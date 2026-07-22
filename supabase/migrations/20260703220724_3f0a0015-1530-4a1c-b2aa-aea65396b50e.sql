@@ -1,0 +1,14 @@
+
+ALTER TABLE public.marketing_campaigns
+  ADD COLUMN IF NOT EXISTS utm_source TEXT,
+  ADD COLUMN IF NOT EXISTS utm_medium TEXT,
+  ADD COLUMN IF NOT EXISTS utm_campaign TEXT,
+  ADD COLUMN IF NOT EXISTS landing_url TEXT,
+  ADD COLUMN IF NOT EXISTS channel TEXT,
+  ADD COLUMN IF NOT EXISTS budget_cents BIGINT NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS spend_cents  BIGINT NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS target_hub TEXT;
+
+ALTER TABLE public.marketing_broadcasts
+  ADD COLUMN IF NOT EXISTS from_name TEXT,
+  ADD COLUMN IF NOT EXISTS preview_text TEXT;

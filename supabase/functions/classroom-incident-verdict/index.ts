@@ -1,0 +1,183 @@
+// AI Senior Engineer: reviews both incident reports for a classroom room
+// and stamps a verdict (status + fault_party + summary) into
+// public.classroom_incident_verdicts.
+import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { createClient } from "npm:@supabase/supabase-js@2";
+
+type Report = {
+  reporter_role: "teacher" | "student";
+  outcome: "completed" | "not_completed";
+  flags: string[];
+  notes: string | null;
+};
+
+const STATUS_VALUES = [
+  "completed_clean",
+  "completed_with_issues",
+  "incomplete_student_tech",
+  "incomplete_teacher_tech",
+  "incomplete_both_tech",
+  "incomplete_student_noshow",
+  "incomplete_teacher_noshow",
+  "incomplete_behavioral",
+  "incomplete_other",
+  "inconclusive",
+] as const;
+const FAULT_VALUES = ["none", "student", "teacher", "both", "platform", "unknown"] as const;
+
+function heuristic(reports: Report[]) {
+  const t = reports.find((r) => r.reporter_role === "teacher");
+  const s = reports.find((r) => r.reporter_role === "student");
+  const allCompleted = reports.length > 0 && reports.every((r) => r.outcome === "completed");
+  const anyIncomplete = reports.some((r) => r.outcome === "not_completed");
+  const hasFlag = (r: Report | undefined, key: string) =>
+    !!r && r.flags.some((f) => f.toLowerCase().includes(key));
+
+  const tStudentTech = hasFlag(t, "student_tech") || hasFlag(t, "student-tech");
+  const sStudentTech = hasFlag(s, "tech") || hasFlag(s, "audio") || hasFlag(s, "video");
+  const tTeacherTech = hasFlag(t, "teacher_tech") || hasFlag(t, "self_tech");
+  const sTeacherTech = hasFlag(s, "teacher_tech") || hasFlag(s, "teacher-tech");
+  const tNoShow = hasFlag(t, "no_show") || hasFlag(t, "absent");
+  const sNoShow = hasFlag(s, "no_show") || hasFlag(s, "absent");
+
+  if (allCompleted && reports.every((r) => r.flags.length === 0))
+    return { status: "completed_clean", fault_party: "none", confidence: 0.95 };
+  if (allCompleted) return { status: "completed_with_issues", fault_party: "none", confidence: 0.75 };
+
+  if (anyIncomplete) {
+    if ((tStudentTech || sStudentTech) && (tTeacherTech || sTeacherTech))
+      return { status: "incomplete_both_tech", fault_party: "both", confidence: 0.7 };
+    if (tStudentTech || sStudentTech)
+      return { status: "incomplete_student_tech", fault_party: "student", confidence: 0.75 };
+    if (tTeacherTech || sTeacherTech)
+      return { status: "incomplete_teacher_tech", fault_party: "teacher", confidence: 0.75 };
+    if (sNoShow) return { status: "incomplete_student_noshow", fault_party: "student", confidence: 0.8 };
+    if (tNoShow) return { status: "incomplete_teacher_noshow", fault_party: "teacher", confidence: 0.8 };
+    return { status: "incomplete_other", fault_party: "unknown", confidence: 0.4 };
+  }
+  return { status: "inconclusive", fault_party: "unknown", confidence: 0.3 };
+}
+
+async function aiVerdict(reports: Report[]) {
+  const key = Deno.env.get("LOVABLE_API_KEY");
+  if (!key) return null;
+
+  const system = `You are a senior classroom operations engineer reviewing post-lesson incident reports.
+Decide what happened in the classroom. Choose ONE status and ONE fault_party from the allowed lists.
+Be conservative: only blame a party when their own report or strong corroboration supports it.
+Allowed status: ${STATUS_VALUES.join(", ")}
+Allowed fault_party: ${FAULT_VALUES.join(", ")}
+Return strict JSON: {"status","fault_party","confidence" (0-1),"summary" (<=240 chars),"recommended_action" (<=160 chars)}.`;
+
+  const user = `Reports:\n${JSON.stringify(reports, null, 2)}`;
+
+  try {
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Lovable-API-Key": key,
+        "X-Lovable-AIG-SDK": "vercel-ai-sdk",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-3-flash-preview",
+        response_format: { type: "json_object" },
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: user },
+        ],
+      }),
+    });
+    if (!res.ok) {
+      console.error("ai verdict failed", res.status, await res.text());
+      return null;
+    }
+    const data = await res.json();
+    const txt = data?.choices?.[0]?.message?.content;
+    if (!txt) return null;
+    const parsed = JSON.parse(txt);
+    if (!STATUS_VALUES.includes(parsed.status)) return null;
+    if (!FAULT_VALUES.includes(parsed.fault_party)) return null;
+    return {
+      status: parsed.status,
+      fault_party: parsed.fault_party,
+      confidence: Math.max(0, Math.min(1, Number(parsed.confidence) || 0.5)),
+      summary: String(parsed.summary || "").slice(0, 240),
+      recommended_action: String(parsed.recommended_action || "").slice(0, 160),
+      model: "google/gemini-3-flash-preview",
+    };
+  } catch (e) {
+    console.error("ai verdict error", e);
+    return null;
+  }
+}
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  try {
+    const { room_id } = await req.json().catch(() => ({}));
+    if (!room_id || typeof room_id !== "string") {
+      return new Response(JSON.stringify({ error: "room_id required" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+
+    const { data: reports, error } = await supabase
+      .from("lesson_incident_reports")
+      .select("reporter_role,outcome,flags,notes")
+      .eq("room_id", room_id);
+
+    if (error) throw error;
+    if (!reports || reports.length === 0) {
+      return new Response(JSON.stringify({ skipped: "no_reports" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const ai = await aiVerdict(reports as Report[]);
+    const base = heuristic(reports as Report[]);
+    const verdict = ai ?? {
+      ...base,
+      summary: ai ? "" : "Auto-classified from incident flags (no AI).",
+      recommended_action:
+        base.fault_party === "none"
+          ? "No action required."
+          : "Review reports and follow up with the at-fault party.",
+      model: null,
+    };
+
+    const { error: upErr } = await supabase
+      .from("classroom_incident_verdicts")
+      .upsert(
+        {
+          room_id,
+          status: verdict.status,
+          fault_party: verdict.fault_party,
+          confidence: (verdict as any).confidence ?? null,
+          summary: verdict.summary || null,
+          recommended_action: verdict.recommended_action || null,
+          reports_considered: reports,
+          model: (verdict as any).model ?? null,
+        },
+        { onConflict: "room_id" },
+      );
+    if (upErr) throw upErr;
+
+    return new Response(JSON.stringify({ ok: true, verdict }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  } catch (e) {
+    console.error("classroom-incident-verdict error", e);
+    return new Response(JSON.stringify({ error: (e as Error).message }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+});

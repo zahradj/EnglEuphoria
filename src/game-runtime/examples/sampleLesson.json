@@ -1,0 +1,90 @@
+{
+  "id": "sample-pg-001",
+  "title": "Animals & Colors",
+  "cefr": "Pre-A1",
+  "hub": "playground",
+  "moments": [
+    {
+      "id": "m-intro",
+      "kind": "intro_moment",
+      "blocks": [
+        { "type": "intro", "title": "Animals & Colors", "subtitle": "Let's play and learn!" }
+      ]
+    },
+    {
+      "id": "m-discovery",
+      "kind": "discovery_moment",
+      "blocks": [
+        { "type": "phonics_focus", "sound": "/b/", "examples": ["bird", "ball", "bear"] },
+        { "type": "vocab_solo", "word": "BIRD", "definition": "An animal that flies" },
+        { "type": "vocab_solo", "word": "FISH", "definition": "An animal that swims" }
+      ]
+    },
+    {
+      "id": "m-challenge",
+      "kind": "challenge_moment",
+      "blocks": [
+        { "type": "multiple_choice", "question": "Which animal flies?", "options": ["BIRD", "FISH", "DOG"], "answerIndex": 0 }
+      ]
+    },
+    {
+      "id": "m-practice",
+      "kind": "practice_moment",
+      "blocks": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Drop each animal where it lives",
+          "items": [
+            { "id": "bird", "label": "BIRD" },
+            { "id": "fish", "label": "FISH" }
+          ],
+          "targets": [
+            { "id": "sky", "label": "SKY", "accepts": "bird" },
+            { "id": "sea", "label": "SEA", "accepts": "fish" }
+          ]
+        },
+        {
+          "type": "match",
+          "prompt": "Match the word with the color",
+          "pairs": [
+            { "left": "SUN", "right": "YELLOW" },
+            { "left": "GRASS", "right": "GREEN" },
+            { "left": "SKY", "right": "BLUE" }
+          ]
+        },
+        {
+          "type": "fill_in_blank",
+          "sentence": "The ___ is yellow.",
+          "options": ["SUN", "SKY", "GRASS"],
+          "answer": "SUN"
+        }
+      ]
+    },
+    {
+      "id": "m-story",
+      "kind": "story_moment",
+      "blocks": [
+        {
+          "type": "storybook",
+          "title": "Bird & Fish",
+          "pages": [
+            { "text": "The bird flies in the sky." },
+            { "text": "The fish swims in the sea." },
+            { "text": "They are friends!" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m-reward",
+      "kind": "reward_moment",
+      "blocks": [
+        {
+          "type": "lesson_summary",
+          "title": "Great job!",
+          "bullets": ["You learned 5 words", "You played 4 games", "You finished a story"]
+        }
+      ]
+    }
+  ]
+}

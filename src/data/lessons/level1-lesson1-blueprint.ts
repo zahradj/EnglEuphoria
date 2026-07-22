@@ -1,0 +1,228 @@
+/**
+ * Level 1 Lesson 1.1: "The Magical Forest of Words"
+ * Pre-generated 12-slide blueprint for the Playground Hub.
+ * 
+ * This serves as a reference/seed lesson. The Mass Generator
+ * can use this JSON structure as a template.
+ */
+
+import slide1Intro from '@/assets/lessons/playground/l1/slide1_intro.png';
+import slide4Flower from '@/assets/lessons/playground/l1/slide4_flower.png';
+import slide12Unlock from '@/assets/lessons/playground/l1/slide12_unlock.png';
+
+export const SAMPLE_SLIDE_IMAGES: Record<number, string> = {
+  1: slide1Intro,
+  4: slide4Flower,
+  12: slide12Unlock,
+};
+
+export const LEVEL1_LESSON_BLUEPRINT = {
+  lesson: {
+    title: "The Magical Forest of Words",
+    hub: "playground" as const,
+    level: 1,
+    lessonNumber: 1.1,
+    durationMinutes: 30,
+    cefrLevel: "Pre-A1",
+    accessoryReward: "Luminous Explorer Hat",
+  },
+  slides: [
+    {
+      slideNumber: 1,
+      title: "Welcome to the Forest",
+      phase: "warm_up",
+      durationSeconds: 150,
+      interactionType: "intro",
+      content: {
+        heading: "Welcome!",
+        bodyText: "Join Pip in the Magical Forest of Words.",
+        mascotAction: "wave",
+        mascotDialogue: "Hello! I am Pip. Let's explore the forest together!",
+      },
+      midjourneyPrompt: "Pip the friendly squirrel mascot waving excitedly at the camera, standing in a lush grassy clearing, subject on the left, High-end 3D claymation, Octane Render, whimsical forest atmosphere, cinematic lighting, soft shadows, vibrant colors, 8k, Unreal Engine 5 aesthetic, bokeh background --v 6.0 --ar 16:9",
+      subjectPosition: "left",
+    },
+    {
+      slideNumber: 2,
+      title: "Look at the Tree",
+      phase: "presentation",
+      durationSeconds: 150,
+      interactionType: "flashcard",
+      content: {
+        heading: "Vocabulary",
+        bodyText: "A big, tall plant with branches.",
+        vocabularyWord: "Tree",
+        vocabularyPhonetic: "/triː/",
+        mascotAction: "idle",
+        mascotDialogue: "Can you say 'Tree'?",
+      },
+      midjourneyPrompt: "A giant whimsical ancient tree with swirling bark and glowing leaves, subject on the right, High-end 3D claymation, Octane Render, whimsical forest atmosphere, cinematic lighting, soft shadows, vibrant colors, 8k, Unreal Engine 5 aesthetic, bokeh background --v 6.0 --ar 16:9",
+      subjectPosition: "right",
+    },
+    {
+      slideNumber: 3,
+      title: "Green Leaf",
+      phase: "presentation",
+      durationSeconds: 150,
+      interactionType: "flashcard",
+      content: {
+        heading: "Vocabulary",
+        bodyText: "Leaves grow on trees.",
+        vocabularyWord: "Leaf",
+        vocabularyPhonetic: "/liːf/",
+        mascotAction: "idle",
+        mascotDialogue: "Look at the green leaf!",
+      },
+      midjourneyPrompt: "A single oversized emerald green leaf with dew drops, subject on the left, High-end 3D claymation, Octane Render, whimsical forest atmosphere, cinematic lighting, soft shadows, vibrant colors, 8k, Unreal Engine 5 aesthetic, bokeh background --v 6.0 --ar 16:9",
+      subjectPosition: "left",
+    },
+    {
+      slideNumber: 4,
+      title: "Pretty Flower",
+      phase: "presentation",
+      durationSeconds: 150,
+      interactionType: "flashcard",
+      content: {
+        heading: "Vocabulary",
+        bodyText: "Flowers smell so sweet.",
+        vocabularyWord: "Flower",
+        vocabularyPhonetic: "/ˈflaʊər/",
+        mascotAction: "idle",
+        mascotDialogue: "Wow! A beautiful flower.",
+      },
+      midjourneyPrompt: "A bright pink and orange magical flower blooming in the sunlight, subject on the right, High-end 3D claymation, Octane Render, whimsical forest atmosphere, cinematic lighting, soft shadows, vibrant colors, 8k, Unreal Engine 5 aesthetic, bokeh background --v 6.0 --ar 16:9",
+      subjectPosition: "right",
+    },
+    {
+      slideNumber: 5,
+      title: "Match the Words",
+      phase: "practice",
+      durationSeconds: 180,
+      interactionType: "matching",
+      content: {
+        heading: "Matching Game",
+        bodyText: "Drag the word to the right picture.",
+        quizOptions: ["Tree", "Leaf", "Flower"],
+        mascotAction: "jump",
+        mascotDialogue: "You can do it! Match them up!",
+      },
+      midjourneyPrompt: "A collage-style placement of a 3D tree, leaf, and flower in a field, subject on the left, High-end 3D claymation, Octane Render, whimsical forest atmosphere, cinematic lighting, soft shadows, vibrant colors, 8k, Unreal Engine 5 aesthetic, bokeh background --v 6.0 --ar 16:9",
+      subjectPosition: "left",
+    },
+    {
+      slideNumber: 6,
+      title: "I see a...",
+      phase: "production",
+      durationSeconds: 150,
+      interactionType: "sentence_builder",
+      content: {
+        heading: "Grammar Time",
+        bodyText: "Use 'I see a' to talk about what you find.",
+        quizOptions: ["I", "see", "a"],
+        correctAnswer: "I see a",
+        mascotAction: "idle",
+        mascotDialogue: "Let's build a sentence!",
+      },
+      midjourneyPrompt: "Pip holding a large magnifying glass looking at a distance, subject on the right, High-end 3D claymation, Octane Render, whimsical forest atmosphere, cinematic lighting, soft shadows, vibrant colors, 8k, Unreal Engine 5 aesthetic, bokeh background --v 6.0 --ar 16:9",
+      subjectPosition: "right",
+    },
+    {
+      slideNumber: 7,
+      title: "Sentence Challenge",
+      phase: "production",
+      durationSeconds: 150,
+      interactionType: "drag_drop",
+      content: {
+        heading: "Complete the Sentence!",
+        bodyText: "Drag the correct word into the blank: 'I see a ___'",
+        quizOptions: ["Tree", "Leaf", "Flower"],
+        mascotAction: "jump",
+        mascotDialogue: "Drag the right word!",
+      },
+      midjourneyPrompt: "A magical chalkboard floating in the forest with golden glowing text, subject on the left, High-end 3D claymation, Octane Render, whimsical forest atmosphere, cinematic lighting, soft shadows, vibrant colors, 8k, Unreal Engine 5 aesthetic, bokeh background --v 6.0 --ar 16:9",
+      subjectPosition: "left",
+    },
+    {
+      slideNumber: 8,
+      title: "Forest Exploration",
+      phase: "practice",
+      durationSeconds: 180,
+      interactionType: "exploration",
+      content: {
+        heading: "Explore the Forest!",
+        bodyText: "Click on hidden objects in the magical forest.",
+        mascotAction: "jump",
+        mascotDialogue: "Find all the hidden things!",
+      },
+      midjourneyPrompt: "A dense enchanted forest with glowing mushrooms and hidden treasures scattered around, subject on the right, High-end 3D claymation, Octane Render, whimsical forest atmosphere, cinematic lighting, soft shadows, vibrant colors, 8k, Unreal Engine 5 aesthetic, bokeh background --v 6.0 --ar 16:9",
+      subjectPosition: "right",
+    },
+    {
+      slideNumber: 9,
+      title: "Speed Quiz!",
+      phase: "practice",
+      durationSeconds: 120,
+      interactionType: "quiz",
+      content: {
+        heading: "Quick Quiz!",
+        bodyText: "Answer 3 questions as fast as you can!",
+        mascotAction: "jump",
+        mascotDialogue: "Let's see how fast you are!",
+      },
+      midjourneyPrompt: "A magical quiz podium with stars and sparkles in a forest clearing, subject on the left, High-end 3D claymation, Octane Render, whimsical forest atmosphere, cinematic lighting, soft shadows, vibrant colors, 8k, Unreal Engine 5 aesthetic, bokeh background --v 6.0 --ar 16:9",
+      subjectPosition: "left",
+    },
+    {
+      slideNumber: 10,
+      title: "Word Review",
+      phase: "recap",
+      durationSeconds: 120,
+      interactionType: "review",
+      content: {
+        heading: "Great Job!",
+        bodyText: "Let's remember our 3 new words: Tree, Leaf, Flower.",
+        mascotAction: "celebrate",
+        mascotDialogue: "You learned 3 new words today!",
+      },
+      midjourneyPrompt: "Three glowing word cards (Tree, Leaf, Flower) floating in a circle in the forest, subject on the right, High-end 3D claymation, Octane Render, whimsical forest atmosphere, cinematic lighting, soft shadows, vibrant colors, 8k, Unreal Engine 5 aesthetic, bokeh background --v 6.0 --ar 16:9",
+      subjectPosition: "right",
+    },
+    {
+      slideNumber: 11,
+      title: "The Climb!",
+      phase: "recap",
+      durationSeconds: 90,
+      interactionType: "progress",
+      content: {
+        heading: "Almost There!",
+        bodyText: "Your progress bar is almost full!",
+        mascotAction: "jump",
+        mascotDialogue: "One more step to the top!",
+      },
+      midjourneyPrompt: "Pip climbing a giant magical beanstalk reaching towards the sky with a glowing finish line, subject on the left, High-end 3D claymation, Octane Render, whimsical forest atmosphere, cinematic lighting, soft shadows, vibrant colors, 8k, Unreal Engine 5 aesthetic, bokeh background --v 6.0 --ar 16:9",
+      subjectPosition: "left",
+    },
+    {
+      slideNumber: 12,
+      title: "THE UNLOCK!",
+      phase: "recap",
+      durationSeconds: 120,
+      interactionType: "unlock",
+      content: {
+        heading: "Level 1 Complete!",
+        bodyText: "You earned the Luminous Explorer Hat!",
+        mascotAction: "celebrate",
+        mascotDialogue: "AMAZING! Look at your new hat!",
+      },
+      midjourneyPrompt: "Cinematic close-up of a Luminous Explorer Hat, glowing with golden light, floating in a magical beam, 3D claymation style, matching the forest color palette, High-end 3D claymation, Octane Render, whimsical forest atmosphere, cinematic lighting, soft shadows, vibrant colors, 8k, Unreal Engine 5 aesthetic, bokeh background --v 6.0 --ar 16:9",
+      subjectPosition: "right",
+    },
+  ],
+  teacherNotes: {
+    summary: "This lesson introduces forest vocabulary (Tree, Leaf, Flower) and the 'I see a...' sentence structure. Students practice through flashcards, matching games, drag-and-drop, and a speed quiz.",
+    atHomeActivity: "Ask your child to point out 3 things they 'see' in the garden or park today using 'I see a ___'. Encourage them to draw their favorite forest word.",
+    vocabularyFocus: ["Tree", "Leaf", "Flower"],
+    grammarFocus: "I see a...",
+    expectedOutcome: "Student can identify and say 3 forest vocabulary words and use them in a simple sentence.",
+  },
+} as const;

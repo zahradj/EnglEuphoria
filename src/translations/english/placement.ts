@@ -1,0 +1,36 @@
+// Placement test localized meta-instructions + UI shell.
+// IMPORTANT: Only the meta-instruction is translated. Question text, options,
+// answers, audio script, and image prompts MUST stay strictly English.
+export const placementTranslations = {
+  'placement.task.listening': 'Listen and choose the correct answer.',
+  'placement.task.vocabulary': 'Look at the picture and choose the correct word.',
+  'placement.task.grammar': 'Choose the correct word to complete the sentence.',
+  'placement.task.reading': 'Read carefully and choose the best answer.',
+  'placement.action.playAudio': 'Play Audio',
+  'placement.action.playAgain': 'Play Again',
+  'placement.action.loading': 'Loading…',
+  'placement.action.playing': 'Playing…',
+  'placement.action.next': 'Next Question',
+  'placement.action.submit': 'Submit',
+  'placement.audio.hint': 'Listen first, then choose your answer.',
+  'placement.progress.question': 'Question',
+  'placement.progress.cefr': 'CEFR Assessment',
+  // Welcome screen
+  'placement.welcome.title.playground': 'Welcome to the Playground, {{name}}!',
+  'placement.welcome.title.academy': 'Welcome to The Academy, {{name}}!',
+  'placement.welcome.title.professional': 'Welcome to Success Hub, {{name}}!',
+  'placement.welcome.subtitle': "Before we open your dashboard, let's calibrate your level so every lesson fits you perfectly.",
+  'placement.welcome.chip.duration': '≈5 minutes',
+  'placement.welcome.chip.personalized': 'Personalized',
+  'placement.welcome.chip.oneTime': 'One time only',
+  'placement.welcome.cta': 'Start My Assessment',
+  'placement.welcome.greetingFallback': 'there',
+  // Pre-test choice screen ("I'm a true beginner" / "Take the placement test")
+  'placement.choice.title': "Hi{{comma}} {{name}}! I'm {{mascot}}.",
+  'placement.choice.subtitle': "Pick how you'd like to start:",
+  'placement.choice.beginnerTitle': "I'm a true beginner",
+  'placement.choice.beginnerHint': "Skip the test — we'll start from the very basics.",
+  'placement.choice.testTitle': 'Take the placement test',
+  'placement.choice.testHint': '~5 min · up to 15 questions · finds your exact level.',
+  'placement.choice.replay': 'Tap to hear again',
+};

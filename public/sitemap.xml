@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://engleuphoria.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://engleuphoria.com/about</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://engleuphoria.com/for-teachers</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://engleuphoria.com/community</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://engleuphoria.com/playground-demo</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://engleuphoria.com/academy-demo</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://engleuphoria.com/success-demo</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://engleuphoria.com/legal/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://engleuphoria.com/legal/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://engleuphoria.com/legal/refund</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+</urlset>

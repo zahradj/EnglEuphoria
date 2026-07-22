@@ -1,0 +1,1 @@
+UPDATE public.student_profiles SET onboarding_completed = true WHERE user_id = '229aca14-9856-44ea-9062-e0c3f3cd0e79';

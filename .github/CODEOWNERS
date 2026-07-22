@@ -1,0 +1,19 @@
+# CODEOWNERS — replace placeholder team names with real GitHub handles/teams
+
+# Video subsystem
+src/services/video/** @team-video
+
+# Auth & security
+src/contexts/AuthContext.tsx @team-auth
+src/hooks/useRoleBasedSecurity.ts @team-auth
+src/hooks/useAdminAuth.ts @team-auth
+
+# Payments & pricing
+src/services/lessonPricingService.ts @team-payments
+src/services/locationService.ts @team-payments
+
+# CI, config & infrastructure
+.github/** @team-infra
+tsconfig*.json @team-infra
+vitest.config.ts @team-infra
+scripts/** @team-infra

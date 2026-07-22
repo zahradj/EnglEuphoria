@@ -1,0 +1,96 @@
+{
+  "unit_id": "people",
+  "unit_title": "My Family & Friends",
+  "cefr_target": "Pre-A1",
+  "meta": {
+    "primary_color": "#FE6A2F",
+    "accent_color": "#FEFBDD",
+    "container_theme": "house",
+    "brain_break_emojis": ["👋", "🏡", "🍼", "🧸"]
+  },
+  "lessons": {
+    "l1_intro": {
+      "lesson_number": 1,
+      "pattern": "greetings_intro_v1",
+      "vocab": ["Hello", "Hi", "Goodbye", "My name is", "Nice to meet you"],
+      "sentence_frame": "My name is ___.",
+      "phonic": {
+        "letter": "h",
+        "sound": "/h/",
+        "words": ["hello", "hi", "hand"]
+      },
+
+      "pages": [
+        {
+          "id": "l1.greetings",
+          "phase_id": "greetings_routine",
+          "title": "Pip says hello",
+          "blocks": [
+            { "kind": "image", "id": "l1.greetings.img-hook", "label": "Pip waves at the child", "subject": "Pip the fox waving warmly, friendly smile" },
+            { "kind": "audio", "id": "l1.greetings.aud-0", "label": "Pip greets the child", "text": "Hello! I am Pip. What is your name?", "voice": "pip" },
+            { "kind": "audio", "id": "l1.greetings.aud-1", "label": "Child reply cue", "text": "Hi! My name is ___.", "voice": "pip" },
+            { "kind": "text", "id": "l1.greetings.tpr", "label": "TPR cue", "value": "Teacher waves with Pip. Child waves back before speaking — silent-period friendly." }
+          ]
+        },
+        {
+          "id": "l1.vocabulary",
+          "phase_id": "vocabulary",
+          "title": "Meet the words",
+          "blocks": [
+            { "kind": "image", "id": "l1.vocabulary.img-0", "label": "Hello", "subject": "Pip waving hello, big smile" },
+            { "kind": "audio", "id": "l1.vocabulary.aud-0", "label": "Hello (Pip says)", "text": "Hello!", "voice": "pip" },
+            { "kind": "image", "id": "l1.vocabulary.img-1", "label": "Hi", "subject": "Pip and Bella Bunny waving hi to each other" },
+            { "kind": "audio", "id": "l1.vocabulary.aud-1", "label": "Hi (Pip says)", "text": "Hi!", "voice": "pip" },
+            { "kind": "image", "id": "l1.vocabulary.img-2", "label": "Goodbye", "subject": "Pip waving goodbye as Bella walks away" },
+            { "kind": "audio", "id": "l1.vocabulary.aud-2", "label": "Goodbye (Pip says)", "text": "Goodbye!", "voice": "pip" },
+            { "kind": "image", "id": "l1.vocabulary.img-3", "label": "My name is", "subject": "Pip pointing to own chest, introducing himself" },
+            { "kind": "audio", "id": "l1.vocabulary.aud-3", "label": "My name is (Pip says)", "text": "My name is Pip.", "voice": "pip" },
+            { "kind": "image", "id": "l1.vocabulary.img-4", "label": "Nice to meet you", "subject": "Pip and Bella shaking hands, both smiling" },
+            { "kind": "audio", "id": "l1.vocabulary.aud-4", "label": "Nice to meet you (Pip says)", "text": "Nice to meet you!", "voice": "pip" }
+          ]
+        },
+        {
+          "id": "l1.modeling",
+          "phase_id": "modeling",
+          "title": "Pip and Bella show us",
+          "blocks": [
+            { "kind": "image", "id": "l1.modeling.scene", "label": "Two-character dialogue scene", "subject": "Pip the fox and Bella the bunny meeting, dual speech bubbles" },
+            { "kind": "audio", "id": "l1.modeling.line-1", "label": "Pip greets Bella", "text": "Hello! My name is Pip.", "voice": "pip" },
+            { "kind": "audio", "id": "l1.modeling.line-2", "label": "Bella replies", "text": "Hi! My name is Bella. Nice to meet you!", "voice": "bella" },
+            { "kind": "audio", "id": "l1.modeling.line-3", "label": "Pip closes", "text": "Nice to meet you too!", "voice": "pip" },
+            { "kind": "text", "id": "l1.modeling.notes", "label": "Teacher notes", "value": "I-DO MODEL (ESA · Study): Play the Pip↔Bella dialogue 3× with exaggerated gestures — wave on 'Hello', point to chest on 'My name is', handshake mime on 'Nice to meet you'. Child stays silent and mimics gestures only. This honours the natural silent period while binding sound → gesture → meaning without translation." }
+          ]
+        },
+        {
+          "id": "l1.sentence",
+          "phase_id": "sentence",
+          "title": "Your turn — My name is ___",
+          "blocks": [
+            { "kind": "text", "id": "l1.sentence.frame", "label": "Sentence frame", "value": "Hello! My name is ___. Nice to meet you!" },
+            { "kind": "audio", "id": "l1.sentence.cue", "label": "Pip cues the child", "text": "Your turn! Hello! My name is...", "voice": "pip" },
+            { "kind": "text", "id": "l1.sentence.roleplay", "label": "Roleplay rotation", "value": "WE-DO → YOU-DO (ESA · Activate): Run a 3-turn roleplay circle. Child greets Pip, then Bella, then Charlie Chick — each NPC replies with a slightly different chunk (Hi! / Nice to meet you! / Hello friend!) so the child hears variation but always SAYS the same frame. Drag-match follows: Hello↔wave, Goodbye↔wave-away, My name is↔point-to-chest, Nice to meet you↔handshake. Align the 4 images as a centred 2×2 grid." },
+            { "kind": "text", "id": "l1.sentence.notes", "label": "Teacher notes", "value": "Treat 'My name is ___' as ONE unanalysed lexical chunk (no grammar talk). Praise bravery > accuracy. If the child stays silent, Pip models again and the child only waves — that still counts as a turn." }
+          ]
+        },
+        {
+          "id": "l1.phonics",
+          "phase_id": "phonics",
+          "title": "Sound /h/",
+          "blocks": [
+            { "kind": "text", "id": "l1.phonics.phonic", "label": "Phonic", "value": "/h/ /h/ — hello, hi, hand" },
+            { "kind": "audio", "id": "l1.phonics.drill", "label": "Pip drills /h/", "text": "/h/ /h/ /h/ — hello! /h/ /h/ /h/ — hi! /h/ /h/ /h/ — hand!", "voice": "pip" },
+            { "kind": "text", "id": "l1.phonics.notes", "label": "Teacher notes", "value": "60-second micro-moment only. Child puts a hand in front of the mouth to feel the puff of air on /h/. Pop the /h/ words as they appear. Do NOT extend into a full phonics lesson — that lives in L2/L3." }
+          ]
+        },
+        {
+          "id": "l1.spelling",
+          "phase_id": "spelling",
+          "title": "Trace the letter h",
+          "blocks": [
+            { "kind": "text", "id": "l1.spelling.notes", "label": "Teacher notes", "value": "FINE-MOTOR + EXIT-HIGH: Child traces lowercase 'h' once (down-stroke, then bump). Then Pip waves: 'Goodbye! See you next lesson!' — confetti + Vault sticker. NEVER end on a quiz; always exit on celebration." }
+          ]
+        }
+      ]
+    }
+  }
+}

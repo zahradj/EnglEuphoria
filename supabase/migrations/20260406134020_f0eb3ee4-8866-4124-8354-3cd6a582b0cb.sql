@@ -1,0 +1,1 @@
+ALTER TABLE public.teacher_applications ADD COLUMN IF NOT EXISTS motivation TEXT;

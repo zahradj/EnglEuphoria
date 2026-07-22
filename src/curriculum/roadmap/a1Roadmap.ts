@@ -1,0 +1,98 @@
+import type { CefrBucket } from './types';
+
+// A1 Playground CEFR roadmap.
+// 10 buckets matching the 10 worlds — but the BUCKETS are theme-agnostic.
+// A bucket's topics may be wrapped by any world; the rotator picks the best fit.
+
+export const A1_PLAYGROUND_BUCKETS: CefrBucket[] = [
+  {
+    index: 0, unitNumber: 1, unitTitle: 'Hello, Class!',
+    topics: ['greetings', 'introductions', 'classroom', 'colors'],
+    grammarFocus: ['be (am/is/are) — affirmative', 'imperatives for classroom commands'],
+    vocabularyFocus: ['hello', 'goodbye', 'name', 'teacher', 'friend', 'red', 'blue', 'yellow'],
+    communicativeGoal: 'Greet someone and say my name',
+    successCriteria: ['Say hello/goodbye correctly', 'Introduce self with full sentence', 'Name 4+ colors'],
+    reviewTargets: [],
+  },
+  {
+    index: 1, unitNumber: 2, unitTitle: 'My Living World',
+    topics: ['animals', 'actions', 'movement', 'simple_present'],
+    grammarFocus: ['simple present — affirmative', 'can for ability'],
+    vocabularyFocus: ['run', 'jump', 'fly', 'swim', 'lion', 'monkey', 'bird', 'fish'],
+    communicativeGoal: 'Describe what animals do',
+    successCriteria: ['Use 6+ action verbs', 'Form 3 affirmative sentences', 'Use can correctly'],
+    reviewTargets: ['be (am/is/are) — affirmative'],
+  },
+  {
+    index: 2, unitNumber: 3, unitTitle: 'Counting Quest',
+    topics: ['numbers', 'counting', 'directions', 'commands'],
+    grammarFocus: ['numbers 1–20', 'prepositions of place (in/on/under)'],
+    vocabularyFocus: ['one', 'two', 'three', 'left', 'right', 'up', 'down', 'in', 'on', 'under'],
+    communicativeGoal: 'Count objects and give simple directions',
+    successCriteria: ['Count 1–20 fluently', 'Use 3 prepositions', 'Follow 2-step directions'],
+    reviewTargets: ['imperatives for classroom commands'],
+  },
+  {
+    index: 3, unitNumber: 4, unitTitle: 'I Like, I Don\'t Like',
+    topics: ['food', 'likes_dislikes', 'countables', 'ordering'],
+    grammarFocus: ['like + noun', 'do/don\'t — negative'],
+    vocabularyFocus: ['apple', 'bread', 'water', 'milk', 'rice', 'cheese', 'pizza', 'banana'],
+    communicativeGoal: 'Express food preferences and order something',
+    successCriteria: ['Form 3 like/don\'t like sentences', 'Order one item politely', 'Name 6+ foods'],
+    reviewTargets: ['simple present — affirmative'],
+  },
+  {
+    index: 4, unitNumber: 5, unitTitle: 'Faces & Feelings',
+    topics: ['emotions', 'appearance', 'personality', 'describing_people'],
+    grammarFocus: ['be + adjective', 'have/has got — appearance'],
+    vocabularyFocus: ['happy', 'sad', 'angry', 'tired', 'tall', 'short', 'big', 'small', 'kind'],
+    communicativeGoal: 'Describe how someone looks and feels',
+    successCriteria: ['Use 4 emotion words', 'Use have got correctly', 'Describe one person in 3 sentences'],
+    reviewTargets: ['be (am/is/are) — affirmative'],
+  },
+  {
+    index: 5, unitNumber: 6, unitTitle: 'Questions Everywhere',
+    topics: ['sea_animals', 'questions', 'habitats', 'actions'],
+    grammarFocus: ['yes/no questions with be', 'where + is/are'],
+    vocabularyFocus: ['shark', 'whale', 'octopus', 'crab', 'where', 'is', 'are', 'live'],
+    communicativeGoal: 'Ask and answer where things live',
+    successCriteria: ['Form 3 yes/no questions', 'Form 2 where questions', 'Answer in short form'],
+    reviewTargets: ['be (am/is/are) — affirmative', 'simple present — affirmative'],
+  },
+  {
+    index: 6, unitNumber: 7, unitTitle: 'I Can Help',
+    topics: ['abilities', 'can_cant', 'helping', 'daily_actions'],
+    grammarFocus: ['can/can\'t — affirmative & negative', 'object pronouns (me/you/him/her)'],
+    vocabularyFocus: ['help', 'lift', 'carry', 'fix', 'find', 'show', 'tell', 'give'],
+    communicativeGoal: 'Offer to help and say what I can or can\'t do',
+    successCriteria: ['Use can/can\'t correctly', 'Use 2 object pronouns', 'Make one offer'],
+    reviewTargets: ['can for ability'],
+  },
+  {
+    index: 7, unitNumber: 8, unitTitle: 'Bigger, Smaller',
+    topics: ['sizes', 'comparisons', 'adjectives', 'nature'],
+    grammarFocus: ['comparatives (-er, more)', 'than'],
+    vocabularyFocus: ['big', 'small', 'long', 'short', 'fast', 'slow', 'old', 'young'],
+    communicativeGoal: 'Compare two things',
+    successCriteria: ['Form 3 comparative sentences', 'Use than correctly', 'Use 5+ adjectives'],
+    reviewTargets: ['be + adjective'],
+  },
+  {
+    index: 8, unitNumber: 9, unitTitle: 'Where Is It?',
+    topics: ['household', 'rooms', 'prepositions', 'object_descriptions'],
+    grammarFocus: ['prepositions of place (in/on/under/next to/behind)', 'there is/there are'],
+    vocabularyFocus: ['table', 'chair', 'door', 'window', 'lamp', 'bed', 'kitchen', 'bedroom'],
+    communicativeGoal: 'Describe where things are in a room',
+    successCriteria: ['Use 4 prepositions', 'Form 2 there is/are sentences', 'Name 6 household items'],
+    reviewTargets: ['prepositions of place (in/on/under)'],
+  },
+  {
+    index: 9, unitNumber: 10, unitTitle: 'How Does It Work?',
+    topics: ['technology', 'instructions', 'routines', 'problem_solving'],
+    grammarFocus: ['imperatives for instructions', 'sequence words (first/then/next)'],
+    vocabularyFocus: ['press', 'turn', 'open', 'close', 'wait', 'first', 'then', 'next', 'finally'],
+    communicativeGoal: 'Give simple step-by-step instructions',
+    successCriteria: ['Give 3-step instructions', 'Use 3 sequence words', 'Use 5+ instruction verbs'],
+    reviewTargets: ['imperatives for classroom commands'],
+  },
+];

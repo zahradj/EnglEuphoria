@@ -1,0 +1,63 @@
+{
+  "name": "Engleuphoria — Joyful English Learning",
+  "short_name": "Engleuphoria",
+  "description": "Live 1-on-1 English lessons with expert teachers across the Playground (Kids), Academy (Teens) and Success (Adults) hubs.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#0a0a12",
+  "theme_color": "#FE6A2F",
+  "orientation": "portrait",
+  "categories": ["education", "productivity", "lifestyle"],
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/",
+  "id": "/",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png?v=8",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png?v=8",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512-maskable.png?v=8",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/apple-touch-icon.png?v=8",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "My Dashboard",
+      "short_name": "Dashboard",
+      "description": "Open your learning dashboard",
+      "url": "/dashboard"
+    },
+    {
+      "name": "Find a Teacher",
+      "short_name": "Book",
+      "description": "Browse and book a teacher",
+      "url": "/find-teacher"
+    },
+    {
+      "name": "Install Guide",
+      "short_name": "Install",
+      "description": "How to add Engleuphoria to your home screen",
+      "url": "/install"
+    }
+  ],
+  "prefer_related_applications": false
+}

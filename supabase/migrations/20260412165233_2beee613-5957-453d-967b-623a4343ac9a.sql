@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "secure_teacher_profiles_insert" ON public.teacher_profiles;

@@ -1,0 +1,36 @@
+User-agent: Googlebot
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /teacher-dashboard
+Disallow: /classroom
+Disallow: /auth
+Disallow: /login
+Disallow: /signup
+Disallow: /sign-up
+Disallow: /student-signup
+Disallow: /email-verification
+Disallow: /profile
+Disallow: /hub-confirmation
+Disallow: /playground-creator
+Disallow: /academy-creator
+Disallow: /success-creator
+Disallow: /academy-classroom
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /classroom
+Disallow: /auth
+
+Sitemap: https://engleuphoria.com/sitemap.xml

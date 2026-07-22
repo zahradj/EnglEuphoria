@@ -1,0 +1,60 @@
+/**
+ * Playground Blueprint — design tokens + utilities ported from
+ * Animal Adventure Academy reference (docs/reference/animal-adventure-academy).
+ * Imported globally by the app entry so phase components can use
+ * `bg-playground-mesh`, `glass-card`, `--playground-*` tokens, and
+ * `animate-lesson-*` keyframes.
+ */
+
+:root {
+  --playground-primary: #FE6A2F;
+  --playground-primary-foreground: #ffffff;
+  --playground-accent: #FEFBDD;
+  --playground-ink: #3a1d0a;
+  --gradient-playground: radial-gradient(at 20% 20%, #FFD49A 0%, transparent 50%),
+    radial-gradient(at 80% 10%, #FFE9A8 0%, transparent 55%),
+    radial-gradient(at 50% 100%, #FFB07A 0%, transparent 60%),
+    linear-gradient(135deg, #FEFBDD 0%, #FFE6CF 100%);
+  --shadow-playground: 0 18px 50px -12px color-mix(in oklab, #FE6A2F 35%, transparent);
+  --shadow-playground-soft: 0 8px 24px -10px color-mix(in oklab, #FE6A2F 25%, transparent);
+}
+
+.bg-playground-mesh {
+  background-image: var(--gradient-playground);
+}
+.shadow-playground {
+  box-shadow: var(--shadow-playground);
+}
+.shadow-playground-soft {
+  box-shadow: var(--shadow-playground-soft);
+}
+.glass-card {
+  background: color-mix(in oklab, white 70%, transparent);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid color-mix(in oklab, white 60%, transparent);
+}
+.glass-card-strong {
+  background: color-mix(in oklab, white 85%, transparent);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid color-mix(in oklab, white 75%, transparent);
+}
+
+@keyframes lesson-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+@keyframes lesson-pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes lesson-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+.animate-lesson-bounce { animation: lesson-bounce 1.4s ease-in-out infinite; }
+.animate-lesson-pop { animation: lesson-pop 0.4s ease-out; }
+.animate-lesson-shake { animation: lesson-shake 0.4s ease-in-out; }

@@ -1,0 +1,147 @@
+-- Insert sample systematic ESL lessons
+INSERT INTO lessons_content (
+  title, 
+  topic, 
+  cefr_level, 
+  module_number, 
+  lesson_number, 
+  duration_minutes, 
+  learning_objectives, 
+  vocabulary_focus, 
+  grammar_focus, 
+  difficulty_level,
+  is_active
+) VALUES 
+(
+  'Introducing Yourself - Basic Greetings',
+  'Greetings and Personal Information',
+  'A1',
+  1,
+  1,
+  45,
+  ARRAY['Use basic greetings', 'Say your name and age', 'Ask simple personal questions'],
+  ARRAY['hello', 'hi', 'goodbye', 'name', 'age', 'nice to meet you'],
+  ARRAY['Present tense of "be"', 'Personal pronouns', 'Basic question formation'],
+  'beginner',
+  true
+),
+(
+  'Family Members and Relationships',
+  'Family and Relationships',
+  'A1',
+  1,
+  2,
+  45,
+  ARRAY['Name family members', 'Describe family relationships', 'Use possessive adjectives'],
+  ARRAY['mother', 'father', 'sister', 'brother', 'grandmother', 'grandfather', 'family'],
+  ARRAY['Possessive adjectives (my, your, his, her)', 'Present tense of "have"'],
+  'beginner',
+  true
+),
+(
+  'Daily Routines and Time',
+  'Daily Life and Time',
+  'A1',
+  1,
+  3,
+  45,
+  ARRAY['Tell time', 'Describe daily activities', 'Use time expressions'],
+  ARRAY['wake up', 'breakfast', 'work', 'lunch', 'dinner', 'sleep', 'clock', 'time'],
+  ARRAY['Present simple tense', 'Time expressions', 'Adverbs of frequency'],
+  'beginner',
+  true
+),
+(
+  'Food and Drinks - Ordering at a Restaurant',
+  'Food and Beverages',
+  'A1',
+  1,
+  4,
+  45,
+  ARRAY['Name common foods and drinks', 'Order food politely', 'Express food preferences'],
+  ARRAY['pizza', 'burger', 'water', 'coffee', 'please', 'thank you', 'menu', 'order'],
+  ARRAY['Would like vs want', 'Polite requests', 'Countable and uncountable nouns'],
+  'beginner',
+  true
+),
+(
+  'Shopping and Money',
+  'Shopping and Commerce',
+  'A2',
+  2,
+  1,
+  50,
+  ARRAY['Ask about prices', 'Make purchases', 'Use money-related vocabulary'],
+  ARRAY['expensive', 'cheap', 'price', 'money', 'buy', 'sell', 'store', 'customer'],
+  ARRAY['How much/How many', 'Comparative adjectives', 'Numbers and prices'],
+  'elementary',
+  true
+),
+(
+  'Travel and Transportation',
+  'Travel and Getting Around',
+  'A2',
+  2,
+  2,
+  50,
+  ARRAY['Ask for directions', 'Use transportation vocabulary', 'Plan a trip'],
+  ARRAY['bus', 'train', 'airplane', 'taxi', 'ticket', 'station', 'airport', 'direction'],
+  ARRAY['Prepositions of place', 'Future with "going to"', 'Modal verbs (can, should)'],
+  'elementary',
+  true
+),
+(
+  'Health and Body Parts',
+  'Health and Medical',
+  'A2',
+  2,
+  3,
+  50,
+  ARRAY['Name body parts', 'Describe health problems', 'Give health advice'],
+  ARRAY['head', 'arm', 'leg', 'stomach', 'sick', 'healthy', 'doctor', 'medicine'],
+  ARRAY['Present perfect tense', 'Should for advice', 'Body parts vocabulary'],
+  'elementary',
+  true
+),
+(
+  'Work and Professions',
+  'Career and Employment',
+  'B1',
+  3,
+  1,
+  60,
+  ARRAY['Describe different jobs', 'Talk about work experience', 'Discuss career goals'],
+  ARRAY['teacher', 'doctor', 'engineer', 'manager', 'experience', 'skills', 'career', 'interview'],
+  ARRAY['Present perfect vs past simple', 'Job-related vocabulary', 'Future plans'],
+  'intermediate',
+  true
+),
+(
+  'Environment and Nature',
+  'Environmental Issues',
+  'B1',
+  3,
+  2,
+  60,
+  ARRAY['Discuss environmental problems', 'Express opinions about nature', 'Use environmental vocabulary'],
+  ARRAY['pollution', 'recycling', 'environment', 'nature', 'climate', 'protect', 'waste', 'energy'],
+  ARRAY['First conditional', 'Environmental vocabulary', 'Expressing opinions'],
+  'intermediate',
+  true
+),
+(
+  'Technology and Social Media',
+  'Modern Technology',
+  'B1',
+  3,
+  3,
+  60,
+  ARRAY['Discuss technology use', 'Talk about social media', 'Express opinions about digital life'],
+  ARRAY['computer', 'internet', 'smartphone', 'social media', 'online', 'digital', 'website', 'app'],
+  ARRAY['Present perfect continuous', 'Technology vocabulary', 'Passive voice'],
+  'intermediate',
+  true
+);
+
+-- Update the metadata to include creation timestamp
+UPDATE lessons_content SET created_at = NOW() WHERE created_at IS NULL;

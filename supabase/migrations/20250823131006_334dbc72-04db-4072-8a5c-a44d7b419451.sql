@@ -1,0 +1,1 @@
+UPDATE users SET role = 'admin', full_name = 'Fatima Zahra Djaanine' WHERE id = '7368f171-f0df-45ce-8e8e-cc3413c803ed';

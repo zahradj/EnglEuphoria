@@ -1,0 +1,1 @@
+ALTER TABLE public.qa_repair_telemetry ADD COLUMN IF NOT EXISTS locators jsonb;

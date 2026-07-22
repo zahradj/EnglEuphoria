@@ -1,0 +1,41 @@
+{
+  "unit_id": "produce",
+  "unit_title": "Fruits & Vegetables",
+  "meta": {
+    "primary_color": "#FE6A2F",
+    "accent_color": "#FEFBDD",
+    "container_theme": "basket",
+    "brain_break_emojis": ["🍎", "🥕", "🍓", "🥦"]
+  },
+  "lessons": {
+    "l1_core": {
+      "vocab": ["apple", "banana", "carrot", "tomato", "potato", "onion"],
+      "sentence_frame": "It is a/an [noun].",
+      "phonic": { "letter": "a", "sound": "/æ/", "words": ["apple", "arrow", "axe"] }
+    },
+    "l2_expansion": {
+      "vocab": ["strawberry", "broccoli", "lemon"],
+      "sentence_frame": "It is a/an [noun]. It is [color].",
+      "phonic": { "letter": "l", "sound": "/l/", "words": ["lemon", "leaf", "lion"] }
+    },
+    "l3_complex": {
+      "vocab": ["watermelon", "pumpkin", "cucumber"],
+      "sentence_frame": "It is a [size] [color] [noun].",
+      "rules": "OSASCOMP: size MUST precede color (e.g. 'a big green watermelon').",
+      "phonic": { "letter": "w", "sound": "/w/", "words": ["watermelon", "window", "web"] }
+    },
+    "l4_storybook": {
+      "title": "The Magic Garden Rescue",
+      "signs": {
+        "apple": "🍎 rub tummy",
+        "big": "🙌 arms wide",
+        "happy": "😊 smile wide"
+      },
+      "scenes": [
+        { "id": 1, "text": "The apple is small and red.", "gap_word": "apple" },
+        { "id": 2, "text": "Look! It is a big green watermelon.", "gap_word": "watermelon" },
+        { "id": 3, "text": "The hungry kids are happy because they love fruit.", "gap_word": "happy" }
+      ]
+    }
+  }
+}

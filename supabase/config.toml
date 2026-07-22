@@ -1,0 +1,234 @@
+project_id = "dcoxpyzoqjvmuuygvlme"
+
+[api]
+  enabled = true
+  extra_search_path = ["public", "extensions"]
+  max_rows = 1000
+  port = 54321
+  schemas = ["public", "graphql_public"]
+
+[auth]
+  additional_redirect_urls = ["https://engleuphoria.lovable.app", "https://engleuphoria.com/set-password", "https://engleuphoria.lovable.app/set-password"]
+  enable_signup = true
+  enabled = true
+  jwt_expiry = 3600
+  port = 54324
+  refresh_token_rotation_enabled = true
+  security_update_password_require_reauthentication = true
+  site_url = "http://localhost:3000"
+
+[functions]
+  [functions.cleanup-playground-image-cache]
+    verify_jwt = false
+  [functions.cleanup-playground-videos]
+    verify_jwt = false
+  [functions.admin-create]
+    verify_jwt = false
+  [functions.admin-create-user]
+    verify_jwt = false
+  [functions.admin-delete-user]
+    verify_jwt = false
+  [functions.ai-activity-generator]
+    verify_jwt = false
+  [functions.ai-rewrite-text]
+    verify_jwt = false
+  [functions.ai-vocab-cards]
+    verify_jwt = false
+  [functions.ai-extract-lesson-from-text]
+    verify_jwt = false
+  [functions.publish-lesson-template]
+    verify_jwt = false
+  [functions.ai-character-voices]
+    verify_jwt = false
+  [functions.suggest-characters]
+    verify_jwt = false
+  [functions.ai-content-generator]
+    verify_jwt = true
+  [functions.ai-conversation]
+    verify_jwt = true
+  [functions.ai-curriculum-analyzer]
+    verify_jwt = true
+  [functions.ai-curriculum-planner]
+    verify_jwt = true
+  [functions.ai-feedback]
+    verify_jwt = true
+  [functions.ai-game-lesson-generator]
+    verify_jwt = false
+  [functions.ai-image-generation]
+    verify_jwt = false
+  [functions.ai-lesson-generator]
+    verify_jwt = false
+  [functions.ai-performance-analyzer]
+    verify_jwt = true
+  [functions.ai-quality-checker]
+    verify_jwt = true
+  [functions.ai-lesson-content-generator]
+    verify_jwt = false
+  [functions.ai-slide-generator]
+    verify_jwt = false
+  [functions.ai-slide-game-generator]
+    verify_jwt = false
+  [functions.ai-systematic-curriculum-batch]
+    verify_jwt = false
+  [functions.auth-email-hook]
+    verify_jwt = false
+  [functions.auto-complete-lessons]
+    verify_jwt = false
+  [functions.batch-generate-lesson-audio]
+    verify_jwt = false
+  [functions.batch-generate-lesson-images]
+    verify_jwt = false
+  [functions.bulk-lesson-generator]
+    verify_jwt = false
+  [functions.complete-lesson]
+    verify_jwt = true
+  [functions.curriculum-breakdown]
+    verify_jwt = true
+  [functions.curriculum-expert-agent]
+    verify_jwt = true
+  [functions.curriculum-generator]
+    verify_jwt = true
+  [functions.fetch-next-lesson]
+    verify_jwt = false
+  [functions.generate-certificate]
+    verify_jwt = false
+  [functions.generate-character-image]
+    verify_jwt = false
+  [functions.generate-daily-lesson]
+    verify_jwt = false
+  [functions.generate-early-learner-lesson]
+    verify_jwt = true
+  [functions.generate-iron-game]
+    verify_jwt = false
+  [functions.generate-learning-path]
+    verify_jwt = false
+  [functions.generate-lesson-audio]
+    verify_jwt = false
+  [functions.generate-lesson-image]
+    verify_jwt = false
+  [functions.generate-placement-summary]
+    verify_jwt = false
+  [functions.generate-speech]
+    verify_jwt = true
+  [functions.generate-smart-worksheet]
+    verify_jwt = true
+  [functions.generate-welcome-lesson]
+    verify_jwt = false
+  [functions.get-dashboard]
+    verify_jwt = true
+  [functions.interactive-lesson-generator]
+    verify_jwt = true
+  [functions.iron-ppp-generator]
+    verify_jwt = false
+  [functions.k12-curriculum-generator]
+    verify_jwt = false
+  [functions.lesson-content-generator]
+    verify_jwt = true
+  [functions.n8n-bridge]
+    verify_jwt = false
+  [functions.notify-admin-new-registration]
+    verify_jwt = false
+  [functions.notify-admin-new-student]
+    verify_jwt = false
+  [functions.notify-teacher-booking]
+    verify_jwt = false
+  [functions.quiz-generator]
+    verify_jwt = false
+  [functions.send-lesson-reminders]
+    verify_jwt = false
+  [functions.send-teacher-emails]
+    verify_jwt = true
+  [functions.send-user-emails]
+    verify_jwt = false
+  [functions.send-welcome-email]
+    verify_jwt = false
+  [functions.speech-to-text]
+    verify_jwt = true
+  [functions.studio-ai-copilot]
+    verify_jwt = false
+  [functions.text-to-speech]
+    verify_jwt = true
+  [functions.webrtc-signaling]
+    verify_jwt = false
+  [functions.send-transactional-email]
+    verify_jwt = false
+  [functions.preview-transactional-email]
+    verify_jwt = false
+  [functions.handle-email-unsubscribe]
+    verify_jwt = false
+  [functions.handle-email-suppression]
+    verify_jwt = false
+  [functions.picsart-process]
+    verify_jwt = false
+  [functions.send-interview-reminders]
+    verify_jwt = false
+  [functions.process-email-queue]
+    verify_jwt = false
+  [functions.generate-lesson-plan]
+    verify_jwt = false
+  [functions.generate-slide-image]
+    verify_jwt = true
+  [functions.generate-slide-voiceover]
+    verify_jwt = true
+  [functions.generate-slide-music]
+    verify_jwt = true
+  [functions.generate-storybook]
+    verify_jwt = false
+  [functions.storybook-generate]
+    verify_jwt = true
+  [functions.storybook-studio]
+    verify_jwt = true
+  [functions.analyze-media]
+    verify_jwt = false
+  [functions.generate-canvas-game]
+    verify_jwt = false
+  [functions.plan-lesson-blueprint]
+    verify_jwt = false
+  [functions.sync-slides-to-blueprint]
+    verify_jwt = false
+  [functions.rewrite-slide-field]
+    verify_jwt = false
+  [functions.intelligence-observer]
+    verify_jwt = true
+  [functions.generate-game-content]
+    verify_jwt = true
+  [functions.interview-token-auth]
+    verify_jwt = false
+  [functions.interview-book-slot]
+    verify_jwt = false
+  [functions.recruitment-invite-applicant]
+    verify_jwt = false
+  [functions.recruitment-agent]
+    verify_jwt = false
+
+  [functions.playground-activity-ai]
+    verify_jwt = false
+
+  [functions.generate-ace-lesson]
+    verify_jwt = false
+
+  [functions.story-architect]
+    verify_jwt = false
+
+  [functions.vocab-image-architect]
+    verify_jwt = false
+
+
+
+
+  [functions.generate-playground-video]
+    verify_jwt = false
+
+  [functions.poll-playground-video]
+    verify_jwt = false
+
+  [functions.publish-video-to-youtube]
+    verify_jwt = true
+
+  [functions.parent-email-preferences]
+    verify_jwt = false
+
+
+
+  [functions.resend-webhook]
+    verify_jwt = false

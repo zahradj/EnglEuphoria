@@ -1,0 +1,1 @@
+ALTER TABLE public.interviews ADD COLUMN IF NOT EXISTS booking_token_expires_at timestamptz;

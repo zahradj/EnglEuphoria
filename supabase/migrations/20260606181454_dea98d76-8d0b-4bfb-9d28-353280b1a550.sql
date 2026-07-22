@@ -1,0 +1,1 @@
+ALTER TABLE public.cat_items ADD COLUMN IF NOT EXISTS audio_url_kids TEXT;

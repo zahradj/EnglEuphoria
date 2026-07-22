@@ -1,0 +1,1448 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    min-height: 100%;
+    scroll-behavior: smooth;
+    overflow-y: auto;
+    overscroll-behavior-y: auto;
+    /* iOS Safari: respect the URL bar; full-bleed surfaces should use h-dvh */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    min-height: 100dvh;
+    /* Mobile: prevent accidental horizontal scroll caused by stray overflows */
+    overflow-x: clip;
+    overflow-y: auto;
+    overscroll-behavior-y: auto;
+  }
+
+  #root {
+    min-height: 100dvh;
+  }
+
+  /* Global safe-area helpers for fixed bottom UI (mobile nav, sticky CTA) */
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+  .pt-safe { padding-top: env(safe-area-inset-top); }
+  .pl-safe { padding-left: env(safe-area-inset-left); }
+  .pr-safe { padding-right: env(safe-area-inset-right); }
+
+  /* ============= Arabic Typography (auto-applied via <html lang="ar" dir="rtl">) ============= */
+  /* Cairo for headings (display weight, geometric, premium feel) */
+  /* Tajawal for body (highly readable, optimized for UI) */
+  html[lang="ar"],
+  html[dir="rtl"] {
+    font-family: 'Tajawal', 'Cairo', 'Segoe UI', system-ui, sans-serif;
+  }
+
+  html[lang="ar"] body,
+  html[dir="rtl"] body {
+    font-family: 'Tajawal', 'Cairo', 'Segoe UI', system-ui, sans-serif;
+    /* Arabic glyphs render slightly smaller — boost legibility */
+    font-size: 1.02em;
+    line-height: 1.75;
+    letter-spacing: 0;
+  }
+
+  /* Headings get Cairo for stronger display presence */
+  html[lang="ar"] h1,
+  html[lang="ar"] h2,
+  html[lang="ar"] h3,
+  html[lang="ar"] h4,
+  html[lang="ar"] h5,
+  html[lang="ar"] h6,
+  html[dir="rtl"] h1,
+  html[dir="rtl"] h2,
+  html[dir="rtl"] h3,
+  html[dir="rtl"] h4,
+  html[dir="rtl"] h5,
+  html[dir="rtl"] h6 {
+    font-family: 'Cairo', 'Tajawal', 'Segoe UI', system-ui, sans-serif;
+    /* Arabic display tracks better with slightly looser leading */
+    line-height: 1.4;
+    /* Letter-spacing must be 0 for Arabic — no tracking */
+    letter-spacing: 0 !important;
+    /* Tracking-tight Tailwind utilities cause cluster breakage in Arabic */
+    word-spacing: 0.02em;
+  }
+
+  /* Neutralize tight tracking utilities that distort Arabic shaping */
+  html[lang="ar"] .tracking-tight,
+  html[lang="ar"] .tracking-tighter,
+  html[lang="ar"] .tracking-wide,
+  html[lang="ar"] .tracking-widest,
+  html[dir="rtl"] .tracking-tight,
+  html[dir="rtl"] .tracking-tighter,
+  html[dir="rtl"] .tracking-wide,
+  html[dir="rtl"] .tracking-widest {
+    letter-spacing: 0 !important;
+  }
+
+  /* Ensure inline icon + text rows reflow naturally in RTL */
+  html[dir="rtl"] .lucide {
+    flex-shrink: 0;
+  }
+}
+
+@layer components {
+  /* Classroom Glass Panel */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(229, 231, 235, 0.5);
+  }
+
+  /* Enhanced Glassmorphism Effects */
+  .glass {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08));
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .glass-light {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.1),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-strong {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.12));
+    backdrop-filter: blur(20px) saturate(200%);
+    -webkit-backdrop-filter: blur(20px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.2),
+                inset 0 1px 2px 0 rgba(255, 255, 255, 0.4);
+  }
+
+  /* ============= CLAYMORPHISM DESIGN SYSTEM ============= */
+  /* Subject-coded colors: Yellow=Phonics, Green=Vocab, Blue=Grammar */
+
+  .clay {
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(240,240,245,0.95));
+    box-shadow:
+      8px 8px 16px rgba(0, 0, 0, 0.08),
+      -4px -4px 12px rgba(255, 255, 255, 0.9),
+      inset 0 2px 4px rgba(255, 255, 255, 0.8),
+      inset 0 -1px 2px rgba(0, 0, 0, 0.04);
+  }
+
+  .clay-phonics {
+    border-radius: 20px;
+    background: linear-gradient(145deg, hsl(45 95% 88%), hsl(42 90% 82%));
+    box-shadow:
+      6px 6px 14px hsl(40 60% 60% / 0.25),
+      -3px -3px 10px hsl(50 100% 96% / 0.9),
+      inset 0 2px 4px hsl(50 100% 96% / 0.7),
+      inset 0 -1px 2px hsl(40 60% 60% / 0.08);
+  }
+
+  .clay-vocab {
+    border-radius: 20px;
+    background: linear-gradient(145deg, hsl(145 55% 82%), hsl(150 50% 76%));
+    box-shadow:
+      6px 6px 14px hsl(150 40% 50% / 0.25),
+      -3px -3px 10px hsl(140 60% 94% / 0.9),
+      inset 0 2px 4px hsl(140 60% 94% / 0.7),
+      inset 0 -1px 2px hsl(150 40% 50% / 0.08);
+  }
+
+  .clay-grammar {
+    border-radius: 20px;
+    background: linear-gradient(145deg, hsl(215 70% 85%), hsl(220 65% 79%));
+    box-shadow:
+      6px 6px 14px hsl(220 50% 55% / 0.25),
+      -3px -3px 10px hsl(210 80% 96% / 0.9),
+      inset 0 2px 4px hsl(210 80% 96% / 0.7),
+      inset 0 -1px 2px hsl(220 50% 55% / 0.08);
+  }
+
+  .clay-pressed {
+    border-radius: 16px;
+    box-shadow:
+      inset 4px 4px 8px rgba(0, 0, 0, 0.1),
+      inset -2px -2px 6px rgba(255, 255, 255, 0.6);
+  }
+
+  .clay-icon {
+    border-radius: 50%;
+    box-shadow:
+      4px 4px 10px rgba(0, 0, 0, 0.12),
+      -2px -2px 8px rgba(255, 255, 255, 0.8),
+      inset 0 1px 3px rgba(255, 255, 255, 0.6);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .clay-icon:hover {
+    transform: scale(1.05);
+    box-shadow:
+      5px 5px 12px rgba(0, 0, 0, 0.14),
+      -3px -3px 10px rgba(255, 255, 255, 0.85),
+      inset 0 1px 3px rgba(255, 255, 255, 0.6);
+  }
+
+  .clay-badge {
+    border-radius: 16px;
+    box-shadow:
+      4px 4px 10px rgba(0, 0, 0, 0.1),
+      -2px -2px 8px rgba(255, 255, 255, 0.7),
+      inset 0 1px 2px rgba(255, 255, 255, 0.5);
+    border: none;
+  }
+  .neumorphic {
+    background: linear-gradient(145deg, hsl(var(--background)), hsl(var(--muted)));
+    box-shadow: 
+      12px 12px 24px rgba(0, 0, 0, 0.1),
+      -12px -12px 24px rgba(255, 255, 255, 0.7);
+  }
+
+  .neumorphic-inset {
+    background: linear-gradient(145deg, hsl(var(--muted)), hsl(var(--background)));
+    box-shadow: 
+      inset 8px 8px 16px rgba(0, 0, 0, 0.1),
+      inset -8px -8px 16px rgba(255, 255, 255, 0.7);
+  }
+
+  /* ============= HUB-SPECIFIC GLASSMORPHISM ============= */
+  .glass-card-hub {
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-radius: 1.25rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .glass-card-hub:hover {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.14), 0 6px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+  }
+
+  /* Playground — Orange/Yellow */
+  .glass-playground {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(254, 106, 47, 0.2);
+    box-shadow: 0 8px 32px rgba(254, 106, 47, 0.1), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+  .glass-playground:hover {
+    border-color: rgba(254, 106, 47, 0.4);
+  }
+  .dark .glass-playground {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(254, 175, 21, 0.18);
+    box-shadow: 0 8px 32px rgba(254, 106, 47, 0.15), inset 0 1px 0 rgba(254, 175, 21, 0.08);
+  }
+
+  /* Academy — Indigo/Purple */
+  .glass-academy {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(23, 78, 166, 0.2);
+    box-shadow: 0 8px 32px rgba(23, 78, 166, 0.1), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+  .glass-academy:hover {
+    border-color: rgba(23, 78, 166, 0.4);
+  }
+  .dark .glass-academy {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(183, 94, 237, 0.18);
+    box-shadow: 0 8px 32px rgba(23, 78, 166, 0.15), inset 0 1px 0 rgba(183, 94, 237, 0.08);
+  }
+
+  /* Professional — Emerald/Teal */
+  .glass-professional {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(13, 101, 45, 0.2);
+    box-shadow: 0 8px 32px rgba(13, 101, 45, 0.1), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+  .glass-professional:hover {
+    border-color: rgba(13, 101, 45, 0.4);
+  }
+  .dark .glass-professional {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(61, 211, 155, 0.18);
+    box-shadow: 0 8px 32px rgba(13, 101, 45, 0.15), inset 0 1px 0 rgba(61, 211, 155, 0.08);
+  }
+
+  /* Glow Pulse Animation for CTA buttons */
+  .glow-pulse-playground {
+    animation: glowPulsePlayground 2s ease-in-out infinite;
+  }
+  .glow-pulse-academy {
+    animation: glowPulseAcademy 2s ease-in-out infinite;
+  }
+  .glow-pulse-professional {
+    animation: glowPulseProfessional 2s ease-in-out infinite;
+  }
+
+  @keyframes glowPulsePlayground {
+    0%, 100% { box-shadow: 0 0 20px rgba(254, 106, 47, 0.3), 0 0 40px rgba(254, 175, 21, 0.15); }
+    50% { box-shadow: 0 0 30px rgba(254, 106, 47, 0.5), 0 0 60px rgba(254, 175, 21, 0.25); }
+  }
+  @keyframes glowPulseAcademy {
+    0%, 100% { box-shadow: 0 0 20px rgba(23, 78, 166, 0.3), 0 0 40px rgba(183, 94, 237, 0.15); }
+    50% { box-shadow: 0 0 30px rgba(23, 78, 166, 0.5), 0 0 60px rgba(183, 94, 237, 0.25); }
+  }
+  @keyframes glowPulseProfessional {
+    0%, 100% { box-shadow: 0 0 20px rgba(13, 101, 45, 0.3), 0 0 40px rgba(61, 211, 155, 0.15); }
+    50% { box-shadow: 0 0 30px rgba(13, 101, 45, 0.5), 0 0 60px rgba(61, 211, 155, 0.25); }
+  }
+
+  /* Enhanced Glow Effects */
+  .glow-primary {
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.6),
+                0 0 60px hsl(var(--primary) / 0.3),
+                inset 0 0 20px hsl(var(--primary) / 0.1);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 30px hsl(var(--accent) / 0.6),
+                0 0 60px hsl(var(--accent) / 0.3);
+  }
+
+  .shadow-soft {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08),
+                0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+
+  .shadow-glow {
+    box-shadow: 0 10px 40px -10px hsl(var(--primary) / 0.4),
+                0 5px 20px -5px hsl(var(--primary) / 0.3),
+                0 0 0 1px hsl(var(--primary) / 0.1);
+  }
+
+  /* Scrollbar Styling */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-muted rounded-full;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+
+  .scrollbar-thumb-classroom-primary\/30::-webkit-scrollbar-thumb {
+    background: hsl(var(--classroom-primary) / 0.3);
+  }
+
+  .scrollbar-track-transparent::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Global page scrollbar — theme-aware */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #f3f4f6;
+  }
+  ::-webkit-scrollbar-corner {
+    background: #ffffff;
+  }
+  html {
+    scrollbar-color: #e5e7eb #ffffff;
+    scrollbar-width: thin;
+  }
+
+  .dark ::-webkit-scrollbar-track {
+    background: #000000;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: #000000;
+    border: 2px solid #1f2937;
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #111827;
+  }
+  .dark ::-webkit-scrollbar-corner {
+    background: #000000;
+  }
+  .dark {
+    scrollbar-color: #1f2937 #000000;
+  }
+}
+
+@media (min-width: 768px) {
+  body.custom-cursor,
+  body.custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+@layer utilities {
+  /* 3D transform helpers (used by the Slide Studio Flashcard Flip) */
+  .perspective-1000 { perspective: 1000px; }
+  .preserve-3d { transform-style: preserve-3d; }
+  .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  .rotate-y-180 { transform: rotateY(180deg); }
+
+  /* Custom animations that work with Tailwind's animate- prefix */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes scale-out {
+    from {
+      transform: scale(1);
+      opacity: 1;
+    }
+    to {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+  }
+
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-out-right {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+
+  .animate-fade-out {
+    animation: fade-out 0.3s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.2s ease-out;
+  }
+
+  .animate-scale-out {
+    animation: scale-out 0.2s ease-out;
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.3s ease-out;
+  }
+
+  .animate-slide-out-right {
+    animation: slide-out-right 0.3s ease-out;
+  }
+}
+
+:root {
+  /* Success Hub Trail brand palette (used by Trial Creator preview) */
+  --brand-emerald: oklch(0.62 0.14 162);
+  --brand-emerald-deep: oklch(0.42 0.12 162);
+  --brand-emerald-glow: oklch(0.78 0.14 168);
+  --brand-mint: oklch(0.97 0.03 178);
+  --brand-cream: oklch(0.985 0.018 95);
+  --brand-sun: oklch(0.88 0.14 92);
+  --brand-sky: oklch(0.85 0.08 210);
+
+  /* Academy Hub Trail brand palette */
+  --brand-purple: oklch(0.55 0.18 295);
+  --brand-purple-deep: oklch(0.38 0.16 295);
+  --brand-purple-glow: oklch(0.74 0.15 300);
+  --brand-pink: oklch(0.74 0.18 350);
+
+
+  /* Base Colors - Pearl Light Mode */
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 280 60% 65%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 5% 96%;
+  --secondary-foreground: 240 6% 25%;
+  --muted: 240 5% 96%;
+  --muted-foreground: 240 4% 46%;
+  --accent: 180 50% 92%;
+  --accent-foreground: 180 50% 25%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 240 6% 90%;
+  --input: 240 6% 90%;
+  --ring: 280 55% 60%;
+  --radius: 0.75rem;
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+
+  /* Classroom-specific colors - Lighter */
+  --classroom-primary: 280 55% 75%;
+  --classroom-accent: 280 40% 60%;
+  --classroom-reward: 45 90% 60%;
+  --classroom-success: 160 60% 50%;
+  --classroom-focus: 220 55% 60%;
+  --classroom-lavender: 280 65% 88%;
+  
+  /* Neon Colors */
+  --neon-pink: 330 100% 70%;
+  --neon-cyan: 180 100% 50%;
+  --neon-green: 120 100% 55%;
+  --neon-magenta: 320 100% 50%;
+  --neon-blue: 200 100% 50%;
+  --neon-purple: 270 100% 60%;
+  --neon-yellow: 60 100% 50%;
+  --neon-orange: 30 100% 55%;
+  
+  /* Kids Playground Theme Colors */
+  --kids-jungle-green: 120 60% 40%;
+  --kids-jungle-dark: 120 50% 25%;
+  --kids-sky-blue: 200 80% 70%;
+  --kids-sun-yellow: 45 100% 55%;
+  --kids-path-brown: 30 50% 40%;
+  --kids-gold: 45 100% 50%;
+  --kids-pink: 330 85% 65%;
+  --kids-purple: 280 70% 60%;
+  
+  /* Academy Neon Theme Colors */
+  --academy-bg-dark: 240 20% 8%;
+  --academy-card-dark: 240 15% 12%;
+  --academy-accent-purple: 270 80% 65%;
+  --academy-accent-cyan: 180 90% 50%;
+
+  /* ── Comic Storybook tokens (Western comic palette) ── */
+  --comic-book-bg: 35 35% 90%;          /* warm parchment table */
+  --comic-paper-bg: 40 60% 96%;         /* page paper */
+  --comic-page-bg: 38 50% 94%;          /* inner page mat */
+  --comic-panel-bg: 0 0% 100%;          /* panel inner */
+  --comic-caption-bg: 48 95% 78%;       /* yellow narration parchment */
+  --comic-caption-border: 0 0% 8%;      /* heavy ink black */
+  --comic-caption-fg: 0 0% 10%;
+  --comic-bubble-bg: 0 0% 100%;
+}
+
+.dark {
+  --comic-book-bg: 30 18% 12%;
+  --comic-paper-bg: 35 22% 16%;
+  --comic-page-bg: 35 20% 18%;
+  --comic-panel-bg: 30 15% 14%;
+  --comic-caption-bg: 45 80% 60%;
+  --comic-caption-border: 35 35% 90%;
+  --comic-caption-fg: 30 18% 10%;
+  --comic-bubble-bg: 35 22% 20%;
+}
+
+.dark {
+  --background: 240 10% 4%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 6%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 6%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 280 60% 70%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 4% 18%;
+  --secondary-foreground: 0 0% 96%;
+  --muted: 240 4% 18%;
+  --muted-foreground: 240 5% 60%;
+  --accent: 240 4% 18%;
+  --accent-foreground: 0 0% 96%;
+  --destructive: 0 62% 40%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 240 4% 18%;
+  --input: 240 4% 18%;
+  --ring: 280 55% 65%;
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+}
+
+/* Enhanced Reward Animations */
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(-100px);
+  }
+}
+
+.drop-shadow-glow {
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+.hover-scale-102:hover {
+  transform: scale(1.02);
+}
+
+@keyframes float-up {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.8);
+  }
+}
+
+.animate-float-up {
+  animation: float-up 1.5s ease-out forwards;
+}
+
+/* Screen shake animation for level-up */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Bounce in animation */
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Neon Glow Effects */
+.neon-glow-pink {
+  box-shadow: 
+    0 0 5px hsl(var(--neon-pink)),
+    0 0 10px hsl(var(--neon-pink)),
+    0 0 20px hsl(var(--neon-pink)),
+    0 0 40px hsl(var(--neon-pink));
+}
+
+.neon-glow-cyan {
+  box-shadow: 
+    0 0 5px hsl(var(--neon-cyan)),
+    0 0 10px hsl(var(--neon-cyan)),
+    0 0 20px hsl(var(--neon-cyan)),
+    0 0 40px hsl(var(--neon-cyan));
+}
+
+.neon-glow-purple {
+  box-shadow: 
+    0 0 5px hsl(var(--neon-purple)),
+    0 0 10px hsl(var(--neon-purple)),
+    0 0 20px hsl(var(--neon-purple));
+}
+
+.neon-glow-magenta {
+  box-shadow: 
+    0 0 5px hsl(var(--neon-magenta)),
+    0 0 10px hsl(var(--neon-magenta)),
+    0 0 20px hsl(var(--neon-magenta));
+}
+
+.neon-border-glow {
+  border: 1px solid hsl(var(--neon-cyan) / 0.5);
+  box-shadow: 
+    0 0 5px hsl(var(--neon-cyan)),
+    inset 0 0 5px hsl(var(--neon-cyan) / 0.2);
+}
+
+.neon-text-glow {
+  text-shadow: 
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 15px currentColor;
+}
+
+/* Kids Playground Animations */
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px hsl(var(--kids-gold) / 0.6), 0 0 40px hsl(var(--kids-gold) / 0.3);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 30px hsl(var(--kids-gold) / 0.8), 0 0 60px hsl(var(--kids-gold) / 0.5);
+    transform: scale(1.05);
+  }
+}
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes path-dash {
+  to { stroke-dashoffset: 0; }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-float-gentle {
+  animation: float-gentle 3s ease-in-out infinite;
+}
+
+.animate-wiggle {
+  animation: wiggle 0.5s ease-in-out infinite;
+}
+
+.animate-path-dash {
+  animation: path-dash 2s ease-out forwards;
+}
+
+/* Academy Hub Trail animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+.animate-pop {
+  animation: pop 0.35s ease-out;
+}
+
+.font-display {
+  font-family: var(--font-display, ui-rounded, "Nunito", "Poppins", system-ui, sans-serif);
+}
+
+/* Cinematic Typography Effects */
+.text-glow {
+  text-shadow: 0 0 6px rgba(255,255,255,0.15), 0 0 18px rgba(255,255,255,0.06);
+}
+
+.text-ink {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Film Grain Filter */
+@keyframes grain-shift {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-2%, -3%); }
+  30% { transform: translate(3%, 2%); }
+  50% { transform: translate(-1%, 3%); }
+  70% { transform: translate(2%, -1%); }
+  90% { transform: translate(-3%, 1%); }
+}
+
+.animate-grain {
+  animation: grain-shift 0.5s steps(3) infinite;
+}
+
+/* Gradient text animation */
+@keyframes gradient-text-flow {
+  0% { background-position: 0% center; }
+  100% { background-position: -200% center; }
+}
+
+.animate-gradient-text {
+  animation: gradient-text-flow 6s linear infinite;
+}
+
+/* Euphoria Ring breathing */
+@keyframes euphoria-breathe {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+  50% { transform: translate(-50%, -50%) scale(1.08); opacity: 0.6; }
+}
+
+.animate-euphoria-ring {
+  animation: euphoria-breathe 4s ease-in-out infinite;
+}
+
+/* Circle ripple for theme transition */
+@keyframes ripple-expand {
+  from { clip-path: circle(0% at var(--ripple-x) var(--ripple-y)); }
+  to { clip-path: circle(150vmax at var(--ripple-x) var(--ripple-y)); }
+}
+
+.theme-ripple {
+  animation: ripple-expand 0.7s ease-out forwards;
+}
+
+/* Gradient Mesh Animation - Light mode hero */
+@keyframes gradient-mesh-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -20px) scale(1.05); }
+  50% { transform: translate(-20px, 15px) scale(0.98); }
+  75% { transform: translate(15px, 25px) scale(1.03); }
+}
+
+.animate-gradient-mesh {
+  animation: gradient-mesh-float 12s ease-in-out infinite;
+}
+
+/* Text Shimmer - Aurora effect for light mode headline */
+@keyframes text-shimmer-flow {
+  0% { background-position: 0% center; }
+  100% { background-position: -300% center; }
+}
+
+.animate-text-shimmer {
+  animation: text-shimmer-flow 8s linear infinite;
+}
+
+/* Pulse Ring - Pricing popular card */
+@keyframes pulse-ring-expand {
+  0% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.6; }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring-expand 2.5s ease-in-out infinite;
+}
+
+/* Pip Character Animations */
+@keyframes pip-idle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes pip-wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(8deg); }
+  75% { transform: rotate(-8deg); }
+}
+@keyframes pip-jump {
+  0%, 100% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-24px) scale(1.05); }
+  60% { transform: translateY(-24px) scale(1.05); }
+}
+@keyframes pip-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+.animate-pip-idle { animation: pip-idle 2.5s ease-in-out infinite; }
+.animate-pip-wave { animation: pip-wave 1.5s ease-in-out infinite; }
+.animate-pip-jump { animation: pip-jump 1s ease-in-out infinite; }
+.animate-pip-shake { animation: pip-shake 0.5s ease-in-out infinite; }
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============= BRAND UTILITY CLASSES ============= */
+@layer components {
+  .brand-card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 1rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .brand-card:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
+  }
+  .dark .brand-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .brand-header {
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.08), hsl(var(--primary) / 0.02));
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .brand-sidebar-item-active {
+    background: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
+    font-weight: 600;
+    box-shadow: 0 0 12px hsl(var(--primary) / 0.15), inset 0 0 0 1px hsl(var(--primary) / 0.2);
+    border-radius: 0.5rem;
+  }
+}
+
+/* ============================================================ */
+/* Hybrid Hub Theme Engine — color tokens per Hub                */
+/* Structural classes (font, radius, shadow, button bounce)      */
+/* live in src/lib/hubTheme.ts as Tailwind utility strings.      */
+/* Use HSL so we can compose with /opacity in Tailwind.          */
+/* ============================================================ */
+.theme-playground {
+  /* Sunshine yellow wash, vibrant orange primary, sky-blue accent — bright & joyful */
+  --hub-bg: 56 95% 93%;             /* #FEFBDD warm cream-yellow */
+  --hub-primary: 18 99% 59%;        /* #FE6A2F bright orange */
+  --hub-primary-foreground: 0 0% 100%;
+  --hub-text: 222 47% 11%;          /* #0f172a ink */
+  --hub-muted: 215 20% 55%;
+  --hub-card: 0 0% 100%;
+  --hub-accent: 199 89% 60%;        /* #38bdf8 sky blue */
+  --hub-border: 18 99% 59%;         /* orange border by default */
+}
+
+.theme-academy {
+  /* Deep slate background, neon purple primary, light text */
+  --hub-bg: 222 47% 11%;            /* #0f172a */
+  --hub-primary: 271 91% 65%;        /* #a855f7 */
+  --hub-primary-foreground: 210 40% 98%;
+  --hub-text: 210 40% 98%;           /* #f8fafc */
+  --hub-muted: 215 16% 47%;
+  --hub-card: 217 33% 17%;
+  --hub-accent: 271 91% 65%;
+  --hub-border: 271 91% 65%;
+}
+
+.theme-success {
+  /* Crisp white background, executive navy primary, ink text */
+  --hub-bg: 210 40% 98%;             /* #f8fafc */
+  --hub-primary: 224 76% 33%;         /* #1e3a8a */
+  --hub-primary-foreground: 210 40% 98%;
+  --hub-text: 222 47% 11%;
+  --hub-muted: 215 16% 47%;
+  --hub-card: 0 0% 100%;
+  --hub-accent: 224 76% 33%;
+  --hub-border: 215 28% 88%;
+}
+
+/* Convenience surface — apply to the outermost themed container */
+.hub-surface {
+  background-color: hsl(var(--hub-bg));
+  color: hsl(var(--hub-text));
+}
+.hub-card {
+  background-color: hsl(var(--hub-card));
+  color: hsl(var(--hub-text));
+  border: 1px solid hsl(var(--hub-border) / 0.3);
+}
+.hub-primary {
+  background-color: hsl(var(--hub-primary));
+  color: hsl(var(--hub-primary-foreground));
+}
+
+
+/* ── Forgiving Gamification: orange wrong-answer feedback ────────────────
+   Side-to-side vibration + warm orange glow. Orange (warning) — never red
+   (failure) — keeps the student in a problem-solving mindset. */
+@keyframes wrong-shake {
+  0%, 100% { transform: translateX(0); }
+  15%      { transform: translateX(-8px); }
+  30%      { transform: translateX(8px); }
+  45%      { transform: translateX(-6px); }
+  60%      { transform: translateX(6px); }
+  75%      { transform: translateX(-3px); }
+  90%      { transform: translateX(3px); }
+}
+.wrong-shake {
+  animation: wrong-shake 0.45s cubic-bezier(.36,.07,.19,.97) both;
+  box-shadow: 0 0 0 3px hsl(28 95% 60% / 0.45),
+              0 0 24px hsl(28 95% 60% / 0.55);
+  border-color: hsl(28 95% 60%) !important;
+  transition: box-shadow 0.2s ease;
+}
+
+/* Subtle pulsing glow used to highlight the correct target after the 2nd mistake. */
+@keyframes hint-target-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(142 71% 45% / 0.55); }
+  50%      { box-shadow: 0 0 0 10px hsl(142 71% 45% / 0); }
+}
+.hint-target-pulse {
+  animation: hint-target-pulse 1.4s ease-out infinite;
+  border-color: hsl(142 71% 45%) !important;
+}
+
+/* Confetti animation for celebration slide */
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+.animate-confetti-fall {
+  animation: confetti-fall 3s ease-in forwards;
+}
+
+/* ============================================================
+   📱 BOLD FLAT MOBILE OVERHAUL (≤767px)
+   - Kills heavy glass/blur/shadow on mobile (perf + flat 2.0)
+   - Tightens type scale, enforces 44px tap targets
+   - Adds full-bleed hub-color section helpers
+   - Adds bottom safe-area padding so sticky CTA never overlaps
+   ============================================================ */
+@media (max-width: 767px) {
+  /* Flatten glassmorphism on mobile — major perf win */
+  .glass,
+  .glass-light,
+  .glass-strong,
+  .glass-panel {
+    background: hsl(var(--background)) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: 1px solid hsl(var(--border)) !important;
+  }
+
+  /* Disable backdrop-blur utility classes globally on mobile */
+  .backdrop-blur-sm,
+  .backdrop-blur,
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl,
+  .backdrop-blur-2xl,
+  .backdrop-blur-3xl {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Drop expensive blur filters on decorative glows */
+  [class*="blur-["],
+  .blur-2xl,
+  .blur-3xl {
+    filter: none !important;
+  }
+
+  /* Soften shadows — Bold Flat aesthetic */
+  .shadow-xl,
+  .shadow-2xl {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+  }
+
+  /* Tighter mobile type scale */
+  h1 { font-size: clamp(1.875rem, 8vw, 2.25rem) !important; line-height: 1.1 !important; }
+  h2 { font-size: clamp(1.5rem, 6vw, 1.75rem) !important; line-height: 1.15 !important; }
+
+  /* Min 44px tap targets for accessibility */
+  a, button, [role="button"] {
+    min-height: 44px;
+  }
+  /* Inline tappables (within text, badges) opt out */
+  a.inline,
+  button.inline,
+  .tap-inline a,
+  .tap-inline button {
+    min-height: 0;
+  }
+
+  /* Reserve space for the sticky bottom CTA on landing */
+  body.has-sticky-cta {
+    padding-bottom: 88px;
+  }
+}
+
+/* ============================================================
+   🎨 HUB FULL-BLEED SECTION HELPERS (mobile-first, all viewports)
+   Use on any landing section to instantly apply Bold Flat
+   hub-color band + matching accent.
+   ============================================================ */
+.hub-band-playground {
+  background: #FE6A2F;
+  color: #FFFFFF;
+}
+.hub-band-playground-soft {
+  background: #FEFBDD;
+  color: #2A1A05;
+}
+.hub-band-academy {
+  background: #6B21A8;
+  color: #FFFFFF;
+}
+.hub-band-academy-soft {
+  background: #F5F3FF;
+  color: #1E0B36;
+}
+.hub-band-success {
+  background: #059669;
+  color: #FFFFFF;
+}
+.hub-band-success-soft {
+  background: #F0FDFA;
+  color: #022C22;
+}
+
+/* Section helper: full-bleed flat band with safe inner padding */
+.flat-band {
+  width: 100%;
+  padding: 3rem 1.25rem;
+  border-radius: 0;
+}
+@media (min-width: 768px) {
+  .flat-band {
+    padding: 5rem 2rem;
+  }
+}
+
+/* ============================================================
+   CREATOR STUDIO — Midnight Indigo workspace tokens
+   Scoped under .creator-studio so the rest of the app is untouched.
+   Hub micro-personality (accent / radius / motion) is overridden by
+   .hub-playground / .hub-academy / .hub-success classes below.
+   ============================================================ */
+.creator-studio {
+  /* Base palette */
+  --workspace-bg:        222 47% 5%;     /* #0a0a1a */
+  --workspace-panel:     232 41% 13%;    /* #141432 */
+  --workspace-rail:      240 51% 23%;    /* #1e1e5a */
+  --workspace-line:      240 30% 22%;
+  --workspace-elevated:  232 38% 16%;
+  --workspace-fg:        220 25% 96%;
+  --workspace-fg-muted:  220 15% 68%;
+  --workspace-fg-subtle: 220 12% 48%;
+  --workspace-primary:   239 84% 60%;    /* #4f46e5 */
+  --workspace-primary-fg: 0 0% 100%;
+  --workspace-danger:    0 72% 60%;
+  --workspace-success:   142 71% 45%;
+  --workspace-warning:   38 92% 56%;
+
+  /* Hub accent — defaults to primary, overridden per hub */
+  --hub-accent:       239 84% 60%;
+  --hub-accent-soft:  239 84% 60% / 0.14;
+  --hub-accent-fg:    0 0% 100%;
+  --hub-radius:       10px;
+  --hub-radius-lg:    14px;
+  --hub-motion:       180ms cubic-bezier(0.22, 1, 0.36, 1);
+  --hub-ornament:     1px solid hsl(var(--workspace-line));
+
+  background: hsl(var(--workspace-bg));
+  color: hsl(var(--workspace-fg));
+  font-family: '"DM Sans"', 'Inter', system-ui, sans-serif;
+  font-feature-settings: 'ss01', 'cv11';
+}
+
+.creator-studio h1,
+.creator-studio h2,
+.creator-studio h3,
+.creator-studio h4,
+.creator-studio .studio-display {
+  font-family: '"Space Grotesk"', 'Outfit', system-ui, sans-serif;
+  letter-spacing: -0.015em;
+}
+
+/* Surface helpers */
+.creator-studio .studio-panel {
+  background: hsl(var(--workspace-panel));
+  border: var(--hub-ornament);
+  border-radius: var(--hub-radius-lg);
+}
+.creator-studio .studio-rail {
+  background: hsl(var(--workspace-rail) / 0.5);
+  border-right: 1px solid hsl(var(--workspace-line));
+}
+.creator-studio .studio-elevated {
+  background: hsl(var(--workspace-elevated));
+  border: 1px solid hsl(var(--workspace-line));
+  border-radius: var(--hub-radius);
+}
+.creator-studio .studio-divider {
+  border-color: hsl(var(--workspace-line));
+}
+.creator-studio .studio-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: hsl(var(--hub-accent) / 0.14);
+  color: hsl(var(--hub-accent));
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.creator-studio .studio-btn-primary {
+  background: hsl(var(--hub-accent));
+  color: hsl(var(--hub-accent-fg));
+  border-radius: var(--hub-radius);
+  transition: filter var(--hub-motion), transform var(--hub-motion);
+}
+.creator-studio .studio-btn-primary:hover { filter: brightness(1.1); }
+.creator-studio .studio-btn-ghost {
+  background: transparent;
+  color: hsl(var(--workspace-fg-muted));
+  border-radius: var(--hub-radius);
+  transition: background var(--hub-motion), color var(--hub-motion);
+}
+.creator-studio .studio-btn-ghost:hover {
+  background: hsl(var(--workspace-elevated));
+  color: hsl(var(--workspace-fg));
+}
+
+/* ------------ Hub micro-personality overrides ------------ */
+.creator-studio.hub-playground {
+  --hub-accent:       18 99% 59%;       /* #FE6A2F */
+  --hub-accent-soft:  18 99% 59% / 0.16;
+  --hub-accent-fg:    20 30% 12%;
+  --hub-radius:       18px;
+  --hub-radius-lg:    22px;
+  --hub-motion:       260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --hub-ornament:     1px solid hsl(var(--hub-accent) / 0.18);
+}
+.creator-studio.hub-academy {
+  --hub-accent:       270 67% 40%;      /* #6B21A8 */
+  --hub-accent-soft:  270 67% 40% / 0.18;
+  --hub-accent-fg:    0 0% 100%;
+  --hub-radius:       8px;
+  --hub-radius-lg:    10px;
+  --hub-motion:       180ms cubic-bezier(0.22, 1, 0.36, 1);
+  --hub-ornament:     1px solid hsl(var(--workspace-line));
+}
+.creator-studio.hub-success {
+  --hub-accent:       160 84% 31%;      /* #059669 */
+  --hub-accent-soft:  160 84% 31% / 0.16;
+  --hub-accent-fg:    0 0% 100%;
+  --hub-radius:       6px;
+  --hub-radius-lg:    8px;
+  --hub-motion:       140ms cubic-bezier(0.4, 0, 0.2, 1);
+  --hub-ornament:     1px solid hsl(var(--workspace-line));
+}
+.creator-studio.hub-success .studio-panel {
+  border-top: 2px solid hsl(var(--hub-accent));
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Playground Immersive Shell — Tactile Interaction Layer
+   Scoped to `.pg-tactile` so the bouncy/snap feel is contained to the
+   Playground lesson canvas and never leaks into Academy/Success or admin UI.
+   ───────────────────────────────────────────────────────────────────────── */
+.pg-tactile button:not(:disabled),
+.pg-tactile [role="button"]:not([aria-disabled="true"]),
+.pg-tactile .pg-tap {
+  transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              filter 180ms ease-out,
+              background-color 180ms ease-out;
+  will-change: transform;
+}
+.pg-tactile button:not(:disabled):hover,
+.pg-tactile [role="button"]:not([aria-disabled="true"]):hover,
+.pg-tactile .pg-tap:hover {
+  transform: scale(1.05);
+}
+.pg-tactile button:not(:disabled):active,
+.pg-tactile [role="button"]:not([aria-disabled="true"]):active,
+.pg-tactile .pg-tap:active {
+  transform: scale(0.96);
+  filter: brightness(0.97);
+}
+
+/* Snap animation for drag-and-drop / matching correct placement. */
+@keyframes pg-snap {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.18) rotate(-2deg); }
+  70%  { transform: scale(0.94) rotate(1.5deg); }
+  100% { transform: scale(1); }
+}
+.pg-tactile .pg-snap,
+.pg-tactile [data-correct="true"] {
+  animation: pg-snap 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Subtle wobble for incorrect attempts (kept gentle for kids). */
+@keyframes pg-wobble {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-6px); }
+  75%      { transform: translateX(6px); }
+}
+.pg-tactile [data-correct="false"] {
+  animation: pg-wobble 280ms ease-in-out;
+}
+
+/* ── Early Learner Mode ─────────────────────────────────────────────
+ * When the "Aa" toggle is OFF, hide every element opted-in via the
+ * [data-early-text] attribute so pre-readers see picture + hear voice
+ * without competing text. Wraps from EarlyLearnerOverlay.tsx.
+ */
+.early-learner-text-hidden [data-early-text] {
+  visibility: hidden;
+}
+.early-learner-shell {
+  /* Reserve room so the FAB doesn't sit over interactive answer rows. */
+  --early-learner-fab-pad: 5rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Unit Progress Report — print / Save-as-PDF layout (A4).
+ * Hides app chrome so window.print() produces a single-page report.
+ * ------------------------------------------------------------------------- */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  body * {
+    visibility: hidden !important;
+  }
+  .print-report,
+  .print-report * {
+    visibility: visible !important;
+  }
+  .print-report {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    background: #ffffff !important;
+    overflow: visible !important;
+  }
+  .print-report .print\:hidden {
+    display: none !important;
+  }
+  /* Preserve gradient header bg in print. */
+  .print-report [class*="bg-gradient"] {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+ * Pre-A1 audio + visual only mode
+ * Applied by PlaygroundLessonPlayer when the lesson CEFR is Pre-A1.
+ * Non-readers get bigger visuals, hidden long prose, and auto-audio.
+ * A1+ lessons never receive this class, so they are unaffected.
+ * ─────────────────────────────────────────────────────────────*/
+.pre-a1-mode [data-pre-a1-hide-text] { display: none !important; }
+.pre-a1-mode [data-pre-a1-hide-caption] { visibility: hidden; }
+.pre-a1-mode [data-pre-a1-audio] { animation: preA1Pulse 1.8s ease-in-out infinite; }
+.pre-a1-mode img,
+.pre-a1-mode [data-pre-a1-image] { image-rendering: -webkit-optimize-contrast; }
+.pre-a1-mode .text-xs,
+.pre-a1-mode .text-sm { font-size: 1rem !important; line-height: 1.4 !important; }
+
+/* Non-readers: hide dense prose blocks + captions that A1+ shows.
+   Renderers can opt-out per-node with [data-pre-a1-keep]. */
+.pre-a1-mode p:not([data-pre-a1-keep]),
+.pre-a1-mode .caption:not([data-pre-a1-keep]),
+.pre-a1-mode .subtitle:not([data-pre-a1-keep]) { display: none !important; }
+
+/* Grow tap-targets: Pre-A1 hands are small + imprecise. */
+.pre-a1-mode button,
+.pre-a1-mode [role="button"] { min-height: 56px; min-width: 56px; font-size: 1.125rem; }
+
+/* Emphasize primary illustration on every slide. */
+.pre-a1-mode img { max-height: 60vh; }
+
+/* Image-first skeleton: promote images to the top of any phase container
+   and make headings the only visible chrome. Text blocks (labels, subtitles)
+   get demoted; teachers can override with [data-pre-a1-keep]. */
+.pre-a1-mode [class*="phase"],
+.pre-a1-mode section,
+.pre-a1-mode article {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pre-a1-mode [class*="phase"] img,
+.pre-a1-mode section img,
+.pre-a1-mode article img { order: -1; margin: 0 auto 0.75rem; }
+.pre-a1-mode span:not([data-pre-a1-keep]):not([aria-hidden="true"]) {
+  font-size: 1.125rem;
+}
+/* First H1/H2 becomes the single audio-anchor label — everything else demoted. */
+.pre-a1-mode h1, .pre-a1-mode h2 {
+  font-size: 2rem !important;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.pre-a1-mode h3:not([data-pre-a1-keep]),
+.pre-a1-mode h4:not([data-pre-a1-keep]) { display: none; }
+
+
+@keyframes preA1Pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+
