@@ -1,68 +1,59 @@
 import { useState, useEffect } from 'react';
-import { StudentPackagePurchase } from '@/types/pricing';
-import { lessonPricingService } from '@/services/lessonPricingService';
 import { bookingValidationService } from '@/services/bookingValidationService';
 import { useStudentCredits } from './useStudentCredits';
 
 interface PackageValidationResult {
   hasActivePackages: boolean;
-  packages: StudentPackagePurchase[];
   totalCredits: number;
   trialAvailable: boolean;
   loading: boolean;
   refresh: () => Promise<void>;
 }
 
+// Package-based pricing (lessonPricingService) was retired — the real
+// student_credits table is the sole source of truth for how many
+// lessons a student can book. This hook now only layers trial
+// eligibility on top of that.
 export const usePackageValidation = (studentId: string | null): PackageValidationResult => {
-  const [packages, setPackages] = useState<StudentPackagePurchase[]>([]);
   const [trialAvailable, setTrialAvailable] = useState(false);
-  const [packageLoading, setPackageLoading] = useState(true);
+  const [trialLoading, setTrialLoading] = useState(true);
 
-  // Use the real student_credits table as the source of truth
   const { availableCredits, loading: creditsLoading, refresh: refreshCredits } = useStudentCredits(studentId);
 
-  const loadPackages = async () => {
+  const loadTrialEligibility = async () => {
     if (!studentId) {
-      setPackageLoading(false);
+      setTrialLoading(false);
       return;
     }
 
     try {
-      setPackageLoading(true);
-      const [data, isTrialEligible] = await Promise.all([
-        lessonPricingService.getStudentPackages(studentId),
-        bookingValidationService.isEligibleForTrial(studentId),
-      ]);
-      setPackages(data);
+      setTrialLoading(true);
+      const isTrialEligible = await bookingValidationService.isEligibleForTrial(studentId);
       setTrialAvailable(isTrialEligible);
     } catch (error) {
-      console.error('Error loading packages for validation:', error);
-      setPackages([]);
+      console.error('Error checking trial eligibility:', error);
       setTrialAvailable(false);
     } finally {
-      setPackageLoading(false);
+      setTrialLoading(false);
     }
   };
 
   useEffect(() => {
-    loadPackages();
+    loadTrialEligibility();
   }, [studentId]);
 
-  // Combine: student has credits if real balance > 0 OR has package-based credits
-  const packageCredits = packages.reduce((sum, pkg) => sum + pkg.lessons_remaining, 0);
-  const totalCredits = availableCredits + packageCredits;
+  const totalCredits = availableCredits;
   const hasActivePackages = totalCredits > 0;
 
   const refresh = async () => {
-    await Promise.all([loadPackages(), refreshCredits()]);
+    await Promise.all([loadTrialEligibility(), refreshCredits()]);
   };
 
   return {
     hasActivePackages,
-    packages,
     totalCredits,
     trialAvailable,
-    loading: packageLoading || creditsLoading,
+    loading: trialLoading || creditsLoading,
     refresh,
   };
 };
