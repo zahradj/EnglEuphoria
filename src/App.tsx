@@ -139,6 +139,7 @@ const SuccessDemo = lazy(() => import("./pages/SuccessLessonRedirect"));
 const PlaygroundCreator = lazy(() => import("./pages/PlaygroundCreator"));
 const PlayScenesLessonPage = lazy(() => import("./pages/playground-scene/PlayScenesLessonPage"));
 const PlayLesson1 = lazy(() => import("./pages/playground-scene/PlayLesson1"));
+const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
 const AcademyClassroom = lazy(() => import("./pages/AcademyClassroom"));
 const AcademyCreator = lazy(() => import("./pages/AcademyCreator"));
@@ -231,6 +232,13 @@ const App = () => {
                       <Route path="/playground-scene/lesson-1" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayLesson1 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* Standalone Playground Library — deliberately outside the Creator Studio
+                          shell, with its own Playground-branded layout. */}
+                      <Route path="/playground-library" element={
+                        <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
+                          <Suspense fallback={<LoadingFallback />}><PlaygroundLibraryPage /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/play/:lessonId" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />

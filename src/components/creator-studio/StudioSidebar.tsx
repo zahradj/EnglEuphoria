@@ -108,11 +108,11 @@ export const StudioSidebar: React.FC = () => {
           );
         })}
 
-        {/* Playground Library — dedicated, hub-locked view of the Master Library,
-            for the growing catalog of generalized Playground units (e.g. Little
-            Explorers Phonics) built lesson by lesson. */}
+        {/* Playground Library — standalone, Playground-branded page (separate from
+            this Creator Studio shell) for the growing catalog of Little Explorers
+            Phonics units, built lesson by lesson. */}
         <button
-          onClick={() => { setCurrentStep('library'); navigate('/content-creator/library?hub=playground'); }}
+          onClick={() => navigate('/playground-library')}
           title={collapsed ? 'Playground Library' : undefined}
           className={cn(
             'w-full flex items-center rounded-lg text-sm font-medium transition-all text-start mt-2 border border-dashed border-orange-800/60',
