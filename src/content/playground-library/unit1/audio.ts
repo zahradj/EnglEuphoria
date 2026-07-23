@@ -1,4 +1,12 @@
-import { supabase } from '@/integrations/supabase/client';
+// Deliberately NOT using supabase.functions.invoke() here — its response
+// parsing mangles the raw audio/mpeg body into a corrupted string instead of
+// a Blob (confirmed live: `data.constructor.name === 'String'`), which then
+// fails to decode as audio and silently falls back to browser speech
+// synthesis on every single line. A plain fetch() against the function URL
+// returns the binary body intact.
+const FUNCTIONS_URL = 'https://dcoxpyzoqjvmuuygvlme.supabase.co/functions/v1';
+const ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjb3hweXpvcWp2bXV1eWd2bG1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5NTcxMzMsImV4cCI6MjA2NTUzMzEzM30.qWD7MJ3O7xrH2KBzIfPqGvVXigVaamR6DMVOW3rnO7s';
 
 /**
  * Little Explorers Phonics — Unit 1 audio layer.
@@ -106,9 +114,11 @@ let sessionId = 0;
 let queueDepth = 0;
 
 function key(character: Character, text: string) {
-  // v2 bumps every cached clip to regenerate at SPEECH_SPEED — v1 clips were
-  // generated at normal pace and would otherwise keep being served stale.
-  return `${character}::v2::${text}`;
+  // v2 bumped every cached clip to regenerate at SPEECH_SPEED. v3 bumps again:
+  // v2 clips were fetched via supabase.functions.invoke(), which mangled the
+  // binary response into a corrupted Blob that fails to decode and silently
+  // falls back to browser TTS — every v2 IndexedDB entry is bad audio.
+  return `${character}::v3::${text}`;
 }
 
 async function fetchMp3(k: string, text: string, character: Character): Promise<string | null> {
@@ -125,12 +135,14 @@ async function fetchMp3(k: string, text: string, character: Character): Promise<
         mp3Cache.set(k, url);
         return url;
       }
-      const { data, error } = await supabase.functions.invoke('elevenlabs-tts', {
-        body: { text, voiceId: VOICE_ID[character], speed: SPEECH_SPEED },
+      const res = await fetch(`${FUNCTIONS_URL}/elevenlabs-tts`, {
+        method: 'POST',
+        headers: { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, voiceId: VOICE_ID[character], speed: SPEECH_SPEED }),
       });
-      if (error) throw error;
-      const blob: Blob = data instanceof Blob ? data : new Blob([data as BlobPart], { type: 'audio/mpeg' });
-      if (!blob.size) throw new Error('empty audio');
+      if (!res.ok) throw new Error(`tts ${res.status}`);
+      const blob = await res.blob();
+      if (!blob.size || !blob.type.startsWith('audio/')) throw new Error(`bad audio response (type=${blob.type}, size=${blob.size})`);
       void idbPut(k, blob);
       const url = URL.createObjectURL(blob);
       mp3Cache.set(k, url);
