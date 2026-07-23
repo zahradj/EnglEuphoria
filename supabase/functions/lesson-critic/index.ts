@@ -10,23 +10,18 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY") ?? "";
-
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    if (!LOVABLE_API_KEY) return json({ error: "LOVABLE_API_KEY not configured" }, 500);
-
     const body = await req.json().catch(() => ({}));
     const prompt = String(body?.prompt ?? "").trim();
     if (!prompt) return json({ error: "prompt is required" }, 400);
 
-    const aiRes = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const aiRes = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",

@@ -13,11 +13,6 @@ serve(async (req) => {
 
   try {
     const { scorePercentage, studentLevel, strengths, areasForGrowth, studentName } = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
-    }
 
     const toneGuides: Record<string, string> = {
       playground: "enthusiastic, encouraging, using simple words and lots of emojis. Address them like a friendly cartoon character would.",
@@ -45,10 +40,9 @@ Write a short summary (2-3 sentences max) that:
 
 Return ONLY the summary text, no JSON, no quotes.`;
 
-    const response = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const response = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

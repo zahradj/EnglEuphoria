@@ -53,14 +53,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    const apiKey = Deno.env.get("LOVABLE_API_KEY");
-    if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
-
-    // Lesson generation is governed by the configured AI providers, not the
-    // legacy in-app `user_credits.lesson_credits` gate. Keeping blueprint
-    // generation unblocked prevents false "workspace balance exhausted" errors
-    // when Google Studio / Lovable AI Gateway balances are available.
-
     const resolvedHub = normalizeHub(target_hub ?? hub);
     const hubBlock = buildBlueprintHubBlock(resolvedHub, cefr_level);
 
@@ -248,9 +240,9 @@ Draft the lesson blueprint now. Pick the best pedagogical framework and emit its
     // Up to 3 attempts. On JSON-parse failure or missing tool_call, append a
     // corrective instruction and retry. After 3 fails, return graceful UI error.
     const callGemini = async (extraInstruction: string) => {
-      return await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      return await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
         method: "POST",
-        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "google/gemini-3-flash-preview",
           messages: [

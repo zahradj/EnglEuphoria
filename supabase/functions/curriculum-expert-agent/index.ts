@@ -953,11 +953,6 @@ serve(async (req) => {
     
     console.log(`🎯 Generating ${mode}:`, requestData);
 
-    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
-    if (!lovableApiKey) {
-      throw new Error('LOVABLE_API_KEY not configured');
-    }
-
     // Get appropriate system prompt and settings
     let systemPrompt = getSystemPrompt(mode);
     const model = getModelForMode(mode);
@@ -1023,10 +1018,9 @@ serve(async (req) => {
     console.log(`📝 Using model: ${model}, max tokens: ${maxTokens}`);
 
     const callModel = async (sysPrompt: string, usrPrompt: string) => {
-      const response = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      const response = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${lovableApiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({

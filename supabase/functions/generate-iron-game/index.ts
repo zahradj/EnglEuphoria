@@ -193,11 +193,6 @@ serve(async (req) => {
 
     console.log('[IronLMS] Generating game:', { targetGroup, topic, gameMode, cefrLevel });
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
-    }
-
     const systemPrompt = `You are the IronLMS Engine, an expert educational game designer.
 You create structured JSON data for interactive mini-games.
 You MUST output valid JSON that matches the exact schema provided.
@@ -206,10 +201,9 @@ Do not include any markdown, explanations, or extra text.`;
     const userPrompt = getGamePrompt(gameMode, topic, targetGroup, cefrLevel, questionCount);
     const tool = getToolDefinition(gameMode);
 
-    const response = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const response = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

@@ -21,8 +21,6 @@ interface Body {
   struggles: Struggle[];
 }
 
-const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY")!;
-
 const homeworkTool = {
   type: "function" as const,
   function: {
@@ -201,9 +199,9 @@ Rules:
 
   let aiPayload: any = null;
   try {
-    const r = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const r = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
       method: "POST",
-      headers: { "Authorization": `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [

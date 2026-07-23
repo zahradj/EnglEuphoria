@@ -12,7 +12,6 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY") ?? "";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 
@@ -212,9 +211,9 @@ content per page_type:
   reflection        : { "prompt": string, "style": "emotional"|"metacognitive" }`;
 
 async function callGemini(systemPrompt: string, userPrompt: string): Promise<string> {
-  const res = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+  const res = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
     method: "POST",
-    headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       model: "google/gemini-2.5-pro",
       messages: [

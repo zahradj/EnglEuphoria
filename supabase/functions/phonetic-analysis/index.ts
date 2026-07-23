@@ -27,11 +27,6 @@ serve(async (req) => {
       );
     }
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
-    }
-
     // Use Gemini to analyze the transcription against target phonemes
     const analysisPrompt = `You are a phonetics expert for ESL students. Analyze the student's pronunciation attempt.
 
@@ -65,10 +60,9 @@ Scoring guide:
 - 0-49%: Replay Prime — Watch and listen again`;
 
     // First, transcribe the audio
-    const transcribeResponse = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const transcribeResponse = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -100,10 +94,9 @@ Scoring guide:
     console.log('Transcribed:', transcribedText, '| Target:', targetWord);
 
     // Now analyze phonetic accuracy
-    const analysisResponse = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const analysisResponse = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

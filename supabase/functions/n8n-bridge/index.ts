@@ -66,12 +66,6 @@ serve(async (req) => {
 
     // ── New: 4-Part Sequential PPP Chunk ──────────────────────────────────────
     if (action === "generate-lesson-chunk") {
-      if (!lovableApiKey) {
-        return new Response(
-          JSON.stringify({ error: "AI service not configured. Please add LOVABLE_API_KEY." }),
-          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
       const stage = String(current_stage || "foundation");
       const slides = await generateLessonChunk({
         topic, system, level, cefrLevel: cefr_level,
@@ -129,17 +123,8 @@ serve(async (req) => {
         }
       }
 
-      // Use Lovable AI to generate the lesson
-      if (!lovableApiKey) {
-        console.error("LOVABLE_API_KEY not configured");
-        return new Response(
-          JSON.stringify({ error: "AI service not configured. Please add LOVABLE_API_KEY." }),
-          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
+      console.log("Generating lesson...");
 
-      console.log("Generating lesson with Lovable AI...");
-      
       const lesson = await generateLessonWithAI({
         topic,
         system,
@@ -426,7 +411,7 @@ REQUIREMENTS:
     try {
       console.log(`Trying model: ${model}`);
       
-      const response = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const response = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${apiKey}`,
@@ -951,7 +936,7 @@ Generate the ${p.currentStage} chunk now.`;
 
   for (const model of modelsToTry) {
     try {
-      const response = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const response = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
         method: "POST",
         headers: { Authorization: `Bearer ${p.apiKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({

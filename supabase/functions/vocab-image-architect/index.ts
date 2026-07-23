@@ -11,7 +11,6 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY") ?? "";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 
@@ -76,8 +75,6 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    if (!LOVABLE_API_KEY) return json({ error: "LOVABLE_API_KEY not configured" }, 500);
-
     const body = await req.json().catch(() => ({}));
     const input = body?.input ?? {};
     const word = String(input.word ?? "").trim();
@@ -157,11 +154,10 @@ Deno.serve(async (req) => {
       }).eq("cache_key", cacheKey);
     };
 
-    const aiRes = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const aiRes = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",

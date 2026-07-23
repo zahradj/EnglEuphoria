@@ -1,8 +1,7 @@
 /**
- * ai-core: Consolidated AI router function with automatic failover.
+ * ai-core: Consolidated AI router function.
  *
- * PRIMARY:  Google AI Studio (Gemini) — direct API
- * BACKUP:   Lovable AI Gateway (Gemini/OpenAI proxy)
+ * Google AI Studio (Gemini) — direct API.
  *
  * Routes via `action` field in request body to:
  *   - explain_mistake
@@ -13,7 +12,6 @@
  */
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { aiFetch } from "../_shared/aiFetch.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { requireAuth } from "../_shared/authGuard.ts";
 
@@ -30,28 +28,20 @@ function jsonResponse(data: unknown, status = 200) {
 }
 
 // ════════════════════════════════════════════════════════════════════
-// AI FAILOVER LAYER
-// Primary  → Google AI Studio (Gemini direct)
-// Backup   → Lovable AI Gateway
+// AI LAYER — Google AI Studio (Gemini direct)
 // ════════════════════════════════════════════════════════════════════
-
-interface AIMessage {
-  role: 'system' | 'user' | 'assistant';
-  content: string;
-}
 
 interface AICallOptions {
   systemPrompt?: string;
   userPrompt: string;
   geminiModel?: string;          // e.g. "gemini-2.5-flash"
-  lovableModel?: string;         // e.g. "google/gemini-2.5-flash"
   jsonMode?: boolean;            // request JSON output
   temperature?: number;
 }
 
 interface AICallResult {
   text: string;
-  provider: 'gemini-direct' | 'lovable-gateway';
+  provider: 'gemini-direct';
 }
 
 /**
@@ -120,65 +110,12 @@ async function callGeminiDirect(opts: AICallOptions): Promise<string> {
 }
 
 /**
- * Call Lovable AI Gateway (backup).
- */
-async function callLovableGateway(opts: AICallOptions): Promise<string> {
-  const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-  if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY not configured');
-
-  const messages: AIMessage[] = [];
-  if (opts.systemPrompt) messages.push({ role: 'system', content: opts.systemPrompt });
-  messages.push({ role: 'user', content: opts.userPrompt });
-
-  const body: any = {
-    model: opts.lovableModel || 'google/gemini-2.5-flash',
-    messages,
-  };
-  if (opts.jsonMode) body.response_format = { type: 'json_object' };
-
-  const res = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-
-  if (!res.ok) {
-    const errText = await res.text().catch(() => '');
-    console.error('LOVABLE GATEWAY CRASH:', res.status, errText);
-    const err: any = new Error(`Lovable gateway failed (${res.status}): ${errText.slice(0, 200)}`);
-    err.status = res.status;
-    throw err;
-  }
-
-  const data = await res.json();
-  const text = data?.choices?.[0]?.message?.content?.trim() || '';
-  if (!text) {
-    console.error('LOVABLE GATEWAY CRASH: empty response', JSON.stringify(data).slice(0, 300));
-    throw new Error('Lovable gateway returned empty response');
-  }
-  return text;
-}
-
-/**
- * The failover wrapper. Try Gemini first, fall back to Lovable Gateway.
- * Used by every text-based action (generate_lesson, explain_mistake, evaluate_speech text portions, etc.)
+ * Call Google AI Studio (Gemini) directly. Thin wrapper kept for call-site
+ * compatibility (returns the same { text, provider } shape callers expect).
  */
 async function callAIWithFailover(opts: AICallOptions): Promise<AICallResult> {
-  try {
-    const text = await callGeminiDirect(opts);
-    return { text, provider: 'gemini-direct' };
-  } catch (primaryError: any) {
-    console.warn('⚠️ Primary AI (Gemini) failed → switching to Lovable Gateway. Reason:', primaryError?.status, primaryError?.message || primaryError);
-    try {
-      const text = await callLovableGateway(opts);
-      return { text, provider: 'lovable-gateway' };
-    } catch (backupError: any) {
-      console.error('❌ Both AI providers failed!', 'gemini=', primaryError?.status, primaryError?.message, '| lovable=', backupError?.status, backupError?.message);
-      const err: any = new Error('AI generation temporarily unavailable.');
-      err.status = backupError?.status ?? primaryError?.status;
-      throw err;
-    }
-  }
+  const text = await callGeminiDirect(opts);
+  return { text, provider: 'gemini-direct' };
 }
 
 // ─── Action: explain_mistake ────────────────────────────────────────
@@ -202,7 +139,6 @@ Explain in one encouraging sentence why their answer is wrong and what the corre
       systemPrompt,
       userPrompt,
       geminiModel: 'gemini-2.5-flash',
-      lovableModel: 'google/gemini-2.5-flash-lite',
       temperature: 0.6,
     });
     return jsonResponse({ explanation: text.trim() || "Keep trying — you're getting closer!", provider });
@@ -248,7 +184,6 @@ Evaluate this response and return ONLY the JSON object.`;
       systemPrompt,
       userPrompt,
       geminiModel: 'gemini-2.5-flash',
-      lovableModel: 'google/gemini-2.5-flash',
       jsonMode: true,
       temperature: 0.4,
     });
@@ -277,8 +212,7 @@ Evaluate this response and return ONLY the JSON object.`;
 }
 
 // ─── Action: evaluate_speech (audio pronunciation) ──────────────────
-// Audio analysis: PRIMARY = Gemini direct (generateContent with inlineData),
-// BACKUP = Lovable Gateway (chat completions with input_audio).
+// Audio analysis: Gemini direct (generateContent with inlineData).
 async function handleEvaluateSpeech(body: any, authHeader: string | null) {
   if (!authHeader?.startsWith('Bearer ')) {
     return jsonResponse({ error: 'Unauthorized' }, 401);
@@ -368,17 +302,15 @@ Return ONLY this JSON, no markdown:
   "encouragement": "<one short warm sentence>"
 }`;
 
-  const audioFormat = mimeType.includes('mp3') ? 'mp3' : 'webm';
   let raw = '';
-  let provider: 'gemini-direct' | 'lovable-gateway' = 'gemini-direct';
+  const provider: 'gemini-direct' = 'gemini-direct';
 
-  // ───── PRIMARY: Gemini direct (inline audio) ─────
   try {
     const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
     if (!GEMINI_API_KEY) throw new Error('GEMINI_API_KEY not configured');
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-    const res = await fetch(url, {
+    const doFetch = () => fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -392,47 +324,23 @@ Return ONLY this JSON, no markdown:
         generationConfig: { temperature: 0.3, responseMimeType: 'application/json' },
       }),
     });
+
+    let res = await doFetch();
+    if (res.status === 429) {
+      await new Promise((r) => setTimeout(r, 2000));
+      res = await doFetch();
+    }
     if (!res.ok) {
+      if (res.status === 429) return jsonResponse({ error: 'Rate limit exceeded. Please wait a moment.' }, 429);
       const t = await res.text().catch(() => '');
       throw new Error(`Gemini direct audio failed (${res.status}): ${t.slice(0, 200)}`);
     }
     const data = await res.json();
     raw = data?.candidates?.[0]?.content?.parts?.map((p: any) => p.text).filter(Boolean).join('') || '';
     if (!raw) throw new Error('Gemini direct audio returned empty');
-  } catch (primaryError) {
-    console.warn('⚠️ Primary AI (Gemini) drained for audio. Switching to backup (Lovable Gateway)…', primaryError instanceof Error ? primaryError.message : primaryError);
-    // ───── BACKUP: Lovable Gateway (input_audio) ─────
-    try {
-      const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-      if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY not configured');
-
-      const res = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
-          messages: [{
-            role: 'user',
-            content: [
-              { type: 'text', text: promptText },
-              { type: 'input_audio', input_audio: { data: audioBase64, format: audioFormat } },
-            ],
-          }],
-        }),
-      });
-      if (!res.ok) {
-        if (res.status === 429) return jsonResponse({ error: 'Rate limit exceeded. Please wait a moment.' }, 429);
-        if (res.status === 402) return jsonResponse({ error: 'AI credits exhausted.' }, 402);
-        const t = await res.text().catch(() => '');
-        throw new Error(`Lovable gateway audio failed (${res.status}): ${t.slice(0, 200)}`);
-      }
-      const data = await res.json();
-      raw = data?.choices?.[0]?.message?.content || '';
-      provider = 'lovable-gateway';
-    } catch (backupError) {
-      console.error('❌ Both AI providers failed for audio!', backupError);
-      return jsonResponse({ error: 'AI generation temporarily unavailable.' }, 503);
-    }
+  } catch (e) {
+    console.error('❌ AI audio evaluation failed!', e instanceof Error ? e.message : e);
+    return jsonResponse({ error: 'AI generation temporarily unavailable.' }, 503);
   }
 
   raw = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
@@ -484,7 +392,6 @@ Scores should be between 0.0 and 1.0. Rating should be 1-5 stars. Be positive an
       systemPrompt,
       userPrompt: `Student said: "${text}"\n\nReturn ONLY the JSON object.`,
       geminiModel: 'gemini-2.5-flash',
-      lovableModel: 'google/gemini-2.5-flash-lite',
       jsonMode: true,
       temperature: 0.4,
     });
@@ -540,7 +447,6 @@ Return ONLY JSON in this exact shape:
       systemPrompt,
       userPrompt,
       geminiModel: 'gemini-2.5-flash',
-      lovableModel: 'google/gemini-2.5-flash',
       jsonMode: true,
       temperature: 0.7,
     });
@@ -635,7 +541,6 @@ Rules:
       systemPrompt,
       userPrompt,
       geminiModel: 'gemini-2.5-flash',
-      lovableModel: 'google/gemini-2.5-flash',
       jsonMode: true,
       temperature: 0.75,
     });
@@ -730,7 +635,6 @@ Return ONLY the JSON described in the system prompt, with EXACTLY 3 slides in th
       systemPrompt,
       userPrompt,
       geminiModel: 'gemini-2.5-flash',
-      lovableModel: 'google/gemini-2.5-flash',
       jsonMode: true,
       temperature: 0.7,
     });
@@ -1021,7 +925,6 @@ ${isPaneled ? '- Every panel image_prompt MUST restate the main character\'s cor
       systemPrompt,
       userPrompt,
       geminiModel: 'gemini-2.5-flash',
-      lovableModel: 'google/gemini-2.5-flash',
       jsonMode: true,
       temperature: 0.9,
     });
@@ -1107,7 +1010,6 @@ Return ONLY: {"words": ["word1", "word2", ...]}`;
       systemPrompt,
       userPrompt,
       geminiModel: 'gemini-2.5-flash',
-      lovableModel: 'google/gemini-2.5-flash',
       temperature: 0.7,
       jsonMode: true,
     });

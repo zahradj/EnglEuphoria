@@ -29,9 +29,6 @@ serve(async (req) => {
     const { message, sessionId, cefrLevel, sessionType = 'text', stream = false } = await req.json();
     const studentId = auth.userId; // SECURITY: always derive from JWT, ignore body.studentId
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY not configured');
-
     const supabase = createClient(supabaseUrl, supabaseKey);
 
 
@@ -179,10 +176,9 @@ Focus Areas:
 
     // ─── STREAMING MODE ───
     if (stream) {
-      const response = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      const response = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -265,10 +261,9 @@ Focus Areas:
     }
 
     // ─── NON-STREAMING MODE ───
-    const response = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

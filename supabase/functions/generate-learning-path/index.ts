@@ -35,11 +35,6 @@ serve(async (req) => {
   try {
     const { interests, level, cefrLevel = 'A1' } = await req.json() as LearningPathRequest;
     
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
-    }
-
     console.log(`Generating learning path for ${level} level with interests:`, interests);
 
     const userPrompt = `Act as an expert ESL Teacher. Create a 4-week personalized English learning path for a student in the "${level}" track who loves ${interests.join(', ')}.
@@ -77,10 +72,9 @@ Create a structured curriculum with exactly this JSON format:
 
 Include 5 lessons per week (20 total). Make themes connect to the student's interests: ${interests.join(', ')}.`;
 
-    const response = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const response = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

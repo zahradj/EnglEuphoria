@@ -98,19 +98,10 @@ serve(async (req) => {
       characterList,
     ].join("\n");
 
-    const apiKey = Deno.env.get("LOVABLE_API_KEY");
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: "AI gateway not configured." }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const aiResp = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const aiResp = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",

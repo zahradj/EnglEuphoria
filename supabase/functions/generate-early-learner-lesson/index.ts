@@ -24,11 +24,6 @@ serve(async (req) => {
     const requestData: GenerateLessonRequest = await req.json();
     console.log('Generating Early Learner lesson:', requestData);
 
-    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
-    if (!lovableApiKey) {
-      throw new Error('LOVABLE_API_KEY not configured');
-    }
-
     const fullPrompt = generateEarlyLearnerPrompt({
       topic: requestData.topic,
       phonicsFocus: requestData.phonicsFocus,
@@ -37,10 +32,9 @@ serve(async (req) => {
       learningObjectives: requestData.learningObjectives
     });
 
-    const response = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

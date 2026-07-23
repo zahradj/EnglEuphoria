@@ -1,10 +1,7 @@
 // Shared AI Client for Edge Functions
-// PRIMARY: Google AI Studio (Gemini direct via GEMINI_API_KEY)
-// BACKUP: Lovable AI Gateway (LOVABLE_API_KEY)
-// Automatic failover when primary returns 429/402/5xx or throws.
+// Google AI Studio (Gemini direct via GEMINI_API_KEY) only.
 
 const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
-const LOVABLE_GATEWAY = 'https://ai.gateway.lovable.dev/v1/chat/completions';
 
 export interface GeminiMessage {
   role: 'user' | 'model';
@@ -22,25 +19,12 @@ export interface GeminiOptions {
 
 export interface GeminiResponse {
   text: string;
-  provider?: 'gemini-direct' | 'lovable-gateway';
+  provider?: 'gemini-direct';
   usage?: {
     promptTokens: number;
     completionTokens: number;
     totalTokens: number;
   };
-}
-
-// Map our internal Gemini model names to Lovable Gateway model identifiers
-function mapToGatewayModel(geminiModel: string): string {
-  switch (geminiModel) {
-    case 'gemini-2.5-pro':
-    case 'gemini-1.5-pro':
-      return 'google/gemini-2.5-pro';
-    case 'gemini-2.5-flash':
-    case 'gemini-1.5-flash':
-    default:
-      return 'google/gemini-2.5-flash';
-  }
 }
 
 async function callGeminiDirect(options: GeminiOptions): Promise<GeminiResponse> {
@@ -103,86 +87,12 @@ async function callGeminiDirect(options: GeminiOptions): Promise<GeminiResponse>
   return { text, usage, provider: 'gemini-direct' };
 }
 
-async function callLovableGateway(options: GeminiOptions): Promise<GeminiResponse> {
-  const apiKey = Deno.env.get('LOVABLE_API_KEY');
-  if (!apiKey) throw new Error('LOVABLE_API_KEY not configured');
-
-  const {
-    model = 'gemini-2.5-flash',
-    systemInstruction,
-    messages,
-    maxTokens = 2048,
-    temperature = 0.7,
-    responseType = 'text',
-  } = options;
-
-  // Convert Gemini messages -> OpenAI-style messages
-  const openAIMessages: Array<{ role: string; content: string }> = [];
-  if (systemInstruction) {
-    openAIMessages.push({ role: 'system', content: systemInstruction });
-  }
-  for (const m of messages) {
-    openAIMessages.push({
-      role: m.role === 'model' ? 'assistant' : 'user',
-      content: m.parts.map((p) => p.text).join('\n'),
-    });
-  }
-
-  const body: any = {
-    model: mapToGatewayModel(model),
-    messages: openAIMessages,
-    max_tokens: maxTokens,
-    temperature,
-  };
-  if (responseType === 'json') {
-    body.response_format = { type: 'json_object' };
-  }
-
-  const response = await fetch(LOVABLE_GATEWAY, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Lovable Gateway error: ${response.status} - ${errorText}`);
-  }
-
-  const data = await response.json();
-  const text = data.choices?.[0]?.message?.content || '';
-  const usage = data.usage
-    ? {
-        promptTokens: data.usage.prompt_tokens || 0,
-        completionTokens: data.usage.completion_tokens || 0,
-        totalTokens: data.usage.total_tokens || 0,
-      }
-    : undefined;
-  return { text, usage, provider: 'lovable-gateway' };
-}
-
 export async function callGemini(options: GeminiOptions): Promise<GeminiResponse> {
-  const hasGemini = !!Deno.env.get('GEMINI_API_KEY');
-  const hasLovable = !!Deno.env.get('LOVABLE_API_KEY');
-
-  if (!hasGemini && !hasLovable) {
+  if (!Deno.env.get('GEMINI_API_KEY')) {
     throw new Error('No AI provider configured (GEMINI_API_KEY required)');
   }
-
-  // ─── HARD GATEWAY-BYPASS (PERMANENT) ───
-  // Lovable AI Gateway is forbidden at runtime when GEMINI_API_KEY is set.
-  if (hasGemini) {
-    const result = await callGeminiDirect(options);
-    console.log(`✅ AI via gemini-direct (tokens: ${result.usage?.totalTokens ?? 'n/a'})`);
-    return result;
-  }
-
-  // Dev sandbox without Gemini configured.
-  const result = await callLovableGateway(options);
-  console.log(`✅ AI via lovable-gateway (no GEMINI_API_KEY) (tokens: ${result.usage?.totalTokens ?? 'n/a'})`);
+  const result = await callGeminiDirect(options);
+  console.log(`✅ AI via gemini-direct (tokens: ${result.usage?.totalTokens ?? 'n/a'})`);
   return result;
 }
 

@@ -210,9 +210,6 @@ serve(async (req) => {
   }
 
   try {
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY not configured');
-
     const body = await req.json();
     const gameType = body.gameType as GameType;
     const lessonContext: string = body.lessonContext ?? '';
@@ -248,10 +245,9 @@ Teacher's instructions: ${userPrompt || '(none — generate the most useful game
 Now produce the game by calling the function "${tool.function.name}".
 `.trim();
 
-    const response = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

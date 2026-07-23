@@ -307,8 +307,7 @@ serve(async (req) => {
   const t0 = Date.now();
 
   try {
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY && !Deno.env.get("GEMINI_API_KEY")) {
+    if (!Deno.env.get("GEMINI_API_KEY")) {
       return fail("context", "No AI provider configured", { httpStatus: 500 });
     }
 
@@ -410,9 +409,9 @@ serve(async (req) => {
           content: `The previous response failed validation: ${repairHint}\nReturn a NEW JSON object that fixes those issues and conforms to the schema. JSON only.`,
         });
       }
-      const aiRes = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const aiRes = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
         method: "POST",
-        headers: { Authorization: `Bearer ${LOVABLE_API_KEY ?? ""}`, "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "google/gemini-2.5-flash",
           messages,

@@ -4,12 +4,12 @@ const corsHeaders = {
 };
 import { aiFetch } from "../_shared/aiFetch.ts";
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { generateGoogleImage } from "../_shared/googleImageClient.ts";
 
 import { requireAuth } from "../_shared/authGuard.ts";
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY')!;
 
 const langMap: Record<string, string> = {
   english: 'English', spanish: 'Spanish', arabic: 'Arabic',
@@ -64,11 +64,10 @@ Deno.serve(async (req) => {
     const targetLang = langMap[language] || 'English';
 
     // Generate definition + translation
-    const aiRes = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const aiRes = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Lovable-API-Key': LOVABLE_API_KEY,
       },
       body: JSON.stringify({
         model: 'google/gemini-3-flash-preview',
@@ -99,23 +98,10 @@ Deno.serve(async (req) => {
     // Generate flat-vector icon (best-effort, non-blocking on failure)
     let imageUrl: string | null = null;
     try {
-      const imgRes = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Lovable-API-Key': LOVABLE_API_KEY },
-        body: JSON.stringify({
-          model: 'google/gemini-2.5-flash-image',
-          messages: [{
-            role: 'user',
-            content: `Flat 2D vector icon, single subject, clean minimal, white background, ${hubAccent[hub] || 'royal purple'} accent. Subject: ${word}. No text.`,
-          }],
-          modalities: ['image', 'text'],
-        }),
-      });
-      if (imgRes.ok) {
-        const imgJson = await imgRes.json();
-        const url = imgJson.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-        if (url) imageUrl = url;
-      }
+      const result = await generateGoogleImage(
+        `Flat 2D vector icon, single subject, clean minimal, white background, ${hubAccent[hub] || 'royal purple'} accent. Subject: ${word}. No text.`,
+      );
+      imageUrl = result.dataUrl;
     } catch (e) {
       console.warn('image gen failed', e);
     }

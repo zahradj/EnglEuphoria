@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { aiFetch } from "../_shared/aiFetch.ts";
+import { generateGoogleImage } from "../_shared/googleImageClient.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { decode } from "https://deno.land/std@0.168.0/encoding/base64.ts";
 
@@ -11,7 +12,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const AI_GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const AI_GATEWAY = "https://ai-gateway.internal/v1/chat/completions";
 
 function buildGeneratePrompt(track: string, level: string, topic: string): string {
   const toneMap: Record<string, string> = {
@@ -94,9 +95,6 @@ serve(async (req) => {
 
 
   try {
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
-
     const body = await req.json();
     const { mode } = body;
 
@@ -108,7 +106,6 @@ serve(async (req) => {
       const response = await aiFetch(AI_GATEWAY, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -154,7 +151,6 @@ serve(async (req) => {
       const response = await aiFetch(AI_GATEWAY, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -197,40 +193,10 @@ serve(async (req) => {
 
       const style = styleMap[track] || styleMap.teens;
 
-      const imageResponse = await aiFetch(AI_GATEWAY, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.5-flash-image",
-          messages: [
-            {
-              role: "user",
-              content: `Generate a lesson cover image for an English language lesson titled "${title}". Style: ${style}. The image should be a wide banner (16:9 ratio) with no text on it. Make it visually stunning and premium-looking.`,
-            },
-          ],
-          modalities: ["image", "text"],
-        }),
-      });
-
-      if (!imageResponse.ok) {
-        const errText = await imageResponse.text();
-        console.error("Image generation error:", imageResponse.status, errText);
-        throw new Error(`Image generation failed: ${imageResponse.status}`);
-      }
-
-      const imageData = await imageResponse.json();
-      const base64Url = imageData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-
-      if (!base64Url) {
-        throw new Error("No image was generated");
-      }
-
-      // Upload to Supabase storage
-      const base64Data = base64Url.replace(/^data:image\/\w+;base64,/, "");
-      const imageBytes = decode(base64Data);
+      const result = await generateGoogleImage(
+        `Generate a lesson cover image for an English language lesson titled "${title}". Style: ${style}. The image should be a wide banner (16:9 ratio) with no text on it. Make it visually stunning and premium-looking.`,
+      );
+      const imageBytes = result.bytes;
 
       const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
       const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -263,7 +229,6 @@ serve(async (req) => {
       const response = await aiFetch(AI_GATEWAY, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({

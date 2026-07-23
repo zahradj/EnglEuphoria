@@ -20,12 +20,6 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
-    }
-
     const mode: 'academy' | 'hub' = body.mode || 'academy';
 
     // ─── ACADEMY: Teen Daily Challenge ─────────────────────────────────────
@@ -82,10 +76,9 @@ RULES:
 - correctIndex is 0-based (0, 1, 2, or 3)
 - Keep language contemporary and engaging for teens`;
 
-      const response = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const response = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -174,10 +167,9 @@ Return ONLY this exact JSON (no markdown, no explanation):
   "actionTip": "One concrete action they can take this week (max 15 words)"
 }`;
 
-      const response = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const response = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({

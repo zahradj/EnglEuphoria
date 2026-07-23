@@ -1,25 +1,23 @@
-// Drop-in fetch() replacement that adds automatic AI provider failover.
+// Drop-in fetch() replacement that always routes AI chat completions to
+// Google AI Studio (Gemini) direct — no third-party AI gateway involved.
 //
-// USAGE: Replace `fetch(url, init)` with `aiFetch(url, init)` for any call
-// targeting the Lovable AI Gateway or Google Generative Language API.
+// USAGE: Replace `fetch(url, init)` with `aiFetch(url, init)` for any AI
+// chat-completion call.
 //
 // Behaviour:
-//  - If the call targets ai.gateway.lovable.dev and fails with 429/402/5xx
-//    (or throws), automatically retries via Gemini direct using the same
-//    OpenAI-style request body (translated).
-//  - If the call targets generativelanguage.googleapis.com and fails with
-//    429/5xx (or throws), automatically retries via the Lovable AI Gateway.
-//  - The returned Response always mirrors the SHAPE the caller expected
-//    (OpenAI-style if they called the gateway, Gemini-style if they called
-//    Gemini direct), so existing parsing code does not need to change.
+//  - If `url` targets generativelanguage.googleapis.com, the request is
+//    passed straight through to Gemini as-is (the caller already built a
+//    Gemini-native body).
+//  - For any other `url` (existing call sites pass an OpenAI-style
+//    "/v1/chat/completions" URL — the literal string is now just an inert
+//    marker, never actually fetched), the OpenAI-style request body is
+//    translated to Gemini's format, sent to Gemini direct, and the response
+//    is translated back into an OpenAI-shaped Response so existing parsing
+//    code doesn't need to change.
+//  - Retries with exponential backoff and falls through a chain of stable
+//    Gemini models on 429/5xx/404.
 
-const LOVABLE_HOST = "ai.gateway.lovable.dev";
 const GEMINI_HOST = "generativelanguage.googleapis.com";
-const LOVABLE_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
-
-function isRetryable(status: number): boolean {
-  return status === 429 || status === 402 || status >= 500;
-}
 
 function gatewayModelToGemini(model?: string): string {
   if (!model) return "gemini-2.5-flash";
@@ -32,11 +30,6 @@ function gatewayModelToGemini(model?: string): string {
   if (bare.includes("flash")) return "gemini-2.5-flash";
   if (bare.includes("pro")) return "gemini-2.5-pro";
   return "gemini-2.5-flash";
-}
-
-function geminiModelToGateway(geminiModel: string): string {
-  if (geminiModel.includes("pro")) return "google/gemini-2.5-pro";
-  return "google/gemini-2.5-flash";
 }
 
 // Recursively strip JSON-Schema fields Gemini's REST API does not accept
@@ -55,12 +48,44 @@ function sanitizeForGemini(node: any): any {
   return node;
 }
 
+// Parses a `data:<mime>;base64,<data>` URI into Gemini's inlineData shape.
+// Returns null if `url` isn't a data: URI (e.g. a real http(s) image URL —
+// not supported here, same as before this translation layer existed).
+function dataUrlToInlineData(url: string): { mimeType: string; data: string } | null {
+  const m = /^data:([^;]+);base64,(.+)$/s.exec(url);
+  if (!m) return null;
+  return { mimeType: m[1], data: m[2] };
+}
+
+// OpenAI-style message `content` can be a plain string, or an array of parts
+// (`{type:"text",...}`, `{type:"image_url",image_url:{url}}`,
+// `{type:"input_audio",input_audio:{data,format}}`) for multimodal messages.
+// Translate whichever shape we're given into Gemini's `parts` array.
+function messageContentToGeminiParts(content: unknown): any[] {
+  if (typeof content === "string") return [{ text: content }];
+  if (!Array.isArray(content)) return [{ text: JSON.stringify(content) }];
+
+  const parts: any[] = [];
+  for (const part of content) {
+    if (!part || typeof part !== "object") continue;
+    if (part.type === "text" && typeof part.text === "string") {
+      parts.push({ text: part.text });
+    } else if (part.type === "image_url" && part.image_url?.url) {
+      const inline = dataUrlToInlineData(part.image_url.url);
+      if (inline) parts.push({ inlineData: inline });
+    } else if (part.type === "input_audio" && part.input_audio?.data) {
+      const format = part.input_audio.format || "webm";
+      parts.push({ inlineData: { mimeType: `audio/${format}`, data: part.input_audio.data } });
+    }
+  }
+  return parts.length ? parts : [{ text: JSON.stringify(content) }];
+}
+
 // Convert an OpenAI-style request -> Gemini direct, call it, then translate
 // the Gemini response back into an OpenAI-style Response so callers don't break.
-async function fallbackGatewayToGemini(originalBody: any): Promise<Response> {
+async function callGeminiForOpenAiStyleRequest(originalBody: any): Promise<Response> {
   const apiKey = Deno.env.get("GEMINI_API_KEY");
-  if (!apiKey) throw new Error("Failover failed: GEMINI_API_KEY not configured");
-
+  if (!apiKey) throw new Error("GEMINI_API_KEY not configured");
 
   const messages: Array<{ role: string; content: string }> = originalBody.messages || [];
   const systemMessages = messages.filter((m) => m.role === "system");
@@ -70,7 +95,7 @@ async function fallbackGatewayToGemini(originalBody: any): Promise<Response> {
   const geminiBody: any = {
     contents: conversation.map((m) => ({
       role: m.role === "assistant" ? "model" : "user",
-      parts: [{ text: typeof m.content === "string" ? m.content : JSON.stringify(m.content) }],
+      parts: messageContentToGeminiParts(m.content),
     })),
     generationConfig: {
       temperature: originalBody.temperature ?? 0.7,
@@ -96,8 +121,7 @@ async function fallbackGatewayToGemini(originalBody: any): Promise<Response> {
   // ─── Tool / function-calling translation (OpenAI → Gemini) ───
   // Many of our edge functions use `tools` + `tool_choice` to force
   // structured JSON output. Translate that into Gemini's functionDeclarations
-  // so the failover path produces the same shape the caller expects.
-  let forcedToolName: string | null = null;
+  // so the response shape stays consistent for callers.
   if (Array.isArray(originalBody.tools) && originalBody.tools.length > 0) {
     geminiBody.tools = [{
       functionDeclarations: originalBody.tools
@@ -109,9 +133,8 @@ async function fallbackGatewayToGemini(originalBody: any): Promise<Response> {
         })),
     }];
     if (originalBody.tool_choice?.type === "function" && originalBody.tool_choice.function?.name) {
-      forcedToolName = originalBody.tool_choice.function.name;
       geminiBody.toolConfig = {
-        functionCallingConfig: { mode: "ANY", allowedFunctionNames: [forcedToolName] },
+        functionCallingConfig: { mode: "ANY", allowedFunctionNames: [originalBody.tool_choice.function.name] },
       };
     }
     // Tool-mode + responseMimeType=json are mutually exclusive in Gemini.
@@ -184,7 +207,7 @@ async function fallbackGatewayToGemini(originalBody: any): Promise<Response> {
         error: true,
         overloaded,
         message,
-        _provider: "gemini-direct-fallback",
+        _provider: "gemini-direct",
         _status: lastStatus,
       }),
       { status: 200, headers: { "Content-Type": "application/json" } },
@@ -212,7 +235,7 @@ async function fallbackGatewayToGemini(originalBody: any): Promise<Response> {
     : undefined;
 
   const openaiShape = {
-    id: `gemini-fallback-${Date.now()}`,
+    id: `gemini-${Date.now()}`,
     object: "chat.completion",
     created: Math.floor(Date.now() / 1000),
     model: geminiModel,
@@ -232,7 +255,7 @@ async function fallbackGatewayToGemini(originalBody: any): Promise<Response> {
           total_tokens: data.usageMetadata.totalTokenCount || 0,
         }
       : undefined,
-    _provider: "gemini-direct-fallback",
+    _provider: "gemini-direct",
   };
   return new Response(JSON.stringify(openaiShape), {
     status: 200,
@@ -240,119 +263,104 @@ async function fallbackGatewayToGemini(originalBody: any): Promise<Response> {
   });
 }
 
-// Convert a Gemini-direct request -> Lovable Gateway, call it, then translate
-// the gateway response back into a Gemini-shaped Response.
-async function fallbackGeminiToGateway(originalUrl: string, originalBody: any): Promise<Response> {
-  const apiKey = Deno.env.get("LOVABLE_API_KEY");
-  if (!apiKey) throw new Error("Failover failed: LOVABLE_API_KEY not configured");
+// Translate an OpenAI-style streaming request -> Gemini's SSE streaming
+// endpoint, re-emitting each chunk as an OpenAI-shaped
+// `data: {"choices":[{"delta":{"content":"..."}}]}\n\n` line so existing
+// consumer code (written against OpenAI's streaming format) keeps working
+// unchanged. Ends with `data: [DONE]\n\n`, matching what callers already
+// check for.
+async function streamGeminiForOpenAiStyleRequest(originalBody: any): Promise<Response> {
+  const apiKey = Deno.env.get("GEMINI_API_KEY");
+  if (!apiKey) throw new Error("GEMINI_API_KEY not configured");
 
-  // Extract model from URL (.../models/{model}:generateContent)
-  const m = originalUrl.match(/models\/([^:/?]+)/);
-  const geminiModel = m?.[1] || "gemini-2.5-flash";
-  const gatewayModel = geminiModelToGateway(geminiModel);
+  const messages: Array<{ role: string; content: string }> = originalBody.messages || [];
+  const systemMessages = messages.filter((m) => m.role === "system");
+  const conversation = messages.filter((m) => m.role !== "system");
+  const geminiModel = gatewayModelToGemini(originalBody.model);
 
-  const messages: Array<{ role: string; content: string }> = [];
-  if (originalBody.systemInstruction?.parts) {
-    const sysText = originalBody.systemInstruction.parts.map((p: any) => p.text).join("\n");
-    if (sysText) messages.push({ role: "system", content: sysText });
-  }
-  for (const c of originalBody.contents || []) {
-    const role = c.role === "model" ? "assistant" : "user";
-    const text = (c.parts || []).map((p: any) => p.text || "").join("\n");
-    messages.push({ role, content: text });
-  }
-
-  const gw: any = {
-    model: gatewayModel,
-    messages,
-    temperature: originalBody.generationConfig?.temperature ?? 0.7,
-    max_tokens: originalBody.generationConfig?.maxOutputTokens ?? 4096,
+  const geminiBody: any = {
+    contents: conversation.map((m) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: messageContentToGeminiParts(m.content),
+    })),
+    generationConfig: {
+      temperature: originalBody.temperature ?? 0.7,
+      maxOutputTokens: originalBody.max_tokens ?? originalBody.maxTokens ?? 4096,
+    },
   };
-  if (originalBody.generationConfig?.responseMimeType === "application/json") {
-    gw.response_format = { type: "json_object" };
+  if (systemMessages.length > 0) {
+    geminiBody.systemInstruction = { parts: [{ text: systemMessages.map((s) => s.content).join("\n\n") }] };
   }
 
-  const resp = await fetch(LOVABLE_URL, {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:streamGenerateContent?alt=sse&key=${apiKey}`;
+  const upstream = await fetch(url, {
     method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify(gw),
-  });
-  if (!resp.ok) {
-    const errText = await resp.text();
-    throw new Error(`Failover (lovable-gateway) failed: ${resp.status} ${errText}`);
-  }
-  const data = await resp.json();
-  const text = data.choices?.[0]?.message?.content || "";
-  // Repackage as Gemini generateContent shape
-  const geminiShape = {
-    candidates: [
-      {
-        content: { parts: [{ text }], role: "model" },
-        finishReason: "STOP",
-        index: 0,
-      },
-    ],
-    usageMetadata: data.usage
-      ? {
-          promptTokenCount: data.usage.prompt_tokens || 0,
-          candidatesTokenCount: data.usage.completion_tokens || 0,
-          totalTokenCount: data.usage.total_tokens || 0,
-        }
-      : undefined,
-    _provider: "lovable-gateway-fallback",
-  };
-  return new Response(JSON.stringify(geminiShape), {
-    status: 200,
     headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(geminiBody),
   });
+
+  if (!upstream.ok || !upstream.body) {
+    const errText = await upstream.text().catch(() => "");
+    return new Response(
+      JSON.stringify({ error: true, message: `Gemini stream failed (${upstream.status}): ${errText.slice(0, 200)}` }),
+      { status: upstream.status || 502, headers: { "Content-Type": "application/json" } },
+    );
+  }
+
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  const translated = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      const reader = upstream.body!.getReader();
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop() ?? "";
+          for (const line of lines) {
+            if (!line.startsWith("data: ")) continue;
+            try {
+              const chunk = JSON.parse(line.slice(6));
+              const text = chunk.candidates?.[0]?.content?.parts?.map((p: any) => p.text || "").join("") || "";
+              if (text) {
+                const openaiChunk = { choices: [{ delta: { content: text } }] };
+                controller.enqueue(encoder.encode(`data: ${JSON.stringify(openaiChunk)}\n\n`));
+              }
+            } catch { /* skip malformed chunk */ }
+          }
+        }
+      } catch (e) {
+        console.error("Gemini stream read error", e);
+      } finally {
+        controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+        controller.close();
+        reader.releaseLock();
+      }
+    },
+  });
+
+  return new Response(translated, { status: 200, headers: { "Content-Type": "text/event-stream" } });
 }
 
 export async function aiFetch(url: string, init?: RequestInit): Promise<Response> {
-  const isLovable = url.includes(LOVABLE_HOST);
-  const isGemini = url.includes(GEMINI_HOST);
-  const hasGemini = !!Deno.env.get("GEMINI_API_KEY");
-  const hasLovable = !!Deno.env.get("LOVABLE_API_KEY");
+  // Caller built a Gemini-native request (their own URL + key) — pass it
+  // straight through, no translation needed.
+  if (url.includes(GEMINI_HOST)) {
+    return await fetch(url, init);
+  }
 
+  // Anything else is an OpenAI-style "/v1/chat/completions" call (the URL
+  // string itself is never fetched — it's only used by existing call sites
+  // to build the request body shape). Translate and call Gemini direct.
   let parsedBody: any = null;
   if (init?.body && typeof init.body === "string") {
     try { parsedBody = JSON.parse(init.body); } catch { /* non-JSON body */ }
   }
-
-  // ─── HARD GATEWAY-BYPASS (PERMANENT) ───
-  // Lovable AI Gateway must NEVER be used at runtime when GEMINI_API_KEY is
-  // configured. All runtime generation routes to Gemini direct. No fallback
-  // to the gateway — credit consumption is forbidden by project policy.
-  if (isLovable) {
-    if (!hasGemini) {
-      // Dev sandbox without Gemini configured: allow gateway as a last resort.
-      if (!hasLovable) throw new Error("No AI provider configured (GEMINI_API_KEY required)");
-      return await fetch(url, init);
-    }
-    if (!parsedBody) throw new Error("aiFetch: cannot route Lovable Gateway request to Gemini without a JSON body");
-    return await fallbackGatewayToGemini(parsedBody);
-  }
-
-  // Caller targeted Gemini directly — try it, optionally fall back to gateway
-  // only if GEMINI is unavailable (key rejected) AND gateway is configured.
-  let primaryError: unknown = null;
-  try {
-    const response = await fetch(url, init);
-    if (response.ok || !isRetryable(response.status)) return response;
-    const errBody = await response.text();
-    primaryError = new Error(`Gemini ${response.status}: ${errBody}`);
-    console.warn(`⚠️ Gemini direct returned ${response.status}`);
-  } catch (err) {
-    primaryError = err;
-    console.warn(`⚠️ Gemini direct threw: ${err instanceof Error ? err.message : err}`);
-  }
-
-  // Only use the Lovable Gateway as a backup when Gemini is genuinely missing
-  // (no key configured). Quota/5xx errors must surface to the caller, not
-  // silently spend Lovable AI credits.
-  if (isGemini && !hasGemini && hasLovable && parsedBody) {
-    const fb = await fallbackGeminiToGateway(url, parsedBody);
-    console.log("✅ Used Lovable Gateway (no GEMINI_API_KEY configured)");
-    return fb;
-  }
-  throw primaryError;
+  if (!parsedBody) throw new Error("aiFetch: cannot build a Gemini request without a JSON body");
+  if (parsedBody.stream === true) return await streamGeminiForOpenAiStyleRequest(parsedBody);
+  return await callGeminiForOpenAiStyleRequest(parsedBody);
 }

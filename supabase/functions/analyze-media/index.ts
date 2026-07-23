@@ -27,9 +27,6 @@ Deno.serve(async (req) => {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY not configured');
-
     const rules = HUB_RULES[hub_type] || HUB_RULES.academy;
 
     const systemPrompt = [
@@ -39,9 +36,9 @@ Deno.serve(async (req) => {
       `Every answer MUST be derivable from the transcript. Do NOT hallucinate facts.`,
     ].join('\n');
 
-    const aiRes = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const aiRes = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'google/gemini-3-flash-preview',
         messages: [

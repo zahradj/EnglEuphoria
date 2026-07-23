@@ -21,12 +21,7 @@ serve(async (req) => {
       );
     }
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
-    }
-
-    const systemPrompt = `You are an expert English language quiz creator for ESL/EFL learners. 
+    const systemPrompt = `You are an expert English language quiz creator for ESL/EFL learners.
 Create engaging, pedagogically sound quiz questions that test understanding of the given topic at the specified CEFR level.
 
 Rules:
@@ -41,10 +36,9 @@ Rules:
 
     const userPrompt = `Generate exactly ${questionCount} quiz questions about "${topic}" for CEFR level ${level}.`;
 
-    const response = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

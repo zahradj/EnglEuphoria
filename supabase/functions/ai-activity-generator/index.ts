@@ -21,8 +21,6 @@ serve(async (req) => {
 
   try {
     const { content, level, activityTypes, customInstructions } = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY not configured');
 
     if (!content || !activityTypes?.length) {
       return new Response(JSON.stringify({ error: 'content and activityTypes are required' }), {
@@ -103,10 +101,9 @@ Rules:
 - Make activities engaging and contextually relevant to the lesson content
 - Generate one activity per requested type`;
 
-    const response = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

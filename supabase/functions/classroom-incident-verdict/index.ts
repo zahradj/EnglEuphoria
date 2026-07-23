@@ -3,6 +3,7 @@
 // public.classroom_incident_verdicts.
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { aiFetch } from "../_shared/aiFetch.ts";
 
 type Report = {
   reporter_role: "teacher" | "student";
@@ -59,8 +60,7 @@ function heuristic(reports: Report[]) {
 }
 
 async function aiVerdict(reports: Report[]) {
-  const key = Deno.env.get("LOVABLE_API_KEY");
-  if (!key) return null;
+  if (!Deno.env.get("GEMINI_API_KEY")) return null;
 
   const system = `You are a senior classroom operations engineer reviewing post-lesson incident reports.
 Decide what happened in the classroom. Choose ONE status and ONE fault_party from the allowed lists.
@@ -72,15 +72,11 @@ Return strict JSON: {"status","fault_party","confidence" (0-1),"summary" (<=240 
   const user = `Reports:\n${JSON.stringify(reports, null, 2)}`;
 
   try {
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const res = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Lovable-API-Key": key,
-        "X-Lovable-AIG-SDK": "vercel-ai-sdk",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-2.5-flash",
         response_format: { type: "json_object" },
         messages: [
           { role: "system", content: system },
@@ -104,7 +100,7 @@ Return strict JSON: {"status","fault_party","confidence" (0-1),"summary" (<=240 
       confidence: Math.max(0, Math.min(1, Number(parsed.confidence) || 0.5)),
       summary: String(parsed.summary || "").slice(0, 240),
       recommended_action: String(parsed.recommended_action || "").slice(0, 160),
-      model: "google/gemini-3-flash-preview",
+      model: "gemini-2.5-flash",
     };
   } catch (e) {
     console.error("ai verdict error", e);

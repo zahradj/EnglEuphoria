@@ -33,11 +33,6 @@ serve(async (req) => {
 
     console.log(`Generating game lesson: ${topic}, ${cefrLevel}, ${duration}min, ${gameType}`);
 
-    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
-    if (!lovableApiKey) {
-      throw new Error('LOVABLE_API_KEY not configured');
-    }
-
     // Construct comprehensive prompt for game lesson generation
     const systemPrompt = `You are an expert English language teacher and game designer who creates engaging, educational game-based lessons for children.
 
@@ -99,10 +94,9 @@ The lesson should:
 
 Make it fun, engaging, and educationally effective!`;
 
-    const response = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

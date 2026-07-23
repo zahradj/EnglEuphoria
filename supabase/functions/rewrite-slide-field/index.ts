@@ -32,13 +32,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    const apiKey = Deno.env.get('LOVABLE_API_KEY');
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: 'LOVABLE_API_KEY not configured' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
 
     const vocab = (blueprint.vocabulary || []).join(', ') || '—';
     const grammar = blueprint.grammar || '—';
@@ -66,9 +59,9 @@ Constraints:
 - When natural, weave in the student interests above so the example feels personal.
 - Return strict JSON: {"value": "<new text>"}`;
 
-    const res = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const res = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
         messages: [

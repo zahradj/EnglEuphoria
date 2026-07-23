@@ -141,15 +141,11 @@ async function callBrain(args: {
   userPrompt: string;
   responseFormat?: unknown;
 }): Promise<unknown> {
-  const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-  if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
-
   const doCall = async (system: string, user: string): Promise<string> => {
-    const res = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const res = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",

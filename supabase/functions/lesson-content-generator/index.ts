@@ -23,12 +23,7 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
-    }
-
-    // Step 1: Generate slide structure using Lovable AI with structured output
+    // Step 1: Generate slide structure with structured output
     console.log('Step 1: Generating enhanced slide structure with gamification...');
     const slidePrompt = buildSlidePrompt(lessonPlan, ageGroup, cefrLevel);
     
@@ -41,10 +36,9 @@ serve(async (req) => {
       try {
         console.log(`AI generation attempt ${attempt}/${maxRetries}...`);
         
-        const aiResponse = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        const aiResponse = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${LOVABLE_API_KEY}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({

@@ -7,7 +7,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const LOVABLE_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const AI_CHAT_ENDPOINT = "https://ai-gateway.internal/v1/chat/completions";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 const wordInText = (word: string, text: string) => {
@@ -51,7 +51,7 @@ function findBadQuizSlides(slides: any[], src: string): QuizCheck[] {
 }
 
 async function callAI(apiKey: string, sys: string, user: string, maxTokens = 12000): Promise<any> {
-  const resp = await aiFetch(LOVABLE_URL, {
+  const resp = await aiFetch(AI_CHAT_ENDPOINT, {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -91,8 +91,7 @@ serve(async (req) => {
     const targetLevel = level || (targetHub === 'playground' ? 'A1' : 'B1');
     const count = Math.max(8, Math.min(40, Number(slideCount) || (targetHub === 'playground' ? 15 : 25)));
 
-    const apiKey = Deno.env.get('LOVABLE_API_KEY');
-    if (!apiKey) throw new Error('LOVABLE_API_KEY not configured');
+    if (!Deno.env.get('GEMINI_API_KEY')) throw new Error('GEMINI_API_KEY not configured');
 
     const academySchema = `Each slide is one of these shapes (block field is one of: warmup, vocab, reading, practice, grammar, production, wrapup):
 - { "type":"intro", "block":"warmup", "title":string, "subtitle":string }

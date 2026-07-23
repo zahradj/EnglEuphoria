@@ -40,9 +40,6 @@ Deno.serve(async (req) => {
     if (!body?.prompt) {
       return json({ error: 'prompt is required' }, 400);
     }
-    const apiKey = Deno.env.get('LOVABLE_API_KEY');
-    if (!apiKey) return json({ error: 'LOVABLE_API_KEY not configured' }, 500);
-
     const hub = body.hub || 'playground';
     const mode = body.mode || 'drag';
     const anchor = [
@@ -106,9 +103,9 @@ Return ONLY valid structured data via the tool call.`;
       },
     };
 
-    const aiResp = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const aiResp = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'google/gemini-3-flash-preview',
         messages: [

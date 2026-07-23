@@ -172,9 +172,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    const apiKey = Deno.env.get("LOVABLE_API_KEY");
-    if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
-
     // ─── Playground branch ─────────────────────────────────────────────────
     // Kids/Interactive hub: short, highly gamified deck. Output matches the
     // Playground Engine's slide schema exactly so the WYSIWYG renderer can
@@ -357,9 +354,9 @@ ${buildEarlyLearnerPromptBlock({ hub: 'playground', level: cefr_level })}`;
         ];
         if (extraUserMsg) messages.push({ role: "user", content: extraUserMsg });
 
-        const aiRes = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        const aiRes = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
           method: "POST",
-          headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ model: "google/gemini-2.5-flash", messages, max_tokens: 16384 }),
         });
         if (!aiRes.ok) throw new Error(`AI error ${aiRes.status}: ${await aiRes.text()}`);
@@ -561,9 +558,9 @@ ${buildEarlyLearnerPromptBlock({ hub: 'academy', level: cefr_level })}
           { role: "user", content: `Build the Academy 7-block deck for "${effectiveTitle}" at ${cefr_level}. JSON array only.` },
         ];
         if (extra) messages.push({ role: "user", content: extra });
-        const aiRes = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        const aiRes = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
           method: "POST",
-          headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ model: "google/gemini-2.5-flash", messages, max_tokens: 16384 }),
         });
         if (!aiRes.ok) throw new Error(`AI error ${aiRes.status}: ${await aiRes.text()}`);
@@ -711,9 +708,9 @@ ${buildHubEnforcementBlock('success', cefr_level, {
           { role: "user", content: `Build the Success 7-block Business English deck for "${effectiveTitle}" at ${cefr_level}. JSON array only.` },
         ];
         if (extra) messages.push({ role: "user", content: extra });
-        const aiRes = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        const aiRes = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
           method: "POST",
-          headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ model: "google/gemini-2.5-flash", messages, max_tokens: 16384 }),
         });
         if (!aiRes.ok) throw new Error(`AI error ${aiRes.status}: ${await aiRes.text()}`);
@@ -1222,9 +1219,9 @@ Return ONLY the JSON object.`;
       // provider's "schema states" limit for our 16-field × 20–25 item shape.
       // The prompt itself instructs Gemini to emit a single JSON object; we
       // strip any code fences and parse defensively below.
-      const aiResp = await aiFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const aiResp = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
         method: "POST",
-        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "google/gemini-2.5-flash",
           max_tokens: 16384,

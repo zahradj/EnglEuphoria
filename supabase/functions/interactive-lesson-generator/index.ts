@@ -35,11 +35,6 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
-    }
-
     // Build comprehensive prompt using new template
     const prompt = generateInteractiveLessonPrompt({
       topic,
@@ -59,10 +54,9 @@ serve(async (req) => {
     
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        const aiResponse = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        const aiResponse = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${LOVABLE_API_KEY}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({

@@ -10,7 +10,6 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const lovableApiKey = Deno.env.get('LOVABLE_API_KEY')
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
@@ -18,13 +17,6 @@ export default async function handler(req: Request): Promise<Response> {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
-  }
-
-  if (!lovableApiKey) {
-    return new Response(
-      JSON.stringify({ error: 'LOVABLE_API_KEY not configured' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
   }
 
   try {
@@ -388,10 +380,9 @@ Return your response as a JSON object with this exact structure:
 Ensure all content is age-appropriate, culturally sensitive, and pedagogically sound. Make activities highly interactive and whiteboard-friendly.`;
 
   try {
-    const response = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

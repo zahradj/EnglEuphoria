@@ -108,14 +108,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      logStage('config', { error: 'LOVABLE_API_KEY not configured' });
-      return new Response(JSON.stringify({ error: 'AI provider not configured', stage: 'config' }), {
-        status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
     const hub = (HUB_RULES[hub_type as Hub] ? hub_type : 'playground') as Hub;
     const rules = HUB_RULES[hub];
     const resolvedLayout = layout_mode || DEFAULT_LAYOUT[hub];
@@ -164,9 +156,9 @@ Deno.serve(async (req) => {
     ].filter(Boolean).join('\n');
 
     const aiStart = Date.now();
-    const aiRes = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const aiRes = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
         messages: [

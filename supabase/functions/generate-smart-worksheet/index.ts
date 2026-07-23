@@ -129,11 +129,6 @@ Deno.serve(async (req) => {
   if (!_auth.ok) return new Response(JSON.stringify(_auth.body), { status: _auth.status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
   try {
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      return json({ error: 'LOVABLE_API_KEY is not configured.' }, 500);
-    }
-
     let body: any;
     try {
       body = await req.json();
@@ -159,10 +154,9 @@ Generate one worksheet JSON with all four game arrays. Make sure the
 in a different order, and that every "sentence_with_blank" contains exactly
 one "___" placeholder.`;
 
-    const aiResponse = await aiFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const aiResponse = await aiFetch('https://ai-gateway.internal/v1/chat/completions', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
