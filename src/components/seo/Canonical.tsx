@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 /**
- * Maintains a single <link rel="canonical"> tag pointing to the apex
- * https://engleuphoria.com origin for whatever route the user is on.
+ * Maintains a single <link rel="canonical"> tag pointing to the
+ * https://www.engleuphoria.com origin for whatever route the user is on.
  *
  * Fixes Google Search Console "Duplicate without user-selected canonical"
  * caused by the same content being reachable from:
@@ -12,10 +12,14 @@ import { useLocation } from 'react-router-dom';
  *   - https://engleuphoria.lovable.app
  *   - https://id-preview--<id>.lovable.app
  *
+ * www is the canonical origin (matches HreflangTags.tsx's SITE constant —
+ * previously this pointed at the apex domain while hreflang pointed at
+ * www, a mismatched signal between the two).
+ *
  * Routes that are private (auth, dashboards, classroom, etc.) are marked
  * noindex so Google does not try to crawl/index them at all.
  */
-const CANONICAL_ORIGIN = 'https://engleuphoria.com';
+const CANONICAL_ORIGIN = 'https://www.engleuphoria.com';
 
 const NOINDEX_PREFIXES = [
   '/dashboard',

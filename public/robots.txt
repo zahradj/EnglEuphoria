@@ -33,4 +33,4 @@ Disallow: /admin
 Disallow: /classroom
 Disallow: /auth
 
-Sitemap: https://engleuphoria.com/sitemap.xml
+Sitemap: https://www.engleuphoria.com/sitemap.xml
