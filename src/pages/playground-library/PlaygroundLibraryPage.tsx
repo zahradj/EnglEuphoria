@@ -9,6 +9,7 @@ interface LessonRow {
   description: string | null;
   is_published: boolean;
   ai_metadata: {
+    cefr_level?: string;
     unit_number?: number;
     unit_title?: string;
     unit_theme?: string;
@@ -18,6 +19,14 @@ interface LessonRow {
     contentFormat?: string;
   } | null;
 }
+
+const LEVELS: { code: string; curriculum: string | null }[] = [
+  { code: 'Pre-A1', curriculum: 'Little Explorers Phonics' },
+  { code: 'A1', curriculum: null },
+  { code: 'A2', curriculum: null },
+  { code: 'B1', curriculum: null },
+  { code: 'B2', curriculum: null },
+];
 
 interface UnitGroup {
   unit_number: number;
@@ -46,6 +55,7 @@ export default function PlaygroundLibraryPage() {
   const [rows, setRows] = useState<LessonRow[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [openUnit, setOpenUnit] = useState<number | null>(1);
+  const [activeLevel, setActiveLevel] = useState('Pre-A1');
 
   useEffect(() => {
     if (!user?.id) return;
@@ -72,6 +82,7 @@ export default function PlaygroundLibraryPage() {
     if (!rows) return [];
     const map = new Map<number, UnitGroup>();
     for (const r of rows) {
+      if ((r.ai_metadata?.cefr_level ?? 'Pre-A1') !== activeLevel) continue;
       const n = r.ai_metadata?.unit_number;
       if (typeof n !== 'number') continue;
       if (!map.has(n)) {
@@ -89,7 +100,7 @@ export default function PlaygroundLibraryPage() {
       g.lessons.sort((a, b) => (a.ai_metadata?.lesson_number ?? 0) - (b.ai_metadata?.lesson_number ?? 0));
     }
     return Array.from(map.values()).sort((a, b) => a.unit_number - b.unit_number);
-  }, [rows]);
+  }, [rows, activeLevel]);
 
   const handleLessonClick = (row: LessonRow) => {
     const fmt = row.ai_metadata?.contentFormat;
@@ -123,10 +134,53 @@ export default function PlaygroundLibraryPage() {
             ← Creator Studio
           </button>
         </div>
+
+        {/* CEFR level tier — Pre-A1 is live (Little Explorers Phonics); A1–B2
+            are upcoming levels, added one at a time. */}
+        <div className="mx-auto flex max-w-6xl flex-wrap gap-2 px-6 pb-4">
+          {LEVELS.map((lvl) => {
+            const active = activeLevel === lvl.code;
+            const hasContent = lvl.curriculum !== null;
+            return (
+              <button
+                key={lvl.code}
+                onClick={() => setActiveLevel(lvl.code)}
+                className={`rounded-full px-4 py-1.5 text-sm font-black transition ${
+                  active
+                    ? 'bg-orange-500 text-white shadow-md'
+                    : hasContent
+                    ? 'bg-white text-orange-700 ring-2 ring-orange-200 hover:bg-orange-50'
+                    : 'bg-white/60 text-orange-400/70 ring-1 ring-orange-100 hover:bg-white'
+                }`}
+              >
+                {lvl.code}
+                {!hasContent && <span className="ml-1 text-[10px] font-bold opacity-70">soon</span>}
+              </button>
+            );
+          })}
+        </div>
       </header>
 
       <main className="mx-auto max-w-6xl px-6 py-8">
-        {loading ? (
+        {(() => {
+          const levelMeta = LEVELS.find((l) => l.code === activeLevel);
+          if (levelMeta?.curriculum) {
+            return (
+              <div className="mb-6 flex items-center gap-2">
+                <span className="rounded-full bg-orange-500 px-3 py-1 text-xs font-black uppercase tracking-wider text-white">{activeLevel}</span>
+                <h2 className="text-2xl font-black text-orange-900" style={{ fontFamily: "'Fredoka', system-ui, sans-serif" }}>{levelMeta.curriculum}</h2>
+              </div>
+            );
+          }
+          return null;
+        })()}
+        {!LEVELS.find((l) => l.code === activeLevel)?.curriculum ? (
+          <div className="rounded-3xl bg-white p-12 text-center shadow-xl">
+            <div className="mb-3 text-5xl">🚧</div>
+            <p className="text-lg font-black text-orange-800">{activeLevel} is coming next.</p>
+            <p className="mt-1 text-sm font-medium text-orange-700/70">No curriculum here yet — we'll design it together, same as Pre-A1.</p>
+          </div>
+        ) : loading ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="h-40 animate-pulse rounded-3xl bg-orange-100/60" />
