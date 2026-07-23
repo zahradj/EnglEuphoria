@@ -286,6 +286,12 @@ export const LibraryManager: React.FC = () => {
       navigate(`/playground-scene/play/${row.id}`);
       return;
     }
+    // Little Explorers Phonics Lesson 1 — the faithful, full-interaction
+    // port with its own static scene data — routes to its dedicated player.
+    if (row.ai_metadata?.contentFormat === 'lep1-rich') {
+      navigate('/playground-scene/lesson-1');
+      return;
+    }
     const slides: PPPSlide[] = Array.isArray(row.content?.slides) ? row.content.slides : [];
     const homework_missions = Array.isArray(row.content?.homework_missions)
       ? row.content.homework_missions

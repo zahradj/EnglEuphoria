@@ -138,6 +138,7 @@ const AcademyDemo = lazy(() => import("./pages/AcademyLessonRedirect"));
 const SuccessDemo = lazy(() => import("./pages/SuccessLessonRedirect"));
 const PlaygroundCreator = lazy(() => import("./pages/PlaygroundCreator"));
 const PlayScenesLessonPage = lazy(() => import("./pages/playground-scene/PlayScenesLessonPage"));
+const PlayLesson1 = lazy(() => import("./pages/playground-scene/PlayLesson1"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
 const AcademyClassroom = lazy(() => import("./pages/AcademyClassroom"));
 const AcademyCreator = lazy(() => import("./pages/AcademyCreator"));
@@ -225,6 +226,11 @@ const App = () => {
                       <Route path="/playground-scene/play/:lessonId" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayScenesLessonPage /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/lesson-1" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayLesson1 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/play/:lessonId" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />
