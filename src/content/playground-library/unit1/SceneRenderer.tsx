@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Scene, CharKey } from './scenes';
 import { CAST, PROP_THEME, getEmotionSprite, COLOR_SKETCH, comicPointForward } from './scenes';
-import { safeSpeak, cueSpeak, cueSpeakOnce, stopSpeaking, isSpeaking, speak, speakOnce, playLetterPhonic, playLetterName, type Character } from './audio';
+import { safeSpeak, cueSpeak, cueSpeakOnce, stopSpeaking, isSpeaking, speak, speakOnce, playLetterPhonic, playLetterName, unlockAudio, type Character } from './audio';
 import * as sfx from './sfx';
 import { Confetti } from './fx';
 import { UNIT1_PHONICS, getMastered, logMicroCheck } from './masteryTracker';
@@ -117,7 +117,7 @@ function TitleCardScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'titl
         <p className="mt-2 max-w-xl rounded-full bg-white/85 px-4 py-1 text-sm font-black text-orange-800 shadow-lg ring-2 ring-orange-200 sm:text-base">{scene.subtitle} ✨</p>
       </div>
       <div className="absolute inset-x-0 bottom-8 z-20 flex justify-center">
-        <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-12 py-5 text-2xl font-black text-white shadow-2xl ring-4 ring-white/60 transition hover:scale-105 active:scale-95 animate-pulse">
+        <button onClick={() => { unlockAudio(); onNext(); }} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-12 py-5 text-2xl font-black text-white shadow-2xl ring-4 ring-white/60 transition hover:scale-105 active:scale-95 animate-pulse">
           Start Lesson →
         </button>
       </div>

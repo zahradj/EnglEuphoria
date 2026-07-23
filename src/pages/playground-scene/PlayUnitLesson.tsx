@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Scene } from '@/content/playground-library/unit1/scenes';
 import { SceneRenderer, Hearts, MAX_HEARTS, Lep1Keyframes } from '@/content/playground-library/unit1/SceneRenderer';
-import { stopSpeaking, prefetch } from '@/content/playground-library/unit1/audio';
+import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-library/unit1/audio';
 
 export default function PlayUnitLesson({ scenes, sessionKey }: { scenes: Scene[]; sessionKey: string }) {
   const navigate = useNavigate();
@@ -70,6 +70,7 @@ export default function PlayUnitLesson({ scenes, sessionKey }: { scenes: Scene[]
   return (
     <div
       dir="ltr"
+      onPointerDownCapture={unlockAudio}
       className="relative min-h-screen w-full overflow-hidden transition-[background-image] duration-500"
       style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
     >

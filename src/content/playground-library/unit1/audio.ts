@@ -171,19 +171,50 @@ function playFallback(text: string, character: Character): Promise<void> {
   });
 }
 
-function playUrl(url: string): Promise<void> {
+/** Resolves true if playback actually started and finished/errored normally,
+ *  false if the browser's autoplay policy rejected play() outright — the
+ *  caller should fall back to speech synthesis in that case. */
+function playUrl(url: string): Promise<boolean> {
   return new Promise((resolve) => {
     const audio = new Audio(url);
     audio.preload = 'auto';
     currentAudio = audio;
-    const done = () => {
+    const finish = (ok: boolean) => {
       if (currentAudio === audio) currentAudio = null;
-      resolve();
+      resolve(ok);
     };
-    audio.addEventListener('ended', done, { once: true });
-    audio.addEventListener('error', done, { once: true });
-    audio.play().catch(done);
+    audio.addEventListener('ended', () => finish(true), { once: true });
+    audio.addEventListener('error', () => finish(false), { once: true });
+    audio.play().catch(() => finish(false));
   });
+}
+
+/**
+ * Browsers block audio autoplay until the page has seen a real user gesture.
+ * Scene voice lines mostly fire from a `useEffect` on mount (not a direct
+ * click), so without this the very first line of every scene can be
+ * silently dropped. Call this once, synchronously, inside a real click
+ * handler (e.g. the lesson's "Start Lesson" button) to unlock playback for
+ * the rest of the tab.
+ */
+let unlocked = false;
+export function unlockAudio() {
+  if (unlocked || typeof window === 'undefined') return;
+  unlocked = true;
+  try {
+    const a = new Audio(
+      'data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tQxAADB8AhSmxhIIEVCSiJrDCQBTcu3UrAIwUdkRgQbFAZC1CQEwTJ9mjRvBAQBAEAwNihEFw+CAIAgc47vBAEAwXf/lwQBAEAxjvOCAIAgGAYLv/y7unBAF3fUIAgLu/y7oIAu7/LugAAAAAAAAP/7UsQNg8AAAaQAAAAgAAA0gAAABExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQ=='
+    );
+    a.volume = 0.01;
+    void a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(() => {});
+  } catch { /* noop */ }
+  try {
+    if ('speechSynthesis' in window) {
+      const u = new SpeechSynthesisUtterance(' ');
+      u.volume = 0;
+      window.speechSynthesis.speak(u);
+    }
+  } catch { /* noop */ }
 }
 
 /** Stop everything currently playing and invalidate the queue. */
@@ -212,11 +243,8 @@ export function speak(text: string, character: Character = 'teacher'): Promise<v
     const k = key(character, trimmed);
     const url = await fetchMp3(k, trimmed, character);
     if (mySession !== sessionId) return;
-    if (url) {
-      await playUrl(url);
-    } else {
-      await playFallback(trimmed, character);
-    }
+    const played = url ? await playUrl(url) : false;
+    if (!played) await playFallback(trimmed, character);
   });
 
   playChain = job.catch(() => undefined).finally(() => {
