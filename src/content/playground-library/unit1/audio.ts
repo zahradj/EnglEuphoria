@@ -68,15 +68,25 @@ const ANON_KEY =
  * natural tone now needs to carry the "young" quality on its own, which is
  * exactly why a naturally bright base voice matters more under this engine
  * than it did when detune was doing the work.
+ *
+ * Round 7: 0.68 was "still very fast," 0.55 (Round 4) turned out to be
+ * *too slow* — not natural, not good for hearing/repeating. The workable
+ * pace sits between those two, so SPEECH_SPEED landed on 0.63 (roughly the
+ * midpoint). PITCH_CENTS for the Web Audio path was recomputed to hit the
+ * same ~1.15x net lift target at this new rate — see that constant's
+ * comment for the formula. This is very much a "keep nudging" dial: if it
+ * still isn't right, adjust SPEECH_SPEED (and recompute PITCH_CENTS to
+ * match) rather than picking a number from scratch.
  */
 
 /** ElevenLabs speed multiplier for every generated line — slower and more
  *  deliberate than natural adult conversational pace, so pre-k students have
- *  time to hear, understand, and repeat each line. This is applied entirely
- *  client-side via Web Audio's `playbackRate` (see the pitch-shift engine
- *  further down), not ElevenLabs' own `speed` param, so it isn't bound by
- *  the ~0.7 floor where their server-side model starts to distort. */
-const SPEECH_SPEED = 0.55;
+ *  time to hear, understand, and repeat each line, without dragging so much
+ *  that it stops sounding natural. This is applied entirely client-side via
+ *  Web Audio's `playbackRate` (see the pitch-shift engine further down),
+ *  not ElevenLabs' own `speed` param, so it isn't bound by the ~0.7 floor
+ *  where their server-side model starts to distort. */
+const SPEECH_SPEED = 0.63;
 
 export type Character = 'pip' | 'mia' | 'bella' | 'willow' | 'leo' | 'teacher' | 'narrator';
 
@@ -104,12 +114,14 @@ const NATURAL_PITCH_CHARACTERS: ReadonlySet<Character> = new Set(['pip', 'teache
  *  multiplicatively with SPEECH_SPEED's own pitch drop (net multiplier =
  *  SPEECH_SPEED * 2^(cents/1200)). Mia/Bella/Willow/Leo are still-adult base
  *  voices, so they get a mild ~1.15x net lift — enough to read as young
- *  without the heavier ~1.48x lift that sounded synthetic/over-processed. */
+ *  without the heavier ~1.48x lift that sounded synthetic/over-processed.
+ *  Recompute this any time SPEECH_SPEED changes: cents = 1200 *
+ *  log2(1.15 / SPEECH_SPEED). */
 const PITCH_CENTS: Partial<Record<Character, number>> = {
-  mia: 1250,
-  bella: 1250,
-  willow: 1250,
-  leo: 1250,
+  mia: 1040,
+  bella: 1040,
+  willow: 1040,
+  leo: 1040,
 };
 
 // Browser speechSynthesis fallback (used only if ElevenLabs and the local
@@ -118,13 +130,13 @@ const PITCH_CENTS: Partial<Record<Character, number>> = {
 // SpeechSynthesisUtterance.pitch is clamped to [0, 2] by the Web Speech API
 // spec, so 2.0 (mia) is the ceiling this path can reach.
 const FALLBACK_VOICE: Record<Character, { rate: number; pitch: number }> = {
-  pip: { rate: 0.55, pitch: 1.5 },
-  mia: { rate: 0.55, pitch: 2.0 },
-  bella: { rate: 0.55, pitch: 1.7 },
-  willow: { rate: 0.55, pitch: 1.6 },
-  leo: { rate: 0.5, pitch: 1.4 },
-  teacher: { rate: 0.55, pitch: 1.3 },
-  narrator: { rate: 0.55, pitch: 1.3 },
+  pip: { rate: 0.63, pitch: 1.5 },
+  mia: { rate: 0.63, pitch: 2.0 },
+  bella: { rate: 0.63, pitch: 1.7 },
+  willow: { rate: 0.63, pitch: 1.6 },
+  leo: { rate: 0.58, pitch: 1.4 },
+  teacher: { rate: 0.63, pitch: 1.3 },
+  narrator: { rate: 0.63, pitch: 1.3 },
 };
 
 // Raw fetched clips are cached as Blobs — playable directly via
@@ -220,8 +232,10 @@ function key(character: Character, text: string) {
   // v8 bumps again: Pip/teacher/narrator now skip the Web Audio detune path
   // entirely (see module doc), so every clip cached under the old pipeline
   // needs regenerating against the new one. v9 bumps again: Pip re-cast off
-  // the placement test's voice to Elli (see module doc, round 6).
-  return `${character}::v9::${text}`;
+  // the placement test's voice to Elli (see module doc, round 6). v10 bumps
+  // again: pace corrected 0.55 -> 0.63 after 0.55 was reported as too slow
+  // (see module doc, round 7); PITCH_CENTS recomputed to match.
+  return `${character}::v10::${text}`;
 }
 
 async function fetchClipBlob(k: string, text: string, character: Character): Promise<Blob | null> {
