@@ -1,4 +1,3 @@
-import { EmailAPIError, sendLovableEmail } from 'npm:@lovable.dev/email-js'
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { requireInternalSecret } from '../_shared/internalAuth.ts'
 
@@ -7,7 +6,52 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const API_KEY = Deno.env.get('LOVABLE_API_KEY') || ''
+const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || ''
+
+class ResendAPIError extends Error {
+  status: number
+  retryAfterSeconds?: number
+  retryable: boolean
+
+  constructor(status: number, message: string, retryAfterSeconds?: number) {
+    super(message)
+    this.status = status
+    this.retryAfterSeconds = retryAfterSeconds
+    // 429/5xx are transient; other 4xx (bad request, invalid recipient, etc.) are not.
+    this.retryable = status === 429 || status >= 500
+  }
+}
+
+async function sendViaResend(payload: QueueMessage['payload']): Promise<{ id?: string }> {
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+      'Idempotency-Key': payload.idempotency_key,
+    },
+    body: JSON.stringify({
+      from: payload.from,
+      to: [payload.to],
+      subject: payload.subject,
+      html: payload.html,
+      text: payload.text,
+    }),
+  })
+
+  const body = await res.json().catch(() => ({}))
+
+  if (!res.ok) {
+    if (res.status === 429) {
+      const retryAfterHeader = res.headers.get('retry-after')
+      const retryAfterSeconds = retryAfterHeader ? Number(retryAfterHeader) : 60
+      throw new ResendAPIError(429, 'Rate limited by Resend', Number.isFinite(retryAfterSeconds) ? retryAfterSeconds : 60)
+    }
+    throw new ResendAPIError(res.status, body?.message || `Resend ${res.status}: ${JSON.stringify(body)}`)
+  }
+
+  return body
+}
 
 interface QueueMessage {
   id: number
@@ -58,7 +102,7 @@ Deno.serve(async (req) => {
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!
   const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
-  if (!supabaseUrl || !supabaseServiceKey || !API_KEY) {
+  if (!supabaseUrl || !supabaseServiceKey || !RESEND_API_KEY) {
     console.error('Missing required environment variables')
     return new Response(JSON.stringify({ error: 'Server configuration error' }), {
       status: 500,
@@ -157,26 +201,9 @@ Deno.serve(async (req) => {
         continue
       }
 
-      // Send via Lovable email API
+      // Send via Resend
       try {
-        await sendLovableEmail({
-          run_id: payload.run_id,
-          message_id: payload.message_id,
-          to: payload.to,
-          from: payload.from,
-          sender_domain: payload.sender_domain,
-          subject: payload.subject,
-          html: payload.html,
-          text: payload.text,
-          purpose: payload.purpose,
-          label: payload.label,
-          idempotency_key: payload.idempotency_key,
-          unsubscribe_token: payload.unsubscribe_token,
-        }, {
-          apiKey: API_KEY,
-          apiBaseUrl: payload.api_base_url,
-          idempotencyKey: payload.idempotency_key,
-        })
+        const resendResult = await sendViaResend(payload)
 
         await supabase.rpc('delete_email', {
           _queue_name: queueName,
@@ -187,10 +214,11 @@ Deno.serve(async (req) => {
           template_name: payload.label || queueName,
           recipient_email: payload.to,
           status: 'sent',
+          metadata: { resend_id: resendResult?.id },
         })
         totalSent++
       } catch (err) {
-        if (err instanceof EmailAPIError && err.status === 429) {
+        if (err instanceof ResendAPIError && err.status === 429) {
           const retryAfter = err.retryAfterSeconds ?? 60
           const retryUntil = new Date(Date.now() + retryAfter * 1000).toISOString()
           console.warn('Rate limited, backing off until', retryUntil)
@@ -217,7 +245,7 @@ Deno.serve(async (req) => {
         const errorMessage = err instanceof Error ? err.message : String(err)
         const shouldMoveToDlq =
           msg.attempts >= 5 ||
-          (err instanceof EmailAPIError && !err.retryable)
+          (err instanceof ResendAPIError && !err.retryable)
 
         if (shouldMoveToDlq) {
           await supabase.rpc('move_to_dlq', {
