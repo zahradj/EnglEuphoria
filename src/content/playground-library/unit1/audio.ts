@@ -35,18 +35,24 @@ const ANON_KEY =
  * PITCH_CENTS aggressively high (targeting a ~1.48x net pitch multiplier)
  * to get a strong "cartoon" lift, which on Pip's already-designed-for-kids
  * voice was over-processing it into a synthetic, "recorded"/robotic
- * quality, and the pace was still reported as too fast.
+ * quality, and the pace was still reported as too fast. Round 4 pulled the
+ * lift back to a modest target and slowed pacing further (0.68 -> 0.55),
+ * with Pip set to just cancel SPEECH_SPEED's own pitch drop (net ~1.0x) —
+ * but it *still* read as "recorded/through a microphone."
  *
- * Round 4: pulled the pitch lift back to a much more modest, natural-sounding
- * level and slowed the pace further (0.68 -> 0.55). Pip specifically gets
- * only enough detune to cancel out SPEECH_SPEED's own pitch drop (net ~1.0x
- * — its natural pitch, since `kPtEHAvRnjUJFv7SK9WI` is already the
- * purpose-built kids voice and doesn't need correcting). The other
- * still-adult voices (Mia/Bella/Willow/Leo) get a mild ~1.15x lift — enough
- * to read as young without sounding processed. The teacher/narrator voice
- * gets no lift beyond cancelling the slowdown. Every time SPEECH_SPEED
- * changes, PITCH_CENTS must be recomputed to hit the same net pitch target
- * — see the formula in the PITCH_CENTS comment below.
+ * Round 5 found the real cause of that: even a detune that nets back to
+ * "original pitch" isn't a no-op. `playbackRate=0.55` first resamples the
+ * signal down (a real pitch/formant shift), then `detune=+1035` resamples
+ * it back up — two lossy operations stacked to *look* neutral on paper,
+ * but the artifacts from both passes compound rather than cancel. That
+ * double-processing is what sounded like a telephone/mic recording.
+ * Characters that don't need a genuine pitch change (Pip, teacher/narrator)
+ * now skip the Web Audio detune path entirely and use a plain
+ * HTMLAudioElement with `preservesPitch` instead — the browser's own
+ * single-pass, hardware-accelerated time-stretch (the same approach the
+ * pre-recorded letter clips below have always used), not a hand-rolled
+ * double resample. Only Mia/Bella/Willow/Leo, which still need a real pitch
+ * lift off their adult base voices, go through the Web Audio detune engine.
  */
 
 /** ElevenLabs speed multiplier for every generated line — slower and more
@@ -69,23 +75,25 @@ const VOICE_ID: Record<Character, string> = {
   narrator: 'jsCqWAovK2LkecY7zXl4', // Freya
 };
 
+/** Characters whose voice needs no real pitch change — they play through a
+ *  plain HTMLAudioElement (`preservesPitch`, single-pass) instead of the Web
+ *  Audio detune engine, avoiding the double-resample artifact described in
+ *  the module doc above. Pip is already the purpose-built kids voice from
+ *  the placement test; the teacher/narrator voice is meant to read as a
+ *  grown-up, just not a deep or elderly one, so it doesn't need lifting. */
+const NATURAL_PITCH_CHARACTERS: ReadonlySet<Character> = new Set(['pip', 'teacher', 'narrator']);
+
 /** Pitch lift applied via Web Audio's `detune`, in cents (100 cents = 1
- *  semitone) — combines multiplicatively with SPEECH_SPEED's own pitch drop
- *  (net multiplier = SPEECH_SPEED * 2^(cents/1200)). Kept deliberately
- *  modest after a much larger lift (targeting ~1.48x) started sounding
- *  synthetic/over-processed rather than childlike. Pip only cancels
- *  SPEECH_SPEED's pitch drop (net ~1.0x, i.e. its own natural pitch — it's
- *  already the purpose-built kids voice from the placement test and doesn't
- *  need correcting). Mia/Bella/Willow/Leo — still-adult base voices — get a
- *  mild ~1.15x lift. Teacher/narrator gets no lift beyond the cancel. */
-const PITCH_CENTS: Record<Character, number> = {
-  pip: 1035,
+ *  semitone), for the characters NOT in NATURAL_PITCH_CHARACTERS — combines
+ *  multiplicatively with SPEECH_SPEED's own pitch drop (net multiplier =
+ *  SPEECH_SPEED * 2^(cents/1200)). Mia/Bella/Willow/Leo are still-adult base
+ *  voices, so they get a mild ~1.15x net lift — enough to read as young
+ *  without the heavier ~1.48x lift that sounded synthetic/over-processed. */
+const PITCH_CENTS: Partial<Record<Character, number>> = {
   mia: 1250,
   bella: 1250,
   willow: 1250,
   leo: 1250,
-  teacher: 1035,
-  narrator: 1035,
 };
 
 // Browser speechSynthesis fallback (used only if ElevenLabs and the local
@@ -103,13 +111,18 @@ const FALLBACK_VOICE: Record<Character, { rate: number; pitch: number }> = {
   narrator: { rate: 0.55, pitch: 1.3 },
 };
 
-const bufferCache = new Map<string, AudioBuffer>();
-const inFlight = new Map<string, Promise<AudioBuffer | null>>();
+// Raw fetched clips are cached as Blobs — playable directly via
+// HTMLAudioElement for NATURAL_PITCH_CHARACTERS, or decoded (and cached
+// separately, see decodedCache below) for the Web Audio detune path.
+const blobCache = new Map<string, Blob>();
+const inFlight = new Map<string, Promise<Blob | null>>();
+const decodedCache = new Map<string, AudioBuffer>();
 
-/** Shared Web Audio context for the ElevenLabs voice pipeline — lets us
- *  control pitch (`detune`) and speed (`playbackRate`) independently, which
- *  a plain HTMLAudioElement can't do (its preservesPitch flag only supports
- *  "change speed, keep original pitch," not "change both differently"). */
+/** Shared Web Audio context for the pitch-shifted subset of the ElevenLabs
+ *  voice pipeline (Mia/Bella/Willow/Leo) — lets us control pitch (`detune`)
+ *  and speed (`playbackRate`) independently, which a plain HTMLAudioElement
+ *  can't do (its preservesPitch flag only supports "change speed, keep
+ *  original pitch," not "change both differently"). */
 let sharedCtx: AudioContext | null = null;
 function getAudioCtx(): AudioContext | null {
   if (typeof window === 'undefined') return null;
@@ -185,27 +198,27 @@ function key(character: Character, text: string) {
   // (too-small) pitch lift. v5 fixed the detune/playbackRate math and
   // re-cast pip/leo to brighter base voices. v6 slowed pacing (0.82 -> 0.68)
   // and re-cast pip to the placement test's "Pip the Fox" voice, but pushed
-  // PITCH_CENTS too far — reported as sounding processed/robotic, and still
-  // too fast. v7 bumps again: pace slowed further (0.68 -> 0.55) and
-  // PITCH_CENTS pulled back to a much more modest, natural-sounding lift.
-  return `${character}::v7::${text}`;
+  // PITCH_CENTS too far. v7 pulled the lift back and slowed pacing further
+  // (0.68 -> 0.55), but Pip's "cancel the rate drop" detune still ran the
+  // clip through two lossy resamples and kept sounding processed/recorded.
+  // v8 bumps again: Pip/teacher/narrator now skip the Web Audio detune path
+  // entirely (see module doc), so every clip cached under the old pipeline
+  // needs regenerating against the new one.
+  return `${character}::v8::${text}`;
 }
 
-async function fetchAudioBuffer(k: string, text: string, character: Character): Promise<AudioBuffer | null> {
-  const cached = bufferCache.get(k);
+async function fetchClipBlob(k: string, text: string, character: Character): Promise<Blob | null> {
+  const cached = blobCache.get(k);
   if (cached) return cached;
   const existing = inFlight.get(k);
   if (existing) return existing;
 
   const job = (async () => {
-    const ctx = getAudioCtx();
-    if (!ctx) return null;
     try {
       const stored = await idbGet(k);
       if (stored && stored.size) {
-        const buf = await ctx.decodeAudioData(await stored.arrayBuffer());
-        bufferCache.set(k, buf);
-        return buf;
+        blobCache.set(k, stored);
+        return stored;
       }
       // Retry a couple of times before giving up — a transient network blip
       // or edge-function cold start shouldn't drop straight to the browser's
@@ -224,9 +237,8 @@ async function fetchAudioBuffer(k: string, text: string, character: Character): 
           const blob = await res.blob();
           if (!blob.size || !blob.type.startsWith('audio/')) throw new Error(`bad audio response (type=${blob.type}, size=${blob.size})`);
           void idbPut(k, blob);
-          const buf = await ctx.decodeAudioData(await blob.arrayBuffer());
-          bufferCache.set(k, buf);
-          return buf;
+          blobCache.set(k, blob);
+          return blob;
         } catch (err) {
           lastErr = err;
         }
@@ -244,6 +256,8 @@ async function fetchAudioBuffer(k: string, text: string, character: Character): 
   return job;
 }
 
+let currentAudioEl: HTMLAudioElement | null = null;
+
 function stopCurrent() {
   if (currentSource) {
     try {
@@ -252,6 +266,15 @@ function stopCurrent() {
       /* noop */
     }
     currentSource = null;
+  }
+  if (currentAudioEl) {
+    try {
+      currentAudioEl.pause();
+      currentAudioEl.src = '';
+    } catch {
+      /* noop */
+    }
+    currentAudioEl = null;
   }
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
     try {
@@ -310,9 +333,9 @@ async function playFallback(text: string, character: Character): Promise<void> {
 }
 
 /** Slows down playback without pitch-shifting (modern browsers preserve
- *  pitch by default on rate change) — used only for the pre-recorded letter
- *  clips below, which are real human recordings and don't go through the
- *  pitch-shift engine. */
+ *  pitch by default on rate change) — used for the pre-recorded letter clips
+ *  below and for NATURAL_PITCH_CHARACTERS' ElevenLabs clips, i.e. anything
+ *  that should just be slower, not a different pitch. */
 function applySlowPace(audio: HTMLAudioElement) {
   audio.playbackRate = SPEECH_SPEED;
   const withPitch = audio as HTMLAudioElement & {
@@ -325,35 +348,77 @@ function applySlowPace(audio: HTMLAudioElement) {
   withPitch.webkitPreservesPitch = true;
 }
 
-/** Plays a decoded ElevenLabs clip through Web Audio with speed and pitch
- *  controlled independently: `playbackRate` paces it for pre-k listeners,
- *  `detune` lifts the pitch into a childlike register (see PITCH_CENTS) —
- *  something a plain HTMLAudioElement can't do (it can only preserve the
- *  original pitch while changing speed, not shift pitch on its own).
- *  Resolves true once playback finishes, false if it couldn't start at all
- *  (e.g. no AudioContext available) — the caller falls back to speech
- *  synthesis in that case. */
-function playBuffer(buffer: AudioBuffer, character: Character): Promise<boolean> {
-  const ctx = getAudioCtx();
-  if (!ctx) return Promise.resolve(false);
+/** Plays an ElevenLabs clip through a plain HTMLAudioElement with
+ *  `preservesPitch` — a single-pass, browser-native time-stretch. Used for
+ *  NATURAL_PITCH_CHARACTERS, where we want the pace slowed for pre-k
+ *  listeners but the voice's own pitch left alone. Resolves true once
+ *  playback finishes, false on error or an autoplay-policy rejection — the
+ *  caller falls back to speech synthesis in that case. */
+function playViaHtmlAudio(blob: Blob): Promise<boolean> {
   return new Promise((resolve) => {
-    try {
-      const source = ctx.createBufferSource();
-      source.buffer = buffer;
-      source.playbackRate.value = SPEECH_SPEED;
-      source.detune.value = PITCH_CENTS[character] ?? 0;
-      source.connect(ctx.destination);
-      currentSource = source;
-      const finish = (ok: boolean) => {
-        if (currentSource === source) currentSource = null;
-        resolve(ok);
-      };
-      source.onended = () => finish(true);
-      source.start(0);
-    } catch {
-      resolve(false);
-    }
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.preload = 'auto';
+    applySlowPace(audio);
+    currentAudioEl = audio;
+    const finish = (ok: boolean) => {
+      if (currentAudioEl === audio) currentAudioEl = null;
+      URL.revokeObjectURL(url);
+      resolve(ok);
+    };
+    audio.addEventListener('ended', () => finish(true), { once: true });
+    audio.addEventListener('error', () => finish(false), { once: true });
+    audio.play().catch(() => finish(false));
   });
+}
+
+/** Decodes (and caches) a clip, then plays it through Web Audio with speed
+ *  and pitch controlled independently: `playbackRate` paces it for pre-k
+ *  listeners, `detune` lifts the pitch into a childlike register (see
+ *  PITCH_CENTS) — something a plain HTMLAudioElement can't do on its own.
+ *  Only used for characters that need a genuine pitch change off their base
+ *  voice (see NATURAL_PITCH_CHARACTERS); everyone else uses playViaHtmlAudio
+ *  above to avoid this path's extra resample pass. Resolves true once
+ *  playback finishes, false if it couldn't start at all (e.g. no
+ *  AudioContext, or decode failure) — the caller falls back to speech
+ *  synthesis in that case. */
+async function playViaWebAudio(k: string, blob: Blob, character: Character): Promise<boolean> {
+  const ctx = getAudioCtx();
+  if (!ctx) return false;
+  try {
+    let buffer = decodedCache.get(k);
+    if (!buffer) {
+      buffer = await ctx.decodeAudioData(await blob.arrayBuffer());
+      decodedCache.set(k, buffer);
+    }
+    return await new Promise((resolve) => {
+      try {
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.playbackRate.value = SPEECH_SPEED;
+        source.detune.value = PITCH_CENTS[character] ?? 0;
+        source.connect(ctx.destination);
+        currentSource = source;
+        const finish = (ok: boolean) => {
+          if (currentSource === source) currentSource = null;
+          resolve(ok);
+        };
+        source.onended = () => finish(true);
+        source.start(0);
+      } catch {
+        resolve(false);
+      }
+    });
+  } catch {
+    return false;
+  }
+}
+
+/** Routes a fetched clip to the right playback engine for its character —
+ *  see NATURAL_PITCH_CHARACTERS and the module doc above for why these are
+ *  two different code paths rather than one. */
+function playClipBlob(k: string, blob: Blob, character: Character): Promise<boolean> {
+  return NATURAL_PITCH_CHARACTERS.has(character) ? playViaHtmlAudio(blob) : playViaWebAudio(k, blob, character);
 }
 
 /**
@@ -412,9 +477,9 @@ export function speak(text: string, character: Character = 'teacher'): Promise<v
   const job = playChain.then(async () => {
     if (mySession !== sessionId) return;
     const k = key(character, trimmed);
-    const buffer = await fetchAudioBuffer(k, trimmed, character);
+    const blob = await fetchClipBlob(k, trimmed, character);
     if (mySession !== sessionId) return;
-    const played = buffer ? await playBuffer(buffer, character) : false;
+    const played = blob ? await playClipBlob(k, blob, character) : false;
     if (!played) await playFallback(trimmed, character);
   });
 
@@ -430,11 +495,11 @@ export function speakOnce(text: string, character: Character = 'teacher'): Promi
   return speak(text, character);
 }
 
-/** Warm the MP3 cache without playing. */
+/** Warm the clip cache without playing. */
 export async function prefetch(text: string, character: Character = 'teacher') {
   const trimmed = text.trim();
   if (!trimmed) return;
-  await fetchAudioBuffer(key(character, trimmed), trimmed, character);
+  await fetchClipBlob(key(character, trimmed), trimmed, character);
 }
 
 export async function safeSpeak(text: string, who: Character) {
