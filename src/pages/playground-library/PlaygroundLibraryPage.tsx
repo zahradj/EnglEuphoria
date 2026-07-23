@@ -105,7 +105,7 @@ export default function PlaygroundLibraryPage() {
   const handleLessonClick = (row: LessonRow) => {
     const fmt = row.ai_metadata?.contentFormat;
     if (fmt === 'lep1-rich') {
-      navigate('/playground-scene/lesson-1');
+      navigate(`/playground-scene/lesson-${row.ai_metadata?.lesson_number ?? 1}`);
       return;
     }
     if (fmt === 'scene-player') {

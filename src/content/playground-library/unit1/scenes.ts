@@ -34,7 +34,13 @@ export type Scene =
   | { id: string; kind: 'alphabet-blocks'; bg: string; teacher: string; letters: string[]; tapRounds: { letter: string }[]; words: { word: string; emoji: string }[] }
   | { id: string; kind: 'alphabet-order'; bg: string; teacher: string; sequences: string[] }
   | { id: string; kind: 'song'; bg: string; title: string; teacher: string; songPrompt: string; songUrl?: string; durationSeconds?: number; bigWord?: string; lyrics: { who: CharKey; text: string; emotion?: 'happy' | 'sad' | 'angry' | 'neutral' }[] }
-  | { id: string; kind: 'finale'; bg: string; who: Character; line: string };
+  | { id: string; kind: 'finale'; bg: string; who: Character; line: string }
+  | { id: string; kind: 'name-gate'; bg: string; teacher: string; rounds: { who: CharKey; question: string; answer: string }[] }
+  | { id: string; kind: 'meet-group'; bg: string; teacher: string; askers: { who: CharKey; xPct: number; yPct: number }[]; newcomer: { who: CharKey; xPct: number; yPct: number }; question: string; answer: string; phonics?: string; showSprites?: boolean }
+  | { id: string; kind: 'voice-stage'; bg: string; teacher: string; question: string; niceToMeet?: boolean; rounds: { who: CharKey; cue: string; answer: string }[] }
+  | { id: string; kind: 'sound-pop'; bg: string; teacher: string; who: CharKey; goal: number; seconds: number; targets: { letter: string; phoneme: string }[]; items: { word: string; letter: string; img?: string; emoji: string }[] }
+  | { id: string; kind: 'brick-crush'; bg: string; teacher: string; who: CharKey; letters: string[]; rows: number; cols: number; goal: number; seconds: number }
+  | { id: string; kind: 'friend-pop'; bg: string; teacher: string; cast: CharKey[]; rounds: { target: CharKey; prompt: string; emotion?: 'happy' | 'sad' | 'angry' | 'neutral'; sayLine?: string }[] };
 
 const A = '/lep1'; // public asset root
 
@@ -288,4 +294,225 @@ export const LESSON_1_SCENES: Scene[] = [
     ],
   },
   { id: 'finale', kind: 'finale', bg: bgBigTree, who: 'pip', line: 'You did it! You made three new friends! Hello, hello, hello!' },
+];
+
+/* =========================================================================
+ * Lesson 2 — "The Name Carnival" (N + W sounds, cumulative H/M/N/W review)
+ * ========================================================================= */
+
+const bgNameCarnivalTitle = `${A}/scenes/bg-name-carnival-title.jpg`;
+const bgNameCarnivalGate = `${A}/scenes/bg-name-carnival-gate.jpg`;
+const bgMeetWillowGroup = `${A}/scenes/bg-meet-willow-group.jpg`;
+const bgNameCarnivalBridge = `${A}/scenes/bg-name-carnival-bridge.jpg`;
+const bgNameCarnivalNest = `${A}/scenes/bg-name-carnival-nest.jpg`;
+const bgNameMicStage = `${A}/scenes/bg-name-mic-stage.jpg`;
+const bgNameCarnivalStage = `${A}/scenes/bg-name-carnival-stage.jpg`;
+const bgNameCarnivalSky = `${A}/scenes/bg-name-carnival-sky.jpg`;
+const bgWillowMeadow = `${A}/scenes/bg-willow-meadow.jpg`;
+
+const itemWhat = `${A}/items/item-what.png`;
+const itemWater = `${A}/items/item-water.png`;
+const itemWind = `${A}/items/item-wind.png`;
+const itemNut = `${A}/items/item-nut.png`;
+const itemNose = `${A}/items/item-nose.png`;
+const itemWave = `${A}/items/item-wave.png`;
+const itemName = `${A}/items/item-name.png`;
+
+export const comicPointForward = `${A}/props/comic-point-forward.png`;
+
+export const LESSON_2_TITLE = 'The Name Carnival';
+export const LESSON_2_OBJECTIVE = 'Ask and answer "What is your name?" while reviewing H, M, N, W sounds.';
+
+export const LESSON_2_SCENES: Scene[] = [
+  { id: 'l2-title', kind: 'title-card', bg: bgNameCarnivalTitle, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'The Name Carnival', subtitle: 'Ask names · answer names · win name tickets' },
+  {
+    id: 'l2-intro', kind: 'cinematic', bg: bgNameCarnivalGate, title: 'The Carnival Gate', subtitle: 'Every booth opens with one magic question.', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Welcome to the Name Carnival!' },
+      { who: 'pip', line: 'To open a booth, ask: What is your name?' },
+      { who: 'bella', line: 'Then listen: My name is Bella!' },
+    ],
+    cta: 'Open the gate!',
+  },
+  {
+    id: 'l2-name-gate', kind: 'name-gate', bg: bgNameCarnivalGate, teacher: 'Teacher and student: tap a booth, ask the question, then listen to the answer.',
+    rounds: [
+      { who: 'pip', question: 'What is your name?', answer: 'My name is Pip!' },
+      { who: 'mia', question: 'What is your name?', answer: 'My name is Mia!' },
+      { who: 'bella', question: 'What is your name?', answer: 'My name is Bella!' },
+    ],
+  },
+  {
+    id: 'l2-meet-willow', kind: 'meet-group', bg: bgMeetWillowGroup, teacher: 'Tap Pip, Mia, and Bella one by one. Each time, repeat: What is your name? Then Willow answers — repeat his name!',
+    askers: [
+      { who: 'pip', xPct: 17, yPct: 62 },
+      { who: 'mia', xPct: 40, yPct: 68 },
+      { who: 'bella', xPct: 55, yPct: 66 },
+    ],
+    newcomer: { who: 'willow', xPct: 83, yPct: 60 },
+    question: 'What is your name?', answer: 'My name is Willow!', phonics: '/w/ /w/ Willow!',
+  },
+  {
+    id: 'l2-model-w', kind: 'sound-model', bg: bgNameCarnivalBridge, who: 'pip', letter: 'W', phoneme: '/w/', sound: 'wuh', teacher: 'At the water bridge, Pip models /w/ before practice.',
+    anchors: [
+      { word: 'What', emoji: '❓', img: itemWhat },
+      { word: 'Water', emoji: '\u{1F4A7}', img: itemWater },
+      { word: 'Wind', emoji: '\u{1F4A8}', img: itemWind },
+    ],
+  },
+  { id: 'l2-trace-w', kind: 'trace', bg: bgNameCarnivalBridge, who: 'pip', letter: 'W', phoneme: '/w/', word: 'What', teacher: 'Trace the carnival ribbon W. /w/ /w/ What!' },
+  {
+    id: 'l2-model-n', kind: 'sound-model', bg: bgNameCarnivalNest, who: 'mia', prop: 'nest', letter: 'N', phoneme: '/n/', sound: 'nnn', teacher: 'Mia opens the nest corner. Listen first: /n/ /n/ Nut.',
+    anchors: [
+      { word: 'Nut', emoji: '\u{1F330}', img: itemNut },
+      { word: 'Nest', emoji: '\u{1FAB9}', img: `${A}/items/item-nest.png` },
+      { word: 'Nose', emoji: '\u{1F443}', img: itemNose },
+    ],
+  },
+  { id: 'l2-trace-n', kind: 'trace', bg: bgNameCarnivalNest, who: 'mia', letter: 'N', phoneme: '/n/', word: 'Nut', teacher: 'Trace the cozy N. /n/ /n/ Nut!' },
+  {
+    id: 'l2-student-question', kind: 'voice-stage', bg: bgNameMicStage, teacher: 'Grab the mic! Ask each friend: What is your name? Then say: Nice to meet you too!', question: 'What is your name?', niceToMeet: true,
+    rounds: [
+      { who: 'mia', cue: 'Ask Mia!', answer: 'My name is Mia.' },
+      { who: 'bella', cue: 'Ask Bella!', answer: 'My name is Bella.' },
+      { who: 'willow', cue: 'Ask Willow!', answer: 'My name is Willow.' },
+    ],
+  },
+  {
+    id: 'l2-sort-nw', kind: 'sound-sort', bg: bgNameCarnivalBridge, teacher: 'Carnival sound toss! Listen and drag to /n/ or /w/.',
+    targets: [
+      { letter: 'N', phoneme: '/n/', who: 'mia' },
+      { letter: 'W', phoneme: '/w/', who: 'pip' },
+    ],
+    items: [
+      { word: 'nest', emoji: '\u{1FAB9}', img: `${A}/items/item-nest.png`, letter: 'N' },
+      { word: 'water', emoji: '\u{1F4A7}', img: itemWater, letter: 'W' },
+      { word: 'wind', emoji: '\u{1F32C}️', img: itemWind, letter: 'W' },
+      { word: 'wave', emoji: '\u{1F30A}', img: itemWave, letter: 'W' },
+      { word: 'nose', emoji: '\u{1F443}', img: itemNose, letter: 'N' },
+      { word: 'nut', emoji: '\u{1F330}', img: itemNut, letter: 'N' },
+    ],
+  },
+  {
+    id: 'l2-sort-all', kind: 'sound-sort', bg: bgNameCarnivalBridge, teacher: 'Big sound mix-up! Drag each picture to /h/, /m/, /n/ or /w/.',
+    targets: [
+      { letter: 'H', phoneme: '/h/', who: 'pip' },
+      { letter: 'M', phoneme: '/m/', who: 'mia' },
+      { letter: 'N', phoneme: '/n/', who: 'bella' },
+      { letter: 'W', phoneme: '/w/', who: 'willow' },
+    ],
+    items: [
+      { word: 'hat', emoji: '\u{1F3A9}', img: `${A}/items/item-hat.png`, letter: 'H' },
+      { word: 'house', emoji: '\u{1F3E0}', img: `${A}/items/item-house.png`, letter: 'H' },
+      { word: 'mouse', emoji: '\u{1F42D}', img: `${A}/items/item-mouse.png`, letter: 'M' },
+      { word: 'moon', emoji: '\u{1F319}', img: `${A}/items/item-moon.png`, letter: 'M' },
+      { word: 'nest', emoji: '\u{1FAB9}', img: `${A}/items/item-nest.png`, letter: 'N' },
+      { word: 'nose', emoji: '\u{1F443}', img: itemNose, letter: 'N' },
+      { word: 'water', emoji: '\u{1F4A7}', img: itemWater, letter: 'W' },
+      { word: 'wave', emoji: '\u{1F30A}', img: itemWave, letter: 'W' },
+    ],
+  },
+  { id: 'l2-brick-crush', kind: 'brick-crush', bg: bgNameCarnivalSky, teacher: 'Brick Crush! Listen to the sound, then tap every brick with that letter.', who: 'pip', letters: ['H', 'M', 'N', 'W'], rows: 6, cols: 7, goal: 18, seconds: 60 },
+  {
+    id: 'l2-sound-pop', kind: 'sound-pop', bg: bgNameCarnivalSky, teacher: 'Balloon Letter Pop! Willow will call a letter. Pop only the balloons with that letter.', who: 'willow', goal: 8, seconds: 45,
+    targets: [
+      { letter: 'H', phoneme: '/h/' },
+      { letter: 'N', phoneme: '/n/' },
+    ],
+    items: [
+      { word: 'H', letter: 'H', emoji: 'H' }, { word: 'N', letter: 'N', emoji: 'N' }, { word: 'A', letter: 'A', emoji: 'A' },
+      { word: 'B', letter: 'B', emoji: 'B' }, { word: 'C', letter: 'C', emoji: 'C' }, { word: 'D', letter: 'D', emoji: 'D' },
+      { word: 'E', letter: 'E', emoji: 'E' }, { word: 'F', letter: 'F', emoji: 'F' }, { word: 'G', letter: 'G', emoji: 'G' },
+      { word: 'I', letter: 'I', emoji: 'I' }, { word: 'K', letter: 'K', emoji: 'K' }, { word: 'L', letter: 'L', emoji: 'L' },
+      { word: 'M', letter: 'M', emoji: 'M' }, { word: 'O', letter: 'O', emoji: 'O' }, { word: 'P', letter: 'P', emoji: 'P' },
+      { word: 'R', letter: 'R', emoji: 'R' }, { word: 'S', letter: 'S', emoji: 'S' }, { word: 'T', letter: 'T', emoji: 'T' },
+    ],
+  },
+  {
+    id: 'l2-grand-build', kind: 'word-build', bg: bgNameCarnivalGate, teacher: 'Grand ticket round! Choose the first sound: H, M, N, or W.',
+    rounds: [
+      { word: 'name', blankIndex: 0, answer: 'N', choices: ['H', 'M', 'N', 'W'], img: itemName, emoji: '\u{1F3F7}️' },
+      { word: 'what', blankIndex: 0, answer: 'W', choices: ['H', 'M', 'N', 'W'], img: itemWhat, emoji: '❓' },
+      { word: 'water', blankIndex: 0, answer: 'W', choices: ['H', 'M', 'N', 'W'], img: itemWater, emoji: '\u{1F4A7}' },
+      { word: 'nest', blankIndex: 0, answer: 'N', choices: ['H', 'M', 'N', 'W'], img: `${A}/items/item-nest.png`, emoji: '\u{1FAB9}' },
+      { word: 'moon', blankIndex: 0, answer: 'M', choices: ['H', 'M', 'N', 'W'], img: `${A}/items/item-moon.png`, emoji: '\u{1F319}' },
+      { word: 'hat', blankIndex: 0, answer: 'H', choices: ['H', 'M', 'N', 'W'], img: `${A}/items/item-hat.png`, emoji: '\u{1F3A9}' },
+    ],
+  },
+  {
+    id: 'l2-dash-carnival', kind: 'dash', bg: bgNameCarnivalStage, teacher: 'Willow Dash! Fly through the carnival and tap only W words. Get 6 rings!', who: 'willow', targetLetter: 'W', targetPhoneme: '/w/', goal: 6, seconds: 40,
+    items: [
+      { word: 'water', letter: 'W', img: itemWater, emoji: '\u{1F4A7}' },
+      { word: 'wind', letter: 'W', img: itemWind, emoji: '\u{1F32C}️' },
+      { word: 'wave', letter: 'W', img: itemWave, emoji: '\u{1F30A}' },
+      { word: 'what', letter: 'W', img: itemWhat, emoji: '❓' },
+      { word: 'name', letter: 'N', img: itemName, emoji: '\u{1F3F7}️' },
+      { word: 'nest', letter: 'N', img: `${A}/items/item-nest.png`, emoji: '\u{1FAB9}' },
+      { word: 'hat', letter: 'H', img: `${A}/items/item-hat.png`, emoji: '\u{1F3A9}' },
+      { word: 'milk', letter: 'M', img: `${A}/items/item-milk.png`, emoji: '\u{1F95B}' },
+    ],
+  },
+  {
+    id: 'l2-roleplay-meet-willow', kind: 'roleplay', bg: bgWillowMeadow, teacher: 'Story time! Pip, Mia and Bella meet Willow. Listen, then repeat after each friend.', cast: ['pip', 'mia', 'bella', 'willow'],
+    script: [
+      { who: 'pip', line: 'Hello!', repeat: true },
+      { who: 'willow', line: 'Hello!' },
+      { who: 'pip', line: 'What is your name?', repeat: true },
+      { who: 'willow', line: 'My name is Willow.' },
+      { who: 'willow', line: 'What is your name?' },
+      { who: 'pip', line: 'My name is Pip.', repeat: true },
+      { who: 'mia', line: 'My name is Mia.', repeat: true },
+      { who: 'bella', line: 'My name is Bella.', repeat: true },
+      { who: 'willow', line: 'Nice to meet you!' },
+      { who: 'pip', line: 'Nice to meet you, Willow!', repeat: true },
+      { who: 'willow', line: 'Goodbye!' },
+      { who: 'pip', line: 'Goodbye, Willow! See you soon!', repeat: true },
+    ],
+  },
+  {
+    id: 'l2-join-stage', kind: 'join-stage', bg: bgNameCarnivalStage, teacher: 'Your turn on stage! Drag your camera onto the stage, then take each turn.', cast: ['pip', 'mia', 'bella', 'willow'],
+    turns: [
+      { who: 'pip', line: 'Hello!' },
+      { who: 'student', line: 'Hello!' },
+      { who: 'willow', line: 'What is your name?' },
+      { who: 'student', line: 'My name is ___.' },
+      { who: 'mia', line: 'Nice to meet you!' },
+      { who: 'student', line: 'Nice to meet you!' },
+      { who: 'bella', line: 'Goodbye!' },
+      { who: 'student', line: 'Goodbye!' },
+    ],
+  },
+  {
+    id: 'l2-friend-pop', kind: 'friend-pop', bg: bgNameCarnivalSky, teacher: 'Whack-a-Friend! Tap the friend I call from the tents.', cast: ['pip', 'mia', 'bella', 'willow'],
+    rounds: [
+      { target: 'willow', prompt: 'Where is Willow?' },
+      { target: 'mia', prompt: 'Where is Mia?' },
+      { target: 'pip', prompt: 'Where is Pip?' },
+      { target: 'bella', prompt: 'Where is Bella?' },
+      { target: 'willow', prompt: 'Find Willow again!' },
+    ],
+  },
+  { id: 'l2-color-friends', kind: 'color-friends', bg: bgMeadow, teacher: 'Bonus round! Choose a color and paint your friends!', cast: ['pip', 'mia', 'bella', 'willow'] },
+  {
+    id: 'l2-alphabet-blocks', kind: 'alphabet-blocks', bg: bgMeadow, teacher: 'Alphabet Blocks! Tap the sound, then stack the word!', letters: ['H', 'M', 'N', 'W', 'A', 'I', 'T'],
+    tapRounds: [{ letter: 'H' }, { letter: 'M' }, { letter: 'N' }, { letter: 'W' }],
+    words: [
+      { word: 'HAT', emoji: '\u{1F3A9}' },
+      { word: 'MAN', emoji: '\u{1F9CD}' },
+      { word: 'WIN', emoji: '\u{1F3C6}' },
+    ],
+  },
+  { id: 'l2-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Drag the letters into ABC order!', sequences: ['EFGH', 'IJKL', 'MNOP'] },
+  {
+    id: 'l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to Willow and all the friends! Sing along together.',
+    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'l2-finale', kind: 'finale', bg: bgWillowMeadow, who: 'willow', line: 'You did it! You met Willow! What is your name? My name is Willow!' },
 ];

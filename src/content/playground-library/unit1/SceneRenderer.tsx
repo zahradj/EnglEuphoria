@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Scene, CharKey } from './scenes';
-import { CAST, PROP_THEME, getEmotionSprite, COLOR_SKETCH } from './scenes';
+import { CAST, PROP_THEME, getEmotionSprite, COLOR_SKETCH, comicPointForward } from './scenes';
 import { safeSpeak, cueSpeak, cueSpeakOnce, stopSpeaking, isSpeaking, speak, speakOnce, playLetterPhonic, playLetterName, type Character } from './audio';
 import * as sfx from './sfx';
 import { Confetti } from './fx';
+import { UNIT1_PHONICS, getMastered, logMicroCheck } from './masteryTracker';
 
 /* ---------- Shared chrome ---------- */
 
@@ -79,6 +80,12 @@ export function SceneRenderer(props: {
     case 'alphabet-order': return <AlphabetOrderScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'song': return <SongScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
+    case 'name-gate': return <NameGateScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'meet-group': return <MeetGroupScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'voice-stage': return <VoiceStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'sound-pop': return <SoundPopScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'brick-crush': return <BrickCrushScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'friend-pop': return <FriendPopScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     default: return null;
   }
 }
@@ -1978,6 +1985,852 @@ function FinaleScene({ scene, hearts, gems, onRestart }: { scene: Extract<Scene,
       <p className="mt-4 text-lg font-bold text-orange-700">"{scene.line}"</p>
       <button onClick={onRestart} className="mt-5 w-full rounded-full bg-white py-3 font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔁 Play again</button>
     </GlassCard>
+  );
+}
+
+/* ---------- Name gate ---------- */
+
+function NameGateScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'name-gate' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [opened, setOpened] = useState<Set<number>>(new Set());
+  const [active, setActive] = useState<number | null>(null);
+  const [gemDone, setGemDone] = useState(false);
+  const [gateOpening, setGateOpening] = useState(false);
+
+  const handleOpenGate = () => {
+    if (gateOpening) return;
+    setGateOpening(true);
+    sfx.reveal();
+    setTimeout(() => onNext(), 1400);
+  };
+
+  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); }, [scene.id]);
+
+  const boothSpots: Record<string, { left: string; top: string; size: number }> = {
+    pip: { left: '16%', top: '55%', size: 170 },
+    mia: { left: '83%', top: '40%', size: 140 },
+    bella: { left: '72%', top: '66%', size: 170 },
+  };
+
+  const openBooth = async (idx: number) => {
+    const round = scene.rounds[idx];
+    if (!round) return;
+    setActive(idx);
+    sfx.reveal();
+    await safeSpeak(round.question, 'teacher');
+    await safeSpeak(round.answer, round.who);
+    setOpened((prev) => {
+      const next = new Set(prev).add(idx);
+      if (next.size >= scene.rounds.length && !gemDone) {
+        setGemDone(true); sfx.gem(); onWin(true); cueSpeak('What is your name?', 'pip');
+      }
+      return next;
+    });
+  };
+
+  const done = opened.size >= scene.rounds.length;
+
+  return (
+    <div className="fixed inset-0 z-10 h-screen w-screen overflow-hidden bg-black">
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{ aspectRatio: '1600 / 1008', width: 'min(100vw, calc(100vh * 1600 / 1008))', height: 'min(100vh, calc(100vw * 1008 / 1600))' }}>
+        <img src={scene.bg} alt="" className="absolute inset-0 h-full w-full object-fill" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-orange-950/35" />
+        {scene.rounds.map((round, idx) => {
+          const c = CAST[round.who];
+          const spot = boothSpots[round.who] ?? { left: '50%', top: '50%', size: 160 };
+          const isOpen = opened.has(idx);
+          const isActive = active === idx;
+          return (
+            <button key={round.who} onClick={() => openBooth(idx)} className="absolute z-20 touch-manipulation rounded-full transition active:scale-95"
+              style={{ left: spot.left, top: spot.top, width: spot.size, height: spot.size, transform: 'translate(-50%, -50%)', background: 'transparent' }}
+              aria-label={`Tap ${c.name} to hear the question and answer`}
+            >
+              {!isOpen && <span className="pointer-events-none absolute inset-0 rounded-full animate-ping" style={{ background: `radial-gradient(circle, ${c.color}66 0%, transparent 65%)` }} />}
+              <span className="pointer-events-none absolute inset-0 rounded-full ring-4" style={{ boxShadow: isActive ? `0 0 40px ${c.color}` : 'none', borderColor: 'transparent' }} />
+              {!isOpen ? (
+                <span className="pointer-events-none absolute left-1/2 -top-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-3 py-1 text-xs font-black shadow-lg animate-bounce" style={{ color: c.color }}>👆 Tap {c.name}!</span>
+              ) : (
+                <span className="pointer-events-none absolute left-1/2 -bottom-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-3 py-1 text-xs font-black text-white shadow-lg">{c.emoji} {c.name} ✓</span>
+              )}
+            </button>
+          );
+        })}
+        {active !== null && (() => {
+          const round = scene.rounds[active];
+          const spot = boothSpots[round?.who ?? 'pip'] ?? { left: '50%', top: '50%', size: 160 };
+          if (!round) return null;
+          return (
+            <div key={`bubble-${active}-${opened.has(active) ? 'a' : 'q'}`} className="pointer-events-none absolute z-30" style={{ left: spot.left, top: `calc(${spot.top} - 18%)`, transform: 'translate(-50%, -50%)' }}>
+              <div className="relative max-w-[280px] rounded-3xl bg-white/95 px-5 py-3 text-center text-lg font-black text-orange-800 shadow-2xl">
+                “{opened.has(active) ? round.answer : round.question}”
+              </div>
+            </div>
+          );
+        })()}
+      </div>
+      <div className="absolute inset-x-0 bottom-7 z-30 flex justify-center px-4">
+        {!done && <div className="rounded-full bg-white/90 px-5 py-2 text-sm font-black text-orange-700 shadow-xl">Name tickets {opened.size}/{scene.rounds.length}</div>}
+      </div>
+      {done && (
+        <div onClick={handleOpenGate} className={`absolute inset-0 z-40 flex items-center justify-center ${gateOpening ? 'pointer-events-none' : 'cursor-pointer'}`}>
+          <div className="pointer-events-none absolute inset-0 bg-black/25" />
+          <div className="relative flex flex-col items-center gap-4">
+            <img src={comicPointForward} alt="Your turn" draggable={false} className="h-[62vh] w-auto object-contain drop-shadow-[0_18px_35px_rgba(0,0,0,0.55)] animate-bounce" />
+            <div className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-3xl font-black uppercase tracking-widest text-white shadow-2xl ring-4 ring-white/70 animate-pulse">Your turn!</div>
+            <div className="rounded-full bg-white/95 px-5 py-2 text-sm font-black uppercase tracking-widest text-orange-700 shadow">Tap to continue</div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Meet group (multi-character question chain) ---------- */
+
+function MeetGroupScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'meet-group' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  type Phase = 'idle' | 'asker-said' | 'student-asked' | 'answer-said' | 'student-answered' | 'done';
+  const [phase, setPhase] = useState<Phase>('idle');
+  const [step, setStep] = useState(0);
+  const [bubble, setBubble] = useState<{ who: string; line: string; color: string } | null>(null);
+  const [xpBurst, setXpBurst] = useState(false);
+
+  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); }, [scene.id]);
+
+  const allAsked = step >= scene.askers.length;
+
+  const tapAsker = async (i: number) => {
+    if (i !== step || phase !== 'idle') return;
+    sfx.pop();
+    const c = CAST[scene.askers[i].who];
+    setBubble({ who: c.name, line: scene.question, color: c.color });
+    setPhase('asker-said');
+    await safeSpeak(scene.question, scene.askers[i].who);
+    setPhase('student-asked');
+  };
+
+  const repeatQuestion = async () => { sfx.click(); await safeSpeak(scene.question, 'teacher'); };
+
+  const confirmStudentAsked = () => {
+    sfx.gem(); setXpBurst(true); setTimeout(() => setXpBurst(false), 900);
+    const next = step + 1;
+    setStep(next); setBubble(null);
+    if (next >= scene.askers.length) { setPhase('idle'); setTimeout(() => tapNewcomer(), 400); }
+    else setPhase('idle');
+  };
+
+  const tapNewcomer = async () => {
+    if (!allAsked && step + 1 < scene.askers.length) return;
+    sfx.pop();
+    const c = CAST[scene.newcomer.who];
+    setBubble({ who: c.name, line: scene.answer, color: c.color });
+    setPhase('answer-said');
+    await safeSpeak(scene.answer, scene.newcomer.who);
+    setPhase('student-answered');
+  };
+
+  const repeatAnswer = async () => { sfx.click(); await safeSpeak(scene.answer, 'teacher'); };
+
+  const confirmStudentAnswered = () => {
+    sfx.gem(); setXpBurst(true); setTimeout(() => setXpBurst(false), 1000);
+    setPhase('done'); onWin(true);
+  };
+
+  const newcomerColor = CAST[scene.newcomer.who].color;
+
+  return (
+    <div className="relative min-h-[78vh]">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
+        <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: `linear-gradient(90deg, ${newcomerColor}, #FEBE4C)` }}>⚔️ Quest · Meet {CAST[scene.newcomer.who].name}</div>
+      </div>
+      <div className="mx-auto mt-8 max-w-xl">
+        <div className="rounded-2xl px-4 py-3 text-center text-lg font-bold text-white shadow-2xl" style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.35))', backdropFilter: 'blur(8px)' }}>{scene.teacher}</div>
+      </div>
+      {scene.phonics && (
+        <span className="absolute right-3 top-16 z-20 grid h-16 w-16 place-items-center rounded-full bg-white text-2xl font-black shadow-2xl ring-4" style={{ color: newcomerColor, borderColor: newcomerColor }}>{CAST[scene.newcomer.who].name[0]}</span>
+      )}
+      {scene.askers.map((a, i) => {
+        const doneAsker = i < step;
+        const active = i === step && phase === 'idle' && !allAsked;
+        const c = CAST[a.who];
+        return (
+          <button key={a.who} onClick={() => tapAsker(i)} disabled={!active} aria-label={`Tap ${c.name}`} className="absolute z-10 -translate-x-1/2 -translate-y-full rounded-b-full"
+            style={{ left: `${a.xPct}%`, top: `${a.yPct}%`, width: 'clamp(200px, 30vh, 320px)', height: 'clamp(240px, 36vh, 380px)' }}>
+            {scene.showSprites && <img src={getEmotionSprite(a.who, 'happy')} alt={c.name} draggable={false} className="pointer-events-none absolute inset-0 mx-auto h-full w-full object-contain drop-shadow-2xl" />}
+            {active && (
+              <>
+                <span className="absolute inset-0 rounded-full" style={{ background: `radial-gradient(circle, ${c.color}66, transparent 65%)`, animation: 'ping 2s ease-out infinite' }} />
+                <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white/95 px-3 py-1 text-sm font-black shadow-xl" style={{ color: c.color }}>👆 Tap {c.name}</span>
+              </>
+            )}
+            {doneAsker && <span className="absolute -top-2 left-1/2 -translate-x-1/2 grid h-9 w-9 place-items-center rounded-full bg-emerald-500 text-white text-xl font-black shadow-lg ring-2 ring-white">✓</span>}
+          </button>
+        );
+      })}
+      <button onClick={tapNewcomer} disabled={!(allAsked && phase === 'idle')} aria-label={`Tap ${CAST[scene.newcomer.who].name}`} className="absolute z-10 -translate-x-1/2 -translate-y-full rounded-b-full"
+        style={{ left: `${scene.newcomer.xPct}%`, top: `${scene.newcomer.yPct}%`, width: 'clamp(220px, 34vh, 360px)', height: 'clamp(260px, 40vh, 420px)' }}>
+        {scene.showSprites && <img src={getEmotionSprite(scene.newcomer.who, 'happy')} alt={CAST[scene.newcomer.who].name} draggable={false} className="pointer-events-none absolute inset-0 mx-auto h-full w-full object-contain drop-shadow-2xl" />}
+        {allAsked && phase === 'idle' && (
+          <>
+            <span className="absolute inset-0 rounded-full" style={{ background: `radial-gradient(circle, ${newcomerColor}77, transparent 65%)`, animation: 'ping 1.5s ease-out infinite' }} />
+            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white/95 px-3 py-1 text-sm font-black shadow-xl" style={{ color: newcomerColor }}>👆 Tap {CAST[scene.newcomer.who].name}</span>
+          </>
+        )}
+      </button>
+      {bubble && (
+        <div className="absolute top-[14vh] left-4 sm:left-8 z-20 max-w-[44%] sm:max-w-[36%]">
+          <button onClick={() => (phase === 'answer-said' || phase === 'student-answered' ? repeatAnswer() : repeatQuestion())} className="relative w-full rounded-3xl border-4 bg-white px-5 py-4 text-left text-xl sm:text-2xl font-black shadow-2xl active:scale-95" style={{ color: bubble.color, borderColor: bubble.color }} aria-label="Hear again">
+            <span className="mr-2 text-sm font-bold uppercase tracking-wider opacity-70">{bubble.who}</span><br />"{bubble.line}"
+          </button>
+        </div>
+      )}
+      {xpBurst && <div className="pointer-events-none absolute inset-x-0 top-[32vh] z-30 grid place-items-center"><div className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 text-2xl font-black text-white shadow-2xl">+10 XP 💎</div></div>}
+      {(phase === 'student-asked' || phase === 'student-answered') && (
+        <div className="absolute inset-x-0 bottom-0 z-30 mx-auto max-w-lg">
+          <div className="mx-3 mb-4 rounded-3xl border-4 border-white/60 bg-white/95 p-4 shadow-2xl">
+            <div className="text-center text-sm font-bold uppercase tracking-widest text-slate-500">Your turn — repeat!</div>
+            <div className="mt-1 text-center text-2xl font-black" style={{ color: newcomerColor }}>"{phase === 'student-asked' ? scene.question : scene.answer}"</div>
+            <div className="mt-3 flex gap-2">
+              <button onClick={phase === 'student-asked' ? repeatQuestion : repeatAnswer} className="flex-1 rounded-2xl border-2 border-slate-300 bg-white px-4 py-3 font-bold text-slate-700 active:scale-95">🔁 Hear it</button>
+              <PrimaryButton onClick={phase === 'student-asked' ? confirmStudentAsked : confirmStudentAnswered}>✅ I said it!</PrimaryButton>
+            </div>
+          </div>
+        </div>
+      )}
+      {phase === 'done' && (
+        <div className="absolute inset-x-0 bottom-0 z-30 mx-auto max-w-md">
+          <div className="mx-3 mb-4 rounded-3xl border-4 border-white/60 bg-white/95 p-4 shadow-2xl">
+            <div className="text-center text-2xl font-black text-emerald-600">🎉 You met {CAST[scene.newcomer.who].name}!</div>
+            <div className="mt-3"><PrimaryButton onClick={onNext}>Next Quest →</PrimaryButton></div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Voice stage ---------- */
+
+function VoiceStageScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'voice-stage' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [round, setRound] = useState(0);
+  const [phase, setPhase] = useState<'ready' | 'listening' | 'guess' | 'reveal' | 'pleasantry' | 'done'>('ready');
+  const [feedback, setFeedback] = useState<null | { who: CharKey; ok: boolean }>(null);
+  const [gemDone, setGemDone] = useState(false);
+  const [placed, setPlaced] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const [pos, setPos] = useState({ x: 12, y: 82 });
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+
+  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); return () => { streamRef.current?.getTracks().forEach((t) => t.stop()); }; }, [scene.id]);
+
+  useEffect(() => {
+    if (!placed) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 320 }, audio: false });
+        if (cancelled) { s.getTracks().forEach((t) => t.stop()); return; }
+        streamRef.current = s;
+        if (videoRef.current) { videoRef.current.srcObject = s; await videoRef.current.play().catch(() => {}); }
+      } catch { /* fallback: no video */ }
+    })();
+    return () => { cancelled = true; };
+  }, [placed]);
+
+  const DROP = { cx: 50, cy: 78, r: 12 };
+  const onPointerDown = (e: React.PointerEvent) => { if (placed) return; setDragging(true); (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); };
+  const onPointerMove = (e: React.PointerEvent) => { if (!dragging || placed) return; setPos({ x: (e.clientX / window.innerWidth) * 100, y: (e.clientY / window.innerHeight) * 100 }); };
+  const onPointerUp = () => {
+    if (!dragging) return;
+    setDragging(false);
+    const dx = pos.x - DROP.cx, dy = pos.y - DROP.cy;
+    if (Math.hypot(dx, dy) <= DROP.r + 4) { setPlaced(true); setPos({ x: DROP.cx, y: DROP.cy }); }
+  };
+
+  const stageSpots = [{ left: '22%', top: '48%' }, { left: '50%', top: '44%' }, { left: '78%', top: '48%' }];
+
+  const playRound = useCallback(async () => {
+    const current = scene.rounds[round];
+    if (!current || phase === 'listening') return;
+    setFeedback(null); setPhase('listening');
+    await safeSpeak(scene.question, 'teacher');
+    await safeSpeak(current.answer, current.who);
+    setPhase('guess');
+  }, [phase, round, scene.question, scene.rounds]);
+
+  const advanceAfterRound = useCallback(() => {
+    const next = round + 1;
+    if (next >= scene.rounds.length) {
+      setPhase('done');
+      if (!gemDone) { setGemDone(true); sfx.gem(); onWin(true); }
+    } else { setRound(next); setPhase('ready'); }
+  }, [round, scene.rounds.length, gemDone, onWin]);
+
+  const finishPleasantry = useCallback(() => { if (phase !== 'pleasantry') return; sfx.match(); advanceAfterRound(); }, [phase, advanceAfterRound]);
+
+  const choose = async (who: CharKey) => {
+    if (phase !== 'guess') return;
+    const current = scene.rounds[round];
+    const ok = current.who === who;
+    setFeedback({ who, ok });
+    setPhase('reveal');
+    if (ok) {
+      sfx.match();
+      await safeSpeak('Yes! My name!', who);
+      if (scene.niceToMeet) { await safeSpeak('Nice to meet you!', who); setFeedback(null); setPhase('pleasantry'); return; }
+    } else { sfx.wrong(); onLose(); await safeSpeak('Listen again.', 'teacher'); }
+    window.setTimeout(() => {
+      setFeedback(null);
+      if (!ok) { setPhase('ready'); return; }
+      advanceAfterRound();
+    }, 950);
+  };
+
+  const currentRound = scene.rounds[Math.min(round, scene.rounds.length - 1)];
+
+  return (
+    <div className="fixed inset-0 z-10 h-screen w-screen overflow-hidden select-none" onPointerMove={onPointerMove} onPointerUp={onPointerUp}>
+      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }} />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/45" />
+      <div className="absolute inset-x-0 top-5 z-30 flex justify-center px-4">
+        <div className="rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-2xl ring-2 ring-orange-200 sm:text-base">🎤 Name Stage · Round {Math.min(round + 1, scene.rounds.length)}/{scene.rounds.length}</div>
+      </div>
+      {scene.rounds.map((r, idx) => {
+        const c = CAST[r.who];
+        const spot = stageSpots[idx] ?? stageSpots[0];
+        const fb = feedback?.who === r.who ? feedback : null;
+        const isTarget = currentRound?.who === r.who;
+        return (
+          <button key={`${r.who}-${idx}`} onClick={() => choose(r.who)} disabled={phase !== 'guess'} className="absolute z-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-transparent p-0 transition active:scale-95 disabled:cursor-default" style={{ left: spot.left, top: spot.top }} aria-label={`Choose ${c.name}`}>
+            <div className="relative grid h-56 w-56 place-items-center rounded-full border-4 bg-white/90 shadow-2xl sm:h-64 sm:w-64" style={{ borderColor: fb ? (fb.ok ? '#22C55E' : '#EF4444') : c.color, boxShadow: phase === 'guess' && isTarget ? `0 0 45px ${c.color}` : '0 24px 44px rgba(0,0,0,0.35)' }}>
+              <span className="absolute -top-6 rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white shadow">🎙️ {r.cue}</span>
+              <img src={c.img} alt={c.name} className="h-44 w-44 object-contain drop-shadow-xl sm:h-52 sm:w-52" />
+              {fb && <span className="absolute -bottom-5 rounded-full px-4 py-1 text-sm font-black text-white shadow-lg" style={{ backgroundColor: fb.ok ? '#22C55E' : '#EF4444' }}>{fb.ok ? 'Yes!' : 'Try again'}</span>}
+            </div>
+          </button>
+        );
+      })}
+      <div className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-dashed transition ${placed ? 'border-orange-400/70 bg-orange-300/10' : 'border-white/85 bg-white/10'} backdrop-blur-sm`} style={{ left: `${DROP.cx}%`, top: `${DROP.cy}%`, width: `${DROP.r * 2}vw`, height: `${DROP.r * 2}vw`, maxWidth: 220, maxHeight: 220, minWidth: 140, minHeight: 140 }}>
+        {!placed && <div className="flex h-full w-full items-center justify-center text-center text-[11px] font-black uppercase tracking-widest text-white drop-shadow">🎤 Drop your<br />camera here</div>}
+      </div>
+      <div onPointerDown={onPointerDown} className={`absolute z-30 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-4 shadow-2xl transition-transform sm:h-32 sm:w-32 ${placed ? 'border-orange-400 ring-4 ring-orange-300/60' : 'border-white cursor-grab active:cursor-grabbing'} ${dragging ? 'scale-110' : ''}`} style={{ left: `${pos.x}%`, top: `${pos.y}%`, background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)', touchAction: 'none' }}>
+        <video ref={videoRef} muted playsInline className="h-full w-full object-cover" />
+      </div>
+      <div className="absolute right-4 top-1/2 z-30 flex w-[240px] -translate-y-1/2 flex-col items-stretch gap-3 sm:right-8 sm:w-[280px]">
+        <div className="rounded-3xl bg-white/95 px-4 py-3 text-center shadow-2xl ring-2 ring-orange-200">
+          <div className="text-[10px] font-black uppercase tracking-widest text-orange-500">Listen & Repeat</div>
+          <div className="mt-1 text-base font-black text-orange-800 sm:text-lg">
+            {phase === 'guess' ? 'Who answered? Tap a friend.' : phase === 'pleasantry' ? 'Say: Nice to meet you too!' : phase === 'done' ? 'Great job! ⭐' : `“${scene.question}”`}
+          </div>
+        </div>
+        {phase === 'done' ? (
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-3 text-base font-black text-white shadow-2xl ring-4 ring-white/50 active:scale-95">⭐ Stage complete →</button>
+        ) : phase === 'pleasantry' ? (
+          <button onClick={finishPleasantry} className="rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-3 text-base font-black text-white shadow-2xl ring-4 ring-white/50 active:scale-95">🎤 I said it! →</button>
+        ) : (
+          <button onClick={() => void playRound()} disabled={phase === 'listening' || phase === 'guess'} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-3 text-base font-black text-white shadow-2xl ring-4 ring-white/50 active:scale-95 disabled:opacity-60">
+            {phase === 'listening' ? 'Listening…' : phase === 'guess' ? 'Your turn 🎤' : '🔊 Ask & repeat'}
+          </button>
+        )}
+        {!placed && <div className="rounded-2xl bg-black/50 px-3 py-2 text-center text-[11px] font-black uppercase tracking-widest text-white shadow">⬅ Drag your camera into the circle</div>}
+      </div>
+      {phase === 'pleasantry' && currentRound && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-32 z-40 flex justify-center px-4">
+          <div className="rounded-[36px] bg-white/95 px-8 py-5 text-center shadow-2xl ring-4 ring-emerald-300">
+            <div className="text-[11px] font-black uppercase tracking-widest text-emerald-600">{CAST[currentRound.who].name} said: “Nice to meet you!”</div>
+            <div className="mt-2 text-2xl font-black text-emerald-800 sm:text-3xl">🎤 Say: “Nice to meet you too!”</div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Sound pop ---------- */
+
+type PopMode = 'balloon' | 'bubble' | 'butterfly' | 'apple' | 'rocket';
+const MODE_FOR_LETTER: Record<string, PopMode> = { B: 'balloon', H: 'balloon', S: 'bubble', N: 'bubble', T: 'butterfly', W: 'butterfly', A: 'apple', M: 'rocket' };
+type PopBalloon = { key: number; word: string; letter: string; img?: string; emoji: string; xPct: number; hue: number; duration: number; born: number; popped: null | 'hit' | 'miss'; mode: PopMode };
+
+function SoundPopScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'sound-pop' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [targetIdx, setTargetIdx] = useState(0);
+  const [score, setScore] = useState(0);
+  const [misses, setMisses] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(scene.seconds);
+  const [balloons, setBalloons] = useState<PopBalloon[]>([]);
+  const [phase, setPhase] = useState<'intro' | 'play' | 'win' | 'lose'>('intro');
+  const [gemDone, setGemDone] = useState(false);
+  const [flash, setFlash] = useState<null | 'hit' | 'miss'>(null);
+  const nextKey = useRef(1);
+  const attemptsByLetter = useRef<Record<string, number>>({});
+  const [hitsForTarget, setHitsForTarget] = useState(0);
+  const [masteryTick, setMasteryTick] = useState(0);
+  useEffect(() => {
+    const h = () => setMasteryTick((n) => n + 1);
+    window.addEventListener('pg-mastery-changed', h);
+    return () => window.removeEventListener('pg-mastery-changed', h);
+  }, []);
+  const mastered = useMemo(() => getMastered(), [masteryTick]);
+
+  const c = CAST[scene.who];
+  const target = scene.targets[targetIdx];
+  const phonemeSound = (letter: string) => {
+    const L = letter.toUpperCase();
+    const map: Record<string, string> = { S: 'sss, sss', A: 'ah, ah', H: 'h, h, h', M: 'mmm, mmm', N: 'nnn, nnn', W: 'wuh, wuh', R: 'rrr, rrr' };
+    return map[L] ?? `${L.toLowerCase()}, ${L.toLowerCase()}`;
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setPhase('intro'); setHitsForTarget(0); setBalloons([]);
+      if (cancelled) return;
+      await safeSpeak(phonemeSound(target.letter), scene.who);
+      if (!cancelled) setPhase('play');
+    })();
+    return () => { cancelled = true; };
+  }, [scene.id, targetIdx]);
+
+  useEffect(() => {
+    if (phase !== 'play') return;
+    const id = window.setInterval(() => setTimeLeft((t) => Math.max(0, t - 1)), 1000);
+    return () => window.clearInterval(id);
+  }, [phase]);
+
+  const isTargetMastered = mastered.has(target.letter.toUpperCase());
+  const tier: 0 | 1 | 2 = isTargetMastered ? 2 : hitsForTarget >= 2 ? 1 : 0;
+  const spawnMs = tier === 2 ? 620 : tier === 1 ? 820 : 1100;
+  const targetWeight = tier === 2 ? 0.65 : tier === 1 ? 0.5 : 0.35;
+  const modeDur = tier === 2 ? 4200 : tier === 1 ? 4800 : 5600;
+
+  useEffect(() => {
+    if (phase !== 'play') return;
+    const spawn = () => {
+      const pool = scene.items;
+      const targets = pool.filter((p) => p.letter === target.letter);
+      const others = pool.filter((p) => p.letter !== target.letter);
+      const useTarget = targets.length > 0 && Math.random() < targetWeight;
+      const bucket = useTarget ? targets : (others.length ? others : pool);
+      const it = bucket[Math.floor(Math.random() * bucket.length)];
+      let xPct = 8 + Math.random() * 84;
+      setBalloons((prev) => {
+        const recent = prev.filter((p) => !p.popped && performance.now() - p.born < 2200);
+        for (let tries = 0; tries < 8; tries++) {
+          if (recent.every((p) => Math.abs(p.xPct - xPct) > 18)) break;
+          xPct = 8 + Math.random() * 84;
+        }
+        const mode: PopMode = MODE_FOR_LETTER[target.letter.toUpperCase()] ?? 'balloon';
+        const baseDur = mode === 'butterfly' ? modeDur + 1200 : mode === 'apple' ? modeDur - 1000 : mode === 'rocket' ? Math.round(modeDur * 0.55) : modeDur;
+        const b: PopBalloon = { key: nextKey.current++, word: it.word, letter: it.letter, img: it.img, emoji: it.emoji, xPct, hue: [12, 40, 200, 280, 330, 150][Math.floor(Math.random() * 6)], duration: baseDur + Math.random() * 1500, born: performance.now(), popped: null, mode };
+        return [...prev.filter((p) => performance.now() - p.born < 8000), b];
+      });
+    };
+    spawn();
+    const id = window.setInterval(spawn, spawnMs);
+    return () => window.clearInterval(id);
+  }, [phase, scene.items, target.letter, spawnMs, targetWeight, modeDur]);
+
+  useEffect(() => {
+    if (phase !== 'play') return;
+    if (score >= scene.goal) {
+      setPhase('win');
+      if (!gemDone) { setGemDone(true); sfx.gem(); onWin(true); }
+      void safeSpeak('Perfect ears! You popped the sounds!', scene.who);
+    } else if (timeLeft <= 0) {
+      setPhase('lose'); onLose();
+      void safeSpeak("Nice try! Let's pop more next time.", 'teacher');
+    }
+  }, [score, timeLeft, phase, scene.goal, scene.who, onWin, onLose, gemDone]);
+
+  useEffect(() => {
+    if (phase !== 'play') return;
+    if (score > 0 && score % 4 === 0 && targetIdx < scene.targets.length - 1) setTargetIdx((i) => Math.min(scene.targets.length - 1, i + 1));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [score]);
+
+  const pop = async (b: PopBalloon) => {
+    if (phase !== 'play' || b.popped) return;
+    const isHit = b.letter === target.letter;
+    const rt = Math.max(0, Math.round(performance.now() - b.born));
+    const key = target.letter.toUpperCase();
+    attemptsByLetter.current[key] = (attemptsByLetter.current[key] ?? 0) + 1;
+    logMicroCheck({ ts: Date.now(), sceneId: scene.id, lesson: 2, letter: key, tappedLetter: b.letter.toUpperCase(), correct: isHit, attemptForLetter: attemptsByLetter.current[key], responseTimeMs: rt });
+    setBalloons((prev) => prev.map((p) => (p.key === b.key ? { ...p, popped: isHit ? 'hit' : 'miss' } : p)));
+    if (isHit) {
+      sfx.pop(); sfx.match(); setFlash('hit'); setScore((s) => s + 1); setHitsForTarget((h) => h + 1);
+      await safeSpeak(phonemeSound(target.letter), scene.who);
+    } else { sfx.wrong(); setFlash('miss'); setMisses((m) => m + 1); }
+    window.setTimeout(() => setFlash(null), 220);
+    window.setTimeout(() => setBalloons((prev) => prev.filter((p) => p.key !== b.key)), 350);
+  };
+
+  return (
+    <div className="fixed inset-0 z-10 h-screen w-screen overflow-hidden select-none">
+      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }} />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/50" />
+      {flash && <div className="pointer-events-none absolute inset-0 z-40 transition-opacity" style={{ background: flash === 'hit' ? 'rgba(34,197,94,0.18)' : 'rgba(239,68,68,0.20)' }} />}
+      <div className="absolute inset-x-0 top-4 z-30 flex items-center justify-between px-4">
+        <div className="rounded-full bg-white/95 px-4 py-2 text-sm font-black text-orange-700 shadow-2xl ring-2 ring-orange-200">🎈 {score}/{scene.goal}</div>
+        <div className="rounded-full bg-black/60 px-4 py-2 text-sm font-black text-white shadow-2xl">⏱ {timeLeft}s</div>
+        <div className="rounded-full bg-white/95 px-4 py-2 text-sm font-black text-red-500 shadow-2xl ring-2 ring-red-200">✖ {misses}</div>
+      </div>
+      <div className="absolute inset-x-0 top-16 z-30 flex justify-center px-4">
+        <div className="flex items-center gap-3 rounded-full bg-white/95 px-5 py-2 shadow-2xl ring-4" style={{ borderColor: c.color, boxShadow: `0 12px 30px ${c.color}55` }}>
+          <img src={c.img} alt={c.name} className="h-10 w-10 rounded-full object-contain" />
+          <span className="text-xs font-black uppercase tracking-widest text-slate-600">Pop the sound</span>
+          <span className="rounded-2xl px-3 py-1 text-2xl font-black text-white" style={{ backgroundColor: c.color }}>{target.letter} · {target.phoneme}</span>
+          <span className="rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-widest" style={{ background: tier === 2 ? '#22c55e' : tier === 1 ? '#f59e0b' : '#e2e8f0', color: tier === 0 ? '#334155' : '#fff' }}>{tier === 2 ? '⚡ fast' : tier === 1 ? '▶ go' : '🐢 easy'}</span>
+        </div>
+      </div>
+      <div className="absolute inset-x-0 top-28 z-30 flex justify-center px-4">
+        <div className="flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 shadow-xl ring-1 ring-white/20 backdrop-blur">
+          <span className="mr-1 text-[10px] font-black uppercase tracking-widest text-white/80">Mastered</span>
+          {UNIT1_PHONICS.map((L) => {
+            const on = mastered.has(L);
+            const isCur = L === target.letter.toUpperCase();
+            return <span key={L} title={on ? `${L} · mastered` : `${L} · not yet`} className="grid h-7 w-7 place-items-center rounded-full text-[11px] font-black transition" style={{ background: on ? '#22c55e' : 'rgba(255,255,255,0.15)', color: on ? '#fff' : 'rgba(255,255,255,0.75)', outline: isCur ? '2px solid #FFD447' : 'none', outlineOffset: 1 }}>{on ? '✓' : L}</span>;
+          })}
+        </div>
+      </div>
+      {phase === 'play' && balloons.map((b) => {
+        const isFall = b.mode === 'apple';
+        const anim = b.mode === 'balloon' ? `sp-rise ${b.duration}ms linear forwards, sp-sway 2.4s ease-in-out infinite`
+          : b.mode === 'bubble' ? `sp-rise ${b.duration}ms linear forwards, sp-wobble 1.6s ease-in-out infinite`
+          : b.mode === 'butterfly' ? `sp-rise ${b.duration}ms linear forwards, sp-zig 1.6s ease-in-out infinite`
+          : b.mode === 'rocket' ? `sp-shoot ${b.duration}ms cubic-bezier(.55,0,.85,.35) forwards, sp-wiggle 0.35s ease-in-out infinite`
+          : `sp-fall ${b.duration}ms linear forwards, sp-spin 2.2s linear infinite`;
+        const posStyle: React.CSSProperties = isFall ? { left: `${b.xPct}%`, top: '-180px' } : { left: `${b.xPct}%`, bottom: '-180px' };
+        return (
+          <button key={b.key} onClick={() => void pop(b)} className="absolute z-20 -translate-x-1/2 select-none focus:outline-none" style={{ ...posStyle, animation: anim, transform: b.popped ? 'scale(1.6)' : undefined, opacity: b.popped ? 0 : 1, transition: 'opacity 260ms ease, transform 260ms ease', touchAction: 'manipulation' }} aria-label={`${b.mode} ${b.word}`}>
+            {b.mode === 'balloon' && (
+              <div className="relative flex flex-col items-center">
+                <div className="grid h-48 w-44 place-items-center rounded-[50%] shadow-2xl ring-2 ring-white/70" style={{ background: `radial-gradient(circle at 32% 28%, hsla(${b.hue},95%,82%,1) 0%, hsla(${b.hue},85%,55%,1) 65%, hsla(${b.hue},75%,42%,1) 100%)` }}>
+                  <span className="text-8xl font-black text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.35)]" style={{ fontFamily: "'Fredoka',sans-serif" }}>{b.letter}</span>
+                </div>
+                <div className="h-4 w-[7px]" style={{ background: `hsl(${b.hue},70%,40%)` }} />
+                <div className="-mt-0.5 text-2xl leading-none">🎀</div>
+              </div>
+            )}
+            {b.mode === 'bubble' && (
+              <div className="grid h-44 w-44 place-items-center rounded-full shadow-2xl" style={{ background: 'radial-gradient(circle at 30% 25%, rgba(255,255,255,0.95) 0%, rgba(186,230,253,0.55) 40%, rgba(56,189,248,0.35) 75%, rgba(2,132,199,0.25) 100%)', border: '2px solid rgba(255,255,255,0.85)' }}>
+                <span className="text-7xl font-black text-sky-900/90" style={{ fontFamily: "'Fredoka',sans-serif" }}>{b.letter}</span>
+              </div>
+            )}
+            {b.mode === 'butterfly' && (
+              <div className="relative flex flex-col items-center">
+                <div className="relative h-40 w-52">
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 text-[6.5rem] leading-none" style={{ animation: 'sp-wingL 260ms ease-in-out infinite', color: `hsl(${b.hue},80%,55%)` }}>🦋</span>
+                  <span className="absolute right-0 top-1/2 -translate-y-1/2 -scale-x-100 text-[6.5rem] leading-none" style={{ animation: 'sp-wingR 260ms ease-in-out infinite', color: `hsl(${b.hue},80%,55%)` }}>🦋</span>
+                </div>
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full px-4 py-1.5 text-4xl font-black text-white shadow-xl ring-4 ring-white/85" style={{ backgroundColor: `hsl(${b.hue},70%,45%)`, fontFamily: "'Fredoka',sans-serif" }}>{b.letter}</div>
+              </div>
+            )}
+            {b.mode === 'apple' && (
+              <div className="grid h-40 w-40 place-items-center rounded-[42%] shadow-2xl ring-2 ring-white/60" style={{ background: 'radial-gradient(circle at 30% 25%, #fecaca 0%, #ef4444 55%, #991b1b 100%)' }}>
+                <span className="text-7xl font-black text-white" style={{ fontFamily: "'Fredoka',sans-serif" }}>{b.letter}</span>
+                <div className="absolute -top-3 text-2xl">🍃</div>
+              </div>
+            )}
+            {b.mode === 'rocket' && (
+              <div className="relative flex flex-col items-center">
+                <div className="absolute left-1/2 top-full h-24 w-6 -translate-x-1/2 rounded-b-full" style={{ background: 'linear-gradient(180deg, #fde68a 0%, #f97316 55%, #dc2626 100%)', filter: 'blur(3px)' }} />
+                <span className="pointer-events-none absolute top-full mt-1 text-2xl">🔥</span>
+                <div className="relative grid h-44 w-28 place-items-center rounded-[46%_46%_38%_38%/60%_60%_40%_40%] shadow-2xl ring-4 ring-white/70" style={{ background: 'linear-gradient(180deg, #f1f5f9 0%, #cbd5e1 45%, #64748b 100%)' }}>
+                  <span className="pointer-events-none absolute -top-2 text-3xl">🚀</span>
+                  <span className="mt-2 text-6xl font-black text-slate-900" style={{ fontFamily: "'Fredoka',sans-serif" }}>{b.letter}</span>
+                </div>
+              </div>
+            )}
+          </button>
+        );
+      })}
+      {phase === 'intro' && (
+        <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center">
+          <div className="rounded-3xl bg-white/95 px-6 py-4 text-center text-lg font-black text-orange-800 shadow-2xl ring-4 ring-orange-200">🎈 Listen to {c.name}… get ready to POP!</div>
+        </div>
+      )}
+      {(phase === 'win' || phase === 'lose') && (
+        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-black/55 px-6 text-center">
+          <div className="text-5xl font-black text-white drop-shadow-lg">{phase === 'win' ? '⭐ Sound Master! ⭐' : "⏰ Time's up!"}</div>
+          <div className="rounded-2xl bg-white/95 px-5 py-3 text-base font-black text-orange-700 shadow-2xl">Score: {score}/{scene.goal}</div>
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-7 py-3 text-base font-black text-white shadow-2xl ring-4 ring-white/50 active:scale-95">{phase === 'win' ? 'Next →' : 'Keep going →'}</button>
+        </div>
+      )}
+      <style>{`
+        @keyframes sp-rise { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(-50%, calc(-100vh - 260px), 0); } }
+        @keyframes sp-sway { 0%,100% { margin-left: -6px; } 50% { margin-left: 6px; } }
+        @keyframes sp-fall { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(-50%, calc(100vh + 260px), 0); } }
+        @keyframes sp-wobble { 0%,100% { margin-left: -10px; } 50% { margin-left: 10px; } }
+        @keyframes sp-spin { from { margin-left: -4px; } 50% { margin-left: 4px; } to { margin-left: -4px; } }
+        @keyframes sp-zig { 0% { margin-left: -34px; } 25% { margin-left: 10px; } 50% { margin-left: 34px; } 75% { margin-left: -12px; } 100% { margin-left: -34px; } }
+        @keyframes sp-wingL { 0%,100% { transform: translateY(-50%) rotateY(0deg); } 50% { transform: translateY(-50%) rotateY(70deg); } }
+        @keyframes sp-wingR { 0%,100% { transform: translateY(-50%) scaleX(-1) rotateY(0deg); } 50% { transform: translateY(-50%) scaleX(-1) rotateY(70deg); } }
+        @keyframes sp-shoot { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(-50%, calc(-100vh - 260px), 0); } }
+        @keyframes sp-wiggle { 0%,100% { margin-left: -3px; } 50% { margin-left: 3px; } }
+      `}</style>
+    </div>
+  );
+}
+
+/* ---------- Brick crush ---------- */
+
+type Brick = { id: number; letter: string; color: string; crashed: boolean; wobble: boolean };
+
+function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'brick-crush' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const LETTER_COLORS: Record<string, string> = { H: '#FF6B6B', M: '#4DABF7', N: '#FFD43B', W: '#9775FA', A: '#51CF66', S: '#FF922B' };
+  const phonemeFor = (L: string) => {
+    const map: Record<string, string> = { H: 'h, h', M: 'mmm', N: 'nnn', W: 'wuh', A: 'ah', S: 'sss' };
+    return map[L] ?? L.toLowerCase();
+  };
+
+  const buildGrid = useCallback(() => {
+    const out: Brick[] = [];
+    let id = 1;
+    for (let r = 0; r < scene.rows; r++) for (let c = 0; c < scene.cols; c++) {
+      const L = scene.letters[Math.floor(Math.random() * scene.letters.length)];
+      out.push({ id: id++, letter: L, color: LETTER_COLORS[L] ?? '#FE6A2F', crashed: false, wobble: false });
+    }
+    return out;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scene.rows, scene.cols]);
+
+  const [bricks, setBricks] = useState<Brick[]>(() => buildGrid());
+  const [targetLetter, setTargetLetter] = useState<string>(scene.letters[0]);
+  const [score, setScore] = useState(0);
+  const [misses, setMisses] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(scene.seconds);
+  const [phase, setPhase] = useState<'intro' | 'play' | 'win' | 'lose'>('intro');
+  const [gemDone, setGemDone] = useState(false);
+  const [flash, setFlash] = useState<null | 'hit' | 'miss'>(null);
+  const [combo, setCombo] = useState(0);
+  const c = CAST[scene.who];
+
+  const callNewSound = useCallback(async () => {
+    const remaining = bricks.filter((b) => !b.crashed);
+    if (remaining.length === 0) return;
+    const available = Array.from(new Set(remaining.map((b) => b.letter)));
+    const next = available[Math.floor(Math.random() * available.length)];
+    setTargetLetter(next);
+    await safeSpeak(phonemeFor(next), scene.who);
+  }, [bricks, scene.who]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setPhase('intro');
+      await safeSpeak('Listen and tap!', scene.who);
+      if (cancelled) return;
+      const first = scene.letters[Math.floor(Math.random() * scene.letters.length)];
+      setTargetLetter(first);
+      await safeSpeak(phonemeFor(first), scene.who);
+      if (!cancelled) setPhase('play');
+    })();
+    return () => { cancelled = true; };
+  }, [scene.id]);
+
+  useEffect(() => {
+    if (phase !== 'play') return;
+    const id = window.setInterval(() => setTimeLeft((t) => Math.max(0, t - 1)), 1000);
+    return () => window.clearInterval(id);
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== 'play') return;
+    if (score >= scene.goal) {
+      setPhase('win');
+      if (!gemDone) { setGemDone(true); onWin(true); sfx.gem(); cueSpeak('Amazing! Brick crush champion!', 'teacher'); }
+    } else if (timeLeft <= 0) { setPhase('lose'); cueSpeak('Great try! Tap next to keep going.', 'teacher'); }
+  }, [score, timeLeft, phase, scene.goal, gemDone, onWin]);
+
+  const tapBrick = (b: Brick) => {
+    if (phase !== 'play' || b.crashed) return;
+    if (b.letter === targetLetter) {
+      sfx.pop();
+      setBricks((prev) => prev.map((x) => (x.id === b.id ? { ...x, crashed: true } : x)));
+      setScore((s) => s + 1); setCombo((k) => k + 1); setFlash('hit');
+      window.setTimeout(() => setFlash(null), 220);
+      const remainingOfTarget = bricks.filter((x) => !x.crashed && x.letter === targetLetter && x.id !== b.id).length;
+      const nextScore = score + 1;
+      if (remainingOfTarget === 0 || nextScore % 4 === 0) window.setTimeout(() => { void callNewSound(); }, 400);
+    } else {
+      sfx.wrong(); onLose(); setMisses((m) => m + 1); setCombo(0);
+      setBricks((prev) => prev.map((x) => (x.id === b.id ? { ...x, wobble: true } : x)));
+      setFlash('miss');
+      window.setTimeout(() => { setBricks((prev) => prev.map((x) => (x.id === b.id ? { ...x, wobble: false } : x))); setFlash(null); }, 400);
+    }
+  };
+
+  const replaySound = () => { void safeSpeak(phonemeFor(targetLetter), scene.who); };
+
+  return (
+    <div className="relative h-[calc(100vh-8rem)] w-full overflow-hidden">
+      <div className="pointer-events-none absolute inset-x-0 top-3 z-30 flex items-start justify-between px-4">
+        <div className="pointer-events-auto rounded-2xl bg-white/95 px-4 py-2 text-sm font-black text-orange-700 shadow-xl backdrop-blur">⭐ {score}/{scene.goal} · ⏱ {timeLeft}s{combo >= 3 ? ` · 🔥 x${combo}` : ''}</div>
+        <button onClick={replaySound} className="pointer-events-auto flex items-center gap-2 rounded-full px-5 py-3 text-lg font-black text-white shadow-2xl ring-4 ring-white/60 active:scale-95" style={{ background: `linear-gradient(135deg, ${c.color}, #FEBE4C)` }}>🔊 Sound: <span className="text-2xl">{phonemeFor(targetLetter)}</span></button>
+      </div>
+      <div className="absolute inset-x-0 top-20 bottom-6 z-10 grid place-items-center px-4">
+        <div className="grid gap-2 sm:gap-3" style={{ gridTemplateColumns: `repeat(${scene.cols}, minmax(0, 1fr))`, width: 'min(96vw, 900px)' }}>
+          {bricks.map((b) => {
+            if (b.crashed) return <div key={b.id} className="aspect-square rounded-2xl bg-transparent" aria-hidden />;
+            const isTarget = b.letter === targetLetter;
+            return (
+              <button key={b.id} onClick={() => tapBrick(b)} className={`relative aspect-square rounded-2xl border-b-[6px] border-black/25 shadow-xl transition-all active:translate-y-1 active:border-b-2 ${isTarget ? 'ring-4 ring-white/80 animate-pulse' : ''} ${b.wobble ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`} style={{ background: `linear-gradient(160deg, ${b.color}, ${b.color}dd 60%, ${b.color}99)` }} aria-label={`Brick ${b.letter}`}>
+                <span className="grid h-full w-full place-items-center text-3xl font-black text-white drop-shadow-[0_2px_0_rgba(0,0,0,0.35)] sm:text-4xl md:text-5xl">{b.letter}</span>
+                <span className="pointer-events-none absolute inset-x-2 top-2 h-1/3 rounded-xl bg-white/25 blur-sm" />
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      {flash && <div className="pointer-events-none absolute inset-0 z-20" style={{ background: flash === 'hit' ? 'radial-gradient(circle at center, rgba(34,197,94,0.35), transparent 60%)' : 'radial-gradient(circle at center, rgba(239,68,68,0.35), transparent 60%)' }} />}
+      {phase === 'intro' && (
+        <div className="absolute inset-0 z-40 grid place-items-center bg-black/40 backdrop-blur-sm">
+          <div className="rounded-3xl bg-white/95 px-8 py-6 text-center shadow-2xl">
+            <div className="text-xs font-black uppercase tracking-widest text-orange-500">Get ready</div>
+            <div className="mt-1 text-3xl font-black text-orange-800">🧱 Brick Crush</div>
+            <div className="mt-2 text-sm font-bold text-orange-700">Listen to {c.name}. Tap the matching letter bricks!</div>
+          </div>
+        </div>
+      )}
+      {(phase === 'win' || phase === 'lose') && (
+        <div className="absolute inset-x-0 bottom-6 z-40 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl ring-4 ring-white/50 active:scale-95">{phase === 'win' ? '✨ Champion! Next →' : `Nice try (${score}/${scene.goal}) — Next →`}</button>
+        </div>
+      )}
+      {misses > 0 && <div className="pointer-events-none absolute right-4 bottom-4 z-30 rounded-full bg-black/60 px-3 py-1 text-xs font-black text-white">Misses: {misses}</div>}
+    </div>
+  );
+}
+
+/* ---------- Friend pop ---------- */
+
+function FriendPopScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'friend-pop' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const GENDER: Record<string, 'she' | 'he'> = { bella: 'she', mia: 'she', willow: 'she', leo: 'he', pip: 'he' };
+  const [round, setRound] = useState(0);
+  const [score, setScore] = useState(0);
+  const [tapped, setTapped] = useState<{ who: CharKey; ok: boolean } | null>(null);
+  const [gemDone, setGemDone] = useState(false);
+  const answeredRef = useRef(false);
+  const total = scene.rounds.length;
+  const finished = round >= total;
+  const r = !finished ? scene.rounds[round] : null;
+
+  const roundEmotion = (prompt: string, explicit?: 'happy' | 'sad' | 'angry' | 'neutral'): 'happy' | 'sad' | 'angry' | 'neutral' => {
+    if (explicit) return explicit;
+    if (/(angry|grrr|mad)/i.test(prompt)) return 'angry';
+    if (/sad/i.test(prompt)) return 'sad';
+    if (/happy/i.test(prompt)) return 'happy';
+    return 'neutral';
+  };
+
+  const targetGender = r ? GENDER[r.target as string] ?? 'she' : 'she';
+  const roundEmo = r ? roundEmotion(r.prompt, r.emotion) : 'happy';
+  const helloMode = !!r && !!r.sayLine && /hello|hi\b/i.test(r.sayLine);
+  const pronounMode = !!r && !helloMode && /^\s*(he|she)\b/i.test(r.prompt);
+
+  const lineup: { who: CharKey; emo: 'happy' | 'sad' | 'angry' | 'neutral' }[] = useMemo(() => {
+    if (!r) return [];
+    const cast = scene.cast;
+    if (helloMode) {
+      const target = r.target;
+      const others = cast.filter((c) => c !== target);
+      const pickA = others[round % Math.max(1, others.length)] ?? target;
+      const pickB = others[(round + 1) % Math.max(1, others.length)] ?? target;
+      const arr: CharKey[] = [target, pickA, pickB];
+      const swap = (a: number, b: number) => { const t = arr[a]; arr[a] = arr[b]; arr[b] = t; };
+      swap(0, round % 3);
+      return arr.map((who) => ({ who, emo: 'happy' as const }));
+    }
+    if (pronounMode) {
+      const boys = cast.filter((c) => GENDER[c] === 'he');
+      const girls = cast.filter((c) => GENDER[c] === 'she');
+      const targetPool = targetGender === 'he' ? boys : girls;
+      const otherPool = targetGender === 'he' ? girls : boys;
+      const target = targetPool.includes(r.target) ? r.target : targetPool[round % Math.max(1, targetPool.length)];
+      const others: CharKey[] = [];
+      for (let i = 0; i < 2; i++) {
+        const pool = otherPool.length ? otherPool : targetPool.filter((c) => c !== target);
+        others.push(pool[(round + i) % pool.length]);
+      }
+      const arr = [target, ...others];
+      const swap = (a: number, b: number) => { const t = arr[a]; arr[a] = arr[b]; arr[b] = t; };
+      swap(0, round % 3); swap(1, (round + 1) % 3);
+      const allEmos: ('happy' | 'sad' | 'angry')[] = ['happy', 'sad', 'angry'];
+      const otherEmos = allEmos.filter((e) => e !== roundEmo);
+      return arr.map((who) => ({ who, emo: who === target ? roundEmo : (otherEmos[(round + arr.indexOf(who)) % otherEmos.length] as 'happy' | 'sad' | 'angry') }));
+    }
+    const emotions: ('happy' | 'sad' | 'angry')[] = ['happy', 'sad', 'angry'];
+    const target = r.target;
+    const others = cast.filter((c) => c !== target).slice(0, 2);
+    const otherEmos = emotions.filter((e) => e !== roundEmo);
+    const arr = [
+      { who: target, emo: roundEmo },
+      { who: others[0] ?? target, emo: otherEmos[0] },
+      { who: others[1] ?? target, emo: otherEmos[1] ?? otherEmos[0] },
+    ];
+    const swap = (a: number, b: number) => { const t = arr[a]; arr[a] = arr[b]; arr[b] = t; };
+    swap(0, round % 3); swap(1, (round + 1) % 3);
+    return arr;
+  }, [round, r, targetGender, scene.cast, pronounMode, helloMode, roundEmo]);
+
+  useEffect(() => {
+    if (!r) return;
+    answeredRef.current = false; setTapped(null);
+    void safeSpeak(r.prompt, r.target);
+  }, [round, r]);
+
+  const tap = async (who: CharKey, emo: 'happy' | 'sad' | 'angry' | 'neutral') => {
+    if (!r || answeredRef.current) return;
+    const isCorrect = helloMode ? who === r.target : pronounMode ? GENDER[who] === targetGender : emo === roundEmo;
+    if (isCorrect) {
+      answeredRef.current = true; setTapped({ who, ok: true }); sfx.match(); setScore((s) => s + 1);
+      const line = helloMode ? (r.sayLine ?? `Hello, ${CAST[who].name}!`) : pronounMode ? `${GENDER[who] === 'he' ? 'He' : 'She'} is ${roundEmo}!` : `${CAST[who].name} is ${roundEmo}!`;
+      await safeSpeak(line, who);
+      window.setTimeout(() => {
+        const next = round + 1;
+        if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+        setRound(next);
+      }, 700);
+    } else {
+      setTapped({ who, ok: false }); sfx.wrong(); onLose();
+      window.setTimeout(() => setTapped(null), 500);
+    }
+  };
+
+  if (finished) {
+    return (
+      <div className="relative flex h-[calc(100vh-8rem)] w-full items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/40" />
+        <div className="relative z-10 flex flex-col items-center gap-4">
+          <div className="rounded-3xl bg-white/95 px-8 py-4 text-center shadow-2xl">
+            <div className="text-2xl font-black text-orange-700">🎉 Amazing!</div>
+            <div className="text-lg font-bold text-neutral-700">You found all your friends! {score}/{total}</div>
+          </div>
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next ⭐</button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative flex h-[calc(100vh-8rem)] w-full flex-col items-center justify-center bg-cover bg-center px-4" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <button onClick={() => cueSpeak(r!.prompt, r!.target)} className="absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-6 py-3 text-center text-lg font-black text-orange-700 shadow-xl backdrop-blur active:scale-95 sm:text-2xl">
+        🔊 {r!.prompt}<span className="ml-2 rounded-full bg-orange-100 px-2 py-0.5 text-sm text-orange-600">{round + 1}/{total}</span>
+      </button>
+      <div className="relative z-10 mt-20 flex w-full items-end justify-center gap-2 sm:gap-6">
+        {lineup.map((item, i) => {
+          const { who, emo } = item;
+          const isFlash = tapped?.who === who;
+          return (
+            <button key={`${round}-${i}-${who}`} onClick={() => tap(who, emo)} className="relative transition-transform active:scale-95" style={{ width: 'clamp(180px, 30vw, 340px)', height: 'clamp(280px, 55vh, 500px)' }} aria-label={CAST[who].name}>
+              <img src={getEmotionSprite(who, emo)} alt={CAST[who].name} className="h-full w-full object-contain drop-shadow-2xl" draggable={false} />
+              {isFlash && <div className={`pointer-events-none absolute inset-0 flex items-center justify-center text-8xl font-black ${tapped!.ok ? 'text-green-400' : 'text-red-500'}`}>{tapped!.ok ? '✓' : '✗'}</div>}
+            </button>
+          );
+        })}
+      </div>
+      <div className="pointer-events-none absolute bottom-4 left-1/2 z-30 -translate-x-1/2 rounded-full bg-white/90 px-4 py-1 text-sm font-black text-orange-700 shadow">⭐ {score}/{total}</div>
+    </div>
   );
 }
 
