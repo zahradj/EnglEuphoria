@@ -288,21 +288,21 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
   const side: 'left' | 'right' = scene.who === 'mia' ? 'right' : 'left';
   const [beat, setBeat] = useState(-1);
   const [opened, setOpened] = useState<Set<number>>(new Set());
-  const [phase, setPhase] = useState<'intro' | 'invite' | 'done'>('intro');
+  const [phase, setPhase] = useState<'invite' | 'done'>('invite');
   const [replays, setReplays] = useState(0);
 
-  const runModel = useCallback(async () => {
+  // The teacher gives all spoken instructions live in the classroom — this
+  // scene only ever plays the letter's actual recorded sound (never TTS
+  // narration) and only ever on tap, never automatically on mount.
+  const playLetterSound = useCallback(async () => {
     setBeat(0);
-    await safeSpeak(scene.sound, scene.who);
+    await playLetterPhonic(scene.letter);
     setBeat(-1);
-    setPhase('invite');
-    await safeSpeak(`Now tap to find my /${scene.phoneme.replace(/[/]/g, '')}/ words!`, 'teacher');
-  }, [scene.sound, scene.who, scene.phoneme]);
+  }, [scene.letter]);
 
   useEffect(() => {
     setOpened(new Set());
-    setPhase('intro');
-    safeSpeak(scene.teacher, 'teacher').then(() => runModel());
+    setPhase('invite');
   }, [scene.id]);
 
   const openProp = async (i: number) => {
@@ -321,16 +321,22 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
         </div>
       </div>
       <div className="pointer-events-none absolute inset-y-0 z-30 flex w-[42%] flex-col items-center justify-center gap-4" style={{ [side]: 0 }}>
-        <div className="grid place-items-center rounded-[2.5rem] border-8 bg-white/95 font-black shadow-2xl backdrop-blur" style={{ color: theme.tint, borderColor: theme.tint, width: 'min(60vh, 22rem)', height: 'min(60vh, 22rem)', fontSize: 'min(48vh, 18rem)', lineHeight: 1, animation: beat >= 0 ? 'lep1-pop 0.5s ease-out' : 'lep1-wiggle 4s ease-in-out infinite' }}>
+        <button
+          type="button"
+          onClick={playLetterSound}
+          aria-label={`Hear the ${scene.letter} sound again`}
+          className="pointer-events-auto grid place-items-center rounded-[2.5rem] border-8 bg-white/95 font-black shadow-2xl backdrop-blur transition active:scale-95"
+          style={{ color: theme.tint, borderColor: theme.tint, width: 'min(60vh, 22rem)', height: 'min(60vh, 22rem)', fontSize: 'min(48vh, 18rem)', lineHeight: 1, animation: beat >= 0 ? 'lep1-pop 0.5s ease-out' : 'lep1-wiggle 4s ease-in-out infinite' }}
+        >
           {scene.letter}
-        </div>
+        </button>
         <div className="rounded-2xl border-4 bg-white px-5 py-2 text-center text-2xl font-black shadow-xl sm:text-3xl" style={{ color: theme.tint, borderColor: theme.tint }}>
           /{scene.phoneme.replace(/[/]/g, '')}/ /{scene.phoneme.replace(/[/]/g, '')}/
         </div>
       </div>
       <div className="pointer-events-none absolute inset-x-0 top-10 z-10 flex justify-center px-4">
         <div className="max-w-md rounded-2xl px-4 py-3 text-center text-base font-bold text-white shadow-2xl sm:text-lg" style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.35))', backdropFilter: 'blur(8px)', textShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
-          {phase === 'done' ? 'You found them all! Great listening! ⭐' : phase === 'invite' ? `Tap to hear a /${scene.phoneme.replace(/[/]/g, '')}/ word!` : scene.teacher}
+          {phase === 'done' ? 'You found them all! Great listening! ⭐' : `Tap the letter or a picture to hear it!`}
         </div>
       </div>
       {scene.anchors.map((a, i) => {
@@ -365,7 +371,7 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
         );
       })}
       <div className="absolute inset-x-0 bottom-4 z-30 mx-auto flex max-w-md gap-2 px-4">
-        <button onClick={() => { setReplays((r) => r + 1); runModel(); }} className="flex-1 rounded-full bg-white/95 py-3 text-sm font-bold text-orange-700 shadow-xl ring-2 ring-orange-200 backdrop-blur active:scale-95">
+        <button onClick={() => { setReplays((r) => r + 1); playLetterSound(); }} className="flex-1 rounded-full bg-white/95 py-3 text-sm font-bold text-orange-700 shadow-xl ring-2 ring-orange-200 backdrop-blur active:scale-95">
           🔁 Hear sound {replays > 0 && <span className="opacity-60">({replays})</span>}
         </button>
         <button onClick={onNext} disabled={phase !== 'done'} className={`flex-1 rounded-full py-3 text-sm font-black text-white shadow-xl transition ${phase === 'done' ? 'bg-gradient-to-r from-green-500 to-emerald-500 active:scale-95' : 'cursor-not-allowed bg-neutral-400/70'}`}>
