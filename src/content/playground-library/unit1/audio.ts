@@ -16,21 +16,25 @@ const ANON_KEY =
  * the same sequential-playback + IndexedDB-cache design now calls the
  * existing `elevenlabs-tts` Supabase Edge Function instead.
  *
- * Voice cast: standard ElevenLabs native-English premade voices, chosen and
- * pitch-tuned for 5-6 year olds after the original adult-timbre cast (Charlie,
- * Alice, Callum, Sarah) read as grown-up/elderly rather than child-like.
- * Fundamental frequency (F0) was measured directly off real generated clips
- * (autocorrelation pitch detection) to pick objectively brighter voices —
- * Pip=Josh (~240Hz, was Charlie ~133Hz), Mia=Lily (~265Hz), Bella=Matilda
- * (~273Hz), Willow=Nicole (~242Hz, was Alice ~151Hz), Leo=Harry (~207Hz, was
- * the gravelly adult Callum ~102Hz), Teacher/narrator=Freya (~229Hz, was
- * Sarah ~105Hz) — then every line gets an additional cents-based pitch lift
- * (PITCH_CENTS below) on top of that, landing everyone in a consistent
- * ~230-290Hz cartoon-kid range. Paced slower (SPEECH_SPEED below) throughout
- * for Pre-A1 / pre-k listeners, independent of the pitch lift (see the
- * Web Audio playback engine further down — pitch and rate are controlled
- * separately via `detune` and `playbackRate` so slowing speech down for
- * clarity never drags the pitch back down into "old person" territory).
+ * Voice cast: standard ElevenLabs native-English premade voices, picked and
+ * pitch-tuned for 5-6 year olds after two rounds of measuring real generated
+ * clips (autocorrelation pitch detection on decoded audio, not guesswork).
+ *
+ * Round 1 swapped the deepest voices (Charlie/Alice/Callum/Sarah) for
+ * brighter ones and added a small +100/+200 cent lift — still reported as
+ * "adult." Round 2 found why: Web Audio's `playbackRate` and `detune`
+ * combine *multiplicatively*. SPEECH_SPEED=0.82 alone lowers pitch by about
+ * -340 cents (it's a literal tape-speed change), so a +100/+200 cent lift
+ * on top left the *net* pitch flat or even lower than the original adult
+ * recording — the slowdown needed for pre-k pacing was quietly cancelling
+ * out the fix. PITCH_CENTS below is now large enough to comfortably outrun
+ * that -340 cent floor and land every character in a genuinely childlike,
+ * exaggerated "cartoon" register (measured net F0 ~250-440Hz across the
+ * cast — see PITCH_CENTS). Two voices were also re-cast: Pip -> Elli and
+ * Leo -> Mimi, both bright, animated-style voices that hold up far better
+ * under a strong pitch lift than the deep adult male voices they replaced
+ * (Charlie, then Josh) ever could — same approach real cartoons use to
+ * voice young boy characters with lighter voice actors.
  */
 
 /** ElevenLabs speed multiplier for every generated line — slower and more
@@ -42,40 +46,46 @@ const SPEECH_SPEED = 0.82;
 export type Character = 'pip' | 'mia' | 'bella' | 'willow' | 'leo' | 'teacher' | 'narrator';
 
 const VOICE_ID: Record<Character, string> = {
-  pip: 'TxGEqnHWrfWFTfGW9XjX', // Josh
+  pip: 'MF3mGyEYCl7XYWbV9V6O', // Elli
   mia: 'pFZP5JQG7iQjIQuC4Bku', // Lily
   bella: 'XrExE9yKIg1WjnnlVkGX', // Matilda
   willow: 'piTKgcLEGmPE4e6mEKli', // Nicole
-  leo: 'SOYHLrjzK2X1ezoPC6cr', // Harry
+  leo: 'zrHiDhphv9ZnVXBqCLjz', // Mimi
   teacher: 'jsCqWAovK2LkecY7zXl4', // Freya
   narrator: 'jsCqWAovK2LkecY7zXl4', // Freya
 };
 
-/** Extra pitch lift applied on top of each voice's natural pitch, in cents
- *  (100 cents = 1 semitone), via Web Audio's `detune` — independent of
- *  playback speed. Kid characters get a bigger lift; the teacher/narrator
- *  voice gets a smaller one since it still reads as a grown-up in the story. */
+/** Pitch lift applied via Web Audio's `detune`, in cents (100 cents = 1
+ *  semitone) — combines multiplicatively with SPEECH_SPEED's own -340-cent
+ *  pitch drop (see module doc above), so these numbers look large but net
+ *  out to a measured ~250-440Hz across the cast, not a further +10/+20
+ *  semitones on top of the original voice. Kid characters get the full
+ *  1000-cent lift; the teacher/narrator voice gets a smaller 600-cent lift
+ *  since it still reads as a grown-up in the story, just no longer a deep
+ *  or elderly-sounding one. */
 const PITCH_CENTS: Record<Character, number> = {
-  pip: 200,
-  mia: 100,
-  bella: 100,
-  willow: 200,
-  leo: 200,
-  teacher: 100,
-  narrator: 100,
+  pip: 1000,
+  mia: 1000,
+  bella: 1000,
+  willow: 1000,
+  leo: 1000,
+  teacher: 600,
+  narrator: 600,
 };
 
 // Browser speechSynthesis fallback (used only if ElevenLabs and the local
 // clip both fail) — paced to match SPEECH_SPEED above for pre-k listeners,
 // pitch raised to stay consistent with the childlike ElevenLabs cast.
+// SpeechSynthesisUtterance.pitch is clamped to [0, 2] by the Web Speech API
+// spec, so 2.0 (mia) is the ceiling this path can reach.
 const FALLBACK_VOICE: Record<Character, { rate: number; pitch: number }> = {
-  pip: { rate: 0.78, pitch: 1.7 },
+  pip: { rate: 0.78, pitch: 1.9 },
   mia: { rate: 0.8, pitch: 2.0 },
-  bella: { rate: 0.78, pitch: 1.7 },
-  willow: { rate: 0.8, pitch: 1.6 },
-  leo: { rate: 0.75, pitch: 1.3 },
-  teacher: { rate: 0.8, pitch: 1.3 },
-  narrator: { rate: 0.8, pitch: 1.3 },
+  bella: { rate: 0.78, pitch: 1.9 },
+  willow: { rate: 0.8, pitch: 1.8 },
+  leo: { rate: 0.75, pitch: 1.6 },
+  teacher: { rate: 0.8, pitch: 1.5 },
+  narrator: { rate: 0.8, pitch: 1.5 },
 };
 
 const bufferCache = new Map<string, AudioBuffer>();
@@ -156,11 +166,12 @@ let queueDepth = 0;
 function key(character: Character, text: string) {
   // v2 bumped every cached clip to regenerate at SPEECH_SPEED. v3 bumped
   // again for the supabase.functions.invoke() binary-corruption fix. v4
-  // bumps again: the voice cast itself changed (brighter, more childlike
-  // voice IDs for pip/willow/leo/teacher) and playback moved from
-  // HTMLAudioElement to the Web Audio pitch-shift engine below, so every
-  // older cached clip is either the wrong voice or the wrong format.
-  return `${character}::v4::${text}`;
+  // moved playback to the Web Audio pitch-shift engine with a first-pass
+  // (too-small) pitch lift. v5 bumps again: fixed the detune/playbackRate
+  // math (see module doc — the old lift was actually net-negative once the
+  // pre-k slowdown was factored in) and re-cast pip/leo to brighter base
+  // voices, so every older cached clip still has the wrong, flatter pitch.
+  return `${character}::v5::${text}`;
 }
 
 async function fetchAudioBuffer(k: string, text: string, character: Character): Promise<AudioBuffer | null> {
