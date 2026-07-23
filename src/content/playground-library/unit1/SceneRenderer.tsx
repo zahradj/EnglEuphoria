@@ -188,7 +188,6 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
   const c = CAST[scene.who];
   const repeatWord = scene.repeat ?? scene.line;
 
-  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); }, [scene.id]);
 
   const tapCharacter = async () => {
     if (phase !== 'idle') return;
@@ -391,7 +390,6 @@ function EchoScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind: 'ec
   const holdTimer = useRef<number | null>(null);
   const c = CAST[scene.who];
 
-  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); }, [scene.id]);
 
   const hear = async () => { setHeard((h) => h + 1); await safeSpeak(scene.hearWord ?? scene.word, scene.who); };
   const startHold = () => {
@@ -436,7 +434,6 @@ function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, {
   const got = slots.filter((s) => s.collected).length;
   const done = got >= scene.goal;
 
-  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); }, [scene.id]);
   useEffect(() => {
     if (done && !gemAwarded) { setGemAwarded(true); onWin(true); cueSpeak(`Yes! The ${scene.letter} portal is open!`, scene.who); }
   }, [done, gemAwarded]);
@@ -473,7 +470,7 @@ function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, {
       if (x.idx !== idx) return x;
       if (!dropped) return { ...x, dragging: false, dx: 0, dy: 0 };
       if (x.it.hit) { sfx.match(); cueSpeak(`${scene.phoneme}! ${x.it.word}!`, scene.who); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
-      sfx.wrong(); cueSpeak(`No, no ${scene.phoneme}. Try again!`, scene.who); onLose();
+      sfx.wrong(); onLose();
       return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
     }));
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
@@ -544,7 +541,6 @@ function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 't
   useEffect(() => {
     segmentBuckets.current = segments.map(() => new Set<number>());
     setZonesDone(0); setStrokes([]); setDone(false);
-    cueSpeak(scene.teacher, 'teacher');
   }, [scene.id]);
 
   const localPoint = (e: React.PointerEvent) => {
@@ -654,7 +650,6 @@ function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
   const start = useRef({ x: 0, y: 0 });
   const done = slots.every((s) => s.collected);
 
-  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); }, [scene.id]);
   useEffect(() => { if (done && !gemAwarded) { setGemAwarded(true); onWin(true); cueSpeak('Amazing! All sounds sorted!', 'teacher'); } }, [done, gemAwarded]);
 
   function hitTest(x: number, y: number, itemEl?: Element | null): string | null {
@@ -702,7 +697,7 @@ function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
       if (x.idx !== idx) return x;
       if (!dropLetter) return { ...x, dragging: false, dx: 0, dy: 0 };
       if (dropLetter === x.it.letter) { sfx.match(); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
-      sfx.wrong(); cueSpeak('Try another sound!', 'teacher'); onLose();
+      sfx.wrong(); onLose();
       return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
     }));
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
@@ -769,7 +764,6 @@ function WordBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
   const total = scene.rounds.length;
   const complete = round >= total;
 
-  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); }, [scene.id]);
   useEffect(() => {
     if (complete) return;
     setFilled(null); setWrong(null);
@@ -854,15 +848,10 @@ function WhoSaidItScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind
   const target = scene.rounds[round]?.who ?? null;
   const targetLine = scene.rounds[round]?.line ?? '';
 
-  useEffect(() => {
-    if (phase !== 'prompt' || finished || !target) return;
-    cueSpeak(`Tap ${CAST[target].name}. Listen and repeat!`, 'teacher');
-  }, [phase, finished, target]);
-
   const pick = async (choice: CharKey) => {
     if (phase !== 'prompt' || !target) return;
     setTapped(choice);
-    if (choice !== target) { sfx.wrong(); await safeSpeak(`Try again. Tap ${CAST[target].name}.`, 'teacher'); setTapped(null); return; }
+    if (choice !== target) { sfx.wrong(); setTapped(null); return; }
     sfx.match(); setPhase('playing');
     await safeSpeak(targetLine, target);
     setPhase('repeat');
@@ -930,7 +919,6 @@ function GatherScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: '
     window.addEventListener('resize', sync);
     return () => window.removeEventListener('resize', sync);
   }, []);
-  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); }, [scene.id]);
   useEffect(() => () => { streamRef.current?.getTracks().forEach((t) => t.stop()); }, []);
 
   const project = (x: number, y: number, r: number) => {
@@ -949,7 +937,6 @@ function GatherScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: '
       if (videoRef.current) { videoRef.current.srcObject = stream; await videoRef.current.play().catch(() => {}); }
       setCamActive(true); sfx.gem();
       if (!gemDone) { setGemDone(true); onWin(true); }
-      await safeSpeak('Your turn! Say: Hello, my name is...', 'teacher');
     } catch {
       setCamError('Camera unavailable — you can still say your name out loud!');
       setCamActive(true);
@@ -1031,7 +1018,6 @@ function MemoryScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
   const [busy, setBusy] = useState(false);
   const [gemDone, setGemDone] = useState(false);
 
-  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); }, [scene.id]);
 
   const tap = async (card: Card) => {
     if (busy || matched.has(card.pairId) || flipped.includes(card.key)) return;
@@ -1095,7 +1081,6 @@ function DashScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { k
   const gemDoneRef = useRef(false);
   const heroSrc = CAST[scene.who].img;
 
-  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); }, [scene.id]);
 
   const start = () => { setRings(0); setHearts(3); setTime(scene.seconds); setItems([]); gemDoneRef.current = false; setStatus('play'); };
 
@@ -1182,7 +1167,6 @@ function DashScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { k
 
 function FeelingsScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'feelings' }>; onNext: () => void }) {
   const [pick, setPick] = useState<number | null>(null);
-  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); }, [scene.id]);
   const choose = async (idx: number) => {
     setPick(idx);
     const label = scene.options[idx].label.toLowerCase();
@@ -1221,7 +1205,6 @@ function PuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
   useEffect(() => {
     if (finished) return;
     setRevealed(new Set()); setPick(null); setCorrect(null);
-    if (round === 0) cueSpeak(scene.teacher, 'teacher');
   }, [round, finished]);
 
   const tapPiece = (i: number) => { if (!r || correct !== null) return; setRevealed((s) => { const c = new Set(s); c.add(i); return c; }); sfx.match(); };
@@ -1285,7 +1268,6 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
 
   useEffect(() => {
     stopRef.current = false;
-    cueSpeak(scene.teacher, 'teacher');
     async function run(i: number) {
       if (stopRef.current) return;
       if (i >= scene.script.length) { setStep(scene.script.length); return; }
@@ -1482,14 +1464,11 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
     (async () => {
       if (round === 0) {
         setOrder(scene.cast); setPhase('reveal');
-        await safeSpeak('Look! Here are your friends.', 'teacher');
-        if (cancelled) return;
         for (const who of scene.cast) { await safeSpeak(CAST[who].name, who); if (cancelled) return; }
         await new Promise((res) => setTimeout(res, 400));
         if (cancelled) return;
       }
       setPhase('shuffle');
-      await safeSpeak('Now… shuffle!', 'teacher');
       if (cancelled) return;
       for (let k = 0; k < 3; k++) { setOrder((o) => shuffle(o)); await new Promise((res) => setTimeout(res, 420)); if (cancelled) return; }
       await new Promise((res) => setTimeout(res, 200));
@@ -1510,7 +1489,7 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
     await safeSpeak(r.helloLine, who);
     setPhase('echo');
     await new Promise((res) => setTimeout(res, 250));
-    await safeSpeak(`Your turn! ${r.echoLine}`, 'teacher');
+    await safeSpeak(r.echoLine, r.target);
     setScore((s) => s + 1);
     await new Promise((res) => setTimeout(res, 1400));
     const next = round + 1;
@@ -1589,16 +1568,10 @@ function ColorFriendsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { k
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const paintingRef = useRef(false);
   const lastPtRef = useRef<{ x: number; y: number } | null>(null);
-  const introRef = useRef(false);
   const who = CHARS[idx] ?? 'pip';
   const c = CAST[who];
   const sketch = COLOR_SKETCH[who];
 
-  useEffect(() => {
-    if (introRef.current) return;
-    introRef.current = true;
-    (async () => { await new Promise((r) => setTimeout(r, 250)); await safeSpeak(scene.teacher, 'teacher'); })();
-  }, []);
   useEffect(() => { clearCanvas(); if (idx > 0) cueSpeak(`${c.name}!`, who); }, [idx]);
 
   const getCtx = () => canvasRef.current?.getContext('2d') ?? null;
@@ -1677,10 +1650,8 @@ function AlphabetBlocksScene({ scene, onNext, onWin }: { scene: Extract<Scene, {
     introRef.current = true;
     (async () => {
       await new Promise((r) => setTimeout(r, 200));
-      await safeSpeak(scene.teacher, 'teacher');
       setPhase('tap');
       await new Promise((r) => setTimeout(r, 300));
-      await safeSpeak('Listen! Tap the sound!', 'pip');
       await playLetterPhonic(scene.tapRounds[0].letter);
     })();
   }, []);
@@ -1704,7 +1675,6 @@ function AlphabetBlocksScene({ scene, onNext, onWin }: { scene: Extract<Scene, {
       else {
         setPhase('stack'); setWordIdx(0); setPlaced([]);
         await new Promise((r) => setTimeout(r, 300));
-        await safeSpeak('Now stack the word!', 'pip');
         await safeSpeak(scene.words[0].word, 'pip');
       }
     } else { setTapWrong(letter); sfx.wrong(); window.setTimeout(() => setTapWrong(null), 450); }
@@ -1806,7 +1776,6 @@ function AlphabetOrderScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
   const [celebrate, setCelebrate] = useState(false);
   const [done, setDone] = useState(false);
   const gemRef = useRef(false);
-  const introRef = useRef(false);
   const current = scene.sequences[seqIdx];
   const target = current.split('');
 
@@ -1821,11 +1790,6 @@ function AlphabetOrderScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
 
   const [used, setUsed] = useState<Set<number>>(new Set());
   useEffect(() => { setPlaced([]); setUsed(new Set()); }, [seqIdx]);
-  useEffect(() => {
-    if (introRef.current) return;
-    introRef.current = true;
-    (async () => { await new Promise((r) => setTimeout(r, 200)); await safeSpeak(scene.teacher, 'teacher'); await safeSpeak('Tap the letters in A B C order!', 'pip'); })();
-  }, []);
 
   const COLORS = ['#FE6A2F', '#22C55E', '#3B82F6', '#EC4899', '#F59E0B', '#8B5CF6'];
   const colorFor = (L: string) => COLORS[(L.charCodeAt(0) - 65) % COLORS.length];
@@ -1845,7 +1809,7 @@ function AlphabetOrderScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
         for (const ch of target) await playLetterName(ch);
         await new Promise((r) => setTimeout(r, 500));
         setCelebrate(false);
-        if (seqIdx + 1 < scene.sequences.length) { setSeqIdx(seqIdx + 1); await new Promise((r) => setTimeout(r, 300)); await safeSpeak('Next one!', 'pip'); }
+        if (seqIdx + 1 < scene.sequences.length) { setSeqIdx(seqIdx + 1); }
         else { setDone(true); if (!gemRef.current) { gemRef.current = true; onWin(true); } }
       }
     } else { setWrongLetter(L); sfx.wrong(); window.setTimeout(() => setWrongLetter(null), 450); }
@@ -1966,7 +1930,7 @@ function SongScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'so
 /* ---------- Finale ---------- */
 
 function FinaleScene({ scene, hearts, gems, onRestart }: { scene: Extract<Scene, { kind: 'finale' }>; hearts: number; gems: number; onRestart: () => void }) {
-  useEffect(() => { cueSpeak(scene.line, 'teacher'); }, [scene.id]);
+  useEffect(() => { cueSpeak(scene.line, scene.who); }, [scene.id]);
   const stars = 1 + Math.min(2, Math.floor(hearts / 2)) + (gems >= 3 ? 1 : 0);
 
   return (
@@ -2009,7 +1973,6 @@ function NameGateScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
     setTimeout(() => onNext(), 1400);
   };
 
-  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); }, [scene.id]);
 
   const boothSpots: Record<string, { left: string; top: string; size: number }> = {
     pip: { left: '16%', top: '55%', size: 170 },
@@ -2099,7 +2062,6 @@ function MeetGroupScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
   const [bubble, setBubble] = useState<{ who: string; line: string; color: string } | null>(null);
   const [xpBurst, setXpBurst] = useState(false);
 
-  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); }, [scene.id]);
 
   const allAsked = step >= scene.askers.length;
 
@@ -2226,7 +2188,7 @@ function VoiceStageScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
-  useEffect(() => { cueSpeak(scene.teacher, 'teacher'); return () => { streamRef.current?.getTracks().forEach((t) => t.stop()); }; }, [scene.id]);
+  useEffect(() => { return () => { streamRef.current?.getTracks().forEach((t) => t.stop()); }; }, [scene.id]);
 
   useEffect(() => {
     if (!placed) return;
@@ -2283,7 +2245,7 @@ function VoiceStageScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
       sfx.match();
       await safeSpeak('Yes! My name!', who);
       if (scene.niceToMeet) { await safeSpeak('Nice to meet you!', who); setFeedback(null); setPhase('pleasantry'); return; }
-    } else { sfx.wrong(); onLose(); await safeSpeak('Listen again.', 'teacher'); }
+    } else { sfx.wrong(); onLose(); }
     window.setTimeout(() => {
       setFeedback(null);
       if (!ok) { setPhase('ready'); return; }
@@ -2623,8 +2585,6 @@ function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
     let cancelled = false;
     (async () => {
       setPhase('intro');
-      await safeSpeak('Listen and tap!', scene.who);
-      if (cancelled) return;
       const first = scene.letters[Math.floor(Math.random() * scene.letters.length)];
       setTargetLetter(first);
       await safeSpeak(phonemeFor(first), scene.who);
@@ -2644,7 +2604,7 @@ function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
     if (score >= scene.goal) {
       setPhase('win');
       if (!gemDone) { setGemDone(true); onWin(true); sfx.gem(); cueSpeak('Amazing! Brick crush champion!', 'teacher'); }
-    } else if (timeLeft <= 0) { setPhase('lose'); cueSpeak('Great try! Tap next to keep going.', 'teacher'); }
+    } else if (timeLeft <= 0) { setPhase('lose'); cueSpeak('Great try!', 'teacher'); }
   }, [score, timeLeft, phase, scene.goal, gemDone, onWin]);
 
   const tapBrick = (b: Brick) => {
