@@ -26,17 +26,27 @@ const ANON_KEY =
  * "adult." Round 2 found why: Web Audio's `playbackRate` and `detune`
  * combine *multiplicatively*. Slowing playback for pre-k pacing is itself a
  * pitch drop (it's a literal tape-speed change), so a small detune lift on
- * top of it was being quietly cancelled out. PITCH_CENTS below is sized to
- * comfortably outrun that drop and land every character in a genuinely
- * childlike, exaggerated "cartoon" register. Round 3 slowed SPEECH_SPEED
- * further (0.82 -> 0.68) after it was still reported as too fast for pre-k
- * students to follow and repeat — and re-cast Pip to `kPtEHAvRnjUJFv7SK9WI`,
- * the same "Pip the Fox" voice already used for the placement test (see
+ * top of it was being quietly cancelled out. Round 3 slowed SPEECH_SPEED
+ * further (0.82 -> 0.68) and re-cast Pip to `kPtEHAvRnjUJFv7SK9WI`, the same
+ * "Pip the Fox" voice already used for the placement test (see
  * `src/constants/characterVoices.ts` and the `placement-voiceover` /
  * `placement-content-asset` / `placement-audio-warm` edge functions) so the
- * character sounds identical across both experiences. Every time
- * SPEECH_SPEED changes, PITCH_CENTS must be recomputed to hit the same net
- * pitch target — see the formula in the PITCH_CENTS comment below.
+ * character sounds identical across both experiences — but pushed
+ * PITCH_CENTS aggressively high (targeting a ~1.48x net pitch multiplier)
+ * to get a strong "cartoon" lift, which on Pip's already-designed-for-kids
+ * voice was over-processing it into a synthetic, "recorded"/robotic
+ * quality, and the pace was still reported as too fast.
+ *
+ * Round 4: pulled the pitch lift back to a much more modest, natural-sounding
+ * level and slowed the pace further (0.68 -> 0.55). Pip specifically gets
+ * only enough detune to cancel out SPEECH_SPEED's own pitch drop (net ~1.0x
+ * — its natural pitch, since `kPtEHAvRnjUJFv7SK9WI` is already the
+ * purpose-built kids voice and doesn't need correcting). The other
+ * still-adult voices (Mia/Bella/Willow/Leo) get a mild ~1.15x lift — enough
+ * to read as young without sounding processed. The teacher/narrator voice
+ * gets no lift beyond cancelling the slowdown. Every time SPEECH_SPEED
+ * changes, PITCH_CENTS must be recomputed to hit the same net pitch target
+ * — see the formula in the PITCH_CENTS comment below.
  */
 
 /** ElevenLabs speed multiplier for every generated line — slower and more
@@ -45,7 +55,7 @@ const ANON_KEY =
  *  client-side via Web Audio's `playbackRate` (see the pitch-shift engine
  *  further down), not ElevenLabs' own `speed` param, so it isn't bound by
  *  the ~0.7 floor where their server-side model starts to distort. */
-const SPEECH_SPEED = 0.68;
+const SPEECH_SPEED = 0.55;
 
 export type Character = 'pip' | 'mia' | 'bella' | 'willow' | 'leo' | 'teacher' | 'narrator';
 
@@ -61,20 +71,21 @@ const VOICE_ID: Record<Character, string> = {
 
 /** Pitch lift applied via Web Audio's `detune`, in cents (100 cents = 1
  *  semitone) — combines multiplicatively with SPEECH_SPEED's own pitch drop
- *  (net multiplier = SPEECH_SPEED * 2^(cents/1200)), so these numbers look
- *  large but net out to a moderate, consistent childlike register rather
- *  than stacking on top of the original voice untouched. Kid characters
- *  target a net ~1.48x pitch multiplier (1200*log2(1.48/SPEECH_SPEED));
- *  the teacher/narrator voice targets a smaller ~1.16x since it still reads
- *  as a grown-up in the story, just no longer a deep or elderly one. */
+ *  (net multiplier = SPEECH_SPEED * 2^(cents/1200)). Kept deliberately
+ *  modest after a much larger lift (targeting ~1.48x) started sounding
+ *  synthetic/over-processed rather than childlike. Pip only cancels
+ *  SPEECH_SPEED's pitch drop (net ~1.0x, i.e. its own natural pitch — it's
+ *  already the purpose-built kids voice from the placement test and doesn't
+ *  need correcting). Mia/Bella/Willow/Leo — still-adult base voices — get a
+ *  mild ~1.15x lift. Teacher/narrator gets no lift beyond the cancel. */
 const PITCH_CENTS: Record<Character, number> = {
-  pip: 1300,
-  mia: 1300,
-  bella: 1300,
-  willow: 1300,
-  leo: 1300,
-  teacher: 900,
-  narrator: 900,
+  pip: 1035,
+  mia: 1250,
+  bella: 1250,
+  willow: 1250,
+  leo: 1250,
+  teacher: 1035,
+  narrator: 1035,
 };
 
 // Browser speechSynthesis fallback (used only if ElevenLabs and the local
@@ -83,13 +94,13 @@ const PITCH_CENTS: Record<Character, number> = {
 // SpeechSynthesisUtterance.pitch is clamped to [0, 2] by the Web Speech API
 // spec, so 2.0 (mia) is the ceiling this path can reach.
 const FALLBACK_VOICE: Record<Character, { rate: number; pitch: number }> = {
-  pip: { rate: 0.65, pitch: 1.9 },
-  mia: { rate: 0.68, pitch: 2.0 },
-  bella: { rate: 0.65, pitch: 1.9 },
-  willow: { rate: 0.68, pitch: 1.8 },
-  leo: { rate: 0.62, pitch: 1.6 },
-  teacher: { rate: 0.68, pitch: 1.5 },
-  narrator: { rate: 0.68, pitch: 1.5 },
+  pip: { rate: 0.55, pitch: 1.5 },
+  mia: { rate: 0.55, pitch: 2.0 },
+  bella: { rate: 0.55, pitch: 1.7 },
+  willow: { rate: 0.55, pitch: 1.6 },
+  leo: { rate: 0.5, pitch: 1.4 },
+  teacher: { rate: 0.55, pitch: 1.3 },
+  narrator: { rate: 0.55, pitch: 1.3 },
 };
 
 const bufferCache = new Map<string, AudioBuffer>();
@@ -172,11 +183,12 @@ function key(character: Character, text: string) {
   // again for the supabase.functions.invoke() binary-corruption fix. v4
   // moved playback to the Web Audio pitch-shift engine with a first-pass
   // (too-small) pitch lift. v5 fixed the detune/playbackRate math and
-  // re-cast pip/leo to brighter base voices. v6 bumps again: SPEECH_SPEED
-  // slowed further (0.82 -> 0.68) for pre-k listening/repeat-after pacing,
-  // PITCH_CENTS recomputed to match, and pip re-cast to the placement
-  // test's "Pip the Fox" voice for cross-experience consistency.
-  return `${character}::v6::${text}`;
+  // re-cast pip/leo to brighter base voices. v6 slowed pacing (0.82 -> 0.68)
+  // and re-cast pip to the placement test's "Pip the Fox" voice, but pushed
+  // PITCH_CENTS too far — reported as sounding processed/robotic, and still
+  // too fast. v7 bumps again: pace slowed further (0.68 -> 0.55) and
+  // PITCH_CENTS pulled back to a much more modest, natural-sounding lift.
+  return `${character}::v7::${text}`;
 }
 
 async function fetchAudioBuffer(k: string, text: string, character: Character): Promise<AudioBuffer | null> {
