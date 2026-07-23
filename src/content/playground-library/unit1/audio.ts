@@ -135,20 +135,33 @@ async function fetchMp3(k: string, text: string, character: Character): Promise<
         mp3Cache.set(k, url);
         return url;
       }
-      const res = await fetch(`${FUNCTIONS_URL}/elevenlabs-tts`, {
-        method: 'POST',
-        headers: { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, voiceId: VOICE_ID[character], speed: SPEECH_SPEED }),
-      });
-      if (!res.ok) throw new Error(`tts ${res.status}`);
-      const blob = await res.blob();
-      if (!blob.size || !blob.type.startsWith('audio/')) throw new Error(`bad audio response (type=${blob.type}, size=${blob.size})`);
-      void idbPut(k, blob);
-      const url = URL.createObjectURL(blob);
-      mp3Cache.set(k, url);
-      return url;
+      // Retry a couple of times before giving up — a transient network blip
+      // or edge-function cold start shouldn't drop straight to the browser's
+      // (often wrong-language) fallback voice.
+      const ATTEMPTS = 3;
+      let lastErr: unknown = null;
+      for (let attempt = 0; attempt < ATTEMPTS; attempt++) {
+        try {
+          if (attempt > 0) await new Promise((r) => setTimeout(r, 350 * attempt));
+          const res = await fetch(`${FUNCTIONS_URL}/elevenlabs-tts`, {
+            method: 'POST',
+            headers: { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, voiceId: VOICE_ID[character], speed: SPEECH_SPEED }),
+          });
+          if (!res.ok) throw new Error(`tts ${res.status}`);
+          const blob = await res.blob();
+          if (!blob.size || !blob.type.startsWith('audio/')) throw new Error(`bad audio response (type=${blob.type}, size=${blob.size})`);
+          void idbPut(k, blob);
+          const url = URL.createObjectURL(blob);
+          mp3Cache.set(k, url);
+          return url;
+        } catch (err) {
+          lastErr = err;
+        }
+      }
+      throw lastErr;
     } catch (err) {
-      console.warn('[lep1 voice] TTS fetch failed, using browser fallback:', err);
+      console.warn('[lep1 voice] TTS fetch failed after retries, using browser fallback:', err);
       return null;
     } finally {
       inFlight.delete(k);
@@ -178,17 +191,47 @@ function stopCurrent() {
   }
 }
 
-function playFallback(text: string, character: Character): Promise<void> {
+/** Waits briefly for the browser's voice list to finish loading (it loads
+ *  asynchronously on some browsers) and returns whatever is available. */
+function getVoicesReady(): Promise<SpeechSynthesisVoice[]> {
   return new Promise((resolve) => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
-      resolve();
-      return;
-    }
+    const v = window.speechSynthesis.getVoices();
+    if (v.length) { resolve(v); return; }
+    const timer = window.setTimeout(() => resolve(window.speechSynthesis.getVoices()), 500);
+    window.speechSynthesis.onvoiceschanged = () => {
+      window.clearTimeout(timer);
+      resolve(window.speechSynthesis.getVoices());
+    };
+  });
+}
+
+async function playFallback(text: string, character: Character): Promise<void> {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+
+  // This fallback only exists for the rare case the real character-voice
+  // fetch fails outright. If the device has no English voice installed at
+  // all, the browser will substitute whatever its default system voice is
+  // (observed in the wild: a French voice) regardless of the `lang` we ask
+  // for — that's worse than staying silent for a beat, since the teacher is
+  // narrating live anyway. So refuse to speak rather than guess wrong.
+  const voices = await getVoicesReady();
+  const english = voices.filter((v) => v.lang.toLowerCase().startsWith('en'));
+  if (!english.length) {
+    console.warn('[lep1 voice] no English system voice installed — skipping fallback speech for:', text);
+    return;
+  }
+  const voice =
+    english.find((v) => /en-US/i.test(v.lang)) ??
+    english.find((v) => /female/i.test(v.name)) ??
+    english[0];
+
+  return new Promise((resolve) => {
     const u = new SpeechSynthesisUtterance(text);
     const f = FALLBACK_VOICE[character];
     u.rate = f.rate;
     u.pitch = f.pitch;
-    u.lang = 'en-US';
+    u.lang = voice.lang;
+    u.voice = voice;
     u.onend = () => resolve();
     u.onerror = () => resolve();
     window.speechSynthesis.speak(u);
