@@ -53,6 +53,21 @@ const ANON_KEY =
  * pre-recorded letter clips below have always used), not a hand-rolled
  * double resample. Only Mia/Bella/Willow/Leo, which still need a real pitch
  * lift off their adult base voices, go through the Web Audio detune engine.
+ *
+ * Round 6: still reported as unnatural/"recorded" even after Round 5's
+ * fix, so the placement test's `kPtEHAvRnjUJFv7SK9WI` voice itself was
+ * dropped rather than debugged further. Measured across several full clips
+ * (windowed median F0, not a single noisy sample) it had a low median
+ * (~160Hz, adult-male-leaning) and an oddly wide, erratic pitch swing
+ * (81-706Hz) — likely a stylistic/recording-quality trait of that specific
+ * voice rather than anything our pipeline was doing to it. Re-cast to Elli
+ * (`MF3mGyEYCl7XYWbV9V6O`), which measured the brightest and most
+ * consistent of every candidate tested (median ~242Hz, tight range). Since
+ * Elli stays in NATURAL_PITCH_CHARACTERS, it plays completely unprocessed
+ * pitch-wise — only the pre-k pacing slowdown is applied — so its own
+ * natural tone now needs to carry the "young" quality on its own, which is
+ * exactly why a naturally bright base voice matters more under this engine
+ * than it did when detune was doing the work.
  */
 
 /** ElevenLabs speed multiplier for every generated line — slower and more
@@ -66,7 +81,7 @@ const SPEECH_SPEED = 0.55;
 export type Character = 'pip' | 'mia' | 'bella' | 'willow' | 'leo' | 'teacher' | 'narrator';
 
 const VOICE_ID: Record<Character, string> = {
-  pip: 'kPtEHAvRnjUJFv7SK9WI', // "Pip the Fox" — same voice as the placement test
+  pip: 'MF3mGyEYCl7XYWbV9V6O', // Elli — brightest, most consistent of every candidate tested
   mia: 'pFZP5JQG7iQjIQuC4Bku', // Lily
   bella: 'XrExE9yKIg1WjnnlVkGX', // Matilda
   willow: 'piTKgcLEGmPE4e6mEKli', // Nicole
@@ -78,9 +93,10 @@ const VOICE_ID: Record<Character, string> = {
 /** Characters whose voice needs no real pitch change — they play through a
  *  plain HTMLAudioElement (`preservesPitch`, single-pass) instead of the Web
  *  Audio detune engine, avoiding the double-resample artifact described in
- *  the module doc above. Pip is already the purpose-built kids voice from
- *  the placement test; the teacher/narrator voice is meant to read as a
- *  grown-up, just not a deep or elderly one, so it doesn't need lifting. */
+ *  the module doc above. Pip's voice (Elli) was picked specifically for
+ *  being naturally bright, so it doesn't need lifting; the teacher/narrator
+ *  voice is meant to read as a grown-up, just not a deep or elderly one, so
+ *  it doesn't need lifting either. */
 const NATURAL_PITCH_CHARACTERS: ReadonlySet<Character> = new Set(['pip', 'teacher', 'narrator']);
 
 /** Pitch lift applied via Web Audio's `detune`, in cents (100 cents = 1
@@ -203,8 +219,9 @@ function key(character: Character, text: string) {
   // clip through two lossy resamples and kept sounding processed/recorded.
   // v8 bumps again: Pip/teacher/narrator now skip the Web Audio detune path
   // entirely (see module doc), so every clip cached under the old pipeline
-  // needs regenerating against the new one.
-  return `${character}::v8::${text}`;
+  // needs regenerating against the new one. v9 bumps again: Pip re-cast off
+  // the placement test's voice to Elli (see module doc, round 6).
+  return `${character}::v9::${text}`;
 }
 
 async function fetchClipBlob(k: string, text: string, character: Character): Promise<Blob | null> {
