@@ -1,15 +1,23 @@
 import { supabase } from '@/integrations/supabase/client';
 
 /**
- * Little Explorers Phonics — Lesson 1 audio layer.
+ * Little Explorers Phonics — Unit 1 audio layer.
  *
  * Ported from the original "Forest of Hellos" player. That app called its own
  * TanStack Start `/api/tts` Node route; this project is a static Vite SPA, so
  * the same sequential-playback + IndexedDB-cache design now calls the
  * existing `elevenlabs-tts` Supabase Edge Function instead. Locked voice
- * cast per the source spec: Pip=Charlie, Mia=Lily, Bella=Matilda,
- * Willow=Alice, Leo=Callum, Teacher/narrator=Sarah.
+ * cast per the source spec — all standard ElevenLabs native-English premade
+ * voices: Pip=Charlie, Mia=Lily, Bella=Matilda, Willow=Alice, Leo=Callum,
+ * Teacher/narrator=Sarah. Paced slower (SPEECH_SPEED below) throughout for
+ * Pre-A1 / pre-k listeners.
  */
+
+/** ElevenLabs speed multiplier for every generated line — slower and more
+ *  deliberate than natural adult conversational pace, without dropping so
+ *  low that the model starts to sound distorted (ElevenLabs' usable floor
+ *  is around 0.7). */
+const SPEECH_SPEED = 0.82;
 
 export type Character = 'pip' | 'mia' | 'bella' | 'willow' | 'leo' | 'teacher' | 'narrator';
 
@@ -23,14 +31,16 @@ const VOICE_ID: Record<Character, string> = {
   narrator: 'EXAVITQu4vr4xnSDxMaL', // Sarah
 };
 
+// Browser speechSynthesis fallback (used only if ElevenLabs and the local
+// clip both fail) — paced to match SPEECH_SPEED above for pre-k listeners.
 const FALLBACK_VOICE: Record<Character, { rate: number; pitch: number }> = {
-  pip: { rate: 0.85, pitch: 1.6 },
-  mia: { rate: 0.9, pitch: 2.0 },
-  bella: { rate: 0.85, pitch: 1.7 },
-  willow: { rate: 0.9, pitch: 1.3 },
-  leo: { rate: 0.8, pitch: 0.8 },
-  teacher: { rate: 0.9, pitch: 1.2 },
-  narrator: { rate: 0.9, pitch: 1.2 },
+  pip: { rate: 0.78, pitch: 1.6 },
+  mia: { rate: 0.8, pitch: 2.0 },
+  bella: { rate: 0.78, pitch: 1.7 },
+  willow: { rate: 0.8, pitch: 1.3 },
+  leo: { rate: 0.75, pitch: 0.8 },
+  teacher: { rate: 0.8, pitch: 1.2 },
+  narrator: { rate: 0.8, pitch: 1.2 },
 };
 
 const mp3Cache = new Map<string, string>();
@@ -96,7 +106,9 @@ let sessionId = 0;
 let queueDepth = 0;
 
 function key(character: Character, text: string) {
-  return `${character}::${text}`;
+  // v2 bumps every cached clip to regenerate at SPEECH_SPEED — v1 clips were
+  // generated at normal pace and would otherwise keep being served stale.
+  return `${character}::v2::${text}`;
 }
 
 async function fetchMp3(k: string, text: string, character: Character): Promise<string | null> {
@@ -114,7 +126,7 @@ async function fetchMp3(k: string, text: string, character: Character): Promise<
         return url;
       }
       const { data, error } = await supabase.functions.invoke('elevenlabs-tts', {
-        body: { text, voiceId: VOICE_ID[character] },
+        body: { text, voiceId: VOICE_ID[character], speed: SPEECH_SPEED },
       });
       if (error) throw error;
       const blob: Blob = data instanceof Blob ? data : new Blob([data as BlobPart], { type: 'audio/mpeg' });
@@ -171,6 +183,22 @@ function playFallback(text: string, character: Character): Promise<void> {
   });
 }
 
+/** Slows down playback without pitch-shifting (modern browsers preserve
+ *  pitch by default on rate change) — the reliable, backend-independent way
+ *  to pace speech for pre-k listeners regardless of what the TTS provider's
+ *  own `speed` setting does under the hood. */
+function applySlowPace(audio: HTMLAudioElement) {
+  audio.playbackRate = SPEECH_SPEED;
+  const withPitch = audio as HTMLAudioElement & {
+    preservesPitch?: boolean;
+    mozPreservesPitch?: boolean;
+    webkitPreservesPitch?: boolean;
+  };
+  withPitch.preservesPitch = true;
+  withPitch.mozPreservesPitch = true;
+  withPitch.webkitPreservesPitch = true;
+}
+
 /** Resolves true if playback actually started and finished/errored normally,
  *  false if the browser's autoplay policy rejected play() outright — the
  *  caller should fall back to speech synthesis in that case. */
@@ -178,6 +206,7 @@ function playUrl(url: string): Promise<boolean> {
   return new Promise((resolve) => {
     const audio = new Audio(url);
     audio.preload = 'auto';
+    applySlowPace(audio);
     currentAudio = audio;
     const finish = (ok: boolean) => {
       if (currentAudio === audio) currentAudio = null;
@@ -286,34 +315,36 @@ export function cueSpeakOnce(text: string, who: Character) {
 /* --------------------------------------------------------------------------
  * Letter sounds — the original shipped pre-recorded phon_*.mp3 / name_*.m4a
  * clips from a private CDN this export didn't include. Real recorded clips
- * for H and M (Lesson 1's target sounds) were sourced from the user's own
- * phonics-master (phoneme) and Alphabet-with-sounds (letter name) archives
- * and copied into public/lep1/audio/letters/. Any other letter — or a
- * playback failure — falls back to the ElevenLabs voice pipeline above so
- * the tap-to-hear contract never goes silent.
+ * for the full A-Z alphabet were sourced from the user's own phonics-master
+ * (phoneme, one native-recorded .ogg per letter) and Alphabet-with-sounds
+ * (letter name, one .m4a per letter) archives and copied into
+ * public/lep1/audio/letters/. A playback failure falls back to the
+ * ElevenLabs voice pipeline above so the tap-to-hear contract never goes
+ * silent even if a specific clip is missing or corrupt.
  * -------------------------------------------------------------------------- */
 
-const PHONIC_CLIP: Record<string, string> = {
-  h: '/lep1/audio/letters/phon-h.ogg',
-  m: '/lep1/audio/letters/phon-m.ogg',
-};
-const NAME_CLIP: Record<string, string> = {
-  h: '/lep1/audio/letters/name-h.m4a',
-  m: '/lep1/audio/letters/name-m.m4a',
-};
+const ALPHABET = 'abcdefghijklmnopqrstuvwxyz'.split('');
+const PHONIC_CLIP: Record<string, string> = Object.fromEntries(
+  ALPHABET.map((l) => [l, `/lep1/audio/letters/phon-${l}.ogg`]),
+);
+const NAME_CLIP: Record<string, string> = Object.fromEntries(
+  ALPHABET.map((l) => [l, `/lep1/audio/letters/name-${l}.m4a`]),
+);
 
+// Spoken-out phoneme fallback text, used only if a letter's recorded clip
+// is missing AND the ElevenLabs call also fails.
 const PHONEME_SOUND: Record<string, string> = {
-  h: 'huh, huh',
-  m: 'mmm, mmm',
-  a: 'ah, ah',
-  s: 'sss, sss',
-  n: 'nnn, nnn',
-  w: 'wuh, wuh',
+  a: 'ah, ah', b: 'buh, buh', c: 'kuh, kuh', d: 'duh, duh', e: 'eh, eh',
+  f: 'fff, fff', g: 'guh, guh', h: 'huh, huh', i: 'ih, ih', j: 'juh, juh',
+  k: 'kuh, kuh', l: 'lll, lll', m: 'mmm, mmm', n: 'nnn, nnn', o: 'ah, ah',
+  p: 'puh, puh', q: 'kwuh, kwuh', r: 'rrr, rrr', s: 'sss, sss', t: 'tuh, tuh',
+  u: 'uh, uh', v: 'vvv, vvv', w: 'wuh, wuh', x: 'ks, ks', y: 'yuh, yuh', z: 'zzz, zzz',
 };
 
 function playClip(url: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const audio = new Audio(url);
+    applySlowPace(audio);
     audio.onended = () => resolve();
     audio.onerror = () => reject(new Error('clip failed'));
     audio.play().catch(reject);
