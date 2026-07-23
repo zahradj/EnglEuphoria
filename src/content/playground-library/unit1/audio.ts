@@ -14,11 +14,23 @@ const ANON_KEY =
  * Ported from the original "Forest of Hellos" player. That app called its own
  * TanStack Start `/api/tts` Node route; this project is a static Vite SPA, so
  * the same sequential-playback + IndexedDB-cache design now calls the
- * existing `elevenlabs-tts` Supabase Edge Function instead. Locked voice
- * cast per the source spec — all standard ElevenLabs native-English premade
- * voices: Pip=Charlie, Mia=Lily, Bella=Matilda, Willow=Alice, Leo=Callum,
- * Teacher/narrator=Sarah. Paced slower (SPEECH_SPEED below) throughout for
- * Pre-A1 / pre-k listeners.
+ * existing `elevenlabs-tts` Supabase Edge Function instead.
+ *
+ * Voice cast: standard ElevenLabs native-English premade voices, chosen and
+ * pitch-tuned for 5-6 year olds after the original adult-timbre cast (Charlie,
+ * Alice, Callum, Sarah) read as grown-up/elderly rather than child-like.
+ * Fundamental frequency (F0) was measured directly off real generated clips
+ * (autocorrelation pitch detection) to pick objectively brighter voices —
+ * Pip=Josh (~240Hz, was Charlie ~133Hz), Mia=Lily (~265Hz), Bella=Matilda
+ * (~273Hz), Willow=Nicole (~242Hz, was Alice ~151Hz), Leo=Harry (~207Hz, was
+ * the gravelly adult Callum ~102Hz), Teacher/narrator=Freya (~229Hz, was
+ * Sarah ~105Hz) — then every line gets an additional cents-based pitch lift
+ * (PITCH_CENTS below) on top of that, landing everyone in a consistent
+ * ~230-290Hz cartoon-kid range. Paced slower (SPEECH_SPEED below) throughout
+ * for Pre-A1 / pre-k listeners, independent of the pitch lift (see the
+ * Web Audio playback engine further down — pitch and rate are controlled
+ * separately via `detune` and `playbackRate` so slowing speech down for
+ * clarity never drags the pitch back down into "old person" territory).
  */
 
 /** ElevenLabs speed multiplier for every generated line — slower and more
@@ -30,29 +42,57 @@ const SPEECH_SPEED = 0.82;
 export type Character = 'pip' | 'mia' | 'bella' | 'willow' | 'leo' | 'teacher' | 'narrator';
 
 const VOICE_ID: Record<Character, string> = {
-  pip: 'IKne3meq5aSn9XLyUdCD', // Charlie
+  pip: 'TxGEqnHWrfWFTfGW9XjX', // Josh
   mia: 'pFZP5JQG7iQjIQuC4Bku', // Lily
   bella: 'XrExE9yKIg1WjnnlVkGX', // Matilda
-  willow: 'Xb7hH8MSUJpSbSDYk0k2', // Alice
-  leo: 'N2lVS1w4EtoT3dr4eOWO', // Callum
-  teacher: 'EXAVITQu4vr4xnSDxMaL', // Sarah
-  narrator: 'EXAVITQu4vr4xnSDxMaL', // Sarah
+  willow: 'piTKgcLEGmPE4e6mEKli', // Nicole
+  leo: 'SOYHLrjzK2X1ezoPC6cr', // Harry
+  teacher: 'jsCqWAovK2LkecY7zXl4', // Freya
+  narrator: 'jsCqWAovK2LkecY7zXl4', // Freya
+};
+
+/** Extra pitch lift applied on top of each voice's natural pitch, in cents
+ *  (100 cents = 1 semitone), via Web Audio's `detune` — independent of
+ *  playback speed. Kid characters get a bigger lift; the teacher/narrator
+ *  voice gets a smaller one since it still reads as a grown-up in the story. */
+const PITCH_CENTS: Record<Character, number> = {
+  pip: 200,
+  mia: 100,
+  bella: 100,
+  willow: 200,
+  leo: 200,
+  teacher: 100,
+  narrator: 100,
 };
 
 // Browser speechSynthesis fallback (used only if ElevenLabs and the local
-// clip both fail) — paced to match SPEECH_SPEED above for pre-k listeners.
+// clip both fail) — paced to match SPEECH_SPEED above for pre-k listeners,
+// pitch raised to stay consistent with the childlike ElevenLabs cast.
 const FALLBACK_VOICE: Record<Character, { rate: number; pitch: number }> = {
-  pip: { rate: 0.78, pitch: 1.6 },
+  pip: { rate: 0.78, pitch: 1.7 },
   mia: { rate: 0.8, pitch: 2.0 },
   bella: { rate: 0.78, pitch: 1.7 },
-  willow: { rate: 0.8, pitch: 1.3 },
-  leo: { rate: 0.75, pitch: 0.8 },
-  teacher: { rate: 0.8, pitch: 1.2 },
-  narrator: { rate: 0.8, pitch: 1.2 },
+  willow: { rate: 0.8, pitch: 1.6 },
+  leo: { rate: 0.75, pitch: 1.3 },
+  teacher: { rate: 0.8, pitch: 1.3 },
+  narrator: { rate: 0.8, pitch: 1.3 },
 };
 
-const mp3Cache = new Map<string, string>();
-const inFlight = new Map<string, Promise<string | null>>();
+const bufferCache = new Map<string, AudioBuffer>();
+const inFlight = new Map<string, Promise<AudioBuffer | null>>();
+
+/** Shared Web Audio context for the ElevenLabs voice pipeline — lets us
+ *  control pitch (`detune`) and speed (`playbackRate`) independently, which
+ *  a plain HTMLAudioElement can't do (its preservesPitch flag only supports
+ *  "change speed, keep original pitch," not "change both differently"). */
+let sharedCtx: AudioContext | null = null;
+function getAudioCtx(): AudioContext | null {
+  if (typeof window === 'undefined') return null;
+  const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (!Ctor) return null;
+  if (!sharedCtx) sharedCtx = new Ctor();
+  return sharedCtx;
+}
 
 const IDB_NAME = 'lep1-tts';
 const IDB_STORE = 'clips';
@@ -108,32 +148,36 @@ async function idbPut(k: string, blob: Blob): Promise<void> {
   });
 }
 
-let currentAudio: HTMLAudioElement | null = null;
+let currentSource: AudioBufferSourceNode | null = null;
 let playChain: Promise<void> = Promise.resolve();
 let sessionId = 0;
 let queueDepth = 0;
 
 function key(character: Character, text: string) {
-  // v2 bumped every cached clip to regenerate at SPEECH_SPEED. v3 bumps again:
-  // v2 clips were fetched via supabase.functions.invoke(), which mangled the
-  // binary response into a corrupted Blob that fails to decode and silently
-  // falls back to browser TTS — every v2 IndexedDB entry is bad audio.
-  return `${character}::v3::${text}`;
+  // v2 bumped every cached clip to regenerate at SPEECH_SPEED. v3 bumped
+  // again for the supabase.functions.invoke() binary-corruption fix. v4
+  // bumps again: the voice cast itself changed (brighter, more childlike
+  // voice IDs for pip/willow/leo/teacher) and playback moved from
+  // HTMLAudioElement to the Web Audio pitch-shift engine below, so every
+  // older cached clip is either the wrong voice or the wrong format.
+  return `${character}::v4::${text}`;
 }
 
-async function fetchMp3(k: string, text: string, character: Character): Promise<string | null> {
-  const cached = mp3Cache.get(k);
+async function fetchAudioBuffer(k: string, text: string, character: Character): Promise<AudioBuffer | null> {
+  const cached = bufferCache.get(k);
   if (cached) return cached;
   const existing = inFlight.get(k);
   if (existing) return existing;
 
   const job = (async () => {
+    const ctx = getAudioCtx();
+    if (!ctx) return null;
     try {
       const stored = await idbGet(k);
       if (stored && stored.size) {
-        const url = URL.createObjectURL(stored);
-        mp3Cache.set(k, url);
-        return url;
+        const buf = await ctx.decodeAudioData(await stored.arrayBuffer());
+        bufferCache.set(k, buf);
+        return buf;
       }
       // Retry a couple of times before giving up — a transient network blip
       // or edge-function cold start shouldn't drop straight to the browser's
@@ -152,9 +196,9 @@ async function fetchMp3(k: string, text: string, character: Character): Promise<
           const blob = await res.blob();
           if (!blob.size || !blob.type.startsWith('audio/')) throw new Error(`bad audio response (type=${blob.type}, size=${blob.size})`);
           void idbPut(k, blob);
-          const url = URL.createObjectURL(blob);
-          mp3Cache.set(k, url);
-          return url;
+          const buf = await ctx.decodeAudioData(await blob.arrayBuffer());
+          bufferCache.set(k, buf);
+          return buf;
         } catch (err) {
           lastErr = err;
         }
@@ -173,14 +217,13 @@ async function fetchMp3(k: string, text: string, character: Character): Promise<
 }
 
 function stopCurrent() {
-  if (currentAudio) {
+  if (currentSource) {
     try {
-      currentAudio.pause();
-      currentAudio.src = '';
+      currentSource.stop();
     } catch {
       /* noop */
     }
-    currentAudio = null;
+    currentSource = null;
   }
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
     try {
@@ -239,9 +282,9 @@ async function playFallback(text: string, character: Character): Promise<void> {
 }
 
 /** Slows down playback without pitch-shifting (modern browsers preserve
- *  pitch by default on rate change) — the reliable, backend-independent way
- *  to pace speech for pre-k listeners regardless of what the TTS provider's
- *  own `speed` setting does under the hood. */
+ *  pitch by default on rate change) — used only for the pre-recorded letter
+ *  clips below, which are real human recordings and don't go through the
+ *  pitch-shift engine. */
 function applySlowPace(audio: HTMLAudioElement) {
   audio.playbackRate = SPEECH_SPEED;
   const withPitch = audio as HTMLAudioElement & {
@@ -254,22 +297,34 @@ function applySlowPace(audio: HTMLAudioElement) {
   withPitch.webkitPreservesPitch = true;
 }
 
-/** Resolves true if playback actually started and finished/errored normally,
- *  false if the browser's autoplay policy rejected play() outright — the
- *  caller should fall back to speech synthesis in that case. */
-function playUrl(url: string): Promise<boolean> {
+/** Plays a decoded ElevenLabs clip through Web Audio with speed and pitch
+ *  controlled independently: `playbackRate` paces it for pre-k listeners,
+ *  `detune` lifts the pitch into a childlike register (see PITCH_CENTS) —
+ *  something a plain HTMLAudioElement can't do (it can only preserve the
+ *  original pitch while changing speed, not shift pitch on its own).
+ *  Resolves true once playback finishes, false if it couldn't start at all
+ *  (e.g. no AudioContext available) — the caller falls back to speech
+ *  synthesis in that case. */
+function playBuffer(buffer: AudioBuffer, character: Character): Promise<boolean> {
+  const ctx = getAudioCtx();
+  if (!ctx) return Promise.resolve(false);
   return new Promise((resolve) => {
-    const audio = new Audio(url);
-    audio.preload = 'auto';
-    applySlowPace(audio);
-    currentAudio = audio;
-    const finish = (ok: boolean) => {
-      if (currentAudio === audio) currentAudio = null;
-      resolve(ok);
-    };
-    audio.addEventListener('ended', () => finish(true), { once: true });
-    audio.addEventListener('error', () => finish(false), { once: true });
-    audio.play().catch(() => finish(false));
+    try {
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.playbackRate.value = SPEECH_SPEED;
+      source.detune.value = PITCH_CENTS[character] ?? 0;
+      source.connect(ctx.destination);
+      currentSource = source;
+      const finish = (ok: boolean) => {
+        if (currentSource === source) currentSource = null;
+        resolve(ok);
+      };
+      source.onended = () => finish(true);
+      source.start(0);
+    } catch {
+      resolve(false);
+    }
   });
 }
 
@@ -285,6 +340,10 @@ let unlocked = false;
 export function unlockAudio() {
   if (unlocked || typeof window === 'undefined') return;
   unlocked = true;
+  try {
+    const ctx = getAudioCtx();
+    if (ctx && ctx.state === 'suspended') void ctx.resume();
+  } catch { /* noop */ }
   try {
     const a = new Audio(
       'data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tQxAADB8AhSmxhIIEVCSiJrDCQBTcu3UrAIwUdkRgQbFAZC1CQEwTJ9mjRvBAQBAEAwNihEFw+CAIAgc47vBAEAwXf/lwQBAEAxjvOCAIAgGAYLv/y7unBAF3fUIAgLu/y7oIAu7/LugAAAAAAAAP/7UsQNg8AAAaQAAAAgAAA0gAAABExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQ=='
@@ -325,9 +384,9 @@ export function speak(text: string, character: Character = 'teacher'): Promise<v
   const job = playChain.then(async () => {
     if (mySession !== sessionId) return;
     const k = key(character, trimmed);
-    const url = await fetchMp3(k, trimmed, character);
+    const buffer = await fetchAudioBuffer(k, trimmed, character);
     if (mySession !== sessionId) return;
-    const played = url ? await playUrl(url) : false;
+    const played = buffer ? await playBuffer(buffer, character) : false;
     if (!played) await playFallback(trimmed, character);
   });
 
@@ -347,7 +406,7 @@ export function speakOnce(text: string, character: Character = 'teacher'): Promi
 export async function prefetch(text: string, character: Character = 'teacher') {
   const trimmed = text.trim();
   if (!trimmed) return;
-  await fetchMp3(key(character, trimmed), trimmed, character);
+  await fetchAudioBuffer(key(character, trimmed), trimmed, character);
 }
 
 export async function safeSpeak(text: string, who: Character) {
