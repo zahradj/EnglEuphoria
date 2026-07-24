@@ -530,6 +530,8 @@ function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 't
   const TRACE_SEGMENTS: Record<string, TraceSegment[]> = {
     H: [{ from: { x: 170, y: 130 }, to: { x: 170, y: 470 } }, { from: { x: 430, y: 130 }, to: { x: 430, y: 470 } }, { from: { x: 175, y: 305 }, to: { x: 425, y: 305 } }],
     M: [{ from: { x: 155, y: 470 }, to: { x: 195, y: 130 } }, { from: { x: 195, y: 130 }, to: { x: 300, y: 455 } }, { from: { x: 300, y: 455 }, to: { x: 405, y: 130 } }, { from: { x: 405, y: 130 }, to: { x: 455, y: 235 } }],
+    A: [{ from: { x: 300, y: 130 }, to: { x: 150, y: 470 } }, { from: { x: 300, y: 130 }, to: { x: 450, y: 470 } }, { from: { x: 205, y: 340 }, to: { x: 395, y: 340 } }],
+    S: [{ from: { x: 400, y: 175 }, to: { x: 200, y: 175 } }, { from: { x: 200, y: 175 }, to: { x: 200, y: 295 } }, { from: { x: 200, y: 295 }, to: { x: 400, y: 295 } }, { from: { x: 400, y: 295 }, to: { x: 400, y: 415 } }, { from: { x: 400, y: 415 }, to: { x: 200, y: 415 } }],
   };
   const HIT_RADIUS = 72;
   const BUCKETS_PER_SEGMENT = 16;
