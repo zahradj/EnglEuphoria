@@ -522,6 +522,11 @@ export const LESSON_2_SCENES: Scene[] = [
  * ========================================================================= */
 
 const itemStar = `${A}/items/prop-star.png`;
+const itemSun = `${A}/items/item-sun.svg`;
+const itemSnake = `${A}/items/item-snake.svg`;
+const itemApple = `${A}/items/item-apple.svg`;
+const itemAnt = `${A}/items/item-ant.svg`;
+const itemAlligator = `${A}/items/item-alligator.svg`;
 
 export const LESSON_3_TITLE = 'The Sunshine Meadow';
 export const LESSON_3_OBJECTIVE = 'Ask and answer "How are you?" while learning the /s/ and /a/ sounds and reviewing H, M, N, W.';
@@ -556,12 +561,12 @@ export const LESSON_3_SCENES: Scene[] = [
       { letter: 'A', phoneme: '/a/', who: 'willow' },
     ],
     items: [
-      { word: 'sun', emoji: '☀️', img: itemStar, letter: 'S' },
+      { word: 'sun', emoji: '☀️', img: itemSun, letter: 'S' },
       { word: 'star', emoji: '⭐', img: itemStar, letter: 'S' },
-      { word: 'snake', emoji: '\u{1F40D}', letter: 'S' },
-      { word: 'apple', emoji: '\u{1F34E}', letter: 'A' },
-      { word: 'ant', emoji: '\u{1F41C}', letter: 'A' },
-      { word: 'alligator', emoji: '\u{1F40A}', letter: 'A' },
+      { word: 'snake', emoji: '\u{1F40D}', img: itemSnake, letter: 'S' },
+      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, letter: 'A' },
+      { word: 'ant', emoji: '\u{1F41C}', img: itemAnt, letter: 'A' },
+      { word: 'alligator', emoji: '\u{1F40A}', img: itemAlligator, letter: 'A' },
     ],
   },
   {
@@ -577,17 +582,17 @@ export const LESSON_3_SCENES: Scene[] = [
       { word: 'nose', emoji: '\u{1F443}', img: itemNose, letter: 'N' },
       { word: 'water', emoji: '\u{1F4A7}', img: itemWater, letter: 'W' },
       { word: 'wave', emoji: '\u{1F30A}', img: itemWave, letter: 'W' },
-      { word: 'sun', emoji: '☀️', img: itemStar, letter: 'S' },
-      { word: 'snake', emoji: '\u{1F40D}', letter: 'S' },
-      { word: 'apple', emoji: '\u{1F34E}', letter: 'A' },
-      { word: 'ant', emoji: '\u{1F41C}', letter: 'A' },
+      { word: 'sun', emoji: '☀️', img: itemSun, letter: 'S' },
+      { word: 'snake', emoji: '\u{1F40D}', img: itemSnake, letter: 'S' },
+      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, letter: 'A' },
+      { word: 'ant', emoji: '\u{1F41C}', img: itemAnt, letter: 'A' },
     ],
   },
   {
     id: 'l3-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Sunshine round! Choose the first sound: H, M, N, W, S, or A.',
     rounds: [
-      { word: 'sun', blankIndex: 0, answer: 'S', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemStar, emoji: '☀️' },
-      { word: 'ant', blankIndex: 0, answer: 'A', choices: ['H', 'M', 'N', 'W', 'S', 'A'], emoji: '\u{1F41C}' },
+      { word: 'sun', blankIndex: 0, answer: 'S', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemSun, emoji: '☀️' },
+      { word: 'ant', blankIndex: 0, answer: 'A', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemAnt, emoji: '\u{1F41C}' },
       { word: 'water', blankIndex: 0, answer: 'W', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemWater, emoji: '\u{1F4A7}' },
       { word: 'nest', blankIndex: 0, answer: 'N', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: `${A}/items/item-nest.png`, emoji: '\u{1FAB9}' },
       { word: 'hat', blankIndex: 0, answer: 'H', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: `${A}/items/item-hat.png`, emoji: '\u{1F3A9}' },
@@ -605,21 +610,21 @@ export const LESSON_3_SCENES: Scene[] = [
   {
     id: 'l3-memory', kind: 'memory', bg: bgMeadow, teacher: 'Find the pairs! Tap two cards to match them.',
     pairs: [
-      { id: 'sun', label: 'Sun', emoji: '☀️', img: itemStar },
+      { id: 'sun', label: 'Sun', emoji: '☀️', img: itemSun },
       { id: 'star', label: 'Star', emoji: '⭐', img: itemStar },
-      { id: 'apple', label: 'Apple', emoji: '\u{1F34E}' },
-      { id: 'ant', label: 'Ant', emoji: '\u{1F41C}' },
+      { id: 'apple', label: 'Apple', emoji: '\u{1F34E}', img: itemApple },
+      { id: 'ant', label: 'Ant', emoji: '\u{1F41C}', img: itemAnt },
     ],
   },
   {
     id: 'l3-dash', kind: 'dash', bg: bgClearing, teacher: 'Leo Dash! Tap only the S words as they run by. Get 6 rings!', who: 'leo', targetLetter: 'S', targetPhoneme: '/s/', goal: 6, seconds: 40,
     items: [
-      { word: 'sun', letter: 'S', img: itemStar, emoji: '☀️' },
+      { word: 'sun', letter: 'S', img: itemSun, emoji: '☀️' },
       { word: 'star', letter: 'S', img: itemStar, emoji: '⭐' },
-      { word: 'snake', letter: 'S', emoji: '\u{1F40D}' },
-      { word: 'apple', letter: 'A', emoji: '\u{1F34E}' },
-      { word: 'ant', letter: 'A', emoji: '\u{1F41C}' },
-      { word: 'alligator', letter: 'A', emoji: '\u{1F40A}' },
+      { word: 'snake', letter: 'S', img: itemSnake, emoji: '\u{1F40D}' },
+      { word: 'apple', letter: 'A', img: itemApple, emoji: '\u{1F34E}' },
+      { word: 'ant', letter: 'A', img: itemAnt, emoji: '\u{1F41C}' },
+      { word: 'alligator', letter: 'A', img: itemAlligator, emoji: '\u{1F40A}' },
     ],
   },
   {
