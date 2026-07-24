@@ -23,7 +23,7 @@ export function Hearts({ count }: { count: number }) {
 export function GlassCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
     <div
-      className={`relative overflow-hidden rounded-3xl border border-white/40 bg-white/25 p-5 text-neutral-900 shadow-2xl backdrop-blur-2xl ring-1 ring-white/30 ${className}`}
+      className={`relative overflow-hidden rounded-3xl border border-white/40 bg-white/95 p-5 text-neutral-900 shadow-2xl backdrop-blur-2xl ring-1 ring-white/30 ${className}`}
       style={{ boxShadow: '0 20px 60px -20px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.6)' }}
     >
       {children}
@@ -1310,19 +1310,7 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
         <span className="w-fit rounded-full bg-orange-500 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-white shadow">Listen · Repeat · Play</span>
       </div>
       {current && <button onClick={replayCurrent} className="absolute right-6 top-6 z-30 flex items-center gap-2 rounded-full bg-white/95 px-5 py-3 text-sm font-black uppercase tracking-widest text-orange-700 shadow-2xl ring-2 ring-orange-200 active:scale-95" aria-label="Repeat what the character said">🔁 Play again</button>}
-      {scene.cast.map((who) => {
-        const c = CAST[who];
-        const p = positions[who] ?? { left: '50%', bottom: '12vh', scale: 1 };
-        const isSpeaking = current?.who === who;
-        const sprite = c.img;
-        const leftPct = parseFloat(p.left);
-        const facingLeft = !Number.isNaN(leftPct) && leftPct >= 50;
-        return (
-          <img key={who} src={sprite} alt={c.name} draggable={false} className="absolute object-contain drop-shadow-2xl transition-all duration-300"
-            style={{ left: p.left, bottom: p.bottom, height: `calc(clamp(240px, 40vh, 460px) * ${p.scale})`, transform: facingLeft ? 'scaleX(-1)' : undefined, filter: isSpeaking ? `drop-shadow(0 0 30px ${c.color})` : undefined }} />
-        );
-      })}
-      {current && (
+      {current && !awaitingRepeat && (
         <div className="absolute z-20 max-w-[520px] -translate-x-1/2 px-4 transition-all duration-300" style={{ left: positions[current.who]?.left ?? '50%', bottom: `calc(${positions[current.who]?.bottom ?? '12vh'} + clamp(240px, 40vh, 460px) * ${positions[current.who]?.scale ?? 1} + 20px)` }}>
           <div className="relative rounded-3xl bg-white/95 px-5 py-3 text-center text-xl font-black text-orange-800 shadow-2xl sm:text-2xl">“{current.line}”</div>
         </div>

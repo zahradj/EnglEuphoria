@@ -243,7 +243,7 @@ export const LESSON_1_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'roleplay-l1', kind: 'roleplay', bg: bgGather, teacher: 'Story time! Listen to the friends greet each other, then repeat each line.', cast: ['pip', 'mia', 'bella'],
+    id: 'roleplay-l1', kind: 'roleplay', bg: bgGatherEmpty, teacher: 'Story time! Listen to the friends greet each other, then repeat each line.', cast: ['pip', 'mia', 'bella'],
     script: [
       { who: 'pip', line: 'Hello! I am Pip.' },
       { who: 'mia', line: 'Hi! My name is Mia.', repeat: true },
