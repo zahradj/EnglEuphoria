@@ -105,7 +105,12 @@ export default function PlaygroundLibraryPage() {
   const handleLessonClick = (row: LessonRow) => {
     const fmt = row.ai_metadata?.contentFormat;
     if (fmt === 'lep1-rich') {
-      navigate(`/playground-scene/lesson-${row.ai_metadata?.lesson_number ?? 1}`);
+      const unitNum = row.ai_metadata?.unit_number ?? 1;
+      const lessonNum = row.ai_metadata?.lesson_number ?? 1;
+      // Unit 1's routes predate per-unit routing (/playground-scene/lesson-N) —
+      // keep them stable. Every other unit gets a unit-scoped path so lesson
+      // numbers don't collide across units (every unit has its own Lesson 1).
+      navigate(unitNum === 1 ? `/playground-scene/lesson-${lessonNum}` : `/playground-scene/unit-${unitNum}-lesson-${lessonNum}`);
       return;
     }
     if (fmt === 'scene-player') {

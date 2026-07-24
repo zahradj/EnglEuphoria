@@ -289,7 +289,9 @@ export const LibraryManager: React.FC = () => {
     // Little Explorers Phonics Lesson 1 — the faithful, full-interaction
     // port with its own static scene data — routes to its dedicated player.
     if (row.ai_metadata?.contentFormat === 'lep1-rich') {
-      navigate(`/playground-scene/lesson-${row.ai_metadata?.lesson_number ?? 1}`);
+      const unitNum = row.ai_metadata?.unit_number ?? 1;
+      const lessonNum = row.ai_metadata?.lesson_number ?? 1;
+      navigate(unitNum === 1 ? `/playground-scene/lesson-${lessonNum}` : `/playground-scene/unit-${unitNum}-lesson-${lessonNum}`);
       return;
     }
     const slides: PPPSlide[] = Array.isArray(row.content?.slides) ? row.content.slides : [];

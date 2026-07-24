@@ -1212,3 +1212,175 @@ export const LESSON_6_SCENES: Scene[] = [
   },
   { id: 'l6-finale', kind: 'finale', bg: bgBigTree, who: 'pip', line: 'You did it! You earned the Unit 1 Trophy! Hello, names, feelings, and six letter sounds — you know it all! \u{1F3C6}' },
 ];
+
+/* =========================================================================
+ * Unit 2, Lesson 1 — "The Rainbow Meadow" (B + T sounds, Colors & Shapes).
+ * Same cast/world as Unit 1 (no new characters or background art exist for
+ * a distinct Unit 2 world yet) — see the playground-library-lesson-builder
+ * skill, section 6, for why this stays in unit1/scenes.ts despite the DB's
+ * unit_number being 2. B and T are taught through "Blue" and "Triangle" so
+ * the unit's colors/shapes theme comes through the phonics vocab itself.
+ * ========================================================================= */
+
+const itemBall = `${A}/items/item-ball.svg`;
+const itemBear = `${A}/items/item-bear.svg`;
+const itemButterfly = `${A}/items/item-butterfly.svg`;
+const itemTriangle = `${A}/items/item-triangle.svg`;
+const itemTurtle = `${A}/items/item-turtle.svg`;
+const itemTree = `${A}/items/item-tree.svg`;
+
+export const LESSON_U2L1_TITLE = 'The Rainbow Meadow';
+export const LESSON_U2L1_OBJECTIVE = 'Name colors and shapes while learning the /b/ and /t/ sounds.';
+
+export const LESSON_U2L1_SCENES: Scene[] = [
+  { id: 'u2l1-title', kind: 'title-card', bg: bgMeadow, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 1', title: 'The Rainbow Meadow', subtitle: 'Colors, shapes & the /b/ and /t/ sounds' },
+  {
+    id: 'u2l1-intro', kind: 'cinematic', bg: bgMeadow, title: 'The Rainbow Meadow', subtitle: 'A meadow full of colors and shapes', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Look at all the colors and shapes today!' },
+      { who: 'pip', line: 'Bella and Willow found two new sounds to share.' },
+    ],
+    cta: "Let's look!",
+  },
+  {
+    id: 'u2l1-model-b', kind: 'sound-model', bg: bgClearing, who: 'bella', letter: 'B', phoneme: '/b/', sound: 'buh', teacher: 'Listen to Bella\'s sound. /b/ /b/ Blue!',
+    anchors: [
+      { word: 'Ball', emoji: '\u{26BD}', img: itemBall },
+      { word: 'Bear', emoji: '\u{1F43B}', img: itemBear },
+      { word: 'Butterfly', emoji: '\u{1F98B}', img: itemButterfly },
+    ],
+  },
+  { id: 'u2l1-trace-b', kind: 'trace', bg: bgClearing, who: 'bella', letter: 'B', phoneme: '/b/', word: 'Ball', teacher: 'Trace the big B with your finger! /b/ /b/ Ball!' },
+  { id: 'u2l1-echo-b', kind: 'echo', bg: bgMeadow, who: 'bella', teacher: 'Repeat after Bella: Blue ball! Blue ball!', word: 'Blue ball!' },
+  {
+    id: 'u2l1-model-t', kind: 'sound-model', bg: bgBigTree, who: 'willow', letter: 'T', phoneme: '/t/', sound: 'tuh', teacher: 'Listen to Willow\'s sound. /t/ /t/ Triangle!',
+    anchors: [
+      { word: 'Triangle', emoji: '\u{1F53A}', img: itemTriangle },
+      { word: 'Turtle', emoji: '\u{1F422}', img: itemTurtle },
+      { word: 'Tree', emoji: '\u{1F333}', img: itemTree },
+    ],
+  },
+  { id: 'u2l1-trace-t', kind: 'trace', bg: bgBigTree, who: 'willow', letter: 'T', phoneme: '/t/', word: 'Triangle', teacher: 'Trace the tall T with your finger! /t/ /t/ Triangle!' },
+  { id: 'u2l1-echo-t', kind: 'echo', bg: bgMeadow, who: 'willow', teacher: 'Repeat after Willow: Orange triangle! Orange triangle!', word: 'Orange triangle!' },
+  {
+    id: 'u2l1-basket-b', kind: 'basket', bg: bgClearing, letter: 'B', phoneme: '/b/', who: 'bella', teacher: "Drag the /b/ words into Bella's B basket!", goal: 3,
+    items: [
+      { word: 'ball', emoji: '\u{26BD}', img: itemBall, hit: true },
+      { word: 'bear', emoji: '\u{1F43B}', img: itemBear, hit: true },
+      { word: 'butterfly', emoji: '\u{1F98B}', img: itemButterfly, hit: true },
+      { word: 'triangle', emoji: '\u{1F53A}', img: itemTriangle, hit: false },
+      { word: 'turtle', emoji: '\u{1F422}', img: itemTurtle, hit: false },
+    ],
+  },
+  {
+    id: 'u2l1-basket-t', kind: 'basket', bg: bgBigTree, letter: 'T', phoneme: '/t/', who: 'willow', teacher: "Drag the /t/ words into Willow's T basket!", goal: 3,
+    items: [
+      { word: 'triangle', emoji: '\u{1F53A}', img: itemTriangle, hit: true },
+      { word: 'turtle', emoji: '\u{1F422}', img: itemTurtle, hit: true },
+      { word: 'tree', emoji: '\u{1F333}', img: itemTree, hit: true },
+      { word: 'ball', emoji: '\u{26BD}', img: itemBall, hit: false },
+      { word: 'bear', emoji: '\u{1F43B}', img: itemBear, hit: false },
+    ],
+  },
+  {
+    id: 'u2l1-sort-bt', kind: 'sound-sort', bg: bgMeadow, teacher: 'Listen! Drag each thing to its sound — /b/ or /t/.',
+    targets: [
+      { letter: 'B', phoneme: '/b/', who: 'bella' },
+      { letter: 'T', phoneme: '/t/', who: 'willow' },
+    ],
+    items: [
+      { word: 'ball', emoji: '\u{26BD}', img: itemBall, letter: 'B' },
+      { word: 'bear', emoji: '\u{1F43B}', img: itemBear, letter: 'B' },
+      { word: 'butterfly', emoji: '\u{1F98B}', img: itemButterfly, letter: 'B' },
+      { word: 'triangle', emoji: '\u{1F53A}', img: itemTriangle, letter: 'T' },
+      { word: 'turtle', emoji: '\u{1F422}', img: itemTurtle, letter: 'T' },
+      { word: 'tree', emoji: '\u{1F333}', img: itemTree, letter: 'T' },
+    ],
+  },
+  {
+    id: 'u2l1-color-friends', kind: 'color-friends', bg: bgMeadow, teacher: 'Rainbow time! Pick a color and paint your friends!', cast: ['pip', 'mia', 'bella', 'willow', 'leo'],
+  },
+  {
+    id: 'u2l1-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Listen! Tap the missing letter to make the word.',
+    rounds: [
+      { word: 'ball', blankIndex: 0, answer: 'B', choices: ['B', 'T'], img: itemBall, emoji: '\u{26BD}' },
+      { word: 'triangle', blankIndex: 0, answer: 'T', choices: ['B', 'T'], img: itemTriangle, emoji: '\u{1F53A}' },
+      { word: 'bear', blankIndex: 0, answer: 'B', choices: ['B', 'T'], img: itemBear, emoji: '\u{1F43B}' },
+      { word: 'turtle', blankIndex: 0, answer: 'T', choices: ['B', 'T'], img: itemTurtle, emoji: '\u{1F422}' },
+    ],
+  },
+  {
+    id: 'u2l1-who', kind: 'who-said-it', bg: bgHideSeek, teacher: 'Listen! Who is talking? Tap the friend.',
+    rounds: [
+      { line: 'Look at the blue ball!', who: 'bella' },
+      { line: 'I see an orange triangle!', who: 'willow' },
+      { line: 'The tree is so tall!', who: 'pip' },
+    ],
+  },
+  {
+    id: 'u2l1-memory', kind: 'memory', bg: bgMeadow, teacher: 'Find the pairs! Tap two cards to match them.',
+    pairs: [
+      { id: 'ball', label: 'Ball', emoji: '\u{26BD}', img: itemBall },
+      { id: 'bear', label: 'Bear', emoji: '\u{1F43B}', img: itemBear },
+      { id: 'triangle', label: 'Triangle', emoji: '\u{1F53A}', img: itemTriangle },
+      { id: 'turtle', label: 'Turtle', emoji: '\u{1F422}', img: itemTurtle },
+    ],
+  },
+  {
+    id: 'u2l1-dash', kind: 'dash', bg: bgClearing, teacher: 'Bella Dash! Tap only the B words as they run by. Get 6 rings!', who: 'bella', targetLetter: 'B', targetPhoneme: '/b/', goal: 6, seconds: 40,
+    items: [
+      { word: 'ball', letter: 'B', img: itemBall, emoji: '\u{26BD}' },
+      { word: 'bear', letter: 'B', img: itemBear, emoji: '\u{1F43B}' },
+      { word: 'butterfly', letter: 'B', img: itemButterfly, emoji: '\u{1F98B}' },
+      { word: 'triangle', letter: 'T', img: itemTriangle, emoji: '\u{1F53A}' },
+      { word: 'turtle', letter: 'T', img: itemTurtle, emoji: '\u{1F422}' },
+      { word: 'tree', letter: 'T', img: itemTree, emoji: '\u{1F333}' },
+    ],
+  },
+  {
+    id: 'u2l1-feelings', kind: 'feelings', bg: bgBigTree, teacher: 'So many colors and shapes today! How do you feel?',
+    options: [
+      { label: 'Happy', emoji: '\u{1F600}', reply: 'Yay! Colors and shapes are fun!' },
+      { label: 'Okay', emoji: '\u{1F610}', reply: 'That is okay. Let\'s keep exploring together.' },
+      { label: 'Sad', emoji: '\u{1F622}', reply: "It's okay to feel sad. I am here with you." },
+    ],
+  },
+  {
+    id: 'u2l1-puzzle', kind: 'puzzle', bg: bgMeadow, teacher: 'Guess the friend! Tap pieces to peek, then pick who it is.',
+    rounds: [
+      { who: 'bella', img: CAST.bella.img, hint: 'She loves the color blue.' },
+      { who: 'willow', img: CAST.willow.img, hint: 'She found a triangle today.' },
+      { who: 'leo', img: CAST.leo.img, hint: 'A sleepy lion with a big, warm roar.' },
+    ],
+  },
+  {
+    id: 'u2l1-roleplay', kind: 'roleplay', bg: bgGatherEmpty, teacher: 'Story time! Listen to Pip and Bella talk about the meadow, then repeat.', cast: ['pip', 'bella'],
+    script: [
+      { who: 'pip', line: 'Look! A blue ball!' },
+      { who: 'bella', line: 'I like blue!', repeat: true },
+      { who: 'bella', line: 'Look! An orange triangle!' },
+      { who: 'pip', line: 'I like orange too!', repeat: true },
+    ],
+  },
+  {
+    id: 'u2l1-alphabet-blocks', kind: 'alphabet-blocks', bg: bgMeadow, teacher: 'Alphabet Blocks! Tap the sound, then stack the word!', letters: ['B', 'T', 'A', 'U'],
+    tapRounds: [{ letter: 'B' }, { letter: 'T' }, { letter: 'B' }, { letter: 'T' }],
+    words: [
+      { word: 'BAT', emoji: '\u{1F987}' },
+      { word: 'TUB', emoji: '\u{1F6C1}' },
+    ],
+  },
+  { id: 'u2l1-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Drag the letters into ABC order!', sequences: ['ABCD', 'STUV', 'QRST'] },
+  {
+    id: 'u2l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the rainbow meadow! Sing along together.',
+    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u2l1-finale', kind: 'finale', bg: bgMeadow, who: 'bella', line: 'You did it! You found colors, shapes, and two new sounds — /b/ and /t/!' },
+];

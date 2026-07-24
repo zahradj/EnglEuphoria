@@ -144,6 +144,7 @@ const PlayLesson3 = lazy(() => import("./pages/playground-scene/PlayLesson3"));
 const PlayLesson4 = lazy(() => import("./pages/playground-scene/PlayLesson4"));
 const PlayLesson5 = lazy(() => import("./pages/playground-scene/PlayLesson5"));
 const PlayLesson6 = lazy(() => import("./pages/playground-scene/PlayLesson6"));
+const PlayUnit2Lesson1 = lazy(() => import("./pages/playground-scene/PlayUnit2Lesson1"));
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
 const AcademyClassroom = lazy(() => import("./pages/AcademyClassroom"));
@@ -262,6 +263,11 @@ const App = () => {
                       <Route path="/playground-scene/lesson-6" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayLesson6 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-2-lesson-1" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit2Lesson1 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* Standalone Playground Library — deliberately outside the Creator Studio
