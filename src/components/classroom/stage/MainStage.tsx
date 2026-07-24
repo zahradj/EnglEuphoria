@@ -9,6 +9,7 @@ import { Layout, Globe, PenTool, Wifi, Gamepad2 } from 'lucide-react';
 import { PlaygroundLessonPlayer } from '@/components/playground-player/PlaygroundLessonPlayer';
 import type { PlaygroundLessonNumber } from '@/playground-blueprint/unitTemplate';
 import { ClassroomToolOverlay } from './ClassroomToolOverlay';
+import { EmbeddedSceneLesson } from './EmbeddedSceneLesson';
 
 interface Slide {
   id: string;
@@ -80,6 +81,9 @@ export const MainStage: React.FC<MainStageProps> = ({
   const { label, Icon } = MODE_META[mode];
   const stageRef = useRef<HTMLDivElement>(null);
   useCollapseWatcher(stageRef, `main-stage[${role}/${mode}]`);
+  const sceneLessonRef = (rawSlides as any)?.[0]?.sceneLessonRef as
+    | { unitNumber: number; lessonNumber: number }
+    | undefined;
 
   return (
     <div className="absolute inset-0 h-full w-full flex items-stretch justify-stretch min-h-0 min-w-0">
@@ -95,6 +99,14 @@ export const MainStage: React.FC<MainStageProps> = ({
           {customStage ? (
             <div className="absolute inset-0 overflow-auto">
               {customStage}
+            </div>
+          ) : hubType === 'playground' && mode === 'slide' && sceneLessonRef ? (
+            <div className="absolute inset-0 overflow-auto bg-white">
+              <EmbeddedSceneLesson
+                unitNumber={sceneLessonRef.unitNumber}
+                lessonNumber={sceneLessonRef.lessonNumber}
+                roomId={roomId}
+              />
             </div>
           ) : hubType === 'playground' && mode === 'slide' ? (
             <div className="absolute inset-0 overflow-auto bg-white">

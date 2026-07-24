@@ -4,7 +4,7 @@ import type { Scene } from '@/content/playground-library/unit1/scenes';
 import { SceneRenderer, Hearts, MAX_HEARTS, Lep1Keyframes } from '@/content/playground-library/unit1/SceneRenderer';
 import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-library/unit1/audio';
 
-export default function PlayUnitLesson({ scenes, sessionKey }: { scenes: Scene[]; sessionKey: string }) {
+export default function PlayUnitLesson({ scenes, sessionKey, embedded = false }: { scenes: Scene[]; sessionKey: string; embedded?: boolean }) {
   const navigate = useNavigate();
   const SCENES = scenes;
 
@@ -71,20 +71,24 @@ export default function PlayUnitLesson({ scenes, sessionKey }: { scenes: Scene[]
     <div
       dir="ltr"
       onPointerDownCapture={unlockAudio}
-      className="relative min-h-screen w-full overflow-hidden transition-[background-image] duration-500"
+      className={`relative w-full overflow-hidden transition-[background-image] duration-500 ${embedded ? 'h-full' : 'min-h-screen'}`}
       style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
     >
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/55" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,0.35)_100%)]" />
 
-      <div className="relative z-10 mx-auto flex min-h-screen w-full flex-col px-0 pb-6 pt-4">
+      <div className={`relative z-10 mx-auto flex w-full flex-col px-0 pb-6 pt-4 ${embedded ? 'min-h-full' : 'min-h-screen'}`}>
         <div className="flex items-center justify-between px-4">
-          <button
-            onClick={() => { stopSpeaking(); navigate('/playground-library'); }}
-            className="rounded-full bg-white/85 px-3 py-1 text-sm font-bold text-orange-700 shadow-lg ring-1 ring-white/60 backdrop-blur"
-          >
-            ← Map
-          </button>
+          {embedded ? (
+            <div className="w-16" />
+          ) : (
+            <button
+              onClick={() => { stopSpeaking(); navigate('/playground-library'); }}
+              className="rounded-full bg-white/85 px-3 py-1 text-sm font-bold text-orange-700 shadow-lg ring-1 ring-white/60 backdrop-blur"
+            >
+              ← Map
+            </button>
+          )}
           <div className="flex items-center gap-2 rounded-full bg-white/85 px-4 py-2 text-lg font-black shadow-lg ring-1 ring-white/60 backdrop-blur">
             <Hearts count={hearts} />
             <span className="mx-1 text-orange-300">·</span>
@@ -114,7 +118,7 @@ export default function PlayUnitLesson({ scenes, sessionKey }: { scenes: Scene[]
         )}
       </div>
 
-      <div className="pointer-events-none fixed inset-x-0 bottom-4 z-[80] flex items-center justify-between px-4">
+      <div className={`pointer-events-none inset-x-0 bottom-4 z-[80] flex items-center justify-between px-4 ${embedded ? 'absolute' : 'fixed'}`}>
         <button type="button" onClick={goBack} disabled={sceneIdx === 0} aria-label="Previous scene"
           className="pointer-events-auto flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-base font-bold text-slate-800 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
           <span aria-hidden>◀</span> Back

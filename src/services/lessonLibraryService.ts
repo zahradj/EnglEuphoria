@@ -29,7 +29,14 @@ export interface LibraryLessonCard {
   thumbnail_url: string | null;
   slide_count: number;
   created_at: string;
+  /** True for lessons with real, playable content — either raw content.slides
+   *  or a recognized rich content format (e.g. the scene-based Little
+   *  Explorers Phonics lessons, whose content lives in code, not content.slides).
+   *  Coming-soon scaffold rows are never ready. */
+  isReady: boolean;
 }
+
+const READY_CONTENT_FORMATS = new Set(['lep1-rich', 'scene-player']);
 
 export interface ClassroomSlide {
   id: string;
@@ -72,6 +79,8 @@ export function getLibrarySlideCount(lesson: Pick<LibraryLesson, 'content'>): nu
 }
 
 export function toLibraryLessonCard(lesson: LibraryLesson): LibraryLessonCard {
+  const slideCount = getLibrarySlideCount(lesson);
+  const contentFormat = (lesson.ai_metadata as any)?.contentFormat;
   return {
     id: lesson.id,
     title: lesson.title || 'Untitled Lesson',
@@ -81,8 +90,9 @@ export function toLibraryLessonCard(lesson: LibraryLesson): LibraryLessonCard {
     difficulty_level: lesson.difficulty_level,
     duration_minutes: lesson.duration_minutes,
     thumbnail_url: lesson.thumbnail_url,
-    slide_count: getLibrarySlideCount(lesson),
+    slide_count: slideCount,
     created_at: lesson.created_at,
+    isReady: slideCount > 0 || READY_CONTENT_FORMATS.has(contentFormat),
   };
 }
 

@@ -185,7 +185,21 @@ export async function resolveBookingLesson(booking: {
     (lesson?.content as any)?.playground_unit ??
     (lesson?.content as any)?.playground_lesson ??
     null;
-  if (hubType === 'playground' && playgroundUnit && baseSlides.length > 0) {
+  const contentFormat = (lesson?.ai_metadata as any)?.contentFormat;
+  if (hubType === 'playground' && contentFormat === 'lep1-rich') {
+    // Little Explorers Phonics scene-based lessons render through
+    // <EmbeddedSceneLesson/>, which looks up the static Scene[] by
+    // unit/lesson number — replace whatever (possibly stale legacy
+    // blueprint) slides this row carries with a single synthetic slide
+    // carrying that reference.
+    const unitNumber = Number((lesson?.ai_metadata as any)?.unit_number ?? 1);
+    const lessonNumber = Number((lesson?.ai_metadata as any)?.lesson_number ?? 1);
+    baseSlides = [{
+      id: `scene-lesson-${unitNumber}-${lessonNumber}`,
+      type: 'playground_scene',
+      sceneLessonRef: { unitNumber, lessonNumber },
+    }];
+  } else if (hubType === 'playground' && playgroundUnit && baseSlides.length > 0) {
     baseSlides = baseSlides.map((s, i) =>
       i === 0 ? { ...s, playgroundUnit } : s,
     );

@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Loader2, ShieldOff, Bug } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SoundSettingsLauncher } from '@/components/classroom/settings/SoundSettingsLauncher';
-import { resolveBookingLesson } from '@/services/classroomLessonResolver';
+import { resolveBookingLesson, normalizeHub } from '@/services/classroomLessonResolver';
 import { ClassroomLifecycle } from '@/components/classroom/ClassroomLifecycle';
 import { SuccessTrailLesson } from '@/components/trial/success-trail/SuccessTrailLesson';
 import { AcademyTrailLesson } from '@/components/trial/academy-trail/AcademyTrailLesson';
@@ -406,7 +406,13 @@ const UnifiedClassroomPage: React.FC = () => {
   // Admin "God Mode" — admin enters as teacher view by default
   const classroomRole: 'teacher' | 'student' = isTeacher || (isAdmin && !isStudent) ? 'teacher' : 'student';
 
-  const normalizedHub: 'playground' | 'academy' | 'professional' = resolved?.hubType ?? 'academy';
+  // Prefer the fully-resolved lesson's hub, but fall back to the booking's
+  // own hub_type (known as soon as the booking loads, well before the
+  // lesson-content resolution completes) instead of hardcoding 'academy' —
+  // that mismatch was causing a purple flash before the correct hub color
+  // (e.g. orange for Playground) took over in the pre-flight waiting room.
+  const normalizedHub: 'playground' | 'academy' | 'professional' =
+    resolved?.hubType ?? normalizeHub((booking as any)?.hub_type);
 
   // Hub-aware booked duration: Playground = 30min, Academy/Success = 60min.
   const scheduledAtIso: string | null = (booking as any)?.scheduled_at ?? null;

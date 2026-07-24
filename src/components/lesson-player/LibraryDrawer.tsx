@@ -72,15 +72,20 @@ export default function LibraryDrawer({
       const lf = levelFilter.toLowerCase();
       list = list.filter((l) => (l.difficulty_level || '').toLowerCase() === lf);
     }
-    if (!searchQuery.trim()) return list;
-    const q = searchQuery.toLowerCase();
-    return list.filter(
-      (l) =>
-        l.title.toLowerCase().includes(q) ||
-        l.difficulty_level.toLowerCase().includes(q) ||
-        l.hub.toLowerCase().includes(q) ||
-        (l.description && l.description.toLowerCase().includes(q))
-    );
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(
+        (l) =>
+          l.title.toLowerCase().includes(q) ||
+          l.difficulty_level.toLowerCase().includes(q) ||
+          l.hub.toLowerCase().includes(q) ||
+          (l.description && l.description.toLowerCase().includes(q))
+      );
+    }
+    // Ready-to-play lessons first — otherwise dozens of "Coming Soon"
+    // scaffold placeholders (sorted newest-first by the query) bury the
+    // small number of actually-built lessons at the bottom of the list.
+    return [...list].sort((a, b) => Number(b.isReady) - Number(a.isReady));
   }, [lessons, searchQuery, levelFilter, levelLocked]);
 
   const handleSelect = async (lessonId: string) => {
@@ -217,8 +222,10 @@ export default function LibraryDrawer({
                               {lesson.hub}
                             </span>
                           )}
-                          <span className="text-[10px] text-slate-400">
-                            {lesson.slide_count} slides
+                          <span className={`text-[10px] font-bold uppercase ${lesson.isReady ? 'text-emerald-600' : 'text-slate-400'}`}>
+                            {lesson.isReady
+                              ? (lesson.slide_count > 0 ? `${lesson.slide_count} slides` : 'Ready')
+                              : 'Coming soon'}
                           </span>
                         </div>
                       </div>
