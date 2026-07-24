@@ -141,6 +141,9 @@ const PlayScenesLessonPage = lazy(() => import("./pages/playground-scene/PlaySce
 const PlayLesson1 = lazy(() => import("./pages/playground-scene/PlayLesson1"));
 const PlayLesson2 = lazy(() => import("./pages/playground-scene/PlayLesson2"));
 const PlayLesson3 = lazy(() => import("./pages/playground-scene/PlayLesson3"));
+const PlayLesson4 = lazy(() => import("./pages/playground-scene/PlayLesson4"));
+const PlayLesson5 = lazy(() => import("./pages/playground-scene/PlayLesson5"));
+const PlayLesson6 = lazy(() => import("./pages/playground-scene/PlayLesson6"));
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
 const AcademyClassroom = lazy(() => import("./pages/AcademyClassroom"));
@@ -244,6 +247,21 @@ const App = () => {
                       <Route path="/playground-scene/lesson-3" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayLesson3 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/lesson-4" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayLesson4 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/lesson-5" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayLesson5 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/lesson-6" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayLesson6 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* Standalone Playground Library — deliberately outside the Creator Studio
