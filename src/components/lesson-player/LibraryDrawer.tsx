@@ -12,17 +12,23 @@ import {
 } from '@/services/lessonLibraryService';
 
 
+export interface SceneLessonMeta {
+  contentFormat: string;
+  unitNumber: number;
+  lessonNumber: number;
+}
+
 interface LibraryDrawerProps {
   open: boolean;
   onClose: () => void;
-  onSelectLesson: (slides: any[], title: string) => void;
+  /** `sceneMeta` is set when the picked lesson is a scene-based (e.g. Little
+   *  Explorers Phonics) lesson whose real content lives in code, not in
+   *  `content.slides` — the caller should render it via the scene player
+   *  instead of treating `slides` as normal classroom slides. */
+  onSelectLesson: (slides: any[], title: string, sceneMeta?: SceneLessonMeta) => void;
   slideFormat?: 'classroom' | 'raw';
   /** Lock the drawer to a single hub (playground | academy | professional). */
   hubFilter?: string;
-  /** Lock the drawer to a single CEFR level (e.g. "A1", "B2"). Case-insensitive. */
-  levelFilter?: string;
-  /** Allow user to toggle level filter off. Default true. */
-  allowLevelToggle?: boolean;
 }
 
 const HUB_BADGE_COLORS: Record<string, string> = {
@@ -31,11 +37,20 @@ const HUB_BADGE_COLORS: Record<string, string> = {
   professional: 'bg-emerald-100 text-emerald-700 border-emerald-200',
 };
 
-const HUB_LABEL: Record<string, string> = {
-  playground: 'Playground',
-  academy: 'Academy',
-  professional: 'Success',
-};
+// CEFR ordering for the level tabs — anything not in this list sorts after,
+// alphabetically.
+const LEVEL_ORDER = ['pre-a1', 'a1', 'a2', 'b1', 'b2', 'c1', 'c2'];
+
+function sortLevels(levels: string[]): string[] {
+  return [...levels].sort((a, b) => {
+    const ai = LEVEL_ORDER.indexOf(a.toLowerCase());
+    const bi = LEVEL_ORDER.indexOf(b.toLowerCase());
+    if (ai === -1 && bi === -1) return a.localeCompare(b);
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+}
 
 export default function LibraryDrawer({
   open,
@@ -43,17 +58,16 @@ export default function LibraryDrawer({
   onSelectLesson,
   slideFormat = 'classroom',
   hubFilter,
-  levelFilter,
-  allowLevelToggle = true,
 }: LibraryDrawerProps) {
   const [lessons, setLessons] = useState<LibraryLessonCard[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loadingLessonId, setLoadingLessonId] = useState<string | null>(null);
-  const [levelLocked, setLevelLocked] = useState(true);
+  const [selectedLevel, setSelectedLevel] = useState<string>('all');
 
   useEffect(() => {
     if (!open) return;
+    setSelectedLevel('all');
     setLoading(true);
     getLibraryLessons(hubFilter, { includeDrafts: true })
       .then((data) => setLessons(data.map(toLibraryLessonCard)))
@@ -66,11 +80,20 @@ export default function LibraryDrawer({
       });
   }, [open, hubFilter]);
 
+  // Levels present in this hub's lessons, e.g. Pre-A1 / A1 / A2 — lets the
+  // teacher jump straight to a level instead of scrolling one long list.
+  const levels = useMemo(() => {
+    const set = new Set<string>();
+    lessons.forEach((l) => {
+      if (l.difficulty_level) set.add(l.difficulty_level);
+    });
+    return sortLevels(Array.from(set));
+  }, [lessons]);
+
   const filtered = useMemo(() => {
     let list = lessons;
-    if (levelFilter && levelLocked) {
-      const lf = levelFilter.toLowerCase();
-      list = list.filter((l) => (l.difficulty_level || '').toLowerCase() === lf);
+    if (selectedLevel !== 'all') {
+      list = list.filter((l) => (l.difficulty_level || '').toLowerCase() === selectedLevel.toLowerCase());
     }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -86,17 +109,26 @@ export default function LibraryDrawer({
     // scaffold placeholders (sorted newest-first by the query) bury the
     // small number of actually-built lessons at the bottom of the list.
     return [...list].sort((a, b) => Number(b.isReady) - Number(a.isReady));
-  }, [lessons, searchQuery, levelFilter, levelLocked]);
+  }, [lessons, searchQuery, selectedLevel]);
 
   const handleSelect = async (lessonId: string) => {
 
     setLoadingLessonId(lessonId);
     try {
       const lesson = await getLessonById(lessonId);
+      const contentFormat = (lesson.ai_metadata as any)?.contentFormat;
+      const sceneMeta: SceneLessonMeta | undefined =
+        contentFormat === 'lep1-rich'
+          ? {
+              contentFormat,
+              unitNumber: Number((lesson.ai_metadata as any)?.unit_number ?? 1),
+              lessonNumber: Number((lesson.ai_metadata as any)?.lesson_number ?? 1),
+            }
+          : undefined;
       const slides = slideFormat === 'raw'
         ? getLibraryLessonSlides(lesson)
         : extractClassroomSlides(lesson);
-      onSelectLesson(slides, lesson.title || 'Lesson');
+      onSelectLesson(slides, lesson.title || 'Lesson', sceneMeta);
     } catch (error) {
       console.error('Failed to load lesson slides:', error);
       setLoadingLessonId(null);
@@ -152,31 +184,33 @@ export default function LibraryDrawer({
               </div>
             </div>
 
-            {(hubFilter || levelFilter) && (
-              <div className="px-5 py-2 flex flex-wrap gap-2 border-b border-slate-100 dark:border-slate-800 shrink-0">
-                {hubFilter && (
-                  <span
-                    className={`text-[10px] font-bold uppercase px-2 py-1 rounded-full border ${
-                      HUB_BADGE_COLORS[hubFilter] || 'bg-slate-100 text-slate-600 border-slate-200'
-                    }`}
-                  >
-                    {HUB_LABEL[hubFilter] || hubFilter} only
-                  </span>
-                )}
-                {levelFilter && (
+            {levels.length > 1 && (
+              <div className="px-5 py-2 flex flex-wrap gap-1.5 border-b border-slate-100 dark:border-slate-800 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setSelectedLevel('all')}
+                  className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full border transition-colors ${
+                    selectedLevel === 'all'
+                      ? 'bg-indigo-600 text-white border-indigo-600'
+                      : 'bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200'
+                  }`}
+                >
+                  All
+                </button>
+                {levels.map((level) => (
                   <button
+                    key={level}
                     type="button"
-                    onClick={() => allowLevelToggle && setLevelLocked((v) => !v)}
-                    className={`text-[10px] font-bold uppercase px-2 py-1 rounded-full border transition-colors ${
-                      levelLocked
-                        ? 'bg-indigo-100 text-indigo-700 border-indigo-200'
-                        : 'bg-slate-100 text-slate-500 border-slate-200 line-through'
+                    onClick={() => setSelectedLevel(level)}
+                    className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full border transition-colors ${
+                      selectedLevel.toLowerCase() === level.toLowerCase()
+                        ? 'bg-indigo-600 text-white border-indigo-600'
+                        : 'bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200'
                     }`}
-                    title={allowLevelToggle ? 'Click to toggle level filter' : undefined}
                   >
-                    Level {levelFilter}
+                    {level}
                   </button>
-                )}
+                ))}
               </div>
             )}
 

@@ -1334,9 +1334,33 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         onClose={() => setIsLibraryOpen(false)}
         slideFormat="raw"
         hubFilter={hubType}
-        levelFilter={studentContext?.cefrLevel || studentContext?.level || undefined}
-        onSelectLesson={async (selectedSlides, title) => {
+        onSelectLesson={async (selectedSlides, title, sceneMeta) => {
           setIsLibraryOpen(false);
+
+          if (sceneMeta) {
+            // Scene-based (e.g. Little Explorers Phonics) lesson — its real
+            // content lives in code, not content.slides. Stamp the same
+            // sceneLessonRef shape classroomLessonResolver.ts produces so
+            // MainStage renders it via the embedded scene player instead of
+            // treating it as a normal (and here, empty/stale) slide deck.
+            const sceneSlides = [{
+              id: `scene-lesson-${sceneMeta.unitNumber}-${sceneMeta.lessonNumber}`,
+              type: 'playground_scene',
+              sceneLessonRef: { unitNumber: sceneMeta.unitNumber, lessonNumber: sceneMeta.lessonNumber },
+            }];
+            setRawSlides(sceneSlides);
+            await updateSharedDisplay({ lessonSlides: sceneSlides, lessonTitle: title, embeddedUrl: null });
+            await updateSlide(0);
+            await setStageMode('slide');
+            await updateCanvasTab('slides');
+            toast({
+              title: "📚 Lesson Loaded!",
+              description: `"${title}" is now on screen.`,
+              className: "bg-indigo-900 border-indigo-700",
+            });
+            return;
+          }
+
           const mapped = selectedSlides.map((s: any, i: number) => ({
             ...s,
             id: String(s?.id ?? i + 1),
