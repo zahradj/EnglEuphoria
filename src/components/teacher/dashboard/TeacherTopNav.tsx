@@ -10,20 +10,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { 
-  LayoutDashboard, 
-  Calendar, 
-  BookOpen, 
-  User, 
-  Users, 
+import {
+  LayoutDashboard,
+  Calendar,
+  BookOpen,
+  User,
+  Users,
   LogOut,
   ChevronDown,
   HelpCircle,
   BarChart3,
+  LifeBuoy,
 } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 
-type TabType = 'dashboard' | 'schedule' | 'library' | 'creator' | 'analytics' | 'methodology' | 'account' | 'teacher-hub' | 'help';
+type TabType = 'dashboard' | 'schedule' | 'library' | 'creator' | 'analytics' | 'methodology' | 'account' | 'teacher-hub' | 'help' | 'support';
 
 interface TeacherTopNavProps {
   teacherName: string;
@@ -41,6 +42,7 @@ const navItems: { id: TabType; label: string; icon: React.ElementType }[] = [
   { id: 'account', label: 'Account', icon: User },
   { id: 'teacher-hub', label: 'Teacher Hub', icon: Users },
   { id: 'help', label: 'Help', icon: HelpCircle },
+  { id: 'support', label: 'Tech Support', icon: LifeBuoy },
 ];
 
 export const TeacherTopNav: React.FC<TeacherTopNavProps> = ({

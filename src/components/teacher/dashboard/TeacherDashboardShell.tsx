@@ -19,8 +19,9 @@ import { TeacherLessonLibrary } from '@/components/teacher/library/TeacherLesson
 import { AdminBroadcastBanner } from './AdminBroadcastBanner';
 import { TeacherMethodologyTab } from './TeacherMethodologyTab';
 import { TeacherHubTab } from './TeacherHubTab';
+import { TechnicalSupportTab } from './TechnicalSupportTab';
 
-type TabType = 'dashboard' | 'schedule' | 'library' | 'creator' | 'analytics' | 'methodology' | 'account' | 'teacher-hub' | 'help';
+type TabType = 'dashboard' | 'schedule' | 'library' | 'creator' | 'analytics' | 'methodology' | 'account' | 'teacher-hub' | 'help' | 'support';
 
 interface TeacherDashboardShellProps {
   teacherName: string;
@@ -85,6 +86,8 @@ export const TeacherDashboardShell = ({
           return <TeacherMethodologyTab />;
         case 'teacher-hub':
           return <TeacherHubTab />;
+        case 'support':
+          return <TechnicalSupportTab />;
         default:
           return <NovakidDashboard teacherId={teacherId} profileImageUrl={profile?.profile_image_url || null} />;
       }

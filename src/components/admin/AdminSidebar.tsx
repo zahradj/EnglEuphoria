@@ -7,7 +7,7 @@ import { useAdminPendingCounts } from "@/hooks/useAdminPendingCounts";
 import {
   LayoutDashboard, Activity, Users, FileText, TrendingUp, CreditCard, Settings,
   LogOut, Calendar, GraduationCap, Radio, Video, Mail, Briefcase, Inbox,
-  BarChart3, Gift, Megaphone,
+  BarChart3, Gift, Megaphone, LifeBuoy,
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -60,6 +60,7 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
       items: [
         { id: "communications", label: "Communications", icon: Radio },
         { id: "inbox", label: "Contact Inbox", icon: Inbox },
+        { id: "tech-support", label: "Tech Support", icon: LifeBuoy },
         { id: "email-log", label: "Email Log", icon: Mail },
       ],
     },

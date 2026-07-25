@@ -24,6 +24,7 @@ import { TeacherProfileReviewQueue } from '@/components/admin/TeacherProfileRevi
 import { TestCreditButton } from '@/components/admin/TestCreditButton';
 import { DesktopOnlyNotice } from '@/components/admin/DesktopOnlyNotice';
 import { AdminInbox } from '@/components/admin/AdminInbox';
+import { TechnicalSupportInbox } from '@/components/admin/TechnicalSupportInbox';
 import { MarketingDashboardContent } from '@/components/marketing/MarketingDashboardContent';
 import { AdminActionRequiredCard } from '@/components/admin/AdminActionRequiredCard';
 import { AdminMobileBottomNav, type AdminMobileTab } from '@/components/admin/AdminMobileBottomNav';
@@ -121,6 +122,8 @@ const AdminDashboard = () => {
         return <TeacherProfileReviewQueue />;
       case 'inbox':
         return <AdminInbox />;
+      case 'tech-support':
+        return <TechnicalSupportInbox />;
       case 'marketing':
         return <MarketingDashboardContent />;
       default:
