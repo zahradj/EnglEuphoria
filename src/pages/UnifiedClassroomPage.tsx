@@ -316,6 +316,7 @@ const UnifiedClassroomPage: React.FC = () => {
             lessonTitle={mockLesson.title}
             initialSlides={mockLesson.slides as any[]}
             scheduledAt={interview.scheduled_at}
+            isInterview
           />
           <SoundSettingsLauncher />
         </>
@@ -332,6 +333,7 @@ const UnifiedClassroomPage: React.FC = () => {
           teacherName={applicantName}
           hubType={hubType}
           scheduledAt={interview.scheduled_at}
+          isInterview
         />
         <SoundSettingsLauncher />
       </>

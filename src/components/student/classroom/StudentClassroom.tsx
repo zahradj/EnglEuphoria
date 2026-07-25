@@ -39,6 +39,8 @@ interface StudentClassroomProps {
   scheduledAt?: string | Date | null;
   /** Optional fully-custom stage content (e.g. Success Hub Trail Lesson). */
   customStage?: React.ReactNode;
+  /** True for interview/demo classrooms — see MainStage. */
+  isInterview?: boolean;
 }
 
 export const StudentClassroom: React.FC<StudentClassroomProps> = ({
@@ -49,6 +51,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
   hubType = "academy",
   scheduledAt,
   customStage,
+  isInterview = false,
 }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -553,6 +556,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
           onAddStroke={addStroke}
           onSlideComplete={handleSlideCompletion}
           customStage={customStage}
+          isInterview={isInterview}
         />
       </div>
 

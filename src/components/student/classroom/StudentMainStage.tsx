@@ -57,6 +57,8 @@ interface StudentMainStageProps {
   onSlideComplete?: (slideIndex: number, slideId: string, accuracy?: number, timeSpent?: number) => void;
   /** Optional fully-custom stage content (e.g. Success Hub Trail Lesson). */
   customStage?: React.ReactNode;
+  /** True for interview/demo classrooms — see MainStage. */
+  isInterview?: boolean;
 }
 
 /**
@@ -90,6 +92,7 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
   onAddStroke,
   onSlideComplete,
   customStage,
+  isInterview = false,
 }) => {
   const currentSlide = slides[currentSlideIndex];
   const isQuizSlide = currentSlide?.type === 'quiz';
@@ -212,6 +215,7 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
         rawSlides={rawSlides}
         hubType={hubType as any}
         customStage={customStage}
+        isInterview={isInterview}
         onAddStroke={onAddStroke}
       />
 

@@ -40,6 +40,10 @@ interface MainStageProps {
   hubType?: HubType;
   /** Optional fully-custom stage content (e.g. interactive Trail Lesson). When set, replaces StageContent. */
   customStage?: React.ReactNode;
+  /** True for interview/demo classrooms. Skips the Playground curriculum
+   *  blueprint fallback — interviews have no real unit/lesson to render
+   *  there, so their own mock-lesson slides should show instead. */
+  isInterview?: boolean;
   onAddStroke: (stroke: Omit<WhiteboardStroke, 'id' | 'roomId' | 'timestamp'>) => void;
 }
 
@@ -76,6 +80,7 @@ export const MainStage: React.FC<MainStageProps> = ({
   rawSlides,
   hubType = 'academy',
   customStage,
+  isInterview = false,
   onAddStroke,
 }) => {
   const { label, Icon } = MODE_META[mode];
@@ -108,7 +113,7 @@ export const MainStage: React.FC<MainStageProps> = ({
                 roomId={roomId}
               />
             </div>
-          ) : hubType === 'playground' && mode === 'slide' ? (
+          ) : hubType === 'playground' && mode === 'slide' && !isInterview ? (
             <div className="absolute inset-0 overflow-auto bg-white">
               <PlaygroundLessonPlayer
                 embedded

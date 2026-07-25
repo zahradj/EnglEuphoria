@@ -1190,6 +1190,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             rawSlides={displayedSlides}
             hubType={hubType}
             customStage={customStage}
+            isInterview={isInterview}
             onAddStroke={addStroke}
           />
           <TeacherControlDock
