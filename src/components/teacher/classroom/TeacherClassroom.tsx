@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabaseUrl, supabaseAnonKey } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useClassroomSync } from "@/hooks/useClassroomSync";
 import { useAuth } from "@/contexts/AuthContext";
@@ -455,8 +456,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
           studentId: studentId ?? null,
           teacherId: authData?.user?.id ?? null,
         });
-        const url = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/finalize-class-end`;
-        const anon = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+        const url = `${supabaseUrl}/functions/v1/finalize-class-end`;
+        const anon = supabaseAnonKey;
         void fetch(url, {
           method: 'POST',
           keepalive: true,

@@ -15,7 +15,7 @@
  *  4. Each clip is cached in localStorage as a data URL so subsequent plays
  *     are instant, work offline, and survive page reloads.
  */
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, supabaseUrl, supabaseAnonKey } from "@/integrations/supabase/client";
 import { logger } from "@/utils/logger";
 
 export type SfxKey =
@@ -198,11 +198,8 @@ function enqueue<T>(task: () => Promise<T>): Promise<T> {
 
 // ------------------------ Edge-function fetch (clean binary) ------------------------
 
-const SUPABASE_URL =
-  (import.meta as any).env?.VITE_SUPABASE_URL ||
-  "https://dcoxpyzoqjvmuuygvlme.supabase.co";
-const SUPABASE_ANON =
-  (import.meta as any).env?.VITE_SUPABASE_PUBLISHABLE_KEY || "";
+const SUPABASE_URL = supabaseUrl;
+const SUPABASE_ANON = supabaseAnonKey;
 
 async function fetchSfxBlob(spec: SfxSpec): Promise<Blob> {
   const { data: sessionData } = await supabase.auth.getSession();

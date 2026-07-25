@@ -8,7 +8,7 @@ import { Slider } from '@/components/ui/slider';
 import { Bold, Italic, AlignLeft, AlignCenter, AlignRight, Plus, X, Check, Upload, Mic, MicOff, Sparkles, ImageIcon } from 'lucide-react';
 import type { CanvasElementData } from '../types';
 import { v4 as uuidv4 } from 'uuid';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 interface PropertiesPanelProps {
@@ -145,13 +145,13 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({ element, onUpd
     setIsGeneratingVoice(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-tts`,
+        `${supabaseUrl}/functions/v1/elevenlabs-tts`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            apikey: supabaseAnonKey,
+            Authorization: `Bearer ${supabaseAnonKey}`,
           },
           body: JSON.stringify({ text: aiText, voiceId: 'Xb7hH8MSUJpSbSDYk0k2' }),
         }

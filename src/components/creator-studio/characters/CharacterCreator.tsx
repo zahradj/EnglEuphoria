@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
 import { extractEdgeError } from '@/lib/extractEdgeError';
 import {
   listCharactersForHub,
@@ -235,12 +235,12 @@ export const CharacterCreator: React.FC = () => {
       // edge function directly with fetch and read the blob.
       const { data: sess } = await supabase.auth.getSession();
       const token = sess?.session?.access_token;
-      const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-tts`;
+      const url = `${supabaseUrl}/functions/v1/elevenlabs-tts`;
       const res = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string,
+          apikey: supabaseAnonKey,
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({ text, voiceId }),

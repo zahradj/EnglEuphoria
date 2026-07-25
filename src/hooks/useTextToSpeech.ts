@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
+import { supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
 
 interface TTSOptions {
   voiceId?: string;
@@ -33,13 +34,13 @@ export function useTextToSpeech() {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-tts`,
+        `${supabaseUrl}/functions/v1/elevenlabs-tts`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            apikey: supabaseAnonKey,
+            Authorization: `Bearer ${supabaseAnonKey}`,
           },
           body: JSON.stringify({
             text,

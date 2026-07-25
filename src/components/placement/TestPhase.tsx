@@ -4,7 +4,7 @@ import { Volume2, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import ChatBubble from './ChatBubble';
 import { accentFor } from './hubAccent';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { VocabularyImage } from '@/components/ui/VocabularyImage';
 import { getHubPool, resolveSkill, resolveScoreSkill, taskInstructionKeyFor, type Hub, type BankQuestion } from './questionBanks';
@@ -103,8 +103,8 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
       if (!url) {
         // Bypass supabase.functions.invoke() because it can mis-parse binary
         // audio responses as JSON. Direct fetch guarantees a clean blob.
-        const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
-        const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+        const SUPABASE_URL = supabaseUrl;
+        const SUPABASE_KEY = supabaseAnonKey;
         const { data: sessionData } = await supabase.auth.getSession();
         const accessToken = sessionData.session?.access_token ?? SUPABASE_KEY;
 

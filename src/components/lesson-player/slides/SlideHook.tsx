@@ -6,6 +6,7 @@ import PipMascot from '../PipMascot';
 import { Play, Loader2, Square, Music, Volume2 } from 'lucide-react';
 import { useTextToSpeech } from '@/hooks/useTextToSpeech';
 import { SlideBrandHeader } from './SlideBrandHeader';
+import { supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
 
 interface Props {
   slide: GeneratedSlide;
@@ -58,13 +59,13 @@ export default function SlideHook({ slide, hub }: Props) {
       const musicPrompt = `Children singing a fun, upbeat educational song for young English learners. Happy, playful melody with singing vocals. Lyrics: ${lyrics.substring(0, 300)}`;
 
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-music`,
+        `${supabaseUrl}/functions/v1/elevenlabs-music`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            apikey: supabaseAnonKey,
+            Authorization: `Bearer ${supabaseAnonKey}`,
           },
           body: JSON.stringify({
             prompt: musicPrompt,

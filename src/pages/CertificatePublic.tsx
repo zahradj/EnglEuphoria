@@ -4,7 +4,7 @@
  */
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, supabaseUrl } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
@@ -37,9 +37,7 @@ export default function CertificatePublic() {
 
   useEffect(() => {
     if (!token) return;
-    const projectId = (import.meta as any).env?.VITE_SUPABASE_PROJECT_ID;
-    if (!projectId) return;
-    const ogUrl = `https://${projectId}.supabase.co/functions/v1/generate-certificate-og?token=${encodeURIComponent(token)}&format=png`;
+    const ogUrl = `${supabaseUrl}/functions/v1/generate-certificate-og?token=${encodeURIComponent(token)}&format=png`;
     const tags = [
       ["property", "og:image", ogUrl],
       ["property", "og:image:type", "image/png"],
@@ -81,12 +79,11 @@ export default function CertificatePublic() {
     window.open(targets[kind], "_blank", "noopener,noreferrer");
   };
 
-  const projectId = (import.meta as any).env?.VITE_SUPABASE_PROJECT_ID;
-  const ogUrl = projectId && token
-    ? `https://${projectId}.supabase.co/functions/v1/generate-certificate-og?token=${encodeURIComponent(token)}`
+  const ogUrl = token
+    ? `${supabaseUrl}/functions/v1/generate-certificate-og?token=${encodeURIComponent(token)}`
     : null;
-  const pngUrl = projectId && token
-    ? `https://${projectId}.supabase.co/functions/v1/generate-certificate-og?token=${encodeURIComponent(token)}&format=png`
+  const pngUrl = token
+    ? `${supabaseUrl}/functions/v1/generate-certificate-og?token=${encodeURIComponent(token)}&format=png`
     : null;
 
   const downloadPng = async () => {
