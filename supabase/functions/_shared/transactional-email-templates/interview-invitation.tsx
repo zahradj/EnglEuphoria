@@ -6,15 +6,14 @@ import {
   Container,
   Head,
   Html,
-  Img,
   Preview,
   Section,
   Text,
   Hr,
 } from 'npm:@react-email/components@0.0.22'
 import type { TemplateEntry } from './registry.ts'
+import { EmailLogo } from './emailBranding.tsx'
 
-const LOGO_WHITE_URL = 'https://dcoxpyzoqjvmuuygvlme.supabase.co/storage/v1/object/public/email-assets/logo-white.png'
 const SITE_NAME = 'EnglEuphoria'
 const SITE_URL = 'https://engleuphoria.lovable.app'
 
@@ -58,7 +57,7 @@ const InterviewInvitationEmail = ({
         <Container style={container}>
           {/* Navy Header */}
           <Section style={navyHeader}>
-            <Img src={LOGO_WHITE_URL} width="160" height="44" alt={SITE_NAME} style={headerLogo} />
+            <EmailLogo size={44} />
           </Section>
 
           {/* Reminder Badge */}
@@ -141,7 +140,7 @@ const InterviewInvitationEmail = ({
 
           {/* Dark Footer */}
           <Section style={darkFooter}>
-            <Img src={LOGO_WHITE_URL} width="100" height="28" alt={SITE_NAME} style={{ margin: '0 auto 12px', display: 'block' }} />
+            <EmailLogo size={32} style={{ marginBottom: '12px' }} />
             <Text style={footerText}>© 2026 {SITE_NAME}. All rights reserved.</Text>
           </Section>
         </Container>
@@ -183,10 +182,6 @@ const navyHeader = {
   backgroundColor: '#0047AB',
   padding: '28px 32px',
   textAlign: 'center' as const,
-}
-const headerLogo = {
-  margin: '0 auto',
-  display: 'block',
 }
 const reminderBadge = {
   backgroundColor: '#E3F2FD',

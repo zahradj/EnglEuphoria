@@ -2,12 +2,12 @@
 import * as React from 'npm:react@18.3.1'
 
 import {
-  Body, Button, Container, Head, Heading, Hr, Html, Img, Preview, Section, Text,
+  Body, Button, Container, Head, Heading, Hr, Html, Preview, Section, Text,
 } from 'npm:@react-email/components@0.0.22'
 import type { TemplateEntry } from './registry.ts'
+import { EmailLogo } from './emailBranding.tsx'
 
 const SITE_NAME = 'EnglEuphoria'
-const LOGO_WHITE_URL = 'https://dcoxpyzoqjvmuuygvlme.supabase.co/storage/v1/object/public/email-assets/logo-white.png'
 
 interface ProfileApprovedProps {
   name?: string
@@ -20,7 +20,7 @@ const ProfileApprovedEmail = ({ name }: ProfileApprovedProps) => (
     <Body style={main}>
       <Container style={container}>
         <Section style={headerSection}>
-          <Img src={LOGO_WHITE_URL} width="160" height="44" alt={SITE_NAME} style={{ margin: '0 auto', display: 'block' }} />
+          <EmailLogo size={44} />
           <Text style={headerSubtitle}>Teaching Excellence Community</Text>
         </Section>
         <Section style={contentSection}>

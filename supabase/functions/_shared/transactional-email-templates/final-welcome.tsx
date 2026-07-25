@@ -6,14 +6,13 @@ import {
   Container,
   Head,
   Html,
-  Img,
   Preview,
   Section,
   Text,
 } from 'npm:@react-email/components@0.0.22'
 import type { TemplateEntry } from './registry.ts'
+import { EmailLogo } from './emailBranding.tsx'
 
-const LOGO_WHITE_URL = 'https://dcoxpyzoqjvmuuygvlme.supabase.co/storage/v1/object/public/email-assets/logo-white.png'
 const DASHBOARD_URL = 'https://engleuphoria.lovable.app/teacher-dashboard'
 
 interface FinalWelcomeProps {
@@ -33,7 +32,7 @@ function FinalWelcomeEmail({ name, setPasswordUrl }: FinalWelcomeProps) {
         <Container style={{ maxWidth: '600px', margin: '0 auto', background: '#ffffff', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
           {/* Navy Header */}
           <Section style={{ background: '#0047AB', padding: '28px 32px', textAlign: 'center' as const }}>
-            <Img src={LOGO_WHITE_URL} width="160" height="44" alt="EnglEuphoria" style={{ margin: '0 auto', display: 'block' }} />
+            <EmailLogo size={44} />
           </Section>
           {/* Content */}
           <Section style={{ padding: '32px' }}>
@@ -58,7 +57,7 @@ function FinalWelcomeEmail({ name, setPasswordUrl }: FinalWelcomeProps) {
           </Section>
           {/* Dark Footer */}
           <Section style={{ background: '#0D1642', padding: '24px 32px', textAlign: 'center' as const }}>
-            <Img src={LOGO_WHITE_URL} width="100" height="28" alt="EnglEuphoria" style={{ margin: '0 auto 12px', display: 'block' }} />
+            <EmailLogo size={32} style={{ marginBottom: '12px' }} />
             <Text style={{ fontSize: '12px', color: '#9CA3AF', margin: '0' }}>© 2026 EnglEuphoria. All rights reserved.</Text>
           </Section>
         </Container>

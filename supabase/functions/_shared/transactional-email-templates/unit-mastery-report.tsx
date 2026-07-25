@@ -8,14 +8,13 @@ import {
   Heading,
   Hr,
   Html,
-  Img,
   Preview,
   Section,
   Text,
 } from 'npm:@react-email/components@0.0.22'
 import type { TemplateEntry } from './registry.ts'
+import { EmailLogo } from './emailBranding.tsx'
 
-const LOGO_URL = 'https://dcoxpyzoqjvmuuygvlme.supabase.co/storage/v1/object/public/email-assets/logo-black.png'
 const SITE_NAME = 'EnglEuphoria'
 
 interface SkillScore {
@@ -72,7 +71,7 @@ const UnitMasteryReportEmail = ({
       <Container style={container}>
         <Section style={headerBar} />
         <Section style={logoSection}>
-          <Img src={LOGO_URL} width="180" height="50" alt={SITE_NAME} style={logo} />
+          <EmailLogo variant="black" size={50} style={logo} />
         </Section>
 
         {/* Victory Header */}
