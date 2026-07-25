@@ -1,82 +1,34 @@
 import { useState } from "react";
 
+import PlayUnitLesson from "@/pages/playground-scene/PlayUnitLesson";
+import { PLAYGROUND_TRIAL_SCENES } from "@/content/playground-library/trial/trialScenes";
+
 import logo from "@/assets/playground-trail/logo.png";
 import mascot from "@/assets/playground-trail/mascot.png";
 
-// ---------- difficulty levels (CEFR) ----------
-type Difficulty = "pre-a1" | "a1" | "a2" | "b1" | "b2";
-
-const LEVELS: Record<
-  Difficulty,
-  {
-    cefr: string;
-    label: string;
-    short: string;
-    emoji: string;
-    tagline: string;
-    blurb: string;
-  }
-> = {
-  "pre-a1": {
-    cefr: "Pre-A1",
-    label: "Tiny Seedling",
-    short: "Seedling",
-    emoji: "🌱",
-    tagline: "True starter • first English words",
-    blurb: "Lots of pictures, gentle pace, only the easiest activities.",
-  },
-  a1: {
-    cefr: "A1",
-    label: "Happy Sprout",
-    short: "Sprout",
-    emoji: "🌼",
-    tagline: "A1 • building first vocabulary",
-    blurb: "Adds letters, animals and feelings. Still very friendly.",
-  },
-  a2: {
-    cefr: "A2",
-    label: "Brave Explorer",
-    short: "Explorer",
-    emoji: "🚀",
-    tagline: "A2 • the classic adventure",
-    blurb: "Reading CVC words, shapes, actions and family.",
-  },
-  b1: {
-    cefr: "B1",
-    label: "Sky Voyager",
-    short: "Voyager",
-    emoji: "🦅",
-    tagline: "B1 • trickier and faster",
-    blurb: "Full vocabulary set plus 'I like / I don't like' opinions.",
-  },
-  b2: {
-    cefr: "B2",
-    label: "Star Champion",
-    short: "Champion",
-    emoji: "🏆",
-    tagline: "B2 • for confident readers",
-    blurb: "Every quest plus a memory challenge to push fast thinking.",
-  },
-};
-
-const DIFFICULTY_ORDER: Difficulty[] = ["pre-a1", "a1", "a2", "b1", "b2"];
-
 // ---------- page ----------
-// Only the welcome card remains — the placement test, result screen and the
-// 14 lesson-activity stages were removed. A replacement lesson (built in the
-// Little Explorers Phonics scene-based style) is coming later.
-export function PlaygroundTrailLesson(
-  _props: { roomId?: string; role?: "teacher" | "student" } = {},
-) {
-  return <IntroScreen />;
+// A short, no-reading-required welcome adventure for true first-time
+// English learners — meet Pip, Mia and Bella, play, and sing together.
+// Meant to be a fun, memorable first impression of the school.
+export function PlaygroundTrailLesson({
+  roomId,
+}: { roomId?: string; role?: "teacher" | "student" } = {}) {
+  const [started, setStarted] = useState(false);
+
+  if (started) {
+    return (
+      <PlayUnitLesson
+        scenes={PLAYGROUND_TRIAL_SCENES}
+        sessionKey={`playground-trial-${roomId ?? "anon"}`}
+      />
+    );
+  }
+
+  return <IntroScreen onStart={() => setStarted(true)} />;
 }
 
 // ---------- Intro / Welcome Card ----------
-function IntroScreen() {
-  const [pickerOpen, setPickerOpen] = useState(false);
-  const [manual, setManual] = useState<Difficulty>("a1");
-  const [comingSoon, setComingSoon] = useState(false);
-
+function IntroScreen({ onStart }: { onStart: () => void }) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#FEFBDD]">
       <div
@@ -108,19 +60,19 @@ function IntroScreen() {
                 Hi superstar! ✨
               </h1>
               <p className="mt-4 text-base leading-relaxed opacity-95 sm:text-lg">
-                I'm <strong>Buddy</strong>, your friend today. First we'll play
-                5 quick questions to find your level — then we start a fun
-                English adventure made just for you.
+                I'm <strong>Buddy</strong>! Today you'll meet Pip, Mia and
+                Bella, play fun games together, and sing a happy song — no
+                reading needed, just smiles.
               </p>
               <div className="mt-6 flex flex-wrap gap-2 text-xs font-bold">
                 <span className="rounded-full bg-white/25 px-3 py-1.5 backdrop-blur">
-                  🧭 5-question placement
+                  👋 Meet new friends
                 </span>
                 <span className="rounded-full bg-white/25 px-3 py-1.5 backdrop-blur">
-                  🎯 Auto-pick your CEFR level
+                  🎨 Fun games
                 </span>
                 <span className="rounded-full bg-white/25 px-3 py-1.5 backdrop-blur">
-                  🏆 Earn stars
+                  🎵 Sing & celebrate
                 </span>
               </div>
             </div>
@@ -139,106 +91,37 @@ function IntroScreen() {
             </div>
           </div>
 
-          {/* CEFR overview + CTAs */}
+          {/* what to expect + CTA */}
           <div className="border-t-2 border-[#FE6A2F]/15 bg-white/70 p-6 sm:p-8">
             <p className="mb-1 text-base font-black text-[#FE6A2F]">
-              🧭 5 CEFR levels — we'll match the right one
+              🌱 A gentle Pre-A1 adventure, made for true beginners
             </p>
             <p className="mb-4 text-xs text-[#FE6A2F]/70">
-              From true starter to confident reader. The placement test takes
-              about 1 minute.
+              About 10 minutes of pictures, sounds and games — perfect for a
+              first English class.
             </p>
 
-            <div className="grid gap-2 sm:grid-cols-5">
-              {DIFFICULTY_ORDER.map((d) => {
-                const meta = LEVELS[d];
-                return (
-                  <div
-                    key={d}
-                    className="rounded-2xl border-2 border-[#FE6A2F]/20 bg-white p-3 text-center"
-                  >
-                    <div className="text-2xl" aria-hidden>
-                      {meta.emoji}
-                    </div>
-                    <div className="mt-1 text-[10px] font-extrabold uppercase tracking-wide text-[#FE6A2F]/70">
-                      {meta.cefr}
-                    </div>
-                    <div className="text-xs font-black text-[#FE6A2F]">
-                      {meta.short}
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="grid gap-2 sm:grid-cols-3">
+              <div className="rounded-2xl border-2 border-[#FE6A2F]/20 bg-white p-3 text-center">
+                <div className="text-2xl" aria-hidden>👋</div>
+                <div className="mt-1 text-xs font-black text-[#FE6A2F]">Say hello</div>
+              </div>
+              <div className="rounded-2xl border-2 border-[#FE6A2F]/20 bg-white p-3 text-center">
+                <div className="text-2xl" aria-hidden>😊</div>
+                <div className="mt-1 text-xs font-black text-[#FE6A2F]">Share feelings</div>
+              </div>
+              <div className="rounded-2xl border-2 border-[#FE6A2F]/20 bg-white p-3 text-center">
+                <div className="text-2xl" aria-hidden>🎉</div>
+                <div className="mt-1 text-xs font-black text-[#FE6A2F]">Celebrate!</div>
+              </div>
             </div>
 
-            {comingSoon ? (
-              <div className="mt-6 animate-fade-in rounded-2xl border-2 border-[#FE6A2F]/20 bg-white p-4 text-center text-sm font-bold text-[#FE6A2F]">
-                🚧 This adventure is being rebuilt with fresh activities —
-                ask your teacher what's next!
-              </div>
-            ) : (
-              <>
-                <div className="mt-6 flex flex-col items-center justify-between gap-3 sm:flex-row">
-                  <button
-                    onClick={() => setPickerOpen((v) => !v)}
-                    className="text-xs font-bold text-[#FE6A2F]/80 underline-offset-4 hover:underline"
-                  >
-                    {pickerOpen ? "Hide manual picker" : "Teacher: skip & pick level manually"}
-                  </button>
-                  <BigButton onClick={() => setComingSoon(true)}>
-                    Start placement test →
-                  </BigButton>
-                </div>
-
-                {pickerOpen && (
-                  <div className="mt-4 animate-fade-in rounded-2xl border-2 border-[#FE6A2F]/20 bg-white p-4">
-                    <p className="mb-2 text-xs font-bold text-[#FE6A2F]/80">
-                      Pick a level and jump straight in:
-                    </p>
-                    <LevelPills value={manual} onChange={setManual} />
-                    <div className="mt-3 flex justify-end">
-                      <BigButton variant="ghost" onClick={() => setComingSoon(true)}>
-                        Start at {LEVELS[manual].emoji} {LEVELS[manual].cefr} →
-                      </BigButton>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
+            <div className="mt-6 flex justify-center">
+              <BigButton onClick={onStart}>Let's play! →</BigButton>
+            </div>
           </div>
         </div>
       </main>
-    </div>
-  );
-}
-
-function LevelPills({
-  value,
-  onChange,
-}: {
-  value: Difficulty;
-  onChange: (d: Difficulty) => void;
-}) {
-  return (
-    <div className="inline-flex flex-wrap gap-1 rounded-full border border-[#FE6A2F]/30 bg-white/70 p-1">
-      {DIFFICULTY_ORDER.map((d) => {
-        const meta = LEVELS[d];
-        const active = d === value;
-        return (
-          <button
-            key={d}
-            onClick={() => onChange(d)}
-            title={meta.label}
-            className={`rounded-full px-3 py-1 text-xs font-extrabold transition-all ${
-              active
-                ? "bg-[#FE6A2F] text-white shadow"
-                : "text-[#FE6A2F] hover:bg-[#FE6A2F]/10"
-            }`}
-          >
-            {meta.emoji} {meta.short}
-          </button>
-        );
-      })}
     </div>
   );
 }
