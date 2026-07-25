@@ -5,7 +5,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const SITE_URL = "https://engleuphoria.com";
+const SITE_URL = "https://engleuphoria.lovable.app";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -132,14 +132,19 @@ Deno.serve(async (req) => {
       .eq("id", applicationId)
       .single();
 
-    // Create teacher profile
+    // Create teacher profile. cv_url moves here permanently on hire — the
+    // application row's copy is subject to the rejected-applicant cleanup
+    // job, but a hired teacher's CV should never be auto-deleted.
     const { error: profileError } = await adminClient.from("teacher_profiles").upsert(
       {
         user_id: authUserId,
         bio: appData?.bio || "",
+        video_url: appData?.video_url || "",
         specializations: appData?.preferred_age_groups || [],
         languages_spoken: appData?.languages_spoken || ["English"],
         years_experience: appData?.teaching_experience_years || 0,
+        profile_image_url: appData?.professional_photo_url || "",
+        cv_url: appData?.cv_url ?? null,
         profile_complete: false,
         can_teach: false,
         is_available: false,
@@ -149,12 +154,11 @@ Deno.serve(async (req) => {
     );
     if (profileError) console.error("Profile upsert error:", profileError);
 
-    // Update application status — 'approved' is the terminal hired stage the
-    // admin dashboards (Kanban "Hired" column, Review "Approved" tab) key off.
+    // Update application status
     const { error: appUpdateError } = await adminClient
       .from("teacher_applications")
       .update({
-        current_stage: "approved",
+        current_stage: "interview_completed",
         status: "accepted",
         user_id: authUserId,
       })
