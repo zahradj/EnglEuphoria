@@ -132,7 +132,7 @@ export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, o
     <div
       dir="ltr"
       onPointerDownCapture={unlockAudio}
-      className={`relative w-full overflow-hidden transition-[background-image] duration-500 ${embedded ? 'h-full' : 'min-h-screen'}`}
+      className={`relative w-full overflow-hidden transition-[background-image] duration-500 [container-type:size] ${embedded ? 'h-full' : 'min-h-screen'}`}
       style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
     >
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/55" />
