@@ -106,13 +106,15 @@ export const MainStage: React.FC<MainStageProps> = ({
               {customStage}
             </div>
           ) : hubType === 'playground' && mode === 'slide' && sceneLessonRef ? (
-            <div className="absolute inset-0 overflow-auto bg-white">
-              <EmbeddedSceneLesson
-                unitNumber={sceneLessonRef.unitNumber}
-                lessonNumber={sceneLessonRef.lessonNumber}
-                roomId={roomId}
-                role={role}
-              />
+            <div className="absolute inset-3 sm:inset-4 lg:inset-6 overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">
+              <div className="absolute inset-0 overflow-auto">
+                <EmbeddedSceneLesson
+                  unitNumber={sceneLessonRef.unitNumber}
+                  lessonNumber={sceneLessonRef.lessonNumber}
+                  roomId={roomId}
+                  role={role}
+                />
+              </div>
             </div>
           ) : hubType === 'playground' && mode === 'slide' && !isInterview ? (
             <div className="absolute inset-0 overflow-auto bg-white">
