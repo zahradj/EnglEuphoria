@@ -76,6 +76,7 @@ const MethodologyPage = lazy(() => import("./pages/Methodology"));
 const ActivityCatalogPage = lazy(() => import("./pages/ActivityCatalogPage"));
 const CastChatQuest = lazy(() => import("./pages/CastChatQuest"));
 const ForTeachersPage = lazy(() => import("./pages/ForTeachersPage"));
+const PricingPage = lazy(() => import("./pages/PricingPage"));
 const Login = lazy(() => import("./pages/Login"));
 const SignUp = lazy(() => import("./pages/SignUp"));
 const StudentDashboard = lazy(() => import("./pages/StudentDashboard"));
@@ -310,6 +311,7 @@ const App = () => {
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/for-teachers" element={<Suspense fallback={<LoadingFallback />}><ForTeachersPage /></Suspense>} />
+                      <Route path="/pricing" element={<Suspense fallback={<LoadingFallback />}><PricingPage /></Suspense>} />
                       <Route path="/login" element={<Suspense fallback={<LoadingFallback />}><Login /></Suspense>} />
                       <Route path="/signup" element={<Navigate to="/student-signup" replace />} />
                       <Route path="/teacher-signup" element={<Navigate to="/for-teachers" replace />} />
