@@ -196,7 +196,7 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
   const zoneNames = ['Vocab Forest', 'Vocab Forest', 'Grammar Mountain', 'Grammar Mountain', 'Story River', 'Story River', 'Phonics Valley', 'Phonics Valley'];
 
   return (
-    <div className="relative w-full h-dvh overflow-hidden" style={{ fontFamily: "'Fredoka', cursive" }}>
+    <div className="relative w-full h-full overflow-hidden" style={{ fontFamily: "'Fredoka', cursive" }}>
       <ThemeBackground />
       
       {/* Header with student name */}
