@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
 
 type ConnectionQuality = 'good' | 'fair' | 'poor';
 
@@ -39,10 +40,10 @@ export const useConnectionHealth = (): ConnectionHealth => {
     // Fallback: measure latency with a small fetch
     try {
       const start = performance.now();
-      await fetch(`https://dcoxpyzoqjvmuuygvlme.supabase.co/rest/v1/`, {
+      await fetch(`${supabaseUrl}/rest/v1/`, {
         method: 'HEAD',
         headers: {
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjb3hweXpvcWp2bXV1eWd2bG1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5NTcxMzMsImV4cCI6MjA2NTUzMzEzM30.qWD7MJ3O7xrH2KBzIfPqGvVXigVaamR6DMVOW3rnO7s',
+          'apikey': supabaseAnonKey,
         },
       });
       const latency = Math.round(performance.now() - start);

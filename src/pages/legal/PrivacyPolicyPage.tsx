@@ -36,13 +36,13 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section>
-        <h2 className="font-display text-2xl font-semibold mt-8 mb-3">4. Payment Processing (Paddle)</h2>
+        <h2 className="font-display text-2xl font-semibold mt-8 mb-3">4. Payment Processing (Stripe)</h2>
         <p>
-          All payments are processed by <strong>Paddle</strong>, our Merchant of Record. Paddle handles billing,
-          tax compliance, and chargebacks on our behalf. EnglEuphoria does not store your full credit card
-          details. For Paddle's privacy practices, see{' '}
-          <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">
-            paddle.com/legal/privacy
+          All payments are processed by <strong>Stripe</strong>, our payment processor. Stripe handles billing and
+          card processing on our behalf. EnglEuphoria does not store your full credit card details. For Stripe's
+          privacy practices, see{' '}
+          <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">
+            stripe.com/privacy
           </a>.
         </p>
       </section>

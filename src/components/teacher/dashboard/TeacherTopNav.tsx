@@ -21,10 +21,11 @@ import {
   HelpCircle,
   BarChart3,
   LifeBuoy,
+  Wallet,
 } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 
-type TabType = 'dashboard' | 'schedule' | 'library' | 'creator' | 'analytics' | 'methodology' | 'account' | 'teacher-hub' | 'help' | 'support';
+type TabType = 'dashboard' | 'schedule' | 'library' | 'creator' | 'analytics' | 'methodology' | 'account' | 'teacher-hub' | 'help' | 'support' | 'withdrawals';
 
 interface TeacherTopNavProps {
   teacherName: string;
@@ -38,6 +39,7 @@ const navItems: { id: TabType; label: string; icon: React.ElementType }[] = [
   { id: 'schedule', label: 'Schedule', icon: Calendar },
   { id: 'library', label: 'Library', icon: BookOpen },
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+  { id: 'withdrawals', label: 'Withdrawals', icon: Wallet },
   { id: 'methodology', label: 'Methodology', icon: BookOpen },
   { id: 'account', label: 'Account', icon: User },
   { id: 'teacher-hub', label: 'Teacher Hub', icon: Users },

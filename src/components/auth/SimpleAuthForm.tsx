@@ -176,7 +176,6 @@ export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChan
     setFormError('');
     setLoading(true);
     setVerifyingRole(false);
-    console.log('[AUTH FORM] Submit started', { mode, email: formData.email });
 
     try {
       if (!isConfigured) {
@@ -187,9 +186,7 @@ export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChan
       }
 
       if (mode === 'login') {
-        console.log('[AUTH FORM] Calling signIn');
         const { data, error } = await signIn(formData.email, formData.password);
-        console.log('[AUTH FORM] signIn returned', { hasData: !!data, error });
         if (error) {
           const isInvalidCreds = error.message?.toLowerCase().includes('invalid login credentials');
           const description = isInvalidCreds
@@ -295,7 +292,6 @@ export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChan
       console.error('Auth error:', error);
       toast({ title: "Error", description: "An unexpected error occurred.", variant: "destructive" });
     } finally {
-      console.log('[AUTH FORM] Submit finished');
       setLoading(false);
     }
   };

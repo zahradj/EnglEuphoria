@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Loader2, AlertTriangle } from 'lucide-react';
+import { Loader2, AlertTriangle, MailCheck } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useDevBypass } from '@/hooks/useDevBypass';
 import { DevBypassWrapper } from './DevBypassWrapper';
 import { useStudentLevel, StudentLevel } from '@/hooks/useStudentLevel';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface ImprovedProtectedRouteProps {
   children: React.ReactNode;
@@ -25,10 +27,12 @@ export const ImprovedProtectedRoute: React.FC<ImprovedProtectedRouteProps> = ({
   redirectTo = '/login' 
 }) => {
   const navigate = useNavigate();
-  const { user, loading, roleHydrating, error } = useAuth();
+  const { user, session, loading, roleHydrating, error } = useAuth();
   const { isDevBypassActive, bypassRole } = useDevBypass();
   const { studentLevel, onboardingCompleted, loading: studentLoading } = useStudentLevel();
+  const { toast } = useToast();
   const [roleLoadTimeout, setRoleLoadTimeout] = useState(false);
+  const [resending, setResending] = useState(false);
   const timeoutTriggeredRef = useRef(false);
   const cachedRole = typeof window !== 'undefined'
     ? (sessionStorage.getItem('auth_resolved_role') ||
@@ -112,6 +116,50 @@ export const ImprovedProtectedRoute: React.FC<ImprovedProtectedRouteProps> = ({
   // Redirect to login if no user
   if (!user) {
     return <Navigate to={redirectTo} replace />;
+  }
+
+  // Require a confirmed email for student accounts before granting dashboard
+  // access — students could previously sign up and skip verification
+  // entirely since nothing checked auth.users.email_confirmed_at. Scoped to
+  // students only: teacher/admin accounts are provisioned through separate
+  // flows (recruitment approval, admin-create) that don't go through the
+  // signup-link confirmation step, so gating them here would risk locking
+  // out legitimately provisioned staff.
+  if (userRole === 'student' && session?.user && !session.user.email_confirmed_at) {
+    const email = session.user.email;
+    const handleResend = async () => {
+      if (!email || resending) return;
+      setResending(true);
+      const { error: resendError } = await supabase.auth.resend({ type: 'signup', email });
+      setResending(false);
+      toast(
+        resendError
+          ? { title: 'Could not resend', description: resendError.message, variant: 'destructive' }
+          : { title: 'Verification email sent', description: `Check ${email} (and your spam folder).` },
+      );
+    };
+    return (
+      <div className="min-h-dvh flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6 text-center">
+            <MailCheck className="h-12 w-12 text-primary mx-auto mb-4" />
+            <h3 className="font-semibold text-lg text-foreground mb-2">Please verify your email</h3>
+            <p className="text-muted-foreground mb-4">
+              We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account, then
+              refresh this page.
+            </p>
+            <div className="flex flex-col gap-2">
+              <Button onClick={handleResend} disabled={resending} className="w-full">
+                {resending ? 'Sending…' : 'Resend verification email'}
+              </Button>
+              <Button onClick={() => navigate('/login')} variant="outline" className="w-full">
+                Back to Login
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   // Normalize required roles to an array for any-of matching.

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import type { Scene } from '@/content/playground-library/unit1/scenes';
 import { SceneRenderer, Hearts, MAX_HEARTS, Lep1Keyframes } from '@/content/playground-library/unit1/SceneRenderer';
 import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-library/unit1/audio';
+import { whiteboardService } from '@/services/whiteboardService';
 
 interface PlayUnitLessonProps {
   scenes: Scene[];
@@ -14,9 +15,16 @@ interface PlayUnitLessonProps {
   lessonNumber?: number;
   /** Fired once when the finale scene is reached. */
   onFinaleReached?: () => void;
+  /** Live-classroom leader/follower control: when both `role` and `roomId`
+   *  are provided, only the teacher can move scenes forward/back — the
+   *  student's view follows the teacher's broadcast and can only interact
+   *  with the activity itself. Omitted entirely for solo/self-paced play
+   *  (the dashboard launcher), where navigation stays fully local. */
+  role?: 'teacher' | 'student';
+  roomId?: string;
 }
 
-export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, onFinaleReached }: PlayUnitLessonProps) {
+export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, onFinaleReached, unitNumber, lessonNumber, role, roomId }: PlayUnitLessonProps) {
   const navigate = useNavigate();
   const SCENES = scenes;
   const finaleFiredRef = useRef(false);
@@ -30,7 +38,33 @@ export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, o
   const [hearts, setHearts] = useState(MAX_HEARTS);
   const [gems, setGems] = useState(0);
 
+  const isSynced = role != null && !!roomId;
+  const canNavigate = !isSynced || role === 'teacher';
+
   useEffect(() => { window.sessionStorage.setItem(sessionKey, String(sceneIdx)); }, [sceneIdx, sessionKey]);
+
+  // Teacher → student: broadcast the authoritative scene index so the
+  // student's view always mirrors whatever the teacher is showing.
+  useEffect(() => {
+    if (!isSynced || role !== 'teacher' || !roomId) return;
+    void whiteboardService.sendSceneLessonNav(roomId, {
+      unitNumber: unitNumber ?? 0,
+      lessonNumber: lessonNumber ?? 0,
+      sceneIdx,
+      senderId: 'teacher',
+    });
+  }, [isSynced, role, roomId, sceneIdx, unitNumber, lessonNumber]);
+
+  // Student: follow the teacher's broadcast — never drives its own index.
+  useEffect(() => {
+    if (!isSynced || role !== 'student' || !roomId) return;
+    const unsubscribe = whiteboardService.subscribeToSceneLessonNav(roomId, (payload) => {
+      if (unitNumber != null && payload.unitNumber !== unitNumber) return;
+      if (lessonNumber != null && payload.lessonNumber !== lessonNumber) return;
+      setSceneIdx(Math.max(0, Math.min(SCENES.length - 1, payload.sceneIdx)));
+    });
+    return unsubscribe;
+  }, [isSynced, role, roomId, unitNumber, lessonNumber, SCENES.length]);
 
   useEffect(() => {
     let cancelled = false;
@@ -65,13 +99,20 @@ export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, o
   }, []);
   const registerWin = useCallback((didGem: boolean) => { if (didGem) setGems((g) => g + 1); }, []);
 
-  const goNext = useCallback(() => { stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1)); }, [SCENES.length]);
-  const goBack = useCallback(() => { stopSpeaking(); setSceneIdx((i) => Math.max(0, i - 1)); }, []);
+  const goNext = useCallback(() => {
+    if (!canNavigate) return;
+    stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
+  }, [SCENES.length, canNavigate]);
+  const goBack = useCallback(() => {
+    if (!canNavigate) return;
+    stopSpeaking(); setSceneIdx((i) => Math.max(0, i - 1));
+  }, [canNavigate]);
   const restart = useCallback(() => {
+    if (!canNavigate) return;
     stopSpeaking();
     setSceneIdx(0); setHearts(MAX_HEARTS); setGems(0);
     window.sessionStorage.removeItem(sessionKey);
-  }, [sessionKey]);
+  }, [sessionKey, canNavigate]);
 
   const totalGemsPossible = useMemo(
     () => SCENES.filter((s) => s.kind === 'basket' || s.kind === 'who-said-it' || s.kind === 'roleplay' || s.kind === 'join-stage' || s.kind === 'name-gate' || s.kind === 'meet-group' || s.kind === 'voice-stage' || (s.kind === 'meet' && s.repeat)).length,
@@ -138,17 +179,25 @@ export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, o
         )}
       </div>
 
-      <div className={`pointer-events-none inset-x-0 bottom-4 z-[80] flex items-center justify-between px-4 ${embedded ? 'absolute' : 'fixed'}`}>
-        <button type="button" onClick={goBack} disabled={sceneIdx === 0} aria-label="Previous scene"
-          className="pointer-events-auto flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-base font-bold text-slate-800 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
-          <span aria-hidden>◀</span> Back
-        </button>
-        <div className="pointer-events-auto rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">{sceneIdx + 1} / {SCENES.length}</div>
-        <button type="button" onClick={goNext} disabled={sceneIdx >= SCENES.length - 1} aria-label="Next scene"
-          className="pointer-events-auto flex items-center gap-2 rounded-full bg-[#FE6A2F] px-5 py-3 text-base font-bold text-white shadow-xl backdrop-blur transition hover:scale-105 hover:bg-[#ff7a45] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
-          Next <span aria-hidden>▶</span>
-        </button>
-      </div>
+      {canNavigate ? (
+        <div className={`pointer-events-none inset-x-0 bottom-4 z-[80] flex items-center justify-between px-4 ${embedded ? 'absolute' : 'fixed'}`}>
+          <button type="button" onClick={goBack} disabled={sceneIdx === 0} aria-label="Previous scene"
+            className="pointer-events-auto flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-base font-bold text-slate-800 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
+            <span aria-hidden>◀</span> Back
+          </button>
+          <div className="pointer-events-auto rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">{sceneIdx + 1} / {SCENES.length}</div>
+          <button type="button" onClick={goNext} disabled={sceneIdx >= SCENES.length - 1} aria-label="Next scene"
+            className="pointer-events-auto flex items-center gap-2 rounded-full bg-[#FE6A2F] px-5 py-3 text-base font-bold text-white shadow-xl backdrop-blur transition hover:scale-105 hover:bg-[#ff7a45] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
+            Next <span aria-hidden>▶</span>
+          </button>
+        </div>
+      ) : (
+        <div className={`pointer-events-none inset-x-0 bottom-4 z-[80] flex items-center justify-center px-4 ${embedded ? 'absolute' : 'fixed'}`}>
+          <div className="pointer-events-none flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">
+            <span aria-hidden>👩‍🏫</span> Your teacher is guiding this lesson · {sceneIdx + 1} / {SCENES.length}
+          </div>
+        </div>
+      )}
 
       <Lep1Keyframes />
     </div>

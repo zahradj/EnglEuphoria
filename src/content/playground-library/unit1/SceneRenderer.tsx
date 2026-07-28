@@ -94,7 +94,7 @@ export function SceneRenderer(props: {
 
 function TitleCardScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'title-card' }>; onNext: () => void }) {
   return (
-    <div className="fixed inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0) 55%, rgba(254,106,47,0.35) 100%)' }} />
       <div className="absolute right-5 top-5 flex flex-wrap justify-end gap-2">
         <span className="rounded-full bg-white/90 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-orange-700 shadow">{scene.level}</span>
@@ -150,7 +150,7 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
   const currentLine = step < 0 ? '…' : step < scene.script.length ? scene.script[step].line : 'Ready?';
 
   return (
-    <div className="fixed inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 55%, rgba(254,106,47,0.35) 100%)' }} />
       <div className="absolute left-1/2 top-8 -translate-x-1/2 text-center">
         <h1 className="text-4xl font-black text-white drop-shadow-[0_3px_8px_rgba(0,0,0,0.55)] sm:text-5xl">{scene.title}</h1>
@@ -872,7 +872,7 @@ function WhoSaidItScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind
   const replayModel = async () => { if (target) await safeSpeak(targetLine, target); };
 
   return (
-    <div className="fixed inset-0 z-10 h-screen w-screen overflow-hidden">
+    <div className="absolute inset-0 z-10 overflow-hidden">
       {spots.map((s) => {
         const c = CAST[s.who];
         const isTarget = !finished && s.who === target;
@@ -911,6 +911,7 @@ function WhoSaidItScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind
 
 function GatherScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'gather' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
   const IMG_W = 1920, IMG_H = 1152;
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [viewport, setViewport] = useState({ w: 0, h: 0 });
   const [spoken, setSpoken] = useState<Set<CharKey>>(new Set());
   const [camActive, setCamActive] = useState(false);
@@ -921,11 +922,17 @@ function GatherScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: '
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
+  // Measure our own bounded container (not the browser window) so hotspot
+  // math stays correct when this scene is embedded in the smaller classroom
+  // stage rather than filling the whole viewport.
   useEffect(() => {
-    const sync = () => setViewport({ w: window.innerWidth, h: window.innerHeight });
+    const el = containerRef.current;
+    if (!el) return;
+    const sync = () => setViewport({ w: el.clientWidth, h: el.clientHeight });
     sync();
-    window.addEventListener('resize', sync);
-    return () => window.removeEventListener('resize', sync);
+    const ro = new ResizeObserver(sync);
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
   useEffect(() => () => { streamRef.current?.getTracks().forEach((t) => t.stop()); }, []);
 
@@ -952,12 +959,26 @@ function GatherScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: '
     }
   };
 
-  const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => { if (camActive) return; (e.target as Element).setPointerCapture?.(e.pointerId); setDragging(true); setDragPos({ x: e.clientX, y: e.clientY }); };
-  const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => { if (!dragging) return; setDragPos({ x: e.clientX, y: e.clientY }); };
+  // All pointer coordinates below are converted from viewport-relative
+  // (e.clientX/Y) to container-relative, matching the container-relative
+  // `project()` math above.
+  const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (camActive) return;
+    (e.target as Element).setPointerCapture?.(e.pointerId);
+    const rect = containerRef.current?.getBoundingClientRect();
+    setDragging(true);
+    setDragPos({ x: e.clientX - (rect?.left ?? 0), y: e.clientY - (rect?.top ?? 0) });
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!dragging) return;
+    const rect = containerRef.current?.getBoundingClientRect();
+    setDragPos({ x: e.clientX - (rect?.left ?? 0), y: e.clientY - (rect?.top ?? 0) });
+  };
   const onPointerUp = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (!dragging) return;
     setDragging(false);
-    const dx = e.clientX - stagePos.left, dy = e.clientY - stagePos.top;
+    const rect = containerRef.current?.getBoundingClientRect();
+    const dx = (e.clientX - (rect?.left ?? 0)) - stagePos.left, dy = (e.clientY - (rect?.top ?? 0)) - stagePos.top;
     const inside = Math.hypot(dx, dy) <= stagePos.size / 2 + 40;
     setDragPos(null);
     if (inside) void startCamera(); else sfx.wrong();
@@ -965,22 +986,22 @@ function GatherScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: '
   const allSpoken = spoken.size >= scene.hotspots.length;
 
   return (
-    <div className="relative h-[calc(100vh-8rem)] w-full">
+    <div ref={containerRef} className="relative h-full w-full">
       {scene.hotspots.map((h) => {
         const p = project(h.x, h.y, h.r);
-        return <button key={h.who} onClick={() => tapHotspot(h)} aria-label={`Tap ${CAST[h.who].name}`} className="fixed z-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-transparent" style={{ left: p.left, top: p.top, width: p.size, height: p.size }}><span className="sr-only">{CAST[h.who].name}</span></button>;
+        return <button key={h.who} onClick={() => tapHotspot(h)} aria-label={`Tap ${CAST[h.who].name}`} className="absolute z-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-transparent" style={{ left: p.left, top: p.top, width: p.size, height: p.size }}><span className="sr-only">{CAST[h.who].name}</span></button>;
       })}
       {scene.hotspots.map((h) => {
         if (!spoken.has(h.who)) return null;
         const p = project(h.x, h.y, h.r);
         const c = CAST[h.who];
         return (
-          <div key={`bubble-${h.who}`} className="fixed z-30 -translate-x-1/2 animate-[lep1-slide-up_0.35s_ease-out]" style={{ left: p.left, top: p.top - p.size / 2 - 20 }}>
+          <div key={`bubble-${h.who}`} className="absolute z-30 -translate-x-1/2 animate-[lep1-slide-up_0.35s_ease-out]" style={{ left: p.left, top: p.top - p.size / 2 - 20 }}>
             <div className="relative max-w-[16rem] rounded-2xl bg-white/95 px-4 py-2 text-center text-sm font-black shadow-2xl ring-4 backdrop-blur sm:text-base" style={{ color: c.color, borderColor: c.color }}>{h.line}</div>
           </div>
         );
       })}
-      <div className="fixed z-10 -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ left: stagePos.left, top: stagePos.top, width: stagePos.size, height: stagePos.size, boxShadow: camActive ? '0 0 0 6px rgba(59,130,246,0.7), 0 0 60px rgba(59,130,246,0.55)' : dragging ? '0 0 0 8px rgba(254,106,47,0.85), 0 0 60px rgba(254,106,47,0.55)' : '0 0 0 4px rgba(255,255,255,0.7), 0 0 30px rgba(255,255,255,0.4)', transition: 'box-shadow 0.2s' }}>
+      <div className="absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ left: stagePos.left, top: stagePos.top, width: stagePos.size, height: stagePos.size, boxShadow: camActive ? '0 0 0 6px rgba(59,130,246,0.7), 0 0 60px rgba(59,130,246,0.55)' : dragging ? '0 0 0 8px rgba(254,106,47,0.85), 0 0 60px rgba(254,106,47,0.55)' : '0 0 0 4px rgba(255,255,255,0.7), 0 0 30px rgba(255,255,255,0.4)', transition: 'box-shadow 0.2s' }}>
         {camActive ? (
           <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-white shadow-2xl bg-black">
             <video ref={videoRef} playsInline muted autoPlay className="h-full w-full object-cover" style={{ transform: 'scaleX(-1)' }} />
@@ -992,7 +1013,7 @@ function GatherScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: '
       </div>
       {!camActive && (
         <button onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}
-          className="fixed z-30 flex select-none items-center gap-2 rounded-full bg-white/95 px-4 py-3 font-black text-orange-700 shadow-2xl backdrop-blur-md ring-4 ring-orange-400 active:scale-95"
+          className="absolute z-30 flex select-none items-center gap-2 rounded-full bg-white/95 px-4 py-3 font-black text-orange-700 shadow-2xl backdrop-blur-md ring-4 ring-orange-400 active:scale-95"
           style={{ left: dragPos ? dragPos.x : 24, top: dragPos ? dragPos.y : (viewport.h || 600) - 120, transform: dragging ? 'translate(-50%, -50%) scale(1.1)' : undefined, touchAction: 'none', transition: dragging ? 'none' : 'transform 0.15s' }}
         >
           <span className="text-3xl">🎥</span><span className="text-sm">Drag me!</span>
@@ -1311,7 +1332,7 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
   const replayCurrent = () => { if (current) void safeSpeak(current.line, current.who); };
 
   return (
-    <div className="fixed inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 55%, rgba(254,106,47,0.35) 100%)' }} />
       <div className="absolute left-6 top-6 flex flex-col gap-2">
         <span className="w-fit rounded-full bg-white/95 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-orange-700 shadow">Roleplay · Say Hello</span>
@@ -1390,7 +1411,7 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
   };
 
   return (
-    <div className="fixed inset-0 overflow-hidden select-none" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div className="absolute inset-0 overflow-hidden select-none" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.05) 55%, rgba(254,106,47,0.35) 100%)' }} />
       <div className="absolute left-6 top-6 z-20 flex flex-col gap-2">
         <span className="w-fit rounded-full bg-white/95 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-orange-700 shadow">Live Stage · Your Turn</span>
@@ -1886,7 +1907,7 @@ function SongScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'so
   const isDone = status === 'done';
 
   return (
-    <div className="fixed inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 100%)' }} />
       <div className="absolute left-1/2 top-6 -translate-x-1/2 rounded-full bg-white/85 px-5 py-2 text-lg font-black text-[#FE6A2F] shadow-lg backdrop-blur-md ring-2 ring-white/70">{scene.title}</div>
       {isPlaying && (
@@ -1995,7 +2016,7 @@ function NameGateScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
   const done = opened.size >= scene.rounds.length;
 
   return (
-    <div className="fixed inset-0 z-10 h-screen w-screen overflow-hidden bg-black">
+    <div className="absolute inset-0 z-10 overflow-hidden bg-black">
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{ aspectRatio: '1600 / 1008', width: 'min(100vw, calc(100vh * 1600 / 1008))', height: 'min(100vh, calc(100vw * 1008 / 1600))' }}>
         <img src={scene.bg} alt="" className="absolute inset-0 h-full w-full object-fill" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-orange-950/35" />
@@ -2202,7 +2223,11 @@ function VoiceStageScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
 
   const DROP = { cx: 50, cy: 78, r: 12 };
   const onPointerDown = (e: React.PointerEvent) => { if (placed) return; setDragging(true); (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); };
-  const onPointerMove = (e: React.PointerEvent) => { if (!dragging || placed) return; setPos({ x: (e.clientX / window.innerWidth) * 100, y: (e.clientY / window.innerHeight) * 100 }); };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!dragging || placed) return;
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    setPos({ x: ((e.clientX - rect.left) / rect.width) * 100, y: ((e.clientY - rect.top) / rect.height) * 100 });
+  };
   const onPointerUp = () => {
     if (!dragging) return;
     setDragging(false);
@@ -2252,7 +2277,7 @@ function VoiceStageScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
   const currentRound = scene.rounds[Math.min(round, scene.rounds.length - 1)];
 
   return (
-    <div className="fixed inset-0 z-10 h-screen w-screen overflow-hidden select-none" onPointerMove={onPointerMove} onPointerUp={onPointerUp}>
+    <div className="absolute inset-0 z-10 overflow-hidden select-none" onPointerMove={onPointerMove} onPointerUp={onPointerUp}>
       <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }} />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/45" />
       <div className="absolute inset-x-0 top-5 z-30 flex justify-center px-4">
@@ -2428,7 +2453,7 @@ function SoundPopScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene,
   };
 
   return (
-    <div className="fixed inset-0 z-10 h-screen w-screen overflow-hidden select-none">
+    <div className="absolute inset-0 z-10 overflow-hidden select-none">
       <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }} />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/50" />
       {flash && <div className="pointer-events-none absolute inset-0 z-40 transition-opacity" style={{ background: flash === 'hit' ? 'rgba(34,197,94,0.18)' : 'rgba(239,68,68,0.20)' }} />}

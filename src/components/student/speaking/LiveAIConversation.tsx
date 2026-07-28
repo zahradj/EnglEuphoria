@@ -16,6 +16,7 @@ import {
   User
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import { speakingPracticeService } from '@/services/speakingPracticeService';
 import { LiveAIMessage, AIConversationSession, SpeakingScenario } from '@/types/speaking';
 import { useVoiceRecording } from '@/hooks/useVoiceRecording';
@@ -116,7 +117,6 @@ export const LiveAIConversation: React.FC<LiveAIConversationProps> = ({
     setIsLoading(true);
 
     try {
-      // TODO: Call edge function for AI response
       const aiResponse = await getAIResponse(messageContent, messages, scenario);
       
       const assistantMessage: LiveAIMessage = {
@@ -147,20 +147,20 @@ export const LiveAIConversation: React.FC<LiveAIConversationProps> = ({
     }
   };
 
-  // Mock AI response - replace with actual edge function call
   const getAIResponse = async (userMessage: string, conversationHistory: LiveAIMessage[], scenario?: SpeakingScenario) => {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    return {
-      content: "Thank you for sharing! Can you tell me more about that? I'd love to hear your thoughts on this topic.",
-      feedback: {
-        rating: 4,
-        encouragement: "Great job! Your grammar is improving.",
-        grammar_suggestions: [],
-        alternative_phrases: []
-      }
-    };
+    const { data, error } = await supabase.functions.invoke('ai-conversation', {
+      body: {
+        userMessage,
+        scenario: scenario ?? { name: 'General Conversation', type: 'free_talk', cefr_level: 'B1', context_instructions: '' },
+        conversationHistory: conversationHistory.map((m) => ({ role: m.role, content: m.content })),
+      },
+    });
+
+    if (error || !data?.response) {
+      throw new Error(error?.message || 'AI did not return a response');
+    }
+
+    return { content: data.response as string };
   };
 
   const handleVoiceToggle = () => {

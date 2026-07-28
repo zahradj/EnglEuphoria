@@ -14,9 +14,10 @@ import {
   LogOut,
   Menu,
   LifeBuoy,
+  Wallet,
 } from 'lucide-react';
 
-type TabType = 'dashboard' | 'schedule' | 'library' | 'creator' | 'analytics' | 'methodology' | 'account' | 'teacher-hub' | 'help' | 'support';
+type TabType = 'dashboard' | 'schedule' | 'library' | 'creator' | 'analytics' | 'methodology' | 'account' | 'teacher-hub' | 'help' | 'support' | 'withdrawals';
 
 interface MobileTeacherBottomNavProps {
   activeTab: TabType;
@@ -31,6 +32,7 @@ const primaryItems: { id: TabType; label: string; icon: React.ElementType }[] = 
 ];
 
 const extraItems: { id: TabType; label: string; icon: React.ElementType }[] = [
+  { id: 'withdrawals', label: 'Withdrawals', icon: Wallet },
   { id: 'methodology', label: 'Methodology', icon: BookOpen },
   { id: 'teacher-hub', label: 'Teacher Hub', icon: Users },
   { id: 'help', label: 'Help & Guide', icon: HelpCircle },

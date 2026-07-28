@@ -4,9 +4,10 @@
 // fails to decode as audio and silently falls back to browser speech
 // synthesis on every single line. A plain fetch() against the function URL
 // returns the binary body intact.
-const FUNCTIONS_URL = 'https://dcoxpyzoqjvmuuygvlme.supabase.co/functions/v1';
-const ANON_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjb3hweXpvcWp2bXV1eWd2bG1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5NTcxMzMsImV4cCI6MjA2NTUzMzEzM30.qWD7MJ3O7xrH2KBzIfPqGvVXigVaamR6DMVOW3rnO7s';
+import { supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
+
+const FUNCTIONS_URL = `${supabaseUrl}/functions/v1`;
+const ANON_KEY = supabaseAnonKey;
 
 /**
  * Little Explorers Phonics — Unit 1 audio layer.

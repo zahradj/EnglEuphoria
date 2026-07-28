@@ -82,7 +82,7 @@ export default function RefundPolicyPage() {
       <section>
         <h2 className="font-display text-2xl font-semibold mt-8 mb-3">8. Disputes & Chargebacks</h2>
         <p>
-          All payments are processed by Paddle, our Merchant of Record. Refund disputes should first be raised
+          All payments are processed by Stripe, our payment processor. Refund disputes should first be raised
           with EnglEuphoria support at{' '}
           <a href="mailto:billing@engleuphoria.com" className="text-indigo-400 hover:underline">billing@engleuphoria.com</a>.
           Initiating a chargeback without first contacting support may result in account suspension.

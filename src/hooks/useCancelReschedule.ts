@@ -65,54 +65,34 @@ export function useCancelReschedule(): CancelRescheduleResult {
   const cancelLesson = async (lessonId: string, reason: string): Promise<boolean> => {
     setLoading(true);
     try {
-      const { data: lesson, error: fetchError } = await supabase
-        .from('lessons')
-        .select('scheduled_at, lesson_price, student_id, teacher_id')
-        .eq('id', lessonId)
-        .single();
+      // student_cancel_lesson is the sole source of truth for the 120-hour
+      // window and the credit refund — both are re-verified server-side
+      // against the DB's own clock, not trusted from client state.
+      const { data, error: rpcError } = await supabase.rpc('student_cancel_lesson', {
+        p_lesson_id: lessonId,
+        p_reason: reason,
+      });
 
-      if (fetchError || !lesson) {
-        throw new Error('Failed to fetch lesson details');
-      }
-
-      const isTrialOrFree = !lesson.lesson_price || lesson.lesson_price === 0;
-
-      if (!canCancel(lesson.scheduled_at, isTrialOrFree)) {
+      if (rpcError) {
         toast({
           title: 'Cannot Cancel',
-          description: `Lessons must be cancelled at least 5 days in advance. Cancelling now will result in a full charge.`,
-          variant: 'destructive'
+          description: rpcError.message.includes('5 days')
+            ? 'Lessons must be cancelled at least 5 days in advance. Cancelling now will result in a full charge.'
+            : rpcError.message,
+          variant: 'destructive',
         });
         return false;
       }
 
-      // Update lesson status
-      const { error: updateError } = await supabase
-        .from('lessons')
-        .update({
-          status: 'cancelled',
-          cancellation_reason: reason
-        })
-        .eq('id', lessonId);
-
-      if (updateError) throw updateError;
-
-      // Cancel related class_bookings
-      await supabase
-        .from('class_bookings')
-        .update({ status: 'cancelled', cancellation_reason: reason, cancelled_at: new Date().toISOString() })
-        .eq('lesson_id', lessonId);
-
-      // Re-open teacher's availability slot
-      await reopenTeacherSlot(lessonId);
-
-      const refundInfo = getRefundInfo(lesson.scheduled_at, lesson.lesson_price || 0);
+      const result = data as { refunded: boolean; is_trial: boolean } | null;
 
       toast({
         title: 'Lesson Cancelled',
-        description: isTrialOrFree
+        description: result?.is_trial
           ? 'Your trial lesson has been cancelled. You can book a new one anytime.'
-          : `Refund: €${refundInfo.refundAmount.toFixed(2)}`,
+          : result?.refunded
+          ? 'Your credit has been returned to your balance.'
+          : 'Lesson cancelled.',
       });
 
       return true;

@@ -34,17 +34,53 @@ Deno.serve(async (req) => {
       });
     }
 
+    // ========== AUTH CHECK ==========
+    // Only the teacher running the session may finalize its verdict — this
+    // writes student_lesson_progress/student_curriculum_progress via the
+    // service-role client below, so an unverified caller could otherwise
+    // rewrite ANY student's progress by just naming their studentId.
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    const supabaseAuth = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_ANON_KEY')!,
+      { global: { headers: { Authorization: authHeader } } },
+    );
+    const { data: claimsData, error: claimsError } = await supabaseAuth.auth.getUser(
+      authHeader.replace('Bearer ', ''),
+    );
+    if (claimsError || !claimsData?.user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    const authenticatedUserId = claimsData.user.id;
+    // =================================
+
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     );
 
-    // 1. Pull session counters
+    // 1. Pull session counters — teacher_id too, so we can verify the caller
+    // actually owns this session before writing anything.
     const { data: state } = await supabase
       .from('classroom_states')
-      .select('correct_count, attempt_count, session_struggles')
+      .select('teacher_id, correct_count, attempt_count, session_struggles')
       .eq('session_id', body.sessionId)
       .maybeSingle();
+
+    // ========== OWNERSHIP CHECK ==========
+    if (!state || state.teacher_id !== authenticatedUserId) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    // ======================================
 
     const correct = state?.correct_count ?? 0;
     const attempts = state?.attempt_count ?? 0;

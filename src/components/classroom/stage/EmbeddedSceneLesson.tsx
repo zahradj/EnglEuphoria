@@ -7,6 +7,7 @@ interface EmbeddedSceneLessonProps {
   unitNumber: number;
   lessonNumber: number;
   roomId: string;
+  role: 'teacher' | 'student';
 }
 
 /**
@@ -14,7 +15,7 @@ interface EmbeddedSceneLessonProps {
  * scene player. Looks up the matching Scene[] for the resolved lesson and
  * renders it embedded within MainStage's stage container.
  */
-export function EmbeddedSceneLesson({ unitNumber, lessonNumber, roomId }: EmbeddedSceneLessonProps) {
+export function EmbeddedSceneLesson({ unitNumber, lessonNumber, roomId, role }: EmbeddedSceneLessonProps) {
   const scenes = getSceneLesson(unitNumber, lessonNumber);
 
   if (!scenes || scenes.length === 0) {
@@ -33,6 +34,10 @@ export function EmbeddedSceneLesson({ unitNumber, lessonNumber, roomId }: Embedd
         scenes={scenes}
         sessionKey={`lep-scene-${unitNumber}-${lessonNumber}-${roomId}`}
         embedded
+        unitNumber={unitNumber}
+        lessonNumber={lessonNumber}
+        role={role}
+        roomId={roomId}
       />
     </Suspense>
   );
