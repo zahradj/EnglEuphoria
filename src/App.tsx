@@ -321,7 +321,7 @@ const App = () => {
                       <Route path="/set-password" element={<Suspense fallback={<LoadingFallback />}><SetPassword /></Suspense>} />
                       <Route path="/unsubscribe" element={<Suspense fallback={<LoadingFallback />}><UnsubscribePage /></Suspense>} />
 
-                      {/* Legal Pages — Required for Paddle Merchant of Record */}
+                      {/* Legal Pages */}
                       <Route path="/terms-of-service" element={<Suspense fallback={<LoadingFallback />}><TermsOfServicePage /></Suspense>} />
                       <Route path="/privacy-policy" element={<Suspense fallback={<LoadingFallback />}><PrivacyPolicyPage /></Suspense>} />
                       <Route path="/refund-policy" element={<Suspense fallback={<LoadingFallback />}><RefundPolicyPage /></Suspense>} />

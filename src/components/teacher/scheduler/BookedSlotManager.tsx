@@ -66,12 +66,12 @@ export const BookedSlotManager: React.FC<BookedSlotManagerProps> = ({
   const handleCancelOccurrence = async () => {
     setBusy(true);
     try {
-      await cancelBookedSlot({ slotId: slot.slotId, reason });
+      const { refunded } = await cancelBookedSlot({ slotId: slot.slotId, reason });
       toast({
         title: "Booking cancelled",
-        description: lateNotice
-          ? "Inside the 5-day window — the student's credit is forfeited per policy."
-          : "The student has been notified and the slot is open again.",
+        description: refunded
+          ? "The student's credit has been refunded and the slot is open again."
+          : "The slot is open again.",
       });
       onCancelled?.();
       onOpenChange(false);

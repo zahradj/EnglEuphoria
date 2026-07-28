@@ -696,7 +696,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const sanitizedEmail = sanitizeText(email);
       
       const { error } = await supabase.auth.resetPasswordForEmail(sanitizedEmail, {
-        redirectTo: `https://engleuphoria.com/reset-password`
+        redirectTo: `${window.location.origin}/reset-password`
       });
       
       if (error) {

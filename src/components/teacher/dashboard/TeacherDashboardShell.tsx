@@ -20,8 +20,9 @@ import { AdminBroadcastBanner } from './AdminBroadcastBanner';
 import { TeacherMethodologyTab } from './TeacherMethodologyTab';
 import { TeacherHubTab } from './TeacherHubTab';
 import { TechnicalSupportTab } from './TechnicalSupportTab';
+import { WithdrawalsTab } from '@/components/teacher/WithdrawalsTab';
 
-type TabType = 'dashboard' | 'schedule' | 'library' | 'creator' | 'analytics' | 'methodology' | 'account' | 'teacher-hub' | 'help' | 'support';
+type TabType = 'dashboard' | 'schedule' | 'library' | 'creator' | 'analytics' | 'methodology' | 'account' | 'teacher-hub' | 'help' | 'support' | 'withdrawals';
 
 interface TeacherDashboardShellProps {
   teacherName: string;
@@ -88,6 +89,8 @@ export const TeacherDashboardShell = ({
           return <TeacherHubTab />;
         case 'support':
           return <TechnicalSupportTab />;
+        case 'withdrawals':
+          return <WithdrawalsTab />;
         default:
           return <NovakidDashboard teacherId={teacherId} profileImageUrl={profile?.profile_image_url || null} />;
       }

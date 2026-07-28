@@ -32,47 +32,18 @@ interface CancelSingleArgs {
 }
 
 /**
- * Cancel a single booked occurrence:
- *   1. mark the linked class_bookings row as cancelled (if any)
- *   2. clear the slot's booking link and re-open it as available
+ * Cancel a single booked occurrence via the teacher_cancel_slot RPC, which
+ * atomically: refunds the student's credit (per the Refund Policy, teacher
+ * cancellations always refund regardless of timing), marks the linked
+ * class_bookings/lessons rows cancelled, and re-opens the slot.
  */
-export async function cancelBookedSlot({ slotId, reason }: CancelSingleArgs): Promise<void> {
-  // Fetch slot to find linked lesson/booking
-  const { data: slot, error: slotErr } = await supabase
-    .from("teacher_availability")
-    .select("id, lesson_id, teacher_id, start_time, recurring_pattern")
-    .eq("id", slotId)
-    .maybeSingle();
-
-  if (slotErr) throw slotErr;
-  if (!slot) throw new Error("Slot not found");
-
-  if (slot.lesson_id) {
-    const { error: bookingErr } = await supabase
-      .from("class_bookings")
-      .update({
-        status: "cancelled",
-        cancelled_at: new Date().toISOString(),
-        cancellation_reason: reason ?? "Cancelled by teacher",
-      })
-      .eq("lesson_id", slot.lesson_id);
-
-    if (bookingErr) throw bookingErr;
-  }
-
-  // Re-open the slot for booking
-  const { error: releaseErr } = await supabase
-    .from("teacher_availability")
-    .update({
-      is_booked: false,
-      is_available: true,
-      lesson_id: null,
-      student_id: null,
-      lesson_title: null,
-    })
-    .eq("id", slotId);
-
-  if (releaseErr) throw releaseErr;
+export async function cancelBookedSlot({ slotId, reason }: CancelSingleArgs): Promise<{ refunded: boolean }> {
+  const { data, error } = await supabase.rpc("teacher_cancel_slot", {
+    p_slot_id: slotId,
+    p_reason: reason ?? null,
+  });
+  if (error) throw error;
+  return (data as { refunded: boolean } | null) ?? { refunded: false };
 }
 
 interface CancelSeriesArgs {
@@ -124,10 +95,26 @@ export async function cancelBookedSeries({
     (s: any) => JSON.stringify(s.recurring_pattern) === anchorSig,
   );
 
-  // 1. Cancel every booked lesson in the series
+  // 1. Refund each student's credit (teacher cancellations always refund,
+  // regardless of timing — same rule as the single-occurrence path) and
+  // cancel every booked lesson in the series.
   const lessonIds = matching.map((s: any) => s.lesson_id).filter(Boolean) as string[];
   let cancelledBookings = 0;
   if (lessonIds.length > 0) {
+    await Promise.all(
+      lessonIds.map((lessonId) =>
+        supabase.rpc("refund_lesson_credit", { p_lesson_id: lessonId }).then(({ error }) => {
+          if (error) console.error(`Failed to refund credit for lesson ${lessonId}:`, error);
+        }),
+      ),
+    );
+
+    const { error: lessonErr } = await supabase
+      .from("lessons")
+      .update({ status: "cancelled", cancellation_reason: reason ?? "Series cancelled by teacher" })
+      .in("id", lessonIds);
+    if (lessonErr) throw lessonErr;
+
     const { error: bookErr, count } = await supabase
       .from("class_bookings")
       .update(
