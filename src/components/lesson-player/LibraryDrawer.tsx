@@ -37,8 +37,8 @@ const HUB_BADGE_COLORS: Record<string, string> = {
   professional: 'bg-emerald-100 text-emerald-700 border-emerald-200',
 };
 
-// CEFR ordering for the level tabs — anything not in this list sorts after,
-// alphabetically.
+// CEFR ordering for the level sections — anything not in this list sorts
+// after, alphabetically.
 const LEVEL_ORDER = ['pre-a1', 'a1', 'a2', 'b1', 'b2', 'c1', 'c2'];
 
 function sortLevels(levels: string[]): string[] {
@@ -63,11 +63,9 @@ export default function LibraryDrawer({
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loadingLessonId, setLoadingLessonId] = useState<string | null>(null);
-  const [selectedLevel, setSelectedLevel] = useState<string>('all');
 
   useEffect(() => {
     if (!open) return;
-    setSelectedLevel('all');
     setLoading(true);
     getLibraryLessons(hubFilter, { includeDrafts: true })
       .then((data) => setLessons(data.map(toLibraryLessonCard)))
@@ -80,36 +78,36 @@ export default function LibraryDrawer({
       });
   }, [open, hubFilter]);
 
-  // Levels present in this hub's lessons, e.g. Pre-A1 / A1 / A2 — lets the
-  // teacher jump straight to a level instead of scrolling one long list.
-  const levels = useMemo(() => {
-    const set = new Set<string>();
-    lessons.forEach((l) => {
-      if (l.difficulty_level) set.add(l.difficulty_level);
-    });
-    return sortLevels(Array.from(set));
-  }, [lessons]);
-
   const filtered = useMemo(() => {
     let list = lessons;
-    if (selectedLevel !== 'all') {
-      list = list.filter((l) => (l.difficulty_level || '').toLowerCase() === selectedLevel.toLowerCase());
-    }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       list = list.filter(
         (l) =>
           l.title.toLowerCase().includes(q) ||
-          l.difficulty_level.toLowerCase().includes(q) ||
+          l.cefr_level.toLowerCase().includes(q) ||
           l.hub.toLowerCase().includes(q) ||
           (l.description && l.description.toLowerCase().includes(q))
       );
     }
-    // Ready-to-play lessons first — otherwise dozens of "Coming Soon"
-    // scaffold placeholders (sorted newest-first by the query) bury the
-    // small number of actually-built lessons at the bottom of the list.
+    // Ready-to-play lessons first within each level — otherwise "Coming
+    // Soon" scaffold placeholders (sorted newest-first by the query) bury
+    // the small number of actually-built lessons.
     return [...list].sort((a, b) => Number(b.isReady) - Number(a.isReady));
-  }, [lessons, searchQuery, selectedLevel]);
+  }, [lessons, searchQuery]);
+
+  // Group into CEFR sections (Pre-A1 / A1 / A2 / B1 / B2…) so the teacher
+  // sees the library organized by level instead of one long flat list.
+  const grouped = useMemo(() => {
+    const map = new Map<string, LibraryLessonCard[]>();
+    for (const lesson of filtered) {
+      const key = lesson.cefr_level || 'Unleveled';
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(lesson);
+    }
+    const orderedKeys = sortLevels(Array.from(map.keys()));
+    return orderedKeys.map((level) => ({ level, lessons: map.get(level)! }));
+  }, [filtered]);
 
   const handleSelect = async (lessonId: string) => {
 
@@ -184,38 +182,8 @@ export default function LibraryDrawer({
               </div>
             </div>
 
-            {levels.length > 1 && (
-              <div className="px-5 py-2 flex flex-wrap gap-1.5 border-b border-slate-100 dark:border-slate-800 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setSelectedLevel('all')}
-                  className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full border transition-colors ${
-                    selectedLevel === 'all'
-                      ? 'bg-indigo-600 text-white border-indigo-600'
-                      : 'bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200'
-                  }`}
-                >
-                  All
-                </button>
-                {levels.map((level) => (
-                  <button
-                    key={level}
-                    type="button"
-                    onClick={() => setSelectedLevel(level)}
-                    className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full border transition-colors ${
-                      selectedLevel.toLowerCase() === level.toLowerCase()
-                        ? 'bg-indigo-600 text-white border-indigo-600'
-                        : 'bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200'
-                    }`}
-                  >
-                    {level}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Lesson list */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {/* Lesson list, organized into CEFR level sections */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-5">
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-16 gap-3 opacity-60">
                   <div className="w-8 h-8 border-3 border-indigo-400 border-t-transparent rounded-full animate-spin" />
@@ -229,45 +197,57 @@ export default function LibraryDrawer({
                   </p>
                 </div>
               ) : (
-                filtered.map((lesson) => (
-                  <button
-                    key={lesson.id}
-                    onClick={() => handleSelect(lesson.id)}
-                    disabled={loadingLessonId === lesson.id}
-                    className="w-full text-left p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-md bg-white dark:bg-slate-800/60 transition-all group disabled:opacity-60"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                          {lesson.title}
-                        </h3>
-                        {lesson.description && (
-                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
-                            {lesson.description}
-                          </p>
-                        )}
-                        <div className="flex items-center gap-2 mt-2">
-                          {lesson.hub && (
-                            <span
-                              className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${
-                                HUB_BADGE_COLORS[lesson.hub] || 'bg-slate-100 text-slate-600 border-slate-200'
-                              }`}
-                            >
-                              {lesson.hub}
-                            </span>
-                          )}
-                          <span className={`text-[10px] font-bold uppercase ${lesson.isReady ? 'text-emerald-600' : 'text-slate-400'}`}>
-                            {lesson.isReady
-                              ? (lesson.slide_count > 0 ? `${lesson.slide_count} slides` : 'Ready')
-                              : 'Coming soon'}
-                          </span>
-                        </div>
-                      </div>
-                      {loadingLessonId === lesson.id && (
-                        <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin shrink-0 mt-1" />
-                      )}
+                grouped.map(({ level, lessons: levelLessons }) => (
+                  <div key={level}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                        {level}
+                      </h4>
+                      <div className="h-px flex-1 bg-slate-100 dark:bg-slate-800" />
                     </div>
-                  </button>
+                    <div className="space-y-3">
+                      {levelLessons.map((lesson) => (
+                        <button
+                          key={lesson.id}
+                          onClick={() => handleSelect(lesson.id)}
+                          disabled={loadingLessonId === lesson.id}
+                          className="w-full text-left p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-md bg-white dark:bg-slate-800/60 transition-all group disabled:opacity-60"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                                {lesson.title}
+                              </h3>
+                              {lesson.description && (
+                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
+                                  {lesson.description}
+                                </p>
+                              )}
+                              <div className="flex items-center gap-2 mt-2">
+                                {lesson.hub && (
+                                  <span
+                                    className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${
+                                      HUB_BADGE_COLORS[lesson.hub] || 'bg-slate-100 text-slate-600 border-slate-200'
+                                    }`}
+                                  >
+                                    {lesson.hub}
+                                  </span>
+                                )}
+                                <span className={`text-[10px] font-bold uppercase ${lesson.isReady ? 'text-emerald-600' : 'text-slate-400'}`}>
+                                  {lesson.isReady
+                                    ? (lesson.slide_count > 0 ? `${lesson.slide_count} slides` : 'Ready')
+                                    : 'Coming soon'}
+                                </span>
+                              </div>
+                            </div>
+                            {loadingLessonId === lesson.id && (
+                              <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin shrink-0 mt-1" />
+                            )}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 ))
               )}
             </div>
