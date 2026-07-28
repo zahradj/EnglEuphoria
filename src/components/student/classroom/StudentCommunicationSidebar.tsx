@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { User, Send, Video, Mic, MicOff, VideoOff, BookOpen } from 'lucide-react';
+import { User, Send, Video, Mic, MicOff, VideoOff, BookOpen, PictureInPicture2, Pin } from 'lucide-react';
 import { getClassroomHubTheme, type ClassroomHubKey } from '@/components/teacher/classroom/hubClassroomTheme';
 import { DictionaryPopover } from '@/components/classroom/DictionaryPopover';
 import { whiteboardService, type ChatBroadcastPayload } from '@/services/whiteboardService';
@@ -21,6 +21,9 @@ interface StudentCommunicationSidebarProps {
   /** Realtime room/user — required for live chat sync with the teacher. */
   roomId?: string;
   userId?: string;
+  /** When true, the video tiles are floating over the lesson content instead of docked here. */
+  videosFloating?: boolean;
+  onToggleVideosFloating?: () => void;
 }
 
 interface ChatMessage {
@@ -43,6 +46,8 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
   hubType = 'academy',
   roomId,
   userId,
+  videosFloating = false,
+  onToggleVideosFloating,
 }) => {
   const theme = getClassroomHubTheme(hubType);
 
@@ -111,15 +116,36 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
   return (
     <div className={`w-[224px] ${theme.panelBg} border-r ${theme.panelBorder} flex flex-col shrink-0`}>
       {/* Section header */}
-      <div className={`flex items-center px-3 py-2 border-b ${theme.panelBorder}`}>
+      <div className={`flex items-center justify-between px-3 py-2 border-b ${theme.panelBorder}`}>
         <span className={`text-xs font-semibold uppercase tracking-wider ${theme.accentText}`}>Live</span>
+        {onToggleVideosFloating && (
+          <button
+            type="button"
+            onClick={onToggleVideosFloating}
+            title={videosFloating ? 'Dock videos back to sidebar' : 'Float videos over the lesson'}
+            className={`p-1 rounded-md hover:bg-black/5 ${theme.accentText}`}
+          >
+            {videosFloating ? <Pin className="w-3.5 h-3.5" /> : <PictureInPicture2 className="w-3.5 h-3.5" />}
+          </button>
+        )}
       </div>
 
       {/* Video Containers — enhanced hub-tinted frames (matches teacher) */}
       <div className="p-3 space-y-3">
+        {videosFloating && (
+          <button
+            type="button"
+            onClick={onToggleVideosFloating}
+            className="w-full flex flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed border-gray-300 py-6 text-center text-gray-500 hover:border-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <PictureInPicture2 className="w-5 h-5" />
+            <span className="text-[11px] font-medium leading-tight px-2">Videos are floating over the lesson<br />Click to dock</span>
+          </button>
+        )}
+
         {/* Teacher Video Container */}
         <div
-          className="group relative aspect-[4/3] rounded-2xl overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)]"
+          className={`group relative aspect-[4/3] rounded-2xl overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)] ${videosFloating ? 'hidden' : ''}`}
           style={{ background: theme.hexGradient }}
         >
           <div className="absolute inset-[2px] rounded-[14px] overflow-hidden bg-gray-900">
@@ -162,7 +188,7 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
 
         {/* Student Video Container (self) */}
         <div
-          className="group relative aspect-[4/3] rounded-2xl overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)]"
+          className={`group relative aspect-[4/3] rounded-2xl overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)] ${videosFloating ? 'hidden' : ''}`}
           style={{ background: theme.hexGradient }}
         >
           <div className="absolute inset-[2px] rounded-[14px] overflow-hidden bg-gray-900">

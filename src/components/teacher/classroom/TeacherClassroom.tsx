@@ -97,6 +97,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   const [wrapUpOpen, setWrapUpOpen] = useState(false);
   const [isZenMode, setIsZenMode] = useState(false);
   const [zenElapsed, setZenElapsed] = useState(0);
+  const [videosFloating, setVideosFloating] = useState(false);
   // (commsCollapsed removed — Live video sidebar is now a fixed dock.)
   const [slideNavOpen, setSlideNavOpen] = useState(false);
 
@@ -961,6 +962,29 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         )}
       </AnimatePresence>
 
+      {/* Video tiles floated out of the sidebar over the lesson content */}
+      {!isZenMode && videosFloating && (
+        <>
+          <PictureInPicture
+            name={`${teacherName} (You)`}
+            isConnected={media.isConnected}
+            stream={media.stream}
+            mirrored
+            isMuted={media.isMuted}
+            isCameraOff={media.isCameraOff}
+            defaultPosition={{ x: 240, y: 76 }}
+            onDock={() => setVideosFloating(false)}
+          />
+          <PictureInPicture
+            name={studentName}
+            isConnected={rtcConnected}
+            stream={participants[0]?.stream || null}
+            defaultPosition={{ x: 240, y: 292 }}
+            onDock={() => setVideosFloating(false)}
+          />
+        </>
+      )}
+
       {/* Top Control Bar (hidden in Zen) */}
       {!isZenMode && (
         <div style={topBarIdle.style} onMouseMove={topBarIdle.onMouseMove} onMouseEnter={topBarIdle.onMouseEnter}>
@@ -1065,6 +1089,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
                 await updateSessionContext({ ...(sessionContext || {}), studentCameraOff: next });
                 toast({ title: next ? "📷 Student camera off" : "📹 Student camera on", description: next ? "The student's camera has been turned off" : "The student's camera is back on" });
               }}
+              videosFloating={videosFloating}
+              onToggleVideosFloating={() => setVideosFloating(v => !v)}
             />
           </div>
         )}

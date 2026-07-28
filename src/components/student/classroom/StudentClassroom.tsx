@@ -59,6 +59,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
   const [activeColor, setActiveColor] = useState('#FF6B6B');
   const [isZenMode, setIsZenMode] = useState(false);
   const [zenElapsed, setZenElapsed] = useState(0);
+  const [videosFloating, setVideosFloating] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
 
@@ -462,6 +463,29 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
         )}
       </AnimatePresence>
 
+      {/* Video tiles floated out of the sidebar over the lesson content */}
+      {!isZenMode && videosFloating && (
+        <>
+          <PictureInPicture
+            name={teacherName}
+            isConnected={rtcConnected}
+            stream={participants[0]?.stream || null}
+            defaultPosition={{ x: 240, y: 76 }}
+            onDock={() => setVideosFloating(false)}
+          />
+          <PictureInPicture
+            name={`${studentName} (You)`}
+            isConnected={media.isConnected}
+            stream={media.stream}
+            mirrored
+            isMuted={media.isMuted}
+            isCameraOff={media.isCameraOff}
+            defaultPosition={{ x: 240, y: 292 }}
+            onDock={() => setVideosFloating(false)}
+          />
+        </>
+      )}
+
       {/* Media Permission Error Overlay */}
       {media.error && (
         <div className="fixed inset-0 z-[60] bg-black/70 flex items-center justify-center">
@@ -524,6 +548,8 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
               hubType={hubType === 'professional' ? 'success' : hubType}
               roomId={roomId}
               userId={studentId}
+              videosFloating={videosFloating}
+              onToggleVideosFloating={() => setVideosFloating(v => !v)}
             />
           </div>
         )}
