@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { StageMode, WhiteboardStroke, SmartWorksheet } from '@/services/whiteboardService';
 import type { HubType } from '@/components/admin/lesson-builder/ai-wizard/types';
@@ -49,7 +49,14 @@ interface MainStageProps {
   sceneLessonIdx?: number | null;
   /** Teacher-only: persist the embedded scene lesson's current scene index. */
   onPersistSceneLessonIdx?: (idx: number) => void;
+  /** Reports the embedded scene lesson's nav state whenever it changes, so a caller (e.g. the Lesson Timeline) can mirror it. */
+  onSceneNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean }) => void;
   onAddStroke: (stroke: Omit<WhiteboardStroke, 'id' | 'roomId' | 'timestamp'>) => void;
+}
+
+export interface MainStageHandle {
+  /** Jump the embedded scene lesson directly to a scene index (teacher-only when synced). No-op if no scene lesson is active. */
+  goToScene: (idx: number) => void;
 }
 
 const MODE_META: Record<StageMode, { label: string; Icon: React.ComponentType<{ className?: string }> }> = {
@@ -67,7 +74,7 @@ const MODE_META: Record<StageMode, { label: string; Icon: React.ComponentType<{ 
  * viewport. Whatever the teacher selects (slide / web / blank) appears here
  * for both teacher and student, with a transparent annotation overlay on top.
  */
-export const MainStage: React.FC<MainStageProps> = ({
+export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function MainStage({
   mode,
   slides,
   currentSlideIndex,
@@ -88,8 +95,9 @@ export const MainStage: React.FC<MainStageProps> = ({
   isInterview = false,
   sceneLessonIdx = null,
   onPersistSceneLessonIdx,
+  onSceneNavState,
   onAddStroke,
-}) => {
+}, ref) {
   const { label, Icon } = MODE_META[mode];
   const stageRef = useRef<HTMLDivElement>(null);
   useCollapseWatcher(stageRef, `main-stage[${role}/${mode}]`);
@@ -100,9 +108,25 @@ export const MainStage: React.FC<MainStageProps> = ({
   const sceneLessonHandleRef = useRef<PlayUnitLessonHandle>(null);
   const [sceneNav, setSceneNav] = useState({ sceneIdx: 0, total: 0, canNavigate: true });
   const handleSceneNavState = useCallback(
-    (state: { sceneIdx: number; total: number; canNavigate: boolean }) => setSceneNav(state),
-    [],
+    (state: { sceneIdx: number; total: number; canNavigate: boolean }) => {
+      setSceneNav(state);
+      onSceneNavState?.(state);
+    },
+    [onSceneNavState],
   );
+
+  useImperativeHandle(ref, () => ({
+    goToScene: (idx: number) => sceneLessonHandleRef.current?.goToIndex(idx),
+  }), []);
+
+  // Reset stale nav state once the scene lesson is no longer the active stage content
+  // (e.g. the teacher swaps to a regular slide deck) so callers mirroring this state
+  // don't keep treating a plain lesson as if it were still a scene lesson.
+  useEffect(() => {
+    if (sceneLessonRef) return;
+    setSceneNav({ sceneIdx: 0, total: 0, canNavigate: true });
+    onSceneNavState?.({ sceneIdx: 0, total: 0, canNavigate: true });
+  }, [sceneLessonRef, onSceneNavState]);
 
   return (
     <div className="absolute inset-0 h-full w-full flex items-stretch justify-stretch min-h-0 min-w-0">
@@ -232,4 +256,4 @@ export const MainStage: React.FC<MainStageProps> = ({
       </div>
     </div>
   );
-};
+});

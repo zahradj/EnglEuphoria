@@ -10,7 +10,7 @@ import { useStudentContext } from "@/hooks/useStudentContext";
 import { useWebRTCConnection } from "@/hooks/useWebRTCConnection";
 import { ClassroomTopBar } from "./ClassroomTopBar";
 import { CommunicationZone } from "./CommunicationZone";
-import { MainStage } from "@/components/classroom/stage/MainStage";
+import { MainStage, type MainStageHandle } from "@/components/classroom/stage/MainStage";
 import { TeacherControlDock } from "@/components/classroom/stage/TeacherControlDock";
 import { SlideNavigator } from "./SlideNavigator";
 import { getClassroomHubTheme } from "./hubClassroomTheme";
@@ -98,6 +98,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   const [isZenMode, setIsZenMode] = useState(false);
   const [zenElapsed, setZenElapsed] = useState(0);
   const [videosFloating, setVideosFloating] = useState(false);
+  const mainStageRef = useRef<MainStageHandle>(null);
+  const [sceneNavState, setSceneNavState] = useState({ sceneIdx: 0, total: 0, canNavigate: true });
   // (commsCollapsed removed — Live video sidebar is now a fixed dock.)
   const [slideNavOpen, setSlideNavOpen] = useState(false);
 
@@ -1202,6 +1204,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             );
           })()}
           <MainStage
+            ref={mainStageRef}
             mode={stageMode}
             slides={displayedSlides}
             currentSlideIndex={currentSlide}
@@ -1221,6 +1224,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             isInterview={isInterview}
             sceneLessonIdx={sceneLessonIdx}
             onPersistSceneLessonIdx={updateSceneLessonIdx}
+            onSceneNavState={setSceneNavState}
             onAddStroke={addStroke}
           />
           <TeacherControlDock
@@ -1274,15 +1278,27 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
 
         {/* Right: Slide Navigator — toggled via header button */}
         {!isZenMode && slideNavOpen && (
-          <SlideNavigator
-            hubType={hubType}
-            slides={displayedSlides as any}
-            currentSlideIndex={currentSlide}
-            onSlideSelect={handleSlideSelect}
-            lessonTitle={activeLessonTitle}
-            isCollapsed={false}
-            onToggleCollapse={() => setSlideNavOpen(false)}
-          />
+          sceneNavState.total > 0 ? (
+            <SlideNavigator
+              hubType={hubType}
+              slides={Array.from({ length: sceneNavState.total }, (_, i) => ({ id: `scene-${i}`, title: `Page ${i + 1}` }))}
+              currentSlideIndex={sceneNavState.sceneIdx}
+              onSlideSelect={(idx) => mainStageRef.current?.goToScene(idx)}
+              lessonTitle={activeLessonTitle}
+              isCollapsed={false}
+              onToggleCollapse={() => setSlideNavOpen(false)}
+            />
+          ) : (
+            <SlideNavigator
+              hubType={hubType}
+              slides={displayedSlides as any}
+              currentSlideIndex={currentSlide}
+              onSlideSelect={handleSlideSelect}
+              lessonTitle={activeLessonTitle}
+              isCollapsed={false}
+              onToggleCollapse={() => setSlideNavOpen(false)}
+            />
+          )
         )}
       </div>
 

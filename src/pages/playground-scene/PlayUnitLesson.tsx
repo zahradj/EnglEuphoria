@@ -8,6 +8,7 @@ import { whiteboardService } from '@/services/whiteboardService';
 export interface PlayUnitLessonHandle {
   goNext: () => void;
   goBack: () => void;
+  goToIndex: (idx: number) => void;
 }
 
 interface PlayUnitLessonProps {
@@ -142,6 +143,10 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
     if (!canNavigate) return;
     stopSpeaking(); setSceneIdx((i) => Math.max(0, i - 1));
   }, [canNavigate]);
+  const goToIndex = useCallback((idx: number) => {
+    if (!canNavigate) return;
+    stopSpeaking(); setSceneIdx(Math.max(0, Math.min(SCENES.length - 1, idx)));
+  }, [SCENES.length, canNavigate]);
   const restart = useCallback(() => {
     if (!canNavigate) return;
     stopSpeaking();
@@ -149,7 +154,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
     window.sessionStorage.removeItem(sessionKey);
   }, [sessionKey, canNavigate]);
 
-  useImperativeHandle(ref, () => ({ goNext, goBack }), [goNext, goBack]);
+  useImperativeHandle(ref, () => ({ goNext, goBack, goToIndex }), [goNext, goBack, goToIndex]);
 
   useEffect(() => {
     onNavState?.({ sceneIdx, total: SCENES.length, canNavigate });
