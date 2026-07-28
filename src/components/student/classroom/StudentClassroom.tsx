@@ -105,7 +105,8 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
     applyRemoteStageMode,
     applyRemoteDrawingEnabled,
     applyRemoteIframeUnlocked,
-    sessionEnded
+    sessionEnded,
+    sceneLessonIdx,
   } = useClassroomSync({
     roomId,
     userId: studentId,
@@ -557,6 +558,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
           onSlideComplete={handleSlideCompletion}
           customStage={customStage}
           isInterview={isInterview}
+          sceneLessonIdx={sceneLessonIdx}
         />
       </div>
 

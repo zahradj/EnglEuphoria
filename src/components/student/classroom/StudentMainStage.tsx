@@ -59,6 +59,8 @@ interface StudentMainStageProps {
   customStage?: React.ReactNode;
   /** True for interview/demo classrooms — see MainStage. */
   isInterview?: boolean;
+  /** Persisted current scene index of an active embedded scene lesson, if any. */
+  sceneLessonIdx?: number | null;
 }
 
 /**
@@ -93,6 +95,7 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
   onSlideComplete,
   customStage,
   isInterview = false,
+  sceneLessonIdx = null,
 }) => {
   const currentSlide = slides[currentSlideIndex];
   const isQuizSlide = currentSlide?.type === 'quiz';
@@ -216,6 +219,7 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
         hubType={hubType as any}
         customStage={customStage}
         isInterview={isInterview}
+        sceneLessonIdx={sceneLessonIdx}
         onAddStroke={onAddStroke}
       />
 

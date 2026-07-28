@@ -109,6 +109,10 @@ interface UseClassroomSyncReturn {
   applyRemoteIframeUnlocked: (unlocked: boolean) => void;
   /** Teacher-only: broadcast a full state snapshot to all clients (no reload). */
   forceSync: () => Promise<void>;
+  /** Persisted current scene index of an active embedded scene lesson, if any. */
+  sceneLessonIdx: number | null;
+  /** Teacher-only: persist the current scene index (see sceneLessonIdx). */
+  updateSceneLessonIdx: (idx: number) => Promise<void>;
 }
 
 const deriveStageModeFromSession = (session: ClassroomSession, fallback: StageMode): StageMode => {
@@ -160,6 +164,7 @@ export const useClassroomSync = ({
           setSession(newSession);
           setCurrentSlideIndex(newSession.currentSlideIndex ?? 0);
           setStageModeState(prev => deriveStageModeFromSession(newSession, prev));
+          setDrawingEnabledState(newSession.drawingEnabled ?? false);
           setIsConnected(true);
         }
       } else {
@@ -168,6 +173,7 @@ export const useClassroomSync = ({
           setSession(existingSession);
           setCurrentSlideIndex(existingSession.currentSlideIndex ?? 0);
           setStageModeState(prev => deriveStageModeFromSession(existingSession, prev));
+          setDrawingEnabledState(existingSession.drawingEnabled ?? false);
           setIsConnected(true);
         }
       }
@@ -186,6 +192,7 @@ export const useClassroomSync = ({
         setSession(updatedSession);
         setCurrentSlideIndex(updatedSession.currentSlideIndex ?? 0);
         setStageModeState(prev => deriveStageModeFromSession(updatedSession, prev));
+        setDrawingEnabledState(updatedSession.drawingEnabled ?? false);
       }
     );
 
@@ -279,8 +286,14 @@ export const useClassroomSync = ({
   const setDrawingEnabled = useCallback(async (enabled: boolean) => {
     setDrawingEnabledState(enabled);
     if (role !== 'teacher') return;
+    // Instant broadcast for immediate feel, PLUS persist to the session row —
+    // the broadcast alone is a fire-and-forget realtime event with no replay,
+    // so a student who isn't subscribed at that exact instant (late join,
+    // brief reconnect) would otherwise never learn drawing was enabled.
     try { await whiteboardService.sendDrawingEnabled(roomId, enabled, userId); }
     catch (error) { console.error('Failed to send drawing enabled:', error); }
+    try { await classroomSyncService.updateSession(roomId, { drawingEnabled: enabled }); }
+    catch (error) { console.error('Failed to persist drawing enabled:', error); }
   }, [roomId, role, userId]);
 
   const applyRemoteIframeUnlocked = useCallback((unlocked: boolean) => {
@@ -327,6 +340,20 @@ export const useClassroomSync = ({
       setSession(prev => prev ? { ...prev, studentCanDraw: canDraw } : null);
     } catch (error) {
       console.error('Failed to update drawing permission:', error);
+    }
+  }, [roomId, role]);
+
+  // Teacher: persist the embedded scene lesson's current scene index, so a
+  // student who joins late or briefly reconnects catches up to the right
+  // scene from the DB row instead of only ever hearing about scene changes
+  // via the instant (but non-replayable) sendSceneLessonNav broadcast.
+  const updateSceneLessonIdx = useCallback(async (idx: number) => {
+    if (role !== 'teacher') return;
+    try {
+      await classroomSyncService.updateSession(roomId, { sceneLessonIdx: idx });
+      setSession(prev => prev ? { ...prev, sceneLessonIdx: idx } : prev);
+    } catch (error) {
+      console.error('Failed to persist scene lesson index:', error);
     }
   }, [roomId, role]);
 
@@ -488,5 +515,7 @@ export const useClassroomSync = ({
     setIframeUnlocked,
     applyRemoteIframeUnlocked,
     forceSync,
+    sceneLessonIdx: session?.sceneLessonIdx ?? null,
+    updateSceneLessonIdx,
   };
 };

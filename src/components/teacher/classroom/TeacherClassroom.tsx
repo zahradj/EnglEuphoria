@@ -235,6 +235,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     applyRemoteStageMode,
     applyRemoteDrawingEnabled,
     forceSync,
+    sceneLessonIdx,
+    updateSceneLessonIdx,
   } = useClassroomSync({
     roomId: roomName,
     userId: user?.id || (() => {
@@ -1191,6 +1193,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             hubType={hubType}
             customStage={customStage}
             isInterview={isInterview}
+            sceneLessonIdx={sceneLessonIdx}
+            onPersistSceneLessonIdx={updateSceneLessonIdx}
             onAddStroke={addStroke}
           />
           <TeacherControlDock

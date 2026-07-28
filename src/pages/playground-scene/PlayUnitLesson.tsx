@@ -1,9 +1,14 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Scene } from '@/content/playground-library/unit1/scenes';
 import { SceneRenderer, Hearts, MAX_HEARTS, Lep1Keyframes } from '@/content/playground-library/unit1/SceneRenderer';
 import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-library/unit1/audio';
 import { whiteboardService } from '@/services/whiteboardService';
+
+export interface PlayUnitLessonHandle {
+  goNext: () => void;
+  goBack: () => void;
+}
 
 interface PlayUnitLessonProps {
   scenes: Scene[];
@@ -22,9 +27,27 @@ interface PlayUnitLessonProps {
    *  (the dashboard launcher), where navigation stays fully local. */
   role?: 'teacher' | 'student';
   roomId?: string;
+  /** When true, the internal Back/Next/counter bar is not rendered — the
+   *  caller renders its own nav bar outside this component's frame instead,
+   *  driven by onNavState + the exposed goNext/goBack ref handle. */
+  hideInternalNav?: boolean;
+  /** Reports scene position/navigability whenever it changes, so a caller
+   *  rendering hideInternalNav can show an external nav bar in sync. */
+  onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean }) => void;
+  /** Last scene index persisted to the classroom session DB row, if any —
+   *  a reliable (if slightly delayed) catch-up path for a student who
+   *  joins late or reconnects and missed the instant broadcast. */
+  persistedSceneIdx?: number | null;
+  /** Teacher-only: called whenever the scene index changes, so the caller
+   *  can persist it (in addition to the instant broadcast this component
+   *  already sends) for that catch-up path. */
+  onSceneIdxPersist?: (idx: number) => void;
 }
 
-export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, onFinaleReached, unitNumber, lessonNumber, role, roomId }: PlayUnitLessonProps) {
+const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(function PlayUnitLesson(
+  { scenes, sessionKey, embedded = false, onFinaleReached, unitNumber, lessonNumber, role, roomId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist },
+  ref,
+) {
   const navigate = useNavigate();
   const SCENES = scenes;
   const finaleFiredRef = useRef(false);
@@ -44,7 +67,9 @@ export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, o
   useEffect(() => { window.sessionStorage.setItem(sessionKey, String(sceneIdx)); }, [sceneIdx, sessionKey]);
 
   // Teacher → student: broadcast the authoritative scene index so the
-  // student's view always mirrors whatever the teacher is showing.
+  // student's view always mirrors whatever the teacher is showing, and
+  // persist it so a late-joining/reconnecting student can catch up even if
+  // they missed the (non-replayable) broadcast.
   useEffect(() => {
     if (!isSynced || role !== 'teacher' || !roomId) return;
     void whiteboardService.sendSceneLessonNav(roomId, {
@@ -53,7 +78,8 @@ export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, o
       sceneIdx,
       senderId: 'teacher',
     });
-  }, [isSynced, role, roomId, sceneIdx, unitNumber, lessonNumber]);
+    onSceneIdxPersist?.(sceneIdx);
+  }, [isSynced, role, roomId, sceneIdx, unitNumber, lessonNumber, onSceneIdxPersist]);
 
   // Student: follow the teacher's broadcast — never drives its own index.
   useEffect(() => {
@@ -65,6 +91,15 @@ export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, o
     });
     return unsubscribe;
   }, [isSynced, role, roomId, unitNumber, lessonNumber, SCENES.length]);
+
+  // Student catch-up: apply the DB-persisted scene index whenever it
+  // changes (a reliable, replicated fallback for whenever the instant
+  // broadcast above was missed — e.g. joining mid-lesson, reconnecting).
+  useEffect(() => {
+    if (!isSynced || role !== 'student') return;
+    if (persistedSceneIdx == null) return;
+    setSceneIdx(Math.max(0, Math.min(SCENES.length - 1, persistedSceneIdx)));
+  }, [isSynced, role, persistedSceneIdx, SCENES.length]);
 
   useEffect(() => {
     let cancelled = false;
@@ -113,6 +148,12 @@ export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, o
     setSceneIdx(0); setHearts(MAX_HEARTS); setGems(0);
     window.sessionStorage.removeItem(sessionKey);
   }, [sessionKey, canNavigate]);
+
+  useImperativeHandle(ref, () => ({ goNext, goBack }), [goNext, goBack]);
+
+  useEffect(() => {
+    onNavState?.({ sceneIdx, total: SCENES.length, canNavigate });
+  }, [sceneIdx, SCENES.length, canNavigate, onNavState]);
 
   const totalGemsPossible = useMemo(
     () => SCENES.filter((s) => s.kind === 'basket' || s.kind === 'who-said-it' || s.kind === 'roleplay' || s.kind === 'join-stage' || s.kind === 'name-gate' || s.kind === 'meet-group' || s.kind === 'voice-stage' || (s.kind === 'meet' && s.repeat)).length,
@@ -179,7 +220,7 @@ export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, o
         )}
       </div>
 
-      {canNavigate ? (
+      {!hideInternalNav && (canNavigate ? (
         <div className={`pointer-events-none inset-x-0 bottom-4 z-[80] flex items-center justify-between px-4 ${embedded ? 'absolute' : 'fixed'}`}>
           <button type="button" onClick={goBack} disabled={sceneIdx === 0} aria-label="Previous scene"
             className="pointer-events-auto flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-base font-bold text-slate-800 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
@@ -197,9 +238,11 @@ export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, o
             <span aria-hidden>👩‍🏫</span> Your teacher is guiding this lesson · {sceneIdx + 1} / {SCENES.length}
           </div>
         </div>
-      )}
+      ))}
 
       <Lep1Keyframes />
     </div>
   );
-}
+});
+
+export default PlayUnitLesson;

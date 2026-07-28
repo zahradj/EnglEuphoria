@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { StageMode, WhiteboardStroke, SmartWorksheet } from '@/services/whiteboardService';
 import type { HubType } from '@/components/admin/lesson-builder/ai-wizard/types';
@@ -10,6 +10,7 @@ import { PlaygroundLessonPlayer } from '@/components/playground-player/Playgroun
 import type { PlaygroundLessonNumber } from '@/playground-blueprint/unitTemplate';
 import { ClassroomToolOverlay } from './ClassroomToolOverlay';
 import { EmbeddedSceneLesson } from './EmbeddedSceneLesson';
+import type { PlayUnitLessonHandle } from '@/pages/playground-scene/PlayUnitLesson';
 
 interface Slide {
   id: string;
@@ -44,6 +45,10 @@ interface MainStageProps {
    *  blueprint fallback — interviews have no real unit/lesson to render
    *  there, so their own mock-lesson slides should show instead. */
   isInterview?: boolean;
+  /** Persisted current scene index of an active embedded scene lesson, if any. */
+  sceneLessonIdx?: number | null;
+  /** Teacher-only: persist the embedded scene lesson's current scene index. */
+  onPersistSceneLessonIdx?: (idx: number) => void;
   onAddStroke: (stroke: Omit<WhiteboardStroke, 'id' | 'roomId' | 'timestamp'>) => void;
 }
 
@@ -81,6 +86,8 @@ export const MainStage: React.FC<MainStageProps> = ({
   hubType = 'academy',
   customStage,
   isInterview = false,
+  sceneLessonIdx = null,
+  onPersistSceneLessonIdx,
   onAddStroke,
 }) => {
   const { label, Icon } = MODE_META[mode];
@@ -89,6 +96,13 @@ export const MainStage: React.FC<MainStageProps> = ({
   const sceneLessonRef = (rawSlides as any)?.[0]?.sceneLessonRef as
     | { unitNumber: number; lessonNumber: number }
     | undefined;
+
+  const sceneLessonHandleRef = useRef<PlayUnitLessonHandle>(null);
+  const [sceneNav, setSceneNav] = useState({ sceneIdx: 0, total: 0, canNavigate: true });
+  const handleSceneNavState = useCallback(
+    (state: { sceneIdx: number; total: number; canNavigate: boolean }) => setSceneNav(state),
+    [],
+  );
 
   return (
     <div className="absolute inset-0 h-full w-full flex items-stretch justify-stretch min-h-0 min-w-0">
@@ -106,15 +120,57 @@ export const MainStage: React.FC<MainStageProps> = ({
               {customStage}
             </div>
           ) : hubType === 'playground' && mode === 'slide' && sceneLessonRef ? (
-            <div className="absolute inset-3 sm:inset-4 lg:inset-6 overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">
-              <div className="absolute inset-0 overflow-auto">
-                <EmbeddedSceneLesson
-                  unitNumber={sceneLessonRef.unitNumber}
-                  lessonNumber={sceneLessonRef.lessonNumber}
-                  roomId={roomId}
-                  role={role}
-                />
+            <div className="absolute inset-3 sm:inset-4 lg:inset-6 flex flex-col gap-2">
+              <div className="relative flex-1 min-h-0 overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">
+                <div className="absolute inset-0 overflow-auto">
+                  <EmbeddedSceneLesson
+                    ref={sceneLessonHandleRef}
+                    unitNumber={sceneLessonRef.unitNumber}
+                    lessonNumber={sceneLessonRef.lessonNumber}
+                    roomId={roomId}
+                    role={role}
+                    hideInternalNav
+                    onNavState={handleSceneNavState}
+                    persistedSceneIdx={sceneLessonIdx}
+                    onSceneIdxPersist={onPersistSceneLessonIdx}
+                  />
+                </div>
               </div>
+
+              {/* Nav bar lives below the framed lesson card, not overlaid on it */}
+              {sceneNav.total > 0 && (
+                <div className="shrink-0 flex items-center justify-between px-1">
+                  {sceneNav.canNavigate ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => sceneLessonHandleRef.current?.goBack()}
+                        disabled={sceneNav.sceneIdx === 0}
+                        aria-label="Previous scene"
+                        className="flex items-center gap-2 rounded-full bg-white/90 px-5 py-2.5 text-sm font-bold text-slate-800 shadow-lg backdrop-blur transition hover:scale-105 hover:bg-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+                      >
+                        <span aria-hidden>◀</span> Back
+                      </button>
+                      <div className="rounded-full bg-white/90 px-4 py-2 text-xs font-extrabold text-slate-800 shadow-lg backdrop-blur tabular-nums">
+                        {sceneNav.sceneIdx + 1} / {sceneNav.total}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => sceneLessonHandleRef.current?.goNext()}
+                        disabled={sceneNav.sceneIdx >= sceneNav.total - 1}
+                        aria-label="Next scene"
+                        className="flex items-center gap-2 rounded-full bg-[#FE6A2F] px-5 py-2.5 text-sm font-bold text-white shadow-lg backdrop-blur transition hover:scale-105 hover:bg-[#ff7a45] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+                      >
+                        Next <span aria-hidden>▶</span>
+                      </button>
+                    </>
+                  ) : (
+                    <div className="mx-auto flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-xs font-extrabold text-slate-800 shadow-lg backdrop-blur tabular-nums">
+                      <span aria-hidden>👩‍🏫</span> Your teacher is guiding this lesson · {sceneNav.sceneIdx + 1} / {sceneNav.total}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           ) : hubType === 'playground' && mode === 'slide' && !isInterview ? (
             <div className="absolute inset-0 overflow-auto bg-white">

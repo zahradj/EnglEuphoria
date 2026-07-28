@@ -32,6 +32,12 @@ export interface ClassroomSession {
   sessionContext: Record<string, any>;
   // Phase 8: Canvas tab sync
   activeCanvasTab: string;
+  // Persisted alongside the instant broadcast so late joiners / reconnects
+  // catch up to the correct state instead of only ever seeing it if they
+  // happened to be subscribed the instant the teacher toggled it.
+  drawingEnabled: boolean;
+  /** Current scene index within an embedded Playground scene lesson, if one is active. */
+  sceneLessonIdx: number | null;
 }
 
 export interface SessionUpdate {
@@ -61,6 +67,8 @@ export interface SessionUpdate {
   sessionContext?: Record<string, any>;
   // Phase 8: Canvas tab sync
   activeCanvasTab?: string;
+  drawingEnabled?: boolean;
+  sceneLessonIdx?: number | null;
 }
 
 class ClassroomSyncService {
@@ -238,6 +246,12 @@ class ClassroomSyncService {
       if (updates.activeCanvasTab !== undefined) {
         updateData.active_canvas_tab = updates.activeCanvasTab;
       }
+      if (updates.drawingEnabled !== undefined) {
+        updateData.drawing_enabled = updates.drawingEnabled;
+      }
+      if (updates.sceneLessonIdx !== undefined) {
+        updateData.scene_lesson_idx = updates.sceneLessonIdx;
+      }
 
       const { error } = await supabase
         .from('classroom_sessions')
@@ -408,7 +422,9 @@ class ClassroomSyncService {
       sharedNotes: data.shared_notes || '',
       sessionContext: data.session_context || {},
       activeCanvasTab: data.active_canvas_tab || 'slides',
-      force_refresh_timestamp: data.force_refresh_timestamp || 0
+      force_refresh_timestamp: data.force_refresh_timestamp || 0,
+      drawingEnabled: data.drawing_enabled || false,
+      sceneLessonIdx: typeof data.scene_lesson_idx === 'number' ? data.scene_lesson_idx : null,
     };
   }
 
