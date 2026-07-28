@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { JungleTheme } from './JungleTheme';
@@ -17,6 +17,38 @@ export type ThemeType = 'jungle' | 'space' | 'underwater';
 // Type alias for backwards compatibility
 export type Level = PlaygroundLesson;
 export type LessonContent = PlaygroundLesson['content'];
+
+/** Drifting cloud bank marking where the revealed path ends — the rest of
+ *  the adventure is still hidden until the student reaches it. */
+const FogBank: React.FC<{ position: { x: number; y: number } }> = ({ position }) => (
+  <div
+    className="pointer-events-none absolute z-[8]"
+    style={{
+      left: `${position.x}%`,
+      top: `${position.y}%`,
+      transform: 'translate(-50%, -50%)',
+    }}
+  >
+    {[
+      { dx: 40, dy: 8, scale: 1.4, delay: 0 },
+      { dx: -30, dy: -12, scale: 1.1, delay: 0.6 },
+      { dx: 10, dy: 28, scale: 1.2, delay: 1.2 },
+    ].map((puff, i) => (
+      <motion.div
+        key={i}
+        animate={{ x: [puff.dx - 8, puff.dx + 8, puff.dx - 8], opacity: [0.5, 0.8, 0.5] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: puff.delay }}
+        className="absolute rounded-full bg-white/70 blur-2xl"
+        style={{
+          width: `${90 * puff.scale}px`,
+          height: `${90 * puff.scale}px`,
+          left: `${puff.dx}px`,
+          top: `${puff.dy}px`,
+        }}
+      />
+    ))}
+  </div>
+);
 
 interface KidsWorldMapProps {
   theme?: ThemeType;
@@ -40,10 +72,23 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   const currentLevel = lessons.find(l => l.status === 'current');
-  const completedIndex = lessons.findIndex(l => l.status === 'current') - 1;
+  const currentIndex = lessons.findIndex(l => l.status === 'current');
+  const completedIndex = currentIndex - 1;
+
+  // Fog of war: only show the path up through the current lesson, plus one
+  // misty "coming up" node beyond it. The rest stays hidden until reached —
+  // no wall of gray locked circles spoiling the whole route up front.
+  const visibleLessons = useMemo(() => {
+    if (currentIndex === -1) return lessons; // nothing in progress, or all done
+    return lessons.slice(0, currentIndex + 2);
+  }, [lessons, currentIndex]);
+  const mysteryNode = visibleLessons[visibleLessons.length - 1]?.status === 'locked'
+    ? visibleLessons[visibleLessons.length - 1]
+    : null;
+  const isMoreHiddenInFog = visibleLessons.length < lessons.length;
 
   // Extract positions for the winding path
-  const levelPositions = lessons.map(l => l.position);
+  const levelPositions = visibleLessons.map(l => l.position);
 
   const ThemeBackground = {
     jungle: JungleTheme,
@@ -207,8 +252,8 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
       {/* Mascot */}
       <MascotPip />
 
-      {/* Level nodes */}
-      {lessons.map((level, index) => (
+      {/* Level nodes — only the path so far, plus one misty node teasing what's next */}
+      {visibleLessons.map((level, index) => (
         <LevelNode
           key={level.id}
           id={level.id}
@@ -217,6 +262,7 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
           isCompleted={level.status === 'completed'}
           isCurrent={level.status === 'current'}
           isLocked={level.status === 'locked'}
+          isMystery={mysteryNode?.id === level.id}
           position={level.position}
           onClick={() => handleLevelClick(level.id)}
           theme={selectedTheme}
@@ -224,6 +270,9 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
           zoneName={zoneNames[index]}
         />
       ))}
+
+      {/* Fog bank beyond the mystery node — the rest of the adventure is still hidden */}
+      {isMoreHiddenInFog && mysteryNode && <FogBank position={mysteryNode.position} />}
 
       {/* Big Play button */}
       <GiantGoButton 

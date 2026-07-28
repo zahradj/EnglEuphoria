@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Star, Lock, Play, Sparkles } from 'lucide-react';
+import { Star, Lock, Play, Sparkles, HelpCircle } from 'lucide-react';
 
 interface LevelNodeProps {
   id: string;
@@ -15,6 +15,10 @@ interface LevelNodeProps {
   score?: number;
   isNew?: boolean;
   zoneName?: string;
+  /** The single "coming up next" node shown beyond the current one — a soft,
+   *  swirling mystery marker instead of a flat locked circle, so the rest of
+   *  the path stays hidden in the fog until the student actually gets there. */
+  isMystery?: boolean;
 }
 
 export const LevelNode: React.FC<LevelNodeProps> = ({
@@ -30,6 +34,7 @@ export const LevelNode: React.FC<LevelNodeProps> = ({
   score,
   isNew = false,
   zoneName,
+  isMystery = false,
 }) => {
   // Theme-specific colors
   const themeColors = {
@@ -62,6 +67,9 @@ export const LevelNode: React.FC<LevelNodeProps> = ({
     if (isCurrent) {
       return `bg-gradient-to-br ${colors.current} animate-pulse-glow`;
     }
+    if (isMystery) {
+      return 'bg-gradient-to-br from-white/50 via-violet-200/40 to-white/10 backdrop-blur-md';
+    }
     return `bg-gradient-to-br ${colors.locked}`;
   };
 
@@ -71,6 +79,9 @@ export const LevelNode: React.FC<LevelNodeProps> = ({
     }
     if (isCurrent) {
       return <Play className="w-8 h-8 text-white fill-white drop-shadow-lg" />;
+    }
+    if (isMystery) {
+      return <HelpCircle className="w-8 h-8 text-white/90 drop-shadow-lg" />;
     }
     return <Lock className="w-6 h-6 text-white/70" />;
   };
@@ -103,17 +114,35 @@ export const LevelNode: React.FC<LevelNodeProps> = ({
       }}
       className="z-10"
     >
+      {/* Drifting fog wisps around the mystery node */}
+      {isMystery && (
+        <>
+          <motion.div
+            animate={{ x: [-6, 6, -6], y: [0, -4, 0], opacity: [0.35, 0.6, 0.35] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            className="pointer-events-none absolute -inset-6 rounded-full bg-white/30 blur-xl"
+          />
+          <motion.div
+            animate={{ x: [5, -5, 5], y: [3, -3, 3], opacity: [0.25, 0.5, 0.25] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+            className="pointer-events-none absolute -inset-4 rounded-full bg-violet-200/30 blur-lg"
+          />
+        </>
+      )}
       <motion.button
         onClick={!isLocked ? onClick : undefined}
         whileHover={!isLocked ? { scale: 1.15 } : {}}
         whileTap={!isLocked ? { scale: 0.95 } : {}}
+        animate={isMystery ? { opacity: [0.6, 0.9, 0.6] } : undefined}
+        transition={isMystery ? { duration: 2.5, repeat: Infinity, ease: 'easeInOut' } : undefined}
         className={`
-          relative w-20 h-20 md:w-24 md:h-24 rounded-full 
+          relative w-20 h-20 md:w-24 md:h-24 rounded-full
           ${getNodeStyle()}
           flex items-center justify-center
           shadow-lg transition-all duration-300
           ${!isLocked ? 'cursor-pointer hover:shadow-2xl' : 'cursor-not-allowed'}
           ${isCurrent ? 'ring-4 ring-white ring-offset-4 ring-offset-transparent' : ''}
+          ${isMystery ? 'border-2 border-dashed border-white/60' : ''}
         `}
         disabled={isLocked}
       >
@@ -121,18 +150,20 @@ export const LevelNode: React.FC<LevelNodeProps> = ({
         <div className="absolute inset-2 rounded-full bg-white/20 flex items-center justify-center">
           {getIcon()}
         </div>
-        
-        {/* Level number badge */}
-        <div className={`
-          absolute -top-2 -right-2 w-8 h-8 rounded-full 
-          flex items-center justify-center text-sm font-bold
-          ${isCompleted ? 'bg-white text-amber-600' : 
-            isCurrent ? 'bg-white text-emerald-600' : 
-            'bg-gray-300 text-gray-600'}
-          shadow-md
-        `}>
-          {number}
-        </div>
+
+        {/* Level number badge (hidden for mystery — the whole point is you don't know yet) */}
+        {!isMystery && (
+          <div className={`
+            absolute -top-2 -right-2 w-8 h-8 rounded-full
+            flex items-center justify-center text-sm font-bold
+            ${isCompleted ? 'bg-white text-amber-600' :
+              isCurrent ? 'bg-white text-emerald-600' :
+              'bg-gray-300 text-gray-600'}
+            shadow-md
+          `}>
+            {number}
+          </div>
+        )}
 
         {/* NEW badge for freshly unlocked */}
         {isCurrent && isNew && (
@@ -186,15 +217,15 @@ export const LevelNode: React.FC<LevelNodeProps> = ({
       {/* Title label */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: number * 0.08 + 0.2 }}
+        animate={isMystery ? { opacity: [0.5, 0.9, 0.5], y: 0 } : { opacity: 1, y: 0 }}
+        transition={isMystery ? { duration: 2.5, repeat: Infinity, ease: 'easeInOut' } : { delay: number * 0.08 + 0.2 }}
         className={`
           mt-3 text-center text-sm md:text-base font-bold
-          ${isLocked ? 'text-gray-400' : 'text-white drop-shadow-lg'}
+          ${isMystery ? 'italic text-white/80' : isLocked ? 'text-gray-400' : 'text-white drop-shadow-lg'}
           max-w-[100px] truncate
         `}
       >
-        {isLocked ? '???' : title}
+        {isMystery ? 'Coming up…' : isLocked ? '???' : title}
       </motion.div>
 
       {/* Zone name badge */}
