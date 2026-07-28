@@ -20,6 +20,12 @@ export interface PlaygroundLesson {
   canvasSlides?: any[];
   score?: number;
   completedAt?: string;
+  /** Set when this row is a scene-based Little Explorers Phonics lesson
+   *  (ai_metadata.contentFormat === 'lep1-rich') — the map renders these
+   *  via the scene player instead of the generic quiz modal. */
+  contentFormat?: string;
+  unitNumber?: number;
+  lessonNumber?: number;
 }
 
 interface CurriculumLessonRow {
@@ -29,6 +35,7 @@ interface CurriculumLessonRow {
   difficulty_level: string;
   content: unknown;
   description: string | null;
+  ai_metadata: Record<string, unknown> | null;
 }
 
 interface ProgressRow {
@@ -82,7 +89,7 @@ export const usePlaygroundLessons = () => {
       // Fetch curriculum lessons for kids
       const { data: curriculumData, error: curriculumError } = await supabase
         .from('curriculum_lessons')
-        .select('id, title, sequence_order, difficulty_level, content, description')
+        .select('id, title, sequence_order, difficulty_level, content, description, ai_metadata')
         .eq('target_system', 'kids')
         .eq('is_published', true)
         .order('sequence_order', { ascending: true });
@@ -144,6 +151,10 @@ export const usePlaygroundLessons = () => {
             if (lesson.difficulty_level === 'game') type = 'game';
           }
 
+          const contentFormat = lesson.ai_metadata?.contentFormat as string | undefined;
+          const unitNumber = lesson.ai_metadata?.unit_number != null ? Number(lesson.ai_metadata.unit_number) : undefined;
+          const lessonNumber = lesson.ai_metadata?.lesson_number != null ? Number(lesson.ai_metadata.lesson_number) : undefined;
+
           return {
             id: lesson.id,
             number: index + 1,
@@ -155,6 +166,9 @@ export const usePlaygroundLessons = () => {
             canvasSlides,
             score: progress?.score ?? undefined,
             completedAt: progress?.completed_at ?? undefined,
+            contentFormat,
+            unitNumber,
+            lessonNumber,
           };
         }
       );

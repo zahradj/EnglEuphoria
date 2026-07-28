@@ -1,12 +1,25 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Scene } from '@/content/playground-library/unit1/scenes';
 import { SceneRenderer, Hearts, MAX_HEARTS, Lep1Keyframes } from '@/content/playground-library/unit1/SceneRenderer';
 import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-library/unit1/audio';
 
-export default function PlayUnitLesson({ scenes, sessionKey, embedded = false }: { scenes: Scene[]; sessionKey: string; embedded?: boolean }) {
+interface PlayUnitLessonProps {
+  scenes: Scene[];
+  sessionKey: string;
+  embedded?: boolean;
+  /** Only needed by callers that also pass onFinaleReached — lets the
+   *  caller identify which lesson just finished. */
+  unitNumber?: number;
+  lessonNumber?: number;
+  /** Fired once when the finale scene is reached. */
+  onFinaleReached?: () => void;
+}
+
+export default function PlayUnitLesson({ scenes, sessionKey, embedded = false, onFinaleReached }: PlayUnitLessonProps) {
   const navigate = useNavigate();
   const SCENES = scenes;
+  const finaleFiredRef = useRef(false);
 
   const [sceneIdx, setSceneIdx] = useState<number>(() => {
     if (typeof window === 'undefined') return 0;
@@ -66,6 +79,13 @@ export default function PlayUnitLesson({ scenes, sessionKey, embedded = false }:
   );
 
   const isFinale = scene.kind === 'finale';
+
+  useEffect(() => {
+    if (isFinale && !finaleFiredRef.current) {
+      finaleFiredRef.current = true;
+      onFinaleReached?.();
+    }
+  }, [isFinale, onFinaleReached]);
 
   return (
     <div

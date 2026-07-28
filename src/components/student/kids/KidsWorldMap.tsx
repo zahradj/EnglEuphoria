@@ -9,6 +9,7 @@ import { WindingPath } from './WindingPath';
 import { FloatingBackpack } from './FloatingBackpack';
 import { GiantGoButton } from './GiantGoButton';
 import { LessonPlayerModal } from './LessonPlayerModal';
+import { SceneLessonPlayerModal } from './SceneLessonPlayerModal';
 import { PlaygroundLesson } from '@/hooks/usePlaygroundLessons';
 
 export type ThemeType = 'jungle' | 'space' | 'underwater';
@@ -233,14 +234,24 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
       {/* Floating backpack with stars */}
       <FloatingBackpack totalStars={totalStars} />
 
-      {/* Lesson player modal */}
-      <LessonPlayerModal
-        isOpen={isModalOpen}
-        lesson={selectedLesson}
-        onClose={() => setIsModalOpen(false)}
-        onComplete={handleLessonComplete}
-        studentName={studentName}
-      />
+      {/* Lesson player modal — scene-based Little Explorers Phonics lessons get
+          their own full player; everything else uses the generic quiz modal. */}
+      {selectedLesson?.contentFormat === 'lep1-rich' ? (
+        <SceneLessonPlayerModal
+          isOpen={isModalOpen}
+          lesson={selectedLesson}
+          onClose={() => setIsModalOpen(false)}
+          onComplete={handleLessonComplete}
+        />
+      ) : (
+        <LessonPlayerModal
+          isOpen={isModalOpen}
+          lesson={selectedLesson}
+          onClose={() => setIsModalOpen(false)}
+          onComplete={handleLessonComplete}
+          studentName={studentName}
+        />
+      )}
     </div>
   );
 };
