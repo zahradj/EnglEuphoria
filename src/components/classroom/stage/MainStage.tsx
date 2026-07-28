@@ -111,6 +111,7 @@ export const MainStage: React.FC<MainStageProps> = ({
                 unitNumber={sceneLessonRef.unitNumber}
                 lessonNumber={sceneLessonRef.lessonNumber}
                 roomId={roomId}
+                role={role}
               />
             </div>
           ) : hubType === 'playground' && mode === 'slide' && !isInterview ? (

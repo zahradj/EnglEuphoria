@@ -154,6 +154,17 @@ export interface SlideChangePayload {
 }
 type SlideChangeListener = (payload: SlideChangePayload) => void;
 
+/** Teacher → student: authoritative scene index inside an embedded Playground
+ *  scene lesson (leader/follower — only the teacher can advance the class). */
+export interface SceneLessonNavPayload {
+  unitNumber: number;
+  lessonNumber: number;
+  sceneIdx: number;
+  senderId: string;
+  timestamp: number;
+}
+type SceneLessonNavListener = (payload: SceneLessonNavPayload) => void;
+
 /** Teacher's authoritative snapshot pushed on demand by the "Force Sync" button. */
 export interface ForceSyncPayload {
   slideIndex: number;
@@ -186,6 +197,7 @@ interface RoomChannel {
   slideChangeListeners: Set<SlideChangeListener>;
   forceSyncListeners: Set<ForceSyncListener>;
   studentActionListeners: Set<StudentActionListener>;
+  sceneLessonNavListeners: Set<SceneLessonNavListener>;
   refCount: number;
 }
 
@@ -216,6 +228,7 @@ class WhiteboardService {
     const slideChangeListeners = new Set<SlideChangeListener>();
     const forceSyncListeners = new Set<ForceSyncListener>();
     const studentActionListeners = new Set<StudentActionListener>();
+    const sceneLessonNavListeners = new Set<SceneLessonNavListener>();
     const statusListeners = new Set<(status: string) => void>();
 
     const channel = supabase
@@ -286,6 +299,9 @@ class WhiteboardService {
       })
       .on('broadcast', { event: 'student_action' }, (payload) => {
         studentActionListeners.forEach((cb) => cb(payload.payload as StudentActionPayload));
+      })
+      .on('broadcast', { event: 'scene_lesson_nav' }, (payload) => {
+        sceneLessonNavListeners.forEach((cb) => cb(payload.payload as SceneLessonNavPayload));
       });
 
     const ready = new Promise<void>((resolve) => {
@@ -315,6 +331,7 @@ class WhiteboardService {
       slideChangeListeners,
       forceSyncListeners,
       studentActionListeners,
+      sceneLessonNavListeners,
       refCount: 0,
     };
     this.rooms.set(channelName, room);
@@ -610,6 +627,29 @@ class WhiteboardService {
     return () => this.release(roomId, () => room.studentActionListeners.delete(onAction));
   }
 
+  /** Teacher → student: broadcast the authoritative scene index inside an
+   *  embedded Playground scene lesson. Students never call this — their
+   *  local scene index is fully driven by whatever the teacher sends. */
+  async sendSceneLessonNav(
+    roomId: string,
+    payload: Omit<SceneLessonNavPayload, 'timestamp'>,
+  ): Promise<void> {
+    const room = this.getRoom(roomId);
+    await room.ready;
+    await room.channel.send({
+      type: 'broadcast',
+      event: 'scene_lesson_nav',
+      payload: { ...payload, timestamp: Date.now() } satisfies SceneLessonNavPayload,
+    });
+  }
+
+  subscribeToSceneLessonNav(roomId: string, onNav: SceneLessonNavListener): () => void {
+    const room = this.getRoom(roomId);
+    room.sceneLessonNavListeners.add(onNav);
+    room.refCount += 1;
+    return () => this.release(roomId, () => room.sceneLessonNavListeners.delete(onNav));
+  }
+
   subscribeToStatus(roomId: string, onStatus: (status: string) => void): () => void {
     const room = this.getRoom(roomId);
     room.statusListeners.add(onStatus);
@@ -640,6 +680,7 @@ class WhiteboardService {
       room.slideChangeListeners.size === 0 &&
       room.forceSyncListeners.size === 0 &&
       room.studentActionListeners.size === 0 &&
+      room.sceneLessonNavListeners.size === 0 &&
       room.statusListeners.size === 0
     ) {
       supabase.removeChannel(room.channel);
