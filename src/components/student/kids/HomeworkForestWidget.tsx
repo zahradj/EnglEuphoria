@@ -88,13 +88,32 @@ export const HomeworkForestWidget: React.FC<HomeworkForestWidgetProps> = ({
       className="glass-card-hub glass-playground p-4 backdrop-blur-md"
       aria-label="Homework Forest"
     >
+      <div className="mb-3 flex items-center gap-2">
+        <Trees className={cn('h-5 w-5', isDark ? 'text-emerald-300' : 'text-emerald-700')} />
+        <h3 className={cn('text-sm font-extrabold', isDark ? 'text-emerald-100' : 'text-emerald-900')}>
+          Homework Forest
+        </h3>
+      </div>
 
       {loading ? (
         <div className="flex items-center gap-2 py-4 text-xs text-emerald-700/70 dark:text-emerald-300/70">
           <div className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
           Loading the forest...
         </div>
-      ) : sorted.length === 0 ? null : (
+      ) : sorted.length === 0 ? (
+        <div
+          className={cn(
+            'flex items-center gap-3 rounded-2xl border border-dashed p-4',
+            isDark ? 'border-emerald-700/40 text-emerald-300/70' : 'border-emerald-300 text-emerald-700/70',
+          )}
+        >
+          <Trees className="h-6 w-6 shrink-0 opacity-60" />
+          <p className="text-xs font-semibold leading-snug">
+            Your Homework Forest is empty for now — finish a lesson on the map below and your first
+            practice quest will grow right here!
+          </p>
+        </div>
+      ) : (
         <div className="flex flex-col gap-2 max-h-72 overflow-y-auto pr-1 scrollbar-thin">
           <AnimatePresence initial={false}>
             {sorted.map((hw, i) => {

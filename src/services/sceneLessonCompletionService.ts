@@ -29,6 +29,9 @@ interface CompleteSceneLessonResult {
   phonicsLetters: string[];
   phonicsOk: boolean;
   homeworkOk: boolean;
+  /** The newly-created homework_assignments row id, if the homework step
+   *  succeeded — lets the caller offer a direct "do it now" link. */
+  homeworkAssignmentId: string | null;
 }
 
 /** Letters this lesson introduces, in first-seen order, deduped. */
@@ -129,6 +132,7 @@ export async function completeSceneLesson({
     phonicsLetters: [],
     phonicsOk: false,
     homeworkOk: false,
+    homeworkAssignmentId: null,
   };
 
   // 1. Progress
@@ -176,11 +180,12 @@ export async function completeSceneLesson({
   // 3. Homework
   try {
     const content = buildHomeworkContent(scenes, title, lessonRowId);
-    const { error } = await supabase.functions.invoke('create-lep1-homework', {
+    const { data, error } = await supabase.functions.invoke('create-lep1-homework', {
       body: { lessonId: lessonRowId, title: `Practice: ${title}`, content },
     });
     if (error) throw error;
     result.homeworkOk = true;
+    result.homeworkAssignmentId = (data as { assignment_id?: string } | null)?.assignment_id ?? null;
   } catch (err) {
     console.error('[sceneLessonCompletion] homework creation failed', err);
   }

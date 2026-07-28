@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Loader2, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { X, Loader2, Sparkles, Trophy, BookOpen, Map as MapIcon } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import PlayUnitLesson from '@/pages/playground-scene/PlayUnitLesson';
 import { getSceneLesson } from '@/content/playground-library/sceneLessonRegistry';
@@ -46,10 +47,15 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
   onComplete,
 }) => {
   const { user } = useAuth();
-  const [phase, setPhase] = useState<'preview' | 'playing' | 'saving'>('preview');
+  const navigate = useNavigate();
+  const [phase, setPhase] = useState<'preview' | 'playing' | 'saving' | 'complete'>('preview');
+  const [homeworkAssignmentId, setHomeworkAssignmentId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isOpen) setPhase('preview');
+    if (isOpen) {
+      setPhase('preview');
+      setHomeworkAssignmentId(null);
+    }
   }, [isOpen, lesson?.id]);
 
   const key = lesson?.unitNumber != null && lesson?.lessonNumber != null ? `${lesson.unitNumber}-${lesson.lessonNumber}` : null;
@@ -75,9 +81,19 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
   const handleFinale = async () => {
     setPhase('saving');
     if (user?.id) {
-      await completeSceneLesson({ userId: user.id, lessonRowId: lesson.id, title: meta.title, scenes });
+      const result = await completeSceneLesson({ userId: user.id, lessonRowId: lesson.id, title: meta.title, scenes });
+      setHomeworkAssignmentId(result.homeworkAssignmentId);
     }
     onComplete(lesson.id, 100);
+    setPhase('complete');
+  };
+
+  const goToHomework = () => {
+    if (homeworkAssignmentId) navigate(`/homework/${homeworkAssignmentId}`);
+    onClose();
+  };
+
+  const backToMap = () => {
     onClose();
   };
 
@@ -139,6 +155,44 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
                 className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FE6A2F] px-6 py-4 text-lg font-extrabold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
               >
                 <Sparkles className="h-5 w-5" /> Start!
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      ) : phase === 'complete' ? (
+        <motion.div
+          key="complete"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="w-full max-w-md overflow-hidden rounded-[2rem] bg-white p-8 text-center shadow-2xl"
+          >
+            <Trophy className="mx-auto h-16 w-16 text-amber-400 drop-shadow" />
+            <h2 className="mt-3 text-2xl font-black text-[#FE6A2F]">Lesson complete!</h2>
+            <p className="mt-2 text-sm text-slate-600">
+              {homeworkAssignmentId
+                ? "Great job! Your practice homework is ready — do it now while it's fresh, or come back to it later."
+                : "Great job! Head back to the map to keep going."}
+            </p>
+
+            <div className="mt-6 flex flex-col gap-3">
+              {homeworkAssignmentId && (
+                <button
+                  onClick={goToHomework}
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FE6A2F] px-6 py-4 text-lg font-extrabold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
+                >
+                  <BookOpen className="h-5 w-5" /> Do my homework now
+                </button>
+              )}
+              <button
+                onClick={backToMap}
+                className="flex w-full items-center justify-center gap-2 rounded-full border-2 border-[#FE6A2F]/30 bg-white px-6 py-4 text-lg font-extrabold text-[#FE6A2F] shadow transition-transform hover:scale-[1.02] active:scale-95"
+              >
+                <MapIcon className="h-5 w-5" /> Back to the map
               </button>
             </div>
           </motion.div>
