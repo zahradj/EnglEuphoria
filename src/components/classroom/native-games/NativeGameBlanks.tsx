@@ -18,16 +18,42 @@ interface BlanksState {
   revealed: boolean;
 }
 
+// Deterministic string hash + PRNG (mulberry32) so the option order below is
+// identical on every client for the same question — the shuffle itself was
+// never part of the synced state, so a Math.random() shuffle here meant the
+// teacher and student saw the answer choices in different positions.
+const hashString = (str: string): number => {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (Math.imul(h, 31) + str.charCodeAt(i)) | 0;
+  }
+  return h >>> 0;
+};
+
+const mulberry32 = (seed: number) => {
+  let a = seed;
+  return () => {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+};
+
 export const NativeGameBlanks: React.FC<Props> = ({ worksheet, roomId, userId, role }) => {
   const items = worksheet.fill_in_blanks ?? [];
   const [state, setState] = useState<BlanksState>({ index: 0, selected: null, revealed: false });
 
-  // Cache shuffled options per index so order is stable across re-renders.
+  // Cache shuffled options per index so order is stable across re-renders,
+  // and — critically — identical between teacher and student since both
+  // derive it from the same worksheet content via the same seeded shuffle.
   const optionsByIndex = useMemo(() => {
     return items.map((item) => {
       const opts = [item.correct_answer, ...item.distractors];
+      const seed = hashString(opts.join('~'));
+      const rand = mulberry32(seed);
       for (let i = opts.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        const j = Math.floor(rand() * (i + 1));
         [opts[i], opts[j]] = [opts[j], opts[i]];
       }
       return opts;

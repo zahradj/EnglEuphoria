@@ -24,10 +24,33 @@ interface MemoryState {
   matched: number[]; // matched card ids
 }
 
-const seedFromTimestamp = (cards: Card[]): Card[] => {
+// Deterministic string hash + PRNG (mulberry32) so the shuffle below produces
+// the exact same card order on every client, given the exact same worksheet —
+// no extra sync round-trip needed, and it re-derives correctly for a student
+// who joins late or reconnects.
+const hashString = (str: string): number => {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (Math.imul(h, 31) + str.charCodeAt(i)) | 0;
+  }
+  return h >>> 0;
+};
+
+const mulberry32 = (seed: number) => {
+  let a = seed;
+  return () => {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+};
+
+const seededShuffle = (cards: Card[], seed: number): Card[] => {
   const arr = [...cards];
+  const rand = mulberry32(seed);
   for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(rand() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
@@ -40,7 +63,8 @@ const buildInitial = (worksheet: SmartWorksheet): MemoryState => {
     cards.push({ id: i * 2, pairId: i, text: p.pair_1 });
     cards.push({ id: i * 2 + 1, pairId: i, text: p.pair_2 });
   });
-  return { cards: seedFromTimestamp(cards), flipped: [], matched: [] };
+  const seed = hashString(pairs.map((p) => `${p.pair_1}|${p.pair_2}`).join('~'));
+  return { cards: seededShuffle(cards, seed), flipped: [], matched: [] };
 };
 
 export const NativeGameMemory: React.FC<Props> = ({ worksheet, roomId, userId, role }) => {
@@ -102,7 +126,10 @@ export const NativeGameMemory: React.FC<Props> = ({ worksheet, roomId, userId, r
     }
   };
 
-  const reset = () => update(buildInitial(worksheet));
+  // Reset is teacher-only and always broadcasts the resulting order to the
+  // student, so it's safe (and more fun) to reshuffle freshly here rather
+  // than reuse the deterministic seed buildInitial() needs for first render.
+  const reset = () => update({ cards: seededShuffle(state.cards, Date.now()), flipped: [], matched: [] });
 
   if (state.cards.length === 0) {
     return (
