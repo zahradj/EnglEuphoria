@@ -46,6 +46,77 @@ function PrimaryButton({ onClick, disabled, children }: { onClick: () => void; d
 
 /* ---------- Dispatcher ---------- */
 
+/** Per-scene coaching notes for teachers running the lesson live — only Lesson 3 has any so far. */
+const L3_TEACHER_TIPS: Record<string, string> = {
+  'l3-title': "Set the mood: 'Today we learn feelings — happy, sad, angry!' Have students mirror each face.",
+  'l3-song': "The Feelings Song! Sing each line with the character. Clap on 'happy', hug yourself on 'sad', stomp on 'angry'. Tap Sing Again to loop — repeat 2x so the student joins in.",
+  'l3-intro': 'Pause after each line. Ask the student to repeat with the same emotion in their voice.',
+  'l3-vocab-match': 'Tap a character → card pops with the feeling. Model twice, then have student repeat with matching expression.',
+  'l3-model-a': "Model /æ/ 3x (short 'a' as in 'angry'). Student echoes. Then say each anchor word together.",
+  'l3-trace-a': 'Trace freely — no scoring. Say /æ/ every time the finger moves. Keep it playful.',
+  'l3-model-s': 'Model /s/ like a snake — long and soft. Student repeats each anchor word after you.',
+  'l3-trace-s': 'Trace freely. Whisper /sss/ together as they draw. No pressure on accuracy.',
+  'l3-feeling-stage': "Model the sentence first: 'I am happy.' Student repeats before tapping the matching face.",
+  'l3-who-feels-it': "Tap a friend → card pops with full sentence: 'Mia is happy', 'Bella is sad', 'Leo is angry', 'Pip is happy'. Repeat together.",
+  'l3-feed-monsters': "Name the feeling BEFORE the student drags. 'Mia is happy → the YELLOW monster.' Cheer every match.",
+  'l3-sort-as': 'Say each word before dragging. Emphasize the /æ/ or /s/ sound. Student repeats then drags.',
+  'l3-sound-pop': 'Fast game — but pause between rounds so student can say the target sound aloud.',
+  'l3-grand-build': 'Read the full sentence together. Then student picks the missing word and repeats the whole line.',
+  'l3-x-is-feeling': "Model 'Leo is angry' with dramatic voice. Student mirrors both the words and the expression.",
+  'l3-he-she-model': 'Point to the character: \'Mia is sad. SHE is sad.\' Emphasize HE for boys (Pip, Leo) and SHE for girls (Mia, Bella). Student repeats both lines.',
+  'l3-he-she-sort': "The character says 'I am ___'. Student decides girl → SHE box (left), boy → HE box (right). Drag to sort. Tap the sentence card to replay the audio.",
+  'l3-he-she-say': "Show the character + feeling card. Prompt: 'Is it HE or SHE? Say the sentence!' Wait for the student to say it OUT LOUD ('She is angry.') BEFORE they tap HE/SHE. On correct tap, the character models the sentence once — tap the card to replay.",
+  'l3-feeling-quiz': "Emotion recognition only. Teacher says 'Who is happy?' — student taps whichever friend shows a smile. Names don't matter here; focus on reading the face.",
+  'l3-i-am-feeling': "Personal turn. Ask: 'How are YOU today?' Encourage a full 'I am ___' answer.",
+  'l3-roleplay-feelings': 'Take turns. You play one character, student plays another. Swap roles the second time.',
+  'l3-i-am-demo': "Model each 'I am ___' sentence with big feeling. Point to yourself as the character speaks. Tap the card to replay before moving on.",
+  'l3-feelings-dice': 'Roll → student acts out the feeling AND says the sentence. Big voices, big faces!',
+  'l3-friend-pop': "Fast recall. Between rounds, prompt: 'Say it back — how is Pip?'",
+  'l3-finale': 'Celebrate! Ask student to teach YOU one feeling they learned today.',
+};
+
+function TeacherTip({ instruction, tip }: { instruction?: string; tip?: string }) {
+  const [open, setOpen] = useState(false);
+  if (!instruction && !tip) return null;
+  return (
+    <>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        aria-label={open ? 'Hide teacher notes' : 'Show teacher notes'}
+        className="fixed right-4 top-4 z-[9999] flex h-11 w-11 items-center justify-center rounded-full border border-white/60 bg-black/40 text-lg text-white shadow-lg backdrop-blur-md transition hover:scale-105 active:scale-95"
+        style={{ boxShadow: '0 6px 20px rgba(0,0,0,0.35)' }}
+        title="Teacher notes (only you can see this)"
+      >
+        {open ? '✕' : '\u{1F393}'}
+      </button>
+      {open && (
+        <div
+          className="fixed right-4 top-[68px] z-[9998] max-w-[340px] rounded-2xl border border-white/50 bg-neutral-900/90 p-4 text-sm leading-relaxed text-white shadow-2xl backdrop-blur-xl"
+          style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.5)' }}
+        >
+          <div className="mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-orange-300">
+            <span>{'\u{1F393}'}</span>
+            <span>Teacher notes</span>
+          </div>
+          {instruction && (
+            <div className="mb-3">
+              <div className="mb-1 text-[10px] font-black uppercase tracking-widest text-white/60">Say to student</div>
+              <div className="rounded-lg bg-white/10 px-3 py-2 text-white/95">{instruction}</div>
+            </div>
+          )}
+          {tip && (
+            <div>
+              <div className="mb-1 text-[10px] font-black uppercase tracking-widest text-white/60">Tip</div>
+              <div className="text-white/90">{tip}</div>
+            </div>
+          )}
+          <div className="mt-3 text-[10px] italic text-white/50">Only visible to you. Tap the icon to hide.</div>
+        </div>
+      )}
+    </>
+  );
+}
+
 export function SceneRenderer(props: {
   scene: Scene;
   onWin: (gem: boolean) => void;
@@ -54,8 +125,13 @@ export function SceneRenderer(props: {
   onRestart: () => void;
   gemsCollected: number;
   heartsRemaining: number;
+  lessonNumber?: number;
 }) {
-  const { scene } = props;
+  const { scene, lessonNumber } = props;
+  const teacherTip = lessonNumber === 3 ? L3_TEACHER_TIPS[scene.id] : undefined;
+  const instruction = (scene as { teacher?: string }).teacher;
+  const tipOverlay = (instruction || teacherTip) ? <TeacherTip key={scene.id} instruction={instruction} tip={teacherTip} /> : null;
+  const content = (() => {
   switch (scene.kind) {
     case 'title-card': return <TitleCardScene scene={scene} onNext={props.onNext} />;
     case 'cinematic': return <CinematicScene scene={scene} onNext={props.onNext} />;
@@ -107,6 +183,13 @@ export function SceneRenderer(props: {
     case 'age-quiz': return <AgeQuizScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     default: return null;
   }
+  })();
+  return (
+    <>
+      {content}
+      {tipOverlay}
+    </>
+  );
 }
 
 /* ---------- Title card ---------- */

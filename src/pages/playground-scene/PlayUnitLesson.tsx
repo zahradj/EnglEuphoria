@@ -1,5 +1,6 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import type { Scene } from '@/content/playground-library/unit1/scenes';
 import { SceneRenderer, Hearts, MAX_HEARTS, Lep1Keyframes } from '@/content/playground-library/unit1/SceneRenderer';
 import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-library/unit1/audio';
@@ -15,6 +16,9 @@ interface PlayUnitLessonProps {
   scenes: Scene[];
   sessionKey: string;
   embedded?: boolean;
+  /** Sets document.title/meta description for this lesson. Ignored when embedded. */
+  pageTitle?: string;
+  pageDescription?: string;
   /** Only needed by callers that also pass onFinaleReached — lets the
    *  caller identify which lesson just finished. */
   unitNumber?: number;
@@ -46,7 +50,7 @@ interface PlayUnitLessonProps {
 }
 
 const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(function PlayUnitLesson(
-  { scenes, sessionKey, embedded = false, onFinaleReached, unitNumber, lessonNumber, role, roomId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist },
+  { scenes, sessionKey, embedded = false, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist },
   ref,
 ) {
   const navigate = useNavigate();
@@ -161,7 +165,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   }, [sceneIdx, SCENES.length, canNavigate, onNavState]);
 
   const totalGemsPossible = useMemo(
-    () => SCENES.filter((s) => s.kind === 'basket' || s.kind === 'who-said-it' || s.kind === 'roleplay' || s.kind === 'join-stage' || s.kind === 'name-gate' || s.kind === 'meet-group' || s.kind === 'voice-stage' || (s.kind === 'meet' && s.repeat)).length,
+    () => SCENES.filter((s) => s.kind === 'basket' || s.kind === 'who-said-it' || s.kind === 'name-gate' || s.kind === 'voice-stage' || s.kind === 'roleplay' || s.kind === 'join-stage' || s.kind === 'sound-pop' || (s.kind === 'meet' && s.repeat)).length,
     [SCENES],
   );
 
@@ -175,7 +179,14 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   }, [isFinale, onFinaleReached]);
 
   return (
-    <div
+    <>
+      {!embedded && pageTitle && (
+        <Helmet>
+          <title>{pageTitle}</title>
+          {pageDescription && <meta name="description" content={pageDescription} />}
+        </Helmet>
+      )}
+      <div
       dir="ltr"
       onPointerDownCapture={unlockAudio}
       className={`relative w-full overflow-hidden transition-[background-image] duration-500 [container-type:size] ${embedded ? 'h-full' : 'min-h-screen'}`}
@@ -213,6 +224,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
             onRestart={restart}
             gemsCollected={gems}
             heartsRemaining={hearts}
+            lessonNumber={lessonNumber}
           />
         </div>
 
@@ -246,7 +258,8 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
       ))}
 
       <Lep1Keyframes />
-    </div>
+      </div>
+    </>
   );
 });
 
