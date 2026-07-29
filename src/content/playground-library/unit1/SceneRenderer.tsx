@@ -86,6 +86,17 @@ export function SceneRenderer(props: {
     case 'sound-pop': return <SoundPopScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'brick-crush': return <BrickCrushScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'friend-pop': return <FriendPopScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'feelings-tap': return <FeelingsTapScene scene={scene} onNext={props.onNext} />;
+    case 'feelings-wheel': return <FeelingsWheelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'x-is-feeling': return <XIsFeelingScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'feelings-dice': return <FeelingsDiceScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'feed-monsters': return <FeedMonstersScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'he-she-model': return <HeSheModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'he-she-sort': return <HeSheSortScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'he-she-say': return <HeSheSayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'feeling-quiz': return <FeelingQuizScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'i-am-feeling': return <IAmFeelingScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'feelings-bingo': return <FeelingsBingoScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     default: return null;
   }
 }
@@ -2817,6 +2828,614 @@ function FriendPopScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
         })}
       </div>
       <div className="pointer-events-none absolute bottom-4 left-1/2 z-30 -translate-x-1/2 rounded-full bg-white/90 px-4 py-1 text-sm font-black text-orange-700 shadow">⭐ {score}/{total}</div>
+    </div>
+  );
+}
+
+/* =========================================================================
+ * Feelings vocabulary pack — ported (interaction design only, not code) from
+ * the reference "Little Explorers Phonics" Lesson 3 feelings progression.
+ * Field shapes and every implementation below are our own, matching this
+ * file's existing conventions (GlassCard/PrimaryButton chrome, CAST sprites,
+ * safeSpeak/sfx audio, lep1-* CSS keyframes, Confetti on big completions).
+ * ========================================================================= */
+
+const FEELING_EMOJI: Record<'happy' | 'sad' | 'angry', string> = { happy: '\u{1F60A}', sad: '\u{1F622}', angry: '\u{1F620}' };
+
+/* ---------- Feelings tap ---------- */
+
+function FeelingsTapScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'feelings-tap' }>; onNext: () => void }) {
+  const [tapped, setTapped] = useState<Set<number>>(new Set());
+  const [active, setActive] = useState<number | null>(null);
+  const total = scene.cast.length;
+  const spots = useMemo(() => {
+    const leftPad = total <= 3 ? 18 : 12;
+    const step = total > 1 ? (100 - leftPad * 2) / (total - 1) : 0;
+    return scene.cast.map((_, i) => ({ leftPct: leftPad + step * i }));
+  }, [scene.cast, total]);
+
+  const tap = async (i: number) => {
+    setActive(i);
+    setTapped((s) => new Set(s).add(i));
+    sfx.pop();
+    const { who, label } = scene.cast[i];
+    await safeSpeak(label, who);
+  };
+
+  const allTapped = tapped.size >= total;
+
+  return (
+    <div className="absolute inset-0 z-10 overflow-hidden">
+      <div className="pointer-events-none absolute inset-x-0 top-4 flex justify-center px-4">
+        <div className="pointer-events-auto max-w-lg rounded-3xl bg-white/90 px-5 py-3 text-center text-sm font-black text-orange-700 shadow-lg backdrop-blur sm:text-base">{scene.teacher}</div>
+      </div>
+      {scene.cast.map((c, i) => {
+        const cast = CAST[c.who];
+        const isActive = active === i;
+        const isDone = tapped.has(i);
+        return (
+          <button key={i} onClick={() => tap(i)} aria-label={`Tap ${cast.name}`}
+            className="absolute bottom-8 z-20 grid place-items-end"
+            style={{ left: `${spots[i].leftPct}%`, height: '58%', width: 'auto', aspectRatio: '0.72', transform: `translateX(-50%) scale(${isActive ? 1.1 : 1})`, transition: 'transform 0.3s ease-out' }}
+          >
+            <img src={cast.img} alt={cast.name} className="pointer-events-none block h-full w-full select-none object-contain" style={{ filter: isDone ? 'drop-shadow(0 12px 18px rgba(34,197,94,0.55))' : 'drop-shadow(0 10px 14px rgba(0,0,0,0.4))' }} />
+            {isDone && (
+              <div className="pointer-events-none absolute -top-4 left-1/2 -translate-x-1/2 rounded-2xl bg-white/95 px-4 py-2 text-center shadow-2xl ring-2 ring-orange-200 animate-[lep1-pop_0.4s_ease-out]">
+                <span className="text-2xl">{FEELING_EMOJI[c.emotion]}</span>
+                <p className="text-sm font-black" style={{ color: cast.color }}>{c.label}</p>
+              </div>
+            )}
+          </button>
+        );
+      })}
+      <div className="absolute inset-x-0 bottom-4 flex justify-center">
+        {allTapped
+          ? <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95 animate-[lep1-slide-up_0.4s_ease-out]">Great job! Next →</button>
+          : <div className="rounded-full bg-white/85 px-4 py-2 text-xs font-black text-orange-700 shadow">👉 Tap each friend ({tapped.size}/{total})</div>}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Feelings wheel ---------- */
+
+function FeelingsWheelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'feelings-wheel' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const n = scene.slots.length;
+  const slice = 360 / n;
+  const colors = ['#FE6A2F', '#4FA9E0', '#B85CD1', '#FFC93C', '#7BE0FF', '#E76FA5'];
+  const gradient = scene.slots.map((_, i) => `${colors[i % colors.length]} ${i * slice}deg ${(i + 1) * slice}deg`).join(', ');
+  const [rotation, setRotation] = useState(0);
+  const [spinning, setSpinning] = useState(false);
+  const [landed, setLanded] = useState<number | null>(null);
+  const [said, setSaid] = useState(false);
+
+  const spin = () => {
+    if (spinning || landed !== null) return;
+    const target = Math.floor(Math.random() * n);
+    const finalAngle = 360 * 5 - (target * slice + slice / 2);
+    sfx.pop();
+    setSpinning(true);
+    setRotation(finalAngle);
+    window.setTimeout(async () => {
+      setSpinning(false);
+      setLanded(target);
+      sfx.match();
+      await safeSpeak(scene.slots[target].label, scene.slots[target].who);
+    }, 2200);
+  };
+
+  const replay = () => { if (landed !== null) void safeSpeak(scene.slots[landed].label, scene.slots[landed].who); };
+  const confirm = () => { if (landed === null || said) return; setSaid(true); sfx.gem(); onWin(true); };
+  const slot = landed !== null ? scene.slots[landed] : null;
+
+  return (
+    <GlassCard className="text-center">
+      <p className="text-lg font-bold text-orange-700">{scene.teacher}</p>
+      <div className="relative mx-auto my-6 h-64 w-64">
+        <div className="pointer-events-none absolute -top-3 left-1/2 z-20 -translate-x-1/2 text-4xl drop-shadow-lg">🔻</div>
+        <div
+          className="absolute inset-0 rounded-full border-8 border-white shadow-2xl"
+          style={{ background: `conic-gradient(${gradient})`, transform: `rotate(${rotation}deg)`, transition: spinning ? 'transform 2.2s cubic-bezier(0.15,0.65,0.25,1)' : 'none' }}
+        >
+          {scene.slots.map((s, i) => {
+            const angleDeg = i * slice + slice / 2 - 90;
+            const rad = (angleDeg * Math.PI) / 180;
+            const radius = 92;
+            return (
+              <span key={i} className="absolute text-3xl" style={{ left: 128 + radius * Math.cos(rad), top: 128 + radius * Math.sin(rad), transform: 'translate(-50%,-50%)' }}>
+                {FEELING_EMOJI[s.emotion]}
+              </span>
+            );
+          })}
+        </div>
+        <div className="pointer-events-none absolute inset-0 grid place-items-center">
+          <div className="h-10 w-10 rounded-full border-4 border-orange-400 bg-white shadow-lg" />
+        </div>
+      </div>
+      {landed === null ? (
+        <button onClick={spin} disabled={spinning} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95 disabled:opacity-60">
+          {spinning ? '🌀 Spinning…' : '🎡 Spin the wheel!'}
+        </button>
+      ) : (
+        <div className="flex flex-col items-center gap-3">
+          <div className="rounded-2xl bg-white/90 px-6 py-3 shadow-xl">
+            <span className="text-4xl">{FEELING_EMOJI[slot!.emotion]}</span>
+            <p className="mt-1 text-2xl font-black" style={{ color: CAST[slot!.who].color }}>{slot!.label}!</p>
+          </div>
+          {!said ? (
+            <div className="flex gap-3">
+              <button onClick={replay} className="rounded-full bg-white/95 px-5 py-3 text-sm font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔊 Hear again</button>
+              <button onClick={confirm} className="rounded-full bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-3 text-base font-black text-white shadow-xl active:scale-95">✅ I said it!</button>
+            </div>
+          ) : (
+            <PrimaryButton onClick={onNext}>Next →</PrimaryButton>
+          )}
+        </div>
+      )}
+    </GlassCard>
+  );
+}
+
+/* ---------- Modeled "X is feeling" rounds (shared by x-is-feeling & he-she-model) ---------- */
+
+function ModeledFeelingRounds<R extends { who: CharKey; emotion: 'happy' | 'sad' | 'angry'; sentence: string }>({
+  teacher, rounds, badge, onNext, onWin,
+}: {
+  teacher: string;
+  rounds: R[];
+  badge?: (r: R) => string;
+  onNext: () => void;
+  onWin: (gem: boolean) => void;
+}) {
+  const [round, setRound] = useState(0);
+  const [phase, setPhase] = useState<'model' | 'repeat'>('model');
+  const [gemDone, setGemDone] = useState(false);
+  const total = rounds.length;
+  const finished = round >= total;
+  const r = !finished ? rounds[round] : null;
+
+  useEffect(() => {
+    if (!r) return;
+    let cancelled = false;
+    setPhase('model');
+    (async () => {
+      await new Promise((res) => setTimeout(res, 300));
+      if (cancelled) return;
+      await safeSpeak(r.sentence, r.who);
+      if (cancelled) return;
+      setPhase('repeat');
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round]);
+
+  const replay = () => { if (r) void safeSpeak(r.sentence, r.who); };
+  const confirm = () => {
+    if (!r || phase !== 'repeat') return;
+    sfx.match();
+    const next = round + 1;
+    if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+    setRound(next);
+  };
+
+  if (finished) {
+    return (
+      <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+        <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95 animate-[lep1-slide-up_0.4s_ease-out]">Great job! Next →</button>
+      </div>
+    );
+  }
+
+  const c = CAST[r!.who];
+  return (
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6">
+      <div className="pointer-events-none absolute inset-x-0 top-4 flex justify-center px-4">
+        <div className="max-w-lg rounded-full bg-white/90 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-lg backdrop-blur sm:text-base">{teacher} <span className="ml-1 opacity-60">({round + 1}/{total})</span></div>
+      </div>
+      <div className="relative flex flex-col items-center">
+        <img src={getEmotionSprite(r!.who, r!.emotion)} alt={c.name} className="h-56 w-56 object-contain drop-shadow-2xl sm:h-64 sm:w-64" style={{ animation: phase === 'model' ? 'lep1-hop 0.9s ease-in-out infinite' : undefined }} />
+        {badge && <span className="absolute -right-2 top-4 rounded-full bg-orange-500 px-3 py-1 text-sm font-black uppercase text-white shadow-lg">{badge(r!)}</span>}
+      </div>
+      <div className="mt-4 rounded-3xl bg-white/95 px-6 py-3 text-center shadow-2xl">
+        <p className="text-2xl font-black sm:text-3xl" style={{ color: c.color }}>“{r!.sentence}”</p>
+      </div>
+      {phase === 'repeat' && (
+        <div className="mt-5 flex gap-3">
+          <button onClick={replay} className="rounded-full bg-white/95 px-5 py-3 text-sm font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔊 Hear again</button>
+          <button onClick={confirm} className="rounded-full bg-gradient-to-r from-orange-500 to-orange-600 px-7 py-3 text-base font-black text-white shadow-xl active:scale-95">✅ I said it!</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function XIsFeelingScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'x-is-feeling' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  return <ModeledFeelingRounds teacher={scene.teacher} rounds={scene.rounds} onNext={onNext} onWin={onWin} />;
+}
+
+function HeSheModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'he-she-model' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  return <ModeledFeelingRounds teacher={scene.teacher} rounds={scene.rounds} badge={(r) => r.pronoun} onNext={onNext} onWin={onWin} />;
+}
+
+/* ---------- Free production "say it & check" (feelings-dice, he-she-say, i-am-feeling) ---------- */
+
+function ProduceSentenceScene({
+  teacher, icon, rounds, announce, onNext, onWin,
+}: {
+  teacher: string;
+  icon: string;
+  rounds: { key: string; who?: CharKey; emotion: 'happy' | 'sad' | 'angry'; sentence: string }[];
+  announce?: { who: CharKey; text: string };
+  onNext: () => void;
+  onWin: (gem: boolean) => void;
+}) {
+  const [round, setRound] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const [gemDone, setGemDone] = useState(false);
+  const total = rounds.length;
+  const finished = round >= total;
+  const r = !finished ? rounds[round] : null;
+
+  useEffect(() => {
+    setRevealed(false);
+    if (!r) return;
+    if (announce) void safeSpeak(announce.text, announce.who);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round]);
+
+  const reveal = async () => { if (!r) return; setRevealed(true); sfx.pop(); await safeSpeak(r.sentence, r.who ?? 'teacher'); };
+  const confirm = () => {
+    if (!r) return;
+    if (!revealed) { void reveal(); return; }
+    sfx.match();
+    const next = round + 1;
+    if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+    setRound(next);
+  };
+
+  if (finished) {
+    return (
+      <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+        <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95 animate-[lep1-slide-up_0.4s_ease-out]">Great job! Next →</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6">
+      <div className="pointer-events-none absolute inset-x-0 top-4 flex justify-center px-4">
+        <div className="max-w-lg rounded-full bg-white/90 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-lg backdrop-blur sm:text-base">{teacher} <span className="ml-1 opacity-60">({round + 1}/{total})</span></div>
+      </div>
+      <div className="flex flex-col items-center">
+        {r!.who ? (
+          <img src={getEmotionSprite(r!.who, r!.emotion)} alt={CAST[r!.who].name} className="h-56 w-56 object-contain drop-shadow-2xl sm:h-64 sm:w-64" style={{ animation: 'lep1-float 3s ease-in-out infinite' }} />
+        ) : (
+          <div className="grid h-40 w-40 place-items-center rounded-full bg-gradient-to-br from-orange-300 to-pink-300 text-7xl shadow-2xl" style={{ animation: 'lep1-float 3s ease-in-out infinite' }}>🌟</div>
+        )}
+        <span className="mt-2 text-5xl">{FEELING_EMOJI[r!.emotion]}</span>
+      </div>
+      <div className="mt-4 min-h-[4.5rem] w-full max-w-md rounded-3xl bg-white/95 px-6 py-4 text-center shadow-2xl">
+        {revealed
+          ? <p className="text-2xl font-black text-orange-700 sm:text-3xl">“{r!.sentence}”</p>
+          : <p className="text-lg font-bold text-neutral-500">{icon} Say it out loud, then tap to check!</p>}
+      </div>
+      <div className="mt-5 flex gap-3">
+        {revealed && <button onClick={() => void reveal()} className="rounded-full bg-white/95 px-5 py-3 text-sm font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔊 Hear it again</button>}
+        <button onClick={confirm} className="rounded-full bg-gradient-to-r from-orange-500 to-orange-600 px-7 py-3 text-base font-black text-white shadow-xl active:scale-95">
+          {revealed ? '➜ Next round' : '✅ Check my answer'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function FeelingsDiceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'feelings-dice' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const rounds = useMemo(() => scene.rounds.map((r, i) => ({ key: `${i}`, who: r.who, emotion: r.emotion, sentence: r.sentence })), [scene.rounds]);
+  return <ProduceSentenceScene teacher={scene.teacher} icon="🎲" rounds={rounds} onNext={onNext} onWin={onWin} />;
+}
+
+function HeSheSayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'he-she-say' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const rounds = useMemo(() => scene.rounds.map((r, i) => ({ key: `${i}`, who: r.who, emotion: r.emotion, sentence: `${r.pronoun} is ${r.emotion}.` })), [scene.rounds]);
+  return <ProduceSentenceScene teacher={scene.teacher} icon="🗣️" rounds={rounds} onNext={onNext} onWin={onWin} />;
+}
+
+function IAmFeelingScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'i-am-feeling' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const rounds = useMemo(() => scene.rounds.map((r, i) => ({ key: `${i}`, who: undefined, emotion: r.emotion, sentence: `I am ${r.label.toLowerCase()}!` })), [scene.rounds]);
+  return <ProduceSentenceScene teacher={scene.teacher} icon="🌟" rounds={rounds} announce={{ who: scene.asker, text: 'How are you?' }} onNext={onNext} onWin={onWin} />;
+}
+
+/* ---------- Feed the mood monsters ---------- */
+
+const MONSTER_META: Record<'happy' | 'sad' | 'angry', { emoji: string; label: string; color: string }> = {
+  happy: { emoji: '🟡', label: 'Happy Monster', color: '#FFC93C' },
+  sad: { emoji: '🔵', label: 'Sad Monster', color: '#4FA9E0' },
+  angry: { emoji: '🔴', label: 'Angry Monster', color: '#E5561A' },
+};
+
+function FeedMonstersScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'feed-monsters' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [round, setRound] = useState(0);
+  const [score, setScore] = useState(0);
+  const [feeding, setFeeding] = useState<'happy' | 'sad' | 'angry' | null>(null);
+  const [wrongPick, setWrongPick] = useState<'happy' | 'sad' | 'angry' | null>(null);
+  const [gemDone, setGemDone] = useState(false);
+  const total = scene.rounds.length;
+  const finished = round >= total;
+  const r = !finished ? scene.rounds[round] : null;
+
+  useEffect(() => {
+    if (!r) return;
+    setFeeding(null); setWrongPick(null);
+    const t = window.setTimeout(() => void safeSpeak(r.sentence, r.who), 300);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round]);
+
+  const feed = async (monster: 'happy' | 'sad' | 'angry') => {
+    if (!r || feeding) return;
+    if (monster === r.emotion) {
+      sfx.match(); setFeeding(monster); setScore((s) => s + 1);
+      await new Promise((res) => setTimeout(res, 700));
+      const next = round + 1;
+      if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+      setRound(next);
+    } else {
+      sfx.wrong(); onLose(); setWrongPick(monster);
+      window.setTimeout(() => setWrongPick(null), 500);
+    }
+  };
+
+  if (finished) {
+    return (
+      <div className="relative flex h-[calc(100cqh-8rem)] w-full items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="relative z-10 flex flex-col items-center gap-3">
+          <div className="rounded-3xl bg-white/95 px-8 py-4 text-center shadow-2xl">
+            <div className="text-2xl font-black text-orange-700">🎉 Yum yum!</div>
+            <div className="text-lg font-bold text-neutral-700">You fed the monsters {score}/{total}!</div>
+          </div>
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next ⭐</button>
+        </div>
+      </div>
+    );
+  }
+
+  const c = CAST[r!.who];
+  return (
+    <div className="relative flex h-[calc(100cqh-8rem)] w-full flex-col items-center justify-between bg-cover bg-center px-4 py-4" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <button onClick={() => void safeSpeak(r!.sentence, r!.who)} className="relative z-20 mt-2 max-w-[92%] rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur active:scale-95 sm:text-lg">
+        🔊 {r!.sentence} <span className="ml-1 rounded-full bg-orange-100 px-2 py-0.5 text-xs text-orange-600">{round + 1}/{total}</span>
+      </button>
+      <div className="relative z-10 flex flex-col items-center" style={{ opacity: feeding ? 0 : 1, transform: feeding ? 'scale(0.3) translateY(80px)' : 'scale(1)', transition: 'all 0.6s ease-in' }}>
+        <img src={getEmotionSprite(r!.who, r!.emotion)} alt={c.name} className="h-40 w-40 object-contain drop-shadow-2xl sm:h-52 sm:w-52" />
+        <span className="mt-1 rounded-full bg-white/90 px-3 py-1 text-sm font-black" style={{ color: c.color }}>{c.name}</span>
+      </div>
+      <div className="relative z-10 flex w-full max-w-lg justify-center gap-4 pb-2">
+        {(['happy', 'sad', 'angry'] as const).map((m) => {
+          const meta = MONSTER_META[m];
+          return (
+            <button key={m} onClick={() => feed(m)} disabled={!!feeding}
+              className={`flex flex-1 flex-col items-center gap-1 rounded-3xl border-4 border-white p-3 shadow-2xl transition active:scale-95 disabled:opacity-60 ${wrongPick === m ? 'animate-[lep1-shake_0.4s_ease-out]' : ''} ${feeding === m ? 'scale-110 ring-4 ring-green-300' : ''}`}
+              style={{ background: `linear-gradient(135deg, ${meta.color}, ${meta.color}cc)` }}
+            >
+              <span className="text-5xl">{feeding === m ? '😋' : meta.emoji}</span>
+              <span className="text-xs font-black uppercase text-white drop-shadow">{meta.label}</span>
+            </button>
+          );
+        })}
+      </div>
+      <div className="pointer-events-none absolute bottom-2 left-1/2 z-30 -translate-x-1/2 rounded-full bg-white/90 px-4 py-1 text-sm font-black text-orange-700 shadow">⭐ {score}/{total}</div>
+    </div>
+  );
+}
+
+/* ---------- He / She sort ---------- */
+
+function HeSheSortScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'he-she-sort' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [round, setRound] = useState(0);
+  const [score, setScore] = useState(0);
+  const [picked, setPicked] = useState<'He' | 'She' | null>(null);
+  const [correct, setCorrect] = useState<boolean | null>(null);
+  const [gemDone, setGemDone] = useState(false);
+  const total = scene.rounds.length;
+  const finished = round >= total;
+  const r = !finished ? scene.rounds[round] : null;
+
+  useEffect(() => {
+    if (!r) return;
+    setPicked(null); setCorrect(null);
+    const t = window.setTimeout(() => void safeSpeak(`I am ${r.emotion}.`, r.who), 300);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round]);
+
+  const pick = async (choice: 'He' | 'She') => {
+    if (!r || picked) return;
+    setPicked(choice);
+    const ok = choice === r.pronoun;
+    setCorrect(ok);
+    if (ok) {
+      sfx.match(); setScore((s) => s + 1);
+      await safeSpeak(`Yes! ${choice} is ${r.emotion}.`, r.who);
+      const next = round + 1;
+      if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+      window.setTimeout(() => setRound(next), 400);
+    } else {
+      sfx.wrong(); onLose();
+      window.setTimeout(() => { setPicked(null); setCorrect(null); }, 700);
+    }
+  };
+
+  if (finished) {
+    return (
+      <div className="relative flex h-[calc(100cqh-8rem)] w-full items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <div className="absolute inset-0 bg-black/30" />
+        <button onClick={onNext} className="relative z-10 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Nice sorting! {score}/{total} ⭐ Next</button>
+      </div>
+    );
+  }
+
+  const c = CAST[r!.who];
+  return (
+    <div className="relative flex h-[calc(100cqh-8rem)] w-full flex-col items-center justify-between bg-cover bg-center px-4 py-4" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="relative z-20 mt-2 max-w-[92%] rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">{scene.teacher} <span className="ml-1 rounded-full bg-orange-100 px-2 py-0.5 text-xs text-orange-600">{round + 1}/{total}</span></div>
+      <div className="relative z-10 flex flex-col items-center">
+        <img src={getEmotionSprite(r!.who, r!.emotion)} alt={c.name} className="h-48 w-48 object-contain drop-shadow-2xl sm:h-60 sm:w-60" />
+        <div className="mt-2 rounded-full bg-white/95 px-4 py-1 text-lg font-black" style={{ color: c.color }}>“I am {r!.emotion}.”</div>
+      </div>
+      <div className="relative z-10 flex w-full max-w-md gap-4 pb-2">
+        {(['He', 'She'] as const).map((p) => (
+          <button key={p} onClick={() => pick(p)} disabled={!!picked}
+            className={`flex-1 rounded-3xl border-4 border-white py-8 text-3xl font-black text-white shadow-2xl transition active:scale-95 disabled:opacity-60 ${picked === p ? (correct ? 'ring-4 ring-green-300 scale-105' : 'animate-[lep1-shake_0.4s_ease-out]') : ''}`}
+            style={{ background: p === 'He' ? 'linear-gradient(135deg,#4FA9E0,#7BE0FF)' : 'linear-gradient(135deg,#E76FA5,#FF9EC4)' }}
+          >{p}</button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Feeling quiz ---------- */
+
+const EMOTION_WORD: Record<'happy' | 'sad' | 'angry', string> = { happy: 'Happy', sad: 'Sad', angry: 'Angry' };
+
+function FeelingQuizScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'feeling-quiz' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [round, setRound] = useState(0);
+  const [score, setScore] = useState(0);
+  const [picked, setPicked] = useState<'happy' | 'sad' | 'angry' | null>(null);
+  const [correct, setCorrect] = useState<boolean | null>(null);
+  const [gemDone, setGemDone] = useState(false);
+  const total = scene.rounds.length;
+  const finished = round >= total;
+  const r = !finished ? scene.rounds[round] : null;
+
+  const options = useMemo(() => {
+    if (!r) return [] as ('happy' | 'sad' | 'angry')[];
+    const others = (['happy', 'sad', 'angry'] as const).filter((e) => e !== r.emotion);
+    const arr = [r.emotion, ...others];
+    const seed = round * 7 + 3;
+    return arr.map((e, i) => ({ e, k: (i * 131 + seed * 97) % 991 })).sort((a, b) => a.k - b.k).map((x) => x.e);
+  }, [round, r]);
+
+  useEffect(() => {
+    if (!r) return;
+    setPicked(null); setCorrect(null);
+    const t = window.setTimeout(() => void safeSpeak(r.prompt, 'teacher'), 300);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round]);
+
+  const pick = async (choice: 'happy' | 'sad' | 'angry') => {
+    if (!r || picked) return;
+    setPicked(choice);
+    const ok = choice === r.emotion;
+    setCorrect(ok);
+    if (ok) {
+      sfx.match(); setScore((s) => s + 1);
+      await safeSpeak(`${CAST[r.who].name} is ${r.emotion}!`, r.who);
+      const next = round + 1;
+      if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+      window.setTimeout(() => setRound(next), 300);
+    } else {
+      sfx.wrong(); onLose();
+      window.setTimeout(() => { setPicked(null); setCorrect(null); }, 700);
+    }
+  };
+
+  if (finished) {
+    return (
+      <div className="relative flex h-[calc(100cqh-8rem)] w-full items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <div className="absolute inset-0 bg-black/30" />
+        <button onClick={onNext} className="relative z-10 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Great quiz! {score}/{total} ⭐ Next</button>
+      </div>
+    );
+  }
+
+  const c = CAST[r!.who];
+  return (
+    <div className="relative flex h-[calc(100cqh-8rem)] w-full flex-col items-center justify-between bg-cover bg-center px-4 py-4" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <button onClick={() => void safeSpeak(r!.prompt, 'teacher')} className="relative z-20 mt-2 max-w-[92%] rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur active:scale-95 sm:text-lg">
+        🔊 {r!.prompt} <span className="ml-1 rounded-full bg-orange-100 px-2 py-0.5 text-xs text-orange-600">{round + 1}/{total}</span>
+      </button>
+      <img src={getEmotionSprite(r!.who, r!.emotion)} alt={c.name} className="relative z-10 h-48 w-48 object-contain drop-shadow-2xl sm:h-60 sm:w-60" />
+      <div className="relative z-10 flex w-full max-w-lg gap-3 pb-2">
+        {options.map((opt) => (
+          <button key={opt} onClick={() => pick(opt)} disabled={!!picked}
+            className={`flex flex-1 flex-col items-center gap-1 rounded-3xl border-4 border-white p-3 shadow-2xl transition active:scale-95 disabled:opacity-60 ${picked === opt ? (correct ? 'ring-4 ring-green-300 scale-105' : 'animate-[lep1-shake_0.4s_ease-out]') : ''}`}
+            style={{ background: 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' }}
+          >
+            <span className="text-5xl">{FEELING_EMOJI[opt]}</span>
+            <span className="text-xs font-black uppercase text-white drop-shadow">{EMOTION_WORD[opt]}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Feelings bingo ---------- */
+
+function FeelingsBingoScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'feelings-bingo' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [callIdx, setCallIdx] = useState(0);
+  const [hits, setHits] = useState<Set<number>>(new Set());
+  const [wrongTile, setWrongTile] = useState<number | null>(null);
+  const [gemDone, setGemDone] = useState(false);
+  const total = scene.rounds.length;
+  const finished = callIdx >= total;
+  const round = !finished ? scene.rounds[callIdx] : null;
+  const cols = scene.tiles.length > 4 ? 3 : 2;
+
+  useEffect(() => {
+    if (!round) return;
+    const t = window.setTimeout(() => void safeSpeak(round.prompt, 'teacher'), 300);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [callIdx]);
+
+  const tapTile = async (i: number) => {
+    if (!round || finished) return;
+    const tile = scene.tiles[i];
+    if (tile.who === round.who && tile.emotion === round.emotion) {
+      sfx.match();
+      setHits((s) => new Set(s).add(i));
+      await safeSpeak(`Yes! ${CAST[tile.who].name} is ${tile.emotion}!`, tile.who);
+      const next = callIdx + 1;
+      if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+      setCallIdx(next);
+    } else {
+      sfx.wrong(); onLose(); setWrongTile(i);
+      window.setTimeout(() => setWrongTile(null), 500);
+    }
+  };
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">
+        {finished ? '🎉 BINGO! You found every friend!' : <>🔊 {round!.prompt} <span className="ml-1 rounded-full bg-orange-100 px-2 py-0.5 text-xs text-orange-600">{callIdx + 1}/{total}</span></>}
+      </div>
+      <div className="relative z-10 grid gap-3" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0,1fr))` }}>
+        {scene.tiles.map((tile, i) => {
+          const c = CAST[tile.who];
+          const isHit = hits.has(i);
+          return (
+            <button key={i} onClick={() => tapTile(i)} disabled={finished}
+              className={`relative grid aspect-square w-24 place-items-center rounded-3xl border-4 bg-white/90 p-2 shadow-xl transition active:scale-95 disabled:opacity-90 sm:w-28 ${wrongTile === i ? 'animate-[lep1-shake_0.4s_ease-out] border-rose-400' : isHit ? 'border-green-400 ring-4 ring-green-300/60' : 'border-white'}`}
+            >
+              <img src={getEmotionSprite(tile.who, tile.emotion)} alt={c.name} className="h-full w-full object-contain" draggable={false} />
+              {isHit && <span className="absolute -right-2 -top-2 grid h-9 w-9 place-items-center rounded-full bg-green-500 text-lg text-white shadow-lg">✓</span>}
+            </button>
+          );
+        })}
+      </div>
+      {finished && (
+        <div className="relative z-30 flex flex-col items-center">
+          <Confetti />
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next ⭐</button>
+        </div>
+      )}
     </div>
   );
 }

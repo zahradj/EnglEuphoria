@@ -24,6 +24,9 @@ export const SCENE_KINDS = [
   'feelings', 'puzzle', 'roleplay', 'join-stage', 'hello-doors', 'color-friends',
   'alphabet-blocks', 'alphabet-order', 'song', 'finale', 'name-gate',
   'meet-group', 'voice-stage', 'sound-pop', 'brick-crush', 'friend-pop',
+  'feelings-tap', 'feelings-wheel', 'x-is-feeling', 'feelings-dice',
+  'feed-monsters', 'he-she-model', 'he-she-sort', 'he-she-say',
+  'feeling-quiz', 'i-am-feeling', 'feelings-bingo',
 ] as const;
 export type SceneKindName = (typeof SCENE_KINDS)[number];
 
