@@ -51,17 +51,6 @@ export function useCancelReschedule(): CancelRescheduleResult {
     }
   };
 
-  const reopenTeacherSlot = async (lessonId: string) => {
-    try {
-      await supabase
-        .from('teacher_availability')
-        .update({ is_booked: false, student_id: null, lesson_id: null, lesson_title: null })
-        .eq('lesson_id', lessonId);
-    } catch (err) {
-      console.error('Failed to reopen teacher availability slot:', err);
-    }
-  };
-
   const cancelLesson = async (lessonId: string, reason: string): Promise<boolean> => {
     setLoading(true);
     try {
@@ -116,52 +105,31 @@ export function useCancelReschedule(): CancelRescheduleResult {
   ): Promise<boolean> => {
     setLoading(true);
     try {
-      const { data: lesson, error: fetchError } = await supabase
-        .from('lessons')
-        .select('scheduled_at, reschedule_count, lesson_price')
-        .eq('id', lessonId)
-        .single();
+      // student_reschedule_lesson is the sole source of truth: it re-verifies
+      // the 120-hour window server-side (the old client-only check could be
+      // bypassed entirely), rejects times that collide with another booking
+      // the teacher already has, and atomically moves both lessons and
+      // class_bookings plus the teacher_availability rows in one transaction
+      // instead of two independent client writes that could drift apart.
+      const { data, error: rpcError } = await supabase.rpc('student_reschedule_lesson', {
+        p_lesson_id: lessonId,
+        p_new_scheduled_at: newDateTime,
+        p_reason: reason || null,
+      });
 
-      if (fetchError || !lesson) {
-        throw new Error('Failed to fetch lesson details');
-      }
-
-      const isTrialOrFree = !lesson.lesson_price || lesson.lesson_price === 0;
-
-      if (!canReschedule(lesson.scheduled_at, isTrialOrFree)) {
+      if (rpcError) {
+        const msg = rpcError.message || '';
         toast({
           title: 'Cannot Reschedule',
-          description: 'Rescheduling is only available 5+ days in advance.',
-          variant: 'destructive'
+          description: msg.includes('5+ days')
+            ? 'Rescheduling is only available 5+ days in advance.'
+            : msg.includes('already has a lesson')
+            ? 'This teacher already has a lesson booked at that time. Please choose another slot.'
+            : msg || 'Unable to reschedule lesson. Please try again.',
+          variant: 'destructive',
         });
         return false;
       }
-
-      // Re-open old teacher slot
-      await reopenTeacherSlot(lessonId);
-
-      const rescheduleHistory = {
-        old_date: lesson.scheduled_at,
-        new_date: newDateTime,
-        reason: reason || 'Student requested',
-        timestamp: new Date().toISOString()
-      };
-
-      const { error: updateError } = await supabase
-        .from('lessons')
-        .update({
-          scheduled_at: newDateTime,
-          reschedule_count: (lesson.reschedule_count || 0) + 1,
-        })
-        .eq('id', lessonId);
-
-      if (updateError) throw updateError;
-
-      // Update class_bookings too
-      await supabase
-        .from('class_bookings')
-        .update({ scheduled_at: newDateTime })
-        .eq('lesson_id', lessonId);
 
       toast({
         title: 'Lesson Rescheduled',

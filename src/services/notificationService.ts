@@ -7,7 +7,7 @@ export interface NotificationData {
   user_id: string;
   title: string;
   content: string;
-  type: 'lesson_reminder' | 'payment_due' | 'homework_assigned' | 'system' | 'achievement';
+  type: 'lesson_reminder' | 'payment_due' | 'homework_assigned' | 'system' | 'achievement' | 'lesson_cancelled' | 'lesson_rescheduled';
   is_read: boolean;
   action_url?: string;
   scheduled_for?: string;
