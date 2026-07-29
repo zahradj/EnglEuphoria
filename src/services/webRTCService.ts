@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { logPeer, logWebRTC } from '@/lib/connectionDebugLog';
+import { ICE_SERVERS } from '@/lib/iceServers';
 
 interface WebRTCCallbacks {
   onRemoteStream?: (stream: MediaStream) => void;
@@ -38,12 +39,7 @@ export class WebRTCService {
     this.localStream = localStream;
     this.disposed = false;
 
-    this.peerConnection = new RTCPeerConnection({
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' },
-      ],
-    });
+    this.peerConnection = new RTCPeerConnection({ iceServers: ICE_SERVERS });
 
     localStream.getTracks().forEach((track) => {
       this.peerConnection!.addTrack(track, localStream);

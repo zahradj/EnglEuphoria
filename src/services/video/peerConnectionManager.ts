@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { ICE_SERVERS as ICE_SERVER_LIST } from "@/lib/iceServers";
 
 interface PeerConnection {
   pc: RTCPeerConnection;
@@ -6,12 +7,7 @@ interface PeerConnection {
   stream?: MediaStream;
 }
 
-const ICE_SERVERS = {
-  iceServers: [
-    { urls: 'stun:stun.l.google.com:19302' },
-    { urls: 'stun:stun1.l.google.com:19302' },
-  ]
-};
+const ICE_SERVERS = { iceServers: ICE_SERVER_LIST };
 
 export class PeerConnectionManager {
   private connections = new Map<string, PeerConnection>();

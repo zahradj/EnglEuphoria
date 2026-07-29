@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
+import { ICE_SERVERS } from '@/lib/iceServers';
 
 interface WebRTCParticipant {
   id: string;
@@ -46,13 +47,6 @@ export const useEnhancedWebRTC = (roomId: string, userId: string) => {
     return signalingChannelRef.current;
   }, [roomId]);
 
-  // ICE servers configuration with TURN/STUN
-  const iceServers = [
-    { urls: 'stun:stun.l.google.com:19302' },
-    { urls: 'stun:stun1.l.google.com:19302' },
-    // Add TURN servers for production
-    // { urls: 'turn:your-turn-server.com:3478', username: 'user', credential: 'pass' }
-  ];
 
   const initializeLocalMedia = useCallback(async (constraints = { video: true, audio: true }) => {
     try {
@@ -86,7 +80,7 @@ export const useEnhancedWebRTC = (roomId: string, userId: string) => {
   }, [toast]);
 
   const createPeerConnection = useCallback((participantId: string): RTCPeerConnection => {
-    const peerConnection = new RTCPeerConnection({ iceServers });
+    const peerConnection = new RTCPeerConnection({ iceServers: ICE_SERVERS });
     
     // Add local stream tracks
     if (localStream) {
