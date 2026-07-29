@@ -8,8 +8,8 @@ import { Loader2, Star, Clock, BookOpen, ArrowRight, ClipboardCheck, Sparkles, T
 import pipMascot from '@/assets/pip-fox-mascot-v2.png';
 import ariaOwl from '@/assets/aria-owl-mascot-v2.png';
 import maxEagle from '@/assets/max-eagle-mascot-v2.png';
-import { StudentLessonOutcomeDialog } from '@/components/classroom/StudentLessonOutcomeDialog';
 import { FLAG_META, IncidentFlag, toneClasses } from '@/components/classroom/incidentFlags';
+import { PostLessonRatingCard } from '@/components/student/PostLessonRatingCard';
 
 
 type Hub = 'playground' | 'academy' | 'professional';
@@ -479,7 +479,15 @@ const PostLessonSummary: React.FC = () => {
 
 
 
-      {/* Student outcome dialog removed — handled inline in classroom wrap-up */}
+      {/* Student rates the teacher — small inline card, tap a star and done. */}
+      {!isTeacher && !leftEarly && booking?.teacher_id && lookupId && user?.id && (
+        <PostLessonRatingCard
+          bookingId={lookupId}
+          teacherId={booking.teacher_id}
+          studentId={user.id}
+          accentClass={brand.accent}
+        />
+      )}
 
 
 

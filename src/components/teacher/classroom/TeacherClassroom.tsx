@@ -409,6 +409,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   const [leftEarly, setLeftEarly] = useState(false);
 
   const handleEndClass = useCallback(async () => {
+   try {
     // If the lesson never actually started (teacher is just prepping / leaving
     // before clicking Start Class), this is a plain "leave" — not an early-exit
     // penalty. The mandatory-core timer only applies once the class is live.
@@ -480,6 +481,20 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     }
 
     await endSession();
+    // Stamp the booking's end time now (once) — this is the reference point
+    // for the wrap-up report's 24h "or it won't be paid" deadline, whether
+    // the teacher submits it now or finishes it later from the dashboard.
+    if (classId) {
+      try {
+        await supabase
+          .from('class_bookings')
+          .update({ ended_at: new Date().toISOString() })
+          .eq('id', classId)
+          .is('ended_at', null);
+      } catch (e) {
+        console.warn('[TeacherClassroom] failed to stamp booking ended_at', e);
+      }
+    }
     setHasEndedClass(true);
     // Skip the wrap-up feedback panel when the session was cut short before
     // the mandatory core completed — there's no meaningful session to wrap up,
@@ -499,6 +514,17 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     }
     // Otherwise the teacher stays on this view with the Wrap-Up panel open;
     // navigation happens when the panel closes.
+   } catch (err: any) {
+     // Safety net: an unexpected failure anywhere above used to bubble up
+     // uncaught and crash to the app's generic error boundary ("Something
+     // went wrong") instead of leaving the teacher with a usable classroom.
+     console.error('[TeacherClassroom] handleEndClass failed', err);
+     toast({
+       title: 'Could not end the class',
+       description: err?.message ?? 'Something went wrong ending the class. Please try again.',
+       variant: 'destructive',
+     });
+   }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toast, endSession, timePolicy, isTrial, classTime, classId, hubType, studentId, navigate, isInterview]);
 
@@ -1331,6 +1357,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         open={wrapUpOpen}
         onOpenChange={handleWrapUpChange}
         lessonId={lessonId}
+        bookingId={classId}
         studentId={studentId}
         teacherId={user?.id}
         sharedNotes={sharedNotes}

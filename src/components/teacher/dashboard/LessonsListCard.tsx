@@ -345,6 +345,7 @@ export const LessonsListCard: React.FC = () => {
         open={wrapUpOpen}
         onOpenChange={handleWrapUpChange}
         lessonId={wrapUpLesson?.id}
+        bookingId={wrapUpLesson?.id}
         studentId={wrapUpLesson?.studentId ?? undefined}
         teacherId={user?.id}
       />

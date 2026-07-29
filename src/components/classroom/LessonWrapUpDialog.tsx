@@ -9,12 +9,18 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { IncidentFlag, TEACHER_FLAG_OPTIONS, FLAG_META } from './incidentFlags';
 import { getClassroomHubTheme, type ClassroomHubKey } from '@/components/teacher/classroom/hubClassroomTheme';
+import { endLesson } from '@/services/endLesson';
 
+const REPORT_DEADLINE_MS = 24 * 60 * 60 * 1000;
 
 interface LessonWrapUpDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Curriculum lesson reference — used for feedback/completion records. */
   lessonId?: string;
+  /** class_bookings.id — the actual booking this session belongs to. Required
+   *  to close the booking and credit the teacher; distinct from lessonId. */
+  bookingId?: string;
   studentId?: string;
   teacherId?: string;
   vocabularyWords?: string[];
@@ -44,6 +50,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   open,
   onOpenChange,
   lessonId,
+  bookingId,
   studentId,
   teacherId,
   vocabularyWords = ['accomplish', 'schedule', 'presentation', 'negotiate', 'deadline'],
@@ -67,6 +74,8 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
     business_writing: 5,
     listening: 5,
   });
+  const [bookingEndedAt, setBookingEndedAt] = useState<string | null>(null);
+  const [now, setNow] = useState(() => Date.now());
 
   const toggleFlag = (f: IncidentFlag) =>
     setIncidentFlags((prev) => (prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]));
@@ -90,6 +99,32 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
     };
     loadSkills();
   }, [open, studentId]);
+
+  // Load the booking's ended_at so we can show a real countdown against the
+  // 24h payment deadline instead of a static warning string.
+  useEffect(() => {
+    if (!open || !bookingId) return;
+    setNow(Date.now());
+    supabase
+      .from('class_bookings')
+      .select('ended_at')
+      .eq('id', bookingId)
+      .maybeSingle()
+      .then(({ data }) => setBookingEndedAt(data?.ended_at ?? null));
+  }, [open, bookingId]);
+
+  // Tick the countdown once a minute while the dialog is open.
+  useEffect(() => {
+    if (!open) return;
+    const interval = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(interval);
+  }, [open]);
+
+  const msRemaining = bookingEndedAt
+    ? REPORT_DEADLINE_MS - (now - new Date(bookingEndedAt).getTime())
+    : null;
+  const isOverdue = msRemaining !== null && msRemaining <= 0;
+  const hoursRemaining = msRemaining !== null ? Math.max(0, msRemaining / (60 * 60 * 1000)) : null;
 
   const toggleWord = (word: string) => {
     setMasteredWords(prev =>
@@ -200,81 +235,73 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
 
       // ───────────────────────────────────────────────────────────────────────
       // CLOSE THE BOOKING + RECORD EARNINGS
-      // (lessonId here is actually class_bookings.id — see UnifiedClassroomPage)
+      // bookingId is class_bookings.id — the single source of truth for
+      // closing the booking and crediting the teacher is the end_lesson RPC
+      // (atomic: booking, classroom session, completion row, earnings,
+      // payout ledger, performance metrics — all in one transaction).
+      // Submitting after the 24h deadline still saves this report (the
+      // teacher's notes still matter for the student's record) but does NOT
+      // credit any earnings — that's the "mandatory or unpaid" rule.
       // ───────────────────────────────────────────────────────────────────────
-      if (lessonId) {
-        // 1. Mark booking completed → student-side UI no longer treats it as live.
-        const { data: bookingRow, error: bookingErr } = await supabase
-          .from('class_bookings')
-          .update({ status: 'completed', updated_at: new Date().toISOString() })
-          .eq('id', lessonId)
-          .select('id, hub_type, price_paid, currency, student_id, teacher_id, status')
-          .maybeSingle();
+      let paid = false;
+      if (bookingId) {
+        const overdue = bookingEndedAt
+          ? Date.now() - new Date(bookingEndedAt).getTime() > REPORT_DEADLINE_MS
+          : false;
 
-        if (bookingErr) console.error('Failed to close booking:', bookingErr);
-
-        // 2. Mark the live classroom session as ended (room teardown signal).
-        await supabase
-          .from('classroom_sessions')
-          .update({
-            session_status: 'ended',
-            ended_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', lessonId);
-
-        // 3. Record teacher earnings — idempotent (one payment row per booking).
-        if (bookingRow && bookingRow.teacher_id && bookingRow.student_id) {
-          const { data: existing } = await supabase
-            .from('lesson_payments')
-            .select('id')
-            .eq('lesson_id', lessonId)
-            .maybeSingle();
-
-          if (!existing) {
-            // Pull hub-specific payout amount; fall back to academy default.
-            const hub = (bookingRow.hub_type as string) || 'academy';
-            const { data: payoutRow } = await supabase
-              .from('hub_payout_settings')
-              .select('payout_amount_eur')
-              .eq('hub', hub)
-              .maybeSingle();
-
-            const teacherPayout = Number(payoutRow?.payout_amount_eur ?? 7.0);
-            const amountCharged = Number(bookingRow.price_paid ?? 0) || teacherPayout;
-            const platformProfit = Math.max(amountCharged - teacherPayout, 0);
-
-            const { error: payErr } = await supabase.from('lesson_payments').insert({
-              lesson_id: lessonId,
-              student_id: bookingRow.student_id,
-              teacher_id: bookingRow.teacher_id,
-              amount_charged: amountCharged,
-              teacher_payout: teacherPayout,
-              platform_profit: platformProfit,
-              payment_method: 'platform_credit',
+        if (!overdue) {
+          try {
+            await endLesson(bookingId);
+            paid = true;
+          } catch (endErr: any) {
+            console.error('end_lesson failed:', endErr);
+            toast({
+              title: 'Report saved, but payment failed',
+              description: endErr?.message ?? 'Could not finalize this lesson for payment. Contact support if this keeps happening.',
+              variant: 'destructive',
             });
-            if (payErr) console.error('Failed to insert lesson_payments:', payErr);
           }
+        } else {
+          // Past the 24h window — still close the booking for record-keeping,
+          // just without crediting earnings.
+          await supabase
+            .from('class_bookings')
+            .update({ status: 'completed', updated_at: new Date().toISOString() })
+            .eq('id', bookingId);
         }
 
-        // 4. Post-Class Sync — push the lesson's blueprint vocab + phonics
-        //    into the student's Vocabulary Vault and Map of Sounds.
+        // Post-Class Sync — push the lesson's blueprint vocab + phonics
+        // into the student's Vocabulary Vault and Map of Sounds.
         try {
           await supabase.functions.invoke('post-class-sync', {
-            body: { booking_id: lessonId },
+            body: { booking_id: bookingId },
           });
         } catch (syncErr) {
           console.error('post-class-sync failed (non-blocking):', syncErr);
         }
       }
 
-      toast({
-        title: 'Session Report Saved ✓',
-        description: showSkillScores
-          ? 'Lesson closed for the student and earnings updated. Skill scores synced to dashboard.'
-          : 'Lesson closed for the student and earnings updated.',
-        className: 'bg-emerald-600 text-white border-emerald-700'
-      });
+      if (bookingId && !paid) {
+        const overdue = bookingEndedAt
+          ? Date.now() - new Date(bookingEndedAt).getTime() > REPORT_DEADLINE_MS
+          : false;
+        toast({
+          title: overdue ? 'Report saved — past the 24h window' : 'Session Report Saved',
+          description: overdue
+            ? 'This report was submitted more than 24 hours after the lesson ended, so this session will not be paid.'
+            : 'Saved. Payment will be finalized shortly.',
+          className: overdue ? undefined : 'bg-emerald-600 text-white border-emerald-700',
+          variant: overdue ? 'destructive' : undefined,
+        });
+      } else {
+        toast({
+          title: 'Session Report Saved ✓',
+          description: showSkillScores
+            ? 'Lesson closed for the student, earnings credited, and skill scores synced to dashboard.'
+            : 'Lesson closed for the student and earnings credited.',
+          className: 'bg-emerald-600 text-white border-emerald-700'
+        });
+      }
 
       onOpenChange(false);
       // Reset
@@ -471,9 +498,19 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
             </div>
           </div>
 
-          <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-[11px] leading-relaxed text-amber-800">
-            ⏰ <strong>You have 24 hours</strong> to submit this report. If you skip it now, you can finish it from your dashboard within 24 hours of the lesson ending — otherwise this session <strong>won't be paid</strong>.
-          </div>
+          {isOverdue ? (
+            <div className="rounded-xl border border-rose-300 bg-rose-50 p-3 text-[11px] leading-relaxed text-rose-800">
+              ⚠️ <strong>The 24-hour window has passed.</strong> Submitting now still saves your notes, but this session will <strong>not be paid</strong>.
+            </div>
+          ) : (
+            <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-[11px] leading-relaxed text-amber-800">
+              ⏰ {hoursRemaining !== null ? (
+                <><strong>{hoursRemaining < 1 ? '< 1 hour' : `${Math.floor(hoursRemaining)} hour${Math.floor(hoursRemaining) === 1 ? '' : 's'}`} left</strong> to submit this report.</>
+              ) : (
+                <><strong>You have 24 hours</strong> to submit this report.</>
+              )} If you skip it now, you can finish it from your dashboard within that window — otherwise this session <strong>won't be paid</strong>.
+            </div>
+          )}
 
           <div className="flex flex-col sm:flex-row gap-2">
             <Button
@@ -487,9 +524,9 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
             <Button
               onClick={handleSubmit}
               disabled={submitting}
-              className={`w-full text-white ${theme.buttonPrimary}`}
+              className={`w-full text-white ${isOverdue ? 'bg-rose-600 hover:bg-rose-700' : theme.buttonPrimary}`}
             >
-              {submitting ? 'Saving...' : 'Submit Session Report'}
+              {submitting ? 'Saving...' : isOverdue ? 'Submit (unpaid — past deadline)' : 'Submit Session Report'}
             </Button>
           </div>
         </div>
