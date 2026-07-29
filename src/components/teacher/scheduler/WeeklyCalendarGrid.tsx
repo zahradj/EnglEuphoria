@@ -151,7 +151,11 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
   }, [slotDuration]);
 
   return (
-    <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+    <div className="bg-card rounded-2xl border border-border shadow-sm overflow-y-hidden overflow-x-auto">
+      {/* Below md, the 7 day columns don't fit a phone width — this min-width keeps
+          each column usable and lets the card scroll horizontally instead of
+          squeezing every column down to an unreadable sliver. */}
+      <div className="min-w-[720px] md:min-w-0">
       {/* Sticky Header row with days */}
       <div className="grid grid-cols-[88px_repeat(7,1fr)] border-b border-border bg-gradient-to-b from-muted/60 to-muted/20 backdrop-blur sticky top-0 z-20">
         <div className="p-2 text-center text-[10px] font-semibold uppercase tracking-wider text-muted-foreground flex items-center justify-center">
@@ -257,6 +261,7 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
             </React.Fragment>
           );
         })}
+      </div>
       </div>
     </div>
   );
