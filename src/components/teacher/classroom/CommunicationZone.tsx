@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { User, Send, Mic, MicOff, Video, VideoOff, BookOpen, PictureInPicture2, Pin } from 'lucide-react';
+import { User, Send, Mic, MicOff, Video, VideoOff, BookOpen, PictureInPicture2, Pin, X } from 'lucide-react';
 import { getClassroomHubTheme, type ClassroomHubKey } from './hubClassroomTheme';
 import { DictionaryPopover } from '@/components/classroom/DictionaryPopover';
 import { whiteboardService, type ChatBroadcastPayload } from '@/services/whiteboardService';
@@ -42,6 +42,9 @@ interface CommunicationZoneProps {
   /** When true, the video tiles are floating over the lesson content instead of docked here. */
   videosFloating?: boolean;
   onToggleVideosFloating?: () => void;
+  /** Below the md breakpoint this panel renders as an off-canvas drawer instead of a docked column — open state and close handle are controlled by the caller. */
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
 export const CommunicationZone: React.FC<CommunicationZoneProps> = ({
@@ -75,6 +78,8 @@ export const CommunicationZone: React.FC<CommunicationZoneProps> = ({
   userId,
   videosFloating = false,
   onToggleVideosFloating,
+  mobileOpen = false,
+  onMobileClose,
 }) => {
   const theme = getClassroomHubTheme(hubType);
   const [chatMessages, setChatMessages] = useState<Array<{ id: string; sender: 'teacher' | 'student' | 'system'; senderName?: string; text: string }>>([
@@ -141,9 +146,29 @@ export const CommunicationZone: React.FC<CommunicationZoneProps> = ({
   };
 
   return (
-    <div className={`w-[224px] ${theme.panelBg} border-r ${theme.panelBorder} flex flex-col shrink-0`}>
+    <>
+      {/* Backdrop — mobile only, dismisses the drawer */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-[74] bg-black/40 md:hidden" onClick={onMobileClose} />
+      )}
+      <div
+        className={`fixed inset-y-0 left-0 z-[75] w-[280px] transition-transform duration-200 md:transition-none md:static md:z-auto md:w-[224px] md:translate-x-0 ${
+          mobileOpen ? 'translate-x-0' : '-translate-x-full'
+        } ${theme.panelBg} border-r ${theme.panelBorder} flex flex-col shrink-0`}
+      >
       <div className={`flex items-center justify-between px-3 py-2 border-b ${theme.panelBorder}`}>
         <span className={`text-xs font-semibold uppercase tracking-wider ${theme.accentText}`}>Live</span>
+        <div className="flex items-center gap-1">
+        {onMobileClose && (
+          <button
+            type="button"
+            onClick={onMobileClose}
+            aria-label="Close"
+            className="p-1 rounded-md hover:bg-black/5 text-gray-500 md:hidden"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
         {onToggleVideosFloating && (
           <button
             type="button"
@@ -154,6 +179,7 @@ export const CommunicationZone: React.FC<CommunicationZoneProps> = ({
             {videosFloating ? <Pin className="w-3.5 h-3.5" /> : <PictureInPicture2 className="w-3.5 h-3.5" />}
           </button>
         )}
+        </div>
       </div>
       {/* Video Containers */}
       <div className="p-3 space-y-3">
@@ -379,6 +405,7 @@ export const CommunicationZone: React.FC<CommunicationZoneProps> = ({
           buttonClass={`${theme.accentSoftBg} ${theme.accentText} hover:opacity-80`}
         />
       </div>
-    </div>
+      </div>
+    </>
   );
 };

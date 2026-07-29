@@ -37,7 +37,7 @@ export const SlideNavigator: React.FC<SlideNavigatorProps> = ({
 
   if (isCollapsed) {
     return (
-      <div className={`w-12 ${theme.panelBg} border-l ${theme.panelBorder} flex flex-col items-center py-4 shrink-0`}>
+      <div className={`hidden md:flex w-12 ${theme.panelBg} border-l ${theme.panelBorder} flex-col items-center py-4 shrink-0`}>
         <Button
           variant="ghost"
           size="icon"
@@ -57,7 +57,12 @@ export const SlideNavigator: React.FC<SlideNavigatorProps> = ({
   }
 
   return (
-    <div className={`w-64 ${theme.panelBg} border-l ${theme.panelBorder} flex flex-col shrink-0`}>
+    <>
+      {/* Backdrop — mobile only, dismisses the drawer */}
+      <div className="fixed inset-0 z-[74] bg-black/40 md:hidden" onClick={onToggleCollapse} />
+      <div
+        className={`fixed inset-y-0 right-0 z-[75] w-[280px] animate-in slide-in-from-right duration-200 md:animate-none md:static md:z-auto md:w-64 ${theme.panelBg} border-l ${theme.panelBorder} flex flex-col shrink-0`}
+      >
       {/* Header */}
       <div className="p-4 border-b border-border space-y-3">
         <div className="flex items-start justify-between gap-2">
@@ -191,6 +196,7 @@ export const SlideNavigator: React.FC<SlideNavigatorProps> = ({
           })}
         </ol>
       </ScrollArea>
-    </div>
+      </div>
+    </>
   );
 };

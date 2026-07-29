@@ -60,6 +60,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
   const [isZenMode, setIsZenMode] = useState(false);
   const [zenElapsed, setZenElapsed] = useState(0);
   const [videosFloating, setVideosFloating] = useState(false);
+  const [mobileCommsOpen, setMobileCommsOpen] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
 
@@ -526,6 +527,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
             onReconnect={handleReconnect}
             studentStars={starCount}
             scheduledAt={scheduledAt ?? null}
+            onToggleComms={() => setMobileCommsOpen(v => !v)}
           />
         </div>
       )}
@@ -550,6 +552,8 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
               userId={studentId}
               videosFloating={videosFloating}
               onToggleVideosFloating={() => setVideosFloating(v => !v)}
+              mobileOpen={mobileCommsOpen}
+              onMobileClose={() => setMobileCommsOpen(false)}
             />
           </div>
         )}

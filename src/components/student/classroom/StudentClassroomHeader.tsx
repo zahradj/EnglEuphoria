@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import englePhoriaLogo from '@/assets/englephoria-logo.png';
 import { Badge } from '@/components/ui/badge';
-import { Mic, MicOff, Video, VideoOff, LogOut, Signal, SignalMedium, SignalLow, WifiOff, Maximize2, Minimize2, RefreshCw, Star, Clock } from 'lucide-react';
+import { Mic, MicOff, Video, VideoOff, LogOut, Signal, SignalMedium, SignalLow, WifiOff, Maximize2, Minimize2, RefreshCw, Star, Clock, Users } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useConnectionHealth } from '@/hooks/useConnectionHealth';
 import CoinBalance from '@/components/academy/CoinBalance';
@@ -29,6 +29,8 @@ interface StudentClassroomHeaderProps {
   studentStars?: number;
   /** Booking scheduled_at — drives the read-only countdown that mirrors the teacher's smart timer. */
   scheduledAt?: string | Date | null;
+  /** Mobile only — opens the video/chat drawer that's otherwise a docked sidebar on desktop. */
+  onToggleComms?: () => void;
 }
 
 export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
@@ -46,6 +48,7 @@ export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
   onReconnect,
   studentStars = 0,
   scheduledAt = null,
+  onToggleComms,
 }) => {
   const { quality, latencyMs, suggestion } = useConnectionHealth();
   const earnedStars = Math.min(Math.max(studentStars, 0), 10);
@@ -81,30 +84,30 @@ export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
 
   return (
     <div className="relative">
-      <div className={`h-14 ${theme.headerGradient} backdrop-blur-md border-b ${theme.panelBorder} px-4 flex items-center justify-between shadow-sm`}>
+      <div className={`h-14 ${theme.headerGradient} backdrop-blur-md border-b ${theme.panelBorder} px-2 md:px-4 flex items-center justify-between shadow-sm overflow-hidden`}>
         {/* Left: Logo + Live Indicator + Lesson Title */}
-        <div className="flex items-center gap-4">
-          {/* Hub-Branded Logo */}
+        <div className="flex items-center gap-2 md:gap-4 shrink-0">
+          {/* Hub-Branded Logo — stays visible at every size, this is the hub's branded color identity */}
           <div className="flex items-center gap-2">
             <div
-              className="w-8 h-8 rounded-full flex items-center justify-center shadow-md"
+              className="w-8 h-8 rounded-full flex items-center justify-center shadow-md shrink-0"
               style={{ background: hubGradient }}
             >
               <img src={englePhoriaLogo} alt="EnglEuphoria" className="w-5 h-5 object-contain" />
             </div>
-            <span className="text-sm font-bold bg-clip-text text-transparent" style={{ backgroundImage: hubGradient }}>
+            <span className="hidden md:inline text-sm font-bold bg-clip-text text-transparent" style={{ backgroundImage: hubGradient }}>
               EnglEuphoria
             </span>
           </div>
-          <div className="h-6 w-px bg-gray-200" />
+          <div className="hidden md:block h-6 w-px bg-gray-200" />
           {isConnected && (
-            <div className="flex items-center gap-2">
-              <div className="h-2.5 w-2.5 rounded-full bg-red-500 animate-pulse" />
-              <span className="text-sm font-medium text-red-500">LIVE</span>
+            <div className="flex items-center gap-1.5 md:gap-2">
+              <div className="h-2 w-2 md:h-2.5 md:w-2.5 rounded-full bg-red-500 animate-pulse" />
+              <span className="text-xs md:text-sm font-medium text-red-500">LIVE</span>
             </div>
           )}
-          <div className="h-6 w-px bg-gray-200" />
-          <Badge variant="secondary" className={`${theme.chipBg} ${theme.chipText} border ${theme.panelBorder}`}>
+          <div className="hidden md:block h-6 w-px bg-gray-200" />
+          <Badge variant="secondary" className={`hidden md:inline-flex ${theme.chipBg} ${theme.chipText} border ${theme.panelBorder}`}>
             {lessonTitle}
           </Badge>
           <TooltipProvider>
@@ -112,7 +115,7 @@ export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
               <TooltipTrigger asChild>
                 <Badge
                   variant={isConnected ? 'default' : 'destructive'}
-                  className={`flex items-center gap-1 cursor-default ${isConnected ? signalColor : 'bg-red-600'}`}
+                  className={`hidden md:flex items-center gap-1 cursor-default ${isConnected ? signalColor : 'bg-red-600'}`}
                 >
                   {isConnected ? <SignalIcon className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
                   {isConnected ? signalLabel : 'Disconnected'}
@@ -127,7 +130,7 @@ export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
         </div>
 
       {/* Center: Star progress (matches teacher) — in-flow so it never overlaps the connection badge */}
-      <div className="flex items-center gap-1 bg-background/85 border border-[hsl(var(--classroom-reward)/0.45)] px-3 py-1 rounded-full shadow-[0_0_12px_hsl(var(--classroom-reward)/0.24)] shrink-0">
+      <div className="hidden md:flex items-center gap-1 bg-background/85 border border-[hsl(var(--classroom-reward)/0.45)] px-3 py-1 rounded-full shadow-[0_0_12px_hsl(var(--classroom-reward)/0.24)] shrink-0">
         {Array.from({ length: 10 }).map((_, index) => {
           const isEarned = index < earnedStars;
           return (
@@ -144,13 +147,13 @@ export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
       </div>
 
       {/* Right: Controls */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1 md:gap-2 shrink-0">
         {/* Read-only smart timer mirror (matches teacher) */}
         {scheduledAt && (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${theme.panelBorder} bg-background/70`}>
+                <div className={`hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${theme.panelBorder} bg-background/70`}>
                   <Clock className={`h-3.5 w-3.5 ${timerColor}`} />
                   <span className={`font-mono text-xs font-bold ${timerColor}`}>
                     {isOvertime ? `+${fmt(overtimeSec)}` : fmt(remaining)}
@@ -170,11 +173,11 @@ export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
           </TooltipProvider>
         )}
         {hubType === 'academy' && (
-          <>
+          <div className="hidden md:flex items-center gap-2">
             <CoinBalance />
             <ProfileAvatar size="sm" />
             <div className="h-6 w-px bg-gray-200 mx-1" />
-          </>
+          </div>
         )}
         <Button
           variant="ghost"
@@ -192,12 +195,24 @@ export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
         >
           {isCameraOff ? <VideoOff className="h-4 w-4" /> : <Video className="h-4 w-4" />}
         </Button>
+        {onToggleComms && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onToggleComms}
+            className="h-9 w-9 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 md:hidden"
+            title="Video & chat"
+            aria-label="Toggle video and chat panel"
+          >
+            <Users className="h-4 w-4" />
+          </Button>
+        )}
         {onToggleZenMode && (
           <Button
             variant="ghost"
             size="icon"
             onClick={onToggleZenMode}
-            className="h-9 w-9 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+            className="hidden md:inline-flex h-9 w-9 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
             title="Zen Mode (F11)"
           >
             {isZenMode ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}

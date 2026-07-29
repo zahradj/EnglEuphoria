@@ -98,6 +98,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   const [isZenMode, setIsZenMode] = useState(false);
   const [zenElapsed, setZenElapsed] = useState(0);
   const [videosFloating, setVideosFloating] = useState(false);
+  const [mobileCommsOpen, setMobileCommsOpen] = useState(false);
   const mainStageRef = useRef<MainStageHandle>(null);
   const [sceneNavState, setSceneNavState] = useState({ sceneIdx: 0, total: 0, canNavigate: true });
   // (commsCollapsed removed — Live video sidebar is now a fixed dock.)
@@ -1019,6 +1020,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             onSwitchMicrophone={media.switchMicrophone}
             onToggleSlideNav={() => setSlideNavOpen(v => !v)}
             slideNavOpen={slideNavOpen}
+            onToggleComms={() => setMobileCommsOpen(v => !v)}
             onForceSync={handleForceSync}
             realtimeConnected={channelStatus === 'SUBSCRIBED'}
             classStarted={classStarted}
@@ -1093,6 +1095,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
               }}
               videosFloating={videosFloating}
               onToggleVideosFloating={() => setVideosFloating(v => !v)}
+              mobileOpen={mobileCommsOpen}
+              onMobileClose={() => setMobileCommsOpen(false)}
             />
           </div>
         )}

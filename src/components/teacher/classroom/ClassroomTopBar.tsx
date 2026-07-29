@@ -59,6 +59,8 @@ interface ClassroomTopBarProps {
   onSwitchMicrophone?: (deviceId: string) => Promise<boolean>;
   onToggleSlideNav?: () => void;
   slideNavOpen?: boolean;
+  /** Mobile only — opens the video/chat drawer that's otherwise a docked sidebar on desktop. */
+  onToggleComms?: () => void;
   onForceSync?: () => void;
   realtimeConnected?: boolean;
   /** Whether the lesson has actually started; controls End/Leave button styling + label. */
@@ -100,6 +102,7 @@ export const ClassroomTopBar: React.FC<ClassroomTopBarProps> = ({
   onSwitchMicrophone,
   onToggleSlideNav,
   slideNavOpen = false,
+  onToggleComms,
   onForceSync,
   realtimeConnected = false,
   classStarted = true,
@@ -154,40 +157,40 @@ export const ClassroomTopBar: React.FC<ClassroomTopBarProps> = ({
   const hubGradient = theme.hexGradient;
 
   return (
-    <div className={`h-14 ${theme.headerGradient} backdrop-blur-md border-b ${theme.panelBorder} flex items-center justify-between px-4 shrink-0 shadow-sm`}>
+    <div className={`h-14 ${theme.headerGradient} backdrop-blur-md border-b ${theme.panelBorder} flex items-center justify-between px-2 md:px-4 shrink-0 shadow-sm overflow-hidden`}>
 
-      <div className="flex items-center gap-4">
-        {/* Hub-Branded Logo */}
+      <div className="flex items-center gap-2 md:gap-4 shrink-0">
+        {/* Hub-Branded Logo — stays visible at every size, this is the hub's branded color identity */}
         <div className="flex items-center gap-2">
           <div
-            className="w-8 h-8 rounded-full flex items-center justify-center shadow-md"
+            className="w-8 h-8 rounded-full flex items-center justify-center shadow-md shrink-0"
             style={{ background: hubGradient }}
           >
             <img src={logoWhite} alt="EnglEuphoria" className="w-5 h-5 object-contain" />
           </div>
-          <span className="text-sm font-bold bg-clip-text text-transparent" style={{ backgroundImage: hubGradient }}>
+          <span className="hidden md:inline text-sm font-bold bg-clip-text text-transparent" style={{ backgroundImage: hubGradient }}>
             EnglEuphoria
           </span>
         </div>
-        <div className="h-6 w-px bg-gray-200" />
+        <div className="hidden md:block h-6 w-px bg-gray-200" />
         {/* Live Indicator */}
-        <div className="flex items-center gap-2">
-          <div className="h-2.5 w-2.5 rounded-full bg-red-500 animate-pulse" />
-          <span className="text-sm font-medium text-red-500">LIVE</span>
+        <div className="flex items-center gap-1.5 md:gap-2">
+          <div className="h-2 w-2 md:h-2.5 md:w-2.5 rounded-full bg-red-500 animate-pulse" />
+          <span className="text-xs md:text-sm font-medium text-red-500">LIVE</span>
         </div>
-        <div className="h-6 w-px bg-gray-200" />
-        <div className="flex items-center gap-2">
+        <div className="hidden md:block h-6 w-px bg-gray-200" />
+        <div className="hidden md:flex items-center gap-2">
           <Users className="h-4 w-4 text-gray-500" />
           <span className="text-sm text-gray-600">{participantCount} in room</span>
         </div>
-        <Badge variant="secondary" className={`${theme.chipBg} ${theme.chipText} border ${theme.panelBorder}`}>
+        <Badge variant="secondary" className={`hidden md:inline-flex ${theme.chipBg} ${theme.chipText} border ${theme.panelBorder}`}>
           {lessonTitle}
         </Badge>
       </div>
 
       {/* Centered: Star Count + Timer */}
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-1.5 bg-background/85 border border-[hsl(var(--classroom-reward)/0.45)] px-4 py-1.5 rounded-full shadow-[0_0_12px_hsl(var(--classroom-reward)/0.24)]">
+      <div className="flex items-center gap-1 md:gap-4 min-w-0 overflow-hidden">
+        <div className="hidden md:flex items-center gap-1.5 bg-background/85 border border-[hsl(var(--classroom-reward)/0.45)] px-4 py-1.5 rounded-full shadow-[0_0_12px_hsl(var(--classroom-reward)/0.24)]">
           {Array.from({ length: 10 }).map((_, index) => {
             const isEarned = index < earnedStars;
             return (
@@ -204,26 +207,26 @@ export const ClassroomTopBar: React.FC<ClassroomTopBarProps> = ({
         </div>
 
         {/* Smart Timer Display */}
-        <div className={`flex items-center gap-2 px-3 py-1 rounded-full ${timerBgClass}`}>
+        <div className={`flex items-center gap-1 md:gap-2 px-2 md:px-3 py-1 rounded-full shrink-0 ${timerBgClass}`}>
           <Clock className={`h-4 w-4 ${timerColorClass}`} />
           <div className="flex flex-col items-center leading-none">
-            <span className={`font-mono text-sm font-bold ${timerColorClass}`}>
+            <span className={`font-mono text-xs md:text-sm font-bold ${timerColorClass}`}>
               {isOvertime ? `+${fmt(overtimeSec)}` : fmt(remaining)}
             </span>
             {smartTimer.phase !== 'normal' && (
-              <span className={`text-[10px] font-semibold uppercase tracking-wider ${timerColorClass}`}>
+              <span className={`hidden md:inline text-[10px] font-semibold uppercase tracking-wider ${timerColorClass}`}>
                 {smartTimer.phaseLabel}
               </span>
             )}
           </div>
-          <span className="text-[10px] text-gray-500 font-mono">
+          <span className="hidden md:inline text-[10px] text-gray-500 font-mono">
             {fmtFull(elapsedSeconds)}
           </span>
         </div>
 
         {/* Hub time-policy phase chip — Core / Bonus / Overtime + "left early" warning */}
         <div
-          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[10px] font-bold uppercase tracking-wider ${
+          className={`hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[10px] font-bold uppercase tracking-wider ${
             lessonPhase === 'mandatory'
               ? wouldBeLeftEarly
                 ? 'bg-amber-50 border-amber-300 text-amber-700'
@@ -260,7 +263,7 @@ export const ClassroomTopBar: React.FC<ClassroomTopBarProps> = ({
 
         {/* Legacy buffer indicator (kept for the urgent visual cue) */}
         {inBuffer && (
-          <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-600/30 border border-red-500/50 animate-pulse">
+          <div className="hidden md:flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-600/30 border border-red-500/50 animate-pulse">
             <div className="h-2 w-2 rounded-full bg-red-500" />
             <span className="text-[10px] font-bold text-red-300 uppercase tracking-wider">Buffer</span>
           </div>
@@ -276,7 +279,7 @@ export const ClassroomTopBar: React.FC<ClassroomTopBarProps> = ({
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full bg-gray-100 text-gray-700"
+            className="hidden md:inline-flex rounded-full bg-gray-100 text-gray-700"
             onClick={onToggleZenMode}
             title="Zen Mode (F11)"
           >
@@ -284,16 +287,18 @@ export const ClassroomTopBar: React.FC<ClassroomTopBarProps> = ({
           </Button>
         )}
         {onSwitchCamera && onSwitchMicrophone ? (
-          <DeviceSelector
-            stream={localStream}
-            onSwitchCamera={onSwitchCamera}
-            onSwitchMicrophone={onSwitchMicrophone}
-          />
+          <div className="hidden md:block">
+            <DeviceSelector
+              stream={localStream}
+              onSwitchCamera={onSwitchCamera}
+              onSwitchMicrophone={onSwitchMicrophone}
+            />
+          </div>
         ) : (
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full bg-gray-100 text-gray-700"
+            className="hidden md:inline-flex rounded-full bg-gray-100 text-gray-700"
             onClick={onOpenSettings}
           >
             <Settings className="h-5 w-5" />
@@ -311,6 +316,18 @@ export const ClassroomTopBar: React.FC<ClassroomTopBarProps> = ({
           >
             <RefreshCw className="h-4 w-4" />
             Reconnect
+          </Button>
+        )}
+        {onToggleComms && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onToggleComms}
+            title="Video & chat"
+            aria-label="Toggle video and chat panel"
+            className="h-8 w-8 rounded-full bg-gray-100 hover:bg-gray-200 md:hidden"
+          >
+            <Users className="h-4 w-4" />
           </Button>
         )}
         {onToggleSlideNav && (
