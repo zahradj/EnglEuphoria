@@ -18,8 +18,8 @@ import {
   cancelBookedSlot,
   cancelBookedSeries,
   hoursUntil,
-  isWithinFiveDayRule,
-  FIVE_DAY_RULE_HOURS,
+  isWithinPenaltyWindow,
+  LATE_CANCELLATION_PENALTY_HOURS,
 } from "@/services/cancelSlotService";
 
 interface BookedSlotInfo {
@@ -61,17 +61,20 @@ export const BookedSlotManager: React.FC<BookedSlotManagerProps> = ({
 
   const meta = slot.hub ? HUB_META[slot.hub] : null;
   const hoursLeft = hoursUntil(slot.startTime);
-  const lateNotice = isWithinFiveDayRule(slot.startTime);
+  const lateNotice = isWithinPenaltyWindow(slot.startTime);
 
   const handleCancelOccurrence = async () => {
     setBusy(true);
     try {
-      const { refunded } = await cancelBookedSlot({ slotId: slot.slotId, reason });
+      const { refunded, penalized, penaltyAmount } = await cancelBookedSlot({ slotId: slot.slotId, reason });
       toast({
-        title: "Booking cancelled",
-        description: refunded
+        title: penalized ? "Booking cancelled — penalty applied" : "Booking cancelled",
+        description: penalized
+          ? `The student's credit was refunded in full. Since this was inside the ${LATE_CANCELLATION_PENALTY_HOURS}-hour window, a $${penaltyAmount.toFixed(2)} cancellation fee was deducted from your balance.`
+          : refunded
           ? "The student's credit has been refunded and the slot is open again."
           : "The slot is open again.",
+        variant: penalized ? "destructive" : "default",
       });
       onCancelled?.();
       onOpenChange(false);
@@ -168,19 +171,19 @@ export const BookedSlotManager: React.FC<BookedSlotManagerProps> = ({
           )}
         </div>
 
-        {/* 5-day rule banner */}
+        {/* 48-hour late-cancellation penalty banner */}
         {lateNotice ? (
           <div className="flex items-start gap-2 rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-xs text-destructive">
             <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
             <div>
-              <strong>Inside the 5-day window</strong> ({Math.max(0, Math.round(hoursLeft))}h left).
-              Cancelling now forfeits the student's credit per Engleuphoria's
-              {` ${FIVE_DAY_RULE_HOURS}-hour`} cancellation policy.
+              <strong>Inside the {LATE_CANCELLATION_PENALTY_HOURS}-hour window</strong> ({Math.max(0, Math.round(hoursLeft))}h left).
+              The student is still refunded in full, but cancelling this close to the lesson
+              means <strong>you'll be charged a cancellation fee</strong> per Engleuphoria's policy.
             </div>
           </div>
         ) : (
           <p className="text-xs text-muted-foreground">
-            More than 5 days away — student's credit is fully refundable.
+            More than {LATE_CANCELLATION_PENALTY_HOURS} hours away — no cancellation penalty applies.
           </p>
         )}
 

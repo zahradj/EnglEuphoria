@@ -51,7 +51,9 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
     const isPast = isSlotInPast(day, time);
 
     if (isPast) {
-      return 'bg-muted/40 cursor-not-allowed opacity-50';
+      // Deliberately darker than an empty future cell so "already gone by"
+      // reads at a glance instead of blending in with open slots.
+      return 'bg-slate-950/[0.08] dark:bg-black/50 grayscale cursor-not-allowed opacity-60';
     }
 
     if (!slot) {

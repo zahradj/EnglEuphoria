@@ -17,6 +17,12 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const FIVE_DAY_RULE_HOURS = 120;
 
+// Teacher-side consequence: cancelling a paid lesson inside 48 hours of its
+// start incurs a penalty fee (enforced server-side in teacher_cancel_slot,
+// re-verified against the DB's own clock — this constant is only for the
+// pre-cancel warning banner).
+export const LATE_CANCELLATION_PENALTY_HOURS = 48;
+
 export function hoursUntil(start: string | Date): number {
   const ms = new Date(start).getTime() - Date.now();
   return ms / (1000 * 60 * 60);
@@ -26,24 +32,42 @@ export function isWithinFiveDayRule(start: string | Date): boolean {
   return hoursUntil(start) < FIVE_DAY_RULE_HOURS;
 }
 
+export function isWithinPenaltyWindow(start: string | Date): boolean {
+  return hoursUntil(start) < LATE_CANCELLATION_PENALTY_HOURS;
+}
+
 interface CancelSingleArgs {
   slotId: string;
   reason?: string;
+}
+
+interface CancelSingleResult {
+  refunded: boolean;
+  penalized: boolean;
+  penaltyAmount: number;
 }
 
 /**
  * Cancel a single booked occurrence via the teacher_cancel_slot RPC, which
  * atomically: refunds the student's credit (per the Refund Policy, teacher
  * cancellations always refund regardless of timing), marks the linked
- * class_bookings/lessons rows cancelled, and re-opens the slot.
+ * class_bookings/lessons rows cancelled, re-opens the slot, and — if this
+ * is a paid lesson cancelled inside the 48-hour window — charges the
+ * teacher a penalty fee (re-verified server-side, not trusted from client
+ * state).
  */
-export async function cancelBookedSlot({ slotId, reason }: CancelSingleArgs): Promise<{ refunded: boolean }> {
+export async function cancelBookedSlot({ slotId, reason }: CancelSingleArgs): Promise<CancelSingleResult> {
   const { data, error } = await supabase.rpc("teacher_cancel_slot", {
     p_slot_id: slotId,
     p_reason: reason ?? null,
   });
   if (error) throw error;
-  return (data as { refunded: boolean } | null) ?? { refunded: false };
+  const result = data as { refunded: boolean; penalized?: boolean; penalty_amount?: number } | null;
+  return {
+    refunded: result?.refunded ?? false,
+    penalized: result?.penalized ?? false,
+    penaltyAmount: result?.penalty_amount ?? 0,
+  };
 }
 
 interface CancelSeriesArgs {
