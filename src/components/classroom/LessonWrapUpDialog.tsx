@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { Slider } from '@/components/ui/slider';
-import { Star, ClipboardCheck, BarChart3, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Star, ClipboardCheck, BarChart3, CheckCircle2, AlertTriangle, Sparkles, MessageSquareText, Clock3 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { IncidentFlag, TEACHER_FLAG_OPTIONS, FLAG_META } from './incidentFlags';
@@ -23,7 +22,6 @@ interface LessonWrapUpDialogProps {
   bookingId?: string;
   studentId?: string;
   teacherId?: string;
-  vocabularyWords?: string[];
   sharedNotes?: string;
   hubType?: ClassroomHubKey | 'professional' | string;
 }
@@ -53,13 +51,11 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   bookingId,
   studentId,
   teacherId,
-  vocabularyWords = ['accomplish', 'schedule', 'presentation', 'negotiate', 'deadline'],
   sharedNotes = '',
   hubType = 'academy'
 }) => {
   const theme = getClassroomHubTheme(hubType);
   const { toast } = useToast();
-  const [masteredWords, setMasteredWords] = useState<string[]>([]);
   const [areasForImprovement, setAreasForImprovement] = useState<string[]>([]);
   const [quickNotes, setQuickNotes] = useState('');
   const [rating, setRating] = useState(0);
@@ -79,7 +75,6 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
 
   const toggleFlag = (f: IncidentFlag) =>
     setIncidentFlags((prev) => (prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]));
-
 
   // Load existing skill scores when dialog opens
   useEffect(() => {
@@ -126,11 +121,12 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   const isOverdue = msRemaining !== null && msRemaining <= 0;
   const hoursRemaining = msRemaining !== null ? Math.max(0, msRemaining / (60 * 60 * 1000)) : null;
 
-  const toggleWord = (word: string) => {
-    setMasteredWords(prev =>
-      prev.includes(word) ? prev.filter(w => w !== word) : [...prev, word]
-    );
-  };
+  // A quick at-a-glance session score — the closest thing to a single
+  // "verified progress" number this report produces. Only meaningful once
+  // skill scores are in play; otherwise it just reflects outcome + rating.
+  const sessionScore = showSkillScores
+    ? Math.round((Object.values(skillScores).reduce((a, b) => a + b, 0) / Object.values(skillScores).length) * 10)
+    : null;
 
   const toggleArea = (area: string) => {
     setAreasForImprovement(prev =>
@@ -164,7 +160,6 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
         teacher_id: teacherId,
         student_id: studentId || null,
         feedback_content: {
-          words_mastered: masteredWords,
           areas_for_improvement: areasForImprovement,
           quick_notes: quickNotes,
           skill_scores: showSkillScores ? skillScores : undefined,
@@ -172,7 +167,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
           incident_flags: incidentFlags,
         },
         student_performance_rating: rating,
-        lesson_objectives_met: outcome === 'completed' && masteredWords.length >= vocabularyWords.length / 2
+        lesson_objectives_met: outcome === 'completed'
       });
 
 
@@ -305,7 +300,6 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
 
       onOpenChange(false);
       // Reset
-      setMasteredWords([]);
       setAreasForImprovement([]);
       setQuickNotes('');
       setRating(0);
@@ -320,18 +314,34 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <ClipboardCheck className={`w-5 h-5 ${theme.accentText}`} />
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto p-0 gap-0 overflow-x-hidden">
+        <DialogTitle className="sr-only">Session Report</DialogTitle>
+        {/* Hub-branded header banner */}
+        <div
+          className="relative overflow-hidden px-6 pt-6 pb-5 text-white"
+          style={{ background: theme.hexGradient }}
+        >
+          <div className="absolute -right-6 -top-10 w-36 h-36 rounded-full bg-white/10" />
+          <div className="absolute -right-2 bottom-[-2.5rem] w-24 h-24 rounded-full bg-white/10" />
+          <div className="relative z-10 flex items-center gap-2 text-white/85 text-[11px] font-bold uppercase tracking-[0.14em] mb-1.5">
+            <ClipboardCheck className="w-4 h-4" />
             Session Report
-          </DialogTitle>
-        </DialogHeader>
+          </div>
+          <h2 className="relative z-10 text-xl font-extrabold leading-snug">
+            How did today's lesson go?
+          </h2>
+          {sessionScore !== null && (
+            <div className="relative z-10 mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur px-3 py-1 text-xs font-semibold">
+              <Sparkles className="w-3.5 h-3.5" />
+              Session score: {sessionScore}%
+            </div>
+          )}
+        </div>
 
-        <div className="space-y-5 py-2">
+        <div className="px-6 py-5 space-y-6">
           {/* Lesson outcome */}
           <div>
-            <p className="text-sm font-medium text-foreground mb-2">How did the lesson go?</p>
+            <p className="text-sm font-semibold text-foreground mb-2">Outcome</p>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
@@ -364,8 +374,8 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
 
           {/* Incident flags */}
           <div>
-            <p className="text-sm font-medium text-foreground mb-2">
-              Flag what happened {outcome === 'completed' && <span className="text-xs text-muted-foreground">(optional)</span>}
+            <p className="text-sm font-semibold text-foreground mb-2">
+              Flag what happened {outcome === 'completed' && <span className="text-xs font-normal text-muted-foreground">(optional)</span>}
             </p>
             <div className="flex flex-wrap gap-2">
               {TEACHER_FLAG_OPTIONS.map((f) => {
@@ -389,100 +399,91 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
             </div>
           </div>
 
-          {/* Words Mastered */}
-          <div>
-            <p className="text-sm font-medium text-foreground mb-2">Words Mastered</p>
-
-            <div className="flex flex-wrap gap-2">
-              {vocabularyWords.map(word => (
-                <button
-                  key={word}
-                  onClick={() => toggleWord(word)}
-                  className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
-                    masteredWords.includes(word)
-                      ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                      : 'bg-muted text-muted-foreground hover:bg-muted/70 border border-border'
-                  }`}
-                >
-                  {masteredWords.includes(word) ? '✓ ' : ''}{word}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Areas for Improvement */}
-          <div>
-            <p className="text-sm font-medium text-foreground mb-2">Areas for Improvement</p>
-            <div className="space-y-2">
-              {IMPROVEMENT_AREAS.map(area => (
-                <label key={area} className="flex items-center gap-2 cursor-pointer">
-                  <Checkbox
-                    checked={areasForImprovement.includes(area)}
-                    onCheckedChange={() => toggleArea(area)}
-                    className="data-[state=checked]:bg-amber-600 data-[state=checked]:border-amber-600"
-                  />
-                  <span className="text-sm text-foreground">{area}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Skill Score Assessment Toggle */}
-          <div>
+          {/* Progress Assessment — the section that actually verifies progress */}
+          <div className={`rounded-2xl border ${theme.panelBorder} overflow-hidden`}>
             <button
+              type="button"
               onClick={() => setShowSkillScores(!showSkillScores)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all w-full ${
-                showSkillScores
-                  ? `${theme.accentSoftBg} ${theme.accentText} border ${theme.panelBorder}`
-                  : 'bg-muted text-muted-foreground hover:bg-muted/70 border border-border'
+              className={`flex items-center justify-between gap-2 px-4 py-3 w-full text-sm font-semibold transition-colors ${
+                showSkillScores ? `${theme.accentSoftBg} ${theme.accentText}` : 'bg-muted/40 text-foreground hover:bg-muted/60'
               }`}
             >
-              <BarChart3 className="w-4 h-4" />
-              {showSkillScores ? 'Skill Score Assessment (Active)' : 'Add Skill Score Assessment'}
+              <span className="flex items-center gap-2">
+                <BarChart3 className="w-4 h-4" />
+                Progress Assessment
+              </span>
+              <span className="text-[11px] font-medium opacity-70">
+                {showSkillScores ? 'Hide' : 'Score this session'}
+              </span>
             </button>
+
+            {showSkillScores && (
+              <div className="space-y-4 p-4 bg-card">
+                <p className="text-xs text-muted-foreground -mt-1">
+                  Scores (0–10) sync straight to the student's Skill Radar and progress dashboard.
+                </p>
+                {SKILL_FIELDS.map(field => (
+                  <div key={field.key} className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-foreground">{field.label}</span>
+                      <span className={`text-xs font-mono font-bold px-1.5 py-0.5 rounded ${theme.accentSoftBg} ${theme.accentText}`}>
+                        {skillScores[field.key].toFixed(1)} · {scoreToCefr(skillScores[field.key])}
+                      </span>
+                    </div>
+                    <Slider
+                      value={[skillScores[field.key]]}
+                      onValueChange={([val]) => setSkillScores(prev => ({ ...prev, [field.key]: val }))}
+                      min={0}
+                      max={10}
+                      step={0.5}
+                      className="w-full"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Skill Score Sliders */}
-          {showSkillScores && (
-            <div className="space-y-4 p-3 rounded-lg bg-muted/40 border border-border">
-              <p className="text-xs text-muted-foreground mb-1">
-                Adjust scores (0–10) based on this session. Changes update the student's Skill Radar.
-              </p>
-              {SKILL_FIELDS.map(field => (
-                <div key={field.key} className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-foreground">{field.label}</span>
-                    <span className="text-xs font-mono text-blue-600 dark:text-blue-300">
-                      {skillScores[field.key].toFixed(1)} · {scoreToCefr(skillScores[field.key])}
-                    </span>
-                  </div>
-                  <Slider
-                    value={[skillScores[field.key]]}
-                    onValueChange={([val]) => setSkillScores(prev => ({ ...prev, [field.key]: val }))}
-                    min={0}
-                    max={10}
-                    step={0.5}
-                    className="w-full"
-                  />
-                </div>
-              ))}
+          {/* Areas for Improvement — chips, matches the incident-flag style above */}
+          <div>
+            <p className="text-sm font-semibold text-foreground mb-2">Areas for Improvement</p>
+            <div className="flex flex-wrap gap-2">
+              {IMPROVEMENT_AREAS.map(area => {
+                const active = areasForImprovement.includes(area);
+                return (
+                  <button
+                    key={area}
+                    type="button"
+                    onClick={() => toggleArea(area)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                      active
+                        ? 'bg-amber-500 text-white border-amber-500'
+                        : 'bg-white text-slate-700 border-slate-300 hover:border-amber-400'
+                    }`}
+                  >
+                    {active ? '✓ ' : ''}{area}
+                  </button>
+                );
+              })}
             </div>
-          )}
+          </div>
 
           {/* Quick Notes */}
           <div>
-            <p className="text-sm font-medium text-foreground mb-2">Quick Notes</p>
+            <p className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1.5">
+              <MessageSquareText className="w-4 h-4" /> Quick Notes
+            </p>
             <Textarea
               value={quickNotes}
               onChange={(e) => setQuickNotes(e.target.value)}
-              placeholder="Any observations about the lesson..."
-              className="text-sm min-h-[60px]"
+              placeholder="Any observations about the lesson — these are visible to the student and to any future teacher."
+              className="text-sm min-h-[70px]"
             />
           </div>
 
           {/* Performance Rating */}
           <div>
-            <p className="text-sm font-medium text-foreground mb-2">Performance Rating</p>
+            <p className="text-sm font-semibold text-foreground mb-2">Student Performance</p>
             <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map(star => (
                 <button
@@ -499,16 +500,20 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
           </div>
 
           {isOverdue ? (
-            <div className="rounded-xl border border-rose-300 bg-rose-50 p-3 text-[11px] leading-relaxed text-rose-800">
-              ⚠️ <strong>The 24-hour window has passed.</strong> Submitting now still saves your notes, but this session will <strong>not be paid</strong>.
+            <div className="rounded-xl border border-rose-300 bg-rose-50 p-3 text-[11px] leading-relaxed text-rose-800 flex items-start gap-2">
+              <Clock3 className="w-4 h-4 shrink-0 mt-0.5" />
+              <span><strong>The 24-hour window has passed.</strong> Submitting now still saves your notes, but this session will <strong>not be paid</strong>.</span>
             </div>
           ) : (
-            <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-[11px] leading-relaxed text-amber-800">
-              ⏰ {hoursRemaining !== null ? (
-                <><strong>{hoursRemaining < 1 ? '< 1 hour' : `${Math.floor(hoursRemaining)} hour${Math.floor(hoursRemaining) === 1 ? '' : 's'}`} left</strong> to submit this report.</>
-              ) : (
-                <><strong>You have 24 hours</strong> to submit this report.</>
-              )} If you skip it now, you can finish it from your dashboard within that window — otherwise this session <strong>won't be paid</strong>.
+            <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-[11px] leading-relaxed text-amber-800 flex items-start gap-2">
+              <Clock3 className="w-4 h-4 shrink-0 mt-0.5" />
+              <span>
+                {hoursRemaining !== null ? (
+                  <><strong>{hoursRemaining < 1 ? '< 1 hour' : `${Math.floor(hoursRemaining)} hour${Math.floor(hoursRemaining) === 1 ? '' : 's'}`} left</strong> to submit this report.</>
+                ) : (
+                  <><strong>You have 24 hours</strong> to submit this report.</>
+                )} If you skip it now, you can finish it from your dashboard within that window — otherwise this session <strong>won't be paid</strong>.
+              </span>
             </div>
           )}
 

@@ -339,6 +339,8 @@ export const LessonsListCard: React.FC = () => {
         onOpenChange={setFeedbackOpen}
         lessonId={feedbackLesson?.id ?? null}
         lessonTitle={feedbackLesson?.title}
+        studentId={feedbackLesson?.studentId ?? null}
+        viewerRole="teacher"
       />
 
       <LessonWrapUpDialog

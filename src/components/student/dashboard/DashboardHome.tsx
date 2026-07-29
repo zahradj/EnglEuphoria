@@ -3,6 +3,7 @@ import { JoinLessonHero } from '@/components/student/JoinLessonHero';
 import { ProgressStrip } from './ProgressStrip';
 import { JumpBackInCard } from './JumpBackInCard';
 import { HomeworkForestWidget } from '@/components/student/kids/HomeworkForestWidget';
+import { RecentLessonReports } from '@/components/student/RecentLessonReports';
 import { SkillsRadarChart } from '@/components/student/hub/SkillsRadarChart';
 import { AcademyJourneyHub } from '@/components/student/hub/AcademyJourneyHub';
 import { useThemeMode } from '@/hooks/useThemeMode';
@@ -85,6 +86,10 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ hub, studentName }
       {(hub === 'playground' || hub === 'academy') && (
         <HomeworkForestWidget isDark={isDark} />
       )}
+
+      {/* Teacher's session reports — progress verification the student can
+          actually see, right where they already look for "what's next". */}
+      <RecentLessonReports hubId={hub} limit={3} />
     </div>
   );
 };
