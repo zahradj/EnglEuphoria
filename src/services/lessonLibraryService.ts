@@ -10,6 +10,9 @@ export interface LibraryLesson {
   /** Real CEFR slot level (Pre-A1 / A1 / A2 / B1 / B2…) — more reliable than
    *  difficulty_level, which is often a generic placeholder like "beginner". */
   slot_cefr_level: string | null;
+  /** Curriculum position within the level — used to group the library by unit. */
+  slot_unit_number: number | null;
+  slot_lesson_number: number | null;
   duration_minutes: number | null;
   thumbnail_url: string | null;
   content: any;
@@ -29,6 +32,8 @@ export interface LibraryLessonCard {
   target_system: string;
   difficulty_level: string;
   cefr_level: string;
+  unit_number: number | null;
+  lesson_number: number | null;
   duration_minutes: number | null;
   thumbnail_url: string | null;
   slide_count: number;
@@ -93,6 +98,8 @@ export function toLibraryLessonCard(lesson: LibraryLesson): LibraryLessonCard {
     target_system: lesson.target_system,
     difficulty_level: lesson.difficulty_level,
     cefr_level: lesson.slot_cefr_level || lesson.difficulty_level || 'Unleveled',
+    unit_number: lesson.slot_unit_number ?? null,
+    lesson_number: lesson.slot_lesson_number ?? null,
     duration_minutes: lesson.duration_minutes,
     thumbnail_url: lesson.thumbnail_url,
     slide_count: slideCount,
