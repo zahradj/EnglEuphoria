@@ -97,6 +97,14 @@ export function SceneRenderer(props: {
     case 'feeling-quiz': return <FeelingQuizScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'i-am-feeling': return <IAmFeelingScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'feelings-bingo': return <FeelingsBingoScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'numbers-learn': return <NumbersLearnScene scene={scene} onNext={props.onNext} />;
+    case 'numbers-review': return <NumbersReviewScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'candle-cake': return <CandleCakeScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'count-balloons': return <CountBalloonsScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'age-balloons': return <AgeBalloonsScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'age-sentence-match': return <AgeSentenceMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'meet-greet': return <MeetGreetScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'age-quiz': return <AgeQuizScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     default: return null;
   }
 }
@@ -3436,6 +3444,425 @@ function FeelingsBingoScene({ scene, onNext, onWin, onLose }: { scene: Extract<S
           <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next ⭐</button>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ---------- Numbers / age (Lesson 4 birthday block) ---------- */
+
+function NumbersLearnScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'numbers-learn' }>; onNext: () => void }) {
+  const numbers = useMemo(() => Array.from({ length: scene.to - scene.from + 1 }, (_, i) => scene.from + i), [scene.from, scene.to]);
+  const [heard, setHeard] = useState<Set<number>>(new Set());
+  const cast = CAST[scene.who];
+
+  const tapNumber = async (n: number) => {
+    setHeard((s) => new Set(s).add(n));
+    sfx.pop();
+    await safeSpeak(String(n), scene.who);
+  };
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-center gap-6 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">{scene.teacher}</div>
+      <img src={cast.img} alt={cast.name} className="relative z-10 h-28 w-28 object-contain drop-shadow-2xl sm:h-32 sm:w-32" style={{ animation: 'lep1-float 3s ease-in-out infinite' }} />
+      <div className="relative z-10 flex max-w-xl flex-wrap justify-center gap-3">
+        {numbers.map((n) => (
+          <button key={n} onClick={() => void tapNumber(n)}
+            className={`grid h-16 w-16 place-items-center rounded-2xl border-4 bg-white/95 text-2xl font-black shadow-xl transition active:scale-95 sm:h-20 sm:w-20 sm:text-3xl ${heard.has(n) ? 'border-green-400 text-green-600' : 'border-white text-orange-700'}`}
+          >
+            {n}
+          </button>
+        ))}
+      </div>
+      <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Next →</button>
+    </div>
+  );
+}
+
+function NumbersReviewScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'numbers-review' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const numbers = useMemo(() => Array.from({ length: scene.to - scene.from + 1 }, (_, i) => scene.from + i), [scene.from, scene.to]);
+  const [target, setTarget] = useState<number>(() => numbers[Math.floor(Math.random() * numbers.length)]);
+  const [correct, setCorrect] = useState(0);
+  const [wrongTap, setWrongTap] = useState<number | null>(null);
+  const [gemDone, setGemDone] = useState(false);
+  const ready = correct >= 8;
+  const cast = CAST[scene.who];
+
+  useEffect(() => {
+    if (ready) return;
+    const t = window.setTimeout(() => void safeSpeak(String(target), scene.who), 300);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [target]);
+
+  const tapNumber = (n: number) => {
+    if (ready) return;
+    if (n === target) {
+      sfx.match();
+      const next = correct + 1;
+      setCorrect(next);
+      if (next >= 8 && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+      setTarget(numbers[Math.floor(Math.random() * numbers.length)]);
+    } else {
+      sfx.wrong(); setWrongTap(n);
+      window.setTimeout(() => setWrongTap(null), 400);
+    }
+  };
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-center gap-6 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">
+        {ready ? '🎉 Great counting!' : <>🔊 {scene.teacher} <span className="ml-1 rounded-full bg-orange-100 px-2 py-0.5 text-xs text-orange-600">{correct}/8</span></>}
+      </div>
+      <button onClick={() => void safeSpeak(String(target), scene.who)} className="relative z-10 flex flex-col items-center active:scale-95" aria-label="Hear the number again" disabled={ready}>
+        <img src={cast.img} alt={cast.name} className="h-24 w-24 object-contain drop-shadow-2xl" style={{ animation: 'lep1-float 3s ease-in-out infinite' }} />
+        {!ready && <span className="mt-1 text-xs font-bold text-white/90 drop-shadow">🔊 Hear again</span>}
+      </button>
+      <div className="relative z-10 flex max-w-xl flex-wrap justify-center gap-3">
+        {numbers.map((n) => (
+          <button key={n} onClick={() => tapNumber(n)} disabled={ready}
+            className={`grid h-16 w-16 place-items-center rounded-2xl border-4 bg-white/95 text-2xl font-black shadow-xl transition active:scale-95 disabled:opacity-70 sm:h-20 sm:w-20 sm:text-3xl ${wrongTap === n ? 'animate-[lep1-shake_0.4s_ease-out] border-rose-400' : 'border-white text-orange-700'}`}
+          >
+            {n}
+          </button>
+        ))}
+      </div>
+      {ready && <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">I'm ready! →</button>}
+    </div>
+  );
+}
+
+function CandleCakeScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'candle-cake' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [round, setRound] = useState(0);
+  const [candles, setCandles] = useState(0);
+  const [studentAge, setStudentAge] = useState<number | null>(null);
+  const [celebrating, setCelebrating] = useState(false);
+  const [gemDone, setGemDone] = useState(false);
+  const total = scene.rounds.length;
+  const finished = round >= total;
+  const r = !finished ? scene.rounds[round] : null;
+  const target = r?.isStudent ? (studentAge ?? 0) : (r?.target ?? 0);
+
+  useEffect(() => {
+    setCandles(0); setStudentAge(null); setCelebrating(false);
+    if (!r) return;
+    const t = window.setTimeout(() => void safeSpeak(r.prompt, r.asker), 300);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round]);
+
+  const tapCake = async () => {
+    if (!r || celebrating || target <= 0 || candles >= target) return;
+    sfx.pop();
+    const next = candles + 1;
+    setCandles(next);
+    if (next >= target) {
+      setCelebrating(true);
+      sfx.gem();
+      await safeSpeak(r.celebrate, r.asker);
+      if (round === total - 1 && !gemDone) { setGemDone(true); onWin(true); }
+      window.setTimeout(() => setRound((x) => x + 1), 900);
+    }
+  };
+
+  if (finished) {
+    return (
+      <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <Confetti />
+        <div className="relative z-20 rounded-3xl bg-white/95 px-8 py-6 text-center text-2xl font-black text-orange-700 shadow-2xl">🎂 Happy birthday to YOU! 🎂</div>
+        <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next ⭐</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">🔊 {r!.prompt}</div>
+      {r!.isStudent && studentAge === null ? (
+        <div className="relative z-10 flex max-w-md flex-wrap justify-center gap-2">
+          {[2, 3, 4, 5, 6, 7, 8].map((n) => (
+            <button key={n} onClick={() => setStudentAge(n)} className="grid h-14 w-14 place-items-center rounded-2xl border-4 border-white bg-white/95 text-xl font-black text-orange-700 shadow-xl active:scale-95">{n}</button>
+          ))}
+        </div>
+      ) : (
+        <button onClick={() => void tapCake()} className="relative z-10 active:scale-95" aria-label="Tap the cake to add a candle">
+          <div className="relative grid h-40 w-48 place-items-end rounded-t-3xl bg-gradient-to-b from-pink-300 to-pink-400 pb-2 shadow-2xl sm:h-48 sm:w-56">
+            <div className="flex flex-wrap justify-center gap-1 px-2 pb-2">
+              {Array.from({ length: candles }).map((_, i) => (
+                <span key={i} className="text-2xl" style={{ animation: 'lep1-pop 0.3s ease-out' }}>🕯️</span>
+              ))}
+            </div>
+          </div>
+          <div className="mt-2 text-center text-lg font-black text-white drop-shadow">{candles}/{target}</div>
+        </button>
+      )}
+    </div>
+  );
+}
+
+function CountBalloonsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'count-balloons' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [popped, setPopped] = useState(0);
+  const [gemDone, setGemDone] = useState(false);
+  const finished = popped >= scene.total;
+  const cast = CAST[scene.who];
+
+  const popNext = async () => {
+    if (finished) return;
+    sfx.pop();
+    const n = popped + 1;
+    setPopped(n);
+    await safeSpeak(String(n), scene.who);
+    if (n >= scene.total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+  };
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-center gap-6 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">
+        {finished ? '🎉 You counted them all!' : <>{scene.teacher} <span className="ml-1 rounded-full bg-orange-100 px-2 py-0.5 text-xs text-orange-600">{popped}/{scene.total}</span></>}
+      </div>
+      <img src={cast.img} alt={cast.name} className="relative z-10 h-20 w-20 object-contain drop-shadow-2xl" />
+      <div className="relative z-10 flex max-w-xl flex-wrap justify-center gap-3">
+        {Array.from({ length: scene.total }).map((_, i) => (
+          i < popped
+            ? <span key={i} className="grid h-14 w-14 place-items-center text-2xl font-black text-white drop-shadow">{i + 1}</span>
+            : <button key={i} onClick={() => void popNext()} disabled={i !== popped}
+                className="grid h-14 w-14 place-items-center rounded-full text-4xl shadow-xl transition active:scale-90 disabled:opacity-40" aria-label={`Pop balloon ${i + 1}`}
+              >
+                🎈
+              </button>
+        ))}
+      </div>
+      {finished && <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Next →</button>}
+    </div>
+  );
+}
+
+function AgeBalloonsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'age-balloons' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [tapped, setTapped] = useState<Set<number>>(new Set());
+  const [active, setActive] = useState<number | null>(null);
+  const total = scene.friends.length;
+  const allDone = tapped.size >= total;
+
+  const tapFriend = async (i: number) => {
+    if (tapped.has(i)) return;
+    setActive(i);
+    const f = scene.friends[i];
+    const next = new Set(tapped).add(i);
+    setTapped(next);
+    sfx.pop();
+    await safeSpeak(`${CAST[f.who].name} is ${f.age}!`, f.who);
+    if (next.size >= total) { sfx.gem(); onWin(true); }
+  };
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-center gap-6 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">{scene.teacher}</div>
+      <div className="relative z-10 flex flex-wrap justify-center gap-6">
+        {scene.friends.map((f, i) => {
+          const c = CAST[f.who];
+          const isDone = tapped.has(i);
+          return (
+            <button key={i} onClick={() => void tapFriend(i)} className="flex flex-col items-center gap-1 active:scale-95">
+              <div className="relative">
+                <img src={c.img} alt={c.name} className="h-24 w-24 object-contain drop-shadow-2xl sm:h-28 sm:w-28" style={{ animation: active === i ? 'lep1-pop 0.4s ease-out' : undefined }} />
+                {isDone && <div className="absolute -right-2 -top-2 grid h-8 w-8 place-items-center rounded-full bg-green-500 text-white shadow-lg">✓</div>}
+              </div>
+              <div className="flex gap-0.5">{Array.from({ length: f.age }).map((_, b) => <span key={b} className="text-sm">🎈</span>)}</div>
+              {isDone && <span className="rounded-full bg-white/95 px-3 py-1 text-sm font-black text-orange-700 shadow">{c.name} is {f.age}!</span>}
+            </button>
+          );
+        })}
+      </div>
+      {allDone && <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Next →</button>}
+    </div>
+  );
+}
+
+function AgeSentenceMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'age-sentence-match' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const cards = useMemo(() => {
+    const arr = scene.friends.map((f, i) => ({ i, text: `${CAST[f.who].name} is ${f.age}!` }));
+    return [...arr].sort(() => Math.random() - 0.5);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const [selectedFriend, setSelectedFriend] = useState<number | null>(null);
+  const [matched, setMatched] = useState<Set<number>>(new Set());
+  const [wrongCard, setWrongCard] = useState<number | null>(null);
+  const [gemDone, setGemDone] = useState(false);
+  const allMatched = matched.size >= scene.friends.length;
+
+  const pickFriend = async (i: number) => {
+    if (matched.has(i)) return;
+    setSelectedFriend(i);
+    await safeSpeak(CAST[scene.friends[i].who].name, scene.friends[i].who);
+  };
+
+  const pickCard = async (cardIdx: number) => {
+    if (selectedFriend === null) return;
+    const card = cards[cardIdx];
+    if (card.i === selectedFriend) {
+      sfx.match();
+      const next = new Set(matched).add(selectedFriend);
+      setMatched(next);
+      const f = scene.friends[selectedFriend];
+      setSelectedFriend(null);
+      await safeSpeak(card.text, f.who);
+      if (next.size >= scene.friends.length && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+    } else {
+      sfx.wrong(); onLose(); setWrongCard(cardIdx);
+      window.setTimeout(() => setWrongCard(null), 400);
+    }
+  };
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 py-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">{scene.teacher}</div>
+      <div className="relative z-10 flex flex-wrap justify-center gap-3">
+        {scene.friends.map((f, i) => (
+          <button key={i} onClick={() => void pickFriend(i)} disabled={matched.has(i)}
+            className={`rounded-2xl border-4 bg-white/90 p-1 shadow-xl transition active:scale-95 disabled:opacity-60 ${matched.has(i) ? 'border-green-400' : selectedFriend === i ? 'border-orange-400 ring-4 ring-orange-300/60' : 'border-white'}`}
+          >
+            <img src={CAST[f.who].img} alt={CAST[f.who].name} className="h-16 w-16 object-contain sm:h-20 sm:w-20" />
+          </button>
+        ))}
+      </div>
+      <div className="relative z-10 flex max-w-lg flex-wrap justify-center gap-2">
+        {cards.map((card, idx) => (
+          <button key={idx} onClick={() => void pickCard(idx)} disabled={matched.has(card.i)}
+            className={`rounded-2xl border-2 bg-white/95 px-4 py-2 text-sm font-bold text-orange-700 shadow-lg transition active:scale-95 disabled:opacity-40 ${wrongCard === idx ? 'animate-[lep1-shake_0.4s_ease-out] border-rose-400' : 'border-orange-200'}`}
+          >
+            {card.text}
+          </button>
+        ))}
+      </div>
+      {allMatched && <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Next →</button>}
+    </div>
+  );
+}
+
+function MeetGreetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'meet-greet' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [idx, setIdx] = useState(0);
+  const [step, setStep] = useState(0);
+  const [gemDone, setGemDone] = useState(false);
+  const total = scene.friends.length;
+  const finished = idx >= total;
+  const f = !finished ? scene.friends[idx] : null;
+  const c = f ? CAST[f.who] : null;
+
+  const steps = f ? [
+    { line: "What's your name?", who: 'teacher' as const },
+    { line: `My name is ${c!.name}.`, who: f.who },
+    { line: 'How old are you?', who: 'teacher' as const },
+    { line: `I am ${f.age}.`, who: f.who },
+    { line: 'Nice to meet you!', who: 'teacher' as const },
+  ] : [];
+
+  useEffect(() => {
+    if (!f) return;
+    const t = window.setTimeout(() => void safeSpeak(steps[step].line, steps[step].who), 300);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idx, step]);
+
+  const advance = () => {
+    if (step < steps.length - 1) { setStep(step + 1); return; }
+    const nextIdx = idx + 1;
+    if (nextIdx >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+    setIdx(nextIdx);
+    setStep(0);
+  };
+
+  if (finished) {
+    return (
+      <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <Confetti />
+        <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next ⭐</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-xs font-black text-orange-700 shadow-xl backdrop-blur sm:text-sm">{scene.teacher}</div>
+      <img src={c!.img} alt={c!.name} className="relative z-10 h-28 w-28 object-contain drop-shadow-2xl sm:h-32 sm:w-32" style={{ animation: 'lep1-float 3s ease-in-out infinite' }} />
+      <button onClick={() => void safeSpeak(steps[step].line, steps[step].who)} className="relative z-10 max-w-md rounded-3xl bg-white/95 px-6 py-4 text-center shadow-2xl active:scale-95">
+        <p className="text-xl font-black text-orange-700">🔊 "{steps[step].line}"</p>
+      </button>
+      <button onClick={advance} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 px-7 py-3 text-base font-black text-white shadow-xl active:scale-95">
+        {step < steps.length - 1 ? 'Next line →' : idx < total - 1 ? 'Next friend →' : 'Finish →'}
+      </button>
+    </div>
+  );
+}
+
+function AgeQuizScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'age-quiz' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [idx, setIdx] = useState(0);
+  const [pickedAge, setPickedAge] = useState<number | null>(null);
+  const [gemDone, setGemDone] = useState(false);
+  const total = scene.friends.length + 1;
+  const isStudentTurn = idx >= scene.friends.length;
+  const f = !isStudentTurn ? scene.friends[idx] : null;
+  const finished = idx >= total;
+
+  useEffect(() => {
+    setPickedAge(null);
+    if (finished) return;
+    const t = window.setTimeout(() => void safeSpeak('How old are you?', 'teacher'), 300);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idx]);
+
+  const pickAge = async (age: number) => {
+    if (pickedAge !== null) return;
+    setPickedAge(age);
+    sfx.match();
+    if (f) await safeSpeak(`${CAST[f.who].name} is ${age}!`, f.who);
+    else await safeSpeak(`I am ${age}!`, 'teacher');
+  };
+
+  const advance = () => {
+    const next = idx + 1;
+    if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+    setIdx(next);
+  };
+
+  if (finished) {
+    return (
+      <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <Confetti />
+        <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next ⭐</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">
+        {isStudentTurn ? '🎁 Your turn! Tap YOUR age!' : `🎁 How old is ${CAST[f!.who].name}? Guess the candles!`}
+      </div>
+      {!isStudentTurn && <img src={CAST[f!.who].img} alt={CAST[f!.who].name} className="relative z-10 h-24 w-24 object-contain drop-shadow-2xl" style={{ animation: 'lep1-float 3s ease-in-out infinite' }} />}
+      <div className="relative z-10 flex flex-wrap justify-center gap-2">
+        {scene.studentAges.map((age) => {
+          const isPicked = pickedAge === age;
+          const isCorrect = !isStudentTurn && age === f?.age;
+          const show = pickedAge !== null && (isPicked || isCorrect);
+          return (
+            <button key={age} onClick={() => void pickAge(age)} disabled={pickedAge !== null}
+              className={`grid h-16 w-16 place-items-center rounded-2xl border-4 bg-white/95 text-2xl font-black shadow-xl transition active:scale-95 disabled:opacity-70 ${show ? 'border-green-400 text-green-600' : 'border-white text-orange-700'}`}
+            >
+              {age}
+            </button>
+          );
+        })}
+      </div>
+      {pickedAge !== null && <button onClick={advance} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 px-7 py-3 text-base font-black text-white shadow-xl active:scale-95">Next →</button>}
     </div>
   );
 }

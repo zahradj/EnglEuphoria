@@ -27,6 +27,8 @@ export const SCENE_KINDS = [
   'feelings-tap', 'feelings-wheel', 'x-is-feeling', 'feelings-dice',
   'feed-monsters', 'he-she-model', 'he-she-sort', 'he-she-say',
   'feeling-quiz', 'i-am-feeling', 'feelings-bingo',
+  'numbers-learn', 'numbers-review', 'candle-cake', 'count-balloons',
+  'age-balloons', 'age-sentence-match', 'meet-greet', 'age-quiz',
 ] as const;
 export type SceneKindName = (typeof SCENE_KINDS)[number];
 

@@ -51,7 +51,15 @@ export type Scene =
   | { id: string; kind: 'he-she-say'; bg: string; teacher: string; rounds: { who: CharKey; emotion: 'happy' | 'sad' | 'angry'; pronoun: 'He' | 'She' }[] }
   | { id: string; kind: 'feeling-quiz'; bg: string; teacher: string; rounds: { who: CharKey; emotion: 'happy' | 'sad' | 'angry'; prompt: string }[] }
   | { id: string; kind: 'i-am-feeling'; bg: string; teacher: string; asker: CharKey; rounds: { emotion: 'happy' | 'sad' | 'angry'; label: string }[] }
-  | { id: string; kind: 'feelings-bingo'; bg: string; teacher: string; tiles: { who: CharKey; emotion: 'happy' | 'sad' | 'angry' }[]; rounds: { who: CharKey; emotion: 'happy' | 'sad' | 'angry'; prompt: string }[] };
+  | { id: string; kind: 'feelings-bingo'; bg: string; teacher: string; tiles: { who: CharKey; emotion: 'happy' | 'sad' | 'angry' }[]; rounds: { who: CharKey; emotion: 'happy' | 'sad' | 'angry'; prompt: string }[] }
+  | { id: string; kind: 'numbers-learn'; bg: string; who: CharKey; from: number; to: number; teacher: string }
+  | { id: string; kind: 'numbers-review'; bg: string; who: CharKey; from: number; to: number; teacher: string }
+  | { id: string; kind: 'candle-cake'; bg: string; who: CharKey; teacher: string; rounds: { asker: CharKey; target: number; isStudent?: boolean; prompt: string; celebrate: string }[] }
+  | { id: string; kind: 'count-balloons'; bg: string; who: CharKey; total: number; teacher: string }
+  | { id: string; kind: 'age-balloons'; bg: string; teacher: string; friends: { who: CharKey; age: number }[] }
+  | { id: string; kind: 'age-sentence-match'; bg: string; teacher: string; friends: { who: CharKey; age: number }[] }
+  | { id: string; kind: 'meet-greet'; bg: string; teacher: string; friends: { who: CharKey; age: number }[] }
+  | { id: string; kind: 'age-quiz'; bg: string; teacher: string; friends: { who: CharKey; age: number }[]; studentAges: number[] };
 
 const A = '/lep1'; // public asset root
 
@@ -539,24 +547,16 @@ const itemApple = `${A}/items/item-apple.svg`;
 const itemAnt = `${A}/items/item-ant.svg`;
 const itemAlligator = `${A}/items/item-alligator.svg`;
 
-export const LESSON_3_TITLE = 'The Sunshine Meadow';
-export const LESSON_3_OBJECTIVE = 'Ask and answer "How are you?", say I am / He is / She is happy, sad, or angry, while learning the /s/ and /a/ sounds and reviewing H, M, N, W.';
+export const LESSON_3_TITLE = 'How Are You?';
+export const LESSON_3_OBJECTIVE = 'Ask and answer "How are you?", say I am / He is / She is happy, sad, or angry, while learning the /æ/ and /s/ sounds.';
 
 export const LESSON_3_SCENES: Scene[] = [
-  { id: 'l3-title', kind: 'title-card', bg: bgMeadow, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 3', title: 'The Sunshine Meadow', subtitle: 'Feelings & the /s/ and /a/ sounds' },
+  { id: 'l3-title', kind: 'title-card', bg: bgMeadow, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 3 · Feelings', title: 'How Are You?', subtitle: '\u{1F60A} Happy · \u{1F622} Sad · \u{1F620} Angry — today we talk about EMOTIONS!' },
   {
-    id: 'l3-intro', kind: 'cinematic', bg: bgMeadow, title: 'The Sunshine Meadow', subtitle: 'A new friend is napping in the sun', narrator: 'pip',
-    script: [
-      { who: 'pip', line: 'Shh! Someone new is sleeping in the sunshine.' },
-      { who: 'pip', line: 'Let’s wake up our new friend and ask: How are you?' },
-    ],
-    cta: 'Wake him up!',
-  },
-  { id: 'l3-meet-leo', kind: 'meet', bg: bgBigTree, who: 'leo', teacher: 'A big yawn! Tap Leo to say hello!', line: 'Hello! My name is Leo. How are you?', repeat: 'How are you?' },
-  {
-    id: 'l3-feelings-song', kind: 'song', bg: bgMeadow, title: '\u{1F3B5} The Feelings Song \u{1F3B5}', teacher: "Sing along! Clap on 'happy', hug yourself on 'sad', stomp on 'angry'.",
-    durationSeconds: 30, bigWord: 'Feelings', songUrl: `${A}/audio/goodbye-song.mp3`,
-    songPrompt: "A cheerful children's sing-along in C major, 100 BPM, warm ukulele and glockenspiel, playful clapping. Kids (ages 4-6) sing call-and-response: 'How are you? How are you? I am happy — yes I am, ha ha ha! How are you? How are you? I am sad — boo hoo hoo. How are you? How are you? I am angry — grrr grrr grrr! Happy, sad, and angry too — every feeling is okay with you!' Simple, catchy, kindergarten-style melody, super clear diction, no adult voices.",
+    id: 'l3-song', kind: 'song', bg: bgMeadow, title: '\u{1F3B5} The Feelings Song \u{1F3B5}',
+    teacher: "Sing along! Clap on 'happy', hug yourself on 'sad', stomp on 'angry'. Repeat the whole song a second time and let the student sing louder!",
+    durationSeconds: 30,
+    songPrompt: "A cheerful children's sing-along in C major, 100 BPM, warm ukulele and glockenspiel, playful clapping. A group of kids (ages 4-6) sing in a bright, joyful call-and-response style. Lyrics: 'How are you? How are you? I am happy — yes I am, ha ha ha! How are you? How are you? I am sad — boo hoo hoo. How are you? How are you? I am angry — grrr grrr grrr! Happy, sad, and angry too — every feeling is okay with you!' Simple, catchy, kindergarten-style melody, super clear diction, no adult voices.",
     lyrics: [
       { who: 'pip', text: 'How are you? How are you?', emotion: 'happy' },
       { who: 'mia', text: 'I am happy — yes I am! Ha ha ha!', emotion: 'happy' },
@@ -569,7 +569,7 @@ export const LESSON_3_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l3-feelings-tap', kind: 'feelings-tap', bg: bgMeadow, teacher: 'Tap each friend — a card pops up! Say the feeling together.',
+    id: 'l3-vocab-match', kind: 'feelings-tap', bg: bgMeadow, teacher: 'Tap each friend — a card pops up! Repeat the feeling with the student.',
     cast: [
       { who: 'pip', emotion: 'happy', label: 'Happy.' },
       { who: 'mia', emotion: 'sad', label: 'Sad.' },
@@ -577,7 +577,7 @@ export const LESSON_3_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l3-feelings-wheel', kind: 'feelings-wheel', bg: bgMeadow, teacher: 'Spin the wheel! When it stops, YOU say the feeling — no hints!',
+    id: 'l3-vocab-wheel', kind: 'feelings-wheel', bg: bgMeadow, teacher: 'Spin the wheel! When it stops, YOU say the feeling. No hints — you name it!',
     slots: [
       { who: 'mia', emotion: 'happy', label: 'Happy' },
       { who: 'pip', emotion: 'angry', label: 'Angry' },
@@ -585,159 +585,175 @@ export const LESSON_3_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l3-friend-pop', kind: 'friend-pop', bg: bgNameCarnivalSky, teacher: 'Say the feeling word. Listen, then tap the friend who feels that way!', cast: ['mia', 'bella', 'leo', 'pip'],
+    id: 'l3-feeling-stage', kind: 'friend-pop', bg: bgClearing, teacher: 'Say the feeling word. Student listens and taps the friend who feels that way.', cast: ['mia', 'bella', 'leo', 'pip'],
     rounds: [
-      { target: 'mia', prompt: 'Happy \u{1F60A}', emotion: 'happy' },
-      { target: 'pip', prompt: 'Happy \u{1F60A}', emotion: 'happy' },
-      { target: 'bella', prompt: 'Sad \u{1F622}', emotion: 'sad' },
-      { target: 'leo', prompt: 'Angry \u{1F620}', emotion: 'angry' },
-      { target: 'mia', prompt: 'Sad \u{1F622}', emotion: 'sad' },
+      { target: 'mia', emotion: 'happy', prompt: 'Happy \u{1F60A}' },
+      { target: 'pip', emotion: 'happy', prompt: 'Happy \u{1F60A}' },
+      { target: 'bella', emotion: 'sad', prompt: 'Sad \u{1F622}' },
+      { target: 'leo', emotion: 'angry', prompt: 'Angry \u{1F620}' },
+      { target: 'mia', emotion: 'sad', prompt: 'Sad \u{1F622}' },
+      { target: 'pip', emotion: 'angry', prompt: 'Angry \u{1F620}' },
     ],
   },
   {
-    id: 'l3-x-is-feeling', kind: 'x-is-feeling', bg: bgMeadow, teacher: 'Look and listen. Then tap to repeat: X is happy, X is sad, X is angry.',
+    id: 'l3-i-am-demo', kind: 'x-is-feeling', bg: bgMeadow, teacher: "Demonstration: 'I am ___'. Each friend models the first-person sentence. Student listens, then taps the card to repeat.",
     rounds: [
-      { who: 'mia', emotion: 'happy', sentence: 'Mia is happy.' },
-      { who: 'leo', emotion: 'angry', sentence: 'Leo is angry.' },
-      { who: 'bella', emotion: 'sad', sentence: 'Bella is sad.' },
+      { who: 'pip', emotion: 'happy', sentence: 'I am happy!' },
+      { who: 'mia', emotion: 'sad', sentence: 'I am sad.' },
+      { who: 'leo', emotion: 'angry', sentence: 'I am angry!' },
     ],
   },
   {
-    id: 'l3-feelings-dice', kind: 'feelings-dice', bg: bgMeadow, teacher: 'Free practice! Roll and see the friend. Say the FULL sentence alone: I am happy / sad / angry.',
+    id: 'l3-feelings-dice', kind: 'feelings-dice', bg: bgMeadow, teacher: "Free practice! Roll → see the friend. Student says the full sentence alone: 'I am happy / sad / angry.' No model, no help.",
     rounds: [
       { who: 'pip', emotion: 'happy', sentence: 'I am happy!' },
       { who: 'mia', emotion: 'sad', sentence: 'I am sad.' },
       { who: 'bella', emotion: 'angry', sentence: 'I am angry!' },
       { who: 'leo', emotion: 'happy', sentence: 'I am happy!' },
+      { who: 'mia', emotion: 'angry', sentence: 'I am angry!' },
+      { who: 'pip', emotion: 'sad', sentence: 'I am sad.' },
     ],
   },
   {
-    id: 'l3-who-said-it', kind: 'who-said-it', bg: bgHideSeek, teacher: 'Listen! Who is talking? Tap the friend.',
+    id: 'l3-who-feels-it', kind: 'who-said-it', bg: bgHideSeek, teacher: 'Tap a friend on the stage. Hear their feeling and say it with them!',
     rounds: [
-      { line: 'I am happy!', who: 'mia', emotion: 'happy' },
-      { line: 'I am sad.', who: 'bella', emotion: 'sad' },
-      { line: 'I am angry!', who: 'leo', emotion: 'angry' },
-      { line: 'Hello! My name is Leo. How are you?', who: 'leo' },
+      { line: 'Mia is happy.', who: 'mia', emotion: 'happy' },
+      { line: 'Bella is sad.', who: 'bella', emotion: 'sad' },
+      { line: 'Leo is angry.', who: 'leo', emotion: 'angry' },
+      { line: 'Pip is happy.', who: 'pip', emotion: 'happy' },
     ],
   },
   {
-    id: 'l3-feed-monsters', kind: 'feed-monsters', bg: bgMeadow, teacher: 'Feed the Mood Monsters! Listen, then tap the monster that matches the feeling.',
+    id: 'l3-feed-monsters', kind: 'feed-monsters', bg: bgClearing, teacher: 'Feed the Mood Monsters! Listen, then drag the friend to the monster that feels the same.',
     rounds: [
       { who: 'mia', emotion: 'happy', sentence: 'Mia is happy. Feed the happy monster!' },
       { who: 'bella', emotion: 'sad', sentence: 'Bella is sad. Feed the sad monster!' },
       { who: 'leo', emotion: 'angry', sentence: 'Leo is angry. Feed the angry monster!' },
       { who: 'pip', emotion: 'happy', sentence: 'Pip is happy. Feed the happy monster!' },
       { who: 'leo', emotion: 'sad', sentence: 'Leo is sad. Feed the sad monster!' },
+      { who: 'bella', emotion: 'angry', sentence: 'Bella is angry. Feed the angry monster!' },
     ],
   },
   {
-    id: 'l3-model-a', kind: 'sound-model', bg: bgClearing, who: 'willow', letter: 'A', phoneme: '/a/', sound: 'aaa', teacher: 'Listen to Willow’s sound. /a/ /a/ Apple!',
+    id: 'l3-model-a', kind: 'sound-model', bg: bgMeadow, who: 'leo', letter: 'A', phoneme: '/æ/', sound: 'aaa', teacher: 'Leo roars the short A sound. Listen first: /æ/ /æ/ apple.',
     anchors: [
       { word: 'Apple', emoji: '\u{1F34E}', img: itemApple },
       { word: 'Ant', emoji: '\u{1F41C}', img: itemAnt },
-      { word: 'Alligator', emoji: '\u{1F40A}', img: itemAlligator },
     ],
   },
-  { id: 'l3-trace-a', kind: 'trace', bg: bgClearing, who: 'willow', letter: 'A', phoneme: '/a/', word: 'Apple', teacher: 'Trace the tall A with your finger! /a/ /a/ Apple!' },
+  { id: 'l3-trace-a', kind: 'trace', bg: bgMeadow, who: 'leo', letter: 'A', phoneme: '/æ/', word: 'Apple', teacher: 'Trace the sunny A. /æ/ /æ/ Apple!' },
   {
-    id: 'l3-model-s', kind: 'sound-model', bg: bgHideSeek, who: 'bella', letter: 'S', phoneme: '/s/', sound: 'sss', teacher: 'Listen to Bella’s sound. /s/ /s/ Sun!',
+    id: 'l3-model-s', kind: 'sound-model', bg: bgHideSeek, who: 'mia', letter: 'S', phoneme: '/s/', sound: 'sss', teacher: 'Mia hisses the /s/ sound. Listen: /s/ /s/ Sad.',
     anchors: [
       { word: 'Sun', emoji: '☀️', img: itemSun },
       { word: 'Star', emoji: '⭐', img: itemStar },
-      { word: 'Snake', emoji: '\u{1F40D}', img: itemSnake },
     ],
   },
-  { id: 'l3-trace-s', kind: 'trace', bg: bgHideSeek, who: 'bella', letter: 'S', phoneme: '/s/', word: 'Sun', teacher: 'Trace the wiggly S with your finger! /s/ /s/ Sun!' },
+  { id: 'l3-trace-s', kind: 'trace', bg: bgHideSeek, who: 'mia', letter: 'S', phoneme: '/s/', word: 'Sun', teacher: 'Trace the wavy S. /s/ /s/ Sun!' },
   {
-    id: 'l3-sort-sa', kind: 'sound-sort', bg: bgHideSeek, teacher: 'Sunshine sound toss! Listen and drag to /s/ or /a/.',
+    id: 'l3-sort-as', kind: 'sound-sort', bg: bgMeadow, teacher: 'Feelings sound toss! Listen and drag to /æ/ or /s/.',
     targets: [
-      { letter: 'S', phoneme: '/s/', who: 'bella' },
-      { letter: 'A', phoneme: '/a/', who: 'willow' },
+      { letter: 'A', phoneme: '/æ/', who: 'leo' },
+      { letter: 'S', phoneme: '/s/', who: 'mia' },
     ],
     items: [
+      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, letter: 'A' },
       { word: 'sun', emoji: '☀️', img: itemSun, letter: 'S' },
       { word: 'star', emoji: '⭐', img: itemStar, letter: 'S' },
-      { word: 'snake', emoji: '\u{1F40D}', img: itemSnake, letter: 'S' },
-      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, letter: 'A' },
       { word: 'ant', emoji: '\u{1F41C}', img: itemAnt, letter: 'A' },
-      { word: 'alligator', emoji: '\u{1F40A}', img: itemAlligator, letter: 'A' },
     ],
   },
   {
-    id: 'l3-sort-all', kind: 'sound-sort', bg: bgClearing, teacher: 'Big sound mix-up! Drag each picture to /n/, /w/, /s/ or /a/.',
+    id: 'l3-sound-pop', kind: 'sound-pop', bg: bgMeadow, teacher: 'Balloon Letter Pop! Leo will call a letter. Pop only that letter!', who: 'leo', goal: 8, seconds: 45,
     targets: [
-      { letter: 'N', phoneme: '/n/', who: 'mia' },
-      { letter: 'W', phoneme: '/w/', who: 'pip' },
-      { letter: 'S', phoneme: '/s/', who: 'bella' },
-      { letter: 'A', phoneme: '/a/', who: 'willow' },
+      { letter: 'A', phoneme: '/æ/' },
+      { letter: 'S', phoneme: '/s/' },
     ],
     items: [
-      { word: 'nest', emoji: '\u{1FAB9}', img: `${A}/items/item-nest.png`, letter: 'N' },
-      { word: 'nose', emoji: '\u{1F443}', img: itemNose, letter: 'N' },
-      { word: 'water', emoji: '\u{1F4A7}', img: itemWater, letter: 'W' },
-      { word: 'wave', emoji: '\u{1F30A}', img: itemWave, letter: 'W' },
-      { word: 'sun', emoji: '☀️', img: itemSun, letter: 'S' },
-      { word: 'snake', emoji: '\u{1F40D}', img: itemSnake, letter: 'S' },
-      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, letter: 'A' },
-      { word: 'ant', emoji: '\u{1F41C}', img: itemAnt, letter: 'A' },
+      { word: 'A', letter: 'A', emoji: 'A' },
+      { word: 'S', letter: 'S', emoji: 'S' },
+      { word: 'H', letter: 'H', emoji: 'H' },
+      { word: 'M', letter: 'M', emoji: 'M' },
+      { word: 'N', letter: 'N', emoji: 'N' },
+      { word: 'W', letter: 'W', emoji: 'W' },
+      { word: 'B', letter: 'B', emoji: 'B' },
+      { word: 'T', letter: 'T', emoji: 'T' },
     ],
   },
   {
-    id: 'l3-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Sunshine round! Choose the first sound: H, M, N, W, S, or A.',
+    id: 'l3-grand-build', kind: 'word-build', bg: bgMeadow, teacher: 'Grand feelings round! Choose the first sound: A, S, H, or M.',
     rounds: [
-      { word: 'sun', blankIndex: 0, answer: 'S', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemSun, emoji: '☀️' },
-      { word: 'ant', blankIndex: 0, answer: 'A', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemAnt, emoji: '\u{1F41C}' },
-      { word: 'water', blankIndex: 0, answer: 'W', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemWater, emoji: '\u{1F4A7}' },
-      { word: 'nest', blankIndex: 0, answer: 'N', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: `${A}/items/item-nest.png`, emoji: '\u{1FAB9}' },
-      { word: 'hat', blankIndex: 0, answer: 'H', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: `${A}/items/item-hat.png`, emoji: '\u{1F3A9}' },
-      { word: 'moon', blankIndex: 0, answer: 'M', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: `${A}/items/item-moon.png`, emoji: '\u{1F319}' },
+      { word: 'apple', blankIndex: 0, answer: 'A', choices: ['A', 'S', 'H', 'M'], img: itemApple, emoji: '\u{1F34E}' },
+      { word: 'sun', blankIndex: 0, answer: 'S', choices: ['A', 'S', 'H', 'M'], img: itemSun, emoji: '☀️' },
+      { word: 'ant', blankIndex: 0, answer: 'A', choices: ['A', 'S', 'H', 'M'], img: itemAnt, emoji: '\u{1F41C}' },
+      { word: 'hat', blankIndex: 0, answer: 'H', choices: ['A', 'S', 'H', 'M'], img: itemHat, emoji: '\u{1F3A9}' },
+      { word: 'moon', blankIndex: 0, answer: 'M', choices: ['A', 'S', 'H', 'M'], img: itemMoon, emoji: '\u{1F319}' },
     ],
   },
   {
-    id: 'l3-he-she-model', kind: 'he-she-model', bg: bgMeadow, teacher: 'Boys are HE. Girls are SHE. Listen, then tap to repeat.',
+    id: 'l3-x-is-feeling', kind: 'x-is-feeling', bg: bgMeadow, teacher: 'Look and listen. Then repeat: X is happy, X is sad, X is angry.',
+    rounds: [
+      { who: 'mia', emotion: 'happy', sentence: 'Mia is happy.' },
+      { who: 'leo', emotion: 'angry', sentence: 'Leo is angry.' },
+      { who: 'bella', emotion: 'sad', sentence: 'Bella is sad.' },
+      { who: 'pip', emotion: 'happy', sentence: 'Pip is happy.' },
+      { who: 'leo', emotion: 'sad', sentence: 'Leo is sad.' },
+      { who: 'mia', emotion: 'angry', sentence: 'Mia is angry.' },
+    ],
+  },
+  {
+    id: 'l3-he-she-model', kind: 'he-she-model', bg: bgMeadow, teacher: "Boys are HE. Girls are SHE. Model twice: 'Mia is sad. She is sad.' Then have the student repeat both lines.",
     rounds: [
       { who: 'mia', emotion: 'sad', pronoun: 'She', sentence: 'Mia is sad. She is sad.' },
       { who: 'pip', emotion: 'happy', pronoun: 'He', sentence: 'Pip is happy. He is happy.' },
       { who: 'bella', emotion: 'happy', pronoun: 'She', sentence: 'Bella is happy. She is happy.' },
       { who: 'leo', emotion: 'angry', pronoun: 'He', sentence: 'Leo is angry. He is angry.' },
+      { who: 'mia', emotion: 'happy', pronoun: 'She', sentence: 'Mia is happy. She is happy.' },
+      { who: 'leo', emotion: 'sad', pronoun: 'He', sentence: 'Leo is sad. He is sad.' },
     ],
   },
   {
-    id: 'l3-he-she-sort', kind: 'he-she-sort', bg: bgMeadow, teacher: 'Listen! Is it HE or SHE? Tap the right pronoun.',
+    id: 'l3-he-she-sort', kind: 'he-she-sort', bg: bgMeadow, teacher: "Listen! The character says 'I am ___'. Girls go into the SHE box. Boys go into the HE box. Drag each friend to the right pronoun.",
     rounds: [
       { who: 'mia', emotion: 'sad', pronoun: 'She' },
       { who: 'pip', emotion: 'happy', pronoun: 'He' },
       { who: 'bella', emotion: 'happy', pronoun: 'She' },
       { who: 'leo', emotion: 'angry', pronoun: 'He' },
       { who: 'willow', emotion: 'happy', pronoun: 'She' },
+      { who: 'leo', emotion: 'sad', pronoun: 'He' },
     ],
   },
   {
-    id: 'l3-he-she-say', kind: 'he-she-say', bg: bgMeadow, teacher: 'Look at the friend. Say it! Is it HE or SHE? Then tap to check.',
+    id: 'l3-he-she-say', kind: 'he-she-say', bg: bgMeadow, teacher: 'Look at the friend and the feeling card. Say it! Is it HE or SHE? Then tap to check.',
     rounds: [
       { who: 'mia', emotion: 'angry', pronoun: 'She' },
       { who: 'pip', emotion: 'sad', pronoun: 'He' },
       { who: 'leo', emotion: 'happy', pronoun: 'He' },
       { who: 'bella', emotion: 'sad', pronoun: 'She' },
+      { who: 'leo', emotion: 'angry', pronoun: 'He' },
+      { who: 'mia', emotion: 'happy', pronoun: 'She' },
     ],
   },
   {
-    id: 'l3-feeling-quiz', kind: 'feeling-quiz', bg: bgMeadow, teacher: 'Look at your friend’s face! Tap the feeling you see.',
+    id: 'l3-feeling-quiz', kind: 'feeling-quiz', bg: bgMeadow, teacher: "Emotion recognition only. Say: 'Who is happy?' — the student taps whichever friend is showing that feeling. Ignore character names.",
     rounds: [
       { who: 'pip', emotion: 'happy', prompt: 'How does Pip feel?' },
       { who: 'mia', emotion: 'sad', prompt: 'How does Mia feel?' },
       { who: 'leo', emotion: 'angry', prompt: 'How does Leo feel?' },
       { who: 'bella', emotion: 'happy', prompt: 'How does Bella feel?' },
+      { who: 'mia', emotion: 'angry', prompt: 'How does Mia feel?' },
+      { who: 'bella', emotion: 'sad', prompt: 'How does Bella feel?' },
     ],
   },
   {
-    id: 'l3-roleplay', kind: 'roleplay', bg: bgGatherEmpty, teacher: 'Story time! Leo asks how everyone feels. Listen, then repeat each line.', cast: ['pip', 'mia', 'leo'],
+    id: 'l3-model-how-are-you', kind: 'roleplay', bg: bgMeadow, teacher: "Look and listen! Bella asks Pip: 'How are you?' Pip answers: 'I am happy.' Then the student repeats BOTH lines. Do the same for the sad and angry turns before the student's own turn.", cast: ['pip', 'bella'],
     script: [
-      { who: 'leo', line: 'Hello! How are you?' },
+      { who: 'bella', line: 'Hi, Pip! How are you?', repeat: true },
       { who: 'pip', line: 'I am happy!', repeat: true },
-      { who: 'leo', line: 'How are you, Mia?' },
-      { who: 'mia', line: 'I am happy too!', repeat: true },
-      { who: 'leo', line: 'Yay! We are all happy!', repeat: true },
+      { who: 'bella', line: 'Hi, Pip! How are you?', repeat: true },
+      { who: 'pip', line: 'I am sad.', repeat: true },
+      { who: 'bella', line: 'Hi, Pip! How are you?', repeat: true },
+      { who: 'pip', line: 'I am angry!', repeat: true },
     ],
   },
   {
@@ -746,6 +762,25 @@ export const LESSON_3_SCENES: Scene[] = [
       { emotion: 'happy', label: 'Happy' },
       { emotion: 'sad', label: 'Sad' },
       { emotion: 'angry', label: 'Angry' },
+      { emotion: 'happy', label: 'Happy' },
+    ],
+  },
+  {
+    id: 'l3-roleplay-feelings', kind: 'roleplay', bg: bgGatherEmpty, teacher: "Meet Leo! Only Leo introduces his name (new friend). Then Leo asks 'How are you?' to each friend. Finally Pip asks Leo — Leo says 'I am angry!' Student repeats every line.", cast: ['pip', 'mia', 'bella', 'leo'],
+    script: [
+      { who: 'pip', line: "Hello! What's your name?", repeat: true },
+      { who: 'leo', line: 'Hello! My name is Leo.', repeat: true },
+      { who: 'pip', line: 'Nice to meet you, Leo!', repeat: true },
+      { who: 'leo', line: 'Hi, Mia! How are you?', repeat: true },
+      { who: 'mia', line: 'I am happy!', repeat: true },
+      { who: 'leo', line: 'Hi, Bella! How are you?', repeat: true },
+      { who: 'bella', line: 'I am sad.', repeat: true },
+      { who: 'leo', line: 'Hi, Pip! How are you?', repeat: true },
+      { who: 'pip', line: 'I am happy!', repeat: true },
+      { who: 'pip', line: 'And you, Leo? How are you?', repeat: true },
+      { who: 'leo', line: 'I am angry! Grrr!', repeat: true },
+      { who: 'mia', line: "It's okay, Leo.", repeat: true },
+      { who: 'pip', line: 'Goodbye, friends!', repeat: true },
     ],
   },
   {
@@ -755,37 +790,40 @@ export const LESSON_3_SCENES: Scene[] = [
       { who: 'mia', emotion: 'sad' },
       { who: 'bella', emotion: 'angry' },
       { who: 'leo', emotion: 'happy' },
+      { who: 'pip', emotion: 'angry' },
+      { who: 'mia', emotion: 'happy' },
     ],
     rounds: [
       { who: 'mia', emotion: 'sad', prompt: 'Find sad Mia!' },
       { who: 'bella', emotion: 'angry', prompt: 'Find angry Bella!' },
       { who: 'leo', emotion: 'happy', prompt: 'Find happy Leo!' },
-      { who: 'pip', emotion: 'happy', prompt: 'Find happy Pip!' },
+      { who: 'pip', emotion: 'angry', prompt: 'Find angry Pip!' },
     ],
   },
-  { id: 'l3-color-friends', kind: 'color-friends', bg: bgMeadow, teacher: 'Bonus round! Choose a color and paint your friends!', cast: ['pip', 'mia', 'bella', 'willow', 'leo'] },
+  { id: 'l3-color-friends', kind: 'color-friends', bg: bgMeadow, teacher: 'Bonus time! Pick a color and paint your friends!', cast: ['pip', 'mia', 'bella', 'leo'] },
   {
-    id: 'l3-alphabet-blocks', kind: 'alphabet-blocks', bg: bgMeadow, teacher: 'Alphabet Blocks! Tap the sound, then stack the word!', letters: ['H', 'M', 'N', 'W', 'S', 'A'],
-    tapRounds: [{ letter: 'S' }, { letter: 'A' }, { letter: 'S' }, { letter: 'A' }],
+    id: 'l3-alphabet-blocks', kind: 'alphabet-blocks', bg: bgMeadow, teacher: 'Alphabet Blocks! Tap the /a/ sound, then stack the word!', letters: ['A', 'H', 'M', 'T', 'S', 'D'],
+    tapRounds: [{ letter: 'A' }, { letter: 'M' }, { letter: 'H' }, { letter: 'A' }],
     words: [
-      { word: 'SAT', emoji: '\u{1FA91}' },
-      { word: 'MAN', emoji: '\u{1F9CD}' },
-      { word: 'HAS', emoji: '✨' },
+      { word: 'HAT', emoji: '\u{1F3A9}' },
+      { word: 'MAT', emoji: '\u{1F7EB}' },
+      { word: 'SAD', emoji: '\u{1F622}' },
     ],
   },
-  { id: 'l3-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Drag the letters into ABC order!', sequences: ['IJKL', 'MNOP', 'QRST'] },
+  { id: 'l3-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Put the letters in ABC order!', sequences: ['KLMN', 'MNOP', 'PQRS'] },
   {
-    id: 'l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to Leo and all the friends! Sing along together.',
+    id: 'l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to your feelings friends! Sing along together.',
     durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
-      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
       { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
       { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F389} Goodbye, goodbye, goodbye!', emotion: 'happy' },
       { who: 'bella', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
     ],
   },
-  { id: 'l3-finale', kind: 'finale', bg: bgBigTree, who: 'leo', line: 'You did it! You met Leo and shared your feelings! How are you? I am happy!' },
+  { id: 'l3-finale', kind: 'finale', bg: bgMeadow, who: 'leo', line: 'You did it! You met Leo and shared your feelings! How are you? I am happy!' },
 ];
 
 /* =========================================================================
@@ -793,176 +831,195 @@ export const LESSON_3_SCENES: Scene[] = [
  * no new letters: cumulative H/M/N/W/S/A)
  * ========================================================================= */
 
-export const LESSON_4_TITLE = 'The Big Chat Tree';
-export const LESSON_4_OBJECTIVE = 'Have a full conversation: say hello, ask a name, ask how someone feels, and say goodbye.';
+export const LESSON_4_TITLE = "Bella's Birthday!";
+export const LESSON_4_OBJECTIVE = 'Ask and answer "How old are you?", count 1-10, and learn the /b/ and /t/ sounds.';
 
 export const LESSON_4_SCENES: Scene[] = [
-  { id: 'l4-title', kind: 'title-card', bg: bgBigTree, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 4', title: 'The Big Chat Tree', subtitle: "Let's put it all together!" },
+  { id: 'l4-title', kind: 'title-card', bg: bgBigTree, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 4 · Birthday', title: "Bella's Birthday!", subtitle: '\u{1F382} How old are you? · \u{1F44B} Goodbye! — party with Pip, Mia, Bella & Leo!' },
+  { id: 'l4-arrive', kind: 'meet', bg: bgBigTree, who: 'pip', teacher: 'Pip runs to Bella’s party. Wave hello and repeat with Pip!', line: 'Hello, friends! Today is Bella’s birthday!', repeat: 'Hello, friends!' },
+  { id: 'l4-bella-age', kind: 'meet', bg: bgBigTree, who: 'bella', teacher: 'Bella is FIVE today! Repeat with Bella: I am five.', line: 'Hello! I am Bella. I am five!', repeat: 'I am five.' },
+  { id: 'l4-mia-age', kind: 'meet', bg: bgBigTree, who: 'mia', teacher: 'Mia is SIX! Repeat with Mia: I am six.', line: 'Hi! I am Mia. I am six!', repeat: 'I am six.' },
+  { id: 'l4-leo-age', kind: 'meet', bg: bgBigTree, who: 'leo', teacher: 'Leo is SEVEN! Repeat with Leo: I am seven.', line: 'Hi! I am Leo. I am seven!', repeat: 'I am seven.' },
+  { id: 'l4-willow-age', kind: 'meet', bg: bgBigTree, who: 'willow', teacher: 'Willow is FOUR! Repeat with Willow: I am four.', line: 'Hello! I am Willow. I am four!', repeat: 'I am four.' },
+  { id: 'l4-pip-age', kind: 'meet', bg: bgBigTree, who: 'pip', teacher: 'Pip is SIX! Repeat with Pip: I am six.', line: 'Hi friends! I am Pip. I am six!', repeat: 'I am six.' },
+  { id: 'l4-echo-question', kind: 'echo', bg: bgBigTree, who: 'pip', teacher: 'Say it with Pip! Point to a friend and ask the big question.', word: 'How old are you?', hearWord: 'How old are you?' },
+  { id: 'l4-echo-i-am-five', kind: 'echo', bg: bgBigTree, who: 'bella', teacher: 'Bella answers. Repeat two times, then say YOUR age.', word: 'I am five.', hearWord: 'I am five.' },
+  { id: 'l4-numbers-learn', kind: 'numbers-learn', bg: bgMeadow, who: 'pip', from: 1, to: 10, teacher: "Let's count together! Tap each number to hear Pip say it. Press Next when the student can say them all." },
+  { id: 'l4-numbers-review', kind: 'numbers-review', bg: bgMeadow, who: 'pip', from: 1, to: 10, teacher: 'Number-tap game! Tap the number Pip calls out.' },
   {
-    id: 'l4-intro', kind: 'cinematic', bg: bgBigTree, title: 'The Big Chat Tree', subtitle: 'Everyone gathers for one big conversation', narrator: 'pip',
-    script: [
-      { who: 'pip', line: 'Today is chat day! Hello, names, feelings — all together!' },
-      { who: 'pip', line: 'Listen close, then it is your turn to talk!' },
-    ],
-    cta: "Let's chat!",
-  },
-  {
-    id: 'l4-model-convo', kind: 'roleplay', bg: bgGatherEmpty, teacher: 'Listen to the whole conversation, then repeat each line.', cast: ['pip', 'mia'],
-    script: [
-      { who: 'pip', line: 'Hello!' },
-      { who: 'mia', line: 'Hi! What is your name?', repeat: true },
-      { who: 'pip', line: 'My name is Pip. How are you?', repeat: true },
-      { who: 'mia', line: 'I am happy! Goodbye!', repeat: true },
-      { who: 'pip', line: 'Goodbye, Mia!', repeat: true },
-    ],
-  },
-  {
-    id: 'l4-name-gate', kind: 'name-gate', bg: bgNameCarnivalGate, teacher: 'Tap a booth, ask the question, then listen to the answer.',
+    id: 'l4-age-pop', kind: 'candle-cake', bg: bgBigTree, who: 'bella', teacher: 'Bella’s cake needs candles! Listen to the age, then tap the cake to add that many candles. \u{1F382}',
     rounds: [
-      { who: 'bella', question: 'What is your name?', answer: 'My name is Bella!' },
-      { who: 'willow', question: 'What is your name?', answer: 'My name is Willow!' },
-      { who: 'leo', question: 'What is your name?', answer: 'My name is Leo!' },
+      { asker: 'bella', target: 5, prompt: 'I am FIVE! Tap FIVE candles on my cake!', celebrate: 'Five candles! I am five!' },
+      { asker: 'mia', target: 6, prompt: 'I am SIX! Tap SIX candles for Mia!', celebrate: 'Six candles! I am six!' },
+      { asker: 'pip', target: 6, prompt: 'I am SIX too! Give Pip SIX candles!', celebrate: 'Six candles! I am six!' },
+      { asker: 'pip', target: 0, isStudent: true, prompt: 'Your turn! How old are you? Tap your age, then put candles on YOUR cake and blow!', celebrate: 'Happy birthday to YOU!' },
+    ],
+  },
+  { id: 'l4-count-balloons', kind: 'count-balloons', bg: bgClearing, who: 'pip', total: 10, teacher: 'Ten sticker balloons floated up! Pop them ONE by ONE and count with Pip!' },
+  {
+    id: 'l4-age-balloons', kind: 'age-balloons', bg: bgClearing, teacher: 'Each friend is holding balloons. Tap a friend! Count the balloons, then say: "{Name} is {number}!"',
+    friends: [
+      { who: 'willow', age: 3 },
+      { who: 'bella', age: 5 },
+      { who: 'mia', age: 6 },
+      { who: 'leo', age: 7 },
     ],
   },
   {
-    id: 'l4-voice-stage', kind: 'voice-stage', bg: bgNameMicStage, teacher: 'Grab the mic! Ask each friend how they feel, then say something nice back.', question: 'How are you?', niceToMeet: true,
-    rounds: [
-      { who: 'pip', cue: 'Ask Pip!', answer: 'I am happy!' },
-      { who: 'bella', cue: 'Ask Bella!', answer: 'I am okay.' },
-      { who: 'leo', cue: 'Ask Leo!', answer: 'I am happy!' },
+    id: 'l4-age-sentence-match', kind: 'age-sentence-match', bg: bgClearing, teacher: 'Match each friend to their sentence! Tap a friend, then tap the matching card.',
+    friends: [
+      { who: 'willow', age: 3 },
+      { who: 'bella', age: 5 },
+      { who: 'mia', age: 6 },
+      { who: 'leo', age: 7 },
     ],
   },
   {
-    id: 'l4-join-stage', kind: 'join-stage', bg: bgGatherEmpty, teacher: 'Your turn on stage! Take the whole conversation from hello to goodbye.', cast: ['pip', 'mia', 'bella', 'willow', 'leo'],
+    id: 'l4-meet-greet', kind: 'meet-greet', bg: bgClearing, teacher: 'One friend at a time comes on stage. Ask their name, their age, then say nice to meet you.',
+    friends: [
+      { who: 'bella', age: 5 },
+      { who: 'mia', age: 6 },
+      { who: 'leo', age: 7 },
+      { who: 'willow', age: 3 },
+    ],
+  },
+  {
+    id: 'l4-age-quiz', kind: 'age-quiz', bg: bgBigTree, teacher: 'Tap the wobbly present! Ask "How old are you?" then guess the candles. At the end — tap YOUR own age!',
+    friends: [
+      { who: 'bella', age: 5 },
+      { who: 'mia', age: 6 },
+      { who: 'leo', age: 7 },
+      { who: 'willow', age: 3 },
+    ],
+    studentAges: [3, 4, 5, 6, 7],
+  },
+  {
+    id: 'l4-age-mic', kind: 'join-stage', bg: bgNameMicStage, teacher: 'Live Stage! Read each teacher line out loud — the student answers into the mic, then tap the check.', cast: [],
     turns: [
-      { who: 'pip', line: 'Hello!' },
-      { who: 'student', line: 'Hello!' },
-      { who: 'mia', line: 'What is your name?' },
-      { who: 'student', line: 'My name is ___.' },
-      { who: 'bella', line: 'How are you?' },
-      { who: 'student', line: 'I am happy!' },
-      { who: 'willow', line: 'Nice to meet you!' },
-      { who: 'student', line: 'Nice to meet you too!' },
-      { who: 'leo', line: 'Goodbye!' },
-      { who: 'student', line: 'Goodbye!' },
+      { who: 'teacher', line: 'How old are you?' },
+      { who: 'student', line: 'I am ___ years old.' },
+      { who: 'teacher', line: 'Wow! Nice!' },
+      { who: 'student', line: 'How old are you?' },
+      { who: 'teacher', line: 'I am ___ years old!' },
+      { who: 'student', line: 'Nice to meet you!' },
     ],
   },
   {
-    id: 'l4-who', kind: 'who-said-it', bg: bgHideSeek, teacher: 'Listen! Who is talking? Tap the friend.',
-    rounds: [
-      { line: 'What is your name?', who: 'mia' },
-      { line: 'How are you?', who: 'bella' },
-      { line: 'My name is Leo!', who: 'leo' },
-      { line: 'Goodbye! See you soon!', who: 'willow' },
+    id: 'l4-birthday-song', kind: 'song', bg: bgBigTree, title: '\u{1F382} Happy Birthday, Bella! \u{1F382}', teacher: 'Everyone sings to Bella! Clap on every line. At the end, a big cheer: Happy birthday, Bella!',
+    durationSeconds: 29, songUrl: `${A}/audio/goodbye-song.mp3`,
+    songPrompt: 'Traditional normal Happy Birthday rhythm and beat, cheerful kids-and-teacher birthday sing-along for Bella, clear real singing, simple party claps, ending with a big joyful cheer: Happy birthday, Bella!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F382} Happy birthday to you', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F388} Happy birthday to you', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F389} Happy birthday dear Bella', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F381} Happy birthday to you!', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F973} Yaaay! Happy birthday, Bella!', emotion: 'happy' },
     ],
   },
   {
-    id: 'l4-hello-doors', kind: 'hello-doors', bg: bgBigTree, teacher: 'Knock knock! Tap the right door, then say hello to your friend!', cast: ['pip', 'mia', 'bella', 'willow'],
-    rounds: [
-      { target: 'willow', prompt: 'Knock knock! Where is Willow?', helloLine: 'Hello! My name is Willow.', echoLine: 'Hello, Willow!' },
-      { target: 'bella', prompt: 'Knock knock! Where is Bella?', helloLine: 'Hello! My name is Bella.', echoLine: 'Hi, Bella!' },
-      { target: 'pip', prompt: 'One more! Find Pip!', helloLine: 'Hello! My name is Pip.', echoLine: 'Hello, Pip!' },
+    id: 'l4-model-b', kind: 'sound-model', bg: bgBigTree, who: 'bella', letter: 'B', phoneme: '/b/', sound: 'buh', teacher: 'Bella bounces the /b/ sound! Listen first: /b/ /b/ Bag. /b/ /b/ Ball.',
+    anchors: [
+      { word: 'Bag', emoji: '\u{1F392}' },
+      { word: 'Ball', emoji: '⚽' },
+      { word: 'Bye', emoji: '\u{1F44B}' },
     ],
   },
+  { id: 'l4-trace-b', kind: 'trace', bg: bgBigTree, who: 'bella', letter: 'B', phoneme: '/b/', word: 'Ball', teacher: 'Trace the bouncy B. /b/ /b/ Ball!' },
   {
-    id: 'l4-friend-pop', kind: 'friend-pop', bg: bgNameCarnivalSky, teacher: 'Whack-a-Friend! Tap the friend I call.', cast: ['pip', 'mia', 'bella', 'willow', 'leo'],
-    rounds: [
-      { target: 'leo', prompt: 'Where is Leo?' },
-      { target: 'mia', prompt: 'Where is Mia?' },
-      { target: 'willow', prompt: 'Where is Willow?' },
-      { target: 'bella', prompt: 'Where is Bella?' },
-      { target: 'pip', prompt: 'Where is Pip?' },
+    id: 'l4-model-t', kind: 'sound-model', bg: bgBigTree, who: 'leo', letter: 'T', phoneme: '/t/', sound: 'tuh', teacher: 'Leo taps the /t/ sound! Listen first: /t/ /t/ Two. /t/ /t/ Ten.',
+    anchors: [
+      { word: 'Two', emoji: '2\u{FE0F}\u{20E3}' },
+      { word: 'Ten', emoji: '\u{1F51F}' },
+      { word: 'Toy', emoji: '\u{1F9F8}' },
     ],
   },
+  { id: 'l4-trace-t', kind: 'trace', bg: bgBigTree, who: 'leo', letter: 'T', phoneme: '/t/', word: 'Two', teacher: 'Trace the tall T. /t/ /t/ Two!' },
   {
-    id: 'l4-sort-all', kind: 'sound-sort', bg: bgClearing, teacher: 'Big review! Drag each picture to /h/, /m/, /s/ or /a/.',
+    id: 'l4-sound-pop', kind: 'sound-pop', bg: bgHideSeek, teacher: 'Balloon Letter Pop! Bella will call a letter. Pop only that letter!', who: 'bella', goal: 8, seconds: 45,
     targets: [
-      { letter: 'H', phoneme: '/h/', who: 'pip' },
-      { letter: 'M', phoneme: '/m/', who: 'mia' },
-      { letter: 'S', phoneme: '/s/', who: 'bella' },
-      { letter: 'A', phoneme: '/a/', who: 'willow' },
+      { letter: 'B', phoneme: '/b/' },
+      { letter: 'T', phoneme: '/t/' },
     ],
     items: [
-      { word: 'hat', emoji: '\u{1F3A9}', img: `${A}/items/item-hat.png`, letter: 'H' },
-      { word: 'house', emoji: '\u{1F3E0}', img: `${A}/items/item-house.png`, letter: 'H' },
-      { word: 'moon', emoji: '\u{1F319}', img: `${A}/items/item-moon.png`, letter: 'M' },
-      { word: 'milk', emoji: '\u{1F95B}', img: `${A}/items/item-milk.png`, letter: 'M' },
-      { word: 'sun', emoji: '☀️', img: itemSun, letter: 'S' },
-      { word: 'snake', emoji: '\u{1F40D}', img: itemSnake, letter: 'S' },
-      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, letter: 'A' },
-      { word: 'ant', emoji: '\u{1F41C}', img: itemAnt, letter: 'A' },
+      { word: 'B', letter: 'B', emoji: 'B' },
+      { word: 'T', letter: 'T', emoji: 'T' },
+      { word: 'A', letter: 'A', emoji: 'A' },
+      { word: 'S', letter: 'S', emoji: 'S' },
+      { word: 'H', letter: 'H', emoji: 'H' },
+      { word: 'M', letter: 'M', emoji: 'M' },
+      { word: 'N', letter: 'N', emoji: 'N' },
+      { word: 'W', letter: 'W', emoji: 'W' },
     ],
   },
+  { id: 'l4-sort-bt', kind: 'brick-crush', bg: bgBigTree, teacher: 'Mega Brick Crush! All the sounds from Lessons 1–4. Listen — then smash every brick with that letter!', who: 'bella', letters: ['H', 'M', 'N', 'W', 'S', 'A', 'B', 'T'], rows: 6, cols: 7, goal: 20, seconds: 70 },
   {
-    id: 'l4-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Big chat review! Choose the first sound: H, M, N, W, S, or A.',
+    id: 'l4-grand-build', kind: 'word-build', bg: bgBigTree, teacher: 'Grand birthday round! Choose the first sound: B, T, A, S, or H.',
     rounds: [
-      { word: 'hat', blankIndex: 0, answer: 'H', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: `${A}/items/item-hat.png`, emoji: '\u{1F3A9}' },
-      { word: 'moon', blankIndex: 0, answer: 'M', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: `${A}/items/item-moon.png`, emoji: '\u{1F319}' },
-      { word: 'nest', blankIndex: 0, answer: 'N', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: `${A}/items/item-nest.png`, emoji: '\u{1FAB9}' },
-      { word: 'water', blankIndex: 0, answer: 'W', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemWater, emoji: '\u{1F4A7}' },
-      { word: 'sun', blankIndex: 0, answer: 'S', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemSun, emoji: '☀️' },
-      { word: 'apple', blankIndex: 0, answer: 'A', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemApple, emoji: '\u{1F34E}' },
+      { word: 'ball', blankIndex: 0, answer: 'B', choices: ['B', 'T', 'A', 'S', 'H'], emoji: '⚽' },
+      { word: 'two', blankIndex: 0, answer: 'T', choices: ['B', 'T', 'A', 'S', 'H'], emoji: '2\u{FE0F}\u{20E3}' },
+      { word: 'bye', blankIndex: 0, answer: 'B', choices: ['B', 'T', 'A', 'S', 'H'], emoji: '\u{1F44B}' },
+      { word: 'ten', blankIndex: 0, answer: 'T', choices: ['B', 'T', 'A', 'S', 'H'], emoji: '\u{1F51F}' },
+      { word: 'sun', blankIndex: 0, answer: 'S', choices: ['B', 'T', 'A', 'S', 'H'], img: itemSun, emoji: '☀️' },
+      { word: 'hat', blankIndex: 0, answer: 'H', choices: ['B', 'T', 'A', 'S', 'H'], img: itemHat, emoji: '\u{1F3A9}' },
+      { word: 'ant', blankIndex: 0, answer: 'A', choices: ['B', 'T', 'A', 'S', 'H'], img: itemAnt, emoji: '\u{1F41C}' },
     ],
   },
   {
-    id: 'l4-memory', kind: 'memory', bg: bgMeadow, teacher: 'Find the pairs! Tap two cards to match them.',
-    pairs: [
-      { id: 'hello', label: 'Hello', emoji: '\u{1F44B}', img: itemHello },
-      { id: 'moon', label: 'Moon', emoji: '\u{1F319}', img: itemMoon },
-      { id: 'sun', label: 'Sun', emoji: '☀️', img: itemSun },
-      { id: 'apple', label: 'Apple', emoji: '\u{1F34E}', img: itemApple },
+    id: 'l4-roleplay-birthday', kind: 'roleplay', bg: bgBigTree, teacher: 'Full birthday conversation! Characters ask, the student answers (repeat each line), then everyone wishes Bella a happy birthday.', cast: ['pip', 'mia', 'bella', 'leo'],
+    script: [
+      { who: 'bella', line: 'Hello! How are you?', repeat: true },
+      { who: 'pip', line: 'I am happy. How are you?', repeat: true },
+      { who: 'bella', line: 'I am happy too!', repeat: true },
+      { who: 'mia', line: 'Hello! What is your name?', repeat: true },
+      { who: 'pip', line: 'My name is Pip. What is your name?', repeat: true },
+      { who: 'mia', line: 'My name is Mia!', repeat: true },
+      { who: 'leo', line: 'Nice to meet you! How old are you?', repeat: true },
+      { who: 'pip', line: 'I am five. How old are you?', repeat: true },
+      { who: 'leo', line: 'I am seven!', repeat: true },
+      { who: 'bella', line: 'Welcome to my party, friend!', repeat: true },
+      { who: 'mia', line: 'We are so happy you are here!', repeat: true },
+      { who: 'pip', line: 'Everybody — say it with me!', repeat: true },
+      { who: 'leo', line: 'Happy birthday to Bella!', repeat: true },
+      { who: 'bella', line: 'Thank you! Hip hip hooray!', repeat: true },
     ],
   },
   {
-    id: 'l4-dash', kind: 'dash', bg: bgClearing, teacher: 'Mia Dash! Tap only the M words as they run by. Get 6 rings!', who: 'mia', targetLetter: 'M', targetPhoneme: '/m/', goal: 6, seconds: 40,
-    items: [
-      { word: 'moon', letter: 'M', img: itemMoon, emoji: '\u{1F319}' },
-      { word: 'milk', letter: 'M', img: itemMilk, emoji: '\u{1F95B}' },
-      { word: 'mouse', letter: 'M', img: itemMouse, emoji: '\u{1F42D}' },
-      { word: 'sun', letter: 'S', img: itemSun, emoji: '☀️' },
-      { word: 'ant', letter: 'A', img: itemAnt, emoji: '\u{1F41C}' },
-      { word: 'water', letter: 'W', img: itemWater, emoji: '\u{1F4A7}' },
+    id: 'l4-join-birthday', kind: 'join-stage', bg: bgBigTree, teacher: 'Live Stage! Read each question — the student answers into the microphone, then tap the check.', cast: [],
+    turns: [
+      { who: 'teacher', line: 'Hello! How are you?' },
+      { who: 'student', line: 'I am happy!' },
+      { who: 'teacher', line: 'What is your name?' },
+      { who: 'student', line: 'My name is ___.' },
+      { who: 'teacher', line: 'How old are you?' },
+      { who: 'student', line: 'I am ___.' },
+      { who: 'teacher', line: 'Nice to meet you!' },
+      { who: 'student', line: 'Nice to meet you too!' },
     ],
   },
+  { id: 'l4-color-friends', kind: 'color-friends', bg: bgMeadow, teacher: 'Bonus round! Pick a color and paint the birthday friends!', cast: ['pip', 'mia', 'bella', 'leo'] },
   {
-    id: 'l4-puzzle', kind: 'puzzle', bg: bgMeadow, teacher: 'Guess the friend! Tap pieces to peek, then pick who it is.',
-    rounds: [
-      { who: 'willow', img: CAST.willow.img, hint: 'A friend who loves the meadow breeze.' },
-      { who: 'leo', img: CAST.leo.img, hint: 'A sleepy lion with a big, warm roar.' },
-      { who: 'mia', img: CAST.mia.img, hint: 'A tiny mouse who loves the moon.' },
-    ],
-  },
-  {
-    id: 'l4-feelings', kind: 'feelings', bg: bgBigTree, teacher: 'One more time — how do you feel right now?',
-    options: [
-      { label: 'Happy', emoji: '\u{1F600}', reply: 'Yay! Talking with friends makes me happy too!' },
-      { label: 'Okay', emoji: '\u{1F610}', reply: 'That is okay. I am glad you are here.' },
-      { label: 'Sad', emoji: '\u{1F622}', reply: "It's okay to feel sad sometimes. I am here for you." },
-    ],
-  },
-  { id: 'l4-color-friends', kind: 'color-friends', bg: bgMeadow, teacher: 'Bonus time! Pick a color and tap your friends to paint them!', cast: ['pip', 'mia', 'bella', 'willow', 'leo'] },
-  {
-    id: 'l4-alphabet-blocks', kind: 'alphabet-blocks', bg: bgMeadow, teacher: 'Alphabet Blocks! Tap the sound, then stack the word!', letters: ['H', 'M', 'N', 'W', 'S', 'A'],
-    tapRounds: [{ letter: 'H' }, { letter: 'S' }, { letter: 'M' }, { letter: 'A' }],
+    id: 'l4-alphabet-blocks', kind: 'alphabet-blocks', bg: bgMeadow, teacher: 'Alphabet Blocks! Tap the sound, then stack the birthday word!', letters: ['B', 'T', 'A', 'E', 'N', 'G'],
+    tapRounds: [{ letter: 'B' }, { letter: 'T' }, { letter: 'B' }, { letter: 'T' }],
     words: [
-      { word: 'SAT', emoji: '\u{1FA91}' },
-      { word: 'HAM', emoji: '\u{1F953}' },
-      { word: 'MAN', emoji: '\u{1F9CD}' },
+      { word: 'BAT', emoji: '\u{1F987}' },
+      { word: 'TEN', emoji: '\u{1F51F}' },
+      { word: 'BAG', emoji: '\u{1F392}' },
     ],
   },
-  { id: 'l4-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Drag the letters into ABC order!', sequences: ['NOPQ', 'RSTU', 'WXYZ'] },
+  { id: 'l4-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Drag the letters into ABC order!', sequences: ['OPQR', 'STUV', 'WXYZ'] },
   {
-    id: 'l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to everyone! Sing along together.',
+    id: 'l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Everyone waves goodbye! Sing together and wave on every goodbye.',
     durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
-      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
       { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
       { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F389} Goodbye, goodbye, goodbye!', emotion: 'happy' },
       { who: 'bella', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
     ],
   },
-  { id: 'l4-finale', kind: 'finale', bg: bgBigTree, who: 'pip', line: 'Wow, what a big chat! Hello, names, feelings, goodbye — you know it all!' },
+  { id: 'l4-finale', kind: 'finale', bg: bgWillowMeadow, who: 'bella', line: 'You did it! You know my age! Goodbye, friend! See you next lesson!' },
 ];
 
 /* =========================================================================
