@@ -168,13 +168,23 @@ export const useClassroomSync = ({
           setIsConnected(true);
         }
       } else {
-        const existingSession = await classroomSyncService.getActiveSession(roomId);
-        if (existingSession) {
-          setSession(existingSession);
-          setCurrentSlideIndex(existingSession.currentSlideIndex ?? 0);
-          setStageModeState(prev => deriveStageModeFromSession(existingSession, prev));
-          setDrawingEnabledState(existingSession.drawingEnabled ?? false);
-          setIsConnected(true);
+        // The teacher's session row may not have landed yet if both parties
+        // join at roughly the same time — a single failed fetch here used to
+        // leave the student permanently stuck on "Disconnected" with no
+        // retry. Poll a few times with a short backoff before giving up; the
+        // realtime subscription below is the fast path, this is the safety
+        // net for whatever gap exists before it's actually connected.
+        for (let attempt = 0; attempt < 6; attempt++) {
+          const existingSession = await classroomSyncService.getActiveSession(roomId);
+          if (existingSession) {
+            setSession(existingSession);
+            setCurrentSlideIndex(existingSession.currentSlideIndex ?? 0);
+            setStageModeState(prev => deriveStageModeFromSession(existingSession, prev));
+            setDrawingEnabledState(existingSession.drawingEnabled ?? false);
+            setIsConnected(true);
+            break;
+          }
+          await new Promise((r) => setTimeout(r, 1000));
         }
       }
     };
@@ -193,6 +203,10 @@ export const useClassroomSync = ({
         setCurrentSlideIndex(updatedSession.currentSlideIndex ?? 0);
         setStageModeState(prev => deriveStageModeFromSession(updatedSession, prev));
         setDrawingEnabledState(updatedSession.drawingEnabled ?? false);
+        // Receiving any session row (INSERT or UPDATE) proves the realtime
+        // channel is live — this is what actually clears a stuck
+        // "Disconnected" badge if the initial fetch above missed the race.
+        setIsConnected(true);
       }
     );
 

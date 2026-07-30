@@ -316,13 +316,17 @@ class ClassroomSyncService {
       .on(
         'postgres_changes',
         {
-          event: 'UPDATE',
+          // '*' (not just 'UPDATE') so a student already subscribed when the
+          // teacher's session row is first INSERTed still receives it live,
+          // instead of only ever seeing subsequent updates.
+          event: '*',
           schema: 'public',
           table: 'classroom_sessions',
           filter: `room_id=eq.${roomId}`
         },
         (payload) => {
           console.log('🔄 SYNC EVENT received:', payload);
+          if (payload.eventType === 'DELETE') return;
           const session = this.mapToSession(payload.new);
           if (session) {
             console.log('🔄 Mapped session – slideIndex:', session.currentSlideIndex, 'forceRefresh:', (payload.new as any)?.force_refresh_timestamp);
