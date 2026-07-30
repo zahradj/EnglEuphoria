@@ -370,7 +370,7 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
   const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
   return (
-    <div className="relative h-full min-h-[400px]">
+    <div className="relative min-h-[78vh]">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
         <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: `linear-gradient(90deg, ${c.color}, #FEBE4C)` }}>
           ⚔️ Quest · Meet {c.name}
@@ -382,10 +382,10 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
         </div>
       </div>
       {/* scene.bg already paints {c.name} directly into the art — no separate sprite on top, just a tap affordance. */}
-      {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 cursor-pointer bg-transparent" />}
+      {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 h-[60vh] w-full cursor-pointer bg-transparent" />}
       {phase === 'idle' && (
-        <div className="pointer-events-none absolute inset-x-0 top-[22cqh] z-10 grid place-items-center">
-          <div className="relative h-48 w-48 sm:h-56 sm:w-56" style={{ animation: 'lep1-wiggle 3s ease-in-out infinite' }}>
+        <div className="pointer-events-none absolute inset-x-0 top-[26vh] z-10 grid place-items-center">
+          <div className="relative h-40 w-40" style={{ animation: 'lep1-wiggle 3s ease-in-out infinite' }}>
             <span className="absolute inset-0 rounded-full" style={{ background: `radial-gradient(circle, ${c.color}55, transparent 65%)`, animation: 'lep1-ping 2s ease-out infinite' }} />
             <span className="absolute inset-6 rounded-full border-4" style={{ borderColor: c.color, animation: 'lep1-ping 2s ease-out 0.4s infinite' }} />
           </div>
@@ -397,19 +397,19 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
         </span>
       )}
       {xpBurst && (
-        <div className="pointer-events-none absolute inset-x-0 top-[32cqh] z-30 grid place-items-center">
+        <div className="pointer-events-none absolute inset-x-0 top-[32vh] z-30 grid place-items-center">
           <div className="animate-[lep1-pop-fade_1.1s_ease-out_forwards] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 text-2xl font-black text-white shadow-2xl">+10 XP 💎</div>
         </div>
       )}
       {phase !== 'idle' && (
-        <div className="absolute top-[14cqh] right-4 sm:right-8 z-20 max-w-[42%] sm:max-w-[34%]">
+        <div className="absolute top-[14vh] right-4 sm:right-8 z-20 max-w-[42%] sm:max-w-[34%]">
           <button onClick={replayIntro} className="group relative w-full rounded-3xl border-4 bg-white px-5 py-4 text-left text-xl sm:text-2xl font-black shadow-2xl active:scale-95" style={{ color: c.color, borderColor: c.color }}>
             <span className="mr-2 text-xl">{c.emoji}</span>“{scene.line}”
           </button>
         </div>
       )}
       {phase === 'idle' && (
-        <div className="pointer-events-none absolute inset-x-0 top-[44cqh] z-20 grid place-items-center">
+        <div className="pointer-events-none absolute inset-x-0 top-[44vh] z-20 grid place-items-center">
           <span className="animate-pulse rounded-full bg-white/95 px-5 py-2 text-base font-bold shadow-xl" style={{ color: c.color }}>👆 Tap {c.name} {c.emoji}</span>
         </div>
       )}
@@ -3843,12 +3843,23 @@ function CandleCakeScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
     );
   }
 
+  const askerColor = r!.isStudent ? '#FE6A2F' : CAST[r!.asker].color;
+  const candleSpacing = Math.min(9, 30 / Math.max(target - 1, 1));
+
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
-      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">🔊 {r!.prompt}</div>
+      <div className="pointer-events-none absolute inset-x-0 top-3 z-30 flex items-start justify-between px-4">
+        <div className="rounded-2xl bg-white/95 px-4 py-2 text-sm font-black text-orange-700 shadow-xl">🎂 Round {round + 1}/{total}</div>
+        <div className="flex items-center gap-2 rounded-full px-5 py-3 text-lg font-black text-white shadow-xl" style={{ background: `linear-gradient(135deg, ${askerColor}, #FEBE4C)` }}>
+          🕯️ {candles}/{target || '?'}
+        </div>
+      </div>
+      <div className="pointer-events-none absolute left-1/2 top-[16%] z-30 max-w-[92%] -translate-x-1/2 rounded-3xl bg-white/95 px-6 py-4 text-center shadow-2xl">
+        <div className="text-xl font-black text-orange-700 sm:text-2xl">🔊 {r!.prompt}</div>
+      </div>
       {r!.isStudent && studentAge === null ? (
-        <div className="relative z-10 flex max-w-md flex-wrap justify-center gap-2">
+        <div className="absolute inset-x-0 bottom-10 z-30 flex max-w-md flex-wrap justify-center gap-2 px-4" style={{ margin: '0 auto' }}>
           {[2, 3, 4, 5, 6, 7, 8].map((n) => (
             <button key={n} onClick={() => setStudentAge(n)} className="grid h-14 w-14 place-items-center rounded-2xl border-4 border-white bg-white/95 text-xl font-black text-orange-700 shadow-xl active:scale-95">{n}</button>
           ))}
@@ -3860,20 +3871,36 @@ function CandleCakeScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
               src={BIRTHDAY_SPRITE[r!.asker]}
               alt={CAST[r!.asker].name}
               className="pointer-events-none absolute bottom-[6%] left-[2%] z-20 drop-shadow-2xl"
-              style={{ width: 'min(40vh, 340px)', animation: celebrating ? 'lep1-pop 0.5s ease-in-out 2' : 'lep1-float 3s ease-in-out infinite' }}
+              style={{ width: 'min(46vh, 460px)', animation: celebrating ? 'lep1-pop 0.5s ease-in-out 2' : 'lep1-cakeBounce 1.6s ease-in-out infinite' }}
             />
           )}
-          <button onClick={() => void tapCake()} className="relative z-10 active:scale-95" aria-label="Tap the cake to add a candle">
-            <div className="relative" style={{ width: 'min(70vw, 320px)', height: 'min(46vh, 260px)' }}>
+          <div className="absolute inset-x-0 bottom-[4%] z-10 grid place-items-center">
+            <button
+              onClick={() => void tapCake()}
+              aria-label="Tap the cake to add a candle"
+              className="relative cursor-pointer touch-none select-none"
+              style={{ width: 'min(88vw, 760px)', height: 'min(56vh, 560px)', animation: 'lep1-cakeIdle 2.6s ease-in-out infinite', transformOrigin: '50% 100%' }}
+            >
               <img src={cakeSticker} alt="Birthday cake" draggable={false} className="absolute inset-0 h-full w-full select-none" style={{ objectFit: 'contain', objectPosition: 'center bottom' }} />
-              <div className="absolute inset-x-0 top-[6%] flex flex-wrap justify-center gap-1 px-4">
-                {Array.from({ length: candles }).map((_, i) => (
-                  <img key={i} src={candleSticker} alt="" draggable={false} className="w-[10%] min-w-[16px] max-w-[28px] select-none" style={{ animation: 'lep1-pop 0.3s ease-out' }} />
-                ))}
-              </div>
-            </div>
-            <div className="mt-2 text-center text-lg font-black text-white drop-shadow">{candles}/{target}</div>
-          </button>
+              {candles < target && (
+                <span
+                  className="pointer-events-none absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                  style={{ border: '4px solid rgba(255,255,255,0.9)', animation: 'lep1-tapRipple 1.4s ease-out infinite' }}
+                />
+              )}
+              {Array.from({ length: candles }).map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute z-[5]"
+                  style={{ left: `${50 + (i - (target - 1) / 2) * candleSpacing}%`, bottom: '82%', transform: 'translateX(-50%)', width: 'clamp(70px, 13%, 120px)', transformOrigin: '50% 100%', animation: 'lep1-candleDrop 0.55s cubic-bezier(0.34,1.56,0.64,1)' }}
+                >
+                  <div className="relative w-full" style={{ animation: 'lep1-candleWiggle 2.4s ease-in-out infinite' }}>
+                    <img src={candleSticker} alt="" draggable={false} className="block w-full select-none" style={{ filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.3))' }} />
+                  </div>
+                </div>
+              ))}
+            </button>
+          </div>
         </>
       )}
     </div>
@@ -4289,6 +4316,11 @@ export function Lep1Keyframes() {
       @keyframes lep1-lyricPop { 0% { transform: scale(0.85); opacity: 0; } 60% { transform: scale(1.06); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
       @keyframes lep1-noteFloat { 0% { transform: translateY(0) rotate(-8deg); opacity: 0; } 20% { opacity: 0.9; } 100% { transform: translateY(-160px) rotate(12deg); opacity: 0; } }
       @keyframes lep1-balloonFloat { 0%, 100% { translate: 0px; } 50% { translate: 0px -10px; } }
+      @keyframes lep1-cakeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+      @keyframes lep1-cakeIdle { 0%, 100% { transform: translateY(0) scale(1, 1); } 50% { transform: translateY(-8px) scale(1.015, 0.985); } }
+      @keyframes lep1-tapRipple { 0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0.9; } 100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; } }
+      @keyframes lep1-candleDrop { 0% { transform: translateX(-50%) translateY(-140px) rotate(-25deg) scale(0.7); opacity: 0; } 60% { transform: translateX(-50%) translateY(8px) rotate(6deg) scale(1.1); opacity: 1; } 100% { transform: translateX(-50%) translateY(0) rotate(0deg) scale(1); opacity: 1; } }
+      @keyframes lep1-candleWiggle { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
     `}</style>
   );
 }
