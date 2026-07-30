@@ -2985,7 +2985,7 @@ function FeelingsTapScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'fe
             className="absolute bottom-8 z-20 grid place-items-end"
             style={{ left: `${spots[i].leftPct}%`, height: '58%', width: 'auto', aspectRatio: '0.72', transform: `translateX(-50%) scale(${isActive ? 1.1 : 1})`, transition: 'transform 0.3s ease-out' }}
           >
-            <img src={cast.img} alt={cast.name} className="pointer-events-none block h-full w-full select-none object-contain" style={{ filter: isDone ? 'drop-shadow(0 12px 18px rgba(34,197,94,0.55))' : 'drop-shadow(0 10px 14px rgba(0,0,0,0.4))' }} />
+            <img src={getEmotionSprite(c.who, c.emotion)} alt={cast.name} className="pointer-events-none block h-full w-full select-none object-contain" style={{ filter: isDone ? 'drop-shadow(0 12px 18px rgba(34,197,94,0.55))' : 'drop-shadow(0 10px 14px rgba(0,0,0,0.4))' }} />
             {isDone && (
               <div className="pointer-events-none absolute -top-4 left-1/2 -translate-x-1/2 rounded-2xl bg-white/95 px-4 py-2 text-center shadow-2xl ring-2 ring-orange-200 animate-[lep1-pop_0.4s_ease-out]">
                 <span className="text-2xl">{FEELING_EMOJI[c.emotion]}</span>
