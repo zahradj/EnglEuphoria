@@ -215,7 +215,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
           <div className="w-16" />
         </div>
 
-        <div key={scene.id} className="flex-1 animate-[lep1-fade-slide_0.45s_ease-out]">
+        <div key={scene.id} className="relative flex-1 animate-[lep1-fade-slide_0.45s_ease-out]">
           <SceneRenderer
             scene={scene}
             onWin={registerWin}
