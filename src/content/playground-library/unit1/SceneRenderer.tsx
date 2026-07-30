@@ -341,24 +341,16 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
           {scene.teacher}
         </div>
       </div>
+      {/* scene.bg already paints {c.name} directly into the art — no separate sprite on top, just a tap affordance. */}
       {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 cursor-pointer bg-transparent" />}
-      <div className="pointer-events-none absolute inset-x-0 top-[22cqh] z-10 grid place-items-center">
-        <div className="relative grid h-48 w-48 place-items-center sm:h-56 sm:w-56" style={{ animation: phase === 'idle' ? 'lep1-wiggle 3s ease-in-out infinite' : undefined }}>
-          {phase === 'idle' && (
-            <>
-              <span className="absolute inset-0 rounded-full" style={{ background: `radial-gradient(circle, ${c.color}55, transparent 65%)`, animation: 'lep1-ping 2s ease-out infinite' }} />
-              <span className="absolute inset-6 rounded-full border-4" style={{ borderColor: c.color, animation: 'lep1-ping 2s ease-out 0.4s infinite' }} />
-            </>
-          )}
-          <div className="relative h-full w-full drop-shadow-2xl">
-            <SpriteMascot
-              profile={{ src: c.img, eyeBand: MASCOT_EYE_BANDS[scene.who] }}
-              isTalking={phase === 'talking'}
-              alt={c.name}
-            />
+      {phase === 'idle' && (
+        <div className="pointer-events-none absolute inset-x-0 top-[22cqh] z-10 grid place-items-center">
+          <div className="relative h-48 w-48 sm:h-56 sm:w-56" style={{ animation: 'lep1-wiggle 3s ease-in-out infinite' }}>
+            <span className="absolute inset-0 rounded-full" style={{ background: `radial-gradient(circle, ${c.color}55, transparent 65%)`, animation: 'lep1-ping 2s ease-out infinite' }} />
+            <span className="absolute inset-6 rounded-full border-4" style={{ borderColor: c.color, animation: 'lep1-ping 2s ease-out 0.4s infinite' }} />
           </div>
         </div>
-      </div>
+      )}
       {scene.phonics && (
         <span className="absolute right-3 top-16 z-20 grid h-16 w-16 place-items-center rounded-full bg-white text-3xl font-black shadow-2xl ring-4" style={{ color: c.color, borderColor: c.color, animation: 'lep1-wiggle 3s ease-in-out infinite' }}>
           {scene.phonics.toUpperCase()}
