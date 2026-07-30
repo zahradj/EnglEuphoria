@@ -1059,10 +1059,10 @@ export const LESSON_4_SCENES: Scene[] = [
  * ========================================================================= */
 
 export const LESSON_5_TITLE = "Leo's Lost Star";
-export const LESSON_5_OBJECTIVE = 'Follow a story, retell key lines, and practice feelings and greetings inside the adventure.';
+export const LESSON_5_OBJECTIVE = 'Follow a story that revisits every friend, question, and sound from Lessons 1-4: greetings, names, feelings, and age.';
 
 export const LESSON_5_SCENES: Scene[] = [
-  { id: 'l5-title', kind: 'title-card', bg: bgMeadow, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 5', title: "Leo's Lost Star", subtitle: 'A story about friends helping friends' },
+  { id: 'l5-title', kind: 'title-card', bg: bgMeadow, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 5 · Story', title: "Leo's Lost Star", subtitle: 'A story that remembers everything we have learned' },
   {
     id: 'l5-intro', kind: 'cinematic', bg: bgMeadow, title: "Leo's Lost Star", subtitle: 'Leo cannot find his lucky star', narrator: 'pip',
     script: [
@@ -1080,13 +1080,37 @@ export const LESSON_5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l5-ask-friends', kind: 'join-stage', bg: bgGatherEmpty, teacher: 'Your turn! Ask each friend how they feel about Leo\'s star.', cast: ['mia', 'bella', 'willow'],
+    id: 'l5-recall-hello', kind: 'join-stage', bg: bgMeadow, teacher: 'Remember Lesson 1? Say hello to Mia the way we learned!', cast: ['mia'],
+    turns: [
+      { who: 'mia', line: 'Hello! My name is Mia.' },
+      { who: 'student', line: 'Hello! My name is ___.' },
+      { who: 'mia', line: 'Nice to meet you again! Leo lost his star — will you help?' },
+      { who: 'student', line: 'Yes! We will help Leo!' },
+    ],
+  },
+  {
+    id: 'l5-recall-name', kind: 'join-stage', bg: bgMeadow, teacher: 'Remember Lesson 2? Ask Bella the carnival question!', cast: ['bella'],
+    turns: [
+      { who: 'bella', line: 'Hello again!' },
+      { who: 'student', line: 'What is your name?' },
+      { who: 'bella', line: 'My name is Bella! Let’s go help Leo find his star.' },
+    ],
+  },
+  {
+    id: 'l5-ask-friends', kind: 'join-stage', bg: bgGatherEmpty, teacher: 'Remember Lesson 3? Ask how everyone feels, then help Leo.', cast: ['mia', 'bella', 'willow'],
     turns: [
       { who: 'mia', line: 'How are you, Leo?' },
       { who: 'student', line: 'I am sad. I lost my star.' },
-      { who: 'bella', line: 'Do not worry, Leo!' },
+      { who: 'bella', line: 'I am happy! Do not worry, Leo — we will find it.' },
       { who: 'student', line: 'Thank you!' },
-      { who: 'willow', line: 'Let’s look together!' },
+      { who: 'willow', line: 'I am angry we cannot find it. Let’s keep looking!' },
+    ],
+  },
+  {
+    id: 'l5-recall-age', kind: 'join-stage', bg: bgMeadow, teacher: 'Remember Lesson 4? Ask Willow the birthday question!', cast: ['willow'],
+    turns: [
+      { who: 'student', line: 'How old are you?' },
+      { who: 'willow', line: 'I am three! Now let’s search for the star.' },
     ],
   },
   {
@@ -1108,27 +1132,32 @@ export const LESSON_5_SCENES: Scene[] = [
     cta: 'Yay!',
   },
   {
-    id: 'l5-who', kind: 'who-said-it', bg: bgHideSeek, teacher: 'Listen! Who said it in the story? Tap the friend.',
+    id: 'l5-who', kind: 'who-said-it', bg: bgHideSeek, teacher: 'Listen! Who said it in our story? Tap the friend.',
     rounds: [
-      { line: 'I am sad. I lost my star.', who: 'leo' },
+      { line: 'I am sad. I lost my star.', who: 'leo', emotion: 'sad' },
       { line: 'Do not worry! We will help you!', who: 'pip' },
-      { line: 'Let’s look together!', who: 'willow' },
+      { line: 'Hello! My name is Mia.', who: 'mia' },
+      { line: 'I am happy! Do not worry, Leo.', who: 'bella', emotion: 'happy' },
+      { line: 'I am angry we cannot find it.', who: 'willow', emotion: 'angry' },
     ],
   },
   {
-    id: 'l5-roleplay-recap', kind: 'roleplay', bg: bgGatherEmpty, teacher: 'Retell the story! Listen, then repeat each line.', cast: ['leo', 'pip', 'bella'],
+    id: 'l5-roleplay-recap', kind: 'roleplay', bg: bgGatherEmpty, teacher: 'Retell the whole story! Listen, then repeat each line.', cast: ['leo', 'pip', 'mia', 'willow', 'bella'],
     script: [
       { who: 'leo', line: 'I lost my star. I was sad.', repeat: true },
-      { who: 'pip', line: 'We looked together.', repeat: true },
+      { who: 'mia', line: 'We said hello and asked how to help.', repeat: true },
+      { who: 'pip', line: 'We looked together in the meadow.', repeat: true },
+      { who: 'willow', line: 'I felt a little angry, but we did not give up!', repeat: true },
       { who: 'bella', line: 'We found the star! Now Leo is happy!', repeat: true },
     ],
   },
   {
     id: 'l5-puzzle', kind: 'puzzle', bg: bgMeadow, teacher: 'Guess the friend from the story! Tap pieces to peek.',
     rounds: [
-      { who: 'leo', img: CAST.leo.img, hint: 'He was sad, then happy again.' },
-      { who: 'willow', img: CAST.willow.img, hint: 'She said "Let\'s look together!"' },
-      { who: 'bella', img: CAST.bella.img, hint: 'She found the star under the tree.' },
+      { who: 'leo', img: CAST.leo.img, hint: 'He was sad, then happy again.', emotion: 'sad' },
+      { who: 'mia', img: CAST.mia.img, hint: 'She said hello first and asked to help.' },
+      { who: 'willow', img: CAST.willow.img, hint: 'He felt a little angry but kept looking.', emotion: 'angry' },
+      { who: 'bella', img: CAST.bella.img, hint: 'She found the star under the tree.', emotion: 'happy' },
     ],
   },
   {
@@ -1140,33 +1169,54 @@ export const LESSON_5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l5-sort-all', kind: 'sound-sort', bg: bgClearing, teacher: 'Story review! Drag each picture to /n/, /w/, /s/ or /a/.',
+    id: 'l5-sort-part1', kind: 'sound-sort', bg: bgClearing, teacher: 'Lessons 1 & 2 review! Drag each picture to /h/, /m/, /n/ or /w/.',
     targets: [
+      { letter: 'H', phoneme: '/h/', who: 'pip' },
+      { letter: 'M', phoneme: '/m/', who: 'mia' },
       { letter: 'N', phoneme: '/n/', who: 'mia' },
       { letter: 'W', phoneme: '/w/', who: 'pip' },
-      { letter: 'S', phoneme: '/s/', who: 'bella' },
-      { letter: 'A', phoneme: '/a/', who: 'willow' },
     ],
     items: [
+      { word: 'hat', emoji: '\u{1F3A9}', img: itemHat, letter: 'H' },
+      { word: 'house', emoji: '\u{1F3E0}', img: itemHouse, letter: 'H' },
+      { word: 'mouse', emoji: '\u{1F42D}', img: itemMouse, letter: 'M' },
+      { word: 'moon', emoji: '\u{1F319}', img: itemMoon, letter: 'M' },
       { word: 'nose', emoji: '\u{1F443}', img: itemNose, letter: 'N' },
-      { word: 'nest', emoji: '\u{1FAB9}', img: `${A}/items/item-nest.png`, letter: 'N' },
+      { word: 'nut', emoji: '\u{1F95C}', img: itemNut, letter: 'N' },
       { word: 'wave', emoji: '\u{1F30A}', img: itemWave, letter: 'W' },
       { word: 'water', emoji: '\u{1F4A7}', img: itemWater, letter: 'W' },
-      { word: 'star', emoji: '⭐', img: itemStar, letter: 'S' },
-      { word: 'snake', emoji: '\u{1F40D}', img: itemSnake, letter: 'S' },
-      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, letter: 'A' },
-      { word: 'alligator', emoji: '\u{1F40A}', img: itemAlligator, letter: 'A' },
     ],
   },
   {
-    id: 'l5-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Story review! Choose the first sound: H, M, N, W, S, or A.',
+    id: 'l5-sort-part2', kind: 'sound-sort', bg: bgClearing, teacher: 'Lessons 3 & 4 review! Drag each picture to /a/, /s/, /b/ or /t/.',
+    targets: [
+      { letter: 'A', phoneme: '/a/', who: 'leo' },
+      { letter: 'S', phoneme: '/s/', who: 'mia' },
+      { letter: 'B', phoneme: '/b/', who: 'bella' },
+      { letter: 'T', phoneme: '/t/', who: 'leo' },
+    ],
+    items: [
+      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, letter: 'A' },
+      { word: 'ant', emoji: '\u{1F41C}', img: itemAnt, letter: 'A' },
+      { word: 'star', emoji: '⭐', img: itemStar, letter: 'S' },
+      { word: 'sun', emoji: '☀️', img: itemSun, letter: 'S' },
+      { word: 'bag', emoji: '\u{1F392}', img: itemBag, letter: 'B' },
+      { word: 'ball', emoji: '⚽', img: itemBallL4, letter: 'B' },
+      { word: 'two', emoji: '2\u{FE0F}\u{20E3}', img: itemTwo, letter: 'T' },
+      { word: 'toy', emoji: '\u{1F9F8}', img: itemToy, letter: 'T' },
+    ],
+  },
+  {
+    id: 'l5-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Grand review! Choose the first sound — all 8 you have learned!',
     rounds: [
-      { word: 'house', blankIndex: 0, answer: 'H', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: `${A}/items/item-house.png`, emoji: '\u{1F3E0}' },
-      { word: 'mouse', blankIndex: 0, answer: 'M', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemMouse, emoji: '\u{1F42D}' },
-      { word: 'nose', blankIndex: 0, answer: 'N', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemNose, emoji: '\u{1F443}' },
-      { word: 'wave', blankIndex: 0, answer: 'W', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemWave, emoji: '\u{1F30A}' },
-      { word: 'star', blankIndex: 0, answer: 'S', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemStar, emoji: '⭐' },
-      { word: 'ant', blankIndex: 0, answer: 'A', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemAnt, emoji: '\u{1F41C}' },
+      { word: 'house', blankIndex: 0, answer: 'H', choices: ['H', 'M', 'N', 'W', 'A', 'S', 'B', 'T'], img: itemHouse, emoji: '\u{1F3E0}' },
+      { word: 'mouse', blankIndex: 0, answer: 'M', choices: ['H', 'M', 'N', 'W', 'A', 'S', 'B', 'T'], img: itemMouse, emoji: '\u{1F42D}' },
+      { word: 'nose', blankIndex: 0, answer: 'N', choices: ['H', 'M', 'N', 'W', 'A', 'S', 'B', 'T'], img: itemNose, emoji: '\u{1F443}' },
+      { word: 'wave', blankIndex: 0, answer: 'W', choices: ['H', 'M', 'N', 'W', 'A', 'S', 'B', 'T'], img: itemWave, emoji: '\u{1F30A}' },
+      { word: 'ant', blankIndex: 0, answer: 'A', choices: ['H', 'M', 'N', 'W', 'A', 'S', 'B', 'T'], img: itemAnt, emoji: '\u{1F41C}' },
+      { word: 'star', blankIndex: 0, answer: 'S', choices: ['H', 'M', 'N', 'W', 'A', 'S', 'B', 'T'], img: itemStar, emoji: '⭐' },
+      { word: 'bag', blankIndex: 0, answer: 'B', choices: ['H', 'M', 'N', 'W', 'A', 'S', 'B', 'T'], img: itemBag, emoji: '\u{1F392}' },
+      { word: 'two', blankIndex: 0, answer: 'T', choices: ['H', 'M', 'N', 'W', 'A', 'S', 'B', 'T'], img: itemTwo, emoji: '2\u{FE0F}\u{20E3}' },
     ],
   },
   {
@@ -1175,9 +1225,11 @@ export const LESSON_5_SCENES: Scene[] = [
       { word: 'star', letter: 'S', img: itemStar, emoji: '⭐' },
       { word: 'sun', letter: 'S', img: itemSun, emoji: '☀️' },
       { word: 'snake', letter: 'S', img: itemSnake, emoji: '\u{1F40D}' },
-      { word: 'nest', letter: 'N', img: `${A}/items/item-nest.png`, emoji: '\u{1FAB9}' },
+      { word: 'nose', letter: 'N', img: itemNose, emoji: '\u{1F443}' },
       { word: 'water', letter: 'W', img: itemWater, emoji: '\u{1F4A7}' },
-      { word: 'hat', letter: 'H', img: `${A}/items/item-hat.png`, emoji: '\u{1F3A9}' },
+      { word: 'hat', letter: 'H', img: itemHat, emoji: '\u{1F3A9}' },
+      { word: 'bag', letter: 'B', img: itemBag, emoji: '\u{1F392}' },
+      { word: 'two', letter: 'T', img: itemTwo, emoji: '2\u{FE0F}\u{20E3}' },
     ],
   },
   {
@@ -1189,8 +1241,8 @@ export const LESSON_5_SCENES: Scene[] = [
   },
   { id: 'l5-color-friends', kind: 'color-friends', bg: bgMeadow, teacher: 'Bonus time! Pick a color and paint your friends!', cast: ['pip', 'mia', 'bella', 'willow', 'leo'] },
   {
-    id: 'l5-alphabet-blocks', kind: 'alphabet-blocks', bg: bgMeadow, teacher: 'Alphabet Blocks! Tap the sound, then stack the word!', letters: ['H', 'M', 'N', 'W', 'S', 'A'],
-    tapRounds: [{ letter: 'S' }, { letter: 'A' }, { letter: 'N' }, { letter: 'W' }],
+    id: 'l5-alphabet-blocks', kind: 'alphabet-blocks', bg: bgMeadow, teacher: 'Alphabet Blocks! Tap the sound, then stack the word!', letters: ['H', 'M', 'N', 'W', 'A', 'S', 'B', 'T'],
+    tapRounds: [{ letter: 'S' }, { letter: 'A' }, { letter: 'N' }, { letter: 'W' }, { letter: 'B' }, { letter: 'T' }],
     words: [
       { word: 'WAS', emoji: '⏳' },
       { word: 'SAM', emoji: '\u{1F9CD}' },
