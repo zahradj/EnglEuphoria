@@ -5,6 +5,7 @@ import { safeSpeak, cueSpeak, cueSpeakOnce, stopSpeaking, isSpeaking, speak, spe
 import * as sfx from './sfx';
 import { Confetti } from './fx';
 import { UNIT1_PHONICS, getMastered, logMicroCheck } from './masteryTracker';
+import { SpriteMascot, MASCOT_EYE_BANDS } from './SpriteMascot';
 import engleuphoriaLogo from '@/assets/engleuphoria-logo.png';
 
 const cakeSticker = '/lep1/items/cake-sticker.png';
@@ -329,7 +330,7 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
   const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
   return (
-    <div className="relative min-h-[78cqh]">
+    <div className="relative h-full min-h-[400px]">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
         <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: `linear-gradient(90deg, ${c.color}, #FEBE4C)` }}>
           ⚔️ Quest · Meet {c.name}
@@ -340,15 +341,24 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
           {scene.teacher}
         </div>
       </div>
-      {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 h-[60cqh] w-full cursor-pointer bg-transparent" />}
-      {phase === 'idle' && (
-        <div className="pointer-events-none absolute inset-x-0 top-[26cqh] z-10 grid place-items-center">
-          <div className="relative grid h-40 w-40 place-items-center" style={{ animation: 'lep1-wiggle 3s ease-in-out infinite' }}>
-            <span className="absolute inset-0 rounded-full" style={{ background: `radial-gradient(circle, ${c.color}55, transparent 65%)`, animation: 'lep1-ping 2s ease-out infinite' }} />
-            <span className="absolute inset-6 rounded-full border-4" style={{ borderColor: c.color, animation: 'lep1-ping 2s ease-out 0.4s infinite' }} />
+      {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 cursor-pointer bg-transparent" />}
+      <div className="pointer-events-none absolute inset-x-0 top-[22cqh] z-10 grid place-items-center">
+        <div className="relative grid h-48 w-48 place-items-center sm:h-56 sm:w-56" style={{ animation: phase === 'idle' ? 'lep1-wiggle 3s ease-in-out infinite' : undefined }}>
+          {phase === 'idle' && (
+            <>
+              <span className="absolute inset-0 rounded-full" style={{ background: `radial-gradient(circle, ${c.color}55, transparent 65%)`, animation: 'lep1-ping 2s ease-out infinite' }} />
+              <span className="absolute inset-6 rounded-full border-4" style={{ borderColor: c.color, animation: 'lep1-ping 2s ease-out 0.4s infinite' }} />
+            </>
+          )}
+          <div className="relative h-full w-full drop-shadow-2xl">
+            <SpriteMascot
+              profile={{ src: c.img, eyeBand: MASCOT_EYE_BANDS[scene.who] }}
+              isTalking={phase === 'talking'}
+              alt={c.name}
+            />
           </div>
         </div>
-      )}
+      </div>
       {scene.phonics && (
         <span className="absolute right-3 top-16 z-20 grid h-16 w-16 place-items-center rounded-full bg-white text-3xl font-black shadow-2xl ring-4" style={{ color: c.color, borderColor: c.color, animation: 'lep1-wiggle 3s ease-in-out infinite' }}>
           {scene.phonics.toUpperCase()}
@@ -2240,7 +2250,7 @@ function MeetGroupScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
   const newcomerColor = CAST[scene.newcomer.who].color;
 
   return (
-    <div className="relative min-h-[78cqh]">
+    <div className="relative h-full min-h-[400px]">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
         <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: `linear-gradient(90deg, ${newcomerColor}, #FEBE4C)` }}>⚔️ Quest · Meet {CAST[scene.newcomer.who].name}</div>
       </div>
@@ -2954,6 +2964,7 @@ const FEELING_EMOJI: Record<'happy' | 'sad' | 'angry', string> = { happy: '\u{1F
 function FeelingsTapScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'feelings-tap' }>; onNext: () => void }) {
   const [tapped, setTapped] = useState<Set<number>>(new Set());
   const [active, setActive] = useState<number | null>(null);
+  const [talkingIdx, setTalkingIdx] = useState<number | null>(null);
   const total = scene.cast.length;
   const spots = useMemo(() => {
     const leftPad = total <= 3 ? 18 : 12;
@@ -2966,7 +2977,9 @@ function FeelingsTapScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'fe
     setTapped((s) => new Set(s).add(i));
     sfx.pop();
     const { who, label } = scene.cast[i];
+    setTalkingIdx(i);
     await safeSpeak(label, who);
+    setTalkingIdx((cur) => (cur === i ? null : cur));
   };
 
   const allTapped = tapped.size >= total;
@@ -2985,7 +2998,14 @@ function FeelingsTapScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'fe
             className="absolute bottom-8 z-20 grid place-items-end"
             style={{ left: `${spots[i].leftPct}%`, height: '58%', width: 'auto', aspectRatio: '0.72', transform: `translateX(-50%) scale(${isActive ? 1.1 : 1})`, transition: 'transform 0.3s ease-out' }}
           >
-            <img src={getEmotionSprite(c.who, c.emotion)} alt={cast.name} className="pointer-events-none block h-full w-full select-none object-contain" style={{ filter: isDone ? 'drop-shadow(0 12px 18px rgba(34,197,94,0.55))' : 'drop-shadow(0 10px 14px rgba(0,0,0,0.4))' }} />
+            <div className="pointer-events-none h-full w-full" style={{ filter: isDone ? 'drop-shadow(0 12px 18px rgba(34,197,94,0.55))' : 'drop-shadow(0 10px 14px rgba(0,0,0,0.4))' }}>
+              <SpriteMascot
+                profile={{ src: getEmotionSprite(c.who, c.emotion), eyeBand: MASCOT_EYE_BANDS[c.who] }}
+                emotion={c.emotion}
+                isTalking={talkingIdx === i}
+                alt={cast.name}
+              />
+            </div>
             {isDone && (
               <div className="pointer-events-none absolute -top-4 left-1/2 -translate-x-1/2 rounded-2xl bg-white/95 px-4 py-2 text-center shadow-2xl ring-2 ring-orange-200 animate-[lep1-pop_0.4s_ease-out]">
                 <span className="text-2xl">{FEELING_EMOJI[c.emotion]}</span>
@@ -3140,7 +3160,14 @@ function ModeledFeelingRounds<R extends { who: CharKey; emotion: 'happy' | 'sad'
         <div className="max-w-lg rounded-full bg-white/90 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-lg backdrop-blur sm:text-base">{teacher} <span className="ml-1 opacity-60">({round + 1}/{total})</span></div>
       </div>
       <div className="relative flex flex-col items-center">
-        <img src={getEmotionSprite(r!.who, r!.emotion)} alt={c.name} className="h-56 w-56 object-contain drop-shadow-2xl sm:h-64 sm:w-64" style={{ animation: phase === 'model' ? 'lep1-hop 0.9s ease-in-out infinite' : undefined }} />
+        <div className="h-56 w-56 drop-shadow-2xl sm:h-64 sm:w-64">
+          <SpriteMascot
+            profile={{ src: getEmotionSprite(r!.who, r!.emotion), eyeBand: MASCOT_EYE_BANDS[r!.who] }}
+            emotion={r!.emotion}
+            isTalking={phase === 'model'}
+            alt={c.name}
+          />
+        </div>
         {badge && <span className="absolute -right-2 top-4 rounded-full bg-orange-500 px-3 py-1 text-sm font-black uppercase text-white shadow-lg">{badge(r!)}</span>}
       </div>
       <div className="mt-4 rounded-3xl bg-white/95 px-6 py-3 text-center shadow-2xl">
@@ -3179,6 +3206,7 @@ function ProduceSentenceScene({
   const [round, setRound] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [gemDone, setGemDone] = useState(false);
+  const [talking, setTalking] = useState(false);
   const total = rounds.length;
   const finished = round >= total;
   const r = !finished ? rounds[round] : null;
@@ -3190,7 +3218,14 @@ function ProduceSentenceScene({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round]);
 
-  const reveal = async () => { if (!r) return; setRevealed(true); sfx.pop(); await safeSpeak(r.sentence, r.who ?? 'teacher'); };
+  const reveal = async () => {
+    if (!r) return;
+    setRevealed(true);
+    sfx.pop();
+    setTalking(true);
+    await safeSpeak(r.sentence, r.who ?? 'teacher');
+    setTalking(false);
+  };
   const confirm = () => {
     if (!r) return;
     if (!revealed) { void reveal(); return; }
@@ -3215,7 +3250,14 @@ function ProduceSentenceScene({
       </div>
       <div className="flex flex-col items-center">
         {r!.who ? (
-          <img src={getEmotionSprite(r!.who, r!.emotion)} alt={CAST[r!.who].name} className="h-56 w-56 object-contain drop-shadow-2xl sm:h-64 sm:w-64" style={{ animation: 'lep1-float 3s ease-in-out infinite' }} />
+          <div className="h-56 w-56 drop-shadow-2xl sm:h-64 sm:w-64">
+            <SpriteMascot
+              profile={{ src: getEmotionSprite(r!.who, r!.emotion), eyeBand: MASCOT_EYE_BANDS[r!.who] }}
+              emotion={r!.emotion}
+              isTalking={talking}
+              alt={CAST[r!.who].name}
+            />
+          </div>
         ) : (
           <div className="grid h-40 w-40 place-items-center rounded-full bg-gradient-to-br from-orange-300 to-pink-300 text-7xl shadow-2xl" style={{ animation: 'lep1-float 3s ease-in-out infinite' }}>🌟</div>
         )}
