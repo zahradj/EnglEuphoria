@@ -5,6 +5,15 @@ import { safeSpeak, cueSpeak, cueSpeakOnce, stopSpeaking, isSpeaking, speak, spe
 import * as sfx from './sfx';
 import { Confetti } from './fx';
 import { UNIT1_PHONICS, getMastered, logMicroCheck } from './masteryTracker';
+import engleuphoriaLogo from '@/assets/engleuphoria-logo.png';
+
+const cakeSticker = '/lep1/items/cake-sticker.png';
+const candleSticker = '/lep1/items/candle-sticker.png';
+const BIRTHDAY_SPRITE: Partial<Record<CharKey, string>> = {
+  bella: '/lep1/characters/bella-birthday.png',
+  mia: '/lep1/characters/mia-birthday.png',
+  pip: '/lep1/characters/pip-birthday.png',
+};
 
 /* ---------- Shared chrome ---------- */
 
@@ -198,6 +207,13 @@ function TitleCardScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'titl
   return (
     <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0) 55%, rgba(254,106,47,0.35) 100%)' }} />
+      <div className="absolute left-5 top-5 flex items-center gap-3 animate-[lep1-fade-slide_0.5s_ease-out]">
+        <img src={engleuphoriaLogo} alt="EnglEuphoria logo" className="h-16 w-16 rounded-full object-cover shadow-[0_10px_30px_rgba(0,0,0,0.4)] ring-2 ring-white/70" />
+        <div className="hidden flex-col sm:flex">
+          <span className="text-[11px] font-black uppercase tracking-widest text-white/90 drop-shadow">EnglEuphoria</span>
+          <span className="text-[10px] font-bold text-white/80 drop-shadow">Playground Hub</span>
+        </div>
+      </div>
       <div className="absolute right-5 top-5 flex flex-wrap justify-end gap-2">
         <span className="rounded-full bg-white/90 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-orange-700 shadow">{scene.level}</span>
         <span className="rounded-full bg-white/90 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-orange-700 shadow">{scene.unit}</span>
@@ -207,7 +223,7 @@ function TitleCardScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'titl
         <h1
           className="inline-block -rotate-2 text-6xl leading-[1] sm:text-8xl md:text-9xl"
           style={{
-            fontFamily: "'Fredoka', system-ui, sans-serif",
+            fontFamily: "'Bungee', 'Fredoka', system-ui, sans-serif",
             background: 'linear-gradient(180deg, #FFF3B0 0%, #FFD34E 35%, #FF8A3D 70%, #E5561A 100%)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', WebkitTextStroke: '5px #2A1200',
             paintOrder: 'stroke fill', filter: 'drop-shadow(0 8px 0 #B23A00) drop-shadow(0 12px 18px rgba(0,0,0,0.45))',
@@ -216,7 +232,7 @@ function TitleCardScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'titl
         >
           {scene.title}
         </h1>
-        <p className="mt-2 max-w-xl rounded-full bg-white/85 px-4 py-1 text-sm font-black text-orange-800 shadow-lg ring-2 ring-orange-200 sm:text-base">{scene.subtitle} ✨</p>
+        <p className="mt-2 max-w-xl rounded-full bg-white/85 px-4 py-1 text-sm font-black text-orange-800 shadow-lg ring-2 ring-orange-200 sm:text-base" style={{ fontFamily: "'Fredoka', system-ui, sans-serif" }}>{scene.subtitle} ✨</p>
       </div>
       <div className="absolute inset-x-0 bottom-8 z-20 flex justify-center">
         <button onClick={() => { unlockAudio(); onNext(); }} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-12 py-5 text-2xl font-black text-white shadow-2xl ring-4 ring-white/60 transition hover:scale-105 active:scale-95 animate-pulse">
@@ -3671,16 +3687,27 @@ function CandleCakeScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
           ))}
         </div>
       ) : (
-        <button onClick={() => void tapCake()} className="relative z-10 active:scale-95" aria-label="Tap the cake to add a candle">
-          <div className="relative grid h-40 w-48 place-items-end rounded-t-3xl bg-gradient-to-b from-pink-300 to-pink-400 pb-2 shadow-2xl sm:h-48 sm:w-56">
-            <div className="flex flex-wrap justify-center gap-1 px-2 pb-2">
-              {Array.from({ length: candles }).map((_, i) => (
-                <span key={i} className="text-2xl" style={{ animation: 'lep1-pop 0.3s ease-out' }}>🕯️</span>
-              ))}
+        <>
+          {!r!.isStudent && BIRTHDAY_SPRITE[r!.asker] && (
+            <img
+              src={BIRTHDAY_SPRITE[r!.asker]}
+              alt={CAST[r!.asker].name}
+              className="pointer-events-none absolute bottom-[6%] left-[2%] z-20 drop-shadow-2xl"
+              style={{ width: 'min(40vh, 340px)', animation: celebrating ? 'lep1-pop 0.5s ease-in-out 2' : 'lep1-float 3s ease-in-out infinite' }}
+            />
+          )}
+          <button onClick={() => void tapCake()} className="relative z-10 active:scale-95" aria-label="Tap the cake to add a candle">
+            <div className="relative" style={{ width: 'min(70vw, 320px)', height: 'min(46vh, 260px)' }}>
+              <img src={cakeSticker} alt="Birthday cake" draggable={false} className="absolute inset-0 h-full w-full select-none" style={{ objectFit: 'contain', objectPosition: 'center bottom' }} />
+              <div className="absolute inset-x-0 top-[6%] flex flex-wrap justify-center gap-1 px-4">
+                {Array.from({ length: candles }).map((_, i) => (
+                  <img key={i} src={candleSticker} alt="" draggable={false} className="w-[10%] min-w-[16px] max-w-[28px] select-none" style={{ animation: 'lep1-pop 0.3s ease-out' }} />
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="mt-2 text-center text-lg font-black text-white drop-shadow">{candles}/{target}</div>
-        </button>
+            <div className="mt-2 text-center text-lg font-black text-white drop-shadow">{candles}/{target}</div>
+          </button>
+        </>
       )}
     </div>
   );
