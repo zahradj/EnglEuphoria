@@ -86,6 +86,10 @@ export function getEmotionSprite(who: CharKey, emotion: 'happy' | 'sad' | 'angry
 export const PROP_THEME: Record<string, { closed: string; label: string; tint: string; img?: string }> = {
   pip: { closed: '\u{1F41A}', label: 'shell', tint: '#FE6A2F', img: `${A}/items/prop-shell.png` },
   mia: { closed: '⭐', label: 'star', tint: '#FDE68A', img: `${A}/items/prop-star.png` },
+  // Bella/Leo (Lesson 4, B and T) had no entry here, so PROP_THEME[scene.prop ?? scene.who] ?? PROP_THEME.pip
+  // was silently falling through to Pip's shell theme from Lesson 1 for a birthday-themed lesson.
+  bella: { closed: '\u{1F381}', label: 'gift', tint: '#E76FA5' },
+  leo: { closed: '\u{1F381}', label: 'gift', tint: '#C97A2F' },
 };
 
 export const CHARACTER_STAGE: Record<CharKey, { side: 'left' | 'right' }> = {

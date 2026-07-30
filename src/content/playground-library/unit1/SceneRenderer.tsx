@@ -316,10 +316,10 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
         <p className="mt-1 text-sm font-semibold text-white/95 drop-shadow sm:text-base">{scene.subtitle}</p>
       </div>
       {scene.id !== 'intro' && (
-        <img src={CAST.pip.img} alt="Pip" className="absolute bottom-[18cqh] left-1/2 -translate-x-1/2 object-contain drop-shadow-2xl" style={{ height: 'clamp(220px, 34cqh, 420px)', animation: 'lep1-walk 3.2s ease-in-out infinite' }} />
+        <img src={CAST.pip.img} alt="Pip" className="absolute bottom-[18vh] left-1/2 -translate-x-1/2 object-contain drop-shadow-2xl" style={{ height: 'clamp(220px, 34vh, 420px)', animation: 'lep1-walk 3.2s ease-in-out infinite' }} />
       )}
       {step >= 0 && step < scene.script.length && (
-        <div className="absolute bottom-[52cqh] left-1/2 max-w-[520px] -translate-x-1/2 px-4">
+        <div className="absolute bottom-[52vh] left-1/2 max-w-[520px] -translate-x-1/2 px-4">
           <div className="relative rounded-3xl bg-white/95 px-6 py-4 text-center text-2xl font-black text-orange-800 shadow-2xl">
             “{currentLine}”
             <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 border-x-[14px] border-t-[16px] border-x-transparent border-t-white/95" />
@@ -485,7 +485,7 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
           onClick={playLetterSound}
           aria-label={`Hear the ${scene.letter} sound again`}
           className="pointer-events-auto grid place-items-center rounded-[2.5rem] border-8 bg-white/95 font-black shadow-2xl backdrop-blur transition active:scale-95"
-          style={{ color: theme.tint, borderColor: theme.tint, width: 'min(60cqh, 22rem)', height: 'min(60cqh, 22rem)', fontSize: 'min(48cqh, 18rem)', lineHeight: 1, animation: beat >= 0 ? 'lep1-pop 0.5s ease-out' : 'lep1-wiggle 4s ease-in-out infinite' }}
+          style={{ color: theme.tint, borderColor: theme.tint, width: 'min(60vh, 22rem)', height: 'min(60vh, 22rem)', fontSize: 'min(48vh, 18rem)', lineHeight: 1, animation: beat >= 0 ? 'lep1-pop 0.5s ease-out' : 'lep1-wiggle 4s ease-in-out infinite' }}
         >
           {scene.letter}
         </button>
@@ -1042,7 +1042,7 @@ function WhoSaidItScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind
         return (
           <button key={s.who} onClick={() => pick(s.who)} disabled={phase !== 'prompt'} aria-label={`Tap ${c.name}`}
             className="absolute z-20 -translate-x-1/2 grid place-items-end cursor-pointer disabled:cursor-default"
-            style={{ left: `${s.leftPct}%`, bottom: `${s.bottomPct}%`, height: `${s.sizeVh}cqh`, width: `min(${s.widthVw}cqw, ${s.sizeVh * 0.68}cqh)`, transform: `translateX(-50%) scale(${scale})`, transition: 'transform 0.3s ease-out', transformOrigin: '50% 100%' }}
+            style={{ left: `${s.leftPct}%`, bottom: `${s.bottomPct}%`, height: `${s.sizeVh}vh`, width: `min(${s.widthVw}vw, ${s.sizeVh * 0.68}vh)`, transform: `translateX(-50%) scale(${scale})`, transition: 'transform 0.3s ease-out', transformOrigin: '50% 100%' }}
           >
             <img src={c.img} alt={c.name} className="pointer-events-none block h-full w-full select-none object-contain" style={{ filter: speaking ? 'drop-shadow(0 12px 18px rgba(254,106,47,0.85))' : 'drop-shadow(0 10px 14px rgba(0,0,0,0.4))' }} />
             <span className={`pointer-events-none absolute left-1/2 -bottom-6 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-black shadow-lg whitespace-nowrap ${isTarget && phase === 'prompt' ? 'bg-orange-500 text-white animate-pulse' : 'bg-white/90 text-neutral-800'}`}>{c.name}</span>
@@ -1419,7 +1419,7 @@ function PuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">🧩 {scene.teacher} <span className="ml-1 opacity-70">({round + 1}/{total})</span></div>
-      <div className="relative z-10 mt-16 h-[46cqh] w-[46cqh] max-w-[92cqw] overflow-hidden rounded-3xl border-4 border-white shadow-2xl">
+      <div className="relative z-10 mt-16 h-[46vh] w-[46vh] max-w-[92vw] overflow-hidden rounded-3xl border-4 border-white shadow-2xl">
         <img src={r!.emotion ? getEmotionSprite(r!.who, r!.emotion) : r!.img} alt="mystery friend" className="absolute inset-0 h-full w-full object-contain" draggable={false} />
         <div className="absolute inset-0 grid grid-cols-3 grid-rows-3">
           {Array.from({ length: GRID }, (_, i) => {
@@ -1483,10 +1483,10 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
   };
 
   const positions: Record<string, { left: string; bottom: string; scale: number }> = {
-    pip: { left: '12%', bottom: '10cqh', scale: 1.35 },
-    mia: { left: '34%', bottom: '9cqh', scale: 1.15 },
-    bella: { left: '58%', bottom: '10cqh', scale: 1.3 },
-    willow: { left: '82%', bottom: '11cqh', scale: 1.2 },
+    pip: { left: '12%', bottom: '10vh', scale: 1.35 },
+    mia: { left: '34%', bottom: '9vh', scale: 1.15 },
+    bella: { left: '58%', bottom: '10vh', scale: 1.3 },
+    willow: { left: '82%', bottom: '11vh', scale: 1.2 },
   };
   const current = step >= 0 && step < scene.script.length ? scene.script[step] : null;
   const replayCurrent = () => { if (current) void safeSpeak(current.line, current.who); };
@@ -1500,7 +1500,7 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
       </div>
       {current && <button onClick={replayCurrent} className="absolute right-6 top-6 z-30 flex items-center gap-2 rounded-full bg-white/95 px-5 py-3 text-sm font-black uppercase tracking-widest text-orange-700 shadow-2xl ring-2 ring-orange-200 active:scale-95" aria-label="Repeat what the character said">🔁 Play again</button>}
       {current && !awaitingRepeat && (
-        <div className="absolute z-20 max-w-[520px] -translate-x-1/2 px-4 transition-all duration-300" style={{ left: positions[current.who]?.left ?? '50%', bottom: `calc(${positions[current.who]?.bottom ?? '12cqh'} + clamp(240px, 40cqh, 460px) * ${positions[current.who]?.scale ?? 1} + 20px)` }}>
+        <div className="absolute z-20 max-w-[520px] -translate-x-1/2 px-4 transition-all duration-300" style={{ left: positions[current.who]?.left ?? '50%', bottom: `calc(${positions[current.who]?.bottom ?? '12vh'} + clamp(240px, 40vh, 460px) * ${positions[current.who]?.scale ?? 1} + 20px)` }}>
           <div className="relative rounded-3xl bg-white/95 px-5 py-3 text-center text-xl font-black text-orange-800 shadow-2xl sm:text-2xl">“{current.line}”</div>
         </div>
       )}
@@ -1597,7 +1597,7 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
         </div>
       )}
       <div className="absolute left-1/2 z-30" style={{ top: '58%', transform: 'translate(-50%, -50%)' }}>
-        <div className={`relative flex items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-all ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`} style={{ width: 'clamp(300px, 46cqw, 500px)', height: 'clamp(300px, 46cqw, 500px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}>
+        <div className={`relative flex items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-all ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`} style={{ width: 'clamp(300px, 46vw, 500px)', height: 'clamp(300px, 46vw, 500px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}>
           <video ref={videoRef} muted playsInline className="h-full w-full object-cover" />
           <span className="absolute right-6 top-6 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white"><span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" /> Live</span>
         </div>
@@ -1709,8 +1709,8 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
           const stepOutside = i === doorPositions.length - 1 ? '28%' : '72%';
           const showChar = openIdx === i || phase === 'reveal';
           return (
-            <div key={i} className="absolute bottom-0" style={{ left: `${left}%`, transform: 'translateX(-50%)', width: '28%', maxWidth: 320, height: 'clamp(260px, 52cqh, 480px)' }}>
-              <div className="pointer-events-none absolute left-1/2 z-30 -translate-x-1/2" style={{ left: phase === 'reveal' ? '50%' : openIdx === i ? stepOutside : '50%', bottom: '-14%', width: 'clamp(420px, 42cqw, 620px)', height: 'clamp(420px, 42cqw, 620px)', transform: showChar ? 'translateY(0) scale(1)' : 'translateY(10%) scale(0.96)', opacity: showChar ? 1 : 0, transition: 'left 0.45s ease-out, transform 0.45s ease-out, opacity 0.25s ease-out', transitionDelay: openIdx === i ? '0.35s' : '0s' }}>
+            <div key={i} className="absolute bottom-0" style={{ left: `${left}%`, transform: 'translateX(-50%)', width: '28%', maxWidth: 320, height: 'clamp(260px, 52vh, 480px)' }}>
+              <div className="pointer-events-none absolute left-1/2 z-30 -translate-x-1/2" style={{ left: phase === 'reveal' ? '50%' : openIdx === i ? stepOutside : '50%', bottom: '-14%', width: 'clamp(420px, 42vw, 620px)', height: 'clamp(420px, 42vw, 620px)', transform: showChar ? 'translateY(0) scale(1)' : 'translateY(10%) scale(0.96)', opacity: showChar ? 1 : 0, transition: 'left 0.45s ease-out, transform 0.45s ease-out, opacity 0.25s ease-out', transitionDelay: openIdx === i ? '0.35s' : '0s' }}>
                 <img src={c.img} alt={c.name} draggable={false} className="h-full w-full max-w-none object-contain" style={{ filter: 'drop-shadow(0 10px 18px rgba(0,0,0,0.45))' }} />
                 {phase === 'reveal' && <div className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-2xl bg-white px-4 py-2 text-lg font-black text-neutral-800 shadow-xl ring-2 ring-white" style={{ color: c.color }}>{c.name}</div>}
                 {(phase === 'greet' || phase === 'echo') && openIdx === i && <div className="absolute -top-14 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-2xl bg-white px-4 py-2 text-base font-black text-neutral-800 shadow-xl ring-2 ring-white">{r!.helloLine}</div>}
@@ -1783,7 +1783,7 @@ function ColorFriendsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { k
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/40 via-white/15 to-white/50" />
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">🎨 Color {c.name}!</div>
       <div className="absolute inset-x-0 top-14 bottom-36 z-10 flex items-center justify-center">
-        <div key={who} className="relative aspect-[400/520] h-full max-h-full max-w-[96cqw] overflow-hidden rounded-3xl bg-[#FFFDF7] shadow-2xl ring-2 ring-white/70">
+        <div key={who} className="relative aspect-[400/520] h-full max-h-full max-w-[96vw] overflow-hidden rounded-3xl bg-[#FFFDF7] shadow-2xl ring-2 ring-white/70">
           <canvas ref={canvasRef} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={endStroke} onPointerCancel={endStroke} onPointerLeave={endStroke} className="absolute inset-0 h-full w-full touch-none" style={{ cursor: 'crosshair' }} />
           <img src={sketch} alt={c.name} className="pointer-events-none absolute inset-0 h-full w-full object-contain select-none" draggable={false} />
         </div>
@@ -1899,7 +1899,7 @@ function AlphabetBlocksScene({ scene, onNext, onWin }: { scene: Extract<Scene, {
       {phase === 'tap' && (
         <div className="absolute inset-x-0 top-20 bottom-24 z-10 flex flex-col items-center justify-center gap-6 px-4">
           <button onClick={() => playLetterPhonic(scene.tapRounds[tapIdx].letter)} className="rounded-full bg-white/95 px-6 py-3 text-lg font-black text-orange-700 shadow-xl active:scale-95">🔊 Play sound again</button>
-          <div className="grid max-w-[92cqw] grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+          <div className="grid max-w-[92vw] grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
             {scene.letters.map((L) => (
               <button key={L} onClick={() => handleTapLetter(L)} className="relative flex h-28 w-28 items-center justify-center rounded-2xl text-6xl font-black text-white transition-transform active:scale-95 sm:h-32 sm:w-32"
                 style={{ backgroundColor: colorFor(L), animation: tapWrong === L ? 'lep1-blockShake 0.4s ease-in-out' : tapWinLetter === L ? 'lep1-blockWin 0.7s ease-out' : undefined }}>
@@ -1923,7 +1923,7 @@ function AlphabetBlocksScene({ scene, onNext, onWin }: { scene: Extract<Scene, {
               return <div key={i} className="relative flex h-24 w-20 items-center justify-center rounded-xl text-5xl font-black text-white sm:h-28 sm:w-24 sm:text-6xl" style={{ backgroundColor: bg, animation: filled ? 'lep1-blockDrop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)' : undefined, opacity: filled ? 1 : 0.85 }}>{filled ?? <span className="text-2xl opacity-60">{tgt}</span>}</div>;
             })}
           </div>
-          <div className="flex max-w-[92cqw] flex-wrap items-center justify-center gap-3">
+          <div className="flex max-w-[92vw] flex-wrap items-center justify-center gap-3">
             {bank.map((L, i) => (
               <button key={`${i}-${L}`} onClick={() => handleBankTap(i, L)} disabled={usedBank.has(i)} className="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl font-black text-white transition-transform active:scale-90 sm:h-24 sm:w-24 sm:text-5xl"
                 style={{ backgroundColor: colorFor(L), opacity: usedBank.has(i) ? 0.25 : 1, animation: wrongBankIdx === i ? 'lep1-blockShake 0.4s ease-in-out' : undefined }}>{L}</button>
@@ -2075,13 +2075,13 @@ function SongScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'so
           {['🎵', '🎶', '🎵', '🎶', '🎵'].map((n, i) => <span key={i} className="absolute text-3xl" style={{ left: `${10 + i * 18}%`, bottom: '45%', animation: `lep1-noteFloat ${3 + (i % 3)}s ease-in-out ${i * 0.4}s infinite` }}>{n}</span>)}
         </div>
       )}
-      <div className="absolute left-1/2 w-[94%] max-w-5xl -translate-x-1/2 rounded-[2rem] bg-white/95 p-8 text-center shadow-2xl ring-8 ring-[#FE6A2F]/40 backdrop-blur-md" style={{ top: '40cqh', zIndex: 15 }}>
+      <div className="absolute left-1/2 w-[94%] max-w-5xl -translate-x-1/2 rounded-[2rem] bg-white/95 p-8 text-center shadow-2xl ring-8 ring-[#FE6A2F]/40 backdrop-blur-md" style={{ top: '40vh', zIndex: 15 }}>
         {status === 'error' ? (
           <div className="text-xl font-bold text-red-600">Song unavailable — try again in a moment.</div>
         ) : current ? (
           <>
             <div className="mb-3 text-sm font-black uppercase tracking-widest text-[#FE6A2F] sm:text-base">🎤 {current.who.toUpperCase()} sings</div>
-            <div key={idx} className="font-black leading-tight text-slate-800" style={{ fontSize: 'clamp(28px, 5cqw, 64px)', animation: 'lep1-lyricPop 0.4s ease-out' }}>{current.text}</div>
+            <div key={idx} className="font-black leading-tight text-slate-800" style={{ fontSize: 'clamp(28px, 5vw, 64px)', animation: 'lep1-lyricPop 0.4s ease-out' }}>{current.text}</div>
             <div className="mt-5 flex justify-center gap-2">
               {scene.lyrics.map((_, i) => <span key={i} className={`h-3 w-10 rounded-full ${i <= idx ? 'bg-[#FE6A2F]' : 'bg-slate-200'}`} />)}
             </div>
@@ -2177,7 +2177,7 @@ function NameGateScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
 
   return (
     <div className="absolute inset-0 z-10 overflow-hidden bg-black">
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{ aspectRatio: '1600 / 1008', width: 'min(100cqw, calc(100cqh * 1600 / 1008))', height: 'min(100cqh, calc(100cqw * 1008 / 1600))' }}>
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{ aspectRatio: '1600 / 1008', width: 'min(100vw, calc(100vh * 1600 / 1008))', height: 'min(100vh, calc(100vw * 1008 / 1600))' }}>
         <img src={scene.bg} alt="" className="absolute inset-0 h-full w-full object-fill" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-orange-950/35" />
         {scene.rounds.map((round, idx) => {
@@ -2220,7 +2220,7 @@ function NameGateScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
         <div onClick={handleOpenGate} className={`absolute inset-0 z-40 flex items-center justify-center ${gateOpening ? 'pointer-events-none' : 'cursor-pointer'}`}>
           <div className="pointer-events-none absolute inset-0 bg-black/25" />
           <div className="relative flex flex-col items-center gap-4">
-            <img src={comicPointForward} alt="Your turn" draggable={false} className="h-[62cqh] w-auto object-contain drop-shadow-[0_18px_35px_rgba(0,0,0,0.55)] animate-bounce" />
+            <img src={comicPointForward} alt="Your turn" draggable={false} className="h-[62vh] w-auto object-contain drop-shadow-[0_18px_35px_rgba(0,0,0,0.55)] animate-bounce" />
             <div className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-3xl font-black uppercase tracking-widest text-white shadow-2xl ring-4 ring-white/70 animate-pulse">Your turn!</div>
             <div className="rounded-full bg-white/95 px-5 py-2 text-sm font-black uppercase tracking-widest text-orange-700 shadow">Tap to continue</div>
           </div>
@@ -2298,7 +2298,7 @@ function MeetGroupScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
         const c = CAST[a.who];
         return (
           <button key={a.who} onClick={() => tapAsker(i)} disabled={!active} aria-label={`Tap ${c.name}`} className="absolute z-10 -translate-x-1/2 -translate-y-full rounded-b-full"
-            style={{ left: `${a.xPct}%`, top: `${a.yPct}%`, width: 'clamp(200px, 30cqh, 320px)', height: 'clamp(240px, 36cqh, 380px)' }}>
+            style={{ left: `${a.xPct}%`, top: `${a.yPct}%`, width: 'clamp(200px, 30vh, 320px)', height: 'clamp(240px, 36vh, 380px)' }}>
             {scene.showSprites && <img src={getEmotionSprite(a.who, 'happy')} alt={c.name} draggable={false} className="pointer-events-none absolute inset-0 mx-auto h-full w-full object-contain drop-shadow-2xl" />}
             {active && (
               <>
@@ -2311,7 +2311,7 @@ function MeetGroupScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
         );
       })}
       <button onClick={tapNewcomer} disabled={!(allAsked && phase === 'idle')} aria-label={`Tap ${CAST[scene.newcomer.who].name}`} className="absolute z-10 -translate-x-1/2 -translate-y-full rounded-b-full"
-        style={{ left: `${scene.newcomer.xPct}%`, top: `${scene.newcomer.yPct}%`, width: 'clamp(220px, 34cqh, 360px)', height: 'clamp(260px, 40cqh, 420px)' }}>
+        style={{ left: `${scene.newcomer.xPct}%`, top: `${scene.newcomer.yPct}%`, width: 'clamp(220px, 34vh, 360px)', height: 'clamp(260px, 40vh, 420px)' }}>
         {scene.showSprites && <img src={getEmotionSprite(scene.newcomer.who, 'happy')} alt={CAST[scene.newcomer.who].name} draggable={false} className="pointer-events-none absolute inset-0 mx-auto h-full w-full object-contain drop-shadow-2xl" />}
         {allAsked && phase === 'idle' && (
           <>
@@ -2321,13 +2321,13 @@ function MeetGroupScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
         )}
       </button>
       {bubble && (
-        <div className="absolute top-[14cqh] left-4 sm:left-8 z-20 max-w-[44%] sm:max-w-[36%]">
+        <div className="absolute top-[14vh] left-4 sm:left-8 z-20 max-w-[44%] sm:max-w-[36%]">
           <button onClick={() => (phase === 'answer-said' || phase === 'student-answered' ? repeatAnswer() : repeatQuestion())} className="relative w-full rounded-3xl border-4 bg-white px-5 py-4 text-left text-xl sm:text-2xl font-black shadow-2xl active:scale-95" style={{ color: bubble.color, borderColor: bubble.color }} aria-label="Hear again">
             <span className="mr-2 text-sm font-bold uppercase tracking-wider opacity-70">{bubble.who}</span><br />"{bubble.line}"
           </button>
         </div>
       )}
-      {xpBurst && <div className="pointer-events-none absolute inset-x-0 top-[32cqh] z-30 grid place-items-center"><div className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 text-2xl font-black text-white shadow-2xl">+10 XP 💎</div></div>}
+      {xpBurst && <div className="pointer-events-none absolute inset-x-0 top-[32vh] z-30 grid place-items-center"><div className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 text-2xl font-black text-white shadow-2xl">+10 XP 💎</div></div>}
       {(phase === 'student-asked' || phase === 'student-answered') && (
         <div className="absolute inset-x-0 bottom-0 z-30 mx-auto max-w-lg">
           <div className="mx-3 mb-4 rounded-3xl border-4 border-white/60 bg-white/95 p-4 shadow-2xl">
@@ -2458,7 +2458,7 @@ function VoiceStageScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
           </button>
         );
       })}
-      <div className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-dashed transition ${placed ? 'border-orange-400/70 bg-orange-300/10' : 'border-white/85 bg-white/10'} backdrop-blur-sm`} style={{ left: `${DROP.cx}%`, top: `${DROP.cy}%`, width: `${DROP.r * 2}cqw`, height: `${DROP.r * 2}cqw`, maxWidth: 220, maxHeight: 220, minWidth: 140, minHeight: 140 }}>
+      <div className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-dashed transition ${placed ? 'border-orange-400/70 bg-orange-300/10' : 'border-white/85 bg-white/10'} backdrop-blur-sm`} style={{ left: `${DROP.cx}%`, top: `${DROP.cy}%`, width: `${DROP.r * 2}vw`, height: `${DROP.r * 2}vw`, maxWidth: 220, maxHeight: 220, minWidth: 140, minHeight: 140 }}>
         {!placed && <div className="flex h-full w-full items-center justify-center text-center text-[11px] font-black uppercase tracking-widest text-white drop-shadow">🎤 Drop your<br />camera here</div>}
       </div>
       <div onPointerDown={onPointerDown} className={`absolute z-30 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-4 shadow-2xl transition-transform sm:h-32 sm:w-32 ${placed ? 'border-orange-400 ring-4 ring-orange-300/60' : 'border-white cursor-grab active:cursor-grabbing'} ${dragging ? 'scale-110' : ''}`} style={{ left: `${pos.x}%`, top: `${pos.y}%`, background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)', touchAction: 'none' }}>
@@ -2705,15 +2705,15 @@ function SoundPopScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene,
         </div>
       )}
       <style>{`
-        @keyframes sp-rise { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(-50%, calc(-100cqh - 260px), 0); } }
+        @keyframes sp-rise { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(-50%, calc(-100vh - 260px), 0); } }
         @keyframes sp-sway { 0%,100% { margin-left: -6px; } 50% { margin-left: 6px; } }
-        @keyframes sp-fall { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(-50%, calc(100cqh + 260px), 0); } }
+        @keyframes sp-fall { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(-50%, calc(100vh + 260px), 0); } }
         @keyframes sp-wobble { 0%,100% { margin-left: -10px; } 50% { margin-left: 10px; } }
         @keyframes sp-spin { from { margin-left: -4px; } 50% { margin-left: 4px; } to { margin-left: -4px; } }
         @keyframes sp-zig { 0% { margin-left: -34px; } 25% { margin-left: 10px; } 50% { margin-left: 34px; } 75% { margin-left: -12px; } 100% { margin-left: -34px; } }
         @keyframes sp-wingL { 0%,100% { transform: translateY(-50%) rotateY(0deg); } 50% { transform: translateY(-50%) rotateY(70deg); } }
         @keyframes sp-wingR { 0%,100% { transform: translateY(-50%) scaleX(-1) rotateY(0deg); } 50% { transform: translateY(-50%) scaleX(-1) rotateY(70deg); } }
-        @keyframes sp-shoot { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(-50%, calc(-100cqh - 260px), 0); } }
+        @keyframes sp-shoot { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(-50%, calc(-100vh - 260px), 0); } }
         @keyframes sp-wiggle { 0%,100% { margin-left: -3px; } 50% { margin-left: 3px; } }
       `}</style>
     </div>
@@ -2815,7 +2815,7 @@ function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
         <button onClick={replaySound} className="pointer-events-auto flex items-center gap-2 rounded-full px-5 py-3 text-lg font-black text-white shadow-2xl ring-4 ring-white/60 active:scale-95" style={{ background: `linear-gradient(135deg, ${c.color}, #FEBE4C)` }}>🔊 Sound: <span className="text-2xl">{phonemeFor(targetLetter)}</span></button>
       </div>
       <div className="absolute inset-x-0 top-20 bottom-6 z-10 grid place-items-center px-4">
-        <div className="grid gap-2 sm:gap-3" style={{ gridTemplateColumns: `repeat(${scene.cols}, minmax(0, 1fr))`, width: 'min(96cqw, 900px)' }}>
+        <div className="grid gap-2 sm:gap-3" style={{ gridTemplateColumns: `repeat(${scene.cols}, minmax(0, 1fr))`, width: 'min(96vw, 900px)' }}>
           {bricks.map((b) => {
             if (b.crashed) return <div key={b.id} className="aspect-square rounded-2xl bg-transparent" aria-hidden />;
             const isTarget = b.letter === targetLetter;
@@ -2969,7 +2969,7 @@ function FriendPopScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
           const { who, emo } = item;
           const isFlash = tapped?.who === who;
           return (
-            <button key={`${round}-${i}-${who}`} onClick={() => tap(who, emo)} className="relative transition-transform active:scale-95" style={{ width: 'clamp(180px, 30cqw, 340px)', height: 'clamp(280px, 55cqh, 500px)' }} aria-label={CAST[who].name}>
+            <button key={`${round}-${i}-${who}`} onClick={() => tap(who, emo)} className="relative transition-transform active:scale-95" style={{ width: 'clamp(180px, 30vw, 340px)', height: 'clamp(280px, 55vh, 500px)' }} aria-label={CAST[who].name}>
               <img src={getEmotionSprite(who, emo)} alt={CAST[who].name} className="h-full w-full object-contain drop-shadow-2xl" draggable={false} />
               {isFlash && <div className={`pointer-events-none absolute inset-0 flex items-center justify-center text-8xl font-black ${tapped!.ok ? 'text-green-400' : 'text-red-500'}`}>{tapped!.ok ? '✓' : '✗'}</div>}
             </button>
@@ -3092,7 +3092,7 @@ function FeelingsWheelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
       <div className="relative z-10 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">{scene.teacher}</div>
 
-      <div className="relative z-10 mx-auto my-2" style={{ width: 'clamp(260px, 40cqh, 340px)', height: 'clamp(260px, 40cqh, 340px)' }}>
+      <div className="relative z-10 mx-auto my-2" style={{ width: 'clamp(260px, 40vh, 340px)', height: 'clamp(260px, 40vh, 340px)' }}>
         {/* Pointer — a small carnival-style teardrop instead of a bare emoji glyph. */}
         <div
           className="pointer-events-none absolute -top-2 left-1/2 z-20 h-8 w-8 -translate-x-1/2 rounded-full shadow-lg"
@@ -4060,28 +4060,71 @@ function AgeSentenceMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
   };
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 py-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
-      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">{scene.teacher}</div>
-      <div className="relative z-10 flex flex-wrap justify-center gap-3">
-        {scene.friends.map((f, i) => (
-          <button key={i} onClick={() => void pickFriend(i)} disabled={matched.has(i)}
-            className={`rounded-2xl border-4 bg-white/90 p-1 shadow-xl transition active:scale-95 disabled:opacity-60 ${matched.has(i) ? 'border-green-400' : selectedFriend === i ? 'border-orange-400 ring-4 ring-orange-300/60' : 'border-white'}`}
-          >
-            <img src={CAST[f.who].img} alt={CAST[f.who].name} className="h-16 w-16 object-contain sm:h-20 sm:w-20" />
-          </button>
-        ))}
+      <div className="pointer-events-none absolute inset-x-0 top-3 z-30 flex items-start justify-between px-4">
+        <div className="rounded-2xl bg-white/95 px-4 py-2 text-sm font-black text-orange-700 shadow-xl">🎯 {matched.size}/{scene.friends.length}</div>
+        <div className="max-w-[70%] rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl">{scene.teacher}</div>
       </div>
-      <div className="relative z-10 flex max-w-lg flex-wrap justify-center gap-2">
-        {cards.map((card, idx) => (
-          <button key={idx} onClick={() => void pickCard(idx)} disabled={matched.has(card.i)}
-            className={`rounded-2xl border-2 bg-white/95 px-4 py-2 text-sm font-bold text-orange-700 shadow-lg transition active:scale-95 disabled:opacity-40 ${wrongCard === idx ? 'animate-[lep1-shake_0.4s_ease-out] border-rose-400' : 'border-orange-200'}`}
-          >
-            {card.text}
-          </button>
-        ))}
+      <div className="absolute inset-x-0 top-20 z-20 flex flex-wrap justify-center gap-4 px-6">
+        {cards.map((card, idx) => {
+          const f = scene.friends[card.i];
+          const color = CAST[f.who].color;
+          const isMatched = matched.has(card.i);
+          return (
+            <button
+              key={idx}
+              onClick={() => void pickCard(idx)}
+              disabled={isMatched}
+              className={`rounded-2xl bg-white/95 px-3 py-2 shadow-xl backdrop-blur transition active:scale-95 disabled:opacity-40 ${wrongCard === idx ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`}
+              style={{ outline: `3px solid ${wrongCard === idx ? '#f43f5e' : color}`, boxShadow: `0 6px 18px ${color}55` }}
+            >
+              <div className="flex items-center justify-center gap-1.5">
+                <div className="text-center font-black leading-none" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.2rem)' }}>
+                  <span style={{ color }}>{CAST[f.who].name}</span>
+                  <span className="text-slate-800"> is </span>
+                  <span className="text-orange-600" style={{ WebkitTextStroke: '1px #FE6A2F' }}>{f.age}</span>
+                  <span className="text-slate-800">!</span>
+                </div>
+                <span className="text-sm">🔊</span>
+              </div>
+              <div className="mt-0.5 text-center text-[9px] font-black uppercase tracking-widest text-slate-500">tap me!</div>
+            </button>
+          );
+        })}
       </div>
-      {allMatched && <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Next →</button>}
+      {scene.friends.map((f, i) => {
+        const c = CAST[f.who];
+        const isDone = matched.has(i);
+        const isSelected = selectedFriend === i;
+        return (
+          <button
+            key={i}
+            onClick={() => void pickFriend(i)}
+            disabled={isDone}
+            className="absolute z-20 select-none"
+            style={{ left: `${(i / scene.friends.length) * 100}%`, bottom: '6%', width: `${(1 / scene.friends.length) * 100 * 1.35}%`, opacity: isDone ? 0.5 : 1 }}
+          >
+            <img
+              src={BALLOONS_SPRITE[f.who] ?? c.img}
+              alt={c.name}
+              className="pointer-events-none relative w-full drop-shadow-2xl"
+              style={{ animation: 'lep1-float 2.6s ease-in-out infinite', transformOrigin: '50% 90%' }}
+            />
+            <div
+              className="absolute left-1/2 -translate-x-1/2 rounded-full bg-white px-4 py-1.5 text-base font-black shadow-lg"
+              style={{ bottom: -10, color: c.color, border: `2px solid ${c.color}`, whiteSpace: 'nowrap', boxShadow: `0 4px 14px ${c.color}66`, outline: isSelected ? `3px solid ${c.color}` : undefined }}
+            >
+              {c.name}
+            </div>
+          </button>
+        );
+      })}
+      {allMatched && (
+        <div className="absolute inset-x-0 bottom-6 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Next →</button>
+        </div>
+      )}
     </div>
   );
 }
