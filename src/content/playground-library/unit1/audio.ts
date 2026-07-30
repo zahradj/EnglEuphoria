@@ -78,6 +78,23 @@ const ANON_KEY = supabaseAnonKey;
  * comment for the formula. This is very much a "keep nudging" dial: if it
  * still isn't right, adjust SPEECH_SPEED (and recompute PITCH_CENTS to
  * match) rather than picking a number from scratch.
+ *
+ * Round 8: Pip specifically was still reported as "dragging the words"
+ * even after Round 7's pace correction. Root cause turned out to be
+ * upstream of all the tuning above: fetchClipBlob() was sending
+ * `speed: SPEECH_SPEED` in the request body to the elevenlabs-tts edge
+ * function, which forwards it straight into ElevenLabs' own
+ * `voice_settings.speed` — directly contradicting this doc's own claim
+ * that the slowdown is "applied entirely client-side." Every clip was
+ * being generated already-slowed (0.63x) by ElevenLabs, then slowed
+ * *again* to 0.63x on playback via playbackRate — a ~0.40x compounded
+ * rate. Mia/Bella/Willow/Leo's Web Audio resample path (playViaWebAudio)
+ * mostly masked this, but Pip's browser preservesPitch time-stretch
+ * (playViaHtmlAudio) audibly warps at that extreme a rate, which is what
+ * read as "dragging." Fix: stop sending `speed` to the edge function at
+ * all (clips now generate at ElevenLabs' natural 1.0x pace); the client
+ * playbackRate=SPEECH_SPEED slowdown is now the only one applied, as the
+ * design always intended.
  */
 
 /** ElevenLabs speed multiplier for every generated line — slower and more
@@ -235,8 +252,12 @@ function key(character: Character, text: string) {
   // needs regenerating against the new one. v9 bumps again: Pip re-cast off
   // the placement test's voice to Elli (see module doc, round 6). v10 bumps
   // again: pace corrected 0.55 -> 0.63 after 0.55 was reported as too slow
-  // (see module doc, round 7); PITCH_CENTS recomputed to match.
-  return `${character}::v10::${text}`;
+  // (see module doc, round 7); PITCH_CENTS recomputed to match. v11 bumps
+  // again: stopped also sending `speed: SPEECH_SPEED` to the ElevenLabs
+  // edge function (round 8, below) — every clip was being generated
+  // server-side at 0.63x AND slowed client-side to 0.63x again, a ~0.40x
+  // compounded rate that read as Pip "dragging the words."
+  return `${character}::v11::${text}`;
 }
 
 async function fetchClipBlob(k: string, text: string, character: Character): Promise<Blob | null> {
@@ -263,7 +284,21 @@ async function fetchClipBlob(k: string, text: string, character: Character): Pro
           const res = await fetch(`${FUNCTIONS_URL}/elevenlabs-tts`, {
             method: 'POST',
             headers: { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, voiceId: VOICE_ID[character], speed: SPEECH_SPEED }),
+            // Generate at ElevenLabs' natural pace (no `speed` field — the
+            // edge function defaults to 1.0) and apply 100% of the pre-k
+            // slowdown client-side via playbackRate, per the module doc
+            // above. This used to also send `speed: SPEECH_SPEED` here,
+            // which the elevenlabs-tts function forwards straight into
+            // ElevenLabs' own voice_settings.speed — so every clip was
+            // being slowed down TWICE (once server-side by ElevenLabs,
+            // again client-side by playbackRate), compounding to a ~0.40x
+            // net rate. Pip runs that double-slowed clip through the
+            // browser's preservesPitch time-stretch (playViaHtmlAudio),
+            // whose algorithm audibly warps/drags at that extreme a rate;
+            // Mia/Bella/Willow/Leo take the Web Audio resample path
+            // instead, which masks the same double-slowdown better. This
+            // was the actual root cause of "Pip's voice is dragging."
+            body: JSON.stringify({ text, voiceId: VOICE_ID[character] }),
           });
           if (!res.ok) throw new Error(`tts ${res.status}`);
           const blob = await res.blob();
