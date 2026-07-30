@@ -23,25 +23,38 @@ const BALLOONS_SPRITE: Partial<Record<CharKey, string>> = {
   willow: '/lep1/characters/willow-balloons.png',
 };
 
-/** Small glossy balloon chip (matches the balloon rendering already used in the Sound Pop game) — used wherever a count of balloons needs a real shape instead of the 🎈 emoji glyph. */
-function MiniBalloon({ hue, size = 26 }: { hue: number; size?: number }) {
+/** Rainbow spectrum used across every "count 1-10" activity (numbers tiles, balloon pop) — one fixed hue per digit, red through purple. */
+const RAINBOW_10 = ['#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e', '#10b981', '#06b6d4', '#3b82f6', '#a855f7'];
+const NUMBER_WORDS = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN'];
+
+/** Hand-drawn balloon — real body/string/highlight shape instead of the 🎈 emoji glyph, colored per RAINBOW_10. */
+function Balloon({ color }: { color: string }) {
   return (
-    <span className="relative inline-flex flex-col items-center" style={{ width: size }}>
-      <span
-        className="block rounded-[50%] shadow-md ring-1 ring-white/70"
-        style={{
-          width: size,
-          height: size * 1.15,
-          background: `radial-gradient(circle at 32% 26%, hsla(${hue},95%,88%,1) 0%, hsla(${hue},85%,60%,1) 60%, hsla(${hue},75%,45%,1) 100%)`,
-        }}
-      />
-      <span className="block" style={{ width: 1.5, height: size * 0.35, background: `hsl(${hue},50%,40%)` }} />
-    </span>
+    <svg viewBox="0 0 100 180" className="h-full w-full">
+      <path d="M50 108 Q 44 124, 54 138 Q 44 152, 54 166 Q 48 174, 50 178" stroke="rgba(255,255,255,0.9)" strokeWidth={2.2} fill="none" strokeLinecap="round" />
+      <ellipse cx="50" cy="52" rx="38" ry="46" fill={color} stroke="rgba(0,0,0,0.25)" strokeWidth={3} />
+      <ellipse cx="36" cy="36" rx="10" ry="16" fill="rgba(255,255,255,0.55)" />
+      <circle cx="60" cy="30" r="4" fill="rgba(255,255,255,0.75)" />
+      <polygon points="45,98 55,98 50,108" fill={color} stroke="rgba(0,0,0,0.3)" strokeWidth={2} />
+    </svg>
   );
 }
-const BALLOON_HUES = [12, 200, 280, 45, 150, 330];
-/** Toy-block palette for number tiles — cycles by value instead of every tile being an identical white box. */
-const NUMBER_PALETTE = ['#FE6A2F', '#4FA9E0', '#B85CD1', '#FFC93C', '#5FA85A', '#E76FA5', '#7BE0FF', '#C97A2F'];
+
+/** Hand-drawn wrapped present — pink box, cream lid band, ribbon + bow, big "?" — the tap-to-reveal box for the age-quiz game. */
+function PresentBox() {
+  return (
+    <svg viewBox="0 0 220 240" style={{ width: 'clamp(220px, 34vw, 360px)', height: 'auto', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.35))' }}>
+      <rect x="10" y="60" width="200" height="40" rx="10" fill="#E76FA5" stroke="#3b1e08" strokeWidth={4} />
+      <rect x="20" y="100" width="180" height="130" rx="10" fill="#FEFBDD" stroke="#3b1e08" strokeWidth={4} />
+      <rect x="100" y="60" width="20" height="170" fill="#E76FA5" stroke="#3b1e08" strokeWidth={3} />
+      <rect x="10" y="75" width="200" height="12" fill="#FEFBDD" stroke="#3b1e08" strokeWidth={2} />
+      <ellipse cx="90" cy="55" rx="26" ry="18" fill="#E76FA5" stroke="#3b1e08" strokeWidth={3} />
+      <ellipse cx="130" cy="55" rx="26" ry="18" fill="#E76FA5" stroke="#3b1e08" strokeWidth={3} />
+      <circle cx="110" cy="55" r="10" fill="#FEFBDD" stroke="#3b1e08" strokeWidth={3} />
+      <text x="110" y="170" textAnchor="middle" fontSize="70" fontWeight={900} fill="#3b1e08">?</text>
+    </svg>
+  );
+}
 
 /* ---------- Shared chrome ---------- */
 
@@ -3686,35 +3699,43 @@ function FeelingsBingoScene({ scene, onNext, onWin, onLose }: { scene: Extract<S
 function NumbersLearnScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'numbers-learn' }>; onNext: () => void }) {
   const numbers = useMemo(() => Array.from({ length: scene.to - scene.from + 1 }, (_, i) => scene.from + i), [scene.from, scene.to]);
   const [heard, setHeard] = useState<Set<number>>(new Set());
-  const cast = CAST[scene.who];
+  const [popN, setPopN] = useState<number | null>(null);
 
   const tapNumber = async (n: number) => {
     setHeard((s) => new Set(s).add(n));
+    setPopN(n);
     sfx.pop();
     await safeSpeak(String(n), scene.who);
+    setPopN((cur) => (cur === n ? null : cur));
   };
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center gap-6 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
-      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">{scene.teacher}</div>
-      <img src={cast.img} alt={cast.name} className="relative z-10 h-28 w-28 object-contain drop-shadow-2xl sm:h-32 sm:w-32" style={{ animation: 'lep1-float 3s ease-in-out infinite' }} />
-      <div className="relative z-10 flex max-w-xl flex-wrap justify-center gap-3">
+      <div className="absolute left-1/2 top-4 z-20 flex -translate-x-1/2 flex-col items-center gap-1.5 px-4 text-center">
+        <span className="w-fit rounded-full bg-white/90 px-4 py-1 text-xs font-black uppercase tracking-widest text-orange-700 shadow">Numbers 1 → {scene.to}</span>
+        <span className="max-w-lg rounded-full bg-white/95 px-5 py-2 text-sm font-bold text-orange-800 shadow-xl backdrop-blur sm:text-base">{scene.teacher}</span>
+      </div>
+      {popN !== null && (
+        <div key={popN} className="pointer-events-none absolute inset-x-0 top-1/3 z-20 flex flex-col items-center" style={{ animation: 'lep1-pop 0.4s ease-out' }}>
+          <span className="text-7xl font-black text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]">{popN}</span>
+          <span className="mt-1 rounded-full bg-white/90 px-4 py-1 text-lg font-black text-orange-700 shadow">{NUMBER_WORDS[popN - 1]}</span>
+        </div>
+      )}
+      <div className="absolute inset-x-0 bottom-24 flex flex-wrap items-center justify-center gap-2 px-4 sm:gap-3">
         {numbers.map((n) => {
-          const color = NUMBER_PALETTE[n % NUMBER_PALETTE.length];
-          const isHeard = heard.has(n);
+          const color = RAINBOW_10[(n - 1) % RAINBOW_10.length];
           return (
             <button key={n} onClick={() => void tapNumber(n)}
-              className="relative grid h-16 w-16 place-items-center rounded-2xl text-2xl font-black text-white shadow-xl ring-2 ring-white/70 transition active:scale-95 sm:h-20 sm:w-20 sm:text-3xl"
-              style={{ background: `linear-gradient(150deg, ${color}, ${color}bb)`, opacity: isHeard ? 0.55 : 1 }}
+              className="rounded-2xl border-4 font-black text-white shadow-lg transition-transform active:scale-95"
+              style={{ width: 'min(11vw, 74px)', height: 'min(11vw, 74px)', fontSize: 'min(6vw, 32px)', background: color, borderColor: 'rgba(255,255,255,0.85)', opacity: heard.has(n) ? 0.6 : 1 }}
             >
-              <span className="drop-shadow-[0_2px_0_rgba(0,0,0,0.25)]">{n}</span>
-              {isHeard && <span className="absolute -right-1.5 -top-1.5 grid h-6 w-6 place-items-center rounded-full bg-emerald-500 text-xs text-white shadow ring-2 ring-white">✓</span>}
+              {n}
             </button>
           );
         })}
       </div>
-      <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Next →</button>
+      <button onClick={onNext} className="absolute inset-x-0 bottom-6 z-20 mx-auto w-fit rounded-full bg-orange-500 px-8 py-3 text-lg font-black text-white shadow-xl transition hover:bg-orange-600 active:scale-95">Next →</button>
     </div>
   );
 }
@@ -3726,7 +3747,6 @@ function NumbersReviewScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
   const [wrongTap, setWrongTap] = useState<number | null>(null);
   const [gemDone, setGemDone] = useState(false);
   const ready = correct >= 8;
-  const cast = CAST[scene.who];
 
   useEffect(() => {
     if (ready) return;
@@ -3750,29 +3770,32 @@ function NumbersReviewScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
   };
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center gap-6 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
-      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">
-        {ready ? '🎉 Great counting!' : <>🔊 {scene.teacher} <span className="ml-1 rounded-full bg-orange-100 px-2 py-0.5 text-xs text-orange-600">{correct}/8</span></>}
+      <div className="absolute left-1/2 top-4 z-20 flex -translate-x-1/2 flex-col items-center gap-1.5 px-4 text-center">
+        <span className="w-fit rounded-full bg-white/90 px-4 py-1 text-xs font-black uppercase tracking-widest text-orange-700 shadow">Tap the number</span>
+        <span className="max-w-lg rounded-full bg-white/95 px-5 py-2 text-sm font-bold text-orange-800 shadow-xl backdrop-blur sm:text-base">{ready ? '🎉 Great counting!' : scene.teacher}</span>
+        {!ready && (
+          <button onClick={() => void safeSpeak(String(target), scene.who)} className="mt-0.5 rounded-full bg-orange-500 px-4 py-1 text-sm font-black text-white shadow active:scale-95">
+            🔊 {NUMBER_WORDS[target - 1]}
+          </button>
+        )}
       </div>
-      <button onClick={() => void safeSpeak(String(target), scene.who)} className="relative z-10 flex flex-col items-center active:scale-95" aria-label="Hear the number again" disabled={ready}>
-        <img src={cast.img} alt={cast.name} className="h-24 w-24 object-contain drop-shadow-2xl" style={{ animation: 'lep1-float 3s ease-in-out infinite' }} />
-        {!ready && <span className="mt-1 text-xs font-bold text-white/90 drop-shadow">🔊 Hear again</span>}
-      </button>
-      <div className="relative z-10 flex max-w-xl flex-wrap justify-center gap-3">
+      <div className="pointer-events-none absolute bottom-40 left-1/2 z-20 -translate-x-1/2 rounded-full bg-white/90 px-4 py-1 text-sm font-black text-orange-700 shadow">{correct}/8</div>
+      <div className="absolute inset-x-0 bottom-24 flex flex-wrap items-center justify-center gap-2 px-4 sm:gap-3">
         {numbers.map((n) => {
-          const color = NUMBER_PALETTE[n % NUMBER_PALETTE.length];
+          const color = RAINBOW_10[(n - 1) % RAINBOW_10.length];
           return (
             <button key={n} onClick={() => tapNumber(n)} disabled={ready}
-              className={`grid h-16 w-16 place-items-center rounded-2xl text-2xl font-black text-white shadow-xl ring-2 ring-white/70 transition active:scale-95 disabled:opacity-70 sm:h-20 sm:w-20 sm:text-3xl ${wrongTap === n ? 'animate-[lep1-shake_0.4s_ease-out] ring-rose-400' : ''}`}
-              style={{ background: `linear-gradient(150deg, ${color}, ${color}bb)` }}
+              className={`rounded-2xl border-4 font-black text-white shadow-lg transition-transform active:scale-95 disabled:opacity-70 ${wrongTap === n ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`}
+              style={{ width: 'min(13vw, 92px)', height: 'min(13vw, 92px)', fontSize: 'min(7vw, 42px)', background: color, borderColor: wrongTap === n ? 'rgba(239,68,68,0.9)' : 'rgba(255,255,255,0.55)' }}
             >
-              <span className="drop-shadow-[0_2px_0_rgba(0,0,0,0.25)]">{n}</span>
+              {n}
             </button>
           );
         })}
       </div>
-      {ready && <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">I'm ready! →</button>}
+      {ready && <button onClick={onNext} className="absolute inset-x-0 bottom-6 z-20 mx-auto w-fit rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">I'm ready! →</button>}
     </div>
   );
 }
@@ -3858,52 +3881,66 @@ function CandleCakeScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
 }
 
 function CountBalloonsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'count-balloons' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [popped, setPopped] = useState(0);
+  const [popped, setPopped] = useState<Set<number>>(new Set());
   const [gemDone, setGemDone] = useState(false);
-  const finished = popped >= scene.total;
-  const cast = CAST[scene.who];
+  const count = popped.size;
+  const finished = count >= scene.total;
 
-  const popNext = async () => {
-    if (finished) return;
+  const popNext = async (i: number) => {
+    if (finished || popped.has(i) || i !== count) return;
     sfx.pop();
-    const n = popped + 1;
-    setPopped(n);
-    await safeSpeak(String(n), scene.who);
-    if (n >= scene.total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+    const next = new Set(popped).add(i);
+    setPopped(next);
+    await safeSpeak(String(next.size), scene.who);
+    if (next.size >= scene.total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
   };
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center gap-6 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
-      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">
-        {finished ? '🎉 You counted them all!' : <>{scene.teacher} <span className="ml-1 rounded-full bg-orange-100 px-2 py-0.5 text-xs text-orange-600">{popped}/{scene.total}</span></>}
+      <div className="absolute left-1/2 top-4 z-20 flex -translate-x-1/2 flex-col items-center gap-1.5 px-4 text-center">
+        <span className="w-fit rounded-full bg-white/90 px-4 py-1 text-xs font-black uppercase tracking-widest text-orange-700 shadow">Pop & Count · 1 → {scene.total}</span>
+        <span className="max-w-lg rounded-full bg-white/95 px-5 py-2 text-sm font-bold text-orange-800 shadow-xl backdrop-blur sm:text-base">{scene.teacher}</span>
       </div>
-      <img src={cast.img} alt={cast.name} className="relative z-10 h-20 w-20 object-contain drop-shadow-2xl" style={{ animation: 'lep1-float 2.6s ease-in-out infinite' }} />
-      <div className="relative z-10 flex max-w-xl flex-wrap justify-center gap-3">
-        {Array.from({ length: scene.total }).map((_, i) => {
-          const hue = BALLOON_HUES[i % BALLOON_HUES.length];
-          return i < popped ? (
-            <span key={i} className="grid h-14 w-14 place-items-center rounded-full bg-white/90 text-2xl font-black shadow-lg" style={{ color: `hsl(${hue},70%,42%)`, animation: 'lep1-pop 0.3s ease-out' }}>{i + 1}</span>
-          ) : (
-            <button
-              key={i}
-              onClick={() => void popNext()}
-              disabled={i !== popped}
-              aria-label={`Pop balloon ${i + 1}`}
-              className="relative flex flex-col items-center transition active:scale-90 disabled:opacity-40"
-            >
-              <span
-                className="grid h-14 w-14 place-items-center rounded-[50%] shadow-xl ring-2 ring-white/70"
-                style={{ background: `radial-gradient(circle at 32% 26%, hsla(${hue},95%,86%,1) 0%, hsla(${hue},85%,58%,1) 60%, hsla(${hue},75%,44%,1) 100%)` }}
-              >
-                <span className="text-lg font-black text-white drop-shadow">{i + 1}</span>
-              </span>
-              <span className="-mt-0.5 h-3 w-[2px]" style={{ background: `hsl(${hue},50%,40%)` }} />
-            </button>
-          );
-        })}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 text-center font-black text-white/90 drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)]">
+        <span className="text-7xl sm:text-8xl">{count}</span>
+        <span className="text-3xl sm:text-4xl">/{scene.total}</span>
       </div>
-      {finished && <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Next →</button>}
+      {Array.from({ length: scene.total }).map((_, i) => {
+        const perRow = Math.min(5, scene.total);
+        const row = Math.floor(i / perRow);
+        const col = i % perRow;
+        const rowCount = Math.min(perRow, scene.total - row * perRow);
+        const x = ((col + 0.5) / rowCount) * 100;
+        const y = 40 + row * 20;
+        const rot = (col % 2 === 0 ? -1 : 1) * (4 + col * 2);
+        const isPopped = popped.has(i);
+        const color = RAINBOW_10[i % RAINBOW_10.length];
+        return (
+          <button
+            key={i}
+            onClick={() => void popNext(i)}
+            disabled={isPopped || i !== count}
+            aria-label={`Balloon ${i + 1}`}
+            className="absolute select-none"
+            style={{
+              left: `${x}%`, top: `${y}%`, transform: `translate(-50%, -50%) rotate(${rot}deg)`,
+              width: 'min(18vw, 130px)', height: 'min(30vw, 228px)',
+              opacity: isPopped ? 0 : 1, pointerEvents: isPopped ? 'none' : 'auto',
+              transition: 'opacity 220ms',
+              animation: `lep1-balloonFloat 3.6s ease-in-out ${(i % perRow) * 0.35}s infinite`,
+              filter: 'drop-shadow(0 8px 14px rgba(0,0,0,0.3))',
+            }}
+          >
+            <Balloon color={color} />
+          </button>
+        );
+      })}
+      <button onClick={finished ? onNext : undefined} disabled={!finished}
+        className="absolute inset-x-0 bottom-6 z-20 mx-auto w-fit rounded-full bg-orange-500 px-8 py-3 text-lg font-black text-white shadow-xl transition hover:bg-orange-600 active:scale-95 disabled:opacity-50"
+      >
+        {finished ? 'Next →' : `Pop them all… (${scene.total - count} left)`}
+      </button>
     </div>
   );
 }
@@ -3926,28 +3963,36 @@ function AgeBalloonsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { ki
   };
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center gap-6 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
-      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">{scene.teacher}</div>
-      <div className="relative z-10 flex flex-wrap justify-center gap-6">
-        {scene.friends.map((f, i) => {
-          const c = CAST[f.who];
-          const isDone = tapped.has(i);
-          return (
-            <button key={i} onClick={() => void tapFriend(i)} className="flex flex-col items-center gap-1 active:scale-95">
-              <div className="relative">
-                <img src={BALLOONS_SPRITE[f.who] ?? c.img} alt={c.name} className="h-28 w-28 object-contain drop-shadow-2xl sm:h-32 sm:w-32" style={{ animation: active === i ? 'lep1-pop 0.4s ease-out' : undefined }} />
-                {isDone && <div className="absolute -right-1 -top-1 grid h-8 w-8 place-items-center rounded-full bg-green-500 text-white shadow-lg">✓</div>}
-              </div>
-              <div className="flex flex-wrap justify-center gap-0.5" style={{ maxWidth: 96 }}>
-                {Array.from({ length: f.age }).map((_, b) => <MiniBalloon key={b} hue={BALLOON_HUES[b % BALLOON_HUES.length]} size={16} />)}
-              </div>
-              {isDone && <span className="rounded-full bg-white/95 px-3 py-1 text-sm font-black text-orange-700 shadow">{c.name} is {f.age}!</span>}
-            </button>
-          );
-        })}
+      <div className="absolute left-1/2 top-4 z-20 flex -translate-x-1/2 flex-col items-center gap-1.5 px-4 text-center">
+        <span className="w-fit rounded-full bg-white/90 px-4 py-1 text-xs font-black uppercase tracking-widest text-orange-700 shadow">🎈 {tapped.size}/{total}</span>
+        <span className="max-w-lg rounded-full bg-white/95 px-5 py-2 text-sm font-bold text-orange-800 shadow-xl backdrop-blur sm:text-base">{scene.teacher}</span>
       </div>
-      {allDone && <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Next →</button>}
+      {scene.friends.map((f, i) => {
+        const c = CAST[f.who];
+        const isDone = tapped.has(i);
+        const n = scene.friends.length;
+        return (
+          <button
+            key={i}
+            onClick={() => void tapFriend(i)}
+            className="absolute bottom-0 flex flex-col items-center pb-4"
+            style={{ left: `${(i / n) * 100}%`, width: `${(1 / n) * 100 * 1.35}%` }}
+          >
+            <img
+              src={BALLOONS_SPRITE[f.who] ?? c.img}
+              alt={c.name}
+              className="pointer-events-none w-full object-contain drop-shadow-2xl"
+              style={{ animation: active === i ? 'lep1-pop 0.4s ease-out' : undefined }}
+            />
+            <span className="mt-2 rounded-full bg-white/95 px-4 py-1 text-sm font-black shadow" style={{ color: isDone ? undefined : c.color }}>
+              {isDone ? `${c.name} is ${f.age}! ⭐` : c.name}
+            </span>
+          </button>
+        );
+      })}
+      {allDone && <button onClick={onNext} className="absolute inset-x-0 bottom-6 z-20 mx-auto w-fit rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Next →</button>}
     </div>
   );
 }
@@ -4048,44 +4093,95 @@ function MeetGreetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
 
   if (finished) {
     return (
-      <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
-        <Confetti />
-        <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next ⭐</button>
+      <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/25">
+          <Confetti />
+          <button onClick={onNext} className="pointer-events-auto rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next ⭐</button>
+        </div>
       </div>
     );
   }
 
+  const current = steps[step];
+  const isTeacherLine = current.who === 'teacher';
+  const bubbleColor = isTeacherLine ? '#FE6A2F' : c!.color;
+
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
-      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-xs font-black text-orange-700 shadow-xl backdrop-blur sm:text-sm">{scene.teacher}</div>
-      <img src={c!.img} alt={c!.name} className="relative z-10 h-28 w-28 object-contain drop-shadow-2xl sm:h-32 sm:w-32" style={{ animation: 'lep1-float 3s ease-in-out infinite' }} />
-      <button onClick={() => void safeSpeak(steps[step].line, steps[step].who)} className="relative z-10 max-w-md rounded-3xl bg-white/95 px-6 py-4 text-center shadow-2xl active:scale-95">
-        <p className="text-xl font-black text-orange-700">🔊 "{steps[step].line}"</p>
-      </button>
-      <button onClick={advance} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 px-7 py-3 text-base font-black text-white shadow-xl active:scale-95">
-        {step < steps.length - 1 ? 'Next line →' : idx < total - 1 ? 'Next friend →' : 'Finish →'}
+      <div className="absolute left-6 top-6 z-30 flex flex-col gap-2">
+        <span className="w-fit rounded-full bg-white/95 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-orange-700 shadow">Age Stage · Meet &amp; Greet</span>
+        <span className="w-fit rounded-full bg-orange-500 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-white shadow">Friend {idx + 1}/{total} · {c!.name}</span>
+      </div>
+      <img
+        src={c!.img}
+        alt={c!.name}
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow-2xl"
+        style={{ width: 'clamp(220px, 46vw, 460px)', animation: 'lep1-float 3.4s ease-in-out infinite' }}
+      />
+      <div className="absolute inset-x-0 top-24 z-20 mx-auto flex max-w-lg flex-col gap-3 px-6">
+        <button
+          key={step}
+          onClick={() => void safeSpeak(current.line, current.who)}
+          className="group relative flex justify-start text-left outline-none"
+          style={{ animation: 'lep1-pop 0.35s ease-out' }}
+        >
+          <div className="max-w-[85%] rounded-3xl px-5 py-3 text-left shadow-2xl ring-2 ring-white/40" style={{ background: bubbleColor }}>
+            <div className="text-[10px] font-black uppercase tracking-widest text-white/80">{isTeacherLine ? 'You ask' : `${c!.name} answers`}</div>
+            <div className="text-lg font-bold text-white">{current.line}</div>
+            <div className="mt-1 text-[10px] font-bold text-white/80">🔁 tap to replay</div>
+          </div>
+        </button>
+      </div>
+      <button onClick={advance} className="absolute bottom-8 left-1/2 z-30 -translate-x-1/2 rounded-full bg-white px-8 py-4 text-lg font-black uppercase text-orange-700 shadow-2xl transition hover:scale-105 active:scale-95">
+        {step < steps.length - 1 ? '🎤 Your turn — say it, then tap ▶' : idx < total - 1 ? 'Next friend →' : 'Finish →'}
       </button>
     </div>
   );
 }
 
+/** Mini candle cake — the age-quiz answer cards draw one live cake per choice, candle count matching the number. */
+function MiniCake({ candles }: { candles: number }) {
+  return (
+    <svg viewBox="0 0 140 110" style={{ width: 'clamp(120px, 15vw, 170px)', height: 'auto' }} className="mt-1">
+      <rect x="10" y="60" width="120" height="40" rx="6" fill="#f4a3c7" stroke="#3b1e08" strokeWidth={3} />
+      <rect x="10" y="72" width="120" height="6" fill="#fff" opacity={0.7} />
+      <rect x="10" y="40" width="120" height="24" rx="6" fill="#fde68a" stroke="#3b1e08" strokeWidth={3} />
+      {Array.from({ length: candles }).map((_, i) => {
+        const x = 22 + i * 15;
+        return (
+          <g key={i}>
+            <rect x={x} y="20" width="6" height="22" fill="#fff" stroke="#3b1e08" strokeWidth={1.5} />
+            <path d={`M ${x + 3} 8 Q ${x + 7} 14 ${x + 3} 20 Q ${x - 1} 14 ${x + 3} 8`} fill="#FE6A2F" stroke="#3b1e08" strokeWidth={1.5} />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
 function AgeQuizScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'age-quiz' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
   const [idx, setIdx] = useState(0);
+  const [opened, setOpened] = useState(false);
   const [pickedAge, setPickedAge] = useState<number | null>(null);
   const [gemDone, setGemDone] = useState(false);
   const total = scene.friends.length + 1;
   const isStudentTurn = idx >= scene.friends.length;
   const f = !isStudentTurn ? scene.friends[idx] : null;
   const finished = idx >= total;
+  const askLine = isStudentTurn ? 'What is your age?' : `How old is ${f ? CAST[f.who].name : ''}? \u{1F382}`;
+  const sayPrefix = isStudentTurn ? 'I am' : `${f ? CAST[f.who].name : ''} is`;
 
   useEffect(() => {
+    setOpened(false);
     setPickedAge(null);
-    if (finished) return;
-    const t = window.setTimeout(() => void safeSpeak('How old are you?', 'teacher'), 300);
-    return () => window.clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idx]);
+
+  const openPresent = async () => {
+    setOpened(true);
+    sfx.pop();
+    await safeSpeak(askLine, 'teacher');
+  };
 
   const pickAge = async (age: number) => {
     if (pickedAge !== null) return;
@@ -4103,35 +4199,67 @@ function AgeQuizScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 
 
   if (finished) {
     return (
-      <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
-        <Confetti />
-        <button onClick={onNext} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next ⭐</button>
+      <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/25">
+          <Confetti />
+          <button onClick={onNext} className="pointer-events-auto rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next ⭐</button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
-      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">
-        {isStudentTurn ? '🎁 Your turn! Tap YOUR age!' : `🎁 How old is ${CAST[f!.who].name}? Guess the candles!`}
+      <div className="absolute left-6 top-6 z-30 flex flex-col gap-2">
+        <span className="w-fit rounded-full bg-white/95 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-orange-700 shadow">Age Party · Guess My Candles</span>
+        <span className="w-fit rounded-full bg-orange-500 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-white shadow">Present {idx + 1} / {total}</span>
       </div>
-      {!isStudentTurn && <img src={CAST[f!.who].img} alt={CAST[f!.who].name} className="relative z-10 h-24 w-24 object-contain drop-shadow-2xl" style={{ animation: 'lep1-float 3s ease-in-out infinite' }} />}
-      <div className="relative z-10 flex flex-wrap justify-center gap-2">
-        {scene.studentAges.map((age) => {
-          const isPicked = pickedAge === age;
-          const isCorrect = !isStudentTurn && age === f?.age;
-          const show = pickedAge !== null && (isPicked || isCorrect);
-          return (
-            <button key={age} onClick={() => void pickAge(age)} disabled={pickedAge !== null}
-              className={`grid h-16 w-16 place-items-center rounded-2xl border-4 bg-white/95 text-2xl font-black shadow-xl transition active:scale-95 disabled:opacity-70 ${show ? 'border-green-400 text-green-600' : 'border-white text-orange-700'}`}
-            >
-              {age}
-            </button>
-          );
-        })}
-      </div>
-      {pickedAge !== null && <button onClick={advance} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 px-7 py-3 text-base font-black text-white shadow-xl active:scale-95">Next →</button>}
+
+      {!opened ? (
+        <div className="absolute inset-x-0 bottom-[18%] top-[20%] z-20 flex items-end justify-center">
+          <button onClick={() => void openPresent()} aria-label="Open the present" className="relative outline-none active:scale-95" style={{ animation: 'lep1-wiggle 1.4s ease-in-out infinite' }}>
+            <PresentBox />
+            <div className="mt-3 rounded-full bg-orange-500 px-4 py-1 text-center text-[11px] font-black uppercase tracking-widest text-white shadow">Tap to open!</div>
+          </button>
+        </div>
+      ) : (
+        <>
+          <button onClick={() => void safeSpeak(askLine, 'teacher')} className="absolute left-1/2 top-24 z-30 -translate-x-1/2 rounded-[2rem] bg-white/95 px-8 py-5 text-center shadow-2xl ring-4 ring-orange-300 active:scale-95">
+            <div className="text-[10px] font-black uppercase tracking-widest text-orange-700">You ask</div>
+            <div className="text-2xl font-black text-slate-800">{askLine}</div>
+            <div className="mt-1 text-[10px] font-bold text-slate-500">🔁 tap to replay</div>
+          </button>
+          <div className="absolute left-1/2 top-44 z-30 -translate-x-1/2 rounded-[2rem] bg-gradient-to-b from-yellow-100 to-orange-100 px-8 py-4 text-center shadow-xl ring-4 ring-orange-200">
+            <div className="text-[10px] font-black uppercase tracking-widest text-orange-600">You say</div>
+            <div className="flex items-center gap-3 text-3xl font-black text-orange-800">
+              <span>{sayPrefix}</span>
+              <span className="inline-flex h-14 w-20 items-center justify-center rounded-2xl border-4 border-dashed border-orange-300 bg-white/70 text-2xl">{pickedAge ?? '___'}</span>
+              <span>!</span>
+            </div>
+          </div>
+          {!isStudentTurn && (
+            <img src={CAST[f!.who].img} alt={CAST[f!.who].name} className="absolute inset-x-0 bottom-[16%] mx-auto object-contain drop-shadow-2xl" style={{ width: 'clamp(200px, 32vw, 325px)', animation: 'lep1-float 3s ease-in-out infinite' }} />
+          )}
+          {pickedAge === null ? (
+            <div className="absolute inset-x-0 bottom-6 z-30 flex flex-wrap items-center justify-center gap-4 px-6">
+              {scene.studentAges.map((age) => (
+                <button key={age} onClick={() => void pickAge(age)}
+                  className="relative flex flex-col items-center rounded-3xl bg-white/95 px-4 pb-2 pt-3 shadow-2xl ring-4 ring-orange-100 transition active:scale-95"
+                >
+                  <span className="text-6xl font-black leading-none text-orange-700 drop-shadow-sm">{age}</span>
+                  <MiniCake candles={age} />
+                  <span className="mt-1 text-[11px] font-black uppercase tracking-widest text-orange-600">{NUMBER_WORDS[age - 1]?.toLowerCase()}</span>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+              <button onClick={advance} className="rounded-full bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-4 text-lg font-black text-white shadow-2xl active:scale-95">Next →</button>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
@@ -4160,6 +4288,7 @@ export function Lep1Keyframes() {
       @keyframes lep1-blockDrop { 0% { transform: translateY(-40px) scale(1.1); opacity: 0; } 60% { transform: translateY(4px) scale(0.98); opacity: 1; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
       @keyframes lep1-lyricPop { 0% { transform: scale(0.85); opacity: 0; } 60% { transform: scale(1.06); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
       @keyframes lep1-noteFloat { 0% { transform: translateY(0) rotate(-8deg); opacity: 0; } 20% { opacity: 0.9; } 100% { transform: translateY(-160px) rotate(12deg); opacity: 0; } }
+      @keyframes lep1-balloonFloat { 0%, 100% { translate: 0px; } 50% { translate: 0px -10px; } }
     `}</style>
   );
 }
