@@ -1,15 +1,22 @@
 import { CSSProperties, memo, useEffect, useState } from 'react';
+import { motion, useAnimationControls } from 'framer-motion';
 
 /**
- * SpriteMascot — CSS-only "aliveness" wrapper around an intact character
- * sprite (no separate limb/eyelid layers, so nothing can ever clip):
+ * SpriteMascot — "aliveness" wrapper around an intact character sprite
+ * (no separate limb/eyelid layers, so nothing can ever clip):
  *   - Continuous breathing (torso scale) + idle head bob
  *   - Talking loop (faster bob) while `isTalking` is true
  *   - Periodic blink — painted only inside a per-character "eye band" using
  *     the sprite itself as a mask, so no separate eyelid PNG is needed
  *   - One-shot wave (whole-sprite sway, anchored low so it reads as a
  *     friendly gesture rather than a detached arm)
- *   - Slight mood tilt per emotion
+ *   - Slight mood tilt per emotion, springing into place on change
+ *
+ * Animated with framer-motion (already a project dependency, see
+ * PipMascot.tsx for the established convention) rather than raw CSS
+ * @keyframes: switching between the idle and talk loops interpolates from
+ * the sprite's current position instead of snapping to frame 0, and the
+ * mood tilt eases in with a spring instead of jumping instantly.
  */
 
 export type MascotEmotion = 'neutral' | 'happy' | 'sad' | 'angry' | 'surprised';
@@ -92,20 +99,30 @@ export const SpriteMascot = memo(function SpriteMascot({
   const eyeY = profile.eyeBand.y;
   const eyeHH = profile.eyeBand.halfHeight;
 
+  const waveControls = useAnimationControls();
+  useEffect(() => {
+    if (!waving) return;
+    void waveControls.start({
+      rotate: [0, -8, 8, -5, 3, 0],
+      transition: { duration: 1.2, ease: 'easeInOut' },
+    });
+  }, [waving, waveControls]);
+
   return (
-    <div
+    <motion.div
       className={`sprite-mascot ${isTalking ? 'is-talking' : ''} ${className}`}
       style={{
         width: size ?? '100%',
         height: size ?? '100%',
         position: 'relative',
-        transform: `${flip ? 'scaleX(-1) ' : ''}rotate(${tilt}deg)`,
         transformOrigin: '50% 90%',
         ...style,
       }}
+      animate={{ rotate: tilt, scaleX: flip ? -1 : 1 }}
+      transition={{ type: 'spring', stiffness: 140, damping: 14 }}
       data-emotion={emotion}
     >
-      <img
+      <motion.img
         src={profile.src}
         alt={alt}
         draggable={false}
@@ -115,16 +132,19 @@ export const SpriteMascot = memo(function SpriteMascot({
           height: '100%',
           objectFit: 'contain',
           userSelect: 'none',
-          animation: isTalking
-            ? 'sprite-breath 0.9s ease-in-out infinite, sprite-talkbob 0.32s ease-in-out infinite'
-            : 'sprite-breath 2.4s ease-in-out infinite, sprite-idlebob 4.8s ease-in-out infinite',
           transformOrigin: '50% 95%',
         }}
+        animate={
+          isTalking
+            ? { scale: [1, 1.025, 0.985, 1], y: [0, -2, -1, 0] }
+            : { scale: [1, 1.015, 0.985, 1], y: [0, -6, -2, 0] }
+        }
+        transition={{ duration: isTalking ? 0.32 : 2.4, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       {/* Eyelid overlay — the sprite itself is used as a mask so the paint
           only lands on character pixels, clipped to a per-character eye band. */}
-      <div
+      <motion.div
         aria-hidden
         className="sprite-mascot__lids"
         style={{
@@ -138,8 +158,6 @@ export const SpriteMascot = memo(function SpriteMascot({
           maskRepeat: 'no-repeat',
           WebkitMaskSize: '100% 100%',
           maskSize: '100% 100%',
-          opacity: closed ? 1 : 0,
-          transition: 'opacity 60ms linear',
           clipPath: `polygon(
             ${(eyeX - eyeHW) * 100}% ${(eyeY - eyeHH) * 100}%,
             ${(eyeX + eyeHW) * 100}% ${(eyeY - eyeHH) * 100}%,
@@ -147,43 +165,20 @@ export const SpriteMascot = memo(function SpriteMascot({
             ${(eyeX - eyeHW) * 100}% ${(eyeY + eyeHH) * 100}%
           )`,
         }}
+        animate={{ opacity: closed ? 1 : 0 }}
+        transition={{ duration: 0.06, ease: 'linear' }}
       />
 
       {waving && (
-        <div
+        <motion.div
           aria-hidden
           className="sprite-mascot__wave"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            animation: 'sprite-wave 1.2s ease-in-out',
-            transformOrigin: '50% 85%',
-          }}
+          style={{ position: 'absolute', inset: 0, transformOrigin: '50% 85%' }}
+          initial={{ rotate: 0 }}
+          animate={waveControls}
         />
       )}
-
-      <style>{`
-        @keyframes sprite-breath {
-          0%, 100% { transform: scale(1.0, 1.0); }
-          50%      { transform: scale(1.015, 0.985); }
-        }
-        @keyframes sprite-idlebob {
-          0%, 100% { translate: 0 0; }
-          50%      { translate: 0 -6px; }
-        }
-        @keyframes sprite-talkbob {
-          0%, 100% { translate: 0 0; }
-          50%      { translate: 0 -2px; }
-        }
-        @keyframes sprite-wave {
-          0%   { transform: rotate(0deg); }
-          20%  { transform: rotate(-6deg); }
-          50%  { transform: rotate(6deg); }
-          80%  { transform: rotate(-4deg); }
-          100% { transform: rotate(0deg); }
-        }
-      `}</style>
-    </div>
+    </motion.div>
   );
 });
 
