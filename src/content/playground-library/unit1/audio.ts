@@ -95,6 +95,25 @@ const ANON_KEY = supabaseAnonKey;
  * all (clips now generate at ElevenLabs' natural 1.0x pace); the client
  * playbackRate=SPEECH_SPEED slowdown is now the only one applied, as the
  * design always intended.
+ *
+ * Round 9: Pip was *still* reported as dragging after Round 8's fix —
+ * because nearly every earlier round's "0.63 sounds right" listening
+ * test was itself done against the still-compounded ~0.40x rate (Round 8
+ * was the first time single, uncompounded 0.63x was ever actually heard
+ * on Pip's path), so 0.63x had never really been validated for Pip in
+ * isolation. And it turns out it doesn't hold up: Pip/teacher/narrator's
+ * `preservesPitch` browser time-stretch (playViaHtmlAudio) is a
+ * different algorithm from Mia/Bella/Willow/Leo's raw Web Audio
+ * `playbackRate` resample (playViaWebAudio), and empirically warps/drags
+ * far more noticeably at a 37%-of-natural-speed slowdown — the same
+ * numeric rate reads as fine on one engine and sluggish on the other.
+ * Rather than keep nudging one shared dial and fighting that mismatch,
+ * `applySlowPace` now takes an explicit rate, and the preservesPitch
+ * path gets its own, less extreme constant (SPEECH_SPEED_NATURAL) so it
+ * can be tuned independently of the Web Audio path going forward. Letter
+ * phonic/name clips (playClip) intentionally stay on the slower
+ * SPEECH_SPEED — those are meant to be a deliberate, drawn-out "listen to
+ * the sound" moment, not conversational dialogue.
  */
 
 /** ElevenLabs speed multiplier for every generated line — slower and more
@@ -105,6 +124,14 @@ const ANON_KEY = supabaseAnonKey;
  *  not ElevenLabs' own `speed` param, so it isn't bound by the ~0.7 floor
  *  where their server-side model starts to distort. */
 const SPEECH_SPEED = 0.63;
+
+/** Playback rate for the `preservesPitch` browser time-stretch path
+ *  (Pip/teacher/narrator, via playViaHtmlAudio) and its speechSynthesis
+ *  fallback — deliberately less extreme than SPEECH_SPEED because that
+ *  algorithm audibly warps/drags at SPEECH_SPEED's rate in a way the Web
+ *  Audio resample path used by the other characters doesn't. See "Round 9"
+ *  in the module doc above before changing this. */
+const SPEECH_SPEED_NATURAL = 0.78;
 
 export type Character = 'pip' | 'mia' | 'bella' | 'willow' | 'leo' | 'teacher' | 'narrator';
 
@@ -148,13 +175,13 @@ const PITCH_CENTS: Partial<Record<Character, number>> = {
 // SpeechSynthesisUtterance.pitch is clamped to [0, 2] by the Web Speech API
 // spec, so 2.0 (mia) is the ceiling this path can reach.
 const FALLBACK_VOICE: Record<Character, { rate: number; pitch: number }> = {
-  pip: { rate: 0.63, pitch: 1.5 },
+  pip: { rate: 0.78, pitch: 1.5 },
   mia: { rate: 0.63, pitch: 2.0 },
   bella: { rate: 0.63, pitch: 1.7 },
   willow: { rate: 0.63, pitch: 1.6 },
   leo: { rate: 0.58, pitch: 1.4 },
-  teacher: { rate: 0.63, pitch: 1.3 },
-  narrator: { rate: 0.63, pitch: 1.3 },
+  teacher: { rate: 0.78, pitch: 1.3 },
+  narrator: { rate: 0.78, pitch: 1.3 },
 };
 
 // Raw fetched clips are cached as Blobs — playable directly via
@@ -402,9 +429,11 @@ async function playFallback(text: string, character: Character): Promise<void> {
 /** Slows down playback without pitch-shifting (modern browsers preserve
  *  pitch by default on rate change) — used for the pre-recorded letter clips
  *  below and for NATURAL_PITCH_CHARACTERS' ElevenLabs clips, i.e. anything
- *  that should just be slower, not a different pitch. */
-function applySlowPace(audio: HTMLAudioElement) {
-  audio.playbackRate = SPEECH_SPEED;
+ *  that should just be slower, not a different pitch. Defaults to
+ *  SPEECH_SPEED (the letter-clip rate); playViaHtmlAudio below passes
+ *  SPEECH_SPEED_NATURAL explicitly since that path needs a different rate. */
+function applySlowPace(audio: HTMLAudioElement, rate: number = SPEECH_SPEED) {
+  audio.playbackRate = rate;
   const withPitch = audio as HTMLAudioElement & {
     preservesPitch?: boolean;
     mozPreservesPitch?: boolean;
@@ -426,7 +455,7 @@ function playViaHtmlAudio(blob: Blob): Promise<boolean> {
     const url = URL.createObjectURL(blob);
     const audio = new Audio(url);
     audio.preload = 'auto';
-    applySlowPace(audio);
+    applySlowPace(audio, SPEECH_SPEED_NATURAL);
     currentAudioEl = audio;
     const finish = (ok: boolean) => {
       if (currentAudioEl === audio) currentAudioEl = null;

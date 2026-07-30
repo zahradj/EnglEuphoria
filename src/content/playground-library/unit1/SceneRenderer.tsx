@@ -56,6 +56,33 @@ function PresentBox() {
   );
 }
 
+/** Hand-drawn treasure chest — wooden body + hinged lid that pops open on `open`, used by the Trophy Chest capstone game. */
+function TrophyChestArt({ open }: { open: boolean }) {
+  return (
+    <svg viewBox="0 0 220 200" style={{ width: 'clamp(190px, 30vw, 300px)', height: 'auto', overflow: 'visible', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.35))' }}>
+      <rect x="20" y="100" width="180" height="90" rx="14" fill="#C97A2F" stroke="#2B1E17" strokeWidth={5} />
+      <rect x="20" y="128" width="180" height="14" fill="#8A5420" stroke="#2B1E17" strokeWidth={3} />
+      <rect x="94" y="100" width="32" height="90" fill="#8A5420" stroke="#2B1E17" strokeWidth={3} />
+      <circle cx="110" cy="145" r="14" fill="#F5B942" stroke="#2B1E17" strokeWidth={4} />
+      <rect x="104" y="141" width="12" height="16" rx="3" fill="#8A5420" />
+      <g style={{ transformBox: 'fill-box', transformOrigin: '50% 100%', transform: open ? 'rotate(-55deg) translate(-4px, -6px)' : 'rotate(0deg)', transition: 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
+        <path d="M14 100 Q14 42 110 38 Q206 42 206 100 Z" fill="#E08A3C" stroke="#2B1E17" strokeWidth={5} />
+        <rect x="94" y="38" width="32" height="62" fill="#8A5420" opacity={0.85} />
+      </g>
+      {open && (
+        <g className="pointer-events-none">
+          {[0, 1, 2, 3, 4, 5].map((i) => {
+            const a = (i / 6) * Math.PI * 2;
+            return (
+              <text key={i} x={110 + Math.cos(a) * 78} y={78 + Math.sin(a) * 58} fontSize="20" textAnchor="middle" style={{ animation: `lep1-pop-fade 0.9s ease-out ${i * 0.05}s both` }}>✨</text>
+            );
+          })}
+        </g>
+      )}
+    </svg>
+  );
+}
+
 /* ---------- Shared chrome ---------- */
 
 export const MAX_HEARTS = 3;
@@ -198,6 +225,7 @@ export function SceneRenderer(props: {
     case 'dash': return <DashScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'feelings': return <FeelingsScene scene={scene} onNext={props.onNext} />;
     case 'puzzle': return <PuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'trophy-chest': return <TrophyChestScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
@@ -1363,18 +1391,24 @@ function FeelingsScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'feeli
     await safeSpeak(scene.options[idx].reply, voice);
   };
   return (
-    <GlassCard>
-      <p className="text-center text-lg font-bold text-orange-700">{scene.teacher}</p>
-      <div className="mt-6 grid grid-cols-3 gap-3">
+    <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 bg-cover bg-center px-4 pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="relative z-20 max-w-lg rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">{scene.teacher}</div>
+      <div className="relative z-10 grid grid-cols-3 gap-3">
         {scene.options.map((o, idx) => (
-          <button key={idx} onClick={() => choose(idx)} className={`grid aspect-square place-items-center rounded-3xl shadow-md transition active:scale-95 ${pick === idx ? 'bg-orange-200 ring-4 ring-orange-500 scale-105' : 'bg-white hover:scale-105'}`}>
-            <span className="text-6xl">{o.emoji}</span>
-            <span className="mt-1 text-sm font-bold text-neutral-700">{o.label}</span>
+          <button key={idx} onClick={() => choose(idx)} className={`grid aspect-square w-24 place-items-center rounded-3xl bg-white/95 shadow-xl transition active:scale-95 sm:w-28 ${pick === idx ? 'ring-4 ring-orange-500 scale-105' : 'hover:scale-105'}`}>
+            <span className="text-5xl sm:text-6xl">{o.emoji}</span>
+            <span className="mt-1 text-xs font-bold text-neutral-700 sm:text-sm">{o.label}</span>
           </button>
         ))}
       </div>
-      <PrimaryButton onClick={onNext} disabled={pick === null}>Finish 🎉</PrimaryButton>
-    </GlassCard>
+      {pick !== null && (
+        <div className="relative z-20 max-w-md rounded-3xl bg-white/95 px-6 py-4 text-center shadow-2xl">
+          <p className="text-lg font-bold text-orange-700">{scene.options[pick].reply}</p>
+        </div>
+      )}
+      <button onClick={onNext} disabled={pick === null} className="relative z-20 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-40">Finish 🎉</button>
+    </div>
   );
 }
 
@@ -1971,7 +2005,19 @@ function AlphabetOrderScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
   const COLORS = ['#FE6A2F', '#22C55E', '#3B82F6', '#EC4899', '#F59E0B', '#8B5CF6'];
   const colorFor = (L: string) => COLORS[(L.charCodeAt(0) - 65) % COLORS.length];
 
-  const handleTap = async (idx: number, L: string) => {
+  const dropZoneRef = useRef<HTMLDivElement | null>(null);
+  const dragIdx = useRef<number | null>(null);
+  const start = useRef({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState<number | null>(null);
+  const [dragOffset, setDragOffset] = useState({ dx: 0, dy: 0 });
+  const [zoneHot, setZoneHot] = useState(false);
+
+  const isOverZone = (x: number, y: number) => {
+    const b = dropZoneRef.current?.getBoundingClientRect();
+    return !!b && x >= b.left && x <= b.right && y >= b.top && y <= b.bottom;
+  };
+
+  const place = async (idx: number, L: string) => {
     if (used.has(idx) || celebrate || done) return;
     const nextExpected = target[placed.length];
     if (L === nextExpected) {
@@ -1992,13 +2038,35 @@ function AlphabetOrderScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
     } else { setWrongLetter(L); sfx.wrong(); window.setTimeout(() => setWrongLetter(null), 450); }
   };
 
+  const onDown = (idx: number) => (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (used.has(idx) || celebrate || done) return;
+    setDragging(idx);
+    dragIdx.current = idx;
+    start.current = { x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+  const onMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (dragIdx.current === null) return;
+    setDragOffset({ dx: e.clientX - start.current.x, dy: e.clientY - start.current.y });
+    setZoneHot(isOverZone(e.clientX, e.clientY));
+  };
+  const onUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const idx = dragIdx.current;
+    dragIdx.current = null;
+    setDragging(null);
+    setZoneHot(false);
+    setDragOffset({ dx: 0, dy: 0 });
+    if (idx === null) return;
+    if (isOverZone(e.clientX, e.clientY)) void place(idx, shuffled[idx]);
+  };
+
   return (
     <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/35 via-white/10 to-white/40" />
-      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">🔤 Alphabet Order — Tap A → B → C!</div>
+      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">🔤 Alphabet Order — Drag A → B → C!</div>
       {!done && (
         <div className="absolute inset-x-0 top-20 bottom-24 z-10 flex flex-col items-center justify-between gap-3 px-3 py-3">
-          <div className="flex flex-wrap items-end justify-center gap-3 rounded-2xl bg-white/40 px-6 py-4 backdrop-blur">
+          <div ref={dropZoneRef} className={`flex flex-wrap items-end justify-center gap-3 rounded-2xl px-6 py-4 backdrop-blur transition-all ${zoneHot ? 'scale-105 bg-white/70 ring-4 ring-emerald-300' : 'bg-white/40'}`}>
             {target.map((tgt, i) => {
               const filled = placed[i];
               const bg = filled ? colorFor(filled) : 'rgba(255,255,255,0.5)';
@@ -2008,8 +2076,14 @@ function AlphabetOrderScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
           <div className="text-3xl font-black text-white drop-shadow-lg">↓ Next: <span className="text-orange-300">{target[placed.length] ?? '✓'}</span></div>
           <div className="flex flex-wrap items-center justify-center gap-4">
             {shuffled.map((L, i) => (
-              <button key={`${i}-${L}`} onClick={() => handleTap(i, L)} disabled={used.has(i)} className="flex h-24 w-24 items-center justify-center rounded-2xl text-5xl font-black text-white transition-transform active:scale-90 sm:h-28 sm:w-28 sm:text-6xl"
-                style={{ backgroundColor: colorFor(L), opacity: used.has(i) ? 0.25 : 1, animation: wrongLetter === L && !used.has(i) ? 'lep1-blockShake 0.4s ease-in-out' : undefined }}>{L}</button>
+              <button key={`${i}-${L}`} onPointerDown={onDown(i)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} disabled={used.has(i)}
+                className={`flex h-24 w-24 touch-none select-none items-center justify-center rounded-2xl text-5xl font-black text-white shadow-lg sm:h-28 sm:w-28 sm:text-6xl ${dragging === i ? 'z-20 scale-125' : ''}`}
+                style={{
+                  backgroundColor: colorFor(L), opacity: used.has(i) ? 0.25 : 1,
+                  animation: wrongLetter === L && !used.has(i) ? 'lep1-blockShake 0.4s ease-in-out' : undefined,
+                  transform: dragging === i ? `translate(${dragOffset.dx}px, ${dragOffset.dy}px) scale(1.25)` : undefined,
+                  transition: dragging === i ? 'none' : 'transform 200ms cubic-bezier(0.34,1.56,0.64,1)',
+                }}>{L}</button>
             ))}
           </div>
           <div className="text-sm font-black text-white drop-shadow-md">Round {seqIdx + 1} / {scene.sequences.length}</div>
@@ -2023,6 +2097,81 @@ function AlphabetOrderScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
         </div>
       )}
       {celebrate && <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"><div className="rounded-full bg-white/95 px-6 py-3 text-3xl font-black text-orange-600 shadow-2xl animate-bounce">✨ {current}! ✨</div></div>}
+    </div>
+  );
+}
+
+/* ---------- Trophy chest ---------- */
+
+function TrophyChestScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'trophy-chest' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [roundIdx, setRoundIdx] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const [wrongPick, setWrongPick] = useState<string | null>(null);
+  const [finished, setFinished] = useState(false);
+  const gemDone = useRef(false);
+  const round = scene.rounds[roundIdx];
+  const c = CAST[scene.who];
+
+  useEffect(() => { if (round && !revealed) cueSpeakOnce(`Find the ${round.letter} sound!`, scene.who); }, [roundIdx]);
+
+  const pick = async (choice: string) => {
+    if (revealed || finished || !round) return;
+    if (choice !== round.letter) { sfx.wrong(); onLose(); setWrongPick(choice); window.setTimeout(() => setWrongPick(null), 450); return; }
+    sfx.match();
+    setRevealed(true);
+    await safeSpeak(round.word, scene.who);
+    await new Promise((r) => window.setTimeout(r, 1300));
+    const next = roundIdx + 1;
+    if (next >= scene.rounds.length) {
+      setFinished(true);
+      if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+    } else {
+      setRevealed(false);
+      setRoundIdx(next);
+    }
+  };
+
+  return (
+    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/40" />
+      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        🗝️ {scene.teacher} {!finished && <span className="ml-1 opacity-60">({roundIdx + 1}/{scene.rounds.length})</span>}
+      </div>
+
+      {!finished ? (
+        <div className="absolute inset-x-0 top-24 bottom-28 z-10 flex flex-col items-center justify-center gap-5 px-4">
+          <div className="relative flex flex-col items-center">
+            <TrophyChestArt open={revealed} />
+            {revealed && round && (
+              <div className="absolute -top-16 left-1/2 flex -translate-x-1/2 flex-col items-center" style={{ animation: 'lep1-pop 0.5s ease-out' }}>
+                {round.img ? <img src={round.img} alt={round.word} className="h-20 w-20 object-contain drop-shadow-xl" /> : <span className="text-6xl">{round.emoji}</span>}
+                <span className="mt-1 rounded-full bg-white/95 px-3 py-1 text-sm font-black text-orange-700 shadow">{round.word}</span>
+              </div>
+            )}
+          </div>
+          <img src={c.img} alt={c.name} width={64} height={64} className="h-16 w-16 object-contain animate-[lep1-hop_1.6s_ease-in-out_infinite]" />
+          <button onClick={() => round && safeSpeak(round.word, scene.who)} disabled={revealed} className="rounded-full bg-white/90 px-4 py-2 text-sm font-bold text-orange-700 shadow-lg ring-2 ring-orange-200 backdrop-blur disabled:opacity-40">
+            🔊 Hear it again
+          </button>
+          <div className="flex gap-3">
+            {round?.choices.map((L) => (
+              <button key={L} onClick={() => pick(L)} disabled={revealed}
+                className={`grid h-20 w-20 place-items-center rounded-2xl text-4xl font-black text-white shadow-xl transition active:scale-90 disabled:opacity-50 sm:h-24 sm:w-24 sm:text-5xl ${wrongPick === L ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
+                style={{ background: 'linear-gradient(135deg, #C97A2F, #F5B942)' }}>
+                {L}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-6 text-center">
+          <TrophyChestArt open />
+          <div className="rounded-3xl bg-white/95 px-8 py-4 text-2xl font-black text-orange-700 shadow-2xl sm:text-3xl">🏆 The Trophy Chest is unlocked!</div>
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
+            Next →
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -2111,27 +2260,30 @@ function FinaleScene({ scene, hearts, gems, onRestart }: { scene: Extract<Scene,
   const stars = 1 + Math.min(2, Math.floor(hearts / 2)) + (gems >= 3 ? 1 : 0);
 
   return (
-    <GlassCard className="text-center">
+    <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center px-4" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/40" />
       <Confetti />
-      <p className="text-sm font-bold uppercase tracking-widest text-orange-500">Lesson Complete!</p>
-      <h2 className="mt-1 text-4xl font-black text-orange-800">You did it!</h2>
-      <div className="my-4 flex justify-center gap-2 text-5xl">
-        {[0, 1, 2, 3].map((i) => <span key={i} className={i < stars ? '' : 'opacity-20'}>⭐</span>)}
+      <div className="relative z-10 w-full max-w-sm rounded-3xl border border-white/40 bg-white/95 p-5 text-center text-neutral-900 shadow-2xl backdrop-blur-2xl ring-1 ring-white/30">
+        <p className="text-sm font-bold uppercase tracking-widest text-orange-500">Lesson Complete!</p>
+        <h2 className="mt-1 text-4xl font-black text-orange-800">You did it!</h2>
+        <div className="my-4 flex justify-center gap-2 text-5xl">
+          {[0, 1, 2, 3].map((i) => <span key={i} className={i < stars ? '' : 'opacity-20'}>⭐</span>)}
+        </div>
+        <div className="mx-auto grid grid-cols-3 gap-2 rounded-3xl bg-white/70 p-3">
+          {(['pip', 'mia', 'bella'] as const).map((k) => {
+            const c = CAST[k];
+            return (
+              <div key={k} className="grid place-items-center">
+                <img src={c.img} alt={c.name} width={72} height={72} className="h-16 w-16 object-contain animate-[lep1-hop_1.6s_ease-in-out_infinite]" />
+                <span className="text-xs font-black" style={{ color: c.color }}>💎 {c.name}</span>
+              </div>
+            );
+          })}
+        </div>
+        <p className="mt-4 text-lg font-bold text-orange-700">"{scene.line}"</p>
+        <button onClick={onRestart} className="mt-5 w-full rounded-full bg-white py-3 font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔁 Play again</button>
       </div>
-      <div className="mx-auto grid grid-cols-3 gap-2 rounded-3xl bg-white/70 p-3">
-        {(['pip', 'mia', 'bella'] as const).map((k) => {
-          const c = CAST[k];
-          return (
-            <div key={k} className="grid place-items-center">
-              <img src={c.img} alt={c.name} width={72} height={72} className="h-16 w-16 object-contain animate-[lep1-hop_1.6s_ease-in-out_infinite]" />
-              <span className="text-xs font-black" style={{ color: c.color }}>💎 {c.name}</span>
-            </div>
-          );
-        })}
-      </div>
-      <p className="mt-4 text-lg font-bold text-orange-700">"{scene.line}"</p>
-      <button onClick={onRestart} className="mt-5 w-full rounded-full bg-white py-3 font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔁 Play again</button>
-    </GlassCard>
+    </div>
   );
 }
 
@@ -3367,19 +3519,35 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
   const [round, setRound] = useState(0);
   const [score, setScore] = useState(0);
   const [feeding, setFeeding] = useState<'happy' | 'sad' | 'angry' | null>(null);
-  const [wrongPick, setWrongPick] = useState<'happy' | 'sad' | 'angry' | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ dx: 0, dy: 0 });
+  const [hotMonster, setHotMonster] = useState<'happy' | 'sad' | 'angry' | null>(null);
+  const [wrongShake, setWrongShake] = useState(false);
   const [gemDone, setGemDone] = useState(false);
+  const monsterRefs = useRef<Record<'happy' | 'sad' | 'angry', HTMLDivElement | null>>({ happy: null, sad: null, angry: null });
+  const dragStart = useRef({ x: 0, y: 0 });
   const total = scene.rounds.length;
   const finished = round >= total;
   const r = !finished ? scene.rounds[round] : null;
 
   useEffect(() => {
     if (!r) return;
-    setFeeding(null); setWrongPick(null);
+    setFeeding(null); setWrongShake(false); setDragOffset({ dx: 0, dy: 0 });
     const t = window.setTimeout(() => void safeSpeak(r.sentence, r.who), 300);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round]);
+
+  const hitTest = (x: number, y: number): 'happy' | 'sad' | 'angry' | null => {
+    for (const m of ['happy', 'sad', 'angry'] as const) {
+      const el = monsterRefs.current[m];
+      if (!el) continue;
+      const b = el.getBoundingClientRect();
+      const PAD = 30;
+      if (x >= b.left - PAD && x <= b.right + PAD && y >= b.top - PAD && y <= b.bottom + PAD) return m;
+    }
+    return null;
+  };
 
   const feed = async (monster: 'happy' | 'sad' | 'angry') => {
     if (!r || feeding) return;
@@ -3390,9 +3558,29 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
       if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
       setRound(next);
     } else {
-      sfx.wrong(); onLose(); setWrongPick(monster);
-      window.setTimeout(() => setWrongPick(null), 500);
+      sfx.wrong(); onLose(); setWrongShake(true); setDragOffset({ dx: 0, dy: 0 });
+      window.setTimeout(() => setWrongShake(false), 500);
     }
+  };
+
+  const onDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!r || feeding) return;
+    setDragging(true);
+    dragStart.current = { x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+  const onMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!dragging) return;
+    setDragOffset({ dx: e.clientX - dragStart.current.x, dy: e.clientY - dragStart.current.y });
+    setHotMonster(hitTest(e.clientX, e.clientY));
+  };
+  const onUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!dragging) return;
+    setDragging(false);
+    const target = hitTest(e.clientX, e.clientY);
+    setHotMonster(null);
+    if (!target) { setDragOffset({ dx: 0, dy: 0 }); return; }
+    void feed(target);
   };
 
   if (finished) {
@@ -3416,34 +3604,31 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
     <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20" />
 
-      {/* Tap zones over the monsters already painted into scene.bg — no separate monster art drawn on top. */}
+      {/* Drop zones over the monsters already painted into scene.bg — no separate monster art drawn on top. */}
       {(['happy', 'sad', 'angry'] as const).map((m) => {
         const meta = MONSTER_META[m];
-        const isWrong = wrongPick === m;
+        const isHot = hotMonster === m;
         const isFed = feeding === m;
         return (
-          <button
+          <div
             key={m}
-            onClick={() => void feed(m)}
-            disabled={!!feeding}
-            aria-label={`Feed the ${meta.label}`}
-            className="absolute bottom-0 top-[10%] z-10 disabled:cursor-default"
+            ref={(el) => { monsterRefs.current[m] = el; }}
+            aria-hidden="true"
+            className="pointer-events-none absolute bottom-0 top-[10%] z-10"
             style={{ left: `${meta.xPct - 16}%`, width: '32%' }}
           >
             <span
-              className="pointer-events-none absolute left-1/2 top-1/2 h-[85%] w-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+              className="pointer-events-none absolute left-1/2 top-1/2 h-[85%] w-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform"
               style={{
-                background: `radial-gradient(circle, ${meta.color}33 0%, transparent 68%)`,
+                background: `radial-gradient(circle, ${meta.color}${isHot ? '66' : '33'} 0%, transparent 68%)`,
                 animation: !feeding ? 'lep1-ping 2.4s ease-out infinite' : undefined,
+                transform: isHot ? 'scale(1.15)' : 'scale(1)',
               }}
             />
-            {isWrong && (
-              <span className="pointer-events-none absolute left-1/2 top-1/2 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full border-8 border-rose-500/80" style={{ animation: 'lep1-pop-fade 0.5s ease-out forwards' }} />
-            )}
             {isFed && (
               <span className="pointer-events-none absolute left-1/2 top-1/2 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full border-8 border-emerald-400/90" style={{ animation: 'lep1-pop-fade 0.7s ease-out forwards' }} />
             )}
-          </button>
+          </div>
         );
       })}
 
@@ -3451,15 +3636,21 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
         🔊 {r!.sentence} <span className="ml-1 rounded-full bg-orange-100 px-2 py-0.5 text-xs text-orange-600">{round + 1}/{total}</span>
       </button>
 
-      {/* Friend stands grounded on the grass in front of the monsters, not floating in the empty sky above them. */}
-      <div
-        className="pointer-events-none absolute z-10 flex flex-col items-center"
+      {/* Friend stands grounded on the grass in front of the monsters — grab and drag onto the matching monster. */}
+      <button
+        onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
+        disabled={!!feeding}
+        aria-label={`Drag ${c.name} to the matching monster`}
+        className="absolute z-20 flex touch-none select-none flex-col items-center border-0 bg-transparent p-0 disabled:cursor-default"
         style={{
           left: feeding ? `${MONSTER_META[feeding].xPct}%` : '50%',
           top: feeding ? '58%' : '82%',
-          transform: `translate(-50%, -50%) scale(${feeding ? 0.3 : 1})`,
+          transform: dragging
+            ? `translate(calc(-50% + ${dragOffset.dx}px), calc(-50% + ${dragOffset.dy}px)) scale(1.15)`
+            : `translate(-50%, -50%) scale(${feeding ? 0.3 : 1})`,
           opacity: feeding ? 0 : 1,
-          transition: 'all 0.7s cubic-bezier(0.3,0,0.2,1)',
+          transition: dragging ? 'none' : 'all 0.7s cubic-bezier(0.3,0,0.2,1)',
+          animation: wrongShake ? 'lep1-shake 0.4s ease-in-out' : undefined,
         }}
       >
         {!feeding && (
@@ -3468,9 +3659,9 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
             style={{ width: '70%', height: '18%', background: 'radial-gradient(ellipse, rgba(0,0,0,0.32) 0%, transparent 72%)' }}
           />
         )}
-        <img src={getEmotionSprite(r!.who, r!.emotion)} alt={c.name} className="relative h-32 w-32 object-contain drop-shadow-2xl sm:h-40 sm:w-40" style={{ animation: feeding ? undefined : 'lep1-float 2.6s ease-in-out infinite' }} />
-        <span className="relative mt-0.5 rounded-full bg-white/90 px-3 py-1 text-sm font-black shadow" style={{ color: c.color }}>{c.name}</span>
-      </div>
+        <img src={getEmotionSprite(r!.who, r!.emotion)} alt={c.name} draggable={false} className="pointer-events-none relative h-32 w-32 object-contain drop-shadow-2xl sm:h-40 sm:w-40" style={{ animation: feeding || dragging ? undefined : 'lep1-float 2.6s ease-in-out infinite' }} />
+        <span className="pointer-events-none relative mt-0.5 rounded-full bg-white/90 px-3 py-1 text-sm font-black shadow" style={{ color: c.color }}>{c.name}</span>
+      </button>
 
       {feeding && (
         <div className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 text-4xl" style={{ left: `${MONSTER_META[feeding].xPct}%`, top: '58%', animation: 'lep1-pop 0.5s ease-out 0.35s both' }}>
@@ -3491,17 +3682,33 @@ function HeSheSortScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
   const [picked, setPicked] = useState<'He' | 'She' | null>(null);
   const [correct, setCorrect] = useState<boolean | null>(null);
   const [gemDone, setGemDone] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ dx: 0, dy: 0 });
+  const [hotBox, setHotBox] = useState<'He' | 'She' | null>(null);
+  const boxRefs = useRef<Record<'He' | 'She', HTMLDivElement | null>>({ He: null, She: null });
+  const start = useRef({ x: 0, y: 0 });
   const total = scene.rounds.length;
   const finished = round >= total;
   const r = !finished ? scene.rounds[round] : null;
 
   useEffect(() => {
     if (!r) return;
-    setPicked(null); setCorrect(null);
+    setPicked(null); setCorrect(null); setDragOffset({ dx: 0, dy: 0 });
     const t = window.setTimeout(() => void safeSpeak(`I am ${r.emotion}.`, r.who), 300);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round]);
+
+  const hitTest = (x: number, y: number): 'He' | 'She' | null => {
+    for (const p of ['He', 'She'] as const) {
+      const el = boxRefs.current[p];
+      if (!el) continue;
+      const b = el.getBoundingClientRect();
+      const PAD = 20;
+      if (x >= b.left - PAD && x <= b.right + PAD && y >= b.top - PAD && y <= b.bottom + PAD) return p;
+    }
+    return null;
+  };
 
   const pick = async (choice: 'He' | 'She') => {
     if (!r || picked) return;
@@ -3516,8 +3723,28 @@ function HeSheSortScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
       window.setTimeout(() => setRound(next), 400);
     } else {
       sfx.wrong(); onLose();
-      window.setTimeout(() => { setPicked(null); setCorrect(null); }, 700);
+      window.setTimeout(() => { setPicked(null); setCorrect(null); setDragOffset({ dx: 0, dy: 0 }); }, 700);
     }
+  };
+
+  const onDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!r || picked) return;
+    setDragging(true);
+    start.current = { x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+  const onMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!dragging) return;
+    setDragOffset({ dx: e.clientX - start.current.x, dy: e.clientY - start.current.y });
+    setHotBox(hitTest(e.clientX, e.clientY));
+  };
+  const onUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!dragging) return;
+    setDragging(false);
+    const target = hitTest(e.clientX, e.clientY);
+    setHotBox(null);
+    if (!target) { setDragOffset({ dx: 0, dy: 0 }); return; }
+    void pick(target);
   };
 
   if (finished) {
@@ -3534,16 +3761,26 @@ function HeSheSortScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
     <div className="absolute inset-0 flex flex-col items-center justify-between bg-cover bg-center px-4 py-4" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
       <div className="relative z-20 mt-2 max-w-[92%] rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">{scene.teacher} <span className="ml-1 rounded-full bg-orange-100 px-2 py-0.5 text-xs text-orange-600">{round + 1}/{total}</span></div>
-      <div className="relative z-10 flex flex-col items-center">
-        <img src={getEmotionSprite(r!.who, r!.emotion)} alt={c.name} className="h-48 w-48 object-contain drop-shadow-2xl sm:h-60 sm:w-60" />
-        <div className="mt-2 rounded-full bg-white/95 px-4 py-1 text-lg font-black" style={{ color: c.color }}>“I am {r!.emotion}.”</div>
-      </div>
+      <button
+        onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
+        disabled={!!picked}
+        aria-label={`Drag ${c.name} to He or She`}
+        className="relative z-10 flex touch-none select-none flex-col items-center border-0 bg-transparent p-0 disabled:cursor-default"
+        style={{
+          transform: dragging ? `translate(${dragOffset.dx}px, ${dragOffset.dy}px) scale(1.1)` : undefined,
+          transition: dragging ? 'none' : 'transform 200ms cubic-bezier(0.34,1.56,0.64,1)',
+          animation: picked && !correct ? 'lep1-shake 0.4s ease-out' : undefined,
+        }}
+      >
+        <img src={getEmotionSprite(r!.who, r!.emotion)} alt={c.name} draggable={false} className="pointer-events-none h-48 w-48 object-contain drop-shadow-2xl sm:h-60 sm:w-60" />
+        <div className="pointer-events-none mt-2 rounded-full bg-white/95 px-4 py-1 text-lg font-black" style={{ color: c.color }}>“I am {r!.emotion}.”</div>
+      </button>
       <div className="relative z-10 flex w-full max-w-md gap-4 pb-2">
         {(['He', 'She'] as const).map((p) => (
-          <button key={p} onClick={() => pick(p)} disabled={!!picked}
-            className={`flex-1 rounded-3xl border-4 border-white py-8 text-3xl font-black text-white shadow-2xl transition active:scale-95 disabled:opacity-60 ${picked === p ? (correct ? 'ring-4 ring-green-300 scale-105' : 'animate-[lep1-shake_0.4s_ease-out]') : ''}`}
+          <div key={p} ref={(el) => { boxRefs.current[p] = el; }}
+            className={`flex-1 rounded-3xl border-4 border-white py-8 text-center text-3xl font-black text-white shadow-2xl transition ${hotBox === p ? 'scale-110 ring-4 ring-white' : ''} ${picked === p ? (correct ? 'ring-4 ring-green-300 scale-105' : '') : ''}`}
             style={{ background: p === 'He' ? 'linear-gradient(135deg,#4FA9E0,#7BE0FF)' : 'linear-gradient(135deg,#E76FA5,#FF9EC4)' }}
-          >{p}</button>
+          >{p}</div>
         ))}
       </div>
     </div>
@@ -4030,33 +4267,63 @@ function AgeSentenceMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
     return [...arr].sort(() => Math.random() - 0.5);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const [selectedFriend, setSelectedFriend] = useState<number | null>(null);
   const [matched, setMatched] = useState<Set<number>>(new Set());
   const [wrongCard, setWrongCard] = useState<number | null>(null);
   const [gemDone, setGemDone] = useState(false);
   const allMatched = matched.size >= scene.friends.length;
 
-  const pickFriend = async (i: number) => {
-    if (matched.has(i)) return;
-    setSelectedFriend(i);
-    await safeSpeak(CAST[scene.friends[i].who].name, scene.friends[i].who);
+  const [dragging, setDragging] = useState<number | null>(null);
+  const [dragOffset, setDragOffset] = useState({ dx: 0, dy: 0 });
+  const [hotFriend, setHotFriend] = useState<number | null>(null);
+  const friendRefs = useRef<Record<number, HTMLElement | null>>({});
+  const start = useRef({ x: 0, y: 0 });
+
+  const hitTest = (x: number, y: number): number | null => {
+    for (let i = 0; i < scene.friends.length; i++) {
+      const el = friendRefs.current[i];
+      if (!el) continue;
+      const b = el.getBoundingClientRect();
+      const PAD = 24;
+      if (x >= b.left - PAD && x <= b.right + PAD && y >= b.top - PAD && y <= b.bottom + PAD) return i;
+    }
+    return null;
   };
 
-  const pickCard = async (cardIdx: number) => {
-    if (selectedFriend === null) return;
+  const attemptMatch = async (cardIdx: number, friendIdx: number) => {
     const card = cards[cardIdx];
-    if (card.i === selectedFriend) {
+    if (card.i === friendIdx) {
       sfx.match();
-      const next = new Set(matched).add(selectedFriend);
+      const next = new Set(matched).add(card.i);
       setMatched(next);
-      const f = scene.friends[selectedFriend];
-      setSelectedFriend(null);
+      const f = scene.friends[card.i];
       await safeSpeak(card.text, f.who);
       if (next.size >= scene.friends.length && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
     } else {
       sfx.wrong(); onLose(); setWrongCard(cardIdx);
       window.setTimeout(() => setWrongCard(null), 400);
     }
+  };
+
+  const onDown = (idx: number) => (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (matched.has(cards[idx].i)) return;
+    setDragging(idx);
+    start.current = { x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    void safeSpeak(cards[idx].text, scene.friends[cards[idx].i].who);
+  };
+  const onMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (dragging === null) return;
+    setDragOffset({ dx: e.clientX - start.current.x, dy: e.clientY - start.current.y });
+    setHotFriend(hitTest(e.clientX, e.clientY));
+  };
+  const onUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const idx = dragging;
+    setDragging(null);
+    setHotFriend(null);
+    setDragOffset({ dx: 0, dy: 0 });
+    if (idx === null) return;
+    const friendIdx = hitTest(e.clientX, e.clientY);
+    if (friendIdx !== null) void attemptMatch(idx, friendIdx);
   };
 
   return (
@@ -4071,24 +4338,28 @@ function AgeSentenceMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
           const f = scene.friends[card.i];
           const color = CAST[f.who].color;
           const isMatched = matched.has(card.i);
+          if (isMatched) return null;
           return (
             <button
               key={idx}
-              onClick={() => void pickCard(idx)}
-              disabled={isMatched}
-              className={`rounded-2xl bg-white/95 px-3 py-2 shadow-xl backdrop-blur transition active:scale-95 disabled:opacity-40 ${wrongCard === idx ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`}
-              style={{ outline: `3px solid ${wrongCard === idx ? '#f43f5e' : color}`, boxShadow: `0 6px 18px ${color}55` }}
+              onPointerDown={onDown(idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
+              className={`touch-none select-none rounded-2xl bg-white/95 px-3 py-2 shadow-xl backdrop-blur ${dragging === idx ? 'z-30 scale-110' : ''} ${wrongCard === idx ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`}
+              style={{
+                outline: `3px solid ${wrongCard === idx ? '#f43f5e' : color}`, boxShadow: `0 6px 18px ${color}55`,
+                transform: dragging === idx ? `translate(${dragOffset.dx}px, ${dragOffset.dy}px) scale(1.15)` : undefined,
+                transition: dragging === idx ? 'none' : 'transform 200ms cubic-bezier(0.34,1.56,0.64,1)',
+              }}
             >
               <div className="flex items-center justify-center gap-1.5">
-                <div className="text-center font-black leading-none" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.2rem)' }}>
+                <div className="pointer-events-none text-center font-black leading-none" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.2rem)' }}>
                   <span style={{ color }}>{CAST[f.who].name}</span>
                   <span className="text-slate-800"> is </span>
                   <span className="text-orange-600" style={{ WebkitTextStroke: '1px #FE6A2F' }}>{f.age}</span>
                   <span className="text-slate-800">!</span>
                 </div>
-                <span className="text-sm">🔊</span>
+                <span className="pointer-events-none text-sm">🔊</span>
               </div>
-              <div className="mt-0.5 text-center text-[9px] font-black uppercase tracking-widest text-slate-500">tap me!</div>
+              <div className="pointer-events-none mt-0.5 text-center text-[9px] font-black uppercase tracking-widest text-slate-500">grab & drag me!</div>
             </button>
           );
         })}
@@ -4096,14 +4367,14 @@ function AgeSentenceMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
       {scene.friends.map((f, i) => {
         const c = CAST[f.who];
         const isDone = matched.has(i);
-        const isSelected = selectedFriend === i;
+        const isHot = hotFriend === i;
         return (
-          <button
+          <div
             key={i}
-            onClick={() => void pickFriend(i)}
-            disabled={isDone}
-            className="absolute z-20 select-none"
-            style={{ left: `${(i / scene.friends.length) * 100}%`, bottom: '6%', width: `${(1 / scene.friends.length) * 100 * 1.35}%`, opacity: isDone ? 0.5 : 1 }}
+            ref={(el) => { friendRefs.current[i] = el; }}
+            aria-hidden={isDone}
+            className="absolute z-10 select-none transition-transform"
+            style={{ left: `${(i / scene.friends.length) * 100}%`, bottom: '6%', width: `${(1 / scene.friends.length) * 100 * 1.35}%`, opacity: isDone ? 0.5 : 1, transform: isHot ? 'scale(1.1)' : undefined }}
           >
             <img
               src={BALLOONS_SPRITE[f.who] ?? c.img}
@@ -4112,12 +4383,12 @@ function AgeSentenceMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
               style={{ animation: 'lep1-float 2.6s ease-in-out infinite', transformOrigin: '50% 90%' }}
             />
             <div
-              className="absolute left-1/2 -translate-x-1/2 rounded-full bg-white px-4 py-1.5 text-base font-black shadow-lg"
-              style={{ bottom: -10, color: c.color, border: `2px solid ${c.color}`, whiteSpace: 'nowrap', boxShadow: `0 4px 14px ${c.color}66`, outline: isSelected ? `3px solid ${c.color}` : undefined }}
+              className="pointer-events-none absolute left-1/2 -translate-x-1/2 rounded-full bg-white px-4 py-1.5 text-base font-black shadow-lg"
+              style={{ bottom: -10, color: c.color, border: `2px solid ${c.color}`, whiteSpace: 'nowrap', boxShadow: `0 4px 14px ${c.color}66`, outline: isHot ? `3px solid ${c.color}` : undefined }}
             >
-              {c.name}
+              {isDone ? `${c.name} is ${f.age}! ⭐` : c.name}
             </div>
-          </button>
+          </div>
         );
       })}
       {allMatched && (
