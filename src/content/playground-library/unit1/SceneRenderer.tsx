@@ -26,6 +26,12 @@ const BALLOONS_SPRITE: Partial<Record<CharKey, string>> = {
 /** Rainbow spectrum used across every "count 1-10" activity (numbers tiles, balloon pop) — one fixed hue per digit, red through purple. */
 const RAINBOW_10 = ['#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e', '#10b981', '#06b6d4', '#3b82f6', '#a855f7'];
 const NUMBER_WORDS = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN'];
+/** Natural-cased number word for TTS — a bare digit string like "5" sent to the
+ *  voice pipeline is read inconsistently; the actual word reads clearly every time. */
+function numberSpeech(n: number): string {
+  const w = NUMBER_WORDS[n - 1];
+  return w ? w.charAt(0) + w.slice(1).toLowerCase() : String(n);
+}
 
 /** Hand-drawn balloon — real body/string/highlight shape instead of the 🎈 emoji glyph, colored per RAINBOW_10. */
 function Balloon({ color }: { color: string }) {
@@ -3942,7 +3948,7 @@ function NumbersLearnScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'n
     setHeard((s) => new Set(s).add(n));
     setPopN(n);
     sfx.pop();
-    await safeSpeak(String(n), scene.who);
+    await safeSpeak(numberSpeech(n), scene.who);
     setPopN((cur) => (cur === n ? null : cur));
   };
 
@@ -3987,7 +3993,7 @@ function NumbersReviewScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
 
   useEffect(() => {
     if (ready) return;
-    const t = window.setTimeout(() => void safeSpeak(String(target), scene.who), 300);
+    const t = window.setTimeout(() => void safeSpeak(numberSpeech(target), scene.who), 300);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [target]);
@@ -4013,7 +4019,7 @@ function NumbersReviewScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
         <span className="w-fit rounded-full bg-white/90 px-4 py-1 text-xs font-black uppercase tracking-widest text-orange-700 shadow">Tap the number</span>
         <span className="max-w-lg rounded-full bg-white/95 px-5 py-2 text-sm font-bold text-orange-800 shadow-xl backdrop-blur sm:text-base">{ready ? '🎉 Great counting!' : scene.teacher}</span>
         {!ready && (
-          <button onClick={() => void safeSpeak(String(target), scene.who)} className="mt-0.5 rounded-full bg-orange-500 px-4 py-1 text-sm font-black text-white shadow active:scale-95">
+          <button onClick={() => void safeSpeak(numberSpeech(target), scene.who)} className="mt-0.5 rounded-full bg-orange-500 px-4 py-1 text-sm font-black text-white shadow active:scale-95">
             🔊 {NUMBER_WORDS[target - 1]}
           </button>
         )}
@@ -4155,7 +4161,7 @@ function CountBalloonsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
     sfx.pop();
     const next = new Set(popped).add(i);
     setPopped(next);
-    await safeSpeak(String(next.size), scene.who);
+    await safeSpeak(numberSpeech(next.size), scene.who);
     if (next.size >= scene.total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
   };
 
