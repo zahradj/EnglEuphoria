@@ -2241,55 +2241,83 @@ function FlipbookScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene,
     advance();
   };
 
+  const sparkles = useMemo(
+    () => Array.from({ length: 22 }, (_, i) => ({
+      left: `${(i * 37) % 100}%`,
+      top: `${(i * 53) % 100}%`,
+      size: 3 + (i % 4) * 2,
+      dur: 2200 + (i % 5) * 500,
+      delay: (i % 7) * 300,
+    })),
+    [],
+  );
+
   if (done) {
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
-        <button onClick={onNext} className="relative z-10 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
-          📖 The End! Next →
-        </button>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/60 backdrop-blur-sm" />
+        <Confetti count={60} />
+        <div className="relative z-10 flex flex-col items-center gap-5 px-6 text-center">
+          <p className="max-w-md text-2xl font-black text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)] sm:text-3xl">{scene.pages[scene.pages.length - 1]?.text}</p>
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-amber-400 via-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl ring-4 ring-white/50 active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
+            📖 The End! Next →
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
-      <div className="pointer-events-none absolute inset-0 bg-black/25" />
-      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
-        📖 {scene.title} <span className="ml-1 opacity-60">({pageIdx + 1}/{total})</span>
+      <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(ellipse at center 45%, rgba(20,10,45,0.15) 0%, rgba(10,5,30,0.55) 70%, rgba(5,2,18,0.78) 100%)' }} />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {sparkles.map((s, i) => (
+          <span key={i} className="absolute rounded-full bg-amber-200" style={{ left: s.left, top: s.top, width: s.size, height: s.size, boxShadow: '0 0 8px 2px rgba(255,224,140,0.9)', animation: `lep1-twinkle ${s.dur}ms ease-in-out ${s.delay}ms infinite` }} />
+        ))}
+      </div>
+      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-gradient-to-r from-amber-100/95 via-white/95 to-amber-100/95 px-5 py-2 text-center text-sm font-black text-orange-800 shadow-xl backdrop-blur ring-1 ring-amber-300/70 sm:text-base">
+        ✦ {scene.title} ✦ <span className="ml-1 opacity-60">({pageIdx + 1}/{total})</span>
       </div>
 
       <div className="absolute inset-0 z-10 flex items-center justify-center px-4 pb-24 pt-16" style={{ perspective: 1400 }}>
         <div
           onClick={turnPage}
-          className="relative w-full max-w-[560px] cursor-pointer select-none rounded-[28px] bg-white shadow-2xl ring-4 ring-white/70"
+          className="relative w-full max-w-[600px] cursor-pointer select-none rounded-[30px] p-[7px]"
           style={{
             aspectRatio: '4 / 3',
+            background: 'linear-gradient(135deg, #F5D67D 0%, #C9932F 45%, #8A5A1E 100%)',
             transformOrigin: 'right center',
             transform: flipping ? 'rotateY(-130deg) scaleX(0.85)' : 'rotateY(0deg)',
             transition: 'transform 0.45s cubic-bezier(0.45,0.05,0.55,0.95)',
             backfaceVisibility: 'hidden',
+            animation: flipping ? undefined : 'lep1-bookGlow 3.2s ease-in-out infinite',
           }}
         >
-          <div className="h-[68%] w-full overflow-hidden rounded-t-[28px]">
-            <img src={page.img} alt="" className="h-full w-full object-cover" />
-          </div>
-          <div className="flex h-[32%] flex-col items-center justify-center gap-1 px-6 text-center">
-            <p className="text-base font-bold text-orange-800 sm:text-lg">{page.text}</p>
-            {page.who && <span className="text-xs font-black uppercase tracking-widest text-orange-400">— {CAST[page.who].name}</span>}
+          <div className="relative h-full w-full overflow-hidden rounded-[24px] bg-gradient-to-b from-[#FFFBF0] to-[#FFF2D0]">
+            <div className="h-[68%] w-full overflow-hidden">
+              <img src={page.img} alt="" className="h-full w-full object-cover" />
+            </div>
+            <div className="flex h-[32%] flex-col items-center justify-center gap-1 px-6 text-center">
+              <p className="text-base font-bold text-orange-900 sm:text-lg">{page.text}</p>
+              {page.who && <span className="text-xs font-black uppercase tracking-widest text-amber-600">— {CAST[page.who].name}</span>}
+            </div>
+            {/* Book spine/gutter shadow, sells the open-book illusion. */}
+            <div className="pointer-events-none absolute inset-y-0 left-1/2 w-8 -translate-x-1/2" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.16) 45%, rgba(0,0,0,0.16) 55%, transparent)' }} />
+            {/* Folded page corner, purely decorative. */}
+            <div className="pointer-events-none absolute bottom-0 right-0 h-9 w-9" style={{ background: 'linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.18) 50%)', borderRadius: '0 0 24px 0' }} />
           </div>
           {!flipping && (
-            <div className="absolute -right-3 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-orange-500 text-white shadow-xl animate-pulse">▶</div>
+            <div className="absolute -right-4 top-1/2 grid h-14 w-14 -translate-y-1/2 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-orange-600 text-2xl text-white shadow-xl ring-2 ring-white/70 animate-pulse">▶</div>
           )}
         </div>
       </div>
 
       {checkpoint && (
-        <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/50 px-6" style={{ animation: 'lep1-pop 0.3s ease-out' }}>
-          <div className="w-full max-w-sm rounded-3xl bg-white p-6 text-center shadow-2xl">
+        <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/60 px-6" style={{ animation: 'lep1-pop 0.3s ease-out' }}>
+          <div className="w-full max-w-sm rounded-3xl bg-gradient-to-b from-[#FFFBF0] to-[#FFF2D0] p-6 text-center shadow-2xl ring-4 ring-amber-300/70">
             {checkpoint.who && <img src={CAST[checkpoint.who].img} alt={CAST[checkpoint.who].name} className="mx-auto mb-2 h-16 w-16 object-contain" />}
             <div className="mb-1 text-3xl">🤔</div>
-            <p className="mb-4 text-xl font-black text-orange-800">{checkpoint.question}</p>
+            <p className="mb-4 text-xl font-black text-orange-900">{checkpoint.question}</p>
             <div className="flex flex-col gap-2">
               {checkpoint.options.map((opt) => (
                 <button key={opt} onClick={() => answer(opt)}
@@ -4765,6 +4793,8 @@ export function Lep1Keyframes() {
       @keyframes lep1-tapRipple { 0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0.9; } 100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; } }
       @keyframes lep1-candleDrop { 0% { transform: translateX(-50%) translateY(-140px) rotate(-25deg) scale(0.7); opacity: 0; } 60% { transform: translateX(-50%) translateY(8px) rotate(6deg) scale(1.1); opacity: 1; } 100% { transform: translateX(-50%) translateY(0) rotate(0deg) scale(1); opacity: 1; } }
       @keyframes lep1-candleWiggle { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+      @keyframes lep1-twinkle { 0%, 100% { opacity: 0.15; transform: scale(0.6); } 50% { opacity: 1; transform: scale(1.2); } }
+      @keyframes lep1-bookGlow { 0%, 100% { box-shadow: 0 0 40px rgba(245,214,125,0.35), 0 25px 55px rgba(0,0,0,0.45); } 50% { box-shadow: 0 0 70px rgba(245,214,125,0.65), 0 25px 55px rgba(0,0,0,0.45); } }
     `}</style>
   );
 }
