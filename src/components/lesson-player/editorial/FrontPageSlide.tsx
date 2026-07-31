@@ -56,15 +56,19 @@ function getIntroPalette(hub?: string) {
 }
 
 /**
- * Editorial Front Page — 50/50 split layout.
- *   ┌──────────────────────┬──────────────────────┐
- *   │                      │                logo  │
- *   │                      │                      │
- *   │   COVER IMAGE        │   [LEVEL pill]       │
- *   │   (object-cover)     │   Lesson Title       │
- *   │                      │   Unit · Lesson #    │
- *   │                      │                      │
- *   └──────────────────────┴──────────────────────┘
+ * Editorial Front Page — full-bleed hero cover.
+ *   ┌───────────────────────────────────────────────┐
+ *   │  full-bleed cover image (or themed gradient)   │
+ *   │                                         logo   │
+ *   │                                                │
+ *   │  [LEVEL pill]                                  │
+ *   │  Lesson Title (large, overlaid)                │
+ *   │  Unit · Lesson #                               │
+ *   │  subtitle                                      │
+ *   └───────────────────────────────────────────────┘
+ * No cover image yet? Falls back to a rich hub-themed gradient with
+ * soft decorative highlights instead of a flat tint + lone emoji, so the
+ * slide still reads as a designed cover rather than an empty placeholder.
  */
 export default function FrontPageSlide({
   lessonTitle,
@@ -89,9 +93,9 @@ export default function FrontPageSlide({
   })();
 
   return (
-    <div className="relative w-full h-full min-h-[520px] overflow-hidden rounded-2xl bg-white grid grid-cols-2">
-      {/* ── LEFT: full-bleed cover image ─────────────────────────── */}
-      <div className="relative h-full w-full bg-slate-100 overflow-hidden">
+    <div className="relative w-full h-full min-h-[520px] overflow-hidden rounded-2xl">
+      {/* ── Full-bleed background: real cover image, or a themed hero gradient ── */}
+      <div className="absolute inset-0">
         {coverImageUrl ? (
           <img
             src={coverImageUrl}
@@ -100,86 +104,82 @@ export default function FrontPageSlide({
           />
         ) : (
           <div
-            className="absolute inset-0 flex items-center justify-center text-6xl"
-            style={{
-              background: `linear-gradient(135deg, ${palette.primary}33, ${palette.accent}33)`,
-              color: palette.primary,
-            }}
+            className="absolute inset-0"
+            style={{ background: `linear-gradient(135deg, ${palette.primary} 0%, ${palette.accent} 100%)` }}
             aria-hidden
           >
-            📖
+            <div
+              className="absolute inset-0 opacity-40"
+              style={{
+                backgroundImage:
+                  'radial-gradient(circle at 15% 20%, rgba(255,255,255,0.55) 0%, transparent 32%),' +
+                  'radial-gradient(circle at 85% 75%, rgba(255,255,255,0.35) 0%, transparent 30%),' +
+                  'radial-gradient(circle at 75% 15%, rgba(255,255,255,0.25) 0%, transparent 25%)',
+              }}
+            />
           </div>
         )}
-        {/* Subtle hub accent stripe at bottom of image */}
+      </div>
+
+      {/* Scrim for text legibility over any image/gradient. */}
+      <div
+        className="absolute inset-0"
+        style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.72) 100%)' }}
+      />
+
+      {/* Logo — top-right, overlaid */}
+      <div className="absolute top-5 right-6 z-10 flex items-center gap-2">
+        <span
+          className="inline-flex items-center justify-center h-8 w-8 rounded-lg bg-white/95 font-black text-sm"
+          style={{ color: palette.primary }}
+          aria-hidden
+        >
+          E
+        </span>
+        <span className="text-sm font-extrabold tracking-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]">
+          EnglEuphoria
+        </span>
+      </div>
+
+      {/* Content block, bottom-aligned over the full-bleed art. */}
+      <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-3 px-8 py-8 md:px-12 md:py-10">
+        {level && (
+          <span
+            className={`inline-flex self-start items-center px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest ${palette.pillBg} ${palette.pillText}`}
+          >
+            {level}
+          </span>
+        )}
+
+        <h1
+          className="font-serif text-3xl md:text-5xl lg:text-6xl font-black text-white leading-[1.05] max-w-3xl drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)]"
+        >
+          {lessonTitle}
+        </h1>
+
+        {unitLessonLine && (
+          <p className="text-sm md:text-base font-semibold uppercase tracking-[0.18em] text-white/90 drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]">
+            {unitLessonLine}
+          </p>
+        )}
+
+        {(subtitle || (topic && topic !== lessonTitle)) && (
+          <p className="text-sm md:text-lg text-white/90 font-light leading-relaxed max-w-2xl drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]">
+            {subtitle || topic}
+          </p>
+        )}
+
+        {/* Hub accent bar */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-1.5"
+          className="mt-1 h-1 w-20 rounded-full"
           style={{
             background: `linear-gradient(90deg, ${palette.primary}, ${palette.accent})`,
           }}
         />
-      </div>
 
-      {/* ── RIGHT: metadata panel ────────────────────────────────── */}
-      <div
-        className="relative h-full w-full px-8 md:px-12 py-10 flex flex-col justify-center"
-        style={{
-          background: `linear-gradient(180deg, #ffffff 0%, ${palette.primary}0A 100%)`,
-        }}
-      >
-        {/* Logo — top-right */}
-        <div className="absolute top-5 right-6 flex items-center gap-2">
-          <span
-            className="inline-flex items-center justify-center h-8 w-8 rounded-lg text-white font-black text-sm"
-            style={{ backgroundColor: palette.primary }}
-            aria-hidden
-          >
-            E
-          </span>
-          <span className="text-sm font-extrabold tracking-tight text-slate-800">
-            EnglEuphoria
-          </span>
-        </div>
-
-        {/* Vertically-centered metadata stack */}
-        <div className="flex flex-col gap-4 max-w-md">
-          {level && (
-            <span
-              className={`inline-flex self-start items-center px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest ${palette.pillBg} ${palette.pillText}`}
-            >
-              {level}
-            </span>
-          )}
-
-          <h1
-            className="font-serif text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 leading-[1.05]"
-          >
-            {lessonTitle}
-          </h1>
-
-          {unitLessonLine && (
-            <p className="text-sm md:text-base font-semibold uppercase tracking-[0.18em] text-slate-500">
-              {unitLessonLine}
-            </p>
-          )}
-
-          {(subtitle || (topic && topic !== lessonTitle)) && (
-            <p className="text-sm md:text-base text-slate-600 font-light leading-relaxed">
-              {subtitle || topic}
-            </p>
-          )}
-
-          {/* Hub accent bar */}
-          <div
-            className="mt-2 h-1 w-20 rounded-full"
-            style={{
-              background: `linear-gradient(90deg, ${palette.primary}, ${palette.accent})`,
-            }}
-          />
-
-          <span className="text-[10px] uppercase tracking-[0.3em] text-slate-400 font-bold">
-            {theme.label}
-          </span>
-        </div>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-white/70 font-bold">
+          {theme.label}
+        </span>
       </div>
     </div>
   );
