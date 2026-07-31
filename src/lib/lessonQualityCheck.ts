@@ -236,15 +236,38 @@ export function runLessonQualityCheck(input: LessonQualityInput): LessonQualityR
       rubricScore -= Math.min(40, under.length * 8);
     }
   }
-  if (blueprint?.learning_objective) {
+  // Objective is mandatory for Academy/Success — this is what actually gets
+  // taught, and it was previously optional at every layer (type, AI fallback,
+  // persistence, and this one weak check), so most published lessons had none.
+  const objective = String(blueprint?.learning_objective || '').trim();
+  if ((hub === 'academy' || hub === 'success') && objective.length < 12) {
+    issues.push({
+      code: 'MISSING_LEARNING_OBJECTIVE',
+      severity: 'block',
+      message: 'No real learning objective set. Add one describing what students will learn before publishing.',
+    });
+    rubricScore -= 50;
+  }
+  if (objective) {
     const last = slides[slides.length - 1];
-    if (last && String(last?.type || '') !== 'lesson_summary') {
+    const lastIsSummary = last && String(last?.type || '') === 'lesson_summary';
+    if (!lastIsSummary) {
       issues.push({
         code: 'NO_FINAL_SUMMARY',
         severity: 'warn',
         message: 'Lesson does not end with a lesson_summary slide aligned to the objective.',
       });
       rubricScore -= 15;
+    } else if (last?.auto_generated) {
+      // ensureBookendSlides() scaffolds a generic placeholder summary so a
+      // missing slide never blocks *saving* — but it must not be mistaken
+      // for a real objective-aligned wrap-up at *publish* time.
+      issues.push({
+        code: 'PLACEHOLDER_SUMMARY_NOT_ALIGNED',
+        severity: 'block',
+        message: 'The final summary slide is still the auto-generated placeholder ("Great work! / You completed the lesson.") — write a real summary that recaps the objective before publishing.',
+      });
+      rubricScore -= 40;
     }
   }
 

@@ -13,6 +13,18 @@ import { cefrToDifficulty, hubToTargetSystem } from '@/services/lessonHubMapping
  */
 export type LessonKind = 'standard' | 'trial' | 'story';
 
+/**
+ * True once a lesson has a real, human-meaningful learning objective —
+ * not just an empty/whitespace string. This pipeline has no automated
+ * content-quality gate (unlike the Academy/Success blueprint creator's
+ * `runLessonQualityCheck`), so this is the one thing worth enforcing
+ * centrally before a lesson can go live in the Master Library.
+ */
+function hasRealObjective(lesson: ActiveLessonData): boolean {
+  const obj = (lesson.target_goal || lesson.source_lesson?.objective || lesson.source_lesson?.learning_objective || '').trim();
+  return obj.length >= 12;
+}
+
 export async function persistLesson(
   lesson: ActiveLessonData,
   slides: PPPSlide[],
@@ -23,6 +35,20 @@ export async function persistLesson(
   const { data: userData } = await supabase.auth.getUser();
   const userId = userData.user?.id;
   if (!userId) return { ok: false, error: 'You must be signed in to save.' };
+
+  // Publish-time quality gate. Drafts (isPublished === false) are never
+  // blocked — only the step that makes a lesson visible to students.
+  if (isPublished) {
+    if (!Array.isArray(slides) || slides.length === 0) {
+      return { ok: false, error: 'This lesson has no slides yet — add content before publishing.' };
+    }
+    if ((lesson.hub === 'academy' || lesson.hub === 'success') && kind !== 'trial' && !hasRealObjective(lesson)) {
+      return {
+        ok: false,
+        error: 'This lesson has no learning objective set. Add a Target Goal describing what students will learn before publishing to the Master Library.',
+      };
+    }
+  }
 
   const basePayload: Record<string, any> = {
     title: lesson.lesson_title,
