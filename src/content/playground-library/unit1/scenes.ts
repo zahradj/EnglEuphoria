@@ -65,7 +65,10 @@ export type Scene =
       id: string; kind: 'flipbook'; bg: string; title: string;
       pages: { who?: CharKey; img: string; text: string }[];
       checkpoints: { afterPage: number; who?: CharKey; question: string; options: string[]; answer: string }[];
-    };
+    }
+  | { id: string; kind: 'color-model'; bg: string; who: CharKey; colorWord: string; colorHex: string; teacher: string; anchors: { word: string; emoji: string; img?: string }[] }
+  | { id: string; kind: 'color-basket'; bg: string; colorWord: string; colorHex: string; who: CharKey; teacher: string; items: BasketItem[]; goal: number }
+  | { id: string; kind: 'color-sort'; bg: string; teacher: string; targets: { colorWord: string; colorHex: string; who: CharKey }[]; items: { word: string; img?: string; emoji: string; colorWord: string }[] };
 
 const A = '/lep1'; // public asset root
 
@@ -1495,90 +1498,103 @@ export const LESSON_6_SCENES: Scene[] = [
 ];
 
 /* =========================================================================
- * Unit 2, Lesson 1 — "The Rainbow Meadow" (R + Y sounds, Colors & Shapes).
+ * Unit 2, Lesson 1 — "Red, Blue, Yellow!" (color vocabulary).
  * Same cast/world as Unit 1 (no new characters or background art exist for
  * a distinct Unit 2 world yet) — see the playground-library-lesson-builder
  * skill, section 6, for why this stays in unit1/scenes.ts despite the DB's
- * unit_number being 2. Per the reference curriculum's "Red, Blue, Yellow!"
- * spec (see skill section 15), Unit 2 Lesson 1 teaches R and Y — not B/T,
- * which is Unit 1 Lesson 4's pair and was a real content bug when this
- * lesson duplicated it. R and Y are taught through "Red" and "Yellow" so
- * the unit's colors/shapes theme comes through the phonics vocab itself.
+ * unit_number being 2.
+ *
+ * An earlier version of this lesson taught the /r/ and /y/ LETTER SOUNDS
+ * (using "Red"/"Yellow" only as example words), reasoning that Unit 2
+ * should continue Unit 1's alphabet-sound progression. The actual
+ * curriculum blueprint's stated objective for this slot is color-vocabulary
+ * acquisition ("Identify and name basic colors"), not phonics — rebuilt to
+ * match that: this lesson has no letter-sound target at all, it's purely
+ * "what color is this, and can you say it back."
+ *
+ * New scene kinds added for this: 'color-model' / 'color-basket' /
+ * 'color-sort' — built as their own components (not reused from the
+ * sound-model/basket/sound-sort phonics kinds) because those hard-depend
+ * on playLetterPhonic()'s per-letter audio lookup and a single-glyph-sized
+ * display box, neither of which fits a color word. These use safeSpeak()
+ * for audio and an actual colored swatch (scene.colorHex) for the visual,
+ * so "red" genuinely renders as red rather than an arbitrary character
+ * theme color standing in for it.
  * ========================================================================= */
 
 const itemRain = `${A}/items/item-rain.png`;
-const itemRainbow = `${A}/items/item-rainbow.png`;
 const itemRose = `${A}/items/item-rose.png`;
-const itemYoyo = `${A}/items/item-yoyo.png`;
-const itemYarn = `${A}/items/item-yarn.png`;
-const itemYak = `${A}/items/item-yak.png`;
 
-export const LESSON_U2L1_TITLE = 'The Rainbow Meadow';
-export const LESSON_U2L1_OBJECTIVE = 'Name colors and shapes while learning the /r/ and /y/ sounds.';
+export const LESSON_U2L1_TITLE = 'Red, Blue, Yellow!';
+export const LESSON_U2L1_OBJECTIVE = 'Identify and name basic colors: red, blue, and yellow.';
 
 export const LESSON_U2L1_SCENES: Scene[] = [
-  { id: 'u2l1-title', kind: 'title-card', bg: bgMeadow, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 1', title: 'The Rainbow Meadow', subtitle: 'Colors, shapes & the /r/ and /y/ sounds' },
+  { id: 'u2l1-title', kind: 'title-card', bg: bgMeadow, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 1', title: 'Red, Blue, Yellow!', subtitle: 'Learn to name the colors all around us' },
   {
-    id: 'u2l1-intro', kind: 'cinematic', bg: bgMeadow, title: 'The Rainbow Meadow', subtitle: 'A meadow full of colors and shapes', narrator: 'pip',
+    id: 'u2l1-intro', kind: 'cinematic', bg: bgMeadow, title: 'Red, Blue, Yellow!', subtitle: 'A meadow full of colors', narrator: 'pip',
     script: [
-      { who: 'pip', line: 'Look at all the colors and shapes today!' },
-      { who: 'pip', line: 'Bella and Willow found two new sounds to share.' },
+      { who: 'pip', line: 'Look at all the colors today!' },
+      { who: 'pip', line: 'Bella and Willow want to show you red, blue, and yellow.' },
     ],
     cta: "Let's look!",
   },
   {
-    id: 'u2l1-model-r', kind: 'sound-model', bg: bgClearing, who: 'bella', letter: 'R', phoneme: '/r/', sound: 'ruh', teacher: 'Listen to Bella\'s sound. /r/ /r/ Rainbow!',
+    id: 'u2l1-model-red', kind: 'color-model', bg: bgClearing, who: 'bella', colorWord: 'RED', colorHex: '#E63946', teacher: "Listen to Bella. This is red!",
     anchors: [
-      { word: 'Rain', emoji: '\u{1F327}️', img: itemRain },
-      { word: 'Rainbow', emoji: '\u{1F308}', img: itemRainbow },
+      { word: 'Apple', emoji: '\u{1F34E}', img: itemApple },
       { word: 'Rose', emoji: '\u{1F339}', img: itemRose },
     ],
   },
-  { id: 'u2l1-trace-r', kind: 'trace', bg: bgClearing, who: 'bella', letter: 'R', phoneme: '/r/', word: 'Rainbow', teacher: 'Trace the round R with your finger! /r/ /r/ Rainbow!' },
-  { id: 'u2l1-echo-r', kind: 'echo', bg: bgMeadow, who: 'bella', teacher: 'Repeat after Bella: Red rose! Red rose!', word: 'Red rose!' },
+  { id: 'u2l1-echo-red', kind: 'echo', bg: bgMeadow, who: 'bella', teacher: 'Repeat after Bella: This is red! This is red!', word: 'This is red!' },
   {
-    id: 'u2l1-model-y', kind: 'sound-model', bg: bgBigTree, who: 'willow', letter: 'Y', phoneme: '/y/', sound: 'yuh', teacher: 'Listen to Willow\'s sound. /y/ /y/ Yoyo!',
+    id: 'u2l1-model-blue', kind: 'color-model', bg: bgBigTree, who: 'willow', colorWord: 'BLUE', colorHex: '#3B82F6', teacher: 'Listen to Willow. This is blue!',
     anchors: [
-      { word: 'Yoyo', emoji: '\u{1FA80}', img: itemYoyo },
-      { word: 'Yarn', emoji: '\u{1F9F6}', img: itemYarn },
-      { word: 'Yak', emoji: '\u{1F403}', img: itemYak },
+      { word: 'Water', emoji: '\u{1F4A7}', img: itemWater },
+      { word: 'Wave', emoji: '\u{1F30A}', img: itemWave },
     ],
   },
-  { id: 'u2l1-trace-y', kind: 'trace', bg: bgBigTree, who: 'willow', letter: 'Y', phoneme: '/y/', word: 'Yoyo', teacher: 'Trace the tall Y with your finger! /y/ /y/ Yoyo!' },
-  { id: 'u2l1-echo-y', kind: 'echo', bg: bgMeadow, who: 'willow', teacher: 'Repeat after Willow: Yellow yarn! Yellow yarn!', word: 'Yellow yarn!' },
+  { id: 'u2l1-echo-blue', kind: 'echo', bg: bgMeadow, who: 'willow', teacher: 'Repeat after Willow: This is blue! This is blue!', word: 'This is blue!' },
   {
-    id: 'u2l1-basket-r', kind: 'basket', bg: bgClearing, letter: 'R', phoneme: '/r/', who: 'bella', teacher: "Drag the /r/ words into Bella's R basket!", goal: 3,
+    id: 'u2l1-model-yellow', kind: 'color-model', bg: bgMeadow, who: 'pip', colorWord: 'YELLOW', colorHex: '#FBBF24', teacher: 'Listen to Pip. This is yellow!',
+    anchors: [
+      { word: 'Sun', emoji: '\u{2600}️', img: itemSun },
+      { word: 'Moon', emoji: '\u{1F319}', img: itemMoon },
+    ],
+  },
+  { id: 'u2l1-echo-yellow', kind: 'echo', bg: bgMeadow, who: 'pip', teacher: 'Repeat after Pip: This is yellow! This is yellow!', word: 'This is yellow!' },
+  {
+    id: 'u2l1-basket-red', kind: 'color-basket', bg: bgClearing, colorWord: 'RED', colorHex: '#E63946', who: 'bella', teacher: 'Drag the red things into the red basket!', goal: 3,
     items: [
-      { word: 'rain', emoji: '\u{1F327}️', img: itemRain, hit: true },
-      { word: 'rainbow', emoji: '\u{1F308}', img: itemRainbow, hit: true },
+      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, hit: true },
       { word: 'rose', emoji: '\u{1F339}', img: itemRose, hit: true },
-      { word: 'yoyo', emoji: '\u{1FA80}', img: itemYoyo, hit: false },
-      { word: 'yarn', emoji: '\u{1F9F6}', img: itemYarn, hit: false },
+      { word: 'water', emoji: '\u{1F4A7}', img: itemWater, hit: false },
+      { word: 'sun', emoji: '\u{2600}️', img: itemSun, hit: false },
     ],
   },
   {
-    id: 'u2l1-basket-y', kind: 'basket', bg: bgBigTree, letter: 'Y', phoneme: '/y/', who: 'willow', teacher: "Drag the /y/ words into Willow's Y basket!", goal: 3,
+    id: 'u2l1-basket-blue', kind: 'color-basket', bg: bgBigTree, colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', teacher: 'Drag the blue things into the blue basket!', goal: 3,
     items: [
-      { word: 'yoyo', emoji: '\u{1FA80}', img: itemYoyo, hit: true },
-      { word: 'yarn', emoji: '\u{1F9F6}', img: itemYarn, hit: true },
-      { word: 'yak', emoji: '\u{1F403}', img: itemYak, hit: true },
-      { word: 'rain', emoji: '\u{1F327}️', img: itemRain, hit: false },
-      { word: 'rainbow', emoji: '\u{1F308}', img: itemRainbow, hit: false },
+      { word: 'water', emoji: '\u{1F4A7}', img: itemWater, hit: true },
+      { word: 'wave', emoji: '\u{1F30A}', img: itemWave, hit: true },
+      { word: 'rain', emoji: '\u{1F327}️', img: itemRain, hit: true },
+      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, hit: false },
+      { word: 'sun', emoji: '\u{2600}️', img: itemSun, hit: false },
     ],
   },
   {
-    id: 'u2l1-sort-ry', kind: 'sound-sort', bg: bgMeadow, teacher: 'Listen! Drag each thing to its sound — /r/ or /y/.',
+    id: 'u2l1-sort-colors', kind: 'color-sort', bg: bgMeadow, teacher: 'Listen! Drag each thing to its color — red, blue, or yellow.',
     targets: [
-      { letter: 'R', phoneme: '/r/', who: 'bella' },
-      { letter: 'Y', phoneme: '/y/', who: 'willow' },
+      { colorWord: 'RED', colorHex: '#E63946', who: 'bella' },
+      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow' },
+      { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip' },
     ],
     items: [
-      { word: 'rain', emoji: '\u{1F327}️', img: itemRain, letter: 'R' },
-      { word: 'rainbow', emoji: '\u{1F308}', img: itemRainbow, letter: 'R' },
-      { word: 'rose', emoji: '\u{1F339}', img: itemRose, letter: 'R' },
-      { word: 'yoyo', emoji: '\u{1FA80}', img: itemYoyo, letter: 'Y' },
-      { word: 'yarn', emoji: '\u{1F9F6}', img: itemYarn, letter: 'Y' },
-      { word: 'yak', emoji: '\u{1F403}', img: itemYak, letter: 'Y' },
+      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, colorWord: 'RED' },
+      { word: 'rose', emoji: '\u{1F339}', img: itemRose, colorWord: 'RED' },
+      { word: 'water', emoji: '\u{1F4A7}', img: itemWater, colorWord: 'BLUE' },
+      { word: 'wave', emoji: '\u{1F30A}', img: itemWave, colorWord: 'BLUE' },
+      { word: 'sun', emoji: '\u{2600}️', img: itemSun, colorWord: 'YELLOW' },
+      { word: 'moon', emoji: '\u{1F319}', img: itemMoon, colorWord: 'YELLOW' },
     ],
   },
   {
@@ -1587,44 +1603,43 @@ export const LESSON_U2L1_SCENES: Scene[] = [
   {
     id: 'u2l1-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Listen! Tap the missing letter to make the word.',
     rounds: [
-      { word: 'rain', blankIndex: 0, answer: 'R', choices: ['R', 'Y'], img: itemRain, emoji: '\u{1F327}️' },
-      { word: 'yoyo', blankIndex: 0, answer: 'Y', choices: ['R', 'Y'], img: itemYoyo, emoji: '\u{1FA80}' },
-      { word: 'rose', blankIndex: 0, answer: 'R', choices: ['R', 'Y'], img: itemRose, emoji: '\u{1F339}' },
-      { word: 'yak', blankIndex: 0, answer: 'Y', choices: ['R', 'Y'], img: itemYak, emoji: '\u{1F403}' },
+      { word: 'red', blankIndex: 0, answer: 'R', choices: ['R', 'B', 'Y'], img: itemApple, emoji: '\u{1F34E}' },
+      { word: 'blue', blankIndex: 0, answer: 'B', choices: ['R', 'B', 'Y'], img: itemWater, emoji: '\u{1F4A7}' },
+      { word: 'yellow', blankIndex: 0, answer: 'Y', choices: ['R', 'B', 'Y'], img: itemSun, emoji: '\u{2600}️' },
     ],
   },
   {
     id: 'u2l1-who', kind: 'who-said-it', bg: bgHideSeek, teacher: 'Listen! Who is talking? Tap the friend.',
     rounds: [
-      { line: 'Look at the red rose!', who: 'bella' },
-      { line: 'I have a yellow yoyo!', who: 'willow' },
-      { line: 'The rainbow is so pretty!', who: 'pip' },
+      { line: 'Look at the red apple!', who: 'bella' },
+      { line: 'The water is blue!', who: 'willow' },
+      { line: 'The sun is yellow!', who: 'pip' },
     ],
   },
   {
     id: 'u2l1-memory', kind: 'memory', bg: bgMeadow, teacher: 'Find the pairs! Tap two cards to match them.',
     pairs: [
-      { id: 'rain', label: 'Rain', emoji: '\u{1F327}️', img: itemRain },
+      { id: 'apple', label: 'Apple', emoji: '\u{1F34E}', img: itemApple },
+      { id: 'water', label: 'Water', emoji: '\u{1F4A7}', img: itemWater },
+      { id: 'sun', label: 'Sun', emoji: '\u{2600}️', img: itemSun },
       { id: 'rose', label: 'Rose', emoji: '\u{1F339}', img: itemRose },
-      { id: 'yoyo', label: 'Yoyo', emoji: '\u{1FA80}', img: itemYoyo },
-      { id: 'yak', label: 'Yak', emoji: '\u{1F403}', img: itemYak },
     ],
   },
   {
-    id: 'u2l1-dash', kind: 'dash', bg: bgClearing, teacher: 'Bella Dash! Tap only the R words as they run by. Get 6 rings!', who: 'bella', targetLetter: 'R', targetPhoneme: '/r/', goal: 6, seconds: 40,
+    id: 'u2l1-dash', kind: 'dash', bg: bgClearing, teacher: 'Bella Dash! Tap only the RED things as they run by. Get 6 rings!', who: 'bella', targetLetter: 'RED', targetPhoneme: '', goal: 6, seconds: 40,
     items: [
-      { word: 'rain', letter: 'R', img: itemRain, emoji: '\u{1F327}️' },
-      { word: 'rainbow', letter: 'R', img: itemRainbow, emoji: '\u{1F308}' },
-      { word: 'rose', letter: 'R', img: itemRose, emoji: '\u{1F339}' },
-      { word: 'yoyo', letter: 'Y', img: itemYoyo, emoji: '\u{1FA80}' },
-      { word: 'yarn', letter: 'Y', img: itemYarn, emoji: '\u{1F9F6}' },
-      { word: 'yak', letter: 'Y', img: itemYak, emoji: '\u{1F403}' },
+      { word: 'apple', letter: 'RED', img: itemApple, emoji: '\u{1F34E}' },
+      { word: 'rose', letter: 'RED', img: itemRose, emoji: '\u{1F339}' },
+      { word: 'water', letter: 'BLUE', img: itemWater, emoji: '\u{1F4A7}' },
+      { word: 'wave', letter: 'BLUE', img: itemWave, emoji: '\u{1F30A}' },
+      { word: 'sun', letter: 'YELLOW', img: itemSun, emoji: '\u{2600}️' },
+      { word: 'moon', letter: 'YELLOW', img: itemMoon, emoji: '\u{1F319}' },
     ],
   },
   {
-    id: 'u2l1-feelings', kind: 'feelings', bg: bgBigTree, teacher: 'So many colors and shapes today! How do you feel?',
+    id: 'u2l1-feelings', kind: 'feelings', bg: bgBigTree, teacher: 'So many colors today! How do you feel?',
     options: [
-      { label: 'Happy', emoji: '\u{1F600}', reply: 'Yay! Colors and shapes are fun!' },
+      { label: 'Happy', emoji: '\u{1F600}', reply: 'Yay! Colors are fun!' },
       { label: 'Okay', emoji: '\u{1F610}', reply: 'That is okay. Let\'s keep exploring together.' },
       { label: 'Sad', emoji: '\u{1F622}', reply: "It's okay to feel sad. I am here with you." },
     ],
@@ -1632,31 +1647,22 @@ export const LESSON_U2L1_SCENES: Scene[] = [
   {
     id: 'u2l1-puzzle', kind: 'puzzle', bg: bgMeadow, teacher: 'Guess the friend! Tap pieces to peek, then pick who it is.',
     rounds: [
-      { who: 'bella', img: CAST.bella.img, hint: 'She loves red roses.' },
-      { who: 'willow', img: CAST.willow.img, hint: 'She found a yellow yoyo today.' },
+      { who: 'bella', img: CAST.bella.img, hint: 'She loves red apples.' },
+      { who: 'willow', img: CAST.willow.img, hint: 'She loves the blue water.' },
       { who: 'leo', img: CAST.leo.img, hint: 'A sleepy lion with a big, warm roar.' },
     ],
   },
   {
-    id: 'u2l1-roleplay', kind: 'roleplay', bg: bgGatherEmpty, teacher: 'Story time! Listen to Pip and Bella talk about the meadow, then repeat.', cast: ['pip', 'bella'],
+    id: 'u2l1-roleplay', kind: 'roleplay', bg: bgGatherEmpty, teacher: 'Story time! Listen to Pip and Bella talk about colors, then repeat.', cast: ['pip', 'bella'],
     script: [
-      { who: 'pip', line: 'Look! A red rose!' },
+      { who: 'pip', line: 'Look! A red apple!' },
       { who: 'bella', line: 'I like red!', repeat: true },
-      { who: 'bella', line: 'Look! A yellow yoyo!' },
-      { who: 'pip', line: 'I like yellow too!', repeat: true },
+      { who: 'bella', line: 'Look! The blue water!' },
+      { who: 'pip', line: 'I like blue too!', repeat: true },
     ],
   },
   {
-    id: 'u2l1-alphabet-blocks', kind: 'alphabet-blocks', bg: bgMeadow, teacher: 'Alphabet Blocks! Tap the sound, then stack the word!', letters: ['R', 'Y', 'E', 'T'],
-    tapRounds: [{ letter: 'R' }, { letter: 'Y' }, { letter: 'R' }, { letter: 'Y' }],
-    words: [
-      { word: 'RYE', emoji: '\u{1F35E}' },
-      { word: 'TRY', emoji: '\u{1F4AA}' },
-    ],
-  },
-  { id: 'u2l1-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Drag the letters into ABC order!', sequences: ['QRST', 'TUVW', 'WXYZ'] },
-  {
-    id: 'u2l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the rainbow meadow! Sing along together.',
+    id: 'u2l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the colorful meadow! Sing along together.',
     durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
@@ -1666,5 +1672,5 @@ export const LESSON_U2L1_SCENES: Scene[] = [
       { who: 'pip', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
     ],
   },
-  { id: 'u2l1-finale', kind: 'finale', bg: bgMeadow, who: 'bella', line: 'You did it! You found colors, shapes, and two new sounds — /r/ and /y/!' },
+  { id: 'u2l1-finale', kind: 'finale', bg: bgMeadow, who: 'bella', line: 'You did it! You can name red, blue, and yellow! \u{1F308}' },
 ];
