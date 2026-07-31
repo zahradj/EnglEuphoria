@@ -1654,7 +1654,7 @@ export const LESSON_U2L1_SCENES: Scene[] = [
       { word: 'TRY', emoji: '\u{1F4AA}' },
     ],
   },
-  { id: 'u2l1-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Drag the letters into ABC order!', sequences: ['ABCD', 'STUV', 'QRST'] },
+  { id: 'u2l1-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Drag the letters into ABC order!', sequences: ['QRST', 'TUVW', 'WXYZ'] },
   {
     id: 'u2l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the rainbow meadow! Sing along together.',
     durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
