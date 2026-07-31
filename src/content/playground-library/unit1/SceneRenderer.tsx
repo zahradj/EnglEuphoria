@@ -614,6 +614,25 @@ function EchoScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind: 'ec
   );
 }
 
+/* ---------- Scatter layout ---------- */
+
+/** Lays out N draggable items into two clean, evenly-spaced rows instead of
+ *  the old hand-picked percentage list — which drifted into overlapping,
+ *  off-center clutter as soon as an item count didn't match what the list
+ *  was tuned for. Rotation is kept small so items read as tidy, not messy. */
+function scatterPositions(n: number, rowTops: [number, number] = [16, 84], margin = 14): { left: string; top: string; rot: number }[] {
+  const topCount = Math.ceil(n / 2);
+  const bottomCount = n - topCount;
+  const usable = 100 - margin * 2;
+  const row = (count: number, topPct: number, offset: number) =>
+    Array.from({ length: count }, (_, i) => ({
+      left: `${count === 1 ? 50 : margin + (usable * i) / (count - 1)}%`,
+      top: `${topPct}%`,
+      rot: (i % 2 === 0 ? -1 : 1) * (2 + ((i + offset) % 3)),
+    }));
+  return [...row(topCount, rowTops[0], 0), ...row(bottomCount, rowTops[1], topCount)];
+}
+
 /* ---------- Basket ---------- */
 
 function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'basket' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
@@ -670,11 +689,7 @@ function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, {
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
   }
 
-  const orbit = [
-    { left: '12%', top: '42%', rot: -8 }, { left: '88%', top: '42%', rot: 7 },
-    { left: '20%', top: '72%', rot: 4 }, { left: '80%', top: '72%', rot: -5 },
-    { left: '50%', top: '84%', rot: -3 },
-  ];
+  const orbit = scatterPositions(scene.items.length, [56, 86], 14);
 
   return (
     <div className="absolute inset-0">
@@ -905,9 +920,7 @@ function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
   };
 
-  const orbit = scene.items.length === 6
-    ? [{ left: '16%', top: '18%', rot: -6 }, { left: '50%', top: '12%', rot: 4 }, { left: '84%', top: '20%', rot: -3 }, { left: '18%', top: '84%', rot: 5 }, { left: '50%', top: '90%', rot: -4 }, { left: '82%', top: '84%', rot: 3 }]
-    : [{ left: '14%', top: '22%', rot: -6 }, { left: '38%', top: '16%', rot: 4 }, { left: '62%', top: '16%', rot: -3 }, { left: '86%', top: '22%', rot: 5 }, { left: '18%', top: '82%', rot: 4 }, { left: '42%', top: '88%', rot: -5 }, { left: '58%', top: '88%', rot: 3 }, { left: '82%', top: '82%', rot: -4 }];
+  const orbit = scatterPositions(scene.items.length, [16, 84], 14);
 
   return (
     <div className="absolute inset-0">
@@ -938,7 +951,7 @@ function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
         const glow = s.flash === 'bad' ? 'drop-shadow-[0_0_14px_rgba(239,68,68,0.9)] animate-[lep1-shake_0.4s_ease-in-out]' : s.flash === 'good' ? 'drop-shadow-[0_0_18px_rgba(34,197,94,0.9)]' : 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]';
         return (
           <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-            className={`absolute h-56 w-56 sm:h-72 sm:w-72 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
+            className={`absolute h-40 w-40 sm:h-52 sm:w-52 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
             style={{ left: pos.left, top: pos.top, animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
             aria-label={s.it.word}
           >
