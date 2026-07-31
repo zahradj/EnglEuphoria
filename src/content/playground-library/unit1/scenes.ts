@@ -60,7 +60,12 @@ export type Scene =
   | { id: string; kind: 'age-balloons'; bg: string; teacher: string; friends: { who: CharKey; age: number }[] }
   | { id: string; kind: 'age-sentence-match'; bg: string; teacher: string; friends: { who: CharKey; age: number }[] }
   | { id: string; kind: 'meet-greet'; bg: string; teacher: string; friends: { who: CharKey; age: number }[] }
-  | { id: string; kind: 'age-quiz'; bg: string; teacher: string; friends: { who: CharKey; age: number }[]; studentAges: number[] };
+  | { id: string; kind: 'age-quiz'; bg: string; teacher: string; friends: { who: CharKey; age: number }[]; studentAges: number[] }
+  | {
+      id: string; kind: 'flipbook'; bg: string; title: string;
+      pages: { who?: CharKey; img: string; text: string }[];
+      checkpoints: { afterPage: number; who?: CharKey; question: string; options: string[]; answer: string }[];
+    };
 
 const A = '/lep1'; // public asset root
 
@@ -1453,6 +1458,26 @@ export const LESSON_6_SCENES: Scene[] = [
       { letter: 'W', phoneme: '/w/', word: 'wind', img: itemWind, emoji: '\u{1F32C}️', choices: ['W', 'S', 'M'] },
       { letter: 'S', phoneme: '/s/', word: 'snake', img: itemSnake, emoji: '\u{1F40D}', choices: ['S', 'A', 'W'] },
       { letter: 'A', phoneme: '/a/', word: 'alligator', img: itemAlligator, emoji: '\u{1F40A}', choices: ['A', 'H', 'N'] },
+    ],
+  },
+  {
+    id: 'l6-storybook', kind: 'flipbook', bg: bgGoodbyeCast, title: 'Our Forest Story',
+    pages: [
+      { img: bgTitleForest, text: 'Once upon a time, there was a magical forest full of friends.' },
+      { who: 'pip', img: scenePipClearing, text: 'Pip the squirrel waved and said, "Hello! My name is Pip!"' },
+      { who: 'mia', img: sceneMiaMousehole, text: 'Mia the mouse felt happy today. "I am happy!" she said.' },
+      { who: 'bella', img: sceneBellaBigTree, text: 'Bella the bunny had a birthday. She is five years old!' },
+      { who: 'willow', img: bgMeadow, text: 'In the Rainbow Meadow, Willow found a yellow yoyo. Yoyo starts with /y/!' },
+      { who: 'leo', img: bgBigTree, text: 'Leo the lion saw all his friends together and felt so happy!' },
+      { img: bgL6TrophyTrail, text: 'All the friends walked together down the Trophy Trail.' },
+      { img: bgGoodbyeCast, text: 'The End! Now you know all about Pip, Mia, Bella, Willow, and Leo. \u{2728}' },
+    ],
+    checkpoints: [
+      { afterPage: 1, who: 'pip', question: "What's his name?", options: ['Pip', 'Leo', 'Mia'], answer: 'Pip' },
+      { afterPage: 2, who: 'mia', question: 'How does she feel?', options: ['Sad', 'Angry', 'Happy'], answer: 'Happy' },
+      { afterPage: 3, who: 'bella', question: 'How old is she?', options: ['Three', 'Five', 'Seven'], answer: 'Five' },
+      { afterPage: 4, who: 'willow', question: "Which sound does 'yoyo' start with?", options: ['/r/', '/h/', '/y/'], answer: '/y/' },
+      { afterPage: 5, who: 'leo', question: 'How does he feel?', options: ['Sad', 'Happy', 'Angry'], answer: 'Happy' },
     ],
   },
   {

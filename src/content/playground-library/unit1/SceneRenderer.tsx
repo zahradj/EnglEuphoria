@@ -232,6 +232,7 @@ export function SceneRenderer(props: {
     case 'feelings': return <FeelingsScene scene={scene} onNext={props.onNext} />;
     case 'puzzle': return <PuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'trophy-chest': return <TrophyChestScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
@@ -2189,6 +2190,116 @@ function TrophyChestScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sce
           <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
             Next →
           </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Flipbook (page-flip storybook with comprehension checkpoints) ---------- */
+
+function FlipbookScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'flipbook' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [pageIdx, setPageIdx] = useState(0);
+  const [flipping, setFlipping] = useState(false);
+  const [checkpoint, setCheckpoint] = useState<(typeof scene.checkpoints)[number] | null>(null);
+  const [solved, setSolved] = useState<Set<number>>(new Set());
+  const [wrongPick, setWrongPick] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
+  const gemDone = useRef(false);
+  const page = scene.pages[pageIdx];
+  const total = scene.pages.length;
+
+  useEffect(() => { if (page) cueSpeakOnce(page.text, page.who ?? 'teacher'); }, [pageIdx]);
+
+  const advance = () => {
+    setFlipping(true);
+    sfx.click();
+    window.setTimeout(() => {
+      setFlipping(false);
+      if (pageIdx + 1 >= total) {
+        setDone(true);
+        if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+      } else {
+        setPageIdx((p) => p + 1);
+      }
+    }, 450);
+  };
+
+  const turnPage = () => {
+    if (flipping || checkpoint || done) return;
+    const pending = scene.checkpoints.find((c) => c.afterPage === pageIdx && !solved.has(c.afterPage));
+    if (pending) { setCheckpoint(pending); return; }
+    advance();
+  };
+
+  const answer = (choice: string) => {
+    if (!checkpoint) return;
+    if (choice !== checkpoint.answer) { sfx.wrong(); onLose(); setWrongPick(choice); window.setTimeout(() => setWrongPick(null), 450); return; }
+    sfx.match();
+    setSolved((prev) => new Set(prev).add(checkpoint.afterPage));
+    setCheckpoint(null);
+    advance();
+  };
+
+  if (done) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+        <button onClick={onNext} className="relative z-10 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
+          📖 The End! Next →
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-black/25" />
+      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        📖 {scene.title} <span className="ml-1 opacity-60">({pageIdx + 1}/{total})</span>
+      </div>
+
+      <div className="absolute inset-0 z-10 flex items-center justify-center px-4 pb-24 pt-16" style={{ perspective: 1400 }}>
+        <div
+          onClick={turnPage}
+          className="relative w-full max-w-[560px] cursor-pointer select-none rounded-[28px] bg-white shadow-2xl ring-4 ring-white/70"
+          style={{
+            aspectRatio: '4 / 3',
+            transformOrigin: 'right center',
+            transform: flipping ? 'rotateY(-130deg) scaleX(0.85)' : 'rotateY(0deg)',
+            transition: 'transform 0.45s cubic-bezier(0.45,0.05,0.55,0.95)',
+            backfaceVisibility: 'hidden',
+          }}
+        >
+          <div className="h-[68%] w-full overflow-hidden rounded-t-[28px]">
+            <img src={page.img} alt="" className="h-full w-full object-cover" />
+          </div>
+          <div className="flex h-[32%] flex-col items-center justify-center gap-1 px-6 text-center">
+            <p className="text-base font-bold text-orange-800 sm:text-lg">{page.text}</p>
+            {page.who && <span className="text-xs font-black uppercase tracking-widest text-orange-400">— {CAST[page.who].name}</span>}
+          </div>
+          {!flipping && (
+            <div className="absolute -right-3 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-orange-500 text-white shadow-xl animate-pulse">▶</div>
+          )}
+        </div>
+      </div>
+
+      {checkpoint && (
+        <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/50 px-6" style={{ animation: 'lep1-pop 0.3s ease-out' }}>
+          <div className="w-full max-w-sm rounded-3xl bg-white p-6 text-center shadow-2xl">
+            {checkpoint.who && <img src={CAST[checkpoint.who].img} alt={CAST[checkpoint.who].name} className="mx-auto mb-2 h-16 w-16 object-contain" />}
+            <div className="mb-1 text-3xl">🤔</div>
+            <p className="mb-4 text-xl font-black text-orange-800">{checkpoint.question}</p>
+            <div className="flex flex-col gap-2">
+              {checkpoint.options.map((opt) => (
+                <button key={opt} onClick={() => answer(opt)}
+                  className={`rounded-2xl border-4 border-white py-3 text-lg font-black text-white shadow-lg transition active:scale-95 ${wrongPick === opt ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
+                  style={{ background: 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' }}>
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
