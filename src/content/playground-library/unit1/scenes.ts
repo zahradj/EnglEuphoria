@@ -1448,7 +1448,7 @@ export const LESSON_6_SCENES: Scene[] = [
       { word: 'MAT', emoji: '\u{1F7EB}' },
     ],
   },
-  { id: 'l6-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Final Alphabet Order! Drag the letters into ABC order!', sequences: ['UVWX', 'RSTU', 'OPQR'] },
+  { id: 'l6-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Final Alphabet Order! Drag the letters into ABC order!', sequences: ['ABHM', 'HMNS', 'NSTW'] },
   {
     id: 'l6-trophy-chest', kind: 'trophy-chest', bg: bgGatherEmpty, who: 'pip', teacher: 'The Trophy Chest! Tap the sound you hear to unlock each treasure.',
     rounds: [
