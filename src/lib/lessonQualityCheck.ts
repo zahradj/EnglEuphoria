@@ -61,7 +61,11 @@ const CEFR_BUDGET: Record<string, { maxAvgSentenceWords: number; maxAvgWordLen: 
 /** Hub-specific slide-count targets (must align with generate-ppp-slides). */
 const HUB_SLIDE_TARGET: Record<LessonHub, { min: number; max: number; ideal: number }> = {
   playground: { min: 9, max: 22, ideal: 17 },
-  academy: { min: 24, max: 32, ideal: 28 },
+  // Academy grew from 26-30 to 30-40 slides: vocab and grammar each now get
+  // their own presentation + ≥3/≥4 dedicated retrieval-practice rounds
+  // instead of sharing one "practice" block at the end (see
+  // generate-ppp-slides' academy prompt + hubEnforcementBlock.ts).
+  academy: { min: 26, max: 42, ideal: 34 },
   success: { min: 24, max: 32, ideal: 28 },
 };
 
@@ -78,16 +82,47 @@ const HUB_BLOCK_ORDER: Partial<Record<LessonHub, string[]>> = {
   success: ['warmup', 'vocab', 'context', 'functional', 'practice', 'simulation', 'output'],
 };
 
+/**
+ * Pulls every learner-facing string out of a slide so vocab-recycling counts
+ * (and reading-level checks) reflect what a student actually sees. Written
+ * for an earlier, simpler slide schema — it silently gave zero credit to
+ * `vocab_deck`/`vocab_image_match`/`matching`'s nested `cards`/`pairs`,
+ * `fill_blank`'s `before`/`after`, `error_detection`'s `sentence`, and
+ * `cluster`'s `activities`, so Academy's own game-based vocab/grammar
+ * practice was invisible to this scorer even when it was present.
+ */
 function extractText(slide: any): string {
   const buckets: string[] = [];
-  for (const key of ['title', 'subtitle', 'text', 'passage', 'transcript', 'prompt', 'question', 'statement', 'instruction', 'definition', 'example', 'rule', 'takeaway', 'situation', 'task']) {
+  for (const key of ['title', 'subtitle', 'text', 'passage', 'transcript', 'prompt', 'question', 'statement', 'sentence', 'instruction', 'definition', 'example', 'rule', 'takeaway', 'situation', 'task', 'word', 'content', 'before', 'after', 'wrong', 'lineA', 'lineB', 'grammar_recap']) {
     const v = (slide as any)?.[key];
     if (typeof v === 'string') buckets.push(v);
   }
-  if (Array.isArray(slide?.options)) buckets.push(slide.options.filter((o: any) => typeof o === 'string').join(' '));
-  if (Array.isArray(slide?.examples)) buckets.push(slide.examples.filter((o: any) => typeof o === 'string').join(' '));
+  for (const key of ['options', 'examples', 'words', 'vocab_recap', 'starters']) {
+    const arr = (slide as any)?.[key];
+    if (Array.isArray(arr)) buckets.push(arr.filter((o: any) => typeof o === 'string').join(' '));
+  }
+  if (Array.isArray(slide?.answer)) buckets.push(slide.answer.filter((o: any) => typeof o === 'string').join(' '));
+  else if (typeof slide?.answer === 'string') buckets.push(slide.answer);
   if (Array.isArray(slide?.pages)) {
     for (const p of slide.pages) if (typeof p?.text === 'string') buckets.push(p.text);
+  }
+  // vocab_deck's cards, vocab_image_match/matching's pairs.
+  if (Array.isArray(slide?.cards)) {
+    for (const c of slide.cards) {
+      for (const k of ['word', 'definition', 'example']) if (typeof c?.[k] === 'string') buckets.push(c[k]);
+    }
+  }
+  if (Array.isArray(slide?.pairs)) {
+    for (const p of slide.pairs) {
+      for (const k of ['word', 'left', 'right']) if (typeof p?.[k] === 'string') buckets.push(p[k]);
+    }
+  }
+  // cluster's bundled mini-activities.
+  if (Array.isArray(slide?.activities)) {
+    for (const a of slide.activities) {
+      for (const k of ['question', 'text', 'statement', 'prompt']) if (typeof a?.[k] === 'string') buckets.push(a[k]);
+      if (Array.isArray(a?.options)) buckets.push(a.options.filter((o: any) => typeof o === 'string').join(' '));
+    }
   }
   return buckets.join(' ').trim();
 }

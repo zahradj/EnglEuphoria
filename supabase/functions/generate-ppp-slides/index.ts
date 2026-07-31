@@ -472,26 +472,30 @@ PRONUNCIATION LAYER (MANDATORY): The lesson MUST include EXACTLY 1 "phonics_focu
         role: 'pedagogue',
         cefr: cefr_level,
         hub: 'academy',
-        ageGroup: 'teens',
+        ageGroup: 'teens (skews YOUNG — most students are 10-13-year-old tweens, a minority 14-17; keep energy high and game-like, avoid dating/romance/mature themes, favor school/friends/gaming/internet-culture references)',
         previousTopics: prevTopics,
       });
-      const academySystem = `${DATA_INTEGRITY_BLOCK}\n${academyPersona}${castingBlock}\n\nYou are a Master TEFL/CELTA-trained ESL lesson designer for TEENAGERS.
+      const academySystem = `${DATA_INTEGRITY_BLOCK}\n${academyPersona}${castingBlock}\n\nYou are a Master TEFL/CELTA-trained ESL lesson designer for TEENAGERS. Most of your actual students are 10-13-year-old tweens, not older teens — keep humor and references age-appropriate for that band even though you write with CELTA-grade pedagogy, and never write mature/dating content.
 Output ONLY a valid raw JSON array of slide objects (no markdown, no prose, no backticks).
 
 Build a 60-minute Academy lesson at CEFR ${cefr_level}. Topic: "${effectiveTitle}". ${objective ? `Goal: ${objective}.` : ""}
 
-STRICT 7-BLOCK STRUCTURE (60-MINUTE ACADEMY LESSON — pace ~2 min/slide → 26–30 slides total) — slides MUST appear in this order:
+STRICT 7-BLOCK STRUCTURE (60-MINUTE ACADEMY LESSON — pace ~2 min/slide → 30–40 slides total) — slides MUST appear in this order. Vocab and grammar each get PRESENTATION immediately followed by their OWN repeated, gamified retrieval practice — never just one game round, and never deferred to the shared "practice" block later:
   1. warmup       — opinion / poll / question (3-4 slides)
-  2. vocab        — prefer ONE "vocab_deck" (paginated cards with images) + ONE "vocab_image_match" (drag word↔image) + optional "matching" (4-6 slides)
+  2. vocab        — PRESENT once, then DRILL before moving on (6-8 slides total):
+                   • Presentation: ONE "vocab_deck" (paginated cards with images, all target words).
+                   • Practice (MANDATORY — at least 3 DISTINCT game rounds, each re-testing every word from a different angle so words are actively retrieved, not just re-read):
+                     ONE "vocab_image_match" (drag word↔image) + ONE "matching" (word↔definition) + at least ONE more round — either a second "matching" (word↔word/synonym) or a set of "multiple" MCQs (meaning-in-context, one per word) — that tests the same words a different way than the first two rounds.
   3. reading      — reading_passage + listening + comprehension multiple/truefalse (4-6 slides)
-  4. grammar      — VISUAL FIRST: open with ONE creative grammar visual, then drill (4-5 slides total).
-                   • Use "frequency_thermometer" whenever the target grammar is adverbs of frequency.
-                   • Use "grammar_formula" for tense formulas (e.g. Present Perfect = Subject + have/has + V3).
-                   • Use "grammar_color_decode" for word-order / sentence-anatomy patterns (color-coded chunks).
-                   • Fall back to "grammar_pattern" only if none of the above fit.
-                   • Follow the visual with "error_detection" and/or "correction" drills.
-  5. practice     — fill_blank + sentence_builder + cluster (5-6 slides)
-  6. interactive  — debate_scale + role_play (3-4 slides)
+  4. grammar      — PRESENT the rule once, then DRILL it intensively before any free/communicative use (6-8 slides total):
+                   • Presentation: ONE creative grammar visual.
+                     - Use "frequency_thermometer" whenever the target grammar is adverbs of frequency.
+                     - Use "grammar_formula" for tense formulas (e.g. Present Perfect = Subject + have/has + V3).
+                     - Use "grammar_color_decode" for word-order / sentence-anatomy patterns (color-coded chunks).
+                     - Fall back to "grammar_pattern" only if none of the above fit.
+                   • Practice (MANDATORY — at least 4 controlled-practice slides, each with NEW example sentences, so the student actively produces or fixes the target structure at least 4 times before leaving this block): "error_detection" + "correction" + at least 2 more slides drawn from "fill_blank" and/or "sentence_builder" (tagged "block":"grammar" here — these are allowed in both "grammar" and "practice" blocks), each drilling the SAME rule with fresh sentences.
+  5. practice     — CUMULATIVE, INTEGRATED review mixing vocab + grammar together in the same items (fill_blank + sentence_builder + cluster) — by this point the student has already drilled each skill separately, so this block recombines them, it is not the first practice either skill gets (5-6 slides)
+  6. interactive  — debate_scale + role_play — free, communicative use with minimal error-correction (3-4 slides)
   7. speaking     — speaking_task + reflection (3-4 slides)
 
 EVERY slide MUST include a "block" field equal to one of:
@@ -516,8 +520,8 @@ Allowed types and required minimal shapes (omit any irrelevant key):
 { "type":"grammar_formula","block":"grammar","title":"...","terms":[{"label":"Subject","role":"subject"},{"label":"have/has","role":"aux"},{"label":"V3","role":"verb","note":"past participle"}],"example":[{"text":"She","role":"subject"},{"text":"has","role":"aux"},{"text":"eaten","role":"verb"}],"rule":"..." }
 { "type":"error_detection","block":"grammar","prompt":"Tap the wrong word.","sentence":"He go to school.","wrongIndex":1 }
 { "type":"correction","block":"grammar","prompt":"Fix the sentence.","wrong":"...","answer":"..." }
-{ "type":"fill_blank","block":"practice","prompt":"Complete the sentence.","before":"...","after":"...","answer":"..." }
-{ "type":"sentence_builder","block":"practice","prompt":"Order the words.","words":["..."],"answer":["..."] }
+{ "type":"fill_blank","block":"grammar|practice","prompt":"Complete the sentence.","before":"...","after":"...","answer":"..." }
+{ "type":"sentence_builder","block":"grammar|practice","prompt":"Order the words.","words":["..."],"answer":["..."] }
 { "type":"cluster","block":"practice","title":"Quick Drill","content":"...","activities":[
    {"type":"mcq","question":"...","options":["A","B","C"],"answer":"A"},
    {"type":"fill","text":"He ___ phone.","answer":"uses"},
@@ -531,10 +535,10 @@ Allowed types and required minimal shapes (omit any irrelevant key):
 { "type":"lesson_summary","block":"speaking","title":"Review Sheet","vocab_recap":["...","..."],"grammar_recap":"...","takeaway":"..." }
 
 PEDAGOGICAL RULES:
-- Vocabulary taught in block "vocab" MUST appear inside the "reading" passage AND in the "practice" cluster.
-- Grammar pattern in block "grammar" MUST be required by the "speaking" prompts.
-- Total 26-30 slides (NEVER fewer than 26). Block order is STRICT: never interleave blocks out of order. This deck MUST fill a full 60-minute classroom session.
-- Use teen-appropriate, modern, culturally inclusive examples. Keep sentences level-appropriate (${cefr_level}).
+- Vocabulary taught in block "vocab" MUST appear inside the "reading" passage AND in the "practice" cluster, IN ADDITION TO the ≥3 dedicated retrieval-practice rounds inside the "vocab" block itself.
+- Grammar pattern in block "grammar" MUST be required by the "speaking" prompts, IN ADDITION TO the ≥4 dedicated drill slides inside the "grammar" block itself.
+- Total 30-40 slides (NEVER fewer than 30). Block order is STRICT: never interleave blocks out of order. This deck MUST fill a full 60-minute classroom session with genuine repeated practice, not just more presentation.
+- Use teen-appropriate, modern, culturally inclusive examples suited to a mostly 10-13-year-old classroom (school, friends, gaming, internet culture, family — no dating/romance/mature themes). Keep sentences level-appropriate (${cefr_level}).
 - For EVERY slide, include a "teacher_notes" string (≤140 chars) telling the live teacher how to deliver the slide. Never reveal it to the student.
 - The FINAL slide MUST be a "lesson_summary" auto-recapping the 5 vocab words taught + the grammar rule + a one-line takeaway.
 - Return RAW JSON ARRAY only.${phonicsAcademyBlock}
