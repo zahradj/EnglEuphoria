@@ -5,7 +5,7 @@ import type { Scene } from '@/content/playground-library/unit1/scenes';
 import { SceneRenderer, Hearts, MAX_HEARTS, Lep1Keyframes } from '@/content/playground-library/unit1/SceneRenderer';
 import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-library/unit1/audio';
 import { whiteboardService } from '@/services/whiteboardService';
-import { getDomPath, getElementAtPath } from '@/content/playground-library/unit1/scenePathSync';
+import { getDomPath, getElementAtPath, withPointerCaptureNoop } from '@/content/playground-library/unit1/scenePathSync';
 
 export interface PlayUnitLessonHandle {
   goNext: () => void;
@@ -115,27 +115,120 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
     if (!iCaptureTaps || !roomId || !role) return;
     const rootEl = sceneRootRef.current;
     if (!rootEl) return;
-    const handler = (e: MouseEvent) => {
+
+    const clickHandler = (e: MouseEvent) => {
       if (isApplyingRemoteTapRef.current) return;
       const target = e.target as Element | null;
       if (!target) return;
       const path = getDomPath(rootEl, target);
       if (!path) return;
-      void whiteboardService.sendSceneTap(roomId, { path, senderRole: role, senderId: role });
+      void whiteboardService.sendSceneTap(roomId, { path, kind: 'click', senderRole: role, senderId: role });
     };
-    rootEl.addEventListener('click', handler, true);
-    return () => rootEl.removeEventListener('click', handler, true);
+
+    // Drag gestures (basket/sort/word-build/etc.): track each active
+    // pointer's down-position and target path, and broadcast pixel deltas
+    // from that down position — not absolute coordinates — so the follower
+    // can reproduce the same relative motion on its own (possibly
+    // differently sized/positioned) copy of the element. Move broadcasts
+    // are throttled; down/up always send immediately.
+    const drags = new Map<number, { path: number[]; downX: number; downY: number; lastSent: number }>();
+    const MOVE_THROTTLE_MS = 50;
+
+    const downHandler = (e: PointerEvent) => {
+      if (isApplyingRemoteTapRef.current) return;
+      const target = e.target as Element | null;
+      if (!target) return;
+      const path = getDomPath(rootEl, target);
+      if (!path) return;
+      drags.set(e.pointerId, { path, downX: e.clientX, downY: e.clientY, lastSent: 0 });
+      void whiteboardService.sendSceneTap(roomId, {
+        path, kind: 'pointerdown', dx: 0, dy: 0, pointerId: e.pointerId, senderRole: role, senderId: role,
+      });
+    };
+    const moveHandler = (e: PointerEvent) => {
+      if (isApplyingRemoteTapRef.current) return;
+      const drag = drags.get(e.pointerId);
+      if (!drag) return;
+      const now = performance.now();
+      if (now - drag.lastSent < MOVE_THROTTLE_MS) return;
+      drag.lastSent = now;
+      void whiteboardService.sendSceneTap(roomId, {
+        path: drag.path, kind: 'pointermove', dx: e.clientX - drag.downX, dy: e.clientY - drag.downY,
+        pointerId: e.pointerId, senderRole: role, senderId: role,
+      });
+    };
+    const upHandler = (e: PointerEvent) => {
+      if (isApplyingRemoteTapRef.current) return;
+      const drag = drags.get(e.pointerId);
+      if (!drag) return;
+      drags.delete(e.pointerId);
+      void whiteboardService.sendSceneTap(roomId, {
+        path: drag.path, kind: e.type === 'pointercancel' ? 'pointercancel' : 'pointerup',
+        dx: e.clientX - drag.downX, dy: e.clientY - drag.downY,
+        pointerId: e.pointerId, senderRole: role, senderId: role,
+      });
+    };
+
+    rootEl.addEventListener('click', clickHandler, true);
+    rootEl.addEventListener('pointerdown', downHandler, true);
+    rootEl.addEventListener('pointermove', moveHandler, true);
+    rootEl.addEventListener('pointerup', upHandler, true);
+    rootEl.addEventListener('pointercancel', upHandler, true);
+    return () => {
+      rootEl.removeEventListener('click', clickHandler, true);
+      rootEl.removeEventListener('pointerdown', downHandler, true);
+      rootEl.removeEventListener('pointermove', moveHandler, true);
+      rootEl.removeEventListener('pointerup', upHandler, true);
+      rootEl.removeEventListener('pointercancel', upHandler, true);
+    };
   }, [iCaptureTaps, roomId, role, sceneIdx]);
 
   useEffect(() => {
     if (!iReplayTaps || !roomId) return;
+    // Follower's own synthetic down-position per active gesture — an
+    // anchor point on ITS OWN element (its center), since absolute screen
+    // coordinates from the driver's device don't mean anything here; only
+    // the broadcasted dx/dy deltas need to reproduce faithfully.
+    const dragTargets = new Map<number, { el: HTMLElement; startX: number; startY: number }>();
     const unsubscribe = whiteboardService.subscribeToSceneTap(roomId, (payload) => {
       const rootEl = sceneRootRef.current;
       if (!rootEl) return;
-      const el = getElementAtPath(rootEl, payload.path);
-      if (!el) return;
+      const kind = payload.kind ?? 'click';
+      const pointerId = payload.pointerId ?? 0;
       isApplyingRemoteTapRef.current = true;
-      try { el.click(); } finally { isApplyingRemoteTapRef.current = false; }
+      try {
+        if (kind === 'click') {
+          getElementAtPath(rootEl, payload.path)?.click();
+          return;
+        }
+        if (kind === 'pointerdown') {
+          const el = getElementAtPath(rootEl, payload.path);
+          if (!el) return;
+          const rect = el.getBoundingClientRect();
+          const startX = rect.left + rect.width / 2;
+          const startY = rect.top + rect.height / 2;
+          dragTargets.set(pointerId, { el, startX, startY });
+          withPointerCaptureNoop(() => {
+            el.dispatchEvent(new PointerEvent('pointerdown', {
+              bubbles: true, cancelable: true, pointerId, pointerType: 'mouse', isPrimary: true,
+              clientX: startX, clientY: startY,
+            }));
+          });
+          return;
+        }
+        const drag = dragTargets.get(pointerId);
+        if (!drag) return;
+        const clientX = drag.startX + (payload.dx ?? 0);
+        const clientY = drag.startY + (payload.dy ?? 0);
+        withPointerCaptureNoop(() => {
+          drag.el.dispatchEvent(new PointerEvent(kind, {
+            bubbles: true, cancelable: true, pointerId, pointerType: 'mouse', isPrimary: true, clientX, clientY,
+          }));
+        });
+        if (kind !== 'pointermove') dragTargets.delete(pointerId);
+      } finally {
+        isApplyingRemoteTapRef.current = false;
+      }
     });
     return unsubscribe;
   }, [iReplayTaps, roomId]);
@@ -364,7 +457,11 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
       ) : (
         <div className={`pointer-events-none inset-x-0 bottom-4 z-[80] flex items-center justify-center px-4 ${embedded ? 'absolute' : 'fixed'}`}>
           <div className="pointer-events-none flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">
-            <span aria-hidden>👩‍🏫</span> Your teacher is guiding this lesson · {sceneIdx + 1} / {SCENES.length}
+            {interactionUnlocked ? (
+              <><span aria-hidden>✋</span> Your turn! Try the activity</>
+            ) : (
+              <><span aria-hidden>👩‍🏫</span> Your teacher is guiding this lesson · {sceneIdx + 1} / {SCENES.length}</>
+            )}
           </div>
         </div>
       ))}

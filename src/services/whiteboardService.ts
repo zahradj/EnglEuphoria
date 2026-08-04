@@ -166,14 +166,27 @@ export interface SceneLessonNavPayload {
 type SceneLessonNavListener = (payload: SceneLessonNavPayload) => void;
 
 /** Whoever currently has the floor inside an embedded Playground scene lesson
- *  broadcasts every tap so the other side's identical scene mirrors it live —
- *  same scene, same data, so replaying a click at the same DOM position
- *  reproduces the same local state change (selection, reveal, drag-drop…)
- *  without needing per-scene-kind sync code. Purely a live mirror; it never
- *  drives page-level navigation — that stays on SceneLessonNavPayload. */
+ *  broadcasts every tap (and drag gesture step) so the other side's identical
+ *  scene mirrors it live — same scene, same data, so replaying input at the
+ *  same DOM position reproduces the same local state change (selection,
+ *  reveal, drag-drop…) without needing per-scene-kind sync code. Purely a
+ *  live mirror; it never drives page-level navigation — that stays on
+ *  SceneLessonNavPayload.
+ *
+ *  `kind: 'click'` (default) replays a single click — covers taps/reveals/
+ *  selections. `pointerdown`/`pointermove`/`pointerup`/`pointercancel`
+ *  replay one step of a drag gesture: `dx`/`dy` are pixel deltas from the
+ *  gesture's own down position (not absolute coordinates), so the follower
+ *  can reproduce the same relative motion on its own — possibly differently
+ *  sized — copy of the element. */
 export interface SceneTapPayload {
-  /** Child-index path from the scene wrapper root down to the tapped element. */
+  /** Child-index path from the scene wrapper root down to the target element. */
   path: number[];
+  kind?: 'click' | 'pointerdown' | 'pointermove' | 'pointerup' | 'pointercancel';
+  dx?: number;
+  dy?: number;
+  /** Groups down/move/up events belonging to the same gesture. */
+  pointerId?: number;
   senderRole: 'teacher' | 'student';
   senderId: string;
   timestamp: number;
