@@ -627,7 +627,111 @@ in this sandboxed, non-interactive shell needs a workaround:
      plain background-only prompt, no characters baked in per §11's "never
      generate a cast member from scratch" rule).
 
-## 15. The canonical curriculum map (source of truth for scope + objectives)
+## 15. Building a new CEFR tier's first lesson from scratch (case study: A1 Welcome Town)
+
+Building `src/content/playground-library/welcome-town/` (A1 Unit 1 Lesson 1,
+a new tier above Pre-A1) surfaced learnings not covered above:
+
+- **Carry a returning character forward across tiers, don't re-invent a
+  lookalike.** The first draft used a brand-new "Pip the Penguin" for A1
+  because an earlier planning doc (`a1Worlds.ts`) had speculated that mascot
+  name. The user's actual instruction was to keep the *real* Pip (the Pre-A1
+  fox) — same name, same voice key (`'pip'` in `audio.ts`), same color
+  (`#FE6A2F`) — so he reads as one continuous character across tiers, not a
+  different animal with a coincidentally-reused name. When a new tier's
+  planning doc speculates a cast, treat it as a starting suggestion, not a
+  constraint — check with the user before assuming a brand-new character
+  belongs where a returning one would work better.
+- **A character's *existing* asset may not be a transparent sticker even
+  though it's used as one.** The Pre-A1 `CAST[x].img` portraits (e.g.
+  `pip-hello.png`) are actually full opaque illustrations with a baked-in
+  background (a playground scene behind Pip), not cutouts — fine for their
+  own framed-card uses in that lesson, but they render as a visible
+  rectangular box if reused as a floating sprite over a *different*
+  background (exactly the bug the user flagged: "images of the character
+  should be without a background, like stickers"). Don't assume an
+  existing `CAST[x].img` is transparent just because it's used as a
+  floating tap-target elsewhere — open it with `Read` and look. If it has
+  a background baked in, generate a fresh sticker cutout instead of reusing
+  the asset path, keeping the same name/voice/color/design so it still
+  reads as the same character.
+- **Generating a true transparent sticker**: call the `ai-image-generation`
+  edge function with `transparentBackground: true` in the body (in addition
+  to the usual `prompt`/`style`/`aspectRatio`), and describe the character's
+  exact existing design in the prompt (colors, markings, pose) plus explicit
+  cutout language — `"Die-cut sticker style, isolated on a fully transparent
+  background, no scenery, no background elements, no shadow, no frame, no
+  border, full body visible from head to feet."` Worked first try for both
+  a new character and a redo of an existing one.
+- **"Conversation" scenes (two characters talking face to face) need the
+  characters painted into the background art, not floating cutouts on top**
+  — this is the *same* rule §11 already states for backgrounds generally
+  ("never a pasted cut-out"), it just doesn't get exercised for kinds like
+  `meet`/`echo`/`hello-doors` where only one character's *portrait* shows
+  (a sticker floating over a plain establishing-shot background reads fine
+  there). For `roleplay`/`join-stage`-style scenes specifically, generate a
+  dedicated background with both characters already standing in it, feet
+  grounded, matching lighting and soft contact shadows, posed roughly where
+  the dialogue's speech-bubble anchor points expect them (e.g. one on the
+  left third, one on the right third) — then those scene components need no
+  character `<img>` at all, only bubble-position anchoring. Prompt shape
+  that worked: describe the setting once, then both characters by their
+  established design, explicitly stating "standing with both feet firmly
+  planted on the ground" and "painted into the scene... not pasted cutouts."
+- **A brand-new scene kind with no prior implementation to port** (this
+  lesson's `choice` — simple multiple-choice tap-the-right-answer) is
+  fastest built by adapting the *closest existing pattern* rather than
+  starting blank — `ColorQuizScene` in `unit1/SceneRenderer.tsx` (pick from
+  N options, one correct, shake-on-wrong / green-ring-on-right, gem on
+  first correct pick) is the right template for any single-round
+  multiple-choice interaction. **Don't color-code the correct answer's
+  button differently before the student picks** — an early draft did
+  `background: L === answer ? orange : purple`, which is a visible giveaway
+  that defeats the whole point of a multiple-choice check. Alternate colors
+  by index/position instead, never by correctness.
+- **Voice reuse across a new cast** (`VOICE_KEY: Record<CharKey, Character>`
+  mapping a new tier's character names onto `audio.ts`'s existing
+  role-keyed voices) works cleanly for pointing a new name at an existing
+  voice, but remember every `safeSpeak`/`cueSpeak`/`cueSpeakOnce` call in a
+  ported scene component takes a `Character`, not the new module's
+  `CharKey` — wrap every such call site in the mapping function (e.g.
+  `voiceOf(scene.who)`), not just the ones that "looked custom" during a
+  quick port; it's an easy one to miss on components with several call
+  sites (roleplay, hello-doors, join-stage all have 3+).
+- **Generating a real sung song with exact lyrics** (not just "sing about
+  X" and hoping the model doesn't paraphrase): call the `elevenlabs-music`
+  edge function with a `composition_plan` body instead of a bare `prompt` —
+  `{ positive_global_styles: [...], negative_global_styles: [...], sections:
+  [{ section_name, positive_local_styles, negative_local_styles, duration_ms,
+  lines: string[] }] }` where `lines` are the *exact* lyric strings from the
+  scene's own `lyrics` array. The free-text `prompt` field only steers style
+  and lets the model paraphrase the words — `composition_plan.sections[].lines`
+  is what makes it sing the literal text. Response is a raw `audio/mpeg`
+  body (like `ai-image-generation` returns a data-URL JSON, this one doesn't
+  — save the response bytes directly). Reference implementation already in
+  the codebase: `src/pages/playground-creator/inspector/MediaTab.tsx`
+  (~line 430) builds exactly this payload for warm-up/sing-along blocks.
+- **Extending a lesson's scope mid-build is normal — plan for it.** This
+  lesson grew from a single greetings/colors vocabulary flow into two
+  parts (vocabulary + a full phonics/CVC-reading unit) after the user
+  reviewed the first pass. Picking phonics letters for a *new* tier's first
+  reading lesson: prefer the classic s-a-t-p-i-n starting trio (S, A, T
+  here) over avoiding letters Pre-A1 already used — A1 students aren't
+  assumed to have completed Pre-A1 first, so the lesson needs to be
+  self-contained, and s/a/t is standard precisely because it's the smallest
+  set that already forms a real decodable CVC word (SAT). §3's "don't
+  silently reuse another unit's phonics pair" rule is about *accidental*
+  duplication within one curriculum's own sequence — deliberate reuse
+  across tiers for pedagogical reasons is fine.
+- **`TraceScene`'s `TRACE_SEGMENTS` map only has straight-line letters**
+  (H, M, A, S, T, B in the Pre-A1 source) — it can't express a curved
+  letter like C or O with the existing `{from, to}` segment model. When
+  picking new phonics letters for any lesson, either stick to the already-
+  covered straight-line set or budget separate time to extend the tracing
+  hit-detection to curves; don't discover this after committing to a
+  letter choice in the content file.
+
+## 16. The canonical curriculum map (source of truth for scope + objectives)
 
 Fetched 2026-07-30 from the reference site's own `/curriculum` page —
 **use `https://early-ear-learners.lovable.app/curriculum`, not the
