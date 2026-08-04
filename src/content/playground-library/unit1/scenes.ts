@@ -149,6 +149,15 @@ const bgGoodbyeCast = `${A}/scenes/bg-goodbye-cast.jpg`;
 const bgL6TrophyTrail = `${A}/scenes/bg-l6-trophy-trail.jpg`;
 const bgL6TrophyPodium = `${A}/scenes/bg-l6-trophy-podium.jpg`;
 
+// Illustration audit (see MEMORY.md "lesson background art quality"): these
+// scenes described a specific visual moment their assigned bg didn't show
+// at all — a knockable door, a birthday cake, a red apple + blue stream —
+// so each got real, purpose-generated art via the project's own Gemini
+// image pipeline instead of a reused generic backdrop.
+const bgHelloDoorsTree = `${A}/scenes/bg-hello-doors-tree.png`;
+const bgL4BellaBirthdayCake = `${A}/scenes/bg-l4-bella-birthday-cake.png`;
+const bgU2L1PipBellaAppleWater = `${A}/scenes/bg-u2l1-pip-bella-apple-water.png`;
+
 const itemHello = `${A}/items/item-hello.png`;
 const itemHat = `${A}/items/item-hat.png`;
 const itemHouse = `${A}/items/item-house.png`;
@@ -310,7 +319,7 @@ export const LESSON_1_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'hello-doors-l1', kind: 'hello-doors', bg: bgBigTree, teacher: 'Knock knock! Tap the right door, then say hello to your friend!', cast: ['pip', 'mia', 'bella'],
+    id: 'hello-doors-l1', kind: 'hello-doors', bg: bgHelloDoorsTree, teacher: 'Knock knock! Tap the right door, then say hello to your friend!', cast: ['pip', 'mia', 'bella'],
     rounds: [
       { target: 'pip', prompt: 'Knock knock! Where is Pip?', helloLine: 'Hello! My name is Pip.', echoLine: 'Hello, Pip!' },
       { target: 'mia', prompt: 'Knock knock! Where is Mia?', helloLine: 'Hello! My name is Mia.', echoLine: 'Hello, Mia!' },
@@ -391,7 +400,7 @@ export const LESSON_2_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l2-meet-willow', kind: 'meet-group', bg: bgMeetWillowGroup, teacher: 'Tap Pip, Mia, and Bella one by one. Each time, repeat: What is your name? Then Willow answers — repeat his name!',
+    id: 'l2-meet-willow', kind: 'meet-group', bg: bgMeetWillowGroup, teacher: 'Tap Pip, Mia, and Bella one by one. Each time, repeat: What is your name? Then Willow answers — repeat her name!',
     askers: [
       { who: 'pip', xPct: 17, yPct: 62 },
       { who: 'mia', xPct: 40, yPct: 68 },
@@ -1034,7 +1043,7 @@ export const LESSON_4_SCENES: Scene[] = [
       { who: 'pip', line: 'My name is Pip. What is your name?', repeat: true },
       { who: 'mia', line: 'My name is Mia!', repeat: true },
       { who: 'leo', line: 'Nice to meet you! How old are you?', repeat: true },
-      { who: 'pip', line: 'I am five. How old are you?', repeat: true },
+      { who: 'pip', line: 'I am six. How old are you?', repeat: true },
       { who: 'leo', line: 'I am seven!', repeat: true },
       { who: 'bella', line: 'Welcome to my party, friend!', repeat: true },
       { who: 'mia', line: 'We are so happy you are here!', repeat: true },
@@ -1079,7 +1088,7 @@ export const LESSON_4_SCENES: Scene[] = [
       { who: 'bella', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
     ],
   },
-  { id: 'l4-finale', kind: 'finale', bg: bgWillowMeadow, who: 'bella', line: 'You did it! You know my age! Goodbye, friend! See you next lesson!' },
+  { id: 'l4-finale', kind: 'finale', bg: bgL4BellaBirthdayCake, who: 'bella', line: 'You did it! You know my age! Goodbye, friend! See you next lesson!' },
 ];
 
 /* =========================================================================
@@ -1185,7 +1194,7 @@ export const LESSON_5_SCENES: Scene[] = [
     rounds: [
       { who: 'leo', img: CAST.leo.img, hint: 'He was sad, then happy again.', emotion: 'sad' },
       { who: 'mia', img: CAST.mia.img, hint: 'She said hello first and asked to help.' },
-      { who: 'willow', img: CAST.willow.img, hint: 'He felt a little angry but kept looking.', emotion: 'angry' },
+      { who: 'willow', img: CAST.willow.img, hint: 'She felt a little angry but kept looking.', emotion: 'angry' },
       { who: 'bella', img: CAST.bella.img, hint: 'She found the star under the tree.', emotion: 'happy' },
     ],
   },
@@ -1262,7 +1271,7 @@ export const LESSON_5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l5-hello-doors', kind: 'hello-doors', bg: bgBigTree, teacher: 'Knock knock! Tap the right door, then say hello to your friend!', cast: ['pip', 'mia', 'bella', 'willow'],
+    id: 'l5-hello-doors', kind: 'hello-doors', bg: bgHelloDoorsTree, teacher: 'Knock knock! Tap the right door, then say hello to your friend!', cast: ['pip', 'mia', 'bella', 'willow'],
     rounds: [
       { target: 'pip', prompt: 'Knock knock! Where is Pip?', helloLine: 'Hello! My name is Pip.', echoLine: 'Hello, Pip!' },
       { target: 'willow', prompt: 'Knock knock! Where is Willow?', helloLine: 'Hello! My name is Willow.', echoLine: 'Hi, Willow!' },
@@ -1478,23 +1487,27 @@ export const LESSON_6_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l6-storybook', kind: 'flipbook', bg: bgGoodbyeCast, title: 'The Legend of the Golden Acorn',
+    // Simplified per explicit teacher feedback: the earlier "Golden Acorn
+    // quest" (locked gate + number, hidden door + sound) was too complex
+    // for a Pre-A1 listener. Rebuilt as one plain, linear pattern repeated
+    // 3 times — meet a friend, say hello, notice how they feel, help if
+    // needed — using only vocabulary already taught in this unit
+    // (greetings from L1, happy/sad/angry from L3), no invented objects or
+    // puzzles. Reuses each character's own existing "meet" background
+    // instead of new art, since the story now maps directly onto Lesson 1's
+    // original meet-the-cast scenes.
+    id: 'l6-storybook', kind: 'flipbook', bg: bgGoodbyeCast, title: 'Pip and the Happy Forest Friends',
     pages: [
-      { img: bgTitleForest, text: 'Long ago, deep in the forest, a Golden Acorn kept every day bright and happy. But one morning... its glow went dark!' },
-      { who: 'pip', img: scenePipClearing, text: 'Pip the fox raced to help. "Don’t worry! Hello! My name is Pip, and I know this forest best!"' },
-      { who: 'mia', img: sceneMiaMousehole, text: 'At the old mousehole, Mia found the first clue. Even though she was nervous, she stayed happy. "I am happy!" she said — and the path lit up!' },
-      { who: 'bella', img: sceneBellaBigTree, text: 'A locked gate blocked the way. It needed a number! Bella smiled bravely. "I am five years old!" The gate creaked open.' },
-      { who: 'willow', img: bgWillowMeadow, text: 'Deep in the Rainbow Meadow, a hidden door needed a sound. Willow spun her yellow yoyo. "Yoyo starts with /y/!" The door swung wide.' },
-      { who: 'leo', img: bgBigTree, text: 'At last, they found the Golden Acorn — dim and quiet. Leo took a deep breath and roared with joy, "I am so happy!" The acorn began to glow!' },
-      { img: bgL6TrophyTrail, text: 'The Golden Acorn blazed brighter than ever, and the whole forest sparkled with light again!' },
-      { img: bgGoodbyeCast, text: 'You saved the day! You remembered every name, feeling, number, and sound. You are a true Forest Hero! ✨\u{1F3C6}' },
+      { img: bgClearing, text: 'Pip is walking in the forest. Who will Pip meet today?' },
+      { who: 'mia', img: sceneMiaMousehole, text: '"Hello! My name is Pip!" "Hello! My name is Mia!" Mia is happy. Pip and Mia play together.' },
+      { who: 'bella', img: sceneBellaBigTree, text: '"Hello! My name is Bella." But Bella is sad. "What is wrong?" asks Pip. They help Bella. "Thank you! Now I am happy!"' },
+      { who: 'leo', img: bgMoodMonsters, text: '"Hello! My name is Leo." But Leo is angry! "Why are you angry?" asks Pip. Leo tells them his problem. They help Leo. "Thank you, friends! Now I am happy!"' },
+      { img: bgGoodbyeCast, text: 'Now everyone is happy together! Pip, Mia, Bella, Leo, and Willow are all friends! ✨' },
     ],
     checkpoints: [
-      { afterPage: 1, who: 'pip', question: "What's his name?", options: ['Pip', 'Leo', 'Mia'], answer: 'Pip' },
-      { afterPage: 2, who: 'mia', question: 'How does she feel?', options: ['Sad', 'Angry', 'Happy'], answer: 'Happy' },
-      { afterPage: 3, who: 'bella', question: 'How old is she?', options: ['Three', 'Five', 'Seven'], answer: 'Five' },
-      { afterPage: 4, who: 'willow', question: "Which sound does 'yoyo' start with?", options: ['/r/', '/h/', '/y/'], answer: '/y/' },
-      { afterPage: 5, who: 'leo', question: 'How does he feel?', options: ['Sad', 'Happy', 'Angry'], answer: 'Happy' },
+      { afterPage: 1, who: 'mia', question: 'How does Mia feel?', options: ['Sad', 'Angry', 'Happy'], answer: 'Happy' },
+      { afterPage: 2, who: 'bella', question: 'How did Bella feel before Pip helped her?', options: ['Happy', 'Sad', 'Angry'], answer: 'Sad' },
+      { afterPage: 3, who: 'leo', question: 'How did Leo feel before Pip helped him?', options: ['Happy', 'Sad', 'Angry'], answer: 'Angry' },
     ],
   },
   {
@@ -1725,7 +1738,7 @@ export const LESSON_U2L1_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u2l1-roleplay', kind: 'roleplay', bg: bgGatherEmpty, teacher: 'Story time! Listen to Pip and Bella talk about colors, then repeat.', cast: ['pip', 'bella'],
+    id: 'u2l1-roleplay', kind: 'roleplay', bg: bgU2L1PipBellaAppleWater, teacher: 'Story time! Listen to Pip and Bella talk about colors, then repeat.', cast: ['pip', 'bella'],
     script: [
       { who: 'pip', line: 'Look! A red apple!' },
       { who: 'bella', line: 'I like red!', repeat: true },
