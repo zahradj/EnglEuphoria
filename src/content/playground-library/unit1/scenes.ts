@@ -30,7 +30,11 @@ export type Scene =
   | { id: string; kind: 'roleplay'; bg: string; teacher: string; cast: CharKey[]; script: { who: CharKey; line: string; repeat?: boolean }[] }
   | { id: string; kind: 'join-stage'; bg: string; teacher: string; cast: CharKey[]; turns: { who: CharKey | 'student'; line: string }[] }
   | { id: string; kind: 'hello-doors'; bg: string; teacher: string; cast: CharKey[]; rounds: { target: CharKey; prompt: string; helloLine: string; echoLine: string }[] }
-  | { id: string; kind: 'color-friends'; bg: string; teacher: string; cast: CharKey[] }
+  | {
+      id: string; kind: 'color-friends'; bg: string; teacher: string; cast?: CharKey[];
+      /** When set, colors vocabulary objects (apple/water/sun) instead of a character. */
+      vocabItems?: { label: string; targetColorHex: string; targetColorName: string; outline: 'apple' | 'water' | 'sun' }[];
+    }
   | { id: string; kind: 'alphabet-blocks'; bg: string; teacher: string; letters: string[]; tapRounds: { letter: string }[]; words: { word: string; emoji: string }[] }
   | { id: string; kind: 'alphabet-order'; bg: string; teacher: string; sequences: string[] }
   | { id: string; kind: 'song'; bg: string; title: string; teacher: string; songPrompt: string; songUrl?: string; durationSeconds?: number; bigWord?: string; lyrics: { who: CharKey; text: string; emotion?: 'happy' | 'sad' | 'angry' | 'neutral' }[] }
@@ -74,6 +78,10 @@ export type Scene =
   | {
       id: string; kind: 'color-quiz'; bg: string; teacher: string;
       rounds: { colorWord: string; colorHex: string; who: CharKey; correctImg: string; correctLabel: string; distractors: { img: string; label: string }[] }[];
+    }
+  | {
+      id: string; kind: 'listen-repeat-cards'; bg: string; teacher: string;
+      cards: { who: CharKey; sentence: string; img: string; imgLabel: string }[];
     };
 
 const A = '/lep1'; // public asset root
@@ -1548,6 +1556,25 @@ export const LESSON_6_SCENES: Scene[] = [
  * cue, a second dash round targeting a different color, and grew memory
  * from 4 to 6 pairs — all recycling the same 3-color/6-item vocabulary
  * set through different mechanics rather than introducing new content.
+ *
+ * 'color-model' (u2l1-vocab-colors) is a 3-stage presentation per item, not
+ * a single tap-and-done card: color word -> hold&repeat -> the OBJECT word
+ * is revealed on its own (Apple/Water/Sun get introduced as vocabulary in
+ * their own right, not just glued onto the color) -> hold&repeat -> the two
+ * combine into one full sentence ("The apple is red.") -> hold&repeat. This
+ * mirrors the intended teaching order: color, then object, then the
+ * sentence that joins them — never the sentence first.
+ *
+ * 'color-friends' (u2l1-color-friends) now supports a `vocabItems` mode
+ * (hand-coded SVG line-art via VocabOutline, no new image assets) that
+ * colors the VOCABULARY OBJECTS themselves (apple/water/sun) rather than a
+ * character — reinforcing "the apple is red" instead of "Bella is red."
+ *
+ * 'listen-repeat-cards' (u2l1-who, replacing the old 'who-said-it' scene)
+ * presents one character+sentence+object-image card at a time with
+ * approximate karaoke-style word highlighting timed to safeSpeak() (no true
+ * word-boundary TTS API available, so timing is estimated from sentence
+ * length) instead of a flat character-only quote list.
  * ========================================================================= */
 
 const itemRose = `${A}/items/item-rose.png`;
@@ -1567,7 +1594,7 @@ export const LESSON_U2L1_SCENES: Scene[] = [
   },
   {
     id: 'u2l1-vocab-colors', kind: 'color-model', bg: bgMeadow,
-    teacher: 'Look! Tap a color to hear it, then hold the mic and say it back!',
+    teacher: 'Look! Tap a color to hear it, say it back, learn the word, then say the sentence!',
     items: [
       { colorWord: 'RED', colorHex: '#E63946', who: 'bella', exampleWord: 'Apple', exampleImg: itemApple },
       { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', exampleWord: 'Water', exampleImg: itemWater },
@@ -1599,7 +1626,18 @@ export const LESSON_U2L1_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u2l1-color-friends', kind: 'color-friends', bg: bgMeadow, teacher: 'Rainbow time! Pick a color and paint your friends!', cast: ['pip', 'mia', 'bella', 'willow', 'leo'],
+    // Colors the vocabulary itself (apple/water/sun) instead of a character —
+    // "the apple is red, the water is blue, the sun is yellow" reinforced by
+    // actually painting each one its real color, not a generic bonus round.
+    id: 'u2l1-color-friends', kind: 'color-friends', bg: bgMeadow, teacher: 'Rainbow time! Color each thing its real color!',
+    // Hex values match PAINT_COLORS in ColorFriendsScene exactly (not the
+    // #E63946/#FBBF24 used elsewhere in this lesson) so the palette's
+    // suggested-swatch pulse actually finds and highlights the right one.
+    vocabItems: [
+      { label: 'Apple', targetColorHex: '#EF4444', targetColorName: 'Red', outline: 'apple' },
+      { label: 'Water', targetColorHex: '#3B82F6', targetColorName: 'Blue', outline: 'water' },
+      { label: 'Sun', targetColorHex: '#FACC15', targetColorName: 'Yellow', outline: 'sun' },
+    ],
   },
   {
     id: 'u2l1-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Listen! Tap the missing letter to make the word.',
@@ -1610,11 +1648,11 @@ export const LESSON_U2L1_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u2l1-who', kind: 'who-said-it', bg: bgHideSeek, teacher: 'Listen! Who is talking? Tap the friend.',
-    rounds: [
-      { line: 'Look at the red apple!', who: 'bella' },
-      { line: 'The water is blue!', who: 'willow' },
-      { line: 'The sun is yellow!', who: 'pip' },
+    id: 'u2l1-who', kind: 'listen-repeat-cards', bg: bgHideSeek, teacher: 'Listen to each friend, then repeat!',
+    cards: [
+      { who: 'bella', sentence: 'Look at the red apple!', img: itemApple, imgLabel: 'Apple' },
+      { who: 'willow', sentence: 'The water is blue!', img: itemWater, imgLabel: 'Water' },
+      { who: 'pip', sentence: 'The sun is yellow!', img: itemSun, imgLabel: 'Sun' },
     ],
   },
   {

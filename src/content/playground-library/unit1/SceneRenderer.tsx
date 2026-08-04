@@ -236,6 +236,7 @@ export function SceneRenderer(props: {
     case 'color-model': return <ColorModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'color-sort': return <ColorSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'color-quiz': return <ColorQuizScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
+    case 'listen-repeat-cards': return <ListenRepeatCardsScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
     case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
@@ -1789,10 +1790,48 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
   );
 }
 
-/* ---------- Color friends ---------- */
+/* ---------- Color friends / Color the vocabulary ---------- */
+
+/** Simple coloring-book line art (stroke-only, no fill) for the vocabulary-
+ * coloring mode — code-drawn so no new image assets are needed. */
+function VocabOutline({ kind }: { kind: 'apple' | 'water' | 'sun' }) {
+  const stroke = { fill: 'none', stroke: '#1a1a1a', strokeWidth: 8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
+  if (kind === 'apple') {
+    return (
+      <svg viewBox="0 0 400 520" className="pointer-events-none absolute inset-0 h-full w-full">
+        <path d="M200 190 C170 158 118 168 98 208 C68 262 80 336 132 384 C162 412 190 420 200 410 C210 420 238 412 268 384 C320 336 332 262 302 208 C282 168 230 158 200 190 Z" {...stroke} />
+        <path d="M200 190 L200 148" {...stroke} />
+        <path d="M200 158 Q234 136 258 158 Q234 176 200 158 Z" {...stroke} />
+      </svg>
+    );
+  }
+  if (kind === 'water') {
+    return (
+      <svg viewBox="0 0 400 520" className="pointer-events-none absolute inset-0 h-full w-full">
+        <path d="M150 160 L250 160 L228 400 L172 400 Z" {...stroke} />
+        <path d="M162 290 Q200 268 238 290" {...stroke} />
+      </svg>
+    );
+  }
+  const rays = [0, 45, 90, 135, 180, 225, 270, 315];
+  return (
+    <svg viewBox="0 0 400 520" className="pointer-events-none absolute inset-0 h-full w-full">
+      <circle cx="200" cy="280" r="80" {...stroke} />
+      {rays.map((angle) => {
+        const rad = (angle * Math.PI) / 180;
+        const x1 = 200 + Math.cos(rad) * 100, y1 = 280 + Math.sin(rad) * 100;
+        const x2 = 200 + Math.cos(rad) * 140, y2 = 280 + Math.sin(rad) * 140;
+        return <line key={angle} x1={x1} y1={y1} x2={x2} y2={y2} {...stroke} />;
+      })}
+    </svg>
+  );
+}
 
 function ColorFriendsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'color-friends' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const CHARS = scene.cast;
+  const isVocabMode = Boolean(scene.vocabItems?.length);
+  const CHARS = scene.cast ?? [];
+  const VOCAB = scene.vocabItems ?? [];
+  const count = isVocabMode ? VOCAB.length : CHARS.length;
   const PAINT_COLORS = ['#FE6A2F', '#F59E0B', '#FACC15', '#84CC16', '#22C55E', '#06B6D4', '#3B82F6', '#8B5CF6', '#EC4899', '#EF4444', '#78350F', '#111827'];
   const BRUSHES = [18, 30, 46];
   const [idx, setIdx] = useState(0);
@@ -1802,11 +1841,13 @@ function ColorFriendsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { k
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const paintingRef = useRef(false);
   const lastPtRef = useRef<{ x: number; y: number } | null>(null);
-  const who = CHARS[idx] ?? 'pip';
-  const c = CAST[who];
-  const sketch = COLOR_SKETCH[who];
+  const who = !isVocabMode ? (CHARS[idx] ?? 'pip') : null;
+  const c = who ? CAST[who] : null;
+  const sketch = who ? COLOR_SKETCH[who] : null;
+  const vocabItem = isVocabMode ? VOCAB[idx] : null;
+  const label = isVocabMode ? vocabItem!.label : c!.name;
 
-  useEffect(() => { clearCanvas(); if (idx > 0) cueSpeak(`${c.name}!`, who); }, [idx]);
+  useEffect(() => { clearCanvas(); if (idx > 0) cueSpeak(`${label}!`, who ?? 'teacher'); }, [idx]);
 
   const getCtx = () => canvasRef.current?.getContext('2d') ?? null;
   const clearCanvas = () => { const canvas = canvasRef.current; const ctx = getCtx(); if (canvas && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); };
@@ -1819,7 +1860,7 @@ function ColorFriendsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { k
     const ctx = canvas.getContext('2d');
     if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   };
-  useEffect(() => { resizeCanvas(); const onResize = () => resizeCanvas(); window.addEventListener('resize', onResize); return () => window.removeEventListener('resize', onResize); }, [who]);
+  useEffect(() => { resizeCanvas(); const onResize = () => resizeCanvas(); window.addEventListener('resize', onResize); return () => window.removeEventListener('resize', onResize); }, [who, idx]);
 
   const localPoint = (e: React.PointerEvent<HTMLCanvasElement>) => { const r = canvasRef.current!.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
   const strokeTo = (x: number, y: number) => {
@@ -1833,27 +1874,42 @@ function ColorFriendsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { k
   const onPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => { e.currentTarget.setPointerCapture(e.pointerId); paintingRef.current = true; const p = localPoint(e); lastPtRef.current = p; strokeTo(p.x, p.y); };
   const onPointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => { if (!paintingRef.current) return; const p = localPoint(e); strokeTo(p.x, p.y); };
   const endStroke = () => { paintingRef.current = false; lastPtRef.current = null; };
-  const handleDone = () => { if (!gemDone) { setGemDone(true); onWin(true); } if (idx + 1 < CHARS.length) setIdx(idx + 1); else onNext(); };
+  const handleDone = () => {
+    if (!gemDone) { setGemDone(true); onWin(true); }
+    if (isVocabMode && vocabItem) void cueSpeak(`Yes! The ${vocabItem.label.toLowerCase()} is ${vocabItem.targetColorName.toLowerCase()}!`, 'pip');
+    if (idx + 1 < count) setIdx(idx + 1); else onNext();
+  };
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/40 via-white/15 to-white/50" />
-      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">🎨 Color {c.name}!</div>
+      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">
+        🎨 Color the {label}!{isVocabMode && vocabItem && <span className="ml-1 opacity-60">Try {vocabItem.targetColorName}!</span>}
+      </div>
       <div className="absolute inset-x-0 top-14 bottom-36 z-10 flex items-center justify-center">
-        <div key={who} className="relative aspect-[400/520] h-full max-h-full max-w-[96vw] overflow-hidden rounded-3xl bg-[#FFFDF7] shadow-2xl ring-2 ring-white/70">
+        <div key={isVocabMode ? vocabItem!.label : who} className="relative aspect-[400/520] h-full max-h-full max-w-[96vw] overflow-hidden rounded-3xl bg-[#FFFDF7] shadow-2xl ring-2 ring-white/70">
           <canvas ref={canvasRef} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={endStroke} onPointerCancel={endStroke} onPointerLeave={endStroke} className="absolute inset-0 h-full w-full touch-none" style={{ cursor: 'crosshair' }} />
-          <img src={sketch} alt={c.name} className="pointer-events-none absolute inset-0 h-full w-full object-contain select-none" draggable={false} />
+          {isVocabMode && vocabItem ? (
+            <VocabOutline kind={vocabItem.outline} />
+          ) : (
+            <img src={sketch!} alt={label} className="pointer-events-none absolute inset-0 h-full w-full object-contain select-none" draggable={false} />
+          )}
         </div>
       </div>
       <div className="absolute inset-x-0 bottom-3 z-30 flex flex-col items-center gap-2">
         <div className="flex flex-wrap items-center justify-center gap-2 rounded-full bg-white/95 px-4 py-2 shadow-2xl">
-          {PAINT_COLORS.map((col) => <button key={col} onClick={() => setColor(col)} aria-label={`Color ${col}`} className={`h-10 w-10 rounded-full transition-transform active:scale-90 ${col === color ? 'ring-4 ring-orange-500 scale-110' : 'ring-2 ring-white'}`} style={{ backgroundColor: col }} />)}
+          {PAINT_COLORS.map((col) => {
+            const isSuggested = isVocabMode && vocabItem && col.toUpperCase() === vocabItem.targetColorHex.toUpperCase();
+            return (
+              <button key={col} onClick={() => setColor(col)} aria-label={`Color ${col}`} className={`h-10 w-10 rounded-full transition-transform active:scale-90 ${col === color ? 'ring-4 ring-orange-500 scale-110' : isSuggested ? 'ring-4 ring-orange-300 animate-pulse' : 'ring-2 ring-white'}`} style={{ backgroundColor: col }} />
+            );
+          })}
           <div className="mx-2 h-8 w-px bg-neutral-300" />
           {BRUSHES.map((size) => <button key={size} onClick={() => setBrush(size)} aria-label={`Brush ${size}`} className={`flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 transition-transform active:scale-90 ${size === brush ? 'ring-4 ring-orange-500 scale-110' : 'ring-2 ring-white'}`}><span className="block rounded-full bg-neutral-800" style={{ width: size * 0.5, height: size * 0.5 }} /></button>)}
           <button onClick={clearCanvas} className="ml-2 rounded-full bg-neutral-100 px-3 py-2 text-xs font-black text-neutral-700 shadow active:scale-95">↺ Clear</button>
         </div>
         <div className="flex items-center gap-2">
-          {idx + 1 < CHARS.length && <button onClick={() => setIdx(idx + 1)} className="rounded-full bg-white/95 px-5 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">Next Friend →</button>}
+          {idx + 1 < count && <button onClick={() => setIdx(idx + 1)} className="rounded-full bg-white/95 px-5 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">Next {isVocabMode ? 'Item' : 'Friend'} →</button>}
           <button onClick={handleDone} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Done ⭐</button>
         </div>
       </div>
@@ -2211,17 +2267,38 @@ function TrophyChestScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sce
  * deliberately separate from any phonics scene, and separate from the
  * practice/matching stage (ColorSortScene) that follows it. */
 
+function buildColorSentence(colorWord: string, exampleWord: string): string {
+  return `The ${exampleWord.toLowerCase()} is ${colorWord.toLowerCase()}.`;
+}
+
+/** Per-item progression, three real steps rather than a single word:
+ *   1. heard        -> tap the swatch, hear the color word alone ("Red")
+ *   2. colorDone     -> repeat it, then the OBJECT word is introduced on its
+ *      own ("Apple") — vocabulary comes before the sentence, not the other
+ *      way round
+ *   3. objectDone    -> repeat the object word, then the two combine into a
+ *      real sentence ("The apple is red.")
+ *   4. sentenceDone  -> repeat the sentence, item complete
+ * Deliberately separate from any phonics scene, and separate from the
+ * practice/matching stage (ColorSortScene) that follows it. */
 function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'color-model' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const [heard, setHeard] = useState<Set<number>>(new Set());
-  const [repeated, setRepeated] = useState<Set<number>>(new Set());
+  const [colorDone, setColorDone] = useState<Set<number>>(new Set());
+  const [objectDone, setObjectDone] = useState<Set<number>>(new Set());
+  const [sentenceDone, setSentenceDone] = useState<Set<number>>(new Set());
   const [held, setHeld] = useState(false);
   const holdTimer = useRef<number | null>(null);
   const gemDone = useRef(false);
-  const allDone = repeated.size >= scene.items.length;
+  const allDone = sentenceDone.size >= scene.items.length;
 
   useEffect(() => {
-    if (allDone && !gemDone.current) { gemDone.current = true; onWin(true); cueSpeak('Wonderful! You know red, blue, and yellow!', 'pip'); }
+    if (allDone && !gemDone.current) {
+      gemDone.current = true;
+      onWin(true);
+      const sentences = scene.items.map((it) => buildColorSentence(it.colorWord, it.exampleWord)).join(' ');
+      cueSpeak(`Wonderful! ${sentences}`, 'pip');
+    }
   }, [allDone]);
 
   const tapItem = async (i: number) => {
@@ -2232,11 +2309,35 @@ function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
     await safeSpeak(scene.items[i].colorWord, scene.items[i].who);
   };
 
-  const startHold = (i: number) => {
+  const startHoldColor = (i: number) => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(async () => {
+      setHeld(false);
+      setColorDone((s) => new Set(s).add(i));
+      sfx.gem();
+      const item = scene.items[i];
+      await new Promise((r) => window.setTimeout(r, 400));
+      await safeSpeak(item.exampleWord, item.who);
+    }, 1200);
+  };
+
+  const startHoldObject = (i: number) => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(async () => {
+      setHeld(false);
+      setObjectDone((s) => new Set(s).add(i));
+      sfx.gem();
+      const item = scene.items[i];
+      await new Promise((r) => window.setTimeout(r, 400));
+      await safeSpeak(buildColorSentence(item.colorWord, item.exampleWord), item.who);
+    }, 1200);
+  };
+
+  const startHoldSentence = (i: number) => {
     setHeld(true);
     holdTimer.current = window.setTimeout(() => {
       setHeld(false);
-      setRepeated((s) => new Set(s).add(i));
+      setSentenceDone((s) => new Set(s).add(i));
       sfx.gem();
     }, 1200);
   };
@@ -2246,7 +2347,7 @@ function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
     <div className="absolute inset-0">
       <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
         <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
-          {allDone ? 'You know red, blue, and yellow! ⭐' : scene.teacher}
+          {allDone ? 'You know the words and the sentences! ⭐' : scene.teacher}
         </div>
       </div>
 
@@ -2254,23 +2355,47 @@ function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
         {scene.items.map((item, i) => {
           const isActive = activeIdx === i;
           const isHeard = heard.has(i);
-          const isRepeated = repeated.has(i);
+          const isColorDone = colorDone.has(i);
+          const isObjectDone = objectDone.has(i);
+          const isSentenceDone = sentenceDone.has(i);
           return (
-            <div key={item.colorWord} className="flex flex-col items-center gap-3">
+            <div key={item.colorWord} className="flex flex-col items-center gap-2">
               <button
                 onClick={() => tapItem(i)}
-                className={`grid h-36 w-36 place-items-center rounded-full border-8 border-white shadow-2xl transition active:scale-95 sm:h-44 sm:w-44 ${isRepeated ? '' : 'animate-[lep1-wiggle_4s_ease-in-out_infinite]'}`}
+                className={`grid h-36 w-36 place-items-center rounded-full border-8 border-white shadow-2xl transition active:scale-95 sm:h-44 sm:w-44 ${isSentenceDone ? '' : 'animate-[lep1-wiggle_4s_ease-in-out_infinite]'}`}
                 style={{ background: item.colorHex, animationDelay: `${i * 0.4}s` }}
                 aria-label={`Hear ${item.colorWord}`}
               >
                 <img src={item.exampleImg} alt={item.exampleWord} className="h-20 w-20 object-contain drop-shadow-lg sm:h-24 sm:w-24" />
               </button>
               <span className="rounded-full bg-white px-4 py-1 text-lg font-black uppercase shadow" style={{ color: item.colorHex }}>{item.colorWord}</span>
-              {isRepeated ? (
+              {isColorDone && (
+                <span className="rounded-full bg-white/95 px-3 py-1 text-sm font-bold text-slate-700 shadow">{item.exampleWord}</span>
+              )}
+              {isObjectDone && (
+                <span className="max-w-[10rem] rounded-2xl bg-white px-3 py-1 text-center text-xs font-bold text-slate-800 shadow sm:text-sm">{buildColorSentence(item.colorWord, item.exampleWord)}</span>
+              )}
+              {isSentenceDone ? (
                 <span className="text-2xl">✅</span>
+              ) : isObjectDone ? (
+                <button
+                  onPointerDown={() => startHoldSentence(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
+                  style={{ background: 'linear-gradient(90deg, #8B5CF6, #A78BFA)' }}
+                >
+                  🎤 Say the sentence!
+                </button>
+              ) : isColorDone ? (
+                <button
+                  onPointerDown={() => startHoldObject(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
+                  style={{ background: 'linear-gradient(90deg, #22C55E, #34D399)' }}
+                >
+                  🎤 Say the word!
+                </button>
               ) : isHeard && isActive ? (
                 <button
-                  onPointerDown={() => startHold(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  onPointerDown={() => startHoldColor(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
                   className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
                   style={{ background: 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
                 >
@@ -2493,6 +2618,129 @@ function ColorQuizScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
         })}
       </div>
       {correct && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={next} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>Next →</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Listen & Repeat cards (one sentence at a time, object image,
+ * karaoke-style word highlight synced to playback, then hold-to-repeat) ---------- */
+
+function ListenRepeatCardsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'listen-repeat-cards' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [idx, setIdx] = useState(0);
+  const [heard, setHeard] = useState(false);
+  const [repeated, setRepeated] = useState(false);
+  const [activeWord, setActiveWord] = useState(-1);
+  const [playing, setPlaying] = useState(false);
+  const [held, setHeld] = useState(false);
+  const holdTimer = useRef<number | null>(null);
+  const karaokeTimer = useRef<number | null>(null);
+  const gemDone = useRef(false);
+  const total = scene.cards.length;
+  const done = idx >= total;
+  const card = !done ? scene.cards[idx] : null;
+  const words = useMemo(() => (card ? card.sentence.split(' ') : []), [card]);
+
+  useEffect(() => {
+    setHeard(false);
+    setRepeated(false);
+    setActiveWord(-1);
+  }, [idx]);
+
+  const play = async () => {
+    if (!card || playing) return;
+    setPlaying(true);
+    setHeard(true);
+    // Approximate karaoke: no per-word timing from TTS, so step through words
+    // at a pace scaled to how long each one is, roughly tracking natural speech
+    // rhythm instead of a flat interval.
+    const totalChars = card.sentence.length;
+    const estMs = Math.max(1400, totalChars * 55);
+    const perWordMs = estMs / words.length;
+    let i = 0;
+    setActiveWord(0);
+    karaokeTimer.current = window.setInterval(() => {
+      i += 1;
+      if (i < words.length) setActiveWord(i);
+    }, perWordMs);
+    await safeSpeak(card.sentence, card.who);
+    if (karaokeTimer.current) window.clearInterval(karaokeTimer.current);
+    setActiveWord(-1);
+    setPlaying(false);
+  };
+
+  const startHold = () => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(() => {
+      setHeld(false);
+      setRepeated(true);
+      sfx.gem();
+    }, 1200);
+  };
+  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+
+  const next = () => {
+    const n = idx + 1;
+    if (n >= total && !gemDone.current) { gemDone.current = true; onWin(true); }
+    setIdx(n);
+  };
+
+  if (done) {
+    return (
+      <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/25">
+          <Confetti />
+          <button onClick={onNext} className="pointer-events-auto rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next →</button>
+        </div>
+      </div>
+    );
+  }
+
+  const c = CAST[card!.who];
+
+  return (
+    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-black/20" />
+      <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
+        <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
+          🎧 {scene.teacher} <span className="opacity-60">({idx + 1}/{total})</span>
+        </div>
+      </div>
+
+      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 justify-center px-4">
+        <div className="flex w-full max-w-md flex-col items-center gap-4 rounded-[2rem] bg-white/95 p-6 shadow-2xl ring-4 ring-white/70">
+          <div className="flex items-center gap-3">
+            <img src={c.img} alt={c.name} className="h-16 w-16 object-contain drop-shadow-lg" />
+            <span className="rounded-full px-3 py-1 text-xs font-black uppercase tracking-widest text-white shadow" style={{ background: c.color }}>{c.name}</span>
+          </div>
+          <div className="grid h-32 w-32 place-items-center rounded-3xl bg-orange-50 shadow-inner">
+            <img src={card!.img} alt={card!.imgLabel} className="h-24 w-24 object-contain drop-shadow" />
+          </div>
+          <p className="text-center text-xl font-black leading-snug text-slate-800 sm:text-2xl">
+            {words.map((w, i) => (
+              <span key={i} className={`transition-colors ${i === activeWord ? 'rounded bg-yellow-300 px-1 text-orange-900' : ''}`}>{w}{i < words.length - 1 ? ' ' : ''}</span>
+            ))}
+          </p>
+          <div className="flex w-full gap-2">
+            <button onClick={play} disabled={playing} className="flex-1 rounded-full bg-white py-3 text-sm font-bold text-orange-700 shadow-md ring-2 ring-orange-200 active:scale-95 disabled:opacity-50">
+              🔊 {playing ? 'Listening…' : 'Listen'}
+            </button>
+            <button
+              onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+              disabled={!heard || repeated}
+              className={`flex-1 rounded-full py-3 text-sm font-black text-white shadow-xl transition disabled:opacity-40 ${held ? 'scale-95' : ''}`}
+              style={{ background: repeated ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
+            >
+              {repeated ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & repeat'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {repeated && (
         <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
           <button onClick={next} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>Next →</button>
         </div>
