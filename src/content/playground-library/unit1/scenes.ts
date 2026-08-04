@@ -70,7 +70,11 @@ export type Scene =
       id: string; kind: 'color-model'; bg: string; teacher: string;
       items: { colorWord: string; colorHex: string; who: CharKey; exampleWord: string; exampleImg: string }[];
     }
-  | { id: string; kind: 'color-sort'; bg: string; teacher: string; targets: { colorWord: string; colorHex: string; who: CharKey }[]; items: { word: string; img?: string; emoji: string; colorWord: string }[] };
+  | { id: string; kind: 'color-sort'; bg: string; teacher: string; targets: { colorWord: string; colorHex: string; who: CharKey }[]; items: { word: string; img?: string; emoji: string; colorWord: string }[] }
+  | {
+      id: string; kind: 'color-quiz'; bg: string; teacher: string;
+      rounds: { colorWord: string; colorHex: string; who: CharKey; correctImg: string; correctLabel: string; distractors: { img: string; label: string }[] }[];
+    };
 
 const A = '/lep1'; // public asset root
 
@@ -1535,6 +1539,15 @@ export const LESSON_6_SCENES: Scene[] = [
  * an earlier draft had 3 separate model scenes + 3 echo scenes + 2 basket
  * scenes doing largely the same job; consolidated to avoid exactly that
  * "scattered activities with no clear objective" failure mode.
+ *
+ * Expanded for more practice reps (17 scenes total, ~30 min): added a new
+ * 'color-quiz' kind (tap-select multiple choice — a genuinely different
+ * interaction from color-sort's drag, not just a repaint of it), a second
+ * harder color-sort round whose instruction explicitly calls out each
+ * color word's own initial sound (/r/ed, /b/lue, /y/ellow) as a retrieval
+ * cue, a second dash round targeting a different color, and grew memory
+ * from 4 to 6 pairs — all recycling the same 3-color/6-item vocabulary
+ * set through different mechanics rather than introducing new content.
  * ========================================================================= */
 
 const itemRose = `${A}/items/item-rose.png`;
@@ -1578,6 +1591,14 @@ export const LESSON_U2L1_SCENES: Scene[] = [
     ],
   },
   {
+    id: 'u2l1-color-quiz', kind: 'color-quiz', bg: bgMeadow, teacher: 'Which one is the right color? Tap it!',
+    rounds: [
+      { colorWord: 'RED', colorHex: '#E63946', who: 'bella', correctImg: itemApple, correctLabel: 'Apple', distractors: [{ img: itemWater, label: 'Water' }, { img: itemSun, label: 'Sun' }] },
+      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', correctImg: itemWave, correctLabel: 'Wave', distractors: [{ img: itemRose, label: 'Rose' }, { img: itemMoon, label: 'Moon' }] },
+      { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip', correctImg: itemSun, correctLabel: 'Sun', distractors: [{ img: itemApple, label: 'Apple' }, { img: itemWater, label: 'Water' }] },
+    ],
+  },
+  {
     id: 'u2l1-color-friends', kind: 'color-friends', bg: bgMeadow, teacher: 'Rainbow time! Pick a color and paint your friends!', cast: ['pip', 'mia', 'bella', 'willow', 'leo'],
   },
   {
@@ -1603,6 +1624,8 @@ export const LESSON_U2L1_SCENES: Scene[] = [
       { id: 'water', label: 'Water', emoji: '\u{1F4A7}', img: itemWater },
       { id: 'sun', label: 'Sun', emoji: '\u{2600}️', img: itemSun },
       { id: 'rose', label: 'Rose', emoji: '\u{1F339}', img: itemRose },
+      { id: 'wave', label: 'Wave', emoji: '\u{1F30A}', img: itemWave },
+      { id: 'moon', label: 'Moon', emoji: '\u{1F319}', img: itemMoon },
     ],
   },
   {
@@ -1614,6 +1637,37 @@ export const LESSON_U2L1_SCENES: Scene[] = [
       { word: 'wave', letter: 'BLUE', img: itemWave, emoji: '\u{1F30A}' },
       { word: 'sun', letter: 'YELLOW', img: itemSun, emoji: '\u{2600}️' },
       { word: 'moon', letter: 'YELLOW', img: itemMoon, emoji: '\u{1F319}' },
+    ],
+  },
+  {
+    // Second, harder sort round — same mechanic, more items per color, and the
+    // instruction leans on the color words' own initial sounds (/r/ed, /b/lue,
+    // /y/ellow) as an extra retrieval cue rather than pure visual matching.
+    id: 'u2l1-sort-colors-2', kind: 'color-sort', bg: bgBigTree,
+    teacher: "Listen for the sound! /r/ed, /b/lue, /y/ellow — find where each one goes!",
+    targets: [
+      { colorWord: 'RED', colorHex: '#E63946', who: 'bella' },
+      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow' },
+      { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip' },
+    ],
+    items: [
+      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, colorWord: 'RED' },
+      { word: 'rose', emoji: '\u{1F339}', img: itemRose, colorWord: 'RED' },
+      { word: 'water', emoji: '\u{1F4A7}', img: itemWater, colorWord: 'BLUE' },
+      { word: 'wave', emoji: '\u{1F30A}', img: itemWave, colorWord: 'BLUE' },
+      { word: 'sun', emoji: '\u{2600}️', img: itemSun, colorWord: 'YELLOW' },
+      { word: 'moon', emoji: '\u{1F319}', img: itemMoon, colorWord: 'YELLOW' },
+    ],
+  },
+  {
+    id: 'u2l1-dash-2', kind: 'dash', bg: bgClearing, teacher: 'Pip Dash! This time tap only the YELLOW things! Get 6 rings!', who: 'pip', targetLetter: 'YELLOW', targetPhoneme: '', goal: 6, seconds: 40,
+    items: [
+      { word: 'sun', letter: 'YELLOW', img: itemSun, emoji: '\u{2600}️' },
+      { word: 'moon', letter: 'YELLOW', img: itemMoon, emoji: '\u{1F319}' },
+      { word: 'apple', letter: 'RED', img: itemApple, emoji: '\u{1F34E}' },
+      { word: 'rose', letter: 'RED', img: itemRose, emoji: '\u{1F339}' },
+      { word: 'water', letter: 'BLUE', img: itemWater, emoji: '\u{1F4A7}' },
+      { word: 'wave', letter: 'BLUE', img: itemWave, emoji: '\u{1F30A}' },
     ],
   },
   {
