@@ -5,11 +5,16 @@ import type { Scene } from '@/content/playground-library/unit1/scenes';
 import { SceneRenderer, Hearts, MAX_HEARTS, Lep1Keyframes } from '@/content/playground-library/unit1/SceneRenderer';
 import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-library/unit1/audio';
 import { whiteboardService } from '@/services/whiteboardService';
+import { getDomPath, getElementAtPath } from '@/content/playground-library/unit1/scenePathSync';
 
 export interface PlayUnitLessonHandle {
   goNext: () => void;
   goBack: () => void;
   goToIndex: (idx: number) => void;
+  /** Teacher-only: grant/revoke the student's ability to tap their own copy
+   *  of the current activity directly, instead of just mirroring the
+   *  teacher's taps. */
+  setInteractionUnlocked: (unlocked: boolean) => void;
 }
 
 interface PlayUnitLessonProps {
@@ -38,7 +43,7 @@ interface PlayUnitLessonProps {
   hideInternalNav?: boolean;
   /** Reports scene position/navigability whenever it changes, so a caller
    *  rendering hideInternalNav can show an external nav bar in sync. */
-  onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean }) => void;
+  onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean }) => void;
   /** Last scene index persisted to the classroom session DB row, if any —
    *  a reliable (if slightly delayed) catch-up path for a student who
    *  joins late or reconnects and missed the instant broadcast. */
@@ -68,6 +73,72 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
 
   const isSynced = role != null && !!roomId;
   const canNavigate = !isSynced || role === 'teacher';
+
+  // Whoever currently "has the floor" on the current activity: the teacher
+  // by default, or the student once granted interactionUnlocked. Exactly one
+  // side captures+broadcasts taps at a time; the other replays them onto its
+  // own identical scene — see scenePathSync.ts for why this needs no
+  // per-scene-kind code, and SceneTapPayload for why it never touches
+  // page-level navigation (that stays on the sceneIdx broadcast above).
+  const [interactionUnlocked, setInteractionUnlockedState] = useState(false);
+  const sceneRootRef = useRef<HTMLDivElement>(null);
+  const isApplyingRemoteTapRef = useRef(false);
+
+  const setInteractionUnlocked = useCallback((next: boolean) => {
+    setInteractionUnlockedState(next);
+    if (isSynced && role === 'teacher' && roomId) {
+      void whiteboardService.sendSceneInteractionPermission(roomId, { unlocked: next, senderId: 'teacher' });
+    }
+  }, [isSynced, role, roomId]);
+
+  // Each new activity starts locked — the teacher re-grants per activity
+  // rather than an unlock silently carrying over to unrelated content.
+  useEffect(() => {
+    if (isSynced && role === 'teacher') setInteractionUnlocked(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sceneIdx]);
+
+  useEffect(() => {
+    if (!isSynced || role !== 'student' || !roomId) return;
+    const unsubscribe = whiteboardService.subscribeToSceneInteractionPermission(roomId, (payload) => {
+      setInteractionUnlockedState(payload.unlocked);
+    });
+    return unsubscribe;
+  }, [isSynced, role, roomId]);
+
+  const iCaptureTaps = isSynced && !!role && (role === 'teacher' || (role === 'student' && interactionUnlocked));
+  const iReplayTaps = isSynced && !!role && (
+    (role === 'teacher' && interactionUnlocked) || (role === 'student' && !interactionUnlocked)
+  );
+
+  useEffect(() => {
+    if (!iCaptureTaps || !roomId || !role) return;
+    const rootEl = sceneRootRef.current;
+    if (!rootEl) return;
+    const handler = (e: MouseEvent) => {
+      if (isApplyingRemoteTapRef.current) return;
+      const target = e.target as Element | null;
+      if (!target) return;
+      const path = getDomPath(rootEl, target);
+      if (!path) return;
+      void whiteboardService.sendSceneTap(roomId, { path, senderRole: role, senderId: role });
+    };
+    rootEl.addEventListener('click', handler, true);
+    return () => rootEl.removeEventListener('click', handler, true);
+  }, [iCaptureTaps, roomId, role, sceneIdx]);
+
+  useEffect(() => {
+    if (!iReplayTaps || !roomId) return;
+    const unsubscribe = whiteboardService.subscribeToSceneTap(roomId, (payload) => {
+      const rootEl = sceneRootRef.current;
+      if (!rootEl) return;
+      const el = getElementAtPath(rootEl, payload.path);
+      if (!el) return;
+      isApplyingRemoteTapRef.current = true;
+      try { el.click(); } finally { isApplyingRemoteTapRef.current = false; }
+    });
+    return unsubscribe;
+  }, [iReplayTaps, roomId]);
 
   useEffect(() => { window.sessionStorage.setItem(sessionKey, String(sceneIdx)); }, [sceneIdx, sessionKey]);
 
@@ -139,10 +210,31 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   }, []);
   const registerWin = useCallback((didGem: boolean) => { if (didGem) setGems((g) => g + 1); }, []);
 
+  // An unlocked student completing the activity (e.g. a flipbook's own
+  // "Next" reaching the end) can't just move its own sceneIdx — the teacher
+  // stays the single source of truth. Advance locally right away so it
+  // doesn't feel stuck, and ask the teacher to advance too; the teacher's
+  // own goNext() then re-broadcasts via the existing sceneIdx pipe, which
+  // reaches this same student again as an idempotent confirmation.
+  const studentCanAdvanceViaActivity = isSynced && role === 'student' && interactionUnlocked;
   const goNext = useCallback(() => {
-    if (!canNavigate) return;
-    stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
-  }, [SCENES.length, canNavigate]);
+    if (canNavigate) {
+      stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
+      return;
+    }
+    if (studentCanAdvanceViaActivity && roomId) {
+      stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
+      void whiteboardService.sendSceneAdvanceRequest(roomId, { senderId: 'student' });
+    }
+  }, [SCENES.length, canNavigate, studentCanAdvanceViaActivity, roomId]);
+
+  // Teacher: a permitted student finishing the activity asks us to advance —
+  // do so through the normal goNext() so it re-broadcasts as usual.
+  useEffect(() => {
+    if (!isSynced || role !== 'teacher' || !roomId) return;
+    const unsubscribe = whiteboardService.subscribeToSceneAdvanceRequest(roomId, () => { goNext(); });
+    return unsubscribe;
+  }, [isSynced, role, roomId, goNext]);
   const goBack = useCallback(() => {
     if (!canNavigate) return;
     stopSpeaking(); setSceneIdx((i) => Math.max(0, i - 1));
@@ -158,11 +250,11 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
     window.sessionStorage.removeItem(sessionKey);
   }, [sessionKey, canNavigate]);
 
-  useImperativeHandle(ref, () => ({ goNext, goBack, goToIndex }), [goNext, goBack, goToIndex]);
+  useImperativeHandle(ref, () => ({ goNext, goBack, goToIndex, setInteractionUnlocked }), [goNext, goBack, goToIndex, setInteractionUnlocked]);
 
   useEffect(() => {
-    onNavState?.({ sceneIdx, total: SCENES.length, canNavigate });
-  }, [sceneIdx, SCENES.length, canNavigate, onNavState]);
+    onNavState?.({ sceneIdx, total: SCENES.length, canNavigate, interactionUnlocked });
+  }, [sceneIdx, SCENES.length, canNavigate, interactionUnlocked, onNavState]);
 
   const totalGemsPossible = useMemo(
     () => SCENES.filter((s) => s.kind === 'basket' || s.kind === 'who-said-it' || s.kind === 'name-gate' || s.kind === 'voice-stage' || s.kind === 'roleplay' || s.kind === 'join-stage' || s.kind === 'sound-pop' || s.kind === 'flipbook' || s.kind === 'color-model' || s.kind === 'color-sort' || s.kind === 'color-quiz' || s.kind === 'listen-repeat-cards' || (s.kind === 'meet' && s.repeat)).length,
@@ -215,7 +307,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
           <div className="w-16" />
         </div>
 
-        <div key={scene.id} className="relative flex-1 animate-[lep1-fade-slide_0.45s_ease-out]">
+        <div key={scene.id} ref={sceneRootRef} className="relative flex-1 animate-[lep1-fade-slide_0.45s_ease-out]">
           <SceneRenderer
             scene={scene}
             onWin={registerWin}
@@ -226,6 +318,18 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
             heartsRemaining={hearts}
             lessonNumber={lessonNumber}
           />
+          {isSynced && role === 'student' && !interactionUnlocked && (
+            <div className="absolute inset-0 z-40 cursor-not-allowed" aria-hidden="true">
+              <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
+                👀 Watching your teacher
+              </div>
+            </div>
+          )}
+          {isSynced && role === 'teacher' && interactionUnlocked && (
+            <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-emerald-600/80 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
+              ✋ Student is trying this
+            </div>
+          )}
         </div>
 
         {!isFinale && scene.kind !== 'who-said-it' && (
@@ -243,7 +347,15 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
             className="pointer-events-auto flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-base font-bold text-slate-800 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
             <span aria-hidden>◀</span> Back
           </button>
-          <div className="pointer-events-auto rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">{sceneIdx + 1} / {SCENES.length}</div>
+          <div className="pointer-events-auto flex items-center gap-2">
+            {isSynced && (
+              <button type="button" onClick={() => setInteractionUnlocked(!interactionUnlocked)}
+                className={`rounded-full px-4 py-3 text-sm font-bold shadow-xl backdrop-blur transition hover:scale-105 ${interactionUnlocked ? 'bg-emerald-500 text-white' : 'bg-white/90 text-slate-800'}`}>
+                {interactionUnlocked ? '🔓 Student can try' : '🔒 Let student try'}
+              </button>
+            )}
+            <div className="rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">{sceneIdx + 1} / {SCENES.length}</div>
+          </div>
           <button type="button" onClick={goNext} disabled={sceneIdx >= SCENES.length - 1} aria-label="Next scene"
             className="pointer-events-auto flex items-center gap-2 rounded-full bg-[#FE6A2F] px-5 py-3 text-base font-bold text-white shadow-xl backdrop-blur transition hover:scale-105 hover:bg-[#ff7a45] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
             Next <span aria-hidden>▶</span>

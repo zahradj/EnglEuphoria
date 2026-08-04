@@ -165,6 +165,43 @@ export interface SceneLessonNavPayload {
 }
 type SceneLessonNavListener = (payload: SceneLessonNavPayload) => void;
 
+/** Whoever currently has the floor inside an embedded Playground scene lesson
+ *  broadcasts every tap so the other side's identical scene mirrors it live —
+ *  same scene, same data, so replaying a click at the same DOM position
+ *  reproduces the same local state change (selection, reveal, drag-drop…)
+ *  without needing per-scene-kind sync code. Purely a live mirror; it never
+ *  drives page-level navigation — that stays on SceneLessonNavPayload. */
+export interface SceneTapPayload {
+  /** Child-index path from the scene wrapper root down to the tapped element. */
+  path: number[];
+  senderRole: 'teacher' | 'student';
+  senderId: string;
+  timestamp: number;
+}
+type SceneTapListener = (payload: SceneTapPayload) => void;
+
+/** Teacher → student: grants/revokes the student's ability to interact with
+ *  their own copy of the current embedded scene activity. Locked (default) =
+ *  student's activity is view-only and mirrors the teacher's taps; unlocked =
+ *  student can tap their own copy directly (and the teacher's mirrors theirs). */
+export interface SceneInteractionPermissionPayload {
+  unlocked: boolean;
+  senderId: string;
+  timestamp: number;
+}
+type SceneInteractionPermissionListener = (payload: SceneInteractionPermissionPayload) => void;
+
+/** Student → teacher: "I finished this activity, please advance" — sent when
+ *  an unlocked student's own action would normally trigger onNext. Keeps the
+ *  teacher's scene index as the single source of truth: the teacher calls its
+ *  own goNext() in response, which re-broadcasts via SceneLessonNavPayload as
+ *  usual, closing the loop back to the student. */
+export interface SceneAdvanceRequestPayload {
+  senderId: string;
+  timestamp: number;
+}
+type SceneAdvanceRequestListener = (payload: SceneAdvanceRequestPayload) => void;
+
 /** Teacher's authoritative snapshot pushed on demand by the "Force Sync" button. */
 export interface ForceSyncPayload {
   slideIndex: number;
@@ -198,6 +235,9 @@ interface RoomChannel {
   forceSyncListeners: Set<ForceSyncListener>;
   studentActionListeners: Set<StudentActionListener>;
   sceneLessonNavListeners: Set<SceneLessonNavListener>;
+  sceneTapListeners: Set<SceneTapListener>;
+  sceneInteractionPermissionListeners: Set<SceneInteractionPermissionListener>;
+  sceneAdvanceRequestListeners: Set<SceneAdvanceRequestListener>;
   refCount: number;
 }
 
@@ -229,6 +269,9 @@ class WhiteboardService {
     const forceSyncListeners = new Set<ForceSyncListener>();
     const studentActionListeners = new Set<StudentActionListener>();
     const sceneLessonNavListeners = new Set<SceneLessonNavListener>();
+    const sceneTapListeners = new Set<SceneTapListener>();
+    const sceneInteractionPermissionListeners = new Set<SceneInteractionPermissionListener>();
+    const sceneAdvanceRequestListeners = new Set<SceneAdvanceRequestListener>();
     const statusListeners = new Set<(status: string) => void>();
 
     const channel = supabase
@@ -302,6 +345,15 @@ class WhiteboardService {
       })
       .on('broadcast', { event: 'scene_lesson_nav' }, (payload) => {
         sceneLessonNavListeners.forEach((cb) => cb(payload.payload as SceneLessonNavPayload));
+      })
+      .on('broadcast', { event: 'scene_tap' }, (payload) => {
+        sceneTapListeners.forEach((cb) => cb(payload.payload as SceneTapPayload));
+      })
+      .on('broadcast', { event: 'scene_interaction_permission' }, (payload) => {
+        sceneInteractionPermissionListeners.forEach((cb) => cb(payload.payload as SceneInteractionPermissionPayload));
+      })
+      .on('broadcast', { event: 'scene_advance_request' }, (payload) => {
+        sceneAdvanceRequestListeners.forEach((cb) => cb(payload.payload as SceneAdvanceRequestPayload));
       });
 
     const ready = new Promise<void>((resolve) => {
@@ -332,6 +384,9 @@ class WhiteboardService {
       forceSyncListeners,
       studentActionListeners,
       sceneLessonNavListeners,
+      sceneTapListeners,
+      sceneInteractionPermissionListeners,
+      sceneAdvanceRequestListeners,
       refCount: 0,
     };
     this.rooms.set(channelName, room);
@@ -648,6 +703,69 @@ class WhiteboardService {
     room.sceneLessonNavListeners.add(onNav);
     room.refCount += 1;
     return () => this.release(roomId, () => room.sceneLessonNavListeners.delete(onNav));
+  }
+
+  /** Whoever has the floor broadcasts a tap; the other side replays it onto
+   *  its own identical scene. See SceneTapPayload for why this needs no
+   *  per-scene-kind code. */
+  async sendSceneTap(roomId: string, payload: Omit<SceneTapPayload, 'timestamp'>): Promise<void> {
+    const room = this.getRoom(roomId);
+    await room.ready;
+    await room.channel.send({
+      type: 'broadcast',
+      event: 'scene_tap',
+      payload: { ...payload, timestamp: Date.now() } satisfies SceneTapPayload,
+    });
+  }
+
+  subscribeToSceneTap(roomId: string, onTap: SceneTapListener): () => void {
+    const room = this.getRoom(roomId);
+    room.sceneTapListeners.add(onTap);
+    room.refCount += 1;
+    return () => this.release(roomId, () => room.sceneTapListeners.delete(onTap));
+  }
+
+  async sendSceneInteractionPermission(
+    roomId: string,
+    payload: Omit<SceneInteractionPermissionPayload, 'timestamp'>,
+  ): Promise<void> {
+    const room = this.getRoom(roomId);
+    await room.ready;
+    await room.channel.send({
+      type: 'broadcast',
+      event: 'scene_interaction_permission',
+      payload: { ...payload, timestamp: Date.now() } satisfies SceneInteractionPermissionPayload,
+    });
+  }
+
+  subscribeToSceneInteractionPermission(
+    roomId: string,
+    onPermission: SceneInteractionPermissionListener,
+  ): () => void {
+    const room = this.getRoom(roomId);
+    room.sceneInteractionPermissionListeners.add(onPermission);
+    room.refCount += 1;
+    return () => this.release(roomId, () => room.sceneInteractionPermissionListeners.delete(onPermission));
+  }
+
+  async sendSceneAdvanceRequest(
+    roomId: string,
+    payload: Omit<SceneAdvanceRequestPayload, 'timestamp'>,
+  ): Promise<void> {
+    const room = this.getRoom(roomId);
+    await room.ready;
+    await room.channel.send({
+      type: 'broadcast',
+      event: 'scene_advance_request',
+      payload: { ...payload, timestamp: Date.now() } satisfies SceneAdvanceRequestPayload,
+    });
+  }
+
+  subscribeToSceneAdvanceRequest(roomId: string, onRequest: SceneAdvanceRequestListener): () => void {
+    const room = this.getRoom(roomId);
+    room.sceneAdvanceRequestListeners.add(onRequest);
+    room.refCount += 1;
+    return () => this.release(roomId, () => room.sceneAdvanceRequestListeners.delete(onRequest));
   }
 
   subscribeToStatus(roomId: string, onStatus: (status: string) => void): () => void {
