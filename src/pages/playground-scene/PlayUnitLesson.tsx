@@ -165,7 +165,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   }, [sceneIdx, SCENES.length, canNavigate, onNavState]);
 
   const totalGemsPossible = useMemo(
-    () => SCENES.filter((s) => s.kind === 'basket' || s.kind === 'who-said-it' || s.kind === 'name-gate' || s.kind === 'voice-stage' || s.kind === 'roleplay' || s.kind === 'join-stage' || s.kind === 'sound-pop' || s.kind === 'flipbook' || s.kind === 'color-basket' || s.kind === 'color-sort' || (s.kind === 'meet' && s.repeat)).length,
+    () => SCENES.filter((s) => s.kind === 'basket' || s.kind === 'who-said-it' || s.kind === 'name-gate' || s.kind === 'voice-stage' || s.kind === 'roleplay' || s.kind === 'join-stage' || s.kind === 'sound-pop' || s.kind === 'flipbook' || s.kind === 'color-model' || s.kind === 'color-sort' || (s.kind === 'meet' && s.repeat)).length,
     [SCENES],
   );
 

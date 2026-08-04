@@ -233,8 +233,7 @@ export function SceneRenderer(props: {
     case 'puzzle': return <PuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'trophy-chest': return <TrophyChestScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-    case 'color-model': return <ColorModelScene scene={scene} onNext={props.onNext} />;
-    case 'color-basket': return <ColorBasketScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
+    case 'color-model': return <ColorModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'color-sort': return <ColorSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
@@ -2199,182 +2198,96 @@ function TrophyChestScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sce
   );
 }
 
-/* ---------- Color vocabulary (model / basket / sort) ----------
+/* ---------- Color vocabulary (model / sort) ----------
  * Built as their own components rather than reusing sound-model/basket/
  * sound-sort: those hard-depend on playLetterPhonic()'s per-letter audio
  * lookup and a single-glyph-sized display box, neither of which fits a
  * color word. These use safeSpeak() for audio and an actual colored
- * swatch (scene.colorHex) for the visual instead. */
+ * swatch (scene.colorHex) for the visual instead.
+ *
+ * ColorModelScene is the vocabulary-presentation stage: every target word
+ * illustrated in one row (not scattered), tap to hear, hold to repeat —
+ * deliberately separate from any phonics scene, and separate from the
+ * practice/matching stage (ColorSortScene) that follows it. */
 
-function ColorModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'color-model' }>; onNext: () => void }) {
-  const side: 'left' | 'right' = scene.who === 'mia' ? 'right' : 'left';
-  const [beat, setBeat] = useState(-1);
-  const [opened, setOpened] = useState<Set<number>>(new Set());
-  const [phase, setPhase] = useState<'invite' | 'done'>('invite');
-  const [replays, setReplays] = useState(0);
-
-  const playColorWord = useCallback(async () => {
-    setBeat(0);
-    await safeSpeak(scene.colorWord, scene.who);
-    setBeat(-1);
-  }, [scene.colorWord, scene.who]);
-
-  useEffect(() => { setOpened(new Set()); setPhase('invite'); }, [scene.id]);
-
-  const openProp = async (i: number) => {
-    if (opened.has(i)) { sfx.pop(); await safeSpeak(scene.anchors[i].word, scene.who); return; }
-    sfx.reveal();
-    const next = new Set(opened); next.add(i); setOpened(next);
-    await safeSpeak(scene.anchors[i].word, scene.who);
-    if (next.size >= scene.anchors.length) { sfx.gem(); setPhase('done'); }
-  };
-
-  return (
-    <div className="absolute inset-0">
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
-        <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: `linear-gradient(90deg, ${scene.colorHex}, #FEBE4C)` }}>
-          🎨 Color Quest · {scene.colorWord}
-        </div>
-      </div>
-      <div className="pointer-events-none absolute inset-y-0 z-30 flex w-[42%] flex-col items-center justify-center gap-4" style={{ [side]: 0 }}>
-        <button
-          type="button"
-          onClick={playColorWord}
-          aria-label={`Hear ${scene.colorWord} again`}
-          className="pointer-events-auto grid place-items-center rounded-full border-8 border-white/90 font-black uppercase text-white shadow-2xl backdrop-blur transition active:scale-95"
-          style={{ background: scene.colorHex, width: 'min(50vh, 20rem)', height: 'min(50vh, 20rem)', fontSize: 'min(7vh, 2.75rem)', lineHeight: 1, textShadow: '0 2px 10px rgba(0,0,0,0.55), 0 0 3px rgba(0,0,0,0.85)', animation: beat >= 0 ? 'lep1-pop 0.5s ease-out' : 'lep1-wiggle 4s ease-in-out infinite' }}
-        >
-          {scene.colorWord}
-        </button>
-      </div>
-      <div className="pointer-events-none absolute inset-x-0 top-10 z-10 flex justify-center px-4">
-        <div className="max-w-md rounded-2xl px-4 py-3 text-center text-base font-bold text-white shadow-2xl sm:text-lg" style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.35))', backdropFilter: 'blur(8px)', textShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
-          {phase === 'done' ? 'You found them all! Great looking! ⭐' : 'Tap the circle or a picture to hear it!'}
-        </div>
-      </div>
-      {scene.anchors.map((a, i) => {
-        const base = side === 'left' ? 72 : 28;
-        const cols = side === 'left' ? [-8, 12] : [-12, 8];
-        const tops = ['30%', '66%'];
-        const rots = [-6, 5];
-        const spot = { left: `${base + (cols[i] ?? 0)}%`, top: tops[i] ?? '50%', rot: rots[i] ?? 0 };
-        const isOpen = opened.has(i);
-        return (
-          <div key={a.word} className="absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: spot.left, top: spot.top, animation: `lep1-float 3s ease-in-out ${i * 0.3}s infinite` }}>
-            <button
-              onClick={() => openProp(i)}
-              className={`relative grid place-items-center rounded-3xl bg-transparent p-0 transition-transform active:scale-90 ${isOpen ? 'h-64 w-64 sm:h-80 sm:w-80' : 'h-40 w-40 sm:h-52 sm:w-52'} ${!isOpen && phase === 'invite' ? 'animate-pulse' : ''}`}
-              style={{ transform: `rotate(${spot.rot}deg)`, filter: `drop-shadow(0 0 18px ${scene.colorHex}) drop-shadow(0 12px 24px rgba(0,0,0,0.35))` }}
-              aria-label={isOpen ? `Hear ${a.word} again` : 'Open the gift'}
-            >
-              {isOpen ? (
-                <img src={a.img} alt={a.word} className="h-full w-full object-contain animate-[lep1-pop_0.6s_ease-out]" />
-              ) : (
-                <span className="text-[9rem] sm:text-[11rem]">🎁</span>
-              )}
-            </button>
-            {isOpen && (
-              <div className="mx-auto mt-3 w-max animate-[lep1-pop_0.5s_ease-out] rounded-2xl border-4 bg-white px-6 py-2 text-center text-3xl font-black shadow-xl sm:text-4xl" style={{ color: scene.colorHex, borderColor: scene.colorHex }}>
-                {a.word}
-              </div>
-            )}
-          </div>
-        );
-      })}
-      <div className="absolute inset-x-0 bottom-4 z-30 mx-auto flex max-w-md gap-2 px-4">
-        <button onClick={() => { setReplays((r) => r + 1); playColorWord(); }} className="flex-1 rounded-full bg-white/95 py-3 text-sm font-bold text-orange-700 shadow-xl ring-2 ring-orange-200 backdrop-blur active:scale-95">
-          🔁 Hear it {replays > 0 && <span className="opacity-60">({replays})</span>}
-        </button>
-        <button onClick={onNext} disabled={phase !== 'done'} className={`flex-1 rounded-full py-3 text-sm font-black text-white shadow-xl transition ${phase === 'done' ? 'bg-gradient-to-r from-green-500 to-emerald-500 active:scale-95' : 'cursor-not-allowed bg-neutral-400/70'}`}>
-          {phase === 'done' ? 'Now you try →' : `Find ${scene.anchors.length - opened.size} more`}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function ColorBasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'color-basket' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
-  type Slot = { idx: number; it: typeof scene.items[number]; collected: boolean; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
-  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, collected: false, dragging: false, dx: 0, dy: 0, flash: 'none' })));
-  const [basketHot, setBasketHot] = useState(false);
-  const [gemAwarded, setGemAwarded] = useState(false);
-  const basketRef = useRef<HTMLDivElement | null>(null);
-  const dragIdx = useRef<number | null>(null);
-  const start = useRef({ x: 0, y: 0 });
-  const got = slots.filter((s) => s.collected).length;
-  const done = got >= scene.goal;
+function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'color-model' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const [heard, setHeard] = useState<Set<number>>(new Set());
+  const [repeated, setRepeated] = useState<Set<number>>(new Set());
+  const [held, setHeld] = useState(false);
+  const holdTimer = useRef<number | null>(null);
+  const gemDone = useRef(false);
+  const allDone = repeated.size >= scene.items.length;
 
   useEffect(() => {
-    if (done && !gemAwarded) { setGemAwarded(true); onWin(true); cueSpeak(`Yes! You found all the ${scene.colorWord} things!`, scene.who); }
-  }, [done, gemAwarded]);
+    if (allDone && !gemDone.current) { gemDone.current = true; onWin(true); cueSpeak('Wonderful! You know red, blue, and yellow!', 'pip'); }
+  }, [allDone]);
 
-  function onDown(idx: number) {
-    return (e: React.PointerEvent<HTMLButtonElement>) => {
-      const s = slots.find((x) => x.idx === idx);
-      if (!s || s.collected) return;
-      sfx.pop();
-      cueSpeakOnce(s.it.word, 'teacher');
-      dragIdx.current = idx;
-      start.current = { x: e.clientX, y: e.clientY };
-      (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
-      setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, dragging: true, dx: 0, dy: 0, flash: 'none' } : x)));
-    };
-  }
-  function onMove(e: React.PointerEvent<HTMLButtonElement>) {
-    const idx = dragIdx.current;
-    if (idx === null) return;
-    const dx = e.clientX - start.current.x;
-    const dy = e.clientY - start.current.y;
-    setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, dx, dy } : x)));
-    const b = basketRef.current?.getBoundingClientRect();
-    if (b) setBasketHot(e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom);
-  }
-  function onUp(e: React.PointerEvent<HTMLButtonElement>) {
-    const idx = dragIdx.current;
-    dragIdx.current = null;
-    setBasketHot(false);
-    if (idx === null) return;
-    const b = basketRef.current?.getBoundingClientRect();
-    const dropped = b && e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom;
-    setSlots((p) => p.map((x) => {
-      if (x.idx !== idx) return x;
-      if (!dropped) return { ...x, dragging: false, dx: 0, dy: 0 };
-      if (x.it.hit) { sfx.match(); cueSpeak(`${scene.colorWord}! ${x.it.word}!`, scene.who); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
-      sfx.wrong(); onLose();
-      return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
-    }));
-    window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
-  }
+  const tapItem = async (i: number) => {
+    if (held) return;
+    setActiveIdx(i);
+    setHeard((s) => new Set(s).add(i));
+    sfx.pop();
+    await safeSpeak(scene.items[i].colorWord, scene.items[i].who);
+  };
 
-  const orbit = scatterPositions(scene.items.length, [46, 82], 12);
+  const startHold = (i: number) => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(() => {
+      setHeld(false);
+      setRepeated((s) => new Set(s).add(i));
+      sfx.gem();
+    }, 1200);
+  };
+  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
   return (
     <div className="absolute inset-0">
-      <div className="pointer-events-none absolute left-4 top-4 z-30 max-w-[260px] rounded-2xl bg-white/95 px-3 py-2 text-sm font-bold text-neutral-800 shadow-xl backdrop-blur sm:max-w-[320px] sm:text-base">{scene.teacher}</div>
-      <div ref={basketRef} className={`absolute left-1/2 top-16 z-10 grid h-56 w-56 -translate-x-1/2 place-items-center rounded-full border-4 border-dashed shadow-2xl backdrop-blur transition-all sm:h-72 sm:w-72 ${basketHot ? 'scale-110 border-green-400 bg-green-100/90' : 'border-white/80 bg-white/40'}`}>
-        <div className={`absolute inset-0 rounded-full opacity-70 ${done ? '' : 'animate-pulse'}`} style={{ background: `radial-gradient(circle at center, ${scene.colorHex}cc, transparent 70%)` }} />
-        <div className="relative flex flex-col items-center gap-1 text-center">
-          <span className="grid h-28 w-28 place-items-center rounded-full text-lg font-black uppercase text-white shadow-lg sm:h-36 sm:w-36 sm:text-2xl" style={{ background: scene.colorHex, textShadow: '0 2px 8px rgba(0,0,0,0.55)' }}>{scene.colorWord}</span>
-          <p className="text-xs font-bold text-orange-700">⭐ {got}/{scene.goal}</p>
+      <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
+        <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
+          {allDone ? 'You know red, blue, and yellow! ⭐' : scene.teacher}
         </div>
       </div>
-      {slots.map((s, i) => {
-        const pos = orbit[i % orbit.length];
-        if (s.collected) return <div key={s.idx} className="absolute grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-green-300/60 text-3xl opacity-60 ring-2 ring-green-400 backdrop-blur" style={{ left: pos.left, top: pos.top }}>✅</div>;
-        const glow = s.flash === 'bad' ? 'drop-shadow-[0_0_14px_rgba(239,68,68,0.9)] animate-[lep1-shake_0.4s_ease-in-out]' : s.flash === 'good' ? 'drop-shadow-[0_0_18px_rgba(34,197,94,0.9)]' : 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]';
-        return (
-          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-            className={`absolute h-40 w-40 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition sm:h-48 sm:w-48 ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
-            style={{ left: pos.left, top: pos.top, animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
-            aria-label={s.it.word}
-          >
-            {s.it.img ? <img src={s.it.img} alt={s.it.word} draggable={false} className="pointer-events-none h-full w-full object-contain" /> : <span className="pointer-events-none grid h-full w-full place-items-center text-7xl">{s.it.emoji}</span>}
+
+      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 flex-wrap items-start justify-center gap-6 px-4 sm:gap-10">
+        {scene.items.map((item, i) => {
+          const isActive = activeIdx === i;
+          const isHeard = heard.has(i);
+          const isRepeated = repeated.has(i);
+          return (
+            <div key={item.colorWord} className="flex flex-col items-center gap-3">
+              <button
+                onClick={() => tapItem(i)}
+                className={`grid h-36 w-36 place-items-center rounded-full border-8 border-white shadow-2xl transition active:scale-95 sm:h-44 sm:w-44 ${isRepeated ? '' : 'animate-[lep1-wiggle_4s_ease-in-out_infinite]'}`}
+                style={{ background: item.colorHex, animationDelay: `${i * 0.4}s` }}
+                aria-label={`Hear ${item.colorWord}`}
+              >
+                <img src={item.exampleImg} alt={item.exampleWord} className="h-20 w-20 object-contain drop-shadow-lg sm:h-24 sm:w-24" />
+              </button>
+              <span className="rounded-full bg-white px-4 py-1 text-lg font-black uppercase shadow" style={{ color: item.colorHex }}>{item.colorWord}</span>
+              {isRepeated ? (
+                <span className="text-2xl">✅</span>
+              ) : isHeard && isActive ? (
+                <button
+                  onPointerDown={() => startHold(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
+                  style={{ background: 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
+                >
+                  🎤 Hold & repeat
+                </button>
+              ) : (
+                <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-orange-700 shadow">Tap to hear</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {allDone && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
+            Now let's practice →
           </button>
-        );
-      })}
-      {done && (
-        <div className="absolute inset-x-0 top-4 flex justify-center">
-          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>✨ Well done! Next →</button>
         </div>
       )}
     </div>

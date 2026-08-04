@@ -66,8 +66,10 @@ export type Scene =
       pages: { who?: CharKey; img: string; text: string }[];
       checkpoints: { afterPage: number; who?: CharKey; question: string; options: string[]; answer: string }[];
     }
-  | { id: string; kind: 'color-model'; bg: string; who: CharKey; colorWord: string; colorHex: string; teacher: string; anchors: { word: string; emoji: string; img?: string }[] }
-  | { id: string; kind: 'color-basket'; bg: string; colorWord: string; colorHex: string; who: CharKey; teacher: string; items: BasketItem[]; goal: number }
+  | {
+      id: string; kind: 'color-model'; bg: string; teacher: string;
+      items: { colorWord: string; colorHex: string; who: CharKey; exampleWord: string; exampleImg: string }[];
+    }
   | { id: string; kind: 'color-sort'; bg: string; teacher: string; targets: { colorWord: string; colorHex: string; who: CharKey }[]; items: { word: string; img?: string; emoji: string; colorWord: string }[] };
 
 const A = '/lep1'; // public asset root
@@ -1512,17 +1514,29 @@ export const LESSON_6_SCENES: Scene[] = [
  * match that: this lesson has no letter-sound target at all, it's purely
  * "what color is this, and can you say it back."
  *
- * New scene kinds added for this: 'color-model' / 'color-basket' /
- * 'color-sort' — built as their own components (not reused from the
- * sound-model/basket/sound-sort phonics kinds) because those hard-depend
- * on playLetterPhonic()'s per-letter audio lookup and a single-glyph-sized
- * display box, neither of which fits a color word. These use safeSpeak()
- * for audio and an actual colored swatch (scene.colorHex) for the visual,
- * so "red" genuinely renders as red rather than an arbitrary character
- * theme color standing in for it.
+ * New scene kinds added for this: 'color-model' / 'color-sort' — built as
+ * their own components (not reused from the sound-model/basket/sound-sort
+ * phonics kinds) because those hard-depend on playLetterPhonic()'s
+ * per-letter audio lookup and a single-glyph-sized display box, neither of
+ * which fits a color word. These use safeSpeak() for audio and an actual
+ * colored swatch (scene.colorHex) for the visual, so "red" genuinely
+ * renders as red rather than an arbitrary character theme color standing
+ * in for it.
+ *
+ * Deliberately kept separate from any phonics scene, and structured as a
+ * real PPP arc rather than a pile of similar drills:
+ *   1. 'cinematic' story hook (u2l1-intro)
+ *   2. 'color-model' — ALL 3 target words illustrated together in one row
+ *      (not scattered), tap to hear, hold to repeat (u2l1-vocab-colors)
+ *   3. 'color-sort' — the practice/production stage: drag-and-drop match
+ *      each object to its color (u2l1-sort-colors)
+ * Everything after that (color-friends, word-build, memory, dash, etc.) is
+ * recycling/consolidation, not a second presentation of the same words —
+ * an earlier draft had 3 separate model scenes + 3 echo scenes + 2 basket
+ * scenes doing largely the same job; consolidated to avoid exactly that
+ * "scattered activities with no clear objective" failure mode.
  * ========================================================================= */
 
-const itemRain = `${A}/items/item-rain.png`;
 const itemRose = `${A}/items/item-rose.png`;
 
 export const LESSON_U2L1_TITLE = 'Red, Blue, Yellow!';
@@ -1539,50 +1553,16 @@ export const LESSON_U2L1_SCENES: Scene[] = [
     cta: "Let's look!",
   },
   {
-    id: 'u2l1-model-red', kind: 'color-model', bg: bgClearing, who: 'bella', colorWord: 'RED', colorHex: '#E63946', teacher: "Listen to Bella. This is red!",
-    anchors: [
-      { word: 'Apple', emoji: '\u{1F34E}', img: itemApple },
-      { word: 'Rose', emoji: '\u{1F339}', img: itemRose },
-    ],
-  },
-  { id: 'u2l1-echo-red', kind: 'echo', bg: bgMeadow, who: 'bella', teacher: 'Repeat after Bella: This is red! This is red!', word: 'This is red!' },
-  {
-    id: 'u2l1-model-blue', kind: 'color-model', bg: bgBigTree, who: 'willow', colorWord: 'BLUE', colorHex: '#3B82F6', teacher: 'Listen to Willow. This is blue!',
-    anchors: [
-      { word: 'Water', emoji: '\u{1F4A7}', img: itemWater },
-      { word: 'Wave', emoji: '\u{1F30A}', img: itemWave },
-    ],
-  },
-  { id: 'u2l1-echo-blue', kind: 'echo', bg: bgMeadow, who: 'willow', teacher: 'Repeat after Willow: This is blue! This is blue!', word: 'This is blue!' },
-  {
-    id: 'u2l1-model-yellow', kind: 'color-model', bg: bgMeadow, who: 'pip', colorWord: 'YELLOW', colorHex: '#FBBF24', teacher: 'Listen to Pip. This is yellow!',
-    anchors: [
-      { word: 'Sun', emoji: '\u{2600}️', img: itemSun },
-      { word: 'Moon', emoji: '\u{1F319}', img: itemMoon },
-    ],
-  },
-  { id: 'u2l1-echo-yellow', kind: 'echo', bg: bgMeadow, who: 'pip', teacher: 'Repeat after Pip: This is yellow! This is yellow!', word: 'This is yellow!' },
-  {
-    id: 'u2l1-basket-red', kind: 'color-basket', bg: bgClearing, colorWord: 'RED', colorHex: '#E63946', who: 'bella', teacher: 'Drag the red things into the red basket!', goal: 3,
+    id: 'u2l1-vocab-colors', kind: 'color-model', bg: bgMeadow,
+    teacher: 'Look! Tap a color to hear it, then hold the mic and say it back!',
     items: [
-      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, hit: true },
-      { word: 'rose', emoji: '\u{1F339}', img: itemRose, hit: true },
-      { word: 'water', emoji: '\u{1F4A7}', img: itemWater, hit: false },
-      { word: 'sun', emoji: '\u{2600}️', img: itemSun, hit: false },
+      { colorWord: 'RED', colorHex: '#E63946', who: 'bella', exampleWord: 'Apple', exampleImg: itemApple },
+      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', exampleWord: 'Water', exampleImg: itemWater },
+      { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip', exampleWord: 'Sun', exampleImg: itemSun },
     ],
   },
   {
-    id: 'u2l1-basket-blue', kind: 'color-basket', bg: bgBigTree, colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', teacher: 'Drag the blue things into the blue basket!', goal: 3,
-    items: [
-      { word: 'water', emoji: '\u{1F4A7}', img: itemWater, hit: true },
-      { word: 'wave', emoji: '\u{1F30A}', img: itemWave, hit: true },
-      { word: 'rain', emoji: '\u{1F327}️', img: itemRain, hit: true },
-      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, hit: false },
-      { word: 'sun', emoji: '\u{2600}️', img: itemSun, hit: false },
-    ],
-  },
-  {
-    id: 'u2l1-sort-colors', kind: 'color-sort', bg: bgMeadow, teacher: 'Listen! Drag each thing to its color — red, blue, or yellow.',
+    id: 'u2l1-sort-colors', kind: 'color-sort', bg: bgMeadow, teacher: 'Now you try! Drag each thing to its color — red, blue, or yellow.',
     targets: [
       { colorWord: 'RED', colorHex: '#E63946', who: 'bella' },
       { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow' },
