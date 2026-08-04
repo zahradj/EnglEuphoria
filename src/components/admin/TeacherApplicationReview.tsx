@@ -454,6 +454,8 @@ The EnglEuphoria Hiring Team`,
             applications={filteredApplications}
             onView={setSelectedApplication}
             onApprove={handleApproveForInterview}
+            onFinalApprove={handleFinalApprove}
+            finalApproveLoading={actionLoading}
             onReject={(app) => { setSelectedApplication(app); setShowRejectDialog(true); }}
             getStatusBadge={getStatusBadge}
             onDelete={handleDeleteApplication}
@@ -465,6 +467,8 @@ The EnglEuphoria Hiring Team`,
             applications={filteredApplications}
             onView={setSelectedApplication}
             onApprove={handleApproveForInterview}
+            onFinalApprove={handleFinalApprove}
+            finalApproveLoading={actionLoading}
             onReject={(app) => { setSelectedApplication(app); setShowRejectDialog(true); }}
             getStatusBadge={getStatusBadge}
           />
@@ -474,6 +478,8 @@ The EnglEuphoria Hiring Team`,
             applications={filteredApplications}
             onView={setSelectedApplication}
             onApprove={handleApproveForInterview}
+            onFinalApprove={handleFinalApprove}
+            finalApproveLoading={actionLoading}
             onReject={(app) => { setSelectedApplication(app); setShowRejectDialog(true); }}
             getStatusBadge={getStatusBadge}
             onResendInvite={handleResendInvite}
@@ -484,6 +490,8 @@ The EnglEuphoria Hiring Team`,
             applications={filteredApplications}
             onView={setSelectedApplication}
             onApprove={handleApproveForInterview}
+            onFinalApprove={handleFinalApprove}
+            finalApproveLoading={actionLoading}
             onReject={(app) => { setSelectedApplication(app); setShowRejectDialog(true); }}
             getStatusBadge={getStatusBadge}
             onDelete={handleDeleteApplication}
@@ -495,6 +503,8 @@ The EnglEuphoria Hiring Team`,
             applications={filteredApplications}
             onView={setSelectedApplication}
             onApprove={handleApproveForInterview}
+            onFinalApprove={handleFinalApprove}
+            finalApproveLoading={actionLoading}
             onReject={(app) => { setSelectedApplication(app); setShowRejectDialog(true); }}
             getStatusBadge={getStatusBadge}
             onDelete={handleDeleteApplication}
@@ -820,16 +830,22 @@ interface ApplicationGridProps {
   getStatusBadge: (stage: string) => React.ReactNode;
   onDelete?: (app: TeacherApplication) => void;
   onResendInvite?: (app: TeacherApplication) => void;
+  onFinalApprove?: (app: TeacherApplication) => void;
+  finalApproveLoading?: boolean;
 }
 
-const ApplicationGrid: React.FC<ApplicationGridProps> = ({ 
-  applications, 
-  onView, 
-  onApprove, 
+const FINAL_APPROVE_STAGES = ['interview_pending', 'interview_scheduled', 'interview_completed', 'final_review'];
+
+const ApplicationGrid: React.FC<ApplicationGridProps> = ({
+  applications,
+  onView,
+  onApprove,
   onReject,
   getStatusBadge,
   onDelete,
   onResendInvite,
+  onFinalApprove,
+  finalApproveLoading,
 }) => {
   if (applications.length === 0) {
     return (
@@ -925,14 +941,35 @@ const ApplicationGrid: React.FC<ApplicationGridProps> = ({
               </>
             )}
             {application.current_stage === 'interview_scheduled' && onResendInvite && (
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 onClick={() => onResendInvite(application)}
               >
                 <Send className="h-4 w-4 mr-1" />
                 Resend
               </Button>
+            )}
+            {FINAL_APPROVE_STAGES.includes(application.current_stage) && onFinalApprove && (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-destructive hover:bg-destructive/10"
+                  onClick={() => onReject(application)}
+                >
+                  <XCircle className="h-4 w-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-green-600 hover:bg-green-700"
+                  disabled={finalApproveLoading}
+                  onClick={() => onFinalApprove(application)}
+                >
+                  <CheckCircle className="h-4 w-4 mr-1" />
+                  Approve as Teacher
+                </Button>
+              </>
             )}
             {(application.current_stage === 'rejected' || application.current_stage === 'approved') && onDelete && (
               <Button 
