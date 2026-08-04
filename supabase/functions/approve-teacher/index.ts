@@ -1,11 +1,12 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
+import { internalAuthHeaders } from "../_shared/internalAuth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const SITE_URL = "https://engleuphoria.lovable.app";
+const SITE_URL = "https://engleuphoria.com";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -182,6 +183,7 @@ Deno.serve(async (req) => {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${serviceRoleKey}`,
           "apikey": serviceRoleKey,
+          ...internalAuthHeaders(),
         },
         body: JSON.stringify({
           templateName: "final-welcome",

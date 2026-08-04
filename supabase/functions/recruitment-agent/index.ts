@@ -6,6 +6,7 @@
  * trigger the existing booking-invitation flow when explicitly requested.
  */
 import { createClient } from 'npm:@supabase/supabase-js@2'
+import { internalAuthHeaders } from '../_shared/internalAuth.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -258,7 +259,7 @@ Deno.serve(async (req) => {
 
       const emailRes = await fetch(`${supabaseUrl}/functions/v1/send-transactional-email`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${serviceKey}`, apikey: serviceKey, 'Content-Type': 'application/json' },
+        headers: { Authorization: `Bearer ${serviceKey}`, apikey: serviceKey, 'Content-Type': 'application/json', ...internalAuthHeaders() },
         body: JSON.stringify({
           templateName: 'booking-invitation',
           recipientEmail: app.email,

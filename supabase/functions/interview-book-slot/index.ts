@@ -7,6 +7,7 @@
  * collision with an existing booked interview.
  */
 import { createClient } from 'npm:@supabase/supabase-js@2'
+import { internalAuthHeaders } from '../_shared/internalAuth.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -183,6 +184,7 @@ Deno.serve(async (req) => {
           Authorization: `Bearer ${serviceKey}`,
           apikey: serviceKey,
           'Content-Type': 'application/json',
+          ...internalAuthHeaders(),
         },
         body: JSON.stringify({
           templateName: 'interview-confirmed',

@@ -6,6 +6,7 @@
 
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
 import { createClient } from 'npm:@supabase/supabase-js@2'
+import { internalAuthHeaders } from '../_shared/internalAuth.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -262,6 +263,7 @@ Deno.serve(async (req) => {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${SERVICE_ROLE}`,
+            ...internalAuthHeaders(),
           },
           body: JSON.stringify({
             templateName: 'teacher-vocab-games-digest',
