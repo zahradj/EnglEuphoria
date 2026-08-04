@@ -136,7 +136,7 @@ export default function PlaygroundLibraryPage() {
             <span className="grid h-11 w-11 place-items-center rounded-2xl text-2xl shadow-lg" style={{ background: 'linear-gradient(135deg,#FE6A2F,#FEBE4C)' }}>🎪</span>
             <div>
               <h1 className="text-xl font-black text-orange-900" style={{ fontFamily: "'Fredoka', system-ui, sans-serif" }}>Playground Library</h1>
-              <p className="text-xs font-semibold text-orange-700/70">Little Explorers Phonics — built lesson by lesson</p>
+              <p className="text-xs font-semibold text-orange-700/70">{LEVELS.find((l) => l.code === activeLevel)?.curriculum ?? 'New curriculum'} — built lesson by lesson</p>
             </div>
           </div>
           <button
