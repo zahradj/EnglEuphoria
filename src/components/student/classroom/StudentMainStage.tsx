@@ -161,12 +161,12 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
     );
   }
 
-  // Bi-directional sync: capture interactive clicks bubbling up from the
-  // CreatorSlideRenderer / DynamicSlideRenderer and broadcast a compact
-  // payload so the teacher's screen highlights what the student selected.
+  // Bi-directional sync: capture interactive clicks/drags bubbling up from
+  // the CreatorSlideRenderer / DynamicSlideRenderer / embedded Playground
+  // scene games, and broadcast a compact payload so the teacher's screen
+  // highlights what the student selected or dragged.
   const lastBroadcastRef = useRef<{ key: string; ts: number } | null>(null);
-  const handleStageClickCapture = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLElement | null;
+  const broadcastInteraction = useCallback((target: HTMLElement | null, kind: 'Selected' | 'Dropped on') => {
     if (!target) return;
     const interactive = target.closest(
       'button, [role="button"], [role="option"], [role="radio"], [role="checkbox"], [data-option], [data-answer], [data-draggable], [data-droppable], li[tabindex], label[for]'
@@ -183,23 +183,41 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
     const slide = slides[currentSlideIndex];
     const key = `${currentSlideIndex}:${label}`;
     const now = Date.now();
-    // Debounce identical events within 300ms
+    // Debounce identical events within 300ms — also collapses the click AND
+    // pointerup that both fire for a simple tap into a single broadcast.
     if (lastBroadcastRef.current?.key === key && now - lastBroadcastRef.current.ts < 300) return;
     lastBroadcastRef.current = { key, ts: now };
     void whiteboardService.sendStudentAction(roomId, {
       slideId: String(slide?.id ?? currentSlideIndex),
       slideIndex: currentSlideIndex,
-      label: `Selected: ${label}`,
+      label: `${kind}: ${label}`,
       data: { text: label },
       senderId: userId,
       senderName: userName,
     }).catch(() => {});
   }, [slides, currentSlideIndex, roomId, userId, userName]);
 
+  const handleStageClickCapture = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    broadcastInteraction(e.target as HTMLElement | null, 'Selected');
+  }, [broadcastInteraction]);
+
+  // Drag-and-drop games (Playground's basket/sort scenes, etc.) release via
+  // pointerup on a target that's usually different from the pointerdown
+  // origin — browsers only synthesize a 'click' event when press and release
+  // land on (near) the same point, so a real drag gesture never fires
+  // onClickCapture at all. That made every drag-and-drop activity invisible
+  // to the teacher's live indicator even though tap-based activities worked.
+  // pointerup always fires regardless, so mirror the same broadcast there.
+  const handleStagePointerUpCapture = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const dropTarget = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
+    broadcastInteraction(dropTarget ?? (e.target as HTMLElement | null), 'Dropped on');
+  }, [broadcastInteraction]);
+
   return (
     <div
       className="flex-1 flex flex-col bg-muted/20 relative overflow-hidden"
       onClickCapture={handleStageClickCapture}
+      onPointerUpCapture={handleStagePointerUpCapture}
     >
       <MainStage
         mode={stageMode}
