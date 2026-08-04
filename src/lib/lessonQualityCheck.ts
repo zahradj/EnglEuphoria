@@ -172,6 +172,10 @@ export function runLessonQualityCheck(input: LessonQualityInput): LessonQualityR
   }
 
   const presentTypes = new Set(slides.map((s) => String(s?.type || '')));
+  // Academy/Success present vocabulary via a single paginated "vocab_deck"
+  // rather than one slide per word — that still satisfies the "vocab"
+  // coverage requirement below, it just isn't the literal type name.
+  if (presentTypes.has('vocab_deck')) presentTypes.add('vocab');
   let coverageScore = 100;
   const missingTypes = HUB_REQUIRED_TYPES[hub].filter((t) => !presentTypes.has(t));
   if (missingTypes.length > 0) {

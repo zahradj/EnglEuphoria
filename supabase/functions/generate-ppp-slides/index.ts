@@ -456,7 +456,7 @@ ${buildEarlyLearnerPromptBlock({ hub: 'playground', level: cefr_level })}`;
     if (hub_type === "academy") {
       const allowedBlocks = ["warmup", "vocab", "reading", "grammar", "practice", "interactive", "speaking"] as const;
       const allowedTypes = new Set([
-        "intro","question","poll","opinion","vocab","matching","reading_passage","listening",
+        "intro","question","poll","opinion","vocab","vocab_deck","vocab_image_match","matching","reading_passage","listening",
         "truefalse","multiple","grammar_pattern","grammar_color_decode","frequency_thermometer","grammar_formula","error_detection","correction","fill_blank",
         "sentence_builder","debate_scale","role_play","speaking_task","reflection","cluster","lesson_summary",
         "phonics_focus","listen_repeat",
@@ -583,7 +583,10 @@ ${buildEarlyLearnerPromptBlock({ hub: 'academy', level: cefr_level })}
         const filtered = parsed.filter((s: any) =>
           s && allowedTypes.has(s.type) && (allowedBlocks as readonly string[]).includes(s.block),
         );
-        if (filtered.length < 24) throw new Error(`AI returned only ${filtered.length} valid Academy slides (need ≥24 for a 60-minute lesson)`);
+        // Must match HUB_SLIDE_TARGET.academy.min in src/lib/lessonQualityCheck.ts — a lower
+        // threshold here lets a deck pass generation only to fail SLIDE_COUNT_BELOW_MIN at
+        // Save/Publish, which reads as an unexplained contradiction to the teacher.
+        if (filtered.length < 26) throw new Error(`AI returned only ${filtered.length} valid Academy slides (need ≥26 for a 60-minute lesson)`);
 
         // Validate strict block order: each block must appear at least once and in canonical order.
         const seen: string[] = [];

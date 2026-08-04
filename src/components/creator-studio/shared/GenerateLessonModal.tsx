@@ -73,7 +73,12 @@ interface Props {
 
 const HUB_SLIDE_TARGETS: Record<Hub, { min: number; max: number; minutes: number }> = {
   playground: { min: 18, max: 22, minutes: 30 },
-  academy: { min: 26, max: 30, minutes: 60 },
+  // Academy grew from 26-30 to 30-40 slides — vocab and grammar each now get
+  // their own presentation + dedicated retrieval-practice rounds instead of
+  // sharing one "practice" block. Must match generate-ppp-slides' academy
+  // prompt ("30-40 slides total (NEVER fewer than 30)") and
+  // HUB_SLIDE_TARGET.academy in src/lib/lessonQualityCheck.ts.
+  academy: { min: 30, max: 40, minutes: 60 },
   success: { min: 26, max: 30, minutes: 60 },
 };
 
@@ -83,8 +88,8 @@ const HUB_SLIDE_TARGETS: Record<Hub, { min: number; max: number; minutes: number
  * what the pipeline will actually emit.
  *
  * Playground is fully deterministic (intro + optional phonics + vocab + practice
- * + grammar + production + summary). Academy / Success target a 26–30 range and
- * we show the midpoint as the estimate.
+ * + grammar + production + summary). Academy / Success are AI-generated within
+ * a target band — we show the midpoint of HUB_SLIDE_TARGETS as the estimate.
  */
 function computeExpectedSlides(
   hub: Hub,
@@ -108,7 +113,8 @@ function computeExpectedSlides(
       1; /* summary */
     return { estimate: total, min: total, max: total, minutes: 30, deterministic: true };
   }
-  return { estimate: 28, min: 26, max: 30, minutes: 60, deterministic: false };
+  const { min, max, minutes } = HUB_SLIDE_TARGETS[hub];
+  return { estimate: Math.round((min + max) / 2), min, max, minutes, deterministic: false };
 }
 
 const PROGRESS_STEPS = [

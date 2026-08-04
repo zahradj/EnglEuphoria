@@ -246,6 +246,11 @@ export default function SuccessCreator() {
         target_phonics: typeof bp.target_phonics === 'string' ? bp.target_phonics : bp.target_phonics?.focus || '',
         interests: '',
         specific_needs: '',
+        // plan-lesson-blueprint computes these — carry them through so the
+        // publish-time objective gate (MISSING_LEARNING_OBJECTIVE) doesn't
+        // fire for a lesson that already has one from the Curriculum Map.
+        learning_objective: bp.learning_objective || st.objective || '',
+        final_output_task: bp.final_output_task || '',
       } as LessonBlueprint);
     } else if (st.skill_focus) {
       setBlueprint({ vocabulary: ['', '', '', '', ''], grammar: st.skill_focus, interests: '', specific_needs: '', target_phonics: '' });

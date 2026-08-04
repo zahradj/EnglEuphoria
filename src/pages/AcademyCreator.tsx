@@ -280,6 +280,11 @@ export default function AcademyCreator() {
         target_phonics: typeof bp.target_phonics === 'string' ? bp.target_phonics : bp.target_phonics?.focus || '',
         interests: '',
         specific_needs: '',
+        // plan-lesson-blueprint computes these — carry them through so the
+        // publish-time objective gate (MISSING_LEARNING_OBJECTIVE) doesn't
+        // fire for a lesson that already has one from the Curriculum Map.
+        learning_objective: bp.learning_objective || st.objective || '',
+        final_output_task: bp.final_output_task || '',
       } as LessonBlueprint);
     } else if (st.skill_focus) {
       setBlueprint({ vocabulary: ['', '', '', '', ''], grammar: st.skill_focus, interests: '', specific_needs: '', target_phonics: '' });
@@ -462,17 +467,33 @@ export default function AcademyCreator() {
       const targetWords = (payload.vocabulary || [])
         .map((w) => (typeof w === 'string' ? w.trim() : ''))
         .filter(Boolean);
-      const presentWords = new Set(
-        academySlides
-          .filter((s: any) => s.type === 'vocab' && typeof s.word === 'string')
-          .map((s: any) => s.word.trim().toLowerCase()),
-      );
+      // Vocabulary can arrive as flat "vocab" slides (one per word) or as a
+      // single paginated "vocab_deck" (cards[]) / "vocab_image_match"
+      // (pairs[]) — check all three shapes, or every AI-generated deck reads
+      // as "0 vocab cards" and gets its real words replaced with blank
+      // backfills below.
+      const presentWords = new Set<string>();
+      for (const s of academySlides as any[]) {
+        if (s.type === 'vocab' && typeof s.word === 'string') {
+          presentWords.add(s.word.trim().toLowerCase());
+        } else if (s.type === 'vocab_deck' && Array.isArray(s.cards)) {
+          for (const c of s.cards) if (typeof c?.word === 'string') presentWords.add(c.word.trim().toLowerCase());
+        } else if (s.type === 'vocab_image_match' && Array.isArray(s.pairs)) {
+          for (const p of s.pairs) if (typeof p?.word === 'string') presentWords.add(p.word.trim().toLowerCase());
+        }
+      }
       const missingWords = targetWords.filter((w) => !presentWords.has(w.toLowerCase()));
       let backfilledSlides: Slide[] = academySlides;
       if (missingWords.length > 0) {
         const lastVocabIdx = (() => {
           for (let i = backfilledSlides.length - 1; i >= 0; i--) {
             if ((backfilledSlides[i] as any).type === 'vocab') return i;
+          }
+          // No flat "vocab" slide (deck used vocab_deck/vocab_image_match
+          // instead) — fall back to the last slide in the vocab block so
+          // backfills land inside that block, not appended after "speaking".
+          for (let i = backfilledSlides.length - 1; i >= 0; i--) {
+            if ((backfilledSlides[i] as any).block === 'vocab') return i;
           }
           return -1;
         })();
