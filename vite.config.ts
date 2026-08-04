@@ -36,11 +36,30 @@ export default defineConfig(({ mode }) => ({
             },
           },
           {
+            // JS/CSS use StaleWhileRevalidate rather than CacheFirst: content-hashed
+            // filenames mean a stale entry only lingers if the browser never gets a
+            // chance to re-fetch it, but CacheFirst blindly trusts whatever's cached
+            // for up to 30 days with no revalidation at all — the exact mechanism
+            // behind repeated "I cleared my cache and still don't see the update"
+            // reports, since a hard clear was needed to force it. StaleWhileRevalidate
+            // still serves instantly from cache, but always fires a background fetch
+            // that updates the cache for the *next* load — no manual clear needed.
+            urlPattern: ({ url, sameOrigin }) => sameOrigin && /\.(?:js|css)$/.test(url.pathname),
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "static-assets-js",
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
+          },
+          {
+            // Images/fonts are safe to keep on CacheFirst — they're content-hashed
+            // too but change far less often, and re-fetching them on every load has
+            // no benefit worth the bandwidth.
             urlPattern: ({ url, sameOrigin }) =>
-              sameOrigin && /\.(?:js|css|woff2|png|svg|jpg|jpeg|webp)$/.test(url.pathname),
+              sameOrigin && /\.(?:woff2|png|svg|jpg|jpeg|webp)$/.test(url.pathname),
             handler: "CacheFirst",
             options: {
-              cacheName: "static-assets",
+              cacheName: "static-assets-media",
               expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },

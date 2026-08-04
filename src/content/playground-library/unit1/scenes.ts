@@ -1481,10 +1481,10 @@ export const LESSON_6_SCENES: Scene[] = [
     id: 'l6-storybook', kind: 'flipbook', bg: bgGoodbyeCast, title: 'The Legend of the Golden Acorn',
     pages: [
       { img: bgTitleForest, text: 'Long ago, deep in the forest, a Golden Acorn kept every day bright and happy. But one morning... its glow went dark!' },
-      { who: 'pip', img: scenePipClearing, text: 'Pip the squirrel raced to help. "Don’t worry! Hello! My name is Pip, and I know this forest best!"' },
+      { who: 'pip', img: scenePipClearing, text: 'Pip the fox raced to help. "Don’t worry! Hello! My name is Pip, and I know this forest best!"' },
       { who: 'mia', img: sceneMiaMousehole, text: 'At the old mousehole, Mia found the first clue. Even though she was nervous, she stayed happy. "I am happy!" she said — and the path lit up!' },
       { who: 'bella', img: sceneBellaBigTree, text: 'A locked gate blocked the way. It needed a number! Bella smiled bravely. "I am five years old!" The gate creaked open.' },
-      { who: 'willow', img: bgMeadow, text: 'Deep in the Rainbow Meadow, a hidden door needed a sound. Willow spun her yellow yoyo. "Yoyo starts with /y/!" The door swung wide.' },
+      { who: 'willow', img: bgWillowMeadow, text: 'Deep in the Rainbow Meadow, a hidden door needed a sound. Willow spun her yellow yoyo. "Yoyo starts with /y/!" The door swung wide.' },
       { who: 'leo', img: bgBigTree, text: 'At last, they found the Golden Acorn — dim and quiet. Leo took a deep breath and roared with joy, "I am so happy!" The acorn began to glow!' },
       { img: bgL6TrophyTrail, text: 'The Golden Acorn blazed brighter than ever, and the whole forest sparkled with light again!' },
       { img: bgGoodbyeCast, text: 'You saved the day! You remembered every name, feeling, number, and sound. You are a true Forest Hero! ✨\u{1F3C6}' },
