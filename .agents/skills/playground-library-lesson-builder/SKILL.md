@@ -730,6 +730,70 @@ a new tier above Pre-A1) surfaced learnings not covered above:
   covered straight-line set or budget separate time to extend the tracing
   hit-detection to curves; don't discover this after committing to a
   letter choice in the content file.
+- **A follow-up "remove all the floating character images" correction is a
+  real, likely-to-recur note, not an edge case** — the very sticker-cutout
+  approach documented above (fresh transparent PNGs floating over plain
+  establishing-shot backgrounds) was explicitly rejected by the user on
+  this exact lesson one revision later: "the mascots with the background —
+  remove it, remove them all... characters should be on a full-bleed
+  scene." The fix wasn't a style tweak, it was architectural: stop
+  generating standalone character stickers at all, and instead paint every
+  character directly into whichever background(s) they appear in (same
+  §11 "never a pasted cut-out" rule, just applied consistently instead of
+  only for two-person "conversation" scenes). Concretely, for scene kinds
+  whose whole mechanic is "tap the character to hear them talk" (`meet`),
+  this means going back to the *original* unit1 pattern: no character
+  `<img>` at all, just a broad invisible tap-zone over the general area
+  they're standing in the painted background (see `unit1/SceneRenderer.tsx`'s
+  own `MeetScene` comment: "scene.bg already paints the character directly
+  into the art"). A scene kind that fundamentally needs a *discrete,
+  poppable* per-item graphic (a reveal-from-behind-a-door game, a memory
+  card) can't paint that into a static background — swap the illustrated
+  character for a small colored emoji+name badge instead of dropping the
+  interaction. Before generating any character as a separate sticker
+  asset, ask whether the background it's going into could just have them
+  painted in instead — it usually can, and it's the safer default given
+  this was already flagged once.
+- **A full cast (not just the two leads) can appear throughout a lesson
+  without each member getting a dedicated "meet" scene.** When asked to
+  "bring back all the [prior] characters," the pacing-friendly pattern is:
+  paint everyone into the shared ensemble backgrounds (so they're visibly
+  present and named throughout) and give the *non-lead* characters cameo
+  lines inside mechanics that already exist for a different core purpose —
+  a `roleplay` script can end with one extra character's non-repeat line,
+  a `join-stage`'s turn list can add one more `who`, and a `hello-doors`-
+  style reveal game is a natural home for two more characters to get a
+  proper spoken introduction each, all without adding new scenes.
+- **Actually compute the pacing estimate, don't eyeball it.** §12 gives
+  per-scene-kind time bands and an explicit budget ("3-5 'say it out loud'
+  reps across a lesson") for a reason: a lesson that reuses familiar scene
+  kinds can quietly balloon past 30 minutes by simply having *more* of
+  each kind than the budget assumes. When a user says "verify it's 30
+  minutes," sum estimated minutes per scene against §12's bands before
+  answering — this lesson's first draft had 9 "say it out loud" scenes
+  (meet/echo/roleplay/join-stage) against a 3-5 budget, and fixing that
+  meant recognizing that a `meet` scene's own hold-to-repeat step already
+  *is* the repeat practice, so a separate `echo` scene right after it
+  teaches the identical line is redundant runtime, not extra learning —
+  cutting those (and merging two single-word `meet` scenes into one
+  two-word `meet`) brought a ~35min draft down to ~30-33min without losing
+  content, just removing repetition.
+- **Full-bleed background generation fails more often on tight/vignette-
+  style compositions than on wide room shots**, independent of how the
+  prompt phrases the "no border" instruction. A prompt describing a full
+  room with characters spread across the frame edge-to-edge succeeds on
+  the first try; the same "no border/frame/vignette" language on a
+  cozier, tighter-cropped composition (a reading nook, a close-up cabinet)
+  still often comes back with a rounded-corner postcard frame and white
+  margins. If a background comes back framed, don't just repeat the same
+  "no border" instruction more emphatically — restructure the *composition*
+  itself to spread elements from edge to edge (e.g. "a bookshelf on the
+  FAR LEFT... a window on the FAR RIGHT... a banner spanning the top from
+  edge to edge") the way the successful wide-room prompts already do. If a
+  background still comes back with a moderate frame/margin after a couple
+  of tries and isn't worth more attempts, it's usually still usable as-is:
+  `background-size: cover` on a wide player frame crops a thin uniform
+  margin away in practice even though the raw generated file still shows it.
 
 ## 16. The canonical curriculum map (source of truth for scope + objectives)
 

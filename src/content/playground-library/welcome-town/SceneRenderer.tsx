@@ -189,7 +189,6 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
         <h1 className="text-4xl font-black text-white drop-shadow-[0_3px_8px_rgba(0,0,0,0.55)] sm:text-5xl">{scene.title}</h1>
         <p className="mt-1 text-sm font-semibold text-white/95 drop-shadow sm:text-base">{scene.subtitle}</p>
       </div>
-      <img src={CAST.pip.img} alt="Pip" className="absolute bottom-[18vh] left-1/2 -translate-x-1/2 object-contain drop-shadow-2xl" style={{ height: 'clamp(220px, 34vh, 420px)', animation: 'lep1-walk 3.2s ease-in-out infinite' }} />
       {step >= 0 && step < scene.script.length && (
         <div className="absolute bottom-[52vh] left-1/2 max-w-[520px] -translate-x-1/2 px-4">
           <div className="relative rounded-3xl bg-white/95 px-6 py-4 text-center text-2xl font-black text-orange-800 shadow-2xl">
@@ -252,21 +251,10 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
           {scene.teacher}
         </div>
       </div>
+      {/* scene.bg already paints {c.name} directly into the classroom art —
+          no separate sprite on top, just a broad tap affordance over the
+          area where they're standing. */}
       {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 h-[60vh] w-full cursor-pointer bg-transparent" />}
-      {/* This world's backgrounds are plain establishing shots (no character
-          baked in like the Little Explorers art), so the character sprite is
-          rendered here directly rather than relying on the bg image alone. */}
-      <div className={`pointer-events-none absolute inset-x-0 z-10 grid place-items-center transition-[top] duration-500 ${phase === 'idle' ? 'top-[20vh]' : 'top-[13vh]'}`}>
-        <div className="relative" style={{ width: 'clamp(200px, 32vh, 320px)', height: 'clamp(200px, 32vh, 320px)' }}>
-          {phase === 'idle' && (
-            <>
-              <span className="absolute inset-0 rounded-full" style={{ background: `radial-gradient(circle, ${c.color}55, transparent 65%)`, animation: 'lep1-ping 2s ease-out infinite' }} />
-              <span className="absolute inset-6 rounded-full border-4" style={{ borderColor: c.color, animation: 'lep1-ping 2s ease-out 0.4s infinite' }} />
-            </>
-          )}
-          <img src={c.img} alt={c.name} className="relative h-full w-full object-contain drop-shadow-2xl" style={{ animation: 'lep1-hop 2.4s ease-in-out infinite' }} />
-        </div>
-      </div>
       {xpBurst && (
         <div className="pointer-events-none absolute inset-x-0 top-[32vh] z-30 grid place-items-center">
           <div className="animate-[lep1-pop-fade_1.1s_ease-out_forwards] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 text-2xl font-black text-white shadow-2xl">+10 XP 💎</div>
@@ -329,9 +317,10 @@ function EchoScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind: 'ec
   return (
     <GlassCard>
       <p className="text-center text-lg font-bold text-orange-700">{scene.teacher}</p>
-      <div className="mt-4 grid place-items-center rounded-3xl bg-white/60 p-4">
-        <img src={c.img} alt={c.name} width={128} height={128} className="h-32 w-32 object-contain animate-[lep1-hop_1.4s_ease-in-out_infinite]" />
-        <p className="mt-2 text-3xl font-black" style={{ color: c.color }}>"{scene.word}"</p>
+      <div className="mt-4 grid place-items-center rounded-3xl bg-white/60 p-6">
+        <span className="text-5xl" style={{ animation: 'lep1-hop 1.4s ease-in-out infinite' }}>{c.emoji}</span>
+        <p className="mt-2 text-sm font-black uppercase tracking-widest" style={{ color: c.color }}>{c.name} says</p>
+        <p className="mt-1 text-3xl font-black" style={{ color: c.color }}>"{scene.word}"</p>
       </div>
       <button onClick={hear} className="mt-4 w-full rounded-full bg-white py-3 text-lg font-bold text-orange-700 shadow-md ring-2 ring-orange-200 active:scale-95">
         🔊 Listen {heard > 0 && <span className="text-sm opacity-60">({heard})</span>}
@@ -505,7 +494,10 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
   // where they talk face to face), so only the bubble's anchor point needs
   // to roughly match where each of them stands in that painting — no
   // character image is rendered here.
-  const bubbleLeft: Record<CharKey, string> = { pip: '26%', marigold: '74%' };
+  // bg-classroom-circle paints Pip and Miss Marigold facing each other on
+  // the rug (left/right), with the other classmates gathered behind them —
+  // only the two dialogue leads need a precise bubble anchor.
+  const bubbleLeft: Record<CharKey, string> = { pip: '22%', marigold: '78%', mia: '50%', bella: '50%', willow: '50%', leo: '50%' };
   const current = step >= 0 && step < scene.script.length ? scene.script[step] : null;
   const replayCurrent = () => { if (current) void safeSpeak(current.line, voiceOf(current.who)); };
 
@@ -719,30 +711,25 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
       <button onClick={() => cueSpeak(r!.prompt, voiceOf(r!.target))} className="absolute right-4 top-4 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>
       {phase === 'echo' && <div className="pointer-events-none absolute left-1/2 top-24 z-40 -translate-x-1/2 rounded-3xl bg-white px-6 py-4 text-2xl font-black text-orange-600 shadow-2xl ring-4 ring-orange-200">🎤 {r!.echoLine}</div>}
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/40 to-transparent" />
-      <div className={`absolute bottom-0 left-0 right-0 z-10 h-[82%] ${phase === 'shuffle' ? 'animate-[lep1-shuffleShake_0.42s_ease-in-out_infinite]' : ''}`}>
+      {/* scene.bg already paints the cubby doors themselves — this world has
+          no per-character illustration, so a name+emoji badge stands in for
+          the door-opening reveal instead of a floating character image. */}
+      <div className={`absolute inset-0 z-10 ${phase === 'shuffle' ? 'animate-[lep1-shuffleShake_0.42s_ease-in-out_infinite]' : ''}`}>
         {doorPositions.map((left, i) => {
           const who = order[i];
           const c = CAST[who];
           const isOpen = openIdx === i || phase === 'reveal';
           const isWrong = wrongIdx === i;
-          const isIdle = openIdx === null && !answeredRef.current && phase === 'prompt';
-          const stepOutside = i === doorPositions.length - 1 ? '28%' : '72%';
-          const showChar = openIdx === i || phase === 'reveal';
+          const showBadge = openIdx === i || phase === 'reveal';
           return (
-            <div key={i} className="absolute bottom-0" style={{ left: `${left}%`, transform: 'translateX(-50%)', width: '28%', maxWidth: 320, height: 'clamp(260px, 52vh, 480px)' }}>
-              <div className="pointer-events-none absolute left-1/2 z-30 -translate-x-1/2" style={{ left: phase === 'reveal' ? '50%' : openIdx === i ? stepOutside : '50%', bottom: '-14%', width: 'clamp(420px, 42vw, 620px)', height: 'clamp(420px, 42vw, 620px)', transform: showChar ? 'translateY(0) scale(1)' : 'translateY(10%) scale(0.96)', opacity: showChar ? 1 : 0, transition: 'left 0.45s ease-out, transform 0.45s ease-out, opacity 0.25s ease-out', transitionDelay: openIdx === i ? '0.35s' : '0s' }}>
-                <img src={c.img} alt={c.name} draggable={false} className="h-full w-full max-w-none object-contain" style={{ filter: 'drop-shadow(0 10px 18px rgba(0,0,0,0.45))' }} />
-                {phase === 'reveal' && <div className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-2xl bg-white px-4 py-2 text-lg font-black text-neutral-800 shadow-xl ring-2 ring-white" style={{ color: c.color }}>{c.name}</div>}
-                {(phase === 'greet' || phase === 'echo') && openIdx === i && <div className="absolute -top-14 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-2xl bg-white px-4 py-2 text-base font-black text-neutral-800 shadow-xl ring-2 ring-white">{r!.helloLine}</div>}
+            <div key={i} className="absolute bottom-[8%] top-[8%]" style={{ left: `${left}%`, transform: 'translateX(-50%)', width: '28%', maxWidth: 320 }}>
+              <div className="pointer-events-none absolute inset-x-0 top-1/2 z-30 flex -translate-y-1/2 flex-col items-center gap-2 transition-all duration-300" style={{ opacity: showBadge ? 1 : 0, transform: `translateY(${showBadge ? '0' : '10px'})` }}>
+                <span className="grid h-20 w-20 place-items-center rounded-full text-4xl shadow-2xl ring-4 ring-white" style={{ background: `${c.color}33` }}>{c.emoji}</span>
+                <span className="whitespace-nowrap rounded-2xl bg-white px-4 py-2 text-lg font-black shadow-xl ring-2 ring-white" style={{ color: c.color }}>{c.name}</span>
+                {(phase === 'greet' || phase === 'echo') && openIdx === i && <span className="max-w-[220px] whitespace-normal rounded-2xl bg-white px-4 py-2 text-center text-sm font-black text-neutral-800 shadow-xl ring-2 ring-white">{r!.helloLine}</span>}
               </div>
-              <button onClick={() => tap(i)} disabled={answeredRef.current || phase !== 'prompt'} aria-label={`Door ${i + 1}`} className={`absolute inset-0 ${isWrong ? 'animate-[lep1-shake_0.5s]' : ''} ${isIdle ? 'hover:-translate-y-1' : ''} transition-transform active:scale-95`}>
-                <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2 rounded-t-full" style={{ width: '112%', height: '20%', background: `linear-gradient(180deg, ${c.color} 0%, ${c.color}dd 100%)`, boxShadow: '0 8px 20px rgba(0,0,0,0.3)' }} />
-                <div className="absolute left-1/2 top-[16%] h-[84%] w-[94%] -translate-x-1/2 overflow-hidden rounded-t-[46%] border-[7px] border-amber-950 shadow-2xl" style={{ background: 'radial-gradient(ellipse at 50% 70%, #4a2c14 0%, #1a0d05 100%)' }}>
-                  <div className="absolute inset-0 transition-opacity duration-500" style={{ opacity: isOpen ? 1 : 0, background: `radial-gradient(circle at 50% 65%, ${c.color}ee 0%, ${c.color}88 35%, rgba(0,0,0,0.4) 90%)` }} />
-                  <div className="absolute inset-y-0 left-0 w-1/2 origin-left transition-transform duration-[700ms]" style={{ transform: isOpen ? 'perspective(800px) rotateY(-110deg)' : 'rotateY(0deg)', background: 'linear-gradient(90deg, #8A5028 0%, #A76A3D 60%, #C68B58 100%)' }} />
-                  <div className="absolute inset-y-0 right-0 w-1/2 origin-right transition-transform duration-[700ms]" style={{ transform: isOpen ? 'perspective(800px) rotateY(110deg)' : 'rotateY(0deg)', background: 'linear-gradient(270deg, #8A5028 0%, #A76A3D 60%, #C68B58 100%)' }} />
-                </div>
-                {isWrong && <div className="pointer-events-none absolute inset-0 z-40 flex items-center justify-center text-8xl font-black text-red-500 drop-shadow-lg">✗</div>}
+              <button onClick={() => tap(i)} disabled={answeredRef.current || phase !== 'prompt'} aria-label={`Cubby ${i + 1}`} className={`absolute inset-0 rounded-3xl transition-transform active:scale-95 ${isWrong ? 'animate-[lep1-shake_0.5s]' : ''} ${isOpen ? 'ring-4' : ''}`} style={{ ['--tw-ring-color' as string]: c.color }}>
+                {isWrong && <div className="pointer-events-none absolute inset-0 z-40 flex items-center justify-center text-7xl font-black text-red-500 drop-shadow-lg">✗</div>}
               </button>
             </div>
           );
@@ -869,7 +856,7 @@ function FlipbookScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene,
       {checkpoint && (
         <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/60 px-6" style={{ animation: 'lep1-pop 0.3s ease-out' }}>
           <div className="w-full max-w-sm rounded-3xl bg-gradient-to-b from-[#FFFBF0] to-[#FFF2D0] p-6 text-center shadow-2xl ring-4 ring-amber-300/70">
-            <img src={CAST[checkpoint.who].img} alt={CAST[checkpoint.who].name} className="mx-auto mb-2 h-16 w-16 object-contain" />
+            <span className="mx-auto mb-2 block text-5xl">{CAST[checkpoint.who].emoji}</span>
             <div className="mb-1 text-3xl">🤔</div>
             <p className="mb-4 text-xl font-black text-orange-900">{checkpoint.question}</p>
             <div className="flex flex-col gap-2">
@@ -1252,13 +1239,13 @@ function FinaleScene({ scene, hearts, gems, onRestart }: { scene: Extract<Scene,
         <div className="my-4 flex justify-center gap-2 text-5xl">
           {[0, 1, 2, 3].map((i) => <span key={i} className={i < stars ? '' : 'opacity-20'}>⭐</span>)}
         </div>
-        <div className="mx-auto grid grid-cols-2 gap-2 rounded-3xl bg-white/70 p-3">
-          {(['pip', 'marigold'] as const).map((k) => {
+        <div className="mx-auto grid grid-cols-3 gap-2 rounded-3xl bg-white/70 p-3">
+          {(['marigold', 'pip', 'mia', 'bella', 'willow', 'leo'] as const).map((k, i) => {
             const c = CAST[k];
             return (
               <div key={k} className="grid place-items-center">
-                <img src={c.img} alt={c.name} width={72} height={72} className="h-16 w-16 object-contain animate-[lep1-hop_1.6s_ease-in-out_infinite]" />
-                <span className="text-xs font-black" style={{ color: c.color }}>💎 {c.name}</span>
+                <span className="text-3xl" style={{ animation: `lep1-hop 1.6s ease-in-out ${i * 0.1}s infinite` }}>{c.emoji}</span>
+                <span className="text-[10px] font-black" style={{ color: c.color }}>{c.name}</span>
               </div>
             );
           })}

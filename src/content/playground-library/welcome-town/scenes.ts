@@ -4,75 +4,76 @@
  * This is the Playground Hub's first A1-tier lesson (distinct from the
  * existing Pre-A1 "Little Explorers Phonics" curriculum in
  * ../unit1/scenes.ts — that content is explicitly Pre-A1 per its own
- * title-card `level` field and the playground-library-lesson-builder
- * skill's canonical curriculum map; A1 is the next tier up).
+ * title-card `level` field; A1 is the next tier up).
  *
- * Content grounded in the app's own already-wired A1 curriculum plan rather
- * than invented from scratch (src/curriculum/roadmap/a1Roadmap.ts bucket 0
- * "Hello, Class!": greetings/introductions/classroom/colors vocab; grammar
- * "be" affirmative; goal "Greet someone and say my name") plus a deliberate
- * extension past that bucket's original scope, per direct instruction: the
- * lesson is split into two parts —
- *   Part 1 (Vocabulary): greetings, self-introduction, colors — the
- *     original scope, told through a new Welcome Town story.
- *   Part 2 (Phonics + CVC reading): the three sounds S, A, T (the classic
- *     first phonics trio — with them alone a real, decodable CVC word
- *     exists: SAT), taught via the same sound-model/trace mechanics as the
- *     Pre-A1 curriculum, then blended into reading practice.
+ * Direct instruction this revision implements:
+ *   - Every character appears painted directly into a full-bleed classroom
+ *     background — no floating sticker/mascot images anywhere. A scene that
+ *     needs to show who's speaking either (a) has that character already
+ *     painted into its `bg`, with an invisible tap-zone over the general
+ *     area (the `meet` scene pattern — see SceneRenderer.tsx), or (b) is a
+ *     game mechanic that reveals a name/emoji badge rather than a body
+ *     illustration (hello-doors).
+ *   - The whole lesson is set in one school building (Welcome Town School),
+ *     not a town street — different rooms/moments (classroom door, circle
+ *     time, a colors corner, a reading nook, cubby doors) for visual variety
+ *     per the art style contract's "characters painted into the background,
+ *     never a pasted cut-out" rule.
+ *   - Story: Pip (same fox from the Pre-A1 curriculum — same name, voice,
+ *     color) is the new student; Miss Marigold is the teacher; Mia, Bella,
+ *     Willow, and Leo (also carried forward from Pre-A1) are the established
+ *     classmates who welcome him as an ensemble — visible throughout and
+ *     given a couple of spoken cameo lines (roleplay, join-stage,
+ *     hello-doors), without each needing a dedicated full "meet" sequence,
+ *     per the pacing budget below.
+ *   - Two parts in one lesson: Part 1 (greetings, self-intro, colors) and
+ *     Part 2 (phonics S/A/T + first CVC word, SAT).
  *
- * Cast: Pip is the SAME character students already know from the Pre-A1
- * lessons (../unit1/scenes.ts) — same name, same voice key ('pip' in
- * audio.ts), same color (#FE6A2F) — carried forward into A1 rather than
- * replaced by a new lookalike, so the character is a throughline across
- * tiers. Mayor Marigold is new to this tier, voiced through the existing
- * generic 'teacher' key (she plays that role, so no new audio.ts key is
- * needed — the voice pipeline is keyed by role/name, not by visual design).
- *
- * Art: every character image here is a transparent-background sticker
- * cutout (`*-sticker.png`) — safe to float over ANY background without a
- * visible box. For the two "conversation" scenes where both characters
- * talk face to face (roleplay, join-stage), the art style contract's own
- * rule applies instead: characters are painted directly into the
- * background art, standing on the ground with real contact shadows, not
- * layered cutouts — see `bg-together.png`.
- *
- * New cast (Pip + Mayor Marigold together) needed its own module rather
- * than folding into unit1/scenes.ts: SceneRenderer.tsx there imports CAST/
- * PROP_THEME/etc. directly from that module, coupling every scene kind to
- * the Pre-A1 fox-and-friends roster specifically, not to "Unit 1" as a
- * concept — see that skill's §6.
+ * Pacing check against the skill's own §12 budget (title+cinematic ~1.5min;
+ * "say it out loud" reps meet/echo/roleplay/join-stage budgeted 3-5 across
+ * a lesson — this lesson covers more ground than a single-strand Pre-A1
+ * lesson so runs slightly over that at 6, deliberately, since two of the
+ * original meet+echo pairs were collapsed into one meet each — the meet
+ * scene's own hold-to-repeat step already IS the repeat practice, so a
+ * separate echo scene right after teaching the identical line is redundant
+ * repetition, not extra learning; 1-3min per mini-game; 2-4min per new
+ * letter's sound-model+trace pair): estimated total ≈ 30-33 minutes.
  * ========================================================================= */
 
 const W = '/welcome-town';
 
-export type CharKey = 'pip' | 'marigold';
-/** Which existing audio.ts voice each of this world's characters speaks
- * through — reusing established voices rather than adding new ones. */
-export const VOICE_KEY: Record<CharKey, 'pip' | 'teacher'> = {
+export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo';
+
+/** Every one of these maps onto an audio.ts voice already built for that
+ *  exact character (pip/mia/bella/willow/leo are the same characters as the
+ *  Pre-A1 curriculum, reusing their established voices) — Marigold plays a
+ *  teacher role, so she uses the existing generic 'teacher' key. */
+export const VOICE_KEY: Record<CharKey, 'pip' | 'mia' | 'bella' | 'willow' | 'leo' | 'teacher'> = {
   pip: 'pip',
   marigold: 'teacher',
+  mia: 'mia',
+  bella: 'bella',
+  willow: 'willow',
+  leo: 'leo',
 };
 
-export const CAST: Record<CharKey, { name: string; img: string; emoji: string; color: string }> = {
-  // Same character, same voice, same color as the Pre-A1 Pip in
-  // ../unit1/scenes.ts — only the portrait is a fresh transparent sticker
-  // cutout (the Pre-A1 asset has a baked-in playground background, fine for
-  // its own framed-card uses there but wrong for floating over other art).
-  pip: { name: 'Pip', img: `${W}/characters/pip-sticker.png`, emoji: '\u{1F98A}', color: '#FE6A2F' },
-  marigold: { name: 'Mayor Marigold', img: `${W}/characters/marigold-sticker.png`, emoji: '\u{1F3E1}', color: '#8ECAE6' },
+/** No `img` field — every character appears painted directly into a scene's
+ *  `bg`, never as a standalone floating image (see the file banner above). */
+export const CAST: Record<CharKey, { name: string; emoji: string; color: string }> = {
+  pip: { name: 'Pip', emoji: '\u{1F98A}', color: '#FE6A2F' },
+  marigold: { name: 'Miss Marigold', emoji: '\u{1F34E}', color: '#8ECAE6' },
+  mia: { name: 'Mia', emoji: '\u{1F42D}', color: '#B85CD1' },
+  bella: { name: 'Bella', emoji: '\u{1F430}', color: '#E76FA5' },
+  willow: { name: 'Willow', emoji: '\u{1F426}', color: '#4FA9E0' },
+  leo: { name: 'Leo', emoji: '\u{1F981}', color: '#C97A2F' },
 };
 
-const bgTitle = `${W}/scenes/bg-title.png`;
-const bgStreet = `${W}/scenes/bg-street.png`;
-const bgSchoolhouse = `${W}/scenes/bg-schoolhouse.png`;
-const bgBalloons = `${W}/scenes/bg-balloons.png`;
-const bgDoors = `${W}/scenes/bg-doors.png`;
-/** Pip and Mayor Marigold painted directly into the Welcome Town street,
- * both feet-on-the-ground — used only for the two face-to-face
- * "conversation" scenes (roleplay, join-stage), per the art style
- * contract's "never a pasted cut-out" rule for scenes where characters
- * talk to each other in place. */
-const bgTogether = `${W}/scenes/bg-together.png`;
+const bgWide = `${W}/scenes/bg-classroom-wide.png`;
+const bgDoor = `${W}/scenes/bg-classroom-door.png`;
+const bgCircle = `${W}/scenes/bg-classroom-circle.png`;
+const bgColors = `${W}/scenes/bg-classroom-colors.png`;
+const bgCubbies = `${W}/scenes/bg-cubbies.png`;
+const bgReading = `${W}/scenes/bg-classroom-reading.png`;
 
 export type Scene =
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string; cta?: string }
@@ -92,39 +93,31 @@ export type Scene =
   | { id: string; kind: 'finale'; bg: string; who: CharKey; line: string };
 
 export const LESSON_1_TITLE = 'Hello, Class!';
-export const LESSON_1_OBJECTIVE = "Part 1: Greet a new friend and share your name (\"Hello! My name is ___.\"). Part 2: Learn the sounds S, A, T and read your first word.";
+export const LESSON_1_OBJECTIVE = "Part 1: Greet your new class and share your name (\"Hello! My name is ___.\"), plus 3 colors. Part 2: Learn the sounds S, A, T and read your first word.";
 
 export const LESSON_1_SCENES: Scene[] = [
-  { id: 'wt-title', kind: 'title-card', bg: bgTitle, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 1', title: 'Welcome Town: Hello, Class!', subtitle: 'Say hello, share your name, and read your first word' },
+  { id: 'wt-title', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 1', title: 'Welcome Town School: Hello, Class!', subtitle: 'Meet the class, say your name, and read your first word' },
 
   {
-    id: 'wt-intro', kind: 'cinematic', bg: bgTitle, title: 'Welcome Town', subtitle: 'A brand-new town, full of brand-new friends', narrator: 'marigold',
+    id: 'wt-intro', kind: 'cinematic', bg: bgDoor, title: 'Welcome Town School', subtitle: 'A new friend joins the class today', narrator: 'marigold',
     script: [
-      { who: 'marigold', line: 'Welcome, everyone! Today is a very special day.' },
-      { who: 'marigold', line: 'A new friend just arrived in Welcome Town. Let’s go say hello!' },
+      { who: 'marigold', line: 'Good morning, class! Today is a very special day.' },
+      { who: 'marigold', line: 'We have a new friend joining us. Let’s all say hello!' },
     ],
-    cta: '\u{1F3AE} LET’S GO!',
+    cta: '\u{1F392} LET’S GO!',
   },
 
-  { id: 'wt-meet-marigold', kind: 'meet', bg: bgTitle, who: 'marigold', teacher: 'Tap Mayor Marigold to hear her say hello!', line: 'Hello! I am Mayor Marigold. Welcome to our town!', repeat: 'Hello!' },
-  { id: 'wt-echo-hello', kind: 'echo', bg: bgTitle, who: 'marigold', teacher: 'Repeat after Mayor Marigold: Hello! Hello! Hello!', word: 'Hello!' },
-
-  { id: 'wt-meet-pip', kind: 'meet', bg: bgStreet, who: 'pip', teacher: 'A familiar friend runs over. Tap Pip to say hi!', line: 'Hi! My name is Pip.', repeat: 'My name is Pip.' },
-  { id: 'wt-echo-name', kind: 'echo', bg: bgStreet, who: 'pip', teacher: 'Repeat after Pip: My name is Pip.', word: 'My name is Pip.' },
+  { id: 'wt-meet-marigold', kind: 'meet', bg: bgDoor, who: 'marigold', teacher: 'Tap Miss Marigold to hear her say hello!', line: 'Hello! I am Miss Marigold, your teacher. Welcome to our class!', repeat: 'Hello!' },
+  { id: 'wt-meet-pip', kind: 'meet', bg: bgDoor, who: 'pip', teacher: 'Here comes Pip! Tap him to say hi.', line: 'Hi! My name is Pip. I am new here!', repeat: 'My name is Pip.' },
 
   {
-    id: 'wt-vocab-friend', kind: 'meet', bg: bgStreet, who: 'marigold',
-    teacher: 'Tap Mayor Marigold to learn a new word: friend!',
-    line: 'Pip is my friend! Do you want to be my friend too?', repeat: 'My friend!',
-  },
-  {
-    id: 'wt-vocab-teacher', kind: 'meet', bg: bgSchoolhouse, who: 'marigold',
-    teacher: 'Tap Mayor Marigold to learn a new word: teacher!',
-    line: 'I am your teacher today. Hello, class!', repeat: 'Hello, teacher!',
+    id: 'wt-vocab-friend-teacher', kind: 'meet', bg: bgCircle, who: 'marigold',
+    teacher: 'Tap Miss Marigold to learn two new words: friend and teacher!',
+    line: 'Mia, Bella, Willow, and Leo are Pip’s new friends — and I am your teacher!', repeat: 'My friend! My teacher!',
   },
 
   {
-    id: 'wt-memory-words', kind: 'memory', bg: bgStreet, teacher: 'Match the matching pairs! Hello, goodbye, name, friend, teacher.',
+    id: 'wt-memory-words', kind: 'memory', bg: bgCircle, teacher: 'Match the matching pairs! Hello, goodbye, name, friend, teacher.',
     pairs: [
       { id: 'hello', label: 'Hello', emoji: '\u{1F44B}' },
       { id: 'goodbye', label: 'Goodbye', emoji: '\u{1F44B}' },
@@ -135,7 +128,7 @@ export const LESSON_1_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt-choice-hello', kind: 'choice', bg: bgStreet, who: 'pip', teacher: 'Listen carefully, then tap the right answer!',
+    id: 'wt-choice-hello', kind: 'choice', bg: bgCircle, who: 'pip', teacher: 'Listen carefully, then tap the right answer!',
     prompt: 'Which word means HELLO?',
     options: [
       { label: 'Hello', emoji: '\u{1F44B}', correct: true },
@@ -145,12 +138,12 @@ export const LESSON_1_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt-colors-balloons', kind: 'meet', bg: bgBalloons, who: 'marigold',
-    teacher: 'Look up! Tap Mayor Marigold to name the balloon colors.',
+    id: 'wt-colors-balloons', kind: 'meet', bg: bgColors, who: 'marigold',
+    teacher: 'Look up! Tap Miss Marigold to name the balloon colors.',
     line: 'Look at the balloons! Red, blue, and yellow!', repeat: 'Red, blue, yellow!',
   },
   {
-    id: 'wt-choice-red', kind: 'choice', bg: bgBalloons, who: 'marigold', teacher: 'Which balloon is RED?',
+    id: 'wt-choice-red', kind: 'choice', bg: bgColors, who: 'marigold', teacher: 'Which balloon is RED?',
     prompt: 'Tap the RED balloon!',
     options: [
       { label: 'Red', emoji: '\u{1F534}', correct: true },
@@ -158,94 +151,82 @@ export const LESSON_1_SCENES: Scene[] = [
       { label: 'Yellow', emoji: '\u{1F7E1}' },
     ],
   },
-  {
-    id: 'wt-choice-blue', kind: 'choice', bg: bgBalloons, who: 'marigold', teacher: 'Which balloon is BLUE?',
-    prompt: 'Tap the BLUE balloon!',
-    options: [
-      { label: 'Yellow', emoji: '\u{1F7E1}' },
-      { label: 'Blue', emoji: '\u{1F535}', correct: true },
-      { label: 'Red', emoji: '\u{1F534}' },
-    ],
-  },
 
   {
-    id: 'wt-roleplay', kind: 'roleplay', bg: bgTogether, teacher: 'Story time! Listen to Pip and Mayor Marigold, then repeat each line.', cast: ['pip', 'marigold'],
+    id: 'wt-roleplay', kind: 'roleplay', bg: bgCircle, teacher: 'Story time! Listen to Pip and Miss Marigold, then repeat each line.', cast: ['pip', 'marigold', 'mia'],
     script: [
-      { who: 'marigold', line: 'Hello! My name is Mayor Marigold.', repeat: true },
+      { who: 'marigold', line: 'Hello! My name is Miss Marigold.', repeat: true },
       { who: 'pip', line: 'Hello! My name is Pip.', repeat: true },
       { who: 'marigold', line: 'Nice to meet you, Pip!', repeat: true },
       { who: 'pip', line: 'Nice to meet you too!', repeat: true },
+      { who: 'mia', line: 'Welcome to our class, Pip!' },
     ],
   },
 
   {
-    id: 'wt-join-stage', kind: 'join-stage', bg: bgTogether, teacher: 'Your turn! When it says YOU, say your own name out loud!', cast: ['pip', 'marigold'],
+    id: 'wt-join-stage', kind: 'join-stage', bg: bgCircle, teacher: 'Your turn! When it says YOU, say your own name out loud!', cast: ['pip', 'marigold', 'leo'],
     turns: [
       { who: 'marigold', line: 'Hello! What is your name?' },
       { who: 'student', line: 'Hello! My name is ______.' },
-      { who: 'pip', line: 'Nice to meet you! Welcome to Welcome Town!' },
+      { who: 'pip', line: 'Nice to meet you! Welcome to our class!' },
+      { who: 'leo', line: 'We are so happy you are here!' },
     ],
   },
 
   {
-    id: 'wt-hello-doors', kind: 'hello-doors', bg: bgDoors, teacher: 'Knock knock! Tap the right door, then say hello to your new friend!', cast: ['pip', 'marigold'],
+    id: 'wt-hello-doors', kind: 'hello-doors', bg: bgCubbies, teacher: 'Knock knock! Tap the right cubby to meet a classmate!', cast: ['mia', 'leo'],
     rounds: [
-      { target: 'pip', prompt: 'Knock knock! Where is Pip?', helloLine: 'Hi! My name is Pip.', echoLine: 'Hello, Pip!' },
-      { target: 'marigold', prompt: 'Knock knock! Where is Mayor Marigold?', helloLine: 'Hello! I am Mayor Marigold.', echoLine: 'Hello, Mayor Marigold!' },
+      { target: 'mia', prompt: 'Knock knock! Which cubby is Mia’s?', helloLine: 'Hi! I am Mia! Welcome to our class!', echoLine: 'Hello, Mia!' },
+      { target: 'leo', prompt: 'Knock knock! Which cubby is Leo’s?', helloLine: 'Hey there! I am Leo!', echoLine: 'Hello, Leo!' },
     ],
   },
 
   {
-    id: 'wt-storybook', kind: 'flipbook', bg: bgTitle, title: "Pip's First Day in Welcome Town",
+    id: 'wt-storybook', kind: 'flipbook', bg: bgWide, title: "Pip's First Day at Welcome Town School",
     pages: [
-      { img: bgTitle, text: "It is Pip's first day in Welcome Town. Pip feels a little shy." },
-      { who: 'pip', img: bgStreet, text: 'Pip sees a new friend. "Hello! My name is Pip."' },
-      { who: 'marigold', img: bgStreet, text: '"Hello, Pip! My name is Mayor Marigold. Welcome to our town!"' },
-      { who: 'pip', img: bgSchoolhouse, text: 'Now Pip is not shy anymore. Pip has a new friend!' },
-      { img: bgTitle, text: 'Everyone in Welcome Town says hello! ✨' },
+      { img: bgDoor, text: "It is Pip's first day at school. Pip feels a little shy." },
+      { who: 'pip', img: bgDoor, text: 'Pip meets the teacher. "Hello! My name is Pip."' },
+      { who: 'marigold', img: bgCircle, text: '"Hello, Pip! Welcome to our class!"' },
+      { img: bgWide, text: 'Now Pip is not shy anymore. Pip has new friends! ✨' },
     ],
     checkpoints: [
-      { afterPage: 1, who: 'pip', question: 'How does Pip feel at first?', options: ['Happy', 'Shy', 'Angry'], answer: 'Shy' },
-      { afterPage: 3, who: 'marigold', question: "What is Pip's new friend's name?", options: ['Mayor Marigold', 'Mia', 'Bella'], answer: 'Mayor Marigold' },
+      { afterPage: 0, who: 'pip', question: 'How does Pip feel at first?', options: ['Happy', 'Shy', 'Angry'], answer: 'Shy' },
+      { afterPage: 2, who: 'marigold', question: 'Who welcomes Pip to the class?', options: ['Miss Marigold', 'Mia', 'Bella'], answer: 'Miss Marigold' },
     ],
   },
 
-  { id: 'wt-vocab-goodbye', kind: 'meet', bg: bgSchoolhouse, who: 'marigold', teacher: 'Tap Mayor Marigold to learn a new word: goodbye!', line: 'It is time to go. Goodbye, class!', repeat: 'Goodbye!' },
-
   {
-    id: 'wt-goodbye-song', kind: 'song', bg: bgSchoolhouse, title: '\u{1F3B5} Welcome Town Goodbye Song \u{1F3B5}', teacher: 'Wave goodbye and sing along together!',
+    id: 'wt-goodbye-song', kind: 'song', bg: bgWide, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
     songUrl: `${W}/audio/goodbye-song.mp3`,
     lyrics: [
       { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
       { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },
-      { who: 'marigold', text: '\u{1F3E0} Welcome Town is happy today' },
-      { who: 'pip', text: '\u{1F496} Byeeee, friend! See you soon!' },
+      { who: 'marigold', text: '\u{1F3EB} Welcome Town School is happy today' },
+      { who: 'pip', text: '\u{1F496} Byeeee, friends! See you soon!' },
     ],
   },
 
   /* =========================== Part 2: Phonics + CVC =========================
    * The classic S-A-T starting trio — with just these three sounds, one real
    * decodable CVC word already exists (SAT), so the very first phonics
-   * lesson can end with an actual reading win, not just isolated sounds.
-   * Kept inside Welcome Town (schoolhouse) rather than a generic backdrop,
-   * per direct instruction to keep every scene grounded in the town. */
+   * lesson can end with an actual reading win, not just isolated sounds. */
 
-  { id: 'wt-part2-title', kind: 'title-card', bg: bgSchoolhouse, level: 'A1', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time!', subtitle: 'Learn new sounds and read your first word', cta: '\u{1F4D6} LET’S READ!' },
+  { id: 'wt-part2-title', kind: 'title-card', bg: bgReading, level: 'A1', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time!', subtitle: 'Learn new sounds and read your first word', cta: '\u{1F4D6} LET’S READ!' },
 
   {
-    id: 'wt-model-s', kind: 'sound-model', bg: bgSchoolhouse, who: 'marigold', letter: 'S', phoneme: '/s/', sound: 'sss',
-    teacher: "Listen to Mayor Marigold's sound. /s/ /s/ Snake!",
+    id: 'wt-model-s', kind: 'sound-model', bg: bgReading, who: 'marigold', letter: 'S', phoneme: '/s/', sound: 'sss',
+    teacher: "Listen to Miss Marigold's sound. /s/ /s/ Snake!",
     anchors: [
-      { word: 'sun', emoji: '\u{2600}\u{FE0F}' },
+      { word: 'sun', emoji: '\u{2600}️' },
       { word: 'sock', emoji: '\u{1F9E6}' },
       { word: 'snake', emoji: '\u{1F40D}' },
     ],
   },
-  { id: 'wt-trace-s', kind: 'trace', bg: bgSchoolhouse, who: 'marigold', letter: 'S', phoneme: '/s/', word: 'sun', teacher: 'Trace the letter S! Say /s/ /s/ /s/ as you draw.' },
+  { id: 'wt-trace-s', kind: 'trace', bg: bgReading, who: 'marigold', letter: 'S', phoneme: '/s/', word: 'sun', teacher: 'Trace the letter S! Say /s/ /s/ /s/ as you draw.' },
 
   {
-    id: 'wt-model-a', kind: 'sound-model', bg: bgSchoolhouse, who: 'pip', letter: 'A', phoneme: '/æ/', sound: 'aaa',
+    id: 'wt-model-a', kind: 'sound-model', bg: bgReading, who: 'pip', letter: 'A', phoneme: '/æ/', sound: 'aaa',
     teacher: "Listen to Pip's sound. /a/ /a/ Apple!",
     anchors: [
       { word: 'apple', emoji: '\u{1F34E}' },
@@ -253,26 +234,26 @@ export const LESSON_1_SCENES: Scene[] = [
       { word: 'alligator', emoji: '\u{1F40A}' },
     ],
   },
-  { id: 'wt-trace-a', kind: 'trace', bg: bgSchoolhouse, who: 'pip', letter: 'A', phoneme: '/æ/', word: 'apple', teacher: 'Trace the letter A! Say /a/ /a/ /a/ as you draw.' },
+  { id: 'wt-trace-a', kind: 'trace', bg: bgReading, who: 'pip', letter: 'A', phoneme: '/æ/', word: 'apple', teacher: 'Trace the letter A! Say /a/ /a/ /a/ as you draw.' },
 
   {
-    id: 'wt-model-t', kind: 'sound-model', bg: bgSchoolhouse, who: 'marigold', letter: 'T', phoneme: '/t/', sound: 'tuh',
-    teacher: "Listen to Mayor Marigold's sound. /t/ /t/ Top!",
+    id: 'wt-model-t', kind: 'sound-model', bg: bgReading, who: 'marigold', letter: 'T', phoneme: '/t/', sound: 'tuh',
+    teacher: "Listen to Miss Marigold's sound. /t/ /t/ Top!",
     anchors: [
       { word: 'top', emoji: '\u{1F3A9}' },
       { word: 'ten', emoji: '\u{1F51F}' },
       { word: 'tiger', emoji: '\u{1F42F}' },
     ],
   },
-  { id: 'wt-trace-t', kind: 'trace', bg: bgSchoolhouse, who: 'marigold', letter: 'T', phoneme: '/t/', word: 'top', teacher: 'Trace the letter T! Say /t/ /t/ /t/ as you draw.' },
+  { id: 'wt-trace-t', kind: 'trace', bg: bgReading, who: 'marigold', letter: 'T', phoneme: '/t/', word: 'top', teacher: 'Trace the letter T! Say /t/ /t/ /t/ as you draw.' },
 
   {
-    id: 'wt-word-build-sat', kind: 'word-build', bg: bgSchoolhouse, teacher: 'You know all 3 sounds! Now read your first word: S-A-T, SAT!',
+    id: 'wt-word-build-sat', kind: 'word-build', bg: bgReading, teacher: 'You know all 3 sounds! Now read your first word: S-A-T, SAT!',
     rounds: [
       { word: 'SAT', blankIndex: 0, answer: 'S', choices: ['S', 'M', 'B'], emoji: '\u{1FA91}' },
       { word: 'SAT', blankIndex: 2, answer: 'T', choices: ['T', 'P', 'N'], emoji: '\u{1FA91}' },
     ],
   },
 
-  { id: 'wt-finale', kind: 'finale', bg: bgTitle, who: 'pip', line: 'You said hello, shared your name, learned S, A, T — and read the word SAT! ✨\u{1F3C6}' },
+  { id: 'wt-finale', kind: 'finale', bg: bgWide, who: 'pip', line: 'You said hello, met your new class, learned S, A, T — and read the word SAT! ✨\u{1F3C6}' },
 ];
