@@ -253,8 +253,17 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
       </div>
       {/* scene.bg already paints {c.name} directly into the classroom art —
           no separate sprite on top, just a broad tap affordance over the
-          area where they're standing. */}
+          area where they're standing, with the same pulsing ring cue used
+          for this exact idle-tap pattern in the Pre-A1 lessons. */}
       {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 h-[60vh] w-full cursor-pointer bg-transparent" />}
+      {phase === 'idle' && (
+        <div className="pointer-events-none absolute inset-x-0 top-[26vh] z-10 grid place-items-center">
+          <div className="relative h-40 w-40" style={{ animation: 'lep1-wiggle 3s ease-in-out infinite' }}>
+            <span className="absolute inset-0 rounded-full" style={{ background: `radial-gradient(circle, ${c.color}55, transparent 65%)`, animation: 'lep1-ping 2s ease-out infinite' }} />
+            <span className="absolute inset-6 rounded-full border-4" style={{ borderColor: c.color, animation: 'lep1-ping 2s ease-out 0.4s infinite' }} />
+          </div>
+        </div>
+      )}
       {xpBurst && (
         <div className="pointer-events-none absolute inset-x-0 top-[32vh] z-30 grid place-items-center">
           <div className="animate-[lep1-pop-fade_1.1s_ease-out_forwards] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 text-2xl font-black text-white shadow-2xl">+10 XP 💎</div>
