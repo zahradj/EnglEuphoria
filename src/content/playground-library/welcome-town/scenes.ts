@@ -61,7 +61,7 @@ export const VOICE_KEY: Record<CharKey, 'pip' | 'mia' | 'bella' | 'willow' | 'le
  *  `bg`, never as a standalone floating image (see the file banner above). */
 export const CAST: Record<CharKey, { name: string; emoji: string; color: string }> = {
   pip: { name: 'Pip', emoji: '\u{1F98A}', color: '#FE6A2F' },
-  marigold: { name: 'Miss Marigold', emoji: '\u{1F34E}', color: '#8ECAE6' },
+  marigold: { name: 'Miss Marigold', emoji: '\u{1F989}', color: '#8ECAE6' },
   mia: { name: 'Mia', emoji: '\u{1F42D}', color: '#B85CD1' },
   bella: { name: 'Bella', emoji: '\u{1F430}', color: '#E76FA5' },
   willow: { name: 'Willow', emoji: '\u{1F426}', color: '#4FA9E0' },
@@ -81,7 +81,8 @@ export type Scene =
   | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string }
   | { id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string }
   | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string }[] }
-  | { id: string; kind: 'choice'; bg: string; who: CharKey; teacher: string; prompt: string; options: { label: string; emoji: string; correct?: boolean }[] }
+  | { id: string; kind: 'color-card'; bg: string; who: CharKey; teacher: string; colorWord: string; colorHex: string }
+  | { id: string; kind: 'choice'; bg: string; who: CharKey; teacher: string; prompt: string; options: { label: string; emoji: string; colorHex?: string; correct?: boolean }[] }
   | { id: string; kind: 'roleplay'; bg: string; teacher: string; cast: CharKey[]; script: { who: CharKey; line: string; repeat?: boolean }[] }
   | { id: string; kind: 'join-stage'; bg: string; teacher: string; cast: CharKey[]; turns: { who: CharKey | 'student'; line: string }[] }
   | { id: string; kind: 'hello-doors'; bg: string; teacher: string; cast: CharKey[]; rounds: { target: CharKey; prompt: string; helloLine: string; echoLine: string }[] }
@@ -137,18 +138,16 @@ export const LESSON_1_SCENES: Scene[] = [
     ],
   },
 
-  {
-    id: 'wt-colors-balloons', kind: 'meet', bg: bgColors, who: 'marigold',
-    teacher: 'Look up! Tap Miss Marigold to name the balloon colors.',
-    line: 'Look at the balloons! Red, blue, and yellow!', repeat: 'Red, blue, yellow!',
-  },
+  { id: 'wt-color-red', kind: 'color-card', bg: bgColors, who: 'marigold', teacher: 'Tap Miss Marigold to name this color!', colorWord: 'Red', colorHex: '#EF4444' },
+  { id: 'wt-color-blue', kind: 'color-card', bg: bgColors, who: 'marigold', teacher: 'Tap Miss Marigold to name this color!', colorWord: 'Blue', colorHex: '#3B82F6' },
+  { id: 'wt-color-yellow', kind: 'color-card', bg: bgColors, who: 'marigold', teacher: 'Tap Miss Marigold to name this color!', colorWord: 'Yellow', colorHex: '#FACC15' },
   {
     id: 'wt-choice-red', kind: 'choice', bg: bgColors, who: 'marigold', teacher: 'Which balloon is RED?',
     prompt: 'Tap the RED balloon!',
     options: [
-      { label: 'Red', emoji: '\u{1F534}', correct: true },
-      { label: 'Blue', emoji: '\u{1F535}' },
-      { label: 'Yellow', emoji: '\u{1F7E1}' },
+      { label: 'Red', emoji: '\u{1F534}', colorHex: '#EF4444', correct: true },
+      { label: 'Blue', emoji: '\u{1F535}', colorHex: '#3B82F6' },
+      { label: 'Yellow', emoji: '\u{1F7E1}', colorHex: '#FACC15' },
     ],
   },
 

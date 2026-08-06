@@ -95,6 +95,7 @@ export function SceneRenderer(props: {
       case 'meet': return <MeetScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'echo': return <EchoScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
       case 'memory': return <MemoryScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+      case 'color-card': return <ColorCardScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'choice': return <ChoiceScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
@@ -214,6 +215,7 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
   const [held, setHeld] = useState(false);
   const [heardRepeat, setHeardRepeat] = useState(0);
   const [xpBurst, setXpBurst] = useState(false);
+  const [glow, setGlow] = useState(false);
   const holdTimer = useRef<number | null>(null);
   const c = CAST[scene.who];
   const repeatWord = scene.repeat ?? scene.line;
@@ -221,12 +223,14 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
   const tapCharacter = async () => {
     if (phase !== 'idle') return;
     sfx.pop();
+    setGlow(true);
     setPhase('talking');
     await safeSpeak(scene.line, voiceOf(scene.who));
     setTimeout(() => setPhase('repeat'), 500);
+    setTimeout(() => setGlow(false), 1600);
   };
   const hearRepeat = async () => { sfx.click(); setHeardRepeat((n) => n + 1); await safeSpeak(repeatWord, voiceOf(scene.who)); };
-  const replayIntro = async () => { sfx.click(); await safeSpeak(scene.line, voiceOf(scene.who)); };
+  const replayIntro = async () => { sfx.click(); setGlow(true); await safeSpeak(scene.line, voiceOf(scene.who)); setTimeout(() => setGlow(false), 1200); };
   const startHold = () => {
     if (phase !== 'repeat') return;
     setHeld(true);
@@ -264,15 +268,25 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
           </div>
         </div>
       )}
+      {/* A bright glow washes over the general area {c.name} is standing in
+          the painted background right as they speak, then the vocabulary
+          card below pops up already illustrating the word on its own. */}
+      {glow && (
+        <div className="pointer-events-none absolute inset-x-0 top-[8vh] z-10 h-[55vh] grid place-items-center" style={{ animation: 'lep1-twinkle 1.4s ease-in-out' }}>
+          <div className="h-full w-full rounded-full" style={{ background: `radial-gradient(circle, ${c.color}66 0%, ${c.color}22 45%, transparent 70%)` }} />
+        </div>
+      )}
       {xpBurst && (
         <div className="pointer-events-none absolute inset-x-0 top-[32vh] z-30 grid place-items-center">
           <div className="animate-[lep1-pop-fade_1.1s_ease-out_forwards] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 text-2xl font-black text-white shadow-2xl">+10 XP 💎</div>
         </div>
       )}
       {phase !== 'idle' && (
-        <div className="absolute top-[14vh] right-4 sm:right-8 z-20 max-w-[42%] sm:max-w-[34%]">
-          <button onClick={replayIntro} className="group relative w-full rounded-3xl border-4 bg-white px-5 py-4 text-left text-xl sm:text-2xl font-black shadow-2xl active:scale-95" style={{ color: c.color, borderColor: c.color }}>
-            <span className="mr-2 text-xl">{c.emoji}</span>“{scene.line}”
+        <div className="pointer-events-none absolute inset-x-0 top-[12vh] z-20 flex justify-center px-4">
+          <button onClick={replayIntro} className="group pointer-events-auto relative flex w-full max-w-sm flex-col items-center gap-2 rounded-[2rem] border-4 bg-white px-6 py-5 text-center shadow-2xl active:scale-95" style={{ borderColor: c.color, animation: 'lep1-pop 0.4s ease-out' }}>
+            <span className="grid h-16 w-16 place-items-center rounded-full text-4xl shadow-inner" style={{ background: `${c.color}22` }}>{c.emoji}</span>
+            <span className="text-2xl font-black sm:text-3xl" style={{ color: c.color }}>{repeatWord}</span>
+            <span className="text-sm font-semibold text-neutral-500">🔊 “{scene.line}”</span>
           </button>
         </div>
       )}
@@ -300,6 +314,105 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
               {phase === 'done' ? '✅ Nailed it!' : held ? '🎤 Keep talking…' : '🎤 Hold to say it'}
             </button>
             <PrimaryButton onClick={onNext} disabled={phase !== 'done'}>{phase === 'done' ? 'Next Quest →' : 'Say it first!'}</PrimaryButton>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Color card (one color, illustrated alone) ---------- */
+
+function ColorCardScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'color-card' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  type Phase = 'idle' | 'talking' | 'repeat' | 'done';
+  const [phase, setPhase] = useState<Phase>('idle');
+  const [held, setHeld] = useState(false);
+  const [heardRepeat, setHeardRepeat] = useState(0);
+  const [glow, setGlow] = useState(false);
+  const holdTimer = useRef<number | null>(null);
+  const c = CAST[scene.who];
+  const line = `${scene.colorWord}!`;
+
+  const tapCharacter = async () => {
+    if (phase !== 'idle') return;
+    sfx.pop();
+    setGlow(true);
+    setPhase('talking');
+    await safeSpeak(line, voiceOf(scene.who));
+    setTimeout(() => setPhase('repeat'), 500);
+    setTimeout(() => setGlow(false), 1600);
+  };
+  const hearRepeat = async () => { sfx.click(); setHeardRepeat((n) => n + 1); await safeSpeak(line, voiceOf(scene.who)); };
+  const startHold = () => {
+    if (phase !== 'repeat') return;
+    setHeld(true);
+    holdTimer.current = window.setTimeout(async () => {
+      setHeld(false); setPhase('done'); sfx.gem();
+      onWin(true);
+      await safeSpeak('Great color!', 'pip');
+    }, 1300);
+  };
+  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+
+  return (
+    <div className="relative min-h-[78vh]">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
+        <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: `linear-gradient(90deg, ${scene.colorHex}, #FEBE4C)` }}>
+          🎨 New Color
+        </div>
+      </div>
+      <div className="mx-auto mt-8 max-w-md">
+        <div className="rounded-2xl px-4 py-3 text-center text-lg font-bold text-white shadow-2xl" style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.35))', backdropFilter: 'blur(8px)', textShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
+          {scene.teacher}
+        </div>
+      </div>
+      {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to name the color`} className="absolute inset-0 z-10 h-[60vh] w-full cursor-pointer bg-transparent" />}
+      {phase === 'idle' && (
+        <div className="pointer-events-none absolute inset-x-0 top-[26vh] z-10 grid place-items-center">
+          <div className="relative h-40 w-40" style={{ animation: 'lep1-wiggle 3s ease-in-out infinite' }}>
+            <span className="absolute inset-0 rounded-full" style={{ background: `radial-gradient(circle, ${scene.colorHex}55, transparent 65%)`, animation: 'lep1-ping 2s ease-out infinite' }} />
+            <span className="absolute inset-6 rounded-full border-4" style={{ borderColor: scene.colorHex, animation: 'lep1-ping 2s ease-out 0.4s infinite' }} />
+          </div>
+        </div>
+      )}
+      {glow && (
+        <div className="pointer-events-none absolute inset-x-0 top-[8vh] z-10 h-[55vh] grid place-items-center" style={{ animation: 'lep1-twinkle 1.4s ease-in-out' }}>
+          <div className="h-full w-full rounded-full" style={{ background: `radial-gradient(circle, ${scene.colorHex}66 0%, ${scene.colorHex}22 45%, transparent 70%)` }} />
+        </div>
+      )}
+      {/* This color's own dedicated card — illustrated alone, not mixed in
+          with the other colors, per the "each vocabulary illustrated alone"
+          rule. */}
+      {phase !== 'idle' && (
+        <div className="pointer-events-none absolute inset-x-0 top-[12vh] z-20 flex justify-center px-4">
+          <button onClick={hearRepeat} className="group pointer-events-auto relative flex w-full max-w-sm flex-col items-center gap-3 rounded-[2rem] border-4 border-white bg-white px-6 py-6 text-center shadow-2xl active:scale-95" style={{ animation: 'lep1-pop 0.4s ease-out' }}>
+            <span className="h-20 w-20 rounded-full shadow-inner ring-4 ring-white" style={{ background: scene.colorHex }} />
+            <span className="text-3xl font-black" style={{ color: scene.colorHex }}>{scene.colorWord}</span>
+            <span className="text-sm font-semibold text-neutral-500">🔊 Hear it {heardRepeat > 0 && <span className="opacity-60">({heardRepeat})</span>}</span>
+          </button>
+        </div>
+      )}
+      {phase === 'idle' && (
+        <div className="pointer-events-none absolute inset-x-0 top-[44vh] z-20 grid place-items-center">
+          <span className="animate-pulse rounded-full bg-white/95 px-5 py-2 text-base font-bold shadow-xl" style={{ color: scene.colorHex }}>👆 Tap {c.name}</span>
+        </div>
+      )}
+      {(phase === 'repeat' || phase === 'done') && (
+        <div className="absolute inset-x-0 bottom-0 z-30 mx-auto max-w-md" style={{ animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
+          <div className="rounded-t-[2rem] border-t-4 p-4 shadow-2xl" style={{ borderColor: scene.colorHex, background: 'linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85))', backdropFilter: 'blur(20px)' }}>
+            <div className="flex items-center justify-between">
+              <span className="rounded-full px-3 py-1 text-xs font-black uppercase tracking-widest text-white" style={{ background: scene.colorHex }}>🎤 Your turn</span>
+              <span className="text-xs font-bold text-neutral-500">Hold & repeat</span>
+            </div>
+            <p className="mt-2 text-center text-2xl font-black" style={{ color: scene.colorHex }}>"{scene.colorWord}!"</p>
+            <button
+              onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+              className={`mt-2 w-full rounded-full py-5 text-xl font-black text-white shadow-xl transition ${held ? 'scale-95' : ''}`}
+              style={{ background: phase === 'done' ? 'linear-gradient(90deg, #10B981, #34D399)' : `linear-gradient(90deg, ${scene.colorHex}, #FEBE4C)` }}
+            >
+              {phase === 'done' ? '✅ Nailed it!' : held ? '🎤 Keep talking…' : '🎤 Hold to say it'}
+            </button>
+            <PrimaryButton onClick={onNext} disabled={phase !== 'done'}>{phase === 'done' ? 'Next →' : 'Say it first!'}</PrimaryButton>
           </div>
         </div>
       )}
@@ -447,7 +560,13 @@ function ChoiceScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
               className={`grid h-36 w-36 place-items-center rounded-3xl border-8 bg-white shadow-2xl transition active:scale-95 sm:h-44 sm:w-44 ${showWrong ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : showRight ? 'border-green-400' : 'border-white'}`}
               aria-label={opt.label}
             >
-              <span className="text-5xl">{opt.emoji}</span>
+              {/* A color word gets an actual color swatch card, not a small
+                  emoji glyph — each vocabulary item illustrated on its own. */}
+              {opt.colorHex ? (
+                <span className="h-16 w-16 rounded-full shadow-inner ring-4 ring-white" style={{ background: opt.colorHex }} />
+              ) : (
+                <span className="text-5xl">{opt.emoji}</span>
+              )}
               <span className="mt-2 text-lg font-black text-orange-700">{opt.label}</span>
             </button>
           );
