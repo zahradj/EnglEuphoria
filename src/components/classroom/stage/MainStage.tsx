@@ -34,6 +34,8 @@ interface MainStageProps {
   role: 'teacher' | 'student';
   /** Web-mode "Independent Play" — when true the student can interact directly with the iframe. */
   iframeUnlocked?: boolean;
+  /** Whether the student may play the active Playground scene activity (default locked/watch-only). */
+  activityUnlocked?: boolean;
   /** Active Smart Worksheet for native game modes. */
   worksheet?: SmartWorksheet | null;
   /** Raw GeneratedSlide data for premium rendering. */
@@ -88,6 +90,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
   userName,
   role,
   iframeUnlocked = false,
+  activityUnlocked = false,
   worksheet = null,
   rawSlides,
   hubType = 'academy',
@@ -144,7 +147,11 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
               {customStage}
             </div>
           ) : hubType === 'playground' && mode === 'slide' && sceneLessonRef ? (
-            <div className="absolute inset-3 sm:inset-4 lg:inset-6 flex flex-col gap-2">
+            // Bottom inset is taller for the teacher: TeacherControlDock floats
+            // `fixed bottom-4` over this stage, and without this clearance its
+            // ~64-80px footprint hides the scene's own Back/Next/counter row
+            // (the last item in this flex column) underneath it.
+            <div className={`absolute inset-x-3 top-3 sm:inset-x-4 sm:top-4 lg:inset-x-6 lg:top-6 flex flex-col gap-2 ${role === 'teacher' ? 'bottom-20 sm:bottom-24' : 'bottom-3 sm:bottom-4 lg:bottom-6'}`}>
               <div className="relative flex-1 min-h-0 overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">
                 <div className="absolute inset-0 overflow-auto">
                   <EmbeddedSceneLesson
@@ -153,6 +160,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                     lessonNumber={sceneLessonRef.lessonNumber}
                     roomId={roomId}
                     role={role}
+                    activityUnlocked={activityUnlocked}
                     hideInternalNav
                     onNavState={handleSceneNavState}
                     persistedSceneIdx={sceneLessonIdx}

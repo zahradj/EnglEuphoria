@@ -107,6 +107,10 @@ interface UseClassroomSyncReturn {
   iframeUnlocked: boolean;
   setIframeUnlocked: (unlocked: boolean) => Promise<void>;
   applyRemoteIframeUnlocked: (unlocked: boolean) => void;
+  /** Whether the student may play the active Playground scene activity (default locked/watch-only). */
+  activityUnlocked: boolean;
+  setActivityUnlocked: (unlocked: boolean) => Promise<void>;
+  applyRemoteActivityUnlocked: (unlocked: boolean) => void;
   /** Teacher-only: broadcast a full state snapshot to all clients (no reload). */
   forceSync: () => Promise<void>;
   /** Persisted current scene index of an active embedded scene lesson, if any. */
@@ -136,6 +140,7 @@ export const useClassroomSync = ({
   const [stageMode, setStageModeState] = useState<StageMode>('slide');
   const [drawingEnabled, setDrawingEnabledState] = useState<boolean>(false);
   const [iframeUnlocked, setIframeUnlockedState] = useState<boolean>(false);
+  const [activityUnlocked, setActivityUnlockedState] = useState<boolean>(false);
   const cleanupRef = useRef<(() => void) | null>(null);
   const strokeCleanupRef = useRef<(() => void) | null>(null);
 
@@ -263,6 +268,7 @@ export const useClassroomSync = ({
       if (snap.stageMode) setStageModeState(snap.stageMode);
       if (typeof snap.drawingEnabled === 'boolean') setDrawingEnabledState(snap.drawingEnabled);
       if (typeof snap.iframeUnlocked === 'boolean') setIframeUnlockedState(snap.iframeUnlocked);
+      if (typeof snap.sceneActivityUnlocked === 'boolean') setActivityUnlockedState(snap.sceneActivityUnlocked);
       setSession(prev => prev ? {
         ...prev,
         currentSlideIndex: snap.slideIndex,
@@ -319,6 +325,17 @@ export const useClassroomSync = ({
     if (role !== 'teacher') return;
     try { await whiteboardService.sendIframeLockState(roomId, unlocked, userId); }
     catch (error) { console.error('Failed to send iframe lock state:', error); }
+  }, [roomId, role, userId]);
+
+  const applyRemoteActivityUnlocked = useCallback((unlocked: boolean) => {
+    setActivityUnlockedState(unlocked);
+  }, []);
+
+  const setActivityUnlocked = useCallback(async (unlocked: boolean) => {
+    setActivityUnlockedState(unlocked);
+    if (role !== 'teacher') return;
+    try { await whiteboardService.sendSceneActivityLockState(roomId, unlocked, userId); }
+    catch (error) { console.error('Failed to send scene activity lock state:', error); }
   }, [roomId, role, userId]);
 
   // Teacher actions
@@ -469,6 +486,7 @@ export const useClassroomSync = ({
         stageMode,
         drawingEnabled,
         iframeUnlocked,
+        sceneActivityUnlocked: activityUnlocked,
         embeddedUrl: session?.embeddedUrl ?? null,
         activeCanvasTab: session?.activeCanvasTab,
         senderId: userId,
@@ -477,7 +495,7 @@ export const useClassroomSync = ({
       console.error('Failed to broadcast force_sync:', error);
       throw error;
     }
-  }, [role, roomId, userId, currentSlideIndex, stageMode, drawingEnabled, iframeUnlocked, session?.embeddedUrl, session?.activeCanvasTab]);
+  }, [role, roomId, userId, currentSlideIndex, stageMode, drawingEnabled, iframeUnlocked, activityUnlocked, session?.embeddedUrl, session?.activeCanvasTab]);
 
   return {
     session,
@@ -528,6 +546,9 @@ export const useClassroomSync = ({
     iframeUnlocked,
     setIframeUnlocked,
     applyRemoteIframeUnlocked,
+    activityUnlocked,
+    setActivityUnlocked,
+    applyRemoteActivityUnlocked,
     forceSync,
     sceneLessonIdx: session?.sceneLessonIdx ?? null,
     updateSceneLessonIdx,

@@ -50,6 +50,8 @@ interface StudentMainStageProps {
   stageMode: StageMode;
   drawingEnabled: boolean;
   iframeUnlocked?: boolean;
+  /** Whether the student may play the active Playground scene activity (default locked/watch-only). */
+  activityUnlocked?: boolean;
   /** Raw GeneratedSlide payloads (premium renderer source). */
   rawSlides?: any[];
   hubType?: 'playground' | 'academy' | 'professional';
@@ -89,6 +91,7 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
   stageMode,
   drawingEnabled,
   iframeUnlocked = false,
+  activityUnlocked = false,
   rawSlides,
   hubType = 'academy',
   onAddStroke,
@@ -233,6 +236,7 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
         userName={userName}
         role="student"
         iframeUnlocked={iframeUnlocked}
+        activityUnlocked={activityUnlocked}
         rawSlides={rawSlides}
         hubType={hubType as any}
         customStage={customStage}

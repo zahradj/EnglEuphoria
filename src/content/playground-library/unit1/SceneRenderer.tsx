@@ -6,6 +6,7 @@ import * as sfx from './sfx';
 import { Confetti } from './fx';
 import { UNIT1_PHONICS, getMastered, logMicroCheck } from './masteryTracker';
 import { SpriteMascot, MASCOT_EYE_BANDS } from './SpriteMascot';
+import { useSyncedSceneState } from './useSyncedSceneState';
 import engleuphoriaLogo from '@/assets/engleuphoria-logo.png';
 
 const cakeSticker = '/lep1/items/cake-sticker.png';
@@ -209,6 +210,10 @@ export function SceneRenderer(props: {
   gemsCollected: number;
   heartsRemaining: number;
   lessonNumber?: number;
+  /** Live-classroom sync — only meaningful for a handful of scene kinds that support it. */
+  role?: 'teacher' | 'student';
+  roomId?: string;
+  activityUnlocked?: boolean;
 }) {
   const { scene, lessonNumber } = props;
   const teacherTip = lessonNumber === 3 ? L3_TEACHER_TIPS[scene.id] : undefined;
@@ -218,28 +223,28 @@ export function SceneRenderer(props: {
   switch (scene.kind) {
     case 'title-card': return <TitleCardScene scene={scene} onNext={props.onNext} />;
     case 'cinematic': return <CinematicScene scene={scene} onNext={props.onNext} />;
-    case 'meet': return <MeetScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'meet': return <MeetScene scene={scene} onNext={props.onNext} onWin={props.onWin} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
     case 'sound-model': return <SoundModelScene scene={scene} onNext={props.onNext} />;
     case 'echo': return <EchoScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
-    case 'basket': return <BasketScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
+    case 'basket': return <BasketScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
     case 'trace': return <TraceScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'sound-sort': return <SoundSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
-    case 'word-build': return <WordBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'sound-sort': return <SoundSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'word-build': return <WordBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
     case 'who-said-it': return <WhoSaidItScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
     case 'gather': return <GatherScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'memory': return <MemoryScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'memory': return <MemoryScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
     case 'dash': return <DashScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'feelings': return <FeelingsScene scene={scene} onNext={props.onNext} />;
-    case 'puzzle': return <PuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-    case 'trophy-chest': return <TrophyChestScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'puzzle': return <PuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'trophy-chest': return <TrophyChestScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
     case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'color-model': return <ColorModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'color-sort': return <ColorSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
+    case 'color-sort': return <ColorSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
     case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
     case 'color-friends': return <ColorFriendsScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'alphabet-blocks': return <AlphabetBlocksScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'alphabet-blocks': return <AlphabetBlocksScene scene={scene} onNext={props.onNext} onWin={props.onWin} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
     case 'alphabet-order': return <AlphabetOrderScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'song': return <SongScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
@@ -248,18 +253,18 @@ export function SceneRenderer(props: {
     case 'voice-stage': return <VoiceStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'sound-pop': return <SoundPopScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'brick-crush': return <BrickCrushScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-    case 'friend-pop': return <FriendPopScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'friend-pop': return <FriendPopScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
     case 'feelings-tap': return <FeelingsTapScene scene={scene} onNext={props.onNext} />;
     case 'feelings-wheel': return <FeelingsWheelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'x-is-feeling': return <XIsFeelingScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'feelings-dice': return <FeelingsDiceScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'feed-monsters': return <FeedMonstersScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'feed-monsters': return <FeedMonstersScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
     case 'he-she-model': return <HeSheModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'he-she-sort': return <HeSheSortScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'he-she-sort': return <HeSheSortScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
     case 'he-she-say': return <HeSheSayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'feeling-quiz': return <FeelingQuizScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'i-am-feeling': return <IAmFeelingScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'feelings-bingo': return <FeelingsBingoScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'feelings-bingo': return <FeelingsBingoScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
     case 'numbers-learn': return <NumbersLearnScene scene={scene} onNext={props.onNext} />;
     case 'numbers-review': return <NumbersReviewScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'candle-cake': return <CandleCakeScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
@@ -374,34 +379,46 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
 
 /* ---------- Meet ---------- */
 
-function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'meet' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+function MeetScene({ scene, onNext, onWin, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'meet' }>; onNext: () => void; onWin: (gem: boolean) => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
   type Phase = 'idle' | 'talking' | 'repeat' | 'done';
-  const [phase, setPhase] = useState<Phase>('idle');
+  const [synced, updateSynced, canAct] = useSyncedSceneState<{ phase: Phase }>(
+    { phase: 'idle' },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const phase = synced.phase;
+  const setPhase = (phase: Phase) => updateSynced({ phase });
   const [held, setHeld] = useState(false);
   const [heardRepeat, setHeardRepeat] = useState(0);
   const [xpBurst, setXpBurst] = useState(false);
+  const [gemDone, setGemDone] = useState(false);
   const holdTimer = useRef<number | null>(null);
   const c = CAST[scene.who];
   const repeatWord = scene.repeat ?? scene.line;
 
+  useEffect(() => {
+    if (phase === 'done' && !gemDone) {
+      setGemDone(true);
+      setXpBurst(true); sfx.gem();
+      setTimeout(() => setXpBurst(false), 1200);
+      onWin(true);
+      void safeSpeak('Awesome voice! Great job!', 'pip');
+    }
+  }, [phase, gemDone]);
 
   const tapCharacter = async () => {
-    if (phase !== 'idle') return;
+    if (!canAct || phase !== 'idle') return;
     sfx.pop();
     setPhase('talking');
     await safeSpeak(scene.line, scene.who);
     setTimeout(() => setPhase('repeat'), 500);
   };
-  const hearRepeat = async () => { sfx.click(); setHeardRepeat((n) => n + 1); await safeSpeak(repeatWord, scene.who); };
+  const hearRepeat = async () => { if (!canAct) return; sfx.click(); setHeardRepeat((n) => n + 1); await safeSpeak(repeatWord, scene.who); };
   const replayIntro = async () => { sfx.click(); await safeSpeak(scene.line, scene.who); };
   const startHold = () => {
-    if (phase !== 'repeat') return;
+    if (!canAct || phase !== 'repeat') return;
     setHeld(true);
-    holdTimer.current = window.setTimeout(async () => {
-      setHeld(false); setPhase('done'); setXpBurst(true); sfx.gem();
-      setTimeout(() => setXpBurst(false), 1200);
-      onWin(true);
-      await safeSpeak('Awesome voice! Great job!', 'pip');
+    holdTimer.current = window.setTimeout(() => {
+      setHeld(false); setPhase('done');
     }, 1300);
   };
   const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
@@ -419,7 +436,7 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
         </div>
       </div>
       {/* scene.bg already paints {c.name} directly into the art — no separate sprite on top, just a tap affordance. */}
-      {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 h-[60vh] w-full cursor-pointer bg-transparent" />}
+      {phase === 'idle' && <button onClick={tapCharacter} disabled={!canAct} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 h-[60vh] w-full cursor-pointer bg-transparent disabled:cursor-not-allowed" />}
       {phase === 'idle' && (
         <div className="pointer-events-none absolute inset-x-0 top-[26vh] z-10 grid place-items-center">
           <div className="relative h-40 w-40" style={{ animation: 'lep1-wiggle 3s ease-in-out infinite' }}>
@@ -458,12 +475,13 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
               <span className="text-xs font-bold text-neutral-500">Hold & repeat</span>
             </div>
             <p className="mt-2 text-center text-2xl font-black" style={{ color: c.color }}>“{repeatWord}”</p>
-            <button onClick={hearRepeat} className="mt-3 w-full rounded-full bg-white py-2 text-sm font-bold text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">
+            <button onClick={hearRepeat} disabled={!canAct} className="mt-3 w-full rounded-full bg-white py-2 text-sm font-bold text-orange-700 shadow ring-2 ring-orange-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60">
               🔊 Hear it {heardRepeat > 0 && <span className="opacity-60">({heardRepeat})</span>}
             </button>
             <button
               onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
-              className={`mt-2 w-full rounded-full py-5 text-xl font-black text-white shadow-xl transition ${held ? 'scale-95' : ''}`}
+              disabled={!canAct}
+              className={`mt-2 w-full rounded-full py-5 text-xl font-black text-white shadow-xl transition disabled:cursor-not-allowed disabled:opacity-60 ${held ? 'scale-95' : ''}`}
               style={{ background: phase === 'done' ? 'linear-gradient(90deg, #10B981, #34D399)' : `linear-gradient(90deg, ${c.color}, #FEBE4C)` }}
             >
               {phase === 'done' ? '✅ Nailed it!' : held ? '🎤 Keep talking…' : '🎤 Hold to say it'}
@@ -638,16 +656,21 @@ function scatterPositions(n: number, rowTops: [number, number] = [16, 84], margi
 
 /* ---------- Basket ---------- */
 
-function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'basket' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
-  type Slot = { idx: number; it: typeof scene.items[number]; collected: boolean; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
-  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, collected: false, dragging: false, dx: 0, dy: 0, flash: 'none' })));
+function BasketScene({ scene, onWin, onLose, onNext, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'basket' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+  type Slot = { idx: number; it: typeof scene.items[number]; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
+  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, dragging: false, dx: 0, dy: 0, flash: 'none' })));
+  const [synced, updateSynced, canAct] = useSyncedSceneState<{ collected: number[] }>(
+    { collected: [] },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const collected = useMemo(() => new Set(synced.collected), [synced.collected]);
   const [basketHot, setBasketHot] = useState(false);
   const [gemAwarded, setGemAwarded] = useState(false);
   const basketRef = useRef<HTMLDivElement | null>(null);
   const dragIdx = useRef<number | null>(null);
   const start = useRef({ x: 0, y: 0 });
   const c = CAST[scene.who];
-  const got = slots.filter((s) => s.collected).length;
+  const got = collected.size;
   const done = got >= scene.goal;
 
   useEffect(() => {
@@ -656,8 +679,9 @@ function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, {
 
   function onDown(idx: number) {
     return (e: React.PointerEvent<HTMLButtonElement>) => {
+      if (!canAct) return;
       const s = slots.find((x) => x.idx === idx);
-      if (!s || s.collected) return;
+      if (!s || collected.has(idx)) return;
       sfx.pop();
       cueSpeakOnce(s.it.word, 'teacher');
       dragIdx.current = idx;
@@ -682,13 +706,17 @@ function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, {
     if (idx === null) return;
     const b = basketRef.current?.getBoundingClientRect();
     const dropped = b && e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom;
+    const slot = slots.find((x) => x.idx === idx);
     setSlots((p) => p.map((x) => {
       if (x.idx !== idx) return x;
       if (!dropped) return { ...x, dragging: false, dx: 0, dy: 0 };
-      if (x.it.hit) { sfx.match(); cueSpeak(`${scene.phoneme}! ${x.it.word}!`, scene.who); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
-      sfx.wrong(); onLose();
+      if (x.it.hit) return { ...x, dragging: false, dx: 0, dy: 0, flash: 'good' };
       return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
     }));
+    if (dropped && slot) {
+      if (slot.it.hit) { sfx.match(); cueSpeak(`${scene.phoneme}! ${slot.it.word}!`, scene.who); updateSynced({ collected: [...synced.collected, idx] }); }
+      else { sfx.wrong(); onLose(); }
+    }
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
   }
 
@@ -707,11 +735,11 @@ function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, {
       </div>
       {slots.map((s, i) => {
         const pos = orbit[i % orbit.length];
-        if (s.collected) return <div key={s.idx} className="absolute grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-green-300/60 text-3xl opacity-60 ring-2 ring-green-400 backdrop-blur" style={{ left: pos.left, top: pos.top }}>✅</div>;
+        if (collected.has(s.idx)) return <div key={s.idx} className="absolute grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-green-300/60 text-3xl opacity-60 ring-2 ring-green-400 backdrop-blur" style={{ left: pos.left, top: pos.top }}>✅</div>;
         const glow = s.flash === 'bad' ? 'drop-shadow-[0_0_14px_rgba(239,68,68,0.9)] animate-[lep1-shake_0.4s_ease-in-out]' : s.flash === 'good' ? 'drop-shadow-[0_0_18px_rgba(34,197,94,0.9)]' : 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]';
         return (
-          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-            className={`absolute h-40 w-40 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition sm:h-48 sm:w-48 ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
+          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} disabled={!canAct}
+            className={`absolute h-40 w-40 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition sm:h-48 sm:w-48 disabled:cursor-not-allowed ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
             style={{ left: pos.left, top: pos.top, animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
             aria-label={s.it.word}
           >
@@ -860,15 +888,20 @@ function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 't
 
 /* ---------- Sound sort ---------- */
 
-function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'sound-sort' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
-  type Slot = { idx: number; it: typeof scene.items[number]; collected: boolean; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
-  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, collected: false, dragging: false, dx: 0, dy: 0, flash: 'none' })));
+function SoundSortScene({ scene, onWin, onLose, onNext, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'sound-sort' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+  type Slot = { idx: number; it: typeof scene.items[number]; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
+  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, dragging: false, dx: 0, dy: 0, flash: 'none' })));
+  const [synced, updateSynced, canAct] = useSyncedSceneState<{ collected: number[] }>(
+    { collected: [] },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const collectedSet = useMemo(() => new Set(synced.collected), [synced.collected]);
   const [hotLetter, setHotLetter] = useState<string | null>(null);
   const [gemAwarded, setGemAwarded] = useState(false);
   const targetRefs = useRef<Record<string, HTMLElement | null>>({});
   const dragIdx = useRef<number | null>(null);
   const start = useRef({ x: 0, y: 0 });
-  const done = slots.every((s) => s.collected);
+  const done = slots.every((s) => collectedSet.has(s.idx));
 
   useEffect(() => { if (done && !gemAwarded) { setGemAwarded(true); onWin(true); cueSpeak('Amazing! All sounds sorted!', 'teacher'); } }, [done, gemAwarded]);
 
@@ -890,8 +923,9 @@ function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
   }
 
   const onDown = (idx: number) => (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!canAct) return;
     const s = slots.find((x) => x.idx === idx);
-    if (!s || s.collected) return;
+    if (!s || collectedSet.has(idx)) return;
     sfx.pop();
     const speaker = scene.targets.find((t) => t.letter === s.it.letter)?.who ?? 'pip';
     cueSpeakOnce(s.it.word, speaker);
@@ -913,13 +947,17 @@ function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
     const dropLetter = hitTest(e.clientX, e.clientY, e.currentTarget);
     setHotLetter(null);
     if (idx === null) return;
+    const slot = slots.find((x) => x.idx === idx);
     setSlots((p) => p.map((x) => {
       if (x.idx !== idx) return x;
       if (!dropLetter) return { ...x, dragging: false, dx: 0, dy: 0 };
-      if (dropLetter === x.it.letter) { sfx.match(); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
-      sfx.wrong(); onLose();
+      if (dropLetter === x.it.letter) return { ...x, dragging: false, dx: 0, dy: 0, flash: 'good' };
       return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
     }));
+    if (dropLetter && slot) {
+      if (dropLetter === slot.it.letter) { sfx.match(); updateSynced({ collected: [...synced.collected, idx] }); }
+      else { sfx.wrong(); onLose(); }
+    }
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
   };
 
@@ -933,7 +971,7 @@ function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
         {scene.targets.map((t) => {
           const c = CAST[t.who];
           const hot = hotLetter === t.letter;
-          const collected = slots.filter((s) => s.collected && s.it.letter === t.letter).length;
+          const collected = slots.filter((s) => collectedSet.has(s.idx) && s.it.letter === t.letter).length;
           const total = slots.filter((s) => s.it.letter === t.letter).length;
           return (
             <button key={t.letter} type="button" ref={(el) => { targetRefs.current[t.letter] = el; }} onClick={() => void playLetterPhonic(t.letter)}
@@ -950,11 +988,11 @@ function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
       </div>
       {slots.map((s, i) => {
         const pos = orbit[i % orbit.length];
-        if (s.collected) return <div key={s.idx} className="absolute grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-green-300/60 text-4xl opacity-70 ring-2 ring-green-400 backdrop-blur" style={{ left: pos.left, top: pos.top }}>✅</div>;
+        if (collectedSet.has(s.idx)) return <div key={s.idx} className="absolute grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-green-300/60 text-4xl opacity-70 ring-2 ring-green-400 backdrop-blur" style={{ left: pos.left, top: pos.top }}>✅</div>;
         const glow = s.flash === 'bad' ? 'drop-shadow-[0_0_14px_rgba(239,68,68,0.9)] animate-[lep1-shake_0.4s_ease-in-out]' : s.flash === 'good' ? 'drop-shadow-[0_0_18px_rgba(34,197,94,0.9)]' : 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]';
         return (
-          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-            className={`absolute h-40 w-40 sm:h-52 sm:w-52 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
+          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} disabled={!canAct}
+            className={`absolute h-40 w-40 sm:h-52 sm:w-52 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition disabled:cursor-not-allowed ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
             style={{ left: pos.left, top: pos.top, animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
             aria-label={s.it.word}
           >
@@ -973,9 +1011,12 @@ function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
 
 /* ---------- Word build ---------- */
 
-function WordBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'word-build' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [filled, setFilled] = useState<string | null>(null);
+function WordBuildScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'word-build' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+  const [synced, updateSynced, canAct] = useSyncedSceneState<{ round: number; filled: string | null }>(
+    { round: 0, filled: null },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const { round, filled } = synced;
   const [wrong, setWrong] = useState<string | null>(null);
   const [gemDone, setGemDone] = useState(false);
   const r = scene.rounds[round];
@@ -984,19 +1025,21 @@ function WordBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
 
   useEffect(() => {
     if (complete) return;
-    setFilled(null); setWrong(null);
+    setWrong(null);
     const t = window.setTimeout(() => void safeSpeak(r.word, 'pip'), 350);
     return () => window.clearTimeout(t);
   }, [round, complete]);
 
+  useEffect(() => {
+    if (complete && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+  }, [complete, gemDone]);
+
   const tap = async (letter: string) => {
-    if (filled || complete) return;
+    if (!canAct || filled || complete) return;
     if (letter.toLowerCase() === r.answer.toLowerCase()) {
-      sfx.match(); setFilled(letter); await safeSpeak(r.word, 'pip');
+      sfx.match(); updateSynced({ round, filled: letter }); await safeSpeak(r.word, 'pip');
       window.setTimeout(() => {
-        const next = round + 1;
-        if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-        setRound(next);
+        updateSynced({ round: round + 1, filled: null });
       }, 900);
     } else { sfx.wrong(); onLose(); setWrong(letter); window.setTimeout(() => setWrong(null), 500); }
   };
@@ -1028,7 +1071,7 @@ function WordBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
         <button onClick={() => void safeSpeak(r.word, 'pip')} className="rounded-full bg-white/95 px-6 py-2 text-sm font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔊 Listen</button>
         <div className="flex flex-wrap justify-center gap-3">
           {r.choices.map((L) => (
-            <button key={L} onClick={() => tap(L)} disabled={!!filled} className={`grid h-20 w-20 place-items-center rounded-2xl border-4 border-white text-4xl font-black text-white shadow-2xl transition active:scale-95 disabled:opacity-40 sm:h-24 sm:w-24 sm:text-5xl ${wrong === L ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`} style={{ background: L === 'H' ? 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' : 'linear-gradient(135deg,#B85CD1,#D57BE6)' }}>{L}</button>
+            <button key={L} onClick={() => tap(L)} disabled={!canAct || !!filled} className={`grid h-20 w-20 place-items-center rounded-2xl border-4 border-white text-4xl font-black text-white shadow-2xl transition active:scale-95 disabled:opacity-40 sm:h-24 sm:w-24 sm:text-5xl ${wrong === L ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`} style={{ background: L === 'H' ? 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' : 'linear-gradient(135deg,#B85CD1,#D57BE6)' }}>{L}</button>
           ))}
         </div>
       </div>
@@ -1246,22 +1289,27 @@ function GatherScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: '
 
 /* ---------- Memory ---------- */
 
-function MemoryScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'memory' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+function MemoryScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'memory' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
   type Card = { key: string; pairId: string; label: string; emoji: string; img?: string };
   const deck = useMemo<Card[]>(() => {
     const base = scene.pairs.flatMap((p) => [{ key: `${p.id}-a`, pairId: p.id, label: p.label, emoji: p.emoji, img: p.img }, { key: `${p.id}-b`, pairId: p.id, label: p.label, emoji: p.emoji, img: p.img }]);
     return base.map((c, i) => ({ c, r: (i * 9301 + 49297) % 233280 })).sort((a, b) => a.r - b.r).map((x) => x.c);
   }, [scene.id]);
-  const [flipped, setFlipped] = useState<string[]>([]);
-  const [matched, setMatched] = useState<Set<string>>(new Set());
+  type Synced = { flipped: string[]; matched: string[] };
+  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
+    { flipped: [], matched: [] },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const flipped = synced.flipped;
+  const matched = useMemo(() => new Set(synced.matched), [synced.matched]);
   const [busy, setBusy] = useState(false);
   const [gemDone, setGemDone] = useState(false);
 
 
   const tap = async (card: Card) => {
-    if (busy || matched.has(card.pairId) || flipped.includes(card.key)) return;
+    if (!canAct || busy || matched.has(card.pairId) || flipped.includes(card.key)) return;
     const next = [...flipped, card.key];
-    setFlipped(next);
+    updateSynced({ flipped: next, matched: synced.matched });
     void safeSpeak(card.label, 'teacher');
     if (next.length === 2) {
       setBusy(true);
@@ -1269,16 +1317,19 @@ function MemoryScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
       await new Promise((r) => setTimeout(r, 700));
       if (a.pairId === b.pairId) {
         sfx.match();
-        setMatched((m) => {
-          const copy = new Set(m); copy.add(a.pairId);
-          if (copy.size === scene.pairs.length && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-          return copy;
-        });
-      } else { sfx.wrong(); onLose(); }
-      setFlipped([]); setBusy(false);
+        updateSynced({ flipped: [], matched: [...synced.matched, a.pairId] });
+      } else {
+        sfx.wrong(); onLose();
+        updateSynced({ flipped: [], matched: synced.matched });
+      }
+      setBusy(false);
     }
   };
   const complete = matched.size === scene.pairs.length;
+
+  useEffect(() => {
+    if (complete && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+  }, [complete, gemDone]);
 
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
@@ -1288,7 +1339,7 @@ function MemoryScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
           const isMatched = matched.has(card.pairId);
           const isFlipped = flipped.includes(card.key) || isMatched;
           return (
-            <button key={card.key} onClick={() => tap(card)} disabled={busy || isMatched} className="relative aspect-square [perspective:800px]" aria-label={isFlipped ? card.label : 'Hidden card'}>
+            <button key={card.key} onClick={() => tap(card)} disabled={!canAct || busy || isMatched} className="relative aspect-square [perspective:800px]" aria-label={isFlipped ? card.label : 'Hidden card'}>
               <div className="absolute inset-0 transition-transform duration-500 [transform-style:preserve-3d]" style={{ transform: isFlipped ? 'rotateY(180deg)' : undefined }}>
                 <div className="absolute inset-0 flex items-center justify-center rounded-2xl border-4 border-white text-3xl font-black text-white shadow-xl [backface-visibility:hidden]" style={{ background: 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' }}>?</div>
                 <div className={`absolute inset-0 flex flex-col items-center justify-center rounded-2xl border-4 bg-white p-2 shadow-xl [backface-visibility:hidden] [transform:rotateY(180deg)] ${isMatched ? 'border-green-400 ring-4 ring-green-300/60' : 'border-white'}`}>
@@ -1436,11 +1487,14 @@ function FeelingsScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'feeli
 
 /* ---------- Puzzle ---------- */
 
-function PuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'puzzle' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [revealed, setRevealed] = useState<Set<number>>(new Set());
-  const [pick, setPick] = useState<CharKey | null>(null);
-  const [correct, setCorrect] = useState<boolean | null>(null);
+function PuzzleScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'puzzle' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+  type Synced = { round: number; revealed: number[]; pick: CharKey | null; correct: boolean | null };
+  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
+    { round: 0, revealed: [], pick: null, correct: null },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const { round, pick, correct } = synced;
+  const revealed = useMemo(() => new Set(synced.revealed), [synced.revealed]);
   const [gemDone, setGemDone] = useState(false);
   const total = scene.rounds.length;
   const finished = round >= total;
@@ -1448,20 +1502,26 @@ function PuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
   const GRID = 9;
 
   useEffect(() => {
-    if (finished) return;
-    setRevealed(new Set()); setPick(null); setCorrect(null);
-  }, [round, finished]);
+    if (finished && !gemDone) { setGemDone(true); onWin(true); }
+  }, [finished, gemDone]);
 
-  const tapPiece = (i: number) => { if (!r || correct !== null) return; setRevealed((s) => { const c = new Set(s); c.add(i); return c; }); sfx.match(); };
+  const tapPiece = (i: number) => {
+    if (!canAct || !r || correct !== null || revealed.has(i)) return;
+    sfx.match();
+    updateSynced({ ...synced, revealed: [...synced.revealed, i] });
+  };
   const guess = async (who: CharKey) => {
-    if (!r || correct !== null) return;
-    setPick(who);
+    if (!canAct || !r || correct !== null) return;
     const ok = who === r.who;
-    setCorrect(ok);
     if (ok) {
-      sfx.match(); setRevealed(new Set(Array.from({ length: GRID }, (_, i) => i))); sfx.gem();
-      window.setTimeout(() => { const next = round + 1; if (next >= total && !gemDone) { setGemDone(true); onWin(true); } setRound(next); }, 2200);
-    } else { sfx.wrong(); onLose(); window.setTimeout(() => { setPick(null); setCorrect(null); }, 700); }
+      sfx.match(); sfx.gem();
+      updateSynced({ round, revealed: Array.from({ length: GRID }, (_, i) => i), pick: who, correct: true });
+      window.setTimeout(() => { updateSynced({ round: round + 1, revealed: [], pick: null, correct: null }); }, 2200);
+    } else {
+      sfx.wrong(); onLose();
+      updateSynced({ ...synced, pick: who, correct: false });
+      window.setTimeout(() => { updateSynced({ round, revealed: Array.from(revealed), pick: null, correct: null }); }, 700);
+    }
   };
 
   if (finished) {
@@ -1480,7 +1540,7 @@ function PuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
         <div className="absolute inset-0 grid grid-cols-3 grid-rows-3">
           {Array.from({ length: GRID }, (_, i) => {
             const isRev = revealed.has(i);
-            return <button key={i} onClick={() => tapPiece(i)} disabled={isRev} className={`border border-white/50 transition-opacity duration-300 ${isRev ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ background: 'linear-gradient(135deg,#FE6A2F,#FEBE4C)' }} aria-label={`Reveal piece ${i + 1}`}><span className="text-2xl font-black text-white drop-shadow">?</span></button>;
+            return <button key={i} onClick={() => tapPiece(i)} disabled={!canAct || isRev} className={`border border-white/50 transition-opacity duration-300 ${isRev ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ background: 'linear-gradient(135deg,#FE6A2F,#FEBE4C)' }} aria-label={`Reveal piece ${i + 1}`}><span className="text-2xl font-black text-white drop-shadow">?</span></button>;
           })}
         </div>
       </div>
@@ -1491,7 +1551,7 @@ function PuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
           const isPick = pick === who;
           const showWrong = isPick && correct === false;
           return (
-            <button key={who} onClick={() => guess(who)} disabled={correct !== null} className={`flex flex-col items-center rounded-2xl border-4 bg-white/95 px-4 py-3 shadow-xl active:scale-95 ${isPick && correct ? 'border-green-400 ring-4 ring-green-300/60' : showWrong ? 'border-red-400 animate-[lep1-shake_0.4s_ease-out]' : 'border-white'}`}>
+            <button key={who} onClick={() => guess(who)} disabled={!canAct || correct !== null} className={`flex flex-col items-center rounded-2xl border-4 bg-white/95 px-4 py-3 shadow-xl active:scale-95 ${isPick && correct ? 'border-green-400 ring-4 ring-green-300/60' : showWrong ? 'border-red-400 animate-[lep1-shake_0.4s_ease-out]' : 'border-white'}`}>
               <img src={c.img} alt={c.name} className="h-16 w-16 object-contain" draggable={false} />
               <span className="mt-1 text-sm font-black text-orange-700">{c.name}</span>
             </button>
@@ -1671,13 +1731,15 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
 
 /* ---------- Hello doors ---------- */
 
-function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'hello-doors' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [order, setOrder] = useState<CharKey[]>(scene.cast);
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
+function HelloDoorsScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'hello-doors' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+  type Phase = 'reveal' | 'shuffle' | 'prompt' | 'greet' | 'echo' | 'done';
+  type Synced = { round: number; order: CharKey[]; openIdx: number | null; phase: Phase; score: number };
+  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
+    { round: 0, order: scene.cast, openIdx: null, phase: 'reveal', score: 0 },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const { round, order, openIdx, phase, score } = synced;
   const [wrongIdx, setWrongIdx] = useState<number | null>(null);
-  const [phase, setPhase] = useState<'reveal' | 'shuffle' | 'prompt' | 'greet' | 'echo' | 'done'>('reveal');
-  const [score, setScore] = useState(0);
   const [gemDone, setGemDone] = useState(false);
   const answeredRef = useRef(false);
   const total = scene.rounds.length;
@@ -1691,43 +1753,57 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
   };
 
   useEffect(() => {
-    if (!r) return;
+    if (finished && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+  }, [finished, gemDone]);
+
+  // Only the acting side (teacher, or an unlocked student) drives this round's
+  // reveal → shuffle → prompt sequence — the watching side just renders
+  // whatever `order`/`phase` it receives, so both screens show the exact
+  // same shuffled door order rather than each independently randomizing one.
+  useEffect(() => {
+    if (!canAct || !r) return;
     let cancelled = false;
-    answeredRef.current = false; setOpenIdx(null); setWrongIdx(null);
+    answeredRef.current = false; setWrongIdx(null);
     (async () => {
+      let ord = order;
       if (round === 0) {
-        setOrder(scene.cast); setPhase('reveal');
+        ord = scene.cast;
+        updateSynced({ round, order: ord, openIdx: null, phase: 'reveal', score });
         for (const who of scene.cast) { await safeSpeak(CAST[who].name, who); if (cancelled) return; }
         await new Promise((res) => setTimeout(res, 400));
         if (cancelled) return;
       }
-      setPhase('shuffle');
+      updateSynced({ round, order: ord, openIdx: null, phase: 'shuffle', score });
       if (cancelled) return;
-      for (let k = 0; k < 3; k++) { setOrder((o) => shuffle(o)); await new Promise((res) => setTimeout(res, 420)); if (cancelled) return; }
+      for (let k = 0; k < 3; k++) {
+        ord = shuffle(ord);
+        updateSynced({ round, order: ord, openIdx: null, phase: 'shuffle', score });
+        await new Promise((res) => setTimeout(res, 420));
+        if (cancelled) return;
+      }
       await new Promise((res) => setTimeout(res, 200));
       if (cancelled) return;
-      setPhase('prompt');
+      updateSynced({ round, order: ord, openIdx: null, phase: 'prompt', score });
       await new Promise((res) => setTimeout(res, 200));
       await safeSpeak(r.prompt, r.target);
     })();
     return () => { cancelled = true; };
-  }, [round]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round, canAct]);
 
   const tap = async (idx: number) => {
-    if (!r || answeredRef.current) return;
+    if (!canAct || !r || answeredRef.current) return;
     const who = order[idx];
     if (who !== r.target) { setWrongIdx(idx); sfx.wrong(); onLose(); window.setTimeout(() => setWrongIdx(null), 500); return; }
-    answeredRef.current = true; setOpenIdx(idx); setPhase('greet'); sfx.match();
+    answeredRef.current = true; sfx.match();
+    updateSynced({ round, order, openIdx: idx, phase: 'greet', score });
     await new Promise((res) => setTimeout(res, 500));
     await safeSpeak(r.helloLine, who);
-    setPhase('echo');
+    updateSynced({ round, order, openIdx: idx, phase: 'echo', score });
     await new Promise((res) => setTimeout(res, 250));
     await safeSpeak(r.echoLine, r.target);
-    setScore((s) => s + 1);
     await new Promise((res) => setTimeout(res, 1400));
-    const next = round + 1;
-    if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-    setRound(next);
+    updateSynced({ round: round + 1, order, openIdx: null, phase: 'reveal', score: score + 1 });
   };
 
   if (finished) {
@@ -1771,7 +1847,7 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
                 {phase === 'reveal' && <div className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-2xl bg-white px-4 py-2 text-lg font-black text-neutral-800 shadow-xl ring-2 ring-white" style={{ color: c.color }}>{c.name}</div>}
                 {(phase === 'greet' || phase === 'echo') && openIdx === i && <div className="absolute -top-14 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-2xl bg-white px-4 py-2 text-base font-black text-neutral-800 shadow-xl ring-2 ring-white">{r!.helloLine}</div>}
               </div>
-              <button onClick={() => tap(i)} disabled={answeredRef.current || phase !== 'prompt'} aria-label={`Door ${i + 1}`} className={`absolute inset-0 ${isWrong ? 'animate-[lep1-shake_0.5s]' : ''} ${isIdle ? 'hover:-translate-y-1' : ''} transition-transform active:scale-95`}>
+              <button onClick={() => tap(i)} disabled={!canAct || answeredRef.current || phase !== 'prompt'} aria-label={`Door ${i + 1}`} className={`absolute inset-0 ${isWrong ? 'animate-[lep1-shake_0.5s]' : ''} ${isIdle ? 'hover:-translate-y-1' : ''} transition-transform active:scale-95`}>
                 <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2 rounded-t-full" style={{ width: '112%', height: '20%', background: `linear-gradient(180deg, ${c.color} 0%, ${c.color}dd 100%)`, boxShadow: '0 8px 20px rgba(0,0,0,0.3)' }} />
                 <div className="absolute left-1/2 top-[16%] h-[84%] w-[94%] -translate-x-1/2 overflow-hidden rounded-t-[46%] border-[7px] border-amber-950 shadow-2xl" style={{ background: 'radial-gradient(ellipse at 50% 70%, #4a2c14 0%, #1a0d05 100%)' }}>
                   <div className="absolute inset-0 transition-opacity duration-500" style={{ opacity: isOpen ? 1 : 0, background: `radial-gradient(circle at 50% 65%, ${c.color}ee 0%, ${c.color}88 35%, rgba(0,0,0,0.4) 90%)` }} />
@@ -1862,14 +1938,18 @@ function ColorFriendsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { k
 
 /* ---------- Alphabet blocks ---------- */
 
-function AlphabetBlocksScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'alphabet-blocks' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  type Phase = 'intro' | 'tap' | 'stack' | 'done';
-  const [phase, setPhase] = useState<Phase>('intro');
-  const [tapIdx, setTapIdx] = useState(0);
+function AlphabetBlocksScene({ scene, onNext, onWin, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'alphabet-blocks' }>; onNext: () => void; onWin: (gem: boolean) => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+  type Phase = 'tap' | 'stack' | 'done';
+  type Synced = { phase: Phase; tapIdx: number; wordIdx: number; placed: string[]; usedBank: number[] };
+  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
+    { phase: 'tap', tapIdx: 0, wordIdx: 0, placed: [], usedBank: [] },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const { phase, tapIdx, wordIdx, placed } = synced;
+  const usedBankSet = useMemo(() => new Set(synced.usedBank), [synced.usedBank]);
+  const [introDone, setIntroDone] = useState(false);
   const [tapWrong, setTapWrong] = useState<string | null>(null);
   const [tapWinLetter, setTapWinLetter] = useState<string | null>(null);
-  const [wordIdx, setWordIdx] = useState(0);
-  const [placed, setPlaced] = useState<string[]>([]);
   const [wrongBankIdx, setWrongBankIdx] = useState<number | null>(null);
   const [celebrate, setCelebrate] = useState(false);
   const [gemDone, setGemDone] = useState(false);
@@ -1883,11 +1963,15 @@ function AlphabetBlocksScene({ scene, onNext, onWin }: { scene: Extract<Scene, {
     introRef.current = true;
     (async () => {
       await new Promise((r) => setTimeout(r, 200));
-      setPhase('tap');
+      setIntroDone(true);
       await new Promise((r) => setTimeout(r, 300));
       await playLetterPhonic(scene.tapRounds[0].letter);
     })();
   }, []);
+
+  useEffect(() => {
+    if (phase === 'done' && !gemDone) { setGemDone(true); onWin(true); }
+  }, [phase, gemDone]);
 
   const tapPromptRef = useRef(0);
   useEffect(() => {
@@ -1898,15 +1982,16 @@ function AlphabetBlocksScene({ scene, onNext, onWin }: { scene: Extract<Scene, {
   }, [tapIdx, phase]);
 
   const handleTapLetter = async (letter: string) => {
-    if (phase !== 'tap' || tapWinLetter) return;
+    if (!canAct || phase !== 'tap' || tapWinLetter) return;
     const target = scene.tapRounds[tapIdx].letter;
     if (letter === target) {
       setTapWinLetter(letter); sfx.gem();
       await new Promise((r) => setTimeout(r, 700));
       setTapWinLetter(null);
-      if (tapIdx + 1 < scene.tapRounds.length) setTapIdx(tapIdx + 1);
-      else {
-        setPhase('stack'); setWordIdx(0); setPlaced([]);
+      if (tapIdx + 1 < scene.tapRounds.length) {
+        updateSynced({ ...synced, tapIdx: tapIdx + 1 });
+      } else {
+        updateSynced({ phase: 'stack', tapIdx, wordIdx: 0, placed: [], usedBank: [] });
         await new Promise((r) => setTimeout(r, 300));
         await safeSpeak(scene.words[0].word, 'pip');
       }
@@ -1919,29 +2004,30 @@ function AlphabetBlocksScene({ scene, onNext, onWin }: { scene: Extract<Scene, {
     const need = currentWord.split('');
     const distractors = scene.letters.filter((l) => !need.includes(l)).slice(0, 3);
     const arr = [...need, ...distractors];
-    for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[arr[i], arr[j]] = [arr[j], arr[i]]; }
-    return arr;
-  }, [phase, wordIdx]);
-
-  const [usedBank, setUsedBank] = useState<Set<number>>(new Set());
-  useEffect(() => { setUsedBank(new Set()); setPlaced([]); }, [wordIdx, phase]);
+    return arr.map((c, i) => ({ c, r: ((wordIdx + 1) * (i * 9301 + 49297)) % 233280 })).sort((a, b) => a.r - b.r).map((x) => x.c);
+  }, [phase, wordIdx, currentWord]);
 
   const handleBankTap = async (bIdx: number, letter: string) => {
-    if (phase !== 'stack' || celebrate || usedBank.has(bIdx)) return;
+    if (!canAct || phase !== 'stack' || celebrate || usedBankSet.has(bIdx)) return;
     const target = currentWord[placed.length];
     if (letter === target) {
       const nextPlaced = [...placed, letter];
-      setPlaced(nextPlaced);
-      setUsedBank((s) => new Set(s).add(bIdx));
+      const nextUsedBank = [...synced.usedBank, bIdx];
       sfx.pop();
+      updateSynced({ phase, tapIdx, wordIdx, placed: nextPlaced, usedBank: nextUsedBank });
       if (nextPlaced.length === currentWord.length) {
         setCelebrate(true); sfx.gem();
         await new Promise((r) => setTimeout(r, 350));
         await safeSpeak(currentWord, 'pip');
         await new Promise((r) => setTimeout(r, 700));
         setCelebrate(false);
-        if (wordIdx + 1 < scene.words.length) { setWordIdx(wordIdx + 1); await new Promise((r) => setTimeout(r, 300)); await safeSpeak(scene.words[wordIdx + 1].word, 'pip'); }
-        else { setPhase('done'); if (!gemDone) { setGemDone(true); onWin(true); } }
+        if (wordIdx + 1 < scene.words.length) {
+          updateSynced({ phase: 'stack', tapIdx, wordIdx: wordIdx + 1, placed: [], usedBank: [] });
+          await new Promise((r) => setTimeout(r, 300));
+          await safeSpeak(scene.words[wordIdx + 1].word, 'pip');
+        } else {
+          updateSynced({ phase: 'done', tapIdx, wordIdx, placed: nextPlaced, usedBank: nextUsedBank });
+        }
       }
     } else { setWrongBankIdx(bIdx); sfx.wrong(); window.setTimeout(() => setWrongBankIdx(null), 450); }
   };
@@ -1952,12 +2038,12 @@ function AlphabetBlocksScene({ scene, onNext, onWin }: { scene: Extract<Scene, {
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">
         🧱 Alphabet Blocks{phase === 'tap' && <span className="ml-2 text-orange-500">— Tap the sound!</span>}{phase === 'stack' && <span className="ml-2 text-orange-500">— Stack the word!</span>}
       </div>
-      {phase === 'tap' && (
+      {introDone && phase === 'tap' && (
         <div className="absolute inset-x-0 top-20 bottom-24 z-10 flex flex-col items-center justify-center gap-6 px-4">
           <button onClick={() => playLetterPhonic(scene.tapRounds[tapIdx].letter)} className="rounded-full bg-white/95 px-6 py-3 text-lg font-black text-orange-700 shadow-xl active:scale-95">🔊 Play sound again</button>
           <div className="grid max-w-[92vw] grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
             {scene.letters.map((L) => (
-              <button key={L} onClick={() => handleTapLetter(L)} className="relative flex h-28 w-28 items-center justify-center rounded-2xl text-6xl font-black text-white transition-transform active:scale-95 sm:h-32 sm:w-32"
+              <button key={L} onClick={() => handleTapLetter(L)} disabled={!canAct} className="relative flex h-28 w-28 items-center justify-center rounded-2xl text-6xl font-black text-white transition-transform active:scale-95 disabled:cursor-not-allowed sm:h-32 sm:w-32"
                 style={{ backgroundColor: colorFor(L), animation: tapWrong === L ? 'lep1-blockShake 0.4s ease-in-out' : tapWinLetter === L ? 'lep1-blockWin 0.7s ease-out' : undefined }}>
                 {L}{tapWinLetter === L && <span className="absolute -right-2 -top-2 text-4xl">✨</span>}
               </button>
@@ -1981,8 +2067,8 @@ function AlphabetBlocksScene({ scene, onNext, onWin }: { scene: Extract<Scene, {
           </div>
           <div className="flex max-w-[92vw] flex-wrap items-center justify-center gap-3">
             {bank.map((L, i) => (
-              <button key={`${i}-${L}`} onClick={() => handleBankTap(i, L)} disabled={usedBank.has(i)} className="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl font-black text-white transition-transform active:scale-90 sm:h-24 sm:w-24 sm:text-5xl"
-                style={{ backgroundColor: colorFor(L), opacity: usedBank.has(i) ? 0.25 : 1, animation: wrongBankIdx === i ? 'lep1-blockShake 0.4s ease-in-out' : undefined }}>{L}</button>
+              <button key={`${i}-${L}`} onClick={() => handleBankTap(i, L)} disabled={!canAct || usedBankSet.has(i)} className="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl font-black text-white transition-transform active:scale-90 disabled:cursor-not-allowed sm:h-24 sm:w-24 sm:text-5xl"
+                style={{ backgroundColor: colorFor(L), opacity: usedBankSet.has(i) ? 0.25 : 1, animation: wrongBankIdx === i ? 'lep1-blockShake 0.4s ease-in-out' : undefined }}>{L}</button>
             ))}
           </div>
           <div className="text-sm font-black text-white drop-shadow-md">Word {wordIdx + 1} / {scene.words.length}</div>
@@ -2125,31 +2211,36 @@ function AlphabetOrderScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
 
 /* ---------- Trophy chest ---------- */
 
-function TrophyChestScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'trophy-chest' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [roundIdx, setRoundIdx] = useState(0);
-  const [revealed, setRevealed] = useState(false);
+function TrophyChestScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'trophy-chest' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+  type Synced = { roundIdx: number; revealed: boolean; finished: boolean };
+  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
+    { roundIdx: 0, revealed: false, finished: false },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const { roundIdx, revealed, finished } = synced;
   const [wrongPick, setWrongPick] = useState<string | null>(null);
-  const [finished, setFinished] = useState(false);
   const gemDone = useRef(false);
   const round = scene.rounds[roundIdx];
   const c = CAST[scene.who];
 
   useEffect(() => { if (round && !revealed) cueSpeakOnce(`Find the ${round.letter} sound!`, scene.who); }, [roundIdx]);
 
+  useEffect(() => {
+    if (finished && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+  }, [finished]);
+
   const pick = async (choice: string) => {
-    if (revealed || finished || !round) return;
+    if (!canAct || revealed || finished || !round) return;
     if (choice !== round.letter) { sfx.wrong(); onLose(); setWrongPick(choice); window.setTimeout(() => setWrongPick(null), 450); return; }
     sfx.match();
-    setRevealed(true);
+    updateSynced({ roundIdx, revealed: true, finished: false });
     await safeSpeak(round.word, scene.who);
     await new Promise((r) => window.setTimeout(r, 1300));
     const next = roundIdx + 1;
     if (next >= scene.rounds.length) {
-      setFinished(true);
-      if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+      updateSynced({ roundIdx, revealed: true, finished: true });
     } else {
-      setRevealed(false);
-      setRoundIdx(next);
+      updateSynced({ roundIdx: next, revealed: false, finished: false });
     }
   };
 
@@ -2177,7 +2268,7 @@ function TrophyChestScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sce
           </button>
           <div className="flex gap-3">
             {round?.choices.map((L) => (
-              <button key={L} onClick={() => pick(L)} disabled={revealed}
+              <button key={L} onClick={() => pick(L)} disabled={!canAct || revealed}
                 className={`grid h-20 w-20 place-items-center rounded-2xl text-4xl font-black text-white shadow-xl transition active:scale-90 disabled:opacity-50 sm:h-24 sm:w-24 sm:text-5xl ${wrongPick === L ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
                 style={{ background: 'linear-gradient(135deg, #C97A2F, #F5B942)' }}>
                 {L}
@@ -2294,15 +2385,20 @@ function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
   );
 }
 
-function ColorSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'color-sort' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
-  type Slot = { idx: number; it: typeof scene.items[number]; collected: boolean; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
-  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, collected: false, dragging: false, dx: 0, dy: 0, flash: 'none' })));
+function ColorSortScene({ scene, onWin, onLose, onNext, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'color-sort' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+  type Slot = { idx: number; it: typeof scene.items[number]; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
+  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, dragging: false, dx: 0, dy: 0, flash: 'none' })));
+  const [synced, updateSynced, canAct] = useSyncedSceneState<{ collected: number[] }>(
+    { collected: [] },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const collectedSet = useMemo(() => new Set(synced.collected), [synced.collected]);
   const [hotColor, setHotColor] = useState<string | null>(null);
   const [gemAwarded, setGemAwarded] = useState(false);
   const targetRefs = useRef<Record<string, HTMLElement | null>>({});
   const dragIdx = useRef<number | null>(null);
   const start = useRef({ x: 0, y: 0 });
-  const done = slots.every((s) => s.collected);
+  const done = slots.every((s) => collectedSet.has(s.idx));
 
   useEffect(() => { if (done && !gemAwarded) { setGemAwarded(true); onWin(true); cueSpeak('Amazing! All colors sorted!', 'teacher'); } }, [done, gemAwarded]);
 
@@ -2324,8 +2420,9 @@ function ColorSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
   }
 
   const onDown = (idx: number) => (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!canAct) return;
     const s = slots.find((x) => x.idx === idx);
-    if (!s || s.collected) return;
+    if (!s || collectedSet.has(idx)) return;
     sfx.pop();
     const speaker = scene.targets.find((t) => t.colorWord === s.it.colorWord)?.who ?? 'pip';
     cueSpeakOnce(s.it.word, speaker);
@@ -2347,13 +2444,17 @@ function ColorSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
     const dropColor = hitTest(e.clientX, e.clientY, e.currentTarget);
     setHotColor(null);
     if (idx === null) return;
+    const slot = slots.find((x) => x.idx === idx);
     setSlots((p) => p.map((x) => {
       if (x.idx !== idx) return x;
       if (!dropColor) return { ...x, dragging: false, dx: 0, dy: 0 };
-      if (dropColor === x.it.colorWord) { sfx.match(); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
-      sfx.wrong(); onLose();
+      if (dropColor === x.it.colorWord) return { ...x, dragging: false, dx: 0, dy: 0, flash: 'good' };
       return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
     }));
+    if (dropColor && slot) {
+      if (dropColor === slot.it.colorWord) { sfx.match(); updateSynced({ collected: [...synced.collected, idx] }); }
+      else { sfx.wrong(); onLose(); }
+    }
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
   };
 
@@ -2366,7 +2467,7 @@ function ColorSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
       <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 items-center justify-center gap-6 px-4 sm:gap-10">
         {scene.targets.map((t) => {
           const hot = hotColor === t.colorWord;
-          const collected = slots.filter((s) => s.collected && s.it.colorWord === t.colorWord).length;
+          const collected = slots.filter((s) => collectedSet.has(s.idx) && s.it.colorWord === t.colorWord).length;
           const total = slots.filter((s) => s.it.colorWord === t.colorWord).length;
           return (
             <button key={t.colorWord} type="button" ref={(el) => { targetRefs.current[t.colorWord] = el; }} onClick={() => void safeSpeak(t.colorWord, t.who)}
@@ -2382,11 +2483,11 @@ function ColorSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
       </div>
       {slots.map((s, i) => {
         const pos = orbit[i % orbit.length];
-        if (s.collected) return <div key={s.idx} className="absolute grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-green-300/60 text-4xl opacity-70 ring-2 ring-green-400 backdrop-blur" style={{ left: pos.left, top: pos.top }}>✅</div>;
+        if (collectedSet.has(s.idx)) return <div key={s.idx} className="absolute grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-green-300/60 text-4xl opacity-70 ring-2 ring-green-400 backdrop-blur" style={{ left: pos.left, top: pos.top }}>✅</div>;
         const glow = s.flash === 'bad' ? 'drop-shadow-[0_0_14px_rgba(239,68,68,0.9)] animate-[lep1-shake_0.4s_ease-in-out]' : s.flash === 'good' ? 'drop-shadow-[0_0_18px_rgba(34,197,94,0.9)]' : 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]';
         return (
-          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-            className={`absolute h-40 w-40 sm:h-52 sm:w-52 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
+          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} disabled={!canAct}
+            className={`absolute h-40 w-40 sm:h-52 sm:w-52 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition disabled:cursor-not-allowed ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
             style={{ left: pos.left, top: pos.top, animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
             aria-label={s.it.word}
           >
@@ -3367,11 +3468,14 @@ function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
 
 /* ---------- Friend pop ---------- */
 
-function FriendPopScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'friend-pop' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+function FriendPopScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'friend-pop' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
   const GENDER: Record<string, 'she' | 'he'> = { bella: 'she', mia: 'she', willow: 'she', leo: 'he', pip: 'he' };
-  const [round, setRound] = useState(0);
-  const [score, setScore] = useState(0);
-  const [tapped, setTapped] = useState<{ who: CharKey; ok: boolean } | null>(null);
+  type Synced = { round: number; score: number; tapped: { who: CharKey; ok: boolean } | null };
+  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
+    { round: 0, score: 0, tapped: null },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const { round, score, tapped } = synced;
   const [gemDone, setGemDone] = useState(false);
   const answeredRef = useRef(false);
   const total = scene.rounds.length;
@@ -3438,25 +3542,29 @@ function FriendPopScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
 
   useEffect(() => {
     if (!r) return;
-    answeredRef.current = false; setTapped(null);
+    answeredRef.current = false;
     void safeSpeak(r.prompt, r.target);
   }, [round, r]);
 
+  useEffect(() => {
+    if (finished && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+  }, [finished, gemDone]);
+
   const tap = async (who: CharKey, emo: 'happy' | 'sad' | 'angry' | 'neutral') => {
-    if (!r || answeredRef.current) return;
+    if (!canAct || !r || answeredRef.current) return;
     const isCorrect = helloMode ? who === r.target : pronounMode ? GENDER[who] === targetGender : emo === roundEmo;
     if (isCorrect) {
-      answeredRef.current = true; setTapped({ who, ok: true }); sfx.match(); setScore((s) => s + 1);
+      answeredRef.current = true; sfx.match();
+      updateSynced({ round, score: score + 1, tapped: { who, ok: true } });
       const line = helloMode ? (r.sayLine ?? `Hello, ${CAST[who].name}!`) : pronounMode ? `${GENDER[who] === 'he' ? 'He' : 'She'} is ${roundEmo}!` : `${CAST[who].name} is ${roundEmo}!`;
       await safeSpeak(line, who);
       window.setTimeout(() => {
-        const next = round + 1;
-        if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-        setRound(next);
+        updateSynced({ round: round + 1, score: score + 1, tapped: null });
       }, 700);
     } else {
-      setTapped({ who, ok: false }); sfx.wrong(); onLose();
-      window.setTimeout(() => setTapped(null), 500);
+      sfx.wrong(); onLose();
+      updateSynced({ round, score, tapped: { who, ok: false } });
+      window.setTimeout(() => updateSynced({ round, score, tapped: null }), 500);
     }
   };
 
@@ -3486,7 +3594,7 @@ function FriendPopScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
           const { who, emo } = item;
           const isFlash = tapped?.who === who;
           return (
-            <button key={`${round}-${i}-${who}`} onClick={() => tap(who, emo)} className="relative transition-transform active:scale-95" style={{ width: 'clamp(180px, 30vw, 340px)', height: 'clamp(280px, 55vh, 500px)' }} aria-label={CAST[who].name}>
+            <button key={`${round}-${i}-${who}`} onClick={() => tap(who, emo)} disabled={!canAct} className="relative transition-transform active:scale-95 disabled:cursor-not-allowed" style={{ width: 'clamp(180px, 30vw, 340px)', height: 'clamp(280px, 55vh, 500px)' }} aria-label={CAST[who].name}>
               <img src={getEmotionSprite(who, emo)} alt={CAST[who].name} className="h-full w-full object-contain drop-shadow-2xl" draggable={false} />
               {isFlash && <div className={`pointer-events-none absolute inset-0 flex items-center justify-center text-8xl font-black ${tapped!.ok ? 'text-green-400' : 'text-red-500'}`}>{tapped!.ok ? '✓' : '✗'}</div>}
             </button>
@@ -3880,10 +3988,13 @@ const MONSTER_META: Record<'happy' | 'sad' | 'angry', { label: string; color: st
   angry: { label: 'Angry Monster', color: '#E5561A', xPct: 81 },
 };
 
-function FeedMonstersScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'feed-monsters' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [score, setScore] = useState(0);
-  const [feeding, setFeeding] = useState<'happy' | 'sad' | 'angry' | null>(null);
+function FeedMonstersScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'feed-monsters' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+  type Synced = { round: number; score: number; feeding: 'happy' | 'sad' | 'angry' | null };
+  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
+    { round: 0, score: 0, feeding: null },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const { round, score, feeding } = synced;
   const [dragging, setDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ dx: 0, dy: 0 });
   const [hotMonster, setHotMonster] = useState<'happy' | 'sad' | 'angry' | null>(null);
@@ -3897,11 +4008,15 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
 
   useEffect(() => {
     if (!r) return;
-    setFeeding(null); setWrongShake(false); setDragOffset({ dx: 0, dy: 0 });
+    setWrongShake(false); setDragOffset({ dx: 0, dy: 0 });
     const t = window.setTimeout(() => void safeSpeak(r.sentence, r.who), 300);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round]);
+
+  useEffect(() => {
+    if (finished && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+  }, [finished, gemDone]);
 
   const hitTest = (x: number, y: number): 'happy' | 'sad' | 'angry' | null => {
     for (const m of ['happy', 'sad', 'angry'] as const) {
@@ -3915,13 +4030,12 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
   };
 
   const feed = async (monster: 'happy' | 'sad' | 'angry') => {
-    if (!r || feeding) return;
+    if (!canAct || !r || feeding) return;
     if (monster === r.emotion) {
-      sfx.match(); setFeeding(monster); setScore((s) => s + 1);
+      sfx.match();
+      updateSynced({ round, score: score + 1, feeding: monster });
       await new Promise((res) => setTimeout(res, 700));
-      const next = round + 1;
-      if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-      setRound(next);
+      updateSynced({ round: round + 1, score: score + 1, feeding: null });
     } else {
       sfx.wrong(); onLose(); setWrongShake(true); setDragOffset({ dx: 0, dy: 0 });
       window.setTimeout(() => setWrongShake(false), 500);
@@ -3929,7 +4043,7 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
   };
 
   const onDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (!r || feeding) return;
+    if (!canAct || !r || feeding) return;
     setDragging(true);
     dragStart.current = { x: e.clientX, y: e.clientY };
     e.currentTarget.setPointerCapture?.(e.pointerId);
@@ -4004,7 +4118,7 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
       {/* Friend stands grounded on the grass in front of the monsters — grab and drag onto the matching monster. */}
       <button
         onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-        disabled={!!feeding}
+        disabled={!canAct || !!feeding}
         aria-label={`Drag ${c.name} to the matching monster`}
         className="absolute z-20 flex touch-none select-none flex-col items-center border-0 bg-transparent p-0 disabled:cursor-default"
         style={{
@@ -4041,11 +4155,13 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
 
 /* ---------- He / She sort ---------- */
 
-function HeSheSortScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'he-she-sort' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [score, setScore] = useState(0);
-  const [picked, setPicked] = useState<'He' | 'She' | null>(null);
-  const [correct, setCorrect] = useState<boolean | null>(null);
+function HeSheSortScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'he-she-sort' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+  type Synced = { round: number; score: number; picked: 'He' | 'She' | null; correct: boolean | null };
+  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
+    { round: 0, score: 0, picked: null, correct: null },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const { round, score, picked, correct } = synced;
   const [gemDone, setGemDone] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ dx: 0, dy: 0 });
@@ -4058,11 +4174,15 @@ function HeSheSortScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
 
   useEffect(() => {
     if (!r) return;
-    setPicked(null); setCorrect(null); setDragOffset({ dx: 0, dy: 0 });
+    setDragOffset({ dx: 0, dy: 0 });
     const t = window.setTimeout(() => void safeSpeak(`I am ${r.emotion}.`, r.who), 300);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round]);
+
+  useEffect(() => {
+    if (finished && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+  }, [finished, gemDone]);
 
   const hitTest = (x: number, y: number): 'He' | 'She' | null => {
     for (const p of ['He', 'She'] as const) {
@@ -4076,24 +4196,21 @@ function HeSheSortScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
   };
 
   const pick = async (choice: 'He' | 'She') => {
-    if (!r || picked) return;
-    setPicked(choice);
+    if (!canAct || !r || picked) return;
     const ok = choice === r.pronoun;
-    setCorrect(ok);
+    updateSynced({ round, score, picked: choice, correct: ok });
     if (ok) {
-      sfx.match(); setScore((s) => s + 1);
+      sfx.match();
       await safeSpeak(`Yes! ${choice} is ${r.emotion}.`, r.who);
-      const next = round + 1;
-      if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-      window.setTimeout(() => setRound(next), 400);
+      window.setTimeout(() => updateSynced({ round: round + 1, score: score + 1, picked: null, correct: null }), 400);
     } else {
       sfx.wrong(); onLose();
-      window.setTimeout(() => { setPicked(null); setCorrect(null); setDragOffset({ dx: 0, dy: 0 }); }, 700);
+      window.setTimeout(() => { updateSynced({ round, score, picked: null, correct: null }); setDragOffset({ dx: 0, dy: 0 }); }, 700);
     }
   };
 
   const onDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (!r || picked) return;
+    if (!canAct || !r || picked) return;
     setDragging(true);
     start.current = { x: e.clientX, y: e.clientY };
     e.currentTarget.setPointerCapture?.(e.pointerId);
@@ -4128,7 +4245,7 @@ function HeSheSortScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
       <div className="relative z-20 mt-2 max-w-[92%] rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">{scene.teacher} <span className="ml-1 rounded-full bg-orange-100 px-2 py-0.5 text-xs text-orange-600">{round + 1}/{total}</span></div>
       <button
         onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-        disabled={!!picked}
+        disabled={!canAct || !!picked}
         aria-label={`Drag ${c.name} to He or She`}
         className="relative z-10 flex touch-none select-none flex-col items-center border-0 bg-transparent p-0 disabled:cursor-default"
         style={{
@@ -4233,9 +4350,13 @@ function FeelingQuizScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sce
 
 /* ---------- Feelings bingo ---------- */
 
-function FeelingsBingoScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'feelings-bingo' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [callIdx, setCallIdx] = useState(0);
-  const [hits, setHits] = useState<Set<number>>(new Set());
+function FeelingsBingoScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'feelings-bingo' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+  const [synced, updateSynced, canAct] = useSyncedSceneState<{ callIdx: number; hits: number[] }>(
+    { callIdx: 0, hits: [] },
+    { sceneId: scene.id, roomId, role, activityUnlocked },
+  );
+  const { callIdx } = synced;
+  const hits = useMemo(() => new Set(synced.hits), [synced.hits]);
   const [wrongTile, setWrongTile] = useState<number | null>(null);
   const [gemDone, setGemDone] = useState(false);
   const total = scene.rounds.length;
@@ -4250,16 +4371,18 @@ function FeelingsBingoScene({ scene, onNext, onWin, onLose }: { scene: Extract<S
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callIdx]);
 
+  useEffect(() => {
+    if (finished && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+  }, [finished, gemDone]);
+
   const tapTile = async (i: number) => {
-    if (!round || finished) return;
+    if (!canAct || !round || finished) return;
     const tile = scene.tiles[i];
     if (tile.who === round.who && tile.emotion === round.emotion) {
       sfx.match();
-      setHits((s) => new Set(s).add(i));
+      updateSynced({ callIdx, hits: [...synced.hits, i] });
       await safeSpeak(`Yes! ${CAST[tile.who].name} is ${tile.emotion}!`, tile.who);
-      const next = callIdx + 1;
-      if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-      setCallIdx(next);
+      updateSynced({ callIdx: callIdx + 1, hits: [...synced.hits, i] });
     } else {
       sfx.wrong(); onLose(); setWrongTile(i);
       window.setTimeout(() => setWrongTile(null), 500);
@@ -4277,7 +4400,7 @@ function FeelingsBingoScene({ scene, onNext, onWin, onLose }: { scene: Extract<S
           const c = CAST[tile.who];
           const isHit = hits.has(i);
           return (
-            <button key={i} onClick={() => tapTile(i)} disabled={finished}
+            <button key={i} onClick={() => tapTile(i)} disabled={!canAct || finished}
               className={`relative grid aspect-square w-24 place-items-center rounded-3xl border-4 bg-white/90 p-2 shadow-xl transition active:scale-95 disabled:opacity-90 sm:w-28 ${wrongTile === i ? 'animate-[lep1-shake_0.4s_ease-out] border-rose-400' : isHit ? 'border-green-400 ring-4 ring-green-300/60' : 'border-white'}`}
             >
               <img src={getEmotionSprite(tile.who, tile.emotion)} alt={c.name} className="h-full w-full object-contain" draggable={false} />
