@@ -95,7 +95,8 @@ export function SceneRenderer(props: {
       case 'meet': return <MeetScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'echo': return <EchoScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
       case 'memory': return <MemoryScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-      case 'color-card': return <ColorCardScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+      case 'drag-match': return <DragMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+      case 'vocab-spot': return <VocabSpotScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'choice': return <ChoiceScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
@@ -321,99 +322,103 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
   );
 }
 
-/* ---------- Color card (one color, illustrated alone) ---------- */
+/* ---------- Vocab spot (arrow hotspots on one reused scene) ---------- */
 
-function ColorCardScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'color-card' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  type Phase = 'idle' | 'talking' | 'repeat' | 'done';
-  const [phase, setPhase] = useState<Phase>('idle');
-  const [held, setHeld] = useState(false);
-  const [heardRepeat, setHeardRepeat] = useState(0);
-  const [glow, setGlow] = useState(false);
-  const holdTimer = useRef<number | null>(null);
-  const c = CAST[scene.who];
-  const line = `${scene.colorWord}!`;
+function VocabSpotScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'vocab-spot' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [step, setStep] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const gemDone = useRef(false);
+  const total = scene.items.length;
+  const done = step >= total;
+  const current = !done ? scene.items[step] : null;
 
-  const tapCharacter = async () => {
-    if (phase !== 'idle') return;
+  const tap = async () => {
+    if (!current || revealed) return;
     sfx.pop();
-    setGlow(true);
-    setPhase('talking');
-    await safeSpeak(line, voiceOf(scene.who));
-    setTimeout(() => setPhase('repeat'), 500);
-    setTimeout(() => setGlow(false), 1600);
+    setRevealed(true);
+    // Primary audio is the bare word — the example sentence is a secondary,
+    // tap-to-hear extra on the flashcard, not something spoken automatically.
+    await safeSpeak(current.label, current.who ? voiceOf(current.who) : 'teacher');
   };
-  const hearRepeat = async () => { sfx.click(); setHeardRepeat((n) => n + 1); await safeSpeak(line, voiceOf(scene.who)); };
-  const startHold = () => {
-    if (phase !== 'repeat') return;
-    setHeld(true);
-    holdTimer.current = window.setTimeout(async () => {
-      setHeld(false); setPhase('done'); sfx.gem();
-      onWin(true);
-      await safeSpeak('Great color!', 'pip');
-    }, 1300);
+  const hearSentence = async () => {
+    if (!current) return;
+    sfx.click();
+    await safeSpeak(current.sentence, current.who ? voiceOf(current.who) : 'teacher');
   };
-  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+  const dismiss = () => {
+    setRevealed(false);
+    const next = step + 1;
+    if (next >= total && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+    setStep(next);
+  };
 
   return (
-    <div className="relative min-h-[78vh]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
-        <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: `linear-gradient(90deg, ${scene.colorHex}, #FEBE4C)` }}>
-          🎨 New Color
-        </div>
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        {scene.teacher} <span className="ml-1 opacity-60">({Math.min(step, total)}/{total})</span>
       </div>
-      <div className="mx-auto mt-8 max-w-md">
-        <div className="rounded-2xl px-4 py-3 text-center text-lg font-bold text-white shadow-2xl" style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.35))', backdropFilter: 'blur(8px)', textShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
-          {scene.teacher}
-        </div>
-      </div>
-      {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to name the color`} className="absolute inset-0 z-10 h-[60vh] w-full cursor-pointer bg-transparent" />}
-      {phase === 'idle' && (
-        <div className="pointer-events-none absolute inset-x-0 top-[26vh] z-10 grid place-items-center">
-          <div className="relative h-40 w-40" style={{ animation: 'lep1-wiggle 3s ease-in-out infinite' }}>
-            <span className="absolute inset-0 rounded-full" style={{ background: `radial-gradient(circle, ${scene.colorHex}55, transparent 65%)`, animation: 'lep1-ping 2s ease-out infinite' }} />
-            <span className="absolute inset-6 rounded-full border-4" style={{ borderColor: scene.colorHex, animation: 'lep1-ping 2s ease-out 0.4s infinite' }} />
-          </div>
-        </div>
-      )}
-      {glow && (
-        <div className="pointer-events-none absolute inset-x-0 top-[8vh] z-10 h-[55vh] grid place-items-center" style={{ animation: 'lep1-twinkle 1.4s ease-in-out' }}>
-          <div className="h-full w-full rounded-full" style={{ background: `radial-gradient(circle, ${scene.colorHex}66 0%, ${scene.colorHex}22 45%, transparent 70%)` }} />
-        </div>
-      )}
-      {/* This color's own dedicated card — illustrated alone, not mixed in
-          with the other colors, per the "each vocabulary illustrated alone"
-          rule. */}
-      {phase !== 'idle' && (
-        <div className="pointer-events-none absolute inset-x-0 top-[12vh] z-20 flex justify-center px-4">
-          <button onClick={hearRepeat} className="group pointer-events-auto relative flex w-full max-w-sm flex-col items-center gap-3 rounded-[2rem] border-4 border-white bg-white px-6 py-6 text-center shadow-2xl active:scale-95" style={{ animation: 'lep1-pop 0.4s ease-out' }}>
-            <span className="h-20 w-20 rounded-full shadow-inner ring-4 ring-white" style={{ background: scene.colorHex }} />
-            <span className="text-3xl font-black" style={{ color: scene.colorHex }}>{scene.colorWord}</span>
-            <span className="text-sm font-semibold text-neutral-500">🔊 Hear it {heardRepeat > 0 && <span className="opacity-60">({heardRepeat})</span>}</span>
+      {/* Every word is already visibly drawn in scene.bg — only ONE arrow is
+          ever on screen, pointing at the current word, so attention isn't
+          split across the whole scene at once. It never carries a floating
+          illustration of its own; it just marks where to look. The arrow
+          sits a fixed gap away from the actual target (never touching it)
+          and can approach from above, the left, or the right depending on
+          `dir`, whichever side actually has room in that background. */}
+      {current && (() => {
+        const dir = current.dir ?? 'down';
+        const GAP = 62;
+        const pos = dir === 'down'
+          ? { left: current.left, top: `calc(${current.top} - ${GAP}px)` }
+          : dir === 'right'
+          ? { left: `calc(${current.left} - ${GAP}px)`, top: current.top }
+          : { left: `calc(${current.left} + ${GAP}px)`, top: current.top };
+        const angle = dir === 'down' ? 0 : dir === 'right' ? -90 : 90;
+        return (
+          <button
+            onClick={tap}
+            disabled={revealed}
+            aria-label={`Learn the word ${current.label}`}
+            className="absolute z-20 transition active:scale-90 disabled:pointer-events-none"
+            style={{ ...pos, transform: `translate(-50%, -50%) rotate(${angle}deg)` }}
+          >
+            {/* A chunky, thick-outlined cartoon arrow (matching this world's
+                "Kawaii Comic Cartoon" style — bold dark outline, solid fill,
+                rounded corners), with a pulsing glow at the tip plus a
+                bouncing motion so the motion reads clearly at a glance. The
+                bounce animates on this inner span, separately from the
+                outer button's static rotation, so the two don't clobber
+                each other on the shared `transform` property. */}
+            <span className="relative block" style={{ animation: revealed ? undefined : 'lep1-hop 0.9s ease-in-out infinite' }}>
+              {!revealed && (
+                <span className="pointer-events-none absolute bottom-0 left-1/2 h-12 w-12 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${current.color}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
+              )}
+              <svg width="52" height="76" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
+                <path
+                  d="M13 3 C13 1.9 13.9 1 15 1 L25 1 C26.1 1 27 1.9 27 3 L27 21 L36 21 C37.9 21 38.8 23.3 37.4 24.6 L21.4 43.6 C20.6 44.5 19.4 44.5 18.6 43.6 L2.6 24.6 C1.2 23.3 2.1 21 4 21 L13 21 Z"
+                  fill={current.color}
+                  stroke="white"
+                  strokeWidth="3"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
           </button>
-        </div>
-      )}
-      {phase === 'idle' && (
-        <div className="pointer-events-none absolute inset-x-0 top-[44vh] z-20 grid place-items-center">
-          <span className="animate-pulse rounded-full bg-white/95 px-5 py-2 text-base font-bold shadow-xl" style={{ color: scene.colorHex }}>👆 Tap {c.name}</span>
-        </div>
-      )}
-      {(phase === 'repeat' || phase === 'done') && (
-        <div className="absolute inset-x-0 bottom-0 z-30 mx-auto max-w-md" style={{ animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
-          <div className="rounded-t-[2rem] border-t-4 p-4 shadow-2xl" style={{ borderColor: scene.colorHex, background: 'linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85))', backdropFilter: 'blur(20px)' }}>
-            <div className="flex items-center justify-between">
-              <span className="rounded-full px-3 py-1 text-xs font-black uppercase tracking-widest text-white" style={{ background: scene.colorHex }}>🎤 Your turn</span>
-              <span className="text-xs font-bold text-neutral-500">Hold & repeat</span>
-            </div>
-            <p className="mt-2 text-center text-2xl font-black" style={{ color: scene.colorHex }}>"{scene.colorWord}!"</p>
-            <button
-              onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
-              className={`mt-2 w-full rounded-full py-5 text-xl font-black text-white shadow-xl transition ${held ? 'scale-95' : ''}`}
-              style={{ background: phase === 'done' ? 'linear-gradient(90deg, #10B981, #34D399)' : `linear-gradient(90deg, ${scene.colorHex}, #FEBE4C)` }}
-            >
-              {phase === 'done' ? '✅ Nailed it!' : held ? '🎤 Keep talking…' : '🎤 Hold to say it'}
-            </button>
-            <PrimaryButton onClick={onNext} disabled={phase !== 'done'}>{phase === 'done' ? 'Next →' : 'Say it first!'}</PrimaryButton>
+        );
+      })()}
+      {current && revealed && (
+        <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/40 px-6" onClick={dismiss} style={{ animation: 'lep1-pop 0.25s ease-out' }}>
+          <div className="flex w-full max-w-sm flex-col items-center gap-2 rounded-[2rem] border-4 border-white bg-white px-6 py-6 text-center shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <span className="grid h-16 w-16 place-items-center rounded-full text-4xl" style={{ background: `${current.color}22` }}>{current.emoji}</span>
+            <span className="text-3xl font-black" style={{ color: current.color }}>{current.label}</span>
+            <button onClick={hearSentence} className="text-sm font-semibold text-neutral-500 underline decoration-dotted active:scale-95">🔊 Hear it in a sentence: “{current.sentence}”</button>
+            <button onClick={dismiss} className="mt-2 rounded-full px-6 py-2 text-sm font-black uppercase tracking-widest text-white shadow active:scale-95" style={{ background: current.color }}>Got it!</button>
           </div>
+        </div>
+      )}
+      {done && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">All found! ⭐ Next</button>
         </div>
       )}
     </div>
@@ -519,6 +524,122 @@ function MemoryScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
   );
 }
 
+/* ---------- Drag match (listen, then drag the word onto its object) ---------- */
+
+function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'drag-match' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const total = scene.items.length;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [placed, setPlaced] = useState<Set<number>>(new Set());
+  const [drag, setDrag] = useState<{ idx: number; x: number; y: number; startX: number; startY: number } | null>(null);
+  const [wrongIdx, setWrongIdx] = useState<number | null>(null);
+  const gemDone = useRef(false);
+
+  const hear = (idx: number) => {
+    sfx.click();
+    const item = scene.items[idx];
+    void safeSpeak(item.label, item.who ? voiceOf(item.who) : 'teacher');
+  };
+
+  const startDrag = (e: React.PointerEvent, idx: number) => {
+    if (placed.has(idx)) return;
+    e.preventDefault();
+    hear(idx);
+    setDrag({ idx, x: e.clientX, y: e.clientY, startX: e.clientX, startY: e.clientY });
+  };
+
+  useEffect(() => {
+    if (!drag) return;
+    const move = (e: PointerEvent) => setDrag((d) => (d ? { ...d, x: e.clientX, y: e.clientY } : d));
+    const up = (e: PointerEvent) => {
+      const movedDist = Math.hypot(e.clientX - drag.startX, e.clientY - drag.startY);
+      // A short tap (barely moved) is just "hear the word again," not a
+      // drop attempt — only a real drag gesture gets scored as a match try.
+      if (movedDist < 24) { setDrag(null); return; }
+      const container = containerRef.current;
+      const item = scene.items[drag.idx];
+      if (container) {
+        const rect = container.getBoundingClientRect();
+        const targetX = rect.left + (parseFloat(item.targetLeft) / 100) * rect.width;
+        const targetY = rect.top + (parseFloat(item.targetTop) / 100) * rect.height;
+        const dist = Math.hypot(e.clientX - targetX, e.clientY - targetY);
+        const tolerance = Math.min(rect.width, rect.height) * 0.14;
+        if (dist <= tolerance) {
+          sfx.match();
+          setPlaced((prev) => {
+            const next = new Set(prev).add(drag.idx);
+            if (next.size === total && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+            return next;
+          });
+        } else {
+          sfx.wrong(); onLose();
+          setWrongIdx(drag.idx);
+          window.setTimeout(() => setWrongIdx(null), 500);
+        }
+      }
+      setDrag(null);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    return () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+  }, [drag, scene.items, total, onWin, onLose]);
+
+  const done = placed.size === total;
+
+  return (
+    <div ref={containerRef} className="absolute inset-0 overflow-hidden bg-cover bg-center touch-none" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        {scene.teacher} <span className="ml-1 opacity-60">({placed.size}/{total})</span>
+      </div>
+      {/* A dashed landing-zone ring marks exactly where each word belongs —
+          the same point that scene's own vocab-spot arrow pointed at — so
+          "listen" and "drop" both anchor to one shared location. */}
+      {scene.items.map((item, i) => !placed.has(i) && (
+        <div
+          key={`zone-${i}`}
+          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-dashed"
+          style={{ left: item.targetLeft, top: item.targetTop, width: 64, height: 64, borderColor: item.color, opacity: 0.75, animation: 'lep1-ping 2.4s ease-out infinite' }}
+        />
+      ))}
+      {scene.items.map((item, i) => placed.has(i) && (
+        <div
+          key={`placed-${i}`}
+          className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 grid h-16 w-16 place-items-center rounded-full shadow-xl ring-4 ring-white"
+          style={{ left: item.targetLeft, top: item.targetTop, background: item.color, animation: 'lep1-pop 0.4s ease-out' }}
+        >
+          <span className="text-3xl">{item.emoji}</span>
+        </div>
+      ))}
+      <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex justify-center gap-4 px-4">
+        {scene.items.map((item, i) => !placed.has(i) && drag?.idx !== i && (
+          <button
+            key={`tray-${i}`}
+            onPointerDown={(e) => startDrag(e, i)}
+            aria-label={`Drag the word ${item.label}`}
+            className={`pointer-events-auto touch-none grid h-16 w-16 place-items-center rounded-full text-3xl shadow-2xl ring-4 ring-white transition active:scale-95 ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
+            style={{ background: item.color, animation: wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
+          >
+            {item.emoji}
+          </button>
+        ))}
+      </div>
+      {drag && (
+        <div
+          className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-1/2 grid h-16 w-16 place-items-center rounded-full text-3xl shadow-2xl ring-4 ring-white"
+          style={{ left: drag.x, top: drag.y, background: scene.items[drag.idx].color }}
+        >
+          {scene.items[drag.idx].emoji}
+        </div>
+      )}
+      {done && (
+        <div className="absolute inset-x-0 bottom-8 z-40 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Great job! ⭐ Next</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ---------- Choice (new: simple multiple-choice tap) ---------- */
 
 function ChoiceScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'choice' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
@@ -560,13 +681,7 @@ function ChoiceScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
               className={`grid h-36 w-36 place-items-center rounded-3xl border-8 bg-white shadow-2xl transition active:scale-95 sm:h-44 sm:w-44 ${showWrong ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : showRight ? 'border-green-400' : 'border-white'}`}
               aria-label={opt.label}
             >
-              {/* A color word gets an actual color swatch card, not a small
-                  emoji glyph — each vocabulary item illustrated on its own. */}
-              {opt.colorHex ? (
-                <span className="h-16 w-16 rounded-full shadow-inner ring-4 ring-white" style={{ background: opt.colorHex }} />
-              ) : (
-                <span className="text-5xl">{opt.emoji}</span>
-              )}
+              <span className="text-5xl">{opt.emoji}</span>
               <span className="mt-2 text-lg font-black text-orange-700">{opt.label}</span>
             </button>
           );

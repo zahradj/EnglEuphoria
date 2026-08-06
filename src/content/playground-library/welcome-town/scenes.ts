@@ -16,9 +16,9 @@
  *     illustration (hello-doors).
  *   - The whole lesson is set in one school building (Welcome Town School),
  *     not a town street — different rooms/moments (classroom door, circle
- *     time, a colors corner, a reading nook, cubby doors) for visual variety
- *     per the art style contract's "characters painted into the background,
- *     never a pasted cut-out" rule.
+ *     time, a reading nook, cubby doors) for visual variety per the art
+ *     style contract's "characters painted into the background, never a
+ *     pasted cut-out" rule.
  *   - Story: Pip (same fox from the Pre-A1 curriculum — same name, voice,
  *     color) is the new student; Miss Marigold is the teacher; Mia, Bella,
  *     Willow, and Leo (also carried forward from Pre-A1) are the established
@@ -26,18 +26,25 @@
  *     given a couple of spoken cameo lines (roleplay, join-stage,
  *     hello-doors), without each needing a dedicated full "meet" sequence,
  *     per the pacing budget below.
- *   - Two parts in one lesson: Part 1 (greetings, self-intro, colors) and
- *     Part 2 (phonics S/A/T + first CVC word, SAT).
+ *   - Two parts in one lesson: Part 1 (greetings + self-intro only) and
+ *     Part 2 (phonics S/A/T + first CVC word, SAT) — phonics-alongside-topic
+ *     is an established, correct Pre-A1 pairing per playground-curriculum-
+ *     engine's case study. Colors was cut from this lesson entirely per that
+ *     same skill: it's a Unit 2 ("Colors & Shapes") topic per this project's
+ *     own seeded A1 roadmap, with no knowledge-graph link to greetings —
+ *     grafting it onto Lesson 1 was the exact "orphan topic" mistake that
+ *     skill's validation checklist exists to catch. See
+ *     .agents/skills/playground-curriculum-engine/SKILL.md.
  *
- * Pacing check against the skill's own §12 budget (title+cinematic ~1.5min;
- * "say it out loud" reps meet/echo/roleplay/join-stage budgeted 3-5 across
- * a lesson — this lesson covers more ground than a single-strand Pre-A1
- * lesson so runs slightly over that at 6, deliberately, since two of the
- * original meet+echo pairs were collapsed into one meet each — the meet
- * scene's own hold-to-repeat step already IS the repeat practice, so a
- * separate echo scene right after teaching the identical line is redundant
- * repetition, not extra learning; 1-3min per mini-game; 2-4min per new
- * letter's sound-model+trace pair): estimated total ≈ 30-33 minutes.
+ * Pacing check against playground-library-lesson-builder's §12 budget
+ * (title+cinematic ~1.5min; "say it out loud" reps meet/echo/roleplay/
+ * join-stage budgeted 3-5 across a lesson — this lesson runs slightly over
+ * that at 6, deliberately, since two of the original meet+echo pairs were
+ * collapsed into one meet each — the meet scene's own hold-to-repeat step
+ * already IS the repeat practice, so a separate echo scene right after
+ * teaching the identical line is redundant repetition, not extra learning;
+ * 1-3min per mini-game; 2-4min per new letter's sound-model+trace pair):
+ * estimated total ≈ 26-28 minutes now that colors (~5min) is removed.
  * ========================================================================= */
 
 const W = '/welcome-town';
@@ -71,9 +78,10 @@ export const CAST: Record<CharKey, { name: string; emoji: string; color: string 
 const bgWide = `${W}/scenes/bg-classroom-wide.png`;
 const bgDoor = `${W}/scenes/bg-classroom-door.png`;
 const bgCircle = `${W}/scenes/bg-classroom-circle.png`;
-const bgColors = `${W}/scenes/bg-classroom-colors.png`;
 const bgCubbies = `${W}/scenes/bg-cubbies.png`;
 const bgReading = `${W}/scenes/bg-classroom-reading.png`;
+const bgFixtures = `${W}/scenes/bg-classroom-fixtures.png`;
+const bgPeople = `${W}/scenes/bg-classroom-people.png`;
 
 export type Scene =
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string; cta?: string }
@@ -81,8 +89,9 @@ export type Scene =
   | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string }
   | { id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string }
   | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string }[] }
-  | { id: string; kind: 'color-card'; bg: string; who: CharKey; teacher: string; colorWord: string; colorHex: string }
-  | { id: string; kind: 'choice'; bg: string; who: CharKey; teacher: string; prompt: string; options: { label: string; emoji: string; colorHex?: string; correct?: boolean }[] }
+  | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: { label: string; emoji: string; color: string; targetLeft: string; targetTop: string; who?: CharKey }[] }
+  | { id: string; kind: 'vocab-spot'; bg: string; teacher: string; items: { label: string; sentence: string; emoji: string; left: string; top: string; color: string; dir?: 'down' | 'left' | 'right'; who?: CharKey }[] }
+  | { id: string; kind: 'choice'; bg: string; who: CharKey; teacher: string; prompt: string; options: { label: string; emoji: string; correct?: boolean }[] }
   | { id: string; kind: 'roleplay'; bg: string; teacher: string; cast: CharKey[]; script: { who: CharKey; line: string; repeat?: boolean }[] }
   | { id: string; kind: 'join-stage'; bg: string; teacher: string; cast: CharKey[]; turns: { who: CharKey | 'student'; line: string }[] }
   | { id: string; kind: 'hello-doors'; bg: string; teacher: string; cast: CharKey[]; rounds: { target: CharKey; prompt: string; helloLine: string; echoLine: string }[] }
@@ -94,7 +103,7 @@ export type Scene =
   | { id: string; kind: 'finale'; bg: string; who: CharKey; line: string };
 
 export const LESSON_1_TITLE = 'Hello, Class!';
-export const LESSON_1_OBJECTIVE = "Part 1: Greet your new class and share your name (\"Hello! My name is ___.\"), plus 3 colors. Part 2: Learn the sounds S, A, T and read your first word.";
+export const LESSON_1_OBJECTIVE = "Part 1: Greet your new class and share your name (\"Hello! My name is ___.\"). Part 2: Learn the sounds S, A, T and read your first word.";
 
 export const LESSON_1_SCENES: Scene[] = [
   { id: 'wt-title', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 1', title: 'Welcome Town School: Hello, Class!', subtitle: 'Meet the class, say your name, and read your first word' },
@@ -110,6 +119,54 @@ export const LESSON_1_SCENES: Scene[] = [
 
   { id: 'wt-meet-marigold', kind: 'meet', bg: bgDoor, who: 'marigold', teacher: 'Tap Miss Marigold to hear her say hello!', line: 'Hello! I am Miss Marigold, your teacher. Welcome to our class!', repeat: 'Hello!' },
   { id: 'wt-meet-pip', kind: 'meet', bg: bgDoor, who: 'pip', teacher: 'Here comes Pip! Tap him to say hi.', line: 'Hi! My name is Pip. I am new here!', repeat: 'My name is Pip.' },
+
+  {
+    // 2-3 hotspots per scene, not 5 — per attention-engine's own cognitive-
+    // load rule, and direct feedback. Each vocab-spot scene gets its own
+    // dedicated, purpose-built background (never reused from a narrative
+    // scene) so every target word is large, clean, and unambiguous.
+    id: 'wt-vocab-people', kind: 'vocab-spot', bg: bgPeople,
+    teacher: 'Look around! Tap the arrow to learn a classroom word.',
+    items: [
+      { label: 'Teacher', sentence: 'This is the teacher.', emoji: '\u{1F989}', left: '26%', top: '42%', color: '#8ECAE6', who: 'marigold' },
+      { label: 'Student', sentence: 'This is the student.', emoji: '\u{1F98A}', left: '68%', top: '48%', color: '#FE6A2F', who: 'pip' },
+    ],
+  },
+  {
+    // A dedicated scene purpose-built for this hotspot trio (not reused
+    // from the arrival/door narrative scene) — Door, Board, and Window are
+    // each large, clean, and evenly spaced here.
+    id: 'wt-vocab-room', kind: 'vocab-spot', bg: bgFixtures,
+    teacher: 'Now find these things in the room!',
+    items: [
+      { label: 'Door', sentence: 'This is the door.', emoji: '\u{1F6AA}', left: '16%', top: '48%', color: '#8B5CF6' },
+      { label: 'Board', sentence: 'This is the board.', emoji: '\u{1F4CB}', left: '49%', top: '49%', color: '#22C55E' },
+      { label: 'Window', sentence: 'This is the window.', emoji: '\u{1FA9F}', left: '81%', top: '47%', color: '#06B6D4' },
+    ],
+  },
+
+  {
+    // The "Practice" step right after vocabulary discovery (per visual-
+    // learning-engine's Scene → Discovery → Flashcards → PRACTICE flow) —
+    // listen-and-drag: tap a token to hear its word, then drag it onto that
+    // exact object in the same full-bleed scene it was just discovered in.
+    // Target coordinates deliberately match wt-vocab-people's own hotspots
+    // one-for-one, so "drop zone" and "where the word lives" are the same
+    // point the learner already looked at.
+    id: 'wt-drag-people', kind: 'drag-match', bg: bgPeople, teacher: 'Listen, then drag each word onto the matching classroom member!',
+    items: [
+      { label: 'Teacher', emoji: '\u{1F989}', color: '#8ECAE6', who: 'marigold', targetLeft: '26%', targetTop: '42%' },
+      { label: 'Student', emoji: '\u{1F98A}', color: '#FE6A2F', who: 'pip', targetLeft: '68%', targetTop: '48%' },
+    ],
+  },
+  {
+    id: 'wt-drag-room', kind: 'drag-match', bg: bgFixtures, teacher: 'Listen, then drag each word onto the matching thing in the room!',
+    items: [
+      { label: 'Door', emoji: '\u{1F6AA}', color: '#8B5CF6', targetLeft: '16%', targetTop: '48%' },
+      { label: 'Board', emoji: '\u{1F4CB}', color: '#22C55E', targetLeft: '49%', targetTop: '49%' },
+      { label: 'Window', emoji: '\u{1FA9F}', color: '#06B6D4', targetLeft: '81%', targetTop: '47%' },
+    ],
+  },
 
   {
     id: 'wt-vocab-friend-teacher', kind: 'meet', bg: bgCircle, who: 'marigold',
@@ -135,19 +192,6 @@ export const LESSON_1_SCENES: Scene[] = [
       { label: 'Hello', emoji: '\u{1F44B}', correct: true },
       { label: 'Goodbye', emoji: '\u{1F44B}' },
       { label: 'Friend', emoji: '\u{1F91D}' },
-    ],
-  },
-
-  { id: 'wt-color-red', kind: 'color-card', bg: bgColors, who: 'marigold', teacher: 'Tap Miss Marigold to name this color!', colorWord: 'Red', colorHex: '#EF4444' },
-  { id: 'wt-color-blue', kind: 'color-card', bg: bgColors, who: 'marigold', teacher: 'Tap Miss Marigold to name this color!', colorWord: 'Blue', colorHex: '#3B82F6' },
-  { id: 'wt-color-yellow', kind: 'color-card', bg: bgColors, who: 'marigold', teacher: 'Tap Miss Marigold to name this color!', colorWord: 'Yellow', colorHex: '#FACC15' },
-  {
-    id: 'wt-choice-red', kind: 'choice', bg: bgColors, who: 'marigold', teacher: 'Which balloon is RED?',
-    prompt: 'Tap the RED balloon!',
-    options: [
-      { label: 'Red', emoji: '\u{1F534}', colorHex: '#EF4444', correct: true },
-      { label: 'Blue', emoji: '\u{1F535}', colorHex: '#3B82F6' },
-      { label: 'Yellow', emoji: '\u{1F7E1}', colorHex: '#FACC15' },
     ],
   },
 
@@ -206,16 +250,19 @@ export const LESSON_1_SCENES: Scene[] = [
     ],
   },
 
-  /* =========================== Part 2: Phonics + CVC =========================
-   * The classic S-A-T starting trio — with just these three sounds, one real
-   * decodable CVC word already exists (SAT), so the very first phonics
-   * lesson can end with an actual reading win, not just isolated sounds. */
+  /* =========================== Part 2: Reading Review =========================
+   * A1 per reading-engine's own progression table assumes Pre-A1's letter-
+   * sound discovery is already done — this is framed as REVIEW-through-
+   * reading ("remember this sound? now read it in a word"), not first-time
+   * discovery, and spends more of its time on actual decoding (two real
+   * words: SAT and AT) than on re-teaching individual sounds. See
+   * .agents/skills/reading-engine/SKILL.md. */
 
-  { id: 'wt-part2-title', kind: 'title-card', bg: bgReading, level: 'A1', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time!', subtitle: 'Learn new sounds and read your first word', cta: '\u{1F4D6} LET’S READ!' },
+  { id: 'wt-part2-title', kind: 'title-card', bg: bgReading, level: 'A1', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time!', subtitle: 'Remember your sounds — then read two real words', cta: '\u{1F4D6} LET’S READ!' },
 
   {
     id: 'wt-model-s', kind: 'sound-model', bg: bgReading, who: 'marigold', letter: 'S', phoneme: '/s/', sound: 'sss',
-    teacher: "Listen to Miss Marigold's sound. /s/ /s/ Snake!",
+    teacher: "Remember this sound? /s/ /s/ Snake!",
     anchors: [
       { word: 'sun', emoji: '\u{2600}️' },
       { word: 'sock', emoji: '\u{1F9E6}' },
@@ -226,7 +273,7 @@ export const LESSON_1_SCENES: Scene[] = [
 
   {
     id: 'wt-model-a', kind: 'sound-model', bg: bgReading, who: 'pip', letter: 'A', phoneme: '/æ/', sound: 'aaa',
-    teacher: "Listen to Pip's sound. /a/ /a/ Apple!",
+    teacher: "Remember this sound? /a/ /a/ Apple!",
     anchors: [
       { word: 'apple', emoji: '\u{1F34E}' },
       { word: 'ant', emoji: '\u{1F41C}' },
@@ -237,7 +284,7 @@ export const LESSON_1_SCENES: Scene[] = [
 
   {
     id: 'wt-model-t', kind: 'sound-model', bg: bgReading, who: 'marigold', letter: 'T', phoneme: '/t/', sound: 'tuh',
-    teacher: "Listen to Miss Marigold's sound. /t/ /t/ Top!",
+    teacher: "Remember this sound? /t/ /t/ Top!",
     anchors: [
       { word: 'top', emoji: '\u{1F3A9}' },
       { word: 'ten', emoji: '\u{1F51F}' },
@@ -247,12 +294,13 @@ export const LESSON_1_SCENES: Scene[] = [
   { id: 'wt-trace-t', kind: 'trace', bg: bgReading, who: 'marigold', letter: 'T', phoneme: '/t/', word: 'top', teacher: 'Trace the letter T! Say /t/ /t/ /t/ as you draw.' },
 
   {
-    id: 'wt-word-build-sat', kind: 'word-build', bg: bgReading, teacher: 'You know all 3 sounds! Now read your first word: S-A-T, SAT!',
+    id: 'wt-word-build-sat', kind: 'word-build', bg: bgReading, teacher: 'You know all 3 sounds! Now read two real words: SAT and AT!',
     rounds: [
       { word: 'SAT', blankIndex: 0, answer: 'S', choices: ['S', 'M', 'B'], emoji: '\u{1FA91}' },
       { word: 'SAT', blankIndex: 2, answer: 'T', choices: ['T', 'P', 'N'], emoji: '\u{1FA91}' },
+      { word: 'AT', blankIndex: 0, answer: 'A', choices: ['A', 'I', 'O'], emoji: '\u{1F4CD}' },
     ],
   },
 
-  { id: 'wt-finale', kind: 'finale', bg: bgWide, who: 'pip', line: 'You said hello, met your new class, learned S, A, T — and read the word SAT! ✨\u{1F3C6}' },
+  { id: 'wt-finale', kind: 'finale', bg: bgWide, who: 'pip', line: 'You said hello, met your new class, and read two real words — SAT and AT! ✨\u{1F3C6}' },
 ];
