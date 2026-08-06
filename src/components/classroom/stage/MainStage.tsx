@@ -11,43 +11,13 @@ import type { PlaygroundLessonNumber } from '@/playground-blueprint/unitTemplate
 import { ClassroomToolOverlay } from './ClassroomToolOverlay';
 import { EmbeddedSceneLesson } from './EmbeddedSceneLesson';
 import type { PlayUnitLessonHandle } from '@/pages/playground-scene/PlayUnitLesson';
+import { useFrameScale } from '@/hooks/useFrameScale';
 
 interface Slide {
   id: string;
   title?: string;
   imageUrl?: string;
   content?: any;
-}
-
-/**
- * Playground scene content is built with `vh`/`vw` units sized for the
- * full-screen solo player — those units always resolve against the real
- * browser viewport, never a containing element, no matter how deeply
- * nested. Embedded in the classroom, the framed lesson card is only a
- * fraction of the viewport (sidebar/header/dock eat into it), so the same
- * content renders far too large for its frame. Measuring the actual frame
- * size and scaling the whole subtree down to match keeps every scene's
- * existing vh/vw sizing correct relative to its real container instead of
- * the browser window.
- */
-function useFrameScale(frameRef: React.RefObject<HTMLElement>) {
-  const [scale, setScale] = useState(1);
-  useEffect(() => {
-    const el = frameRef.current;
-    if (!el) return;
-    const recompute = () => {
-      const rect = el.getBoundingClientRect();
-      if (rect.width <= 0 || rect.height <= 0 || window.innerWidth <= 0 || window.innerHeight <= 0) return;
-      const s = Math.min(rect.width / window.innerWidth, rect.height / window.innerHeight, 1);
-      if (Number.isFinite(s) && s > 0) setScale(s);
-    };
-    recompute();
-    const ro = new ResizeObserver(recompute);
-    ro.observe(el);
-    window.addEventListener('resize', recompute);
-    return () => { ro.disconnect(); window.removeEventListener('resize', recompute); };
-  }, [frameRef]);
-  return scale;
 }
 
 interface MainStageProps {
