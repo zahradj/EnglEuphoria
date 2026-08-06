@@ -106,6 +106,8 @@ export function SceneRenderer(props: {
       case 'sound-model': return <SoundModelScene scene={scene} onNext={props.onNext} />;
       case 'trace': return <TraceScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'word-build': return <WordBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+      case 'letter-game': return <LetterGameScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+      case 'jigsaw-puzzle': return <JigsawPuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
       default: return null;
     }
@@ -1472,6 +1474,220 @@ function WordBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+/* ---------- Letter game (end-of-lesson review: name mode = "alphabet
+   game", sound mode = "sound game" — same tap-the-right-letter mechanic as
+   WordBuildScene's round progression, just matching a letter NAME or a
+   PHONEME rather than filling a word's blank) ---------- */
+
+function LetterGameScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'letter-game' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [round, setRound] = useState(0);
+  const [correctPick, setCorrectPick] = useState(false);
+  const [wrong, setWrong] = useState<string | null>(null);
+  const [gemDone, setGemDone] = useState(false);
+  const total = scene.rounds.length;
+  const complete = round >= total;
+  const r = scene.rounds[round];
+  const c = CAST[scene.who];
+
+  const playPrompt = async () => {
+    if (scene.mode === 'sound') await playLetterPhonic(r.letter);
+    else await safeSpeak(`Find the letter ${r.letter}!`, voiceOf(scene.who));
+  };
+
+  useEffect(() => {
+    if (complete) return;
+    setCorrectPick(false); setWrong(null);
+    const t = window.setTimeout(() => void playPrompt(), 350);
+    return () => window.clearTimeout(t);
+  }, [round, complete]);
+
+  const tap = async (letter: string) => {
+    if (correctPick || complete) return;
+    if (letter === r.letter) {
+      sfx.match(); setCorrectPick(true);
+      await safeSpeak(`${r.letter}! Great job!`, voiceOf(scene.who));
+      window.setTimeout(() => {
+        const next = round + 1;
+        if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+        setRound(next);
+      }, 900);
+    } else { sfx.wrong(); onLose(); setWrong(letter); window.setTimeout(() => setWrong(null), 500); }
+  };
+
+  if (complete) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+        <Confetti count={50} />
+        <button onClick={onNext} className="relative z-10 animate-[lep1-slide-up_0.4s_ease-out] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">
+          {scene.mode === 'sound' ? 'Great listening!' : 'Great letter hunting!'} ⭐ Next
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="absolute inset-0 bg-black/15" />
+      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        {scene.mode === 'sound' ? '\u{1F50A}' : '\u{1F524}'} {scene.teacher} <span className="ml-1 opacity-70">({round + 1}/{total})</span>
+      </div>
+      <div className="relative z-10 flex w-full max-w-[560px] flex-col items-center gap-6 px-4">
+        <button
+          onClick={playPrompt}
+          aria-label={scene.mode === 'sound' ? 'Hear the sound again' : 'Hear the letter name again'}
+          className="grid h-32 w-32 place-items-center rounded-[2rem] border-8 bg-white/95 shadow-2xl transition active:scale-95"
+          style={{ borderColor: c.color }}
+        >
+          <span className="text-5xl">{scene.mode === 'sound' ? '\u{1F50A}' : '\u{1F5E3}\u{FE0F}'}</span>
+        </button>
+        {scene.mode === 'sound' && r.phoneme && (
+          <div className="rounded-2xl border-4 bg-white px-5 py-2 text-center text-xl font-black shadow-xl" style={{ color: c.color, borderColor: c.color }}>{r.phoneme} {r.phoneme}</div>
+        )}
+        <div className="flex flex-wrap justify-center gap-4">
+          {r.choices.map((L, i) => (
+            <button
+              key={L}
+              onClick={() => tap(L)}
+              disabled={correctPick}
+              className={`grid h-24 w-24 place-items-center rounded-3xl border-4 border-white text-5xl font-black text-white shadow-2xl transition active:scale-95 disabled:opacity-40 sm:h-28 sm:w-28 ${wrong === L ? 'animate-[lep1-shake_0.4s_ease-out]' : ''} ${correctPick && L === r.letter ? 'ring-4 ring-green-300' : ''}`}
+              style={{ background: i % 2 === 0 ? 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' : 'linear-gradient(135deg,#B85CD1,#D57BE6)' }}
+            >
+              {L}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Jigsaw puzzle (real drag-to-assemble puzzle — reuses drag-
+   match's native PointerEvent + tolerance-radius drop pattern, but each
+   piece is a CSS-cropped slice of one full image via percentage
+   background-size/-position, so every piece renders correctly at any
+   rendered pixel size without needing the image's real dimensions) ------- */
+
+function JigsawPuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'jigsaw-puzzle' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const { rows, cols, image } = scene;
+  const total = rows * cols;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [placed, setPlaced] = useState<Set<number>>(new Set());
+  const [drag, setDrag] = useState<{ idx: number; x: number; y: number; startX: number; startY: number } | null>(null);
+  const [wrongIdx, setWrongIdx] = useState<number | null>(null);
+  const gemDone = useRef(false);
+
+  const pieces = useMemo(() => Array.from({ length: total }, (_, i) => ({ row: Math.floor(i / cols), col: i % cols })), [total, cols]);
+  const trayOrder = useMemo(() => {
+    const order = pieces.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = (i * 7 + 3) % (i + 1);
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    return order;
+  }, [scene.id]);
+
+  const pieceStyle = (idx: number): React.CSSProperties => {
+    const { row, col } = pieces[idx];
+    return {
+      backgroundImage: `url(${image})`,
+      backgroundSize: `${cols * 100}% ${rows * 100}%`,
+      backgroundPosition: `${cols > 1 ? (col / (cols - 1)) * 100 : 0}% ${rows > 1 ? (row / (rows - 1)) * 100 : 0}%`,
+    };
+  };
+
+  const startDrag = (e: React.PointerEvent, idx: number) => {
+    if (placed.has(idx)) return;
+    e.preventDefault();
+    sfx.click();
+    setDrag({ idx, x: e.clientX, y: e.clientY, startX: e.clientX, startY: e.clientY });
+  };
+
+  useEffect(() => {
+    if (!drag) return;
+    const move = (e: PointerEvent) => setDrag((d) => (d ? { ...d, x: e.clientX, y: e.clientY } : d));
+    const up = (e: PointerEvent) => {
+      const movedDist = Math.hypot(e.clientX - drag.startX, e.clientY - drag.startY);
+      if (movedDist < 20) { setDrag(null); return; }
+      const container = containerRef.current;
+      if (container) {
+        const rect = container.getBoundingClientRect();
+        const { row, col } = pieces[drag.idx];
+        const targetX = rect.left + ((col + 0.5) / cols) * rect.width;
+        const targetY = rect.top + ((row + 0.5) / rows) * rect.height;
+        const dist = Math.hypot(e.clientX - targetX, e.clientY - targetY);
+        const tolerance = Math.min(rect.width / cols, rect.height / rows) * 0.6;
+        if (dist <= tolerance) {
+          sfx.match();
+          setPlaced((prev) => {
+            const next = new Set(prev).add(drag.idx);
+            if (next.size === total && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+            return next;
+          });
+        } else {
+          sfx.wrong(); onLose();
+          setWrongIdx(drag.idx);
+          window.setTimeout(() => setWrongIdx(null), 500);
+        }
+      }
+      setDrag(null);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    return () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+  }, [drag, pieces, cols, rows, total, onWin, onLose]);
+
+  const done = placed.size === total;
+
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 bg-gradient-to-b from-orange-50 to-pink-50 px-4 pb-28 pt-16 touch-none">
+      <div className="pointer-events-none absolute inset-x-0 top-4 z-30 flex justify-center px-4">
+        <div className="max-w-[92%] rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl sm:text-base">
+          {'\u{1F9E9}'} {scene.teacher} <span className="ml-1 opacity-60">({placed.size}/{total})</span>
+        </div>
+      </div>
+      <div ref={containerRef} className="relative aspect-video w-full max-w-2xl overflow-hidden rounded-3xl border-4 border-white bg-white shadow-2xl">
+        {/* A faint full-picture guide underneath — a real jigsaw box lid,
+            not a vocabulary hint — so a young learner can see the shape
+            they're building toward instead of placing pieces blind. */}
+        <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-15" draggable={false} />
+        <div className="pointer-events-none absolute inset-0 grid" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)`, gridTemplateRows: `repeat(${rows}, 1fr)` }}>
+          {pieces.map((_, i) => <div key={`slot-${i}`} className="border border-dashed border-white/50" />)}
+        </div>
+        {pieces.map((p, i) => placed.has(i) && (
+          <div
+            key={`placed-${i}`}
+            className="absolute"
+            style={{ left: `${(p.col / cols) * 100}%`, top: `${(p.row / rows) * 100}%`, width: `${100 / cols}%`, height: `${100 / rows}%`, ...pieceStyle(i), animation: 'lep1-pop 0.3s ease-out' }}
+          />
+        ))}
+      </div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex flex-wrap justify-center gap-3 px-4">
+        {trayOrder.map((i) => {
+          if (placed.has(i) || drag?.idx === i) return null;
+          return (
+            <button
+              key={`tray-${i}`}
+              onPointerDown={(e) => startDrag(e, i)}
+              aria-label={`Puzzle piece ${i + 1}`}
+              className={`pointer-events-auto touch-none rounded-xl shadow-2xl ring-4 ring-white transition active:scale-95 ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
+              style={{ width: 64, height: 64, ...pieceStyle(i), animation: wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
+            />
+          );
+        })}
+      </div>
+      {drag && (
+        <div className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-1/2 rounded-xl shadow-2xl ring-4 ring-white" style={{ left: drag.x, top: drag.y, width: 72, height: 72, ...pieceStyle(drag.idx) }} />
+      )}
+      {done && (
+        <div className="absolute inset-x-0 bottom-8 z-40 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">You built it! ⭐ Next</button>
+        </div>
+      )}
     </div>
   );
 }

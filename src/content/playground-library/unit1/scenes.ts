@@ -1304,11 +1304,31 @@ export const LESSON_5_SCENES: Scene[] = [
 
 /* =========================================================================
  * Lesson 6 — "The Trophy Trail" (Trophy Quiz — cumulative capstone review
- * across H, M, N, W, S, A + all communicative goals; no new letters)
+ * across all EIGHT Unit 1 sounds — H, M, N, W, S, A, B, T — plus every
+ * communicative goal; no new letters.
+ *
+ * Rebuilt from a version that only ever reviewed 6 of the unit's 8 taught
+ * letters (Lesson 4's B/T were entirely absent from every phonics activity
+ * here, despite the lesson's own finale claiming "six letter sounds" as the
+ * full total) and that had drifted into redundancy: three separate timed
+ * letter-tap games (sound-pop, brick-crush, dash) covering overlapping,
+ * narrower letter subsets; two separate "ask a friend" games (name-gate,
+ * voice-stage) testing exactly what join-stage right after them already
+ * covers in one pass; two separate "arrange the alphabet" games
+ * (alphabet-blocks, alphabet-order) back to back; and a word-build round
+ * testing the same "identify the beginning letter" skill as trophy-chest.
+ * Also cut: color-friends, which teaches color vocabulary — a Unit 2
+ * ("Colors & Shapes") topic with no knowledge-graph link to this unit,
+ * the exact orphan-topic mistake playground-curriculum-engine exists to
+ * catch. Kept one best-in-class activity per skill instead, and gave the
+ * freed-up time to actually covering B and T everywhere H/M/N/W/S/A
+ * already were: a new sort-bt round, brick-crush and trophy-chest expanded
+ * to all 8 letters (goal/seconds matched to Lesson 4's own already-tuned
+ * 8-letter brick-crush calibration), and alphabet-blocks gained a BAT round.
  * ========================================================================= */
 
 export const LESSON_6_TITLE = 'The Trophy Trail';
-export const LESSON_6_OBJECTIVE = "Show everything you've learned — sounds, names, and feelings — and win the Unit 1 trophy!";
+export const LESSON_6_OBJECTIVE = "Show everything you've learned — all 8 letter sounds, names, and feelings — and win the Unit 1 trophy!";
 
 export const LESSON_6_SCENES: Scene[] = [
   { id: 'l6-title', kind: 'title-card', bg: bgL6TrophyTrail, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 6', title: 'The Trophy Trail', subtitle: 'Show what you know and win the trophy!' },
@@ -1360,42 +1380,27 @@ export const LESSON_6_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l6-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Trophy round! Choose the first sound: H, M, N, W, S, or A.',
-    rounds: [
-      { word: 'hat', blankIndex: 0, answer: 'H', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: `${A}/items/item-hat.png`, emoji: '\u{1F3A9}' },
-      { word: 'moon', blankIndex: 0, answer: 'M', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemMoon, emoji: '\u{1F319}' },
-      { word: 'nest', blankIndex: 0, answer: 'N', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: `${A}/items/item-nest.png`, emoji: '\u{1FAB9}' },
-      { word: 'wave', blankIndex: 0, answer: 'W', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemWave, emoji: '\u{1F30A}' },
-      { word: 'sun', blankIndex: 0, answer: 'S', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemSun, emoji: '☀️' },
-      { word: 'ant', blankIndex: 0, answer: 'A', choices: ['H', 'M', 'N', 'W', 'S', 'A'], img: itemAnt, emoji: '\u{1F41C}' },
-    ],
-  },
-  {
-    id: 'l6-sound-pop', kind: 'sound-pop', bg: bgNameCarnivalSky, teacher: 'Balloon Letter Pop! Leo will call a letter. Pop only the balloons with that letter.', who: 'leo', goal: 8, seconds: 45,
+    // NEW — Lesson 4's B/T were never reviewed anywhere in this capstone
+    // before. Same sound-sort pattern as the H/M, N/W, S/A rounds above,
+    // reusing Lesson 4's own B/T anchor words and images for consistency.
+    id: 'l6-sort-bt', kind: 'sound-sort', bg: bgL4Party, teacher: 'Round 4! Drag each picture to /b/ or /t/.',
     targets: [
-      { letter: 'S', phoneme: '/s/' },
-      { letter: 'A', phoneme: '/a/' },
+      { letter: 'B', phoneme: '/b/', who: 'bella' },
+      { letter: 'T', phoneme: '/t/', who: 'leo' },
     ],
     items: [
-      { word: 'S', letter: 'S', emoji: 'S' }, { word: 'A', letter: 'A', emoji: 'A' }, { word: 'B', letter: 'B', emoji: 'B' },
-      { word: 'C', letter: 'C', emoji: 'C' }, { word: 'D', letter: 'D', emoji: 'D' }, { word: 'E', letter: 'E', emoji: 'E' },
-      { word: 'F', letter: 'F', emoji: 'F' }, { word: 'G', letter: 'G', emoji: 'G' }, { word: 'H', letter: 'H', emoji: 'H' },
-      { word: 'I', letter: 'I', emoji: 'I' }, { word: 'K', letter: 'K', emoji: 'K' }, { word: 'L', letter: 'L', emoji: 'L' },
-      { word: 'M', letter: 'M', emoji: 'M' }, { word: 'N', letter: 'N', emoji: 'N' }, { word: 'O', letter: 'O', emoji: 'O' },
-      { word: 'P', letter: 'P', emoji: 'P' }, { word: 'R', letter: 'R', emoji: 'R' }, { word: 'T', letter: 'T', emoji: 'T' },
+      { word: 'ball', emoji: '⚽', img: itemBallL4, letter: 'B' },
+      { word: 'bag', emoji: '\u{1F392}', img: itemBag, letter: 'B' },
+      { word: 'ten', emoji: '\u{1F51F}', img: itemTen, letter: 'T' },
+      { word: 'toy', emoji: '\u{1F9F8}', img: itemToy, letter: 'T' },
     ],
   },
-  { id: 'l6-brick-crush', kind: 'brick-crush', bg: bgNameCarnivalSky, teacher: 'Brick Crush! Listen to the sound, then tap every brick with that letter.', who: 'pip', letters: ['H', 'M', 'N', 'W', 'S', 'A'], rows: 6, cols: 7, goal: 20, seconds: 60 },
   {
-    id: 'l6-dash', kind: 'dash', bg: bgClearing, teacher: 'Trophy Dash! Tap only the A words as they run by. Get 6 rings!', who: 'willow', targetLetter: 'A', targetPhoneme: '/a/', goal: 6, seconds: 40,
-    items: [
-      { word: 'apple', letter: 'A', img: itemApple, emoji: '\u{1F34E}' },
-      { word: 'ant', letter: 'A', img: itemAnt, emoji: '\u{1F41C}' },
-      { word: 'alligator', letter: 'A', img: itemAlligator, emoji: '\u{1F40A}' },
-      { word: 'sun', letter: 'S', img: itemSun, emoji: '☀️' },
-      { word: 'moon', letter: 'M', img: itemMoon, emoji: '\u{1F319}' },
-      { word: 'water', letter: 'W', img: itemWater, emoji: '\u{1F4A7}' },
-    ],
+    // Covers all 8 of the unit's letters at once — goal/seconds matched to
+    // Lesson 4's own already-tuned 8-letter brick-crush (l4-sort-bt above),
+    // rather than this scene's old 6-letter timing, which would be
+    // relatively harder now with two more letters in the mix.
+    id: 'l6-brick-crush', kind: 'brick-crush', bg: bgNameCarnivalSky, teacher: 'Mega Brick Crush! All 8 sounds from this unit. Listen — then smash every brick with that letter!', who: 'pip', letters: ['H', 'M', 'N', 'W', 'S', 'A', 'B', 'T'], rows: 6, cols: 7, goal: 20, seconds: 70,
   },
   {
     id: 'l6-memory', kind: 'memory', bg: bgMeadow, teacher: 'Find the pairs! Tap two cards to match them.',
@@ -1425,20 +1430,11 @@ export const LESSON_6_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l6-name-gate', kind: 'name-gate', bg: bgNameCarnivalGate, teacher: 'One more time! Ask each friend their name.',
-    rounds: [
-      { who: 'mia', question: 'What is your name?', answer: 'My name is Mia!' },
-      { who: 'leo', question: 'What is your name?', answer: 'My name is Leo!' },
-    ],
-  },
-  {
-    id: 'l6-voice-stage', kind: 'voice-stage', bg: bgNameMicStage, teacher: 'One more time! Ask each friend how they feel.', question: 'How are you?', niceToMeet: true,
-    rounds: [
-      { who: 'willow', cue: 'Ask Willow!', answer: 'I am happy!' },
-      { who: 'pip', cue: 'Ask Pip!', answer: 'I am happy!' },
-    ],
-  },
-  {
+    // name-gate (ask each friend their name) and voice-stage (ask each
+    // friend how they feel) were cut here — join-stage right after this
+    // already asks a friend both questions in one pass, so both scenes
+    // were re-testing exactly what it covers, just split across two extra
+    // screens first.
     id: 'l6-roleplay', kind: 'roleplay', bg: bgGatherEmpty, teacher: 'The whole gang together! Listen, then repeat each line.', cast: ['pip', 'mia', 'leo'],
     script: [
       { who: 'pip', line: 'We did it! Trophy day!' },
@@ -1457,6 +1453,32 @@ export const LESSON_6_SCENES: Scene[] = [
     ],
   },
   {
+    // NEW — everything above only ever reviews the first-person "I am ___"
+    // pattern. Lesson 3's own objective promises "I am / He is / She is
+    // happy, sad, or angry," but this capstone never once reviewed the
+    // third-person half — added here reusing Lesson 3's own established
+    // he-she-model + he-she-sort mechanics (modeled repeat, then real
+    // drag-to-pronoun practice) rather than inventing a new one.
+    id: 'l6-he-she-model', kind: 'he-she-model', bg: bgFeelingsMeadow, teacher: "Boys are HE. Girls are SHE. Model twice, then repeat both lines with the student.",
+    rounds: [
+      { who: 'leo', emotion: 'happy', pronoun: 'He', sentence: 'Leo is happy. He is happy.' },
+      { who: 'bella', emotion: 'sad', pronoun: 'She', sentence: 'Bella is sad. She is sad.' },
+      { who: 'pip', emotion: 'angry', pronoun: 'He', sentence: 'Pip is angry. He is angry.' },
+      { who: 'mia', emotion: 'happy', pronoun: 'She', sentence: 'Mia is happy. She is happy.' },
+    ],
+  },
+  {
+    id: 'l6-he-she-sort', kind: 'he-she-sort', bg: bgFeelingsMeadow, teacher: "Trophy round! Listen to each friend, then drag them to the right pronoun box — HE or SHE.",
+    rounds: [
+      { who: 'pip', emotion: 'happy', pronoun: 'He' },
+      { who: 'bella', emotion: 'sad', pronoun: 'She' },
+      { who: 'leo', emotion: 'angry', pronoun: 'He' },
+      { who: 'mia', emotion: 'happy', pronoun: 'She' },
+      { who: 'willow', emotion: 'sad', pronoun: 'She' },
+      { who: 'leo', emotion: 'happy', pronoun: 'He' },
+    ],
+  },
+  {
     id: 'l6-feelings', kind: 'feelings', bg: bgBigTree, teacher: 'You are about to win the trophy! How do you feel?',
     options: [
       { label: 'Happy', emoji: '\u{1F600}', reply: 'Yay! You should feel proud and happy!' },
@@ -1464,18 +1486,30 @@ export const LESSON_6_SCENES: Scene[] = [
       { label: 'Sad', emoji: '\u{1F622}', reply: "It's okay. You still earned this trophy — great job!" },
     ],
   },
-  { id: 'l6-color-friends', kind: 'color-friends', bg: bgMeadow, teacher: 'Celebration time! Pick a color and paint your friends!', cast: ['pip', 'mia', 'bella', 'willow', 'leo'] },
   {
-    id: 'l6-alphabet-blocks', kind: 'alphabet-blocks', bg: bgMeadow, teacher: 'Final Alphabet Blocks! Tap the sound, then stack the word!', letters: ['H', 'M', 'N', 'W', 'S', 'A'],
-    tapRounds: [{ letter: 'H' }, { letter: 'M' }, { letter: 'S' }, { letter: 'A' }],
+    // Colors was cut from this Unit 1 review — it's a Unit 2 ("Colors &
+    // Shapes") topic with no knowledge-graph link to this unit's own
+    // greetings/names/feelings/phonics goals, the same orphan-topic
+    // mistake playground-curriculum-engine flags elsewhere in this
+    // project. alphabet-order (plain ABC sequencing) was also cut —
+    // unlike alphabet-blocks just below, it doesn't exercise this unit's
+    // actual sound-to-letter objective, and it duplicated the
+    // "arrange letters" beat right next to it with no new content
+    // between them.
+    id: 'l6-alphabet-blocks', kind: 'alphabet-blocks', bg: bgMeadow, teacher: 'Final Alphabet Blocks! Tap the sound, then stack the word!', letters: ['H', 'M', 'N', 'W', 'S', 'A', 'B', 'T'],
+    tapRounds: [{ letter: 'H' }, { letter: 'M' }, { letter: 'S' }, { letter: 'A' }, { letter: 'B' }, { letter: 'T' }],
     words: [
       { word: 'HAS', emoji: '✨' },
       { word: 'SAM', emoji: '\u{1F9CD}' },
       { word: 'MAT', emoji: '\u{1F7EB}' },
+      { word: 'BAT', emoji: '\u{1F987}' },
     ],
   },
-  { id: 'l6-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Final Alphabet Order! Drag the letters into ABC order!', sequences: ['ABHM', 'HMNS', 'NSTW'] },
   {
+    // Expanded from 6 to all 8 of the unit's letters (adds B/T) — this now
+    // fully supersedes the old l6-word-build round, which tested the exact
+    // same "identify the beginning letter" skill with less content (just
+    // 6 rounds, no phoneme label) than this scene already had.
     id: 'l6-trophy-chest', kind: 'trophy-chest', bg: bgGatherEmpty, who: 'pip', teacher: 'The Trophy Chest! Tap the sound you hear to unlock each treasure.',
     rounds: [
       { letter: 'H', phoneme: '/h/', word: 'house', img: itemHouse, emoji: '\u{1F3E0}', choices: ['H', 'S', 'M'] },
@@ -1484,6 +1518,8 @@ export const LESSON_6_SCENES: Scene[] = [
       { letter: 'W', phoneme: '/w/', word: 'wind', img: itemWind, emoji: '\u{1F32C}️', choices: ['W', 'S', 'M'] },
       { letter: 'S', phoneme: '/s/', word: 'snake', img: itemSnake, emoji: '\u{1F40D}', choices: ['S', 'A', 'W'] },
       { letter: 'A', phoneme: '/a/', word: 'alligator', img: itemAlligator, emoji: '\u{1F40A}', choices: ['A', 'H', 'N'] },
+      { letter: 'B', phoneme: '/b/', word: 'ball', img: itemBallL4, emoji: '⚽', choices: ['B', 'T', 'H'] },
+      { letter: 'T', phoneme: '/t/', word: 'ten', img: itemTen, emoji: '\u{1F51F}', choices: ['T', 'B', 'N'] },
     ],
   },
   {
@@ -1521,7 +1557,7 @@ export const LESSON_6_SCENES: Scene[] = [
       { who: 'bella', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
     ],
   },
-  { id: 'l6-finale', kind: 'finale', bg: bgL6TrophyPodium, who: 'pip', line: 'You did it! You earned the Unit 1 Trophy! Hello, names, feelings, and six letter sounds — you know it all! \u{1F3C6}' },
+  { id: 'l6-finale', kind: 'finale', bg: bgL6TrophyPodium, who: 'pip', line: 'You did it! You earned the Unit 1 Trophy! Hello, names, feelings, and all 8 letter sounds — you know it all! \u{1F3C6}' },
 ];
 
 /* =========================================================================

@@ -503,7 +503,17 @@ export function speak(text: string, character: Character = 'teacher'): Promise<v
     const blob = await fetchClipBlob(k, trimmed, character);
     if (mySession !== sessionId) return;
     const played = blob ? await playClipBlob(blob) : false;
-    if (!played) await playFallback(trimmed, character);
+    // A clip that was deliberately interrupted mid-playback (stopSpeaking()
+    // called while playClipBlob's audio element was still playing — e.g. the
+    // student tapped past a scene before its line finished) also resolves
+    // `played` false, via the audio element's own `error` event firing after
+    // stopCurrent() clears its src. Without this guard that read the same as
+    // a genuine playback failure and fell through to the robotic browser
+    // speechSynthesis fallback, so the interrupted line appeared to "play
+    // twice" — the clean ElevenLabs clip, cut short, then the same text
+    // again in the low-quality fallback voice a beat later. Only a real
+    // failure (session still valid) should trigger the fallback.
+    if (!played && mySession === sessionId) await playFallback(trimmed, character);
   });
 
   playChain = job.catch(() => undefined).finally(() => {
