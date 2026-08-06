@@ -43,19 +43,6 @@ function PrimaryButton({ onClick, disabled, children }: { onClick: () => void; d
   );
 }
 
-/** A plain speaker/sound-wave glyph — used on every draggable audio token
- *  instead of an emoji, since the token represents "tap to hear a sound,"
- *  not the specific word (which would otherwise double as an answer key). */
-function AudioGlyph() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
-      <path d="M4 10V16H8L13 20V6L8 10H4Z" fill="white" />
-      <path d="M17 9C18.5 10.5 18.5 15.5 17 17" stroke="white" strokeWidth="2" strokeLinecap="round" />
-      <path d="M20 6C22.5 8.5 22.5 17.5 20 20" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
-    </svg>
-  );
-}
-
 function TeacherTip({ instruction }: { instruction?: string }) {
   const [open, setOpen] = useState(false);
   if (!instruction) return null;
@@ -546,6 +533,17 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
   const [drag, setDrag] = useState<{ idx: number; x: number; y: number; startX: number; startY: number } | null>(null);
   const [wrongIdx, setWrongIdx] = useState<number | null>(null);
   const gemDone = useRef(false);
+  // The tray's left-to-right order is scattered rather than matching each
+  // item's index (which lines up with left-to-right position in the scene
+  // itself) — otherwise tray order alone gives away which tile goes where.
+  const trayOrder = useMemo(() => {
+    const order = scene.items.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = (i * 7 + 3) % (i + 1);
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    return order;
+  }, [scene.id]);
 
   const hear = (idx: number) => {
     sfx.click();
@@ -606,33 +604,41 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
       </div>
       {/* No landing-zone hint is rendered — the student has to remember
           where the object is from the vocab-spot scene that just taught
-          it, not read it off a dashed ring drawn in advance. */}
+          it, not read it off a dashed ring drawn in advance. Tiles are
+          rectangles carrying the word's own text, not a circle/emoji that
+          would otherwise stand in for the answer. */}
       {scene.items.map((item, i) => placed.has(i) && (
         <div
           key={`placed-${i}`}
-          className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 h-16 w-16 rounded-full shadow-xl ring-4 ring-white"
+          className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-xl px-3 py-2 shadow-xl ring-4 ring-white"
           style={{ left: item.targetLeft, top: item.targetTop, background: item.color, animation: 'lep1-pop 0.4s ease-out' }}
-        />
+        >
+          <span className="text-sm font-black uppercase tracking-wide text-white">{item.label}</span>
+        </div>
       ))}
-      <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex justify-center gap-4 px-4">
-        {scene.items.map((item, i) => !placed.has(i) && drag?.idx !== i && (
-          <button
-            key={`tray-${i}`}
-            onPointerDown={(e) => startDrag(e, i)}
-            aria-label={`Drag the word ${item.label}`}
-            className={`pointer-events-auto touch-none grid h-16 w-16 place-items-center rounded-full shadow-2xl ring-4 ring-white transition active:scale-95 ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
-            style={{ background: item.color, animation: wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
-          >
-            <AudioGlyph />
-          </button>
-        ))}
+      <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex flex-wrap justify-center gap-3 px-4">
+        {trayOrder.map((i) => {
+          const item = scene.items[i];
+          if (placed.has(i) || drag?.idx === i) return null;
+          return (
+            <button
+              key={`tray-${i}`}
+              onPointerDown={(e) => startDrag(e, i)}
+              aria-label={`Drag the word ${item.label}`}
+              className={`pointer-events-auto touch-none rounded-xl px-4 py-3 shadow-2xl ring-4 ring-white transition active:scale-95 ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
+              style={{ background: item.color, animation: wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
+            >
+              <span className="text-sm font-black uppercase tracking-wide text-white">{item.label}</span>
+            </button>
+          );
+        })}
       </div>
       {drag && (
         <div
-          className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-1/2 grid h-16 w-16 place-items-center rounded-full shadow-2xl ring-4 ring-white"
+          className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-xl px-4 py-3 shadow-2xl ring-4 ring-white"
           style={{ left: drag.x, top: drag.y, background: scene.items[drag.idx].color }}
         >
-          <AudioGlyph />
+          <span className="text-sm font-black uppercase tracking-wide text-white">{scene.items[drag.idx].label}</span>
         </div>
       )}
       {done && (
