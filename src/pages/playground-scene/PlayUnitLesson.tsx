@@ -7,6 +7,15 @@ import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-librar
 import { whiteboardService } from '@/services/whiteboardService';
 import { getDomPath, getElementAtPath, withPointerCaptureNoop } from '@/content/playground-library/unit1/scenePathSync';
 
+/** Scene kinds where the student can always try the activity directly —
+ *  hands-on drag/match/trace/guess games work better as free play than as a
+ *  teacher-demo-first flow. Everything else (meet-and-greet, narrative
+ *  sequences, timed arcade games, etc.) keeps the default locked/watch-only
+ *  behavior, teacher-granted per activity via setInteractionUnlocked. */
+const ALWAYS_UNLOCKED_SCENE_KINDS = new Set([
+  'trace', 'basket', 'sound-sort', 'color-sort', 'memory', 'puzzle', 'word-build', 'hello-doors',
+]);
+
 export interface PlayUnitLessonHandle {
   goNext: () => void;
   goBack: () => void;
@@ -43,7 +52,7 @@ interface PlayUnitLessonProps {
   hideInternalNav?: boolean;
   /** Reports scene position/navigability whenever it changes, so a caller
    *  rendering hideInternalNav can show an external nav bar in sync. */
-  onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean }) => void;
+  onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean; lockToggleApplicable: boolean }) => void;
   /** Last scene index persisted to the classroom session DB row, if any —
    *  a reliable (if slightly delayed) catch-up path for a student who
    *  joins late or reconnects and missed the instant broadcast. */
@@ -84,6 +93,11 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   const sceneRootRef = useRef<HTMLDivElement>(null);
   const isApplyingRemoteTapRef = useRef(false);
 
+  // Hands-on activities (drag/match/trace/guess) skip the teacher-grant step
+  // entirely — the student can always try them, live-mirrored both ways.
+  const skipsLock = ALWAYS_UNLOCKED_SCENE_KINDS.has(SCENES[sceneIdx]?.kind as string);
+  const effectiveUnlocked = interactionUnlocked || skipsLock;
+
   const setInteractionUnlocked = useCallback((next: boolean) => {
     setInteractionUnlockedState(next);
     if (isSynced && role === 'teacher' && roomId) {
@@ -106,9 +120,12 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
     return unsubscribe;
   }, [isSynced, role, roomId]);
 
-  const iCaptureTaps = isSynced && !!role && (role === 'teacher' || (role === 'student' && interactionUnlocked));
+  // skipsLock activities are bidirectional for both roles at once — safe
+  // from feedback loops because isApplyingRemoteTapRef (below) stops a
+  // replayed synthetic event from being re-captured and re-broadcast.
+  const iCaptureTaps = isSynced && !!role && (skipsLock || role === 'teacher' || (role === 'student' && interactionUnlocked));
   const iReplayTaps = isSynced && !!role && (
-    (role === 'teacher' && interactionUnlocked) || (role === 'student' && !interactionUnlocked)
+    skipsLock || (role === 'teacher' && interactionUnlocked) || (role === 'student' && !interactionUnlocked)
   );
 
   useEffect(() => {
@@ -309,7 +326,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   // doesn't feel stuck, and ask the teacher to advance too; the teacher's
   // own goNext() then re-broadcasts via the existing sceneIdx pipe, which
   // reaches this same student again as an idempotent confirmation.
-  const studentCanAdvanceViaActivity = isSynced && role === 'student' && interactionUnlocked;
+  const studentCanAdvanceViaActivity = isSynced && role === 'student' && effectiveUnlocked;
   const goNext = useCallback(() => {
     if (canNavigate) {
       stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
@@ -346,8 +363,8 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   useImperativeHandle(ref, () => ({ goNext, goBack, goToIndex, setInteractionUnlocked }), [goNext, goBack, goToIndex, setInteractionUnlocked]);
 
   useEffect(() => {
-    onNavState?.({ sceneIdx, total: SCENES.length, canNavigate, interactionUnlocked });
-  }, [sceneIdx, SCENES.length, canNavigate, interactionUnlocked, onNavState]);
+    onNavState?.({ sceneIdx, total: SCENES.length, canNavigate, interactionUnlocked: effectiveUnlocked, lockToggleApplicable: !skipsLock });
+  }, [sceneIdx, SCENES.length, canNavigate, effectiveUnlocked, skipsLock, onNavState]);
 
   const totalGemsPossible = useMemo(
     () => SCENES.filter((s) => s.kind === 'basket' || s.kind === 'who-said-it' || s.kind === 'name-gate' || s.kind === 'voice-stage' || s.kind === 'roleplay' || s.kind === 'join-stage' || s.kind === 'sound-pop' || s.kind === 'flipbook' || s.kind === 'color-model' || s.kind === 'color-sort' || s.kind === 'color-quiz' || s.kind === 'listen-repeat-cards' || (s.kind === 'meet' && s.repeat)).length,
@@ -411,14 +428,14 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
             heartsRemaining={hearts}
             lessonNumber={lessonNumber}
           />
-          {isSynced && role === 'student' && !interactionUnlocked && (
+          {isSynced && role === 'student' && !effectiveUnlocked && (
             <div className="absolute inset-0 z-40 cursor-not-allowed" aria-hidden="true">
               <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
                 👀 Watching your teacher
               </div>
             </div>
           )}
-          {isSynced && role === 'teacher' && interactionUnlocked && (
+          {isSynced && role === 'teacher' && interactionUnlocked && !skipsLock && (
             <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-emerald-600/80 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
               ✋ Student is trying this
             </div>
@@ -441,7 +458,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
             <span aria-hidden>◀</span> Back
           </button>
           <div className="pointer-events-auto flex items-center gap-2">
-            {isSynced && (
+            {isSynced && !skipsLock && (
               <button type="button" onClick={() => setInteractionUnlocked(!interactionUnlocked)}
                 className={`rounded-full px-4 py-3 text-sm font-bold shadow-xl backdrop-blur transition hover:scale-105 ${interactionUnlocked ? 'bg-emerald-500 text-white' : 'bg-white/90 text-slate-800'}`}>
                 {interactionUnlocked ? '🔓 Student can try' : '🔒 Let student try'}
@@ -457,7 +474,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
       ) : (
         <div className={`pointer-events-none inset-x-0 bottom-4 z-[80] flex items-center justify-center px-4 ${embedded ? 'absolute' : 'fixed'}`}>
           <div className="pointer-events-none flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">
-            {interactionUnlocked ? (
+            {effectiveUnlocked ? (
               <><span aria-hidden>✋</span> Your turn! Try the activity</>
             ) : (
               <><span aria-hidden>👩‍🏫</span> Your teacher is guiding this lesson · {sceneIdx + 1} / {SCENES.length}</>

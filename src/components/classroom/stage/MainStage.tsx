@@ -19,6 +19,37 @@ interface Slide {
   content?: any;
 }
 
+/**
+ * Playground scene content is built with `vh`/`vw` units sized for the
+ * full-screen solo player — those units always resolve against the real
+ * browser viewport, never a containing element, no matter how deeply
+ * nested. Embedded in the classroom, the framed lesson card is only a
+ * fraction of the viewport (sidebar/header/dock eat into it), so the same
+ * content renders far too large for its frame. Measuring the actual frame
+ * size and scaling the whole subtree down to match keeps every scene's
+ * existing vh/vw sizing correct relative to its real container instead of
+ * the browser window.
+ */
+function useFrameScale(frameRef: React.RefObject<HTMLElement>) {
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    const el = frameRef.current;
+    if (!el) return;
+    const recompute = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0 || window.innerWidth <= 0 || window.innerHeight <= 0) return;
+      const s = Math.min(rect.width / window.innerWidth, rect.height / window.innerHeight, 1);
+      if (Number.isFinite(s) && s > 0) setScale(s);
+    };
+    recompute();
+    const ro = new ResizeObserver(recompute);
+    ro.observe(el);
+    window.addEventListener('resize', recompute);
+    return () => { ro.disconnect(); window.removeEventListener('resize', recompute); };
+  }, [frameRef]);
+  return scale;
+}
+
 interface MainStageProps {
   mode: StageMode;
   slides: Slide[];
@@ -50,7 +81,7 @@ interface MainStageProps {
   /** Teacher-only: persist the embedded scene lesson's current scene index. */
   onPersistSceneLessonIdx?: (idx: number) => void;
   /** Reports the embedded scene lesson's nav state whenever it changes, so a caller (e.g. the Lesson Timeline) can mirror it. */
-  onSceneNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean }) => void;
+  onSceneNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean; lockToggleApplicable: boolean }) => void;
   onAddStroke: (stroke: Omit<WhiteboardStroke, 'id' | 'roomId' | 'timestamp'>) => void;
 }
 
@@ -106,9 +137,11 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
     | undefined;
 
   const sceneLessonHandleRef = useRef<PlayUnitLessonHandle>(null);
-  const [sceneNav, setSceneNav] = useState({ sceneIdx: 0, total: 0, canNavigate: true, interactionUnlocked: false });
+  const sceneFrameRef = useRef<HTMLDivElement>(null);
+  const sceneFrameScale = useFrameScale(sceneFrameRef);
+  const [sceneNav, setSceneNav] = useState({ sceneIdx: 0, total: 0, canNavigate: true, interactionUnlocked: false, lockToggleApplicable: true });
   const handleSceneNavState = useCallback(
-    (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean }) => {
+    (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean; lockToggleApplicable: boolean }) => {
       setSceneNav(state);
       onSceneNavState?.(state);
     },
@@ -124,8 +157,8 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
   // don't keep treating a plain lesson as if it were still a scene lesson.
   useEffect(() => {
     if (sceneLessonRef) return;
-    setSceneNav({ sceneIdx: 0, total: 0, canNavigate: true, interactionUnlocked: false });
-    onSceneNavState?.({ sceneIdx: 0, total: 0, canNavigate: true, interactionUnlocked: false });
+    setSceneNav({ sceneIdx: 0, total: 0, canNavigate: true, interactionUnlocked: false, lockToggleApplicable: true });
+    onSceneNavState?.({ sceneIdx: 0, total: 0, canNavigate: true, interactionUnlocked: false, lockToggleApplicable: true });
   }, [sceneLessonRef, onSceneNavState]);
 
   return (
@@ -144,9 +177,15 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
               {customStage}
             </div>
           ) : hubType === 'playground' && mode === 'slide' && sceneLessonRef ? (
-            <div className="absolute inset-3 sm:inset-4 lg:inset-6 flex flex-col gap-2">
-              <div className="relative flex-1 min-h-0 overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">
-                <div className="absolute inset-0 overflow-auto">
+            // Bottom inset is taller for the teacher: TeacherControlDock floats
+            // `fixed bottom-4` over this stage, and without this clearance its
+            // ~64-80px footprint hides this scene's own Back/Lock/Next row
+            // (the last item in this flex column, including "Let student
+            // try") underneath it.
+            <div className={`absolute inset-x-3 top-3 sm:inset-x-4 sm:top-4 lg:inset-x-6 lg:top-6 flex flex-col gap-2 ${role === 'teacher' ? 'bottom-20 sm:bottom-24' : 'bottom-3 sm:bottom-4 lg:bottom-6'}`}>
+              <div ref={sceneFrameRef} className="relative flex-1 min-h-0 overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">
+                <div className="absolute inset-0 overflow-hidden">
+                  <div style={{ position: 'absolute', top: 0, left: 0, width: `${100 / sceneFrameScale}%`, height: `${100 / sceneFrameScale}%`, transform: `scale(${sceneFrameScale})`, transformOrigin: 'top left' }}>
                   <EmbeddedSceneLesson
                     ref={sceneLessonHandleRef}
                     unitNumber={sceneLessonRef.unitNumber}
@@ -158,6 +197,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                     persistedSceneIdx={sceneLessonIdx}
                     onSceneIdxPersist={onPersistSceneLessonIdx}
                   />
+                  </div>
                 </div>
               </div>
 
@@ -175,13 +215,15 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                       >
                         <span aria-hidden>◀</span> Back
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => sceneLessonHandleRef.current?.setInteractionUnlocked(!sceneNav.interactionUnlocked)}
-                        className={`rounded-full px-4 py-2 text-xs font-bold shadow-lg backdrop-blur transition hover:scale-105 ${sceneNav.interactionUnlocked ? 'bg-emerald-500 text-white' : 'bg-white/90 text-slate-800'}`}
-                      >
-                        {sceneNav.interactionUnlocked ? '🔓 Student can try' : '🔒 Let student try'}
-                      </button>
+                      {sceneNav.lockToggleApplicable && (
+                        <button
+                          type="button"
+                          onClick={() => sceneLessonHandleRef.current?.setInteractionUnlocked(!sceneNav.interactionUnlocked)}
+                          className={`rounded-full px-4 py-2 text-xs font-bold shadow-lg backdrop-blur transition hover:scale-105 ${sceneNav.interactionUnlocked ? 'bg-emerald-500 text-white' : 'bg-white/90 text-slate-800'}`}
+                        >
+                          {sceneNav.interactionUnlocked ? '🔓 Student can try' : '🔒 Let student try'}
+                        </button>
+                      )}
                       <div className="rounded-full bg-white/90 px-4 py-2 text-xs font-extrabold text-slate-800 shadow-lg backdrop-blur tabular-nums">
                         {sceneNav.sceneIdx + 1} / {sceneNav.total}
                       </div>
