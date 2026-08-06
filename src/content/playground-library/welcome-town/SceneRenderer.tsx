@@ -43,6 +43,19 @@ function PrimaryButton({ onClick, disabled, children }: { onClick: () => void; d
   );
 }
 
+/** A plain speaker/sound-wave glyph — used on every draggable audio token
+ *  instead of an emoji, since the token represents "tap to hear a sound,"
+ *  not the specific word (which would otherwise double as an answer key). */
+function AudioGlyph() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+      <path d="M4 10V16H8L13 20V6L8 10H4Z" fill="white" />
+      <path d="M17 9C18.5 10.5 18.5 15.5 17 17" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path d="M20 6C22.5 8.5 22.5 17.5 20 20" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
+    </svg>
+  );
+}
+
 function TeacherTip({ instruction }: { instruction?: string }) {
   const [open, setOpen] = useState(false);
   if (!instruction) return null;
@@ -591,24 +604,15 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
       <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
         {scene.teacher} <span className="ml-1 opacity-60">({placed.size}/{total})</span>
       </div>
-      {/* A dashed landing-zone ring marks exactly where each word belongs —
-          the same point that scene's own vocab-spot arrow pointed at — so
-          "listen" and "drop" both anchor to one shared location. */}
-      {scene.items.map((item, i) => !placed.has(i) && (
-        <div
-          key={`zone-${i}`}
-          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-dashed"
-          style={{ left: item.targetLeft, top: item.targetTop, width: 64, height: 64, borderColor: item.color, opacity: 0.75, animation: 'lep1-ping 2.4s ease-out infinite' }}
-        />
-      ))}
+      {/* No landing-zone hint is rendered — the student has to remember
+          where the object is from the vocab-spot scene that just taught
+          it, not read it off a dashed ring drawn in advance. */}
       {scene.items.map((item, i) => placed.has(i) && (
         <div
           key={`placed-${i}`}
-          className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 grid h-16 w-16 place-items-center rounded-full shadow-xl ring-4 ring-white"
+          className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 h-16 w-16 rounded-full shadow-xl ring-4 ring-white"
           style={{ left: item.targetLeft, top: item.targetTop, background: item.color, animation: 'lep1-pop 0.4s ease-out' }}
-        >
-          <span className="text-3xl">{item.emoji}</span>
-        </div>
+        />
       ))}
       <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex justify-center gap-4 px-4">
         {scene.items.map((item, i) => !placed.has(i) && drag?.idx !== i && (
@@ -616,19 +620,19 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
             key={`tray-${i}`}
             onPointerDown={(e) => startDrag(e, i)}
             aria-label={`Drag the word ${item.label}`}
-            className={`pointer-events-auto touch-none grid h-16 w-16 place-items-center rounded-full text-3xl shadow-2xl ring-4 ring-white transition active:scale-95 ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
+            className={`pointer-events-auto touch-none grid h-16 w-16 place-items-center rounded-full shadow-2xl ring-4 ring-white transition active:scale-95 ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
             style={{ background: item.color, animation: wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
           >
-            {item.emoji}
+            <AudioGlyph />
           </button>
         ))}
       </div>
       {drag && (
         <div
-          className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-1/2 grid h-16 w-16 place-items-center rounded-full text-3xl shadow-2xl ring-4 ring-white"
+          className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-1/2 grid h-16 w-16 place-items-center rounded-full shadow-2xl ring-4 ring-white"
           style={{ left: drag.x, top: drag.y, background: scene.items[drag.idx].color }}
         >
-          {scene.items[drag.idx].emoji}
+          <AudioGlyph />
         </div>
       )}
       {done && (

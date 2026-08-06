@@ -89,7 +89,7 @@ export type Scene =
   | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string }
   | { id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string }
   | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string }[] }
-  | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: { label: string; emoji: string; color: string; targetLeft: string; targetTop: string; who?: CharKey }[] }
+  | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: { label: string; color: string; targetLeft: string; targetTop: string; who?: CharKey }[] }
   | { id: string; kind: 'vocab-spot'; bg: string; teacher: string; items: { label: string; sentence: string; emoji: string; left: string; top: string; color: string; dir?: 'down' | 'left' | 'right'; who?: CharKey }[] }
   | { id: string; kind: 'choice'; bg: string; who: CharKey; teacher: string; prompt: string; options: { label: string; emoji: string; correct?: boolean }[] }
   | { id: string; kind: 'roleplay'; bg: string; teacher: string; cast: CharKey[]; script: { who: CharKey; line: string; repeat?: boolean }[] }
@@ -155,16 +155,16 @@ export const LESSON_1_SCENES: Scene[] = [
     // point the learner already looked at.
     id: 'wt-drag-people', kind: 'drag-match', bg: bgPeople, teacher: 'Listen, then drag each word onto the matching classroom member!',
     items: [
-      { label: 'Teacher', emoji: '\u{1F989}', color: '#8ECAE6', who: 'marigold', targetLeft: '26%', targetTop: '42%' },
-      { label: 'Student', emoji: '\u{1F98A}', color: '#FE6A2F', who: 'pip', targetLeft: '68%', targetTop: '48%' },
+      { label: 'Teacher', color: '#8ECAE6', who: 'marigold', targetLeft: '26%', targetTop: '42%' },
+      { label: 'Student', color: '#FE6A2F', who: 'pip', targetLeft: '68%', targetTop: '48%' },
     ],
   },
   {
     id: 'wt-drag-room', kind: 'drag-match', bg: bgFixtures, teacher: 'Listen, then drag each word onto the matching thing in the room!',
     items: [
-      { label: 'Door', emoji: '\u{1F6AA}', color: '#8B5CF6', targetLeft: '16%', targetTop: '48%' },
-      { label: 'Board', emoji: '\u{1F4CB}', color: '#22C55E', targetLeft: '49%', targetTop: '49%' },
-      { label: 'Window', emoji: '\u{1FA9F}', color: '#06B6D4', targetLeft: '81%', targetTop: '47%' },
+      { label: 'Door', color: '#8B5CF6', targetLeft: '16%', targetTop: '48%' },
+      { label: 'Board', color: '#22C55E', targetLeft: '49%', targetTop: '49%' },
+      { label: 'Window', color: '#06B6D4', targetLeft: '81%', targetTop: '47%' },
     ],
   },
 
