@@ -396,6 +396,57 @@ export function runLessonQualityCheck(input: LessonQualityInput): LessonQualityR
       });
       rubricScore -= 10;
     }
+
+    // Spaced retrieval: a target word that only ever surfaces inside the vocab
+    // block (never reinforced later in reading/grammar/practice) is massed
+    // repetition, not spaced — weaker for long-term retention.
+    const vocabWords = (blueprint?.vocabulary ?? []).map((v) => String(v || '').trim().toLowerCase()).filter(Boolean);
+    if (vocabWords.length > 0) {
+      const textByBlock = new Map<string, string>();
+      for (const s of slides) {
+        const b = String(s?.block || '__none__');
+        textByBlock.set(b, `${textByBlock.get(b) ?? ''} ${extractText(s)}`);
+      }
+      const notSpaced: string[] = [];
+      for (const w of vocabWords) {
+        const re = new RegExp(`\\b${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+        const blocksContaining = [...textByBlock.entries()].filter(([, text]) => re.test(text)).map(([b]) => b);
+        if (blocksContaining.length > 0 && blocksContaining.every((b) => b === 'vocab')) notSpaced.push(w);
+      }
+      if (notSpaced.length > 0) {
+        issues.push({
+          code: 'VOCAB_NOT_SPACED',
+          severity: 'warn',
+          message: `Target word(s) only appear in the vocab block, never reinforced later: ${notSpaced.slice(0, 5).join(', ')}${notSpaced.length > 5 ? '…' : ''}.`,
+        });
+        rubricScore -= Math.min(15, notSpaced.length * 3);
+      }
+    }
+
+    // Bloom's escalation: recognition rounds (matching/multiple/image-match)
+    // should come before production rounds (fill_blank/sentence_builder)
+    // within the same block — a production slide followed by an easier
+    // recognition slide means practice got easier instead of harder.
+    const RECOGNITION_TYPES = new Set(['matching', 'multiple', 'vocab_image_match']);
+    const PRODUCTION_TYPES = new Set(['fill_blank', 'sentence_builder']);
+    for (const blockName of ['vocab', 'grammar']) {
+      const blockSlides = slides.filter((s) => s?.block === blockName);
+      let sawProduction = false;
+      let outOfOrder = false;
+      for (const s of blockSlides) {
+        const t = String(s?.type || '');
+        if (PRODUCTION_TYPES.has(t)) sawProduction = true;
+        else if (RECOGNITION_TYPES.has(t) && sawProduction) { outOfOrder = true; break; }
+      }
+      if (outOfOrder) {
+        issues.push({
+          code: 'PRACTICE_ORDER_NOT_ESCALATING',
+          severity: 'warn',
+          message: `"${blockName}" block: a recognition-style activity appears after a production/usage activity — practice should escalate Remember→Understand→Apply, not get easier again.`,
+        });
+        rubricScore -= 8;
+      }
+    }
   }
 
   const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));

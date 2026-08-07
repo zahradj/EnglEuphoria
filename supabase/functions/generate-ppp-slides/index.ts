@@ -482,20 +482,27 @@ Build a 60-minute Academy lesson at CEFR ${cefr_level}. Topic: "${effectiveTitle
 
 STRICT 7-BLOCK STRUCTURE (60-MINUTE ACADEMY LESSON — pace ~2 min/slide → 35–45 slides total) — slides MUST appear in this order. Vocab and grammar each get PRESENTATION immediately followed by their OWN repeated, gamified retrieval AND production practice — never just one game round, and never deferred to the shared "practice" block later:
   1. warmup       — opinion / poll / question (3-4 slides)
-  2. vocab        — PRESENT once, then DRILL before moving on (7-9 slides total):
+  2. vocab        — PRESENT once, then DRILL before moving on (7-9 slides total), following a Remember→Understand→Apply escalation (Bloom's Taxonomy) — do NOT put the production round first or in the middle:
                    • Presentation: ONE "vocab_deck" (paginated cards with images, all target words).
-                   • Practice (MANDATORY — at least 4 DISTINCT rounds, each re-testing every word from a different angle so words are actively retrieved AND actually used, not just re-read):
-                     ONE "vocab_image_match" (drag word↔image, tests RECOGNITION) + ONE "matching" (word↔definition, tests MEANING) + ONE mandatory USAGE round — a "fill_blank" or "sentence_builder" set with one item per target word (tagged "block":"vocab") that makes the student PRODUCE the word correctly in an original sentence, not just recognize it — plus at least ONE more round, either a second "matching" (word↔word/synonym) or a set of "multiple" MCQs (meaning-in-context, one per word).
+                   • Practice (MANDATORY — at least 4 DISTINCT rounds, IN THIS ORDER, each re-testing every word from a different angle so words are actively retrieved AND actually used, not just re-read):
+                     1. ONE "vocab_image_match" (drag word↔image, tests RECOGNITION — Bloom: Remember).
+                     2. ONE "matching" (word↔definition, tests MEANING — Bloom: Understand).
+                     3. At least ONE more recognition/meaning round — either a second "matching" (word↔word/synonym) or a set of "multiple" MCQs (meaning-in-context, one per word).
+                     4. LAST — ONE mandatory USAGE round — a "fill_blank" or "sentence_builder" set with one item per target word (tagged "block":"vocab") that makes the student PRODUCE the word correctly in an original sentence, not just recognize it — Bloom: Apply. This MUST be the final vocab practice round, never earlier.
+                   • SPACED RETRIEVAL (MANDATORY): do not let every occurrence of a target word land inside this vocab block alone — at least one occurrence of every target word MUST also resurface later, inside the reading passage, the grammar examples, or the practice block, so retrieval is spaced across the lesson, not massed in one place.
   3. reading      — TWO SEPARATE comprehension checks, one per skill (5-7 slides total):
                    • reading_passage (60-120 words), immediately followed by AT LEAST ONE "multiple" or "truefalse" slide whose answer is stated in the passage — this checks READING specifically.
                    • listening (audio transcript), immediately followed by AT LEAST ONE "multiple" or "truefalse" slide whose answer is stated ONLY in the transcript, NOT in the reading passage — this checks LISTENING specifically. A listening slide with no dedicated comprehension question of its own is incomplete and NOT acceptable, even if the reading passage already has one.
-  4. grammar      — PRESENT the rule once, then DRILL it intensively and thoroughly before any free/communicative use (9-11 slides total). This is a STANDALONE grammar block — its practice sentences are NEW, grammar-focused sentences, not comprehension questions recycled from the reading/listening passages in block 3 — but every practice sentence MUST still be built from THIS LESSON's topic and target vocabulary, so practice feels connected to the lesson rather than generic/disconnected filler:
+  4. grammar      — PRESENT the rule once, then DRILL it intensively and thoroughly before any free/communicative use (9-11 slides total), following the SAME Remember→Understand→Apply escalation as the vocab block. This is a STANDALONE grammar block — its practice sentences are NEW, grammar-focused sentences, not comprehension questions recycled from the reading/listening passages in block 3 — but every practice sentence MUST still be built from THIS LESSON's topic and target vocabulary, so practice feels connected to the lesson rather than generic/disconnected filler:
                    • Presentation: ONE creative grammar visual explaining the rule with a clear example.
                      - Use "frequency_thermometer" whenever the target grammar is adverbs of frequency.
                      - Use "grammar_formula" for tense formulas (e.g. Present Perfect = Subject + have/has + V3).
                      - Use "grammar_color_decode" for word-order / sentence-anatomy patterns (color-coded chunks).
                      - Fall back to "grammar_pattern" only if none of the above fit.
-                   • Practice (MANDATORY — at least 6 controlled-practice slides, each with a NEW lesson-topic-connected example sentence, so the student actively produces or fixes the target structure at least 6 times, with difficulty ESCALATING from simple single-clause recognition to longer/compound-sentence free production, before leaving this block — this must be extensive enough that a student who completes it has genuinely mastered the rule, not just seen it once): "error_detection" (spot the mistake) + "correction" (fix the mistake) + at least 4 more slides drawn from "fill_blank" and/or "sentence_builder" (tagged "block":"grammar" here — these are allowed in both "grammar" and "practice" blocks), each drilling the SAME rule with a fresh, lesson-connected sentence, increasing in complexity across the set.
+                   • Practice (MANDATORY — at least 6 controlled-practice slides, IN THIS ESCALATING ORDER, each with a NEW lesson-topic-connected example sentence, so the student actively produces or fixes the target structure at least 6 times before leaving this block — this must be extensive enough that a student who completes it has genuinely mastered the rule, not just seen it once):
+                     1-2. "error_detection" (spot the mistake) + "correction" (fix the mistake) — Bloom: Understand/Analyze, simple single-clause sentences.
+                     3-6. At least 4 more slides drawn from "fill_blank" and/or "sentence_builder" (tagged "block":"grammar" here — these are allowed in both "grammar" and "practice" blocks) — Bloom: Apply — each drilling the SAME rule with a fresh, lesson-connected sentence, complexity INCREASING toward longer/compound sentences across the set. Do not place a harder slide before an easier one.
+                   • SPACED RETRIEVAL: at least one grammar-pattern example MUST also resurface later, inside the "practice" (cumulative) or "speaking" block, not only here.
   5. practice     — CUMULATIVE, INTEGRATED review mixing vocab + grammar together in the same items (fill_blank + sentence_builder + cluster) — by this point the student has already drilled each skill separately, so this block recombines them, it is not the first practice either skill gets (5-6 slides)
   6. interactive  — debate_scale + role_play — free, communicative use with minimal error-correction (3-4 slides)
   7. speaking     — speaking_task + reflection (3-4 slides)
@@ -624,8 +631,108 @@ ${buildEarlyLearnerPromptBlock({ hub: 'academy', level: cefr_level })}
         });
       }
 
+      // ── AI Quality Critic ────────────────────────────────────────────
+      // Reviews the generated deck like a senior CELTA teacher-trainer and
+      // triggers ONE automatic repair pass if it's weak. This is real
+      // judgment on the actual content (does practice require recall, is
+      // grammar drilling deep enough, are comprehension checks grounded),
+      // not just the structural/keyword checks above. Adds up to 2 extra
+      // Gemini calls (critique + repair) on top of the structural-retry
+      // budget above — bounded deliberately to control latency/cost; no
+      // re-critique after repair.
+      type AcademyCritique = {
+        verdict: "pass" | "needs_repair";
+        scores: Record<string, number>;
+        issues: { dimension: string; note: string }[];
+        repair_instructions: string;
+      };
+
+      const buildLessonDigest = (deck: any[]): string => {
+        const byBlock = new Map<string, any[]>();
+        for (const s of deck) {
+          const b = String(s?.block || "unknown");
+          if (!byBlock.has(b)) byBlock.set(b, []);
+          byBlock.get(b)!.push(s);
+        }
+        const gist = (s: any): string => {
+          const val =
+            s?.word ?? s?.question ?? s?.statement ?? s?.prompt ?? s?.rule ??
+            s?.passage ?? s?.transcript ?? s?.title ?? "";
+          return typeof val === "string" && val ? ` (${val.slice(0, 60)})` : "";
+        };
+        const lines: string[] = [];
+        for (const block of allowedBlocks) {
+          const items = byBlock.get(block) ?? [];
+          if (items.length === 0) continue;
+          lines.push(`BLOCK "${block}" (${items.length} slides):`);
+          for (const s of items) lines.push(`  - ${s?.type ?? "?"}${gist(s)}`);
+        }
+        return lines.join("\n");
+      };
+
+      const critiqueAcademyLesson = async (deck: any[]): Promise<AcademyCritique | null> => {
+        const digest = buildLessonDigest(deck);
+        try {
+          const res = await aiFetch("https://ai-gateway.internal/v1/chat/completions", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              model: "google/gemini-2.5-flash",
+              max_tokens: 2048,
+              messages: [
+                {
+                  role: "system",
+                  content: `You are a senior CELTA-trained teacher trainer reviewing a colleague's lesson plan for classroom readiness — you are judging it, NOT generating content. Score 5 dimensions (0-100 each), grounded in real teaching practice, not just structure:
+1. vocab_memorization_usage — does vocab practice require real recall AND production (using the word in an original sentence), not just recognition/matching?
+2. grammar_mastery_depth — is standalone grammar practice extensive, escalating in difficulty, and would a student genuinely master the rule, not just see it once?
+3. comprehension_grounding — are reading/listening comprehension questions actually answerable from the passage/transcript, and is listening tested separately from reading?
+4. activity_variety_engagement — is there real variety across the deck, or repetitive/formulaic activity types?
+5. cefr_appropriateness — is language level-accurate and consistent for the stated CEFR level?
+
+Return ONLY a JSON object: { "verdict": "pass" | "needs_repair", "scores": {"vocab_memorization_usage": n, "grammar_mastery_depth": n, "comprehension_grounding": n, "activity_variety_engagement": n, "cefr_appropriateness": n}, "issues": [{"dimension": string, "note": string}], "repair_instructions": string }.
+"needs_repair" if ANY dimension scores below 65. "repair_instructions" must be specific and actionable (e.g. "the grammar block only has 3 practice slides, add 3 more escalating fill_blank/sentence_builder slides using the lesson's own vocabulary") — empty string when verdict is "pass".`,
+                },
+                {
+                  role: "user",
+                  content: `Lesson: "${effectiveTitle}" — CEFR ${cefr_level}.\n\nDeck digest (block order, slide types, key content):\n${digest}`,
+                },
+              ],
+            }),
+          });
+          if (!res.ok) return null;
+          const data = await res.json();
+          const raw: string = data?.choices?.[0]?.message?.content ?? "";
+          const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/i, "").trim();
+          let parsed: any;
+          try {
+            parsed = JSON.parse(cleaned);
+          } catch {
+            const m = cleaned.match(/\{[\s\S]*\}/);
+            if (!m) return null;
+            parsed = JSON.parse(m[0]);
+          }
+          if (!parsed || typeof parsed !== "object" || !parsed.verdict) return null;
+          return parsed as AcademyCritique;
+        } catch (e) {
+          console.warn("[ppp] Academy critic call failed (non-fatal):", e);
+          return null;
+        }
+      };
+
+      const quality_report = await critiqueAcademyLesson(academy_slides);
+      if (quality_report?.verdict === "needs_repair" && quality_report.repair_instructions) {
+        try {
+          const repaired = await callAcademy(
+            `A senior teacher-trainer reviewed this lesson and found issues: ${quality_report.repair_instructions}. Return the FULL deck again, fixing these issues, still obeying the strict 7-block order with every slide tagged with a valid "block".`,
+          );
+          academy_slides = repaired;
+        } catch (e) {
+          console.warn("[ppp] Academy repair pass failed, keeping original deck:", e);
+        }
+      }
+
       enforceVisualTheme(academy_slides);
-      return new Response(JSON.stringify({ academy_slides }), {
+      return new Response(JSON.stringify({ academy_slides, quality_report }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

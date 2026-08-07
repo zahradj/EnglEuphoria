@@ -103,7 +103,7 @@ describe('runLessonQualityCheck — Academy pedagogy checks', () => {
       { type: 'truefalse', block: 'reading', statement: 'Tom asked about a trip to the mountains.' },
       { type: 'grammar_pattern', block: 'grammar', rule: 'Present simple: subject + verb + s' },
       { type: 'controlled_drill', block: 'grammar', prompt: 'Complete the sentence.' },
-      { type: 'error_detection', block: 'grammar', sentence: 'She eat an apple.' },
+      { type: 'error_detection', block: 'grammar', sentence: 'She eat an apple and a cherry.' },
       { type: 'fill_blank', block: 'practice', before: 'She ', after: ' an apple.', answer: 'eats' },
       { type: 'fill_blank', block: 'practice', before: 'He ', after: ' a banana.', answer: 'eats' },
       { type: 'speaking_task', block: 'speaking', prompt: 'Describe your favourite fruit.' },
@@ -114,15 +114,62 @@ describe('runLessonQualityCheck — Academy pedagogy checks', () => {
     expect(codes).not.toContain('GRAMMAR_PRACTICE_SHALLOW');
     expect(codes).not.toContain('COMPREHENSION_OFF_SOURCE');
     expect(codes).not.toContain('ACTIVITY_TYPE_OVER_CAP');
+    expect(codes).not.toContain('VOCAB_NOT_SPACED');
+    expect(codes).not.toContain('PRACTICE_ORDER_NOT_ESCALATING');
   });
 
-  it('never blocks publish from the 4 new checks alone (all are warn severity)', () => {
+  it('flags a target word that only ever appears in the vocab block (massed, not spaced)', () => {
+    const slides = bookend([
+      { type: 'vocab', block: 'vocab', word: 'apple', definition: 'a fruit', example: 'I eat an apple.' },
+      { type: 'vocab', block: 'vocab', word: 'banana', definition: 'a fruit', example: 'I eat a banana.' },
+      { type: 'reading_passage', block: 'reading', passage: 'Lena eats a banana every morning.' },
+    ]);
+    const report = runLessonQualityCheck({ slides, hub: 'academy', cefr: 'a2', blueprint: baseBlueprint });
+    const issue = report.issues.find((i) => i.code === 'VOCAB_NOT_SPACED');
+    expect(issue).toBeTruthy();
+    expect(issue?.message).toContain('apple');
+    expect(issue?.severity).toBe('warn');
+  });
+
+  it('does not flag vocab spacing when every target word resurfaces outside the vocab block', () => {
+    const slides = bookend([
+      { type: 'vocab', block: 'vocab', word: 'apple', definition: 'a fruit', example: 'I eat an apple.' },
+      { type: 'reading_passage', block: 'reading', passage: 'Lena eats an apple every morning.' },
+    ]);
+    const report = runLessonQualityCheck({ slides, hub: 'academy', cefr: 'a2', blueprint: baseBlueprint });
+    expect(report.issues.map((i) => i.code)).not.toContain('VOCAB_NOT_SPACED');
+  });
+
+  it('flags practice that gets easier again after a production round (non-escalating)', () => {
+    const slides = bookend([
+      { type: 'fill_blank', block: 'grammar', before: 'She ', after: ' to school.', answer: 'goes' },
+      { type: 'matching', block: 'grammar', prompt: 'Match the pairs.', pairs: [{ left: 'go', right: 'goes' }] },
+    ]);
+    const report = runLessonQualityCheck({ slides, hub: 'academy', cefr: 'a2', blueprint: baseBlueprint });
+    const issue = report.issues.find((i) => i.code === 'PRACTICE_ORDER_NOT_ESCALATING');
+    expect(issue).toBeTruthy();
+    expect(issue?.severity).toBe('warn');
+  });
+
+  it('does not flag practice order when recognition rounds precede the production round', () => {
+    const slides = bookend([
+      { type: 'matching', block: 'grammar', prompt: 'Match the pairs.', pairs: [{ left: 'go', right: 'goes' }] },
+      { type: 'fill_blank', block: 'grammar', before: 'She ', after: ' to school.', answer: 'goes' },
+    ]);
+    const report = runLessonQualityCheck({ slides, hub: 'academy', cefr: 'a2', blueprint: baseBlueprint });
+    expect(report.issues.map((i) => i.code)).not.toContain('PRACTICE_ORDER_NOT_ESCALATING');
+  });
+
+  it('never blocks publish from the new checks alone (all are warn severity)', () => {
     const slides = bookend([
       { type: 'vocab', block: 'vocab', word: 'apple', definition: 'a fruit', example: 'I eat an apple.' },
       { type: 'grammar_pattern', block: 'grammar', rule: 'x' },
     ]);
     const report = runLessonQualityCheck({ slides, hub: 'academy', cefr: 'a2', blueprint: baseBlueprint });
-    const newCodes = ['VOCAB_ACTIVITY_LOW_VARIETY', 'GRAMMAR_PRACTICE_SHALLOW', 'COMPREHENSION_OFF_SOURCE', 'ACTIVITY_TYPE_OVER_CAP'];
+    const newCodes = [
+      'VOCAB_ACTIVITY_LOW_VARIETY', 'GRAMMAR_PRACTICE_SHALLOW', 'COMPREHENSION_OFF_SOURCE', 'ACTIVITY_TYPE_OVER_CAP',
+      'VOCAB_NOT_SPACED', 'PRACTICE_ORDER_NOT_ESCALATING',
+    ];
     const newIssues = report.issues.filter((i) => newCodes.includes(i.code));
     expect(newIssues.every((i) => i.severity === 'warn')).toBe(true);
   });
