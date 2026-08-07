@@ -486,7 +486,9 @@ STRICT 7-BLOCK STRUCTURE (60-MINUTE ACADEMY LESSON — pace ~2 min/slide → 30�
                    • Presentation: ONE "vocab_deck" (paginated cards with images, all target words).
                    • Practice (MANDATORY — at least 3 DISTINCT game rounds, each re-testing every word from a different angle so words are actively retrieved, not just re-read):
                      ONE "vocab_image_match" (drag word↔image) + ONE "matching" (word↔definition) + at least ONE more round — either a second "matching" (word↔word/synonym) or a set of "multiple" MCQs (meaning-in-context, one per word) — that tests the same words a different way than the first two rounds.
-  3. reading      — reading_passage + listening + comprehension multiple/truefalse (4-6 slides)
+  3. reading      — TWO SEPARATE comprehension checks, one per skill (5-7 slides total):
+                   • reading_passage (60-120 words), immediately followed by AT LEAST ONE "multiple" or "truefalse" slide whose answer is stated in the passage — this checks READING specifically.
+                   • listening (audio transcript), immediately followed by AT LEAST ONE "multiple" or "truefalse" slide whose answer is stated ONLY in the transcript, NOT in the reading passage — this checks LISTENING specifically. A listening slide with no dedicated comprehension question of its own is incomplete and NOT acceptable, even if the reading passage already has one.
   4. grammar      — PRESENT the rule once, then DRILL it intensively before any free/communicative use (6-8 slides total):
                    • Presentation: ONE creative grammar visual.
                      - Use "frequency_thermometer" whenever the target grammar is adverbs of frequency.
