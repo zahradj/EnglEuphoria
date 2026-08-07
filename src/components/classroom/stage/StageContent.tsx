@@ -276,7 +276,20 @@ export const StageContent: React.FC<StageContentProps> = ({
     );
   }
   const currentSlide = normalizeLiveSlide(rawSrc, currentSlideIndex);
-  if (!currentSlide) return <div className="absolute inset-0 bg-white" />;
+  if (!currentSlide) {
+    // rawSrc is undefined here — currentSlideIndex is out of bounds for this
+    // client's slide array (e.g. the teacher navigated ahead of a slide push
+    // that hasn't landed yet). A bare blank div made this indistinguishable
+    // from "sync is broken"; show a visible, self-explanatory state instead.
+    return (
+      <div className="absolute inset-0 bg-white flex items-center justify-center">
+        <div className="text-center text-muted-foreground px-6">
+          <div className="text-sm font-medium">Waiting for the teacher to sync this slide…</div>
+          <div className="text-xs mt-1">This will update automatically in a moment.</div>
+        </div>
+      </div>
+    );
+  }
 
   // Canvas-builder slides: render the saved layout in read-only mode.
   const canvasElements = (rawSrc as any)?.canvasElements;
