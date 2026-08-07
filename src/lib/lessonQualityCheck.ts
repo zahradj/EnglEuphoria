@@ -61,11 +61,11 @@ const CEFR_BUDGET: Record<string, { maxAvgSentenceWords: number; maxAvgWordLen: 
 /** Hub-specific slide-count targets (must align with generate-ppp-slides). */
 const HUB_SLIDE_TARGET: Record<LessonHub, { min: number; max: number; ideal: number }> = {
   playground: { min: 9, max: 22, ideal: 17 },
-  // Academy grew from 26-30 to 30-40 slides: vocab and grammar each now get
-  // their own presentation + ≥3/≥4 dedicated retrieval-practice rounds
-  // instead of sharing one "practice" block at the end (see
+  // Academy grew from 26-30 to 35-45 slides: vocab and grammar each now get
+  // their own presentation + ≥4/≥6 dedicated retrieval-AND-production
+  // practice rounds instead of sharing one "practice" block at the end (see
   // generate-ppp-slides' academy prompt + hubEnforcementBlock.ts).
-  academy: { min: 26, max: 42, ideal: 34 },
+  academy: { min: 26, max: 48, ideal: 40 },
   success: { min: 24, max: 32, ideal: 28 },
 };
 

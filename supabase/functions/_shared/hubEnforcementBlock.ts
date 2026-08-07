@@ -34,7 +34,7 @@ const HUB_CEFR_WINDOW: Record<EnforcementHub, { floor: string; ceiling: string; 
     register: "teen-modern, culturally inclusive, energetic but not childish — skews toward tweens (mostly 10-13), so avoid dating/romance or mature themes",
     ageBand: "ages 10–17 (mostly 10–13)",
     lessonMinutes: 60,
-    slideTarget: "30–40 slides — vocab and grammar each need presentation PLUS their own repeated retrieval practice (≥3 vocab game rounds, ≥4 grammar drills) before the shared integration/free-practice blocks",
+    slideTarget: "35–45 slides — vocab and grammar each need presentation PLUS their own repeated retrieval AND production practice (≥4 vocab rounds including 1 usage/production round, ≥6 grammar drills escalating in difficulty) before the shared integration/free-practice blocks",
   },
   success: {
     floor: "Pre-A1",
