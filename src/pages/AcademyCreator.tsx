@@ -746,8 +746,22 @@ export default function AcademyCreator() {
     r.readAsText(file);
   };
 
-  const openClassroom = () => {
+  const [openingClassroom, setOpeningClassroom] = useState(false);
+  const openClassroom = async () => {
+    // Persist current edits first so this preview can never drift from what's
+    // actually stored in curriculum_lessons — the classroom preview used to
+    // show whatever was in the editor's in-memory state, which could be
+    // unsaved changes a student would never actually see.
+    setOpeningClassroom(true);
+    try {
+      await lessonHook.silentSaveDraft(slides, { title, level, blueprint });
+    } catch (e) {
+      console.warn('[AcademyCreator] pre-preview save failed (non-fatal)', e);
+    } finally {
+      setOpeningClassroom(false);
+    }
     (window as any).__ACADEMY_DECK__ = slides;
+    (window as any).__ACADEMY_DECK_META__ = { title, level };
     navigate('/academy-classroom');
   };
 
@@ -961,8 +975,9 @@ export default function AcademyCreator() {
                   </button>
                 );
               })()}
-              <button onClick={openClassroom} className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl px-4 py-2 text-xs shadow-md transition active:scale-95">
-                <Play className="w-4 h-4" /> Classroom
+              <button onClick={openClassroom} disabled={openingClassroom} title="Preview — saves your current draft first, then opens it exactly as it will look for students"
+                className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl px-4 py-2 text-xs shadow-md transition active:scale-95 disabled:opacity-50">
+                {openingClassroom ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />} Classroom
               </button>
             </div>
           </div>
