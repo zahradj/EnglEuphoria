@@ -104,6 +104,7 @@ export const CurriculumMap: React.FC<Props> = ({ data, loading }) => {
         skill_focus: lesson.skill_focus || null,
         unit_title: (lesson as any).unit_title || null,
         unit_number: (lesson as any).unit_number || null,
+        lesson_number: (lesson as any).lesson_number || null,
       },
     });
   };
@@ -187,6 +188,8 @@ export const CurriculumMap: React.FC<Props> = ({ data, loading }) => {
         skill_focus: lesson.skill_focus,
         objective: lesson.objective || lesson.learning_objective,
         unit_theme: unit?.theme,
+        unit_number: unitNumber,
+        lesson_number: lessonNumber,
         previous_lesson_titles: previous,
         autoOpen: true,
         autoRun,

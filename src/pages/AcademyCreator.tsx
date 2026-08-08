@@ -257,6 +257,11 @@ export default function AcademyCreator() {
   const [aiGrammar, setAiGrammar] = useState('Present simple');
   const [aiBusy, setAiBusy] = useState(false);
   const [blueprint, setBlueprint] = useState<LessonBlueprint | null>(null);
+  // Curriculum-slot position, when this lesson was opened from the Curriculum
+  // Map — threaded into every save so it lands on the correct pre-seeded
+  // stub row instead of an orphaned, slot-less one.
+  const [unitNumber, setUnitNumber] = useState<number | undefined>(undefined);
+  const [lessonNumber, setLessonNumber] = useState<number | undefined>(undefined);
   const [aiCriticReport, setAiCriticReport] = useState<{
     verdict: 'pass' | 'needs_repair';
     scores: Record<string, number>;
@@ -277,6 +282,8 @@ export default function AcademyCreator() {
       const canonical = normalizeCefr(String(st.cefrLevel));
       if (canonical) setAiLevel(canonical);
     }
+    if (typeof st.unit_number === 'number') setUnitNumber(st.unit_number);
+    if (typeof st.lesson_number === 'number') setLessonNumber(st.lesson_number);
     if (st.blueprint) {
       const bp = st.blueprint as any;
       setBlueprint({
@@ -675,7 +682,7 @@ export default function AcademyCreator() {
     lessonId: lessonHook.lessonId,
     slides,
     title,
-    silentSaveDraft: (s, m) => lessonHook.silentSaveDraft(s, { ...m, level, blueprint }),
+    silentSaveDraft: (s, m) => lessonHook.silentSaveDraft(s, { ...m, level, blueprint, unitNumber, lessonNumber }),
   });
 
   const [publishVerdict, setPublishVerdict] = useState<CreatorPublishVerdict | null>(null);
@@ -686,13 +693,13 @@ export default function AcademyCreator() {
     return { verdict: aiCriticReport.verdict, overall };
   };
   const handleSaveDraft = async () => {
-    const id = await lessonHook.saveDraft(slides, { title, level, blueprint, criticResult: criticResultForSave() });
+    const id = await lessonHook.saveDraft(slides, { title, level, blueprint, unitNumber, lessonNumber, criticResult: criticResultForSave() });
     if (id) history.captureRevision({ title, slides, kind: 'manual' });
     if (lessonHook.lastQAReport) setPublishVerdict(verdictFromQualityReport(lessonHook.lastQAReport));
   };
   const handlePublish = async () => {
     try {
-      const id = await lessonHook.publish(slides, { title, level, blueprint, criticResult: criticResultForSave() });
+      const id = await lessonHook.publish(slides, { title, level, blueprint, unitNumber, lessonNumber, criticResult: criticResultForSave() });
       if (id) history.captureRevision({ title, slides, kind: 'publish' });
     } finally {
       if (lessonHook.lastQAReport) {
@@ -770,7 +777,7 @@ export default function AcademyCreator() {
     // unsaved changes a student would never actually see.
     setOpeningClassroom(true);
     try {
-      await lessonHook.silentSaveDraft(slides, { title, level, blueprint });
+      await lessonHook.silentSaveDraft(slides, { title, level, blueprint, unitNumber, lessonNumber });
     } catch (e) {
       console.warn('[AcademyCreator] pre-preview save failed (non-fatal)', e);
     } finally {
