@@ -221,51 +221,39 @@ The EnglEuphoria Hiring Team`,
 
   const handleReject = async () => {
     if (!selectedApplication) return;
-    
+
     setActionLoading(true);
     try {
-      const { error } = await supabase
-        .from('teacher_applications')
-        .update({ 
-          current_stage: 'rejected',
-          status: 'rejected',
-          rejection_reason: rejectionReason,
-        })
-        .eq('id', selectedApplication.id);
+      // Routed through reject-teacher-application: send-transactional-email
+      // requires an internal secret on every caller, which can't be attached
+      // safely from the browser. The previous direct invoke() here always
+      // hit that 403 silently (swallowed by the empty catch below it used to
+      // have) — rejection emails were never actually being delivered.
+      const { data, error } = await supabase.functions.invoke('reject-teacher-application', {
+        body: { applicationId: selectedApplication.id, reason: rejectionReason || null },
+      });
 
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
 
-      // Send rejection email — use post-interview template if they were already at interview stage
-      const wasInterviewed = ['interview_scheduled', 'interview_completed'].includes(selectedApplication.current_stage);
-      const templateName = wasInterviewed ? 'post-interview-rejection' : 'application-rejected';
-      const idempotencyKey = wasInterviewed
-        ? `post-interview-rejection-${selectedApplication.id}`
-        : `application-rejected-${selectedApplication.id}`;
-      try {
-        await supabase.functions.invoke('send-transactional-email', {
-          body: {
-            templateName,
-            recipientEmail: selectedApplication.email,
-            idempotencyKey,
-            templateData: {
-              name: selectedApplication.first_name || getDisplayName(selectedApplication)?.split(' ')[0],
-            },
-          },
+      if (data?.emailSent === false) {
+        console.error('Rejection email failed to send:', data.emailError);
+        toast.warning('Application rejected, but the notification email failed to send.', {
+          description: data.emailError,
         });
-      } catch (emailError) {
+      } else {
+        toast.success('Application Rejected', {
+          description: `${getDisplayName(selectedApplication)} has been notified.`,
+        });
       }
-
-      toast.success('Application Rejected', {
-        description: `${getDisplayName(selectedApplication)} has been notified.`,
-      });
 
       setShowRejectDialog(false);
       setRejectionReason('');
       setSelectedApplication(null);
       fetchApplications();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error rejecting application:', error);
-      toast.error('Failed to reject application');
+      toast.error('Failed to reject application', { description: error.message });
     } finally {
       setActionLoading(false);
     }
