@@ -253,13 +253,19 @@ class ClassroomSyncService {
         updateData.scene_lesson_idx = updates.sceneLessonIdx;
       }
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('classroom_sessions')
         .update(updateData)
         .eq('room_id', roomId)
-        .eq('session_status', 'active');
+        .eq('session_status', 'active')
+        .select('room_id');
 
       if (error) throw error;
+      // A 0-row match (session ended/not found) isn't a Postgres error, so it
+      // would otherwise report success while writing nothing — surface it.
+      if (!data || data.length === 0) {
+        throw new Error('Session not found or inactive — the teacher\'s room may need to reconnect');
+      }
     } catch (error) {
       console.error('Failed to update session:', error);
       throw error;

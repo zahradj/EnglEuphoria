@@ -224,7 +224,13 @@ export const TrialCreator: React.FC = () => {
                   </button>
                   {open && (
                     <div className={cn('border-t-2 bg-brand-cream/40 dark:bg-slate-950/40 p-4 sm:p-6', h.border)}>
-                      <h.Component />
+                      {/* Playground's trail lesson scales its vh/vw-sized content to
+                          fit whatever box it's given (see ScaledFrame) — that needs a
+                          real, bounded height here rather than the unconstrained
+                          padding this panel had before. */}
+                      <div className="h-[80vh] overflow-hidden rounded-xl">
+                        <h.Component />
+                      </div>
                     </div>
                   )}
                 </div>

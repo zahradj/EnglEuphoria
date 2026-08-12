@@ -16,10 +16,11 @@ import ImmersivePlaygroundShell from '@/components/playground/ImmersivePlaygroun
 // preview) instead of going through the normalized DynamicSlideRenderer.
 const CREATOR_NATIVE_TYPES = new Set([
   'intro', 'question', 'opinion', 'poll',
-  'vocab', 'vocab_solo', 'matching',
-  'reading_passage', 'listening',
+  'vocab', 'vocab_solo', 'vocab_deck', 'vocab_image_match', 'matching',
+  'reading_passage', 'listening', 'listen_repeat',
   'multiple', 'truefalse', 'fill_blank', 'fill', 'sentence_builder',
-  'grammar_pattern', 'error_detection', 'correction',
+  'grammar_pattern', 'grammar_color_decode', 'frequency_thermometer', 'grammar_formula',
+  'error_detection', 'correction',
   'debate_scale', 'role_play', 'speaking_task', 'reflection',
   'cluster', 'canvas_game', 'living_canvas', 'scaffolded_media',
   'lesson_summary', 'phonics_focus', 'storybook', 'media_player',
@@ -276,7 +277,20 @@ export const StageContent: React.FC<StageContentProps> = ({
     );
   }
   const currentSlide = normalizeLiveSlide(rawSrc, currentSlideIndex);
-  if (!currentSlide) return <div className="absolute inset-0 bg-white" />;
+  if (!currentSlide) {
+    // rawSrc is undefined here — currentSlideIndex is out of bounds for this
+    // client's slide array (e.g. the teacher navigated ahead of a slide push
+    // that hasn't landed yet). A bare blank div made this indistinguishable
+    // from "sync is broken"; show a visible, self-explanatory state instead.
+    return (
+      <div className="absolute inset-0 bg-white flex items-center justify-center">
+        <div className="text-center text-muted-foreground px-6">
+          <div className="text-sm font-medium">Waiting for the teacher to sync this slide…</div>
+          <div className="text-xs mt-1">This will update automatically in a moment.</div>
+        </div>
+      </div>
+    );
+  }
 
   // Canvas-builder slides: render the saved layout in read-only mode.
   const canvasElements = (rawSrc as any)?.canvasElements;

@@ -91,7 +91,7 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
   const persistImpl = useCallback(
     async (
       slides: any[],
-      meta: { title: string; level?: string; publish: boolean; silent?: boolean; blueprint?: any; bypassQA?: boolean; playgroundUnit?: any; criticResult?: { verdict: string; overall: number } | null },
+      meta: { title: string; level?: string; publish: boolean; silent?: boolean; blueprint?: any; bypassQA?: boolean; playgroundUnit?: any; criticResult?: { verdict: string; overall: number } | null; unitNumber?: number; lessonNumber?: number },
     ): Promise<string | null> => {
       if (!meta.silent) setIsSaving(true);
       try {
@@ -170,6 +170,17 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
               content: mergedContent,
               is_published: nextIsPublished,
               difficulty_level: difficulty,
+              // The library groups by slot_cefr_level first, falling back to the
+              // coarse 3-bucket difficulty_level only when this is null — write
+              // the real level so the classroom library shows all 6 CEFR
+              // sections instead of collapsing them into 3.
+              ...(cefr ? { slot_cefr_level: cefr } : {}),
+              // Curriculum-slot position — only set when the caller actually
+              // knows it (e.g. opened from the Curriculum Map), so a
+              // from-scratch lesson's already-correct slot never gets
+              // clobbered by an unrelated save.
+              ...(meta.unitNumber != null ? { slot_unit_number: meta.unitNumber } : {}),
+              ...(meta.lessonNumber != null ? { slot_lesson_number: meta.lessonNumber } : {}),
               target_system: targetSystem,
               ai_metadata: mergedMeta,
             })
@@ -198,6 +209,9 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
             description: `${hub === 'playground' ? 'Playground' : hub === 'success' ? 'Success Hub' : 'Academy'} lesson`,
             target_system: targetSystem,
             difficulty_level: difficulty,
+            ...(cefr ? { slot_cefr_level: cefr } : {}),
+            ...(meta.unitNumber != null ? { slot_unit_number: meta.unitNumber } : {}),
+            ...(meta.lessonNumber != null ? { slot_lesson_number: meta.lessonNumber } : {}),
             duration_minutes: hub === 'playground' ? 30 : 60,
             content,
             is_published: meta.publish,
@@ -239,19 +253,19 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
   );
 
   const saveDraft = useCallback(
-    (slides: any[], meta: { title: string; level?: string; blueprint?: any; playgroundUnit?: any; criticResult?: { verdict: string; overall: number } | null }) =>
+    (slides: any[], meta: { title: string; level?: string; blueprint?: any; playgroundUnit?: any; criticResult?: { verdict: string; overall: number } | null; unitNumber?: number; lessonNumber?: number }) =>
       persist(slides, { ...meta, publish: false }),
     [persist],
   );
 
   const publish = useCallback(
-    (slides: any[], meta: { title: string; level?: string; blueprint?: any; playgroundUnit?: any; criticResult?: { verdict: string; overall: number } | null }) =>
+    (slides: any[], meta: { title: string; level?: string; blueprint?: any; playgroundUnit?: any; criticResult?: { verdict: string; overall: number } | null; unitNumber?: number; lessonNumber?: number }) =>
       persist(slides, { ...meta, publish: true }),
     [persist],
   );
 
   const silentSaveDraft = useCallback(
-    (slides: any[], meta: { title: string; level?: string; blueprint?: any; playgroundUnit?: any }) =>
+    (slides: any[], meta: { title: string; level?: string; blueprint?: any; playgroundUnit?: any; unitNumber?: number; lessonNumber?: number }) =>
       persist(slides, { ...meta, publish: false, silent: true }),
     [persist],
   );

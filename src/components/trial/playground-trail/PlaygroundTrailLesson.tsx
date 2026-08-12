@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import PlayUnitLesson from "@/pages/playground-scene/PlayUnitLesson";
 import { PLAYGROUND_TRIAL_SCENES } from "@/content/playground-library/trial/trialScenes";
+import { ScaledFrame } from "@/components/common/ScaledFrame";
 
 import logo from "@/assets/playground-trail/logo.png";
 import mascot from "@/assets/playground-trail/mascot.png";
@@ -16,11 +17,20 @@ export function PlaygroundTrailLesson({
   const [started, setStarted] = useState(false);
 
   if (started) {
+    // ScaledFrame measures its own box against the real viewport to decide
+    // how much to shrink the vh/vw-sized lesson content — that only works
+    // if this element's height comes from a real ancestor (the classroom's
+    // customStage slot provides one). Callers that mount this outside a
+    // sized container (e.g. an admin preview panel) need to give it one —
+    // see TrialCreator.tsx's `h-[80vh]` wrapper.
     return (
-      <PlayUnitLesson
-        scenes={PLAYGROUND_TRIAL_SCENES}
-        sessionKey={`playground-trial-${roomId ?? "anon"}`}
-      />
+      <ScaledFrame className="relative h-full w-full overflow-hidden">
+        <PlayUnitLesson
+          scenes={PLAYGROUND_TRIAL_SCENES}
+          sessionKey={`playground-trial-${roomId ?? "anon"}`}
+          embedded
+        />
+      </ScaledFrame>
     );
   }
 
