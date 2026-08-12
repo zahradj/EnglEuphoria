@@ -22,6 +22,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { extractEdgeError } from '@/lib/extractEdgeError';
 
 interface StudentRow {
   id: string;
@@ -198,17 +199,20 @@ export const SuperAdminControlCenter: React.FC = () => {
   const handleInviteToInterview = async (app: PipelineApplicant) => {
     setDecisionBusyId(app.id);
     try {
-      const { error } = await supabase.functions.invoke('recruitment-invite-applicant', {
+      const { data, error } = await supabase.functions.invoke('recruitment-invite-applicant', {
         body: { applicationId: app.id },
       });
-      if (error) throw error;
+      if (error || (data as any)?.error) {
+        const msg = await extractEdgeError({ error, data, fallback: 'Failed to send interview invite' });
+        throw new Error(msg);
+      }
       toast.success('Booking invitation sent', {
         description: `${getApplicantName(app)} can now pick a date for the interview.`,
       });
       setPipelineApps(prev => prev.map(a => (a.id === app.id ? { ...a, current_stage: 'interview_pending' } : a)));
     } catch (error: any) {
       console.error('Error sending interview invite:', error);
-      toast.error('Failed to send interview invite', { description: error.message });
+      toast.error('Failed to send interview invite', { description: error.message, duration: 15000 });
     } finally {
       setDecisionBusyId(null);
     }
@@ -228,8 +232,10 @@ export const SuperAdminControlCenter: React.FC = () => {
           lastName: app.last_name,
         },
       });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
+      if (error || data?.error) {
+        const msg = await extractEdgeError({ error, data, fallback: 'Failed to approve teacher' });
+        throw new Error(msg);
+      }
 
       toast.success('Teacher Approved & Invited! 🎉', {
         description: `${getApplicantName(app)} will receive an email to set their password and access the platform.`,
@@ -238,7 +244,7 @@ export const SuperAdminControlCenter: React.FC = () => {
       setPipelineApps(prev => prev.filter(a => a.id !== app.id));
     } catch (error: any) {
       console.error('Error approving teacher:', error);
-      toast.error('Failed to approve teacher', { description: error.message || 'An unexpected error occurred' });
+      toast.error('Failed to approve teacher', { description: error.message || 'An unexpected error occurred', duration: 15000 });
     } finally {
       setDecisionBusyId(null);
     }
@@ -258,8 +264,10 @@ export const SuperAdminControlCenter: React.FC = () => {
       const { data, error } = await supabase.functions.invoke('reject-teacher-application', {
         body: { applicationId: rejectTarget.id, reason: rejectionReason || null },
       });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
+      if (error || data?.error) {
+        const msg = await extractEdgeError({ error, data, fallback: 'Failed to reject application' });
+        throw new Error(msg);
+      }
       if (data?.emailSent === false) {
         console.error('Rejection email failed to send:', data.emailError);
         toast.warning('Application rejected, but the notification email failed to send.', {
@@ -273,7 +281,7 @@ export const SuperAdminControlCenter: React.FC = () => {
       setRejectionReason('');
     } catch (error: any) {
       console.error('Error rejecting application:', error);
-      toast.error('Failed to reject application', { description: error.message });
+      toast.error('Failed to reject application', { description: error.message, duration: 15000 });
     } finally {
       setDecisionBusyId(null);
     }
