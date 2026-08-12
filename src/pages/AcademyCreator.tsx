@@ -257,6 +257,8 @@ export default function AcademyCreator() {
   const [aiGrammar, setAiGrammar] = useState('Present simple');
   const [aiBusy, setAiBusy] = useState(false);
   const [blueprint, setBlueprint] = useState<LessonBlueprint | null>(null);
+  const [unitNumber, setUnitNumber] = useState<number | undefined>(undefined);
+  const [lessonNumber, setLessonNumber] = useState<number | undefined>(undefined);
 
   // ── Hydrate from Curriculum Blueprint hand-off (router state) ────
   const location = useLocation();
@@ -271,6 +273,8 @@ export default function AcademyCreator() {
       const canonical = normalizeCefr(String(st.cefrLevel));
       if (canonical) setAiLevel(canonical);
     }
+    if (st.unit_number != null) setUnitNumber(Number(st.unit_number));
+    if (st.lesson_number != null) setLessonNumber(Number(st.lesson_number));
     if (st.blueprint) {
       const bp = st.blueprint as any;
       setBlueprint({
@@ -644,18 +648,18 @@ export default function AcademyCreator() {
     lessonId: lessonHook.lessonId,
     slides,
     title,
-    silentSaveDraft: (s, m) => lessonHook.silentSaveDraft(s, { ...m, level, blueprint }),
+    silentSaveDraft: (s, m) => lessonHook.silentSaveDraft(s, { ...m, level, blueprint, unitNumber, lessonNumber }),
   });
 
   const [publishVerdict, setPublishVerdict] = useState<CreatorPublishVerdict | null>(null);
   const handleSaveDraft = async () => {
-    const id = await lessonHook.saveDraft(slides, { title, level, blueprint });
+    const id = await lessonHook.saveDraft(slides, { title, level, blueprint, unitNumber, lessonNumber });
     if (id) history.captureRevision({ title, slides, kind: 'manual' });
     if (lessonHook.lastQAReport) setPublishVerdict(verdictFromQualityReport(lessonHook.lastQAReport));
   };
   const handlePublish = async () => {
     try {
-      const id = await lessonHook.publish(slides, { title, level, blueprint });
+      const id = await lessonHook.publish(slides, { title, level, blueprint, unitNumber, lessonNumber });
       if (id) history.captureRevision({ title, slides, kind: 'publish' });
     } finally {
       if (lessonHook.lastQAReport) {

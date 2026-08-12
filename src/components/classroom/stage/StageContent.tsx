@@ -16,15 +16,16 @@ import ImmersivePlaygroundShell from '@/components/playground/ImmersivePlaygroun
 // preview) instead of going through the normalized DynamicSlideRenderer.
 const CREATOR_NATIVE_TYPES = new Set([
   'intro', 'question', 'opinion', 'poll',
-  'vocab', 'vocab_solo', 'matching',
-  'reading_passage', 'listening',
+  'vocab', 'vocab_solo', 'vocab_deck', 'vocab_image_match', 'matching',
+  'reading_passage', 'listening', 'listen_repeat',
   'multiple', 'truefalse', 'fill_blank', 'fill', 'sentence_builder',
-  'grammar_pattern', 'error_detection', 'correction',
+  'grammar_pattern', 'error_detection', 'correction', 'grammar_color_decode', 'grammar_formula',
   'debate_scale', 'role_play', 'speaking_task', 'reflection',
   'cluster', 'canvas_game', 'living_canvas', 'scaffolded_media',
   'lesson_summary', 'phonics_focus', 'storybook', 'media_player',
   'drag', 'match', 'draw',
   'tone_compare', 'functional_pattern', 'rewrite', 'scenario', 'email_task',
+  'frequency_thermometer',
 ]);
 const isCreatorNativeSlide = (s: any) =>
   !!s && typeof s.type === 'string' && CREATOR_NATIVE_TYPES.has(s.type);

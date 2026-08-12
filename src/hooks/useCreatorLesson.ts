@@ -91,7 +91,7 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
   const persistImpl = useCallback(
     async (
       slides: any[],
-      meta: { title: string; level?: string; publish: boolean; silent?: boolean; blueprint?: any; bypassQA?: boolean; playgroundUnit?: any; criticResult?: { verdict: string; overall: number } | null },
+      meta: { title: string; level?: string; publish: boolean; silent?: boolean; blueprint?: any; bypassQA?: boolean; playgroundUnit?: any; criticResult?: { verdict: string; overall: number } | null; unitNumber?: number; lessonNumber?: number },
     ): Promise<string | null> => {
       if (!meta.silent) setIsSaving(true);
       try {
@@ -172,6 +172,8 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
               difficulty_level: difficulty,
               target_system: targetSystem,
               ai_metadata: mergedMeta,
+              ...(meta.unitNumber != null ? { slot_unit_number: String(meta.unitNumber) } : {}),
+              ...(meta.lessonNumber != null ? { slot_lesson_number: String(meta.lessonNumber) } : {}),
             })
             .eq('id', currentLessonId);
           if (error) throw error;
@@ -203,6 +205,8 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
             is_published: meta.publish,
             created_by: userId,
             ai_metadata: { hub, cefr_level: cefr ?? undefined, slideCount: slides.length, ...(meta.blueprint ? { lesson_blueprint: meta.blueprint } : {}), ...(qaReport ? { qa_report: qaReport, quality_score: qaReport.overall ?? null } : {}), ...(meta.criticResult ? { critic_verdict: meta.criticResult.verdict, critic_score: meta.criticResult.overall, critic_scored_at: new Date().toISOString() } : {}) },
+            ...(meta.unitNumber != null ? { slot_unit_number: String(meta.unitNumber) } : {}),
+            ...(meta.lessonNumber != null ? { slot_lesson_number: String(meta.lessonNumber) } : {}),
           } as any)
           .select('id')
           .single();
@@ -239,19 +243,19 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
   );
 
   const saveDraft = useCallback(
-    (slides: any[], meta: { title: string; level?: string; blueprint?: any; playgroundUnit?: any; criticResult?: { verdict: string; overall: number } | null }) =>
+    (slides: any[], meta: { title: string; level?: string; blueprint?: any; playgroundUnit?: any; criticResult?: { verdict: string; overall: number } | null; unitNumber?: number; lessonNumber?: number }) =>
       persist(slides, { ...meta, publish: false }),
     [persist],
   );
 
   const publish = useCallback(
-    (slides: any[], meta: { title: string; level?: string; blueprint?: any; playgroundUnit?: any; criticResult?: { verdict: string; overall: number } | null }) =>
+    (slides: any[], meta: { title: string; level?: string; blueprint?: any; playgroundUnit?: any; criticResult?: { verdict: string; overall: number } | null; unitNumber?: number; lessonNumber?: number }) =>
       persist(slides, { ...meta, publish: true }),
     [persist],
   );
 
   const silentSaveDraft = useCallback(
-    (slides: any[], meta: { title: string; level?: string; blueprint?: any; playgroundUnit?: any }) =>
+    (slides: any[], meta: { title: string; level?: string; blueprint?: any; playgroundUnit?: any; unitNumber?: number; lessonNumber?: number }) =>
       persist(slides, { ...meta, publish: false, silent: true }),
     [persist],
   );
