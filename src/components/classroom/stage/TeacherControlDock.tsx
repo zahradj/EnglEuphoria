@@ -39,6 +39,12 @@ interface TeacherControlDockProps {
   iframeUnlocked: boolean;
   onToggleIframeUnlock: (unlocked: boolean) => void;
 
+  /** Whether the student may play the active Playground scene activity (default locked/watch-only). */
+  activityUnlocked?: boolean;
+  onToggleActivityUnlock?: (unlocked: boolean) => void;
+  /** Show the "Unlock Student Activity" toggle — true when a Playground scene lesson is on stage. */
+  isSceneLessonActive?: boolean;
+
   // Consolidated classroom tools (moved from left sidebar)
   onGiveStar?: () => void;
   onOpenTimer?: () => void;
@@ -97,6 +103,9 @@ export const TeacherControlDock: React.FC<TeacherControlDockProps> = ({
   onClearCanvas,
   iframeUnlocked,
   onToggleIframeUnlock,
+  activityUnlocked = false,
+  onToggleActivityUnlock,
+  isSceneLessonActive = false,
   onGiveStar,
   onOpenTimer,
   onRollDice,
@@ -294,7 +303,7 @@ export const TeacherControlDock: React.FC<TeacherControlDockProps> = ({
         )}
 
         {/* Consolidated Classroom Tools (Timer / Dice / Reactions) */}
-        {(onOpenTimer || onRollDice || onSpinWheel || onStartXO || onSendSticker) && (
+        {(onOpenTimer || onRollDice || onSpinWheel || onStartXO || onSendSticker || (isSceneLessonActive && onToggleActivityUnlock)) && (
           <div className="pl-2 ml-1 border-l border-border">
 
             <Popover>
@@ -306,6 +315,21 @@ export const TeacherControlDock: React.FC<TeacherControlDockProps> = ({
               </PopoverTrigger>
               <PopoverContent className="w-64 p-3" align="end" side="top">
                 <div className="space-y-3">
+                  {/* Unlock/lock the student's ability to play the active Playground scene game */}
+                  {isSceneLessonActive && onToggleActivityUnlock && (
+                    <div className="flex items-center gap-2 rounded-lg bg-muted/50 px-2.5 py-2">
+                      <Unlock className={`h-3.5 w-3.5 shrink-0 ${activityUnlocked ? 'text-primary' : 'text-muted-foreground'}`} />
+                      <label className="flex-1 text-xs font-medium text-foreground select-none cursor-pointer" htmlFor="activity-unlock-toggle">
+                        Unlock Student Activity
+                      </label>
+                      <Switch
+                        id="activity-unlock-toggle"
+                        checked={activityUnlocked}
+                        onCheckedChange={onToggleActivityUnlock}
+                        aria-label="Unlock student interaction with the scene activity"
+                      />
+                    </div>
+                  )}
                   <div className="grid grid-cols-2 gap-2">
                     {/* Star promoted to its own hub-branded button on the dock. */}
 

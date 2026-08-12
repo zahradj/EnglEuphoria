@@ -102,11 +102,13 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
     stageMode,
     drawingEnabled,
     iframeUnlocked,
+    activityUnlocked,
     setCurrentSlideIndex,
     updateSharedNotes,
     applyRemoteStageMode,
     applyRemoteDrawingEnabled,
     applyRemoteIframeUnlocked,
+    applyRemoteActivityUnlocked,
     sessionEnded,
     sceneLessonIdx,
   } = useClassroomSync({
@@ -159,6 +161,17 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
         });
       }
     });
+    const unsubActivityLock = whiteboardService.subscribeToSceneActivityLockState(roomId, ({ isUnlocked, senderId }) => {
+      if (senderId === studentId || typeof isUnlocked !== 'boolean') return;
+      applyRemoteActivityUnlocked(isUnlocked);
+      if (isUnlocked) {
+        toast({
+          title: '🔓 Activity unlocked',
+          description: 'You can play along now!',
+          duration: 2500,
+        });
+      }
+    });
     const unsubReward = whiteboardService.subscribeToRewards(roomId, (payload) => {
       if (payload.senderId === studentId) return;
       if (payload.rewardType === 'star') {
@@ -186,11 +199,12 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
       unsubStage();
       unsubDrawing();
       unsubIframeLock();
+      unsubActivityLock();
       unsubReward();
       unsubTool();
       unsubStatus();
     };
-  }, [roomId, studentId, applyRemoteStageMode, applyRemoteDrawingEnabled, applyRemoteIframeUnlocked, setCurrentSlideIndex, toast]);
+  }, [roomId, studentId, applyRemoteStageMode, applyRemoteDrawingEnabled, applyRemoteIframeUnlocked, applyRemoteActivityUnlocked, setCurrentSlideIndex, toast]);
 
   // Slide sync is now fully handled by postgres_changes in useClassroomSync — no broadcast needed.
 
@@ -582,6 +596,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
           stageMode={stageMode}
           drawingEnabled={drawingEnabled}
           iframeUnlocked={iframeUnlocked}
+          activityUnlocked={activityUnlocked}
           rawSlides={lessonSlides}
           hubType={hubType === 'professional' ? 'professional' : hubType}
           onAddStroke={addStroke}

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  Users, Activity, Eye, Edit2, Check, X, 
+import {
+  Users, Activity, Eye, Edit2, Check, X,
   GraduationCap, BookOpen, TrendingUp, Video,
   RefreshCw, Search, Filter, UserCheck, DollarSign,
   HeartPulse, Bell, Signal, SignalMedium, SignalLow,
-  ShieldCheck, Wrench, ArrowRight, History
+  ShieldCheck, Wrench, ArrowRight, History, Loader2, CalendarCheck,
+  GraduationCap as ApplicantsIcon,
 } from 'lucide-react';
 
 import { SalesPanel } from './SalesPanel';
@@ -17,6 +18,8 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Progress } from '@/components/ui/progress';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -42,6 +45,20 @@ interface LiveSession {
   teacher_id: string;
 }
 
+interface PipelineApplicant {
+  id: string;
+  email: string;
+  first_name: string | null;
+  last_name: string | null;
+  current_stage: string;
+}
+
+// Pre-interview: "accept" here means inviting to interview, not hiring.
+const PRE_INTERVIEW_STAGES = ['application_submitted', 'application_received'];
+// Post-interview: "accept" here is the real final hire.
+const POST_INTERVIEW_STAGES = ['interview_pending', 'interview_scheduled', 'interview_completed', 'final_review'];
+const PIPELINE_STAGES = [...PRE_INTERVIEW_STAGES, ...POST_INTERVIEW_STAGES];
+
 const LEVEL_OPTIONS = ['playground', 'academy', 'professional'];
 
 const levelBadgeColor: Record<string, string> = {
@@ -62,6 +79,13 @@ export const SuperAdminControlCenter: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'analytics' | 'monitor' | 'override' | 'sales' | 'pulse' | 'engineering'>('analytics');
   const navigate = useNavigate();
   const [engineeringCounts, setEngineeringCounts] = useState<{ sentinelPending: number; sentinelNeedsHuman: number; learnerSignals: number }>({ sentinelPending: 0, sentinelNeedsHuman: 0, learnerSignals: 0 });
+
+  // ─── Teacher Applicants — Pipeline (pre- and post-interview) ─────────────
+  const [pipelineApps, setPipelineApps] = useState<PipelineApplicant[]>([]);
+  const [pipelineLoading, setPipelineLoading] = useState(true);
+  const [decisionBusyId, setDecisionBusyId] = useState<string | null>(null);
+  const [rejectTarget, setRejectTarget] = useState<PipelineApplicant | null>(null);
+  const [rejectionReason, setRejectionReason] = useState('');
 
 
   // Stats summary
@@ -148,6 +172,113 @@ export const SuperAdminControlCenter: React.FC = () => {
     }
   };
 
+  const getApplicantName = (app: PipelineApplicant) =>
+    `${app.first_name || ''} ${app.last_name || ''}`.trim() || app.email;
+  const isPreInterview = (app: PipelineApplicant) => PRE_INTERVIEW_STAGES.includes(app.current_stage);
+
+  const fetchPipelineApplicants = async () => {
+    setPipelineLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('teacher_applications')
+        .select('id, email, first_name, last_name, current_stage')
+        .in('current_stage', PIPELINE_STAGES)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      setPipelineApps((data as any) || []);
+    } catch {
+      toast.error('Failed to load teacher applicants');
+    } finally {
+      setPipelineLoading(false);
+    }
+  };
+
+  // Pre-interview "accept": invites to interview, doesn't hire yet — mirrors
+  // TeacherApplicationReview's confirmInterviewInvitation.
+  const handleInviteToInterview = async (app: PipelineApplicant) => {
+    setDecisionBusyId(app.id);
+    try {
+      const { error } = await supabase.functions.invoke('recruitment-invite-applicant', {
+        body: { applicationId: app.id },
+      });
+      if (error) throw error;
+      toast.success('Booking invitation sent', {
+        description: `${getApplicantName(app)} can now pick a date for the interview.`,
+      });
+      setPipelineApps(prev => prev.map(a => (a.id === app.id ? { ...a, current_stage: 'interview_pending' } : a)));
+    } catch (error: any) {
+      console.error('Error sending interview invite:', error);
+      toast.error('Failed to send interview invite', { description: error.message });
+    } finally {
+      setDecisionBusyId(null);
+    }
+  };
+
+  // Post-interview "accept": the real final hire — mirrors
+  // TeacherApplicationReview's handleFinalApprove — creates the auth user +
+  // teacher_profiles row and emails the set-password link.
+  const handleApproveTeacher = async (app: PipelineApplicant) => {
+    setDecisionBusyId(app.id);
+    try {
+      const { data, error } = await supabase.functions.invoke('approve-teacher', {
+        body: {
+          applicationId: app.id,
+          email: app.email,
+          firstName: app.first_name,
+          lastName: app.last_name,
+        },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      toast.success('Teacher Approved & Invited! 🎉', {
+        description: `${getApplicantName(app)} will receive an email to set their password and access the platform.`,
+        duration: 5000,
+      });
+      setPipelineApps(prev => prev.filter(a => a.id !== app.id));
+    } catch (error: any) {
+      console.error('Error approving teacher:', error);
+      toast.error('Failed to approve teacher', { description: error.message || 'An unexpected error occurred' });
+    } finally {
+      setDecisionBusyId(null);
+    }
+  };
+
+  // Reject (either stage): routed through the reject-teacher-application edge
+  // function, which updates the application and sends the rejection email
+  // server-side (picking the pre- vs post-interview template itself).
+  // send-transactional-email requires an internal secret on every caller —
+  // that can't be attached safely from the browser, so this can't call it
+  // directly (the pre-existing Reject flow in TeacherApplicationReview.tsx
+  // does exactly that and its rejection emails have been silently failing).
+  const handleConfirmReject = async () => {
+    if (!rejectTarget) return;
+    setDecisionBusyId(rejectTarget.id);
+    try {
+      const { data, error } = await supabase.functions.invoke('reject-teacher-application', {
+        body: { applicationId: rejectTarget.id, reason: rejectionReason || null },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (data?.emailSent === false) {
+        console.error('Rejection email failed to send:', data.emailError);
+        toast.warning('Application rejected, but the notification email failed to send.', {
+          description: data.emailError,
+        });
+      } else {
+        toast.success('Application Rejected', { description: `${getApplicantName(rejectTarget)} has been notified.` });
+      }
+      setPipelineApps(prev => prev.filter(a => a.id !== rejectTarget.id));
+      setRejectTarget(null);
+      setRejectionReason('');
+    } catch (error: any) {
+      console.error('Error rejecting application:', error);
+      toast.error('Failed to reject application', { description: error.message });
+    } finally {
+      setDecisionBusyId(null);
+    }
+  };
+
   const handleLevelChange = async (studentId: string, level: string) => {
     try {
       const { error } = await supabase
@@ -170,6 +301,7 @@ export const SuperAdminControlCenter: React.FC = () => {
   useEffect(() => {
     fetchStudents();
     fetchLiveSessions();
+    fetchPipelineApplicants();
   }, []);
 
   const filteredStudents = students.filter(s => {
@@ -760,6 +892,122 @@ export const SuperAdminControlCenter: React.FC = () => {
           </div>
         </motion.div>
       )}
+
+      {/* ─── Teacher Applicants — Pipeline ────────────────────────────────── */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-violet-100 text-violet-700">
+              <ApplicantsIcon className="w-5 h-5" />
+            </div>
+            <div>
+              <CardTitle className="text-base">Teacher Applicants</CardTitle>
+              <CardDescription>
+                Before interview: Accept sends the interview invite, Reject ends the application.
+                After interview: Accept is the final hire (creates their account + emails a set-password
+                link); Reject emails them the decision.
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {pipelineLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            </div>
+          ) : pipelineApps.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4">No applicants currently in the pipeline.</p>
+          ) : (
+            <div className="space-y-2">
+              {pipelineApps.map(app => (
+                <div
+                  key={app.id}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg border p-3"
+                >
+                  <div className="min-w-0">
+                    <p className="font-medium truncate">{getApplicantName(app)}</p>
+                    <p className="text-sm text-muted-foreground truncate">{app.email}</p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <Badge variant="secondary" className="capitalize">
+                      {app.current_stage.replace(/_/g, ' ')}
+                    </Badge>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-destructive hover:bg-destructive/10"
+                      disabled={decisionBusyId === app.id}
+                      onClick={() => { setRejectTarget(app); setRejectionReason(''); }}
+                    >
+                      <X className="h-4 w-4 mr-1" />
+                      Reject
+                    </Button>
+                    {isPreInterview(app) ? (
+                      <Button
+                        size="sm"
+                        className="bg-green-600 hover:bg-green-700"
+                        disabled={decisionBusyId === app.id}
+                        onClick={() => handleInviteToInterview(app)}
+                      >
+                        {decisionBusyId === app.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                        ) : (
+                          <CalendarCheck className="h-4 w-4 mr-1" />
+                        )}
+                        Accept (Invite to Interview)
+                      </Button>
+                    ) : (
+                      <Button
+                        size="sm"
+                        className="bg-green-600 hover:bg-green-700"
+                        disabled={decisionBusyId === app.id}
+                        onClick={() => handleApproveTeacher(app)}
+                      >
+                        {decisionBusyId === app.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                        ) : (
+                          <Check className="h-4 w-4 mr-1" />
+                        )}
+                        Accept (Hire)
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <Dialog open={!!rejectTarget} onOpenChange={(open) => { if (!open) setRejectTarget(null); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reject Application</DialogTitle>
+            <DialogDescription>
+              Please provide a reason for rejecting {rejectTarget ? getApplicantName(rejectTarget) : ''}'s application.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            value={rejectionReason}
+            onChange={(e) => setRejectionReason(e.target.value)}
+            placeholder="Reason for rejection (optional)..."
+            rows={4}
+          />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setRejectTarget(null)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleConfirmReject}
+              disabled={!!decisionBusyId}
+            >
+              {decisionBusyId ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <X className="h-4 w-4 mr-2" />}
+              Confirm Rejection
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
