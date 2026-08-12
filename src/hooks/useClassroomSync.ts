@@ -343,14 +343,22 @@ export const useClassroomSync = ({
     if (role !== 'teacher') return;
     setCurrentSlideIndex(index);
     // 1) Instant broadcast (Leader/Follower) — student updates within ~150ms.
-    try { await whiteboardService.sendSlideChange(roomId, index, userId); }
-    catch (error) { console.error('Failed to broadcast slide_change:', error); }
     // 2) Persist to DB so late joiners hydrate from the row.
+    // Both rethrow (like forceSync) instead of only console.error-ing —
+    // silently swallowing here meant a teacher whose broadcast/write failed
+    // saw their own slide advance perfectly with no signal the student didn't.
+    try {
+      await whiteboardService.sendSlideChange(roomId, index, userId);
+    } catch (error) {
+      console.error('Failed to broadcast slide_change:', error);
+      throw error;
+    }
     try {
       await classroomSyncService.updateSession(roomId, { currentSlideIndex: index });
       setSession(prev => prev ? { ...prev, currentSlideIndex: index } : null);
     } catch (error) {
       console.error('Failed to update slide:', error);
+      throw error;
     }
   }, [roomId, role, userId]);
 

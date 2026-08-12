@@ -61,11 +61,11 @@ const CEFR_BUDGET: Record<string, { maxAvgSentenceWords: number; maxAvgWordLen: 
 /** Hub-specific slide-count targets (must align with generate-ppp-slides). */
 const HUB_SLIDE_TARGET: Record<LessonHub, { min: number; max: number; ideal: number }> = {
   playground: { min: 9, max: 22, ideal: 17 },
-  // Academy grew from 26-30 to 30-40 slides: vocab and grammar each now get
-  // their own presentation + ≥3/≥4 dedicated retrieval-practice rounds
-  // instead of sharing one "practice" block at the end (see
+  // Academy grew from 26-30 to 35-45 slides: vocab and grammar each now get
+  // their own presentation + ≥4/≥6 dedicated retrieval-AND-production
+  // practice rounds instead of sharing one "practice" block at the end (see
   // generate-ppp-slides' academy prompt + hubEnforcementBlock.ts).
-  academy: { min: 26, max: 42, ideal: 34 },
+  academy: { min: 26, max: 48, ideal: 40 },
   success: { min: 24, max: 32, ideal: 28 },
 };
 
@@ -144,6 +144,15 @@ function avgWordLen(text: string): number {
   return toks.reduce((n, w) => n + w.length, 0) / toks.length;
 }
 
+/** True if `a` shares a content word (len > 3, to skip stopword-ish noise) with `b`. */
+function hasContentOverlap(a: string, b: string): boolean {
+  const bTokens = new Set(tokenize(b));
+  if (bTokens.size === 0) return true; // nothing to check against — don't false-positive
+  const aTokens = tokenize(a).filter((t) => t.length > 3);
+  if (aTokens.length === 0) return true;
+  return aTokens.some((t) => bTokens.has(t));
+}
+
 export function runLessonQualityCheck(input: LessonQualityInput): LessonQualityReport {
   const { slides, hub, cefr, blueprint } = input;
   const issues: LessonQualityIssue[] = [];
@@ -172,6 +181,10 @@ export function runLessonQualityCheck(input: LessonQualityInput): LessonQualityR
   }
 
   const presentTypes = new Set(slides.map((s) => String(s?.type || '')));
+  // Academy/Success present vocabulary via a single paginated "vocab_deck"
+  // rather than one slide per word — that still satisfies the "vocab"
+  // coverage requirement below, it just isn't the literal type name.
+  if (presentTypes.has('vocab_deck')) presentTypes.add('vocab');
   let coverageScore = 100;
   const missingTypes = HUB_REQUIRED_TYPES[hub].filter((t) => !presentTypes.has(t));
   if (missingTypes.length > 0) {
@@ -303,6 +316,136 @@ export function runLessonQualityCheck(input: LessonQualityInput): LessonQualityR
         message: 'The final summary slide is still the auto-generated placeholder ("Great work! / You completed the lesson.") — write a real summary that recaps the objective before publishing.',
       });
       rubricScore -= 40;
+    }
+  }
+
+  // ── 4. ACADEMY PEDAGOGY: vocab variety, grammar depth, comprehension    ──
+  // grounding, activity-type caps. Mirrors the deterministic checks in
+  // src/qa/validators/cambridgePedagogy.ts (built for the orchestrator's
+  // unrelated ActivitySpec shape) but implemented natively against Academy's
+  // real slide fields, since the two vocabularies don't overlap.
+  if (hub === 'academy') {
+    const vocabWordCount = (blueprint?.vocabulary ?? []).filter(Boolean).length;
+    const vocabSlideTypes = new Set(
+      slides
+        .filter((s) => s?.block === 'vocab' || ['vocab', 'vocab_deck', 'vocab_image_match'].includes(String(s?.type || '')))
+        .map((s) => String(s?.type || ''))
+        .filter(Boolean),
+    );
+    if (vocabWordCount >= 4 && vocabSlideTypes.size === 1) {
+      issues.push({
+        code: 'VOCAB_ACTIVITY_LOW_VARIETY',
+        severity: 'warn',
+        message: `Vocabulary practice uses only "${[...vocabSlideTypes][0]}" activities — add a matching, image-match, or game-style activity for variety.`,
+      });
+      rubricScore -= 10;
+    }
+
+    const grammarSlides = slides.filter((s) => s?.block === 'grammar');
+    const grammarTypes = new Set(grammarSlides.map((s) => String(s?.type || '')));
+    if (grammarSlides.length > 0 && (grammarSlides.length < 3 || grammarTypes.size < 2)) {
+      issues.push({
+        code: 'GRAMMAR_PRACTICE_SHALLOW',
+        severity: 'warn',
+        message: `Grammar practice is shallow — ${grammarSlides.length} slide(s) across ${grammarTypes.size} activity type(s). Aim for ≥3 slides across ≥2 types.`,
+      });
+      rubricScore -= 10;
+    }
+
+    let lastSourceIdx = -1;
+    let lastSourceKind: 'reading' | 'listening' | null = null;
+    slides.forEach((s, idx) => {
+      const t = String(s?.type || '');
+      if (t === 'reading_passage') {
+        lastSourceIdx = idx;
+        lastSourceKind = 'reading';
+      } else if (t === 'listening') {
+        lastSourceIdx = idx;
+        lastSourceKind = 'listening';
+      } else if ((t === 'multiple' || t === 'truefalse') && lastSourceIdx >= 0) {
+        const sourceSlide = slides[lastSourceIdx];
+        const sourceText = String(sourceSlide?.passage || sourceSlide?.text || sourceSlide?.transcript || '');
+        const questionText = String(s?.question || s?.statement || '');
+        if (sourceText && questionText && !hasContentOverlap(questionText, sourceText)) {
+          issues.push({
+            code: 'COMPREHENSION_OFF_SOURCE',
+            severity: 'warn',
+            message: `Slide ${idx + 1}: comprehension question doesn't reference the ${lastSourceKind} content it follows.`,
+            slideIndex: idx,
+          });
+          rubricScore -= 8;
+        }
+      }
+    });
+
+    const multipleCount = slides.filter((s) => String(s?.type || '') === 'multiple').length;
+    const fillCount = slides.filter((s) => String(s?.type || '') === 'fill_blank').length;
+    if (multipleCount > 2) {
+      issues.push({
+        code: 'ACTIVITY_TYPE_OVER_CAP',
+        severity: 'warn',
+        message: `${multipleCount} "multiple" activities (cap is 2). Replace excess with matching, sentence builder, or speaking.`,
+      });
+      rubricScore -= 10;
+    }
+    if (fillCount > 2) {
+      issues.push({
+        code: 'ACTIVITY_TYPE_OVER_CAP',
+        severity: 'warn',
+        message: `${fillCount} "fill_blank" activities (cap is 2). Replace excess with matching, sentence builder, or speaking.`,
+      });
+      rubricScore -= 10;
+    }
+
+    // Spaced retrieval: a target word that only ever surfaces inside the vocab
+    // block (never reinforced later in reading/grammar/practice) is massed
+    // repetition, not spaced — weaker for long-term retention.
+    const vocabWords = (blueprint?.vocabulary ?? []).map((v) => String(v || '').trim().toLowerCase()).filter(Boolean);
+    if (vocabWords.length > 0) {
+      const textByBlock = new Map<string, string>();
+      for (const s of slides) {
+        const b = String(s?.block || '__none__');
+        textByBlock.set(b, `${textByBlock.get(b) ?? ''} ${extractText(s)}`);
+      }
+      const notSpaced: string[] = [];
+      for (const w of vocabWords) {
+        const re = new RegExp(`\\b${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+        const blocksContaining = [...textByBlock.entries()].filter(([, text]) => re.test(text)).map(([b]) => b);
+        if (blocksContaining.length > 0 && blocksContaining.every((b) => b === 'vocab')) notSpaced.push(w);
+      }
+      if (notSpaced.length > 0) {
+        issues.push({
+          code: 'VOCAB_NOT_SPACED',
+          severity: 'warn',
+          message: `Target word(s) only appear in the vocab block, never reinforced later: ${notSpaced.slice(0, 5).join(', ')}${notSpaced.length > 5 ? '…' : ''}.`,
+        });
+        rubricScore -= Math.min(15, notSpaced.length * 3);
+      }
+    }
+
+    // Bloom's escalation: recognition rounds (matching/multiple/image-match)
+    // should come before production rounds (fill_blank/sentence_builder)
+    // within the same block — a production slide followed by an easier
+    // recognition slide means practice got easier instead of harder.
+    const RECOGNITION_TYPES = new Set(['matching', 'multiple', 'vocab_image_match']);
+    const PRODUCTION_TYPES = new Set(['fill_blank', 'sentence_builder']);
+    for (const blockName of ['vocab', 'grammar']) {
+      const blockSlides = slides.filter((s) => s?.block === blockName);
+      let sawProduction = false;
+      let outOfOrder = false;
+      for (const s of blockSlides) {
+        const t = String(s?.type || '');
+        if (PRODUCTION_TYPES.has(t)) sawProduction = true;
+        else if (RECOGNITION_TYPES.has(t) && sawProduction) { outOfOrder = true; break; }
+      }
+      if (outOfOrder) {
+        issues.push({
+          code: 'PRACTICE_ORDER_NOT_ESCALATING',
+          severity: 'warn',
+          message: `"${blockName}" block: a recognition-style activity appears after a production/usage activity — practice should escalate Remember→Understand→Apply, not get easier again.`,
+        });
+        rubricScore -= 8;
+      }
     }
   }
 

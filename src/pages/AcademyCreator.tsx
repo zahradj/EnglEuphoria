@@ -257,8 +257,17 @@ export default function AcademyCreator() {
   const [aiGrammar, setAiGrammar] = useState('Present simple');
   const [aiBusy, setAiBusy] = useState(false);
   const [blueprint, setBlueprint] = useState<LessonBlueprint | null>(null);
+  // Curriculum-slot position, when this lesson was opened from the Curriculum
+  // Map — threaded into every save so it lands on the correct pre-seeded
+  // stub row instead of an orphaned, slot-less one.
   const [unitNumber, setUnitNumber] = useState<number | undefined>(undefined);
   const [lessonNumber, setLessonNumber] = useState<number | undefined>(undefined);
+  const [aiCriticReport, setAiCriticReport] = useState<{
+    verdict: 'pass' | 'needs_repair';
+    scores: Record<string, number>;
+    issues: { dimension: string; note: string }[];
+    repair_instructions: string;
+  } | null>(null);
 
   // ── Hydrate from Curriculum Blueprint hand-off (router state) ────
   const location = useLocation();
@@ -273,8 +282,8 @@ export default function AcademyCreator() {
       const canonical = normalizeCefr(String(st.cefrLevel));
       if (canonical) setAiLevel(canonical);
     }
-    if (st.unit_number != null) setUnitNumber(Number(st.unit_number));
-    if (st.lesson_number != null) setLessonNumber(Number(st.lesson_number));
+    if (typeof st.unit_number === 'number') setUnitNumber(st.unit_number);
+    if (typeof st.lesson_number === 'number') setLessonNumber(st.lesson_number);
     if (st.blueprint) {
       const bp = st.blueprint as any;
       setBlueprint({
@@ -284,6 +293,11 @@ export default function AcademyCreator() {
         target_phonics: typeof bp.target_phonics === 'string' ? bp.target_phonics : bp.target_phonics?.focus || '',
         interests: '',
         specific_needs: '',
+        // plan-lesson-blueprint computes these — carry them through so the
+        // publish-time objective gate (MISSING_LEARNING_OBJECTIVE) doesn't
+        // fire for a lesson that already has one from the Curriculum Map.
+        learning_objective: bp.learning_objective || st.objective || '',
+        final_output_task: bp.final_output_task || '',
       } as LessonBlueprint);
     } else if (st.skill_focus) {
       setBlueprint({ vocabulary: ['', '', '', '', ''], grammar: st.skill_focus, interests: '', specific_needs: '', target_phonics: '' });
@@ -458,6 +472,10 @@ export default function AcademyCreator() {
         const keys = data && typeof data === 'object' ? Object.keys(data).join(', ') : 'none';
         throw new Error(`AI returned no Academy slides. Response keys: [${keys}]`);
       }
+      // AI Quality Critic report (server-side senior-teacher-trainer review,
+      // separate from the deterministic checks in lastQAReport). Absent on
+      // older/undeployed edge function versions — treat as optional.
+      setAiCriticReport(data?.quality_report ?? null);
 
       // ── Vocabulary safety net ──────────────────────────────────────────
       // The AI sometimes returns fewer vocab slides than the target list. Make sure
@@ -466,17 +484,33 @@ export default function AcademyCreator() {
       const targetWords = (payload.vocabulary || [])
         .map((w) => (typeof w === 'string' ? w.trim() : ''))
         .filter(Boolean);
-      const presentWords = new Set(
-        academySlides
-          .filter((s: any) => s.type === 'vocab' && typeof s.word === 'string')
-          .map((s: any) => s.word.trim().toLowerCase()),
-      );
+      // Vocabulary can arrive as flat "vocab" slides (one per word) or as a
+      // single paginated "vocab_deck" (cards[]) / "vocab_image_match"
+      // (pairs[]) — check all three shapes, or every AI-generated deck reads
+      // as "0 vocab cards" and gets its real words replaced with blank
+      // backfills below.
+      const presentWords = new Set<string>();
+      for (const s of academySlides as any[]) {
+        if (s.type === 'vocab' && typeof s.word === 'string') {
+          presentWords.add(s.word.trim().toLowerCase());
+        } else if (s.type === 'vocab_deck' && Array.isArray(s.cards)) {
+          for (const c of s.cards) if (typeof c?.word === 'string') presentWords.add(c.word.trim().toLowerCase());
+        } else if (s.type === 'vocab_image_match' && Array.isArray(s.pairs)) {
+          for (const p of s.pairs) if (typeof p?.word === 'string') presentWords.add(p.word.trim().toLowerCase());
+        }
+      }
       const missingWords = targetWords.filter((w) => !presentWords.has(w.toLowerCase()));
       let backfilledSlides: Slide[] = academySlides;
       if (missingWords.length > 0) {
         const lastVocabIdx = (() => {
           for (let i = backfilledSlides.length - 1; i >= 0; i--) {
             if ((backfilledSlides[i] as any).type === 'vocab') return i;
+          }
+          // No flat "vocab" slide (deck used vocab_deck/vocab_image_match
+          // instead) — fall back to the last slide in the vocab block so
+          // backfills land inside that block, not appended after "speaking".
+          for (let i = backfilledSlides.length - 1; i >= 0; i--) {
+            if ((backfilledSlides[i] as any).block === 'vocab') return i;
           }
           return -1;
         })();
@@ -652,14 +686,20 @@ export default function AcademyCreator() {
   });
 
   const [publishVerdict, setPublishVerdict] = useState<CreatorPublishVerdict | null>(null);
+  const criticResultForSave = (): { verdict: string; overall: number } | null => {
+    if (!aiCriticReport) return null;
+    const values = Object.values(aiCriticReport.scores ?? {});
+    const overall = values.length ? Math.round(values.reduce((a, b) => a + b, 0) / values.length) : 0;
+    return { verdict: aiCriticReport.verdict, overall };
+  };
   const handleSaveDraft = async () => {
-    const id = await lessonHook.saveDraft(slides, { title, level, blueprint, unitNumber, lessonNumber });
+    const id = await lessonHook.saveDraft(slides, { title, level, blueprint, unitNumber, lessonNumber, criticResult: criticResultForSave() });
     if (id) history.captureRevision({ title, slides, kind: 'manual' });
     if (lessonHook.lastQAReport) setPublishVerdict(verdictFromQualityReport(lessonHook.lastQAReport));
   };
   const handlePublish = async () => {
     try {
-      const id = await lessonHook.publish(slides, { title, level, blueprint, unitNumber, lessonNumber });
+      const id = await lessonHook.publish(slides, { title, level, blueprint, unitNumber, lessonNumber, criticResult: criticResultForSave() });
       if (id) history.captureRevision({ title, slides, kind: 'publish' });
     } finally {
       if (lessonHook.lastQAReport) {
@@ -729,8 +769,22 @@ export default function AcademyCreator() {
     r.readAsText(file);
   };
 
-  const openClassroom = () => {
+  const [openingClassroom, setOpeningClassroom] = useState(false);
+  const openClassroom = async () => {
+    // Persist current edits first so this preview can never drift from what's
+    // actually stored in curriculum_lessons — the classroom preview used to
+    // show whatever was in the editor's in-memory state, which could be
+    // unsaved changes a student would never actually see.
+    setOpeningClassroom(true);
+    try {
+      await lessonHook.silentSaveDraft(slides, { title, level, blueprint, unitNumber, lessonNumber });
+    } catch (e) {
+      console.warn('[AcademyCreator] pre-preview save failed (non-fatal)', e);
+    } finally {
+      setOpeningClassroom(false);
+    }
     (window as any).__ACADEMY_DECK__ = slides;
+    (window as any).__ACADEMY_DECK_META__ = { title, level };
     navigate('/academy-classroom');
   };
 
@@ -944,8 +998,9 @@ export default function AcademyCreator() {
                   </button>
                 );
               })()}
-              <button onClick={openClassroom} className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl px-4 py-2 text-xs shadow-md transition active:scale-95">
-                <Play className="w-4 h-4" /> Classroom
+              <button onClick={openClassroom} disabled={openingClassroom} title="Preview — saves your current draft first, then opens it exactly as it will look for students"
+                className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl px-4 py-2 text-xs shadow-md transition active:scale-95 disabled:opacity-50">
+                {openingClassroom ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />} Classroom
               </button>
             </div>
           </div>
@@ -963,6 +1018,30 @@ export default function AcademyCreator() {
             onSaveDraft={handleSaveDraft}
             onRepair={async () => { toast.info('Re-running quality checks…'); await handleSaveDraft(); }}
           />
+        </div>
+      )}
+
+      {aiCriticReport && (
+        <div className="px-4 pt-3">
+          <div className={`rounded-xl border-2 p-3 text-xs ${aiCriticReport.verdict === 'pass' ? 'border-emerald-300 bg-emerald-50' : 'border-amber-300 bg-amber-50'}`}>
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-bold text-slate-800">
+                AI Teacher-Trainer Review — {aiCriticReport.verdict === 'pass' ? '✅ Pass' : '⚠️ Needs work'}
+              </span>
+              <span className="flex flex-wrap gap-x-3 gap-y-0.5 text-slate-500">
+                {Object.entries(aiCriticReport.scores ?? {}).map(([dim, score]) => (
+                  <span key={dim}>{dim.replace(/_/g, ' ')}: {score}</span>
+                ))}
+              </span>
+            </div>
+            {aiCriticReport.issues?.length > 0 && (
+              <ul className="mt-1.5 list-disc pl-4 text-slate-600 space-y-0.5">
+                {aiCriticReport.issues.map((iss, i) => (
+                  <li key={i}><strong>{iss.dimension.replace(/_/g, ' ')}:</strong> {iss.note}</li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       )}
 

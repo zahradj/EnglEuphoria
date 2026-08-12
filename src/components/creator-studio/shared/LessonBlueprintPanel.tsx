@@ -246,6 +246,31 @@ export function LessonBlueprintPanel({
               </div>
               {/* Target Phonics, Student Interests, and Specific Needs were moved
                   into the GenerateLessonModal — see shared/GenerateLessonModal.tsx. */}
+              {hub === 'academy' && (
+                <div className={`rounded-lg border ${t.border} bg-slate-50 px-2.5 py-2 space-y-1.5`}>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">
+                    🧩 Planned Activities (this is what generation will build)
+                  </p>
+                  <div>
+                    <p className="text-[11px] font-semibold text-slate-700">Vocabulary — 4 practice rounds</p>
+                    <p className="text-[10px] text-slate-500 leading-snug">
+                      Image match → Definition match → Synonym match / MCQ → <strong>Sentence production</strong> (student uses the word, not just recognizes it)
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-semibold text-slate-700">Grammar — 6 escalating drills, standalone</p>
+                    <p className="text-[10px] text-slate-500 leading-snug">
+                      Error detection → Correction → 4× fill-blank / sentence-builder, each harder than the last — separate from reading/listening comprehension
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-semibold text-slate-700">Reading &amp; Listening — checked separately</p>
+                    <p className="text-[10px] text-slate-500 leading-snug">
+                      Each gets its own dedicated comprehension question grounded in that passage/transcript
+                    </p>
+                  </div>
+                </div>
+              )}
               {bp.lesson_structure && bp.lesson_structure.length > 0 && (
                 <div>
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">

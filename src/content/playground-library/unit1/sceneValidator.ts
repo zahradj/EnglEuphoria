@@ -29,7 +29,8 @@ export const SCENE_KINDS = [
   'feeling-quiz', 'i-am-feeling', 'feelings-bingo',
   'numbers-learn', 'numbers-review', 'candle-cake', 'count-balloons',
   'age-balloons', 'age-sentence-match', 'meet-greet', 'age-quiz',
-  'trophy-chest', 'flipbook', 'color-model', 'color-sort',
+  'trophy-chest', 'flipbook', 'color-model', 'color-sort', 'color-quiz', 'listen-repeat-cards',
+  'color-spot', 'shape-model', 'shape-sort', 'color-spy', 'color-simon',
 ] as const;
 export type SceneKindName = (typeof SCENE_KINDS)[number];
 
@@ -125,6 +126,13 @@ export function validateLesson(scenes: unknown[], ctx: ValidationContext): Valid
     if (!items || !letter || (s.kind !== 'basket' && s.kind !== 'dash')) return;
     items.forEach((it) => {
       if (!it?.word) return;
+
+      // If the target is a multi-character word (like a color 'RED', 'BLUE', 'YELLOW'),
+      // skip single-character startsWith checks as colors are vocabulary, not phonics.
+      if (letter.length > 1) {
+        return;
+      }
+
       const startsWith = it.word[0]?.toUpperCase() === letter.toUpperCase();
       const shouldMatch = s.kind === 'basket' ? Boolean(it.hit) : it.letter?.toUpperCase() === letter.toUpperCase();
       if (shouldMatch && !startsWith) {

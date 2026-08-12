@@ -59,16 +59,6 @@ export interface GameStatePayload {
   timestamp: number;
 }
 
-/** Live-sync a single Playground scene lesson's in-scene interactive state
- *  (matched/flipped/collected/placed items) between teacher and student. */
-export interface SceneInteractionStatePayload {
-  /** The Scene.id this state belongs to — receivers ignore stale broadcasts for a scene they've since left. */
-  sceneId: string;
-  state: Record<string, any>;
-  senderId: string;
-  timestamp: number;
-}
-
 /** Live student interaction (button click, option select, drag drop, etc.) */
 export interface StudentActionPayload {
   /** Stable slide id (or fallback to index). */
@@ -155,9 +145,6 @@ type WorksheetLoadListener = (payload: WorksheetLoadPayload) => void;
 type SlideCompletionListener = (payload: SlideCompletionPayload) => void;
 type GameStateListener = (payload: GameStatePayload) => void;
 type StudentActionListener = (payload: StudentActionPayload) => void;
-type SceneInteractionStateListener = (payload: SceneInteractionStatePayload) => void;
-/** Teacher → student: whether the student may play the active Playground scene activity (default locked/watch-only). */
-type SceneActivityLockListener = (payload: { isUnlocked: boolean; senderId: string }) => void;
 
 /** Teacher → all clients leader/follower slide navigation. */
 export interface SlideChangePayload {
@@ -178,14 +165,62 @@ export interface SceneLessonNavPayload {
 }
 type SceneLessonNavListener = (payload: SceneLessonNavPayload) => void;
 
+/** Whoever currently has the floor inside an embedded Playground scene lesson
+ *  broadcasts every tap (and drag gesture step) so the other side's identical
+ *  scene mirrors it live — same scene, same data, so replaying input at the
+ *  same DOM position reproduces the same local state change (selection,
+ *  reveal, drag-drop…) without needing per-scene-kind sync code. Purely a
+ *  live mirror; it never drives page-level navigation — that stays on
+ *  SceneLessonNavPayload.
+ *
+ *  `kind: 'click'` (default) replays a single click — covers taps/reveals/
+ *  selections. `pointerdown`/`pointermove`/`pointerup`/`pointercancel`
+ *  replay one step of a drag gesture: `dx`/`dy` are pixel deltas from the
+ *  gesture's own down position (not absolute coordinates), so the follower
+ *  can reproduce the same relative motion on its own — possibly differently
+ *  sized — copy of the element. */
+export interface SceneTapPayload {
+  /** Child-index path from the scene wrapper root down to the target element. */
+  path: number[];
+  kind?: 'click' | 'pointerdown' | 'pointermove' | 'pointerup' | 'pointercancel';
+  dx?: number;
+  dy?: number;
+  /** Groups down/move/up events belonging to the same gesture. */
+  pointerId?: number;
+  senderRole: 'teacher' | 'student';
+  senderId: string;
+  timestamp: number;
+}
+type SceneTapListener = (payload: SceneTapPayload) => void;
+
+/** Teacher → student: grants/revokes the student's ability to interact with
+ *  their own copy of the current embedded scene activity. Locked (default) =
+ *  student's activity is view-only and mirrors the teacher's taps; unlocked =
+ *  student can tap their own copy directly (and the teacher's mirrors theirs). */
+export interface SceneInteractionPermissionPayload {
+  unlocked: boolean;
+  senderId: string;
+  timestamp: number;
+}
+type SceneInteractionPermissionListener = (payload: SceneInteractionPermissionPayload) => void;
+
+/** Student → teacher: "I finished this activity, please advance" — sent when
+ *  an unlocked student's own action would normally trigger onNext. Keeps the
+ *  teacher's scene index as the single source of truth: the teacher calls its
+ *  own goNext() in response, which re-broadcasts via SceneLessonNavPayload as
+ *  usual, closing the loop back to the student. */
+export interface SceneAdvanceRequestPayload {
+  senderId: string;
+  timestamp: number;
+}
+type SceneAdvanceRequestListener = (payload: SceneAdvanceRequestPayload) => void;
+
 /** Teacher's authoritative snapshot pushed on demand by the "Force Sync" button. */
 export interface ForceSyncPayload {
   slideIndex: number;
   stageMode?: StageMode;
   drawingEnabled?: boolean;
   iframeUnlocked?: boolean;
-  /** Whether the student may play the active Playground scene activity — see SceneActivityLockListener. */
-  sceneActivityUnlocked?: boolean;
   embeddedUrl?: string | null;
   activeCanvasTab?: string;
   senderId: string;
@@ -213,8 +248,9 @@ interface RoomChannel {
   forceSyncListeners: Set<ForceSyncListener>;
   studentActionListeners: Set<StudentActionListener>;
   sceneLessonNavListeners: Set<SceneLessonNavListener>;
-  sceneInteractionListeners: Set<SceneInteractionStateListener>;
-  sceneActivityLockListeners: Set<SceneActivityLockListener>;
+  sceneTapListeners: Set<SceneTapListener>;
+  sceneInteractionPermissionListeners: Set<SceneInteractionPermissionListener>;
+  sceneAdvanceRequestListeners: Set<SceneAdvanceRequestListener>;
   refCount: number;
 }
 
@@ -246,8 +282,9 @@ class WhiteboardService {
     const forceSyncListeners = new Set<ForceSyncListener>();
     const studentActionListeners = new Set<StudentActionListener>();
     const sceneLessonNavListeners = new Set<SceneLessonNavListener>();
-    const sceneInteractionListeners = new Set<SceneInteractionStateListener>();
-    const sceneActivityLockListeners = new Set<SceneActivityLockListener>();
+    const sceneTapListeners = new Set<SceneTapListener>();
+    const sceneInteractionPermissionListeners = new Set<SceneInteractionPermissionListener>();
+    const sceneAdvanceRequestListeners = new Set<SceneAdvanceRequestListener>();
     const statusListeners = new Set<(status: string) => void>();
 
     const channel = supabase
@@ -322,11 +359,14 @@ class WhiteboardService {
       .on('broadcast', { event: 'scene_lesson_nav' }, (payload) => {
         sceneLessonNavListeners.forEach((cb) => cb(payload.payload as SceneLessonNavPayload));
       })
-      .on('broadcast', { event: 'scene_interaction_state' }, (payload) => {
-        sceneInteractionListeners.forEach((cb) => cb(payload.payload as SceneInteractionStatePayload));
+      .on('broadcast', { event: 'scene_tap' }, (payload) => {
+        sceneTapListeners.forEach((cb) => cb(payload.payload as SceneTapPayload));
       })
-      .on('broadcast', { event: 'scene_activity_lock_state' }, (payload) => {
-        sceneActivityLockListeners.forEach((cb) => cb(payload.payload as any));
+      .on('broadcast', { event: 'scene_interaction_permission' }, (payload) => {
+        sceneInteractionPermissionListeners.forEach((cb) => cb(payload.payload as SceneInteractionPermissionPayload));
+      })
+      .on('broadcast', { event: 'scene_advance_request' }, (payload) => {
+        sceneAdvanceRequestListeners.forEach((cb) => cb(payload.payload as SceneAdvanceRequestPayload));
       });
 
     const ready = new Promise<void>((resolve) => {
@@ -357,8 +397,9 @@ class WhiteboardService {
       forceSyncListeners,
       studentActionListeners,
       sceneLessonNavListeners,
-      sceneInteractionListeners,
-      sceneActivityLockListeners,
+      sceneTapListeners,
+      sceneInteractionPermissionListeners,
+      sceneAdvanceRequestListeners,
       refCount: 0,
     };
     this.rooms.set(channelName, room);
@@ -677,40 +718,67 @@ class WhiteboardService {
     return () => this.release(roomId, () => room.sceneLessonNavListeners.delete(onNav));
   }
 
-  /** Broadcast the full interactive state of one Playground scene (matched/flipped/collected/placed items). */
-  async sendSceneInteractionState(roomId: string, payload: Omit<SceneInteractionStatePayload, 'timestamp'>): Promise<void> {
+  /** Whoever has the floor broadcasts a tap; the other side replays it onto
+   *  its own identical scene. See SceneTapPayload for why this needs no
+   *  per-scene-kind code. */
+  async sendSceneTap(roomId: string, payload: Omit<SceneTapPayload, 'timestamp'>): Promise<void> {
     const room = this.getRoom(roomId);
     await room.ready;
     await room.channel.send({
       type: 'broadcast',
-      event: 'scene_interaction_state',
-      payload: { ...payload, timestamp: Date.now() } satisfies SceneInteractionStatePayload,
+      event: 'scene_tap',
+      payload: { ...payload, timestamp: Date.now() } satisfies SceneTapPayload,
     });
   }
 
-  subscribeToSceneInteractionState(roomId: string, onState: SceneInteractionStateListener): () => void {
+  subscribeToSceneTap(roomId: string, onTap: SceneTapListener): () => void {
     const room = this.getRoom(roomId);
-    room.sceneInteractionListeners.add(onState);
+    room.sceneTapListeners.add(onTap);
     room.refCount += 1;
-    return () => this.release(roomId, () => room.sceneInteractionListeners.delete(onState));
+    return () => this.release(roomId, () => room.sceneTapListeners.delete(onTap));
   }
 
-  /** Broadcast whether the student is allowed to play the active Playground scene activity (default locked/watch-only). */
-  async sendSceneActivityLockState(roomId: string, isUnlocked: boolean, senderId: string): Promise<void> {
+  async sendSceneInteractionPermission(
+    roomId: string,
+    payload: Omit<SceneInteractionPermissionPayload, 'timestamp'>,
+  ): Promise<void> {
     const room = this.getRoom(roomId);
     await room.ready;
     await room.channel.send({
       type: 'broadcast',
-      event: 'scene_activity_lock_state',
-      payload: { isUnlocked, senderId },
+      event: 'scene_interaction_permission',
+      payload: { ...payload, timestamp: Date.now() } satisfies SceneInteractionPermissionPayload,
     });
   }
 
-  subscribeToSceneActivityLockState(roomId: string, onChange: SceneActivityLockListener): () => void {
+  subscribeToSceneInteractionPermission(
+    roomId: string,
+    onPermission: SceneInteractionPermissionListener,
+  ): () => void {
     const room = this.getRoom(roomId);
-    room.sceneActivityLockListeners.add(onChange);
+    room.sceneInteractionPermissionListeners.add(onPermission);
     room.refCount += 1;
-    return () => this.release(roomId, () => room.sceneActivityLockListeners.delete(onChange));
+    return () => this.release(roomId, () => room.sceneInteractionPermissionListeners.delete(onPermission));
+  }
+
+  async sendSceneAdvanceRequest(
+    roomId: string,
+    payload: Omit<SceneAdvanceRequestPayload, 'timestamp'>,
+  ): Promise<void> {
+    const room = this.getRoom(roomId);
+    await room.ready;
+    await room.channel.send({
+      type: 'broadcast',
+      event: 'scene_advance_request',
+      payload: { ...payload, timestamp: Date.now() } satisfies SceneAdvanceRequestPayload,
+    });
+  }
+
+  subscribeToSceneAdvanceRequest(roomId: string, onRequest: SceneAdvanceRequestListener): () => void {
+    const room = this.getRoom(roomId);
+    room.sceneAdvanceRequestListeners.add(onRequest);
+    room.refCount += 1;
+    return () => this.release(roomId, () => room.sceneAdvanceRequestListeners.delete(onRequest));
   }
 
   subscribeToStatus(roomId: string, onStatus: (status: string) => void): () => void {
@@ -744,8 +812,6 @@ class WhiteboardService {
       room.forceSyncListeners.size === 0 &&
       room.studentActionListeners.size === 0 &&
       room.sceneLessonNavListeners.size === 0 &&
-      room.sceneInteractionListeners.size === 0 &&
-      room.sceneActivityLockListeners.size === 0 &&
       room.statusListeners.size === 0
     ) {
       supabase.removeChannel(room.channel);

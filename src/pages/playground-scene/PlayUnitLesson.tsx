@@ -5,11 +5,25 @@ import type { Scene } from '@/content/playground-library/unit1/scenes';
 import { SceneRenderer, Hearts, MAX_HEARTS, Lep1Keyframes } from '@/content/playground-library/unit1/SceneRenderer';
 import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-library/unit1/audio';
 import { whiteboardService } from '@/services/whiteboardService';
+import { getDomPath, getElementAtPath, withPointerCaptureNoop } from '@/content/playground-library/unit1/scenePathSync';
+
+/** Scene kinds where the student can always try the activity directly —
+ *  hands-on drag/match/trace/guess games work better as free play than as a
+ *  teacher-demo-first flow. Everything else (meet-and-greet, narrative
+ *  sequences, timed arcade games, etc.) keeps the default locked/watch-only
+ *  behavior, teacher-granted per activity via setInteractionUnlocked. */
+const ALWAYS_UNLOCKED_SCENE_KINDS = new Set([
+  'trace', 'basket', 'sound-sort', 'color-sort', 'memory', 'puzzle', 'word-build', 'hello-doors',
+]);
 
 export interface PlayUnitLessonHandle {
   goNext: () => void;
   goBack: () => void;
   goToIndex: (idx: number) => void;
+  /** Teacher-only: grant/revoke the student's ability to tap their own copy
+   *  of the current activity directly, instead of just mirroring the
+   *  teacher's taps. */
+  setInteractionUnlocked: (unlocked: boolean) => void;
 }
 
 interface PlayUnitLessonProps {
@@ -40,7 +54,7 @@ interface PlayUnitLessonProps {
   hideInternalNav?: boolean;
   /** Reports scene position/navigability whenever it changes, so a caller
    *  rendering hideInternalNav can show an external nav bar in sync. */
-  onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean }) => void;
+  onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean; lockToggleApplicable: boolean }) => void;
   /** Last scene index persisted to the classroom session DB row, if any —
    *  a reliable (if slightly delayed) catch-up path for a student who
    *  joins late or reconnects and missed the instant broadcast. */
@@ -70,6 +84,173 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
 
   const isSynced = role != null && !!roomId;
   const canNavigate = !isSynced || role === 'teacher';
+
+  // Whoever currently "has the floor" on the current activity: the teacher
+  // by default, or the student once granted interactionUnlocked. Exactly one
+  // side captures+broadcasts taps at a time; the other replays them onto its
+  // own identical scene — see scenePathSync.ts for why this needs no
+  // per-scene-kind code, and SceneTapPayload for why it never touches
+  // page-level navigation (that stays on the sceneIdx broadcast above).
+  const [interactionUnlocked, setInteractionUnlockedState] = useState(false);
+  const sceneRootRef = useRef<HTMLDivElement>(null);
+  const isApplyingRemoteTapRef = useRef(false);
+
+  // Hands-on activities (drag/match/trace/guess) skip the teacher-grant step
+  // entirely — the student can always try them, live-mirrored both ways.
+  const skipsLock = ALWAYS_UNLOCKED_SCENE_KINDS.has(SCENES[sceneIdx]?.kind as string);
+  const effectiveUnlocked = interactionUnlocked || skipsLock;
+
+  const setInteractionUnlocked = useCallback((next: boolean) => {
+    setInteractionUnlockedState(next);
+    if (isSynced && role === 'teacher' && roomId) {
+      void whiteboardService.sendSceneInteractionPermission(roomId, { unlocked: next, senderId: 'teacher' });
+    }
+  }, [isSynced, role, roomId]);
+
+  // Each new activity starts locked — the teacher re-grants per activity
+  // rather than an unlock silently carrying over to unrelated content.
+  useEffect(() => {
+    if (isSynced && role === 'teacher') setInteractionUnlocked(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sceneIdx]);
+
+  useEffect(() => {
+    if (!isSynced || role !== 'student' || !roomId) return;
+    const unsubscribe = whiteboardService.subscribeToSceneInteractionPermission(roomId, (payload) => {
+      setInteractionUnlockedState(payload.unlocked);
+    });
+    return unsubscribe;
+  }, [isSynced, role, roomId]);
+
+  // skipsLock activities are bidirectional for both roles at once — safe
+  // from feedback loops because isApplyingRemoteTapRef (below) stops a
+  // replayed synthetic event from being re-captured and re-broadcast.
+  const iCaptureTaps = isSynced && !!role && (skipsLock || role === 'teacher' || (role === 'student' && interactionUnlocked));
+  const iReplayTaps = isSynced && !!role && (
+    skipsLock || (role === 'teacher' && interactionUnlocked) || (role === 'student' && !interactionUnlocked)
+  );
+
+  useEffect(() => {
+    if (!iCaptureTaps || !roomId || !role) return;
+    const rootEl = sceneRootRef.current;
+    if (!rootEl) return;
+
+    const clickHandler = (e: MouseEvent) => {
+      if (isApplyingRemoteTapRef.current) return;
+      const target = e.target as Element | null;
+      if (!target) return;
+      const path = getDomPath(rootEl, target);
+      if (!path) return;
+      void whiteboardService.sendSceneTap(roomId, { path, kind: 'click', senderRole: role, senderId: role });
+    };
+
+    // Drag gestures (basket/sort/word-build/etc.): track each active
+    // pointer's down-position and target path, and broadcast pixel deltas
+    // from that down position — not absolute coordinates — so the follower
+    // can reproduce the same relative motion on its own (possibly
+    // differently sized/positioned) copy of the element. Move broadcasts
+    // are throttled; down/up always send immediately.
+    const drags = new Map<number, { path: number[]; downX: number; downY: number; lastSent: number }>();
+    const MOVE_THROTTLE_MS = 50;
+
+    const downHandler = (e: PointerEvent) => {
+      if (isApplyingRemoteTapRef.current) return;
+      const target = e.target as Element | null;
+      if (!target) return;
+      const path = getDomPath(rootEl, target);
+      if (!path) return;
+      drags.set(e.pointerId, { path, downX: e.clientX, downY: e.clientY, lastSent: 0 });
+      void whiteboardService.sendSceneTap(roomId, {
+        path, kind: 'pointerdown', dx: 0, dy: 0, pointerId: e.pointerId, senderRole: role, senderId: role,
+      });
+    };
+    const moveHandler = (e: PointerEvent) => {
+      if (isApplyingRemoteTapRef.current) return;
+      const drag = drags.get(e.pointerId);
+      if (!drag) return;
+      const now = performance.now();
+      if (now - drag.lastSent < MOVE_THROTTLE_MS) return;
+      drag.lastSent = now;
+      void whiteboardService.sendSceneTap(roomId, {
+        path: drag.path, kind: 'pointermove', dx: e.clientX - drag.downX, dy: e.clientY - drag.downY,
+        pointerId: e.pointerId, senderRole: role, senderId: role,
+      });
+    };
+    const upHandler = (e: PointerEvent) => {
+      if (isApplyingRemoteTapRef.current) return;
+      const drag = drags.get(e.pointerId);
+      if (!drag) return;
+      drags.delete(e.pointerId);
+      void whiteboardService.sendSceneTap(roomId, {
+        path: drag.path, kind: e.type === 'pointercancel' ? 'pointercancel' : 'pointerup',
+        dx: e.clientX - drag.downX, dy: e.clientY - drag.downY,
+        pointerId: e.pointerId, senderRole: role, senderId: role,
+      });
+    };
+
+    rootEl.addEventListener('click', clickHandler, true);
+    rootEl.addEventListener('pointerdown', downHandler, true);
+    rootEl.addEventListener('pointermove', moveHandler, true);
+    rootEl.addEventListener('pointerup', upHandler, true);
+    rootEl.addEventListener('pointercancel', upHandler, true);
+    return () => {
+      rootEl.removeEventListener('click', clickHandler, true);
+      rootEl.removeEventListener('pointerdown', downHandler, true);
+      rootEl.removeEventListener('pointermove', moveHandler, true);
+      rootEl.removeEventListener('pointerup', upHandler, true);
+      rootEl.removeEventListener('pointercancel', upHandler, true);
+    };
+  }, [iCaptureTaps, roomId, role, sceneIdx]);
+
+  useEffect(() => {
+    if (!iReplayTaps || !roomId) return;
+    // Follower's own synthetic down-position per active gesture — an
+    // anchor point on ITS OWN element (its center), since absolute screen
+    // coordinates from the driver's device don't mean anything here; only
+    // the broadcasted dx/dy deltas need to reproduce faithfully.
+    const dragTargets = new Map<number, { el: HTMLElement; startX: number; startY: number }>();
+    const unsubscribe = whiteboardService.subscribeToSceneTap(roomId, (payload) => {
+      const rootEl = sceneRootRef.current;
+      if (!rootEl) return;
+      const kind = payload.kind ?? 'click';
+      const pointerId = payload.pointerId ?? 0;
+      isApplyingRemoteTapRef.current = true;
+      try {
+        if (kind === 'click') {
+          getElementAtPath(rootEl, payload.path)?.click();
+          return;
+        }
+        if (kind === 'pointerdown') {
+          const el = getElementAtPath(rootEl, payload.path);
+          if (!el) return;
+          const rect = el.getBoundingClientRect();
+          const startX = rect.left + rect.width / 2;
+          const startY = rect.top + rect.height / 2;
+          dragTargets.set(pointerId, { el, startX, startY });
+          withPointerCaptureNoop(() => {
+            el.dispatchEvent(new PointerEvent('pointerdown', {
+              bubbles: true, cancelable: true, pointerId, pointerType: 'mouse', isPrimary: true,
+              clientX: startX, clientY: startY,
+            }));
+          });
+          return;
+        }
+        const drag = dragTargets.get(pointerId);
+        if (!drag) return;
+        const clientX = drag.startX + (payload.dx ?? 0);
+        const clientY = drag.startY + (payload.dy ?? 0);
+        withPointerCaptureNoop(() => {
+          drag.el.dispatchEvent(new PointerEvent(kind, {
+            bubbles: true, cancelable: true, pointerId, pointerType: 'mouse', isPrimary: true, clientX, clientY,
+          }));
+        });
+        if (kind !== 'pointermove') dragTargets.delete(pointerId);
+      } finally {
+        isApplyingRemoteTapRef.current = false;
+      }
+    });
+    return unsubscribe;
+  }, [iReplayTaps, roomId]);
 
   useEffect(() => { window.sessionStorage.setItem(sessionKey, String(sceneIdx)); }, [sceneIdx, sessionKey]);
 
@@ -141,10 +322,31 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   }, []);
   const registerWin = useCallback((didGem: boolean) => { if (didGem) setGems((g) => g + 1); }, []);
 
+  // An unlocked student completing the activity (e.g. a flipbook's own
+  // "Next" reaching the end) can't just move its own sceneIdx — the teacher
+  // stays the single source of truth. Advance locally right away so it
+  // doesn't feel stuck, and ask the teacher to advance too; the teacher's
+  // own goNext() then re-broadcasts via the existing sceneIdx pipe, which
+  // reaches this same student again as an idempotent confirmation.
+  const studentCanAdvanceViaActivity = isSynced && role === 'student' && effectiveUnlocked;
   const goNext = useCallback(() => {
-    if (!canNavigate) return;
-    stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
-  }, [SCENES.length, canNavigate]);
+    if (canNavigate) {
+      stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
+      return;
+    }
+    if (studentCanAdvanceViaActivity && roomId) {
+      stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
+      void whiteboardService.sendSceneAdvanceRequest(roomId, { senderId: 'student' });
+    }
+  }, [SCENES.length, canNavigate, studentCanAdvanceViaActivity, roomId]);
+
+  // Teacher: a permitted student finishing the activity asks us to advance —
+  // do so through the normal goNext() so it re-broadcasts as usual.
+  useEffect(() => {
+    if (!isSynced || role !== 'teacher' || !roomId) return;
+    const unsubscribe = whiteboardService.subscribeToSceneAdvanceRequest(roomId, () => { goNext(); });
+    return unsubscribe;
+  }, [isSynced, role, roomId, goNext]);
   const goBack = useCallback(() => {
     if (!canNavigate) return;
     stopSpeaking(); setSceneIdx((i) => Math.max(0, i - 1));
@@ -160,14 +362,14 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
     window.sessionStorage.removeItem(sessionKey);
   }, [sessionKey, canNavigate]);
 
-  useImperativeHandle(ref, () => ({ goNext, goBack, goToIndex }), [goNext, goBack, goToIndex]);
+  useImperativeHandle(ref, () => ({ goNext, goBack, goToIndex, setInteractionUnlocked }), [goNext, goBack, goToIndex, setInteractionUnlocked]);
 
   useEffect(() => {
-    onNavState?.({ sceneIdx, total: SCENES.length, canNavigate });
-  }, [sceneIdx, SCENES.length, canNavigate, onNavState]);
+    onNavState?.({ sceneIdx, total: SCENES.length, canNavigate, interactionUnlocked: effectiveUnlocked, lockToggleApplicable: !skipsLock });
+  }, [sceneIdx, SCENES.length, canNavigate, effectiveUnlocked, skipsLock, onNavState]);
 
   const totalGemsPossible = useMemo(
-    () => SCENES.filter((s) => s.kind === 'basket' || s.kind === 'who-said-it' || s.kind === 'name-gate' || s.kind === 'voice-stage' || s.kind === 'roleplay' || s.kind === 'join-stage' || s.kind === 'sound-pop' || s.kind === 'flipbook' || s.kind === 'color-model' || s.kind === 'color-sort' || (s.kind === 'meet' && s.repeat)).length,
+    () => SCENES.filter((s) => s.kind === 'basket' || s.kind === 'who-said-it' || s.kind === 'name-gate' || s.kind === 'voice-stage' || s.kind === 'roleplay' || s.kind === 'join-stage' || s.kind === 'sound-pop' || s.kind === 'flipbook' || s.kind === 'color-model' || s.kind === 'color-sort' || s.kind === 'color-quiz' || s.kind === 'listen-repeat-cards' || (s.kind === 'meet' && s.repeat)).length,
     [SCENES],
   );
 
@@ -217,7 +419,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
           <div className="w-16" />
         </div>
 
-        <div key={scene.id} className="relative flex-1 animate-[lep1-fade-slide_0.45s_ease-out]">
+        <div key={scene.id} ref={sceneRootRef} className="relative flex-1 animate-[lep1-fade-slide_0.45s_ease-out]">
           <SceneRenderer
             scene={scene}
             onWin={registerWin}
@@ -231,6 +433,18 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
             roomId={roomId}
             activityUnlocked={activityUnlocked}
           />
+          {isSynced && role === 'student' && !effectiveUnlocked && (
+            <div className="absolute inset-0 z-40 cursor-not-allowed" aria-hidden="true">
+              <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
+                👀 Watching your teacher
+              </div>
+            </div>
+          )}
+          {isSynced && role === 'teacher' && interactionUnlocked && !skipsLock && (
+            <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-emerald-600/80 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
+              ✋ Student is trying this
+            </div>
+          )}
         </div>
 
         {!isFinale && scene.kind !== 'who-said-it' && (
@@ -248,7 +462,15 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
             className="pointer-events-auto flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-base font-bold text-slate-800 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
             <span aria-hidden>◀</span> Back
           </button>
-          <div className="pointer-events-auto rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">{sceneIdx + 1} / {SCENES.length}</div>
+          <div className="pointer-events-auto flex items-center gap-2">
+            {isSynced && !skipsLock && (
+              <button type="button" onClick={() => setInteractionUnlocked(!interactionUnlocked)}
+                className={`rounded-full px-4 py-3 text-sm font-bold shadow-xl backdrop-blur transition hover:scale-105 ${interactionUnlocked ? 'bg-emerald-500 text-white' : 'bg-white/90 text-slate-800'}`}>
+                {interactionUnlocked ? '🔓 Student can try' : '🔒 Let student try'}
+              </button>
+            )}
+            <div className="rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">{sceneIdx + 1} / {SCENES.length}</div>
+          </div>
           <button type="button" onClick={goNext} disabled={sceneIdx >= SCENES.length - 1} aria-label="Next scene"
             className="pointer-events-auto flex items-center gap-2 rounded-full bg-[#FE6A2F] px-5 py-3 text-base font-bold text-white shadow-xl backdrop-blur transition hover:scale-105 hover:bg-[#ff7a45] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
             Next <span aria-hidden>▶</span>
@@ -257,7 +479,11 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
       ) : (
         <div className={`pointer-events-none inset-x-0 bottom-4 z-[80] flex items-center justify-center px-4 ${embedded ? 'absolute' : 'fixed'}`}>
           <div className="pointer-events-none flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">
-            <span aria-hidden>👩‍🏫</span> Your teacher is guiding this lesson · {sceneIdx + 1} / {SCENES.length}
+            {effectiveUnlocked ? (
+              <><span aria-hidden>✋</span> Your turn! Try the activity</>
+            ) : (
+              <><span aria-hidden>👩‍🏫</span> Your teacher is guiding this lesson · {sceneIdx + 1} / {SCENES.length}</>
+            )}
           </div>
         </div>
       ))}

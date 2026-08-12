@@ -45,7 +45,7 @@ export interface LibraryLessonCard {
   isReady: boolean;
 }
 
-const READY_CONTENT_FORMATS = new Set(['lep1-rich', 'scene-player']);
+const READY_CONTENT_FORMATS = new Set(['lep1-rich', 'scene-player', 'wt-rich', 'wt-a2-rich']);
 
 export interface ClassroomSlide {
   id: string;

@@ -35,6 +35,12 @@ export default function AcademyClassroom() {
     if (Array.isArray(custom) && custom.length > 0) return custom as Slide[];
     return SOCIAL_MEDIA_LESSON.slides;
   }, []);
+  // Set only by AcademyCreator's "Classroom" preview button — absent means
+  // this is the hardcoded demo deck, not a real lesson preview.
+  const isPreview = Array.isArray((window as any).__ACADEMY_DECK__) && (window as any).__ACADEMY_DECK__.length > 0;
+  const deckMeta = (window as any).__ACADEMY_DECK_META__ as { title?: string; level?: string } | undefined;
+  const deckTitle = isPreview ? (deckMeta?.title || 'Untitled lesson') : SOCIAL_MEDIA_LESSON.title;
+  const deckLevel = isPreview ? (deckMeta?.level || '') : SOCIAL_MEDIA_LESSON.level;
 
   const [i, setI] = useState(0);
   const [theme] = useState<Theme>('dark');
@@ -77,7 +83,7 @@ export default function AcademyClassroom() {
 
   const staticContent = staticContextForSlide(slide) ?? (
     <FocusPanel
-      lessonTitle={SOCIAL_MEDIA_LESSON.title}
+      lessonTitle={deckTitle}
       blockLabel={blockLabel}
       block={slide.block}
       slideIndex={i}
@@ -89,7 +95,7 @@ export default function AcademyClassroom() {
     <AcademyWorkspace
       variant="classroom"
       title="ENGLEUPHORIA · ACADEMY"
-      subtitle={`${SOCIAL_MEDIA_LESSON.title} · ${SOCIAL_MEDIA_LESSON.level}`}
+      subtitle={`${deckTitle}${deckLevel ? ` · ${deckLevel}` : ''}`}
       xpSlot={
         <span className="text-xs font-mono text-muted-foreground">
           {i + 1} / {deck.length}
@@ -103,6 +109,14 @@ export default function AcademyClassroom() {
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Back
           </button>
+          {isPreview && (
+            <span
+              className="rounded-md border border-amber-500/50 bg-amber-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-400"
+              title="This is a draft preview from the Creator — it reflects your last saved draft, not necessarily what's published to students."
+            >
+              Draft Preview
+            </span>
+          )}
           <div className="flex-1">
             <ProgressBar currentBlock={slide.block} slideIndex={i} t={t} slides={deck} />
           </div>

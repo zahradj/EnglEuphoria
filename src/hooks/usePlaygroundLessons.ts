@@ -157,7 +157,13 @@ export const usePlaygroundLessons = () => {
 
           return {
             id: lesson.id,
-            number: index + 1,
+            // Prefer the lesson's own declared lessonNumber (e.g. "Unit 1
+            // Lesson 6") over its raw position in this global, cross-unit
+            // query — otherwise the map badge can show a different number
+            // than every other surface (SceneLessonPlayerModal's preview
+            // header, teacher/parent conversation) calls the same lesson,
+            // which reads as "the lesson I was told about doesn't exist."
+            number: lessonNumber ?? index + 1,
             title: lesson.title,
             type,
             status: 'locked' as const,

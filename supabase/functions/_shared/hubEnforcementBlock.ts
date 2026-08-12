@@ -34,7 +34,7 @@ const HUB_CEFR_WINDOW: Record<EnforcementHub, { floor: string; ceiling: string; 
     register: "teen-modern, culturally inclusive, energetic but not childish — skews toward tweens (mostly 10-13), so avoid dating/romance or mature themes",
     ageBand: "ages 10–17 (mostly 10–13)",
     lessonMinutes: 60,
-    slideTarget: "30–40 slides — vocab and grammar each need presentation PLUS their own repeated retrieval practice (≥3 vocab game rounds, ≥4 grammar drills) before the shared integration/free-practice blocks",
+    slideTarget: "35–45 slides — vocab and grammar each need presentation PLUS their own repeated retrieval AND production practice (≥4 vocab rounds including 1 usage/production round, ≥6 grammar drills escalating in difficulty) before the shared integration/free-practice blocks",
   },
   success: {
     floor: "Pre-A1",
@@ -123,15 +123,17 @@ HARD CONSTRAINTS (violating ANY one of these = invalid output, will be rejected)
  3. Do NOT teach a grammar pattern other than the TARGET GRAMMAR. You may RECYCLE earlier patterns.
  4. The lesson MUST land the LEARNING OBJECTIVE — the final slide must let a learner demonstrate it.
  5. Register MUST stay on-hub for all 100% of slides — no cross-hub bleed (no baby-talk in Success, no business jargon in Playground, no childish copy in Academy/Success).
- 6. Every target vocab word MUST appear in the lesson at least 3 times across different slides.
+ 6. Every target vocab word MUST appear in the lesson at least 3 times across different slides, and NOT all clustered in one block — SPACED retrieval (at least one occurrence outside the block where the word was first taught) beats massed repetition in the same block.
  7. Reading passages, dialogues, and examples MUST stay topic-bound — no off-theme filler.
  8. Image prompts MUST be ≤25 words, ≤2 style descriptors, and consistent with the hub visual style.
+ 9. Practice activities within any single skill (vocab, grammar) MUST escalate Remember→Understand→Apply (Bloom's Taxonomy) — recognition/matching rounds before production/usage rounds, never the reverse.
 
 SELF-CHECK BEFORE EMITTING JSON:
- a. Count target vocab usages — every word ≥3.
+ a. Count target vocab usages — every word ≥3, spaced across ≥2 different blocks, not massed in one.
  b. Confirm slide count is inside the hub target band.
  c. Confirm sentence length p95 ≤ CEFR ceiling.
  d. Confirm final slide demonstrates the objective.
+ e. Confirm practice order escalates Remember→Understand→Apply — no production/usage slide sits before a recognition slide in the same block.
 If any check fails, REWRITE before responding. Return RAW JSON ONLY.
 
 ╚═══════════════════════════════════════════════════════════════════════════════════════════╝

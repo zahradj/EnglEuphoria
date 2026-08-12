@@ -6,7 +6,6 @@ import * as sfx from './sfx';
 import { Confetti } from './fx';
 import { UNIT1_PHONICS, getMastered, logMicroCheck } from './masteryTracker';
 import { SpriteMascot, MASCOT_EYE_BANDS } from './SpriteMascot';
-import { useSyncedSceneState } from './useSyncedSceneState';
 import engleuphoriaLogo from '@/assets/engleuphoria-logo.png';
 
 const cakeSticker = '/lep1/items/cake-sticker.png';
@@ -210,10 +209,6 @@ export function SceneRenderer(props: {
   gemsCollected: number;
   heartsRemaining: number;
   lessonNumber?: number;
-  /** Live-classroom sync — only meaningful for a handful of scene kinds that support it. */
-  role?: 'teacher' | 'student';
-  roomId?: string;
-  activityUnlocked?: boolean;
 }) {
   const { scene, lessonNumber } = props;
   const teacherTip = lessonNumber === 3 ? L3_TEACHER_TIPS[scene.id] : undefined;
@@ -223,28 +218,35 @@ export function SceneRenderer(props: {
   switch (scene.kind) {
     case 'title-card': return <TitleCardScene scene={scene} onNext={props.onNext} />;
     case 'cinematic': return <CinematicScene scene={scene} onNext={props.onNext} />;
-    case 'meet': return <MeetScene scene={scene} onNext={props.onNext} onWin={props.onWin} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'meet': return <MeetScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'sound-model': return <SoundModelScene scene={scene} onNext={props.onNext} />;
     case 'echo': return <EchoScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
-    case 'basket': return <BasketScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'basket': return <BasketScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'trace': return <TraceScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'sound-sort': return <SoundSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
-    case 'word-build': return <WordBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'sound-sort': return <SoundSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
+    case 'word-build': return <WordBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'who-said-it': return <WhoSaidItScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
     case 'gather': return <GatherScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'memory': return <MemoryScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'memory': return <MemoryScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'dash': return <DashScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'feelings': return <FeelingsScene scene={scene} onNext={props.onNext} />;
-    case 'puzzle': return <PuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
-    case 'trophy-chest': return <TrophyChestScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'puzzle': return <PuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'trophy-chest': return <TrophyChestScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'color-model': return <ColorModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'color-sort': return <ColorSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'color-sort': return <ColorSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
+    case 'color-quiz': return <ColorQuizScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
+    case 'listen-repeat-cards': return <ListenRepeatCardsScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
+    case 'color-spot': return <ColorSpotScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
+    case 'shape-model': return <ShapeModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'shape-sort': return <ShapeSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
+    case 'color-spy': return <ColorSpyScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
+    case 'color-simon': return <ColorSimonScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'color-friends': return <ColorFriendsScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'alphabet-blocks': return <AlphabetBlocksScene scene={scene} onNext={props.onNext} onWin={props.onWin} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'alphabet-blocks': return <AlphabetBlocksScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'alphabet-order': return <AlphabetOrderScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'song': return <SongScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
@@ -253,18 +255,18 @@ export function SceneRenderer(props: {
     case 'voice-stage': return <VoiceStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'sound-pop': return <SoundPopScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'brick-crush': return <BrickCrushScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-    case 'friend-pop': return <FriendPopScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'friend-pop': return <FriendPopScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'feelings-tap': return <FeelingsTapScene scene={scene} onNext={props.onNext} />;
     case 'feelings-wheel': return <FeelingsWheelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'x-is-feeling': return <XIsFeelingScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'feelings-dice': return <FeelingsDiceScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'feed-monsters': return <FeedMonstersScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'feed-monsters': return <FeedMonstersScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'he-she-model': return <HeSheModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'he-she-sort': return <HeSheSortScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'he-she-sort': return <HeSheSortScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'he-she-say': return <HeSheSayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'feeling-quiz': return <FeelingQuizScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'i-am-feeling': return <IAmFeelingScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'feelings-bingo': return <FeelingsBingoScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} role={props.role} roomId={props.roomId} activityUnlocked={props.activityUnlocked} />;
+    case 'feelings-bingo': return <FeelingsBingoScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'numbers-learn': return <NumbersLearnScene scene={scene} onNext={props.onNext} />;
     case 'numbers-review': return <NumbersReviewScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'candle-cake': return <CandleCakeScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
@@ -362,9 +364,9 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
       )}
       {step >= 0 && step < scene.script.length && (
         <div className="absolute bottom-[52vh] left-1/2 max-w-[520px] -translate-x-1/2 px-4">
-          <div className="relative rounded-3xl bg-white/95 px-6 py-4 text-center text-2xl font-black text-orange-800 shadow-2xl">
+          <div className="relative rounded-3xl bg-white px-6 py-4 text-center text-2xl font-black text-orange-800 shadow-2xl">
             “{currentLine}”
-            <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 border-x-[14px] border-t-[16px] border-x-transparent border-t-white/95" />
+            <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 border-x-[14px] border-t-[16px] border-x-transparent border-t-white" />
           </div>
         </div>
       )}
@@ -379,46 +381,34 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
 
 /* ---------- Meet ---------- */
 
-function MeetScene({ scene, onNext, onWin, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'meet' }>; onNext: () => void; onWin: (gem: boolean) => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'meet' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
   type Phase = 'idle' | 'talking' | 'repeat' | 'done';
-  const [synced, updateSynced, canAct] = useSyncedSceneState<{ phase: Phase }>(
-    { phase: 'idle' },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const phase = synced.phase;
-  const setPhase = (phase: Phase) => updateSynced({ phase });
+  const [phase, setPhase] = useState<Phase>('idle');
   const [held, setHeld] = useState(false);
   const [heardRepeat, setHeardRepeat] = useState(0);
   const [xpBurst, setXpBurst] = useState(false);
-  const [gemDone, setGemDone] = useState(false);
   const holdTimer = useRef<number | null>(null);
   const c = CAST[scene.who];
   const repeatWord = scene.repeat ?? scene.line;
 
-  useEffect(() => {
-    if (phase === 'done' && !gemDone) {
-      setGemDone(true);
-      setXpBurst(true); sfx.gem();
-      setTimeout(() => setXpBurst(false), 1200);
-      onWin(true);
-      void safeSpeak('Awesome voice! Great job!', 'pip');
-    }
-  }, [phase, gemDone]);
 
   const tapCharacter = async () => {
-    if (!canAct || phase !== 'idle') return;
+    if (phase !== 'idle') return;
     sfx.pop();
     setPhase('talking');
     await safeSpeak(scene.line, scene.who);
     setTimeout(() => setPhase('repeat'), 500);
   };
-  const hearRepeat = async () => { if (!canAct) return; sfx.click(); setHeardRepeat((n) => n + 1); await safeSpeak(repeatWord, scene.who); };
+  const hearRepeat = async () => { sfx.click(); setHeardRepeat((n) => n + 1); await safeSpeak(repeatWord, scene.who); };
   const replayIntro = async () => { sfx.click(); await safeSpeak(scene.line, scene.who); };
   const startHold = () => {
-    if (!canAct || phase !== 'repeat') return;
+    if (phase !== 'repeat') return;
     setHeld(true);
-    holdTimer.current = window.setTimeout(() => {
-      setHeld(false); setPhase('done');
+    holdTimer.current = window.setTimeout(async () => {
+      setHeld(false); setPhase('done'); setXpBurst(true); sfx.gem();
+      setTimeout(() => setXpBurst(false), 1200);
+      onWin(true);
+      await safeSpeak('Awesome voice! Great job!', 'pip');
     }, 1300);
   };
   const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
@@ -436,7 +426,7 @@ function MeetScene({ scene, onNext, onWin, role, roomId, activityUnlocked }: { s
         </div>
       </div>
       {/* scene.bg already paints {c.name} directly into the art — no separate sprite on top, just a tap affordance. */}
-      {phase === 'idle' && <button onClick={tapCharacter} disabled={!canAct} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 h-[60vh] w-full cursor-pointer bg-transparent disabled:cursor-not-allowed" />}
+      {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 h-[60vh] w-full cursor-pointer bg-transparent" />}
       {phase === 'idle' && (
         <div className="pointer-events-none absolute inset-x-0 top-[26vh] z-10 grid place-items-center">
           <div className="relative h-40 w-40" style={{ animation: 'lep1-wiggle 3s ease-in-out infinite' }}>
@@ -475,13 +465,12 @@ function MeetScene({ scene, onNext, onWin, role, roomId, activityUnlocked }: { s
               <span className="text-xs font-bold text-neutral-500">Hold & repeat</span>
             </div>
             <p className="mt-2 text-center text-2xl font-black" style={{ color: c.color }}>“{repeatWord}”</p>
-            <button onClick={hearRepeat} disabled={!canAct} className="mt-3 w-full rounded-full bg-white py-2 text-sm font-bold text-orange-700 shadow ring-2 ring-orange-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60">
+            <button onClick={hearRepeat} className="mt-3 w-full rounded-full bg-white py-2 text-sm font-bold text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">
               🔊 Hear it {heardRepeat > 0 && <span className="opacity-60">({heardRepeat})</span>}
             </button>
             <button
               onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
-              disabled={!canAct}
-              className={`mt-2 w-full rounded-full py-5 text-xl font-black text-white shadow-xl transition disabled:cursor-not-allowed disabled:opacity-60 ${held ? 'scale-95' : ''}`}
+              className={`mt-2 w-full rounded-full py-5 text-xl font-black text-white shadow-xl transition ${held ? 'scale-95' : ''}`}
               style={{ background: phase === 'done' ? 'linear-gradient(90deg, #10B981, #34D399)' : `linear-gradient(90deg, ${c.color}, #FEBE4C)` }}
             >
               {phase === 'done' ? '✅ Nailed it!' : held ? '🎤 Keep talking…' : '🎤 Hold to say it'}
@@ -554,18 +543,25 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
         </div>
       </div>
       {scene.anchors.map((a, i) => {
-        const base = side === 'left' ? 72 : 28;
-        const cols = side === 'left' ? [-8, 12, -6] : [-12, 8, -10];
-        const tops = ['14%', '46%', '78%'];
+        // Two columns on the anchors' side (near/far from the letter card),
+        // stacked vertically with generous, even spacing — not the old
+        // single-line-with-±12% jitter, which put anchors 0 and 2 only ~2%
+        // of width apart and let them overlap outright on wide/short
+        // viewports. Sizes are viewport-height-relative (clamp), not fixed
+        // px jumps at sm:, so they can't outgrow a short frame either.
+        const nearCol = side === 'left' ? 64 : 36;
+        const farCol = side === 'left' ? 87 : 13;
+        const cols = [nearCol, farCol, nearCol];
+        const tops = ['20%', '50%', '80%'];
         const rots = [-6, 5, -3];
-        const spot = { left: `${base + (cols[i] ?? 0)}%`, top: tops[i] ?? '50%', rot: rots[i] ?? 0 };
+        const spot = { left: `${cols[i] ?? nearCol}%`, top: tops[i] ?? '50%', rot: rots[i] ?? 0 };
         const isOpen = opened.has(i);
         return (
           <div key={a.word} className="absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: spot.left, top: spot.top, animation: `lep1-float 3s ease-in-out ${i * 0.3}s infinite` }}>
             <button
               onClick={() => openProp(i)}
-              className={`relative grid place-items-center rounded-3xl bg-transparent p-0 transition-transform active:scale-90 ${isOpen ? 'h-64 w-64 sm:h-80 sm:w-80' : 'h-40 w-40 sm:h-52 sm:w-52'} ${!isOpen && phase === 'invite' ? 'animate-pulse' : ''}`}
-              style={{ transform: `rotate(${spot.rot}deg)`, filter: `drop-shadow(0 0 18px ${theme.tint}) drop-shadow(0 12px 24px rgba(0,0,0,0.35))` }}
+              className={`relative grid place-items-center rounded-3xl bg-transparent p-0 transition-transform active:scale-90 ${!isOpen && phase === 'invite' ? 'animate-pulse' : ''}`}
+              style={{ width: isOpen ? 'clamp(96px, 20vh, 180px)' : 'clamp(76px, 14vh, 140px)', height: isOpen ? 'clamp(96px, 20vh, 180px)' : 'clamp(76px, 14vh, 140px)', transform: `rotate(${spot.rot}deg)`, filter: `drop-shadow(0 0 18px ${theme.tint}) drop-shadow(0 12px 24px rgba(0,0,0,0.35))` }}
               aria-label={isOpen ? `Hear ${a.word} again` : `Open ${theme.label}`}
             >
               {isOpen ? (
@@ -573,11 +569,11 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
               ) : theme.img ? (
                 <img src={theme.img} alt={theme.label} className="h-full w-full object-contain" />
               ) : (
-                <span className="text-[9rem] sm:text-[11rem]">{theme.closed}</span>
+                <span style={{ fontSize: 'clamp(2.5rem, 7vh, 4.5rem)' }}>{theme.closed}</span>
               )}
             </button>
             {isOpen && (
-              <div className="mx-auto mt-3 w-max animate-[lep1-pop_0.5s_ease-out] rounded-2xl border-4 bg-white px-6 py-2 text-center text-3xl font-black shadow-xl sm:text-4xl" style={{ color: theme.tint, borderColor: theme.tint }}>
+              <div className="mx-auto mt-2 w-max animate-[lep1-pop_0.5s_ease-out] rounded-2xl border-4 bg-white px-4 py-1.5 text-center text-xl font-black shadow-xl sm:px-6 sm:py-2 sm:text-2xl" style={{ color: theme.tint, borderColor: theme.tint }}>
                 {a.word}
               </div>
             )}
@@ -656,21 +652,16 @@ function scatterPositions(n: number, rowTops: [number, number] = [16, 84], margi
 
 /* ---------- Basket ---------- */
 
-function BasketScene({ scene, onWin, onLose, onNext, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'basket' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
-  type Slot = { idx: number; it: typeof scene.items[number]; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
-  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, dragging: false, dx: 0, dy: 0, flash: 'none' })));
-  const [synced, updateSynced, canAct] = useSyncedSceneState<{ collected: number[] }>(
-    { collected: [] },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const collected = useMemo(() => new Set(synced.collected), [synced.collected]);
+function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'basket' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
+  type Slot = { idx: number; it: typeof scene.items[number]; collected: boolean; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
+  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, collected: false, dragging: false, dx: 0, dy: 0, flash: 'none' })));
   const [basketHot, setBasketHot] = useState(false);
   const [gemAwarded, setGemAwarded] = useState(false);
   const basketRef = useRef<HTMLDivElement | null>(null);
   const dragIdx = useRef<number | null>(null);
   const start = useRef({ x: 0, y: 0 });
   const c = CAST[scene.who];
-  const got = collected.size;
+  const got = slots.filter((s) => s.collected).length;
   const done = got >= scene.goal;
 
   useEffect(() => {
@@ -679,9 +670,8 @@ function BasketScene({ scene, onWin, onLose, onNext, role, roomId, activityUnloc
 
   function onDown(idx: number) {
     return (e: React.PointerEvent<HTMLButtonElement>) => {
-      if (!canAct) return;
       const s = slots.find((x) => x.idx === idx);
-      if (!s || collected.has(idx)) return;
+      if (!s || s.collected) return;
       sfx.pop();
       cueSpeakOnce(s.it.word, 'teacher');
       dragIdx.current = idx;
@@ -706,21 +696,21 @@ function BasketScene({ scene, onWin, onLose, onNext, role, roomId, activityUnloc
     if (idx === null) return;
     const b = basketRef.current?.getBoundingClientRect();
     const dropped = b && e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom;
-    const slot = slots.find((x) => x.idx === idx);
     setSlots((p) => p.map((x) => {
       if (x.idx !== idx) return x;
       if (!dropped) return { ...x, dragging: false, dx: 0, dy: 0 };
-      if (x.it.hit) return { ...x, dragging: false, dx: 0, dy: 0, flash: 'good' };
+      if (x.it.hit) { sfx.match(); cueSpeak(`${scene.phoneme}! ${x.it.word}!`, scene.who); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
+      sfx.wrong(); onLose();
       return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
     }));
-    if (dropped && slot) {
-      if (slot.it.hit) { sfx.match(); cueSpeak(`${scene.phoneme}! ${slot.it.word}!`, scene.who); updateSynced({ collected: [...synced.collected, idx] }); }
-      else { sfx.wrong(); onLose(); }
-    }
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
   }
 
-  const orbit = scatterPositions(scene.items.length, [56, 86], 14);
+  // Top row stays at 56% (not the [10,74] used by the color/sound circle
+  // scenes) — this basket sits near the TOP of the screen (top-16), not
+  // vertically centered, so scattered items need to clear ITS zone instead.
+  const orbit = scatterPositions(scene.items.length, [56, 78], 20);
+  const collectedItems = slots.filter((s) => s.collected);
 
   return (
     <div className="absolute inset-0">
@@ -731,16 +721,27 @@ function BasketScene({ scene, onWin, onLose, onNext, role, roomId, activityUnloc
           <span className="grid h-28 w-28 place-items-center rounded-3xl text-7xl font-black text-white shadow-lg sm:h-36 sm:w-36 sm:text-8xl" style={{ background: `linear-gradient(135deg, ${c.color}, #FEBE4C)` }}>{scene.letter}</span>
           <p className="text-lg font-black leading-none" style={{ color: c.color }}>{scene.phoneme}</p>
           <p className="text-xs font-bold text-orange-700">⭐ {got}/{scene.goal}</p>
+          {/* Collected items render as children of the basket itself, not a
+              separately positioned div measured against its pixel
+              coordinates — see ColorSortScene for why that approach used to
+              land off-center. */}
+          {collectedItems.length > 0 && (
+            <div className="mt-0.5 flex max-w-[10rem] flex-wrap items-center justify-center gap-1 sm:max-w-[12rem]">
+              {collectedItems.map((s) => (
+                <span key={s.idx} className="grid h-6 w-6 place-items-center rounded-full bg-white/90 text-xs shadow ring-2 ring-green-400 animate-[lep1-pop_0.4s_ease-out] sm:h-7 sm:w-7 sm:text-sm">✅</span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       {slots.map((s, i) => {
+        if (s.collected) return null;
         const pos = orbit[i % orbit.length];
-        if (collected.has(s.idx)) return <div key={s.idx} className="absolute grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-green-300/60 text-3xl opacity-60 ring-2 ring-green-400 backdrop-blur" style={{ left: pos.left, top: pos.top }}>✅</div>;
         const glow = s.flash === 'bad' ? 'drop-shadow-[0_0_14px_rgba(239,68,68,0.9)] animate-[lep1-shake_0.4s_ease-in-out]' : s.flash === 'good' ? 'drop-shadow-[0_0_18px_rgba(34,197,94,0.9)]' : 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]';
         return (
-          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} disabled={!canAct}
-            className={`absolute h-40 w-40 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition sm:h-48 sm:w-48 disabled:cursor-not-allowed ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
-            style={{ left: pos.left, top: pos.top, animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
+          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
+            className={`absolute -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
+            style={{ left: pos.left, top: pos.top, width: 'clamp(88px, 16vh, 208px)', height: 'clamp(88px, 16vh, 208px)', animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
             aria-label={s.it.word}
           >
             {s.it.img ? <img src={s.it.img} alt={s.it.word} draggable={false} className="pointer-events-none h-full w-full object-contain" /> : <span className="pointer-events-none grid h-full w-full place-items-center text-7xl">{s.it.emoji}</span>}
@@ -888,20 +889,15 @@ function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 't
 
 /* ---------- Sound sort ---------- */
 
-function SoundSortScene({ scene, onWin, onLose, onNext, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'sound-sort' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
-  type Slot = { idx: number; it: typeof scene.items[number]; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
-  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, dragging: false, dx: 0, dy: 0, flash: 'none' })));
-  const [synced, updateSynced, canAct] = useSyncedSceneState<{ collected: number[] }>(
-    { collected: [] },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const collectedSet = useMemo(() => new Set(synced.collected), [synced.collected]);
+function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'sound-sort' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
+  type Slot = { idx: number; it: typeof scene.items[number]; collected: boolean; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
+  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, collected: false, dragging: false, dx: 0, dy: 0, flash: 'none' })));
   const [hotLetter, setHotLetter] = useState<string | null>(null);
   const [gemAwarded, setGemAwarded] = useState(false);
   const targetRefs = useRef<Record<string, HTMLElement | null>>({});
   const dragIdx = useRef<number | null>(null);
   const start = useRef({ x: 0, y: 0 });
-  const done = slots.every((s) => collectedSet.has(s.idx));
+  const done = slots.every((s) => s.collected);
 
   useEffect(() => { if (done && !gemAwarded) { setGemAwarded(true); onWin(true); cueSpeak('Amazing! All sounds sorted!', 'teacher'); } }, [done, gemAwarded]);
 
@@ -923,9 +919,8 @@ function SoundSortScene({ scene, onWin, onLose, onNext, role, roomId, activityUn
   }
 
   const onDown = (idx: number) => (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (!canAct) return;
     const s = slots.find((x) => x.idx === idx);
-    if (!s || collectedSet.has(idx)) return;
+    if (!s || s.collected) return;
     sfx.pop();
     const speaker = scene.targets.find((t) => t.letter === s.it.letter)?.who ?? 'pip';
     cueSpeakOnce(s.it.word, speaker);
@@ -947,21 +942,17 @@ function SoundSortScene({ scene, onWin, onLose, onNext, role, roomId, activityUn
     const dropLetter = hitTest(e.clientX, e.clientY, e.currentTarget);
     setHotLetter(null);
     if (idx === null) return;
-    const slot = slots.find((x) => x.idx === idx);
     setSlots((p) => p.map((x) => {
       if (x.idx !== idx) return x;
       if (!dropLetter) return { ...x, dragging: false, dx: 0, dy: 0 };
-      if (dropLetter === x.it.letter) return { ...x, dragging: false, dx: 0, dy: 0, flash: 'good' };
+      if (dropLetter === x.it.letter) { sfx.match(); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
+      sfx.wrong(); onLose();
       return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
     }));
-    if (dropLetter && slot) {
-      if (dropLetter === slot.it.letter) { sfx.match(); updateSynced({ collected: [...synced.collected, idx] }); }
-      else { sfx.wrong(); onLose(); }
-    }
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
   };
 
-  const orbit = scatterPositions(scene.items.length, [16, 84], 14);
+  const orbit = scatterPositions(scene.items.length, [10, 74], 20);
 
   return (
     <div className="absolute inset-0">
@@ -971,7 +962,7 @@ function SoundSortScene({ scene, onWin, onLose, onNext, role, roomId, activityUn
         {scene.targets.map((t) => {
           const c = CAST[t.who];
           const hot = hotLetter === t.letter;
-          const collected = slots.filter((s) => collectedSet.has(s.idx) && s.it.letter === t.letter).length;
+          const collectedItems = slots.filter((s) => s.collected && s.it.letter === t.letter);
           const total = slots.filter((s) => s.it.letter === t.letter).length;
           return (
             <button key={t.letter} type="button" ref={(el) => { targetRefs.current[t.letter] = el; }} onClick={() => void playLetterPhonic(t.letter)}
@@ -980,20 +971,31 @@ function SoundSortScene({ scene, onWin, onLose, onNext, role, roomId, activityUn
               <div className="pointer-events-none relative flex flex-col items-center gap-1">
                 <span className="grid h-24 w-24 place-items-center rounded-3xl text-6xl font-black text-white shadow-lg sm:h-28 sm:w-28 sm:text-7xl" style={{ background: `linear-gradient(135deg, ${c.color}, #FEBE4C)` }}>{t.letter}</span>
                 <p className="text-sm font-black leading-none" style={{ color: c.color }}>{t.phoneme}</p>
-                <p className="text-[10px] font-bold text-orange-700">⭐ {collected}/{total}</p>
+                <p className="text-[10px] font-bold text-orange-700">⭐ {collectedItems.length}/{total}</p>
+                {/* Collected items render as children of this already-centered
+                    button, not a separately positioned div measured against
+                    the target's pixel coordinates — see ColorSortScene for
+                    why that measurement approach used to land off-center. */}
+                {collectedItems.length > 0 && (
+                  <div className="mt-0.5 flex flex-wrap items-center justify-center gap-1">
+                    {collectedItems.map((s) => (
+                      <span key={s.idx} className="grid h-7 w-7 place-items-center rounded-full bg-white/90 text-sm shadow ring-2 ring-green-400 animate-[lep1-pop_0.4s_ease-out]">✅</span>
+                    ))}
+                  </div>
+                )}
               </div>
             </button>
           );
         })}
       </div>
       {slots.map((s, i) => {
+        if (s.collected) return null;
         const pos = orbit[i % orbit.length];
-        if (collectedSet.has(s.idx)) return <div key={s.idx} className="absolute grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-green-300/60 text-4xl opacity-70 ring-2 ring-green-400 backdrop-blur" style={{ left: pos.left, top: pos.top }}>✅</div>;
         const glow = s.flash === 'bad' ? 'drop-shadow-[0_0_14px_rgba(239,68,68,0.9)] animate-[lep1-shake_0.4s_ease-in-out]' : s.flash === 'good' ? 'drop-shadow-[0_0_18px_rgba(34,197,94,0.9)]' : 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]';
         return (
-          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} disabled={!canAct}
-            className={`absolute h-40 w-40 sm:h-52 sm:w-52 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition disabled:cursor-not-allowed ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
-            style={{ left: pos.left, top: pos.top, animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
+          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
+            className={`absolute -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
+            style={{ left: pos.left, top: pos.top, width: 'clamp(88px, 16vh, 208px)', height: 'clamp(88px, 16vh, 208px)', animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
             aria-label={s.it.word}
           >
             {s.it.img ? <img src={s.it.img} alt={s.it.word} draggable={false} className="pointer-events-none h-full w-full object-contain" /> : <span className="pointer-events-none grid h-full w-full place-items-center text-6xl">{s.it.emoji}</span>}
@@ -1011,12 +1013,9 @@ function SoundSortScene({ scene, onWin, onLose, onNext, role, roomId, activityUn
 
 /* ---------- Word build ---------- */
 
-function WordBuildScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'word-build' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
-  const [synced, updateSynced, canAct] = useSyncedSceneState<{ round: number; filled: string | null }>(
-    { round: 0, filled: null },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const { round, filled } = synced;
+function WordBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'word-build' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [round, setRound] = useState(0);
+  const [filled, setFilled] = useState<string | null>(null);
   const [wrong, setWrong] = useState<string | null>(null);
   const [gemDone, setGemDone] = useState(false);
   const r = scene.rounds[round];
@@ -1025,21 +1024,19 @@ function WordBuildScene({ scene, onNext, onWin, onLose, role, roomId, activityUn
 
   useEffect(() => {
     if (complete) return;
-    setWrong(null);
+    setFilled(null); setWrong(null);
     const t = window.setTimeout(() => void safeSpeak(r.word, 'pip'), 350);
     return () => window.clearTimeout(t);
   }, [round, complete]);
 
-  useEffect(() => {
-    if (complete && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-  }, [complete, gemDone]);
-
   const tap = async (letter: string) => {
-    if (!canAct || filled || complete) return;
+    if (filled || complete) return;
     if (letter.toLowerCase() === r.answer.toLowerCase()) {
-      sfx.match(); updateSynced({ round, filled: letter }); await safeSpeak(r.word, 'pip');
+      sfx.match(); setFilled(letter); await safeSpeak(r.word, 'pip');
       window.setTimeout(() => {
-        updateSynced({ round: round + 1, filled: null });
+        const next = round + 1;
+        if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+        setRound(next);
       }, 900);
     } else { sfx.wrong(); onLose(); setWrong(letter); window.setTimeout(() => setWrong(null), 500); }
   };
@@ -1071,7 +1068,7 @@ function WordBuildScene({ scene, onNext, onWin, onLose, role, roomId, activityUn
         <button onClick={() => void safeSpeak(r.word, 'pip')} className="rounded-full bg-white/95 px-6 py-2 text-sm font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔊 Listen</button>
         <div className="flex flex-wrap justify-center gap-3">
           {r.choices.map((L) => (
-            <button key={L} onClick={() => tap(L)} disabled={!canAct || !!filled} className={`grid h-20 w-20 place-items-center rounded-2xl border-4 border-white text-4xl font-black text-white shadow-2xl transition active:scale-95 disabled:opacity-40 sm:h-24 sm:w-24 sm:text-5xl ${wrong === L ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`} style={{ background: L === 'H' ? 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' : 'linear-gradient(135deg,#B85CD1,#D57BE6)' }}>{L}</button>
+            <button key={L} onClick={() => tap(L)} disabled={!!filled} className={`grid h-20 w-20 place-items-center rounded-2xl border-4 border-white text-4xl font-black text-white shadow-2xl transition active:scale-95 disabled:opacity-40 sm:h-24 sm:w-24 sm:text-5xl ${wrong === L ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`} style={{ background: L === 'H' ? 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' : 'linear-gradient(135deg,#B85CD1,#D57BE6)' }}>{L}</button>
           ))}
         </div>
       </div>
@@ -1289,27 +1286,22 @@ function GatherScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: '
 
 /* ---------- Memory ---------- */
 
-function MemoryScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'memory' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+function MemoryScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'memory' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
   type Card = { key: string; pairId: string; label: string; emoji: string; img?: string };
   const deck = useMemo<Card[]>(() => {
     const base = scene.pairs.flatMap((p) => [{ key: `${p.id}-a`, pairId: p.id, label: p.label, emoji: p.emoji, img: p.img }, { key: `${p.id}-b`, pairId: p.id, label: p.label, emoji: p.emoji, img: p.img }]);
     return base.map((c, i) => ({ c, r: (i * 9301 + 49297) % 233280 })).sort((a, b) => a.r - b.r).map((x) => x.c);
   }, [scene.id]);
-  type Synced = { flipped: string[]; matched: string[] };
-  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
-    { flipped: [], matched: [] },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const flipped = synced.flipped;
-  const matched = useMemo(() => new Set(synced.matched), [synced.matched]);
+  const [flipped, setFlipped] = useState<string[]>([]);
+  const [matched, setMatched] = useState<Set<string>>(new Set());
   const [busy, setBusy] = useState(false);
   const [gemDone, setGemDone] = useState(false);
 
 
   const tap = async (card: Card) => {
-    if (!canAct || busy || matched.has(card.pairId) || flipped.includes(card.key)) return;
+    if (busy || matched.has(card.pairId) || flipped.includes(card.key)) return;
     const next = [...flipped, card.key];
-    updateSynced({ flipped: next, matched: synced.matched });
+    setFlipped(next);
     void safeSpeak(card.label, 'teacher');
     if (next.length === 2) {
       setBusy(true);
@@ -1317,19 +1309,16 @@ function MemoryScene({ scene, onNext, onWin, onLose, role, roomId, activityUnloc
       await new Promise((r) => setTimeout(r, 700));
       if (a.pairId === b.pairId) {
         sfx.match();
-        updateSynced({ flipped: [], matched: [...synced.matched, a.pairId] });
-      } else {
-        sfx.wrong(); onLose();
-        updateSynced({ flipped: [], matched: synced.matched });
-      }
-      setBusy(false);
+        setMatched((m) => {
+          const copy = new Set(m); copy.add(a.pairId);
+          if (copy.size === scene.pairs.length && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+          return copy;
+        });
+      } else { sfx.wrong(); onLose(); }
+      setFlipped([]); setBusy(false);
     }
   };
   const complete = matched.size === scene.pairs.length;
-
-  useEffect(() => {
-    if (complete && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-  }, [complete, gemDone]);
 
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
@@ -1339,7 +1328,7 @@ function MemoryScene({ scene, onNext, onWin, onLose, role, roomId, activityUnloc
           const isMatched = matched.has(card.pairId);
           const isFlipped = flipped.includes(card.key) || isMatched;
           return (
-            <button key={card.key} onClick={() => tap(card)} disabled={!canAct || busy || isMatched} className="relative aspect-square [perspective:800px]" aria-label={isFlipped ? card.label : 'Hidden card'}>
+            <button key={card.key} onClick={() => tap(card)} disabled={busy || isMatched} className="relative aspect-square [perspective:800px]" aria-label={isFlipped ? card.label : 'Hidden card'}>
               <div className="absolute inset-0 transition-transform duration-500 [transform-style:preserve-3d]" style={{ transform: isFlipped ? 'rotateY(180deg)' : undefined }}>
                 <div className="absolute inset-0 flex items-center justify-center rounded-2xl border-4 border-white text-3xl font-black text-white shadow-xl [backface-visibility:hidden]" style={{ background: 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' }}>?</div>
                 <div className={`absolute inset-0 flex flex-col items-center justify-center rounded-2xl border-4 bg-white p-2 shadow-xl [backface-visibility:hidden] [transform:rotateY(180deg)] ${isMatched ? 'border-green-400 ring-4 ring-green-300/60' : 'border-white'}`}>
@@ -1487,14 +1476,11 @@ function FeelingsScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'feeli
 
 /* ---------- Puzzle ---------- */
 
-function PuzzleScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'puzzle' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
-  type Synced = { round: number; revealed: number[]; pick: CharKey | null; correct: boolean | null };
-  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
-    { round: 0, revealed: [], pick: null, correct: null },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const { round, pick, correct } = synced;
-  const revealed = useMemo(() => new Set(synced.revealed), [synced.revealed]);
+function PuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'puzzle' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [round, setRound] = useState(0);
+  const [revealed, setRevealed] = useState<Set<number>>(new Set());
+  const [pick, setPick] = useState<CharKey | null>(null);
+  const [correct, setCorrect] = useState<boolean | null>(null);
   const [gemDone, setGemDone] = useState(false);
   const total = scene.rounds.length;
   const finished = round >= total;
@@ -1502,26 +1488,20 @@ function PuzzleScene({ scene, onNext, onWin, onLose, role, roomId, activityUnloc
   const GRID = 9;
 
   useEffect(() => {
-    if (finished && !gemDone) { setGemDone(true); onWin(true); }
-  }, [finished, gemDone]);
+    if (finished) return;
+    setRevealed(new Set()); setPick(null); setCorrect(null);
+  }, [round, finished]);
 
-  const tapPiece = (i: number) => {
-    if (!canAct || !r || correct !== null || revealed.has(i)) return;
-    sfx.match();
-    updateSynced({ ...synced, revealed: [...synced.revealed, i] });
-  };
+  const tapPiece = (i: number) => { if (!r || correct !== null) return; setRevealed((s) => { const c = new Set(s); c.add(i); return c; }); sfx.match(); };
   const guess = async (who: CharKey) => {
-    if (!canAct || !r || correct !== null) return;
+    if (!r || correct !== null) return;
+    setPick(who);
     const ok = who === r.who;
+    setCorrect(ok);
     if (ok) {
-      sfx.match(); sfx.gem();
-      updateSynced({ round, revealed: Array.from({ length: GRID }, (_, i) => i), pick: who, correct: true });
-      window.setTimeout(() => { updateSynced({ round: round + 1, revealed: [], pick: null, correct: null }); }, 2200);
-    } else {
-      sfx.wrong(); onLose();
-      updateSynced({ ...synced, pick: who, correct: false });
-      window.setTimeout(() => { updateSynced({ round, revealed: Array.from(revealed), pick: null, correct: null }); }, 700);
-    }
+      sfx.match(); setRevealed(new Set(Array.from({ length: GRID }, (_, i) => i))); sfx.gem();
+      window.setTimeout(() => { const next = round + 1; if (next >= total && !gemDone) { setGemDone(true); onWin(true); } setRound(next); }, 2200);
+    } else { sfx.wrong(); onLose(); window.setTimeout(() => { setPick(null); setCorrect(null); }, 700); }
   };
 
   if (finished) {
@@ -1540,7 +1520,7 @@ function PuzzleScene({ scene, onNext, onWin, onLose, role, roomId, activityUnloc
         <div className="absolute inset-0 grid grid-cols-3 grid-rows-3">
           {Array.from({ length: GRID }, (_, i) => {
             const isRev = revealed.has(i);
-            return <button key={i} onClick={() => tapPiece(i)} disabled={!canAct || isRev} className={`border border-white/50 transition-opacity duration-300 ${isRev ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ background: 'linear-gradient(135deg,#FE6A2F,#FEBE4C)' }} aria-label={`Reveal piece ${i + 1}`}><span className="text-2xl font-black text-white drop-shadow">?</span></button>;
+            return <button key={i} onClick={() => tapPiece(i)} disabled={isRev} className={`border border-white/50 transition-opacity duration-300 ${isRev ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ background: 'linear-gradient(135deg,#FE6A2F,#FEBE4C)' }} aria-label={`Reveal piece ${i + 1}`}><span className="text-2xl font-black text-white drop-shadow">?</span></button>;
           })}
         </div>
       </div>
@@ -1551,7 +1531,7 @@ function PuzzleScene({ scene, onNext, onWin, onLose, role, roomId, activityUnloc
           const isPick = pick === who;
           const showWrong = isPick && correct === false;
           return (
-            <button key={who} onClick={() => guess(who)} disabled={!canAct || correct !== null} className={`flex flex-col items-center rounded-2xl border-4 bg-white/95 px-4 py-3 shadow-xl active:scale-95 ${isPick && correct ? 'border-green-400 ring-4 ring-green-300/60' : showWrong ? 'border-red-400 animate-[lep1-shake_0.4s_ease-out]' : 'border-white'}`}>
+            <button key={who} onClick={() => guess(who)} disabled={correct !== null} className={`flex flex-col items-center rounded-2xl border-4 bg-white/95 px-4 py-3 shadow-xl active:scale-95 ${isPick && correct ? 'border-green-400 ring-4 ring-green-300/60' : showWrong ? 'border-red-400 animate-[lep1-shake_0.4s_ease-out]' : 'border-white'}`}>
               <img src={c.img} alt={c.name} className="h-16 w-16 object-contain" draggable={false} />
               <span className="mt-1 text-sm font-black text-orange-700">{c.name}</span>
             </button>
@@ -1617,14 +1597,14 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
       {current && <button onClick={replayCurrent} className="absolute right-6 top-6 z-30 flex items-center gap-2 rounded-full bg-white/95 px-5 py-3 text-sm font-black uppercase tracking-widest text-orange-700 shadow-2xl ring-2 ring-orange-200 active:scale-95" aria-label="Repeat what the character said">🔁 Play again</button>}
       {current && !awaitingRepeat && (
         <div className="absolute z-20 max-w-[520px] -translate-x-1/2 px-4 transition-all duration-300" style={{ left: positions[current.who]?.left ?? '50%', bottom: `calc(${positions[current.who]?.bottom ?? '12vh'} + clamp(240px, 40vh, 460px) * ${positions[current.who]?.scale ?? 1} + 20px)` }}>
-          <div className="relative rounded-3xl bg-white/95 px-5 py-3 text-center text-xl font-black text-orange-800 shadow-2xl sm:text-2xl">“{current.line}”</div>
+          <div className="relative rounded-3xl bg-white px-5 py-3 text-center text-xl font-black text-orange-800 shadow-2xl sm:text-2xl">“{current.line}”</div>
         </div>
       )}
       {awaitingRepeat && current && (
         <>
           <div className="absolute inset-0 z-20 bg-black/35 backdrop-blur-[2px]" />
           <div className="absolute inset-0 z-30 flex items-center justify-center px-4">
-            <div className="relative w-full max-w-xl rounded-[36px] bg-white/98 p-7 text-center shadow-[0_30px_80px_rgba(0,0,0,0.45)] ring-4 ring-orange-300">
+            <div className="relative w-full max-w-xl rounded-[36px] bg-white p-7 text-center shadow-[0_30px_80px_rgba(0,0,0,0.45)] ring-4 ring-orange-300">
               <div className="mb-2 text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">Your turn!</div>
               <div className="relative mx-auto mb-3 flex h-24 w-24 items-center justify-center">
                 <span className="absolute inset-0 rounded-full bg-orange-400/40 animate-ping" />
@@ -1656,6 +1636,29 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
   const [gemDone, setGemDone] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  // Defaults to the open right-side space the scene art was built to leave
+  // clear (see u2l3-join-stage's *-solo backgrounds) — draggable so the
+  // student can move it if a particular scene's open space is elsewhere.
+  const [circlePos, setCirclePos] = useState({ xPct: 82, yPct: 64 });
+  const draggingRef = useRef(false);
+
+  const moveCircleTo = (clientX: number, clientY: number) => {
+    const rect = stageRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const xPct = Math.min(88, Math.max(12, ((clientX - rect.left) / rect.width) * 100));
+    const yPct = Math.min(90, Math.max(28, ((clientY - rect.top) / rect.height) * 100));
+    setCirclePos({ xPct, yPct });
+  };
+  const onCirclePointerDown = (e: React.PointerEvent) => {
+    draggingRef.current = true;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+  const onCirclePointerMove = (e: React.PointerEvent) => {
+    if (!draggingRef.current) return;
+    moveCircleTo(e.clientX, e.clientY);
+  };
+  const onCirclePointerUp = () => { draggingRef.current = false; };
 
   useEffect(() => () => { stopSpeaking(); streamRef.current?.getTracks().forEach((t) => t.stop()); }, [scene.id]);
   useEffect(() => {
@@ -1677,6 +1680,7 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
   const friendKey = isFriendTurn ? (currentTurn!.who as CharKey) : null;
   const friendMeta = friendKey ? CAST[friendKey] : null;
   const done = turnIdx >= scene.turns.length;
+  const bg = currentTurn?.bg ?? scene.bg;
 
   useEffect(() => { if (isFriendTurn && friendKey && currentTurn) cueSpeakOnce(currentTurn.line, friendKey); }, [turnIdx, isFriendTurn, friendKey]);
 
@@ -1687,7 +1691,7 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
   };
 
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div ref={stageRef} className="absolute inset-0 overflow-hidden select-none" style={{ backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.05) 55%, rgba(254,106,47,0.35) 100%)' }} />
       <div className="absolute left-6 top-6 z-20 flex flex-col gap-2">
         <span className="w-fit rounded-full bg-white/95 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-orange-700 shadow">Live Stage · Your Turn</span>
@@ -1695,7 +1699,7 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
       </div>
       {currentTurn && isFriendTurn && (
         <div className="absolute inset-x-0 top-20 z-30 flex justify-center px-4">
-          <div className="max-w-[720px] rounded-[28px] bg-white/98 px-8 py-5 text-center shadow-[0_30px_80px_rgba(0,0,0,0.35)] ring-4 ring-orange-200">
+          <div className="max-w-[720px] rounded-[28px] bg-white px-8 py-5 text-center shadow-[0_30px_80px_rgba(0,0,0,0.35)] ring-4 ring-orange-200">
             <div className="mb-1 flex items-center justify-center gap-2 text-[11px] font-black uppercase tracking-[0.25em]" style={{ color: friendMeta?.color ?? '#FE6A2F' }}><span className="text-lg">{friendMeta?.emoji ?? '🎓'}</span> {friendMeta?.name ?? 'Teacher'} asks</div>
             <div className="text-3xl font-black text-orange-800 sm:text-4xl">“{currentTurn.line}”</div>
             {friendKey && <button onClick={() => cueSpeakOnce(currentTurn.line, friendKey)} className="mt-3 mr-2 rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-widest text-orange-700 ring-2 ring-orange-300 shadow active:scale-95">🔊 Hear again</button>}
@@ -1705,22 +1709,38 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
       )}
       {currentTurn && isStudentTurn && (
         <div className="absolute inset-x-0 top-20 z-40 flex justify-center px-4">
-          <div className="w-full max-w-[700px] rounded-[32px] bg-white/98 p-6 text-center shadow-[0_30px_80px_rgba(0,0,0,0.4)] ring-4 ring-orange-300">
+          <div className="w-full max-w-[700px] rounded-[32px] bg-white p-6 text-center shadow-[0_30px_80px_rgba(0,0,0,0.4)] ring-4 ring-orange-300">
             <div className="text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">Your turn — say it!</div>
             <div className="mt-1 text-3xl font-black text-orange-700 sm:text-4xl">“{currentTurn.line}”</div>
             <button onClick={advance} className="mt-4 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 px-7 py-3 text-base font-black uppercase tracking-widest text-white shadow-xl active:scale-95">✅ I answered</button>
           </div>
         </div>
       )}
-      <div className="absolute left-1/2 z-30" style={{ top: '58%', transform: 'translate(-50%, -50%)' }}>
-        <div className={`relative flex items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-all ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`} style={{ width: 'clamp(300px, 46vw, 500px)', height: 'clamp(300px, 46vw, 500px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}>
-          <video ref={videoRef} muted playsInline className="h-full w-full object-cover" />
-          <span className="absolute right-6 top-6 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white"><span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" /> Live</span>
+      {/* Draggable, defaulting to the open side of the scene art (not
+          dead-center) so the background's own object/color/shape stays
+          visible while the student looks at and answers about it — drag
+          the circle itself to reposition it over whichever empty patch of
+          the scene fits best. */}
+      <div
+        className="absolute z-30 touch-none"
+        style={{ left: `${circlePos.xPct}%`, top: `${circlePos.yPct}%`, transform: 'translate(-50%, -50%)' }}
+      >
+        <div
+          onPointerDown={onCirclePointerDown}
+          onPointerMove={onCirclePointerMove}
+          onPointerUp={onCirclePointerUp}
+          onPointerCancel={onCirclePointerUp}
+          className={`relative flex cursor-grab items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-colors active:cursor-grabbing ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`}
+          style={{ width: 'clamp(200px, 30vw, 360px)', height: 'clamp(200px, 30vw, 360px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}
+        >
+          <video ref={videoRef} muted playsInline className="pointer-events-none h-full w-full object-cover" />
+          <span className="pointer-events-none absolute right-6 top-6 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white"><span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" /> Live</span>
+          <span className="pointer-events-none absolute left-6 top-6 rounded-full bg-black/50 px-2 py-1 text-xs">✥</span>
         </div>
-        <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '-48px' }}>
-          <div className={`relative flex items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-orange-700 shadow-2xl ring-4 ring-white transition-transform ${isStudentTurn ? 'scale-110' : ''}`} style={{ width: 96, height: 96 }}>
+        <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '-40px' }}>
+          <div className={`relative flex items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-orange-700 shadow-2xl ring-4 ring-white transition-transform ${isStudentTurn ? 'scale-110' : ''}`} style={{ width: 80, height: 80 }}>
             {isStudentTurn && <span className="absolute inset-0 rounded-full bg-orange-400/50 animate-ping" />}
-            <span className="relative text-5xl drop-shadow-md">🎤</span>
+            <span className="relative text-4xl drop-shadow-md">🎤</span>
           </div>
         </div>
       </div>
@@ -1731,15 +1751,13 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
 
 /* ---------- Hello doors ---------- */
 
-function HelloDoorsScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'hello-doors' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
-  type Phase = 'reveal' | 'shuffle' | 'prompt' | 'greet' | 'echo' | 'done';
-  type Synced = { round: number; order: CharKey[]; openIdx: number | null; phase: Phase; score: number };
-  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
-    { round: 0, order: scene.cast, openIdx: null, phase: 'reveal', score: 0 },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const { round, order, openIdx, phase, score } = synced;
+function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'hello-doors' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [round, setRound] = useState(0);
+  const [order, setOrder] = useState<CharKey[]>(scene.cast);
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [wrongIdx, setWrongIdx] = useState<number | null>(null);
+  const [phase, setPhase] = useState<'reveal' | 'shuffle' | 'prompt' | 'greet' | 'echo' | 'done'>('reveal');
+  const [score, setScore] = useState(0);
   const [gemDone, setGemDone] = useState(false);
   const answeredRef = useRef(false);
   const total = scene.rounds.length;
@@ -1753,57 +1771,43 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose, role, roomId, activityU
   };
 
   useEffect(() => {
-    if (finished && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-  }, [finished, gemDone]);
-
-  // Only the acting side (teacher, or an unlocked student) drives this round's
-  // reveal → shuffle → prompt sequence — the watching side just renders
-  // whatever `order`/`phase` it receives, so both screens show the exact
-  // same shuffled door order rather than each independently randomizing one.
-  useEffect(() => {
-    if (!canAct || !r) return;
+    if (!r) return;
     let cancelled = false;
-    answeredRef.current = false; setWrongIdx(null);
+    answeredRef.current = false; setOpenIdx(null); setWrongIdx(null);
     (async () => {
-      let ord = order;
       if (round === 0) {
-        ord = scene.cast;
-        updateSynced({ round, order: ord, openIdx: null, phase: 'reveal', score });
+        setOrder(scene.cast); setPhase('reveal');
         for (const who of scene.cast) { await safeSpeak(CAST[who].name, who); if (cancelled) return; }
         await new Promise((res) => setTimeout(res, 400));
         if (cancelled) return;
       }
-      updateSynced({ round, order: ord, openIdx: null, phase: 'shuffle', score });
+      setPhase('shuffle');
       if (cancelled) return;
-      for (let k = 0; k < 3; k++) {
-        ord = shuffle(ord);
-        updateSynced({ round, order: ord, openIdx: null, phase: 'shuffle', score });
-        await new Promise((res) => setTimeout(res, 420));
-        if (cancelled) return;
-      }
+      for (let k = 0; k < 3; k++) { setOrder((o) => shuffle(o)); await new Promise((res) => setTimeout(res, 420)); if (cancelled) return; }
       await new Promise((res) => setTimeout(res, 200));
       if (cancelled) return;
-      updateSynced({ round, order: ord, openIdx: null, phase: 'prompt', score });
+      setPhase('prompt');
       await new Promise((res) => setTimeout(res, 200));
       await safeSpeak(r.prompt, r.target);
     })();
     return () => { cancelled = true; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [round, canAct]);
+  }, [round]);
 
   const tap = async (idx: number) => {
-    if (!canAct || !r || answeredRef.current) return;
+    if (!r || answeredRef.current) return;
     const who = order[idx];
     if (who !== r.target) { setWrongIdx(idx); sfx.wrong(); onLose(); window.setTimeout(() => setWrongIdx(null), 500); return; }
-    answeredRef.current = true; sfx.match();
-    updateSynced({ round, order, openIdx: idx, phase: 'greet', score });
+    answeredRef.current = true; setOpenIdx(idx); setPhase('greet'); sfx.match();
     await new Promise((res) => setTimeout(res, 500));
     await safeSpeak(r.helloLine, who);
-    updateSynced({ round, order, openIdx: idx, phase: 'echo', score });
+    setPhase('echo');
     await new Promise((res) => setTimeout(res, 250));
     await safeSpeak(r.echoLine, r.target);
+    setScore((s) => s + 1);
     await new Promise((res) => setTimeout(res, 1400));
-    updateSynced({ round: round + 1, order, openIdx: null, phase: 'reveal', score: score + 1 });
+    const next = round + 1;
+    if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+    setRound(next);
   };
 
   if (finished) {
@@ -1811,7 +1815,7 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose, role, roomId, activityU
       <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/40" />
         <div className="relative z-10 flex flex-col items-center gap-4">
-          <div className="rounded-3xl bg-white/95 px-8 py-4 text-center shadow-2xl">
+          <div className="rounded-3xl bg-white px-8 py-4 text-center shadow-2xl">
             <div className="text-2xl font-black text-orange-700">🎉 Wonderful hellos!</div>
             <div className="text-lg font-bold text-neutral-700">You greeted every friend! {score}/{total}</div>
           </div>
@@ -1847,7 +1851,7 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose, role, roomId, activityU
                 {phase === 'reveal' && <div className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-2xl bg-white px-4 py-2 text-lg font-black text-neutral-800 shadow-xl ring-2 ring-white" style={{ color: c.color }}>{c.name}</div>}
                 {(phase === 'greet' || phase === 'echo') && openIdx === i && <div className="absolute -top-14 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-2xl bg-white px-4 py-2 text-base font-black text-neutral-800 shadow-xl ring-2 ring-white">{r!.helloLine}</div>}
               </div>
-              <button onClick={() => tap(i)} disabled={!canAct || answeredRef.current || phase !== 'prompt'} aria-label={`Door ${i + 1}`} className={`absolute inset-0 ${isWrong ? 'animate-[lep1-shake_0.5s]' : ''} ${isIdle ? 'hover:-translate-y-1' : ''} transition-transform active:scale-95`}>
+              <button onClick={() => tap(i)} disabled={answeredRef.current || phase !== 'prompt'} aria-label={`Door ${i + 1}`} className={`absolute inset-0 ${isWrong ? 'animate-[lep1-shake_0.5s]' : ''} ${isIdle ? 'hover:-translate-y-1' : ''} transition-transform active:scale-95`}>
                 <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2 rounded-t-full" style={{ width: '112%', height: '20%', background: `linear-gradient(180deg, ${c.color} 0%, ${c.color}dd 100%)`, boxShadow: '0 8px 20px rgba(0,0,0,0.3)' }} />
                 <div className="absolute left-1/2 top-[16%] h-[84%] w-[94%] -translate-x-1/2 overflow-hidden rounded-t-[46%] border-[7px] border-amber-950 shadow-2xl" style={{ background: 'radial-gradient(ellipse at 50% 70%, #4a2c14 0%, #1a0d05 100%)' }}>
                   <div className="absolute inset-0 transition-opacity duration-500" style={{ opacity: isOpen ? 1 : 0, background: `radial-gradient(circle at 50% 65%, ${c.color}ee 0%, ${c.color}88 35%, rgba(0,0,0,0.4) 90%)` }} />
@@ -1864,10 +1868,48 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose, role, roomId, activityU
   );
 }
 
-/* ---------- Color friends ---------- */
+/* ---------- Color friends / Color the vocabulary ---------- */
+
+/** Simple coloring-book line art (stroke-only, no fill) for the vocabulary-
+ * coloring mode — code-drawn so no new image assets are needed. */
+function VocabOutline({ kind }: { kind: 'apple' | 'water' | 'sun' }) {
+  const stroke = { fill: 'none', stroke: '#1a1a1a', strokeWidth: 8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
+  if (kind === 'apple') {
+    return (
+      <svg viewBox="0 0 400 520" className="pointer-events-none absolute inset-0 h-full w-full">
+        <path d="M200 190 C170 158 118 168 98 208 C68 262 80 336 132 384 C162 412 190 420 200 410 C210 420 238 412 268 384 C320 336 332 262 302 208 C282 168 230 158 200 190 Z" {...stroke} />
+        <path d="M200 190 L200 148" {...stroke} />
+        <path d="M200 158 Q234 136 258 158 Q234 176 200 158 Z" {...stroke} />
+      </svg>
+    );
+  }
+  if (kind === 'water') {
+    return (
+      <svg viewBox="0 0 400 520" className="pointer-events-none absolute inset-0 h-full w-full">
+        <path d="M150 160 L250 160 L228 400 L172 400 Z" {...stroke} />
+        <path d="M162 290 Q200 268 238 290" {...stroke} />
+      </svg>
+    );
+  }
+  const rays = [0, 45, 90, 135, 180, 225, 270, 315];
+  return (
+    <svg viewBox="0 0 400 520" className="pointer-events-none absolute inset-0 h-full w-full">
+      <circle cx="200" cy="280" r="80" {...stroke} />
+      {rays.map((angle) => {
+        const rad = (angle * Math.PI) / 180;
+        const x1 = 200 + Math.cos(rad) * 100, y1 = 280 + Math.sin(rad) * 100;
+        const x2 = 200 + Math.cos(rad) * 140, y2 = 280 + Math.sin(rad) * 140;
+        return <line key={angle} x1={x1} y1={y1} x2={x2} y2={y2} {...stroke} />;
+      })}
+    </svg>
+  );
+}
 
 function ColorFriendsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'color-friends' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const CHARS = scene.cast;
+  const isVocabMode = Boolean(scene.vocabItems?.length);
+  const CHARS = scene.cast ?? [];
+  const VOCAB = scene.vocabItems ?? [];
+  const count = isVocabMode ? VOCAB.length : CHARS.length;
   const PAINT_COLORS = ['#FE6A2F', '#F59E0B', '#FACC15', '#84CC16', '#22C55E', '#06B6D4', '#3B82F6', '#8B5CF6', '#EC4899', '#EF4444', '#78350F', '#111827'];
   const BRUSHES = [18, 30, 46];
   const [idx, setIdx] = useState(0);
@@ -1877,11 +1919,13 @@ function ColorFriendsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { k
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const paintingRef = useRef(false);
   const lastPtRef = useRef<{ x: number; y: number } | null>(null);
-  const who = CHARS[idx] ?? 'pip';
-  const c = CAST[who];
-  const sketch = COLOR_SKETCH[who];
+  const who = !isVocabMode ? (CHARS[idx] ?? 'pip') : null;
+  const c = who ? CAST[who] : null;
+  const sketch = who ? COLOR_SKETCH[who] : null;
+  const vocabItem = isVocabMode ? VOCAB[idx] : null;
+  const label = isVocabMode ? vocabItem!.label : c!.name;
 
-  useEffect(() => { clearCanvas(); if (idx > 0) cueSpeak(`${c.name}!`, who); }, [idx]);
+  useEffect(() => { clearCanvas(); if (idx > 0) cueSpeak(`${label}!`, who ?? 'teacher'); }, [idx]);
 
   const getCtx = () => canvasRef.current?.getContext('2d') ?? null;
   const clearCanvas = () => { const canvas = canvasRef.current; const ctx = getCtx(); if (canvas && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); };
@@ -1894,7 +1938,7 @@ function ColorFriendsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { k
     const ctx = canvas.getContext('2d');
     if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   };
-  useEffect(() => { resizeCanvas(); const onResize = () => resizeCanvas(); window.addEventListener('resize', onResize); return () => window.removeEventListener('resize', onResize); }, [who]);
+  useEffect(() => { resizeCanvas(); const onResize = () => resizeCanvas(); window.addEventListener('resize', onResize); return () => window.removeEventListener('resize', onResize); }, [who, idx]);
 
   const localPoint = (e: React.PointerEvent<HTMLCanvasElement>) => { const r = canvasRef.current!.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
   const strokeTo = (x: number, y: number) => {
@@ -1908,27 +1952,42 @@ function ColorFriendsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { k
   const onPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => { e.currentTarget.setPointerCapture(e.pointerId); paintingRef.current = true; const p = localPoint(e); lastPtRef.current = p; strokeTo(p.x, p.y); };
   const onPointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => { if (!paintingRef.current) return; const p = localPoint(e); strokeTo(p.x, p.y); };
   const endStroke = () => { paintingRef.current = false; lastPtRef.current = null; };
-  const handleDone = () => { if (!gemDone) { setGemDone(true); onWin(true); } if (idx + 1 < CHARS.length) setIdx(idx + 1); else onNext(); };
+  const handleDone = () => {
+    if (!gemDone) { setGemDone(true); onWin(true); }
+    if (isVocabMode && vocabItem) void cueSpeak(`Yes! The ${vocabItem.label.toLowerCase()} is ${vocabItem.targetColorName.toLowerCase()}!`, 'pip');
+    if (idx + 1 < count) setIdx(idx + 1); else onNext();
+  };
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/40 via-white/15 to-white/50" />
-      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">🎨 Color {c.name}!</div>
+      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">
+        🎨 Color the {label}!{isVocabMode && vocabItem && <span className="ml-1 opacity-60">Try {vocabItem.targetColorName}!</span>}
+      </div>
       <div className="absolute inset-x-0 top-14 bottom-36 z-10 flex items-center justify-center">
-        <div key={who} className="relative aspect-[400/520] h-full max-h-full max-w-[96vw] overflow-hidden rounded-3xl bg-[#FFFDF7] shadow-2xl ring-2 ring-white/70">
+        <div key={isVocabMode ? vocabItem!.label : who} className="relative aspect-[400/520] h-full max-h-full max-w-[96vw] overflow-hidden rounded-3xl bg-[#FFFDF7] shadow-2xl ring-2 ring-white/70">
           <canvas ref={canvasRef} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={endStroke} onPointerCancel={endStroke} onPointerLeave={endStroke} className="absolute inset-0 h-full w-full touch-none" style={{ cursor: 'crosshair' }} />
-          <img src={sketch} alt={c.name} className="pointer-events-none absolute inset-0 h-full w-full object-contain select-none" draggable={false} />
+          {isVocabMode && vocabItem ? (
+            <VocabOutline kind={vocabItem.outline} />
+          ) : (
+            <img src={sketch!} alt={label} className="pointer-events-none absolute inset-0 h-full w-full object-contain select-none" draggable={false} />
+          )}
         </div>
       </div>
       <div className="absolute inset-x-0 bottom-3 z-30 flex flex-col items-center gap-2">
         <div className="flex flex-wrap items-center justify-center gap-2 rounded-full bg-white/95 px-4 py-2 shadow-2xl">
-          {PAINT_COLORS.map((col) => <button key={col} onClick={() => setColor(col)} aria-label={`Color ${col}`} className={`h-10 w-10 rounded-full transition-transform active:scale-90 ${col === color ? 'ring-4 ring-orange-500 scale-110' : 'ring-2 ring-white'}`} style={{ backgroundColor: col }} />)}
+          {PAINT_COLORS.map((col) => {
+            const isSuggested = isVocabMode && vocabItem && col.toUpperCase() === vocabItem.targetColorHex.toUpperCase();
+            return (
+              <button key={col} onClick={() => setColor(col)} aria-label={`Color ${col}`} className={`h-10 w-10 rounded-full transition-transform active:scale-90 ${col === color ? 'ring-4 ring-orange-500 scale-110' : isSuggested ? 'ring-4 ring-orange-300 animate-pulse' : 'ring-2 ring-white'}`} style={{ backgroundColor: col }} />
+            );
+          })}
           <div className="mx-2 h-8 w-px bg-neutral-300" />
           {BRUSHES.map((size) => <button key={size} onClick={() => setBrush(size)} aria-label={`Brush ${size}`} className={`flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 transition-transform active:scale-90 ${size === brush ? 'ring-4 ring-orange-500 scale-110' : 'ring-2 ring-white'}`}><span className="block rounded-full bg-neutral-800" style={{ width: size * 0.5, height: size * 0.5 }} /></button>)}
           <button onClick={clearCanvas} className="ml-2 rounded-full bg-neutral-100 px-3 py-2 text-xs font-black text-neutral-700 shadow active:scale-95">↺ Clear</button>
         </div>
         <div className="flex items-center gap-2">
-          {idx + 1 < CHARS.length && <button onClick={() => setIdx(idx + 1)} className="rounded-full bg-white/95 px-5 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">Next Friend →</button>}
+          {idx + 1 < count && <button onClick={() => setIdx(idx + 1)} className="rounded-full bg-white/95 px-5 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">Next {isVocabMode ? 'Item' : 'Friend'} →</button>}
           <button onClick={handleDone} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Done ⭐</button>
         </div>
       </div>
@@ -1938,18 +1997,14 @@ function ColorFriendsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { k
 
 /* ---------- Alphabet blocks ---------- */
 
-function AlphabetBlocksScene({ scene, onNext, onWin, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'alphabet-blocks' }>; onNext: () => void; onWin: (gem: boolean) => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
-  type Phase = 'tap' | 'stack' | 'done';
-  type Synced = { phase: Phase; tapIdx: number; wordIdx: number; placed: string[]; usedBank: number[] };
-  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
-    { phase: 'tap', tapIdx: 0, wordIdx: 0, placed: [], usedBank: [] },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const { phase, tapIdx, wordIdx, placed } = synced;
-  const usedBankSet = useMemo(() => new Set(synced.usedBank), [synced.usedBank]);
-  const [introDone, setIntroDone] = useState(false);
+function AlphabetBlocksScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'alphabet-blocks' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  type Phase = 'intro' | 'tap' | 'stack' | 'done';
+  const [phase, setPhase] = useState<Phase>('intro');
+  const [tapIdx, setTapIdx] = useState(0);
   const [tapWrong, setTapWrong] = useState<string | null>(null);
   const [tapWinLetter, setTapWinLetter] = useState<string | null>(null);
+  const [wordIdx, setWordIdx] = useState(0);
+  const [placed, setPlaced] = useState<string[]>([]);
   const [wrongBankIdx, setWrongBankIdx] = useState<number | null>(null);
   const [celebrate, setCelebrate] = useState(false);
   const [gemDone, setGemDone] = useState(false);
@@ -1963,15 +2018,11 @@ function AlphabetBlocksScene({ scene, onNext, onWin, role, roomId, activityUnloc
     introRef.current = true;
     (async () => {
       await new Promise((r) => setTimeout(r, 200));
-      setIntroDone(true);
+      setPhase('tap');
       await new Promise((r) => setTimeout(r, 300));
       await playLetterPhonic(scene.tapRounds[0].letter);
     })();
   }, []);
-
-  useEffect(() => {
-    if (phase === 'done' && !gemDone) { setGemDone(true); onWin(true); }
-  }, [phase, gemDone]);
 
   const tapPromptRef = useRef(0);
   useEffect(() => {
@@ -1982,16 +2033,15 @@ function AlphabetBlocksScene({ scene, onNext, onWin, role, roomId, activityUnloc
   }, [tapIdx, phase]);
 
   const handleTapLetter = async (letter: string) => {
-    if (!canAct || phase !== 'tap' || tapWinLetter) return;
+    if (phase !== 'tap' || tapWinLetter) return;
     const target = scene.tapRounds[tapIdx].letter;
     if (letter === target) {
       setTapWinLetter(letter); sfx.gem();
       await new Promise((r) => setTimeout(r, 700));
       setTapWinLetter(null);
-      if (tapIdx + 1 < scene.tapRounds.length) {
-        updateSynced({ ...synced, tapIdx: tapIdx + 1 });
-      } else {
-        updateSynced({ phase: 'stack', tapIdx, wordIdx: 0, placed: [], usedBank: [] });
+      if (tapIdx + 1 < scene.tapRounds.length) setTapIdx(tapIdx + 1);
+      else {
+        setPhase('stack'); setWordIdx(0); setPlaced([]);
         await new Promise((r) => setTimeout(r, 300));
         await safeSpeak(scene.words[0].word, 'pip');
       }
@@ -2004,30 +2054,29 @@ function AlphabetBlocksScene({ scene, onNext, onWin, role, roomId, activityUnloc
     const need = currentWord.split('');
     const distractors = scene.letters.filter((l) => !need.includes(l)).slice(0, 3);
     const arr = [...need, ...distractors];
-    return arr.map((c, i) => ({ c, r: ((wordIdx + 1) * (i * 9301 + 49297)) % 233280 })).sort((a, b) => a.r - b.r).map((x) => x.c);
-  }, [phase, wordIdx, currentWord]);
+    for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[arr[i], arr[j]] = [arr[j], arr[i]]; }
+    return arr;
+  }, [phase, wordIdx]);
+
+  const [usedBank, setUsedBank] = useState<Set<number>>(new Set());
+  useEffect(() => { setUsedBank(new Set()); setPlaced([]); }, [wordIdx, phase]);
 
   const handleBankTap = async (bIdx: number, letter: string) => {
-    if (!canAct || phase !== 'stack' || celebrate || usedBankSet.has(bIdx)) return;
+    if (phase !== 'stack' || celebrate || usedBank.has(bIdx)) return;
     const target = currentWord[placed.length];
     if (letter === target) {
       const nextPlaced = [...placed, letter];
-      const nextUsedBank = [...synced.usedBank, bIdx];
+      setPlaced(nextPlaced);
+      setUsedBank((s) => new Set(s).add(bIdx));
       sfx.pop();
-      updateSynced({ phase, tapIdx, wordIdx, placed: nextPlaced, usedBank: nextUsedBank });
       if (nextPlaced.length === currentWord.length) {
         setCelebrate(true); sfx.gem();
         await new Promise((r) => setTimeout(r, 350));
         await safeSpeak(currentWord, 'pip');
         await new Promise((r) => setTimeout(r, 700));
         setCelebrate(false);
-        if (wordIdx + 1 < scene.words.length) {
-          updateSynced({ phase: 'stack', tapIdx, wordIdx: wordIdx + 1, placed: [], usedBank: [] });
-          await new Promise((r) => setTimeout(r, 300));
-          await safeSpeak(scene.words[wordIdx + 1].word, 'pip');
-        } else {
-          updateSynced({ phase: 'done', tapIdx, wordIdx, placed: nextPlaced, usedBank: nextUsedBank });
-        }
+        if (wordIdx + 1 < scene.words.length) { setWordIdx(wordIdx + 1); await new Promise((r) => setTimeout(r, 300)); await safeSpeak(scene.words[wordIdx + 1].word, 'pip'); }
+        else { setPhase('done'); if (!gemDone) { setGemDone(true); onWin(true); } }
       }
     } else { setWrongBankIdx(bIdx); sfx.wrong(); window.setTimeout(() => setWrongBankIdx(null), 450); }
   };
@@ -2038,12 +2087,12 @@ function AlphabetBlocksScene({ scene, onNext, onWin, role, roomId, activityUnloc
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">
         🧱 Alphabet Blocks{phase === 'tap' && <span className="ml-2 text-orange-500">— Tap the sound!</span>}{phase === 'stack' && <span className="ml-2 text-orange-500">— Stack the word!</span>}
       </div>
-      {introDone && phase === 'tap' && (
+      {phase === 'tap' && (
         <div className="absolute inset-x-0 top-20 bottom-24 z-10 flex flex-col items-center justify-center gap-6 px-4">
           <button onClick={() => playLetterPhonic(scene.tapRounds[tapIdx].letter)} className="rounded-full bg-white/95 px-6 py-3 text-lg font-black text-orange-700 shadow-xl active:scale-95">🔊 Play sound again</button>
           <div className="grid max-w-[92vw] grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
             {scene.letters.map((L) => (
-              <button key={L} onClick={() => handleTapLetter(L)} disabled={!canAct} className="relative flex h-28 w-28 items-center justify-center rounded-2xl text-6xl font-black text-white transition-transform active:scale-95 disabled:cursor-not-allowed sm:h-32 sm:w-32"
+              <button key={L} onClick={() => handleTapLetter(L)} className="relative flex h-28 w-28 items-center justify-center rounded-2xl text-6xl font-black text-white transition-transform active:scale-95 sm:h-32 sm:w-32"
                 style={{ backgroundColor: colorFor(L), animation: tapWrong === L ? 'lep1-blockShake 0.4s ease-in-out' : tapWinLetter === L ? 'lep1-blockWin 0.7s ease-out' : undefined }}>
                 {L}{tapWinLetter === L && <span className="absolute -right-2 -top-2 text-4xl">✨</span>}
               </button>
@@ -2067,8 +2116,8 @@ function AlphabetBlocksScene({ scene, onNext, onWin, role, roomId, activityUnloc
           </div>
           <div className="flex max-w-[92vw] flex-wrap items-center justify-center gap-3">
             {bank.map((L, i) => (
-              <button key={`${i}-${L}`} onClick={() => handleBankTap(i, L)} disabled={!canAct || usedBankSet.has(i)} className="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl font-black text-white transition-transform active:scale-90 disabled:cursor-not-allowed sm:h-24 sm:w-24 sm:text-5xl"
-                style={{ backgroundColor: colorFor(L), opacity: usedBankSet.has(i) ? 0.25 : 1, animation: wrongBankIdx === i ? 'lep1-blockShake 0.4s ease-in-out' : undefined }}>{L}</button>
+              <button key={`${i}-${L}`} onClick={() => handleBankTap(i, L)} disabled={usedBank.has(i)} className="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl font-black text-white transition-transform active:scale-90 sm:h-24 sm:w-24 sm:text-5xl"
+                style={{ backgroundColor: colorFor(L), opacity: usedBank.has(i) ? 0.25 : 1, animation: wrongBankIdx === i ? 'lep1-blockShake 0.4s ease-in-out' : undefined }}>{L}</button>
             ))}
           </div>
           <div className="text-sm font-black text-white drop-shadow-md">Word {wordIdx + 1} / {scene.words.length}</div>
@@ -2211,36 +2260,31 @@ function AlphabetOrderScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
 
 /* ---------- Trophy chest ---------- */
 
-function TrophyChestScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'trophy-chest' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
-  type Synced = { roundIdx: number; revealed: boolean; finished: boolean };
-  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
-    { roundIdx: 0, revealed: false, finished: false },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const { roundIdx, revealed, finished } = synced;
+function TrophyChestScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'trophy-chest' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [roundIdx, setRoundIdx] = useState(0);
+  const [revealed, setRevealed] = useState(false);
   const [wrongPick, setWrongPick] = useState<string | null>(null);
+  const [finished, setFinished] = useState(false);
   const gemDone = useRef(false);
   const round = scene.rounds[roundIdx];
   const c = CAST[scene.who];
 
   useEffect(() => { if (round && !revealed) cueSpeakOnce(`Find the ${round.letter} sound!`, scene.who); }, [roundIdx]);
 
-  useEffect(() => {
-    if (finished && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
-  }, [finished]);
-
   const pick = async (choice: string) => {
-    if (!canAct || revealed || finished || !round) return;
+    if (revealed || finished || !round) return;
     if (choice !== round.letter) { sfx.wrong(); onLose(); setWrongPick(choice); window.setTimeout(() => setWrongPick(null), 450); return; }
     sfx.match();
-    updateSynced({ roundIdx, revealed: true, finished: false });
+    setRevealed(true);
     await safeSpeak(round.word, scene.who);
     await new Promise((r) => window.setTimeout(r, 1300));
     const next = roundIdx + 1;
     if (next >= scene.rounds.length) {
-      updateSynced({ roundIdx, revealed: true, finished: true });
+      setFinished(true);
+      if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
     } else {
-      updateSynced({ roundIdx: next, revealed: false, finished: false });
+      setRevealed(false);
+      setRoundIdx(next);
     }
   };
 
@@ -2268,7 +2312,7 @@ function TrophyChestScene({ scene, onNext, onWin, onLose, role, roomId, activity
           </button>
           <div className="flex gap-3">
             {round?.choices.map((L) => (
-              <button key={L} onClick={() => pick(L)} disabled={!canAct || revealed}
+              <button key={L} onClick={() => pick(L)} disabled={revealed}
                 className={`grid h-20 w-20 place-items-center rounded-2xl text-4xl font-black text-white shadow-xl transition active:scale-90 disabled:opacity-50 sm:h-24 sm:w-24 sm:text-5xl ${wrongPick === L ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
                 style={{ background: 'linear-gradient(135deg, #C97A2F, #F5B942)' }}>
                 {L}
@@ -2301,17 +2345,38 @@ function TrophyChestScene({ scene, onNext, onWin, onLose, role, roomId, activity
  * deliberately separate from any phonics scene, and separate from the
  * practice/matching stage (ColorSortScene) that follows it. */
 
+function buildColorSentence(colorWord: string, exampleWord: string): string {
+  return `The ${exampleWord.toLowerCase()} is ${colorWord.toLowerCase()}.`;
+}
+
+/** Per-item progression, three real steps rather than a single word:
+ *   1. heard        -> tap the swatch, hear the color word alone ("Red")
+ *   2. colorDone     -> repeat it, then the OBJECT word is introduced on its
+ *      own ("Apple") — vocabulary comes before the sentence, not the other
+ *      way round
+ *   3. objectDone    -> repeat the object word, then the two combine into a
+ *      real sentence ("The apple is red.")
+ *   4. sentenceDone  -> repeat the sentence, item complete
+ * Deliberately separate from any phonics scene, and separate from the
+ * practice/matching stage (ColorSortScene) that follows it. */
 function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'color-model' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const [heard, setHeard] = useState<Set<number>>(new Set());
-  const [repeated, setRepeated] = useState<Set<number>>(new Set());
+  const [colorDone, setColorDone] = useState<Set<number>>(new Set());
+  const [objectDone, setObjectDone] = useState<Set<number>>(new Set());
+  const [sentenceDone, setSentenceDone] = useState<Set<number>>(new Set());
   const [held, setHeld] = useState(false);
   const holdTimer = useRef<number | null>(null);
   const gemDone = useRef(false);
-  const allDone = repeated.size >= scene.items.length;
+  const allDone = sentenceDone.size >= scene.items.length;
 
   useEffect(() => {
-    if (allDone && !gemDone.current) { gemDone.current = true; onWin(true); cueSpeak('Wonderful! You know red, blue, and yellow!', 'pip'); }
+    if (allDone && !gemDone.current) {
+      gemDone.current = true;
+      onWin(true);
+      const sentences = scene.items.map((it) => buildColorSentence(it.colorWord, it.exampleWord)).join(' ');
+      cueSpeak(`Wonderful! ${sentences}`, 'pip');
+    }
   }, [allDone]);
 
   const tapItem = async (i: number) => {
@@ -2322,11 +2387,35 @@ function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
     await safeSpeak(scene.items[i].colorWord, scene.items[i].who);
   };
 
-  const startHold = (i: number) => {
+  const startHoldColor = (i: number) => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(async () => {
+      setHeld(false);
+      setColorDone((s) => new Set(s).add(i));
+      sfx.gem();
+      const item = scene.items[i];
+      await new Promise((r) => window.setTimeout(r, 400));
+      await safeSpeak(item.exampleWord, item.who);
+    }, 1200);
+  };
+
+  const startHoldObject = (i: number) => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(async () => {
+      setHeld(false);
+      setObjectDone((s) => new Set(s).add(i));
+      sfx.gem();
+      const item = scene.items[i];
+      await new Promise((r) => window.setTimeout(r, 400));
+      await safeSpeak(buildColorSentence(item.colorWord, item.exampleWord), item.who);
+    }, 1200);
+  };
+
+  const startHoldSentence = (i: number) => {
     setHeld(true);
     holdTimer.current = window.setTimeout(() => {
       setHeld(false);
-      setRepeated((s) => new Set(s).add(i));
+      setSentenceDone((s) => new Set(s).add(i));
       sfx.gem();
     }, 1200);
   };
@@ -2336,7 +2425,7 @@ function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
     <div className="absolute inset-0">
       <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
         <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
-          {allDone ? 'You know red, blue, and yellow! ⭐' : scene.teacher}
+          {allDone ? 'You know the words and the sentences! ⭐' : scene.teacher}
         </div>
       </div>
 
@@ -2344,23 +2433,47 @@ function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
         {scene.items.map((item, i) => {
           const isActive = activeIdx === i;
           const isHeard = heard.has(i);
-          const isRepeated = repeated.has(i);
+          const isColorDone = colorDone.has(i);
+          const isObjectDone = objectDone.has(i);
+          const isSentenceDone = sentenceDone.has(i);
           return (
-            <div key={item.colorWord} className="flex flex-col items-center gap-3">
+            <div key={item.colorWord} className="flex flex-col items-center gap-2">
               <button
                 onClick={() => tapItem(i)}
-                className={`grid h-36 w-36 place-items-center rounded-full border-8 border-white shadow-2xl transition active:scale-95 sm:h-44 sm:w-44 ${isRepeated ? '' : 'animate-[lep1-wiggle_4s_ease-in-out_infinite]'}`}
+                className={`grid h-36 w-36 place-items-center rounded-full border-8 border-white shadow-2xl transition active:scale-95 sm:h-44 sm:w-44 ${isSentenceDone ? '' : 'animate-[lep1-wiggle_4s_ease-in-out_infinite]'}`}
                 style={{ background: item.colorHex, animationDelay: `${i * 0.4}s` }}
                 aria-label={`Hear ${item.colorWord}`}
               >
                 <img src={item.exampleImg} alt={item.exampleWord} className="h-20 w-20 object-contain drop-shadow-lg sm:h-24 sm:w-24" />
               </button>
               <span className="rounded-full bg-white px-4 py-1 text-lg font-black uppercase shadow" style={{ color: item.colorHex }}>{item.colorWord}</span>
-              {isRepeated ? (
+              {isColorDone && (
+                <span className="rounded-full bg-white/95 px-3 py-1 text-sm font-bold text-slate-700 shadow">{item.exampleWord}</span>
+              )}
+              {isObjectDone && (
+                <span className="max-w-[10rem] rounded-2xl bg-white px-3 py-1 text-center text-xs font-bold text-slate-800 shadow sm:text-sm">{buildColorSentence(item.colorWord, item.exampleWord)}</span>
+              )}
+              {isSentenceDone ? (
                 <span className="text-2xl">✅</span>
+              ) : isObjectDone ? (
+                <button
+                  onPointerDown={() => startHoldSentence(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
+                  style={{ background: 'linear-gradient(90deg, #8B5CF6, #A78BFA)' }}
+                >
+                  🎤 Say the sentence!
+                </button>
+              ) : isColorDone ? (
+                <button
+                  onPointerDown={() => startHoldObject(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
+                  style={{ background: 'linear-gradient(90deg, #22C55E, #34D399)' }}
+                >
+                  🎤 Say the word!
+                </button>
               ) : isHeard && isActive ? (
                 <button
-                  onPointerDown={() => startHold(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  onPointerDown={() => startHoldColor(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
                   className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
                   style={{ background: 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
                 >
@@ -2385,20 +2498,15 @@ function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
   );
 }
 
-function ColorSortScene({ scene, onWin, onLose, onNext, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'color-sort' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
-  type Slot = { idx: number; it: typeof scene.items[number]; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
-  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, dragging: false, dx: 0, dy: 0, flash: 'none' })));
-  const [synced, updateSynced, canAct] = useSyncedSceneState<{ collected: number[] }>(
-    { collected: [] },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const collectedSet = useMemo(() => new Set(synced.collected), [synced.collected]);
+function ColorSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'color-sort' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
+  type Slot = { idx: number; it: typeof scene.items[number]; collected: boolean; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
+  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, collected: false, dragging: false, dx: 0, dy: 0, flash: 'none' })));
   const [hotColor, setHotColor] = useState<string | null>(null);
   const [gemAwarded, setGemAwarded] = useState(false);
   const targetRefs = useRef<Record<string, HTMLElement | null>>({});
   const dragIdx = useRef<number | null>(null);
   const start = useRef({ x: 0, y: 0 });
-  const done = slots.every((s) => collectedSet.has(s.idx));
+  const done = slots.every((s) => s.collected);
 
   useEffect(() => { if (done && !gemAwarded) { setGemAwarded(true); onWin(true); cueSpeak('Amazing! All colors sorted!', 'teacher'); } }, [done, gemAwarded]);
 
@@ -2420,9 +2528,8 @@ function ColorSortScene({ scene, onWin, onLose, onNext, role, roomId, activityUn
   }
 
   const onDown = (idx: number) => (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (!canAct) return;
     const s = slots.find((x) => x.idx === idx);
-    if (!s || collectedSet.has(idx)) return;
+    if (!s || s.collected) return;
     sfx.pop();
     const speaker = scene.targets.find((t) => t.colorWord === s.it.colorWord)?.who ?? 'pip';
     cueSpeakOnce(s.it.word, speaker);
@@ -2444,30 +2551,26 @@ function ColorSortScene({ scene, onWin, onLose, onNext, role, roomId, activityUn
     const dropColor = hitTest(e.clientX, e.clientY, e.currentTarget);
     setHotColor(null);
     if (idx === null) return;
-    const slot = slots.find((x) => x.idx === idx);
     setSlots((p) => p.map((x) => {
       if (x.idx !== idx) return x;
       if (!dropColor) return { ...x, dragging: false, dx: 0, dy: 0 };
-      if (dropColor === x.it.colorWord) return { ...x, dragging: false, dx: 0, dy: 0, flash: 'good' };
+      if (dropColor === x.it.colorWord) { sfx.match(); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
+      sfx.wrong(); onLose();
       return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
     }));
-    if (dropColor && slot) {
-      if (dropColor === slot.it.colorWord) { sfx.match(); updateSynced({ collected: [...synced.collected, idx] }); }
-      else { sfx.wrong(); onLose(); }
-    }
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
   };
 
-  const orbit = scatterPositions(scene.items.length, [16, 84], 14);
+  const orbit = scatterPositions(scene.items.length, [10, 74], 20);
 
   return (
     <div className="absolute inset-0">
       <div className="pointer-events-none absolute inset-0 z-0 bg-white/25 backdrop-blur-md" />
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-bold text-orange-700 shadow-xl backdrop-blur sm:text-base">🎧 {scene.teacher}</div>
-      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 items-center justify-center gap-6 px-4 sm:gap-10">
+      <div className="absolute inset-x-0 top-1/2 z-10 flex flex-wrap -translate-y-1/2 items-center justify-center gap-4 px-4 sm:gap-8">
         {scene.targets.map((t) => {
           const hot = hotColor === t.colorWord;
-          const collected = slots.filter((s) => collectedSet.has(s.idx) && s.it.colorWord === t.colorWord).length;
+          const collectedItems = slots.filter((s) => s.collected && s.it.colorWord === t.colorWord);
           const total = slots.filter((s) => s.it.colorWord === t.colorWord).length;
           return (
             <button key={t.colorWord} type="button" ref={(el) => { targetRefs.current[t.colorWord] = el; }} onClick={() => void safeSpeak(t.colorWord, t.who)}
@@ -2475,20 +2578,34 @@ function ColorSortScene({ scene, onWin, onLose, onNext, role, roomId, activityUn
               <div className="pointer-events-none absolute inset-0 animate-pulse rounded-full opacity-60" style={{ background: `radial-gradient(circle at center, ${t.colorHex}cc, transparent 70%)` }} />
               <div className="pointer-events-none relative flex flex-col items-center gap-1">
                 <span className="grid h-24 w-24 place-items-center rounded-full text-lg font-black uppercase text-white shadow-lg sm:h-28 sm:w-28 sm:text-xl" style={{ background: t.colorHex, textShadow: '0 2px 8px rgba(0,0,0,0.55)' }}>{t.colorWord}</span>
-                <p className="text-[10px] font-bold text-orange-700">⭐ {collected}/{total}</p>
+                <p className="text-[10px] font-bold text-orange-700">⭐ {collectedItems.length}/{total}</p>
+                {/* Collected items render as children of this already-centered
+                    button — a simple flex-wrap, not a separately positioned
+                    div measured against the target's pixel coordinates. That
+                    measurement approach is what used to land the checkmark
+                    visibly off-center (and briefly during the hot-glow
+                    scale-up, wildly off); nesting it here means the browser's
+                    own layout keeps it centered with no measurement at all. */}
+                {collectedItems.length > 0 && (
+                  <div className="mt-0.5 flex flex-wrap items-center justify-center gap-1">
+                    {collectedItems.map((s) => (
+                      <span key={s.idx} className="grid h-7 w-7 place-items-center rounded-full bg-white/90 text-sm shadow ring-2 ring-green-400 animate-[lep1-pop_0.4s_ease-out]">✅</span>
+                    ))}
+                  </div>
+                )}
               </div>
             </button>
           );
         })}
       </div>
       {slots.map((s, i) => {
+        if (s.collected) return null;
         const pos = orbit[i % orbit.length];
-        if (collectedSet.has(s.idx)) return <div key={s.idx} className="absolute grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-green-300/60 text-4xl opacity-70 ring-2 ring-green-400 backdrop-blur" style={{ left: pos.left, top: pos.top }}>✅</div>;
         const glow = s.flash === 'bad' ? 'drop-shadow-[0_0_14px_rgba(239,68,68,0.9)] animate-[lep1-shake_0.4s_ease-in-out]' : s.flash === 'good' ? 'drop-shadow-[0_0_18px_rgba(34,197,94,0.9)]' : 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]';
         return (
-          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} disabled={!canAct}
-            className={`absolute h-40 w-40 sm:h-52 sm:w-52 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition disabled:cursor-not-allowed ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
-            style={{ left: pos.left, top: pos.top, animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
+          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
+            className={`absolute -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
+            style={{ left: pos.left, top: pos.top, width: 'clamp(88px, 16vh, 208px)', height: 'clamp(88px, 16vh, 208px)', animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
             aria-label={s.it.word}
           >
             {s.it.img ? <img src={s.it.img} alt={s.it.word} draggable={false} className="pointer-events-none h-full w-full object-contain" /> : <span className="pointer-events-none grid h-full w-full place-items-center text-6xl">{s.it.emoji}</span>}
@@ -2498,6 +2615,763 @@ function ColorSortScene({ scene, onWin, onLose, onNext, role, roomId, activityUn
       {done && (
         <div className="absolute inset-x-0 bottom-6 flex justify-center">
           <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>✨ All colors matched! Next →</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Color quiz (tap-select multiple choice, distinct interaction from color-sort's drag) ---------- */
+
+function ColorQuizScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'color-quiz' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
+  const [roundIdx, setRoundIdx] = useState(0);
+  const [picked, setPicked] = useState<string | null>(null);
+  const [correct, setCorrect] = useState(false);
+  const gemDone = useRef(false);
+  const total = scene.rounds.length;
+  const done = roundIdx >= total;
+  const round = !done ? scene.rounds[roundIdx] : null;
+
+  const options = useMemo(() => {
+    if (!round) return [];
+    const opts = [
+      { img: round.correctImg, label: round.correctLabel, isCorrect: true },
+      ...round.distractors.map((d) => ({ ...d, isCorrect: false })),
+    ];
+    // Deterministic shuffle (seeded by round index) so options don't jump on re-render.
+    for (let i = opts.length - 1; i > 0; i--) {
+      const j = (i * 7 + roundIdx * 13) % (i + 1);
+      [opts[i], opts[j]] = [opts[j], opts[i]];
+    }
+    return opts;
+  }, [round, roundIdx]);
+
+  useEffect(() => {
+    if (!round) return;
+    setPicked(null);
+    setCorrect(false);
+    cueSpeakOnce(`Which one is ${round.colorWord}?`, round.who);
+  }, [roundIdx]);
+
+  const pick = async (label: string, isCorrect: boolean) => {
+    if (picked) return;
+    setPicked(label);
+    if (!isCorrect) {
+      sfx.wrong(); onLose();
+      window.setTimeout(() => setPicked(null), 600);
+      return;
+    }
+    sfx.match();
+    setCorrect(true);
+    if (round) await safeSpeak(`Yes! ${round.correctLabel} is ${round.colorWord}!`, round.who);
+  };
+
+  const next = () => {
+    const n = roundIdx + 1;
+    if (n >= total && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+    setRoundIdx(n);
+  };
+
+  if (done) {
+    return (
+      <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/25">
+          <Confetti />
+          <button onClick={onNext} className="pointer-events-auto rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next →</button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-black/20" />
+      <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
+        <div className="rounded-full bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl sm:text-lg">
+          Which one is <span style={{ color: round!.colorHex }} className="font-black uppercase">{round!.colorWord}</span>? <span className="opacity-60">({roundIdx + 1}/{total})</span>
+        </div>
+      </div>
+      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 flex-wrap justify-center gap-6 px-4 sm:gap-10">
+        {options.map((opt) => {
+          const isPicked = picked === opt.label;
+          const showWrong = isPicked && !opt.isCorrect;
+          const showRight = correct && opt.isCorrect;
+          return (
+            <button
+              key={opt.label}
+              onClick={() => pick(opt.label, opt.isCorrect)}
+              disabled={correct}
+              className={`grid h-36 w-36 place-items-center rounded-3xl border-8 bg-white shadow-2xl transition active:scale-95 sm:h-44 sm:w-44 ${showWrong ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : showRight ? 'border-green-400' : 'border-white'}`}
+              aria-label={opt.label}
+            >
+              <img src={opt.img} alt={opt.label} className="h-24 w-24 object-contain sm:h-28 sm:w-28" />
+            </button>
+          );
+        })}
+      </div>
+      {correct && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={next} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>Next →</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Listen & Repeat cards (one sentence at a time, object image,
+ * karaoke-style word highlight synced to playback, then hold-to-repeat) ---------- */
+
+function ListenRepeatCardsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'listen-repeat-cards' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [idx, setIdx] = useState(0);
+  const [heard, setHeard] = useState(false);
+  const [repeated, setRepeated] = useState(false);
+  const [activeWord, setActiveWord] = useState(-1);
+  const [playing, setPlaying] = useState(false);
+  const [held, setHeld] = useState(false);
+  const holdTimer = useRef<number | null>(null);
+  const karaokeTimer = useRef<number | null>(null);
+  const gemDone = useRef(false);
+  const total = scene.cards.length;
+  const done = idx >= total;
+  const card = !done ? scene.cards[idx] : null;
+  const words = useMemo(() => (card ? card.sentence.split(' ') : []), [card]);
+
+  useEffect(() => {
+    setHeard(false);
+    setRepeated(false);
+    setActiveWord(-1);
+  }, [idx]);
+
+  const play = async () => {
+    if (!card || playing) return;
+    setPlaying(true);
+    setHeard(true);
+    // Approximate karaoke: no per-word timing from TTS, so step through words
+    // at a pace scaled to how long each one is, roughly tracking natural speech
+    // rhythm instead of a flat interval.
+    const totalChars = card.sentence.length;
+    const estMs = Math.max(1400, totalChars * 55);
+    const perWordMs = estMs / words.length;
+    let i = 0;
+    setActiveWord(0);
+    karaokeTimer.current = window.setInterval(() => {
+      i += 1;
+      if (i < words.length) setActiveWord(i);
+    }, perWordMs);
+    await safeSpeak(card.sentence, card.who);
+    if (karaokeTimer.current) window.clearInterval(karaokeTimer.current);
+    setActiveWord(-1);
+    setPlaying(false);
+  };
+
+  const startHold = () => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(() => {
+      setHeld(false);
+      setRepeated(true);
+      sfx.gem();
+    }, 1200);
+  };
+  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+
+  const next = () => {
+    const n = idx + 1;
+    if (n >= total && !gemDone.current) { gemDone.current = true; onWin(true); }
+    setIdx(n);
+  };
+
+  if (done) {
+    return (
+      <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/25">
+          <Confetti />
+          <button onClick={onNext} className="pointer-events-auto rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next →</button>
+        </div>
+      </div>
+    );
+  }
+
+  const c = CAST[card!.who];
+
+  return (
+    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-black/20" />
+      <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
+        <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
+          🎧 {scene.teacher} <span className="opacity-60">({idx + 1}/{total})</span>
+        </div>
+      </div>
+
+      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 justify-center px-4">
+        <div className="flex w-full max-w-md flex-col items-center gap-4 rounded-[2rem] bg-white/95 p-6 shadow-2xl ring-4 ring-white/70">
+          <div className="flex items-center gap-3">
+            <img src={c.img} alt={c.name} className="h-16 w-16 object-contain drop-shadow-lg" />
+            <span className="rounded-full px-3 py-1 text-xs font-black uppercase tracking-widest text-white shadow" style={{ background: c.color }}>{c.name}</span>
+          </div>
+          <div className="grid h-32 w-32 place-items-center rounded-3xl bg-orange-50 shadow-inner">
+            <img src={card!.img} alt={card!.imgLabel} className="h-24 w-24 object-contain drop-shadow" />
+          </div>
+          <p className="text-center text-xl font-black leading-snug text-slate-800 sm:text-2xl">
+            {words.map((w, i) => (
+              <span key={i} className={`transition-colors ${i === activeWord ? 'rounded bg-yellow-300 px-1 text-orange-900' : ''}`}>{w}{i < words.length - 1 ? ' ' : ''}</span>
+            ))}
+          </p>
+          <div className="flex w-full gap-2">
+            <button onClick={play} disabled={playing} className="flex-1 rounded-full bg-white py-3 text-sm font-bold text-orange-700 shadow-md ring-2 ring-orange-200 active:scale-95 disabled:opacity-50">
+              🔊 {playing ? 'Listening…' : 'Listen'}
+            </button>
+            <button
+              onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+              disabled={!heard || repeated}
+              className={`flex-1 rounded-full py-3 text-sm font-black text-white shadow-xl transition disabled:opacity-40 ${held ? 'scale-95' : ''}`}
+              style={{ background: repeated ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
+            >
+              {repeated ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & repeat'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {repeated && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={next} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>Next →</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Color spot (tap the colored thing in the real scene) ---------- */
+
+/**
+ * New for the Unit 2 Lesson 1 rebuild — every other color activity in this
+ * lesson teaches the word on an abstract card/icon; this one is the only
+ * place a learner finds the color word by tapping the real illustrated
+ * object inside a full scene, the same "arrow points at it, tap to reveal
+ * a flashcard" pattern Welcome Town's vocab-spot uses, ported here for
+ * colors instead of vocabulary items.
+ */
+function ColorSpotScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'color-spot' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [step, setStep] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const gemDone = useRef(false);
+  const total = scene.items.length;
+  const done = step >= total;
+  const current = !done ? scene.items[step] : null;
+
+  const tap = async () => {
+    if (!current || revealed) return;
+    sfx.pop();
+    setRevealed(true);
+    await safeSpeak(current.colorWord, current.who);
+  };
+  const hearSentence = async () => {
+    if (!current) return;
+    sfx.click();
+    await safeSpeak(current.sentence, current.who);
+  };
+  const dismiss = () => {
+    setRevealed(false);
+    const next = step + 1;
+    if (next >= total && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+    setStep(next);
+  };
+
+  return (
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        {scene.teacher} <span className="ml-1 opacity-60">({Math.min(step, total)}/{total})</span>
+      </div>
+      {current && (() => {
+        const dir = current.dir ?? 'down';
+        const GAP = 62;
+        const pos = dir === 'down'
+          ? { left: current.left, top: `calc(${current.top} - ${GAP}px)` }
+          : dir === 'right'
+          ? { left: `calc(${current.left} - ${GAP}px)`, top: current.top }
+          : { left: `calc(${current.left} + ${GAP}px)`, top: current.top };
+        const angle = dir === 'down' ? 0 : dir === 'right' ? -90 : 90;
+        return (
+          <button
+            onClick={tap}
+            disabled={revealed}
+            aria-label={`Find the color ${current.colorWord}`}
+            className="absolute z-20 transition active:scale-90 disabled:pointer-events-none"
+            style={{ ...pos, transform: `translate(-50%, -50%) rotate(${angle}deg)` }}
+          >
+            <span className="relative block" style={{ animation: revealed ? undefined : 'lep1-hop 0.9s ease-in-out infinite' }}>
+              {!revealed && (
+                <span className="pointer-events-none absolute bottom-0 left-1/2 h-12 w-12 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${current.colorHex}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
+              )}
+              <svg width="52" height="76" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
+                <path
+                  d="M13 3 C13 1.9 13.9 1 15 1 L25 1 C26.1 1 27 1.9 27 3 L27 21 L36 21 C37.9 21 38.8 23.3 37.4 24.6 L21.4 43.6 C20.6 44.5 19.4 44.5 18.6 43.6 L2.6 24.6 C1.2 23.3 2.1 21 4 21 L13 21 Z"
+                  fill={current.colorHex}
+                  stroke="white"
+                  strokeWidth="3"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </button>
+        );
+      })()}
+      {current && revealed && (
+        <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/40 px-6" onClick={dismiss} style={{ animation: 'lep1-pop 0.25s ease-out' }}>
+          <div className="flex w-full max-w-sm flex-col items-center gap-2 rounded-[2rem] border-4 border-white bg-white px-6 py-6 text-center shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <span className="grid h-16 w-16 place-items-center rounded-full text-4xl" style={{ background: `${current.colorHex}22` }}>🎨</span>
+            <span className="text-3xl font-black uppercase" style={{ color: current.colorHex }}>{current.colorWord}</span>
+            <span className="text-lg font-bold text-slate-700">{current.label}</span>
+            <button onClick={hearSentence} className="text-sm font-semibold text-neutral-500 underline decoration-dotted active:scale-95">🔊 Hear it in a sentence: “{current.sentence}”</button>
+            <button onClick={dismiss} className="mt-2 rounded-full px-6 py-2 text-sm font-black uppercase tracking-widest text-white shadow active:scale-95" style={{ background: current.colorHex }}>Got it!</button>
+          </div>
+        </div>
+      )}
+      {done && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">All found! ⭐ Next</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Shape swatch helper (shared by shape-model / shape-sort) ---------- */
+
+/** The color-* scenes' swatch is always `rounded-full` since color doesn't
+ *  imply a form — but a shape scene's whole point is the outline itself, so
+ *  the swatch has to actually BE the shape, not a color-filled circle with
+ *  a shape NAME printed on it. */
+function ShapeSwatchStyle(shapeWord: string, color: string): React.CSSProperties {
+  const key = shapeWord.toUpperCase();
+  if (key === 'SQUARE') return { background: color, borderRadius: '16%' };
+  if (key === 'TRIANGLE') return { background: color, clipPath: 'polygon(50% 4%, 4% 96%, 96% 96%)', borderRadius: 0 };
+  return { background: color, borderRadius: '9999px' };
+}
+
+function buildShapeSentence(shapeWord: string, exampleWord: string): string {
+  return `The ${exampleWord.toLowerCase()} is a ${shapeWord.toLowerCase()}.`;
+}
+
+/* ---------- Shape model (teach: tap the shape, repeat, learn the object, say the sentence) ---------- */
+
+function ShapeModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'shape-model' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const [heard, setHeard] = useState<Set<number>>(new Set());
+  const [shapeDone, setShapeDone] = useState<Set<number>>(new Set());
+  const [objectDone, setObjectDone] = useState<Set<number>>(new Set());
+  const [sentenceDone, setSentenceDone] = useState<Set<number>>(new Set());
+  const [held, setHeld] = useState(false);
+  const holdTimer = useRef<number | null>(null);
+  const gemDone = useRef(false);
+  const allDone = sentenceDone.size >= scene.items.length;
+
+  useEffect(() => {
+    if (allDone && !gemDone.current) {
+      gemDone.current = true;
+      onWin(true);
+      const sentences = scene.items.map((it) => buildShapeSentence(it.shapeWord, it.exampleWord)).join(' ');
+      cueSpeak(`Wonderful! ${sentences}`, 'pip');
+    }
+  }, [allDone]);
+
+  const tapItem = async (i: number) => {
+    if (held) return;
+    setActiveIdx(i);
+    setHeard((s) => new Set(s).add(i));
+    sfx.pop();
+    await safeSpeak(scene.items[i].shapeWord, scene.items[i].who);
+  };
+
+  const startHoldShape = (i: number) => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(async () => {
+      setHeld(false);
+      setShapeDone((s) => new Set(s).add(i));
+      sfx.gem();
+      const item = scene.items[i];
+      await new Promise((r) => window.setTimeout(r, 400));
+      await safeSpeak(item.exampleWord, item.who);
+    }, 1200);
+  };
+
+  const startHoldObject = (i: number) => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(async () => {
+      setHeld(false);
+      setObjectDone((s) => new Set(s).add(i));
+      sfx.gem();
+      const item = scene.items[i];
+      await new Promise((r) => window.setTimeout(r, 400));
+      await safeSpeak(buildShapeSentence(item.shapeWord, item.exampleWord), item.who);
+    }, 1200);
+  };
+
+  const startHoldSentence = (i: number) => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(() => {
+      setHeld(false);
+      setSentenceDone((s) => new Set(s).add(i));
+      sfx.gem();
+    }, 1200);
+  };
+  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+
+  return (
+    <div className="absolute inset-0">
+      <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
+        <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
+          {allDone ? 'You know the words and the sentences! ⭐' : scene.teacher}
+        </div>
+      </div>
+
+      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 flex-wrap items-start justify-center gap-6 px-4 sm:gap-10">
+        {scene.items.map((item, i) => {
+          const isActive = activeIdx === i;
+          const isHeard = heard.has(i);
+          const isShapeDone = shapeDone.has(i);
+          const isObjectDone = objectDone.has(i);
+          const isSentenceDone = sentenceDone.has(i);
+          return (
+            <div key={item.shapeWord} className="flex flex-col items-center gap-2">
+              <button
+                onClick={() => tapItem(i)}
+                className={`grid h-36 w-36 place-items-center border-8 border-white shadow-2xl transition active:scale-95 sm:h-44 sm:w-44 ${isSentenceDone ? '' : 'animate-[lep1-wiggle_4s_ease-in-out_infinite]'}`}
+                style={{ ...ShapeSwatchStyle(item.shapeWord, item.shapeColor), animationDelay: `${i * 0.4}s` }}
+                aria-label={`Hear ${item.shapeWord}`}
+              >
+                <img src={item.exampleImg} alt={item.exampleWord} className="h-20 w-20 object-contain drop-shadow-lg sm:h-24 sm:w-24" />
+              </button>
+              <span className="rounded-full bg-white px-4 py-1 text-lg font-black uppercase shadow" style={{ color: item.shapeColor }}>{item.shapeWord}</span>
+              {isShapeDone && (
+                <span className="rounded-full bg-white/95 px-3 py-1 text-sm font-bold text-slate-700 shadow">{item.exampleWord}</span>
+              )}
+              {isObjectDone && (
+                <span className="max-w-[10rem] rounded-2xl bg-white px-3 py-1 text-center text-xs font-bold text-slate-800 shadow sm:text-sm">{buildShapeSentence(item.shapeWord, item.exampleWord)}</span>
+              )}
+              {isSentenceDone ? (
+                <span className="text-2xl">✅</span>
+              ) : isObjectDone ? (
+                <button
+                  onPointerDown={() => startHoldSentence(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
+                  style={{ background: 'linear-gradient(90deg, #8B5CF6, #A78BFA)' }}
+                >
+                  🎤 Say the sentence!
+                </button>
+              ) : isShapeDone ? (
+                <button
+                  onPointerDown={() => startHoldObject(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
+                  style={{ background: 'linear-gradient(90deg, #22C55E, #34D399)' }}
+                >
+                  🎤 Say the word!
+                </button>
+              ) : isHeard && isActive ? (
+                <button
+                  onPointerDown={() => startHoldShape(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
+                  style={{ background: 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
+                >
+                  🎤 Hold & repeat
+                </button>
+              ) : (
+                <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-orange-700 shadow">Tap to hear</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {allDone && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
+            Now let's practice →
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Shape sort (drag each item into the shape it matches) ---------- */
+
+function ShapeSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'shape-sort' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
+  type Slot = { idx: number; it: typeof scene.items[number]; collected: boolean; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
+  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, collected: false, dragging: false, dx: 0, dy: 0, flash: 'none' })));
+  const [hotShape, setHotShape] = useState<string | null>(null);
+  const [gemAwarded, setGemAwarded] = useState(false);
+  const targetRefs = useRef<Record<string, HTMLElement | null>>({});
+  const dragIdx = useRef<number | null>(null);
+  const start = useRef({ x: 0, y: 0 });
+  const done = slots.every((s) => s.collected);
+
+  useEffect(() => { if (done && !gemAwarded) { setGemAwarded(true); onWin(true); cueSpeak('Amazing! All shapes sorted!', 'teacher'); } }, [done, gemAwarded]);
+
+  function hitTest(x: number, y: number, itemEl?: Element | null): string | null {
+    let cx = x, cy = y;
+    if (itemEl) { const r = (itemEl as HTMLElement).getBoundingClientRect(); cx = r.left + r.width / 2; cy = r.top + r.height / 2; }
+    const PAD = 48;
+    let best: { shapeWord: string; dist: number } | null = null;
+    for (const t of scene.targets) {
+      const el = targetRefs.current[t.shapeWord];
+      if (!el) continue;
+      const b = el.getBoundingClientRect();
+      const inside = (cx >= b.left - PAD && cx <= b.right + PAD && cy >= b.top - PAD && cy <= b.bottom + PAD) || (x >= b.left - PAD && x <= b.right + PAD && y >= b.top - PAD && y <= b.bottom + PAD);
+      if (!inside) continue;
+      const d = Math.hypot(cx - (b.left + b.width / 2), cy - (b.top + b.height / 2));
+      if (!best || d < best.dist) best = { shapeWord: t.shapeWord, dist: d };
+    }
+    return best?.shapeWord ?? null;
+  }
+
+  const onDown = (idx: number) => (e: React.PointerEvent<HTMLButtonElement>) => {
+    const s = slots.find((x) => x.idx === idx);
+    if (!s || s.collected) return;
+    sfx.pop();
+    const speaker = scene.targets.find((t) => t.shapeWord === s.it.shapeWord)?.who ?? 'pip';
+    cueSpeakOnce(s.it.word, speaker);
+    dragIdx.current = idx;
+    start.current = { x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, dragging: true, dx: 0, dy: 0, flash: 'none' } : x)));
+  };
+  const onMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const idx = dragIdx.current;
+    if (idx === null) return;
+    const dx = e.clientX - start.current.x, dy = e.clientY - start.current.y;
+    setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, dx, dy } : x)));
+    setHotShape(hitTest(e.clientX, e.clientY, e.currentTarget));
+  };
+  const onUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const idx = dragIdx.current;
+    dragIdx.current = null;
+    const dropShape = hitTest(e.clientX, e.clientY, e.currentTarget);
+    setHotShape(null);
+    if (idx === null) return;
+    setSlots((p) => p.map((x) => {
+      if (x.idx !== idx) return x;
+      if (!dropShape) return { ...x, dragging: false, dx: 0, dy: 0 };
+      if (dropShape === x.it.shapeWord) { sfx.match(); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
+      sfx.wrong(); onLose();
+      return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
+    }));
+    window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
+  };
+
+  const orbit = scatterPositions(scene.items.length, [10, 74], 20);
+
+  return (
+    <div className="absolute inset-0">
+      <div className="pointer-events-none absolute inset-0 z-0 bg-white/25 backdrop-blur-md" />
+      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-bold text-orange-700 shadow-xl backdrop-blur sm:text-base">🎧 {scene.teacher}</div>
+      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 items-center justify-center gap-6 px-4 sm:gap-10">
+        {scene.targets.map((t) => {
+          const hot = hotShape === t.shapeWord;
+          const collectedItems = slots.filter((s) => s.collected && s.it.shapeWord === t.shapeWord);
+          const total = slots.filter((s) => s.it.shapeWord === t.shapeWord).length;
+          return (
+            <button key={t.shapeWord} type="button" ref={(el) => { targetRefs.current[t.shapeWord] = el; }} onClick={() => void safeSpeak(t.shapeWord, t.who)}
+              className={`relative grid h-40 w-40 place-items-center border-4 border-dashed shadow-2xl backdrop-blur transition-all sm:h-48 sm:w-48 cursor-pointer active:scale-95 ${hot ? 'scale-110 border-green-400 bg-green-100/90' : 'border-white/80 bg-white/40'}`}
+              style={{ borderRadius: ShapeSwatchStyle(t.shapeWord, 'transparent').borderRadius, clipPath: ShapeSwatchStyle(t.shapeWord, 'transparent').clipPath }}
+            >
+              <div className="pointer-events-none relative flex flex-col items-center gap-1">
+                <span className="grid h-24 w-24 place-items-center text-lg font-black uppercase text-white shadow-lg sm:h-28 sm:w-28 sm:text-xl" style={{ ...ShapeSwatchStyle(t.shapeWord, t.shapeColor), textShadow: '0 2px 8px rgba(0,0,0,0.55)' }}>{t.shapeWord}</span>
+                <p className="text-[10px] font-bold text-orange-700">⭐ {collectedItems.length}/{total}</p>
+                {collectedItems.length > 0 && (
+                  <div className="mt-0.5 flex flex-wrap items-center justify-center gap-1">
+                    {collectedItems.map((s) => (
+                      <span key={s.idx} className="grid h-7 w-7 place-items-center rounded-full bg-white/90 text-sm shadow ring-2 ring-green-400 animate-[lep1-pop_0.4s_ease-out]">✅</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      {slots.map((s, i) => {
+        if (s.collected) return null;
+        const pos = orbit[i % orbit.length];
+        const glow = s.flash === 'bad' ? 'drop-shadow-[0_0_14px_rgba(239,68,68,0.9)] animate-[lep1-shake_0.4s_ease-in-out]' : s.flash === 'good' ? 'drop-shadow-[0_0_18px_rgba(34,197,94,0.9)]' : 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]';
+        return (
+          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
+            className={`absolute -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
+            style={{ left: pos.left, top: pos.top, width: 'clamp(88px, 16vh, 208px)', height: 'clamp(88px, 16vh, 208px)', animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
+            aria-label={s.it.word}
+          >
+            {s.it.img ? <img src={s.it.img} alt={s.it.word} draggable={false} className="pointer-events-none h-full w-full object-contain" /> : <span className="pointer-events-none grid h-full w-full place-items-center text-6xl">{s.it.emoji}</span>}
+          </button>
+        );
+      })}
+      {done && (
+        <div className="absolute inset-x-0 bottom-6 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>✨ All shapes matched! Next →</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Color Spy ("I spy something ___!" — find it among several visible at once) ---------- */
+
+function ColorSpyScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'color-spy' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
+  const [roundIdx, setRoundIdx] = useState(0);
+  const [picked, setPicked] = useState<string | null>(null);
+  const [correct, setCorrect] = useState(false);
+  const gemDone = useRef(false);
+  const total = scene.clueOrder.length;
+  const done = roundIdx >= total;
+  const clue = !done ? scene.clueOrder[roundIdx] : null;
+
+  useEffect(() => {
+    if (!clue) return;
+    setPicked(null);
+    setCorrect(false);
+    cueSpeakOnce(`I spy something ${clue.toLowerCase()}!`, scene.who);
+  }, [roundIdx]);
+
+  const pick = async (spot: (typeof scene.spots)[number]) => {
+    if (correct || !clue) return;
+    setPicked(spot.colorWord);
+    if (spot.colorWord !== clue) { sfx.wrong(); onLose(); window.setTimeout(() => setPicked(null), 500); return; }
+    sfx.match(); setCorrect(true);
+    await safeSpeak(`Yes! ${spot.label}!`, scene.who);
+    window.setTimeout(() => {
+      const next = roundIdx + 1;
+      if (next >= total && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+      setRoundIdx(next);
+    }, 900);
+  };
+
+  return (
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        {done ? 'You spied them all! ⭐' : `🔍 I spy something ${clue?.toLowerCase()}!`} <span className="ml-1 opacity-60">({Math.min(roundIdx, total)}/{total})</span>
+      </div>
+      {!done && scene.spots.map((spot) => {
+        const isPicked = picked === spot.colorWord;
+        const isRightPick = isPicked && correct;
+        const isWrongPick = isPicked && !correct;
+        return (
+          <button
+            key={spot.colorWord}
+            onClick={() => pick(spot)}
+            disabled={correct}
+            aria-label={`Is it ${spot.label}?`}
+            className={`absolute z-20 -translate-x-1/2 -translate-y-1/2 grid h-20 w-20 place-items-center rounded-full border-4 border-white shadow-2xl transition active:scale-90 sm:h-24 sm:w-24 ${isRightPick ? 'scale-110 ring-4 ring-green-400' : isWrongPick ? 'animate-[lep1-shake_0.4s_ease-in-out] ring-4 ring-red-400' : 'animate-[lep1-hop_1.6s_ease-in-out_infinite]'}`}
+            style={{ left: spot.left, top: spot.top, background: `${spot.colorHex}33`, backdropFilter: 'blur(2px)' }}
+          >
+            <span className="grid h-14 w-14 place-items-center rounded-full text-xl sm:h-16 sm:w-16" style={{ background: spot.colorHex }}>
+              {isRightPick ? '✅' : isWrongPick ? '❌' : '🔍'}
+            </span>
+          </button>
+        );
+      })}
+      {done && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next →</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Color Simon ("Simon Says" growing color-sequence memory game) ---------- */
+
+function ColorSimonScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'color-simon' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
+  const [round, setRound] = useState(1);
+  const [sequence, setSequence] = useState<number[]>([]);
+  const [phase, setPhase] = useState<'idle' | 'showing' | 'waiting' | 'done'>('idle');
+  const [litIdx, setLitIdx] = useState<number | null>(null);
+  const [userIdx, setUserIdx] = useState(0);
+  const [flashBad, setFlashBad] = useState<number | null>(null);
+  const gemDone = useRef(false);
+  const playingRef = useRef(false);
+
+  const playSequence = useCallback(async (seq: number[]) => {
+    if (playingRef.current) return;
+    playingRef.current = true;
+    setPhase('showing');
+    setUserIdx(0);
+    await new Promise((r) => window.setTimeout(r, 500));
+    for (const idx of seq) {
+      setLitIdx(idx);
+      await safeSpeak(scene.colors[idx].colorWord, scene.colors[idx].who);
+      await new Promise((r) => window.setTimeout(r, 250));
+      setLitIdx(null);
+      await new Promise((r) => window.setTimeout(r, 200));
+    }
+    playingRef.current = false;
+    setPhase('waiting');
+  }, [scene.colors]);
+
+  const startRound = useCallback((r: number) => {
+    const seq = Array.from({ length: r }, () => Math.floor(Math.random() * scene.colors.length));
+    setSequence(seq);
+    void playSequence(seq);
+  }, [playSequence, scene.colors.length]);
+
+  useEffect(() => { startRound(1); }, []);
+
+  const tapColor = (idx: number) => {
+    if (phase !== 'waiting') return;
+    if (idx === sequence[userIdx]) {
+      sfx.pop();
+      setLitIdx(idx);
+      window.setTimeout(() => setLitIdx(null), 200);
+      const next = userIdx + 1;
+      if (next >= sequence.length) {
+        if (round >= scene.maxRounds) {
+          sfx.gem();
+          setPhase('done');
+          if (!gemDone.current) { gemDone.current = true; onWin(true); }
+        } else {
+          sfx.match();
+          setPhase('idle');
+          window.setTimeout(() => { setRound((r) => r + 1); startRound(round + 1); }, 700);
+        }
+      } else {
+        setUserIdx(next);
+      }
+    } else {
+      sfx.wrong();
+      onLose();
+      setFlashBad(idx);
+      window.setTimeout(() => setFlashBad(null), 400);
+      window.setTimeout(() => void playSequence(sequence), 700);
+    }
+  };
+
+  return (
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-white/25 backdrop-blur-md" />
+      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        {phase === 'done' ? 'You remembered them all! ⭐' : phase === 'showing' ? '👀 Watch closely!' : `🎵 ${scene.teacher}`} <span className="ml-1 opacity-60">(Round {Math.min(round, scene.maxRounds)}/{scene.maxRounds})</span>
+      </div>
+      <div className="absolute inset-x-0 top-1/2 z-10 flex flex-wrap -translate-y-1/2 items-center justify-center gap-4 px-4 sm:gap-8">
+        {scene.colors.map((c, i) => {
+          const isLit = litIdx === i;
+          const isBad = flashBad === i;
+          return (
+            <button
+              key={c.colorWord}
+              onClick={() => tapColor(i)}
+              disabled={phase !== 'waiting'}
+              aria-label={`Tap ${c.colorWord}`}
+              className={`grid h-32 w-32 place-items-center rounded-full border-8 border-white shadow-2xl transition-all sm:h-40 sm:w-40 ${isLit ? 'scale-110 brightness-125' : isBad ? 'animate-[lep1-shake_0.4s_ease-in-out]' : phase === 'waiting' ? 'active:scale-90' : 'opacity-90'}`}
+              style={{ background: c.colorHex, boxShadow: isLit ? `0 0 40px 10px ${c.colorHex}` : undefined }}
+            >
+              <span className="text-lg font-black uppercase text-white drop-shadow" style={{ textShadow: '0 2px 6px rgba(0,0,0,0.5)' }}>{c.colorWord}</span>
+            </button>
+          );
+        })}
+      </div>
+      {phase === 'done' && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next →</button>
         </div>
       )}
     </div>
@@ -3468,14 +4342,11 @@ function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
 
 /* ---------- Friend pop ---------- */
 
-function FriendPopScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'friend-pop' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
+function FriendPopScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'friend-pop' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
   const GENDER: Record<string, 'she' | 'he'> = { bella: 'she', mia: 'she', willow: 'she', leo: 'he', pip: 'he' };
-  type Synced = { round: number; score: number; tapped: { who: CharKey; ok: boolean } | null };
-  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
-    { round: 0, score: 0, tapped: null },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const { round, score, tapped } = synced;
+  const [round, setRound] = useState(0);
+  const [score, setScore] = useState(0);
+  const [tapped, setTapped] = useState<{ who: CharKey; ok: boolean } | null>(null);
   const [gemDone, setGemDone] = useState(false);
   const answeredRef = useRef(false);
   const total = scene.rounds.length;
@@ -3542,29 +4413,25 @@ function FriendPopScene({ scene, onNext, onWin, onLose, role, roomId, activityUn
 
   useEffect(() => {
     if (!r) return;
-    answeredRef.current = false;
+    answeredRef.current = false; setTapped(null);
     void safeSpeak(r.prompt, r.target);
   }, [round, r]);
 
-  useEffect(() => {
-    if (finished && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-  }, [finished, gemDone]);
-
   const tap = async (who: CharKey, emo: 'happy' | 'sad' | 'angry' | 'neutral') => {
-    if (!canAct || !r || answeredRef.current) return;
+    if (!r || answeredRef.current) return;
     const isCorrect = helloMode ? who === r.target : pronounMode ? GENDER[who] === targetGender : emo === roundEmo;
     if (isCorrect) {
-      answeredRef.current = true; sfx.match();
-      updateSynced({ round, score: score + 1, tapped: { who, ok: true } });
+      answeredRef.current = true; setTapped({ who, ok: true }); sfx.match(); setScore((s) => s + 1);
       const line = helloMode ? (r.sayLine ?? `Hello, ${CAST[who].name}!`) : pronounMode ? `${GENDER[who] === 'he' ? 'He' : 'She'} is ${roundEmo}!` : `${CAST[who].name} is ${roundEmo}!`;
       await safeSpeak(line, who);
       window.setTimeout(() => {
-        updateSynced({ round: round + 1, score: score + 1, tapped: null });
+        const next = round + 1;
+        if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+        setRound(next);
       }, 700);
     } else {
-      sfx.wrong(); onLose();
-      updateSynced({ round, score, tapped: { who, ok: false } });
-      window.setTimeout(() => updateSynced({ round, score, tapped: null }), 500);
+      setTapped({ who, ok: false }); sfx.wrong(); onLose();
+      window.setTimeout(() => setTapped(null), 500);
     }
   };
 
@@ -3594,7 +4461,7 @@ function FriendPopScene({ scene, onNext, onWin, onLose, role, roomId, activityUn
           const { who, emo } = item;
           const isFlash = tapped?.who === who;
           return (
-            <button key={`${round}-${i}-${who}`} onClick={() => tap(who, emo)} disabled={!canAct} className="relative transition-transform active:scale-95 disabled:cursor-not-allowed" style={{ width: 'clamp(180px, 30vw, 340px)', height: 'clamp(280px, 55vh, 500px)' }} aria-label={CAST[who].name}>
+            <button key={`${round}-${i}-${who}`} onClick={() => tap(who, emo)} className="relative transition-transform active:scale-95" style={{ width: 'clamp(180px, 30vw, 340px)', height: 'clamp(280px, 55vh, 500px)' }} aria-label={CAST[who].name}>
               <img src={getEmotionSprite(who, emo)} alt={CAST[who].name} className="h-full w-full object-contain drop-shadow-2xl" draggable={false} />
               {isFlash && <div className={`pointer-events-none absolute inset-0 flex items-center justify-center text-8xl font-black ${tapped!.ok ? 'text-green-400' : 'text-red-500'}`}>{tapped!.ok ? '✓' : '✗'}</div>}
             </button>
@@ -3988,13 +4855,10 @@ const MONSTER_META: Record<'happy' | 'sad' | 'angry', { label: string; color: st
   angry: { label: 'Angry Monster', color: '#E5561A', xPct: 81 },
 };
 
-function FeedMonstersScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'feed-monsters' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
-  type Synced = { round: number; score: number; feeding: 'happy' | 'sad' | 'angry' | null };
-  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
-    { round: 0, score: 0, feeding: null },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const { round, score, feeding } = synced;
+function FeedMonstersScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'feed-monsters' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [round, setRound] = useState(0);
+  const [score, setScore] = useState(0);
+  const [feeding, setFeeding] = useState<'happy' | 'sad' | 'angry' | null>(null);
   const [dragging, setDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ dx: 0, dy: 0 });
   const [hotMonster, setHotMonster] = useState<'happy' | 'sad' | 'angry' | null>(null);
@@ -4008,15 +4872,11 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose, role, roomId, activit
 
   useEffect(() => {
     if (!r) return;
-    setWrongShake(false); setDragOffset({ dx: 0, dy: 0 });
+    setFeeding(null); setWrongShake(false); setDragOffset({ dx: 0, dy: 0 });
     const t = window.setTimeout(() => void safeSpeak(r.sentence, r.who), 300);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round]);
-
-  useEffect(() => {
-    if (finished && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-  }, [finished, gemDone]);
 
   const hitTest = (x: number, y: number): 'happy' | 'sad' | 'angry' | null => {
     for (const m of ['happy', 'sad', 'angry'] as const) {
@@ -4030,12 +4890,13 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose, role, roomId, activit
   };
 
   const feed = async (monster: 'happy' | 'sad' | 'angry') => {
-    if (!canAct || !r || feeding) return;
+    if (!r || feeding) return;
     if (monster === r.emotion) {
-      sfx.match();
-      updateSynced({ round, score: score + 1, feeding: monster });
+      sfx.match(); setFeeding(monster); setScore((s) => s + 1);
       await new Promise((res) => setTimeout(res, 700));
-      updateSynced({ round: round + 1, score: score + 1, feeding: null });
+      const next = round + 1;
+      if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+      setRound(next);
     } else {
       sfx.wrong(); onLose(); setWrongShake(true); setDragOffset({ dx: 0, dy: 0 });
       window.setTimeout(() => setWrongShake(false), 500);
@@ -4043,7 +4904,7 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose, role, roomId, activit
   };
 
   const onDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (!canAct || !r || feeding) return;
+    if (!r || feeding) return;
     setDragging(true);
     dragStart.current = { x: e.clientX, y: e.clientY };
     e.currentTarget.setPointerCapture?.(e.pointerId);
@@ -4118,7 +4979,7 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose, role, roomId, activit
       {/* Friend stands grounded on the grass in front of the monsters — grab and drag onto the matching monster. */}
       <button
         onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-        disabled={!canAct || !!feeding}
+        disabled={!!feeding}
         aria-label={`Drag ${c.name} to the matching monster`}
         className="absolute z-20 flex touch-none select-none flex-col items-center border-0 bg-transparent p-0 disabled:cursor-default"
         style={{
@@ -4155,13 +5016,11 @@ function FeedMonstersScene({ scene, onNext, onWin, onLose, role, roomId, activit
 
 /* ---------- He / She sort ---------- */
 
-function HeSheSortScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'he-she-sort' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
-  type Synced = { round: number; score: number; picked: 'He' | 'She' | null; correct: boolean | null };
-  const [synced, updateSynced, canAct] = useSyncedSceneState<Synced>(
-    { round: 0, score: 0, picked: null, correct: null },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const { round, score, picked, correct } = synced;
+function HeSheSortScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'he-she-sort' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [round, setRound] = useState(0);
+  const [score, setScore] = useState(0);
+  const [picked, setPicked] = useState<'He' | 'She' | null>(null);
+  const [correct, setCorrect] = useState<boolean | null>(null);
   const [gemDone, setGemDone] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ dx: 0, dy: 0 });
@@ -4174,15 +5033,11 @@ function HeSheSortScene({ scene, onNext, onWin, onLose, role, roomId, activityUn
 
   useEffect(() => {
     if (!r) return;
-    setDragOffset({ dx: 0, dy: 0 });
+    setPicked(null); setCorrect(null); setDragOffset({ dx: 0, dy: 0 });
     const t = window.setTimeout(() => void safeSpeak(`I am ${r.emotion}.`, r.who), 300);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round]);
-
-  useEffect(() => {
-    if (finished && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-  }, [finished, gemDone]);
 
   const hitTest = (x: number, y: number): 'He' | 'She' | null => {
     for (const p of ['He', 'She'] as const) {
@@ -4196,21 +5051,24 @@ function HeSheSortScene({ scene, onNext, onWin, onLose, role, roomId, activityUn
   };
 
   const pick = async (choice: 'He' | 'She') => {
-    if (!canAct || !r || picked) return;
+    if (!r || picked) return;
+    setPicked(choice);
     const ok = choice === r.pronoun;
-    updateSynced({ round, score, picked: choice, correct: ok });
+    setCorrect(ok);
     if (ok) {
-      sfx.match();
+      sfx.match(); setScore((s) => s + 1);
       await safeSpeak(`Yes! ${choice} is ${r.emotion}.`, r.who);
-      window.setTimeout(() => updateSynced({ round: round + 1, score: score + 1, picked: null, correct: null }), 400);
+      const next = round + 1;
+      if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+      window.setTimeout(() => setRound(next), 400);
     } else {
       sfx.wrong(); onLose();
-      window.setTimeout(() => { updateSynced({ round, score, picked: null, correct: null }); setDragOffset({ dx: 0, dy: 0 }); }, 700);
+      window.setTimeout(() => { setPicked(null); setCorrect(null); setDragOffset({ dx: 0, dy: 0 }); }, 700);
     }
   };
 
   const onDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (!canAct || !r || picked) return;
+    if (!r || picked) return;
     setDragging(true);
     start.current = { x: e.clientX, y: e.clientY };
     e.currentTarget.setPointerCapture?.(e.pointerId);
@@ -4245,7 +5103,7 @@ function HeSheSortScene({ scene, onNext, onWin, onLose, role, roomId, activityUn
       <div className="relative z-20 mt-2 max-w-[92%] rounded-full bg-white/95 px-5 py-3 text-center text-base font-black text-orange-700 shadow-xl backdrop-blur sm:text-lg">{scene.teacher} <span className="ml-1 rounded-full bg-orange-100 px-2 py-0.5 text-xs text-orange-600">{round + 1}/{total}</span></div>
       <button
         onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-        disabled={!canAct || !!picked}
+        disabled={!!picked}
         aria-label={`Drag ${c.name} to He or She`}
         className="relative z-10 flex touch-none select-none flex-col items-center border-0 bg-transparent p-0 disabled:cursor-default"
         style={{
@@ -4350,13 +5208,9 @@ function FeelingQuizScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sce
 
 /* ---------- Feelings bingo ---------- */
 
-function FeelingsBingoScene({ scene, onNext, onWin, onLose, role, roomId, activityUnlocked }: { scene: Extract<Scene, { kind: 'feelings-bingo' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; role?: 'teacher' | 'student'; roomId?: string; activityUnlocked?: boolean }) {
-  const [synced, updateSynced, canAct] = useSyncedSceneState<{ callIdx: number; hits: number[] }>(
-    { callIdx: 0, hits: [] },
-    { sceneId: scene.id, roomId, role, activityUnlocked },
-  );
-  const { callIdx } = synced;
-  const hits = useMemo(() => new Set(synced.hits), [synced.hits]);
+function FeelingsBingoScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'feelings-bingo' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [callIdx, setCallIdx] = useState(0);
+  const [hits, setHits] = useState<Set<number>>(new Set());
   const [wrongTile, setWrongTile] = useState<number | null>(null);
   const [gemDone, setGemDone] = useState(false);
   const total = scene.rounds.length;
@@ -4371,18 +5225,16 @@ function FeelingsBingoScene({ scene, onNext, onWin, onLose, role, roomId, activi
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callIdx]);
 
-  useEffect(() => {
-    if (finished && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-  }, [finished, gemDone]);
-
   const tapTile = async (i: number) => {
-    if (!canAct || !round || finished) return;
+    if (!round || finished) return;
     const tile = scene.tiles[i];
     if (tile.who === round.who && tile.emotion === round.emotion) {
       sfx.match();
-      updateSynced({ callIdx, hits: [...synced.hits, i] });
+      setHits((s) => new Set(s).add(i));
       await safeSpeak(`Yes! ${CAST[tile.who].name} is ${tile.emotion}!`, tile.who);
-      updateSynced({ callIdx: callIdx + 1, hits: [...synced.hits, i] });
+      const next = callIdx + 1;
+      if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+      setCallIdx(next);
     } else {
       sfx.wrong(); onLose(); setWrongTile(i);
       window.setTimeout(() => setWrongTile(null), 500);
@@ -4400,7 +5252,7 @@ function FeelingsBingoScene({ scene, onNext, onWin, onLose, role, roomId, activi
           const c = CAST[tile.who];
           const isHit = hits.has(i);
           return (
-            <button key={i} onClick={() => tapTile(i)} disabled={!canAct || finished}
+            <button key={i} onClick={() => tapTile(i)} disabled={finished}
               className={`relative grid aspect-square w-24 place-items-center rounded-3xl border-4 bg-white/90 p-2 shadow-xl transition active:scale-95 disabled:opacity-90 sm:w-28 ${wrongTile === i ? 'animate-[lep1-shake_0.4s_ease-out] border-rose-400' : isHit ? 'border-green-400 ring-4 ring-green-300/60' : 'border-white'}`}
             >
               <img src={getEmotionSprite(tile.who, tile.emotion)} alt={c.name} className="h-full w-full object-contain" draggable={false} />

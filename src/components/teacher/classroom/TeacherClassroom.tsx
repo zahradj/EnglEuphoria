@@ -720,27 +720,43 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
       homeworkTimelineSyncedRef.current = true;
       return;
     }
-    homeworkTimelineSyncedRef.current = true;
-    void updateSharedDisplay({
+    // Only mark this "done" once the push actually succeeds — marking it
+    // done beforehand meant a failed push (network hiccup, inactive session)
+    // was never retried, leaving the student's array permanently shorter
+    // than the teacher's and any nav into homework slides out of bounds.
+    updateSharedDisplay({
       lessonSlides: displayedSlides as any,
       lessonTitle: activeLessonTitle,
       embeddedUrl: null,
+    }).then(() => {
+      homeworkTimelineSyncedRef.current = true;
+    }).catch((error) => {
+      console.warn('Failed to sync homework slides to shared session, will retry:', error);
     });
   }, [isConnected, displayedSlides, syncedLessonSlides, updateSharedDisplay, activeLessonTitle]);
 
+  const handleSlideSyncError = useCallback((error: unknown) => {
+    console.error('Slide sync failed:', error);
+    toast({
+      title: '❌ Slide sync failed',
+      description: 'The student may not have updated — try again or use Force Sync.',
+      variant: 'destructive',
+    });
+  }, [toast]);
+
   const handlePrevSlide = useCallback(async () => {
     const newIndex = Math.max(0, currentSlide - 1);
-    await updateSlide(newIndex);
-  }, [currentSlide, updateSlide]);
+    try { await updateSlide(newIndex); } catch (error) { handleSlideSyncError(error); }
+  }, [currentSlide, updateSlide, handleSlideSyncError]);
 
   const handleNextSlide = useCallback(async () => {
     const newIndex = Math.min(displayedSlides.length - 1, currentSlide + 1);
-    await updateSlide(newIndex);
-  }, [currentSlide, displayedSlides.length, updateSlide]);
+    try { await updateSlide(newIndex); } catch (error) { handleSlideSyncError(error); }
+  }, [currentSlide, displayedSlides.length, updateSlide, handleSlideSyncError]);
 
   const handleSlideSelect = useCallback(async (index: number) => {
-    await updateSlide(index);
-  }, [updateSlide]);
+    try { await updateSlide(index); } catch (error) { handleSlideSyncError(error); }
+  }, [updateSlide, handleSlideSyncError]);
 
   const handleToolChange = useCallback(async (tool: string) => {
     setActiveTool(tool);
@@ -1437,18 +1453,27 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             const sceneSlides = [{
               id: `scene-lesson-${sceneMeta.unitNumber}-${sceneMeta.lessonNumber}`,
               type: 'playground_scene',
-              sceneLessonRef: { unitNumber: sceneMeta.unitNumber, lessonNumber: sceneMeta.lessonNumber },
+              sceneLessonRef: { unitNumber: sceneMeta.unitNumber, lessonNumber: sceneMeta.lessonNumber, contentFormat: sceneMeta.contentFormat },
             }];
             setRawSlides(sceneSlides);
-            await updateSharedDisplay({ lessonSlides: sceneSlides, lessonTitle: title, embeddedUrl: null });
-            await updateSlide(0);
-            await setStageMode('slide');
-            await updateCanvasTab('slides');
-            toast({
-              title: "📚 Lesson Loaded!",
-              description: `"${title}" is now on screen.`,
-              className: "bg-indigo-900 border-indigo-700",
-            });
+            try {
+              await updateSharedDisplay({ lessonSlides: sceneSlides, lessonTitle: title, embeddedUrl: null });
+              await updateSlide(0);
+              await setStageMode('slide');
+              await updateCanvasTab('slides');
+              toast({
+                title: "📚 Lesson Loaded!",
+                description: `"${title}" is now on screen.`,
+                className: "bg-indigo-900 border-indigo-700",
+              });
+            } catch (error) {
+              console.error('Failed to load lesson into classroom:', error);
+              toast({
+                title: '❌ Failed to load lesson',
+                description: 'The student may not have received it — try again or use Force Sync.',
+                variant: 'destructive',
+              });
+            }
             return;
           }
 
@@ -1484,15 +1509,24 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             ...mapped,
           ];
           setRawSlides(liveSlides);
-          await updateSharedDisplay({ lessonSlides: liveSlides, lessonTitle: title, embeddedUrl: null });
-          await updateSlide(0);
-          await setStageMode('slide');
-          await updateCanvasTab('slides');
-          toast({
-            title: "📚 Lesson Loaded!",
-            description: `"${title}" is now on screen.`,
-            className: "bg-indigo-900 border-indigo-700",
-          });
+          try {
+            await updateSharedDisplay({ lessonSlides: liveSlides, lessonTitle: title, embeddedUrl: null });
+            await updateSlide(0);
+            await setStageMode('slide');
+            await updateCanvasTab('slides');
+            toast({
+              title: "📚 Lesson Loaded!",
+              description: `"${title}" is now on screen.`,
+              className: "bg-indigo-900 border-indigo-700",
+            });
+          } catch (error) {
+            console.error('Failed to load lesson into classroom:', error);
+            toast({
+              title: '❌ Failed to load lesson',
+              description: 'The student may not have received it — try again or use Force Sync.',
+              variant: 'destructive',
+            });
+          }
         }}
       />
     </div>

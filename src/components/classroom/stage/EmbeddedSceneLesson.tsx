@@ -14,7 +14,7 @@ interface EmbeddedSceneLessonProps {
   /** When true, suppress the internal Back/Next/counter bar — the caller
    *  renders its own nav bar outside this component's frame instead. */
   hideInternalNav?: boolean;
-  onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean }) => void;
+  onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean }) => void;
   persistedSceneIdx?: number | null;
   onSceneIdxPersist?: (idx: number) => void;
 }

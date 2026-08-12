@@ -278,14 +278,34 @@ export const ProfileTab = ({ studentName }: ProfileTabProps) => {
     }
     setSaving(true);
     try {
+      const trimmedName = fullName.trim();
       const { error: userErr } = await supabase
         .from('users')
         .update({
-          full_name: fullName.trim(),
+          full_name: trimmedName,
           preferred_language: language,
         })
         .eq('id', user.id);
       if (userErr) throw userErr;
+
+      // The teacher dashboard, calendar, and classroom video tiles each
+      // read the student's name from a different store (public.profiles,
+      // public.users, and Supabase Auth's own user_metadata respectively —
+      // a legacy split predating this settings page). Writing only to
+      // `users` above left the other two frozen at whatever name was typed
+      // in at signup, so the same booking could show three different
+      // names depending which screen you were looking at. Keep all three
+      // in sync here rather than trying to unify the reads across every
+      // call site.
+      const { error: profileTableErr } = await supabase
+        .from('profiles')
+        .upsert({ id: user.id, full_name: trimmedName }, { onConflict: 'id' });
+      if (profileTableErr) console.error('Error syncing profiles.full_name:', profileTableErr);
+
+      const { error: authErr } = await supabase.auth.updateUser({
+        data: { full_name: trimmedName },
+      });
+      if (authErr) console.error('Error syncing auth user_metadata.full_name:', authErr);
 
       const { error: profErr } = await supabase
         .from('student_profiles')

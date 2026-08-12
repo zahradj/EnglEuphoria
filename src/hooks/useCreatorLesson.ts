@@ -170,6 +170,17 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
               content: mergedContent,
               is_published: nextIsPublished,
               difficulty_level: difficulty,
+              // The library groups by slot_cefr_level first, falling back to the
+              // coarse 3-bucket difficulty_level only when this is null — write
+              // the real level so the classroom library shows all 6 CEFR
+              // sections instead of collapsing them into 3.
+              ...(cefr ? { slot_cefr_level: cefr } : {}),
+              // Curriculum-slot position — only set when the caller actually
+              // knows it (e.g. opened from the Curriculum Map), so a
+              // from-scratch lesson's already-correct slot never gets
+              // clobbered by an unrelated save.
+              ...(meta.unitNumber != null ? { slot_unit_number: meta.unitNumber } : {}),
+              ...(meta.lessonNumber != null ? { slot_lesson_number: meta.lessonNumber } : {}),
               target_system: targetSystem,
               ai_metadata: mergedMeta,
               ...(meta.unitNumber != null ? { slot_unit_number: String(meta.unitNumber) } : {}),
@@ -200,6 +211,9 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
             description: `${hub === 'playground' ? 'Playground' : hub === 'success' ? 'Success Hub' : 'Academy'} lesson`,
             target_system: targetSystem,
             difficulty_level: difficulty,
+            ...(cefr ? { slot_cefr_level: cefr } : {}),
+            ...(meta.unitNumber != null ? { slot_unit_number: meta.unitNumber } : {}),
+            ...(meta.lessonNumber != null ? { slot_lesson_number: meta.lessonNumber } : {}),
             duration_minutes: hub === 'playground' ? 30 : 60,
             content,
             is_published: meta.publish,
