@@ -10,7 +10,18 @@ import { PlaygroundLessonPlayer } from '@/components/playground-player/Playgroun
 import type { PlaygroundLessonNumber } from '@/playground-blueprint/unitTemplate';
 import { ClassroomToolOverlay } from './ClassroomToolOverlay';
 import { EmbeddedSceneLesson } from './EmbeddedSceneLesson';
-import type { PlayUnitLessonHandle } from '@/pages/playground-scene/PlayUnitLesson';
+import { EmbeddedWelcomeTownLesson } from './EmbeddedWelcomeTownLesson';
+
+/** The two embedded scene players (Pre-A1 lep1-rich, A1/A2 wt-rich/wt-a2-rich)
+ *  expose the same 4 imperative methods from different source files —
+ *  shared here so this stage doesn't need to import (or care) which one
+ *  actually backs the current lesson. */
+interface SceneLessonHandle {
+  goNext: () => void;
+  goBack: () => void;
+  goToIndex: (idx: number) => void;
+  setInteractionUnlocked: (unlocked: boolean) => void;
+}
 
 interface Slide {
   id: string;
@@ -133,10 +144,11 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
   const stageRef = useRef<HTMLDivElement>(null);
   useCollapseWatcher(stageRef, `main-stage[${role}/${mode}]`);
   const sceneLessonRef = (rawSlides as any)?.[0]?.sceneLessonRef as
-    | { unitNumber: number; lessonNumber: number }
+    | { unitNumber: number; lessonNumber: number; contentFormat?: string }
     | undefined;
+  const isWelcomeTownScene = sceneLessonRef?.contentFormat === 'wt-rich' || sceneLessonRef?.contentFormat === 'wt-a2-rich';
 
-  const sceneLessonHandleRef = useRef<PlayUnitLessonHandle>(null);
+  const sceneLessonHandleRef = useRef<SceneLessonHandle>(null);
   const sceneFrameRef = useRef<HTMLDivElement>(null);
   const sceneFrameScale = useFrameScale(sceneFrameRef);
   const [sceneNav, setSceneNav] = useState({ sceneIdx: 0, total: 0, canNavigate: true, interactionUnlocked: false, lockToggleApplicable: true });
@@ -186,17 +198,32 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
               <div ref={sceneFrameRef} className="relative flex-1 min-h-0 overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">
                 <div className="absolute inset-0 overflow-hidden">
                   <div style={{ position: 'absolute', top: 0, left: 0, width: `${100 / sceneFrameScale}%`, height: `${100 / sceneFrameScale}%`, transform: `scale(${sceneFrameScale})`, transformOrigin: 'top left' }}>
-                  <EmbeddedSceneLesson
-                    ref={sceneLessonHandleRef}
-                    unitNumber={sceneLessonRef.unitNumber}
-                    lessonNumber={sceneLessonRef.lessonNumber}
-                    roomId={roomId}
-                    role={role}
-                    hideInternalNav
-                    onNavState={handleSceneNavState}
-                    persistedSceneIdx={sceneLessonIdx}
-                    onSceneIdxPersist={onPersistSceneLessonIdx}
-                  />
+                  {isWelcomeTownScene ? (
+                    <EmbeddedWelcomeTownLesson
+                      ref={sceneLessonHandleRef}
+                      contentFormat={sceneLessonRef.contentFormat!}
+                      unitNumber={sceneLessonRef.unitNumber}
+                      lessonNumber={sceneLessonRef.lessonNumber}
+                      roomId={roomId}
+                      role={role}
+                      hideInternalNav
+                      onNavState={handleSceneNavState}
+                      persistedSceneIdx={sceneLessonIdx}
+                      onSceneIdxPersist={onPersistSceneLessonIdx}
+                    />
+                  ) : (
+                    <EmbeddedSceneLesson
+                      ref={sceneLessonHandleRef}
+                      unitNumber={sceneLessonRef.unitNumber}
+                      lessonNumber={sceneLessonRef.lessonNumber}
+                      roomId={roomId}
+                      role={role}
+                      hideInternalNav
+                      onNavState={handleSceneNavState}
+                      persistedSceneIdx={sceneLessonIdx}
+                      onSceneIdxPersist={onPersistSceneLessonIdx}
+                    />
+                  )}
                   </div>
                 </div>
               </div>
@@ -249,13 +276,25 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                 </div>
               )}
             </div>
-          ) : hubType === 'playground' && mode === 'slide' && !isInterview ? (
+          ) : hubType === 'playground' && mode === 'slide' && !isInterview && (rawSlides as any)?.[0]?.playgroundUnit ? (
+            // Only reachable with a real AI-generated unit (from PlaygroundCreator)
+            // to render — without one, PlaygroundLessonPlayer silently falls back
+            // to its own bundled "Animal Adventure Academy" reference lesson,
+            // which is never what a teacher/student actually opened. Lessons with
+            // no unit and no sceneLessonRef fall through to the explicit
+            // "not available" state below instead of that silent legacy content.
             <div className="absolute inset-0 overflow-auto bg-white">
               <PlaygroundLessonPlayer
                 embedded
                 lessonNumber={(Math.min(7, Math.max(1, currentSlideIndex + 1)) as PlaygroundLessonNumber)}
                 unit={(rawSlides as any)?.[0]?.playgroundUnit ?? null}
               />
+            </div>
+          ) : hubType === 'playground' && mode === 'slide' && !isInterview ? (
+            <div className="flex h-full w-full items-center justify-center bg-orange-50 p-8 text-center">
+              <p className="text-lg font-bold text-orange-700">
+                This lesson's content isn't available yet.
+              </p>
             </div>
           ) : (
             <StageContent

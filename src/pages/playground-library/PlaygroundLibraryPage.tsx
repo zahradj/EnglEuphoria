@@ -23,7 +23,7 @@ interface LessonRow {
 const LEVELS: { code: string; curriculum: string | null }[] = [
   { code: 'Pre-A1', curriculum: 'Little Explorers Phonics' },
   { code: 'A1', curriculum: 'A1 Playground — Foundational General English' },
-  { code: 'A2', curriculum: null },
+  { code: 'A2', curriculum: 'A2 Playground — Growing Confidence' },
   { code: 'B1', curriculum: null },
   { code: 'B2', curriculum: null },
 ];
@@ -120,6 +120,14 @@ export default function PlaygroundLibraryPage() {
       navigate(`/playground-scene/welcome-town-lesson-${lessonNum}`);
       return;
     }
+    if (fmt === 'wt-a2-rich') {
+      // A2's own Welcome Town lessons — separate route family per unit/lesson
+      // since A2 has its own Unit 1 (distinct from A1's Unit 1).
+      const unitNum = row.ai_metadata?.unit_number ?? 1;
+      const lessonNum = row.ai_metadata?.lesson_number ?? 1;
+      navigate(`/playground-scene/a2-unit-${unitNum}-lesson-${lessonNum}`);
+      return;
+    }
     if (fmt === 'scene-player') {
       navigate(`/playground-scene/play/${row.id}`);
       return;
@@ -206,7 +214,7 @@ export default function PlaygroundLibraryPage() {
           <div className="space-y-4">
             {units.map((u) => {
               const art = UNIT_ART[(u.unit_number - 1) % UNIT_ART.length];
-              const readyCount = u.lessons.filter((l) => l.ai_metadata?.contentFormat === 'lep1-rich' || l.ai_metadata?.contentFormat === 'wt-rich' || l.ai_metadata?.contentFormat === 'scene-player').length;
+              const readyCount = u.lessons.filter((l) => l.ai_metadata?.contentFormat === 'lep1-rich' || l.ai_metadata?.contentFormat === 'wt-rich' || l.ai_metadata?.contentFormat === 'wt-a2-rich' || l.ai_metadata?.contentFormat === 'scene-player').length;
               const isOpen = openUnit === u.unit_number;
               return (
                 <div key={u.unit_number} className="overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-orange-100">
@@ -237,7 +245,7 @@ export default function PlaygroundLibraryPage() {
                   {isOpen && (
                     <div className="grid grid-cols-1 gap-3 border-t border-orange-100 bg-orange-50/40 p-5 sm:grid-cols-2 lg:grid-cols-3">
                       {u.lessons.map((l) => {
-                        const ready = l.ai_metadata?.contentFormat === 'lep1-rich' || l.ai_metadata?.contentFormat === 'wt-rich' || l.ai_metadata?.contentFormat === 'scene-player';
+                        const ready = l.ai_metadata?.contentFormat === 'lep1-rich' || l.ai_metadata?.contentFormat === 'wt-rich' || l.ai_metadata?.contentFormat === 'wt-a2-rich' || l.ai_metadata?.contentFormat === 'scene-player';
                         return (
                           <button
                             key={l.id}

@@ -93,9 +93,9 @@ export type Scene =
   | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string }
   | { id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string }
   | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string }[] }
-  | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: { label: string; color: string; targetLeft: string; targetTop: string; who?: CharKey }[] }
+  | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: { label: string; color: string; targetLeft: string; targetTop: string; who?: CharKey }[]; showBlanks?: boolean; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
   | { id: string; kind: 'vocab-spot'; bg: string; teacher: string; items: { label: string; sentence: string; emoji: string; left: string; top: string; color: string; dir?: 'down' | 'left' | 'right'; who?: CharKey }[] }
-  | { id: string; kind: 'choice'; bg: string; who: CharKey; teacher: string; prompt: string; options: { label: string; emoji: string; correct?: boolean }[] }
+  | { id: string; kind: 'choice'; bg: string; who: CharKey; teacher: string; prompt: string; options: { label: string; emoji: string; correct?: boolean }[]; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
   | { id: string; kind: 'roleplay'; bg: string; teacher: string; cast: CharKey[]; script: { who: CharKey; line: string; repeat?: boolean }[] }
   | { id: string; kind: 'join-stage'; bg: string; teacher: string; cast: CharKey[]; turns: { who: CharKey | 'student'; line: string }[] }
   | { id: string; kind: 'hello-doors'; bg: string; teacher: string; cast: CharKey[]; rounds: { target: CharKey; prompt: string; helloLine: string; echoLine: string }[] }
@@ -363,7 +363,7 @@ export const LESSON_1_SCENES: Scene[] = [
  * Same "Greetings & Introductions" unit as Lesson 1 (per this project's own
  * seeded curriculum roadmap) — spiral review of hello/name/age (~20% of
  * runtime, via a quick recall beat, not a re-teach) plus the unit's next new
- * beat: "How are you?" and feelings vocabulary (happy/sad/tired/hungry).
+ * beat: "How are you?" and feelings vocabulary (happy/sad/tired/angry).
  * This exact "Hello" → "How are you?" sequencing is already validated by
  * this project's own Pre-A1 roadmap (Unit 1 Lesson 3 is literally titled
  * "How Are You?") — A1 covers the same real-world beat a tier higher: full
@@ -379,7 +379,7 @@ export const LESSON_1_SCENES: Scene[] = [
  * ========================================================================= */
 
 export const LESSON_2_TITLE = 'How Are You?';
-export const LESSON_2_OBJECTIVE = 'Part 1: Ask and answer "How are you?" and name a feeling (happy, sad, tired, hungry). Part 2: Learn the sounds P, I, N and read three more real words.';
+export const LESSON_2_OBJECTIVE = 'Part 1: Ask and answer "How are you?" and name a feeling (happy, sad, tired, angry). Part 2: Learn the sounds P, I, N and read three more real words.';
 
 export const LESSON_2_SCENES: Scene[] = [
   { id: 'wt2-title', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'How Are You?', subtitle: 'Say hello, then share how you feel today', cta: '\u{1F392} LET’S GO!' },
@@ -413,7 +413,7 @@ export const LESSON_2_SCENES: Scene[] = [
       { label: 'Happy', sentence: 'Pip is happy.', emoji: '\u{1F60A}', left: '17%', top: '55%', color: '#FE6A2F', who: 'pip' },
       { label: 'Sad', sentence: 'Mia is sad.', emoji: '\u{1F622}', left: '40%', top: '62%', color: '#B85CD1', who: 'mia' },
       { label: 'Tired', sentence: 'Leo is tired.', emoji: '\u{1F62A}', left: '63%', top: '58%', color: '#C97A2F' },
-      { label: 'Hungry', sentence: 'Bella is hungry.', emoji: '\u{1F924}', left: '86%', top: '55%', color: '#E76FA5' },
+      { label: 'Angry', sentence: 'Bella is angry.', emoji: '\u{1F620}', left: '86%', top: '55%', color: '#E76FA5' },
     ],
   },
 
@@ -426,7 +426,7 @@ export const LESSON_2_SCENES: Scene[] = [
       { label: 'Happy', color: '#FE6A2F', who: 'pip', targetLeft: '17%', targetTop: '55%' },
       { label: 'Sad', color: '#B85CD1', who: 'mia', targetLeft: '40%', targetTop: '62%' },
       { label: 'Tired', color: '#C97A2F', targetLeft: '63%', targetTop: '58%' },
-      { label: 'Hungry', color: '#E76FA5', targetLeft: '86%', targetTop: '55%' },
+      { label: 'Angry', color: '#E76FA5', targetLeft: '86%', targetTop: '55%' },
     ],
   },
 
@@ -468,7 +468,7 @@ export const LESSON_2_SCENES: Scene[] = [
       { img: bgWide, text: 'Now Pip feels happy again! ✨' },
     ],
     checkpoints: [
-      { afterPage: 0, who: 'pip', question: 'How does Pip feel at first?', options: ['Happy', 'Tired', 'Hungry'], answer: 'Tired' },
+      { afterPage: 0, who: 'pip', question: 'How does Pip feel at first?', options: ['Happy', 'Tired', 'Angry'], answer: 'Tired' },
       { afterPage: 2, who: 'mia', question: 'How does Pip feel at the end?', options: ['Sad', 'Happy', 'Tired'], answer: 'Happy' },
     ],
   },

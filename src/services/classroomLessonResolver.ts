@@ -186,18 +186,21 @@ export async function resolveBookingLesson(booking: {
     (lesson?.content as any)?.playground_lesson ??
     null;
   const contentFormat = (lesson?.ai_metadata as any)?.contentFormat;
-  if (hubType === 'playground' && contentFormat === 'lep1-rich') {
-    // Little Explorers Phonics scene-based lessons render through
-    // <EmbeddedSceneLesson/>, which looks up the static Scene[] by
+  const isSceneLesson = contentFormat === 'lep1-rich' || contentFormat === 'wt-rich' || contentFormat === 'wt-a2-rich';
+  if (hubType === 'playground' && isSceneLesson) {
+    // Scene-based lessons (Little Explorers Phonics = lep1-rich, Welcome
+    // Town A1/A2 = wt-rich/wt-a2-rich) render through <EmbeddedSceneLesson/>
+    // or <EmbeddedWelcomeTownLesson/>, which look up the static Scene[] by
     // unit/lesson number — replace whatever (possibly stale legacy
     // blueprint) slides this row carries with a single synthetic slide
-    // carrying that reference.
+    // carrying that reference. `contentFormat` travels along so MainStage
+    // knows which of the two embedders (and which scene registry) to use.
     const unitNumber = Number((lesson?.ai_metadata as any)?.unit_number ?? 1);
     const lessonNumber = Number((lesson?.ai_metadata as any)?.lesson_number ?? 1);
     baseSlides = [{
       id: `scene-lesson-${unitNumber}-${lessonNumber}`,
       type: 'playground_scene',
-      sceneLessonRef: { unitNumber, lessonNumber },
+      sceneLessonRef: { unitNumber, lessonNumber, contentFormat },
     }];
   } else if (hubType === 'playground' && playgroundUnit && baseSlides.length > 0) {
     baseSlides = baseSlides.map((s, i) =>

@@ -30,6 +30,52 @@ export function GlassCard({ children, className = '' }: { children: React.ReactN
   );
 }
 
+/** A persistent (non-tappable) bouncing arrow + glow marking exactly which
+ *  character on screen a sentence/question refers to — for scenes whose
+ *  background has more than one character in it and the text alone
+ *  ("He is happy," "How do they feel?") doesn't say which one. Visually
+ *  the same arrow VocabSpotScene uses for its hotspots, just without the
+ *  tap-to-reveal behavior — this one only ever points, it never opens a
+ *  flashcard. */
+function CharacterPointer({ left, top, dir = 'down', color }: { left: string; top: string; dir?: 'down' | 'left' | 'right'; color: string }) {
+  const GAP = 62;
+  const pos = dir === 'down'
+    ? { left, top: `calc(${top} - ${GAP}px)` }
+    : dir === 'right'
+    ? { left: `calc(${left} - ${GAP}px)`, top }
+    : { left: `calc(${left} + ${GAP}px)`, top };
+  const angle = dir === 'down' ? 0 : dir === 'right' ? -90 : 90;
+  return (
+    <>
+      {/* A bright spotlight ring sits directly around the character itself
+          (at their own left/top, not the arrow's offset position) — the
+          arrow says "look here," the ring highlights the character once
+          you do. Deliberately white+gold rather than the character's own
+          color: a character-colored glow can blend right into a
+          same-toned character or background (e.g. Leo's own warm brown-
+          gold fur), while white+gold reads against any scene. */}
+      <div
+        className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{ left, top, width: 200, height: 200, border: '6px solid white', boxShadow: '0 0 0 4px #FFD34E, 0 0 32px 10px rgba(255,211,78,0.75)', animation: 'lep1-ping 1.7s ease-in-out infinite' }}
+      />
+      <div className="pointer-events-none absolute z-20" style={{ ...pos, transform: `translate(-50%, -50%) rotate(${angle}deg)` }}>
+        <span className="relative block" style={{ animation: 'lep1-hop 0.9s ease-in-out infinite' }}>
+          <span className="pointer-events-none absolute bottom-0 left-1/2 h-12 w-12 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${color}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
+          <svg width="52" height="76" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
+            <path
+              d="M13 3 C13 1.9 13.9 1 15 1 L25 1 C26.1 1 27 1.9 27 3 L27 21 L36 21 C37.9 21 38.8 23.3 37.4 24.6 L21.4 43.6 C20.6 44.5 19.4 44.5 18.6 43.6 L2.6 24.6 C1.2 23.3 2.1 21 4 21 L13 21 Z"
+              fill={color}
+              stroke="white"
+              strokeWidth="3"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+      </div>
+    </>
+  );
+}
+
 function PrimaryButton({ onClick, disabled, children }: { onClick: () => void; disabled?: boolean; children: React.ReactNode }) {
   return (
     <button
@@ -195,9 +241,9 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
       </div>
       {step >= 0 && step < scene.script.length && (
         <div className="absolute bottom-[52vh] left-1/2 max-w-[520px] -translate-x-1/2 px-4">
-          <div className="relative rounded-3xl bg-white/95 px-6 py-4 text-center text-2xl font-black text-orange-800 shadow-2xl">
+          <div className="relative rounded-3xl bg-white px-6 py-4 text-center text-2xl font-black text-orange-800 shadow-2xl">
             “{currentLine}”
-            <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 border-x-[14px] border-t-[16px] border-x-transparent border-t-white/95" />
+            <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 border-x-[14px] border-t-[16px] border-x-transparent border-t-white" />
           </div>
         </div>
       )}
@@ -601,21 +647,42 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden bg-cover bg-center touch-none" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
-      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+      {scene.pointTo?.map((p, i) => (
+        <CharacterPointer key={`point-${i}`} left={p.left} top={p.top} dir={p.dir} color={CAST[p.who].color} />
+      ))}
+      {scene.showBlanks && (
+        <div className="pointer-events-none absolute left-1/2 top-4 z-30 -translate-x-1/2 rounded-full bg-orange-500 px-4 py-1 text-center text-xs font-black uppercase tracking-widest text-white shadow-lg">
+          📝 Sentence Builder
+        </div>
+      )}
+      <div className={`pointer-events-none absolute left-1/2 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base ${scene.showBlanks ? 'top-14' : 'top-4'}`}>
         {scene.teacher} <span className="ml-1 opacity-60">({placed.size}/{total})</span>
       </div>
-      {/* No landing-zone hint is rendered — the student has to remember
-          where the object is from the vocab-spot scene that just taught
-          it, not read it off a dashed ring drawn in advance. Tiles are
-          rectangles carrying the word's own text, not a circle/emoji that
-          would otherwise stand in for the answer. */}
+      {/* For vocab-matching drag-match scenes, no landing-zone hint is
+          rendered — the student has to remember where the object is from
+          the vocab-spot scene that just taught it, not read it off a
+          dashed ring drawn in advance. For sentence-builder scenes
+          (showBlanks), that same "recall the hidden spot" logic doesn't
+          apply — there's no environmental anchor to remember, the target
+          is just "the Nth word of the sentence" — so the blank itself must
+          be visible from the start or the activity isn't legible as
+          sentence-building at all. */}
+      {scene.showBlanks && scene.items.map((item, i) => !placed.has(i) && (
+        <div
+          key={`blank-${i}`}
+          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-2xl border-[5px] border-dashed border-white/85 bg-black/10 px-6 py-4"
+          style={{ left: item.targetLeft, top: item.targetTop, minWidth: `${Math.max(3, item.label.length) * 1.7}ch` }}
+        >
+          <span className="invisible text-lg font-black uppercase tracking-wide sm:text-xl">{item.label}</span>
+        </div>
+      ))}
       {scene.items.map((item, i) => placed.has(i) && (
         <div
           key={`placed-${i}`}
-          className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-xl px-3 py-2 shadow-xl ring-4 ring-white"
+          className={`pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 grid place-items-center shadow-xl ring-4 ring-white ${scene.showBlanks ? 'rounded-2xl px-6 py-4' : 'rounded-xl px-3 py-2'}`}
           style={{ left: item.targetLeft, top: item.targetTop, background: item.color, animation: 'lep1-pop 0.4s ease-out' }}
         >
-          <span className="text-sm font-black uppercase tracking-wide text-white">{item.label}</span>
+          <span className={`font-black uppercase tracking-wide text-white ${scene.showBlanks ? 'text-lg sm:text-xl' : 'text-sm'}`}>{item.label}</span>
         </div>
       ))}
       <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex flex-wrap justify-center gap-3 px-4">
@@ -627,10 +694,10 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
               key={`tray-${i}`}
               onPointerDown={(e) => startDrag(e, i)}
               aria-label={`Drag the word ${item.label}`}
-              className={`pointer-events-auto touch-none rounded-xl px-4 py-3 shadow-2xl ring-4 ring-white transition active:scale-95 ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
+              className={`pointer-events-auto touch-none shadow-2xl ring-4 ring-white transition active:scale-95 ${scene.showBlanks ? 'rounded-2xl px-6 py-4' : 'rounded-xl px-4 py-3'} ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
               style={{ background: item.color, animation: wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
             >
-              <span className="text-sm font-black uppercase tracking-wide text-white">{item.label}</span>
+              <span className={`font-black uppercase tracking-wide text-white ${scene.showBlanks ? 'text-lg sm:text-xl' : 'text-sm'}`}>{item.label}</span>
             </button>
           );
         })}
@@ -676,6 +743,13 @@ function ChoiceScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
   return (
     <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-black/20" />
+      {/* Only useful when the referenced character sits outside the
+          options row's vertical band (roughly 42%-58% of the screen,
+          where the big tappable option cards render) — otherwise the
+          cards themselves cover whoever the arrow would point at. */}
+      {scene.pointTo?.map((p, i) => (
+        <CharacterPointer key={`point-${i}`} left={p.left} top={p.top} dir={p.dir} color={CAST[p.who].color} />
+      ))}
       <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
         <div className="rounded-full bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl sm:text-lg">{scene.prompt}</div>
       </div>
@@ -766,14 +840,14 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
       {current && <button onClick={replayCurrent} className="absolute right-6 top-6 z-30 flex items-center gap-2 rounded-full bg-white/95 px-5 py-3 text-sm font-black uppercase tracking-widest text-orange-700 shadow-2xl ring-2 ring-orange-200 active:scale-95" aria-label="Repeat what the character said">🔁 Play again</button>}
       {current && !awaitingRepeat && (
         <div className="absolute top-[30%] z-20 max-w-[420px] -translate-x-1/2 px-4 transition-all duration-300" style={{ left: bubbleLeft[current.who] ?? '50%' }}>
-          <div className="relative rounded-3xl bg-white/95 px-5 py-3 text-center text-xl font-black text-orange-800 shadow-2xl sm:text-2xl">“{current.line}”</div>
+          <div className="relative rounded-3xl bg-white px-5 py-3 text-center text-xl font-black text-orange-800 shadow-2xl sm:text-2xl">“{current.line}”</div>
         </div>
       )}
       {awaitingRepeat && current && (
         <>
           <div className="absolute inset-0 z-20 bg-black/35 backdrop-blur-[2px]" />
           <div className="absolute inset-0 z-30 flex items-center justify-center px-4">
-            <div className="relative w-full max-w-xl rounded-[36px] bg-white/98 p-7 text-center shadow-[0_30px_80px_rgba(0,0,0,0.45)] ring-4 ring-orange-300">
+            <div className="relative w-full max-w-xl rounded-[36px] bg-white p-7 text-center shadow-[0_30px_80px_rgba(0,0,0,0.45)] ring-4 ring-orange-300">
               <div className="mb-2 text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">Your turn!</div>
               <div className="relative mx-auto mb-3 flex h-24 w-24 items-center justify-center">
                 <span className="absolute inset-0 rounded-full bg-orange-400/40 animate-ping" />
@@ -843,7 +917,7 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
       </div>
       {currentTurn && isFriendTurn && (
         <div className="absolute inset-x-0 top-20 z-30 flex justify-center px-4">
-          <div className="max-w-[720px] rounded-[28px] bg-white/98 px-8 py-5 text-center shadow-[0_30px_80px_rgba(0,0,0,0.35)] ring-4 ring-orange-200">
+          <div className="max-w-[720px] rounded-[28px] bg-white px-8 py-5 text-center shadow-[0_30px_80px_rgba(0,0,0,0.35)] ring-4 ring-orange-200">
             <div className="mb-1 flex items-center justify-center gap-2 text-[11px] font-black uppercase tracking-[0.25em]" style={{ color: friendMeta?.color ?? '#FE6A2F' }}><span className="text-lg">{friendMeta?.emoji ?? '🎓'}</span> {friendMeta?.name ?? 'Teacher'} asks</div>
             <div className="text-3xl font-black text-orange-800 sm:text-4xl">“{currentTurn.line}”</div>
             {friendKey && <button onClick={() => cueSpeakOnce(currentTurn.line, voiceOf(friendKey))} className="mt-3 mr-2 rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-widest text-orange-700 ring-2 ring-orange-300 shadow active:scale-95">🔊 Hear again</button>}
@@ -853,7 +927,7 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
       )}
       {currentTurn && isStudentTurn && (
         <div className="absolute inset-x-0 top-20 z-40 flex justify-center px-4">
-          <div className="w-full max-w-[700px] rounded-[32px] bg-white/98 p-6 text-center shadow-[0_30px_80px_rgba(0,0,0,0.4)] ring-4 ring-orange-300">
+          <div className="w-full max-w-[700px] rounded-[32px] bg-white p-6 text-center shadow-[0_30px_80px_rgba(0,0,0,0.4)] ring-4 ring-orange-300">
             <div className="text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">Your turn — say it!</div>
             <div className="mt-1 text-3xl font-black text-orange-700 sm:text-4xl">“{currentTurn.line}”</div>
             <button onClick={advance} className="mt-4 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 px-7 py-3 text-base font-black uppercase tracking-widest text-white shadow-xl active:scale-95">✅ I answered</button>
@@ -947,7 +1021,7 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
       <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/40" />
         <div className="relative z-10 flex flex-col items-center gap-4">
-          <div className="rounded-3xl bg-white/95 px-8 py-4 text-center shadow-2xl">
+          <div className="rounded-3xl bg-white px-8 py-4 text-center shadow-2xl">
             <div className="text-2xl font-black text-orange-700">🎉 Wonderful hellos!</div>
             <div className="text-lg font-bold text-neutral-700">You greeted every friend! {score}/{total}</div>
           </div>

@@ -8,6 +8,11 @@ import {
   LESSON_5_SCENES,
   LESSON_6_SCENES,
   LESSON_U2L1_SCENES,
+  LESSON_U2L2_SCENES,
+  LESSON_U2L3_SCENES,
+  LESSON_U2L4_SCENES,
+  LESSON_U2L5_SCENES,
+  LESSON_U2L6_SCENES,
 } from './scenes';
 import { validateLesson, formatValidationResult, type ValidationContext } from './sceneValidator';
 
@@ -18,7 +23,12 @@ const LESSONS: { ctx: ValidationContext; scenes: unknown[] }[] = [
   { ctx: { lessonNumber: 4 }, scenes: LESSON_4_SCENES },
   { ctx: { lessonNumber: 5 }, scenes: LESSON_5_SCENES },
   { ctx: { lessonNumber: 6 }, scenes: LESSON_6_SCENES },
-  { ctx: { lessonNumber: 'U2L1', targetLetters: ['B', 'T'] }, scenes: LESSON_U2L1_SCENES },
+  { ctx: { lessonNumber: 'U2L1' }, scenes: LESSON_U2L1_SCENES },
+  { ctx: { lessonNumber: 'U2L2' }, scenes: LESSON_U2L2_SCENES },
+  { ctx: { lessonNumber: 'U2L3' }, scenes: LESSON_U2L3_SCENES },
+  { ctx: { lessonNumber: 'U2L4' }, scenes: LESSON_U2L4_SCENES },
+  { ctx: { lessonNumber: 'U2L5' }, scenes: LESSON_U2L5_SCENES },
+  { ctx: { lessonNumber: 'U2L6' }, scenes: LESSON_U2L6_SCENES },
 ];
 
 describe('Playground scene validation', () => {

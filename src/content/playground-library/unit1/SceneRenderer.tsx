@@ -237,6 +237,11 @@ export function SceneRenderer(props: {
     case 'color-sort': return <ColorSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'color-quiz': return <ColorQuizScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'listen-repeat-cards': return <ListenRepeatCardsScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
+    case 'color-spot': return <ColorSpotScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
+    case 'shape-model': return <ShapeModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'shape-sort': return <ShapeSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
+    case 'color-spy': return <ColorSpyScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
+    case 'color-simon': return <ColorSimonScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
@@ -359,9 +364,9 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
       )}
       {step >= 0 && step < scene.script.length && (
         <div className="absolute bottom-[52vh] left-1/2 max-w-[520px] -translate-x-1/2 px-4">
-          <div className="relative rounded-3xl bg-white/95 px-6 py-4 text-center text-2xl font-black text-orange-800 shadow-2xl">
+          <div className="relative rounded-3xl bg-white px-6 py-4 text-center text-2xl font-black text-orange-800 shadow-2xl">
             “{currentLine}”
-            <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 border-x-[14px] border-t-[16px] border-x-transparent border-t-white/95" />
+            <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 border-x-[14px] border-t-[16px] border-x-transparent border-t-white" />
           </div>
         </div>
       )}
@@ -538,18 +543,25 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
         </div>
       </div>
       {scene.anchors.map((a, i) => {
-        const base = side === 'left' ? 72 : 28;
-        const cols = side === 'left' ? [-8, 12, -6] : [-12, 8, -10];
-        const tops = ['14%', '46%', '78%'];
+        // Two columns on the anchors' side (near/far from the letter card),
+        // stacked vertically with generous, even spacing — not the old
+        // single-line-with-±12% jitter, which put anchors 0 and 2 only ~2%
+        // of width apart and let them overlap outright on wide/short
+        // viewports. Sizes are viewport-height-relative (clamp), not fixed
+        // px jumps at sm:, so they can't outgrow a short frame either.
+        const nearCol = side === 'left' ? 64 : 36;
+        const farCol = side === 'left' ? 87 : 13;
+        const cols = [nearCol, farCol, nearCol];
+        const tops = ['20%', '50%', '80%'];
         const rots = [-6, 5, -3];
-        const spot = { left: `${base + (cols[i] ?? 0)}%`, top: tops[i] ?? '50%', rot: rots[i] ?? 0 };
+        const spot = { left: `${cols[i] ?? nearCol}%`, top: tops[i] ?? '50%', rot: rots[i] ?? 0 };
         const isOpen = opened.has(i);
         return (
           <div key={a.word} className="absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: spot.left, top: spot.top, animation: `lep1-float 3s ease-in-out ${i * 0.3}s infinite` }}>
             <button
               onClick={() => openProp(i)}
-              className={`relative grid place-items-center rounded-3xl bg-transparent p-0 transition-transform active:scale-90 ${isOpen ? 'h-64 w-64 sm:h-80 sm:w-80' : 'h-40 w-40 sm:h-52 sm:w-52'} ${!isOpen && phase === 'invite' ? 'animate-pulse' : ''}`}
-              style={{ transform: `rotate(${spot.rot}deg)`, filter: `drop-shadow(0 0 18px ${theme.tint}) drop-shadow(0 12px 24px rgba(0,0,0,0.35))` }}
+              className={`relative grid place-items-center rounded-3xl bg-transparent p-0 transition-transform active:scale-90 ${!isOpen && phase === 'invite' ? 'animate-pulse' : ''}`}
+              style={{ width: isOpen ? 'clamp(96px, 20vh, 180px)' : 'clamp(76px, 14vh, 140px)', height: isOpen ? 'clamp(96px, 20vh, 180px)' : 'clamp(76px, 14vh, 140px)', transform: `rotate(${spot.rot}deg)`, filter: `drop-shadow(0 0 18px ${theme.tint}) drop-shadow(0 12px 24px rgba(0,0,0,0.35))` }}
               aria-label={isOpen ? `Hear ${a.word} again` : `Open ${theme.label}`}
             >
               {isOpen ? (
@@ -557,11 +569,11 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
               ) : theme.img ? (
                 <img src={theme.img} alt={theme.label} className="h-full w-full object-contain" />
               ) : (
-                <span className="text-[9rem] sm:text-[11rem]">{theme.closed}</span>
+                <span style={{ fontSize: 'clamp(2.5rem, 7vh, 4.5rem)' }}>{theme.closed}</span>
               )}
             </button>
             {isOpen && (
-              <div className="mx-auto mt-3 w-max animate-[lep1-pop_0.5s_ease-out] rounded-2xl border-4 bg-white px-6 py-2 text-center text-3xl font-black shadow-xl sm:text-4xl" style={{ color: theme.tint, borderColor: theme.tint }}>
+              <div className="mx-auto mt-2 w-max animate-[lep1-pop_0.5s_ease-out] rounded-2xl border-4 bg-white px-4 py-1.5 text-center text-xl font-black shadow-xl sm:px-6 sm:py-2 sm:text-2xl" style={{ color: theme.tint, borderColor: theme.tint }}>
                 {a.word}
               </div>
             )}
@@ -694,7 +706,11 @@ function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, {
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
   }
 
-  const orbit = scatterPositions(scene.items.length, [56, 86], 14);
+  // Top row stays at 56% (not the [10,74] used by the color/sound circle
+  // scenes) — this basket sits near the TOP of the screen (top-16), not
+  // vertically centered, so scattered items need to clear ITS zone instead.
+  const orbit = scatterPositions(scene.items.length, [56, 78], 20);
+  const collectedItems = slots.filter((s) => s.collected);
 
   return (
     <div className="absolute inset-0">
@@ -705,16 +721,27 @@ function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, {
           <span className="grid h-28 w-28 place-items-center rounded-3xl text-7xl font-black text-white shadow-lg sm:h-36 sm:w-36 sm:text-8xl" style={{ background: `linear-gradient(135deg, ${c.color}, #FEBE4C)` }}>{scene.letter}</span>
           <p className="text-lg font-black leading-none" style={{ color: c.color }}>{scene.phoneme}</p>
           <p className="text-xs font-bold text-orange-700">⭐ {got}/{scene.goal}</p>
+          {/* Collected items render as children of the basket itself, not a
+              separately positioned div measured against its pixel
+              coordinates — see ColorSortScene for why that approach used to
+              land off-center. */}
+          {collectedItems.length > 0 && (
+            <div className="mt-0.5 flex max-w-[10rem] flex-wrap items-center justify-center gap-1 sm:max-w-[12rem]">
+              {collectedItems.map((s) => (
+                <span key={s.idx} className="grid h-6 w-6 place-items-center rounded-full bg-white/90 text-xs shadow ring-2 ring-green-400 animate-[lep1-pop_0.4s_ease-out] sm:h-7 sm:w-7 sm:text-sm">✅</span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       {slots.map((s, i) => {
+        if (s.collected) return null;
         const pos = orbit[i % orbit.length];
-        if (s.collected) return <div key={s.idx} className="absolute grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-green-300/60 text-3xl opacity-60 ring-2 ring-green-400 backdrop-blur" style={{ left: pos.left, top: pos.top }}>✅</div>;
         const glow = s.flash === 'bad' ? 'drop-shadow-[0_0_14px_rgba(239,68,68,0.9)] animate-[lep1-shake_0.4s_ease-in-out]' : s.flash === 'good' ? 'drop-shadow-[0_0_18px_rgba(34,197,94,0.9)]' : 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]';
         return (
           <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-            className={`absolute h-40 w-40 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition sm:h-48 sm:w-48 ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
-            style={{ left: pos.left, top: pos.top, animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
+            className={`absolute -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
+            style={{ left: pos.left, top: pos.top, width: 'clamp(88px, 16vh, 208px)', height: 'clamp(88px, 16vh, 208px)', animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
             aria-label={s.it.word}
           >
             {s.it.img ? <img src={s.it.img} alt={s.it.word} draggable={false} className="pointer-events-none h-full w-full object-contain" /> : <span className="pointer-events-none grid h-full w-full place-items-center text-7xl">{s.it.emoji}</span>}
@@ -925,7 +952,7 @@ function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
   };
 
-  const orbit = scatterPositions(scene.items.length, [16, 84], 14);
+  const orbit = scatterPositions(scene.items.length, [10, 74], 20);
 
   return (
     <div className="absolute inset-0">
@@ -935,7 +962,7 @@ function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
         {scene.targets.map((t) => {
           const c = CAST[t.who];
           const hot = hotLetter === t.letter;
-          const collected = slots.filter((s) => s.collected && s.it.letter === t.letter).length;
+          const collectedItems = slots.filter((s) => s.collected && s.it.letter === t.letter);
           const total = slots.filter((s) => s.it.letter === t.letter).length;
           return (
             <button key={t.letter} type="button" ref={(el) => { targetRefs.current[t.letter] = el; }} onClick={() => void playLetterPhonic(t.letter)}
@@ -944,20 +971,31 @@ function SoundSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
               <div className="pointer-events-none relative flex flex-col items-center gap-1">
                 <span className="grid h-24 w-24 place-items-center rounded-3xl text-6xl font-black text-white shadow-lg sm:h-28 sm:w-28 sm:text-7xl" style={{ background: `linear-gradient(135deg, ${c.color}, #FEBE4C)` }}>{t.letter}</span>
                 <p className="text-sm font-black leading-none" style={{ color: c.color }}>{t.phoneme}</p>
-                <p className="text-[10px] font-bold text-orange-700">⭐ {collected}/{total}</p>
+                <p className="text-[10px] font-bold text-orange-700">⭐ {collectedItems.length}/{total}</p>
+                {/* Collected items render as children of this already-centered
+                    button, not a separately positioned div measured against
+                    the target's pixel coordinates — see ColorSortScene for
+                    why that measurement approach used to land off-center. */}
+                {collectedItems.length > 0 && (
+                  <div className="mt-0.5 flex flex-wrap items-center justify-center gap-1">
+                    {collectedItems.map((s) => (
+                      <span key={s.idx} className="grid h-7 w-7 place-items-center rounded-full bg-white/90 text-sm shadow ring-2 ring-green-400 animate-[lep1-pop_0.4s_ease-out]">✅</span>
+                    ))}
+                  </div>
+                )}
               </div>
             </button>
           );
         })}
       </div>
       {slots.map((s, i) => {
+        if (s.collected) return null;
         const pos = orbit[i % orbit.length];
-        if (s.collected) return <div key={s.idx} className="absolute grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-green-300/60 text-4xl opacity-70 ring-2 ring-green-400 backdrop-blur" style={{ left: pos.left, top: pos.top }}>✅</div>;
         const glow = s.flash === 'bad' ? 'drop-shadow-[0_0_14px_rgba(239,68,68,0.9)] animate-[lep1-shake_0.4s_ease-in-out]' : s.flash === 'good' ? 'drop-shadow-[0_0_18px_rgba(34,197,94,0.9)]' : 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]';
         return (
           <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-            className={`absolute h-40 w-40 sm:h-52 sm:w-52 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
-            style={{ left: pos.left, top: pos.top, animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
+            className={`absolute -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
+            style={{ left: pos.left, top: pos.top, width: 'clamp(88px, 16vh, 208px)', height: 'clamp(88px, 16vh, 208px)', animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
             aria-label={s.it.word}
           >
             {s.it.img ? <img src={s.it.img} alt={s.it.word} draggable={false} className="pointer-events-none h-full w-full object-contain" /> : <span className="pointer-events-none grid h-full w-full place-items-center text-6xl">{s.it.emoji}</span>}
@@ -1559,14 +1597,14 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
       {current && <button onClick={replayCurrent} className="absolute right-6 top-6 z-30 flex items-center gap-2 rounded-full bg-white/95 px-5 py-3 text-sm font-black uppercase tracking-widest text-orange-700 shadow-2xl ring-2 ring-orange-200 active:scale-95" aria-label="Repeat what the character said">🔁 Play again</button>}
       {current && !awaitingRepeat && (
         <div className="absolute z-20 max-w-[520px] -translate-x-1/2 px-4 transition-all duration-300" style={{ left: positions[current.who]?.left ?? '50%', bottom: `calc(${positions[current.who]?.bottom ?? '12vh'} + clamp(240px, 40vh, 460px) * ${positions[current.who]?.scale ?? 1} + 20px)` }}>
-          <div className="relative rounded-3xl bg-white/95 px-5 py-3 text-center text-xl font-black text-orange-800 shadow-2xl sm:text-2xl">“{current.line}”</div>
+          <div className="relative rounded-3xl bg-white px-5 py-3 text-center text-xl font-black text-orange-800 shadow-2xl sm:text-2xl">“{current.line}”</div>
         </div>
       )}
       {awaitingRepeat && current && (
         <>
           <div className="absolute inset-0 z-20 bg-black/35 backdrop-blur-[2px]" />
           <div className="absolute inset-0 z-30 flex items-center justify-center px-4">
-            <div className="relative w-full max-w-xl rounded-[36px] bg-white/98 p-7 text-center shadow-[0_30px_80px_rgba(0,0,0,0.45)] ring-4 ring-orange-300">
+            <div className="relative w-full max-w-xl rounded-[36px] bg-white p-7 text-center shadow-[0_30px_80px_rgba(0,0,0,0.45)] ring-4 ring-orange-300">
               <div className="mb-2 text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">Your turn!</div>
               <div className="relative mx-auto mb-3 flex h-24 w-24 items-center justify-center">
                 <span className="absolute inset-0 rounded-full bg-orange-400/40 animate-ping" />
@@ -1598,6 +1636,29 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
   const [gemDone, setGemDone] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  // Defaults to the open right-side space the scene art was built to leave
+  // clear (see u2l3-join-stage's *-solo backgrounds) — draggable so the
+  // student can move it if a particular scene's open space is elsewhere.
+  const [circlePos, setCirclePos] = useState({ xPct: 82, yPct: 64 });
+  const draggingRef = useRef(false);
+
+  const moveCircleTo = (clientX: number, clientY: number) => {
+    const rect = stageRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const xPct = Math.min(88, Math.max(12, ((clientX - rect.left) / rect.width) * 100));
+    const yPct = Math.min(90, Math.max(28, ((clientY - rect.top) / rect.height) * 100));
+    setCirclePos({ xPct, yPct });
+  };
+  const onCirclePointerDown = (e: React.PointerEvent) => {
+    draggingRef.current = true;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+  const onCirclePointerMove = (e: React.PointerEvent) => {
+    if (!draggingRef.current) return;
+    moveCircleTo(e.clientX, e.clientY);
+  };
+  const onCirclePointerUp = () => { draggingRef.current = false; };
 
   useEffect(() => () => { stopSpeaking(); streamRef.current?.getTracks().forEach((t) => t.stop()); }, [scene.id]);
   useEffect(() => {
@@ -1619,6 +1680,7 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
   const friendKey = isFriendTurn ? (currentTurn!.who as CharKey) : null;
   const friendMeta = friendKey ? CAST[friendKey] : null;
   const done = turnIdx >= scene.turns.length;
+  const bg = currentTurn?.bg ?? scene.bg;
 
   useEffect(() => { if (isFriendTurn && friendKey && currentTurn) cueSpeakOnce(currentTurn.line, friendKey); }, [turnIdx, isFriendTurn, friendKey]);
 
@@ -1629,7 +1691,7 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
   };
 
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div ref={stageRef} className="absolute inset-0 overflow-hidden select-none" style={{ backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.05) 55%, rgba(254,106,47,0.35) 100%)' }} />
       <div className="absolute left-6 top-6 z-20 flex flex-col gap-2">
         <span className="w-fit rounded-full bg-white/95 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-orange-700 shadow">Live Stage · Your Turn</span>
@@ -1637,7 +1699,7 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
       </div>
       {currentTurn && isFriendTurn && (
         <div className="absolute inset-x-0 top-20 z-30 flex justify-center px-4">
-          <div className="max-w-[720px] rounded-[28px] bg-white/98 px-8 py-5 text-center shadow-[0_30px_80px_rgba(0,0,0,0.35)] ring-4 ring-orange-200">
+          <div className="max-w-[720px] rounded-[28px] bg-white px-8 py-5 text-center shadow-[0_30px_80px_rgba(0,0,0,0.35)] ring-4 ring-orange-200">
             <div className="mb-1 flex items-center justify-center gap-2 text-[11px] font-black uppercase tracking-[0.25em]" style={{ color: friendMeta?.color ?? '#FE6A2F' }}><span className="text-lg">{friendMeta?.emoji ?? '🎓'}</span> {friendMeta?.name ?? 'Teacher'} asks</div>
             <div className="text-3xl font-black text-orange-800 sm:text-4xl">“{currentTurn.line}”</div>
             {friendKey && <button onClick={() => cueSpeakOnce(currentTurn.line, friendKey)} className="mt-3 mr-2 rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-widest text-orange-700 ring-2 ring-orange-300 shadow active:scale-95">🔊 Hear again</button>}
@@ -1647,22 +1709,38 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
       )}
       {currentTurn && isStudentTurn && (
         <div className="absolute inset-x-0 top-20 z-40 flex justify-center px-4">
-          <div className="w-full max-w-[700px] rounded-[32px] bg-white/98 p-6 text-center shadow-[0_30px_80px_rgba(0,0,0,0.4)] ring-4 ring-orange-300">
+          <div className="w-full max-w-[700px] rounded-[32px] bg-white p-6 text-center shadow-[0_30px_80px_rgba(0,0,0,0.4)] ring-4 ring-orange-300">
             <div className="text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">Your turn — say it!</div>
             <div className="mt-1 text-3xl font-black text-orange-700 sm:text-4xl">“{currentTurn.line}”</div>
             <button onClick={advance} className="mt-4 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 px-7 py-3 text-base font-black uppercase tracking-widest text-white shadow-xl active:scale-95">✅ I answered</button>
           </div>
         </div>
       )}
-      <div className="absolute left-1/2 z-30" style={{ top: '58%', transform: 'translate(-50%, -50%)' }}>
-        <div className={`relative flex items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-all ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`} style={{ width: 'clamp(300px, 46vw, 500px)', height: 'clamp(300px, 46vw, 500px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}>
-          <video ref={videoRef} muted playsInline className="h-full w-full object-cover" />
-          <span className="absolute right-6 top-6 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white"><span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" /> Live</span>
+      {/* Draggable, defaulting to the open side of the scene art (not
+          dead-center) so the background's own object/color/shape stays
+          visible while the student looks at and answers about it — drag
+          the circle itself to reposition it over whichever empty patch of
+          the scene fits best. */}
+      <div
+        className="absolute z-30 touch-none"
+        style={{ left: `${circlePos.xPct}%`, top: `${circlePos.yPct}%`, transform: 'translate(-50%, -50%)' }}
+      >
+        <div
+          onPointerDown={onCirclePointerDown}
+          onPointerMove={onCirclePointerMove}
+          onPointerUp={onCirclePointerUp}
+          onPointerCancel={onCirclePointerUp}
+          className={`relative flex cursor-grab items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-colors active:cursor-grabbing ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`}
+          style={{ width: 'clamp(200px, 30vw, 360px)', height: 'clamp(200px, 30vw, 360px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}
+        >
+          <video ref={videoRef} muted playsInline className="pointer-events-none h-full w-full object-cover" />
+          <span className="pointer-events-none absolute right-6 top-6 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white"><span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" /> Live</span>
+          <span className="pointer-events-none absolute left-6 top-6 rounded-full bg-black/50 px-2 py-1 text-xs">✥</span>
         </div>
-        <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '-48px' }}>
-          <div className={`relative flex items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-orange-700 shadow-2xl ring-4 ring-white transition-transform ${isStudentTurn ? 'scale-110' : ''}`} style={{ width: 96, height: 96 }}>
+        <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '-40px' }}>
+          <div className={`relative flex items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-orange-700 shadow-2xl ring-4 ring-white transition-transform ${isStudentTurn ? 'scale-110' : ''}`} style={{ width: 80, height: 80 }}>
             {isStudentTurn && <span className="absolute inset-0 rounded-full bg-orange-400/50 animate-ping" />}
-            <span className="relative text-5xl drop-shadow-md">🎤</span>
+            <span className="relative text-4xl drop-shadow-md">🎤</span>
           </div>
         </div>
       </div>
@@ -1737,7 +1815,7 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
       <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/40" />
         <div className="relative z-10 flex flex-col items-center gap-4">
-          <div className="rounded-3xl bg-white/95 px-8 py-4 text-center shadow-2xl">
+          <div className="rounded-3xl bg-white px-8 py-4 text-center shadow-2xl">
             <div className="text-2xl font-black text-orange-700">🎉 Wonderful hellos!</div>
             <div className="text-lg font-bold text-neutral-700">You greeted every friend! {score}/{total}</div>
           </div>
@@ -2483,16 +2561,16 @@ function ColorSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
   };
 
-  const orbit = scatterPositions(scene.items.length, [16, 84], 14);
+  const orbit = scatterPositions(scene.items.length, [10, 74], 20);
 
   return (
     <div className="absolute inset-0">
       <div className="pointer-events-none absolute inset-0 z-0 bg-white/25 backdrop-blur-md" />
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-bold text-orange-700 shadow-xl backdrop-blur sm:text-base">🎧 {scene.teacher}</div>
-      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 items-center justify-center gap-6 px-4 sm:gap-10">
+      <div className="absolute inset-x-0 top-1/2 z-10 flex flex-wrap -translate-y-1/2 items-center justify-center gap-4 px-4 sm:gap-8">
         {scene.targets.map((t) => {
           const hot = hotColor === t.colorWord;
-          const collected = slots.filter((s) => s.collected && s.it.colorWord === t.colorWord).length;
+          const collectedItems = slots.filter((s) => s.collected && s.it.colorWord === t.colorWord);
           const total = slots.filter((s) => s.it.colorWord === t.colorWord).length;
           return (
             <button key={t.colorWord} type="button" ref={(el) => { targetRefs.current[t.colorWord] = el; }} onClick={() => void safeSpeak(t.colorWord, t.who)}
@@ -2500,20 +2578,34 @@ function ColorSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
               <div className="pointer-events-none absolute inset-0 animate-pulse rounded-full opacity-60" style={{ background: `radial-gradient(circle at center, ${t.colorHex}cc, transparent 70%)` }} />
               <div className="pointer-events-none relative flex flex-col items-center gap-1">
                 <span className="grid h-24 w-24 place-items-center rounded-full text-lg font-black uppercase text-white shadow-lg sm:h-28 sm:w-28 sm:text-xl" style={{ background: t.colorHex, textShadow: '0 2px 8px rgba(0,0,0,0.55)' }}>{t.colorWord}</span>
-                <p className="text-[10px] font-bold text-orange-700">⭐ {collected}/{total}</p>
+                <p className="text-[10px] font-bold text-orange-700">⭐ {collectedItems.length}/{total}</p>
+                {/* Collected items render as children of this already-centered
+                    button — a simple flex-wrap, not a separately positioned
+                    div measured against the target's pixel coordinates. That
+                    measurement approach is what used to land the checkmark
+                    visibly off-center (and briefly during the hot-glow
+                    scale-up, wildly off); nesting it here means the browser's
+                    own layout keeps it centered with no measurement at all. */}
+                {collectedItems.length > 0 && (
+                  <div className="mt-0.5 flex flex-wrap items-center justify-center gap-1">
+                    {collectedItems.map((s) => (
+                      <span key={s.idx} className="grid h-7 w-7 place-items-center rounded-full bg-white/90 text-sm shadow ring-2 ring-green-400 animate-[lep1-pop_0.4s_ease-out]">✅</span>
+                    ))}
+                  </div>
+                )}
               </div>
             </button>
           );
         })}
       </div>
       {slots.map((s, i) => {
+        if (s.collected) return null;
         const pos = orbit[i % orbit.length];
-        if (s.collected) return <div key={s.idx} className="absolute grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-green-300/60 text-4xl opacity-70 ring-2 ring-green-400 backdrop-blur" style={{ left: pos.left, top: pos.top }}>✅</div>;
         const glow = s.flash === 'bad' ? 'drop-shadow-[0_0_14px_rgba(239,68,68,0.9)] animate-[lep1-shake_0.4s_ease-in-out]' : s.flash === 'good' ? 'drop-shadow-[0_0_18px_rgba(34,197,94,0.9)]' : 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]';
         return (
           <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-            className={`absolute h-40 w-40 sm:h-52 sm:w-52 -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
-            style={{ left: pos.left, top: pos.top, animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
+            className={`absolute -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
+            style={{ left: pos.left, top: pos.top, width: 'clamp(88px, 16vh, 208px)', height: 'clamp(88px, 16vh, 208px)', animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
             aria-label={s.it.word}
           >
             {s.it.img ? <img src={s.it.img} alt={s.it.word} draggable={false} className="pointer-events-none h-full w-full object-contain" /> : <span className="pointer-events-none grid h-full w-full place-items-center text-6xl">{s.it.emoji}</span>}
@@ -2743,6 +2835,543 @@ function ListenRepeatCardsScene({ scene, onNext, onWin }: { scene: Extract<Scene
       {repeated && (
         <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
           <button onClick={next} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>Next →</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Color spot (tap the colored thing in the real scene) ---------- */
+
+/**
+ * New for the Unit 2 Lesson 1 rebuild — every other color activity in this
+ * lesson teaches the word on an abstract card/icon; this one is the only
+ * place a learner finds the color word by tapping the real illustrated
+ * object inside a full scene, the same "arrow points at it, tap to reveal
+ * a flashcard" pattern Welcome Town's vocab-spot uses, ported here for
+ * colors instead of vocabulary items.
+ */
+function ColorSpotScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'color-spot' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [step, setStep] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const gemDone = useRef(false);
+  const total = scene.items.length;
+  const done = step >= total;
+  const current = !done ? scene.items[step] : null;
+
+  const tap = async () => {
+    if (!current || revealed) return;
+    sfx.pop();
+    setRevealed(true);
+    await safeSpeak(current.colorWord, current.who);
+  };
+  const hearSentence = async () => {
+    if (!current) return;
+    sfx.click();
+    await safeSpeak(current.sentence, current.who);
+  };
+  const dismiss = () => {
+    setRevealed(false);
+    const next = step + 1;
+    if (next >= total && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+    setStep(next);
+  };
+
+  return (
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        {scene.teacher} <span className="ml-1 opacity-60">({Math.min(step, total)}/{total})</span>
+      </div>
+      {current && (() => {
+        const dir = current.dir ?? 'down';
+        const GAP = 62;
+        const pos = dir === 'down'
+          ? { left: current.left, top: `calc(${current.top} - ${GAP}px)` }
+          : dir === 'right'
+          ? { left: `calc(${current.left} - ${GAP}px)`, top: current.top }
+          : { left: `calc(${current.left} + ${GAP}px)`, top: current.top };
+        const angle = dir === 'down' ? 0 : dir === 'right' ? -90 : 90;
+        return (
+          <button
+            onClick={tap}
+            disabled={revealed}
+            aria-label={`Find the color ${current.colorWord}`}
+            className="absolute z-20 transition active:scale-90 disabled:pointer-events-none"
+            style={{ ...pos, transform: `translate(-50%, -50%) rotate(${angle}deg)` }}
+          >
+            <span className="relative block" style={{ animation: revealed ? undefined : 'lep1-hop 0.9s ease-in-out infinite' }}>
+              {!revealed && (
+                <span className="pointer-events-none absolute bottom-0 left-1/2 h-12 w-12 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${current.colorHex}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
+              )}
+              <svg width="52" height="76" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
+                <path
+                  d="M13 3 C13 1.9 13.9 1 15 1 L25 1 C26.1 1 27 1.9 27 3 L27 21 L36 21 C37.9 21 38.8 23.3 37.4 24.6 L21.4 43.6 C20.6 44.5 19.4 44.5 18.6 43.6 L2.6 24.6 C1.2 23.3 2.1 21 4 21 L13 21 Z"
+                  fill={current.colorHex}
+                  stroke="white"
+                  strokeWidth="3"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </button>
+        );
+      })()}
+      {current && revealed && (
+        <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/40 px-6" onClick={dismiss} style={{ animation: 'lep1-pop 0.25s ease-out' }}>
+          <div className="flex w-full max-w-sm flex-col items-center gap-2 rounded-[2rem] border-4 border-white bg-white px-6 py-6 text-center shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <span className="grid h-16 w-16 place-items-center rounded-full text-4xl" style={{ background: `${current.colorHex}22` }}>🎨</span>
+            <span className="text-3xl font-black uppercase" style={{ color: current.colorHex }}>{current.colorWord}</span>
+            <span className="text-lg font-bold text-slate-700">{current.label}</span>
+            <button onClick={hearSentence} className="text-sm font-semibold text-neutral-500 underline decoration-dotted active:scale-95">🔊 Hear it in a sentence: “{current.sentence}”</button>
+            <button onClick={dismiss} className="mt-2 rounded-full px-6 py-2 text-sm font-black uppercase tracking-widest text-white shadow active:scale-95" style={{ background: current.colorHex }}>Got it!</button>
+          </div>
+        </div>
+      )}
+      {done && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">All found! ⭐ Next</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Shape swatch helper (shared by shape-model / shape-sort) ---------- */
+
+/** The color-* scenes' swatch is always `rounded-full` since color doesn't
+ *  imply a form — but a shape scene's whole point is the outline itself, so
+ *  the swatch has to actually BE the shape, not a color-filled circle with
+ *  a shape NAME printed on it. */
+function ShapeSwatchStyle(shapeWord: string, color: string): React.CSSProperties {
+  const key = shapeWord.toUpperCase();
+  if (key === 'SQUARE') return { background: color, borderRadius: '16%' };
+  if (key === 'TRIANGLE') return { background: color, clipPath: 'polygon(50% 4%, 4% 96%, 96% 96%)', borderRadius: 0 };
+  return { background: color, borderRadius: '9999px' };
+}
+
+function buildShapeSentence(shapeWord: string, exampleWord: string): string {
+  return `The ${exampleWord.toLowerCase()} is a ${shapeWord.toLowerCase()}.`;
+}
+
+/* ---------- Shape model (teach: tap the shape, repeat, learn the object, say the sentence) ---------- */
+
+function ShapeModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'shape-model' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const [heard, setHeard] = useState<Set<number>>(new Set());
+  const [shapeDone, setShapeDone] = useState<Set<number>>(new Set());
+  const [objectDone, setObjectDone] = useState<Set<number>>(new Set());
+  const [sentenceDone, setSentenceDone] = useState<Set<number>>(new Set());
+  const [held, setHeld] = useState(false);
+  const holdTimer = useRef<number | null>(null);
+  const gemDone = useRef(false);
+  const allDone = sentenceDone.size >= scene.items.length;
+
+  useEffect(() => {
+    if (allDone && !gemDone.current) {
+      gemDone.current = true;
+      onWin(true);
+      const sentences = scene.items.map((it) => buildShapeSentence(it.shapeWord, it.exampleWord)).join(' ');
+      cueSpeak(`Wonderful! ${sentences}`, 'pip');
+    }
+  }, [allDone]);
+
+  const tapItem = async (i: number) => {
+    if (held) return;
+    setActiveIdx(i);
+    setHeard((s) => new Set(s).add(i));
+    sfx.pop();
+    await safeSpeak(scene.items[i].shapeWord, scene.items[i].who);
+  };
+
+  const startHoldShape = (i: number) => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(async () => {
+      setHeld(false);
+      setShapeDone((s) => new Set(s).add(i));
+      sfx.gem();
+      const item = scene.items[i];
+      await new Promise((r) => window.setTimeout(r, 400));
+      await safeSpeak(item.exampleWord, item.who);
+    }, 1200);
+  };
+
+  const startHoldObject = (i: number) => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(async () => {
+      setHeld(false);
+      setObjectDone((s) => new Set(s).add(i));
+      sfx.gem();
+      const item = scene.items[i];
+      await new Promise((r) => window.setTimeout(r, 400));
+      await safeSpeak(buildShapeSentence(item.shapeWord, item.exampleWord), item.who);
+    }, 1200);
+  };
+
+  const startHoldSentence = (i: number) => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(() => {
+      setHeld(false);
+      setSentenceDone((s) => new Set(s).add(i));
+      sfx.gem();
+    }, 1200);
+  };
+  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+
+  return (
+    <div className="absolute inset-0">
+      <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
+        <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
+          {allDone ? 'You know the words and the sentences! ⭐' : scene.teacher}
+        </div>
+      </div>
+
+      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 flex-wrap items-start justify-center gap-6 px-4 sm:gap-10">
+        {scene.items.map((item, i) => {
+          const isActive = activeIdx === i;
+          const isHeard = heard.has(i);
+          const isShapeDone = shapeDone.has(i);
+          const isObjectDone = objectDone.has(i);
+          const isSentenceDone = sentenceDone.has(i);
+          return (
+            <div key={item.shapeWord} className="flex flex-col items-center gap-2">
+              <button
+                onClick={() => tapItem(i)}
+                className={`grid h-36 w-36 place-items-center border-8 border-white shadow-2xl transition active:scale-95 sm:h-44 sm:w-44 ${isSentenceDone ? '' : 'animate-[lep1-wiggle_4s_ease-in-out_infinite]'}`}
+                style={{ ...ShapeSwatchStyle(item.shapeWord, item.shapeColor), animationDelay: `${i * 0.4}s` }}
+                aria-label={`Hear ${item.shapeWord}`}
+              >
+                <img src={item.exampleImg} alt={item.exampleWord} className="h-20 w-20 object-contain drop-shadow-lg sm:h-24 sm:w-24" />
+              </button>
+              <span className="rounded-full bg-white px-4 py-1 text-lg font-black uppercase shadow" style={{ color: item.shapeColor }}>{item.shapeWord}</span>
+              {isShapeDone && (
+                <span className="rounded-full bg-white/95 px-3 py-1 text-sm font-bold text-slate-700 shadow">{item.exampleWord}</span>
+              )}
+              {isObjectDone && (
+                <span className="max-w-[10rem] rounded-2xl bg-white px-3 py-1 text-center text-xs font-bold text-slate-800 shadow sm:text-sm">{buildShapeSentence(item.shapeWord, item.exampleWord)}</span>
+              )}
+              {isSentenceDone ? (
+                <span className="text-2xl">✅</span>
+              ) : isObjectDone ? (
+                <button
+                  onPointerDown={() => startHoldSentence(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
+                  style={{ background: 'linear-gradient(90deg, #8B5CF6, #A78BFA)' }}
+                >
+                  🎤 Say the sentence!
+                </button>
+              ) : isShapeDone ? (
+                <button
+                  onPointerDown={() => startHoldObject(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
+                  style={{ background: 'linear-gradient(90deg, #22C55E, #34D399)' }}
+                >
+                  🎤 Say the word!
+                </button>
+              ) : isHeard && isActive ? (
+                <button
+                  onPointerDown={() => startHoldShape(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
+                  style={{ background: 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
+                >
+                  🎤 Hold & repeat
+                </button>
+              ) : (
+                <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-orange-700 shadow">Tap to hear</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {allDone && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
+            Now let's practice →
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Shape sort (drag each item into the shape it matches) ---------- */
+
+function ShapeSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'shape-sort' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
+  type Slot = { idx: number; it: typeof scene.items[number]; collected: boolean; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
+  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, collected: false, dragging: false, dx: 0, dy: 0, flash: 'none' })));
+  const [hotShape, setHotShape] = useState<string | null>(null);
+  const [gemAwarded, setGemAwarded] = useState(false);
+  const targetRefs = useRef<Record<string, HTMLElement | null>>({});
+  const dragIdx = useRef<number | null>(null);
+  const start = useRef({ x: 0, y: 0 });
+  const done = slots.every((s) => s.collected);
+
+  useEffect(() => { if (done && !gemAwarded) { setGemAwarded(true); onWin(true); cueSpeak('Amazing! All shapes sorted!', 'teacher'); } }, [done, gemAwarded]);
+
+  function hitTest(x: number, y: number, itemEl?: Element | null): string | null {
+    let cx = x, cy = y;
+    if (itemEl) { const r = (itemEl as HTMLElement).getBoundingClientRect(); cx = r.left + r.width / 2; cy = r.top + r.height / 2; }
+    const PAD = 48;
+    let best: { shapeWord: string; dist: number } | null = null;
+    for (const t of scene.targets) {
+      const el = targetRefs.current[t.shapeWord];
+      if (!el) continue;
+      const b = el.getBoundingClientRect();
+      const inside = (cx >= b.left - PAD && cx <= b.right + PAD && cy >= b.top - PAD && cy <= b.bottom + PAD) || (x >= b.left - PAD && x <= b.right + PAD && y >= b.top - PAD && y <= b.bottom + PAD);
+      if (!inside) continue;
+      const d = Math.hypot(cx - (b.left + b.width / 2), cy - (b.top + b.height / 2));
+      if (!best || d < best.dist) best = { shapeWord: t.shapeWord, dist: d };
+    }
+    return best?.shapeWord ?? null;
+  }
+
+  const onDown = (idx: number) => (e: React.PointerEvent<HTMLButtonElement>) => {
+    const s = slots.find((x) => x.idx === idx);
+    if (!s || s.collected) return;
+    sfx.pop();
+    const speaker = scene.targets.find((t) => t.shapeWord === s.it.shapeWord)?.who ?? 'pip';
+    cueSpeakOnce(s.it.word, speaker);
+    dragIdx.current = idx;
+    start.current = { x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, dragging: true, dx: 0, dy: 0, flash: 'none' } : x)));
+  };
+  const onMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const idx = dragIdx.current;
+    if (idx === null) return;
+    const dx = e.clientX - start.current.x, dy = e.clientY - start.current.y;
+    setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, dx, dy } : x)));
+    setHotShape(hitTest(e.clientX, e.clientY, e.currentTarget));
+  };
+  const onUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const idx = dragIdx.current;
+    dragIdx.current = null;
+    const dropShape = hitTest(e.clientX, e.clientY, e.currentTarget);
+    setHotShape(null);
+    if (idx === null) return;
+    setSlots((p) => p.map((x) => {
+      if (x.idx !== idx) return x;
+      if (!dropShape) return { ...x, dragging: false, dx: 0, dy: 0 };
+      if (dropShape === x.it.shapeWord) { sfx.match(); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
+      sfx.wrong(); onLose();
+      return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
+    }));
+    window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
+  };
+
+  const orbit = scatterPositions(scene.items.length, [10, 74], 20);
+
+  return (
+    <div className="absolute inset-0">
+      <div className="pointer-events-none absolute inset-0 z-0 bg-white/25 backdrop-blur-md" />
+      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-bold text-orange-700 shadow-xl backdrop-blur sm:text-base">🎧 {scene.teacher}</div>
+      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 items-center justify-center gap-6 px-4 sm:gap-10">
+        {scene.targets.map((t) => {
+          const hot = hotShape === t.shapeWord;
+          const collectedItems = slots.filter((s) => s.collected && s.it.shapeWord === t.shapeWord);
+          const total = slots.filter((s) => s.it.shapeWord === t.shapeWord).length;
+          return (
+            <button key={t.shapeWord} type="button" ref={(el) => { targetRefs.current[t.shapeWord] = el; }} onClick={() => void safeSpeak(t.shapeWord, t.who)}
+              className={`relative grid h-40 w-40 place-items-center border-4 border-dashed shadow-2xl backdrop-blur transition-all sm:h-48 sm:w-48 cursor-pointer active:scale-95 ${hot ? 'scale-110 border-green-400 bg-green-100/90' : 'border-white/80 bg-white/40'}`}
+              style={{ borderRadius: ShapeSwatchStyle(t.shapeWord, 'transparent').borderRadius, clipPath: ShapeSwatchStyle(t.shapeWord, 'transparent').clipPath }}
+            >
+              <div className="pointer-events-none relative flex flex-col items-center gap-1">
+                <span className="grid h-24 w-24 place-items-center text-lg font-black uppercase text-white shadow-lg sm:h-28 sm:w-28 sm:text-xl" style={{ ...ShapeSwatchStyle(t.shapeWord, t.shapeColor), textShadow: '0 2px 8px rgba(0,0,0,0.55)' }}>{t.shapeWord}</span>
+                <p className="text-[10px] font-bold text-orange-700">⭐ {collectedItems.length}/{total}</p>
+                {collectedItems.length > 0 && (
+                  <div className="mt-0.5 flex flex-wrap items-center justify-center gap-1">
+                    {collectedItems.map((s) => (
+                      <span key={s.idx} className="grid h-7 w-7 place-items-center rounded-full bg-white/90 text-sm shadow ring-2 ring-green-400 animate-[lep1-pop_0.4s_ease-out]">✅</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      {slots.map((s, i) => {
+        if (s.collected) return null;
+        const pos = orbit[i % orbit.length];
+        const glow = s.flash === 'bad' ? 'drop-shadow-[0_0_14px_rgba(239,68,68,0.9)] animate-[lep1-shake_0.4s_ease-in-out]' : s.flash === 'good' ? 'drop-shadow-[0_0_18px_rgba(34,197,94,0.9)]' : 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]';
+        return (
+          <button key={s.idx} onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
+            className={`absolute -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent p-0 transition ${glow} ${s.dragging ? 'z-20 scale-125' : 'hover:scale-110 animate-[lep1-float_3s_ease-in-out_infinite]'}`}
+            style={{ left: pos.left, top: pos.top, width: 'clamp(88px, 16vh, 208px)', height: 'clamp(88px, 16vh, 208px)', animationDelay: `${(i % 4) * 0.3}s`, transform: s.dragging ? `translate(calc(-50% + ${s.dx}px), calc(-50% + ${s.dy}px)) scale(1.25) rotate(-4deg)` : `translate(-50%, -50%) rotate(${pos.rot}deg)`, transition: s.dragging ? 'none' : 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)' }}
+            aria-label={s.it.word}
+          >
+            {s.it.img ? <img src={s.it.img} alt={s.it.word} draggable={false} className="pointer-events-none h-full w-full object-contain" /> : <span className="pointer-events-none grid h-full w-full place-items-center text-6xl">{s.it.emoji}</span>}
+          </button>
+        );
+      })}
+      {done && (
+        <div className="absolute inset-x-0 bottom-6 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>✨ All shapes matched! Next →</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Color Spy ("I spy something ___!" — find it among several visible at once) ---------- */
+
+function ColorSpyScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'color-spy' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
+  const [roundIdx, setRoundIdx] = useState(0);
+  const [picked, setPicked] = useState<string | null>(null);
+  const [correct, setCorrect] = useState(false);
+  const gemDone = useRef(false);
+  const total = scene.clueOrder.length;
+  const done = roundIdx >= total;
+  const clue = !done ? scene.clueOrder[roundIdx] : null;
+
+  useEffect(() => {
+    if (!clue) return;
+    setPicked(null);
+    setCorrect(false);
+    cueSpeakOnce(`I spy something ${clue.toLowerCase()}!`, scene.who);
+  }, [roundIdx]);
+
+  const pick = async (spot: (typeof scene.spots)[number]) => {
+    if (correct || !clue) return;
+    setPicked(spot.colorWord);
+    if (spot.colorWord !== clue) { sfx.wrong(); onLose(); window.setTimeout(() => setPicked(null), 500); return; }
+    sfx.match(); setCorrect(true);
+    await safeSpeak(`Yes! ${spot.label}!`, scene.who);
+    window.setTimeout(() => {
+      const next = roundIdx + 1;
+      if (next >= total && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+      setRoundIdx(next);
+    }, 900);
+  };
+
+  return (
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        {done ? 'You spied them all! ⭐' : `🔍 I spy something ${clue?.toLowerCase()}!`} <span className="ml-1 opacity-60">({Math.min(roundIdx, total)}/{total})</span>
+      </div>
+      {!done && scene.spots.map((spot) => {
+        const isPicked = picked === spot.colorWord;
+        const isRightPick = isPicked && correct;
+        const isWrongPick = isPicked && !correct;
+        return (
+          <button
+            key={spot.colorWord}
+            onClick={() => pick(spot)}
+            disabled={correct}
+            aria-label={`Is it ${spot.label}?`}
+            className={`absolute z-20 -translate-x-1/2 -translate-y-1/2 grid h-20 w-20 place-items-center rounded-full border-4 border-white shadow-2xl transition active:scale-90 sm:h-24 sm:w-24 ${isRightPick ? 'scale-110 ring-4 ring-green-400' : isWrongPick ? 'animate-[lep1-shake_0.4s_ease-in-out] ring-4 ring-red-400' : 'animate-[lep1-hop_1.6s_ease-in-out_infinite]'}`}
+            style={{ left: spot.left, top: spot.top, background: `${spot.colorHex}33`, backdropFilter: 'blur(2px)' }}
+          >
+            <span className="grid h-14 w-14 place-items-center rounded-full text-xl sm:h-16 sm:w-16" style={{ background: spot.colorHex }}>
+              {isRightPick ? '✅' : isWrongPick ? '❌' : '🔍'}
+            </span>
+          </button>
+        );
+      })}
+      {done && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next →</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Color Simon ("Simon Says" growing color-sequence memory game) ---------- */
+
+function ColorSimonScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'color-simon' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
+  const [round, setRound] = useState(1);
+  const [sequence, setSequence] = useState<number[]>([]);
+  const [phase, setPhase] = useState<'idle' | 'showing' | 'waiting' | 'done'>('idle');
+  const [litIdx, setLitIdx] = useState<number | null>(null);
+  const [userIdx, setUserIdx] = useState(0);
+  const [flashBad, setFlashBad] = useState<number | null>(null);
+  const gemDone = useRef(false);
+  const playingRef = useRef(false);
+
+  const playSequence = useCallback(async (seq: number[]) => {
+    if (playingRef.current) return;
+    playingRef.current = true;
+    setPhase('showing');
+    setUserIdx(0);
+    await new Promise((r) => window.setTimeout(r, 500));
+    for (const idx of seq) {
+      setLitIdx(idx);
+      await safeSpeak(scene.colors[idx].colorWord, scene.colors[idx].who);
+      await new Promise((r) => window.setTimeout(r, 250));
+      setLitIdx(null);
+      await new Promise((r) => window.setTimeout(r, 200));
+    }
+    playingRef.current = false;
+    setPhase('waiting');
+  }, [scene.colors]);
+
+  const startRound = useCallback((r: number) => {
+    const seq = Array.from({ length: r }, () => Math.floor(Math.random() * scene.colors.length));
+    setSequence(seq);
+    void playSequence(seq);
+  }, [playSequence, scene.colors.length]);
+
+  useEffect(() => { startRound(1); }, []);
+
+  const tapColor = (idx: number) => {
+    if (phase !== 'waiting') return;
+    if (idx === sequence[userIdx]) {
+      sfx.pop();
+      setLitIdx(idx);
+      window.setTimeout(() => setLitIdx(null), 200);
+      const next = userIdx + 1;
+      if (next >= sequence.length) {
+        if (round >= scene.maxRounds) {
+          sfx.gem();
+          setPhase('done');
+          if (!gemDone.current) { gemDone.current = true; onWin(true); }
+        } else {
+          sfx.match();
+          setPhase('idle');
+          window.setTimeout(() => { setRound((r) => r + 1); startRound(round + 1); }, 700);
+        }
+      } else {
+        setUserIdx(next);
+      }
+    } else {
+      sfx.wrong();
+      onLose();
+      setFlashBad(idx);
+      window.setTimeout(() => setFlashBad(null), 400);
+      window.setTimeout(() => void playSequence(sequence), 700);
+    }
+  };
+
+  return (
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-white/25 backdrop-blur-md" />
+      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        {phase === 'done' ? 'You remembered them all! ⭐' : phase === 'showing' ? '👀 Watch closely!' : `🎵 ${scene.teacher}`} <span className="ml-1 opacity-60">(Round {Math.min(round, scene.maxRounds)}/{scene.maxRounds})</span>
+      </div>
+      <div className="absolute inset-x-0 top-1/2 z-10 flex flex-wrap -translate-y-1/2 items-center justify-center gap-4 px-4 sm:gap-8">
+        {scene.colors.map((c, i) => {
+          const isLit = litIdx === i;
+          const isBad = flashBad === i;
+          return (
+            <button
+              key={c.colorWord}
+              onClick={() => tapColor(i)}
+              disabled={phase !== 'waiting'}
+              aria-label={`Tap ${c.colorWord}`}
+              className={`grid h-32 w-32 place-items-center rounded-full border-8 border-white shadow-2xl transition-all sm:h-40 sm:w-40 ${isLit ? 'scale-110 brightness-125' : isBad ? 'animate-[lep1-shake_0.4s_ease-in-out]' : phase === 'waiting' ? 'active:scale-90' : 'opacity-90'}`}
+              style={{ background: c.colorHex, boxShadow: isLit ? `0 0 40px 10px ${c.colorHex}` : undefined }}
+            >
+              <span className="text-lg font-black uppercase text-white drop-shadow" style={{ textShadow: '0 2px 6px rgba(0,0,0,0.5)' }}>{c.colorWord}</span>
+            </button>
+          );
+        })}
+      </div>
+      {phase === 'done' && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next →</button>
         </div>
       )}
     </div>

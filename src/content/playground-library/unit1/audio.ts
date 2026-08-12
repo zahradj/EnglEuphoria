@@ -489,18 +489,34 @@ export function isSpeaking(): boolean {
   return queueDepth > 0;
 }
 
+/** A few English words are spelled identically but pronounced differently
+ *  depending on tense/part of speech ("read" the present-tense verb, rhymes
+ *  with "reed," vs. "read" the past tense, rhymes with "red"). ElevenLabs
+ *  guesses from the surrounding sentence and gets this wrong often enough
+ *  on short, standalone lines — e.g. "I read a book" (present tense, the
+ *  daily-routine grammar point Welcome Town A2 actually teaches) came back
+ *  pronounced as the past tense. This curriculum only ever uses the present/
+ *  base form of these words in spoken content, so it's safe to always
+ *  rewrite them to an unambiguous phonetic spelling before they reach
+ *  ElevenLabs — this only changes what gets SPOKEN, never the on-screen
+ *  caption text, which is rendered straight from the scene data elsewhere. */
+function ttsSafe(text: string): string {
+  return text.replace(/\bread\b/g, (m) => (m === m.toUpperCase() ? 'REED' : m[0] === m[0].toUpperCase() ? 'Reed' : 'reed'));
+}
+
 /** Speak `text` as `character`. Utterances are sequenced. */
 export function speak(text: string, character: Character = 'teacher'): Promise<void> {
   if (typeof window === 'undefined') return Promise.resolve();
   const trimmed = text.trim();
   if (!trimmed) return Promise.resolve();
+  const spoken = ttsSafe(trimmed);
 
   const mySession = sessionId;
   queueDepth++;
   const job = playChain.then(async () => {
     if (mySession !== sessionId) return;
-    const k = key(character, trimmed);
-    const blob = await fetchClipBlob(k, trimmed, character);
+    const k = key(character, spoken);
+    const blob = await fetchClipBlob(k, spoken, character);
     if (mySession !== sessionId) return;
     const played = blob ? await playClipBlob(blob) : false;
     // A clip that was deliberately interrupted mid-playback (stopSpeaking()
@@ -513,7 +529,7 @@ export function speak(text: string, character: Character = 'teacher'): Promise<v
     // twice" — the clean ElevenLabs clip, cut short, then the same text
     // again in the low-quality fallback voice a beat later. Only a real
     // failure (session still valid) should trigger the fallback.
-    if (!played && mySession === sessionId) await playFallback(trimmed, character);
+    if (!played && mySession === sessionId) await playFallback(spoken, character);
   });
 
   playChain = job.catch(() => undefined).finally(() => {
@@ -532,7 +548,8 @@ export function speakOnce(text: string, character: Character = 'teacher'): Promi
 export async function prefetch(text: string, character: Character = 'teacher') {
   const trimmed = text.trim();
   if (!trimmed) return;
-  await fetchClipBlob(key(character, trimmed), trimmed, character);
+  const spoken = ttsSafe(trimmed);
+  await fetchClipBlob(key(character, spoken), spoken, character);
 }
 
 export async function safeSpeak(text: string, who: Character) {

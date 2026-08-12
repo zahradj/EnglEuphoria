@@ -146,7 +146,7 @@ export default function SlideVocabulary({ slide, hub }: Props) {
             )}
 
             {sentence && (
-              <div className="px-3 py-2.5 rounded-xl bg-black/8 w-full text-center">
+              <div className="px-3 py-2.5 rounded-xl bg-black/10 w-full text-center">
                 <span className="text-[10px] uppercase tracking-widest opacity-40 block mb-1">Example</span>
                 <span className="text-sm italic leading-snug">"{sentence}"</span>
               </div>

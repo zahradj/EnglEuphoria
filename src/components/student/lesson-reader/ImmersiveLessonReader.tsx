@@ -22,7 +22,7 @@ interface ImmersiveLessonReaderProps {
 const TRACK_GLOW: Record<string, string> = {
   kids: 'from-emerald-400/10 via-amber-300/10 to-orange-300/10',
   teens: 'from-indigo-500/10 via-purple-500/10 to-violet-400/10',
-  adults: 'from-amber-500/8 via-yellow-600/8 to-amber-700/8',
+  adults: 'from-amber-500/10 via-yellow-600/10 to-amber-700/10',
 };
 
 const TRACK_ACCENT: Record<string, string> = {

@@ -1425,7 +1425,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             const sceneSlides = [{
               id: `scene-lesson-${sceneMeta.unitNumber}-${sceneMeta.lessonNumber}`,
               type: 'playground_scene',
-              sceneLessonRef: { unitNumber: sceneMeta.unitNumber, lessonNumber: sceneMeta.lessonNumber },
+              sceneLessonRef: { unitNumber: sceneMeta.unitNumber, lessonNumber: sceneMeta.lessonNumber, contentFormat: sceneMeta.contentFormat },
             }];
             setRawSlides(sceneSlides);
             await updateSharedDisplay({ lessonSlides: sceneSlides, lessonTitle: title, embeddedUrl: null });

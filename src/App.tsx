@@ -147,8 +147,14 @@ const PlayLesson4 = lazy(() => import("./pages/playground-scene/PlayLesson4"));
 const PlayLesson5 = lazy(() => import("./pages/playground-scene/PlayLesson5"));
 const PlayLesson6 = lazy(() => import("./pages/playground-scene/PlayLesson6"));
 const PlayUnit2Lesson1 = lazy(() => import("./pages/playground-scene/PlayUnit2Lesson1"));
+const PlayUnit2Lesson2 = lazy(() => import("./pages/playground-scene/PlayUnit2Lesson2"));
+const PlayUnit2Lesson3 = lazy(() => import("./pages/playground-scene/PlayUnit2Lesson3"));
+const PlayUnit2Lesson4 = lazy(() => import("./pages/playground-scene/PlayUnit2Lesson4"));
+const PlayUnit2Lesson5 = lazy(() => import("./pages/playground-scene/PlayUnit2Lesson5"));
+const PlayUnit2Lesson6 = lazy(() => import("./pages/playground-scene/PlayUnit2Lesson6"));
 const PlayWelcomeTown1 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown1"));
 const PlayWelcomeTown2 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown2"));
+const PlayA2Unit1Lesson1 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson1"));
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
 const AcademyClassroom = lazy(() => import("./pages/AcademyClassroom"));
@@ -274,6 +280,31 @@ const App = () => {
                           <Suspense fallback={<LoadingFallback />}><PlayUnit2Lesson1 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
+                      <Route path="/playground-scene/unit-2-lesson-2" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit2Lesson2 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-2-lesson-3" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit2Lesson3 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-2-lesson-4" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit2Lesson4 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-2-lesson-5" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit2Lesson5 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-2-lesson-6" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit2Lesson6 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
                       {/* A1 tier — Welcome Town, Unit 1 Lesson 1 ("Hello, Class!"). */}
                       <Route path="/playground-scene/welcome-town-lesson-1" element={
                         <ImprovedProtectedRoute>
@@ -284,6 +315,12 @@ const App = () => {
                       <Route path="/playground-scene/welcome-town-lesson-2" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayWelcomeTown2 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A2 tier — Welcome Town, Unit 1 Lesson 1 ("My Day"). */}
+                      <Route path="/playground-scene/a2-unit-1-lesson-1" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayA2Unit1Lesson1 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* Standalone Playground Library — deliberately outside the Creator Studio
