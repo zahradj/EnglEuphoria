@@ -25,6 +25,7 @@ import {
 import { Loader2, Send, ExternalLink, Search, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import { extractEdgeError } from '@/lib/extractEdgeError';
 
 type Stage = 'pending' | 'invited' | 'scheduled' | 'reviewed';
 
@@ -146,14 +147,17 @@ export function RecruitmentTable() {
       const { data, error } = await supabase.functions.invoke('approve-teacher', {
         body: { applicationId: row.id, email: row.email, firstName: row.first_name, lastName: row.last_name },
       });
-      if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
+      if (error || (data as any)?.error) {
+        const msg = await extractEdgeError({ error, data, fallback: 'Failed to approve teacher' });
+        throw new Error(msg);
+      }
       toast.success('Teacher approved & invited! 🎉', {
         description: `${row.first_name || row.email} will receive an email to set their password.`,
       });
       await load();
     } catch (e: any) {
-      toast.error('Failed to approve teacher', { description: e?.message });
+      console.error('[RecruitmentTable] approve failed:', e);
+      toast.error('Failed to approve teacher', { description: e?.message, duration: 15000 });
     } finally {
       setDecisionBusyId(null);
     }
@@ -166,8 +170,10 @@ export function RecruitmentTable() {
       const { data, error } = await supabase.functions.invoke('reject-teacher-application', {
         body: { applicationId: rejectTarget.id, reason: rejectionReason || null },
       });
-      if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
+      if (error || (data as any)?.error) {
+        const msg = await extractEdgeError({ error, data, fallback: 'Failed to reject application' });
+        throw new Error(msg);
+      }
       if ((data as any)?.emailSent === false) {
         toast.warning('Rejected, but the notification email failed to send.', { description: (data as any).emailError });
       } else {
@@ -177,7 +183,8 @@ export function RecruitmentTable() {
       setRejectionReason('');
       await load();
     } catch (e: any) {
-      toast.error('Failed to reject application', { description: e?.message });
+      console.error('[RecruitmentTable] reject failed:', e);
+      toast.error('Failed to reject application', { description: e?.message, duration: 15000 });
     } finally {
       setDecisionBusyId(null);
     }
