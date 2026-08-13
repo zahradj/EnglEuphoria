@@ -78,9 +78,10 @@ Deno.serve(async (req) => {
     for (const to of emails) {
       const { error } = await admin.functions.invoke('send-transactional-email', {
         body: {
-          template: 'parent-unit-report',
-          to,
-          data: {
+          templateName: 'parent-unit-report',
+          recipientEmail: to,
+          idempotencyKey: `parent-unit-report-${body.share_token}-${to}`,
+          templateData: {
             studentName: body.student_name,
             unitTitle: body.unit_title,
             stars: body.stars,
@@ -91,7 +92,8 @@ Deno.serve(async (req) => {
         },
         headers: internalAuthHeaders(),
       })
-      if (!error) sent++
+      if (error) console.error(`[send-parent-unit-report] failed to send to ${to}:`, error);
+      else sent++
     }
 
     return new Response(JSON.stringify({ sent }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
