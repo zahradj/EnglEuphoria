@@ -17,12 +17,15 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
   Table, TableHeader, TableBody, TableRow, TableHead, TableCell,
 } from '@/components/ui/table';
-import { Loader2, Send, ExternalLink, Search } from 'lucide-react';
+import { Loader2, Send, ExternalLink, Search, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import { extractEdgeError } from '@/lib/extractEdgeError';
 
 type Stage = 'pending' | 'invited' | 'scheduled' | 'reviewed';
 
@@ -63,6 +66,9 @@ export function RecruitmentTable() {
   const [invitingId, setInvitingId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [stageFilter, setStageFilter] = useState<Stage | 'all'>('all');
+  const [decisionBusyId, setDecisionBusyId] = useState<string | null>(null);
+  const [rejectTarget, setRejectTarget] = useState<AppRow | null>(null);
+  const [rejectionReason, setRejectionReason] = useState('');
 
   async function load() {
     setLoading(true);
@@ -128,6 +134,59 @@ export function RecruitmentTable() {
       toast.error(e?.message ?? 'Failed to send invite');
     } finally {
       setInvitingId(null);
+    }
+  }
+
+  // Final decision on a scheduled interview: accept = hire, reject = decline.
+  // Both route through server-side edge functions rather than calling
+  // send-transactional-email directly — that function requires an internal
+  // secret no browser call can safely hold.
+  async function approve(row: AppRow) {
+    setDecisionBusyId(row.id);
+    try {
+      const { data, error } = await supabase.functions.invoke('approve-teacher', {
+        body: { applicationId: row.id, email: row.email, firstName: row.first_name, lastName: row.last_name },
+      });
+      if (error || (data as any)?.error) {
+        const msg = await extractEdgeError({ error, data, fallback: 'Failed to approve teacher' });
+        throw new Error(msg);
+      }
+      toast.success('Teacher approved & invited! 🎉', {
+        description: `${row.first_name || row.email} will receive an email to set their password.`,
+      });
+      await load();
+    } catch (e: any) {
+      console.error('[RecruitmentTable] approve failed:', e);
+      toast.error('Failed to approve teacher', { description: e?.message, duration: 15000 });
+    } finally {
+      setDecisionBusyId(null);
+    }
+  }
+
+  async function confirmReject() {
+    if (!rejectTarget) return;
+    setDecisionBusyId(rejectTarget.id);
+    try {
+      const { data, error } = await supabase.functions.invoke('reject-teacher-application', {
+        body: { applicationId: rejectTarget.id, reason: rejectionReason || null },
+      });
+      if (error || (data as any)?.error) {
+        const msg = await extractEdgeError({ error, data, fallback: 'Failed to reject application' });
+        throw new Error(msg);
+      }
+      if ((data as any)?.emailSent === false) {
+        toast.warning('Rejected, but the notification email failed to send.', { description: (data as any).emailError });
+      } else {
+        toast.success('Application rejected', { description: `${rejectTarget.first_name || rejectTarget.email} has been notified.` });
+      }
+      setRejectTarget(null);
+      setRejectionReason('');
+      await load();
+    } catch (e: any) {
+      console.error('[RecruitmentTable] reject failed:', e);
+      toast.error('Failed to reject application', { description: e?.message, duration: 15000 });
+    } finally {
+      setDecisionBusyId(null);
     }
   }
 
@@ -296,6 +355,31 @@ export function RecruitmentTable() {
                             Resend
                           </Button>
                         )}
+                        {stage === 'scheduled' && (
+                          <>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="text-destructive hover:bg-destructive/10"
+                              disabled={decisionBusyId === r.id}
+                              onClick={() => { setRejectTarget(r); setRejectionReason(''); }}
+                            >
+                              <X className="h-3.5 w-3.5 mr-1" />
+                              Reject
+                            </Button>
+                            <Button
+                              size="sm"
+                              className="bg-green-600 hover:bg-green-700"
+                              disabled={decisionBusyId === r.id}
+                              onClick={() => approve(r)}
+                            >
+                              {decisionBusyId === r.id
+                                ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1" />
+                                : <Check className="h-3.5 w-3.5 mr-1" />}
+                              Accept
+                            </Button>
+                          </>
+                        )}
                       </TableCell>
                     </TableRow>
                   );
@@ -305,6 +389,32 @@ export function RecruitmentTable() {
           </div>
         )}
       </CardContent>
+
+      <Dialog open={!!rejectTarget} onOpenChange={(open) => { if (!open) setRejectTarget(null); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reject Application</DialogTitle>
+            <DialogDescription>
+              Please provide a reason for rejecting {rejectTarget ? (rejectTarget.first_name || rejectTarget.email) : ''}'s application.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            value={rejectionReason}
+            onChange={(e) => setRejectionReason(e.target.value)}
+            placeholder="Reason for rejection (optional)..."
+            rows={4}
+          />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setRejectTarget(null)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmReject} disabled={!!decisionBusyId}>
+              {decisionBusyId ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <X className="h-4 w-4 mr-2" />}
+              Confirm Rejection
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }

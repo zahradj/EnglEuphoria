@@ -198,7 +198,7 @@ export function useDailyPersonalizedLesson() {
                   .eq('id', user.id)
                   .maybeSingle();
 
-                await supabase.functions.invoke('notify-student-lesson', {
+                const { error: notifyError } = await supabase.functions.invoke('notify-student-lesson', {
                   body: {
                     student_email: user.email,
                     student_name: profileData?.full_name || user.email,
@@ -207,11 +207,16 @@ export function useDailyPersonalizedLesson() {
                   },
                 });
 
-                // Mark email as sent
-                await supabase
-                  .from('daily_lessons')
-                  .update({ email_sent: true, email_sent_at: new Date().toISOString() })
-                  .eq('id', lessonRow.id);
+                if (notifyError) {
+                  // Leave email_sent=false so the next load retries instead of
+                  // silently recording a send that never actually happened.
+                  console.warn('Lesson email notification failed:', notifyError);
+                } else {
+                  await supabase
+                    .from('daily_lessons')
+                    .update({ email_sent: true, email_sent_at: new Date().toISOString() })
+                    .eq('id', lessonRow.id);
+                }
               }
             } catch (emailErr) {
               // Non-fatal: log but don't disrupt lesson loading

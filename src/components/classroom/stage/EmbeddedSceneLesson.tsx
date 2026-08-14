@@ -9,6 +9,8 @@ interface EmbeddedSceneLessonProps {
   lessonNumber: number;
   roomId: string;
   role: 'teacher' | 'student';
+  /** Whether the student may play the active scene's game (default locked/watch-only). */
+  activityUnlocked?: boolean;
   /** When true, suppress the internal Back/Next/counter bar — the caller
    *  renders its own nav bar outside this component's frame instead. */
   hideInternalNav?: boolean;
@@ -24,7 +26,7 @@ interface EmbeddedSceneLessonProps {
  */
 export const EmbeddedSceneLesson = forwardRef<PlayUnitLessonHandle, EmbeddedSceneLessonProps>(
   function EmbeddedSceneLesson(
-    { unitNumber, lessonNumber, roomId, role, hideInternalNav, onNavState, persistedSceneIdx, onSceneIdxPersist },
+    { unitNumber, lessonNumber, roomId, role, activityUnlocked, hideInternalNav, onNavState, persistedSceneIdx, onSceneIdxPersist },
     ref,
   ) {
     const scenes = getSceneLesson(unitNumber, lessonNumber);
@@ -50,6 +52,7 @@ export const EmbeddedSceneLesson = forwardRef<PlayUnitLessonHandle, EmbeddedScen
           lessonNumber={lessonNumber}
           role={role}
           roomId={roomId}
+          activityUnlocked={activityUnlocked}
           hideInternalNav={hideInternalNav}
           onNavState={onNavState}
           persistedSceneIdx={persistedSceneIdx}

@@ -183,6 +183,8 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
               ...(meta.lessonNumber != null ? { slot_lesson_number: meta.lessonNumber } : {}),
               target_system: targetSystem,
               ai_metadata: mergedMeta,
+              ...(meta.unitNumber != null ? { slot_unit_number: String(meta.unitNumber) } : {}),
+              ...(meta.lessonNumber != null ? { slot_lesson_number: String(meta.lessonNumber) } : {}),
             })
             .eq('id', currentLessonId);
           if (error) throw error;
@@ -217,6 +219,8 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
             is_published: meta.publish,
             created_by: userId,
             ai_metadata: { hub, cefr_level: cefr ?? undefined, slideCount: slides.length, ...(meta.blueprint ? { lesson_blueprint: meta.blueprint } : {}), ...(qaReport ? { qa_report: qaReport, quality_score: qaReport.overall ?? null } : {}), ...(meta.criticResult ? { critic_verdict: meta.criticResult.verdict, critic_score: meta.criticResult.overall, critic_scored_at: new Date().toISOString() } : {}) },
+            ...(meta.unitNumber != null ? { slot_unit_number: String(meta.unitNumber) } : {}),
+            ...(meta.lessonNumber != null ? { slot_lesson_number: String(meta.lessonNumber) } : {}),
           } as any)
           .select('id')
           .single();

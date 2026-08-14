@@ -158,6 +158,7 @@ const PlayWelcomeTown1 = lazy(() => import("./pages/playground-scene/PlayWelcome
 const PlayWelcomeTown2 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown2"));
 const PlayA2Unit1Lesson1 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson1"));
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
+const PlaygroundLibraryPublic = lazy(() => import("./pages/playground-library/PlaygroundLibraryPublic"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
 const AcademyClassroom = lazy(() => import("./pages/AcademyClassroom"));
 const AcademyCreator = lazy(() => import("./pages/AcademyCreator"));
@@ -341,6 +342,11 @@ const App = () => {
                         <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
                           <Suspense fallback={<LoadingFallback />}><PlaygroundLibraryPage /></Suspense>
                         </ImprovedProtectedRoute>
+                      } />
+                      {/* Public, read-only mirror of the library above — anyone with the
+                          link can browse published lessons, no account required. */}
+                      <Route path="/library/playground" element={
+                        <Suspense fallback={<LoadingFallback />}><PlaygroundLibraryPublic /></Suspense>
                       } />
                       <Route path="/play/:lessonId" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />
                       <Route path="/play" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />

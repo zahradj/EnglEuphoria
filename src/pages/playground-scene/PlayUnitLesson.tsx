@@ -46,6 +46,8 @@ interface PlayUnitLessonProps {
    *  (the dashboard launcher), where navigation stays fully local. */
   role?: 'teacher' | 'student';
   roomId?: string;
+  /** Whether the student may play the active scene's game (default locked/watch-only). Ignored for teacher/solo play. */
+  activityUnlocked?: boolean;
   /** When true, the internal Back/Next/counter bar is not rendered — the
    *  caller renders its own nav bar outside this component's frame instead,
    *  driven by onNavState + the exposed goNext/goBack ref handle. */
@@ -64,7 +66,7 @@ interface PlayUnitLessonProps {
 }
 
 const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(function PlayUnitLesson(
-  { scenes, sessionKey, embedded = false, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist },
+  { scenes, sessionKey, embedded = false, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, activityUnlocked, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist },
   ref,
 ) {
   const navigate = useNavigate();
@@ -427,6 +429,9 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
             gemsCollected={gems}
             heartsRemaining={hearts}
             lessonNumber={lessonNumber}
+            role={role}
+            roomId={roomId}
+            activityUnlocked={activityUnlocked}
           />
           {isSynced && role === 'student' && !effectiveUnlocked && (
             <div className="absolute inset-0 z-40 cursor-not-allowed" aria-hidden="true">

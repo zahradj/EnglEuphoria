@@ -158,23 +158,33 @@ const StudentSignUp = () => {
         console.error('Failed to upsert student_profiles:', profileError);
       }
 
-      // Fire-and-forget welcome / admin notification emails.
+      // Fire-and-forget welcome / admin notification emails. `.catch()` alone
+      // is not enough here — supabase-js resolves (doesn't reject) on HTTP
+      // error statuses like the function's own 403 self-auth check, so a
+      // failure was previously swallowed with zero visibility. Check the
+      // resolved `error` too so a broken send actually surfaces in logs.
       void supabase.functions
         .invoke('send-user-emails', {
           body: {
             to: data.email,
             type: 'student-welcome',
-            data: { userName: data.fullName, baseUrl: window.location.origin },
+            data: { userName: data.fullName, baseUrl: window.location.origin, userId, hub: assignment.hub_type },
           },
         })
-        .catch(() => undefined);
+        .then(({ error: sendError }) => {
+          if (sendError) console.error('[StudentSignUp] Welcome email failed to send:', sendError);
+        })
+        .catch((err) => console.error('[StudentSignUp] Welcome email invoke threw:', err));
       void supabase.functions
         .invoke('notify-admin-new-student', {
           body: {
             record: { id: userId, email: data.email, full_name: data.fullName, role: 'student' },
           },
         })
-        .catch(() => undefined);
+        .then(({ error: notifyError }) => {
+          if (notifyError) console.error('[StudentSignUp] Admin notification failed to send:', notifyError);
+        })
+        .catch((err) => console.error('[StudentSignUp] Admin notification invoke threw:', err));
 
       toast({
         title: '🎉 Welcome to Engleuphoria!',

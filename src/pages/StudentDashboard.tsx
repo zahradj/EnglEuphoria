@@ -106,7 +106,7 @@ const StudentDashboard = () => {
   const [studentProfile, setStudentProfile] = useState<any>(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [systemId, setSystemId] = useState<SystemId | null>(null);
-  const { studentLevel, hubReady } = useStudentLevel();
+  const { studentLevel, hubReady, refetch: refetchStudentLevel } = useStudentLevel();
   const { resolvedTheme } = useThemeMode();
   const isDark = resolvedTheme === 'dark';
   const navigate = useNavigate();
@@ -270,7 +270,7 @@ const StudentDashboard = () => {
       <PlacementGatekeeper
         studentLevel={studentLevel}
         studentName={studentName}
-        onComplete={() => window.location.reload()}
+        onComplete={() => { void refetchStudentLevel(); }}
       >
       <SidebarHoverShell>
         <div className="flex min-h-dvh w-full relative overflow-hidden animate-fade-in">

@@ -222,8 +222,10 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     stageMode,
     drawingEnabled,
     iframeUnlocked,
+    activityUnlocked,
     setCurrentSlideIndex,
     setIframeUnlocked,
+    setActivityUnlocked,
     updateSlide,
     updateTool,
     setStudentCanDraw,
@@ -702,6 +704,12 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     return homeworkSlides.length ? [...base, ...homeworkSlides] : base;
   }, [syncedLessonSlides, slides, initialSlides, hubType, syncedLessonTitle, lessonTitle]);
   const activeLessonTitle = syncedLessonTitle || lessonTitle;
+
+  // Whether the unified stage is currently showing an embedded Playground
+  // scene lesson (vs. a regular slide deck) — gates the "Unlock Student
+  // Activity" dock toggle. Mirrors MainStage's own sceneLessonRef derivation.
+  const isSceneLessonOnStage =
+    hubType === 'playground' && stageMode === 'slide' && !!(displayedSlides as any)?.[0]?.sceneLessonRef;
 
   const homeworkTimelineSyncedRef = React.useRef(false);
   useEffect(() => {
@@ -1264,6 +1272,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             userName={teacherName}
             role="teacher"
             iframeUnlocked={iframeUnlocked}
+            activityUnlocked={activityUnlocked}
             rawSlides={displayedSlides}
             hubType={hubType}
             customStage={customStage}
@@ -1307,6 +1316,9 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             onClearCanvas={handleClearCanvas}
             iframeUnlocked={iframeUnlocked}
             onToggleIframeUnlock={setIframeUnlocked}
+            activityUnlocked={activityUnlocked}
+            onToggleActivityUnlock={setActivityUnlocked}
+            isSceneLessonActive={isSceneLessonOnStage}
             onGiveStar={handleGiveStar}
             starCount={studentStars}
 
