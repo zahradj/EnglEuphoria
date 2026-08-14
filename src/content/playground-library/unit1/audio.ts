@@ -588,6 +588,30 @@ const NAME_CLIP: Record<string, string> = Object.fromEntries(
   ALPHABET.map((l) => [l, `/lep1/audio/letters/name-${l}.m4a`]),
 );
 
+// Digraph/blend sounds from the same phonics-master recordings — not used by any
+// lesson yet (every letter taught so far is a single straight-line letter), but
+// wired up so a future digraph lesson (SH/TH/CH/WH/AR/AU/ER/ING/OU) can call
+// playLetterPhonic('sh') exactly like a single letter, no separate API needed.
+for (const pair of ['sh', 'th', 'ch', 'wh', 'ar', 'au', 'er', 'ing', 'ou']) {
+  PHONIC_CLIP[pair] = `/lep1/audio/letters/phon-${pair}.ogg`;
+}
+
+// Long-vowel variants (phonics-master's double-underscore recordings), kept under
+// a distinct key since e.g. 'a' is already the SHORT /æ/ sound above.
+const LONG_VOWEL_CLIP: Record<string, string> = Object.fromEntries(
+  ['a', 'e', 'i', 'o', 'u', 'oo'].map((v) => [v, `/lep1/audio/letters/phon-${v}-long.ogg`]),
+);
+
+// Real recorded encouragement/instruction phrases from the same phonics-master
+// archive, for scenes that currently rely on TTS or sfx-only feedback.
+const PHRASE_CLIP: Record<string, string> = {
+  'cat-blend': '/lep1/audio/phrases/cat-blend.ogg',
+  'nice-work': '/lep1/audio/phrases/nice-work.ogg',
+  'try-again': '/lep1/audio/phrases/try-again.ogg',
+  'spell-the-word': '/lep1/audio/phrases/spell-the-word.ogg',
+  'you-spelled': '/lep1/audio/phrases/you-spelled.ogg',
+};
+
 // Spoken-out phoneme fallback text, used only if a letter's recorded clip
 // is missing AND the ElevenLabs call also fails.
 const PHONEME_SOUND: Record<string, string> = {
@@ -634,4 +658,31 @@ export async function playLetterName(letter: string): Promise<void> {
     }
   }
   await safeSpeak(letter.toUpperCase(), 'teacher');
+}
+
+export async function playLongVowelPhonic(vowel: string): Promise<void> {
+  const v = vowel.toLowerCase();
+  const clip = LONG_VOWEL_CLIP[v];
+  if (clip) {
+    try {
+      await playClip(clip);
+      return;
+    } catch {
+      /* fall through to TTS */
+    }
+  }
+  await safeSpeak(`${vowel}, ${vowel}`, 'pip');
+}
+
+export async function playPhonicsPhrase(key: keyof typeof PHRASE_CLIP, fallbackText: string): Promise<void> {
+  const clip = PHRASE_CLIP[key];
+  if (clip) {
+    try {
+      await playClip(clip);
+      return;
+    } catch {
+      /* fall through to TTS */
+    }
+  }
+  await safeSpeak(fallbackText, 'pip');
 }
