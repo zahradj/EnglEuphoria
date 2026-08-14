@@ -158,6 +158,7 @@ const PlayWelcomeTown1 = lazy(() => import("./pages/playground-scene/PlayWelcome
 const PlayWelcomeTown2 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown2"));
 const PlayA2Unit1Lesson1 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson1"));
 const PlayA2Unit1Lesson2 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson2"));
+const PlayA2Unit1Lesson3 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson3"));
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundLibraryPublic = lazy(() => import("./pages/playground-library/PlaygroundLibraryPublic"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
@@ -341,6 +342,12 @@ const App = () => {
                       <Route path="/playground-scene/a2-unit-1-lesson-2" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayA2Unit1Lesson2 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A2 tier — Welcome Town, Unit 1 Lesson 3 ("Yesterday"). */}
+                      <Route path="/playground-scene/a2-unit-1-lesson-3" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayA2Unit1Lesson3 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* Standalone Playground Library — deliberately outside the Creator Studio

@@ -716,3 +716,235 @@ export const LESSON_A2U1L2_SCENES: Scene[] = [
     line: 'You did it! You know the days of the week, and you can say how often you do things! \u{1F3C6} Tonight, tell your family what you ALWAYS do every week — and try reading an “ay” word together!',
   },
 ];
+
+/* =============================================================================
+ * Welcome Town — A2 Unit 1 Lesson 3: "Yesterday"
+ *
+ * Third rung on the same present-simple -> present+frequency -> PAST SIMPLE
+ * tense ladder: L1 taught daily-routine present simple in isolation, L2
+ * fused it with frequency adverbs, L3 fuses the exact same verb set again
+ * with the unit's first past-tense grammar — never re-teaching "wake up /
+ * brush teeth / play / read / sleep" as vocabulary, only ever as the
+ * content the new grammar operates on. Genuinely new content: past simple
+ * (regular -ed vs. irregular forms) and "yesterday" as a time marker.
+ *
+ * Deliberately reuses L1's own art wholesale rather than generating
+ * anything new — bgMorning, bgBathroom, bgKitchen, bgStreet, bgPlayground,
+ * bgBedroomNight, bgBedroomAsleep are the exact same images the "My Day"
+ * storybook used. That's not corner-cutting: the whole lesson's premise is
+ * Pip looking back at a day that already happened, so retelling it over
+ * the identical pictures — now in past tense — is the more honest choice
+ * than painting a second, different-looking "yesterday."
+ *
+ * No new scene kind this lesson, on purpose — L2 already added
+ * frequency-ladder; reaching for a new mechanic every single lesson would
+ * turn "unique" into "gimmicky." Regular-vs-irregular is taught the same
+ * way L1 taught its three-round "guess the feeling" sequence: consecutive
+ * `choice` scenes, each anchored on the routine's own established image
+ * (bgStreet for "walked," bgKitchen for "ate"), which is the actual novel
+ * part — using the pictures the student already associates with each verb
+ * as the retrieval cue, not a flashcard word floating on nothing.
+ *
+ * Part 2 continues the long-vowel reading arc L1 (silent e) and L2 (ay)
+ * built: "ee" (see, tree, sleep) — bridged from this lesson's own "slept"
+ * vocabulary. The review-choice round now has to tell THREE spelling
+ * patterns apart (silent-e, ay, ee), one distractor per prior lesson, so
+ * it actually reviews the whole arc instead of only this lesson's slice.
+ * ========================================================================= */
+
+export const LESSON_A2U1L3_TITLE = 'Yesterday';
+export const LESSON_A2U1L3_OBJECTIVE = 'Part 1: Talk about the past using past simple with daily-routine verbs, telling regular -ed verbs (walked, played) apart from irregular ones (woke up, ate, slept), and use "yesterday" as a time marker. Part 2: Read the long-vowel "ee" pattern (see, tree, sleep) and a short story.';
+
+export const LESSON_A2U1L3_SCENES: Scene[] = [
+  { id: 'a2u1l3-title', kind: 'title-card', bg: bgMorning, level: 'A2', unit: 'Unit 1', lessonLabel: 'Lesson 3', title: 'Yesterday', subtitle: 'Let’s remember what already happened!', cta: '\u{23EA} LET’S GO!' },
+
+  {
+    id: 'a2u1l3-intro', kind: 'cinematic', bg: bgMorning, title: 'Yesterday', subtitle: 'A day that already happened', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Hi! Do you remember my day? Today I want to tell you about YESTERDAY!' },
+      { who: 'pip', line: 'Yesterday is a day that already happened. Let’s remember it together!' },
+    ],
+    cta: '\u{23EA} LET’S GO!',
+  },
+
+  {
+    // New grammar model — same Marigold-elicits/Pip-answers/each-line-
+    // repeated shape as L1's and L2's own model roleplays, this time
+    // eliciting past forms of L1's own routine verbs instead of new ones.
+    id: 'a2u1l3-model-past', kind: 'roleplay', bg: bgMorning, teacher: 'Listen to Pip remember yesterday, then repeat each line.', cast: ['marigold', 'pip'],
+    script: [
+      { who: 'marigold', line: 'Pip, what did you do yesterday morning?', repeat: true },
+      { who: 'pip', line: 'Yesterday, I woke up and I brushed my teeth!', repeat: true },
+      { who: 'marigold', line: 'Did you walk to school?', repeat: true },
+      { who: 'pip', line: 'Yes! I walked to school, and I played with my friends.', repeat: true },
+      { who: 'marigold', line: 'What did you do at night?', repeat: true },
+      { who: 'pip', line: 'I read a book, and then I slept!', repeat: true },
+    ],
+  },
+
+  {
+    id: 'a2u1l3-choice-tense', kind: 'choice', bg: bgMorning, who: 'marigold', teacher: 'Listen carefully, then tap the right word!',
+    prompt: 'Which word means it already happened — YESTERDAY?',
+    options: [
+      { label: 'Walked', emoji: '\u{1F45F}', correct: true },
+      { label: 'Walk', emoji: '\u{1F6B6}' },
+      { label: 'Walking', emoji: '\u{1F3C3}' },
+    ],
+  },
+
+  {
+    // Four consecutive choice rounds (mirrors L1's own "guess the feeling"
+    // sequence) — each anchored on the exact background L1 already taught
+    // that verb against, so the picture itself is the retrieval cue for
+    // regular vs. irregular, not a bare word.
+    id: 'a2u1l3-reg-walked', kind: 'choice', bg: bgStreet, who: 'marigold', teacher: 'Listen, then tap the right answer!',
+    prompt: '“Walked” — is this REGULAR (-ed) or IRREGULAR?',
+    options: [
+      { label: 'Regular', emoji: '\u{2705}', correct: true },
+      { label: 'Irregular', emoji: '\u{2753}' },
+    ],
+  },
+  {
+    id: 'a2u1l3-irr-wokeup', kind: 'choice', bg: bgMorning, who: 'marigold', teacher: 'Listen, then tap the right answer!',
+    prompt: '“Woke up” — is this REGULAR (-ed) or IRREGULAR?',
+    options: [
+      { label: 'Irregular', emoji: '\u{2753}', correct: true },
+      { label: 'Regular', emoji: '\u{2705}' },
+    ],
+  },
+  {
+    id: 'a2u1l3-reg-played', kind: 'choice', bg: bgPlayground, who: 'marigold', teacher: 'Listen, then tap the right answer!',
+    prompt: '“Played” — is this REGULAR (-ed) or IRREGULAR?',
+    options: [
+      { label: 'Regular', emoji: '\u{2705}', correct: true },
+      { label: 'Irregular', emoji: '\u{2753}' },
+    ],
+  },
+  {
+    id: 'a2u1l3-irr-ate', kind: 'choice', bg: bgKitchen, who: 'marigold', teacher: 'Listen, then tap the right answer!',
+    prompt: '“Ate” — is this REGULAR (-ed) or IRREGULAR?',
+    options: [
+      { label: 'Irregular', emoji: '\u{2753}', correct: true },
+      { label: 'Regular', emoji: '\u{2705}' },
+    ],
+  },
+
+  {
+    id: 'a2u1l3-sentence-walked', kind: 'drag-match', bg: bgStreet, showBlanks: true, teacher: 'Drag the words to build the sentence: Yesterday, I walked to school.',
+    items: [
+      { label: 'Yesterday', color: '#FE6A2F', who: 'pip', targetLeft: '25%', targetTop: '20%' },
+      { label: 'I walked', color: '#FE6A2F', who: 'pip', targetLeft: '50%', targetTop: '20%' },
+      { label: 'to school', color: '#FE6A2F', who: 'pip', targetLeft: '75%', targetTop: '20%' },
+    ],
+  },
+  {
+    id: 'a2u1l3-sentence-slept', kind: 'drag-match', bg: bgBedroomAsleep, showBlanks: true, teacher: 'Drag the words to build the sentence: Last night, I slept well.',
+    items: [
+      { label: 'Last night', color: '#B85CD1', who: 'pip', targetLeft: '25%', targetTop: '20%' },
+      { label: 'I slept', color: '#B85CD1', who: 'pip', targetLeft: '50%', targetTop: '20%' },
+      { label: 'well', color: '#B85CD1', who: 'pip', targetLeft: '75%', targetTop: '20%' },
+    ],
+  },
+
+  {
+    id: 'a2u1l3-join-stage', kind: 'join-stage', bg: bgBedroomNight, teacher: 'Your turn! Tell me about yesterday.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'What did you eat yesterday?' },
+      { who: 'student', line: 'Yesterday, I ate ______.' },
+      { who: 'pip', line: 'What did you play yesterday?' },
+      { who: 'student', line: 'Yesterday, I played ______.' },
+      { who: 'pip', line: 'Great! Now you can talk about yesterday!' },
+    ],
+  },
+
+  {
+    id: 'a2u1l3-storybook', kind: 'flipbook', bg: bgWide, title: 'Pip’s Yesterday',
+    pages: [
+      { who: 'pip', img: bgMorning, text: 'Yesterday morning, Pip woke up and stretched.' },
+      { who: 'pip', img: bgBathroom, text: 'He brushed his teeth. Scrub, scrub, scrub!' },
+      { who: 'pip', img: bgKitchen, text: 'He ate his breakfast. Yum, yum!' },
+      { who: 'pip', img: bgStreet, text: 'He walked to school with his backpack.' },
+      { who: 'pip', img: bgPlayground, text: 'At recess, he played with Mia and Leo.' },
+      { who: 'pip', img: bgBedroomNight, text: 'At night, he read his favorite book.' },
+      { who: 'pip', img: bgBedroomAsleep, text: 'Then he slept. What a busy yesterday!' },
+    ],
+    checkpoints: [
+      { afterPage: 2, who: 'pip', question: 'What did Pip eat?', options: ['Breakfast', 'Dinner', 'Nothing'], answer: 'Breakfast' },
+      { afterPage: 4, who: 'pip', question: 'Who did Pip play with?', options: ['No one', 'Mia and Leo', 'Miss Marigold'], answer: 'Mia and Leo' },
+    ],
+  },
+
+  { id: 'a2u1l3-break', kind: 'title-card', bg: bgWide, level: 'A2', unit: 'Unit 1', lessonLabel: 'Break Time', title: 'Great Job!', subtitle: 'Stretch, get some water, then come back for Part 2!', cta: '\u{1F938} I’m Ready!' },
+
+  /* =========================== Part 2: Reading — See, Tree, Sleep ========
+   * The long-vowel 'ee' spelling — the next step on A2's reading-fluency
+   * arc after L1's silent-e and L2's 'ay', bridged from this lesson's own
+   * "slept" vocabulary rather than an unrelated phonics topic. */
+
+  { id: 'a2u1l3-part2-title', kind: 'title-card', bg: bgBedroomNight, level: 'A2', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time! See, Tree, Sleep', subtitle: 'Two letters, one long sound', cta: '\u{1F4D6} LET’S READ!' },
+
+  {
+    id: 'a2u1l3-ee-intro', kind: 'cinematic', bg: bgBedroomNight, title: 'The EE Sound', subtitle: 'Two letters that make one long sound', narrator: 'marigold',
+    script: [
+      { who: 'marigold', line: 'Look at the word “see.” Two letters, E and E, together make one long E sound!' },
+      { who: 'marigold', line: 'Listen: s-ee, see! Now try “tree” and “sleep” — same “ee” sound!' },
+    ],
+    cta: 'Try it!',
+  },
+  {
+    id: 'a2u1l3-wordbuild-see', kind: 'word-build', bg: bgBedroomNight, teacher: 'Complete the word: S_E',
+    rounds: [{ word: 'SEE', blankIndex: 1, answer: 'E', choices: ['E', 'A', 'O'], emoji: '\u{1F440}' }],
+  },
+  {
+    id: 'a2u1l3-wordbuild-tree', kind: 'word-build', bg: bgBedroomNight, teacher: 'Complete the word: TR_E',
+    rounds: [{ word: 'TREE', blankIndex: 2, answer: 'E', choices: ['E', 'A', 'I'], emoji: '\u{1F333}' }],
+  },
+  {
+    id: 'a2u1l3-wordbuild-sleep', kind: 'word-build', bg: bgBedroomNight, teacher: 'Complete the word: SL_P',
+    rounds: [{ word: 'SLEEP', blankIndex: 3, answer: 'E', choices: ['E', 'A', 'O'], emoji: '\u{1F634}' }],
+  },
+
+  {
+    id: 'a2u1l3-reading-story', kind: 'flipbook', bg: bgPlayground, title: 'Leo Climbs a Tree',
+    pages: [
+      { who: 'leo', img: bgPlayground, text: 'Leo sees a big, tall tree.' },
+      { who: 'leo', img: bgPlayground, text: '“I want to climb the tree!” says Leo.' },
+      { who: 'leo', img: bgPlayground, text: 'Leo climbs up and looks at everything. What a great day!' },
+      { who: 'leo', img: bgBedroomAsleep, text: 'After playing, Leo is tired. He wants to sleep.' },
+    ],
+    checkpoints: [
+      { afterPage: 0, who: 'leo', question: 'What does Leo see?', options: ['A book', 'A tree', 'A kite'], answer: 'A tree' },
+      { afterPage: 2, who: 'leo', question: 'What does Leo do in the tree?', options: ['He sleeps', 'He climbs and looks around', 'He eats'], answer: 'He climbs and looks around' },
+    ],
+  },
+
+  {
+    // Three distractors, one per prior lesson's own long-vowel spelling
+    // (L1 silent-e, L2 ay) plus a plain short vowel — this reviews the
+    // whole reading arc, not just today's slice of it.
+    id: 'a2u1l3-review-choice', kind: 'choice', bg: bgBedroomNight, who: 'marigold', teacher: 'Listen carefully, then tap the word with the “ee” sound!',
+    prompt: 'Which word has the long E “ee” sound?',
+    options: [
+      { label: 'Tree', emoji: '\u{1F333}', correct: true },
+      { label: 'Play', emoji: '\u{26BD}' },
+      { label: 'Kite', emoji: '\u{1FA81}' },
+    ],
+  },
+
+  {
+    id: 'a2u1l3-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    durationSeconds: 20, bigWord: 'Goodbye',
+    songUrl: `${W}/audio/goodbye-song.mp3`,
+    lyrics: [
+      { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, see you soon' },
+      { who: 'pip', text: '\u{23EA} We remembered yesterday, what a fun afternoon' },
+      { who: 'marigold', text: '\u{1F3EB} Welcome Town School is happy today' },
+      { who: 'pip', text: '\u{1F496} Byeeee, friends! See you soon!' },
+    ],
+  },
+
+  {
+    id: 'a2u1l3-finale', kind: 'finale', bg: bgWide, who: 'pip',
+    line: 'You did it! You can talk about YESTERDAY, and you know regular and irregular verbs! \u{1F3C6} Tonight, tell your family what you did yesterday — and try reading an “ee” word together!',
+  },
+];
