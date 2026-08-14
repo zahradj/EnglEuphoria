@@ -110,6 +110,8 @@ const bgStreet = `${W}/scenes/bg-a2-street.png`;
 const bgBedroomNight = `${W}/scenes/bg-a2-bedroom-night.png`;
 const bgBedroomAsleep = `${W}/scenes/bg-a2-bedroom-asleep.png`;
 const bgThirsty = `${W}/scenes/bg-a2-thirsty.png`;
+const bgCalendar = `${W}/scenes/bg-a2-calendar.png`;
+const bgWeekend = `${W}/scenes/bg-a2-weekend.png`;
 
 export const LESSON_A2U1L1_TITLE = 'My Day';
 export const LESSON_A2U1L1_OBJECTIVE = 'Part 1: Describe a daily routine using present simple ("I wake up, I brush my teeth, I eat breakfast, I walk to school, I play, I read, I sleep"), name a feeling including hungry and thirsty, and use he is / she is / they are to say how someone else feels. Part 2: Read the silent-e pattern (cap -> cape, kit -> kite) and a short story.';
@@ -461,5 +463,256 @@ export const LESSON_A2U1L1_SCENES: Scene[] = [
   {
     id: 'a2u1-finale', kind: 'finale', bg: bgWide, who: 'pip',
     line: 'You did it! You can talk about your whole day, and you read words with the magic E! \u{1F3C6} Tonight, tell your family what you do every morning — and try reading a magic-E word together!',
+  },
+];
+
+/* =============================================================================
+ * Welcome Town — A2 Unit 1 Lesson 2: "My Week"
+ *
+ * Progressive-combination rule applied directly: this lesson does not repeat
+ * L1's daily-routine verbs or he/she/they-are grammar in isolation — it
+ * teaches two genuinely new things (days of the week; frequency adverbs
+ * always/usually/sometimes/never) and immediately fuses the new grammar with
+ * L1's own routine verbs ("I ALWAYS wake up early," "I NEVER go to school on
+ * Sunday") rather than practicing them side by side as unrelated sentences.
+ * Same standalone-story convention as L1: Pip narrates his own week; Miss
+ * Marigold appears only for the frequency-adverb model exchange (mirroring
+ * exactly how L1 used her only for the he/she/they-are model), not as a
+ * default classroom frame.
+ *
+ * Vocabulary: days of the week (Monday-Sunday), weekday/weekend as a real
+ * concept (not just seven isolated words), reusing L1's own routine verbs
+ * (wake up, brush teeth, play, read, go to school) as the content the new
+ * frequency grammar operates on.
+ *
+ * New mechanic: `frequency-ladder` (added to scenes.ts + SceneRenderer.tsx).
+ * Researched rather than invented from nothing — a vertical never-at-the-
+ * bottom/always-at-the-top scale is a real, established ESL technique for
+ * teaching frequency adverbs (as opposed to a flat multiple-choice list,
+ * which doesn't show that the four answers are actually ordered against
+ * each other). `choice` already existed and could have technically hosted
+ * a "which word fits" round, but it can't express that ordering visually,
+ * which is the entire pedagogical point of teaching frequency on a scale.
+ *
+ * Art: two new full-bleed backgrounds (bg-a2-calendar.png, bg-a2-
+ * weekend.png), both generated against the existing bg-a2-morning.png /
+ * bg-a2-playground.png as style + Pip-design references, matching L1's own
+ * process rather than reusing an off-model asset from a different world.
+ * Everything else reuses L1's already-verified-correct art (bgPlayground,
+ * bgKitchen, bgStreet, bgBedroomNight, bgWide, bgExpressGoodbye) — the same
+ * "no new asset unless the story genuinely needs one" discipline L1 used.
+ *
+ * Reading (Part 2): the long-vowel 'ay' spelling (day, play, stay) is the
+ * next step on A2's own silent-e/long-vowel reading-fluency arc from L1,
+ * and is thematically bridged from Part 1's own vocabulary ("day" is
+ * literally the week's own unit word), not an unrelated phonics topic
+ * bolted on. The review-choice round deliberately includes "kite" as a
+ * distractor so students have to tell 'ay' apart from L1's own silent-e
+ * long-A spelling, not just recognize "a word that sounds long."
+ * ========================================================================= */
+
+export const LESSON_A2U1L2_TITLE = 'My Week';
+export const LESSON_A2U1L2_OBJECTIVE = 'Part 1: Name the days of the week, tell weekdays from the weekend, and use always / usually / sometimes / never with daily-routine verbs to describe a weekly pattern ("I always wake up early. I never go to school on Sunday."). Part 2: Read the long-vowel "ay" pattern (day, play, stay) and a short story.';
+
+const A2U1L2_DAYS: { label: string; sentence: string; emoji: string; left: string }[] = [
+  { label: 'Monday', sentence: 'On Monday, I go to school.', emoji: '\u{1F3EB}', left: '24%' },
+  { label: 'Tuesday', sentence: 'On Tuesday, I play soccer.', emoji: '\u{26BD}', left: '33%' },
+  { label: 'Wednesday', sentence: 'On Wednesday, I read a new book.', emoji: '\u{1F4D6}', left: '42%' },
+  { label: 'Thursday', sentence: 'On Thursday, I visit my friend Leo.', emoji: '\u{1F917}', left: '51%' },
+  { label: 'Friday', sentence: 'On Friday, I am so happy — the weekend is close!', emoji: '\u{1F600}', left: '60%' },
+  { label: 'Saturday', sentence: 'On Saturday, I fly my kite all day.', emoji: '\u{1FA81}', left: '69%' },
+  { label: 'Sunday', sentence: 'On Sunday, I rest at home with my family.', emoji: '\u{1F3E0}', left: '78%' },
+];
+
+export const LESSON_A2U1L2_SCENES: Scene[] = [
+  { id: 'a2u1l2-title', kind: 'title-card', bg: bgCalendar, level: 'A2', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'My Week', subtitle: 'Every day is a new adventure!', cta: '\u{1F4C5} LET’S GO!' },
+
+  {
+    id: 'a2u1l2-intro', kind: 'cinematic', bg: bgCalendar, title: 'My Week', subtitle: 'Come see my whole week!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Hi! I am Pip. Do you know all the days of the week?' },
+      { who: 'pip', line: 'Every day is different! Let’s look at my whole week together.' },
+    ],
+    cta: '\u{1F4C5} LET’S GO!',
+  },
+
+  {
+    id: 'a2u1l2-vocab-days', kind: 'vocab-spot', bg: bgCalendar,
+    teacher: 'Tap each day on my calendar to learn its name!',
+    items: A2U1L2_DAYS.map((d) => ({ label: d.label, sentence: d.sentence, emoji: d.emoji, left: d.left, top: '42%', color: '#FE6A2F', who: 'pip' as const })),
+  },
+
+  {
+    // Deliberately NOT re-using the same left% as a2u1l2-vocab-days above —
+    // if the blanks sat on the exact calendar columns the student just
+    // tapped, this would test position-memory, not day-sequence knowledge.
+    // A neutral sentence-strip row (same showBlanks convention L1's
+    // sentence-builders used) tests the actual target: which day comes
+    // first, second, third...
+    id: 'a2u1l2-day-order', kind: 'drag-match', bg: bgCalendar, showBlanks: true, teacher: 'Drag the days into order — which day comes first?',
+    items: A2U1L2_DAYS.map((d, i) => ({
+      label: d.label,
+      color: i % 2 === 0 ? '#FE6A2F' : '#B85CD1',
+      who: 'pip' as const,
+      targetLeft: ['10%', '23%', '37%', '50%', '63%', '77%', '90%'][i],
+      targetTop: '18%',
+    })),
+  },
+
+  {
+    // New grammar model — mirrors L1's a2u1-hesheare-model exactly (Marigold
+    // elicits, Pip answers, each line repeated), just for always/usually/
+    // sometimes/never fused directly onto L1's own routine verbs instead of
+    // introducing new ones.
+    id: 'a2u1l2-model-frequency', kind: 'roleplay', bg: bgCalendar, teacher: 'Listen to Pip talk about his week, then repeat each line.', cast: ['marigold', 'pip'],
+    script: [
+      { who: 'marigold', line: 'Pip, what do you ALWAYS do in the morning?', repeat: true },
+      { who: 'pip', line: 'I always wake up and brush my teeth!', repeat: true },
+      { who: 'marigold', line: 'What do you USUALLY do after school?', repeat: true },
+      { who: 'pip', line: 'I usually play with my friends.', repeat: true },
+      { who: 'marigold', line: 'Do you SOMETIMES eat pizza?', repeat: true },
+      { who: 'pip', line: 'Yes! I sometimes eat pizza on Friday.', repeat: true },
+      { who: 'marigold', line: 'Do you ever go to school on Sunday?', repeat: true },
+      { who: 'pip', line: 'No! I NEVER go to school on Sunday. It is the weekend!', repeat: true },
+    ],
+  },
+
+  {
+    id: 'a2u1l2-choice-frequency', kind: 'choice', bg: bgCalendar, who: 'marigold', teacher: 'Listen carefully, then tap the right word!',
+    prompt: 'Which word means EVERY single day — 100% of the time?',
+    options: [
+      { label: 'Always', emoji: '\u{1F4AF}', correct: true },
+      { label: 'Sometimes', emoji: '\u{1F937}' },
+      { label: 'Never', emoji: '\u{274C}' },
+    ],
+  },
+
+  {
+    // The core combination point: L1's own routine verbs (wake up, brush
+    // teeth, read, play, go to school), each placed on the frequency scale
+    // that IS this lesson's new grammar — not a fresh, unrelated vocabulary
+    // list standing next to the old one.
+    id: 'a2u1l2-ladder', kind: 'frequency-ladder', bg: bgWeekend, who: 'pip', teacher: 'Tap the rung that matches Pip’s week!',
+    rounds: [
+      { action: 'wake up early', emoji: '\u{23F0}', answer: 'always', line: 'I always wake up early!' },
+      { action: 'brush my teeth', emoji: '\u{1FAA5}', answer: 'always', line: 'I always brush my teeth!' },
+      { action: 'read before bed', emoji: '\u{1F4D6}', answer: 'usually', line: 'I usually read before bed.' },
+      { action: 'play soccer on Saturday', emoji: '\u{26BD}', answer: 'sometimes', line: 'I sometimes play soccer on Saturday.' },
+      { action: 'go to school on Sunday', emoji: '\u{1F3EB}', answer: 'never', line: 'I never go to school on Sunday!' },
+    ],
+  },
+
+  {
+    id: 'a2u1l2-weekend-choice', kind: 'choice', bg: bgWeekend, who: 'pip', teacher: 'Listen, then tap the right answer!',
+    prompt: 'No school today! Which day is part of the WEEKEND?',
+    options: [
+      { label: 'Saturday', emoji: '\u{1F389}', correct: true },
+      { label: 'Monday', emoji: '\u{1F3EB}' },
+      { label: 'Wednesday', emoji: '\u{1F3EB}' },
+    ],
+  },
+
+  {
+    id: 'a2u1l2-join-stage', kind: 'join-stage', bg: bgWeekend, teacher: 'Your turn! Answer with always, usually, sometimes, or never.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'How often do you play outside?' },
+      { who: 'student', line: 'I ______ play outside.' },
+      { who: 'pip', line: 'How often do you read a book?' },
+      { who: 'student', line: 'I ______ read a book.' },
+      { who: 'pip', line: 'Great! Every week is a fun week.' },
+    ],
+  },
+
+  {
+    id: 'a2u1l2-storybook', kind: 'flipbook', bg: bgWide, title: 'Pip’s Busy Week',
+    pages: [
+      { who: 'pip', img: bgStreet, text: 'On Monday, Pip walks to school. He always says hello to his friends.' },
+      { who: 'pip', img: bgPlayground, text: 'On Tuesday, Pip plays soccer with Leo. He usually wins!' },
+      { who: 'pip', img: bgBedroomNight, text: 'On Wednesday, Pip reads a new book. He loves story time.' },
+      { who: 'pip', img: bgPlayground, text: 'On Thursday, Pip visits Leo. They laugh and play together.' },
+      { who: 'pip', img: bgKitchen, text: 'On Friday, Pip is very happy — pizza night! Tomorrow is Saturday.' },
+      { who: 'pip', img: bgWeekend, text: 'On Saturday, Pip flies his kite all afternoon. No school today!' },
+      { who: 'pip', img: bgWeekend, text: 'On Sunday, Pip rests at home with his family. Good night, week!' },
+    ],
+    checkpoints: [
+      { afterPage: 1, who: 'pip', question: 'What does Pip do on Tuesday?', options: ['He reads', 'He plays soccer', 'He sleeps'], answer: 'He plays soccer' },
+      { afterPage: 5, who: 'pip', question: 'Why does Pip fly his kite on Saturday?', options: ['He has school', 'It is the weekend', 'He is tired'], answer: 'It is the weekend' },
+    ],
+  },
+
+  { id: 'a2u1l2-break', kind: 'title-card', bg: bgWide, level: 'A2', unit: 'Unit 1', lessonLabel: 'Break Time', title: 'Great Job!', subtitle: 'Stretch, get some water, then come back for Part 2!', cta: '\u{1F938} I’m Ready!' },
+
+  /* =========================== Part 2: Reading — Day, Play, Stay =========
+   * The 'ay' long-vowel spelling — the next step on A2's own long-vowel
+   * reading-fluency arc from L1's silent-e (cap->cape), bridged thematically
+   * from this lesson's own "day" vocabulary rather than an unrelated
+   * phonics topic. */
+
+  { id: 'a2u1l2-part2-title', kind: 'title-card', bg: bgBedroomNight, level: 'A2', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time! Day, Play, Stay', subtitle: 'Two letters, one long sound', cta: '\u{1F4D6} LET’S READ!' },
+
+  {
+    id: 'a2u1l2-ay-intro', kind: 'cinematic', bg: bgBedroomNight, title: 'The AY Sound', subtitle: 'Two letters that make one long sound', narrator: 'marigold',
+    script: [
+      { who: 'marigold', line: 'Look at the word “day.” Two letters, A and Y, together make one long A sound!' },
+      { who: 'marigold', line: 'Listen: d-ay, day! Now try “play” and “stay” — same “ay” sound!' },
+    ],
+    cta: 'Try it!',
+  },
+  {
+    id: 'a2u1l2-wordbuild-day', kind: 'word-build', bg: bgBedroomNight, teacher: 'Complete the word: D_Y',
+    rounds: [{ word: 'DAY', blankIndex: 1, answer: 'A', choices: ['A', 'E', 'U'], emoji: '\u{2600}\u{FE0F}' }],
+  },
+  {
+    id: 'a2u1l2-wordbuild-play', kind: 'word-build', bg: bgBedroomNight, teacher: 'Complete the word: PL_Y',
+    rounds: [{ word: 'PLAY', blankIndex: 2, answer: 'A', choices: ['A', 'O', 'I'], emoji: '\u{26BD}' }],
+  },
+  {
+    id: 'a2u1l2-wordbuild-stay', kind: 'word-build', bg: bgBedroomNight, teacher: 'Complete the word: ST_Y',
+    rounds: [{ word: 'STAY', blankIndex: 2, answer: 'A', choices: ['A', 'E', 'O'], emoji: '\u{1F3E0}' }],
+  },
+
+  {
+    id: 'a2u1l2-reading-story', kind: 'flipbook', bg: bgWeekend, title: 'Mia’s Sunny Day',
+    pages: [
+      { who: 'mia', img: bgWeekend, text: 'It is Saturday. Mia wants to play all day.' },
+      { who: 'mia', img: bgWeekend, text: '“Let’s stay outside and play!” says Mia.' },
+      { who: 'mia', img: bgPlayground, text: 'Mia and her friends play and play. What a fun day!' },
+      { who: 'mia', img: bgWeekend, text: '“I hope every day can be like today!” says Mia.' },
+    ],
+    checkpoints: [
+      { afterPage: 0, who: 'mia', question: 'What day is it in the story?', options: ['Monday', 'Saturday', 'Wednesday'], answer: 'Saturday' },
+      { afterPage: 2, who: 'mia', question: 'What do Mia and her friends do?', options: ['They sleep', 'They play', 'They read'], answer: 'They play' },
+    ],
+  },
+
+  {
+    // "Kite" is a deliberate distractor, not a random wrong answer — it
+    // tests whether the student can tell today's "ay" spelling apart from
+    // L1's own silent-e long-A/I spelling, not just "a word that sounds
+    // long."
+    id: 'a2u1l2-review-choice', kind: 'choice', bg: bgBedroomNight, who: 'marigold', teacher: 'Listen carefully, then tap the word with the “ay” sound!',
+    prompt: 'Which word has the long A “ay” sound?',
+    options: [
+      { label: 'Play', emoji: '\u{26BD}', correct: true },
+      { label: 'Cat', emoji: '\u{1F408}' },
+      { label: 'Kite', emoji: '\u{1FA81}' },
+    ],
+  },
+
+  {
+    id: 'a2u1l2-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    durationSeconds: 20, bigWord: 'Goodbye',
+    songUrl: `${W}/audio/goodbye-song.mp3`,
+    lyrics: [
+      { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, see you soon' },
+      { who: 'pip', text: '\u{1F4C5} We had fun this whole week through' },
+      { who: 'marigold', text: '\u{1F3EB} Welcome Town School is happy today' },
+      { who: 'pip', text: '\u{1F496} Byeeee, friends! See you soon!' },
+    ],
+  },
+
+  {
+    id: 'a2u1l2-finale', kind: 'finale', bg: bgWide, who: 'pip',
+    line: 'You did it! You know the days of the week, and you can say how often you do things! \u{1F3C6} Tonight, tell your family what you ALWAYS do every week — and try reading an “ay” word together!',
   },
 ];
