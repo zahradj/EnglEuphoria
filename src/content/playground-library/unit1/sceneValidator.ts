@@ -30,7 +30,8 @@ export const SCENE_KINDS = [
   'numbers-learn', 'numbers-review', 'candle-cake', 'count-balloons',
   'age-balloons', 'age-sentence-match', 'meet-greet', 'age-quiz',
   'trophy-chest', 'flipbook', 'color-model', 'color-sort', 'color-quiz', 'listen-repeat-cards',
-  'color-spot', 'shape-model', 'shape-sort', 'color-spy', 'color-simon',
+  'color-spot', 'shape-model', 'shape-sort', 'color-spy', 'color-simon', 'toy-model',
+  'plural-sort', 'train-recall',
 ] as const;
 export type SceneKindName = (typeof SCENE_KINDS)[number];
 

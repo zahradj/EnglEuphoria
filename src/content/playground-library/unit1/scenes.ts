@@ -13,12 +13,34 @@ export type BasketItem = { word: string; emoji: string; hit: boolean; img?: stri
 
 export type Scene =
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string }
-  | { id: string; kind: 'cinematic'; bg: string; title: string; subtitle: string; narrator: Character; script: { who: Character; line: string; emotion?: 'happy' | 'sad' | 'angry' | 'neutral' }[]; cta: string }
+  | {
+      id: string; kind: 'cinematic'; bg: string; title: string; subtitle: string; narrator: Character;
+      script: { who: Character; line: string; emotion?: 'happy' | 'sad' | 'angry' | 'neutral' }[]; cta: string;
+      /** The renderer overlays an animated walking Pip sprite on every
+       *  cinematic scene except the one hardcoded id 'intro' — a duplicate,
+       *  visually redundant Pip whenever the scene's own background art
+       *  already draws Pip into it (most hero/parade shots do). Set true
+       *  for any such scene instead of relying on that id match. */
+      hidePipOverlay?: boolean;
+    }
   | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat?: string; phonics?: string }
   | { id: string; kind: 'sound-model'; bg: string; who: CharKey; prop?: string; letter: string; phoneme: string; sound: string; teacher: string; anchors: { word: string; emoji: string; img?: string }[] }
   | { id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string; hearWord?: string }
-  | { id: string; kind: 'basket'; bg: string; letter: string; phoneme: string; who: CharKey; teacher: string; items: BasketItem[]; goal: number }
-  | { id: string; kind: 'trace'; bg: string; who: CharKey; letter: string; phoneme: string; word: string; teacher: string }
+  | {
+      id: string; kind: 'basket'; bg: string; letter: string; phoneme: string; who: CharKey; teacher: string; items: BasketItem[]; goal: number;
+      /** When false, dropping a correct item into the basket skips the "{phoneme}! {word}!" voice
+       * line — the teacher voice already announces the same word on pickup, so on some scenes
+       * (basket-h) hearing it a second time right after felt like a doubled-up audio bug. Defaults
+       * to true. */
+      announceOnDrop?: boolean;
+    }
+  | {
+      id: string; kind: 'trace'; bg: string; who: CharKey; letter: string; phoneme: string; word: string; teacher: string;
+      /** When false, tracing completion skips the spoken "{letter}! {phoneme} {word}!" line
+       * entirely — playLetterPhonic still plays the real recorded phonic sound right after, so
+       * the TTS line was pure duplicate audio on scenes like trace-h. Defaults to true. */
+      speakWord?: boolean;
+    }
   | { id: string; kind: 'sound-sort'; bg: string; teacher: string; targets: { letter: string; phoneme: string; who: CharKey }[]; items: { word: string; img?: string; emoji: string; letter: string }[] }
   | { id: string; kind: 'word-build'; bg: string; teacher: string; rounds: { word: string; blankIndex: number; answer: string; choices: string[]; img?: string; emoji: string }[] }
   | { id: string; kind: 'who-said-it'; bg: string; teacher: string; rounds: { line: string; who: CharKey; emotion?: 'happy' | 'sad' | 'angry' | 'neutral' }[] }
@@ -39,7 +61,7 @@ export type Scene =
   | {
       id: string; kind: 'color-friends'; bg: string; teacher: string; cast?: CharKey[];
       /** When set, colors vocabulary objects (apple/water/sun) instead of a character. */
-      vocabItems?: { label: string; targetColorHex: string; targetColorName: string; outline: 'apple' | 'water' | 'sun' }[];
+      vocabItems?: { label: string; targetColorHex: string; targetColorName: string; outline: 'apple' | 'water' | 'sun' | 'circle' | 'square' | 'triangle' }[];
     }
   | { id: string; kind: 'alphabet-blocks'; bg: string; teacher: string; letters: string[]; tapRounds: { letter: string }[]; words: { word: string; emoji: string }[] }
   | { id: string; kind: 'alphabet-order'; bg: string; teacher: string; sequences: string[] }
@@ -108,6 +130,41 @@ export type Scene =
        *  don't generalize to a shape's outline. */
       id: string; kind: 'shape-model'; bg: string; teacher: string;
       items: { shapeWord: string; shapeColor: string; who: CharKey; exampleWord: string; exampleImg: string }[];
+    }
+  | {
+      /** Toy-noun counterpart to shape-model/color-model — same tap/hold/
+       *  repeat progression (hear the toy word, repeat, then say the
+       *  combined color+toy sentence), but the swatch shows the actual toy
+       *  icon (already rendered in its fixed color) instead of an abstract
+       *  color circle or shape outline. First used by Unit 3 Lesson 1
+       *  ("Ball, Car, Doll!") to combine brand-new toy nouns with colors
+       *  already mastered in Unit 2, per the progressive-combination rule. */
+      id: string; kind: 'toy-model'; bg: string; teacher: string;
+      /** `plural: true` renders "They are {colorWord} {toyWord}." instead
+       *  of "It's a {colorWord} {toyWord}." — first used by Unit 3 Lesson
+       *  2 for toy words that are naturally plural (e.g. "blocks"). */
+      items: { toyWord: string; colorWord: string; colorHex: string; who: CharKey; img: string; plural?: boolean }[];
+    }
+  | {
+      /** Drag each picture into one of two FIXED bins — "It is" (one item
+       *  shown) or "They are" (several of the same item shown) — teaching
+       *  singular vs. plural recognition directly, independent of any
+       *  particular color or shape. First used by Unit 3 Lesson 2
+       *  ("Teddy Bear, Blocks, Train!"), the unit's first plural-grammar
+       *  lesson. Mixes brand-new items with earlier lessons' own already-
+       *  verified single-object images for spiral review. */
+      id: string; kind: 'plural-sort'; bg: string; teacher: string; who: CharKey;
+      items: { word: string; img?: string; emoji: string; plural: boolean }[];
+    }
+  | {
+      /** A row of toy-train cars, each with a different toy in its window.
+       *  The train "chugs" past and covers each car in turn; one randomly
+       *  stays covered, and the student must recall which toy was inside
+       *  it from a set of choices — a visual working-memory game (the
+       *  "missing card" mechanic), thematically built around the train
+       *  toy itself. First used by Unit 3 Lesson 2. */
+      id: string; kind: 'train-recall'; bg: string; teacher: string;
+      cars: { word: string; img?: string; emoji: string }[];
     }
   | {
       /** Shape counterpart to color-sort. */
@@ -198,6 +255,22 @@ const bgHBasket = `${A}/scenes/bg-h-basket.jpg`;
 const bgMBasket = `${A}/scenes/bg-m-basket.jpg`;
 const bgGather = `${A}/scenes/bg-gather.jpg`;
 const bgGatherEmpty = `${A}/scenes/bg-gather-empty.jpg`;
+// roleplay-l1 needs its own dedicated background (not bgGatherEmpty, which join-stage-l1
+// still uses for its open webcam space) because RoleplayScene never renders character
+// sprites — it relies entirely on the bg art to show who's "talking." Characters are
+// placed at ~12/34/58% from the left to line up with RoleplayScene's own hardcoded
+// speech-bubble anchor positions for pip/mia/bella.
+const bgL1RoleplayFriends = `${A}/scenes/bg-l1-roleplay-friends.jpg`;
+// join-stage-l1 previously used bgGatherEmpty for every turn (friend turns AND the
+// student's own turn) — same bug class as roleplay-l1: JoinStageScene renders no
+// friend sprite either, so pip/mia/bella's turns showed nobody. These -solo shots
+// (character on the left third, right ~55% left open) follow the same convention
+// every other lesson's join-stage already uses, keeping the open side clear for the
+// webcam circle (default position ~82%/64%). bgGatherEmpty stays as-is for the
+// student's own turn, where an empty backdrop is correct.
+const bgL1PipSolo = `${A}/scenes/bg-l1-pip-solo.jpg`;
+const bgL1MiaSolo = `${A}/scenes/bg-l1-mia-solo.jpg`;
+const bgL1BellaSolo = `${A}/scenes/bg-l1-bella-solo.jpg`;
 const bgHideSeek = `${A}/scenes/bg-hideseek.jpg`;
 const bgMeadow = `${A}/scenes/bg-meadow.jpg`;
 const bgBigTree = `${A}/scenes/bg-bigtree.jpg`;
@@ -205,6 +278,7 @@ const bgL5LeoSad = `${A}/scenes/bg-l5-leo-sad.png`;
 const bgL5Search = `${A}/scenes/bg-l5-search.png`;
 const bgL5FoundTree = `${A}/scenes/bg-l5-found-tree.png`;
 const bgGoodbyeCast = `${A}/scenes/bg-goodbye-cast.jpg`;
+const bgHelloCast = `${A}/scenes/bg-hello-cast.jpg`;
 const bgL6TrophyTrail = `${A}/scenes/bg-l6-trophy-trail.jpg`;
 const bgL6TrophyPodium = `${A}/scenes/bg-l6-trophy-podium.jpg`;
 
@@ -230,6 +304,17 @@ export const LESSON_1_OBJECTIVE = "Greet a friend and say my name using 'Hello. 
 export const LESSON_1_SCENES: Scene[] = [
   { id: 'title-1', kind: 'title-card', bg: bgTitleForest, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 1', title: 'The Forest of Hellos', subtitle: 'Greetings & the /h/ and /m/ sounds' },
   {
+    id: 'l1-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: "Warm up with Pip! Sing along and wave on every 'hello'.",
+    durationSeconds: 24, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3`,
+    songPrompt: 'Cheerful upbeat kids hello song, sweet real singing with a warm teacher voice and small kids choir, ukulele plus light claps, bright and welcoming.',
+    lyrics: [
+      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+    ],
+  },
+  {
     id: 'intro', kind: 'cinematic', bg: bgClearing, title: 'The Forest of Hellos', subtitle: 'A tiny adventure with big new friends', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Hi, hi, hi! I am Pip!' },
@@ -248,7 +333,7 @@ export const LESSON_1_SCENES: Scene[] = [
   },
   { id: 'echo-hello', kind: 'echo', bg: scenePipClearing, who: 'pip', teacher: 'Repeat after Pip: Hello! Hello! Hello!', word: 'Hello!' },
   {
-    id: 'basket-h', kind: 'basket', bg: bgHBasket, letter: 'H', phoneme: '/h/', who: 'pip', teacher: "Drag the /h/ words into Pip's H basket!", goal: 3,
+    id: 'basket-h', kind: 'basket', bg: bgHBasket, letter: 'H', phoneme: '/h/', who: 'pip', teacher: "Drag the /h/ words into Pip's H basket!", goal: 3, announceOnDrop: false,
     items: [
       { word: 'hello', emoji: '\u{1F44B}', img: itemHello, hit: true },
       { word: 'hat', emoji: '\u{1F3A9}', img: itemHat, hit: true },
@@ -257,7 +342,7 @@ export const LESSON_1_SCENES: Scene[] = [
       { word: 'milk', emoji: '\u{1F95B}', img: itemMilk, hit: false },
     ],
   },
-  { id: 'trace-h', kind: 'trace', bg: bgHPortal, who: 'pip', letter: 'H', phoneme: '/h/', word: 'Hello', teacher: 'Trace the big H with your finger! /h/ /h/' },
+  { id: 'trace-h', kind: 'trace', bg: bgHPortal, who: 'pip', letter: 'H', phoneme: '/h/', word: 'Hello', speakWord: false, teacher: 'Trace the big H with your finger! /h/ /h/' },
   { id: 'meet-mia', kind: 'meet', bg: sceneMiaMousehole, who: 'mia', teacher: 'Peek! Tap Mia to meet her!', line: 'Hi! My name is Mia!', repeat: 'My name is Mia!', phonics: 'm' },
   {
     id: 'model-m', kind: 'sound-model', bg: bgMPortal, who: 'mia', letter: 'M', phoneme: '/m/', sound: 'mmm', teacher: 'Listen to Mia’s sound. /m/ /m/ Mia!',
@@ -314,6 +399,15 @@ export const LESSON_1_SCENES: Scene[] = [
     ],
   },
   {
+    id: 'l1-sound-pop-m', kind: 'sound-pop', bg: bgClearing, teacher: 'Balloon Letter Pop! Mia will call a letter. Pop only that letter!', who: 'mia', goal: 8, seconds: 45,
+    targets: [
+      { letter: 'M', phoneme: '/m/' },
+    ],
+    items: [
+      { word: 'M', letter: 'M', emoji: 'M' }, { word: 'H', letter: 'H', emoji: 'H' },
+    ],
+  },
+  {
     id: 'gather', kind: 'gather', bg: bgGather, teacher: 'All friends are here! Tap a friend to hear them. Then drag the camera to the daisy circle for YOUR turn!',
     hotspots: [
       { who: 'pip', line: 'Hello, my name is Pip. Nice to meet you.', x: 380, y: 620, r: 220 },
@@ -359,7 +453,7 @@ export const LESSON_1_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'roleplay-l1', kind: 'roleplay', bg: bgGatherEmpty, teacher: 'Story time! Listen to the friends greet each other, then repeat each line.', cast: ['pip', 'mia', 'bella'],
+    id: 'roleplay-l1', kind: 'roleplay', bg: bgL1RoleplayFriends, teacher: 'Story time! Listen to the friends greet each other, then repeat each line.', cast: ['pip', 'mia', 'bella'],
     script: [
       { who: 'pip', line: 'Hello! I am Pip.' },
       { who: 'mia', line: 'Hi! My name is Mia.', repeat: true },
@@ -370,11 +464,11 @@ export const LESSON_1_SCENES: Scene[] = [
   {
     id: 'join-stage-l1', kind: 'join-stage', bg: bgGatherEmpty, teacher: 'Your turn! When it says YOU, say your name out loud!', cast: ['pip', 'mia', 'bella'],
     turns: [
-      { who: 'pip', line: 'Hello! I am Pip.' },
-      { who: 'mia', line: 'Hi! My name is Mia.' },
-      { who: 'bella', line: 'Hello! I am Bella.' },
+      { who: 'pip', line: 'Hello! I am Pip.', bg: bgL1PipSolo },
+      { who: 'mia', line: 'Hi! My name is Mia.', bg: bgL1MiaSolo },
+      { who: 'bella', line: 'Hello! I am Bella.', bg: bgL1BellaSolo },
       { who: 'student', line: 'Hello! My name is ___.' },
-      { who: 'pip', line: 'Nice to meet you!' },
+      { who: 'pip', line: 'Nice to meet you!', bg: bgL1PipSolo },
     ],
   },
   {
@@ -1859,7 +1953,7 @@ export const LESSON_U2L1_OBJECTIVE = 'Identify and name the colors red, blue, an
 export const LESSON_U2L1_SCENES: Scene[] = [
   { id: 'u2l1-title', kind: 'title-card', bg: bgU2L1ColorParade, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 1', title: 'Red, Blue, Yellow!', subtitle: 'Learn to name the colors all around us' },
   {
-    id: 'u2l1-intro', kind: 'cinematic', bg: bgU2L1ColorParade, title: 'Red, Blue, Yellow!', subtitle: 'A meadow full of colors', narrator: 'pip',
+    id: 'u2l1-intro', kind: 'cinematic', bg: bgU2L1ColorParade, title: 'Red, Blue, Yellow!', subtitle: 'A meadow full of colors', narrator: 'pip', hidePipOverlay: true,
     script: [
       { who: 'pip', line: 'Look at all the colors today!' },
       { who: 'pip', line: 'Bella has a red apple, Willow found blue water, and I found a yellow sunflower!' },
@@ -2245,7 +2339,7 @@ export const LESSON_U2L2_OBJECTIVE = 'Identify and name the colors green, orange
 export const LESSON_U2L2_SCENES: Scene[] = [
   { id: 'u2l2-title', kind: 'title-card', bg: bgU2L2ColorParade, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 2', title: 'Green, Orange, Purple!', subtitle: 'More colors all around us' },
   {
-    id: 'u2l2-intro', kind: 'cinematic', bg: bgU2L2ColorParade, title: 'Green, Orange, Purple!', subtitle: 'A garden full of more colors', narrator: 'pip',
+    id: 'u2l2-intro', kind: 'cinematic', bg: bgU2L2ColorParade, title: 'Green, Orange, Purple!', subtitle: 'A garden full of more colors', narrator: 'pip', hidePipOverlay: true,
     script: [
       { who: 'pip', line: 'Look! Even more colors today!' },
       { who: 'pip', line: 'Willow has a green leaf, Leo found an orange, and Mia has purple grapes!' },
@@ -2805,7 +2899,7 @@ export const LESSON_U2L4_OBJECTIVE = 'Review and confidently name all six colors
 export const LESSON_U2L4_SCENES: Scene[] = [
   { id: 'u2l4-title', kind: 'title-card', bg: bgU2L1ColorParade, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 4', title: 'What Color is This?', subtitle: 'Let’s remember ALL our colors!' },
   {
-    id: 'u2l4-intro', kind: 'cinematic', bg: bgU2L2ColorParade, title: 'What Color is This?', subtitle: 'Six colors, one big review!', narrator: 'pip',
+    id: 'u2l4-intro', kind: 'cinematic', bg: bgU2L2ColorParade, title: 'What Color is This?', subtitle: 'Six colors, one big review!', narrator: 'pip', hidePipOverlay: true,
     script: [
       { who: 'pip', line: 'Red, blue, yellow, green, orange, purple — six colors!' },
       { who: 'pip', line: 'Let’s see how many you remember!' },
@@ -3041,7 +3135,7 @@ export const LESSON_U2L5_OBJECTIVE = 'Follow an original story about a fish who 
 export const LESSON_U2L5_SCENES: Scene[] = [
   { id: 'u2l5-title', kind: 'title-card', bg: bgU2L5FishPond, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 5', title: "The Rainbow Fish's Scales", subtitle: 'A story about a very special fish' },
   {
-    id: 'u2l5-intro', kind: 'cinematic', bg: bgU2L5FishPond, title: "The Rainbow Fish's Scales", subtitle: 'Pip and Bella find a new friend', narrator: 'pip',
+    id: 'u2l5-intro', kind: 'cinematic', bg: bgU2L5FishPond, title: "The Rainbow Fish's Scales", subtitle: 'Pip and Bella find a new friend', narrator: 'pip', hidePipOverlay: true,
     script: [
       { who: 'pip', line: 'Look, Bella! There is a little fish in the pond!' },
       { who: 'bella', line: 'Oh! But this fish has no color at all!' },
@@ -3138,6 +3232,24 @@ export const LESSON_U2L5_SCENES: Scene[] = [
  * - u2l6-storybook is a "greatest hits" flipbook using one page per lesson
  *   (L1's parade, L2's parade, L3's parade, L5's finished rainbow fish) as
  *   a visual recap of the whole unit's journey, not new narrative content.
+ *
+ * LENGTH/VARIETY REVISION (2026-08-12): direct user correction — the lesson
+ * needed more activities to fill its real ~30-minute classroom slot, with
+ * "coloring" and "puzzle" named as ideas, and explicit license to build a
+ * new mechanic if needed. Added two rounds, both genuinely new mechanics
+ * for THIS unit (not reused verbatim), backed by a live web search
+ * confirming shape-matching and interactive coloring are the two most
+ * common effective mechanics for this exact age/topic:
+ * - u2l6-memory: an 8-pair memory-match board (the `memory` kind already
+ *   existed in this file's own type union from Unit 1 but had never been
+ *   used anywhere in Unit 2) mixing isolated colors and combined
+ *   color+shape items — reuse of an existing mechanic, new to this unit.
+ * - u2l6-coloring: a real paint-with-your-finger coloring activity (the
+ *   `color-friends` kind's existing vocabItems/canvas-painting mode,
+ *   previously only used for apple/water/sun in u2l1-color-friends) —
+ *   required one small, genuinely new code addition: `circle`/`square`/
+ *   `triangle` outline shapes added to VocabOutline in SceneRenderer.tsx,
+ *   so the same proven paint mechanic could color shapes instead of fruit.
  * ========================================================================= */
 
 export const LESSON_U2L6_TITLE = 'Color & Shape Hunt';
@@ -3223,6 +3335,36 @@ export const LESSON_U2L6_SCENES: Scene[] = [
       { word: 'circle', blankIndex: 0, answer: 'C', choices: ['C', 'S', 'T'], img: itemBall, emoji: '\u{26BD}' },
       { word: 'square', blankIndex: 0, answer: 'S', choices: ['C', 'S', 'T'], img: itemBook, emoji: '\u{1F4D8}' },
       { word: 'triangle', blankIndex: 0, answer: 'T', choices: ['C', 'S', 'T'], img: itemPizza, emoji: '\u{1F355}' },
+    ],
+  },
+  {
+    // Direct user request for more variety/length: a real memory-match
+    // board mixing isolated colors (from L1-L2) with the combined
+    // color+shape items (from L3) — 8 pairs = a clean 4x4 grid, and the
+    // biggest single activity added to fill out the lesson's time.
+    id: 'u2l6-memory', kind: 'memory', bg: bgMeadow, teacher: 'Hunt round 5b! Find the matching pairs!',
+    pairs: [
+      { id: 'red', label: 'Red', emoji: '\u{1F34E}', img: itemApple },
+      { id: 'blue', label: 'Blue', emoji: '\u{1F4A7}', img: itemWater },
+      { id: 'yellow', label: 'Yellow', emoji: '\u{2600}️', img: itemSun },
+      { id: 'green', label: 'Green', emoji: '\u{1F343}', img: itemLeaf },
+      { id: 'orange', label: 'Orange', emoji: '\u{1F34A}', img: itemOrange },
+      { id: 'purple', label: 'Purple', emoji: '\u{1F347}', img: itemGrapes },
+      { id: 'red-circle', label: 'Red circle', emoji: '\u{26BD}', img: itemBall },
+      { id: 'yellow-triangle', label: 'Yellow triangle', emoji: '\u{1F355}', img: itemPizza },
+    ],
+  },
+  {
+    // Direct user request for a coloring activity: paints the three shapes
+    // in the combined-skill's own colors (red circle, blue square, yellow
+    // triangle), reusing the already-built color-friends canvas-painting
+    // mechanic in its vocabItems mode (previously only apple/water/sun —
+    // added circle/square/triangle outlines to VocabOutline for this).
+    id: 'u2l6-coloring', kind: 'color-friends', bg: bgMeadow, teacher: 'Hunt round 5c! Color each shape its own special color!',
+    vocabItems: [
+      { label: 'Circle', targetColorHex: '#EF4444', targetColorName: 'Red', outline: 'circle' },
+      { label: 'Square', targetColorHex: '#3B82F6', targetColorName: 'Blue', outline: 'square' },
+      { label: 'Triangle', targetColorHex: '#FBBF24', targetColorName: 'Yellow', outline: 'triangle' },
     ],
   },
   {
@@ -3317,4 +3459,496 @@ export const LESSON_U2L6_SCENES: Scene[] = [
     ],
   },
   { id: 'u2l6-finale', kind: 'finale', bg: bgU2L3ShapeParade, who: 'pip', line: 'You are a Rainbow Meadow champion! Six colors, three shapes, AND you can put them together — red circles, blue squares, yellow triangles, and everything in between! \u{1F3C6}\u{1F308}' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 3, Lesson 1 — "Ball, Car, Doll!"
+ *
+ * The curriculum blueprint's own pre-seeded stub for this slot (curriculum_
+ * lessons row daacfe9c-f714-425c-b670-4bfa74cf4f3d) names the topic: Unit 3
+ * ("Toys & Playtime") opens here with its first three toy nouns. Per the
+ * generate-lesson skill's unit shape (.agents/skills/generate-lesson), this
+ * is a Lesson 1 — core vocabulary, light production, Straight Arrow ESA.
+ *
+ * PROGRESSIVE COMBINATION FROM THE START: unlike Unit 2 Lesson 1 (which
+ * taught colors in isolation, only combining with shapes three lessons
+ * later), this lesson combines the brand-new toy nouns with colors already
+ * mastered in Unit 2 from its very first practice round — "It's a red
+ * ball," never a bare "It's a ball." The color skill needs no re-teaching;
+ * only the toy nouns are new. See the smart-lesson-architect methodology's
+ * "Progressive combination rule."
+ *
+ * - Cast: Bella=BALL (red), Willow=CAR (blue), Mia=DOLL (green) — fixed,
+ *   single colors per toy (not each character's own established color
+ *   ownership from Unit 2, which doesn't apply here; picked classic,
+ *   maximally distinct combos). Pip stays narrator/host.
+ * - Phonics: of the three toy words' initial letters (B, C, D), only D is
+ *   new — B was taught in Unit 1, C in Unit 2 Lesson 3. D gets a full
+ *   sound-model+trace pair; B and C get retrieval-only practice (a
+ *   phonics hint in word-build's letter choices), matching the
+ *   established "already-taught letter gets lighter treatment" pattern.
+ * - Mechanics: added two new Scene kinds mirroring shape-model's proven
+ *   tap/hold/repeat progression — 'toy-model' (teaches the toy noun, then
+ *   the combined color+toy sentence). The sort round reuses 'color-sort'
+ *   directly rather than adding a third new kind: it's fully generic
+ *   (colorWord as a plain matching key, colorHex as the swatch fill), so
+ *   setting colorWord to the toy noun (BALL/CAR/DOLL) instead of an actual
+ *   color name works with zero code changes.
+ * - Art: every scene needing a specific character+toy gets its own
+ *   dedicated single-object image — a parade hero (all 4 cast + all 3
+ *   toys), a two-character "-only" image per toy for roleplay/flipbook,
+ *   and a separate one-character "-solo" image per toy (owner alone, open
+ *   space on the right) for join-stage, per the U2L3 lesson learned this
+ *   session: two-character images leave no clear space for the student's
+ *   draggable video circle. All backgrounds needed a full-bleed retry —
+ *   the first attempt for all four hero/roleplay shots rendered as a
+ *   small oval rug floating on white instead of filling the canvas: fixed
+ *   by explicitly describing the floor and wall as extending edge-to-edge
+ *   rather than just asking for "no white space." One retry was also
+ *   needed for bg-u3l1-doll-only (first attempt drew Pip twice instead of
+ *   Pip+Mia) and bg-u3l1-car-solo (first attempt had a flat, windowless
+ *   wall with a visual streak artifact, inconsistent with the other two
+ *   solo shots).
+ * ========================================================================= */
+
+const bgU3L1ToyParade = `${A}/scenes/bg-u3l1-toy-parade.png`;
+const bgU3L1BallOnly = `${A}/scenes/bg-u3l1-ball-only.png`;
+const bgU3L1CarOnly = `${A}/scenes/bg-u3l1-car-only.png`;
+const bgU3L1DollOnly = `${A}/scenes/bg-u3l1-doll-only.png`;
+const bgU3L1BallSolo = `${A}/scenes/bg-u3l1-ball-solo.png`;
+const bgU3L1CarSolo = `${A}/scenes/bg-u3l1-car-solo.png`;
+const bgU3L1DollSolo = `${A}/scenes/bg-u3l1-doll-solo.png`;
+const bgU3L1SoundGarden = `${A}/scenes/bg-u3l1-sound-garden.png`;
+const bgU3L1DashArena = `${A}/scenes/bg-u3l1-dash-arena.png`;
+const itemCar = `${A}/items/item-car.png`;
+const itemDoll = `${A}/items/item-doll.png`;
+
+export const LESSON_U3L1_TITLE = 'Ball, Car, Doll!';
+export const LESSON_U3L1_OBJECTIVE = 'Identify and name the toys ball, car, and doll, combine them immediately with previously-learned colors into full noun phrases ("It\'s a red ball," "I like blue cars," "I don\'t like green dolls"), and recognize the D letter sound.';
+
+export const LESSON_U3L1_SCENES: Scene[] = [
+  { id: 'u3l1-title', kind: 'title-card', bg: bgU3L1ToyParade, level: 'Pre-A1', unit: 'Unit 3', lessonLabel: 'Lesson 1', title: 'Ball, Car, Doll!', subtitle: 'Playtime with Pip and friends' },
+  {
+    // Warmup hello moment, per direct user request — every lesson so far
+    // opened straight into the cinematic intro with no dedicated warmup.
+    // Uses 'roleplay' (spoken live via the app's own TTS voices, same as
+    // every other line in the app) rather than 'song' — 'song' depends on
+    // a pre-recorded audio file, and unlike goodbye-song.mp3 (which
+    // already exists and is reused by every lesson), no hello-song.mp3
+    // exists anywhere in this project. SongScene has no way to advance
+    // past a song whose audio fails to load (the Continue button only
+    // appears once the audio's onended fires), so using 'song' here would
+    // have soft-locked the lesson at this very first activity. Doubles as
+    // the "revision if necessary" the user also asked about: the middle
+    // two lines briefly call back to Unit 2's own six colors before the
+    // new toy content starts, without a whole separate review activity —
+    // those colors get real practice again a moment later anyway, fused
+    // into this lesson's own target sentences.
+    id: 'u3l1-hello', kind: 'roleplay', bg: bgU3L1ToyParade, teacher: 'Good morning! Let’s say hello and warm up together.', cast: ['pip', 'bella', 'willow', 'mia'],
+    script: [
+      { who: 'pip', line: 'Hello, hello, hello my friend!', repeat: true },
+      { who: 'bella', line: "Hello! Let's play again!" },
+      { who: 'willow', line: 'Remember red, blue, yellow, green?', repeat: true },
+      { who: 'mia', line: "Today it's toys — let's go and see!" },
+    ],
+  },
+  {
+    id: 'u3l1-intro', kind: 'cinematic', bg: bgU3L1ToyParade, title: 'Ball, Car, Doll!', subtitle: 'A playroom full of toys', narrator: 'pip', hidePipOverlay: true,
+    script: [
+      { who: 'pip', line: 'Look! Today we find toys, not colors or shapes!' },
+      { who: 'pip', line: 'Bella has a red ball, Willow has a blue car, and Mia has a green doll!' },
+    ],
+    cta: "Let's play!",
+  },
+  {
+    id: 'u3l1-vocab-toys', kind: 'toy-model', bg: bgMeadow,
+    teacher: 'Look! Tap a toy to hear it, say it back, then say the sentence!',
+    items: [
+      { toyWord: 'BALL', colorWord: 'RED', colorHex: '#EF4444', who: 'bella', img: itemBall },
+      { toyWord: 'CAR', colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', img: itemCar },
+      { toyWord: 'DOLL', colorWord: 'GREEN', colorHex: '#22C55E', who: 'mia', img: itemDoll },
+    ],
+  },
+  {
+    id: 'u3l1-model-d', kind: 'sound-model', bg: bgU3L1SoundGarden, who: 'mia', letter: 'D', phoneme: '/d/', sound: 'duh', teacher: 'Mia models the /d/ sound! Listen first: /d/ /d/ Doll. /d/ /d/ Duck.',
+    anchors: [
+      { word: 'Doll', emoji: '\u{1FA86}' },
+      { word: 'Duck', emoji: '\u{1F986}' },
+      { word: 'Dinosaur', emoji: '\u{1F995}' },
+    ],
+  },
+  { id: 'u3l1-trace-d', kind: 'trace', bg: bgU3L1SoundGarden, who: 'mia', letter: 'D', phoneme: '/d/', word: 'Doll', teacher: 'Trace the tall D. /d/ /d/ Doll!' },
+  {
+    // Direct user request for genuinely new (not "copycat") mechanics,
+    // backed by live research: toy-vocabulary memory-matching is one of
+    // the most common, proven activities for retention at this age —
+    // and the `memory` kind has never been used anywhere in Unit 2 or 3
+    // before this. 8 pairs = a clean 4x4 grid.
+    id: 'u3l1-memory', kind: 'memory', bg: bgMeadow, teacher: 'Memory game! Find the matching toy pairs!',
+    pairs: [
+      { id: 'ball', label: 'Ball', emoji: '\u{26BD}', img: itemBall },
+      { id: 'car', label: 'Car', emoji: '\u{1F697}', img: itemCar },
+      { id: 'doll', label: 'Doll', emoji: '\u{1FA86}', img: itemDoll },
+    ],
+  },
+  {
+    // B (Unit 1) and C (Unit 2 Lesson 3) are already-taught letters — same
+    // lighter, retrieval-only treatment established for repeated letters:
+    // a phonics hint here and in word-build, no full model+trace pair.
+    // Reuses 'color-sort' directly (fully generic — colorWord is just a
+    // matching key) rather than adding a third new scene kind for toys.
+    id: 'u3l1-sort-toys', kind: 'color-sort', bg: bgMeadow, teacher: "Listen for the sound! /b/all, /c/ar, /d/oll — now drag each thing to its toy!",
+    targets: [
+      { colorWord: 'BALL', colorHex: '#EF4444', who: 'bella' },
+      { colorWord: 'CAR', colorHex: '#3B82F6', who: 'willow' },
+      { colorWord: 'DOLL', colorHex: '#22C55E', who: 'mia' },
+    ],
+    items: [
+      { word: 'soccer ball', emoji: '\u{26BD}', colorWord: 'BALL' },
+      { word: 'basketball', emoji: '\u{1F3C0}', colorWord: 'BALL' },
+      { word: 'taxi', emoji: '\u{1F695}', colorWord: 'CAR' },
+      { word: 'truck', emoji: '\u{1F69A}', colorWord: 'CAR' },
+      { word: 'teddy bear', emoji: '\u{1F9F8}', colorWord: 'DOLL' },
+      { word: 'toy figure', emoji: '\u{1FA86}', colorWord: 'DOLL' },
+    ],
+  },
+  {
+    id: 'u3l1-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Listen! Tap the missing letter to make the word.',
+    rounds: [
+      { word: 'ball', blankIndex: 0, answer: 'B', choices: ['B', 'C', 'D'], img: itemBall, emoji: '\u{26BD}' },
+      { word: 'car', blankIndex: 0, answer: 'C', choices: ['B', 'C', 'D'], img: itemCar, emoji: '\u{1F697}' },
+      { word: 'doll', blankIndex: 0, answer: 'D', choices: ['B', 'C', 'D'], img: itemDoll, emoji: '\u{1FA86}' },
+    ],
+  },
+  {
+    id: 'u3l1-who', kind: 'listen-repeat-cards', bg: bgU3L1ToyParade, teacher: 'Listen to each friend, then repeat!',
+    cards: [
+      { who: 'bella', sentence: 'Bella has a ball!', img: itemBall, imgLabel: 'Ball' },
+      { who: 'willow', sentence: 'Willow has a car!', img: itemCar, imgLabel: 'Car' },
+      { who: 'mia', sentence: 'Mia has a doll!', img: itemDoll, imgLabel: 'Doll' },
+    ],
+  },
+  {
+    // The TARGET frame for this lesson: toy + the color that object's own
+    // art already shows, combined into one noun phrase from the very
+    // first practice round — colors need no re-teaching, only the toy
+    // nouns are new.
+    id: 'u3l1-sentence-practice', kind: 'listen-repeat-cards', bg: bgU3L1ToyParade, teacher: "Now let's put color AND toy together! Listen, then repeat!",
+    cards: [
+      { who: 'bella', sentence: "It's a red ball!", img: itemBall, imgLabel: 'Red ball' },
+      { who: 'willow', sentence: "It's a blue car!", img: itemCar, imgLabel: 'Blue car' },
+      { who: 'mia', sentence: "It's a green doll!", img: itemDoll, imgLabel: 'Green doll' },
+      { who: 'bella', sentence: 'I like red balls!', img: itemBall, imgLabel: 'Red ball' },
+      { who: 'willow', sentence: "I don't like blue cars!", img: itemCar, imgLabel: 'Blue car' },
+      { who: 'mia', sentence: 'I like green dolls!', img: itemDoll, imgLabel: 'Green doll' },
+    ],
+  },
+  {
+    id: 'u3l1-dash-ball', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Bella Dash! Tap only the BALL things as they run by. Get 6 rings!', who: 'bella', targetLetter: 'BALL', targetPhoneme: '', goal: 6, seconds: 40,
+    items: [
+      { word: 'ball', letter: 'BALL', img: itemBall, emoji: '\u{26BD}' },
+      { word: 'ball2', letter: 'BALL', img: itemBall, emoji: '\u{1F3C0}' },
+      { word: 'car', letter: 'CAR', img: itemCar, emoji: '\u{1F697}' },
+      { word: 'car2', letter: 'CAR', img: itemCar, emoji: '\u{1F695}' },
+      { word: 'doll', letter: 'DOLL', img: itemDoll, emoji: '\u{1FA86}' },
+      { word: 'doll2', letter: 'DOLL', img: itemDoll, emoji: '\u{1F9F8}' },
+    ],
+  },
+  {
+    id: 'u3l1-dash-car', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Willow Dash! Tap only the CAR things as they run by. Get 6 rings!', who: 'willow', targetLetter: 'CAR', targetPhoneme: '', goal: 6, seconds: 40,
+    items: [
+      { word: 'car', letter: 'CAR', img: itemCar, emoji: '\u{1F697}' },
+      { word: 'car2', letter: 'CAR', img: itemCar, emoji: '\u{1F695}' },
+      { word: 'doll', letter: 'DOLL', img: itemDoll, emoji: '\u{1FA86}' },
+      { word: 'doll2', letter: 'DOLL', img: itemDoll, emoji: '\u{1F9F8}' },
+      { word: 'ball', letter: 'BALL', img: itemBall, emoji: '\u{26BD}' },
+      { word: 'ball2', letter: 'BALL', img: itemBall, emoji: '\u{1F3C0}' },
+    ],
+  },
+  {
+    id: 'u3l1-dash-doll', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Mia Dash! Tap only the DOLL things as they run by. Get 6 rings!', who: 'mia', targetLetter: 'DOLL', targetPhoneme: '', goal: 6, seconds: 40,
+    items: [
+      { word: 'doll', letter: 'DOLL', img: itemDoll, emoji: '\u{1FA86}' },
+      { word: 'doll2', letter: 'DOLL', img: itemDoll, emoji: '\u{1F9F8}' },
+      { word: 'ball', letter: 'BALL', img: itemBall, emoji: '\u{26BD}' },
+      { word: 'ball2', letter: 'BALL', img: itemBall, emoji: '\u{1F3C0}' },
+      { word: 'car', letter: 'CAR', img: itemCar, emoji: '\u{1F697}' },
+      { word: 'car2', letter: 'CAR', img: itemCar, emoji: '\u{1F695}' },
+    ],
+  },
+  {
+    // Each question shows the actual object being asked about (its own
+    // single-CHARACTER solo image, open space preserved for the student's
+    // draggable video circle) — the fix established in U2L3/U2L4/U2L6.
+    id: 'u3l1-join-stage', kind: 'join-stage', bg: bgU3L1ToyParade, teacher: 'Your turn! When it says YOU, say the color AND the toy.', cast: ['pip', 'bella', 'willow', 'mia'],
+    turns: [
+      { who: 'pip', line: 'What color and toy is this?', bg: bgU3L1BallSolo },
+      { who: 'student', line: "It's a ______ ______. (red ball)", bg: bgU3L1BallSolo },
+      { who: 'willow', line: 'Do you like blue cars?', bg: bgU3L1CarSolo },
+      { who: 'student', line: 'I like ______ ______. / I don’t like ______ ______.', bg: bgU3L1CarSolo },
+      { who: 'mia', line: 'What color and toy is this?', bg: bgU3L1DollSolo },
+      { who: 'student', line: "It's a ______ ______. (green doll)", bg: bgU3L1DollSolo },
+    ],
+  },
+  {
+    id: 'u3l1-storybook', kind: 'flipbook', bg: bgU3L1ToyParade, title: 'Playtime with Pip and Friends',
+    pages: [
+      { who: 'bella', img: bgU3L1BallOnly, text: 'Bella found her favorite toy. It is a red ball!' },
+      { who: 'willow', img: bgU3L1CarOnly, text: 'Willow zoomed her toy car. It is a blue car!' },
+      { who: 'mia', img: bgU3L1DollOnly, text: 'Mia hugged her soft doll. It is a green doll!' },
+      { who: 'pip', img: bgU3L1ToyParade, text: 'Red ball, blue car, green doll — so many toys with friends!' },
+    ],
+    checkpoints: [
+      { afterPage: 0, who: 'bella', question: 'What color is the ball?', options: ['Red', 'Blue', 'Green'], answer: 'Red' },
+      { afterPage: 2, who: 'mia', question: 'What color is the doll?', options: ['Red', 'Blue', 'Green'], answer: 'Green' },
+    ],
+  },
+  {
+    id: 'u3l1-roleplay-ball', kind: 'roleplay', bg: bgU3L1BallOnly, teacher: 'Story time! Listen to Pip and Bella, then repeat.', cast: ['pip', 'bella'],
+    script: [
+      { who: 'bella', line: "It's a red ball!", repeat: true },
+      { who: 'pip', line: 'I like red balls!', repeat: true },
+    ],
+  },
+  {
+    id: 'u3l1-roleplay-car', kind: 'roleplay', bg: bgU3L1CarOnly, teacher: 'Now listen to them talk about the car, then repeat.', cast: ['pip', 'willow'],
+    script: [
+      { who: 'willow', line: "It's a blue car!", repeat: true },
+      { who: 'pip', line: "I don't like blue cars!", repeat: true },
+    ],
+  },
+  {
+    id: 'u3l1-roleplay-doll', kind: 'roleplay', bg: bgU3L1DollOnly, teacher: 'Now listen to them talk about the doll, then repeat.', cast: ['pip', 'mia'],
+    script: [
+      { who: 'mia', line: "It's a green doll!", repeat: true },
+      { who: 'pip', line: 'I like green dolls!', repeat: true },
+    ],
+  },
+  {
+    id: 'u3l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the playroom! Sing along together.',
+    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u3l1-finale', kind: 'finale', bg: bgU3L1ToyParade, who: 'pip', line: 'You did it! You can name a red ball, a blue car, and a green doll! \u{1F389}\u{1F9F8}' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 3, Lesson 2 — "Teddy Bear, Blocks, Train!"
+ *
+ * The curriculum blueprint's own pre-seeded stub for this slot (curriculum_
+ * lessons row 51785a84-2d77-4a02-b2b0-7b50f349ac38) names the topic. No new
+ * phonics letter this lesson — teddy(T)/blocks(B)/train(T) were all taught
+ * in Unit 1, matching the DB stub's own "review" marking — freeing the
+ * whole lesson to focus on new GRAMMAR instead: singular ("It's a teddy
+ * bear") vs. plural ("They are blocks"), the natural next rung after L1's
+ * color+toy combination, since "blocks" is a toy that's inherently plural
+ * in real usage.
+ *
+ * DIRECT USER REQUEST for genuine uniqueness — this lesson should not feel
+ * like a copycat of Lesson 1's own activity set, and should be backed by
+ * real research into what actually helps kids retain vocabulary and enjoy
+ * a grammar-focused lesson. Two brand-new Scene kinds were added rather
+ * than reusing L1's exact mechanic set:
+ * - 'plural-sort': a two-bin drag sort ("It is" vs "They are"), directly
+ *   modeled on the "toss the card in the Singular or Plural basket" game
+ *   found in live research (multiple ESL-kids sources). Mixes new toys
+ *   with L1's own ball/doll for spiral review of both units at once.
+ * - 'train-recall': a "missing car" visual-memory game, directly modeled
+ *   on the "Phonics Train" mechanic found in the same research pass (show
+ *   a train of cards, remove one, ask what's missing) — a natural fit
+ *   given the lesson's own train toy, not used anywhere else in this app.
+ * The 'memory' kind (matching pairs) is also new to Unit 3 — it exists
+ * elsewhere in this codebase (Unit 1, and Unit 2's own capstone) but had
+ * never been used in any Unit 3 lesson before this one.
+ * - Cast: Leo=TEDDY BEAR (brown, singular), Bella=BLOCKS (blue, plural),
+ *   Willow=TRAIN (red, singular) — deliberately rotates Leo in and Mia out
+ *   relative to L1's own cast (Bella/Willow/Mia), so the same three
+ *   characters aren't carrying every lesson.
+ * - Art: same full-bleed lesson from L1 held up (all 7 new backgrounds
+ *   passed full-bleed on the first attempt), but two of the four
+ *   two-character "-only" shots needed a retry for a DIFFERENT bug this
+ *   time: bg-u3l2-teddy-only drew Pip twice instead of Pip+Leo, and
+ *   bg-u3l2-train-only omitted Willow entirely, leaving Pip alone — both
+ *   fixed by explicitly describing each character's physical differences
+ *   from Pip (species, colors, body shape) rather than just naming them.
+ * ========================================================================= */
+
+const bgU3L2ToyParade = `${A}/scenes/bg-u3l2-toy-parade.png`;
+const bgU3L2TeddyOnly = `${A}/scenes/bg-u3l2-teddy-only.png`;
+const bgU3L2BlocksOnly = `${A}/scenes/bg-u3l2-blocks-only.png`;
+const bgU3L2TrainOnly = `${A}/scenes/bg-u3l2-train-only.png`;
+const bgU3L2TeddySolo = `${A}/scenes/bg-u3l2-teddy-solo.png`;
+const bgU3L2BlocksSolo = `${A}/scenes/bg-u3l2-blocks-solo.png`;
+const bgU3L2TrainSolo = `${A}/scenes/bg-u3l2-train-solo.png`;
+const itemTeddy = `${A}/items/item-teddy.png`;
+const itemBlocks = `${A}/items/item-blocks.png`;
+const itemTrain = `${A}/items/item-train.png`;
+
+export const LESSON_U3L2_TITLE = 'Teddy Bear, Blocks, Train!';
+export const LESSON_U3L2_OBJECTIVE = 'Identify and name teddy bear, blocks, and train, keep combining toys with colors ("It\'s a brown teddy bear"), and introduce singular vs. plural ("It\'s a train" / "They are blocks").';
+
+export const LESSON_U3L2_SCENES: Scene[] = [
+  { id: 'u3l2-title', kind: 'title-card', bg: bgU3L2ToyParade, level: 'Pre-A1', unit: 'Unit 3', lessonLabel: 'Lesson 2', title: 'Teddy Bear, Blocks, Train!', subtitle: 'More toys, and one is many!' },
+  {
+    id: 'u3l2-intro', kind: 'cinematic', bg: bgU3L2ToyParade, title: 'Teddy Bear, Blocks, Train!', subtitle: 'More toys join the playroom', narrator: 'pip', hidePipOverlay: true,
+    script: [
+      { who: 'pip', line: 'Look! More toys today — a teddy bear, blocks, and a train!' },
+      { who: 'pip', line: 'Leo has ONE teddy bear. But Bella has MANY blocks — they are blocks!' },
+    ],
+    cta: "Let's play!",
+  },
+  {
+    id: 'u3l2-vocab-toys', kind: 'toy-model', bg: bgMeadow,
+    teacher: 'Look! Tap a toy to hear it, say it back, then say the sentence!',
+    items: [
+      { toyWord: 'TEDDY BEAR', colorWord: 'BROWN', colorHex: '#92400E', who: 'leo', img: itemTeddy },
+      { toyWord: 'BLOCKS', colorWord: 'BLUE', colorHex: '#3B82F6', who: 'bella', img: itemBlocks, plural: true },
+      { toyWord: 'TRAIN', colorWord: 'RED', colorHex: '#EF4444', who: 'willow', img: itemTrain },
+    ],
+  },
+  {
+    // New singular/plural sort — direct research match: "toss the card in
+    // the Singular or Plural basket." Mixes today's new toys with L1's own
+    // ball/doll for spiral review of both lessons at once.
+    id: 'u3l2-plural-sort', kind: 'plural-sort', bg: bgMeadow, who: 'pip',
+    teacher: 'Is it ONE, or is it MANY? Drag each picture to "It is" or "They are"!',
+    items: [
+      { word: 'teddy bear', img: itemTeddy, emoji: '\u{1F9F8}', plural: false },
+      { word: 'teddy bears', img: itemTeddy, emoji: '\u{1F9F8}', plural: true },
+      { word: 'train', img: itemTrain, emoji: '\u{1F682}', plural: false },
+      { word: 'blocks', img: itemBlocks, emoji: '\u{1F9F1}', plural: true },
+      { word: 'doll', img: itemDoll, emoji: '\u{1FA86}', plural: false },
+      { word: 'balls', img: itemBall, emoji: '\u{26BD}', plural: true },
+    ],
+  },
+  {
+    // New "missing car" visual-memory game, directly modeled on the
+    // "Phonics Train" mechanic found in live research — a natural fit
+    // given this lesson's own train toy.
+    id: 'u3l2-train-recall', kind: 'train-recall', bg: bgU3L2ToyParade, teacher: 'All aboard! Watch the toy train — remember what is in each car!',
+    cars: [
+      { word: 'TEDDY BEAR', img: itemTeddy, emoji: '\u{1F9F8}' },
+      { word: 'BLOCKS', img: itemBlocks, emoji: '\u{1F9F1}' },
+      { word: 'TRAIN', img: itemTrain, emoji: '\u{1F682}' },
+      { word: 'BALL', img: itemBall, emoji: '\u{26BD}' },
+      { word: 'DOLL', img: itemDoll, emoji: '\u{1FA86}' },
+    ],
+  },
+  {
+    // 'memory' kind already existed in this codebase but had never been
+    // used in any Unit 3 lesson — genuinely fresh mechanic for this unit.
+    id: 'u3l2-memory', kind: 'memory', bg: bgMeadow, teacher: 'Find the matching pairs!',
+    pairs: [
+      { id: 'teddy', label: 'Teddy Bear', emoji: '\u{1F9F8}', img: itemTeddy },
+      { id: 'blocks', label: 'Blocks', emoji: '\u{1F9F1}', img: itemBlocks },
+      { id: 'train', label: 'Train', emoji: '\u{1F682}', img: itemTrain },
+      { id: 'ball', label: 'Ball', emoji: '\u{26BD}', img: itemBall },
+      { id: 'doll', label: 'Doll', emoji: '\u{1FA86}', img: itemDoll },
+      { id: 'car', label: 'Car', emoji: '\u{1F697}', img: itemCar },
+    ],
+  },
+  {
+    id: 'u3l2-who', kind: 'listen-repeat-cards', bg: bgU3L2ToyParade, teacher: 'Listen to each friend, then repeat!',
+    cards: [
+      { who: 'leo', sentence: 'Leo has a teddy bear!', img: itemTeddy, imgLabel: 'Teddy bear' },
+      { who: 'bella', sentence: 'Bella has blocks!', img: itemBlocks, imgLabel: 'Blocks' },
+      { who: 'willow', sentence: 'Willow has a train!', img: itemTrain, imgLabel: 'Train' },
+    ],
+  },
+  {
+    id: 'u3l2-sentence-practice', kind: 'listen-repeat-cards', bg: bgU3L2ToyParade, teacher: "Now let's say the full sentence — one, or many!",
+    cards: [
+      { who: 'leo', sentence: "It's a brown teddy bear!", img: itemTeddy, imgLabel: 'Brown teddy bear' },
+      { who: 'bella', sentence: 'They are blue blocks!', img: itemBlocks, imgLabel: 'Blue blocks' },
+      { who: 'willow', sentence: "It's a red train!", img: itemTrain, imgLabel: 'Red train' },
+      { who: 'leo', sentence: 'I like brown teddy bears!', img: itemTeddy, imgLabel: 'Brown teddy bear' },
+      { who: 'bella', sentence: "I don't like blue blocks!", img: itemBlocks, imgLabel: 'Blue blocks' },
+      { who: 'willow', sentence: 'I like red trains!', img: itemTrain, imgLabel: 'Red train' },
+    ],
+  },
+  {
+    id: 'u3l2-dash-teddy', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Leo Dash! Tap only the TEDDY BEAR things as they run by. Get 6 rings!', who: 'leo', targetLetter: 'TEDDY', targetPhoneme: '', goal: 6, seconds: 40,
+    items: [
+      { word: 'teddy', letter: 'TEDDY', img: itemTeddy, emoji: '\u{1F9F8}' },
+      { word: 'teddy2', letter: 'TEDDY', img: itemTeddy, emoji: '\u{1F9F8}' },
+      { word: 'blocks', letter: 'BLOCKS', img: itemBlocks, emoji: '\u{1F9F1}' },
+      { word: 'blocks2', letter: 'BLOCKS', img: itemBlocks, emoji: '\u{1F9F1}' },
+      { word: 'train', letter: 'TRAIN', img: itemTrain, emoji: '\u{1F682}' },
+      { word: 'train2', letter: 'TRAIN', img: itemTrain, emoji: '\u{1F682}' },
+    ],
+  },
+  {
+    id: 'u3l2-dash-train', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Willow Dash! Tap only the TRAIN things as they run by. Get 6 rings!', who: 'willow', targetLetter: 'TRAIN', targetPhoneme: '', goal: 6, seconds: 40,
+    items: [
+      { word: 'train', letter: 'TRAIN', img: itemTrain, emoji: '\u{1F682}' },
+      { word: 'train2', letter: 'TRAIN', img: itemTrain, emoji: '\u{1F682}' },
+      { word: 'teddy', letter: 'TEDDY', img: itemTeddy, emoji: '\u{1F9F8}' },
+      { word: 'teddy2', letter: 'TEDDY', img: itemTeddy, emoji: '\u{1F9F8}' },
+      { word: 'blocks', letter: 'BLOCKS', img: itemBlocks, emoji: '\u{1F9F1}' },
+      { word: 'blocks2', letter: 'BLOCKS', img: itemBlocks, emoji: '\u{1F9F1}' },
+    ],
+  },
+  {
+    id: 'u3l2-join-stage', kind: 'join-stage', bg: bgU3L2ToyParade, teacher: 'Your turn! Is it ONE, or is it MANY?', cast: ['pip', 'leo', 'bella', 'willow'],
+    turns: [
+      { who: 'pip', line: 'What color and toy is this?', bg: bgU3L2TeddySolo },
+      { who: 'student', line: "It's a ______ ______. (brown teddy bear)", bg: bgU3L2TeddySolo },
+      { who: 'bella', line: 'Is it one block, or many blocks?', bg: bgU3L2BlocksSolo },
+      { who: 'student', line: 'They are ______ ______. (blue blocks)', bg: bgU3L2BlocksSolo },
+      { who: 'willow', line: 'What color and toy is this?', bg: bgU3L2TrainSolo },
+      { who: 'student', line: "It's a ______ ______. (red train)", bg: bgU3L2TrainSolo },
+    ],
+  },
+  {
+    id: 'u3l2-storybook', kind: 'flipbook', bg: bgU3L2ToyParade, title: 'One Toy, Many Toys',
+    pages: [
+      { who: 'leo', img: bgU3L2TeddyOnly, text: 'Leo has one toy. It is a brown teddy bear!' },
+      { who: 'bella', img: bgU3L2BlocksOnly, text: 'Bella has many toys. They are blue blocks!' },
+      { who: 'willow', img: bgU3L2TrainOnly, text: 'Willow has one toy. It is a red train!' },
+      { who: 'pip', img: bgU3L2ToyParade, text: 'One teddy bear, one train, but many blocks — playtime is the best with friends!' },
+    ],
+    checkpoints: [
+      { afterPage: 1, who: 'leo', question: 'Is the teddy bear one, or many?', options: ['One', 'Many'], answer: 'One' },
+      { afterPage: 2, who: 'bella', question: 'Are the blocks one, or many?', options: ['One', 'Many'], answer: 'Many' },
+    ],
+  },
+  {
+    id: 'u3l2-roleplay-teddy', kind: 'roleplay', bg: bgU3L2TeddyOnly, teacher: 'Story time! Listen to Pip and Leo, then repeat.', cast: ['pip', 'leo'],
+    script: [
+      { who: 'leo', line: "It's a brown teddy bear!", repeat: true },
+      { who: 'pip', line: 'I like brown teddy bears!', repeat: true },
+    ],
+  },
+  {
+    id: 'u3l2-roleplay-blocks', kind: 'roleplay', bg: bgU3L2BlocksOnly, teacher: 'Now listen to them talk about the blocks, then repeat.', cast: ['pip', 'bella'],
+    script: [
+      { who: 'bella', line: 'They are blue blocks!', repeat: true },
+      { who: 'pip', line: "I don't like blue blocks!", repeat: true },
+    ],
+  },
+  {
+    id: 'u3l2-roleplay-train', kind: 'roleplay', bg: bgU3L2TrainOnly, teacher: 'Now listen to them talk about the train, then repeat.', cast: ['pip', 'willow'],
+    script: [
+      { who: 'willow', line: "It's a red train!", repeat: true },
+      { who: 'pip', line: 'I like red trains!', repeat: true },
+    ],
+  },
+  {
+    id: 'u3l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the playroom! Sing along together.',
+    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u3l2-finale', kind: 'finale', bg: bgU3L2ToyParade, who: 'pip', line: "You did it! You know one teddy bear, one train, AND many blocks! \u{1F389}\u{1F682}" },
 ];

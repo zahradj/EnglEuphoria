@@ -7,7 +7,7 @@ import { Bug, ChevronDown, ChevronUp } from 'lucide-react';
 /**
  * Collapsible debug panel that shows the current user's resolved
  * hub_type, role, onboarding status, and raw auth metadata.
- * Only visible in development or when ?debug=true is in the URL.
+ * Hidden by default — opt in with ?debug=true in the URL.
  */
 export const ProfileDebugPanel: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -15,12 +15,11 @@ export const ProfileDebugPanel: React.FC = () => {
   const { studentLevel, onboardingCompleted, loading: studentLoading } = useStudentLevel();
   const { hubRole, hubKind, loading: teacherLoading } = useTeacherHubRole(user?.id);
 
-  const isDev = import.meta.env.DEV;
   const debugParam = typeof window !== 'undefined'
     ? new URLSearchParams(window.location.search).get('debug') === 'true'
     : false;
 
-  if (!isDev && !debugParam) return null;
+  if (!debugParam) return null;
   if (!user) return null;
 
   const role = (user as any).role ?? 'unknown';

@@ -239,6 +239,9 @@ export function SceneRenderer(props: {
     case 'listen-repeat-cards': return <ListenRepeatCardsScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
     case 'color-spot': return <ColorSpotScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
     case 'shape-model': return <ShapeModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'toy-model': return <ToyModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'plural-sort': return <PluralSortScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'train-recall': return <TrainRecallScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'shape-sort': return <ShapeSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'color-spy': return <ColorSpyScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'color-simon': return <ColorSimonScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
@@ -359,7 +362,7 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
         <h1 className="text-4xl font-black text-white drop-shadow-[0_3px_8px_rgba(0,0,0,0.55)] sm:text-5xl">{scene.title}</h1>
         <p className="mt-1 text-sm font-semibold text-white/95 drop-shadow sm:text-base">{scene.subtitle}</p>
       </div>
-      {scene.id !== 'intro' && (
+      {scene.id !== 'intro' && !scene.hidePipOverlay && (
         <img src={CAST.pip.img} alt="Pip" className="absolute bottom-[18vh] left-1/2 -translate-x-1/2 object-contain drop-shadow-2xl" style={{ height: 'clamp(220px, 34vh, 420px)', animation: 'lep1-walk 3.2s ease-in-out infinite' }} />
       )}
       {step >= 0 && step < scene.script.length && (
@@ -552,7 +555,13 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
         const nearCol = side === 'left' ? 64 : 36;
         const farCol = side === 'left' ? 87 : 13;
         const cols = [nearCol, farCol, nearCol];
-        const tops = ['20%', '50%', '80%'];
+        // Shifted up from ['20%', '50%', '80%'] — the third anchor's icon (up to
+        // clamp(...,20vh,...) tall) plus its opened-state label below it could push
+        // past the bottom "Hear sound / Now you try" bar on shorter viewports,
+        // clipping the label off-screen entirely. An intermediate ['16%','42%','66%']
+        // still measured its 3rd label ~20px into the bottom bar — this leaves real
+        // clearance, verified against the actual button-bar top in the live scene.
+        const tops = ['15%', '38%', '60%'];
         const rots = [-6, 5, -3];
         const spot = { left: `${cols[i] ?? nearCol}%`, top: tops[i] ?? '50%', rot: rots[i] ?? 0 };
         const isOpen = opened.has(i);
@@ -610,24 +619,30 @@ function EchoScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind: 'ec
   const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
   return (
-    <GlassCard>
-      <p className="text-center text-lg font-bold text-orange-700">{scene.teacher}</p>
-      <div className="mt-4 grid place-items-center rounded-3xl bg-white/60 p-4">
-        <img src={c.img} alt={c.name} width={128} height={128} className="h-32 w-32 object-contain animate-[lep1-hop_1.4s_ease-in-out_infinite]" />
-        <p className="mt-2 text-3xl font-black" style={{ color: c.color }}>"{scene.word}"</p>
-      </div>
-      <button onClick={hear} className="mt-4 w-full rounded-full bg-white py-3 text-lg font-bold text-orange-700 shadow-md ring-2 ring-orange-200 active:scale-95">
-        🔊 Listen {heard > 0 && <span className="text-sm opacity-60">({heard})</span>}
-      </button>
-      <button
-        onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold} disabled={heard === 0}
-        className={`mt-3 w-full rounded-full py-6 text-2xl font-black text-white shadow-xl transition ${held ? 'scale-95' : ''} disabled:opacity-40`}
-        style={{ background: done ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
-      >
-        {done ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & say it'}
-      </button>
-      <PrimaryButton onClick={onNext} disabled={!done}>Next →</PrimaryButton>
-    </GlassCard>
+    // GlassCard has no built-in width limit — every other GlassCard-free scene
+    // kind constrains itself via its own absolute layout, but this is the one
+    // place GlassCard is used bare, so without this wrapper it stretches to
+    // the full viewport width instead of reading as a compact centered card.
+    <div className="mx-auto flex h-full w-full max-w-sm items-center justify-center px-4">
+      <GlassCard className="w-full">
+        <p className="text-center text-lg font-bold text-orange-700">{scene.teacher}</p>
+        <div className="mt-3 grid place-items-center rounded-3xl bg-white/60 p-3">
+          <img src={c.img} alt={c.name} width={96} height={96} className="h-24 w-24 object-contain animate-[lep1-hop_1.4s_ease-in-out_infinite]" />
+          <p className="mt-2 text-2xl font-black" style={{ color: c.color }}>"{scene.word}"</p>
+        </div>
+        <button onClick={hear} className="mt-4 w-full rounded-full bg-white py-3 text-lg font-bold text-orange-700 shadow-md ring-2 ring-orange-200 active:scale-95">
+          🔊 Listen {heard > 0 && <span className="text-sm opacity-60">({heard})</span>}
+        </button>
+        <button
+          onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold} disabled={heard === 0}
+          className={`mt-3 w-full rounded-full py-6 text-2xl font-black text-white shadow-xl transition ${held ? 'scale-95' : ''} disabled:opacity-40`}
+          style={{ background: done ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
+        >
+          {done ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & say it'}
+        </button>
+        <PrimaryButton onClick={onNext} disabled={!done}>Next →</PrimaryButton>
+      </GlassCard>
+    </div>
   );
 }
 
@@ -699,7 +714,7 @@ function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, {
     setSlots((p) => p.map((x) => {
       if (x.idx !== idx) return x;
       if (!dropped) return { ...x, dragging: false, dx: 0, dy: 0 };
-      if (x.it.hit) { sfx.match(); cueSpeak(`${scene.phoneme}! ${x.it.word}!`, scene.who); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
+      if (x.it.hit) { sfx.match(); if (scene.announceOnDrop !== false) cueSpeak(`${scene.phoneme}! ${x.it.word}!`, scene.who); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
       sfx.wrong(); onLose();
       return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
     }));
@@ -847,7 +862,7 @@ function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 't
     if (changed) setZonesDone(doneCount);
     if (doneCount >= segments.length && !done) {
       setDone(true); sfx.gem(); onWin(true);
-      void safeSpeak(`${scene.letter}! ${scene.phoneme} ${scene.word}!`, scene.who);
+      if (scene.speakWord !== false) void safeSpeak(`${scene.letter}! ${scene.phoneme} ${scene.word}!`, scene.who);
       void playLetterPhonic(scene.letter);
     }
   };
@@ -877,7 +892,7 @@ function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 't
           <button onClick={() => { void playLetterPhonic(scene.letter); }} className="flex-1 rounded-full bg-white/95 py-3 text-sm font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔊 Listen</button>
         </div>
         <button
-          onClick={() => { if (!done) { setDone(true); sfx.gem(); onWin(true); void safeSpeak(`${scene.letter}! ${scene.phoneme} ${scene.word}!`, scene.who); } onNext(); }}
+          onClick={() => { if (!done) { setDone(true); sfx.gem(); onWin(true); if (scene.speakWord === false) { void playLetterPhonic(scene.letter); } else { void safeSpeak(`${scene.letter}! ${scene.phoneme} ${scene.word}!`, scene.who); } } onNext(); }}
           className="mt-4 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-3 text-lg font-black text-white shadow-2xl active:scale-95"
         >
           Great tracing! ⭐ Next
@@ -1349,6 +1364,8 @@ function MemoryScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
 
 type DashItem = { id: number; word: string; letter: string; img?: string; emoji: string; lane: number; x: number; correct: boolean; taken: boolean };
 
+const DASH_BALLOON_COLORS = ['#FE6A2F', '#4FA9E0', '#E76FA5', '#34D399', '#FEBE4C', '#A78BFA'];
+
 function DashScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'dash' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
   const [rings, setRings] = useState(0);
   const [hearts, setHearts] = useState(3);
@@ -1408,7 +1425,10 @@ function DashScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { k
         <div className="rounded-full bg-white/95 px-4 py-2 text-sm font-black text-slate-700 shadow-xl backdrop-blur">⏱ {Math.ceil(time)}s</div>
       </div>
       <div className="pointer-events-none absolute left-1/2 top-16 z-30 -translate-x-1/2 rounded-full bg-orange-500 px-5 py-2 text-base font-black text-white shadow-2xl">
-        Tap only <span className="mx-1 rounded-lg bg-white px-2 py-0.5 text-orange-600">{scene.targetLetter}</span> {scene.targetPhoneme}
+        {/* Phonics rounds (targetPhoneme set) show only the sound, not the letter name AND
+            the sound together — vocabulary rounds (color/shape/toy dash games, where
+            targetPhoneme is '') have no separate "sound" to show, so they keep the word. */}
+        Tap only <span className="mx-1 rounded-lg bg-white px-2 py-0.5 text-orange-600">{scene.targetPhoneme || scene.targetLetter}</span>
       </div>
       {flash && <div className={`pointer-events-none absolute inset-0 z-20 ${flash === 'good' ? 'bg-yellow-200/30' : 'bg-rose-500/25'}`} />}
       <div className="pointer-events-none absolute left-4 bottom-16 z-20 sm:left-8" style={{ animation: 'lep1-heroBounce 0.45s ease-in-out infinite' }}>
@@ -1416,12 +1436,23 @@ function DashScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { k
       </div>
       {[0, 1, 2].map((lane) => (
         <div key={lane} className="absolute left-0 right-0" style={{ top: `${30 + lane * 20}%`, height: 0 }}>
-          {items.filter((it) => it.lane === lane && !it.taken).map((it) => (
-            <button key={it.id} onClick={() => tap(it.id)} className="absolute grid h-24 w-24 -translate-y-1/2 place-items-center rounded-3xl border-4 border-white bg-white/95 shadow-2xl active:scale-90 sm:h-28 sm:w-28" style={{ right: `${it.x}%`, animation: 'lep1-itemBob 0.8s ease-in-out infinite' }} aria-label={it.word}>
-              {it.img ? <img src={it.img} alt={it.word} className="h-16 w-16 object-contain sm:h-20 sm:w-20" draggable={false} /> : <span className="text-4xl">{it.emoji}</span>}
-              <span className="pointer-events-none absolute -bottom-6 rounded-full bg-orange-500 px-2 py-0.5 text-[10px] font-black uppercase text-white shadow">{it.word}</span>
-            </button>
-          ))}
+          {items.filter((it) => it.lane === lane && !it.taken).map((it) => {
+            const color = DASH_BALLOON_COLORS[it.id % DASH_BALLOON_COLORS.length];
+            return (
+              <button key={it.id} onClick={() => tap(it.id)} className="absolute -translate-y-1/2" style={{ right: `${it.x}%`, animation: 'lep1-itemBob 0.8s ease-in-out infinite' }} aria-label={it.word}>
+                <div className="relative flex flex-col items-center">
+                  <div className="grid h-24 w-24 place-items-center rounded-[50%] shadow-2xl ring-2 ring-white/70 active:scale-90 sm:h-28 sm:w-28" style={{ background: `radial-gradient(circle at 32% 28%, ${color}ee 0%, ${color} 65%, ${color}cc 100%)` }}>
+                    <div className="grid h-16 w-16 place-items-center rounded-full bg-white/95 sm:h-[4.5rem] sm:w-[4.5rem]">
+                      {it.img ? <img src={it.img} alt={it.word} className="h-11 w-11 object-contain sm:h-12 sm:w-12" draggable={false} /> : <span className="text-3xl">{it.emoji}</span>}
+                    </div>
+                  </div>
+                  <div className="h-4 w-[7px]" style={{ background: color }} />
+                  <div className="-mt-0.5 text-xl leading-none">🎀</div>
+                  <span className="pointer-events-none absolute -bottom-6 whitespace-nowrap rounded-full bg-orange-500 px-2 py-0.5 text-[10px] font-black uppercase text-white shadow">{it.word}</span>
+                </div>
+              </button>
+            );
+          })}
         </div>
       ))}
       {status === 'ready' && (
@@ -1601,24 +1632,29 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
         </div>
       )}
       {awaitingRepeat && current && (
-        <>
-          <div className="absolute inset-0 z-20 bg-black/35 backdrop-blur-[2px]" />
-          <div className="absolute inset-0 z-30 flex items-center justify-center px-4">
-            <div className="relative w-full max-w-xl rounded-[36px] bg-white p-7 text-center shadow-[0_30px_80px_rgba(0,0,0,0.45)] ring-4 ring-orange-300">
-              <div className="mb-2 text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">Your turn!</div>
-              <div className="relative mx-auto mb-3 flex h-24 w-24 items-center justify-center">
-                <span className="absolute inset-0 rounded-full bg-orange-400/40 animate-ping" />
-                <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-orange-600 text-4xl shadow-xl">🎤</div>
-              </div>
-              <div className="text-sm font-bold uppercase tracking-widest text-neutral-500">Say it like {CAST[current.who].name}</div>
-              <div className="mt-1 text-3xl font-black text-orange-700 sm:text-4xl">“{current.line}”</div>
-              <div className="mt-5 flex items-center justify-center gap-3">
-                <button onClick={replayCurrent} className="flex items-center gap-2 rounded-full bg-orange-100 px-5 py-3 text-sm font-black uppercase tracking-widest text-orange-700 ring-2 ring-orange-200 active:scale-95">🔁 Hear again</button>
-                <button onClick={confirmRepeat} className="flex items-center gap-2 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 px-7 py-3 text-base font-black uppercase tracking-widest text-white shadow-xl active:scale-95">✅ I said it</button>
-              </div>
+        // Previously a full-screen dark/blur overlay + dead-center card regardless of
+        // speaker — with 3 painted-in characters (bgL1RoleplayFriends), that left Pip
+        // (positioned off to the left, outside the centered card's footprint) fully
+        // visible on every turn while Mia/Bella got hidden behind the card, making it
+        // look like Pip was "in" every turn even when it wasn't his line. Anchoring
+        // near the current speaker's own on-screen position (clamped to stay fully
+        // on-screen) and dropping the full-screen dim keeps every character visible
+        // and makes it visually clear whose turn it actually is.
+        <div className="absolute inset-x-0 bottom-10 z-30 flex justify-center px-4">
+          <div className="relative w-full max-w-[380px] rounded-[32px] bg-white p-5 text-center shadow-[0_30px_80px_rgba(0,0,0,0.45)] ring-4 ring-orange-300">
+            <div className="mb-2 text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">Your turn!</div>
+            <div className="relative mx-auto mb-3 flex h-20 w-20 items-center justify-center">
+              <span className="absolute inset-0 rounded-full bg-orange-400/40 animate-ping" />
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-orange-600 text-3xl shadow-xl">🎤</div>
+            </div>
+            <div className="text-sm font-bold uppercase tracking-widest text-neutral-500">Say it like {CAST[current.who].name}</div>
+            <div className="mt-1 text-2xl font-black text-orange-700 sm:text-3xl">“{current.line}”</div>
+            <div className="mt-4 flex items-center justify-center gap-3">
+              <button onClick={replayCurrent} className="flex items-center gap-2 rounded-full bg-orange-100 px-5 py-3 text-sm font-black uppercase tracking-widest text-orange-700 ring-2 ring-orange-200 active:scale-95">🔁 Hear again</button>
+              <button onClick={confirmRepeat} className="flex items-center gap-2 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 px-7 py-3 text-base font-black uppercase tracking-widest text-white shadow-xl active:scale-95">✅ I said it</button>
             </div>
           </div>
-        </>
+        </div>
       )}
       {step >= scene.script.length && (
         <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
@@ -1846,7 +1882,15 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
           const showChar = openIdx === i || phase === 'reveal';
           return (
             <div key={i} className="absolute bottom-0" style={{ left: `${left}%`, transform: 'translateX(-50%)', width: '28%', maxWidth: 320, height: 'clamp(260px, 52vh, 480px)' }}>
-              <div className="pointer-events-none absolute left-1/2 z-30 -translate-x-1/2" style={{ left: phase === 'reveal' ? '50%' : openIdx === i ? stepOutside : '50%', bottom: '-14%', width: 'clamp(420px, 42vw, 620px)', height: 'clamp(420px, 42vw, 620px)', transform: showChar ? 'translateY(0) scale(1)' : 'translateY(10%) scale(0.96)', opacity: showChar ? 1 : 0, transition: 'left 0.45s ease-out, transform 0.45s ease-out, opacity 0.25s ease-out', transitionDelay: openIdx === i ? '0.35s' : '0s' }}>
+              {/* Sized off vh, not vw, and inset from the door's bottom edge instead of
+                  stepping below it — the old 42vw sizing + -14% bottom offset looked fine
+                  on tall phone aspect ratios, but on a squarer/shorter viewport it pushed
+                  the character's lower third under the fixed Back/Next nav bar (which
+                  overlays the bottom ~60-90px of every full-bleed scene), so the reveal
+                  read as a character cut off at the door instead of standing in front of
+                  it. Sizing off vh and pulling the bottom inset positive keeps the whole
+                  sprite clear of that overlay at any aspect ratio. */}
+              <div className="pointer-events-none absolute left-1/2 z-30 -translate-x-1/2" style={{ left: phase === 'reveal' ? '50%' : openIdx === i ? stepOutside : '50%', bottom: '14%', width: 'clamp(200px, 40vh, 380px)', height: 'clamp(200px, 40vh, 380px)', transform: showChar ? 'translateY(0) scale(1)' : 'translateY(10%) scale(0.96)', opacity: showChar ? 1 : 0, transition: 'left 0.45s ease-out, transform 0.45s ease-out, opacity 0.25s ease-out', transitionDelay: openIdx === i ? '0.35s' : '0s' }}>
                 <img src={c.img} alt={c.name} draggable={false} className="h-full w-full max-w-none object-contain" style={{ filter: 'drop-shadow(0 10px 18px rgba(0,0,0,0.45))' }} />
                 {phase === 'reveal' && <div className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-2xl bg-white px-4 py-2 text-lg font-black text-neutral-800 shadow-xl ring-2 ring-white" style={{ color: c.color }}>{c.name}</div>}
                 {(phase === 'greet' || phase === 'echo') && openIdx === i && <div className="absolute -top-14 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-2xl bg-white px-4 py-2 text-base font-black text-neutral-800 shadow-xl ring-2 ring-white">{r!.helloLine}</div>}
@@ -1872,8 +1916,29 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
 
 /** Simple coloring-book line art (stroke-only, no fill) for the vocabulary-
  * coloring mode — code-drawn so no new image assets are needed. */
-function VocabOutline({ kind }: { kind: 'apple' | 'water' | 'sun' }) {
+function VocabOutline({ kind }: { kind: 'apple' | 'water' | 'sun' | 'circle' | 'square' | 'triangle' }) {
   const stroke = { fill: 'none', stroke: '#1a1a1a', strokeWidth: 8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
+  if (kind === 'circle') {
+    return (
+      <svg viewBox="0 0 400 520" className="pointer-events-none absolute inset-0 h-full w-full">
+        <circle cx="200" cy="280" r="130" {...stroke} />
+      </svg>
+    );
+  }
+  if (kind === 'square') {
+    return (
+      <svg viewBox="0 0 400 520" className="pointer-events-none absolute inset-0 h-full w-full">
+        <rect x="90" y="170" width="220" height="220" rx="18" {...stroke} />
+      </svg>
+    );
+  }
+  if (kind === 'triangle') {
+    return (
+      <svg viewBox="0 0 400 520" className="pointer-events-none absolute inset-0 h-full w-full">
+        <path d="M200 150 L320 390 L80 390 Z" {...stroke} />
+      </svg>
+    );
+  }
   if (kind === 'apple') {
     return (
       <svg viewBox="0 0 400 520" className="pointer-events-none absolute inset-0 h-full w-full">
@@ -3095,6 +3160,344 @@ function ShapeModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
   );
 }
 
+function buildToySentence(colorWord: string, toyWord: string, plural?: boolean): string {
+  if (plural) return `They are ${colorWord.toLowerCase()} ${toyWord.toLowerCase()}.`;
+  return `It's a ${colorWord.toLowerCase()} ${toyWord.toLowerCase()}.`;
+}
+
+/* ---------- Toy model (teach: tap the toy, repeat, then say the combined color+toy sentence) ---------- */
+
+function ToyModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'toy-model' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const [heard, setHeard] = useState<Set<number>>(new Set());
+  const [wordDone, setWordDone] = useState<Set<number>>(new Set());
+  const [sentenceDone, setSentenceDone] = useState<Set<number>>(new Set());
+  const [held, setHeld] = useState(false);
+  const holdTimer = useRef<number | null>(null);
+  const gemDone = useRef(false);
+  const allDone = sentenceDone.size >= scene.items.length;
+
+  useEffect(() => {
+    if (allDone && !gemDone.current) {
+      gemDone.current = true;
+      onWin(true);
+      const sentences = scene.items.map((it) => buildToySentence(it.colorWord, it.toyWord, it.plural)).join(' ');
+      cueSpeak(`Wonderful! ${sentences}`, 'pip');
+    }
+  }, [allDone]);
+
+  const tapItem = async (i: number) => {
+    if (held) return;
+    setActiveIdx(i);
+    setHeard((s) => new Set(s).add(i));
+    sfx.pop();
+    await safeSpeak(scene.items[i].toyWord, scene.items[i].who);
+  };
+
+  const startHoldWord = (i: number) => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(async () => {
+      setHeld(false);
+      setWordDone((s) => new Set(s).add(i));
+      sfx.gem();
+      const item = scene.items[i];
+      await new Promise((r) => window.setTimeout(r, 400));
+      await safeSpeak(buildToySentence(item.colorWord, item.toyWord, item.plural), item.who);
+    }, 1200);
+  };
+
+  const startHoldSentence = (i: number) => {
+    setHeld(true);
+    holdTimer.current = window.setTimeout(() => {
+      setHeld(false);
+      setSentenceDone((s) => new Set(s).add(i));
+      sfx.gem();
+    }, 1200);
+  };
+  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+
+  return (
+    <div className="absolute inset-0">
+      <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
+        <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
+          {allDone ? 'You know the toys and the sentences! ⭐' : scene.teacher}
+        </div>
+      </div>
+
+      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 flex-wrap items-start justify-center gap-6 px-4 sm:gap-10">
+        {scene.items.map((item, i) => {
+          const isActive = activeIdx === i;
+          const isHeard = heard.has(i);
+          const isWordDone = wordDone.has(i);
+          const isSentenceDone = sentenceDone.has(i);
+          return (
+            <div key={item.toyWord} className="flex flex-col items-center gap-2">
+              <button
+                onClick={() => tapItem(i)}
+                className="relative grid h-40 w-40 place-items-center bg-transparent transition active:scale-95 sm:h-48 sm:w-48"
+                aria-label={`Hear ${item.toyWord}`}
+              >
+                <span className="absolute bottom-2 h-6 w-24 rounded-full blur-sm sm:w-28" style={{ background: 'rgba(0,0,0,0.22)' }} />
+                <img
+                  src={item.img} alt={item.toyWord}
+                  className={`relative h-36 w-36 object-contain drop-shadow-xl sm:h-44 sm:w-44 ${isSentenceDone ? '' : 'animate-[lep1-hop_1.8s_ease-in-out_infinite]'}`}
+                  style={{ animationDelay: `${i * 0.3}s` }}
+                />
+              </button>
+              <span className="rounded-full bg-white px-4 py-1 text-lg font-black uppercase shadow" style={{ color: item.colorHex }}>{item.toyWord}</span>
+              {isWordDone && (
+                <span className="max-w-[10rem] rounded-2xl bg-white px-3 py-1 text-center text-xs font-bold text-slate-800 shadow sm:text-sm">{buildToySentence(item.colorWord, item.toyWord, item.plural)}</span>
+              )}
+              {isSentenceDone ? (
+                <span className="text-2xl">✅</span>
+              ) : isWordDone ? (
+                <button
+                  onPointerDown={() => startHoldSentence(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
+                  style={{ background: 'linear-gradient(90deg, #8B5CF6, #A78BFA)' }}
+                >
+                  🎤 Say the sentence!
+                </button>
+              ) : isHeard && isActive ? (
+                <button
+                  onPointerDown={() => startHoldWord(i)} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+                  className={`rounded-full px-5 py-2 text-sm font-black text-white shadow-lg transition ${held ? 'scale-95' : 'animate-pulse'}`}
+                  style={{ background: 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
+                >
+                  🎤 Hold & repeat
+                </button>
+              ) : (
+                <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-orange-700 shadow">Tap to hear</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {allDone && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
+            Now let's practice →
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Plural sort (drag each picture into "It is" or "They are") ---------- */
+
+function PluralSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'plural-sort' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
+  type Slot = { idx: number; it: typeof scene.items[number]; collected: boolean; dragging: boolean; dx: number; dy: number; flash: 'none' | 'good' | 'bad' };
+  const [slots, setSlots] = useState<Slot[]>(() => scene.items.map((it, idx) => ({ idx, it, collected: false, dragging: false, dx: 0, dy: 0, flash: 'none' })));
+  const [hotBin, setHotBin] = useState<'one' | 'many' | null>(null);
+  const [gemAwarded, setGemAwarded] = useState(false);
+  const targetRefs = useRef<Record<string, HTMLElement | null>>({});
+  const dragIdx = useRef<number | null>(null);
+  const start = useRef({ x: 0, y: 0 });
+  const done = slots.every((s) => s.collected);
+
+  useEffect(() => { if (done && !gemAwarded) { setGemAwarded(true); onWin(true); cueSpeak('Amazing! One or many, you know them all!', scene.who); } }, [done, gemAwarded]);
+
+  function hitTest(x: number, y: number, itemEl?: Element | null): 'one' | 'many' | null {
+    let cx = x, cy = y;
+    if (itemEl) { const r = (itemEl as HTMLElement).getBoundingClientRect(); cx = r.left + r.width / 2; cy = r.top + r.height / 2; }
+    const PAD = 48;
+    for (const bin of ['one', 'many'] as const) {
+      const el = targetRefs.current[bin];
+      if (!el) continue;
+      const b = el.getBoundingClientRect();
+      const inside = (cx >= b.left - PAD && cx <= b.right + PAD && cy >= b.top - PAD && cy <= b.bottom + PAD) || (x >= b.left - PAD && x <= b.right + PAD && y >= b.top - PAD && y <= b.bottom + PAD);
+      if (inside) return bin;
+    }
+    return null;
+  }
+
+  const onDown = (idx: number) => (e: React.PointerEvent<HTMLButtonElement>) => {
+    const s = slots.find((x) => x.idx === idx);
+    if (!s || s.collected) return;
+    sfx.pop();
+    cueSpeakOnce(s.it.word, scene.who);
+    dragIdx.current = idx;
+    start.current = { x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, dragging: true, dx: 0, dy: 0, flash: 'none' } : x)));
+  };
+  const onMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const idx = dragIdx.current;
+    if (idx === null) return;
+    const dx = e.clientX - start.current.x, dy = e.clientY - start.current.y;
+    setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, dx, dy } : x)));
+    setHotBin(hitTest(e.clientX, e.clientY, e.currentTarget));
+  };
+  const onUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const idx = dragIdx.current;
+    dragIdx.current = null;
+    const dropBin = hitTest(e.clientX, e.clientY, e.currentTarget);
+    setHotBin(null);
+    if (idx === null) return;
+    setSlots((p) => p.map((x) => {
+      if (x.idx !== idx) return x;
+      if (!dropBin) return { ...x, dragging: false, dx: 0, dy: 0 };
+      const correctBin = x.it.plural ? 'many' : 'one';
+      if (dropBin === correctBin) { sfx.match(); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
+      sfx.wrong(); onLose();
+      return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
+    }));
+  };
+
+  const scattered = scatterPositions(slots.length);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div className="pointer-events-none absolute inset-x-0 top-4 z-30 flex justify-center px-4">
+        <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">{scene.teacher}</div>
+      </div>
+      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 items-center justify-center gap-6 px-4 sm:gap-10">
+        {(['one', 'many'] as const).map((bin) => {
+          const label = bin === 'one' ? 'IT IS' : 'THEY ARE';
+          const isHot = hotBin === bin;
+          const collectedHere = slots.filter((s) => s.collected && (s.it.plural ? 'many' : 'one') === bin);
+          return (
+            <div key={bin} ref={(el) => { targetRefs.current[bin] = el; }} className={`flex h-40 w-40 flex-col items-center justify-center rounded-3xl border-4 shadow-2xl transition-transform sm:h-52 sm:w-52 ${isHot ? 'scale-110 border-orange-400 ring-8 ring-orange-300/70' : 'border-white'}`} style={{ background: bin === 'one' ? '#FE6A2F' : '#8B5CF6' }}>
+              <span className="text-lg font-black uppercase text-white drop-shadow sm:text-2xl">{label}</span>
+              <div className="mt-2 flex flex-wrap items-center justify-center gap-1 px-2">
+                {collectedHere.map((s) => (
+                  <span key={s.idx} className="grid h-7 w-7 place-items-center rounded-full bg-white text-sm shadow ring-2 ring-green-400 animate-[lep1-pop_0.4s_ease-out]">✅</span>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {slots.filter((s) => !s.collected).map((s) => {
+        const pos = scattered[s.idx];
+        return (
+          <button
+            key={s.idx}
+            onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
+            className={`absolute z-20 flex items-center justify-center rounded-3xl border-4 border-white bg-white shadow-xl transition ${s.dragging ? 'scale-110' : ''} ${s.flash === 'bad' ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`}
+            style={{ left: pos.left, top: pos.top, width: 'clamp(88px, 16vh, 208px)', height: 'clamp(88px, 16vh, 208px)', transform: s.dragging ? `translate(${s.dx}px, ${s.dy}px) scale(1.1)` : undefined, touchAction: 'none' }}
+            aria-label={s.it.word}
+          >
+            {s.it.plural ? (
+              <div className="flex flex-wrap items-center justify-center gap-0.5 p-1">
+                {[0, 1, 2].map((i) => s.it.img ? <img key={i} src={s.it.img} alt="" className="h-1/3 w-1/3 object-contain" draggable={false} /> : <span key={i} className="text-2xl">{s.it.emoji}</span>)}
+              </div>
+            ) : s.it.img ? (
+              <img src={s.it.img} alt={s.it.word} className="h-3/4 w-3/4 object-contain" draggable={false} />
+            ) : (
+              <span className="text-5xl">{s.it.emoji}</span>
+            )}
+          </button>
+        );
+      })}
+      {done && <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center"><button onClick={onNext} className="rounded-full bg-orange-500 px-8 py-4 text-base font-black uppercase tracking-widest text-white shadow-2xl active:scale-95">✨ Next</button></div>}
+    </div>
+  );
+}
+
+/* ---------- Train recall (the train's cars are covered one by one; recall which toy was in the one that stays hidden) ---------- */
+
+function TrainRecallScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'train-recall' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
+  type Phase = 'reveal' | 'hidden' | 'ask' | 'done';
+  const [phase, setPhase] = useState<Phase>('reveal');
+  const [missingIdx, setMissingIdx] = useState<number | null>(null);
+  const [choices, setChoices] = useState<string[]>([]);
+  const [picked, setPicked] = useState<string | null>(null);
+  const [wrong, setWrong] = useState(false);
+  const gemDone = useRef(false);
+  const started = useRef(false);
+
+  useEffect(() => {
+    if (started.current) return;
+    started.current = true;
+    (async () => {
+      for (const car of scene.cars) { await safeSpeak(car.word, 'pip'); await new Promise((r) => setTimeout(r, 250)); }
+      await new Promise((r) => setTimeout(r, 300));
+      setPhase('hidden');
+      await new Promise((r) => setTimeout(r, 700));
+      const idx = Math.floor(Math.random() * scene.cars.length);
+      setMissingIdx(idx);
+      const others = scene.cars.filter((_, i) => i !== idx).map((c) => c.word);
+      const distractors = others.sort(() => Math.random() - 0.5).slice(0, 2);
+      setChoices([scene.cars[idx].word, ...distractors].sort(() => Math.random() - 0.5));
+      setPhase('ask');
+      await safeSpeak('Choo choo! One car is empty. Which toy is missing?', 'pip');
+    })();
+  }, []);
+
+  const pick = async (word: string) => {
+    if (missingIdx === null || picked) return;
+    setPicked(word);
+    if (word === scene.cars[missingIdx].word) {
+      sfx.match(); sfx.gem();
+      setPhase('done');
+      if (!gemDone.current) { gemDone.current = true; onWin(true); }
+      await safeSpeak(`Yes! It's the ${word.toLowerCase()}!`, 'pip');
+    } else {
+      sfx.wrong(); onLose(); setWrong(true);
+      window.setTimeout(() => { setPicked(null); setWrong(false); }, 700);
+    }
+  };
+
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div className="pointer-events-none absolute inset-x-0 top-4 z-30 flex justify-center px-4">
+        <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
+          {phase === 'ask' || phase === 'done' ? 'Choo choo! Which toy is missing?' : scene.teacher}
+        </div>
+      </div>
+      <div className="absolute inset-x-0 top-[42%] z-10 flex -translate-y-1/2 items-center justify-center gap-3 px-4">
+        {scene.cars.map((car, i) => {
+          const isMissing = missingIdx === i;
+          const showContents = phase === 'reveal' || (phase !== 'hidden' && !isMissing) || (phase === 'done' && isMissing);
+          return (
+            <div key={i} className="flex flex-col items-center gap-1">
+              <div className={`relative flex h-24 w-24 items-center justify-center rounded-2xl border-4 border-white bg-gradient-to-b from-orange-400 to-orange-600 shadow-xl sm:h-28 sm:w-28 ${isMissing && phase === 'ask' ? 'animate-pulse ring-4 ring-yellow-300' : ''}`}>
+                {showContents ? (
+                  car.img ? <img src={car.img} alt={car.word} className="h-3/4 w-3/4 object-contain" draggable={false} /> : <span className="text-3xl">{car.emoji}</span>
+                ) : (
+                  <span className="text-3xl font-black text-white">?</span>
+                )}
+              </div>
+              <div className="h-3 w-16 rounded-b-lg bg-neutral-700" />
+              <div className="flex gap-3">
+                <span className="h-4 w-4 rounded-full bg-neutral-800" />
+                <span className="h-4 w-4 rounded-full bg-neutral-800" />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {phase === 'ask' && (
+        <div className="absolute inset-x-0 bottom-10 z-30 flex flex-wrap justify-center gap-3 px-4">
+          {choices.map((word) => {
+            const isPicked = picked === word;
+            return (
+              <button
+                key={word}
+                onClick={() => pick(word)}
+                disabled={!!picked}
+                className={`rounded-2xl border-4 bg-white px-6 py-3 text-lg font-black uppercase text-orange-700 shadow-xl active:scale-95 ${isPicked && wrong ? 'border-red-400 animate-[lep1-shake_0.4s_ease-out]' : 'border-white'}`}
+              >
+                {word}
+              </button>
+            );
+          })}
+        </div>
+      )}
+      {phase === 'done' && (
+        <div className="absolute inset-x-0 bottom-10 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
+            All aboard! Next →
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ---------- Shape sort (drag each item into the shape it matches) ---------- */
 
 function ShapeSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'shape-sort' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
@@ -3989,7 +4392,7 @@ function VoiceStageScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
 /* ---------- Sound pop ---------- */
 
 type PopMode = 'balloon' | 'bubble' | 'butterfly' | 'apple' | 'rocket';
-const MODE_FOR_LETTER: Record<string, PopMode> = { B: 'balloon', H: 'balloon', S: 'bubble', N: 'bubble', T: 'butterfly', W: 'butterfly', A: 'apple', M: 'rocket' };
+const MODE_FOR_LETTER: Record<string, PopMode> = { B: 'balloon', H: 'balloon', M: 'balloon', S: 'bubble', N: 'bubble', T: 'butterfly', W: 'butterfly', A: 'apple' };
 type PopBalloon = { key: number; word: string; letter: string; img?: string; emoji: string; xPct: number; hue: number; duration: number; born: number; popped: null | 'hit' | 'miss'; mode: PopMode };
 
 function SoundPopScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'sound-pop' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
