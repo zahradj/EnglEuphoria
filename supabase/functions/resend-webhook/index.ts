@@ -1,7 +1,13 @@
 // Public webhook endpoint for Resend delivery events.
 // Verifies the Svix signature using RESEND_WEBHOOK_SECRET, then updates the
-// matching row in public.system_emails (by resend_id stored in metadata) and
-// appends the raw event to metadata.events[].
+// matching row(s) by resend_id stored in metadata, in BOTH:
+//   - public.email_send_log -- populated with resend_id on every single send,
+//     since send-transactional-email (the shared sender every caller goes
+//     through) always writes it there. This is the reliable match target.
+//   - public.system_emails -- only some callers populate resend_id here, so
+//     this match is best-effort and will miss rows until each caller is
+//     updated to capture and store it too.
+// Appends the raw event to metadata.events[] on whichever row(s) match.
 //
 // verify_jwt = false (see supabase/config.toml) so Resend can POST without a
 // Supabase JWT. Signature verification is what authenticates the caller.
@@ -75,36 +81,65 @@ Deno.serve(async (req) => {
 
   const admin = createClient(supabaseUrl, serviceKey);
 
+  // Builds the metadata patch shared by both tables. Neither table has a
+  // top-level delivered_at column, so that timestamp lives in metadata too.
+  const buildPatchMeta = (existing: Record<string, any>) => {
+    const events = Array.isArray(existing.events) ? existing.events : [];
+    events.push({ type, at: new Date().toISOString(), data });
+    const nowIso = new Date().toISOString();
+    const patchMeta: Record<string, any> = { ...existing, events, last_event: type, last_event_at: nowIso };
+    if (type === 'email.delivered') patchMeta.delivered_at = nowIso;
+    return patchMeta;
+  };
+  const errorMessage = () =>
+    data?.bounce?.message ?? data?.reason ?? data?.error ?? `Resend ${type}`;
+
   if (resendId) {
-    // Find the row by metadata->>'resend_id'
-    const { data: rows, error: findErr } = await admin
+    // email_send_log: reliable match -- send-transactional-email always
+    // stores resend_id here for every send, regardless of caller.
+    const { data: logRows, error: logFindErr } = await admin
+      .from('email_send_log')
+      .select('id, metadata')
+      .eq('metadata->>resend_id', resendId)
+      .limit(1);
+
+    if (logFindErr) {
+      console.error('resend-webhook: email_send_log lookup error', logFindErr);
+    } else if (logRows && logRows.length > 0) {
+      const row = logRows[0] as { id: string; metadata: any };
+      const patch: Record<string, any> = {
+        status,
+        metadata: buildPatchMeta((row.metadata ?? {}) as Record<string, any>),
+      };
+      if (type === 'email.bounced' || type === 'email.complained' || type === 'email.failed') {
+        patch.error_message = errorMessage();
+      }
+      const { error: updErr } = await admin.from('email_send_log').update(patch).eq('id', row.id);
+      if (updErr) console.error('resend-webhook: email_send_log update error', updErr);
+    } else {
+      console.warn(`resend-webhook: no email_send_log row for resend_id=${resendId}`);
+    }
+
+    // system_emails: best-effort -- only some callers store resend_id here yet.
+    const { data: sysRows, error: sysFindErr } = await admin
       .from('system_emails')
       .select('id, metadata')
       .eq('metadata->>resend_id', resendId)
       .limit(1);
 
-    if (findErr) {
-      console.error('resend-webhook: lookup error', findErr);
-    } else if (rows && rows.length > 0) {
-      const row = rows[0] as { id: string; metadata: any };
-      const meta = (row.metadata ?? {}) as Record<string, any>;
-      const events = Array.isArray(meta.events) ? meta.events : [];
-      events.push({ type, at: new Date().toISOString(), data });
-
+    if (sysFindErr) {
+      console.error('resend-webhook: system_emails lookup error', sysFindErr);
+    } else if (sysRows && sysRows.length > 0) {
+      const row = sysRows[0] as { id: string; metadata: any };
       const patch: Record<string, any> = {
         delivery_status: status,
-        metadata: { ...meta, events, last_event: type, last_event_at: new Date().toISOString() },
+        metadata: buildPatchMeta((row.metadata ?? {}) as Record<string, any>),
       };
-      if (type === 'email.delivered') patch.delivered_at = new Date().toISOString();
       if (type === 'email.bounced' || type === 'email.complained' || type === 'email.failed') {
-        patch.error_message =
-          data?.bounce?.message ?? data?.reason ?? data?.error ?? `Resend ${type}`;
+        patch.error_message = errorMessage();
       }
-
       const { error: updErr } = await admin.from('system_emails').update(patch).eq('id', row.id);
-      if (updErr) console.error('resend-webhook: update error', updErr);
-    } else {
-      console.warn(`resend-webhook: no system_emails row for resend_id=${resendId}`);
+      if (updErr) console.error('resend-webhook: system_emails update error', updErr);
     }
   }
 

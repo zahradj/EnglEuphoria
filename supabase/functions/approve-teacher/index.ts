@@ -176,6 +176,7 @@ Deno.serve(async (req) => {
     // Send branded welcome email via direct HTTP call to avoid functions.invoke issues
     let emailSuccess = false;
     let emailErrorMsg = "";
+    let resendId: string | null = null;
     try {
       const emailRes = await fetch(`${supabaseUrl}/functions/v1/send-transactional-email`, {
         method: "POST",
@@ -201,6 +202,15 @@ Deno.serve(async (req) => {
         emailErrorMsg = `HTTP ${emailRes.status}: ${emailBody}`;
       } else {
         emailSuccess = true;
+        // Capture resend_id so the resend-webhook can later match this row
+        // and update it with the real delivered/bounced/complained status --
+        // without it, this row is stuck showing "sent" forever regardless of
+        // what actually happens after Resend hands the email off.
+        try {
+          resendId = JSON.parse(emailBody)?.resend_id ?? null;
+        } catch {
+          // non-JSON body — leave resendId null, nothing else to do here
+        }
       }
     } catch (fetchErr) {
       console.error("Email fetch error:", fetchErr);
@@ -230,6 +240,7 @@ Deno.serve(async (req) => {
         sent_at: new Date().toISOString(),
         related_entity_id: applicationId,
         related_entity_type: "teacher_application",
+        ...(resendId ? { metadata: { resend_id: resendId } } : {}),
       });
     }
 
