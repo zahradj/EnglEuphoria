@@ -1307,11 +1307,27 @@ function SongScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'so
       await audio.play();
       setStatus('playing'); setIdx(0);
       const dur = () => (isFinite(audio.duration) && audio.duration > 0 ? audio.duration : totalDuration);
+      // Real per-line cue START times (seconds) when the song was generated with them
+      // — falls back to evenly dividing the audio's total length for older songs that
+      // predate lineDurationsMs (see the field's own comment in scenes.ts for why even
+      // division drifts out of sync with real sung pacing).
+      let cueStarts: number[] | null = null;
+      if (scene.lineDurationsMs) {
+        cueStarts = [];
+        let acc = 0;
+        for (const ms of scene.lineDurationsMs) { cueStarts.push(acc); acc += ms / 1000; }
+      }
       const tick = () => {
         if (!audioRef.current) return;
         const t = audioRef.current.currentTime;
-        const perLine = dur() / totalLines;
-        const i = Math.min(totalLines - 1, Math.floor(t / perLine));
+        let i: number;
+        if (cueStarts) {
+          i = 0;
+          for (let k = 0; k < cueStarts.length; k++) { if (t >= cueStarts[k]) i = k; }
+        } else {
+          const perLine = dur() / totalLines;
+          i = Math.min(totalLines - 1, Math.floor(t / perLine));
+        }
         setIdx(i);
         if (!audioRef.current.paused && !audioRef.current.ended) rafRef.current = requestAnimationFrame(tick);
       };

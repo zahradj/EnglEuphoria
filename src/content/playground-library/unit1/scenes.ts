@@ -65,7 +65,20 @@ export type Scene =
     }
   | { id: string; kind: 'alphabet-blocks'; bg: string; teacher: string; letters: string[]; tapRounds: { letter: string }[]; words: { word: string; emoji: string }[] }
   | { id: string; kind: 'alphabet-order'; bg: string; teacher: string; sequences: string[] }
-  | { id: string; kind: 'song'; bg: string; title: string; teacher: string; songPrompt: string; songUrl?: string; durationSeconds?: number; bigWord?: string; lyrics: { who: CharKey; text: string; emotion?: 'happy' | 'sad' | 'angry' | 'neutral' }[] }
+  | {
+      id: string; kind: 'song'; bg: string; title: string; teacher: string; songPrompt: string; songUrl?: string; durationSeconds?: number; bigWord?: string;
+      lyrics: { who: CharKey; text: string; emotion?: 'happy' | 'sad' | 'angry' | 'neutral' }[];
+      /** Exact per-line duration (ms), same length as `lyrics`, in playback order. When
+       * present, SongScene highlights lines using these real cue points instead of
+       * dividing the audio's total duration evenly by line count — real sung audio
+       * doesn't pace itself evenly (intro bars, uneven line lengths, an outro), so the
+       * even-division fallback drifts out of sync with what's actually being sung.
+       * Generate these from the SAME per-line duration_ms values used to build the
+       * song's composition_plan sections, so the UI and the audio share one source of
+       * truth instead of the UI guessing. Omit for older songs generated before this
+       * field existed — they keep the even-division fallback. */
+      lineDurationsMs?: number[];
+    }
   | { id: string; kind: 'finale'; bg: string; who: Character; line: string }
   | { id: string; kind: 'name-gate'; bg: string; teacher: string; rounds: { who: CharKey; question: string; answer: string }[] }
   | { id: string; kind: 'meet-group'; bg: string; teacher: string; askers: { who: CharKey; xPct: number; yPct: number }[]; newcomer: { who: CharKey; xPct: number; yPct: number }; question: string; answer: string; phonics?: string; showSprites?: boolean }
