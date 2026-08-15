@@ -714,7 +714,7 @@ function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, {
     setSlots((p) => p.map((x) => {
       if (x.idx !== idx) return x;
       if (!dropped) return { ...x, dragging: false, dx: 0, dy: 0 };
-      if (x.it.hit) { sfx.match(); if (scene.announceOnDrop !== false) cueSpeak(`${scene.phoneme}! ${x.it.word}!`, scene.who); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
+      if (x.it.hit) { sfx.match(); if (scene.announceOnDrop !== false) void playLetterPhonic(scene.letter).then(() => safeSpeak(x.it.word, scene.who)); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
       sfx.wrong(); onLose();
       return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
     }));
@@ -863,7 +863,7 @@ function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 't
     if (doneCount >= segments.length && !done) {
       setDone(true); sfx.gem(); onWin(true);
       if (scene.speakWord === false) void playLetterPhonic(scene.letter);
-      else void safeSpeak(`${scene.letter}! ${scene.phoneme} ${scene.word}!`, scene.who);
+      else void playLetterPhonic(scene.letter).then(() => safeSpeak(scene.word, scene.who));
     }
   };
   const end = () => { setDrawing(false); lastPoint.current = null; };
@@ -892,7 +892,7 @@ function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 't
           <button onClick={() => { void playLetterPhonic(scene.letter); }} className="flex-1 rounded-full bg-white/95 py-3 text-sm font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔊 Listen</button>
         </div>
         <button
-          onClick={() => { if (!done) { setDone(true); sfx.gem(); onWin(true); if (scene.speakWord === false) { void playLetterPhonic(scene.letter); } else { void safeSpeak(`${scene.letter}! ${scene.phoneme} ${scene.word}!`, scene.who); } } onNext(); }}
+          onClick={() => { if (!done) { setDone(true); sfx.gem(); onWin(true); if (scene.speakWord === false) { void playLetterPhonic(scene.letter); } else { void playLetterPhonic(scene.letter).then(() => safeSpeak(scene.word, scene.who)); } } onNext(); }}
           className="mt-4 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-3 text-lg font-black text-white shadow-2xl active:scale-95"
         >
           Great tracing! ⭐ Next
@@ -4434,18 +4434,13 @@ function SoundPopScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene,
 
   const c = CAST[scene.who];
   const target = scene.targets[targetIdx];
-  const phonemeSound = (letter: string) => {
-    const L = letter.toUpperCase();
-    const map: Record<string, string> = { S: 'sss, sss', A: 'ah, ah', H: 'h, h, h', M: 'mmm, mmm', N: 'nnn, nnn', W: 'wuh, wuh', R: 'rrr, rrr' };
-    return map[L] ?? `${L.toLowerCase()}, ${L.toLowerCase()}`;
-  };
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       setPhase('intro'); setHitsForTarget(0); setBalloons([]);
       if (cancelled) return;
-      await safeSpeak(phonemeSound(target.letter), scene.who);
+      await playLetterPhonic(target.letter);
       if (!cancelled) setPhase('play');
     })();
     return () => { cancelled = true; };
@@ -4518,7 +4513,7 @@ function SoundPopScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene,
     setBalloons((prev) => prev.map((p) => (p.key === b.key ? { ...p, popped: isHit ? 'hit' : 'miss' } : p)));
     if (isHit) {
       sfx.pop(); sfx.match(); setFlash('hit'); setScore((s) => s + 1); setHitsForTarget((h) => h + 1);
-      await safeSpeak(phonemeSound(target.letter), scene.who);
+      await playLetterPhonic(target.letter);
     } else { sfx.wrong(); setFlash('miss'); setMisses((m) => m + 1); }
     window.setTimeout(() => setFlash(null), 220);
     window.setTimeout(() => setBalloons((prev) => prev.filter((p) => p.key !== b.key)), 350);
@@ -4671,7 +4666,7 @@ function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
     const available = Array.from(new Set(remaining.map((b) => b.letter)));
     const next = available[Math.floor(Math.random() * available.length)];
     setTargetLetter(next);
-    await safeSpeak(phonemeFor(next), scene.who);
+    await playLetterPhonic(next);
   }, [bricks, scene.who]);
 
   useEffect(() => {
@@ -4680,7 +4675,7 @@ function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
       setPhase('intro');
       const first = scene.letters[Math.floor(Math.random() * scene.letters.length)];
       setTargetLetter(first);
-      await safeSpeak(phonemeFor(first), scene.who);
+      await playLetterPhonic(first);
       if (!cancelled) setPhase('play');
     })();
     return () => { cancelled = true; };
@@ -4718,7 +4713,7 @@ function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
     }
   };
 
-  const replaySound = () => { void safeSpeak(phonemeFor(targetLetter), scene.who); };
+  const replaySound = () => { void playLetterPhonic(targetLetter); };
 
   return (
     <div className="absolute inset-0 overflow-hidden">
