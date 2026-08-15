@@ -1374,6 +1374,7 @@ function SongScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'so
           </button>
         )}
         {isDone && <button onClick={onNext} className="rounded-full bg-emerald-500 px-6 py-3 text-lg font-black text-white shadow-xl transition hover:scale-105 active:scale-95">Continue ➜</button>}
+        {status === 'error' && <button onClick={onNext} className="rounded-full bg-slate-400 px-6 py-3 text-lg font-black text-white shadow-xl transition hover:scale-105 active:scale-95">Skip ➜</button>}
       </div>
     </div>
   );
@@ -1544,7 +1545,6 @@ function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 't
     if (doneCount >= segments.length && !done) {
       setDone(true); sfx.gem(); onWin(true);
       void safeSpeak(`${scene.letter}! ${scene.phoneme} ${scene.word}!`, voiceOf(scene.who));
-      void playLetterPhonic(scene.letter);
     }
   };
   const end = () => { setDrawing(false); lastPoint.current = null; };

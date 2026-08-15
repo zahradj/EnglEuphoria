@@ -704,8 +704,8 @@ export const LESSON_A2U1L2_SCENES: Scene[] = [
     durationSeconds: 20, bigWord: 'Goodbye',
     songUrl: `${W}/audio/goodbye-song.mp3`,
     lyrics: [
-      { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, see you soon' },
-      { who: 'pip', text: '\u{1F4C5} We had fun this whole week through' },
+      { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
+      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },
       { who: 'marigold', text: '\u{1F3EB} Welcome Town School is happy today' },
       { who: 'pip', text: '\u{1F496} Byeeee, friends! See you soon!' },
     ],
@@ -936,8 +936,8 @@ export const LESSON_A2U1L3_SCENES: Scene[] = [
     durationSeconds: 20, bigWord: 'Goodbye',
     songUrl: `${W}/audio/goodbye-song.mp3`,
     lyrics: [
-      { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, see you soon' },
-      { who: 'pip', text: '\u{23EA} We remembered yesterday, what a fun afternoon' },
+      { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
+      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },
       { who: 'marigold', text: '\u{1F3EB} Welcome Town School is happy today' },
       { who: 'pip', text: '\u{1F496} Byeeee, friends! See you soon!' },
     ],

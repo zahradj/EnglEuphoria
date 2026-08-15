@@ -274,6 +274,44 @@ function key(character: Character, text: string) {
   return `${character}::v11::${text}`;
 }
 
+/** FNV-1a — turns an arbitrary cache key into a short, filesystem-safe hex
+ *  id. Must stay byte-for-byte identical to the copy in
+ *  scripts/generate-voice-cache.mjs, since both sides need to land on the
+ *  same filename for a pre-generated clip to be found at playback time. */
+function fnv1a(s: string): string {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(16).padStart(8, '0');
+}
+
+/** Filename (no extension) for `character`+`text`'s pre-generated static
+ *  clip under public/audio-cache/, if one has been baked by
+ *  scripts/generate-voice-cache.mjs. Derived from the same versioned cache
+ *  key as the IndexedDB/live-fetch path, so a voice/pacing re-cast that
+ *  bumps `key()`'s version also invalidates stale static files (they'll
+ *  just 404 and fall through to live generation until re-baked). */
+export function cacheFileName(character: Character, text: string): string {
+  return fnv1a(key(character, text));
+}
+
+async function fetchStaticClip(character: Character, text: string): Promise<Blob | null> {
+  try {
+    const res = await fetch(`/audio-cache/${cacheFileName(character, text)}.mp3`);
+    // Dev/prod SPA hosting falls back to index.html (200, text/html) for any
+    // unmatched path — `res.ok` alone can't tell "missing file" from "real
+    // clip," so this needs the same content-type guard the live-fetch path
+    // below already uses.
+    if (!res.ok || !(res.headers.get('content-type') ?? '').startsWith('audio/')) return null;
+    const blob = await res.blob();
+    return blob.size ? blob : null;
+  } catch {
+    return null;
+  }
+}
+
 async function fetchClipBlob(k: string, text: string, character: Character): Promise<Blob | null> {
   const cached = blobCache.get(k);
   if (cached) return cached;
@@ -282,6 +320,11 @@ async function fetchClipBlob(k: string, text: string, character: Character): Pro
 
   const job = (async () => {
     try {
+      const baked = await fetchStaticClip(character, text);
+      if (baked) {
+        blobCache.set(k, baked);
+        return baked;
+      }
       const stored = await idbGet(k);
       if (stored && stored.size) {
         blobCache.set(k, stored);
