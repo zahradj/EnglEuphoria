@@ -1544,7 +1544,7 @@ function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 't
     if (changed) setZonesDone(doneCount);
     if (doneCount >= segments.length && !done) {
       setDone(true); sfx.gem(); onWin(true);
-      void safeSpeak(`${scene.letter}! ${scene.phoneme} ${scene.word}!`, voiceOf(scene.who));
+      void playLetterPhonic(scene.letter).then(() => safeSpeak(scene.word, voiceOf(scene.who)));
     }
   };
   const end = () => { setDrawing(false); lastPoint.current = null; };
@@ -1573,7 +1573,7 @@ function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 't
           <button onClick={() => { void playLetterPhonic(scene.letter); }} className="flex-1 rounded-full bg-white/95 py-3 text-sm font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔊 Listen</button>
         </div>
         <button
-          onClick={() => { if (!done) { setDone(true); sfx.gem(); onWin(true); void safeSpeak(`${scene.letter}! ${scene.phoneme} ${scene.word}!`, voiceOf(scene.who)); } onNext(); }}
+          onClick={() => { if (!done) { setDone(true); sfx.gem(); onWin(true); void playLetterPhonic(scene.letter).then(() => safeSpeak(scene.word, voiceOf(scene.who))); } onNext(); }}
           className="mt-4 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-3 text-lg font-black text-white shadow-2xl active:scale-95"
         >
           Great tracing! ⭐ Next
