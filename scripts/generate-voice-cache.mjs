@@ -109,6 +109,38 @@ const FIXED_LINES = [
 
 const CAST = unit1Scenes.CAST;
 
+/** Small helpers that mirror shared derivation logic in
+ *  unit1/SceneRenderer.tsx byte-for-byte — these produce spoken text from a
+ *  template/lookup rather than a raw scene field, but the template itself
+ *  and every possible input are fully known ahead of time, so the result is
+ *  exactly as safe to pre-generate as a verbatim field. Keep each one in
+ *  sync with its renderer counterpart; a mismatch here bakes an audio clip
+ *  that says something different from what the app actually displays. */
+const NUMBER_WORDS = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN'];
+function numberSpeech(n) {
+  const w = NUMBER_WORDS[n - 1];
+  return w ? w.charAt(0) + w.slice(1).toLowerCase() : String(n);
+}
+function buildColorSentence(colorWord, exampleWord) {
+  return `The ${exampleWord.toLowerCase()} is ${colorWord.toLowerCase()}.`;
+}
+function buildShapeSentence(shapeWord, exampleWord) {
+  return `The ${exampleWord.toLowerCase()} is a ${shapeWord.toLowerCase()}.`;
+}
+function buildToySentence(colorWord, toyWord, plural) {
+  if (plural) return `They are ${colorWord.toLowerCase()} ${toyWord.toLowerCase()}.`;
+  return `It's a ${colorWord.toLowerCase()} ${toyWord.toLowerCase()}.`;
+}
+const FRIEND_POP_GENDER = { bella: 'she', mia: 'she', willow: 'she', leo: 'he', pip: 'he' };
+function friendPopEmotion(prompt, explicit) {
+  if (explicit) return explicit;
+  if (/(angry|grrr|mad)/i.test(prompt)) return 'angry';
+  if (/sad/i.test(prompt)) return 'sad';
+  if (/happy/i.test(prompt)) return 'happy';
+  return 'neutral';
+}
+const castName = (who) => CAST[who]?.name ?? who;
+
 /** Per-kind extractors for the unit1 (Pre-A1) engine, verified against the
  *  actual `safeSpeak`/`cueSpeak` call sites in unit1/SceneRenderer.tsx (not
  *  inferred from field names). Returns an array of [character, text] pairs
@@ -132,6 +164,138 @@ const UNIT1_EXTRACTORS = {
   memory: (s) => (s.pairs ?? []).map((p) => ['teacher', p.label]),
   dash: (s) => (s.items ?? []).map((it) => [s.who, it.word]),
   roleplay: (s) => (s.script ?? []).map((l) => [l.who, l.line]),
+  'who-said-it': (s) => (s.rounds ?? []).map((r) => [r.who, r.line]),
+  feelings: (s) => (s.options ?? []).map((o) => {
+    const label = o.label.toLowerCase();
+    const voice = label.includes('happy') ? 'mia' : label.includes('sad') ? 'bella' : 'pip';
+    return [voice, o.reply];
+  }),
+  'color-friends': (s) => {
+    const out = [];
+    if (s.vocabItems?.length) {
+      s.vocabItems.forEach((v, idx) => {
+        if (idx > 0) out.push(['teacher', `${v.label}!`]);
+        out.push(['pip', `Yes! The ${v.label.toLowerCase()} is ${v.targetColorName.toLowerCase()}!`]);
+      });
+    } else {
+      (s.cast ?? []).forEach((who, idx) => { if (idx > 0) out.push([who, `${castName(who)}!`]); });
+    }
+    return out;
+  },
+  'name-gate': (s) => {
+    const out = (s.rounds ?? []).flatMap((r) => [['teacher', r.question], [r.who, r.answer]]);
+    if ((s.rounds ?? []).length) out.push(['pip', 'What is your name?']);
+    return out;
+  },
+  'meet-group': (s) => [[s.askers?.[0]?.who ?? 'teacher', s.question], ['teacher', s.question], [s.newcomer.who, s.answer], ['teacher', s.answer]],
+  'voice-stage': (s) => {
+    const out = [['teacher', s.question]];
+    for (const r of s.rounds ?? []) {
+      out.push([r.who, r.answer]);
+      out.push([r.who, 'Yes! My name!']);
+      if (s.niceToMeet) out.push([r.who, 'Nice to meet you!']);
+    }
+    return out;
+  },
+  'sound-pop': (s) => [[s.who, 'Perfect ears! You popped the sounds!']],
+  'trophy-chest': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, `Find the ${r.letter} sound!`], [s.who, r.word]]),
+  'friend-pop': (s) => (s.rounds ?? []).flatMap((r) => {
+    const helloMode = !!r.sayLine && /hello|hi\b/i.test(r.sayLine);
+    const pronounMode = !helloMode && /^\s*(he|she)\b/i.test(r.prompt);
+    const roundEmo = friendPopEmotion(r.prompt, r.emotion);
+    const line = helloMode
+      ? (r.sayLine ?? `Hello, ${castName(r.target)}!`)
+      : pronounMode
+        ? `${FRIEND_POP_GENDER[r.target] === 'he' ? 'He' : 'She'} is ${roundEmo}!`
+        : `${castName(r.target)} is ${roundEmo}!`;
+    return [[r.target, r.prompt], [r.target, line]];
+  }),
+  'feelings-tap': (s) => (s.cast ?? []).map((c) => [c.who, c.label]),
+  'feelings-wheel': (s) => (s.slots ?? []).map((sl) => [sl.who, sl.label]),
+  'x-is-feeling': (s) => (s.rounds ?? []).map((r) => [r.who, r.sentence]),
+  'he-she-model': (s) => (s.rounds ?? []).map((r) => [r.who, r.sentence]),
+  'feed-monsters': (s) => (s.rounds ?? []).map((r) => [r.who, r.sentence]),
+  'he-she-sort': (s) => (s.rounds ?? []).flatMap((r) => [[r.who, `I am ${r.emotion}.`], [r.who, `Yes! ${r.pronoun} is ${r.emotion}.`]]),
+  'feeling-quiz': (s) => (s.rounds ?? []).flatMap((r) => [['teacher', r.prompt], [r.who, `${castName(r.who)} is ${r.emotion}!`]]),
+  'feelings-dice': (s) => (s.rounds ?? []).map((r) => [r.who ?? 'teacher', r.sentence]),
+  'he-she-say': (s) => (s.rounds ?? []).map((r) => [r.who ?? 'teacher', `${r.pronoun} is ${r.emotion}.`]),
+  'i-am-feeling': (s) => {
+    const out = (s.rounds ?? []).map((r) => ['teacher', `I am ${r.label.toLowerCase()}!`]);
+    out.push([s.asker, 'How are you?']);
+    return out;
+  },
+  'feelings-bingo': (s) => [
+    ...(s.rounds ?? []).map((r) => ['teacher', r.prompt]),
+    ...(s.tiles ?? []).map((t) => [t.who, `Yes! ${castName(t.who)} is ${t.emotion}!`]),
+  ],
+  'numbers-learn': (s) => { const out = []; for (let n = s.from; n <= s.to; n++) out.push([s.who, numberSpeech(n)]); return out; },
+  'numbers-review': (s) => { const out = []; for (let n = s.from; n <= s.to; n++) out.push([s.who, numberSpeech(n)]); return out; },
+  'count-balloons': (s) => { const out = []; for (let n = 1; n <= s.total; n++) out.push([s.who, numberSpeech(n)]); return out; },
+  'candle-cake': (s) => (s.rounds ?? []).flatMap((r) => [[r.asker, r.prompt], [r.asker, r.celebrate]]),
+  'age-balloons': (s) => (s.friends ?? []).map((f) => [f.who, `${castName(f.who)} is ${f.age}!`]),
+  'age-sentence-match': (s) => (s.friends ?? []).map((f) => [f.who, `${castName(f.who)} is ${f.age}!`]),
+  'meet-greet': (s) => (s.friends ?? []).flatMap((f) => [
+    ['teacher', "What's your name?"],
+    [f.who, `My name is ${castName(f.who)}.`],
+    ['teacher', 'How old are you?'],
+    [f.who, `I am ${f.age}.`],
+    ['teacher', 'Nice to meet you!'],
+  ]),
+  'age-quiz': (s) => {
+    const out = [['teacher', 'What is your age?']];
+    for (const f of s.friends ?? []) {
+      out.push(['teacher', `How old is ${castName(f.who)}? \u{1F382}`]);
+      for (const age of s.studentAges ?? []) out.push([f.who, `${castName(f.who)} is ${age}!`]);
+    }
+    for (const age of s.studentAges ?? []) out.push(['teacher', `I am ${age}!`]);
+    return out;
+  },
+  flipbook: (s) => (s.pages ?? []).map((p) => [p.who ?? 'teacher', p.text]),
+  'color-model': (s) => {
+    const out = (s.items ?? []).flatMap((it) => [
+      [it.who, it.colorWord], [it.who, it.exampleWord], [it.who, buildColorSentence(it.colorWord, it.exampleWord)],
+    ]);
+    out.push(['pip', `Wonderful! ${(s.items ?? []).map((it) => buildColorSentence(it.colorWord, it.exampleWord)).join(' ')}`]);
+    return out;
+  },
+  'color-sort': (s) => [
+    ['teacher', 'Amazing! All colors sorted!'],
+    ...(s.items ?? []).map((it) => [(s.targets ?? []).find((t) => t.colorWord === it.colorWord)?.who ?? 'pip', it.word]),
+    ...(s.targets ?? []).map((t) => [t.who, t.colorWord]),
+  ],
+  'color-quiz': (s) => (s.rounds ?? []).flatMap((r) => [[r.who, `Which one is ${r.colorWord}?`], [r.who, `Yes! ${r.correctLabel} is ${r.colorWord}!`]]),
+  'listen-repeat-cards': (s) => (s.cards ?? []).map((c) => [c.who, c.sentence]),
+  'color-spot': (s) => (s.items ?? []).flatMap((it) => [[it.who, it.colorWord], [it.who, it.sentence]]),
+  'shape-model': (s) => {
+    const out = (s.items ?? []).flatMap((it) => [
+      [it.who, it.shapeWord], [it.who, it.exampleWord], [it.who, buildShapeSentence(it.shapeWord, it.exampleWord)],
+    ]);
+    out.push(['pip', `Wonderful! ${(s.items ?? []).map((it) => buildShapeSentence(it.shapeWord, it.exampleWord)).join(' ')}`]);
+    return out;
+  },
+  'toy-model': (s) => {
+    const out = (s.items ?? []).flatMap((it) => [
+      [it.who, it.toyWord], [it.who, buildToySentence(it.colorWord, it.toyWord, it.plural)],
+    ]);
+    out.push(['pip', `Wonderful! ${(s.items ?? []).map((it) => buildToySentence(it.colorWord, it.toyWord, it.plural)).join(' ')}`]);
+    return out;
+  },
+  'plural-sort': (s) => [['teacher', 'Amazing! One or many, you know them all!'], ...(s.items ?? []).map((it) => [s.who, it.word])],
+  'train-recall': (s) => [
+    ...(s.cars ?? []).map((c) => ['pip', c.word]),
+    ['pip', "Choo choo! One car is empty. Which toy is missing?"],
+    ...(s.cars ?? []).map((c) => ['pip', `Yes! It's the ${c.word.toLowerCase()}!`]),
+  ],
+  'shape-sort': (s) => [
+    ['teacher', 'Amazing! All shapes sorted!'],
+    ...(s.items ?? []).map((it) => [(s.targets ?? []).find((t) => t.shapeWord === it.shapeWord)?.who ?? 'pip', it.word]),
+    ...(s.targets ?? []).map((t) => [t.who, t.shapeWord]),
+  ],
+  'color-spy': (s) => [
+    ...(s.clueOrder ?? []).map((clue) => [s.who, `I spy something ${clue.toLowerCase()}!`]),
+    ...(s.spots ?? []).map((sp) => [s.who, `Yes! ${sp.label}!`]),
+  ],
+  'color-simon': (s) => (s.colors ?? []).map((c) => [c.who, c.colorWord]),
   'join-stage': (s) => (s.turns ?? []).filter((t) => t.who !== 'student').map((t) => [t.who, t.line]),
   'hello-doors': (s) => {
     const out = (s.cast ?? []).map((who) => [who, CAST[who]?.name ?? who]);
@@ -150,11 +314,16 @@ const UNIT1_EXTRACTORS = {
   // ElevenLabs — see SceneRenderer.tsx. The word itself is still a live
   // ElevenLabs call and is safe to pre-generate.
   trace: (s) => (s.speakWord === false ? [] : [[s.who, s.word]]),
-  basket: (s) => (s.announceOnDrop === false ? [] : (s.items ?? []).filter((it) => it.hit).map((it) => [s.who, it.word])),
-  // The phoneme-sound line in both of these is now playLetterPhonic() (a
-  // real recorded file, no ElevenLabs call at all) — only the fixed win
-  // line (voice varies by scene.who) still needs pre-generating here.
-  'sound-pop': (s) => [[s.who, 'Perfect ears! You popped the sounds!']],
+  // Three distinct call sites, not just the drop announcement: every item
+  // (correct or not) gets a 'teacher' pickup announcement; only correct
+  // (hit) items get a scene.who drop announcement, gated by
+  // announceOnDrop; and a fixed "portal open" line fires once on goal.
+  basket: (s) => {
+    const out = (s.items ?? []).map((it) => ['teacher', it.word]);
+    if (s.announceOnDrop !== false) for (const it of s.items ?? []) if (it.hit) out.push([s.who, it.word]);
+    out.push([s.who, `Yes! The ${s.letter} portal is open!`]);
+    return out;
+  },
 };
 
 /** Per-kind extractors for the welcome-town (A1) engine and welcome-town-a2
