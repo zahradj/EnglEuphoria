@@ -595,7 +595,7 @@ export const LESSON_A2U1L2_SCENES: Scene[] = [
     id: 'a2u1l2-ladder', kind: 'frequency-ladder', bg: bgWeekend, who: 'pip', teacher: 'Tap the rung that matches Pip’s week!',
     rounds: [
       { action: 'wake up early', emoji: '\u{23F0}', answer: 'always', line: 'I always wake up early!' },
-      { action: 'brush my teeth', emoji: '\u{1FAA5}', answer: 'always', line: 'I always brush my teeth!' },
+      { action: 'brush your teeth', emoji: '\u{1FAA5}', answer: 'always', line: 'I always brush my teeth!' },
       { action: 'read before bed', emoji: '\u{1F4D6}', answer: 'usually', line: 'I usually read before bed.' },
       { action: 'play soccer on Saturday', emoji: '\u{26BD}', answer: 'sometimes', line: 'I sometimes play soccer on Saturday.' },
       { action: 'go to school on Sunday', emoji: '\u{1F3EB}', answer: 'never', line: 'I never go to school on Sunday!' },

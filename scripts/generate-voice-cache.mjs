@@ -363,9 +363,27 @@ const WT_EXTRACTORS = {
   trace: (s) => [[s.who, s.word]],
   'word-build': (s) => (s.rounds ?? []).map((r) => ['pip', r.word]),
   finale: (s) => (s.line ? [[s.who, s.line]] : []),
-  // frequency-ladder's per-round reveal line (r.line) is verbatim; the
-  // "How often do you {action}?" prompt is a template and stays live.
-  'frequency-ladder': (s) => (s.rounds ?? []).map((r) => [s.who, r.line]),
+  // The reveal line (r.line) is verbatim; the "How often do you {action}?"
+  // prompt is a template, but s.rounds[].action is scene-authored (not
+  // open-ended user input) and always spoken by a fixed 'teacher' voice, so
+  // it's just as enumerable/safe as any other bounded template here.
+  'frequency-ladder': (s) => (s.rounds ?? []).flatMap((r) => [['teacher', `How often do you ${r.action}?`], [s.who, r.line]]),
+  // Only the CORRECT option's label ever reaches the "Yes! {label}!" line
+  // (pick() returns early on a wrong tap before that call) — see ChoiceScene.
+  choice: (s) => {
+    const out = [[s.who, s.prompt]];
+    for (const opt of s.options ?? []) if (opt.correct) out.push([s.who, `Yes! ${opt.label}!`]);
+    return out;
+  },
+  // mode:'sound' rounds route through playLetterPhonic (a real recorded
+  // file already, out of scope here); only mode:'letter' rounds speak the
+  // template line via ElevenLabs. The "Great job!" line always does.
+  'letter-game': (s) => (s.rounds ?? []).flatMap((r) => {
+    const out = [];
+    if (s.mode !== 'sound') out.push([s.who, `Find the letter ${r.letter}!`]);
+    out.push([s.who, `${r.letter}! Great job!`]);
+    return out;
+  }),
 };
 
 /** unit1's CharKey IS the shared audio Character type already — no mapping
