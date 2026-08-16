@@ -655,16 +655,6 @@ const PHRASE_CLIP: Record<string, string> = {
   'you-spelled': '/lep1/audio/phrases/you-spelled.ogg',
 };
 
-// Spoken-out phoneme fallback text, used only if a letter's recorded clip
-// is missing AND the ElevenLabs call also fails.
-const PHONEME_SOUND: Record<string, string> = {
-  a: 'ah, ah', b: 'buh, buh', c: 'kuh, kuh', d: 'duh, duh', e: 'eh, eh',
-  f: 'fff, fff', g: 'guh, guh', h: 'huh, huh', i: 'ih, ih', j: 'juh, juh',
-  k: 'kuh, kuh', l: 'lll, lll', m: 'mmm, mmm', n: 'nnn, nnn', o: 'ah, ah',
-  p: 'puh, puh', q: 'kwuh, kwuh', r: 'rrr, rrr', s: 'sss, sss', t: 'tuh, tuh',
-  u: 'uh, uh', v: 'vvv, vvv', w: 'wuh, wuh', x: 'ks, ks', y: 'yuh, yuh', z: 'zzz, zzz',
-};
-
 function playClip(url: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const audio = new Audio(url);
@@ -675,57 +665,36 @@ function playClip(url: string): Promise<void> {
   });
 }
 
-export async function playLetterPhonic(letter: string): Promise<void> {
-  const l = letter.toLowerCase();
-  const clip = PHONIC_CLIP[l];
-  if (clip) {
-    try {
-      await playClip(clip);
-      return;
-    } catch {
-      /* fall through to TTS */
-    }
+/**
+ * Real phonics recordings ONLY — no ElevenLabs fallback. An isolated
+ * phonics sound isn't a real word, so a TTS model guessing at one from
+ * spelled-out text ("sss, sss", "h, h, h") is never phonetically accurate
+ * enough to teach from; playing nothing on a missing/corrupt clip is safer
+ * than teaching a wrong sound. If this ever logs a missing-clip warning in
+ * practice, the fix is recording/adding that clip, not restoring a spoken
+ * fallback.
+ */
+async function playPhonicsClip(clip: string | undefined, label: string): Promise<void> {
+  if (!clip) { console.warn(`[phonics] no recorded clip for "${label}" — playing nothing (no ElevenLabs fallback, by design)`); return; }
+  try {
+    await playClip(clip);
+  } catch (err) {
+    console.warn(`[phonics] recorded clip for "${label}" failed to play — playing nothing (no ElevenLabs fallback, by design)`, err);
   }
-  await safeSpeak(PHONEME_SOUND[l] ?? `${letter}, ${letter}`, 'pip');
 }
 
-export async function playLetterName(letter: string): Promise<void> {
-  const l = letter.toLowerCase();
-  const clip = NAME_CLIP[l];
-  if (clip) {
-    try {
-      await playClip(clip);
-      return;
-    } catch {
-      /* fall through to TTS */
-    }
-  }
-  await safeSpeak(letter.toUpperCase(), 'teacher');
+export function playLetterPhonic(letter: string): Promise<void> {
+  return playPhonicsClip(PHONIC_CLIP[letter.toLowerCase()], letter);
 }
 
-export async function playLongVowelPhonic(vowel: string): Promise<void> {
-  const v = vowel.toLowerCase();
-  const clip = LONG_VOWEL_CLIP[v];
-  if (clip) {
-    try {
-      await playClip(clip);
-      return;
-    } catch {
-      /* fall through to TTS */
-    }
-  }
-  await safeSpeak(`${vowel}, ${vowel}`, 'pip');
+export function playLetterName(letter: string): Promise<void> {
+  return playPhonicsClip(NAME_CLIP[letter.toLowerCase()], letter);
 }
 
-export async function playPhonicsPhrase(key: keyof typeof PHRASE_CLIP, fallbackText: string): Promise<void> {
-  const clip = PHRASE_CLIP[key];
-  if (clip) {
-    try {
-      await playClip(clip);
-      return;
-    } catch {
-      /* fall through to TTS */
-    }
-  }
-  await safeSpeak(fallbackText, 'pip');
+export function playLongVowelPhonic(vowel: string): Promise<void> {
+  return playPhonicsClip(LONG_VOWEL_CLIP[vowel.toLowerCase()], vowel);
+}
+
+export function playPhonicsPhrase(key: keyof typeof PHRASE_CLIP): Promise<void> {
+  return playPhonicsClip(PHRASE_CLIP[key], key);
 }
