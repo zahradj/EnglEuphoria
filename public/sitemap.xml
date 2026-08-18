@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.engleuphoria.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://www.engleuphoria.com/about</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.engleuphoria.com/for-teachers</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.engleuphoria.com/playground-demo</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.engleuphoria.com/academy-demo</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.engleuphoria.com/success-demo</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.engleuphoria.com/privacy-policy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://www.engleuphoria.com/terms-of-service</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://www.engleuphoria.com/refund-policy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.engleuphoria.com/</loc><lastmod>2026-08-18</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.engleuphoria.com/about</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.engleuphoria.com/methodology</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.engleuphoria.com/pricing</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.engleuphoria.com/for-teachers</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.engleuphoria.com/playground-demo</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.engleuphoria.com/academy-demo</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.engleuphoria.com/success-demo</loc><lastmod>2026-08-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.engleuphoria.com/library/playground</loc><lastmod>2026-08-18</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.engleuphoria.com/privacy-policy</loc><lastmod>2026-08-18</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.engleuphoria.com/terms-of-service</loc><lastmod>2026-08-18</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.engleuphoria.com/refund-policy</loc><lastmod>2026-08-18</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>
