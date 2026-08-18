@@ -38,25 +38,39 @@ const HUB_IDENTITY: Record<Hub, HubIdentity> = {
   },
   academy: {
     hub: 'academy',
-    accent: '#3b82f6',
-    accent2: '#818cf8',
+    // Matches PlacementChoice.tsx's actual Academy hub theme exactly:
+    // CTA gradient from-violet-600 to-fuchsia-600, ring-violet-300,
+    // bg from-violet-50 via-indigo-50 to-fuchsia-50. Indigo in the middle
+    // keeps a "bluish" note without inventing a plain-blue accent.
+    accent: '#7c3aed',
+    accent2: '#c026d3',
     characterName: 'Vee',
     characterTagline: 'Academy mentor',
     characterAvatarEmoji: '🎧',
-    sceneGradient: 'linear-gradient(180deg, #bfdbfe 0%, #60a5fa 35%, #4f46e5 75%, #1e1b4b 100%)',
-    glow: 'rgba(96,165,250,0.55)',
+    sceneGradient: 'linear-gradient(180deg, #ddd6fe 0%, #818cf8 28%, #7c3aed 60%, #4c1d95 100%)',
+    glow: 'rgba(124,58,237,0.5)',
   },
   success: {
     hub: 'success',
+    // Matches PlacementChoice.tsx's actual Success hub theme exactly:
+    // CTA gradient from-emerald-600 to-teal-600, ring-emerald-300, bg
+    // from-emerald-50 via-teal-50 to-cyan-50. Kept in the teal/emerald
+    // family throughout (not faded to near-black) so it reads as a rich
+    // jewel-toned teal rather than the murky dark green from before.
     accent: '#059669',
-    accent2: '#14b8a6',
+    accent2: '#0d9488',
     characterName: 'Sol',
     characterTagline: 'Success coach',
     characterAvatarEmoji: '💼',
-    sceneGradient: 'linear-gradient(180deg, #a7f3d0 0%, #10b981 35%, #0f766e 75%, #042f2e 100%)',
-    glow: 'rgba(16,185,129,0.55)',
+    sceneGradient: 'linear-gradient(180deg, #a5f3fc 0%, #2dd4bf 30%, #0d9488 62%, #134e4a 100%)',
+    glow: 'rgba(13,148,136,0.5)',
   },
 };
+
+/** Non-context accessor for pages that don't (or can't) mount HubThemeProvider. */
+export function getHubIdentity(hub: Hub): HubIdentity {
+  return HUB_IDENTITY[hub];
+}
 
 const HubThemeContext = createContext<HubIdentity>(HUB_IDENTITY.playground);
 
@@ -94,20 +108,20 @@ const GAME_THEME_VARS: Record<Hub, CSSProperties> = {
     ['--pg-gradient-to' as string]: '#f59e0b',
   },
   academy: {
-    ['--pg-accent' as string]: '#3b82f6',
-    ['--pg-accent-dark' as string]: '#1d4ed8',
-    ['--pg-accent-500' as string]: '#3b82f6',
-    ['--pg-accent-400' as string]: '#60a5fa',
-    ['--pg-accent-300' as string]: '#93c5fd',
-    ['--pg-accent-200' as string]: '#bfdbfe',
-    ['--pg-accent-100' as string]: '#dbeafe',
-    ['--pg-accent-600' as string]: '#2563eb',
-    ['--pg-accent-50' as string]: '#eff6ff',
-    ['--pg-accent-50-80' as string]: 'rgba(239,246,255,0.8)',
-    ['--pg-accent-50-50' as string]: 'rgba(239,246,255,0.5)',
-    ['--pg-accent-alpha-50' as string]: 'rgba(59,130,246,0.5)',
-    ['--pg-accent-soft-text' as string]: 'rgba(59,130,246,0.8)',
-    ['--pg-gradient-to' as string]: '#0ea5e9',
+    ['--pg-accent' as string]: '#7c3aed',
+    ['--pg-accent-dark' as string]: '#5b21b6',
+    ['--pg-accent-500' as string]: '#8b5cf6',
+    ['--pg-accent-400' as string]: '#a78bfa',
+    ['--pg-accent-300' as string]: '#c4b5fd',
+    ['--pg-accent-200' as string]: '#ddd6fe',
+    ['--pg-accent-100' as string]: '#ede9fe',
+    ['--pg-accent-600' as string]: '#6d28d9',
+    ['--pg-accent-50' as string]: '#f5f3ff',
+    ['--pg-accent-50-80' as string]: 'rgba(245,243,255,0.8)',
+    ['--pg-accent-50-50' as string]: 'rgba(245,243,255,0.5)',
+    ['--pg-accent-alpha-50' as string]: 'rgba(124,58,237,0.5)',
+    ['--pg-accent-soft-text' as string]: 'rgba(124,58,237,0.8)',
+    ['--pg-gradient-to' as string]: '#c026d3',
   },
   success: {
     ['--pg-accent' as string]: '#059669',
@@ -117,13 +131,13 @@ const GAME_THEME_VARS: Record<Hub, CSSProperties> = {
     ['--pg-accent-300' as string]: '#6ee7b7',
     ['--pg-accent-200' as string]: '#a7f3d0',
     ['--pg-accent-100' as string]: '#d1fae5',
-    ['--pg-accent-600' as string]: '#059669',
+    ['--pg-accent-600' as string]: '#047857',
     ['--pg-accent-50' as string]: '#ecfdf5',
     ['--pg-accent-50-80' as string]: 'rgba(236,253,245,0.8)',
     ['--pg-accent-50-50' as string]: 'rgba(236,253,245,0.5)',
     ['--pg-accent-alpha-50' as string]: 'rgba(5,150,105,0.5)',
     ['--pg-accent-soft-text' as string]: 'rgba(5,150,105,0.8)',
-    ['--pg-gradient-to' as string]: '#14b8a6',
+    ['--pg-gradient-to' as string]: '#0d9488',
   },
 };
 

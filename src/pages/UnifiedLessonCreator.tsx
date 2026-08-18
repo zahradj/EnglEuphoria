@@ -27,9 +27,9 @@ import {
   deleteUnifiedLesson,
   type UnifiedLessonRow,
 } from '@/unified-lessons/unifiedLessonsService';
+import { getHubIdentity } from '@/components/unified-player/HubTheme';
 
 const HUB_LABEL: Record<Hub, string> = { playground: 'Playground', academy: 'Academy', success: 'Success' };
-const HUB_ACCENT: Record<Hub, string> = { playground: '#FE6A2F', academy: '#3b82f6', success: '#059669' };
 
 const MOMENT_KIND_TO_MODE: Record<MomentKind, SectionMode> = {
   intro_moment: 'presentation',
@@ -313,7 +313,8 @@ export default function UnifiedLessonCreator() {
   const { hub: hubParam } = useParams<{ hub: string }>();
   const navigate = useNavigate();
   const hub = (['academy', 'success'].includes(hubParam ?? '') ? hubParam : 'academy') as Hub;
-  const accent = HUB_ACCENT[hub];
+  const theme = getHubIdentity(hub);
+  const accent = theme.accent;
 
   const [rows, setRows] = useState<UnifiedLessonRow[]>([]);
   const [loadingList, setLoadingList] = useState(true);
@@ -432,13 +433,24 @@ export default function UnifiedLessonCreator() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
-      <header className="border-b bg-white px-6 py-4 shadow-sm">
-        <h1 className="text-xl font-black" style={{ color: accent }}>{HUB_LABEL[hub]} Lesson Creator</h1>
-        <p className="text-sm text-slate-500">Combine PPP sections with activities in one lesson.</p>
+    <div className="relative min-h-screen" style={{ background: theme.sceneGradient }}>
+      <div
+        className="pointer-events-none absolute inset-0 opacity-60"
+        style={{ background: `radial-gradient(circle at 50% 0%, ${theme.glow}, transparent 45%)` }}
+      />
+      <header className="relative bg-black/20 px-6 py-4 shadow-lg backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center gap-3">
+          <span className="grid h-10 w-10 place-items-center rounded-xl text-xl shadow-lg ring-2 ring-white/40" style={{ background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent2})` }}>
+            {theme.characterAvatarEmoji}
+          </span>
+          <div>
+            <h1 className="text-xl font-black text-white drop-shadow">{HUB_LABEL[hub]} Lesson Creator</h1>
+            <p className="text-sm text-white/80">Combine PPP sections with activities in one lesson.</p>
+          </div>
+        </div>
       </header>
 
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 p-6 lg:grid-cols-[260px_1fr]">
+      <div className="relative mx-auto grid max-w-6xl grid-cols-1 gap-6 p-6 lg:grid-cols-[260px_1fr]">
         <aside className="space-y-3">
           <button onClick={() => setLesson(emptyLesson(hub))} className="w-full rounded-xl px-4 py-2 text-sm font-black text-white" style={{ backgroundColor: accent }}>
             + New lesson
