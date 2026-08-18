@@ -209,13 +209,22 @@ Deno.serve(async (req) => {
         templateData: { candidateName, bookingLink, expiresAtLabel },
       }),
     })
+    const emailBodyText = await emailRes.text()
     if (!emailRes.ok) {
-      const detail = await emailRes.text().catch(() => '')
       console.error('[recruitment-invite-applicant] email enqueue', {
         status: emailRes.status,
-        detail,
+        detail: emailBodyText,
       })
-      return json({ error: 'email_failed', details: detail || `HTTP ${emailRes.status}` }, 500)
+      return json({ error: 'email_failed', details: emailBodyText || `HTTP ${emailRes.status}` }, 500)
+    }
+    // Capture resend_id so resend-webhook can later match this row and update
+    // it with the real delivered/bounced/complained status -- without it this
+    // row is stuck showing "sent" forever regardless of what actually happens.
+    let resendId: string | null = null
+    try {
+      resendId = JSON.parse(emailBodyText)?.resend_id ?? null
+    } catch {
+      // non-JSON body — leave resendId null
     }
 
     await admin.from('system_emails').insert({
@@ -227,7 +236,7 @@ Deno.serve(async (req) => {
       sent_at: new Date().toISOString(),
       related_entity_id: iv.id,
       related_entity_type: 'interview',
-      metadata: { bookingLink, applicationId, expiresAt: expiresAtIso },
+      metadata: { bookingLink, applicationId, expiresAt: expiresAtIso, ...(resendId ? { resend_id: resendId } : {}) },
     })
 
     return json({ ok: true, bookingLink, interviewId: iv.id, expiresAt: expiresAtIso })
