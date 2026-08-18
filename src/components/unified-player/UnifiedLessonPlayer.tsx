@@ -5,7 +5,7 @@
  * depending on `moment.mode`.
  */
 import { useEffect, useState } from 'react';
-import { unifiedLessonRegistry } from '@/unified-lessons/registry';
+import { loadUnifiedLesson } from '@/unified-lessons/registry';
 import type { UnifiedLesson, Hub } from '@/unified-lessons/types';
 import { HubThemeProvider, useHubTheme } from './HubTheme';
 import { PresentationSection } from './PresentationSection';
@@ -71,14 +71,17 @@ export function UnifiedLessonPlayer({ hub, lessonId }: { hub: Hub; lessonId: str
 
   useEffect(() => {
     let cancelled = false;
-    const loader = unifiedLessonRegistry[lessonId];
-    if (!loader) {
-      setError(`No pilot lesson registered for id "${lessonId}"`);
-      return;
-    }
-    loader().then((l) => {
-      if (!cancelled) setLesson(l);
-    });
+    setLesson(null);
+    setError(null);
+    loadUnifiedLesson(lessonId)
+      .then((l) => {
+        if (cancelled) return;
+        if (!l) setError(`No lesson found for id "${lessonId}"`);
+        else setLesson(l);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err?.message ?? 'Failed to load lesson');
+      });
     return () => {
       cancelled = true;
     };

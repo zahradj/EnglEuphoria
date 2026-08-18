@@ -27,6 +27,8 @@ import { AppErrorBoundary } from "@/components/common/AppErrorBoundary";
 import { lazy, Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 const UnifiedPilotPage = lazy(() => import("@/pages/UnifiedPilotPage"));
+const UnifiedLessonCreator = lazy(() => import("@/pages/UnifiedLessonCreator"));
+const UnifiedLibraryPage = lazy(() => import("@/pages/UnifiedLibraryPage"));
 const BetaAnalytics = lazy(() => import("@/pages/admin/BetaAnalytics"));
 const ScenarioOverrides = lazy(() => import("@/pages/teacher/ScenarioOverrides"));
 const ScenarioMarketplace = lazy(() => import("@/pages/teacher/ScenarioMarketplace"));
@@ -236,8 +238,15 @@ const App = () => {
                       <Route path="/lesson/:lessonId" element={<Suspense fallback={<LoadingFallback />}><PlaygroundLessonShare /></Suspense>} />
                      <Route path="/academy-demo" element={<Suspense fallback={<AcademyLoadingFallback />}><AcademyDemo /></Suspense>} />
                      <Route path="/success-demo" element={<Suspense fallback={<LoadingFallback />}><SuccessDemo /></Suspense>} />
-                     {/* Dev-only pilot for the unified PPP + activity engine (Phase 1) — not linked from any nav. */}
+                     {/* Unified PPP + activity engine: solo player, Academy/Success creators, and public libraries. */}
                      <Route path="/unified-pilot/:hub/:lessonId" element={<Suspense fallback={<LoadingFallback />}><UnifiedPilotPage /></Suspense>} />
+                     <Route path="/unified-creator/:hub" element={
+                       <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
+                         <Suspense fallback={<LoadingFallback />}><UnifiedLessonCreator /></Suspense>
+                       </ImprovedProtectedRoute>
+                     } />
+                     <Route path="/library/academy" element={<Suspense fallback={<LoadingFallback />}><UnifiedLibraryPage hub="academy" /></Suspense>} />
+                     <Route path="/library/success" element={<Suspense fallback={<LoadingFallback />}><UnifiedLibraryPage hub="success" /></Suspense>} />
                       <Route path="/playground-creator" element={
                         <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
                           <Suspense fallback={<LoadingFallback />}><PlaygroundCreator /></Suspense>
