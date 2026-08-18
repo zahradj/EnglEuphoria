@@ -26,6 +26,7 @@ import { WrongMarketBanner } from "@/components/common/WrongMarketBanner";
 import { AppErrorBoundary } from "@/components/common/AppErrorBoundary";
 import { lazy, Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+const UnifiedPilotPage = lazy(() => import("@/pages/UnifiedPilotPage"));
 const BetaAnalytics = lazy(() => import("@/pages/admin/BetaAnalytics"));
 const ScenarioOverrides = lazy(() => import("@/pages/teacher/ScenarioOverrides"));
 const ScenarioMarketplace = lazy(() => import("@/pages/teacher/ScenarioMarketplace"));
@@ -235,6 +236,8 @@ const App = () => {
                       <Route path="/lesson/:lessonId" element={<Suspense fallback={<LoadingFallback />}><PlaygroundLessonShare /></Suspense>} />
                      <Route path="/academy-demo" element={<Suspense fallback={<AcademyLoadingFallback />}><AcademyDemo /></Suspense>} />
                      <Route path="/success-demo" element={<Suspense fallback={<LoadingFallback />}><SuccessDemo /></Suspense>} />
+                     {/* Dev-only pilot for the unified PPP + activity engine (Phase 1) — not linked from any nav. */}
+                     <Route path="/unified-pilot/:hub/:lessonId" element={<Suspense fallback={<LoadingFallback />}><UnifiedPilotPage /></Suspense>} />
                       <Route path="/playground-creator" element={
                         <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
                           <Suspense fallback={<LoadingFallback />}><PlaygroundCreator /></Suspense>

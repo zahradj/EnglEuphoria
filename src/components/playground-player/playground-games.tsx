@@ -42,11 +42,11 @@ export function StageHeader({
 }) {
   return (
     <div className="mb-6 text-center">
-      <h2 className="text-3xl font-black text-[#FE6A2F] sm:text-4xl">
+      <h2 className="text-3xl font-black text-[color:var(--pg-accent,#FE6A2F)] sm:text-4xl">
         {emoji && <span className="mr-2">{emoji}</span>}
         {title}
       </h2>
-      {subtitle && <p className="mt-1 text-base text-[#FE6A2F]/80">{subtitle}</p>}
+      {subtitle && <p className="mt-1 text-base text-[color:var(--pg-accent-soft-text,rgba(254,106,47,0.8))]">{subtitle}</p>}
     </div>
   );
 }
@@ -137,11 +137,11 @@ export function TrailChoiceGame({ slide }: { slide: TrailChoiceSlide }) {
                   ? 'border-green-500 bg-green-100 text-green-700'
                   : isPicked && !isAnswer
                     ? 'border-rose-500 bg-rose-100 text-rose-700'
-                    : 'border-orange-300 bg-white text-slate-800 shadow-md hover:border-orange-500 hover:shadow-lg'
+                    : 'border-[color:var(--pg-accent-300,#fdba74)] bg-white text-slate-800 shadow-md hover:border-[color:var(--pg-accent-500,#f97316)] hover:shadow-lg'
               }`}
             >
               {optionImage ? (
-                <img src={optionImage} alt={option} className="mx-auto mb-3 h-24 w-24 rounded-2xl object-contain bg-orange-50" />
+                <img src={optionImage} alt={option} className="mx-auto mb-3 h-24 w-24 rounded-2xl object-contain bg-[color:var(--pg-accent-50,#fff7ed)]" />
               ) : (
                 <span className="mb-3 block text-5xl">✨</span>
               )}
@@ -242,8 +242,8 @@ export function TrailDragMatchGame({ slide }: { slide: TrailDragMatchSlide }) {
     <div className="w-full" data-correct={allCorrect ? 'true' : undefined}>
       <StageHeader title={slide.instruction || (isSingleDrop ? 'Drag the word to the picture' : 'Match words and pictures')} emoji="🧩" />
       <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-[1fr_1.1fr]">
-        <div className="rounded-3xl border-4 border-orange-200 bg-white/90 p-4">
-          <h3 className="mb-3 text-center text-sm font-black uppercase tracking-wide text-orange-600">Drag from here</h3>
+        <div className="rounded-3xl border-4 border-[color:var(--pg-accent-200,#fed7aa)] bg-white/90 p-4">
+          <h3 className="mb-3 text-center text-sm font-black uppercase tracking-wide text-[color:var(--pg-accent-600,#ea580c)]">Drag from here</h3>
           <div className="grid grid-cols-2 gap-3">
             {sources.map((source) => {
               const state = feedback[source.id];
@@ -262,7 +262,7 @@ export function TrailDragMatchGame({ slide }: { slide: TrailDragMatchSlide }) {
                         ? 'border-amber-400 bg-amber-100 text-slate-900 ring-4 ring-amber-200'
                         : state === 'incorrect'
                           ? 'border-rose-400 bg-rose-50 text-rose-700'
-                          : 'border-orange-300 bg-gradient-to-br from-orange-500 to-amber-500 text-white hover:shadow-lg'
+                          : 'border-[color:var(--pg-accent-300,#fdba74)] bg-gradient-to-br from-[color:var(--pg-accent-500,#f97316)] to-[color:var(--pg-gradient-to,#f59e0b)] text-white hover:shadow-lg'
                   }`}
                 >
                   {source.image && <img src={source.image} alt="" className="mx-auto mb-2 h-14 w-14 rounded-xl object-contain bg-white/80" />}
@@ -274,8 +274,8 @@ export function TrailDragMatchGame({ slide }: { slide: TrailDragMatchSlide }) {
             })}
           </div>
         </div>
-        <div className="rounded-3xl border-4 border-dashed border-orange-300 bg-orange-50/80 p-4">
-          <h3 className="mb-3 text-center text-sm font-black uppercase tracking-wide text-orange-600">Drop here</h3>
+        <div className="rounded-3xl border-4 border-dashed border-[color:var(--pg-accent-300,#fdba74)] bg-[color:var(--pg-accent-50-80,rgba(255,247,237,0.8))] p-4">
+          <h3 className="mb-3 text-center text-sm font-black uppercase tracking-wide text-[color:var(--pg-accent-600,#ea580c)]">Drop here</h3>
           <div className={`grid gap-3 ${targets.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
             {targets.map((target) => {
               const correctSource = sources.find((source) => source.matchId === target.id && feedback[source.id] === 'correct');
@@ -320,7 +320,7 @@ export function TrailDragMatchGame({ slide }: { slide: TrailDragMatchSlide }) {
               setFeedback({});
               setSelected(null);
             }}
-            className="rounded-full bg-white px-5 py-2 text-sm font-black text-orange-600 shadow-sm ring-2 ring-orange-200"
+            className="rounded-full bg-white px-5 py-2 text-sm font-black text-[color:var(--pg-accent-600,#ea580c)] shadow-sm ring-2 ring-[color:var(--pg-accent-200,#fed7aa)]"
           >
             Try again
           </button>
@@ -364,8 +364,8 @@ export function MissingLetterGame({ slide }: { slide: MissingLetterSlide }) {
   return (
     <div className="w-full text-center" data-correct={correct ? 'true' : undefined}>
       <StageHeader title={slide.instruction || 'What letter is missing?'} subtitle="Fill the missing letter" emoji={slide.emoji || '🔎'} />
-      <div className="mx-auto max-w-md rounded-3xl border-4 border-orange-200 bg-white p-6 shadow-md">
-        <img src={safeImage(target, slide.image_url)} alt={target} className="mx-auto mb-5 h-36 w-36 rounded-2xl object-contain bg-orange-50" />
+      <div className="mx-auto max-w-md rounded-3xl border-4 border-[color:var(--pg-accent-200,#fed7aa)] bg-white p-6 shadow-md">
+        <img src={safeImage(target, slide.image_url)} alt={target} className="mx-auto mb-5 h-36 w-36 rounded-2xl object-contain bg-[color:var(--pg-accent-50,#fff7ed)]" />
         <div className="mb-5 flex items-center justify-center gap-2">
           {target.split('').map((letter, index) => index === position ? (
             <input
@@ -376,20 +376,20 @@ export function MissingLetterGame({ slide }: { slide: MissingLetterSlide }) {
                 setChecked(false);
               }}
               className={`h-16 w-14 rounded-2xl border-4 text-center text-3xl font-black uppercase outline-none ${
-                checked ? (correct ? 'border-green-500 bg-green-100 text-green-700' : 'border-rose-500 bg-rose-100 text-rose-700') : 'border-orange-400 bg-orange-50 text-orange-600'
+                checked ? (correct ? 'border-green-500 bg-green-100 text-green-700' : 'border-rose-500 bg-rose-100 text-rose-700') : 'border-[color:var(--pg-accent-400,#fb923c)] bg-[color:var(--pg-accent-50,#fff7ed)] text-[color:var(--pg-accent-600,#ea580c)]'
               }`}
               maxLength={1}
               aria-label="Missing letter"
             />
           ) : (
-            <span key={`${letter}-${index}`} className="flex h-16 w-14 items-center justify-center rounded-2xl bg-orange-100 text-3xl font-black text-orange-600">
+            <span key={`${letter}-${index}`} className="flex h-16 w-14 items-center justify-center rounded-2xl bg-[color:var(--pg-accent-100,#ffedd5)] text-3xl font-black text-[color:var(--pg-accent-600,#ea580c)]">
               {letter}
             </span>
           ))}
         </div>
         <button
           onClick={() => playVoice(target)}
-          className="mb-4 rounded-full bg-amber-100 px-4 py-2 text-sm font-black text-orange-700 ring-2 ring-amber-200"
+          className="mb-4 rounded-full bg-amber-100 px-4 py-2 text-sm font-black text-[color:var(--pg-accent-600,#ea580c)] ring-2 ring-amber-200"
         >
           🔊 Hear word
         </button>
@@ -398,12 +398,12 @@ export function MissingLetterGame({ slide }: { slide: MissingLetterSlide }) {
             whileTap={{ scale: 0.95 }}
             onClick={check}
             disabled={!answer.trim() || correct}
-            className="rounded-2xl bg-orange-500 px-8 py-3 text-lg font-black text-white shadow-md disabled:opacity-40"
+            className="rounded-2xl bg-[color:var(--pg-accent-500,#f97316)] px-8 py-3 text-lg font-black text-white shadow-md disabled:opacity-40"
           >
             Check Answer
           </motion.button>
         </div>
-        {checked && !correct && <p className="mt-3 text-sm font-bold text-orange-600">Try again — listen and look carefully.</p>}
+        {checked && !correct && <p className="mt-3 text-sm font-bold text-[color:var(--pg-accent-600,#ea580c)]">Try again — listen and look carefully.</p>}
       </div>
     </div>
   );
@@ -540,14 +540,14 @@ export function TrailWordGapGame({ slide }: { slide: TrailWordGapSlide }) {
   return (
     <div className="w-full" data-correct={correct ? 'true' : undefined}>
       <StageHeader title="Build the sentence" subtitle="Tap the word that fits" emoji="🏗️" />
-      {slide.image_url && <img src={safeImage(answer, slide.image_url)} alt="" className="mx-auto mb-5 h-36 w-36 rounded-2xl object-contain bg-orange-50 shadow-md" />}
+      {slide.image_url && <img src={safeImage(answer, slide.image_url)} alt="" className="mx-auto mb-5 h-36 w-36 rounded-2xl object-contain bg-[color:var(--pg-accent-50,#fff7ed)] shadow-md" />}
       <motion.div
         animate={wrong ? { x: [-8, 8, -8, 8, 0] } : correct ? { scale: [1, 1.05, 1] } : undefined}
-        className="mx-auto mb-6 flex max-w-3xl flex-wrap items-center justify-center gap-3 rounded-3xl border-4 border-orange-200 bg-white p-6 text-center text-3xl font-black text-slate-800 shadow-md"
+        className="mx-auto mb-6 flex max-w-3xl flex-wrap items-center justify-center gap-3 rounded-3xl border-4 border-[color:var(--pg-accent-200,#fed7aa)] bg-white p-6 text-center text-3xl font-black text-slate-800 shadow-md"
       >
         <span>{parts[0]}</span>
         <span className={`inline-flex min-h-[64px] min-w-[136px] items-center justify-center rounded-2xl border-4 border-dashed px-5 ${
-          correct ? 'border-green-500 bg-green-100 text-green-700' : selected ? 'border-orange-500 bg-orange-100 text-orange-700' : 'border-orange-300 bg-orange-50 text-orange-300'
+          correct ? 'border-green-500 bg-green-100 text-green-700' : selected ? 'border-[color:var(--pg-accent-500,#f97316)] bg-[color:var(--pg-accent-100,#ffedd5)] text-[color:var(--pg-accent-600,#ea580c)]' : 'border-[color:var(--pg-accent-300,#fdba74)] bg-[color:var(--pg-accent-50,#fff7ed)] text-[color:var(--pg-accent-300,#fdba74)]'
         }`}
         >
           {selected || '⬇'}
@@ -563,7 +563,7 @@ export function TrailWordGapGame({ slide }: { slide: TrailWordGapSlide }) {
             whileTap={{ scale: 0.94 }}
             whileHover={correct ? undefined : { y: -4, scale: 1.04 }}
             className={`rounded-2xl border-2 px-6 py-4 text-2xl font-black shadow-md ${
-              selected === word && correct ? 'border-green-400 bg-green-100 text-green-700' : 'border-orange-600/30 bg-gradient-to-br from-orange-500 to-amber-500 text-white'
+              selected === word && correct ? 'border-green-400 bg-green-100 text-green-700' : 'border-[color:var(--pg-accent-300,#fdba74)] bg-gradient-to-br from-[color:var(--pg-accent-500,#f97316)] to-[color:var(--pg-gradient-to,#f59e0b)] text-white'
             }`}
           >
             {word}
@@ -695,13 +695,13 @@ export function MemoryGame({ slide }: { slide: MemorySlide }) {
               whileTap={{ scale: 0.95 }}
               className={`aspect-square rounded-2xl border-2 font-extrabold text-xl flex items-center justify-center transition-all ${
                 isOpen
-                  ? 'bg-white border-[#FE6A2F] text-slate-800 shadow-md'
-                  : 'bg-gradient-to-br from-[#FE6A2F] to-amber-500 border-[#c54c1d] text-white shadow-lg'
+                  ? 'bg-white border-[color:var(--pg-accent,#FE6A2F)] text-slate-800 shadow-md'
+                  : 'bg-gradient-to-br from-[color:var(--pg-accent,#FE6A2F)] to-[color:var(--pg-gradient-to,#f59e0b)] border-[color:var(--pg-accent-dark,#c54c1d)] text-white shadow-lg'
               }`}
             >
               {isOpen ? (
                 c.image_url ? (
-                  <img src={safeImage(c.label, c.image_url)} alt={c.label} className="w-full h-full object-contain rounded-xl bg-orange-50" />
+                  <img src={safeImage(c.label, c.image_url)} alt={c.label} className="w-full h-full object-contain rounded-xl bg-[color:var(--pg-accent-50,#fff7ed)]" />
                 ) : (
                   <span className="flex flex-col items-center gap-1">
                     {c.emoji && <span className="text-4xl">{c.emoji}</span>}
@@ -852,7 +852,7 @@ export function HotspotGame({ slide }: { slide: HotspotSlide }) {
               className={`rounded-2xl border-2 p-4 font-extrabold text-lg flex flex-col items-center gap-1 shadow-md transition-all ${
                 isFound
                   ? 'bg-green-100 border-green-400 text-green-700'
-                  : 'bg-white border-[#FE6A2F] text-slate-800 hover:shadow-lg'
+                  : 'bg-white border-[color:var(--pg-accent,#FE6A2F)] text-slate-800 hover:shadow-lg'
               }`}
             >
               {p.emoji && <span className="text-4xl">{p.emoji}</span>}
@@ -994,9 +994,9 @@ export function SortGame({ slide }: { slide: SortSlide }) {
                 const lbl = e.dataTransfer.getData('text/plain');
                 if (lbl) drop(lbl, b.id);
               }}
-              className="rounded-2xl border-4 border-dashed border-[#FE6A2F]/50 bg-orange-50/50 p-4 min-h-[120px]"
+              className="rounded-2xl border-4 border-dashed border-[color:var(--pg-accent-alpha-50,rgba(254,106,47,0.5))] bg-[color:var(--pg-accent-50-50,rgba(255,247,237,0.5))] p-4 min-h-[120px]"
             >
-              <p className="font-extrabold text-[#FE6A2F] mb-2">
+              <p className="font-extrabold text-[color:var(--pg-accent,#FE6A2F)] mb-2">
                 {b.emoji && <span className="mr-1">{b.emoji}</span>}{b.label}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -1021,7 +1021,7 @@ export function SortGame({ slide }: { slide: SortSlide }) {
             onDragStart={(e: any) => e.dataTransfer.setData('text/plain', it.label)}
             animate={wrong === it.label ? { x: [-6, 6, -6, 6, 0] } : undefined}
             whileTap={{ scale: 0.95 }}
-            className="cursor-grab active:cursor-grabbing px-4 py-2 rounded-2xl bg-gradient-to-br from-[#FE6A2F] to-amber-500 text-white font-extrabold shadow-md border-2 border-[#c54c1d]"
+            className="cursor-grab active:cursor-grabbing px-4 py-2 rounded-2xl bg-gradient-to-br from-[color:var(--pg-accent,#FE6A2F)] to-[color:var(--pg-gradient-to,#f59e0b)] text-white font-extrabold shadow-md border-2 border-[color:var(--pg-accent-dark,#c54c1d)]"
           >
             {it.emoji && <span className="mr-1 text-xl">{it.emoji}</span>}{it.label}
           </motion.div>
