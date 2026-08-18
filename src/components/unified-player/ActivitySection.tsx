@@ -27,6 +27,7 @@ import {
 } from '@/components/playground-player/playground-games';
 import type { UnifiedMoment, CatalogActivityBlock } from '@/unified-lessons/types';
 import { GameThemeScope, useHubTheme } from './HubTheme';
+import { RolePlayGame, SpeakingMissionGame, type RolePlaySlide, type SpeakingMissionSlide } from './SpeakingActivities';
 
 function ActivityView({ block }: { block: CatalogActivityBlock }) {
   switch (block.activityType) {
@@ -42,6 +43,10 @@ function ActivityView({ block }: { block: CatalogActivityBlock }) {
       return <MissingLetterGame slide={{ type: 'missing_letter', ...block.config } as MissingLetterSlide} />;
     case 'hotspot':
       return <HotspotGame slide={{ type: 'hotspot', ...block.config } as HotspotSlide} />;
+    case 'role_play':
+      return <RolePlayGame slide={{ type: 'role_play', ...block.config } as RolePlaySlide} />;
+    case 'speaking_mission':
+      return <SpeakingMissionGame slide={{ type: 'speaking_mission', ...block.config } as SpeakingMissionSlide} />;
     default:
       return (
         <p className="text-center text-slate-500">
@@ -71,22 +76,28 @@ export function ActivitySection({
   if (!current) return null;
 
   return (
-    <GameThemeScope hub={theme.hub}>
-      <div className="mx-auto max-w-3xl">
-        {current.label && (
-          <p className="mb-3 text-center text-sm font-bold uppercase tracking-wide text-slate-500">{current.label}</p>
-        )}
-        <ActivityView block={current} />
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => (isLastBlock ? onNext() : setIndex((i) => i + 1))}
-            className="rounded-2xl px-8 py-3 text-lg font-black text-white shadow-md transition-transform hover:scale-105"
-            style={{ backgroundColor: theme.accent }}
-          >
-            {isLastBlock ? (isLast ? 'Finish' : 'Continue') : 'Next activity'}
-          </button>
-        </div>
+    <div className="mx-auto max-w-3xl">
+      {current.label && (
+        <p className="mb-3 text-center">
+          <span className="rounded-full bg-black/25 px-4 py-1.5 text-xs font-black uppercase tracking-wide text-white shadow backdrop-blur-md">
+            {current.label}
+          </span>
+        </p>
+      )}
+      <div className="rounded-3xl bg-white/95 p-5 shadow-2xl ring-1 ring-white/60 backdrop-blur-xl sm:p-8">
+        <GameThemeScope hub={theme.hub}>
+          <ActivityView block={current} />
+        </GameThemeScope>
       </div>
-    </GameThemeScope>
+      <div className="mt-6 text-center">
+        <button
+          onClick={() => (isLastBlock ? onNext() : setIndex((i) => i + 1))}
+          className="rounded-full px-10 py-4 text-lg font-black text-white shadow-2xl ring-4 ring-white/40 transition hover:scale-105 active:scale-95"
+          style={{ background: `linear-gradient(90deg, ${theme.accent}, ${theme.accent2})` }}
+        >
+          {isLastBlock ? (isLast ? 'Finish ✨' : 'Continue →') : 'Next activity →'}
+        </button>
+      </div>
+    </div>
   );
 }

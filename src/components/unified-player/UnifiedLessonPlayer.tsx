@@ -7,6 +7,7 @@
 import { useEffect, useState } from 'react';
 import { loadUnifiedLesson } from '@/unified-lessons/registry';
 import type { UnifiedLesson, Hub } from '@/unified-lessons/types';
+import { markLessonCompleted } from '@/unified-lessons/completionTracking';
 import { HubThemeProvider, useHubTheme } from './HubTheme';
 import { PresentationSection } from './PresentationSection';
 import { ActivitySection } from './ActivitySection';
@@ -15,20 +16,29 @@ function PlayerChrome({ lesson, momentIndex }: { lesson: UnifiedLesson; momentIn
   const theme = useHubTheme();
   const total = lesson.moments.length;
   return (
-    <div className="mx-auto mb-6 flex max-w-2xl items-center gap-3">
-      <div className="flex h-12 w-12 items-center justify-center rounded-full text-2xl" style={{ backgroundColor: `${theme.accent}22` }}>
-        {theme.characterAvatarEmoji}
+    <div className="relative mx-auto mb-8 flex max-w-2xl items-center gap-4">
+      <div className="relative flex h-16 w-16 flex-shrink-0 items-center justify-center">
+        <span
+          className="absolute inset-0 rounded-full opacity-80"
+          style={{ background: `radial-gradient(circle, ${theme.glow}, transparent 70%)` }}
+        />
+        <span
+          className="relative grid h-14 w-14 place-items-center rounded-2xl text-3xl shadow-xl ring-2 ring-white/60"
+          style={{ background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent2})` }}
+        >
+          {theme.characterAvatarEmoji}
+        </span>
       </div>
-      <div className="flex-1">
-        <div className="text-sm font-black text-slate-800">{theme.characterName} · {theme.characterTagline}</div>
-        <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-slate-200">
+      <div className="flex-1 rounded-2xl bg-black/20 px-4 py-2.5 shadow-lg backdrop-blur-md">
+        <div className="text-sm font-black text-white drop-shadow">{theme.characterName} · {theme.characterTagline}</div>
+        <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-white/25">
           <div
-            className="h-full rounded-full transition-all"
-            style={{ width: `${((momentIndex + 1) / total) * 100}%`, backgroundColor: theme.accent }}
+            className="h-full rounded-full transition-all duration-500"
+            style={{ width: `${((momentIndex + 1) / total) * 100}%`, background: `linear-gradient(90deg, ${theme.accent}, #fff)` }}
           />
         </div>
       </div>
-      <div className="text-xs font-bold text-slate-400">{momentIndex + 1} / {total}</div>
+      <div className="rounded-full bg-black/20 px-3 py-1.5 text-xs font-black text-white shadow backdrop-blur-md">{momentIndex + 1} / {total}</div>
     </div>
   );
 }
@@ -42,25 +52,45 @@ function UnifiedLessonPlayerInner({ lesson }: { lesson: UnifiedLesson }) {
   const advance = () => {
     if (isLast) {
       setFinished(true);
+      markLessonCompleted(lesson.hub, lesson.id);
     } else {
       setMomentIndex((i) => i + 1);
     }
   };
 
+  const theme = useHubTheme();
+
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-10">
-      <PlayerChrome lesson={lesson} momentIndex={Math.min(momentIndex, lesson.moments.length - 1)} />
-      {finished ? (
-        <div data-lesson-complete="true" className="mx-auto max-w-md rounded-2xl border-2 border-slate-200 bg-white p-8 text-center shadow-sm">
-          <div className="text-4xl">🎉</div>
-          <h2 className="mt-2 text-2xl font-black text-slate-800">Lesson complete</h2>
-          <p className="mt-1 text-slate-500">{lesson.title}</p>
-        </div>
-      ) : moment.mode === 'activity' ? (
-        <ActivitySection moment={moment} onNext={advance} isLast={isLast} />
-      ) : (
-        <PresentationSection moment={moment} onNext={advance} isLast={isLast} />
-      )}
+    <div className="relative min-h-screen overflow-hidden px-4 py-10" style={{ background: theme.sceneGradient }}>
+      {/* Ambient scene glow — the "place" feeling in place of a photographed background. */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-70"
+        style={{ background: `radial-gradient(circle at 50% 0%, ${theme.glow}, transparent 55%)` }}
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
+        style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.35) 100%)' }}
+      />
+
+      <div className="relative">
+        <PlayerChrome lesson={lesson} momentIndex={Math.min(momentIndex, lesson.moments.length - 1)} />
+        {finished ? (
+          <div data-lesson-complete="true" className="mx-auto max-w-md rounded-3xl bg-white/90 p-8 text-center shadow-2xl ring-1 ring-white/60 backdrop-blur-xl">
+            <div
+              className="mx-auto mb-3 grid h-20 w-20 place-items-center rounded-full text-4xl shadow-lg"
+              style={{ background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent2})` }}
+            >
+              🎉
+            </div>
+            <h2 className="text-2xl font-black text-slate-800">Lesson complete</h2>
+            <p className="mt-1 text-slate-500">{lesson.title}</p>
+          </div>
+        ) : moment.mode === 'activity' ? (
+          <ActivitySection moment={moment} onNext={advance} isLast={isLast} />
+        ) : (
+          <PresentationSection moment={moment} onNext={advance} isLast={isLast} />
+        )}
+      </div>
     </div>
   );
 }

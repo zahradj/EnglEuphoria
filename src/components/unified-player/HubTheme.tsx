@@ -15,32 +15,46 @@ export type Hub = 'playground' | 'academy' | 'success';
 export interface HubIdentity {
   hub: Hub;
   accent: string;
+  accent2: string;
   characterName: string;
   characterTagline: string;
   characterAvatarEmoji: string;
+  /** Full-bleed backdrop for the whole player, evoking a "place" rather than a form. */
+  sceneGradient: string;
+  /** Radial glow color used behind the character badge and hero elements. */
+  glow: string;
 }
 
 const HUB_IDENTITY: Record<Hub, HubIdentity> = {
   playground: {
     hub: 'playground',
     accent: '#FE6A2F',
+    accent2: '#FEBE4C',
     characterName: 'Pip',
     characterTagline: 'Playground guide',
     characterAvatarEmoji: '🦊',
+    sceneGradient: 'linear-gradient(180deg, #FFF3B0 0%, #FFD34E 35%, #FF8A3D 70%, #E5561A 100%)',
+    glow: 'rgba(254,106,47,0.55)',
   },
   academy: {
     hub: 'academy',
     accent: '#3b82f6',
+    accent2: '#818cf8',
     characterName: 'Vee',
     characterTagline: 'Academy mentor',
     characterAvatarEmoji: '🎧',
+    sceneGradient: 'linear-gradient(180deg, #bfdbfe 0%, #60a5fa 35%, #4f46e5 75%, #1e1b4b 100%)',
+    glow: 'rgba(96,165,250,0.55)',
   },
   success: {
     hub: 'success',
     accent: '#059669',
+    accent2: '#14b8a6',
     characterName: 'Sol',
     characterTagline: 'Success coach',
     characterAvatarEmoji: '💼',
+    sceneGradient: 'linear-gradient(180deg, #a7f3d0 0%, #10b981 35%, #0f766e 75%, #042f2e 100%)',
+    glow: 'rgba(16,185,129,0.55)',
   },
 };
 

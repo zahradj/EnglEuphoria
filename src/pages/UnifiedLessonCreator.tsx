@@ -50,7 +50,7 @@ const MOMENT_KIND_OPTIONS: { value: MomentKind; label: string }[] = [
 ];
 
 const PRESENTATION_BLOCK_TYPES: LessonBlock['type'][] = ['intro', 'vocab_solo', 'phonics_focus', 'storybook', 'lesson_summary'];
-const ACTIVITY_TYPES = ['multiple', 'match', 'memory', 'fill', 'missing_letter', 'hotspot'] as const;
+const ACTIVITY_TYPES = ['multiple', 'match', 'memory', 'fill', 'missing_letter', 'hotspot', 'role_play', 'speaking_mission'] as const;
 
 let uidSeq = 0;
 const uid = (prefix: string) => `${prefix}-${Date.now().toString(36)}-${uidSeq++}`;
@@ -78,6 +78,8 @@ function emptyActivityFor(activityType: string): CatalogActivityBlock {
     fill: { text: '', answer: '', options: [] },
     missing_letter: { instruction: '', word: '', missing_position: 1 },
     hotspot: { instruction: '', parts: [] },
+    role_play: { prompt: '', character: '', lines: [], scaffold: '' },
+    speaking_mission: { prompt: '', scaffold: '' },
   };
   return { type: 'catalog_activity', activityType, label: '', config: defaults[activityType] ?? {} };
 }
@@ -97,7 +99,7 @@ function BlockForm({ block, onChange }: { block: LessonBlock; onChange: (b: Less
       return (
         <div className="space-y-2">
           <input className={input} placeholder="Title" value={block.title} onChange={(e) => onChange({ ...block, title: e.target.value })} />
-          <input className={input} placeholder="Subtitle (optional)" value={block.subtitle ?? ''} onChange={(e) => onChange({ ...block, subtitle: e.target.value })} />
+          <input className={input} placeholder="Subtitle — tell them why this matters to them (adults especially need the 'why' up front)" value={block.subtitle ?? ''} onChange={(e) => onChange({ ...block, subtitle: e.target.value })} />
         </div>
       );
     case 'vocab_solo':
@@ -183,6 +185,22 @@ function ActivityForm({ block, onChange }: { block: CatalogActivityBlock; onChan
         <div className="space-y-2">
           <input className={input} placeholder="Instruction" value={cfg.instruction ?? ''} onChange={(e) => setCfg({ instruction: e.target.value })} />
           <textarea className={input} rows={3} placeholder={'One item per line: word,emoji'} value={(cfg.parts ?? []).map((p: any) => `${p.label},${p.emoji ?? ''}`).join('\n')} onChange={(e) => setCfg({ parts: linesToArray(e.target.value).map((line) => { const [label, emoji] = line.split(',').map((s) => s.trim()); return { label, emoji }; }) })} />
+        </div>
+      );
+    case 'role_play':
+      return (
+        <div className="space-y-2">
+          <input className={input} placeholder="Prompt (e.g. Greet the interviewer)" value={cfg.prompt ?? ''} onChange={(e) => setCfg({ prompt: e.target.value })} />
+          <input className={input} placeholder="Character name" value={cfg.character ?? ''} onChange={(e) => setCfg({ character: e.target.value })} />
+          <textarea className={input} rows={3} placeholder={'Lines the character says, one per line'} value={(cfg.lines ?? []).join('\n')} onChange={(e) => setCfg({ lines: linesToArray(e.target.value) })} />
+          <input className={input} placeholder="Scaffold — a sentence starter to help them respond (optional)" value={cfg.scaffold ?? ''} onChange={(e) => setCfg({ scaffold: e.target.value })} />
+        </div>
+      );
+    case 'speaking_mission':
+      return (
+        <div className="space-y-2">
+          <input className={input} placeholder="Prompt (open speaking task)" value={cfg.prompt ?? ''} onChange={(e) => setCfg({ prompt: e.target.value })} />
+          <input className={input} placeholder="Scaffold — a sentence starter (optional)" value={cfg.scaffold ?? ''} onChange={(e) => setCfg({ scaffold: e.target.value })} />
         </div>
       );
     default:

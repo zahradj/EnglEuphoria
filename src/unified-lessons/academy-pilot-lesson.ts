@@ -28,7 +28,7 @@ export const academyPilotLesson: UnifiedLesson = {
         {
           type: 'intro',
           title: 'Trip Prep',
-          subtitle: "Let's learn the words you need for your first trip abroad.",
+          subtitle: "Going somewhere soon? These are the exact words you'll need at check-in and the airport.",
         },
       ],
     },
@@ -140,6 +140,46 @@ export const academyPilotLesson: UnifiedLesson = {
               { label: 'sun', emoji: '☀️' },
               { label: 'fish', emoji: '🐟' },
             ],
+          },
+        },
+      ],
+    },
+    {
+      id: 'practice-6',
+      kind: 'practice_moment',
+      mode: 'activity',
+      hostCharacterId: 'vee',
+      blocks: [
+        {
+          type: 'catalog_activity',
+          activityType: 'role_play',
+          label: 'Check in for your flight',
+          config: {
+            prompt: 'Check in for your flight',
+            character: 'Airport Agent',
+            lines: [
+              'Hello! Can I see your passport, please?',
+              'Do you have any luggage to check?',
+              "Great — here's your boarding pass. Have a safe flight!",
+            ],
+            scaffold: "Here's my passport.",
+          },
+        },
+      ],
+    },
+    {
+      id: 'practice-7',
+      kind: 'practice_moment',
+      mode: 'activity',
+      hostCharacterId: 'vee',
+      blocks: [
+        {
+          type: 'catalog_activity',
+          activityType: 'speaking_mission',
+          label: 'Talk about your dream trip',
+          config: {
+            prompt: "Tell Vee about a trip you'd love to take — where and why?",
+            scaffold: "I'd love to go to ___ because ___.",
           },
         },
       ],

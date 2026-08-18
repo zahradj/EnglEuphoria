@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { Hub } from '@/unified-lessons/types';
 import { listPublishedUnifiedLessons, type UnifiedLessonRow } from '@/unified-lessons/unifiedLessonsService';
+import { getCompletedLessonIds } from '@/unified-lessons/completionTracking';
 
 const HUB_LABEL: Record<Hub, string> = { playground: 'Playground', academy: 'Academy', success: 'Success' };
 const HUB_ACCENT: Record<Hub, string> = { playground: '#FE6A2F', academy: '#3b82f6', success: '#059669' };
@@ -20,9 +21,11 @@ export default function UnifiedLibraryPage({ hub: hubProp }: { hub?: Hub } = {})
   const accent = HUB_ACCENT[hub];
 
   const [rows, setRows] = useState<UnifiedLessonRow[] | null>(null);
+  const [completed, setCompleted] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     setRows(null);
+    setCompleted(getCompletedLessonIds(hub));
     listPublishedUnifiedLessons(hub)
       .then(setRows)
       .catch((err) => {
@@ -30,6 +33,8 @@ export default function UnifiedLibraryPage({ hub: hubProp }: { hub?: Hub } = {})
         setRows([]);
       });
   }, [hub]);
+
+  const completedCount = rows?.filter((r) => completed.has(r.id)).length ?? 0;
 
   return (
     <div className="min-h-screen w-full" style={{ background: HUB_SOFT_BG[hub] }}>
@@ -39,6 +44,11 @@ export default function UnifiedLibraryPage({ hub: hubProp }: { hub?: Hub } = {})
             <h1 className="text-xl font-black" style={{ color: accent }}>{HUB_LABEL[hub]} Library</h1>
             <p className="text-xs font-semibold text-slate-500">Lessons you can start right away, solo.</p>
           </div>
+          {rows && rows.length > 0 && completedCount > 0 && (
+            <div className="rounded-full px-3 py-1.5 text-xs font-black text-white" style={{ backgroundColor: accent }}>
+              ✓ {completedCount} of {rows.length} complete
+            </div>
+          )}
         </div>
       </header>
 
@@ -63,9 +73,14 @@ export default function UnifiedLibraryPage({ hub: hubProp }: { hub?: Hub } = {})
                 className="flex flex-col items-start gap-2 rounded-2xl border-2 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
                 style={{ borderColor: `${accent}33` }}
               >
-                <span className="rounded-full px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wider text-white" style={{ backgroundColor: accent }}>
-                  {row.cefr}
-                </span>
+                <div className="flex w-full items-center justify-between">
+                  <span className="rounded-full px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wider text-white" style={{ backgroundColor: accent }}>
+                    {row.cefr}
+                  </span>
+                  {completed.has(row.id) && (
+                    <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-black text-green-700">✓ Completed</span>
+                  )}
+                </div>
                 <h2 className="text-lg font-black text-slate-800">{row.title}</h2>
                 <p className="text-sm text-slate-400">{row.moments.length} sections</p>
               </button>

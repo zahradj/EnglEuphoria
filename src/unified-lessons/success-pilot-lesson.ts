@@ -23,7 +23,7 @@ export const successPilotLesson: UnifiedLesson = {
         {
           type: 'intro',
           title: 'Business Travel Essentials',
-          subtitle: 'Sharpen the vocabulary you need for your next work trip.',
+          subtitle: "You'll need this vocabulary the next time you book a flight or file a trip expense report — let's make sure you're ready.",
         },
       ],
     },
@@ -135,6 +135,46 @@ export const successPilotLesson: UnifiedLesson = {
               { label: 'sun', emoji: '☀️' },
               { label: 'fish', emoji: '🐟' },
             ],
+          },
+        },
+      ],
+    },
+    {
+      id: 'practice-6',
+      kind: 'practice_moment',
+      mode: 'activity',
+      hostCharacterId: 'sol',
+      blocks: [
+        {
+          type: 'catalog_activity',
+          activityType: 'role_play',
+          label: 'Discuss your itinerary with a colleague',
+          config: {
+            prompt: 'Discuss your itinerary with a colleague',
+            character: 'Colleague',
+            lines: [
+              'Hey, are you all set for the trip?',
+              'What time does your connecting flight leave?',
+              "Don't forget to submit your expense report when you're back!",
+            ],
+            scaffold: "Yes, I'm all set.",
+          },
+        },
+      ],
+    },
+    {
+      id: 'practice-7',
+      kind: 'practice_moment',
+      mode: 'activity',
+      hostCharacterId: 'sol',
+      blocks: [
+        {
+          type: 'catalog_activity',
+          activityType: 'speaking_mission',
+          label: 'Summarize your trip',
+          config: {
+            prompt: 'Summarize your upcoming business trip in two sentences.',
+            scaffold: "I'm traveling to ___ to ___.",
           },
         },
       ],
