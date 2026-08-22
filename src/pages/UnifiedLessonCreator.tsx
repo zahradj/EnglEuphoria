@@ -11,6 +11,7 @@
  */
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import type {
   UnifiedLesson,
   UnifiedMoment,
@@ -91,15 +92,63 @@ function csvToArray(text: string): string[] {
   return text.split(',').map((s) => s.trim()).filter(Boolean);
 }
 
+// Calls the same generate-slide-image edge function the Academy/Success PPP
+// creator already uses for slide art, uploading to the lesson-assets bucket
+// and returning a permanent public URL — generated once, then stored on the
+// lesson like any other authored content (not fetched live on every play).
+async function generateHeroImage(hub: Hub, lessonId: string, prompt: string): Promise<string> {
+  const { data, error } = await supabase.functions.invoke('generate-slide-image', {
+    body: { prompt, lessonId, slideId: 'intro-hero', hub },
+  });
+  if (error) throw error;
+  if (!data?.url) throw new Error('No image URL returned');
+  return data.url as string;
+}
+
 // ─── Presentation block forms ────────────────────────────────────────────
-function BlockForm({ block, onChange }: { block: LessonBlock; onChange: (b: LessonBlock) => void }) {
+function BlockForm({ block, onChange, hub, lessonId }: { block: LessonBlock; onChange: (b: LessonBlock) => void; hub: Hub; lessonId: string }) {
   const input = 'w-full rounded-lg border border-slate-300 px-3 py-2 text-sm';
+  const [imagePrompt, setImagePrompt] = useState('');
+  const [generating, setGenerating] = useState(false);
+  const [genError, setGenError] = useState<string | null>(null);
+
   switch (block.type) {
     case 'intro':
       return (
         <div className="space-y-2">
           <input className={input} placeholder="Title" value={block.title} onChange={(e) => onChange({ ...block, title: e.target.value })} />
           <input className={input} placeholder="Subtitle — tell them why this matters to them (adults especially need the 'why' up front)" value={block.subtitle ?? ''} onChange={(e) => onChange({ ...block, subtitle: e.target.value })} />
+          <div className="rounded-lg border border-dashed border-slate-300 p-3">
+            {block.heroImageUrl && (
+              <img src={block.heroImageUrl} alt="" className="mb-2 h-28 w-full rounded object-cover" />
+            )}
+            <input
+              className={input}
+              placeholder="Describe the full-bleed hero image (e.g. a bright airport terminal with travelers)"
+              value={imagePrompt}
+              onChange={(e) => setImagePrompt(e.target.value)}
+            />
+            <button
+              type="button"
+              disabled={generating || !imagePrompt.trim()}
+              onClick={async () => {
+                setGenerating(true);
+                setGenError(null);
+                try {
+                  const url = await generateHeroImage(hub, lessonId, imagePrompt);
+                  onChange({ ...block, heroImageUrl: url });
+                } catch (e: any) {
+                  setGenError(e?.message ?? 'Image generation failed');
+                } finally {
+                  setGenerating(false);
+                }
+              }}
+              className="mt-2 rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-bold text-white disabled:opacity-40"
+            >
+              {generating ? 'Generating…' : block.heroImageUrl ? 'Regenerate hero image' : 'Generate hero image'}
+            </button>
+            {genError && <p className="mt-1 text-xs text-rose-600">{genError}</p>}
+          </div>
         </div>
       );
     case 'vocab_solo':
@@ -215,12 +264,16 @@ function MomentEditor({
   onDelete,
   onMove,
   accent,
+  hub,
+  lessonId,
 }: {
   moment: UnifiedMoment;
   onChange: (m: UnifiedMoment) => void;
   onDelete: () => void;
   onMove: (dir: -1 | 1) => void;
   accent: string;
+  hub: Hub;
+  lessonId: string;
 }) {
   const isActivity = moment.mode === 'activity';
 
@@ -285,7 +338,7 @@ function MomentEditor({
                 <ActivityForm block={block} onChange={(b) => updateBlock(i, b)} />
               </>
             ) : (
-              <BlockForm block={block} onChange={(b) => updateBlock(i, b)} />
+              <BlockForm block={block} onChange={(b) => updateBlock(i, b)} hub={hub} lessonId={lessonId} />
             )}
           </div>
         ))}
@@ -433,19 +486,15 @@ export default function UnifiedLessonCreator() {
   };
 
   return (
-    <div className="relative min-h-screen" style={{ background: theme.sceneGradient }}>
-      <div
-        className="pointer-events-none absolute inset-0 opacity-60"
-        style={{ background: `radial-gradient(circle at 50% 0%, ${theme.glow}, transparent 45%)` }}
-      />
-      <header className="relative bg-black/20 px-6 py-4 shadow-lg backdrop-blur-md">
+    <div className="min-h-screen bg-white">
+      <header className="bg-white px-6 py-4 shadow-sm ring-1 ring-slate-100">
         <div className="mx-auto flex max-w-6xl items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-xl text-xl shadow-lg ring-2 ring-white/40" style={{ background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent2})` }}>
+          <span className="grid h-10 w-10 place-items-center rounded-xl text-xl shadow-md" style={{ background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent2})` }}>
             {theme.characterAvatarEmoji}
           </span>
           <div>
-            <h1 className="text-xl font-black text-white drop-shadow">{HUB_LABEL[hub]} Lesson Creator</h1>
-            <p className="text-sm text-white/80">Combine PPP sections with activities in one lesson.</p>
+            <h1 className="text-xl font-black" style={{ color: theme.accent }}>{HUB_LABEL[hub]} Lesson Creator</h1>
+            <p className="text-sm text-slate-500">Combine PPP sections with activities in one lesson.</p>
           </div>
         </div>
       </header>
@@ -498,6 +547,8 @@ export default function UnifiedLessonCreator() {
               key={moment.id}
               moment={moment}
               accent={accent}
+              hub={hub}
+              lessonId={lesson.id || 'draft'}
               onChange={(m) => updateMoment(i, m)}
               onDelete={() => deleteMoment(i)}
               onMove={(dir) => moveMoment(i, dir)}

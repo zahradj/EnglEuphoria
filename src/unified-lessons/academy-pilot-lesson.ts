@@ -29,6 +29,7 @@ export const academyPilotLesson: UnifiedLesson = {
           type: 'intro',
           title: 'Trip Prep',
           subtitle: "Going somewhere soon? These are the exact words you'll need at check-in and the airport.",
+          heroImageUrl: 'https://dcoxpyzoqjvmuuygvlme.supabase.co/storage/v1/object/public/lesson-assets/studio/academy-pilot-lesson/ai-image-intro-hero-1787374276856.png',
         },
       ],
     },

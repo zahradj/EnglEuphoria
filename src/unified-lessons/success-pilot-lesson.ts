@@ -24,6 +24,7 @@ export const successPilotLesson: UnifiedLesson = {
           type: 'intro',
           title: 'Business Travel Essentials',
           subtitle: "You'll need this vocabulary the next time you book a flight or file a trip expense report — let's make sure you're ready.",
+          heroImageUrl: 'https://dcoxpyzoqjvmuuygvlme.supabase.co/storage/v1/object/public/lesson-assets/studio/success-pilot-lesson/ai-image-intro-hero-1787374303806.png',
         },
       ],
     },

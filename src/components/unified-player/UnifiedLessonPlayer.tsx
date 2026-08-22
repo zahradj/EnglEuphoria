@@ -3,6 +3,11 @@
  * Loads a UnifiedLesson from the pilot registry, steps through its
  * moments, and renders each one via PresentationSection or ActivitySection
  * depending on `moment.mode`.
+ *
+ * White page background by design — a full-bleed gradient scene looked
+ * lively but fights focus in a learning context. Hub identity comes through
+ * as contained pops of color instead: the character badge, progress bar,
+ * and CTA buttons, not the whole backdrop.
  */
 import { useEffect, useState } from 'react';
 import { loadUnifiedLesson } from '@/unified-lessons/registry';
@@ -16,29 +21,23 @@ function PlayerChrome({ lesson, momentIndex }: { lesson: UnifiedLesson; momentIn
   const theme = useHubTheme();
   const total = lesson.moments.length;
   return (
-    <div className="relative mx-auto mb-8 flex max-w-2xl items-center gap-4">
-      <div className="relative flex h-16 w-16 flex-shrink-0 items-center justify-center">
-        <span
-          className="absolute inset-0 rounded-full opacity-80"
-          style={{ background: `radial-gradient(circle, ${theme.glow}, transparent 70%)` }}
-        />
-        <span
-          className="relative grid h-14 w-14 place-items-center rounded-2xl text-3xl shadow-xl ring-2 ring-white/60"
-          style={{ background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent2})` }}
-        >
-          {theme.characterAvatarEmoji}
-        </span>
-      </div>
-      <div className="flex-1 rounded-2xl bg-black/20 px-4 py-2.5 shadow-lg backdrop-blur-md">
-        <div className="text-sm font-black text-white drop-shadow">{theme.characterName} · {theme.characterTagline}</div>
-        <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-white/25">
+    <div className="mx-auto mb-8 flex max-w-2xl items-center gap-4">
+      <span
+        className="grid h-14 w-14 flex-shrink-0 place-items-center rounded-2xl text-3xl shadow-md"
+        style={{ background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent2})` }}
+      >
+        {theme.characterAvatarEmoji}
+      </span>
+      <div className="flex-1 rounded-2xl bg-slate-50 px-4 py-2.5 ring-1 ring-slate-200">
+        <div className="text-sm font-black text-slate-800">{theme.characterName} · {theme.characterTagline}</div>
+        <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-slate-200">
           <div
             className="h-full rounded-full transition-all duration-500"
-            style={{ width: `${((momentIndex + 1) / total) * 100}%`, background: `linear-gradient(90deg, ${theme.accent}, #fff)` }}
+            style={{ width: `${((momentIndex + 1) / total) * 100}%`, background: `linear-gradient(90deg, ${theme.accent}, ${theme.accent2})` }}
           />
         </div>
       </div>
-      <div className="rounded-full bg-black/20 px-3 py-1.5 text-xs font-black text-white shadow backdrop-blur-md">{momentIndex + 1} / {total}</div>
+      <div className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-black text-slate-500">{momentIndex + 1} / {total}</div>
     </div>
   );
 }
@@ -61,36 +60,24 @@ function UnifiedLessonPlayerInner({ lesson }: { lesson: UnifiedLesson }) {
   const theme = useHubTheme();
 
   return (
-    <div className="relative min-h-screen overflow-hidden px-4 py-10" style={{ background: theme.sceneGradient }}>
-      {/* Ambient scene glow — the "place" feeling in place of a photographed background. */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-70"
-        style={{ background: `radial-gradient(circle at 50% 0%, ${theme.glow}, transparent 55%)` }}
-      />
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
-        style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.35) 100%)' }}
-      />
-
-      <div className="relative">
-        <PlayerChrome lesson={lesson} momentIndex={Math.min(momentIndex, lesson.moments.length - 1)} />
-        {finished ? (
-          <div data-lesson-complete="true" className="mx-auto max-w-md rounded-3xl bg-white/90 p-8 text-center shadow-2xl ring-1 ring-white/60 backdrop-blur-xl">
-            <div
-              className="mx-auto mb-3 grid h-20 w-20 place-items-center rounded-full text-4xl shadow-lg"
-              style={{ background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent2})` }}
-            >
-              🎉
-            </div>
-            <h2 className="text-2xl font-black text-slate-800">Lesson complete</h2>
-            <p className="mt-1 text-slate-500">{lesson.title}</p>
+    <div className="min-h-screen bg-white px-4 py-10">
+      <PlayerChrome lesson={lesson} momentIndex={Math.min(momentIndex, lesson.moments.length - 1)} />
+      {finished ? (
+        <div data-lesson-complete="true" className="mx-auto max-w-md rounded-3xl bg-white p-8 text-center shadow-lg ring-1 ring-slate-200">
+          <div
+            className="mx-auto mb-3 grid h-20 w-20 place-items-center rounded-full text-4xl shadow-md"
+            style={{ background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent2})` }}
+          >
+            🎉
           </div>
-        ) : moment.mode === 'activity' ? (
-          <ActivitySection moment={moment} onNext={advance} isLast={isLast} />
-        ) : (
-          <PresentationSection moment={moment} onNext={advance} isLast={isLast} />
-        )}
-      </div>
+          <h2 className="text-2xl font-black text-slate-800">Lesson complete</h2>
+          <p className="mt-1 text-slate-500">{lesson.title}</p>
+        </div>
+      ) : moment.mode === 'activity' ? (
+        <ActivitySection moment={moment} onNext={advance} isLast={isLast} />
+      ) : (
+        <PresentationSection moment={moment} onNext={advance} isLast={isLast} />
+      )}
     </div>
   );
 }

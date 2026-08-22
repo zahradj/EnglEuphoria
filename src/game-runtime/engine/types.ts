@@ -41,6 +41,14 @@ export interface IntroBlock {
   title: string;
   subtitle?: string;
   mascot?: string;
+  /**
+   * Optional full-bleed hero image reflecting the lesson topic (generated
+   * via the generate-slide-image edge function into the lesson-assets
+   * bucket). Purely additive — the Phaser scene planner (scenePlanner.ts)
+   * only reads title/subtitle/mascot from IntroBlock, so this new optional
+   * field is invisible to that path and never breaks it.
+   */
+  heroImageUrl?: string;
 }
 export interface PhonicsBlock {
   type: 'phonics_focus';
