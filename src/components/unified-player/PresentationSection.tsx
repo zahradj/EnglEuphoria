@@ -51,12 +51,17 @@ function BlockView({ block }: { block: UnifiedMoment['blocks'][number] }) {
       );
     case 'vocab_solo':
       return (
-        <div className="flex items-start gap-3 rounded-2xl bg-white/95 p-5 shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
-          <div className="flex-1">
-            <div className="text-xl font-black text-slate-800">{block.word}</div>
-            <p className="mt-1 text-slate-600">{block.definition}</p>
+        <div className="overflow-hidden rounded-2xl bg-white/95 shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
+          {block.image && (
+            <img src={block.image} alt="" className="h-40 w-full object-cover sm:h-48" />
+          )}
+          <div className="flex items-start gap-3 p-5">
+            <div className="flex-1">
+              <div className="text-xl font-black text-slate-800">{block.word}</div>
+              <p className="mt-1 text-slate-600">{block.definition}</p>
+            </div>
+            <HearButton text={`${block.word}. ${block.definition}`} />
           </div>
-          <HearButton text={`${block.word}. ${block.definition}`} />
         </div>
       );
     case 'phonics_focus':
@@ -161,7 +166,7 @@ export function PresentationSection({
   if (!sceneImage) return content;
 
   return (
-    <div className="relative overflow-hidden rounded-3xl shadow-lg">
+    <div className="relative flex min-h-[75vh] flex-col justify-center overflow-hidden rounded-3xl shadow-lg">
       <img src={sceneImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,23,42,0.15) 0%, rgba(15,23,42,0.55) 100%)' }} />
       <div className="relative px-4 py-10 sm:px-8">{content}</div>
