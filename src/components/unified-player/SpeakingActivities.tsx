@@ -26,39 +26,70 @@ export interface RolePlaySlide {
   scaffold?: string;
 }
 
+interface Turn {
+  speaker: 'character' | 'you';
+  text: string;
+}
+
 export function RolePlayGame({ slide }: { slide: RolePlaySlide }) {
   const theme = useHubTheme();
-  const [step, setStep] = useState(0);
-  const done = step >= slide.lines.length;
-  const current = slide.lines[step];
+  const { playVoice } = usePlaygroundAudio();
+  // Alternates character-line / your-turn so the exchange plays out as a
+  // real back-and-forth conversation, not just a cycle through the
+  // character's lines with a static hint repeated every time.
+  const turns: Turn[] = slide.lines.flatMap((line) => [
+    { speaker: 'character', text: line },
+    { speaker: 'you', text: slide.scaffold || '(say something back)' },
+  ]);
+  const [revealed, setRevealed] = useState(1);
+  const done = revealed >= turns.length;
+  const nextTurn = turns[revealed];
 
   return (
     <div className="w-full text-center" data-correct={done ? 'true' : undefined}>
       <h2 className="text-2xl font-black text-slate-800">{slide.prompt}</h2>
       <p className="mt-1 text-sm font-semibold text-slate-500">Role-play with {slide.character}</p>
 
-      <div className="mx-auto mt-5 max-w-md rounded-3xl border-2 bg-white p-6 shadow-sm" style={{ borderColor: `${theme.accent}33` }}>
-        {done ? (
-          <>
-            <div className="text-4xl">🎉</div>
-            <p className="mt-2 font-bold text-slate-700">Nice work — you played the whole scene!</p>
-          </>
-        ) : (
-          <motion.div key={step} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
-            <span className="text-xs font-black uppercase tracking-wide" style={{ color: theme.accent }}>{slide.character} says</span>
-            <p className="mt-2 text-xl font-black text-slate-800">&ldquo;{current}&rdquo;</p>
-            {slide.scaffold && <p className="mt-3 text-sm italic text-slate-500">Try: &ldquo;{slide.scaffold}&rdquo;</p>}
+      <div className="mx-auto mt-5 max-w-md space-y-2 rounded-3xl border-2 bg-white p-5 text-left shadow-sm" style={{ borderColor: `${theme.accent}33` }}>
+        {turns.slice(0, revealed).map((turn, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`flex items-end gap-2 ${turn.speaker === 'you' ? 'flex-row-reverse' : ''}`}
+          >
+            <div
+              className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm font-bold shadow-sm ${turn.speaker === 'you' ? 'text-white' : 'bg-slate-100 text-slate-800'}`}
+              style={turn.speaker === 'you' ? { backgroundColor: theme.accent } : undefined}
+            >
+              <div className="mb-0.5 text-[10px] font-black uppercase tracking-wide opacity-70">
+                {turn.speaker === 'you' ? 'You' : slide.character}
+              </div>
+              &ldquo;{turn.text}&rdquo;
+            </div>
+            {turn.speaker === 'character' && (
+              <button
+                type="button"
+                onClick={() => playVoice(turn.text)}
+                aria-label="Hear this line"
+                className="mb-1 grid h-6 w-6 flex-shrink-0 place-items-center rounded-full bg-slate-200 text-xs"
+              >
+                🔊
+              </button>
+            )}
           </motion.div>
-        )}
+        ))}
       </div>
 
-      {!done && (
+      {done ? (
+        <p className="mt-5 font-bold text-green-600">🎉 Nice work — you played the whole scene!</p>
+      ) : (
         <button
-          onClick={() => setStep((s) => s + 1)}
+          onClick={() => setRevealed((r) => r + 1)}
           className="mt-5 rounded-2xl px-8 py-3 text-lg font-black text-white shadow-md transition-transform hover:scale-105"
           style={{ backgroundColor: theme.accent }}
         >
-          🗣️ I said it — next line
+          {nextTurn?.speaker === 'you' ? '🗣️ I said it' : `Next: ${slide.character} replies →`}
         </button>
       )}
     </div>

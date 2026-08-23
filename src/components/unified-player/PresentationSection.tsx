@@ -15,6 +15,8 @@
  * richness — with light content cards floating over it. Without an image,
  * it's plain light cards on white, keeping focus on the content.
  */
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { usePlaygroundAudio } from '@/hooks/usePlaygroundAudio';
 import type { UnifiedMoment } from '@/unified-lessons/types';
 import { useHubTheme } from './HubTheme';
@@ -68,17 +70,7 @@ function BlockView({ block }: { block: UnifiedMoment['blocks'][number] }) {
         </div>
       );
     case 'storybook':
-      return (
-        <div className="space-y-3 rounded-3xl bg-white/95 p-6 shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
-          <h2 className="text-2xl font-black" style={{ color: 'var(--unified-accent)' }}>{block.title}</h2>
-          {block.pages.map((page, i) => (
-            <div key={i} className="flex items-start gap-3 rounded-xl bg-slate-50 p-4">
-              <p className="flex-1 text-slate-700">{page.text}</p>
-              <HearButton text={page.text} size="sm" />
-            </div>
-          ))}
-        </div>
-      );
+      return <StorybookView block={block} />;
     case 'lesson_summary':
       return (
         <div className="rounded-3xl bg-white/95 p-7 text-center shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
@@ -96,6 +88,44 @@ function BlockView({ block }: { block: UnifiedMoment['blocks'][number] }) {
     default:
       return null;
   }
+}
+
+/**
+ * Reveals one story page at a time instead of dumping the whole story as a
+ * wall of text — matches Playground's page-by-page storybook pacing and
+ * keeps a beginner from being overwhelmed by three paragraphs at once.
+ */
+function StorybookView({ block }: { block: Extract<UnifiedMoment['blocks'][number], { type: 'storybook' }> }) {
+  const [page, setPage] = useState(0);
+  const isLastPage = page >= block.pages.length - 1;
+  const current = block.pages[page];
+
+  return (
+    <div className="rounded-3xl bg-white/95 p-6 shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-black" style={{ color: 'var(--unified-accent)' }}>{block.title}</h2>
+        <span className="text-xs font-black text-slate-400">Page {page + 1} / {block.pages.length}</span>
+      </div>
+      <motion.div
+        key={page}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mt-4 flex items-start gap-3 rounded-xl bg-slate-50 p-5"
+      >
+        <p className="flex-1 text-lg text-slate-700">{current.text}</p>
+        <HearButton text={current.text} size="sm" />
+      </motion.div>
+      {!isLastPage && (
+        <button
+          onClick={() => setPage((p) => p + 1)}
+          className="mx-auto mt-4 block rounded-full px-6 py-2.5 text-sm font-black text-white shadow"
+          style={{ backgroundColor: 'var(--unified-accent)' }}
+        >
+          Next page →
+        </button>
+      )}
+    </div>
+  );
 }
 
 export function PresentationSection({
