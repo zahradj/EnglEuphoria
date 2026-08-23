@@ -27,7 +27,7 @@ import {
 } from '@/components/playground-player/playground-games';
 import type { UnifiedMoment, CatalogActivityBlock } from '@/unified-lessons/types';
 import { GameThemeScope, useHubTheme } from './HubTheme';
-import { RolePlayGame, SpeakingMissionGame, type RolePlaySlide, type SpeakingMissionSlide } from './SpeakingActivities';
+import { RolePlayGame, SpeakingMissionGame, ListenRepeatGame, type RolePlaySlide, type SpeakingMissionSlide, type ListenRepeatSlide } from './SpeakingActivities';
 
 function ActivityView({ block }: { block: CatalogActivityBlock }) {
   switch (block.activityType) {
@@ -47,6 +47,9 @@ function ActivityView({ block }: { block: CatalogActivityBlock }) {
       return <RolePlayGame slide={{ type: 'role_play', ...block.config } as RolePlaySlide} />;
     case 'speaking_mission':
       return <SpeakingMissionGame slide={{ type: 'speaking_mission', ...block.config } as SpeakingMissionSlide} />;
+    case 'echo':
+    case 'shadowing':
+      return <ListenRepeatGame slide={{ type: block.activityType, ...block.config } as ListenRepeatSlide} />;
     default:
       return (
         <p className="text-center text-slate-500">
@@ -75,7 +78,7 @@ export function ActivitySection({
 
   if (!current) return null;
 
-  return (
+  const body = (
     <div className="mx-auto max-w-3xl">
       {current.label && (
         <p className="mb-3 text-center">
@@ -84,9 +87,9 @@ export function ActivitySection({
           </span>
         </p>
       )}
-      <div className="rounded-3xl bg-white p-5 shadow-md ring-1 ring-slate-200 sm:p-8">
+      <div className="rounded-3xl bg-white/95 p-5 shadow-md ring-1 ring-slate-200 backdrop-blur-sm sm:p-8">
         <GameThemeScope hub={theme.hub}>
-          <ActivityView block={current} />
+          <ActivityView key={index} block={current} />
         </GameThemeScope>
       </div>
       <div className="mt-6 text-center">
@@ -98,6 +101,16 @@ export function ActivitySection({
           {isLastBlock ? (isLast ? 'Finish ✨' : 'Continue →') : 'Next activity →'}
         </button>
       </div>
+    </div>
+  );
+
+  if (!moment.sceneImageUrl) return body;
+
+  return (
+    <div className="relative overflow-hidden rounded-3xl shadow-lg">
+      <img src={moment.sceneImageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,23,42,0.15) 0%, rgba(15,23,42,0.45) 100%)' }} />
+      <div className="relative px-4 py-10 sm:px-8">{body}</div>
     </div>
   );
 }

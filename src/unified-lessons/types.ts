@@ -36,6 +36,13 @@ export interface UnifiedMoment {
   title?: string;
   mode: SectionMode;
   hostCharacterId?: string;
+  /**
+   * Optional full-bleed illustrated background for this specific moment
+   * (generated via generate-slide-image), matching Playground's per-scene
+   * illustrated richness — not just a single banner at the lesson intro.
+   * Falls back to the intro block's own heroImageUrl for older content.
+   */
+  sceneImageUrl?: string;
   blocks: UnifiedBlock[];
 }
 

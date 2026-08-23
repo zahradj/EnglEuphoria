@@ -3,64 +3,92 @@
  * (intro, vocab/phonics discovery, storybook, reward summary) using the
  * existing 9 LessonBlock kinds from src/game-runtime/engine/types.ts.
  *
- * Light cards on a white page (see UnifiedLessonPlayer) — hub identity
- * comes through as accent-colored headings and a gradient CTA, not a full
- * backdrop wash, so the reading content stays the focus.
+ * True Pre-A1 beginners often can't reliably decode English text yet — a
+ * page of written vocabulary/story content isn't accessible on its own. So
+ * every text block gets a "hear it" speaker button (usePlaygroundAudio's
+ * playVoice, the same static-cache-with-live-fallback hook every other
+ * Playground game already uses) — nothing here is text-only.
+ *
+ * When the moment carries a `sceneImageUrl` (or its intro block carries the
+ * older `heroImageUrl`), the whole moment renders as a full-bleed
+ * illustrated scene — matching Playground's per-scene illustrated
+ * richness — with light content cards floating over it. Without an image,
+ * it's plain light cards on white, keeping focus on the content.
  */
+import { usePlaygroundAudio } from '@/hooks/usePlaygroundAudio';
 import type { UnifiedMoment } from '@/unified-lessons/types';
 import { useHubTheme } from './HubTheme';
+
+function HearButton({ text, size = 'md' }: { text: string; size?: 'sm' | 'md' }) {
+  const { playVoice } = usePlaygroundAudio();
+  const dim = size === 'sm' ? 'h-7 w-7 text-sm' : 'h-9 w-9 text-base';
+  return (
+    <button
+      type="button"
+      onClick={() => playVoice(text)}
+      aria-label={`Hear: ${text}`}
+      className={`inline-flex flex-shrink-0 items-center justify-center rounded-full text-white shadow ${dim}`}
+      style={{ backgroundColor: 'var(--unified-accent)' }}
+    >
+      🔊
+    </button>
+  );
+}
 
 function BlockView({ block }: { block: UnifiedMoment['blocks'][number] }) {
   switch (block.type) {
     case 'intro':
-      if (block.heroImageUrl) {
-        return (
-          <div className="relative overflow-hidden rounded-3xl shadow-md ring-1 ring-slate-200">
-            <img src={block.heroImageUrl} alt="" className="h-64 w-full object-cover sm:h-80" />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%)' }} />
-            <div className="absolute inset-x-0 bottom-0 p-6 text-center sm:p-8">
-              <h1 className="text-3xl font-black text-white drop-shadow-lg sm:text-4xl">{block.title}</h1>
-              {block.subtitle && <p className="mx-auto mt-2 max-w-md text-base font-medium text-white/95 drop-shadow sm:text-lg">{block.subtitle}</p>}
-            </div>
-          </div>
-        );
-      }
       return (
-        <div className="rounded-3xl bg-slate-50 p-8 text-center ring-1 ring-slate-200">
-          <h1 className="text-4xl font-black sm:text-5xl" style={{ color: 'var(--unified-accent)' }}>{block.title}</h1>
+        <div className="rounded-3xl bg-white/95 p-8 text-center shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
+          <div className="flex items-center justify-center gap-3">
+            <h1 className="text-4xl font-black sm:text-5xl" style={{ color: 'var(--unified-accent)' }}>{block.title}</h1>
+            <HearButton text={block.subtitle ? `${block.title}. ${block.subtitle}` : block.title} />
+          </div>
           {block.subtitle && <p className="mx-auto mt-3 max-w-md text-lg font-medium text-slate-600">{block.subtitle}</p>}
         </div>
       );
     case 'vocab_solo':
       return (
-        <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
-          <div className="text-xl font-black text-slate-800">{block.word}</div>
-          <p className="mt-1 text-slate-600">{block.definition}</p>
+        <div className="flex items-start gap-3 rounded-2xl bg-white/95 p-5 shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
+          <div className="flex-1">
+            <div className="text-xl font-black text-slate-800">{block.word}</div>
+            <p className="mt-1 text-slate-600">{block.definition}</p>
+          </div>
+          <HearButton text={`${block.word}. ${block.definition}`} />
         </div>
       );
     case 'phonics_focus':
       return (
-        <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
-          <div className="text-xl font-black text-slate-800">/{block.sound}/</div>
-          <p className="mt-1 text-slate-600">{block.examples.join(', ')}</p>
+        <div className="flex items-start gap-3 rounded-2xl bg-white/95 p-5 shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
+          <div className="flex-1">
+            <div className="text-xl font-black text-slate-800">/{block.sound}/</div>
+            <p className="mt-1 text-slate-600">{block.examples.join(', ')}</p>
+          </div>
+          <HearButton text={block.sound} />
         </div>
       );
     case 'storybook':
       return (
-        <div className="space-y-3 rounded-3xl bg-slate-50 p-6 ring-1 ring-slate-200">
+        <div className="space-y-3 rounded-3xl bg-white/95 p-6 shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
           <h2 className="text-2xl font-black" style={{ color: 'var(--unified-accent)' }}>{block.title}</h2>
           {block.pages.map((page, i) => (
-            <p key={i} className="rounded-xl bg-white p-4 text-slate-700 shadow-sm">{page.text}</p>
+            <div key={i} className="flex items-start gap-3 rounded-xl bg-slate-50 p-4">
+              <p className="flex-1 text-slate-700">{page.text}</p>
+              <HearButton text={page.text} size="sm" />
+            </div>
           ))}
         </div>
       );
     case 'lesson_summary':
       return (
-        <div className="rounded-3xl bg-slate-50 p-7 text-center ring-1 ring-slate-200">
+        <div className="rounded-3xl bg-white/95 p-7 text-center shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
           <h2 className="text-3xl font-black" style={{ color: 'var(--unified-accent)' }}>{block.title}</h2>
           <ul className="mx-auto mt-4 max-w-md space-y-2 text-left">
             {block.bullets.map((b, i) => (
-              <li key={i} className="rounded-lg bg-white px-4 py-2 text-slate-700 shadow-sm">✓ {b}</li>
+              <li key={i} className="flex items-start gap-2 rounded-lg bg-slate-50 px-4 py-2 text-slate-700">
+                <span className="flex-1">✓ {b}</span>
+                <HearButton text={b} size="sm" />
+              </li>
             ))}
           </ul>
         </div>
@@ -80,7 +108,10 @@ export function PresentationSection({
   isLast: boolean;
 }) {
   const theme = useHubTheme();
-  return (
+  const introBlock = moment.blocks.find((b) => b.type === 'intro');
+  const sceneImage = moment.sceneImageUrl ?? (introBlock?.type === 'intro' ? introBlock.heroImageUrl : undefined);
+
+  const content = (
     <div className="mx-auto flex max-w-2xl flex-col gap-5" style={{ ['--unified-accent' as string]: theme.accent }}>
       {moment.blocks.map((block, i) => (
         <BlockView key={i} block={block} />
@@ -92,6 +123,16 @@ export function PresentationSection({
       >
         {isLast ? 'Finish ✨' : 'Continue →'}
       </button>
+    </div>
+  );
+
+  if (!sceneImage) return content;
+
+  return (
+    <div className="relative overflow-hidden rounded-3xl shadow-lg">
+      <img src={sceneImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,23,42,0.15) 0%, rgba(15,23,42,0.55) 100%)' }} />
+      <div className="relative px-4 py-10 sm:px-8">{content}</div>
     </div>
   );
 }

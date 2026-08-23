@@ -15,6 +15,7 @@
  */
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { usePlaygroundAudio } from '@/hooks/usePlaygroundAudio';
 import { useHubTheme } from './HubTheme';
 
 export interface RolePlaySlide {
@@ -104,6 +105,65 @@ export function SpeakingMissionGame({ slide }: { slide: SpeakingMissionSlide }) 
         </>
       ) : (
         <p className="mt-5 font-bold text-green-600">🎉 Nice work!</p>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Listen & Repeat — matches ACTIVITY_CATALOG's 'echo'/'shadowing' types
+ * (Hear it · say it back). No component existed for either in
+ * playground-games.tsx, so built fresh here on the same pattern: play the
+ * target audio via the shared usePlaygroundAudio hook (static cache with
+ * live ElevenLabs fallback, same as every other Playground game), then
+ * self-confirm since there's no speech-recognition dependency.
+ */
+export interface ListenRepeatSlide {
+  type: 'echo' | 'shadowing';
+  prompt?: string;
+  word?: string;
+  sentence?: string;
+}
+
+export function ListenRepeatGame({ slide }: { slide: ListenRepeatSlide }) {
+  const theme = useHubTheme();
+  const { playVoice } = usePlaygroundAudio();
+  const [heard, setHeard] = useState(false);
+  const [done, setDone] = useState(false);
+  const target = slide.sentence || slide.word || '';
+
+  const hear = () => {
+    playVoice(target);
+    setHeard(true);
+  };
+
+  return (
+    <div className="w-full text-center" data-correct={done ? 'true' : undefined}>
+      <h2 className="text-2xl font-black text-slate-800">🔊 Listen & repeat</h2>
+      {slide.prompt && <p className="mt-1 text-sm font-semibold text-slate-500">{slide.prompt}</p>}
+
+      <div className="mx-auto mt-5 max-w-md rounded-3xl border-2 bg-white p-6 shadow-sm" style={{ borderColor: `${theme.accent}33` }}>
+        <p className="text-2xl font-black" style={{ color: theme.accent }}>&ldquo;{target}&rdquo;</p>
+        <button
+          onClick={hear}
+          className="mt-4 rounded-full px-6 py-2.5 text-sm font-black text-white shadow-md transition-transform hover:scale-105"
+          style={{ backgroundColor: theme.accent }}
+        >
+          🔊 Hear it
+        </button>
+      </div>
+
+      {!done ? (
+        <button
+          onClick={() => setDone(true)}
+          disabled={!heard}
+          className="mt-5 rounded-2xl px-8 py-3 text-lg font-black text-white shadow-md transition-transform hover:scale-105 disabled:opacity-40 disabled:hover:scale-100"
+          style={{ backgroundColor: theme.accent }}
+        >
+          🗣️ I said it back
+        </button>
+      ) : (
+        <p className="mt-5 font-bold text-green-600">🎉 Nice pronunciation!</p>
       )}
     </div>
   );

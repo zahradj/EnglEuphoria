@@ -74,9 +74,9 @@ function UnifiedLessonPlayerInner({ lesson }: { lesson: UnifiedLesson }) {
           <p className="mt-1 text-slate-500">{lesson.title}</p>
         </div>
       ) : moment.mode === 'activity' ? (
-        <ActivitySection moment={moment} onNext={advance} isLast={isLast} />
+        <ActivitySection key={moment.id} moment={moment} onNext={advance} isLast={isLast} />
       ) : (
-        <PresentationSection moment={moment} onNext={advance} isLast={isLast} />
+        <PresentationSection key={moment.id} moment={moment} onNext={advance} isLast={isLast} />
       )}
     </div>
   );
