@@ -37,6 +37,28 @@ function HearButton({ text, size = 'md' }: { text: string; size?: 'sm' | 'md' })
   );
 }
 
+/**
+ * Isolated phonics sounds must ONLY ever play the real recorded clip —
+ * never a live ElevenLabs fallback. A live TTS engine reading a raw phoneme
+ * in isolation mispronounces it unpredictably, which teaches the wrong
+ * sound. So unlike HearButton, this plays a literal <audio> file and does
+ * nothing at all if the block has no recorded `audio` yet.
+ */
+function PhonicsHearButton({ src, label }: { src?: string; label: string }) {
+  if (!src) return null;
+  return (
+    <button
+      type="button"
+      onClick={() => new Audio(src).play().catch(() => {})}
+      aria-label={`Hear the sound: ${label}`}
+      className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-white shadow"
+      style={{ backgroundColor: 'var(--unified-accent)' }}
+    >
+      🔊
+    </button>
+  );
+}
+
 function BlockView({ block }: { block: UnifiedMoment['blocks'][number] }) {
   switch (block.type) {
     case 'intro':
@@ -53,7 +75,9 @@ function BlockView({ block }: { block: UnifiedMoment['blocks'][number] }) {
       return (
         <div className="overflow-hidden rounded-2xl bg-white/95 shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
           {block.image && (
-            <img src={block.image} alt="" className="h-40 w-full object-cover sm:h-48" />
+            <div className="bg-slate-50">
+              <img src={block.image} alt="" className="mx-auto h-64 w-auto max-w-full object-contain sm:h-72" />
+            </div>
           )}
           <div className="flex items-start gap-3 p-5">
             <div className="flex-1">
@@ -71,7 +95,7 @@ function BlockView({ block }: { block: UnifiedMoment['blocks'][number] }) {
             <div className="text-xl font-black text-slate-800">/{block.sound}/</div>
             <p className="mt-1 text-slate-600">{block.examples.join(', ')}</p>
           </div>
-          <HearButton text={block.sound} />
+          <PhonicsHearButton src={block.audio} label={block.sound} />
         </div>
       );
     case 'storybook':
