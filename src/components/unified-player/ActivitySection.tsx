@@ -78,20 +78,32 @@ export function ActivitySection({
 
   if (!current) return null;
 
+  // Role-play is a floating chat conversation, not a game UI — it supplies
+  // its own bubble styling, so it skips the shared white-card frame that
+  // every other (game-board-style) activity type still needs.
+  const isBubbleStyle = current.activityType === 'role_play';
+  const activityView = (
+    <GameThemeScope hub={theme.hub}>
+      <ActivityView key={index} block={current} />
+    </GameThemeScope>
+  );
+
   const body = (
     <div className="mx-auto max-w-3xl">
-      {current.label && (
+      {current.label && !isBubbleStyle && (
         <p className="mb-3 text-center">
           <span className="rounded-full px-4 py-1.5 text-xs font-black uppercase tracking-wide text-white shadow" style={{ background: `linear-gradient(90deg, ${theme.accent}, ${theme.accent2})` }}>
             {current.label}
           </span>
         </p>
       )}
-      <div className="rounded-3xl bg-white/95 p-5 shadow-md ring-1 ring-slate-200 backdrop-blur-sm sm:p-8">
-        <GameThemeScope hub={theme.hub}>
-          <ActivityView key={index} block={current} />
-        </GameThemeScope>
-      </div>
+      {isBubbleStyle ? (
+        activityView
+      ) : (
+        <div className="rounded-3xl bg-white/95 p-5 shadow-md ring-1 ring-slate-200 backdrop-blur-sm sm:p-8">
+          {activityView}
+        </div>
+      )}
       <div className="mt-6 text-center">
         <button
           onClick={() => (isLastBlock ? onNext() : setIndex((i) => i + 1))}

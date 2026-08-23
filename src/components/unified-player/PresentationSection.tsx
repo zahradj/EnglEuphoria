@@ -94,6 +94,10 @@ function BlockView({ block }: { block: UnifiedMoment['blocks'][number] }) {
  * Reveals one story page at a time instead of dumping the whole story as a
  * wall of text — matches Playground's page-by-page storybook pacing and
  * keeps a beginner from being overwhelmed by three paragraphs at once.
+ *
+ * No enclosing card/frame — the page text floats as a speech bubble near
+ * the top of the scene, like dialogue coming from the illustrated
+ * character, not a text box laid over the picture.
  */
 function StorybookView({ block }: { block: Extract<UnifiedMoment['blocks'][number], { type: 'storybook' }> }) {
   const [page, setPage] = useState(0);
@@ -101,24 +105,22 @@ function StorybookView({ block }: { block: Extract<UnifiedMoment['blocks'][numbe
   const current = block.pages[page];
 
   return (
-    <div className="rounded-3xl bg-white/95 p-6 shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-black" style={{ color: 'var(--unified-accent)' }}>{block.title}</h2>
-        <span className="text-xs font-black text-slate-400">Page {page + 1} / {block.pages.length}</span>
-      </div>
-      <motion.div
-        key={page}
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mt-4 flex items-start gap-3 rounded-xl bg-slate-50 p-5"
-      >
-        <p className="flex-1 text-lg text-slate-700">{current.text}</p>
-        <HearButton text={current.text} size="sm" />
+    <div>
+      <p className="mb-3 text-center">
+        <span className="rounded-full bg-black/30 px-3 py-1 text-xs font-black uppercase tracking-wide text-white shadow backdrop-blur-sm">
+          {block.title} · Page {page + 1}/{block.pages.length}
+        </span>
+      </p>
+      <motion.div key={page} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mx-auto max-w-sm">
+        <div className="flex items-start gap-2 rounded-3xl rounded-bl-md bg-white px-5 py-4 shadow-xl">
+          <p className="flex-1 text-base font-bold text-slate-800">{current.text}</p>
+          <HearButton text={current.text} size="sm" />
+        </div>
       </motion.div>
       {!isLastPage && (
         <button
           onClick={() => setPage((p) => p + 1)}
-          className="mx-auto mt-4 block rounded-full px-6 py-2.5 text-sm font-black text-white shadow"
+          className="mx-auto mt-4 block rounded-full px-6 py-2.5 text-sm font-black text-white shadow-lg"
           style={{ backgroundColor: 'var(--unified-accent)' }}
         >
           Next page →

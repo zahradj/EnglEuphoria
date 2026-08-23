@@ -47,19 +47,24 @@ export function RolePlayGame({ slide }: { slide: RolePlaySlide }) {
 
   return (
     <div className="w-full text-center" data-correct={done ? 'true' : undefined}>
-      <h2 className="text-2xl font-black text-slate-800">{slide.prompt}</h2>
-      <p className="mt-1 text-sm font-semibold text-slate-500">Role-play with {slide.character}</p>
+      <p className="mb-3">
+        <span className="rounded-full bg-black/30 px-3 py-1 text-xs font-black uppercase tracking-wide text-white shadow backdrop-blur-sm">
+          {slide.prompt} · Role-play with {slide.character}
+        </span>
+      </p>
 
-      <div className="mx-auto mt-5 max-w-md space-y-2 rounded-3xl border-2 bg-white p-5 text-left shadow-sm" style={{ borderColor: `${theme.accent}33` }}>
+      <div className="mx-auto flex max-w-md flex-col gap-2 text-left">
         {turns.slice(0, revealed).map((turn, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
             className={`flex items-end gap-2 ${turn.speaker === 'you' ? 'flex-row-reverse' : ''}`}
           >
             <div
-              className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm font-bold shadow-sm ${turn.speaker === 'you' ? 'text-white' : 'bg-slate-100 text-slate-800'}`}
+              className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm font-bold shadow-xl ${
+                turn.speaker === 'you' ? 'rounded-br-md text-white' : 'rounded-bl-md bg-white text-slate-800'
+              }`}
               style={turn.speaker === 'you' ? { backgroundColor: theme.accent } : undefined}
             >
               <div className="mb-0.5 text-[10px] font-black uppercase tracking-wide opacity-70">
@@ -72,7 +77,7 @@ export function RolePlayGame({ slide }: { slide: RolePlaySlide }) {
                 type="button"
                 onClick={() => playVoice(turn.text)}
                 aria-label="Hear this line"
-                className="mb-1 grid h-6 w-6 flex-shrink-0 place-items-center rounded-full bg-slate-200 text-xs"
+                className="mb-1 grid h-6 w-6 flex-shrink-0 place-items-center rounded-full bg-white/90 text-xs shadow"
               >
                 🔊
               </button>
@@ -82,11 +87,11 @@ export function RolePlayGame({ slide }: { slide: RolePlaySlide }) {
       </div>
 
       {done ? (
-        <p className="mt-5 font-bold text-green-600">🎉 Nice work — you played the whole scene!</p>
+        <p className="mt-5 rounded-full bg-black/30 px-4 py-1.5 text-sm font-bold text-white shadow backdrop-blur-sm inline-block">🎉 Nice work — you played the whole scene!</p>
       ) : (
         <button
           onClick={() => setRevealed((r) => r + 1)}
-          className="mt-5 rounded-2xl px-8 py-3 text-lg font-black text-white shadow-md transition-transform hover:scale-105"
+          className="mt-5 rounded-2xl px-8 py-3 text-lg font-black text-white shadow-lg transition-transform hover:scale-105"
           style={{ backgroundColor: theme.accent }}
         >
           {nextTurn?.speaker === 'you' ? '🗣️ I said it' : `Next: ${slide.character} replies →`}
