@@ -55,6 +55,10 @@ export interface PhonicsBlock {
   sound: string;
   examples: string[];
   audio?: string;
+  /** Optional anchor picture for the sound (e.g. an apple for "a") — Pre-A1
+   * beginners can't decode the sound from letters alone, so a picture
+   * anchor matters as much as it does for vocab_solo. */
+  image?: string;
 }
 export interface VocabBlock {
   type: 'vocab_solo';

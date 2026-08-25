@@ -35,6 +35,8 @@ function ActivityView({ block }: { block: CatalogActivityBlock }) {
       return <TrailChoiceGame slide={{ type: 'multiple', ...block.config } as TrailChoiceSlide} />;
     case 'match':
       return <TrailDragMatchGame slide={{ type: 'match', ...block.config } as TrailDragMatchSlide} />;
+    case 'drag':
+      return <TrailDragMatchGame slide={{ type: 'drag', ...block.config } as TrailDragMatchSlide} />;
     case 'memory':
       return <MemoryGame slide={{ type: 'memory', ...block.config } as MemorySlide} />;
     case 'fill':

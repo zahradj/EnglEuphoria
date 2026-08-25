@@ -73,29 +73,54 @@ function BlockView({ block }: { block: UnifiedMoment['blocks'][number] }) {
       );
     case 'vocab_solo':
       return (
-        <div className="overflow-hidden rounded-2xl bg-white/95 shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
+        <div className="overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-200">
           {block.image && (
-            <div className="bg-slate-50">
+            <div className="relative bg-slate-50">
               <img src={block.image} alt="" className="mx-auto h-64 w-auto max-w-full object-contain sm:h-72" />
+              <div
+                className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 px-4 py-2.5 text-white"
+                style={{ backgroundColor: 'var(--unified-accent)' }}
+              >
+                <span className="text-lg font-black">{block.word}</span>
+                <HearButton text={`${block.word}. ${block.definition}`} size="sm" />
+              </div>
             </div>
           )}
-          <div className="flex items-start gap-3 p-5">
-            <div className="flex-1">
-              <div className="text-xl font-black text-slate-800">{block.word}</div>
-              <p className="mt-1 text-slate-600">{block.definition}</p>
-            </div>
-            <HearButton text={`${block.word}. ${block.definition}`} />
+          <div className="p-4">
+            {!block.image && (
+              <div className="mb-1 flex items-center justify-between gap-3">
+                <span className="text-xl font-black text-slate-800">{block.word}</span>
+                <HearButton text={`${block.word}. ${block.definition}`} />
+              </div>
+            )}
+            <p className="text-slate-600">{block.definition}</p>
           </div>
         </div>
       );
     case 'phonics_focus':
       return (
-        <div className="flex items-start gap-3 rounded-2xl bg-white/95 p-5 shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
-          <div className="flex-1">
-            <div className="text-xl font-black text-slate-800">/{block.sound}/</div>
-            <p className="mt-1 text-slate-600">{block.examples.join(', ')}</p>
+        <div className="overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-200">
+          {block.image && (
+            <div className="relative bg-slate-50">
+              <img src={block.image} alt="" className="mx-auto h-48 w-auto max-w-full object-contain sm:h-56" />
+              <div
+                className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 px-4 py-2.5 text-white"
+                style={{ backgroundColor: 'var(--unified-accent)' }}
+              >
+                <span className="text-2xl font-black">/{block.sound}/</span>
+                <PhonicsHearButton src={block.audio} label={block.sound} />
+              </div>
+            </div>
+          )}
+          <div className="p-4">
+            {!block.image && (
+              <div className="mb-1 flex items-center justify-between gap-3">
+                <span className="text-xl font-black text-slate-800">/{block.sound}/</span>
+                <PhonicsHearButton src={block.audio} label={block.sound} />
+              </div>
+            )}
+            <p className="text-slate-600">{block.examples.join(', ')}</p>
           </div>
-          <PhonicsHearButton src={block.audio} label={block.sound} />
         </div>
       );
     case 'storybook':
