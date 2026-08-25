@@ -190,10 +190,13 @@ export function PresentationSection({
   if (!sceneImage) return content;
 
   return (
-    <div className="relative flex min-h-[75vh] flex-col justify-center overflow-hidden rounded-3xl shadow-lg">
+    <div className="relative flex min-h-[75vh] flex-col overflow-hidden rounded-3xl shadow-lg">
       <img src={sceneImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,23,42,0.15) 0%, rgba(15,23,42,0.55) 100%)' }} />
-      <div className="relative px-4 py-10 sm:px-8">{content}</div>
+      {/* Content hugs the top of the scene, in the sky/background band above
+          where illustrated characters are framed, so bubbles/cards read as
+          speech coming from above them instead of covering their faces. */}
+      <div className="relative px-4 pb-10 pt-8 sm:px-8">{content}</div>
     </div>
   );
 }
