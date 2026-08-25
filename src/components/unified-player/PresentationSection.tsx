@@ -274,9 +274,11 @@ function FlashcardDeck({ blocks, accent, accent2 }: { blocks: Block[]; accent: s
 }
 
 /**
- * Reveals one story page at a time instead of dumping the whole story as a
- * wall of text — matches Playground's page-by-page storybook pacing and
- * keeps a beginner from being overwhelmed by three paragraphs at once.
+ * A story to read AND listen-and-repeat, not just read — each page must be
+ * heard (🔊) and confirmed repeated (🗣️) before "Next page" unlocks, the
+ * same hear-then-repeat gating ListenRepeatGame already uses elsewhere in
+ * this lesson. Reveals one page at a time so a beginner isn't overwhelmed
+ * by the whole story as a wall of text.
  */
 function StorybookSlide({
   block,
@@ -289,25 +291,57 @@ function StorybookSlide({
   accent2: string;
   sceneImage?: string;
 }) {
+  const { playVoice } = usePlaygroundAudio();
   const [page, setPage] = useState(0);
+  const [heard, setHeard] = useState(false);
+  const [repeated, setRepeated] = useState(false);
   const isLastPage = page >= block.pages.length - 1;
   const current = block.pages[page];
+
+  const goToPage = (p: number) => {
+    setPage(p);
+    setHeard(false);
+    setRepeated(false);
+  };
+
+  const hear = () => {
+    playVoice(current.text);
+    setHeard(true);
+  };
 
   return (
     <SlideFrame kicker={`Page ${page + 1} / ${block.pages.length}`} title={block.title} accent={accent} accent2={accent2} image={sceneImage}>
       <div className="flex h-full w-full items-center gap-5">
         <motion.div key={page} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="w-full rounded-xl bg-white/95 px-5 py-4 shadow-lg backdrop-blur-sm">
           <p className="text-base font-bold text-slate-800">{current.text}</p>
-          <div className="mt-2 flex items-center gap-3">
-            <HearButtonDark text={current.text} />
-            {!isLastPage && (
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={hear}
+              className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-black text-white shadow-md transition hover:scale-105"
+              style={{ backgroundColor: accent }}
+            >
+              🔊 Hear it
+            </button>
+            <button
+              type="button"
+              onClick={() => setRepeated(true)}
+              disabled={!heard}
+              className="inline-flex items-center gap-1.5 rounded-full bg-slate-200 px-4 py-2 text-sm font-black text-slate-700 shadow-md transition disabled:opacity-40"
+            >
+              🗣️ I said it
+            </button>
+            {!isLastPage ? (
               <button
-                onClick={() => setPage((p) => p + 1)}
-                className="rounded-full px-5 py-2 text-sm font-black text-white shadow-md"
+                onClick={() => goToPage(page + 1)}
+                disabled={!repeated}
+                className="rounded-full px-5 py-2 text-sm font-black text-white shadow-md transition disabled:opacity-40"
                 style={{ backgroundColor: accent }}
               >
                 Next page →
               </button>
+            ) : (
+              repeated && <span className="font-bold text-green-600">🎉 Great reading!</span>
             )}
           </div>
         </motion.div>
