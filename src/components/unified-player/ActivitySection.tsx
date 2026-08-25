@@ -27,6 +27,7 @@ import {
 } from '@/components/playground-player/playground-games';
 import type { UnifiedMoment, CatalogActivityBlock } from '@/unified-lessons/types';
 import { GameThemeScope, useHubTheme } from './HubTheme';
+import { NavFooter } from './NavFooter';
 import { RolePlayGame, SpeakingMissionGame, ListenRepeatGame, type RolePlaySlide, type SpeakingMissionSlide, type ListenRepeatSlide } from './SpeakingActivities';
 
 function ActivityView({ block }: { block: CatalogActivityBlock }) {
@@ -64,11 +65,17 @@ function ActivityView({ block }: { block: CatalogActivityBlock }) {
 export function ActivitySection({
   moment,
   onNext,
+  onBack,
+  isFirst,
   isLast,
+  pageLabel,
 }: {
   moment: UnifiedMoment;
   onNext: () => void;
+  onBack: () => void;
+  isFirst: boolean;
   isLast: boolean;
+  pageLabel: string;
 }) {
   const theme = useHubTheme();
   const [index, setIndex] = useState(0);
@@ -106,28 +113,34 @@ export function ActivitySection({
           {activityView}
         </div>
       )}
-      <div className="mt-6 text-center">
-        <button
-          onClick={() => (isLastBlock ? onNext() : setIndex((i) => i + 1))}
-          className="rounded-full px-10 py-4 text-lg font-black text-white shadow-md transition hover:scale-105 active:scale-95"
-          style={{ background: `linear-gradient(90deg, ${theme.accent}, ${theme.accent2})` }}
-        >
-          {isLastBlock ? (isLast ? 'Finish ✨' : 'Continue →') : 'Next activity →'}
-        </button>
-      </div>
     </div>
   );
 
-  if (!moment.sceneImageUrl) return body;
-
-  return (
+  const scene = !moment.sceneImageUrl ? (
+    body
+  ) : (
     <div className="relative flex min-h-[75vh] flex-col overflow-hidden rounded-3xl shadow-lg">
       <img src={moment.sceneImageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,23,42,0.15) 0%, rgba(15,23,42,0.45) 100%)' }} />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,23,42,0.05) 0%, rgba(15,23,42,0.25) 100%)' }} />
       {/* Content hugs the top of the scene instead of centering over it, so
           floating bubbles (role_play) or cards sit above the illustrated
           characters rather than covering their faces. */}
       <div className="relative px-4 pb-10 pt-8 sm:px-8">{body}</div>
+    </div>
+  );
+
+  return (
+    <div>
+      {scene}
+      <NavFooter
+        onBack={() => (index > 0 ? setIndex((i) => i - 1) : onBack())}
+        backDisabled={isFirst && index === 0}
+        onNext={() => (isLastBlock ? onNext() : setIndex((i) => i + 1))}
+        nextLabel={isLastBlock ? (isLast ? 'Finish ✨' : 'Next →') : 'Next activity →'}
+        pageLabel={pageLabel}
+        accent={theme.accent}
+        accent2={theme.accent2}
+      />
     </div>
   );
 }

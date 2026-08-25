@@ -20,6 +20,8 @@ import { motion } from 'framer-motion';
 import { usePlaygroundAudio } from '@/hooks/usePlaygroundAudio';
 import type { UnifiedMoment } from '@/unified-lessons/types';
 import { useHubTheme } from './HubTheme';
+import { NavFooter } from './NavFooter';
+import logoWhite from '@/assets/logo-white.png';
 
 function HearButton({ text, size = 'md' }: { text: string; size?: 'sm' | 'md' }) {
   const { playVoice } = usePlaygroundAudio();
@@ -59,16 +61,33 @@ function PhonicsHearButton({ src, label }: { src?: string; label: string }) {
   );
 }
 
-function BlockView({ block }: { block: UnifiedMoment['blocks'][number] }) {
+function BlockView({ block, hasScene }: { block: UnifiedMoment['blocks'][number]; hasScene: boolean }) {
   switch (block.type) {
     case 'intro':
-      return (
-        <div className="rounded-3xl bg-white/95 p-8 text-center shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
-          <div className="flex items-center justify-center gap-3">
+      // A cover-page treatment, not a card: logo + "Unit · Lesson" kicker +
+      // title only, sitting directly on the illustration so the scene
+      // reads clearly instead of being boxed off. White text needs the
+      // photo backdrop, so it only applies when a scene image is present.
+      return hasScene ? (
+        <div className="text-center">
+          <img src={logoWhite} alt="EnglEuphoria" className="mx-auto h-9 w-auto drop-shadow-lg sm:h-10" />
+          {block.kicker && (
+            <p className="mt-4 text-sm font-black uppercase tracking-[0.2em] text-white/90 drop-shadow-md">{block.kicker}</p>
+          )}
+          <div className="mt-2 flex items-center justify-center gap-3">
+            <h1 className="text-4xl font-black text-white drop-shadow-lg sm:text-5xl">{block.title}</h1>
+            <HearButton text={block.subtitle ? `${block.title}. ${block.subtitle}` : block.title} />
+          </div>
+        </div>
+      ) : (
+        <div className="text-center">
+          {block.kicker && (
+            <p className="text-sm font-black uppercase tracking-[0.2em] text-slate-400">{block.kicker}</p>
+          )}
+          <div className="mt-2 flex items-center justify-center gap-3">
             <h1 className="text-4xl font-black sm:text-5xl" style={{ color: 'var(--unified-accent)' }}>{block.title}</h1>
             <HearButton text={block.subtitle ? `${block.title}. ${block.subtitle}` : block.title} />
           </div>
-          {block.subtitle && <p className="mx-auto mt-3 max-w-md text-lg font-medium text-slate-600">{block.subtitle}</p>}
         </div>
       );
     case 'vocab_solo':
@@ -187,41 +206,62 @@ function StorybookView({ block }: { block: Extract<UnifiedMoment['blocks'][numbe
 export function PresentationSection({
   moment,
   onNext,
+  onBack,
+  isFirst,
   isLast,
+  pageLabel,
 }: {
   moment: UnifiedMoment;
   onNext: () => void;
+  onBack: () => void;
+  isFirst: boolean;
   isLast: boolean;
+  pageLabel: string;
 }) {
   const theme = useHubTheme();
   const introBlock = moment.blocks.find((b) => b.type === 'intro');
   const sceneImage = moment.sceneImageUrl ?? (introBlock?.type === 'intro' ? introBlock.heroImageUrl : undefined);
+  // A cover-page moment (just the intro block, nothing else) centers its
+  // title in the scene instead of hugging the top — it's not competing
+  // with characters the way a bubble/card would.
+  const isCoverPage = moment.blocks.length === 1 && moment.blocks[0].type === 'intro';
 
-  const content = (
+  const blocksOnly = (
     <div className="mx-auto flex max-w-2xl flex-col gap-5" style={{ ['--unified-accent' as string]: theme.accent }}>
       {moment.blocks.map((block, i) => (
-        <BlockView key={i} block={block} />
+        <BlockView key={i} block={block} hasScene={!!sceneImage} />
       ))}
-      <button
-        onClick={onNext}
-        className="mx-auto rounded-full px-10 py-4 text-lg font-black text-white shadow-md transition hover:scale-105 active:scale-95"
-        style={{ background: `linear-gradient(90deg, ${theme.accent}, ${theme.accent2})` }}
-      >
-        {isLast ? 'Finish ✨' : 'Continue →'}
-      </button>
     </div>
   );
 
-  if (!sceneImage) return content;
-
-  return (
-    <div className="relative flex min-h-[75vh] flex-col overflow-hidden rounded-3xl shadow-lg">
+  const scene = !sceneImage ? (
+    blocksOnly
+  ) : (
+    <div
+      className={`relative flex min-h-[75vh] flex-col overflow-hidden rounded-3xl shadow-lg ${isCoverPage ? 'justify-center' : ''}`}
+    >
       <img src={sceneImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,23,42,0.15) 0%, rgba(15,23,42,0.55) 100%)' }} />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,23,42,0.05) 0%, rgba(15,23,42,0.25) 100%)' }} />
       {/* Content hugs the top of the scene, in the sky/background band above
           where illustrated characters are framed, so bubbles/cards read as
-          speech coming from above them instead of covering their faces. */}
-      <div className="relative px-4 pb-10 pt-8 sm:px-8">{content}</div>
+          speech coming from above them instead of covering their faces
+          (cover pages are the exception — centered, see isCoverPage). */}
+      <div className={`relative px-4 sm:px-8 ${isCoverPage ? 'py-10' : 'pb-10 pt-8'}`}>{blocksOnly}</div>
+    </div>
+  );
+
+  return (
+    <div>
+      {scene}
+      <NavFooter
+        onBack={onBack}
+        backDisabled={isFirst}
+        onNext={onNext}
+        nextLabel={isLast ? 'Finish ✨' : 'Next →'}
+        pageLabel={pageLabel}
+        accent={theme.accent}
+        accent2={theme.accent2}
+      />
     </div>
   );
 }

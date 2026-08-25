@@ -41,6 +41,8 @@ export interface IntroBlock {
   title: string;
   subtitle?: string;
   mascot?: string;
+  /** Small label shown above the title, e.g. "Unit 1 · Lesson 1". */
+  kicker?: string;
   /**
    * Optional full-bleed hero image reflecting the lesson topic (generated
    * via the generate-slide-image edge function into the lesson-assets
