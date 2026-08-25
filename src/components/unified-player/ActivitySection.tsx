@@ -28,7 +28,20 @@ import {
 import type { UnifiedMoment, CatalogActivityBlock } from '@/unified-lessons/types';
 import { GameThemeScope, useHubTheme } from './HubTheme';
 import { NavFooter } from './NavFooter';
+import { SlideFrame } from './SlideFrame';
 import { RolePlayGame, SpeakingMissionGame, ListenRepeatGame, type RolePlaySlide, type SpeakingMissionSlide, type ListenRepeatSlide } from './SpeakingActivities';
+
+const ACTIVITY_ICON: Record<string, string> = {
+  multiple: '🤔',
+  match: '🧩',
+  drag: '🎯',
+  memory: '🧠',
+  fill: '✏️',
+  missing_letter: '🔤',
+  hotspot: '👆',
+  echo: '🔊',
+  shadowing: '🔊',
+};
 
 function ActivityView({ block }: { block: CatalogActivityBlock }) {
   switch (block.activityType) {
@@ -88,50 +101,41 @@ export function ActivitySection({
   if (!current) return null;
 
   // Role-play is a floating chat conversation, not a game UI — it supplies
-  // its own bubble styling, so it skips the shared white-card frame that
-  // every other (game-board-style) activity type still needs.
+  // its own bubble styling, so it skips the shared card treatment every
+  // other (game-board-style) activity type still needs.
   const isBubbleStyle = current.activityType === 'role_play';
   const activityView = (
     <GameThemeScope hub={theme.hub}>
       <ActivityView key={index} block={current} />
     </GameThemeScope>
   );
-
-  const body = (
-    <div className="mx-auto max-w-3xl">
-      {current.label && !isBubbleStyle && (
-        <p className="mb-3 text-center">
-          <span className="rounded-full px-4 py-1.5 text-xs font-black uppercase tracking-wide text-white shadow" style={{ background: `linear-gradient(90deg, ${theme.accent}, ${theme.accent2})` }}>
-            {current.label}
-          </span>
-        </p>
-      )}
-      {isBubbleStyle ? (
-        activityView
-      ) : (
-        <div className="rounded-3xl bg-white/95 p-5 shadow-md ring-1 ring-slate-200 backdrop-blur-sm sm:p-8">
-          {activityView}
-        </div>
-      )}
-    </div>
-  );
-
-  const scene = !moment.sceneImageUrl ? (
-    body
+  const gameCard = isBubbleStyle ? (
+    activityView
   ) : (
-    <div className="relative flex min-h-[75vh] flex-col overflow-hidden rounded-3xl shadow-lg">
-      <img src={moment.sceneImageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,23,42,0.05) 0%, rgba(15,23,42,0.25) 100%)' }} />
-      {/* Content hugs the top of the scene instead of centering over it, so
-          floating bubbles (role_play) or cards sit above the illustrated
-          characters rather than covering their faces. */}
-      <div className="relative px-4 pb-10 pt-8 sm:px-8">{body}</div>
+    <div
+      className="rounded-2xl p-5 shadow-lg ring-1 ring-white/60 backdrop-blur-sm sm:p-6"
+      style={{ background: `linear-gradient(160deg, #ffffff 0%, ${theme.accent}17 100%)` }}
+    >
+      {activityView}
     </div>
   );
 
   return (
     <div>
-      {scene}
+      <SlideFrame
+        title={current.label}
+        accent={theme.accent}
+        accent2={theme.accent2}
+        flexHeight
+        image={moment.sceneImageUrl}
+        headerRight={
+          <span className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full bg-white/20 text-lg">
+            {ACTIVITY_ICON[current.activityType] ?? '🎮'}
+          </span>
+        }
+      >
+        {gameCard}
+      </SlideFrame>
       <NavFooter
         onBack={() => (index > 0 ? setIndex((i) => i - 1) : onBack())}
         backDisabled={isFirst && index === 0}

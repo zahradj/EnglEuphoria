@@ -3,24 +3,25 @@
  * (intro, vocab/phonics discovery, storybook, reward summary) using the
  * existing 9 LessonBlock kinds from src/game-runtime/engine/types.ts.
  *
+ * PPTX-style page shell: every block renders inside a fixed 16:9 SlideFrame
+ * (colored title bar + content area) instead of a full-bleed illustrated
+ * background — a clean presentation-deck look rather than an
+ * illustrated-storybook one. Images are contained pictures placed on the
+ * slide, not edge-to-edge wallpaper.
+ *
  * True Pre-A1 beginners often can't reliably decode English text yet — a
  * page of written vocabulary/story content isn't accessible on its own. So
  * every text block gets a "hear it" speaker button (usePlaygroundAudio's
  * playVoice, the same static-cache-with-live-fallback hook every other
  * Playground game already uses) — nothing here is text-only.
- *
- * When the moment carries a `sceneImageUrl` (or its intro block carries the
- * older `heroImageUrl`), the whole moment renders as a full-bleed
- * illustrated scene — matching Playground's per-scene illustrated
- * richness — with light content cards floating over it. Without an image,
- * it's plain light cards on white, keeping focus on the content.
  */
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { usePlaygroundAudio } from '@/hooks/usePlaygroundAudio';
 import type { UnifiedMoment } from '@/unified-lessons/types';
 import { useHubTheme } from './HubTheme';
 import { NavFooter } from './NavFooter';
+import { SlideFrame } from './SlideFrame';
 import logoWhite from '@/assets/logo-white.png';
 
 function HearButton({ text, size = 'md' }: { text: string; size?: 'sm' | 'md' }) {
@@ -31,8 +32,7 @@ function HearButton({ text, size = 'md' }: { text: string; size?: 'sm' | 'md' })
       type="button"
       onClick={() => playVoice(text)}
       aria-label={`Hear: ${text}`}
-      className={`inline-flex flex-shrink-0 items-center justify-center rounded-full text-white shadow ${dim}`}
-      style={{ backgroundColor: 'var(--unified-accent)' }}
+      className={`inline-flex flex-shrink-0 items-center justify-center rounded-full bg-white/20 text-white shadow ${dim}`}
     >
       🔊
     </button>
@@ -46,130 +46,163 @@ function HearButton({ text, size = 'md' }: { text: string; size?: 'sm' | 'md' })
  * sound. So unlike HearButton, this plays a literal <audio> file and does
  * nothing at all if the block has no recorded `audio` yet.
  */
-function PhonicsHearButton({ src, label }: { src?: string; label: string }) {
+function PhonicsHearButton({ src }: { src?: string }) {
   if (!src) return null;
   return (
     <button
       type="button"
       onClick={() => new Audio(src).play().catch(() => {})}
-      aria-label={`Hear the sound: ${label}`}
-      className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-white shadow"
-      style={{ backgroundColor: 'var(--unified-accent)' }}
+      aria-label="Hear the sound"
+      className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-white/20 text-white shadow"
     >
       🔊
     </button>
   );
 }
 
-function BlockView({ block, hasScene }: { block: UnifiedMoment['blocks'][number]; hasScene: boolean }) {
+type Block = UnifiedMoment['blocks'][number];
+
+/** Renders one block as a full SlideFrame — title bar + contained content. */
+function SlideForBlock({
+  block,
+  accent,
+  accent2,
+  sceneImage,
+}: {
+  block: Block;
+  accent: string;
+  accent2: string;
+  /** The moment's own illustration (welcome/story/speaking/reward scenes) — shown as a contained picture, not moment-level background art. */
+  sceneImage?: string;
+}) {
   switch (block.type) {
-    case 'intro':
-      // A cover-page treatment, not a card: logo + "Unit · Lesson" kicker +
-      // title only, sitting directly on the illustration so the scene
-      // reads clearly instead of being boxed off. White text needs the
-      // photo backdrop, so it only applies when a scene image is present.
-      return hasScene ? (
-        <div className="text-center">
-          <img src={logoWhite} alt="EnglEuphoria" className="mx-auto h-9 w-auto drop-shadow-lg sm:h-10" />
-          {block.kicker && (
-            <p className="mt-4 text-sm font-black uppercase tracking-[0.2em] text-white/90 drop-shadow-md">{block.kicker}</p>
-          )}
-          <div className="mt-2 flex items-center justify-center gap-3">
-            <h1 className="text-4xl font-black text-white drop-shadow-lg sm:text-5xl">{block.title}</h1>
-            <HearButton text={block.subtitle ? `${block.title}. ${block.subtitle}` : block.title} />
-          </div>
-        </div>
-      ) : (
-        <div className="text-center">
-          {block.kicker && (
-            <p className="text-sm font-black uppercase tracking-[0.2em] text-slate-400">{block.kicker}</p>
-          )}
-          <div className="mt-2 flex items-center justify-center gap-3">
-            <h1 className="text-4xl font-black sm:text-5xl" style={{ color: 'var(--unified-accent)' }}>{block.title}</h1>
-            <HearButton text={block.subtitle ? `${block.title}. ${block.subtitle}` : block.title} />
-          </div>
-        </div>
-      );
-    case 'vocab_solo':
+    case 'intro': {
+      const image = sceneImage ?? block.heroImageUrl;
       return (
-        <div className="overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-200">
-          {block.image && (
-            <div className="relative bg-slate-50">
-              <img src={block.image} alt="" className="mx-auto h-64 w-auto max-w-full object-contain sm:h-72" />
-              <div
-                className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 px-4 py-2.5 text-white"
-                style={{ backgroundColor: 'var(--unified-accent)' }}
-              >
-                <span className="text-lg font-black">{block.word}</span>
-                <HearButton text={`${block.word}. ${block.definition}`} size="sm" />
-              </div>
+        <SlideFrame
+          kicker={block.kicker}
+          title={block.title}
+          accent={accent}
+          accent2={accent2}
+          image={image}
+          large
+          headerRight={
+            <div className="flex flex-shrink-0 items-center gap-2">
+              <img src={logoWhite} alt="EnglEuphoria" className="h-6 w-auto opacity-90 sm:h-8" />
+              <HearButton text={block.subtitle ? `${block.title}. ${block.subtitle}` : block.title} />
             </div>
-          )}
-          <div className="p-4">
-            {!block.image && (
-              <div className="mb-1 flex items-center justify-between gap-3">
-                <span className="text-xl font-black text-slate-800">{block.word}</span>
-                <HearButton text={`${block.word}. ${block.definition}`} />
-              </div>
-            )}
-            <p className="text-slate-600">{block.definition}</p>
+          }
+        />
+      );
+    }
+    case 'vocab_solo':
+      // The word repeats here in the opaque caption card — the overlaid
+      // title can lose contrast against a busy image, but this card is
+      // always legible regardless of what's behind it.
+      return (
+        <SlideFrame title={block.word} accent={accent} accent2={accent2} image={block.image} headerRight={<HearButton text={`${block.word}. ${block.definition}`} />}>
+          <div className="rounded-xl bg-white/95 px-4 py-3 shadow-lg backdrop-blur-sm">
+            <div className="text-xl font-black text-slate-800 sm:text-2xl">{block.word}</div>
+            <p className="mt-1 text-slate-700">{block.definition}</p>
           </div>
-        </div>
+        </SlideFrame>
       );
     case 'phonics_focus':
-      return (
-        <div className="overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-200">
-          {block.image && (
-            <div className="relative bg-slate-50">
-              <img src={block.image} alt="" className="mx-auto h-48 w-auto max-w-full object-contain sm:h-56" />
-              <div
-                className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 px-4 py-2.5 text-white"
-                style={{ backgroundColor: 'var(--unified-accent)' }}
-              >
-                <span className="text-2xl font-black">/{block.sound}/</span>
-                <PhonicsHearButton src={block.audio} label={block.sound} />
-              </div>
-            </div>
-          )}
-          <div className="p-4">
-            {!block.image && (
-              <div className="mb-1 flex items-center justify-between gap-3">
-                <span className="text-xl font-black text-slate-800">/{block.sound}/</span>
-                <PhonicsHearButton src={block.audio} label={block.sound} />
-              </div>
-            )}
-            <p className="text-slate-600">{block.examples.join(', ')}</p>
-          </div>
-        </div>
-      );
+      return <PhonicsSlide block={block} accent={accent} accent2={accent2} />;
     case 'storybook':
-      return <StorybookView block={block} />;
+      return <StorybookSlide block={block} accent={accent} accent2={accent2} sceneImage={sceneImage} />;
     case 'lesson_summary':
       return (
-        <div className="rounded-3xl bg-white/95 p-7 text-center shadow-sm ring-1 ring-slate-200 backdrop-blur-sm">
-          <h2 className="text-3xl font-black" style={{ color: 'var(--unified-accent)' }}>{block.title}</h2>
-          <ul className="mx-auto mt-4 max-w-md space-y-2 text-left">
+        <SlideFrame title={block.title} accent={accent} accent2={accent2} image={sceneImage}>
+          <ul className="max-h-[55%] w-full max-w-md space-y-1.5 overflow-y-auto rounded-xl bg-white/95 p-3 shadow-lg backdrop-blur-sm">
             {block.bullets.map((b, i) => (
-              <li key={i} className="flex items-start gap-2 rounded-lg bg-slate-50 px-4 py-2 text-slate-700">
+              <li key={i} className="flex items-start gap-2 rounded-lg bg-slate-50 px-3 py-1.5 text-sm text-slate-700">
                 <span className="flex-1">✓ {b}</span>
-                <HearButton text={b} size="sm" />
+                <HearButtonDark text={b} />
               </li>
             ))}
           </ul>
-        </div>
+        </SlideFrame>
       );
     default:
       return null;
   }
 }
 
+const PHONICS_WORD_POSITIONS = [
+  'left-1/2 top-0 -translate-x-1/2 -translate-y-1/2', // N
+  'right-0 top-1/2 translate-x-1/2 -translate-y-1/2', // E
+  'left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2', // S
+  'left-0 top-1/2 -translate-x-1/2 -translate-y-1/2', // W
+];
+
+/**
+ * The sound itself is the whole point of a phonics card, so it sits huge
+ * and centered in its own badge — not tucked into a small header label —
+ * with its example words ringed around it (N/E/S/W) instead of listed as
+ * a caption-card chip row underneath.
+ */
+function PhonicsSlide({ block, accent, accent2 }: { block: Extract<Block, { type: 'phonics_focus' }>; accent: string; accent2: string }) {
+  return (
+    <div className="relative mx-auto flex aspect-video w-full max-w-3xl flex-col overflow-hidden rounded-2xl shadow-xl ring-1 ring-slate-200">
+      {block.image ? (
+        <>
+          <img src={block.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-black/50" />
+        </>
+      ) : (
+        <div className="absolute inset-0" style={{ background: `linear-gradient(160deg, ${accent}, ${accent2})` }} />
+      )}
+      <div className="relative z-10 p-4 sm:p-6">
+        <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-black uppercase tracking-[0.2em] text-white backdrop-blur-sm">Phonics</span>
+      </div>
+      <div className="relative z-10 flex flex-1 items-center justify-center px-16 pb-4 sm:px-24">
+        <div className="relative h-32 w-32 sm:h-44 sm:w-44">
+          <div
+            className="grid h-full w-full place-items-center rounded-full bg-white shadow-2xl"
+            style={{ boxShadow: `0 0 0 5px ${accent}, 0 20px 40px rgba(0,0,0,0.35)` }}
+          >
+            <span className="text-3xl font-black sm:text-5xl" style={{ color: accent }}>/{block.sound}/</span>
+          </div>
+          {block.examples.slice(0, 4).map((ex, i) => (
+            <span
+              key={i}
+              className={`absolute whitespace-nowrap rounded-full bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-lg sm:text-sm ${PHONICS_WORD_POSITIONS[i]}`}
+            >
+              {ex}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="relative z-10 flex items-center justify-center pb-4 sm:pb-6">
+        <PhonicsHearButton src={block.audio} />
+      </div>
+    </div>
+  );
+}
+
+/** Same as HearButton but tinted for use on light backgrounds (outside a title bar). */
+function HearButtonDark({ text }: { text: string }) {
+  const { playVoice } = usePlaygroundAudio();
+  return (
+    <button
+      type="button"
+      onClick={() => playVoice(text)}
+      aria-label={`Hear: ${text}`}
+      className="inline-flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-slate-200 text-sm text-slate-700 shadow"
+    >
+      🔊
+    </button>
+  );
+}
+
 /**
  * A moment with several vocab_solo or phonics_focus cards in a row used to
  * just stack them vertically, which forced scrolling to see them all. This
- * shows one card at a time — tap the arrows or a dot to flip through the
+ * shows one slide at a time — tap the arrows or a dot to flip through the
  * deck — so the whole thing fits on screen like a real flashcard stack.
  */
-function FlashcardDeck({ blocks, hasScene }: { blocks: UnifiedMoment['blocks']; hasScene: boolean }) {
+function FlashcardDeck({ blocks, accent, accent2 }: { blocks: Block[]; accent: string; accent2: string }) {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const total = blocks.length;
@@ -181,36 +214,42 @@ function FlashcardDeck({ blocks, hasScene }: { blocks: UnifiedMoment['blocks']; 
 
   return (
     <div>
-      <div className="flex items-center justify-center gap-2 sm:gap-4">
+      {/* Arrows overlay the card's own edges instead of sitting beside it —
+          flanking arrows need extra viewport width beyond the card's
+          max-width and can overflow off-screen on narrower viewports,
+          making the deck impossible to advance. Overlaid arrows always
+          fit within the card's own footprint. */}
+      <div className="relative mx-auto w-full max-w-3xl">
+        {/* AnimatePresence stalled here — the index state advanced
+            correctly but the exiting card's animation never resolved, so
+            the new card never mounted. A plain enter-only motion.div
+            (no AnimatePresence) sidesteps that; StorybookSlide uses the
+            same pattern successfully. */}
+        <div className="relative overflow-hidden">
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, x: direction > 0 ? 32 : -32 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SlideForBlock block={blocks[index]} accent={accent} accent2={accent2} />
+          </motion.div>
+        </div>
         <button
           type="button"
           onClick={() => go(-1)}
           disabled={index === 0}
           aria-label="Previous card"
-          className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full bg-white/95 text-xl font-black text-slate-700 shadow-md transition disabled:opacity-0"
+          className="absolute left-2 top-1/2 z-20 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white text-xl font-black text-slate-700 shadow-lg transition disabled:opacity-0 sm:left-3"
         >
           ‹
         </button>
-        <div className="w-full max-w-sm overflow-hidden">
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={index}
-              custom={direction}
-              initial={{ opacity: 0, x: direction > 0 ? 32 : -32 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: direction > 0 ? -32 : 32 }}
-              transition={{ duration: 0.2 }}
-            >
-              <BlockView block={blocks[index]} hasScene={hasScene} />
-            </motion.div>
-          </AnimatePresence>
-        </div>
         <button
           type="button"
           onClick={() => go(1)}
           disabled={index === total - 1}
           aria-label="Next card"
-          className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full bg-white/95 text-xl font-black text-slate-700 shadow-md transition disabled:opacity-0"
+          className="absolute right-2 top-1/2 z-20 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white text-xl font-black text-slate-700 shadow-lg transition disabled:opacity-0 sm:right-3"
         >
           ›
         </button>
@@ -225,7 +264,7 @@ function FlashcardDeck({ blocks, hasScene }: { blocks: UnifiedMoment['blocks']; 
             className="h-2 rounded-full transition-all"
             style={{
               width: i === index ? '1.5rem' : '0.5rem',
-              backgroundColor: i === index ? 'var(--unified-accent)' : 'rgba(148,163,184,0.5)',
+              backgroundColor: i === index ? accent : 'rgba(148,163,184,0.5)',
             }}
           />
         ))}
@@ -238,39 +277,42 @@ function FlashcardDeck({ blocks, hasScene }: { blocks: UnifiedMoment['blocks']; 
  * Reveals one story page at a time instead of dumping the whole story as a
  * wall of text — matches Playground's page-by-page storybook pacing and
  * keeps a beginner from being overwhelmed by three paragraphs at once.
- *
- * No enclosing card/frame — the page text floats as a speech bubble near
- * the top of the scene, like dialogue coming from the illustrated
- * character, not a text box laid over the picture.
  */
-function StorybookView({ block }: { block: Extract<UnifiedMoment['blocks'][number], { type: 'storybook' }> }) {
+function StorybookSlide({
+  block,
+  accent,
+  accent2,
+  sceneImage,
+}: {
+  block: Extract<Block, { type: 'storybook' }>;
+  accent: string;
+  accent2: string;
+  sceneImage?: string;
+}) {
   const [page, setPage] = useState(0);
   const isLastPage = page >= block.pages.length - 1;
   const current = block.pages[page];
 
   return (
-    <div>
-      <p className="mb-3 text-center">
-        <span className="rounded-full bg-black/30 px-3 py-1 text-xs font-black uppercase tracking-wide text-white shadow backdrop-blur-sm">
-          {block.title} · Page {page + 1}/{block.pages.length}
-        </span>
-      </p>
-      <motion.div key={page} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mx-auto max-w-sm">
-        <div className="flex items-start gap-2 rounded-3xl rounded-bl-md bg-white px-5 py-4 shadow-xl">
-          <p className="flex-1 text-base font-bold text-slate-800">{current.text}</p>
-          <HearButton text={current.text} size="sm" />
-        </div>
-      </motion.div>
-      {!isLastPage && (
-        <button
-          onClick={() => setPage((p) => p + 1)}
-          className="mx-auto mt-4 block rounded-full px-6 py-2.5 text-sm font-black text-white shadow-lg"
-          style={{ backgroundColor: 'var(--unified-accent)' }}
-        >
-          Next page →
-        </button>
-      )}
-    </div>
+    <SlideFrame kicker={`Page ${page + 1} / ${block.pages.length}`} title={block.title} accent={accent} accent2={accent2} image={sceneImage}>
+      <div className="flex h-full w-full items-center gap-5">
+        <motion.div key={page} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="w-full rounded-xl bg-white/95 px-5 py-4 shadow-lg backdrop-blur-sm">
+          <p className="text-base font-bold text-slate-800">{current.text}</p>
+          <div className="mt-2 flex items-center gap-3">
+            <HearButtonDark text={current.text} />
+            {!isLastPage && (
+              <button
+                onClick={() => setPage((p) => p + 1)}
+                className="rounded-full px-5 py-2 text-sm font-black text-white shadow-md"
+                style={{ backgroundColor: accent }}
+              >
+                Next page →
+              </button>
+            )}
+          </div>
+        </motion.div>
+      </div>
+    </SlideFrame>
   );
 }
 
@@ -290,12 +332,6 @@ export function PresentationSection({
   pageLabel: string;
 }) {
   const theme = useHubTheme();
-  const introBlock = moment.blocks.find((b) => b.type === 'intro');
-  const sceneImage = moment.sceneImageUrl ?? (introBlock?.type === 'intro' ? introBlock.heroImageUrl : undefined);
-  // A cover-page moment (just the intro block, nothing else) centers its
-  // title in the scene instead of hugging the top — it's not competing
-  // with characters the way a bubble/card would.
-  const isCoverPage = moment.blocks.length === 1 && moment.blocks[0].type === 'intro';
   // Several vocab/phonics cards back to back used to just stack and force
   // scrolling — show them as a one-at-a-time flashcard deck instead.
   const isFlashcardDeck =
@@ -303,35 +339,15 @@ export function PresentationSection({
     (moment.blocks[0].type === 'vocab_solo' || moment.blocks[0].type === 'phonics_focus') &&
     moment.blocks.every((b) => b.type === moment.blocks[0].type);
 
-  const blocksOnly = (
-    <div className="mx-auto flex max-w-2xl flex-col gap-5" style={{ ['--unified-accent' as string]: theme.accent }}>
-      {isFlashcardDeck ? (
-        <FlashcardDeck blocks={moment.blocks} hasScene={!!sceneImage} />
-      ) : (
-        moment.blocks.map((block, i) => <BlockView key={i} block={block} hasScene={!!sceneImage} />)
-      )}
-    </div>
-  );
-
-  const scene = !sceneImage ? (
-    blocksOnly
-  ) : (
-    <div
-      className={`relative flex min-h-[75vh] flex-col overflow-hidden rounded-3xl shadow-lg ${isCoverPage ? 'justify-center' : ''}`}
-    >
-      <img src={sceneImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,23,42,0.05) 0%, rgba(15,23,42,0.25) 100%)' }} />
-      {/* Content hugs the top of the scene, in the sky/background band above
-          where illustrated characters are framed, so bubbles/cards read as
-          speech coming from above them instead of covering their faces
-          (cover pages are the exception — centered, see isCoverPage). */}
-      <div className={`relative px-4 sm:px-8 ${isCoverPage ? 'py-10' : 'pb-10 pt-8'}`}>{blocksOnly}</div>
-    </div>
-  );
-
   return (
     <div>
-      {scene}
+      {isFlashcardDeck ? (
+        <FlashcardDeck blocks={moment.blocks} accent={theme.accent} accent2={theme.accent2} />
+      ) : (
+        moment.blocks.map((block, i) => (
+          <SlideForBlock key={i} block={block} accent={theme.accent} accent2={theme.accent2} sceneImage={moment.sceneImageUrl} />
+        ))
+      )}
       <NavFooter
         onBack={onBack}
         backDisabled={isFirst}
