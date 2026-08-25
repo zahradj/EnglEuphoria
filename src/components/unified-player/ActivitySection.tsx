@@ -18,12 +18,16 @@ import {
   TrailWordGapGame,
   MissingLetterGame,
   HotspotGame,
+  TapOrderGame,
+  WordBuilderGame,
   type TrailChoiceSlide,
   type TrailDragMatchSlide,
   type MemorySlide,
   type TrailWordGapSlide,
   type MissingLetterSlide,
   type HotspotSlide,
+  type TapOrderSlide,
+  type WordBuilderSlide,
 } from '@/components/playground-player/playground-games';
 import type { UnifiedMoment, CatalogActivityBlock } from '@/unified-lessons/types';
 import { GameThemeScope, useHubTheme } from './HubTheme';
@@ -41,6 +45,8 @@ const ACTIVITY_ICON: Record<string, string> = {
   hotspot: '👆',
   echo: '🔊',
   shadowing: '🔊',
+  tap_order: '🔢',
+  word_builder: '🔡',
 };
 
 function ActivityView({ block }: { block: CatalogActivityBlock }) {
@@ -59,6 +65,10 @@ function ActivityView({ block }: { block: CatalogActivityBlock }) {
       return <MissingLetterGame slide={{ type: 'missing_letter', ...block.config } as MissingLetterSlide} />;
     case 'hotspot':
       return <HotspotGame slide={{ type: 'hotspot', ...block.config } as HotspotSlide} />;
+    case 'tap_order':
+      return <TapOrderGame slide={{ type: 'tap_order', ...block.config } as TapOrderSlide} />;
+    case 'word_builder':
+      return <WordBuilderGame slide={{ type: 'word_builder', ...block.config } as WordBuilderSlide} />;
     case 'role_play':
       return <RolePlayGame slide={{ type: 'role_play', ...block.config } as RolePlaySlide} />;
     case 'speaking_mission':
