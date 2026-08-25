@@ -16,7 +16,7 @@
  * it's plain light cards on white, keeping focus on the content.
  */
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { usePlaygroundAudio } from '@/hooks/usePlaygroundAudio';
 import type { UnifiedMoment } from '@/unified-lessons/types';
 import { useHubTheme } from './HubTheme';
@@ -164,6 +164,77 @@ function BlockView({ block, hasScene }: { block: UnifiedMoment['blocks'][number]
 }
 
 /**
+ * A moment with several vocab_solo or phonics_focus cards in a row used to
+ * just stack them vertically, which forced scrolling to see them all. This
+ * shows one card at a time — tap the arrows or a dot to flip through the
+ * deck — so the whole thing fits on screen like a real flashcard stack.
+ */
+function FlashcardDeck({ blocks, hasScene }: { blocks: UnifiedMoment['blocks']; hasScene: boolean }) {
+  const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const total = blocks.length;
+
+  const go = (delta: number) => {
+    setDirection(delta);
+    setIndex((i) => Math.min(total - 1, Math.max(0, i + delta)));
+  };
+
+  return (
+    <div>
+      <div className="flex items-center justify-center gap-2 sm:gap-4">
+        <button
+          type="button"
+          onClick={() => go(-1)}
+          disabled={index === 0}
+          aria-label="Previous card"
+          className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full bg-white/95 text-xl font-black text-slate-700 shadow-md transition disabled:opacity-0"
+        >
+          ‹
+        </button>
+        <div className="w-full max-w-sm overflow-hidden">
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={index}
+              custom={direction}
+              initial={{ opacity: 0, x: direction > 0 ? 32 : -32 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: direction > 0 ? -32 : 32 }}
+              transition={{ duration: 0.2 }}
+            >
+              <BlockView block={blocks[index]} hasScene={hasScene} />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+        <button
+          type="button"
+          onClick={() => go(1)}
+          disabled={index === total - 1}
+          aria-label="Next card"
+          className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full bg-white/95 text-xl font-black text-slate-700 shadow-md transition disabled:opacity-0"
+        >
+          ›
+        </button>
+      </div>
+      <div className="mt-4 flex items-center justify-center gap-1.5">
+        {blocks.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => { setDirection(i > index ? 1 : -1); setIndex(i); }}
+            aria-label={`Go to card ${i + 1}`}
+            className="h-2 rounded-full transition-all"
+            style={{
+              width: i === index ? '1.5rem' : '0.5rem',
+              backgroundColor: i === index ? 'var(--unified-accent)' : 'rgba(148,163,184,0.5)',
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
  * Reveals one story page at a time instead of dumping the whole story as a
  * wall of text — matches Playground's page-by-page storybook pacing and
  * keeps a beginner from being overwhelmed by three paragraphs at once.
@@ -225,12 +296,20 @@ export function PresentationSection({
   // title in the scene instead of hugging the top — it's not competing
   // with characters the way a bubble/card would.
   const isCoverPage = moment.blocks.length === 1 && moment.blocks[0].type === 'intro';
+  // Several vocab/phonics cards back to back used to just stack and force
+  // scrolling — show them as a one-at-a-time flashcard deck instead.
+  const isFlashcardDeck =
+    moment.blocks.length > 1 &&
+    (moment.blocks[0].type === 'vocab_solo' || moment.blocks[0].type === 'phonics_focus') &&
+    moment.blocks.every((b) => b.type === moment.blocks[0].type);
 
   const blocksOnly = (
     <div className="mx-auto flex max-w-2xl flex-col gap-5" style={{ ['--unified-accent' as string]: theme.accent }}>
-      {moment.blocks.map((block, i) => (
-        <BlockView key={i} block={block} hasScene={!!sceneImage} />
-      ))}
+      {isFlashcardDeck ? (
+        <FlashcardDeck blocks={moment.blocks} hasScene={!!sceneImage} />
+      ) : (
+        moment.blocks.map((block, i) => <BlockView key={i} block={block} hasScene={!!sceneImage} />)
+      )}
     </div>
   );
 
