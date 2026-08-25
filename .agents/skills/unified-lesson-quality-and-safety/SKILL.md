@@ -104,13 +104,34 @@ this for intro/vocab/phonics/story/summary; activity moments
 
 8. **Check `playground-games.tsx` for an existing component before
    building a new activity type.** `tap_order` (tap words/items in the
-   correct sequence — doubles as a sentence-builder) and `word_builder`
+   correct sequence — doubles as a sentence-builder), `word_builder`
    (auto-scrambled letters, tap tiles in order to spell a target word,
-   optional `show_sounds` for phonics reinforcement) already existed,
-   fully built, with zero lines of new game logic needed — they just had
-   no dispatch case in `ActivitySection.tsx`'s `ActivityView` switch. Read
+   optional `show_sounds` for phonics reinforcement), and `sort` (drag
+   items into labeled buckets — a genuinely different interaction from
+   `match`, good for any "which category" task) already existed, fully
+   built, with zero lines of new game logic needed — they just had no
+   dispatch case in `ActivitySection.tsx`'s `ActivityView` switch. Read
    that file's exports before assuming a requested interaction ("scramble
-   the letters", "put the words in order") needs a new component.
+   the letters", "put the words in order", "sort these") needs a new
+   component.
+
+9. **Not every component in `playground-games.tsx` is actually hub-theme-
+   aware — check before wiring one in.** `GameThemeScope` only sets CSS
+   custom properties (`--pg-accent`, `--pg-gradient-from/to`, etc.) via an
+   inline style on a wrapper div; it does **not** retarget literal
+   Tailwind classes or arbitrary hex values. `SortGame`, `TrailChoiceGame`,
+   `TrailDragMatchGame`, `TapOrderGame`, and `WordBuilderGame` correctly
+   read `var(--pg-accent, #FE6A2F)`-style values and re-theme properly
+   (confirmed rendering in Academy's violet, not Playground's orange).
+   `PhonicsHuntGame` and `VocabGridGame` use literal `bg-orange-500`/
+   `border-orange-500` Tailwind classes, and `ThumbsGame` uses a literal
+   `border-[#FE6A2F]` hex arbitrary value — none of these three will
+   re-theme; they'll show Playground-orange in every hub until someone
+   parameterizes them. Grep the candidate component's body for
+   `orange` and bare hex literals before adding it to a non-Playground
+   lesson; if it's hardcoded, either skip it or fix the component itself
+   (touches the shared file — verify the live Playground callsite still
+   renders identically after).
 
 ## Character identity — use the cast vault, don't invent a face each time
 

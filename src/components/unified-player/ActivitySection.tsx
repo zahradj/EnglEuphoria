@@ -20,6 +20,7 @@ import {
   HotspotGame,
   TapOrderGame,
   WordBuilderGame,
+  SortGame,
   type TrailChoiceSlide,
   type TrailDragMatchSlide,
   type MemorySlide,
@@ -28,6 +29,7 @@ import {
   type HotspotSlide,
   type TapOrderSlide,
   type WordBuilderSlide,
+  type SortSlide,
 } from '@/components/playground-player/playground-games';
 import type { UnifiedMoment, CatalogActivityBlock } from '@/unified-lessons/types';
 import { GameThemeScope, useHubTheme } from './HubTheme';
@@ -47,6 +49,7 @@ const ACTIVITY_ICON: Record<string, string> = {
   shadowing: '🔊',
   tap_order: '🔢',
   word_builder: '🔡',
+  sort: '🗂️',
 };
 
 function ActivityView({ block }: { block: CatalogActivityBlock }) {
@@ -69,6 +72,8 @@ function ActivityView({ block }: { block: CatalogActivityBlock }) {
       return <TapOrderGame slide={{ type: 'tap_order', ...block.config } as TapOrderSlide} />;
     case 'word_builder':
       return <WordBuilderGame slide={{ type: 'word_builder', ...block.config } as WordBuilderSlide} />;
+    case 'sort':
+      return <SortGame slide={{ type: 'sort', ...block.config } as SortSlide} />;
     case 'role_play':
       return <RolePlayGame slide={{ type: 'role_play', ...block.config } as RolePlaySlide} />;
     case 'speaking_mission':
