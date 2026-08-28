@@ -30,9 +30,19 @@ export type UnifiedBlock = LessonBlock | CatalogActivityBlock;
 
 export type SectionMode = 'presentation' | 'activity';
 
+/**
+ * `MomentKind` is the shared engine type, exhaustively switched over by the
+ * Phaser scene planner (see this file's header) — adding a value there
+ * would need to touch that live path. `warmup_moment` (energizer/tongue
+ * twister/song + quick review of the previous lesson, the real first beat
+ * of a classroom lesson before new content starts) only exists in the
+ * unified engine's own parallel envelope, so it's layered on here instead.
+ */
+export type UnifiedMomentKind = MomentKind | 'warmup_moment';
+
 export interface UnifiedMoment {
   id: string;
-  kind: MomentKind;
+  kind: UnifiedMomentKind;
   title?: string;
   mode: SectionMode;
   hostCharacterId?: string;

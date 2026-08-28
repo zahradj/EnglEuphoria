@@ -61,6 +61,15 @@ export interface PhonicsBlock {
    * beginners can't decode the sound from letters alone, so a picture
    * anchor matters as much as it does for vocab_solo. */
   image?: string;
+  /**
+   * Each example word as its own illustrated, individually-tappable card
+   * (picture + a "hear this word" audio) surrounding the central sound
+   * badge, instead of `examples` rendering as plain text chips. Optional
+   * and additive — `examples` stays the source of truth for the word list
+   * itself; this only adds pictures. 4-6 entries is the natural range for
+   * one phonics focus (enough variety without overwhelming a beginner).
+   */
+  examplePictures?: { word: string; image?: string }[];
 }
 export interface VocabBlock {
   type: 'vocab_solo';

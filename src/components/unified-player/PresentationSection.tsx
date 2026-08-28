@@ -84,18 +84,17 @@ function SlideForBlock({
       const image = sceneImage ?? block.heroImageUrl;
       return (
         <SlideFrame
+          // The cover slide is the one place the school brand gets real
+          // presence — a proper logo lockup above Level · Unit · Lesson,
+          // not a small icon sharing a corner with the hear button.
+          brandmark={<img src={logoWhite} alt="EnglEuphoria" className="h-8 w-auto drop-shadow sm:h-10" />}
           kicker={block.kicker}
           title={block.title}
           accent={accent}
           accent2={accent2}
           image={image}
           large
-          headerRight={
-            <div className="flex flex-shrink-0 items-center gap-2">
-              <img src={logoWhite} alt="EnglEuphoria" className="h-6 w-auto opacity-90 sm:h-8" />
-              <HearButton text={block.subtitle ? `${block.title}. ${block.subtitle}` : block.title} />
-            </div>
-          }
+          headerRight={<HearButton text={block.subtitle ? `${block.title}. ${block.subtitle}` : block.title} />}
         />
       );
     }
@@ -133,20 +132,64 @@ function SlideForBlock({
   }
 }
 
-const PHONICS_WORD_POSITIONS = [
-  'left-1/2 top-0 -translate-x-1/2 -translate-y-1/2', // N
-  'right-0 top-1/2 translate-x-1/2 -translate-y-1/2', // E
-  'left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2', // S
-  'left-0 top-1/2 -translate-x-1/2 -translate-y-1/2', // W
-];
+/**
+ * Evenly spaced points on a circle around the center, starting at 12
+ * o'clock and going clockwise — works for any count from 3 to 6 (a phonics
+ * focus naturally teaches 4-6 example sounds), unlike a hardcoded N/E/S/W
+ * 4-slot layout that had nowhere to put a 5th or 6th word.
+ */
+function ringPositions(count: number, radiusPct: number): { left: string; top: string }[] {
+  return Array.from({ length: count }, (_, i) => {
+    const angle = (-90 + (360 / count) * i) * (Math.PI / 180);
+    return {
+      left: `${50 + radiusPct * Math.cos(angle)}%`,
+      top: `${50 + radiusPct * Math.sin(angle)}%`,
+    };
+  });
+}
+
+/**
+ * One example word ringed around the sound — a real picture (or a letter
+ * fallback if no art yet), individually tappable to hear that word on its
+ * own. Whole words are safe to speak through the normal TTS-fallback voice
+ * hook (unlike the isolated phoneme itself, which stays file-only below).
+ */
+function PhonicsExampleBadge({ word, image, pos }: { word: string; image?: string; pos: { left: string; top: string } }) {
+  const { playVoice } = usePlaygroundAudio();
+  return (
+    <button
+      type="button"
+      onClick={() => playVoice(word)}
+      aria-label={`Hear: ${word}`}
+      className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 transition hover:scale-110 active:scale-95"
+      style={pos}
+    >
+      <span className="grid h-14 w-14 place-items-center overflow-hidden rounded-full bg-white shadow-lg ring-2 ring-white/70 sm:h-20 sm:w-20">
+        {image ? (
+          <img src={image} alt="" className="h-full w-full object-cover" />
+        ) : (
+          <span className="text-xl sm:text-2xl">🔊</span>
+        )}
+      </span>
+      <span className="whitespace-nowrap rounded-full bg-white px-2.5 py-0.5 text-[11px] font-bold text-slate-700 shadow sm:text-sm">{word}</span>
+    </button>
+  );
+}
 
 /**
  * The sound itself is the whole point of a phonics card, so it sits huge
  * and centered in its own badge — not tucked into a small header label —
- * with its example words ringed around it (N/E/S/W) instead of listed as
- * a caption-card chip row underneath. Full-screen, no card frame.
+ * with its example words ringed around it (evenly spaced, any count 4-6)
+ * instead of listed as a caption-card chip row underneath. Each example is
+ * now its own tappable illustrated audio badge, not a plain text chip.
+ * Full-screen, no card frame.
  */
 function PhonicsSlide({ block, accent }: { block: Extract<Block, { type: 'phonics_focus' }>; accent: string }) {
+  const pictures = block.examplePictures?.length
+    ? block.examplePictures.slice(0, 6)
+    : block.examples.slice(0, 6).map((word) => ({ word, image: undefined as string | undefined }));
+  const positions = ringPositions(pictures.length, 44);
+
   return (
     <div className="relative flex h-full w-full flex-col overflow-hidden">
       {block.image && (
@@ -158,21 +201,16 @@ function PhonicsSlide({ block, accent }: { block: Extract<Block, { type: 'phonic
       <div className="relative z-10 p-4 sm:p-8">
         <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-black uppercase tracking-[0.2em] text-white backdrop-blur-sm">Phonics</span>
       </div>
-      <div className="relative z-10 flex flex-1 items-center justify-center px-16 pb-4 sm:px-32">
-        <div className="relative h-40 w-40 sm:h-56 sm:w-56">
+      <div className="relative z-10 flex flex-1 items-center justify-center px-20 pb-4 sm:px-40">
+        <div className="relative h-52 w-52 sm:h-64 sm:w-64">
           <div
             className="grid h-full w-full place-items-center rounded-full bg-white shadow-2xl"
             style={{ boxShadow: `0 0 0 6px ${accent}, 0 20px 40px rgba(0,0,0,0.35)` }}
           >
             <span className="text-4xl font-black sm:text-6xl" style={{ color: accent }}>/{block.sound}/</span>
           </div>
-          {block.examples.slice(0, 4).map((ex, i) => (
-            <span
-              key={i}
-              className={`absolute whitespace-nowrap rounded-full bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-lg sm:text-base ${PHONICS_WORD_POSITIONS[i]}`}
-            >
-              {ex}
-            </span>
+          {pictures.map((ex, i) => (
+            <PhonicsExampleBadge key={i} word={ex.word} image={ex.image} pos={positions[i]} />
           ))}
         </div>
       </div>

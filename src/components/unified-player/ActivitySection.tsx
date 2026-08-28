@@ -34,6 +34,7 @@ import {
 import type { UnifiedMoment, CatalogActivityBlock } from '@/unified-lessons/types';
 import { GameThemeScope, useHubTheme } from './HubTheme';
 import { NavFooter } from './NavFooter';
+import { PhonicsPopGame, type PhonicsPopSlide } from './PhonicsPopGame';
 import { RolePlayGame, SpeakingMissionGame, ListenRepeatGame, type RolePlaySlide, type SpeakingMissionSlide, type ListenRepeatSlide } from './SpeakingActivities';
 
 const ACTIVITY_ICON: Record<string, string> = {
@@ -49,6 +50,7 @@ const ACTIVITY_ICON: Record<string, string> = {
   tap_order: '🔢',
   word_builder: '🔡',
   sort: '🗂️',
+  phonics_pop: '🫧',
 };
 
 function ActivityView({ block }: { block: CatalogActivityBlock }) {
@@ -80,6 +82,8 @@ function ActivityView({ block }: { block: CatalogActivityBlock }) {
     case 'echo':
     case 'shadowing':
       return <ListenRepeatGame slide={{ type: block.activityType, ...block.config } as ListenRepeatSlide} />;
+    case 'phonics_pop':
+      return <PhonicsPopGame slide={{ type: 'phonics_pop', ...block.config } as PhonicsPopSlide} />;
     default:
       return (
         <p className="text-center text-slate-500">
