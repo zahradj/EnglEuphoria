@@ -324,9 +324,13 @@ function VocabCard({ entry, onClose }: { entry: VocabEntry; onClose: () => void 
       >
         {/* A real illustration of the word — "modeling" it, not just
             defining it — so a beginner who can't yet decode the
-            definition text still gets the meaning from the picture. */}
+            definition text still gets the meaning from the picture.
+            object-contain (not cover) on a neutral backdrop: these are
+            square generated illustrations, and cropping them tight to a
+            short wide strip cut off/zoomed into the object. Showing the
+            whole picture matters more here than filling the frame. */}
         {entry.image && (
-          <img src={entry.image} alt={entry.word} className="h-40 w-full object-cover sm:h-48" />
+          <img src={entry.image} alt={entry.word} className="h-52 w-full bg-slate-50 object-contain p-3 sm:h-60" />
         )}
         <div className="p-6">
           <div className="text-[11px] font-black uppercase tracking-widest" style={{ color: VOCAB_COLOR }}>
@@ -480,7 +484,12 @@ function StorybookSlide({
           {block.title} · {page + 1} / {block.pages.length}
         </span>
       </div>
-      <div className={`relative z-10 flex flex-1 items-center px-4 sm:px-10 ${justify}`}>
+      {/* Anchored near the top of the frame, not vertically centered — a
+          full-bleed scene puts character faces roughly mid-frame, and a
+          centered bubble sat right on top of them. Speech bubbles belong
+          above a speaking character's head (the universal comic
+          convention), never over their face. */}
+      <div className={`relative z-10 flex flex-1 items-start pt-1 px-4 sm:px-10 sm:pt-2 ${justify}`}>
         <motion.div
           key={page}
           initial={{ opacity: 0, y: -8 }}
