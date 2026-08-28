@@ -27,17 +27,19 @@ here maps to a real bug or a real user correction, not a hypothetical.
 
 ## The rendering model, in one paragraph
 
-Every moment renders as a **SlideFrame**: a 16:9 PowerPoint-style frame.
-With an `image`, the picture fills the whole frame edge-to-edge (a "full
-bleed" picture-slide layout) with the title/kicker overlaid at top (scrim +
+Every moment renders full-screen via **SlideFrame** — the slide content
+*is* the screen, not a card floating on a page (an earlier "16:9 bounded
+card on a colored background" direction was explicitly rejected as still
+looking like an unstyled app). With an `image`, the picture fills the
+entire viewport edge-to-edge with the title/kicker overlaid at top (scrim +
 drop-shadow for legibility) and any `children` floating as an opaque
 caption card near the bottom. Without an image, it's a solid accent-color
-title bar over a plain content area. `flexHeight` drops the fixed
-aspect-ratio for content whose size varies a lot (game boards, memory
-grids) — same visual language, natural height instead of clipping/scrolling
-inside a fixed box. Presentation moments (`PresentationSection.tsx`) use
+title bar over a content area that fills the rest of the screen. A
+full-width bottom action bar (`NavFooter` — Back / page counter / Next,
+Duolingo-strip style) is pinned below the slide content, not floating
+centered under it. Presentation moments (`PresentationSection.tsx`) use
 this for intro/vocab/phonics/story/summary; activity moments
-(`ActivitySection.tsx`) use it for games, always with `flexHeight`.
+(`ActivitySection.tsx`) use it for games.
 
 ## Hard rules (each one is a real bug that shipped and got caught)
 
@@ -72,6 +74,23 @@ this for intro/vocab/phonics/story/summary; activity moments
    itself explicitly inside that real height. If a contained image looks
    wrong, check for a centering wrapper sitting between it and any
    ancestor with a real height.
+
+3b. **Two independent `min-h-screen` divs nested inside each other don't
+   reliably give an `h-full` grandchild a real height.** When the full-
+   screen redesign wrapped `UnifiedLessonPlayer`'s outer div AND
+   `PresentationSection`/`ActivitySection`'s own wrapper each in their own
+   `min-h-screen flex-col`, the scene `<img>` (three levels down, via
+   `h-full`) silently rendered at **0px height** — confirmed with
+   `getBoundingClientRect()`, no console error, no visual "crash," just an
+   invisible image. `min-height` on a flex container doesn't unambiguously
+   hand a definite pixel height to `flex-1` descendants the way a plain
+   `height` does. Fix: exactly **one** hard height at the top
+   (`h-screen overflow-hidden` on the outermost wrapper) and `h-full`
+   everywhere below it — never a second independent `min-h-screen` deeper
+   in the tree. Verify any full-screen layout change with
+   `getBoundingClientRect()` on the actual image/game element, not just a
+   glance at the DOM tree — "it has the right classes" is not proof it has
+   the right computed height.
 
 4. **Carousel/deck arrows overlay the card, they don't flank it.** Arrows
    placed beside a `max-w-3xl` card need extra viewport width beyond the
