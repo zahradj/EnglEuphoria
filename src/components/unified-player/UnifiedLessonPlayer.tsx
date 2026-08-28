@@ -4,11 +4,14 @@
  * moments, and renders each one via PresentationSection or ActivitySection
  * depending on `moment.mode`.
  *
- * No top chrome bar (avatar/character badge/progress rail) — each moment
- * is a full-bleed "page" navigated with the Back/Next controls the section
- * components render below their own content, per moment count in `pageLabel`.
+ * Each moment fills the entire screen edge-to-edge (no page margins, no
+ * background wash behind it) — the slide itself IS the screen, not a card
+ * floating on a page. No top chrome bar (avatar/character badge/progress
+ * rail) — the Back/Next controls render inside the slide itself, per
+ * moment count in `pageLabel`.
  */
 import { useEffect, useState } from 'react';
+import confetti from 'canvas-confetti';
 import { loadUnifiedLesson } from '@/unified-lessons/registry';
 import type { UnifiedLesson, Hub } from '@/unified-lessons/types';
 import { markLessonCompleted } from '@/unified-lessons/completionTracking';
@@ -24,30 +27,31 @@ function UnifiedLessonPlayerInner({ lesson }: { lesson: UnifiedLesson }) {
   const isLast = momentIndex >= lesson.moments.length - 1;
   const pageLabel = `${momentIndex + 1} / ${lesson.moments.length}`;
 
+  const theme = useHubTheme();
+
   const advance = () => {
     if (isLast) {
       setFinished(true);
       markLessonCompleted(lesson.hub, lesson.id);
+      confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 }, colors: [theme.accent, theme.accent2, '#ffffff'] });
     } else {
       setMomentIndex((i) => i + 1);
     }
   };
   const goBack = () => setMomentIndex((i) => Math.max(0, i - 1));
 
-  const theme = useHubTheme();
-
   return (
-    <div className="min-h-screen bg-white px-4 py-6">
+    <div className="h-screen overflow-hidden bg-white">
       {finished ? (
-        <div data-lesson-complete="true" className="mx-auto max-w-md rounded-3xl bg-white p-8 text-center shadow-lg ring-1 ring-slate-200">
+        <div data-lesson-complete="true" className="flex h-full flex-col items-center justify-center p-8 text-center">
           <div
-            className="mx-auto mb-3 grid h-20 w-20 place-items-center rounded-full text-4xl shadow-md"
+            className="mx-auto mb-3 grid h-24 w-24 place-items-center rounded-full text-5xl shadow-lg"
             style={{ background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent2})` }}
           >
             🎉
           </div>
-          <h2 className="text-2xl font-black text-slate-800">Lesson complete</h2>
-          <p className="mt-1 text-slate-500">{lesson.title}</p>
+          <h2 className="text-3xl font-black text-slate-800">Lesson complete!</h2>
+          <p className="mt-1 font-semibold text-slate-500">{lesson.title}</p>
         </div>
       ) : moment.mode === 'activity' ? (
         <ActivitySection key={moment.id} moment={moment} onNext={advance} onBack={goBack} isFirst={isFirst} isLast={isLast} pageLabel={pageLabel} />

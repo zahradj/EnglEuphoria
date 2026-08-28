@@ -128,7 +128,7 @@ export function ActivitySection({
     activityView
   ) : (
     <div
-      className="rounded-2xl p-5 shadow-lg ring-1 ring-white/60 backdrop-blur-sm sm:p-6"
+      className="mx-auto max-w-3xl rounded-3xl p-5 shadow-2xl ring-1 ring-white/60 backdrop-blur-sm sm:p-8"
       style={{ background: `linear-gradient(160deg, #ffffff 0%, ${theme.accent}17 100%)` }}
     >
       {activityView}
@@ -136,21 +136,22 @@ export function ActivitySection({
   );
 
   return (
-    <div>
-      <SlideFrame
-        title={current.label}
-        accent={theme.accent}
-        accent2={theme.accent2}
-        flexHeight
-        image={moment.sceneImageUrl}
-        headerRight={
-          <span className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full bg-white/20 text-lg">
-            {ACTIVITY_ICON[current.activityType] ?? '🎮'}
-          </span>
-        }
-      >
-        {gameCard}
-      </SlideFrame>
+    <div className="flex h-full flex-col">
+      <div className="min-h-0 flex-1">
+        <SlideFrame
+          title={current.label}
+          accent={theme.accent}
+          accent2={theme.accent2}
+          image={moment.sceneImageUrl}
+          headerRight={
+            <span className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full bg-white/20 text-lg">
+              {ACTIVITY_ICON[current.activityType] ?? '🎮'}
+            </span>
+          }
+        >
+          {gameCard}
+        </SlideFrame>
+      </div>
       <NavFooter
         onBack={() => (index > 0 ? setIndex((i) => i - 1) : onBack())}
         backDisabled={isFirst && index === 0}
