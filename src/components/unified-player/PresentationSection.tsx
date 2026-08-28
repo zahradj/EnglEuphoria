@@ -231,7 +231,8 @@ function FlashcardDeck({ blocks, accent, accent2 }: { blocks: Block[]; accent: s
         onClick={() => go(-1)}
         disabled={index === 0}
         aria-label="Previous card"
-        className="absolute left-3 top-1/2 z-20 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-2xl font-black text-slate-700 shadow-lg backdrop-blur-sm transition hover:scale-110 disabled:opacity-0 sm:left-6"
+        className="absolute left-3 top-1/2 z-20 grid h-14 w-14 -translate-y-1/2 place-items-center rounded-full bg-white text-2xl font-black text-slate-700 ring-4 ring-white/40 transition hover:scale-110 active:translate-y-[calc(-50%+3px)] active:shadow-none disabled:opacity-0 sm:left-6"
+        style={{ boxShadow: '0 5px 0 0 rgba(0,0,0,0.15)' }}
       >
         ‹
       </button>
@@ -240,21 +241,27 @@ function FlashcardDeck({ blocks, accent, accent2 }: { blocks: Block[]; accent: s
         onClick={() => go(1)}
         disabled={index === total - 1}
         aria-label="Next card"
-        className="absolute right-3 top-1/2 z-20 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-2xl font-black text-slate-700 shadow-lg backdrop-blur-sm transition hover:scale-110 disabled:opacity-0 sm:right-6"
+        className="absolute right-3 top-1/2 z-20 grid h-14 w-14 -translate-y-1/2 place-items-center rounded-full bg-white text-2xl font-black text-slate-700 ring-4 ring-white/40 transition hover:scale-110 active:translate-y-[calc(-50%+3px)] active:shadow-none disabled:opacity-0 sm:right-6"
+        style={{ boxShadow: '0 5px 0 0 rgba(0,0,0,0.15)' }}
       >
         ›
       </button>
-      <div className="absolute inset-x-0 bottom-4 z-20 flex items-center justify-center gap-2 sm:bottom-6">
+      {/* Dot "tabs" — a solid white pill tray (not bare dots floating on
+          whatever happens to be behind them) so they read as a deliberate
+          UI control against either the image or the white caption card,
+          with the active dot pulled out into a big pill the way a real
+          game's page-tracker looks. */}
+      <div className="absolute inset-x-0 bottom-4 z-20 mx-auto flex w-fit items-center justify-center gap-2 rounded-full bg-white px-3 py-2 shadow-lg ring-1 ring-black/5 sm:bottom-6">
         {blocks.map((_, i) => (
           <button
             key={i}
             type="button"
             onClick={() => { setDirection(i > index ? 1 : -1); setIndex(i); }}
             aria-label={`Go to card ${i + 1}`}
-            className="h-2.5 rounded-full shadow transition-all"
+            className="h-3 rounded-full transition-all active:scale-90"
             style={{
-              width: i === index ? '2rem' : '0.625rem',
-              backgroundColor: i === index ? accent : 'rgba(255,255,255,0.6)',
+              width: i === index ? '1.75rem' : '0.75rem',
+              backgroundColor: i === index ? accent : '#e2e8f0',
             }}
           />
         ))}
@@ -307,8 +314,8 @@ function StorybookSlide({
           <button
             type="button"
             onClick={hear}
-            className="inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-black text-white shadow-md transition hover:scale-105"
-            style={{ backgroundColor: accent }}
+            className="inline-flex items-center gap-1.5 rounded-2xl px-5 py-2.5 text-sm font-black text-white transition hover:scale-105 active:translate-y-1 active:shadow-none"
+            style={{ backgroundColor: accent, boxShadow: `0 4px 0 0 ${accent2}` }}
           >
             🔊 Hear it
           </button>
@@ -316,7 +323,8 @@ function StorybookSlide({
             type="button"
             onClick={() => setRepeated(true)}
             disabled={!heard}
-            className="inline-flex items-center gap-1.5 rounded-full bg-slate-200 px-5 py-2.5 text-sm font-black text-slate-700 shadow-md transition disabled:opacity-40"
+            className="inline-flex items-center gap-1.5 rounded-2xl bg-slate-100 px-5 py-2.5 text-sm font-black text-slate-700 transition active:translate-y-1 active:shadow-none disabled:opacity-40"
+            style={{ boxShadow: '0 4px 0 0 #e2e8f0' }}
           >
             🗣️ I said it
           </button>
@@ -324,8 +332,8 @@ function StorybookSlide({
             <button
               onClick={() => goToPage(page + 1)}
               disabled={!repeated}
-              className="rounded-full px-5 py-2.5 text-sm font-black text-white shadow-md transition disabled:opacity-40"
-              style={{ backgroundColor: accent }}
+              className="rounded-2xl px-5 py-2.5 text-sm font-black text-white transition active:translate-y-1 active:shadow-none disabled:opacity-40"
+              style={{ backgroundColor: accent, boxShadow: `0 4px 0 0 ${accent2}` }}
             >
               Next page →
             </button>

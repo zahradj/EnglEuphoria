@@ -957,6 +957,7 @@ export function SortGame({ slide }: { slide: SortSlide }) {
   const { playCorrect, playWrong } = usePlaygroundAudio();
   const [placed, setPlaced] = useState<Record<string, string>>({}); // item label -> bucket id
   const [wrong, setWrong] = useState<string | null>(null);
+  const [hoverBucket, setHoverBucket] = useState<string | null>(null);
 
   const remaining = slide.items.filter((it) => !placed[it.label]);
   const done = remaining.length === 0;
@@ -985,28 +986,39 @@ export function SortGame({ slide }: { slide: SortSlide }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl mx-auto mb-6">
         {slide.buckets.map((b) => {
           const items = slide.items.filter((it) => placed[it.label] === b.id);
+          const isHover = hoverBucket === b.id;
           return (
             <div
               key={b.id}
-              onDragOver={(e) => e.preventDefault()}
+              onDragOver={(e) => { e.preventDefault(); setHoverBucket(b.id); }}
+              onDragLeave={() => setHoverBucket((h) => (h === b.id ? null : h))}
               onDrop={(e) => {
                 e.preventDefault();
+                setHoverBucket(null);
                 const lbl = e.dataTransfer.getData('text/plain');
                 if (lbl) drop(lbl, b.id);
               }}
-              className="rounded-2xl border-4 border-dashed border-[color:var(--pg-accent-alpha-50,rgba(254,106,47,0.5))] bg-[color:var(--pg-accent-50-50,rgba(255,247,237,0.5))] p-4 min-h-[120px]"
+              className={`rounded-2xl border-4 border-dashed p-4 min-h-[120px] transition-all duration-150 ${
+                isHover
+                  ? 'scale-[1.02] border-[color:var(--pg-accent,#FE6A2F)] bg-[color:var(--pg-accent-50,#fff7ed)]'
+                  : 'border-[color:var(--pg-accent-alpha-50,rgba(254,106,47,0.5))] bg-[color:var(--pg-accent-50-50,rgba(255,247,237,0.5))]'
+              }`}
             >
               <p className="font-extrabold text-[color:var(--pg-accent,#FE6A2F)] mb-2">
                 {b.emoji && <span className="mr-1">{b.emoji}</span>}{b.label}
               </p>
               <div className="flex flex-wrap gap-2">
                 {items.map((it) => (
-                  <span
+                  <motion.span
                     key={it.label}
+                    layout
+                    initial={{ scale: 0, opacity: 0, rotate: -8 }}
+                    animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 18 }}
                     className="px-3 py-1 rounded-xl bg-green-500 text-white font-bold shadow"
                   >
                     {it.emoji && <span className="mr-1">{it.emoji}</span>}{it.label}
-                  </span>
+                  </motion.span>
                 ))}
               </div>
             </div>
@@ -1017,9 +1029,13 @@ export function SortGame({ slide }: { slide: SortSlide }) {
         {remaining.map((it) => (
           <motion.div
             key={it.label}
+            layout
             draggable
             onDragStart={(e: any) => e.dataTransfer.setData('text/plain', it.label)}
-            animate={wrong === it.label ? { x: [-6, 6, -6, 6, 0] } : undefined}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={wrong === it.label ? { x: [-6, 6, -6, 6, 0], scale: 1, opacity: 1 } : { scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+            whileHover={{ scale: 1.06, rotate: -2 }}
             whileTap={{ scale: 0.95 }}
             className="cursor-grab active:cursor-grabbing px-4 py-2 rounded-2xl bg-gradient-to-br from-[color:var(--pg-accent,#FE6A2F)] to-[color:var(--pg-gradient-to,#f59e0b)] text-white font-extrabold shadow-md border-2 border-[color:var(--pg-accent-dark,#c54c1d)]"
           >

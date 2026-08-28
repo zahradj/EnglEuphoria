@@ -124,12 +124,17 @@ export function ActivitySection({
       <ActivityView key={index} block={current} />
     </GameThemeScope>
   );
+  // Mirrors the real Playground game-board card signature — a thin tinted
+  // border on a near-white panel, see ActivityCard in
+  // PlaygroundLessonPlayer.tsx — rather than a generic glass/gradient
+  // panel. SlideFrame's own title bar above already shows the activity
+  // label, so the card itself stays label-free to avoid repeating it.
   const gameCard = isBubbleStyle ? (
     activityView
   ) : (
     <div
-      className="mx-auto max-w-3xl rounded-3xl p-5 shadow-2xl ring-1 ring-white/60 backdrop-blur-sm sm:p-8"
-      style={{ background: `linear-gradient(160deg, #ffffff 0%, ${theme.accent}17 100%)` }}
+      className="mx-auto max-w-3xl rounded-3xl border-2 bg-white/90 p-5 shadow-xl backdrop-blur-sm sm:p-8"
+      style={{ borderColor: `${theme.accent}33` }}
     >
       {activityView}
     </div>
