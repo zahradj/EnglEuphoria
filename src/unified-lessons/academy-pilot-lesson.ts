@@ -49,6 +49,10 @@ export const academyPilotLesson: UnifiedLesson = {
       kind: 'story_moment',
       mode: 'presentation',
       hostCharacterId: 'vee',
+      // AI-generated full-bleed scene: Vee and Sam talking face to face in an
+      // airport terminal, Academy house style (generate-slide-image, hub:
+      // academy) — this is the backdrop every page's speech bubble sits on.
+      sceneImageUrl: 'https://dcoxpyzoqjvmuuygvlme.supabase.co/storage/v1/object/public/lesson-assets/studio/academy-pilot-lesson/ai-image-story-airport-scene-1787921017757.png',
       blocks: [
         {
           type: 'storybook',
@@ -57,17 +61,29 @@ export const academyPilotLesson: UnifiedLesson = {
             {
               speaker: 'Vee',
               text: 'Ugh, this line is so long! Do you have your passport ready?',
-              vocab: [{ word: 'passport', definition: 'The official ID you need to travel to another country.' }],
+              vocab: [{
+                word: 'passport',
+                definition: 'The official ID you need to travel to another country.',
+                image: 'https://dcoxpyzoqjvmuuygvlme.supabase.co/storage/v1/object/public/lesson-assets/studio/academy-pilot-lesson/ai-image-vocab-passport-1787921028751.png',
+              }],
             },
             {
               speaker: 'Sam',
               text: "Yes, it's right here. I already packed my suitcase last night too.",
-              vocab: [{ word: 'suitcase', definition: 'A bag you use to pack your clothes for a trip.' }],
+              vocab: [{
+                word: 'suitcase',
+                definition: 'A bag you use to pack your clothes for a trip.',
+                image: 'https://dcoxpyzoqjvmuuygvlme.supabase.co/storage/v1/object/public/lesson-assets/studio/academy-pilot-lesson/ai-image-vocab-suitcase-1787921041717.png',
+              }],
             },
             {
               speaker: 'Vee',
               text: "Smart! Don't forget — we need to show our boarding pass before we board.",
-              vocab: [{ word: 'boarding pass', definition: 'The ticket you show before getting on a plane.' }],
+              vocab: [{
+                word: 'boarding pass',
+                definition: 'The ticket you show before getting on a plane.',
+                image: 'https://dcoxpyzoqjvmuuygvlme.supabase.co/storage/v1/object/public/lesson-assets/studio/academy-pilot-lesson/ai-image-vocab-boarding-pass-1787921053203.png',
+              }],
             },
             {
               speaker: 'Sam',

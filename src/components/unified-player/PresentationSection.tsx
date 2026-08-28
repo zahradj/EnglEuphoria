@@ -275,7 +275,7 @@ function FlashcardDeck({ blocks, accent, accent2 }: { blocks: Block[]; accent: s
   );
 }
 
-type VocabEntry = { word: string; definition: string };
+type VocabEntry = { word: string; definition: string; image?: string };
 
 /**
  * Splits a line of dialogue on its vocab words and renders each match as a
@@ -319,31 +319,39 @@ function VocabCard({ entry, onClose }: { entry: VocabEntry; onClose: () => void 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm" onClick={onClose}>
       <div
-        className="w-full max-w-sm rounded-3xl bg-white p-6 text-center shadow-2xl"
+        className="w-full max-w-sm overflow-hidden rounded-3xl bg-white text-center shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="text-[11px] font-black uppercase tracking-widest" style={{ color: VOCAB_COLOR }}>
-          Vocabulary
-        </div>
-        <div className="mt-1 text-3xl font-black text-slate-800">{entry.word}</div>
-        <p className="mt-2 text-slate-600">{entry.definition}</p>
-        <div className="mt-5 flex items-center justify-center gap-2">
-          <button
-            type="button"
-            onClick={() => playVoice(entry.word)}
-            className="rounded-2xl px-5 py-2.5 text-sm font-black text-white transition active:translate-y-1 active:shadow-none"
-            style={{ backgroundColor: VOCAB_COLOR, boxShadow: '0 4px 0 0 #9f1239' }}
-          >
-            🔊 Hear again
-          </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-2xl bg-slate-100 px-5 py-2.5 text-sm font-black text-slate-700 transition active:translate-y-1 active:shadow-none"
-            style={{ boxShadow: '0 4px 0 0 #e2e8f0' }}
-          >
-            🗣️ I repeated it
-          </button>
+        {/* A real illustration of the word — "modeling" it, not just
+            defining it — so a beginner who can't yet decode the
+            definition text still gets the meaning from the picture. */}
+        {entry.image && (
+          <img src={entry.image} alt={entry.word} className="h-40 w-full object-cover sm:h-48" />
+        )}
+        <div className="p-6">
+          <div className="text-[11px] font-black uppercase tracking-widest" style={{ color: VOCAB_COLOR }}>
+            Vocabulary
+          </div>
+          <div className="mt-1 text-3xl font-black text-slate-800">{entry.word}</div>
+          <p className="mt-2 text-slate-600">{entry.definition}</p>
+          <div className="mt-5 flex items-center justify-center gap-2">
+            <button
+              type="button"
+              onClick={() => playVoice(entry.word)}
+              className="rounded-2xl px-5 py-2.5 text-sm font-black text-white transition active:translate-y-1 active:shadow-none"
+              style={{ backgroundColor: VOCAB_COLOR, boxShadow: '0 4px 0 0 #9f1239' }}
+            >
+              🔊 Hear again
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-2xl bg-slate-100 px-5 py-2.5 text-sm font-black text-slate-700 transition active:translate-y-1 active:shadow-none"
+              style={{ boxShadow: '0 4px 0 0 #e2e8f0' }}
+            >
+              🗣️ I repeated it
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -477,10 +485,10 @@ function StorybookSlide({
           key={page}
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-[85%] rounded-3xl bg-white px-5 py-4 text-left shadow-2xl sm:max-w-md sm:px-6 sm:py-5"
+          className="max-w-[70%] rounded-2xl bg-white px-4 py-3 text-left shadow-xl sm:max-w-xs sm:px-4 sm:py-3"
         >
-          {current.speaker && <div className="mb-1 text-[11px] font-black uppercase tracking-wide text-slate-400">{current.speaker}</div>}
-          <p className="text-xl font-bold text-slate-800 sm:text-2xl">
+          {current.speaker && <div className="mb-0.5 text-[10px] font-black uppercase tracking-wide text-slate-400">{current.speaker}</div>}
+          <p className="text-sm font-bold text-slate-800 sm:text-base">
             &ldquo;{renderWithVocab(current.text, current.vocab, setOpenVocab)}&rdquo;
           </p>
         </motion.div>
