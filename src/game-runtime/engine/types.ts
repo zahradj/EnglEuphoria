@@ -95,7 +95,24 @@ export interface FillInBlankBlock {
 export interface StorybookBlock {
   type: 'storybook';
   title: string;
-  pages: { text: string; image?: string }[];
+  pages: {
+    text: string;
+    image?: string;
+    /**
+     * Who says this line. Present -> the page renders as one line of a
+     * speech-bubble conversation (Playground's own story-scene pattern:
+     * one full-bleed bubble at a time, alternating sides by speaker).
+     * Omitted -> legacy narrator-style page (a single centered text card),
+     * so existing authored content with no speaker keeps working.
+     */
+    speaker?: string;
+    /**
+     * Words inside `text` to highlight in the vocabulary color and make
+     * tappable — tapping pops a small card with the definition and a
+     * "hear it" replay, for a second listen-and-repeat on just that word.
+     */
+    vocab?: { word: string; definition: string }[];
+  }[];
 }
 export interface LessonSummaryBlock {
   type: 'lesson_summary';

@@ -14,7 +14,7 @@
  * playVoice, the same static-cache-with-live-fallback hook every other
  * Playground game already uses) — nothing here is text-only.
  */
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { usePlaygroundAudio } from '@/hooks/usePlaygroundAudio';
 import type { UnifiedMoment } from '@/unified-lessons/types';
@@ -22,6 +22,11 @@ import { useHubTheme } from './HubTheme';
 import { NavFooter } from './NavFooter';
 import { SlideFrame } from './SlideFrame';
 import logoWhite from '@/assets/logo-white.png';
+
+/** A vocabulary color that reads as "tappable" against both a white bubble
+ * and a photo backdrop — distinct from the hub accent so it never gets
+ * mistaken for a themed UI element. */
+const VOCAB_COLOR = '#e11d48';
 
 function HearButton({ text, size = 'md' }: { text: string; size?: 'sm' | 'md' }) {
   const { playVoice } = usePlaygroundAudio();
@@ -270,12 +275,96 @@ function FlashcardDeck({ blocks, accent, accent2 }: { blocks: Block[]; accent: s
   );
 }
 
+type VocabEntry = { word: string; definition: string };
+
+/**
+ * Splits a line of dialogue on its vocab words and renders each match as a
+ * bold, underlined, colored, tappable span — everything else passes through
+ * as plain text. Tapping calls `onPick` with that word's full entry so the
+ * caller can pop the definition card.
+ */
+function renderWithVocab(text: string, vocab: VocabEntry[] | undefined, onPick: (v: VocabEntry) => void) {
+  if (!vocab || vocab.length === 0) return text;
+  const escaped = vocab.map((v) => v.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const parts = text.split(new RegExp(`(${escaped.join('|')})`, 'gi'));
+  return parts.map((part, i) => {
+    const match = vocab.find((v) => v.word.toLowerCase() === part.toLowerCase());
+    if (!match) return <span key={i}>{part}</span>;
+    return (
+      <button
+        key={i}
+        type="button"
+        onClick={() => onPick(match)}
+        className="font-black underline decoration-2 underline-offset-2"
+        style={{ color: VOCAB_COLOR }}
+      >
+        {part}
+      </button>
+    );
+  });
+}
+
+/**
+ * The card that pops when a vocabulary word is tapped mid-story — hears the
+ * word immediately (the first "listen"), then offers "hear again" for the
+ * repeat before the student closes it and the conversation continues.
+ */
+function VocabCard({ entry, onClose }: { entry: VocabEntry; onClose: () => void }) {
+  const { playVoice } = usePlaygroundAudio();
+  useEffect(() => {
+    playVoice(entry.word);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entry.word]);
+
+  return (
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm" onClick={onClose}>
+      <div
+        className="w-full max-w-sm rounded-3xl bg-white p-6 text-center shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="text-[11px] font-black uppercase tracking-widest" style={{ color: VOCAB_COLOR }}>
+          Vocabulary
+        </div>
+        <div className="mt-1 text-3xl font-black text-slate-800">{entry.word}</div>
+        <p className="mt-2 text-slate-600">{entry.definition}</p>
+        <div className="mt-5 flex items-center justify-center gap-2">
+          <button
+            type="button"
+            onClick={() => playVoice(entry.word)}
+            className="rounded-2xl px-5 py-2.5 text-sm font-black text-white transition active:translate-y-1 active:shadow-none"
+            style={{ backgroundColor: VOCAB_COLOR, boxShadow: '0 4px 0 0 #9f1239' }}
+          >
+            🔊 Hear again
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-2xl bg-slate-100 px-5 py-2.5 text-sm font-black text-slate-700 transition active:translate-y-1 active:shadow-none"
+            style={{ boxShadow: '0 4px 0 0 #e2e8f0' }}
+          >
+            🗣️ I repeated it
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /**
  * A story to read AND listen-and-repeat, not just read — each page must be
  * heard (🔊) and confirmed repeated (🗣️) before "Next page" unlocks, the
  * same hear-then-repeat gating ListenRepeatGame already uses elsewhere in
  * this lesson. Reveals one page at a time so a beginner isn't overwhelmed
  * by the whole story as a wall of text.
+ *
+ * Two rendering modes, chosen by whether any page names a `speaker`:
+ * - Conversation mode (the real Playground story-scene pattern — see
+ *   welcome-town/SceneRenderer.tsx's RoleplayScene): one full-bleed speech
+ *   bubble at a time, anchored left/right by who's talking, with any
+ *   bolded vocab words inside it tappable.
+ * - Legacy mode (no page has a speaker): the original single centered
+ *   caption card, so already-authored content with no speaker field keeps
+ *   rendering exactly as before.
  */
 function StorybookSlide({
   block,
@@ -288,12 +377,27 @@ function StorybookSlide({
   accent2: string;
   sceneImage?: string;
 }) {
+  const theme = useHubTheme();
   const { playVoice } = usePlaygroundAudio();
   const [page, setPage] = useState(0);
   const [heard, setHeard] = useState(false);
   const [repeated, setRepeated] = useState(false);
+  const [openVocab, setOpenVocab] = useState<VocabEntry | null>(null);
   const isLastPage = page >= block.pages.length - 1;
   const current = block.pages[page];
+  const isConversation = block.pages.some((p) => p.speaker);
+
+  // Stable left/right assignment: the first distinct speaker encountered
+  // (reading the whole script, not just pages seen so far) sits on the
+  // left, the second on the right — so a character doesn't jump sides if
+  // they happen to speak first on a later page than their scene partner.
+  const speakerOrder = useMemo(() => {
+    const seen: string[] = [];
+    for (const p of block.pages) {
+      if (p.speaker && !seen.includes(p.speaker)) seen.push(p.speaker);
+    }
+    return seen;
+  }, [block.pages]);
 
   const goToPage = (p: number) => {
     setPage(p);
@@ -306,43 +410,114 @@ function StorybookSlide({
     setHeard(true);
   };
 
-  return (
-    <SlideFrame kicker={`Page ${page + 1} / ${block.pages.length}`} title={block.title} accent={accent} accent2={accent2} image={sceneImage}>
-      <motion.div key={page} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mx-auto max-w-xl rounded-2xl bg-white/95 px-6 py-5 shadow-xl backdrop-blur-sm">
-        <p className="text-xl font-bold text-slate-800">{current.text}</p>
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={hear}
-            className="inline-flex items-center gap-1.5 rounded-2xl px-5 py-2.5 text-sm font-black text-white transition hover:scale-105 active:translate-y-1 active:shadow-none"
-            style={{ backgroundColor: accent, boxShadow: `0 4px 0 0 ${accent2}` }}
-          >
-            🔊 Hear it
-          </button>
-          <button
-            type="button"
-            onClick={() => setRepeated(true)}
-            disabled={!heard}
-            className="inline-flex items-center gap-1.5 rounded-2xl bg-slate-100 px-5 py-2.5 text-sm font-black text-slate-700 transition active:translate-y-1 active:shadow-none disabled:opacity-40"
-            style={{ boxShadow: '0 4px 0 0 #e2e8f0' }}
-          >
-            🗣️ I said it
-          </button>
-          {!isLastPage ? (
+  if (!isConversation) {
+    return (
+      <SlideFrame kicker={`Page ${page + 1} / ${block.pages.length}`} title={block.title} accent={accent} accent2={accent2} image={sceneImage}>
+        <motion.div key={page} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mx-auto max-w-xl rounded-2xl bg-white/95 px-6 py-5 shadow-xl backdrop-blur-sm">
+          <p className="text-xl font-bold text-slate-800">{renderWithVocab(current.text, current.vocab, setOpenVocab)}</p>
+          <div className="mt-4 flex flex-wrap items-center gap-2">
             <button
-              onClick={() => goToPage(page + 1)}
-              disabled={!repeated}
-              className="rounded-2xl px-5 py-2.5 text-sm font-black text-white transition active:translate-y-1 active:shadow-none disabled:opacity-40"
+              type="button"
+              onClick={hear}
+              className="inline-flex items-center gap-1.5 rounded-2xl px-5 py-2.5 text-sm font-black text-white transition hover:scale-105 active:translate-y-1 active:shadow-none"
               style={{ backgroundColor: accent, boxShadow: `0 4px 0 0 ${accent2}` }}
             >
-              Next page →
+              🔊 Hear it
             </button>
-          ) : (
-            repeated && <span className="font-bold text-green-600">🎉 Great reading!</span>
-          )}
-        </div>
-      </motion.div>
-    </SlideFrame>
+            <button
+              type="button"
+              onClick={() => setRepeated(true)}
+              disabled={!heard}
+              className="inline-flex items-center gap-1.5 rounded-2xl bg-slate-100 px-5 py-2.5 text-sm font-black text-slate-700 transition active:translate-y-1 active:shadow-none disabled:opacity-40"
+              style={{ boxShadow: '0 4px 0 0 #e2e8f0' }}
+            >
+              🗣️ I said it
+            </button>
+            {!isLastPage ? (
+              <button
+                onClick={() => goToPage(page + 1)}
+                disabled={!repeated}
+                className="rounded-2xl px-5 py-2.5 text-sm font-black text-white transition active:translate-y-1 active:shadow-none disabled:opacity-40"
+                style={{ backgroundColor: accent, boxShadow: `0 4px 0 0 ${accent2}` }}
+              >
+                Next page →
+              </button>
+            ) : (
+              repeated && <span className="font-bold text-green-600">🎉 Great reading!</span>
+            )}
+          </div>
+        </motion.div>
+        {openVocab && <VocabCard entry={openVocab} onClose={() => setOpenVocab(null)} />}
+      </SlideFrame>
+    );
+  }
+
+  const side = !current.speaker ? 'center' : speakerOrder.indexOf(current.speaker) % 2 === 0 ? 'left' : 'right';
+  const justify = side === 'left' ? 'justify-start' : side === 'right' ? 'justify-end' : 'justify-center';
+  const bgImage = current.image ?? sceneImage;
+
+  return (
+    <div className="relative flex h-full w-full flex-col overflow-hidden" style={bgImage ? undefined : { backgroundImage: theme.slideBackground }}>
+      {bgImage && (
+        <>
+          <img src={bgImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <div
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(180deg, rgba(15,23,42,0.55) 0%, rgba(15,23,42,0.05) 32%, rgba(15,23,42,0.05) 60%, rgba(15,23,42,0.65) 100%)' }}
+          />
+        </>
+      )}
+      <div className="relative z-10 flex-shrink-0 p-4 sm:p-8">
+        <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-black uppercase tracking-[0.2em] text-white backdrop-blur-sm">
+          {block.title} · {page + 1} / {block.pages.length}
+        </span>
+      </div>
+      <div className={`relative z-10 flex flex-1 items-center px-4 sm:px-10 ${justify}`}>
+        <motion.div
+          key={page}
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-[85%] rounded-3xl bg-white px-5 py-4 text-left shadow-2xl sm:max-w-md sm:px-6 sm:py-5"
+        >
+          {current.speaker && <div className="mb-1 text-[11px] font-black uppercase tracking-wide text-slate-400">{current.speaker}</div>}
+          <p className="text-xl font-bold text-slate-800 sm:text-2xl">
+            &ldquo;{renderWithVocab(current.text, current.vocab, setOpenVocab)}&rdquo;
+          </p>
+        </motion.div>
+      </div>
+      <div className="relative z-10 flex flex-shrink-0 flex-wrap items-center justify-center gap-2 p-4 sm:p-6">
+        <button
+          type="button"
+          onClick={hear}
+          className="inline-flex items-center gap-1.5 rounded-2xl px-5 py-2.5 text-sm font-black text-white transition hover:scale-105 active:translate-y-1 active:shadow-none"
+          style={{ backgroundColor: accent, boxShadow: `0 4px 0 0 ${accent2}` }}
+        >
+          🔊 Hear it
+        </button>
+        <button
+          type="button"
+          onClick={() => setRepeated(true)}
+          disabled={!heard}
+          className="inline-flex items-center gap-1.5 rounded-2xl bg-white px-5 py-2.5 text-sm font-black text-slate-700 transition active:translate-y-1 active:shadow-none disabled:opacity-40"
+          style={{ boxShadow: '0 4px 0 0 #e2e8f0' }}
+        >
+          🗣️ I said it
+        </button>
+        {!isLastPage ? (
+          <button
+            onClick={() => goToPage(page + 1)}
+            disabled={!repeated}
+            className="rounded-2xl px-5 py-2.5 text-sm font-black text-white transition active:translate-y-1 active:shadow-none disabled:opacity-40"
+            style={{ backgroundColor: accent, boxShadow: `0 4px 0 0 ${accent2}` }}
+          >
+            Next →
+          </button>
+        ) : (
+          repeated && <span className="rounded-full bg-white/90 px-4 py-2 font-bold text-green-600 shadow">🎉 Great reading!</span>
+        )}
+      </div>
+      {openVocab && <VocabCard entry={openVocab} onClose={() => setOpenVocab(null)} />}
+    </div>
   );
 }
 

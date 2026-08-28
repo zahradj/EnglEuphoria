@@ -45,6 +45,39 @@ export const academyPilotLesson: UnifiedLesson = {
       ],
     },
     {
+      id: 'story-1',
+      kind: 'story_moment',
+      mode: 'presentation',
+      hostCharacterId: 'vee',
+      blocks: [
+        {
+          type: 'storybook',
+          title: 'At the Airport',
+          pages: [
+            {
+              speaker: 'Vee',
+              text: 'Ugh, this line is so long! Do you have your passport ready?',
+              vocab: [{ word: 'passport', definition: 'The official ID you need to travel to another country.' }],
+            },
+            {
+              speaker: 'Sam',
+              text: "Yes, it's right here. I already packed my suitcase last night too.",
+              vocab: [{ word: 'suitcase', definition: 'A bag you use to pack your clothes for a trip.' }],
+            },
+            {
+              speaker: 'Vee',
+              text: "Smart! Don't forget — we need to show our boarding pass before we board.",
+              vocab: [{ word: 'boarding pass', definition: 'The ticket you show before getting on a plane.' }],
+            },
+            {
+              speaker: 'Sam',
+              text: "Got it right here. I think we're ready for this trip!",
+            },
+          ],
+        },
+      ],
+    },
+    {
       id: 'practice-1',
       kind: 'practice_moment',
       mode: 'activity',
