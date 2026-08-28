@@ -19,10 +19,16 @@ export interface HubIdentity {
   characterName: string;
   characterTagline: string;
   characterAvatarEmoji: string;
-  /** Full-bleed backdrop for the whole player, evoking a "place" rather than a form. */
-  sceneGradient: string;
-  /** Radial glow color used behind the character badge and hero elements. */
-  glow: string;
+  /**
+   * A bold, confident color-block background for slides with no photo —
+   * the deliberate "designed presentation slide" treatment (think a Canva
+   * or Keynote template's title-slide background), not an app's pastel
+   * chrome. A rich diagonal sweep between the hub's two accent colors plus
+   * one soft highlight, so a screen never goes flat/form-white but also
+   * never reads as mobile-app "UI" — just a strong, artistic backdrop for
+   * bold white type.
+   */
+  slideBackground: string;
 }
 
 const HUB_IDENTITY: Record<Hub, HubIdentity> = {
@@ -33,8 +39,8 @@ const HUB_IDENTITY: Record<Hub, HubIdentity> = {
     characterName: 'Pip',
     characterTagline: 'Playground guide',
     characterAvatarEmoji: '🦊',
-    sceneGradient: 'linear-gradient(180deg, #FFF3B0 0%, #FFD34E 35%, #FF8A3D 70%, #E5561A 100%)',
-    glow: 'rgba(254,106,47,0.55)',
+    slideBackground:
+      'radial-gradient(circle at 12% 12%, rgba(255,255,255,0.28), transparent 42%), linear-gradient(135deg, #FE6A2F 0%, #FEBE4C 100%)',
   },
   academy: {
     hub: 'academy',
@@ -47,8 +53,8 @@ const HUB_IDENTITY: Record<Hub, HubIdentity> = {
     characterName: 'Vee',
     characterTagline: 'Academy mentor',
     characterAvatarEmoji: '🎧',
-    sceneGradient: 'linear-gradient(180deg, #ddd6fe 0%, #818cf8 28%, #7c3aed 60%, #4c1d95 100%)',
-    glow: 'rgba(124,58,237,0.5)',
+    slideBackground:
+      'radial-gradient(circle at 12% 12%, rgba(255,255,255,0.25), transparent 42%), linear-gradient(135deg, #7c3aed 0%, #c026d3 100%)',
   },
   success: {
     hub: 'success',
@@ -62,8 +68,8 @@ const HUB_IDENTITY: Record<Hub, HubIdentity> = {
     characterName: 'Sol',
     characterTagline: 'Success coach',
     characterAvatarEmoji: '💼',
-    sceneGradient: 'linear-gradient(180deg, #a5f3fc 0%, #2dd4bf 30%, #0d9488 62%, #134e4a 100%)',
-    glow: 'rgba(13,148,136,0.5)',
+    slideBackground:
+      'radial-gradient(circle at 12% 12%, rgba(255,255,255,0.25), transparent 42%), linear-gradient(135deg, #059669 0%, #0d9488 100%)',
   },
 };
 

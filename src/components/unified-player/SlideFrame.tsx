@@ -1,13 +1,18 @@
+import { useHubTheme } from './HubTheme';
+
 /**
  * The full-screen slide shell. The slide IS the screen — no floating card,
- * no page margin around it, no rounded corners cutting off the edges. Two
- * layouts, chosen by whether an `image` is supplied:
+ * no page margin around it, no rounded corners cutting off the edges. A
+ * designed presentation slide, not an app screen: no floating pill chips or
+ * circular avatar badges anywhere in here, just bold type on a real
+ * background. Two layouts, chosen by whether an `image` is supplied:
  *
  * - With an image: the illustration fills the entire screen edge-to-edge
  *   — kicker/title overlay near the top with a scrim for legibility, and
  *   any `children` (a caption, a game card) float near the bottom.
- * - Without an image: a solid-color title bar up top, the content area
- *   filling the rest of the screen below it.
+ * - Without an image: the hub's bold color-block slideBackground (a real
+ *   "title slide" background, not app chrome) with a solid-color title bar
+ *   up top and the content area below it.
  */
 export function SlideFrame({
   kicker,
@@ -29,6 +34,7 @@ export function SlideFrame({
   /** Cover-page treatment — a much bigger title, for the intro slide. */
   large?: boolean;
 }) {
+  const theme = useHubTheme();
   if (image) {
     return (
       <div className="relative flex h-full w-full flex-col justify-end overflow-hidden">
@@ -52,7 +58,7 @@ export function SlideFrame({
   }
 
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden bg-white">
+    <div className="flex h-full w-full flex-col overflow-hidden" style={{ backgroundImage: theme.slideBackground }}>
       {(title || kicker) && (
         <div
           className="flex flex-shrink-0 items-center justify-between gap-3 px-5 py-4 sm:px-8 sm:py-6"

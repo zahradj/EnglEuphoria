@@ -29,7 +29,14 @@ export function NavFooter({
   accent2: string;
 }) {
   return (
-    <div className="flex-shrink-0 border-t-2 border-slate-100 bg-white px-4 py-4 sm:px-8">
+    // relative z-20: any absolutely-positioned full-bleed scene image/scrim
+    // a moment renders behind its content (ActivitySection, SlideFrame) is
+    // position:absolute with no z-index, which paints above plain in-flow
+    // siblings regardless of DOM order — without this, that scrim sits on
+    // top of this bar and silently eats every click on Back/Next. Learned
+    // the hard way: buttons looked perfectly normal and were completely
+    // dead on any moment with background art.
+    <div className="relative z-20 flex-shrink-0 border-t-2 border-slate-100 bg-white px-4 py-4 sm:px-8">
       <div className="mx-auto flex max-w-4xl items-center justify-between gap-4">
         <button
           type="button"
@@ -40,9 +47,10 @@ export function NavFooter({
         >
           ← Back
         </button>
-        <span className="flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-black text-slate-500">
-          ⭐ {pageLabel}
-        </span>
+        {/* The top progress bar (UnifiedLessonPlayer) is now the primary,
+            glanceable progress signal, so this stays a small plain label
+            instead of a competing star pill. */}
+        <span className="text-xs font-bold text-slate-400">{pageLabel}</span>
         <button
           type="button"
           onClick={onNext}

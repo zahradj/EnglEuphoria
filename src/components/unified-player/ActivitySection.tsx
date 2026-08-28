@@ -34,7 +34,6 @@ import {
 import type { UnifiedMoment, CatalogActivityBlock } from '@/unified-lessons/types';
 import { GameThemeScope, useHubTheme } from './HubTheme';
 import { NavFooter } from './NavFooter';
-import { SlideFrame } from './SlideFrame';
 import { RolePlayGame, SpeakingMissionGame, ListenRepeatGame, type RolePlaySlide, type SpeakingMissionSlide, type ListenRepeatSlide } from './SpeakingActivities';
 
 const ACTIVITY_ICON: Record<string, string> = {
@@ -124,38 +123,35 @@ export function ActivitySection({
       <ActivityView key={index} block={current} />
     </GameThemeScope>
   );
-  // Mirrors the real Playground game-board card signature — a thin tinted
-  // border on a near-white panel, see ActivityCard in
-  // PlaygroundLessonPlayer.tsx — rather than a generic glass/gradient
-  // panel. SlideFrame's own title bar above already shows the activity
-  // label, so the card itself stays label-free to avoid repeating it.
+  // A clean, near-opaque content panel — closer to a slide's white content
+  // block than an app "card" (no tinted border/backdrop-blur trying to
+  // read the background through it), since it now sits on a bold color
+  // background rather than a busy mesh.
   const gameCard = isBubbleStyle ? (
     activityView
   ) : (
-    <div
-      className="mx-auto max-w-3xl rounded-3xl border-2 bg-white/90 p-5 shadow-xl backdrop-blur-sm sm:p-8"
-      style={{ borderColor: `${theme.accent}33` }}
-    >
-      {activityView}
-    </div>
+    <div className="mx-auto max-w-3xl rounded-2xl bg-white p-5 shadow-2xl sm:p-8">{activityView}</div>
   );
 
+  // A designed presentation slide, not an app screen: a bold color-block
+  // (or the moment's own scene photo) background, one big confident
+  // headline set directly on it like real slide type — no floating pill
+  // chip, no circular avatar badge, no soft app-style mesh texture.
   return (
-    <div className="flex h-full flex-col">
-      <div className="min-h-0 flex-1">
-        <SlideFrame
-          title={current.label}
-          accent={theme.accent}
-          accent2={theme.accent2}
-          image={moment.sceneImageUrl}
-          headerRight={
-            <span className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full bg-white/20 text-lg">
-              {ACTIVITY_ICON[current.activityType] ?? '🎮'}
-            </span>
-          }
-        >
-          {gameCard}
-        </SlideFrame>
+    <div className="relative flex h-full flex-col overflow-hidden" style={moment.sceneImageUrl ? undefined : { backgroundImage: theme.slideBackground }}>
+      {moment.sceneImageUrl && (
+        <>
+          <img src={moment.sceneImageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-black/35" />
+        </>
+      )}
+      <div className="relative z-10 flex-shrink-0 p-4 sm:p-8">
+        <h2 className="text-2xl font-black text-white drop-shadow-lg sm:text-4xl">
+          {ACTIVITY_ICON[current.activityType] ?? '🎮'} {current.label}
+        </h2>
+      </div>
+      <div className="relative z-10 min-h-0 flex-1 overflow-y-auto px-4 pb-4 sm:px-8 sm:pb-8">
+        <div className="flex min-h-full items-center justify-center">{gameCard}</div>
       </div>
       <NavFooter
         onBack={() => (index > 0 ? setIndex((i) => i - 1) : onBack())}

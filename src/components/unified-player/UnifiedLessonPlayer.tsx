@@ -41,23 +41,39 @@ function UnifiedLessonPlayerInner({ lesson }: { lesson: UnifiedLesson }) {
   const goBack = () => setMomentIndex((i) => Math.max(0, i - 1));
 
   return (
-    <div className="h-screen overflow-hidden bg-white">
-      {finished ? (
-        <div data-lesson-complete="true" className="flex h-full flex-col items-center justify-center p-8 text-center">
+    <div className="flex h-screen flex-col overflow-hidden bg-white">
+      {/* A filling top progress bar (the Duolingo/Playground lesson-progress
+          signature) instead of a numeric "N / M" readout — the single most
+          recognizable "this is a game, not a form" visual cue, and it reads
+          at a glance without asking the student to do the division. */}
+      {!finished && (
+        <div className="h-2 w-full flex-shrink-0 bg-slate-100">
           <div
-            className="mx-auto mb-3 grid h-24 w-24 place-items-center rounded-full text-5xl shadow-lg"
-            style={{ background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent2})` }}
-          >
-            🎉
-          </div>
-          <h2 className="text-3xl font-black text-slate-800">Lesson complete!</h2>
-          <p className="mt-1 font-semibold text-slate-500">{lesson.title}</p>
+            className="h-full rounded-r-full transition-all duration-500 ease-out"
+            style={{
+              width: `${((momentIndex + 1) / lesson.moments.length) * 100}%`,
+              background: `linear-gradient(90deg, ${theme.accent}, ${theme.accent2})`,
+            }}
+          />
         </div>
-      ) : moment.mode === 'activity' ? (
-        <ActivitySection key={moment.id} moment={moment} onNext={advance} onBack={goBack} isFirst={isFirst} isLast={isLast} pageLabel={pageLabel} />
-      ) : (
-        <PresentationSection key={moment.id} moment={moment} onNext={advance} onBack={goBack} isFirst={isFirst} isLast={isLast} pageLabel={pageLabel} />
       )}
+      <div className="min-h-0 flex-1">
+        {finished ? (
+          <div
+            data-lesson-complete="true"
+            className="flex h-full flex-col items-center justify-center p-8 text-center"
+            style={{ backgroundImage: theme.slideBackground }}
+          >
+            <div className="mx-auto mb-3 grid h-24 w-24 place-items-center rounded-full bg-white text-5xl shadow-lg">🎉</div>
+            <h2 className="text-3xl font-black text-white drop-shadow-lg">Lesson complete!</h2>
+            <p className="mt-1 font-semibold text-white/80">{lesson.title}</p>
+          </div>
+        ) : moment.mode === 'activity' ? (
+          <ActivitySection key={moment.id} moment={moment} onNext={advance} onBack={goBack} isFirst={isFirst} isLast={isLast} pageLabel={pageLabel} />
+        ) : (
+          <PresentationSection key={moment.id} moment={moment} onNext={advance} onBack={goBack} isFirst={isFirst} isLast={isLast} pageLabel={pageLabel} />
+        )}
+      </div>
     </div>
   );
 }
