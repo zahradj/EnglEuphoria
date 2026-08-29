@@ -1662,13 +1662,25 @@ export const LESSON_6_SCENES: Scene[] = [
     // convention join-stage-l1 uses) — each friend's turn overrides it with
     // their own solo shot instead, since JoinStageScene never renders a
     // friend sprite of its own.
+    // Refactored into one real three-question conversation (name -> age ->
+    // feeling) instead of jumping straight from name to feeling with no
+    // age question at all — matches this capstone's own stated objective
+    // ("share their name/age") and the new l6-age-quiz round right before
+    // this one, giving age a second, conversational rep here too.
     id: 'l6-join-stage', kind: 'join-stage', bg: bgGatherEmpty, teacher: 'Your final turn! Show everything you know!', cast: ['pip', 'mia', 'bella', 'willow', 'leo'],
     turns: [
-      { who: 'pip', line: 'Hello!', bg: bgL1PipSolo },
+      { who: 'pip', line: 'Hello! What is your name?', bg: bgL1PipSolo },
       { who: 'student', line: 'Hello! My name is ___.' },
-      { who: 'leo', line: 'How are you?', bg: bgLeoSolo },
+      { who: 'leo', line: 'How old are you?', bg: bgLeoSolo },
+      { who: 'student', line: 'I am ___ years old.' },
+      { who: 'mia', line: 'How are you?', bg: bgL1MiaSolo },
       { who: 'student', line: 'I am happy!' },
-      { who: 'mia', line: 'You did it! Trophy time!', bg: bgL1MiaSolo },
+      // Same bg repeated here (not omitted) — JoinStageScene falls back to
+      // the scene's own default (bgGatherEmpty) on any turn without an
+      // explicit bg, which would flash back to an empty meadow for this
+      // closing line otherwise.
+      { who: 'mia', line: 'Nice to meet you!', bg: bgL1MiaSolo },
+      { who: 'student', line: 'Nice to meet you too!' },
     ],
   },
   {
