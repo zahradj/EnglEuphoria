@@ -392,7 +392,7 @@ export const LESSON_1_SCENES: Scene[] = [
  * ========================================================================= */
 
 export const LESSON_2_TITLE = 'How Are You?';
-export const LESSON_2_OBJECTIVE = 'Part 1: Ask and answer "How are you?" and name a feeling (happy, sad, tired, angry). Part 2: Learn the sounds P, I, N and read three more real words.';
+export const LESSON_2_OBJECTIVE = 'Part 1: Ask and answer "How are you?", name a feeling (happy, sad, tired, angry, hungry), and use He, She and They to say how a friend feels. Part 2: Learn the sounds P, I, N and read three more real words.';
 
 export const LESSON_2_SCENES: Scene[] = [
   { id: 'wt2-title', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'How Are You?', subtitle: 'Say hello, then share how you feel today', cta: '\u{1F392} LET’S GO!' },
@@ -423,10 +423,11 @@ export const LESSON_2_SCENES: Scene[] = [
     id: 'wt2-vocab-feelings', kind: 'vocab-spot', bg: bgFeelings,
     teacher: 'Look at each friend! Tap the arrow to learn how they feel.',
     items: [
-      { label: 'Happy', sentence: 'Pip is happy.', emoji: '\u{1F60A}', left: '17%', top: '55%', color: '#FE6A2F', who: 'pip' },
-      { label: 'Sad', sentence: 'Mia is sad.', emoji: '\u{1F622}', left: '40%', top: '62%', color: '#B85CD1', who: 'mia' },
-      { label: 'Tired', sentence: 'Leo is tired.', emoji: '\u{1F62A}', left: '63%', top: '58%', color: '#C97A2F' },
-      { label: 'Angry', sentence: 'Bella is angry.', emoji: '\u{1F620}', left: '86%', top: '55%', color: '#E76FA5' },
+      { label: 'Happy', sentence: 'Pip is happy.', emoji: '\u{1F60A}', left: '14%', top: '58%', color: '#FE6A2F', who: 'pip' },
+      { label: 'Tired', sentence: 'Leo is tired.', emoji: '\u{1F62A}', left: '33%', top: '60%', color: '#C97A2F', who: 'leo' },
+      { label: 'Sad', sentence: 'Mia is sad.', emoji: '\u{1F622}', left: '52%', top: '64%', color: '#B85CD1', who: 'mia' },
+      { label: 'Angry', sentence: 'Bella is angry.', emoji: '\u{1F620}', left: '71%', top: '62%', color: '#E76FA5', who: 'bella' },
+      { label: 'Hungry', sentence: 'Willow is hungry.', emoji: '\u{1F924}', left: '90%', top: '64%', color: '#4FA9E0', who: 'willow' },
     ],
   },
 
@@ -436,10 +437,11 @@ export const LESSON_2_SCENES: Scene[] = [
     // drag-match scenes.
     id: 'wt2-drag-feelings', kind: 'drag-match', bg: bgFeelings, teacher: 'Listen, then drag each word onto the friend who feels that way!',
     items: [
-      { label: 'Happy', color: '#FE6A2F', who: 'pip', targetLeft: '17%', targetTop: '55%' },
-      { label: 'Sad', color: '#B85CD1', who: 'mia', targetLeft: '40%', targetTop: '62%' },
-      { label: 'Tired', color: '#C97A2F', targetLeft: '63%', targetTop: '58%' },
-      { label: 'Angry', color: '#E76FA5', targetLeft: '86%', targetTop: '55%' },
+      { label: 'Happy', color: '#FE6A2F', who: 'pip', targetLeft: '14%', targetTop: '58%' },
+      { label: 'Tired', color: '#C97A2F', who: 'leo', targetLeft: '33%', targetTop: '60%' },
+      { label: 'Sad', color: '#B85CD1', who: 'mia', targetLeft: '52%', targetTop: '64%' },
+      { label: 'Angry', color: '#E76FA5', who: 'bella', targetLeft: '71%', targetTop: '62%' },
+      { label: 'Hungry', color: '#4FA9E0', who: 'willow', targetLeft: '90%', targetTop: '64%' },
     ],
   },
 
@@ -469,6 +471,54 @@ export const LESSON_2_SCENES: Scene[] = [
       { label: 'Happy', emoji: '\u{1F60A}', correct: true },
       { label: 'Sad', emoji: '\u{1F622}' },
       { label: 'Tired', emoji: '\u{1F62A}' },
+      { label: 'Hungry', emoji: '\u{1F924}' },
+    ],
+  },
+
+  /* --- New words: He, She, They — built directly on the five feelings
+   * just taught, never re-teaching the feeling words themselves, only the
+   * new grammar operating on them. Reuses roleplay (model) + choice
+   * (practice) + join-stage (produce), the same three-step pattern already
+   * used for "How are you?" earlier in this lesson, rather than inventing
+   * a dedicated pronoun mechanic. */
+  {
+    id: 'wt2-pronoun-model', kind: 'roleplay', bg: bgFeelings, teacher: 'New words! Listen to Miss Marigold, then repeat.', cast: ['marigold'],
+    script: [
+      { who: 'marigold', line: 'Look at Pip! He is happy.', repeat: true },
+      { who: 'marigold', line: 'Look at Mia! She is sad.', repeat: true },
+      { who: 'marigold', line: 'Look at Leo and Willow! They are tired and hungry.', repeat: true },
+    ],
+  },
+  {
+    id: 'wt2-pronoun-choice-1', kind: 'choice', bg: bgFeelings, who: 'marigold', teacher: 'Listen carefully, then tap the right word!',
+    prompt: 'Pip is a boy. Which word means Pip?',
+    options: [
+      { label: 'He', emoji: '\u{1F466}', correct: true },
+      { label: 'She', emoji: '\u{1F467}' },
+    ],
+  },
+  {
+    id: 'wt2-pronoun-choice-2', kind: 'choice', bg: bgFeelings, who: 'marigold', teacher: 'Listen carefully, then tap the right word!',
+    prompt: 'Mia is a girl. Which word means Mia?',
+    options: [
+      { label: 'She', emoji: '\u{1F467}', correct: true },
+      { label: 'He', emoji: '\u{1F466}' },
+    ],
+  },
+  {
+    id: 'wt2-pronoun-choice-3', kind: 'choice', bg: bgFeelings, who: 'marigold', teacher: 'Listen carefully, then tap the right word!',
+    prompt: 'Leo and Willow are two friends. Which word means both of them?',
+    options: [
+      { label: 'They', emoji: '\u{1F46B}', correct: true },
+      { label: 'He', emoji: '\u{1F466}' },
+    ],
+  },
+  {
+    id: 'wt2-pronoun-join', kind: 'join-stage', bg: bgFeelings, teacher: 'Your turn! Point to a friend and say He or She!', cast: ['pip', 'mia', 'marigold'],
+    turns: [
+      { who: 'marigold', line: 'Point to a friend. Is your friend a boy or a girl?' },
+      { who: 'student', line: 'He is ______. / She is ______.' },
+      { who: 'pip', line: 'Great practice!' },
     ],
   },
 

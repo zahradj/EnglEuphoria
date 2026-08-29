@@ -622,7 +622,14 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
         const targetX = rect.left + (parseFloat(item.targetLeft) / 100) * rect.width;
         const targetY = rect.top + (parseFloat(item.targetTop) / 100) * rect.height;
         const dist = Math.hypot(e.clientX - targetX, e.clientY - targetY);
-        const tolerance = Math.min(rect.width, rect.height) * 0.14;
+        // Vocab-matching drops (no showBlanks landing-zone box drawn) land
+        // anywhere on a full character illustration, not a pinpoint — 0.14
+        // was tight enough that dropping on a visibly-correct character
+        // (e.g. Mia) still missed and registered as wrong. Widened so the
+        // whole character's rendered footprint is a comfortable hit area;
+        // sentence-builder (showBlanks) drops stay tighter since those have
+        // a small drawn blank to aim at, not a full illustration.
+        const tolerance = Math.min(rect.width, rect.height) * (scene.showBlanks ? 0.14 : 0.22);
         if (dist <= tolerance) {
           sfx.match();
           setPlaced((prev) => {
