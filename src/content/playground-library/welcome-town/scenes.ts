@@ -102,6 +102,13 @@ export type Scene =
   // action gets tapped onto. Distinct from `choice` (unordered options) because
   // the four answers have a real ordered relationship the visual should show.
   | { id: string; kind: 'frequency-ladder'; bg: string; who: CharKey; teacher: string; rounds: { action: string; emoji: string; answer: 'never' | 'sometimes' | 'usually' | 'always'; line: string }[] }
+  // Drag-to-bin sort with THREE bins (He / She / They) — one or two
+  // characters (a `who` pair for the group rounds) drop onto the pronoun
+  // that describes them. Reuses the interaction pattern already proven in
+  // unit1's he-she-sort (drag a character onto a labeled box), extended
+  // with a third bin and pair support so "they" gets real practice instead
+  // of only he/she.
+  | { id: string; kind: 'pronoun-sort'; bg: string; teacher: string; rounds: { who: CharKey | [CharKey, CharKey]; img: string | [string, string]; emotion: string; answer: 'He' | 'She' | 'They' }[] }
   | { id: string; kind: 'roleplay'; bg: string; teacher: string; cast: CharKey[]; script: { who: CharKey; line: string; repeat?: boolean }[] }
   | { id: string; kind: 'join-stage'; bg: string; teacher: string; cast: CharKey[]; turns: { who: CharKey | 'student'; line: string }[] }
   | { id: string; kind: 'hello-doors'; bg: string; teacher: string; cast: CharKey[]; rounds: { target: CharKey; prompt: string; helloLine: string; echoLine: string }[] }
@@ -477,10 +484,8 @@ export const LESSON_2_SCENES: Scene[] = [
 
   /* --- New words: He, She, They — built directly on the five feelings
    * just taught, never re-teaching the feeling words themselves, only the
-   * new grammar operating on them. Reuses roleplay (model) + choice
-   * (practice) + join-stage (produce), the same three-step pattern already
-   * used for "How are you?" earlier in this lesson, rather than inventing
-   * a dedicated pronoun mechanic. */
+   * new grammar operating on them. Model (roleplay) -> practice (a real
+   * drag-to-bin sort game, not another choice scene) -> produce (join-stage). */
   {
     id: 'wt2-pronoun-model', kind: 'roleplay', bg: bgFeelings, teacher: 'New words! Listen to Miss Marigold, then repeat.', cast: ['marigold'],
     script: [
@@ -490,27 +495,20 @@ export const LESSON_2_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'wt2-pronoun-choice-1', kind: 'choice', bg: bgFeelings, who: 'marigold', teacher: 'Listen carefully, then tap the right word!',
-    prompt: 'Pip is a boy. Which word means Pip?',
-    options: [
-      { label: 'He', emoji: '\u{1F466}', correct: true },
-      { label: 'She', emoji: '\u{1F467}' },
-    ],
-  },
-  {
-    id: 'wt2-pronoun-choice-2', kind: 'choice', bg: bgFeelings, who: 'marigold', teacher: 'Listen carefully, then tap the right word!',
-    prompt: 'Mia is a girl. Which word means Mia?',
-    options: [
-      { label: 'She', emoji: '\u{1F467}', correct: true },
-      { label: 'He', emoji: '\u{1F466}' },
-    ],
-  },
-  {
-    id: 'wt2-pronoun-choice-3', kind: 'choice', bg: bgFeelings, who: 'marigold', teacher: 'Listen carefully, then tap the right word!',
-    prompt: 'Leo and Willow are two friends. Which word means both of them?',
-    options: [
-      { label: 'They', emoji: '\u{1F46B}', correct: true },
-      { label: 'He', emoji: '\u{1F466}' },
+    // Individual rounds use the established boy/girl split (matching
+    // unit1's own he/she gender table): Pip and Leo -> He; Mia, Bella and
+    // Willow -> She. The two pair rounds are the only "They" practice —
+    // built from character pairs already modeled together above and in
+    // the vocab section, not a new grouping.
+    id: 'wt2-pronoun-sort', kind: 'pronoun-sort', bg: bgFeelings, teacher: 'Drag each friend to He, She, or They!',
+    rounds: [
+      { who: 'pip', img: `${W}/sprites/pip-happy.png`, emotion: 'happy', answer: 'He' },
+      { who: 'mia', img: `${W}/sprites/mia-sad.png`, emotion: 'sad', answer: 'She' },
+      { who: 'leo', img: `${W}/sprites/leo-tired.png`, emotion: 'tired', answer: 'He' },
+      { who: 'bella', img: `${W}/sprites/bella-angry.png`, emotion: 'angry', answer: 'She' },
+      { who: 'willow', img: `${W}/sprites/willow-hungry.png`, emotion: 'hungry', answer: 'She' },
+      { who: ['leo', 'willow'], img: [`${W}/sprites/leo-tired.png`, `${W}/sprites/willow-hungry.png`], emotion: 'tired and hungry', answer: 'They' },
+      { who: ['pip', 'mia'], img: [`${W}/sprites/pip-happy.png`, `${W}/sprites/mia-sad.png`], emotion: 'happy and sad', answer: 'They' },
     ],
   },
   {

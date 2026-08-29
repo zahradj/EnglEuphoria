@@ -368,6 +368,17 @@ const WT_EXTRACTORS = {
   // open-ended user input) and always spoken by a fixed 'teacher' voice, so
   // it's just as enumerable/safe as any other bounded template here.
   'frequency-ladder': (s) => (s.rounds ?? []).flatMap((r) => [['teacher', `How often do you ${r.action}?`], [s.who, r.line]]),
+  // Mirrors PronounSortScene's derivation exactly: speaker is the pair's
+  // first character for a "they" round; "I am {emotion}." vs "We are
+  // {emotion}." and the is/are agreement on the confirmation line both
+  // depend on whether `who` is a single character or a pair.
+  'pronoun-sort': (s) => (s.rounds ?? []).flatMap((r) => {
+    const isPair = Array.isArray(r.who);
+    const speaker = isPair ? r.who[0] : r.who;
+    const sayLine = isPair ? `We are ${r.emotion}.` : `I am ${r.emotion}.`;
+    const verb = r.answer === 'They' ? 'are' : 'is';
+    return [[speaker, sayLine], [speaker, `Yes! ${r.answer} ${verb} ${r.emotion}!`]];
+  }),
   // Only the CORRECT option's label ever reaches the "Yes! {label}!" line
   // (pick() returns early on a wrong tap before that call) — see ChoiceScene.
   choice: (s) => {
