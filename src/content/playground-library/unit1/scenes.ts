@@ -284,6 +284,17 @@ const bgL1RoleplayFriends = `${A}/scenes/bg-l1-roleplay-friends.jpg`;
 const bgL1PipSolo = `${A}/scenes/bg-l1-pip-solo.jpg`;
 const bgL1MiaSolo = `${A}/scenes/bg-l1-mia-solo.jpg`;
 const bgL1BellaSolo = `${A}/scenes/bg-l1-bella-solo.jpg`;
+// Same "solo shot" convention as the three above (character on the left
+// third, right side open) — Leo never got one, so his join-stage turns
+// anywhere in the unit fell back to whatever the scene's default bg was
+// (bgGatherEmpty in Lesson 6's case), showing nobody for his lines.
+const bgLeoSolo = `${A}/scenes/bg-leo-solo.jpg`;
+// Lesson 6's roleplay (cast: pip/mia/leo) had the exact same bug
+// roleplay-l1 already had and was fixed for: RoleplayScene never renders
+// character sprites, it relies entirely on the bg art, so bgGatherEmpty
+// (a literally empty meadow) showed nobody "talking" for any line. Same
+// fix pattern as bgL1RoleplayFriends, with Leo in place of Bella.
+const bgL6RoleplayFriends = `${A}/scenes/bg-l6-roleplay-friends.jpg`;
 const bgHideSeek = `${A}/scenes/bg-hideseek.jpg`;
 const bgMeadow = `${A}/scenes/bg-meadow.jpg`;
 const bgBigTree = `${A}/scenes/bg-bigtree.jpg`;
@@ -1638,7 +1649,7 @@ export const LESSON_6_SCENES: Scene[] = [
     // already asks a friend both questions in one pass, so both scenes
     // were re-testing exactly what it covers, just split across two extra
     // screens first.
-    id: 'l6-roleplay', kind: 'roleplay', bg: bgGatherEmpty, teacher: 'The whole gang together! Listen, then repeat each line.', cast: ['pip', 'mia', 'leo'],
+    id: 'l6-roleplay', kind: 'roleplay', bg: bgL6RoleplayFriends, teacher: 'The whole gang together! Listen, then repeat each line.', cast: ['pip', 'mia', 'leo'],
     script: [
       { who: 'pip', line: 'We did it! Trophy day!' },
       { who: 'mia', line: 'I am so happy!', repeat: true },
@@ -1646,13 +1657,18 @@ export const LESSON_6_SCENES: Scene[] = [
     ],
   },
   {
+    // bg stays bgGatherEmpty as the scene-level default (correct for the
+    // student's own turns — an empty backdrop for the webcam circle, same
+    // convention join-stage-l1 uses) — each friend's turn overrides it with
+    // their own solo shot instead, since JoinStageScene never renders a
+    // friend sprite of its own.
     id: 'l6-join-stage', kind: 'join-stage', bg: bgGatherEmpty, teacher: 'Your final turn! Show everything you know!', cast: ['pip', 'mia', 'bella', 'willow', 'leo'],
     turns: [
-      { who: 'pip', line: 'Hello!' },
+      { who: 'pip', line: 'Hello!', bg: bgL1PipSolo },
       { who: 'student', line: 'Hello! My name is ___.' },
-      { who: 'leo', line: 'How are you?' },
+      { who: 'leo', line: 'How are you?', bg: bgLeoSolo },
       { who: 'student', line: 'I am happy!' },
-      { who: 'mia', line: 'You did it! Trophy time!' },
+      { who: 'mia', line: 'You did it! Trophy time!', bg: bgL1MiaSolo },
     ],
   },
   {
