@@ -745,11 +745,17 @@ export const LESSON_2_SCENES: Scene[] = [
  * ========================================================================= */
 
 const itemStar = `${A}/items/prop-star.png`;
-const itemSun = `${A}/items/item-sun.svg`;
-const itemSnake = `${A}/items/item-snake.svg`;
-const itemApple = `${A}/items/item-apple.svg`;
-const itemAnt = `${A}/items/item-ant.svg`;
-const itemAlligator = `${A}/items/item-alligator.svg`;
+// Replaced from crude hand-coded placeholder SVGs (flat triangle-ring sun,
+// blob apple, blob alligator — jarringly plain next to every other item's
+// detailed illustration) with real generated art matching the rest of the
+// unit's style. These 5 constants are reused across Lessons 3-6 AND every
+// Unit 2 color lesson (apple=red, sun=yellow are the canonical color
+// examples there), so fixing the constant fixes every occurrence at once.
+const itemSun = `${A}/items/item-sun.png`;
+const itemSnake = `${A}/items/item-snake.png`;
+const itemApple = `${A}/items/item-apple.png`;
+const itemAnt = `${A}/items/item-ant.png`;
+const itemAlligator = `${A}/items/item-alligator.png`;
 const itemCat = `${A}/items/item-cat.png`;
 const itemSad = `${A}/items/item-sad.png`;
 
@@ -1648,6 +1654,23 @@ export const LESSON_6_SCENES: Scene[] = [
       { who: 'student', line: 'I am happy!' },
       { who: 'mia', line: 'You did it! Trophy time!' },
     ],
+  },
+  {
+    // NEW — this capstone's own stated objective promises reviewing
+    // "greet a friend and share their name/age," but nothing anywhere in
+    // it ever touched Lesson 4's age/counting content (only its B/T
+    // phonics got reviewed, via l6-sort-bt above) until now. Reuses
+    // Lesson 4's own age-quiz mechanic and the exact same friends/ages it
+    // established (Bella 5, Mia 6, Leo 7, Willow 3), the same
+    // reuse-before-inventing approach as l6-he-she-model/sort below.
+    id: 'l6-age-quiz', kind: 'age-quiz', bg: bgL4Party, teacher: 'Trophy round! How old is everyone? Tap the wobbly present, then guess the candles. At the end — tap YOUR own age!',
+    friends: [
+      { who: 'bella', age: 5 },
+      { who: 'mia', age: 6 },
+      { who: 'leo', age: 7 },
+      { who: 'willow', age: 3 },
+    ],
+    studentAges: [3, 4, 5, 6, 7],
   },
   {
     // NEW — everything above only ever reviews the first-person "I am ___"
