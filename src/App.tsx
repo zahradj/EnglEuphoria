@@ -161,6 +161,7 @@ const PlayA2Unit1Lesson2 = lazy(() => import("./pages/playground-scene/PlayA2Uni
 const PlayA2Unit1Lesson3 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson3"));
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundLibraryPublic = lazy(() => import("./pages/playground-library/PlaygroundLibraryPublic"));
+const AcademyLibraryPublic = lazy(() => import("./pages/playground-library/AcademyLibraryPublic"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
 const AcademyClassroom = lazy(() => import("./pages/AcademyClassroom"));
 const AcademyCreator = lazy(() => import("./pages/AcademyCreator"));
@@ -361,6 +362,11 @@ const App = () => {
                           link can browse published lessons, no account required. */}
                       <Route path="/library/playground" element={
                         <Suspense fallback={<LoadingFallback />}><PlaygroundLibraryPublic /></Suspense>
+                      } />
+                      {/* Same public, read-only, no-account-needed pattern as
+                          /library/playground, for the Academy hub. */}
+                      <Route path="/library/academy" element={
+                        <Suspense fallback={<LoadingFallback />}><AcademyLibraryPublic /></Suspense>
                       } />
                       <Route path="/play/:lessonId" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />
                       <Route path="/play" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />
