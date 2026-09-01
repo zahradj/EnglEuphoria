@@ -161,7 +161,7 @@ const PlayA2Unit1Lesson2 = lazy(() => import("./pages/playground-scene/PlayA2Uni
 const PlayA2Unit1Lesson3 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson3"));
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundLibraryPublic = lazy(() => import("./pages/playground-library/PlaygroundLibraryPublic"));
-const AcademyLibraryPublic = lazy(() => import("./pages/playground-library/AcademyLibraryPublic"));
+const AcademyLibraryPage = lazy(() => import("./pages/playground-library/AcademyLibraryPage"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
 const AcademyClassroom = lazy(() => import("./pages/AcademyClassroom"));
 const AcademyCreator = lazy(() => import("./pages/AcademyCreator"));
@@ -363,10 +363,14 @@ const App = () => {
                       <Route path="/library/playground" element={
                         <Suspense fallback={<LoadingFallback />}><PlaygroundLibraryPublic /></Suspense>
                       } />
-                      {/* Same public, read-only, no-account-needed pattern as
-                          /library/playground, for the Academy hub. */}
-                      <Route path="/library/academy" element={
-                        <Suspense fallback={<LoadingFallback />}><AcademyLibraryPublic /></Suspense>
+                      {/* Academy's own content-creator dashboard library — role-gated
+                          like /playground-library above, NOT a public page: it lists
+                          the signed-in creator's own Academy rows and opens them in
+                          the Academy Creator editor. */}
+                      <Route path="/academy-library" element={
+                        <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
+                          <Suspense fallback={<LoadingFallback />}><AcademyLibraryPage /></Suspense>
+                        </ImprovedProtectedRoute>
                       } />
                       <Route path="/play/:lessonId" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />
                       <Route path="/play" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />
