@@ -99,6 +99,18 @@ export type Slide =
   | { type: 'sentence_builder'; block: Block; prompt: string; words?: string[]; answer?: string[]; items?: { words: string[]; answer: string[] }[] }
   | { type: 'debate_scale'; block: Block; prompt: string }
   | { type: 'role_play'; block: Block; title: string; lineA: string; lineB: string }
+  // Full-bleed illustrated dialogue scene — background art with the cast already
+  // painted into it (never a floating cutout, same convention Playground's
+  // RoleplayScene uses), one line revealed at a time with a speech bubble
+  // anchored above whoever is speaking.
+  | {
+      type: 'scene_dialogue';
+      block: Block;
+      title?: string;
+      bg_image_url: string;
+      cast: { id: string; name: string; anchor_left: string }[];
+      lines: { speaker: string; text: string }[];
+    }
   | { type: 'speaking_task'; block: Block; prompt: string; starters?: string[] }
   | { type: 'reflection'; block: Block; prompt: string }
   | { type: 'cluster'; block: Block; title: string; content?: string; activities: ClusterActivity[] }
@@ -1087,6 +1099,93 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
   );
 }
 
+function SceneDialogueSlide({ slide }: { slide: Extract<Slide, { type: 'scene_dialogue' }> }) {
+  const { playVoice } = useAcademyAudio();
+  const [step, setStep] = useState(0);
+  const [started, setStarted] = useState(false);
+
+  const anchorFor = (speakerId: string) =>
+    slide.cast.find((c) => c.id === speakerId)?.anchor_left ?? '50%';
+  const nameFor = (speakerId: string) =>
+    slide.cast.find((c) => c.id === speakerId)?.name ?? speakerId;
+
+  const current = started && step < slide.lines.length ? slide.lines[step] : null;
+  const finished = started && step >= slide.lines.length;
+
+  const begin = () => {
+    setStarted(true);
+    setStep(0);
+    playVoice(slide.lines[0]?.text ?? '');
+  };
+  const replay = () => current && playVoice(current.text);
+  const advance = () => {
+    const nextStep = step + 1;
+    setStep(nextStep);
+    if (nextStep < slide.lines.length) playVoice(slide.lines[nextStep].text);
+  };
+
+  return (
+    <div className="relative w-full aspect-video max-w-4xl overflow-hidden rounded-2xl shadow-2xl">
+      <img src={slide.bg_image_url} alt={slide.title || 'Dialogue scene'} className="absolute inset-0 h-full w-full object-cover" />
+      <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,10,40,0.35) 0%, rgba(15,10,40,0) 30%, rgba(15,10,40,0) 55%, rgba(76,29,149,0.4) 100%)' }} />
+
+      {slide.title && (
+        <span className="absolute left-5 top-5 w-fit rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-indigo-700 shadow">
+          {slide.title}
+        </span>
+      )}
+
+      {!started && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 backdrop-blur-[1px]">
+          <button
+            onClick={begin}
+            className="flex items-center gap-2 rounded-full bg-indigo-600 px-7 py-3.5 text-base font-bold text-white shadow-2xl transition hover:bg-indigo-500 active:scale-95"
+          >
+            ▶ Watch the conversation
+          </button>
+        </div>
+      )}
+
+      {current && (
+        <>
+          <button
+            onClick={replay}
+            className="absolute right-5 top-5 z-30 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-xs font-bold uppercase tracking-widest text-indigo-700 shadow-xl ring-1 ring-indigo-200 active:scale-95"
+            aria-label="Hear this line again"
+          >
+            🔁 Replay
+          </button>
+          <div
+            className="absolute top-[26%] z-20 max-w-[340px] -translate-x-1/2 px-4 transition-all duration-300"
+            style={{ left: anchorFor(current.speaker) }}
+          >
+            <div className="rounded-2xl bg-white px-5 py-3 text-center shadow-2xl">
+              <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-indigo-500">{nameFor(current.speaker)}</div>
+              <div className="text-lg font-semibold text-slate-800">{current.text}</div>
+            </div>
+          </div>
+          <div className="absolute inset-x-0 bottom-6 z-30 flex justify-center">
+            <button
+              onClick={advance}
+              className="rounded-full bg-white/95 px-6 py-3 text-sm font-bold uppercase tracking-widest text-indigo-700 shadow-xl ring-1 ring-indigo-200 active:scale-95"
+            >
+              {step === slide.lines.length - 1 ? 'Finish ✓' : 'Next line →'}
+            </button>
+          </div>
+        </>
+      )}
+
+      {finished && (
+        <div className="absolute inset-x-0 bottom-6 z-30 flex justify-center">
+          <span className="rounded-full bg-emerald-500 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-xl">
+            ✓ Scene complete
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SpeakingTaskSlide({ slide, t }: { slide: Extract<Slide, { type: 'speaking_task' }>; t: ThemeTokens }) {
   return (
     <div className="space-y-6 max-w-2xl w-full">
@@ -1493,6 +1592,7 @@ function renderSlideInner({ slide, t }: { slide: Slide; t: ThemeTokens }) {
     case 'sentence_builder': return <SentenceBuilderSlide slide={slide} t={t} />;
     case 'debate_scale': return <DebateScaleSlide slide={slide} t={t} />;
     case 'role_play': return <RolePlaySlide slide={slide} t={t} />;
+    case 'scene_dialogue': return <SceneDialogueSlide slide={slide} />;
     case 'speaking_task': return <SpeakingTaskSlide slide={slide} t={t} />;
     case 'reflection': return <ReflectionSlide slide={slide} t={t} />;
     case 'cluster': return <ClusterSlide slide={slide} t={t} />;
