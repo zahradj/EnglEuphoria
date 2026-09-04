@@ -574,7 +574,15 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
               aria-label={isOpen ? `Hear ${a.word} again` : `Open ${theme.label}`}
             >
               {isOpen ? (
-                <img src={a.img} alt={a.word} className="h-full w-full object-contain animate-[lep1-pop_0.6s_ease-out]" />
+                a.img ? (
+                  <img src={a.img} alt={a.word} className="h-full w-full object-contain animate-[lep1-pop_0.6s_ease-out]" />
+                ) : (
+                  // Anchors are allowed to skip `img` and rely on `emoji` alone
+                  // (per the Scene type) — this was rendering <img src={undefined}>
+                  // for those instead, a broken-image icon indistinguishable from
+                  // a genuinely missing asset.
+                  <span className="animate-[lep1-pop_0.6s_ease-out]" style={{ fontSize: 'clamp(2.5rem, 7vh, 4.5rem)' }}>{a.emoji}</span>
+                )
               ) : theme.img ? (
                 <img src={theme.img} alt={theme.label} className="h-full w-full object-contain" />
               ) : (

@@ -2000,6 +2000,8 @@ export const LESSON_6_SCENES: Scene[] = [
  * ========================================================================= */
 
 const itemRose = `${A}/items/item-rose.png`;
+const itemYarn = `${A}/items/item-yarn.png`;
+const itemYoyo = `${A}/items/item-yoyo.png`;
 const bgU2L1ColorParade = `${A}/scenes/bg-u2l1-color-parade.png`;
 const bgU2L1WaterOnly = `${A}/scenes/bg-u2l1-water-only.png`;
 const bgU2L1SunflowerGroup = `${A}/scenes/bg-u2l1-sunflower-group.png`;
@@ -2083,8 +2085,15 @@ export const LESSON_U2L1_SCENES: Scene[] = [
     id: 'u2l1-model-y', kind: 'sound-model', bg: bgU2L1SoundGarden, who: 'pip', letter: 'Y', phoneme: '/y/', sound: 'yuh', teacher: 'Pip models the /y/ sound! Listen first: /y/ /y/ Yellow. /y/ /y/ Yo-yo.',
     anchors: [
       { word: 'Yellow', emoji: '\u{1F7E1}', img: itemSun },
-      { word: 'Yo-yo', emoji: '\u{1FA80}' },
-      { word: 'Yarn', emoji: '\u{1F9F6}' },
+      // Yo-yo and Yarn had no `img` (emoji-only, which the Scene type
+      // allows) — but SoundModelScene's opened-state always rendered
+      // `<img src={a.img}>` with no fallback to `a.emoji`, so tapping either
+      // showed a broken-image icon (looked exactly like a missing asset).
+      // Fixed the renderer to fall back to the emoji when `img` is absent
+      // (SceneRenderer.tsx); gave these two a real generated icon anyway,
+      // matching every other anchor in this lesson.
+      { word: 'Yo-yo', emoji: '\u{1FA80}', img: itemYoyo },
+      { word: 'Yarn', emoji: '\u{1F9F6}', img: itemYarn },
     ],
   },
   { id: 'u2l1-trace-y', kind: 'trace', bg: bgU2L1SoundGarden, who: 'pip', letter: 'Y', phoneme: '/y/', word: 'Yellow', teacher: 'Trace the young Y. /y/ /y/ Yellow!' },
