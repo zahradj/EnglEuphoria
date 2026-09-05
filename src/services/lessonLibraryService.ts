@@ -34,6 +34,9 @@ export interface LibraryLessonCard {
   cefr_level: string;
   unit_number: number | null;
   lesson_number: number | null;
+  /** Unit display name (e.g. "The Rainbow Meadow"), when the source row's
+   *  ai_metadata carries one — used to label unit groupings in the library. */
+  unit_title: string | null;
   duration_minutes: number | null;
   thumbnail_url: string | null;
   slide_count: number;
@@ -100,6 +103,7 @@ export function toLibraryLessonCard(lesson: LibraryLesson): LibraryLessonCard {
     cefr_level: lesson.slot_cefr_level || lesson.difficulty_level || 'Unleveled',
     unit_number: lesson.slot_unit_number ?? null,
     lesson_number: lesson.slot_lesson_number ?? null,
+    unit_title: (lesson.ai_metadata as any)?.unit_title ?? null,
     duration_minutes: lesson.duration_minutes,
     thumbnail_url: lesson.thumbnail_url,
     slide_count: slideCount,
