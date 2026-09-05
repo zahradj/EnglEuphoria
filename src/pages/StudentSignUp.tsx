@@ -1,4 +1,4 @@
-import { detectMarketRegion } from '@/lib/marketRegion';
+import { detectMarketRegion, toDbMarketRegion } from '@/lib/marketRegion';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -124,14 +124,15 @@ const StudentSignUp = () => {
         .maybeSingle();
 
       if (!existing) {
-        await supabase.from('users').insert({
+        const { error: usersInsertErr } = await supabase.from('users').insert({
           id: userId,
           email: data.email,
           full_name: data.fullName,
           role: 'student',
           current_system: systemTag,
-          market_region: detectMarketRegion(),
+          market_region: toDbMarketRegion(detectMarketRegion()),
         } as any);
+        if (usersInsertErr) console.error('StudentSignUp users insert failed:', usersInsertErr);
         await supabase.from('user_roles').insert({ user_id: userId, role: 'student' });
       } else {
         await supabase.from('users').update({ current_system: systemTag }).eq('id', userId);

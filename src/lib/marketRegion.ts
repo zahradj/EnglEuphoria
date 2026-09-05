@@ -222,6 +222,27 @@ export function detectMarketRegion(hostname?: string): MarketRegion {
   return resolveRegion({ hostname, pathname: '' });
 }
 
+/**
+ * The `users.market_region` column (and every other table with a
+ * market_region column) is a Postgres enum that only has two values —
+ * 'DZ' | 'INTL' — never migrated to match this file's newer 6-region
+ * MarketRegion type (TR/ES/AR/FR added later for the adaptive
+ * globalization layer, UI-only so far). Writing detectMarketRegion()'s
+ * raw result straight into that column fails with a silent Postgres
+ * "invalid input value for enum" error for any user resolved to TR/ES/
+ * AR/FR — the INSERT/UPSERT throws, but every call site either only
+ * console.errors it or doesn't check the error at all, so the account's
+ * `users` row (and therefore its role, and anything keyed off it, like
+ * being assignable a lesson) silently never gets created. Confirmed live
+ * against production for a real account stuck in exactly this state.
+ * Use this wherever a region value is written to a market_region DB
+ * column; keep using MarketRegion/detectMarketRegion() directly for UI,
+ * routing, and localization, which are unaffected.
+ */
+export function toDbMarketRegion(region: MarketRegion): 'DZ' | 'INTL' {
+  return region === 'DZ' ? 'DZ' : 'INTL';
+}
+
 export function persistRegionChoice(region: MarketRegion) {
   if (typeof window === 'undefined') return;
   try {

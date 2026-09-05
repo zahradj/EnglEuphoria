@@ -1,4 +1,4 @@
-import { detectMarketRegion } from '@/lib/marketRegion';
+import { detectMarketRegion, toDbMarketRegion } from '@/lib/marketRegion';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -95,13 +95,14 @@ const AuthCallback = () => {
           const fullName = session.user.user_metadata?.full_name 
             || session.user.email?.split('@')[0] 
             || 'Student';
-          await supabase.from('users').upsert({
+          const { error: usersUpsertErr } = await supabase.from('users').upsert({
             id: userId,
             email: session.user.email,
             full_name: fullName,
             role: session.user.user_metadata?.role || 'student',
-            market_region: detectMarketRegion(),
+            market_region: toDbMarketRegion(detectMarketRegion()),
           } as any, { onConflict: 'id' });
+          if (usersUpsertErr) console.error('[AuthCallback] users upsert failed:', usersUpsertErr);
         }
 
         // Step 4: Direct hub-based redirect — bypass /dashboard smart router

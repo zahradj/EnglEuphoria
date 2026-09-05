@@ -1,4 +1,4 @@
-import { detectMarketRegion } from '@/lib/marketRegion';
+import { detectMarketRegion, toDbMarketRegion } from '@/lib/marketRegion';
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -234,14 +234,15 @@ export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChan
               .maybeSingle();
             
             if (!existingProfile) {
-              await supabase.from('users').insert({
+              const { error: usersInsertErr } = await supabase.from('users').insert({
                 id: data.user.id,
                 email: formData.email,
                 full_name: formData.fullName,
                 role: formData.role,
                 current_system: systemTag,
-                market_region: detectMarketRegion(),
+                market_region: toDbMarketRegion(detectMarketRegion()),
               } as any);
+              if (usersInsertErr) console.error('Signup users insert failed:', usersInsertErr);
               await supabase.from('user_roles').insert({
                 user_id: data.user.id,
                 role: formData.role

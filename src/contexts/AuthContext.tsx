@@ -4,7 +4,7 @@ import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { sanitizeText, rateLimiter } from '@/utils/security';
 import { toast } from 'sonner';
-import { detectMarketRegion } from '@/lib/marketRegion';
+import { detectMarketRegion, toDbMarketRegion } from '@/lib/marketRegion';
 
 interface AuthContextType {
   user: User | null;
@@ -194,7 +194,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           email: authUser.email,
           full_name: fullName,
           role: role,
-          market_region: detectMarketRegion(),
+          market_region: toDbMarketRegion(detectMarketRegion()),
         } as any, { onConflict: 'id' });
         if (upsertErr) console.error('Auto-heal users upsert failed:', upsertErr);
 
