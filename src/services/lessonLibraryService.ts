@@ -37,6 +37,10 @@ export interface LibraryLessonCard {
   /** Unit display name (e.g. "The Rainbow Meadow"), when the source row's
    *  ai_metadata carries one — used to label unit groupings in the library. */
   unit_title: string | null;
+  /** Raw ai_metadata.contentFormat (e.g. "lep1-rich") — needed to route into
+   *  the correct player via resolvePlaygroundLessonRoute; null for
+   *  Academy/Success rows, which always use the generic /lesson/:id reader. */
+  content_format: string | null;
   duration_minutes: number | null;
   thumbnail_url: string | null;
   slide_count: number;
@@ -75,6 +79,38 @@ export function targetSystemToHub(targetSystem?: string | null): LibraryHub {
   return 'professional';
 }
 
+/**
+ * Resolve the real player route for a Playground (hand-authored Scene[])
+ * lesson, given its ai_metadata. Returns null for anything that isn't one
+ * of the recognized Playground content formats — callers should fall back
+ * to the generic `/lesson/:id` reader (Academy/Success's AI-slide format)
+ * in that case, NOT navigate there for a Playground row: `/lesson/:id`
+ * has no idea what a lep1-rich/wt-rich row's `content` field means and,
+ * for `target_system: 'kids'` rows with no `content.playground_unit`,
+ * silently kicks off a fresh AI generation of an unrelated lesson instead
+ * of opening the real one. Mirrors PlaygroundLibraryPage's own
+ * handleLessonClick — kept in one place so every entry point (teacher
+ * library, student assignment "Start", etc.) resolves the same way.
+ */
+export function resolvePlaygroundLessonRoute(lessonId: string, aiMetadata: any): string | null {
+  const fmt = aiMetadata?.contentFormat;
+  const unitNum = aiMetadata?.unit_number ?? 1;
+  const lessonNum = aiMetadata?.lesson_number ?? 1;
+  if (fmt === 'lep1-rich') {
+    return unitNum === 1 ? `/playground-scene/lesson-${lessonNum}` : `/playground-scene/unit-${unitNum}-lesson-${lessonNum}`;
+  }
+  if (fmt === 'wt-rich') {
+    return `/playground-scene/welcome-town-lesson-${lessonNum}`;
+  }
+  if (fmt === 'wt-a2-rich') {
+    return `/playground-scene/a2-unit-${unitNum}-lesson-${lessonNum}`;
+  }
+  if (fmt === 'scene-player') {
+    return `/playground-scene/play/${lessonId}`;
+  }
+  return null;
+}
+
 function getSlidesArray(content: any): any[] {
   if (Array.isArray(content)) return content;
   if (Array.isArray(content?.slides)) return content.slides;
@@ -104,6 +140,7 @@ export function toLibraryLessonCard(lesson: LibraryLesson): LibraryLessonCard {
     unit_number: lesson.slot_unit_number ?? null,
     lesson_number: lesson.slot_lesson_number ?? null,
     unit_title: (lesson.ai_metadata as any)?.unit_title ?? null,
+    content_format: contentFormat ?? null,
     duration_minutes: lesson.duration_minutes,
     thumbnail_url: lesson.thumbnail_url,
     slide_count: slideCount,

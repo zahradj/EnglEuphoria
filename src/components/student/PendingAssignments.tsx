@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { BookOpen, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { resolvePlaygroundLessonRoute, targetSystemToHub } from '@/services/lessonLibraryService';
 
 export const PendingAssignments: React.FC = () => {
   const { user } = useAuth();
@@ -17,7 +18,7 @@ export const PendingAssignments: React.FC = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('student_assignments')
-        .select('id, lesson_id, assigned_at, curriculum_lessons(id, title, description, target_system, difficulty_level)')
+        .select('id, lesson_id, assigned_at, curriculum_lessons(id, title, description, target_system, difficulty_level, ai_metadata)')
         .eq('student_id', user!.id)
         .eq('status', 'pending')
         .order('assigned_at', { ascending: false });
@@ -41,6 +42,16 @@ export const PendingAssignments: React.FC = () => {
       <CardContent className="space-y-3">
         {assignments.map((a: any) => {
           const lesson = a.curriculum_lessons;
+          const handleStart = () => {
+            // Fire-and-forget: don't block navigation on this write, and don't
+            // let a failed status update stop the student from opening the lesson.
+            supabase.from('student_assignments').update({ status: 'in_progress' }).eq('id', a.id).then(() => {});
+            const hub = targetSystemToHub(lesson?.target_system);
+            const playgroundRoute = hub === 'playground'
+              ? resolvePlaygroundLessonRoute(a.lesson_id, lesson?.ai_metadata)
+              : null;
+            navigate(playgroundRoute ?? `/lesson/${a.lesson_id}`);
+          };
           return (
             <div
               key={a.id}
@@ -62,7 +73,7 @@ export const PendingAssignments: React.FC = () => {
               <Button
                 size="sm"
                 className="gap-1.5"
-                onClick={() => navigate(`/lesson/${a.lesson_id}`)}
+                onClick={handleStart}
               >
                 Start
                 <ArrowRight className="w-3.5 h-3.5" />

@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Eye, Rocket, Search, BookOpen, Loader2, ChevronDown } from 'lucide-react';
 import { AssignLessonModal } from './AssignLessonModal';
 import { useNavigate } from 'react-router-dom';
-import { getLibraryLessons, toLibraryLessonCard, type LibraryLessonCard, type LibraryHub } from '@/services/lessonLibraryService';
+import { getLibraryLessons, toLibraryLessonCard, resolvePlaygroundLessonRoute, type LibraryLessonCard, type LibraryHub } from '@/services/lessonLibraryService';
 
 const HUB_META: Record<LibraryHub, { label: string; emoji: string; color: string; active: string }> = {
   playground: { label: 'Playground', emoji: '🎪', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300', active: 'bg-orange-500 text-white' },
@@ -164,7 +164,12 @@ export const TeacherLessonLibrary: React.FC = () => {
     );
   }
 
-  const handleView = (lesson: LibraryLessonCard) => navigate(`/lesson/${lesson.id}`);
+  const handleView = (lesson: LibraryLessonCard) => {
+    const playgroundRoute = lesson.hub === 'playground'
+      ? resolvePlaygroundLessonRoute(lesson.id, { contentFormat: lesson.content_format, unit_number: lesson.unit_number, lesson_number: lesson.lesson_number })
+      : null;
+    navigate(playgroundRoute ?? `/lesson/${lesson.id}`);
+  };
 
   return (
     <div className="space-y-6">

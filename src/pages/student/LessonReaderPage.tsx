@@ -132,6 +132,14 @@ const LessonReaderPage: React.FC = () => {
         studentId={user?.id}
         homeworkPack={homeworkPack}
         onComplete={(score) => {
+          if (user?.id) {
+            supabase
+              .from('student_assignments')
+              .update({ status: 'completed', completed_at: new Date().toISOString() })
+              .eq('lesson_id', lesson.id)
+              .eq('student_id', user.id)
+              .then(() => {});
+          }
           navigate('/dashboard');
         }}
         onExit={() => navigate('/dashboard')}

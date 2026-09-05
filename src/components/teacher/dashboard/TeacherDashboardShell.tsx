@@ -9,6 +9,7 @@ import { ClassScheduler } from '@/components/teacher/scheduler';
 import { ProfileSetupTab } from '@/components/teacher/ProfileSetupTab';
 import { TeacherGuideTab } from './TeacherGuideTab';
 import { StudentLearningAnalytics } from '@/components/teacher/analytics/StudentLearningAnalytics';
+import { AssignmentStatusPanel } from '@/components/teacher/analytics/AssignmentStatusPanel';
 import { ScrollHeader } from '@/components/navigation/ScrollHeader';
 import { Loader2 } from 'lucide-react';
 import { FloatingHelpButton } from '@/components/support/FloatingHelpButton';
@@ -78,7 +79,12 @@ export const TeacherDashboardShell = ({
         case 'library':
           return <TeacherLessonLibrary />;
         case 'analytics':
-          return <StudentLearningAnalytics teacherId={teacherId} />;
+          return (
+            <div className="space-y-6">
+              <AssignmentStatusPanel teacherId={teacherId} />
+              <StudentLearningAnalytics teacherId={teacherId} />
+            </div>
+          );
         case 'account':
           return <ProfileSetupTab teacherId={teacherId} />;
         case 'help':
