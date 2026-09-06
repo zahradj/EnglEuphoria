@@ -115,11 +115,16 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
       // Always compare in UTC to avoid local timezone offsets hiding valid slots
       const nowUtcIso = new Date().toISOString();
 
-      // 1. Find teachers in this hub
-      const { data: hubTeachers, error: hubError } = await supabase
-        .from('teacher_profiles')
-        .select('user_id, hub_role')
-        .in('hub_role', allowedHubRoles);
+      // 1. Find teachers in this hub. teacher_profiles' own RLS only allows
+      // a row's owner (or an admin) to SELECT it — a direct query here was
+      // silently returning zero rows for every student, no matter how many
+      // real matching teachers existed, which made every hub's slot list
+      // permanently empty. get_approved_teachers() is a SECURITY DEFINER
+      // RPC built for exactly this (same one FindTeacher.tsx's teacher
+      // directory already uses) — it safely bypasses that per-row
+      // restriction while only ever exposing public-facing fields.
+      const { data: approvedTeachers, error: hubError } = await supabase.rpc('get_approved_teachers');
+      const hubTeachers = (approvedTeachers || []).filter((t: any) => allowedHubRoles.includes(t.hub_role));
 
       console.log('[BookMyClassModal] hub:', selectedHub, 'allowedHubRoles:', allowedHubRoles);
       console.log('[BookMyClassModal] hubTeachers:', hubTeachers, 'hub error:', hubError);
