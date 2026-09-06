@@ -31,6 +31,9 @@ jobs:
       
       - name: Run tests with coverage
         run: npm run test:unit -- --coverage
-      
+
       - name: Check repository hygiene
         run: npm run hygiene:check
+
+      - name: Check for queries against nonexistent Supabase tables
+        run: npm run check:schema
