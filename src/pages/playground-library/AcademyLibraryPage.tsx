@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Pencil } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -160,10 +161,20 @@ export default function AcademyLibraryPage() {
     setOpenUnit(units[0]?.unit_number ?? null);
   }, [units]);
 
-  // Every card — built or still an empty scaffold slot — opens straight
-  // into the Academy Creator editor, same fallback the Playground Library
-  // uses for its own not-yet-built slots.
-  const handleLessonClick = (row: LessonRow) => navigate(`/academy-creator?lessonId=${row.id}`);
+  // A built academy-v2 lesson opens into the real player — "opening the
+  // lesson" means playing it, matching how PlaygroundLibraryPage's built
+  // cards behave. An empty slot has nothing to play, so it still opens
+  // straight into Academy Creator to build it. Every card also gets an
+  // explicit Edit button (below) so a creator can still jump into the
+  // editor for a lesson that's already playable.
+  const handleLessonClick = (row: LessonRow) => {
+    if (isReady(row) && row.ai_metadata?.contentFormat === 'academy-v2') {
+      navigate(`/academy-scene/${row.id}`);
+    } else {
+      navigate(`/academy-creator?lessonId=${row.id}`);
+    }
+  };
+  const handleEditClick = (row: LessonRow) => navigate(`/academy-creator?lessonId=${row.id}`);
 
   return (
     <div dir="ltr" className="min-h-screen w-full bg-gradient-to-b from-[#0B0A1F] to-[#151330]">
@@ -261,15 +272,36 @@ export default function AcademyLibraryPage() {
                     <div className="grid grid-cols-1 gap-3 border-t border-violet-500/20 bg-black/20 p-5 sm:grid-cols-2 lg:grid-cols-3">
                       {u.lessons.map((l) => {
                         const ready = isReady(l);
+                        const playable = ready && l.ai_metadata?.contentFormat === 'academy-v2';
                         return (
                           <button
                             key={l.id}
                             onClick={() => handleLessonClick(l)}
-                            className={`flex flex-col items-start gap-1 rounded-2xl border p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
+                            className={`group relative flex flex-col items-start gap-1 rounded-2xl border p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
                               ready ? 'border-violet-500/30 bg-white/5 hover:bg-white/10' : 'border-dashed border-violet-500/20 bg-white/[0.02] hover:bg-white/5'
                             }`}
                           >
-                            <div className="flex w-full items-center justify-between">
+                            {ready && (
+                              <span
+                                role="button"
+                                tabIndex={0}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEditClick(l);
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter' || e.key === ' ') {
+                                    e.stopPropagation();
+                                    handleEditClick(l);
+                                  }
+                                }}
+                                title="Edit in Academy Creator"
+                                className="absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full bg-black/30 text-violet-200 opacity-0 ring-1 ring-white/10 transition hover:bg-black/50 hover:text-white group-hover:opacity-100"
+                              >
+                                <Pencil className="h-3.5 w-3.5" />
+                              </span>
+                            )}
+                            <div className="flex w-full items-center justify-between pr-8">
                               <span className="text-xs font-bold uppercase tracking-wide text-violet-300">Lesson {l.ai_metadata?.lesson_number ?? '?'}</span>
                               {ready ? (
                                 <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${l.is_published ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}`}>
@@ -285,6 +317,7 @@ export default function AcademyLibraryPage() {
                             ) : (
                               <p className="text-xs text-violet-400/60">Open in Academy Creator to build this one.</p>
                             )}
+                            {playable && <p className="text-[11px] font-semibold text-emerald-300/80">▶ Tap to play</p>}
                           </button>
                         );
                       })}
