@@ -29,6 +29,20 @@ interface LessonRow {
 // same roadmap-preview treatment Playground Library uses.
 const LEVELS = ['Pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1'];
 
+// ai_metadata.cefr_level casing isn't consistent across every write path
+// (e.g. a bulk-seed script wrote 'PRE-A1' for at least one real row, while
+// the Creator's own save path writes 'Pre-A1') — every level comparison
+// below was exact-string, so a row like that silently matched no tab at all
+// and just vanished from the library. Normalize once, right after fetch, to
+// the canonical LEVELS casing so every downstream `=== lvl` check keeps
+// working unchanged; an unrecognized level falls back to the raw value
+// rather than being dropped.
+const normalizeCefrLevel = (raw?: string | null): string | undefined => {
+  if (!raw) return undefined;
+  const trimmed = raw.trim();
+  return LEVELS.find((l) => l.toLowerCase() === trimmed.toLowerCase()) ?? trimmed;
+};
+
 interface UnitGroup {
   unit_number: number;
   unit_title: string;
@@ -91,7 +105,12 @@ export default function AcademyLibraryPage() {
         setRows([]);
       } else {
         const all = (data ?? []) as unknown as LessonRow[];
-        setRows(all.filter(isVisibleInLibrary));
+        const normalized = all.map((r) =>
+          r.ai_metadata?.cefr_level
+            ? { ...r, ai_metadata: { ...r.ai_metadata, cefr_level: normalizeCefrLevel(r.ai_metadata.cefr_level) } }
+            : r,
+        );
+        setRows(normalized.filter(isVisibleInLibrary));
       }
       setLoading(false);
     })();
