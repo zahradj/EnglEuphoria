@@ -138,6 +138,7 @@ type ScrollListener = (payload: { scrollPercentage: number; senderId: string }) 
 type StageModeListener = (payload: { mode: StageMode; senderId: string }) => void;
 type DrawingEnabledListener = (payload: { enabled: boolean; senderId: string }) => void;
 type IframeLockListener = (payload: { isUnlocked: boolean; senderId: string }) => void;
+type SceneActivityLockListener = (payload: { isUnlocked: boolean; senderId: string }) => void;
 type RewardListener = (payload: RewardPayload) => void;
 type ToolActionListener = (payload: ToolActionPayload) => void;
 type ChatListener = (payload: ChatBroadcastPayload) => void;
@@ -238,6 +239,7 @@ interface RoomChannel {
   stageModeListeners: Set<StageModeListener>;
   drawingEnabledListeners: Set<DrawingEnabledListener>;
   iframeLockListeners: Set<IframeLockListener>;
+  sceneActivityLockListeners: Set<SceneActivityLockListener>;
   rewardListeners: Set<RewardListener>;
   toolActionListeners: Set<ToolActionListener>;
   chatListeners: Set<ChatListener>;
@@ -272,6 +274,7 @@ class WhiteboardService {
     const stageModeListeners = new Set<StageModeListener>();
     const drawingEnabledListeners = new Set<DrawingEnabledListener>();
     const iframeLockListeners = new Set<IframeLockListener>();
+    const sceneActivityLockListeners = new Set<SceneActivityLockListener>();
     const rewardListeners = new Set<RewardListener>();
     const toolActionListeners = new Set<ToolActionListener>();
     const chatListeners = new Set<ChatListener>();
@@ -319,6 +322,9 @@ class WhiteboardService {
       })
       .on('broadcast', { event: 'iframe_lock_state' }, (payload) => {
         iframeLockListeners.forEach((cb) => cb(payload.payload as any));
+      })
+      .on('broadcast', { event: 'scene_activity_lock_state' }, (payload) => {
+        sceneActivityLockListeners.forEach((cb) => cb(payload.payload as any));
       })
       .on('broadcast', { event: 'reward' }, (payload) => {
         rewardListeners.forEach((cb) => cb(payload.payload as RewardPayload));
@@ -387,6 +393,7 @@ class WhiteboardService {
       stageModeListeners,
       drawingEnabledListeners,
       iframeLockListeners,
+      sceneActivityLockListeners,
       rewardListeners,
       toolActionListeners,
       chatListeners,
@@ -507,6 +514,30 @@ class WhiteboardService {
     room.iframeLockListeners.add(onChange);
     room.refCount += 1;
     return () => this.release(roomId, () => room.iframeLockListeners.delete(onChange));
+  }
+
+  /** Broadcast whether the student is allowed to interact with the current in-lesson
+   *  activity/game (as opposed to sendIframeLockState, which gates an embedded web
+   *  page). Was called from both TeacherClassroom.tsx and StudentClassroom.tsx with
+   *  no implementation ever added here — every classroom session crashed the instant
+   *  either side tried to lock/unlock an activity (confirmed via a real production
+   *  incident: sentinel_incidents 6256ba89, "q.subscribeToSceneActivityLockState is
+   *  not a function"). */
+  async sendSceneActivityLockState(roomId: string, isUnlocked: boolean, senderId: string): Promise<void> {
+    const room = this.getRoom(roomId);
+    await room.ready;
+    await room.channel.send({
+      type: 'broadcast',
+      event: 'scene_activity_lock_state',
+      payload: { isUnlocked, senderId },
+    });
+  }
+
+  subscribeToSceneActivityLockState(roomId: string, onChange: SceneActivityLockListener): () => void {
+    const room = this.getRoom(roomId);
+    room.sceneActivityLockListeners.add(onChange);
+    room.refCount += 1;
+    return () => this.release(roomId, () => room.sceneActivityLockListeners.delete(onChange));
   }
 
   /** Broadcast a teacher reward (star or sticker) so the student animates instantly. */
@@ -802,6 +833,7 @@ class WhiteboardService {
       room.stageModeListeners.size === 0 &&
       room.drawingEnabledListeners.size === 0 &&
       room.iframeLockListeners.size === 0 &&
+      room.sceneActivityLockListeners.size === 0 &&
       room.rewardListeners.size === 0 &&
       room.toolActionListeners.size === 0 &&
       room.chatListeners.size === 0 &&
