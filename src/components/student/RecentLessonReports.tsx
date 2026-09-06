@@ -64,12 +64,19 @@ export const RecentLessonReports: React.FC<Props> = ({ hubId = 'academy', limit 
         // 'profiles' doesn't exist as a table in this project, and 'users'
         // has no avatar_url column (only avatar_id) — teacher_profiles is
         // the real photo source and was already the primary one here.
+        // teacher_profiles' own SELECT policy only allows a row's owner to
+        // read it, so a direct cross-user query here always came back
+        // empty for a student (no error — every photo silently blank).
+        // get_approved_teachers() is the SECURITY DEFINER RPC built for
+        // exactly this cross-user case (same one the booking flow uses).
         const [{ data: profs }, { data: tprofs }] = await Promise.all([
           supabase.from('users').select('id, full_name').in('id', teacherIds),
-          supabase.from('teacher_profiles').select('user_id, profile_image_url').in('user_id', teacherIds),
+          supabase.rpc('get_approved_teachers'),
         ]);
         const photoByTeacher: Record<string, string | null> = {};
-        (tprofs ?? []).forEach((t: any) => { photoByTeacher[t.user_id] = t.profile_image_url || null; });
+        (tprofs ?? [])
+          .filter((t: any) => teacherIds.includes(t.user_id))
+          .forEach((t: any) => { photoByTeacher[t.user_id] = t.profile_image_url || null; });
         (profs ?? []).forEach((p: any) => {
           teacherMap[p.id] = {
             name: p.full_name || 'Teacher',
