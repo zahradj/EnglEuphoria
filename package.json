@@ -15,7 +15,8 @@
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
     "typecheck:strict": "tsc -p tsconfig.strict.json --noEmit",
-    "hygiene:check": "node scripts/hygiene-check.mjs"
+    "hygiene:check": "node scripts/hygiene-check.mjs",
+    "check:schema": "node scripts/check-supabase-schema.mjs"
   },
   "dependencies": {
     "@11labs/react": "^0.2.0",
