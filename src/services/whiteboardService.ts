@@ -139,6 +139,7 @@ type StageModeListener = (payload: { mode: StageMode; senderId: string }) => voi
 type DrawingEnabledListener = (payload: { enabled: boolean; senderId: string }) => void;
 type IframeLockListener = (payload: { isUnlocked: boolean; senderId: string }) => void;
 type SceneActivityLockListener = (payload: { isUnlocked: boolean; senderId: string }) => void;
+type SceneInteractionStateListener = (payload: { sceneId: string; state: any; senderId: string }) => void;
 type RewardListener = (payload: RewardPayload) => void;
 type ToolActionListener = (payload: ToolActionPayload) => void;
 type ChatListener = (payload: ChatBroadcastPayload) => void;
@@ -240,6 +241,7 @@ interface RoomChannel {
   drawingEnabledListeners: Set<DrawingEnabledListener>;
   iframeLockListeners: Set<IframeLockListener>;
   sceneActivityLockListeners: Set<SceneActivityLockListener>;
+  sceneInteractionStateListeners: Set<SceneInteractionStateListener>;
   rewardListeners: Set<RewardListener>;
   toolActionListeners: Set<ToolActionListener>;
   chatListeners: Set<ChatListener>;
@@ -275,6 +277,7 @@ class WhiteboardService {
     const drawingEnabledListeners = new Set<DrawingEnabledListener>();
     const iframeLockListeners = new Set<IframeLockListener>();
     const sceneActivityLockListeners = new Set<SceneActivityLockListener>();
+    const sceneInteractionStateListeners = new Set<SceneInteractionStateListener>();
     const rewardListeners = new Set<RewardListener>();
     const toolActionListeners = new Set<ToolActionListener>();
     const chatListeners = new Set<ChatListener>();
@@ -325,6 +328,9 @@ class WhiteboardService {
       })
       .on('broadcast', { event: 'scene_activity_lock_state' }, (payload) => {
         sceneActivityLockListeners.forEach((cb) => cb(payload.payload as any));
+      })
+      .on('broadcast', { event: 'scene_interaction_state' }, (payload) => {
+        sceneInteractionStateListeners.forEach((cb) => cb(payload.payload as any));
       })
       .on('broadcast', { event: 'reward' }, (payload) => {
         rewardListeners.forEach((cb) => cb(payload.payload as RewardPayload));
@@ -394,6 +400,7 @@ class WhiteboardService {
       drawingEnabledListeners,
       iframeLockListeners,
       sceneActivityLockListeners,
+      sceneInteractionStateListeners,
       rewardListeners,
       toolActionListeners,
       chatListeners,
@@ -538,6 +545,34 @@ class WhiteboardService {
     room.sceneActivityLockListeners.add(onChange);
     room.refCount += 1;
     return () => this.release(roomId, () => room.sceneActivityLockListeners.delete(onChange));
+  }
+
+  /** Broadcast an interactive Playground scene's live state (drag/sort/trace/etc.
+   *  progress) so the other party's copy of the same scene mirrors it instantly.
+   *  Called from useSyncedSceneState.ts (unit1 scenes) with no implementation ever
+   *  added here — every synced interactive scene crashed the instant it mounted
+   *  in a live classroom, the same half-shipped-feature pattern as
+   *  sendSceneActivityLockState above (see sentinel_incidents 6256ba89) — this one
+   *  fires far more often since it covers ordinary scene interaction, not just the
+   *  activity-lock toggle. */
+  async sendSceneInteractionState(
+    roomId: string,
+    payload: { sceneId: string; state: any; senderId: string },
+  ): Promise<void> {
+    const room = this.getRoom(roomId);
+    await room.ready;
+    await room.channel.send({
+      type: 'broadcast',
+      event: 'scene_interaction_state',
+      payload,
+    });
+  }
+
+  subscribeToSceneInteractionState(roomId: string, onChange: SceneInteractionStateListener): () => void {
+    const room = this.getRoom(roomId);
+    room.sceneInteractionStateListeners.add(onChange);
+    room.refCount += 1;
+    return () => this.release(roomId, () => room.sceneInteractionStateListeners.delete(onChange));
   }
 
   /** Broadcast a teacher reward (star or sticker) so the student animates instantly. */
@@ -834,6 +869,7 @@ class WhiteboardService {
       room.drawingEnabledListeners.size === 0 &&
       room.iframeLockListeners.size === 0 &&
       room.sceneActivityLockListeners.size === 0 &&
+      room.sceneInteractionStateListeners.size === 0 &&
       room.rewardListeners.size === 0 &&
       room.toolActionListeners.size === 0 &&
       room.chatListeners.size === 0 &&
