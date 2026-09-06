@@ -7,28 +7,42 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   SlideRenderer,
-  ProgressBar,
   themeMap,
   BLOCKS,
   type Slide,
   type Theme,
+  type Block,
 } from '@/pages/AcademyDemo';
 import { AcademyHubProvider } from '@/components/academy/HubGuard';
 import ProfileAvatar from '@/components/academy/ProfileAvatar';
 import CoinBalance from '@/components/academy/CoinBalance';
 import AcademyLessonCompleteModal from '@/components/academy/AcademyLessonCompleteModal';
 import { awardAcademyCoins, ACADEMY_COINS_PER_BLOCK } from '@/lib/academy/coins';
-import { staticContextForSlide, FocusPanel } from '@/components/academy/splitSlide';
 
 /**
  * The new, canonical Academy lesson player (Phase 1 of the "new Academy
- * engine" rebuild). This is a real-lesson-data adaptation of AcademyDemo.tsx's
- * own page component — that file already renders the exact schema
- * generate-ppp-slides produces correctly (SlideRenderer/themeMap/BLOCKS,
- * imported straight from there rather than duplicated, so there is exactly
- * one canonical renderer for this schema, not two). What AcademyDemo.tsx
- * doesn't do is fetch a real curriculum_lessons row or persist real
- * completion — that's what this component adds.
+ * engine" rebuild) — full-bleed scene layout, mirroring Playground's
+ * PlayUnitLesson.tsx/SceneRenderer.tsx convention: a scene's background
+ * fills the whole viewport and content floats on top of it as a glass
+ * panel, rather than sitting in a bordered card inside a split-pane page
+ * (AcademyDemo.tsx's own layout, which this used to copy verbatim).
+ *
+ * Playground gets this from a hand-painted `bg` image per scene
+ * (unit1/scenes.ts). Academy has no equivalent per-slide art pipeline yet
+ * (AcademyCreator's AI generation produces text content, not backgrounds),
+ * so each of the 7 pedagogical blocks (warmup/vocab/reading/grammar/
+ * practice/interactive/speaking — BLOCKS in AcademyDemo.tsx) gets its own
+ * full-bleed CSS gradient "scene" (BLOCK_SCENES below) — a real, distinct,
+ * full-viewport backdrop per stage of the lesson, the same role Playground's
+ * bg images play, without requiring a bespoke illustration per slide. A
+ * `scene_dialogue` slide (which already carries its own bg_image_url) is
+ * exempted from the glass-panel treatment and shown edge-to-edge instead,
+ * since it's already a real full-bleed scene in its own right.
+ *
+ * SlideRenderer itself (imported from AcademyDemo.tsx, unchanged) still
+ * renders each slide type's actual content — this file only changes the
+ * chrome around it, so there is no risk of regressing any of the ~30
+ * slide-type renderers to keep this in sync with.
  *
  * Routed lessons must carry ai_metadata.contentFormat === 'academy-v2' —
  * see resolvePlaygroundLessonRoute() in lessonLibraryService.ts, which is
@@ -50,6 +64,72 @@ interface LessonRow {
 }
 
 const SESSION_KEY_PREFIX = 'academy-scene-idx:';
+
+// One full-bleed "scene" per pedagogical block — layered radial glows over a
+// dark base, each with its own accent hue and a distinct decorative motif so
+// the lesson visibly moves through a place, the way Playground's varied
+// scene backgrounds do, even though these are generated, not painted.
+const BLOCK_SCENES: Record<Block, { background: string; motif: string; accent: string }> = {
+  warmup: {
+    background:
+      'radial-gradient(ellipse 900px 700px at 15% 0%, rgba(129,140,248,0.35), transparent 60%), ' +
+      'radial-gradient(ellipse 800px 800px at 90% 100%, rgba(217,70,239,0.22), transparent 60%), ' +
+      'linear-gradient(160deg, #171335 0%, #100e28 55%, #0b0a1f 100%)',
+    motif: 'radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1.5px)',
+    accent: '#a5b4fc',
+  },
+  vocab: {
+    background:
+      'radial-gradient(ellipse 850px 650px at 85% 5%, rgba(192,132,252,0.32), transparent 60%), ' +
+      'radial-gradient(ellipse 700px 900px at 5% 95%, rgba(129,140,248,0.24), transparent 60%), ' +
+      'linear-gradient(160deg, #1d1440 0%, #140f30 55%, #0b0a1f 100%)',
+    motif: 'radial-gradient(circle, rgba(216,180,254,0.55) 1.5px, transparent 2px)',
+    accent: '#d8b4fe',
+  },
+  reading: {
+    background:
+      'radial-gradient(ellipse 900px 700px at 10% 100%, rgba(96,165,250,0.26), transparent 60%), ' +
+      'radial-gradient(ellipse 750px 600px at 95% 0%, rgba(129,140,248,0.24), transparent 60%), ' +
+      'linear-gradient(160deg, #101a3a 0%, #0e1330 55%, #0b0a1f 100%)',
+    motif:
+      'repeating-linear-gradient(0deg, rgba(147,197,253,0.06) 0px, rgba(147,197,253,0.06) 1px, transparent 1px, transparent 28px)',
+    accent: '#93c5fd',
+  },
+  grammar: {
+    background:
+      'radial-gradient(ellipse 850px 700px at 90% 90%, rgba(45,212,191,0.22), transparent 60%), ' +
+      'radial-gradient(ellipse 800px 650px at 5% 10%, rgba(99,102,241,0.28), transparent 60%), ' +
+      'linear-gradient(160deg, #12213a 0%, #101430 55%, #0b0a1f 100%)',
+    motif:
+      'linear-gradient(rgba(94,234,212,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(94,234,212,0.08) 1px, transparent 1px)',
+    accent: '#5eead4',
+  },
+  practice: {
+    background:
+      'radial-gradient(ellipse 900px 700px at 20% 100%, rgba(52,211,153,0.24), transparent 60%), ' +
+      'radial-gradient(ellipse 750px 700px at 85% 10%, rgba(99,102,241,0.24), transparent 60%), ' +
+      'linear-gradient(160deg, #10231f 0%, #10182e 55%, #0b0a1f 100%)',
+    motif: 'radial-gradient(circle at 50% 50%, transparent 24%, rgba(110,231,183,0.12) 25%, transparent 26%)',
+    accent: '#6ee7b7',
+  },
+  interactive: {
+    background:
+      'radial-gradient(ellipse 900px 700px at 95% 100%, rgba(244,114,182,0.28), transparent 60%), ' +
+      'radial-gradient(ellipse 750px 650px at 5% 0%, rgba(168,85,247,0.28), transparent 60%), ' +
+      'linear-gradient(160deg, #29103a 0%, #1a0f30 55%, #0b0a1f 100%)',
+    motif:
+      'repeating-linear-gradient(115deg, rgba(244,114,182,0.07) 0px, rgba(244,114,182,0.07) 2px, transparent 2px, transparent 26px)',
+    accent: '#f9a8d4',
+  },
+  speaking: {
+    background:
+      'radial-gradient(ellipse 900px 800px at 50% 100%, rgba(45,212,191,0.26), transparent 65%), ' +
+      'radial-gradient(ellipse 700px 700px at 15% 0%, rgba(129,140,248,0.24), transparent 60%), ' +
+      'linear-gradient(160deg, #10231f 0%, #101430 55%, #0b0a1f 100%)',
+    motif: 'radial-gradient(circle at 50% 100%, rgba(94,234,212,0.18), transparent 55%)',
+    accent: '#99f6e4',
+  },
+};
 
 export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonProps) {
   const { id: routeLessonId } = useParams<{ id: string }>();
@@ -147,6 +227,8 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
 
   const blockLabel = useMemo(() => BLOCKS.find((b) => b.id === slide?.block)?.label ?? '', [slide]);
   const coinsEarned = creditedBlocks.current.size * ACADEMY_COINS_PER_BLOCK;
+  const scene = slide ? BLOCK_SCENES[slide.block] : BLOCK_SCENES.warmup;
+  const isFullBleedSlideType = slide?.type === 'scene_dialogue';
 
   const persistCompletion = async () => {
     if (!user?.id || !lesson?.id) return;
@@ -226,108 +308,119 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
       <Helmet>
         <title>{lesson.title} · Academy</title>
       </Helmet>
-      <div className={`min-h-dvh ${t.bg} ${t.text} font-sans flex flex-col`} data-hub="academy">
-        {theme === 'dark' && (
-          <div
-            className="pointer-events-none fixed inset-0 opacity-40"
-            style={{
-              backgroundImage:
-                'radial-gradient(at 20% 10%, rgba(99,102,241,0.25), transparent 50%), radial-gradient(at 80% 90%, rgba(168,85,247,0.18), transparent 50%)',
-            }}
-          />
-        )}
 
-        <header className="relative z-10 border-b border-slate-800/60 backdrop-blur-sm">
-          <div className="max-w-6xl mx-auto px-6 py-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="w-8 h-8 shrink-0 rounded-md bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
-                  A
-                </div>
-                <div className="min-w-0">
-                  <div className="text-sm font-semibold truncate">{lesson.title}</div>
-                  <div className={`text-xs ${t.muted}`}>Academy</div>
-                </div>
+      <div className="relative h-dvh w-full overflow-hidden text-white font-sans" data-hub="academy">
+        {/* Full-bleed scene background, cross-fading per block — the
+            Academy equivalent of a Playground scene's `bg` image. */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={slide.block}
+            className="absolute inset-0"
+            style={{ background: scene.background }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="absolute inset-0 opacity-[0.35]" style={{ backgroundImage: scene.motif, backgroundSize: '26px 26px' }} />
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Floating top chrome — lesson chip, progress dots, block label, minimal controls. */}
+        <header className="absolute inset-x-0 top-0 z-30 px-4 pt-4 md:px-8 md:pt-6">
+          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
+            <div className="flex min-w-0 items-center gap-3 rounded-full bg-black/30 py-1.5 pl-1.5 pr-4 backdrop-blur-md ring-1 ring-white/10">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-sm font-bold">
+                A
               </div>
-              <div className="flex items-center gap-3 shrink-0">
-                <CoinBalance />
-                <ProfileAvatar size="sm" />
-                <button
-                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                  className={`p-2 rounded-md ${t.btnGhost}`}
-                  aria-label="Toggle theme"
-                >
-                  {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                </button>
+              <div className="min-w-0">
+                <div className="truncate text-sm font-semibold leading-tight">{lesson.title}</div>
+                <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: scene.accent }}>
+                  {blockLabel}
+                </div>
               </div>
             </div>
-            <ProgressBar currentBlock={slide.block} slideIndex={i} t={t} slides={slides} />
+            <div className="flex shrink-0 items-center gap-2 rounded-full bg-black/30 px-2 py-1.5 backdrop-blur-md ring-1 ring-white/10">
+              <CoinBalance />
+              <ProfileAvatar size="sm" />
+              <button
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="rounded-full p-1.5 text-white/80 transition hover:bg-white/10 hover:text-white"
+                aria-label="Toggle theme"
+              >
+                {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </button>
+            </div>
+          </div>
+
+          {/* Progress dots — one per slide, current block's accent highlights the active run. */}
+          <div className="mx-auto mt-3 flex max-w-5xl items-center gap-1 overflow-x-auto pb-1">
+            {slides.map((s, idx) => (
+              <div
+                key={s.id ?? idx}
+                className="h-1.5 flex-1 min-w-[6px] rounded-full transition-colors duration-300"
+                style={{
+                  background:
+                    idx < i ? scene.accent : idx === i ? scene.accent : 'rgba(255,255,255,0.15)',
+                  opacity: idx <= i ? 1 : 0.5,
+                }}
+              />
+            ))}
           </div>
         </header>
 
-        <main className="relative z-10 flex-1">
-          <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-6 p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-            <aside className="lg:sticky lg:top-6 lg:self-start">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`static-${i}`}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {staticContextForSlide(slide) ?? (
-                    <FocusPanel
-                      lessonTitle={lesson.title}
-                      blockLabel={blockLabel}
-                      block={slide.block}
-                      slideIndex={i}
-                      totalSlides={slides.length}
-                    />
-                  )}
-                </motion.div>
-              </AnimatePresence>
-            </aside>
-
-            <section>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.2 }}
-                  className={`w-full rounded-xl border ${t.card} px-6 py-8 md:px-8 md:py-10 min-h-[420px] flex items-center justify-center`}
-                >
-                  <SlideRenderer slide={slide} t={t} />
-                </motion.div>
-              </AnimatePresence>
-            </section>
-          </div>
+        {/* Scene content. scene_dialogue renders itself edge-to-edge (it's
+            already a real full-bleed scene); everything else floats as a
+            glass panel over the block's background, mirroring Playground's
+            GlassCard-over-bg convention. */}
+        <main className="absolute inset-0 z-20 flex items-center justify-center px-4 pt-28 pb-24 md:px-8">
+          <AnimatePresence mode="wait">
+            {isFullBleedSlideType ? (
+              <motion.div
+                key={i}
+                className="flex h-full w-full max-w-6xl items-center justify-center"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.25 }}
+              >
+                <SlideRenderer slide={slide} t={t} />
+              </motion.div>
+            ) : (
+              <motion.div
+                key={i}
+                className="w-full max-w-2xl rounded-3xl bg-[#0B0A1F]/70 p-6 shadow-2xl ring-1 ring-white/10 backdrop-blur-xl md:p-10"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.25 }}
+              >
+                <SlideRenderer slide={slide} t={t} />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </main>
 
-        <footer className="relative z-10 border-t border-slate-800/60 backdrop-blur-sm">
-          <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Floating bottom nav. */}
+        <footer className="absolute inset-x-0 bottom-0 z-30 px-4 pb-4 md:px-8 md:pb-6">
+          <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 rounded-full bg-black/30 px-3 py-2 backdrop-blur-md ring-1 ring-white/10">
             <button
               onClick={() => setI((n) => Math.max(0, n - 1))}
               disabled={i === 0}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium disabled:opacity-30 ${t.btnGhost}`}
+              className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white disabled:opacity-30"
             >
-              <ChevronLeft className="w-4 h-4" /> Previous
+              <ChevronLeft className="h-4 w-4" /> Previous
             </button>
-            <div className={`text-sm ${t.muted}`}>
-              <span className="font-semibold text-indigo-400">{blockLabel}</span>
-              <span className="mx-2">·</span>
-              <span>
-                {i + 1} / {slides.length}
-              </span>
+            <div className="text-xs font-medium text-white/60">
+              {i + 1} / {slides.length}
             </div>
             <button
               onClick={handleNext}
               disabled={saving}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 text-white"
+              className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-bold text-[#0B0A1F] shadow-lg transition disabled:opacity-60"
+              style={{ background: scene.accent }}
             >
-              {i === slides.length - 1 ? (saving ? 'Saving…' : 'Finish') : 'Next'} <ChevronRight className="w-4 h-4" />
+              {i === slides.length - 1 ? (saving ? 'Saving…' : 'Finish') : 'Next'} <ChevronRight className="h-4 w-4" />
             </button>
           </div>
         </footer>
