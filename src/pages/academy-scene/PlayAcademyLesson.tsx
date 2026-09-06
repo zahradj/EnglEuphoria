@@ -28,16 +28,21 @@ import { awardAcademyCoins, ACADEMY_COINS_PER_BLOCK } from '@/lib/academy/coins'
  * (AcademyDemo.tsx's own layout, which this used to copy verbatim).
  *
  * Playground gets this from a hand-painted `bg` image per scene
- * (unit1/scenes.ts). Academy has no equivalent per-slide art pipeline yet
- * (AcademyCreator's AI generation produces text content, not backgrounds),
- * so each of the 7 pedagogical blocks (warmup/vocab/reading/grammar/
- * practice/interactive/speaking — BLOCKS in AcademyDemo.tsx) gets its own
- * full-bleed CSS gradient "scene" (BLOCK_SCENES below) — a real, distinct,
- * full-viewport backdrop per stage of the lesson, the same role Playground's
- * bg images play, without requiring a bespoke illustration per slide. A
- * `scene_dialogue` slide (which already carries its own bg_image_url) is
- * exempted from the glass-panel treatment and shown edge-to-edge instead,
- * since it's already a real full-bleed scene in its own right.
+ * (unit1/scenes.ts) — bespoke to each lesson's own story, not a shared
+ * asset. Academy has no in-Creator authoring step for this yet, but the
+ * same underlying pipeline exists (generate-slide-image, verify_jwt=false,
+ * the exact function that produced the Ava & Theo scene_dialogue art) —
+ * callable directly to pre-generate one real illustrated background per
+ * pedagogical block for a given lesson, stored on that lesson's own
+ * content.blockImages (see LessonRow below) and rendered here in place of
+ * the CSS gradient. Each of the 7 blocks (warmup/vocab/reading/grammar/
+ * practice/interactive/speaking — BLOCKS in AcademyDemo.tsx) still has a
+ * CSS gradient "scene" (BLOCK_SCENES below) as the graceful fallback for
+ * any lesson that hasn't been illustrated this way yet — never a blank or
+ * broken background. A `scene_dialogue` slide (which carries its own
+ * bg_image_url) is exempted from the glass-panel treatment and shown
+ * edge-to-edge instead, since it's already a real full-bleed scene in its
+ * own right.
  *
  * SlideRenderer itself (imported from AcademyDemo.tsx, unchanged) still
  * renders each slide type's actual content — this file only changes the
@@ -61,6 +66,13 @@ interface LessonRow {
   id: string;
   title: string;
   slides: Slide[];
+  /** Real illustrated background per block, generated per-lesson via the
+   *  app's own generate-slide-image pipeline (same one that produced the
+   *  Ava & Theo scene_dialogue art) — bespoke to this lesson's own story,
+   *  the same way Playground's bg images are bespoke per lesson, never a
+   *  shared/generic asset. Absent on lessons not yet illustrated this way;
+   *  BLOCK_SCENES' CSS gradients are the fallback for those. */
+  blockImages?: Partial<Record<Block, string>>;
 }
 
 const SESSION_KEY_PREFIX = 'academy-scene-idx:';
@@ -172,7 +184,12 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
           throw new Error('This lesson has no content yet.');
         }
         if (!cancelled) {
-          setLesson({ id: data.id, title: data.title, slides: slides as Slide[] });
+          setLesson({
+            id: data.id,
+            title: data.title,
+            slides: slides as Slide[],
+            blockImages: (data?.content as any)?.blockImages ?? undefined,
+          });
           const saved = sessionStorage.getItem(`${SESSION_KEY_PREFIX}${lessonId}`);
           const savedIdx = saved ? parseInt(saved, 10) : 0;
           setI(Number.isFinite(savedIdx) ? Math.min(Math.max(savedIdx, 0), slides.length - 1) : 0);
@@ -227,7 +244,10 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
 
   const blockLabel = useMemo(() => BLOCKS.find((b) => b.id === slide?.block)?.label ?? '', [slide]);
   const coinsEarned = creditedBlocks.current.size * ACADEMY_COINS_PER_BLOCK;
-  const scene = slide ? BLOCK_SCENES[slide.block] : BLOCK_SCENES.warmup;
+  const cssScene = slide ? BLOCK_SCENES[slide.block] : BLOCK_SCENES.warmup;
+  // A real illustrated background for this lesson's block wins over the CSS
+  // gradient fallback — see LessonRow.blockImages' own comment.
+  const realSceneImage = slide ? lesson?.blockImages?.[slide.block] : undefined;
   const isFullBleedSlideType = slide?.type === 'scene_dialogue';
 
   const persistCompletion = async () => {
@@ -311,18 +331,35 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
 
       <div className="relative h-dvh w-full overflow-hidden text-white font-sans" data-hub="academy">
         {/* Full-bleed scene background, cross-fading per block — the
-            Academy equivalent of a Playground scene's `bg` image. */}
+            Academy equivalent of a Playground scene's `bg` image. Real
+            illustrated art (lesson.blockImages) wins when this lesson has
+            it; otherwise the CSS gradient scene is the fallback. */}
         <AnimatePresence mode="wait">
           <motion.div
             key={slide.block}
             className="absolute inset-0"
-            style={{ background: scene.background }}
+            style={
+              realSceneImage
+                ? { backgroundImage: `url(${realSceneImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                : { background: cssScene.background }
+            }
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="absolute inset-0 opacity-[0.35]" style={{ backgroundImage: scene.motif, backgroundSize: '26px 26px' }} />
+            {realSceneImage ? (
+              // Scrim so floating chrome/glass content stay legible over a photo.
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    'linear-gradient(180deg, rgba(11,10,31,0.55) 0%, rgba(11,10,31,0.15) 22%, rgba(11,10,31,0.35) 60%, rgba(11,10,31,0.75) 100%)',
+                }}
+              />
+            ) : (
+              <div className="absolute inset-0 opacity-[0.35]" style={{ backgroundImage: cssScene.motif, backgroundSize: '26px 26px' }} />
+            )}
           </motion.div>
         </AnimatePresence>
 
@@ -335,7 +372,7 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
               </div>
               <div className="min-w-0">
                 <div className="truncate text-sm font-semibold leading-tight">{lesson.title}</div>
-                <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: scene.accent }}>
+                <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: cssScene.accent }}>
                   {blockLabel}
                 </div>
               </div>
@@ -361,7 +398,7 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
                 className="h-1.5 flex-1 min-w-[6px] rounded-full transition-colors duration-300"
                 style={{
                   background:
-                    idx < i ? scene.accent : idx === i ? scene.accent : 'rgba(255,255,255,0.15)',
+                    idx < i ? cssScene.accent : idx === i ? cssScene.accent : 'rgba(255,255,255,0.15)',
                   opacity: idx <= i ? 1 : 0.5,
                 }}
               />
@@ -418,7 +455,7 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
               onClick={handleNext}
               disabled={saving}
               className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-bold text-[#0B0A1F] shadow-lg transition disabled:opacity-60"
-              style={{ background: scene.accent }}
+              style={{ background: cssScene.accent }}
             >
               {i === slides.length - 1 ? (saving ? 'Saving…' : 'Finish') : 'Next'} <ChevronRight className="h-4 w-4" />
             </button>
