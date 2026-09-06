@@ -386,6 +386,19 @@ const bgLeoSolo = `${A}/scenes/bg-leo-solo.jpg`;
 // (a literally empty meadow) showed nobody "talking" for any line. Same
 // fix pattern as bgL1RoleplayFriends, with Leo in place of Bella.
 const bgL6RoleplayFriends = `${A}/scenes/bg-l6-roleplay-friends.jpg`;
+// Lesson 5's l5-roleplay-recap (cast: leo/pip/mia/willow/bella) is the
+// same bug once more — bgGatherEmpty, nobody painted in — but with the
+// full five-friend cast, so it needs its own new composition rather than
+// reusing L6's three-character shot. Characters are painted left-to-right
+// in the order of RoleplayScene's own hardcoded speech-bubble x-anchors
+// (pip ~12%, mia ~34%, leo ~50% via the 50% fallback, bella ~58%,
+// willow ~82%) so each line's bubble lands near its speaker.
+const bgL5RoleplayFriends = `${A}/scenes/bg-l5-roleplay-friends.jpg`;
+// Willow's "solo shot" (character on the left third, right side open) —
+// the last cast member without one. Same convention as bgL1PipSolo/
+// MiaSolo/BellaSolo and bgLeoSolo; used by l5-ask-friends' Willow turn,
+// which otherwise fell back to the scene's empty bgGatherEmpty default.
+const bgWillowSolo = `${A}/scenes/bg-willow-solo.jpg`;
 const bgHideSeek = `${A}/scenes/bg-hideseek.jpg`;
 const bgMeadow = `${A}/scenes/bg-meadow.jpg`;
 const bgBigTree = `${A}/scenes/bg-bigtree.jpg`;
@@ -1442,13 +1455,18 @@ export const LESSON_5_SCENES: Scene[] = [
     rounds: [{ who: 'bella', cue: 'Ask Bella!', answer: 'My name is Bella. Let’s go help Leo find his star.' }],
   },
   {
+    // bg stays bgGatherEmpty as the scene-level default (correct for the
+    // student's own turns — an empty backdrop for the webcam circle) —
+    // each friend's turn overrides it with their own solo shot, since
+    // JoinStageScene never renders a friend sprite of its own. Same fix
+    // as l6-join-stage / join-stage-l1.
     id: 'l5-ask-friends', kind: 'join-stage', bg: bgGatherEmpty, teacher: 'Remember Lesson 3? Ask how everyone feels, then help Leo.', cast: ['mia', 'bella', 'willow'],
     turns: [
-      { who: 'mia', line: 'How are you, Leo?' },
+      { who: 'mia', line: 'How are you, Leo?', bg: bgL1MiaSolo },
       { who: 'student', line: 'I am sad. I lost my star.' },
-      { who: 'bella', line: 'I am happy! Do not worry, Leo — we will find it.' },
+      { who: 'bella', line: 'I am happy! Do not worry, Leo — we will find it.', bg: bgL1BellaSolo },
       { who: 'student', line: 'Thank you!' },
-      { who: 'willow', line: 'I am angry we cannot find it. Let’s keep looking!' },
+      { who: 'willow', line: 'I am angry we cannot find it. Let’s keep looking!', bg: bgWillowSolo },
     ],
   },
   {
@@ -1528,7 +1546,10 @@ export const LESSON_5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l5-roleplay-recap', kind: 'roleplay', bg: bgGatherEmpty, teacher: 'Retell the whole story! Listen, then repeat each line.', cast: ['leo', 'pip', 'mia', 'willow', 'bella'],
+    // Was bgGatherEmpty (an empty meadow) — RoleplayScene paints no
+    // sprites of its own, so every line's bubble floated over nobody.
+    // bgL5RoleplayFriends has all five friends painted in and waving.
+    id: 'l5-roleplay-recap', kind: 'roleplay', bg: bgL5RoleplayFriends, teacher: 'Retell the whole story! Listen, then repeat each line.', cast: ['leo', 'pip', 'mia', 'willow', 'bella'],
     script: [
       { who: 'leo', line: 'I lost my star. I was sad.', repeat: true },
       { who: 'mia', line: 'We said hello and asked how to help.', repeat: true },
