@@ -61,8 +61,11 @@ export const RecentLessonReports: React.FC<Props> = ({ hubId = 'academy', limit 
       // Teacher profiles + photos
       let teacherMap: Record<string, { name: string; photo: string | null }> = {};
       if (teacherIds.length) {
+        // 'profiles' doesn't exist as a table in this project, and 'users'
+        // has no avatar_url column (only avatar_id) — teacher_profiles is
+        // the real photo source and was already the primary one here.
         const [{ data: profs }, { data: tprofs }] = await Promise.all([
-          supabase.from('profiles').select('id, full_name, avatar_url').in('id', teacherIds),
+          supabase.from('users').select('id, full_name').in('id', teacherIds),
           supabase.from('teacher_profiles').select('user_id, profile_image_url').in('user_id', teacherIds),
         ]);
         const photoByTeacher: Record<string, string | null> = {};
@@ -70,7 +73,7 @@ export const RecentLessonReports: React.FC<Props> = ({ hubId = 'academy', limit 
         (profs ?? []).forEach((p: any) => {
           teacherMap[p.id] = {
             name: p.full_name || 'Teacher',
-            photo: photoByTeacher[p.id] || p.avatar_url || null,
+            photo: photoByTeacher[p.id] || null,
           };
         });
       }

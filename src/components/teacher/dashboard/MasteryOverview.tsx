@@ -34,11 +34,13 @@ export const MasteryOverview: React.FC<MasteryOverviewProps> = ({ teacherId }) =
         .in('student_id', studentIds)
         .order('completed_at', { ascending: false });
 
-      // Fetch student profiles
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('id, display_name, avatar_url')
+      // Fetch student profiles. 'profiles' doesn't exist as a table in this
+      // project — real identity table is 'users' (full_name, no avatar_url).
+      const { data: profilesRaw } = await supabase
+        .from('users')
+        .select('id, full_name')
         .in('id', studentIds);
+      const profiles = (profilesRaw ?? []).map((p) => ({ ...p, display_name: p.full_name, avatar_url: null as string | null }));
 
       // Fetch unit titles
       const unitIds = [...new Set(milestones?.map((m: any) => m.unit_id) || [])];

@@ -41,11 +41,14 @@ export const StudentLearningAnalytics: React.FC<StudentLearningAnalyticsProps> =
         .eq('teacher_id', teacherId);
       const uniqueIds = [...new Set(bookings?.map(b => b.student_id) || [])];
       if (!uniqueIds.length) return [];
+      // 'profiles' doesn't exist as a table in this project — the real
+      // identity table is 'users' (full_name/cefr_level, not
+      // display_name/current_level).
       const { data: profiles } = await supabase
-        .from('profiles')
-        .select('id, display_name, email, current_level')
+        .from('users')
+        .select('id, full_name, email, cefr_level')
         .in('id', uniqueIds);
-      return profiles || [];
+      return (profiles || []).map((p) => ({ ...p, display_name: p.full_name, current_level: p.cefr_level }));
     },
     enabled: !!teacherId,
   });

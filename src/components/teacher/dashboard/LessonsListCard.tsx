@@ -134,7 +134,7 @@ export const LessonsListCard: React.FC = () => {
         let studentMap: Record<string, { name: string }> = {};
         if (studentIds.length) {
           const { data: profiles } = await supabase
-            .from('profiles')
+            .from('users')
             .select('id, full_name')
             .in('id', studentIds);
           studentMap = (profiles ?? []).reduce((acc: any, p: any) => {

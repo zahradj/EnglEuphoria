@@ -118,7 +118,7 @@ export const FeedbackReportDialog: React.FC<FeedbackReportDialogProps> = ({
 
         const teacherIds = Array.from(new Set(others.map((r) => r.teacher_id).filter(Boolean)));
         const { data: profs } = teacherIds.length
-          ? await supabase.from('profiles').select('id, full_name').in('id', teacherIds)
+          ? await supabase.from('users').select('id, full_name').in('id', teacherIds)
           : { data: [] as { id: string; full_name: string | null }[] };
         const nameById: Record<string, string> = {};
         (profs ?? []).forEach((p) => { nameById[p.id] = p.full_name || 'Teacher'; });

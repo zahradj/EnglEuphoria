@@ -52,7 +52,7 @@ export function LessonHistory() {
       let teacherMap: Record<string, string> = {};
       if (teacherIds.length) {
         const { data: profs } = await supabase
-          .from('profiles')
+          .from('users')
           .select('id, full_name')
           .in('id', teacherIds);
         teacherMap = (profs ?? []).reduce((acc: any, p: any) => {

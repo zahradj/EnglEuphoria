@@ -52,9 +52,11 @@ export const AssignmentStatusPanel: React.FC<AssignmentStatusPanelProps> = ({ te
   const { data: profiles } = useQuery({
     queryKey: ['teacher-assignment-student-profiles', studentIds.join(',')],
     queryFn: async () => {
+      // 'profiles' doesn't exist as a table in this project — the real
+      // identity table is 'users' (full_name, not display_name).
       const { data, error } = await supabase
-        .from('profiles')
-        .select('id, display_name, email')
+        .from('users')
+        .select('id, full_name, email')
         .in('id', studentIds);
       if (error) throw error;
       return data || [];
@@ -64,7 +66,7 @@ export const AssignmentStatusPanel: React.FC<AssignmentStatusPanelProps> = ({ te
 
   const nameFor = (studentId: string) => {
     const p = profiles?.find((p) => p.id === studentId);
-    return p?.display_name || p?.email || 'Student';
+    return p?.full_name || p?.email || 'Student';
   };
 
   if (isLoading) return null;
