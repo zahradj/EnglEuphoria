@@ -12,16 +12,43 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { FeedbackReportDialog } from '@/components/classroom/FeedbackReportDialog';
 import { LessonWrapUpDialog } from '@/components/classroom/LessonWrapUpDialog';
 
+/** Raw class_bookings.status values this card cares about. */
+type BookingStatus = 'scheduled' | 'confirmed' | 'completed' | 'failed_technical' | 'ended_early' | 'cancelled' | string;
+
 interface Lesson {
   id: string;
   scheduledAt: Date;
   title: string;
   studentName: string;
   studentAge: number | null;
+  /** Tab bucket this lesson belongs in. */
   status: 'upcoming' | 'completed' | 'needs-feedback';
+  /** The real class_bookings.status, kept for the outcome badge. */
+  rawStatus: BookingStatus;
+  /** class_bookings.technical_fault_party — set when rawStatus is 'failed_technical'. */
+  faultParty: 'teacher' | 'student' | 'both' | null;
   classroomId: string | null;
   studentId: string | null;
 }
+
+/** Outcome badge for a lesson that has actually ended (Past / No Feedback
+ *  tabs) — separate from the "Needs Feedback" flag, which is about whether a
+ *  wrap-up report exists, not whether the lesson itself succeeded. */
+const OutcomeBadge: React.FC<{ rawStatus: BookingStatus; faultParty: Lesson['faultParty'] }> = ({ rawStatus, faultParty }) => {
+  if (rawStatus === 'failed_technical') {
+    const who =
+      faultParty === 'teacher' ? 'your side' : faultParty === 'student' ? "student's side" : faultParty === 'both' ? 'both sides' : 'unknown side';
+    return (
+      <Badge className="text-xs bg-rose-100 text-rose-700 hover:bg-rose-100 border-rose-200">
+        Technical issue — {who}
+      </Badge>
+    );
+  }
+  if (rawStatus === 'ended_early') {
+    return <Badge className="text-xs bg-amber-100 text-amber-700 hover:bg-amber-100 border-amber-200">Ended early</Badge>;
+  }
+  return <Badge className="text-xs bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-emerald-200">Completed</Badge>;
+};
 
 interface LessonItemProps {
   lesson: Lesson;
@@ -43,8 +70,11 @@ const LessonItem: React.FC<LessonItemProps> = ({ lesson, showEnterButton, onEnte
       onClick={clickable ? handleRowClick : undefined}
     >
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
+        <div className="flex items-center gap-2 mb-1 flex-wrap">
           <p className="font-medium text-foreground truncate">{lesson.title}</p>
+          {(lesson.status === 'completed' || lesson.status === 'needs-feedback') && (
+            <OutcomeBadge rawStatus={lesson.rawStatus} faultParty={lesson.faultParty} />
+          )}
           {lesson.status === 'needs-feedback' && (
             <Badge variant="destructive" className="text-xs">Needs Feedback</Badge>
           )}
@@ -119,11 +149,20 @@ export const LessonsListCard: React.FC = () => {
 
     let cancelled = false;
 
+    // A lesson has genuinely ended once end_lesson()/end_lesson_service()/
+    // mark_booking_ended_status() (or the classroom-incident-verdict edge
+    // function) has stamped one of these terminal statuses — see the
+    // classroom-lifecycle-status migration. 'ended_early' never needs a
+    // wrap-up report (LessonWrapUpDialog.tsx is skipped for those sessions),
+    // so it's excluded from the ENDED_NEEDING_REPORT set below.
+    const ENDED_STATUSES = new Set(['completed', 'failed_technical', 'ended_early']);
+    const ENDED_NEEDING_REPORT = new Set(['completed', 'failed_technical']);
+
     const loadLessons = async () => {
       try {
         const { data, error } = await supabase
           .from('class_bookings')
-          .select('id, classroom_id, scheduled_at, status, hub_type, notes, student_id')
+          .select('id, classroom_id, scheduled_at, status, technical_fault_party, hub_type, notes, student_id')
           .eq('teacher_id', user.id)
           .order('scheduled_at', { ascending: true });
 
@@ -143,12 +182,27 @@ export const LessonsListCard: React.FC = () => {
           }, {});
         }
 
+        // Whether a wrap-up report already exists — the real signal for the
+        // "No Feedback" tab, replacing the old 1-hour-past-scheduled-time
+        // guess (which had nothing to do with whether the lesson actually
+        // happened or how it ended).
+        const bookingIds = (data ?? []).map((r: any) => r.id);
+        let feedbackSet = new Set<string>();
+        if (bookingIds.length) {
+          const { data: fbs } = await supabase
+            .from('lesson_feedback_submissions')
+            .select('lesson_id')
+            .in('lesson_id', bookingIds);
+          feedbackSet = new Set((fbs ?? []).map((f: any) => f.lesson_id));
+        }
+
         const mapped: Lesson[] = (data ?? []).map((row: any) => {
           const scheduledAt = new Date(row.scheduled_at);
+          const rawStatus: BookingStatus = row.status;
           let status: Lesson['status'] = 'upcoming';
-          if (row.status === 'completed') status = 'completed';
-          else if (row.status === 'needs_feedback') status = 'needs-feedback';
-          else if (scheduledAt.getTime() < Date.now() - 60 * 60 * 1000) status = 'needs-feedback';
+          if (ENDED_STATUSES.has(rawStatus)) {
+            status = ENDED_NEEDING_REPORT.has(rawStatus) && !feedbackSet.has(row.id) ? 'needs-feedback' : 'completed';
+          }
           return {
             id: row.id,
             scheduledAt,
@@ -156,6 +210,8 @@ export const LessonsListCard: React.FC = () => {
             studentName: studentMap[row.student_id]?.name || 'Student',
             studentAge: null,
             status,
+            rawStatus,
+            faultParty: (row.technical_fault_party ?? null) as Lesson['faultParty'],
             classroomId: row.classroom_id ?? null,
             studentId: row.student_id ?? null,
           };
@@ -219,28 +275,12 @@ export const LessonsListCard: React.FC = () => {
   const handleWrapUpChange = (open: boolean) => {
     setWrapUpOpen(open);
     if (!open) {
-      // Refresh after submission so the row moves from "No Feedback" to "Past"
+      // Refresh after submission so the row moves from "No Feedback" to
+      // "Past" — a full reload (same loadLessons the mount effect uses, via
+      // loadLessonsRef) so the "does lesson_feedback_submissions exist yet"
+      // check re-runs too, not just status.
       setWrapUpLesson(null);
-      // Re-fetch by toggling user dependency — simplest: reload lessons inline
-      if (user?.id) {
-        supabase
-          .from('class_bookings')
-          .select('id, status')
-          .eq('teacher_id', user.id)
-          .then(({ data }) => {
-            if (!data) return;
-            setLessons(prev =>
-              prev.map(l => {
-                const updated = data.find((d: any) => d.id === l.id);
-                if (!updated) return l;
-                let status: Lesson['status'] = l.status;
-                if (updated.status === 'completed') status = 'completed';
-                else if (updated.status === 'needs_feedback') status = 'needs-feedback';
-                return { ...l, status };
-              })
-            );
-          });
-      }
+      void loadLessonsRef.current();
     }
   };
 

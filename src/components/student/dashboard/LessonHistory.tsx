@@ -16,6 +16,7 @@ interface LessonRow {
   scheduled_at: string;
   duration: number;
   status: string;
+  faultParty?: 'teacher' | 'student' | 'both' | null;
   teacher_name?: string;
   payment_amount?: number;
   teacher_share?: number;
@@ -39,7 +40,7 @@ export function LessonHistory() {
       // 1. Pull this student's bookings
       const { data: bookings, error } = await supabase
         .from('class_bookings')
-        .select('id, scheduled_at, duration_minutes, status, hub_type, notes, teacher_id, price_paid')
+        .select('id, scheduled_at, duration_minutes, status, technical_fault_party, hub_type, notes, teacher_id, price_paid')
         .eq('student_id', user.id)
         .order('scheduled_at', { ascending: false });
 
@@ -87,6 +88,7 @@ export function LessonHistory() {
         scheduled_at: b.scheduled_at,
         duration: b.duration_minutes ?? 30,
         status: b.status,
+        faultParty: b.technical_fault_party ?? null,
         teacher_name: teacherMap[b.teacher_id],
         payment_amount: payMap[b.id]?.amount_charged ?? b.price_paid ?? undefined,
         teacher_share: payMap[b.id]?.teacher_payout,
@@ -127,8 +129,14 @@ export function LessonHistory() {
     return () => { supabase.removeChannel(channel); };
   }, [user?.id]);
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string, faultParty?: 'teacher' | 'student' | 'both' | null) => {
     if (status === 'completed') return <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-100">Completed</Badge>;
+    if (status === 'failed_technical') {
+      const who =
+        faultParty === 'student' ? 'your side' : faultParty === 'teacher' ? "teacher's side" : faultParty === 'both' ? 'both sides' : 'unknown side';
+      return <Badge className="bg-rose-100 text-rose-800 hover:bg-rose-100">Technical issue — {who}</Badge>;
+    }
+    if (status === 'ended_early') return <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100">Ended early</Badge>;
     if (status === 'cancelled') return <Badge variant="destructive">Cancelled</Badge>;
     if (status === 'scheduled' || status === 'confirmed') return <Badge variant="outline">Scheduled</Badge>;
     return <Badge variant="secondary">{status}</Badge>;
@@ -223,7 +231,7 @@ export function LessonHistory() {
                       <TableCell className="font-medium">{lesson.title}</TableCell>
                       <TableCell>{lesson.teacher_name || 'Unknown'}</TableCell>
                       <TableCell><Badge variant="outline">{lesson.duration} min</Badge></TableCell>
-                      <TableCell>{getStatusBadge(lesson.status)}</TableCell>
+                      <TableCell>{getStatusBadge(lesson.status, lesson.faultParty)}</TableCell>
                       <TableCell className="font-medium">
                         {lesson.payment_amount ? (
                           <span>€{Number(lesson.payment_amount).toFixed(2)}</span>

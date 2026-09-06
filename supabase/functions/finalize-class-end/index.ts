@@ -83,6 +83,29 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Guarantee the booking always reaches a terminal status when the
+    // teacher's own tab SKIPPED the wrap-up dialog (left-early exit —
+    // TeacherClassroom.tsx never opens LessonWrapUpDialog in that case, so
+    // end_lesson would otherwise never run and the booking sits at
+    // 'scheduled' forever). Deliberately status-only (mark_booking_ended_status,
+    // not end_lesson_service): a left-early session already has its own
+    // distinct handling (the student is refunded via
+    // refund_credit_on_left_early) and this must NOT start crediting teacher
+    // earnings for a session that was cut short — it only records
+    // 'failed_technical' (with fault_party) when the heartbeat log shows real
+    // disconnects, otherwise 'ended_early'. Restricted to the service_role
+    // Postgres role, which this function's SERVICE_ROLE_KEY client holds and
+    // a browser client never can. Best-effort: a failure here still leaves
+    // the audit row (and refund/alert triggers on it) intact.
+    if (p.leftEarly) {
+      try {
+        const { error: statusErr } = await admin.rpc('mark_booking_ended_status', { p_booking_id: p.bookingId });
+        if (statusErr) console.error('mark_booking_ended_status failed:', statusErr);
+      } catch (e) {
+        console.error('mark_booking_ended_status threw:', e);
+      }
+    }
+
     return new Response(JSON.stringify({ ok: true }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

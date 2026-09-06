@@ -421,6 +421,37 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Surface this verdict on the ongoing teacher/student dashboards, not
+    // just the one-time Post-Lesson Summary page. A human-filed incident
+    // report catches things the automatic heartbeat-disconnect check in
+    // end_lesson()/end_lesson_service() can't (e.g. one-way audio while the
+    // connection itself stayed up), so it's allowed to reclassify a booking
+    // that was auto-marked 'completed' — a real report matters more than the
+    // narrower automatic signal. Only a TECH-related fault reclassifies the
+    // booking status — a no-show or behavioral verdict isn't a "technical
+    // problem" in the sense the dashboards report. Never touches a
+    // 'cancelled' booking, and skips room_ids with no matching booking at
+    // all (e.g. interview rooms).
+    const TECH_STATUSES = new Set([
+      "incomplete_student_tech",
+      "incomplete_teacher_tech",
+      "incomplete_both_tech",
+    ]);
+    if (TECH_STATUSES.has(verdict.status) && verdict.fault_party !== "none") {
+      const { data: currentBooking } = await supabase
+        .from("class_bookings")
+        .select("status")
+        .eq("id", room_id)
+        .maybeSingle();
+      if (currentBooking && currentBooking.status !== "cancelled") {
+        const { error: statusErr } = await supabase
+          .from("class_bookings")
+          .update({ status: "failed_technical", technical_fault_party: verdict.fault_party, updated_at: new Date().toISOString() })
+          .eq("id", room_id);
+        if (statusErr) console.error("failed to write verdict onto class_bookings", statusErr);
+      }
+    }
+
     return new Response(JSON.stringify({ ok: true, verdict, refunded }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
