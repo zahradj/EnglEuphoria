@@ -157,6 +157,16 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
             ...(meta.blueprint ? { lesson_blueprint: meta.blueprint } : {}),
             ...(qaReport ? { qa_report: qaReport, quality_score: qaReport.overall ?? null } : {}),
             ...(meta.criticResult ? { critic_verdict: meta.criticResult.verdict, critic_score: meta.criticResult.overall, critic_scored_at: new Date().toISOString() } : {}),
+            // Marks this row as the new engine's canonical Slide[] schema —
+            // resolvePlaygroundLessonRoute() reads this to send it to
+            // PlayAcademyLesson.tsx instead of the old, structurally
+            // incompatible /lesson/:id reader, and AcademyLibraryPage.tsx
+            // reads it to hide old-format rows until they're re-authored.
+            // Playground rows never pass through this hub branch with a
+            // different contentFormat convention (theirs is the hand-authored
+            // Scene[] engine, an entirely separate content family), so this
+            // is safe to set unconditionally for hub === 'academy'.
+            ...(hub === 'academy' ? { contentFormat: 'academy-v2' } : {}),
           };
           // Silent autosaves must NEVER downgrade a published lesson back to draft.
           // Only an explicit Publish/SaveDraft click (non-silent) can change is_published.
@@ -218,7 +228,7 @@ export function useCreatorLesson({ hub, initialLessonId }: UseCreatorLessonArgs)
             content,
             is_published: meta.publish,
             created_by: userId,
-            ai_metadata: { hub, cefr_level: cefr ?? undefined, slideCount: slides.length, ...(meta.blueprint ? { lesson_blueprint: meta.blueprint } : {}), ...(qaReport ? { qa_report: qaReport, quality_score: qaReport.overall ?? null } : {}), ...(meta.criticResult ? { critic_verdict: meta.criticResult.verdict, critic_score: meta.criticResult.overall, critic_scored_at: new Date().toISOString() } : {}) },
+            ai_metadata: { hub, cefr_level: cefr ?? undefined, slideCount: slides.length, ...(meta.blueprint ? { lesson_blueprint: meta.blueprint } : {}), ...(qaReport ? { qa_report: qaReport, quality_score: qaReport.overall ?? null } : {}), ...(meta.criticResult ? { critic_verdict: meta.criticResult.verdict, critic_score: meta.criticResult.overall, critic_scored_at: new Date().toISOString() } : {}), ...(hub === 'academy' ? { contentFormat: 'academy-v2' } : {}) },
             ...(meta.unitNumber != null ? { slot_unit_number: String(meta.unitNumber) } : {}),
             ...(meta.lessonNumber != null ? { slot_lesson_number: String(meta.lessonNumber) } : {}),
           } as any)

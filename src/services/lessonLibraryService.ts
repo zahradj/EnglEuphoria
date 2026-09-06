@@ -80,17 +80,22 @@ export function targetSystemToHub(targetSystem?: string | null): LibraryHub {
 }
 
 /**
- * Resolve the real player route for a Playground (hand-authored Scene[])
- * lesson, given its ai_metadata. Returns null for anything that isn't one
- * of the recognized Playground content formats — callers should fall back
- * to the generic `/lesson/:id` reader (Academy/Success's AI-slide format)
- * in that case, NOT navigate there for a Playground row: `/lesson/:id`
- * has no idea what a lep1-rich/wt-rich row's `content` field means and,
- * for `target_system: 'kids'` rows with no `content.playground_unit`,
- * silently kicks off a fresh AI generation of an unrelated lesson instead
- * of opening the real one. Mirrors PlaygroundLibraryPage's own
- * handleLessonClick — kept in one place so every entry point (teacher
- * library, student assignment "Start", etc.) resolves the same way.
+ * Resolve the real player route for a lesson whose content isn't the
+ * generic AI-slide format `/lesson/:id` (LessonReaderPage) expects, given
+ * its ai_metadata. Covers both the hand-authored Playground Scene[] formats
+ * and, as of the new Academy engine, `academy-v2` — the canonical
+ * AcademyDemo.tsx Slide[] schema, rendered by PlayAcademyLesson.tsx instead
+ * of the old (and structurally incompatible — see PlayAcademyLesson.tsx's
+ * own header comment) DynamicSlideRenderer path.
+ *
+ * Returns null for anything not recognized here — callers should fall back
+ * to the generic `/lesson/:id` reader in that case, NOT navigate there for
+ * a row this function DOES recognize: `/lesson/:id` has no idea what a
+ * lep1-rich/wt-rich/academy-v2 row's `content` field means and, for
+ * `target_system: 'kids'` rows with no `content.playground_unit`, silently
+ * kicks off a fresh AI generation of an unrelated lesson instead of opening
+ * the real one. Kept in one place so every entry point (teacher library,
+ * student assignment "Start", etc.) resolves the same way.
  */
 export function resolvePlaygroundLessonRoute(lessonId: string, aiMetadata: any): string | null {
   const fmt = aiMetadata?.contentFormat;
@@ -107,6 +112,9 @@ export function resolvePlaygroundLessonRoute(lessonId: string, aiMetadata: any):
   }
   if (fmt === 'scene-player') {
     return `/playground-scene/play/${lessonId}`;
+  }
+  if (fmt === 'academy-v2') {
+    return `/academy-scene/${lessonId}`;
   }
   return null;
 }

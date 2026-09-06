@@ -165,10 +165,14 @@ export const TeacherLessonLibrary: React.FC = () => {
   }
 
   const handleView = (lesson: LibraryLessonCard) => {
-    const playgroundRoute = lesson.hub === 'playground'
+    // resolvePlaygroundLessonRoute also covers the new 'academy-v2' Academy
+    // format now (see its own doc comment) — only Playground and Academy
+    // rows can possibly resolve to a real non-null route; Success/old-format
+    // Academy rows correctly fall through to the generic /lesson/:id reader.
+    const richRoute = lesson.hub === 'playground' || lesson.hub === 'academy'
       ? resolvePlaygroundLessonRoute(lesson.id, { contentFormat: lesson.content_format, unit_number: lesson.unit_number, lesson_number: lesson.lesson_number })
       : null;
-    navigate(playgroundRoute ?? `/lesson/${lesson.id}`);
+    navigate(richRoute ?? `/lesson/${lesson.id}`);
   };
 
   return (

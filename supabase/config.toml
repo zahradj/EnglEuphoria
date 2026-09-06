@@ -104,6 +104,19 @@ project_id = "dcoxpyzoqjvmuuygvlme"
     verify_jwt = false
   [functions.generate-lesson-audio]
     verify_jwt = false
+  # elevenlabs-tts's own source comment claims it's meant to be public/no-JWT
+  # ("so warm-up/audio blocks work for unauthenticated preview sessions"),
+  # but neither it nor generate-elevenlabs-audio (the function
+  # src/lib/elevenLabsAudio.ts's playElevenLabs() actually calls) was ever
+  # listed here — the platform gateway defaults unlisted functions to
+  # verify_jwt = true, so every call was rejected with a 401 before the
+  # function body ever ran whenever the caller's session JWT was even
+  # slightly stale. This is the confirmed root cause of the "Academy lesson
+  # player 401" report.
+  [functions.elevenlabs-tts]
+    verify_jwt = false
+  [functions.generate-elevenlabs-audio]
+    verify_jwt = false
   [functions.generate-lesson-image]
     verify_jwt = false
   [functions.generate-placement-summary]

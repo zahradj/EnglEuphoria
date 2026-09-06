@@ -465,7 +465,15 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
           studentId: studentId ?? null,
           teacherId: authData?.user?.id ?? null,
         });
-        const url = `${supabaseUrl}/functions/v1/finalize-class-end`;
+        // Routed to classroom-mark-crash, not a dedicated finalize-class-end
+        // function — this project is on Supabase's Free plan and already
+        // past its 100-edge-function cap, so a brand-new function slug can't
+        // be deployed right now. classroom-mark-crash was merged to also
+        // handle this exact payload shape (discriminated by the presence of
+        // `bookingId`) rather than leaving this call pointed at a function
+        // that was never actually deployed. See that function's own header
+        // comment for the full rationale.
+        const url = `${supabaseUrl}/functions/v1/classroom-mark-crash`;
         const anon = supabaseAnonKey;
         void fetch(url, {
           method: 'POST',
@@ -476,7 +484,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             Authorization: `Bearer ${anon}`,
           },
           body: payload,
-        }).catch((e) => console.warn('[TeacherClassroom] finalize-class-end failed', e));
+        }).catch((e) => console.warn('[TeacherClassroom] finalize-class-end (via classroom-mark-crash) failed', e));
       } catch (e) {
         console.warn('[TeacherClassroom] pacing telemetry failed', e);
       }

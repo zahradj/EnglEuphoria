@@ -47,10 +47,14 @@ export const PendingAssignments: React.FC = () => {
             // let a failed status update stop the student from opening the lesson.
             supabase.from('student_assignments').update({ status: 'in_progress' }).eq('id', a.id).then(() => {});
             const hub = targetSystemToHub(lesson?.target_system);
-            const playgroundRoute = hub === 'playground'
+            // resolvePlaygroundLessonRoute also covers the new 'academy-v2'
+            // Academy format (see its own doc comment) — returns null for
+            // anything else, so old-format Academy/Success rows correctly
+            // keep falling back to the generic /lesson/:id reader.
+            const richRoute = hub === 'playground' || hub === 'academy'
               ? resolvePlaygroundLessonRoute(a.lesson_id, lesson?.ai_metadata)
               : null;
-            navigate(playgroundRoute ?? `/lesson/${a.lesson_id}`);
+            navigate(richRoute ?? `/lesson/${a.lesson_id}`);
           };
           return (
             <div

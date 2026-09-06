@@ -162,6 +162,9 @@ const PlayA2Unit1Lesson3 = lazy(() => import("./pages/playground-scene/PlayA2Uni
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundLibraryPublic = lazy(() => import("./pages/playground-library/PlaygroundLibraryPublic"));
 const AcademyLibraryPage = lazy(() => import("./pages/playground-library/AcademyLibraryPage"));
+// New Academy lesson engine (Phase 1) — canonical AcademyDemo.tsx schema/renderer,
+// routed to for any curriculum_lessons row with ai_metadata.contentFormat === 'academy-v2'.
+const PlayAcademyLesson = lazy(() => import("./pages/academy-scene/PlayAcademyLesson"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
 const AcademyClassroom = lazy(() => import("./pages/AcademyClassroom"));
 const AcademyCreator = lazy(() => import("./pages/AcademyCreator"));
@@ -249,6 +252,12 @@ const App = () => {
                       <Route path="/playground-scene/play/:lessonId" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayScenesLessonPage /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* Academy Library (new engine) — 'academy-v2' format lessons. */}
+                      <Route path="/academy-scene/:id" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayAcademyLesson /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/playground-scene/lesson-1" element={

@@ -15,6 +15,11 @@ interface LessonRow {
     unit_theme?: string;
     lesson_number?: number;
     lesson_role?: string;
+    /** 'academy-v2' once authored/saved through the new engine — see
+     *  resolvePlaygroundLessonRoute() and PlayAcademyLesson.tsx. Absent on
+     *  every pre-existing row (old AI-slide format, incompatible with the
+     *  real student player — see that file's header comment). */
+    contentFormat?: string;
   } | null;
   content: { slides?: unknown[] } | null;
 }
@@ -47,6 +52,14 @@ const UNIT_ART = [
 
 const isReady = (row: LessonRow) => Array.isArray(row.content?.slides) && (row.content!.slides as unknown[]).length > 0;
 
+// Show a row if it's still an empty authoring slot (isReady === false — those
+// stay visible so a creator can start building the NEW-format lesson in it,
+// per the pre-seeded-slot convention this library already follows), OR it's
+// built AND in the new engine's format. A built row in the OLD format is
+// hidden, not deleted, until it's re-authored — the old player it was built
+// for renders most of its slide types incorrectly (see PlayAcademyLesson.tsx).
+const isVisibleInLibrary = (row: LessonRow) => !isReady(row) || row.ai_metadata?.contentFormat === 'academy-v2';
+
 /**
  * Academy's own content-creator dashboard library — same shape as
  * PlaygroundLibraryPage (CEFR level tabs -> unit accordion -> lesson cards),
@@ -77,7 +90,8 @@ export default function AcademyLibraryPage() {
         console.error('Academy Library fetch error', error);
         setRows([]);
       } else {
-        setRows((data ?? []) as unknown as LessonRow[]);
+        const all = (data ?? []) as unknown as LessonRow[];
+        setRows(all.filter(isVisibleInLibrary));
       }
       setLoading(false);
     })();

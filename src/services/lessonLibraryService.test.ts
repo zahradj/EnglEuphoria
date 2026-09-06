@@ -41,6 +41,12 @@ describe('resolvePlaygroundLessonRoute', () => {
     ).toBe('/playground-scene/play/the-lesson-id');
   });
 
+  test('academy-v2 (new Academy engine) is keyed by lesson id, routes to PlayAcademyLesson', () => {
+    expect(
+      resolvePlaygroundLessonRoute('the-lesson-id', { contentFormat: 'academy-v2' }),
+    ).toBe('/academy-scene/the-lesson-id');
+  });
+
   test('missing unit_number/lesson_number default to 1', () => {
     expect(resolvePlaygroundLessonRoute('id-5', { contentFormat: 'lep1-rich' })).toBe('/playground-scene/lesson-1');
   });
