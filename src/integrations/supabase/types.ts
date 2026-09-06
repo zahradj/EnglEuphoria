@@ -8250,6 +8250,50 @@ export type Database = {
           },
         ]
       }
+      mastery_milestone_results: {
+        Row: {
+          completed_at: string
+          created_at: string
+          id: string
+          passed: boolean
+          score: number
+          skill_scores: Json
+          student_id: string
+          unit_id: string
+          weakest_skill: string | null
+        }
+        Insert: {
+          completed_at?: string
+          created_at?: string
+          id?: string
+          passed?: boolean
+          score: number
+          skill_scores?: Json
+          student_id: string
+          unit_id: string
+          weakest_skill?: string | null
+        }
+        Update: {
+          completed_at?: string
+          created_at?: string
+          id?: string
+          passed?: boolean
+          score?: number
+          skill_scores?: Json
+          student_id?: string
+          unit_id?: string
+          weakest_skill?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mastery_milestone_results_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "curriculum_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       material_skills: {
         Row: {
           id: string
