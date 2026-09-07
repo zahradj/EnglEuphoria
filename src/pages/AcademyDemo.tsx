@@ -146,6 +146,12 @@ export type Slide =
       cast: { id: string; name: string }[];
       lines: { speaker: string; before: string; answer: string; after: string }[];
     }
+  // A tap-to-hear numbers grid (word list is fixed English vocabulary,
+  // generated in the component, not authored per lesson) -- used to teach
+  // the numbers a student needs before an activity asks them to state
+  // their age. Tapping a number plays it and reinforces the target
+  // sentence pattern ("I am ___ years old").
+  | { type: 'number_chart'; block: Block; title?: string; from?: number; to?: number }
   | { type: 'speaking_task'; block: Block; prompt: string; starters?: string[] }
   | { type: 'reflection'; block: Block; prompt: string }
   | { type: 'cluster'; block: Block; title: string; content?: string; activities: ClusterActivity[] }
@@ -1253,6 +1259,65 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
   );
 }
 
+const NUMBER_WORDS = [
+  'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+  'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',
+];
+
+// Tap-to-hear numbers grid. Built specifically as a scaffold before an
+// activity asks the student to state their age -- tapping a number plays
+// it AND says the full target sentence ("I am seven years old."), so the
+// student rehearses the exact pattern they'll need next, not just the
+// isolated number word.
+function NumberChartSlide({ slide, t }: { slide: Extract<Slide, { type: 'number_chart' }>; t: ThemeTokens }) {
+  const { playVoice } = useAcademyAudio();
+  const from = slide.from ?? 1;
+  const to = slide.to ?? 20;
+  const nums = Array.from({ length: to - from + 1 }, (_, i) => from + i);
+  const [picked, setPicked] = useState<number | null>(null);
+
+  const tap = (n: number) => {
+    setPicked(n);
+    void playVoice(`${NUMBER_WORDS[n]}. I am ${NUMBER_WORDS[n]} years old.`);
+  };
+
+  return (
+    <div className="w-full max-w-3xl mx-auto space-y-5">
+      <div className="space-y-1 text-center">
+        <div className={`text-xs uppercase tracking-widest ${t.muted}`}>Numbers</div>
+        <h2 className={`text-2xl font-semibold md:text-3xl ${t.text}`}>{slide.title || 'Numbers 1–20'}</h2>
+        <p className={`text-sm ${t.muted}`}>Tap a number to hear it — practice saying your age!</p>
+      </div>
+      <div className="grid grid-cols-4 gap-2.5 sm:grid-cols-5">
+        {nums.map((n) => {
+          const active = picked === n;
+          return (
+            <button
+              key={n}
+              onClick={() => tap(n)}
+              className={`flex flex-col items-center justify-center gap-0.5 rounded-2xl border-2 py-3 shadow-sm transition active:scale-95 ${
+                active ? 'border-indigo-500 bg-indigo-600 text-white' : `${t.card} hover:border-indigo-400`
+              }`}
+            >
+              <span className="text-2xl font-black">{n}</span>
+              <span className={`text-[11px] font-semibold uppercase tracking-wide ${active ? 'text-indigo-100' : t.muted}`}>
+                {NUMBER_WORDS[n]}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      {picked !== null && (
+        <div className="flex justify-center">
+          <span className="rounded-full bg-emerald-100 px-4 py-2 text-sm font-bold text-emerald-700">
+            "I am {NUMBER_WORDS[picked]} years old!" 🎉
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Dialogue lines can mark specific words as vocabulary with **word** —
 // stripMd gives TTS the plain sentence; DialogueLineText renders those
 // spans as individually tappable "say it again" chips so a student can
@@ -1987,6 +2052,7 @@ function renderSlideInner({ slide, t, fullBleed }: { slide: Slide; t: ThemeToken
     case 'role_play': return <RolePlaySlide slide={slide} t={t} />;
     case 'scene_dialogue': return <SceneDialogueSlide slide={slide} fullBleed={fullBleed} />;
     case 'conversation_fill': return <ConversationFillSlide slide={slide} fullBleed={fullBleed} />;
+    case 'number_chart': return <NumberChartSlide slide={slide} t={t} />;
     case 'speaking_task': return <SpeakingTaskSlide slide={slide} t={t} />;
     case 'reflection': return <ReflectionSlide slide={slide} t={t} />;
     case 'cluster': return <ClusterSlide slide={slide} t={t} />;
