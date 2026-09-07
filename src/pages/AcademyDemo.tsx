@@ -1099,6 +1099,34 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
   );
 }
 
+// Dialogue lines can mark specific words as vocabulary with **word** —
+// stripMd gives TTS the plain sentence; DialogueLineText renders those
+// spans as individually tappable "say it again" chips so a student can
+// click a word inside the conversation itself and hear + repeat just that
+// word, instead of vocabulary living only in a separate card deck later.
+const stripMd = (s: string) => s.replace(/\*\*(.+?)\*\*/g, '$1');
+
+function DialogueLineText({ text, onWordTap }: { text: string; onWordTap: (word: string) => void }) {
+  const parts = text.split(/\*\*(.+?)\*\*/g);
+  return (
+    <>
+      {parts.map((part, i) =>
+        i % 2 === 1 ? (
+          <button
+            key={i}
+            onClick={(e) => { e.stopPropagation(); onWordTap(part); }}
+            className="mx-0.5 rounded-md bg-indigo-100 px-1.5 py-0.5 font-bold text-indigo-700 underline decoration-indigo-400 decoration-2 underline-offset-2 transition active:scale-95"
+          >
+            {part}
+          </button>
+        ) : (
+          <React.Fragment key={i}>{part}</React.Fragment>
+        ),
+      )}
+    </>
+  );
+}
+
 function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 'scene_dialogue' }>; fullBleed?: boolean }) {
   const { playVoice } = useAcademyAudio();
   const [step, setStep] = useState(0);
@@ -1111,17 +1139,18 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
 
   const current = started && step < slide.lines.length ? slide.lines[step] : null;
   const finished = started && step >= slide.lines.length;
+  const hasVocabWords = slide.lines.some((l) => /\*\*(.+?)\*\*/.test(l.text));
 
   const begin = () => {
     setStarted(true);
     setStep(0);
-    playVoice(slide.lines[0]?.text ?? '');
+    playVoice(stripMd(slide.lines[0]?.text ?? ''));
   };
-  const replay = () => current && playVoice(current.text);
+  const replay = () => current && playVoice(stripMd(current.text));
   const advance = () => {
     const nextStep = step + 1;
     setStep(nextStep);
-    if (nextStep < slide.lines.length) playVoice(slide.lines[nextStep].text);
+    if (nextStep < slide.lines.length) playVoice(stripMd(slide.lines[nextStep].text));
   };
 
   // fullBleed (set by PlayAcademyLesson, the only edge-to-edge player) drops
@@ -1182,9 +1211,18 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
           >
             <div className="rounded-2xl bg-white px-5 py-3 text-center shadow-2xl">
               <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-indigo-500">{nameFor(current.speaker)}</div>
-              <div className="text-lg font-semibold text-slate-800">{current.text}</div>
+              <div className="text-lg font-semibold text-slate-800">
+                <DialogueLineText text={current.text} onWordTap={(w) => playVoice(w)} />
+              </div>
             </div>
           </div>
+          {hasVocabWords && step === 0 && (
+            <div className="absolute inset-x-0 top-[14%] z-20 flex justify-center px-4">
+              <span className="rounded-full bg-white/95 px-4 py-1.5 text-xs font-bold text-indigo-700 shadow-lg">
+                👆 Tap the highlighted words to hear and repeat them!
+              </span>
+            </div>
+          )}
           <div className="absolute inset-x-0 bottom-6 z-30 flex justify-center">
             <button
               onClick={advance}
