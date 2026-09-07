@@ -248,11 +248,17 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
   // A real illustrated background for this lesson's block wins over the CSS
   // gradient fallback — see LessonRow.blockImages' own comment.
   const realSceneImage = slide ? lesson?.blockImages?.[slide.block] : undefined;
-  // scene_dialogue and canvas_game/living_canvas all render their own
-  // full-bleed container (with its own background) already — wrapping them
-  // in the speech-bubble panel below would double-box them.
+  // scene_dialogue, canvas_game/living_canvas, and intro all render their
+  // own complete, self-contained visual already (a full scene, a game
+  // board, or a branded cover card) — wrapping any of them in the
+  // speech-bubble panel below just double-boxes them. Confirmed live: the
+  // intro slide's own cover card (EnglEuphoria badge, level pill, gradient)
+  // was rendering nested inside the white bubble until this was added.
   const isFullBleedSlideType =
-    slide?.type === 'scene_dialogue' || slide?.type === 'canvas_game' || slide?.type === 'living_canvas';
+    slide?.type === 'scene_dialogue' ||
+    slide?.type === 'canvas_game' ||
+    slide?.type === 'living_canvas' ||
+    slide?.type === 'intro';
 
   const persistCompletion = async () => {
     if (!user?.id || !lesson?.id) return;
