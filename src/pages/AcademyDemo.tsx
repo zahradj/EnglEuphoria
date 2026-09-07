@@ -1131,6 +1131,14 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
   const { playVoice } = useAcademyAudio();
   const [step, setStep] = useState(0);
   const [started, setStarted] = useState(false);
+  // Per-line "hold to repeat" gate, mirroring Playground's MeetScene
+  // (SceneRenderer.tsx) hold-and-confirm mechanic: a line only counts as
+  // practiced once the student holds the repeat button for ~1.2s, not just
+  // by tapping through. repeated tracks which line indices have cleared it;
+  // Next line stays disabled until the current one has.
+  const [repeated, setRepeated] = useState<Set<number>>(new Set());
+  const [held, setHeld] = useState(false);
+  const holdTimer = useRef<number | null>(null);
 
   const anchorFor = (speakerId: string) =>
     slide.cast.find((c) => c.id === speakerId)?.anchor_left ?? '50%';
@@ -1140,6 +1148,7 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
   const current = started && step < slide.lines.length ? slide.lines[step] : null;
   const finished = started && step >= slide.lines.length;
   const hasVocabWords = slide.lines.some((l) => /\*\*(.+?)\*\*/.test(l.text));
+  const currentRepeated = repeated.has(step);
 
   const begin = () => {
     setStarted(true);
@@ -1151,6 +1160,18 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
     const nextStep = step + 1;
     setStep(nextStep);
     if (nextStep < slide.lines.length) playVoice(stripMd(slide.lines[nextStep].text));
+  };
+  const startHold = () => {
+    if (currentRepeated) return;
+    setHeld(true);
+    holdTimer.current = window.setTimeout(() => {
+      setHeld(false);
+      setRepeated((s) => new Set(s).add(step));
+    }, 1200);
+  };
+  const endHold = () => {
+    setHeld(false);
+    if (holdTimer.current) window.clearTimeout(holdTimer.current);
   };
 
   // fullBleed (set by PlayAcademyLesson, the only edge-to-edge player) drops
@@ -1223,13 +1244,34 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
               </span>
             </div>
           )}
-          <div className="absolute inset-x-0 bottom-6 z-30 flex justify-center">
-            <button
-              onClick={advance}
-              className="rounded-full bg-white/95 px-6 py-3 text-sm font-bold uppercase tracking-widest text-indigo-700 shadow-xl ring-1 ring-indigo-200 active:scale-95"
-            >
-              {step === slide.lines.length - 1 ? 'Finish ✓' : 'Next line →'}
-            </button>
+
+          {/* Mandatory "hold to repeat" step, same shape as Playground's
+              MeetScene bottom sheet: the student holds the button while
+              saying the line out loud; Next line only unlocks once they
+              have. Whole-conversation listening isn't enough on its own —
+              every single line gets its own repeat rep, matching direction. */}
+          <div className="absolute inset-x-0 bottom-6 z-30 flex flex-col items-center gap-3 px-4">
+            {!currentRepeated ? (
+              <div className="w-full max-w-sm rounded-t-3xl border-t-4 border-indigo-400 bg-white/95 p-4 text-center shadow-2xl backdrop-blur">
+                <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-indigo-500">🎤 Your turn — say it out loud</div>
+                <button
+                  onPointerDown={startHold}
+                  onPointerUp={endHold}
+                  onPointerLeave={endHold}
+                  onPointerCancel={endHold}
+                  className={`w-full rounded-full bg-indigo-600 py-4 text-sm font-black uppercase tracking-widest text-white shadow-xl transition active:scale-95 ${held ? 'scale-95 bg-indigo-700' : ''}`}
+                >
+                  {held ? 'Keep holding…' : 'Hold & repeat the line'}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={advance}
+                className="rounded-full bg-white/95 px-6 py-3 text-sm font-bold uppercase tracking-widest text-indigo-700 shadow-xl ring-1 ring-indigo-200 active:scale-95"
+              >
+                {step === slide.lines.length - 1 ? 'Finish ✓' : 'Next line →'}
+              </button>
+            )}
           </div>
         </>
       )}
