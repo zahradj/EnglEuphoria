@@ -648,14 +648,20 @@ function GrammarPatternSlide({ slide, t }: { slide: Extract<Slide, { type: 'gram
       </h2>
       <div className="grid grid-cols-2 gap-3">
         {slide.rows.map((r, i) => (
-          <div key={i} className={`px-4 py-3 rounded-md border ${t.card.replace('bg-', 'bg-')} border-slate-700`}>
-            <div className={`text-base ${t.text}`}><GrammarMarkup text={r.a} /></div>
-          </div>
-        )).flatMap((node, i) => [node,
-          <div key={`b${i}`} className="px-4 py-3 rounded-md border border-indigo-500/40 bg-indigo-500/5">
-            <div className="text-base text-indigo-200"><GrammarMarkup text={slide.rows[i].b} /></div>
-          </div>
-        ])}
+          <React.Fragment key={i}>
+            <div className={`px-4 py-3 rounded-md border ${t.card}`}>
+              <div className={`text-base ${t.text}`}><GrammarMarkup text={r.a} /></div>
+            </div>
+            {/* Was text-indigo-200 -- a near-white shade meant for a dark
+                card, unreadable on the white speech-bubble this slide
+                actually renders inside (confirmed live: invisible text).
+                indigo-700 keeps the same accent hue with real contrast on
+                a light card. */}
+            <div className="px-4 py-3 rounded-md border border-indigo-500/40 bg-indigo-500/5">
+              <div className="text-base font-semibold text-indigo-700"><GrammarMarkup text={r.b} /></div>
+            </div>
+          </React.Fragment>
+        ))}
       </div>
       {slide.rule && (
         <p className={`text-sm ${t.muted}`}>
