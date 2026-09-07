@@ -109,7 +109,13 @@ export type Slide =
       title?: string;
       bg_image_url: string;
       cast: { id: string; name: string; anchor_left: string }[];
-      lines: { speaker: string; text: string }[];
+      // student_answer (optional): when a line is a question the STUDENT
+      // should answer in their own words rather than just echo back, this
+      // is what the repeat/answer gate asks for instead of the line's own
+      // text — e.g. Ava asks "What is your name?" (text) and the gate
+      // prompts "Hi! I am ___." (student_answer), a genuinely different
+      // sentence, not a repeat of Ava's line.
+      lines: { speaker: string; text: string; student_answer?: string }[];
     }
   | { type: 'speaking_task'; block: Block; prompt: string; starters?: string[] }
   | { type: 'reflection'; block: Block; prompt: string }
@@ -1226,15 +1232,20 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
           >
             🔁 Replay
           </button>
+          {/* A real speech bubble now — rounded card + a triangular tail —
+              instead of a plain frameless rectangle, offset to sit beside
+              the speaker (not centered on top of them), tail pointing back
+              down-left toward whoever is talking. */}
           <div
-            className="absolute top-[26%] z-20 max-w-[340px] -translate-x-1/2 px-4 transition-all duration-300"
-            style={{ left: anchorFor(current.speaker) }}
+            className="absolute top-[20%] z-20 max-w-[340px] px-4 transition-all duration-300"
+            style={{ left: `calc(${anchorFor(current.speaker)} + 14%)` }}
           >
-            <div className="rounded-2xl bg-white px-5 py-3 text-center shadow-2xl">
+            <div className="relative rounded-2xl bg-white px-5 py-3 text-center shadow-2xl">
               <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-indigo-500">{nameFor(current.speaker)}</div>
               <div className="text-lg font-semibold text-slate-800">
                 <DialogueLineText text={current.text} onWordTap={(w) => playVoice(w)} />
               </div>
+              <div className="absolute -bottom-2 left-7 h-4 w-4 rotate-45 bg-white" />
             </div>
           </div>
           {hasVocabWords && step === 0 && (
@@ -1245,15 +1256,23 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
             </div>
           )}
 
-          {/* Mandatory "hold to repeat" step, same shape as Playground's
-              MeetScene bottom sheet: the student holds the button while
-              saying the line out loud; Next line only unlocks once they
-              have. Whole-conversation listening isn't enough on its own —
-              every single line gets its own repeat rep, matching direction. */}
+          {/* Mandatory "hold to repeat/answer" step, same shape as
+              Playground's MeetScene bottom sheet: the student holds the
+              button while saying the line out loud; Next line only unlocks
+              once they have. When the line carries a student_answer, this
+              becomes a real Q&A turn — the gate shows and asks for THAT
+              sentence (the student's own answer), not an echo of Ava's
+              question, so "What is your name?" is followed by the student
+              actually saying their own name, not repeating the question. */}
           <div className="absolute inset-x-0 bottom-6 z-30 flex flex-col items-center gap-3 px-4">
             {!currentRepeated ? (
               <div className="w-full max-w-sm rounded-t-3xl border-t-4 border-indigo-400 bg-white/95 p-4 text-center shadow-2xl backdrop-blur">
-                <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-indigo-500">🎤 Your turn — say it out loud</div>
+                <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-indigo-500">
+                  {current.student_answer ? '🎤 Your turn — answer!' : '🎤 Your turn — say it out loud'}
+                </div>
+                {current.student_answer && (
+                  <div className="mb-2 text-sm font-semibold text-slate-700">"{current.student_answer}"</div>
+                )}
                 <button
                   onPointerDown={startHold}
                   onPointerUp={endHold}
@@ -1261,7 +1280,7 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
                   onPointerCancel={endHold}
                   className={`w-full rounded-full bg-indigo-600 py-4 text-sm font-black uppercase tracking-widest text-white shadow-xl transition active:scale-95 ${held ? 'scale-95 bg-indigo-700' : ''}`}
                 >
-                  {held ? 'Keep holding…' : 'Hold & repeat the line'}
+                  {held ? 'Keep holding…' : current.student_answer ? 'Hold & say your answer' : 'Hold & repeat the line'}
                 </button>
               </div>
             ) : (
