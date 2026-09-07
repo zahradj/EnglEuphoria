@@ -567,6 +567,8 @@ function TrueFalseSlide({ slide, t }: { slide: Extract<Slide, { type: 'truefalse
     <div className="space-y-6 max-w-2xl w-full">
       <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{item.statement}</h2>
       <div className="flex gap-3">
+        {/* True/False as thumbs up/down -- an icon a pre-reader recognizes
+            instantly, not text they have to decode. True stays first. */}
         {[true, false].map((v) => {
           const active = picked === v;
           const isAnswer = picked !== null && v === item.answer;
@@ -575,8 +577,14 @@ function TrueFalseSlide({ slide, t }: { slide: Extract<Slide, { type: 'truefalse
           else if (active && !correct) cls = 'bg-red-600 text-white border-red-600';
           else if (picked !== null && isAnswer) cls = 'border border-emerald-500 text-emerald-300';
           return (
-            <button key={String(v)} onClick={() => picked === null && setPicks((p) => ({ ...p, [index]: v }))} className={`px-6 py-2.5 rounded-md font-medium transition ${cls}`}>
-              {v ? 'True' : 'False'}
+            <button
+              key={String(v)}
+              onClick={() => picked === null && setPicks((p) => ({ ...p, [index]: v }))}
+              className={`flex flex-col items-center gap-1 px-8 py-3 rounded-xl font-medium transition ${cls}`}
+              aria-label={v ? 'True' : 'False'}
+            >
+              <span className="text-3xl leading-none">{v ? '👍' : '👎'}</span>
+              <span className="text-xs uppercase tracking-widest">{v ? 'True' : 'False'}</span>
             </button>
           );
         })}
