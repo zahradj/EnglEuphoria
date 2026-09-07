@@ -248,7 +248,11 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
   // A real illustrated background for this lesson's block wins over the CSS
   // gradient fallback — see LessonRow.blockImages' own comment.
   const realSceneImage = slide ? lesson?.blockImages?.[slide.block] : undefined;
-  const isFullBleedSlideType = slide?.type === 'scene_dialogue';
+  // scene_dialogue and canvas_game/living_canvas all render their own
+  // full-bleed container (with its own background) already — wrapping them
+  // in the speech-bubble panel below would double-box them.
+  const isFullBleedSlideType =
+    slide?.type === 'scene_dialogue' || slide?.type === 'canvas_game' || slide?.type === 'living_canvas';
 
   const persistCompletion = async () => {
     if (!user?.id || !lesson?.id) return;
@@ -414,11 +418,16 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
           </div>
         </header>
 
-        {/* Scene content. scene_dialogue renders itself edge-to-edge (it's
-            already a real full-bleed scene); everything else floats as a
-            glass panel over the block's background, mirroring Playground's
-            GlassCard-over-bg convention. */}
-        <main className="absolute inset-0 z-20 flex items-center justify-center px-4 pt-28 pb-24 md:px-8">
+        {/* Scene content. scene_dialogue/canvas_game/living_canvas render
+            themselves edge-to-edge (each already carries its own full-bleed
+            art); everything else appears as a real speech bubble anchored
+            over the block's scene — the same visual language as the
+            scene_dialogue art we already built (Ava & Theo), not a boxed
+            content card. Bubble content is always rendered in the LIGHT
+            theme regardless of the page's dark/light toggle, since a white
+            speech bubble needs dark text (themeMap.light), independent of
+            what the toggle does to the surrounding chrome. */}
+        <main className="absolute inset-0 z-20 flex items-end justify-center px-4 pb-24 pt-24 md:px-8">
           <AnimatePresence mode="wait">
             {isFullBleedSlideType ? (
               <motion.div
@@ -434,13 +443,26 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
             ) : (
               <motion.div
                 key={i}
-                className="w-full max-w-2xl rounded-3xl bg-[#0B0A1F]/70 p-6 shadow-2xl ring-1 ring-white/10 backdrop-blur-xl md:p-10"
+                className="relative w-full max-w-xl"
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.25 }}
               >
-                <SlideRenderer slide={slide} t={t} />
+                <span
+                  className="mb-1.5 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-widest shadow"
+                  style={{ color: cssScene.accent }}
+                >
+                  🗣 Ava
+                </span>
+                <div className="max-h-[56vh] overflow-y-auto rounded-2xl bg-white px-5 py-4 shadow-2xl md:px-7 md:py-6">
+                  <SlideRenderer slide={slide} t={themeMap.light} />
+                </div>
+                {/* Speech-bubble tail, pointing down toward the "speaker". */}
+                <div
+                  className="absolute -bottom-2.5 left-8 h-5 w-5 rotate-45 bg-white"
+                  style={{ boxShadow: '2px 2px 2px rgba(0,0,0,0.04)' }}
+                />
               </motion.div>
             )}
           </AnimatePresence>
