@@ -287,7 +287,13 @@ function CanvasItem({
         key={el.id}
         initial={initial}
         animate={{
-          opacity: 1, scale: 1, y: 0, x: 0,
+          // Drive the snap offset through the SAME x/y motion values that
+          // the drag gesture itself writes to (not a separate style
+          // translateX/Y) -- otherwise framer-motion leaves its own
+          // drag-residual transform on the element and this snap offset
+          // stacks on top of it instead of replacing it, flinging the tile
+          // hundreds of px off-canvas on a successful drop.
+          opacity: 1, scale: 1, y: dragOffset.y, x: dragOffset.x,
           rotate: el.rotation ?? 0,
         }}
         exit={exitProps as any}
@@ -306,8 +312,6 @@ function CanvasItem({
           width: `${widthPct}%`,
           height: el.height ? `${el.height}%` : 'auto',
           aspectRatio: el.height ? undefined : '1 / 1',
-          translateX: dragOffset.x,
-          translateY: dragOffset.y,
           zIndex: el.z_index ?? 1,
           cursor: isDraggable ? (snapped ? 'default' : 'grab') : isReveal ? 'pointer' : 'default',
           // shake when wrong

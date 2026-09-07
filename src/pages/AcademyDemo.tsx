@@ -609,21 +609,27 @@ function MultipleSlide({ slide, t }: { slide: Extract<Slide, { type: 'multiple' 
   return (
     <div className="space-y-6 max-w-2xl w-full">
       <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{item.question}</h2>
-      <div className="space-y-2">
+      {/* Chunky, colorful pill options with a clear correct/wrong icon on
+          pick -- matches the true/false thumbs-up/down treatment instead of
+          the old plain bordered rows that looked identical whichever theme
+          wrapped them. */}
+      <div className="grid gap-3 sm:grid-cols-2">
         {item.options.map((opt) => {
           const active = picked === opt;
           const isAnswer = opt === item.answer;
-          let cls = `border-slate-700 hover:border-indigo-500/60 ${t.text}`;
-          if (picked && active && isAnswer) cls = 'border-emerald-500 bg-emerald-500/10 text-emerald-200';
-          else if (picked && active && !isAnswer) cls = 'border-red-500 bg-red-500/10 text-red-200';
-          else if (picked && isAnswer) cls = 'border-emerald-500/50 text-emerald-300';
+          let cls = `${t.btnGhost} bg-transparent`;
+          if (picked && active && isAnswer) cls = 'border-2 border-emerald-500 bg-emerald-500/10 text-emerald-600';
+          else if (picked && active && !isAnswer) cls = 'border-2 border-red-500 bg-red-500/10 text-red-600';
+          else if (picked && isAnswer) cls = 'border-2 border-emerald-500/50 text-emerald-600';
           return (
             <button
               key={opt}
               onClick={() => picked === null && setPicks((p) => ({ ...p, [index]: opt }))}
-              className={`w-full text-left px-4 py-3 rounded-md border transition ${cls}`}
+              className={`flex items-center justify-between gap-2 rounded-2xl border-2 px-5 py-4 text-lg font-semibold shadow-sm transition ${cls}`}
             >
-              {opt}
+              <span>{opt}</span>
+              {picked && active && (isAnswer ? <span className="text-xl">✓</span> : <span className="text-xl">✗</span>)}
+              {picked && !active && isAnswer && <span className="text-xl">✓</span>}
             </button>
           );
         })}
