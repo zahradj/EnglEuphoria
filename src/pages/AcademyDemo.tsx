@@ -98,7 +98,23 @@ export type Slide =
   | { type: 'fill_blank'; block: Block; prompt: string; before?: string; after?: string; answer?: string; items?: { before: string; answer: string; after: string }[] }
   | { type: 'sentence_builder'; block: Block; prompt: string; words?: string[]; answer?: string[]; items?: { words: string[]; answer: string[] }[] }
   | { type: 'debate_scale'; block: Block; prompt: string }
-  | { type: 'role_play'; block: Block; title: string; lineA: string; lineB: string }
+  | {
+      type: 'role_play';
+      block: Block;
+      title: string;
+      lineA: string;
+      lineB: string;
+      // Optional second turn: after the student answers lineA in their own
+      // words, Ava invites them to ask something back -- askHints are
+      // tappable sentence-starter chips (tap to drop the text into the
+      // compose box) for a student who's stuck on how to phrase a
+      // question; askReply is Ava's canned closing reply once the student
+      // sends their own question. All optional so existing lineA/lineB-only
+      // content (a single answer-only turn) keeps working unchanged.
+      askPrompt?: string;
+      askHints?: string[];
+      askReply?: string;
+    }
   // Full-bleed illustrated dialogue scene — background art with the cast already
   // painted into it (never a floating cutout, same convention Playground's
   // RoleplayScene uses), one line revealed at a time with a speech bubble
@@ -1124,22 +1140,48 @@ function DebateScaleSlide({ slide, t }: { slide: Extract<Slide, { type: 'debate_
   );
 }
 
-// Was two static lines of dialogue text (A said this, B said this) -- no
-// actual student input. Now a real phone-texting UI: Ava's line arrives as
-// an incoming message bubble, lide.lineB (the old scripted "B" reply)
-// renders once as a faded, dashed example bubble showing the pattern, and
-// the student types their OWN reply into a real compose bar -- each send
-// appears as a genuine outgoing bubble, same student-writes-it-themselves
-// spirit as scene_dialogue's student_answer gate.
+// Real phone-texting UI, structured as a genuine two-way exchange rather
+// than a single answer: stage 1, Ava asks (lineA) and the student answers
+// in their OWN words (lineB is shown only as a faded, dashed example until
+// they do); stage 2 (only when the slide carries an askPrompt), Ava invites
+// the student to ask HER something back, with tappable sentence-starter
+// hint chips for anyone stuck on how to phrase a question -- tapping one
+// drops it straight into the compose box, which the student can still edit
+// before sending; stage 3, Ava's canned askReply closes the loop. A slide
+// with no askPrompt behaves exactly like the original single-turn version.
+type RolePlayMsg = { from: 'ava' | 'student'; text: string };
+
 function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play' }>; t: ThemeTokens }) {
+  const [messages, setMessages] = useState<RolePlayMsg[]>([{ from: 'ava', text: slide.lineA }]);
+  const [stage, setStage] = useState<'answer' | 'ask' | 'done'>('answer');
   const [draft, setDraft] = useState('');
-  const [sent, setSent] = useState<string[]>([]);
+  const hasAskTurn = !!slide.askPrompt;
+
   const send = () => {
     const msg = draft.trim();
     if (!msg) return;
-    setSent((s) => [...s, msg]);
     setDraft('');
+    if (stage === 'answer') {
+      setMessages((m) => [...m, { from: 'student', text: msg }]);
+      if (hasAskTurn) {
+        window.setTimeout(() => {
+          setMessages((m) => [...m, { from: 'ava', text: slide.askPrompt! }]);
+          setStage('ask');
+        }, 500);
+      } else {
+        setStage('done');
+      }
+    } else if (stage === 'ask') {
+      setMessages((m) => [...m, { from: 'student', text: msg }]);
+      setStage('done');
+      if (slide.askReply) {
+        window.setTimeout(() => {
+          setMessages((m) => [...m, { from: 'ava', text: slide.askReply! }]);
+        }, 500);
+      }
+    }
   };
+
   return (
     <div className="mx-auto w-full max-w-sm space-y-3">
       <div className={`text-xs uppercase tracking-widest text-center ${t.muted}`}>{slide.title}</div>
@@ -1150,39 +1192,68 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
           <span className="text-sm font-semibold text-slate-800">Ava</span>
         </div>
         {/* Message thread */}
-        <div className="flex min-h-[220px] flex-col gap-2 bg-slate-50 p-4">
-          <div className="flex justify-start">
-            <div className="max-w-[80%] rounded-2xl rounded-bl-sm border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm">
-              <GrammarMarkup text={slide.lineA} />
+        <div className="flex min-h-[240px] flex-col gap-2 bg-slate-50 p-4">
+          {messages.map((m, i) => (
+            <div key={i} className={`flex ${m.from === 'ava' ? 'justify-start' : 'justify-end'}`}>
+              <div
+                className={
+                  m.from === 'ava'
+                    ? 'max-w-[80%] rounded-2xl rounded-bl-sm border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm'
+                    : 'max-w-[80%] rounded-2xl rounded-br-sm bg-indigo-600 px-3 py-2 text-sm text-white shadow-sm'
+                }
+              >
+                <GrammarMarkup text={m.text} />
+              </div>
             </div>
-          </div>
-          {sent.length === 0 && slide.lineB && (
+          ))}
+          {/* Faded example of what to say -- only while the student hasn't
+              answered yet, and only for the first (answer) turn. */}
+          {stage === 'answer' && slide.lineB && (
             <div className="flex justify-end">
               <div className="max-w-[80%] rounded-2xl rounded-br-sm border-2 border-dashed border-indigo-300 bg-indigo-50/60 px-3 py-2 text-sm text-indigo-400">
                 <GrammarMarkup text={slide.lineB} />
               </div>
             </div>
           )}
-          {sent.map((msg, i) => (
-            <div key={i} className="flex justify-end">
-              <div className="max-w-[80%] rounded-2xl rounded-br-sm bg-indigo-600 px-3 py-2 text-sm text-white shadow-sm">
-                {msg}
-              </div>
+          {stage === 'done' && (
+            <div className="flex justify-center pt-1">
+              <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-emerald-700">
+                ✓ Conversation complete
+              </span>
             </div>
-          ))}
+          )}
         </div>
+
+        {/* Hint chips -- only during the "student asks" turn, for anyone
+            stuck on how to phrase a question; tapping one fills the box,
+            still editable before sending. */}
+        {stage === 'ask' && slide.askHints && slide.askHints.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 border-t border-slate-200 bg-white px-3 pt-2">
+            {slide.askHints.map((h) => (
+              <button
+                key={h}
+                onClick={() => setDraft(h)}
+                className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600 transition active:scale-95"
+              >
+                {h}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Compose bar -- the student's own words, not a scripted line. */}
         <div className="flex items-center gap-2 border-t border-slate-200 bg-white px-3 py-2">
           <input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && send()}
-            placeholder="Type your reply…"
-            className="flex-1 rounded-full border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none focus:border-indigo-500"
+            disabled={stage === 'done'}
+            placeholder={stage === 'ask' ? 'Ask Ava something…' : 'Type your reply…'}
+            className="flex-1 rounded-full border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none focus:border-indigo-500 disabled:opacity-50"
           />
           <button
             onClick={send}
-            disabled={!draft.trim()}
+            disabled={!draft.trim() || stage === 'done'}
             aria-label="Send"
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-white transition disabled:opacity-30"
           >
