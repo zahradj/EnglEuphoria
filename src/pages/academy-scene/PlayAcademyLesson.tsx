@@ -257,20 +257,21 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
   // block-level image/gradient, so that art fills the actual viewport
   // instead of sitting boxed inside the content area.
   const slideOwnImage =
-    slide?.type === 'scene_dialogue'
+    slide?.type === 'scene_dialogue' || slide?.type === 'conversation_fill'
       ? slide.bg_image_url
       : slide?.type === 'canvas_game' || slide?.type === 'living_canvas'
         ? (slide as any).background_image
         : undefined;
   const pageBgImage = slideOwnImage || realSceneImage;
-  // scene_dialogue, canvas_game/living_canvas, and intro all render their
-  // own complete, self-contained visual already (a full scene, a game
-  // board, or a branded cover card) — wrapping any of them in the
-  // speech-bubble panel below just double-boxes them. Confirmed live: the
+  // scene_dialogue, conversation_fill, canvas_game/living_canvas, and intro
+  // all render their own complete, self-contained visual already (a full
+  // scene, a game board, or a branded cover card) — wrapping any of them in
+  // the speech-bubble panel below just double-boxes them. Confirmed live: the
   // intro slide's own cover card (EnglEuphoria badge, level pill, gradient)
   // was rendering nested inside the white bubble until this was added.
   const isFullBleedSlideType =
     slide?.type === 'scene_dialogue' ||
+    slide?.type === 'conversation_fill' ||
     slide?.type === 'canvas_game' ||
     slide?.type === 'living_canvas' ||
     slide?.type === 'intro';

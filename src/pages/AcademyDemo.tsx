@@ -117,6 +117,20 @@ export type Slide =
       // sentence, not a repeat of Ava's line.
       lines: { speaker: string; text: string; student_answer?: string }[];
     }
+  // A full conversation recap shown as real chat bubbles (alternating side
+  // per speaker, same visual language as scene_dialogue) with one word
+  // missing per line -- the student taps a tile from the word bank, then
+  // taps the blank it belongs in. Unlike scene_dialogue (one line revealed
+  // at a time), every bubble is visible at once so the whole exchange reads
+  // as a completed story once every blank is filled.
+  | {
+      type: 'conversation_fill';
+      block: Block;
+      title?: string;
+      bg_image_url: string;
+      cast: { id: string; name: string }[];
+      lines: { speaker: string; before: string; answer: string; after: string }[];
+    }
   | { type: 'speaking_task'; block: Block; prompt: string; starters?: string[] }
   | { type: 'reflection'; block: Block; prompt: string }
   | { type: 'cluster'; block: Block; title: string; content?: string; activities: ClusterActivity[] }
@@ -1381,6 +1395,131 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
   );
 }
 
+// Real chat bubbles (same rounded-card + rotated-square-tail language as
+// SceneDialogueSlide), one bubble per line, alternating side by whichever
+// speaker appears first in the data -- not a hardcoded id, so it works for
+// any two-person cast. Every bubble is visible at once (unlike
+// SceneDialogueSlide's one-line-at-a-time reveal) with a tap-to-fill blank;
+// the student taps a word tile then taps the blank it belongs in.
+function ConversationFillSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 'conversation_fill' }>; fullBleed?: boolean }) {
+  const { playVoice } = useAcademyAudio();
+
+  const tiles = useMemo(
+    () => [...slide.lines.map((l, i) => ({ id: `tile-${i}`, word: l.answer }))].sort(() => Math.random() - 0.5),
+    [slide],
+  );
+  const sideFor = useMemo(() => {
+    const order: string[] = [];
+    slide.lines.forEach((l) => { if (!order.includes(l.speaker)) order.push(l.speaker); });
+    return (speaker: string) => (order.indexOf(speaker) === 0 ? 'left' : 'right');
+  }, [slide]);
+
+  const [placedTile, setPlacedTile] = useState<(string | null)[]>(() => slide.lines.map(() => null));
+  const [selected, setSelected] = useState<string | null>(null);
+  const [wrongLine, setWrongLine] = useState<number | null>(null);
+
+  const usedTileIds = new Set(placedTile.filter(Boolean) as string[]);
+  const allDone = placedTile.every(Boolean);
+  const nameFor = (id: string) => slide.cast.find((c) => c.id === id)?.name ?? id;
+
+  const tapTile = (tileId: string) => {
+    if (usedTileIds.has(tileId)) return;
+    setSelected((s) => (s === tileId ? null : tileId));
+  };
+
+  const tapBlank = (lineIndex: number) => {
+    const already = placedTile[lineIndex];
+    if (already) {
+      setPlacedTile((p) => { const next = [...p]; next[lineIndex] = null; return next; });
+      return;
+    }
+    if (!selected) return;
+    const tile = tiles.find((t) => t.id === selected);
+    if (!tile) return;
+    const line = slide.lines[lineIndex];
+    if (tile.word.toLowerCase() === line.answer.toLowerCase()) {
+      setPlacedTile((p) => { const next = [...p]; next[lineIndex] = tile.id; return next; });
+      setSelected(null);
+      void playVoice(`${line.before}${tile.word}${line.after}`);
+    } else {
+      setWrongLine(lineIndex);
+      window.setTimeout(() => setWrongLine(null), 500);
+    }
+  };
+
+  return (
+    <div className={fullBleed ? 'relative h-full w-full overflow-hidden' : 'relative w-full max-w-4xl overflow-hidden rounded-2xl shadow-2xl'}>
+      {!fullBleed && (
+        <>
+          <img src={slide.bg_image_url} alt={slide.title || 'Conversation'} className="absolute inset-0 h-full w-full object-cover" />
+          <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,10,40,0.35) 0%, rgba(15,10,40,0) 30%, rgba(15,10,40,0) 55%, rgba(76,29,149,0.4) 100%)' }} />
+        </>
+      )}
+
+      {slide.title && (
+        <span className="absolute left-5 top-5 z-20 w-fit rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-indigo-700 shadow">
+          {slide.title}
+        </span>
+      )}
+
+      <div className="relative z-10 flex h-full flex-col">
+        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 pb-2 pt-16">
+          {slide.lines.map((line, i) => {
+            const side = sideFor(line.speaker);
+            const filled = placedTile[i] !== null;
+            const tileWord = filled ? tiles.find((t) => t.id === placedTile[i])?.word : null;
+            return (
+              <div key={i} className={`flex ${side === 'left' ? 'justify-start' : 'justify-end'}`}>
+                <div className="relative max-w-[82%]">
+                  <div className="rounded-2xl bg-white px-4 py-2.5 shadow-xl">
+                    <div className="mb-0.5 text-[10px] font-bold uppercase tracking-widest text-indigo-500">{nameFor(line.speaker)}</div>
+                    <div className="text-base font-semibold leading-snug text-slate-800">
+                      {line.before}
+                      <button
+                        onClick={() => tapBlank(i)}
+                        className={
+                          filled
+                            ? 'mx-1 inline-flex items-center rounded-md bg-emerald-100 px-2 py-0.5 align-middle font-bold text-emerald-700 ring-1 ring-emerald-400'
+                            : `mx-1 inline-block min-w-[2.75rem] rounded-md border-2 border-dashed px-1 align-middle ${wrongLine === i ? 'border-red-400 bg-red-50' : 'border-indigo-400 bg-indigo-50'}`
+                        }
+                      >
+                        {filled ? tileWord : ' '}
+                      </button>
+                      {line.after}
+                    </div>
+                  </div>
+                  <div className={`absolute -bottom-1.5 h-3.5 w-3.5 rotate-45 bg-white ${side === 'left' ? 'left-6' : 'right-6'}`} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Word bank -- tap a tile, then tap the blank it belongs in. */}
+        <div className="shrink-0 border-t border-white/15 bg-black/25 px-4 py-3 backdrop-blur-sm">
+          {allDone ? (
+            <div className="text-center text-sm font-bold text-emerald-300">🎉 Great job! You completed the story.</div>
+          ) : (
+            <div className="flex flex-wrap justify-center gap-2">
+              {tiles.filter((t) => !usedTileIds.has(t.id)).map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => tapTile(t.id)}
+                  className={`rounded-full px-4 py-2 text-sm font-bold shadow transition active:scale-95 ${
+                    selected === t.id ? 'bg-white text-indigo-700 ring-2 ring-white' : 'bg-indigo-600 text-white hover:bg-indigo-500'
+                  }`}
+                >
+                  {t.word}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SpeakingTaskSlide({ slide, t }: { slide: Extract<Slide, { type: 'speaking_task' }>; t: ThemeTokens }) {
   return (
     <div className="space-y-6 max-w-2xl w-full">
@@ -1788,6 +1927,7 @@ function renderSlideInner({ slide, t, fullBleed }: { slide: Slide; t: ThemeToken
     case 'debate_scale': return <DebateScaleSlide slide={slide} t={t} />;
     case 'role_play': return <RolePlaySlide slide={slide} t={t} />;
     case 'scene_dialogue': return <SceneDialogueSlide slide={slide} fullBleed={fullBleed} />;
+    case 'conversation_fill': return <ConversationFillSlide slide={slide} fullBleed={fullBleed} />;
     case 'speaking_task': return <SpeakingTaskSlide slide={slide} t={t} />;
     case 'reflection': return <ReflectionSlide slide={slide} t={t} />;
     case 'cluster': return <ClusterSlide slide={slide} t={t} />;
