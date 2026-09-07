@@ -608,7 +608,11 @@ function MultipleSlide({ slide, t }: { slide: Extract<Slide, { type: 'multiple' 
   const score = items.reduce((s, it, i) => s + ((picks[i] && picks[i] === it.answer) ? 1 : 0), 0);
   return (
     <div className="space-y-6 max-w-2xl w-full">
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{item.question}</h2>
+      {/* GrammarMarkup (not raw text) so a "___" blank renders as its own
+          dashed box, not plain underscore characters buried in the
+          sentence -- confirmed live: a student couldn't tell the blank
+          apart from the rest of the question. */}
+      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}><GrammarMarkup text={item.question} /></h2>
       {/* Chunky, colorful pill options with a clear correct/wrong icon on
           pick -- matches the true/false thumbs-up/down treatment instead of
           the old plain bordered rows that looked identical whichever theme
@@ -1106,19 +1110,70 @@ function DebateScaleSlide({ slide, t }: { slide: Extract<Slide, { type: 'debate_
   );
 }
 
+// Was two static lines of dialogue text (A said this, B said this) -- no
+// actual student input. Now a real phone-texting UI: Ava's line arrives as
+// an incoming message bubble, lide.lineB (the old scripted "B" reply)
+// renders once as a faded, dashed example bubble showing the pattern, and
+// the student types their OWN reply into a real compose bar -- each send
+// appears as a genuine outgoing bubble, same student-writes-it-themselves
+// spirit as scene_dialogue's student_answer gate.
 function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play' }>; t: ThemeTokens }) {
+  const [draft, setDraft] = useState('');
+  const [sent, setSent] = useState<string[]>([]);
+  const send = () => {
+    const msg = draft.trim();
+    if (!msg) return;
+    setSent((s) => [...s, msg]);
+    setDraft('');
+  };
   return (
-    <div className="space-y-6 max-w-2xl w-full">
-      <div className={`text-xs uppercase tracking-widest ${t.muted}`}>Role play</div>
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.title}</h2>
-      <div className="space-y-3">
-        <div className="flex items-start gap-3">
-          <span className="px-2 py-1 rounded text-xs font-semibold bg-indigo-600 text-white">A</span>
-          <p className={`text-lg ${t.text}`}>{slide.lineA}</p>
+    <div className="mx-auto w-full max-w-sm space-y-3">
+      <div className={`text-xs uppercase tracking-widest text-center ${t.muted}`}>{slide.title}</div>
+      <div className="overflow-hidden rounded-[1.75rem] border-4 border-slate-900 bg-slate-100 shadow-2xl">
+        {/* Contact header, like an actual messages app */}
+        <div className="flex items-center gap-2 border-b border-slate-200 bg-white px-4 py-3">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 text-sm font-bold text-white">A</span>
+          <span className="text-sm font-semibold text-slate-800">Ava</span>
         </div>
-        <div className="flex items-start gap-3">
-          <span className="px-2 py-1 rounded text-xs font-semibold bg-pink-600 text-white">B</span>
-          <p className={`text-lg ${t.text}`}>{slide.lineB}</p>
+        {/* Message thread */}
+        <div className="flex min-h-[220px] flex-col gap-2 bg-slate-50 p-4">
+          <div className="flex justify-start">
+            <div className="max-w-[80%] rounded-2xl rounded-bl-sm border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm">
+              <GrammarMarkup text={slide.lineA} />
+            </div>
+          </div>
+          {sent.length === 0 && slide.lineB && (
+            <div className="flex justify-end">
+              <div className="max-w-[80%] rounded-2xl rounded-br-sm border-2 border-dashed border-indigo-300 bg-indigo-50/60 px-3 py-2 text-sm text-indigo-400">
+                <GrammarMarkup text={slide.lineB} />
+              </div>
+            </div>
+          )}
+          {sent.map((msg, i) => (
+            <div key={i} className="flex justify-end">
+              <div className="max-w-[80%] rounded-2xl rounded-br-sm bg-indigo-600 px-3 py-2 text-sm text-white shadow-sm">
+                {msg}
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Compose bar -- the student's own words, not a scripted line. */}
+        <div className="flex items-center gap-2 border-t border-slate-200 bg-white px-3 py-2">
+          <input
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && send()}
+            placeholder="Type your reply…"
+            className="flex-1 rounded-full border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none focus:border-indigo-500"
+          />
+          <button
+            onClick={send}
+            disabled={!draft.trim()}
+            aria-label="Send"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-white transition disabled:opacity-30"
+          >
+            ➤
+          </button>
         </div>
       </div>
     </div>

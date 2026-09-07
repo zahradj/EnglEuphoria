@@ -16,6 +16,12 @@ import React from 'react';
 
 const TAG_RE = /<\s*(verb|noun|adjective|adj|target)\s*>([\s\S]*?)<\s*\/\s*\1\s*>/gi;
 const BOLD_RE = /\*\*(.+?)\*\*/g;
+// A run of 2+ underscores is the fill-in-the-blank convention used across
+// this app's authored content ("I ___ Tom.", "I spend about ____ hours").
+// Rendered as plain characters it reads as part of the sentence and a
+// pre-reader can miss it entirely -- a dashed, standalone box makes the
+// blank unmistakably its own thing to tap/think about.
+const BLANK_RE = /_{2,}/g;
 
 const TAG_CLASS: Record<string, string> = {
   verb: 'font-bold text-red-600',
@@ -25,16 +31,35 @@ const TAG_CLASS: Record<string, string> = {
   target: 'font-bold bg-yellow-200 text-slate-900 px-1 rounded',
 };
 
+function renderBlanks(text: string, keyPrefix: string): React.ReactNode[] {
+  if (!text) return [];
+  const parts = text.split(BLANK_RE);
+  const nodes: React.ReactNode[] = [];
+  parts.forEach((p, i) => {
+    if (p) nodes.push(<React.Fragment key={`${keyPrefix}-p-${i}`}>{p}</React.Fragment>);
+    if (i < parts.length - 1) {
+      nodes.push(
+        <span
+          key={`${keyPrefix}-blank-${i}`}
+          className="inline-block align-middle mx-1 min-w-[2.75rem] h-[1.4em] rounded-md border-2 border-dashed border-indigo-400 bg-indigo-50"
+          aria-label="blank"
+        />,
+      );
+    }
+  });
+  return nodes;
+}
+
 function renderBold(text: string, keyPrefix: string): React.ReactNode[] {
   const parts = text.split(BOLD_RE);
-  return parts.map((p, i) =>
-    i % 2 === 1 ? (
-      <strong key={`${keyPrefix}-b-${i}`} className="font-bold text-violet-700">
-        {p}
-      </strong>
-    ) : (
-      <React.Fragment key={`${keyPrefix}-t-${i}`}>{p}</React.Fragment>
-    ),
+  return parts.flatMap((p, i) =>
+    i % 2 === 1
+      ? [
+          <strong key={`${keyPrefix}-b-${i}`} className="font-bold text-violet-700">
+            {p}
+          </strong>,
+        ]
+      : renderBlanks(p, `${keyPrefix}-t-${i}`),
   );
 }
 
