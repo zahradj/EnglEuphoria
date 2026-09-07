@@ -303,7 +303,7 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
 
   if (loading) {
     return (
-      <div className="min-h-dvh flex items-center justify-center bg-[#0B0F1A] text-white">
+      <div dir="ltr" className="min-h-dvh flex items-center justify-center bg-[#0B0F1A] text-white">
         <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
       </div>
     );
@@ -311,7 +311,7 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
 
   if (loadError || !lesson || !slide) {
     return (
-      <div className="min-h-dvh flex flex-col items-center justify-center gap-3 bg-[#0B0F1A] text-white px-6 text-center">
+      <div dir="ltr" className="min-h-dvh flex flex-col items-center justify-center gap-3 bg-[#0B0F1A] text-white px-6 text-center">
         <p className="text-lg font-semibold">{loadError || 'This lesson could not be loaded.'}</p>
         <button
           onClick={() => navigate('/dashboard')}
@@ -329,7 +329,15 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
         <title>{lesson.title} · Academy</title>
       </Helmet>
 
-      <div className="relative h-dvh w-full overflow-hidden text-white font-sans" data-hub="academy">
+      {/* Academy content is authored English-only and this layout (prev/next
+          nav, progress dots, floating chrome) assumes LTR — dir defaults to
+          whatever LocaleContext/i18n set on <html> for the signed-in user's
+          locale (e.g. rtl for an Arabic-locale account), which without this
+          override mirrors everything: the title's bidi reorders ("Who Am I?"
+          renders as "?Who Am I"), Next/Previous swap sides, and "1 / 32"
+          renders as "32 / 1". AcademyLibraryPage.tsx already needed this
+          exact same guard for the same reason. */}
+      <div dir="ltr" className="relative h-dvh w-full overflow-hidden text-white font-sans" data-hub="academy">
         {/* Full-bleed scene background, cross-fading per block — the
             Academy equivalent of a Playground scene's `bg` image. Real
             illustrated art (lesson.blockImages) wins when this lesson has
