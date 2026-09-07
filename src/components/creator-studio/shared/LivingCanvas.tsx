@@ -118,7 +118,15 @@ export function LivingCanvas({ slide, hub, onAllSolved, authoring, onMoveElement
             : `relative w-full aspect-[16/9] rounded-3xl border-4 overflow-hidden shadow-lg ${HUB_FRAME[hub]}`
         }
         style={
-          slide.background_image
+          // fullBleed: PlayAcademyLesson already paints this exact
+          // background_image as the whole page's background (behind the
+          // header/nav too, not just this board's own box, which is smaller
+          // than the full viewport). Drawing it a second time here at a
+          // different container size made the two independent cover-crops
+          // disagree at the edges — a visible seam. Omit it here and let
+          // the page background show through for a seamless edge-to-edge
+          // photo, matching SceneDialogueSlide's identical fullBleed fix.
+          !fullBleed && slide.background_image
             ? { backgroundImage: `url(${slide.background_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }
             : undefined
         }

@@ -1129,10 +1129,26 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
   // filling its parent completely — the parent itself is what's sized to the
   // viewport there. Every other caller (AcademyDemo's own split-pane preview,
   // Creator Studio) omits the prop and keeps the original bounded-card look.
+  //
+  // fullBleed ALSO skips this component's own <img>/scrim: PlayAcademyLesson
+  // already paints this exact bg_image_url as the whole page's background
+  // (covering the header and nav too, not just this component's own box —
+  // see pageBgImage there). Drawing the same photo a second time here, at a
+  // different container size (this component's box is only the area between
+  // the header and the bottom nav, smaller than the full viewport), made
+  // each layer's independent cover-crop math disagree at the edges — a
+  // visible seam right where this box met the page background, i.e. a
+  // letterboxed-looking border around what was meant to be one seamless
+  // edge-to-edge photo. Rendering nothing here and letting the page
+  // background show through removes the seam entirely.
   return (
     <div className={fullBleed ? 'relative h-full w-full overflow-hidden' : 'relative w-full aspect-video max-w-4xl overflow-hidden rounded-2xl shadow-2xl'}>
-      <img src={slide.bg_image_url} alt={slide.title || 'Dialogue scene'} className="absolute inset-0 h-full w-full object-cover" />
-      <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,10,40,0.35) 0%, rgba(15,10,40,0) 30%, rgba(15,10,40,0) 55%, rgba(76,29,149,0.4) 100%)' }} />
+      {!fullBleed && (
+        <>
+          <img src={slide.bg_image_url} alt={slide.title || 'Dialogue scene'} className="absolute inset-0 h-full w-full object-cover" />
+          <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,10,40,0.35) 0%, rgba(15,10,40,0) 30%, rgba(15,10,40,0) 55%, rgba(76,29,149,0.4) 100%)' }} />
+        </>
+      )}
 
       {slide.title && (
         <span className="absolute left-5 top-5 w-fit rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-indigo-700 shadow">
