@@ -1296,7 +1296,7 @@ function NumberChartSlide({ slide, t }: { slide: Extract<Slide, { type: 'number_
               key={n}
               onClick={() => tap(n)}
               className={`flex flex-col items-center justify-center gap-0.5 rounded-2xl border-2 py-3 shadow-sm transition active:scale-95 ${
-                active ? 'border-indigo-500 bg-indigo-600 text-white' : `${t.card} hover:border-indigo-400`
+                active ? 'border-indigo-500 bg-indigo-600 text-white' : `${t.card} ${t.text} hover:border-indigo-400`
               }`}
             >
               <span className="text-2xl font-black">{n}</span>
