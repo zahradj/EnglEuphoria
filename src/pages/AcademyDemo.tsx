@@ -102,18 +102,17 @@ export type Slide =
       type: 'role_play';
       block: Block;
       title: string;
-      lineA: string;
-      lineB: string;
-      // Optional second turn: after the student answers lineA in their own
-      // words, Ava invites them to ask something back -- askHints are
-      // tappable sentence-starter chips (tap to drop the text into the
-      // compose box) for a student who's stuck on how to phrase a
-      // question; askReply is Ava's canned closing reply once the student
-      // sends their own question. All optional so existing lineA/lineB-only
-      // content (a single answer-only turn) keeps working unchanged.
-      askPrompt?: string;
-      askHints?: string[];
-      askReply?: string;
+      lineA: string; // Ava's first question, e.g. "Hi! I am Ava. What is your name?"
+      lineB: string; // faded example answer, shown until the student sends their own
+      // Optional second question: Ava asks again (not the student inventing
+      // a question to Ava) once the student has answered the first --
+      // e.g. "Nice to meet you! How old are you?" -- same
+      // answer-in-your-own-words pattern as the first turn. All optional so
+      // existing lineA/lineB-only content (a single-question turn) keeps
+      // working unchanged.
+      lineC?: string; // Ava's transition + second question
+      lineD?: string; // faded example answer for the second question
+      closing?: string; // Ava's closing line once both questions are answered
     }
   // Full-bleed illustrated dialogue scene — background art with the cast already
   // painted into it (never a floating cutout, same convention Playground's
@@ -1140,47 +1139,53 @@ function DebateScaleSlide({ slide, t }: { slide: Extract<Slide, { type: 'debate_
   );
 }
 
-// Real phone-texting UI, structured as a genuine two-way exchange rather
-// than a single answer: stage 1, Ava asks (lineA) and the student answers
-// in their OWN words (lineB is shown only as a faded, dashed example until
-// they do); stage 2 (only when the slide carries an askPrompt), Ava invites
-// the student to ask HER something back, with tappable sentence-starter
-// hint chips for anyone stuck on how to phrase a question -- tapping one
-// drops it straight into the compose box, which the student can still edit
-// before sending; stage 3, Ava's canned askReply closes the loop. A slide
-// with no askPrompt behaves exactly like the original single-turn version.
+// Real phone-texting UI. Ava asks a question, the student answers in
+// their OWN words (lineB is shown only as a faded, dashed example until
+// they do); if the slide carries a second question (lineC), Ava asks
+// again -- Ava is the one asking both times, not the student inventing a
+// question to send her -- and the student answers a second time (lineD is
+// that turn's faded example); once both are answered, Ava's closing line
+// wraps up the exchange. A slide with no lineC behaves exactly like a
+// single-question turn.
 type RolePlayMsg = { from: 'ava' | 'student'; text: string };
 
 function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play' }>; t: ThemeTokens }) {
   const [messages, setMessages] = useState<RolePlayMsg[]>([{ from: 'ava', text: slide.lineA }]);
-  const [stage, setStage] = useState<'answer' | 'ask' | 'done'>('answer');
+  const [stage, setStage] = useState<'q1' | 'q2' | 'done'>('q1');
   const [draft, setDraft] = useState('');
-  const hasAskTurn = !!slide.askPrompt;
+  const hasSecondQuestion = !!slide.lineC;
 
   const send = () => {
     const msg = draft.trim();
     if (!msg) return;
     setDraft('');
-    if (stage === 'answer') {
+    if (stage === 'q1') {
       setMessages((m) => [...m, { from: 'student', text: msg }]);
-      if (hasAskTurn) {
+      if (hasSecondQuestion) {
         window.setTimeout(() => {
-          setMessages((m) => [...m, { from: 'ava', text: slide.askPrompt! }]);
-          setStage('ask');
+          setMessages((m) => [...m, { from: 'ava', text: slide.lineC! }]);
+          setStage('q2');
         }, 500);
       } else {
         setStage('done');
+        if (slide.closing) {
+          window.setTimeout(() => {
+            setMessages((m) => [...m, { from: 'ava', text: slide.closing! }]);
+          }, 500);
+        }
       }
-    } else if (stage === 'ask') {
+    } else if (stage === 'q2') {
       setMessages((m) => [...m, { from: 'student', text: msg }]);
       setStage('done');
-      if (slide.askReply) {
+      if (slide.closing) {
         window.setTimeout(() => {
-          setMessages((m) => [...m, { from: 'ava', text: slide.askReply! }]);
+          setMessages((m) => [...m, { from: 'ava', text: slide.closing! }]);
         }, 500);
       }
     }
   };
+
+  const currentExample = stage === 'q1' ? slide.lineB : stage === 'q2' ? slide.lineD : undefined;
 
   return (
     <div className="mx-auto w-full max-w-sm space-y-3">
@@ -1207,11 +1212,11 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
             </div>
           ))}
           {/* Faded example of what to say -- only while the student hasn't
-              answered yet, and only for the first (answer) turn. */}
-          {stage === 'answer' && slide.lineB && (
+              answered the CURRENT question yet. */}
+          {currentExample && (
             <div className="flex justify-end">
               <div className="max-w-[80%] rounded-2xl rounded-br-sm border-2 border-dashed border-indigo-300 bg-indigo-50/60 px-3 py-2 text-sm text-indigo-400">
-                <GrammarMarkup text={slide.lineB} />
+                <GrammarMarkup text={currentExample} />
               </div>
             </div>
           )}
@@ -1224,23 +1229,6 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
           )}
         </div>
 
-        {/* Hint chips -- only during the "student asks" turn, for anyone
-            stuck on how to phrase a question; tapping one fills the box,
-            still editable before sending. */}
-        {stage === 'ask' && slide.askHints && slide.askHints.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 border-t border-slate-200 bg-white px-3 pt-2">
-            {slide.askHints.map((h) => (
-              <button
-                key={h}
-                onClick={() => setDraft(h)}
-                className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600 transition active:scale-95"
-              >
-                {h}
-              </button>
-            ))}
-          </div>
-        )}
-
         {/* Compose bar -- the student's own words, not a scripted line. */}
         <div className="flex items-center gap-2 border-t border-slate-200 bg-white px-3 py-2">
           <input
@@ -1248,7 +1236,7 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && send()}
             disabled={stage === 'done'}
-            placeholder={stage === 'ask' ? 'Ask Ava something…' : 'Type your reply…'}
+            placeholder="Type your reply…"
             className="flex-1 rounded-full border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none focus:border-indigo-500 disabled:opacity-50"
           />
           <button
