@@ -23,6 +23,12 @@ interface Props {
    *  and onMoveElement is called as elements settle. */
   authoring?: boolean;
   onMoveElement?: (id: string, x: number, y: number) => void;
+  /** When true, fills the parent completely instead of the default bounded,
+   *  max-w-5xl/aspect-[16/9]/bordered card — set by edge-to-edge players
+   *  (PlayAcademyLesson) whose parent is already sized to the viewport.
+   *  Omitted everywhere else, so every other caller (Creator Studio
+   *  authoring, other previews) keeps the original bounded-card look. */
+  fullBleed?: boolean;
 }
 
 function speak(text?: string) {
@@ -34,7 +40,7 @@ function speak(text?: string) {
   void playElevenLabs(text);
 }
 
-export function LivingCanvas({ slide, hub, onAllSolved, authoring, onMoveElement }: Props) {
+export function LivingCanvas({ slide, hub, onAllSolved, authoring, onMoveElement, fullBleed }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [solved, setSolved] = useState<Set<string>>(new Set());
@@ -88,14 +94,14 @@ export function LivingCanvas({ slide, hub, onAllSolved, authoring, onMoveElement
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto flex flex-col gap-3">
+    <div className={fullBleed ? 'h-full w-full flex flex-col gap-3' : 'w-full max-w-5xl mx-auto flex flex-col gap-3'}>
       {(slide.title || slide.instruction) && (
-        <div className="text-center">
-          {slide.title && <h2 className="text-2xl font-extrabold text-slate-800">{slide.title}</h2>}
+        <div className={fullBleed ? 'text-center shrink-0 px-4 pt-2' : 'text-center'}>
+          {slide.title && <h2 className={fullBleed ? 'text-2xl font-extrabold text-white drop-shadow-lg' : 'text-2xl font-extrabold text-slate-800'}>{slide.title}</h2>}
           {slide.instruction && (
             <button
               onClick={() => speak(slide.instruction_audio || slide.instruction)}
-              className="inline-flex items-center gap-2 text-slate-700 mt-1 hover:text-slate-900"
+              className={fullBleed ? 'inline-flex items-center gap-2 text-white/90 mt-1 hover:text-white drop-shadow' : 'inline-flex items-center gap-2 text-slate-700 mt-1 hover:text-slate-900'}
             >
               <Volume2 className="w-4 h-4" />
               <span className="text-sm">{slide.instruction}</span>
@@ -106,7 +112,11 @@ export function LivingCanvas({ slide, hub, onAllSolved, authoring, onMoveElement
 
       <div
         ref={containerRef}
-        className={`relative w-full aspect-[16/9] rounded-3xl border-4 overflow-hidden shadow-lg ${HUB_FRAME[hub]}`}
+        className={
+          fullBleed
+            ? 'relative flex-1 min-h-0 w-full overflow-hidden'
+            : `relative w-full aspect-[16/9] rounded-3xl border-4 overflow-hidden shadow-lg ${HUB_FRAME[hub]}`
+        }
         style={
           slide.background_image
             ? { backgroundImage: `url(${slide.background_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }

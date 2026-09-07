@@ -248,6 +248,21 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
   // A real illustrated background for this lesson's block wins over the CSS
   // gradient fallback — see LessonRow.blockImages' own comment.
   const realSceneImage = slide ? lesson?.blockImages?.[slide.block] : undefined;
+  // Playground's PlayUnitLesson.tsx drives its ENTIRE page background from a
+  // single per-scene `scene.bg` — one real image, cover-fit on the page root,
+  // with the scene's own content floating directly on top (no separate
+  // bounded/aspect-locked image card nested inside). Mirrored here: a slide
+  // that carries its own real art (scene_dialogue's bg_image_url, a
+  // canvas_game's background_image) wins as the page background over the
+  // block-level image/gradient, so that art fills the actual viewport
+  // instead of sitting boxed inside the content area.
+  const slideOwnImage =
+    slide?.type === 'scene_dialogue'
+      ? slide.bg_image_url
+      : slide?.type === 'canvas_game' || slide?.type === 'living_canvas'
+        ? (slide as any).background_image
+        : undefined;
+  const pageBgImage = slideOwnImage || realSceneImage;
   // scene_dialogue, canvas_game/living_canvas, and intro all render their
   // own complete, self-contained visual already (a full scene, a game
   // board, or a branded cover card) — wrapping any of them in the
@@ -347,43 +362,34 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
           renders as "?Who Am I"), Next/Previous swap sides, and "1 / 32"
           renders as "32 / 1". AcademyLibraryPage.tsx already needed this
           exact same guard for the same reason. */}
-      <div dir="ltr" className="relative h-dvh w-full overflow-hidden text-white font-sans" data-hub="academy">
-        {/* Full-bleed scene background, cross-fading per block — the
-            Academy equivalent of a Playground scene's `bg` image. Real
-            illustrated art (lesson.blockImages) wins when this lesson has
-            it; otherwise the CSS gradient scene is the fallback. */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={slide.block}
-            className="absolute inset-0"
-            style={
-              realSceneImage
-                ? { backgroundImage: `url(${realSceneImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-                : { background: cssScene.background }
-            }
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            {realSceneImage ? (
-              // Scrim so floating chrome/glass content stay legible over a photo.
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'linear-gradient(180deg, rgba(11,10,31,0.55) 0%, rgba(11,10,31,0.15) 22%, rgba(11,10,31,0.35) 60%, rgba(11,10,31,0.75) 100%)',
-                }}
-              />
-            ) : (
-              <div className="absolute inset-0 opacity-[0.35]" style={{ backgroundImage: cssScene.motif, backgroundSize: '26px 26px' }} />
-            )}
-          </motion.div>
-        </AnimatePresence>
+      {/* Structure mirrors Playground's PlayUnitLesson.tsx one-for-one: the
+          current slide's own real art (or the block's) is the PAGE
+          background itself — cover-fit, edge-to-edge — with all chrome and
+          content floating directly on top of it. Not a separate bounded
+          image card nested inside a content area (that's what produced the
+          letterboxed/boxed-in look this replaces). */}
+      <div
+        dir="ltr"
+        className="relative h-dvh w-full overflow-hidden text-white font-sans transition-[background-image] duration-500"
+        data-hub="academy"
+        style={
+          pageBgImage
+            ? { backgroundImage: `url(${pageBgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }
+            : { background: cssScene.background }
+        }
+      >
+        {pageBgImage ? (
+          <>
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/55" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,0.35)_100%)]" />
+          </>
+        ) : (
+          <div className="pointer-events-none absolute inset-0 opacity-[0.35]" style={{ backgroundImage: cssScene.motif, backgroundSize: '26px 26px' }} />
+        )}
 
-        {/* Floating top chrome — lesson chip, progress dots, block label, minimal controls. */}
-        <header className="absolute inset-x-0 top-0 z-30 px-4 pt-4 md:px-8 md:pt-6">
-          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
+        <div className="relative z-10 flex h-full w-full flex-col px-0 pb-4 pt-4">
+          {/* Top chrome — lesson chip, block label, minimal controls. */}
+          <header className="flex items-center justify-between gap-4 px-4 md:px-8">
             <div className="flex min-w-0 items-center gap-3 rounded-full bg-black/30 py-1.5 pl-1.5 pr-4 backdrop-blur-md ring-1 ring-white/10">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-sm font-bold">
                 A
@@ -406,97 +412,98 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
                 {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </button>
             </div>
-          </div>
+          </header>
 
-          {/* Progress dots — one per slide, current block's accent highlights the active run. */}
-          <div className="mx-auto mt-3 flex max-w-5xl items-center gap-1 overflow-x-auto pb-1">
+          {/* Scene content — grows to fill the space between the top bar and
+              the progress dots, exactly like Playground's flex-1 scene slot.
+              scene_dialogue/canvas_game/living_canvas render edge-to-edge
+              inside it (their art is already the page background above, so
+              they're purely the interactive layer here); everything else is
+              a real speech bubble anchored over the scene, not a boxed
+              content card. Bubble content always renders in the LIGHT theme
+              regardless of the page's dark/light toggle, since a white
+              bubble needs dark text (themeMap.light) independent of what the
+              toggle does to the surrounding chrome. */}
+          <main className="relative flex-1 min-h-0">
+            <AnimatePresence mode="wait">
+              {isFullBleedSlideType ? (
+                <motion.div
+                  key={i}
+                  className="absolute inset-0 flex items-center justify-center"
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <SlideRenderer slide={slide} t={t} fullBleed={slide.type !== 'intro'} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key={i}
+                  className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-xl px-4 md:px-8"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <span
+                    className="mb-1.5 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-widest shadow"
+                    style={{ color: cssScene.accent }}
+                  >
+                    🗣 Ava
+                  </span>
+                  <div className="relative max-h-[50vh] overflow-y-auto rounded-2xl bg-white px-5 py-4 shadow-2xl md:px-7 md:py-6">
+                    <SlideRenderer slide={slide} t={themeMap.light} />
+                  </div>
+                  {/* Speech-bubble tail, pointing down toward the "speaker". */}
+                  <div
+                    className="absolute bottom-[calc(100%-1.5rem)] left-8 h-5 w-5 rotate-45 bg-white"
+                    style={{ boxShadow: '2px 2px 2px rgba(0,0,0,0.04)' }}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </main>
+
+          {/* Progress dots — one per slide, sitting just above the fixed nav
+              bar, the same position Playground's dot row holds. */}
+          <div className="mt-3 flex flex-wrap justify-center gap-1.5 px-4 pb-16">
             {slides.map((s, idx) => (
-              <div
+              <span
                 key={s.id ?? idx}
-                className="h-1.5 flex-1 min-w-[6px] rounded-full transition-colors duration-300"
+                className="h-2 rounded-full shadow transition-all"
                 style={{
-                  background:
-                    idx < i ? cssScene.accent : idx === i ? cssScene.accent : 'rgba(255,255,255,0.15)',
-                  opacity: idx <= i ? 1 : 0.5,
+                  width: idx === i ? '2rem' : '0.5rem',
+                  background: idx <= i ? cssScene.accent : 'rgba(255,255,255,0.3)',
                 }}
               />
             ))}
           </div>
-        </header>
+        </div>
 
-        {/* Scene content. scene_dialogue/canvas_game/living_canvas render
-            themselves edge-to-edge (each already carries its own full-bleed
-            art); everything else appears as a real speech bubble anchored
-            over the block's scene — the same visual language as the
-            scene_dialogue art we already built (Ava & Theo), not a boxed
-            content card. Bubble content is always rendered in the LIGHT
-            theme regardless of the page's dark/light toggle, since a white
-            speech bubble needs dark text (themeMap.light), independent of
-            what the toggle does to the surrounding chrome. */}
-        <main className="absolute inset-0 z-20 flex items-end justify-center px-4 pb-24 pt-24 md:px-8">
-          <AnimatePresence mode="wait">
-            {isFullBleedSlideType ? (
-              <motion.div
-                key={i}
-                className="flex h-full w-full max-w-6xl items-center justify-center"
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.25 }}
-              >
-                <SlideRenderer slide={slide} t={t} />
-              </motion.div>
-            ) : (
-              <motion.div
-                key={i}
-                className="relative w-full max-w-xl"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.25 }}
-              >
-                <span
-                  className="mb-1.5 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-widest shadow"
-                  style={{ color: cssScene.accent }}
-                >
-                  🗣 Ava
-                </span>
-                <div className="max-h-[56vh] overflow-y-auto rounded-2xl bg-white px-5 py-4 shadow-2xl md:px-7 md:py-6">
-                  <SlideRenderer slide={slide} t={themeMap.light} />
-                </div>
-                {/* Speech-bubble tail, pointing down toward the "speaker". */}
-                <div
-                  className="absolute -bottom-2.5 left-8 h-5 w-5 rotate-45 bg-white"
-                  style={{ boxShadow: '2px 2px 2px rgba(0,0,0,0.04)' }}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </main>
-
-        {/* Floating bottom nav. */}
-        <footer className="absolute inset-x-0 bottom-0 z-30 px-4 pb-4 md:px-8 md:pb-6">
-          <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 rounded-full bg-black/30 px-3 py-2 backdrop-blur-md ring-1 ring-white/10">
-            <button
-              onClick={() => setI((n) => Math.max(0, n - 1))}
-              disabled={i === 0}
-              className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white disabled:opacity-30"
-            >
-              <ChevronLeft className="h-4 w-4" /> Previous
-            </button>
-            <div className="text-xs font-medium text-white/60">
-              {i + 1} / {slides.length}
-            </div>
-            <button
-              onClick={handleNext}
-              disabled={saving}
-              className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-bold text-[#0B0A1F] shadow-lg transition disabled:opacity-60"
-              style={{ background: cssScene.accent }}
-            >
-              {i === slides.length - 1 ? (saving ? 'Saving…' : 'Finish') : 'Next'} <ChevronRight className="h-4 w-4" />
-            </button>
+        {/* Fixed bottom nav — same fixed-to-viewport placement as
+            Playground's Back/counter/Next bar, independent of scene content
+            height. */}
+        <div className="fixed inset-x-0 bottom-4 z-[80] flex items-center justify-between gap-3 px-4 md:px-8">
+          <button
+            onClick={() => setI((n) => Math.max(0, n - 1))}
+            disabled={i === 0}
+            className="flex items-center gap-1.5 rounded-full bg-white/90 px-5 py-3 text-sm font-bold text-slate-800 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+          >
+            <ChevronLeft className="h-4 w-4" /> Back
+          </button>
+          <div className="rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">
+            {i + 1} / {slides.length}
           </div>
-        </footer>
+          <button
+            onClick={handleNext}
+            disabled={saving}
+            className="flex items-center gap-1.5 rounded-full px-5 py-3 text-sm font-bold text-[#0B0A1F] shadow-xl backdrop-blur transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
+            style={{ background: cssScene.accent }}
+          >
+            {i === slides.length - 1 ? (saving ? 'Saving…' : 'Finish') : 'Next'} <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
 
         <AcademyLessonCompleteModal
           open={completeOpen}

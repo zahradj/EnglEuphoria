@@ -1099,7 +1099,7 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
   );
 }
 
-function SceneDialogueSlide({ slide }: { slide: Extract<Slide, { type: 'scene_dialogue' }> }) {
+function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 'scene_dialogue' }>; fullBleed?: boolean }) {
   const { playVoice } = useAcademyAudio();
   const [step, setStep] = useState(0);
   const [started, setStarted] = useState(false);
@@ -1124,8 +1124,13 @@ function SceneDialogueSlide({ slide }: { slide: Extract<Slide, { type: 'scene_di
     if (nextStep < slide.lines.length) playVoice(slide.lines[nextStep].text);
   };
 
+  // fullBleed (set by PlayAcademyLesson, the only edge-to-edge player) drops
+  // the aspect-video/max-w-4xl/rounded-2xl bounded-card sizing in favor of
+  // filling its parent completely — the parent itself is what's sized to the
+  // viewport there. Every other caller (AcademyDemo's own split-pane preview,
+  // Creator Studio) omits the prop and keeps the original bounded-card look.
   return (
-    <div className="relative w-full aspect-video max-w-4xl overflow-hidden rounded-2xl shadow-2xl">
+    <div className={fullBleed ? 'relative h-full w-full overflow-hidden' : 'relative w-full aspect-video max-w-4xl overflow-hidden rounded-2xl shadow-2xl'}>
       <img src={slide.bg_image_url} alt={slide.title || 'Dialogue scene'} className="absolute inset-0 h-full w-full object-cover" />
       <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(15,10,40,0.35) 0%, rgba(15,10,40,0) 30%, rgba(15,10,40,0) 55%, rgba(76,29,149,0.4) 100%)' }} />
 
@@ -1570,7 +1575,7 @@ function VocabImageMatchSlide({ slide, t }: { slide: Extract<Slide, { type: 'voc
 
 }
 
-function renderSlideInner({ slide, t }: { slide: Slide; t: ThemeTokens }) {
+function renderSlideInner({ slide, t, fullBleed }: { slide: Slide; t: ThemeTokens; fullBleed?: boolean }) {
   switch (slide.type) {
     case 'intro': return <Intro slide={slide} t={t} />;
     case 'question': return <QuestionSlide slide={slide} t={t} />;
@@ -1592,13 +1597,13 @@ function renderSlideInner({ slide, t }: { slide: Slide; t: ThemeTokens }) {
     case 'sentence_builder': return <SentenceBuilderSlide slide={slide} t={t} />;
     case 'debate_scale': return <DebateScaleSlide slide={slide} t={t} />;
     case 'role_play': return <RolePlaySlide slide={slide} t={t} />;
-    case 'scene_dialogue': return <SceneDialogueSlide slide={slide} />;
+    case 'scene_dialogue': return <SceneDialogueSlide slide={slide} fullBleed={fullBleed} />;
     case 'speaking_task': return <SpeakingTaskSlide slide={slide} t={t} />;
     case 'reflection': return <ReflectionSlide slide={slide} t={t} />;
     case 'cluster': return <ClusterSlide slide={slide} t={t} />;
     case 'canvas_game':
     case 'living_canvas':
-      return <LivingCanvas slide={slide as any} hub="academy" />;
+      return <LivingCanvas slide={slide as any} hub="academy" fullBleed={fullBleed} />;
     case 'scaffolded_media':
       return <ScaffoldedPlayer slide={slide as any} hub="academy" />;
     case 'vocab_solo': {
@@ -1633,7 +1638,7 @@ function LanguageEngineSlide({ slide, t }: { slide: any; t: ThemeTokens }) {
   );
 }
 
-export function SlideRenderer({ slide, t }: { slide: Slide; t: ThemeTokens }) {
+export function SlideRenderer({ slide, t, fullBleed }: { slide: Slide; t: ThemeTokens; fullBleed?: boolean }) {
   // Slides that render their own image inline (cover, vocab 50/50, etc.)
   // must NOT also get the floating SlideMediaHeader image — it produces a
   // duplicate "small image at top" + "image inside card" bug.
@@ -1641,7 +1646,7 @@ export function SlideRenderer({ slide, t }: { slide: Slide; t: ThemeTokens }) {
   return (
     <>
       {!skipHeader && <SlideMediaHeader slide={slide} />}
-      {renderSlideInner({ slide, t })}
+      {renderSlideInner({ slide, t, fullBleed })}
     </>
   );
 }
