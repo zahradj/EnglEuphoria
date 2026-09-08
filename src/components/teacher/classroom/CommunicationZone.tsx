@@ -128,6 +128,112 @@ export const CommunicationZone: React.FC<CommunicationZoneProps> = ({
     if (chatScrollRef.current) chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
   }, [chatMessages]);
 
+  // Same fix as the student side's CommunicationSidebar: below `md` (768px
+  // — narrower than many tablets in portrait) this whole panel is a hidden
+  // off-canvas drawer, so the video call was invisible by default on those
+  // devices. Shared tile markup rendered in exactly one of two places at a
+  // time (compact top strip below `md`, full docked sidebar at `md`+) so
+  // it's never shown twice.
+  const studentTile = (compact: boolean) => (
+    <div
+      className={`group relative aspect-[4/3] overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all ${compact ? 'w-24 sm:w-28 shrink-0 rounded-xl' : 'rounded-2xl hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)]'} ${videosFloating ? 'hidden' : ''}`}
+      style={{ background: theme.hexGradient }}
+    >
+      <div className={`absolute overflow-hidden bg-gray-900 ${compact ? 'inset-[1px] rounded-[10px]' : 'inset-[2px] rounded-[14px]'}`}>
+        {remoteStream ? (
+          <video ref={studentVideoRef} autoPlay playsInline className="w-full h-full object-cover" />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+            <div className={`${compact ? 'w-8 h-8' : 'w-20 h-20'} rounded-full ${theme.accentSoftBg} flex items-center justify-center mx-auto shadow-inner`}>
+              <User className={`${compact ? 'w-4 h-4' : 'w-10 h-10'} ${theme.accentText}`} />
+            </div>
+          </div>
+        )}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/55 to-transparent" />
+        <div className={`absolute bottom-1 left-1 flex items-center gap-1 bg-white/85 backdrop-blur-sm rounded-full font-semibold text-gray-800 shadow-sm ${compact ? 'px-1.5 py-0.5 text-[9px]' : 'px-2 py-0.5 text-[11px] bottom-2 left-2'}`}>
+          <span className={`h-1.5 w-1.5 rounded-full ${isRemoteConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400'}`} />
+          {compact ? studentName.split(' ')[0] : studentName}
+        </div>
+        {!compact && (onToggleStudentMic || onToggleStudentCamera) && (
+          <div className="absolute bottom-2 right-2 flex gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
+            {onToggleStudentMic && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onToggleStudentMic}
+                title={studentMicMuted ? 'Unmute student' : 'Mute student'}
+                className={`h-7 w-7 rounded-full shadow-md backdrop-blur-sm ${studentMicMuted ? 'bg-red-500/90 text-white hover:bg-red-600' : 'bg-white/90 text-gray-700 hover:bg-white'}`}
+              >
+                {studentMicMuted ? <MicOff className="h-3.5 w-3.5" /> : <Mic className="h-3.5 w-3.5" />}
+              </Button>
+            )}
+            {onToggleStudentCamera && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onToggleStudentCamera}
+                title={studentCameraOff ? 'Turn on student camera' : 'Turn off student camera'}
+                className={`h-7 w-7 rounded-full shadow-md backdrop-blur-sm ${studentCameraOff ? 'bg-red-500/90 text-white hover:bg-red-600' : 'bg-white/90 text-gray-700 hover:bg-white'}`}
+              >
+                {studentCameraOff ? <VideoOff className="h-3.5 w-3.5" /> : <Video className="h-3.5 w-3.5" />}
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const teacherTile = (compact: boolean) => (
+    <div
+      className={`group relative aspect-[4/3] overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all ${compact ? 'w-24 sm:w-28 shrink-0 rounded-xl' : 'rounded-2xl hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)] w-full'} ${videosFloating ? 'hidden' : ''}`}
+      style={{ background: theme.hexGradient }}
+    >
+      <div className={`absolute overflow-hidden bg-gray-900 ${compact ? 'inset-[1px] rounded-[10px]' : 'inset-[2px] rounded-[14px]'}`}>
+        {isVideoConnected && localStream && !isLocalCameraOff ? (
+          <video ref={teacherVideoRef} autoPlay muted playsInline className="w-full h-full object-cover mirror" style={{ transform: 'scaleX(-1)' }} />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+            <div className={`${compact ? 'w-8 h-8' : 'w-20 h-20'} rounded-full ${theme.accentSoftBg} flex items-center justify-center mx-auto shadow-inner`}>
+              <User className={`${compact ? 'w-4 h-4' : 'w-10 h-10'} ${theme.accentText}`} />
+            </div>
+          </div>
+        )}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/55 to-transparent" />
+        <div className={`absolute bottom-1 left-1 flex items-center gap-1 bg-white/85 backdrop-blur-sm rounded-full font-semibold text-gray-800 shadow-sm ${compact ? 'px-1.5 py-0.5 text-[9px]' : 'px-2 py-0.5 text-[11px] bottom-2 left-2'}`}>
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          You
+        </div>
+        {!compact && (onToggleLocalMic || onToggleLocalCamera) && (
+          <div className="absolute bottom-2 right-2 flex gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
+            {onToggleLocalMic && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onToggleLocalMic}
+                title={isLocalMicMuted ? 'Unmute microphone' : 'Mute microphone'}
+                className={`h-7 w-7 rounded-full shadow-md backdrop-blur-sm ${isLocalMicMuted ? 'bg-red-500/90 text-white hover:bg-red-600' : 'bg-white/90 text-gray-700 hover:bg-white'}`}
+              >
+                {isLocalMicMuted ? <MicOff className="h-3.5 w-3.5" /> : <Mic className="h-3.5 w-3.5" />}
+              </Button>
+            )}
+            {onToggleLocalCamera && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onToggleLocalCamera}
+                title={isLocalCameraOff ? 'Turn camera on' : 'Turn camera off'}
+                className={`h-7 w-7 rounded-full shadow-md backdrop-blur-sm ${isLocalCameraOff ? 'bg-red-500/90 text-white hover:bg-red-600' : 'bg-white/90 text-gray-700 hover:bg-white'}`}
+              >
+                {isLocalCameraOff ? <VideoOff className="h-3.5 w-3.5" /> : <Video className="h-3.5 w-3.5" />}
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   const handleSendMessage = () => {
     const text = newMessage.trim();
     if (!text) return;
@@ -147,6 +253,15 @@ export const CommunicationZone: React.FC<CommunicationZoneProps> = ({
 
   return (
     <>
+      {/* Always-visible compact video strip for narrow viewports — see the
+          matching comment on the extracted tile functions above. */}
+      {!videosFloating && !(isScreenSharing && screenShareStream) && (
+        <div className="md:hidden fixed top-14 right-2 z-40 flex gap-2">
+          {studentTile(true)}
+          {teacherTile(true)}
+        </div>
+      )}
+
       {/* Backdrop — mobile only, dismisses the drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-[74] bg-black/40 md:hidden" onClick={onMobileClose} />
@@ -181,8 +296,10 @@ export const CommunicationZone: React.FC<CommunicationZoneProps> = ({
         )}
         </div>
       </div>
-      {/* Video Containers */}
-      <div className="p-3 space-y-3">
+      {/* Video Containers — full-size, desktop/landscape-tablet docked
+          sidebar only; the compact strip above covers narrow viewports so
+          these never render at the same time as that strip. */}
+      <div className="hidden md:block p-3 space-y-3">
         {/* Screen Share Preview (if active) */}
         {isScreenSharing && screenShareStream && (
           <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden border-2 border-indigo-400/50">
@@ -209,142 +326,8 @@ export const CommunicationZone: React.FC<CommunicationZoneProps> = ({
             <span className="text-[11px] font-medium leading-tight px-2">Videos are floating over the lesson<br />Click to dock</span>
           </button>
         )}
-
-        {/* Student Video Container — enhanced hub-tinted frame */}
-        <div
-          className={`group relative aspect-[4/3] rounded-2xl overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)] ${videosFloating ? 'hidden' : ''}`}
-          style={{ background: theme.hexGradient }}
-        >
-          <div className="absolute inset-[2px] rounded-[14px] overflow-hidden bg-gray-900">
-            {remoteStream ? (
-              <video
-                ref={studentVideoRef}
-                autoPlay
-                playsInline
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-                <div className="text-center space-y-2">
-                  <div className={`w-20 h-20 rounded-full ${theme.accentSoftBg} flex items-center justify-center mx-auto shadow-inner`}>
-                    <User className={`w-10 h-10 ${theme.accentText}`} />
-                  </div>
-                  <p className="text-[10px] text-gray-500 font-medium">Waiting for student…</p>
-                </div>
-              </div>
-            )}
-
-            {/* Bottom gradient scrim for label legibility */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/55 to-transparent" />
-
-            {/* Name pill */}
-            <div className="absolute bottom-2 left-2 flex items-center gap-1.5 bg-white/85 backdrop-blur-sm px-2 py-0.5 rounded-full text-[11px] font-semibold text-gray-800 shadow-sm">
-              <span className={`h-1.5 w-1.5 rounded-full ${isRemoteConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400'}`} />
-              {studentName}
-            </div>
-
-            {/* Connection dot */}
-            <div className="absolute top-2 right-2 flex items-center gap-1 bg-black/35 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
-              <span className={`h-1.5 w-1.5 rounded-full ${isRemoteConnected ? 'bg-emerald-400 animate-pulse' : 'bg-gray-400'}`} />
-              <span className="text-[9px] font-medium text-white uppercase tracking-wider">
-                {isRemoteConnected ? 'Live' : 'Off'}
-              </span>
-            </div>
-
-            {/* Teacher remote-control over student mic & camera */}
-            {(onToggleStudentMic || onToggleStudentCamera) && (
-              <div className="absolute bottom-2 right-2 flex gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
-                {onToggleStudentMic && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={onToggleStudentMic}
-                    title={studentMicMuted ? 'Unmute student' : 'Mute student'}
-                    className={`h-7 w-7 rounded-full shadow-md backdrop-blur-sm ${studentMicMuted ? 'bg-red-500/90 text-white hover:bg-red-600' : 'bg-white/90 text-gray-700 hover:bg-white'}`}
-                  >
-                    {studentMicMuted ? <MicOff className="h-3.5 w-3.5" /> : <Mic className="h-3.5 w-3.5" />}
-                  </Button>
-                )}
-                {onToggleStudentCamera && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={onToggleStudentCamera}
-                    title={studentCameraOff ? 'Turn on student camera' : 'Turn off student camera'}
-                    className={`h-7 w-7 rounded-full shadow-md backdrop-blur-sm ${studentCameraOff ? 'bg-red-500/90 text-white hover:bg-red-600' : 'bg-white/90 text-gray-700 hover:bg-white'}`}
-                  >
-                    {studentCameraOff ? <VideoOff className="h-3.5 w-3.5" /> : <Video className="h-3.5 w-3.5" />}
-                  </Button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Teacher Video Container — same dimensions as student tile */}
-        <div
-          className={`group relative aspect-[4/3] rounded-2xl overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)] w-full ${videosFloating ? 'hidden' : ''}`}
-          style={{ background: theme.hexGradient }}
-        >
-          <div className="absolute inset-[2px] rounded-[14px] overflow-hidden bg-gray-900">
-            {isVideoConnected && localStream && !isLocalCameraOff ? (
-              <video
-                ref={teacherVideoRef}
-                autoPlay
-                muted
-                playsInline
-                className="w-full h-full object-cover mirror"
-                style={{ transform: 'scaleX(-1)' }}
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-                <div className="text-center space-y-2">
-                  <div className={`w-20 h-20 rounded-full ${theme.accentSoftBg} flex items-center justify-center mx-auto shadow-inner`}>
-                    <User className={`w-10 h-10 ${theme.accentText}`} />
-                  </div>
-                  <p className="text-[10px] text-gray-500 font-medium">{teacherName} (You)</p>
-                </div>
-              </div>
-            )}
-
-            {/* Bottom gradient scrim */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/55 to-transparent" />
-
-            {/* "You" pill */}
-            <div className="absolute bottom-2 left-2 flex items-center gap-1.5 bg-white/85 backdrop-blur-sm px-2 py-0.5 rounded-full text-[11px] font-semibold text-gray-800 shadow-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              You
-            </div>
-
-            {/* Local mic/camera self-controls (moved from top bar) */}
-            {(onToggleLocalMic || onToggleLocalCamera) && (
-              <div className="absolute bottom-2 right-2 flex gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
-                {onToggleLocalMic && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={onToggleLocalMic}
-                    title={isLocalMicMuted ? 'Unmute microphone' : 'Mute microphone'}
-                    className={`h-7 w-7 rounded-full shadow-md backdrop-blur-sm ${isLocalMicMuted ? 'bg-red-500/90 text-white hover:bg-red-600' : 'bg-white/90 text-gray-700 hover:bg-white'}`}
-                  >
-                    {isLocalMicMuted ? <MicOff className="h-3.5 w-3.5" /> : <Mic className="h-3.5 w-3.5" />}
-                  </Button>
-                )}
-                {onToggleLocalCamera && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={onToggleLocalCamera}
-                    title={isLocalCameraOff ? 'Turn camera on' : 'Turn camera off'}
-                    className={`h-7 w-7 rounded-full shadow-md backdrop-blur-sm ${isLocalCameraOff ? 'bg-red-500/90 text-white hover:bg-red-600' : 'bg-white/90 text-gray-700 hover:bg-white'}`}
-                  >
-                    {isLocalCameraOff ? <VideoOff className="h-3.5 w-3.5" /> : <Video className="h-3.5 w-3.5" />}
-                  </Button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
+        {studentTile(false)}
+        {teacherTile(false)}
       </div>
 
       {/* Tools moved to bottom Control Dock — left sidebar is now strictly Video Feeds + Chat */}

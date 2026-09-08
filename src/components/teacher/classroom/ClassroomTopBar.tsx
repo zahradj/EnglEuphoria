@@ -11,7 +11,8 @@ import {
   Maximize2,
   Minimize2,
   RefreshCw,
-  LayoutGrid
+  LayoutGrid,
+  MessageCircle
 } from 'lucide-react';
 import { useSmartTimer, type TimerPhase } from '@/hooks/classroom/useSmartTimer';
 import { DeviceSelector } from '@/components/classroom/DeviceSelector';
@@ -323,11 +324,11 @@ export const ClassroomTopBar: React.FC<ClassroomTopBarProps> = ({
             variant="ghost"
             size="icon"
             onClick={onToggleComms}
-            title="Video & chat"
-            aria-label="Toggle video and chat panel"
+            title="Chat"
+            aria-label="Toggle chat panel"
             className="h-8 w-8 rounded-full bg-gray-100 hover:bg-gray-200 md:hidden"
           >
-            <Users className="h-4 w-4" />
+            <MessageCircle className="h-4 w-4" />
           </Button>
         )}
         {onToggleSlideNav && (

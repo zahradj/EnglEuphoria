@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import englePhoriaLogo from '@/assets/englephoria-logo.png';
 import { Badge } from '@/components/ui/badge';
-import { Mic, MicOff, Video, VideoOff, LogOut, Signal, SignalMedium, SignalLow, WifiOff, Maximize2, Minimize2, RefreshCw, Star, Clock, Users } from 'lucide-react';
+import { Mic, MicOff, Video, VideoOff, LogOut, Signal, SignalMedium, SignalLow, WifiOff, Maximize2, Minimize2, RefreshCw, Star, Clock, MessageCircle } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useConnectionHealth } from '@/hooks/useConnectionHealth';
 import CoinBalance from '@/components/academy/CoinBalance';
@@ -201,10 +201,10 @@ export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
             size="icon"
             onClick={onToggleComms}
             className="h-9 w-9 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 md:hidden"
-            title="Video & chat"
-            aria-label="Toggle video and chat panel"
+            title="Chat"
+            aria-label="Toggle chat panel"
           >
-            <Users className="h-4 w-4" />
+            <MessageCircle className="h-4 w-4" />
           </Button>
         )}
         {onToggleZenMode && (
