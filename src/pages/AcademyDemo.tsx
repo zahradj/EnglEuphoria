@@ -2362,9 +2362,6 @@ function FindInSceneGameSlide({ slide }: { slide: Extract<Slide, { type: 'find_i
               {showHint && it.word === item.word && (
                 <span className="absolute inset-0 animate-ping rounded-full bg-yellow-300/40" />
               )}
-              {feedback === 'correct' && it.word === item.word && (
-                <span className="absolute inset-0 rounded-full ring-4 ring-emerald-400" />
-              )}
             </button>
           ))}
         </>
