@@ -67,6 +67,21 @@ export type Scene =
   | { id: string; kind: 'gather'; bg: string; teacher: string; hotspots: { who: CharKey; line: string; x: number; y: number; r: number }[]; stage: { x: number; y: number; r: number } }
   | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string; img?: string }[] }
   | { id: string; kind: 'dash'; bg: string; teacher: string; who: CharKey; targetLetter: string; targetPhoneme: string; goal: number; seconds: number; items: { word: string; letter: string; img?: string; emoji: string }[] }
+  | {
+      // Two-basket catch arcade: one item falls at a time, the student taps
+      // the LEFT or RIGHT basket to sort it before it lands -- a fresh
+      // mechanic (not yet in the engine) combining two single-target
+      // review games into one livelier round with a real decision each
+      // catch, inspired by the classic "catch it in the right basket"
+      // sorting-game pattern used across kids' learning apps. First used
+      // by Unit 5 Lesson 1 per direct user request to replace two
+      // near-identical single-target `dash` rounds.
+      id: string; kind: 'catch-sort'; bg: string; teacher: string;
+      left: { label: string; img?: string; emoji: string };
+      right: { label: string; img?: string; emoji: string };
+      items: { word: string; img?: string; emoji: string; target: 'left' | 'right' }[];
+      goal: number; seconds: number;
+    }
   | { id: string; kind: 'feelings'; bg: string; teacher: string; options: { label: string; emoji: string; reply: string }[] }
   | { id: string; kind: 'puzzle'; bg: string; teacher: string; rounds: { who: CharKey; img: string; hint: string; emotion?: 'happy' | 'sad' | 'angry' | 'neutral' }[] }
   | { id: string; kind: 'roleplay'; bg: string; teacher: string; cast: CharKey[]; script: { who: CharKey; line: string; repeat?: boolean }[] }
@@ -4183,34 +4198,14 @@ export const LESSON_U5L1_SCENES: Scene[] = [
     cards: [{ who: 'pip', sentence: 'Family! This is my family!', img: bgU5L1FamilyHome, imgLabel: 'Family' }],
   },
   {
-    // M and D are both already-taught letters (M: Unit 1 Lesson 1, D: Unit
-    // 3 Lesson 1) — lighter, retrieval-only sound-sort review rather than a
-    // full sound-model+trace pair, matching the established pattern.
-    // bg swapped from the generic shared meadow to this lesson's own
-    // family-home art, and mom/dad get their real illustrated portraits
-    // instead of bare emoji, matching the polished style used everywhere
-    // else in this lesson (per direct user request).
-    // bg kept as the plain shared meadow (not the busy family-home shot) —
-    // per direct user request that a full, detailed background reads as
-    // crowded/distracting behind a sort/puzzle activity already covering
-    // the screen with its own targets and items; the real mom/dad item
-    // images below already carry the illustrated context this needs.
-    id: 'u5l1-sound-sort', kind: 'sound-sort', bg: bgMeadow, teacher: 'Listen for the sound! /m/om, /d/ad — now drag each thing to its sound!',
-    targets: [
-      { letter: 'M', phoneme: '/m/', who: 'pip' },
-      { letter: 'D', phoneme: '/d/', who: 'mia' },
-    ],
-    items: [
-      { word: 'mom', img: bgU5L1MomSolo, emoji: '\u{1F469}', letter: 'M' },
-      { word: 'monkey', emoji: '\u{1F412}', letter: 'M' },
-      { word: 'moon', emoji: '\u{1F319}', letter: 'M' },
-      { word: 'dad', img: bgU5L1DadSolo, emoji: '\u{1F468}', letter: 'D' },
-      { word: 'dog', emoji: '\u{1F436}', letter: 'D' },
-      { word: 'duck', emoji: '\u{1F986}', letter: 'D' },
-    ],
-  },
-  {
-    // Per direct user request: the student should spell the WHOLE word,
+    // Per direct user request: removed this lesson's standalone M/D
+    // sound-review page entirely (previously a drag-sort, briefly a
+    // Balloon-Pop arcade round) — M and D were already taught and
+    // reviewed in Unit 1 Lesson 1 and Unit 3 Lesson 1 respectively, and
+    // still get real retrieval practice right here in this lesson via
+    // word-build (spelling MOM/DAD letter by letter) immediately below,
+    // so a dedicated isolated-letter round added nothing further.
+    // The student should spell the WHOLE word,
     // not just its first letter — three rounds per word, one per letter
     // position, so by the end of the activity every letter of "mom" and
     // "dad" has been tapped in order (this system's tap-based spelling
@@ -4312,25 +4307,24 @@ export const LESSON_U5L1_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u5l1-dash-mom', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Mia Dash! Tap only the MOM things as they run by. Get 6 rings!', who: 'mia', targetLetter: 'MOM', targetPhoneme: '', goal: 6, seconds: 40,
+    // Per direct user request: replace the two near-identical single-
+    // target Dash rounds (tap only MOM things, then a second nearly
+    // identical round for DAD) with one livelier combined game — a fresh
+    // "catch it in the right basket" mechanic (researched for inspiration:
+    // https://www.splashlearn.com/blog/best-vocabulary-games-for-kids/,
+    // https://www.teachstarter.com/us/teaching-resource/sorting-by-category-vocabulary-activity/)
+    // where every item (mom or dad) falls one at a time and the student
+    // makes a real MOM-or-DAD decision on each catch, instead of two
+    // separate rounds that were each just "tap the one thing that keeps
+    // showing up."
+    id: 'u5l1-catch-sort', kind: 'catch-sort', bg: bgU5L1FamilyHome, teacher: 'Catch it! Which basket — Mom or Dad?', goal: 8, seconds: 45,
+    left: { label: 'Mom', img: bgU5L1MomSolo, emoji: '\u{1F469}' },
+    right: { label: 'Dad', img: bgU5L1DadSolo, emoji: '\u{1F468}' },
     items: [
-      { word: 'mom', letter: 'MOM', emoji: '\u{1F469}' },
-      { word: 'mom', letter: 'MOM', emoji: '\u{1F469}\u{200D}\u{1F467}' },
-      { word: 'dad', letter: 'DAD', emoji: '\u{1F468}' },
-      { word: 'dad', letter: 'DAD', emoji: '\u{1F468}\u{200D}\u{1F466}' },
-      { word: 'baby', letter: 'BABY', emoji: '\u{1F476}' },
-      { word: 'baby', letter: 'BABY', emoji: '\u{1F37C}' },
-    ],
-  },
-  {
-    id: 'u5l1-dash-dad', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Willow Dash! Tap only the DAD things as they run by. Get 6 rings!', who: 'willow', targetLetter: 'DAD', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'dad', letter: 'DAD', emoji: '\u{1F468}' },
-      { word: 'dad', letter: 'DAD', emoji: '\u{1F468}\u{200D}\u{1F466}' },
-      { word: 'mom', letter: 'MOM', emoji: '\u{1F469}' },
-      { word: 'mom', letter: 'MOM', emoji: '\u{1F469}\u{200D}\u{1F467}' },
-      { word: 'baby', letter: 'BABY', emoji: '\u{1F476}' },
-      { word: 'baby', letter: 'BABY', emoji: '\u{1F37C}' },
+      { word: 'mom', emoji: '\u{1F469}', target: 'left' },
+      { word: 'mom', emoji: '\u{1F469}\u{200D}\u{1F467}', target: 'left' },
+      { word: 'dad', emoji: '\u{1F468}', target: 'right' },
+      { word: 'dad', emoji: '\u{1F468}\u{200D}\u{1F466}', target: 'right' },
     ],
   },
   {
