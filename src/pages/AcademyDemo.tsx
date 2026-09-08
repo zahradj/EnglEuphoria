@@ -203,6 +203,36 @@ export type Slide =
       example?: string;
       bg_image_url?: string;
     }
+  // A full-bleed "which picture?" arcade round -- Ava says the word, the
+  // student taps the matching picture from a few choices (same proven
+  // listen-tap-streak-confetti mechanic as number_quiz_game/
+  // letter_sound_game), reusing this lesson's own illustrated scenes as
+  // the answer choices instead of a plain word-list matching board.
+  | {
+      type: 'picture_match_game';
+      block: Block;
+      bg_image_url?: string;
+      items: { word: string; choices: { word: string; image_url: string }[] }[];
+    }
+  // A full-bleed "hold & say it" practice round -- each word gets its own
+  // picture and the student must hold the button ~1.2s while saying it
+  // out loud, the same mandatory hold-and-confirm gate scene_dialogue
+  // already uses (mirroring Playground's MeetScene), before moving on.
+  | {
+      type: 'say_it_game';
+      block: Block;
+      bg_image_url?: string;
+      items: { word: string; image_url: string; prompt: string }[];
+    }
+  // A full-bleed true/false arcade round -- thumbs up/down (no reading
+  // required to answer), streak + confetti on a correct pick, same energy
+  // as the other phonics recap games.
+  | {
+      type: 'sound_challenge_game';
+      block: Block;
+      bg_image_url?: string;
+      items: { statement: string; answer: boolean }[];
+    }
   // A creative, illustrated "storybook page" for connected reading --
   // full-bleed scene, the passage laid out like a page from a picture
   // book with its target words highlighted in their own color, a
@@ -1715,7 +1745,7 @@ function LetterSoundGameSlide({ slide, fullBleed }: { slide: Extract<Slide, { ty
   };
 
   const card = (
-    <div className={`w-full ${fullBleed ? 'max-w-lg rounded-[2rem] bg-white/95 p-6 shadow-2xl backdrop-blur-sm md:p-8' : 'max-w-lg mx-auto space-y-5'}`}>
+    <div className="w-full max-w-lg mx-auto space-y-5">
       <div className="mb-4 flex items-center justify-between">
         <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-bold uppercase tracking-widest text-indigo-600">
           {finished ? 'Done!' : `Sound ${index + 1} / ${rounds.length}`}
@@ -1789,10 +1819,84 @@ function LetterSoundGameSlide({ slide, fullBleed }: { slide: Extract<Slide, { ty
   );
 
   if (fullBleed) {
-    // Background is painted by the page root (PlayAcademyLesson) from
-    // slide.bg_image_url -- no decorative sparkles here anymore, the real
-    // illustrated scene behind the card carries the "fun" on its own.
-    return <div className="relative flex h-full w-full items-center justify-center overflow-hidden px-4">{card}</div>;
+    // No enclosing white card anymore -- per direction, "remove the
+    // frame". Each piece (badges, the mystery reveal, Listen again, the
+    // letter choices) floats as its own small translucent element
+    // directly on the illustrated scene (same language role_play's
+    // fullBleed bubbles already use), anchored toward the lower third so
+    // the picture's subject stays visible up top instead of covered by a
+    // big centered box.
+    return (
+      <div className="relative flex h-full w-full flex-col items-center justify-end gap-4 overflow-hidden px-4 pb-24 text-center">
+        <div className="flex items-center gap-3">
+          <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-widest text-indigo-600 shadow backdrop-blur-sm">
+            {finished ? 'Done!' : `Sound ${index + 1} / ${rounds.length}`}
+          </span>
+          <span className="flex items-center gap-1 rounded-full bg-orange-100/90 px-3 py-1 text-xs font-bold text-orange-600 shadow backdrop-blur-sm">
+            🔥 {streak}
+          </span>
+        </div>
+        {finished ? (
+          <div className="space-y-3">
+            <div className="text-5xl drop-shadow-lg">🎉</div>
+            <h2 className="text-2xl font-bold text-white drop-shadow-lg">You found {slide.word.toUpperCase()}!</h2>
+            <div className="flex justify-center gap-3">
+              {rounds.map((r, i) => (
+                <img
+                  key={i}
+                  src={r.image_url}
+                  alt={r.letter}
+                  className={`h-16 w-16 rounded-2xl border-4 object-cover shadow-lg ${r.is_vowel ? 'border-rose-300' : 'border-indigo-300'}`}
+                />
+              ))}
+            </div>
+            <p className="font-semibold text-white drop-shadow">
+              <span className="font-bold text-yellow-300">{score} / {rounds.length}</span> sounds found first try!
+            </p>
+          </div>
+        ) : (
+          <>
+            <div
+              className={`relative h-32 w-32 overflow-hidden rounded-3xl border-4 shadow-xl ${
+                picked === round.letter ? (round.is_vowel ? 'border-rose-300' : 'border-indigo-300') : 'border-white'
+              }`}
+            >
+              {picked === round.letter ? (
+                <img src={round.image_url} alt={round.letter} className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-white/90 backdrop-blur-sm text-5xl">❓</div>
+              )}
+            </div>
+            <button
+              onClick={speakSound}
+              className="flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-3 text-base font-bold text-white shadow-lg transition active:scale-95"
+            >
+              🔊 Listen again
+            </button>
+            <div className="flex items-center justify-center gap-3">
+              {choices.map((l) => {
+                const active = picked === l;
+                const isAnswer = l === round.letter;
+                let cls = 'border-white bg-white/90 text-slate-800 hover:border-indigo-400';
+                if (picked !== null && active && isAnswer) cls = 'border-emerald-500 bg-emerald-500 text-white';
+                else if (picked !== null && active && !isAnswer) cls = 'border-red-500 bg-red-500 text-white';
+                else if (picked !== null && isAnswer) cls = 'border-emerald-500 bg-emerald-50 text-emerald-700';
+                return (
+                  <button
+                    key={l}
+                    onClick={() => pick(l)}
+                    disabled={picked !== null}
+                    className={`flex h-20 w-20 items-center justify-center rounded-2xl border-2 text-4xl font-black shadow-lg backdrop-blur-sm transition active:scale-95 ${cls}`}
+                  >
+                    {l}
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </div>
+    );
   }
   return (
     <div className="relative w-full max-w-3xl aspect-video overflow-hidden rounded-2xl shadow-2xl mx-auto flex items-center justify-center px-4">
@@ -1837,7 +1941,7 @@ function WordBlendSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 'w
   const remaining = slide.letters.length - tapped.size;
 
   const card = (
-    <div className={`w-full ${fullBleed ? 'max-w-lg rounded-[2rem] bg-white/95 p-6 shadow-2xl backdrop-blur-sm md:p-8' : 'max-w-lg mx-auto space-y-5'} text-center`}>
+    <div className="w-full max-w-lg mx-auto space-y-5 text-center">
       <div className="mb-4 text-xs font-bold uppercase tracking-widest text-indigo-500">
         {blended ? 'You spelled it!' : 'Tap each sound!'}
       </div>
@@ -1877,13 +1981,304 @@ function WordBlendSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 'w
   );
 
   if (fullBleed) {
-    return <div className="relative flex h-full w-full items-center justify-center overflow-hidden px-4">{card}</div>;
+    // No enclosing white card -- per direction, "remove the frame". The
+    // label, letter tiles, and reveal float directly on the illustrated
+    // scene as their own small translucent pieces, anchored toward the
+    // lower third so the picture's subject reads clearly up top.
+    return (
+      <div className="relative flex h-full w-full flex-col items-center justify-end gap-4 overflow-hidden px-4 pb-24 text-center">
+        <div className="rounded-full bg-white/90 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-indigo-600 shadow backdrop-blur-sm">
+          {blended ? 'You spelled it!' : 'Tap each sound!'}
+        </div>
+        <div className="flex items-center justify-center gap-3">
+          {slide.letters.map((letter, i) => {
+            const isTapped = tapped.has(i);
+            return (
+              <button
+                key={i}
+                onClick={() => tap(i, letter)}
+                className={`flex h-20 w-20 items-center justify-center rounded-2xl border-2 text-4xl font-black shadow-lg backdrop-blur-sm transition active:scale-95 ${
+                  isTapped ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-white bg-white/90 text-slate-800 hover:border-indigo-400'
+                }`}
+              >
+                {letter}
+              </button>
+            );
+          })}
+        </div>
+        {blended ? (
+          <div className="space-y-2">
+            <h2 className="text-3xl font-bold text-white drop-shadow-lg">{slide.word}</h2>
+            {slide.definition && <p className="text-base font-medium text-white drop-shadow">{slide.definition}</p>}
+            <button
+              onClick={() => void playVoice(slide.example || slide.word)}
+              className="mx-auto flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-3 text-base font-bold text-white shadow-lg transition active:scale-95"
+            >
+              🔊 Say it together!
+            </button>
+          </div>
+        ) : (
+          <p className="text-sm font-semibold text-white drop-shadow">
+            Tap {remaining} more sound{remaining === 1 ? '' : 's'}!
+          </p>
+        )}
+      </div>
+    );
   }
   return (
     <div className="relative w-full max-w-3xl aspect-video overflow-hidden rounded-2xl shadow-2xl mx-auto flex items-center justify-center px-4">
       {slide.bg_image_url && <img src={slide.bg_image_url} alt="" className="absolute inset-0 h-full w-full object-cover" />}
       {slide.bg_image_url && <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />}
       {card}
+    </div>
+  );
+}
+
+// A full-bleed "which picture?" arcade round -- Ava says the word, the
+// student taps the matching picture (listen-tap-streak-confetti, the same
+// mechanic proven by number_quiz_game/letter_sound_game).
+function PictureMatchGameSlide({ slide }: { slide: Extract<Slide, { type: 'picture_match_game' }>; fullBleed?: boolean }) {
+  const { playVoice } = useAcademyAudio();
+  const [index, setIndex] = useState(0);
+  const [picked, setPicked] = useState<string | null>(null);
+  const [streak, setStreak] = useState(0);
+  const [score, setScore] = useState(0);
+  const items = slide.items;
+  const item = items[index];
+  const finished = index >= items.length;
+
+  const choices = useMemo(() => (item ? [...item.choices].sort(() => Math.random() - 0.5) : []), [item]);
+
+  useEffect(() => {
+    if (!finished && item) void playVoice(`Where is the ${item.word}?`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
+
+  const pick = (word: string) => {
+    if (picked !== null) return;
+    setPicked(word);
+    const correct = word === item.word;
+    if (correct) {
+      setStreak((s) => s + 1);
+      setScore((s) => s + 1);
+      confetti({ particleCount: 70, spread: 70, origin: { y: 0.55 } });
+      void playVoice(`Yes! ${word}!`);
+    } else {
+      setStreak(0);
+      void playVoice(`Not quite. It's ${item.word}.`);
+    }
+    window.setTimeout(() => {
+      setPicked(null);
+      setIndex((i) => i + 1);
+    }, 1400);
+  };
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-end gap-4 overflow-hidden px-4 pb-24 text-center">
+      {finished ? (
+        <div className="space-y-3">
+          <div className="text-5xl drop-shadow-lg">🏆</div>
+          <h2 className="text-2xl font-bold text-white drop-shadow-lg">Great matching!</h2>
+          <p className="font-semibold text-white drop-shadow">
+            <span className="font-bold text-yellow-300">{score} / {items.length}</span> correct!
+          </p>
+        </div>
+      ) : (
+        <>
+          <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-widest text-indigo-600 shadow backdrop-blur-sm">
+            Match {index + 1} / {items.length}
+          </span>
+          <button
+            onClick={() => void playVoice(`Where is the ${item.word}?`)}
+            className="flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-3 text-base font-bold text-white shadow-lg transition active:scale-95"
+          >
+            🔊 Where is the {item.word}?
+          </button>
+          <div className="flex items-center justify-center gap-4">
+            {choices.map((c) => {
+              const active = picked === c.word;
+              const isAnswer = c.word === item.word;
+              let ring = 'border-white';
+              if (picked !== null && ((active && isAnswer) || isAnswer)) ring = 'border-emerald-500';
+              else if (picked !== null && active && !isAnswer) ring = 'border-red-500';
+              return (
+                <button
+                  key={c.word}
+                  onClick={() => pick(c.word)}
+                  disabled={picked !== null}
+                  className={`h-24 w-24 overflow-hidden rounded-2xl border-4 shadow-lg transition active:scale-95 ${ring}`}
+                >
+                  <img src={c.image_url} alt={c.word} className="h-full w-full object-cover" />
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+// A full-bleed "hold & say it" practice round -- each word gets its own
+// picture, and the student must hold the button ~1.2s while saying it out
+// loud (the same mandatory hold-and-confirm gate scene_dialogue already
+// uses, mirroring Playground's MeetScene) before moving to the next word.
+function SayItGameSlide({ slide }: { slide: Extract<Slide, { type: 'say_it_game' }>; fullBleed?: boolean }) {
+  const { playVoice } = useAcademyAudio();
+  const [index, setIndex] = useState(0);
+  const [saidSet, setSaidSet] = useState<Set<number>>(new Set());
+  const [held, setHeld] = useState(false);
+  const holdTimer = useRef<number | null>(null);
+  const items = slide.items;
+  const item = items[index];
+  const finished = index >= items.length;
+  const said = saidSet.has(index);
+
+  useEffect(() => {
+    if (!finished && item) void playVoice(item.prompt);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
+
+  const startHold = () => {
+    if (said) return;
+    setHeld(true);
+    holdTimer.current = window.setTimeout(() => {
+      setHeld(false);
+      setSaidSet((s) => new Set(s).add(index));
+      confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
+    }, 1200);
+  };
+  const endHold = () => {
+    setHeld(false);
+    if (holdTimer.current) window.clearTimeout(holdTimer.current);
+  };
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-end gap-4 overflow-hidden px-4 pb-24 text-center">
+      {finished ? (
+        <div className="space-y-3">
+          <div className="text-5xl drop-shadow-lg">🎤🎉</div>
+          <h2 className="text-2xl font-bold text-white drop-shadow-lg">You said them all!</h2>
+        </div>
+      ) : (
+        <>
+          <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-widest text-indigo-600 shadow backdrop-blur-sm">
+            Say it {index + 1} / {items.length}
+          </span>
+          <img src={item.image_url} alt={item.word} className="h-28 w-28 rounded-3xl border-4 border-white object-cover shadow-xl" />
+          <button
+            onClick={() => void playVoice(item.prompt)}
+            className="flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg transition active:scale-95"
+          >
+            🔊 Listen again
+          </button>
+          {!said ? (
+            <button
+              onPointerDown={startHold}
+              onPointerUp={endHold}
+              onPointerLeave={endHold}
+              onPointerCancel={endHold}
+              className={`w-full max-w-xs rounded-full bg-rose-500 py-4 text-sm font-black uppercase tracking-widest text-white shadow-xl transition active:scale-95 ${held ? 'scale-95 bg-rose-600' : ''}`}
+            >
+              {held ? 'Keep holding…' : '🎤 Hold & say it!'}
+            </button>
+          ) : (
+            <button
+              onClick={() => setIndex((i) => i + 1)}
+              className="rounded-full bg-white/95 px-6 py-3 text-sm font-bold uppercase tracking-widest text-indigo-700 shadow-xl ring-1 ring-indigo-200 active:scale-95"
+            >
+              {index === items.length - 1 ? 'Finish ✓' : 'Next word →'}
+            </button>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+// A full-bleed true/false arcade round -- thumbs up/down (no reading
+// required to answer), streak + confetti on a correct pick, same energy
+// as the other phonics recap games.
+function SoundChallengeGameSlide({ slide }: { slide: Extract<Slide, { type: 'sound_challenge_game' }>; fullBleed?: boolean }) {
+  const { playVoice } = useAcademyAudio();
+  const [index, setIndex] = useState(0);
+  const [picked, setPicked] = useState<boolean | null>(null);
+  const [streak, setStreak] = useState(0);
+  const [score, setScore] = useState(0);
+  const items = slide.items;
+  const item = items[index];
+  const finished = index >= items.length;
+
+  useEffect(() => {
+    if (!finished && item) void playVoice(item.statement);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
+
+  const pick = (guess: boolean) => {
+    if (picked !== null) return;
+    setPicked(guess);
+    const correct = guess === item.answer;
+    if (correct) {
+      setStreak((s) => s + 1);
+      setScore((s) => s + 1);
+      confetti({ particleCount: 70, spread: 70, origin: { y: 0.55 } });
+      void playVoice('Yes! That is right!');
+    } else {
+      setStreak(0);
+      void playVoice(item.answer ? "Actually, that's true!" : "Actually, that's false!");
+    }
+    window.setTimeout(() => {
+      setPicked(null);
+      setIndex((i) => i + 1);
+    }, 1400);
+  };
+
+  return (
+    <div className="relative flex h-full w-full flex-col items-center justify-end gap-4 overflow-hidden px-4 pb-24 text-center">
+      {finished ? (
+        <div className="space-y-3">
+          <div className="text-5xl drop-shadow-lg">🏆</div>
+          <h2 className="text-2xl font-bold text-white drop-shadow-lg">Challenge complete!</h2>
+          <p className="font-semibold text-white drop-shadow">
+            <span className="font-bold text-yellow-300">{score} / {items.length}</span> correct!
+          </p>
+        </div>
+      ) : (
+        <>
+          <span className="flex items-center gap-1 rounded-full bg-orange-100/90 px-3 py-1 text-xs font-bold text-orange-600 shadow backdrop-blur-sm">
+            🔥 {streak}
+          </span>
+          <div className="max-w-sm rounded-2xl bg-white/90 px-5 py-4 text-base font-bold text-slate-800 shadow-xl backdrop-blur-sm">
+            {item.statement}
+          </div>
+          <button
+            onClick={() => void playVoice(item.statement)}
+            className="flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg transition active:scale-95"
+          >
+            🔊 Listen again
+          </button>
+          <div className="flex items-center justify-center gap-6">
+            <button
+              onClick={() => pick(true)}
+              disabled={picked !== null}
+              className={`flex h-20 w-20 items-center justify-center rounded-2xl border-4 text-3xl shadow-lg backdrop-blur-sm transition active:scale-95 ${
+                picked !== null && item.answer ? 'border-emerald-500 bg-emerald-500' : 'border-white bg-white/90'
+              }`}
+            >
+              👍
+            </button>
+            <button
+              onClick={() => pick(false)}
+              disabled={picked !== null}
+              className={`flex h-20 w-20 items-center justify-center rounded-2xl border-4 text-3xl shadow-lg backdrop-blur-sm transition active:scale-95 ${
+                picked !== null && !item.answer ? 'border-emerald-500 bg-emerald-500' : 'border-white bg-white/90'
+              }`}
+            >
+              👎
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -2678,6 +3073,9 @@ function renderSlideInner({ slide, t, fullBleed }: { slide: Slide; t: ThemeToken
     case 'number_quiz_game': return <NumberQuizGameSlide slide={slide} fullBleed={fullBleed} />;
     case 'letter_sound_game': return <LetterSoundGameSlide slide={slide} fullBleed={fullBleed} />;
     case 'word_blend': return <WordBlendSlide slide={slide} fullBleed={fullBleed} />;
+    case 'picture_match_game': return <PictureMatchGameSlide slide={slide} />;
+    case 'say_it_game': return <SayItGameSlide slide={slide} />;
+    case 'sound_challenge_game': return <SoundChallengeGameSlide slide={slide} />;
     case 'story_page': return <StoryPageSlide slide={slide} fullBleed={fullBleed} />;
     case 'speaking_task': return <SpeakingTaskSlide slide={slide} t={t} />;
     case 'reflection': return <ReflectionSlide slide={slide} t={t} />;
