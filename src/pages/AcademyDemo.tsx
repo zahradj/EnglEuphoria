@@ -2351,7 +2351,7 @@ function FindInSceneGameSlide({ slide }: { slide: Extract<Slide, { type: 'find_i
               key={it.word}
               onClick={() => tapHotspot(it.word)}
               aria-label={`Find the ${it.word}`}
-              className="absolute"
+              className="absolute appearance-none border-0 bg-transparent p-0 outline-none focus:outline-none focus-visible:outline-none"
               style={{
                 left: `${it.hotspot.x}%`,
                 top: `${it.hotspot.y}%`,
