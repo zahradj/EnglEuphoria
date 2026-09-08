@@ -153,15 +153,17 @@ export type Slide =
   // their age. Tapping a number plays it and reinforces the target
   // sentence pattern ("I am ___ years old").
   | { type: 'number_chart'; block: Block; title?: string; from?: number; to?: number; bg_image_url?: string }
-  // A gamified quiz -- big colorful answer buttons, a streak counter,
-  // confetti on a correct answer, over a full-bleed illustrated
-  // game-show scene -- instead of the plain multiple-choice quiz card.
+  // A gamified LISTENING quiz -- Ava SPEAKS a number, the student taps the
+  // matching digit. No English text is required to play: Pre-A1 students
+  // can't read yet, so word options ("Twelve"/"Twenty"/"Two") would make
+  // the quiz unsolvable by reading alone. Digits are answered by ear +
+  // numeral recognition only.
   | {
       type: 'number_quiz_game';
       block: Block;
       title?: string;
       bg_image_url?: string;
-      items: { question: string; options: string[]; answer: string }[];
+      items: { answer: number; choices: number[] }[];
     }
   | { type: 'speaking_task'; block: Block; prompt: string; starters?: string[] }
   | { type: 'reflection'; block: Block; prompt: string }
@@ -1361,38 +1363,41 @@ function NumberChartSlide({ slide, t, fullBleed }: { slide: Extract<Slide, { typ
   );
 }
 
-// Gamified quiz: big colorful answer buttons, a streak counter, confetti
-// on a correct answer, over a full-bleed illustrated game-show scene --
-// per direction, "make it more like a game" instead of the plain
-// multiple-choice quiz card. Reads each question aloud; a correct answer
-// also reads the full sentence back ("Yes! Twelve!") before advancing.
+// Gamified LISTENING quiz: Ava SPEAKS a number, the student taps the
+// matching digit -- no English word to read, so a Pre-A1 student who
+// can't read yet can still play. Big colorful digit buttons, a streak
+// counter, confetti on a correct tap, over a full-bleed illustrated
+// game-show scene, researched from kids-app gamification patterns
+// (streaks, celebratory feedback, bite-sized rounds).
 function NumberQuizGameSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 'number_quiz_game' }>; fullBleed?: boolean }) {
   const { playVoice } = useAcademyAudio();
   const [index, setIndex] = useState(0);
-  const [picked, setPicked] = useState<string | null>(null);
+  const [picked, setPicked] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
   const [score, setScore] = useState(0);
   const items = slide.items;
   const item = items[index];
   const finished = index >= items.length;
 
+  const speakAnswer = () => item && void playVoice(NUMBER_WORDS[item.answer]);
+
   useEffect(() => {
-    if (!finished && item) void playVoice(item.question);
+    if (!finished && item) void playVoice(`Listen! ${NUMBER_WORDS[item.answer]}!`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index]);
 
-  const pick = (opt: string) => {
-    if (picked) return;
-    setPicked(opt);
-    const correct = opt === item.answer;
+  const pick = (n: number) => {
+    if (picked !== null) return;
+    setPicked(n);
+    const correct = n === item.answer;
     if (correct) {
       setStreak((s) => s + 1);
       setScore((s) => s + 1);
       confetti({ particleCount: 60, spread: 65, origin: { y: 0.6 } });
-      void playVoice(`Yes! ${opt}!`);
+      void playVoice(`Yes! ${NUMBER_WORDS[n]}!`);
     } else {
       setStreak(0);
-      void playVoice(`Not quite. It's ${item.answer}.`);
+      void playVoice(`Not quite. ${NUMBER_WORDS[item.answer]}.`);
     }
     window.setTimeout(() => {
       setPicked(null);
@@ -1404,7 +1409,7 @@ function NumberQuizGameSlide({ slide, fullBleed }: { slide: Extract<Slide, { typ
     <div className={`w-full ${fullBleed ? 'max-w-lg rounded-[2rem] bg-white/95 p-6 shadow-2xl backdrop-blur-sm md:p-8' : 'max-w-lg mx-auto space-y-5'}`}>
       <div className="mb-5 flex items-center justify-between">
         <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-bold uppercase tracking-widest text-indigo-600">
-          {finished ? 'Done!' : `Question ${index + 1} / ${items.length}`}
+          {finished ? 'Done!' : `Round ${index + 1} / ${items.length}`}
         </span>
         <span className="flex items-center gap-1 rounded-full bg-orange-100 px-3 py-1 text-xs font-bold text-orange-600">
           🔥 {streak}
@@ -1420,23 +1425,30 @@ function NumberQuizGameSlide({ slide, fullBleed }: { slide: Extract<Slide, { typ
         </div>
       ) : (
         <>
-          <h2 className="mb-5 text-center text-2xl font-bold text-slate-900">{item.question}</h2>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            {item.options.map((opt) => {
-              const active = picked === opt;
-              const isAnswer = opt === item.answer;
+          {/* No English text to read -- just an ear icon inviting a replay,
+              and the numeral choices themselves. */}
+          <button
+            onClick={speakAnswer}
+            className="mx-auto mb-5 flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-3 text-lg font-bold text-white shadow-lg transition active:scale-95"
+          >
+            🔊 Listen again
+          </button>
+          <div className="grid grid-cols-3 gap-3">
+            {item.choices.map((n) => {
+              const active = picked === n;
+              const isAnswer = n === item.answer;
               let cls = 'border-slate-200 bg-white text-slate-800 hover:border-indigo-400';
-              if (picked && active && isAnswer) cls = 'border-emerald-500 bg-emerald-500 text-white';
-              else if (picked && active && !isAnswer) cls = 'border-red-500 bg-red-500 text-white';
-              else if (picked && isAnswer) cls = 'border-emerald-500 bg-emerald-50 text-emerald-700';
+              if (picked !== null && active && isAnswer) cls = 'border-emerald-500 bg-emerald-500 text-white';
+              else if (picked !== null && active && !isAnswer) cls = 'border-red-500 bg-red-500 text-white';
+              else if (picked !== null && isAnswer) cls = 'border-emerald-500 bg-emerald-50 text-emerald-700';
               return (
                 <button
-                  key={opt}
-                  onClick={() => pick(opt)}
-                  disabled={!!picked}
-                  className={`rounded-2xl border-2 px-4 py-4 text-lg font-bold capitalize shadow-sm transition active:scale-95 ${cls}`}
+                  key={n}
+                  onClick={() => pick(n)}
+                  disabled={picked !== null}
+                  className={`rounded-2xl border-2 py-6 text-4xl font-black shadow-sm transition active:scale-95 ${cls}`}
                 >
-                  {opt}
+                  {n}
                 </button>
               );
             })}
