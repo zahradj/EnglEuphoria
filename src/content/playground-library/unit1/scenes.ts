@@ -4334,22 +4334,6 @@ export const LESSON_U5L1_SCENES: Scene[] = [
     ],
   },
   {
-    // Each question shows the actual parent being asked about, matching
-    // the established U2/U3 "-solo" per-subject framing (open space
-    // preserved for the student's draggable video circle). The student's
-    // own answer here is the real "This is my ___" practice — about their
-    // own family, not a scripted character's.
-    id: 'u5l1-join-stage', kind: 'join-stage', bg: bgU5L1FamilyHome, teacher: 'Your turn! Who is this? Say it about YOUR family.', cast: ['pip', 'bella', 'willow'],
-    turns: [
-      { who: 'pip', line: 'Who is this?', bg: bgU5L1MomSolo },
-      { who: 'student', line: 'This is my ______. (mom)', bg: bgU5L1MomSolo },
-      { who: 'bella', line: 'And who is this?', bg: bgU5L1DadSolo },
-      { who: 'student', line: 'This is my ______. (dad)', bg: bgU5L1DadSolo },
-      { who: 'willow', line: 'Do you love your family?', bg: bgU5L1FamilyHome },
-      { who: 'student', line: 'I love my ______! (mom / dad)', bg: bgU5L1FamilyHome },
-    ],
-  },
-  {
     id: 'u5l1-storybook', kind: 'flipbook', bg: bgU5L1FamilyHome, title: "A Day With Pip's Family",
     pages: [
       { who: 'pip', img: bgU5L1FamilyHome, text: 'Pip woke up at home. Mom and Dad were making breakfast!' },
@@ -4374,6 +4358,27 @@ export const LESSON_U5L1_SCENES: Scene[] = [
     script: [
       { who: 'pip', line: 'This is my dad!', repeat: true },
       { who: 'willow', line: "Hi, Pip's dad! Nice to meet you!" },
+    ],
+  },
+  {
+    // Per direct user request: the student should talk about THEIR OWN
+    // family at the very END of the lesson, as the closing capstone --
+    // moved here (was previously mid-lesson, before the storybook) so
+    // this is the LAST thing the student does before the goodbye song,
+    // right after meeting Mom and Dad through the storybook + roleplays.
+    // Each question shows the actual parent being asked about, matching
+    // the established U2/U3 "-solo" per-subject framing (open space
+    // preserved for the student's draggable video circle). The student's
+    // own answer here is the real "This is my ___" practice — about their
+    // own family, not a scripted character's.
+    id: 'u5l1-join-stage', kind: 'join-stage', bg: bgU5L1FamilyHome, teacher: 'Your turn! Who is this? Say it about YOUR family.', cast: ['pip', 'bella', 'willow'],
+    turns: [
+      { who: 'pip', line: 'Who is this?', bg: bgU5L1MomSolo },
+      { who: 'student', line: 'This is my ______. (mom)', bg: bgU5L1MomSolo },
+      { who: 'bella', line: 'And who is this?', bg: bgU5L1DadSolo },
+      { who: 'student', line: 'This is my ______. (dad)', bg: bgU5L1DadSolo },
+      { who: 'willow', line: 'Do you love your family?', bg: bgU5L1FamilyHome },
+      { who: 'student', line: 'I love my ______! (mom / dad)', bg: bgU5L1FamilyHome },
     ],
   },
   {
