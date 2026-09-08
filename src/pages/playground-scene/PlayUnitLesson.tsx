@@ -125,7 +125,16 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   // skipsLock activities are bidirectional for both roles at once — safe
   // from feedback loops because isApplyingRemoteTapRef (below) stops a
   // replayed synthetic event from being re-captured and re-broadcast.
-  const iCaptureTaps = isSynced && !!role && (skipsLock || role === 'teacher' || (role === 'student' && interactionUnlocked));
+  //
+  // Bug fixed here: this previously read `role === 'teacher'` unconditionally
+  // (no `&& !interactionUnlocked` guard), so once a teacher granted the
+  // student control both sides captured+broadcast their own taps at once —
+  // violating the "exactly one side captures at a time" invariant this
+  // comment describes. The teacher's stray broadcasts went nowhere (the
+  // student's iReplayTaps below already correctly stops listening once
+  // unlocked), but it doubled real traffic on the tap channel during every
+  // unlocked activity and made this file's own driver/follower model a lie.
+  const iCaptureTaps = isSynced && !!role && (skipsLock || (role === 'teacher' && !interactionUnlocked) || (role === 'student' && interactionUnlocked));
   const iReplayTaps = isSynced && !!role && (
     skipsLock || (role === 'teacher' && interactionUnlocked) || (role === 'student' && !interactionUnlocked)
   );

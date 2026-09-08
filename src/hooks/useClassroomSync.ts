@@ -274,6 +274,7 @@ export const useClassroomSync = ({
         currentSlideIndex: snap.slideIndex,
         embeddedUrl: snap.embeddedUrl !== undefined ? snap.embeddedUrl : prev.embeddedUrl,
         activeCanvasTab: snap.activeCanvasTab ?? prev.activeCanvasTab,
+        sceneLessonIdx: typeof snap.sceneLessonIdx === 'number' ? snap.sceneLessonIdx : prev.sceneLessonIdx,
       } : prev);
     });
     return unsub;
@@ -495,6 +496,7 @@ export const useClassroomSync = ({
         drawingEnabled,
         iframeUnlocked,
         sceneActivityUnlocked: activityUnlocked,
+        sceneLessonIdx: session?.sceneLessonIdx ?? null,
         embeddedUrl: session?.embeddedUrl ?? null,
         activeCanvasTab: session?.activeCanvasTab,
         senderId: userId,

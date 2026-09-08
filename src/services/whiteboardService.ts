@@ -225,6 +225,13 @@ export interface ForceSyncPayload {
   iframeUnlocked?: boolean;
   embeddedUrl?: string | null;
   activeCanvasTab?: string;
+  /** Whether the student may currently interact with the embedded Playground scene. */
+  sceneActivityUnlocked?: boolean;
+  /** Current scene index within an active embedded Playground scene lesson,
+   *  if any — without this, Force Sync fixed everything about a desynced
+   *  classroom EXCEPT the one thing "the student's view looks wrong" most
+   *  often meant in practice: a stuck/mismatched Playground lesson scene. */
+  sceneLessonIdx?: number | null;
   senderId: string;
   timestamp: number;
 }
