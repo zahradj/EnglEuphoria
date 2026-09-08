@@ -12,6 +12,7 @@ import { ClassroomToolOverlay } from './ClassroomToolOverlay';
 import { EmbeddedSceneLesson } from './EmbeddedSceneLesson';
 import { EmbeddedWelcomeTownLesson } from './EmbeddedWelcomeTownLesson';
 import { useFrameScale } from '@/hooks/useFrameScale';
+import { useLetterboxSize } from '@/hooks/useLetterboxSize';
 
 /** The two embedded scene players (Pre-A1 lep1-rich, A1/A2 wt-rich/wt-a2-rich)
  *  expose the same 4 imperative methods from different source files —
@@ -119,6 +120,8 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
   const isWelcomeTownScene = sceneLessonRef?.contentFormat === 'wt-rich' || sceneLessonRef?.contentFormat === 'wt-a2-rich';
 
   const sceneLessonHandleRef = useRef<SceneLessonHandle>(null);
+  const sceneStageAreaRef = useRef<HTMLDivElement>(null);
+  const sceneFrameSize = useLetterboxSize(sceneStageAreaRef, 16 / 9);
   const sceneFrameRef = useRef<HTMLDivElement>(null);
   const sceneFrameScale = useFrameScale(sceneFrameRef);
   const [sceneNav, setSceneNav] = useState({ sceneIdx: 0, total: 0, canNavigate: true, interactionUnlocked: false, lockToggleApplicable: true });
@@ -165,7 +168,26 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
             // (the last item in this flex column, including "Let student
             // try") underneath it.
             <div className={`absolute inset-x-3 top-3 sm:inset-x-4 sm:top-4 lg:inset-x-6 lg:top-6 flex flex-col gap-2 ${role === 'teacher' ? 'bottom-20 sm:bottom-24' : 'bottom-3 sm:bottom-4 lg:bottom-6'}`}>
-              <div ref={sceneFrameRef} className="relative flex-1 min-h-0 overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">
+              {/* Scene art is generated full-bleed 16:9 and every scene paints
+                  it with `bg-cover` (fill-and-crop, never letterbox on its
+                  own) -- so the frame itself needs to be locked to that same
+                  16:9 shape before any art renders inside it. Without this,
+                  the frame just stretched to whatever leftover space this
+                  column had (wide-and-short on most desktop monitors), and
+                  bg-cover cropped/zoomed heavily to fill that mismatched
+                  shape -- reported live as "looks zoomed in, doesn't show
+                  the whole image." useLetterboxSize measures the available
+                  area and sets explicit pixel width/height for the largest
+                  16:9 box that fits -- a pure-CSS aspect-ratio attempt here
+                  first collapsed toward zero (the frame's only child is
+                  `position: absolute`, so it has no in-flow content to size
+                  against), hence measuring explicitly instead. */}
+              <div ref={sceneStageAreaRef} className="relative flex-1 min-h-0 flex items-center justify-center">
+              <div
+                ref={sceneFrameRef}
+                className="relative overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5"
+                style={sceneFrameSize.width > 0 ? { width: sceneFrameSize.width, height: sceneFrameSize.height } : { width: '100%', height: '100%' }}
+              >
                 <div className="absolute inset-0 overflow-hidden">
                   <div style={{ position: 'absolute', top: 0, left: 0, width: `${100 / sceneFrameScale}%`, height: `${100 / sceneFrameScale}%`, transform: `scale(${sceneFrameScale})`, transformOrigin: 'top left' }}>
                   {isWelcomeTownScene ? (
@@ -196,6 +218,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                   )}
                   </div>
                 </div>
+              </div>
               </div>
 
               {/* Nav bar lives below the framed lesson card, not overlaid on it */}
