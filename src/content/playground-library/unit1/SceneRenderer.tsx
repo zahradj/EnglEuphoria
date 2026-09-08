@@ -1074,25 +1074,46 @@ function WordBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
   }
 
   const letters = r.word.split('');
+  const side = scene.side;
+  // Only positions solved in an EARLIER round are revealed — a not-yet-reached
+  // letter must never be shown, or the "hint" gives the answer away before the
+  // student earns it. Per direct user request: the student builds the whole
+  // word letter by letter with no hints, not fill-in-the-one-blank with the
+  // rest of the word pre-printed.
+  const revealed = new Set<number>();
+  for (let i = 0; i < round; i++) revealed.add(scene.rounds[i].blankIndex);
+  const choiceGradients = [
+    'linear-gradient(135deg,#FE6A2F,#FF8A4C)', // orange
+    'linear-gradient(135deg,#4FA9E0,#6EC6F0)', // blue
+    'linear-gradient(135deg,#B85CD1,#D57BE6)', // purple
+    'linear-gradient(135deg,#4ADE80,#86EFAC)', // green
+  ];
   return (
-    <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div className={`absolute inset-0 flex items-center bg-cover bg-center pb-24 ${side === 'right' ? 'justify-end' : side === 'left' ? 'justify-start' : 'justify-center'}`} style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">🧩 {scene.teacher} <span className="ml-1 opacity-70">({round + 1}/{total})</span></div>
-      <div className="relative z-10 flex w-full max-w-[560px] flex-col items-center gap-6 px-4">
-        <button onClick={() => void safeSpeak(r.word, 'pip')} className="grid h-44 w-44 place-items-center rounded-3xl p-2 transition active:scale-95 sm:h-52 sm:w-52" aria-label={`Hear ${r.word}`}>
-          {r.img ? <img src={r.img} alt={r.word} className="h-full w-full object-contain drop-shadow-2xl" draggable={false} /> : <span className="text-7xl drop-shadow-2xl">{r.emoji}</span>}
-        </button>
-        <div className="flex items-end gap-2">
-          {letters.map((ch, i) => {
-            const isBlank = i === r.blankIndex;
-            const display = isBlank ? (filled ?? '_') : ch;
-            return <div key={i} className={`grid place-items-center rounded-2xl border-4 font-black uppercase shadow-lg ${isBlank ? (filled ? 'border-green-400 bg-green-100 text-green-700' : 'border-dashed border-white bg-white/70 text-orange-700') : 'border-white bg-white/90 text-orange-700'}`} style={{ width: 62, height: 78, fontSize: 42 }}>{display}</div>;
-          })}
-        </div>
-        <button onClick={() => void safeSpeak(r.word, 'pip')} className="rounded-full bg-white/95 px-6 py-2 text-sm font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔊 Listen</button>
-        <div className="flex flex-wrap justify-center gap-3">
-          {r.choices.map((L) => (
-            <button key={L} onClick={() => tap(L)} disabled={!!filled} className={`grid h-20 w-20 place-items-center rounded-2xl border-4 border-white text-4xl font-black text-white shadow-2xl transition active:scale-95 disabled:opacity-40 sm:h-24 sm:w-24 sm:text-5xl ${wrong === L ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`} style={{ background: L === 'H' ? 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' : 'linear-gradient(135deg,#B85CD1,#D57BE6)' }}>{L}</button>
-          ))}
+      <div className={`relative z-10 flex w-full flex-col items-center px-4 ${side ? 'max-w-[420px]' : 'max-w-[520px]'}`}>
+        <div className="w-full rounded-[2.25rem] bg-white/90 p-6 shadow-2xl ring-4 ring-white/60 backdrop-blur-sm">
+          <div className="flex items-center justify-center gap-3">
+            {letters.map((ch, i) => {
+              const isCurrent = i === r.blankIndex;
+              const isRevealed = revealed.has(i);
+              const display = isCurrent ? (filled ?? '_') : isRevealed ? ch : '_';
+              const tileTone = isCurrent
+                ? (filled ? 'border-green-400 bg-green-50 text-green-600' : 'border-dashed border-amber-400 bg-amber-50 text-amber-400')
+                : isRevealed
+                ? 'border-green-300 bg-green-50 text-green-700'
+                : 'border-dashed border-neutral-300 bg-neutral-100 text-neutral-300';
+              return <div key={i} className={`grid place-items-center rounded-3xl border-4 font-black uppercase shadow-md transition-colors ${tileTone}`} style={{ width: 66, height: 82, fontSize: 44 }}>{display}</div>;
+            })}
+          </div>
+          <div className="mt-4 flex justify-center">
+            <button onClick={() => void safeSpeak(r.word, 'pip')} className="rounded-full bg-orange-100 px-6 py-2 text-sm font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔊 Listen</button>
+          </div>
+          <div className="mt-5 flex flex-wrap justify-center gap-3">
+            {r.choices.map((L, i) => (
+              <button key={L} onClick={() => tap(L)} disabled={!!filled} className={`grid h-20 w-20 place-items-center rounded-3xl border-4 border-white text-4xl font-black text-white shadow-xl transition active:scale-95 disabled:opacity-40 sm:h-24 sm:w-24 sm:text-5xl ${wrong === L ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`} style={{ background: choiceGradients[i % choiceGradients.length] }}>{L}</button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

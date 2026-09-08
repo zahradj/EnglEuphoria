@@ -42,7 +42,16 @@ export type Scene =
       speakWord?: boolean;
     }
   | { id: string; kind: 'sound-sort'; bg: string; teacher: string; targets: { letter: string; phoneme: string; who: CharKey }[]; items: { word: string; img?: string; emoji: string; letter: string }[] }
-  | { id: string; kind: 'word-build'; bg: string; teacher: string; rounds: { word: string; blankIndex: number; answer: string; choices: string[]; img?: string; emoji: string }[] }
+  | {
+      id: string; kind: 'word-build'; bg: string; teacher: string; rounds: { word: string; blankIndex: number; answer: string; choices: string[]; img?: string; emoji: string }[];
+      /** When set, docks the whole puzzle (picture, letter slots, choices)
+       *  to one side of the frame instead of dead-center — for a `bg` with
+       *  a character standing to one side and real open space on the
+       *  other, centering the puzzle covers their face. First used by
+       *  Unit 5 Lesson 1 per direct user request. Omitted (default) keeps
+       *  the original centered layout existing lessons use. */
+      side?: 'left' | 'right';
+    }
   | { id: string; kind: 'who-said-it'; bg: string; teacher: string; rounds: { line: string; who: CharKey; emotion?: 'happy' | 'sad' | 'angry' | 'neutral' }[] }
   | { id: string; kind: 'gather'; bg: string; teacher: string; hotspots: { who: CharKey; line: string; x: number; y: number; r: number }[]; stage: { x: number; y: number; r: number } }
   | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string; img?: string }[] }
@@ -4202,19 +4211,19 @@ export const LESSON_U5L1_SCENES: Scene[] = [
     // background felt crowded/distracting behind the puzzle, and the small
     // picture-in-picture thumbnail already gives all the visual context
     // this activity needs.
-    id: 'u5l1-word-build-mom', kind: 'word-build', bg: bgU5L1MomSolo, teacher: "Listen! Tap each letter to spell the whole word.",
+    id: 'u5l1-word-build-mom', kind: 'word-build', bg: bgU5L1MomSolo, teacher: "Listen! Tap each letter to spell the whole word.", side: 'right',
     rounds: [
-      { word: 'mom', blankIndex: 0, answer: 'M', choices: ['M', 'D', 'B'], img: bgU5L1MomSolo, emoji: '\u{1F469}' },
-      { word: 'mom', blankIndex: 1, answer: 'O', choices: ['O', 'A', 'E'], img: bgU5L1MomSolo, emoji: '\u{1F469}' },
-      { word: 'mom', blankIndex: 2, answer: 'M', choices: ['M', 'D', 'N'], img: bgU5L1MomSolo, emoji: '\u{1F469}' },
+      { word: 'mom', blankIndex: 0, answer: 'M', choices: ['M', 'D', 'B'], emoji: '\u{1F469}' },
+      { word: 'mom', blankIndex: 1, answer: 'O', choices: ['O', 'A', 'E'], emoji: '\u{1F469}' },
+      { word: 'mom', blankIndex: 2, answer: 'M', choices: ['M', 'D', 'N'], emoji: '\u{1F469}' },
     ],
   },
   {
-    id: 'u5l1-word-build-dad', kind: 'word-build', bg: bgU5L1DadSolo, teacher: 'Now spell Dad!',
+    id: 'u5l1-word-build-dad', kind: 'word-build', bg: bgU5L1DadSolo, teacher: 'Now spell Dad!', side: 'left',
     rounds: [
-      { word: 'dad', blankIndex: 0, answer: 'D', choices: ['D', 'M', 'B'], img: bgU5L1DadSolo, emoji: '\u{1F468}' },
-      { word: 'dad', blankIndex: 1, answer: 'A', choices: ['A', 'O', 'E'], img: bgU5L1DadSolo, emoji: '\u{1F468}' },
-      { word: 'dad', blankIndex: 2, answer: 'D', choices: ['D', 'M', 'N'], img: bgU5L1DadSolo, emoji: '\u{1F468}' },
+      { word: 'dad', blankIndex: 0, answer: 'D', choices: ['D', 'M', 'B'], emoji: '\u{1F468}' },
+      { word: 'dad', blankIndex: 1, answer: 'A', choices: ['A', 'O', 'E'], emoji: '\u{1F468}' },
+      { word: 'dad', blankIndex: 2, answer: 'D', choices: ['D', 'M', 'N'], emoji: '\u{1F468}' },
     ],
   },
   {
@@ -4245,6 +4254,17 @@ export const LESSON_U5L1_SCENES: Scene[] = [
     cards: [
       { who: 'pip', sentence: 'This is my dad!', img: bgU5L1DadSolo, imgLabel: 'Dad', wordColors: ['#EF4444', '#EF4444', '#4ADE80', null] },
       { who: 'pip', sentence: 'I love my dad!', img: bgU5L1DadSolo, imgLabel: 'Dad', wordColors: ['#EF4444', '#EF4444', '#4ADE80', null] },
+    ],
+  },
+  {
+    // Per direct user request: complete the "This is my ___" sentence set
+    // with Family too, not just Mom and Dad — the student should end up
+    // able to make all three sentences. No single clean empty side on the
+    // 3-person family-home shot, so the sentence floats top-anchored
+    // (same choice already made for the Me/Family vocabulary scenes).
+    id: 'u5l1-sentence-family', kind: 'listen-repeat-cards', bg: bgU5L1FamilyHome, teacher: "Now let's say it about the whole family! Listen, then repeat.", bare: true, textSide: 'top',
+    cards: [
+      { who: 'pip', sentence: 'This is my family!', img: bgU5L1FamilyHome, imgLabel: 'Family', wordColors: ['#EF4444', '#EF4444', '#4ADE80', null] },
     ],
   },
   {
