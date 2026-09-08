@@ -1023,9 +1023,14 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Video tiles floated out of the sidebar over the lesson content */}
+      {/* Video tiles floated out of the sidebar over the lesson content —
+          desktop/landscape-tablet only, same reasoning as the student
+          side: react-rnd's fixed pixel positioning here was never adapted
+          for narrow/portrait screens, and the always-visible compact
+          video strip (CommunicationZone) already covers that case without
+          needing floating mode at all. */}
       {!isZenMode && videosFloating && (
-        <>
+        <div className="hidden md:contents">
           <PictureInPicture
             name={`${teacherName} (You)`}
             isConnected={media.isConnected}
@@ -1043,7 +1048,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             defaultPosition={{ x: 240, y: 292 }}
             onDock={() => setVideosFloating(false)}
           />
-        </>
+        </div>
       )}
 
       {/* Top Control Bar (hidden in Zen) */}

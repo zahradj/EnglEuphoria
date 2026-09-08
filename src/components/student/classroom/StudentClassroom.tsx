@@ -478,9 +478,18 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Video tiles floated out of the sidebar over the lesson content */}
+      {/* Video tiles floated out of the sidebar over the lesson content —
+          desktop/landscape-tablet only. react-rnd positions these with
+          fixed pixel coordinates (defaultPosition below) that were never
+          adapted for narrow/portrait screens, where they can end up
+          covering the lesson content with no way back short of finding
+          the tiny dock icon on hover. The always-visible compact video
+          strip (StudentCommunicationSidebar) already solves "see the
+          video without losing the lesson" on narrow screens, so floating
+          mode is desktop-only; the toggle to enter it is hidden below
+          `md` there too. */}
       {!isZenMode && videosFloating && (
-        <>
+        <div className="hidden md:contents">
           <PictureInPicture
             name={teacherName}
             isConnected={rtcConnected}
@@ -498,7 +507,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
             defaultPosition={{ x: 240, y: 292 }}
             onDock={() => setVideosFloating(false)}
           />
-        </>
+        </div>
       )}
 
       {/* Media Permission Error Overlay */}

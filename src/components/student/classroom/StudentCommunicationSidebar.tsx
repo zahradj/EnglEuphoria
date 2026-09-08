@@ -113,7 +113,7 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
   // once — see the `hidden md:block` / `md:hidden` split below.
   const teacherTile = (compact: boolean) => (
     <div
-      className={`group relative aspect-[4/3] overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all ${compact ? 'w-24 sm:w-28 shrink-0 rounded-xl' : 'rounded-2xl hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)]'} ${videosFloating ? 'hidden' : ''}`}
+      className={`group relative aspect-[4/3] overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all ${compact ? 'w-14 shrink-0 rounded-lg' : 'rounded-2xl hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)]'} ${videosFloating ? 'hidden' : ''}`}
       style={{ background: theme.hexGradient }}
     >
       <div className={`absolute overflow-hidden bg-gray-900 ${compact ? 'inset-[1px] rounded-[10px]' : 'inset-[2px] rounded-[14px]'}`}>
@@ -129,18 +129,24 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
             </div>
           </div>
         )}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/55 to-transparent" />
-        <div className={`absolute bottom-1 left-1 flex items-center gap-1 bg-white/85 backdrop-blur-sm rounded-full font-semibold text-gray-800 shadow-sm ${compact ? 'px-1.5 py-0.5 text-[9px]' : 'px-2 py-0.5 text-[11px] bottom-2 left-2'}`}>
-          <span className={`h-1.5 w-1.5 rounded-full ${isRemoteConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400'}`} />
-          {compact ? teacherName.split(' ')[0] : teacherName}
-        </div>
+        {compact ? (
+          <span className={`absolute top-1 right-1 h-2 w-2 rounded-full ring-1 ring-white/80 ${isRemoteConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400'}`} />
+        ) : (
+          <>
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/55 to-transparent" />
+            <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-white/85 backdrop-blur-sm rounded-full px-2 py-0.5 text-[11px] font-semibold text-gray-800 shadow-sm">
+              <span className={`h-1.5 w-1.5 rounded-full ${isRemoteConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400'}`} />
+              {teacherName}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
 
   const studentTile = (compact: boolean) => (
     <div
-      className={`group relative aspect-[4/3] overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all ${compact ? 'w-24 sm:w-28 shrink-0 rounded-xl' : 'rounded-2xl hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)]'} ${videosFloating ? 'hidden' : ''}`}
+      className={`group relative aspect-[4/3] overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all ${compact ? 'w-14 shrink-0 rounded-lg' : 'rounded-2xl hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)]'} ${videosFloating ? 'hidden' : ''}`}
       style={{ background: theme.hexGradient }}
     >
       <div className={`absolute overflow-hidden bg-gray-900 ${compact ? 'inset-[1px] rounded-[10px]' : 'inset-[2px] rounded-[14px]'}`}>
@@ -153,11 +159,17 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
             </div>
           </div>
         )}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/55 to-transparent" />
-        <div className={`absolute bottom-1 left-1 flex items-center gap-1 bg-white/85 backdrop-blur-sm rounded-full font-semibold text-gray-800 shadow-sm ${compact ? 'px-1.5 py-0.5 text-[9px]' : 'px-2 py-0.5 text-[11px] bottom-2 left-2'}`}>
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          {compact ? 'You' : `${studentName} (You)`}
-        </div>
+        {compact ? (
+          <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-emerald-500 animate-pulse ring-1 ring-white/80" />
+        ) : (
+          <>
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/55 to-transparent" />
+            <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-white/85 backdrop-blur-sm rounded-full px-2 py-0.5 text-[11px] font-semibold text-gray-800 shadow-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              {studentName} (You)
+            </div>
+          </>
+        )}
         {!compact && (
           <div className="absolute bottom-2 right-2 flex gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
             <Button
@@ -209,13 +221,19 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
           simply never appeared unless a student happened to tap the header's
           small comms icon. This strip is independent of that drawer (never
           rendered at the same time — see `hidden md:block` on the sidebar's
-          own tiles below) so the video is never shown twice at once. */}
-      {!videosFloating && (
-        <div className="md:hidden fixed top-14 right-2 z-40 flex gap-2">
-          {teacherTile(true)}
-          {studentTile(true)}
-        </div>
-      )}
+          own tiles below) so the video is never shown twice at once.
+          Deliberately NOT gated on `!videosFloating`: floating mode is
+          desktop-only now (its toggle is `hidden md:inline-block`, and the
+          floating tiles themselves are `hidden md:contents` in
+          StudentClassroom), but `videosFloating` could still be stuck
+          `true` from before a viewport resize/rotation — without this
+          strip ignoring that flag, a student in that state would see no
+          video at all: not the (hidden-below-md) floating tiles, not the
+          (hidden-below-md) docked sidebar, and not this strip either. */}
+      <div className="md:hidden fixed top-14 right-2 z-40 flex gap-2">
+        {teacherTile(true)}
+        {studentTile(true)}
+      </div>
 
       {/* Backdrop — mobile only, dismisses the drawer */}
       {mobileOpen && (
@@ -240,12 +258,14 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
             <X className="w-4 h-4" />
           </button>
         )}
+        {/* Desktop/landscape-tablet only — see the note on the floating
+            PictureInPicture render itself for why. */}
         {onToggleVideosFloating && (
           <button
             type="button"
             onClick={onToggleVideosFloating}
             title={videosFloating ? 'Dock videos back to sidebar' : 'Float videos over the lesson'}
-            className={`p-1 rounded-md hover:bg-black/5 ${theme.accentText}`}
+            className={`hidden md:inline-block p-1 rounded-md hover:bg-black/5 ${theme.accentText}`}
           >
             {videosFloating ? <Pin className="w-3.5 h-3.5" /> : <PictureInPicture2 className="w-3.5 h-3.5" />}
           </button>
