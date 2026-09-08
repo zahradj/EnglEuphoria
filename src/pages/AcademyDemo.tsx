@@ -103,16 +103,20 @@ export type Slide =
       type: 'role_play';
       block: Block;
       title: string;
-      lineA: string; // Ava's first question, e.g. "Hi! I am Ava. What is your name?"
-      lineB: string; // faded example answer, shown until the student sends their own
+      lineA: string; // Ava's first question, a complete real sentence -- never a
+      // fill-in-the-blank template, that's what hintsA is for
+      hintsA: string[]; // tappable "try saying" chips near the compose bar --
+      // complete example sentences (not blanks) the student can tap to drop
+      // into the box and edit, help for the answer, separate from Ava's own
+      // dialogue text
       // Optional second question: Ava asks again (not the student inventing
       // a question to Ava) once the student has answered the first --
       // e.g. "Nice to meet you! How old are you?" -- same
       // answer-in-your-own-words pattern as the first turn. All optional so
-      // existing lineA/lineB-only content (a single-question turn) keeps
+      // existing lineA/hintsA-only content (a single-question turn) keeps
       // working unchanged.
       lineC?: string; // Ava's transition + second question
-      lineD?: string; // faded example answer for the second question
+      hintsC?: string[]; // hint chips for the second answer
       closing?: string; // Ava's closing line once both questions are answered
     }
   // Full-bleed illustrated dialogue scene — background art with the cast already
@@ -1173,6 +1177,7 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
   const [messages, setMessages] = useState<RolePlayMsg[]>([{ from: 'ava', text: slide.lineA }]);
   const [stage, setStage] = useState<'q1' | 'q2' | 'done'>('q1');
   const [draft, setDraft] = useState('');
+  const [typing, setTyping] = useState(false);
   const hasSecondQuestion = !!slide.lineC;
   const spokenCount = useRef(0);
 
@@ -1188,6 +1193,16 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 
+  // A brief "Ava is typing…" beat before her next message lands -- reads
+  // like a real texting app, not a scripted line dumped on screen.
+  const sendAva = (text: string) => {
+    setTyping(true);
+    window.setTimeout(() => {
+      setTyping(false);
+      setMessages((m) => [...m, { from: 'ava', text }]);
+    }, 900);
+  };
+
   const send = () => {
     const msg = draft.trim();
     if (!msg) return;
@@ -1195,42 +1210,41 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
     if (stage === 'q1') {
       setMessages((m) => [...m, { from: 'student', text: msg }]);
       if (hasSecondQuestion) {
-        window.setTimeout(() => {
-          setMessages((m) => [...m, { from: 'ava', text: slide.lineC! }]);
-          setStage('q2');
-        }, 500);
+        setStage('q2');
+        sendAva(slide.lineC!);
       } else {
         setStage('done');
-        if (slide.closing) {
-          window.setTimeout(() => {
-            setMessages((m) => [...m, { from: 'ava', text: slide.closing! }]);
-          }, 500);
-        }
+        if (slide.closing) sendAva(slide.closing);
       }
     } else if (stage === 'q2') {
       setMessages((m) => [...m, { from: 'student', text: msg }]);
       setStage('done');
-      if (slide.closing) {
-        window.setTimeout(() => {
-          setMessages((m) => [...m, { from: 'ava', text: slide.closing! }]);
-        }, 500);
-      }
+      if (slide.closing) sendAva(slide.closing);
     }
   };
 
-  const currentExample = stage === 'q1' ? slide.lineB : stage === 'q2' ? slide.lineD : undefined;
+  // Tappable "try saying" hints -- complete example sentences the student
+  // can drop into the box and edit, never a fill-in-the-blank baked into
+  // the message itself (Ava's own lines are always whole sentences).
+  const hints = stage === 'q1' ? slide.hintsA : stage === 'q2' ? slide.hintsC : undefined;
 
   return (
     <div className="mx-auto w-full max-w-2xl space-y-3">
       <div className={`text-xs uppercase tracking-widest text-center ${t.muted}`}>{slide.title}</div>
-      <div className="overflow-hidden rounded-[1.75rem] border-4 border-slate-900 bg-slate-100 shadow-2xl">
+      <div className="overflow-hidden rounded-[1.75rem] border-4 border-slate-900 bg-gradient-to-b from-slate-50 to-slate-100 shadow-2xl">
         {/* Contact header, like an actual messages app */}
-        <div className="flex items-center gap-2 border-b border-slate-200 bg-white px-5 py-4">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 text-base font-bold text-white">A</span>
-          <span className="text-base font-semibold text-slate-800">Ava</span>
+        <div className="flex items-center gap-3 border-b border-slate-200 bg-white px-5 py-4">
+          <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-base font-bold text-white">
+            A
+            <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-emerald-400" />
+          </span>
+          <div>
+            <div className="text-base font-semibold text-slate-800">Ava</div>
+            <div className="text-xs font-medium text-emerald-500">{typing ? 'typing…' : 'online'}</div>
+          </div>
         </div>
         {/* Message thread */}
-        <div className="flex min-h-[380px] flex-col gap-3 bg-slate-50 p-5">
+        <div className="flex min-h-[380px] flex-col gap-3 p-5">
           {messages.map((m, i) => (
             <div key={i} className={`flex ${m.from === 'ava' ? 'justify-start' : 'justify-end'}`}>
               {m.from === 'ava' && (
@@ -1246,23 +1260,28 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
                 className={
                   m.from === 'ava'
                     ? 'max-w-[75%] rounded-2xl rounded-bl-sm border border-slate-200 bg-white px-4 py-3 text-base text-slate-800 shadow-sm'
-                    : 'max-w-[75%] rounded-2xl rounded-br-sm bg-indigo-600 px-4 py-3 text-base text-white shadow-sm'
+                    : 'max-w-[75%] rounded-2xl rounded-br-sm bg-gradient-to-br from-indigo-500 to-indigo-600 px-4 py-3 text-base text-white shadow-sm'
                 }
               >
                 <GrammarMarkup text={m.text} />
               </div>
             </div>
           ))}
-          {/* Faded example of what to say -- only while the student hasn't
-              answered the CURRENT question yet. */}
-          {currentExample && (
-            <div className="flex justify-end">
-              <div className="max-w-[75%] rounded-2xl rounded-br-sm border-2 border-dashed border-indigo-300 bg-indigo-50/60 px-4 py-3 text-base text-indigo-400">
-                <GrammarMarkup text={currentExample} />
+          {/* Typing indicator -- three bouncing dots, like a real chat app. */}
+          {typing && (
+            <div className="flex justify-start">
+              <div className="flex items-center gap-1 rounded-2xl rounded-bl-sm border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
+                {[0, 1, 2].map((d) => (
+                  <span
+                    key={d}
+                    className="h-2 w-2 animate-bounce rounded-full bg-slate-400"
+                    style={{ animationDelay: `${d * 0.15}s` }}
+                  />
+                ))}
               </div>
             </div>
           )}
-          {stage === 'done' && (
+          {stage === 'done' && !typing && (
             <div className="flex justify-center pt-1">
               <span className="rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-emerald-700">
                 ✓ Conversation complete
@@ -1270,6 +1289,23 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
             </div>
           )}
         </div>
+
+        {/* Hint chips -- help for THIS answer, clearly separate from the
+            message thread above so they never look like an actual message. */}
+        {stage !== 'done' && !typing && hints && hints.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5 border-t border-slate-200 bg-indigo-50/60 px-4 pt-2.5">
+            <span className="text-xs font-bold text-indigo-400">💡 Try:</span>
+            {hints.map((h) => (
+              <button
+                key={h}
+                onClick={() => setDraft(h)}
+                className="rounded-full border border-indigo-200 bg-white px-3 py-1 text-xs font-semibold text-indigo-600 shadow-sm transition active:scale-95"
+              >
+                {h}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Compose bar -- the student's own words, not a scripted line. */}
         <div className="flex items-center gap-2 border-t border-slate-200 bg-white px-4 py-3">
