@@ -52,6 +52,17 @@ export type Scene =
        *  the original centered layout existing lessons use. */
       side?: 'left' | 'right';
     }
+  | {
+      // Word-level counterpart to word-build: the student assembles a
+      // whole sentence from its own shuffled words, tapping them in
+      // order, instead of just watching/repeating a sentence that's
+      // already put together. First used by Unit 5 Lesson 1 per direct
+      // user request ("shuffle the words... the student must make the
+      // full sentence").
+      id: string; kind: 'sentence-build'; bg: string; teacher: string;
+      rounds: { words: string[]; colors?: (string | null)[] }[];
+      side?: 'left' | 'right' | 'top';
+    }
   | { id: string; kind: 'who-said-it'; bg: string; teacher: string; rounds: { line: string; who: CharKey; emotion?: 'happy' | 'sad' | 'angry' | 'neutral' }[] }
   | { id: string; kind: 'gather'; bg: string; teacher: string; hotspots: { who: CharKey; line: string; x: number; y: number; r: number }[]; stage: { x: number; y: number; r: number } }
   | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string; img?: string }[] }
@@ -4243,6 +4254,10 @@ export const LESSON_U5L1_SCENES: Scene[] = [
     // student learns to recognize each part by color, not just position —
     // "This is"/"I love" always red, "my" always green, the family word
     // itself stays the default white (it's the one new piece each time).
+    // MODEL first (listen, then repeat) — the shuffled build-it-yourself
+    // exercise right after (u5l1-sentence-mom-build) is the practice step,
+    // not a replacement for modeling it. Per direct user request: don't
+    // drop the modeling pages when adding the shuffle exercise.
     id: 'u5l1-sentence-mom', kind: 'listen-repeat-cards', bg: bgU5L1MomSolo, teacher: "Now let's say a bigger sentence! Listen, then repeat.", bare: true, textSide: 'right',
     cards: [
       { who: 'pip', sentence: 'This is my mom!', img: bgU5L1MomSolo, imgLabel: 'Mom', wordColors: ['#EF4444', '#EF4444', '#4ADE80', null] },
@@ -4250,10 +4265,25 @@ export const LESSON_U5L1_SCENES: Scene[] = [
     ],
   },
   {
+    // Per direct user request: this is a real "making exercise" right
+    // after the model above — the words are shuffled and the student
+    // must tap them in order to build the sentence themselves.
+    id: 'u5l1-sentence-mom-build', kind: 'sentence-build', bg: bgU5L1MomSolo, teacher: 'The words are mixed up! Tap them in order to make the sentence.', side: 'right',
+    rounds: [
+      { words: ['This', 'is', 'my', 'mom.'], colors: ['#EF4444', '#EF4444', '#4ADE80', null] },
+    ],
+  },
+  {
     id: 'u5l1-sentence-dad', kind: 'listen-repeat-cards', bg: bgU5L1DadSolo, teacher: 'Now the same for Dad! Listen, then repeat.', bare: true, textSide: 'left',
     cards: [
       { who: 'pip', sentence: 'This is my dad!', img: bgU5L1DadSolo, imgLabel: 'Dad', wordColors: ['#EF4444', '#EF4444', '#4ADE80', null] },
       { who: 'pip', sentence: 'I love my dad!', img: bgU5L1DadSolo, imgLabel: 'Dad', wordColors: ['#EF4444', '#EF4444', '#4ADE80', null] },
+    ],
+  },
+  {
+    id: 'u5l1-sentence-dad-build', kind: 'sentence-build', bg: bgU5L1DadSolo, teacher: 'Now the same for Dad! Tap the words in order.', side: 'left',
+    rounds: [
+      { words: ['This', 'is', 'my', 'dad.'], colors: ['#EF4444', '#EF4444', '#4ADE80', null] },
     ],
   },
   {
@@ -4265,6 +4295,20 @@ export const LESSON_U5L1_SCENES: Scene[] = [
     id: 'u5l1-sentence-family', kind: 'listen-repeat-cards', bg: bgU5L1FamilyHome, teacher: "Now let's say it about the whole family! Listen, then repeat.", bare: true, textSide: 'top',
     cards: [
       { who: 'pip', sentence: 'This is my family!', img: bgU5L1FamilyHome, imgLabel: 'Family', wordColors: ['#EF4444', '#EF4444', '#4ADE80', null] },
+      { who: 'pip', sentence: 'I love my family!', img: bgU5L1FamilyHome, imgLabel: 'Family', wordColors: ['#EF4444', '#EF4444', '#4ADE80', null] },
+    ],
+  },
+  {
+    // Per direct user request: complete the sentence set with Family too
+    // -- both "This is my family" AND "I love my family", the four
+    // target sentences named directly (dad / mom / family / I love my
+    // family). No single clean empty side on the 3-person family-home
+    // shot, so the puzzle floats top-anchored (same choice already made
+    // for the Me/Family vocabulary scenes).
+    id: 'u5l1-sentence-family-build', kind: 'sentence-build', bg: bgU5L1FamilyHome, teacher: "Now let's build it about the whole family! Tap the words in order.", side: 'top',
+    rounds: [
+      { words: ['This', 'is', 'my', 'family.'], colors: ['#EF4444', '#EF4444', '#4ADE80', null] },
+      { words: ['I', 'love', 'my', 'family.'], colors: ['#EF4444', '#EF4444', '#4ADE80', null] },
     ],
   },
   {
