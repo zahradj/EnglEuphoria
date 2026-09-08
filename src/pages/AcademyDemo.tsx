@@ -177,6 +177,29 @@ export type Slide =
       bg_image_url?: string;
       items: { answer: number; choices: number[] }[];
     }
+  // A real GAME for letter sounds, not a passive flashcard: Ava plays a
+  // sound, the student taps the matching letter from a few choices --
+  // same listen-tap-streak-confetti loop as number_quiz_game, culminating
+  // in a "You found <WORD>!" reveal with the mnemonic pictures once every
+  // round is answered.
+  | {
+      type: 'letter_sound_game';
+      block: Block;
+      word: string; // the CVC word being spelled out round by round, e.g. "dog"
+      rounds: { letter: string; is_vowel?: boolean; image_url: string; distractors: string[] }[];
+    }
+  // A creative, illustrated "storybook page" for connected reading --
+  // full-bleed scene, the passage laid out like a page from a picture
+  // book with its target words highlighted in their own color, a
+  // narrator button to hear the whole page read aloud.
+  | {
+      type: 'story_page';
+      block: Block;
+      title?: string;
+      bg_image_url: string;
+      passage: string;
+      highlight_words: { word: string; color: string; emoji: string }[];
+    }
   | { type: 'speaking_task'; block: Block; prompt: string; starters?: string[] }
   | { type: 'reflection'; block: Block; prompt: string }
   | { type: 'cluster'; block: Block; title: string; content?: string; activities: ClusterActivity[] }
@@ -1627,6 +1650,197 @@ function NumberQuizGameSlide({ slide, fullBleed }: { slide: Extract<Slide, { typ
   return card;
 }
 
+// A real GAME for letter sounds -- per direction, "it doesn't have to be
+// flashcards... use it as a game" -- reusing the exact listen-tap-streak-
+// confetti loop from NumberQuizGameSlide (already proven and, per the
+// earlier accessibility fix, works with zero reading required). Each
+// round: hear a sound, tap the matching letter from a few choices; the
+// mnemonic picture is the reward for a correct pick, not a passive first
+// step. Finishing all rounds reveals the spelled-out word with every
+// mnemonic picture in a row.
+function LetterSoundGameSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 'letter_sound_game' }>; fullBleed?: boolean }) {
+  const { playVoice } = useAcademyAudio();
+  const [index, setIndex] = useState(0);
+  const [picked, setPicked] = useState<string | null>(null);
+  const [streak, setStreak] = useState(0);
+  const [score, setScore] = useState(0);
+  const rounds = slide.rounds;
+  const round = rounds[index];
+  const finished = index >= rounds.length;
+
+  const choices = useMemo(
+    () => (round ? [...round.distractors, round.letter].sort(() => Math.random() - 0.5) : []),
+    [round],
+  );
+
+  const speakSound = () => round && void playVoice(`${round.letter}... ${round.letter}... ${round.letter}...`);
+
+  useEffect(() => {
+    if (!finished && round) void playVoice(`Listen! ${round.letter}... ${round.letter}... ${round.letter}...`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
+
+  const pick = (letter: string) => {
+    if (picked !== null) return;
+    setPicked(letter);
+    const correct = letter === round.letter;
+    if (correct) {
+      setStreak((s) => s + 1);
+      setScore((s) => s + 1);
+      confetti({ particleCount: 70, spread: 70, origin: { y: 0.55 } });
+      void playVoice(`Yes! ${letter}!`);
+    } else {
+      setStreak(0);
+      void playVoice(`Not quite. It's ${round.letter}.`);
+    }
+    window.setTimeout(() => {
+      setPicked(null);
+      setIndex((i) => i + 1);
+    }, 1400);
+  };
+
+  const card = (
+    <div className={`w-full ${fullBleed ? 'max-w-lg rounded-[2rem] bg-white/95 p-6 shadow-2xl backdrop-blur-sm md:p-8' : 'max-w-lg mx-auto space-y-5'}`}>
+      <div className="mb-4 flex items-center justify-between">
+        <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-bold uppercase tracking-widest text-indigo-600">
+          {finished ? 'Done!' : `Sound ${index + 1} / ${rounds.length}`}
+        </span>
+        <span className="flex items-center gap-1 rounded-full bg-orange-100 px-3 py-1 text-xs font-bold text-orange-600">
+          🔥 {streak}
+        </span>
+      </div>
+      {finished ? (
+        <div className="space-y-4 py-2 text-center">
+          <div className="text-5xl">🎉</div>
+          <h2 className="text-2xl font-bold text-slate-900">You found {slide.word.toUpperCase()}!</h2>
+          <div className="flex justify-center gap-3">
+            {rounds.map((r, i) => (
+              <img
+                key={i}
+                src={r.image_url}
+                alt={r.letter}
+                className={`h-16 w-16 rounded-2xl border-4 object-cover shadow-lg ${r.is_vowel ? 'border-rose-300' : 'border-indigo-300'}`}
+              />
+            ))}
+          </div>
+          <p className="text-slate-500">
+            <span className="font-bold text-indigo-600">{score} / {rounds.length}</span> sounds found first try!
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* Mystery card until the right sound is tapped -- the mnemonic
+              picture is a reward, not the first thing shown. */}
+          <div
+            className={`relative mx-auto mb-4 h-36 w-36 overflow-hidden rounded-3xl border-4 shadow-xl ${
+              picked === round.letter ? (round.is_vowel ? 'border-rose-300' : 'border-indigo-300') : 'border-white'
+            }`}
+          >
+            {picked === round.letter ? (
+              <img src={round.image_url} alt={round.letter} className="h-full w-full object-cover" />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-indigo-100 text-5xl">❓</div>
+            )}
+          </div>
+          <button
+            onClick={speakSound}
+            className="mx-auto mb-4 flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-3 text-lg font-bold text-white shadow-lg transition active:scale-95"
+          >
+            🔊 Listen again
+          </button>
+          <div className="grid grid-cols-3 gap-3">
+            {choices.map((l) => {
+              const active = picked === l;
+              const isAnswer = l === round.letter;
+              let cls = 'border-slate-200 bg-white text-slate-800 hover:border-indigo-400';
+              if (picked !== null && active && isAnswer) cls = 'border-emerald-500 bg-emerald-500 text-white';
+              else if (picked !== null && active && !isAnswer) cls = 'border-red-500 bg-red-500 text-white';
+              else if (picked !== null && isAnswer) cls = 'border-emerald-500 bg-emerald-50 text-emerald-700';
+              return (
+                <button
+                  key={l}
+                  onClick={() => pick(l)}
+                  disabled={picked !== null}
+                  className={`rounded-2xl border-2 py-6 text-4xl font-black shadow-sm transition active:scale-95 ${cls}`}
+                >
+                  {l}
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  );
+
+  if (fullBleed) {
+    return (
+      <div className="relative flex h-full w-full items-center justify-center overflow-hidden px-4">
+        {/* Decorative floating sparkles -- per direction, "make it fun,
+            entertaining", matching the game-show energy of the numbers
+            quiz. */}
+        <span className="pointer-events-none absolute left-10 top-10 text-3xl opacity-80">✨</span>
+        <span className="pointer-events-none absolute right-12 top-16 text-2xl opacity-70">⭐</span>
+        <span className="pointer-events-none absolute bottom-16 left-16 text-2xl opacity-70">🌟</span>
+        {card}
+      </div>
+    );
+  }
+  return card;
+}
+
+// A creative, illustrated "storybook page" for connected reading -- full-
+// bleed scene, the passage laid out like a real picture-book page with
+// its target CVC words highlighted in their own color (tap one to hear
+// it), a narrator button reads the whole page aloud.
+function StoryPageSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 'story_page' }>; fullBleed?: boolean }) {
+  const { playVoice } = useAcademyAudio();
+  const tokens = useMemo(() => {
+    const parts = slide.passage.split(/(\s+)/);
+    return parts.map((tok) => {
+      const clean = tok.replace(/[.,!?]/g, '').toLowerCase();
+      const hit = slide.highlight_words.find((h) => h.word.toLowerCase() === clean);
+      return { tok, hit };
+    });
+  }, [slide]);
+
+  const page = (
+    <div className={`relative w-full ${fullBleed ? 'max-w-lg' : 'max-w-2xl'} space-y-4 rounded-[2rem] bg-white/95 p-7 shadow-2xl backdrop-blur-sm md:p-9`}>
+      <div className="text-xs font-bold uppercase tracking-widest text-indigo-500">📖 {slide.title || 'Read Together!'}</div>
+      <button
+        onClick={() => playVoice(slide.passage)}
+        className="flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg transition active:scale-95"
+      >
+        🔊 Listen to the story
+      </button>
+      <p className="text-2xl font-bold leading-relaxed text-slate-800">
+        {tokens.map((p, i) =>
+          p.hit ? (
+            <button
+              key={i}
+              onClick={() => playVoice(p.hit!.word)}
+              className="mx-0.5 rounded-lg px-1.5 py-0.5 font-black transition active:scale-95"
+              style={{ background: `${p.hit.color}22`, color: p.hit.color }}
+            >
+              {p.hit.emoji} {p.tok.trim()}
+            </button>
+          ) : (
+            <React.Fragment key={i}>{p.tok}</React.Fragment>
+          ),
+        )}
+      </p>
+    </div>
+  );
+
+  return (
+    <div className={fullBleed ? 'relative flex h-full w-full items-center justify-center overflow-hidden px-4' : 'relative w-full max-w-3xl aspect-video overflow-hidden rounded-2xl shadow-2xl mx-auto flex items-center justify-center px-4'}>
+      {!fullBleed && <img src={slide.bg_image_url} alt="" className="absolute inset-0 h-full w-full object-cover" />}
+      {!fullBleed && <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />}
+      {page}
+    </div>
+  );
+}
+
 // Dialogue lines can mark specific words as vocabulary with **word** —
 // stripMd gives TTS the plain sentence; DialogueLineText renders those
 // spans as individually tappable "say it again" chips so a student can
@@ -2363,6 +2577,8 @@ function renderSlideInner({ slide, t, fullBleed }: { slide: Slide; t: ThemeToken
     case 'conversation_fill': return <ConversationFillSlide slide={slide} fullBleed={fullBleed} />;
     case 'number_chart': return <NumberChartSlide slide={slide} t={t} fullBleed={fullBleed} />;
     case 'number_quiz_game': return <NumberQuizGameSlide slide={slide} fullBleed={fullBleed} />;
+    case 'letter_sound_game': return <LetterSoundGameSlide slide={slide} fullBleed={fullBleed} />;
+    case 'story_page': return <StoryPageSlide slide={slide} fullBleed={fullBleed} />;
     case 'speaking_task': return <SpeakingTaskSlide slide={slide} t={t} />;
     case 'reflection': return <ReflectionSlide slide={slide} t={t} />;
     case 'cluster': return <ClusterSlide slide={slide} t={t} />;
