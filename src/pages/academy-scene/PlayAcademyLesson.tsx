@@ -256,8 +256,13 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
   // canvas_game's background_image) wins as the page background over the
   // block-level image/gradient, so that art fills the actual viewport
   // instead of sitting boxed inside the content area.
+  // role_play deliberately excluded here: which texting partner's art
+  // applies depends on in-component character-select state the page-level
+  // background logic can't see (the slide carries an array of characters,
+  // each with its own bg_image_url, not one top-level image) -- the
+  // component paints its own background internally instead.
   const slideOwnImage =
-    slide?.type === 'scene_dialogue' || slide?.type === 'conversation_fill' || slide?.type === 'number_chart' || slide?.type === 'number_quiz_game' || slide?.type === 'role_play'
+    slide?.type === 'scene_dialogue' || slide?.type === 'conversation_fill' || slide?.type === 'number_chart' || slide?.type === 'number_quiz_game'
       ? slide.bg_image_url
       : slide?.type === 'canvas_game' || slide?.type === 'living_canvas'
         ? (slide as any).background_image

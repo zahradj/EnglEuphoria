@@ -103,22 +103,29 @@ export type Slide =
       type: 'role_play';
       block: Block;
       title: string;
-      lineA: string; // Ava's first question, a complete real sentence -- never a
-      // fill-in-the-blank template, that's what hintsA is for
-      hintsA: string[]; // tappable "try saying" chips near the compose bar --
-      // complete example sentences (not blanks) the student can tap to drop
-      // into the box and edit, help for the answer, separate from Ava's own
-      // dialogue text
-      // Optional second question: Ava asks again (not the student inventing
-      // a question to Ava) once the student has answered the first --
-      // e.g. "Nice to meet you! How old are you?" -- same
-      // answer-in-your-own-words pattern as the first turn. All optional so
-      // existing lineA/hintsA-only content (a single-question turn) keeps
-      // working unchanged.
-      lineC?: string; // Ava's transition + second question
-      hintsC?: string[]; // hint chips for the second answer
-      closing?: string; // Ava's closing line once both questions are answered
-      bg_image_url?: string; // optional full-bleed illustrated scene behind the chat
+      // One entry per texting partner the student can choose between (e.g.
+      // Ava, Theo). A single entry skips the picker screen entirely and
+      // starts that conversation directly -- multiple entries show a "Who
+      // do you want to text?" character-select step first.
+      characters: {
+        id: string;
+        name: string;
+        lineA: string; // this character's first question, a complete real
+        // sentence -- never a fill-in-the-blank template, that's what
+        // hintsA is for
+        hintsA: string[]; // tappable "try saying" chips near the compose
+        // bar -- complete example sentences (not blanks) the student can
+        // tap to drop into the box and edit, help for the answer, separate
+        // from the character's own dialogue text
+        // Optional second question: this character asks again (not the
+        // student inventing a question to them) once the student has
+        // answered the first -- same answer-in-your-own-words pattern as
+        // the first turn. All optional so a single-question turn works too.
+        lineC?: string;
+        hintsC?: string[]; // hint chips for the second answer
+        closing?: string; // closing line once both questions are answered
+        bg_image_url?: string; // this character's own full-bleed scene
+      }[];
     }
   // Full-bleed illustrated dialogue scene — background art with the cast already
   // painted into it (never a floating cutout, same convention Playground's
@@ -1171,36 +1178,82 @@ function DebateScaleSlide({ slide, t }: { slide: Extract<Slide, { type: 'debate_
 // that turn's faded example); once both are answered, Ava's closing line
 // wraps up the exchange. A slide with no lineC behaves exactly like a
 // single-question turn.
-type RolePlayMsg = { from: 'ava' | 'student'; text: string };
+type RolePlayMsg = { from: 'char' | 'student'; text: string };
+type RolePlayCharacter = Extract<Slide, { type: 'role_play' }>['characters'][number];
 
+// Outer component: shows a "Who do you want to text?" picker when the
+// slide offers more than one texting partner (Ava, Theo, ...), then hands
+// off to RolePlayConversation for whichever one the student picks. A
+// single-character slide skips the picker and starts straight in.
 function RolePlaySlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 'role_play' }>; t: ThemeTokens; fullBleed?: boolean }) {
+  const [selectedId, setSelectedId] = useState<string | null>(slide.characters.length === 1 ? slide.characters[0].id : null);
+  const selected = slide.characters.find((c) => c.id === selectedId) ?? null;
+
+  if (!selected) {
+    const picker = (
+      <div className="mx-auto w-full max-w-md space-y-5 text-center">
+        <div className={fullBleed ? 'text-lg font-bold text-white drop-shadow-lg' : `text-lg font-bold ${t.text}`}>
+          Who do you want to text? 💬
+        </div>
+        <div className="flex flex-wrap justify-center gap-5">
+          {slide.characters.map((c) => (
+            <motion.button
+              key={c.id}
+              onClick={() => setSelectedId(c.id)}
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.05 }}
+              className="flex flex-col items-center gap-2 rounded-3xl bg-white/95 px-6 py-5 shadow-2xl backdrop-blur-sm transition"
+            >
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-2xl font-bold text-white shadow-lg">
+                {c.name[0]}
+              </span>
+              <span className="text-base font-bold text-slate-800">{c.name}</span>
+            </motion.button>
+          ))}
+        </div>
+      </div>
+    );
+    return fullBleed ? (
+      <div className="relative flex h-full w-full items-center justify-center overflow-hidden px-4">{picker}</div>
+    ) : (
+      picker
+    );
+  }
+
+  return <RolePlayConversation key={selected.id} character={selected} title={slide.title} t={t} fullBleed={fullBleed} />;
+}
+
+function RolePlayConversation({
+  character, title, t, fullBleed,
+}: { character: RolePlayCharacter; title: string; t: ThemeTokens; fullBleed?: boolean }) {
   const { playVoice } = useAcademyAudio();
-  const [messages, setMessages] = useState<RolePlayMsg[]>([{ from: 'ava', text: slide.lineA }]);
+  const [messages, setMessages] = useState<RolePlayMsg[]>([{ from: 'char', text: character.lineA }]);
   const [stage, setStage] = useState<'q1' | 'q2' | 'done'>('q1');
   const [draft, setDraft] = useState('');
   const [typing, setTyping] = useState(false);
-  const hasSecondQuestion = !!slide.lineC;
+  const hasSecondQuestion = !!character.lineC;
   const spokenCount = useRef(0);
 
-  // Every Ava message auto-plays once it arrives, and stays replayable via
-  // the speaker button on its bubble -- a Pre-A1 student who can't read
-  // yet still needs to know what Ava is asking; text alone isn't enough.
+  // Every incoming message auto-plays once it arrives, and stays
+  // replayable via the speaker button on its bubble -- a Pre-A1 student
+  // who can't read yet still needs to know what's being asked; text alone
+  // isn't enough.
   useEffect(() => {
     const last = messages[messages.length - 1];
-    if (messages.length > spokenCount.current && last?.from === 'ava') {
+    if (messages.length > spokenCount.current && last?.from === 'char') {
       void playVoice(stripMd(last.text));
     }
     spokenCount.current = messages.length;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 
-  // A brief "Ava is typing…" beat before her next message lands -- reads
-  // like a real texting app, not a scripted line dumped on screen.
-  const sendAva = (text: string) => {
+  // A brief "typing…" beat before the next message lands -- reads like a
+  // real texting app, not a scripted line dumped on screen.
+  const sendChar = (text: string) => {
     setTyping(true);
     window.setTimeout(() => {
       setTyping(false);
-      setMessages((m) => [...m, { from: 'ava', text }]);
+      setMessages((m) => [...m, { from: 'char', text }]);
     }, 900);
   };
 
@@ -1212,22 +1265,23 @@ function RolePlaySlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 
       setMessages((m) => [...m, { from: 'student', text: msg }]);
       if (hasSecondQuestion) {
         setStage('q2');
-        sendAva(slide.lineC!);
+        sendChar(character.lineC!);
       } else {
         setStage('done');
-        if (slide.closing) sendAva(slide.closing);
+        if (character.closing) sendChar(character.closing);
       }
     } else if (stage === 'q2') {
       setMessages((m) => [...m, { from: 'student', text: msg }]);
       setStage('done');
-      if (slide.closing) sendAva(slide.closing);
+      if (character.closing) sendChar(character.closing);
     }
   };
 
   // Tappable "try saying" hints -- complete example sentences the student
   // can drop into the box and edit, never a fill-in-the-blank baked into
-  // the message itself (Ava's own lines are always whole sentences).
-  const hints = stage === 'q1' ? slide.hintsA : stage === 'q2' ? slide.hintsC : undefined;
+  // the message itself (the character's own lines are always whole
+  // sentences).
+  const hints = stage === 'q1' ? character.hintsA : stage === 'q2' ? character.hintsC : undefined;
 
   // Message bubbles -- shared between the fullBleed (floating directly on
   // the scene) and boxed (Creator Studio preview) layouts.
@@ -1239,9 +1293,9 @@ function RolePlaySlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 
           initial={{ opacity: 0, y: 12, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-          className={`flex ${m.from === 'ava' ? 'justify-start' : 'justify-end'}`}
+          className={`flex ${m.from === 'char' ? 'justify-start' : 'justify-end'}`}
         >
-          {m.from === 'ava' && (
+          {m.from === 'char' && (
             <button
               onClick={() => playVoice(stripMd(m.text))}
               aria-label="Hear this message again"
@@ -1252,7 +1306,7 @@ function RolePlaySlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 
           )}
           <div
             className={
-              m.from === 'ava'
+              m.from === 'char'
                 ? 'max-w-[75%] rounded-2xl rounded-bl-sm bg-white/95 px-4 py-3 text-base text-slate-800 shadow-lg backdrop-blur-sm'
                 : 'max-w-[75%] rounded-2xl rounded-br-sm bg-gradient-to-br from-indigo-500 to-indigo-600 px-4 py-3 text-base text-white shadow-lg'
             }
@@ -1323,16 +1377,23 @@ function RolePlaySlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 
 
   // fullBleed: bubbles float directly on the illustrated scene -- no boxed
   // "phone screenshot" card sitting on top of the art. Per direction, the
-  // enclosing panel competed with the background instead of showing it off.
+  // enclosing panel competed with the background instead of showing it
+  // off. The background image is THIS character's own (per-character, not
+  // the page-level single image), painted here rather than by
+  // PlayAcademyLesson, since which character's art applies is decided by
+  // in-component selection state the page-level background logic can't see.
   if (fullBleed) {
     return (
       <div className="relative flex h-full w-full flex-col items-center overflow-hidden px-4 pb-6 pt-6">
+        {character.bg_image_url && (
+          <img src={character.bg_image_url} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover" />
+        )}
         <div className="flex items-center gap-2 rounded-full bg-black/30 px-4 py-2 shadow-lg backdrop-blur-md">
           <span className="relative flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-xs font-bold text-white">
-            A
+            {character.name[0]}
             <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-400" />
           </span>
-          <span className="text-sm font-semibold text-white">Ava</span>
+          <span className="text-sm font-semibold text-white">{character.name}</span>
           <span className="text-xs text-emerald-300">{typing ? 'typing…' : 'online'}</span>
         </div>
         <div className="mt-4 flex w-full max-w-xl flex-1 flex-col justify-end gap-3 overflow-y-auto">
@@ -1350,15 +1411,15 @@ function RolePlaySlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 
 
   return (
     <div className="mx-auto w-full max-w-2xl space-y-3">
-      <div className={`text-xs uppercase tracking-widest text-center ${t.muted}`}>{slide.title}</div>
+      <div className={`text-xs uppercase tracking-widest text-center ${t.muted}`}>{title}</div>
       <div className="overflow-hidden rounded-[1.75rem] border-4 border-slate-900 bg-gradient-to-b from-slate-50 to-slate-100 shadow-2xl">
         <div className="flex items-center gap-3 border-b border-slate-200 bg-white px-5 py-4">
           <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-base font-bold text-white">
-            A
+            {character.name[0]}
             <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-emerald-400" />
           </span>
           <div>
-            <div className="text-base font-semibold text-slate-800">Ava</div>
+            <div className="text-base font-semibold text-slate-800">{character.name}</div>
             <div className="text-xs font-medium text-emerald-500">{typing ? 'typing…' : 'online'}</div>
           </div>
         </div>
