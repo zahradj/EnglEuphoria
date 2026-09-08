@@ -2499,8 +2499,6 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
   const [held, setHeld] = useState(false);
   const holdTimer = useRef<number | null>(null);
 
-  const anchorFor = (speakerId: string) =>
-    slide.cast.find((c) => c.id === speakerId)?.anchor_left ?? '50%';
   const nameFor = (speakerId: string) =>
     slide.cast.find((c) => c.id === speakerId)?.name ?? speakerId;
 
@@ -2585,15 +2583,19 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
           >
             🔁 Replay
           </button>
-          {/* A real speech bubble now — rounded card + a triangular tail —
-              instead of a plain frameless rectangle, offset to sit beside
-              the speaker (not centered on top of them), tail pointing back
-              down-left toward whoever is talking. */}
-          <div
-            className="absolute top-[20%] z-20 max-w-[340px] px-4 transition-all duration-300"
-            style={{ left: `calc(${anchorFor(current.speaker)} + 14%)` }}
-          >
-            <div className="relative rounded-2xl bg-white px-5 py-3 text-center shadow-2xl">
+          {/* A real speech bubble now — rounded card + a triangular tail.
+              Pinned to a fixed strip near the very top of the frame instead
+              of being offset from the speaker's own anchor_left: these
+              portrait-style illustrations put faces anywhere from
+              upper-middle to dead-center, so an anchor-relative bubble
+              routinely ended up covering a face (badly so in solo close-up
+              scenes, and it could even push past the right edge of wide
+              viewports for a speaker anchored near 70-80%). A bubble
+              docked above the hairline is safe across every scene's
+              framing without per-scene tuning, and the speaker's name
+              label already says who's talking. */}
+          <div className="absolute inset-x-0 top-3 z-20 flex justify-center px-4 transition-all duration-300">
+            <div className="relative max-w-[340px] rounded-2xl bg-white px-5 py-3 text-center shadow-2xl">
               <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-indigo-500">{nameFor(current.speaker)}</div>
               <div className="text-lg font-semibold text-slate-800">
                 <DialogueLineText text={current.text} onWordTap={(w) => playVoice(w)} />
@@ -2619,19 +2621,19 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
               actually saying their own name, not repeating the question. */}
           <div className="absolute inset-x-0 bottom-6 z-30 flex flex-col items-center gap-3 px-4">
             {!currentRepeated ? (
-              <div className="w-full max-w-sm rounded-t-3xl border-t-4 border-indigo-400 bg-white/95 p-4 text-center shadow-2xl backdrop-blur">
-                <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-indigo-500">
+              <div className="mx-auto w-full max-w-xl rounded-t-3xl border-t-4 border-indigo-400 bg-white/95 p-6 text-center shadow-2xl backdrop-blur">
+                <div className="mb-2 text-xs font-bold uppercase tracking-widest text-indigo-500">
                   {current.student_answer ? '🎤 Your turn — answer!' : '🎤 Your turn — say it out loud'}
                 </div>
                 {current.student_answer && (
-                  <div className="mb-2 text-sm font-semibold text-slate-700">"{current.student_answer}"</div>
+                  <div className="mb-3 text-base font-semibold text-slate-700">"{current.student_answer}"</div>
                 )}
                 <button
                   onPointerDown={startHold}
                   onPointerUp={endHold}
                   onPointerLeave={endHold}
                   onPointerCancel={endHold}
-                  className={`w-full rounded-full bg-indigo-600 py-4 text-sm font-black uppercase tracking-widest text-white shadow-xl transition active:scale-95 ${held ? 'scale-95 bg-indigo-700' : ''}`}
+                  className={`w-full rounded-full bg-indigo-600 py-5 text-base font-black uppercase tracking-widest text-white shadow-xl transition active:scale-95 ${held ? 'scale-95 bg-indigo-700' : ''}`}
                 >
                   {held ? 'Keep holding…' : current.student_answer ? 'Hold & say your answer' : 'Hold & repeat the line'}
                 </button>
