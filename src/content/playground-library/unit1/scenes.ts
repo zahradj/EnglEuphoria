@@ -122,7 +122,18 @@ export type Scene =
     }
   | {
       id: string; kind: 'listen-repeat-cards'; bg: string; teacher: string;
-      cards: { who: CharKey; sentence: string; img: string; imgLabel: string }[];
+      cards: {
+        who: CharKey; sentence: string; img: string; imgLabel: string;
+        /** Per-word CSS color for the sentence, aligned by index to the
+         *  words `sentence.split(' ')` produces (null/undefined = default
+         *  white). Lets a fixed grammar chunk keep one color across every
+         *  card so the student learns to recognize it by color, not just
+         *  position — e.g. "This is" always red, "my" always green, the
+         *  family word itself staying the default white. First used by
+         *  Unit 5 Lesson 1's sentence-practice scenes per direct user
+         *  request. Existing cards omit this and render plain white. */
+        wordColors?: (string | null)[];
+      }[];
       /** When true, drops the big enclosing white card entirely — the
        *  word/sentence floats as its own bold drop-shadowed text directly
        *  on the full-bleed background's own empty side (no duplicate small
@@ -4155,51 +4166,85 @@ export const LESSON_U5L1_SCENES: Scene[] = [
     // M and D are both already-taught letters (M: Unit 1 Lesson 1, D: Unit
     // 3 Lesson 1) — lighter, retrieval-only sound-sort review rather than a
     // full sound-model+trace pair, matching the established pattern.
+    // bg swapped from the generic shared meadow to this lesson's own
+    // family-home art, and mom/dad get their real illustrated portraits
+    // instead of bare emoji, matching the polished style used everywhere
+    // else in this lesson (per direct user request).
+    // bg kept as the plain shared meadow (not the busy family-home shot) —
+    // per direct user request that a full, detailed background reads as
+    // crowded/distracting behind a sort/puzzle activity already covering
+    // the screen with its own targets and items; the real mom/dad item
+    // images below already carry the illustrated context this needs.
     id: 'u5l1-sound-sort', kind: 'sound-sort', bg: bgMeadow, teacher: 'Listen for the sound! /m/om, /d/ad — now drag each thing to its sound!',
     targets: [
       { letter: 'M', phoneme: '/m/', who: 'pip' },
       { letter: 'D', phoneme: '/d/', who: 'mia' },
     ],
     items: [
-      { word: 'mom', emoji: '\u{1F469}', letter: 'M' },
+      { word: 'mom', img: bgU5L1MomSolo, emoji: '\u{1F469}', letter: 'M' },
       { word: 'monkey', emoji: '\u{1F412}', letter: 'M' },
       { word: 'moon', emoji: '\u{1F319}', letter: 'M' },
-      { word: 'dad', emoji: '\u{1F468}', letter: 'D' },
+      { word: 'dad', img: bgU5L1DadSolo, emoji: '\u{1F468}', letter: 'D' },
       { word: 'dog', emoji: '\u{1F436}', letter: 'D' },
       { word: 'duck', emoji: '\u{1F986}', letter: 'D' },
     ],
   },
   {
-    id: 'u5l1-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Listen! Tap the missing letter to make the word.',
+    // Per direct user request: the student should spell the WHOLE word,
+    // not just its first letter — three rounds per word, one per letter
+    // position, so by the end of the activity every letter of "mom" and
+    // "dad" has been tapped in order (this system's tap-based spelling
+    // mechanic, the appropriate "writing" equivalent for pre-writers who
+    // can't yet free-type).
+    // Split into two person-scoped scenes (bg = that person's own solo
+    // portrait, matching the vocabulary scenes) rather than one scene over
+    // the busy 3-person family-home shot — per direct user request, that
+    // background felt crowded/distracting behind the puzzle, and the small
+    // picture-in-picture thumbnail already gives all the visual context
+    // this activity needs.
+    id: 'u5l1-word-build-mom', kind: 'word-build', bg: bgU5L1MomSolo, teacher: "Listen! Tap each letter to spell the whole word.",
     rounds: [
-      { word: 'mom', blankIndex: 0, answer: 'M', choices: ['M', 'D', 'B'], emoji: '\u{1F469}' },
-      { word: 'dad', blankIndex: 0, answer: 'D', choices: ['M', 'D', 'B'], emoji: '\u{1F468}' },
+      { word: 'mom', blankIndex: 0, answer: 'M', choices: ['M', 'D', 'B'], img: bgU5L1MomSolo, emoji: '\u{1F469}' },
+      { word: 'mom', blankIndex: 1, answer: 'O', choices: ['O', 'A', 'E'], img: bgU5L1MomSolo, emoji: '\u{1F469}' },
+      { word: 'mom', blankIndex: 2, answer: 'M', choices: ['M', 'D', 'N'], img: bgU5L1MomSolo, emoji: '\u{1F469}' },
+    ],
+  },
+  {
+    id: 'u5l1-word-build-dad', kind: 'word-build', bg: bgU5L1DadSolo, teacher: 'Now spell Dad!',
+    rounds: [
+      { word: 'dad', blankIndex: 0, answer: 'D', choices: ['D', 'M', 'B'], img: bgU5L1DadSolo, emoji: '\u{1F468}' },
+      { word: 'dad', blankIndex: 1, answer: 'A', choices: ['A', 'O', 'E'], img: bgU5L1DadSolo, emoji: '\u{1F468}' },
+      { word: 'dad', blankIndex: 2, answer: 'D', choices: ['D', 'M', 'N'], img: bgU5L1DadSolo, emoji: '\u{1F468}' },
     ],
   },
   {
     id: 'u5l1-memory', kind: 'memory', bg: bgMeadow, teacher: 'Memory game! Find the matching family pairs!',
     pairs: [
-      { id: 'mom', label: 'Mom', emoji: '\u{1F469}' },
-      { id: 'dad', label: 'Dad', emoji: '\u{1F468}' },
+      { id: 'mom', label: 'Mom', img: bgU5L1MomSolo, emoji: '\u{1F469}' },
+      { id: 'dad', label: 'Dad', img: bgU5L1DadSolo, emoji: '\u{1F468}' },
       { id: 'baby', label: 'Baby', emoji: '\u{1F476}' },
-      { id: 'family', label: 'Family', emoji: '\u{1F46A}' },
+      { id: 'family', label: 'Family', img: bgU5L1FamilyHome, emoji: '\u{1F46A}' },
     ],
   },
   {
     // Now combine the vocabulary just taught into full sentences — still
     // one person per scene, matching the same "only one" rule as the
     // vocabulary scenes above, just with a fuller sentence this time.
+    // Per direct user request: color-code the grammar chunks so the
+    // student learns to recognize each part by color, not just position —
+    // "This is"/"I love" always red, "my" always green, the family word
+    // itself stays the default white (it's the one new piece each time).
     id: 'u5l1-sentence-mom', kind: 'listen-repeat-cards', bg: bgU5L1MomSolo, teacher: "Now let's say a bigger sentence! Listen, then repeat.", bare: true, textSide: 'right',
     cards: [
-      { who: 'pip', sentence: 'This is my mom!', img: bgU5L1MomSolo, imgLabel: 'Mom' },
-      { who: 'pip', sentence: 'I love my mom!', img: bgU5L1MomSolo, imgLabel: 'Mom' },
+      { who: 'pip', sentence: 'This is my mom!', img: bgU5L1MomSolo, imgLabel: 'Mom', wordColors: ['#EF4444', '#EF4444', '#4ADE80', null] },
+      { who: 'pip', sentence: 'I love my mom!', img: bgU5L1MomSolo, imgLabel: 'Mom', wordColors: ['#EF4444', '#EF4444', '#4ADE80', null] },
     ],
   },
   {
     id: 'u5l1-sentence-dad', kind: 'listen-repeat-cards', bg: bgU5L1DadSolo, teacher: 'Now the same for Dad! Listen, then repeat.', bare: true, textSide: 'left',
     cards: [
-      { who: 'pip', sentence: 'This is my dad!', img: bgU5L1DadSolo, imgLabel: 'Dad' },
-      { who: 'pip', sentence: 'I love my dad!', img: bgU5L1DadSolo, imgLabel: 'Dad' },
+      { who: 'pip', sentence: 'This is my dad!', img: bgU5L1DadSolo, imgLabel: 'Dad', wordColors: ['#EF4444', '#EF4444', '#4ADE80', null] },
+      { who: 'pip', sentence: 'I love my dad!', img: bgU5L1DadSolo, imgLabel: 'Dad', wordColors: ['#EF4444', '#EF4444', '#4ADE80', null] },
     ],
   },
   {

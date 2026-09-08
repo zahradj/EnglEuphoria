@@ -2893,9 +2893,18 @@ function ListenRepeatCardsScene({ scene, onNext, onWin }: { scene: Extract<Scene
             className="text-center font-black leading-none text-white drop-shadow-[0_6px_14px_rgba(0,0,0,0.7)]"
             style={{ fontSize: side === 'top' ? 'clamp(3.5rem, 10vw, 7rem)' : 'clamp(4.5rem, 13vw, 10rem)' }}
           >
-            {words.map((w, i) => (
-              <span key={i} className={`transition-colors ${i === activeWord ? 'rounded bg-yellow-300 px-1 text-orange-900' : ''}`}>{w}{i < words.length - 1 ? ' ' : ''}</span>
-            ))}
+            {words.map((w, i) => {
+              const fixedColor = card!.wordColors?.[i];
+              return (
+                <span
+                  key={i}
+                  className={`transition-colors ${i === activeWord ? 'rounded bg-yellow-300 px-1 text-orange-900' : ''}`}
+                  style={fixedColor && i !== activeWord ? { color: fixedColor } : undefined}
+                >
+                  {w}{i < words.length - 1 ? ' ' : ''}
+                </span>
+              );
+            })}
           </p>
           <div className={side === 'top' ? 'flex flex-row items-center gap-3' : 'flex flex-col items-center gap-3'}>
             <button onClick={play} disabled={playing} className="rounded-full bg-white/95 px-6 py-3 text-sm font-bold text-orange-700 shadow-xl ring-2 ring-orange-200 active:scale-95 disabled:opacity-50">
