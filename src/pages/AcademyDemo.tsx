@@ -1229,13 +1229,129 @@ function RolePlaySlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 
   // the message itself (Ava's own lines are always whole sentences).
   const hints = stage === 'q1' ? slide.hintsA : stage === 'q2' ? slide.hintsC : undefined;
 
-  const frame = (
-    <div className={`mx-auto w-full ${fullBleed ? 'max-w-3xl' : 'max-w-2xl'} space-y-3`}>
-      <div className={fullBleed ? 'text-center text-xs font-bold uppercase tracking-widest text-white drop-shadow' : `text-xs uppercase tracking-widest text-center ${t.muted}`}>
-        {slide.title}
+  // Message bubbles -- shared between the fullBleed (floating directly on
+  // the scene) and boxed (Creator Studio preview) layouts.
+  const messageItems = (
+    <AnimatePresence initial={false}>
+      {messages.map((m, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 12, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+          className={`flex ${m.from === 'ava' ? 'justify-start' : 'justify-end'}`}
+        >
+          {m.from === 'ava' && (
+            <button
+              onClick={() => playVoice(stripMd(m.text))}
+              aria-label="Hear this message again"
+              className="mr-2 flex h-9 w-9 shrink-0 items-center justify-center self-center rounded-full bg-indigo-600 text-base text-white shadow-lg transition active:scale-95"
+            >
+              🔊
+            </button>
+          )}
+          <div
+            className={
+              m.from === 'ava'
+                ? 'max-w-[75%] rounded-2xl rounded-bl-sm bg-white/95 px-4 py-3 text-base text-slate-800 shadow-lg backdrop-blur-sm'
+                : 'max-w-[75%] rounded-2xl rounded-br-sm bg-gradient-to-br from-indigo-500 to-indigo-600 px-4 py-3 text-base text-white shadow-lg'
+            }
+          >
+            <GrammarMarkup text={m.text} />
+          </div>
+        </motion.div>
+      ))}
+    </AnimatePresence>
+  );
+
+  const typingBubble = typing && (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
+      <div className="flex items-center gap-1 rounded-2xl rounded-bl-sm bg-white/95 px-4 py-3.5 shadow-lg backdrop-blur-sm">
+        {[0, 1, 2].map((d) => (
+          <span key={d} className="h-2 w-2 animate-bounce rounded-full bg-slate-400" style={{ animationDelay: `${d * 0.15}s` }} />
+        ))}
       </div>
+    </motion.div>
+  );
+
+  const doneBadge = stage === 'done' && !typing && (
+    <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="flex justify-center pt-1">
+      <span className="rounded-full bg-emerald-500 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white shadow-lg">
+        ✓ Conversation complete
+      </span>
+    </motion.div>
+  );
+
+  const hintsRow = stage !== 'done' && !typing && hints && hints.length > 0 && (
+    <div className={`flex flex-wrap items-center justify-center gap-1.5 ${fullBleed ? '' : 'border-t border-slate-200 bg-indigo-50/60 px-4 pt-2.5'}`}>
+      <span className={`text-xs font-bold ${fullBleed ? 'text-white drop-shadow' : 'text-indigo-400'}`}>💡 Try:</span>
+      {hints.map((h, i) => (
+        <motion.button
+          key={h}
+          initial={{ opacity: 0, scale: 0.7 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: i * 0.08 }}
+          onClick={() => setDraft(h)}
+          className="rounded-full border border-indigo-200 bg-white/95 px-3 py-1 text-xs font-semibold text-indigo-600 shadow-lg backdrop-blur-sm transition active:scale-95"
+        >
+          {h}
+        </motion.button>
+      ))}
+    </div>
+  );
+
+  const composeBar = (
+    <div className={`flex items-center gap-2 ${fullBleed ? 'rounded-full bg-white/95 px-3 py-2 shadow-2xl backdrop-blur-sm' : 'border-t border-slate-200 bg-white px-4 py-3'}`}>
+      <input
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && send()}
+        disabled={stage === 'done'}
+        placeholder="Type your reply…"
+        className={`flex-1 text-base text-slate-900 outline-none disabled:opacity-50 ${fullBleed ? 'bg-transparent px-3' : 'rounded-full border border-slate-300 px-5 py-3 focus:border-indigo-500'}`}
+      />
+      <button
+        onClick={send}
+        disabled={!draft.trim() || stage === 'done'}
+        aria-label="Send"
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-lg text-white transition disabled:opacity-30"
+      >
+        ➤
+      </button>
+    </div>
+  );
+
+  // fullBleed: bubbles float directly on the illustrated scene -- no boxed
+  // "phone screenshot" card sitting on top of the art. Per direction, the
+  // enclosing panel competed with the background instead of showing it off.
+  if (fullBleed) {
+    return (
+      <div className="relative flex h-full w-full flex-col items-center overflow-hidden px-4 pb-6 pt-6">
+        <div className="flex items-center gap-2 rounded-full bg-black/30 px-4 py-2 shadow-lg backdrop-blur-md">
+          <span className="relative flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-xs font-bold text-white">
+            A
+            <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-400" />
+          </span>
+          <span className="text-sm font-semibold text-white">Ava</span>
+          <span className="text-xs text-emerald-300">{typing ? 'typing…' : 'online'}</span>
+        </div>
+        <div className="mt-4 flex w-full max-w-xl flex-1 flex-col justify-end gap-3 overflow-y-auto">
+          {messageItems}
+          {typingBubble}
+          {doneBadge}
+        </div>
+        <div className="mt-3 w-full max-w-xl space-y-2">
+          {hintsRow}
+          {composeBar}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto w-full max-w-2xl space-y-3">
+      <div className={`text-xs uppercase tracking-widest text-center ${t.muted}`}>{slide.title}</div>
       <div className="overflow-hidden rounded-[1.75rem] border-4 border-slate-900 bg-gradient-to-b from-slate-50 to-slate-100 shadow-2xl">
-        {/* Contact header, like an actual messages app */}
         <div className="flex items-center gap-3 border-b border-slate-200 bg-white px-5 py-4">
           <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-base font-bold text-white">
             A
@@ -1246,110 +1362,16 @@ function RolePlaySlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 
             <div className="text-xs font-medium text-emerald-500">{typing ? 'typing…' : 'online'}</div>
           </div>
         </div>
-        {/* Message thread -- tall enough that the whole exchange (plus
-            hints and the compose bar) fits without the student needing to
-            scroll to find their reply box. */}
-        <div className={`flex ${fullBleed ? 'min-h-[520px]' : 'min-h-[460px]'} flex-col gap-3 p-5`}>
-          <AnimatePresence initial={false}>
-            {messages.map((m, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 12, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-                className={`flex ${m.from === 'ava' ? 'justify-start' : 'justify-end'}`}
-              >
-                {m.from === 'ava' && (
-                  <button
-                    onClick={() => playVoice(stripMd(m.text))}
-                    aria-label="Hear this message again"
-                    className="mr-2 flex h-9 w-9 shrink-0 items-center justify-center self-center rounded-full bg-indigo-600 text-base text-white shadow transition active:scale-95"
-                  >
-                    🔊
-                  </button>
-                )}
-                <div
-                  className={
-                    m.from === 'ava'
-                      ? 'max-w-[75%] rounded-2xl rounded-bl-sm border border-slate-200 bg-white px-4 py-3 text-base text-slate-800 shadow-sm'
-                      : 'max-w-[75%] rounded-2xl rounded-br-sm bg-gradient-to-br from-indigo-500 to-indigo-600 px-4 py-3 text-base text-white shadow-sm'
-                  }
-                >
-                  <GrammarMarkup text={m.text} />
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-          {/* Typing indicator -- three bouncing dots, like a real chat app. */}
-          {typing && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
-              <div className="flex items-center gap-1 rounded-2xl rounded-bl-sm border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
-                {[0, 1, 2].map((d) => (
-                  <span
-                    key={d}
-                    className="h-2 w-2 animate-bounce rounded-full bg-slate-400"
-                    style={{ animationDelay: `${d * 0.15}s` }}
-                  />
-                ))}
-              </div>
-            </motion.div>
-          )}
-          {stage === 'done' && !typing && (
-            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="flex justify-center pt-1">
-              <span className="rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-emerald-700">
-                ✓ Conversation complete
-              </span>
-            </motion.div>
-          )}
+        <div className="flex min-h-[460px] flex-col gap-3 p-5">
+          {messageItems}
+          {typingBubble}
+          {doneBadge}
         </div>
-
-        {/* Hint chips -- help for THIS answer, clearly separate from the
-            message thread above so they never look like an actual message. */}
-        {stage !== 'done' && !typing && hints && hints.length > 0 && (
-          <div className="flex flex-wrap items-center gap-1.5 border-t border-slate-200 bg-indigo-50/60 px-4 pt-2.5">
-            <span className="text-xs font-bold text-indigo-400">💡 Try:</span>
-            {hints.map((h, i) => (
-              <motion.button
-                key={h}
-                initial={{ opacity: 0, scale: 0.7 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.08 }}
-                onClick={() => setDraft(h)}
-                className="rounded-full border border-indigo-200 bg-white px-3 py-1 text-xs font-semibold text-indigo-600 shadow-sm transition active:scale-95"
-              >
-                {h}
-              </motion.button>
-            ))}
-          </div>
-        )}
-
-        {/* Compose bar -- the student's own words, not a scripted line. */}
-        <div className="flex items-center gap-2 border-t border-slate-200 bg-white px-4 py-3">
-          <input
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && send()}
-            disabled={stage === 'done'}
-            placeholder="Type your reply…"
-            className="flex-1 rounded-full border border-slate-300 px-5 py-3 text-base text-slate-900 outline-none focus:border-indigo-500 disabled:opacity-50"
-          />
-          <button
-            onClick={send}
-            disabled={!draft.trim() || stage === 'done'}
-            aria-label="Send"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-lg text-white transition disabled:opacity-30"
-          >
-            ➤
-          </button>
-        </div>
+        {hintsRow}
+        {composeBar}
       </div>
     </div>
   );
-
-  if (fullBleed) {
-    return <div className="relative flex h-full w-full items-center justify-center overflow-hidden px-4">{frame}</div>;
-  }
-  return frame;
 }
 
 const NUMBER_WORDS = [
