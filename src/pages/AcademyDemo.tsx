@@ -233,6 +233,17 @@ export type Slide =
       bg_image_url?: string;
       items: { statement: string; answer: boolean }[];
     }
+  // A "find it in the picture" listen-and-tap round -- Ava says a word,
+  // the student taps that object directly inside the illustrated scene
+  // itself (the actual painted cat / sun / dog), not a separate picture
+  // button. hotspot is a percentage box (x/y/w/h, 0-100, top-left origin)
+  // over the rendered scene -- generously sized, not pixel-precise.
+  | {
+      type: 'find_in_scene_game';
+      block: Block;
+      bg_image_url: string;
+      items: { word: string; hotspot: { x: number; y: number; w: number; h: number } }[];
+    }
   // A creative, illustrated "storybook page" for connected reading --
   // full-bleed scene, the passage laid out like a page from a picture
   // book with its target words highlighted in their own color, a
@@ -2283,6 +2294,121 @@ function SoundChallengeGameSlide({ slide }: { slide: Extract<Slide, { type: 'sou
   );
 }
 
+// A "find it in the picture" listen-and-tap round -- Ava says a word, the
+// student taps that object directly inside the illustrated scene itself
+// (the real painted cat / sun / dog), not a separate picture button.
+// Invisible, generously-sized hotspots sit over the scene; after two
+// wrong taps on the same round a soft pulsing ring appears over the
+// correct spot so a stuck student always has a way forward.
+function FindInSceneGameSlide({ slide }: { slide: Extract<Slide, { type: 'find_in_scene_game' }>; fullBleed?: boolean }) {
+  const { playVoice } = useAcademyAudio();
+  const [index, setIndex] = useState(0);
+  const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
+  const [misses, setMisses] = useState(0);
+  const [streak, setStreak] = useState(0);
+  const [score, setScore] = useState(0);
+  const items = slide.items;
+  const item = items[index];
+  const finished = index >= items.length;
+
+  useEffect(() => {
+    if (!finished && item) void playVoice(`Find the ${item.word}!`);
+    setMisses(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
+
+  const tapHotspot = (word: string) => {
+    if (feedback !== null) return;
+    const correct = word === item.word;
+    if (correct) {
+      setFeedback('correct');
+      setStreak((s) => s + 1);
+      setScore((s) => s + 1);
+      confetti({ particleCount: 70, spread: 70, origin: { y: 0.6 } });
+      void playVoice(`Yes! ${word}!`);
+      window.setTimeout(() => {
+        setFeedback(null);
+        setIndex((i) => i + 1);
+      }, 1200);
+    } else {
+      setFeedback('wrong');
+      setStreak(0);
+      setMisses((m) => m + 1);
+      window.setTimeout(() => setFeedback(null), 500);
+    }
+  };
+
+  const showHint = misses >= 2 && feedback === null;
+
+  return (
+    <div className="relative h-full w-full overflow-hidden">
+      {!finished && (
+        <>
+          {/* Invisible (generously-sized) tap zones over each painted
+              object -- the picture itself is the game board. */}
+          {items.map((it) => (
+            <button
+              key={it.word}
+              onClick={() => tapHotspot(it.word)}
+              aria-label={`Find the ${it.word}`}
+              className="absolute"
+              style={{
+                left: `${it.hotspot.x}%`,
+                top: `${it.hotspot.y}%`,
+                width: `${it.hotspot.w}%`,
+                height: `${it.hotspot.h}%`,
+              }}
+            >
+              {showHint && it.word === item.word && (
+                <span className="absolute inset-0 animate-ping rounded-full bg-yellow-300/40" />
+              )}
+              {feedback === 'correct' && it.word === item.word && (
+                <span className="absolute inset-0 rounded-full ring-4 ring-emerald-400" />
+              )}
+            </button>
+          ))}
+        </>
+      )}
+
+      <div className="pointer-events-none relative flex h-full w-full flex-col items-center gap-3 px-4 pt-6 text-center">
+        {finished ? (
+          <div className="space-y-3">
+            <div className="text-5xl drop-shadow-lg">🏆</div>
+            <h2 className="text-2xl font-bold text-white drop-shadow-lg">You found them all!</h2>
+            <p className="font-semibold text-white drop-shadow">
+              <span className="font-bold text-yellow-300">{score} / {items.length}</span> found first try!
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center gap-3">
+              <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-widest text-indigo-600 shadow backdrop-blur-sm">
+                Find {index + 1} / {items.length}
+              </span>
+              <span className="flex items-center gap-1 rounded-full bg-orange-100/90 px-3 py-1 text-xs font-bold text-orange-600 shadow backdrop-blur-sm">
+                🔥 {streak}
+              </span>
+            </div>
+            <div
+              className={`pointer-events-auto flex items-center gap-2 rounded-full px-5 py-3 text-base font-bold text-white shadow-lg transition ${
+                feedback === 'wrong' ? 'bg-red-500' : feedback === 'correct' ? 'bg-emerald-500' : 'bg-indigo-600'
+              }`}
+              onClick={() => void playVoice(`Find the ${item.word}!`)}
+            >
+              {feedback === 'correct' ? `✓ Yes, the ${item.word}!` : feedback === 'wrong' ? 'Try again!' : `🔊 Find the ${item.word}!`}
+            </div>
+            {misses > 0 && feedback === null && (
+              <p className="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700 shadow backdrop-blur-sm">
+                {showHint ? '✨ Tap the glowing spot!' : 'Not quite -- look around the picture!'}
+              </p>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // A creative, illustrated "storybook page" for connected reading -- full-
 // bleed scene, the passage laid out like a real picture-book page with
 // its target CVC words highlighted in their own color (tap one to hear
@@ -3076,6 +3202,7 @@ function renderSlideInner({ slide, t, fullBleed }: { slide: Slide; t: ThemeToken
     case 'picture_match_game': return <PictureMatchGameSlide slide={slide} />;
     case 'say_it_game': return <SayItGameSlide slide={slide} />;
     case 'sound_challenge_game': return <SoundChallengeGameSlide slide={slide} />;
+    case 'find_in_scene_game': return <FindInSceneGameSlide slide={slide} />;
     case 'story_page': return <StoryPageSlide slide={slide} fullBleed={fullBleed} />;
     case 'speaking_task': return <SpeakingTaskSlide slide={slide} t={t} />;
     case 'reflection': return <ReflectionSlide slide={slide} t={t} />;

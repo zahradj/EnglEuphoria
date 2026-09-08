@@ -262,7 +262,7 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
   // each with its own bg_image_url, not one top-level image) -- the
   // component paints its own background internally instead.
   const slideOwnImage =
-    slide?.type === 'scene_dialogue' || slide?.type === 'conversation_fill' || slide?.type === 'number_chart' || slide?.type === 'number_quiz_game' || slide?.type === 'story_page' || slide?.type === 'letter_sound_game' || slide?.type === 'word_blend' || slide?.type === 'picture_match_game' || slide?.type === 'say_it_game' || slide?.type === 'sound_challenge_game'
+    slide?.type === 'scene_dialogue' || slide?.type === 'conversation_fill' || slide?.type === 'number_chart' || slide?.type === 'number_quiz_game' || slide?.type === 'story_page' || slide?.type === 'letter_sound_game' || slide?.type === 'word_blend' || slide?.type === 'picture_match_game' || slide?.type === 'say_it_game' || slide?.type === 'sound_challenge_game' || slide?.type === 'find_in_scene_game'
       ? slide.bg_image_url
       : slide?.type === 'canvas_game' || slide?.type === 'living_canvas'
         ? (slide as any).background_image
@@ -290,6 +290,7 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
     slide?.type === 'picture_match_game' ||
     slide?.type === 'say_it_game' ||
     slide?.type === 'sound_challenge_game' ||
+    slide?.type === 'find_in_scene_game' ||
     slide?.type === 'story_page' ||
     slide?.type === 'canvas_game' ||
     slide?.type === 'living_canvas' ||
