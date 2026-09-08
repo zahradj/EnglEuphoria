@@ -118,6 +118,7 @@ export type Slide =
       lineC?: string; // Ava's transition + second question
       hintsC?: string[]; // hint chips for the second answer
       closing?: string; // Ava's closing line once both questions are answered
+      bg_image_url?: string; // optional full-bleed illustrated scene behind the chat
     }
   // Full-bleed illustrated dialogue scene — background art with the cast already
   // painted into it (never a floating cutout, same convention Playground's
@@ -1172,7 +1173,7 @@ function DebateScaleSlide({ slide, t }: { slide: Extract<Slide, { type: 'debate_
 // single-question turn.
 type RolePlayMsg = { from: 'ava' | 'student'; text: string };
 
-function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play' }>; t: ThemeTokens }) {
+function RolePlaySlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 'role_play' }>; t: ThemeTokens; fullBleed?: boolean }) {
   const { playVoice } = useAcademyAudio();
   const [messages, setMessages] = useState<RolePlayMsg[]>([{ from: 'ava', text: slide.lineA }]);
   const [stage, setStage] = useState<'q1' | 'q2' | 'done'>('q1');
@@ -1228,9 +1229,11 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
   // the message itself (Ava's own lines are always whole sentences).
   const hints = stage === 'q1' ? slide.hintsA : stage === 'q2' ? slide.hintsC : undefined;
 
-  return (
-    <div className="mx-auto w-full max-w-2xl space-y-3">
-      <div className={`text-xs uppercase tracking-widest text-center ${t.muted}`}>{slide.title}</div>
+  const frame = (
+    <div className={`mx-auto w-full ${fullBleed ? 'max-w-3xl' : 'max-w-2xl'} space-y-3`}>
+      <div className={fullBleed ? 'text-center text-xs font-bold uppercase tracking-widest text-white drop-shadow' : `text-xs uppercase tracking-widest text-center ${t.muted}`}>
+        {slide.title}
+      </div>
       <div className="overflow-hidden rounded-[1.75rem] border-4 border-slate-900 bg-gradient-to-b from-slate-50 to-slate-100 shadow-2xl">
         {/* Contact header, like an actual messages app */}
         <div className="flex items-center gap-3 border-b border-slate-200 bg-white px-5 py-4">
@@ -1243,33 +1246,43 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
             <div className="text-xs font-medium text-emerald-500">{typing ? 'typing…' : 'online'}</div>
           </div>
         </div>
-        {/* Message thread */}
-        <div className="flex min-h-[380px] flex-col gap-3 p-5">
-          {messages.map((m, i) => (
-            <div key={i} className={`flex ${m.from === 'ava' ? 'justify-start' : 'justify-end'}`}>
-              {m.from === 'ava' && (
-                <button
-                  onClick={() => playVoice(stripMd(m.text))}
-                  aria-label="Hear this message again"
-                  className="mr-2 flex h-9 w-9 shrink-0 items-center justify-center self-center rounded-full bg-indigo-600 text-base text-white shadow transition active:scale-95"
-                >
-                  🔊
-                </button>
-              )}
-              <div
-                className={
-                  m.from === 'ava'
-                    ? 'max-w-[75%] rounded-2xl rounded-bl-sm border border-slate-200 bg-white px-4 py-3 text-base text-slate-800 shadow-sm'
-                    : 'max-w-[75%] rounded-2xl rounded-br-sm bg-gradient-to-br from-indigo-500 to-indigo-600 px-4 py-3 text-base text-white shadow-sm'
-                }
+        {/* Message thread -- tall enough that the whole exchange (plus
+            hints and the compose bar) fits without the student needing to
+            scroll to find their reply box. */}
+        <div className={`flex ${fullBleed ? 'min-h-[520px]' : 'min-h-[460px]'} flex-col gap-3 p-5`}>
+          <AnimatePresence initial={false}>
+            {messages.map((m, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+                className={`flex ${m.from === 'ava' ? 'justify-start' : 'justify-end'}`}
               >
-                <GrammarMarkup text={m.text} />
-              </div>
-            </div>
-          ))}
+                {m.from === 'ava' && (
+                  <button
+                    onClick={() => playVoice(stripMd(m.text))}
+                    aria-label="Hear this message again"
+                    className="mr-2 flex h-9 w-9 shrink-0 items-center justify-center self-center rounded-full bg-indigo-600 text-base text-white shadow transition active:scale-95"
+                  >
+                    🔊
+                  </button>
+                )}
+                <div
+                  className={
+                    m.from === 'ava'
+                      ? 'max-w-[75%] rounded-2xl rounded-bl-sm border border-slate-200 bg-white px-4 py-3 text-base text-slate-800 shadow-sm'
+                      : 'max-w-[75%] rounded-2xl rounded-br-sm bg-gradient-to-br from-indigo-500 to-indigo-600 px-4 py-3 text-base text-white shadow-sm'
+                  }
+                >
+                  <GrammarMarkup text={m.text} />
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
           {/* Typing indicator -- three bouncing dots, like a real chat app. */}
           {typing && (
-            <div className="flex justify-start">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
               <div className="flex items-center gap-1 rounded-2xl rounded-bl-sm border border-slate-200 bg-white px-4 py-3.5 shadow-sm">
                 {[0, 1, 2].map((d) => (
                   <span
@@ -1279,14 +1292,14 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
                   />
                 ))}
               </div>
-            </div>
+            </motion.div>
           )}
           {stage === 'done' && !typing && (
-            <div className="flex justify-center pt-1">
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="flex justify-center pt-1">
               <span className="rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-emerald-700">
                 ✓ Conversation complete
               </span>
-            </div>
+            </motion.div>
           )}
         </div>
 
@@ -1295,14 +1308,17 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
         {stage !== 'done' && !typing && hints && hints.length > 0 && (
           <div className="flex flex-wrap items-center gap-1.5 border-t border-slate-200 bg-indigo-50/60 px-4 pt-2.5">
             <span className="text-xs font-bold text-indigo-400">💡 Try:</span>
-            {hints.map((h) => (
-              <button
+            {hints.map((h, i) => (
+              <motion.button
                 key={h}
+                initial={{ opacity: 0, scale: 0.7 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.08 }}
                 onClick={() => setDraft(h)}
                 className="rounded-full border border-indigo-200 bg-white px-3 py-1 text-xs font-semibold text-indigo-600 shadow-sm transition active:scale-95"
               >
                 {h}
-              </button>
+              </motion.button>
             ))}
           </div>
         )}
@@ -1329,6 +1345,11 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
       </div>
     </div>
   );
+
+  if (fullBleed) {
+    return <div className="relative flex h-full w-full items-center justify-center overflow-hidden px-4">{frame}</div>;
+  }
+  return frame;
 }
 
 const NUMBER_WORDS = [
@@ -2254,7 +2275,7 @@ function renderSlideInner({ slide, t, fullBleed }: { slide: Slide; t: ThemeToken
     case 'fill_blank': return <FillBlankSlide slide={slide} t={t} />;
     case 'sentence_builder': return <SentenceBuilderSlide slide={slide} t={t} />;
     case 'debate_scale': return <DebateScaleSlide slide={slide} t={t} />;
-    case 'role_play': return <RolePlaySlide slide={slide} t={t} />;
+    case 'role_play': return <RolePlaySlide slide={slide} t={t} fullBleed={fullBleed} />;
     case 'scene_dialogue': return <SceneDialogueSlide slide={slide} fullBleed={fullBleed} />;
     case 'conversation_fill': return <ConversationFillSlide slide={slide} fullBleed={fullBleed} />;
     case 'number_chart': return <NumberChartSlide slide={slide} t={t} fullBleed={fullBleed} />;

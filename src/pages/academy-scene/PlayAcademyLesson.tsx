@@ -257,25 +257,27 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
   // block-level image/gradient, so that art fills the actual viewport
   // instead of sitting boxed inside the content area.
   const slideOwnImage =
-    slide?.type === 'scene_dialogue' || slide?.type === 'conversation_fill' || slide?.type === 'number_chart' || slide?.type === 'number_quiz_game'
+    slide?.type === 'scene_dialogue' || slide?.type === 'conversation_fill' || slide?.type === 'number_chart' || slide?.type === 'number_quiz_game' || slide?.type === 'role_play'
       ? slide.bg_image_url
       : slide?.type === 'canvas_game' || slide?.type === 'living_canvas'
         ? (slide as any).background_image
         : undefined;
   const pageBgImage = slideOwnImage || realSceneImage;
   // scene_dialogue, conversation_fill, number_chart, number_quiz_game,
-  // canvas_game/living_canvas, and intro all render their own complete,
-  // self-contained visual already (a full scene, a game board, or a
-  // branded cover card) — wrapping any of them in the speech-bubble panel
-  // below just double-boxes them. Confirmed live: the intro slide's own
-  // cover card (EnglEuphoria badge, level pill, gradient) was rendering
-  // nested inside the white bubble until this was added. number_chart and
-  // number_quiz_game get the same fullBleed treatment even on lessons
-  // where they carry no bg_image_url of their own — the point is the
-  // bigger centered card, not just the background photo.
+  // role_play, canvas_game/living_canvas, and intro all render their own
+  // complete, self-contained visual already (a full scene, a game board,
+  // or a branded cover card) — wrapping any of them in the speech-bubble
+  // panel below just double-boxes them. Confirmed live: the intro slide's
+  // own cover card (EnglEuphoria badge, level pill, gradient) was
+  // rendering nested inside the white bubble until this was added.
+  // number_chart, number_quiz_game, and role_play get the same fullBleed
+  // treatment even on lessons where they carry no bg_image_url of their
+  // own — the point is the bigger centered card, not just the background
+  // photo.
   const isFullBleedSlideType =
     slide?.type === 'scene_dialogue' ||
     slide?.type === 'conversation_fill' ||
+    slide?.type === 'role_play' ||
     slide?.type === 'number_chart' ||
     slide?.type === 'number_quiz_game' ||
     slide?.type === 'canvas_game' ||
