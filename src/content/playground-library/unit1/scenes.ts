@@ -123,6 +123,25 @@ export type Scene =
   | {
       id: string; kind: 'listen-repeat-cards'; bg: string; teacher: string;
       cards: { who: CharKey; sentence: string; img: string; imgLabel: string }[];
+      /** When true, drops the big enclosing white card entirely — the
+       *  word/sentence floats as its own bold drop-shadowed text directly
+       *  on the full-bleed background's own empty side (no duplicate small
+       *  thumbnail of a character the background already shows large),
+       *  with small individual floating pill buttons for Listen/Hold &
+       *  repeat instead of one boxed panel. First used by Unit 5 Lesson 1's
+       *  single-word vocabulary scenes (bg is a "-solo" character portrait
+       *  with real empty space to one side) per direct user request: the
+       *  original boxed-card design covered/duplicated the character the
+       *  background already showed. Existing lessons omit this (default
+       *  false) and keep the original boxed-card look unchanged. */
+      bare?: boolean;
+      /** Which side of the frame is empty enough for the floating word,
+       *  only used when `bare` is true. 'top' spans the word centered near
+       *  the top of the frame instead of a left/right half-width column —
+       *  the right shape for a background with no single clean empty side
+       *  (e.g. a 3-character group shot with someone on both edges).
+       *  Defaults to 'right'. */
+      textSide?: 'left' | 'right' | 'top';
     }
   | {
       /** Tap the real illustrated object inside a full scene to find its
@@ -4019,4 +4038,245 @@ export const LESSON_U3L2_SCENES: Scene[] = [
     ],
   },
   { id: 'u3l2-finale', kind: 'finale', bg: bgU3L2ToyParade, who: 'pip', line: "You did it! You know one teddy bear, one train, AND many blocks! \u{1F389}\u{1F682}" },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 5, Lesson 1 — "Mom, Dad, Me!"
+ *
+ * First lesson built outside Units 1-3 — the curriculum blueprint's own
+ * pre-seeded stub for this slot (curriculum_lessons row
+ * 95185473-8ff3-49fe-8e68-84a1265cfb56) named the topic "Mommy, Daddy, Me!";
+ * both that row's title/ai_metadata.lesson_role/ai_metadata.unit_theme and
+ * this unit's whole Pre-A1 stub set were renamed to "Mom, Dad, Me!" / "Mom,
+ * Dad, and me" per direct user request (informal register match with this
+ * same unit's own "Grandma & Grandpa" stub, not the more formal "Mother and
+ * Father").
+ *
+ * - Grammar target: "This is my ___" to introduce an immediate family
+ *   member, extended to "I love my ___" for a warm affective close —
+ *   matches the A1-tier sibling lesson's own grammar_focus ("This is my...")
+ *   without needing new structures beyond what's already taught.
+ * - Phonics: unit_letters lists M and D for this lesson, but BOTH are
+ *   already-taught letters by this point (M in Unit 1 Lesson 1, D in Unit 3
+ *   Lesson 1) — matching the established "already-taught letter gets
+ *   lighter, retrieval-only treatment" pattern (U3L1's own B/C, U3L2's own
+ *   T), so this lesson uses 'sound-sort' + word-build phonics hints only,
+ *   no full sound-model+trace pair.
+ * - Cast/characters: "Mom" and "Dad" are NOT added as new CharKey/CAST
+ *   entries — they never speak a scripted line themselves anywhere in this
+ *   lesson (avoiding the "silent trap" risk §3 of the skill doc flags for
+ *   any new Record<CharKey,...> lookup table entry). Every spoken line
+ *   stays with the established cast (pip narrates about his own mom/dad in
+ *   third person, "This is my mom!"; bella/willow react to meeting them);
+ *   Mom and Dad appear only as painted-into-the-background art, exactly
+ *   the pattern already established for objects/vocab that don't need
+ *   their own voice. The student's own turn (join-stage) is the actual
+ *   "This is my mom/dad" practice — about THEIR real family, not a
+ *   scripted character's.
+ * - Art: three new full-bleed backgrounds — bg-u5l1-family-home (all three
+ *   foxes together: Mom and Dad with Pip standing between them, drawn
+ *   noticeably shorter than his parents, per direct user request so the
+ *   "family" concept is concrete, not just implied), bg-u5l1-mom-solo and
+ *   bg-u5l1-dad-solo (each parent alone, for the progressive vocabulary
+ *   scenes and roleplay/join-stage framing, matching the established
+ *   "-solo" per-subject convention). Fox parents rather than a new species
+ *   — Pip is already an established fox, so his mom/dad reading as the
+ *   same family fits without inventing an unrelated design. The first
+ *   attempt at both solo shots came back as a vignette vector-sticker
+ *   (mostly white background, no scenery) — the same failure mode §9
+ *   describes for tight/cozy compositions — fixed by the same
+ *   restructuring fix: describing a WIDE ROOM shot with named furniture
+ *   explicitly anchored to the far-left/far-right edges (bookshelf/window
+ *   one lesson, armchair/plant the next) instead of asking for a "close
+ *   medium portrait." The family-home group shot's first attempt also
+ *   baked "PiP" text onto his shirt, violating the art contract's own "no
+ *   text baked into artwork" rule — fixed by explicitly requesting a plain
+ *   solid-color shirt with no text/logo/writing of any kind.
+ * - Structure: per direct user request, restructured to teach vocabulary
+ *   progressively — Mom, then Dad, then Me, then Family, each its OWN
+ *   full-bleed scene showing only that one concept (not the combined
+ *   family shot) — BEFORE any word is combined into a sentence. Only once
+ *   all four words have been individually introduced do the "This is my
+ *   ___" / "I love my ___" sentence scenes begin, each still scoped to one
+ *   person's own solo background. This matches the lesson's own title
+ *   "Mom, Dad, Me!", which names three vocabulary items, not two — the
+ *   original draft only taught mom/dad and jumped straight to sentences.
+ * ========================================================================= */
+
+const bgU5L1FamilyHome = `${A}/scenes/bg-u5l1-family-home.png`;
+const bgU5L1MomSolo = `${A}/scenes/bg-u5l1-mom-solo.png`;
+const bgU5L1DadSolo = `${A}/scenes/bg-u5l1-dad-solo.png`;
+
+export const LESSON_U5L1_TITLE = 'Mom, Dad, Me!';
+export const LESSON_U5L1_OBJECTIVE = 'Identify and name mom and dad, use "This is my ___" to introduce a family member, and review the M and D letter sounds.';
+
+export const LESSON_U5L1_SCENES: Scene[] = [
+  { id: 'u5l1-title', kind: 'title-card', bg: bgU5L1FamilyHome, level: 'Pre-A1', unit: 'Unit 5', lessonLabel: 'Lesson 1', title: 'Mom, Dad, Me!', subtitle: "Meet Pip's family!" },
+  {
+    id: 'u5l1-hello', kind: 'roleplay', bg: bgU5L1FamilyHome, teacher: "Good morning! Let's say hello and warm up together.", cast: ['pip', 'bella', 'willow', 'mia'],
+    script: [
+      { who: 'pip', line: 'Hello, hello, hello my friend!', repeat: true },
+      { who: 'bella', line: 'Hello! Remember our toys — ball, car, doll?' },
+      { who: 'willow', line: "Today it's something new — Pip's family!", repeat: true },
+      { who: 'mia', line: "Let's go and meet them!" },
+    ],
+  },
+  {
+    id: 'u5l1-intro', kind: 'cinematic', bg: bgU5L1FamilyHome, title: 'Mom, Dad, Me!', subtitle: "Pip's cozy home", narrator: 'pip', hidePipOverlay: true,
+    script: [
+      { who: 'pip', line: "Welcome to my home! Today you meet MY family!" },
+      { who: 'pip', line: "Let's meet them one at a time!" },
+    ],
+    cta: "Let's meet them!",
+  },
+  {
+    // Progressive vocabulary, per direct user request: one new word at a
+    // time, each in its own full-bleed scene showing only that one person
+    // (not the combined family shot), BEFORE any word is combined into a
+    // full sentence. Mom, then Dad, then Me, then Family — matching this
+    // lesson's own title "Mom, Dad, Me!" (which promises three vocabulary
+    // items, not just two) plus a culminating "family" concept word.
+    id: 'u5l1-vocab-mom', kind: 'listen-repeat-cards', bg: bgU5L1MomSolo, teacher: 'Listen, then repeat!', bare: true, textSide: 'right',
+    cards: [{ who: 'pip', sentence: 'Mom!', img: bgU5L1MomSolo, imgLabel: 'Mom' }],
+  },
+  {
+    id: 'u5l1-vocab-dad', kind: 'listen-repeat-cards', bg: bgU5L1DadSolo, teacher: 'Listen, then repeat!', bare: true, textSide: 'left',
+    cards: [{ who: 'pip', sentence: 'Dad!', img: bgU5L1DadSolo, imgLabel: 'Dad' }],
+  },
+  {
+    id: 'u5l1-vocab-me', kind: 'listen-repeat-cards', bg: bgU5L1FamilyHome, teacher: 'Listen, then repeat!', bare: true, textSide: 'top',
+    cards: [{ who: 'pip', sentence: 'Me! I am Pip!', img: bgU5L1FamilyHome, imgLabel: 'Me' }],
+  },
+  {
+    id: 'u5l1-vocab-family', kind: 'listen-repeat-cards', bg: bgU5L1FamilyHome, teacher: 'Listen, then repeat!', bare: true, textSide: 'top',
+    cards: [{ who: 'pip', sentence: 'Family! This is my family!', img: bgU5L1FamilyHome, imgLabel: 'Family' }],
+  },
+  {
+    // M and D are both already-taught letters (M: Unit 1 Lesson 1, D: Unit
+    // 3 Lesson 1) — lighter, retrieval-only sound-sort review rather than a
+    // full sound-model+trace pair, matching the established pattern.
+    id: 'u5l1-sound-sort', kind: 'sound-sort', bg: bgMeadow, teacher: 'Listen for the sound! /m/om, /d/ad — now drag each thing to its sound!',
+    targets: [
+      { letter: 'M', phoneme: '/m/', who: 'pip' },
+      { letter: 'D', phoneme: '/d/', who: 'mia' },
+    ],
+    items: [
+      { word: 'mom', emoji: '\u{1F469}', letter: 'M' },
+      { word: 'monkey', emoji: '\u{1F412}', letter: 'M' },
+      { word: 'moon', emoji: '\u{1F319}', letter: 'M' },
+      { word: 'dad', emoji: '\u{1F468}', letter: 'D' },
+      { word: 'dog', emoji: '\u{1F436}', letter: 'D' },
+      { word: 'duck', emoji: '\u{1F986}', letter: 'D' },
+    ],
+  },
+  {
+    id: 'u5l1-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Listen! Tap the missing letter to make the word.',
+    rounds: [
+      { word: 'mom', blankIndex: 0, answer: 'M', choices: ['M', 'D', 'B'], emoji: '\u{1F469}' },
+      { word: 'dad', blankIndex: 0, answer: 'D', choices: ['M', 'D', 'B'], emoji: '\u{1F468}' },
+    ],
+  },
+  {
+    id: 'u5l1-memory', kind: 'memory', bg: bgMeadow, teacher: 'Memory game! Find the matching family pairs!',
+    pairs: [
+      { id: 'mom', label: 'Mom', emoji: '\u{1F469}' },
+      { id: 'dad', label: 'Dad', emoji: '\u{1F468}' },
+      { id: 'baby', label: 'Baby', emoji: '\u{1F476}' },
+      { id: 'family', label: 'Family', emoji: '\u{1F46A}' },
+    ],
+  },
+  {
+    // Now combine the vocabulary just taught into full sentences — still
+    // one person per scene, matching the same "only one" rule as the
+    // vocabulary scenes above, just with a fuller sentence this time.
+    id: 'u5l1-sentence-mom', kind: 'listen-repeat-cards', bg: bgU5L1MomSolo, teacher: "Now let's say a bigger sentence! Listen, then repeat.", bare: true, textSide: 'right',
+    cards: [
+      { who: 'pip', sentence: 'This is my mom!', img: bgU5L1MomSolo, imgLabel: 'Mom' },
+      { who: 'pip', sentence: 'I love my mom!', img: bgU5L1MomSolo, imgLabel: 'Mom' },
+    ],
+  },
+  {
+    id: 'u5l1-sentence-dad', kind: 'listen-repeat-cards', bg: bgU5L1DadSolo, teacher: 'Now the same for Dad! Listen, then repeat.', bare: true, textSide: 'left',
+    cards: [
+      { who: 'pip', sentence: 'This is my dad!', img: bgU5L1DadSolo, imgLabel: 'Dad' },
+      { who: 'pip', sentence: 'I love my dad!', img: bgU5L1DadSolo, imgLabel: 'Dad' },
+    ],
+  },
+  {
+    id: 'u5l1-dash-mom', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Mia Dash! Tap only the MOM things as they run by. Get 6 rings!', who: 'mia', targetLetter: 'MOM', targetPhoneme: '', goal: 6, seconds: 40,
+    items: [
+      { word: 'mom', letter: 'MOM', emoji: '\u{1F469}' },
+      { word: 'mom', letter: 'MOM', emoji: '\u{1F469}\u{200D}\u{1F467}' },
+      { word: 'dad', letter: 'DAD', emoji: '\u{1F468}' },
+      { word: 'dad', letter: 'DAD', emoji: '\u{1F468}\u{200D}\u{1F466}' },
+      { word: 'baby', letter: 'BABY', emoji: '\u{1F476}' },
+      { word: 'baby', letter: 'BABY', emoji: '\u{1F37C}' },
+    ],
+  },
+  {
+    id: 'u5l1-dash-dad', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Willow Dash! Tap only the DAD things as they run by. Get 6 rings!', who: 'willow', targetLetter: 'DAD', targetPhoneme: '', goal: 6, seconds: 40,
+    items: [
+      { word: 'dad', letter: 'DAD', emoji: '\u{1F468}' },
+      { word: 'dad', letter: 'DAD', emoji: '\u{1F468}\u{200D}\u{1F466}' },
+      { word: 'mom', letter: 'MOM', emoji: '\u{1F469}' },
+      { word: 'mom', letter: 'MOM', emoji: '\u{1F469}\u{200D}\u{1F467}' },
+      { word: 'baby', letter: 'BABY', emoji: '\u{1F476}' },
+      { word: 'baby', letter: 'BABY', emoji: '\u{1F37C}' },
+    ],
+  },
+  {
+    // Each question shows the actual parent being asked about, matching
+    // the established U2/U3 "-solo" per-subject framing (open space
+    // preserved for the student's draggable video circle). The student's
+    // own answer here is the real "This is my ___" practice — about their
+    // own family, not a scripted character's.
+    id: 'u5l1-join-stage', kind: 'join-stage', bg: bgU5L1FamilyHome, teacher: 'Your turn! Who is this? Say it about YOUR family.', cast: ['pip', 'bella', 'willow'],
+    turns: [
+      { who: 'pip', line: 'Who is this?', bg: bgU5L1MomSolo },
+      { who: 'student', line: 'This is my ______. (mom)', bg: bgU5L1MomSolo },
+      { who: 'bella', line: 'And who is this?', bg: bgU5L1DadSolo },
+      { who: 'student', line: 'This is my ______. (dad)', bg: bgU5L1DadSolo },
+      { who: 'willow', line: 'Do you love your family?', bg: bgU5L1FamilyHome },
+      { who: 'student', line: 'I love my ______! (mom / dad)', bg: bgU5L1FamilyHome },
+    ],
+  },
+  {
+    id: 'u5l1-storybook', kind: 'flipbook', bg: bgU5L1FamilyHome, title: "A Day With Pip's Family",
+    pages: [
+      { who: 'pip', img: bgU5L1FamilyHome, text: 'Pip woke up at home. Mom and Dad were making breakfast!' },
+      { who: 'pip', img: bgU5L1MomSolo, text: 'This is my mom. She makes yummy pancakes!' },
+      { who: 'pip', img: bgU5L1DadSolo, text: 'This is my dad. He reads me a story every night!' },
+      { who: 'pip', img: bgU5L1FamilyHome, text: 'I love my mom and my dad. We are a happy family!' },
+    ],
+    checkpoints: [
+      { afterPage: 1, who: 'pip', question: 'Who makes pancakes?', options: ['Mom', 'Dad'], answer: 'Mom' },
+      { afterPage: 2, who: 'pip', question: 'Who reads a story?', options: ['Mom', 'Dad'], answer: 'Dad' },
+    ],
+  },
+  {
+    id: 'u5l1-roleplay-mom', kind: 'roleplay', bg: bgU5L1MomSolo, teacher: 'Story time! Listen to Pip and Bella, then repeat.', cast: ['pip', 'bella'],
+    script: [
+      { who: 'pip', line: 'This is my mom!', repeat: true },
+      { who: 'bella', line: "Hi, Pip's mom! Nice to meet you!" },
+    ],
+  },
+  {
+    id: 'u5l1-roleplay-dad', kind: 'roleplay', bg: bgU5L1DadSolo, teacher: 'Now listen to Pip and Willow, then repeat.', cast: ['pip', 'willow'],
+    script: [
+      { who: 'pip', line: 'This is my dad!', repeat: true },
+      { who: 'willow', line: "Hi, Pip's dad! Nice to meet you!" },
+    ],
+  },
+  {
+    id: 'u5l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u5l1-finale', kind: 'finale', bg: bgU5L1FamilyHome, who: 'pip', line: 'You did it! You can say "This is my mom!" and "This is my dad!" \u{1F389}\u{1F468}\u{200D}\u{1F469}\u{200D}\u{1F466}' },
 ];

@@ -3,6 +3,7 @@ import {
   LESSON_4_SCENES, LESSON_5_SCENES, LESSON_6_SCENES,
   LESSON_U2L1_SCENES, LESSON_U2L2_SCENES, LESSON_U2L3_SCENES, LESSON_U2L4_SCENES, LESSON_U2L5_SCENES, LESSON_U2L6_SCENES,
   LESSON_U3L1_SCENES, LESSON_U3L2_SCENES,
+  LESSON_U5L1_SCENES,
 } from './unit1/scenes';
 import type { Scene } from './unit1/scenes';
 
@@ -12,6 +13,7 @@ export const SCENE_LESSON_REGISTRY: Record<string, Scene[]> = {
   '2-1': LESSON_U2L1_SCENES, '2-2': LESSON_U2L2_SCENES, '2-3': LESSON_U2L3_SCENES, '2-4': LESSON_U2L4_SCENES,
   '2-5': LESSON_U2L5_SCENES, '2-6': LESSON_U2L6_SCENES,
   '3-1': LESSON_U3L1_SCENES, '3-2': LESSON_U3L2_SCENES,
+  '5-1': LESSON_U5L1_SCENES,
 };
 
 export function getSceneLesson(unitNumber: number, lessonNumber: number): Scene[] | null {

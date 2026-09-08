@@ -2866,6 +2866,61 @@ function ListenRepeatCardsScene({ scene, onNext, onWin }: { scene: Extract<Scene
 
   const c = CAST[card!.who];
 
+  if (scene.bare) {
+    const side = scene.textSide ?? 'right';
+    return (
+      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <div className="pointer-events-none absolute inset-0 bg-black/10" />
+        <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
+          <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
+            🎧 {scene.teacher} <span className="opacity-60">({idx + 1}/{total})</span>
+          </div>
+        </div>
+
+        {/* No enclosing card — the word floats directly on the background.
+            'top' (a group shot with no single clean empty side) spans the
+            word centered above everyone's heads instead of a left/right
+            half-width column that would overlap whoever stands on that
+            side; 'left'/'right' hug the one open side of a solo portrait
+            (the character is already large in the photo, no need for a
+            duplicate small thumbnail either way). */}
+        <div className={
+          side === 'top'
+            ? 'absolute inset-x-0 top-24 z-10 flex flex-col items-center gap-6 px-4'
+            : `absolute inset-y-0 z-10 flex w-1/2 flex-col items-center justify-center gap-8 px-1 ${side === 'right' ? 'right-0' : 'left-0'}`
+        }>
+          <p
+            className="text-center font-black leading-none text-white drop-shadow-[0_6px_14px_rgba(0,0,0,0.7)]"
+            style={{ fontSize: side === 'top' ? 'clamp(3.5rem, 10vw, 7rem)' : 'clamp(4.5rem, 13vw, 10rem)' }}
+          >
+            {words.map((w, i) => (
+              <span key={i} className={`transition-colors ${i === activeWord ? 'rounded bg-yellow-300 px-1 text-orange-900' : ''}`}>{w}{i < words.length - 1 ? ' ' : ''}</span>
+            ))}
+          </p>
+          <div className={side === 'top' ? 'flex flex-row items-center gap-3' : 'flex flex-col items-center gap-3'}>
+            <button onClick={play} disabled={playing} className="rounded-full bg-white/95 px-6 py-3 text-sm font-bold text-orange-700 shadow-xl ring-2 ring-orange-200 active:scale-95 disabled:opacity-50">
+              🔊 {playing ? 'Listening…' : 'Listen'}
+            </button>
+            <button
+              onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
+              disabled={!heard || repeated}
+              className={`rounded-full px-6 py-3 text-sm font-black text-white shadow-xl transition disabled:opacity-40 ${held ? 'scale-95' : ''}`}
+              style={{ background: repeated ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
+            >
+              {repeated ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & repeat'}
+            </button>
+          </div>
+        </div>
+
+        {repeated && (
+          <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+            <button onClick={next} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>Next →</button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-black/20" />
