@@ -1169,10 +1169,24 @@ function DebateScaleSlide({ slide, t }: { slide: Extract<Slide, { type: 'debate_
 type RolePlayMsg = { from: 'ava' | 'student'; text: string };
 
 function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play' }>; t: ThemeTokens }) {
+  const { playVoice } = useAcademyAudio();
   const [messages, setMessages] = useState<RolePlayMsg[]>([{ from: 'ava', text: slide.lineA }]);
   const [stage, setStage] = useState<'q1' | 'q2' | 'done'>('q1');
   const [draft, setDraft] = useState('');
   const hasSecondQuestion = !!slide.lineC;
+  const spokenCount = useRef(0);
+
+  // Every Ava message auto-plays once it arrives, and stays replayable via
+  // the speaker button on its bubble -- a Pre-A1 student who can't read
+  // yet still needs to know what Ava is asking; text alone isn't enough.
+  useEffect(() => {
+    const last = messages[messages.length - 1];
+    if (messages.length > spokenCount.current && last?.from === 'ava') {
+      void playVoice(stripMd(last.text));
+    }
+    spokenCount.current = messages.length;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages]);
 
   const send = () => {
     const msg = draft.trim();
@@ -1207,23 +1221,32 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
   const currentExample = stage === 'q1' ? slide.lineB : stage === 'q2' ? slide.lineD : undefined;
 
   return (
-    <div className="mx-auto w-full max-w-sm space-y-3">
+    <div className="mx-auto w-full max-w-2xl space-y-3">
       <div className={`text-xs uppercase tracking-widest text-center ${t.muted}`}>{slide.title}</div>
       <div className="overflow-hidden rounded-[1.75rem] border-4 border-slate-900 bg-slate-100 shadow-2xl">
         {/* Contact header, like an actual messages app */}
-        <div className="flex items-center gap-2 border-b border-slate-200 bg-white px-4 py-3">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 text-sm font-bold text-white">A</span>
-          <span className="text-sm font-semibold text-slate-800">Ava</span>
+        <div className="flex items-center gap-2 border-b border-slate-200 bg-white px-5 py-4">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 text-base font-bold text-white">A</span>
+          <span className="text-base font-semibold text-slate-800">Ava</span>
         </div>
         {/* Message thread */}
-        <div className="flex min-h-[240px] flex-col gap-2 bg-slate-50 p-4">
+        <div className="flex min-h-[380px] flex-col gap-3 bg-slate-50 p-5">
           {messages.map((m, i) => (
             <div key={i} className={`flex ${m.from === 'ava' ? 'justify-start' : 'justify-end'}`}>
+              {m.from === 'ava' && (
+                <button
+                  onClick={() => playVoice(stripMd(m.text))}
+                  aria-label="Hear this message again"
+                  className="mr-2 flex h-9 w-9 shrink-0 items-center justify-center self-center rounded-full bg-indigo-600 text-base text-white shadow transition active:scale-95"
+                >
+                  🔊
+                </button>
+              )}
               <div
                 className={
                   m.from === 'ava'
-                    ? 'max-w-[80%] rounded-2xl rounded-bl-sm border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm'
-                    : 'max-w-[80%] rounded-2xl rounded-br-sm bg-indigo-600 px-3 py-2 text-sm text-white shadow-sm'
+                    ? 'max-w-[75%] rounded-2xl rounded-bl-sm border border-slate-200 bg-white px-4 py-3 text-base text-slate-800 shadow-sm'
+                    : 'max-w-[75%] rounded-2xl rounded-br-sm bg-indigo-600 px-4 py-3 text-base text-white shadow-sm'
                 }
               >
                 <GrammarMarkup text={m.text} />
@@ -1234,14 +1257,14 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
               answered the CURRENT question yet. */}
           {currentExample && (
             <div className="flex justify-end">
-              <div className="max-w-[80%] rounded-2xl rounded-br-sm border-2 border-dashed border-indigo-300 bg-indigo-50/60 px-3 py-2 text-sm text-indigo-400">
+              <div className="max-w-[75%] rounded-2xl rounded-br-sm border-2 border-dashed border-indigo-300 bg-indigo-50/60 px-4 py-3 text-base text-indigo-400">
                 <GrammarMarkup text={currentExample} />
               </div>
             </div>
           )}
           {stage === 'done' && (
             <div className="flex justify-center pt-1">
-              <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-emerald-700">
+              <span className="rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-emerald-700">
                 ✓ Conversation complete
               </span>
             </div>
@@ -1249,20 +1272,20 @@ function RolePlaySlide({ slide, t }: { slide: Extract<Slide, { type: 'role_play'
         </div>
 
         {/* Compose bar -- the student's own words, not a scripted line. */}
-        <div className="flex items-center gap-2 border-t border-slate-200 bg-white px-3 py-2">
+        <div className="flex items-center gap-2 border-t border-slate-200 bg-white px-4 py-3">
           <input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && send()}
             disabled={stage === 'done'}
             placeholder="Type your reply…"
-            className="flex-1 rounded-full border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none focus:border-indigo-500 disabled:opacity-50"
+            className="flex-1 rounded-full border border-slate-300 px-5 py-3 text-base text-slate-900 outline-none focus:border-indigo-500 disabled:opacity-50"
           />
           <button
             onClick={send}
             disabled={!draft.trim() || stage === 'done'}
             aria-label="Send"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-white transition disabled:opacity-30"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-lg text-white transition disabled:opacity-30"
           >
             ➤
           </button>
