@@ -187,6 +187,21 @@ export type Slide =
       block: Block;
       word: string; // the CVC word being spelled out round by round, e.g. "dog"
       rounds: { letter: string; is_vowel?: boolean; image_url: string; distractors: string[] }[];
+      bg_image_url?: string;
+    }
+  // A sound-blending recap: tap each letter to hear its sound (any order),
+  // and once every letter has been tapped the word blends together aloud
+  // and is revealed spelled out -- "click the sounds, then say the whole
+  // word", replacing the old plain word+definition vocab card for the
+  // phonics recap after each letter_sound_game / Build-the-Word pair.
+  | {
+      type: 'word_blend';
+      block: Block;
+      word: string;
+      letters: string[];
+      definition?: string;
+      example?: string;
+      bg_image_url?: string;
     }
   // A creative, illustrated "storybook page" for connected reading --
   // full-bleed scene, the passage laid out like a page from a picture
@@ -1774,19 +1789,103 @@ function LetterSoundGameSlide({ slide, fullBleed }: { slide: Extract<Slide, { ty
   );
 
   if (fullBleed) {
-    return (
-      <div className="relative flex h-full w-full items-center justify-center overflow-hidden px-4">
-        {/* Decorative floating sparkles -- per direction, "make it fun,
-            entertaining", matching the game-show energy of the numbers
-            quiz. */}
-        <span className="pointer-events-none absolute left-10 top-10 text-3xl opacity-80">✨</span>
-        <span className="pointer-events-none absolute right-12 top-16 text-2xl opacity-70">⭐</span>
-        <span className="pointer-events-none absolute bottom-16 left-16 text-2xl opacity-70">🌟</span>
-        {card}
-      </div>
-    );
+    // Background is painted by the page root (PlayAcademyLesson) from
+    // slide.bg_image_url -- no decorative sparkles here anymore, the real
+    // illustrated scene behind the card carries the "fun" on its own.
+    return <div className="relative flex h-full w-full items-center justify-center overflow-hidden px-4">{card}</div>;
   }
-  return card;
+  return (
+    <div className="relative w-full max-w-3xl aspect-video overflow-hidden rounded-2xl shadow-2xl mx-auto flex items-center justify-center px-4">
+      {slide.bg_image_url && <img src={slide.bg_image_url} alt="" className="absolute inset-0 h-full w-full object-cover" />}
+      {slide.bg_image_url && <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />}
+      {card}
+    </div>
+  );
+}
+
+// A sound-blending recap: tap s, tap u, tap n (any order) to hear each
+// sound, then the word blends together aloud and its full spelling is
+// revealed -- something the student DOES, not a passive word+definition
+// card.
+function WordBlendSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 'word_blend' }>; fullBleed?: boolean }) {
+  const { playVoice } = useAcademyAudio();
+  const [tapped, setTapped] = useState<Set<number>>(new Set());
+  const [blended, setBlended] = useState(false);
+  const allTapped = tapped.size === slide.letters.length;
+
+  const tap = (i: number, letter: string) => {
+    void playVoice(letter);
+    setTapped((prev) => {
+      const next = new Set(prev);
+      next.add(i);
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    if (allTapped && !blended) {
+      const timer = window.setTimeout(() => {
+        setBlended(true);
+        confetti({ particleCount: 90, spread: 80, origin: { y: 0.55 } });
+        void playVoice(slide.example || slide.word);
+      }, 500);
+      return () => window.clearTimeout(timer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allTapped]);
+
+  const remaining = slide.letters.length - tapped.size;
+
+  const card = (
+    <div className={`w-full ${fullBleed ? 'max-w-lg rounded-[2rem] bg-white/95 p-6 shadow-2xl backdrop-blur-sm md:p-8' : 'max-w-lg mx-auto space-y-5'} text-center`}>
+      <div className="mb-4 text-xs font-bold uppercase tracking-widest text-indigo-500">
+        {blended ? 'You spelled it!' : 'Tap each sound!'}
+      </div>
+      <div className="mb-6 flex items-center justify-center gap-3">
+        {slide.letters.map((letter, i) => {
+          const isTapped = tapped.has(i);
+          return (
+            <button
+              key={i}
+              onClick={() => tap(i, letter)}
+              className={`flex h-20 w-20 items-center justify-center rounded-2xl border-2 text-4xl font-black shadow-sm transition active:scale-95 ${
+                isTapped ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-slate-200 bg-white text-slate-800 hover:border-indigo-400'
+              }`}
+            >
+              {letter}
+            </button>
+          );
+        })}
+      </div>
+      {blended ? (
+        <div className="space-y-3">
+          <h2 className="text-3xl font-bold text-slate-900">{slide.word}</h2>
+          {slide.definition && <p className="text-base text-slate-600">{slide.definition}</p>}
+          <button
+            onClick={() => void playVoice(slide.example || slide.word)}
+            className="mx-auto flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-3 text-lg font-bold text-white shadow-lg transition active:scale-95"
+          >
+            🔊 Say it together!
+          </button>
+        </div>
+      ) : (
+        <p className="text-sm text-slate-500">
+          Tap {remaining} more sound{remaining === 1 ? '' : 's'}!
+        </p>
+      )}
+    </div>
+  );
+
+  if (fullBleed) {
+    return <div className="relative flex h-full w-full items-center justify-center overflow-hidden px-4">{card}</div>;
+  }
+  return (
+    <div className="relative w-full max-w-3xl aspect-video overflow-hidden rounded-2xl shadow-2xl mx-auto flex items-center justify-center px-4">
+      {slide.bg_image_url && <img src={slide.bg_image_url} alt="" className="absolute inset-0 h-full w-full object-cover" />}
+      {slide.bg_image_url && <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />}
+      {card}
+    </div>
+  );
 }
 
 // A creative, illustrated "storybook page" for connected reading -- full-
@@ -2578,6 +2677,7 @@ function renderSlideInner({ slide, t, fullBleed }: { slide: Slide; t: ThemeToken
     case 'number_chart': return <NumberChartSlide slide={slide} t={t} fullBleed={fullBleed} />;
     case 'number_quiz_game': return <NumberQuizGameSlide slide={slide} fullBleed={fullBleed} />;
     case 'letter_sound_game': return <LetterSoundGameSlide slide={slide} fullBleed={fullBleed} />;
+    case 'word_blend': return <WordBlendSlide slide={slide} fullBleed={fullBleed} />;
     case 'story_page': return <StoryPageSlide slide={slide} fullBleed={fullBleed} />;
     case 'speaking_task': return <SpeakingTaskSlide slide={slide} t={t} />;
     case 'reflection': return <ReflectionSlide slide={slide} t={t} />;
