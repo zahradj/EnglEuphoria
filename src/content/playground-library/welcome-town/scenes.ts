@@ -108,6 +108,14 @@ export type Scene =
   // drag-match hotspot coordinates elsewhere in this file); each round in
   // `rounds` plays one spoken line and names which target answers it.
   | { id: string; kind: 'listen-tap'; bg: string; teacher: string; targets: { label: string; left: string; top: string; color: string }[]; rounds: { prompt: string; answerLabel: string; who?: CharKey }[] }
+  // A spoken statement, judged True or False — a third, genuinely different
+  // listening-check modality from `choice` (pick from 3 text buttons) and
+  // `listen-tap` (tap a real object in the scene): a fast binary call, no
+  // scene-hotspot dependency at all, so it can freely mix content from
+  // different backgrounds/topics in one scene. Named explicitly in
+  // smart-lesson-architect's own "Recognition / noticing" activity family
+  // and grounded by dedicated research (see the scene using it below).
+  | { id: string; kind: 'true-false'; bg: string; teacher: string; rounds: { who: CharKey; statement: string; isTrue: boolean }[] }
   // A vertical Never->Sometimes->Usually->Always scale (a real, established ESL
   // technique for frequency adverbs — students place/rate a habit's frequency
   // on a ladder rather than picking from a flat list) that a round's routine
@@ -761,16 +769,19 @@ export const LESSON_3_SCENES: Scene[] = [
     ],
   },
 
-  // --- From here down: listen-tap, not choice. Per direct feedback that
-  // the original nine near-identical choice-menu scenes in a row felt
-  // repetitive/low quality, and per web research into ESL listening-game
-  // design for young learners (recognition-based "tap the object in the
-  // picture" mechanics, e.g. Guess-the-Object/Listen-and-point, read
-  // better than a flat text-button quiz for this exact skill) — every
-  // target below is a real character or object already painted in that
-  // bg, reusing the exact hotspot coordinates this file's own vocab-spot/
-  // drag-match scenes for that same bg already established, so "where to
-  // look" is never new information, only "which one did I just hear".
+  // --- From here down: listen-tap and true-false, not choice. Per direct
+  // feedback that the original nine near-identical choice-menu scenes in a
+  // row felt repetitive/low quality, and per web research into ESL
+  // listening-game design for young learners (recognition-based "tap the
+  // object in the picture" mechanics, e.g. Guess-the-Object/Listen-and-
+  // point, read better than a flat text-button quiz for this exact skill)
+  // — every target below is a real character or object already painted in
+  // that bg, reusing the exact hotspot coordinates this file's own
+  // vocab-spot/drag-match scenes for that same bg already established, so
+  // "where to look" is never new information, only "which one did I just
+  // hear". Capped at 2 consecutive listen-tap scenes (feelings, people) per
+  // the Hard Variety Rule — see the true-false scene below for why room +
+  // supplies content switched mechanics instead of extending this run.
 
   // Feelings listening review (Lesson 2 content) — targets/coords match
   // wt2-vocab-feelings' own hotspots for mia/leo/willow.
@@ -801,33 +812,29 @@ export const LESSON_3_SCENES: Scene[] = [
     ],
   },
 
-  // Classroom vocabulary listening review (Lesson 1 content) — coords
-  // match wt-vocab-room's own hotspots for door/board/window.
+  // Classroom + school-supplies listening review (Lesson 1 content), as
+  // True/False rather than a third and fourth listen-tap scene in a row.
+  // Per activity-pattern-library's Hard Variety Rule (no more than 2
+  // consecutive same-kind scenes) -- the first cut of this lesson ran
+  // FOUR listen-tap scenes back to back (feelings/people/room/supplies),
+  // the same shape of mistake the original nine-choice-scenes run was,
+  // just with a newer mechanic. Researched before redesigning:
+  // englishcurrent.com/speaking/true-false-guessing-game-activity-esl and
+  // teach-this.com/esl-games/listening-games both name True/False as a
+  // proven, fast, genuinely different listening-check format for young
+  // learners (a binary judgment call, not a search-the-scene or pick-a-
+  // button task) -- also explicitly listed in smart-lesson-architect's own
+  // "Recognition / noticing" activity family. Since True/False doesn't
+  // depend on scene hotspots, one scene freely reviews BOTH room fixtures
+  // and school supplies together instead of needing a separate scene per
+  // background.
   {
-    id: 'wt3-listen-tap-room', kind: 'listen-tap', bg: bgFixtures, teacher: 'Listen, then tap the right thing in the room!',
-    targets: [
-      { label: 'Door', left: '16%', top: '48%', color: '#8B5CF6' },
-      { label: 'Board', left: '49%', top: '49%', color: '#22C55E' },
-      { label: 'Window', left: '81%', top: '47%', color: '#06B6D4' },
-    ],
+    id: 'wt3-true-false', kind: 'true-false', bg: bgSupplies, teacher: 'Listen to each sentence. Is it TRUE or FALSE?',
     rounds: [
-      { prompt: 'Look at the board!', answerLabel: 'Board', who: 'marigold' },
-      { prompt: 'Open the door!', answerLabel: 'Door', who: 'marigold' },
-    ],
-  },
-
-  // School-supplies listening review (Lesson 1 content) — coords match
-  // wt-vocab-supplies' own hotspots for desk/chair/backpack.
-  {
-    id: 'wt3-listen-tap-supplies', kind: 'listen-tap', bg: bgSupplies, teacher: 'Listen, then tap the right thing!',
-    targets: [
-      { label: 'Desk', left: '20%', top: '58%', color: '#F59E0B' },
-      { label: 'Chair', left: '55%', top: '62%', color: '#22C55E' },
-      { label: 'Backpack', left: '85%', top: '62%', color: '#16A34A' },
-    ],
-    rounds: [
-      { prompt: 'This is my backpack!', answerLabel: 'Backpack', who: 'pip' },
-      { prompt: 'Sit in your chair!', answerLabel: 'Chair', who: 'pip' },
+      { who: 'marigold', statement: 'This is called a board.', isTrue: true },
+      { who: 'marigold', statement: 'A backpack is a chair.', isTrue: false },
+      { who: 'pip', statement: 'I carry my books in my backpack.', isTrue: true },
+      { who: 'pip', statement: 'I sleep in my chair.', isTrue: false },
     ],
   },
 

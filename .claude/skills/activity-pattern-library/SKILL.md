@@ -126,22 +126,22 @@ avoid-forever rule for a `kind` that's otherwise fine elsewhere.
 
 A separate, smaller `Scene` type union from Pre-A1's (different file,
 different renderer — don't assume a Pre-A1 `kind` exists here or vice
-versa). ~22 `kind`s as of Lesson 4 (`20517b28`):
+versa). ~23 `kind`s as of the true-false addition below:
 
 | Purpose | `kind`s |
 |---|---|
 | **Discovery / model** | `meet`, `sound-model` |
-| **Controlled / recognition practice** | `echo`, `trace`, `vocab-spot`, `drag-match`, `frequency-ladder`, `pronoun-sort` |
+| **Controlled / recognition practice** | `echo`, `trace`, `vocab-spot`, `drag-match`, `frequency-ladder`, `pronoun-sort`, `true-false` |
 | **Interactive game practice** | `choice`, `listen-tap`, `memory`, `word-build`, `letter-game`, `jigsaw-puzzle`, `hello-doors` |
 | **Speaking production** | `roleplay`, `join-stage` |
 | **Story** | `flipbook` |
 | **Structural / closing** | `title-card`, `cinematic`, `song`, `finale` |
 
-`listen-tap` (added commit `203d5a09`) and reviving `echo`/`hello-doors`
-into real use (commits `203d5a09`, `20517b28`) are the concrete precedent
-for "the catalog already has an underused option — check here before
-inventing a new `kind`, and check the Research Step before defaulting to
-`choice` again."
+`listen-tap`/`true-false` (added commits `203d5a09` and the follow-up
+correction below) and reviving `echo`/`hello-doors` into real use (commits
+`203d5a09`, `20517b28`) are the concrete precedent for "the catalog
+already has an underused option — check here before inventing a new
+`kind`, and check the Research Step before defaulting to `choice` again."
 
 **Known existing defect, flagged for a future session (not fixed by
 writing this skill):** `welcome-town-a2/scenes.ts`'s own Unit 1 Lesson 1
@@ -149,6 +149,19 @@ repeats the same "several `choice` scenes in a row" pattern already fixed
 in A1 Lesson 3 (four back-to-back around the file's own lines ~222-279,
 verified by grep this session). Apply the Variety Rule there the next time
 that lesson is touched.
+
+**Self-correction worth internalizing:** the very first pass of applying
+this Hard Variety Rule to Lesson 3 (`203d5a09`) fixed the nine-`choice`-
+in-a-row problem by introducing `listen-tap` — but then chained FOUR
+`listen-tap` scenes back to back (feelings/people/room/supplies), the
+identical shape of mistake with a newer mechanic. Caught and fixed in a
+follow-up pass by literally listing the lesson's `kind` sequence in order
+(rule 4 above) and finding the run — introducing `true-false` for
+room+supplies content instead of a third and fourth `listen-tap`. Lesson:
+running the Variety Rule check once, right after picking a promising new
+mechanic, is not enough — a fresh mechanic can get over-relied on just as
+easily as an old one. Re-check the full `kind` sequence after every
+editing pass, not just once at the start of the design.
 
 ## Academy / Success hub — Arcade + vocab-games
 
