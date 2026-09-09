@@ -1,4 +1,4 @@
-import { LESSON_1_SCENES, LESSON_1_TITLE, LESSON_2_SCENES, LESSON_2_TITLE } from './welcome-town/scenes';
+import { LESSON_1_SCENES, LESSON_1_TITLE, LESSON_2_SCENES, LESSON_2_TITLE, LESSON_3_SCENES, LESSON_3_TITLE } from './welcome-town/scenes';
 import { LESSON_A2U1L1_SCENES, LESSON_A2U1L1_TITLE, LESSON_A2U1L2_SCENES, LESSON_A2U1L2_TITLE, LESSON_A2U1L3_SCENES, LESSON_A2U1L3_TITLE } from './welcome-town-a2/scenes';
 import type { Scene } from './welcome-town/scenes';
 
@@ -10,6 +10,7 @@ import type { Scene } from './welcome-town/scenes';
 const WELCOME_TOWN_LESSON_REGISTRY: Record<string, { scenes: Scene[]; title: string }> = {
   'wt-rich-1-1': { scenes: LESSON_1_SCENES, title: LESSON_1_TITLE },
   'wt-rich-1-2': { scenes: LESSON_2_SCENES, title: LESSON_2_TITLE },
+  'wt-rich-1-3': { scenes: LESSON_3_SCENES, title: LESSON_3_TITLE },
   'wt-a2-rich-1-1': { scenes: LESSON_A2U1L1_SCENES, title: LESSON_A2U1L1_TITLE },
   'wt-a2-rich-1-2': { scenes: LESSON_A2U1L2_SCENES, title: LESSON_A2U1L2_TITLE },
   'wt-a2-rich-1-3': { scenes: LESSON_A2U1L3_SCENES, title: LESSON_A2U1L3_TITLE },

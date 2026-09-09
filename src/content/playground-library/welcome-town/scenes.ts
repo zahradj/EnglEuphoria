@@ -650,3 +650,192 @@ export const LESSON_2_SCENES: Scene[] = [
 
   { id: 'wt2-finale', kind: 'finale', bg: bgWide, who: 'pip', line: 'You said how you feel, and read three more real words — SIT, PIN, and PIP! ✨\u{1F3C6}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 1, Lesson 3: "Listen & Greet!"
+ *
+ * Per this project's own seeded curriculum blueprint (queried directly from
+ * curriculum_lessons before writing a single scene, per generate-lesson's
+ * §3/§4): title "Listen & Greet!", objective "Students will be able to
+ * identify greetings and introductions in short audio." Sits between
+ * Lesson 2 (the second vocab+phonics double lesson) and Lesson 4 "Speak &
+ * Meet!" (the seeded blueprint's own productive counterpart) — so this
+ * lesson stays deliberately receptive: no new vocabulary, no new phonics,
+ * no new art (per Gate D — every bg below is reused verbatim from Lessons
+ * 1-2's own already-verified assets). It's a listening-comprehension
+ * consolidation of everything taught so far (hello/name/age, feelings,
+ * friend/teacher, classroom + school vocabulary), not a re-teach: every
+ * `choice` prompt below is an in-character short line to LISTEN to and
+ * identify — not a "which word means X" vocabulary drill — matching the
+ * blueprint's own "identify... in short audio" framing. Production stays
+ * light (one small join-stage) since Lesson 4 owns the real speaking
+ * practice for this same content.
+ * ========================================================================= */
+
+export const LESSON_3_TITLE = 'Listen & Greet!';
+export const LESSON_3_OBJECTIVE = 'Listen carefully to short greetings and introductions from Welcome Town School and show you understand — a listening review of everything from Lessons 1 and 2, no new words.';
+
+export const LESSON_3_SCENES: Scene[] = [
+  { id: 'wt3-title', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 3', title: 'Listen & Greet!', subtitle: 'Put on your listening ears!', cta: '👂 LET’S LISTEN!' },
+
+  {
+    id: 'wt3-intro', kind: 'cinematic', bg: bgCircle, title: 'Listening Time!', subtitle: 'Miss Marigold has a game for the class', narrator: 'marigold',
+    script: [
+      { who: 'marigold', line: 'Welcome back, class! Today we play a listening game.' },
+      { who: 'marigold', line: 'Listen carefully to each friend, then choose the right answer!' },
+      { who: 'pip', line: 'I love listening games! Let’s go!' },
+    ],
+    cta: '👂 LET’S LISTEN!',
+  },
+
+  // Round 1-3: greeting / name / age -- the exact three beats wt-roleplay
+  // modeled together in Lesson 1, now split apart and tested one at a time
+  // as pure listening identification.
+  {
+    id: 'wt3-choice-hello', kind: 'choice', bg: bgCircle, who: 'marigold', teacher: 'Listen carefully, then tap what Miss Marigold is doing!',
+    prompt: 'Hello! Welcome to our class!',
+    options: [
+      { label: 'Saying hello', emoji: '👋', correct: true },
+      { label: 'Saying goodbye', emoji: '👋' },
+      { label: 'Asking a question', emoji: '❓' },
+    ],
+  },
+  {
+    id: 'wt3-choice-name', kind: 'choice', bg: bgDoor, who: 'pip', teacher: 'Listen carefully, then tap what Pip is telling you!',
+    prompt: 'My name is Pip.',
+    options: [
+      { label: 'His name', emoji: '🏷️', correct: true },
+      { label: 'His age', emoji: '🎂' },
+      { label: 'How he feels', emoji: '😊' },
+    ],
+  },
+  {
+    id: 'wt3-choice-age', kind: 'choice', bg: bgDoor, who: 'pip', teacher: 'Listen carefully, then tap what Pip is telling you now!',
+    prompt: 'I am seven years old.',
+    options: [
+      { label: 'His age', emoji: '🎂', correct: true },
+      { label: 'His name', emoji: '🏷️' },
+      { label: 'Goodbye', emoji: '👋' },
+    ],
+  },
+
+  // Revives hello-doors — declared in the Scene union with a working
+  // renderer but not actually used by any shipped lesson yet (Lesson 1's
+  // own cubby-guessing round using this exact mechanic was replaced with
+  // real vocabulary per direct user request earlier this project) — a
+  // genuine fit here since this lesson's whole point is listen-for-the-
+  // name-then-respond, not carrying vocabulary content of its own.
+  {
+    id: 'wt3-hello-doors', kind: 'hello-doors', bg: bgDoor, teacher: 'Knock knock! Listen for the name, then tap the right door!', cast: ['mia', 'leo', 'bella', 'willow'],
+    rounds: [
+      { target: 'mia', prompt: 'Knock knock! Who is it?', helloLine: 'Hello! My name is Mia.', echoLine: 'Hello, Mia!' },
+      { target: 'leo', prompt: 'Knock again! Who is it?', helloLine: 'Hello! My name is Leo.', echoLine: 'Hello, Leo!' },
+      { target: 'bella', prompt: 'One more! Who is it?', helloLine: 'Hello! My name is Bella.', echoLine: 'Hello, Bella!' },
+      { target: 'willow', prompt: 'Last one! Who is it?', helloLine: 'Hello! My name is Willow.', echoLine: 'Hello, Willow!' },
+    ],
+  },
+
+  // Feelings listening review (Lesson 2 content).
+  {
+    id: 'wt3-choice-sad', kind: 'choice', bg: bgFeelings, who: 'mia', teacher: 'Listen carefully, then tap how Mia feels!',
+    prompt: 'I am sad today.',
+    options: [
+      { label: 'Sad', emoji: '😢', correct: true },
+      { label: 'Happy', emoji: '😊' },
+      { label: 'Hungry', emoji: '🤤' },
+    ],
+  },
+  {
+    id: 'wt3-choice-tired', kind: 'choice', bg: bgFeelings, who: 'leo', teacher: 'Listen carefully, then tap how Leo feels!',
+    prompt: 'I am so tired.',
+    options: [
+      { label: 'Tired', emoji: '😪', correct: true },
+      { label: 'Angry', emoji: '😠' },
+      { label: 'Happy', emoji: '😊' },
+    ],
+  },
+
+  // Friend / Teacher listening review (Lesson 1 content).
+  {
+    id: 'wt3-choice-friend', kind: 'choice', bg: bgExpressFriend, who: 'mia', teacher: 'Listen carefully, then tap the right word!',
+    prompt: 'Bella is my friend!',
+    options: [
+      { label: 'Friend', emoji: '🤝', correct: true },
+      { label: 'Teacher', emoji: '🧑‍🏫' },
+      { label: 'Name', emoji: '🏷️' },
+    ],
+  },
+  {
+    id: 'wt3-choice-teacher', kind: 'choice', bg: bgPeople, who: 'marigold', teacher: 'Listen carefully, then tap the right word!',
+    prompt: 'I am your teacher.',
+    options: [
+      { label: 'Teacher', emoji: '🦉', correct: true },
+      { label: 'Student', emoji: '🦊' },
+      { label: 'Friend', emoji: '🤝' },
+    ],
+  },
+
+  // Classroom + school vocabulary listening review (Lesson 1 content).
+  {
+    id: 'wt3-choice-board', kind: 'choice', bg: bgFixtures, who: 'marigold', teacher: 'Listen carefully, then tap the right thing in the room!',
+    prompt: 'Look at the board!',
+    options: [
+      { label: 'Board', emoji: '📋', correct: true },
+      { label: 'Door', emoji: '🚪' },
+      { label: 'Window', emoji: '🪟' },
+    ],
+  },
+  {
+    id: 'wt3-choice-backpack', kind: 'choice', bg: bgSupplies, who: 'pip', teacher: 'Listen carefully, then tap the right thing!',
+    prompt: 'This is my backpack!',
+    options: [
+      { label: 'Backpack', emoji: '🎒', correct: true },
+      { label: 'Desk', emoji: '🍎' },
+      { label: 'Chair', emoji: '🪑' },
+    ],
+  },
+
+  // Cumulative listening-review memory match — every word tested above.
+  {
+    id: 'wt3-memory', kind: 'memory', bg: bgCircle, teacher: 'Match the matching pairs! Everything we listened to today.',
+    pairs: [
+      { id: 'hello', label: 'Hello', emoji: '👋' },
+      { id: 'name', label: 'Name', emoji: '🏷️' },
+      { id: 'age', label: 'Age', emoji: '🎂' },
+      { id: 'happy', label: 'Happy', emoji: '😊' },
+      { id: 'friend', label: 'Friend', emoji: '🤝' },
+      { id: 'teacher', label: 'Teacher', emoji: '🦉' },
+    ],
+  },
+
+  // One light production capstone (Gate A bias, not a hard gate) -- kept
+  // small since Lesson 4 "Speak & Meet!" owns the real speaking practice
+  // for this exact content.
+  {
+    id: 'wt3-join-stage', kind: 'join-stage', bg: bgCircle, teacher: 'Your turn! Listen, then say hello back!', cast: ['marigold', 'pip'],
+    turns: [
+      { who: 'marigold', line: 'Hello! What is your name?' },
+      { who: 'student', line: 'Hello! My name is ______.' },
+      { who: 'pip', line: 'Great listening today!' },
+    ],
+  },
+
+  {
+    id: 'wt3-class-puzzle', kind: 'jigsaw-puzzle', bg: bgWide, teacher: 'Great listening! Drag the pieces to reveal the class picture!',
+    image: bgWide, rows: 2, cols: 3,
+  },
+
+  {
+    id: 'wt3-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '🎵 Welcome Town School Goodbye Song 🎵', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    durationSeconds: 20, bigWord: 'Goodbye',
+    songUrl: `${W}/audio/goodbye-song.mp3`,
+    lyrics: [
+      { who: 'marigold', text: '👋 Goodbye, goodbye, my new friend' },
+      { who: 'pip', text: '👋 Goodbye, goodbye, see you again' },
+      { who: 'marigold', text: '🏫 Welcome Town School is happy today' },
+      { who: 'pip', text: '💖 Byeeee, friends! See you soon!' },
+    ],
+  },
+
+  { id: 'wt3-finale', kind: 'finale', bg: bgWide, who: 'pip', line: 'You listened carefully to hello, names, ages, feelings, friends, and your teacher — great job! ✨👂' },
+];
