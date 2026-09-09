@@ -417,6 +417,25 @@ reaching for before hand-rolling something similar:
 > photographic. No text/letters/numbers baked into any artwork — all
 > language is rendered by the UI on top.
 
+**Character proportions — chibi/toddler, not "cute child."** Confirmed by
+direct user report and a real side-by-side comparison (`bg-hello-cast.jpg`
+vs. A1 Welcome Town's `bg-classroom-*` assets generated this session): A1
+characters generated under this contract's condensed wording alone came
+out with normal child-like body proportions, more detailed fur/feather
+texture, and more articulated eyebrows — reading distinctly *older* than
+Pre-A1's actual established look. The condensed wording above never said
+the proportions explicitly, so they drifted. Every character, in every
+tier, must keep Pre-A1's exaggerated **chibi ratio**: an oversized round
+head roughly 50-60% of total body height, a tiny stubby body, short
+stubby limbs, huge simple round eyes with minimal linework detail (no
+individually-rendered fur strands or feather barbs — flat shapes read as
+"fur/feathers" via color and a few thick outline strokes, not texture).
+State this explicitly in every character-generation prompt going forward
+— don't rely on "Kawaii Comic Cartoon" alone to imply it, since it
+evidently doesn't reliably produce it. If a generated image's characters
+read as more mature/detailed than `bg-hello-cast.jpg`'s Pip, regenerate
+with the ratio spelled out rather than shipping it.
+
 - **Color tokens:** Playground orange `#FE6A2F`, cream `#FEFBDD`, Mia
   purple `#B85CD1`, Bella pink `#E76FA5`, Willow blue `#4FA9E0`, Leo amber
   `#C97A2F`, foliage green `#5FA85A`→`#2F6B39`, outline brown `#2B1E17`.
@@ -794,6 +813,17 @@ a new tier above Pre-A1) surfaced learnings not covered above:
   of tries and isn't worth more attempts, it's usually still usable as-is:
   `background-size: cover` on a wide player frame crops a thin uniform
   margin away in practice even though the raw generated file still shows it.
+- **A1 Welcome Town's characters drifted older-looking than Pre-A1's
+  across an entire session of `bg-classroom-*` generations** (flagged by
+  direct user report, confirmed by opening `bg-hello-cast.jpg` next to
+  the new assets) — every one of those prompts said "Kawaii Comic Cartoon"
+  but never spelled out the chibi head-to-body ratio, so the model
+  defaulted to more normally-proportioned, more detailed characters. See
+  §11's now-expanded proportions paragraph — added *after* this incident,
+  not before, so any A1/A2 art generated earlier in this project may still
+  need a pass against it. Decision made at the time: fix the contract for
+  future art only, leave the already-shipped Lessons 1-4 backgrounds as
+  they are unless/until asked to redo them specifically.
 
 ## 16. The canonical curriculum map (source of truth for scope + objectives)
 
