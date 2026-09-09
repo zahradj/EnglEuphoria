@@ -86,6 +86,10 @@ const bgExpressHello = `${W}/scenes/bg-express-hello.png`;
 const bgExpressGoodbye = `${W}/scenes/bg-express-goodbye.png`;
 const bgExpressFriend = `${W}/scenes/bg-express-friend.png`;
 const bgFeelings = `${W}/scenes/bg-classroom-feelings.png`;
+const bgPrepIn = `${W}/scenes/bg-prep-in.png`;
+const bgPrepOn = `${W}/scenes/bg-prep-on.png`;
+const bgPrepNextTo = `${W}/scenes/bg-prep-next-to.png`;
+const bgSupplies2 = `${W}/scenes/bg-classroom-supplies2.png`;
 
 export type Scene =
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string; cta?: string }
@@ -284,14 +288,18 @@ export const LESSON_1_SCENES: Scene[] = [
     // Per direct user request: replaced the old cubby-guessing game here
     // (no real vocabulary content -- Mia and Leo are already introduced
     // by name in wt-roleplay/wt-join-stage above) with real school/
-    // classroom vocabulary: Desk, Chair, Backpack -- distinct from
+    // classroom vocabulary: Desk, Chair, Bag -- distinct from
     // wt-vocab-room's Door/Board/Window, same 2-3-hotspot pattern.
+    // Per direct user request, renamed from "Backpack" to the simpler
+    // "Bag" project-wide (this scene's own art still shows a backpack --
+    // a backpack IS a bag, so the simpler word is still an accurate label
+    // for the same object, not a mismatch with the art).
     id: 'wt-vocab-supplies', kind: 'vocab-spot', bg: bgSupplies,
     teacher: 'A new part of the room! Tap the arrow to learn a school word.',
     items: [
       { label: 'Desk', sentence: 'This is my desk.', emoji: '\u{1F34E}', left: '20%', top: '58%', color: '#F59E0B' },
       { label: 'Chair', sentence: 'This is my chair.', emoji: '\u{1FA91}', left: '55%', top: '62%', color: '#22C55E' },
-      { label: 'Backpack', sentence: 'This is my backpack.', emoji: '\u{1F392}', left: '85%', top: '62%', color: '#16A34A' },
+      { label: 'Bag', sentence: 'This is my bag.', emoji: '\u{1F392}', left: '85%', top: '62%', color: '#16A34A' },
     ],
   },
   {
@@ -304,7 +312,7 @@ export const LESSON_1_SCENES: Scene[] = [
     items: [
       { label: 'Desk', color: '#F59E0B', targetLeft: '20%', targetTop: '58%' },
       { label: 'Chair', color: '#22C55E', targetLeft: '55%', targetTop: '62%' },
-      { label: 'Backpack', color: '#16A34A', targetLeft: '85%', targetTop: '62%' },
+      { label: 'Bag', color: '#16A34A', targetLeft: '85%', targetTop: '62%' },
     ],
   },
 
@@ -453,7 +461,7 @@ export const LESSON_1_SCENES: Scene[] = [
  * ========================================================================= */
 
 export const LESSON_2_TITLE = 'How Are You?';
-export const LESSON_2_OBJECTIVE = 'Part 1: Ask and answer "How are you?", name a feeling (happy, sad, tired, angry, hungry), and use He, She and They to say how a friend feels. Part 2: Learn the sounds P, I, N and read three more real words.';
+export const LESSON_2_OBJECTIVE = 'Part 1: Ask and answer "How are you?", name a feeling (happy, sad, tired, angry, hungry), and use He, She and They to say how a friend feels — plus three new school-supplies words (book, pencil, pen) and a first listen at classroom-description language ("There is...", "next to", "on"), heard and repeated once, not yet formally taught. Part 2: Learn the sounds P, I, N and read three more real words.';
 
 export const LESSON_2_SCENES: Scene[] = [
   { id: 'wt2-title', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'How Are You?', subtitle: 'Say hello, then share how you feel today', cta: '\u{1F392} LET’S GO!' },
@@ -651,9 +659,76 @@ export const LESSON_2_SCENES: Scene[] = [
       { letter: 'N', choices: ['N', 'M', 'H'] },
     ],
   },
+  // Per direct user request: a revision of Lesson 1's classroom vocabulary
+  // (desk/chair/bag already taught there) plus new school-supplies words —
+  // book, pencil, pen (3 items, per this file's own established "2-3
+  // hotspots per scene" cognitive-load rule, not the 5+ a single crammed
+  // scene would need to cover everything at once). Same dedicated-image,
+  // Discovery → Practice pattern every other vocab-spot/drag-match pair in
+  // this file already uses. Placed before the preposition scenes below so
+  // "book" is already-known vocabulary by the time "The book is IN the
+  // bag" plays, not a brand-new word inside a grammar-focused sentence.
+  {
+    id: 'wt2-vocab-supplies2', kind: 'vocab-spot', bg: bgSupplies2,
+    teacher: 'Remember desk and chair? Now learn three new school words!',
+    items: [
+      { label: 'Book', sentence: 'This is my book.', emoji: '\u{1F4D6}', left: '39%', top: '58%', color: '#2563EB' },
+      { label: 'Pencil', sentence: 'This is my pencil.', emoji: '\u{270F}\u{FE0F}', left: '53%', top: '58%', color: '#F59E0B' },
+      { label: 'Pen', sentence: 'This is my pen.', emoji: '\u{1F58A}\u{FE0F}', left: '61%', top: '55%', color: '#0EA5E9' },
+    ],
+  },
+  {
+    id: 'wt2-drag-supplies2', kind: 'drag-match', bg: bgSupplies2, teacher: 'Listen, then drag each word onto the matching thing on the desk!',
+    items: [
+      { label: 'Book', color: '#2563EB', targetLeft: '39%', targetTop: '58%' },
+      { label: 'Pencil', color: '#F59E0B', targetLeft: '53%', targetTop: '58%' },
+      { label: 'Pen', color: '#0EA5E9', targetLeft: '61%', targetTop: '55%' },
+    ],
+  },
   {
     id: 'wt2-class-puzzle', kind: 'jigsaw-puzzle', bg: bgFeelings, teacher: 'Puzzle game! Drag the pieces to put the picture back together!',
     image: bgFeelings, rows: 2, cols: 3,
+  },
+
+  // Per direct user request to make the unit feel more progressive/
+  // cumulative toward real production by its end -- checked against the
+  // full A1 roadmap (all 10 units) via playground-curriculum-engine first,
+  // not just guessed. Finding: "There is/There are" is already Unit 3's
+  // own core grammar target (reinforced across 4 of its 7 lessons, paired
+  // meaningfully with counting) and "in/on/next to" isn't seeded anywhere
+  // in the roadmap yet -- formally teaching either here would either waste
+  // Unit 3's teaching moment or introduce an orphan structure nothing
+  // later reinforces. So: a light, chunk-level exposure only (hear it,
+  // repeat it once -- no drilling, no quiz, nothing assessed) -- not a
+  // new taught/assessed grammar target. The real compounding capstone
+  // (light, non-formal PRODUCTION of this same pattern, layered onto
+  // everything Unit 1 has taught) is planned for Lesson 6/7 once built;
+  // formal teaching of both structures still belongs to Unit 3 and a
+  // future unit respectively.
+  //
+  // Per direct follow-up correction: an earlier draft crammed "in", "on",
+  // AND "next to" into a single narrated scene sharing one background --
+  // too much at once with nothing to anchor each preposition individually.
+  // Now confirmed as a standing project-wide rule (see smart-lesson-
+  // architect's Vocabulary logic, extended to grammar chunks): one new
+  // concept per scene, each with its own dedicated, purpose-built image
+  // that makes that one concept visually unambiguous -- the same
+  // single-concept-per-scene discipline every other `meet`/`vocab-spot`
+  // scene in this file already follows.
+  {
+    id: 'wt2-prep-in', kind: 'meet', bg: bgPrepIn, who: 'pip',
+    teacher: 'Tap Pip to hear a new word!',
+    line: 'Look! The book is IN the bag.', repeat: 'In the bag!',
+  },
+  {
+    id: 'wt2-prep-on', kind: 'meet', bg: bgPrepOn, who: 'mia',
+    teacher: 'Tap Mia to hear a new word!',
+    line: 'Look! The apple is ON the desk.', repeat: 'On the desk!',
+  },
+  {
+    id: 'wt2-prep-next-to', kind: 'meet', bg: bgPrepNextTo, who: 'leo',
+    teacher: 'Tap Leo to hear a new word!',
+    line: 'Look! The chair is NEXT TO the desk.', repeat: 'Next to the desk!',
   },
 
   {
@@ -832,8 +907,8 @@ export const LESSON_3_SCENES: Scene[] = [
     id: 'wt3-true-false', kind: 'true-false', bg: bgSupplies, teacher: 'Listen to each sentence. Is it TRUE or FALSE?',
     rounds: [
       { who: 'marigold', statement: 'This is called a board.', isTrue: true },
-      { who: 'marigold', statement: 'A backpack is a chair.', isTrue: false },
-      { who: 'pip', statement: 'I carry my books in my backpack.', isTrue: true },
+      { who: 'marigold', statement: 'A bag is a chair.', isTrue: false },
+      { who: 'pip', statement: 'I carry my books in my bag.', isTrue: true },
       { who: 'pip', statement: 'I sleep in my chair.', isTrue: false },
     ],
   },

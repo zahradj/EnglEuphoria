@@ -396,6 +396,19 @@ For new vocabulary:
 7. combine old + new
 8. use the vocabulary in a meaningful task
 
+**This applies to grammar/functional chunks exactly as much as single
+words — confirmed as a standing project-wide rule, not a one-off.** A
+scene that narrates "There is a backpack, it is next to the chair, there
+is an apple, it is on the desk" in one breath is the grammar-chunk
+equivalent of dumping five vocabulary cards onto one screen: too much at
+once, nothing for the learner to anchor any single piece to. Each new
+chunk (each preposition, each new sentence pattern) gets its OWN scene
+with its OWN dedicated, purpose-built image that makes that one concept
+visually unambiguous — never a shared background doing double or triple
+duty for multiple concepts in a single narrated pass. This is the same
+single-concept-per-scene discipline `meet`/`vocab-spot` scenes already use
+for single words, just applied one level up to a spoken pattern.
+
 Keep new content controlled and recycle previously learned content through spaced retrieval.
 
 ---
