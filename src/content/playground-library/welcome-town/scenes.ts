@@ -875,3 +875,196 @@ export const LESSON_3_SCENES: Scene[] = [
 
   { id: 'wt3-finale', kind: 'finale', bg: bgWide, who: 'pip', line: 'You listened carefully to hello, names, ages, feelings, friends, and your teacher — great job! ✨👂' },
 ];
+
+/* =============================================================================
+ * A1 Unit 1, Lesson 4: "Speak & Meet!"
+ *
+ * Per this project's own seeded curriculum blueprint (queried directly from
+ * curriculum_lessons before writing a single scene, per generate-lesson's
+ * §3/§4): title "Speak & Meet!", objective "Students will be able to greet
+ * and introduce themselves to a partner," skill_focus "Speaking",
+ * communication_goal "Have a simple greeting conversation," phonics_focus
+ * "/f/ (friend)". This is the productive counterpart Lesson 3 explicitly
+ * deferred to — Lesson 3 stayed receptive-only; this lesson is where all of
+ * it (hello, name, how-are-you, friend/teacher) finally gets said out loud
+ * in one real back-and-forth, not drilled as isolated vocabulary again.
+ * Per playground-curriculum-engine's progressive-combination rule, this
+ * lesson's roleplay/join-stage scenes deliberately COMBINE Lesson 1's
+ * hello+name and Lesson 2's how-are-you into a single conversation, and add
+ * one genuinely new grammar move on top: introducing a THIRD person
+ * ("This is my friend, ___") rather than only ever talking about yourself
+ * — sourced from real ESL classroom practice (a partner-interview-then-
+ * introduce technique, see sources below), and a natural fit since
+ * "friend" is already-known vocabulary from Lesson 1 that this lesson's
+ * own phonics slot (/f/) is already anchored to.
+ *
+ * Two scene kinds get real use here for the first time in the Welcome Town
+ * family: `echo` (declared in the Scene union with a working renderer,
+ * never actually used by a shipped lesson — a genuine fit for this
+ * lesson's quick single-word "hold and say it" speaking reps, a different
+ * rhythm from `meet`'s longer modeled monologue) and the shared goodbye
+ * song / storybook conventions stay exactly as established, EXCEPT no
+ * flipbook here — the blueprint's own Lesson 5 ("Storybook: New Friends at
+ * the Park") is the unit's dedicated storybook slot; adding one here too
+ * would step on that lesson's own reason to exist.
+ *
+ * Web research consulted before designing the speaking activities (per
+ * standing direction to research fresh mechanics rather than default to
+ * the same shape every lesson):
+ *   https://www.teach-this.com/functional-language/introductions
+ *   https://games4esl.com/greetings-and-introductions-esl-games/
+ * Continues the phonics-through-reading track from Lesson 2's P/I/N with
+ * one new sound, F — the blueprint's own phonics_focus for this slot —
+ * landing on a small delightful capstone: Pip himself is a fox, so
+ * "F is for Fox" doubles as a callback to the lesson's own mascot, the
+ * same trick Lesson 2's "read PIP" capstone used.
+ * ========================================================================= */
+
+export const LESSON_4_TITLE = 'Speak & Meet!';
+export const LESSON_4_OBJECTIVE = 'Part 1: Greet a partner and introduce yourself AND a friend, combining everything from Lessons 1-3 into one real conversation. Part 2: Learn the sound F and read three more real words.';
+
+export const LESSON_4_SCENES: Scene[] = [
+  { id: 'wt4-title', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 4', title: 'Speak & Meet!', subtitle: 'Say hello and meet a new friend!', cta: '🗣️ LET’S TALK!' },
+
+  {
+    id: 'wt4-intro', kind: 'cinematic', bg: bgCircle, title: 'Time to Talk!', subtitle: 'Today you have a real conversation', narrator: 'marigold',
+    script: [
+      { who: 'marigold', line: 'Welcome back, class! Today we practice something new.' },
+      { who: 'marigold', line: 'You will meet a partner and have a real conversation!' },
+      { who: 'pip', line: 'I love talking to my friends! Let’s go!' },
+    ],
+    cta: '🗣️ LET’S TALK!',
+  },
+
+  {
+    id: 'wt4-meet-model', kind: 'meet', bg: bgExpressHello, who: 'marigold',
+    teacher: 'Tap Miss Marigold to hear a full greeting!',
+    line: 'Watch me! Hello! My name is Miss Marigold. Nice to meet you!', repeat: 'Nice to meet you!',
+  },
+  {
+    // First real use of `echo` in the Welcome Town family — see the file
+    // banner above. A quick single-word speaking rep, deliberately shorter
+    // than `meet`'s full modeled line, right after that longer model.
+    id: 'wt4-echo-hello', kind: 'echo', bg: bgExpressHello, who: 'pip', teacher: 'Now you try! Hold the button and say it with Pip!', word: 'Hello!',
+  },
+
+  {
+    // Combines Lesson 1's hello+name and Lesson 2's how-are-you into ONE
+    // conversation (progressive combination, not a re-teach of either).
+    id: 'wt4-roleplay', kind: 'roleplay', bg: bgCircle, teacher: 'A real conversation! Listen to Pip and Leo, then repeat each line.', cast: ['pip', 'leo'],
+    script: [
+      { who: 'pip', line: 'Hello! My name is Pip.', repeat: true },
+      { who: 'leo', line: 'Hi Pip! My name is Leo.', repeat: true },
+      { who: 'pip', line: 'Nice to meet you, Leo!', repeat: true },
+      { who: 'leo', line: 'Nice to meet you too! How are you today?', repeat: true },
+      { who: 'pip', line: 'I am happy! How are you?', repeat: true },
+      { who: 'leo', line: 'I am fine, thank you!' },
+    ],
+  },
+  {
+    id: 'wt4-echo-friend', kind: 'echo', bg: bgExpressFriend, who: 'mia', teacher: 'Say it with Mia! Hold and say it!', word: 'Friend!',
+  },
+
+  {
+    // Produce, same combined pattern the roleplay above just modeled.
+    id: 'wt4-join-stage-intro', kind: 'join-stage', bg: bgCircle, teacher: 'Your turn! Say hello, your name, and how you feel!', cast: ['marigold', 'leo'],
+    turns: [
+      { who: 'marigold', line: 'Hello! What is your name?' },
+      { who: 'student', line: 'Hello! My name is ______.' },
+      { who: 'leo', line: 'Nice to meet you! How are you?' },
+      { who: 'student', line: 'I am ______. Nice to meet you too!' },
+      { who: 'marigold', line: 'Wonderful! You had a real conversation!' },
+    ],
+  },
+  {
+    // The lesson's one genuinely new grammar move: introducing someone
+    // ELSE ("This is my friend, ___"), not only yourself — see the file
+    // banner's note on the partner-interview-then-introduce technique.
+    id: 'wt4-join-stage-partner', kind: 'join-stage', bg: bgCircle, teacher: 'Now introduce a FRIEND! Point to someone and say their name!', cast: ['pip', 'bella'],
+    turns: [
+      { who: 'pip', line: 'This is my friend, Bella!' },
+      { who: 'student', line: 'Hello, Bella! Nice to meet you!' },
+      { who: 'bella', line: 'Hello! Nice to meet you too!' },
+      { who: 'pip', line: 'Now you try! Point to a friend and introduce them!' },
+      { who: 'student', line: 'This is my friend, ______!' },
+    ],
+  },
+
+  {
+    id: 'wt4-memory', kind: 'memory', bg: bgCircle, teacher: 'Match the matching pairs! Everything you said today.',
+    pairs: [
+      { id: 'hello', label: 'Hello', emoji: '👋' },
+      { id: 'goodbye', label: 'Goodbye', emoji: '👋' },
+      { id: 'name', label: 'Name', emoji: '🏷️' },
+      { id: 'friend', label: 'Friend', emoji: '🤝' },
+      { id: 'nice', label: 'Nice to meet you', emoji: '🤗' },
+    ],
+  },
+
+  {
+    id: 'wt4-break', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Break Time', title: 'Great Job!', subtitle: 'Stretch, get some water, then come back for Part 2!', cta: '🤸 I’m Ready!',
+  },
+
+  /* =========================== Part 2: Reading ===========================
+   * Continues straight from Lesson 2's P/I/N — one new sound, F, per the
+   * blueprint's own phonics_focus for this slot. */
+
+  { id: 'wt4-part2-title', kind: 'title-card', bg: bgReading, level: 'A1', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time!', subtitle: 'One new sound — /f/ — then read real words!', cta: '📖 LET’S READ!' },
+
+  {
+    id: 'wt4-model-f', kind: 'sound-model', bg: bgReading, who: 'pip', letter: 'F', phoneme: '/f/', sound: 'fff',
+    teacher: 'A brand-new sound! /f/ /f/ Fox! Just like me!',
+    anchors: [
+      { word: 'fan', emoji: '🪭' },
+      { word: 'fish', emoji: '🐟' },
+      { word: 'fox', emoji: '🦊' },
+    ],
+  },
+  { id: 'wt4-trace-f', kind: 'trace', bg: bgReading, who: 'pip', letter: 'F', phoneme: '/f/', word: 'fox', teacher: 'Trace the letter F! Say /f/ /f/ /f/ as you draw.' },
+
+  {
+    id: 'wt4-word-build', kind: 'word-build', bg: bgReading, teacher: 'You know a new sound! Now read three more real words!',
+    rounds: [
+      { word: 'FAN', blankIndex: 0, answer: 'F', choices: ['F', 'S', 'P'], emoji: '🪭' },
+      { word: 'FIN', blankIndex: 0, answer: 'F', choices: ['F', 'P', 'T'], emoji: '🐟' },
+      { word: 'SIP', blankIndex: 0, answer: 'S', choices: ['S', 'F', 'P'], emoji: '🥤' },
+    ],
+  },
+
+  {
+    id: 'wt4-letter-hunt', kind: 'letter-game', bg: bgReading, who: 'marigold', mode: 'name',
+    teacher: 'Alphabet game! Find the letter I say.',
+    rounds: [
+      { letter: 'F', choices: ['F', 'P', 'T'] },
+      { letter: 'A', choices: ['A', 'O', 'E'] },
+      { letter: 'N', choices: ['N', 'M', 'H'] },
+    ],
+  },
+  {
+    id: 'wt4-sound-hunt', kind: 'letter-game', bg: bgReading, who: 'pip', mode: 'sound',
+    teacher: 'Sound game! Listen, then tap the letter that makes that sound.',
+    rounds: [
+      { letter: 'F', phoneme: '/f/', choices: ['F', 'S', 'P'] },
+      { letter: 'A', phoneme: '/æ/', choices: ['A', 'I', 'O'] },
+      { letter: 'N', phoneme: '/n/', choices: ['N', 'M', 'D'] },
+    ],
+  },
+  {
+    id: 'wt4-class-puzzle', kind: 'jigsaw-puzzle', bg: bgWide, teacher: 'Puzzle game! Drag the pieces to put the class picture back together!',
+    image: bgWide, rows: 2, cols: 3,
+  },
+
+  {
+    id: 'wt4-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '🎵 Welcome Town School Goodbye Song 🎵', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    durationSeconds: 20, bigWord: 'Goodbye',
+    songUrl: `${W}/audio/goodbye-song.mp3`,
+    lyrics: [
+      { who: 'marigold', text: '👋 Goodbye, goodbye, my new friend' },
+      { who: 'pip', text: '👋 Goodbye, goodbye, see you again' },
+      { who: 'marigold', text: '🏫 Welcome Town School is happy today' },
+      { who: 'pip', text: '💖 Byeeee, friends! See you soon!' },
+    ],
+  },
+
+  { id: 'wt4-finale', kind: 'finale', bg: bgWide, who: 'pip', line: 'You met a partner, had a real conversation, and learned a new sound — F is for friend, and F is for Fox, just like me! ✨🗣️' },
+];
