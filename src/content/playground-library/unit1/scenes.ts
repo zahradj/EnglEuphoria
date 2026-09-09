@@ -607,7 +607,14 @@ const bgNameCarnivalNest = `${A}/scenes/bg-name-carnival-nest.jpg`;
 const bgNameMicStage = `${A}/scenes/bg-name-mic-stage.jpg`;
 const bgNameCarnivalStage = `${A}/scenes/bg-name-carnival-stage.jpg`;
 const bgNameCarnivalSky = `${A}/scenes/bg-name-carnival-sky.jpg`;
-const bgWillowMeadow = `${A}/scenes/bg-willow-meadow.jpg`;
+// v2: the original bg-willow-meadow.jpg was pure empty garden scenery with
+// no characters at all -- broken for its actual uses (l2-roleplay-meet-
+// willow's 4-character cast script, and l2-finale's "You met Willow!" line)
+// since RoleplayScene positions speech bubbles assuming the characters are
+// actually painted into the background at those relative positions. v2
+// repaints the same meadow/garden with Pip, Mia, Bella and Willow spread
+// left-to-right, matching RoleplayScene's own anchor percentages.
+const bgWillowMeadow = `${A}/scenes/bg-willow-meadow-v2.png`;
 
 const itemWhat = `${A}/items/item-what.png`;
 const itemWater = `${A}/items/item-water.png`;
