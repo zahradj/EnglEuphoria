@@ -1196,7 +1196,13 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
   // bg-classroom-circle paints Pip and Miss Marigold facing each other on
   // the rug (left/right), with the other classmates gathered behind them —
   // only the two dialogue leads need a precise bubble anchor.
-  const bubbleLeft: Record<CharKey, string> = { pip: '22%', marigold: '78%', mia: '50%', bella: '50%', willow: '50%', leo: '50%' };
+  // bg-classroom-peers paints Pip and Leo facing each other left/right
+  // (added for Lesson 4's peer-to-peer roleplay per lesson-quality-gate's
+  // Semantic pass — bg-classroom-circle never actually painted Leo).
+  // mia/bella/willow still default to center — no roleplay scene uses them
+  // as a speaker on a background that doesn't paint them yet; fix the same
+  // way (a dedicated bg + a real anchor here) before ever doing so.
+  const bubbleLeft: Record<CharKey, string> = { pip: '22%', marigold: '78%', mia: '50%', bella: '50%', willow: '50%', leo: '78%' };
   const current = step >= 0 && step < scene.script.length ? scene.script[step] : null;
   const replayCurrent = () => { if (current) void safeSpeak(current.line, voiceOf(current.who)); };
 

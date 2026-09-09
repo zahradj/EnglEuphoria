@@ -90,6 +90,7 @@ const bgPrepIn = `${W}/scenes/bg-prep-in.png`;
 const bgPrepOn = `${W}/scenes/bg-prep-on.png`;
 const bgPrepNextTo = `${W}/scenes/bg-prep-next-to.png`;
 const bgSupplies2 = `${W}/scenes/bg-classroom-supplies2.png`;
+const bgPeers = `${W}/scenes/bg-classroom-peers.png`;
 
 export type Scene =
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string; cta?: string }
@@ -1033,7 +1034,17 @@ export const LESSON_4_SCENES: Scene[] = [
   {
     // Combines Lesson 1's hello+name and Lesson 2's how-are-you into ONE
     // conversation (progressive combination, not a re-teach of either).
-    id: 'wt4-roleplay', kind: 'roleplay', bg: bgCircle, teacher: 'A real conversation! Listen to Pip and Leo, then repeat each line.', cast: ['pip', 'leo'],
+    // Per lesson-quality-gate's Semantic pass: bg-classroom-circle.png (used
+    // by every other roleplay/join-stage scene in this file) only paints
+    // Pip and Miss Marigold -- RoleplayScene's bubbleLeft anchor map has a
+    // real position for those two specifically and silently defaults
+    // everyone else to dead-center, so Leo speaking on that background
+    // would float a speech bubble over empty space with no character
+    // there. Fixed with a dedicated new asset (bg-classroom-peers.png,
+    // Pip left / Leo right, facing each other) instead of reusing
+    // bg-classroom-circle -- see the matching `leo` anchor added to
+    // RoleplayScene's bubbleLeft map in SceneRenderer.tsx.
+    id: 'wt4-roleplay', kind: 'roleplay', bg: bgPeers, teacher: 'A real conversation! Listen to Pip and Leo, then repeat each line.', cast: ['pip', 'leo'],
     script: [
       { who: 'pip', line: 'Hello! My name is Pip.', repeat: true },
       { who: 'leo', line: 'Hi Pip! My name is Leo.', repeat: true },
