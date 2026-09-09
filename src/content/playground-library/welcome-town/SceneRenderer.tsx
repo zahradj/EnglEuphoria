@@ -144,6 +144,7 @@ export function SceneRenderer(props: {
       case 'drag-match': return <DragMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'vocab-spot': return <VocabSpotScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'choice': return <ChoiceScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+      case 'listen-tap': return <ListenTapScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'frequency-ladder': return <FrequencyLadderScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'pronoun-sort': return <PronounSortScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
@@ -787,6 +788,87 @@ function ChoiceScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
           <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next ⭐</button>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ---------- Listen & tap (multiple real objects/characters already
+   painted in the background are all live hotspots at once; a line plays
+   and the student must tap the ONE that matches — unlike vocab-spot's
+   single guided arrow with no wrong-answer risk, a wrong tap here is a
+   real possibility, closer to a genuine listening check than a discovery
+   flashcard; see scenes.ts's `listen-tap` type comment for why this kind
+   exists). ---------- */
+
+function ListenTapScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'listen-tap' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [round, setRound] = useState(0);
+  const [correct, setCorrect] = useState(false);
+  const [wrongLabel, setWrongLabel] = useState<string | null>(null);
+  const [misses, setMisses] = useState(0);
+  const gemDone = useRef(false);
+  const total = scene.rounds.length;
+  const complete = round >= total;
+  const r = !complete ? scene.rounds[round] : null;
+
+  useEffect(() => {
+    if (complete) return;
+    setCorrect(false); setWrongLabel(null); setMisses(0);
+    cueSpeakOnce(r!.prompt, voiceOf(r!.who ?? 'marigold'));
+  }, [round, complete]);
+
+  const tap = async (label: string) => {
+    if (!r || correct) return;
+    if (label !== r.answerLabel) {
+      sfx.wrong(); onLose(); setMisses((m) => m + 1);
+      setWrongLabel(label);
+      window.setTimeout(() => setWrongLabel(null), 500);
+      return;
+    }
+    sfx.match(); setCorrect(true);
+    if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+    await safeSpeak(`Yes! ${label}!`, voiceOf(r.who ?? 'marigold'));
+    window.setTimeout(() => setRound((n) => n + 1), 1000);
+  };
+
+  if (complete) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+        <Confetti count={50} />
+        <button onClick={onNext} className="relative z-10 animate-[lep1-slide-up_0.4s_ease-out] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Great listening! ⭐ Next</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/25" />
+      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        👂 {scene.teacher} <span className="ml-1 opacity-60">({round + 1}/{total})</span>
+      </div>
+      <button onClick={() => cueSpeak(r!.prompt, voiceOf(r!.who ?? 'marigold'))} className="absolute right-4 top-16 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>
+      {scene.targets.map((t) => {
+        const isWrong = wrongLabel === t.label;
+        const isRight = correct && t.label === r!.answerLabel;
+        // After two wrong taps on the same round, gently ring the correct
+        // spot — same "a stuck student always has a way forward" pattern
+        // as the Pre-A1 find-in-scene game this mechanic was modeled on.
+        const revealCorrect = misses >= 2 && t.label === r!.answerLabel && !correct;
+        return (
+          <button
+            key={t.label}
+            onClick={() => tap(t.label)}
+            disabled={correct}
+            aria-label={t.label}
+            className={`absolute z-20 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 transition active:scale-90 ${isWrong ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400 bg-red-400/20' : isRight ? 'scale-110 border-green-400 bg-green-400/30' : revealCorrect ? 'border-white bg-white/25' : 'border-white/70 bg-white/10'}`}
+            style={{
+              left: t.left, top: t.top, width: 88, height: 88,
+              boxShadow: isRight ? `0 0 0 6px ${t.color}aa` : revealCorrect ? '0 0 0 6px rgba(255,255,255,0.85)' : undefined,
+              animation: revealCorrect && !isRight ? 'lep1-ping 1s ease-in-out infinite' : undefined,
+            }}
+          />
+        );
+      })}
     </div>
   );
 }

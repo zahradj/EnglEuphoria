@@ -96,6 +96,18 @@ export type Scene =
   | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: { label: string; color: string; targetLeft: string; targetTop: string; who?: CharKey }[]; showBlanks?: boolean; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
   | { id: string; kind: 'vocab-spot'; bg: string; teacher: string; items: { label: string; sentence: string; emoji: string; left: string; top: string; color: string; dir?: 'down' | 'left' | 'right'; who?: CharKey }[] }
   | { id: string; kind: 'choice'; bg: string; who: CharKey; teacher: string; prompt: string; options: { label: string; emoji: string; correct?: boolean }[]; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
+  // Listen-and-tap-in-the-scene: unlike `vocab-spot` (one guided arrow at a
+  // time, no wrong answer possible) every real object/character already
+  // painted in `bg` is a live hotspot at once, so a spoken line genuinely
+  // has to be matched against the right one — a recognition-based
+  // listening check (research: ESL listening games for young learners
+  // favor "tap the object in the picture" over a text-button menu, since
+  // it tests the same comprehension without turning into a reading task).
+  // `targets` are the fixed positions of every real thing on screen the
+  // student can tap (reused verbatim from that same bg's own vocab-spot/
+  // drag-match hotspot coordinates elsewhere in this file); each round in
+  // `rounds` plays one spoken line and names which target answers it.
+  | { id: string; kind: 'listen-tap'; bg: string; teacher: string; targets: { label: string; left: string; top: string; color: string }[]; rounds: { prompt: string; answerLabel: string; who?: CharKey }[] }
   // A vertical Never->Sometimes->Usually->Always scale (a real, established ESL
   // technique for frequency adverbs — students place/rate a habit's frequency
   // on a ladder rather than picking from a flat list) that a round's routine
@@ -664,12 +676,27 @@ export const LESSON_2_SCENES: Scene[] = [
  * no new art (per Gate D — every bg below is reused verbatim from Lessons
  * 1-2's own already-verified assets). It's a listening-comprehension
  * consolidation of everything taught so far (hello/name/age, feelings,
- * friend/teacher, classroom + school vocabulary), not a re-teach: every
- * `choice` prompt below is an in-character short line to LISTEN to and
- * identify — not a "which word means X" vocabulary drill — matching the
- * blueprint's own "identify... in short audio" framing. Production stays
- * light (one small join-stage) since Lesson 4 owns the real speaking
- * practice for this same content.
+ * teacher/student, classroom + school vocabulary), not a re-teach: every
+ * round below is an in-character short line to LISTEN to and identify —
+ * not a "which word means X" vocabulary drill — matching the blueprint's
+ * own "identify... in short audio" framing. Production stays light (one
+ * small join-stage) since Lesson 4 owns the real speaking practice for
+ * this same content.
+ *
+ * Revision note: the first draft of this lesson ran nine near-identical
+ * `choice` (tap-a-text-button) scenes back to back for this middle
+ * section. Per direct user feedback that it felt repetitive/low quality,
+ * and per web research into ESL listening-game design for young learners
+ * (recognition-based "tap the object in the picture" mechanics read
+ * better for this exact skill than a flat multiple-choice quiz — see
+ * e.g. https://www.teach-this.com/esl-games/listening-games and
+ * https://www.teachingexpertise.com/classroom-ideas/esl-listening-activity/),
+ * most of that block is now a new `listen-tap` scene kind: every real
+ * object/character already painted in a background becomes a live
+ * hotspot at once (not one guided arrow, not a text menu), and a spoken
+ * line has to be matched against the right one. Two plain `choice`
+ * scenes remain deliberately (the greeting opener, and age — which has
+ * no physical object to tap), and hello-doors still owns name-listening.
  * ========================================================================= */
 
 export const LESSON_3_TITLE = 'Listen & Greet!';
@@ -688,9 +715,11 @@ export const LESSON_3_SCENES: Scene[] = [
     cta: '👂 LET’S LISTEN!',
   },
 
-  // Round 1-3: greeting / name / age -- the exact three beats wt-roleplay
-  // modeled together in Lesson 1, now split apart and tested one at a time
-  // as pure listening identification.
+  // Round 1: greeting -- exactly what wt-roleplay modeled in Lesson 1, now
+  // tested as pure listening identification. Kept as a `choice` scene
+  // deliberately (not every round in this lesson needs to become
+  // listen-tap below -- one plain multiple-choice opener is real variety
+  // in itself right after the all-choice run this replaced).
   {
     id: 'wt3-choice-hello', kind: 'choice', bg: bgCircle, who: 'marigold', teacher: 'Listen carefully, then tap what Miss Marigold is doing!',
     prompt: 'Hello! Welcome to our class!',
@@ -700,17 +729,11 @@ export const LESSON_3_SCENES: Scene[] = [
       { label: 'Asking a question', emoji: '❓' },
     ],
   },
+  // Age has no physical object in any bg to tap (unlike feelings/people/
+  // room/supplies below, all real painted things or characters) -- stays
+  // a `choice` scene for that reason, not because it's the default.
   {
-    id: 'wt3-choice-name', kind: 'choice', bg: bgDoor, who: 'pip', teacher: 'Listen carefully, then tap what Pip is telling you!',
-    prompt: 'My name is Pip.',
-    options: [
-      { label: 'His name', emoji: '🏷️', correct: true },
-      { label: 'His age', emoji: '🎂' },
-      { label: 'How he feels', emoji: '😊' },
-    ],
-  },
-  {
-    id: 'wt3-choice-age', kind: 'choice', bg: bgDoor, who: 'pip', teacher: 'Listen carefully, then tap what Pip is telling you now!',
+    id: 'wt3-choice-age', kind: 'choice', bg: bgDoor, who: 'pip', teacher: 'Listen carefully, then tap what Pip is telling you!',
     prompt: 'I am seven years old.',
     options: [
       { label: 'His age', emoji: '🎂', correct: true },
@@ -724,7 +747,10 @@ export const LESSON_3_SCENES: Scene[] = [
   // own cubby-guessing round using this exact mechanic was replaced with
   // real vocabulary per direct user request earlier this project) — a
   // genuine fit here since this lesson's whole point is listen-for-the-
-  // name-then-respond, not carrying vocabulary content of its own.
+  // name-then-respond, not carrying vocabulary content of its own. Also
+  // covers name-listening on its own, so a separate wt3-choice-name round
+  // (the original draft had one) would have been pure repetition of this
+  // same beat in a flatter format -- dropped in favor of this real game.
   {
     id: 'wt3-hello-doors', kind: 'hello-doors', bg: bgDoor, teacher: 'Knock knock! Listen for the name, then tap the right door!', cast: ['mia', 'leo', 'bella', 'willow'],
     rounds: [
@@ -735,63 +761,73 @@ export const LESSON_3_SCENES: Scene[] = [
     ],
   },
 
-  // Feelings listening review (Lesson 2 content).
+  // --- From here down: listen-tap, not choice. Per direct feedback that
+  // the original nine near-identical choice-menu scenes in a row felt
+  // repetitive/low quality, and per web research into ESL listening-game
+  // design for young learners (recognition-based "tap the object in the
+  // picture" mechanics, e.g. Guess-the-Object/Listen-and-point, read
+  // better than a flat text-button quiz for this exact skill) — every
+  // target below is a real character or object already painted in that
+  // bg, reusing the exact hotspot coordinates this file's own vocab-spot/
+  // drag-match scenes for that same bg already established, so "where to
+  // look" is never new information, only "which one did I just hear".
+
+  // Feelings listening review (Lesson 2 content) — targets/coords match
+  // wt2-vocab-feelings' own hotspots for mia/leo/willow.
   {
-    id: 'wt3-choice-sad', kind: 'choice', bg: bgFeelings, who: 'mia', teacher: 'Listen carefully, then tap how Mia feels!',
-    prompt: 'I am sad today.',
-    options: [
-      { label: 'Sad', emoji: '😢', correct: true },
-      { label: 'Happy', emoji: '😊' },
-      { label: 'Hungry', emoji: '🤤' },
+    id: 'wt3-listen-tap-feelings', kind: 'listen-tap', bg: bgFeelings, teacher: 'Listen, then tap the friend who feels that way!',
+    targets: [
+      { label: 'Mia', left: '52%', top: '64%', color: '#B85CD1' },
+      { label: 'Leo', left: '33%', top: '60%', color: '#C97A2F' },
+      { label: 'Willow', left: '90%', top: '64%', color: '#4FA9E0' },
     ],
-  },
-  {
-    id: 'wt3-choice-tired', kind: 'choice', bg: bgFeelings, who: 'leo', teacher: 'Listen carefully, then tap how Leo feels!',
-    prompt: 'I am so tired.',
-    options: [
-      { label: 'Tired', emoji: '😪', correct: true },
-      { label: 'Angry', emoji: '😠' },
-      { label: 'Happy', emoji: '😊' },
+    rounds: [
+      { prompt: 'I am sad today.', answerLabel: 'Mia', who: 'mia' },
+      { prompt: 'I am so tired.', answerLabel: 'Leo', who: 'leo' },
     ],
   },
 
-  // Friend / Teacher listening review (Lesson 1 content).
+  // Teacher / student listening review (Lesson 1 content) — coords match
+  // wt-vocab-people's own hotspots for pip/marigold.
   {
-    id: 'wt3-choice-friend', kind: 'choice', bg: bgExpressFriend, who: 'mia', teacher: 'Listen carefully, then tap the right word!',
-    prompt: 'Bella is my friend!',
-    options: [
-      { label: 'Friend', emoji: '🤝', correct: true },
-      { label: 'Teacher', emoji: '🧑‍🏫' },
-      { label: 'Name', emoji: '🏷️' },
+    id: 'wt3-listen-tap-people', kind: 'listen-tap', bg: bgPeople, teacher: 'Listen, then tap who is talking!',
+    targets: [
+      { label: 'Student', left: '26%', top: '42%', color: '#FE6A2F' },
+      { label: 'Teacher', left: '68%', top: '48%', color: '#8ECAE6' },
     ],
-  },
-  {
-    id: 'wt3-choice-teacher', kind: 'choice', bg: bgPeople, who: 'marigold', teacher: 'Listen carefully, then tap the right word!',
-    prompt: 'I am your teacher.',
-    options: [
-      { label: 'Teacher', emoji: '🦉', correct: true },
-      { label: 'Student', emoji: '🦊' },
-      { label: 'Friend', emoji: '🤝' },
+    rounds: [
+      { prompt: 'I am your teacher.', answerLabel: 'Teacher', who: 'marigold' },
+      { prompt: 'This is the student.', answerLabel: 'Student', who: 'marigold' },
     ],
   },
 
-  // Classroom + school vocabulary listening review (Lesson 1 content).
+  // Classroom vocabulary listening review (Lesson 1 content) — coords
+  // match wt-vocab-room's own hotspots for door/board/window.
   {
-    id: 'wt3-choice-board', kind: 'choice', bg: bgFixtures, who: 'marigold', teacher: 'Listen carefully, then tap the right thing in the room!',
-    prompt: 'Look at the board!',
-    options: [
-      { label: 'Board', emoji: '📋', correct: true },
-      { label: 'Door', emoji: '🚪' },
-      { label: 'Window', emoji: '🪟' },
+    id: 'wt3-listen-tap-room', kind: 'listen-tap', bg: bgFixtures, teacher: 'Listen, then tap the right thing in the room!',
+    targets: [
+      { label: 'Door', left: '16%', top: '48%', color: '#8B5CF6' },
+      { label: 'Board', left: '49%', top: '49%', color: '#22C55E' },
+      { label: 'Window', left: '81%', top: '47%', color: '#06B6D4' },
+    ],
+    rounds: [
+      { prompt: 'Look at the board!', answerLabel: 'Board', who: 'marigold' },
+      { prompt: 'Open the door!', answerLabel: 'Door', who: 'marigold' },
     ],
   },
+
+  // School-supplies listening review (Lesson 1 content) — coords match
+  // wt-vocab-supplies' own hotspots for desk/chair/backpack.
   {
-    id: 'wt3-choice-backpack', kind: 'choice', bg: bgSupplies, who: 'pip', teacher: 'Listen carefully, then tap the right thing!',
-    prompt: 'This is my backpack!',
-    options: [
-      { label: 'Backpack', emoji: '🎒', correct: true },
-      { label: 'Desk', emoji: '🍎' },
-      { label: 'Chair', emoji: '🪑' },
+    id: 'wt3-listen-tap-supplies', kind: 'listen-tap', bg: bgSupplies, teacher: 'Listen, then tap the right thing!',
+    targets: [
+      { label: 'Desk', left: '20%', top: '58%', color: '#F59E0B' },
+      { label: 'Chair', left: '55%', top: '62%', color: '#22C55E' },
+      { label: 'Backpack', left: '85%', top: '62%', color: '#16A34A' },
+    ],
+    rounds: [
+      { prompt: 'This is my backpack!', answerLabel: 'Backpack', who: 'pip' },
+      { prompt: 'Sit in your chair!', answerLabel: 'Chair', who: 'pip' },
     ],
   },
 
