@@ -78,10 +78,10 @@ export const CAST: Record<CharKey, { name: string; emoji: string; color: string 
 const bgWide = `${W}/scenes/bg-classroom-wide.png`;
 const bgDoor = `${W}/scenes/bg-classroom-door.png`;
 const bgCircle = `${W}/scenes/bg-classroom-circle.png`;
-const bgCubbies = `${W}/scenes/bg-cubbies.png`;
 const bgReading = `${W}/scenes/bg-classroom-reading.png`;
 const bgFixtures = `${W}/scenes/bg-classroom-fixtures.png`;
 const bgPeople = `${W}/scenes/bg-classroom-people.png`;
+const bgSupplies = `${W}/scenes/bg-classroom-supplies.png`;
 const bgExpressHello = `${W}/scenes/bg-express-hello.png`;
 const bgExpressGoodbye = `${W}/scenes/bg-express-goodbye.png`;
 const bgExpressFriend = `${W}/scenes/bg-express-friend.png`;
@@ -151,11 +151,19 @@ export const LESSON_1_SCENES: Scene[] = [
     // load rule, and direct feedback. Each vocab-spot scene gets its own
     // dedicated, purpose-built background (never reused from a narrative
     // scene) so every target word is large, clean, and unambiguous.
+    // Per direct user report: "mixed up between the teacher and the
+    // student" -- the label/who/emoji pairing was swapped relative to
+    // where the two characters actually stand in bg-classroom-people.png
+    // (Pip the fox is on the LEFT, Miss Marigold the owl is on the
+    // RIGHT), so the "Teacher" hotspot sat on Pip and "Student" sat on
+    // Marigold. left/top are unchanged (they correctly mark each
+    // character's real position) -- only the word/emoji/color/who
+    // attached to each position were fixed.
     id: 'wt-vocab-people', kind: 'vocab-spot', bg: bgPeople,
     teacher: 'Look around! Tap the arrow to learn a classroom word.',
     items: [
-      { label: 'Teacher', sentence: 'This is the teacher.', emoji: '\u{1F989}', left: '26%', top: '42%', color: '#8ECAE6', who: 'marigold' },
-      { label: 'Student', sentence: 'This is the student.', emoji: '\u{1F98A}', left: '68%', top: '48%', color: '#FE6A2F', who: 'pip' },
+      { label: 'Student', sentence: 'This is the student.', emoji: '\u{1F98A}', left: '26%', top: '42%', color: '#FE6A2F', who: 'pip' },
+      { label: 'Teacher', sentence: 'This is the teacher.', emoji: '\u{1F989}', left: '68%', top: '48%', color: '#8ECAE6', who: 'marigold' },
     ],
   },
   {
@@ -181,8 +189,8 @@ export const LESSON_1_SCENES: Scene[] = [
     // point the learner already looked at.
     id: 'wt-drag-people', kind: 'drag-match', bg: bgPeople, teacher: 'Listen, then drag each word onto the matching classroom member!',
     items: [
-      { label: 'Teacher', color: '#8ECAE6', who: 'marigold', targetLeft: '26%', targetTop: '42%' },
-      { label: 'Student', color: '#FE6A2F', who: 'pip', targetLeft: '68%', targetTop: '48%' },
+      { label: 'Student', color: '#FE6A2F', who: 'pip', targetLeft: '26%', targetTop: '42%' },
+      { label: 'Teacher', color: '#8ECAE6', who: 'marigold', targetLeft: '68%', targetTop: '48%' },
     ],
   },
   {
@@ -195,9 +203,15 @@ export const LESSON_1_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt-vocab-friend-teacher', kind: 'meet', bg: bgExpressFriend, who: 'marigold',
-    teacher: 'Tap Miss Marigold to learn two new words: friend and teacher!',
-    line: 'Mia, Bella, Willow, and Leo are Pip’s new friends — and I am your teacher!', repeat: 'My friend! My teacher!',
+    // Per direct user request: this page's vocabulary should be ONLY
+    // "friend" -- dropped "teacher" (already its own word on wt-vocab-
+    // people). The art (bg-express-friend.png) shows Mia and Bella
+    // hugging with hearts -- no Miss Marigold in it at all -- so `who`
+    // was also wrong (voiced as Marigold, who isn't even pictured);
+    // switched to Mia, who is.
+    id: 'wt-vocab-friend', kind: 'meet', bg: bgExpressFriend, who: 'mia',
+    teacher: 'Tap Mia to learn a new word: friend!',
+    line: 'Bella is my friend! Mia, Bella, Willow, and Leo are all Pip’s new friends!', repeat: 'My friend!',
   },
 
   {
@@ -247,10 +261,30 @@ export const LESSON_1_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt-hello-doors', kind: 'hello-doors', bg: bgCubbies, teacher: 'Knock knock! Tap the right cubby to meet a classmate!', cast: ['mia', 'leo'],
-    rounds: [
-      { target: 'mia', prompt: 'Knock knock! Which cubby is Mia’s?', helloLine: 'Hi! I am Mia! Welcome to our class!', echoLine: 'Hello, Mia!' },
-      { target: 'leo', prompt: 'Knock knock! Which cubby is Leo’s?', helloLine: 'Hey there! I am Leo!', echoLine: 'Hello, Leo!' },
+    // Per direct user request: replaced the old cubby-guessing game here
+    // (no real vocabulary content -- Mia and Leo are already introduced
+    // by name in wt-roleplay/wt-join-stage above) with real school/
+    // classroom vocabulary: Desk, Chair, Backpack -- distinct from
+    // wt-vocab-room's Door/Board/Window, same 2-3-hotspot pattern.
+    id: 'wt-vocab-supplies', kind: 'vocab-spot', bg: bgSupplies,
+    teacher: 'A new part of the room! Tap the arrow to learn a school word.',
+    items: [
+      { label: 'Desk', sentence: 'This is my desk.', emoji: '\u{1F34E}', left: '20%', top: '58%', color: '#F59E0B' },
+      { label: 'Chair', sentence: 'This is my chair.', emoji: '\u{1FA91}', left: '55%', top: '62%', color: '#22C55E' },
+      { label: 'Backpack', sentence: 'This is my backpack.', emoji: '\u{1F392}', left: '85%', top: '62%', color: '#16A34A' },
+    ],
+  },
+  {
+    // The practice/review step right after, matching the exact Scene →
+    // Discovery → PRACTICE pattern wt-vocab-people/wt-vocab-room already
+    // use — per direct user request for "an exercise for the student to
+    // remember the vocabulary." Target coordinates match wt-vocab-
+    // supplies' own hotspots one-for-one.
+    id: 'wt-drag-supplies', kind: 'drag-match', bg: bgSupplies, teacher: 'Listen, then drag each word onto the matching thing in the room!',
+    items: [
+      { label: 'Desk', color: '#F59E0B', targetLeft: '20%', targetTop: '58%' },
+      { label: 'Chair', color: '#22C55E', targetLeft: '55%', targetTop: '62%' },
+      { label: 'Backpack', color: '#16A34A', targetLeft: '85%', targetTop: '62%' },
     ],
   },
 
