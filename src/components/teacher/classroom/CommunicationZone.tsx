@@ -286,7 +286,7 @@ export const CommunicationZone: React.FC<CommunicationZoneProps> = ({
       <div
         className={`fixed inset-y-0 left-0 z-[75] w-[280px] transition-transform duration-200 md:transition-none md:static md:z-auto md:w-[224px] md:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
-        } ${theme.panelBg} border-r ${theme.panelBorder} flex flex-col shrink-0`}
+        } ${theme.panelBg} border-r ${theme.panelBorder} flex flex-col shrink-0 h-full overflow-y-auto`}
       >
       <div className={`flex items-center justify-between px-3 py-2 border-b ${theme.panelBorder}`}>
         <span className={`text-xs font-semibold uppercase tracking-wider ${theme.accentText}`}>Live</span>

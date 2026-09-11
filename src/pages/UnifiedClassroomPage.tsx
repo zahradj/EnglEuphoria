@@ -20,6 +20,7 @@ import { PlaygroundTrailLesson } from '@/components/trial/playground-trail/Playg
 import { useForceEnglishLocale } from '@/hooks/useForceEnglishLocale';
 import { LessonWindowGate, bookedMinutesFor } from '@/components/classroom/LessonWindowGate';
 import { getMockLesson } from '@/data/interviewMockLessons';
+import { useDevBypass } from '@/hooks/useDevBypass';
 
 type ClassroomHub = 'playground' | 'academy' | 'professional';
 
@@ -54,6 +55,7 @@ const UnifiedClassroomPage: React.FC = () => {
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const [preFlightPassed, setPreFlightPassed] = useState(false);
+  const { isDevBypassActive, bypassRole } = useDevBypass();
 
   const userRole = (user as any)?.role;
   const isAdmin = userRole === 'admin';
@@ -197,6 +199,41 @@ const UnifiedClassroomPage: React.FC = () => {
     enabled: !!booking?.id && (!isTrialLesson || (trialCefr !== undefined && isFirstLesson !== undefined)),
   });
 
+
+  // DEV BYPASS — local QA only, never reachable in a real build (useDevBypass
+  // itself returns inactive unless import.meta.env.DEV AND ?dev_bypass=true
+  // are both true). Renders TeacherClassroom/StudentClassroom directly with
+  // a fixed Welcome Town lesson, skipping every Supabase booking/auth query
+  // above — the real production data path is completely untouched. Both
+  // tabs share the same roomId (override with ?dev_room=) so they sync live
+  // through the same realtime channel a real booking would use, letting the
+  // teacher and student views be compared side by side without any real
+  // login credentials or a fabricated production booking row.
+  if (isDevBypassActive) {
+    const devRoomId = new URLSearchParams(location.search).get('dev_room') || 'dev-classroom-test';
+    const devLessonRef = { unitNumber: 1, lessonNumber: 4, contentFormat: 'wt-rich' };
+    if (bypassRole === 'student') {
+      return (
+        <StudentClassroom
+          roomId={devRoomId}
+          studentId="dev-bypass-student"
+          studentName="Dev Student"
+          teacherName="Dev Teacher"
+          hubType="playground"
+        />
+      );
+    }
+    return (
+      <TeacherClassroom
+        classId={devRoomId}
+        teacherName="Dev Teacher"
+        studentName="Dev Student"
+        hubType="playground"
+        lessonTitle="Speak & Meet!"
+        initialSlides={[{ sceneLessonRef: devLessonRef }]}
+      />
+    );
+  }
 
   // Auth loading
   if (authLoading) {
