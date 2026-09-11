@@ -1202,7 +1202,10 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
   // mia/bella/willow still default to center — no roleplay scene uses them
   // as a speaker on a background that doesn't paint them yet; fix the same
   // way (a dedicated bg + a real anchor here) before ever doing so.
-  const bubbleLeft: Record<CharKey, string> = { pip: '22%', marigold: '78%', mia: '50%', bella: '50%', willow: '50%', leo: '78%' };
+  // Flex justify (not a raw left:% + translateX) so the bubble is clamped by
+  // inset-x-4 on every viewport — a long line anchored toward an edge can't
+  // get clipped by this scene's overflow-hidden container on narrow phones.
+  const bubbleAlign: Record<CharKey, 'start' | 'center' | 'end'> = { pip: 'start', marigold: 'end', mia: 'center', bella: 'center', willow: 'center', leo: 'end' };
   const current = step >= 0 && step < scene.script.length ? scene.script[step] : null;
   const replayCurrent = () => { if (current) void safeSpeak(current.line, voiceOf(current.who)); };
 
@@ -1215,8 +1218,12 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
       </div>
       {current && <button onClick={replayCurrent} className="absolute right-6 top-6 z-30 flex items-center gap-2 rounded-full bg-white/95 px-5 py-3 text-sm font-black uppercase tracking-widest text-orange-700 shadow-2xl ring-2 ring-orange-200 active:scale-95" aria-label="Repeat what the character said">🔁 Play again</button>}
       {current && !awaitingRepeat && (
-        <div className="absolute top-[30%] z-20 max-w-[420px] -translate-x-1/2 px-4 transition-all duration-300" style={{ left: bubbleLeft[current.who] ?? '50%' }}>
-          <div className="relative rounded-3xl bg-white px-5 py-3 text-center text-xl font-black text-orange-800 shadow-2xl sm:text-2xl">“{current.line}”</div>
+        <div
+          className={`absolute inset-x-4 top-[30%] z-20 flex transition-all duration-300 ${
+            bubbleAlign[current.who] === 'start' ? 'justify-start' : bubbleAlign[current.who] === 'end' ? 'justify-end' : 'justify-center'
+          }`}
+        >
+          <div className="relative max-w-[420px] rounded-3xl bg-white px-5 py-3 text-center text-xl font-black text-orange-800 shadow-2xl sm:text-2xl">“{current.line}”</div>
         </div>
       )}
       {awaitingRepeat && current && (

@@ -92,6 +92,26 @@ const bgPrepNextTo = `${W}/scenes/bg-prep-next-to.png`;
 const bgSupplies2 = `${W}/scenes/bg-classroom-supplies2.png`;
 const bgPeers = `${W}/scenes/bg-classroom-peers.png`;
 
+// Lesson 4-only "-v2" chibi-corrected background set. Per direct user
+// report + a real side-by-side comparison against Pre-A1's bg-hello-
+// cast.jpg: every background above was generated under the OLD art-style
+// contract (before playground-library-lesson-builder §11 was expanded to
+// explicitly require chibi/toddler proportions), so its characters read
+// distinctly older than Pre-A1's. Per direct user decision at the time,
+// only the style guide was fixed going forward, leaving Lessons 1-3's
+// already-shipped art untouched -- these -v2 assets are Lesson 4's own
+// dedicated regeneration under the corrected contract, deliberately NOT
+// repointing the shared consts above (which would silently also change
+// Lessons 1-3's look). If Lessons 1-3 are ever redone the same way, give
+// them their own -v2 set the same way rather than retargeting these.
+const bgWideV2 = `${W}/scenes/bg-classroom-wide-v2.png`;
+const bgCircleV2 = `${W}/scenes/bg-classroom-circle-v2.png`;
+const bgExpressHelloV2 = `${W}/scenes/bg-express-hello-v2.png`;
+const bgPeersV2 = `${W}/scenes/bg-classroom-peers-v2.png`;
+const bgExpressFriendV2 = `${W}/scenes/bg-express-friend-v2.png`;
+const bgReadingV2 = `${W}/scenes/bg-classroom-reading-v2.png`;
+const bgExpressGoodbyeV2 = `${W}/scenes/bg-express-goodbye-v2.png`;
+
 export type Scene =
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string; cta?: string }
   | { id: string; kind: 'cinematic'; bg: string; title: string; subtitle: string; narrator: CharKey; script: { who: CharKey; line: string }[]; cta: string }
@@ -1007,10 +1027,10 @@ export const LESSON_4_TITLE = 'Speak & Meet!';
 export const LESSON_4_OBJECTIVE = 'Part 1: Greet a partner and introduce yourself AND a friend, combining everything from Lessons 1-3 into one real conversation. Part 2: Learn the sound F and read three more real words.';
 
 export const LESSON_4_SCENES: Scene[] = [
-  { id: 'wt4-title', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 4', title: 'Speak & Meet!', subtitle: 'Say hello and meet a new friend!', cta: '🗣️ LET’S TALK!' },
+  { id: 'wt4-title', kind: 'title-card', bg: bgWideV2, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 4', title: 'Speak & Meet!', subtitle: 'Say hello and meet a new friend!', cta: '🗣️ LET’S TALK!' },
 
   {
-    id: 'wt4-intro', kind: 'cinematic', bg: bgCircle, title: 'Time to Talk!', subtitle: 'Today you have a real conversation', narrator: 'marigold',
+    id: 'wt4-intro', kind: 'cinematic', bg: bgCircleV2, title: 'Time to Talk!', subtitle: 'Today you have a real conversation', narrator: 'marigold',
     script: [
       { who: 'marigold', line: 'Welcome back, class! Today we practice something new.' },
       { who: 'marigold', line: 'You will meet a partner and have a real conversation!' },
@@ -1020,7 +1040,7 @@ export const LESSON_4_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt4-meet-model', kind: 'meet', bg: bgExpressHello, who: 'marigold',
+    id: 'wt4-meet-model', kind: 'meet', bg: bgExpressHelloV2, who: 'marigold',
     teacher: 'Tap Miss Marigold to hear a full greeting!',
     line: 'Watch me! Hello! My name is Miss Marigold. Nice to meet you!', repeat: 'Nice to meet you!',
   },
@@ -1028,7 +1048,7 @@ export const LESSON_4_SCENES: Scene[] = [
     // First real use of `echo` in the Welcome Town family — see the file
     // banner above. A quick single-word speaking rep, deliberately shorter
     // than `meet`'s full modeled line, right after that longer model.
-    id: 'wt4-echo-hello', kind: 'echo', bg: bgExpressHello, who: 'pip', teacher: 'Now you try! Hold the button and say it with Pip!', word: 'Hello!',
+    id: 'wt4-echo-hello', kind: 'echo', bg: bgExpressHelloV2, who: 'pip', teacher: 'Now you try! Hold the button and say it with Pip!', word: 'Hello!',
   },
 
   {
@@ -1044,7 +1064,7 @@ export const LESSON_4_SCENES: Scene[] = [
     // Pip left / Leo right, facing each other) instead of reusing
     // bg-classroom-circle -- see the matching `leo` anchor added to
     // RoleplayScene's bubbleLeft map in SceneRenderer.tsx.
-    id: 'wt4-roleplay', kind: 'roleplay', bg: bgPeers, teacher: 'A real conversation! Listen to Pip and Leo, then repeat each line.', cast: ['pip', 'leo'],
+    id: 'wt4-roleplay', kind: 'roleplay', bg: bgPeersV2, teacher: 'A real conversation! Listen to Pip and Leo, then repeat each line.', cast: ['pip', 'leo'],
     script: [
       { who: 'pip', line: 'Hello! My name is Pip.', repeat: true },
       { who: 'leo', line: 'Hi Pip! My name is Leo.', repeat: true },
@@ -1055,12 +1075,12 @@ export const LESSON_4_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'wt4-echo-friend', kind: 'echo', bg: bgExpressFriend, who: 'mia', teacher: 'Say it with Mia! Hold and say it!', word: 'Friend!',
+    id: 'wt4-echo-friend', kind: 'echo', bg: bgExpressFriendV2, who: 'mia', teacher: 'Say it with Mia! Hold and say it!', word: 'Friend!',
   },
 
   {
     // Produce, same combined pattern the roleplay above just modeled.
-    id: 'wt4-join-stage-intro', kind: 'join-stage', bg: bgCircle, teacher: 'Your turn! Say hello, your name, and how you feel!', cast: ['marigold', 'leo'],
+    id: 'wt4-join-stage-intro', kind: 'join-stage', bg: bgCircleV2, teacher: 'Your turn! Say hello, your name, and how you feel!', cast: ['marigold', 'leo'],
     turns: [
       { who: 'marigold', line: 'Hello! What is your name?' },
       { who: 'student', line: 'Hello! My name is ______.' },
@@ -1073,7 +1093,7 @@ export const LESSON_4_SCENES: Scene[] = [
     // The lesson's one genuinely new grammar move: introducing someone
     // ELSE ("This is my friend, ___"), not only yourself — see the file
     // banner's note on the partner-interview-then-introduce technique.
-    id: 'wt4-join-stage-partner', kind: 'join-stage', bg: bgCircle, teacher: 'Now introduce a FRIEND! Point to someone and say their name!', cast: ['pip', 'bella'],
+    id: 'wt4-join-stage-partner', kind: 'join-stage', bg: bgCircleV2, teacher: 'Now introduce a FRIEND! Point to someone and say their name!', cast: ['pip', 'bella'],
     turns: [
       { who: 'pip', line: 'This is my friend, Bella!' },
       { who: 'student', line: 'Hello, Bella! Nice to meet you!' },
@@ -1084,7 +1104,7 @@ export const LESSON_4_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt4-memory', kind: 'memory', bg: bgCircle, teacher: 'Match the matching pairs! Everything you said today.',
+    id: 'wt4-memory', kind: 'memory', bg: bgCircleV2, teacher: 'Match the matching pairs! Everything you said today.',
     pairs: [
       { id: 'hello', label: 'Hello', emoji: '👋' },
       { id: 'goodbye', label: 'Goodbye', emoji: '👋' },
@@ -1095,17 +1115,17 @@ export const LESSON_4_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt4-break', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Break Time', title: 'Great Job!', subtitle: 'Stretch, get some water, then come back for Part 2!', cta: '🤸 I’m Ready!',
+    id: 'wt4-break', kind: 'title-card', bg: bgWideV2, level: 'A1', unit: 'Unit 1', lessonLabel: 'Break Time', title: 'Great Job!', subtitle: 'Stretch, get some water, then come back for Part 2!', cta: '🤸 I’m Ready!',
   },
 
   /* =========================== Part 2: Reading ===========================
    * Continues straight from Lesson 2's P/I/N — one new sound, F, per the
    * blueprint's own phonics_focus for this slot. */
 
-  { id: 'wt4-part2-title', kind: 'title-card', bg: bgReading, level: 'A1', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time!', subtitle: 'One new sound — /f/ — then read real words!', cta: '📖 LET’S READ!' },
+  { id: 'wt4-part2-title', kind: 'title-card', bg: bgReadingV2, level: 'A1', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time!', subtitle: 'One new sound — /f/ — then read real words!', cta: '📖 LET’S READ!' },
 
   {
-    id: 'wt4-model-f', kind: 'sound-model', bg: bgReading, who: 'pip', letter: 'F', phoneme: '/f/', sound: 'fff',
+    id: 'wt4-model-f', kind: 'sound-model', bg: bgReadingV2, who: 'pip', letter: 'F', phoneme: '/f/', sound: 'fff',
     teacher: 'A brand-new sound! /f/ /f/ Fox! Just like me!',
     anchors: [
       { word: 'fan', emoji: '🪭' },
@@ -1113,10 +1133,10 @@ export const LESSON_4_SCENES: Scene[] = [
       { word: 'fox', emoji: '🦊' },
     ],
   },
-  { id: 'wt4-trace-f', kind: 'trace', bg: bgReading, who: 'pip', letter: 'F', phoneme: '/f/', word: 'fox', teacher: 'Trace the letter F! Say /f/ /f/ /f/ as you draw.' },
+  { id: 'wt4-trace-f', kind: 'trace', bg: bgReadingV2, who: 'pip', letter: 'F', phoneme: '/f/', word: 'fox', teacher: 'Trace the letter F! Say /f/ /f/ /f/ as you draw.' },
 
   {
-    id: 'wt4-word-build', kind: 'word-build', bg: bgReading, teacher: 'You know a new sound! Now read three more real words!',
+    id: 'wt4-word-build', kind: 'word-build', bg: bgReadingV2, teacher: 'You know a new sound! Now read three more real words!',
     rounds: [
       { word: 'FAN', blankIndex: 0, answer: 'F', choices: ['F', 'S', 'P'], emoji: '🪭' },
       { word: 'FIN', blankIndex: 0, answer: 'F', choices: ['F', 'P', 'T'], emoji: '🐟' },
@@ -1125,7 +1145,7 @@ export const LESSON_4_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt4-letter-hunt', kind: 'letter-game', bg: bgReading, who: 'marigold', mode: 'name',
+    id: 'wt4-letter-hunt', kind: 'letter-game', bg: bgReadingV2, who: 'marigold', mode: 'name',
     teacher: 'Alphabet game! Find the letter I say.',
     rounds: [
       { letter: 'F', choices: ['F', 'P', 'T'] },
@@ -1134,7 +1154,7 @@ export const LESSON_4_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'wt4-sound-hunt', kind: 'letter-game', bg: bgReading, who: 'pip', mode: 'sound',
+    id: 'wt4-sound-hunt', kind: 'letter-game', bg: bgReadingV2, who: 'pip', mode: 'sound',
     teacher: 'Sound game! Listen, then tap the letter that makes that sound.',
     rounds: [
       { letter: 'F', phoneme: '/f/', choices: ['F', 'S', 'P'] },
@@ -1143,12 +1163,12 @@ export const LESSON_4_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'wt4-class-puzzle', kind: 'jigsaw-puzzle', bg: bgWide, teacher: 'Puzzle game! Drag the pieces to put the class picture back together!',
-    image: bgWide, rows: 2, cols: 3,
+    id: 'wt4-class-puzzle', kind: 'jigsaw-puzzle', bg: bgWideV2, teacher: 'Puzzle game! Drag the pieces to put the class picture back together!',
+    image: bgWideV2, rows: 2, cols: 3,
   },
 
   {
-    id: 'wt4-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '🎵 Welcome Town School Goodbye Song 🎵', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    id: 'wt4-goodbye-song', kind: 'song', bg: bgExpressGoodbyeV2, title: '🎵 Welcome Town School Goodbye Song 🎵', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
     songUrl: `${W}/audio/goodbye-song.mp3`,
     lyrics: [
@@ -1159,5 +1179,5 @@ export const LESSON_4_SCENES: Scene[] = [
     ],
   },
 
-  { id: 'wt4-finale', kind: 'finale', bg: bgWide, who: 'pip', line: 'You met a partner, had a real conversation, and learned a new sound — F is for friend, and F is for Fox, just like me! ✨🗣️' },
+  { id: 'wt4-finale', kind: 'finale', bg: bgWideV2, who: 'pip', line: 'You met a partner, had a real conversation, and learned a new sound — F is for friend, and F is for Fox, just like me! ✨🗣️' },
 ];

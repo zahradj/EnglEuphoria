@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { generateGoogleImage, GoogleImageError } from "../_shared/googleImageClient.ts";
+import { generateGoogleImage, GoogleImageError, type ReferenceImage } from "../_shared/googleImageClient.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -199,7 +199,26 @@ serve(async (req) => {
       // prompt fragment that must be appended verbatim to enforce the look.
       imageStyle,
       imageStyleSuffix,
+      // Real reference-image conditioning (actual pixels, not a text
+      // description of them) — pass one or more { mimeType, data } objects
+      // (data = raw base64, no `data:` prefix) or plain base64 strings
+      // (mimeType assumed image/png) to have the model match an existing
+      // asset's exact art style instead of guessing from a written
+      // description. See googleImageClient.ts's ReferenceImage type.
+      referenceImages,
     } = await req.json();
+
+    const normalizedReferenceImages: ReferenceImage[] | undefined = Array.isArray(referenceImages)
+      ? referenceImages
+          .map((r: unknown) =>
+            typeof r === 'string'
+              ? { mimeType: 'image/png', data: r }
+              : (r && typeof r === 'object' && 'data' in r
+                  ? { mimeType: (r as { mimeType?: string }).mimeType || 'image/png', data: (r as { data: string }).data }
+                  : null),
+          )
+          .filter((r: ReferenceImage | null): r is ReferenceImage => !!r?.data)
+      : undefined;
 
     if (!prompt) {
       return new Response(
@@ -244,7 +263,7 @@ serve(async (req) => {
 
     let imageUrl: string;
     try {
-      const out = await generateGoogleImage(enhancedPrompt);
+      const out = await generateGoogleImage(enhancedPrompt, normalizedReferenceImages);
       imageUrl = out.dataUrl;
     } catch (e) {
       const err = e as GoogleImageError;

@@ -34,6 +34,16 @@ export interface GoogleImageResult {
   dataUrl: string;
 }
 
+/** A reference image to condition generation on — actual pixels, not a text
+ *  description of them. Used for style-matching against an existing asset
+ *  (e.g. "draw this new scene in exactly this character's established art
+ *  style") instead of hoping a written description reproduces it. */
+export interface ReferenceImage {
+  mimeType: string;
+  /** Raw base64 payload, no `data:` prefix. */
+  data: string;
+}
+
 const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504]);
 
 function delay(ms: number): Promise<void> {
@@ -52,7 +62,10 @@ function b64ToBytes(b64: string): Uint8Array {
  * Throws GoogleImageError with an appropriate HTTP status on failure.
  * Name preserved for backwards compatibility with existing callers.
  */
-export async function generateGoogleImage(prompt: string): Promise<GoogleImageResult> {
+export async function generateGoogleImage(
+  prompt: string,
+  referenceImages?: ReferenceImage[],
+): Promise<GoogleImageResult> {
   const apiKey = Deno.env.get("GEMINI_API_KEY");
   if (!apiKey) {
     throw new GoogleImageError("GEMINI_API_KEY is not configured", 500);
@@ -76,7 +89,7 @@ export async function generateGoogleImage(prompt: string): Promise<GoogleImageRe
   let lastStatus = 502;
   for (const p of attempts) {
     try {
-      return await callGemini(p, apiKey);
+      return await callGemini(p, apiKey, referenceImages);
     } catch (e) {
       const err = e as GoogleImageError;
       lastReason = err.message;
@@ -140,8 +153,20 @@ function buildQualityFallbackPrompt(prompt: string): string {
   ].join(" ");
 }
 
-async function callGemini(prompt: string, apiKey: string): Promise<GoogleImageResult> {
+async function callGemini(
+  prompt: string,
+  apiKey: string,
+  referenceImages?: ReferenceImage[],
+): Promise<GoogleImageResult> {
   const models = [PRIMARY_MODEL, FALLBACK_MODEL];
+  // Reference images go FIRST as their own parts, text instruction LAST —
+  // this is the order Gemini's multi-modal image-editing/style-reference
+  // examples use, and matters more than it seems: text-after-image reads as
+  // "here is the image, now do this to/with it" rather than a caption.
+  const parts: Record<string, unknown>[] = (referenceImages ?? []).map((ref) => ({
+    inlineData: { mimeType: ref.mimeType, data: ref.data },
+  }));
+  parts.push({ text: prompt });
   let res: Response | null = null;
   let lastErrorText = "";
   for (const model of models) {
@@ -150,7 +175,7 @@ async function callGemini(prompt: string, apiKey: string): Promise<GoogleImageRe
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
+          contents: [{ parts }],
           generationConfig: { responseModalities: ["IMAGE"] },
         }),
       });
@@ -160,8 +185,11 @@ async function callGemini(prompt: string, apiKey: string): Promise<GoogleImageRe
       console.warn(`Nano Banana (${model}) ${res.status} (attempt ${attempt}/4) — ${lastErrorText.slice(0, 180)}`);
       await delay(400 * attempt * attempt);
     }
-    // If Pro returns 404 (not enabled) or 400 (model unknown for key), drop to fallback model.
-    if (res && (res.status === 404 || res.status === 400) && model === PRIMARY_MODEL) {
+    // Drop to the fallback model on ANY non-2xx from Pro, not just 404/400 —
+    // confirmed bug: Google returning 503 UNAVAILABLE (high demand) fell
+    // through this check and just re-exhausted retries against the same
+    // overloaded primary model, never trying the working fallback at all.
+    if (res && !res.ok && model === PRIMARY_MODEL) {
       lastErrorText = await res.text().catch(() => "");
       console.warn(`Nano Banana Pro unavailable (${res.status}) — falling back to ${FALLBACK_MODEL}. ${lastErrorText.slice(0, 160)}`);
       continue;
@@ -179,9 +207,9 @@ async function callGemini(prompt: string, apiKey: string): Promise<GoogleImageRe
   }
 
   const data = await res.json();
-  const parts = data?.candidates?.[0]?.content?.parts ?? [];
+  const responseParts = data?.candidates?.[0]?.content?.parts ?? [];
   let inline: { mimeType?: string; data?: string } | undefined;
-  for (const p of parts) {
+  for (const p of responseParts) {
     const cand = p?.inlineData ?? p?.inline_data;
     if (cand?.data) {
       inline = { mimeType: cand.mimeType ?? cand.mime_type, data: cand.data };
