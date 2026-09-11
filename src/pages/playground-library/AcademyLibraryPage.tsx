@@ -17,9 +17,11 @@ interface LessonRow {
     lesson_number?: number;
     lesson_role?: string;
     /** 'academy-v2' once authored/saved through the new engine — see
-     *  resolvePlaygroundLessonRoute() and PlayAcademyLesson.tsx. Absent on
-     *  every pre-existing row (old AI-slide format, incompatible with the
-     *  real student player — see that file's header comment). */
+     *  resolvePlaygroundLessonRoute(). No longer load-bearing for
+     *  visibility/playability here: PlayAcademyLesson.tsx reads plain
+     *  content.slides[] directly and renders pre-existing (old-format) rows
+     *  correctly too, same SlideRenderer the live classroom already uses
+     *  for them. Kept only for informational display. */
     contentFormat?: string;
   } | null;
   content: { slides?: unknown[] } | null;
@@ -67,13 +69,10 @@ const UNIT_ART = [
 
 const isReady = (row: LessonRow) => Array.isArray(row.content?.slides) && (row.content!.slides as unknown[]).length > 0;
 
-// Show a row if it's still an empty authoring slot (isReady === false — those
-// stay visible so a creator can start building the NEW-format lesson in it,
-// per the pre-seeded-slot convention this library already follows), OR it's
-// built AND in the new engine's format. A built row in the OLD format is
-// hidden, not deleted, until it's re-authored — the old player it was built
-// for renders most of its slide types incorrectly (see PlayAcademyLesson.tsx).
-const isVisibleInLibrary = (row: LessonRow) => !isReady(row) || row.ai_metadata?.contentFormat === 'academy-v2';
+// Every row is visible now — an empty authoring slot (isReady === false) so
+// a creator can start building it, or a built row (any format) which
+// PlayAcademyLesson.tsx renders correctly regardless of contentFormat (see
+// the LessonRow.ai_metadata.contentFormat doc comment above).
 
 /**
  * Academy's own content-creator dashboard library — same shape as
@@ -111,7 +110,7 @@ export default function AcademyLibraryPage() {
             ? { ...r, ai_metadata: { ...r.ai_metadata, cefr_level: normalizeCefrLevel(r.ai_metadata.cefr_level) } }
             : r,
         );
-        setRows(normalized.filter(isVisibleInLibrary));
+        setRows(normalized);
       }
       setLoading(false);
     })();
@@ -161,14 +160,14 @@ export default function AcademyLibraryPage() {
     setOpenUnit(units[0]?.unit_number ?? null);
   }, [units]);
 
-  // A built academy-v2 lesson opens into the real player — "opening the
+  // A built lesson (any format) opens into the real player — "opening the
   // lesson" means playing it, matching how PlaygroundLibraryPage's built
   // cards behave. An empty slot has nothing to play, so it still opens
   // straight into Academy Creator to build it. Every card also gets an
   // explicit Edit button (below) so a creator can still jump into the
   // editor for a lesson that's already playable.
   const handleLessonClick = (row: LessonRow) => {
-    if (isReady(row) && row.ai_metadata?.contentFormat === 'academy-v2') {
+    if (isReady(row)) {
       navigate(`/academy-scene/${row.id}`);
     } else {
       navigate(`/academy-creator?lessonId=${row.id}`);
@@ -272,7 +271,7 @@ export default function AcademyLibraryPage() {
                     <div className="grid grid-cols-1 gap-3 border-t border-violet-500/20 bg-black/20 p-5 sm:grid-cols-2 lg:grid-cols-3">
                       {u.lessons.map((l) => {
                         const ready = isReady(l);
-                        const playable = ready && l.ai_metadata?.contentFormat === 'academy-v2';
+                        const playable = ready;
                         return (
                           <button
                             key={l.id}

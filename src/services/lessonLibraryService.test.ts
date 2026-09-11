@@ -51,9 +51,18 @@ describe('resolvePlaygroundLessonRoute', () => {
     expect(resolvePlaygroundLessonRoute('id-5', { contentFormat: 'lep1-rich' })).toBe('/playground-scene/lesson-1');
   });
 
-  test('an unrecognized or missing contentFormat returns null — the caller must fall back to /lesson/:id, never navigate blind', () => {
+  test('an unrecognized or missing contentFormat, with no hub given, returns null — the caller must fall back to /lesson/:id, never navigate blind', () => {
     expect(resolvePlaygroundLessonRoute('id-6', { contentFormat: undefined })).toBeNull();
     expect(resolvePlaygroundLessonRoute('id-7', { contentFormat: 'some-academy-format' })).toBeNull();
     expect(resolvePlaygroundLessonRoute('id-8', null)).toBeNull();
+  });
+
+  test('hub: academy routes to PlayAcademyLesson even with old-format/missing contentFormat', () => {
+    expect(resolvePlaygroundLessonRoute('id-9', { contentFormat: undefined }, 'academy')).toBe('/academy-scene/id-9');
+    expect(resolvePlaygroundLessonRoute('id-10', null, 'academy')).toBe('/academy-scene/id-10');
+  });
+
+  test('hub: playground does not fall into the academy branch — unrecognized Playground content still returns null', () => {
+    expect(resolvePlaygroundLessonRoute('id-11', { contentFormat: undefined }, 'playground')).toBeNull();
   });
 });
