@@ -404,11 +404,17 @@ const App = () => {
                       <Route path="/play/:lessonId" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />
                       <Route path="/play" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />
                       <Route path="/academy-classroom" element={<Suspense fallback={<AcademyLoadingFallback />}><AcademyClassroom /></Suspense>} />
-                      <Route path="/academy-creator" element={
-                        <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
-                          <Suspense fallback={<LoadingFallback />}><AcademyCreator /></Suspense>
-                        </ImprovedProtectedRoute>
-                      } />
+                      {/* Retired per direct user request — Academy content is now
+                          authored the same way its library lessons already work,
+                          not through this standalone tool. AcademyCreator.tsx and
+                          every navigate('/academy-creator...') call elsewhere in the
+                          app (AcademyLibraryPage, CurriculumMap, TrialCreator,
+                          LibraryManager, useLessonTemplates, ImportFromTextDialog)
+                          are deliberately left untouched — this single route-level
+                          redirect intercepts all of them, so the tool can be
+                          reinstated later (e.g. for a different program) just by
+                          restoring the route below. */}
+                      <Route path="/academy-creator" element={<Navigate to="/academy-library" replace />} />
                       <Route path="/success-creator" element={
                         <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
                           <Suspense fallback={<LoadingFallback />}><SuccessCreator /></Suspense>
