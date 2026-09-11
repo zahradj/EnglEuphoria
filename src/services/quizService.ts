@@ -11,6 +11,8 @@ export interface QuizResponse {
   responseTimeMs: number;
   /** Domain-prefixed competency tag (e.g. 'grammar:present_perfect'), if this question was authored with one. */
   skillTag: string | null;
+  /** Index into a multi-item slide's items[] (multiple/truefalse/matching/etc.). Null for single-question type:quiz slides. */
+  itemIndex: number | null;
   createdAt: string;
 }
 
@@ -32,17 +34,22 @@ class QuizService {
     selectedOptionId: string,
     isCorrect: boolean,
     responseTimeMs: number,
-    skillTag?: string | null
+    skillTag?: string | null,
+    itemIndex?: number | null
   ): Promise<QuizResponse | null> {
     try {
-      // Check if student already answered this question
-      const { data: existing } = await supabase
+      // Check if student already answered this question (or, for a
+      // multi-item slide, this specific item within it — item_index is
+      // null for the single-question type:quiz path, so .is()/.eq() must
+      // branch since PostgREST's .eq(col, null) doesn't mean IS NULL).
+      let existingQuery = supabase
         .from('quiz_responses')
         .select('id')
         .eq('session_id', sessionId)
         .eq('slide_id', slideId)
-        .eq('student_id', studentId)
-        .single();
+        .eq('student_id', studentId);
+      existingQuery = itemIndex == null ? existingQuery.is('item_index', null) : existingQuery.eq('item_index', itemIndex);
+      const { data: existing } = await existingQuery.maybeSingle();
 
       if (existing) {
         console.warn('Student already answered this question');
@@ -59,7 +66,8 @@ class QuizService {
           selected_option_id: selectedOptionId,
           is_correct: isCorrect,
           response_time_ms: responseTimeMs,
-          skill_tag: skillTag ?? null
+          skill_tag: skillTag ?? null,
+          item_index: itemIndex ?? null
         })
         .select()
         .single();
@@ -185,6 +193,7 @@ class QuizService {
       isCorrect: data.is_correct,
       responseTimeMs: data.response_time_ms,
       skillTag: data.skill_tag ?? null,
+      itemIndex: data.item_index ?? null,
       createdAt: data.created_at
     };
   }

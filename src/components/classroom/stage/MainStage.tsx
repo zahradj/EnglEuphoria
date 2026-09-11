@@ -45,6 +45,9 @@ interface MainStageProps {
   userId: string;
   userName: string;
   role: 'teacher' | 'student';
+  /** Real classroom_sessions.id (NOT roomId, which is class_bookings.id) —
+   *  needed to persist quiz_responses for Academy's live quiz-like slides. */
+  sessionId?: string;
   /** Web-mode "Independent Play" — when true the student can interact directly with the iframe. */
   iframeUnlocked?: boolean;
   /** Active Smart Worksheet for native game modes. */
@@ -100,6 +103,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
   userId,
   userName,
   role,
+  sessionId,
   iframeUnlocked = false,
   worksheet = null,
   rawSlides,
@@ -302,6 +306,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
               worksheet={worksheet}
               rawSlides={rawSlides}
               hubType={hubType}
+              sessionId={sessionId}
             />
           )}
         </div>

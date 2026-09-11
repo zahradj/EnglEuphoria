@@ -1284,6 +1284,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             userId={user?.id || sessionStorage.getItem('demo-teacher-id') || ''}
             userName={teacherName}
             role="teacher"
+            sessionId={session?.id}
             iframeUnlocked={iframeUnlocked}
             activityUnlocked={activityUnlocked}
             rawSlides={displayedSlides}

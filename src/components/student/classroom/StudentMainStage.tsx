@@ -236,6 +236,7 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
         userId={userId}
         userName={userName}
         role="student"
+        sessionId={sessionId}
         iframeUnlocked={iframeUnlocked}
         activityUnlocked={activityUnlocked}
         rawSlides={rawSlides}

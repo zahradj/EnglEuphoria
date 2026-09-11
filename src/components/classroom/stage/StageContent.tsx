@@ -6,6 +6,8 @@ import { NativeCoPlayArena } from '@/components/classroom/native-games/NativeCoP
 import DynamicSlideRenderer from '@/components/lesson-player/DynamicSlideRenderer';
 import { CanvasEditor } from '@/components/admin/lesson-builder/canvas/CanvasEditor';
 import { CreatorSlideRenderer } from './CreatorSlideRenderer';
+import type { OnAnswer } from '@/pages/AcademyDemo';
+import { quizService } from '@/services/quizService';
 import { HomeworkSlideLivePreview } from '@/components/creator-studio/shared/HomeworkSlideLivePreview';
 import type { GeneratedSlide, HubType } from '@/components/admin/lesson-builder/ai-wizard/types';
 import ImmersivePlaygroundShell from '@/components/playground/ImmersivePlaygroundShell';
@@ -195,6 +197,10 @@ interface StageContentProps {
   worksheet?: SmartWorksheet | null;
   rawSlides?: any[];
   hubType?: HubType;
+  /** Real classroom_sessions.id — NOT the same as `roomId` (that's
+   *  class_bookings.id). Needed to persist quiz_responses rows for
+   *  Academy's live quiz-like slides (see onAnswer below). */
+  sessionId?: string;
 }
 
 /**
@@ -216,6 +222,7 @@ export const StageContent: React.FC<StageContentProps> = ({
   worksheet = null,
   rawSlides,
   hubType = 'academy',
+  sessionId,
 }) => {
   if (mode.startsWith('native_game_')) {
     return (
@@ -321,6 +328,30 @@ export const StageContent: React.FC<StageContentProps> = ({
   const hubGradient = slideMode === 'intro' ? HUB_BG_GRADIENT[hubType] : undefined;
 
   if (isCreatorNativeSlide(rawSrc)) {
+    // Persist real answers for Academy's live-classroom quiz-like slides —
+    // these previously tracked picks in local component state only, with
+    // zero server record (confirmed: quiz_responses had zero rows from any
+    // real class). Gated to the student's own session: only the student
+    // clicking should ever be recorded (a teacher mirroring/demoing the
+    // same slide isn't "answering"), and quiz_responses' RLS insert policy
+    // requires auth.uid() = student_id anyway, so a teacher-side insert
+    // would just fail — this avoids firing a doomed request.
+    const onAnswer: OnAnswer | undefined =
+      hubType === 'academy' && role === 'student' && sessionId
+        ? ({ itemIndex, isCorrect, skillTag }) => {
+            void quizService.submitAnswer(
+              sessionId,
+              currentSlide.id,
+              userId,
+              userId,
+              String(itemIndex),
+              isCorrect,
+              0,
+              skillTag ?? null,
+              itemIndex,
+            );
+          }
+        : undefined;
     const inner = (
       <div
         className={wrapper.className}
@@ -328,7 +359,7 @@ export const StageContent: React.FC<StageContentProps> = ({
         data-slide-mode={slideMode}
       >
         <InnerForMode mode={slideMode}>
-          <CreatorSlideRenderer slide={rawSrc} hub={hubType} theme="light" />
+          <CreatorSlideRenderer slide={rawSrc} hub={hubType} theme="light" onAnswer={onAnswer} />
         </InnerForMode>
       </div>
     );

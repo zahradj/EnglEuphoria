@@ -9840,6 +9840,7 @@ export type Database = {
           created_at: string | null
           id: string
           is_correct: boolean
+          item_index: number | null
           response_time_ms: number | null
           selected_option_id: string
           session_id: string
@@ -9852,6 +9853,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           is_correct: boolean
+          item_index?: number | null
           response_time_ms?: number | null
           selected_option_id: string
           session_id: string
@@ -9864,6 +9866,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           is_correct?: boolean
+          item_index?: number | null
           response_time_ms?: number | null
           selected_option_id?: string
           session_id?: string

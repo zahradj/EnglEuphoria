@@ -12,7 +12,7 @@
  */
 import React from 'react';
 import { SlideRenderer as PlaygroundSlideRenderer } from '@/pages/PlaygroundDemo';
-import { SlideRenderer as AcademySlideRenderer, themeMap as academyThemeMap } from '@/pages/AcademyDemo';
+import { SlideRenderer as AcademySlideRenderer, themeMap as academyThemeMap, type OnAnswer } from '@/pages/AcademyDemo';
 import { SlideRenderer as SuccessSlideRenderer, themeMap as successThemeMap } from '@/pages/SuccessDemo';
 import {
   TrailBackground,
@@ -25,9 +25,14 @@ interface Props {
   slide: any;
   hub: CreatorHub;
   theme?: 'light' | 'dark';
+  /** Fired when a student answers a gradable item on an Academy quiz-like
+   *  slide (multiple/truefalse/matching/etc.) — wired only for Academy,
+   *  where the real live-classroom persistence path needs it; Playground
+   *  and Success slide renderers don't accept this prop yet. */
+  onAnswer?: OnAnswer;
 }
 
-export const CreatorSlideRenderer: React.FC<Props> = ({ slide, hub, theme = 'light' }) => {
+export const CreatorSlideRenderer: React.FC<Props> = ({ slide, hub, theme = 'light', onAnswer }) => {
   if (!slide) return null;
 
   if (hub === 'playground') {
@@ -59,7 +64,7 @@ export const CreatorSlideRenderer: React.FC<Props> = ({ slide, hub, theme = 'lig
   return (
     <div className={`w-full h-full flex items-center justify-center px-6 py-4 ${t.bg}`}>
       <div className="w-full max-w-4xl">
-        <AcademySlideRenderer slide={slide as any} t={t} />
+        <AcademySlideRenderer slide={slide as any} t={t} onAnswer={onAnswer} />
       </div>
     </div>
   );

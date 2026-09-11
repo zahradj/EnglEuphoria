@@ -210,8 +210,25 @@ const UnifiedClassroomPage: React.FC = () => {
   // teacher and student views be compared side by side without any real
   // login credentials or a fabricated production booking row.
   if (isDevBypassActive) {
-    const devRoomId = new URLSearchParams(location.search).get('dev_room') || 'dev-classroom-test';
+    const devSearch = new URLSearchParams(location.search);
+    const devRoomId = devSearch.get('dev_room') || 'dev-classroom-test';
     const devLessonRef = { unitNumber: 1, lessonNumber: 4, contentFormat: 'wt-rich' };
+    // ?dev_hub=academy swaps the synthetic content to one tagged 'multiple'
+    // quiz slide, to live-verify the CreatorSlideRenderer answer-persistence
+    // path (quizService.submitAnswer via StageContent's onAnswer) without
+    // needing a real booking or real curriculum content.
+    const devHub = devSearch.get('dev_hub') === 'academy' ? 'academy' : 'playground';
+    const devAcademySlides = [{
+      id: 'dev-multiple-1',
+      type: 'multiple',
+      prompt: 'Dev verification slide',
+      items: [{
+        question: 'She ___ football every day.',
+        options: ['play', 'plays', 'playing'],
+        answer: 'plays',
+        skillTag: 'grammar:present_simple',
+      }],
+    }];
     if (bypassRole === 'student') {
       return (
         <StudentClassroom
@@ -219,7 +236,7 @@ const UnifiedClassroomPage: React.FC = () => {
           studentId="dev-bypass-student"
           studentName="Dev Student"
           teacherName="Dev Teacher"
-          hubType="playground"
+          hubType={devHub}
         />
       );
     }
@@ -228,9 +245,9 @@ const UnifiedClassroomPage: React.FC = () => {
         classId={devRoomId}
         teacherName="Dev Teacher"
         studentName="Dev Student"
-        hubType="playground"
-        lessonTitle="Speak & Meet!"
-        initialSlides={[{ sceneLessonRef: devLessonRef }]}
+        hubType={devHub}
+        lessonTitle={devHub === 'academy' ? 'Dev Academy Quiz Test' : 'Speak & Meet!'}
+        initialSlides={devHub === 'academy' ? devAcademySlides : [{ sceneLessonRef: devLessonRef }]}
       />
     );
   }

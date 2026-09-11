@@ -552,12 +552,12 @@ function ObjectiveBanner({ objective }: { objective?: { title: string; skill: st
   );
 }
 
-function MatchingSlide({ slide, t }: { slide: Extract<Slide, { type: 'matching' }>; t: ThemeTokens }) {
+function MatchingSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: 'matching' }>; t: ThemeTokens; onAnswer?: OnAnswer }) {
   const rights = useMemo(() => [...slide.pairs].sort(() => Math.random() - 0.5), [slide.pairs]);
   const [selL, setSelL] = useState<string | null>(null);
   const [solved, setSolved] = useState<Record<string, true>>({});
   const [wrong, setWrong] = useState<string | null>(null);
-  const attemptsRef = useRef({ attempts: 0, correct: 0, startedAt: Date.now(), emitted: false });
+  const attemptsRef = useRef({ attempts: 0, correct: 0, startedAt: Date.now(), emitted: false, answered: false });
 
   const tryPair = (left: string, right: string) => {
     attemptsRef.current.attempts += 1;
@@ -570,6 +570,18 @@ function MatchingSlide({ slide, t }: { slide: Extract<Slide, { type: 'matching' 
     }
     setSelL(null);
   };
+
+  // Persist one answer event for the whole board once fully solved — a
+  // matching board doesn't have per-pair "which item" granularity the way
+  // multiple/truefalse do, so it's tracked as itemIndex 0, isCorrect true
+  // (by definition: `solved` only reaches `total` via all-correct matches).
+  useEffect(() => {
+    const total = slide.pairs.length;
+    if (total === 0 || attemptsRef.current.answered) return;
+    if (Object.keys(solved).length < total) return;
+    attemptsRef.current.answered = true;
+    onAnswer?.({ itemIndex: 0, isCorrect: true, skillTag: (slide as any).skillTag });
+  }, [solved, slide, onAnswer]);
 
   // Emit vocab-arc completion once when board is fully solved (source-tagged only).
   useEffect(() => {
@@ -689,7 +701,7 @@ function ListeningSlide({ slide, t }: { slide: Extract<Slide, { type: 'listening
   );
 }
 
-function TrueFalseSlide({ slide, t }: { slide: Extract<Slide, { type: 'truefalse' }>; t: ThemeTokens }) {
+function TrueFalseSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: 'truefalse' }>; t: ThemeTokens; onAnswer?: OnAnswer }) {
   const items = getTrueFalseItems(slide);
   const [index, setIndex] = useState(0);
   const [picks, setPicks] = useState<Record<number, boolean>>({});
@@ -718,7 +730,11 @@ function TrueFalseSlide({ slide, t }: { slide: Extract<Slide, { type: 'truefalse
           return (
             <button
               key={String(v)}
-              onClick={() => picked === null && setPicks((p) => ({ ...p, [index]: v }))}
+              onClick={() => {
+                if (picked !== null) return;
+                setPicks((p) => ({ ...p, [index]: v }));
+                onAnswer?.({ itemIndex: index, isCorrect: v === item.answer, skillTag: item.skillTag });
+              }}
               className={`flex flex-col items-center gap-1 px-8 py-3 rounded-xl font-medium transition ${cls}`}
               aria-label={v ? 'True' : 'False'}
             >
@@ -733,7 +749,7 @@ function TrueFalseSlide({ slide, t }: { slide: Extract<Slide, { type: 'truefalse
   );
 }
 
-function MultipleSlide({ slide, t }: { slide: Extract<Slide, { type: 'multiple' }>; t: ThemeTokens }) {
+function MultipleSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: 'multiple' }>; t: ThemeTokens; onAnswer?: OnAnswer }) {
   const items = getMultipleItems(slide);
   const [index, setIndex] = useState(0);
   const [picks, setPicks] = useState<Record<number, string>>({});
@@ -767,7 +783,11 @@ function MultipleSlide({ slide, t }: { slide: Extract<Slide, { type: 'multiple' 
           return (
             <button
               key={opt}
-              onClick={() => picked === null && setPicks((p) => ({ ...p, [index]: opt }))}
+              onClick={() => {
+                if (picked !== null) return;
+                setPicks((p) => ({ ...p, [index]: opt }));
+                onAnswer?.({ itemIndex: index, isCorrect: opt === item.answer, skillTag: item.skillTag });
+              }}
               className={`flex items-center justify-between gap-2 rounded-2xl border-2 px-5 py-4 text-lg font-semibold shadow-sm transition ${cls}`}
             >
               <span>{opt}</span>
@@ -1017,7 +1037,7 @@ function ItemPager({ total, index, setIndex, score, t }: { total: number; index:
   );
 }
 
-function ErrorDetectionSlide({ slide, t }: { slide: Extract<Slide, { type: 'error_detection' }>; t: ThemeTokens }) {
+function ErrorDetectionSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: 'error_detection' }>; t: ThemeTokens; onAnswer?: OnAnswer }) {
   const items = getErrorDetectionItems(slide);
   const [index, setIndex] = useState(0);
   const [picks, setPicks] = useState<Record<number, number>>({});
@@ -1044,7 +1064,11 @@ function ErrorDetectionSlide({ slide, t }: { slide: Extract<Slide, { type: 'erro
           else if (picked !== null && isPicked && !isWrong) cls = 'border-red-500 bg-red-500/10 text-red-200';
           else if (picked !== null && isWrong) cls = 'border-emerald-500/60 text-emerald-300';
           return (
-            <button key={i} onClick={() => picked === null && setPicks((p) => ({ ...p, [index]: i }))}
+            <button key={i} onClick={() => {
+                if (picked !== null) return;
+                setPicks((p) => ({ ...p, [index]: i }));
+                onAnswer?.({ itemIndex: index, isCorrect: i === item.wrongIndex, skillTag: item.skillTag });
+              }}
               className={`px-3 py-1.5 rounded-md border transition ${cls}`}>
               {w}
             </button>
@@ -1056,7 +1080,7 @@ function ErrorDetectionSlide({ slide, t }: { slide: Extract<Slide, { type: 'erro
   );
 }
 
-function CorrectionSlide({ slide, t }: { slide: Extract<Slide, { type: 'correction' }>; t: ThemeTokens }) {
+function CorrectionSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: 'correction' }>; t: ThemeTokens; onAnswer?: OnAnswer }) {
   const items = getCorrectionItems(slide);
   const [index, setIndex] = useState(0);
   const [vals, setVals] = useState<Record<number, string>>({});
@@ -1072,6 +1096,10 @@ function CorrectionSlide({ slide, t }: { slide: Extract<Slide, { type: 'correcti
   const norm = (s: string) => s.trim().toLowerCase().replace(/[.!?]/g, '');
   const correct = submitted && norm(val) === norm(item.answer);
   const score = items.reduce((s, it, i) => s + ((subs[i] && norm(vals[i] || '') === norm(it.answer)) ? 1 : 0), 0);
+  const check = () => {
+    setSubs((p) => ({ ...p, [index]: true }));
+    onAnswer?.({ itemIndex: index, isCorrect: norm(val) === norm(item.answer), skillTag: item.skillTag });
+  };
   return (
     <div className="space-y-6 max-w-2xl w-full">
       <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
@@ -1084,7 +1112,7 @@ function CorrectionSlide({ slide, t }: { slide: Extract<Slide, { type: 'correcti
           submitted ? (correct ? 'border-emerald-500' : 'border-red-500') : ''
         }`}
       />
-      <button onClick={() => setSubs((p) => ({ ...p, [index]: true }))}
+      <button onClick={check}
         className="px-5 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium">
         Check
       </button>
@@ -1099,7 +1127,7 @@ function CorrectionSlide({ slide, t }: { slide: Extract<Slide, { type: 'correcti
   );
 }
 
-function FillBlankSlide({ slide, t }: { slide: Extract<Slide, { type: 'fill_blank' }>; t: ThemeTokens }) {
+function FillBlankSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: 'fill_blank' }>; t: ThemeTokens; onAnswer?: OnAnswer }) {
   const items = getFillBlankItems(slide);
   const [index, setIndex] = useState(0);
   const [vals, setVals] = useState<Record<number, string>>({});
@@ -1114,6 +1142,10 @@ function FillBlankSlide({ slide, t }: { slide: Extract<Slide, { type: 'fill_blan
   const submitted = !!subs[index];
   const correct = submitted && val.trim().toLowerCase() === item.answer.toLowerCase();
   const score = items.reduce((s, it, i) => s + ((subs[i] && (vals[i] || '').trim().toLowerCase() === it.answer.toLowerCase()) ? 1 : 0), 0);
+  const check = () => {
+    setSubs((p) => ({ ...p, [index]: true }));
+    onAnswer?.({ itemIndex: index, isCorrect: val.trim().toLowerCase() === item.answer.toLowerCase(), skillTag: item.skillTag });
+  };
   return (
     <div className="space-y-6 max-w-2xl w-full">
       <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
@@ -1122,14 +1154,14 @@ function FillBlankSlide({ slide, t }: { slide: Extract<Slide, { type: 'fill_blan
         <input
           value={val}
           onChange={(e) => { setVals((p) => ({ ...p, [index]: e.target.value })); setSubs((p) => ({ ...p, [index]: false })); }}
-          onKeyDown={(e) => e.key === 'Enter' && setSubs((p) => ({ ...p, [index]: true }))}
+          onKeyDown={(e) => e.key === 'Enter' && check()}
           className={`w-32 px-3 py-1.5 rounded-md border text-center outline-none focus:border-indigo-500 ${t.inputBg} ${
             submitted ? (correct ? 'border-emerald-500' : 'border-red-500') : ''
           }`}
         />
         <span>{item.after}</span>
       </div>
-      <button onClick={() => setSubs((p) => ({ ...p, [index]: true }))}
+      <button onClick={check}
         className="px-5 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium">
         Check
       </button>
@@ -1143,7 +1175,7 @@ function FillBlankSlide({ slide, t }: { slide: Extract<Slide, { type: 'fill_blan
   );
 }
 
-function SentenceBuilderSlide({ slide, t }: { slide: Extract<Slide, { type: 'sentence_builder' }>; t: ThemeTokens }) {
+function SentenceBuilderSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: 'sentence_builder' }>; t: ThemeTokens; onAnswer?: OnAnswer }) {
   const items = getSentenceBuilderItems(slide);
   const [index, setIndex] = useState(0);
   const [scores, setScores] = useState<Record<number, boolean>>({});
@@ -1161,7 +1193,10 @@ function SentenceBuilderSlide({ slide, t }: { slide: Extract<Slide, { type: 'sen
         key={index}
         item={item}
         t={t}
-        onScored={(ok) => setScores((p) => ({ ...p, [index]: ok }))}
+        onScored={(ok) => {
+          setScores((p) => ({ ...p, [index]: ok }));
+          onAnswer?.({ itemIndex: index, isCorrect: ok, skillTag: item.skillTag });
+        }}
         footer={<ItemPager total={items.length} index={index} setIndex={setIndex} score={score} t={t} />}
       />
     </div>
@@ -3170,26 +3205,26 @@ function VocabImageMatchSlide({ slide, t }: { slide: Extract<Slide, { type: 'voc
 
 }
 
-function renderSlideInner({ slide, t, fullBleed }: { slide: Slide; t: ThemeTokens; fullBleed?: boolean }) {
+function renderSlideInner({ slide, t, fullBleed, onAnswer }: { slide: Slide; t: ThemeTokens; fullBleed?: boolean; onAnswer?: OnAnswer }) {
   switch (slide.type) {
     case 'intro': return <Intro slide={slide} t={t} />;
     case 'question': return <QuestionSlide slide={slide} t={t} />;
     case 'poll': return <PollSlide slide={slide} t={t} />;
     case 'opinion': return <OpinionSlide slide={slide} t={t} />;
     case 'vocab': return <VocabSlide slide={slide} t={t} />;
-    case 'matching': return <MatchingSlide slide={slide} t={t} />;
+    case 'matching': return <MatchingSlide slide={slide} t={t} onAnswer={onAnswer} />;
     case 'reading_passage': return <ReadingSlide slide={slide} t={t} />;
     case 'listening': return <ListeningSlide slide={slide} t={t} />;
-    case 'truefalse': return <TrueFalseSlide slide={slide} t={t} />;
-    case 'multiple': return <MultipleSlide slide={slide} t={t} />;
+    case 'truefalse': return <TrueFalseSlide slide={slide} t={t} onAnswer={onAnswer} />;
+    case 'multiple': return <MultipleSlide slide={slide} t={t} onAnswer={onAnswer} />;
     case 'grammar_pattern': return <GrammarPatternSlide slide={slide} t={t} />;
     case 'grammar_color_decode': return <GrammarColorDecodeSlide slide={slide} t={t} />;
     case 'frequency_thermometer': return <FrequencyThermometerSlide slide={slide} t={t} />;
     case 'grammar_formula': return <GrammarFormulaSlide slide={slide} t={t} />;
-    case 'error_detection': return <ErrorDetectionSlide slide={slide} t={t} />;
-    case 'correction': return <CorrectionSlide slide={slide} t={t} />;
-    case 'fill_blank': return <FillBlankSlide slide={slide} t={t} />;
-    case 'sentence_builder': return <SentenceBuilderSlide slide={slide} t={t} />;
+    case 'error_detection': return <ErrorDetectionSlide slide={slide} t={t} onAnswer={onAnswer} />;
+    case 'correction': return <CorrectionSlide slide={slide} t={t} onAnswer={onAnswer} />;
+    case 'fill_blank': return <FillBlankSlide slide={slide} t={t} onAnswer={onAnswer} />;
+    case 'sentence_builder': return <SentenceBuilderSlide slide={slide} t={t} onAnswer={onAnswer} />;
     case 'debate_scale': return <DebateScaleSlide slide={slide} t={t} />;
     case 'role_play': return <RolePlaySlide slide={slide} t={t} fullBleed={fullBleed} />;
     case 'scene_dialogue': return <SceneDialogueSlide slide={slide} fullBleed={fullBleed} />;
@@ -3243,7 +3278,16 @@ function LanguageEngineSlide({ slide, t }: { slide: any; t: ThemeTokens }) {
   );
 }
 
-export function SlideRenderer({ slide, t, fullBleed }: { slide: Slide; t: ThemeTokens; fullBleed?: boolean }) {
+/** Fired the moment a student's pick on a gradable item is locked in — see
+ *  the "Real answer persistence" note above MultipleSlide for why this
+ *  exists: these slide types previously tracked answers in local state
+ *  only, with the result discarded on navigation. `itemIndex` is the
+ *  position within the slide's items[] (every one of these types holds an
+ *  array of gradable items per slide, not just one). */
+export interface AnswerEvent { itemIndex: number; isCorrect: boolean; skillTag?: string }
+export type OnAnswer = (e: AnswerEvent) => void;
+
+export function SlideRenderer({ slide, t, fullBleed, onAnswer }: { slide: Slide; t: ThemeTokens; fullBleed?: boolean; onAnswer?: OnAnswer }) {
   // Slides that render their own image inline (cover, vocab 50/50, etc.)
   // must NOT also get the floating SlideMediaHeader image — it produces a
   // duplicate "small image at top" + "image inside card" bug.
@@ -3251,7 +3295,7 @@ export function SlideRenderer({ slide, t, fullBleed }: { slide: Slide; t: ThemeT
   return (
     <>
       {!skipHeader && <SlideMediaHeader slide={slide} />}
-      {renderSlideInner({ slide, t, fullBleed })}
+      {renderSlideInner({ slide, t, fullBleed, onAnswer })}
     </>
   );
 }
