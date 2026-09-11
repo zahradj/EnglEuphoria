@@ -17,8 +17,11 @@ interface QueueRow {
 
 /**
  * Auto-Assigned Lessons queue — pins Bonus Quest (remedial) lessons to the top
- * of the student's path. Zero teacher intervention: rows appear via
- * `useUnitProgression` after a failed Mastery Quiz.
+ * of the student's path. Zero teacher intervention: rows appear here purely
+ * from `scheduled_lessons.auto_assigned = true`, written by whichever
+ * auto-remediation path fired — today that's the Academy per-domain Extra
+ * Practice check (evaluateAndAssignExtraPractice.ts, via the
+ * generate-lesson-content edge function).
  */
 export default function AutoAssignedQueue() {
   const navigate = useNavigate();
