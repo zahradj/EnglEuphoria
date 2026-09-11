@@ -23,6 +23,8 @@ interface StudentQuizViewProps {
   quizActive: boolean;
   quizLocked: boolean;
   quizRevealAnswer: boolean;
+  /** Domain-prefixed competency tag for this question (e.g. 'grammar:present_perfect'), if authored with one. */
+  skillTag?: string | null;
 }
 
 export const StudentQuizView: React.FC<StudentQuizViewProps> = ({
@@ -34,7 +36,8 @@ export const StudentQuizView: React.FC<StudentQuizViewProps> = ({
   studentName,
   quizActive,
   quizLocked,
-  quizRevealAnswer
+  quizRevealAnswer,
+  skillTag
 }) => {
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -78,7 +81,8 @@ export const StudentQuizView: React.FC<StudentQuizViewProps> = ({
       studentName,
       optionId,
       isCorrect,
-      responseTimeMs
+      responseTimeMs,
+      skillTag
     );
 
     setHasSubmitted(true);

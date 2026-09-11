@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { IncidentFlag, TEACHER_FLAG_OPTIONS, FLAG_META } from './incidentFlags';
 import { getClassroomHubTheme, type ClassroomHubKey } from '@/components/teacher/classroom/hubClassroomTheme';
 import { endLesson } from '@/services/endLesson';
+import { evaluateAndAssignExtraPractice } from '@/lib/remediation/evaluateAndAssignExtraPractice';
 
 const REPORT_DEADLINE_MS = 24 * 60 * 60 * 1000;
 
@@ -273,6 +274,15 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
           });
         } catch (syncErr) {
           console.error('post-class-sync failed (non-blocking):', syncErr);
+        }
+
+        // Automatic per-domain Extra Practice — evaluates this lesson's
+        // quiz_responses against Novakid's per-competency rule and
+        // auto-assigns a matching practice lesson where it triggers.
+        // Academy-only today (see evaluateAndAssignExtraPractice.ts); a
+        // no-op, never-throwing call for every other hub.
+        if (studentId) {
+          void evaluateAndAssignExtraPractice({ bookingId, studentId, hub: hubType as any });
         }
       }
 

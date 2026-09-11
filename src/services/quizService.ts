@@ -9,6 +9,8 @@ export interface QuizResponse {
   selectedOptionId: string;
   isCorrect: boolean;
   responseTimeMs: number;
+  /** Domain-prefixed competency tag (e.g. 'grammar:present_perfect'), if this question was authored with one. */
+  skillTag: string | null;
   createdAt: string;
 }
 
@@ -29,7 +31,8 @@ class QuizService {
     studentName: string,
     selectedOptionId: string,
     isCorrect: boolean,
-    responseTimeMs: number
+    responseTimeMs: number,
+    skillTag?: string | null
   ): Promise<QuizResponse | null> {
     try {
       // Check if student already answered this question
@@ -55,7 +58,8 @@ class QuizService {
           student_name: studentName,
           selected_option_id: selectedOptionId,
           is_correct: isCorrect,
-          response_time_ms: responseTimeMs
+          response_time_ms: responseTimeMs,
+          skill_tag: skillTag ?? null
         })
         .select()
         .single();
@@ -180,6 +184,7 @@ class QuizService {
       selectedOptionId: data.selected_option_id,
       isCorrect: data.is_correct,
       responseTimeMs: data.response_time_ms,
+      skillTag: data.skill_tag ?? null,
       createdAt: data.created_at
     };
   }

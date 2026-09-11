@@ -144,6 +144,7 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
             question={currentSlide.quizQuestion} options={currentSlide.quizOptions}
             studentId={userId} studentName={userName}
             quizActive={quizActive} quizLocked={quizLocked} quizRevealAnswer={quizRevealAnswer}
+            skillTag={currentSlide.skillTag ?? null}
           />
         </div>
       </div>

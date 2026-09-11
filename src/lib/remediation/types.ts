@@ -2,8 +2,33 @@
  * Cycle 3 Adaptive Routing — shared remediation types.
  */
 
-export type RemedialKind = 'unit' | 'micro';
+export type RemedialKind = 'unit' | 'micro' | 'competency';
 export type Hub = 'playground' | 'academy' | 'professional';
+
+/**
+ * A single quiz answer tagged with a domain-prefixed competency, e.g.
+ * `grammar:present_perfect`, `reading:main_idea`, `speaking:fluency` — the
+ * same `domain:specific` convention `useLiveClassroom.ts`'s `Struggle.skill_tag`
+ * already uses. Untagged answers (`skillTag` null/undefined) are ignored by
+ * domain aggregation — old quiz content keeps working, it just doesn't
+ * contribute a competency signal until authored with a tag.
+ */
+export interface TaggedQuizAnswer {
+  skillTag: string | null | undefined;
+  isCorrect: boolean;
+}
+
+/** One competency domain's automatic-remediation verdict for a single lesson. */
+export interface DomainCompetencyResult {
+  /** The domain prefix, e.g. 'grammar', 'reading', 'speaking'. */
+  domain: string;
+  /** Distinct competency tags seen in this domain this lesson. */
+  totalTags: string[];
+  /** Distinct competency tags with at least one wrong answer. */
+  failedTags: string[];
+  /** Whether this domain's rule was triggered — see evaluateDomainCompetencies.ts for the exact thresholds. */
+  shouldAssign: boolean;
+}
 
 /**
  * Result payload emitted by the Unit Quiz (Lesson 6 mastery quiz).

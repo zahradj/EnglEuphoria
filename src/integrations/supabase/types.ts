@@ -2148,6 +2148,7 @@ export type Database = {
           student_id: string
           subscription_id: string | null
           teacher_id: string
+          technical_fault_party: string | null
           updated_at: string
         }
         Insert: {
@@ -2173,6 +2174,7 @@ export type Database = {
           student_id: string
           subscription_id?: string | null
           teacher_id: string
+          technical_fault_party?: string | null
           updated_at?: string
         }
         Update: {
@@ -2198,6 +2200,7 @@ export type Database = {
           student_id?: string
           subscription_id?: string | null
           teacher_id?: string
+          technical_fault_party?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -2417,6 +2420,7 @@ export type Database = {
           current_slide_index: number | null
           dice_value: number | null
           disconnect_reason: string | null
+          drawing_enabled: boolean
           duration_minutes: number | null
           embedded_url: string | null
           ended_at: string | null
@@ -2436,6 +2440,7 @@ export type Database = {
           quiz_locked: boolean | null
           quiz_reveal_answer: boolean | null
           room_id: string
+          scene_lesson_idx: number | null
           scheduled_at: string | null
           session_context: Json | null
           session_status: string
@@ -2469,6 +2474,7 @@ export type Database = {
           current_slide_index?: number | null
           dice_value?: number | null
           disconnect_reason?: string | null
+          drawing_enabled?: boolean
           duration_minutes?: number | null
           embedded_url?: string | null
           ended_at?: string | null
@@ -2488,6 +2494,7 @@ export type Database = {
           quiz_locked?: boolean | null
           quiz_reveal_answer?: boolean | null
           room_id: string
+          scene_lesson_idx?: number | null
           scheduled_at?: string | null
           session_context?: Json | null
           session_status?: string
@@ -2521,6 +2528,7 @@ export type Database = {
           current_slide_index?: number | null
           dice_value?: number | null
           disconnect_reason?: string | null
+          drawing_enabled?: boolean
           duration_minutes?: number | null
           embedded_url?: string | null
           ended_at?: string | null
@@ -2540,6 +2548,7 @@ export type Database = {
           quiz_locked?: boolean | null
           quiz_reveal_answer?: boolean | null
           room_id?: string
+          scene_lesson_idx?: number | null
           scheduled_at?: string | null
           session_context?: Json | null
           session_status?: string
@@ -3315,6 +3324,7 @@ export type Database = {
           pack_id: string
           payment_method: string | null
           purchased_at: string
+          stripe_session_id: string | null
           student_id: string
         }
         Insert: {
@@ -3327,6 +3337,7 @@ export type Database = {
           pack_id: string
           payment_method?: string | null
           purchased_at?: string
+          stripe_session_id?: string | null
           student_id: string
         }
         Update: {
@@ -3339,6 +3350,7 @@ export type Database = {
           pack_id?: string
           payment_method?: string | null
           purchased_at?: string
+          stripe_session_id?: string | null
           student_id?: string
         }
         Relationships: [
@@ -9831,6 +9843,7 @@ export type Database = {
           response_time_ms: number | null
           selected_option_id: string
           session_id: string
+          skill_tag: string | null
           slide_id: string
           student_id: string
           student_name: string
@@ -9842,6 +9855,7 @@ export type Database = {
           response_time_ms?: number | null
           selected_option_id: string
           session_id: string
+          skill_tag?: string | null
           slide_id: string
           student_id: string
           student_name: string
@@ -9853,6 +9867,7 @@ export type Database = {
           response_time_ms?: number | null
           selected_option_id?: string
           session_id?: string
+          skill_tag?: string | null
           slide_id?: string
           student_id?: string
           student_name?: string
@@ -13055,8 +13070,10 @@ export type Database = {
       }
       support_tickets: {
         Row: {
+          admin_response: string | null
           category: string | null
           created_at: string | null
+          diagnostics: string | null
           id: string
           message: string
           priority: string | null
@@ -13066,8 +13083,10 @@ export type Database = {
           user_name: string | null
         }
         Insert: {
+          admin_response?: string | null
           category?: string | null
           created_at?: string | null
+          diagnostics?: string | null
           id?: string
           message: string
           priority?: string | null
@@ -13077,8 +13096,10 @@ export type Database = {
           user_name?: string | null
         }
         Update: {
+          admin_response?: string | null
           category?: string | null
           created_at?: string | null
+          diagnostics?: string | null
           id?: string
           message?: string
           priority?: string | null
@@ -13693,7 +13714,7 @@ export type Database = {
           {
             foreignKeyName: "teacher_earnings_booking_id_fkey"
             columns: ["booking_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "class_bookings"
             referencedColumns: ["id"]
           },
@@ -14133,6 +14154,7 @@ export type Database = {
           feedback_completion_rate: number | null
           id: string
           last_lesson_at: string | null
+          late_cancellations_count: number
           lesson_quality_score: number | null
           lessons_taught: number
           overall_kpi_score: number | null
@@ -14151,6 +14173,7 @@ export type Database = {
           feedback_completion_rate?: number | null
           id?: string
           last_lesson_at?: string | null
+          late_cancellations_count?: number
           lesson_quality_score?: number | null
           lessons_taught?: number
           overall_kpi_score?: number | null
@@ -14169,6 +14192,7 @@ export type Database = {
           feedback_completion_rate?: number | null
           id?: string
           last_lesson_at?: string | null
+          late_cancellations_count?: number
           lesson_quality_score?: number | null
           lessons_taught?: number
           overall_kpi_score?: number | null
@@ -14190,6 +14214,7 @@ export type Database = {
           can_teach: boolean | null
           certificate_urls: string[] | null
           created_at: string
+          cv_url: string | null
           hourly_rate_dzd: number | null
           hourly_rate_eur: number | null
           hub_role: string
@@ -14225,6 +14250,7 @@ export type Database = {
           can_teach?: boolean | null
           certificate_urls?: string[] | null
           created_at?: string
+          cv_url?: string | null
           hourly_rate_dzd?: number | null
           hourly_rate_eur?: number | null
           hub_role?: string
@@ -14260,6 +14286,7 @@ export type Database = {
           can_teach?: boolean | null
           certificate_urls?: string[] | null
           created_at?: string
+          cv_url?: string | null
           hourly_rate_dzd?: number | null
           hourly_rate_eur?: number | null
           hub_role?: string
@@ -14550,6 +14577,53 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      unified_lessons: {
+        Row: {
+          cefr: string
+          created_at: string
+          created_by: string
+          default_host_character_id: string | null
+          hub: string
+          id: string
+          moments: Json
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          cefr: string
+          created_at?: string
+          created_by: string
+          default_host_character_id?: string | null
+          hub: string
+          id?: string
+          moments?: Json
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          cefr?: string
+          created_at?: string
+          created_by?: string
+          default_host_character_id?: string | null
+          hub?: string
+          id?: string
+          moments?: Json
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "unified_lessons_default_host_character_id_fkey"
+            columns: ["default_host_character_id"]
+            isOneToOne: false
+            referencedRelation: "cast_vault_characters"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       unit_lessons: {
         Row: {
@@ -15685,6 +15759,13 @@ export type Database = {
       cleanup_stale_classroom_sessions: { Args: never; Returns: number }
       clear_pending_earnings: { Args: never; Returns: number }
       complete_referral: { Args: { friend_uuid: string }; Returns: undefined }
+      compute_session_disconnects: {
+        Args: { p_gap_seconds?: number; p_session_id: string }
+        Returns: {
+          student_disconnects: number
+          teacher_disconnects: number
+        }[]
+      }
       consume_credit: { Args: { p_student_id: string }; Returns: boolean }
       consume_lesson_credit: {
         Args: { p_user_id: string }
@@ -15718,6 +15799,7 @@ export type Database = {
         Returns: boolean
       }
       end_lesson: { Args: { p_booking_id: string }; Returns: Json }
+      end_lesson_service: { Args: { p_booking_id: string }; Returns: Json }
       enqueue_email: {
         Args: { _payload: Json; _queue_name: string }
         Returns: number
@@ -15932,6 +16014,14 @@ export type Database = {
       }
       is_admin: { Args: never; Returns: boolean }
       is_admin_or_marketing: { Args: { _user_id: string }; Returns: boolean }
+      is_homework_assignment_student: {
+        Args: { _assignment_id: string; _student_id: string }
+        Returns: boolean
+      }
+      is_homework_assignment_teacher: {
+        Args: { _assignment_id: string; _teacher_id: string }
+        Returns: boolean
+      }
       is_user_admin: { Args: never; Returns: boolean }
       is_user_teacher: { Args: never; Returns: boolean }
       jsonb_array_append: {
@@ -15946,6 +16036,10 @@ export type Database = {
           p_resource_type: string
         }
         Returns: undefined
+      }
+      mark_booking_ended_status: {
+        Args: { p_booking_id: string }
+        Returns: Json
       }
       mark_student_absent: { Args: { p_session_id: string }; Returns: Json }
       move_to_dlq: {
@@ -15992,6 +16086,11 @@ export type Database = {
         Returns: Json
       }
       refund_credit: { Args: { p_student_id: string }; Returns: undefined }
+      refund_lesson_credit: { Args: { p_lesson_id: string }; Returns: boolean }
+      refund_lesson_credit_for_noshow: {
+        Args: { p_fault_party: string; p_lesson_id: string }
+        Returns: boolean
+      }
       reset_monthly_class_usage: { Args: never; Returns: undefined }
       resolve_classroom_id: { Args: { any_id: string }; Returns: string }
       save_placement_test_result: {
@@ -16012,6 +16111,18 @@ export type Database = {
         Returns: boolean
       }
       server_now: { Args: never; Returns: string }
+      student_cancel_lesson: {
+        Args: { p_lesson_id: string; p_reason?: string }
+        Returns: Json
+      }
+      student_reschedule_lesson: {
+        Args: {
+          p_lesson_id: string
+          p_new_scheduled_at: string
+          p_reason?: string
+        }
+        Returns: Json
+      }
       submit_teacher_application:
         | {
             Args: {
@@ -16030,6 +16141,10 @@ export type Database = {
             Returns: string
           }
         | { Args: { p_payload: Json }; Returns: string }
+      teacher_cancel_slot: {
+        Args: { p_reason?: string; p_slot_id: string }
+        Returns: Json
+      }
       tick_heartbeat: {
         Args: { p_role: string; p_session_id: string }
         Returns: undefined
@@ -16156,12 +16271,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -16185,11 +16300,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -16210,11 +16325,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -16235,11 +16350,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -16252,11 +16367,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
