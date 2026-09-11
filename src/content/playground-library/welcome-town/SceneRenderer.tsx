@@ -494,25 +494,27 @@ function EchoScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind: 'ec
   const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
   return (
-    <GlassCard>
-      <p className="text-center text-lg font-bold text-orange-700">{scene.teacher}</p>
-      <div className="mt-4 grid place-items-center rounded-3xl bg-white/60 p-6">
-        <span className="text-5xl" style={{ animation: 'lep1-hop 1.4s ease-in-out infinite' }}>{c.emoji}</span>
-        <p className="mt-2 text-sm font-black uppercase tracking-widest" style={{ color: c.color }}>{c.name} says</p>
-        <p className="mt-1 text-3xl font-black" style={{ color: c.color }}>"{scene.word}"</p>
-      </div>
-      <button onClick={hear} className="mt-4 w-full rounded-full bg-white py-3 text-lg font-bold text-orange-700 shadow-md ring-2 ring-orange-200 active:scale-95">
-        🔊 Listen {heard > 0 && <span className="text-sm opacity-60">({heard})</span>}
-      </button>
-      <button
-        onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold} disabled={heard === 0}
-        className={`mt-3 w-full rounded-full py-6 text-2xl font-black text-white shadow-xl transition ${held ? 'scale-95' : ''} disabled:opacity-40`}
-        style={{ background: done ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
-      >
-        {done ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & say it'}
-      </button>
-      <PrimaryButton onClick={onNext} disabled={!done}>Next →</PrimaryButton>
-    </GlassCard>
+    <div className="absolute inset-x-0 top-8 z-20 flex justify-center px-4 sm:top-12">
+      <GlassCard className="w-full max-w-sm">
+        <p className="text-center text-lg font-bold text-orange-700">{scene.teacher}</p>
+        <div className="mt-4 grid place-items-center rounded-3xl bg-white/60 p-6">
+          <span className="text-5xl" style={{ animation: 'lep1-hop 1.4s ease-in-out infinite' }}>{c.emoji}</span>
+          <p className="mt-2 text-sm font-black uppercase tracking-widest" style={{ color: c.color }}>{c.name} says</p>
+          <p className="mt-1 text-3xl font-black" style={{ color: c.color }}>"{scene.word}"</p>
+        </div>
+        <button onClick={hear} className="mt-4 w-full rounded-full bg-white py-3 text-lg font-bold text-orange-700 shadow-md ring-2 ring-orange-200 active:scale-95">
+          🔊 Listen {heard > 0 && <span className="text-sm opacity-60">({heard})</span>}
+        </button>
+        <button
+          onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold} disabled={heard === 0}
+          className={`mt-3 w-full rounded-full py-6 text-2xl font-black text-white shadow-xl transition ${held ? 'scale-95' : ''} disabled:opacity-40`}
+          style={{ background: done ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
+        >
+          {done ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & say it'}
+        </button>
+        <PrimaryButton onClick={onNext} disabled={!done}>Next →</PrimaryButton>
+      </GlassCard>
+    </div>
   );
 }
 
