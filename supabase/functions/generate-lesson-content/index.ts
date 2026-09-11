@@ -147,7 +147,10 @@ Deno.serve(async (req) => {
         continue;
       }
 
-      const targetSystems = ["academy", "teen", "teens"];
+      // curriculum_lessons.target_system is CHECK-constrained to exactly
+      // 'kids' | 'teen' | 'adult' — confirmed against the live schema, not
+      // the hub id ('academy') this function otherwise deals in.
+      const targetSystems = ["teen"];
       const { data: practiceLesson } = await supabase
         .from("curriculum_lessons")
         .select("id")
