@@ -117,6 +117,10 @@ interface UseClassroomSyncReturn {
   sceneLessonIdx: number | null;
   /** Teacher-only: persist the current scene index (see sceneLessonIdx). */
   updateSceneLessonIdx: (idx: number) => Promise<void>;
+  /** Persisted unlock state of an embedded scene lesson's own interaction gate (PlayWelcomeTownLesson/PlayUnitLesson's `interactionUnlocked`) — recovered on refresh instead of resetting to locked. */
+  sceneInteractionUnlocked: boolean;
+  /** Teacher-only: persist the scene lesson's interaction-unlock state (see sceneInteractionUnlocked). */
+  updateSceneInteractionUnlocked: (unlocked: boolean) => Promise<void>;
 }
 
 const deriveStageModeFromSession = (session: ClassroomSession, fallback: StageMode): StageMode => {
@@ -141,6 +145,7 @@ export const useClassroomSync = ({
   const [drawingEnabled, setDrawingEnabledState] = useState<boolean>(false);
   const [iframeUnlocked, setIframeUnlockedState] = useState<boolean>(false);
   const [activityUnlocked, setActivityUnlockedState] = useState<boolean>(false);
+  const [sceneInteractionUnlocked, setSceneInteractionUnlockedState] = useState<boolean>(false);
   const cleanupRef = useRef<(() => void) | null>(null);
   const strokeCleanupRef = useRef<(() => void) | null>(null);
 
@@ -170,6 +175,9 @@ export const useClassroomSync = ({
           setCurrentSlideIndex(newSession.currentSlideIndex ?? 0);
           setStageModeState(prev => deriveStageModeFromSession(newSession, prev));
           setDrawingEnabledState(newSession.drawingEnabled ?? false);
+          setIframeUnlockedState(newSession.iframeUnlocked ?? false);
+          setActivityUnlockedState(newSession.sceneActivityUnlocked ?? false);
+          setSceneInteractionUnlockedState(newSession.sceneInteractionUnlocked ?? false);
           setIsConnected(true);
         }
       } else {
@@ -186,6 +194,9 @@ export const useClassroomSync = ({
             setCurrentSlideIndex(existingSession.currentSlideIndex ?? 0);
             setStageModeState(prev => deriveStageModeFromSession(existingSession, prev));
             setDrawingEnabledState(existingSession.drawingEnabled ?? false);
+            setIframeUnlockedState(existingSession.iframeUnlocked ?? false);
+            setActivityUnlockedState(existingSession.sceneActivityUnlocked ?? false);
+            setSceneInteractionUnlockedState(existingSession.sceneInteractionUnlocked ?? false);
             setIsConnected(true);
             break;
           }
@@ -208,6 +219,9 @@ export const useClassroomSync = ({
         setCurrentSlideIndex(updatedSession.currentSlideIndex ?? 0);
         setStageModeState(prev => deriveStageModeFromSession(updatedSession, prev));
         setDrawingEnabledState(updatedSession.drawingEnabled ?? false);
+        setIframeUnlockedState(updatedSession.iframeUnlocked ?? false);
+        setActivityUnlockedState(updatedSession.sceneActivityUnlocked ?? false);
+        setSceneInteractionUnlockedState(updatedSession.sceneInteractionUnlocked ?? false);
         // Receiving any session row (INSERT or UPDATE) proves the realtime
         // channel is live — this is what actually clears a stuck
         // "Disconnected" badge if the initial fetch above missed the race.
@@ -269,12 +283,14 @@ export const useClassroomSync = ({
       if (typeof snap.drawingEnabled === 'boolean') setDrawingEnabledState(snap.drawingEnabled);
       if (typeof snap.iframeUnlocked === 'boolean') setIframeUnlockedState(snap.iframeUnlocked);
       if (typeof snap.sceneActivityUnlocked === 'boolean') setActivityUnlockedState(snap.sceneActivityUnlocked);
+      if (typeof snap.sceneInteractionUnlocked === 'boolean') setSceneInteractionUnlockedState(snap.sceneInteractionUnlocked);
       setSession(prev => prev ? {
         ...prev,
         currentSlideIndex: snap.slideIndex,
         embeddedUrl: snap.embeddedUrl !== undefined ? snap.embeddedUrl : prev.embeddedUrl,
         activeCanvasTab: snap.activeCanvasTab ?? prev.activeCanvasTab,
         sceneLessonIdx: typeof snap.sceneLessonIdx === 'number' ? snap.sceneLessonIdx : prev.sceneLessonIdx,
+        sceneInteractionUnlocked: typeof snap.sceneInteractionUnlocked === 'boolean' ? snap.sceneInteractionUnlocked : prev.sceneInteractionUnlocked,
       } : prev);
     });
     return unsub;
@@ -324,8 +340,13 @@ export const useClassroomSync = ({
   const setIframeUnlocked = useCallback(async (unlocked: boolean) => {
     setIframeUnlockedState(unlocked);
     if (role !== 'teacher') return;
+    // Instant broadcast for immediate feel, PLUS persist to the session row
+    // (same shape as setDrawingEnabled) — a refreshed tab used to have no
+    // way to recover this and just reset to locked/false.
     try { await whiteboardService.sendIframeLockState(roomId, unlocked, userId); }
     catch (error) { console.error('Failed to send iframe lock state:', error); }
+    try { await classroomSyncService.updateSession(roomId, { iframeUnlocked: unlocked }); }
+    catch (error) { console.error('Failed to persist iframe lock state:', error); }
   }, [roomId, role, userId]);
 
   const applyRemoteActivityUnlocked = useCallback((unlocked: boolean) => {
@@ -335,23 +356,36 @@ export const useClassroomSync = ({
   const setActivityUnlocked = useCallback(async (unlocked: boolean) => {
     setActivityUnlockedState(unlocked);
     if (role !== 'teacher') return;
+    // Instant broadcast for immediate feel, PLUS persist to the session row
+    // (same shape as setDrawingEnabled) — a refreshed tab used to have no
+    // way to recover this and just reset to locked/false.
     try { await whiteboardService.sendSceneActivityLockState(roomId, unlocked, userId); }
     catch (error) { console.error('Failed to send scene activity lock state:', error); }
+    try { await classroomSyncService.updateSession(roomId, { sceneActivityUnlocked: unlocked }); }
+    catch (error) { console.error('Failed to persist scene activity lock state:', error); }
   }, [roomId, role, userId]);
 
   // Teacher actions
   const updateSlide = useCallback(async (index: number) => {
     if (role !== 'teacher') return;
+    const previousIndex = currentSlideIndex;
     setCurrentSlideIndex(index);
     // 1) Instant broadcast (Leader/Follower) — student updates within ~150ms.
     // 2) Persist to DB so late joiners hydrate from the row.
     // Both rethrow (like forceSync) instead of only console.error-ing —
     // silently swallowing here meant a teacher whose broadcast/write failed
     // saw their own slide advance perfectly with no signal the student didn't.
+    // Both also roll the teacher's own optimistic index back on failure —
+    // otherwise the teacher's view kept showing the new slide even though
+    // neither the student nor the DB ever learned about it, which read as
+    // exactly the "teacher/student looking at different slides" mismatch
+    // bug once a late-joining/reconnecting student then hydrated from the
+    // (unchanged) DB row and never matched what the teacher saw.
     try {
       await whiteboardService.sendSlideChange(roomId, index, userId);
     } catch (error) {
       console.error('Failed to broadcast slide_change:', error);
+      setCurrentSlideIndex(previousIndex);
       throw error;
     }
     try {
@@ -359,9 +393,10 @@ export const useClassroomSync = ({
       setSession(prev => prev ? { ...prev, currentSlideIndex: index } : null);
     } catch (error) {
       console.error('Failed to update slide:', error);
+      setCurrentSlideIndex(previousIndex);
       throw error;
     }
-  }, [roomId, role, userId]);
+  }, [roomId, role, userId, currentSlideIndex]);
 
   const updateTool = useCallback(async (tool: string) => {
     if (role !== 'teacher') return;
@@ -394,6 +429,22 @@ export const useClassroomSync = ({
       setSession(prev => prev ? { ...prev, sceneLessonIdx: idx } : prev);
     } catch (error) {
       console.error('Failed to persist scene lesson index:', error);
+    }
+  }, [roomId, role]);
+
+  // Teacher: persist the embedded scene lesson's own interaction-unlock
+  // gate, the same way updateSceneLessonIdx persists its scene index — a
+  // student who joins late or briefly reconnects catches up to the right
+  // locked/unlocked state from the DB row instead of only ever hearing
+  // about it via the instant (but non-replayable) sendSceneInteractionPermission broadcast.
+  const updateSceneInteractionUnlocked = useCallback(async (unlocked: boolean) => {
+    if (role !== 'teacher') return;
+    setSceneInteractionUnlockedState(unlocked);
+    try {
+      await classroomSyncService.updateSession(roomId, { sceneInteractionUnlocked: unlocked });
+      setSession(prev => prev ? { ...prev, sceneInteractionUnlocked: unlocked } : prev);
+    } catch (error) {
+      console.error('Failed to persist scene interaction unlock state:', error);
     }
   }, [roomId, role]);
 
@@ -497,6 +548,7 @@ export const useClassroomSync = ({
         iframeUnlocked,
         sceneActivityUnlocked: activityUnlocked,
         sceneLessonIdx: session?.sceneLessonIdx ?? null,
+        sceneInteractionUnlocked: session?.sceneInteractionUnlocked ?? sceneInteractionUnlocked,
         embeddedUrl: session?.embeddedUrl ?? null,
         activeCanvasTab: session?.activeCanvasTab,
         senderId: userId,
@@ -505,7 +557,7 @@ export const useClassroomSync = ({
       console.error('Failed to broadcast force_sync:', error);
       throw error;
     }
-  }, [role, roomId, userId, currentSlideIndex, stageMode, drawingEnabled, iframeUnlocked, activityUnlocked, session?.embeddedUrl, session?.activeCanvasTab]);
+  }, [role, roomId, userId, currentSlideIndex, stageMode, drawingEnabled, iframeUnlocked, activityUnlocked, sceneInteractionUnlocked, session?.embeddedUrl, session?.activeCanvasTab, session?.sceneLessonIdx, session?.sceneInteractionUnlocked]);
 
   return {
     session,
@@ -562,5 +614,7 @@ export const useClassroomSync = ({
     forceSync,
     sceneLessonIdx: session?.sceneLessonIdx ?? null,
     updateSceneLessonIdx,
+    sceneInteractionUnlocked: session?.sceneInteractionUnlocked ?? sceneInteractionUnlocked,
+    updateSceneInteractionUnlocked,
   };
 };

@@ -30,6 +30,10 @@ interface PlayWelcomeTownLessonProps {
   onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean }) => void;
   persistedSceneIdx?: number | null;
   onSceneIdxPersist?: (idx: number) => void;
+  /** Last interaction-unlock state persisted to the classroom session DB row, if any — recovers a refreshed/reconnecting tab instead of resetting to locked. */
+  persistedInteractionUnlocked?: boolean | null;
+  /** Teacher-only: called whenever the interaction-unlock gate changes, so the caller can persist it (in addition to the instant broadcast this component already sends) for that catch-up path. */
+  onInteractionUnlockedPersist?: (unlocked: boolean) => void;
 }
 
 /** Gem-eligible scene kinds — every activity kind that ever calls onWin(true)
@@ -38,7 +42,7 @@ interface PlayWelcomeTownLessonProps {
 const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'letter-game', 'jigsaw-puzzle']);
 
 const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcomeTownLessonProps>(function PlayWelcomeTownLesson(
-  { scenes, sessionKey, embedded = false, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist },
+  { scenes, sessionKey, embedded = false, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
   ref,
 ) {
   const navigate = useNavigate();
@@ -60,6 +64,15 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   const [interactionUnlocked, setInteractionUnlockedState] = useState(false);
   const sceneRootRef = useRef<HTMLDivElement>(null);
   const isApplyingRemoteTapRef = useRef(false);
+  // Set synchronously inside the capture-phase click handler right when a
+  // student's tap is mirrored to the teacher (sendSceneTap). Replaying that
+  // click on the teacher's own DOM independently fires whatever onClick the
+  // real element has — including onNext for activities that advance on
+  // click — so if goNext() runs as part of the SAME click, sending a
+  // second, separate sendSceneAdvanceRequest on top of it double-advances
+  // the teacher (confirmed: this was leaving the student's own view stuck
+  // one scene behind after their own successful tap).
+  const justMirroredTapRef = useRef(false);
 
   const setInteractionUnlocked = useCallback((next: boolean) => {
     setInteractionUnlockedState(next);
@@ -81,6 +94,23 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
     return unsubscribe;
   }, [isSynced, role, roomId]);
 
+  // Recover the current unlock state from the DB-persisted value on mount
+  // or reconnect, for BOTH roles — previously this gate was broadcast-only,
+  // so a refreshed tab (teacher or student) always reset to locked/false
+  // with no way to learn the real current value.
+  useEffect(() => {
+    if (!isSynced) return;
+    if (persistedInteractionUnlocked == null) return;
+    setInteractionUnlockedState(persistedInteractionUnlocked);
+  }, [isSynced, persistedInteractionUnlocked]);
+
+  // Teacher: persist the unlock gate whenever it changes, the same way
+  // sceneIdx is persisted below via onSceneIdxPersist.
+  useEffect(() => {
+    if (!isSynced || role !== 'teacher') return;
+    onInteractionUnlockedPersist?.(interactionUnlocked);
+  }, [isSynced, role, interactionUnlocked, onInteractionUnlockedPersist]);
+
   const iCaptureTaps = isSynced && !!role && (role === 'teacher' || (role === 'student' && interactionUnlocked));
   const iReplayTaps = isSynced && !!role && (
     (role === 'teacher' && interactionUnlocked) || (role === 'student' && !interactionUnlocked)
@@ -97,6 +127,14 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
       if (!target) return;
       const path = getDomPath(rootEl, target);
       if (!path) return;
+      // This click is about to be mirrored onto the other party's DOM,
+      // which independently re-fires whatever onClick the real element has
+      // — including a call to goNext() further down in this same
+      // synchronous dispatch, if this element is an activity's own
+      // advance/continue control. Flag it so goNext() doesn't ALSO send a
+      // separate advance request for the same action.
+      justMirroredTapRef.current = true;
+      setTimeout(() => { justMirroredTapRef.current = false; }, 0);
       void whiteboardService.sendSceneTap(roomId, { path, kind: 'click', senderRole: role, senderId: role });
     };
 
@@ -266,7 +304,17 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
     }
     if (studentCanAdvanceViaActivity && roomId) {
       stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
-      void whiteboardService.sendSceneAdvanceRequest(roomId, { senderId: 'student' });
+      // If this goNext() is running as part of a click that was just
+      // mirrored to the teacher (justMirroredTapRef), the teacher will
+      // independently reach goNext() by replaying that same click — an
+      // extra advance request here would double-advance the teacher while
+      // this student only advances once. Only send it when goNext() was
+      // reached some other way (no click to mirror it through).
+      if (justMirroredTapRef.current) {
+        justMirroredTapRef.current = false;
+      } else {
+        void whiteboardService.sendSceneAdvanceRequest(roomId, { senderId: 'student' });
+      }
     }
   }, [SCENES.length, canNavigate, studentCanAdvanceViaActivity, roomId]);
 

@@ -16,6 +16,8 @@ interface EmbeddedWelcomeTownLessonProps {
   onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean }) => void;
   persistedSceneIdx?: number | null;
   onSceneIdxPersist?: (idx: number) => void;
+  persistedInteractionUnlocked?: boolean | null;
+  onInteractionUnlockedPersist?: (unlocked: boolean) => void;
 }
 
 /**
@@ -26,7 +28,7 @@ interface EmbeddedWelcomeTownLessonProps {
  */
 export const EmbeddedWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, EmbeddedWelcomeTownLessonProps>(
   function EmbeddedWelcomeTownLesson(
-    { contentFormat, unitNumber, lessonNumber, roomId, role, hideInternalNav, onNavState, persistedSceneIdx, onSceneIdxPersist },
+    { contentFormat, unitNumber, lessonNumber, roomId, role, hideInternalNav, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
     ref,
   ) {
     const lesson = getWelcomeTownLesson(contentFormat, unitNumber, lessonNumber);
@@ -56,6 +58,8 @@ export const EmbeddedWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle,
           onNavState={onNavState}
           persistedSceneIdx={persistedSceneIdx}
           onSceneIdxPersist={onSceneIdxPersist}
+          persistedInteractionUnlocked={persistedInteractionUnlocked}
+          onInteractionUnlockedPersist={onInteractionUnlockedPersist}
         />
       </Suspense>
     );

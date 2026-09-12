@@ -2427,6 +2427,7 @@ export type Database = {
           fault_type: string | null
           force_refresh_timestamp: number | null
           id: string
+          iframe_unlocked: boolean
           is_milestone: boolean | null
           is_screen_sharing: boolean | null
           lesson_id: string | null
@@ -2440,6 +2441,8 @@ export type Database = {
           quiz_locked: boolean | null
           quiz_reveal_answer: boolean | null
           room_id: string
+          scene_activity_unlocked: boolean
+          scene_interaction_unlocked: boolean
           scene_lesson_idx: number | null
           scheduled_at: string | null
           session_context: Json | null
@@ -2481,6 +2484,7 @@ export type Database = {
           fault_type?: string | null
           force_refresh_timestamp?: number | null
           id?: string
+          iframe_unlocked?: boolean
           is_milestone?: boolean | null
           is_screen_sharing?: boolean | null
           lesson_id?: string | null
@@ -2494,6 +2498,8 @@ export type Database = {
           quiz_locked?: boolean | null
           quiz_reveal_answer?: boolean | null
           room_id: string
+          scene_activity_unlocked?: boolean
+          scene_interaction_unlocked?: boolean
           scene_lesson_idx?: number | null
           scheduled_at?: string | null
           session_context?: Json | null
@@ -2535,6 +2541,7 @@ export type Database = {
           fault_type?: string | null
           force_refresh_timestamp?: number | null
           id?: string
+          iframe_unlocked?: boolean
           is_milestone?: boolean | null
           is_screen_sharing?: boolean | null
           lesson_id?: string | null
@@ -2548,6 +2555,8 @@ export type Database = {
           quiz_locked?: boolean | null
           quiz_reveal_answer?: boolean | null
           room_id?: string
+          scene_activity_unlocked?: boolean
+          scene_interaction_unlocked?: boolean
           scene_lesson_idx?: number | null
           scheduled_at?: string | null
           session_context?: Json | null

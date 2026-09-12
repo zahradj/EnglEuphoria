@@ -111,6 +111,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
     applyRemoteActivityUnlocked,
     sessionEnded,
     sceneLessonIdx,
+    sceneInteractionUnlocked,
   } = useClassroomSync({
     roomId,
     userId: studentId,
@@ -613,6 +614,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
           customStage={customStage}
           isInterview={isInterview}
           sceneLessonIdx={sceneLessonIdx}
+          sceneInteractionUnlocked={sceneInteractionUnlocked}
         />
       </div>
 

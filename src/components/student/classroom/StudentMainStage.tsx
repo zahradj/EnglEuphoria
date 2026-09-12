@@ -63,6 +63,8 @@ interface StudentMainStageProps {
   isInterview?: boolean;
   /** Persisted current scene index of an active embedded scene lesson, if any. */
   sceneLessonIdx?: number | null;
+  /** Persisted interaction-unlock state of an active embedded scene lesson's own gate, if any. */
+  sceneInteractionUnlocked?: boolean | null;
 }
 
 /**
@@ -99,6 +101,7 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
   customStage,
   isInterview = false,
   sceneLessonIdx = null,
+  sceneInteractionUnlocked = null,
 }) => {
   const currentSlide = slides[currentSlideIndex];
   const isQuizSlide = currentSlide?.type === 'quiz';
@@ -244,6 +247,7 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
         customStage={customStage}
         isInterview={isInterview}
         sceneLessonIdx={sceneLessonIdx}
+        sceneInteractionUnlocked={sceneInteractionUnlocked}
         onAddStroke={onAddStroke}
       />
 

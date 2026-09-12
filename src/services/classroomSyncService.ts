@@ -38,6 +38,13 @@ export interface ClassroomSession {
   drawingEnabled: boolean;
   /** Current scene index within an embedded Playground scene lesson, if one is active. */
   sceneLessonIdx: number | null;
+  // Persisted the same way as drawingEnabled/sceneLessonIdx above — these
+  // used to be broadcast-only, so a refreshed tab reset them to false with
+  // no way to recover the real value and the surviving peer never re-sent
+  // it. See useClassroomSync.ts.
+  iframeUnlocked: boolean;
+  sceneActivityUnlocked: boolean;
+  sceneInteractionUnlocked: boolean;
 }
 
 export interface SessionUpdate {
@@ -69,6 +76,9 @@ export interface SessionUpdate {
   activeCanvasTab?: string;
   drawingEnabled?: boolean;
   sceneLessonIdx?: number | null;
+  iframeUnlocked?: boolean;
+  sceneActivityUnlocked?: boolean;
+  sceneInteractionUnlocked?: boolean;
 }
 
 class ClassroomSyncService {
@@ -251,6 +261,15 @@ class ClassroomSyncService {
       }
       if (updates.sceneLessonIdx !== undefined) {
         updateData.scene_lesson_idx = updates.sceneLessonIdx;
+      }
+      if (updates.iframeUnlocked !== undefined) {
+        updateData.iframe_unlocked = updates.iframeUnlocked;
+      }
+      if (updates.sceneActivityUnlocked !== undefined) {
+        updateData.scene_activity_unlocked = updates.sceneActivityUnlocked;
+      }
+      if (updates.sceneInteractionUnlocked !== undefined) {
+        updateData.scene_interaction_unlocked = updates.sceneInteractionUnlocked;
       }
 
       const { data, error } = await supabase
@@ -435,6 +454,9 @@ class ClassroomSyncService {
       force_refresh_timestamp: data.force_refresh_timestamp || 0,
       drawingEnabled: data.drawing_enabled || false,
       sceneLessonIdx: typeof data.scene_lesson_idx === 'number' ? data.scene_lesson_idx : null,
+      iframeUnlocked: data.iframe_unlocked || false,
+      sceneActivityUnlocked: data.scene_activity_unlocked || false,
+      sceneInteractionUnlocked: data.scene_interaction_unlocked || false,
     };
   }
 

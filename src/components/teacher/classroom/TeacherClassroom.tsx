@@ -243,6 +243,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     forceSync,
     sceneLessonIdx,
     updateSceneLessonIdx,
+    sceneInteractionUnlocked,
+    updateSceneInteractionUnlocked,
   } = useClassroomSync({
     roomId: roomName,
     userId: user?.id || (() => {
@@ -1293,6 +1295,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             isInterview={isInterview}
             sceneLessonIdx={sceneLessonIdx}
             onPersistSceneLessonIdx={updateSceneLessonIdx}
+            sceneInteractionUnlocked={sceneInteractionUnlocked}
+            onPersistSceneInteractionUnlocked={updateSceneInteractionUnlocked}
             onSceneNavState={setSceneNavState}
             onAddStroke={addStroke}
           />

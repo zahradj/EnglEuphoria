@@ -17,6 +17,8 @@ interface EmbeddedSceneLessonProps {
   onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean }) => void;
   persistedSceneIdx?: number | null;
   onSceneIdxPersist?: (idx: number) => void;
+  persistedInteractionUnlocked?: boolean | null;
+  onInteractionUnlockedPersist?: (unlocked: boolean) => void;
 }
 
 /**
@@ -26,7 +28,7 @@ interface EmbeddedSceneLessonProps {
  */
 export const EmbeddedSceneLesson = forwardRef<PlayUnitLessonHandle, EmbeddedSceneLessonProps>(
   function EmbeddedSceneLesson(
-    { unitNumber, lessonNumber, roomId, role, activityUnlocked, hideInternalNav, onNavState, persistedSceneIdx, onSceneIdxPersist },
+    { unitNumber, lessonNumber, roomId, role, activityUnlocked, hideInternalNav, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
     ref,
   ) {
     const scenes = getSceneLesson(unitNumber, lessonNumber);
@@ -57,6 +59,8 @@ export const EmbeddedSceneLesson = forwardRef<PlayUnitLessonHandle, EmbeddedScen
           onNavState={onNavState}
           persistedSceneIdx={persistedSceneIdx}
           onSceneIdxPersist={onSceneIdxPersist}
+          persistedInteractionUnlocked={persistedInteractionUnlocked}
+          onInteractionUnlockedPersist={onInteractionUnlockedPersist}
         />
       </Suspense>
     );

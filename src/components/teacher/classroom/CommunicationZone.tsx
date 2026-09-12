@@ -6,6 +6,7 @@ import { User, Send, Mic, MicOff, Video, VideoOff, BookOpen, PictureInPicture2, 
 import { getClassroomHubTheme, type ClassroomHubKey } from './hubClassroomTheme';
 import { DictionaryPopover } from '@/components/classroom/DictionaryPopover';
 import { whiteboardService, type ChatBroadcastPayload } from '@/services/whiteboardService';
+import { useCompactVideoLayout } from '@/hooks/useCompactVideoLayout';
 
 
 interface CommunicationZoneProps {
@@ -82,6 +83,11 @@ export const CommunicationZone: React.FC<CommunicationZoneProps> = ({
   onMobileClose,
 }) => {
   const theme = getClassroomHubTheme(hubType);
+  // Keyed on the shorter viewport dimension, not raw width — a portrait
+  // tablet (e.g. iPad Mini, 744px wide) must get the same docked/stacked
+  // layout as a landscape one, not the compact phone strip a pure `md`
+  // (768px width) breakpoint would wrongly give it.
+  const isCompact = useCompactVideoLayout();
   const [chatMessages, setChatMessages] = useState<Array<{ id: string; sender: 'teacher' | 'student' | 'system'; senderName?: string; text: string }>>([
     { id: 'sys-start', sender: 'system', text: 'Class session started' }
   ]);
@@ -265,44 +271,50 @@ export const CommunicationZone: React.FC<CommunicationZoneProps> = ({
 
   return (
     <>
-      {/* Always-visible compact video strip for narrow viewports — see the
-          matching comment on the extracted tile functions above.
+      {/* Always-visible compact video strip for phones (any orientation) —
+          see the matching comment on the extracted tile functions above.
           Deliberately NOT gated on `!videosFloating` (floating mode is
-          desktop-only now — its toggle and floating tiles are both
-          `hidden` below `md`) so a `videosFloating` flag stuck `true` from
-          before a viewport resize never leaves this teacher with no video
-          tile at all. */}
-      {!(isScreenSharing && screenShareStream) && (
-        <div className="md:hidden fixed top-14 right-2 z-40 flex gap-2">
+          docked-layout-only now — its toggle and floating tiles are both
+          hidden in compact mode) so a `videosFloating` flag stuck `true`
+          from before a viewport resize never leaves this teacher with no
+          video tile at all. */}
+      {isCompact && !(isScreenSharing && screenShareStream) && (
+        <div className="fixed top-14 right-2 z-40 flex gap-2">
           {studentTile(true)}
           {teacherTile(true)}
         </div>
       )}
 
-      {/* Backdrop — mobile only, dismisses the drawer */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-[74] bg-black/40 md:hidden" onClick={onMobileClose} />
+      {/* Backdrop — compact/drawer mode only, dismisses the drawer */}
+      {isCompact && mobileOpen && (
+        <div className="fixed inset-0 z-[74] bg-black/40" onClick={onMobileClose} />
       )}
       <div
-        className={`fixed inset-y-0 left-0 z-[75] w-[280px] transition-transform duration-200 md:transition-none md:static md:z-auto md:w-[224px] md:translate-x-0 ${
-          mobileOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`${
+          isCompact
+            ? `fixed inset-y-0 left-0 z-[75] w-[280px] transition-transform duration-200 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`
+            : 'static z-auto w-[224px] translate-x-0'
         } ${theme.panelBg} border-r ${theme.panelBorder} flex flex-col shrink-0 h-full overflow-y-auto`}
       >
       <div className={`flex items-center justify-between px-3 py-2 border-b ${theme.panelBorder}`}>
         <span className={`text-xs font-semibold uppercase tracking-wider ${theme.accentText}`}>Live</span>
         <div className="flex items-center gap-1">
-        {onMobileClose && (
+        {isCompact && onMobileClose && (
           <button
             type="button"
             onClick={onMobileClose}
             aria-label="Close"
-            className="p-1 rounded-md hover:bg-black/5 text-gray-500 md:hidden"
+            className="p-1 rounded-md hover:bg-black/5 text-gray-500"
           >
             <X className="w-4 h-4" />
           </button>
         )}
-        {/* Desktop/landscape-tablet only — see the note on the floating
-            PictureInPicture render in TeacherClassroom for why. */}
+        {/* Kept on the original `md` (768px) width breakpoint, NOT
+            `isCompact` — the floating-PiP render this toggles
+            (TeacherClassroom.tsx) still uses react-rnd's fixed pixel
+            positioning, undocumented for narrow/portrait screens, and is
+            out of scope here; only the docked sidebar's own layout below
+            is fixed for tablets. */}
         {onToggleVideosFloating && (
           <button
             type="button"
@@ -315,10 +327,10 @@ export const CommunicationZone: React.FC<CommunicationZoneProps> = ({
         )}
         </div>
       </div>
-      {/* Video Containers — full-size, desktop/landscape-tablet docked
-          sidebar only; the compact strip above covers narrow viewports so
-          these never render at the same time as that strip. */}
-      <div className="hidden md:block p-3 space-y-3">
+      {/* Video Containers — full-size, docked sidebar only (desktop or
+          tablet, any orientation); the compact strip above covers phones
+          so these never render at the same time as that strip. */}
+      <div className={`${isCompact ? 'hidden' : 'block'} p-3 space-y-3`}>
         {/* Screen Share Preview (if active) */}
         {isScreenSharing && screenShareStream && (
           <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden border-2 border-indigo-400/50">

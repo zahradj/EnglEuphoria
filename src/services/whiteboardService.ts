@@ -232,6 +232,9 @@ export interface ForceSyncPayload {
    *  classroom EXCEPT the one thing "the student's view looks wrong" most
    *  often meant in practice: a stuck/mismatched Playground lesson scene. */
   sceneLessonIdx?: number | null;
+  /** Unlock state of an active embedded scene lesson's own interaction gate
+   *  (PlayWelcomeTownLesson/PlayUnitLesson's `interactionUnlocked`). */
+  sceneInteractionUnlocked?: boolean;
   senderId: string;
   timestamp: number;
 }

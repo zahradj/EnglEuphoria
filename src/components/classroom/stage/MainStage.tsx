@@ -65,6 +65,10 @@ interface MainStageProps {
   sceneLessonIdx?: number | null;
   /** Teacher-only: persist the embedded scene lesson's current scene index. */
   onPersistSceneLessonIdx?: (idx: number) => void;
+  /** Persisted interaction-unlock state of an active embedded scene lesson's own gate, if any. */
+  sceneInteractionUnlocked?: boolean | null;
+  /** Teacher-only: persist the embedded scene lesson's interaction-unlock state. */
+  onPersistSceneInteractionUnlocked?: (unlocked: boolean) => void;
   /** Reports the embedded scene lesson's nav state whenever it changes, so a caller (e.g. the Lesson Timeline) can mirror it. */
   onSceneNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean; lockToggleApplicable: boolean }) => void;
   onAddStroke: (stroke: Omit<WhiteboardStroke, 'id' | 'roomId' | 'timestamp'>) => void;
@@ -112,6 +116,8 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
   isInterview = false,
   sceneLessonIdx = null,
   onPersistSceneLessonIdx,
+  sceneInteractionUnlocked = null,
+  onPersistSceneInteractionUnlocked,
   onSceneNavState,
   onAddStroke,
 }, ref) {
@@ -206,6 +212,8 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                       onNavState={handleSceneNavState}
                       persistedSceneIdx={sceneLessonIdx}
                       onSceneIdxPersist={onPersistSceneLessonIdx}
+                      persistedInteractionUnlocked={sceneInteractionUnlocked}
+                      onInteractionUnlockedPersist={onPersistSceneInteractionUnlocked}
                     />
                   ) : (
                     <EmbeddedSceneLesson
@@ -218,6 +226,8 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                       onNavState={handleSceneNavState}
                       persistedSceneIdx={sceneLessonIdx}
                       onSceneIdxPersist={onPersistSceneLessonIdx}
+                      persistedInteractionUnlocked={sceneInteractionUnlocked}
+                      onInteractionUnlockedPersist={onPersistSceneInteractionUnlocked}
                     />
                   )}
                   </div>

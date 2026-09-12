@@ -6,6 +6,7 @@ import { User, Send, Video, Mic, MicOff, VideoOff, BookOpen, PictureInPicture2, 
 import { getClassroomHubTheme, type ClassroomHubKey } from '@/components/teacher/classroom/hubClassroomTheme';
 import { DictionaryPopover } from '@/components/classroom/DictionaryPopover';
 import { whiteboardService, type ChatBroadcastPayload } from '@/services/whiteboardService';
+import { useCompactVideoLayout } from '@/hooks/useCompactVideoLayout';
 
 interface StudentCommunicationSidebarProps {
   studentName: string;
@@ -55,6 +56,11 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
   onMobileClose,
 }) => {
   const theme = getClassroomHubTheme(hubType);
+  // Keyed on the shorter viewport dimension, not raw width — a portrait
+  // tablet (e.g. iPad Mini, 744px wide) must get the same docked/stacked
+  // layout as a landscape one, not the compact phone strip a pure `md`
+  // (768px width) breakpoint would wrongly give it.
+  const isCompact = useCompactVideoLayout();
 
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     { id: 'sys-start', sender: 'system', text: 'Class session started' }
@@ -223,43 +229,51 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
           rendered at the same time — see `hidden md:block` on the sidebar's
           own tiles below) so the video is never shown twice at once.
           Deliberately NOT gated on `!videosFloating`: floating mode is
-          desktop-only now (its toggle is `hidden md:inline-block`, and the
-          floating tiles themselves are `hidden md:contents` in
+          docked-layout-only now (its toggle is `hidden md:inline-block`,
+          and the floating tiles themselves are `hidden md:contents` in
           StudentClassroom), but `videosFloating` could still be stuck
           `true` from before a viewport resize/rotation — without this
           strip ignoring that flag, a student in that state would see no
-          video at all: not the (hidden-below-md) floating tiles, not the
-          (hidden-below-md) docked sidebar, and not this strip either. */}
-      <div className="md:hidden fixed top-14 right-2 z-40 flex gap-2">
-        {teacherTile(true)}
-        {studentTile(true)}
-      </div>
+          video at all: not the floating tiles, not the docked sidebar,
+          and not this strip either. */}
+      {isCompact && (
+        <div className="fixed top-14 right-2 z-40 flex gap-2">
+          {teacherTile(true)}
+          {studentTile(true)}
+        </div>
+      )}
 
-      {/* Backdrop — mobile only, dismisses the drawer */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-[74] bg-black/40 md:hidden" onClick={onMobileClose} />
+      {/* Backdrop — compact/drawer mode only, dismisses the drawer */}
+      {isCompact && mobileOpen && (
+        <div className="fixed inset-0 z-[74] bg-black/40" onClick={onMobileClose} />
       )}
       <div
-        className={`fixed inset-y-0 left-0 z-[75] w-[280px] transition-transform duration-200 md:transition-none md:static md:z-auto md:w-[224px] md:translate-x-0 ${
-          mobileOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`${
+          isCompact
+            ? `fixed inset-y-0 left-0 z-[75] w-[280px] transition-transform duration-200 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`
+            : 'static z-auto w-[224px] translate-x-0'
         } ${theme.panelBg} border-r ${theme.panelBorder} flex flex-col shrink-0 h-full overflow-y-auto`}
       >
       {/* Section header */}
       <div className={`flex items-center justify-between px-3 py-2 border-b ${theme.panelBorder}`}>
         <span className={`text-xs font-semibold uppercase tracking-wider ${theme.accentText}`}>Live</span>
         <div className="flex items-center gap-1">
-        {onMobileClose && (
+        {isCompact && onMobileClose && (
           <button
             type="button"
             onClick={onMobileClose}
             aria-label="Close"
-            className="p-1 rounded-md hover:bg-black/5 text-gray-500 md:hidden"
+            className="p-1 rounded-md hover:bg-black/5 text-gray-500"
           >
             <X className="w-4 h-4" />
           </button>
         )}
-        {/* Desktop/landscape-tablet only — see the note on the floating
-            PictureInPicture render itself for why. */}
+        {/* Kept on the original `md` (768px) width breakpoint, NOT
+            `isCompact` — the floating-PiP render this toggles
+            (StudentClassroom.tsx) still uses react-rnd's fixed pixel
+            positioning, undocumented for narrow/portrait screens, and is
+            out of scope here; only the docked sidebar's own layout below
+            is fixed for tablets. */}
         {onToggleVideosFloating && (
           <button
             type="button"
@@ -273,10 +287,10 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
         </div>
       </div>
 
-      {/* Video Containers — full-size, desktop/landscape-tablet docked
-          sidebar only; the compact strip above covers narrow viewports so
-          these never render at the same time as that strip. */}
-      <div className="hidden md:block p-3 space-y-3">
+      {/* Video Containers — full-size, docked sidebar only (desktop or
+          tablet, any orientation); the compact strip above covers phones
+          so these never render at the same time as that strip. */}
+      <div className={`${isCompact ? 'hidden' : 'block'} p-3 space-y-3`}>
         {videosFloating && (
           <button
             type="button"
