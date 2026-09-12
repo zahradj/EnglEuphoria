@@ -979,13 +979,32 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
       )}
 
 
-      {/* Teacher-only: live diagnostics for realtime + WebRTC */}
+      {/* Teacher-only: live diagnostics for realtime + WebRTC, plus a
+          "send to support" action that attaches this lesson/sync state on
+          top of the connection log — the four sync bugs this session
+          weren't just connection drops, so a report from here needs more
+          than realtime/webrtc health to be actionable. */}
       <ConnectionDebugPanel
         realtimeStatus={realtimeHealth}
         signalingReady={channelStatus === 'SUBSCRIBED'}
         peerConnected={rtcConnected}
         roomId={roomName}
         hubType={hubType}
+        userId={user?.id}
+        userEmail={user?.email ?? undefined}
+        userName={teacherName}
+        extraContext={{
+          lessonTitle: syncedLessonTitle || lessonTitle,
+          hubType,
+          sessionStatus: session?.sessionStatus ?? 'unknown',
+          stageMode,
+          currentSlideIndex: currentSlide,
+          sceneLessonIdx,
+          sceneInteractionUnlocked,
+          iframeUnlocked,
+          activityUnlocked,
+          isConnected,
+        }}
       />
 
 

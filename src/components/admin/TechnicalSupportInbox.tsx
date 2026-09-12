@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Loader2, LifeBuoy, RefreshCw, ClipboardCopy, Send } from 'lucide-react';
+import { Loader2, LifeBuoy, RefreshCw, ClipboardCopy, Send, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -22,6 +22,7 @@ interface SupportTicket {
   user_name: string | null;
   message: string;
   diagnostics: string | null;
+  priority: string | null;
   status: string;
   admin_response: string | null;
 }
@@ -120,7 +121,18 @@ export const TechnicalSupportInbox: React.FC = () => {
   };
 
   const filtered = filter === 'all' ? tickets : tickets.filter((t) => t.status === filter);
+  // Urgent (live-classroom) reports surface first regardless of arrival
+  // order — created_at alone buried them among routine post-class reports,
+  // which defeats the point of filing a report while a lesson is still
+  // active. Stable within each priority tier since the query already
+  // orders by created_at.
+  const sorted = [...filtered].sort((a, b) => {
+    const aUrgent = a.priority === 'urgent' ? 0 : 1;
+    const bUrgent = b.priority === 'urgent' ? 0 : 1;
+    return aUrgent - bUrgent;
+  });
   const openCount = tickets.filter((t) => t.status === 'open').length;
+  const urgentOpenCount = tickets.filter((t) => t.status === 'open' && t.priority === 'urgent').length;
 
   return (
     <div className="space-y-6">
@@ -134,9 +146,16 @@ export const TechnicalSupportInbox: React.FC = () => {
                 {openCount} open
               </Badge>
             )}
+            {urgentOpenCount > 0 && (
+              <Badge variant="destructive" className="ml-1 gap-1 bg-red-700 hover:bg-red-700">
+                <AlertTriangle className="h-3 w-3" />
+                {urgentOpenCount} live class
+              </Badge>
+            )}
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
-            Technical problems reported by teachers from their dashboard, with connection
+            Technical problems reported by teachers, from their dashboard or filed live from an
+            active classroom (marked "live class" — sorted to the top), with connection
             diagnostics when attached.
           </p>
         </div>
@@ -164,7 +183,7 @@ export const TechnicalSupportInbox: React.FC = () => {
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
-      ) : filtered.length === 0 ? (
+      ) : sorted.length === 0 ? (
         <Card>
           <CardContent className="py-16 text-center text-muted-foreground">
             <LifeBuoy className="h-10 w-10 mx-auto mb-3 opacity-50" />
@@ -173,8 +192,8 @@ export const TechnicalSupportInbox: React.FC = () => {
         </Card>
       ) : (
         <div className="space-y-3">
-          {filtered.map((t) => (
-            <Card key={t.id} className="overflow-hidden">
+          {sorted.map((t) => (
+            <Card key={t.id} className={t.priority === 'urgent' ? 'overflow-hidden ring-1 ring-red-500/40' : 'overflow-hidden'}>
               <CardHeader className="pb-3">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
@@ -183,6 +202,11 @@ export const TechnicalSupportInbox: React.FC = () => {
                       <Badge variant={statusVariant[t.status] ?? 'default'}>
                         {t.status.replace('_', ' ')}
                       </Badge>
+                      {t.priority === 'urgent' && (
+                        <Badge variant="destructive" className="gap-1 bg-red-700 hover:bg-red-700 text-[10px]">
+                          <AlertTriangle className="h-3 w-3" /> Live class
+                        </Badge>
+                      )}
                       {t.diagnostics && (
                         <Badge variant="outline" className="text-[10px]">
                           Diagnostics attached

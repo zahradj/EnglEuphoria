@@ -11,10 +11,14 @@ import {
   Wifi,
   WifiOff,
   Loader2,
+  Send,
+  CheckCircle2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import {
   connectionDebugLog,
   type ConnectionLogEntry,
@@ -42,6 +46,12 @@ interface ConnectionDebugPanelProps {
   disabled?: boolean;
   /** Hub for brand coloring. */
   hubType?: ClassroomHubKey | 'professional' | string;
+  /** Reporting teacher's identity — required to submit a support ticket from here. */
+  userId?: string;
+  userEmail?: string;
+  userName?: string;
+  /** Extra lesson/sync state (current slide, lock states, session status…) merged into the diagnostic payload — the realtime/webrtc log alone doesn't explain a stuck-slide or lock-state bug. */
+  extraContext?: Record<string, unknown>;
 }
 
 
@@ -78,17 +88,23 @@ function buildCopyPayload(opts: {
   signalingReady: boolean;
   peerConnected: boolean;
   roomId?: string;
+  extraContext?: Record<string, unknown>;
 }): string {
-  const { entries, realtimeStatus, signalingReady, peerConnected, roomId } = opts;
+  const { entries, realtimeStatus, signalingReady, peerConnected, roomId, extraContext } = opts;
+  const contextLines = extraContext && Object.keys(extraContext).length
+    ? ['--- Lesson state ---', ...Object.entries(extraContext).map(([k, v]) => `${k}: ${JSON.stringify(v)}`)]
+    : [];
   const header = [
     '=== EnglEuphoria Classroom Diagnostics ===',
     `Captured: ${new Date().toISOString()}`,
     roomId ? `Room: ${roomId}` : null,
     `User-Agent: ${typeof navigator !== 'undefined' ? navigator.userAgent : 'n/a'}`,
+    `Viewport: ${typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight}` : 'n/a'}`,
     '--- Snapshot ---',
     `Realtime sync : ${realtimeStatus}`,
     `Signaling     : ${signalingReady ? 'SUBSCRIBED' : 'NOT READY'}`,
     `Peer (video)  : ${peerConnected ? 'CONNECTED' : 'NOT CONNECTED'}`,
+    ...contextLines,
     '--- Last events (newest first) ---',
   ].filter(Boolean).join('\n');
 
@@ -108,7 +124,12 @@ function buildCopyPayload(opts: {
  * Teacher-only floating diagnostic panel that surfaces the latest
  * Supabase Realtime + WebRTC events. Auto-opens when the student is
  * stuck on Disconnected or "Waiting for student", and offers a one-click
- * copy of the full diagnostic payload for support.
+ * copy of the full diagnostic payload for support — plus, when the
+ * teacher is a real logged-in user, a "Send to support" action that
+ * files it directly as a support_tickets row (category: 'technical'),
+ * the same table/admin inbox the post-class dashboard report already
+ * uses, so a mid-class problem doesn't have to wait until after the
+ * lesson to get in front of someone.
  */
 export const ConnectionDebugPanel: React.FC<ConnectionDebugPanelProps> = ({
   realtimeStatus,
@@ -117,6 +138,10 @@ export const ConnectionDebugPanel: React.FC<ConnectionDebugPanelProps> = ({
   roomId,
   disabled,
   hubType = 'academy',
+  userId,
+  userEmail,
+  userName,
+  extraContext,
 }) => {
   const hubTheme = getClassroomHubTheme(hubType);
   const accentHex = hubTheme.accentHex;
@@ -126,6 +151,9 @@ export const ConnectionDebugPanel: React.FC<ConnectionDebugPanelProps> = ({
   const [userDismissed, setUserDismissed] = useState(false);
 
   const [collapsed, setCollapsed] = useState(false);
+  const [reportMessage, setReportMessage] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const isUnhealthy = useMemo(() => {
     if (realtimeStatus !== 'connected') return true;
@@ -160,6 +188,7 @@ export const ConnectionDebugPanel: React.FC<ConnectionDebugPanelProps> = ({
       signalingReady,
       peerConnected,
       roomId,
+      extraContext,
     });
     try {
       await navigator.clipboard.writeText(payload);
@@ -173,6 +202,50 @@ export const ConnectionDebugPanel: React.FC<ConnectionDebugPanelProps> = ({
         description: 'Your browser blocked clipboard access.',
         variant: 'destructive',
       });
+    }
+  };
+
+  const canSendToSupport = !!userId && !!userEmail;
+
+  const handleSendToSupport = async () => {
+    if (!reportMessage.trim() || !canSendToSupport) return;
+    setSubmitting(true);
+    try {
+      const diagnostics = buildCopyPayload({
+        entries,
+        realtimeStatus,
+        signalingReady,
+        peerConnected,
+        roomId,
+        extraContext,
+      });
+      const { error } = await supabase.from('support_tickets').insert({
+        user_id: userId,
+        user_email: userEmail || '',
+        user_name: userName || userEmail?.split('@')[0] || 'Teacher',
+        category: 'technical',
+        message: reportMessage.trim(),
+        diagnostics,
+        priority: 'urgent',
+        status: 'open',
+      });
+      if (error) throw error;
+      toast({
+        title: 'Sent to support',
+        description: 'The admin team can see this now, with your full diagnostics attached.',
+      });
+      setReportMessage('');
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 4000);
+    } catch (err) {
+      console.error('Failed to submit classroom support ticket:', err);
+      toast({
+        title: 'Could not send report',
+        description: 'Try "Copy details" instead and share it directly for now.',
+        variant: 'destructive',
+      });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -304,6 +377,43 @@ export const ConnectionDebugPanel: React.FC<ConnectionDebugPanelProps> = ({
           </div>
         )}
 
+        {/* Report a problem — files straight into the same support_tickets
+            inbox the post-class dashboard report already uses, so a
+            mid-class issue doesn't have to wait until after the lesson.
+            Only shown for a real logged-in teacher (support_tickets RLS
+            requires auth.uid() = user_id); otherwise "Copy details" below
+            is still available as a manual fallback. */}
+        {canSendToSupport && (
+          <div className="space-y-2 border-t border-white/10 px-3 py-2">
+            {submitted ? (
+              <div className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-300">
+                <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
+                Sent — the admin team can see it now, diagnostics attached.
+              </div>
+            ) : (
+              <>
+                <Textarea
+                  value={reportMessage}
+                  onChange={(e) => setReportMessage(e.target.value)}
+                  placeholder="What's going wrong? e.g. 'Student says their screen is frozen on the intro slide.'"
+                  className="min-h-[52px] resize-none border-white/10 bg-white/5 text-xs text-slate-100 placeholder:text-slate-500"
+                  maxLength={1000}
+                />
+                <Button
+                  size="sm"
+                  style={{ backgroundColor: accentHex }}
+                  className="h-7 w-full gap-1 text-[11px] text-white hover:opacity-90"
+                  onClick={handleSendToSupport}
+                  disabled={!reportMessage.trim() || submitting}
+                >
+                  {submitting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+                  {submitting ? 'Sending…' : 'Send to support (attaches diagnostics)'}
+                </Button>
+              </>
+            )}
+          </div>
+        )}
+
         {/* Footer actions */}
         <div className="flex items-center justify-between gap-2 border-t border-white/10 bg-white/5 px-3 py-2">
           <Button
@@ -316,8 +426,9 @@ export const ConnectionDebugPanel: React.FC<ConnectionDebugPanelProps> = ({
           </Button>
           <Button
             size="sm"
-            style={{ backgroundColor: accentHex }}
-            className="h-7 gap-1 text-[11px] text-white hover:opacity-90"
+            variant={canSendToSupport ? 'ghost' : 'default'}
+            style={canSendToSupport ? undefined : { backgroundColor: accentHex }}
+            className={cn('h-7 gap-1 text-[11px]', canSendToSupport ? 'text-slate-300 hover:text-white' : 'text-white hover:opacity-90')}
             onClick={handleCopy}
           >
             <ClipboardCopy className="h-3.5 w-3.5" /> Copy details
