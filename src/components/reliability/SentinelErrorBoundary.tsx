@@ -2,6 +2,7 @@ import { Component, type ErrorInfo, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { snapshotLatestSentinelState } from "@/hooks/useSentinelState";
 import { SentinelFallback } from "./SentinelFallback";
+import { isChunkLoadError, reloadOnceForChunkError } from "@/lib/chunkLoadRecovery";
 
 const CYCLE1_ROUTES = [
   "/onboarding",
@@ -17,16 +18,22 @@ interface State {
   hasError: boolean;
   incidentId: string | null;
   diagnosing: boolean;
+  /** A stale-chunk crash we're already reloading to recover from — not a real incident, don't show the scary fallback or file a report for it. */
+  recoveringFromDeploy: boolean;
 }
 
 export class SentinelErrorBoundary extends Component<{ children: ReactNode }, State> {
-  state: State = { hasError: false, incidentId: null, diagnosing: false };
+  state: State = { hasError: false, incidentId: null, diagnosing: false, recoveringFromDeploy: false };
 
-  static getDerivedStateFromError(): Partial<State> {
-    return { hasError: true, diagnosing: true };
+  static getDerivedStateFromError(error: Error): Partial<State> {
+    if (isChunkLoadError(error) && reloadOnceForChunkError()) {
+      return { hasError: true, recoveringFromDeploy: true };
+    }
+    return { hasError: true, diagnosing: true, recoveringFromDeploy: false };
   }
 
   async componentDidCatch(error: Error, info: ErrorInfo) {
+    if (this.state.recoveringFromDeploy) return; // already reloading — not a real incident
     try {
       const route = typeof window !== "undefined" ? window.location.pathname : "";
       const cycle1 = CYCLE1_ROUTES.some((c) => route.toLowerCase().startsWith(c));
@@ -76,6 +83,12 @@ export class SentinelErrorBoundary extends Component<{ children: ReactNode }, St
 
   render() {
     if (this.state.hasError) {
+      if (this.state.recoveringFromDeploy) {
+        // window.location.reload() is already in flight (triggered from
+        // getDerivedStateFromError) — render nothing rather than flash the
+        // "Something went off-script" card for a false alarm.
+        return null;
+      }
       return (
         <SentinelFallback
           incidentId={this.state.incidentId}

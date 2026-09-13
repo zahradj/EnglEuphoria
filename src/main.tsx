@@ -17,6 +17,17 @@ import i18n from '@/lib/i18n';
 import { clearAllCaches, optimizeForProduction } from '@/utils/productionCleanup';
 import { clearInsecureRoleStorage } from '@/utils/roleValidation';
 import { installVocabArcObserver } from '@/lib/vocabArcObserver';
+import { reloadOnceForChunkError } from '@/lib/chunkLoadRecovery';
+
+// A stale page can reference JS chunk files a newer deploy has already
+// replaced — Vite fires this event on the window when that happens. One
+// reload fetches the current chunk manifest and almost always fixes it;
+// see chunkLoadRecovery.ts for why this exists (it was silently crashing
+// the homepage for real visitors and Googlebot, plus at least one live
+// classroom, before this was wired up).
+window.addEventListener('vite:preloadError', () => {
+  reloadOnceForChunkError();
+});
 
 // Route Academy vocab-gamification arc completions into the intelligence observer
 installVocabArcObserver({ defaultHub: 'academy' });

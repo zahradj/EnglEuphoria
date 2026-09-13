@@ -1,9 +1,12 @@
 import React from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { isChunkLoadError, reloadOnceForChunkError } from "@/lib/chunkLoadRecovery";
 
 interface State {
   hasError: boolean;
   message?: string;
+  /** A stale-chunk crash we're already reloading to recover from — not a real error, don't show the fallback or log it. */
+  recoveringFromDeploy: boolean;
 }
 
 interface Props {
@@ -11,13 +14,17 @@ interface Props {
 }
 
 export class GlobalErrorBoundary extends React.Component<Props, State> {
-  state: State = { hasError: false };
+  state: State = { hasError: false, recoveringFromDeploy: false };
 
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, message: error.message };
+    if (isChunkLoadError(error) && reloadOnceForChunkError()) {
+      return { hasError: true, message: error.message, recoveringFromDeploy: true };
+    }
+    return { hasError: true, message: error.message, recoveringFromDeploy: false };
   }
 
   async componentDidCatch(error: Error, info: React.ErrorInfo) {
+    if (this.state.recoveringFromDeploy) return; // already reloading — not a real error to log
     try {
       const { data: auth } = await supabase.auth.getUser();
       const componentName =
@@ -42,6 +49,12 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
 
   render() {
     if (!this.state.hasError) return this.props.children;
+    if (this.state.recoveringFromDeploy) {
+      // window.location.reload() is already in flight (triggered from
+      // getDerivedStateFromError) — render nothing rather than flash the
+      // crash card for a false alarm.
+      return null;
+    }
 
     return (
       <div className="min-h-dvh flex items-center justify-center p-6 bg-background">
