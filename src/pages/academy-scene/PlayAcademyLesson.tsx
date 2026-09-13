@@ -412,9 +412,11 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
           {/* Top chrome — lesson chip, block label, minimal controls. */}
           <header className="flex items-center justify-between gap-4 px-4 md:px-8">
             <div className="flex min-w-0 items-center gap-3 rounded-full bg-black/30 py-1.5 pl-1.5 pr-4 backdrop-blur-md ring-1 ring-white/10">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-sm font-bold">
-                A
-              </div>
+              <img
+                src="/favicon.png?v=10"
+                alt="EnglEuphoria"
+                className="h-8 w-8 shrink-0 rounded-full bg-white/95 object-contain p-0.5 ring-1 ring-white/20"
+              />
               <div className="min-w-0">
                 <div className="truncate text-sm font-semibold leading-tight">{lesson.title}</div>
                 <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: cssScene.accent }}>
