@@ -129,13 +129,11 @@ export default function FrontPageSlide({
 
       {/* Logo — top-right, overlaid */}
       <div className="absolute top-5 right-6 z-10 flex items-center gap-2">
-        <span
-          className="inline-flex items-center justify-center h-8 w-8 rounded-lg bg-white/95 font-black text-sm"
-          style={{ color: palette.primary }}
-          aria-hidden
-        >
-          E
-        </span>
+        <img
+          src="/favicon.png?v=10"
+          alt="EnglEuphoria"
+          className="h-8 w-8 rounded-lg bg-white/95 object-contain p-0.5"
+        />
         <span className="text-sm font-extrabold tracking-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]">
           EnglEuphoria
         </span>
