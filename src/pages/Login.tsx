@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { LogIn, Loader2 } from 'lucide-react';
 import { AuthPageLayout } from '@/components/auth/AuthPageLayout';
 import { SimpleAuthForm } from '@/components/auth/SimpleAuthForm';
@@ -75,16 +76,25 @@ const Login = () => {
   }
 
   return (
-    <HeroThemeProvider>
-      <AuthPageLayout
-        title="Welcome Back"
-        subtitle="Sign in to continue your learning journey"
-        icon={LogIn}
-        variant="default"
-      >
-        <SimpleAuthForm mode="login" />
-      </AuthPageLayout>
-    </HeroThemeProvider>
+    <>
+      <Helmet>
+        <title>Log In | EnglEuphoria</title>
+        <meta
+          name="description"
+          content="Sign in to your EnglEuphoria account to join your live 1-on-1 English lesson or manage your bookings."
+        />
+      </Helmet>
+      <HeroThemeProvider>
+        <AuthPageLayout
+          title="Welcome Back"
+          subtitle="Sign in to continue your learning journey"
+          icon={LogIn}
+          variant="default"
+        >
+          <SimpleAuthForm mode="login" />
+        </AuthPageLayout>
+      </HeroThemeProvider>
+    </>
   );
 };
 

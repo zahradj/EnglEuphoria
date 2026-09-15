@@ -1,6 +1,7 @@
 import { detectMarketRegion, toDbMarketRegion } from '@/lib/marketRegion';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Mail, Lock, User as UserIcon, Calendar, Eye, EyeOff, ArrowLeft, ArrowRight, CheckCircle, BookOpen } from 'lucide-react';
 
@@ -215,7 +216,15 @@ const StudentSignUp = () => {
   }
 
   return (
-    <AuthPageLayout
+    <>
+      <Helmet>
+        <title>Sign Up — Start Learning English | EnglEuphoria</title>
+        <meta
+          name="description"
+          content="Create your free EnglEuphoria account in three quick steps and book your first live 1-on-1 English lesson."
+        />
+      </Helmet>
+      <AuthPageLayout
       title="Start Learning English"
       subtitle="Three quick steps and you’re in."
       icon={BookOpen}
@@ -325,6 +334,7 @@ const StudentSignUp = () => {
         </p>
       </div>
     </AuthPageLayout>
+    </>
   );
 };
 
