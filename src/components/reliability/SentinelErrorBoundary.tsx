@@ -2,7 +2,7 @@ import { Component, type ErrorInfo, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { snapshotLatestSentinelState } from "@/hooks/useSentinelState";
 import { SentinelFallback } from "./SentinelFallback";
-import { isChunkLoadError, reloadOnceForChunkError } from "@/lib/chunkLoadRecovery";
+import { isChunkLoadError, reloadOnceForChunkError, hardReload } from "@/lib/chunkLoadRecovery";
 
 const CYCLE1_ROUTES = [
   "/onboarding",
@@ -78,7 +78,7 @@ export class SentinelErrorBoundary extends Component<{ children: ReactNode }, St
   }
 
   handleReload = () => {
-    window.location.reload();
+    void hardReload();
   };
 
   render() {

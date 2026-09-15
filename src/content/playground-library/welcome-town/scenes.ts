@@ -86,6 +86,11 @@ const bgExpressHello = `${W}/scenes/bg-express-hello.png`;
 const bgExpressGoodbye = `${W}/scenes/bg-express-goodbye.png`;
 const bgExpressFriend = `${W}/scenes/bg-express-friend.png`;
 const bgFeelings = `${W}/scenes/bg-classroom-feelings.png`;
+const bgVocabPipHappy = `${W}/scenes/bg-vocab-pip-happy.png`;
+const bgVocabLeoTired = `${W}/scenes/bg-vocab-leo-tired.png`;
+const bgVocabMiaSad = `${W}/scenes/bg-vocab-mia-sad.png`;
+const bgVocabBellaAngry = `${W}/scenes/bg-vocab-bella-angry.png`;
+const bgVocabWillowHungry = `${W}/scenes/bg-vocab-willow-hungry.png`;
 const bgPrepIn = `${W}/scenes/bg-prep-in.png`;
 const bgPrepOn = `${W}/scenes/bg-prep-on.png`;
 const bgPrepNextTo = `${W}/scenes/bg-prep-next-to.png`;
@@ -503,6 +508,32 @@ export const LESSON_2_SCENES: Scene[] = [
     line: 'How are you today? I am fine, thank you!', repeat: 'I am fine, thank you!',
   },
 
+  /* --- Progressive vocabulary intro, one word at a time — same pattern as
+   * Pre-A1 Unit 5 Lesson 1 Part A's Mom/Dad/Me/Family sequence: each new
+   * word gets its OWN full-bleed scene showing only that one character
+   * expressing that one feeling, BEFORE any word is combined into the
+   * five-hotspot group scene below. */
+  {
+    id: 'wt2-vocab-pip-happy', kind: 'meet', bg: bgVocabPipHappy, who: 'pip',
+    teacher: 'Listen, then repeat!', line: 'Pip is happy!', repeat: 'Happy!',
+  },
+  {
+    id: 'wt2-vocab-leo-tired', kind: 'meet', bg: bgVocabLeoTired, who: 'leo',
+    teacher: 'Listen, then repeat!', line: 'Leo is tired!', repeat: 'Tired!',
+  },
+  {
+    id: 'wt2-vocab-mia-sad', kind: 'meet', bg: bgVocabMiaSad, who: 'mia',
+    teacher: 'Listen, then repeat!', line: 'Mia is sad!', repeat: 'Sad!',
+  },
+  {
+    id: 'wt2-vocab-bella-angry', kind: 'meet', bg: bgVocabBellaAngry, who: 'bella',
+    teacher: 'Listen, then repeat!', line: 'Bella is angry!', repeat: 'Angry!',
+  },
+  {
+    id: 'wt2-vocab-willow-hungry', kind: 'meet', bg: bgVocabWillowHungry, who: 'willow',
+    teacher: 'Listen, then repeat!', line: 'Willow is hungry!', repeat: 'Hungry!',
+  },
+
   {
     // A dedicated scene purpose-built for this hotspot quartet — four
     // classmates each visibly showing one feeling through pose and
@@ -532,6 +563,22 @@ export const LESSON_2_SCENES: Scene[] = [
       { label: 'Sad', color: '#B85CD1', who: 'mia', targetLeft: '52%', targetTop: '64%' },
       { label: 'Angry', color: '#E76FA5', who: 'bella', targetLeft: '71%', targetTop: '62%' },
       { label: 'Hungry', color: '#4FA9E0', who: 'willow', targetLeft: '90%', targetTop: '64%' },
+    ],
+  },
+
+  {
+    // Extra retrieval-practice round so the five feelings words actually
+    // get memorized, not just recognized-once — a genuinely different
+    // mechanic from the vocab-spot/drag-match pair just above (matching
+    // the Hard Variety Rule), same `memory` shape already proven by
+    // wt-memory-words (Lesson 1) and wt3-memory (Lesson 3).
+    id: 'wt2-feelings-memory', kind: 'memory', bg: bgFeelings, teacher: 'Memory game! Find the matching feelings pairs!',
+    pairs: [
+      { id: 'happy', label: 'Happy', emoji: '\u{1F60A}' },
+      { id: 'tired', label: 'Tired', emoji: '\u{1F62A}' },
+      { id: 'sad', label: 'Sad', emoji: '\u{1F622}' },
+      { id: 'angry', label: 'Angry', emoji: '\u{1F620}' },
+      { id: 'hungry', label: 'Hungry', emoji: '\u{1F924}' },
     ],
   },
 
@@ -606,10 +653,10 @@ export const LESSON_2_SCENES: Scene[] = [
   {
     id: 'wt2-storybook', kind: 'flipbook', bg: bgWide, title: "Pip's Tired Day",
     pages: [
-      { who: 'pip', img: bgFeelings, text: 'Pip feels tired today. "I am so tired!"' },
-      { who: 'mia', img: bgCircle, text: 'Mia asks, "Are you okay, Pip?"' },
-      { who: 'pip', img: bgCircle, text: 'Pip rests, then plays with his friends.' },
-      { img: bgWide, text: 'Now Pip feels happy again! ✨' },
+      { who: 'pip', img: `${W}/scenes/bg-story-pip-tired.png`, text: 'Pip feels tired today. "I am so tired!"' },
+      { who: 'mia', img: `${W}/scenes/bg-story-mia-checks-pip.png`, text: 'Mia asks, "Are you okay, Pip?"' },
+      { who: 'pip', img: `${W}/scenes/bg-story-pip-rests-plays.png`, text: 'Pip rests, then plays with his friends.' },
+      { img: `${W}/scenes/bg-story-pip-happy-friends.png`, text: 'Now Pip feels happy again! ✨' },
     ],
     checkpoints: [
       { afterPage: 0, who: 'pip', question: 'How does Pip feel at first?', options: ['Happy', 'Tired', 'Angry'], answer: 'Tired' },

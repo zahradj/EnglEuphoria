@@ -1,6 +1,6 @@
 import React from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { isChunkLoadError, reloadOnceForChunkError } from "@/lib/chunkLoadRecovery";
+import { isChunkLoadError, reloadOnceForChunkError, hardReload } from "@/lib/chunkLoadRecovery";
 
 interface State {
   hasError: boolean;
@@ -44,7 +44,7 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
   }
 
   handleReload = () => {
-    window.location.reload();
+    void hardReload();
   };
 
   render() {

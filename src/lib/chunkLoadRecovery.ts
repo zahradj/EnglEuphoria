@@ -25,6 +25,35 @@ export function isChunkLoadError(error: unknown): boolean {
   );
 }
 
+/**
+ * A plain `window.location.reload()` is not guaranteed to fix a stale-chunk
+ * crash: the app's service worker (see vite.config.ts's `workbox.runtimeCaching`)
+ * serves navigations `NetworkFirst` with only a 3s timeout, and JS/CSS
+ * `StaleWhileRevalidate` — so a slow or flaky network on that one reload can
+ * still hand back the exact same stale `index.html`/chunk that just failed,
+ * and the user watching the "Reload" button appears to do nothing at all.
+ * This unregisters the service worker and clears its caches first, so the
+ * reload that follows is forced to hit the network for fresh content —
+ * confirmed as the fix for a live report of "the reload button isn't
+ * reloading" on the Sentinel/GlobalErrorBoundary crash card.
+ */
+export async function hardReload(): Promise<void> {
+  try {
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.allSettled(regs.map((r) => r.unregister()));
+    }
+    if ('caches' in window) {
+      const keys = await caches.keys();
+      await Promise.allSettled(keys.map((k) => caches.delete(k)));
+    }
+  } catch {
+    // Best effort — reload below regardless, a plain reload is still better than nothing.
+  } finally {
+    window.location.reload();
+  }
+}
+
 /** Reloads the page once per session if this is the first chunk-load failure seen. Returns true if it triggered a reload (caller should not also render/log a crash). */
 export function reloadOnceForChunkError(): boolean {
   if (typeof window === 'undefined') return false;
@@ -34,6 +63,6 @@ export function reloadOnceForChunkError(): boolean {
   } catch {
     // sessionStorage unavailable (private mode, etc.) — still attempt the one reload below.
   }
-  window.location.reload();
+  void hardReload();
   return true;
 }
