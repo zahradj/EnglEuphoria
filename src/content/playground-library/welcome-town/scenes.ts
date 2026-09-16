@@ -91,6 +91,8 @@ const bgVocabLeoTired = `${W}/scenes/bg-vocab-leo-tired.png`;
 const bgVocabMiaSad = `${W}/scenes/bg-vocab-mia-sad.png`;
 const bgVocabBellaAngry = `${W}/scenes/bg-vocab-bella-angry.png`;
 const bgVocabWillowHungry = `${W}/scenes/bg-vocab-willow-hungry.png`;
+const bgHeIntroPip = `${W}/scenes/bg-heshe-intro-pip.png`;
+const bgSheIntroMia = `${W}/scenes/bg-heshe-intro-mia.png`;
 const bgPrepIn = `${W}/scenes/bg-prep-in.png`;
 const bgPrepOn = `${W}/scenes/bg-prep-on.png`;
 const bgPrepNextTo = `${W}/scenes/bg-prep-next-to.png`;
@@ -617,6 +619,40 @@ export const LESSON_2_SCENES: Scene[] = [
       { label: 'Sad', emoji: '\u{1F622}' },
       { label: 'Tired', emoji: '\u{1F62A}' },
       { label: 'Hungry', emoji: '\u{1F924}' },
+    ],
+  },
+
+  /* --- He / She concept primer — a simple, concrete "boy = He, girl = She"
+   * anchor BEFORE any sentence work touches pronouns, using two characters
+   * already established in this lesson (Pip, Mia) rather than inventing new
+   * unnamed children. This is deliberately simple/visual; the full
+   * He/She/They sort-and-produce sequence right below still does the real
+   * teaching — this just gives students a concrete first foothold. */
+  {
+    id: 'wt2-heshe-intro-pip', kind: 'meet', bg: bgHeIntroPip, who: 'pip', cardSide: 'right',
+    teacher: 'Listen, then repeat!', line: 'This is Pip. Pip is a boy. He is a boy!', repeat: 'He!',
+  },
+  {
+    id: 'wt2-heshe-intro-mia', kind: 'meet', bg: bgSheIntroMia, who: 'mia', cardSide: 'left',
+    teacher: 'Listen, then repeat!', line: 'This is Mia. Mia is a girl. She is a girl!', repeat: 'She!',
+  },
+  {
+    // Quick generalization check with two DIFFERENT characters than the
+    // ones just modeled, reusing their existing vocab-scene art (no new
+    // images needed) — confirms He/She isn't just memorized for Pip/Mia.
+    id: 'wt2-heshe-check-leo', kind: 'choice', bg: bgVocabLeoTired, who: 'leo', teacher: 'Look at Leo. Is Leo a boy or a girl?',
+    prompt: 'Leo is a boy. We say...',
+    options: [
+      { label: 'He', emoji: '\u{1F466}', correct: true },
+      { label: 'She', emoji: '\u{1F467}' },
+    ],
+  },
+  {
+    id: 'wt2-heshe-check-bella', kind: 'choice', bg: bgVocabBellaAngry, who: 'bella', teacher: 'Look at Bella. Is Bella a boy or a girl?',
+    prompt: 'Bella is a girl. We say...',
+    options: [
+      { label: 'She', emoji: '\u{1F467}', correct: true },
+      { label: 'He', emoji: '\u{1F466}' },
     ],
   },
 
