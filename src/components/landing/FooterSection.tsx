@@ -129,25 +129,38 @@ export function FooterSection() {
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
         >
-          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
-            <p className={`text-sm ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-              © {new Date().getFullYear()} EnglEuphoria. {t('lp.footer.copyright')}
-            </p>
-            <div className="flex items-center gap-3">
-              {legalLinks.map((link, i) => (
-                <span key={link.label} className="flex items-center gap-3">
-                  {i > 0 && <span className={isDark ? 'text-slate-700' : 'text-slate-300'}>·</span>}
-                  <Link
-                    to={link.href}
-                    className={`text-xs transition-colors ${
-                      isDark ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </span>
-              ))}
+          <div className="flex flex-col items-center md:items-start gap-2">
+            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+              <p className={`text-sm ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                © {new Date().getFullYear()} EnglEuphoria. {t('lp.footer.copyright')}
+              </p>
+              <div className="flex items-center gap-3">
+                {legalLinks.map((link, i) => (
+                  <span key={link.label} className="flex items-center gap-3">
+                    {i > 0 && <span className={isDark ? 'text-slate-700' : 'text-slate-300'}>·</span>}
+                    <Link
+                      to={link.href}
+                      className={`text-xs transition-colors ${
+                        isDark ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </span>
+                ))}
+              </div>
             </div>
+            <p className={`text-xs ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>
+              Made by{' '}
+              <a
+                href="https://webdz.space/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`transition-colors ${isDark ? 'hover:text-slate-300' : 'hover:text-slate-600'}`}
+              >
+                webdz.space
+              </a>
+            </p>
           </div>
           <div className="flex items-center gap-6">
             <Link to="/login" className={`text-sm font-medium transition-colors ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}>
