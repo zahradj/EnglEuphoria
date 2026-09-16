@@ -61,7 +61,7 @@ export const useTeacherStudents = () => {
             email: student.email,
             total_lessons: 0,
             last_lesson_date: '',
-            level: 'Intermediate', // Default level, could be fetched from student profile
+            level: undefined, // filled in below from student_profiles.cefr_level
             attendance_rate: 0,
             progress: 65, // Default progress, could be calculated from actual data
           });
@@ -94,6 +94,21 @@ export const useTeacherStudents = () => {
         studentData.attendance_rate = totalScheduledLessons > 0 
           ? Math.round((completedLessons / totalScheduledLessons) * 100)
           : 100;
+      }
+
+      // Real CEFR level per student, replacing the previous hardcoded
+      // 'Intermediate' for everyone — student_profiles.cefr_level is the
+      // field the admin dashboard's level editor actually writes to.
+      const studentIds = Array.from(studentMap.keys());
+      if (studentIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from('student_profiles')
+          .select('user_id, cefr_level')
+          .in('user_id', studentIds);
+        for (const profile of profiles || []) {
+          const s = studentMap.get(profile.user_id);
+          if (s) s.level = profile.cefr_level || 'A1';
+        }
       }
 
       setStudents(Array.from(studentMap.values()));

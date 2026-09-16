@@ -144,3 +144,52 @@ export async function advanceCurriculumProgress(
     );
   return next.id;
 }
+
+/** All published lessons for one hub, in the same real teaching order
+ *  compareLessons/getAdjacentLesson use — for an admin "set current lesson"
+ *  picker (or any other UI that needs the full ordered sequence, not just
+ *  one neighbor). */
+export async function fetchHubLessonSequence(hub: Hub): Promise<LessonMeta[]> {
+  const targets = HUB_TO_TARGET_SYSTEM[hub];
+  const { data } = await supabase
+    .from('curriculum_lessons')
+    .select(META_COLS)
+    .in('target_system', targets)
+    .eq('is_published', true);
+  return [...((data as LessonMeta[]) ?? [])].sort(compareLessons);
+}
+
+/**
+ * Admin override: directly set which lesson a student is currently on
+ * (their "starting point" for the next booking that resolves through
+ * resolveActiveCoreLesson), independent of the normal complete-a-lesson
+ * advance flow. Same write shape LessonSwitcher.tsx uses mid-class, minus
+ * the booking pin (there is no live booking to pin here) — logs to
+ * audit_logs the same way, so LessonSwitchAudit-style history stays
+ * meaningful for admin-made changes too.
+ */
+export async function setCurrentLesson(
+  studentId: string,
+  lessonId: string,
+  adminUserId: string | null,
+  previousLessonId?: string | null,
+): Promise<void> {
+  await supabase
+    .from('student_curriculum_progress')
+    .upsert(
+      { student_id: studentId, current_lesson_id: lessonId, last_activity_at: new Date().toISOString() },
+      { onConflict: 'student_id' },
+    );
+  try {
+    await supabase.from('audit_logs').insert({
+      user_id: adminUserId,
+      action: 'admin_set_current_lesson',
+      resource_type: 'student_curriculum_progress',
+      resource_id: studentId,
+      old_values: { current_lesson_id: previousLessonId ?? null },
+      new_values: { current_lesson_id: lessonId },
+    });
+  } catch (e) {
+    console.warn('[setCurrentLesson] audit log failed', e);
+  }
+}

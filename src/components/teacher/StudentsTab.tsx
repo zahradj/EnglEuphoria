@@ -3,14 +3,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Search, Filter, MessageCircle, Calendar, BarChart3, Loader2 } from "lucide-react";
+import { Search, Filter, MessageCircle, Calendar, BarChart3, Loader2, GraduationCap } from "lucide-react";
 import { useTeacherStudents } from "@/hooks/useTeacherStudents";
+import { LevelChangeRequestDialog } from "./LevelChangeRequestDialog";
 
 import { format } from "date-fns";
 
 export const StudentsTab = () => {
   const { students, loading, error } = useTeacherStudents();
   const [selectedStudent, setSelectedStudent] = useState<{
+    id: string;
+    name: string;
+    level?: string;
+  } | null>(null);
+  const [levelRequestStudent, setLevelRequestStudent] = useState<{
     id: string;
     name: string;
     level?: string;
@@ -110,6 +116,20 @@ export const StudentsTab = () => {
                       <BarChart3 className="h-4 w-4 mr-1" />
                       Progress
                     </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        setLevelRequestStudent({
+                          id: student.id,
+                          name: student.name,
+                          level: student.level,
+                        })
+                      }
+                    >
+                      <GraduationCap className="h-4 w-4 mr-1" />
+                      Request level
+                    </Button>
                   </div>
                 </div>
                 
@@ -138,6 +158,11 @@ export const StudentsTab = () => {
       </div>
 
     </div>
+    <LevelChangeRequestDialog
+      open={!!levelRequestStudent}
+      onOpenChange={(open) => !open && setLevelRequestStudent(null)}
+      student={levelRequestStudent}
+    />
     </>
   );
 };

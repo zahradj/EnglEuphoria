@@ -10,6 +10,7 @@ import { IncidentFlag, TEACHER_FLAG_OPTIONS, FLAG_META } from './incidentFlags';
 import { getClassroomHubTheme, type ClassroomHubKey } from '@/components/teacher/classroom/hubClassroomTheme';
 import { endLesson } from '@/services/endLesson';
 import { evaluateAndAssignExtraPractice } from '@/lib/remediation/evaluateAndAssignExtraPractice';
+import { advanceCurriculumProgress } from '@/services/activeCoreLessonResolver';
 
 const REPORT_DEADLINE_MS = 24 * 60 * 60 * 1000;
 
@@ -283,6 +284,19 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
         // no-op, never-throwing call for every other hub.
         if (studentId) {
           void evaluateAndAssignExtraPractice({ bookingId, studentId, hub: hubType as any });
+        }
+
+        // Automated next-lesson advance — only on a completed outcome. When
+        // the teacher instead marks "Had issues" (outcome === 'not_completed'),
+        // student_curriculum_progress.current_lesson_id is deliberately left
+        // untouched, so the student's next booking resumes this same lesson
+        // (the "redo" behavior) instead of skipping ahead.
+        if (outcome === 'completed' && studentId && lessonId) {
+          try {
+            await advanceCurriculumProgress(studentId, lessonId);
+          } catch (e) {
+            console.warn('[LessonWrapUpDialog] advanceCurriculumProgress failed', e);
+          }
         }
       }
 

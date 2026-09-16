@@ -6356,6 +6356,54 @@ export type Database = {
           },
         ]
       }
+      kdp_books: {
+        Row: {
+          author_name: string | null
+          chapters: Json
+          cover_image_url: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          font_family: string
+          id: string
+          status: string
+          subtitle: string | null
+          title: string
+          trim_size: string
+          updated_at: string
+        }
+        Insert: {
+          author_name?: string | null
+          chapters?: Json
+          cover_image_url?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          font_family?: string
+          id?: string
+          status?: string
+          subtitle?: string | null
+          title?: string
+          trim_size?: string
+          updated_at?: string
+        }
+        Update: {
+          author_name?: string | null
+          chapters?: Json
+          cover_image_url?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          font_family?: string
+          id?: string
+          status?: string
+          subtitle?: string | null
+          title?: string
+          trim_size?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       leaderboard_entries: {
         Row: {
           additional_data: Json | null
@@ -7649,6 +7697,48 @@ export type Database = {
           topic?: string
           updated_at?: string | null
           vocabulary_focus?: string[] | null
+        }
+        Relationships: []
+      }
+      level_change_requests: {
+        Row: {
+          admin_id: string | null
+          admin_notes: string | null
+          created_at: string
+          current_level: string | null
+          id: string
+          reason: string | null
+          requested_level: string
+          resolved_at: string | null
+          status: string
+          student_id: string
+          teacher_id: string
+        }
+        Insert: {
+          admin_id?: string | null
+          admin_notes?: string | null
+          created_at?: string
+          current_level?: string | null
+          id?: string
+          reason?: string | null
+          requested_level: string
+          resolved_at?: string | null
+          status?: string
+          student_id: string
+          teacher_id: string
+        }
+        Update: {
+          admin_id?: string | null
+          admin_notes?: string | null
+          created_at?: string
+          current_level?: string | null
+          id?: string
+          reason?: string | null
+          requested_level?: string
+          resolved_at?: string | null
+          status?: string
+          student_id?: string
+          teacher_id?: string
         }
         Relationships: []
       }

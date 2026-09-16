@@ -11,9 +11,11 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { supabase } from '@/integrations/supabase/client';
-import { Users, Calendar, TrendingUp, BookOpen, CreditCard, Plus, Trash2, Loader2, Copy } from 'lucide-react';
+import { Users, Calendar, TrendingUp, BookOpen, CreditCard, Plus, Trash2, Loader2, Copy, GraduationCap, Check, X, Pencil } from 'lucide-react';
 import { toast } from 'sonner';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { fetchHubLessonSequence, setCurrentLesson, type Hub, type LessonMeta } from '@/services/activeCoreLessonResolver';
+import { LevelChangeRequestsPanel } from './LevelChangeRequestsPanel';
 
 const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const;
 const HUBS = [
@@ -34,6 +36,22 @@ interface Student {
   student_level?: HubValue;
   total_lessons: number;
   available_credits: number;
+  /** student_curriculum_progress.current_lesson_id — "which lesson does
+   *  this student start from" per direct request; null means they've never
+   *  had a pointer set (resolveActiveCoreLesson will fall back to the
+   *  first published lesson in their hub, i.e. effectively Lesson 1). */
+  current_lesson_id?: string | null;
+  current_lesson_title?: string | null;
+}
+
+/** student_profiles.student_level uses 'professional' for the adult hub;
+ *  activeCoreLessonResolver's Hub type (and its own internal target_system
+ *  mapping) uses 'success' for the same concept — this project's one
+ *  other spot with this exact naming mismatch, see HUB_TO_TARGET_SYSTEM. */
+function toResolverHub(hubValue?: HubValue): Hub {
+  if (hubValue === 'professional') return 'success';
+  if (hubValue === 'academy') return 'academy';
+  return 'playground';
 }
 
 /**
@@ -136,6 +154,27 @@ export const StudentManagement = () => {
         ])
       );
 
+      // Current-lesson pointer (student_curriculum_progress) — "which
+      // lesson does this student start from", per direct request to make
+      // this visible/editable in the admin dashboard. Batched once for all
+      // students rather than per-row, same reasoning as credits above.
+      const { data: progressData } = userIds.length
+        ? await supabase
+            .from('student_curriculum_progress')
+            .select('student_id, current_lesson_id')
+            .in('student_id', userIds)
+        : { data: [] };
+      const lessonIdByStudent = new Map(
+        (progressData || [])
+          .filter((p: any) => p.current_lesson_id)
+          .map((p: any) => [p.student_id, p.current_lesson_id as string])
+      );
+      const lessonIds = Array.from(new Set(Array.from(lessonIdByStudent.values())));
+      const { data: lessonTitles } = lessonIds.length
+        ? await supabase.from('curriculum_lessons').select('id, title').in('id', lessonIds)
+        : { data: [] };
+      const titleByLessonId = new Map((lessonTitles || []).map((l: any) => [l.id, l.title as string]));
+
       // Get lesson counts for each student
       const studentsWithLessons = await Promise.all(
         (profilesData || []).map(async (row: any) => {
@@ -145,6 +184,7 @@ export const StudentManagement = () => {
             .eq('student_id', row.user_id);
 
           const u = usersById.get(row.user_id) as any;
+          const currentLessonId = lessonIdByStudent.get(row.user_id) ?? null;
           return {
             id: row.user_id,
             display_id: toDisplayId(row.user_id),
@@ -155,6 +195,8 @@ export const StudentManagement = () => {
             student_level: row.student_level,
             total_lessons: count || 0,
             available_credits: creditsById.get(row.user_id) || 0,
+            current_lesson_id: currentLessonId,
+            current_lesson_title: currentLessonId ? titleByLessonId.get(currentLessonId) ?? null : null,
           } satisfies Student;
         })
       );
@@ -281,6 +323,27 @@ export const StudentManagement = () => {
       console.error('Failed to update hub:', err);
       setStudents(previous);
       toast.error('Could not update hub');
+    }
+  };
+
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setCurrentUserId(data.user?.id ?? null));
+  }, []);
+
+  const handleSetCurrentLesson = async (studentId: string, lesson: LessonMeta) => {
+    const previous = students;
+    const previousLessonId = students.find(s => s.id === studentId)?.current_lesson_id ?? null;
+    setStudents(prev =>
+      prev.map(s => (s.id === studentId ? { ...s, current_lesson_id: lesson.id, current_lesson_title: lesson.title } : s))
+    );
+    try {
+      await setCurrentLesson(studentId, lesson.id, currentUserId, previousLessonId);
+      toast.success(`Current lesson set to "${lesson.title}"`);
+    } catch (err) {
+      console.error('Failed to set current lesson:', err);
+      setStudents(previous);
+      toast.error('Could not update current lesson');
     }
   };
 
@@ -427,6 +490,8 @@ export const StudentManagement = () => {
         </CardContent>
       </Card>
 
+      <LevelChangeRequestsPanel onResolved={fetchStudents} />
+
       {/* Recent Students Table */}
       <Card>
         <CardHeader>
@@ -445,6 +510,7 @@ export const StudentManagement = () => {
                   <TableHead>Hub</TableHead>
                   <TableHead>CEFR Level</TableHead>
                   <TableHead>Total Lessons</TableHead>
+                  <TableHead>Current Lesson</TableHead>
                   <TableHead>Credits</TableHead>
                   <TableHead>Joined</TableHead>
                   <TableHead>Status</TableHead>
@@ -506,6 +572,14 @@ export const StudentManagement = () => {
                     </TableCell>
                     <TableCell>{student.total_lessons}</TableCell>
                     <TableCell>
+                      <CurrentLessonCell
+                        hub={toResolverHub(student.student_level)}
+                        currentLessonId={student.current_lesson_id}
+                        currentLessonTitle={student.current_lesson_title}
+                        onChange={(lesson) => handleSetCurrentLesson(student.id, lesson)}
+                      />
+                    </TableCell>
+                    <TableCell>
                       <CreditsCell
                         balance={student.available_credits}
                         onAdd={(amt) => handleAddCredits(student.id, amt)}
@@ -562,6 +636,92 @@ export const StudentManagement = () => {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+  );
+};
+
+interface CurrentLessonCellProps {
+  hub: Hub;
+  currentLessonId: string | null | undefined;
+  currentLessonTitle: string | null | undefined;
+  onChange: (lesson: LessonMeta) => Promise<void>;
+}
+
+const CEFR_LABELS: Record<string, string> = {
+  'pre-a1': 'Pre-A1', a1: 'A1', a2: 'A2', b1: 'B1', b2: 'B2', c1: 'C1', c2: 'C2',
+};
+
+function lessonLabel(l: LessonMeta): string {
+  const level = l.slot_cefr_level ? CEFR_LABELS[l.slot_cefr_level.toLowerCase()] ?? l.slot_cefr_level : null;
+  const unitLesson = l.slot_unit_number != null && l.slot_lesson_number != null
+    ? `U${l.slot_unit_number}L${l.slot_lesson_number}`
+    : null;
+  const prefix = [level, unitLesson].filter(Boolean).join(' ');
+  return prefix ? `${prefix} — ${l.title}` : l.title;
+}
+
+const CurrentLessonCell: React.FC<CurrentLessonCellProps> = ({ hub, currentLessonId, currentLessonTitle, onChange }) => {
+  const [open, setOpen] = useState(false);
+  const [lessons, setLessons] = useState<LessonMeta[] | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleOpenChange = async (next: boolean) => {
+    setOpen(next);
+    if (next && lessons === null) {
+      setLoading(true);
+      try {
+        setLessons(await fetchHubLessonSequence(hub));
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const submit = async (lesson: LessonMeta) => {
+    setSubmitting(true);
+    try {
+      await onChange(lesson);
+      setOpen(false);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <Popover open={open} onOpenChange={handleOpenChange}>
+      <PopoverTrigger asChild>
+        <Button size="sm" variant="ghost" className="h-8 px-2 gap-1 max-w-[220px] justify-start">
+          <BookOpen className="h-3 w-3 shrink-0" />
+          <span className="truncate text-xs">
+            {currentLessonTitle || 'Lesson 1 (default)'}
+          </span>
+          <Pencil className="h-3 w-3 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80 space-y-2 max-h-96 overflow-y-auto" align="start">
+        <p className="text-sm font-medium">Set current lesson</p>
+        <p className="text-xs text-muted-foreground">
+          The student's next class resumes from this lesson.
+        </p>
+        {loading && <Loader2 className="h-4 w-4 animate-spin mx-auto my-3" />}
+        {!loading && lessons?.length === 0 && (
+          <p className="text-xs text-muted-foreground py-2">No published lessons found for this hub.</p>
+        )}
+        {!loading && lessons?.map(l => (
+          <button
+            key={l.id}
+            type="button"
+            disabled={submitting}
+            onClick={() => submit(l)}
+            className={`w-full text-left text-xs rounded-md px-2 py-1.5 hover:bg-muted disabled:opacity-50 ${
+              l.id === currentLessonId ? 'bg-muted font-medium' : ''
+            }`}
+          >
+            {lessonLabel(l)}
+          </button>
+        ))}
+      </PopoverContent>
+    </Popover>
   );
 };
 
