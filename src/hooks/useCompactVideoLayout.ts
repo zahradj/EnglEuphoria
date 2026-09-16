@@ -27,3 +27,31 @@ export function useCompactVideoLayout() {
 
   return !!isCompact;
 }
+
+/**
+ * Compact AND taller than wide — a phone or portrait tablet specifically,
+ * not a landscape phone (which is also "compact" by short-side but wide
+ * enough that floating the video strip over a corner of the lesson still
+ * leaves the lesson usable). Used to switch the compact video strip from
+ * floating-over-the-lesson to docked-above-the-lesson: per direct report,
+ * the floating strip plus the classroom stage's own letterboxing left the
+ * lesson content looking wrong on portrait phones/tablets specifically —
+ * landscape is left on the existing floating behavior.
+ */
+export function useIsPortraitCompact(): boolean {
+  const isCompact = useCompactVideoLayout();
+  const [isPortrait, setIsPortrait] = React.useState<boolean | undefined>(undefined);
+
+  React.useEffect(() => {
+    const compute = () => setIsPortrait(window.innerHeight > window.innerWidth);
+    compute();
+    window.addEventListener("resize", compute);
+    window.addEventListener("orientationchange", compute);
+    return () => {
+      window.removeEventListener("resize", compute);
+      window.removeEventListener("orientationchange", compute);
+    };
+  }, []);
+
+  return isCompact && !!isPortrait;
+}

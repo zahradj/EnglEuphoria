@@ -6,7 +6,7 @@ import { User, Send, Video, Mic, MicOff, VideoOff, BookOpen, PictureInPicture2, 
 import { getClassroomHubTheme, type ClassroomHubKey } from '@/components/teacher/classroom/hubClassroomTheme';
 import { DictionaryPopover } from '@/components/classroom/DictionaryPopover';
 import { whiteboardService, type ChatBroadcastPayload } from '@/services/whiteboardService';
-import { useCompactVideoLayout } from '@/hooks/useCompactVideoLayout';
+import { useCompactVideoLayout, useIsPortraitCompact } from '@/hooks/useCompactVideoLayout';
 
 interface StudentCommunicationSidebarProps {
   studentName: string;
@@ -61,6 +61,7 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
   // layout as a landscape one, not the compact phone strip a pure `md`
   // (768px width) breakpoint would wrongly give it.
   const isCompact = useCompactVideoLayout();
+  const isPortraitCompact = useIsPortraitCompact();
 
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     { id: 'sys-start', sender: 'system', text: 'Class session started' }
@@ -236,7 +237,27 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
           strip ignoring that flag, a student in that state would see no
           video at all: not the floating tiles, not the docked sidebar,
           and not this strip either. */}
-      {isCompact && (
+      {/* Portrait phone/tablet: dock the strip in-flow above the lesson
+          instead of floating it over a corner — per direct report, a
+          floating strip left the lesson stage's own letterboxed frame
+          looking wrong underneath it in portrait specifically. This
+          element takes no position of its own; the parent (StudentClassroom)
+          places it above StudentMainStage in a flex-col stack when
+          isPortraitCompact, so the stage's available area shrinks to
+          account for it (the same measurement useLetterboxSize/
+          useViewportRatio already use for the frame-fit fix). */}
+      {isCompact && isPortraitCompact && (
+        <div className="w-full shrink-0 flex justify-center gap-2 px-2 py-2 bg-black/5 backdrop-blur-sm">
+          {teacherTile(true)}
+          {studentTile(true)}
+        </div>
+      )}
+      {/* Landscape phone: floating strip over the top-right corner — the
+          lesson has enough width left over there to stay usable, so this
+          keeps its original always-visible-without-eating-vertical-space
+          behavior rather than switching every compact device to the
+          docked bar above. */}
+      {isCompact && !isPortraitCompact && (
         <div className="fixed top-14 right-2 z-40 flex gap-2">
           {teacherTile(true)}
           {studentTile(true)}

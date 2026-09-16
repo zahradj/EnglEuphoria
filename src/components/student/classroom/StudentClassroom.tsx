@@ -23,6 +23,7 @@ import { useHubClassroomTheme } from '@/components/classroom/shared/useHubClassr
 import { ClassroomLibraryDrawer } from './ClassroomLibraryDrawer';
 import { BookOpen } from 'lucide-react';
 import { CountdownToStart } from '@/components/classroom/CountdownToStart';
+import { useIsPortraitCompact } from '@/hooks/useCompactVideoLayout';
 
 
 
@@ -72,6 +73,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
 
   const headerIdle = useIdleOpacity({ idleTimeout: 3000, idleOpacity: 0.4 });
   const sidebarIdle = useIdleOpacity({ idleTimeout: 4000, idleOpacity: 0.3 });
+  const isPortraitCompact = useIsPortraitCompact();
 
   const {
     session,
@@ -556,11 +558,19 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
         </div>
       )}
 
-      {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Sidebar - Communication */}
+      {/* Main Content — portrait phone/tablet stacks the video strip above
+          the lesson (flex-col) instead of the desktop/landscape side-by-side
+          row, per direct report that video frames should sit above the
+          lesson, not float over/beside it, in portrait. */}
+      <div className={`flex-1 flex overflow-hidden ${isPortraitCompact ? 'flex-col' : ''}`}>
+        {/* Communication — left sidebar on desktop/landscape, full-width bar above the stage in portrait */}
         {!isZenMode && (
-          <div style={sidebarIdle.style} onMouseMove={sidebarIdle.onMouseMove} onMouseEnter={sidebarIdle.onMouseEnter}>
+          <div
+            className={isPortraitCompact ? 'w-full shrink-0' : undefined}
+            style={sidebarIdle.style}
+            onMouseMove={sidebarIdle.onMouseMove}
+            onMouseEnter={sidebarIdle.onMouseEnter}
+          >
             <StudentCommunicationSidebar
               studentName={studentName}
               teacherName={teacherName}

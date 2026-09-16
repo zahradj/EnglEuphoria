@@ -13,6 +13,7 @@ import { EmbeddedSceneLesson } from './EmbeddedSceneLesson';
 import { EmbeddedWelcomeTownLesson } from './EmbeddedWelcomeTownLesson';
 import { useFrameScale } from '@/hooks/useFrameScale';
 import { useLetterboxSize } from '@/hooks/useLetterboxSize';
+import { useViewportRatio } from '@/hooks/useViewportRatio';
 
 /** The two embedded scene players (Pre-A1 lep1-rich, A1/A2 wt-rich/wt-a2-rich)
  *  expose the same 4 imperative methods from different source files —
@@ -131,7 +132,19 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
 
   const sceneLessonHandleRef = useRef<SceneLessonHandle>(null);
   const sceneStageAreaRef = useRef<HTMLDivElement>(null);
-  const sceneFrameSize = useLetterboxSize(sceneStageAreaRef, 16 / 9);
+  // Match the frame's shape to the real device viewport's shape (portrait
+  // phone -> portrait frame, landscape desktop -> landscape frame) instead
+  // of a fixed 16:9 landscape box. The scene player's own vh/vw-based
+  // content is authored to fill a full-viewport-shaped space (see
+  // useFrameScale's doc comment) — on a portrait phone, forcing a 16:9 box
+  // produced a short, squat frame, and useFrameScale then had to shrink
+  // that vh/vw content drastically to cram it in, reported live as "the
+  // lesson is zoomed in, bigger than the frame" on phone/tablet specifically
+  // (desktop, whose real viewport ratio is already close to 16:9, looked
+  // fine). See the comment further down for the original desktop bug this
+  // letterboxing mechanism exists to fix — a dynamic ratio fixes both.
+  const viewportRatio = useViewportRatio();
+  const sceneFrameSize = useLetterboxSize(sceneStageAreaRef, viewportRatio);
   const sceneFrameRef = useRef<HTMLDivElement>(null);
   const sceneFrameScale = useFrameScale(sceneFrameRef);
   const [sceneNav, setSceneNav] = useState({ sceneIdx: 0, total: 0, canNavigate: true, interactionUnlocked: false, lockToggleApplicable: true });
@@ -178,18 +191,29 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
             // (the last item in this flex column, including "Let student
             // try") underneath it.
             <div className={`absolute inset-x-3 top-3 sm:inset-x-4 sm:top-4 lg:inset-x-6 lg:top-6 flex flex-col gap-2 ${role === 'teacher' ? 'bottom-20 sm:bottom-24' : 'bottom-3 sm:bottom-4 lg:bottom-6'}`}>
-              {/* Scene art is generated full-bleed 16:9 and every scene paints
-                  it with `bg-cover` (fill-and-crop, never letterbox on its
-                  own) -- so the frame itself needs to be locked to that same
-                  16:9 shape before any art renders inside it. Without this,
-                  the frame just stretched to whatever leftover space this
-                  column had (wide-and-short on most desktop monitors), and
+              {/* Every scene paints its own bg art with `bg-cover`
+                  (fill-and-crop, never letterbox on its own) -- so the frame
+                  itself needs a real, deliberate aspect ratio before any art
+                  renders inside it. Without this, the frame just stretched
+                  to whatever leftover space this column had (wide-and-short
+                  on most desktop monitors, where the sidebar eats a much
+                  bigger share of width than the header eats of height), and
                   bg-cover cropped/zoomed heavily to fill that mismatched
                   shape -- reported live as "looks zoomed in, doesn't show
-                  the whole image." useLetterboxSize measures the available
-                  area and sets explicit pixel width/height for the largest
-                  16:9 box that fits -- a pure-CSS aspect-ratio attempt here
-                  first collapsed toward zero (the frame's only child is
+                  the whole image." A fixed 16:9 fixed the desktop case but
+                  broke portrait phone/tablet the same way in reverse (a
+                  16:9 box is short and squat inside a tall narrow area, so
+                  useFrameScale then had to shrink the vh/vw-based scene
+                  content drastically to fit) -- reported live as "the lesson
+                  is zoomed in, bigger than the frame" on phone/tablet.
+                  useViewportRatio's real device ratio (portrait phone ->
+                  portrait frame, landscape desktop -> landscape frame) fixes
+                  both, since the scene content is authored to fill whatever
+                  shape the real device viewport is, not specifically 16:9.
+                  useLetterboxSize measures the available area and sets
+                  explicit pixel width/height for the largest matching-ratio
+                  box that fits -- a pure-CSS aspect-ratio attempt here first
+                  collapsed toward zero (the frame's only child is
                   `position: absolute`, so it has no in-flow content to size
                   against), hence measuring explicitly instead. */}
               <div ref={sceneStageAreaRef} className="relative flex-1 min-h-0 flex items-center justify-center">
