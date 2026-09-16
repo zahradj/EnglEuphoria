@@ -120,7 +120,11 @@ const bgExpressGoodbyeV2 = `${W}/scenes/bg-express-goodbye-v2.png`;
 export type Scene =
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string; cta?: string }
   | { id: string; kind: 'cinematic'; bg: string; title: string; subtitle: string; narrator: CharKey; script: { who: CharKey; line: string }[]; cta: string }
-  | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string }
+  // `cardSide` lets the teacher-instruction/repeat cards dock to whichever
+  // side of the full-bleed `bg` was left empty for them (the character is
+  // composed into the opposite side) instead of floating centered over the
+  // character's face — omit for the default centered layout.
+  | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string; cardSide?: 'left' | 'right' }
   | { id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string }
   | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string }[] }
   | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: { label: string; color: string; targetLeft: string; targetTop: string; who?: CharKey }[]; showBlanks?: boolean; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
@@ -514,23 +518,27 @@ export const LESSON_2_SCENES: Scene[] = [
    * expressing that one feeling, BEFORE any word is combined into the
    * five-hotspot group scene below. */
   {
-    id: 'wt2-vocab-pip-happy', kind: 'meet', bg: bgVocabPipHappy, who: 'pip',
+    // Character composed into the LEFT third of bg-vocab-pip-happy.png —
+    // cards dock right, onto the empty side.
+    id: 'wt2-vocab-pip-happy', kind: 'meet', bg: bgVocabPipHappy, who: 'pip', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'Pip is happy!', repeat: 'Happy!',
   },
   {
-    id: 'wt2-vocab-leo-tired', kind: 'meet', bg: bgVocabLeoTired, who: 'leo',
+    // Character composed into the RIGHT third of bg-vocab-leo-tired.png —
+    // cards dock left.
+    id: 'wt2-vocab-leo-tired', kind: 'meet', bg: bgVocabLeoTired, who: 'leo', cardSide: 'left',
     teacher: 'Listen, then repeat!', line: 'Leo is tired!', repeat: 'Tired!',
   },
   {
-    id: 'wt2-vocab-mia-sad', kind: 'meet', bg: bgVocabMiaSad, who: 'mia',
+    id: 'wt2-vocab-mia-sad', kind: 'meet', bg: bgVocabMiaSad, who: 'mia', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'Mia is sad!', repeat: 'Sad!',
   },
   {
-    id: 'wt2-vocab-bella-angry', kind: 'meet', bg: bgVocabBellaAngry, who: 'bella',
+    id: 'wt2-vocab-bella-angry', kind: 'meet', bg: bgVocabBellaAngry, who: 'bella', cardSide: 'left',
     teacher: 'Listen, then repeat!', line: 'Bella is angry!', repeat: 'Angry!',
   },
   {
-    id: 'wt2-vocab-willow-hungry', kind: 'meet', bg: bgVocabWillowHungry, who: 'willow',
+    id: 'wt2-vocab-willow-hungry', kind: 'meet', bg: bgVocabWillowHungry, who: 'willow', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'Willow is hungry!', repeat: 'Hungry!',
   },
 

@@ -296,6 +296,18 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
   };
   const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
+  // The character is painted into one side of `scene.bg` (left/right third),
+  // leaving the opposite side open for these floating cards — dock them
+  // there instead of centering over the character. Omit `cardSide` to keep
+  // the original centered layout (existing scenes that reuse a shared,
+  // symmetric background).
+  const cardAlignClass = scene.cardSide === 'left' ? 'mr-auto ml-2 sm:ml-8'
+    : scene.cardSide === 'right' ? 'ml-auto mr-2 sm:mr-8'
+    : 'mx-auto';
+  const charJustifyClass = scene.cardSide === 'right' ? 'justify-start pl-6 sm:pl-14'
+    : scene.cardSide === 'left' ? 'justify-end pr-6 sm:pr-14'
+    : 'justify-center';
+
   return (
     <div className="relative min-h-[78vh]">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
@@ -303,7 +315,7 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
           ⚔️ Quest · Meet {c.name}
         </div>
       </div>
-      <div className="mx-auto mt-8 max-w-md">
+      <div className={`mt-8 max-w-md ${cardAlignClass}`}>
         <div className="rounded-2xl px-4 py-3 text-center text-lg font-bold text-white shadow-2xl" style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.35))', backdropFilter: 'blur(8px)', textShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
           {scene.teacher}
         </div>
@@ -314,7 +326,7 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
           for this exact idle-tap pattern in the Pre-A1 lessons. */}
       {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 h-[60vh] w-full cursor-pointer bg-transparent" />}
       {phase === 'idle' && (
-        <div className="pointer-events-none absolute inset-x-0 top-[26vh] z-10 grid place-items-center">
+        <div className={`pointer-events-none absolute inset-x-0 top-[26vh] z-10 flex ${charJustifyClass}`}>
           <div className="relative h-40 w-40" style={{ animation: 'lep1-wiggle 3s ease-in-out infinite' }}>
             <span className="absolute inset-0 rounded-full" style={{ background: `radial-gradient(circle, ${c.color}55, transparent 65%)`, animation: 'lep1-ping 2s ease-out infinite' }} />
             <span className="absolute inset-6 rounded-full border-4" style={{ borderColor: c.color, animation: 'lep1-ping 2s ease-out 0.4s infinite' }} />
@@ -325,18 +337,18 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
           the painted background right as they speak, then the vocabulary
           card below pops up already illustrating the word on its own. */}
       {glow && (
-        <div className="pointer-events-none absolute inset-x-0 top-[8vh] z-10 h-[55vh] grid place-items-center" style={{ animation: 'lep1-twinkle 1.4s ease-in-out' }}>
-          <div className="h-full w-full rounded-full" style={{ background: `radial-gradient(circle, ${c.color}66 0%, ${c.color}22 45%, transparent 70%)` }} />
+        <div className={`pointer-events-none absolute inset-x-0 top-[8vh] z-10 h-[55vh] flex ${charJustifyClass}`} style={{ animation: 'lep1-twinkle 1.4s ease-in-out' }}>
+          <div className="h-full w-full max-w-md rounded-full" style={{ background: `radial-gradient(circle, ${c.color}66 0%, ${c.color}22 45%, transparent 70%)` }} />
         </div>
       )}
       {xpBurst && (
-        <div className="pointer-events-none absolute inset-x-0 top-[32vh] z-30 grid place-items-center">
+        <div className={`pointer-events-none absolute inset-x-0 top-[32vh] z-30 flex ${charJustifyClass}`}>
           <div className="animate-[lep1-pop-fade_1.1s_ease-out_forwards] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 text-2xl font-black text-white shadow-2xl">+10 XP 💎</div>
         </div>
       )}
       {phase !== 'idle' && (
         <div className="pointer-events-none absolute inset-x-0 top-[12vh] z-20 flex justify-center px-4">
-          <button onClick={replayIntro} className="group pointer-events-auto relative flex w-full max-w-sm flex-col items-center gap-2 rounded-[2rem] border-4 bg-white px-6 py-5 text-center shadow-2xl active:scale-95" style={{ borderColor: c.color, animation: 'lep1-pop 0.4s ease-out' }}>
+          <button onClick={replayIntro} className={`group pointer-events-auto relative flex w-full max-w-sm flex-col items-center gap-2 rounded-[2rem] border-4 bg-white px-6 py-5 text-center shadow-2xl active:scale-95 ${cardAlignClass}`} style={{ borderColor: c.color, animation: 'lep1-pop 0.4s ease-out' }}>
             <span className="grid h-16 w-16 place-items-center rounded-full text-4xl shadow-inner" style={{ background: `${c.color}22` }}>{c.emoji}</span>
             <span className="text-2xl font-black sm:text-3xl" style={{ color: c.color }}>{repeatWord}</span>
             <span className="text-sm font-semibold text-neutral-500">🔊 “{scene.line}”</span>
@@ -344,7 +356,7 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
         </div>
       )}
       {phase === 'idle' && (
-        <div className="pointer-events-none absolute inset-x-0 top-[44vh] z-20 grid place-items-center">
+        <div className={`pointer-events-none absolute inset-x-0 top-[44vh] z-20 flex ${charJustifyClass}`}>
           <span className="animate-pulse rounded-full bg-white/95 px-5 py-2 text-base font-bold shadow-xl" style={{ color: c.color }}>👆 Tap {c.name} {c.emoji}</span>
         </div>
       )}
