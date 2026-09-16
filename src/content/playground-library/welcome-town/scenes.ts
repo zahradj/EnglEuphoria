@@ -92,7 +92,7 @@ const bgVocabMiaSad = `${W}/scenes/bg-vocab-mia-sad.png`;
 const bgVocabBellaAngry = `${W}/scenes/bg-vocab-bella-angry.png`;
 const bgVocabWillowHungry = `${W}/scenes/bg-vocab-willow-hungry.png`;
 const bgHeIntroPip = `${W}/scenes/bg-heshe-intro-pip.png`;
-const bgSheIntroMia = `${W}/scenes/bg-heshe-intro-mia.png`;
+const bgHeSheTogether = `${W}/scenes/bg-heshe-together.png`;
 const bgPrepIn = `${W}/scenes/bg-prep-in.png`;
 const bgPrepOn = `${W}/scenes/bg-prep-on.png`;
 const bgPrepNextTo = `${W}/scenes/bg-prep-next-to.png`;
@@ -612,13 +612,26 @@ export const LESSON_2_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt2-choice', kind: 'choice', bg: bgFeelings, who: 'pip', teacher: 'Listen carefully, then tap the right answer!',
-    prompt: 'Which word means HAPPY?',
-    options: [
-      { label: 'Happy', emoji: '\u{1F60A}', correct: true },
-      { label: 'Sad', emoji: '\u{1F622}' },
-      { label: 'Tired', emoji: '\u{1F62A}' },
-      { label: 'Hungry', emoji: '\u{1F924}' },
+    // Refactored from a static 4-button "Which word means HAPPY?" MCQ into
+    // a real tap-the-friend-in-the-scene listening game — research backs
+    // this as more engaging than a flat multiple-choice quiz for young
+    // learners (ESL Kids Games' "touch the correct picture" pattern; see
+    // https://www.eslkidsgames.com/online-esl-games). Reuses bgFeelings'
+    // own established hotspot coordinates verbatim (same ones wt2-vocab-
+    // feelings/wt2-drag-feelings already use) — no new art needed, and
+    // now covers three feelings in one game instead of just one.
+    id: 'wt2-choice', kind: 'listen-tap', bg: bgFeelings, teacher: 'Listen, then tap the right friend!',
+    targets: [
+      { label: 'Happy', left: '14%', top: '58%', color: '#FE6A2F' },
+      { label: 'Tired', left: '33%', top: '60%', color: '#C97A2F' },
+      { label: 'Sad', left: '52%', top: '64%', color: '#B85CD1' },
+      { label: 'Angry', left: '71%', top: '62%', color: '#E76FA5' },
+      { label: 'Hungry', left: '90%', top: '64%', color: '#4FA9E0' },
+    ],
+    rounds: [
+      { prompt: 'Who is happy?', answerLabel: 'Happy', who: 'pip' },
+      { prompt: 'Who is sad?', answerLabel: 'Sad', who: 'mia' },
+      { prompt: 'Who is angry?', answerLabel: 'Angry', who: 'bella' },
     ],
   },
 
@@ -633,8 +646,26 @@ export const LESSON_2_SCENES: Scene[] = [
     teacher: 'Listen, then repeat!', line: 'This is Pip. Pip is a boy. He is a boy!', repeat: 'He!',
   },
   {
-    id: 'wt2-heshe-intro-mia', kind: 'meet', bg: bgSheIntroMia, who: 'mia', cardSide: 'left',
-    teacher: 'Listen, then repeat!', line: 'This is Mia. Mia is a girl. She is a girl!', repeat: 'She!',
+    // Refactored from a second solo tap-and-repeat "meet" scene into a real
+    // game: research on teaching he/she to young learners consistently
+    // points to a physical "touch the right one when I call it" mechanic
+    // (the "Wall Touch Game" / "Speed Card Practice" pattern — see
+    // https://eslkidstuff.com/esl-lesson-plans-for-esl-kids-teachers/subject-pronouns-lesson-plan/
+    // and https://numberdyslexia.com/pronoun-activities/), digitally
+    // adapted via the same listen-tap mechanic already proven above.
+    // Mia still gets introduced here — the very first round names her
+    // directly — just inside a game instead of a passive tap-once card.
+    id: 'wt2-heshe-together', kind: 'listen-tap', bg: bgHeSheTogether, teacher: 'Listen, then tap the right friend!',
+    targets: [
+      { label: 'Pip', left: '28%', top: '55%', color: '#FE6A2F' },
+      { label: 'Mia', left: '72%', top: '55%', color: '#B85CD1' },
+    ],
+    rounds: [
+      { prompt: 'This is Mia. Tap Mia — She is a girl!', answerLabel: 'Mia', who: 'mia' },
+      { prompt: 'Tap He — the boy!', answerLabel: 'Pip', who: 'pip' },
+      { prompt: 'Tap She — the girl!', answerLabel: 'Mia', who: 'mia' },
+      { prompt: 'Tap He!', answerLabel: 'Pip', who: 'pip' },
+    ],
   },
   {
     // Quick generalization check with two DIFFERENT characters than the
