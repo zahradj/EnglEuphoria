@@ -4,28 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import { X, Loader2, Sparkles, Trophy, BookOpen, Map as MapIcon } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import PlayUnitLesson from '@/pages/playground-scene/PlayUnitLesson';
-import { getSceneLesson } from '@/content/playground-library/sceneLessonRegistry';
-import {
-  LESSON_1_TITLE, LESSON_1_OBJECTIVE,
-  LESSON_2_TITLE, LESSON_2_OBJECTIVE,
-  LESSON_3_TITLE, LESSON_3_OBJECTIVE,
-  LESSON_4_TITLE, LESSON_4_OBJECTIVE,
-  LESSON_5_TITLE, LESSON_5_OBJECTIVE,
-  LESSON_6_TITLE, LESSON_6_OBJECTIVE,
-  LESSON_U2L1_TITLE, LESSON_U2L1_OBJECTIVE,
-} from '@/content/playground-library/unit1/scenes';
+import PlayWelcomeTownLesson from '@/pages/playground-scene/PlayWelcomeTownLesson';
+import { getSceneLesson, getSceneLessonMeta } from '@/content/playground-library/sceneLessonRegistry';
+import { getWelcomeTownLesson } from '@/content/playground-library/welcomeTownLessonRegistry';
 import { extractTaughtLetters, completeSceneLesson } from '@/services/sceneLessonCompletionService';
 import type { PlaygroundLesson } from '@/hooks/usePlaygroundLessons';
 
-const LESSON_META: Record<string, { title: string; objective: string }> = {
-  '1-1': { title: LESSON_1_TITLE, objective: LESSON_1_OBJECTIVE },
-  '1-2': { title: LESSON_2_TITLE, objective: LESSON_2_OBJECTIVE },
-  '1-3': { title: LESSON_3_TITLE, objective: LESSON_3_OBJECTIVE },
-  '1-4': { title: LESSON_4_TITLE, objective: LESSON_4_OBJECTIVE },
-  '1-5': { title: LESSON_5_TITLE, objective: LESSON_5_OBJECTIVE },
-  '1-6': { title: LESSON_6_TITLE, objective: LESSON_6_OBJECTIVE },
-  '2-1': { title: LESSON_U2L1_TITLE, objective: LESSON_U2L1_OBJECTIVE },
-};
+/** Welcome Town (A1/A2) formats route to PlayWelcomeTownLesson + the
+ *  welcomeTownLessonRegistry; everything else (including the default
+ *  undefined case, matching this modal's original lep1-only behavior)
+ *  routes to PlayUnitLesson + sceneLessonRegistry. Keep in sync with the
+ *  identical format list KidsWorldMap.tsx uses to decide whether to open
+ *  this modal at all, and with classroomLessonResolver.ts's isSceneLesson. */
+const WELCOME_TOWN_FORMATS = new Set(['wt-rich', 'wt-a2-rich']);
 
 interface SceneLessonPlayerModalProps {
   isOpen: boolean;
@@ -35,9 +26,10 @@ interface SceneLessonPlayerModalProps {
 }
 
 /**
- * Launch surface for the scene-based Little Explorers Phonics lessons from
- * the KidsWorldMap — a preview card (title/objective/sounds you'll learn)
- * before starting, then the real scene player, then syncs completion via
+ * Launch surface for scene-based Playground lessons (Pre-A1 Little
+ * Explorers Phonics AND A1/A2 Welcome Town) from the KidsWorldMap — a
+ * preview card (title/objective/sounds you'll learn) before starting,
+ * then the real scene player, then syncs completion via
  * sceneLessonCompletionService when the finale scene is reached.
  */
 export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
@@ -58,9 +50,20 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
     }
   }, [isOpen, lesson?.id]);
 
+  const isWelcomeTown = !!lesson?.contentFormat && WELCOME_TOWN_FORMATS.has(lesson.contentFormat);
   const key = lesson?.unitNumber != null && lesson?.lessonNumber != null ? `${lesson.unitNumber}-${lesson.lessonNumber}` : null;
-  const scenes = useMemo(() => (key ? getSceneLesson(lesson!.unitNumber!, lesson!.lessonNumber!) : null), [key]);
-  const meta = key ? LESSON_META[key] : undefined;
+
+  const welcomeTownLesson = useMemo(
+    () => (key && isWelcomeTown ? getWelcomeTownLesson(lesson!.contentFormat!, lesson!.unitNumber!, lesson!.lessonNumber!) : null),
+    [key, isWelcomeTown],
+  );
+  const scenes = useMemo(
+    () => (isWelcomeTown ? welcomeTownLesson?.scenes ?? null : key ? getSceneLesson(lesson!.unitNumber!, lesson!.lessonNumber!) : null),
+    [key, isWelcomeTown, welcomeTownLesson],
+  );
+  const meta = isWelcomeTown
+    ? (welcomeTownLesson ? { title: welcomeTownLesson.title, objective: welcomeTownLesson.objective } : undefined)
+    : (key ? getSceneLessonMeta(lesson!.unitNumber!, lesson!.lessonNumber!) ?? undefined : undefined);
   const letters = useMemo(() => (scenes ? extractTaughtLetters(scenes) : []), [scenes]);
 
   if (!isOpen || !lesson) return null;
@@ -211,12 +214,21 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
           >
             <X className="h-5 w-5" />
           </button>
-          <PlayUnitLesson
-            scenes={scenes}
-            sessionKey={`dash-scene-${lesson.id}`}
-            embedded
-            onFinaleReached={handleFinale}
-          />
+          {isWelcomeTown ? (
+            <PlayWelcomeTownLesson
+              scenes={scenes as any}
+              sessionKey={`dash-scene-${lesson.id}`}
+              embedded
+              onFinaleReached={handleFinale}
+            />
+          ) : (
+            <PlayUnitLesson
+              scenes={scenes as any}
+              sessionKey={`dash-scene-${lesson.id}`}
+              embedded
+              onFinaleReached={handleFinale}
+            />
+          )}
           {phase === 'saving' && (
             <div className="absolute inset-0 z-[120] flex flex-col items-center justify-center gap-3 bg-black/50 text-white">
               <Loader2 className="h-8 w-8 animate-spin" />

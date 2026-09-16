@@ -1,11 +1,11 @@
 import { supabase } from '@/integrations/supabase/client';
-import type { Scene } from '@/content/playground-library/unit1/scenes';
 
 /**
- * Runs when a student finishes one of the scene-based Little Explorers
- * Phonics lessons (Unit 1 L1-6, Unit 2 L1) from the Playground dashboard.
- * Three writes, each best-effort — a failure in one shouldn't block the
- * celebration UI or the others:
+ * Runs when a student finishes a scene-based Playground lesson — either
+ * the Little Explorers Phonics family (Pre-A1, `unit1/scenes.ts`) or the
+ * Welcome Town family (A1/A2, `welcome-town(-a2)/scenes.ts`) — from the
+ * Playground dashboard. Three writes, each best-effort — a failure in one
+ * shouldn't block the celebration UI or the others:
  *   1. student_lesson_progress — marks the map node complete.
  *   2. student_phonics_progress — adds the letters this lesson teaches to
  *      the "Map of Sounds" tab.
@@ -13,15 +13,31 @@ import type { Scene } from '@/content/playground-library/unit1/scenes';
  *      since students have no direct INSERT policy on that table) — makes
  *      practice for this lesson appear in the Homework Forest widget.
  *
- * All homework/phonics content is derived from the lesson's own Scene[]
+ * All homework/phonics content is derived from the lesson's own scene
  * data — no new authoring, no AI call.
+ *
+ * Typed against a minimal structural shape (not either family's own Scene
+ * union) deliberately: Pre-A1 and Welcome Town are separate, incompatible
+ * TypeScript unions (see activity-pattern-library skill), but the specific
+ * `kind`s this file actually reads (`sound-model`, `echo`, `roleplay`,
+ * `basket`) have identical field shapes in both, and every code path below
+ * already branches on `s.kind` before touching kind-specific fields — so
+ * this works correctly for scenes from either registry without needing a
+ * shared Scene union to exist.
  */
+interface CompletionScene {
+  kind: string;
+  letter?: string;
+  word?: string;
+  script?: { line: string }[];
+  items?: { word: string; hit?: boolean }[];
+}
 
 interface CompleteSceneLessonArgs {
   userId: string;
   lessonRowId: string;
   title: string;
-  scenes: Scene[];
+  scenes: CompletionScene[];
 }
 
 interface CompleteSceneLessonResult {
@@ -35,11 +51,11 @@ interface CompleteSceneLessonResult {
 }
 
 /** Letters this lesson introduces, in first-seen order, deduped. */
-export function extractTaughtLetters(scenes: Scene[]): string[] {
+export function extractTaughtLetters(scenes: CompletionScene[]): string[] {
   const seen = new Set<string>();
   const letters: string[] = [];
   for (const s of scenes) {
-    if (s.kind === 'sound-model' && !seen.has(s.letter)) {
+    if (s.kind === 'sound-model' && s.letter && !seen.has(s.letter)) {
       seen.add(s.letter);
       letters.push(s.letter);
     }
@@ -60,14 +76,15 @@ interface HomeworkContent {
 
 /** Builds the exact 3-activity shape HomeworkPlayer expects, from the
  *  lesson's own basket/echo/roleplay scene data. */
-export function buildHomeworkContent(scenes: Scene[], title: string, lessonRowId: string): HomeworkContent {
+export function buildHomeworkContent(scenes: CompletionScene[], title: string, lessonRowId: string): HomeworkContent {
   // Activity 1 — vocab words from basket scenes (hit:true = target, hit:false = distractor pool).
-  // Review lessons (e.g. L4-L6) have no basket/sound-model scenes at all, so fall back to
-  // short echo-scene phrases — every lesson has those — rather than generic filler.
+  // Welcome Town lessons have no 'basket' kind at all, and Pre-A1 review
+  // lessons (e.g. L4-L6) skip it too — both fall back to short echo-scene
+  // phrases (every lesson family has those) rather than generic filler.
   const correctWords: string[] = [];
   const distractorPool: string[] = [];
   for (const s of scenes) {
-    if (s.kind !== 'basket') continue;
+    if (s.kind !== 'basket' || !s.items) continue;
     for (const item of s.items) {
       if (item.hit) correctWords.push(item.word);
       else distractorPool.push(item.word);
@@ -75,7 +92,7 @@ export function buildHomeworkContent(scenes: Scene[], title: string, lessonRowId
   }
   if (correctWords.length === 0) {
     const echoPhrases = Array.from(
-      new Set(scenes.filter((s): s is Extract<Scene, { kind: 'echo' }> => s.kind === 'echo').map((s) => s.word)),
+      new Set(scenes.filter((s) => s.kind === 'echo' && s.word).map((s) => s.word!)),
     );
     correctWords.push(...echoPhrases);
     distractorPool.push(...echoPhrases);
@@ -95,8 +112,8 @@ export function buildHomeworkContent(scenes: Scene[], title: string, lessonRowId
   // Activity 2 — short lines from echo/roleplay scenes, 3+ words, scrambled
   const candidateLines: string[] = [];
   for (const s of scenes) {
-    if (s.kind === 'echo') candidateLines.push(s.word);
-    if (s.kind === 'roleplay') candidateLines.push(...s.script.map((line) => line.line));
+    if (s.kind === 'echo' && s.word) candidateLines.push(s.word);
+    if (s.kind === 'roleplay' && s.script) candidateLines.push(...s.script.map((line) => line.line));
   }
   const goodLines = Array.from(new Set(candidateLines)).filter((l) => wordsOf(l).length >= 3).slice(0, 3);
   const activity2Items = (goodLines.length > 0 ? goodLines : ['Hello I am here']).map((line) => {

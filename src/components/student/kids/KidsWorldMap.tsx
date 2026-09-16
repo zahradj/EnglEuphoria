@@ -283,9 +283,19 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
       {/* Floating backpack with stars */}
       <FloatingBackpack totalStars={totalStars} />
 
-      {/* Lesson player modal — scene-based Little Explorers Phonics lessons get
-          their own full player; everything else uses the generic quiz modal. */}
-      {selectedLesson?.contentFormat === 'lep1-rich' ? (
+      {/* Lesson player modal — scene-based lessons (Pre-A1 Little Explorers
+          Phonics `lep1-rich`, and A1/A2 Welcome Town `wt-rich`/`wt-a2-rich`)
+          get their own full scene player; everything else uses the generic
+          quiz modal. Previously only checked 'lep1-rich', so every Welcome
+          Town lesson — the actively-shipping content as of this fix — fell
+          through to the generic modal, which has no idea how to read Scene[]
+          data and silently rendered auto-generated filler text instead of
+          the real lesson. Keep this format list in sync with
+          SceneLessonPlayerModal.tsx's own WELCOME_TOWN_FORMATS and
+          classroomLessonResolver.ts's isSceneLesson. */}
+      {selectedLesson?.contentFormat === 'lep1-rich'
+        || selectedLesson?.contentFormat === 'wt-rich'
+        || selectedLesson?.contentFormat === 'wt-a2-rich' ? (
         <SceneLessonPlayerModal
           isOpen={isModalOpen}
           lesson={selectedLesson}
