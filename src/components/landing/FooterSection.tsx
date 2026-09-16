@@ -36,15 +36,16 @@ const getFooterLinks = (t: TFn) => ({
       { label: t('lp.footer.link.contact'), href: 'mailto:hello@engleuphoria.com' },
     ],
   },
-  legal: {
-    heading: t('lp.footer.col.legal'),
-    items: [
-      { label: t('lp.footer.link.terms'), href: '/terms-of-service' },
-      { label: t('lp.footer.link.privacy'), href: '/privacy-policy' },
-      { label: t('lp.footer.link.refund'), href: '/refund-policy' },
-    ],
-  },
 });
+
+// Legal links deliberately kept out of the main column grid (see below) —
+// they're real pages that need to stay linked and indexable, just without
+// the same structural prominence as the product/marketing columns.
+const getLegalLinks = (t: TFn) => [
+  { label: t('lp.footer.link.terms'), href: '/terms-of-service' },
+  { label: t('lp.footer.link.privacy'), href: '/privacy-policy' },
+  { label: t('lp.footer.link.refund'), href: '/refund-policy' },
+];
 
 export function FooterSection() {
   const { resolvedTheme } = useThemeMode();
@@ -54,6 +55,7 @@ export function FooterSection() {
   const { scrollYProgress } = useScroll({ target: logoRef, offset: ['start end', 'end start'] });
   const logoY = useTransform(scrollYProgress, [0, 1], [40, -40]);
   const footerLinks = getFooterLinks(t);
+  const legalLinks = getLegalLinks(t);
 
   return (
     <footer className={`relative transition-colors duration-300 ${
@@ -69,7 +71,7 @@ export function FooterSection() {
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16">
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -127,9 +129,26 @@ export function FooterSection() {
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
         >
-          <p className={`text-sm ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-            © {new Date().getFullYear()} EnglEuphoria. {t('lp.footer.copyright')}
-          </p>
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+            <p className={`text-sm ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              © {new Date().getFullYear()} EnglEuphoria. {t('lp.footer.copyright')}
+            </p>
+            <div className="flex items-center gap-3">
+              {legalLinks.map((link, i) => (
+                <span key={link.label} className="flex items-center gap-3">
+                  {i > 0 && <span className={isDark ? 'text-slate-700' : 'text-slate-300'}>·</span>}
+                  <Link
+                    to={link.href}
+                    className={`text-xs transition-colors ${
+                      isDark ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </span>
+              ))}
+            </div>
+          </div>
           <div className="flex items-center gap-6">
             <Link to="/login" className={`text-sm font-medium transition-colors ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}>
               {t('lp.footer.teacherLogin')}
