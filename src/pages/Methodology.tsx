@@ -1,30 +1,34 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import LevelsAndCourses from '@/components/methodology/LevelsAndCourses';
+import PlatformMethodology from '@/components/methodology/PlatformMethodology';
 
 /**
- * Public Methodology page — Levels & Courses reference for Playground + Academy,
- * mirroring the Novakid age-band structure.
+ * Public Methodology page — describes EnglEuphoria's own teaching approach:
+ * the three hubs, live-lesson structure, placement/progression, and
+ * gamification philosophy. Previously rendered a "Levels and Courses" panel
+ * modeled directly on a competitor's (Novakid's) course structure and course
+ * names — replaced per direct request with the platform's real methodology.
  */
 export default function MethodologyPage() {
   return (
     <>
       <Helmet>
-        <title>Methodology — Levels & Courses | Engleuphoria</title>
+        <title>Methodology | EnglEuphoria</title>
         <meta
           name="description"
-          content="Engleuphoria English levels from pre-school (Playground) to Flyers and speaking courses (Academy), aligned with CEFR Pre-A1 to B1+."
+          content="How EnglEuphoria teaches: live 1-on-1 lessons across three CEFR-aligned hubs, adaptive placement, automatic progression, and gamification built to reinforce learning."
         />
       </Helmet>
       <main className="min-h-screen bg-background py-10 px-4">
         <div className="max-w-6xl mx-auto space-y-6">
           <header className="text-center space-y-2">
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground">Methodology</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground">Our Methodology</h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              How our Playground (ages 4–9) and Academy (ages 11+) curricula progress, level by level.
+              How EnglEuphoria actually teaches — live teachers, a shared CEFR framework across all three hubs,
+              and progress that takes care of itself.
             </p>
           </header>
-          <LevelsAndCourses />
+          <PlatformMethodology />
         </div>
       </main>
     </>
