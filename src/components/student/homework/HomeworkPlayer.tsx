@@ -3,7 +3,12 @@
  * Smart, gamified, 3-step interactive homework runner.
  *
  * Activity 1 — Listen & Match  (TTS + tap matching, gates Activity 2)
- * Activity 2 — Sentence Scramble (click-to-arrange word tokens, gates Activity 3)
+ * Activity 2 — Listen & Point (TTS + tap the matching picture, gates
+ *              Activity 3) when the lesson has enough scene art to build
+ *              distinct picture choices; falls back to Sentence Scramble
+ *              (click-to-arrange word tokens) otherwise — see Activity2's
+ *              own comment for why tile-arranging alone isn't safe to
+ *              assume for a non-reading student.
  * Activity 3 — Voice Challenge (Hold-to-Speak microphone, mock validation)
  *
  * On full completion: confetti + +50 XP + persists submission and bumps users.total_xp.
@@ -30,8 +35,15 @@ interface RecognitionItem {
   choice_images?: Record<string, string>;
 }
 interface SyntaxItem {
-  scrambled_words: string[];
-  correct_order: string;
+  // "Listen & Point" shape (preferred — see buildHomeworkContent's own
+  // comment on why): tap the picture matching the phrase you heard.
+  audio_text?: string;
+  correct_image?: string;
+  image_options?: string[];
+  // Tile-arranging shape (fallback for lessons without enough scene art,
+  // and for already-generated homework rows from before this existed).
+  scrambled_words?: string[];
+  correct_order?: string;
   word_images?: Record<string, string>;
   image?: string;
 }
@@ -161,11 +173,98 @@ function ListenMatch({ items, theme, onPass }: { items: RecognitionItem[]; theme
   );
 }
 
-// ─── Activity 2: Sentence Scramble ───────────────────────────────
-function SentenceScramble({ items, theme, onPass }: { items: SyntaxItem[]; theme: typeof HUB_THEME.playground; onPass: () => void }) {
+// ─── Activity 2: Listen & Point (preferred) or Sentence Scramble (fallback) ──
+// Word-order-by-arranging-text-tiles fundamentally assumes reading ability —
+// even with a picture on every tile, function words ("my", "is", "am") have
+// no vocabulary icon of their own, so a non-reading student still can't tell
+// those tiles apart. "Listen & Point" sidesteps that entirely: hear the
+// whole phrase, tap the one picture that matches — same mechanic as
+// Activity 1, just at the sentence level. Falls back to tile-arranging only
+// when the lesson doesn't have enough distinct scene art to make a picture
+// round meaningful (or for already-generated homework rows from before this
+// existed, which never have image_options at all).
+function Activity2({ items, theme, onPass }: { items: SyntaxItem[]; theme: typeof HUB_THEME.playground; onPass: () => void }) {
   const [idx, setIdx] = useState(0);
   const item = items[idx];
-  const tokens = useMemo(() => item.scrambled_words.map((w, i) => ({ w, i })), [item]);
+  const isPictureMode = !!(item.correct_image && item.image_options && item.image_options.length >= 2);
+
+  const advance = () => {
+    if (idx + 1 >= items.length) onPass();
+    else setIdx(idx + 1);
+  };
+
+  return (
+    <div className="space-y-6">
+      <p className="text-center text-sm text-slate-500">
+        Activity 2 of 3 · {isPictureMode ? 'Listen & Point' : 'Sentence Scramble'} · {idx + 1}/{items.length}
+      </p>
+      {isPictureMode ? (
+        <PhraseListenPoint key={idx} item={item} theme={theme} onCorrect={advance} />
+      ) : (
+        <TileArrange key={idx} item={item} theme={theme} onCorrect={advance} />
+      )}
+    </div>
+  );
+}
+
+function PhraseListenPoint({ item, theme, onCorrect }: { item: SyntaxItem; theme: typeof HUB_THEME.playground; onCorrect: () => void }) {
+  const [picked, setPicked] = useState<string | null>(null);
+  const [wrong, setWrong] = useState<string | null>(null);
+  const options = item.image_options!;
+
+  useEffect(() => { speak(item.audio_text!); }, [item]);
+
+  const handlePick = (img: string) => {
+    if (picked) return;
+    if (img === item.correct_image) {
+      setPicked(img);
+      setTimeout(onCorrect, 700);
+    } else {
+      setWrong(img);
+      setTimeout(() => setWrong(null), 400);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="text-center">
+        <button
+          type="button"
+          onClick={() => speak(item.audio_text!)}
+          className={cn('inline-flex items-center gap-3 rounded-full px-6 py-4 text-white font-bold shadow-lg active:scale-95 transition', theme.primary)}
+        >
+          <Volume2 className="w-6 h-6" /> Tap to Listen
+        </button>
+      </div>
+      <div className="grid grid-cols-2 gap-3 max-w-xl mx-auto">
+        {options.map((img) => {
+          const isCorrect = picked === img;
+          const isWrong = wrong === img;
+          return (
+            <button
+              key={img}
+              onClick={() => handlePick(img)}
+              className={cn(
+                'rounded-2xl border-2 p-2 bg-white transition shadow-sm overflow-hidden',
+                'hover:scale-[1.02] active:scale-95',
+                isCorrect && 'border-green-500 ring-4 ring-green-200',
+                isWrong && 'animate-[shake_0.4s] border-red-400',
+                !isCorrect && !isWrong && 'border-slate-200 hover:border-slate-300'
+              )}
+            >
+              <img src={img} alt="" className="w-full h-28 rounded-xl object-cover" />
+              {isCorrect && <Check className="w-5 h-5 mx-auto mt-1 text-green-600" />}
+              {isWrong && <X className="w-5 h-5 mx-auto mt-1 text-red-600" />}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function TileArrange({ item, theme, onCorrect }: { item: SyntaxItem; theme: typeof HUB_THEME.playground; onCorrect: () => void }) {
+  const tokens = useMemo(() => (item.scrambled_words ?? []).map((w, i) => ({ w, i })), [item]);
   const [pool, setPool] = useState<{ w: string; i: number }[]>(tokens);
   const [arranged, setArranged] = useState<{ w: string; i: number }[]>([]);
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
@@ -176,15 +275,12 @@ function SentenceScramble({ items, theme, onPass }: { items: SyntaxItem[]; theme
     setFeedback(null);
   }, [tokens]);
 
-  const target = norm(item.correct_order);
+  const target = norm(item.correct_order ?? '');
   const checkAnswer = () => {
     const built = arranged.map((t) => t.w).join(' ');
     if (norm(built) === target) {
       setFeedback('correct');
-      setTimeout(() => {
-        if (idx + 1 >= items.length) onPass();
-        else setIdx(idx + 1);
-      }, 800);
+      setTimeout(onCorrect, 800);
     } else {
       setFeedback('wrong');
       setTimeout(() => setFeedback(null), 600);
@@ -195,8 +291,6 @@ function SentenceScramble({ items, theme, onPass }: { items: SyntaxItem[]; theme
 
   return (
     <div className="space-y-6">
-      <p className="text-center text-sm text-slate-500">Activity 2 of 3 · Sentence Scramble · {idx + 1}/{items.length}</p>
-
       {/* The picture (when one exists) anchors what's being said, and
           "Hear the sentence" lets a non-reading student know the target
           order by listening as many times as they need — putting words
@@ -208,7 +302,7 @@ function SentenceScramble({ items, theme, onPass }: { items: SyntaxItem[]; theme
       <div className="text-center">
         <button
           type="button"
-          onClick={() => speak(item.correct_order)}
+          onClick={() => speak(item.correct_order ?? '')}
           className={cn('inline-flex items-center gap-2 rounded-full px-5 py-3 text-white font-bold shadow-lg active:scale-95 transition', theme.primary)}
         >
           <Volume2 className="w-5 h-5" /> Hear the sentence
@@ -532,7 +626,7 @@ export default function HomeworkPlayer({ assignmentId, content, onComplete, prev
           <ListenMatch items={content.activity_1_recognition.items} theme={theme} onPass={() => advance(2)} />
         )}
         {step === 2 && (
-          <SentenceScramble items={content.activity_2_syntax.items} theme={theme} onPass={() => advance(3)} />
+          <Activity2 items={content.activity_2_syntax.items} theme={theme} onPass={() => advance(3)} />
         )}
         {step === 3 && (
           <VoiceChallenge

@@ -92,7 +92,21 @@ interface HomeworkContent {
   activity_2_syntax: {
     instructions?: string;
     items: {
-      scrambled_words: string[]; correct_order: string;
+      // "Listen & Point" shape (preferred) — tap the picture that matches
+      // the phrase you just heard. No token requires being told apart by
+      // its text, unlike arranging word tiles: function words ("my",
+      // "is", "am") have no vocabulary icon of their own, so even with
+      // word_images below, some tiles are always text-only — which a
+      // non-reading student can't use at all. Only built when the lesson
+      // has at least 2 distinct phrase illustrations to choose between;
+      // falls back to the tile-arranging shape otherwise.
+      audio_text?: string;
+      correct_image?: string;
+      image_options?: string[];
+      // Tile-arranging shape (fallback for lessons without enough scene
+      // art, and for already-generated homework rows from before this
+      // shape existed).
+      scrambled_words?: string[]; correct_order?: string;
       /** Same reasoning as choice_images above, one entry per token. */
       word_images?: Record<string, string>;
       /** The lesson's own illustration for this line, if one exists —
@@ -173,14 +187,40 @@ export function buildHomeworkContent(scenes: CompletionScene[], title: string, l
     };
   });
 
-  // Activity 2 — short lines from echo/roleplay scenes, 3+ words, scrambled
+  // Activity 2 — short lines from echo/roleplay scenes, 3+ words
   const candidateLines: string[] = [];
   for (const s of scenes) {
     if (s.kind === 'echo' && s.word) candidateLines.push(s.word);
     if (s.kind === 'roleplay' && s.script) candidateLines.push(...s.script.map((line) => line.line));
   }
   const goodLines = Array.from(new Set(candidateLines)).filter((l) => wordsOf(l).length >= 3).slice(0, 3);
-  const activity2Items = (goodLines.length > 0 ? goodLines : ['Hello I am here']).map((line) => {
+  const finalLines = goodLines.length > 0 ? goodLines : ['Hello I am here'];
+
+  // Phrase-level illustrations for those same lines (a subset of
+  // imageByText — only the meet/echo scenes, which are whole spoken
+  // lines, not single basket words). Need at least 2 distinct images
+  // across the WHOLE lesson to build a real multiple-choice round;
+  // below that there's nothing to tell apart by picture.
+  const phraseImagePool = Array.from(
+    new Set(
+      scenes
+        .filter((s) => (s.kind === 'echo' || s.kind === 'meet') && s.bg)
+        .map((s) => s.bg!),
+    ),
+  );
+  const canDoPictureMatch = phraseImagePool.length >= 2;
+
+  const activity2Items = finalLines.map((line) => {
+    const correctImage = imageByText.get(norm(line));
+    if (canDoPictureMatch && correctImage) {
+      const distractorImages = phraseImagePool.filter((img) => img !== correctImage);
+      const chosenDistractors = distractorImages.slice(0, 3);
+      const imageOptions = [correctImage, ...chosenDistractors].sort(() => Math.random() - 0.5);
+      return { audio_text: line, correct_image: correctImage, image_options: imageOptions };
+    }
+    // Fallback: no distinct picture for this specific line (or not enough
+    // art in the lesson overall) — tile-arranging, still audio + word
+    // images wherever those individually exist.
     const tokens = wordsOf(line);
     const scrambled = [...tokens].sort(() => Math.random() - 0.5);
     const wordImages: Record<string, string> = {};
@@ -192,17 +232,17 @@ export function buildHomeworkContent(scenes: CompletionScene[], title: string, l
       scrambled_words: scrambled,
       correct_order: tokens.join(' '),
       word_images: Object.keys(wordImages).length > 0 ? wordImages : undefined,
-      image: imageByText.get(norm(line)),
+      image: correctImage,
     };
   });
 
   // Activity 3 — speaking prompt built from the strongest candidate line
-  const speakingLine = goodLines[0] ?? activity2Items[0].correct_order;
+  const speakingLine = goodLines[0] ?? activity2Items[0].correct_order ?? finalLines[0];
   const targetWords = wordsOf(speakingLine).filter((w) => w.length > 2).slice(0, 4);
 
   return {
     activity_1_recognition: { instructions: 'Tap what you hear.', items: activity1Items },
-    activity_2_syntax: { instructions: 'Put the words in the right order.', items: activity2Items },
+    activity_2_syntax: { instructions: canDoPictureMatch ? 'Listen, then tap the matching picture.' : 'Put the words in the right order.', items: activity2Items },
     activity_3_production: {
       instructions: 'Say it out loud, just like in class!',
       prompt: speakingLine,
