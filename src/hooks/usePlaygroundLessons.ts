@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { homeworkService } from '@/services/homeworkService';
 
 export interface PlaygroundLesson {
   id: string;
@@ -26,6 +27,12 @@ export interface PlaygroundLesson {
   contentFormat?: string;
   unitNumber?: number;
   lessonNumber?: number;
+  /** homework_assignments.id for this lesson's practice set, when one
+   *  exists and is still pending (active assignment, no graded/submitted
+   *  submission yet) — lets the map show a persistent "Homework" badge
+   *  instead of the one-time post-lesson popup being the only way to
+   *  find it. Null when there's no pending homework for this lesson. */
+  pendingHomeworkId?: string | null;
 }
 
 interface CurriculumLessonRow {
@@ -98,6 +105,10 @@ export const usePlaygroundLessons = () => {
 
       // Fetch user's progress if logged in
       let progressMap = new Map<string, ProgressRow>();
+      // lesson_id -> pending homework_assignments.id, so each map node can
+      // show a persistent "Homework" badge instead of relying on the
+      // one-time post-lesson popup being the only way to find it.
+      let homeworkByLessonId = new Map<string, string>();
       if (user?.id) {
         const { data: progressData, error: progressError } = await supabase
           .from('student_lesson_progress')
@@ -110,6 +121,17 @@ export const usePlaygroundLessons = () => {
           progressData.forEach((p) => {
             progressMap.set(p.lesson_id, p as ProgressRow);
           });
+        }
+
+        try {
+          const assignments = await homeworkService.getStudentAssignments(user.id);
+          for (const a of assignments) {
+            if (!a.lesson_id) continue;
+            const pending = !a.submission || a.submission.status === 'pending';
+            if (pending) homeworkByLessonId.set(a.lesson_id, a.id);
+          }
+        } catch (err) {
+          console.warn('Could not fetch homework assignments:', err);
         }
       }
 
@@ -175,6 +197,7 @@ export const usePlaygroundLessons = () => {
             contentFormat,
             unitNumber,
             lessonNumber,
+            pendingHomeworkId: homeworkByLessonId.get(lesson.id) ?? null,
           };
         }
       );

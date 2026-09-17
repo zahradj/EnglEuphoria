@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Star, Lock, Play, Sparkles, HelpCircle } from 'lucide-react';
+import { Star, Lock, Play, Sparkles, HelpCircle, BookOpen } from 'lucide-react';
 
 interface LevelNodeProps {
   id: string;
@@ -19,6 +19,11 @@ interface LevelNodeProps {
    *  swirling mystery marker instead of a flat locked circle, so the rest of
    *  the path stays hidden in the fog until the student actually gets there. */
   isMystery?: boolean;
+  /** homework_assignments.id when this (usually completed) lesson has
+   *  pending practice waiting — shows a persistent badge instead of the
+   *  one-time post-lesson popup being the only way to find it. */
+  pendingHomeworkId?: string | null;
+  onHomeworkClick?: (homeworkId: string) => void;
 }
 
 export const LevelNode: React.FC<LevelNodeProps> = ({
@@ -35,6 +40,8 @@ export const LevelNode: React.FC<LevelNodeProps> = ({
   isNew = false,
   zoneName,
   isMystery = false,
+  pendingHomeworkId = null,
+  onHomeworkClick,
 }) => {
   // Theme-specific colors
   const themeColors = {
@@ -190,6 +197,28 @@ export const LevelNode: React.FC<LevelNodeProps> = ({
             </div>
             <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-white mx-auto" />
           </motion.div>
+        )}
+
+        {/* Persistent homework badge — the only other way to reach this
+            lesson's practice set is a one-time popup right after finishing
+            it, which is easy to miss or dismiss by accident. */}
+        {!isLocked && !isMystery && pendingHomeworkId && (
+          <motion.button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onHomeworkClick?.(pendingHomeworkId);
+            }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1, y: [0, -3, 0] }}
+            transition={{ scale: { delay: 0.3, type: 'spring' }, y: { duration: 1.8, repeat: Infinity, ease: 'easeInOut' } }}
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
+            title="Homework ready"
+            className="absolute -bottom-3 -right-3 w-9 h-9 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 shadow-lg flex items-center justify-center border-2 border-white z-20"
+          >
+            <BookOpen className="w-4 h-4 text-white" />
+          </motion.button>
         )}
 
         {/* Star rating for completed lessons */}

@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { JungleTheme } from './JungleTheme';
 import { SpaceTheme } from './SpaceTheme';
@@ -70,6 +71,11 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
   const [selectedTheme] = useState<ThemeType>(theme);
   const [selectedLesson, setSelectedLesson] = useState<PlaygroundLesson | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleHomeworkClick = useCallback((homeworkId: string) => {
+    navigate(`/homework/${homeworkId}`);
+  }, [navigate]);
   
   const currentLevel = lessons.find(l => l.status === 'current');
   const currentIndex = lessons.findIndex(l => l.status === 'current');
@@ -268,6 +274,8 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
           theme={selectedTheme}
           score={level.score}
           zoneName={zoneNames[index]}
+          pendingHomeworkId={level.pendingHomeworkId}
+          onHomeworkClick={handleHomeworkClick}
         />
       ))}
 

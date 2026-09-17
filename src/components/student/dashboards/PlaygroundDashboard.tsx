@@ -21,7 +21,7 @@ export const PlaygroundDashboard: React.FC<PlaygroundDashboardProps> = ({
   studentName = 'Explorer',
 }) => {
   useStudentLanguageSync();
-  const { lessons, loading, markLessonComplete, getTotalStars } = usePlaygroundLessons();
+  const { lessons, loading, markLessonComplete, getTotalStars, refetch } = usePlaygroundLessons();
 
   return (
     <div className="space-y-6">
@@ -49,7 +49,14 @@ export const PlaygroundDashboard: React.FC<PlaygroundDashboardProps> = ({
             totalStars={getTotalStars()}
             studentName={studentName}
             lessons={lessons}
-            onLessonComplete={(id, score) => markLessonComplete(id, score)}
+            onLessonComplete={(id, score) => {
+              markLessonComplete(id, score);
+              // Scene-lesson completions create a new homework_assignments
+              // row (see sceneLessonCompletionService.ts) that
+              // markLessonComplete has no way to know about — refetch so
+              // the map's homework badge picks it up right away.
+              refetch();
+            }}
           />
         )}
       </section>
