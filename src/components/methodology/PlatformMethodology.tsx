@@ -20,6 +20,11 @@ const HUBS = [
     body: 'A gamified forest world where every lesson is an adventure. Animated mascots guide the story, rewards celebrate every milestone, and grammar stays implicit — taught through play, never drilled.',
     from: '#FF9F1C',
     to: '#FFBF00',
+    // Validated categorical chart color (see references/color-formula.md) —
+    // the raw brand orange (#FF9F1C) fails the lightness-band and
+    // contrast-vs-surface checks; this amber-600 step holds the same hue
+    // family and passes all six checks in both light and dark mode.
+    chartColor: '#D97706',
   },
   {
     id: 'academy',
@@ -32,6 +37,7 @@ const HUBS = [
     body: 'Project-based lessons built around identity, pop culture, and real debate — up through exam-prep register at the top levels. No textbook filler, just language that matters to a teenager’s actual life.',
     from: '#6366F1',
     to: '#A855F7',
+    chartColor: '#6366F1',
   },
   {
     id: 'success',
@@ -44,6 +50,9 @@ const HUBS = [
     body: 'Structured business English: negotiation, interviews, presentations, and networking, with lexical precision as the focus once fluency is established. Efficient sessions, measurable progress.',
     from: '#10B981',
     to: '#059669',
+    // Raw brand green (#10B981) fails contrast-vs-surface as a chart mark;
+    // emerald-600 passes all six checks in both light and dark mode.
+    chartColor: '#059669',
   },
 ];
 
@@ -108,83 +117,72 @@ function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   );
 }
 
-/** At-a-glance CEFR coverage per hub — same ranges as the hub cards below,
- *  styled as a proper range chart: a faint full-width track per row with an
- *  animated, glowing, icon-marked segment showing that hub's real coverage. */
+/** At-a-glance CEFR coverage per hub, built to the project's dataviz skill:
+ *  form = range bar per hub (3 series, direct-labeled, no legend box needed);
+ *  color = the three hub hues re-stepped to `chartColor` so every mark
+ *  clears the categorical validator (contrast + lightness band) in both
+ *  light and dark mode — run `node scripts/validate_palette.js
+ *  "#D97706,#6366F1,#059669" --mode light|dark` from the dataviz skill's
+ *  base directory to reproduce; marks = <=24px thin bar, square at the
+ *  shared Pre-A1 baseline, 4px rounded only at the data end; identity comes
+ *  from the icon + a color dot beside the range text, never from coloring
+ *  the text itself. */
 function HubCefrLadder({ isDark }: { isDark: boolean }) {
   const cellText = isDark ? 'text-slate-500' : 'text-slate-400';
   const cardBase = isDark ? 'bg-slate-900/60 border-white/10' : 'bg-white border-slate-200';
-  const trackBg = isDark ? 'bg-white/5' : 'bg-slate-100';
-  const rowHover = isDark ? 'hover:bg-white/[0.03]' : 'hover:bg-slate-50';
+  const trackBg = isDark ? 'bg-white/[0.06]' : 'bg-slate-100';
+  const gridLine = isDark ? 'border-white/10' : 'border-slate-200';
+  const labelText = isDark ? 'text-slate-300' : 'text-slate-700';
 
   return (
-    <div className={`relative rounded-3xl border p-6 md:p-8 overflow-hidden ${cardBase}`}>
-      {/* Ambient background glow, echoing each hub's color */}
-      <div
-        className="absolute -top-16 -right-16 w-72 h-72 rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'linear-gradient(135deg, #6366F1, #10B981)', opacity: isDark ? 0.1 : 0.06 }}
-      />
-      <div className="relative flex items-center justify-between mb-6">
-        <p className={`text-xs font-bold uppercase tracking-widest ${cellText}`}>CEFR coverage by hub</p>
-        <div className={`hidden sm:flex items-center gap-1.5 text-[10px] font-semibold ${cellText}`}>
-          <span>Pre-A1</span>
-          <span className="w-8 h-px bg-current opacity-30" />
-          <span>C1</span>
-        </div>
-      </div>
+    <div className={`rounded-3xl border p-6 md:p-8 ${cardBase}`}>
+      <p className={`text-xs font-bold uppercase tracking-widest mb-6 ${cellText}`}>CEFR coverage by hub</p>
 
-      <div className="relative overflow-x-auto -mx-2 px-2">
-        <div className="min-w-[520px] space-y-1">
+      <div className="overflow-x-auto -mx-2 px-2">
+        <div className="min-w-[520px] space-y-5">
           {HUBS.map((hub, i) => {
             const spanPct = ((hub.cefrEnd - hub.cefrStart + 1) / CEFR_LEVELS.length) * 100;
             const startPct = (hub.cefrStart / CEFR_LEVELS.length) * 100;
             return (
-              <FadeIn key={hub.id} delay={i * 0.1}>
-                <div className={`group rounded-2xl px-3 py-3 transition-colors duration-300 ${rowHover}`}>
-                  <div className="flex items-center gap-4 mb-2">
+              <FadeIn key={hub.id} delay={i * 0.08}>
+                <div title={`${hub.name}: ${hub.cefr}`}>
+                  <div className="flex items-center gap-3 mb-2">
                     <div
-                      className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center shadow-sm"
+                      className="shrink-0 w-7 h-7 rounded-lg flex items-center justify-center"
                       style={{ background: `linear-gradient(135deg, ${hub.from}, ${hub.to})` }}
                     >
-                      <hub.icon className="w-4 h-4 text-white" />
+                      <hub.icon className="w-3.5 h-3.5 text-white" />
                     </div>
-                    <div className="min-w-[110px]">
-                      <p className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                        {hub.name}
-                      </p>
-                      <p className={`text-[11px] ${cellText}`}>{hub.ageLabel}</p>
-                    </div>
-                    <span
-                      className="ms-auto text-[11px] font-bold px-2.5 py-1 rounded-full"
-                      style={{ color: hub.from, backgroundColor: `${hub.from}1a` }}
-                    >
-                      {hub.cefr}
+                    <p className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      {hub.name}
+                    </p>
+                    <span className={`text-xs ${cellText}`}>· {hub.ageLabel}</span>
+                    <span className="ms-auto flex items-center gap-1.5 text-xs font-semibold">
+                      <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: hub.chartColor }} />
+                      <span className={labelText}>{hub.cefr}</span>
                     </span>
                   </div>
 
-                  {/* Track */}
-                  <div className={`relative h-3 rounded-full ${trackBg} overflow-hidden`}>
-                    {/* Faint level-boundary ticks */}
+                  {/* Track: 6 CEFR cells, hairline dividers, 16px thin bar */}
+                  <div className={`relative h-4 rounded-sm ${trackBg} overflow-hidden`}>
                     <div className="absolute inset-0 flex">
                       {CEFR_LEVELS.map((_, idx) => (
-                        <div
-                          key={idx}
-                          className={`flex-1 ${idx > 0 ? (isDark ? 'border-s border-white/10' : 'border-s border-slate-200') : ''}`}
-                        />
+                        <div key={idx} className={`flex-1 ${idx > 0 ? `border-s ${gridLine}` : ''}`} />
                       ))}
                     </div>
                     <motion.div
-                      className="absolute inset-y-0 rounded-full"
+                      className="absolute inset-y-0"
                       style={{
-                        background: `linear-gradient(90deg, ${hub.from}, ${hub.to})`,
-                        boxShadow: `0 0 16px ${hub.from}55`,
+                        backgroundColor: hub.chartColor,
                         insetInlineStart: `${startPct}%`,
                         width: `${spanPct}%`,
+                        borderStartEndRadius: 4,
+                        borderEndEndRadius: 4,
                       }}
                       initial={{ scaleX: 0 }}
                       whileInView={{ scaleX: 1 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.7, delay: 0.15 + i * 0.1, ease: 'easeOut' }}
+                      transition={{ duration: 0.6, delay: 0.1 + i * 0.08, ease: 'easeOut' }}
                     />
                   </div>
                 </div>
@@ -192,10 +190,10 @@ function HubCefrLadder({ isDark }: { isDark: boolean }) {
             );
           })}
 
-          {/* Axis labels */}
-          <div className="flex pt-1 px-3">
+          {/* Axis */}
+          <div className={`flex pt-1 border-t ${gridLine}`}>
             {CEFR_LEVELS.map((level) => (
-              <div key={level} className={`flex-1 text-center text-[10px] font-bold uppercase tracking-wide ${cellText}`}>
+              <div key={level} className={`flex-1 pt-2 text-center text-[10px] font-bold uppercase tracking-wide ${cellText}`}>
                 {level}
               </div>
             ))}
