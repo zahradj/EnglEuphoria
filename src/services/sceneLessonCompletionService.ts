@@ -37,6 +37,12 @@ interface CompletionScene {
    *  audio-driven, matching how the lesson itself teaches, instead of
    *  silently assuming reading ability the moment it becomes homework. */
   bg?: string;
+  /** The character who speaks this scene's line(s) — e.g. 'pip', 'mia',
+   *  'teacher' (see `Character` in unit1/audio.ts, which every playground
+   *  scene kind's `who` field is drawn from). Threaded into homework so its
+   *  audio can look up the SAME pre-generated static clip the lesson itself
+   *  plays, instead of generating fresh audio with no character voice. */
+  who?: string;
   script?: { line: string }[];
   items?: { word: string; hit?: boolean; img?: string }[];
 }
@@ -87,6 +93,10 @@ interface HomeworkContent {
        *  (lowercased) word so it covers the correct answer and every
        *  wrong option from one map. */
       choice_images?: Record<string, string>;
+      /** The character who originally spoke this word in the lesson (see
+       *  CompletionScene.who) — lets the player look up the exact same
+       *  pre-generated static clip instead of generating new audio. */
+      audio_character?: string;
     }[];
   };
   activity_2_syntax: {
@@ -113,9 +123,11 @@ interface HomeworkContent {
        *  shown above the activity so the picture (not the text) anchors
        *  what's being built. */
       image?: string;
+      /** Same reasoning as activity 1's audio_character. */
+      audio_character?: string;
     }[];
   };
-  activity_3_production: { instructions?: string; prompt: string; target_words_to_detect?: string[]; example_response?: string; image?: string };
+  activity_3_production: { instructions?: string; prompt: string; target_words_to_detect?: string[]; example_response?: string; image?: string; audio_character?: string };
   meta?: { hub?: string; title?: string; vocabulary?: string[]; lesson_id?: string | null };
 }
 
@@ -131,16 +143,27 @@ export function buildHomeworkContent(scenes: CompletionScene[], title: string, l
   // the lesson: basket item icons for single words, and each echo/meet
   // scene's own full-bleed background for whatever phrase it teaches.
   const imageByText = new Map<string, string>();
+  // Word/phrase -> the character who speaks it in the lesson (scene-level
+  // `who`), so homework audio can find the exact same pre-generated static
+  // clip the lesson itself plays instead of generating fresh audio with no
+  // character voice at all. See unit1/audio.ts's speak()/fetchStaticClip().
+  const charByText = new Map<string, string>();
   for (const s of scenes) {
     if (s.kind === 'basket' && s.items) {
       for (const item of s.items) {
         if (item.img) imageByText.set(norm(item.word), item.img);
+        if (s.who) charByText.set(norm(item.word), s.who);
       }
     }
     if (s.kind === 'echo' && s.word && s.bg) imageByText.set(norm(s.word), s.bg);
+    if (s.kind === 'echo' && s.word && s.who) charByText.set(norm(s.word), s.who);
     if (s.kind === 'meet' && s.bg) {
       const phrase = s.repeat ?? s.word;
       if (phrase) imageByText.set(norm(phrase), s.bg);
+    }
+    if (s.kind === 'meet' && s.who) {
+      const phrase = s.repeat ?? s.word;
+      if (phrase) charByText.set(norm(phrase), s.who);
     }
   }
 
@@ -184,6 +207,7 @@ export function buildHomeworkContent(scenes: CompletionScene[], title: string, l
       correct_answer: word,
       wrong_options: finalWrong,
       choice_images: Object.keys(choiceImages).length > 0 ? choiceImages : undefined,
+      audio_character: charByText.get(norm(word)),
     };
   });
 
@@ -216,7 +240,7 @@ export function buildHomeworkContent(scenes: CompletionScene[], title: string, l
       const distractorImages = phraseImagePool.filter((img) => img !== correctImage);
       const chosenDistractors = distractorImages.slice(0, 3);
       const imageOptions = [correctImage, ...chosenDistractors].sort(() => Math.random() - 0.5);
-      return { audio_text: line, correct_image: correctImage, image_options: imageOptions };
+      return { audio_text: line, correct_image: correctImage, image_options: imageOptions, audio_character: charByText.get(norm(line)) };
     }
     // Fallback: no distinct picture for this specific line (or not enough
     // art in the lesson overall) — tile-arranging, still audio + word
@@ -233,6 +257,7 @@ export function buildHomeworkContent(scenes: CompletionScene[], title: string, l
       correct_order: tokens.join(' '),
       word_images: Object.keys(wordImages).length > 0 ? wordImages : undefined,
       image: correctImage,
+      audio_character: charByText.get(norm(line)),
     };
   });
 
@@ -248,6 +273,7 @@ export function buildHomeworkContent(scenes: CompletionScene[], title: string, l
       prompt: speakingLine,
       target_words_to_detect: targetWords,
       image: imageByText.get(norm(speakingLine)),
+      audio_character: charByText.get(norm(speakingLine)),
     },
     meta: { hub: 'playground', title, vocabulary: uniqueCorrect, lesson_id: lessonRowId },
   };

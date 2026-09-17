@@ -18,7 +18,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { Volume2, Check, X, Mic, Sparkles, Trophy, Loader2, ArrowRight, RotateCcw } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { playElevenLabs } from '@/lib/elevenLabsAudio';
+import { speak as speakLesson, type Character } from '@/content/playground-library/unit1/audio';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -33,6 +33,9 @@ interface RecognitionItem {
   /** word (lowercased) -> image path — lets a non-reading student match
    *  by picture instead of text. Undefined choices fall back to text. */
   choice_images?: Record<string, string>;
+  /** The lesson character who originally spoke this word — lets speak()
+   *  find the exact same pre-generated static clip. */
+  audio_character?: Character;
 }
 interface SyntaxItem {
   // "Listen & Point" shape (preferred — see buildHomeworkContent's own
@@ -46,6 +49,7 @@ interface SyntaxItem {
   correct_order?: string;
   word_images?: Record<string, string>;
   image?: string;
+  audio_character?: Character;
 }
 interface ProductionActivity {
   instructions?: string;
@@ -53,6 +57,7 @@ interface ProductionActivity {
   target_words_to_detect?: string[];
   example_response?: string;
   image?: string;
+  audio_character?: Character;
 }
 interface HomeworkContent {
   activity_1_recognition: { instructions?: string; items: RecognitionItem[] };
@@ -82,9 +87,17 @@ const HUB_THEME: Record<Hub, { primary: string; accent: string; ring: string; bg
   success:    { primary: 'bg-emerald-600 hover:bg-emerald-500', accent: 'text-emerald-700', ring: 'ring-emerald-300', bg: 'from-emerald-50 to-teal-50' },
 };
 
-/** Speaks the given text — ElevenLabs is the exclusive engine, no native fallback. */
-async function speak(text: string) {
-  await playElevenLabs(text);
+/** Speaks the given text through the SAME pipeline the lesson itself uses
+ *  (unit1/audio.ts): a pre-generated static clip first (per the "no live
+ *  audio dependency" rule), then a cached IndexedDB blob, then live
+ *  ElevenLabs generation as a last resort — never the bare live-only call
+ *  this used to make. `character` (from buildHomeworkContent's
+ *  audio_character) is what makes the static-clip lookup actually hit:
+ *  it's part of the same cache key the lesson's own clips were baked
+ *  under, so homework text that's verbatim from the lesson finds the
+ *  exact same file instead of generating anything new. */
+async function speak(text: string, character?: Character) {
+  await speakLesson(text, character ?? 'teacher');
 }
 
 /** Strip simple punctuation so token comparisons are stable. */
@@ -120,7 +133,7 @@ function ListenMatch({ items, theme, onPass }: { items: RecognitionItem[]; theme
   };
 
   // Auto-play audio on each new item
-  useEffect(() => { speak(item.audio_text); }, [item]);
+  useEffect(() => { speak(item.audio_text, item.audio_character); }, [item]);
 
   return (
     <div className="space-y-6">
@@ -128,7 +141,7 @@ function ListenMatch({ items, theme, onPass }: { items: RecognitionItem[]; theme
         <p className="text-sm text-slate-500 mb-2">Activity 1 of 3 · Listen &amp; Match · {idx + 1}/{items.length}</p>
         <button
           type="button"
-          onClick={() => speak(item.audio_text)}
+          onClick={() => speak(item.audio_text, item.audio_character)}
           className={cn('inline-flex items-center gap-3 rounded-full px-6 py-4 text-white font-bold shadow-lg active:scale-95 transition', theme.primary)}
         >
           <Volume2 className="w-6 h-6" /> Tap to Listen
@@ -212,7 +225,7 @@ function PhraseListenPoint({ item, theme, onCorrect }: { item: SyntaxItem; theme
   const [wrong, setWrong] = useState<string | null>(null);
   const options = item.image_options!;
 
-  useEffect(() => { speak(item.audio_text!); }, [item]);
+  useEffect(() => { speak(item.audio_text!, item.audio_character); }, [item]);
 
   const handlePick = (img: string) => {
     if (picked) return;
@@ -230,7 +243,7 @@ function PhraseListenPoint({ item, theme, onCorrect }: { item: SyntaxItem; theme
       <div className="text-center">
         <button
           type="button"
-          onClick={() => speak(item.audio_text!)}
+          onClick={() => speak(item.audio_text!, item.audio_character)}
           className={cn('inline-flex items-center gap-3 rounded-full px-6 py-4 text-white font-bold shadow-lg active:scale-95 transition', theme.primary)}
         >
           <Volume2 className="w-6 h-6" /> Tap to Listen
@@ -302,7 +315,7 @@ function TileArrange({ item, theme, onCorrect }: { item: SyntaxItem; theme: type
       <div className="text-center">
         <button
           type="button"
-          onClick={() => speak(item.correct_order ?? '')}
+          onClick={() => speak(item.correct_order ?? '', item.audio_character)}
           className={cn('inline-flex items-center gap-2 rounded-full px-5 py-3 text-white font-bold shadow-lg active:scale-95 transition', theme.primary)}
         >
           <Volume2 className="w-5 h-5" /> Hear the sentence
@@ -413,7 +426,7 @@ function VoiceChallenge({ activity, theme, onPass }: { activity: ProductionActiv
             audio option — every other activity already has one. */}
         <button
           type="button"
-          onClick={() => speak(activity.prompt)}
+          onClick={() => speak(activity.prompt, activity.audio_character)}
           className={cn('mt-3 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm text-white font-bold shadow active:scale-95 transition', theme.primary)}
         >
           <Volume2 className="w-4 h-4" /> Hear it first
