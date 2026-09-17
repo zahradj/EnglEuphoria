@@ -29,8 +29,16 @@ interface CompletionScene {
   kind: string;
   letter?: string;
   word?: string;
+  /** meet scenes' spoken phrase — echo scenes use `word` for this instead. */
+  repeat?: string;
+  /** Every scene's own illustration. Pre-A1 kids and most Welcome Town
+   *  students can't read yet — homework built from this file leans on
+   *  these images (and item.img below) so practice stays picture- and
+   *  audio-driven, matching how the lesson itself teaches, instead of
+   *  silently assuming reading ability the moment it becomes homework. */
+  bg?: string;
   script?: { line: string }[];
-  items?: { word: string; hit?: boolean }[];
+  items?: { word: string; hit?: boolean; img?: string }[];
 }
 
 interface CompleteSceneLessonArgs {
@@ -68,15 +76,60 @@ function wordsOf(line: string): string[] {
 }
 
 interface HomeworkContent {
-  activity_1_recognition: { instructions?: string; items: { audio_text: string; correct_answer: string; wrong_options: string[] }[] };
-  activity_2_syntax: { instructions?: string; items: { scrambled_words: string[]; correct_order: string }[] };
-  activity_3_production: { instructions?: string; prompt: string; target_words_to_detect?: string[]; example_response?: string };
+  activity_1_recognition: {
+    instructions?: string;
+    items: {
+      audio_text: string; correct_answer: string; wrong_options: string[];
+      /** Pre-A1/Welcome Town kids can't read the choice text yet — these
+       *  let the player show a real picture from the lesson (the item's
+       *  own icon, or the vocab scene's own illustration) next to each
+       *  choice instead of relying on the word alone. Keyed by the
+       *  (lowercased) word so it covers the correct answer and every
+       *  wrong option from one map. */
+      choice_images?: Record<string, string>;
+    }[];
+  };
+  activity_2_syntax: {
+    instructions?: string;
+    items: {
+      scrambled_words: string[]; correct_order: string;
+      /** Same reasoning as choice_images above, one entry per token. */
+      word_images?: Record<string, string>;
+      /** The lesson's own illustration for this line, if one exists —
+       *  shown above the activity so the picture (not the text) anchors
+       *  what's being built. */
+      image?: string;
+    }[];
+  };
+  activity_3_production: { instructions?: string; prompt: string; target_words_to_detect?: string[]; example_response?: string; image?: string };
   meta?: { hub?: string; title?: string; vocabulary?: string[]; lesson_id?: string | null };
 }
 
+const norm = (s: string) => s.trim().toLowerCase();
+
 /** Builds the exact 3-activity shape HomeworkPlayer expects, from the
- *  lesson's own basket/echo/roleplay scene data. */
+ *  lesson's own basket/echo/roleplay scene data — including, wherever
+ *  possible, the same images the lesson itself used, since most Pre-A1
+ *  and many Welcome Town students can't read yet. Homework built purely
+ *  from text would silently assume a skill the lesson never required. */
 export function buildHomeworkContent(scenes: CompletionScene[], title: string, lessonRowId: string): HomeworkContent {
+  // A word/phrase -> illustration lookup, built once from every scene in
+  // the lesson: basket item icons for single words, and each echo/meet
+  // scene's own full-bleed background for whatever phrase it teaches.
+  const imageByText = new Map<string, string>();
+  for (const s of scenes) {
+    if (s.kind === 'basket' && s.items) {
+      for (const item of s.items) {
+        if (item.img) imageByText.set(norm(item.word), item.img);
+      }
+    }
+    if (s.kind === 'echo' && s.word && s.bg) imageByText.set(norm(s.word), s.bg);
+    if (s.kind === 'meet' && s.bg) {
+      const phrase = s.repeat ?? s.word;
+      if (phrase) imageByText.set(norm(phrase), s.bg);
+    }
+  }
+
   // Activity 1 — vocab words from basket scenes (hit:true = target, hit:false = distractor pool).
   // Welcome Town lessons have no 'basket' kind at all, and Pre-A1 review
   // lessons (e.g. L4-L6) skip it too — both fall back to short echo-scene
@@ -106,7 +159,18 @@ export function buildHomeworkContent(scenes: CompletionScene[], title: string, l
     while (wrongOptions.length < 2 && uniqueDistractors.length > 0) {
       wrongOptions.push(uniqueDistractors[(i + wrongOptions.length) % uniqueDistractors.length]);
     }
-    return { audio_text: word, correct_answer: word, wrong_options: Array.from(new Set(wrongOptions)).slice(0, 3) };
+    const finalWrong = Array.from(new Set(wrongOptions)).slice(0, 3);
+    const choiceImages: Record<string, string> = {};
+    for (const w of [word, ...finalWrong]) {
+      const img = imageByText.get(norm(w));
+      if (img) choiceImages[norm(w)] = img;
+    }
+    return {
+      audio_text: word,
+      correct_answer: word,
+      wrong_options: finalWrong,
+      choice_images: Object.keys(choiceImages).length > 0 ? choiceImages : undefined,
+    };
   });
 
   // Activity 2 — short lines from echo/roleplay scenes, 3+ words, scrambled
@@ -119,7 +183,17 @@ export function buildHomeworkContent(scenes: CompletionScene[], title: string, l
   const activity2Items = (goodLines.length > 0 ? goodLines : ['Hello I am here']).map((line) => {
     const tokens = wordsOf(line);
     const scrambled = [...tokens].sort(() => Math.random() - 0.5);
-    return { scrambled_words: scrambled, correct_order: tokens.join(' ') };
+    const wordImages: Record<string, string> = {};
+    for (const t of tokens) {
+      const img = imageByText.get(norm(t));
+      if (img) wordImages[norm(t)] = img;
+    }
+    return {
+      scrambled_words: scrambled,
+      correct_order: tokens.join(' '),
+      word_images: Object.keys(wordImages).length > 0 ? wordImages : undefined,
+      image: imageByText.get(norm(line)),
+    };
   });
 
   // Activity 3 — speaking prompt built from the strongest candidate line
@@ -133,6 +207,7 @@ export function buildHomeworkContent(scenes: CompletionScene[], title: string, l
       instructions: 'Say it out loud, just like in class!',
       prompt: speakingLine,
       target_words_to_detect: targetWords,
+      image: imageByText.get(norm(speakingLine)),
     },
     meta: { hub: 'playground', title, vocabulary: uniqueCorrect, lesson_id: lessonRowId },
   };

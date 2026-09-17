@@ -25,16 +25,22 @@ interface RecognitionItem {
   audio_text: string;
   correct_answer: string;
   wrong_options: string[];
+  /** word (lowercased) -> image path — lets a non-reading student match
+   *  by picture instead of text. Undefined choices fall back to text. */
+  choice_images?: Record<string, string>;
 }
 interface SyntaxItem {
   scrambled_words: string[];
   correct_order: string;
+  word_images?: Record<string, string>;
+  image?: string;
 }
 interface ProductionActivity {
   instructions?: string;
   prompt: string;
   target_words_to_detect?: string[];
   example_response?: string;
+  image?: string;
 }
 interface HomeworkContent {
   activity_1_recognition: { instructions?: string; items: RecognitionItem[] };
@@ -120,18 +126,26 @@ function ListenMatch({ items, theme, onPass }: { items: RecognitionItem[]; theme
         {choices.map((c) => {
           const isCorrect = correct === c;
           const isWrong = shake === c;
+          const image = item.choice_images?.[norm(c)];
           return (
             <button
               key={c}
               onClick={() => handleClick(c)}
               className={cn(
-                'rounded-2xl border-2 p-5 text-lg font-semibold bg-white transition shadow-sm',
-                'hover:scale-[1.02] active:scale-95',
+                'rounded-2xl border-2 p-4 text-lg font-semibold bg-white transition shadow-sm',
+                'hover:scale-[1.02] active:scale-95 flex flex-col items-center gap-2',
                 isCorrect && 'bg-green-100 border-green-500 text-green-800',
                 isWrong && 'animate-[shake_0.4s] bg-red-50 border-red-400 text-red-700',
                 !isCorrect && !isWrong && 'border-slate-200 hover:border-slate-300'
               )}
             >
+              {/* Pre-A1/Welcome Town kids often can't read yet — the
+                  picture is the real answer choice; the word underneath
+                  is a bonus for kids starting to sight-read, not the
+                  primary signal. */}
+              {image && (
+                <img src={image} alt="" className="h-16 w-16 rounded-xl object-cover" />
+              )}
               <span className="inline-flex items-center gap-2">
                 {isCorrect && <Check className="w-5 h-5" />}
                 {isWrong && <X className="w-5 h-5" />}
@@ -177,10 +191,29 @@ function SentenceScramble({ items, theme, onPass }: { items: SyntaxItem[]; theme
     }
   };
 
+  const wordImage = (w: string) => item.word_images?.[norm(w)];
+
   return (
     <div className="space-y-6">
       <p className="text-center text-sm text-slate-500">Activity 2 of 3 · Sentence Scramble · {idx + 1}/{items.length}</p>
-      <p className={cn('text-center font-bold', theme.accent)}>Tap the words in the correct order.</p>
+
+      {/* The picture (when one exists) anchors what's being said, and
+          "Hear the sentence" lets a non-reading student know the target
+          order by listening as many times as they need — putting words
+          in order by reading alone assumes a skill Pre-A1 kids don't
+          have yet. */}
+      {item.image && (
+        <img src={item.image} alt="" className="mx-auto h-28 w-28 rounded-2xl object-cover shadow-md" />
+      )}
+      <div className="text-center">
+        <button
+          type="button"
+          onClick={() => speak(item.correct_order)}
+          className={cn('inline-flex items-center gap-2 rounded-full px-5 py-3 text-white font-bold shadow-lg active:scale-95 transition', theme.primary)}
+        >
+          <Volume2 className="w-5 h-5" /> Hear the sentence
+        </button>
+      </div>
 
       <div className={cn(
         'min-h-[80px] rounded-2xl border-2 border-dashed p-4 flex flex-wrap gap-2 justify-center items-center bg-white',
@@ -189,27 +222,35 @@ function SentenceScramble({ items, theme, onPass }: { items: SyntaxItem[]; theme
         !feedback && 'border-slate-300'
       )}>
         {arranged.length === 0 && <span className="text-slate-400 italic text-sm">Tap a word below to start building…</span>}
-        {arranged.map((t) => (
-          <button
-            key={`${t.w}-${t.i}`}
-            onClick={() => { setArranged(arranged.filter((x) => x !== t)); setPool([...pool, t]); }}
-            className="px-4 py-2 bg-white border-2 border-slate-300 rounded-xl font-semibold text-slate-800 hover:bg-slate-50 shadow-sm"
-          >
-            {t.w}
-          </button>
-        ))}
+        {arranged.map((t) => {
+          const img = wordImage(t.w);
+          return (
+            <button
+              key={`${t.w}-${t.i}`}
+              onClick={() => { setArranged(arranged.filter((x) => x !== t)); setPool([...pool, t]); }}
+              className="flex items-center gap-1.5 px-3 py-2 bg-white border-2 border-slate-300 rounded-xl font-semibold text-slate-800 hover:bg-slate-50 shadow-sm"
+            >
+              {img && <img src={img} alt="" className="h-6 w-6 rounded object-cover" />}
+              {t.w}
+            </button>
+          );
+        })}
       </div>
 
       <div className="flex flex-wrap gap-2 justify-center">
-        {pool.map((t) => (
-          <button
-            key={`pool-${t.w}-${t.i}`}
-            onClick={() => { setPool(pool.filter((x) => x !== t)); setArranged([...arranged, t]); }}
-            className={cn('px-4 py-2 rounded-xl font-bold text-white shadow-md active:scale-95 transition', theme.primary)}
-          >
-            {t.w}
-          </button>
-        ))}
+        {pool.map((t) => {
+          const img = wordImage(t.w);
+          return (
+            <button
+              key={`pool-${t.w}-${t.i}`}
+              onClick={() => { setPool(pool.filter((x) => x !== t)); setArranged([...arranged, t]); }}
+              className={cn('flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-white shadow-md active:scale-95 transition', theme.primary)}
+            >
+              {img && <img src={img} alt="" className="h-6 w-6 rounded object-cover" />}
+              {t.w}
+            </button>
+          );
+        })}
       </div>
 
       <div className="flex justify-center gap-2">
@@ -269,8 +310,20 @@ function VoiceChallenge({ activity, theme, onPass }: { activity: ProductionActiv
       <p className="text-sm text-slate-500">Activity 3 of 3 · Voice Challenge</p>
       {activity.instructions && <p className="text-slate-600">{activity.instructions}</p>}
       <div className={cn('rounded-3xl border-2 p-6 bg-white shadow-sm max-w-xl mx-auto', theme.ring, 'ring-2')}>
+        {activity.image && (
+          <img src={activity.image} alt="" className="mx-auto mb-3 h-24 w-24 rounded-2xl object-cover shadow-sm" />
+        )}
         <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Say this aloud</p>
         <p className={cn('text-2xl font-extrabold mt-2', theme.accent)}>“{activity.prompt}”</p>
+        {/* A non-reading student can't read this prompt at all without an
+            audio option — every other activity already has one. */}
+        <button
+          type="button"
+          onClick={() => speak(activity.prompt)}
+          className={cn('mt-3 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm text-white font-bold shadow active:scale-95 transition', theme.primary)}
+        >
+          <Volume2 className="w-4 h-4" /> Hear it first
+        </button>
         {Array.isArray(activity.target_words_to_detect) && activity.target_words_to_detect.length > 0 && (
           <p className="mt-3 text-xs text-slate-500">
             Try to use: {activity.target_words_to_detect.map((w) => <span key={w} className="inline-block bg-slate-100 rounded-full px-2 py-0.5 mx-0.5 text-slate-700">{w}</span>)}
