@@ -1,7 +1,9 @@
-import { X, Ear, ListOrdered, Mic } from 'lucide-react';
+import { useState } from 'react';
+import { X, Ear, ListOrdered, Mic, List, Gamepad2 } from 'lucide-react';
 import { buildHomeworkContent } from '@/services/sceneLessonCompletionService';
 import { getSceneLesson } from '@/content/playground-library/sceneLessonRegistry';
 import { getWelcomeTownLesson } from '@/content/playground-library/welcomeTownLessonRegistry';
+import HomeworkPlayer from '@/components/student/homework/HomeworkPlayer';
 
 const WELCOME_TOWN_FORMATS = new Set(['wt-rich', 'wt-a2-rich']);
 
@@ -20,8 +22,12 @@ interface HomeworkPreviewModalProps {
  * completion (sceneLessonCompletionService.ts), just run here against the
  * lesson's own scene data ahead of time so a content creator can see what
  * it looks like and judge whether it needs changing, without waiting for
- * a real student to finish the lesson first. Read-only for now — editing
- * comes later if it turns out to be needed.
+ * a real student to finish the lesson first.
+ *
+ * Defaults to "Play it" — the actual gamified HomeworkPlayer (jungle
+ * theme, Pip mascot, the works), in previewMode so nothing real gets
+ * written to the creator's own account. "View as list" is a secondary
+ * plain read-out for quickly scanning content without playing through.
  */
 export function HomeworkPreviewModal({
   lessonId,
@@ -31,11 +37,33 @@ export function HomeworkPreviewModal({
   lessonNumber,
   onClose,
 }: HomeworkPreviewModalProps) {
+  const [view, setView] = useState<'play' | 'list'>('play');
   const isWelcomeTown = WELCOME_TOWN_FORMATS.has(contentFormat);
   const welcomeTownLesson = isWelcomeTown ? getWelcomeTownLesson(contentFormat, unitNumber, lessonNumber) : null;
   const scenes = isWelcomeTown ? welcomeTownLesson?.scenes ?? null : getSceneLesson(unitNumber, lessonNumber);
 
   const homework = scenes ? buildHomeworkContent(scenes as any, title, lessonId) : null;
+
+  if (view === 'play' && homework) {
+    return (
+      <div className="fixed inset-0 z-[100]">
+        <button
+          onClick={onClose}
+          className="fixed right-4 top-4 z-[110] flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-slate-600 shadow-lg hover:bg-white"
+          aria-label="Close preview"
+        >
+          <X className="h-5 w-5" />
+        </button>
+        <button
+          onClick={() => setView('list')}
+          className="fixed left-4 top-4 z-[110] flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-2 text-xs font-black text-orange-700 shadow-lg hover:bg-white"
+        >
+          <List className="h-4 w-4" /> View as list
+        </button>
+        <HomeworkPlayer assignmentId={lessonId} content={homework as any} previewMode />
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm" onClick={onClose}>
@@ -60,6 +88,14 @@ export function HomeworkPreviewModal({
             This is exactly what gets generated for a student the moment they finish this lesson — pulled
             straight from its own scenes, not written separately.
           </p>
+          {homework && (
+            <button
+              onClick={() => setView('play')}
+              className="mt-3 flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-black text-orange-700 shadow hover:bg-orange-50"
+            >
+              <Gamepad2 className="h-3.5 w-3.5" /> Play it instead
+            </button>
+          )}
         </div>
 
         {!homework ? (

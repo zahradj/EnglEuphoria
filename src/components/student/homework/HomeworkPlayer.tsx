@@ -48,6 +48,14 @@ interface Props {
   content: HomeworkContent;
   /** Called after successful completion (server already updated). */
   onComplete?: (newTotalXp: number) => void;
+  /** True when this is a content-creator "try it out" preview (e.g. from
+   *  the Playground Library), not a real student doing real homework —
+   *  skips the homework_submissions insert and the users.total_xp bump
+   *  so previewing a lesson's homework never writes fake completion data
+   *  or fake XP onto the creator's own account. Everything else (the
+   *  actual gameplay, the mascot, the completion screen) runs exactly the
+   *  same either way. */
+  previewMode?: boolean;
 }
 
 const HUB_THEME: Record<Hub, { primary: string; accent: string; ring: string; bg: string }> = {
@@ -375,7 +383,7 @@ const XP_PER_HOMEWORK = 50;
 
 const CHEERS = ['Yay!', 'Great job!', 'Nice one!', "You're on fire!"];
 
-export default function HomeworkPlayer({ assignmentId, content, onComplete }: Props) {
+export default function HomeworkPlayer({ assignmentId, content, onComplete, previewMode = false }: Props) {
   const hub = (content?.meta?.hub || 'academy') as Hub;
   const theme = HUB_THEME[hub] || HUB_THEME.academy;
   const isPlayground = hub === 'playground';
@@ -393,6 +401,17 @@ export default function HomeworkPlayer({ assignmentId, content, onComplete }: Pr
 
   const finalize = async () => {
     setPersisting(true);
+
+    if (previewMode) {
+      // Try-it-out preview from the content library — same celebration,
+      // no real submission or XP written against anyone's account.
+      setTotalXp(XP_PER_HOMEWORK);
+      setAwardedThisRun(XP_PER_HOMEWORK);
+      setPersisting(false);
+      setStep(4);
+      return;
+    }
+
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('not signed in');
