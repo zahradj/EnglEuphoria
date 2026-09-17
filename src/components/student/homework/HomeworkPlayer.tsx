@@ -9,6 +9,7 @@
  * On full completion: confetti + +50 XP + persists submission and bumps users.total_xp.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { Volume2, Check, X, Mic, Sparkles, Trophy, Loader2, ArrowRight, RotateCcw } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -16,6 +17,7 @@ import { playElevenLabs } from '@/lib/elevenLabsAudio';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { JungleTheme } from '@/components/student/kids/JungleTheme';
 
 type Hub = 'playground' | 'academy' | 'success';
 
@@ -298,8 +300,39 @@ function VoiceChallenge({ activity, theme, onPass }: { activity: ProductionActiv
   );
 }
 
+// ─── Mascot (Pip the Parrot, same character used on the Playground
+// world map) — an idle bob plus a brief speech-bubble cheer whenever a
+// round is passed, so homework feels like a continuation of the lesson
+// instead of a plain quiz form. Playground hub only. ────────────────
+function PipMascot({ message }: { message: string | null }) {
+  return (
+    <div className="pointer-events-none fixed bottom-6 right-6 z-20 md:bottom-10 md:right-10">
+      <AnimatePresence>
+        {message && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="absolute -top-14 right-0 whitespace-nowrap rounded-full bg-white px-4 py-2 text-sm font-bold text-purple-600 shadow-lg"
+            style={{ fontFamily: "'Fredoka', cursive" }}
+          >
+            {message}
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <motion.div
+        animate={{ y: [-6, 6, -6], rotate: [-4, 4, -4] }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+        className="text-6xl drop-shadow-lg md:text-7xl"
+      >
+        🦜
+      </motion.div>
+    </div>
+  );
+}
+
 // ─── XP Celebration ──────────────────────────────────────────────
-function CompletionScreen({ xpAwarded, totalXp, theme }: { xpAwarded: number; totalXp: number; theme: typeof HUB_THEME.playground }) {
+function CompletionScreen({ xpAwarded, totalXp, theme, isPlayground }: { xpAwarded: number; totalXp: number; theme: typeof HUB_THEME.playground; isPlayground?: boolean }) {
   const [counter, setCounter] = useState(0);
   useEffect(() => {
     confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 } });
@@ -314,8 +347,23 @@ function CompletionScreen({ xpAwarded, totalXp, theme }: { xpAwarded: number; to
   }, [xpAwarded]);
   return (
     <div className="text-center space-y-4 py-10">
-      <Trophy className={cn('w-20 h-20 mx-auto animate-bounce', theme.accent)} />
-      <h2 className="text-4xl font-extrabold">Homework Complete!</h2>
+      {isPlayground ? (
+        <motion.div
+          animate={{ rotate: [-8, 8, -8], y: [0, -10, 0] }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+          className="text-7xl"
+        >
+          🎉
+        </motion.div>
+      ) : (
+        <Trophy className={cn('w-20 h-20 mx-auto animate-bounce', theme.accent)} />
+      )}
+      <h2
+        className={cn('text-4xl font-extrabold', isPlayground && 'text-orange-700')}
+        style={isPlayground ? { fontFamily: "'Fredoka', cursive" } : undefined}
+      >
+        {isPlayground ? 'Awesome work!' : 'Homework Complete!'}
+      </h2>
       <p className={cn('text-6xl font-black', theme.accent)}>+{counter} XP</p>
       <p className="text-slate-500">New total: <span className="font-bold text-slate-800">{totalXp} XP</span></p>
     </div>
@@ -325,13 +373,23 @@ function CompletionScreen({ xpAwarded, totalXp, theme }: { xpAwarded: number; to
 // ─── Main Player ─────────────────────────────────────────────────
 const XP_PER_HOMEWORK = 50;
 
+const CHEERS = ['Yay!', 'Great job!', 'Nice one!', "You're on fire!"];
+
 export default function HomeworkPlayer({ assignmentId, content, onComplete }: Props) {
   const hub = (content?.meta?.hub || 'academy') as Hub;
   const theme = HUB_THEME[hub] || HUB_THEME.academy;
+  const isPlayground = hub === 'playground';
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [totalXp, setTotalXp] = useState<number>(0);
   const [awardedThisRun, setAwardedThisRun] = useState(0);
   const [persisting, setPersisting] = useState(false);
+  const [cheer, setCheer] = useState<string | null>(null);
+
+  const advance = (next: 1 | 2 | 3 | 4) => {
+    setCheer(CHEERS[Math.floor(Math.random() * CHEERS.length)]);
+    setTimeout(() => setCheer(null), 1400);
+    setStep(next);
+  };
 
   const finalize = async () => {
     setPersisting(true);
@@ -371,30 +429,60 @@ export default function HomeworkPlayer({ assignmentId, content, onComplete }: Pr
   };
 
   return (
-    <div className={cn('min-h-dvh bg-gradient-to-br p-6', theme.bg)}>
-      <div className="max-w-3xl mx-auto bg-white/80 backdrop-blur rounded-3xl shadow-2xl p-6 md:p-10">
+    <div className={cn('relative min-h-dvh overflow-hidden p-6', !isPlayground && 'bg-gradient-to-br', !isPlayground && theme.bg)}>
+      {isPlayground && (
+        <>
+          <JungleTheme />
+          <div className="absolute inset-0 bg-white/35" />
+        </>
+      )}
+
+      {isPlayground && (
+        <div className="relative z-10 mx-auto mb-4 max-w-3xl text-center">
+          <span
+            className="inline-block rounded-full bg-white/90 px-4 py-1.5 text-sm font-bold text-orange-700 shadow-md backdrop-blur"
+            style={{ fontFamily: "'Fredoka', cursive" }}
+          >
+            📝 {content.meta?.title ? `Practice: ${content.meta.title}` : 'Practice Time!'}
+          </span>
+        </div>
+      )}
+
+      <div className="relative z-10 max-w-3xl mx-auto bg-white/90 backdrop-blur rounded-3xl shadow-2xl p-6 md:p-10">
         {/* Progress dots */}
         <div className="flex items-center justify-center gap-2 mb-6">
           {[1, 2, 3].map((n) => (
-            <span key={n} className={cn('h-2 w-12 rounded-full', step >= (n as 1|2|3) ? theme.primary : 'bg-slate-200')} />
+            <span key={n} className={cn('h-2 w-12 rounded-full transition-colors', step >= (n as 1|2|3) ? theme.primary : 'bg-slate-200')} />
           ))}
         </div>
 
         {step === 1 && (
-          <ListenMatch items={content.activity_1_recognition.items} theme={theme} onPass={() => setStep(2)} />
+          <ListenMatch items={content.activity_1_recognition.items} theme={theme} onPass={() => advance(2)} />
         )}
         {step === 2 && (
-          <SentenceScramble items={content.activity_2_syntax.items} theme={theme} onPass={() => setStep(3)} />
+          <SentenceScramble items={content.activity_2_syntax.items} theme={theme} onPass={() => advance(3)} />
         )}
         {step === 3 && (
-          <VoiceChallenge activity={content.activity_3_production} theme={theme} onPass={finalize} />
+          <VoiceChallenge
+            activity={content.activity_3_production}
+            theme={theme}
+            onPass={() => {
+              if (isPlayground) {
+                setCheer(CHEERS[Math.floor(Math.random() * CHEERS.length)]);
+                setTimeout(() => setCheer(null), 1400);
+              }
+              finalize();
+            }}
+          />
         )}
         {step === 4 && (
           persisting
             ? <div className="text-center py-12"><Loader2 className="w-8 h-8 animate-spin mx-auto" /></div>
-            : <CompletionScreen xpAwarded={awardedThisRun} totalXp={totalXp} theme={theme} />
+            : <CompletionScreen xpAwarded={awardedThisRun} totalXp={totalXp} theme={theme} isPlayground={isPlayground} />
         )}
       </div>
+
+      {isPlayground && <PipMascot message={cheer} />}
     </div>
   );
 }
