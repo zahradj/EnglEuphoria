@@ -109,56 +109,97 @@ function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 }
 
 /** At-a-glance CEFR coverage per hub — same ranges as the hub cards below,
- *  just as a chart instead of a text line. */
+ *  styled as a proper range chart: a faint full-width track per row with an
+ *  animated, glowing, icon-marked segment showing that hub's real coverage. */
 function HubCefrLadder({ isDark }: { isDark: boolean }) {
   const cellText = isDark ? 'text-slate-500' : 'text-slate-400';
   const cardBase = isDark ? 'bg-slate-900/60 border-white/10' : 'bg-white border-slate-200';
+  const trackBg = isDark ? 'bg-white/5' : 'bg-slate-100';
+  const rowHover = isDark ? 'hover:bg-white/[0.03]' : 'hover:bg-slate-50';
 
   return (
-    <div className={`rounded-3xl border p-6 md:p-8 overflow-x-auto ${cardBase}`}>
-      <div className="min-w-[560px]">
-        <div
-          className="grid gap-x-2 mb-3"
-          style={{ gridTemplateColumns: '140px repeat(6, minmax(0, 1fr))' }}
-        >
-          <div />
-          {CEFR_LEVELS.map((level) => (
-            <div key={level} className={`text-center text-xs font-bold uppercase tracking-wide ${cellText}`}>
-              {level}
-            </div>
-          ))}
+    <div className={`relative rounded-3xl border p-6 md:p-8 overflow-hidden ${cardBase}`}>
+      {/* Ambient background glow, echoing each hub's color */}
+      <div
+        className="absolute -top-16 -right-16 w-72 h-72 rounded-full blur-[100px] pointer-events-none"
+        style={{ background: 'linear-gradient(135deg, #6366F1, #10B981)', opacity: isDark ? 0.1 : 0.06 }}
+      />
+      <div className="relative flex items-center justify-between mb-6">
+        <p className={`text-xs font-bold uppercase tracking-widest ${cellText}`}>CEFR coverage by hub</p>
+        <div className={`hidden sm:flex items-center gap-1.5 text-[10px] font-semibold ${cellText}`}>
+          <span>Pre-A1</span>
+          <span className="w-8 h-px bg-current opacity-30" />
+          <span>C1</span>
         </div>
-        <div className="space-y-3">
-          {HUBS.map((hub, i) => (
-            <FadeIn key={hub.id} delay={i * 0.08}>
-              <div
-                className="grid gap-x-2 items-center"
-                style={{ gridTemplateColumns: '140px repeat(6, minmax(0, 1fr))' }}
-              >
-                <div className="pr-3">
-                  <p className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                    {hub.name}
-                  </p>
-                  <p className={`text-xs ${cellText}`}>{hub.ageLabel}</p>
-                </div>
-                {CEFR_LEVELS.map((_, colIndex) => {
-                  const covered = colIndex >= hub.cefrStart && colIndex <= hub.cefrEnd;
-                  const isStart = colIndex === hub.cefrStart;
-                  const isEnd = colIndex === hub.cefrEnd;
-                  return (
-                    <div key={colIndex} className="h-7 flex items-center">
-                      {covered && (
-                        <div
-                          className={`h-full w-full ${isStart ? 'rounded-l-full' : ''} ${isEnd ? 'rounded-r-full' : ''}`}
-                          style={{ background: `linear-gradient(90deg, ${hub.from}, ${hub.to})`, opacity: isDark ? 0.85 : 0.9 }}
-                        />
-                      )}
+      </div>
+
+      <div className="relative overflow-x-auto -mx-2 px-2">
+        <div className="min-w-[520px] space-y-1">
+          {HUBS.map((hub, i) => {
+            const spanPct = ((hub.cefrEnd - hub.cefrStart + 1) / CEFR_LEVELS.length) * 100;
+            const startPct = (hub.cefrStart / CEFR_LEVELS.length) * 100;
+            return (
+              <FadeIn key={hub.id} delay={i * 0.1}>
+                <div className={`group rounded-2xl px-3 py-3 transition-colors duration-300 ${rowHover}`}>
+                  <div className="flex items-center gap-4 mb-2">
+                    <div
+                      className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center shadow-sm"
+                      style={{ background: `linear-gradient(135deg, ${hub.from}, ${hub.to})` }}
+                    >
+                      <hub.icon className="w-4 h-4 text-white" />
                     </div>
-                  );
-                })}
+                    <div className="min-w-[110px]">
+                      <p className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        {hub.name}
+                      </p>
+                      <p className={`text-[11px] ${cellText}`}>{hub.ageLabel}</p>
+                    </div>
+                    <span
+                      className="ms-auto text-[11px] font-bold px-2.5 py-1 rounded-full"
+                      style={{ color: hub.from, backgroundColor: `${hub.from}1a` }}
+                    >
+                      {hub.cefr}
+                    </span>
+                  </div>
+
+                  {/* Track */}
+                  <div className={`relative h-3 rounded-full ${trackBg} overflow-hidden`}>
+                    {/* Faint level-boundary ticks */}
+                    <div className="absolute inset-0 flex">
+                      {CEFR_LEVELS.map((_, idx) => (
+                        <div
+                          key={idx}
+                          className={`flex-1 ${idx > 0 ? (isDark ? 'border-s border-white/10' : 'border-s border-slate-200') : ''}`}
+                        />
+                      ))}
+                    </div>
+                    <motion.div
+                      className="absolute inset-y-0 rounded-full"
+                      style={{
+                        background: `linear-gradient(90deg, ${hub.from}, ${hub.to})`,
+                        boxShadow: `0 0 16px ${hub.from}55`,
+                        insetInlineStart: `${startPct}%`,
+                        width: `${spanPct}%`,
+                      }}
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.7, delay: 0.15 + i * 0.1, ease: 'easeOut' }}
+                    />
+                  </div>
+                </div>
+              </FadeIn>
+            );
+          })}
+
+          {/* Axis labels */}
+          <div className="flex pt-1 px-3">
+            {CEFR_LEVELS.map((level) => (
+              <div key={level} className={`flex-1 text-center text-[10px] font-bold uppercase tracking-wide ${cellText}`}>
+                {level}
               </div>
-            </FadeIn>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>
