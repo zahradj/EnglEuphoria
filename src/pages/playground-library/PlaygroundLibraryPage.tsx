@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { BookOpen } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { HomeworkPreviewModal } from './HomeworkPreviewModal';
 
 interface LessonRow {
   id: string;
@@ -56,6 +58,7 @@ export default function PlaygroundLibraryPage() {
   const [loading, setLoading] = useState(true);
   const [openUnit, setOpenUnit] = useState<number | null>(1);
   const [activeLevel, setActiveLevel] = useState('Pre-A1');
+  const [homeworkPreview, setHomeworkPreview] = useState<LessonRow | null>(null);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -247,24 +250,36 @@ export default function PlaygroundLibraryPage() {
                       {u.lessons.map((l) => {
                         const ready = l.ai_metadata?.contentFormat === 'lep1-rich' || l.ai_metadata?.contentFormat === 'wt-rich' || l.ai_metadata?.contentFormat === 'wt-a2-rich' || l.ai_metadata?.contentFormat === 'scene-player';
                         return (
-                          <button
+                          <div
                             key={l.id}
-                            onClick={() => handleLessonClick(l)}
-                            className={`flex flex-col items-start gap-1 rounded-2xl border-2 p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
+                            className={`group relative flex flex-col items-start gap-1 rounded-2xl border-2 p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
                               ready ? 'border-orange-300 bg-white' : 'border-dashed border-orange-200 bg-white/70'
                             }`}
                           >
-                            <div className="flex w-full items-center justify-between">
-                              <span className="text-xs font-black uppercase tracking-wide text-orange-500">Lesson {l.ai_metadata?.lesson_number ?? '?'}</span>
-                              {ready ? (
-                                <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-black text-green-700">▶ Ready</span>
-                              ) : (
-                                <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[10px] font-black text-neutral-500">🔒 Coming Soon</span>
-                              )}
-                            </div>
-                            <p className="text-sm font-bold text-neutral-800">{ready ? l.title : (l.ai_metadata?.lesson_role ?? l.title)}</p>
-                            {!ready && <p className="text-xs text-neutral-500">We'll build this together.</p>}
-                          </button>
+                            <button onClick={() => handleLessonClick(l)} className="flex w-full flex-col items-start gap-1 text-left">
+                              <div className="flex w-full items-center justify-between">
+                                <span className="text-xs font-black uppercase tracking-wide text-orange-500">Lesson {l.ai_metadata?.lesson_number ?? '?'}</span>
+                                {ready ? (
+                                  <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-black text-green-700">▶ Ready</span>
+                                ) : (
+                                  <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[10px] font-black text-neutral-500">🔒 Coming Soon</span>
+                                )}
+                              </div>
+                              <p className="text-sm font-bold text-neutral-800">{ready ? l.title : (l.ai_metadata?.lesson_role ?? l.title)}</p>
+                              {!ready && <p className="text-xs text-neutral-500">We'll build this together.</p>}
+                            </button>
+                            {ready && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setHomeworkPreview(l);
+                                }}
+                                className="mt-1 flex items-center gap-1 rounded-full bg-orange-50 px-2.5 py-1 text-[11px] font-black text-orange-600 ring-1 ring-orange-200 transition hover:bg-orange-100"
+                              >
+                                <BookOpen className="h-3 w-3" /> Homework
+                              </button>
+                            )}
+                          </div>
                         );
                       })}
                     </div>
@@ -275,6 +290,17 @@ export default function PlaygroundLibraryPage() {
           </div>
         )}
       </main>
+
+      {homeworkPreview && homeworkPreview.ai_metadata?.contentFormat && homeworkPreview.ai_metadata?.unit_number != null && homeworkPreview.ai_metadata?.lesson_number != null && (
+        <HomeworkPreviewModal
+          lessonId={homeworkPreview.id}
+          title={homeworkPreview.title}
+          contentFormat={homeworkPreview.ai_metadata.contentFormat}
+          unitNumber={homeworkPreview.ai_metadata.unit_number}
+          lessonNumber={homeworkPreview.ai_metadata.lesson_number}
+          onClose={() => setHomeworkPreview(null)}
+        />
+      )}
     </div>
   );
 }
