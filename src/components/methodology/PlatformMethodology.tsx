@@ -6,6 +6,8 @@ import {
 } from 'lucide-react';
 import { useThemeMode } from '@/hooks/useThemeMode';
 
+const CEFR_LEVELS = ['Pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1'] as const;
+
 const HUBS = [
   {
     id: 'playground',
@@ -13,6 +15,8 @@ const HUBS = [
     name: 'The Playground',
     ageLabel: 'Kids 5–12',
     cefr: 'Pre-A1 → B1',
+    cefrStart: 0,
+    cefrEnd: 3,
     body: 'A gamified forest world where every lesson is an adventure. Animated mascots guide the story, rewards celebrate every milestone, and grammar stays implicit — taught through play, never drilled.',
     from: '#FF9F1C',
     to: '#FFBF00',
@@ -23,6 +27,8 @@ const HUBS = [
     name: 'The Academy',
     ageLabel: 'Teens 13–17',
     cefr: 'Pre-A1 → C1',
+    cefrStart: 0,
+    cefrEnd: 5,
     body: 'Project-based lessons built around identity, pop culture, and real debate — up through exam-prep register at the top levels. No textbook filler, just language that matters to a teenager’s actual life.',
     from: '#6366F1',
     to: '#A855F7',
@@ -33,6 +39,8 @@ const HUBS = [
     name: 'The Success Hub',
     ageLabel: 'Adults 18+',
     cefr: 'Pre-A1 → C1',
+    cefrStart: 0,
+    cefrEnd: 5,
     body: 'Structured business English: negotiation, interviews, presentations, and networking, with lexical precision as the focus once fluency is established. Efficient sessions, measurable progress.',
     from: '#10B981',
     to: '#059669',
@@ -100,6 +108,63 @@ function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   );
 }
 
+/** At-a-glance CEFR coverage per hub — same ranges as the hub cards below,
+ *  just as a chart instead of a text line. */
+function HubCefrLadder({ isDark }: { isDark: boolean }) {
+  const cellText = isDark ? 'text-slate-500' : 'text-slate-400';
+  const cardBase = isDark ? 'bg-slate-900/60 border-white/10' : 'bg-white border-slate-200';
+
+  return (
+    <div className={`rounded-3xl border p-6 md:p-8 overflow-x-auto ${cardBase}`}>
+      <div className="min-w-[560px]">
+        <div
+          className="grid gap-x-2 mb-3"
+          style={{ gridTemplateColumns: '140px repeat(6, minmax(0, 1fr))' }}
+        >
+          <div />
+          {CEFR_LEVELS.map((level) => (
+            <div key={level} className={`text-center text-xs font-bold uppercase tracking-wide ${cellText}`}>
+              {level}
+            </div>
+          ))}
+        </div>
+        <div className="space-y-3">
+          {HUBS.map((hub, i) => (
+            <FadeIn key={hub.id} delay={i * 0.08}>
+              <div
+                className="grid gap-x-2 items-center"
+                style={{ gridTemplateColumns: '140px repeat(6, minmax(0, 1fr))' }}
+              >
+                <div className="pr-3">
+                  <p className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {hub.name}
+                  </p>
+                  <p className={`text-xs ${cellText}`}>{hub.ageLabel}</p>
+                </div>
+                {CEFR_LEVELS.map((_, colIndex) => {
+                  const covered = colIndex >= hub.cefrStart && colIndex <= hub.cefrEnd;
+                  const isStart = colIndex === hub.cefrStart;
+                  const isEnd = colIndex === hub.cefrEnd;
+                  return (
+                    <div key={colIndex} className="h-7 flex items-center">
+                      {covered && (
+                        <div
+                          className={`h-full w-full ${isStart ? 'rounded-l-full' : ''} ${isEnd ? 'rounded-r-full' : ''}`}
+                          style={{ background: `linear-gradient(90deg, ${hub.from}, ${hub.to})`, opacity: isDark ? 0.85 : 0.9 }}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function PlatformMethodology() {
   const { resolvedTheme } = useThemeMode();
   const isDark = resolvedTheme === 'dark';
@@ -122,6 +187,11 @@ export default function PlatformMethodology() {
             Every learner is taught inside the hub built for their stage of life — but all three share the same
             underlying CEFR progression, so level actually means the same thing everywhere on the platform.
           </p>
+        </FadeIn>
+        <FadeIn delay={0.05}>
+          <div className="mb-8">
+            <HubCefrLadder isDark={isDark} />
+          </div>
         </FadeIn>
         <div className="grid md:grid-cols-3 gap-6">
           {HUBS.map((hub, i) => (
