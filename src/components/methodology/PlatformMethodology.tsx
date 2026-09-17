@@ -1,12 +1,12 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   Sparkles, Rocket, Briefcase, UserPlus, ClipboardCheck, Target,
   Gamepad2, ClipboardList, RotateCcw, TrendingUp, Award, Flame,
 } from 'lucide-react';
 import { useThemeMode } from '@/hooks/useThemeMode';
-
-const CEFR_LEVELS = ['Pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1'] as const;
+import { SkillRadarChart } from '@/components/landing/SkillRadarChart';
 
 const HUBS = [
   {
@@ -15,16 +15,9 @@ const HUBS = [
     name: 'The Playground',
     ageLabel: 'Kids 5–12',
     cefr: 'Pre-A1 → B1',
-    cefrStart: 0,
-    cefrEnd: 3,
     body: 'A gamified forest world where every lesson is an adventure. Animated mascots guide the story, rewards celebrate every milestone, and grammar stays implicit — taught through play, never drilled.',
     from: '#FF9F1C',
     to: '#FFBF00',
-    // Validated categorical chart color (see references/color-formula.md) —
-    // the raw brand orange (#FF9F1C) fails the lightness-band and
-    // contrast-vs-surface checks; this amber-600 step holds the same hue
-    // family and passes all six checks in both light and dark mode.
-    chartColor: '#D97706',
   },
   {
     id: 'academy',
@@ -32,12 +25,9 @@ const HUBS = [
     name: 'The Academy',
     ageLabel: 'Teens 13–17',
     cefr: 'Pre-A1 → C1',
-    cefrStart: 0,
-    cefrEnd: 5,
     body: 'Project-based lessons built around identity, pop culture, and real debate — up through exam-prep register at the top levels. No textbook filler, just language that matters to a teenager’s actual life.',
     from: '#6366F1',
     to: '#A855F7',
-    chartColor: '#6366F1',
   },
   {
     id: 'success',
@@ -45,14 +35,9 @@ const HUBS = [
     name: 'The Success Hub',
     ageLabel: 'Adults 18+',
     cefr: 'Pre-A1 → C1',
-    cefrStart: 0,
-    cefrEnd: 5,
     body: 'Structured business English: negotiation, interviews, presentations, and networking, with lexical precision as the focus once fluency is established. Efficient sessions, measurable progress.',
     from: '#10B981',
     to: '#059669',
-    // Raw brand green (#10B981) fails contrast-vs-surface as a chart mark;
-    // emerald-600 passes all six checks in both light and dark mode.
-    chartColor: '#059669',
   },
 ];
 
@@ -117,87 +102,42 @@ function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   );
 }
 
-/** At-a-glance CEFR coverage per hub, built to the project's dataviz skill:
- *  form = range bar per hub (3 series, direct-labeled, no legend box needed);
- *  color = the three hub hues re-stepped to `chartColor` so every mark
- *  clears the categorical validator (contrast + lightness band) in both
- *  light and dark mode — run `node scripts/validate_palette.js
- *  "#D97706,#6366F1,#059669" --mode light|dark` from the dataviz skill's
- *  base directory to reproduce; marks = <=24px thin bar, square at the
- *  shared Pre-A1 baseline, 4px rounded only at the data end; identity comes
- *  from the icon + a color dot beside the range text, never from coloring
- *  the text itself. */
-function HubCefrLadder({ isDark }: { isDark: boolean }) {
-  const cellText = isDark ? 'text-slate-500' : 'text-slate-400';
-  const cardBase = isDark ? 'bg-slate-900/60 border-white/10' : 'bg-white border-slate-200';
-  const trackBg = isDark ? 'bg-white/[0.06]' : 'bg-slate-100';
-  const gridLine = isDark ? 'border-white/10' : 'border-slate-200';
-  const labelText = isDark ? 'text-slate-300' : 'text-slate-700';
-
+/** Same Skill Tracker preview used on the homepage (PersonalizedPathSection.tsx)
+ *  — reuses the real SkillRadarChart component and its i18n copy directly,
+ *  per direct request to match the homepage's own style rather than a
+ *  bespoke chart. */
+function SkillTrackerPreview({ isDark }: { isDark: boolean }) {
+  const { t } = useTranslation();
   return (
-    <div className={`rounded-3xl border p-6 md:p-8 ${cardBase}`}>
-      <p className={`text-xs font-bold uppercase tracking-widest mb-6 ${cellText}`}>CEFR coverage by hub</p>
-
-      <div className="overflow-x-auto -mx-2 px-2">
-        <div className="min-w-[520px] space-y-5">
-          {HUBS.map((hub, i) => {
-            const spanPct = ((hub.cefrEnd - hub.cefrStart + 1) / CEFR_LEVELS.length) * 100;
-            const startPct = (hub.cefrStart / CEFR_LEVELS.length) * 100;
-            return (
-              <FadeIn key={hub.id} delay={i * 0.08}>
-                <div title={`${hub.name}: ${hub.cefr}`}>
-                  <div className="flex items-center gap-3 mb-2">
-                    <div
-                      className="shrink-0 w-7 h-7 rounded-lg flex items-center justify-center"
-                      style={{ background: `linear-gradient(135deg, ${hub.from}, ${hub.to})` }}
-                    >
-                      <hub.icon className="w-3.5 h-3.5 text-white" />
-                    </div>
-                    <p className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                      {hub.name}
-                    </p>
-                    <span className={`text-xs ${cellText}`}>· {hub.ageLabel}</span>
-                    <span className="ms-auto flex items-center gap-1.5 text-xs font-semibold">
-                      <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: hub.chartColor }} />
-                      <span className={labelText}>{hub.cefr}</span>
-                    </span>
-                  </div>
-
-                  {/* Track: 6 CEFR cells, hairline dividers, 16px thin bar */}
-                  <div className={`relative h-4 rounded-sm ${trackBg} overflow-hidden`}>
-                    <div className="absolute inset-0 flex">
-                      {CEFR_LEVELS.map((_, idx) => (
-                        <div key={idx} className={`flex-1 ${idx > 0 ? `border-s ${gridLine}` : ''}`} />
-                      ))}
-                    </div>
-                    <motion.div
-                      className="absolute inset-y-0"
-                      style={{
-                        backgroundColor: hub.chartColor,
-                        insetInlineStart: `${startPct}%`,
-                        width: `${spanPct}%`,
-                        borderStartEndRadius: 4,
-                        borderEndEndRadius: 4,
-                      }}
-                      initial={{ scaleX: 0 }}
-                      whileInView={{ scaleX: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: 0.1 + i * 0.08, ease: 'easeOut' }}
-                    />
-                  </div>
-                </div>
-              </FadeIn>
-            );
-          })}
-
-          {/* Axis */}
-          <div className={`flex pt-1 border-t ${gridLine}`}>
-            {CEFR_LEVELS.map((level) => (
-              <div key={level} className={`flex-1 pt-2 text-center text-[10px] font-bold uppercase tracking-wide ${cellText}`}>
-                {level}
-              </div>
+    <div className={`rounded-3xl p-6 md:p-10 ${
+      isDark
+        ? 'bg-white/[0.03] border border-white/[0.06]'
+        : 'bg-white border border-slate-100 shadow-[0_8px_32px_rgba(15,23,42,0.04)]'
+    }`}>
+      <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <span className={`inline-block text-[11px] font-bold uppercase tracking-widest mb-3 px-3 py-1 rounded-full ${
+            isDark ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : 'text-emerald-700 bg-emerald-50 border border-emerald-200'
+          }`}>
+            {t('lp.skills.eyebrow')}
+          </span>
+          <h3 className={`text-2xl md:text-3xl font-extrabold mb-3 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            {t('lp.skills.heading')}
+          </h3>
+          <p className={`text-base leading-relaxed mb-5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+            {t('lp.skills.desc')}
+          </p>
+          <ul className="space-y-2.5">
+            {(['speaking', 'listening', 'reading', 'writing', 'vocabulary', 'grammar'] as const).map((s) => (
+              <li key={s} className={`flex items-center gap-2 text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-emerald-500" />
+                {t(`lp.skills.${s}`)}
+              </li>
             ))}
-          </div>
+          </ul>
+        </div>
+        <div className="flex items-center justify-center">
+          <SkillRadarChart size={280} />
         </div>
       </div>
     </div>
@@ -226,11 +166,6 @@ export default function PlatformMethodology() {
             Every learner is taught inside the hub built for their stage of life — but all three share the same
             underlying CEFR progression, so level actually means the same thing everywhere on the platform.
           </p>
-        </FadeIn>
-        <FadeIn delay={0.05}>
-          <div className="mb-8">
-            <HubCefrLadder isDark={isDark} />
-          </div>
         </FadeIn>
         <div className="grid md:grid-cols-3 gap-6">
           {HUBS.map((hub, i) => (
@@ -298,6 +233,11 @@ export default function PlatformMethodology() {
             Where you start and what comes next are both handled for you — with a teacher able to override either
             one at any time.
           </p>
+        </FadeIn>
+        <FadeIn delay={0.05}>
+          <div className="mb-8">
+            <SkillTrackerPreview isDark={isDark} />
+          </div>
         </FadeIn>
         <div className="grid md:grid-cols-3 gap-5">
           {PROGRESS_POINTS.map((point, i) => (
