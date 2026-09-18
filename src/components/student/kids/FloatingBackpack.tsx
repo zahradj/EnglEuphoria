@@ -41,7 +41,7 @@ export const FloatingBackpack: React.FC<FloatingBackpackProps> = ({
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50"
       >
         <div className="flex items-center gap-4 bg-white/95 backdrop-blur-lg rounded-full px-6 py-3 shadow-2xl border-4 border-purple-300">
           {/* Backpack Button - Opens Inventory */}

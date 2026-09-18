@@ -23,7 +23,7 @@ export const GiantGoButton: React.FC<GiantGoButtonProps> = ({
         damping: 15,
         delay: 0.5 
       }}
-      className="fixed bottom-28 right-6 md:bottom-32 md:right-10 z-40"
+      className="absolute bottom-28 right-6 md:bottom-32 md:right-10 z-40"
     >
       {/* Outer glow ring */}
       <motion.div
