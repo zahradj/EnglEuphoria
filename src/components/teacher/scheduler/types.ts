@@ -12,6 +12,14 @@ export interface AvailabilitySlot {
   startTime?: string;
   hub?: 'playground' | 'academy' | 'success' | null;
   recurringPattern?: Record<string, unknown> | null;
+  /** Set when this time slot had a booking that was cancelled — kept even
+   *  after the underlying teacher_availability row was recycled back to
+   *  'open', so the grid can still show a tick for it. Independent of
+   *  `status`: a cancelled slot is usually 'open' again (or 'past'), not a
+   *  status of its own. */
+  cancelledBy?: 'teacher' | 'student';
+  cancelledAt?: string;
+  cancelledStudentName?: string;
 }
 
 export interface SchedulerState {

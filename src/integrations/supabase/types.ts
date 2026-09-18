@@ -2129,6 +2129,7 @@ export type Database = {
           booking_type: string
           cancellation_reason: string | null
           cancelled_at: string | null
+          cancelled_by: string | null
           classroom_id: string
           created_at: string
           currency: string
@@ -2155,6 +2156,7 @@ export type Database = {
           booking_type?: string
           cancellation_reason?: string | null
           cancelled_at?: string | null
+          cancelled_by?: string | null
           classroom_id?: string
           created_at?: string
           currency?: string
@@ -2181,6 +2183,7 @@ export type Database = {
           booking_type?: string
           cancellation_reason?: string | null
           cancelled_at?: string | null
+          cancelled_by?: string | null
           classroom_id?: string
           created_at?: string
           currency?: string

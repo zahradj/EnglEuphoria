@@ -69,6 +69,16 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
       return 'bg-primary text-primary-foreground cursor-pointer shadow-md ring-2 ring-primary/40 transition-all';
     }
 
+    // Reopened after a cancellation — still bookable by someone else, but
+    // tinted so the teacher can see at a glance whose call it was to cancel
+    // rather than it just blending back into a plain "available" slot.
+    if (slot.cancelledBy === 'teacher') {
+      return 'bg-slate-400/80 hover:bg-slate-500/80 text-white shadow-md ring-1 ring-slate-400/50 cursor-pointer transition-all';
+    }
+    if (slot.cancelledBy === 'student') {
+      return 'bg-amber-500/85 hover:bg-amber-600/85 text-white shadow-md ring-1 ring-amber-400/50 cursor-pointer transition-all';
+    }
+
     return 'bg-gradient-to-br from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white cursor-pointer shadow-md ring-1 ring-emerald-400/40 transition-all';
   };
 
@@ -76,7 +86,12 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
     const slot = getSlotAt(day, time);
     const isPast = isSlotInPast(day, time);
 
-    if (isPast) return null;
+    // A past slot that was never booked has nothing worth showing — but a
+    // past slot that WAS booked (or was booked and later cancelled) should
+    // still show who/what it was for. It used to render nothing at all
+    // once its time passed, which read as the booking having vanished.
+    if (isPast && !slot) return null;
+    if (isPast && slot?.status !== 'booked' && !slot?.cancelledBy) return null;
 
     if (!slot) {
       return (
@@ -119,6 +134,25 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
           {slot.lessonTitle && (
             <span className="hidden sm:block text-[9px] opacity-80 truncate w-full text-left leading-tight">
               {slot.lessonTitle}
+            </span>
+          )}
+        </div>
+      );
+    }
+
+    // Not currently booked, but this time carries a cancellation — the slot
+    // itself was reopened (or is now in the past), so there's no live
+    // booking to show; show who cancelled instead of a blank/"Open" cell.
+    if (slot.cancelledBy) {
+      const label = slot.cancelledBy === 'teacher' ? 'Cancelled by you' : 'Cancelled by student';
+      return (
+        <div className="flex flex-col items-stretch justify-center gap-[1px] px-1 py-0.5 w-full h-full leading-tight overflow-hidden" title={slot.cancelledStudentName ? `${label} · ${slot.cancelledStudentName}` : label}>
+          <span className="text-[9px] font-bold uppercase tracking-wide truncate w-full text-left opacity-90">
+            {label}
+          </span>
+          {slot.cancelledStudentName && (
+            <span className="text-[9px] truncate w-full text-left opacity-75">
+              {slot.cancelledStudentName}
             </span>
           )}
         </div>

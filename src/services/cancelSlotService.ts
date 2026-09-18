@@ -145,6 +145,7 @@ export async function cancelBookedSeries({
         {
           status: "cancelled",
           cancelled_at: new Date().toISOString(),
+          cancelled_by: "teacher",
           cancellation_reason: reason ?? "Series cancelled by teacher",
         },
         { count: "exact" },

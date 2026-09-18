@@ -26,6 +26,7 @@ interface BookedSlotInfo {
   slotId: string;
   studentName?: string;
   studentShortId?: string;
+  lessonTitle?: string;
   hub?: "playground" | "academy" | "success" | null;
   startTime: Date;
   duration: number;
@@ -163,6 +164,9 @@ export const BookedSlotManager: React.FC<BookedSlotManagerProps> = ({
             })}
             <span>· {slot.duration} min</span>
           </div>
+          {slot.lessonTitle && (
+            <p className="text-sm font-medium text-foreground/90 truncate">{slot.lessonTitle}</p>
+          )}
           {slot.isRecurring && (
             <div className="flex items-center gap-1.5 text-xs text-primary font-medium">
               <Repeat2 className="h-3.5 w-3.5" />

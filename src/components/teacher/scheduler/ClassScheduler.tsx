@@ -288,6 +288,12 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
           <span className="inline-block h-3 w-3 rounded bg-violet-600" /> Booked (locked)
         </span>
         <span className="inline-flex items-center gap-1.5">
+          <span className="inline-block h-3 w-3 rounded bg-slate-400" /> Cancelled by you
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="inline-block h-3 w-3 rounded bg-amber-500" /> Cancelled by student
+        </span>
+        <span className="inline-flex items-center gap-1.5">
           <span className="inline-block h-3 w-3 rounded bg-muted" /> Empty
         </span>
       </div>
@@ -316,6 +322,7 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
           slotId: bookedSlot.id,
           studentName: bookedSlot.studentName,
           studentShortId: bookedSlot.studentShortId,
+          lessonTitle: bookedSlot.lessonTitle,
           hub: bookedSlot.hub ?? null,
           startTime: bookedSlot.startTime ? new Date(bookedSlot.startTime) : new Date(),
           duration: bookedSlot.duration,

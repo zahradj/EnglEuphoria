@@ -32,6 +32,14 @@ interface StudentInfo {
   email?: string;
 }
 
+interface CancelledBookingRow {
+  scheduled_at: string;
+  cancelled_at: string | null;
+  duration: number | null;
+  cancelled_by: string | null;
+  student_id: string | null;
+}
+
 interface LessonInfo {
   studentId?: string;
   title?: string;
@@ -129,6 +137,21 @@ export const useAvailabilityManager = (
 
       const rows = (data ?? []) as DbSlotRow[];
 
+      // Cancelled bookings in this week — teacher_availability's own row for
+      // that time gets wiped back to a plain 'open' slot the moment a
+      // booking is cancelled (see teacher_cancel_slot / student_cancel_lesson),
+      // so this is the only place that still remembers a lesson was ever
+      // there. Queried separately and merged onto the matching slot below,
+      // purely as a display overlay — never treated as a live slot state.
+      const { data: cancelledRows } = await supabase
+        .from('class_bookings')
+        .select('scheduled_at, cancelled_at, duration, cancelled_by, student_id')
+        .eq('teacher_id', teacherId)
+        .eq('status', 'cancelled')
+        .gte('scheduled_at', weekStart.toISOString())
+        .lte('scheduled_at', weekEnd.toISOString());
+      const cancelled = (cancelledRows ?? []) as CancelledBookingRow[];
+
       const lessonIds = Array.from(
         new Set(rows.map((r) => r.lesson_id).filter(Boolean) as string[])
       );
@@ -147,12 +170,13 @@ export const useAvailabilityManager = (
         }
       }
 
-      // Lookup student names for booked rows
+      // Lookup student names for booked rows AND cancelled bookings, in one batch.
       const studentIds = Array.from(
         new Set(
-          rows
-            .map((r) => r.student_id || (r.lesson_id ? lessonInfo[r.lesson_id]?.studentId : undefined))
-            .filter(Boolean) as string[]
+          [
+            ...rows.map((r) => r.student_id || (r.lesson_id ? lessonInfo[r.lesson_id]?.studentId : undefined)),
+            ...cancelled.map((c) => c.student_id),
+          ].filter(Boolean) as string[]
         )
       );
 
@@ -205,6 +229,25 @@ export const useAvailabilityManager = (
           recurringPattern: r.recurring_pattern ?? null,
         };
       });
+
+      // Overlay cancellation info onto whatever's at that day/time now —
+      // typically the same slot, reopened. Attach-only: never fabricates a
+      // slot that isn't otherwise in `mapped`, since there'd be nothing
+      // valid to click into if the underlying row was since deleted.
+      const byKey = new Map(mapped.map((s) => [`${s.day}::${s.time}`, s]));
+      for (const c of cancelled) {
+        if (c.cancelled_by !== 'teacher' && c.cancelled_by !== 'student') continue;
+        const start = new Date(c.scheduled_at);
+        const dayName = DAY_INDEX_TO_NAME[start.getDay()] ?? DAYS[0];
+        const time = `${String(start.getHours()).padStart(2, '0')}:${String(
+          start.getMinutes()
+        ).padStart(2, '0')}`;
+        const target = byKey.get(`${dayName}::${time}`);
+        if (!target) continue;
+        target.cancelledBy = c.cancelled_by;
+        target.cancelledAt = c.cancelled_at ?? c.scheduled_at;
+        target.cancelledStudentName = c.student_id ? newInfo[c.student_id]?.name : undefined;
+      }
 
       if (!signal?.aborted) {
         setSlots(mapped);
