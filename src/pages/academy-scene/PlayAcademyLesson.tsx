@@ -294,7 +294,17 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
     slide?.type === 'story_page' ||
     slide?.type === 'canvas_game' ||
     slide?.type === 'living_canvas' ||
-    slide?.type === 'intro';
+    slide?.type === 'vocab' ||
+    slide?.type === 'reading_passage' ||
+    slide?.type === 'cluster' ||
+    slide?.type === 'grammar_pattern' ||
+    slide?.type === 'intro' ||
+    // Global rule: any slide carrying its own image_url gets the full
+    // absolute-inset-0 area instead of the small bounded speech-bubble card,
+    // regardless of type -- SlideRenderer's generic FullBleedSplitPanel wrap
+    // (AcademyDemo.tsx) handles painting it for every type not already
+    // listed above, so this list never needs a new type added by hand again.
+    !!(slide as any)?.image_url;
 
   const persistCompletion = async () => {
     if (!user?.id || !lesson?.id) return;

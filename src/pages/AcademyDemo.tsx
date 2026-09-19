@@ -84,14 +84,32 @@ export type Slide =
   | { type: 'question'; block: Block; prompt: string; placeholder?: string }
   | { type: 'poll'; block: Block; prompt: string; options: { label: string; pct: number }[] }
   | { type: 'opinion'; block: Block; prompt: string }
-  | { type: 'vocab'; block: Block; word: string; definition: string; example?: string }
-  | { type: 'matching'; block: Block; prompt: string; pairs: { left: string; right: string }[]; objective?: { title: string; skill: string; how: string }; source?: string }
-  | { type: 'reading_passage'; block: Block; title: string; passage: string }
+  | {
+      type: 'vocab';
+      block: Block;
+      word: string;
+      definition: string;
+      example?: string;
+      // 'pattern' (function/grammar words -- name, from, meet, old, too --
+      // that have no concrete picture and only make sense inside a
+      // sentence, e.g. "My name is Zoe.") gets a sentence-first template
+      // with no image tile. Omitted / 'concrete' keeps the original
+      // image-hero template for picturable nouns/verbs (scroll, backpack).
+      usage?: 'pattern' | 'concrete';
+      // pattern usage only: a full-bleed background (typically the scene
+      // this sentence is drawn from, e.g. the lesson's own dialogue art)
+      // with the text panel anchored to whichever side keeps it clear of
+      // the scene's subject. No image_url falls back to a themed gradient.
+      image_url?: string;
+      panel_side?: 'left' | 'right';
+    }
+  | { type: 'matching'; block: Block; prompt: string; pairs: { left: string; right: string }[]; objective?: { title: string; skill: string; how: string }; source?: string; image_url?: string }
+  | { type: 'reading_passage'; block: Block; title: string; passage: string; image_url?: string }
   | { type: 'listening'; block: Block; prompt: string; transcript: string }
-  | { type: 'truefalse'; block: Block; statement?: string; answer?: boolean; items?: { statement: string; answer: boolean }[] }
-  | { type: 'multiple'; block: Block; question?: string; options?: string[]; answer?: string; items?: { question: string; options: string[]; answer: string }[] }
-  | { type: 'grammar_pattern'; block: Block; title: string; rows: { a: string; b: string }[]; rule?: string }
-  | { type: 'grammar_color_decode'; block: Block; title: string; chunks: { role: string; text: string }[]; variants?: { chunks: { role: string; text: string }[] }[]; legend?: string[]; rule?: string }
+  | { type: 'truefalse'; block: Block; statement?: string; answer?: boolean; items?: { statement: string; answer: boolean }[]; image_url?: string }
+  | { type: 'multiple'; block: Block; question?: string; options?: string[]; answer?: string; items?: { question: string; options: string[]; answer: string }[]; image_url?: string }
+  | { type: 'grammar_pattern'; block: Block; title: string; rows: { a: string; b: string }[]; rule?: string; image_url?: string }
+  | { type: 'grammar_color_decode'; block: Block; title: string; chunks: { role: string; text: string }[]; variants?: { chunks: { role: string; text: string }[] }[]; legend?: string[]; rule?: string; image_url?: string }
   | { type: 'frequency_thermometer'; block: Block; title: string; items: { adverb: string; pct: number; example?: string }[]; shape?: 'thermometer' | 'triangle' | 'pyramid'; rule?: string }
   | { type: 'grammar_formula'; block: Block; title: string; terms: { label: string; role: string; note?: string }[]; example: { text: string; role: string }[]; rule?: string }
   | { type: 'error_detection'; block: Block; prompt: string; sentence?: string; wrongIndex?: number; items?: { sentence: string; wrongIndex: number }[] }
@@ -256,9 +274,9 @@ export type Slide =
       passage: string;
       highlight_words: { word: string; color: string; emoji: string }[];
     }
-  | { type: 'speaking_task'; block: Block; prompt: string; starters?: string[] }
+  | { type: 'speaking_task'; block: Block; prompt: string; starters?: string[]; image_url?: string }
   | { type: 'reflection'; block: Block; prompt: string }
-  | { type: 'cluster'; block: Block; title: string; content?: string; activities: ClusterActivity[] }
+  | { type: 'cluster'; block: Block; title: string; content?: string; activities: ClusterActivity[]; image_url?: string }
   | (CanvasGameSlide & { block: Block })
   | (LivingCanvasSlide & { block: Block })
   | (ScaffoldedMediaSlide & { block: Block })
@@ -505,31 +523,99 @@ function OpinionSlide({ slide, t }: { slide: Extract<Slide, { type: 'opinion' }>
   );
 }
 
-function VocabSlide({ slide, t }: { slide: Extract<Slide, { type: 'vocab' }>; t: ThemeTokens }) {
+function VocabSlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 'vocab' }>; t: ThemeTokens; fullBleed?: boolean }) {
+  if (slide.usage === 'pattern') return <PatternVocabSlide slide={slide} fullBleed={fullBleed} />;
   const imageUrl = (slide as any).image_url as string | undefined;
+  // Full-bleed hero, same design language as PatternVocabSlide: the word's
+  // own picture fills the whole scene with a bottom scrim, text floats on
+  // top. Previously a separate boxed/framed card layout (image left, text
+  // right) — that framing is what made vocab slides look like a form field
+  // instead of a scene, and it's gone now so every vocab slide reads as one
+  // continuous picture the word lives in, matching scene_dialogue/intro.
   return (
-    <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center p-2 md:p-6">
-      <div className="w-full h-[40vh] md:h-[60vh] relative rounded-xl overflow-hidden bg-indigo-50/40 border border-indigo-100 flex items-center justify-center">
+    <div className={fullBleed ? 'relative h-full w-full overflow-hidden' : 'relative w-full min-h-[480px] overflow-hidden rounded-2xl'}>
+      <div className="absolute inset-0">
         {imageUrl ? (
-          <img src={imageUrl} alt={slide.word} className="object-cover w-full h-full" />
+          <img src={imageUrl} alt={slide.word} className="absolute inset-0 h-full w-full object-cover" />
         ) : (
-          <div className="text-indigo-300 text-6xl">🖼️</div>
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-700" />
         )}
       </div>
-      <div className="space-y-5 w-full">
-        <div className={`text-xs uppercase tracking-widest ${t.muted}`}>Vocabulary</div>
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(0deg, rgba(15,10,40,0.88) 0%, rgba(15,10,40,0.55) 42%, rgba(15,10,40,0.05) 72%)',
+        }}
+      />
+      <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-6 md:p-10">
+        <span className="text-xs font-bold uppercase tracking-widest text-white/70">Vocabulary</span>
         <div className="flex items-center gap-4 flex-wrap">
-          <h2 className={`text-4xl md:text-5xl font-semibold ${t.text}`}>{slide.word}</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">{slide.word}</h2>
           <ListenButton text={slide.word} label="Listen" />
         </div>
-        <p className={`text-xl ${t.text}`}>
-          <RichText text={slide.definition} highlightClassName="bg-indigo-100 text-indigo-700 font-bold px-1.5 py-0.5 rounded-md shadow-sm" />
+        <p className="max-w-2xl text-lg md:text-xl text-white/95 drop-shadow-[0_1px_6px_rgba(0,0,0,0.45)]">
+          <RichText text={slide.definition} highlightClassName="bg-white text-indigo-700 font-bold px-1.5 py-0.5 rounded-md shadow-sm" />
         </p>
         {slide.example && (
-          <p className={`text-base italic border-l-2 border-indigo-500 pl-4 ${t.muted}`}>
-            “<RichText text={slide.example} highlightClassName="bg-indigo-100 text-indigo-700 font-bold px-1.5 py-0.5 rounded-md not-italic shadow-sm" />”
+          <p className="max-w-2xl text-base italic text-white/85 border-l-2 border-white/60 pl-4">
+            “<RichText text={slide.example} highlightClassName="bg-white text-indigo-700 font-bold px-1.5 py-0.5 rounded-md not-italic shadow-sm" />”
           </p>
         )}
+      </div>
+    </div>
+  );
+}
+
+// "Pattern" vocabulary -- function/grammar words (name, from, meet, old,
+// too...) that have no concrete picture and only exist as a piece of a
+// sentence pattern. The image-hero template above (built for a picturable
+// noun/verb like "backpack" or "scroll") just shows an empty placeholder
+// icon for these and buries the one thing that actually teaches the word --
+// the sentence it lives in -- in a small italic caption at the bottom. This
+// template inverts that: the sentence is the hero, the target word is a
+// highlighted chip inside it, and the bare word is a small secondary label.
+function PatternVocabSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 'vocab' }>; fullBleed?: boolean }) {
+  const sentence = slide.example || slide.word;
+  const side = slide.panel_side === 'right' ? 'right' : 'left';
+  const onLeft = side === 'left';
+  return (
+    <div className={fullBleed ? 'relative h-full w-full overflow-hidden' : 'relative w-full min-h-[480px] overflow-hidden rounded-2xl'}>
+      {/* Full-bleed backdrop: the scene this sentence is drawn from, or a
+          themed gradient (same fallback shape as FrontPageSlide) when no
+          image is set yet. */}
+      <div className="absolute inset-0">
+        {slide.image_url ? (
+          <img src={slide.image_url} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-700" />
+        )}
+      </div>
+      {/* Scrim, stronger on the panel side for text legibility, fading out
+          toward the other side so the scene stays visible. */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: onLeft
+            ? 'linear-gradient(90deg, rgba(15,10,40,0.82) 0%, rgba(15,10,40,0.55) 45%, rgba(15,10,40,0.05) 75%)'
+            : 'linear-gradient(270deg, rgba(15,10,40,0.82) 0%, rgba(15,10,40,0.55) 45%, rgba(15,10,40,0.05) 75%)',
+        }}
+      />
+      <div
+        className={`absolute inset-y-0 ${onLeft ? 'left-0 text-left' : 'right-0 text-right'} flex w-full flex-col justify-center gap-5 p-6 md:w-[58%] md:p-12`}
+      >
+        <span className="text-xs font-bold uppercase tracking-widest text-white/70">Vocabulary in a sentence</span>
+        <p className="max-w-xl text-2xl font-bold leading-snug text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] md:text-4xl">
+          <RichText text={sentence} highlightClassName="bg-white text-indigo-700 px-2 py-0.5 rounded-lg shadow-sm" />
+        </p>
+        <div className={onLeft ? '' : 'flex justify-end'}>
+          <ListenButton text={stripMd(sentence)} label="Listen to the sentence" variant="block" />
+        </div>
+        <div className={`max-w-xs rounded-2xl bg-white/95 px-4 py-3 shadow-xl backdrop-blur ${onLeft ? '' : 'self-end'}`}>
+          <div className="text-base font-bold text-indigo-700">{slide.word}</div>
+          <div className="text-sm text-slate-600">
+            <RichText text={slide.definition} />
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -673,7 +759,50 @@ function MatchingSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: '
   );
 }
 
-function ReadingSlide({ slide, t }: { slide: Extract<Slide, { type: 'reading_passage' }>; t: ThemeTokens }) {
+// Shared full-bleed layout: an edge-to-edge scene panel filling the left
+// half (no rounded card, no border, blended into the panel rather than a
+// hard seam), a scrollable white content panel filling the right half.
+// Stacks top/bottom on narrow viewports. This is the ONE full-bleed shape
+// every slide type in this file should use -- either directly (types with
+// bespoke needs like PatternVocabSlide's single-sentence overlay) or via
+// the generic wrap in SlideRenderer below, which applies this automatically
+// to any slide carrying an `image_url` that doesn't already handle it
+// itself. Don't hand-roll this image+gradient+panel shell again elsewhere.
+function FullBleedSplitPanel({ imageUrl, children }: { imageUrl: string; children: React.ReactNode }) {
+  return (
+    <div className="flex h-full w-full flex-col overflow-hidden md:flex-row">
+      <div className="relative min-h-0 flex-1 md:h-full">
+        <img src={imageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 md:hidden" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0) 55%, rgba(255,255,255,1) 100%)' }} />
+        <div className="absolute inset-0 hidden md:block" style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0) 55%, rgba(255,255,255,1) 100%)' }} />
+      </div>
+      <div className="min-h-0 flex-1 overflow-y-auto bg-white px-6 py-5 md:h-full md:px-8 md:py-7">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function ReadingSlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 'reading_passage' }>; t: ThemeTokens; fullBleed?: boolean }) {
+  // Full-bleed split-page layout: an edge-to-edge scene panel filling the
+  // left half (no rounded card, no border), the passage in a scrollable
+  // panel filling the right half -- a vertical (left/right) split rather
+  // than stacking image-over-text, so both get equal full-height real
+  // estate. Stacks top/bottom on narrow viewports where a 50/50 side split
+  // would leave neither side readable. Falls back to the original
+  // plain-text layout when no image is set yet.
+  if (fullBleed && slide.image_url) {
+    return (
+      <FullBleedSplitPanel imageUrl={slide.image_url}>
+        <div className="mb-2 text-xs font-bold uppercase tracking-widest text-indigo-400">Reading</div>
+        <h2 className="mb-3 text-xl font-bold text-slate-800 md:text-2xl">{slide.title}</h2>
+        <ListenButton text={slide.passage} label="Listen to the passage" variant="block" />
+        <p className="mt-4 text-base leading-relaxed text-slate-700 md:text-lg">
+          <RichText text={slide.passage} highlightClassName="bg-indigo-100 text-indigo-700 font-bold px-1.5 py-0.5 rounded-md shadow-sm" />
+        </p>
+      </FullBleedSplitPanel>
+    );
+  }
   return (
     <div className="space-y-5 max-w-2xl w-full">
       <div className={`text-xs uppercase tracking-widest ${t.muted}`}>Reading</div>
@@ -802,30 +931,47 @@ function MultipleSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: '
   );
 }
 
-function GrammarPatternSlide({ slide, t }: { slide: Extract<Slide, { type: 'grammar_pattern' }>; t: ThemeTokens }) {
+function GrammarPatternSlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 'grammar_pattern' }>; t: ThemeTokens; fullBleed?: boolean }) {
+  const rowGrid = (rowCardCls: string) => (
+    <div className="grid grid-cols-2 gap-3">
+      {slide.rows.map((r, i) => (
+        <React.Fragment key={i}>
+          <div className={`px-4 py-3 rounded-md border ${rowCardCls}`}>
+            <div className="text-base text-slate-800"><GrammarMarkup text={r.a} /></div>
+          </div>
+          <div className="px-4 py-3 rounded-md border border-indigo-500/40 bg-indigo-500/5">
+            <div className="text-base font-semibold text-indigo-700"><GrammarMarkup text={r.b} /></div>
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+  // Same full-bleed left-image / right-content split as ReadingSlide and
+  // ClusterSlide, for the same reason: an edge-to-edge scene instead of a
+  // small bounded card, blended (not a hard seam) into the text panel.
+  if (fullBleed && slide.image_url) {
+    return (
+      <FullBleedSplitPanel imageUrl={slide.image_url}>
+        <div className="mb-2 text-xs font-bold uppercase tracking-widest text-indigo-400">Grammar</div>
+        <h2 className="mb-4 text-xl font-bold text-slate-800 md:text-2xl">
+          <GrammarMarkup text={slide.title} />
+        </h2>
+        {rowGrid('border-slate-200 bg-slate-50')}
+        {slide.rule && (
+          <p className="mt-4 text-sm text-slate-500">
+            <GrammarMarkup text={slide.rule} />
+          </p>
+        )}
+      </FullBleedSplitPanel>
+    );
+  }
   return (
     <div className="space-y-6 max-w-3xl w-full">
       <div className={`text-xs uppercase tracking-widest ${t.muted}`}>Grammar</div>
       <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>
         <GrammarMarkup text={slide.title} />
       </h2>
-      <div className="grid grid-cols-2 gap-3">
-        {slide.rows.map((r, i) => (
-          <React.Fragment key={i}>
-            <div className={`px-4 py-3 rounded-md border ${t.card}`}>
-              <div className={`text-base ${t.text}`}><GrammarMarkup text={r.a} /></div>
-            </div>
-            {/* Was text-indigo-200 -- a near-white shade meant for a dark
-                card, unreadable on the white speech-bubble this slide
-                actually renders inside (confirmed live: invisible text).
-                indigo-700 keeps the same accent hue with real contrast on
-                a light card. */}
-            <div className="px-4 py-3 rounded-md border border-indigo-500/40 bg-indigo-500/5">
-              <div className="text-base font-semibold text-indigo-700"><GrammarMarkup text={r.b} /></div>
-            </div>
-          </React.Fragment>
-        ))}
-      </div>
+      {rowGrid(t.card)}
       {slide.rule && (
         <p className={`text-sm ${t.muted}`}>
           <GrammarMarkup text={slide.rule} />
@@ -2972,7 +3118,38 @@ function ClusterBuild({ a, t }: { a: Extract<ClusterActivity, { type: 'build' }>
   );
 }
 
-function ClusterSlide({ slide, t }: { slide: Extract<Slide, { type: 'cluster' }>; t: ThemeTokens }) {
+function ClusterSlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 'cluster' }>; t: ThemeTokens; fullBleed?: boolean }) {
+  const renderActivities = (theme: ThemeTokens) => (
+    <div className="grid gap-3">
+      {slide.activities.map((a, i) => {
+        switch (a.type) {
+          case 'mcq': return <ClusterMCQ key={i} a={a} t={theme} />;
+          case 'fill': return <ClusterFill key={i} a={a} t={theme} />;
+          case 'tf': return <ClusterTF key={i} a={a} t={theme} />;
+          case 'build': return <ClusterBuild key={i} a={a} t={theme} />;
+        }
+      })}
+    </div>
+  );
+  // Same full-bleed split shape as ReadingSlide: an edge-to-edge scene
+  // panel filling the left half (the passage/story these questions are
+  // about), the questions in a scrollable panel filling the right half --
+  // instead of a small bounded card floating on its own. Stacks top/bottom
+  // on narrow viewports. The panel is always white, so the activity cards
+  // are always styled with the light theme regardless of the page's own
+  // dark/light toggle -- same reasoning as the bounded "speech bubble"
+  // branch elsewhere, which forces themeMap.light too.
+  if (fullBleed && slide.image_url) {
+    return (
+      <FullBleedSplitPanel imageUrl={slide.image_url}>
+        <div className="mb-2 text-xs font-bold uppercase tracking-widest text-indigo-400">{slide.block}</div>
+        <h2 className="mb-3 text-xl font-bold text-slate-800 md:text-2xl">{slide.title}</h2>
+        {slide.content && <p className="mb-4 text-sm text-slate-500">{slide.content}</p>}
+        {renderActivities(themeMap.light)}
+      </FullBleedSplitPanel>
+    );
+  }
+  const activityList = renderActivities(t);
   return (
     <div className="space-y-5 w-full max-w-3xl">
       <div className="space-y-2">
@@ -2980,16 +3157,7 @@ function ClusterSlide({ slide, t }: { slide: Extract<Slide, { type: 'cluster' }>
         <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.title}</h2>
         {slide.content && <p className={`text-base ${t.muted}`}>{slide.content}</p>}
       </div>
-      <div className="grid gap-3">
-        {slide.activities.map((a, i) => {
-          switch (a.type) {
-            case 'mcq': return <ClusterMCQ key={i} a={a} t={t} />;
-            case 'fill': return <ClusterFill key={i} a={a} t={t} />;
-            case 'tf': return <ClusterTF key={i} a={a} t={t} />;
-            case 'build': return <ClusterBuild key={i} a={a} t={t} />;
-          }
-        })}
-      </div>
+      {activityList}
     </div>
   );
 }
@@ -3211,13 +3379,13 @@ function renderSlideInner({ slide, t, fullBleed, onAnswer }: { slide: Slide; t: 
     case 'question': return <QuestionSlide slide={slide} t={t} />;
     case 'poll': return <PollSlide slide={slide} t={t} />;
     case 'opinion': return <OpinionSlide slide={slide} t={t} />;
-    case 'vocab': return <VocabSlide slide={slide} t={t} />;
+    case 'vocab': return <VocabSlide slide={slide} t={t} fullBleed={fullBleed} />;
     case 'matching': return <MatchingSlide slide={slide} t={t} onAnswer={onAnswer} />;
-    case 'reading_passage': return <ReadingSlide slide={slide} t={t} />;
+    case 'reading_passage': return <ReadingSlide slide={slide} t={t} fullBleed={fullBleed} />;
     case 'listening': return <ListeningSlide slide={slide} t={t} />;
     case 'truefalse': return <TrueFalseSlide slide={slide} t={t} onAnswer={onAnswer} />;
     case 'multiple': return <MultipleSlide slide={slide} t={t} onAnswer={onAnswer} />;
-    case 'grammar_pattern': return <GrammarPatternSlide slide={slide} t={t} />;
+    case 'grammar_pattern': return <GrammarPatternSlide slide={slide} t={t} fullBleed={fullBleed} />;
     case 'grammar_color_decode': return <GrammarColorDecodeSlide slide={slide} t={t} />;
     case 'frequency_thermometer': return <FrequencyThermometerSlide slide={slide} t={t} />;
     case 'grammar_formula': return <GrammarFormulaSlide slide={slide} t={t} />;
@@ -3240,7 +3408,7 @@ function renderSlideInner({ slide, t, fullBleed, onAnswer }: { slide: Slide; t: 
     case 'story_page': return <StoryPageSlide slide={slide} fullBleed={fullBleed} />;
     case 'speaking_task': return <SpeakingTaskSlide slide={slide} t={t} />;
     case 'reflection': return <ReflectionSlide slide={slide} t={t} />;
-    case 'cluster': return <ClusterSlide slide={slide} t={t} />;
+    case 'cluster': return <ClusterSlide slide={slide} t={t} fullBleed={fullBleed} />;
     case 'canvas_game':
     case 'living_canvas':
       return <LivingCanvas slide={slide as any} hub="academy" fullBleed={fullBleed} />;
@@ -3287,15 +3455,54 @@ function LanguageEngineSlide({ slide, t }: { slide: any; t: ThemeTokens }) {
 export interface AnswerEvent { itemIndex: number; isCorrect: boolean; skillTag?: string }
 export type OnAnswer = (e: AnswerEvent) => void;
 
+// Slide types that already paint a full-bleed image themselves -- either
+// via their own FullBleedSplitPanel branch (reading_passage, cluster,
+// grammar_pattern), their own bespoke full-bleed layout (vocab's
+// PatternVocabSlide overlay, intro's cover card), or PlayAcademyLesson's
+// page-level background system (scene_dialogue, canvas_game, role_play,
+// and the rest of the "renders a complete self-contained visual" family).
+// SlideRenderer must NOT generically wrap any of these a second time.
+const BESPOKE_FULLBLEED_TYPES = new Set([
+  'intro', 'vocab', 'reading_passage', 'cluster', 'grammar_pattern',
+  'scene_dialogue', 'conversation_fill', 'role_play', 'canvas_game', 'living_canvas',
+  'number_chart', 'number_quiz_game', 'letter_sound_game', 'word_blend',
+  'picture_match_game', 'say_it_game', 'sound_challenge_game', 'find_in_scene_game',
+  'story_page', 'scaffolded_media', 'vocab_solo', 'vocab_deck', 'vocab_image_match',
+  'story_engine_slot', 'escape_room_slot', 'detective_mystery_slot', 'hidden_object_slot',
+]);
+
 export function SlideRenderer({ slide, t, fullBleed, onAnswer }: { slide: Slide; t: ThemeTokens; fullBleed?: boolean; onAnswer?: OnAnswer }) {
+  // Global rule: ANY slide type carrying an `image_url` gets the same
+  // full-bleed split-panel treatment automatically, with no per-type
+  // component work required -- this is the generic fallback for every
+  // "simple bounded card" type (multiple, matching, truefalse, speaking_task,
+  // grammar_color_decode, debate_scale, question, error_detection, ...).
+  // Bespoke types (see BESPOKE_FULLBLEED_TYPES) already handle their own
+  // image and are excluded here to avoid double-wrapping.
+  const imageUrl = (slide as any).image_url as string | undefined;
+  const genericFullBleed = fullBleed && !!imageUrl && !BESPOKE_FULLBLEED_TYPES.has(slide.type as string);
+
   // Slides that render their own image inline (cover, vocab 50/50, etc.)
   // must NOT also get the floating SlideMediaHeader image — it produces a
-  // duplicate "small image at top" + "image inside card" bug.
-  const skipHeader = ['intro', 'vocab', 'canvas_game', 'living_canvas', 'scaffolded_media', 'vocab_solo', 'vocab_deck', 'vocab_image_match', 'story_engine_slot', 'escape_room_slot', 'detective_mystery_slot', 'hidden_object_slot'].includes(slide.type as string);
+  // duplicate "small image at top" + "image inside card" bug. Same reason
+  // applies to any slide taking the generic full-bleed path below.
+  const skipHeader = genericFullBleed || BESPOKE_FULLBLEED_TYPES.has(slide.type as string);
+
+  const inner = renderSlideInner({ slide, t: genericFullBleed ? themeMap.light : t, fullBleed, onAnswer });
+
+  if (genericFullBleed) {
+    return (
+      <FullBleedSplitPanel imageUrl={imageUrl!}>
+        <div className="mb-2 text-xs font-bold uppercase tracking-widest text-indigo-400">{(slide as any).block}</div>
+        {inner}
+      </FullBleedSplitPanel>
+    );
+  }
+
   return (
     <>
       {!skipHeader && <SlideMediaHeader slide={slide} />}
-      {renderSlideInner({ slide, t, fullBleed, onAnswer })}
+      {inner}
     </>
   );
 }
