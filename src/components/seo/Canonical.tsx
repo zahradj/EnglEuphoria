@@ -18,6 +18,15 @@ import { useLocation } from 'react-router-dom';
  *
  * Routes that are private (auth, dashboards, classroom, etc.) are marked
  * noindex so Google does not try to crawl/index them at all.
+ *
+ * /login and /student-signup are deliberately NOT in this list (removed
+ * 2026-09-19): they were blocking Google from ever surfacing Sign In/Sign
+ * Up as sitelinks under the homepage result, no matter how much internal
+ * linking pointed at them — noindex is an absolute block a crawler can't
+ * see past. Both pages are plain, unauthenticated forms (no user-specific
+ * or sensitive content is ever rendered pre-login), so indexing them is
+ * safe. /signup stays noindexed — it's a pure client-side redirect to
+ * /student-signup with no content of its own to index.
  */
 const CANONICAL_ORIGIN = 'https://www.engleuphoria.com';
 
@@ -33,10 +42,8 @@ const NOINDEX_PREFIXES = [
   '/hub',
   '/classroom',
   '/auth',
-  '/login',
   '/sign-up',
   '/signup',
-  '/student-signup',
   '/email-verification',
   '/auth/callback',
   '/profile',
