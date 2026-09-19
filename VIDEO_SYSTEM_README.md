@@ -42,7 +42,13 @@ The video system consists of several key components:
 ### Basic Setup
 
 ```typescript
-import { realTimeVideoService } from '@/services/video/realTimeVideoService';
+import { RealTimeVideoService } from '@/services/video/realTimeVideoService';
+
+// Create one instance per classroom session — never share a single
+// instance across two concurrently-rendered classrooms (e.g. via a
+// module-level singleton), since roomId/participants/localStream are
+// all instance state.
+const videoService = new RealTimeVideoService();
 
 // 1. Get local media stream
 const stream = await navigator.mediaDevices.getUserMedia({
@@ -53,43 +59,47 @@ const stream = await navigator.mediaDevices.getUserMedia({
 // 2. Configure room
 const roomId = 'my-room-id';
 const userId = 'user-123';
-realTimeVideoService.setRoomConfig(roomId, userId, stream);
+videoService.setRoomConfig(roomId, userId, stream);
 
 // 3. Join room
-await realTimeVideoService.joinRoom();
+await videoService.joinRoom();
 
 // 4. Listen for participants
-realTimeVideoService.onParticipantsChange((participants) => {
+videoService.onParticipantsChange((participants) => {
   console.log('Participants:', participants);
   // Update UI with participant streams
 });
+
+// 5. When the classroom session ends, dispose it (leaves the room and
+// tears down the quality monitor / reconnection manager)
+videoService.dispose();
 ```
 
 ### Media Controls
 
 ```typescript
 // Toggle microphone
-await realTimeVideoService.toggleMicrophone();
+await videoService.toggleMicrophone();
 
 // Toggle camera
-await realTimeVideoService.toggleCamera();
+await videoService.toggleCamera();
 
 // Leave room
-await realTimeVideoService.leaveRoom();
+await videoService.leaveRoom();
 ```
 
 ### Connection Quality Monitoring
 
 ```typescript
 // Start monitoring
-realTimeVideoService.startQualityMonitoring((metrics) => {
+videoService.startQualityMonitoring((metrics) => {
   console.log('Quality:', metrics.quality);
   console.log('Latency:', metrics.latency);
   console.log('Packet Loss:', metrics.packetLoss);
 });
 
 // Stop monitoring
-realTimeVideoService.stopQualityMonitoring();
+videoService.stopQualityMonitoring();
 ```
 
 ## Components

@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Video, VideoOff, Mic, MicOff, PhoneOff, Users } from 'lucide-react';
 import { VideoTile } from '@/components/classroom/unified/components/VideoTile';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
-import { realTimeVideoService } from '@/services/video/realTimeVideoService';
+import { RealTimeVideoService } from '@/services/video/realTimeVideoService';
 import { ConnectionQualityMetrics } from '@/services/video/connectionQualityMonitor';
 import { useToast } from '@/hooks/use-toast';
 
@@ -35,6 +35,13 @@ export function WebRTCVideoConference({
   const [isCameraOff, setIsCameraOff] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [connectionQuality, setConnectionQuality] = useState<ConnectionQualityMetrics | null>(null);
+  // Owned per-mount, not a shared module singleton — a second conference
+  // instance rendered in the same tab must not share roomId/participant
+  // state with this one.
+  const serviceRef = useRef<RealTimeVideoService | null>(null);
+  if (!serviceRef.current) {
+    serviceRef.current = new RealTimeVideoService();
+  }
 
   // Initialize local media
   useEffect(() => {
@@ -63,9 +70,14 @@ export function WebRTCVideoConference({
 
   // Set up participants listener
   useEffect(() => {
-    realTimeVideoService.onParticipantsChange((newParticipants) => {
+    const service = serviceRef.current!;
+    service.onParticipantsChange((newParticipants) => {
       setParticipants(newParticipants);
     });
+
+    return () => {
+      service.dispose();
+    };
   }, []);
 
   // Auto-connect if enabled
@@ -80,15 +92,15 @@ export function WebRTCVideoConference({
 
     setIsConnecting(true);
     try {
-      realTimeVideoService.setRoomConfig(roomId, currentUserId, localStream);
-      await realTimeVideoService.joinRoom();
+      serviceRef.current!.setRoomConfig(roomId, currentUserId, localStream);
+      await serviceRef.current!.joinRoom();
       setIsConnected(true);
-      
+
       // Start quality monitoring
-      realTimeVideoService.startQualityMonitoring((metrics) => {
+      serviceRef.current!.startQualityMonitoring((metrics) => {
         setConnectionQuality(metrics);
       });
-      
+
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to connect';
       setError(message);
@@ -104,8 +116,8 @@ export function WebRTCVideoConference({
   };
 
   const handleDisconnect = async () => {
-    realTimeVideoService.stopQualityMonitoring();
-    await realTimeVideoService.leaveRoom();
+    serviceRef.current!.stopQualityMonitoring();
+    await serviceRef.current!.leaveRoom();
     setIsConnected(false);
     setParticipants([]);
     setConnectionQuality(null);
@@ -113,12 +125,12 @@ export function WebRTCVideoConference({
   };
 
   const toggleMicrophone = async () => {
-    await realTimeVideoService.toggleMicrophone();
+    await serviceRef.current!.toggleMicrophone();
     setIsMuted(!localStream?.getAudioTracks()[0]?.enabled || false);
   };
 
   const toggleCamera = async () => {
-    await realTimeVideoService.toggleCamera();
+    await serviceRef.current!.toggleCamera();
     setIsCameraOff(!localStream?.getVideoTracks()[0]?.enabled || false);
   };
 

@@ -229,5 +229,3 @@ export class RealTimeVideoService {
     this.reconnectionManager.dispose();
   }
 }
-
-export const realTimeVideoService = new RealTimeVideoService();

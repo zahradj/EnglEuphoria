@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { realTimeVideoService, VideoParticipant } from '@/services/video/realTimeVideoService';
+import { RealTimeVideoService, VideoParticipant } from '@/services/video/realTimeVideoService';
 import { toast } from 'sonner';
 
 interface UseWebRTCConnectionProps {
@@ -20,6 +20,13 @@ export const useWebRTCConnection = ({
   const [isConnecting, setIsConnecting] = useState(false);
   const connectingRef = useRef(false);
   const connectedRef = useRef(false);
+  // Owned per-mount, not a shared module singleton — two classrooms
+  // rendered in the same tab/process (e.g. a future multi-room teacher
+  // view) must not share roomId/participants/localStream state.
+  const serviceRef = useRef<RealTimeVideoService | null>(null);
+  if (!serviceRef.current) {
+    serviceRef.current = new RealTimeVideoService();
+  }
 
   const connect = useCallback(async () => {
     if (!localStream || !enabled || connectedRef.current || connectingRef.current) {
@@ -29,8 +36,8 @@ export const useWebRTCConnection = ({
     connectingRef.current = true;
     setIsConnecting(true);
     try {
-      realTimeVideoService.setRoomConfig(roomId, userId, localStream);
-      await realTimeVideoService.joinRoom();
+      serviceRef.current!.setRoomConfig(roomId, userId, localStream);
+      await serviceRef.current!.joinRoom();
       connectedRef.current = true;
       setIsConnected(true);
       toast.success("Connected to video call");
@@ -46,7 +53,7 @@ export const useWebRTCConnection = ({
   const disconnect = useCallback(async () => {
     if (!connectedRef.current) return;
 
-    await realTimeVideoService.leaveRoom();
+    await serviceRef.current!.leaveRoom();
     connectedRef.current = false;
     setIsConnected(false);
     setParticipants([]);
@@ -54,16 +61,16 @@ export const useWebRTCConnection = ({
 
   // Set up participants listener — stable across renders
   useEffect(() => {
-    realTimeVideoService.onParticipantsChange((newParticipants) => {
+    const service = serviceRef.current!;
+    service.onParticipantsChange((newParticipants) => {
       setParticipants(newParticipants);
     });
 
     return () => {
-      // Clean up on unmount
-      if (connectedRef.current) {
-        realTimeVideoService.leaveRoom();
-        connectedRef.current = false;
-      }
+      // Tear down this hook instance's own service — never touches another
+      // mounted classroom's service, since each owns its own instance.
+      service.dispose();
+      connectedRef.current = false;
     };
   }, []); // Empty deps — only mount/unmount
 

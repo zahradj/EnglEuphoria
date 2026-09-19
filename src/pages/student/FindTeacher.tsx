@@ -12,12 +12,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { BackNavigation } from '@/components/navigation/BackNavigation';
 import { BookMyClassModal } from '@/components/student/BookMyClassModal';
+import { TeacherProfileModal } from '@/components/student/TeacherProfileModal';
 import { useStudentLevel } from '@/hooks/useStudentLevel';
 import { cn } from '@/lib/utils';
 import { useMarketRegion } from '@/contexts/MarketRegionContext';
 import { getTeacherRate, formatPrice } from '@/lib/pricing';
 
-interface TeacherProfile {
+export interface TeacherProfile {
   id: string;
   user_id: string;
   full_name: string;
@@ -102,6 +103,7 @@ const FindTeacher: React.FC = () => {
   const [hubFilter, setHubFilter] = useState<HubFilter>(initialHub);
   const [selectedTeacherId, setSelectedTeacherId] = useState<string | null>(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [viewingTeacher, setViewingTeacher] = useState<TeacherProfile | null>(null);
 
   // Auto-lock hub filter to the student's actual level. Students cannot browse other hubs.
   useEffect(() => {
@@ -366,8 +368,15 @@ const FindTeacher: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Teacher Header */}
-                      <div className="p-6 pb-4">
+                      {/* Teacher Header — click to open the full profile */}
+                      <div
+                        className="p-6 pb-4 cursor-pointer"
+                        onClick={() => setViewingTeacher(teacher)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setViewingTeacher(teacher); }}
+                        aria-label={`View ${teacher.full_name}'s full profile`}
+                      >
                         <div className="flex items-start gap-4">
                           <div className="relative">
                             <Avatar className={cn("h-16 w-16 border-2", style.border)}>
@@ -404,8 +413,11 @@ const FindTeacher: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Bio */}
-                      <div className="px-6 pb-3">
+                      {/* Bio — click to open the full profile, same as the header */}
+                      <div
+                        className="px-6 pb-3 cursor-pointer"
+                        onClick={() => setViewingTeacher(teacher)}
+                      >
                         <p className="text-sm text-muted-foreground line-clamp-2">
                           {teacher.bio || 'Passionate English teacher ready to help you succeed.'}
                         </p>
@@ -430,6 +442,22 @@ const FindTeacher: React.FC = () => {
                         )}
                       </div>
 
+                      {/* Specializations — previously fetched but never shown on the card */}
+                      {teacher.specializations && teacher.specializations.length > 0 && (
+                        <div className="px-6 pb-4">
+                          <div className="flex items-center gap-1 flex-wrap">
+                            {teacher.specializations.slice(0, 3).map(spec => (
+                              <Badge key={spec} variant="outline" className="text-xs px-1.5 py-0 h-5">
+                                {spec}
+                              </Badge>
+                            ))}
+                            {teacher.specializations.length > 3 && (
+                              <span className="text-xs text-muted-foreground">+{teacher.specializations.length - 3} more</span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
                       {/* Languages */}
                       {teacher.languages_spoken && teacher.languages_spoken.length > 0 && (
                         <div className="px-6 pb-4">
@@ -448,7 +476,14 @@ const FindTeacher: React.FC = () => {
                       )}
 
                       {/* Footer */}
-                      <div className="px-6 pb-6 flex items-center justify-end">
+                      <div className="px-6 pb-6 flex items-center justify-between gap-2">
+                        <Button
+                          onClick={() => setViewingTeacher(teacher)}
+                          size="sm"
+                          variant="outline"
+                        >
+                          View Profile
+                        </Button>
                         <Button
                           onClick={() => handleBookTeacher(teacher.user_id)}
                           size="sm"
@@ -475,6 +510,18 @@ const FindTeacher: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Teacher Profile Modal */}
+      <TeacherProfileModal
+        teacher={viewingTeacher}
+        hubLabel={viewingTeacher ? (HUB_CARD_STYLES[getTeacherHub(viewingTeacher)] || HUB_CARD_STYLES.General).badgeLabel : ''}
+        ctaGradient={viewingTeacher ? (HUB_CARD_STYLES[getTeacherHub(viewingTeacher)] || HUB_CARD_STYLES.General).ctaGradient : ''}
+        onClose={() => setViewingTeacher(null)}
+        onBook={(teacherUserId) => {
+          setViewingTeacher(null);
+          handleBookTeacher(teacherUserId);
+        }}
+      />
 
       {/* Booking Modal */}
       <BookMyClassModal
