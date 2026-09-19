@@ -190,13 +190,20 @@ export function buildHomeworkContent(scenes: CompletionScene[], title: string, l
   const uniqueCorrect = Array.from(new Set(correctWords)).slice(0, 4);
   const uniqueDistractors = Array.from(new Set(distractorPool));
   const activity1Items = (uniqueCorrect.length > 0 ? uniqueCorrect : ['Hello!']).map((word, i) => {
-    const wrongOptions = uniqueDistractors
-      .filter((w) => w !== word)
-      .slice(i, i + 3);
-    while (wrongOptions.length < 2 && uniqueDistractors.length > 0) {
-      wrongOptions.push(uniqueDistractors[(i + wrongOptions.length) % uniqueDistractors.length]);
+    // Excludes `word` up front so the wrap-around fallback below can never
+    // pull the correct answer back in as one of its own wrong options (it
+    // used to index into the unfiltered pool, which still contained `word`
+    // whenever the same term appeared as a distractor in another basket
+    // scene — e.g. 'house' is hit:true in basket-h but hit:false in
+    // basket-m — producing two identical choice cards for that item).
+    const pool = uniqueDistractors.filter((w) => w !== word);
+    const wrongOptions = new Set(pool.slice(i, i + 3));
+    let cursor = 0;
+    while (wrongOptions.size < 2 && cursor < pool.length) {
+      wrongOptions.add(pool[(i + cursor) % pool.length]);
+      cursor++;
     }
-    const finalWrong = Array.from(new Set(wrongOptions)).slice(0, 3);
+    const finalWrong = Array.from(wrongOptions).slice(0, 3);
     const choiceImages: Record<string, string> = {};
     for (const w of [word, ...finalWrong]) {
       const img = imageByText.get(norm(w));
