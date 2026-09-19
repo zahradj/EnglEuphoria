@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Skeleton } from '@/components/ui/skeleton';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { BackNavigation } from '@/components/navigation/BackNavigation';
@@ -266,6 +267,16 @@ const FindTeacher: React.FC = () => {
     return 'academy';
   };
 
+  // Soft hub-colored glow behind the hero — reinforces the same
+  // Playground/Academy/Success color coding used on every card, without
+  // touching the palette itself.
+  const heroGlow: Record<string, string> = {
+    playground: 'from-orange-300/30 via-amber-300/20',
+    academy: 'from-blue-400/30 via-indigo-300/20',
+    professional: 'from-emerald-400/30 via-teal-300/20',
+    all: 'from-primary/25 via-accent/15',
+  };
+
   return (
     <div className="min-h-dvh bg-gradient-to-br from-background via-background to-muted/30">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -275,9 +286,15 @@ const FindTeacher: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-10"
+          className="relative text-center mb-10 py-6"
         >
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-3">
+          <div
+            className={cn(
+              "pointer-events-none absolute inset-x-0 -top-8 mx-auto h-48 w-full max-w-2xl rounded-full bg-gradient-to-b to-transparent blur-3xl -z-10 transition-colors duration-500",
+              heroGlow[hubFilter] || heroGlow.all
+            )}
+          />
+          <h1 className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-3 drop-shadow-sm">
             Find Your Perfect Teacher
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -290,7 +307,7 @@ const FindTeacher: React.FC = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="flex flex-col sm:flex-row gap-4 mb-8"
+          className="flex flex-col sm:flex-row gap-3 mb-8 p-3 rounded-2xl border border-border/40 bg-card/40 backdrop-blur-sm shadow-sm"
         >
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -298,7 +315,7 @@ const FindTeacher: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by name, specialization, or accent..."
-              className="pl-10 bg-card/50 border-border/50 focus:border-primary/50"
+              className="pl-10 bg-background/70 border-border/50 focus:border-primary/50"
             />
           </div>
           {isLockedToHub ? (
@@ -306,8 +323,8 @@ const FindTeacher: React.FC = () => {
               {lockedHubLabel[studentLevel!]?.emoji} {lockedHubLabel[studentLevel!]?.label}
             </Badge>
           ) : (
-            <Tabs value={hubFilter} onValueChange={(v) => setHubFilter(v as HubFilter)}>
-              <TabsList className="bg-card/50 border border-border/30">
+            <Tabs value={hubFilter} onValueChange={(v) => setHubFilter(v as HubFilter)} className="max-w-full overflow-x-auto">
+              <TabsList className="bg-background/70 border border-border/30">
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="playground">🎪 Playground</TabsTrigger>
                 <TabsTrigger value="academy">📘 Academy</TabsTrigger>
@@ -321,12 +338,32 @@ const FindTeacher: React.FC = () => {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map(i => (
-              <Card key={i} className="h-80 animate-pulse bg-card/30" />
+              <Card key={i} className="p-6 border-2 border-border/30 bg-card/30">
+                <div className="flex items-start gap-4 mb-4">
+                  <Skeleton className="h-16 w-16 rounded-full shrink-0" />
+                  <div className="flex-1 space-y-2 pt-1">
+                    <Skeleton className="h-4 w-2/3" />
+                    <Skeleton className="h-3 w-1/3" />
+                  </div>
+                </div>
+                <Skeleton className="h-3 w-full mb-2" />
+                <Skeleton className="h-3 w-5/6 mb-4" />
+                <div className="flex gap-2 mb-6">
+                  <Skeleton className="h-5 w-16 rounded-full" />
+                  <Skeleton className="h-5 w-20 rounded-full" />
+                </div>
+                <div className="flex justify-between">
+                  <Skeleton className="h-8 w-24 rounded-md" />
+                  <Skeleton className="h-8 w-28 rounded-md" />
+                </div>
+              </Card>
             ))}
           </div>
         ) : filteredTeachers.length === 0 ? (
           <div className="text-center py-20">
-            <Sparkles className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
+            <div className="h-20 w-20 rounded-full bg-muted/60 flex items-center justify-center mx-auto mb-4">
+              <Sparkles className="h-9 w-9 text-muted-foreground/50" />
+            </div>
             <h3 className="text-xl font-semibold text-foreground mb-2">
               {hubFilter === 'playground' ? 'No Playground teachers currently available'
                 : hubFilter === 'academy' ? 'No Academy teachers currently available'
@@ -352,12 +389,13 @@ const FindTeacher: React.FC = () => {
                     layout
                   >
                     <Card className={cn(
-                      "group relative overflow-hidden border-2 backdrop-blur-sm hover:shadow-lg transition-all duration-300",
+                      "group relative overflow-hidden border-2 backdrop-blur-sm transition-all duration-300 flex flex-col h-full",
+                      "hover:shadow-lg hover:-translate-y-0.5",
                       style.border,
                       style.bg
                     )}>
-                      {/* Hub Badge — top right */}
-                      <div className="absolute top-3 right-3 z-10">
+                      {/* Hub badge + live status — one cluster, top right */}
+                      <div className="absolute top-3 right-3 z-10 flex flex-col items-end gap-1.5">
                         <div className={cn(
                           "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold shadow-md",
                           style.badgeBg,
@@ -366,117 +404,121 @@ const FindTeacher: React.FC = () => {
                           {style.badgeIcon}
                           {style.badgeLabel}
                         </div>
+                        {teacher.is_available && (
+                          <Badge className="bg-emerald-500/90 text-white border-0 gap-1 text-xs shadow-md">
+                            <Zap className="h-3 w-3" /> Live
+                          </Badge>
+                        )}
                       </div>
 
-                      {/* Teacher Header — click to open the full profile */}
-                      <div
-                        className="p-6 pb-4 cursor-pointer"
-                        onClick={() => setViewingTeacher(teacher)}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setViewingTeacher(teacher); }}
-                        aria-label={`View ${teacher.full_name}'s full profile`}
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className="relative">
-                            <Avatar className={cn("h-16 w-16 border-2", style.border)}>
-                              {teacher.profile_image_url ? (
-                                <AvatarImage
-                                  src={teacher.profile_image_url}
-                                  alt={teacher.full_name || 'Teacher'}
-                                  className="object-cover"
-                                  onError={(e) => {
-                                    console.warn('[FindTeacher] Avatar image failed to load', teacher.profile_image_url, e);
-                                  }}
-                                />
-                              ) : null}
-                              <AvatarFallback className="bg-primary/10 text-primary font-bold text-lg">
-                                {teacher.full_name?.charAt(0)?.toUpperCase() || 'T'}
-                              </AvatarFallback>
-                            </Avatar>
-                            {teacher.is_available && (
-                              <span className="absolute -bottom-0.5 -right-0.5 h-4 w-4 bg-emerald-500 rounded-full border-2 border-card animate-pulse" />
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0 pr-20">
-                            <h3 className="font-bold text-lg text-foreground truncate">{teacher.full_name}</h3>
-                            <div className="flex items-center gap-2 mt-1">
-                              {teacher.rating && (
-                                <div className="flex items-center gap-1">
-                                  <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                                  <span className="text-sm font-medium text-foreground">{teacher.rating.toFixed(1)}</span>
-                                  <span className="text-xs text-muted-foreground">({teacher.total_reviews})</span>
-                                </div>
+                      {/* Scrollable content — footer stays pinned to the bottom via mt-auto below */}
+                      <div className="flex-1">
+                        {/* Teacher Header — click to open the full profile */}
+                        <div
+                          className="p-6 pb-4 cursor-pointer"
+                          onClick={() => setViewingTeacher(teacher)}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setViewingTeacher(teacher); }}
+                          aria-label={`View ${teacher.full_name}'s full profile`}
+                        >
+                          <div className="flex items-start gap-4">
+                            <div className="relative shrink-0">
+                              <Avatar className={cn("h-16 w-16 border-2", style.border)}>
+                                {teacher.profile_image_url ? (
+                                  <AvatarImage
+                                    src={teacher.profile_image_url}
+                                    alt={teacher.full_name || 'Teacher'}
+                                    className="object-cover"
+                                    onError={(e) => {
+                                      console.warn('[FindTeacher] Avatar image failed to load', teacher.profile_image_url, e);
+                                    }}
+                                  />
+                                ) : null}
+                                <AvatarFallback className="bg-primary/10 text-primary font-bold text-lg">
+                                  {teacher.full_name?.charAt(0)?.toUpperCase() || 'T'}
+                                </AvatarFallback>
+                              </Avatar>
+                              {teacher.is_available && (
+                                <span className="absolute -bottom-0.5 -right-0.5 h-4 w-4 bg-emerald-500 rounded-full border-2 border-card animate-pulse" />
                               )}
+                            </div>
+                            <div className="flex-1 min-w-0 pr-16">
+                              <h3 className="font-bold text-lg text-foreground truncate">{teacher.full_name}</h3>
+                              <div className="flex items-center gap-2 mt-1 min-h-[1.25rem]">
+                                {teacher.rating > 0 ? (
+                                  <div className="flex items-center gap-1">
+                                    <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                                    <span className="text-sm font-medium text-foreground">{teacher.rating.toFixed(1)}</span>
+                                    <span className="text-xs text-muted-foreground">({teacher.total_reviews ?? 0})</span>
+                                  </div>
+                                ) : (
+                                  <span className="text-xs text-muted-foreground">New teacher</span>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Bio — click to open the full profile, same as the header */}
-                      <div
-                        className="px-6 pb-3 cursor-pointer"
-                        onClick={() => setViewingTeacher(teacher)}
-                      >
-                        <p className="text-sm text-muted-foreground line-clamp-2">
-                          {teacher.bio || 'Passionate English teacher ready to help you succeed.'}
-                        </p>
-                      </div>
-
-                      {/* Details */}
-                      <div className="px-6 pb-4 flex flex-wrap gap-2">
-                        {teacher.accent && (
-                          <Badge variant="secondary" className="text-xs gap-1">
-                            <Globe className="h-3 w-3" /> {teacher.accent}
-                          </Badge>
-                        )}
-                        {teacher.years_experience && (
-                          <Badge variant="secondary" className="text-xs gap-1">
-                            <Clock className="h-3 w-3" /> {teacher.years_experience}y exp
-                          </Badge>
-                        )}
-                        {teacher.video_url && (
-                          <Badge variant="secondary" className="text-xs gap-1 text-indigo-400 border-indigo-500/20">
-                            <Video className="h-3 w-3" /> Intro Video
-                          </Badge>
-                        )}
-                      </div>
-
-                      {/* Specializations — previously fetched but never shown on the card */}
-                      {teacher.specializations && teacher.specializations.length > 0 && (
-                        <div className="px-6 pb-4">
-                          <div className="flex items-center gap-1 flex-wrap">
-                            {teacher.specializations.slice(0, 3).map(spec => (
-                              <Badge key={spec} variant="outline" className="text-xs px-1.5 py-0 h-5">
-                                {spec}
-                              </Badge>
-                            ))}
-                            {teacher.specializations.length > 3 && (
-                              <span className="text-xs text-muted-foreground">+{teacher.specializations.length - 3} more</span>
-                            )}
-                          </div>
+                        {/* Bio — click to open the full profile, same as the header */}
+                        <div
+                          className="px-6 pb-3 cursor-pointer"
+                          onClick={() => setViewingTeacher(teacher)}
+                        >
+                          <p className="text-sm text-muted-foreground line-clamp-2">
+                            {teacher.bio || 'Passionate English teacher ready to help you succeed.'}
+                          </p>
                         </div>
-                      )}
 
-                      {/* Languages */}
-                      {teacher.languages_spoken && teacher.languages_spoken.length > 0 && (
-                        <div className="px-6 pb-4">
-                          <div className="flex items-center gap-1 flex-wrap">
-                            <span className="text-xs text-muted-foreground">Speaks:</span>
-                            {teacher.languages_spoken.slice(0, 3).map(lang => (
-                              <Badge key={lang} variant="outline" className="text-xs px-1.5 py-0 h-5">
-                                {lang}
-                              </Badge>
-                            ))}
-                            {teacher.languages_spoken.length > 3 && (
-                              <span className="text-xs text-muted-foreground">+{teacher.languages_spoken.length - 3}</span>
-                            )}
-                          </div>
+                        {/* Details + specializations — one wrapped badge cluster */}
+                        <div className="px-6 pb-4 flex flex-wrap gap-2">
+                          {teacher.accent && (
+                            <Badge variant="secondary" className="text-xs gap-1">
+                              <Globe className="h-3 w-3" /> {teacher.accent}
+                            </Badge>
+                          )}
+                          {teacher.years_experience > 0 && (
+                            <Badge variant="secondary" className="text-xs gap-1">
+                              <Clock className="h-3 w-3" /> {teacher.years_experience}y exp
+                            </Badge>
+                          )}
+                          {teacher.video_url && (
+                            <Badge variant="secondary" className="text-xs gap-1 text-indigo-400 border-indigo-500/20">
+                              <Video className="h-3 w-3" /> Intro Video
+                            </Badge>
+                          )}
+                          {teacher.specializations?.slice(0, 3).map(spec => (
+                            <Badge key={spec} variant="outline" className="text-xs">
+                              {spec}
+                            </Badge>
+                          ))}
+                          {teacher.specializations && teacher.specializations.length > 3 && (
+                            <span className="text-xs text-muted-foreground self-center">
+                              +{teacher.specializations.length - 3} more
+                            </span>
+                          )}
                         </div>
-                      )}
 
-                      {/* Footer */}
-                      <div className="px-6 pb-6 flex items-center justify-between gap-2">
+                        {/* Languages */}
+                        {teacher.languages_spoken && teacher.languages_spoken.length > 0 && (
+                          <div className="px-6 pb-4">
+                            <div className="flex items-center gap-1 flex-wrap">
+                              <span className="text-xs text-muted-foreground">Speaks:</span>
+                              {teacher.languages_spoken.slice(0, 3).map(lang => (
+                                <Badge key={lang} variant="outline" className="text-xs px-1.5 py-0 h-5">
+                                  {lang}
+                                </Badge>
+                              ))}
+                              {teacher.languages_spoken.length > 3 && (
+                                <span className="text-xs text-muted-foreground">+{teacher.languages_spoken.length - 3}</span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Footer — pinned to the bottom so every card in a row lines up */}
+                      <div className="px-6 pb-6 pt-2 mt-auto flex items-center justify-between gap-2 border-t border-border/30">
                         <Button
                           onClick={() => setViewingTeacher(teacher)}
                           size="sm"
@@ -492,16 +534,6 @@ const FindTeacher: React.FC = () => {
                           Book Session <ChevronRight className="h-3.5 w-3.5" />
                         </Button>
                       </div>
-
-
-                      {/* Live indicator */}
-                      {teacher.is_available && (
-                        <div className="absolute top-12 right-3">
-                          <Badge className="bg-emerald-500/90 text-white border-0 gap-1 text-xs animate-pulse">
-                            <Zap className="h-3 w-3" /> Live
-                          </Badge>
-                        </div>
-                      )}
                     </Card>
                   </motion.div>
                 );
