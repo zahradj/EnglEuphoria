@@ -1095,6 +1095,19 @@ function WordBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
       <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">🧩 {scene.teacher} <span className="ml-1 opacity-70">({round + 1}/{total})</span></div>
       <div className={`relative z-10 flex w-full flex-col items-center px-4 ${side ? 'max-w-[420px]' : 'max-w-[520px]'}`}>
         <div className="w-full rounded-[2.25rem] bg-white/90 p-6 shadow-2xl ring-4 ring-white/60 backdrop-blur-sm">
+          {/* Picture anchor — r.img/r.emoji were captured on every round's
+              data but never actually rendered here, so a student building a
+              word had no way to confirm WHICH word from just the letter
+              tiles + audio. A non-reader needs this exactly as much as the
+              audio does; text alone (even revealed letters) isn't meaning
+              until the word is fully built. */}
+          <div className="mb-4 flex justify-center">
+            {r.img ? (
+              <img src={r.img} alt={r.word} className="h-20 w-20 rounded-2xl object-cover shadow-md sm:h-24 sm:w-24" />
+            ) : (
+              <span className="text-6xl sm:text-7xl">{r.emoji}</span>
+            )}
+          </div>
           <div className="flex items-center justify-center gap-3">
             {letters.map((ch, i) => {
               const isCurrent = i === r.blankIndex;

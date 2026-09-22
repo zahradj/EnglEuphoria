@@ -382,6 +382,8 @@ const bgU2L1PipBellaAppleWater = `${A}/scenes/bg-u2l1-pip-bella-apple-water.png`
 
 const itemHello = `${A}/items/item-hello.png`;
 const itemHat = `${A}/items/item-hat.png`;
+const itemMat = `${A}/items/item-mat.png`;
+const itemBat = `${A}/items/item-bat.png`;
 const itemHouse = `${A}/items/item-house.png`;
 const itemMoon = `${A}/items/item-moon.png`;
 const itemMilk = `${A}/items/item-milk.png`;
@@ -1369,7 +1371,7 @@ export const LESSON_4_SCENES: Scene[] = [
  * ========================================================================= */
 
 export const LESSON_5_TITLE = "Leo's Lost Star";
-export const LESSON_5_OBJECTIVE = 'Follow a story that revisits every friend, question, and sound from Lessons 1-4: greetings, names, feelings, and age.';
+export const LESSON_5_OBJECTIVE = 'Follow a story that revisits every friend, question, and sound from Lessons 1-4 (greetings, names, feelings, age), then read three whole CVC words — hat, mat, bat — by blending sounds already learned.';
 
 export const LESSON_5_SCENES: Scene[] = [
   { id: 'l5-title', kind: 'title-card', bg: bgMeadow, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 5 · Story', title: "Leo's Lost Star", subtitle: 'A story that remembers everything we have learned' },
@@ -1440,6 +1442,71 @@ export const LESSON_5_SCENES: Scene[] = [
       { who: 'pip', line: 'We are happy too!' },
     ],
     cta: 'Yay!',
+  },
+  /* Reading strand — new for this refactor. Every unit-1 lesson so far only
+   * ever asked students to point at a SOUND'S letter or the FIRST letter of
+   * a word (sound-model, sound-sort, word-build's single-blankIndex rounds
+   * elsewhere in this lesson). None of that adds up to actually reading a
+   * whole word — the literal thing a Pre-A1 student cannot do yet and this
+   * lesson now teaches for the first time, framed as "spiral use of known
+   * knowledge" rather than new phonics: every sound here (H, A, T, M, B)
+   * was already taught in Lessons 1-4, only the SKILL of blending them into
+   * a whole word is new (~20% new content, per playground-curriculum-
+   * engine's spiral-ratio rule — the safe end of the 20-30% band, since
+   * blending is genuinely a bigger cognitive step than one more vocab word).
+   * "A" is the unit's only taught vowel, so hat/mat/bat are the full realistic
+   * set of concrete, kid-friendly CVC words buildable from letters this unit
+   * actually taught (man/ham/sat exist too but fit the meadow-search story
+   * far less naturally than three findable objects/creatures on the walk
+   * home). word-build's own multi-round-per-word pattern (3 rounds, one per
+   * letter position) is reused verbatim from its proven precedent in Unit 5
+   * Lesson 1 ("spell Mom"/"spell Dad") rather than inventing a new scene
+   * kind — activity-pattern-library's "check for an existing option before
+   * inventing" rule. Two word-build scenes run back to back (mat, bat) at
+   * most — activity-pattern-library's Hard Variety Rule caps consecutive
+   * identical `kind`s at 2 — with l5-reading-intro/l5-reading-celebrate
+   * breaking up the run and doubling as the actual story beats (Leo's own
+   * things, found along the way home), not just padding between games.
+   */
+  {
+    id: 'l5-reading-intro', kind: 'cinematic', bg: bgMeadow, title: 'On the Way Home...', subtitle: 'Leo sees his things from the search', narrator: 'leo',
+    script: [
+      { who: 'leo', line: 'Wait! I see some of my things on the ground.' },
+      { who: 'leo', line: 'Can you read them with me? Let’s try!' },
+    ],
+    cta: 'Let’s read!',
+  },
+  {
+    id: 'l5-read-hat', kind: 'word-build', bg: bgMeadow, teacher: 'It’s Leo’s hat! Tap each letter to read the word.',
+    rounds: [
+      { word: 'hat', blankIndex: 0, answer: 'H', choices: ['H', 'M', 'B'], img: itemHat, emoji: '\u{1F3A9}' },
+      { word: 'hat', blankIndex: 1, answer: 'A', choices: ['A', 'O', 'E'], img: itemHat, emoji: '\u{1F3A9}' },
+      { word: 'hat', blankIndex: 2, answer: 'T', choices: ['T', 'N', 'S'], img: itemHat, emoji: '\u{1F3A9}' },
+    ],
+  },
+  {
+    id: 'l5-reading-celebrate', kind: 'cinematic', bg: bgMeadow, title: 'You read HAT!', subtitle: 'Two more things to find', narrator: 'leo',
+    script: [
+      { who: 'leo', line: 'You read it! H-A-T, hat!' },
+      { who: 'leo', line: 'I see two more things. Keep reading with me!' },
+    ],
+    cta: 'Keep going!',
+  },
+  {
+    id: 'l5-read-mat', kind: 'word-build', bg: bgClearing, teacher: 'A picnic mat! Tap each letter to read the word.',
+    rounds: [
+      { word: 'mat', blankIndex: 0, answer: 'M', choices: ['M', 'H', 'B'], emoji: '\u{1F9FA}' },
+      { word: 'mat', blankIndex: 1, answer: 'A', choices: ['A', 'I', 'U'], emoji: '\u{1F9FA}' },
+      { word: 'mat', blankIndex: 2, answer: 'T', choices: ['T', 'N', 'S'], emoji: '\u{1F9FA}' },
+    ],
+  },
+  {
+    id: 'l5-read-bat', kind: 'word-build', bg: bgClearing, teacher: 'A little bat flying home! Tap each letter to read the word.',
+    rounds: [
+      { word: 'bat', blankIndex: 0, answer: 'B', choices: ['B', 'H', 'M'], emoji: '\u{1F987}' },
+      { word: 'bat', blankIndex: 1, answer: 'A', choices: ['A', 'O', 'E'], emoji: '\u{1F987}' },
+      { word: 'bat', blankIndex: 2, answer: 'T', choices: ['T', 'N', 'S'], emoji: '\u{1F987}' },
+    ],
   },
   {
     id: 'l5-who', kind: 'who-said-it', bg: bgHideSeek, teacher: 'Listen! Who said it in our story? Tap the friend.',
@@ -1556,13 +1623,23 @@ export const LESSON_5_SCENES: Scene[] = [
     // only one of which, W, this unit ever actually taught) were both cut
     // here. alphabet-order also duplicated the "arrange letters" beat
     // immediately below it with no new content in between.
-    id: 'l5-alphabet-blocks', kind: 'alphabet-blocks', bg: bgMeadow, teacher: 'Alphabet Blocks! Tap the sound, then stack the word!', letters: ['H', 'M', 'N', 'W', 'A', 'S', 'B', 'T'],
+    //
+    // Word list changed from [WAS, SAM, MAN, HAM] to the three words the
+    // new reading strand above (l5-read-hat/mat/bat) just taught: WAS is
+    // phonetically irregular (pronounced /wʌz/, not decodable the way this
+    // unit's sounds would suggest — a bad example to stack right after
+    // teaching real blending), SAM is a name with no picture/meaning to
+    // anchor it, and neither MAN nor HAM fit the meadow-search story this
+    // lesson is built around. HAT/MAT/BAT are the exact words just
+    // decoded — this is the canonical-flow's "second, later touch" of
+    // today's new content (playground-curriculum-engine's 10-step flow,
+    // step 9), not a new topic.
+    id: 'l5-alphabet-blocks', kind: 'alphabet-blocks', bg: bgMeadow, teacher: 'Alphabet Blocks! Tap the sound, then stack the words you just read!', letters: ['H', 'M', 'N', 'W', 'A', 'S', 'B', 'T'],
     tapRounds: [{ letter: 'S' }, { letter: 'A' }, { letter: 'N' }, { letter: 'W' }, { letter: 'B' }, { letter: 'T' }, { letter: 'H' }, { letter: 'M' }],
     words: [
-      { word: 'WAS', emoji: '⏳' },
-      { word: 'SAM', emoji: '\u{1F9CD}' },
-      { word: 'MAN', emoji: '\u{1F9CD}' },
-      { word: 'HAM', emoji: '\u{1F356}' },
+      { word: 'HAT', emoji: '\u{1F3A9}' },
+      { word: 'MAT', emoji: '\u{1F9FA}' },
+      { word: 'BAT', emoji: '\u{1F987}' },
     ],
   },
   {
@@ -1576,7 +1653,7 @@ export const LESSON_5_SCENES: Scene[] = [
       { who: 'bella', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
     ],
   },
-  { id: 'l5-finale', kind: 'finale', bg: bgL5FoundTree, who: 'leo', line: 'Thank you for helping me find my star! I am happy again. You are a great friend!' },
+  { id: 'l5-finale', kind: 'finale', bg: bgL5FoundTree, who: 'leo', line: 'Thank you for helping me find my star — and you read HAT, MAT, and BAT all by yourself! Tonight, find a hat at home and read it out loud!' },
 ];
 
 /* =========================================================================
