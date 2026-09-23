@@ -225,6 +225,8 @@ export function SceneRenderer(props: {
     case 'trace': return <TraceScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'sound-sort': return <SoundSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'word-build': return <WordBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'video-story': return <VideoStoryScene scene={scene} onNext={props.onNext} />;
+    case 'video-check': return <VideoCheckScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'sentence-build': return <SentenceBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'who-said-it': return <WhoSaidItScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
     case 'gather': return <GatherScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
@@ -1135,6 +1137,147 @@ function WordBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
   );
 }
 
+/* ---------- Video story (AI clip, then a still shine-reveal of the item) ---------- */
+
+function VideoStoryScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'video-story' }>; onNext: () => void }) {
+  const [phase, setPhase] = useState<'video' | 'reveal'>('video');
+  const [needsTap, setNeedsTap] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (phase !== 'reveal') return;
+    void safeSpeak(scene.revealLabel, 'leo');
+  }, [phase]);
+
+  const playVideo = () => {
+    setNeedsTap(false);
+    void videoRef.current?.play().catch(() => setNeedsTap(true));
+  };
+
+  if (phase === 'reveal') {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-amber-200 via-orange-100 to-yellow-100">
+        <div className="relative flex flex-col items-center gap-5">
+          {/* Composed from existing keyframes (a bouncy pop-in + a radiating
+              ping ring) rather than a new bespoke animation — see
+              Lep1Keyframes for both. */}
+          <div className="relative">
+            <span className="absolute inset-0 -m-6 rounded-full bg-yellow-300/50 animate-[lep1-ping_1.4s_ease-out_infinite]" />
+            <img
+              src={scene.revealImg}
+              alt={scene.revealLabel}
+              className="relative h-40 w-40 object-contain drop-shadow-[0_0_25px_rgba(255,200,80,0.8)] sm:h-48 sm:w-48"
+              style={{ animation: 'lep1-pop 0.5s ease-out' }}
+            />
+            <span className="absolute -right-2 -top-2 text-3xl" style={{ animation: 'lep1-float 1.8s ease-in-out infinite' }}>✨</span>
+            <span className="absolute -bottom-1 -left-3 text-2xl" style={{ animation: 'lep1-float 2.2s ease-in-out infinite 0.3s' }}>✨</span>
+          </div>
+          <div className="rounded-full bg-white/95 px-6 py-2 text-xl font-black uppercase tracking-wide text-orange-700 shadow-xl">{scene.revealLabel}</div>
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Next →</button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="absolute inset-0 bg-black">
+      <video
+        ref={videoRef}
+        src={scene.videoUrl}
+        className="absolute inset-0 h-full w-full object-cover"
+        playsInline
+        autoPlay
+        onCanPlay={playVideo}
+        onEnded={() => setPhase('reveal')}
+      />
+      {needsTap && (
+        <button
+          onClick={playVideo}
+          className="absolute inset-0 flex items-center justify-center bg-black/40 text-2xl font-black text-white"
+        >
+          ▶ Tap to play
+        </button>
+      )}
+      <button
+        onClick={() => setPhase('reveal')}
+        className="absolute bottom-4 right-4 z-20 rounded-full bg-white/85 px-4 py-2 text-sm font-bold text-slate-700 shadow-lg backdrop-blur"
+      >
+        Skip ▶
+      </button>
+    </div>
+  );
+}
+
+/* ---------- Video comprehension check (one very-easy picture question) ---------- */
+
+function VideoCheckScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'video-check' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+  const [picked, setPicked] = useState<string | null>(null);
+  const [correct, setCorrect] = useState(false);
+  const gemDone = useRef(false);
+
+  const options = useMemo(() => {
+    const opts = [
+      { img: scene.correctImg, label: scene.correctLabel, isCorrect: true },
+      ...scene.distractors.map((d) => ({ ...d, isCorrect: false })),
+    ];
+    for (let i = opts.length - 1; i > 0; i--) {
+      const j = i % 2 === 0 ? 0 : i - 1; // fixed, deterministic shuffle — single question, no round index to seed with
+      [opts[i], opts[j]] = [opts[j], opts[i]];
+    }
+    return opts;
+  }, [scene]);
+
+  useEffect(() => {
+    cueSpeakOnce(scene.question, 'teacher');
+  }, [scene]);
+
+  const pick = async (label: string, isCorrect: boolean) => {
+    if (picked) return;
+    setPicked(label);
+    if (!isCorrect) {
+      sfx.wrong(); onLose();
+      window.setTimeout(() => setPicked(null), 600);
+      return;
+    }
+    sfx.match();
+    setCorrect(true);
+    if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+    await safeSpeak(`Yes! ${scene.correctLabel}!`, 'teacher');
+  };
+
+  return (
+    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-black/20" />
+      <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
+        <div className="rounded-full bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl sm:text-lg">{scene.question}</div>
+      </div>
+      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 flex-wrap justify-center gap-6 px-4 sm:gap-10">
+        {options.map((opt) => {
+          const isPicked = picked === opt.label;
+          const showWrong = isPicked && !opt.isCorrect;
+          const showRight = correct && opt.isCorrect;
+          return (
+            <button
+              key={opt.label}
+              onClick={() => pick(opt.label, opt.isCorrect)}
+              disabled={correct}
+              className={`grid h-36 w-36 place-items-center rounded-3xl border-8 bg-white shadow-2xl transition active:scale-95 sm:h-44 sm:w-44 ${showWrong ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : showRight ? 'border-green-400' : 'border-white'}`}
+              aria-label={opt.label}
+            >
+              <img src={opt.img} alt={opt.label} className="h-24 w-24 object-contain sm:h-28 sm:w-28" />
+            </button>
+          );
+        })}
+      </div>
+      {correct && (
+        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>Next →</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ---------- Sentence build (shuffled words -> full sentence) ---------- */
 
 function shuffledIndices(n: number): number[] {
@@ -1209,6 +1352,15 @@ function SentenceBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<S
       <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">🔀 {scene.teacher} <span className="ml-1 opacity-70">({round + 1}/{total})</span></div>
       <div className={`relative z-10 flex w-full flex-col items-center px-4 ${side && side !== 'top' ? 'max-w-[440px]' : 'max-w-[600px]'}`}>
         <div className="w-full rounded-[2.25rem] bg-white/90 p-6 shadow-2xl ring-4 ring-white/60 backdrop-blur-sm">
+          {(r.img || r.emoji) && (
+            <div className="mb-4 flex justify-center">
+              {r.img ? (
+                <img src={r.img} alt="" className="h-20 w-20 rounded-2xl object-cover shadow-md sm:h-24 sm:w-24" />
+              ) : (
+                <span className="text-6xl sm:text-7xl">{r.emoji}</span>
+              )}
+            </div>
+          )}
           <div className="flex flex-wrap items-center justify-center gap-2.5">
             {r.words.map((w, i) => {
               const isFilled = i < filledCount;

@@ -60,10 +60,36 @@ export type Scene =
       // user request ("shuffle the words... the student must make the
       // full sentence").
       id: string; kind: 'sentence-build'; bg: string; teacher: string;
-      rounds: { words: string[]; colors?: (string | null)[] }[];
+      /** img/emoji: same reasoning as word-build's own picture fields — a
+       *  non-reader tapping words into order has no way to confirm WHAT
+       *  sentence they're building from the (initially blank) tiles alone;
+       *  a picture anchors the meaning the way it does everywhere else in
+       *  this lesson. */
+      rounds: { words: string[]; colors?: (string | null)[]; img?: string; emoji?: string }[];
       side?: 'left' | 'right' | 'top';
     }
   | { id: string; kind: 'who-said-it'; bg: string; teacher: string; rounds: { line: string; who: CharKey; emotion?: 'happy' | 'sad' | 'angry' | 'neutral' }[] }
+  | {
+      // Plays a short AI-generated clip (Higgsfield, character-referenced
+      // against this app's own established art via reference Elements, so
+      // it doesn't drift off-model), then transitions to a still close-up
+      // of the target item with a shine/sparkle reveal — never a highlight
+      // baked into or overlaid on the moving footage itself, since neither
+      // AI video generation nor a hand-timed overlay can reliably track
+      // exactly where an object sits at exactly what timestamp in
+      // generated footage. First used by Unit 1 Lesson 5's reading strand.
+      id: string; kind: 'video-story'; videoUrl: string; teacher?: string;
+      revealImg: string; revealLabel: string; revealEmoji: string;
+    }
+  | {
+      // Single very-easy comprehension question about what a preceding
+      // video-story scene showed — picture + audio only, never text, since
+      // Pre-A1 students can't read yet. Two or three tappable picture
+      // choices, exactly one correct.
+      id: string; kind: 'video-check'; bg: string; question: string;
+      correctImg: string; correctLabel: string;
+      distractors: { img: string; label: string }[];
+    }
   | { id: string; kind: 'gather'; bg: string; teacher: string; hotspots: { who: CharKey; line: string; x: number; y: number; r: number }[]; stage: { x: number; y: number; r: number } }
   | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string; img?: string }[] }
   | { id: string; kind: 'dash'; bg: string; teacher: string; who: CharKey; targetLetter: string; targetPhoneme: string; goal: number; seconds: number; items: { word: string; letter: string; img?: string; emoji: string }[] }
@@ -366,6 +392,11 @@ const bgBigTree = `${A}/scenes/bg-bigtree.jpg`;
 const bgL5LeoSad = `${A}/scenes/bg-l5-leo-sad.png`;
 const bgL5Search = `${A}/scenes/bg-l5-search.png`;
 const bgL5FoundTree = `${A}/scenes/bg-l5-found-tree.png`;
+const bgL5ReadingIntro = `${A}/scenes/bg-l5-reading-intro.png`;
+const bgL5ReadingHat = `${A}/scenes/bg-l5-reading-hat.png`;
+const bgL5ReadingMat = `${A}/scenes/bg-l5-reading-mat.png`;
+const bgL5ReadingCelebrate = `${A}/scenes/bg-l5-reading-celebrate.png`;
+const bgL5ReadingBat = `${A}/scenes/bg-l5-reading-bat.png`;
 const bgGoodbyeCast = `${A}/scenes/bg-goodbye-cast.jpg`;
 const bgHelloCast = `${A}/scenes/bg-hello-cast.jpg`;
 const bgL6TrophyTrail = `${A}/scenes/bg-l6-trophy-trail.jpg`;
@@ -1371,7 +1402,7 @@ export const LESSON_4_SCENES: Scene[] = [
  * ========================================================================= */
 
 export const LESSON_5_TITLE = "Leo's Lost Star";
-export const LESSON_5_OBJECTIVE = 'Follow a story that revisits every friend, question, and sound from Lessons 1-4 (greetings, names, feelings, age), then read three whole CVC words — hat, mat, bat — by blending sounds already learned.';
+export const LESSON_5_OBJECTIVE = 'Follow a story that revisits every friend, question, and sound from Lessons 1-4 (greetings, names, feelings, age), then read three short sentences — "I see hat/mat/bat" — using sounds already learned.';
 
 export const LESSON_5_SCENES: Scene[] = [
   { id: 'l5-title', kind: 'title-card', bg: bgMeadow, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 5 · Story', title: "Leo's Lost Star", subtitle: 'A story that remembers everything we have learned' },
@@ -1443,70 +1474,46 @@ export const LESSON_5_SCENES: Scene[] = [
     ],
     cta: 'Yay!',
   },
-  /* Reading strand — new for this refactor. Every unit-1 lesson so far only
-   * ever asked students to point at a SOUND'S letter or the FIRST letter of
-   * a word (sound-model, sound-sort, word-build's single-blankIndex rounds
-   * elsewhere in this lesson). None of that adds up to actually reading a
-   * whole word — the literal thing a Pre-A1 student cannot do yet and this
-   * lesson now teaches for the first time, framed as "spiral use of known
-   * knowledge" rather than new phonics: every sound here (H, A, T, M, B)
-   * was already taught in Lessons 1-4, only the SKILL of blending them into
-   * a whole word is new (~20% new content, per playground-curriculum-
-   * engine's spiral-ratio rule — the safe end of the 20-30% band, since
-   * blending is genuinely a bigger cognitive step than one more vocab word).
-   * "A" is the unit's only taught vowel, so hat/mat/bat are the full realistic
-   * set of concrete, kid-friendly CVC words buildable from letters this unit
-   * actually taught (man/ham/sat exist too but fit the meadow-search story
-   * far less naturally than three findable objects/creatures on the walk
-   * home). word-build's own multi-round-per-word pattern (3 rounds, one per
-   * letter position) is reused verbatim from its proven precedent in Unit 5
-   * Lesson 1 ("spell Mom"/"spell Dad") rather than inventing a new scene
-   * kind — activity-pattern-library's "check for an existing option before
-   * inventing" rule. Two word-build scenes run back to back (mat, bat) at
+  /* Reading strand — rebuilt per direct user request: the first pass used
+   * word-build's letter-by-letter blending (H-A-T) plus a Higgsfield video
+   * pilot, which read as too long/cluttered for one lesson. Simplified to
+   * short, predictable 3-word sentences ("I see hat") via sentence-build —
+   * a real early-reader technique (a fixed repeated frame with one
+   * changing decodable word), reusing the exact scene kind + multi-round
+   * pattern already proven in Unit 5 L1 ("build the sentence for Mom/Dad")
+   * rather than a bespoke video pipeline. "A" is the unit's only taught
+   * vowel, so hat/mat/bat are the full realistic set of concrete,
+   * kid-friendly CVC words buildable from letters this unit actually
+   * taught. Two sentence-build scenes run back to back (hat, mat) at
    * most — activity-pattern-library's Hard Variety Rule caps consecutive
-   * identical `kind`s at 2 — with l5-reading-intro/l5-reading-celebrate
-   * breaking up the run and doubling as the actual story beats (Leo's own
-   * things, found along the way home), not just padding between games.
+   * identical `kind`s at 2 — with l5-reading-celebrate breaking the run
+   * before bat.
    */
   {
-    id: 'l5-reading-intro', kind: 'cinematic', bg: bgMeadow, title: 'On the Way Home...', subtitle: 'Leo sees his things from the search', narrator: 'leo',
+    id: 'l5-reading-intro', kind: 'cinematic', bg: bgL5ReadingIntro, title: 'On the Way Home...', subtitle: 'Leo sees his things from the search', narrator: 'leo',
     script: [
-      { who: 'leo', line: 'Wait! I see some of my things on the ground.' },
-      { who: 'leo', line: 'Can you read them with me? Let’s try!' },
+      { who: 'leo', line: 'Wait! I see some of my things. Read them with me!' },
     ],
     cta: 'Let’s read!',
   },
   {
-    id: 'l5-read-hat', kind: 'word-build', bg: bgMeadow, teacher: 'It’s Leo’s hat! Tap each letter to read the word.',
-    rounds: [
-      { word: 'hat', blankIndex: 0, answer: 'H', choices: ['H', 'M', 'B'], img: itemHat, emoji: '\u{1F3A9}' },
-      { word: 'hat', blankIndex: 1, answer: 'A', choices: ['A', 'O', 'E'], img: itemHat, emoji: '\u{1F3A9}' },
-      { word: 'hat', blankIndex: 2, answer: 'T', choices: ['T', 'N', 'S'], img: itemHat, emoji: '\u{1F3A9}' },
-    ],
+    id: 'l5-sentence-hat', kind: 'sentence-build', bg: bgL5ReadingHat, teacher: 'It’s Leo’s hat! Put the words in order.',
+    rounds: [{ words: ['I', 'see', 'hat'], img: itemHat, emoji: '\u{1F3A9}' }],
   },
   {
-    id: 'l5-reading-celebrate', kind: 'cinematic', bg: bgMeadow, title: 'You read HAT!', subtitle: 'Two more things to find', narrator: 'leo',
+    id: 'l5-sentence-mat', kind: 'sentence-build', bg: bgL5ReadingMat, teacher: 'A picnic mat! Put the words in order.',
+    rounds: [{ words: ['I', 'see', 'mat'], emoji: '\u{1F9FA}' }],
+  },
+  {
+    id: 'l5-reading-celebrate', kind: 'cinematic', bg: bgL5ReadingCelebrate, title: 'You read two sentences!', subtitle: 'One more thing to find', narrator: 'leo',
     script: [
-      { who: 'leo', line: 'You read it! H-A-T, hat!' },
-      { who: 'leo', line: 'I see two more things. Keep reading with me!' },
+      { who: 'leo', line: 'One more thing! Keep reading with me!' },
     ],
     cta: 'Keep going!',
   },
   {
-    id: 'l5-read-mat', kind: 'word-build', bg: bgClearing, teacher: 'A picnic mat! Tap each letter to read the word.',
-    rounds: [
-      { word: 'mat', blankIndex: 0, answer: 'M', choices: ['M', 'H', 'B'], emoji: '\u{1F9FA}' },
-      { word: 'mat', blankIndex: 1, answer: 'A', choices: ['A', 'I', 'U'], emoji: '\u{1F9FA}' },
-      { word: 'mat', blankIndex: 2, answer: 'T', choices: ['T', 'N', 'S'], emoji: '\u{1F9FA}' },
-    ],
-  },
-  {
-    id: 'l5-read-bat', kind: 'word-build', bg: bgClearing, teacher: 'A little bat flying home! Tap each letter to read the word.',
-    rounds: [
-      { word: 'bat', blankIndex: 0, answer: 'B', choices: ['B', 'H', 'M'], emoji: '\u{1F987}' },
-      { word: 'bat', blankIndex: 1, answer: 'A', choices: ['A', 'O', 'E'], emoji: '\u{1F987}' },
-      { word: 'bat', blankIndex: 2, answer: 'T', choices: ['T', 'N', 'S'], emoji: '\u{1F987}' },
-    ],
+    id: 'l5-sentence-bat', kind: 'sentence-build', bg: bgL5ReadingBat, teacher: 'A little bat flying home! Put the words in order.',
+    rounds: [{ words: ['I', 'see', 'bat'], emoji: '\u{1F987}' }],
   },
   {
     id: 'l5-who', kind: 'who-said-it', bg: bgHideSeek, teacher: 'Listen! Who said it in our story? Tap the friend.',
