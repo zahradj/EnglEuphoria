@@ -18,7 +18,6 @@ export const HomeworkManagementTab = () => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState<HomeworkAssignment | null>(null);
-  const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
 
   useEffect(() => {
     loadAssignments();
@@ -140,7 +139,6 @@ export const HomeworkManagementTab = () => {
         isOpen={isCreateDialogOpen}
         onClose={() => setIsCreateDialogOpen(false)}
         onSuccess={loadAssignments}
-        studentIds={selectedStudents}
       />
 
       {selectedAssignment && (
