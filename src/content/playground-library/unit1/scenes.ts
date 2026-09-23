@@ -1432,12 +1432,14 @@ export const LESSON_5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l5-recall-name', kind: 'join-stage', bg: bgMeadow, teacher: 'Remember Lesson 2? Ask Bella the carnival question!', cast: ['bella'],
-    turns: [
-      { who: 'bella', line: 'Hello again!' },
-      { who: 'student', line: 'What is your name?' },
-      { who: 'bella', line: 'My name is Bella! Let’s go help Leo find his star.' },
-    ],
+    // kind changed from 'join-stage' to 'voice-stage' — activity-pattern-library's
+    // Hard Variety Rule (max 2 consecutive same-kind scenes): the original had
+    // FOUR join-stage scenes in a row here (recall-hello/name/ask-friends/age).
+    // 'voice-stage' is also the MORE authentic choice — it's the exact mechanic
+    // Lesson 2 itself used to teach "What is your name?" (see l2-student-question),
+    // so reviewing it here mirrors how it was first learned, not just re-skinned.
+    id: 'l5-recall-name', kind: 'voice-stage', bg: bgMeadow, teacher: 'Remember Lesson 2? Grab the mic and ask Bella!', question: 'What is your name?', niceToMeet: true,
+    rounds: [{ who: 'bella', cue: 'Ask Bella!', answer: 'My name is Bella. Let’s go help Leo find his star.' }],
   },
   {
     id: 'l5-ask-friends', kind: 'join-stage', bg: bgGatherEmpty, teacher: 'Remember Lesson 3? Ask how everyone feels, then help Leo.', cast: ['mia', 'bella', 'willow'],
@@ -1450,11 +1452,11 @@ export const LESSON_5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l5-recall-age', kind: 'join-stage', bg: bgMeadow, teacher: 'Remember Lesson 4? Ask Willow the birthday question!', cast: ['willow'],
-    turns: [
-      { who: 'student', line: 'How old are you?' },
-      { who: 'willow', line: 'I am three! Now let’s search for the star.' },
-    ],
+    // kind changed from 'join-stage' to 'meet-greet' — same Hard Variety Rule fix
+    // as l5-recall-name above, and again the more authentic choice: 'meet-greet'
+    // is Lesson 4's own mechanic for "how old are you?" (see l4-meet-greet).
+    id: 'l5-recall-age', kind: 'meet-greet', bg: bgMeadow, teacher: 'Remember Lesson 4? Meet Willow — ask her name, her age, then say nice to meet you!',
+    friends: [{ who: 'willow', age: 3 }],
   },
   {
     id: 'l5-search', kind: 'memory', bg: bgL5Search, teacher: 'Search the meadow! Find the matching pairs to look for the star.',
