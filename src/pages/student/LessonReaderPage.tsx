@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+
+// New canonical Academy engine (AcademyDemo.tsx Slide[] schema). Rendered
+// inline here — rather than redirecting to /academy-scene/:id — because that
+// route is auth-gated and this reader is also the PUBLIC entry point
+// (/academy-demo, /library/academy). PlayAcademyLesson tolerates an anon user.
+const PlayAcademyLesson = lazy(() => import('@/pages/academy-scene/PlayAcademyLesson'));
 import { ImmersiveLessonReader } from '@/components/student/lesson-reader/ImmersiveLessonReader';
 import LessonPlayerContainer from '@/components/lesson-player/LessonPlayerContainer';
 import { StoryBookViewer, StoryLayout } from '@/components/student/story-viewer/StoryBookViewer';
@@ -80,6 +86,36 @@ const LessonReaderPage: React.FC = () => {
     return <SpeakingIntentPrompt onChoose={setIntent} />;
   }
 
+
+  // ── New Academy engine (academy-v2 schema) uses its dedicated renderer ──
+  // The AcademyDemo.tsx Slide[] shape ({ type, block, ... }) is structurally
+  // incompatible with DynamicSlideRenderer (which wants slideType/activityType
+  // + content). Route it to PlayAcademyLesson instead. Detect by the explicit
+  // stamp OR, for rows saved before useCreatorLesson started stamping it, by
+  // the tell-tale shape: content.hub === 'academy' + first slide has `block`
+  // and none of the old renderer's discriminator fields.
+  const s0: Record<string, unknown> | null =
+    Array.isArray(lesson.content?.slides) ? lesson.content.slides[0] ?? null : null;
+  const isAcademyV2 =
+    lesson.ai_metadata?.contentFormat === 'academy-v2' ||
+    (lesson.content?.hub === 'academy' &&
+      s0 != null &&
+      typeof s0.block === 'string' &&
+      s0.slideType == null &&
+      s0.activityType == null);
+  if (isAcademyV2) {
+    return (
+      <Suspense
+        fallback={
+          <div className="min-h-dvh flex items-center justify-center bg-background">
+            <Loader2 className="w-10 h-10 animate-spin text-primary" />
+          </div>
+        }
+      >
+        <PlayAcademyLesson />
+      </Suspense>
+    );
+  }
 
   // ── Playground (kids) lessons ALWAYS use the Animal Adventure Academy template ──
   if (lesson.target_system === 'kids') {

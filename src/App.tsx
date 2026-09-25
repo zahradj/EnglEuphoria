@@ -135,7 +135,6 @@ const AuthCallback = lazy(() => import("./pages/AuthCallback"));
 const StudentCertificatePage = lazy(() => import("./pages/StudentCertificatePage"));
 const HomeworkPage = lazy(() => import("./pages/student/HomeworkPage"));
 const PlaygroundDemo = lazy(() => import("./pages/PlaygroundLessonRedirect"));
-const PlaygroundLessonShare = lazy(() => import("./pages/PlaygroundLessonShare"));
 const AcademyDemo = lazy(() => import("./pages/AcademyLessonRedirect"));
 const SuccessDemo = lazy(() => import("./pages/SuccessLessonRedirect"));
 const PlaygroundCreator = lazy(() => import("./pages/PlaygroundCreator"));
@@ -243,7 +242,6 @@ const App = () => {
                      <Route path="/games/cast-chat-quest" element={<Suspense fallback={<LoadingFallback />}><CastChatQuest /></Suspense>} />
 
                       <Route path="/playground-demo" element={<Suspense fallback={<LoadingFallback />}><PlaygroundDemo /></Suspense>} />
-                      <Route path="/lesson/:lessonId" element={<Suspense fallback={<LoadingFallback />}><PlaygroundLessonShare /></Suspense>} />
                      <Route path="/academy-demo" element={<Suspense fallback={<AcademyLoadingFallback />}><AcademyDemo /></Suspense>} />
                      <Route path="/success-demo" element={<Suspense fallback={<LoadingFallback />}><SuccessDemo /></Suspense>} />
                       <Route path="/playground-creator" element={

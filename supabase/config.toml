@@ -229,6 +229,16 @@ project_id = "dcoxpyzoqjvmuuygvlme"
 
 
 
+  # generate-playground is called from PUBLIC / unauthenticated surfaces —
+  # PlaygroundCurriculumView (kids curriculum lessons opened via /lesson/:id
+  # with no persisted content.playground_unit) and PlaygroundLessonRedirect
+  # (the /playground-demo preview). It was never listed here, so the platform
+  # gateway defaulted it to verify_jwt = true and rejected every anon /
+  # stale-JWT call with a 401 ("Edge Function returned a non-2xx status code")
+  # before the function body ran. Same class of bug as elevenlabs-tts above.
+  [functions.generate-playground]
+    verify_jwt = false
+
   [functions.generate-playground-video]
     verify_jwt = false
 
