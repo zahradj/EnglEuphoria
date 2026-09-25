@@ -58,7 +58,7 @@ export const template = {
   component: LessonReminderEmail,
   subject: (data: Record<string, any>) => `⏰ Reminder: ${data.lessonTitle || 'Your lesson'} starts soon`,
   displayName: 'Lesson reminder',
-  previewData: { recipientName: 'Alex', lessonTitle: 'Present Perfect', lessonDate: 'Monday 10:00 AM', teacherName: 'Maria', reminderType: '1h_before', roomLink: 'https://engleuphoria.lovable.app/classroom/123' },
+  previewData: { recipientName: 'Alex', lessonTitle: 'Present Perfect', lessonDate: 'Monday 10:00 AM', teacherName: 'Maria', reminderType: '1h_before', roomLink: 'https://engleuphoria.com/classroom/123' },
 } satisfies TemplateEntry
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Inter, Arial, sans-serif' }

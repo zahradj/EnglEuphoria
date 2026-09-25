@@ -48,7 +48,7 @@ const UnitCompletedEmail = ({ name, unitName, unitNumber, badgeName, xpEarned }:
               to English fluency.
             </Text>
             <Section style={ctaSection}>
-              <Button style={button} href="https://engleuphoria.lovable.app/student-dashboard">
+              <Button style={button} href="https://engleuphoria.com/student-dashboard">
                 Check Your Progress Hub
               </Button>
             </Section>

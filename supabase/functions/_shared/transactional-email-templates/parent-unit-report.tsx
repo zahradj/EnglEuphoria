@@ -69,7 +69,7 @@ export const template = {
   previewData: {
     studentName: 'Alex', unitTitle: 'Colors & Shapes', stars: 3,
     accuracyPct: 92, masteredCount: 12,
-    reportUrl: 'https://engleuphoria.lovable.app/reports/demo-token',
+    reportUrl: 'https://engleuphoria.com/reports/demo-token',
   },
 } satisfies TemplateEntry
 

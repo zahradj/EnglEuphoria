@@ -81,6 +81,6 @@ export const template: TemplateEntry = {
   displayName: 'Teacher Welcome (Approved)',
   previewData: {
     name: 'Jane Doe',
-    setPasswordUrl: 'https://engleuphoria.lovable.app/set-password',
+    setPasswordUrl: 'https://engleuphoria.com/set-password',
   },
 }

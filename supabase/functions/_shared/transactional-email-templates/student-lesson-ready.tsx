@@ -49,7 +49,7 @@ const StudentLessonReadyEmail = ({ studentName, lessonTitle, studentLevel }: Stu
             <Text style={listItem}>🎯 <strong>Quick Quiz</strong> — Test your understanding</Text>
             <Text style={listItem}>🤖 <strong>AI Tutor</strong> — Practice with your personal coach</Text>
             <Section style={ctaSection}>
-              <Button style={button} href="https://engleuphoria.lovable.app/student-dashboard">
+              <Button style={button} href="https://engleuphoria.com/student-dashboard">
                 {levelConfig.cta}
               </Button>
             </Section>

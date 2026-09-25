@@ -85,7 +85,7 @@ export const template = {
     lessonDate: 'January 15, 2026',
     lessonTime: '3:00 PM (GMT+1)',
     duration: '30 minutes',
-    meetingLink: 'https://engleuphoria.lovable.app/classroom/demo',
+    meetingLink: 'https://engleuphoria.com/classroom/demo',
   },
 } satisfies TemplateEntry
 

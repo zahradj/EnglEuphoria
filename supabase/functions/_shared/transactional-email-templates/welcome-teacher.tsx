@@ -41,7 +41,7 @@ const WelcomeTeacherEmail = ({ name }: WelcomeTeacherProps) => (
             <Text style={cardText}>🏫 Start accepting students!</Text>
           </Section>
           <Section style={ctaSection}>
-            <Button style={button} href="https://engleuphoria.lovable.app/teacher-application">
+            <Button style={button} href="https://engleuphoria.com/teacher-application">
               Set Up Your Profile
             </Button>
           </Section>

@@ -13,7 +13,7 @@ import {
 import type { TemplateEntry } from './registry.ts'
 import { EmailLogo } from './emailBranding.tsx'
 
-const DASHBOARD_URL = 'https://engleuphoria.lovable.app/teacher-dashboard'
+const DASHBOARD_URL = 'https://engleuphoria.com/teacher-dashboard'
 
 interface FinalWelcomeProps {
   name?: string
@@ -70,5 +70,5 @@ export const template: TemplateEntry = {
   component: FinalWelcomeEmail,
   subject: 'Welcome to the EnglEuphoria Teaching Team!',
   displayName: 'Final welcome (teacher approved)',
-  previewData: { name: 'Sarah', setPasswordUrl: 'https://engleuphoria.lovable.app/set-password' },
+  previewData: { name: 'Sarah', setPasswordUrl: 'https://engleuphoria.com/set-password' },
 }

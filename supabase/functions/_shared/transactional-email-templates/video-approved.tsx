@@ -17,7 +17,7 @@ import type { TemplateEntry } from './registry.ts'
 import { EmailLogo } from './emailBranding.tsx'
 
 const SITE_NAME = 'EnglEuphoria'
-const DASHBOARD_URL = 'https://engleuphoria.lovable.app/teacher-dashboard'
+const DASHBOARD_URL = 'https://engleuphoria.com/teacher-dashboard'
 
 interface VideoApprovedProps {
   name?: string

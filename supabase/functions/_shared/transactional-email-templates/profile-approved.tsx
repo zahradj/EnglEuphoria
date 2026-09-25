@@ -42,7 +42,7 @@ const ProfileApprovedEmail = ({ name }: ProfileApprovedProps) => (
             <Text style={cardText}>💬 Join the teacher community</Text>
           </Section>
           <Section style={ctaSection}>
-            <Button style={button} href="https://engleuphoria.lovable.app/teacher-dashboard">
+            <Button style={button} href="https://engleuphoria.com/teacher-dashboard">
               Go to Your Dashboard
             </Button>
           </Section>

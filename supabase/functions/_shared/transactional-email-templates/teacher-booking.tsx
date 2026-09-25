@@ -97,7 +97,7 @@ export const template = {
     lessonDate: 'Monday, Jan 20, 2025',
     lessonTime: '10:00 AM',
     durationLabel: '60 minutes',
-    roomLink: 'https://engleuphoria.lovable.app/classroom/123',
+    roomLink: 'https://engleuphoria.com/classroom/123',
     googleCalendarUrl: 'https://www.google.com/calendar/render?action=TEMPLATE',
     icsUrl: 'data:text/calendar;charset=utf-8,BEGIN:VCALENDAR',
   },

@@ -32,7 +32,7 @@ const AdminNewStudentEmail = ({ studentName, studentEmail, studentId }: AdminNew
           </Section>
           {studentId && (
             <Section style={ctaSection}>
-              <Button style={button} href={`https://engleuphoria.lovable.app/admin?tab=students&student_id=${studentId}`}>
+              <Button style={button} href={`https://engleuphoria.com/admin?tab=students&student_id=${studentId}`}>
                 View Student Profile
               </Button>
             </Section>

@@ -14,7 +14,7 @@ import {
 import type { TemplateEntry } from './registry.ts'
 import { EmailLogo } from './emailBranding.tsx'
 
-const SITE_URL = 'https://engleuphoria.lovable.app'
+const SITE_URL = 'https://engleuphoria.com'
 
 interface InterviewInvitationBrandedProps {
   candidateName?: string
@@ -101,7 +101,7 @@ export const template: TemplateEntry = {
     candidateName: 'Jane Doe',
     interviewDate: 'Monday, January 15, 2026',
     interviewTime: '14:00',
-    meetingLink: 'https://engleuphoria.lovable.app/classroom/demo-123',
+    meetingLink: 'https://engleuphoria.com/classroom/demo-123',
     applicationId: '123',
   },
 }
