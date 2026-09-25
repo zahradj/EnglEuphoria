@@ -76,7 +76,7 @@ export const SpeakingPractice = ({
 
       // 2. If revert tier → push into Mistake Repository for spaced review
       if (r.tier === 'revert') {
-        await supabase.from('mistake_repository').insert({
+        const { error: mistakeErr } = await supabase.from('mistake_repository').insert({
           user_id: uid,
           mistake_type: 'speaking_pronunciation',
           target_content: targetSentence,
@@ -96,6 +96,7 @@ export const SpeakingPractice = ({
             hub,
           },
         });
+        if (mistakeErr) console.error('[SpeakingPractice] mistake_repository insert failed:', mistakeErr);
 
         // 3. Adaptive trigger: if 3+ unresolved revert attempts on this lesson,
         //    surface reinforcement to the parent player (idempotent per mount).

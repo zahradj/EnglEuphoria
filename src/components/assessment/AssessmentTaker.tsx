@@ -116,11 +116,19 @@ export function AssessmentTaker() {
     setAnswers(prev => ({ ...prev, [questionId]: answer }));
 
     if (submissionId) {
-      await supabase.from('assessment_answers').upsert({
+      const { error: answerErr } = await supabase.from('assessment_answers').upsert({
         submission_id: submissionId,
         question_id: questionId,
         answer_text: answer
       });
+      if (answerErr) {
+        console.error('[AssessmentTaker] assessment_answers upsert failed:', answerErr);
+        toast({
+          title: 'Answer not saved',
+          description: 'We could not save that answer. Check your connection and try again.',
+          variant: 'destructive',
+        });
+      }
     }
   };
 
@@ -128,13 +136,23 @@ export function AssessmentTaker() {
     if (!submissionId) return;
 
     try {
-      await supabase
+      const { error: submitErr } = await supabase
         .from('assessment_submissions')
-        .update({ 
+        .update({
           status: 'submitted',
           submitted_at: new Date().toISOString()
         })
         .eq('id', submissionId);
+
+      if (submitErr) {
+        console.error('[AssessmentTaker] assessment_submissions update failed:', submitErr);
+        toast({
+          title: "Error",
+          description: submitErr.message ?? "Could not submit your assessment. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
 
       toast({
         title: "Assessment Submitted",

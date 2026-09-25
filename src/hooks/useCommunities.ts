@@ -64,13 +64,14 @@ export function useCommunities(filters?: CommunityFilters) {
       if (error) throw error;
 
       // Add creator as owner
-      await supabase
+      const { error: membershipErr } = await supabase
         .from('community_memberships')
         .insert({
           community_id: community.id,
           user_id: user.user.id,
           role: 'owner'
         });
+      if (membershipErr) console.error('[useCommunities] community_memberships owner insert failed:', membershipErr);
 
       setCommunities(prev => [community, ...prev]);
       toast({

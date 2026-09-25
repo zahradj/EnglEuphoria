@@ -243,10 +243,11 @@ export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChan
                 market_region: toDbMarketRegion(detectMarketRegion()),
               } as any);
               if (usersInsertErr) console.error('Signup users insert failed:', usersInsertErr);
-              await supabase.from('user_roles').insert({
+              const { error: rolesInsertErr } = await supabase.from('user_roles').insert({
                 user_id: data.user.id,
                 role: formData.role
               });
+              if (rolesInsertErr) console.error('Signup user_roles insert failed:', rolesInsertErr);
             }
           }
 
@@ -258,12 +259,14 @@ export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChan
                 .eq('referral_code', refCode)
                 .maybeSingle();
               if (referrer) {
-                await supabase.from('users').update({ referred_by: referrer.id }).eq('id', data.user.id);
-                await supabase.from('referrals').insert({
+                const { error: referredByErr } = await supabase.from('users').update({ referred_by: referrer.id }).eq('id', data.user.id);
+                if (referredByErr) console.error('Signup users.referred_by update failed:', referredByErr);
+                const { error: referralErr } = await supabase.from('referrals').insert({
                   referrer_id: referrer.id,
                   friend_id: data.user.id,
                   status: 'pending'
                 });
+                if (referralErr) console.error('Signup referrals insert failed:', referralErr);
               }
             } catch (refErr) {
               console.error('Error linking referral:', refErr);

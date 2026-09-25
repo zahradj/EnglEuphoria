@@ -95,7 +95,7 @@ const StudentOnboardingFlow: React.FC = () => {
     setIsLoading(true);
     try {
       if (onboardingData.learningPath) {
-        await supabase.from('personalized_learning_paths').insert({
+        const { error: pathErr } = await supabase.from('personalized_learning_paths').insert({
           student_id: user.id,
           path_name: onboardingData.learningPath.path_name || `${studentLevel} Learning Journey`,
           total_steps: onboardingData.learningPath.total_lessons || 20,
@@ -105,8 +105,9 @@ const StudentOnboardingFlow: React.FC = () => {
           estimated_completion_days: 28,
           ai_generated: true,
         });
+        if (pathErr) console.error('[StudentOnboarding] personalized_learning_paths insert failed:', pathErr);
       }
-      await supabase.from('student_profiles')
+      const { error: profileErr } = await supabase.from('student_profiles')
         .update({
           onboarding_completed: true,
           interests: onboardingData.interests,
@@ -114,6 +115,7 @@ const StudentOnboardingFlow: React.FC = () => {
           placement_test_score: onboardingData.assessmentScore,
         })
         .eq('user_id', user.id);
+      if (profileErr) console.error('[StudentOnboarding] student_profiles update failed:', profileErr);
       await refetch();
       const dashboardRoute = getStudentDashboardRoute(studentLevel);
       navigate(dashboardRoute, { replace: true });

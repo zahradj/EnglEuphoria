@@ -143,7 +143,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
     try {
       // Persist incident report for this room (teacher-side)
       if (lessonId) {
-        await supabase.from('lesson_incident_reports').upsert({
+        const { error: incidentErr } = await supabase.from('lesson_incident_reports').upsert({
           room_id: lessonId,
           reporter_id: teacherId,
           reporter_role: 'teacher',
@@ -151,13 +151,14 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
           flags: incidentFlags,
           notes: quickNotes.trim() || null,
         }, { onConflict: 'room_id,reporter_id' });
+        if (incidentErr) console.error('[LessonWrapUp] lesson_incident_reports upsert failed:', incidentErr);
         // AI Senior Engineer stamps a classroom verdict (fire-and-forget)
         supabase.functions.invoke('classroom-incident-verdict', { body: { room_id: lessonId } })
           .catch((e) => console.warn('verdict invoke failed', e));
       }
 
       // Insert feedback
-      await supabase.from('lesson_feedback_submissions').insert({
+      const { error: feedbackErr } = await supabase.from('lesson_feedback_submissions').insert({
         lesson_id: lessonId || null,
         teacher_id: teacherId,
         student_id: studentId || null,
@@ -171,16 +172,18 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
         student_performance_rating: rating,
         lesson_objectives_met: outcome === 'completed'
       });
+      if (feedbackErr) console.error('[LessonWrapUp] lesson_feedback_submissions insert failed:', feedbackErr);
 
 
       // Save shared notes to lesson_completions
       if (lessonId && studentId && sharedNotes) {
-        await supabase.from('lesson_completions').upsert({
+        const { error: completionErr } = await supabase.from('lesson_completions').upsert({
           lesson_id: lessonId,
           student_id: studentId,
           shared_notes: sharedNotes,
           completed_at: new Date().toISOString()
         }, { onConflict: 'lesson_id,student_id' });
+        if (completionErr) console.error('[LessonWrapUp] lesson_completions upsert failed:', completionErr);
       }
 
       // Update student_skills table if skill scores were provided
@@ -194,7 +197,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
             business_writing: 'Email Etiquette',
             listening: 'Comprehension Drills',
           };
-          await supabase
+          const { error: skillErr } = await supabase
             .from('student_skills')
             .upsert({
               student_id: studentId,
@@ -204,6 +207,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
               next_focus: nextFocusMap[field.key],
               updated_at: new Date().toISOString(),
             }, { onConflict: 'student_id,skill_name' });
+          if (skillErr) console.error(`[LessonWrapUp] student_skills upsert failed (${field.key}):`, skillErr);
         }
       }
 
@@ -222,12 +226,13 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
           source: 'teacher_feedback'
         }));
 
-        await supabase
+        const { error: mistakeErr } = await supabase
           .from('student_profiles')
           .update({
             mistake_history: [...currentHistory, ...newEntries].slice(-50)
           })
           .eq('user_id', studentId);
+        if (mistakeErr) console.error('[LessonWrapUp] student_profiles.mistake_history update failed:', mistakeErr);
       }
 
       // ───────────────────────────────────────────────────────────────────────
@@ -261,10 +266,11 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
         } else {
           // Past the 24h window — still close the booking for record-keeping,
           // just without crediting earnings.
-          await supabase
+          const { error: bookingErr } = await supabase
             .from('class_bookings')
             .update({ status: 'completed', updated_at: new Date().toISOString() })
             .eq('id', bookingId);
+          if (bookingErr) console.error('[LessonWrapUp] class_bookings close (overdue) failed:', bookingErr);
         }
 
         // Post-Class Sync — push the lesson's blueprint vocab + phonics

@@ -54,7 +54,7 @@ async function handleQuizFailed(detail: QuizFailedDetail) {
 
     if (existing && existing.length > 0) {
       const row = existing[0] as { id: string };
-      await supabase
+      const { error: updateErr } = await supabase
         .from('remedial_lessons')
         .update({
           metadata: {
@@ -67,10 +67,11 @@ async function handleQuizFailed(detail: QuizFailedDetail) {
           },
         })
         .eq('id', row.id);
+      if (updateErr) console.error('[vocab-games] remedial_lessons update failed', updateErr);
       return;
     }
 
-    await supabase.from('remedial_lessons').insert({
+    const { error: insertErr } = await supabase.from('remedial_lessons').insert({
       student_id: userId,
       status: 'pending',
       reason: 'vocab_quiz_failed',
@@ -83,6 +84,7 @@ async function handleQuizFailed(detail: QuizFailedDetail) {
         lesson_id: lessonId,
       },
     } as never);
+    if (insertErr) console.error('[vocab-games] remedial_lessons insert failed', insertErr);
   } catch (err) {
     // Non-fatal — reinforcement is a soft-tier signal.
     if (typeof console !== 'undefined') {

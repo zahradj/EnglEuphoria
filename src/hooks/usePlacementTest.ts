@@ -217,7 +217,7 @@ export function usePlacementTest() {
     // CEFR to the users row (source-of-truth for routing & profile display).
     try {
       const hub = level === 'professional' ? 'professional' : level === 'academy' ? 'academy' : 'playground';
-      await supabase.from('placement_results').insert({
+      const { error: placementErr } = await supabase.from('placement_results').insert({
         student_id: user.id,
         method: 'ai_full',
         cefr_level: cefrLevel,
@@ -228,11 +228,16 @@ export function usePlacementTest() {
         trail: results as any,
         duration_seconds: 0,
       });
+      if (placementErr) console.error('[usePlacementTest] placement_results insert failed (non-fatal)', placementErr);
     } catch (e) {
       console.warn('[usePlacementTest] placement_results insert failed (non-fatal)', e);
     }
     try {
-      await supabase.from('users').update({ cefr_level: cefrLevel }).eq('id', user.id);
+      // Mirrors the authoritative CEFR onto the users row — routing & profile
+      // display read from here. A silent failure (e.g. a bad enum value) would
+      // leave the student on the wrong learning path, so surface it.
+      const { error: cefrErr } = await supabase.from('users').update({ cefr_level: cefrLevel }).eq('id', user.id);
+      if (cefrErr) console.error('[usePlacementTest] users.cefr_level update failed (non-fatal)', cefrErr);
     } catch (e) {
       console.warn('[usePlacementTest] users.cefr_level update failed (non-fatal)', e);
     }

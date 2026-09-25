@@ -111,12 +111,13 @@ export const TeacherObservationHUD: React.FC<TeacherObservationHUDProps> = ({
           student_answer: '',
         }));
 
-        await supabase
+        const { error: mistakeErr } = await supabase
           .from('student_profiles')
           .update({
             mistake_history: [...newMistakes, ...currentHistory].slice(0, 50),
           })
           .eq('user_id', studentId);
+        if (mistakeErr) console.error('[TeacherObservationHUD] student_profiles.mistake_history update failed:', mistakeErr);
       }
 
       toast.success('Observations saved to diagnostic profile');

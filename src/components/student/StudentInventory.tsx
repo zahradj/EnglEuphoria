@@ -145,16 +145,18 @@ export const StudentInventory: React.FC<StudentInventoryProps> = ({
 
   const handleEquip = async (inventoryId: string, accessoryId: string) => {
     // Unequip all first
-    await supabase
+    const { error: clearErr } = await supabase
       .from('student_inventory')
       .update({ is_equipped: false } as any)
       .eq('student_id', studentId);
+    if (clearErr) console.error('[StudentInventory] clear-equipped failed:', clearErr);
 
     // Equip selected
-    await supabase
+    const { error: equipErr } = await supabase
       .from('student_inventory')
       .update({ is_equipped: true } as any)
       .eq('id', inventoryId);
+    if (equipErr) console.error('[StudentInventory] equip failed:', equipErr);
 
     setSparklingId(accessoryId);
     setTimeout(() => setSparklingId(null), 1000);
@@ -164,10 +166,11 @@ export const StudentInventory: React.FC<StudentInventoryProps> = ({
   };
 
   const handleUnequip = async (inventoryId: string) => {
-    await supabase
+    const { error: unequipErr } = await supabase
       .from('student_inventory')
       .update({ is_equipped: false } as any)
       .eq('id', inventoryId);
+    if (unequipErr) console.error('[StudentInventory] unequip failed:', unequipErr);
 
     toast.success('Item unequipped');
     fetchInventory();

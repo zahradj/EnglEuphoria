@@ -158,13 +158,14 @@ export const OrganizationProvider = ({ children }: { children: React.ReactNode }
     if (error) throw error;
 
     // Add creator as owner
-    await supabase
+    const { error: memberErr } = await supabase
       .from('organization_members')
       .insert([{
         organization_id: orgData.id,
         user_id: user?.id,
         role: 'owner'
       }]);
+    if (memberErr) console.error('[useOrganization] organization_members owner insert failed:', memberErr);
 
     await loadUserOrganizations();
     return orgData;

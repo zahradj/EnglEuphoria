@@ -226,13 +226,14 @@ export const EquipmentTest: React.FC<EquipmentTestProps> = ({ applicationId, onT
       if (error) throw error;
 
       // Update application status
-      await supabase
+      const { error: stageErr } = await supabase
         .from('teacher_applications')
-        .update({ 
+        .update({
           equipment_test_passed: allTestsPassed,
           current_stage: allTestsPassed ? 'interview_scheduled' : 'equipment_test'
         })
         .eq('id', applicationId);
+      if (stageErr) console.error('[EquipmentTest] teacher_applications stage update failed:', stageErr);
 
       onTestComplete(allTestsPassed);
       

@@ -375,11 +375,12 @@ export const speakingPracticeService = {
     }
 
     // First, deactivate any existing active goals
-    await supabase
+    const { error: deactivateErr } = await supabase
       .from('student_speaking_goals')
       .update({ is_active: false })
       .eq('student_id', userId)
       .eq('is_active', true);
+    if (deactivateErr) console.error('[speakingPracticeService] student_speaking_goals deactivate failed:', deactivateErr);
 
     const { data, error } = await supabase
       .from('student_speaking_goals')

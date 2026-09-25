@@ -292,9 +292,10 @@ export const useStudentSkills = () => {
         });
 
         // Upsert all 5 skills so re-taking the placement test re-syncs the radar.
-        await supabase
+        const { error: skillsUpsertErr } = await supabase
           .from('student_skills')
           .upsert(rows, { onConflict: 'student_id,skill_name' });
+        if (skillsUpsertErr) console.error('[useStudentSkills] student_skills upsert failed:', skillsUpsertErr);
 
         nextSkills = rows.map((r) => ({
           skill: r.skill_name,
@@ -374,7 +375,7 @@ export const useStudentSkills = () => {
     const existing = skills.find((s) => s.skill === skillName);
     const newScore = Math.min(10, (existing?.current || 0) + amount);
 
-    await supabase
+    const { error: incErr } = await supabase
       .from('student_skills')
       .upsert({
         student_id: user.id,
@@ -384,6 +385,7 @@ export const useStudentSkills = () => {
         cefr_equivalent: scoreToCefr(newScore),
         next_focus: NEXT_FOCUS_MAP[skillName] || null,
       }, { onConflict: 'student_id,skill_name' });
+    if (incErr) console.error('[useStudentSkills] incrementSkill upsert failed:', incErr);
   }, [user?.id, skills, NEXT_FOCUS_MAP]);
 
   return {

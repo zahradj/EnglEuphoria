@@ -77,11 +77,11 @@ const AuthCallback = () => {
             : (hubType === 'professional' || hubType === 'success') ? 'professional'
             : 'playground';
 
-          await supabase.from('student_profiles').upsert(
+          const { error: profileUpsertErr } = await supabase.from('student_profiles').upsert(
             { user_id: userId, student_level: resolvedLevel, onboarding_completed: false },
             { onConflict: 'user_id' }
           );
-          
+          if (profileUpsertErr) console.error('AuthCallback student_profiles upsert failed:', profileUpsertErr);
         }
 
         // Step 3: Also ensure users row exists (belt + suspenders)

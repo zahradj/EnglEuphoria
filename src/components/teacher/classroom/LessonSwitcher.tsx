@@ -110,18 +110,20 @@ export const LessonSwitcher: React.FC<Props> = ({
     setSaving(true);
     try {
       // Persist on the booking (preferred by resolver) + null legacy lesson_id.
-      await (supabase as any)
+      const { error: bookingErr } = await (supabase as any)
         .from('class_bookings')
         .update({ curriculum_lesson_id: lessonId, lesson_id: null })
         .eq('id', bookingId);
+      if (bookingErr) console.error('[LessonSwitcher] class_bookings update failed:', bookingErr);
 
       // Also advance the student's Master Library pointer for future bookings.
-      await supabase
+      const { error: progressErr } = await supabase
         .from('student_curriculum_progress')
         .upsert(
           { student_id: studentId, current_lesson_id: lessonId, last_activity_at: new Date().toISOString() },
           { onConflict: 'student_id' },
         );
+      if (progressErr) console.error('[LessonSwitcher] student_curriculum_progress upsert failed:', progressErr);
 
       // Audit trail — best-effort, never blocks the switch.
       try {

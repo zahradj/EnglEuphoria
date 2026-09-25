@@ -577,7 +577,7 @@ export default function HomeworkPlayer({ assignmentId, content, onComplete, prev
       if (!user) throw new Error('not signed in');
 
       // Insert/update submission row (idempotent on best-effort)
-      await supabase.from('homework_submissions').insert({
+      const { error: submissionErr } = await supabase.from('homework_submissions').insert({
         assignment_id: assignmentId,
         student_id: user.id,
         status: 'completed',
@@ -585,6 +585,7 @@ export default function HomeworkPlayer({ assignmentId, content, onComplete, prev
         text_response: 'Completed via interactive HomeworkPlayer',
         submitted_at: new Date().toISOString(),
       });
+      if (submissionErr) console.error('[HomeworkPlayer] homework_submissions insert failed:', submissionErr);
 
       // Bump users.total_xp by 50 — read-modify-write to stay schema-agnostic.
       const { data: row } = await supabase
@@ -594,7 +595,8 @@ export default function HomeworkPlayer({ assignmentId, content, onComplete, prev
         .maybeSingle();
       const current = (row as any)?.total_xp ?? 0;
       const next = current + XP_PER_HOMEWORK;
-      await supabase.from('users').update({ total_xp: next } as any).eq('id', user.id);
+      const { error: xpErr } = await supabase.from('users').update({ total_xp: next } as any).eq('id', user.id);
+      if (xpErr) console.error('[HomeworkPlayer] users.total_xp update failed:', xpErr);
 
       setTotalXp(next);
       setAwardedThisRun(XP_PER_HOMEWORK);

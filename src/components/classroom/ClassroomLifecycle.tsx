@@ -244,10 +244,11 @@ export const ClassroomLifecycle: React.FC<Props> = ({ bookingId, role, hubType =
   useEffect(() => {
     if (role !== 'teacher' || !status || status !== 'waiting') return;
     (async () => {
-      await supabase
+      const { error: liveErr } = await supabase
         .from('classroom_states')
         .update({ status: 'live', started_at: new Date().toISOString() })
         .eq('session_id', bookingId);
+      if (liveErr) console.error('[ClassroomLifecycle] classroom_states status=live update failed:', liveErr);
     })();
   }, [role, status, bookingId]);
 

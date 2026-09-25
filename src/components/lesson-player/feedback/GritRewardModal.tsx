@@ -77,18 +77,22 @@ export default function GritRewardModal({
       if (hub === 'playground') {
         const sticker = pickGritSticker(failedTag);
         try {
-          await supabase.from('student_inventory').insert({
+          const { error: stickerErr } = await supabase.from('student_inventory').insert({
             student_id: studentId,
             item_type: 'sticker',
             item_id: sticker.id,
             source: 'grit_reward',
           } as never);
+          // 23505 = duplicate (already earned this sticker) — expected, ignore.
+          if (stickerErr && stickerErr.code !== '23505') {
+            console.error('[GritReward] student_inventory sticker insert failed', stickerErr);
+          }
         } catch (e) {
           console.warn('[GritReward] sticker insert skipped', (e as Error).message);
         }
       } else if (hub === 'academy') {
         try {
-          await supabase
+          const { error: badgeErr } = await supabase
             .from('student_badges')
             .insert({
               student_id: studentId,
@@ -96,9 +100,14 @@ export default function GritRewardModal({
               badge_description: 'Bounced back from a tough quiz — double XP earned.',
               badge_icon: 'trophy',
             } as never);
+          // 23505 = unique index swallows duplicates — that's expected.
+          if (badgeErr && badgeErr.code !== '23505') {
+            console.error('[GritReward] student_badges insert failed', badgeErr);
+          } else if (badgeErr) {
+            console.debug('[GritReward] badge already earned');
+          }
         } catch (e) {
-          // Unique index swallows duplicates — that's expected.
-          console.debug('[GritReward] badge already earned');
+          console.warn('[GritReward] badge insert skipped', (e as Error).message);
         }
       }
       // Professional: no persistent reward — the named-skill notification is the reward.

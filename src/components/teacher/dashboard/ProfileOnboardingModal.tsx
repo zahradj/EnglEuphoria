@@ -256,19 +256,21 @@ export const ProfileOnboardingModal: React.FC<ProfileOnboardingModalProps> = ({
       const userEmail = userData.user?.email;
 
       if (userId) {
-        const { data: appByUserId } = await supabase
+        const { data: appByUserId, error: byUserIdErr } = await supabase
           .from('teacher_applications')
           .update({ current_stage: 'final_review' })
           .eq('user_id', userId)
           .select('id')
           .maybeSingle();
+        if (byUserIdErr) console.error('[ProfileOnboardingModal] teacher_applications stage update (by user_id) failed:', byUserIdErr);
 
         // If no application found by user_id, try email as fallback
         if (!appByUserId && userEmail) {
-          await supabase
+          const { error: byEmailErr } = await supabase
             .from('teacher_applications')
             .update({ current_stage: 'final_review' })
             .eq('email', userEmail);
+          if (byEmailErr) console.error('[ProfileOnboardingModal] teacher_applications stage update (by email) failed:', byEmailErr);
         }
       }
 

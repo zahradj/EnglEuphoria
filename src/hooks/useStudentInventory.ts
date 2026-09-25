@@ -91,16 +91,18 @@ export function useStudentInventory(studentId: string | undefined) {
         .map((i) => i.id);
 
       for (const id of sameTypeIds) {
-        await supabase
+        const { error: unequipErr } = await supabase
           .from('student_inventory')
           .update({ is_equipped: false } as any)
           .eq('id', id);
+        if (unequipErr) console.error('[useStudentInventory] unequip (same-type) failed:', unequipErr);
       }
 
-      await supabase
+      const { error: equipErr } = await supabase
         .from('student_inventory')
         .update({ is_equipped: true } as any)
         .eq('id', inventoryId);
+      if (equipErr) console.error('[useStudentInventory] equipItem failed:', equipErr);
 
       await fetchInventory();
     },
@@ -109,10 +111,11 @@ export function useStudentInventory(studentId: string | undefined) {
 
   const unequipItem = useCallback(
     async (inventoryId: string) => {
-      await supabase
+      const { error: unequipErr } = await supabase
         .from('student_inventory')
         .update({ is_equipped: false } as any)
         .eq('id', inventoryId);
+      if (unequipErr) console.error('[useStudentInventory] unequipItem failed:', unequipErr);
 
       await fetchInventory();
     },

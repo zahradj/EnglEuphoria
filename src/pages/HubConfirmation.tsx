@@ -55,10 +55,11 @@ const HubConfirmation: React.FC = () => {
     setConfirming(true);
     try {
       // Mark onboarding as completed
-      await supabase
+      const { error: onboardingErr } = await supabase
         .from('student_profiles')
         .update({ onboarding_completed: true })
         .eq('user_id', user.id);
+      if (onboardingErr) console.error('[HubConfirmation] student_profiles.onboarding_completed update failed:', onboardingErr);
 
       toast.success(`Welcome to ${hub.label}!`);
       navigate(getStudentDashboardRoute(studentLevel), { replace: true });

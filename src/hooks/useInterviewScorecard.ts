@@ -190,11 +190,12 @@ export function useInterviewScorecard(interview: InterviewMeta, startedAt?: stri
           },
         });
         if (error) throw error;
-        await supabase.from('interviews').update({
+        const { error: interviewErr } = await supabase.from('interviews').update({
           status: 'passed',
           admin_notes: notes,
           scorecard,
         }).eq('id', interview.id);
+        if (interviewErr) console.error('[useInterviewScorecard] interviews status=passed update failed:', interviewErr);
         toast.success(
           verdict === 'conditional'
             ? 'Approved with conditions — invitation email sent.'

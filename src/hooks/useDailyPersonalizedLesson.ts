@@ -251,10 +251,11 @@ export function useDailyPersonalizedLesson() {
 
     const newScore = (current?.fluency_score ?? 0) + 1;
 
-    await supabase
+    const { error: fluencyErr } = await supabase
       .from('student_profiles')
       .update({ fluency_score: newScore })
       .eq('user_id', user.id);
+    if (fluencyErr) console.error('[useDailyPersonalizedLesson] student_profiles.fluency_score update failed:', fluencyErr);
 
     setFluencyScore(newScore);
 

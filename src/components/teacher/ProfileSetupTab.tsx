@@ -243,10 +243,11 @@ export const ProfileSetupTab = ({ teacherId, onProfileComplete }: ProfileSetupTa
 
         // If profile is now complete, update application stage to final_review
         if (insertedData.profile_complete) {
-          await supabase
+          const { error: stageErr } = await supabase
             .from('teacher_applications')
             .update({ current_stage: 'final_review' })
             .eq('user_id', teacherId);
+          if (stageErr) console.error('[ProfileSetupTab] teacher_applications stage=final_review (insert path) failed:', stageErr);
         }
 
         toast({
@@ -278,10 +279,11 @@ export const ProfileSetupTab = ({ teacherId, onProfileComplete }: ProfileSetupTa
 
       // If profile is now complete, update application stage to final_review
       if (updatedData.profile_complete) {
-        await supabase
+        const { error: stageErr } = await supabase
           .from('teacher_applications')
           .update({ current_stage: 'final_review' })
           .eq('user_id', teacherId);
+        if (stageErr) console.error('[ProfileSetupTab] teacher_applications stage=final_review (update path) failed:', stageErr);
       }
 
       toast({

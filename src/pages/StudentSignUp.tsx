@@ -134,9 +134,11 @@ const StudentSignUp = () => {
           market_region: toDbMarketRegion(detectMarketRegion()),
         } as any);
         if (usersInsertErr) console.error('StudentSignUp users insert failed:', usersInsertErr);
-        await supabase.from('user_roles').insert({ user_id: userId, role: 'student' });
+        const { error: rolesInsertErr } = await supabase.from('user_roles').insert({ user_id: userId, role: 'student' });
+        if (rolesInsertErr) console.error('StudentSignUp user_roles insert failed:', rolesInsertErr);
       } else {
-        await supabase.from('users').update({ current_system: systemTag }).eq('id', userId);
+        const { error: systemErr } = await supabase.from('users').update({ current_system: systemTag }).eq('id', userId);
+        if (systemErr) console.error('StudentSignUp users.current_system update failed:', systemErr);
       }
 
       // Persist the wizard state into student_profiles.

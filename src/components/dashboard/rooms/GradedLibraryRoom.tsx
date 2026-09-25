@@ -48,10 +48,11 @@ export default function GradedLibraryRoom() {
 
   const markRead = async (assetId: string) => {
     if (!user) return;
-    await supabase.from('library_reads').upsert(
+    const { error: readErr } = await supabase.from('library_reads').upsert(
       { student_id: user.id, asset_id: assetId, completed: true },
       { onConflict: 'student_id,asset_id' }
     );
+    if (readErr) console.error('[GradedLibraryRoom] library_reads upsert failed:', readErr);
     awardXP({ action: 'library_read', ref_id: assetId });
   };
 

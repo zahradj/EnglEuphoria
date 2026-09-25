@@ -72,7 +72,7 @@ async function persistAttempt(args: {
     const { data: auth } = await supabase.auth.getUser();
     const studentId = auth?.user?.id;
     if (!studentId) return;
-    await supabase.from('homework_attempts').insert({
+    const { error } = await supabase.from('homework_attempts').insert({
       student_id: studentId,
       pack_id: args.packId,
       task_id: args.taskId,
@@ -81,6 +81,7 @@ async function persistAttempt(args: {
       transcript: args.transcript ?? null,
       success: args.success,
     });
+    if (error) console.error('[HomeworkRunner] homework_attempts insert failed:', error);
   } catch {
     /* swallow */
   }

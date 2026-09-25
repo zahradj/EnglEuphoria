@@ -136,12 +136,13 @@ export async function advanceCurriculumProgress(
 ): Promise<string | null> {
   const next = await getAdjacentLesson(completedLessonId, 'next');
   if (!next) return null;
-  await supabase
+  const { error: advanceErr } = await supabase
     .from('student_curriculum_progress')
     .upsert(
       { student_id: studentId, current_lesson_id: next.id, last_activity_at: new Date().toISOString() },
       { onConflict: 'student_id' },
     );
+  if (advanceErr) console.error('[activeCoreLessonResolver] student_curriculum_progress advance failed:', advanceErr);
   return next.id;
 }
 

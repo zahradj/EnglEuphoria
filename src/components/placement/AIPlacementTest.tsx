@@ -83,7 +83,7 @@ const AIPlacementTest = ({ forcedHub }: AIPlacementTestProps = {}) => {
       if (userErr) throw userErr;
 
       try {
-        await supabase.from('placement_results').insert({
+        const { error: trailErr } = await supabase.from('placement_results').insert({
           student_id: user.id,
           method: 'self_beginner',
           cefr_level: 'pre-a1',
@@ -94,6 +94,7 @@ const AIPlacementTest = ({ forcedHub }: AIPlacementTestProps = {}) => {
           trail: [] as any,
           duration_seconds: 0,
         });
+        if (trailErr) console.error('[placement] self-beginner placement_results insert failed (non-fatal)', trailErr);
       } catch (trailEx) {
         console.warn('[placement] self-beginner trail insert failed (non-fatal)', trailEx);
       }
