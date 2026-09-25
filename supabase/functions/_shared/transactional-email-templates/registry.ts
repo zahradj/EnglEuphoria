@@ -40,6 +40,7 @@ import { template as adminAtRiskTeachers } from './admin-at-risk-teachers.tsx'
 import { template as teacherBonusApproved } from './teacher-bonus-approved.tsx'
 import { template as teacherBonusRejected } from './teacher-bonus-rejected.tsx'
 import { template as teacherKpiWeeklyDigest } from './teacher-kpi-weekly-digest.tsx'
+import { template as classroomInvitation } from './classroom-invitation.tsx'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'booking-confirmation': bookingConfirmation,
@@ -73,4 +74,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'teacher-bonus-approved': teacherBonusApproved,
   'teacher-bonus-rejected': teacherBonusRejected,
   'teacher-kpi-weekly-digest': teacherKpiWeeklyDigest,
+  'classroom-invitation': classroomInvitation,
 }

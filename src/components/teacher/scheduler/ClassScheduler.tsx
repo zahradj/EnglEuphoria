@@ -9,9 +9,10 @@ import { openWeeklyRecurringSelections } from '@/services/recurringSlotsService'
 import { addMinutes, setHours, setMinutes, format } from 'date-fns';
 import { useTeacherHubRole } from '@/hooks/useTeacherHubRole';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Loader2, RotateCcw, Lock, Repeat, CalendarDays } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, RotateCcw, Lock, Repeat, CalendarDays, UserPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { BookedSlotManager } from './BookedSlotManager';
+import { InviteStudentDialog } from './InviteStudentDialog';
 import type { AvailabilitySlot } from './types';
 
 interface ClassSchedulerProps {
@@ -32,6 +33,7 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
   const [busy, setBusy] = useState(false);
   const [mode, setMode] = useState<SlotMode>('single');
   const [bookedSlot, setBookedSlot] = useState<AvailabilitySlot | null>(null);
+  const [inviteOpen, setInviteOpen] = useState(false);
 
   const { hubKind, allowedDurations, loading: hubLoading } = useTeacherHubRole(teacherId);
 
@@ -272,6 +274,11 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
           >
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RotateCcw className="h-4 w-4" />}
           </Button>
+
+          <Button variant="default" size="sm" onClick={() => setInviteOpen(true)}>
+            <UserPlus className="h-4 w-4 mr-1.5" />
+            Invite a Student
+          </Button>
         </div>
       </div>
 
@@ -332,6 +339,15 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
           setBookedSlot(null);
           refresh();
         }}
+      />
+
+      <InviteStudentDialog
+        open={inviteOpen}
+        onOpenChange={setInviteOpen}
+        teacherId={teacherId}
+        hub={hubForSlots}
+        defaultDuration={slotDuration}
+        onInvited={() => refresh()}
       />
     </div>
   );

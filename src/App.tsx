@@ -122,6 +122,7 @@ const StorybookReader = lazy(() => import("./pages/StorybookReader"));
 const UnsubscribePage = lazy(() => import("./pages/UnsubscribePage"));
 const FindTeacher = lazy(() => import("./pages/student/FindTeacher"));
 const InterviewMagicEntry = lazy(() => import("./pages/InterviewMagicEntry"));
+const JoinClassroomPage = lazy(() => import("./pages/JoinClassroomPage"));
 const GrammarTest = lazy(() => import("./pages/teacher/GrammarTest"));
 const GrammarTestResult = lazy(() => import("./pages/teacher/GrammarTestResult"));
 const InterviewScheduler = lazy(() => import("./pages/teacher/InterviewScheduler"));
@@ -729,6 +730,15 @@ const App = () => {
                       <Route path="/interview/:token" element={
                         <Suspense fallback={<LoadingFallback />}>
                           <InterviewMagicEntry />
+                        </Suspense>
+                      } />
+
+                      {/* Classroom invite magic-link entry — public (no password screen).
+                          Teacher-invited student: signs in as their real account, then
+                          hands off into the existing /classroom/:id route unmodified. */}
+                      <Route path="/join-classroom/:token" element={
+                        <Suspense fallback={<LoadingFallback />}>
+                          <JoinClassroomPage />
                         </Suspense>
                       } />
 

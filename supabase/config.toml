@@ -207,6 +207,8 @@ project_id = "dcoxpyzoqjvmuuygvlme"
     verify_jwt = true
   [functions.interview-token-auth]
     verify_jwt = false
+  [functions.classroom-invite]
+    verify_jwt = false
   [functions.interview-book-slot]
     verify_jwt = false
   [functions.recruitment-invite-applicant]
