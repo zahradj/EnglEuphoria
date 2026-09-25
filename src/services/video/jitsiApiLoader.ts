@@ -4,9 +4,21 @@ export class JitsiApiLoader {
   private static isLoading = false;
   private static isLoaded = false;
 
+  /** How long to wait for the injected <script> to fire onload/onerror before giving up. */
+  private static readonly LOAD_TIMEOUT_MS = 15000;
+
   static async loadJitsiApi(): Promise<void> {
-    if (this.isLoaded && window.JitsiMeetExternalAPI) {
-      logger.debug('Jitsi API already loaded');
+    // If the global constructor is already on `window`, the API *is* loaded —
+    // whether we injected the script, index.html did, or a previous loader
+    // instance did before module state was reset. The old guard also required
+    // our private `isLoaded` flag, so in any of those cases we'd fall through
+    // and inject a redundant <script>, then hang forever waiting for an
+    // `onload` that never comes (it also never fires in jsdom, which is why
+    // every lifecycle test timed out on `await service.initialize()`).
+    if (window.JitsiMeetExternalAPI) {
+      this.isLoaded = true;
+      this.isLoading = false;
+      logger.debug('Jitsi API already available on window');
       return Promise.resolve();
     }
 
@@ -44,20 +56,34 @@ export class JitsiApiLoader {
       const script = document.createElement('script');
       script.src = 'https://meet.jit.si/external_api.js';
       script.async = true;
-      
+
+      // Guard against a load that never resolves (offline, CDN stall, a
+      // network layer that holds the connection open without ever firing
+      // onload or onerror). Without this, `initialize()` hangs indefinitely
+      // with no error surfaced anywhere.
+      const timeoutId = setTimeout(() => {
+        this.isLoading = false;
+        script.onload = null;
+        script.onerror = null;
+        script.remove();
+        reject(new Error('Timed out loading Jitsi Meet API script'));
+      }, this.LOAD_TIMEOUT_MS);
+
       script.onload = () => {
+        clearTimeout(timeoutId);
         logger.info('Jitsi API script loaded');
         this.isLoaded = true;
         this.isLoading = false;
-        
+
         if (window.JitsiMeetExternalAPI) {
           resolve();
         } else {
           reject(new Error('Jitsi API loaded but JitsiMeetExternalAPI not available'));
         }
       };
-      
+
       script.onerror = (error) => {
+        clearTimeout(timeoutId);
         logger.error('Failed to load Jitsi API script', error);
         this.isLoading = false;
         reject(new Error('Failed to load Jitsi Meet API script'));

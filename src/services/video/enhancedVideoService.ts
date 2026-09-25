@@ -16,10 +16,55 @@ export class EnhancedVideoService extends VideoService {
   private connectionSimTimeout: ReturnType<typeof setTimeout> | null = null;
   private isDisposed = false;
 
+  // Monotonic id for the current joinRoom() attempt. leaveRoom()/dispose()
+  // bump it, which invalidates any join that is still mid-await: when that
+  // join resumes it sees a stale token and bails instead of installing a
+  // connection timer or mutating state on an already-torn-down service.
+  private joinToken = 0;
+
+  // Last connection state we surfaced to the consumer. Used to collapse
+  // duplicate transitions — notably, leaveRoom() must not emit a spurious
+  // `false` for a session that never reached `true` (leave-during-join).
+  private lastConnectionState: boolean | null = null;
+
   constructor(config: EnhancedVideoConfig, callbacks: VideoServiceCallbacks = {}) {
     super(config, callbacks);
-    this.eventHandlers = new JitsiEventHandlers(callbacks);
+    // Route Jitsi's own `videoConferenceJoined` -> connection-status callback
+    // through the same dedupe gate the service uses, so the event path and
+    // the simulated-connection path can't double-fire or race a teardown.
+    this.eventHandlers = new JitsiEventHandlers({
+      ...callbacks,
+      onConnectionStatusChanged: this.emitConnectionStatus,
+    });
     this.featureManager = new AdvancedVideoFeatureManager();
+  }
+
+  /** Single choke point for connection-status updates: no updates after
+   *  dispose, and no repeated/again-false transitions. */
+  private emitConnectionStatus = (connected: boolean): void => {
+    if (this.isDisposed) return;
+    if ((this.lastConnectionState ?? false) === connected) return;
+    this.lastConnectionState = connected;
+    this.callbacks.onConnectionStatusChanged?.(connected);
+  };
+
+  /** True once a leaveRoom()/dispose() has superseded the join that owns
+   *  `token`, or the service has been disposed outright. */
+  private isJoinSuperseded(token: number): boolean {
+    return token !== this.joinToken || this.isDisposed;
+  }
+
+  /** Tear down the Jitsi API instance and its container. Safe to call when
+   *  there is nothing to tear down. */
+  private teardownApi(): void {
+    if (!this.api) return;
+    try {
+      this.api.dispose();
+    } catch (error) {
+      logger.warn('Enhanced: error disposing Jitsi API', error);
+    }
+    this.api = null;
+    JitsiApiLoader.removeContainer();
   }
 
   private get enhancedConfig(): EnhancedVideoConfig {
@@ -59,45 +104,60 @@ export class EnhancedVideoService extends VideoService {
       return;
     }
 
+    const token = ++this.joinToken;
+
     try {
       logger.debug('Enhanced: joining room', { domain: this.enhancedConfig.domain });
       const domain = this.enhancedConfig.domain || 'meet.jit.si';
-      
+
       const container = JitsiApiLoader.createContainer();
       const options = JitsiConfigBuilder.buildOptions(this.enhancedConfig, container);
 
       logger.debug('Enhanced: creating Jitsi API instance');
-      
+
       if (!window.JitsiMeetExternalAPI) {
         throw new Error('JitsiMeetExternalAPI not available');
       }
 
       this.api = new window.JitsiMeetExternalAPI(domain, options);
       logger.debug('Enhanced: Jitsi API instance created', !!this.api);
-      
+
       logger.debug('Enhanced: setting up event listeners');
       this.eventHandlers.setupEventListeners(this.api);
-      
+
       // Get local media stream for preview
       try {
-        this.localMediaStream = await navigator.mediaDevices.getUserMedia({
+        const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: true
         });
+        if (this.isJoinSuperseded(token)) {
+          // leaveRoom()/dispose() ran while getUserMedia was pending. Release
+          // the stream we just acquired and abandon this join entirely.
+          stream.getTracks().forEach(track => track.stop());
+          this.teardownApi();
+          return;
+        }
+        this.localMediaStream = stream;
         logger.debug('Enhanced: local media stream obtained');
       } catch (mediaError) {
         logger.warn('Enhanced: failed to get local media stream', mediaError);
       }
-      
+
+      if (this.isJoinSuperseded(token)) {
+        // Torn down during setup — do not arm the connection timer.
+        this.teardownApi();
+        return;
+      }
+
       // Simulate connection after a short delay
       this.connectionSimTimeout = setTimeout(() => {
-        if (!this.isDisposed) {
-          logger.debug('Enhanced: simulating connection success');
-          this.callbacks.onConnectionStatusChanged?.(true);
-        }
         this.connectionSimTimeout = null;
+        if (this.isJoinSuperseded(token)) return;
+        logger.debug('Enhanced: simulating connection success');
+        this.emitConnectionStatus(true);
       }, 2000);
-      
+
     } catch (error) {
       logger.error('Enhanced: failed to join room', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to join room';
@@ -283,24 +343,23 @@ export class EnhancedVideoService extends VideoService {
 
   async leaveRoom(): Promise<void> {
     logger.debug('Enhanced: leaving room');
+    // Invalidate any joinRoom() still mid-await, then kill the pending timer.
+    this.joinToken++;
     this.clearConnectionTimeout();
-    
+
     await this.featureManager.stopScreenShare();
     await this.featureManager.stopRecording();
-    
-    if (this.api) {
-      this.api.dispose();
-      this.api = null;
-      JitsiApiLoader.removeContainer();
-    }
-    
+
+    this.teardownApi();
+
     if (this.localMediaStream) {
       this.localMediaStream.getTracks().forEach(track => track.stop());
       this.localMediaStream = null;
     }
-    
+
     this.eventHandlers.clearParticipants();
-    this.callbacks.onConnectionStatusChanged?.(false);
+    // emitConnectionStatus swallows this when we never reached `true`.
+    this.emitConnectionStatus(false);
   }
 
   async dispose(): Promise<void> {

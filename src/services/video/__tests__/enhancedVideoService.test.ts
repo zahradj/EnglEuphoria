@@ -10,20 +10,28 @@ const mockJitsiApi = {
   removeEventListener: vi.fn(),
 };
 
-global.window.JitsiMeetExternalAPI = vi.fn(() => mockJitsiApi) as any;
+// `new window.JitsiMeetExternalAPI(...)` — the impl must be constructable, so
+// a regular function, not an arrow (an arrow throws "not a constructor").
+global.window.JitsiMeetExternalAPI = vi.fn(function () { return mockJitsiApi; }) as any;
+
+// Build a stream whose track objects keep a stable identity across
+// getTracks() calls, so `vi.spyOn(stream.getTracks()[0], 'stop')` in a test
+// actually observes the track the service stops in leaveRoom().
+const makeMockStream = () => {
+  const videoTrack = { stop: vi.fn(), kind: 'video', enabled: true };
+  const audioTrack = { stop: vi.fn(), kind: 'audio', enabled: true };
+  const tracks = [videoTrack, audioTrack];
+  return {
+    getTracks: () => tracks,
+    getVideoTracks: () => [videoTrack],
+    getAudioTracks: () => [audioTrack],
+  };
+};
 
 // Mock navigator.mediaDevices
 Object.defineProperty(global.navigator, 'mediaDevices', {
   value: {
-    getUserMedia: vi.fn().mockResolvedValue({
-      getTracks: () => [{
-        stop: vi.fn(),
-        kind: 'video',
-        enabled: true
-      }],
-      getVideoTracks: () => [{ stop: vi.fn(), enabled: true }],
-      getAudioTracks: () => [{ stop: vi.fn(), enabled: true }],
-    }),
+    getUserMedia: vi.fn().mockImplementation(() => Promise.resolve(makeMockStream())),
     getDisplayMedia: vi.fn(),
   },
   configurable: true,
