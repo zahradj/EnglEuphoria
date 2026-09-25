@@ -62,6 +62,8 @@ interface TeacherClassroomProps {
   isInterview?: boolean;
   /** Trial (student's first booking) — 25 mandatory + 5 optional across every hub. */
   isTrial?: boolean;
+  /** Student's resolved CEFR level for this trial — written to placement_results on wrap-up. */
+  trialCefr?: string | null;
 }
 
 
@@ -78,6 +80,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   customStage,
   isInterview = false,
   isTrial = false,
+  trialCefr = null,
 }) => {
 
   const navigate = useNavigate();
@@ -1427,6 +1430,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         teacherId={user?.id}
         sharedNotes={sharedNotes}
         hubType={hubType}
+        isTrial={isTrial}
+        trialCefr={trialCefr}
       />
 
       {/* Dice Roller Dialog */}

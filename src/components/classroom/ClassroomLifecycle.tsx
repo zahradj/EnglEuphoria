@@ -9,7 +9,6 @@ import { useToast } from '@/hooks/use-toast';
 import { useClassroomHeartbeat } from '@/hooks/classroom/useClassroomHeartbeat';
 import { SafeToLeaveButton } from './SafeToLeaveButton';
 import { TrialCoreIndicator } from './TrialCoreIndicator';
-import { advanceCurriculumProgress } from '@/services/activeCoreLessonResolver';
 
 interface Props {
   bookingId: string;
@@ -21,13 +20,16 @@ interface Props {
    * through the Master Library at the right level. Meant for trial
    * lessons on the student's FIRST booking only. Deduped by checking
    * for an existing `method = 'trial_lesson'` row for the student.
+   *
+   * NOTE: this listener is gated on `classroom_states.status` flipping to
+   * 'ended', but nothing in the real live-lesson flow (TeacherClassroom.tsx
+   * -> endLesson.ts) writes that row for a normal booking — only orphaned
+   * code (useLiveClassroom.ts / classroom/unified / interview edge
+   * functions) does. The working trial handoff now lives in
+   * LessonWrapUpDialog.tsx's handleSubmit. This prop is kept as a harmless,
+   * deduped no-op for real bookings rather than removed outright.
    */
   trialHandoff?: { studentId: string; cefrLevel: string | null } | null;
-  /**
-   * When set, on lifecycle `ended` we advance the student's Master
-   * Library pointer to the next lesson. Fires teacher-side only.
-   */
-  progressAdvance?: { studentId: string; lessonId: string } | null;
 }
 
 const HUB_RING: Record<string, string> = {
@@ -51,7 +53,7 @@ interface SessionMeta {
  * - Resolves the classroom_sessions row for telemetry (heartbeat + Safe to Leave)
  * - Shows EntryCountdown when status flips to 'live'
  */
-export const ClassroomLifecycle: React.FC<Props> = ({ bookingId, role, hubType = 'academy', trialHandoff = null, progressAdvance = null }) => {
+export const ClassroomLifecycle: React.FC<Props> = ({ bookingId, role, hubType = 'academy', trialHandoff = null }) => {
   const [status, setStatus] = useState<'waiting' | 'live' | 'ended' | null>(null);
   const [showCountdown, setShowCountdown] = useState(false);
   const [session, setSession] = useState<SessionMeta | null>(null);
@@ -162,16 +164,6 @@ export const ClassroomLifecycle: React.FC<Props> = ({ bookingId, role, hubType =
                 }
               })();
             }
-            if (next === 'ended' && prev !== 'ended' && role === 'teacher' && progressAdvance?.studentId && progressAdvance.lessonId) {
-              // Advance student's Master Library pointer for booking #2+.
-              (async () => {
-                try {
-                  await advanceCurriculumProgress(progressAdvance.studentId, progressAdvance.lessonId);
-                } catch (e) {
-                  console.warn('[ClassroomLifecycle] advanceCurriculumProgress failed', e);
-                }
-              })();
-            }
             if (next === 'ended' && role === 'student') {
               // Trial → placement toast. If the teacher's handoff wrote a
               // placement_results row for this student, surface the CEFR so
@@ -238,7 +230,7 @@ export const ClassroomLifecycle: React.FC<Props> = ({ bookingId, role, hubType =
       supabase.removeChannel(channel);
       if (sessionChannel) supabase.removeChannel(sessionChannel);
     };
-  }, [bookingId, role, navigate, toast, session?.id, trialHandoff?.studentId, trialHandoff?.cefrLevel, progressAdvance?.studentId, progressAdvance?.lessonId, hubType]);
+  }, [bookingId, role, navigate, toast, session?.id, trialHandoff?.studentId, trialHandoff?.cefrLevel, hubType]);
 
   // Teacher flips status → 'live' on first mount (idempotent)
   useEffect(() => {

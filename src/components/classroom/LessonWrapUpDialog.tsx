@@ -26,6 +26,15 @@ interface LessonWrapUpDialogProps {
   teacherId?: string;
   sharedNotes?: string;
   hubType?: ClassroomHubKey | 'professional' | string;
+  /** True for the student's first-ever (trial) booking. */
+  isTrial?: boolean;
+  /**
+   * Student's resolved CEFR level for this trial lesson. When set alongside
+   * `isTrial`, wrap-up submission writes a `placement_results` row so the
+   * student's NEXT booking resolves through the Master Library at the right
+   * level instead of falling back to the trial slide deck again.
+   */
+  trialCefr?: string | null;
 }
 
 const IMPROVEMENT_AREAS = ['Grammar', 'Pronunciation', 'Vocabulary', 'Fluency', 'Listening'];
@@ -54,7 +63,9 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   studentId,
   teacherId,
   sharedNotes = '',
-  hubType = 'academy'
+  hubType = 'academy',
+  isTrial = false,
+  trialCefr = null,
 }) => {
   const theme = getClassroomHubTheme(hubType);
   const { toast } = useToast();
@@ -290,6 +301,34 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
         // no-op, never-throwing call for every other hub.
         if (studentId) {
           void evaluateAndAssignExtraPractice({ bookingId, studentId, hub: hubType as any });
+        }
+
+        // Trial → CEFR placement handoff — the student's first-ever (trial)
+        // booking gets a placement_results row so their SECOND booking
+        // resolves through the Master Library at the right level instead of
+        // falling back to the trial slide deck again. Deduped by checking
+        // for an existing `method = 'trial_lesson'` row for the student, so
+        // a retried/duplicate submission never double-inserts.
+        if (isTrial && trialCefr && studentId) {
+          try {
+            const { data: existing } = await (supabase as any)
+              .from('placement_results')
+              .select('id')
+              .eq('student_id', studentId)
+              .eq('method', 'trial_lesson')
+              .limit(1)
+              .maybeSingle();
+            if (!existing?.id) {
+              await (supabase as any).from('placement_results').insert({
+                student_id: studentId,
+                cefr_level: trialCefr,
+                method: 'trial_lesson',
+                hub: hubType,
+              });
+            }
+          } catch (e) {
+            console.warn('[LessonWrapUpDialog] trial handoff failed', e);
+          }
         }
 
         // Automated next-lesson advance — only on a completed outcome. When

@@ -532,6 +532,7 @@ const UnifiedClassroomPage: React.FC = () => {
           scheduledAt={scheduledAtIso}
           customStage={trailStage}
           isTrial={isTrialLesson && isFirstLesson === true}
+          trialCefr={trialCefr ?? null}
         />
         <ClassroomLifecycle
           bookingId={booking.id}
@@ -540,11 +541,6 @@ const UnifiedClassroomPage: React.FC = () => {
           trialHandoff={
             isTrialLesson && isFirstLesson === true && (booking as any).student_id
               ? { studentId: (booking as any).student_id, cefrLevel: trialCefr ?? null }
-              : null
-          }
-          progressAdvance={
-            !isTrialLesson && (booking as any).student_id && resolved?.lessonId
-              ? { studentId: (booking as any).student_id, lessonId: resolved.lessonId }
               : null
           }
         />
