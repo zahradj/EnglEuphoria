@@ -115,7 +115,19 @@ serve(async (req) => {
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    logStep("ERROR", { message: errorMessage });
+    // Temporary richer diagnostics -- Stripe's SDK collapses many distinct
+    // underlying causes into one generic "connection" message; the extra
+    // fields on a StripeConnectionError (type/code/detail/cause) disambiguate.
+    const anyErr = error as any;
+    logStep("ERROR", {
+      message: errorMessage,
+      type: anyErr?.type,
+      code: anyErr?.code,
+      detail: anyErr?.detail,
+      raw: anyErr?.raw,
+      cause: anyErr?.cause ? String(anyErr.cause?.message || anyErr.cause) : undefined,
+      stack: anyErr?.stack?.split("\n").slice(0, 5).join(" | "),
+    });
     return new Response(JSON.stringify({ error: errorMessage }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
