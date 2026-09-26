@@ -61,35 +61,49 @@ serve(async (req) => {
     const user = userData.user;
     logStep("User authenticated", { userId: user.id, email: user.email });
 
-    // Get payment plan details with validation
+    // Get subscription plan details with validation.
+    // NOTE: this used to query a `payment_plans` table that doesn't exist --
+    // the real table is `subscription_plans`, which prices in two columns
+    // (price_dzd / price_eur) instead of one price+currency pair.
     const { data: plan, error: planError } = await supabaseClient
-      .from('payment_plans')
+      .from('subscription_plans')
       .select('*')
       .eq('id', planId)
+      .eq('is_active', true)
       .single();
 
     if (planError || !plan) throw new Error("Payment plan not found");
-    
+
+    // Currency follows the same DZ/EUR split used everywhere else in the app
+    // (see src/lib/marketRegion.ts) -- every non-DZ region settles in EUR,
+    // and DZ's listed payment method is 'bank_dz' (a manual path), not
+    // Stripe -- create-pack-checkout uses this exact same EUR-only
+    // convention for that reason, so this mirrors it rather than guessing
+    // at Stripe DZD support.
+    const price = plan.price_eur;
+    const currency = 'eur';
+
     // SECURITY: Validate plan data
-    if (!plan.price || typeof plan.price !== 'number' || plan.price <= 0) {
+    if (!price || typeof price !== 'number' || price <= 0) {
       throw new Error("Invalid plan price");
-    }
-    if (!plan.currency || typeof plan.currency !== 'string') {
-      throw new Error("Invalid plan currency");
     }
     if (!plan.name || typeof plan.name !== 'string') {
       throw new Error("Invalid plan name");
     }
-    
+
     // Validate price is reasonable (prevent manipulation)
-    if (plan.price > 10000) { // Max $10,000 or equivalent
+    if (price > 10000) { // Max €10,000
       throw new Error("Price exceeds maximum allowed");
     }
-    
-    logStep("Payment plan validated", { planName: plan.name, price: plan.price });
 
+    logStep("Payment plan validated", { planName: plan.name, price });
+
+    // Deno's edge runtime needs the fetch-based HTTP client -- the SDK's
+    // default (Node's http module) fails with a generic "connection" error
+    // here, per Stripe's own guidance for Deno/edge deployments.
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2023-10-16",
+      httpClient: Stripe.createFetchHttpClient(),
     });
 
     // Check for existing Stripe customer
@@ -109,18 +123,23 @@ serve(async (req) => {
 
     const origin = req.headers.get("origin") || "http://localhost:3000";
     
-    // Create checkout session based on payment type
+    // Create checkout session -- every subscription_plans row is a
+    // recurring plan by definition (that's the table's whole purpose), so
+    // mode is always 'subscription'; interval_type is 'monthly' | 'yearly'
+    // and needs mapping to Stripe's 'month' | 'year'.
     const sessionConfig: any = {
       customer: customerId,
+      mode: 'subscription',
       line_items: [
         {
           price_data: {
-            currency: plan.currency.toLowerCase(),
-            product_data: { 
+            currency,
+            product_data: {
               name: plan.name,
               description: `${plan.name} - English Learning Platform`
             },
-            unit_amount: Math.round(plan.price * 100), // Convert to cents
+            unit_amount: Math.round(price * 100), // Convert to cents
+            recurring: { interval: plan.interval_type === 'yearly' ? 'year' : 'month' },
           },
           quantity: 1,
         },
@@ -133,29 +152,25 @@ serve(async (req) => {
       }
     };
 
-    if (plan.type === 'subscription' && plan.interval) {
-      sessionConfig.mode = 'subscription';
-      sessionConfig.line_items[0].price_data.recurring = { interval: plan.interval };
-    } else {
-      sessionConfig.mode = 'payment';
-    }
-
     const session = await stripe.checkout.sessions.create(sessionConfig);
     logStep("Checkout session created", { sessionId: session.id, url: session.url });
 
-    // Create pending payment record
+    // KNOWN GAP, NOT FIXED HERE: the `payments` table requires a non-null
+    // lesson_id and has none of payment_gateway/gateway_transaction_id/
+    // plan_id/metadata -- this insert has always failed (silently, since the
+    // error below is only logged, never thrown) and still will. Recording a
+    // subscription payment needs an actual schema decision (what does
+    // "payment for no specific lesson" mean in a lesson-shaped table?), not
+    // a guessed placeholder lesson_id -- left exactly as broken as before
+    // rather than inventing a fake one.
     const { error: paymentError } = await supabaseClient
       .from('payments')
       .insert({
         student_id: user.id,
-        amount: plan.price,
-        currency: plan.currency,
+        amount: price,
+        currency,
         status: 'pending',
         payment_method: 'stripe',
-        payment_gateway: 'stripe',
-        gateway_transaction_id: session.id,
-        plan_id: planId,
-        metadata: { checkout_session_id: session.id }
       });
 
     if (paymentError) {

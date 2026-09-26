@@ -110,8 +110,12 @@ serve(async (req) => {
     return new Response(JSON.stringify({ error: "Webhook not configured" }), { status: 400 });
   }
 
+  // Deno's edge runtime needs the fetch-based HTTP client -- the SDK's
+  // default (Node's http module) fails with a generic "connection" error
+  // here, per Stripe's own guidance for Deno/edge deployments.
   const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
     apiVersion: "2023-10-16",
+    httpClient: Stripe.createFetchHttpClient(),
   });
 
   let event: Stripe.Event;

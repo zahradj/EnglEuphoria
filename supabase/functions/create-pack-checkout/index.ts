@@ -62,8 +62,12 @@ serve(async (req) => {
     }
     logStep("Pack validated", { name: pack.name, price: pack.price_eur, sessions: pack.session_count });
 
+    // Deno's edge runtime needs the fetch-based HTTP client -- the SDK's
+    // default (Node's http module) fails with a generic "connection" error
+    // here, per Stripe's own guidance for Deno/edge deployments.
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2023-10-16",
+      httpClient: Stripe.createFetchHttpClient(),
     });
 
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
