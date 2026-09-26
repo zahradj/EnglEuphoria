@@ -159,9 +159,13 @@ Deno.serve(async (req) => {
       if (!scheduledAt || Number.isNaN(new Date(scheduledAt).getTime())) {
         return json({ error: 'A valid scheduledAt is required' }, 400)
       }
-      const durationMinutes = Number.isFinite(duration) && duration > 0 ? Math.round(duration) : 60
+      // teacher_availability has a CHECK constraint restricting duration to
+      // exactly 30 or 60 -- clamp here so the calendar-grid insert below
+      // never violates it, regardless of what the caller sent.
+      const durationMinutes = Number(duration) >= 45 ? 60 : 30
       const normalizedEmail = studentEmail.trim().toLowerCase()
       const hubType = hub === 'playground' || hub === 'success' ? hub : 'academy'
+      const hubSpecialty = hubType === 'playground' ? 'Playground' : hubType === 'success' ? 'Professional' : 'Academy'
 
       // Find-or-create the real student account. handle_new_user() (the
       // on_auth_user_created trigger) populates public.users automatically
@@ -203,6 +207,33 @@ Deno.serve(async (req) => {
         .single()
       if (bookingErr || !booking) {
         return json({ error: `Could not create booking: ${bookingErr?.message || 'unknown error'}` }, 500)
+      }
+
+      // The teacher's calendar grid (ClassScheduler/useAvailabilityManager)
+      // reads booked slots from teacher_availability, not class_bookings --
+      // insert the matching already-booked row so this lesson shows up on
+      // the calendar exactly like a normal booking would. 'direct_booking'
+      // is an existing, real value in this table's lesson_type CHECK
+      // constraint, distinct from the open-slot 'free_slot' default.
+      const startTime = new Date(scheduledAt)
+      const endTime = new Date(startTime.getTime() + durationMinutes * 60_000)
+      const { error: availabilityErr } = await adminClient.from('teacher_availability').insert({
+        teacher_id: auth.userId,
+        student_id: studentId,
+        start_time: startTime.toISOString(),
+        end_time: endTime.toISOString(),
+        duration: durationMinutes,
+        is_available: false,
+        is_booked: true,
+        lesson_type: 'direct_booking',
+        lesson_id: lessonId || null,
+        lesson_title: studentName ? `Lesson with ${studentName}` : null,
+        hub_specialty: hubSpecialty,
+      })
+      if (availabilityErr) {
+        // Non-fatal: the booking + invite are already valid and the student
+        // can still join. Only the teacher's calendar-grid display degrades.
+        console.error('[CLASSROOM-INVITE] teacher_availability insert failed', availabilityErr)
       }
 
       // Invite window: the lesson's own duration plus an hour of grace on
