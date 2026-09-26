@@ -132,8 +132,6 @@ serve(async (req) => {
     { auth: { persistSession: false } },
   );
 
-  const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2023-10-16" });
-
   try {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
