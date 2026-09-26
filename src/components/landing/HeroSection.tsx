@@ -36,7 +36,7 @@ const GROUP_THEMES = [
     id: 'kids',
     label: 'The Playground',
     ageLabel: 'Kids 5–12',
-    tagline: 'Learn Through Play!',
+    taglineKey: 'lp.hero.taglinePlay',
     src: heroKid,
     alt: 'Happy child learning English on tablet',
     gradient: 'from-[#FF9F1C] to-[#FFBF00]',
@@ -55,7 +55,7 @@ const GROUP_THEMES = [
     id: 'teen',
     label: 'The Academy',
     ageLabel: 'Teens 13–17',
-    tagline: 'Level Up Your English!',
+    taglineKey: 'lp.hero.taglineLevelUp',
     src: heroTeen,
     alt: 'Confident teenager learning English with laptop',
     gradient: 'from-[#6366F1] to-[#A855F7]',
@@ -74,7 +74,7 @@ const GROUP_THEMES = [
     id: 'adult',
     label: 'The Hub',
     ageLabel: 'Adults 18+',
-    tagline: 'Professional Growth Starts Here.',
+    taglineKey: 'lp.hero.taglinePro',
     src: heroAdult,
     alt: 'Professional adult learning Business English',
     gradient: 'from-[#10B981] to-[#059669]',
@@ -162,7 +162,7 @@ export function HeroSection() {
               {t('lp.hero.headline')}
               <br />
               <span className={`bg-gradient-to-r ${theme.gradient} bg-clip-text text-transparent transition-all duration-700`}>
-                {theme.tagline}
+                {t(theme.taglineKey)}
               </span>
             </motion.h1>
 

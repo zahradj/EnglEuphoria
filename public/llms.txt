@@ -1,0 +1,14 @@
+# EnglEuphoria
+
+> Live 1-on-1 English lessons with expert teachers, across three hubs:
+> Playground (kids 5-12), Academy (teens 13-17), and Success (adults 18+).
+> CEFR-aligned curriculum, real teachers, no group classes.
+
+- [Pricing](https://www.engleuphoria.com/pricing.md): plan names, prices, and what's included, in plain text
+- [Pricing page](https://www.engleuphoria.com/pricing): the same plans, rendered
+- [Methodology](https://www.engleuphoria.com/methodology): teaching approach and CEFR alignment
+- [For Teachers](https://www.engleuphoria.com/for-teachers): joining as a teacher
+- [About](https://www.engleuphoria.com/about): company background
+- [Playground demo](https://www.engleuphoria.com/playground-demo): kids hub preview
+- [Academy demo](https://www.engleuphoria.com/academy-demo): teens hub preview
+- [Success demo](https://www.engleuphoria.com/success-demo): adults hub preview
