@@ -7,7 +7,7 @@
  */
 
 import type { QALesson } from '../qa/types';
-import type { LessonCriticResult } from '../qa/judges/lessonCritic';
+import { computeOverall, type LessonCriticResult } from '../qa/judges/lessonCritic';
 
 export interface VariantCandidate {
   lesson: QALesson;
@@ -38,13 +38,7 @@ export function structuralScore(lesson: QALesson): number {
 export function scoreCandidate(lesson: QALesson, critic?: LessonCriticResult): VariantCandidate {
   return {
     lesson,
-    criticScore: critic ? Math.round(
-      critic.scores.pedagogical_flow * 0.25 +
-      critic.scores.vocab_recycling * 0.25 +
-      critic.scores.speaking_authenticity * 0.2 +
-      critic.scores.character_coherence * 0.15 +
-      critic.scores.engagement_variety * 0.15,
-    ) : undefined,
+    criticScore: critic ? computeOverall(critic.scores) : undefined,
     structuralScore: structuralScore(lesson),
   };
 }

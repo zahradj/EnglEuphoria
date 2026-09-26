@@ -101,6 +101,7 @@ function ScoreCard({
           <li>Speaking: {result.scores.speaking_authenticity}</li>
           <li>Cast: {result.scores.character_coherence}</li>
           <li>Variety: {result.scores.engagement_variety}</li>
+          <li>Visual grounding: {result.scores.visual_grounding}</li>
         </ul>
       ) : (
         <div className="text-[11px] text-orange-700/60">

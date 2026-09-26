@@ -8,6 +8,13 @@
  *   Right:   Inspector tabs: Content · Media · Activity · Homework
  *
  * Mounts by default on /playground-creator. Pass `?editor=v1` for classic creator.
+ *
+ * Role: this generates a FIRST DRAFT (via generate-playground -> hub-brain.ts),
+ * not a ship-ready lesson. The activity-variety directive and the lesson
+ * critic's visual_grounding/engagement_variety axes catch the same failure
+ * modes the hand-authored Pre-A1 lessons are held to, but a human pass
+ * against the lesson-quality-gate skill is still the bar before publishing --
+ * same standard as hand-crafted content, not a lower one.
  */
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";

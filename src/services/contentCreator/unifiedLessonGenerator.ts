@@ -10,7 +10,7 @@ import type { ActivityAIClient } from '@/activities/types';
 import { supabase } from '@/integrations/supabase/client';
 import { getHubConfig, type HubCreatorConfig } from './hubConfigurations';
 import type { Hub, Cefr } from '@/governance/types';
-import { buildCriticPrompt, type LessonCriticResult } from '@/qa/judges/lessonCritic';
+import { buildCriticPrompt, computeOverall, type LessonCriticResult } from '@/qa/judges/lessonCritic';
 
 /**
  * Stage filter — controls which engines downstream consumers persist.
@@ -289,14 +289,16 @@ export async function generateUnifiedLesson(
             const match = raw.match(/\{[\s\S]*\}/);
             if (!match) return undefined;
             const parsed = JSON.parse(match[0]);
-            const scores = parsed.scores ?? {};
-            const overall = Math.round(
-              (scores.pedagogical_flow ?? 0) * 0.25 +
-                (scores.vocab_recycling ?? 0) * 0.25 +
-                (scores.speaking_authenticity ?? 0) * 0.2 +
-                (scores.character_coherence ?? 0) * 0.15 +
-                (scores.engagement_variety ?? 0) * 0.15,
-            );
+            const scores = {
+              pedagogical_flow: 0,
+              vocab_recycling: 0,
+              speaking_authenticity: 0,
+              character_coherence: 0,
+              engagement_variety: 0,
+              visual_grounding: 0,
+              ...(parsed.scores ?? {}),
+            };
+            const overall = computeOverall(scores);
             return {
               scores,
               overall,

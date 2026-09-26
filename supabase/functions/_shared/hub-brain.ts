@@ -21,6 +21,7 @@ import { buildStorybookDirective } from "./storybookDirective.ts";
 import { buildHubCefrPreamble, type Cefr, type Hub } from "./pedagogy/index.ts";
 import { buildExpertTeacherPreamble } from "./expertTeacherPreamble.ts";
 import { buildPedagogySkillsBlock } from "./pedagogySkills.ts";
+import { buildActivityVarietyDirective } from "./activityVarietyDirective.ts";
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -290,6 +291,7 @@ function buildUserPrompt(hub: HubId, body: BrainInput): string {
     return [
       expertPreamble,
       pedagogyBlock,
+      buildActivityVarietyDirective(),
       preamble,
       pipelineDirective,
       grammarDirective,
@@ -322,6 +324,7 @@ function buildUserPrompt(hub: HubId, body: BrainInput): string {
       `SMART MODELING RULE: If the topic/goal is greetings, introductions, politeness, classroom routines, feelings, or another formulaic communication goal, modeling MUST be a short cast conversation/video/song model and grammar_target MUST be a lexical chunk such as "My name is ___" — never force "It is a ___" onto greetings. Use grammar charts only for object/description topics.`,
       `Lesson 4 storybook MUST obey the STORYBOOK BRAIN directive above: real character, real problem, real resolution — never a vocabulary list disguised as a story.`,
       `Across L1–L4 the four "focus_label" values MUST be DISTINCT and each must reflect that lesson's communication_goal (not the unit topic).`,
+      `FINAL SELF-CHECK before returning: re-read the ACTIVITY VARIETY RULE above and verify no "type" repeats more than twice in a row anywhere in the unit. Fix any violation before returning your answer.`,
 
 
     ]
