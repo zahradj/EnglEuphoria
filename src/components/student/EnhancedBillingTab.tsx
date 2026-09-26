@@ -175,7 +175,7 @@ export const EnhancedBillingTab = () => {
           <CardTitle>{subscription ? "Buy More Lessons or Change Plan" : "Choose Your Plan"}</CardTitle>
         </CardHeader>
         <CardContent>
-          <PaymentPlansGrid onPlanSelect={loadBillingData} />
+          <PaymentPlansGrid />
         </CardContent>
       </Card>
 

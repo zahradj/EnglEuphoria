@@ -164,32 +164,6 @@ class PaymentService {
     }
   }
 
-  async createSubscription(userId: string, planId: string): Promise<UserSubscription> {
-    try {
-      const { data, error } = await supabase
-        .from('user_subscriptions')
-        .insert({
-          user_id: userId,
-          plan_id: planId,
-          status: 'active',
-          classes_used_this_month: 0,
-          subscription_start: new Date().toISOString(),
-          payment_method: 'stripe' // Default for now
-        })
-        .select(`
-          *,
-          plan:subscription_plans(*)
-        `)
-        .single();
-
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error('Failed to create subscription:', error);
-      throw error;
-    }
-  }
-
   async bookClass(studentId: string, teacherId: string, lessonId?: string): Promise<void> {
     try {
       // Check if user has available classes in their subscription

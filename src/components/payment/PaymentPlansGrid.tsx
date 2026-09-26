@@ -1,75 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, Star, CreditCard, Sparkles, Clock } from "lucide-react";
+import { Check, Star, CreditCard, Sparkles, Clock, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Price } from "@/components/locale/Price";
 import { useStudentLevel } from "@/hooks/useStudentLevel";
+import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
 interface PaymentPlansGridProps {
   /** Optional override; defaults to current student's hub. */
   hubOverride?: AudienceLevel;
-  onPlanSelect?: (planId: string, gateway: string) => void;
+  /** Called after Stripe checkout redirect is initiated (not on completion —
+   * the actual grant happens server-side via stripe-webhook once paid). */
+  onCheckoutStarted?: (packId: string) => void;
 }
 
 type AudienceLevel = "playground" | "academy" | "professional";
 
-interface PackTier {
+interface CreditPack {
   id: string;
-  name: Record<AudienceLevel, string>;
-  label: string;
-  sessions: number;
-  price: Record<AudienceLevel, number>;
-  originalPrice: Record<AudienceLevel, number>;
-  savings: Record<AudienceLevel, number>;
-  popular: boolean;
-  isMastery: boolean;
+  name: string;
+  session_count: number;
+  price_eur: number;
+  original_price_eur: number;
+  savings_eur: number;
+  sort_order: number;
 }
-
-// Mirrors src/components/landing/PricingSection.tsx — single source of truth for landing prices.
-const PER_SESSION: Record<AudienceLevel, number> = {
-  playground: 7.5,
-  academy: 15,
-  professional: 20,
-};
-
-const PACK_TIERS: PackTier[] = [
-  {
-    id: "starter-5",
-    name: { playground: "Starter", academy: "Explorer", professional: "Pro Starter" },
-    label: "Try it out",
-    sessions: 5,
-    price: { playground: 37.5, academy: 75, professional: 100 },
-    originalPrice: { playground: 37.5, academy: 75, professional: 100 },
-    savings: { playground: 0, academy: 0, professional: 0 },
-    popular: false,
-    isMastery: false,
-  },
-  {
-    id: "popular-10",
-    name: { playground: "Adventurer", academy: "Achiever", professional: "Executive" },
-    label: "Most popular",
-    sessions: 10,
-    price: { playground: 75, academy: 150, professional: 195 },
-    originalPrice: { playground: 85, academy: 165, professional: 200 },
-    savings: { playground: 10, academy: 15, professional: 5 },
-    popular: true,
-    isMastery: false,
-  },
-  {
-    id: "mastery-20",
-    name: { playground: "Champion", academy: "Mastery", professional: "Global Leader" },
-    label: "Best value",
-    sessions: 20,
-    price: { playground: 150, academy: 300, professional: 390 },
-    originalPrice: { playground: 170, academy: 330, professional: 400 },
-    savings: { playground: 20, academy: 30, professional: 10 },
-    popular: false,
-    isMastery: true,
-  },
-];
 
 const HUB_THEME: Record<AudienceLevel, {
   label: string;
@@ -125,26 +82,73 @@ const HUB_THEME: Record<AudienceLevel, {
   },
 };
 
-export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride, onPlanSelect }) => {
+export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride, onCheckoutStarted }) => {
   const { studentLevel } = useStudentLevel();
   const hub: AudienceLevel = hubOverride ?? (studentLevel as AudienceLevel) ?? "academy";
   const theme = HUB_THEME[hub];
-  const perSession = PER_SESSION[hub];
   const { toast } = useToast();
-  const [processingPlan, setProcessingPlan] = useState<string | null>(null);
+  const [packs, setPacks] = useState<CreditPack[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [buyingId, setBuyingId] = useState<string | null>(null);
 
-  const handleSelect = async (pack: PackTier) => {
-    setProcessingPlan(pack.id);
-    try {
-      toast({
-        title: "Redirecting to Payment",
-        description: `Opening secure checkout for ${pack.name[hub]}...`,
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    supabase
+      .from("credit_packs")
+      .select("id, name, session_count, price_eur, original_price_eur, savings_eur, sort_order")
+      .eq("student_level", hub)
+      .eq("is_active", true)
+      .order("sort_order")
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error) {
+          toast({ title: "Could not load lesson packages", description: error.message, variant: "destructive" });
+        } else {
+          setPacks((data ?? []).map((p) => ({
+            ...p,
+            price_eur: Number(p.price_eur),
+            original_price_eur: Number(p.original_price_eur),
+            savings_eur: Number(p.savings_eur),
+          })));
+        }
+        setLoading(false);
       });
-      onPlanSelect?.(pack.id, "stripe");
-    } finally {
-      setTimeout(() => setProcessingPlan(null), 800);
+    return () => { cancelled = true; };
+  }, [hub, toast]);
+
+  const handleBuy = async (pack: CreditPack) => {
+    setBuyingId(pack.id);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-pack-checkout", {
+        body: { packId: pack.id },
+      });
+      if (error || !data?.url) {
+        throw new Error(error?.message || "Could not start checkout");
+      }
+      onCheckoutStarted?.(pack.id);
+      window.location.href = data.url;
+    } catch (err: any) {
+      toast({
+        title: "Checkout failed",
+        description: err?.message ?? "Please try again in a moment.",
+        variant: "destructive",
+      });
+      setBuyingId(null);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12 text-muted-foreground">
+        <Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading lesson packages…
+      </div>
+    );
+  }
+
+  if (packs.length === 0) {
+    return <p className="text-sm text-muted-foreground py-8 text-center">No lesson packages are available right now.</p>;
+  }
 
   return (
     <div className="space-y-6">
@@ -153,33 +157,25 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
           <h3 className="text-xl font-semibold text-gray-900">Lesson Packages</h3>
           <p className="text-sm text-muted-foreground">{theme.label}</p>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Base rate{" "}
-          <span className={cn("font-semibold", theme.priceText)}>
-            <Price usd={perSession} showUsdHint />
-          </span>{" "}
-          {theme.perSessionLabel}
-        </p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
-        {PACK_TIERS.map((pack) => {
-          const price = pack.price[hub];
-          const original = pack.originalPrice[hub];
-          const savings = pack.savings[hub];
-          const hasDiscount = savings > 0;
-          const isProcessing = processingPlan === pack.id;
+        {packs.map((pack, i) => {
+          const popular = i === 1 && packs.length >= 2;
+          const isMastery = i === packs.length - 1 && packs.length >= 3;
+          const hasDiscount = pack.savings_eur > 0;
+          const isProcessing = buyingId === pack.id;
 
           return (
             <Card
               key={pack.id}
               className={cn(
                 "relative flex flex-col",
-                pack.popular && `border-2 ${theme.borderPopular} shadow-lg`,
-                pack.isMastery && `border-2 ${theme.borderMastery} shadow-xl scale-[1.02]`
+                popular && `border-2 ${theme.borderPopular} shadow-lg`,
+                isMastery && `border-2 ${theme.borderMastery} shadow-xl scale-[1.02]`
               )}
             >
-              {pack.popular && (
+              {popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <Badge className={cn("text-white px-3 py-1 bg-gradient-to-r", theme.popularBg)}>
                     <Star className="w-3 h-3 mr-1" />
@@ -187,7 +183,7 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
                   </Badge>
                 </div>
               )}
-              {pack.isMastery && (
+              {isMastery && (
                 <div className="absolute -top-3 right-3">
                   <Badge className="bg-amber-500 text-white px-3 py-1">
                     <Sparkles className="w-3 h-3 mr-1" />
@@ -197,32 +193,31 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
               )}
 
               <CardHeader className="text-center pb-3">
-                <CardTitle className="text-lg">{pack.name[hub]}</CardTitle>
-                <p className="text-xs text-muted-foreground">{pack.label}</p>
+                <CardTitle className="text-lg">{pack.name}</CardTitle>
 
                 <div className="mt-3 flex items-center justify-center gap-2">
                   <Clock className={cn("h-4 w-4", theme.clockIcon)} />
                   <span className="text-sm font-medium text-gray-600">
-                    {pack.sessions} sessions
+                    {pack.session_count} sessions
                   </span>
                 </div>
 
                 <div className="mt-3 flex items-baseline justify-center gap-2">
                   <span className={cn("text-3xl font-extrabold", theme.priceText)}>
-                    <Price usd={price} showUsdHint />
+                    €{pack.price_eur.toFixed(0)}
                   </span>
                   {hasDiscount && (
                     <span className="line-through text-base text-muted-foreground">
-                      <Price usd={original} />
+                      €{pack.original_price_eur.toFixed(0)}
                     </span>
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  <Price usd={price / pack.sessions} /> {theme.perSessionLabel}
+                  €{(pack.price_eur / pack.session_count).toFixed(2)} {theme.perSessionLabel}
                 </p>
                 {hasDiscount && (
                   <p className="text-xs font-semibold text-emerald-600 mt-1">
-                    Save <Price usd={savings} />
+                    Save €{pack.savings_eur.toFixed(0)}
                   </p>
                 )}
               </CardHeader>
@@ -244,15 +239,15 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
                 </ul>
 
                 <Button
-                  onClick={() => handleSelect(pack)}
+                  onClick={() => handleBuy(pack)}
                   disabled={isProcessing}
                   className={cn(
                     "w-full",
-                    pack.isMastery ? theme.btnMastery : pack.popular ? theme.btnPopular : theme.btnPrimary
+                    isMastery ? theme.btnMastery : popular ? theme.btnPopular : theme.btnPrimary
                   )}
                 >
                   <CreditCard className="w-4 h-4 mr-2" />
-                  {isProcessing ? "Processing..." : `Buy ${pack.sessions} Sessions`}
+                  {isProcessing ? "Redirecting…" : `Buy ${pack.session_count} Sessions`}
                 </Button>
               </CardContent>
             </Card>

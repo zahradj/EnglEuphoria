@@ -9,9 +9,17 @@
 // SETUP REQUIRED (cannot be done from here — needs the Stripe dashboard):
 //   1. Stripe Dashboard → Developers → Webhooks → Add endpoint
 //      URL: https://dcoxpyzoqjvmuuygvlme.supabase.co/functions/v1/stripe-webhook
-//      Events: checkout.session.completed
+//      Events: checkout.session.completed, customer.subscription.updated,
+//              customer.subscription.deleted
 //   2. Copy the generated signing secret and set it in Supabase:
 //      supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_...
+//
+// checkout.session.completed handles two distinct products that share this
+// one endpoint: one-time credit-pack payments (mode "payment", pre-existing)
+// and subscription checkouts (mode "subscription", added below). The two
+// subscription lifecycle events keep user_subscriptions in sync after the
+// initial checkout — without them a cancelled Stripe subscription would
+// leave the DB showing "active" forever.
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
@@ -124,9 +132,65 @@ serve(async (req) => {
     { auth: { persistSession: false } },
   );
 
+  const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2023-10-16" });
+
   try {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
+
+      if (session.mode === "subscription") {
+        if (session.payment_status !== "paid" && session.status !== "complete") {
+          return new Response(JSON.stringify({ skipped: "subscription checkout not complete" }), { status: 200 });
+        }
+        const userId = session.metadata?.user_id;
+        const planId = session.metadata?.plan_id;
+        const stripeSubscriptionId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
+
+        if (!userId || !planId || !stripeSubscriptionId) {
+          logStep("Missing metadata on subscription session", { sessionId: session.id });
+          return new Response(JSON.stringify({ error: "Missing metadata" }), { status: 200 });
+        }
+
+        // Idempotent: check first (no unique-violation path to lean on here
+        // beyond the constraint added for exactly this table/column).
+        const { data: existing } = await supabase
+          .from("user_subscriptions")
+          .select("id")
+          .eq("stripe_subscription_id", stripeSubscriptionId)
+          .maybeSingle();
+        if (existing) {
+          logStep("Subscription already recorded (idempotent no-op)", { stripeSubscriptionId });
+          return new Response(JSON.stringify({ ok: true, already_processed: true }), { status: 200 });
+        }
+
+        let subscriptionEnd: string | null = null;
+        try {
+          const sub = await stripe.subscriptions.retrieve(stripeSubscriptionId);
+          subscriptionEnd = new Date(sub.current_period_end * 1000).toISOString();
+        } catch (e) {
+          logStep("Could not retrieve subscription for period end", { error: String((e as Error)?.message || e) });
+        }
+
+        const { error: insertError } = await supabase.from("user_subscriptions").insert({
+          user_id: userId,
+          plan_id: planId,
+          status: "active",
+          subscription_start: new Date().toISOString(),
+          subscription_end: subscriptionEnd,
+          payment_method: "stripe",
+          stripe_subscription_id: stripeSubscriptionId,
+        });
+        if (insertError) {
+          if (insertError.code === "23505") {
+            logStep("Already processed (race, idempotent no-op)", { stripeSubscriptionId });
+            return new Response(JSON.stringify({ ok: true, already_processed: true }), { status: 200 });
+          }
+          throw insertError;
+        }
+        logStep("Subscription activated", { userId, planId, stripeSubscriptionId });
+        return new Response(JSON.stringify({ received: true }), { status: 200 });
+      }
+
       if (session.mode !== "payment" || session.payment_status !== "paid") {
         return new Response(JSON.stringify({ skipped: "not a paid one-time payment" }), { status: 200 });
       }
@@ -186,6 +250,29 @@ serve(async (req) => {
           amountEur,
         });
       }
+    } else if (event.type === "customer.subscription.updated") {
+      const sub = event.data.object as Stripe.Subscription;
+      const status = sub.status === "active" || sub.status === "trialing" ? "active"
+        : sub.status === "past_due" ? "past_due"
+        : sub.status === "canceled" || sub.status === "unpaid" || sub.status === "incomplete_expired" ? "canceled"
+        : sub.status;
+      const { error } = await supabase
+        .from("user_subscriptions")
+        .update({
+          status,
+          subscription_end: new Date(sub.current_period_end * 1000).toISOString(),
+        })
+        .eq("stripe_subscription_id", sub.id);
+      if (error) throw error;
+      logStep("Subscription updated", { stripeSubscriptionId: sub.id, status });
+    } else if (event.type === "customer.subscription.deleted") {
+      const sub = event.data.object as Stripe.Subscription;
+      const { error } = await supabase
+        .from("user_subscriptions")
+        .update({ status: "canceled", subscription_end: new Date().toISOString() })
+        .eq("stripe_subscription_id", sub.id);
+      if (error) throw error;
+      logStep("Subscription canceled", { stripeSubscriptionId: sub.id });
     }
 
     return new Response(JSON.stringify({ received: true }), { status: 200 });
