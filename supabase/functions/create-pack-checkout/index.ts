@@ -62,6 +62,22 @@ serve(async (req) => {
     }
     logStep("Pack validated", { name: pack.name, price: pack.price_eur, sessions: pack.session_count });
 
+    // TEMPORARY DIAGNOSTIC: raw fetch straight to Stripe's REST API,
+    // bypassing the SDK entirely, to isolate whether this environment can
+    // reach api.stripe.com at all, or whether the failure is specific to
+    // how the Stripe SDK builds/sends its request.
+    try {
+      const rawResp = await fetch("https://api.stripe.com/v1/customers?limit=1", {
+        headers: { Authorization: `Bearer ${Deno.env.get("STRIPE_SECRET_KEY") || ""}` },
+      });
+      logStep("RAW FETCH DIAGNOSTIC", { status: rawResp.status, ok: rawResp.ok });
+    } catch (rawErr) {
+      logStep("RAW FETCH DIAGNOSTIC FAILED", {
+        message: rawErr instanceof Error ? rawErr.message : String(rawErr),
+        name: rawErr instanceof Error ? rawErr.name : undefined,
+      });
+    }
+
     // Deno's edge runtime needs the fetch-based HTTP client -- the SDK's
     // default (Node's http module) fails with a generic "connection" error
     // here, per Stripe's own guidance for Deno/edge deployments.
