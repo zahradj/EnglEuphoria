@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
-  Search, CheckCircle2, AlertTriangle, AlertCircle, ExternalLink, Globe, FileCode2, Image as ImageIcon,
+  Search, CheckCircle2, AlertTriangle, AlertCircle, ExternalLink, Globe, FileCode2, Image as ImageIcon, Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -56,8 +56,20 @@ const FINDINGS: Finding[] = [
   {
     issue: 'Structured data covers only the organization, not individual pages',
     impact: 'low',
-    evidence: 'Homepage JSON-LD is a single EducationalOrganization block (name/url/logo/image/description) — no sameAs (social profiles), no Course/Product markup on hub or pricing pages, no WebSite + SearchAction.',
-    fix: 'Add sameAs links to real social profiles, and Course schema on the three hub demo pages once they have stable, indexable content.',
+    evidence: 'Homepage JSON-LD is a single EducationalOrganization block (name/url/logo/image/description) — no sameAs (social profiles), no Course/Product markup on hub or pricing pages, no WebSite + SearchAction. No social profile links exist anywhere on the site to populate sameAs with yet, either.',
+    fix: 'Add sameAs links once real social profiles exist, and Course schema on the three hub demo pages once they have stable, indexable content. See the recommended @graph block below.',
+  },
+  {
+    issue: 'No llms.txt — AI assistants (ChatGPT, Claude, Perplexity) have no quick-context file',
+    impact: 'medium',
+    evidence: '/llms.txt returns the SPA shell (client-side router 404-fallback), confirmed live — the file does not exist.',
+    fix: 'Add a plain-text /llms.txt at the site root summarizing what EnglEuphoria is, who the three hubs serve, and links to pricing/methodology/for-teachers. Trivial to add, no rendering required.',
+  },
+  {
+    issue: 'No machine-readable pricing file for AI shopping agents',
+    impact: 'medium',
+    evidence: '/pricing.md returns the SPA shell — confirmed live. Pricing is only available rendered client-side on /pricing.',
+    fix: 'Add /pricing.md listing each plan\'s price, billing cadence, and what\'s included in plain text, so an AI agent comparing tutoring options for a parent can actually read it.',
   },
 ];
 
@@ -69,6 +81,7 @@ const PASSES: { label: string; note: string }[] = [
   { label: 'Image alt text', note: '9/9 homepage images have alt attributes — no missing-alt issues found.' },
   { label: 'Mobile viewport', note: 'Configured correctly (width=device-width, initial-scale=1.0).' },
   { label: 'Heading count', note: 'Exactly one H1 on the homepage (content issue above, not a structural one).' },
+  { label: 'AI crawler access', note: 'robots.txt has no Disallow targeting GPTBot, ClaudeBot, PerplexityBot, or Google-Extended — they fall under the open wildcard rule, so citation isn\'t blocked.' },
 ];
 
 const IMPACT_META: Record<Impact, { label: string; className: string; Icon: typeof AlertCircle }> = {
@@ -165,6 +178,60 @@ export const SeoTab = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Sparkles className="h-4 w-4 text-primary" /> AI search visibility (ChatGPT, Perplexity, Claude)
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-xs text-muted-foreground">
+            Traditional SEO gets you ranked; this is what gets you <em>cited</em> by AI assistants. Two quick,
+            low-risk files close most of the gap above — neither requires touching the rendered app.
+          </p>
+
+          <div>
+            <p className="text-xs font-semibold text-foreground mb-1.5">/llms.txt</p>
+            <pre className="text-[11px] leading-relaxed bg-muted rounded-md p-3 overflow-x-auto"><code>{`# EnglEuphoria
+
+> Live 1-on-1 English lessons with expert teachers, across three hubs:
+> Playground (kids 4-9), Academy (teens 10-17), and Success (adults).
+
+- [Pricing](https://www.engleuphoria.com/pricing.md): plans and what's included
+- [Methodology](https://www.engleuphoria.com/methodology): teaching approach, CEFR alignment
+- [For Teachers](https://www.engleuphoria.com/for-teachers): joining as a teacher
+- [About](https://www.engleuphoria.com/about): company background`}</code></pre>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold text-foreground mb-1.5">Recommended homepage schema (replaces the single Organization block)</p>
+            <pre className="text-[11px] leading-relaxed bg-muted rounded-md p-3 overflow-x-auto"><code>{`{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "EducationalOrganization",
+      "name": "EnglEuphoria",
+      "url": "https://www.engleuphoria.com",
+      "logo": "https://www.engleuphoria.com/favicon.png",
+      "description": "Live 1-on-1 English lessons with expert teachers. Three hubs for kids, teens, and adults.",
+      "sameAs": []
+    },
+    {
+      "@type": "WebSite",
+      "url": "https://www.engleuphoria.com",
+      "name": "EnglEuphoria",
+      "inLanguage": ["en", "ar", "fr", "es", "tr"]
+    }
+  ]
+}`}</code></pre>
+            <p className="text-[11px] text-muted-foreground mt-1">
+              <code className="text-foreground">sameAs</code> stays empty until real social profiles exist — an empty array is
+              honest; a fabricated one would fail schema validation against actual page content.
+            </p>
           </div>
         </CardContent>
       </Card>
