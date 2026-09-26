@@ -67,7 +67,12 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
     {
       label: "Marketing",
       items: [
-        { id: "marketing", label: "Marketing", icon: Megaphone },
+        // A real separate page (src/pages/MarketingDashboard.tsx), not an
+        // inline tab — it has its own header/layout, same as Teacher KPI
+        // and Bonus Queue below. Previously had no `href`, so clicking it
+        // called onTabChange("marketing"), which SuperAdminControlCenter's
+        // activeTab switch never matched — the tab just showed nothing.
+        { id: "marketing", label: "Marketing", icon: Megaphone, href: "/marketing" },
       ],
     },
     {
