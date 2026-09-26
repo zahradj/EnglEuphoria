@@ -40,6 +40,13 @@ export const HomeGate: React.FC = () => {
     return <LandingPage />;
   }
 
+  // Same for the classroom-invite magic-link flow — /join-classroom/:token
+  // owns its own routing into /classroom/:id and must not be raced by
+  // HomeGate's role-based dashboard redirect.
+  if (typeof window !== 'undefined' && sessionStorage.getItem('classroom_invite_flow_active') === '1') {
+    return <LandingPage />;
+  }
+
   const role = (user as any).role;
   if (role === 'admin') return <Navigate to="/super-admin" replace />;
   if (role === 'marketing') return <Navigate to="/marketing" replace />;

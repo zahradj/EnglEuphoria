@@ -348,6 +348,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               return;
             }
 
+            // Same problem, same fix, for the classroom-invite magic-link
+            // flow (/join-classroom/:token): the invited student's own
+            // SIGNED_IN event must not trigger hydration that re-routes them
+            // away from the classroom they were just sent to.
+            if (event === 'SIGNED_IN' && typeof window !== 'undefined' && sessionStorage.getItem('classroom_invite_flow_active') === '1') {
+              console.log(`${AUTH_FLOW_PREFIX} EVENT: SIGNED_IN suppressed — classroom_invite_flow_active (session+user set, hydration skipped)`);
+              setSession(currentSession);
+              if (currentSession?.user) {
+                setUser(createFallbackUserSync(currentSession.user));
+              }
+              setLoading(false);
+              return;
+            }
+
             setSession(currentSession);
             
             if (currentSession?.user) {

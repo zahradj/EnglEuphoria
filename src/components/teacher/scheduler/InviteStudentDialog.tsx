@@ -162,15 +162,25 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="lesson-duration">Duration (minutes)</Label>
-              <Input
-                id="lesson-duration"
-                type="number"
-                min={15}
-                step={15}
-                value={duration}
-                onChange={(e) => setDuration(Number(e.target.value) || defaultDuration)}
-              />
+              <Label>Duration</Label>
+              {/* 30/60 only — matches the calendar grid's own slot durations
+                  (teacher_availability has a CHECK constraint enforcing this). */}
+              <div className="inline-flex rounded-lg bg-muted p-1">
+                <button
+                  type="button"
+                  onClick={() => setDuration(30)}
+                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${duration === 30 ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                >
+                  30 min
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDuration(60)}
+                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${duration === 60 ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                >
+                  60 min
+                </button>
+              </div>
             </div>
             <DialogFooter>
               <Button type="submit" disabled={busy} className="w-full">

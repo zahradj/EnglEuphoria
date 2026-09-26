@@ -41,6 +41,11 @@ export default function JoinClassroomPage() {
     if (ranRef.current) return;
     ranRef.current = true;
 
+    // Mirrors InterviewMagicEntry.tsx's guard: this page's own SIGNED_IN
+    // event must not let AuthContext/HomeGate race it into the student's
+    // default dashboard instead of the classroom this link points at.
+    try { sessionStorage.setItem('classroom_invite_flow_active', '1'); } catch {/* ignore */}
+
     (async () => {
       try {
         setStatus('Checking your invitation…');
