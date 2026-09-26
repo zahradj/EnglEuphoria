@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -14,21 +14,30 @@ import { Loader2, Mail, Copy, Check, UserPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
+type HubChoice = 'playground' | 'academy' | 'success';
+
 interface InviteStudentDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   teacherId: string;
-  hub: 'playground' | 'academy' | 'success';
-  defaultDuration?: number;
+  /** Best-guess default from the teacher's own profile — the picker below
+   * lets them override it per lesson, since a combined academy+success
+   * mentor's profile can't express "this specific lesson is Success." */
+  hub: HubChoice;
   onInvited?: () => void;
 }
+
+const HUB_OPTIONS: { id: HubChoice; label: string; duration: 30 | 60 }[] = [
+  { id: 'playground', label: 'Playground', duration: 30 },
+  { id: 'academy', label: 'Academy', duration: 60 },
+  { id: 'success', label: 'Success', duration: 60 },
+];
 
 export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
   open,
   onOpenChange,
   teacherId,
   hub,
-  defaultDuration = 60,
   onInvited,
 }) => {
   const { toast } = useToast();
@@ -36,17 +45,28 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
   const [studentName, setStudentName] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
-  const [duration, setDuration] = useState(defaultDuration);
+  const [selectedHub, setSelectedHub] = useState<HubChoice>(hub);
   const [busy, setBusy] = useState(false);
   const [joinLink, setJoinLink] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
+  // Duration follows the hub, matching the app-wide rule (Playground = 30
+  // min, Academy/Success = 60 min) rather than a separately pickable value.
+  const duration = HUB_OPTIONS.find((h) => h.id === selectedHub)?.duration ?? 60;
+
+  // Re-sync the default each time the dialog opens — `hub` can still be
+  // loading (or change) at the moment this component first mounts, before
+  // the teacher has touched anything.
+  useEffect(() => {
+    if (open) setSelectedHub(hub);
+  }, [open, hub]);
 
   const reset = () => {
     setStudentEmail('');
     setStudentName('');
     setDate('');
     setTime('');
-    setDuration(defaultDuration);
+    setSelectedHub(hub);
     setJoinLink(null);
     setCopied(false);
   };
@@ -81,7 +101,7 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
           studentName: studentName.trim() || undefined,
           scheduledAt: scheduledAt.toISOString(),
           duration,
-          hub,
+          hub: selectedHub,
         },
         headers: { Authorization: `Bearer ${accessToken}` },
       });
@@ -162,25 +182,24 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
               </div>
             </div>
             <div className="space-y-2">
-              <Label>Duration</Label>
-              {/* 30/60 only — matches the calendar grid's own slot durations
-                  (teacher_availability has a CHECK constraint enforcing this). */}
+              <Label>Hub</Label>
+              {/* Explicit per-lesson choice — a teacher's profile can be
+                  assigned to more than one hub, so it can't reliably stand
+                  in for which hub *this* lesson is for. Duration follows
+                  the pick (Playground 30 min, Academy/Success 60 min). */}
               <div className="inline-flex rounded-lg bg-muted p-1">
-                <button
-                  type="button"
-                  onClick={() => setDuration(30)}
-                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${duration === 30 ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-                >
-                  30 min
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDuration(60)}
-                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${duration === 60 ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-                >
-                  60 min
-                </button>
+                {HUB_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => setSelectedHub(opt.id)}
+                    className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${selectedHub === opt.id ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
               </div>
+              <p className="text-xs text-muted-foreground">{duration}-minute lesson</p>
             </div>
             <DialogFooter>
               <Button type="submit" disabled={busy} className="w-full">

@@ -346,7 +346,6 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
         onOpenChange={setInviteOpen}
         teacherId={teacherId}
         hub={hubForSlots}
-        defaultDuration={slotDuration}
         onInvited={() => refresh()}
       />
     </div>
