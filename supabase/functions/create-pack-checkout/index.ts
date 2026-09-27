@@ -62,6 +62,25 @@ serve(async (req) => {
     }
     logStep("Pack validated", { name: pack.name, price: pack.price_eur, sessions: pack.session_count });
 
+    // TEMPORARY DIAGNOSTIC: inspect the raw secret value char-by-char
+    // (without ever logging the value itself) to find exactly which
+    // character is outside the ByteString range (0-255) and where.
+    {
+      const rawKey = Deno.env.get("STRIPE_SECRET_KEY") || "";
+      const badChars: { index: number; code: number }[] = [];
+      for (let i = 0; i < rawKey.length; i++) {
+        const code = rawKey.charCodeAt(i);
+        if (code > 255) badChars.push({ index: i, code });
+      }
+      logStep("SECRET KEY DIAGNOSTIC", {
+        length: rawKey.length,
+        startsWithSkTest: rawKey.startsWith("sk_test_"),
+        firstCharCode: rawKey.charCodeAt(0),
+        lastCharCode: rawKey.charCodeAt(rawKey.length - 1),
+        badChars,
+      });
+    }
+
     // TEMPORARY DIAGNOSTIC: raw fetch straight to Stripe's REST API,
     // bypassing the SDK entirely, to isolate whether this environment can
     // reach api.stripe.com at all, or whether the failure is specific to
