@@ -27,6 +27,11 @@ export function useClassroomHeartbeat({
   const [peerLastPingAt, setPeerLastPingAt] = useState<string | null>(null);
   const [peerOnline, setPeerOnline] = useState(false);
   const stoppedRef = useRef(false);
+  // Mirrors peerLastPingAt for the staleCheck interval's closure — the
+  // effect below intentionally does NOT depend on peerLastPingAt (see
+  // comment near the dependency array), so a plain state read there would
+  // be frozen at whatever value existed on first mount.
+  const peerLastPingAtRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!sessionId) return;
@@ -75,6 +80,7 @@ export function useClassroomHeartbeat({
         (payload: any) => {
           const v = payload?.new?.[peerField];
           if (v) {
+            peerLastPingAtRef.current = v;
             setPeerLastPingAt(v);
             const ageMs = Date.now() - new Date(v).getTime();
             setPeerOnline(ageMs < intervalMs * 3);
@@ -84,8 +90,9 @@ export function useClassroomHeartbeat({
       .subscribe();
 
     const staleCheck = setInterval(() => {
-      if (!peerLastPingAt) return;
-      const ageMs = Date.now() - new Date(peerLastPingAt).getTime();
+      const v = peerLastPingAtRef.current;
+      if (!v) return;
+      const ageMs = Date.now() - new Date(v).getTime();
       setPeerOnline(ageMs < intervalMs * 3);
     }, intervalMs);
 
@@ -97,7 +104,15 @@ export function useClassroomHeartbeat({
       supabase.removeChannel(channel);
       markLeave();
     };
-  }, [sessionId, role, intervalMs, peerLastPingAt]);
+    // Deliberately NOT depending on peerLastPingAt: that state changes on
+    // every peer heartbeat (~every intervalMs), and including it here made
+    // this whole effect tear down and re-run on that same cadence — whose
+    // cleanup unconditionally stamps {role}_left_at, falsely marking an
+    // actively-connected user as having left every few seconds. The
+    // staleCheck interval reads the live value via peerLastPingAtRef
+    // instead, so correctness doesn't depend on this effect re-running.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionId, role, intervalMs]);
 
   return { peerLastPingAt, peerOnline };
 }
