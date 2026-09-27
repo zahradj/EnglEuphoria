@@ -86,6 +86,7 @@ Deno.serve(async (req) => {
 
   const now = Date.now();
   let processed = 0;
+  const failures: { id: string; error: string }[] = [];
   for (const s of (data ?? []) as Sess[]) {
     const overdue =
       s.scheduled_at && s.duration_minutes
@@ -104,7 +105,7 @@ Deno.serve(async (req) => {
     const verdict = classify(s);
     if (!verdict) continue;
 
-    await supabase
+    const { error: updateError } = await supabase
       .from('classroom_sessions')
       .update({
         fault_type: verdict.fault,
@@ -115,10 +116,21 @@ Deno.serve(async (req) => {
         ended_at: s.session_status === 'active' ? new Date().toISOString() : undefined,
       })
       .eq('id', s.id);
+
+    if (updateError) {
+      // Previously unchecked -- a write that silently failed every run
+      // (e.g. a CHECK constraint rejecting 'incomplete') looked identical
+      // to a successful one from this function's own response, since
+      // `processed` incremented regardless. Now a real failure is both
+      // visible in function logs and reflected in the response body.
+      console.error(`[classroom-telemetry-verdict] update failed for session ${s.id}:`, updateError.message);
+      failures.push({ id: s.id, error: updateError.message });
+      continue;
+    }
     processed++;
   }
 
-  return new Response(JSON.stringify({ processed, scanned: data?.length ?? 0 }), {
+  return new Response(JSON.stringify({ processed, scanned: data?.length ?? 0, failures }), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 });
