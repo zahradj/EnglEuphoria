@@ -33,7 +33,16 @@ export const ClassroomToolOverlay: React.FC<ClassroomToolOverlayProps> = ({ room
   useEffect(() => {
     if (!roomId) return;
     const unsub = whiteboardService.subscribeToToolActions(roomId, (p: ToolActionPayload) => {
-      if (p.tool === 'dice' && typeof p.result === 'number') {
+      if (p.tool === 'dice' && p.status === 'stop') {
+        // Dismiss, broadcast from the other side — see the "Dismiss dice"
+        // button below. Previously that button only called local setDice
+        // (like this whole branch not existing), so the teacher closing
+        // their own dice never told the student's copy of this same
+        // component to close too, leaving it stuck open indefinitely (no
+        // other timer ever clears a settled, non-rolling die).
+        if (diceTimer.current) window.clearTimeout(diceTimer.current);
+        setDice(null);
+      } else if (p.tool === 'dice' && typeof p.result === 'number') {
         const id = p.actionId ?? String(p.timestamp);
         // Opening dice closes other center tools so nothing is hidden behind it.
         setWheel(null);
@@ -43,6 +52,10 @@ export const ClassroomToolOverlay: React.FC<ClassroomToolOverlayProps> = ({ room
         diceTimer.current = window.setTimeout(() => {
           setDice((d) => (d && d.id === id ? { ...d, rolling: false } : d));
         }, 900);
+      } else if (p.tool === 'wheel' && p.status === 'stop') {
+        // Same fix as dice's dismiss, see comment above.
+        if (wheelTimer.current) window.clearTimeout(wheelTimer.current);
+        setWheel(null);
       } else if (p.tool === 'wheel' && p.options && p.options.length) {
         const id = p.actionId ?? String(p.timestamp);
         setDice(null);
@@ -165,7 +178,12 @@ export const ClassroomToolOverlay: React.FC<ClassroomToolOverlayProps> = ({ room
             )}
             {canDismiss && (
               <button
-                onClick={() => setDice(null)}
+                onClick={() => {
+                  setDice(null);
+                  void whiteboardService.sendToolAction(roomId, {
+                    tool: 'dice', status: 'stop', senderId: 'local',
+                  }).catch(() => {});
+                }}
                 className="absolute -right-2 -top-2 rounded-full bg-black/70 p-1 text-white hover:bg-black"
                 aria-label="Dismiss dice"
               >
@@ -205,7 +223,12 @@ export const ClassroomToolOverlay: React.FC<ClassroomToolOverlayProps> = ({ room
             )}
             {canDismiss && (
               <button
-                onClick={() => setWheel(null)}
+                onClick={() => {
+                  setWheel(null);
+                  void whiteboardService.sendToolAction(roomId, {
+                    tool: 'wheel', status: 'stop', senderId: 'local',
+                  }).catch(() => {});
+                }}
                 className="absolute -right-2 -top-2 rounded-full bg-black/70 p-1 text-white hover:bg-black"
                 aria-label="Dismiss wheel"
               >

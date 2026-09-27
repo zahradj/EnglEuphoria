@@ -302,9 +302,11 @@ export const TeacherControlDock: React.FC<TeacherControlDockProps> = ({
           </div>
         )}
 
-        {/* Consolidated Classroom Tools (Timer / Dice / Reactions) */}
-        {(onOpenTimer || onRollDice || onSpinWheel || onStartXO || onSendSticker || (isSceneLessonActive && onToggleActivityUnlock)) && (
-          <div className="pl-2 ml-1 border-l border-border">
+        {/* Consolidated Classroom Tools (Timer / Dice / Reactions) — the
+            "Let Student Interact" toggle inside is always available and
+            required (not optional like the tool buttons), so this popover
+            always renders. */}
+        <div className="pl-2 ml-1 border-l border-border">
 
             <Popover>
               <PopoverTrigger asChild>
@@ -315,21 +317,34 @@ export const TeacherControlDock: React.FC<TeacherControlDockProps> = ({
               </PopoverTrigger>
               <PopoverContent className="w-64 p-3" align="end" side="top">
                 <div className="space-y-3">
-                  {/* Unlock/lock the student's ability to play the active Playground scene game */}
-                  {isSceneLessonActive && onToggleActivityUnlock && (
-                    <div className="flex items-center gap-2 rounded-lg bg-muted/50 px-2.5 py-2">
-                      <Unlock className={`h-3.5 w-3.5 shrink-0 ${activityUnlocked ? 'text-primary' : 'text-muted-foreground'}`} />
-                      <label className="flex-1 text-xs font-medium text-foreground select-none cursor-pointer" htmlFor="activity-unlock-toggle">
-                        Unlock Student Activity
-                      </label>
-                      <Switch
-                        id="activity-unlock-toggle"
-                        checked={activityUnlocked}
-                        onCheckedChange={onToggleActivityUnlock}
-                        aria-label="Unlock student interaction with the scene activity"
-                      />
-                    </div>
-                  )}
+                  {/* Single combined "let student interact" toggle —
+                      persistent until clicked again. Covers both drawing/
+                      annotation AND the active scene lesson's drag-and-drop/
+                      tap activities (see TeacherClassroom's onToggleDrawing,
+                      which now also calls mainStageRef.setSceneInteractionUnlocked)
+                      per direct request for one button rather than separate
+                      per-permission switches. onToggleDrawing/drawingEnabled
+                      were already threaded all the way down to this
+                      component (real, working sync/broadcast/persistence
+                      behind them), but no button here ever actually called
+                      it before — the toggle simply didn't exist in the UI.
+                      The previous separate "Unlock Student Activity" switch
+                      here controlled the activityUnlocked prop, which
+                      MainStage never actually reads — removed rather than
+                      leaving a second, non-functional control next to a
+                      working one. */}
+                  <div className="flex items-center gap-2 rounded-lg bg-muted/50 px-2.5 py-2">
+                    <Pencil className={`h-3.5 w-3.5 shrink-0 ${drawingEnabled ? 'text-primary' : 'text-muted-foreground'}`} />
+                    <label className="flex-1 text-xs font-medium text-foreground select-none cursor-pointer" htmlFor="student-interact-toggle">
+                      Let Student Interact
+                    </label>
+                    <Switch
+                      id="student-interact-toggle"
+                      checked={drawingEnabled}
+                      onCheckedChange={onToggleDrawing}
+                      aria-label="Let the student draw and interact with the shared stage"
+                    />
+                  </div>
                   <div className="grid grid-cols-2 gap-2">
                     {/* Star promoted to its own hub-branded button on the dock. */}
 
@@ -383,8 +398,7 @@ export const TeacherControlDock: React.FC<TeacherControlDockProps> = ({
                 </div>
               </PopoverContent>
             </Popover>
-          </div>
-        )}
+        </div>
 
         {/* Pen tools toggle */}
         {onTogglePenTools && (

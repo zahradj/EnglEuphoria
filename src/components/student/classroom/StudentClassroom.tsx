@@ -16,7 +16,7 @@ import { XPStreakIndicator } from '@/components/classroom/engagement/XPStreakInd
 import { ZenModeOverlay } from '@/components/classroom/ZenModeOverlay';
 import { PictureInPicture } from '@/components/classroom/PictureInPicture';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Timer, Dice6 } from 'lucide-react';
+import { Timer } from 'lucide-react';
 import { useIdleOpacity } from '@/hooks/useIdleOpacity';
 import { whiteboardService } from '@/services/whiteboardService';
 import { useHubClassroomTheme } from '@/components/classroom/shared/useHubClassroomTheme';
@@ -65,7 +65,6 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
 
   // Instant broadcast-driven overlays (separate from slow DB-backed sync)
   const [liveStar, setLiveStar] = useState<{ count: number; isMilestone: boolean; key: number } | null>(null);
-  const [liveDice, setLiveDice] = useState<{ value: number; key: number } | null>(null);
   const [liveSticker, setLiveSticker] = useState<{ emoji: string; key: number } | null>(null);
 
   const headerIdle = useIdleOpacity({ idleTimeout: 3000, idleOpacity: 0.4 });
@@ -98,7 +97,6 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
     isMilestone,
     timerValue,
     timerRunning,
-    diceValue,
     sharedNotes,
     sessionContext,
     activeCanvasTab,
@@ -189,11 +187,6 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
         setTimeout(() => setLiveSticker(null), 1000);
       }
     });
-    const unsubTool = whiteboardService.subscribeToToolActions(roomId, (payload) => {
-      if (payload.senderId === studentId || payload.tool !== 'dice') return;
-      setLiveDice({ value: payload.result, key: Date.now() });
-      setTimeout(() => setLiveDice(null), 1500);
-    });
     const unsubStatus = whiteboardService.subscribeToStatus(roomId, (status) => {
       if (status === 'SUBSCRIBED' || status === 'CLOSED' || status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CONNECTING') {
         setChannelStatus(status as 'CONNECTING' | 'SUBSCRIBED' | 'CLOSED' | 'CHANNEL_ERROR' | 'TIMED_OUT');
@@ -205,7 +198,6 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
       unsubIframeLock();
       unsubActivityLock();
       unsubReward();
-      unsubTool();
       unsubStatus();
     };
   }, [roomId, studentId, applyRemoteStageMode, applyRemoteDrawingEnabled, applyRemoteIframeUnlocked, applyRemoteActivityUnlocked, setCurrentSlideIndex, toast]);
@@ -398,27 +390,6 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Dice Overlay (instant broadcast) */}
-      <AnimatePresence>
-        {liveDice && (
-          <motion.div
-            key={liveDice.key}
-            initial={{ opacity: 0, scale: 0, rotate: -180 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            exit={{ opacity: 0, scale: 0 }}
-            transition={{ type: 'spring', stiffness: 200 }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] pointer-events-none"
-          >
-            <div className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl p-8 shadow-[0_0_50px_rgba(168,85,247,0.5)]">
-              <div className="flex flex-col items-center gap-4">
-                <Dice6 className="w-12 h-12 text-white" />
-                <div className="text-7xl font-bold text-white">{liveDice.value}</div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Timer Overlay */}
       <AnimatePresence>
         {timerRunning && timerValue !== null && (
@@ -435,26 +406,6 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
                   {Math.floor(timerValue / 60).toString().padStart(2, '0')}:
                   {(timerValue % 60).toString().padStart(2, '0')}
                 </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Dice Result Overlay */}
-      <AnimatePresence>
-        {diceValue !== null && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0, rotate: -180 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            exit={{ opacity: 0, scale: 0 }}
-            transition={{ type: 'spring', stiffness: 200 }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none"
-          >
-            <div className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl p-8 shadow-[0_0_50px_rgba(168,85,247,0.5)]">
-              <div className="flex flex-col items-center gap-4">
-                <Dice6 className="w-12 h-12 text-white" />
-                <div className="text-7xl font-bold text-white">{diceValue}</div>
               </div>
             </div>
           </motion.div>

@@ -78,6 +78,8 @@ interface MainStageProps {
 export interface MainStageHandle {
   /** Jump the embedded scene lesson directly to a scene index (teacher-only when synced). No-op if no scene lesson is active. */
   goToScene: (idx: number) => void;
+  /** Unlock/lock the student's ability to interact with the active embedded scene lesson (drag-and-drop, taps, etc). No-op if no scene lesson is active. */
+  setSceneInteractionUnlocked: (unlocked: boolean) => void;
 }
 
 const MODE_META: Record<StageMode, { label: string; Icon: React.ComponentType<{ className?: string }> }> = {
@@ -158,6 +160,13 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
 
   useImperativeHandle(ref, () => ({
     goToScene: (idx: number) => sceneLessonHandleRef.current?.goToIndex(idx),
+    // Lets a caller outside the scene content (the bottom toolbar's
+    // combined "let student interact" toggle) drive the exact same
+    // gate the scene's own inline lock button already uses — real
+    // broadcast + persistence via the scene lesson's own
+    // setInteractionUnlocked, not a separate/parallel mechanism.
+    // No-op when no scene lesson is on stage.
+    setSceneInteractionUnlocked: (unlocked: boolean) => sceneLessonHandleRef.current?.setInteractionUnlocked(unlocked),
   }), []);
 
   // Reset stale nav state once the scene lesson is no longer the active stage content

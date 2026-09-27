@@ -21,12 +21,23 @@ export function useLetterboxSize(containerRef: RefObject<HTMLElement>, ratio: nu
     const el = containerRef.current;
     if (!el) return;
     let cancelled = false;
-    let retryHandle: number | null = null;
+    let rafHandle: number | null = null;
 
-    const recompute = () => {
-      const rect = el.getBoundingClientRect();
+    // Deferred one frame rather than reading getBoundingClientRect()
+    // synchronously inside the triggering resize/visualViewport event —
+    // see useFrameScale's matching comment for the mobile race this avoids
+    // (a resize event firing mid-reflow, e.g. the browser's dynamic
+    // toolbar auto-hiding, catches this container's size and the viewport
+    // at different points in that reflow and bakes in an artificially
+    // small box that nothing ever re-measures once the viewport settles).
+    const measure = () => {
+      rafHandle = null;
+      if (cancelled) return;
+      const liveEl = containerRef.current;
+      if (!liveEl) return;
+      const rect = liveEl.getBoundingClientRect();
       if (rect.width <= 0 || rect.height <= 0) {
-        retryHandle = window.requestAnimationFrame(recompute);
+        rafHandle = window.requestAnimationFrame(measure);
         return;
       }
       let w = rect.width;
@@ -35,7 +46,11 @@ export function useLetterboxSize(containerRef: RefObject<HTMLElement>, ratio: nu
         h = rect.height;
         w = h * ratio;
       }
-      if (!cancelled) setSize({ width: Math.floor(w), height: Math.floor(h) });
+      setSize({ width: Math.floor(w), height: Math.floor(h) });
+    };
+    const recompute = () => {
+      if (rafHandle !== null) window.cancelAnimationFrame(rafHandle);
+      rafHandle = window.requestAnimationFrame(measure);
     };
 
     recompute();
@@ -45,7 +60,7 @@ export function useLetterboxSize(containerRef: RefObject<HTMLElement>, ratio: nu
     window.visualViewport?.addEventListener('resize', recompute);
     return () => {
       cancelled = true;
-      if (retryHandle !== null) window.cancelAnimationFrame(retryHandle);
+      if (rafHandle !== null) window.cancelAnimationFrame(rafHandle);
       ro.disconnect();
       window.removeEventListener('resize', recompute);
       window.visualViewport?.removeEventListener('resize', recompute);

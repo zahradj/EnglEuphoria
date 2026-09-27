@@ -30,10 +30,27 @@ export function useFrameScale(frameRef: RefObject<HTMLElement>) {
     const el = frameRef.current;
     if (!el) return;
     let cancelled = false;
-    let retryHandle: number | null = null;
+    let rafHandle: number | null = null;
 
-    const recompute = () => {
-      const rect = el.getBoundingClientRect();
+    // Deferred one frame (not read synchronously inside the triggering
+    // resize/visualViewport event) — reported live as "the lesson gets
+    // smaller after a few minutes on a tablet/phone, only a page refresh
+    // fixes it, then it happens again." Root cause: on mobile, a
+    // resize/visualViewport event (e.g. the browser's dynamic toolbar
+    // auto-hiding on scroll) can fire WHILE the page's own layout is still
+    // reflowing to match. Reading el.getBoundingClientRect() synchronously
+    // in that same event caught the frame mid-reflow while vw/vh already
+    // reflected the new viewport, producing a mismatched, artificially
+    // small scale — and since the viewport then settles with no further
+    // resize event, nothing ever re-triggered a corrected measurement.
+    // Waiting a frame lets both the frame's layout and the viewport settle
+    // together before either is read.
+    const measure = () => {
+      rafHandle = null;
+      if (cancelled) return;
+      const liveEl = frameRef.current;
+      if (!liveEl) return;
+      const rect = liveEl.getBoundingClientRect();
       // iOS/iPadOS Safari's dynamic toolbar means window.innerHeight can lag
       // the real usable viewport — visualViewport tracks it accurately when
       // available.
@@ -43,11 +60,15 @@ export function useFrameScale(frameRef: RefObject<HTMLElement>) {
         // Layout hasn't settled yet (common right after mount inside a
         // freshly-scaled/absolutely-positioned classroom stage) — try again
         // next frame instead of leaving scale stuck at its unscaled default.
-        retryHandle = window.requestAnimationFrame(recompute);
+        rafHandle = window.requestAnimationFrame(measure);
         return;
       }
       const s = Math.min(rect.width / vw, rect.height / vh, 1);
-      if (!cancelled && Number.isFinite(s) && s > 0) setScale(s);
+      if (Number.isFinite(s) && s > 0) setScale(s);
+    };
+    const recompute = () => {
+      if (rafHandle !== null) window.cancelAnimationFrame(rafHandle);
+      rafHandle = window.requestAnimationFrame(measure);
     };
 
     recompute();
@@ -57,7 +78,7 @@ export function useFrameScale(frameRef: RefObject<HTMLElement>) {
     window.visualViewport?.addEventListener('resize', recompute);
     return () => {
       cancelled = true;
-      if (retryHandle !== null) window.cancelAnimationFrame(retryHandle);
+      if (rafHandle !== null) window.cancelAnimationFrame(rafHandle);
       ro.disconnect();
       window.removeEventListener('resize', recompute);
       window.visualViewport?.removeEventListener('resize', recompute);

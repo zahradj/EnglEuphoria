@@ -103,7 +103,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   const [videosFloating, setVideosFloating] = useState(false);
   const [mobileCommsOpen, setMobileCommsOpen] = useState(false);
   const mainStageRef = useRef<MainStageHandle>(null);
-  const [sceneNavState, setSceneNavState] = useState({ sceneIdx: 0, total: 0, canNavigate: true });
+  const [sceneNavState, setSceneNavState] = useState({ sceneIdx: 0, total: 0, canNavigate: true, interactionUnlocked: false, lockToggleApplicable: false });
   // (commsCollapsed removed — Live video sidebar is now a fixed dock.)
   const [slideNavOpen, setSlideNavOpen] = useState(false);
 
@@ -1342,8 +1342,14 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             }}
             drawingEnabled={drawingEnabled}
             onToggleDrawing={async (enabled) => {
+              // Combined "let student interact" toggle — one button covers
+              // drawing AND the active scene lesson's own drag-and-drop/tap
+              // gate (setSceneInteractionUnlocked is a no-op when no scene
+              // lesson is on stage), per direct request rather than two
+              // separate switches.
               await setDrawingEnabled(enabled);
               await setStudentCanDraw(enabled); // keep legacy flag in sync
+              mainStageRef.current?.setSceneInteractionUnlocked(enabled);
             }}
             activeTool={(activeTool === 'pen' || activeTool === 'eraser' || activeTool === 'highlighter' || activeTool === 'pointer') ? activeTool : 'pen'}
             onToolChange={(t) => handleToolChange(t)}

@@ -105,7 +105,7 @@ export interface ToolActionPayload {
   result?: number;
   /** Timer: duration in seconds. */
   durationSec?: number;
-  /** Timer: 'start' | 'stop' | 'reset'. */
+  /** Timer: 'start' | 'stop' | 'reset'. Also reused by dice/wheel: 'stop' broadcasts a dismiss so the other side's ClassroomToolOverlay closes too, instead of only clearing local state. */
   status?: 'start' | 'stop' | 'reset';
   /** Wheel: options to display. */
   options?: string[];
