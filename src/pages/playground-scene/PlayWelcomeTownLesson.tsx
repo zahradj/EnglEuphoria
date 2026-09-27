@@ -112,9 +112,6 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   }, [isSynced, role, interactionUnlocked, onInteractionUnlockedPersist]);
 
   const iCaptureTaps = isSynced && !!role && (role === 'teacher' || (role === 'student' && interactionUnlocked));
-  const iReplayTaps = isSynced && !!role && (
-    (role === 'teacher' && interactionUnlocked) || (role === 'student' && !interactionUnlocked)
-  );
 
   useEffect(() => {
     if (!iCaptureTaps || !roomId || !role) return;
@@ -190,8 +187,23 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
     };
   }, [iCaptureTaps, roomId, role, sceneIdx]);
 
+  // Deliberately NOT gated on interactionUnlocked (there used to be an
+  // `iReplayTaps` guard mirroring iCaptureTaps' role/unlock check) — that
+  // gate raced against the async round-trip for the teacher's per-scene
+  // "reset to locked" (see the sceneIdx effect above): setInteractionUnlocked
+  // updates the teacher's own state synchronously, but the STUDENT only
+  // learns the new value after a real DB write + realtime round-trip. If
+  // the teacher clicked something in a fresh scene before that round-trip
+  // landed, the student's still-stale `interactionUnlocked` copy made this
+  // effect skip subscribing entirely, silently dropping the tap for good
+  // (a broadcast channel has no replay buffer) -- reported live as "teacher
+  // clicks the vocabulary, nothing happens on the student's side." The
+  // underlying whiteboardService channel is already `broadcast: { self:
+  // false } }`, so every scene_tap this side ever receives is guaranteed to
+  // be from the OTHER party already -- no local unlock guess is needed to
+  // decide whether to trust and replay it.
   useEffect(() => {
-    if (!iReplayTaps || !roomId) return;
+    if (!isSynced || !role || !roomId) return;
     const dragTargets = new Map<number, { el: HTMLElement; startX: number; startY: number }>();
     const unsubscribe = whiteboardService.subscribeToSceneTap(roomId, (payload) => {
       const rootEl = sceneRootRef.current;
@@ -234,7 +246,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
       }
     });
     return unsubscribe;
-  }, [iReplayTaps, roomId]);
+  }, [isSynced, role, roomId]);
 
   useEffect(() => { window.sessionStorage.setItem(sessionKey, String(sceneIdx)); }, [sceneIdx, sessionKey]);
 

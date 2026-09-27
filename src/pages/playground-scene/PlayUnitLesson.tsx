@@ -160,14 +160,12 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   // (no `&& !interactionUnlocked` guard), so once a teacher granted the
   // student control both sides captured+broadcast their own taps at once —
   // violating the "exactly one side captures at a time" invariant this
-  // comment describes. The teacher's stray broadcasts went nowhere (the
-  // student's iReplayTaps below already correctly stops listening once
-  // unlocked), but it doubled real traffic on the tap channel during every
-  // unlocked activity and made this file's own driver/follower model a lie.
+  // comment describes. The teacher's stray broadcasts still got replayed on
+  // the student's side (replay is unconditional now — see the subscription
+  // effect below), but it doubled real traffic on the tap channel during
+  // every unlocked activity and made this file's own driver/follower model
+  // a lie.
   const iCaptureTaps = isSynced && !!role && (skipsLock || (role === 'teacher' && !interactionUnlocked) || (role === 'student' && interactionUnlocked));
-  const iReplayTaps = isSynced && !!role && (
-    skipsLock || (role === 'teacher' && interactionUnlocked) || (role === 'student' && !interactionUnlocked)
-  );
 
   useEffect(() => {
     if (!iCaptureTaps || !roomId || !role) return;
@@ -249,8 +247,23 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
     };
   }, [iCaptureTaps, roomId, role, sceneIdx]);
 
+  // Deliberately NOT gated on interactionUnlocked/skipsLock (there used to
+  // be an `iReplayTaps` guard mirroring iCaptureTaps' role/unlock check) --
+  // that gate raced against the async round-trip for the teacher's
+  // per-scene "reset to locked": setInteractionUnlocked updates the
+  // teacher's own state synchronously, but the follower only learns the new
+  // value after a real DB write + realtime round-trip. If the driver
+  // (whichever side currently captures) acted before that round-trip
+  // landed, the other side's still-stale local `interactionUnlocked` copy
+  // made this effect skip subscribing entirely, silently dropping the tap
+  // for good (a broadcast channel has no replay buffer) -- reported live as
+  // "teacher clicks the vocabulary, nothing happens on the student's side."
+  // whiteboardService's channel is already `broadcast: { self: false } }`,
+  // so every scene_tap this side ever receives is guaranteed to be from the
+  // OTHER party already -- no local unlock guess is needed to decide
+  // whether to trust and replay it.
   useEffect(() => {
-    if (!iReplayTaps || !roomId) return;
+    if (!isSynced || !role || !roomId) return;
     // Follower's own synthetic down-position per active gesture — an
     // anchor point on ITS OWN element (its center), since absolute screen
     // coordinates from the driver's device don't mean anything here; only
@@ -297,7 +310,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
       }
     });
     return unsubscribe;
-  }, [iReplayTaps, roomId]);
+  }, [isSynced, role, roomId]);
 
   useEffect(() => { window.sessionStorage.setItem(sessionKey, String(sceneIdx)); }, [sceneIdx, sessionKey]);
 
