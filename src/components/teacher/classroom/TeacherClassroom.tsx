@@ -32,7 +32,6 @@ import { AnimatePresence } from "framer-motion";
 import { Wand2, MousePointer2, Pencil, Highlighter, Type, Minus, ArrowUpRight, Square, Circle as CircleIcon, Eraser, Trash2, X, PenTool } from "lucide-react";
 import LibraryDrawer from "@/components/lesson-player/LibraryDrawer";
 import { CountdownToStart } from "@/components/classroom/CountdownToStart";
-import { buildPreviewHomeworkPack } from "@/components/lesson-player/buildPreviewHomeworkPack";
 import { useIdleOpacity } from "@/hooks/useIdleOpacity";
 import { useClassroomTimer } from "@/hooks/classroom/useClassroomTimer";
 import { useSmartTimer } from "@/hooks/classroom/useSmartTimer";
@@ -700,10 +699,14 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     await updateCanvasTab('slides');
   }, [updateSharedDisplay, updateCanvasTab, setStageMode]);
 
-  // Always include homework slides from the resolved lesson, even when the
-  // shared session was previously seeded without them. This keeps the
-  // "Bonus / Homework" section visible on the timeline so teachers can hop
-  // into it if the student finishes early.
+  // Include homework slides from the resolved lesson when the lesson
+  // actually has real, assigned homework — but no longer fabricate a
+  // placeholder "preview" pack (buildPreviewHomeworkPack) when it doesn't.
+  // That fallback used to run unconditionally, so a "Bonus / Homework"
+  // section with fake generated tasks was appended to every single lesson
+  // regardless of whether the teacher had assigned any homework at all —
+  // an always-present frame with nothing real behind it, removed per
+  // direct request.
   const displayedSlides = React.useMemo(() => {
     const base = syncedLessonSlides.length > 0 ? syncedLessonSlides : slides;
     const isHw = (s: any) =>
@@ -712,21 +715,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     if (hasHw) return base;
     const hwFromInitial = (initialSlides ?? []).filter(isHw);
     if (hwFromInitial.length) return [...base, ...hwFromInitial];
-    if (!base.length) return base;
-    const previewHub = hubType === 'professional' ? 'success' : hubType;
-    const pack = buildPreviewHomeworkPack(hubType, syncedLessonTitle || lessonTitle, base);
-    const homeworkSlides = (pack.tasks ?? []).map((task, idx) => ({
-      id: `homework-${idx + 1}`,
-      type: 'homework_task',
-      slide_type: 'homework_task',
-      title: `Homework ${idx + 1}: ${task.prompt.slice(0, 60)}${task.prompt.length > 60 ? '…' : ''}`,
-      hub: previewHub,
-      homeworkTask: task,
-      homeworkIndex: idx + 1,
-      homeworkTotal: pack.tasks.length,
-    }));
-    return homeworkSlides.length ? [...base, ...homeworkSlides] : base;
-  }, [syncedLessonSlides, slides, initialSlides, hubType, syncedLessonTitle, lessonTitle]);
+    return base;
+  }, [syncedLessonSlides, slides, initialSlides]);
   const activeLessonTitle = syncedLessonTitle || lessonTitle;
 
   // Whether the unified stage is currently showing an embedded Playground
