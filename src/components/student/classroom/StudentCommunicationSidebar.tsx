@@ -6,7 +6,7 @@ import { User, Send, Video, Mic, MicOff, VideoOff, BookOpen, PictureInPicture2, 
 import { getClassroomHubTheme, type ClassroomHubKey } from '@/components/teacher/classroom/hubClassroomTheme';
 import { DictionaryPopover } from '@/components/classroom/DictionaryPopover';
 import { whiteboardService, type ChatBroadcastPayload } from '@/services/whiteboardService';
-import { useCompactVideoLayout, useIsPortraitCompact } from '@/hooks/useCompactVideoLayout';
+import { useCompactVideoLayout, useIsPortrait } from '@/hooks/useCompactVideoLayout';
 
 interface StudentCommunicationSidebarProps {
   studentName: string;
@@ -61,7 +61,17 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
   // layout as a landscape one, not the compact phone strip a pure `md`
   // (768px width) breakpoint would wrongly give it.
   const isCompact = useCompactVideoLayout();
-  const isPortraitCompact = useIsPortraitCompact();
+  // Orientation alone, not width — a portrait TABLET (isCompact false,
+  // since its short side is well over the 500px phone threshold) must
+  // still get the docked top video strip + off-canvas chat drawer, not
+  // the full desktop sidebar stacked as a narrow left column next to the
+  // lesson (the exact bug reported: video tiles + chat + dictionary all
+  // crammed into a left column on a portrait tablet).
+  const isPortrait = useIsPortrait();
+  // Any device that should use the top-strip + drawer treatment instead
+  // of the full always-visible desktop sidebar: narrow phones (any
+  // orientation) OR any device in portrait (including wide tablets).
+  const showDrawerLayout = isCompact || isPortrait;
 
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     { id: 'sys-start', sender: 'system', text: 'Class session started' }
@@ -243,10 +253,10 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
           looking wrong underneath it in portrait specifically. This
           element takes no position of its own; the parent (StudentClassroom)
           places it above StudentMainStage in a flex-col stack when
-          isPortraitCompact, so the stage's available area shrinks to
+          isPortrait, so the stage's available area shrinks to
           account for it (the same measurement useLetterboxSize/
           useViewportRatio already use for the frame-fit fix). */}
-      {isCompact && isPortraitCompact && (
+      {isPortrait && (
         <div className="w-full shrink-0 flex justify-center gap-2 px-2 py-2 bg-black/5 backdrop-blur-sm">
           {teacherTile(true)}
           {studentTile(true)}
@@ -256,21 +266,22 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
           lesson has enough width left over there to stay usable, so this
           keeps its original always-visible-without-eating-vertical-space
           behavior rather than switching every compact device to the
-          docked bar above. */}
-      {isCompact && !isPortraitCompact && (
+          docked bar above. Portrait tablets never reach here (isPortrait
+          already true above), only landscape phones do. */}
+      {isCompact && !isPortrait && (
         <div className="fixed top-14 right-2 z-40 flex gap-2">
           {teacherTile(true)}
           {studentTile(true)}
         </div>
       )}
 
-      {/* Backdrop — compact/drawer mode only, dismisses the drawer */}
-      {isCompact && mobileOpen && (
+      {/* Backdrop — drawer mode only (narrow phone or any portrait device), dismisses the drawer */}
+      {showDrawerLayout && mobileOpen && (
         <div className="fixed inset-0 z-[74] bg-black/40" onClick={onMobileClose} />
       )}
       <div
         className={`${
-          isCompact
+          showDrawerLayout
             ? `fixed inset-y-0 left-0 z-[75] w-[280px] transition-transform duration-200 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`
             : 'static z-auto w-[224px] translate-x-0'
         } ${theme.panelBg} border-r ${theme.panelBorder} flex flex-col shrink-0 h-full overflow-y-auto`}
@@ -279,7 +290,7 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
       <div className={`flex items-center justify-between px-3 py-2 border-b ${theme.panelBorder}`}>
         <span className={`text-xs font-semibold uppercase tracking-wider ${theme.accentText}`}>Live</span>
         <div className="flex items-center gap-1">
-        {isCompact && onMobileClose && (
+        {showDrawerLayout && onMobileClose && (
           <button
             type="button"
             onClick={onMobileClose}
@@ -309,9 +320,10 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
       </div>
 
       {/* Video Containers — full-size, docked sidebar only (desktop or
-          tablet, any orientation); the compact strip above covers phones
-          so these never render at the same time as that strip. */}
-      <div className={`${isCompact ? 'hidden' : 'block'} p-3 space-y-3`}>
+          landscape tablet); the top strip above covers narrow phones and
+          any portrait device, so these never render at the same time as
+          that strip. */}
+      <div className={`${showDrawerLayout ? 'hidden' : 'block'} p-3 space-y-3`}>
         {videosFloating && (
           <button
             type="button"

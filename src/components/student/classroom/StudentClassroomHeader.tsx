@@ -31,6 +31,8 @@ interface StudentClassroomHeaderProps {
   scheduledAt?: string | Date | null;
   /** Mobile only — opens the video/chat drawer that's otherwise a docked sidebar on desktop. */
   onToggleComms?: () => void;
+  /** True on any portrait device (phone or tablet) — the comms toggle must stay reachable there even above the `md` width breakpoint, since a portrait tablet's width alone can be ≥768px. */
+  isPortrait?: boolean;
 }
 
 export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
@@ -49,6 +51,7 @@ export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
   studentStars = 0,
   scheduledAt = null,
   onToggleComms,
+  isPortrait = false,
 }) => {
   const { quality, latencyMs, suggestion } = useConnectionHealth();
   const earnedStars = Math.min(Math.max(studentStars, 0), 10);
@@ -200,7 +203,7 @@ export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
             variant="ghost"
             size="icon"
             onClick={onToggleComms}
-            className="h-9 w-9 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 md:hidden"
+            className={`h-9 w-9 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 ${isPortrait ? '' : 'md:hidden'}`}
             title="Chat"
             aria-label="Toggle chat panel"
           >

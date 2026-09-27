@@ -23,7 +23,7 @@ import { useHubClassroomTheme } from '@/components/classroom/shared/useHubClassr
 import { ClassroomLibraryDrawer } from './ClassroomLibraryDrawer';
 import { BookOpen } from 'lucide-react';
 import { CountdownToStart } from '@/components/classroom/CountdownToStart';
-import { useIsPortraitCompact } from '@/hooks/useCompactVideoLayout';
+import { useIsPortrait } from '@/hooks/useCompactVideoLayout';
 
 
 
@@ -73,7 +73,11 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
 
   const headerIdle = useIdleOpacity({ idleTimeout: 3000, idleOpacity: 0.4 });
   const sidebarIdle = useIdleOpacity({ idleTimeout: 4000, idleOpacity: 0.3 });
-  const isPortraitCompact = useIsPortraitCompact();
+  // Orientation-only, not width-gated — a portrait TABLET must stack video-
+  // above-lesson exactly like a portrait phone does; only the phone-specific
+  // compact video strip sizing (inside StudentCommunicationSidebar) still
+  // keys off narrow width.
+  const isPortrait = useIsPortrait();
 
   const {
     session,
@@ -554,6 +558,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
             studentStars={starCount}
             scheduledAt={scheduledAt ?? null}
             onToggleComms={() => setMobileCommsOpen(v => !v)}
+            isPortrait={isPortrait}
           />
         </div>
       )}
@@ -561,12 +566,14 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
       {/* Main Content — portrait phone/tablet stacks the video strip above
           the lesson (flex-col) instead of the desktop/landscape side-by-side
           row, per direct report that video frames should sit above the
-          lesson, not float over/beside it, in portrait. */}
-      <div className={`flex-1 flex overflow-hidden ${isPortraitCompact ? 'flex-col' : ''}`}>
+          lesson, not float over/beside it, in portrait. Orientation-only
+          (isPortrait), not narrow-width-gated — a portrait tablet must get
+          this too, not just a portrait phone. */}
+      <div className={`flex-1 flex overflow-hidden ${isPortrait ? 'flex-col' : ''}`}>
         {/* Communication — left sidebar on desktop/landscape, full-width bar above the stage in portrait */}
         {!isZenMode && (
           <div
-            className={isPortraitCompact ? 'w-full shrink-0' : undefined}
+            className={isPortrait ? 'w-full shrink-0' : undefined}
             style={sidebarIdle.style}
             onMouseMove={sidebarIdle.onMouseMove}
             onMouseEnter={sidebarIdle.onMouseEnter}

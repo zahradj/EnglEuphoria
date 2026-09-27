@@ -38,8 +38,15 @@ export function useCompactVideoLayout() {
  * lesson content looking wrong on portrait phones/tablets specifically —
  * landscape is left on the existing floating behavior.
  */
-export function useIsPortraitCompact(): boolean {
-  const isCompact = useCompactVideoLayout();
+/**
+ * Pure orientation check, independent of device width — a portrait TABLET
+ * (short side well over the 500px compact threshold, e.g. iPad Mini at
+ * 744px, iPad Pro at 834-1024px) still reports true here even though
+ * `useCompactVideoLayout` never fires for it. Use this whenever the
+ * decision is "should the layout stack for portrait", as opposed to
+ * "is this a narrow phone" (that's what `useCompactVideoLayout` answers).
+ */
+export function useIsPortrait(): boolean {
   const [isPortrait, setIsPortrait] = React.useState<boolean | undefined>(undefined);
 
   React.useEffect(() => {
@@ -53,5 +60,11 @@ export function useIsPortraitCompact(): boolean {
     };
   }, []);
 
-  return isCompact && !!isPortrait;
+  return !!isPortrait;
+}
+
+export function useIsPortraitCompact(): boolean {
+  const isCompact = useCompactVideoLayout();
+  const isPortrait = useIsPortrait();
+  return isCompact && isPortrait;
 }
