@@ -2124,6 +2124,60 @@ export type Database = {
         }
         Relationships: []
       }
+      class_booking_invites: {
+        Row: {
+          booking_id: string
+          created_at: string
+          created_by: string
+          expires_at: string
+          id: string
+          last_used_at: string | null
+          revoked_at: string | null
+          student_email: string
+          student_name: string | null
+          token: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          created_by: string
+          expires_at: string
+          id?: string
+          last_used_at?: string | null
+          revoked_at?: string | null
+          student_email: string
+          student_name?: string | null
+          token: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          created_by?: string
+          expires_at?: string
+          id?: string
+          last_used_at?: string | null
+          revoked_at?: string | null
+          student_email?: string
+          student_name?: string | null
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_booking_invites_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "class_bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_booking_invites_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       class_bookings: {
         Row: {
           booking_type: string
@@ -9149,13 +9203,11 @@ export type Database = {
           id: string
           is_read: boolean | null
           message: string
-          parent_email: string | null
           parent_id: string
           read_at: string | null
           sender_type: string
           student_id: string
           subject: string
-          teacher_email: string | null
           teacher_id: string
         }
         Insert: {
@@ -9163,13 +9215,11 @@ export type Database = {
           id?: string
           is_read?: boolean | null
           message: string
-          parent_email?: string | null
           parent_id: string
           read_at?: string | null
           sender_type: string
           student_id: string
           subject: string
-          teacher_email?: string | null
           teacher_id: string
         }
         Update: {
@@ -9177,13 +9227,11 @@ export type Database = {
           id?: string
           is_read?: boolean | null
           message?: string
-          parent_email?: string | null
           parent_id?: string
           read_at?: string | null
           sender_type?: string
           student_id?: string
           subject?: string
-          teacher_email?: string | null
           teacher_id?: string
         }
         Relationships: [
@@ -9664,10 +9712,13 @@ export type Database = {
           id: string
           improvement_suggestion: string | null
           lesson_id: string | null
-          material_relevance_rating: number
+          material_relevance_rating: number | null
           student_id: string
-          teacher_energy_rating: number
+          submitted_by_role: string
+          submitted_by_user_id: string
+          teacher_energy_rating: number | null
           teacher_id: string
+          thumbs_up: boolean | null
         }
         Insert: {
           created_at?: string
@@ -9675,10 +9726,13 @@ export type Database = {
           id?: string
           improvement_suggestion?: string | null
           lesson_id?: string | null
-          material_relevance_rating: number
+          material_relevance_rating?: number | null
           student_id: string
-          teacher_energy_rating: number
+          submitted_by_role?: string
+          submitted_by_user_id: string
+          teacher_energy_rating?: number | null
           teacher_id: string
+          thumbs_up?: boolean | null
         }
         Update: {
           created_at?: string
@@ -9686,10 +9740,13 @@ export type Database = {
           id?: string
           improvement_suggestion?: string | null
           lesson_id?: string | null
-          material_relevance_rating?: number
+          material_relevance_rating?: number | null
           student_id?: string
-          teacher_energy_rating?: number
+          submitted_by_role?: string
+          submitted_by_user_id?: string
+          teacher_energy_rating?: number | null
           teacher_id?: string
+          thumbs_up?: boolean | null
         }
         Relationships: []
       }

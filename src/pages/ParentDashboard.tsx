@@ -37,7 +37,7 @@ const ParentDashboard: React.FC = () => {
       if (!user?.id) return [];
       
       const { data, error } = await supabase
-        .from('parent_student_relationships')
+        .from('student_parent_relationships')
         .select(`
           id,
           student_id,
@@ -46,7 +46,7 @@ const ParentDashboard: React.FC = () => {
           can_view_progress,
           can_book_lessons,
           can_communicate_teachers,
-          student:users!parent_student_relationships_student_id_fkey(
+          student:users!student_parent_relationships_student_id_fkey(
             id,
             full_name,
             email

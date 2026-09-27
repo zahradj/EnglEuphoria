@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Star, Zap, BookOpen, Clock } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, Clock } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -20,43 +20,6 @@ interface PostClassFeedbackModalProps {
   roomId?: string;
 }
 
-const StarRating = ({
-  value,
-  onChange,
-  label,
-  icon: Icon,
-}: {
-  value: number;
-  onChange: (v: number) => void;
-  label: string;
-  icon: React.ElementType;
-}) => (
-  <div className="space-y-2">
-    <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-      <Icon className="w-4 h-4" />
-      <span>{label}</span>
-    </div>
-    <div className="flex gap-1">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          type="button"
-          onClick={() => onChange(star)}
-          className="transition-transform hover:scale-110 focus:outline-none"
-        >
-          <Star
-            className={`w-8 h-8 transition-colors ${
-              star <= value
-                ? 'fill-amber-400 text-amber-400'
-                : 'text-muted-foreground/30'
-            }`}
-          />
-        </button>
-      ))}
-    </div>
-  </div>
-);
-
 export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
   isOpen,
   onClose,
@@ -66,9 +29,7 @@ export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
   roomId,
 }) => {
   const { toast } = useToast();
-  const [teacherEnergy, setTeacherEnergy] = useState(0);
-  const [materialRelevance, setMaterialRelevance] = useState(0);
-  const [feelsConfident, setFeelsConfident] = useState<boolean | null>(null);
+  const [thumbsUp, setThumbsUp] = useState<boolean | null>(null);
   const [suggestion, setSuggestion] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [endedAt, setEndedAt] = useState<string | null>(null);
@@ -90,9 +51,18 @@ export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
     return () => { cancelled = true; };
   }, [isOpen, roomId]);
 
+  // Reset for the next lesson's feedback prompt rather than carrying over
+  // whatever was picked last time.
+  useEffect(() => {
+    if (isOpen) {
+      setThumbsUp(null);
+      setSuggestion('');
+    }
+  }, [isOpen]);
+
   const handleSubmit = async () => {
-    if (teacherEnergy === 0 || materialRelevance === 0) {
-      toast({ title: 'Please rate both categories', variant: 'destructive' });
+    if (thumbsUp === null) {
+      toast({ title: 'Please choose thumbs up or down', variant: 'destructive' });
       return;
     }
 
@@ -105,10 +75,10 @@ export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
         student_id: user.id,
         teacher_id: teacherId,
         lesson_id: lessonId,
-        teacher_energy_rating: teacherEnergy,
-        material_relevance_rating: materialRelevance,
-        feels_more_confident: feelsConfident,
-        improvement_suggestion: suggestion.trim() || null,
+        thumbs_up: thumbsUp,
+        submitted_by_role: 'student',
+        submitted_by_user_id: user.id,
+        improvement_suggestion: !thumbsUp ? (suggestion.trim() || null) : null,
       });
 
       if (error) throw error;
@@ -146,64 +116,60 @@ export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
         )}
 
         <div className="space-y-6 py-2">
-          <StarRating
-            value={teacherEnergy}
-            onChange={setTeacherEnergy}
-            label="Teacher Energy"
-            icon={Zap}
-          />
+          <div className="flex justify-center gap-6">
+            <button
+              type="button"
+              onClick={() => setThumbsUp(true)}
+              aria-label="Thumbs up"
+              aria-pressed={thumbsUp === true}
+              className={`flex flex-col items-center gap-2 rounded-2xl px-8 py-5 border-2 transition-all hover:scale-105 ${
+                thumbsUp === true
+                  ? 'border-emerald-500 bg-emerald-500/10'
+                  : 'border-border bg-muted/30 hover:border-emerald-500/50'
+              }`}
+            >
+              <ThumbsUp className={`w-10 h-10 ${thumbsUp === true ? 'fill-emerald-500 text-emerald-500' : 'text-muted-foreground'}`} />
+              <span className={`text-sm font-medium ${thumbsUp === true ? 'text-emerald-600' : 'text-muted-foreground'}`}>Good</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setThumbsUp(false)}
+              aria-label="Thumbs down"
+              aria-pressed={thumbsUp === false}
+              className={`flex flex-col items-center gap-2 rounded-2xl px-8 py-5 border-2 transition-all hover:scale-105 ${
+                thumbsUp === false
+                  ? 'border-red-500 bg-red-500/10'
+                  : 'border-border bg-muted/30 hover:border-red-500/50'
+              }`}
+            >
+              <ThumbsDown className={`w-10 h-10 ${thumbsUp === false ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`} />
+              <span className={`text-sm font-medium ${thumbsUp === false ? 'text-red-600' : 'text-muted-foreground'}`}>Not great</span>
+            </button>
+          </div>
 
-          <StarRating
-            value={materialRelevance}
-            onChange={setMaterialRelevance}
-            label="Material Relevance"
-            icon={BookOpen}
-          />
-
-          {/* Euphoria Metric */}
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-muted-foreground">
-              Do you feel more confident in English after this lesson?
-            </p>
-            <div className="flex gap-3">
-              {[
-                { label: 'Yes 🙌', value: true },
-                { label: 'Not really', value: false },
-              ].map((opt) => (
-                <Button
-                  key={String(opt.value)}
-                  type="button"
-                  variant={feelsConfident === opt.value ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setFeelsConfident(opt.value)}
-                  className="flex-1"
-                >
-                  {opt.label}
-                </Button>
-              ))}
+          {/* Only asked on a thumbs-down — a thumbs-up doesn't need a reason. */}
+          {thumbsUp === false && (
+            <div className="space-y-2 animate-in fade-in slide-in-from-top-1">
+              <p className="text-sm font-medium text-muted-foreground">
+                One thing that could be better (optional)
+              </p>
+              <Textarea
+                value={suggestion}
+                onChange={(e) => setSuggestion(e.target.value.slice(0, 500))}
+                placeholder="Share your thoughts..."
+                className="resize-none h-20"
+                maxLength={500}
+                autoFocus
+              />
+              <p className="text-xs text-muted-foreground text-right">
+                {suggestion.length}/500
+              </p>
             </div>
-          </div>
-
-          {/* Suggestion */}
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-muted-foreground">
-              One thing that could be better (optional)
-            </p>
-            <Textarea
-              value={suggestion}
-              onChange={(e) => setSuggestion(e.target.value.slice(0, 500))}
-              placeholder="Share your thoughts..."
-              className="resize-none h-20"
-              maxLength={500}
-            />
-            <p className="text-xs text-muted-foreground text-right">
-              {suggestion.length}/500
-            </p>
-          </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-2 pt-2">
-          <Button onClick={handleSubmit} disabled={isSubmitting}>
+          <Button onClick={handleSubmit} disabled={isSubmitting || thumbsUp === null}>
             {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
           </Button>
           <button

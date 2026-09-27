@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { User, Eye } from "lucide-react";
+import { ParentLessonFeedbackCard } from "./ParentLessonFeedbackCard";
 
 interface StudentRelationship {
   id: string;
@@ -82,12 +83,17 @@ export function ParentStudentList({ students, onSelectStudent }: ParentStudentLi
 
           <Button
             onClick={() => onSelectStudent(relationship.student_id)}
-            className="w-full"
+            className="w-full mb-3"
             variant="outline"
           >
             <Eye className="h-4 w-4 me-2" />
             {t('pd.students.viewProgressBtn')}
           </Button>
+
+          <ParentLessonFeedbackCard
+            studentId={relationship.student_id}
+            studentName={relationship.student.full_name}
+          />
         </Card>
       ))}
     </div>

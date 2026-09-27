@@ -265,7 +265,18 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   // Save student context to session when available
   useEffect(() => {
     if (studentContext && isConnected) {
+      // updateSessionContext's DB write is a full replace of the
+      // session_context JSONB column, not a merge (see
+      // classroomSyncService.updateSession) -- this effect used to pass a
+      // brand-new object literal with none of the existing fields, which
+      // silently wiped classStarted/startedAt (and anything else already
+      // in session_context) every time it fired. It fires reliably on every
+      // reconnect once isConnected flips true and studentContext resolves
+      // -- i.e. on every refresh -- which is exactly why a refreshed
+      // teacher saw "Start Class" reappear and a refreshed student saw
+      // "Waiting for your teacher" even though the class was already live.
       updateSessionContext({
+        ...(sessionContext || {}),
         studentName: studentContext.studentName,
         level: studentContext.level,
         cefrLevel: studentContext.cefrLevel,
