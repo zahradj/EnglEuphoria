@@ -124,29 +124,45 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
   // comms toggle. Many tablets in portrait are narrower than 768px CSS
   // width, so the video call — the one thing a student needs to see their
   // teacher — was invisible by default on those devices, discoverable only
-  // via a small icon button. Both tiles are shared here (`compact` sizes
-  // them for the new always-visible top strip below) so the strip and the
-  // full sidebar render identical markup, never two different copies at
-  // once — see the `hidden md:block` / `md:hidden` split below.
-  const teacherTile = (compact: boolean) => (
+  // via a small icon button. Both tiles are shared here so the strip and
+  // the full sidebar render identical markup, never two different copies
+  // at once — see the `hidden md:block` / `md:hidden` split below.
+  //
+  // Three sizes, not two: 'xs' is the tiny landscape-phone floating corner
+  // strip (deliberately small — it overlays a corner of the lesson, so it
+  // must stay out of the way). 'md' is the docked portrait strip (phone OR
+  // tablet) — per direct report the xs size was too small to actually see
+  // each other's faces once it became the primary, always-visible video
+  // call UI in portrait rather than a small corner accent. 'full' is the
+  // desktop/landscape-tablet docked sidebar. 'md' and 'full' share all
+  // inner content sizing (name label, buttons, avatar) — only the outer
+  // container's width/shape differs — since a wider container comfortably
+  // fits the same content the full sidebar already uses.
+  const teacherTile = (size: 'xs' | 'md' | 'full') => {
+    const isXs = size === 'xs';
+    return (
     <div
-      className={`group relative aspect-[4/3] overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all ${compact ? 'w-14 shrink-0 rounded-lg' : 'rounded-2xl hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)]'} ${videosFloating ? 'hidden' : ''}`}
+      className={`group relative aspect-[4/3] overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all ${
+        isXs ? 'w-14 shrink-0 rounded-lg' :
+        size === 'md' ? 'flex-1 max-w-[240px] rounded-2xl' :
+        'rounded-2xl hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)]'
+      } ${videosFloating ? 'hidden' : ''}`}
       style={{ background: theme.hexGradient }}
     >
-      <div className={`absolute overflow-hidden bg-gray-900 ${compact ? 'inset-[1px] rounded-[10px]' : 'inset-[2px] rounded-[14px]'}`}>
+      <div className={`absolute overflow-hidden bg-gray-900 ${isXs ? 'inset-[1px] rounded-[10px]' : 'inset-[2px] rounded-[14px]'}`}>
         {remoteStream ? (
           <video ref={teacherVideoRef} autoPlay playsInline className="w-full h-full object-cover" />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
             <div className="text-center space-y-1">
-              <div className={`${compact ? 'w-8 h-8' : 'w-20 h-20'} rounded-full ${theme.accentSoftBg} flex items-center justify-center mx-auto shadow-inner`}>
-                <span className={compact ? 'text-base' : 'text-3xl'}>👩‍🏫</span>
+              <div className={`${isXs ? 'w-8 h-8' : 'w-20 h-20'} rounded-full ${theme.accentSoftBg} flex items-center justify-center mx-auto shadow-inner`}>
+                <span className={isXs ? 'text-base' : 'text-3xl'}>👩‍🏫</span>
               </div>
-              {!compact && <p className="text-[10px] text-gray-500 font-medium">Waiting for teacher…</p>}
+              {size === 'full' && <p className="text-[10px] text-gray-500 font-medium">Waiting for teacher…</p>}
             </div>
           </div>
         )}
-        {compact ? (
+        {isXs ? (
           <span className={`absolute top-1 right-1 h-2 w-2 rounded-full ring-1 ring-white/80 ${isRemoteConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400'}`} />
         ) : (
           <>
@@ -159,24 +175,31 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
         )}
       </div>
     </div>
-  );
+    );
+  };
 
-  const studentTile = (compact: boolean) => (
+  const studentTile = (size: 'xs' | 'md' | 'full') => {
+    const isXs = size === 'xs';
+    return (
     <div
-      className={`group relative aspect-[4/3] overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all ${compact ? 'w-14 shrink-0 rounded-lg' : 'rounded-2xl hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)]'} ${videosFloating ? 'hidden' : ''}`}
+      className={`group relative aspect-[4/3] overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all ${
+        isXs ? 'w-14 shrink-0 rounded-lg' :
+        size === 'md' ? 'flex-1 max-w-[240px] rounded-2xl' :
+        'rounded-2xl hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.45)]'
+      } ${videosFloating ? 'hidden' : ''}`}
       style={{ background: theme.hexGradient }}
     >
-      <div className={`absolute overflow-hidden bg-gray-900 ${compact ? 'inset-[1px] rounded-[10px]' : 'inset-[2px] rounded-[14px]'}`}>
+      <div className={`absolute overflow-hidden bg-gray-900 ${isXs ? 'inset-[1px] rounded-[10px]' : 'inset-[2px] rounded-[14px]'}`}>
         {localStream && !isCameraOff ? (
           <video ref={studentVideoRef} autoPlay playsInline muted className="w-full h-full object-cover" style={{ transform: 'scaleX(-1)' }} />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-            <div className={`${compact ? 'w-8 h-8' : 'w-16 h-16'} rounded-full ${theme.accentSoftBg} flex items-center justify-center shadow-inner`}>
-              <User className={`${compact ? 'w-4 h-4' : 'w-8 h-8'} ${theme.accentText}`} />
+            <div className={`${isXs ? 'w-8 h-8' : 'w-16 h-16'} rounded-full ${theme.accentSoftBg} flex items-center justify-center shadow-inner`}>
+              <User className={`${isXs ? 'w-4 h-4' : 'w-8 h-8'} ${theme.accentText}`} />
             </div>
           </div>
         )}
-        {compact ? (
+        {isXs ? (
           <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-emerald-500 animate-pulse ring-1 ring-white/80" />
         ) : (
           <>
@@ -187,7 +210,7 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
             </div>
           </>
         )}
-        {!compact && (
+        {!isXs && (
           <div className="absolute bottom-2 right-2 flex gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
             <Button
               variant="ghost"
@@ -211,7 +234,8 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
         )}
       </div>
     </div>
-  );
+    );
+  };
 
   const handleSendMessage = () => {
     const text = newMessage.trim();
@@ -257,9 +281,9 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
           account for it (the same measurement useLetterboxSize/
           useViewportRatio already use for the frame-fit fix). */}
       {isPortrait && (
-        <div className="w-full shrink-0 flex justify-center gap-2 px-2 py-2 bg-black/5 backdrop-blur-sm">
-          {teacherTile(true)}
-          {studentTile(true)}
+        <div className="w-full shrink-0 flex justify-center gap-3 px-3 py-3 bg-black/5 backdrop-blur-sm">
+          {teacherTile('md')}
+          {studentTile('md')}
         </div>
       )}
       {/* Landscape phone: floating strip over the top-right corner — the
@@ -267,11 +291,14 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
           keeps its original always-visible-without-eating-vertical-space
           behavior rather than switching every compact device to the
           docked bar above. Portrait tablets never reach here (isPortrait
-          already true above), only landscape phones do. */}
+          already true above), only landscape phones do. Deliberately kept
+          at 'xs' (tiny) — unlike the portrait strip above, this one is a
+          corner overlay ON TOP of the lesson, not a docked bar the stage
+          makes room for, so it must stay small enough not to cover it. */}
       {isCompact && !isPortrait && (
         <div className="fixed top-14 right-2 z-40 flex gap-2">
-          {teacherTile(true)}
-          {studentTile(true)}
+          {teacherTile('xs')}
+          {studentTile('xs')}
         </div>
       )}
 
@@ -334,8 +361,8 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
             <span className="text-[11px] font-medium leading-tight px-2">Videos are floating over the lesson<br />Click to dock</span>
           </button>
         )}
-        {teacherTile(false)}
-        {studentTile(false)}
+        {teacherTile('full')}
+        {studentTile('full')}
       </div>
 
       {/* Chat Box */}
