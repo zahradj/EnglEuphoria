@@ -100,6 +100,11 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
           studentEmail: studentEmail.trim(),
           studentName: studentName.trim() || undefined,
           scheduledAt: scheduledAt.toISOString(),
+          // The edge function runs on Deno (defaults to UTC) and has no
+          // other way to know what "9pm" meant to this teacher — without
+          // this, the confirmation email showed the UTC hour instead of
+          // the local time actually picked above.
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           duration,
           hub: selectedHub,
         },

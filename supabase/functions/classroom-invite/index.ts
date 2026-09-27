@@ -152,7 +152,7 @@ Deno.serve(async (req) => {
       const auth = await requireAuth(req, { allowedRoles: ['teacher', 'admin'] })
       if (!auth.ok) return json(auth.body, auth.status)
 
-      const { studentEmail, studentName, scheduledAt, duration, lessonId, hub } = body
+      const { studentEmail, studentName, scheduledAt, duration, lessonId, hub, timeZone } = body
       if (!studentEmail || typeof studentEmail !== 'string') {
         return json({ error: 'studentEmail is required' }, 400)
       }
@@ -263,9 +263,26 @@ Deno.serve(async (req) => {
         .eq('id', auth.userId)
         .maybeSingle()
 
+      // This function runs on Deno (defaults to UTC) -- without an explicit
+      // timeZone, toLocale*String below would render the stored UTC hour
+      // instead of the local time the teacher actually picked, which is
+      // exactly the "booked 9pm, email said 8pm" bug this guards against.
+      // Falls back to UTC for older clients that don't send timeZone yet,
+      // or an invalid value, rather than throwing and failing the invite.
+      const isValidTimeZone = (tz: unknown): tz is string => {
+        if (typeof tz !== 'string' || !tz) return false
+        try {
+          Intl.DateTimeFormat(undefined, { timeZone: tz })
+          return true
+        } catch {
+          return false
+        }
+      }
+      const emailTimeZone = isValidTimeZone(timeZone) ? timeZone : 'UTC'
+
       const scheduledDate = new Date(booking.scheduled_at)
-      const lessonDateLabel = scheduledDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
-      const lessonTimeLabel = scheduledDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })
+      const lessonDateLabel = scheduledDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: emailTimeZone })
+      const lessonTimeLabel = scheduledDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: emailTimeZone })
 
       const emailSent = await sendClassroomInviteEmail(adminClient, {
         recipientEmail: normalizedEmail,
