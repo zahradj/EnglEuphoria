@@ -20,8 +20,6 @@ import { Timer, Dice6 } from 'lucide-react';
 import { useIdleOpacity } from '@/hooks/useIdleOpacity';
 import { whiteboardService } from '@/services/whiteboardService';
 import { useHubClassroomTheme } from '@/components/classroom/shared/useHubClassroomTheme';
-import { ClassroomLibraryDrawer } from './ClassroomLibraryDrawer';
-import { BookOpen } from 'lucide-react';
 import { CountdownToStart } from '@/components/classroom/CountdownToStart';
 import { useIsPortrait } from '@/hooks/useCompactVideoLayout';
 
@@ -63,7 +61,6 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
   const [videosFloating, setVideosFloating] = useState(false);
   const [mobileCommsOpen, setMobileCommsOpen] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  const [libraryOpen, setLibraryOpen] = useState(false);
 
 
   // Instant broadcast-driven overlays (separate from slow DB-backed sync)
@@ -651,31 +648,6 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
             userId={studentId}
             hubType={hubType}
             canSend
-          />
-        </>
-      )}
-
-      {/* In-classroom Library Drawer (Vocab / Sounds / Grammar / Stories) */}
-      {!isZenMode && (
-        <>
-          <button
-            onClick={() => setLibraryOpen(true)}
-            className={`fixed bottom-6 right-24 z-40 flex items-center gap-2 px-4 py-3 rounded-full text-white font-semibold shadow-lg hover:scale-105 active:scale-95 transition-transform ${
-              hubType === 'playground'
-                ? 'bg-gradient-to-br from-orange-500 to-amber-500'
-                : hubType === 'professional'
-                ? 'bg-gradient-to-br from-emerald-500 to-teal-500'
-                : 'bg-gradient-to-br from-indigo-500 to-violet-500'
-            }`}
-            aria-label="Open library drawer"
-          >
-            <BookOpen className="w-5 h-5" />
-            <span className="hidden sm:inline text-sm">Library</span>
-          </button>
-          <ClassroomLibraryDrawer
-            open={libraryOpen}
-            onOpenChange={setLibraryOpen}
-            hubType={hubType}
           />
         </>
       )}

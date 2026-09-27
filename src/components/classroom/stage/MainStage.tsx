@@ -296,13 +296,11 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                       </button>
                     </>
                   ) : (
-                    <div className="mx-auto flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-xs font-extrabold text-slate-800 shadow-lg backdrop-blur tabular-nums">
-                      {sceneNav.interactionUnlocked ? (
-                        <><span aria-hidden>✋</span> Your turn! Try the activity</>
-                      ) : (
-                        <><span aria-hidden>👩‍🏫</span> Your teacher is guiding this lesson · {sceneNav.sceneIdx + 1} / {sceneNav.total}</>
-                      )}
-                    </div>
+                    sceneNav.interactionUnlocked && (
+                      <div className="mx-auto flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-xs font-extrabold text-slate-800 shadow-lg backdrop-blur tabular-nums">
+                        <span aria-hidden>✋</span> Your turn! Try the activity
+                      </div>
+                    )
                   )}
                 </div>
               )}
