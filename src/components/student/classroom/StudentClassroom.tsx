@@ -68,7 +68,9 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
   const [liveSticker, setLiveSticker] = useState<{ emoji: string; key: number } | null>(null);
 
   const headerIdle = useIdleOpacity({ idleTimeout: 3000, idleOpacity: 0.4 });
-  const sidebarIdle = useIdleOpacity({ idleTimeout: 4000, idleOpacity: 0.3 });
+  // Video sidebar intentionally has no idle-dim (per direct report: seeing
+  // the teacher's face is critical throughout the lesson, not just while
+  // the mouse is hovering over the tiles) — headerIdle above is unaffected.
   // Orientation-only, not width-gated — a portrait TABLET must stack video-
   // above-lesson exactly like a portrait phone does; only the phone-specific
   // compact video strip sizing (inside StudentCommunicationSidebar) still
@@ -529,12 +531,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
       <div className={`flex-1 flex overflow-hidden ${isPortrait ? 'flex-col' : ''}`}>
         {/* Communication — left sidebar on desktop/landscape, full-width bar above the stage in portrait */}
         {!isZenMode && (
-          <div
-            className={isPortrait ? 'w-full shrink-0' : undefined}
-            style={sidebarIdle.style}
-            onMouseMove={sidebarIdle.onMouseMove}
-            onMouseEnter={sidebarIdle.onMouseEnter}
-          >
+          <div className={isPortrait ? 'w-full shrink-0' : undefined}>
             <StudentCommunicationSidebar
               studentName={studentName}
               teacherName={teacherName}

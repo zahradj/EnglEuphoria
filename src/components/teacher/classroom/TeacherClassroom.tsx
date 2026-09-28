@@ -157,9 +157,10 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
 
   const wrapUpAutoOpenedRef = React.useRef(false);
 
-  // Auto-hide for top bar and sidebars
+  // Auto-hide for the top bar only — the video sidebar must never dim
+  // (per direct report: seeing each other's face is critical throughout
+  // the lesson, not just while the mouse is hovering over the tiles).
   const topBarIdle = useIdleOpacity({ idleTimeout: 3000, idleOpacity: 0.4 });
-  const sidebarIdle = useIdleOpacity({ idleTimeout: 4000, idleOpacity: 0.3 });
 
   // Context Handshake
   const { context: studentContext } = useStudentContext(studentId);
@@ -1151,9 +1152,11 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
 
       {/* 3-Column Layout */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left: Communication Zone */}
+        {/* Left: Communication Zone — never dimmed by idle opacity (unlike
+            the top bar/toolbar), since the whole point of these tiles is
+            seeing each other's face throughout the lesson, not just while
+            the mouse happens to be hovering over them. */}
         {!isZenMode && (
-          <div style={sidebarIdle.style} onMouseMove={sidebarIdle.onMouseMove} onMouseEnter={sidebarIdle.onMouseEnter}>
           <CommunicationZone
               hubType={hubType}
               roomId={roomName}
@@ -1196,7 +1199,6 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
               mobileOpen={mobileCommsOpen}
               onMobileClose={() => setMobileCommsOpen(false)}
             />
-          </div>
         )}
 
         {/* Center: Unified Main Stage */}
