@@ -37,6 +37,71 @@ const HUB_BADGE_COLORS: Record<string, string> = {
   professional: 'bg-emerald-100 text-emerald-700 border-emerald-200',
 };
 
+// Hub-branded accent for the drawer chrome itself (icon, search ring, level
+// tabs, hover states) — mirrors each hub's canonical brand color from
+// HubTheme.tsx (playground #FE6A2F / academy #6B21A8 / success #059669),
+// expressed as the closest Tailwind palette so it composes with the
+// existing dark-mode classes instead of hardcoded hex.
+interface HubAccent {
+  icon: string;
+  ring: string;
+  tabActive: string;
+  tabActiveText: string;
+  tabHover: string;
+  spinner: string;
+  rowHover: string;
+  rowTitleHover: string;
+  sectionHeader: string;
+}
+const HUB_ACCENT: Record<string, HubAccent> = {
+  playground: {
+    icon: 'text-amber-500',
+    ring: 'focus:ring-amber-400',
+    tabActive: 'bg-amber-600 border-amber-600',
+    tabActiveText: 'text-amber-200',
+    tabHover: 'hover:border-amber-300',
+    spinner: 'border-amber-400',
+    rowHover: 'hover:border-amber-300 dark:hover:border-amber-600',
+    rowTitleHover: 'group-hover:text-amber-600 dark:group-hover:text-amber-400',
+    sectionHeader: 'text-amber-600 dark:text-amber-400',
+  },
+  academy: {
+    icon: 'text-violet-500',
+    ring: 'focus:ring-violet-400',
+    tabActive: 'bg-violet-600 border-violet-600',
+    tabActiveText: 'text-violet-200',
+    tabHover: 'hover:border-violet-300',
+    spinner: 'border-violet-400',
+    rowHover: 'hover:border-violet-300 dark:hover:border-violet-600',
+    rowTitleHover: 'group-hover:text-violet-600 dark:group-hover:text-violet-400',
+    sectionHeader: 'text-violet-600 dark:text-violet-400',
+  },
+  professional: {
+    icon: 'text-emerald-500',
+    ring: 'focus:ring-emerald-400',
+    tabActive: 'bg-emerald-600 border-emerald-600',
+    tabActiveText: 'text-emerald-200',
+    tabHover: 'hover:border-emerald-300',
+    spinner: 'border-emerald-400',
+    rowHover: 'hover:border-emerald-300 dark:hover:border-emerald-600',
+    rowTitleHover: 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400',
+    sectionHeader: 'text-emerald-600 dark:text-emerald-400',
+  },
+};
+// Used when the drawer isn't locked to one hub (hubFilter undefined) —
+// keeps the original neutral indigo look in that case.
+const DEFAULT_ACCENT: HubAccent = {
+  icon: 'text-indigo-500',
+  ring: 'focus:ring-indigo-400',
+  tabActive: 'bg-indigo-600 border-indigo-600',
+  tabActiveText: 'text-indigo-200',
+  tabHover: 'hover:border-indigo-300',
+  spinner: 'border-indigo-400',
+  rowHover: 'hover:border-indigo-300 dark:hover:border-indigo-600',
+  rowTitleHover: 'group-hover:text-indigo-600 dark:group-hover:text-indigo-400',
+  sectionHeader: 'text-indigo-600 dark:text-indigo-400',
+};
+
 // CEFR ordering for the level tabs — anything not in this list sorts after,
 // alphabetically.
 const LEVEL_ORDER = ['pre-a1', 'a1', 'a2', 'b1', 'b2', 'c1', 'c2'];
@@ -65,6 +130,7 @@ export default function LibraryDrawer({
   const [loadingLessonId, setLoadingLessonId] = useState<string | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const [expandedUnits, setExpandedUnits] = useState<Set<string>>(new Set());
+  const accent = (hubFilter && HUB_ACCENT[hubFilter]) || DEFAULT_ACCENT;
 
   useEffect(() => {
     if (!open) return;
@@ -198,11 +264,11 @@ export default function LibraryDrawer({
       key={lesson.id}
       onClick={() => handleSelect(lesson.id)}
       disabled={loadingLessonId === lesson.id}
-      className="w-full text-left p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-md bg-white dark:bg-slate-800/60 transition-all group disabled:opacity-60"
+      className={`w-full text-left p-4 rounded-2xl border border-slate-100 dark:border-slate-800 ${accent.rowHover} hover:shadow-md bg-white dark:bg-slate-800/60 transition-all group disabled:opacity-60`}
     >
       <div className="flex items-start gap-3">
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+          <h3 className={`font-semibold text-sm truncate ${accent.rowTitleHover} transition-colors`}>
             {lesson.lesson_number != null ? `${lesson.lesson_number}. ` : ''}{lesson.title}
           </h3>
           {lesson.description && (
@@ -228,7 +294,7 @@ export default function LibraryDrawer({
           </div>
         </div>
         {loadingLessonId === lesson.id && (
-          <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin shrink-0 mt-1" />
+          <div className={`w-5 h-5 border-2 ${accent.spinner} border-t-transparent rounded-full animate-spin shrink-0 mt-1`} />
         )}
       </div>
     </button>
@@ -257,7 +323,7 @@ export default function LibraryDrawer({
           >
             {/* Header */}
             <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
-              <BookOpen size={22} className="text-indigo-500" />
+              <BookOpen size={22} className={accent.icon} />
               <h2 className="text-lg font-bold flex-1">Lesson Library</h2>
               <button
                 onClick={onClose}
@@ -276,7 +342,7 @@ export default function LibraryDrawer({
                   placeholder="Search lessons..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all"
+                  className={`w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 ${accent.ring} transition-all`}
                 />
               </div>
             </div>
@@ -295,12 +361,12 @@ export default function LibraryDrawer({
                       onClick={() => setSelectedLevel(level)}
                       className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide border transition-colors ${
                         active
-                          ? 'bg-indigo-600 text-white border-indigo-600'
-                          : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-indigo-300'
+                          ? `${accent.tabActive} text-white`
+                          : `bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 ${accent.tabHover}`
                       }`}
                     >
                       {level}
-                      <span className={active ? 'text-indigo-200' : 'text-slate-400'}> · {lessonCount}</span>
+                      <span className={active ? accent.tabActiveText : 'text-slate-400'}> · {lessonCount}</span>
                     </button>
                   );
                 })}
@@ -311,7 +377,7 @@ export default function LibraryDrawer({
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-16 gap-3 opacity-60">
-                  <div className="w-8 h-8 border-3 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+                  <div className={`w-8 h-8 border-3 ${accent.spinner} border-t-transparent rounded-full animate-spin`} />
                   <p className="text-sm">Loading lessons…</p>
                 </div>
               ) : filtered.length === 0 ? (
@@ -326,7 +392,7 @@ export default function LibraryDrawer({
                 // straight to a lesson, not browsing the curriculum tree.
                 grouped.map(({ level, units }) => (
                   <div key={level} className="space-y-2">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 pl-0.5">
+                    <h4 className={`text-xs font-bold uppercase tracking-wider ${accent.sectionHeader} pl-0.5`}>
                       {level}
                     </h4>
                     <div className="space-y-2">
