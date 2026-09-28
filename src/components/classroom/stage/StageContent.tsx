@@ -28,6 +28,21 @@ const CREATOR_NATIVE_TYPES = new Set([
   'lesson_summary', 'phonics_focus', 'storybook', 'media_player',
   'drag', 'match', 'draw',
   'tone_compare', 'functional_pattern', 'rewrite', 'scenario', 'email_task',
+  // Added -- these all have real, dedicated cases in AcademyDemo.tsx's own
+  // SlideRenderer (renderSlideInner's switch), confirmed against every
+  // distinct slide type actually used across academy/adult curriculum_lessons
+  // rows, but were never added here. A slide with one of these types fell
+  // through to the generic/normalized DynamicSlideRenderer instead of
+  // CreatorSlideRenderer (which is 1:1 with the studio preview these were
+  // authored and verified in), rendering blank or wrong in the live
+  // classroom even though the lesson's real slide data was fully present —
+  // reported as "the lesson doesn't show all the slides" for a Pre-A1/
+  // Academy lesson using several of these (scene_dialogue, letter_sound_game,
+  // word_blend, number_chart, etc.).
+  'scene_dialogue', 'conversation_fill', 'number_chart', 'number_quiz_game',
+  'letter_sound_game', 'word_blend', 'picture_match_game', 'say_it_game',
+  'sound_challenge_game', 'find_in_scene_game', 'story_page',
+  'story_engine_slot', 'escape_room_slot', 'detective_mystery_slot', 'hidden_object_slot',
 ]);
 const isCreatorNativeSlide = (s: any) =>
   !!s && typeof s.type === 'string' && CREATOR_NATIVE_TYPES.has(s.type);
