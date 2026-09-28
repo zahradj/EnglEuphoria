@@ -82,33 +82,54 @@ export const ClassroomLifecycle: React.FC<Props> = ({ bookingId, role, hubType =
   }, [bookingId, role, toast, qc]);
 
 
-  // Resolve classroom_sessions row for telemetry
+  // Resolve classroom_sessions row for telemetry.
+  //
+  // This row is created asynchronously by a *sibling* <TeacherClassroom>
+  // component (classroomSyncService.createOrUpdateSession, via
+  // useClassroomSync), not by this component or a parent -- so there's a
+  // real race at mount: if this fetch ran first, it used to find nothing,
+  // and since this effect never re-runs (deps: [bookingId] only), `session`
+  // stayed null for the rest of the class. That silently disabled the
+  // heartbeat / student-joined-detection subsystem below (useClassroomHeartbeat
+  // bails on a null sessionId) even though the lesson itself ran fine end to
+  // end on its own separate sync path -- producing exactly the "class ran
+  // well past its booked time, but ending still warns the student will be
+  // marked a no-show" bug, since `student_joined_at` never got the chance to
+  // be stamped. Mirrors the retry loop already used for this identical race
+  // on the student side of useClassroomSync.ts.
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const { data: byBooking } = await supabase
-        .from('classroom_sessions')
-        .select('id, lesson_type, scheduled_at, duration_minutes, student_joined_at, started_at')
-        .eq('booking_id', bookingId)
-        .maybeSingle();
-      let row: any = byBooking;
-      if (!row) {
-        const { data: byRoom } = await supabase
+      for (let attempt = 0; attempt < 6; attempt++) {
+        if (cancelled) return;
+        const { data: byBooking } = await supabase
           .from('classroom_sessions')
           .select('id, lesson_type, scheduled_at, duration_minutes, student_joined_at, started_at')
-          .eq('room_id', bookingId)
+          .eq('booking_id', bookingId)
           .maybeSingle();
-        row = byRoom;
-      }
-      if (!cancelled && row) {
-        setSession({
-          id: row.id,
-          lesson_type: (row.lesson_type ?? 'standard') as 'trial' | 'standard',
-          scheduled_at: row.scheduled_at,
-          duration_minutes: row.duration_minutes ?? 60,
-          student_joined_at: row.student_joined_at,
-          started_at: row.started_at,
-        });
+        let row: any = byBooking;
+        if (!row) {
+          const { data: byRoom } = await supabase
+            .from('classroom_sessions')
+            .select('id, lesson_type, scheduled_at, duration_minutes, student_joined_at, started_at')
+            .eq('room_id', bookingId)
+            .maybeSingle();
+          row = byRoom;
+        }
+        if (row) {
+          if (!cancelled) {
+            setSession({
+              id: row.id,
+              lesson_type: (row.lesson_type ?? 'standard') as 'trial' | 'standard',
+              scheduled_at: row.scheduled_at,
+              duration_minutes: row.duration_minutes ?? 60,
+              student_joined_at: row.student_joined_at,
+              started_at: row.started_at,
+            });
+          }
+          return;
+        }
+        await new Promise((r) => setTimeout(r, 1000));
       }
     })();
     return () => {
