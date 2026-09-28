@@ -29,6 +29,7 @@ interface Lesson {
   faultParty: 'teacher' | 'student' | 'both' | null;
   classroomId: string | null;
   studentId: string | null;
+  hubType: string | null;
 }
 
 /** Outcome badge for a lesson that has actually ended (Past / No Feedback
@@ -214,6 +215,7 @@ export const LessonsListCard: React.FC = () => {
             faultParty: (row.technical_fault_party ?? null) as Lesson['faultParty'],
             classroomId: row.classroom_id ?? null,
             studentId: row.student_id ?? null,
+            hubType: row.hub_type ?? null,
           };
         });
         setLessons(mapped);
@@ -381,6 +383,7 @@ export const LessonsListCard: React.FC = () => {
         lessonTitle={feedbackLesson?.title}
         studentId={feedbackLesson?.studentId ?? null}
         viewerRole="teacher"
+        hubType={feedbackLesson?.hubType}
       />
 
       <LessonWrapUpDialog
@@ -390,6 +393,7 @@ export const LessonsListCard: React.FC = () => {
         bookingId={wrapUpLesson?.id}
         studentId={wrapUpLesson?.studentId ?? undefined}
         teacherId={user?.id}
+        hubType={wrapUpLesson?.hubType ?? undefined}
       />
     </Card>
   );

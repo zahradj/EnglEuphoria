@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import { BookOpen, Trophy, Zap, Calendar, TrendingUp } from "lucide-react";
 import { format } from "date-fns";
+import { ParentTeacherFeedbackCard } from "./ParentTeacherFeedbackCard";
 
 interface Student {
   student_id: string;
@@ -170,6 +171,8 @@ export function ParentStudentProgress({
               )}
             </div>
           </Card>
+
+          {activeStudentId && <ParentTeacherFeedbackCard studentId={activeStudentId} />}
         </>
       )}
     </div>

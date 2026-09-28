@@ -11,6 +11,7 @@ import { getClassroomHubTheme, type ClassroomHubKey } from '@/components/teacher
 import { endLesson } from '@/services/endLesson';
 import { evaluateAndAssignExtraPractice } from '@/lib/remediation/evaluateAndAssignExtraPractice';
 import { advanceCurriculumProgress } from '@/services/activeCoreLessonResolver';
+import { HUB_SKILL_PROFILE, normalizeSkillHub, scoreToCefr } from '@/hooks/useStudentSkills';
 
 const REPORT_DEADLINE_MS = 24 * 60 * 60 * 1000;
 
@@ -39,22 +40,6 @@ interface LessonWrapUpDialogProps {
 
 const IMPROVEMENT_AREAS = ['Grammar', 'Pronunciation', 'Vocabulary', 'Fluency', 'Listening'];
 
-const SKILL_FIELDS = [
-  { key: 'professional_vocabulary', label: 'Professional Vocabulary' },
-  { key: 'fluency', label: 'Fluency' },
-  { key: 'grammar_accuracy', label: 'Grammar Accuracy' },
-  { key: 'business_writing', label: 'Business Writing' },
-  { key: 'listening', label: 'Listening' },
-] as const;
-
-const scoreToCefr = (score: number): string => {
-  if (score >= 8) return 'C1';
-  if (score >= 6) return 'B2';
-  if (score >= 4) return 'B1';
-  if (score >= 2) return 'A2';
-  return 'A1';
-};
-
 export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   open,
   onOpenChange,
@@ -68,6 +53,13 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   trialCefr = null,
 }) => {
   const theme = getClassroomHubTheme(hubType);
+  // Which skill categories apply is hub-dependent (a Playground 5-year-old's
+  // report shouldn't offer "Business Writing") -- same taxonomy the
+  // student's own Skill Radar reads (useStudentSkills.ts), so scores this
+  // form writes actually show up there under the keys the radar expects.
+  const skillHub = normalizeSkillHub(hubType);
+  const skillProfile = HUB_SKILL_PROFILE[skillHub];
+  const SKILL_FIELDS = Object.entries(skillProfile.labels).map(([key, label]) => ({ key, label }));
   const { toast } = useToast();
   const [areasForImprovement, setAreasForImprovement] = useState<string[]>([]);
   const [quickNotes, setQuickNotes] = useState('');
@@ -76,13 +68,9 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   const [showSkillScores, setShowSkillScores] = useState(false);
   const [outcome, setOutcome] = useState<'completed' | 'not_completed'>('completed');
   const [incidentFlags, setIncidentFlags] = useState<IncidentFlag[]>([]);
-  const [skillScores, setSkillScores] = useState<Record<string, number>>({
-    professional_vocabulary: 5,
-    fluency: 5,
-    grammar_accuracy: 5,
-    business_writing: 5,
-    listening: 5,
-  });
+  const [skillScores, setSkillScores] = useState<Record<string, number>>(() =>
+    Object.fromEntries(Object.keys(skillProfile.labels).map((key) => [key, 5])),
+  );
   const [bookingEndedAt, setBookingEndedAt] = useState<string | null>(null);
   const [now, setNow] = useState(() => Date.now());
 
@@ -197,17 +185,13 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
         if (completionErr) console.error('[LessonWrapUp] lesson_completions upsert failed:', completionErr);
       }
 
-      // Update student_skills table if skill scores were provided
+      // Update student_skills table if skill scores were provided — writes
+      // under this hub's canonical keys (skillProfile) so the score actually
+      // shows up on the student's Skill Radar instead of landing under a key
+      // that hub's radar never queries for.
       if (showSkillScores && studentId) {
         for (const field of SKILL_FIELDS) {
           const score = skillScores[field.key];
-          const nextFocusMap: Record<string, string> = {
-            professional_vocabulary: 'Industry Terminology',
-            fluency: 'Conversational Practice',
-            grammar_accuracy: 'Advanced Structures',
-            business_writing: 'Email Etiquette',
-            listening: 'Comprehension Drills',
-          };
           const { error: skillErr } = await supabase
             .from('student_skills')
             .upsert({
@@ -215,7 +199,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
               skill_name: field.key,
               current_score: score,
               cefr_equivalent: scoreToCefr(score),
-              next_focus: nextFocusMap[field.key],
+              next_focus: skillProfile.nextFocus[field.key],
               updated_at: new Date().toISOString(),
             }, { onConflict: 'student_id,skill_name' });
           if (skillErr) console.error(`[LessonWrapUp] student_skills upsert failed (${field.key}):`, skillErr);

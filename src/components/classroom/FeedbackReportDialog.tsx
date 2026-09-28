@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Star, ClipboardCheck, Loader2, History } from 'lucide-react';
 import { format } from 'date-fns';
 import { supabase } from '@/integrations/supabase/client';
+import { HUB_SKILL_PROFILE, normalizeSkillHub } from '@/hooks/useStudentSkills';
 
 interface FeedbackReportDialogProps {
   open: boolean;
@@ -15,6 +16,10 @@ interface FeedbackReportDialogProps {
    *  written by a *previous* teacher, so a new teacher has context. */
   studentId?: string | null;
   viewerRole?: 'teacher' | 'student';
+  /** Which hub this lesson belongs to — picks the right skill-score labels
+   *  (a Playground report shouldn't show "Business Writing"). Defaults to
+   *  the professional/business label set when omitted. */
+  hubType?: string | null;
 }
 
 interface FeedbackContent {
@@ -33,14 +38,6 @@ interface HistoryEntry {
   rating: number;
 }
 
-const SKILL_LABELS: Record<string, string> = {
-  professional_vocabulary: 'Professional Vocabulary',
-  fluency: 'Fluency',
-  grammar_accuracy: 'Grammar Accuracy',
-  business_writing: 'Business Writing',
-  listening: 'Listening',
-};
-
 export const FeedbackReportDialog: React.FC<FeedbackReportDialogProps> = ({
   open,
   onOpenChange,
@@ -48,7 +45,9 @@ export const FeedbackReportDialog: React.FC<FeedbackReportDialogProps> = ({
   lessonTitle,
   studentId,
   viewerRole,
+  hubType,
 }) => {
+  const SKILL_LABELS = HUB_SKILL_PROFILE[normalizeSkillHub(hubType)].labels;
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<any | null>(null);
   const [parsedContent, setParsedContent] = useState<FeedbackContent | null>(null);

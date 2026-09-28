@@ -18,6 +18,7 @@ interface RecentLesson {
   teacherName: string;
   teacherPhoto: string | null;
   hasFeedback: boolean;
+  hubType: string | null;
 }
 
 interface Props {
@@ -103,6 +104,7 @@ export const RecentLessonReports: React.FC<Props> = ({ hubId = 'academy', limit 
         teacherName: teacherMap[b.teacher_id]?.name || 'Teacher',
         teacherPhoto: teacherMap[b.teacher_id]?.photo ?? null,
         hasFeedback: feedbackSet.has(b.id),
+        hubType: b.hub_type ?? null,
       }));
 
       setLessons(mapped);
@@ -202,6 +204,7 @@ export const RecentLessonReports: React.FC<Props> = ({ hubId = 'academy', limit 
         onOpenChange={setFeedbackOpen}
         lessonId={selected?.id ?? null}
         lessonTitle={selected ? `${selected.teacherName} · ${selected.title}` : undefined}
+        hubType={selected?.hubType}
       />
     </motion.div>
   );

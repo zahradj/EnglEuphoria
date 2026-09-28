@@ -3,7 +3,19 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useStudentLevel } from '@/hooks/useStudentLevel';
 
-type Hub = 'playground' | 'academy' | 'professional';
+export type Hub = 'playground' | 'academy' | 'professional';
+
+/** Normalize any hub-ish string (incl. the classroom's 'success' alias) onto
+ *  the 3 canonical HUB_SKILL_PROFILE keys — shared by every surface that
+ *  displays or records per-skill feedback (teacher wrap-up form, feedback
+ *  report, Skill Radar) so they never drift onto different label sets for
+ *  the same lesson. */
+export const normalizeSkillHub = (hub?: string | null): Hub => {
+  const v = (hub || '').toLowerCase();
+  if (v === 'playground') return 'playground';
+  if (v === 'academy') return 'academy';
+  return 'professional';
+};
 
 interface StudentSkill {
   skill: string;
