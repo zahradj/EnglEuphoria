@@ -169,7 +169,7 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
                 <label className="text-sm font-medium text-foreground flex items-center gap-2">
                   <Camera className="h-4 w-4" /> Video device
                 </label>
-                <Select value={selectedVideoDevice} onValueChange={setSelectedVideoDevice}>
+                <Select value={selectedVideoDevice} onValueChange={(v) => { setSelectedVideoDevice(v); void runCameraCheck(v); }}>
                   <SelectTrigger className="h-10 rounded-xl bg-white/80">
                     <SelectValue placeholder="Select camera" />
                   </SelectTrigger>
@@ -185,7 +185,7 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
                 <label className="text-sm font-medium text-foreground flex items-center gap-2">
                   <Mic className="h-4 w-4" /> Microphone
                 </label>
-                <Select value={selectedAudioInput} onValueChange={(v) => { setSelectedAudioInput(v); void runMicCheck(); }}>
+                <Select value={selectedAudioInput} onValueChange={(v) => { setSelectedAudioInput(v); void runMicCheck(v); }}>
                   <SelectTrigger className="h-10 rounded-xl bg-white/80">
                     <SelectValue placeholder="Select microphone" />
                   </SelectTrigger>

@@ -22,8 +22,8 @@ interface PreFlightState {
   audioLevel: number;
   cameraError: string | null;
   micError: string | null;
-  runCameraCheck: () => Promise<void>;
-  runMicCheck: () => Promise<void>;
+  runCameraCheck: (deviceIdOverride?: string) => Promise<void>;
+  runMicCheck: (deviceIdOverride?: string) => Promise<void>;
   confirmSpeaker: () => void;
   playSpeakerTest: () => void;
   allPassed: boolean;
@@ -66,6 +66,7 @@ export const usePreFlightCheck = (): PreFlightState => {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animFrameRef = useRef<number>();
   const micStreamRef = useRef<MediaStream | null>(null);
+  const videoStreamRef = useRef<MediaStream | null>(null);
 
   // Enumerate devices
   useEffect(() => {
@@ -115,14 +116,28 @@ export const usePreFlightCheck = (): PreFlightState => {
     }
   }, []);
 
-  const runCameraCheck = useCallback(async () => {
+  // Accepts an explicit deviceId so callers switching devices (the Select's
+  // onValueChange) can pass the just-picked id directly instead of relying
+  // on `selectedVideoDevice` state, which hasn't re-rendered yet at the
+  // moment of the click -- calling this right after setSelectedVideoDevice
+  // in the same handler would otherwise still see the OLD device via the
+  // stale closure. Also stops the previous stream's tracks before opening a
+  // new one; many cameras refuse a second concurrent open, which silently
+  // made switching devices look like it "didn't work".
+  const runCameraCheck = useCallback(async (deviceIdOverride?: string) => {
     setCameraStatus('checking');
     setCameraError(null);
+    if (videoStreamRef.current) {
+      videoStreamRef.current.getTracks().forEach(t => t.stop());
+      videoStreamRef.current = null;
+    }
+    const deviceId = deviceIdOverride ?? selectedVideoDevice;
     try {
       const constraints: MediaStreamConstraints = {
-        video: selectedVideoDevice ? { deviceId: { exact: selectedVideoDevice } } : true,
+        video: deviceId ? { deviceId: { exact: deviceId } } : true,
       };
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      videoStreamRef.current = stream;
       setVideoStream(stream);
       setCameraStatus('passed');
       // Re-enumerate after permission grant
@@ -140,12 +155,30 @@ export const usePreFlightCheck = (): PreFlightState => {
     }
   }, [selectedVideoDevice]);
 
-  const runMicCheck = useCallback(async () => {
+  // Same deviceId-override pattern as runCameraCheck, for the same reason —
+  // also tears down the previous mic stream, animation loop, and audio
+  // context before creating new ones (repeated switches used to leak an
+  // AudioContext + a stacked requestAnimationFrame loop per switch, on top
+  // of reading the stale device).
+  const runMicCheck = useCallback(async (deviceIdOverride?: string) => {
     setMicStatus('checking');
     setMicError(null);
+    if (animFrameRef.current) {
+      cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = undefined;
+    }
+    if (audioContextRef.current) {
+      audioContextRef.current.close().catch(() => {});
+      audioContextRef.current = null;
+    }
+    if (micStreamRef.current) {
+      micStreamRef.current.getTracks().forEach(t => t.stop());
+      micStreamRef.current = null;
+    }
+    const deviceId = deviceIdOverride ?? selectedAudioInput;
     try {
       const constraints: MediaStreamConstraints = {
-        audio: selectedAudioInput ? { deviceId: { exact: selectedAudioInput } } : true,
+        audio: deviceId ? { deviceId: { exact: deviceId } } : true,
       };
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       micStreamRef.current = stream;
@@ -213,17 +246,18 @@ export const usePreFlightCheck = (): PreFlightState => {
   const cleanup = useCallback(() => {
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     if (audioContextRef.current) {
-      audioContextRef.current.close();
+      audioContextRef.current.close().catch(() => {});
       audioContextRef.current = null;
     }
     if (micStreamRef.current) {
       micStreamRef.current.getTracks().forEach(t => t.stop());
       micStreamRef.current = null;
     }
-    if (videoStream) {
-      videoStream.getTracks().forEach(t => t.stop());
+    if (videoStreamRef.current) {
+      videoStreamRef.current.getTracks().forEach(t => t.stop());
+      videoStreamRef.current = null;
     }
-  }, [videoStream]);
+  }, []);
 
   useEffect(() => {
     return cleanup;

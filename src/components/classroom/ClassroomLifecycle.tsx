@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { EntryCountdown } from './EntryCountdown';
 import { LiveActivityOverlay } from './LiveActivityOverlay';
 
 import { useToast } from '@/hooks/use-toast';
@@ -32,12 +31,6 @@ interface Props {
   trialHandoff?: { studentId: string; cefrLevel: string | null } | null;
 }
 
-const HUB_RING: Record<string, string> = {
-  playground: 'hsl(28 95% 58%)',
-  academy: 'hsl(265 70% 47%)',
-  professional: 'hsl(160 84% 32%)',
-};
-
 interface SessionMeta {
   id: string;
   lesson_type: 'trial' | 'standard';
@@ -55,7 +48,6 @@ interface SessionMeta {
  */
 export const ClassroomLifecycle: React.FC<Props> = ({ bookingId, role, hubType = 'academy', trialHandoff = null }) => {
   const [status, setStatus] = useState<'waiting' | 'live' | 'ended' | null>(null);
-  const [showCountdown, setShowCountdown] = useState(false);
   const [session, setSession] = useState<SessionMeta | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -161,7 +153,6 @@ export const ClassroomLifecycle: React.FC<Props> = ({ bookingId, role, hubType =
           const next = (payload.new as any)?.status;
           if (!next) return;
           setStatus((prev) => {
-            if (next === 'live' && prev !== 'live') setShowCountdown(true);
             if (next === 'ended' && prev !== 'ended' && role === 'teacher' && trialHandoff?.studentId && trialHandoff.cefrLevel) {
               // Trial → CEFR handoff (teacher-side, deduped by student+method).
               (async () => {
@@ -267,12 +258,6 @@ export const ClassroomLifecycle: React.FC<Props> = ({ bookingId, role, hubType =
 
   return (
     <>
-      <EntryCountdown
-        active={showCountdown}
-        seconds={30}
-        onComplete={() => setShowCountdown(false)}
-        hubColor={HUB_RING[hubType] ?? HUB_RING.academy}
-      />
       {role === 'teacher' && (
         <div className="fixed top-2.5 right-4 z-[60] flex items-center gap-2">
           {session && (
