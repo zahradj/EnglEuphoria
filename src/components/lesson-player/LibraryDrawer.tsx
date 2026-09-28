@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { X, Search, BookOpen } from 'lucide-react';
+import { X, Search, BookOpen, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   extractClassroomSlides,
@@ -37,8 +37,8 @@ const HUB_BADGE_COLORS: Record<string, string> = {
   professional: 'bg-emerald-100 text-emerald-700 border-emerald-200',
 };
 
-// CEFR ordering for the level sections — anything not in this list sorts
-// after, alphabetically.
+// CEFR ordering for the level tabs — anything not in this list sorts after,
+// alphabetically.
 const LEVEL_ORDER = ['pre-a1', 'a1', 'a2', 'b1', 'b2', 'c1', 'c2'];
 
 function sortLevels(levels: string[]): string[] {
@@ -63,6 +63,8 @@ export default function LibraryDrawer({
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loadingLessonId, setLoadingLessonId] = useState<string | null>(null);
+  const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
+  const [expandedUnits, setExpandedUnits] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!open) return;
@@ -77,6 +79,15 @@ export default function LibraryDrawer({
         setLoading(false);
       });
   }, [open, hubFilter]);
+
+  // Fresh browsing state each time the drawer opens — don't carry over
+  // whichever level/units were expanded last time.
+  useEffect(() => {
+    if (open) {
+      setSearchQuery('');
+      setExpandedUnits(new Set());
+    }
+  }, [open]);
 
   const filtered = useMemo(() => {
     let list = lessons;
@@ -93,10 +104,10 @@ export default function LibraryDrawer({
     return list;
   }, [lessons, searchQuery]);
 
-  // Group into CEFR sections (Pre-A1 / A1 / A2 / B1 / B2…), then into units
-  // within each level (Unit 1, Unit 2…) so the library mirrors the actual
-  // curriculum structure instead of one flat list. Lessons without a level
-  // fall under one used to render even legacy/one-off rows.
+  // Group into CEFR level sections (Pre-A1 / A1 / A2 / B1 / B2…), then into
+  // units within each level (Unit 1, Unit 2…) so the library mirrors the
+  // actual curriculum structure instead of one flat list. Lessons without a
+  // level fall under one used to render even legacy/one-off rows.
   const grouped = useMemo(() => {
     const levelMap = new Map<string, LibraryLessonCard[]>();
     for (const lesson of filtered) {
@@ -132,6 +143,30 @@ export default function LibraryDrawer({
     });
   }, [filtered]);
 
+  const isSearching = searchQuery.trim().length > 0;
+
+  // Keep selectedLevel valid as the grouped list changes (fresh open, hub
+  // switch, or the currently-picked level no longer has any matches) —
+  // default to the first available level rather than leaving the drawer
+  // showing an empty state under a stale tab.
+  useEffect(() => {
+    if (isSearching) return;
+    const levels = grouped.map((g) => g.level);
+    if (selectedLevel && levels.includes(selectedLevel)) return;
+    setSelectedLevel(levels[0] ?? null);
+  }, [grouped, isSearching, selectedLevel]);
+
+  const activeLevelGroup = grouped.find((g) => g.level === selectedLevel) ?? null;
+
+  const toggleUnit = (unitKey: string) => {
+    setExpandedUnits((prev) => {
+      const next = new Set(prev);
+      if (next.has(unitKey)) next.delete(unitKey);
+      else next.add(unitKey);
+      return next;
+    });
+  };
+
   const handleSelect = async (lessonId: string) => {
 
     setLoadingLessonId(lessonId);
@@ -157,6 +192,47 @@ export default function LibraryDrawer({
     }
     setLoadingLessonId(null);
   };
+
+  const renderLessonRow = (lesson: LibraryLessonCard) => (
+    <button
+      key={lesson.id}
+      onClick={() => handleSelect(lesson.id)}
+      disabled={loadingLessonId === lesson.id}
+      className="w-full text-left p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-md bg-white dark:bg-slate-800/60 transition-all group disabled:opacity-60"
+    >
+      <div className="flex items-start gap-3">
+        <div className="flex-1 min-w-0">
+          <h3 className="font-semibold text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+            {lesson.lesson_number != null ? `${lesson.lesson_number}. ` : ''}{lesson.title}
+          </h3>
+          {lesson.description && (
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
+              {lesson.description}
+            </p>
+          )}
+          <div className="flex items-center gap-2 mt-2">
+            {lesson.hub && (
+              <span
+                className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${
+                  HUB_BADGE_COLORS[lesson.hub] || 'bg-slate-100 text-slate-600 border-slate-200'
+                }`}
+              >
+                {lesson.hub}
+              </span>
+            )}
+            <span className={`text-[10px] font-bold uppercase ${lesson.isReady ? 'text-emerald-600' : 'text-slate-400'}`}>
+              {lesson.isReady
+                ? (lesson.slide_count > 0 ? `${lesson.slide_count} slides` : 'Ready')
+                : 'Coming soon'}
+            </span>
+          </div>
+        </div>
+        {loadingLessonId === lesson.id && (
+          <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin shrink-0 mt-1" />
+        )}
+      </div>
+    </button>
+  );
 
   return (
     <AnimatePresence>
@@ -205,8 +281,34 @@ export default function LibraryDrawer({
               </div>
             </div>
 
-            {/* Lesson list, organized into CEFR level sections */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-5">
+            {/* Level tabs — horizontal, only shown while not searching (a
+                search spans every level, so tabs would just be confusing
+                filters-on-top-of-a-filter). */}
+            {!loading && !isSearching && grouped.length > 0 && (
+              <div className="flex gap-1.5 px-5 py-3 border-b border-slate-100 dark:border-slate-800 shrink-0 overflow-x-auto">
+                {grouped.map(({ level, units }) => {
+                  const lessonCount = units.reduce((sum, u) => sum + u.lessons.length, 0);
+                  const active = level === selectedLevel;
+                  return (
+                    <button
+                      key={level}
+                      onClick={() => setSelectedLevel(level)}
+                      className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide border transition-colors ${
+                        active
+                          ? 'bg-indigo-600 text-white border-indigo-600'
+                          : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-indigo-300'
+                      }`}
+                    >
+                      {level}
+                      <span className={active ? 'text-indigo-200' : 'text-slate-400'}> · {lessonCount}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Lesson list */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-16 gap-3 opacity-60">
                   <div className="w-8 h-8 border-3 border-indigo-400 border-t-transparent rounded-full animate-spin" />
@@ -219,71 +321,67 @@ export default function LibraryDrawer({
                     {searchQuery ? 'No lessons match your search' : 'No lessons available'}
                   </p>
                 </div>
-              ) : (
+              ) : isSearching ? (
+                // Flat, level-labeled results — searching is about jumping
+                // straight to a lesson, not browsing the curriculum tree.
                 grouped.map(({ level, units }) => (
-                  <div key={level}>
-                    <div className="flex items-center gap-2 mb-3">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-                        {level}
-                      </h4>
-                      <div className="h-px flex-1 bg-slate-100 dark:bg-slate-800" />
-                    </div>
-                    <div className="space-y-4">
-                      {units.map(({ unitNumber, lessons: unitLessons }) => (
-                        <div key={unitNumber ?? 'no-unit'}>
-                          {unitNumber != null && (
-                            <p className="text-[11px] font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1.5 pl-0.5">
-                              Unit {unitNumber}
-                            </p>
-                          )}
-                          <div className="space-y-3">
-                            {unitLessons.map((lesson) => (
-                              <button
-                                key={lesson.id}
-                                onClick={() => handleSelect(lesson.id)}
-                                disabled={loadingLessonId === lesson.id}
-                                className="w-full text-left p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-md bg-white dark:bg-slate-800/60 transition-all group disabled:opacity-60"
-                              >
-                                <div className="flex items-start gap-3">
-                                  <div className="flex-1 min-w-0">
-                                    <h3 className="font-semibold text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                                      {lesson.lesson_number != null ? `${lesson.lesson_number}. ` : ''}{lesson.title}
-                                    </h3>
-                                    {lesson.description && (
-                                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
-                                        {lesson.description}
-                                      </p>
-                                    )}
-                                    <div className="flex items-center gap-2 mt-2">
-                                      {lesson.hub && (
-                                        <span
-                                          className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${
-                                            HUB_BADGE_COLORS[lesson.hub] || 'bg-slate-100 text-slate-600 border-slate-200'
-                                          }`}
-                                        >
-                                          {lesson.hub}
-                                        </span>
-                                      )}
-                                      <span className={`text-[10px] font-bold uppercase ${lesson.isReady ? 'text-emerald-600' : 'text-slate-400'}`}>
-                                        {lesson.isReady
-                                          ? (lesson.slide_count > 0 ? `${lesson.slide_count} slides` : 'Ready')
-                                          : 'Coming soon'}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  {loadingLessonId === lesson.id && (
-                                    <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin shrink-0 mt-1" />
-                                  )}
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
+                  <div key={level} className="space-y-2">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 pl-0.5">
+                      {level}
+                    </h4>
+                    <div className="space-y-2">
+                      {units.flatMap((u) => u.lessons).map(renderLessonRow)}
                     </div>
                   </div>
                 ))
-              )}
+              ) : activeLevelGroup ? (
+                <div className="space-y-2">
+                  {activeLevelGroup.units.map(({ unitNumber, lessons: unitLessons }) => {
+                    const unitKey = `${activeLevelGroup.level}::${unitNumber ?? 'no-unit'}`;
+                    const isOpen = expandedUnits.has(unitKey);
+                    return (
+                      <div
+                        key={unitKey}
+                        className="rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden"
+                      >
+                        <button
+                          onClick={() => toggleUnit(unitKey)}
+                          className="w-full flex items-center justify-between gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        >
+                          <span className="text-sm font-bold text-slate-700 dark:text-slate-200">
+                            {unitNumber != null ? `Unit ${unitNumber}` : 'Other lessons'}
+                            {unitLessons[0]?.unit_title ? ` · ${unitLessons[0].unit_title}` : ''}
+                          </span>
+                          <span className="flex items-center gap-2 shrink-0">
+                            <span className="text-[11px] font-semibold text-slate-400">
+                              {unitLessons.length} lesson{unitLessons.length === 1 ? '' : 's'}
+                            </span>
+                            <ChevronDown
+                              size={16}
+                              className={`text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                            />
+                          </span>
+                        </button>
+                        <AnimatePresence initial={false}>
+                          {isOpen && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="p-3 space-y-2">
+                                {unitLessons.map(renderLessonRow)}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : null}
             </div>
           </motion.div>
         </>
