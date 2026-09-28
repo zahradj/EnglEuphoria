@@ -10,6 +10,7 @@ import ariaOwl from '@/assets/aria-owl-mascot-v2.png';
 import maxEagle from '@/assets/max-eagle-mascot-v2.png';
 import { FLAG_META, IncidentFlag, toneClasses } from '@/components/classroom/incidentFlags';
 import { PostLessonRatingCard } from '@/components/student/PostLessonRatingCard';
+import { StudentLessonOutcomeDialog } from '@/components/classroom/StudentLessonOutcomeDialog';
 
 
 type Hub = 'playground' | 'academy' | 'professional';
@@ -487,6 +488,17 @@ const PostLessonSummary: React.FC = () => {
           studentId={user.id}
           accentClass={brand.accent}
         />
+      )}
+
+      {/* Student-side incident report — the ONLY way a student can currently
+          flag their side of what happened (e.g. "teacher never joined" /
+          "teacher tech issue"), which then feeds the AI verdict that can
+          reclassify the booking as teacher_absent/failed_technical. Kept
+          regardless of leftEarly (an aborted lesson is exactly when this
+          report matters most). Self-gates on whether a report already
+          exists for this student+room, so it's safe to always render. */}
+      {!isTeacher && !isInterview && lookupId && (
+        <StudentLessonOutcomeDialog roomId={lookupId} hubType={hub} />
       )}
 
 

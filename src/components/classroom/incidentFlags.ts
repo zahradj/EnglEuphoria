@@ -5,8 +5,10 @@
 export type IncidentFlag =
   | 'student_late'
   | 'student_left_early'
+  | 'student_no_show'
   | 'teacher_late'
   | 'teacher_left_early'
+  | 'teacher_no_show'
   | 'student_tech_issue'
   | 'teacher_tech_issue'
   | 'connection_issue'
@@ -20,8 +22,10 @@ export type IncidentFlag =
 export const FLAG_META: Record<IncidentFlag, { label: string; emoji: string; tone: 'red' | 'amber' | 'slate' }> = {
   student_late:        { label: 'Student arrived late',  emoji: '⏰', tone: 'amber' },
   student_left_early:  { label: 'Student left early',    emoji: '🚪', tone: 'amber' },
+  student_no_show:     { label: 'Student never joined',  emoji: '👻', tone: 'red' },
   teacher_late:        { label: 'Teacher arrived late',  emoji: '⏰', tone: 'amber' },
   teacher_left_early:  { label: 'Teacher left early',    emoji: '🚪', tone: 'amber' },
+  teacher_no_show:     { label: 'Teacher never joined',  emoji: '👻', tone: 'red' },
   student_tech_issue:  { label: 'Student tech issue',    emoji: '🛠', tone: 'red' },
   teacher_tech_issue:  { label: 'Teacher tech issue',    emoji: '🛠', tone: 'red' },
   connection_issue:    { label: 'Connection dropped',    emoji: '📶', tone: 'red' },
@@ -36,6 +40,7 @@ export const FLAG_META: Record<IncidentFlag, { label: string; emoji: string; ton
 export const TEACHER_FLAG_OPTIONS: IncidentFlag[] = [
   'student_late',
   'student_left_early',
+  'student_no_show',
   'student_tech_issue',
   'teacher_tech_issue',
   'connection_issue',
@@ -49,6 +54,7 @@ export const TEACHER_FLAG_OPTIONS: IncidentFlag[] = [
 export const STUDENT_FLAG_OPTIONS: IncidentFlag[] = [
   'teacher_late',
   'teacher_left_early',
+  'teacher_no_show',
   'teacher_tech_issue',
   'student_tech_issue',
   'connection_issue',

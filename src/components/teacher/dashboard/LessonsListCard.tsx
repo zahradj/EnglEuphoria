@@ -13,7 +13,7 @@ import { FeedbackReportDialog } from '@/components/classroom/FeedbackReportDialo
 import { LessonWrapUpDialog } from '@/components/classroom/LessonWrapUpDialog';
 
 /** Raw class_bookings.status values this card cares about. */
-type BookingStatus = 'scheduled' | 'confirmed' | 'completed' | 'failed_technical' | 'ended_early' | 'cancelled' | string;
+type BookingStatus = 'scheduled' | 'confirmed' | 'completed' | 'failed_technical' | 'ended_early' | 'cancelled' | 'student_absent' | 'teacher_absent' | string;
 
 interface Lesson {
   id: string;
@@ -44,6 +44,12 @@ const OutcomeBadge: React.FC<{ rawStatus: BookingStatus; faultParty: Lesson['fau
         Technical issue — {who}
       </Badge>
     );
+  }
+  if (rawStatus === 'student_absent') {
+    return <Badge className="text-xs bg-orange-100 text-orange-700 hover:bg-orange-100 border-orange-200">Student no-show</Badge>;
+  }
+  if (rawStatus === 'teacher_absent') {
+    return <Badge className="text-xs bg-purple-100 text-purple-700 hover:bg-purple-100 border-purple-200">Teacher no-show</Badge>;
   }
   if (rawStatus === 'ended_early') {
     return <Badge className="text-xs bg-amber-100 text-amber-700 hover:bg-amber-100 border-amber-200">Ended early</Badge>;
@@ -156,7 +162,7 @@ export const LessonsListCard: React.FC = () => {
     // classroom-lifecycle-status migration. 'ended_early' never needs a
     // wrap-up report (LessonWrapUpDialog.tsx is skipped for those sessions),
     // so it's excluded from the ENDED_NEEDING_REPORT set below.
-    const ENDED_STATUSES = new Set(['completed', 'failed_technical', 'ended_early']);
+    const ENDED_STATUSES = new Set(['completed', 'failed_technical', 'ended_early', 'student_absent', 'teacher_absent']);
     const ENDED_NEEDING_REPORT = new Set(['completed', 'failed_technical']);
 
     const loadLessons = async () => {

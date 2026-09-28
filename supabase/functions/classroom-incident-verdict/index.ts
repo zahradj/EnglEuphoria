@@ -284,8 +284,13 @@ function heuristic(reports: Report[]) {
       return { status: "incomplete_student_tech", fault_party: "student", confidence: 0.75 };
     if (tTeacherTech || sTeacherTech)
       return { status: "incomplete_teacher_tech", fault_party: "teacher", confidence: 0.75 };
-    if (sNoShow) return { status: "incomplete_student_noshow", fault_party: "student", confidence: 0.8 };
-    if (tNoShow) return { status: "incomplete_teacher_noshow", fault_party: "teacher", confidence: 0.8 };
+    // tNoShow = the TEACHER's own report flags the STUDENT as absent (e.g.
+    // "student_no_show") -> student no-show. sNoShow = the STUDENT's own
+    // report flags the TEACHER as absent -> teacher no-show. These were
+    // previously swapped (sNoShow mapped to "student" no-show, which is
+    // backwards -- a student can't file a report about their own absence).
+    if (tNoShow) return { status: "incomplete_student_noshow", fault_party: "student", confidence: 0.8 };
+    if (sNoShow) return { status: "incomplete_teacher_noshow", fault_party: "teacher", confidence: 0.8 };
     return { status: "incomplete_other", fault_party: "unknown", confidence: 0.4 };
   }
   return { status: "inconclusive", fault_party: "unknown", confidence: 0.3 };
@@ -427,26 +432,45 @@ Deno.serve(async (req) => {
     // end_lesson()/end_lesson_service() can't (e.g. one-way audio while the
     // connection itself stayed up), so it's allowed to reclassify a booking
     // that was auto-marked 'completed' — a real report matters more than the
-    // narrower automatic signal. Only a TECH-related fault reclassifies the
-    // booking status — a no-show or behavioral verdict isn't a "technical
-    // problem" in the sense the dashboards report. Never touches a
-    // 'cancelled' booking, and skips room_ids with no matching booking at
-    // all (e.g. interview rooms).
+    // narrower automatic signal. Never touches a 'cancelled' or already
+    // 'failed_technical'/absent-marked booking, and skips room_ids with no
+    // matching booking at all (e.g. interview rooms).
     const TECH_STATUSES = new Set([
       "incomplete_student_tech",
       "incomplete_teacher_tech",
       "incomplete_both_tech",
     ]);
-    if (TECH_STATUSES.has(verdict.status) && verdict.fault_party !== "none") {
+    // Previously only TECH_STATUSES ever reclassified the booking — a
+    // confirmed no-show verdict was computed correctly but never made it
+    // onto class_bookings.status, so every dashboard reading booking status
+    // (not the one-off Post-Lesson Summary, which reads this verdict table
+    // directly) still showed the booking as whatever it was before, usually
+    // still 'scheduled' or a default 'completed'.
+    const NOSHOW_BOOKING_STATUS: Record<string, string> = {
+      incomplete_student_noshow: "student_absent",
+      incomplete_teacher_noshow: "teacher_absent",
+    };
+    const nextBookingStatus = TECH_STATUSES.has(verdict.status)
+      ? (verdict.fault_party !== "none" ? "failed_technical" : null)
+      : NOSHOW_BOOKING_STATUS[verdict.status] ?? null;
+    if (nextBookingStatus) {
       const { data: currentBooking } = await supabase
         .from("class_bookings")
         .select("status")
         .eq("id", room_id)
         .maybeSingle();
-      if (currentBooking && currentBooking.status !== "cancelled") {
+      const SETTLED = new Set(["cancelled", "failed_technical", "student_absent", "teacher_absent"]);
+      if (currentBooking && !SETTLED.has(currentBooking.status)) {
+        const updatePayload: Record<string, unknown> = {
+          status: nextBookingStatus,
+          updated_at: new Date().toISOString(),
+        };
+        if (nextBookingStatus === "failed_technical") {
+          updatePayload.technical_fault_party = verdict.fault_party;
+        }
         const { error: statusErr } = await supabase
           .from("class_bookings")
-          .update({ status: "failed_technical", technical_fault_party: verdict.fault_party, updated_at: new Date().toISOString() })
+          .update(updatePayload)
           .eq("id", room_id);
         if (statusErr) console.error("failed to write verdict onto class_bookings", statusErr);
       }
