@@ -348,8 +348,8 @@ export const ClassroomTopBar: React.FC<ClassroomTopBarProps> = ({
             variant="ghost"
             size="icon"
             onClick={onForceSync}
-            title="Force sync"
-            aria-label="Force sync"
+            title="Force refresh (reloads your screen and the student's)"
+            aria-label="Force refresh both screens"
             className="h-8 w-8 rounded-full bg-gray-100 hover:bg-gray-200"
           >
             <RefreshCw className="h-4 w-4" />

@@ -242,7 +242,6 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     setDrawingEnabled,
     applyRemoteStageMode,
     applyRemoteDrawingEnabled,
-    forceSync,
     sceneLessonIdx,
     updateSceneLessonIdx,
     sceneInteractionUnlocked,
@@ -314,16 +313,27 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   const [channelStatus, setChannelStatus] = useState<'CONNECTING' | 'SUBSCRIBED' | 'CLOSED' | 'CHANNEL_ERROR' | 'TIMED_OUT'>('CONNECTING');
   const pageLoadTime = useRef(Date.now());
 
-  // Force Sync: broadcast a full state snapshot to all clients (in-place, no reload).
+  // Force Refresh: reload BOTH sides for real, rather than the old in-place
+  // "Force Sync" state patch. That patch only ever covered a handful of UI
+  // fields (slide index, stage mode, drawing/iframe locks...) over the SAME
+  // realtime channel that can silently fail to deliver in the first place —
+  // it never included session_context fields like classStarted, so it could
+  // never have fixed a student stuck on "Waiting for your teacher" with a
+  // correct classStarted already sitting in the database. A real reload
+  // re-fetches everything fresh on both ends instead of depending on any of
+  // that state making it across.
   const handleForceSync = useCallback(async () => {
     try {
-      await forceSync();
-      toast({ title: '🔄 Force Sync sent', description: 'Student is now mirroring your screen.' });
+      await whiteboardService.sendForceReload(roomName, teacherUserId);
+      toast({ title: '🔄 Refreshing both screens…', description: 'Reloading your view and the student\'s.' });
+      // Small delay so the broadcast send has time to flush before this tab
+      // itself unloads.
+      setTimeout(() => window.location.reload(), 300);
     } catch (error: any) {
-      console.error('Force sync failed:', error);
-      toast({ title: '❌ Force Sync failed', description: error?.message ?? 'Unknown error', variant: 'destructive' });
+      console.error('Force refresh failed:', error);
+      toast({ title: '❌ Force refresh failed', description: error?.message ?? 'Unknown error', variant: 'destructive' });
     }
-  }, [forceSync, toast]);
+  }, [roomName, teacherUserId, toast]);
 
   useEffect(() => {
     if (!roomName || !teacherUserId) return;

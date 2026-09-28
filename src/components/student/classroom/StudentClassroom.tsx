@@ -192,6 +192,14 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
         setChannelStatus(status as 'CONNECTING' | 'SUBSCRIBED' | 'CLOSED' | 'CHANNEL_ERROR' | 'TIMED_OUT');
       }
     });
+    // Teacher's "Force refresh" button — an actual reload, not an in-place
+    // state patch, so it recovers from a stuck view even when the state
+    // that's wrong (e.g. session_context.classStarted) isn't covered by any
+    // of the other targeted sync channels above.
+    const unsubForceReload = whiteboardService.subscribeToForceReload(roomId, () => {
+      toast({ title: '🔄 Your teacher refreshed the class', description: 'Reloading…' });
+      setTimeout(() => window.location.reload(), 300);
+    });
     return () => {
       unsubStage();
       unsubDrawing();
@@ -199,6 +207,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
       unsubActivityLock();
       unsubReward();
       unsubStatus();
+      unsubForceReload();
     };
   }, [roomId, studentId, applyRemoteStageMode, applyRemoteDrawingEnabled, applyRemoteIframeUnlocked, applyRemoteActivityUnlocked, setCurrentSlideIndex, toast]);
 

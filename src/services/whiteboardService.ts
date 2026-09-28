@@ -240,6 +240,20 @@ export interface ForceSyncPayload {
 }
 type ForceSyncListener = (payload: ForceSyncPayload) => void;
 
+/** Teacher → student (and self): a real page reload, not an in-place state
+ *  patch. Force Sync only ever re-broadcasts a handful of UI fields over
+ *  the SAME realtime channel that can silently fail to deliver in the
+ *  first place (e.g. session_context fields like classStarted aren't part
+ *  of the snapshot at all) — a stuck "Waiting for your teacher" screen with
+ *  a correct DB state behind it needs a full reload to actually recover,
+ *  since that re-fetches everything fresh instead of depending on this
+ *  broadcast landing. */
+export interface ForceReloadPayload {
+  senderId: string;
+  timestamp: number;
+}
+type ForceReloadListener = (payload: ForceReloadPayload) => void;
+
 interface RoomChannel {
   channel: ReturnType<typeof supabase.channel>;
   ready: Promise<void>;
@@ -260,6 +274,7 @@ interface RoomChannel {
   slideCompletionListeners: Set<SlideCompletionListener>;
   slideChangeListeners: Set<SlideChangeListener>;
   forceSyncListeners: Set<ForceSyncListener>;
+  forceReloadListeners: Set<ForceReloadListener>;
   studentActionListeners: Set<StudentActionListener>;
   sceneLessonNavListeners: Set<SceneLessonNavListener>;
   sceneTapListeners: Set<SceneTapListener>;
@@ -296,6 +311,7 @@ class WhiteboardService {
     const slideCompletionListeners = new Set<SlideCompletionListener>();
     const slideChangeListeners = new Set<SlideChangeListener>();
     const forceSyncListeners = new Set<ForceSyncListener>();
+    const forceReloadListeners = new Set<ForceReloadListener>();
     const studentActionListeners = new Set<StudentActionListener>();
     const sceneLessonNavListeners = new Set<SceneLessonNavListener>();
     const sceneTapListeners = new Set<SceneTapListener>();
@@ -375,6 +391,9 @@ class WhiteboardService {
       .on('broadcast', { event: 'force_sync' }, (payload) => {
         forceSyncListeners.forEach((cb) => cb(payload.payload as ForceSyncPayload));
       })
+      .on('broadcast', { event: 'force_reload' }, (payload) => {
+        forceReloadListeners.forEach((cb) => cb(payload.payload as ForceReloadPayload));
+      })
       .on('broadcast', { event: 'student_action' }, (payload) => {
         studentActionListeners.forEach((cb) => cb(payload.payload as StudentActionPayload));
       })
@@ -419,6 +438,7 @@ class WhiteboardService {
       slideCompletionListeners,
       slideChangeListeners,
       forceSyncListeners,
+      forceReloadListeners,
       studentActionListeners,
       sceneLessonNavListeners,
       sceneTapListeners,
@@ -747,6 +767,27 @@ class WhiteboardService {
     return () => this.release(roomId, () => room.forceSyncListeners.delete(onSync));
   }
 
+  /** Teacher → student: tell every other client in the room to actually
+   *  reload the page. Unlike sendForceSync this carries no state — the
+   *  point is that the receiver re-fetches everything from scratch instead
+   *  of trusting anything currently held in memory. */
+  async sendForceReload(roomId: string, senderId: string): Promise<void> {
+    const room = this.getRoom(roomId);
+    await room.ready;
+    await room.channel.send({
+      type: 'broadcast',
+      event: 'force_reload',
+      payload: { senderId, timestamp: Date.now() } satisfies ForceReloadPayload,
+    });
+  }
+
+  subscribeToForceReload(roomId: string, onReload: ForceReloadListener): () => void {
+    const room = this.getRoom(roomId);
+    room.forceReloadListeners.add(onReload);
+    room.refCount += 1;
+    return () => this.release(roomId, () => room.forceReloadListeners.delete(onReload));
+  }
+
   /** Student → all clients: live action broadcast (option click, drag drop…) */
   async sendStudentAction(
     roomId: string,
@@ -888,6 +929,7 @@ class WhiteboardService {
       room.slideCompletionListeners.size === 0 &&
       room.slideChangeListeners.size === 0 &&
       room.forceSyncListeners.size === 0 &&
+      room.forceReloadListeners.size === 0 &&
       room.studentActionListeners.size === 0 &&
       room.sceneLessonNavListeners.size === 0 &&
       room.statusListeners.size === 0
