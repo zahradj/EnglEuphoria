@@ -362,16 +362,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               return;
             }
 
+            // A token refresh renews the access token, nothing about who the
+            // user is. Recomputing a fallback user here — as we do for real
+            // identity events below — used to momentarily overwrite an
+            // already-hydrated role (e.g. 'teacher') with a guess built from
+            // user_metadata.role, which is a stale signup default for most
+            // teacher/content_creator accounts. Every active session hits a
+            // TOKEN_REFRESHED roughly once an hour, so this was intermittently
+            // bouncing teachers out of their dashboard into the student
+            // placement flow mid-session. Just keep the session's token fresh
+            // and leave the resolved user/role alone.
+            if (event === 'TOKEN_REFRESHED') {
+              setSession(currentSession);
+              return;
+            }
+
             setSession(currentSession);
-            
+
             if (currentSession?.user) {
               const fallbackUser = createFallbackUserSync(currentSession.user);
               setUser(fallbackUser);
               setLoading(false);
-
-              if (event !== 'TOKEN_REFRESHED') {
-                hydrateUserInBackground(currentSession.user, `auth-event:${event}`);
-              }
+              hydrateUserInBackground(currentSession.user, `auth-event:${event}`);
             } else {
               setUser(null);
               setLoading(false);
