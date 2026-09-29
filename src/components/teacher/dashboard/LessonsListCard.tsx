@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calendar, Clock, User, Video, MessageSquare, ChevronRight, CalendarRange, Loader2 } from 'lucide-react';
+import { Calendar, Clock, User, MessageSquare, ChevronRight, History, CheckCircle2, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -59,31 +58,32 @@ const OutcomeBadge: React.FC<{ rawStatus: BookingStatus; faultParty: Lesson['fau
 
 interface LessonItemProps {
   lesson: Lesson;
-  showEnterButton?: boolean;
-  onEnter?: (lesson: Lesson) => void;
   onOpenFeedback?: (lesson: Lesson) => void;
   onWriteFeedback?: (lesson: Lesson) => void;
 }
 
-const LessonItem: React.FC<LessonItemProps> = ({ lesson, showEnterButton, onEnter, onOpenFeedback, onWriteFeedback }) => {
-  const clickable = lesson.status === 'completed' || lesson.status === 'needs-feedback';
+/** First letter of the student's name, for the row avatar. */
+const initial = (name: string) => (name.trim()[0] || '?').toUpperCase();
+
+const LessonItem: React.FC<LessonItemProps> = ({ lesson, onOpenFeedback, onWriteFeedback }) => {
   const handleRowClick = () => {
     if (lesson.status === 'completed') onOpenFeedback?.(lesson);
     else if (lesson.status === 'needs-feedback') onWriteFeedback?.(lesson);
   };
   return (
     <div
-      className={`flex items-center gap-4 p-3 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors ${clickable ? 'cursor-pointer' : ''}`}
-      onClick={clickable ? handleRowClick : undefined}
+      className="group flex items-center gap-3 p-3 rounded-xl border border-border/50 bg-card hover:border-border hover:shadow-sm transition-all cursor-pointer"
+      onClick={handleRowClick}
     >
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+        {initial(lesson.studentName)}
+      </div>
+
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1 flex-wrap">
           <p className="font-medium text-foreground truncate">{lesson.title}</p>
           {(lesson.status === 'completed' || lesson.status === 'needs-feedback') && (
             <OutcomeBadge rawStatus={lesson.rawStatus} faultParty={lesson.faultParty} />
-          )}
-          {lesson.status === 'needs-feedback' && (
-            <Badge variant="destructive" className="text-xs">Needs Feedback</Badge>
           )}
         </div>
         <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
@@ -102,41 +102,26 @@ const LessonItem: React.FC<LessonItemProps> = ({ lesson, showEnterButton, onEnte
         </div>
       </div>
 
-      {showEnterButton && (
-        <Button size="sm" className="gap-1 shrink-0" onClick={(e) => { e.stopPropagation(); onEnter?.(lesson); }}>
-          <Video className="w-4 h-4" />
-          Enter
-        </Button>
-      )}
-
       {lesson.status === 'needs-feedback' && (
         <Button
           size="sm"
-          variant="outline"
-          className="gap-1 shrink-0"
+          className="gap-1.5 shrink-0"
           onClick={(e) => { e.stopPropagation(); onWriteFeedback?.(lesson); }}
         >
           <MessageSquare className="w-4 h-4" />
-          Feedback
+          Write feedback
         </Button>
       )}
 
       {lesson.status === 'completed' && (
-        <Button
-          size="sm"
-          variant="ghost"
-          className="shrink-0"
-          onClick={(e) => { e.stopPropagation(); onOpenFeedback?.(lesson); }}
-        >
-          <ChevronRight className="w-4 h-4" />
-        </Button>
+        <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 transition-transform group-hover:translate-x-0.5" />
       )}
     </div>
   );
 };
 
 export const LessonsListCard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('upcoming');
+  const [activeTab, setActiveTab] = useState('past');
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
@@ -144,7 +129,6 @@ export const LessonsListCard: React.FC = () => {
   const [wrapUpOpen, setWrapUpOpen] = useState(false);
   const [wrapUpLesson, setWrapUpLesson] = useState<Lesson | null>(null);
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   const loadLessonsRef = React.useRef<() => Promise<void>>(async () => {});
 
@@ -260,14 +244,8 @@ export const LessonsListCard: React.FC = () => {
     };
   }, [user?.id]);
 
-  const upcomingLessons = lessons.filter(l => l.status === 'upcoming');
   const pastLessons = lessons.filter(l => l.status === 'completed');
   const needsFeedback = lessons.filter(l => l.status === 'needs-feedback');
-
-  const handleEnter = (lesson: Lesson) => {
-    if (lesson.classroomId) navigate(`/classroom/${lesson.classroomId}`);
-    else navigate(`/classroom/${lesson.id}`);
-  };
 
   const handleOpenFeedback = (lesson: Lesson) => {
     setFeedbackLesson(lesson);
@@ -294,19 +272,33 @@ export const LessonsListCard: React.FC = () => {
 
   return (
     <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base">Lessons Details</CardTitle>
+      <CardHeader className="pb-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+              <History className="w-4.5 h-4.5 text-primary" />
+            </div>
+            <div>
+              <CardTitle className="text-base leading-tight">Lessons Details</CardTitle>
+              <CardDescription className="text-xs mt-0.5">Your lesson history & feedback status</CardDescription>
+            </div>
+          </div>
+          {needsFeedback.length > 0 && (
+            <Badge variant="destructive" className="text-xs shrink-0">
+              {needsFeedback.length} pending
+            </Badge>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3 mb-4">
-            <TabsTrigger value="upcoming" className="text-xs sm:text-sm">
-              Upcoming ({upcomingLessons.length})
-            </TabsTrigger>
-            <TabsTrigger value="past" className="text-xs sm:text-sm">
+          <TabsList className="grid w-full grid-cols-2 mb-4">
+            <TabsTrigger value="past" className="text-xs sm:text-sm gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5" />
               Past ({pastLessons.length})
             </TabsTrigger>
-            <TabsTrigger value="feedback" className="text-xs sm:text-sm">
+            <TabsTrigger value="feedback" className="text-xs sm:text-sm gap-1.5">
+              <MessageSquare className="w-3.5 h-3.5" />
               No Feedback ({needsFeedback.length})
             </TabsTrigger>
           </TabsList>
@@ -318,28 +310,6 @@ export const LessonsListCard: React.FC = () => {
             </div>
           ) : (
             <>
-              <TabsContent value="upcoming" className="space-y-2">
-                {upcomingLessons.length > 0 ? (
-                  upcomingLessons.map(lesson => (
-                    <LessonItem
-                      key={lesson.id}
-                      lesson={lesson}
-                      showEnterButton
-                      onEnter={handleEnter}
-                    />
-                  ))
-                ) : (
-                  <EmptyState
-                    icon={CalendarRange}
-                    title="No upcoming lessons"
-                    description="Once students book a session with you, it will appear here."
-                    actionLabel="Manage availability"
-                    onAction={() => navigate('/teacher/availability')}
-                    compact
-                  />
-                )}
-              </TabsContent>
-
               <TabsContent value="past" className="space-y-2">
                 {pastLessons.length > 0 ? (
                   pastLessons.map(lesson => (

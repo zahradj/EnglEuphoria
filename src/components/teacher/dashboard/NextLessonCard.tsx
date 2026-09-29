@@ -3,21 +3,31 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Calendar, 
-  Clock, 
-  User, 
+import {
+  Calendar,
+  Clock,
   Video,
   ChevronRight,
   Loader2,
-  Radio
+  Radio,
+  CalendarClock
 } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, isToday, isTomorrow } from 'date-fns';
 import { useNextClassCountdown } from '@/hooks/useNextClassCountdown';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 import { useLiveClassroomStatus } from '@/hooks/useLiveClassroomStatus';
+
+/** First letter of the student's name, for the avatar. */
+const initial = (name: string) => (name?.trim()[0] || '?').toUpperCase();
+
+/** "Today" / "Tomorrow" / "Mon, Jan 5" — friendlier than a bare date for a single upcoming lesson. */
+const friendlyDay = (date: Date) => {
+  if (isToday(date)) return 'Today';
+  if (isTomorrow(date)) return 'Tomorrow';
+  return format(date, 'EEE, MMM d');
+};
 
 interface NextLessonCardProps {
   disabled?: boolean;
@@ -81,8 +91,8 @@ export const NextLessonCard: React.FC<NextLessonCardProps> = ({ disabled = false
   };
 
   return (
-    <Card className="overflow-hidden">
-      <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 pb-3">
+    <Card className="overflow-hidden border-primary/10 shadow-sm">
+      <CardHeader className="relative bg-gradient-to-br from-primary/15 via-primary/5 to-transparent pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg flex items-center gap-2">
             <Video className="w-5 h-5 text-primary" />
@@ -118,49 +128,46 @@ export const NextLessonCard: React.FC<NextLessonCardProps> = ({ disabled = false
             <Loader2 className="w-6 h-6 animate-spin text-primary" />
           </div>
         ) : !nextLesson ? (
-          <div className="text-center py-6">
-            <p className="text-muted-foreground text-sm">No upcoming lessons scheduled.</p>
-            <p className="text-muted-foreground text-xs mt-1">
+          <div className="flex flex-col items-center text-center py-6 gap-2">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted mb-1">
+              <CalendarClock className="w-6 h-6 text-muted-foreground" />
+            </div>
+            <p className="text-foreground text-sm font-medium">No upcoming lessons scheduled</p>
+            <p className="text-muted-foreground text-xs">
               Students will appear here once they book a slot.
             </p>
           </div>
         ) : (
           <>
-            {/* Date & Time */}
-            <div className="flex items-center gap-4 text-sm">
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Calendar className="w-4 h-4" />
-                <span>{format(new Date(nextLesson.scheduled_at), 'EEEE, MMM d')}</span>
+            {/* Student + lesson title */}
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-base font-semibold text-primary ring-2 ring-primary/10">
+                {initial(nextLesson.student_name)}
               </div>
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-foreground truncate">
+                  {nextLesson.student_name || 'Student'}
+                </p>
+                <p className="text-sm text-muted-foreground truncate">
+                  {nextLesson.title || 'English Lesson'}
+                </p>
+              </div>
+            </div>
+
+            {/* Date, time & duration */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm rounded-lg bg-muted/50 px-3 py-2.5">
+              <div className="flex items-center gap-1.5 text-foreground font-medium">
+                <Calendar className="w-4 h-4 text-primary" />
+                <span>{friendlyDay(new Date(nextLesson.scheduled_at))}</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Clock className="w-4 h-4" />
                 <span>{format(new Date(nextLesson.scheduled_at), 'h:mm a')}</span>
               </div>
+              <span className="ml-auto text-xs text-muted-foreground">
+                {nextLesson.duration} min
+              </span>
             </div>
-
-            {/* Lesson Title */}
-            <div>
-              <p className="font-semibold text-foreground">
-                {nextLesson.title || 'English Lesson'}
-              </p>
-            </div>
-
-            {/* Student Info */}
-            <div className="flex items-center gap-3 bg-muted/50 rounded-lg p-3">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <User className="w-5 h-5 text-primary" />
-              </div>
-              <div className="flex-1">
-                <p className="font-medium text-foreground">
-                  {nextLesson.student_name || 'Student'}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {nextLesson.duration} min session
-                </p>
-              </div>
-            </div>
-
-            {/* Classroom access is shown only when a real upcoming lesson exists. */}
           </>
         )}
 
