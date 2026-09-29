@@ -267,15 +267,15 @@ export function SceneRenderer(props: {
     case 'friend-pop': return <FriendPopScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
     case 'feelings-tap': return <FeelingsTapScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;
     case 'feelings-wheel': return <FeelingsWheelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
-    case 'x-is-feeling': return <XIsFeelingScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'feelings-dice': return <FeelingsDiceScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'x-is-feeling': return <XIsFeelingScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+    case 'feelings-dice': return <FeelingsDiceScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'feed-monsters': return <FeedMonstersScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-    case 'he-she-model': return <HeSheModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'he-she-model': return <HeSheModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'he-she-sort': return <HeSheSortScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-    case 'he-she-say': return <HeSheSayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'feeling-quiz': return <FeelingQuizScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-    case 'i-am-feeling': return <IAmFeelingScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'feelings-bingo': return <FeelingsBingoScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'he-she-say': return <HeSheSayScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+    case 'feeling-quiz': return <FeelingQuizScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+    case 'i-am-feeling': return <IAmFeelingScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+    case 'feelings-bingo': return <FeelingsBingoScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
     case 'numbers-learn': return <NumbersLearnScene scene={scene} onNext={props.onNext} />;
     case 'numbers-review': return <NumbersReviewScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'candle-cake': return <CandleCakeScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
@@ -5689,17 +5689,24 @@ function FeelingsWheelScene({ scene, onNext, onWin, sync }: { scene: Extract<Sce
 /* ---------- Modeled "X is feeling" rounds (shared by x-is-feeling & he-she-model) ---------- */
 
 function ModeledFeelingRounds<R extends { who: CharKey; emotion: 'happy' | 'sad' | 'angry'; sentence: string }>({
-  teacher, rounds, badge, onNext, onWin,
+  teacher, rounds, badge, onNext, onWin, sync,
 }: {
   teacher: string;
   rounds: R[];
   badge?: (r: R) => string;
   onNext: () => void;
   onWin: (gem: boolean) => void;
+  sync?: ActivitySync;
 }) {
-  const [round, setRound] = useState(0);
+  // Only round/gemDone are shared state -- the model/repeat phase transition
+  // is a fixed, deterministic timed sequence (no randomness, no branching),
+  // so each side safely runs its own identical copy the same way
+  // CinematicScene already does, and it re-triggers correctly on both sides
+  // whenever the synced `round` changes.
+  const [state, setState] = useSyncedState(sync, { round: 0, gemDone: false });
+  const { round, gemDone } = state;
+  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
   const [phase, setPhase] = useState<'model' | 'repeat'>('model');
-  const [gemDone, setGemDone] = useState(false);
   const total = rounds.length;
   const finished = round >= total;
   const r = !finished ? rounds[round] : null;
@@ -5721,11 +5728,12 @@ function ModeledFeelingRounds<R extends { who: CharKey; emotion: 'happy' | 'sad'
 
   const replay = () => { if (r) void safeSpeak(r.sentence, r.who); };
   const confirm = () => {
-    if (!r || phase !== 'repeat') return;
+    if (isRemoteMirror || !r || phase !== 'repeat') return;
     sfx.match();
     const next = round + 1;
-    if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-    setRound(next);
+    const awardGem = next >= total && !gemDone;
+    if (awardGem) { sfx.gem(); onWin(true); }
+    setState((s) => ({ ...s, round: next, gemDone: s.gemDone || awardGem }));
   };
 
   if (finished) {
@@ -5766,18 +5774,18 @@ function ModeledFeelingRounds<R extends { who: CharKey; emotion: 'happy' | 'sad'
   );
 }
 
-function XIsFeelingScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'x-is-feeling' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  return <ModeledFeelingRounds teacher={scene.teacher} rounds={scene.rounds} onNext={onNext} onWin={onWin} />;
+function XIsFeelingScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'x-is-feeling' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  return <ModeledFeelingRounds teacher={scene.teacher} rounds={scene.rounds} onNext={onNext} onWin={onWin} sync={sync} />;
 }
 
-function HeSheModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'he-she-model' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  return <ModeledFeelingRounds teacher={scene.teacher} rounds={scene.rounds} badge={(r) => r.pronoun} onNext={onNext} onWin={onWin} />;
+function HeSheModelScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'he-she-model' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  return <ModeledFeelingRounds teacher={scene.teacher} rounds={scene.rounds} badge={(r) => r.pronoun} onNext={onNext} onWin={onWin} sync={sync} />;
 }
 
 /* ---------- Free production "say it & check" (feelings-dice, he-she-say, i-am-feeling) ---------- */
 
 function ProduceSentenceScene({
-  teacher, icon, rounds, announce, onNext, onWin,
+  teacher, icon, rounds, announce, onNext, onWin, sync,
 }: {
   teacher: string;
   icon: string;
@@ -5785,37 +5793,38 @@ function ProduceSentenceScene({
   announce?: { who: CharKey; text: string };
   onNext: () => void;
   onWin: (gem: boolean) => void;
+  sync?: ActivitySync;
 }) {
-  const [round, setRound] = useState(0);
-  const [revealed, setRevealed] = useState(false);
-  const [gemDone, setGemDone] = useState(false);
+  const [state, setState] = useSyncedState(sync, { round: 0, revealed: false, gemDone: false });
+  const { round, revealed, gemDone } = state;
+  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
   const [talking, setTalking] = useState(false);
   const total = rounds.length;
   const finished = round >= total;
   const r = !finished ? rounds[round] : null;
 
   useEffect(() => {
-    setRevealed(false);
     if (!r) return;
     if (announce) void safeSpeak(announce.text, announce.who);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round]);
 
   const reveal = async () => {
-    if (!r) return;
-    setRevealed(true);
+    if (isRemoteMirror || !r) return;
+    setState((s) => ({ ...s, revealed: true }));
     sfx.pop();
     setTalking(true);
     await safeSpeak(r.sentence, r.who ?? 'teacher');
     setTalking(false);
   };
   const confirm = () => {
-    if (!r) return;
+    if (isRemoteMirror || !r) return;
     if (!revealed) { void reveal(); return; }
     sfx.match();
     const next = round + 1;
-    if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-    setRound(next);
+    const awardGem = next >= total && !gemDone;
+    if (awardGem) { sfx.gem(); onWin(true); }
+    setState((s) => ({ ...s, round: next, revealed: false, gemDone: s.gemDone || awardGem }));
   };
 
   if (finished) {
@@ -5861,19 +5870,19 @@ function ProduceSentenceScene({
   );
 }
 
-function FeelingsDiceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'feelings-dice' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+function FeelingsDiceScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'feelings-dice' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
   const rounds = useMemo(() => scene.rounds.map((r, i) => ({ key: `${i}`, who: r.who, emotion: r.emotion, sentence: r.sentence })), [scene.rounds]);
-  return <ProduceSentenceScene teacher={scene.teacher} icon="🎲" rounds={rounds} onNext={onNext} onWin={onWin} />;
+  return <ProduceSentenceScene teacher={scene.teacher} icon="🎲" rounds={rounds} onNext={onNext} onWin={onWin} sync={sync} />;
 }
 
-function HeSheSayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'he-she-say' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+function HeSheSayScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'he-she-say' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
   const rounds = useMemo(() => scene.rounds.map((r, i) => ({ key: `${i}`, who: r.who, emotion: r.emotion, sentence: `${r.pronoun} is ${r.emotion}.` })), [scene.rounds]);
-  return <ProduceSentenceScene teacher={scene.teacher} icon="🗣️" rounds={rounds} onNext={onNext} onWin={onWin} />;
+  return <ProduceSentenceScene teacher={scene.teacher} icon="🗣️" rounds={rounds} onNext={onNext} onWin={onWin} sync={sync} />;
 }
 
-function IAmFeelingScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'i-am-feeling' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+function IAmFeelingScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'i-am-feeling' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
   const rounds = useMemo(() => scene.rounds.map((r, i) => ({ key: `${i}`, who: undefined, emotion: r.emotion, sentence: `I am ${r.label.toLowerCase()}!` })), [scene.rounds]);
-  return <ProduceSentenceScene teacher={scene.teacher} icon="🌟" rounds={rounds} announce={{ who: scene.asker, text: 'How are you?' }} onNext={onNext} onWin={onWin} />;
+  return <ProduceSentenceScene teacher={scene.teacher} icon="🌟" rounds={rounds} announce={{ who: scene.asker, text: 'How are you?' }} onNext={onNext} onWin={onWin} sync={sync} />;
 }
 
 /* ---------- Feed the mood monsters ---------- */
@@ -6167,12 +6176,9 @@ function HeSheSortScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
 
 const EMOTION_WORD: Record<'happy' | 'sad' | 'angry', string> = { happy: 'Happy', sad: 'Sad', angry: 'Angry' };
 
-function FeelingQuizScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'feeling-quiz' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [score, setScore] = useState(0);
-  const [picked, setPicked] = useState<'happy' | 'sad' | 'angry' | null>(null);
-  const [correct, setCorrect] = useState<boolean | null>(null);
-  const [gemDone, setGemDone] = useState(false);
+function FeelingQuizScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'feeling-quiz' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { round: 0, score: 0, picked: null as 'happy' | 'sad' | 'angry' | null, correct: null as boolean | null, gemDone: false });
+  const { round, score, picked, correct, gemDone } = state;
   const total = scene.rounds.length;
   const finished = round >= total;
   const r = !finished ? scene.rounds[round] : null;
@@ -6187,7 +6193,7 @@ function FeelingQuizScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sce
 
   useEffect(() => {
     if (!r) return;
-    setPicked(null); setCorrect(null);
+    setState((s) => ({ ...s, picked: null, correct: null }));
     const t = window.setTimeout(() => void safeSpeak(r.prompt, 'teacher'), 300);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -6195,18 +6201,19 @@ function FeelingQuizScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sce
 
   const pick = async (choice: 'happy' | 'sad' | 'angry') => {
     if (!r || picked) return;
-    setPicked(choice);
     const ok = choice === r.emotion;
-    setCorrect(ok);
+    setState((s) => ({ ...s, picked: choice, correct: ok }));
     if (ok) {
-      sfx.match(); setScore((s) => s + 1);
+      sfx.match();
+      setState((s) => ({ ...s, score: s.score + 1 }));
       await safeSpeak(`${CAST[r.who].name} is ${r.emotion}!`, r.who);
       const next = round + 1;
-      if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-      window.setTimeout(() => setRound(next), 300);
+      const awardGem = next >= total && !gemDone;
+      if (awardGem) { sfx.gem(); onWin(true); }
+      window.setTimeout(() => setState((s) => ({ ...s, round: next, gemDone: s.gemDone || awardGem })), 300);
     } else {
       sfx.wrong(); onLose();
-      window.setTimeout(() => { setPicked(null); setCorrect(null); }, 700);
+      window.setTimeout(() => setState((s) => ({ ...s, picked: null, correct: null })), 700);
     }
   };
 
@@ -6244,11 +6251,12 @@ function FeelingQuizScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sce
 
 /* ---------- Feelings bingo ---------- */
 
-function FeelingsBingoScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'feelings-bingo' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [callIdx, setCallIdx] = useState(0);
-  const [hits, setHits] = useState<Set<number>>(new Set());
-  const [wrongTile, setWrongTile] = useState<number | null>(null);
-  const [gemDone, setGemDone] = useState(false);
+function FeelingsBingoScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'feelings-bingo' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  // `hits` is a plain number[] (not a Set) so it survives the JSON
+  // broadcast round-trip.
+  const [state, setState] = useSyncedState(sync, { callIdx: 0, hits: [] as number[], wrongTile: null as number | null, gemDone: false });
+  const { callIdx, hits, wrongTile, gemDone } = state;
+  const hitsSet = useMemo(() => new Set(hits), [hits]);
   const total = scene.rounds.length;
   const finished = callIdx >= total;
   const round = !finished ? scene.rounds[callIdx] : null;
@@ -6266,14 +6274,17 @@ function FeelingsBingoScene({ scene, onNext, onWin, onLose }: { scene: Extract<S
     const tile = scene.tiles[i];
     if (tile.who === round.who && tile.emotion === round.emotion) {
       sfx.match();
-      setHits((s) => new Set(s).add(i));
+      const nextHits = hits.includes(i) ? hits : [...hits, i];
+      setState((s) => ({ ...s, hits: nextHits }));
       await safeSpeak(`Yes! ${CAST[tile.who].name} is ${tile.emotion}!`, tile.who);
       const next = callIdx + 1;
-      if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-      setCallIdx(next);
+      const awardGem = next >= total && !gemDone;
+      if (awardGem) { sfx.gem(); onWin(true); }
+      setState((s) => ({ ...s, callIdx: next, gemDone: s.gemDone || awardGem }));
     } else {
-      sfx.wrong(); onLose(); setWrongTile(i);
-      window.setTimeout(() => setWrongTile(null), 500);
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, wrongTile: i }));
+      window.setTimeout(() => setState((s) => ({ ...s, wrongTile: null })), 500);
     }
   };
 
@@ -6286,7 +6297,7 @@ function FeelingsBingoScene({ scene, onNext, onWin, onLose }: { scene: Extract<S
       <div className="relative z-10 grid gap-3" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0,1fr))` }}>
         {scene.tiles.map((tile, i) => {
           const c = CAST[tile.who];
-          const isHit = hits.has(i);
+          const isHit = hitsSet.has(i);
           return (
             <button key={i} onClick={() => tapTile(i)} disabled={finished}
               className={`relative grid aspect-square w-24 place-items-center rounded-3xl border-4 bg-white/90 p-2 shadow-xl transition active:scale-95 disabled:opacity-90 sm:w-28 ${wrongTile === i ? 'animate-[lep1-shake_0.4s_ease-out] border-rose-400' : isHit ? 'border-green-400 ring-4 ring-green-300/60' : 'border-white'}`}
