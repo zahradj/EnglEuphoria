@@ -24,7 +24,10 @@ const ALWAYS_UNLOCKED_SCENE_KINDS = new Set([
  *  channel fundamentally can't represent (both sides would stomp on each
  *  other's state). Also excludes title-card/cinematic/finale (no branching
  *  state) and song (audio-clock-driven, not tap-driven). */
-const REAL_SYNC_KINDS = new Set<string>(['meet', 'sound-model']);
+const REAL_SYNC_KINDS = new Set<string>([
+  'meet', 'sound-model', 'echo', 'video-check', 'sentence-build', 'who-said-it',
+  'listen-repeat-cards', 'roleplay', 'join-stage', 'alphabet-blocks',
+]);
 
 export interface PlayUnitLessonHandle {
   goNext: () => void;

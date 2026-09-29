@@ -222,15 +222,15 @@ export function SceneRenderer(props: {
     case 'cinematic': return <CinematicScene scene={scene} onNext={props.onNext} />;
     case 'meet': return <MeetScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'sound-model': return <SoundModelScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;
-    case 'echo': return <EchoScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
+    case 'echo': return <EchoScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'basket': return <BasketScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'trace': return <TraceScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'sound-sort': return <SoundSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'word-build': return <WordBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'video-story': return <VideoStoryScene scene={scene} onNext={props.onNext} />;
-    case 'video-check': return <VideoCheckScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-    case 'sentence-build': return <SentenceBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-    case 'who-said-it': return <WhoSaidItScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
+    case 'video-check': return <VideoCheckScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+    case 'sentence-build': return <SentenceBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+    case 'who-said-it': return <WhoSaidItScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'gather': return <GatherScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'memory': return <MemoryScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'dash': return <DashScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
@@ -242,7 +242,7 @@ export function SceneRenderer(props: {
     case 'color-model': return <ColorModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'color-sort': return <ColorSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'color-quiz': return <ColorQuizScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
-    case 'listen-repeat-cards': return <ListenRepeatCardsScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
+    case 'listen-repeat-cards': return <ListenRepeatCardsScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'color-spot': return <ColorSpotScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
     case 'shape-model': return <ShapeModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'toy-model': return <ToyModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
@@ -251,11 +251,11 @@ export function SceneRenderer(props: {
     case 'shape-sort': return <ShapeSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'color-spy': return <ColorSpyScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'color-simon': return <ColorSimonScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
-    case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+    case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'color-friends': return <ColorFriendsScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'alphabet-blocks': return <AlphabetBlocksScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'alphabet-blocks': return <AlphabetBlocksScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'alphabet-order': return <AlphabetOrderScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'song': return <SongScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
     case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
@@ -618,20 +618,23 @@ function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene, { kind
 
 /* ---------- Echo ---------- */
 
-function EchoScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind: 'echo' }>; onWin: (gem: boolean) => void; onNext: () => void }) {
-  const [heard, setHeard] = useState(0);
-  const [held, setHeld] = useState(false);
-  const [done, setDone] = useState(false);
+function EchoScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, { kind: 'echo' }>; onWin: (gem: boolean) => void; onNext: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { heard: 0, held: false, done: false });
+  const { heard, held, done } = state;
   const holdTimer = useRef<number | null>(null);
   const c = CAST[scene.who];
 
 
-  const hear = async () => { setHeard((h) => h + 1); await safeSpeak(scene.hearWord ?? scene.word, scene.who); };
+  const hear = async () => { setState((s) => ({ ...s, heard: s.heard + 1 })); await safeSpeak(scene.hearWord ?? scene.word, scene.who); };
   const startHold = () => {
-    setHeld(true);
-    holdTimer.current = window.setTimeout(() => { setDone(true); setHeld(false); onWin(true); cueSpeak('Amazing! Great voice!', 'pip'); }, 1200);
+    setState((s) => ({ ...s, held: true }));
+    holdTimer.current = window.setTimeout(() => {
+      setState((s) => ({ ...s, done: true, held: false }));
+      onWin(true);
+      cueSpeak('Amazing! Great voice!', 'pip');
+    }, 1200);
   };
-  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+  const endHold = () => { setState((s) => ({ ...s, held: false })); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
   return (
     // GlassCard has no built-in width limit — every other GlassCard-free scene
@@ -1213,9 +1216,9 @@ function VideoStoryScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'vid
 
 /* ---------- Video comprehension check (one very-easy picture question) ---------- */
 
-function VideoCheckScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'video-check' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [picked, setPicked] = useState<string | null>(null);
-  const [correct, setCorrect] = useState(false);
+function VideoCheckScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'video-check' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { picked: null as string | null, correct: false });
+  const { picked, correct } = state;
   const gemDone = useRef(false);
 
   const options = useMemo(() => {
@@ -1236,14 +1239,14 @@ function VideoCheckScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
 
   const pick = async (label: string, isCorrect: boolean) => {
     if (picked) return;
-    setPicked(label);
     if (!isCorrect) {
       sfx.wrong(); onLose();
-      window.setTimeout(() => setPicked(null), 600);
+      setState((s) => ({ ...s, picked: label }));
+      window.setTimeout(() => setState((s) => ({ ...s, picked: null })), 600);
       return;
     }
     sfx.match();
-    setCorrect(true);
+    setState((s) => ({ ...s, picked: label, correct: true }));
     if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
     await safeSpeak(`Yes! ${scene.correctLabel}!`, 'teacher');
   };
@@ -1296,39 +1299,43 @@ function shuffledIndices(n: number): number[] {
   return arr;
 }
 
-function SentenceBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'sentence-build' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [filledCount, setFilledCount] = useState(0);
-  const [wrongIdx, setWrongIdx] = useState<number | null>(null);
-  const [gemDone, setGemDone] = useState(false);
+function SentenceBuildScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'sentence-build' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { round: 0, filledCount: 0, wrongIdx: null as number | null, gemDone: false, order: [] as number[] });
+  const { round, filledCount, wrongIdx, gemDone, order } = state;
+  // shuffledIndices() uses Math.random() — computing it independently on
+  // each side would give the teacher and student different word orders, so
+  // only the authority computes it (once per round) and it travels as
+  // synced state, same as HelloDoorsScene's `order`.
+  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
   const r = scene.rounds[round];
   const total = scene.rounds.length;
   const complete = round >= total;
 
-  const order = useMemo(() => (r ? shuffledIndices(r.words.length) : []), [round, r]);
-
   useEffect(() => {
-    if (complete) return;
-    setFilledCount(0); setWrongIdx(null);
-  }, [round, complete]);
+    if (isRemoteMirror || complete) return;
+    setState((s) => ({ ...s, filledCount: 0, wrongIdx: null, order: shuffledIndices(scene.rounds[round].words.length) }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round, complete, isRemoteMirror]);
 
   const tap = (wordIdx: number) => {
-    if (complete || wrongIdx !== null) return;
+    if (isRemoteMirror || complete || wrongIdx !== null) return;
     if (wordIdx === filledCount) {
       sfx.match();
       const nextCount = filledCount + 1;
-      setFilledCount(nextCount);
+      setState((s) => ({ ...s, filledCount: nextCount }));
       if (nextCount >= r.words.length) {
         void safeSpeak(r.words.join(' '), 'pip');
         window.setTimeout(() => {
           const next = round + 1;
-          if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-          setRound(next);
+          const awardGem = next >= total && !gemDone;
+          if (awardGem) { sfx.gem(); onWin(true); }
+          setState((s) => ({ ...s, round: next, gemDone: s.gemDone || awardGem }));
         }, 1200);
       }
     } else {
-      sfx.wrong(); onLose(); setWrongIdx(wordIdx);
-      window.setTimeout(() => setWrongIdx(null), 500);
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, wrongIdx: wordIdx }));
+      window.setTimeout(() => setState((s) => ({ ...s, wrongIdx: null })), 500);
     }
   };
 
@@ -1397,11 +1404,9 @@ function SentenceBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<S
 
 /* ---------- Who said it ---------- */
 
-function WhoSaidItScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind: 'who-said-it' }>; onWin: (gem: boolean) => void; onNext: () => void }) {
-  const [round, setRound] = useState(0);
-  const [phase, setPhase] = useState<'prompt' | 'playing' | 'repeat' | 'done'>('prompt');
-  const [tapped, setTapped] = useState<CharKey | null>(null);
-  const [gemDone, setGemDone] = useState(false);
+function WhoSaidItScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, { kind: 'who-said-it' }>; onWin: (gem: boolean) => void; onNext: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { round: 0, phase: 'prompt' as 'prompt' | 'playing' | 'repeat' | 'done', tapped: null as CharKey | null, gemDone: false });
+  const { round, phase, tapped, gemDone } = state;
   const total = scene.rounds.length;
   const finished = round >= total;
 
@@ -1427,15 +1432,16 @@ function WhoSaidItScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind
 
   const pick = async (choice: CharKey) => {
     if (phase !== 'prompt' || !target) return;
-    setTapped(choice);
-    if (choice !== target) { sfx.wrong(); setTapped(null); return; }
-    sfx.match(); setPhase('playing');
+    if (choice !== target) { sfx.wrong(); setState((s) => ({ ...s, tapped: null })); return; }
+    sfx.match();
+    setState((s) => ({ ...s, tapped: choice, phase: 'playing' }));
     await safeSpeak(targetLine, target);
-    setPhase('repeat');
+    setState((s) => ({ ...s, phase: 'repeat' }));
     await new Promise((r) => window.setTimeout(r, 1600));
     const next = round + 1;
-    if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-    setTapped(null); setRound(next); setPhase(next >= total ? 'done' : 'prompt');
+    const awardGem = next >= total && !gemDone;
+    if (awardGem) { sfx.gem(); onWin(true); }
+    setState((s) => ({ ...s, tapped: null, round: next, phase: next >= total ? 'done' : 'prompt', gemDone: s.gemDone || awardGem }));
   };
 
   const replayModel = async () => { if (target) await safeSpeak(targetLine, target); };
@@ -2001,36 +2007,52 @@ function PuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
 
 /* ---------- Roleplay ---------- */
 
-function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'roleplay' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [step, setStep] = useState(-1);
-  const [awaitingRepeat, setAwaitingRepeat] = useState(false);
-  const [gemDone, setGemDone] = useState(false);
+function RoleplayScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'roleplay' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { step: -1, awaitingRepeat: false, gemDone: false });
+  const { step, awaitingRepeat, gemDone } = state;
+  // The mirror side renders the synced step/awaitingRepeat instead of
+  // running its own independently-timed script — two self-driving copies
+  // would immediately drift out of sync with each other.
+  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
   const stopRef = useRef(false);
   const runRef = useRef<((i: number) => void) | null>(null);
 
   useEffect(() => {
+    if (isRemoteMirror) return;
     stopRef.current = false;
     async function run(i: number) {
       if (stopRef.current) return;
-      if (i >= scene.script.length) { setStep(scene.script.length); return; }
-      setStep(i);
+      if (i >= scene.script.length) { setState((s) => ({ ...s, step: scene.script.length })); return; }
+      setState((s) => ({ ...s, step: i }));
       const line = scene.script[i];
       await new Promise((r) => setTimeout(r, 350));
       if (stopRef.current) return;
       await safeSpeak(line.line, line.who);
       if (stopRef.current) return;
-      if (line.repeat) setAwaitingRepeat(true);
+      if (line.repeat) setState((s) => ({ ...s, awaitingRepeat: true }));
       else { await new Promise((r) => setTimeout(r, 500)); run(i + 1); }
     }
     runRef.current = run;
     run(0);
     return () => { stopRef.current = true; stopSpeaking(); };
-  }, [scene.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scene.id, isRemoteMirror]);
+
+  // Mirror side isn't running the script, so it needs its own cue to speak
+  // each line as the synced `step` advances.
+  const lastSpokenStepRef = useRef(-2);
+  useEffect(() => {
+    if (!isRemoteMirror) return;
+    if (step < 0 || step >= scene.script.length || lastSpokenStepRef.current === step) return;
+    lastSpokenStepRef.current = step;
+    const line = scene.script[step];
+    void safeSpeak(line.line, line.who);
+  }, [isRemoteMirror, step, scene.script]);
 
   const confirmRepeat = () => {
-    if (!awaitingRepeat) return;
-    setAwaitingRepeat(false);
-    if (!gemDone) { onWin(true); setGemDone(true); }
+    if (!awaitingRepeat || isRemoteMirror) return;
+    if (!gemDone) onWin(true);
+    setState((s) => ({ ...s, awaitingRepeat: false, gemDone: true }));
     const next = step + 1;
     setTimeout(() => runRef.current?.(next), 250);
   };
@@ -2093,9 +2115,11 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
 
 /* ---------- Join stage ---------- */
 
-function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'join-stage' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [turnIdx, setTurnIdx] = useState(0);
-  const [gemDone, setGemDone] = useState(false);
+function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'join-stage' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { turnIdx: 0, gemDone: false });
+  const { turnIdx, gemDone } = state;
+  // The draggable camera-bubble position below is a per-device UI
+  // preference (each screen's own open space differs), never synced.
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
@@ -2147,9 +2171,10 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
   useEffect(() => { if (isFriendTurn && friendKey && currentTurn) cueSpeakOnce(currentTurn.line, friendKey); }, [turnIdx, isFriendTurn, friendKey]);
 
   const advance = () => {
-    if (isStudentTurn && !gemDone) { onWin(true); setGemDone(true); }
+    const awardGem = isStudentTurn && !gemDone;
+    if (awardGem) onWin(true);
     stopSpeaking();
-    setTurnIdx((i) => i + 1);
+    setState((s) => ({ ...s, turnIdx: s.turnIdx + 1, gemDone: s.gemDone || awardGem }));
   };
 
   return (
@@ -2488,88 +2513,118 @@ function ColorFriendsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { k
 
 /* ---------- Alphabet blocks ---------- */
 
-function AlphabetBlocksScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'alphabet-blocks' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+function AlphabetBlocksScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'alphabet-blocks' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
   type Phase = 'intro' | 'tap' | 'stack' | 'done';
-  const [phase, setPhase] = useState<Phase>('intro');
-  const [tapIdx, setTapIdx] = useState(0);
-  const [tapWrong, setTapWrong] = useState<string | null>(null);
-  const [tapWinLetter, setTapWinLetter] = useState<string | null>(null);
-  const [wordIdx, setWordIdx] = useState(0);
-  const [placed, setPlaced] = useState<string[]>([]);
-  const [wrongBankIdx, setWrongBankIdx] = useState<number | null>(null);
-  const [celebrate, setCelebrate] = useState(false);
-  const [gemDone, setGemDone] = useState(false);
+  // `bank` (the shuffled letter choices for the stack phase) is synced state
+  // rather than a local useMemo — it's built with Math.random(), so the
+  // mirror side computing its own copy would get a different letter order
+  // than the authority, breaking the tap-by-index mapping between screens.
+  // `usedBank` is a plain number[] (not a Set) to survive the JSON
+  // broadcast round-trip.
+  const [state, setState] = useSyncedState(sync, {
+    phase: 'intro' as Phase,
+    tapIdx: 0,
+    tapWrong: null as string | null,
+    tapWinLetter: null as string | null,
+    wordIdx: 0,
+    placed: [] as string[],
+    wrongBankIdx: null as number | null,
+    celebrate: false,
+    gemDone: false,
+    bank: [] as string[],
+    usedBank: [] as number[],
+  });
+  const { phase, tapIdx, tapWrong, tapWinLetter, wordIdx, placed, wrongBankIdx, celebrate, gemDone, bank, usedBank } = state;
+  const usedBankSet = useMemo(() => new Set(usedBank), [usedBank]);
+  // The two async sequences below (tap-phonics prompts, stack-phase intro)
+  // only run on the authority side; the mirror renders whatever state it
+  // receives instead of driving its own independent timers.
+  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
   const introRef = useRef(false);
 
   const BLOCK_COLORS = ['#FE6A2F', '#F59E0B', '#22C55E', '#06B6D4', '#3B82F6', '#8B5CF6', '#EC4899', '#EF4444'];
   const colorFor = (letter: string) => { const i = scene.letters.indexOf(letter); return BLOCK_COLORS[Math.max(0, i) % BLOCK_COLORS.length]; };
 
-  useEffect(() => {
-    if (introRef.current) return;
-    introRef.current = true;
-    (async () => {
-      await new Promise((r) => setTimeout(r, 200));
-      setPhase('tap');
-      await new Promise((r) => setTimeout(r, 300));
-      await playLetterPhonic(scene.tapRounds[0].letter);
-    })();
-  }, []);
-
-  const tapPromptRef = useRef(0);
-  useEffect(() => {
-    if (phase !== 'tap' || tapIdx === 0) return;
-    tapPromptRef.current += 1;
-    const token = tapPromptRef.current;
-    (async () => { await new Promise((r) => setTimeout(r, 250)); if (token !== tapPromptRef.current) return; await playLetterPhonic(scene.tapRounds[tapIdx].letter); })();
-  }, [tapIdx, phase]);
-
-  const handleTapLetter = async (letter: string) => {
-    if (phase !== 'tap' || tapWinLetter) return;
-    const target = scene.tapRounds[tapIdx].letter;
-    if (letter === target) {
-      setTapWinLetter(letter); sfx.gem();
-      await new Promise((r) => setTimeout(r, 700));
-      setTapWinLetter(null);
-      if (tapIdx + 1 < scene.tapRounds.length) setTapIdx(tapIdx + 1);
-      else {
-        setPhase('stack'); setWordIdx(0); setPlaced([]);
-        await new Promise((r) => setTimeout(r, 300));
-        await safeSpeak(scene.words[0].word, 'pip');
-      }
-    } else { setTapWrong(letter); sfx.wrong(); window.setTimeout(() => setTapWrong(null), 450); }
-  };
-
-  const currentWord = scene.words[wordIdx]?.word ?? '';
-  const bank = useMemo(() => {
-    if (phase !== 'stack' || !currentWord) return [] as string[];
-    const need = currentWord.split('');
+  const buildBank = (word: string) => {
+    const need = word.split('');
     const distractors = scene.letters.filter((l) => !need.includes(l)).slice(0, 3);
     const arr = [...need, ...distractors];
     for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[arr[i], arr[j]] = [arr[j], arr[i]]; }
     return arr;
-  }, [phase, wordIdx]);
+  };
 
-  const [usedBank, setUsedBank] = useState<Set<number>>(new Set());
-  useEffect(() => { setUsedBank(new Set()); setPlaced([]); }, [wordIdx, phase]);
+  useEffect(() => {
+    if (isRemoteMirror || introRef.current) return;
+    introRef.current = true;
+    (async () => {
+      await new Promise((r) => setTimeout(r, 200));
+      setState((s) => ({ ...s, phase: 'tap' }));
+      await new Promise((r) => setTimeout(r, 300));
+      await playLetterPhonic(scene.tapRounds[0].letter);
+    })();
+  }, [isRemoteMirror]);
+
+  const tapPromptRef = useRef(0);
+  useEffect(() => {
+    if (isRemoteMirror || phase !== 'tap' || tapIdx === 0) return;
+    tapPromptRef.current += 1;
+    const token = tapPromptRef.current;
+    (async () => { await new Promise((r) => setTimeout(r, 250)); if (token !== tapPromptRef.current) return; await playLetterPhonic(scene.tapRounds[tapIdx].letter); })();
+  }, [tapIdx, phase, isRemoteMirror]);
+
+  const handleTapLetter = async (letter: string) => {
+    if (isRemoteMirror || phase !== 'tap' || tapWinLetter) return;
+    const target = scene.tapRounds[tapIdx].letter;
+    if (letter === target) {
+      setState((s) => ({ ...s, tapWinLetter: letter }));
+      sfx.gem();
+      await new Promise((r) => setTimeout(r, 700));
+      if (tapIdx + 1 < scene.tapRounds.length) {
+        setState((s) => ({ ...s, tapWinLetter: null, tapIdx: s.tapIdx + 1 }));
+      } else {
+        const firstWord = scene.words[0].word;
+        setState((s) => ({ ...s, tapWinLetter: null, phase: 'stack', wordIdx: 0, placed: [], usedBank: [], bank: buildBank(firstWord) }));
+        await new Promise((r) => setTimeout(r, 300));
+        await safeSpeak(firstWord, 'pip');
+      }
+    } else {
+      sfx.wrong();
+      setState((s) => ({ ...s, tapWrong: letter }));
+      window.setTimeout(() => setState((s) => ({ ...s, tapWrong: null })), 450);
+    }
+  };
+
+  const currentWord = scene.words[wordIdx]?.word ?? '';
 
   const handleBankTap = async (bIdx: number, letter: string) => {
-    if (phase !== 'stack' || celebrate || usedBank.has(bIdx)) return;
+    if (isRemoteMirror || phase !== 'stack' || celebrate || usedBankSet.has(bIdx)) return;
     const target = currentWord[placed.length];
     if (letter === target) {
       const nextPlaced = [...placed, letter];
-      setPlaced(nextPlaced);
-      setUsedBank((s) => new Set(s).add(bIdx));
       sfx.pop();
+      setState((s) => ({ ...s, placed: nextPlaced, usedBank: [...s.usedBank, bIdx] }));
       if (nextPlaced.length === currentWord.length) {
-        setCelebrate(true); sfx.gem();
+        setState((s) => ({ ...s, celebrate: true }));
+        sfx.gem();
         await new Promise((r) => setTimeout(r, 350));
         await safeSpeak(currentWord, 'pip');
         await new Promise((r) => setTimeout(r, 700));
-        setCelebrate(false);
-        if (wordIdx + 1 < scene.words.length) { setWordIdx(wordIdx + 1); await new Promise((r) => setTimeout(r, 300)); await safeSpeak(scene.words[wordIdx + 1].word, 'pip'); }
-        else { setPhase('done'); if (!gemDone) { setGemDone(true); onWin(true); } }
+        if (wordIdx + 1 < scene.words.length) {
+          const nextWord = scene.words[wordIdx + 1].word;
+          setState((s) => ({ ...s, celebrate: false, wordIdx: s.wordIdx + 1, placed: [], usedBank: [], bank: buildBank(nextWord) }));
+          await new Promise((r) => setTimeout(r, 300));
+          await safeSpeak(nextWord, 'pip');
+        } else {
+          const awardGem = !gemDone;
+          if (awardGem) onWin(true);
+          setState((s) => ({ ...s, celebrate: false, phase: 'done', gemDone: s.gemDone || awardGem }));
+        }
       }
-    } else { setWrongBankIdx(bIdx); sfx.wrong(); window.setTimeout(() => setWrongBankIdx(null), 450); }
+    } else {
+      sfx.wrong();
+      setState((s) => ({ ...s, wrongBankIdx: bIdx }));
+      window.setTimeout(() => setState((s) => ({ ...s, wrongBankIdx: null })), 450);
+    }
   };
 
   return (
@@ -2607,8 +2662,8 @@ function AlphabetBlocksScene({ scene, onNext, onWin }: { scene: Extract<Scene, {
           </div>
           <div className="flex max-w-[92vw] flex-wrap items-center justify-center gap-3">
             {bank.map((L, i) => (
-              <button key={`${i}-${L}`} onClick={() => handleBankTap(i, L)} disabled={usedBank.has(i)} className="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl font-black text-white transition-transform active:scale-90 sm:h-24 sm:w-24 sm:text-5xl"
-                style={{ backgroundColor: colorFor(L), opacity: usedBank.has(i) ? 0.25 : 1, animation: wrongBankIdx === i ? 'lep1-blockShake 0.4s ease-in-out' : undefined }}>{L}</button>
+              <button key={`${i}-${L}`} onClick={() => handleBankTap(i, L)} disabled={usedBankSet.has(i)} className="flex h-20 w-20 items-center justify-center rounded-2xl text-4xl font-black text-white transition-transform active:scale-90 sm:h-24 sm:w-24 sm:text-5xl"
+                style={{ backgroundColor: colorFor(L), opacity: usedBankSet.has(i) ? 0.25 : 1, animation: wrongBankIdx === i ? 'lep1-blockShake 0.4s ease-in-out' : undefined }}>{L}</button>
             ))}
           </div>
           <div className="text-sm font-black text-white drop-shadow-md">Word {wordIdx + 1} / {scene.words.length}</div>
@@ -3212,10 +3267,13 @@ function ColorQuizScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
 /* ---------- Listen & Repeat cards (one sentence at a time, object image,
  * karaoke-style word highlight synced to playback, then hold-to-repeat) ---------- */
 
-function ListenRepeatCardsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'listen-repeat-cards' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [idx, setIdx] = useState(0);
-  const [heard, setHeard] = useState(false);
-  const [repeated, setRepeated] = useState(false);
+function ListenRepeatCardsScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'listen-repeat-cards' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  // Only the core progression is synced. The karaoke word-highlight and the
+  // hold-to-repeat gesture stay local/per-side polish — each side's own tap
+  // of "Listen" already plays that side's own TTS at its own pace, so there
+  // is nothing meaningful to mirror about their timing.
+  const [state, setState] = useSyncedState(sync, { idx: 0, heard: false, repeated: false });
+  const { idx, heard, repeated } = state;
   const [activeWord, setActiveWord] = useState(-1);
   const [playing, setPlaying] = useState(false);
   const [held, setHeld] = useState(false);
@@ -3228,15 +3286,15 @@ function ListenRepeatCardsScene({ scene, onNext, onWin }: { scene: Extract<Scene
   const words = useMemo(() => (card ? card.sentence.split(' ') : []), [card]);
 
   useEffect(() => {
-    setHeard(false);
-    setRepeated(false);
+    setState((s) => ({ ...s, heard: false, repeated: false }));
     setActiveWord(-1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idx]);
 
   const play = async () => {
     if (!card || playing) return;
     setPlaying(true);
-    setHeard(true);
+    setState((s) => ({ ...s, heard: true }));
     // Approximate karaoke: no per-word timing from TTS, so step through words
     // at a pace scaled to how long each one is, roughly tracking natural speech
     // rhythm instead of a flat interval.
@@ -3259,7 +3317,7 @@ function ListenRepeatCardsScene({ scene, onNext, onWin }: { scene: Extract<Scene
     setHeld(true);
     holdTimer.current = window.setTimeout(() => {
       setHeld(false);
-      setRepeated(true);
+      setState((s) => ({ ...s, repeated: true }));
       sfx.gem();
     }, 1200);
   };
@@ -3268,7 +3326,7 @@ function ListenRepeatCardsScene({ scene, onNext, onWin }: { scene: Extract<Scene
   const next = () => {
     const n = idx + 1;
     if (n >= total && !gemDone.current) { gemDone.current = true; onWin(true); }
-    setIdx(n);
+    setState((s) => ({ ...s, idx: n }));
   };
 
   if (done) {
