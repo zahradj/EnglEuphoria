@@ -54,7 +54,26 @@ const UnifiedClassroomPage: React.FC = () => {
   const bookingId = params.id ?? params.sessionId ?? params.roomId ?? params.interviewId;
   const location = useLocation();
   const { user, loading: authLoading } = useAuth();
-  const [preFlightPassed, setPreFlightPassed] = useState(false);
+  // Persisted per-booking in sessionStorage so a mid-lesson page reload (a
+  // manual F5, or the teacher/student Force Refresh button, which does a
+  // real window.location.reload()) doesn't re-send someone who already
+  // passed the camera/mic check back through the waiting room — it drops
+  // them straight back into the live classroom instead. A fresh tab/session
+  // still gets the real device check.
+  const [preFlightPassed, setPreFlightPassed] = useState(() => {
+    if (!bookingId) return false;
+    try {
+      return sessionStorage.getItem(`preflight_passed:${bookingId}`) === '1';
+    } catch {
+      return false;
+    }
+  });
+  const handlePreFlightComplete = () => {
+    setPreFlightPassed(true);
+    if (bookingId) {
+      try { sessionStorage.setItem(`preflight_passed:${bookingId}`, '1'); } catch {}
+    }
+  };
   const { isDevBypassActive, bypassRole } = useDevBypass();
 
   const userRole = (user as any)?.role;
@@ -349,7 +368,7 @@ const UnifiedClassroomPage: React.FC = () => {
     if (!preFlightPassed) {
       return (
         <PreFlightCheck
-          onComplete={() => setPreFlightPassed(true)}
+          onComplete={handlePreFlightComplete}
           hubType={hubType}
           role={isApplicant ? 'teacher' : 'student'}
         />
@@ -477,7 +496,7 @@ const UnifiedClassroomPage: React.FC = () => {
   if (!preFlightPassed) {
     return (
       <PreFlightCheck
-        onComplete={() => setPreFlightPassed(true)}
+        onComplete={handlePreFlightComplete}
         hubType={normalizedHub}
         role={classroomRole}
       />
