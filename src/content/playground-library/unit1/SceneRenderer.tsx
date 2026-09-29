@@ -237,15 +237,15 @@ export function SceneRenderer(props: {
     case 'catch-sort': return <CatchSortScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'feelings': return <FeelingsScene scene={scene} onNext={props.onNext} />;
     case 'puzzle': return <PuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-    case 'trophy-chest': return <TrophyChestScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'trophy-chest': return <TrophyChestScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
     case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-    case 'color-model': return <ColorModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'color-model': return <ColorModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'color-sort': return <ColorSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
-    case 'color-quiz': return <ColorQuizScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
+    case 'color-quiz': return <ColorQuizScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'listen-repeat-cards': return <ListenRepeatCardsScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
-    case 'color-spot': return <ColorSpotScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
-    case 'shape-model': return <ShapeModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'toy-model': return <ToyModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'color-spot': return <ColorSpotScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'shape-model': return <ShapeModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+    case 'toy-model': return <ToyModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'plural-sort': return <PluralSortScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'train-recall': return <TrainRecallScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'shape-sort': return <ShapeSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
@@ -2806,11 +2806,9 @@ function AlphabetOrderScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
 
 /* ---------- Trophy chest ---------- */
 
-function TrophyChestScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'trophy-chest' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [roundIdx, setRoundIdx] = useState(0);
-  const [revealed, setRevealed] = useState(false);
-  const [wrongPick, setWrongPick] = useState<string | null>(null);
-  const [finished, setFinished] = useState(false);
+function TrophyChestScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'trophy-chest' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { roundIdx: 0, revealed: false, wrongPick: null as string | null, finished: false });
+  const { roundIdx, revealed, wrongPick, finished } = state;
   const gemDone = useRef(false);
   const round = scene.rounds[roundIdx];
   const c = CAST[scene.who];
@@ -2819,18 +2817,22 @@ function TrophyChestScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sce
 
   const pick = async (choice: string) => {
     if (revealed || finished || !round) return;
-    if (choice !== round.letter) { sfx.wrong(); onLose(); setWrongPick(choice); window.setTimeout(() => setWrongPick(null), 450); return; }
+    if (choice !== round.letter) {
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, wrongPick: choice }));
+      window.setTimeout(() => setState((s) => ({ ...s, wrongPick: null })), 450);
+      return;
+    }
     sfx.match();
-    setRevealed(true);
+    setState((s) => ({ ...s, revealed: true }));
     await safeSpeak(round.word, scene.who);
     await new Promise((r) => window.setTimeout(r, 1300));
     const next = roundIdx + 1;
     if (next >= scene.rounds.length) {
-      setFinished(true);
       if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+      setState((s) => ({ ...s, finished: true }));
     } else {
-      setRevealed(false);
-      setRoundIdx(next);
+      setState((s) => ({ ...s, revealed: false, roundIdx: next }));
     }
   };
 
@@ -2905,16 +2907,25 @@ function buildColorSentence(colorWord: string, exampleWord: string): string {
  *   4. sentenceDone  -> repeat the sentence, item complete
  * Deliberately separate from any phonics scene, and separate from the
  * practice/matching stage (ColorSortScene) that follows it. */
-function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'color-model' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [activeIdx, setActiveIdx] = useState<number | null>(null);
-  const [heard, setHeard] = useState<Set<number>>(new Set());
-  const [colorDone, setColorDone] = useState<Set<number>>(new Set());
-  const [objectDone, setObjectDone] = useState<Set<number>>(new Set());
-  const [sentenceDone, setSentenceDone] = useState<Set<number>>(new Set());
-  const [held, setHeld] = useState(false);
+function ColorModelScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'color-model' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  // Each *Done field is a plain number[] (not a Set) so it survives the
+  // JSON broadcast round-trip.
+  const [state, setState] = useSyncedState(sync, {
+    activeIdx: null as number | null,
+    heard: [] as number[],
+    colorDone: [] as number[],
+    objectDone: [] as number[],
+    sentenceDone: [] as number[],
+    held: false,
+  });
+  const { activeIdx, heard, colorDone, objectDone, sentenceDone, held } = state;
+  const heardSet = useMemo(() => new Set(heard), [heard]);
+  const colorDoneSet = useMemo(() => new Set(colorDone), [colorDone]);
+  const objectDoneSet = useMemo(() => new Set(objectDone), [objectDone]);
+  const sentenceDoneSet = useMemo(() => new Set(sentenceDone), [sentenceDone]);
   const holdTimer = useRef<number | null>(null);
   const gemDone = useRef(false);
-  const allDone = sentenceDone.size >= scene.items.length;
+  const allDone = sentenceDone.length >= scene.items.length;
 
   useEffect(() => {
     if (allDone && !gemDone.current) {
@@ -2925,19 +2936,19 @@ function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
     }
   }, [allDone]);
 
+  const addOnce = (arr: number[], i: number) => (arr.includes(i) ? arr : [...arr, i]);
+
   const tapItem = async (i: number) => {
     if (held) return;
-    setActiveIdx(i);
-    setHeard((s) => new Set(s).add(i));
+    setState((s) => ({ ...s, activeIdx: i, heard: addOnce(s.heard, i) }));
     sfx.pop();
     await safeSpeak(scene.items[i].colorWord, scene.items[i].who);
   };
 
   const startHoldColor = (i: number) => {
-    setHeld(true);
+    setState((s) => ({ ...s, held: true }));
     holdTimer.current = window.setTimeout(async () => {
-      setHeld(false);
-      setColorDone((s) => new Set(s).add(i));
+      setState((s) => ({ ...s, held: false, colorDone: addOnce(s.colorDone, i) }));
       sfx.gem();
       const item = scene.items[i];
       await new Promise((r) => window.setTimeout(r, 400));
@@ -2946,10 +2957,9 @@ function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
   };
 
   const startHoldObject = (i: number) => {
-    setHeld(true);
+    setState((s) => ({ ...s, held: true }));
     holdTimer.current = window.setTimeout(async () => {
-      setHeld(false);
-      setObjectDone((s) => new Set(s).add(i));
+      setState((s) => ({ ...s, held: false, objectDone: addOnce(s.objectDone, i) }));
       sfx.gem();
       const item = scene.items[i];
       await new Promise((r) => window.setTimeout(r, 400));
@@ -2958,14 +2968,13 @@ function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
   };
 
   const startHoldSentence = (i: number) => {
-    setHeld(true);
+    setState((s) => ({ ...s, held: true }));
     holdTimer.current = window.setTimeout(() => {
-      setHeld(false);
-      setSentenceDone((s) => new Set(s).add(i));
+      setState((s) => ({ ...s, held: false, sentenceDone: addOnce(s.sentenceDone, i) }));
       sfx.gem();
     }, 1200);
   };
-  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+  const endHold = () => { setState((s) => ({ ...s, held: false })); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
   return (
     <div className="absolute inset-0">
@@ -2978,10 +2987,10 @@ function ColorModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
       <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 flex-wrap items-start justify-center gap-6 px-4 sm:gap-10">
         {scene.items.map((item, i) => {
           const isActive = activeIdx === i;
-          const isHeard = heard.has(i);
-          const isColorDone = colorDone.has(i);
-          const isObjectDone = objectDone.has(i);
-          const isSentenceDone = sentenceDone.has(i);
+          const isHeard = heardSet.has(i);
+          const isColorDone = colorDoneSet.has(i);
+          const isObjectDone = objectDoneSet.has(i);
+          const isSentenceDone = sentenceDoneSet.has(i);
           return (
             <div key={item.colorWord} className="flex flex-col items-center gap-2">
               <button
@@ -3169,10 +3178,9 @@ function ColorSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
 
 /* ---------- Color quiz (tap-select multiple choice, distinct interaction from color-sort's drag) ---------- */
 
-function ColorQuizScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'color-quiz' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
-  const [roundIdx, setRoundIdx] = useState(0);
-  const [picked, setPicked] = useState<string | null>(null);
-  const [correct, setCorrect] = useState(false);
+function ColorQuizScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'color-quiz' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { roundIdx: 0, picked: null as string | null, correct: false });
+  const { roundIdx, picked, correct } = state;
   const gemDone = useRef(false);
   const total = scene.rounds.length;
   const done = roundIdx >= total;
@@ -3194,28 +3202,28 @@ function ColorQuizScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
 
   useEffect(() => {
     if (!round) return;
-    setPicked(null);
-    setCorrect(false);
+    setState((s) => ({ ...s, picked: null, correct: false }));
     cueSpeakOnce(`Which one is ${round.colorWord}?`, round.who);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roundIdx]);
 
   const pick = async (label: string, isCorrect: boolean) => {
     if (picked) return;
-    setPicked(label);
     if (!isCorrect) {
       sfx.wrong(); onLose();
-      window.setTimeout(() => setPicked(null), 600);
+      setState((s) => ({ ...s, picked: label }));
+      window.setTimeout(() => setState((s) => ({ ...s, picked: null })), 600);
       return;
     }
     sfx.match();
-    setCorrect(true);
+    setState((s) => ({ ...s, picked: label, correct: true }));
     if (round) await safeSpeak(`Yes! ${round.correctLabel} is ${round.colorWord}!`, round.who);
   };
 
   const next = () => {
     const n = roundIdx + 1;
     if (n >= total && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
-    setRoundIdx(n);
+    setState((s) => ({ ...s, roundIdx: n }));
   };
 
   if (done) {
@@ -3464,9 +3472,9 @@ function ListenRepeatCardsScene({ scene, onNext, onWin, sync }: { scene: Extract
  * a flashcard" pattern Welcome Town's vocab-spot uses, ported here for
  * colors instead of vocabulary items.
  */
-function ColorSpotScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'color-spot' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [step, setStep] = useState(0);
-  const [revealed, setRevealed] = useState(false);
+function ColorSpotScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'color-spot' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { step: 0, revealed: false });
+  const { step, revealed } = state;
   const gemDone = useRef(false);
   const total = scene.items.length;
   const done = step >= total;
@@ -3475,7 +3483,7 @@ function ColorSpotScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
   const tap = async () => {
     if (!current || revealed) return;
     sfx.pop();
-    setRevealed(true);
+    setState((s) => ({ ...s, revealed: true }));
     await safeSpeak(current.colorWord, current.who);
   };
   const hearSentence = async () => {
@@ -3484,10 +3492,9 @@ function ColorSpotScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
     await safeSpeak(current.sentence, current.who);
   };
   const dismiss = () => {
-    setRevealed(false);
     const next = step + 1;
     if (next >= total && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
-    setStep(next);
+    setState((s) => ({ ...s, revealed: false, step: next }));
   };
 
   return (
@@ -3569,16 +3576,25 @@ function buildShapeSentence(shapeWord: string, exampleWord: string): string {
 
 /* ---------- Shape model (teach: tap the shape, repeat, learn the object, say the sentence) ---------- */
 
-function ShapeModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'shape-model' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [activeIdx, setActiveIdx] = useState<number | null>(null);
-  const [heard, setHeard] = useState<Set<number>>(new Set());
-  const [shapeDone, setShapeDone] = useState<Set<number>>(new Set());
-  const [objectDone, setObjectDone] = useState<Set<number>>(new Set());
-  const [sentenceDone, setSentenceDone] = useState<Set<number>>(new Set());
-  const [held, setHeld] = useState(false);
+function ShapeModelScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'shape-model' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  // Each *Done field is a plain number[] (not a Set) so it survives the
+  // JSON broadcast round-trip.
+  const [state, setState] = useSyncedState(sync, {
+    activeIdx: null as number | null,
+    heard: [] as number[],
+    shapeDone: [] as number[],
+    objectDone: [] as number[],
+    sentenceDone: [] as number[],
+    held: false,
+  });
+  const { activeIdx, heard, shapeDone, objectDone, sentenceDone, held } = state;
+  const heardSet = useMemo(() => new Set(heard), [heard]);
+  const shapeDoneSet = useMemo(() => new Set(shapeDone), [shapeDone]);
+  const objectDoneSet = useMemo(() => new Set(objectDone), [objectDone]);
+  const sentenceDoneSet = useMemo(() => new Set(sentenceDone), [sentenceDone]);
   const holdTimer = useRef<number | null>(null);
   const gemDone = useRef(false);
-  const allDone = sentenceDone.size >= scene.items.length;
+  const allDone = sentenceDone.length >= scene.items.length;
 
   useEffect(() => {
     if (allDone && !gemDone.current) {
@@ -3589,19 +3605,19 @@ function ShapeModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
     }
   }, [allDone]);
 
+  const addOnce = (arr: number[], i: number) => (arr.includes(i) ? arr : [...arr, i]);
+
   const tapItem = async (i: number) => {
     if (held) return;
-    setActiveIdx(i);
-    setHeard((s) => new Set(s).add(i));
+    setState((s) => ({ ...s, activeIdx: i, heard: addOnce(s.heard, i) }));
     sfx.pop();
     await safeSpeak(scene.items[i].shapeWord, scene.items[i].who);
   };
 
   const startHoldShape = (i: number) => {
-    setHeld(true);
+    setState((s) => ({ ...s, held: true }));
     holdTimer.current = window.setTimeout(async () => {
-      setHeld(false);
-      setShapeDone((s) => new Set(s).add(i));
+      setState((s) => ({ ...s, held: false, shapeDone: addOnce(s.shapeDone, i) }));
       sfx.gem();
       const item = scene.items[i];
       await new Promise((r) => window.setTimeout(r, 400));
@@ -3610,10 +3626,9 @@ function ShapeModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
   };
 
   const startHoldObject = (i: number) => {
-    setHeld(true);
+    setState((s) => ({ ...s, held: true }));
     holdTimer.current = window.setTimeout(async () => {
-      setHeld(false);
-      setObjectDone((s) => new Set(s).add(i));
+      setState((s) => ({ ...s, held: false, objectDone: addOnce(s.objectDone, i) }));
       sfx.gem();
       const item = scene.items[i];
       await new Promise((r) => window.setTimeout(r, 400));
@@ -3622,14 +3637,13 @@ function ShapeModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
   };
 
   const startHoldSentence = (i: number) => {
-    setHeld(true);
+    setState((s) => ({ ...s, held: true }));
     holdTimer.current = window.setTimeout(() => {
-      setHeld(false);
-      setSentenceDone((s) => new Set(s).add(i));
+      setState((s) => ({ ...s, held: false, sentenceDone: addOnce(s.sentenceDone, i) }));
       sfx.gem();
     }, 1200);
   };
-  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+  const endHold = () => { setState((s) => ({ ...s, held: false })); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
   return (
     <div className="absolute inset-0">
@@ -3642,10 +3656,10 @@ function ShapeModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
       <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 flex-wrap items-start justify-center gap-6 px-4 sm:gap-10">
         {scene.items.map((item, i) => {
           const isActive = activeIdx === i;
-          const isHeard = heard.has(i);
-          const isShapeDone = shapeDone.has(i);
-          const isObjectDone = objectDone.has(i);
-          const isSentenceDone = sentenceDone.has(i);
+          const isHeard = heardSet.has(i);
+          const isShapeDone = shapeDoneSet.has(i);
+          const isObjectDone = objectDoneSet.has(i);
+          const isSentenceDone = sentenceDoneSet.has(i);
           return (
             <div key={item.shapeWord} className="flex flex-col items-center gap-2">
               <button
@@ -3715,15 +3729,23 @@ function buildToySentence(colorWord: string, toyWord: string, plural?: boolean):
 
 /* ---------- Toy model (teach: tap the toy, repeat, then say the combined color+toy sentence) ---------- */
 
-function ToyModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'toy-model' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [activeIdx, setActiveIdx] = useState<number | null>(null);
-  const [heard, setHeard] = useState<Set<number>>(new Set());
-  const [wordDone, setWordDone] = useState<Set<number>>(new Set());
-  const [sentenceDone, setSentenceDone] = useState<Set<number>>(new Set());
-  const [held, setHeld] = useState(false);
+function ToyModelScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'toy-model' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  // Each *Done field is a plain number[] (not a Set) so it survives the
+  // JSON broadcast round-trip.
+  const [state, setState] = useSyncedState(sync, {
+    activeIdx: null as number | null,
+    heard: [] as number[],
+    wordDone: [] as number[],
+    sentenceDone: [] as number[],
+    held: false,
+  });
+  const { activeIdx, heard, wordDone, sentenceDone, held } = state;
+  const heardSet = useMemo(() => new Set(heard), [heard]);
+  const wordDoneSet = useMemo(() => new Set(wordDone), [wordDone]);
+  const sentenceDoneSet = useMemo(() => new Set(sentenceDone), [sentenceDone]);
   const holdTimer = useRef<number | null>(null);
   const gemDone = useRef(false);
-  const allDone = sentenceDone.size >= scene.items.length;
+  const allDone = sentenceDone.length >= scene.items.length;
 
   useEffect(() => {
     if (allDone && !gemDone.current) {
@@ -3734,19 +3756,19 @@ function ToyModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
     }
   }, [allDone]);
 
+  const addOnce = (arr: number[], i: number) => (arr.includes(i) ? arr : [...arr, i]);
+
   const tapItem = async (i: number) => {
     if (held) return;
-    setActiveIdx(i);
-    setHeard((s) => new Set(s).add(i));
+    setState((s) => ({ ...s, activeIdx: i, heard: addOnce(s.heard, i) }));
     sfx.pop();
     await safeSpeak(scene.items[i].toyWord, scene.items[i].who);
   };
 
   const startHoldWord = (i: number) => {
-    setHeld(true);
+    setState((s) => ({ ...s, held: true }));
     holdTimer.current = window.setTimeout(async () => {
-      setHeld(false);
-      setWordDone((s) => new Set(s).add(i));
+      setState((s) => ({ ...s, held: false, wordDone: addOnce(s.wordDone, i) }));
       sfx.gem();
       const item = scene.items[i];
       await new Promise((r) => window.setTimeout(r, 400));
@@ -3755,14 +3777,13 @@ function ToyModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
   };
 
   const startHoldSentence = (i: number) => {
-    setHeld(true);
+    setState((s) => ({ ...s, held: true }));
     holdTimer.current = window.setTimeout(() => {
-      setHeld(false);
-      setSentenceDone((s) => new Set(s).add(i));
+      setState((s) => ({ ...s, held: false, sentenceDone: addOnce(s.sentenceDone, i) }));
       sfx.gem();
     }, 1200);
   };
-  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+  const endHold = () => { setState((s) => ({ ...s, held: false })); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
   return (
     <div className="absolute inset-0">
@@ -3775,9 +3796,9 @@ function ToyModelScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
       <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 flex-wrap items-start justify-center gap-6 px-4 sm:gap-10">
         {scene.items.map((item, i) => {
           const isActive = activeIdx === i;
-          const isHeard = heard.has(i);
-          const isWordDone = wordDone.has(i);
-          const isSentenceDone = sentenceDone.has(i);
+          const isHeard = heardSet.has(i);
+          const isWordDone = wordDoneSet.has(i);
+          const isSentenceDone = sentenceDoneSet.has(i);
           return (
             <div key={item.toyWord} className="flex flex-col items-center gap-2">
               <button

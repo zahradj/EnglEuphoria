@@ -27,6 +27,7 @@ const ALWAYS_UNLOCKED_SCENE_KINDS = new Set([
 const REAL_SYNC_KINDS = new Set<string>([
   'meet', 'sound-model', 'echo', 'video-check', 'sentence-build', 'who-said-it',
   'listen-repeat-cards', 'roleplay', 'join-stage', 'alphabet-blocks',
+  'trophy-chest', 'color-model', 'color-quiz', 'color-spot', 'shape-model', 'toy-model',
 ]);
 
 export interface PlayUnitLessonHandle {
