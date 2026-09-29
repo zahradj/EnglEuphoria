@@ -238,7 +238,7 @@ export function SceneRenderer(props: {
     case 'feelings': return <FeelingsScene scene={scene} onNext={props.onNext} />;
     case 'puzzle': return <PuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'trophy-chest': return <TrophyChestScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
-    case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
     case 'color-model': return <ColorModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'color-sort': return <ColorSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'color-quiz': return <ColorQuizScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
@@ -247,10 +247,10 @@ export function SceneRenderer(props: {
     case 'shape-model': return <ShapeModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'toy-model': return <ToyModelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'plural-sort': return <PluralSortScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-    case 'train-recall': return <TrainRecallScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'train-recall': return <TrainRecallScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
     case 'shape-sort': return <ShapeSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
-    case 'color-spy': return <ColorSpyScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
-    case 'color-simon': return <ColorSimonScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
+    case 'color-spy': return <ColorSpyScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
+    case 'color-simon': return <ColorSimonScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
@@ -3968,45 +3968,46 @@ function PluralSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scen
 
 /* ---------- Train recall (the train's cars are covered one by one; recall which toy was in the one that stays hidden) ---------- */
 
-function TrainRecallScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'train-recall' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
+function TrainRecallScene({ scene, onWin, onLose, onNext, sync }: { scene: Extract<Scene, { kind: 'train-recall' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void; sync?: ActivitySync }) {
   type Phase = 'reveal' | 'hidden' | 'ask' | 'done';
-  const [phase, setPhase] = useState<Phase>('reveal');
-  const [missingIdx, setMissingIdx] = useState<number | null>(null);
-  const [choices, setChoices] = useState<string[]>([]);
-  const [picked, setPicked] = useState<string | null>(null);
-  const [wrong, setWrong] = useState(false);
+  // missingIdx/choices are picked with Math.random() once per scene -- only
+  // the authority runs that setup and it travels as synced state, same fix
+  // as hello-doors' shuffle, or the mirror would end up quizzing on a
+  // different missing car than the one actually shown as hidden.
+  const [state, setState] = useSyncedState(sync, { phase: 'reveal' as Phase, missingIdx: null as number | null, choices: [] as string[], picked: null as string | null, wrong: false });
+  const { phase, missingIdx, choices, picked, wrong } = state;
+  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
   const gemDone = useRef(false);
   const started = useRef(false);
 
   useEffect(() => {
-    if (started.current) return;
+    if (isRemoteMirror || started.current) return;
     started.current = true;
     (async () => {
       for (const car of scene.cars) { await safeSpeak(car.word, 'pip'); await new Promise((r) => setTimeout(r, 250)); }
       await new Promise((r) => setTimeout(r, 300));
-      setPhase('hidden');
+      setState((s) => ({ ...s, phase: 'hidden' }));
       await new Promise((r) => setTimeout(r, 700));
       const idx = Math.floor(Math.random() * scene.cars.length);
-      setMissingIdx(idx);
       const others = scene.cars.filter((_, i) => i !== idx).map((c) => c.word);
       const distractors = others.sort(() => Math.random() - 0.5).slice(0, 2);
-      setChoices([scene.cars[idx].word, ...distractors].sort(() => Math.random() - 0.5));
-      setPhase('ask');
+      const nextChoices = [scene.cars[idx].word, ...distractors].sort(() => Math.random() - 0.5);
+      setState((s) => ({ ...s, missingIdx: idx, choices: nextChoices, phase: 'ask' }));
       await safeSpeak('Choo choo! One car is empty. Which toy is missing?', 'pip');
     })();
-  }, []);
+  }, [isRemoteMirror]);
 
   const pick = async (word: string) => {
-    if (missingIdx === null || picked) return;
-    setPicked(word);
+    if (isRemoteMirror || missingIdx === null || picked) return;
     if (word === scene.cars[missingIdx].word) {
       sfx.match(); sfx.gem();
-      setPhase('done');
+      setState((s) => ({ ...s, picked: word, phase: 'done' }));
       if (!gemDone.current) { gemDone.current = true; onWin(true); }
       await safeSpeak(`Yes! It's the ${word.toLowerCase()}!`, 'pip');
     } else {
-      sfx.wrong(); onLose(); setWrong(true);
-      window.setTimeout(() => { setPicked(null); setWrong(false); }, 700);
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, picked: word, wrong: true }));
+      window.setTimeout(() => setState((s) => ({ ...s, picked: null, wrong: false })), 700);
     }
   };
 
@@ -4188,10 +4189,9 @@ function ShapeSortScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene
 
 /* ---------- Color Spy ("I spy something ___!" — find it among several visible at once) ---------- */
 
-function ColorSpyScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'color-spy' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
-  const [roundIdx, setRoundIdx] = useState(0);
-  const [picked, setPicked] = useState<string | null>(null);
-  const [correct, setCorrect] = useState(false);
+function ColorSpyScene({ scene, onWin, onLose, onNext, sync }: { scene: Extract<Scene, { kind: 'color-spy' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { roundIdx: 0, picked: null as string | null, correct: false });
+  const { roundIdx, picked, correct } = state;
   const gemDone = useRef(false);
   const total = scene.clueOrder.length;
   const done = roundIdx >= total;
@@ -4199,21 +4199,27 @@ function ColorSpyScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene,
 
   useEffect(() => {
     if (!clue) return;
-    setPicked(null);
-    setCorrect(false);
+    setState((s) => ({ ...s, picked: null, correct: false }));
     cueSpeakOnce(`I spy something ${clue.toLowerCase()}!`, scene.who);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roundIdx]);
 
   const pick = async (spot: (typeof scene.spots)[number]) => {
     if (correct || !clue) return;
-    setPicked(spot.colorWord);
-    if (spot.colorWord !== clue) { sfx.wrong(); onLose(); window.setTimeout(() => setPicked(null), 500); return; }
-    sfx.match(); setCorrect(true);
+    if (spot.colorWord !== clue) {
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, picked: spot.colorWord }));
+      window.setTimeout(() => setState((s) => ({ ...s, picked: null })), 500);
+      return;
+    }
+    sfx.match();
+    setState((s) => ({ ...s, picked: spot.colorWord, correct: true }));
     await safeSpeak(`Yes! ${spot.label}!`, scene.who);
     window.setTimeout(() => {
       const next = roundIdx + 1;
-      if (next >= total && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
-      setRoundIdx(next);
+      const awardGem = next >= total && !gemDone.current;
+      if (awardGem) { gemDone.current = true; sfx.gem(); onWin(true); }
+      setState((s) => ({ ...s, roundIdx: next }));
     }, 900);
   };
 
@@ -4253,66 +4259,76 @@ function ColorSpyScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene,
 
 /* ---------- Color Simon ("Simon Says" growing color-sequence memory game) ---------- */
 
-function ColorSimonScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scene, { kind: 'color-simon' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void }) {
-  const [round, setRound] = useState(1);
-  const [sequence, setSequence] = useState<number[]>([]);
-  const [phase, setPhase] = useState<'idle' | 'showing' | 'waiting' | 'done'>('idle');
-  const [litIdx, setLitIdx] = useState<number | null>(null);
-  const [userIdx, setUserIdx] = useState(0);
-  const [flashBad, setFlashBad] = useState<number | null>(null);
+function ColorSimonScene({ scene, onWin, onLose, onNext, sync }: { scene: Extract<Scene, { kind: 'color-simon' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void; sync?: ActivitySync }) {
+  // The growing sequence is built with Math.random() -- only the authority
+  // generates it (in startRound) and it travels as synced state, same fix
+  // as hello-doors/train-recall. litIdx (which light is currently on) is
+  // synced too so the mirror sees the actual "watch closely" playback
+  // instead of a blank board; only the per-step spoken color name stays
+  // authority-only audio, matching the trade-off used elsewhere in this
+  // pass for secondary audio cues.
+  const [state, setState] = useSyncedState(sync, {
+    round: 1,
+    sequence: [] as number[],
+    phase: 'idle' as 'idle' | 'showing' | 'waiting' | 'done',
+    litIdx: null as number | null,
+    userIdx: 0,
+    flashBad: null as number | null,
+  });
+  const { round, sequence, phase, litIdx, userIdx, flashBad } = state;
+  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
   const gemDone = useRef(false);
   const playingRef = useRef(false);
 
   const playSequence = useCallback(async (seq: number[]) => {
     if (playingRef.current) return;
     playingRef.current = true;
-    setPhase('showing');
-    setUserIdx(0);
+    setState((s) => ({ ...s, phase: 'showing', userIdx: 0 }));
     await new Promise((r) => window.setTimeout(r, 500));
     for (const idx of seq) {
-      setLitIdx(idx);
+      setState((s) => ({ ...s, litIdx: idx }));
       await safeSpeak(scene.colors[idx].colorWord, scene.colors[idx].who);
       await new Promise((r) => window.setTimeout(r, 250));
-      setLitIdx(null);
+      setState((s) => ({ ...s, litIdx: null }));
       await new Promise((r) => window.setTimeout(r, 200));
     }
     playingRef.current = false;
-    setPhase('waiting');
+    setState((s) => ({ ...s, phase: 'waiting' }));
   }, [scene.colors]);
 
   const startRound = useCallback((r: number) => {
     const seq = Array.from({ length: r }, () => Math.floor(Math.random() * scene.colors.length));
-    setSequence(seq);
+    setState((s) => ({ ...s, sequence: seq }));
     void playSequence(seq);
-  }, [playSequence, scene.colors.length]);
+  }, [playSequence]);
 
-  useEffect(() => { startRound(1); }, []);
+  useEffect(() => { if (!isRemoteMirror) startRound(1); }, [isRemoteMirror]);
 
   const tapColor = (idx: number) => {
-    if (phase !== 'waiting') return;
+    if (isRemoteMirror || phase !== 'waiting') return;
     if (idx === sequence[userIdx]) {
       sfx.pop();
-      setLitIdx(idx);
-      window.setTimeout(() => setLitIdx(null), 200);
+      setState((s) => ({ ...s, litIdx: idx }));
+      window.setTimeout(() => setState((s) => ({ ...s, litIdx: null })), 200);
       const next = userIdx + 1;
       if (next >= sequence.length) {
         if (round >= scene.maxRounds) {
           sfx.gem();
-          setPhase('done');
           if (!gemDone.current) { gemDone.current = true; onWin(true); }
+          setState((s) => ({ ...s, phase: 'done' }));
         } else {
           sfx.match();
-          setPhase('idle');
-          window.setTimeout(() => { setRound((r) => r + 1); startRound(round + 1); }, 700);
+          setState((s) => ({ ...s, phase: 'idle' }));
+          window.setTimeout(() => { setState((s) => ({ ...s, round: s.round + 1 })); startRound(round + 1); }, 700);
         }
       } else {
-        setUserIdx(next);
+        setState((s) => ({ ...s, userIdx: next }));
       }
     } else {
       sfx.wrong();
       onLose();
-      setFlashBad(idx);
-      window.setTimeout(() => setFlashBad(null), 400);
+      setState((s) => ({ ...s, flashBad: idx }));
+      window.setTimeout(() => setState((s) => ({ ...s, flashBad: null })), 400);
       window.setTimeout(() => void playSequence(sequence), 700);
     }
   };
@@ -4352,13 +4368,19 @@ function ColorSimonScene({ scene, onWin, onLose, onNext }: { scene: Extract<Scen
 
 /* ---------- Flipbook (page-flip storybook with comprehension checkpoints) ---------- */
 
-function FlipbookScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'flipbook' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [pageIdx, setPageIdx] = useState(0);
-  const [flipping, setFlipping] = useState(false);
-  const [checkpoint, setCheckpoint] = useState<(typeof scene.checkpoints)[number] | null>(null);
-  const [solved, setSolved] = useState<Set<number>>(new Set());
-  const [wrongPick, setWrongPick] = useState<string | null>(null);
-  const [done, setDone] = useState(false);
+function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'flipbook' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  // `solved` is a plain number[] (not a Set) so it survives the JSON
+  // broadcast round-trip.
+  const [state, setState] = useSyncedState(sync, {
+    pageIdx: 0,
+    flipping: false,
+    checkpoint: null as (typeof scene.checkpoints)[number] | null,
+    solved: [] as number[],
+    wrongPick: null as string | null,
+    done: false,
+  });
+  const { pageIdx, flipping, checkpoint, solved, wrongPick, done } = state;
+  const solvedSet = useMemo(() => new Set(solved), [solved]);
   const gemDone = useRef(false);
   const page = scene.pages[pageIdx];
   const total = scene.pages.length;
@@ -4366,32 +4388,39 @@ function FlipbookScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene,
   useEffect(() => { if (page) cueSpeakOnce(page.text, page.who ?? 'teacher'); }, [pageIdx]);
 
   const advance = () => {
-    setFlipping(true);
+    setState((s) => ({ ...s, flipping: true }));
     sfx.click();
     window.setTimeout(() => {
-      setFlipping(false);
       if (pageIdx + 1 >= total) {
-        setDone(true);
+        setState((s) => ({ ...s, flipping: false, done: true }));
         if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
       } else {
-        setPageIdx((p) => p + 1);
+        setState((s) => ({ ...s, flipping: false, pageIdx: s.pageIdx + 1 }));
       }
     }, 450);
   };
 
   const turnPage = () => {
     if (flipping || checkpoint || done) return;
-    const pending = scene.checkpoints.find((c) => c.afterPage === pageIdx && !solved.has(c.afterPage));
-    if (pending) { setCheckpoint(pending); return; }
+    const pending = scene.checkpoints.find((c) => c.afterPage === pageIdx && !solvedSet.has(c.afterPage));
+    if (pending) { setState((s) => ({ ...s, checkpoint: pending })); return; }
     advance();
   };
 
   const answer = (choice: string) => {
     if (!checkpoint) return;
-    if (choice !== checkpoint.answer) { sfx.wrong(); onLose(); setWrongPick(choice); window.setTimeout(() => setWrongPick(null), 450); return; }
+    if (choice !== checkpoint.answer) {
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, wrongPick: choice }));
+      window.setTimeout(() => setState((s) => ({ ...s, wrongPick: null })), 450);
+      return;
+    }
     sfx.match();
-    setSolved((prev) => new Set(prev).add(checkpoint.afterPage));
-    setCheckpoint(null);
+    setState((s) => ({
+      ...s,
+      solved: s.solved.includes(checkpoint.afterPage) ? s.solved : [...s.solved, checkpoint.afterPage],
+      checkpoint: null,
+    }));
     advance();
   };
 
