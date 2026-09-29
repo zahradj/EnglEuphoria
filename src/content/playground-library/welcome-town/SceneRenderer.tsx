@@ -137,6 +137,35 @@ export interface ActivitySync {
   setState: (next: unknown) => void;
 }
 
+/** Drop-in replacement for a scene's own `useState` for whatever piece of
+ *  state needs to look the same on both screens. Each scene keeps exactly
+ *  ONE call to this (a single combined state object, not one call per
+ *  field) — `sync.setState` fully replaces the broadcast snapshot, so N
+ *  separate calls would each clobber the other N-1 fields' latest values.
+ *  With no `sync` (solo play outside a classroom) this is a plain local
+ *  `useState` with no network involved. */
+function useSyncedState<T>(sync: ActivitySync | undefined, initial: T): [T, (updater: T | ((prev: T) => T)) => void] {
+  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
+  const [local, setLocal] = useState<T>(initial);
+  // Several scenes call `set` more than once in the same synchronous handler
+  // (e.g. MemoryScene's tap() sets `flipped` then, without an await between,
+  // `busy` too) — a plain closure over `local` would see the pre-render,
+  // stale value on the second call and silently drop the first update. A
+  // ref kept in lockstep with every `set` call (not just re-renders) makes
+  // this behave like React's own functional setState updater.
+  const localRef = useRef(local);
+  localRef.current = local;
+  const value = isRemoteMirror ? ((sync!.state as T) ?? initial) : local;
+  const set = (updater: T | ((prev: T) => T)) => {
+    if (isRemoteMirror) return; // mirror side never drives state
+    const next = typeof updater === 'function' ? (updater as (prev: T) => T)(localRef.current) : updater;
+    localRef.current = next;
+    setLocal(next);
+    sync?.setState(next);
+  };
+  return [value, set];
+}
+
 export function SceneRenderer(props: {
   scene: Scene;
   onWin: (gem: boolean) => void;
@@ -153,25 +182,25 @@ export function SceneRenderer(props: {
     switch (scene.kind) {
       case 'title-card': return <TitleCardScene scene={scene} onNext={props.onNext} />;
       case 'cinematic': return <CinematicScene scene={scene} onNext={props.onNext} />;
-      case 'meet': return <MeetScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-      case 'echo': return <EchoScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
-      case 'memory': return <MemoryScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+      case 'meet': return <MeetScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+      case 'echo': return <EchoScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+      case 'memory': return <MemoryScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'drag-match': return <DragMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'vocab-spot': return <VocabSpotScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
-      case 'choice': return <ChoiceScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-      case 'listen-tap': return <ListenTapScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-      case 'true-false': return <TrueFalseScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-      case 'frequency-ladder': return <FrequencyLadderScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+      case 'choice': return <ChoiceScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'listen-tap': return <ListenTapScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'true-false': return <TrueFalseScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'frequency-ladder': return <FrequencyLadderScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'pronoun-sort': return <PronounSortScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-      case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-      case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-      case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-      case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+      case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+      case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+      case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'song': return <SongScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-      case 'sound-model': return <SoundModelScene scene={scene} onNext={props.onNext} />;
+      case 'sound-model': return <SoundModelScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;
       case 'trace': return <TraceScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-      case 'word-build': return <WordBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-      case 'letter-game': return <LetterGameScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+      case 'word-build': return <WordBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'letter-game': return <LetterGameScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'jigsaw-puzzle': return <JigsawPuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
       default: return null;
@@ -277,13 +306,12 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
 
 /* ---------- Meet ---------- */
 
-function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'meet' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'meet' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
   type Phase = 'idle' | 'talking' | 'repeat' | 'done';
-  const [phase, setPhase] = useState<Phase>('idle');
-  const [held, setHeld] = useState(false);
-  const [heardRepeat, setHeardRepeat] = useState(0);
-  const [xpBurst, setXpBurst] = useState(false);
-  const [glow, setGlow] = useState(false);
+  const [state, setState] = useSyncedState(sync, { phase: 'idle' as Phase, held: false, heardRepeat: 0, xpBurst: false, glow: false });
+  const { phase, held, heardRepeat, xpBurst, glow } = state;
+  // The hold-to-talk timeout handle is a per-side UI detail, not shared
+  // state — nothing meaningful to mirror about "a timer is running."
   const holdTimer = useRef<number | null>(null);
   const c = CAST[scene.who];
   const repeatWord = scene.repeat ?? scene.line;
@@ -291,25 +319,25 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
   const tapCharacter = async () => {
     if (phase !== 'idle') return;
     sfx.pop();
-    setGlow(true);
-    setPhase('talking');
+    setState((s) => ({ ...s, glow: true, phase: 'talking' }));
     await safeSpeak(scene.line, voiceOf(scene.who));
-    setTimeout(() => setPhase('repeat'), 500);
-    setTimeout(() => setGlow(false), 1600);
+    setTimeout(() => setState((s) => ({ ...s, phase: 'repeat' })), 500);
+    setTimeout(() => setState((s) => ({ ...s, glow: false })), 1600);
   };
-  const hearRepeat = async () => { sfx.click(); setHeardRepeat((n) => n + 1); await safeSpeak(repeatWord, voiceOf(scene.who)); };
-  const replayIntro = async () => { sfx.click(); setGlow(true); await safeSpeak(scene.line, voiceOf(scene.who)); setTimeout(() => setGlow(false), 1200); };
+  const hearRepeat = async () => { sfx.click(); setState((s) => ({ ...s, heardRepeat: s.heardRepeat + 1 })); await safeSpeak(repeatWord, voiceOf(scene.who)); };
+  const replayIntro = async () => { sfx.click(); setState((s) => ({ ...s, glow: true })); await safeSpeak(scene.line, voiceOf(scene.who)); setTimeout(() => setState((s) => ({ ...s, glow: false })), 1200); };
   const startHold = () => {
     if (phase !== 'repeat') return;
-    setHeld(true);
+    setState((s) => ({ ...s, held: true }));
     holdTimer.current = window.setTimeout(async () => {
-      setHeld(false); setPhase('done'); setXpBurst(true); sfx.gem();
-      setTimeout(() => setXpBurst(false), 1200);
+      setState((s) => ({ ...s, held: false, phase: 'done', xpBurst: true }));
+      sfx.gem();
+      setTimeout(() => setState((s) => ({ ...s, xpBurst: false })), 1200);
       onWin(true);
       await safeSpeak('Awesome voice! Great job!', 'pip');
     }, 1300);
   };
-  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+  const endHold = () => { setState((s) => ({ ...s, held: false })); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
   // The character is painted into one side of `scene.bg` (left/right third),
   // leaving the opposite side open for these floating cards — dock them
@@ -539,19 +567,22 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
 
 /* ---------- Echo ---------- */
 
-function EchoScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind: 'echo' }>; onWin: (gem: boolean) => void; onNext: () => void }) {
-  const [heard, setHeard] = useState(0);
-  const [held, setHeld] = useState(false);
-  const [done, setDone] = useState(false);
+function EchoScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, { kind: 'echo' }>; onWin: (gem: boolean) => void; onNext: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { heard: 0, held: false, done: false });
+  const { heard, held, done } = state;
   const holdTimer = useRef<number | null>(null);
   const c = CAST[scene.who];
 
-  const hear = async () => { setHeard((h) => h + 1); await safeSpeak(scene.word, voiceOf(scene.who)); };
+  const hear = async () => { setState((s) => ({ ...s, heard: s.heard + 1 })); await safeSpeak(scene.word, voiceOf(scene.who)); };
   const startHold = () => {
-    setHeld(true);
-    holdTimer.current = window.setTimeout(() => { setDone(true); setHeld(false); onWin(true); cueSpeak('Amazing! Great voice!', 'pip'); }, 1200);
+    setState((s) => ({ ...s, held: true }));
+    holdTimer.current = window.setTimeout(() => {
+      setState((s) => ({ ...s, done: true, held: false }));
+      onWin(true);
+      cueSpeak('Amazing! Great voice!', 'pip');
+    }, 1200);
   };
-  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+  const endHold = () => { setState((s) => ({ ...s, held: false })); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
   return (
     <div className="absolute inset-x-0 top-8 z-20 flex justify-center px-4 sm:top-12">
@@ -580,45 +611,50 @@ function EchoScene({ scene, onWin, onNext }: { scene: Extract<Scene, { kind: 'ec
 
 /* ---------- Memory ---------- */
 
-function MemoryScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'memory' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
+function MemoryScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'memory' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
   type Card = { key: string; pairId: string; label: string; emoji: string };
   const deck = useMemo<Card[]>(() => {
     const base = scene.pairs.flatMap((p) => [{ key: `${p.id}-a`, pairId: p.id, label: p.label, emoji: p.emoji }, { key: `${p.id}-b`, pairId: p.id, label: p.label, emoji: p.emoji }]);
     return base.map((c, i) => ({ c, r: (i * 9301 + 49297) % 233280 })).sort((a, b) => a.r - b.r).map((x) => x.c);
   }, [scene.id]);
-  const [flipped, setFlipped] = useState<string[]>([]);
-  const [matched, setMatched] = useState<Set<string>>(new Set());
-  const [busy, setBusy] = useState(false);
-  const [gemDone, setGemDone] = useState(false);
+  // `matched` is a plain string[] (not a Set) because the synced snapshot
+  // travels as JSON over the broadcast channel, which would silently
+  // flatten a Set to `{}`.
+  const [state, setState] = useSyncedState(sync, { flipped: [] as string[], matched: [] as string[], busy: false, gemDone: false });
+  const { flipped, matched, busy, gemDone } = state;
+  const matchedSet = useMemo(() => new Set(matched), [matched]);
 
   const tap = async (card: Card) => {
-    if (busy || matched.has(card.pairId) || flipped.includes(card.key)) return;
+    if (busy || matchedSet.has(card.pairId) || flipped.includes(card.key)) return;
     const next = [...flipped, card.key];
-    setFlipped(next);
+    setState((s) => ({ ...s, flipped: next }));
     void safeSpeak(card.label, 'teacher');
     if (next.length === 2) {
-      setBusy(true);
+      setState((s) => ({ ...s, busy: true }));
       const a = deck.find((c) => c.key === next[0])!, b = deck.find((c) => c.key === next[1])!;
       await new Promise((r) => setTimeout(r, 700));
       if (a.pairId === b.pairId) {
         sfx.match();
-        setMatched((m) => {
-          const copy = new Set(m); copy.add(a.pairId);
-          if (copy.size === scene.pairs.length && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-          return copy;
+        setState((s) => {
+          const nextMatched = s.matched.includes(a.pairId) ? s.matched : [...s.matched, a.pairId];
+          const justCompleted = nextMatched.length === scene.pairs.length && !s.gemDone;
+          if (justCompleted) { sfx.gem(); onWin(true); }
+          return { ...s, matched: nextMatched, gemDone: s.gemDone || justCompleted, flipped: [], busy: false };
         });
-      } else { sfx.wrong(); onLose(); }
-      setFlipped([]); setBusy(false);
+      } else {
+        sfx.wrong(); onLose();
+        setState((s) => ({ ...s, flipped: [], busy: false }));
+      }
     }
   };
-  const complete = matched.size === scene.pairs.length;
+  const complete = matched.length === scene.pairs.length;
 
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">🧠 {scene.teacher}</div>
       <div className="relative z-10 grid w-full max-w-[860px] grid-cols-4 gap-5 px-4 sm:gap-6">
         {deck.map((card) => {
-          const isMatched = matched.has(card.pairId);
+          const isMatched = matchedSet.has(card.pairId);
           const isFlipped = flipped.includes(card.key) || isMatched;
           return (
             <button key={card.key} onClick={() => tap(card)} disabled={busy || isMatched} className="relative aspect-square [perspective:800px]" aria-label={isFlipped ? card.label : 'Hidden card'}>
@@ -794,21 +830,28 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
 
 /* ---------- Choice (new: simple multiple-choice tap) ---------- */
 
-function ChoiceScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'choice' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [picked, setPicked] = useState<string | null>(null);
-  const [correct, setCorrect] = useState(false);
+function ChoiceScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'choice' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { picked: null as string | null, correct: false });
+  const { picked, correct } = state;
   const gemDone = useRef(false);
 
   useEffect(() => {
-    setPicked(null); setCorrect(false); gemDone.current = false;
+    setState({ picked: null, correct: false });
+    gemDone.current = false;
     cueSpeakOnce(scene.prompt, voiceOf(scene.who));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene.id]);
 
   const pick = async (label: string, isCorrect: boolean) => {
     if (correct) return;
-    setPicked(label);
-    if (!isCorrect) { sfx.wrong(); onLose(); window.setTimeout(() => setPicked(null), 600); return; }
-    sfx.match(); setCorrect(true);
+    if (!isCorrect) {
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, picked: label }));
+      window.setTimeout(() => setState((s) => ({ ...s, picked: null })), 600);
+      return;
+    }
+    sfx.match();
+    setState((s) => ({ ...s, picked: label, correct: true }));
     if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
     await safeSpeak(`Yes! ${label}!`, voiceOf(scene.who));
   };
@@ -863,11 +906,9 @@ function ChoiceScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, {
    flashcard; see scenes.ts's `listen-tap` type comment for why this kind
    exists). ---------- */
 
-function ListenTapScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'listen-tap' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [correct, setCorrect] = useState(false);
-  const [wrongLabel, setWrongLabel] = useState<string | null>(null);
-  const [misses, setMisses] = useState(0);
+function ListenTapScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'listen-tap' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { round: 0, correct: false, wrongLabel: null as string | null, misses: 0 });
+  const { round, correct, wrongLabel, misses } = state;
   const gemDone = useRef(false);
   const total = scene.rounds.length;
   const complete = round >= total;
@@ -875,22 +916,24 @@ function ListenTapScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
 
   useEffect(() => {
     if (complete) return;
-    setCorrect(false); setWrongLabel(null); setMisses(0);
+    setState((s) => ({ ...s, correct: false, wrongLabel: null, misses: 0 }));
     cueSpeakOnce(r!.prompt, voiceOf(r!.who ?? 'marigold'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round, complete]);
 
   const tap = async (label: string) => {
     if (!r || correct) return;
     if (label !== r.answerLabel) {
-      sfx.wrong(); onLose(); setMisses((m) => m + 1);
-      setWrongLabel(label);
-      window.setTimeout(() => setWrongLabel(null), 500);
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, misses: s.misses + 1, wrongLabel: label }));
+      window.setTimeout(() => setState((s) => ({ ...s, wrongLabel: null })), 500);
       return;
     }
-    sfx.match(); setCorrect(true);
+    sfx.match();
+    setState((s) => ({ ...s, correct: true }));
     if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
     await safeSpeak(`Yes! ${label}!`, voiceOf(r.who ?? 'marigold'));
-    window.setTimeout(() => setRound((n) => n + 1), 1000);
+    window.setTimeout(() => setState((s) => ({ ...s, round: s.round + 1 })), 1000);
   };
 
   if (complete) {
@@ -940,10 +983,9 @@ function ListenTapScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
    fast binary listening check, no scene-hotspot dependency, so it can
    freely mix content across topics/backgrounds in one scene). ---------- */
 
-function TrueFalseScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'true-false' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [picked, setPicked] = useState<'true' | 'false' | null>(null);
-  const [correct, setCorrect] = useState(false);
+function TrueFalseScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'true-false' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { round: 0, picked: null as 'true' | 'false' | null, correct: false });
+  const { round, picked, correct } = state;
   const gemDone = useRef(false);
   const total = scene.rounds.length;
   const complete = round >= total;
@@ -951,17 +993,23 @@ function TrueFalseScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
 
   useEffect(() => {
     if (complete) return;
-    setPicked(null); setCorrect(false);
+    setState((s) => ({ ...s, picked: null, correct: false }));
     cueSpeakOnce(r!.statement, voiceOf(r!.who));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round, complete]);
 
   const answer = (guess: boolean) => {
     if (!r || correct) return;
-    setPicked(guess ? 'true' : 'false');
-    if (guess !== r.isTrue) { sfx.wrong(); onLose(); window.setTimeout(() => setPicked(null), 600); return; }
-    sfx.match(); setCorrect(true);
+    if (guess !== r.isTrue) {
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, picked: guess ? 'true' : 'false' }));
+      window.setTimeout(() => setState((s) => ({ ...s, picked: null })), 600);
+      return;
+    }
+    sfx.match();
+    setState((s) => ({ ...s, picked: guess ? 'true' : 'false', correct: true }));
     if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
-    window.setTimeout(() => setRound((n) => n + 1), 900);
+    window.setTimeout(() => setState((s) => ({ ...s, round: s.round + 1 })), 900);
   };
 
   if (complete) {
@@ -1011,11 +1059,9 @@ const FREQUENCY_RUNGS: { key: 'never' | 'sometimes' | 'usually' | 'always'; labe
   { key: 'never', label: 'Never', color: '#94A3B8' },
 ];
 
-function FrequencyLadderScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'frequency-ladder' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [picked, setPicked] = useState<string | null>(null);
-  const [correct, setCorrect] = useState(false);
-  const [wrong, setWrong] = useState<string | null>(null);
+function FrequencyLadderScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'frequency-ladder' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { round: 0, picked: null as string | null, correct: false, wrong: null as string | null });
+  const { round, picked, correct, wrong } = state;
   const gemDone = useRef(false);
   const total = scene.rounds.length;
   const complete = round >= total;
@@ -1023,18 +1069,25 @@ function FrequencyLadderScene({ scene, onNext, onWin, onLose }: { scene: Extract
 
   useEffect(() => {
     if (complete) return;
-    setPicked(null); setCorrect(false); setWrong(null);
+    setState((s) => ({ ...s, picked: null, correct: false, wrong: null }));
     const t = window.setTimeout(() => void safeSpeak(`How often do you ${r!.action}?`, 'teacher'), 350);
     return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round, complete]);
 
   const tap = async (key: string) => {
     if (!r || picked) return;
-    if (key !== r.answer) { sfx.wrong(); onLose(); setWrong(key); window.setTimeout(() => setWrong(null), 500); return; }
-    setPicked(key); sfx.match(); setCorrect(true);
+    if (key !== r.answer) {
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, wrong: key }));
+      window.setTimeout(() => setState((s) => ({ ...s, wrong: null })), 500);
+      return;
+    }
+    sfx.match();
+    setState((s) => ({ ...s, picked: key, correct: true }));
     if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
     await safeSpeak(r.line, voiceOf(scene.who));
-    window.setTimeout(() => setRound((n) => n + 1), 1400);
+    window.setTimeout(() => setState((s) => ({ ...s, round: s.round + 1 })), 1400);
   };
 
   if (complete) {
@@ -1216,36 +1269,53 @@ function PronounSortScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sce
 
 /* ---------- Roleplay ---------- */
 
-function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'roleplay' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [step, setStep] = useState(-1);
-  const [awaitingRepeat, setAwaitingRepeat] = useState(false);
-  const [gemDone, setGemDone] = useState(false);
+function RoleplayScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'roleplay' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { step: -1, awaitingRepeat: false, gemDone: false });
+  const { step, awaitingRepeat, gemDone } = state;
+  // Whether THIS side runs the self-driving script at all — the mirror side
+  // renders whatever step/awaitingRepeat it receives instead of running its
+  // own independent copy, since two independently-timed scripts would
+  // immediately drift out of sync with each other.
+  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
   const stopRef = useRef(false);
   const runRef = useRef<((i: number) => void) | null>(null);
 
   useEffect(() => {
+    if (isRemoteMirror) return;
     stopRef.current = false;
     async function run(i: number) {
       if (stopRef.current) return;
-      if (i >= scene.script.length) { setStep(scene.script.length); return; }
-      setStep(i);
+      if (i >= scene.script.length) { setState((s) => ({ ...s, step: scene.script.length })); return; }
+      setState((s) => ({ ...s, step: i }));
       const line = scene.script[i];
       await new Promise((r) => setTimeout(r, 350));
       if (stopRef.current) return;
       await safeSpeak(line.line, voiceOf(line.who));
       if (stopRef.current) return;
-      if (line.repeat) setAwaitingRepeat(true);
+      if (line.repeat) setState((s) => ({ ...s, awaitingRepeat: true }));
       else { await new Promise((r) => setTimeout(r, 500)); run(i + 1); }
     }
     runRef.current = run;
     run(0);
     return () => { stopRef.current = true; };
-  }, [scene.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scene.id, isRemoteMirror]);
+
+  // Mirror side isn't running the script, so it needs its own cue to speak
+  // each line as the synced `step` advances instead of staying silent.
+  const lastSpokenStepRef = useRef(-2);
+  useEffect(() => {
+    if (!isRemoteMirror) return;
+    if (step < 0 || step >= scene.script.length || lastSpokenStepRef.current === step) return;
+    lastSpokenStepRef.current = step;
+    const line = scene.script[step];
+    void safeSpeak(line.line, voiceOf(line.who));
+  }, [isRemoteMirror, step, scene.script]);
 
   const confirmRepeat = () => {
-    if (!awaitingRepeat) return;
-    setAwaitingRepeat(false);
-    if (!gemDone) { onWin(true); setGemDone(true); }
+    if (!awaitingRepeat || isRemoteMirror) return;
+    if (!gemDone) onWin(true);
+    setState((s) => ({ ...s, awaitingRepeat: false, gemDone: true }));
     const next = step + 1;
     setTimeout(() => runRef.current?.(next), 250);
   };
@@ -1319,9 +1389,11 @@ function RoleplayScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind:
 
 /* ---------- Join stage ---------- */
 
-function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'join-stage' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [turnIdx, setTurnIdx] = useState(0);
-  const [gemDone, setGemDone] = useState(false);
+function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'join-stage' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { turnIdx: 0, gemDone: false });
+  const { turnIdx, gemDone } = state;
+  // The live camera preview below is always THIS device's own webcam, never
+  // synced or mirrored — only the turn/gem progression is shared state.
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
@@ -1349,8 +1421,9 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
   useEffect(() => { if (isFriendTurn && friendKey && currentTurn) cueSpeakOnce(currentTurn.line, voiceOf(friendKey)); }, [turnIdx, isFriendTurn, friendKey]);
 
   const advance = () => {
-    if (isStudentTurn && !gemDone) { onWin(true); setGemDone(true); }
-    setTurnIdx((i) => i + 1);
+    const awardGem = isStudentTurn && !gemDone;
+    if (awardGem) onWin(true);
+    setState((s) => ({ ...s, turnIdx: s.turnIdx + 1, gemDone: s.gemDone || awardGem }));
   };
 
   return (
@@ -1398,14 +1471,22 @@ function JoinStageScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
 
 /* ---------- Hello doors ---------- */
 
-function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'hello-doors' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [order, setOrder] = useState<CharKey[]>(scene.cast);
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
-  const [wrongIdx, setWrongIdx] = useState<number | null>(null);
-  const [phase, setPhase] = useState<'reveal' | 'shuffle' | 'prompt' | 'greet' | 'echo' | 'done'>('reveal');
-  const [score, setScore] = useState(0);
-  const [gemDone, setGemDone] = useState(false);
+function HelloDoorsScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'hello-doors' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, {
+    round: 0,
+    order: scene.cast as CharKey[],
+    openIdx: null as number | null,
+    wrongIdx: null as number | null,
+    phase: 'reveal' as 'reveal' | 'shuffle' | 'prompt' | 'greet' | 'echo' | 'done',
+    score: 0,
+    gemDone: false,
+  });
+  const { round, order, openIdx, wrongIdx, phase, score, gemDone } = state;
+  // The reveal/shuffle/prompt sequence below uses Math.random() — running it
+  // independently on both screens would shuffle the doors differently on
+  // each, so only the authority side runs it; the mirror just renders
+  // whatever order/phase it receives.
+  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
   const answeredRef = useRef(false);
   const total = scene.rounds.length;
   const finished = round >= total;
@@ -1422,43 +1503,68 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
   };
 
   useEffect(() => {
+    if (isRemoteMirror) return;
     if (!r) return;
     let cancelled = false;
-    answeredRef.current = false; setOpenIdx(null); setWrongIdx(null);
+    answeredRef.current = false;
+    setState((s) => ({ ...s, openIdx: null, wrongIdx: null }));
     (async () => {
       if (round === 0) {
-        setOrder(scene.cast); setPhase('reveal');
+        setState((s) => ({ ...s, order: scene.cast, phase: 'reveal' }));
         for (const who of scene.cast) { await safeSpeak(CAST[who].name, voiceOf(who)); if (cancelled) return; }
         await new Promise((res) => setTimeout(res, 400));
         if (cancelled) return;
       }
-      setPhase('shuffle');
+      setState((s) => ({ ...s, phase: 'shuffle' }));
       if (cancelled) return;
-      for (let k = 0; k < 3; k++) { setOrder((o) => shuffle(o)); await new Promise((res) => setTimeout(res, 420)); if (cancelled) return; }
+      for (let k = 0; k < 3; k++) {
+        setState((s) => ({ ...s, order: shuffle(s.order) }));
+        await new Promise((res) => setTimeout(res, 420));
+        if (cancelled) return;
+      }
       await new Promise((res) => setTimeout(res, 200));
       if (cancelled) return;
-      setPhase('prompt');
+      setState((s) => ({ ...s, phase: 'prompt' }));
       await new Promise((res) => setTimeout(res, 200));
       await safeSpeak(r.prompt, voiceOf(r.target));
     })();
     return () => { cancelled = true; };
-  }, [round]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round, isRemoteMirror]);
+
+  // Mirror side isn't running the reveal/shuffle sequence, so it needs its
+  // own cue to speak the round's prompt once the synced phase reaches it.
+  const lastPromptRoundRef = useRef(-1);
+  useEffect(() => {
+    if (!isRemoteMirror || !r || phase !== 'prompt' || lastPromptRoundRef.current === round) return;
+    lastPromptRoundRef.current = round;
+    void safeSpeak(r.prompt, voiceOf(r.target));
+  }, [isRemoteMirror, phase, round, r]);
 
   const tap = async (idx: number) => {
-    if (!r || answeredRef.current) return;
+    if (!r || answeredRef.current || isRemoteMirror) return;
     const who = order[idx];
-    if (who !== r.target) { setWrongIdx(idx); sfx.wrong(); onLose(); window.setTimeout(() => setWrongIdx(null), 500); return; }
-    answeredRef.current = true; setOpenIdx(idx); setPhase('greet'); sfx.match();
+    if (who !== r.target) {
+      setState((s) => ({ ...s, wrongIdx: idx }));
+      sfx.wrong(); onLose();
+      window.setTimeout(() => setState((s) => ({ ...s, wrongIdx: null })), 500);
+      return;
+    }
+    answeredRef.current = true;
+    setState((s) => ({ ...s, openIdx: idx, phase: 'greet' }));
+    sfx.match();
     await new Promise((res) => setTimeout(res, 500));
     await safeSpeak(r.helloLine, voiceOf(who));
-    setPhase('echo');
+    setState((s) => ({ ...s, phase: 'echo' }));
     await new Promise((res) => setTimeout(res, 250));
     await safeSpeak(r.echoLine, voiceOf(r.target));
-    setScore((s) => s + 1);
+    setState((s) => ({ ...s, score: s.score + 1 }));
     await new Promise((res) => setTimeout(res, 1400));
     const next = round + 1;
-    if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-    setRound(next);
+    const awardGem = next >= total && !gemDone;
+    if (awardGem) sfx.gem();
+    if (awardGem) onWin(true);
+    setState((s) => ({ ...s, round: next, gemDone: s.gemDone || awardGem }));
   };
 
   if (finished) {
@@ -1515,13 +1621,19 @@ function HelloDoorsScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
 
 /* ---------- Flipbook ---------- */
 
-function FlipbookScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'flipbook' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [pageIdx, setPageIdx] = useState(0);
-  const [flipping, setFlipping] = useState(false);
-  const [checkpoint, setCheckpoint] = useState<(typeof scene.checkpoints)[number] | null>(null);
-  const [solved, setSolved] = useState<Set<number>>(new Set());
-  const [wrongPick, setWrongPick] = useState<string | null>(null);
-  const [done, setDone] = useState(false);
+function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'flipbook' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  // `solved` is a plain number[] (not a Set) so it survives the JSON
+  // broadcast round-trip.
+  const [state, setState] = useSyncedState(sync, {
+    pageIdx: 0,
+    flipping: false,
+    checkpoint: null as (typeof scene.checkpoints)[number] | null,
+    solved: [] as number[],
+    wrongPick: null as string | null,
+    done: false,
+  });
+  const { pageIdx, flipping, checkpoint, solved, wrongPick, done } = state;
+  const solvedSet = useMemo(() => new Set(solved), [solved]);
   const gemDone = useRef(false);
   const page = scene.pages[pageIdx];
   const total = scene.pages.length;
@@ -1529,32 +1641,39 @@ function FlipbookScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene,
   useEffect(() => { if (page) cueSpeakOnce(page.text, page.who ? voiceOf(page.who) : 'teacher'); }, [pageIdx]);
 
   const advance = () => {
-    setFlipping(true);
+    setState((s) => ({ ...s, flipping: true }));
     sfx.click();
     window.setTimeout(() => {
-      setFlipping(false);
       if (pageIdx + 1 >= total) {
-        setDone(true);
+        setState((s) => ({ ...s, flipping: false, done: true }));
         if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
       } else {
-        setPageIdx((p) => p + 1);
+        setState((s) => ({ ...s, flipping: false, pageIdx: s.pageIdx + 1 }));
       }
     }, 450);
   };
 
   const turnPage = () => {
     if (flipping || checkpoint || done) return;
-    const pending = scene.checkpoints.find((c) => c.afterPage === pageIdx && !solved.has(c.afterPage));
-    if (pending) { setCheckpoint(pending); return; }
+    const pending = scene.checkpoints.find((c) => c.afterPage === pageIdx && !solvedSet.has(c.afterPage));
+    if (pending) { setState((s) => ({ ...s, checkpoint: pending })); return; }
     advance();
   };
 
   const answer = (choice: string) => {
     if (!checkpoint) return;
-    if (choice !== checkpoint.answer) { sfx.wrong(); onLose(); setWrongPick(choice); window.setTimeout(() => setWrongPick(null), 450); return; }
+    if (choice !== checkpoint.answer) {
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, wrongPick: choice }));
+      window.setTimeout(() => setState((s) => ({ ...s, wrongPick: null })), 450);
+      return;
+    }
     sfx.match();
-    setSolved((prev) => new Set(prev).add(checkpoint.afterPage));
-    setCheckpoint(null);
+    setState((s) => ({
+      ...s,
+      solved: s.solved.includes(checkpoint.afterPage) ? s.solved : [...s.solved, checkpoint.afterPage],
+      checkpoint: null,
+    }));
     advance();
   };
 
@@ -1745,27 +1864,32 @@ function SongScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'so
 
 /* ---------- Sound model (phonics: listen + explore anchor words) ---------- */
 
-function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sound-model' }>; onNext: () => void }) {
+function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene, { kind: 'sound-model' }>; onNext: () => void; sync?: ActivitySync }) {
   const c = CAST[scene.who];
-  const [beat, setBeat] = useState(-1);
-  const [opened, setOpened] = useState<Set<number>>(new Set());
-  const [phase, setPhase] = useState<'invite' | 'done'>('invite');
-  const [replays, setReplays] = useState(0);
+  // `opened` is a plain number[] (not a Set) so it survives the JSON
+  // broadcast round-trip.
+  const [state, setState] = useSyncedState(sync, { beat: -1, opened: [] as number[], phase: 'invite' as 'invite' | 'done', replays: 0 });
+  const { beat, opened, phase, replays } = state;
+  const openedSet = useMemo(() => new Set(opened), [opened]);
 
   const playLetterSound = async () => {
-    setBeat(0);
+    setState((s) => ({ ...s, beat: 0 }));
     await playLetterPhonic(scene.letter);
-    setBeat(-1);
+    setState((s) => ({ ...s, beat: -1 }));
   };
 
-  useEffect(() => { setOpened(new Set()); setPhase('invite'); }, [scene.id]);
+  useEffect(() => {
+    setState((s) => ({ ...s, opened: [], phase: 'invite' }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scene.id]);
 
   const openAnchor = async (i: number) => {
-    if (opened.has(i)) { sfx.pop(); await safeSpeak(scene.anchors[i].word, voiceOf(scene.who)); return; }
+    if (openedSet.has(i)) { sfx.pop(); await safeSpeak(scene.anchors[i].word, voiceOf(scene.who)); return; }
     sfx.reveal();
-    const next = new Set(opened); next.add(i); setOpened(next);
+    const nextOpened = opened.includes(i) ? opened : [...opened, i];
+    setState((s) => ({ ...s, opened: nextOpened }));
     await safeSpeak(scene.anchors[i].word, voiceOf(scene.who));
-    if (next.size >= scene.anchors.length) { sfx.gem(); setPhase('done'); }
+    if (nextOpened.length >= scene.anchors.length) { sfx.gem(); setState((s) => ({ ...s, phase: 'done' })); }
   };
 
   return (
@@ -1797,7 +1921,7 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
       </div>
       <div className="absolute inset-x-0 bottom-24 z-20 flex justify-center gap-4 px-4 sm:gap-8">
         {scene.anchors.map((a, i) => {
-          const isOpen = opened.has(i);
+          const isOpen = openedSet.has(i);
           return (
             <button
               key={a.word}
@@ -1812,11 +1936,11 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
         })}
       </div>
       <div className="absolute inset-x-0 bottom-4 z-30 mx-auto flex max-w-md gap-2 px-4">
-        <button onClick={() => { setReplays((r) => r + 1); void playLetterSound(); }} className="flex-1 rounded-full bg-white/95 py-3 text-sm font-bold text-orange-700 shadow-xl ring-2 ring-orange-200 backdrop-blur active:scale-95">
+        <button onClick={() => { setState((s) => ({ ...s, replays: s.replays + 1 })); void playLetterSound(); }} className="flex-1 rounded-full bg-white/95 py-3 text-sm font-bold text-orange-700 shadow-xl ring-2 ring-orange-200 backdrop-blur active:scale-95">
           🔁 Hear sound {replays > 0 && <span className="opacity-60">({replays})</span>}
         </button>
         <button onClick={onNext} disabled={phase !== 'done'} className={`flex-1 rounded-full py-3 text-sm font-black text-white shadow-xl transition ${phase === 'done' ? 'bg-gradient-to-r from-green-500 to-emerald-500 active:scale-95' : 'cursor-not-allowed bg-neutral-400/70'}`}>
-          {phase === 'done' ? 'Now you try →' : `Find ${scene.anchors.length - opened.size} more`}
+          {phase === 'done' ? 'Now you try →' : `Find ${scene.anchors.length - opened.length} more`}
         </button>
       </div>
     </div>
@@ -1948,32 +2072,38 @@ function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 't
 
 /* ---------- Word build (blend taught sounds into a real word) ---------- */
 
-function WordBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'word-build' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [filled, setFilled] = useState<string | null>(null);
-  const [wrong, setWrong] = useState<string | null>(null);
-  const [gemDone, setGemDone] = useState(false);
+function WordBuildScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'word-build' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { round: 0, filled: null as string | null, wrong: null as string | null, gemDone: false });
+  const { round, filled, wrong, gemDone } = state;
   const r = scene.rounds[round];
   const total = scene.rounds.length;
   const complete = round >= total;
 
   useEffect(() => {
     if (complete) return;
-    setFilled(null); setWrong(null);
+    setState((s) => ({ ...s, filled: null, wrong: null }));
     const t = window.setTimeout(() => void safeSpeak(r.word, 'pip'), 350);
     return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round, complete]);
 
   const tap = async (letter: string) => {
     if (filled || complete) return;
     if (letter.toLowerCase() === r.answer.toLowerCase()) {
-      sfx.match(); setFilled(letter); await safeSpeak(r.word, 'pip');
+      sfx.match();
+      setState((s) => ({ ...s, filled: letter }));
+      await safeSpeak(r.word, 'pip');
       window.setTimeout(() => {
         const next = round + 1;
-        if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-        setRound(next);
+        const awardGem = next >= total && !gemDone;
+        if (awardGem) { sfx.gem(); onWin(true); }
+        setState((s) => ({ ...s, round: next, gemDone: s.gemDone || awardGem }));
       }, 900);
-    } else { sfx.wrong(); onLose(); setWrong(letter); window.setTimeout(() => setWrong(null), 500); }
+    } else {
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, wrong: letter }));
+      window.setTimeout(() => setState((s) => ({ ...s, wrong: null })), 500);
+    }
   };
 
   if (complete) {
@@ -2018,11 +2148,9 @@ function WordBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
    WordBuildScene's round progression, just matching a letter NAME or a
    PHONEME rather than filling a word's blank) ---------- */
 
-function LetterGameScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'letter-game' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [correctPick, setCorrectPick] = useState(false);
-  const [wrong, setWrong] = useState<string | null>(null);
-  const [gemDone, setGemDone] = useState(false);
+function LetterGameScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'letter-game' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { round: 0, correctPick: false, wrong: null as string | null, gemDone: false });
+  const { round, correctPick, wrong, gemDone } = state;
   const total = scene.rounds.length;
   const complete = round >= total;
   const r = scene.rounds[round];
@@ -2035,22 +2163,29 @@ function LetterGameScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
 
   useEffect(() => {
     if (complete) return;
-    setCorrectPick(false); setWrong(null);
+    setState((s) => ({ ...s, correctPick: false, wrong: null }));
     const t = window.setTimeout(() => void playPrompt(), 350);
     return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round, complete]);
 
   const tap = async (letter: string) => {
     if (correctPick || complete) return;
     if (letter === r.letter) {
-      sfx.match(); setCorrectPick(true);
+      sfx.match();
+      setState((s) => ({ ...s, correctPick: true }));
       await safeSpeak(`${r.letter}! Great job!`, voiceOf(scene.who));
       window.setTimeout(() => {
         const next = round + 1;
-        if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-        setRound(next);
+        const awardGem = next >= total && !gemDone;
+        if (awardGem) { sfx.gem(); onWin(true); }
+        setState((s) => ({ ...s, round: next, gemDone: s.gemDone || awardGem }));
       }, 900);
-    } else { sfx.wrong(); onLose(); setWrong(letter); window.setTimeout(() => setWrong(null), 500); }
+    } else {
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, wrong: letter }));
+      window.setTimeout(() => setState((s) => ({ ...s, wrong: null })), 500);
+    }
   };
 
   if (complete) {

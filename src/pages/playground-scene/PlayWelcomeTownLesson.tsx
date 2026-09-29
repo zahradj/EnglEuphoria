@@ -47,10 +47,27 @@ const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot'
  *  every change and the other side renders straight from that snapshot —
  *  no click-replay involved, so an asymmetry between the two sides' DOM
  *  trees (e.g. the student-only "Watching your teacher" lock overlay) can
- *  no longer break it. Migrate a kind into this set when its DOM-mirror
- *  sync turns out to be fragile; kinds left out keep working exactly as
- *  before. */
-const REAL_SYNC_KINDS = new Set<Scene['kind']>(['vocab-spot']);
+ *  no longer break it.
+ *
+ *  Left OUT deliberately, still on the old DOM-mirror:
+ *  - title-card, cinematic, finale: no user-driven branching state to
+ *    desync in the first place (cinematic's dialogue is a fixed timed
+ *    script both sides already run identically).
+ *  - song: driven by each side's own <audio> currentTime via
+ *    requestAnimationFrame, not a discrete tap — the old click-mirror
+ *    re-triggers independent-but-content-matching playback on both
+ *    screens, which already works; moving it here would need explicit
+ *    cross-device playback-start syncing, a different problem than the
+ *    one this channel solves.
+ *  - drag-match, pronoun-sort, trace, jigsaw-puzzle: continuous pointer
+ *    gestures (live drag position every pointermove), not a snapshot of
+ *    discrete state — need per-frame position streaming through this
+ *    channel to convert safely, deferred as its own follow-up. */
+const REAL_SYNC_KINDS = new Set<Scene['kind']>([
+  'vocab-spot', 'meet', 'echo', 'memory', 'choice', 'listen-tap', 'true-false',
+  'frequency-ladder', 'roleplay', 'join-stage', 'hello-doors', 'flipbook',
+  'sound-model', 'word-build', 'letter-game',
+]);
 
 const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcomeTownLessonProps>(function PlayWelcomeTownLesson(
   { scenes, sessionKey, embedded = false, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
