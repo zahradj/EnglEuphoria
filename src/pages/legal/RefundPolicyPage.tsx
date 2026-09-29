@@ -91,7 +91,13 @@ export default function RefundPolicyPage() {
 
       <section>
         <h2 className="font-display text-2xl font-semibold mt-8 mb-3">9. Contact</h2>
-        <p>For refund inquiries, contact <a href="mailto:billing@engleuphoria.com" className="text-indigo-400 hover:underline">billing@engleuphoria.com</a>.</p>
+        <p>For refund inquiries, contact <a href="mailto:billing@engleuphoria.com" className="text-indigo-400 hover:underline">billing@engleuphoria.com</a> or by mail at:</p>
+        <p className="not-prose">
+          EnglEuphoria<br />
+          30 N Gould St, Ste R<br />
+          Sheridan, WY 82801<br />
+          United States
+        </p>
       </section>
     </LegalPageLayout>
   );

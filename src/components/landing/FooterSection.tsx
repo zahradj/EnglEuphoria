@@ -87,6 +87,9 @@ export function FooterSection() {
             <p className={`mb-6 max-w-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
               {t('lp.footer.tagline')}
             </p>
+            <p className={`text-xs mb-6 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              30 N Gould St, Ste R, Sheridan, WY 82801, United States
+            </p>
             <div className="flex items-center gap-4">
               {[Globe, Mail, MessageCircle].map((Icon, i) => (
                 <a key={i} href="#" className={`p-3 rounded-xl transition-all duration-300 ${

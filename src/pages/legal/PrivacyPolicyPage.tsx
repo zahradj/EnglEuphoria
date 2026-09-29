@@ -94,7 +94,13 @@ export default function PrivacyPolicyPage() {
 
       <section>
         <h2 className="font-display text-2xl font-semibold mt-8 mb-3">10. Contact</h2>
-        <p>For privacy questions, contact <a href="mailto:privacy@engleuphoria.com" className="text-indigo-400 hover:underline">privacy@engleuphoria.com</a>.</p>
+        <p>For privacy questions, contact <a href="mailto:privacy@engleuphoria.com" className="text-indigo-400 hover:underline">privacy@engleuphoria.com</a> or by mail at:</p>
+        <p className="not-prose">
+          EnglEuphoria<br />
+          30 N Gould St, Ste R<br />
+          Sheridan, WY 82801<br />
+          United States
+        </p>
       </section>
     </LegalPageLayout>
   );
