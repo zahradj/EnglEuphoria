@@ -410,10 +410,11 @@ Deno.serve(async (req) => {
     // lesson_incident_reports) — interview rooms simply won't match and
     // are skipped.
     let refunded = false;
+    let penalized = false;
     if (verdict.fault_party === "teacher") {
       const { data: booking } = await supabase
         .from("class_bookings")
-        .select("lesson_id")
+        .select("lesson_id, teacher_id")
         .eq("id", room_id)
         .maybeSingle();
       if (booking?.lesson_id) {
@@ -423,6 +424,20 @@ Deno.serve(async (req) => {
         );
         if (refundErr) console.error("refund_lesson_credit_for_noshow failed", refundErr);
         refunded = !!refundResult;
+      }
+      // A confirmed no-show (not a tech hiccup that happened to be the
+      // teacher's fault) also costs a 3x-lesson-price penalty on top of the
+      // missed pay + student refund above — scoped specifically to
+      // incomplete_teacher_noshow, not incomplete_teacher_tech, since a
+      // genuine no-show is a much more serious commitment violation than a
+      // connection failure.
+      if (verdict.status === "incomplete_teacher_noshow" && booking?.teacher_id) {
+        const { data: penaltyResult, error: penaltyErr } = await supabase.rpc(
+          "apply_teacher_noshow_penalty",
+          { p_teacher_id: booking.teacher_id, p_booking_id: room_id },
+        );
+        if (penaltyErr) console.error("apply_teacher_noshow_penalty failed", penaltyErr);
+        penalized = !!penaltyResult?.penalized;
       }
     }
 
@@ -476,7 +491,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    return new Response(JSON.stringify({ ok: true, verdict, refunded }), {
+    return new Response(JSON.stringify({ ok: true, verdict, refunded, penalized }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
