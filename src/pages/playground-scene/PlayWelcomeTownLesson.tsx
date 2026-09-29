@@ -41,6 +41,17 @@ interface PlayWelcomeTownLessonProps {
  *  (title-card/cinematic never award a gem; finale is the end screen). */
 const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'letter-game', 'jigsaw-puzzle']);
 
+/** Scene kinds that own real synced state (see `activityState` below)
+ *  instead of relying on the generic scene_tap DOM-click-mirror. Whoever
+ *  holds the floor (hasActivityAuthority) pushes its full local state on
+ *  every change and the other side renders straight from that snapshot —
+ *  no click-replay involved, so an asymmetry between the two sides' DOM
+ *  trees (e.g. the student-only "Watching your teacher" lock overlay) can
+ *  no longer break it. Migrate a kind into this set when its DOM-mirror
+ *  sync turns out to be fragile; kinds left out keep working exactly as
+ *  before. */
+const REAL_SYNC_KINDS = new Set<Scene['kind']>(['vocab-spot']);
+
 const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcomeTownLessonProps>(function PlayWelcomeTownLesson(
   { scenes, sessionKey, embedded = false, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
   ref,
@@ -57,6 +68,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   });
   const [hearts, setHearts] = useState(MAX_HEARTS);
   const [gems, setGems] = useState(0);
+  const scene = SCENES[sceneIdx] ?? SCENES[0];
 
   const isSynced = role != null && !!roomId;
   const canNavigate = !isSynced || role === 'teacher';
@@ -111,7 +123,47 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
     onInteractionUnlockedPersist?.(interactionUnlocked);
   }, [isSynced, role, interactionUnlocked, onInteractionUnlockedPersist]);
 
-  const iCaptureTaps = isSynced && !!role && (role === 'teacher' || (role === 'student' && interactionUnlocked));
+  // Whichever side currently "has the floor" — the teacher by default, or
+  // the student once unlocked. Unlike iCaptureTaps below (which is fine
+  // being true on BOTH sides at once, since the DOM-tap mirror is genuinely
+  // bidirectional), a single-authority state channel needs EXACTLY ONE side
+  // driving state at a time, or both sides would independently compute and
+  // broadcast conflicting snapshots. So this must flip, not just extend, for
+  // the teacher once the student is unlocked.
+  const hasActivityAuthority = !isSynced
+    ? true
+    : role === 'student'
+      ? interactionUnlocked
+      : !interactionUnlocked;
+  const usesRealSync = REAL_SYNC_KINDS.has(scene.kind);
+
+  const [activityState, setActivityStateLocal] = useState<unknown>(null);
+
+  // A new scene starts with no activity state on both sides — each side
+  // resets independently in lockstep as soon as its own (already-synced)
+  // sceneIdx changes, so this needs no broadcast of its own.
+  useEffect(() => { setActivityStateLocal(null); }, [sceneIdx]);
+
+  const setActivityState = useCallback((next: unknown) => {
+    setActivityStateLocal(next);
+    if (isSynced && hasActivityAuthority && roomId && role) {
+      void whiteboardService.sendSceneActivityState(roomId, { state: next, senderId: role });
+    }
+  }, [isSynced, hasActivityAuthority, roomId, role]);
+
+  useEffect(() => {
+    if (!isSynced || hasActivityAuthority || !roomId) return;
+    const unsubscribe = whiteboardService.subscribeToSceneActivityState(roomId, (payload) => {
+      setActivityStateLocal(payload.state);
+    });
+    return unsubscribe;
+  }, [isSynced, hasActivityAuthority, roomId]);
+
+  const activitySync = usesRealSync
+    ? { isSynced, isAuthority: hasActivityAuthority, state: activityState, setState: setActivityState }
+    : undefined;
+
+  const iCaptureTaps = isSynced && !!role && !usesRealSync && (role === 'teacher' || (role === 'student' && interactionUnlocked));
 
   useEffect(() => {
     if (!iCaptureTaps || !roomId || !role) return;
@@ -296,8 +348,6 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
     return () => { cancelled = true; stopSpeaking(); };
   }, [sceneIdx]);
 
-  const scene = SCENES[sceneIdx] ?? SCENES[0];
-
   const gainHeart = useCallback(() => setHearts((h) => Math.min(MAX_HEARTS, h + 1)), []);
   const loseHeart = useCallback(() => {
     setHearts((h) => {
@@ -413,6 +463,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
             onRestart={restart}
             gemsCollected={gems}
             heartsRemaining={hearts}
+            activitySync={activitySync}
           />
           {isSynced && role === 'student' && !interactionUnlocked && (
             <div className="absolute inset-0 z-40 cursor-not-allowed" aria-hidden="true">

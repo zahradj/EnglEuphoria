@@ -217,6 +217,22 @@ export interface SceneAdvanceRequestPayload {
 }
 type SceneAdvanceRequestListener = (payload: SceneAdvanceRequestPayload) => void;
 
+/** Whoever currently holds the "floor" (see PlayWelcomeTownLesson's
+ *  hasActivityAuthority — the teacher, or the student while unlocked)
+ *  pushes its own scene activity's full local state on every change; the
+ *  other side renders straight from the latest snapshot instead of trying
+ *  to locally reproduce it. Scoped to scene kinds that have opted out of
+ *  the generic scene_tap DOM-click-mirror (see REAL_SYNC_KINDS) — the
+ *  state shape is intentionally untyped `any` here since it's owned
+ *  entirely by whichever scene kind uses it (e.g. vocab-spot's
+ *  `{ step, revealed }`), not by this transport. */
+export interface SceneActivityStatePayload {
+  state: unknown;
+  senderId: string;
+  timestamp: number;
+}
+type SceneActivityStateListener = (payload: SceneActivityStatePayload) => void;
+
 /** Teacher's authoritative snapshot pushed on demand by the "Force Sync" button. */
 export interface ForceSyncPayload {
   slideIndex: number;
@@ -280,6 +296,7 @@ interface RoomChannel {
   sceneTapListeners: Set<SceneTapListener>;
   sceneInteractionPermissionListeners: Set<SceneInteractionPermissionListener>;
   sceneAdvanceRequestListeners: Set<SceneAdvanceRequestListener>;
+  sceneActivityStateListeners: Set<SceneActivityStateListener>;
   refCount: number;
 }
 
@@ -317,6 +334,7 @@ class WhiteboardService {
     const sceneTapListeners = new Set<SceneTapListener>();
     const sceneInteractionPermissionListeners = new Set<SceneInteractionPermissionListener>();
     const sceneAdvanceRequestListeners = new Set<SceneAdvanceRequestListener>();
+    const sceneActivityStateListeners = new Set<SceneActivityStateListener>();
     const statusListeners = new Set<(status: string) => void>();
 
     const channel = supabase
@@ -408,6 +426,9 @@ class WhiteboardService {
       })
       .on('broadcast', { event: 'scene_advance_request' }, (payload) => {
         sceneAdvanceRequestListeners.forEach((cb) => cb(payload.payload as SceneAdvanceRequestPayload));
+      })
+      .on('broadcast', { event: 'scene_activity_state' }, (payload) => {
+        sceneActivityStateListeners.forEach((cb) => cb(payload.payload as SceneActivityStatePayload));
       });
 
     const ready = new Promise<void>((resolve) => {
@@ -444,6 +465,7 @@ class WhiteboardService {
       sceneTapListeners,
       sceneInteractionPermissionListeners,
       sceneAdvanceRequestListeners,
+      sceneActivityStateListeners,
       refCount: 0,
     };
     this.rooms.set(channelName, room);
@@ -898,6 +920,28 @@ class WhiteboardService {
     return () => this.release(roomId, () => room.sceneAdvanceRequestListeners.delete(onRequest));
   }
 
+  /** Whoever holds the floor for the current scene activity pushes its full
+   *  local state; see SceneActivityStatePayload. */
+  async sendSceneActivityState(
+    roomId: string,
+    payload: Omit<SceneActivityStatePayload, 'timestamp'>,
+  ): Promise<void> {
+    const room = this.getRoom(roomId);
+    await room.ready;
+    await room.channel.send({
+      type: 'broadcast',
+      event: 'scene_activity_state',
+      payload: { ...payload, timestamp: Date.now() } satisfies SceneActivityStatePayload,
+    });
+  }
+
+  subscribeToSceneActivityState(roomId: string, onState: SceneActivityStateListener): () => void {
+    const room = this.getRoom(roomId);
+    room.sceneActivityStateListeners.add(onState);
+    room.refCount += 1;
+    return () => this.release(roomId, () => room.sceneActivityStateListeners.delete(onState));
+  }
+
   subscribeToStatus(roomId: string, onStatus: (status: string) => void): () => void {
     const room = this.getRoom(roomId);
     room.statusListeners.add(onStatus);
@@ -932,6 +976,7 @@ class WhiteboardService {
       room.forceReloadListeners.size === 0 &&
       room.studentActionListeners.size === 0 &&
       room.sceneLessonNavListeners.size === 0 &&
+      room.sceneActivityStateListeners.size === 0 &&
       room.statusListeners.size === 0
     ) {
       supabase.removeChannel(room.channel);

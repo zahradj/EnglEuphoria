@@ -123,6 +123,20 @@ function TeacherTip({ instruction }: { instruction?: string }) {
 
 /* ---------- Dispatcher ---------- */
 
+/** Real synced state for scene kinds that have opted out of the generic
+ *  DOM-click-mirror (see PlayWelcomeTownLesson's REAL_SYNC_KINDS). Only
+ *  forwarded to the kinds that declare they use it — every other kind
+ *  ignores it entirely. */
+export interface ActivitySync {
+  isSynced: boolean;
+  /** True on whichever side currently "has the floor" — that side's own
+   *  interactions drive state and publish it; the other side is a pure
+   *  mirror of the latest snapshot. */
+  isAuthority: boolean;
+  state: unknown;
+  setState: (next: unknown) => void;
+}
+
 export function SceneRenderer(props: {
   scene: Scene;
   onWin: (gem: boolean) => void;
@@ -131,6 +145,7 @@ export function SceneRenderer(props: {
   onRestart: () => void;
   gemsCollected: number;
   heartsRemaining: number;
+  activitySync?: ActivitySync;
 }) {
   const { scene } = props;
   const instruction = (scene as { teacher?: string }).teacher;
@@ -142,7 +157,7 @@ export function SceneRenderer(props: {
       case 'echo': return <EchoScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
       case 'memory': return <MemoryScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'drag-match': return <DragMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-      case 'vocab-spot': return <VocabSpotScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+      case 'vocab-spot': return <VocabSpotScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'choice': return <ChoiceScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'listen-tap': return <ListenTapScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'true-false': return <TrueFalseScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
@@ -388,18 +403,42 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
 
 /* ---------- Vocab spot (arrow hotspots on one reused scene) ---------- */
 
-function VocabSpotScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'vocab-spot' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [step, setStep] = useState(0);
-  const [revealed, setRevealed] = useState(false);
+function VocabSpotScene({ scene, onNext, onWin, sync }: {
+  scene: Extract<Scene, { kind: 'vocab-spot' }>;
+  onNext: () => void;
+  onWin: (gem: boolean) => void;
+  sync?: ActivitySync;
+}) {
+  // Real synced state (see PlayWelcomeTownLesson's REAL_SYNC_KINDS): whichever
+  // side has the floor drives `local*` and publishes it via sync.setState;
+  // the other side is a pure mirror, reading step/revealed straight off the
+  // latest snapshot instead of reacting to its own (nonexistent, for this
+  // kind) local clicks. Replaces the old generic DOM-click-mirror for
+  // vocab-spot, which broke here because the student's screen renders an
+  // extra "Watching your teacher" overlay the teacher's screen doesn't —
+  // an asymmetry the raw click-path replay couldn't tolerate.
+  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
+  const syncedState = sync?.state as { step: number; revealed: boolean } | null | undefined;
+  const [localStep, setLocalStep] = useState(0);
+  const [localRevealed, setLocalRevealed] = useState(false);
   const gemDone = useRef(false);
   const total = scene.items.length;
+
+  const step = isRemoteMirror ? (syncedState?.step ?? 0) : localStep;
+  const revealed = isRemoteMirror ? (syncedState?.revealed ?? false) : localRevealed;
   const done = step >= total;
   const current = !done ? scene.items[step] : null;
 
+  const publish = (nextStep: number, nextRevealed: boolean) => {
+    setLocalStep(nextStep);
+    setLocalRevealed(nextRevealed);
+    sync?.setState({ step: nextStep, revealed: nextRevealed });
+  };
+
   const tap = async () => {
-    if (!current || revealed) return;
+    if (isRemoteMirror || !current || revealed) return;
     sfx.pop();
-    setRevealed(true);
+    publish(step, true);
     // Primary audio is the bare word — the example sentence is a secondary,
     // tap-to-hear extra on the flashcard, not something spoken automatically.
     await safeSpeak(current.label, current.who ? voiceOf(current.who) : 'teacher');
@@ -410,11 +449,20 @@ function VocabSpotScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
     await safeSpeak(current.sentence, current.who ? voiceOf(current.who) : 'teacher');
   };
   const dismiss = () => {
-    setRevealed(false);
-    const next = step + 1;
-    if (next >= total && !gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
-    setStep(next);
+    if (isRemoteMirror) return;
+    publish(step + 1, false);
   };
+
+  // Runs on whichever side's own `step` (local or mirrored) crosses into
+  // "done", so the gem/onWin fires on both screens without the mirror side
+  // needing to call dismiss() itself.
+  useEffect(() => {
+    if (done && !gemDone.current) {
+      gemDone.current = true;
+      sfx.gem();
+      onWin(true);
+    }
+  }, [done, onWin]);
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
