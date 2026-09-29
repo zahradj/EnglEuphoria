@@ -32,6 +32,8 @@ const REAL_SYNC_KINDS = new Set<string>([
   'name-gate', 'meet-group', 'friend-pop', 'feelings-tap', 'feelings-wheel',
   'x-is-feeling', 'he-she-model', 'feelings-dice', 'he-she-say', 'i-am-feeling',
   'feeling-quiz', 'feelings-bingo',
+  'numbers-learn', 'numbers-review', 'candle-cake', 'count-balloons',
+  'age-balloons', 'meet-greet', 'age-quiz',
 ]);
 
 export interface PlayUnitLessonHandle {

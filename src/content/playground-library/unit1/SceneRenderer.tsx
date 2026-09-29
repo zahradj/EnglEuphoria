@@ -276,14 +276,14 @@ export function SceneRenderer(props: {
     case 'feeling-quiz': return <FeelingQuizScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
     case 'i-am-feeling': return <IAmFeelingScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'feelings-bingo': return <FeelingsBingoScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
-    case 'numbers-learn': return <NumbersLearnScene scene={scene} onNext={props.onNext} />;
-    case 'numbers-review': return <NumbersReviewScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'candle-cake': return <CandleCakeScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'count-balloons': return <CountBalloonsScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'age-balloons': return <AgeBalloonsScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'numbers-learn': return <NumbersLearnScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;
+    case 'numbers-review': return <NumbersReviewScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+    case 'candle-cake': return <CandleCakeScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+    case 'count-balloons': return <CountBalloonsScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+    case 'age-balloons': return <AgeBalloonsScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'age-sentence-match': return <AgeSentenceMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
-    case 'meet-greet': return <MeetGreetScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'age-quiz': return <AgeQuizScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'meet-greet': return <MeetGreetScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+    case 'age-quiz': return <AgeQuizScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     default: return null;
   }
   })();
@@ -6320,17 +6320,19 @@ function FeelingsBingoScene({ scene, onNext, onWin, onLose, sync }: { scene: Ext
 
 /* ---------- Numbers / age (Lesson 4 birthday block) ---------- */
 
-function NumbersLearnScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'numbers-learn' }>; onNext: () => void }) {
+function NumbersLearnScene({ scene, onNext, sync }: { scene: Extract<Scene, { kind: 'numbers-learn' }>; onNext: () => void; sync?: ActivitySync }) {
   const numbers = useMemo(() => Array.from({ length: scene.to - scene.from + 1 }, (_, i) => scene.from + i), [scene.from, scene.to]);
-  const [heard, setHeard] = useState<Set<number>>(new Set());
-  const [popN, setPopN] = useState<number | null>(null);
+  // `heard` is a plain number[] (not a Set) so it survives the JSON
+  // broadcast round-trip.
+  const [state, setState] = useSyncedState(sync, { heard: [] as number[], popN: null as number | null });
+  const { heard, popN } = state;
+  const heardSet = useMemo(() => new Set(heard), [heard]);
 
   const tapNumber = async (n: number) => {
-    setHeard((s) => new Set(s).add(n));
-    setPopN(n);
+    setState((s) => ({ ...s, heard: s.heard.includes(n) ? s.heard : [...s.heard, n], popN: n }));
     sfx.pop();
     await safeSpeak(numberSpeech(n), scene.who);
-    setPopN((cur) => (cur === n ? null : cur));
+    setState((s) => (s.popN === n ? { ...s, popN: null } : s));
   };
 
   return (
@@ -6352,7 +6354,7 @@ function NumbersLearnScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'n
           return (
             <button key={n} onClick={() => void tapNumber(n)}
               className="rounded-2xl border-4 font-black text-white shadow-lg transition-transform active:scale-95"
-              style={{ width: 'min(11vw, 74px)', height: 'min(11vw, 74px)', fontSize: 'min(6vw, 32px)', background: color, borderColor: 'rgba(255,255,255,0.85)', opacity: heard.has(n) ? 0.6 : 1 }}
+              style={{ width: 'min(11vw, 74px)', height: 'min(11vw, 74px)', fontSize: 'min(6vw, 32px)', background: color, borderColor: 'rgba(255,255,255,0.85)', opacity: heardSet.has(n) ? 0.6 : 1 }}
             >
               {n}
             </button>
@@ -6364,13 +6366,24 @@ function NumbersLearnScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'n
   );
 }
 
-function NumbersReviewScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'numbers-review' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+function NumbersReviewScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'numbers-review' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
   const numbers = useMemo(() => Array.from({ length: scene.to - scene.from + 1 }, (_, i) => scene.from + i), [scene.from, scene.to]);
-  const [target, setTarget] = useState<number>(() => numbers[Math.floor(Math.random() * numbers.length)]);
-  const [correct, setCorrect] = useState(0);
-  const [wrongTap, setWrongTap] = useState<number | null>(null);
-  const [gemDone, setGemDone] = useState(false);
+  // `target` is Math.random()-picked -- only the authority picks it (both
+  // the initial one and each subsequent one after a correct tap) and it
+  // travels as synced state, same fix as the other Math.random() cases in
+  // this pass.
+  const [state, setState] = useSyncedState(sync, { target: numbers[0], correct: 0, wrongTap: null as number | null, gemDone: false });
+  const { target, correct, wrongTap, gemDone } = state;
+  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
   const ready = correct >= 8;
+
+  const startedRef = useRef(false);
+  useEffect(() => {
+    if (isRemoteMirror || startedRef.current) return;
+    startedRef.current = true;
+    setState((s) => ({ ...s, target: numbers[Math.floor(Math.random() * numbers.length)] }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRemoteMirror]);
 
   useEffect(() => {
     if (ready) return;
@@ -6380,16 +6393,17 @@ function NumbersReviewScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
   }, [target]);
 
   const tapNumber = (n: number) => {
-    if (ready) return;
+    if (isRemoteMirror || ready) return;
     if (n === target) {
       sfx.match();
       const next = correct + 1;
-      setCorrect(next);
-      if (next >= 8 && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-      setTarget(numbers[Math.floor(Math.random() * numbers.length)]);
+      const awardGem = next >= 8 && !gemDone;
+      if (awardGem) { sfx.gem(); onWin(true); }
+      setState((s) => ({ ...s, correct: next, gemDone: s.gemDone || awardGem, target: numbers[Math.floor(Math.random() * numbers.length)] }));
     } else {
-      sfx.wrong(); setWrongTap(n);
-      window.setTimeout(() => setWrongTap(null), 400);
+      sfx.wrong();
+      setState((s) => ({ ...s, wrongTap: n }));
+      window.setTimeout(() => setState((s) => ({ ...s, wrongTap: null })), 400);
     }
   };
 
@@ -6424,19 +6438,16 @@ function NumbersReviewScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
   );
 }
 
-function CandleCakeScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'candle-cake' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [round, setRound] = useState(0);
-  const [candles, setCandles] = useState(0);
-  const [studentAge, setStudentAge] = useState<number | null>(null);
-  const [celebrating, setCelebrating] = useState(false);
-  const [gemDone, setGemDone] = useState(false);
+function CandleCakeScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'candle-cake' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { round: 0, candles: 0, studentAge: null as number | null, celebrating: false, gemDone: false });
+  const { round, candles, studentAge, celebrating, gemDone } = state;
   const total = scene.rounds.length;
   const finished = round >= total;
   const r = !finished ? scene.rounds[round] : null;
   const target = r?.isStudent ? (studentAge ?? 0) : (r?.target ?? 0);
 
   useEffect(() => {
-    setCandles(0); setStudentAge(null); setCelebrating(false);
+    setState((s) => ({ ...s, candles: 0, studentAge: null, celebrating: false }));
     if (!r) return;
     const t = window.setTimeout(() => void safeSpeak(r.prompt, r.asker), 300);
     return () => window.clearTimeout(t);
@@ -6447,13 +6458,15 @@ function CandleCakeScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
     if (!r || celebrating || target <= 0 || candles >= target) return;
     sfx.pop();
     const next = candles + 1;
-    setCandles(next);
+    setState((s) => ({ ...s, candles: next }));
     if (next >= target) {
-      setCelebrating(true);
+      setState((s) => ({ ...s, celebrating: true }));
       sfx.gem();
       await safeSpeak(r.celebrate, r.asker);
-      if (round === total - 1 && !gemDone) { setGemDone(true); onWin(true); }
-      window.setTimeout(() => setRound((x) => x + 1), 900);
+      const awardGem = round === total - 1 && !gemDone;
+      if (awardGem) onWin(true);
+      setState((s) => ({ ...s, gemDone: s.gemDone || awardGem }));
+      window.setTimeout(() => setState((s) => ({ ...s, round: s.round + 1 })), 900);
     }
   };
 
@@ -6485,7 +6498,7 @@ function CandleCakeScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
       {r!.isStudent && studentAge === null ? (
         <div className="absolute inset-x-0 bottom-10 z-30 flex max-w-md flex-wrap justify-center gap-2 px-4" style={{ margin: '0 auto' }}>
           {[2, 3, 4, 5, 6, 7, 8].map((n) => (
-            <button key={n} onClick={() => setStudentAge(n)} className="grid h-14 w-14 place-items-center rounded-2xl border-4 border-white bg-white/95 text-xl font-black text-orange-700 shadow-xl active:scale-95">{n}</button>
+            <button key={n} onClick={() => setState((s) => ({ ...s, studentAge: n }))} className="grid h-14 w-14 place-items-center rounded-2xl border-4 border-white bg-white/95 text-xl font-black text-orange-700 shadow-xl active:scale-95">{n}</button>
           ))}
         </div>
       ) : (
@@ -6531,19 +6544,22 @@ function CandleCakeScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kin
   );
 }
 
-function CountBalloonsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'count-balloons' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [popped, setPopped] = useState<Set<number>>(new Set());
-  const [gemDone, setGemDone] = useState(false);
-  const count = popped.size;
+function CountBalloonsScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'count-balloons' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  // `popped` is a plain number[] (not a Set) so it survives the JSON
+  // broadcast round-trip.
+  const [state, setState] = useSyncedState(sync, { popped: [] as number[], gemDone: false });
+  const { popped, gemDone } = state;
+  const poppedSet = useMemo(() => new Set(popped), [popped]);
+  const count = popped.length;
   const finished = count >= scene.total;
 
   const popNext = async (i: number) => {
-    if (finished || popped.has(i) || i !== count) return;
+    if (finished || poppedSet.has(i) || i !== count) return;
     sfx.pop();
-    const next = new Set(popped).add(i);
-    setPopped(next);
-    await safeSpeak(numberSpeech(next.size), scene.who);
-    if (next.size >= scene.total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
+    const nextPopped = [...popped, i];
+    setState((s) => ({ ...s, popped: nextPopped }));
+    await safeSpeak(numberSpeech(nextPopped.length), scene.who);
+    if (nextPopped.length >= scene.total && !gemDone) { sfx.gem(); onWin(true); setState((s) => ({ ...s, gemDone: true })); }
   };
 
   return (
@@ -6565,7 +6581,7 @@ function CountBalloonsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
         const x = ((col + 0.5) / rowCount) * 100;
         const y = 40 + row * 20;
         const rot = (col % 2 === 0 ? -1 : 1) * (4 + col * 2);
-        const isPopped = popped.has(i);
+        const isPopped = poppedSet.has(i);
         const color = RAINBOW_10[i % RAINBOW_10.length];
         return (
           <button
@@ -6596,33 +6612,35 @@ function CountBalloonsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { 
   );
 }
 
-function AgeBalloonsScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'age-balloons' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [tapped, setTapped] = useState<Set<number>>(new Set());
-  const [active, setActive] = useState<number | null>(null);
+function AgeBalloonsScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'age-balloons' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  // `tapped` is a plain number[] (not a Set) so it survives the JSON
+  // broadcast round-trip.
+  const [state, setState] = useSyncedState(sync, { tapped: [] as number[], active: null as number | null });
+  const { tapped, active } = state;
+  const tappedSet = useMemo(() => new Set(tapped), [tapped]);
   const total = scene.friends.length;
-  const allDone = tapped.size >= total;
+  const allDone = tapped.length >= total;
 
   const tapFriend = async (i: number) => {
-    if (tapped.has(i)) return;
-    setActive(i);
+    if (tappedSet.has(i)) return;
     const f = scene.friends[i];
-    const next = new Set(tapped).add(i);
-    setTapped(next);
+    const nextTapped = [...tapped, i];
+    setState((s) => ({ ...s, active: i, tapped: nextTapped }));
     sfx.pop();
     await safeSpeak(`${CAST[f.who].name} is ${f.age}!`, f.who);
-    if (next.size >= total) { sfx.gem(); onWin(true); }
+    if (nextTapped.length >= total) { sfx.gem(); onWin(true); }
   };
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
       <div className="absolute left-1/2 top-4 z-20 flex -translate-x-1/2 flex-col items-center gap-1.5 px-4 text-center">
-        <span className="w-fit rounded-full bg-white/90 px-4 py-1 text-xs font-black uppercase tracking-widest text-orange-700 shadow">🎈 {tapped.size}/{total}</span>
+        <span className="w-fit rounded-full bg-white/90 px-4 py-1 text-xs font-black uppercase tracking-widest text-orange-700 shadow">🎈 {tapped.length}/{total}</span>
         <span className="max-w-lg rounded-full bg-white/95 px-5 py-2 text-sm font-bold text-orange-800 shadow-xl backdrop-blur sm:text-base">{scene.teacher}</span>
       </div>
       {scene.friends.map((f, i) => {
         const c = CAST[f.who];
-        const isDone = tapped.has(i);
+        const isDone = tappedSet.has(i);
         const n = scene.friends.length;
         return (
           <button
@@ -6787,10 +6805,9 @@ function AgeSentenceMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
   );
 }
 
-function MeetGreetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'meet-greet' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [idx, setIdx] = useState(0);
-  const [step, setStep] = useState(0);
-  const [gemDone, setGemDone] = useState(false);
+function MeetGreetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'meet-greet' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { idx: 0, step: 0, gemDone: false });
+  const { idx, step, gemDone } = state;
   const total = scene.friends.length;
   const finished = idx >= total;
   const f = !finished ? scene.friends[idx] : null;
@@ -6812,11 +6829,11 @@ function MeetGreetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind
   }, [idx, step]);
 
   const advance = () => {
-    if (step < steps.length - 1) { setStep(step + 1); return; }
+    if (step < steps.length - 1) { setState((s) => ({ ...s, step: s.step + 1 })); return; }
     const nextIdx = idx + 1;
-    if (nextIdx >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-    setIdx(nextIdx);
-    setStep(0);
+    const awardGem = nextIdx >= total && !gemDone;
+    if (awardGem) { sfx.gem(); onWin(true); }
+    setState((s) => ({ ...s, idx: nextIdx, step: 0, gemDone: s.gemDone || awardGem }));
   };
 
   if (finished) {
@@ -6888,11 +6905,9 @@ function MiniCake({ candles }: { candles: number }) {
   );
 }
 
-function AgeQuizScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'age-quiz' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
-  const [idx, setIdx] = useState(0);
-  const [opened, setOpened] = useState(false);
-  const [pickedAge, setPickedAge] = useState<number | null>(null);
-  const [gemDone, setGemDone] = useState(false);
+function AgeQuizScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'age-quiz' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { idx: 0, opened: false, pickedAge: null as number | null, gemDone: false });
+  const { idx, opened, pickedAge, gemDone } = state;
   const total = scene.friends.length + 1;
   const isStudentTurn = idx >= scene.friends.length;
   const f = !isStudentTurn ? scene.friends[idx] : null;
@@ -6901,19 +6916,19 @@ function AgeQuizScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 
   const sayPrefix = isStudentTurn ? 'I am' : `${f ? CAST[f.who].name : ''} is`;
 
   useEffect(() => {
-    setOpened(false);
-    setPickedAge(null);
+    setState((s) => ({ ...s, opened: false, pickedAge: null }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idx]);
 
   const openPresent = async () => {
-    setOpened(true);
+    setState((s) => ({ ...s, opened: true }));
     sfx.pop();
     await safeSpeak(askLine, 'teacher');
   };
 
   const pickAge = async (age: number) => {
     if (pickedAge !== null) return;
-    setPickedAge(age);
+    setState((s) => ({ ...s, pickedAge: age }));
     sfx.match();
     if (f) await safeSpeak(`${CAST[f.who].name} is ${age}!`, f.who);
     else await safeSpeak(`I am ${age}!`, 'teacher');
@@ -6921,8 +6936,9 @@ function AgeQuizScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 
 
   const advance = () => {
     const next = idx + 1;
-    if (next >= total && !gemDone) { sfx.gem(); setGemDone(true); onWin(true); }
-    setIdx(next);
+    const awardGem = next >= total && !gemDone;
+    if (awardGem) { sfx.gem(); onWin(true); }
+    setState((s) => ({ ...s, idx: next, gemDone: s.gemDone || awardGem }));
   };
 
   if (finished) {
