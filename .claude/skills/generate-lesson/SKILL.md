@@ -54,7 +54,7 @@ Before designing any specific lesson, query the DB stub for that exact unit/less
 There is no JSON contract to emit. A new Playground lesson means editing real files, in this order:
 
 1. Write `LESSON_UxLy_SCENES`, `LESSON_UxLy_TITLE`, `LESSON_UxLy_OBJECTIVE` in `src/content/playground-library/unit1/scenes.ts`, reusing existing `Scene` `kind`s wherever possible.
-2. If a new `kind` is genuinely needed, add it to the `Scene` type union AND write its render function + switch-case in `SceneRenderer.tsx` AND add it to `sceneValidator.ts`'s own separate `SCENE_KINDS` array (easy to miss — it's a second, independent list from the renderer's switch statement).
+2. If a new `kind` is genuinely needed, add it to the `Scene` type union AND write its render function + switch-case in `SceneRenderer.tsx` AND add it to `sceneValidator.ts`'s own separate `SCENE_KINDS` array (easy to miss — it's a second, independent list from the renderer's switch statement) — **and give it real synced state per §4c below; do not let it default to the DOM-tap-mirror.**
 3. Add the new lesson to `sceneValidator.test.ts`'s `LESSONS` array.
 4. Add a `'{unit}-{lesson}'` entry to `sceneLessonRegistry.ts`.
 5. Create `src/pages/playground-scene/PlayUnit{unit}Lesson{lesson}.tsx` (thin wrapper, copy an existing one).
@@ -80,7 +80,8 @@ target unit1-only files.
    own `SceneRenderer.tsx`. There is no separate `SCENE_KINDS` list to keep
    in sync here (unlike unit1) — but check `PlayWelcomeTownLesson.tsx`'s
    `GEM_KINDS` set and add the new `kind` there too, or its scenes silently
-   won't count toward the gem-progress total.
+   won't count toward the gem-progress total. **Also give it real synced
+   state per §4c below rather than leaving it on the DOM-tap-mirror.**
 3. Add a `'{contentFormat}-{unit}-{lesson}'` entry (e.g. `'wt-rich-1-4'`) to
    `welcomeTownLessonRegistry.ts`'s `WELCOME_TOWN_LESSON_REGISTRY`.
 4. Create `src/pages/playground-scene/PlayWelcomeTown{N}.tsx` (thin
@@ -99,6 +100,83 @@ target unit1-only files.
    then `sessionStorage.setItem('<sessionKey>', '<idx>'); location.reload();`
    to jump to specific scenes — restart the dev server if a jump silently
    lands on the wrong scene (a known Vite HMR flakiness after many edits).
+
+## 4c. Every new interactive `kind` uses real shared state — not the DOM-tap-mirror
+
+**Why this exists:** the classroom used to sync live activities by
+mirroring raw teacher/student clicks onto each other's DOM tree — it
+worked only as long as both screens' rendered trees were structurally
+identical. They weren't: the student's own "Watching your teacher" lock
+overlay was, by itself, enough to silently break it. Reported live as "the
+teacher taps the vocabulary card and it pops up on their screen, but
+nothing happens on the student's." Root-caused and replaced, kind by kind,
+across a full session (Welcome Town: 15/22 kinds; Pre-A1: 39/63 kinds, as
+of this writing — the remainder are deliberately deferred, see below, not
+missed).
+
+**The rule going forward: any new `kind` whose state needs to look the
+same on both screens gets real synced state from day one.** Concretely:
+
+1. Give the scene component a `sync?: ActivitySync` prop (import the type
+   from `src/content/playground-library/sceneActivitySync.ts`) and forward
+   it from the dispatcher (`SceneRenderer.tsx`'s switch statement) as
+   `sync={props.activitySync}`.
+2. Replace the scene's own `useState` calls for anything that must match
+   across screens with **one** `useSyncedState(sync, initialStateObject)`
+   call — a single combined object, not one call per field (each call
+   fully replaces the broadcast snapshot, so N separate calls clobber each
+   other). Read `sceneActivitySync.ts`'s own doc comment before using it;
+   it covers the Set/Map JSON-serialization gotcha and the
+   call-more-than-once-per-handler footgun already hit and fixed once this
+   session.
+3. Add the new `kind` to the relevant lesson player's `REAL_SYNC_KINDS` set
+   (`PlayWelcomeTownLesson.tsx` or `PlayUnitLesson.tsx`).
+4. If the kind's state is seeded with `Math.random()` (a shuffle, a
+   spawn-position, a quiz-target pick), make sure only the authority side
+   computes it and let it travel as part of the synced state — never let
+   both sides independently call `Math.random()`, or they'll compute
+   different results and silently desync (hit and fixed for hello-doors,
+   sentence-build, alphabet-blocks, train-recall, color-simon, and
+   numbers-review this session — check for this specifically any time a
+   new kind shuffles/randomizes anything).
+5. If the kind runs its own self-driving timed sequence (an auto-playing
+   dialogue script, a "watch closely" reveal), gate that effect on
+   `!isRemoteMirror` (`!!sync?.isSynced && !sync.isAuthority`) so only the
+   authority drives it, and give the mirror side its own small reactive
+   effect to speak/play whatever the synced state just changed to — see
+   `RoleplayScene`, `HelloDoorsScene`, or `ColorSimonScene` in either
+   `SceneRenderer.tsx` for the exact pattern.
+
+**When NOT to force a kind onto this channel** — these are real,
+considered exceptions, not gaps to eventually close:
+- **Continuous drag/pointer gestures** (a live drag position updating
+  every `pointermove`, freeform canvas drawing) — a discrete-state
+  snapshot doesn't represent "where is the finger right now" well; this
+  needs per-frame position streaming through the same channel, a
+  different design not yet built. Leave these on the existing
+  `scene_tap`/pointer DOM-mirror, which already streams continuous
+  gestures reasonably.
+- **Truly bidirectional kinds** where both teacher and student may drive
+  the SAME activity at the same time (Pre-A1's
+  `ALWAYS_UNLOCKED_SCENE_KINDS` in `PlayUnitLesson.tsx`) — a
+  single-authority channel can't represent "either side may act right
+  now," only "exactly one side currently has the floor." The DOM-mirror's
+  dual-capture model already handles this correctly; don't migrate these.
+- **Each side's own device/media state** (a live camera preview, which
+  side's microphone is active) — never shared state by definition; keep
+  it local regardless of which channel the rest of the scene uses.
+- **Audio/video-clock-driven playback** (a song scene whose progress is
+  read off `audio.currentTime`) — each side already plays its own media
+  element independently via native autoplay; there's nothing to
+  desync unless you're also trying to synchronize playback position
+  itself, which is a different, harder problem than this channel solves.
+- **No branching state at all** (a title card, a fixed non-interactive
+  cinematic, a finale screen) — nothing can desync if nothing branches.
+
+If a new kind doesn't cleanly fit "discrete state, single authority,"
+stop and think about which category above it actually belongs to rather
+than forcing it onto `useSyncedState` — a wrong fit here reproduces
+exactly the kind of bug this section exists to prevent.
 
 ## 5. Self-validation checklist (adapted from the original spec's Gates A-D)
 
