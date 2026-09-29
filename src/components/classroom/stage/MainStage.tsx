@@ -178,6 +178,29 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
     onSceneNavState?.({ sceneIdx: 0, total: 0, canNavigate: true, interactionUnlocked: false, lockToggleApplicable: true });
   }, [sceneLessonRef, onSceneNavState]);
 
+  // Regular slide content (StageContent) rendered directly in the fluid
+  // stage area with no aspect-lock, same as scene lessons did before they
+  // got sceneFrameSize below. The pen-drawing overlay (TransparentCanvas)
+  // normalizes its coordinates (0..1) against that SAME fluid container —
+  // fine as long as the container is the same shape on every viewer, but
+  // it isn't: the teacher's and student's browser windows are essentially
+  // never pixel-identical, and any slide image inside StageContent that
+  // preserves its own aspect ratio (object-contain) ends up positioned at
+  // a different offset within that differently-shaped container on each
+  // side. Reported live as "I circled the pot, but the student saw it
+  // circled next to the pot" — a real, if usually small, coordinate drift
+  // baked into where each side's letterbox margins land. Locking this
+  // pairing to one fixed ratio (matching the proven approach already used
+  // for scene lessons below, via the same useLetterboxSize hook) means
+  // every viewer's canvas is normalized against an identically-shaped box,
+  // so a normalized point lands in the same visual spot for everyone.
+  const isPlainStageContent =
+    !customStage &&
+    !(hubType === 'playground' && mode === 'slide' && !!sceneLessonRef) &&
+    !(hubType === 'playground' && mode === 'slide' && !isInterview);
+  const STAGE_CONTENT_RATIO = 16 / 9;
+  const stageContentFrameSize = useLetterboxSize(stageRef, STAGE_CONTENT_RATIO);
+
   return (
     <div className="absolute inset-0 h-full w-full flex items-stretch justify-stretch min-h-0 min-w-0">
       <div
@@ -335,37 +358,74 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
               </p>
             </div>
           ) : (
-            <StageContent
-              mode={mode}
-              slides={slides}
-              currentSlideIndex={currentSlideIndex}
-              embeddedUrl={embeddedUrl}
-              roomId={roomId}
-              userId={userId}
-              role={role}
-              iframeUnlocked={iframeUnlocked}
-              worksheet={worksheet}
-              rawSlides={rawSlides}
-              hubType={hubType}
-              sessionId={sessionId}
-            />
+            // Letterboxed to a fixed ratio (see isPlainStageContent's
+            // comment above) so StageContent and TransparentCanvas share
+            // an identically-shaped box on every viewer — the pen overlay
+            // is mounted INSIDE this frame for this branch specifically
+            // (instead of at the outer always-on-top position below) so
+            // its 0..1 normalization is relative to this same locked box,
+            // not the raw fluid stage area.
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div
+                className="relative overflow-hidden bg-background"
+                style={
+                  stageContentFrameSize.width > 0
+                    ? { width: stageContentFrameSize.width, height: stageContentFrameSize.height }
+                    : { width: '100%', height: '100%' }
+                }
+              >
+                <StageContent
+                  mode={mode}
+                  slides={slides}
+                  currentSlideIndex={currentSlideIndex}
+                  embeddedUrl={embeddedUrl}
+                  roomId={roomId}
+                  userId={userId}
+                  role={role}
+                  iframeUnlocked={iframeUnlocked}
+                  worksheet={worksheet}
+                  rawSlides={rawSlides}
+                  hubType={hubType}
+                  sessionId={sessionId}
+                />
+                <TransparentCanvas
+                  roomId={roomId}
+                  userId={userId}
+                  userName={userName}
+                  role={role}
+                  drawingEnabled={drawingEnabled}
+                  activeTool={activeTool}
+                  activeColor={activeColor}
+                  strokes={strokes}
+                  onAddStroke={onAddStroke}
+                  mode={mode}
+                  iframeUnlocked={iframeUnlocked}
+                />
+              </div>
+            </div>
           )}
         </div>
 
-        {/* Universal annotation overlay — always mounted, on top */}
-        <TransparentCanvas
-          roomId={roomId}
-          userId={userId}
-          userName={userName}
-          role={role}
-          drawingEnabled={drawingEnabled}
-          activeTool={activeTool}
-          activeColor={activeColor}
-          strokes={strokes}
-          onAddStroke={onAddStroke}
-          mode={mode}
-          iframeUnlocked={iframeUnlocked}
-        />
+        {/* Universal annotation overlay for every OTHER mode (custom stage /
+            scene lesson / playground unit) — always mounted on top for
+            those, unchanged from before. The plain-slide case renders its
+            own copy above, inside the letterboxed frame, instead of this
+            one, so it's never mounted twice at once. */}
+        {!isPlainStageContent && (
+          <TransparentCanvas
+            roomId={roomId}
+            userId={userId}
+            userName={userName}
+            role={role}
+            drawingEnabled={drawingEnabled}
+            activeTool={activeTool}
+            activeColor={activeColor}
+            strokes={strokes}
+            onAddStroke={onAddStroke}
+            mode={mode}
+            iframeUnlocked={iframeUnlocked}
+          />
+        )}
 
         {/* Classroom tool overlay — dice / spinning wheel / timer, synced both sides */}
         <ClassroomToolOverlay roomId={roomId} canDismiss={role === 'teacher'} localRole={role} />
