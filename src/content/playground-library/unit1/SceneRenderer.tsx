@@ -7,6 +7,7 @@ import { Confetti } from './fx';
 import { UNIT1_PHONICS, getMastered, logMicroCheck } from './masteryTracker';
 import { SpriteMascot, MASCOT_EYE_BANDS } from './SpriteMascot';
 import engleuphoriaLogo from '@/assets/engleuphoria-logo.png';
+import { type ActivitySync, useSyncedState } from '../sceneActivitySync';
 
 const cakeSticker = '/lep1/items/cake-sticker.png';
 const candleSticker = '/lep1/items/candle-sticker.png';
@@ -209,6 +210,7 @@ export function SceneRenderer(props: {
   gemsCollected: number;
   heartsRemaining: number;
   lessonNumber?: number;
+  activitySync?: ActivitySync;
 }) {
   const { scene, lessonNumber } = props;
   const teacherTip = lessonNumber === 3 ? L3_TEACHER_TIPS[scene.id] : undefined;
@@ -218,8 +220,8 @@ export function SceneRenderer(props: {
   switch (scene.kind) {
     case 'title-card': return <TitleCardScene scene={scene} onNext={props.onNext} />;
     case 'cinematic': return <CinematicScene scene={scene} onNext={props.onNext} />;
-    case 'meet': return <MeetScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
-    case 'sound-model': return <SoundModelScene scene={scene} onNext={props.onNext} />;
+    case 'meet': return <MeetScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+    case 'sound-model': return <SoundModelScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;
     case 'echo': return <EchoScene scene={scene} onWin={props.onWin} onNext={props.onNext} />;
     case 'basket': return <BasketScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'trace': return <TraceScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
@@ -388,12 +390,10 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
 
 /* ---------- Meet ---------- */
 
-function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'meet' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'meet' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
   type Phase = 'idle' | 'talking' | 'repeat' | 'done';
-  const [phase, setPhase] = useState<Phase>('idle');
-  const [held, setHeld] = useState(false);
-  const [heardRepeat, setHeardRepeat] = useState(0);
-  const [xpBurst, setXpBurst] = useState(false);
+  const [state, setState] = useSyncedState(sync, { phase: 'idle' as Phase, held: false, heardRepeat: 0, xpBurst: false });
+  const { phase, held, heardRepeat, xpBurst } = state;
   const holdTimer = useRef<number | null>(null);
   const c = CAST[scene.who];
   const repeatWord = scene.repeat ?? scene.line;
@@ -402,23 +402,24 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
   const tapCharacter = async () => {
     if (phase !== 'idle') return;
     sfx.pop();
-    setPhase('talking');
+    setState((s) => ({ ...s, phase: 'talking' }));
     await safeSpeak(scene.line, scene.who);
-    setTimeout(() => setPhase('repeat'), 500);
+    setTimeout(() => setState((s) => ({ ...s, phase: 'repeat' })), 500);
   };
-  const hearRepeat = async () => { sfx.click(); setHeardRepeat((n) => n + 1); await safeSpeak(repeatWord, scene.who); };
+  const hearRepeat = async () => { sfx.click(); setState((s) => ({ ...s, heardRepeat: s.heardRepeat + 1 })); await safeSpeak(repeatWord, scene.who); };
   const replayIntro = async () => { sfx.click(); await safeSpeak(scene.line, scene.who); };
   const startHold = () => {
     if (phase !== 'repeat') return;
-    setHeld(true);
+    setState((s) => ({ ...s, held: true }));
     holdTimer.current = window.setTimeout(async () => {
-      setHeld(false); setPhase('done'); setXpBurst(true); sfx.gem();
-      setTimeout(() => setXpBurst(false), 1200);
+      setState((s) => ({ ...s, held: false, phase: 'done', xpBurst: true }));
+      sfx.gem();
+      setTimeout(() => setState((s) => ({ ...s, xpBurst: false })), 1200);
       onWin(true);
       await safeSpeak('Awesome voice! Great job!', 'pip');
     }, 1300);
   };
-  const endHold = () => { setHeld(false); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
+  const endHold = () => { setState((s) => ({ ...s, held: false })); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
   return (
     <div className="relative min-h-[78vh]">
@@ -492,35 +493,37 @@ function MeetScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'me
 
 /* ---------- Sound model ---------- */
 
-function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sound-model' }>; onNext: () => void }) {
+function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene, { kind: 'sound-model' }>; onNext: () => void; sync?: ActivitySync }) {
   const c = CAST[scene.who];
   const theme = PROP_THEME[scene.prop ?? scene.who] ?? PROP_THEME.pip;
   const side: 'left' | 'right' = scene.who === 'mia' ? 'right' : 'left';
-  const [beat, setBeat] = useState(-1);
-  const [opened, setOpened] = useState<Set<number>>(new Set());
-  const [phase, setPhase] = useState<'invite' | 'done'>('invite');
-  const [replays, setReplays] = useState(0);
+  // `opened` is a plain number[] (not a Set) so it survives the JSON
+  // broadcast round-trip.
+  const [state, setState] = useSyncedState(sync, { beat: -1, opened: [] as number[], phase: 'invite' as 'invite' | 'done', replays: 0 });
+  const { beat, opened, phase, replays } = state;
+  const openedSet = useMemo(() => new Set(opened), [opened]);
 
   // The teacher gives all spoken instructions live in the classroom — this
   // scene only ever plays the letter's actual recorded sound (never TTS
   // narration) and only ever on tap, never automatically on mount.
   const playLetterSound = useCallback(async () => {
-    setBeat(0);
+    setState((s) => ({ ...s, beat: 0 }));
     await playLetterPhonic(scene.letter);
-    setBeat(-1);
+    setState((s) => ({ ...s, beat: -1 }));
   }, [scene.letter]);
 
   useEffect(() => {
-    setOpened(new Set());
-    setPhase('invite');
+    setState((s) => ({ ...s, opened: [], phase: 'invite' }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene.id]);
 
   const openProp = async (i: number) => {
-    if (opened.has(i)) { sfx.pop(); await safeSpeak(scene.anchors[i].word, scene.who); return; }
+    if (openedSet.has(i)) { sfx.pop(); await safeSpeak(scene.anchors[i].word, scene.who); return; }
     sfx.reveal();
-    const next = new Set(opened); next.add(i); setOpened(next);
+    const nextOpened = opened.includes(i) ? opened : [...opened, i];
+    setState((s) => ({ ...s, opened: nextOpened }));
     await safeSpeak(scene.anchors[i].word, scene.who);
-    if (next.size >= scene.anchors.length) { sfx.gem(); setPhase('done'); }
+    if (nextOpened.length >= scene.anchors.length) { sfx.gem(); setState((s) => ({ ...s, phase: 'done' })); }
   };
 
   return (
@@ -568,7 +571,7 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
         const tops = ['15%', '38%', '60%'];
         const rots = [-6, 5, -3];
         const spot = { left: `${cols[i] ?? nearCol}%`, top: tops[i] ?? '50%', rot: rots[i] ?? 0 };
-        const isOpen = opened.has(i);
+        const isOpen = openedSet.has(i);
         return (
           <div key={a.word} className="absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: spot.left, top: spot.top, animation: `lep1-float 3s ease-in-out ${i * 0.3}s infinite` }}>
             <button
@@ -602,11 +605,11 @@ function SoundModelScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'sou
         );
       })}
       <div className="absolute inset-x-0 bottom-4 z-30 mx-auto flex max-w-md gap-2 px-4">
-        <button onClick={() => { setReplays((r) => r + 1); playLetterSound(); }} className="flex-1 rounded-full bg-white/95 py-3 text-sm font-bold text-orange-700 shadow-xl ring-2 ring-orange-200 backdrop-blur active:scale-95">
+        <button onClick={() => { setState((s) => ({ ...s, replays: s.replays + 1 })); playLetterSound(); }} className="flex-1 rounded-full bg-white/95 py-3 text-sm font-bold text-orange-700 shadow-xl ring-2 ring-orange-200 backdrop-blur active:scale-95">
           🔁 Hear sound {replays > 0 && <span className="opacity-60">({replays})</span>}
         </button>
         <button onClick={onNext} disabled={phase !== 'done'} className={`flex-1 rounded-full py-3 text-sm font-black text-white shadow-xl transition ${phase === 'done' ? 'bg-gradient-to-r from-green-500 to-emerald-500 active:scale-95' : 'cursor-not-allowed bg-neutral-400/70'}`}>
-          {phase === 'done' ? 'Now you try →' : `Find ${scene.anchors.length - opened.size} more`}
+          {phase === 'done' ? 'Now you try →' : `Find ${scene.anchors.length - opened.length} more`}
         </button>
       </div>
     </div>

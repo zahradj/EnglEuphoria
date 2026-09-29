@@ -16,6 +16,16 @@ const ALWAYS_UNLOCKED_SCENE_KINDS = new Set([
   'trace', 'basket', 'sound-sort', 'color-sort', 'memory', 'puzzle', 'word-build', 'hello-doors',
 ]);
 
+/** Scene kinds moved onto real synced state (see sceneActivitySync.ts)
+ *  instead of the generic scene_tap DOM-click-mirror above. Deliberately
+ *  EXCLUDES every kind in ALWAYS_UNLOCKED_SCENE_KINDS — those are genuinely
+ *  bidirectional (both teacher and student can drive at once), which the
+ *  mirror's dual-capture model supports and a single-authority snapshot
+ *  channel fundamentally can't represent (both sides would stomp on each
+ *  other's state). Also excludes title-card/cinematic/finale (no branching
+ *  state) and song (audio-clock-driven, not tap-driven). */
+const REAL_SYNC_KINDS = new Set<string>(['meet', 'sound-model']);
+
 export interface PlayUnitLessonHandle {
   goNext: () => void;
   goBack: () => void;
@@ -152,6 +162,46 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
     onInteractionUnlockedPersist?.(interactionUnlocked);
   }, [isSynced, role, interactionUnlocked, onInteractionUnlockedPersist]);
 
+  // Whichever side currently "has the floor" for a REAL_SYNC_KINDS activity
+  // — the teacher by default, or the student once unlocked. Must be
+  // mutually exclusive (unlike iCaptureTaps below, which the bidirectional
+  // DOM-mirror is fine having true on both sides for skipsLock kinds): a
+  // single-authority state channel needs exactly one side driving at a
+  // time, or both would independently compute and broadcast conflicting
+  // snapshots.
+  const usesRealSync = REAL_SYNC_KINDS.has(SCENES[sceneIdx]?.kind as string);
+  const hasActivityAuthority = !isSynced
+    ? true
+    : role === 'student'
+      ? interactionUnlocked
+      : !interactionUnlocked;
+
+  const [activityState, setActivityStateLocal] = useState<unknown>(null);
+
+  // A new scene starts with no activity state on both sides — each side
+  // resets independently in lockstep as soon as its own (already-synced)
+  // sceneIdx changes, so this needs no broadcast of its own.
+  useEffect(() => { setActivityStateLocal(null); }, [sceneIdx]);
+
+  const setActivityState = useCallback((next: unknown) => {
+    setActivityStateLocal(next);
+    if (isSynced && hasActivityAuthority && roomId && role) {
+      void whiteboardService.sendSceneActivityState(roomId, { state: next, senderId: role });
+    }
+  }, [isSynced, hasActivityAuthority, roomId, role]);
+
+  useEffect(() => {
+    if (!isSynced || hasActivityAuthority || !roomId) return;
+    const unsubscribe = whiteboardService.subscribeToSceneActivityState(roomId, (payload) => {
+      setActivityStateLocal(payload.state);
+    });
+    return unsubscribe;
+  }, [isSynced, hasActivityAuthority, roomId]);
+
+  const activitySync = usesRealSync
+    ? { isSynced, isAuthority: hasActivityAuthority, state: activityState, setState: setActivityState }
+    : undefined;
+
   // skipsLock activities are bidirectional for both roles at once — safe
   // from feedback loops because isApplyingRemoteTapRef (below) stops a
   // replayed synthetic event from being re-captured and re-broadcast.
@@ -165,7 +215,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   // effect below), but it doubled real traffic on the tap channel during
   // every unlocked activity and made this file's own driver/follower model
   // a lie.
-  const iCaptureTaps = isSynced && !!role && (skipsLock || (role === 'teacher' && !interactionUnlocked) || (role === 'student' && interactionUnlocked));
+  const iCaptureTaps = isSynced && !!role && !usesRealSync && (skipsLock || (role === 'teacher' && !interactionUnlocked) || (role === 'student' && interactionUnlocked));
 
   useEffect(() => {
     if (!iCaptureTaps || !roomId || !role) return;
@@ -502,6 +552,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
             role={role}
             roomId={roomId}
             activityUnlocked={activityUnlocked}
+            activitySync={activitySync}
           />
           {isSynced && role === 'student' && !effectiveUnlocked && (
             <div className="absolute inset-0 z-40 cursor-not-allowed" aria-hidden="true">

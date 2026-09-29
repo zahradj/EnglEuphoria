@@ -6,6 +6,9 @@ import * as sfx from '../unit1/sfx';
 import { Confetti } from '../unit1/fx';
 import { Hearts, MAX_HEARTS, Lep1Keyframes } from '../unit1/SceneRenderer';
 import engleuphoriaLogo from '@/assets/engleuphoria-logo.png';
+import { type ActivitySync, useSyncedState } from '../sceneActivitySync';
+
+export type { ActivitySync };
 
 /** Shorthand: every audio call here takes a story CharKey (pip/marigold),
  *  but the shared voice pipeline is keyed by role/name (Character) — see
@@ -122,49 +125,6 @@ function TeacherTip({ instruction }: { instruction?: string }) {
 }
 
 /* ---------- Dispatcher ---------- */
-
-/** Real synced state for scene kinds that have opted out of the generic
- *  DOM-click-mirror (see PlayWelcomeTownLesson's REAL_SYNC_KINDS). Only
- *  forwarded to the kinds that declare they use it — every other kind
- *  ignores it entirely. */
-export interface ActivitySync {
-  isSynced: boolean;
-  /** True on whichever side currently "has the floor" — that side's own
-   *  interactions drive state and publish it; the other side is a pure
-   *  mirror of the latest snapshot. */
-  isAuthority: boolean;
-  state: unknown;
-  setState: (next: unknown) => void;
-}
-
-/** Drop-in replacement for a scene's own `useState` for whatever piece of
- *  state needs to look the same on both screens. Each scene keeps exactly
- *  ONE call to this (a single combined state object, not one call per
- *  field) — `sync.setState` fully replaces the broadcast snapshot, so N
- *  separate calls would each clobber the other N-1 fields' latest values.
- *  With no `sync` (solo play outside a classroom) this is a plain local
- *  `useState` with no network involved. */
-function useSyncedState<T>(sync: ActivitySync | undefined, initial: T): [T, (updater: T | ((prev: T) => T)) => void] {
-  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
-  const [local, setLocal] = useState<T>(initial);
-  // Several scenes call `set` more than once in the same synchronous handler
-  // (e.g. MemoryScene's tap() sets `flipped` then, without an await between,
-  // `busy` too) — a plain closure over `local` would see the pre-render,
-  // stale value on the second call and silently drop the first update. A
-  // ref kept in lockstep with every `set` call (not just re-renders) makes
-  // this behave like React's own functional setState updater.
-  const localRef = useRef(local);
-  localRef.current = local;
-  const value = isRemoteMirror ? ((sync!.state as T) ?? initial) : local;
-  const set = (updater: T | ((prev: T) => T)) => {
-    if (isRemoteMirror) return; // mirror side never drives state
-    const next = typeof updater === 'function' ? (updater as (prev: T) => T)(localRef.current) : updater;
-    localRef.current = next;
-    setLocal(next);
-    sync?.setState(next);
-  };
-  return [value, set];
-}
 
 export function SceneRenderer(props: {
   scene: Scene;
