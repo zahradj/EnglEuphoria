@@ -310,7 +310,7 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
         className={`${
           showDrawerLayout
             ? `fixed inset-y-0 left-0 z-[75] w-[280px] transition-transform duration-200 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`
-            : 'static z-auto w-[224px] translate-x-0'
+            : 'static z-auto w-[300px] translate-x-0'
         } ${theme.panelBg} border-r ${theme.panelBorder} flex flex-col shrink-0 h-full overflow-y-auto`}
       >
       {/* Section header */}
