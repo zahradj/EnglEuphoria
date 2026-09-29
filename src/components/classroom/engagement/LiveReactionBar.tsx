@@ -9,6 +9,8 @@ interface LiveReactionBarProps {
   hubType?: HubType;
   /** When true the user can send reactions (typically the student). Teachers see, but can also send a 👏. */
   canSend?: boolean;
+  /** Which emoji buttons this side's dock shows. Defaults to the full set. */
+  reactions?: readonly string[];
 }
 
 interface FloatingReaction {
@@ -18,6 +20,8 @@ interface FloatingReaction {
 }
 
 const REACTIONS = ['👍', '❤️', '🎉', '🤔', '❓', '👏'] as const;
+/** Simplified dock for the student side — just a thumbs up/down. */
+export const THUMBS_REACTIONS = ['👍', '👎'] as const;
 
 /**
  * Floating reaction dock. Broadcasts via Supabase Realtime (no DB writes) so
@@ -28,6 +32,7 @@ export const LiveReactionBar: React.FC<LiveReactionBarProps> = ({
   userId,
   hubType = 'academy',
   canSend = true,
+  reactions = REACTIONS,
 }) => {
   const theme = useHubClassroomTheme(hubType);
   const [floating, setFloating] = useState<FloatingReaction[]>([]);
@@ -102,7 +107,7 @@ export const LiveReactionBar: React.FC<LiveReactionBarProps> = ({
           className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 px-2 py-1.5 backdrop-blur-xl bg-white/70 border border-white/60 ${theme.radiusClass}`}
           style={theme.glowShadow}
         >
-          {REACTIONS.map((emoji) => (
+          {reactions.map((emoji) => (
             <button
               key={emoji}
               onClick={() => send(emoji)}

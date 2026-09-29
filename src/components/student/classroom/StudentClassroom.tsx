@@ -11,7 +11,7 @@ import { StudentMainStage } from './StudentMainStage';
 import { StarCelebration } from '@/components/teacher/classroom/StarCelebration';
 import { DiceRoller } from '@/components/teacher/classroom/DiceRoller';
 
-import { LiveReactionBar } from '@/components/classroom/engagement/LiveReactionBar';
+import { LiveReactionBar, THUMBS_REACTIONS } from '@/components/classroom/engagement/LiveReactionBar';
 import { XPStreakIndicator } from '@/components/classroom/engagement/XPStreakIndicator';
 import { ZenModeOverlay } from '@/components/classroom/ZenModeOverlay';
 import { PictureInPicture } from '@/components/classroom/PictureInPicture';
@@ -604,6 +604,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
             roomId={roomId}
             userId={studentId}
             hubType={hubType}
+            reactions={THUMBS_REACTIONS}
             canSend
           />
         </>

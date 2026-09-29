@@ -15,6 +15,19 @@ import { useEffect, useState } from 'react';
  * compensate. Reactive to resize/orientationchange so rotating the device
  * (or the manifest orientation-lock fix landing) updates it live.
  */
+// The scene art itself is drawn/exported at ~16:9 (MainStage's own
+// STAGE_CONTENT_RATIO). Tracking the real device ratio fixed portrait
+// phones/tablets, but on a landscape desktop it means the frame's shape
+// is only as wide as whatever THAT monitor happens to be — a wider-than-
+// 16:9 external/ultrawide monitor stretches the frame beyond what the art
+// was ever drawn for, and bg-cover crops proportionally more to fill it
+// (reported live as "the lesson looks more zoomed in on my big monitor
+// than my laptop"). Capping the tracked ratio at 16:9 keeps every
+// landscape desktop consistent regardless of that monitor's own native
+// shape, while ratios at or below it (portrait devices, and any
+// close-to-16:9 desktop) still pass through real and untouched.
+const MAX_LANDSCAPE_RATIO = 16 / 9;
+
 export function useViewportRatio(fallback = 16 / 9): number {
   const [ratio, setRatio] = useState(fallback);
 
@@ -22,7 +35,7 @@ export function useViewportRatio(fallback = 16 / 9): number {
     const compute = () => {
       const w = window.visualViewport?.width || window.innerWidth;
       const h = window.visualViewport?.height || window.innerHeight;
-      if (w > 0 && h > 0) setRatio(w / h);
+      if (w > 0 && h > 0) setRatio(Math.min(w / h, MAX_LANDSCAPE_RATIO));
     };
     compute();
     window.addEventListener('resize', compute);
