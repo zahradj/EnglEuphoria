@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Timer as TimerIcon, X, RotateCcw } from 'lucide-react';
 import { whiteboardService, type ToolActionPayload, type ToolSyncState } from '@/services/whiteboardService';
+import { SpinWheel, SPIN_DURATION_MS, pickSpinWinner, spinTargetRotation } from '@/components/classroom/shared/SpinWheel';
 
 const DICE_ICONS = [Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
 
@@ -13,7 +14,7 @@ interface ClassroomToolOverlayProps {
 }
 
 type DiceState = { id: string; rolling: boolean; value: number };
-type WheelState = { id: string; options: string[]; winner?: string; spinning: boolean };
+type WheelState = { id: string; count: number; rotation: number; spinning: boolean; winner?: number; options?: string[] };
 type TimerState = { id: string; endsAt: number; durationSec: number; remaining: number; running: boolean };
 
 /**
@@ -35,7 +36,7 @@ export const ClassroomToolOverlay: React.FC<ClassroomToolOverlayProps> = ({ room
   const openToolsRef = useRef<ToolSyncState>({});
   openToolsRef.current = {
     dice: dice && !dice.rolling ? { value: dice.value } : null,
-    wheel: wheel && !wheel.spinning ? { options: wheel.options, winner: wheel.winner } : null,
+    wheel: wheel && !wheel.spinning ? { count: wheel.count, rotation: wheel.rotation, options: wheel.options } : null,
     xo: xoBoard,
     timer: timer ? { remaining: timer.remaining, running: timer.running } : null,
   };
@@ -60,7 +61,7 @@ export const ClassroomToolOverlay: React.FC<ClassroomToolOverlayProps> = ({ room
         // can never undo something newer on this screen.
         const st = p.syncState;
         if (st.dice) setDice((d) => d ?? { id: `sync-${p.timestamp}`, rolling: false, value: st.dice!.value });
-        if (st.wheel) setWheel((w) => w ?? { id: `sync-${p.timestamp}`, options: st.wheel!.options, winner: st.wheel!.winner, spinning: false });
+        if (st.wheel) setWheel((w) => w ?? { id: `sync-${p.timestamp}`, count: st.wheel!.count, rotation: st.wheel!.rotation, options: st.wheel!.options, spinning: false });
         if (st.xo) setXoBoard((b) => b ?? st.xo!.slice());
         if (st.timer) {
           const { remaining, running } = st.timer;
@@ -97,15 +98,28 @@ export const ClassroomToolOverlay: React.FC<ClassroomToolOverlayProps> = ({ room
         // Same fix as dice's dismiss, see comment above.
         if (wheelTimer.current) window.clearTimeout(wheelTimer.current);
         setWheel(null);
-      } else if (p.tool === 'wheel' && p.options && p.options.length) {
+      } else if (p.tool === 'wheel') {
+        // Open, +/− (count change) or a spin. The spinner computed the exact
+        // rotation once, so every screen animates to the same number.
         const id = p.actionId ?? String(p.timestamp);
+        const legacyCount = p.options?.length;
         setDice(null);
         setXoBoard(null);
-        setWheel({ id, options: p.options, spinning: true, winner: undefined });
         if (wheelTimer.current) window.clearTimeout(wheelTimer.current);
-        wheelTimer.current = window.setTimeout(() => {
-          setWheel({ id, options: p.options!, spinning: false, winner: p.winner });
-        }, 2400);
+        setWheel((w) => ({
+          id,
+          count: p.count ?? legacyCount ?? w?.count ?? 6,
+          rotation: typeof p.rotation === 'number' ? p.rotation : (w?.rotation ?? 0),
+          spinning: !!p.spinning,
+          winner: p.spinning ? undefined : w?.winner,
+          options: p.options ?? w?.options,
+        }));
+        if (p.spinning) {
+          const winner = typeof p.result === 'number' ? p.result : undefined;
+          wheelTimer.current = window.setTimeout(() => {
+            setWheel((w) => (w && w.id === id ? { ...w, spinning: false, winner } : w));
+          }, SPIN_DURATION_MS + 100);
+        }
       } else if (p.tool === 'timer') {
         if (p.status === 'stop' || p.status === 'reset') {
           setTimer(null);
@@ -275,29 +289,35 @@ export const ClassroomToolOverlay: React.FC<ClassroomToolOverlayProps> = ({ room
       {wheel && (
         <div className="absolute inset-0 grid place-items-center">
           <div className="pointer-events-auto relative">
-            <SpinningWheel
-              options={wheel.options}
+            <SpinWheel
+              count={wheel.count}
+              rotation={wheel.rotation}
               spinning={wheel.spinning}
-              winner={wheel.winner}
-              canSpin={!!canDismiss && !wheel.spinning}
+              highlight={wheel.winner ?? null}
+              labels={wheel.options}
+              size="min(42vh, 300px)"
+              // Both sides may spin — lesson notes often say "have the
+              // student spin the wheel". Only the teacher changes the count.
               onSpin={() => {
-                if (!canDismiss || wheel.spinning) return;
-                const nextWinner = wheel.options[Math.floor(Math.random() * wheel.options.length)];
+                if (wheel.spinning) return;
+                const winner = pickSpinWinner(wheel.count, wheel.winner ? [wheel.winner] : []);
                 void whiteboardService.sendToolAction(roomId, {
-                  tool: 'wheel', options: wheel.options, winner: nextWinner, senderId: 'local',
+                  tool: 'wheel',
+                  count: wheel.count,
+                  options: wheel.options,
+                  rotation: spinTargetRotation(wheel.rotation, winner, wheel.count, Math.random() * 2 - 1),
+                  spinning: true,
+                  result: winner,
+                  actionId: `${Date.now()}`,
+                  senderId: 'local',
                 }).catch(() => {});
               }}
+              onCountChange={canDismiss ? (n) => {
+                void whiteboardService.sendToolAction(roomId, {
+                  tool: 'wheel', count: n, rotation: 0, spinning: false, actionId: `${Date.now()}`, senderId: 'local',
+                }).catch(() => {});
+              } : undefined}
             />
-            {!wheel.spinning && wheel.winner && (
-              <div className="mt-3 text-center text-2xl font-extrabold text-foreground drop-shadow">
-                🎯 {wheel.winner}
-              </div>
-            )}
-            {!wheel.spinning && canDismiss && (
-              <div className="mt-1 text-center text-xs font-medium text-muted-foreground">
-                Tap the center to spin again
-              </div>
-            )}
             {canDismiss && (
               <button
                 onClick={() => {
@@ -442,97 +462,3 @@ function formatTime(s: number): string {
   const sec = s % 60;
   return `${m}:${String(sec).padStart(2, '0')}`;
 }
-
-const WHEEL_COLORS = ['#FE6A2F', '#FFD166', '#06D6A0', '#118AB2', '#EF476F', '#8338EC', '#3A86FF', '#FB5607'];
-
-interface SpinningWheelProps {
-  options: string[];
-  spinning: boolean;
-  winner?: string;
-  canSpin?: boolean;
-  onSpin?: () => void;
-}
-
-const SpinningWheel: React.FC<SpinningWheelProps> = ({ options, spinning, winner, canSpin, onSpin }) => {
-  const n = Math.max(1, options.length);
-  const slice = 360 / n;
-  const winnerIdx = winner ? Math.max(0, options.indexOf(winner)) : 0;
-  // Land winner at top (pointer at -90°)
-  const targetRot = spinning
-    ? 360 * 6 + (270 - (winnerIdx * slice + slice / 2))
-    : (270 - (winnerIdx * slice + slice / 2));
-
-  const R = 140;
-  const cx = 150;
-  const cy = 150;
-
-  const slicePath = (i: number): string => {
-    const start = (i * slice - 90) * (Math.PI / 180);
-    const end = ((i + 1) * slice - 90) * (Math.PI / 180);
-    const x1 = cx + R * Math.cos(start);
-    const y1 = cy + R * Math.sin(start);
-    const x2 = cx + R * Math.cos(end);
-    const y2 = cy + R * Math.sin(end);
-    const largeArc = slice > 180 ? 1 : 0;
-    return `M ${cx} ${cy} L ${x1} ${y1} A ${R} ${R} 0 ${largeArc} 1 ${x2} ${y2} Z`;
-  };
-
-  return (
-    <div className="relative h-80 w-80">
-      {/* Pointer */}
-      <div className="absolute left-1/2 top-[-4px] z-20 -translate-x-1/2">
-        <div className="h-0 w-0 border-l-[16px] border-r-[16px] border-t-[26px] border-l-transparent border-r-transparent border-t-red-600 drop-shadow-lg" />
-      </div>
-
-      <div
-        className="h-full w-full"
-        style={{
-          transform: `rotate(${targetRot}deg)`,
-          transition: spinning ? 'transform 2.3s cubic-bezier(0.17, 0.67, 0.21, 1)' : 'none',
-        }}
-      >
-        <svg viewBox="0 0 300 300" className="h-full w-full drop-shadow-2xl">
-          <circle cx={cx} cy={cy} r={R + 4} fill="white" />
-          {options.map((label, i) => {
-            const mid = (i * slice + slice / 2 - 90) * (Math.PI / 180);
-            const tx = cx + (R * 0.62) * Math.cos(mid);
-            const ty = cy + (R * 0.62) * Math.sin(mid);
-            const rot = i * slice + slice / 2;
-            const display = label.length > 10 ? `${label.slice(0, 9)}…` : label;
-            return (
-              <g key={`${label}-${i}`}>
-                <path d={slicePath(i)} fill={WHEEL_COLORS[i % WHEEL_COLORS.length]} stroke="white" strokeWidth={2} />
-                <text
-                  x={tx}
-                  y={ty}
-                  fill="white"
-                  fontSize="15"
-                  fontWeight="800"
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  transform={`rotate(${rot} ${tx} ${ty})`}
-                  style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.35)', strokeWidth: 2 }}
-                >
-                  {display}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
-      </div>
-
-      {/* Hub cap — clickable to spin */}
-      <button
-        type="button"
-        disabled={!canSpin}
-        onClick={onSpin}
-        className={`absolute left-1/2 top-1/2 z-10 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-xs font-extrabold uppercase tracking-wide text-foreground shadow-xl ring-4 ring-orange-400 transition ${
-          canSpin ? 'hover:scale-110 active:scale-95 cursor-pointer' : 'cursor-default opacity-90'
-        }`}
-        aria-label={canSpin ? 'Spin the wheel' : 'Wheel'}
-      >
-        {spinning ? '…' : canSpin ? 'SPIN' : '★'}
-      </button>
-    </div>
-  );
-};

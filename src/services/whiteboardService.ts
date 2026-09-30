@@ -104,7 +104,7 @@ export type ToolName = 'dice' | 'timer' | 'wheel' | 'xo' | 'sync';
  *  tool 'sync' request (see ToolActionPayload.syncRole). */
 export interface ToolSyncState {
   dice?: { value: number } | null;
-  wheel?: { options: string[]; winner?: string } | null;
+  wheel?: { count: number; rotation: number; options?: string[] } | null;
   xo?: Array<'X' | 'O' | null> | null;
   timer?: { remaining: number; running: boolean } | null;
 }
@@ -118,10 +118,17 @@ export interface ToolActionPayload {
    *  remaining seconds in durationSec; resuming is a 'start' with that
    *  remaining time). Also reused by dice/wheel: 'stop' broadcasts a dismiss so the other side's ClassroomToolOverlay closes too, instead of only clearing local state. */
   status?: 'start' | 'pause' | 'stop' | 'reset';
-  /** Wheel: options to display. */
+  /** Wheel (legacy): option labels. New wheels are numbered — see count. */
   options?: string[];
-  /** Wheel: chosen option label. */
+  /** Wheel (legacy): chosen option label. */
   winner?: string;
+  /** Wheel: number of numbered segments (2-8). */
+  count?: number;
+  /** Wheel: absolute rotation to animate to, computed once by whoever
+   *  pressed SPIN so every screen lands on the same number. */
+  rotation?: number;
+  /** Wheel: true for a spin (animate), false/absent for open / +/−. */
+  spinning?: boolean;
   /** XO (tic-tac-toe) action verb. */
   xoAction?: 'start' | 'move' | 'reset' | 'close';
   /** XO: 0-8 board cell index. */

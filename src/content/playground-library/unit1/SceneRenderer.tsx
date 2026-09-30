@@ -8,6 +8,7 @@ import { UNIT1_PHONICS, getMastered, logMicroCheck } from './masteryTracker';
 import { SpriteMascot, MASCOT_EYE_BANDS } from './SpriteMascot';
 import engleuphoriaLogo from '@/assets/engleuphoria-logo.png';
 import { type ActivitySync, useSyncedState } from '../sceneActivitySync';
+import { SpinWheelScene } from '../SpinWheelScene';
 
 const cakeSticker = '/lep1/items/cake-sticker.png';
 const candleSticker = '/lep1/items/candle-sticker.png';
@@ -284,6 +285,7 @@ export function SceneRenderer(props: {
     case 'age-sentence-match': return <AgeSentenceMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'meet-greet': return <MeetGreetScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'age-quiz': return <AgeQuizScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+    case 'spin-wheel': return <SpinWheelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     default: return null;
   }
   })();

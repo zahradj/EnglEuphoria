@@ -687,19 +687,15 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
       senderId: teacherUserId,
     }).catch((e) => console.error('Dice broadcast failed:', e));
   }, [roomName, teacherUserId]);
+  // Opens the shared numbered spinner (1..N, +/− on the wheel) over whatever
+  // is on stage — lesson "Spin!" slides number their pictures to match. It
+  // no longer asks for names through a browser prompt first.
   const handleSpinWheel = useCallback(() => {
-    const raw = window.prompt(
-      'Enter wheel options (comma-separated):',
-      'Sara,Tom,Mia,Leo,Ana,Max'
-    );
-    if (!raw) return;
-    const options = raw.split(',').map((s) => s.trim()).filter(Boolean).slice(0, 8);
-    if (options.length < 2) return;
-    const winner = options[Math.floor(Math.random() * options.length)];
     void whiteboardService.sendToolAction(roomName, {
       tool: 'wheel',
-      options,
-      winner,
+      count: 6,
+      rotation: 0,
+      spinning: false,
       actionId: `${Date.now()}`,
       senderId: teacherUserId,
     }).catch((e) => console.error('Wheel broadcast failed:', e));
