@@ -624,8 +624,16 @@ function EchoScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, { kin
           : `absolute inset-y-0 z-20 flex w-1/2 flex-col items-center justify-center gap-8 px-1 ${side === 'right' ? 'right-0' : 'left-0'}`
       }>
         <p
-          className="max-w-[90vw] text-center font-black leading-tight text-white drop-shadow-[0_6px_14px_rgba(0,0,0,0.7)]"
-          style={{ fontSize }}
+          className="max-w-[90vw] text-center font-black leading-tight text-white"
+          style={{
+            fontSize,
+            // A dark contrast shadow (readability on any background) plus a
+            // soft glow in the speaking character's own color underneath it
+            // — same purpose as a card used to serve (giving the bare text
+            // a "presence" of its own) without bringing back the card that
+            // was covering the scene.
+            filter: `drop-shadow(0 6px 14px rgba(0,0,0,0.7)) drop-shadow(0 0 22px ${c.color}88)`,
+          }}
         >
           {scene.wordColors
             ? scene.word.split(' ').map((w, i) => (
@@ -635,20 +643,39 @@ function EchoScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, { kin
               ))
             : scene.word}
         </p>
-        <p className="text-sm font-black uppercase tracking-widest text-white drop-shadow-[0_3px_8px_rgba(0,0,0,0.7)] sm:text-base" style={{ color: c.color }}>
-          {c.name} says
-        </p>
-        <div className={side === 'top' ? 'flex flex-row items-center gap-3' : 'flex flex-col items-center gap-3'}>
-          <button onClick={hear} className="rounded-full bg-white/95 px-6 py-3 text-sm font-bold text-orange-700 shadow-xl ring-2 ring-orange-200 active:scale-95 sm:text-base">
-            🔊 Listen {heard > 0 && <span className="opacity-60">({heard})</span>}
-          </button>
-          <button
-            onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold} disabled={heard === 0}
-            className={`rounded-full px-6 py-3 text-sm font-black text-white shadow-xl transition sm:text-base ${held ? 'scale-95' : ''} disabled:opacity-40`}
-            style={{ background: done ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
-          >
-            {done ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & say it'}
-          </button>
+        {/* One grouped control cluster instead of a lone floating "PIP SAYS"
+            label sitting disconnected above two generic white pills — the
+            speaker chip (avatar + name, character-colored) now visually
+            leads straight into the buttons below it, and both buttons pick
+            up the character's own CAST color as their accent instead of a
+            fixed orange, tying them to the rest of this lesson's chip
+            language (e.g. the vocab-spot room labels). Reported as "still
+            doesn't feel satisfying" on the plain flat-shadow-text version. */}
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex items-center gap-2 rounded-full bg-white/95 py-1.5 pl-1.5 pr-4 shadow-xl backdrop-blur">
+            <span className="grid h-7 w-7 place-items-center rounded-full text-base shadow-inner" style={{ background: c.color }}>
+              {c.emoji}
+            </span>
+            <span className="text-xs font-black uppercase tracking-widest sm:text-sm" style={{ color: c.color }}>
+              {c.name} says
+            </span>
+          </div>
+          <div className={side === 'top' ? 'flex flex-row items-center gap-3' : 'flex flex-col items-center gap-3'}>
+            <button
+              onClick={hear}
+              className="rounded-full border-2 bg-white px-6 py-3 text-sm font-bold shadow-xl transition active:scale-95 sm:text-base"
+              style={{ color: c.color, borderColor: c.color }}
+            >
+              🔊 Listen {heard > 0 && <span className="opacity-60">({heard})</span>}
+            </button>
+            <button
+              onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold} disabled={heard === 0}
+              className={`rounded-full px-6 py-3 text-sm font-black text-white shadow-xl transition sm:text-base ${held ? 'scale-95' : ''} disabled:opacity-40`}
+              style={{ background: done ? 'linear-gradient(90deg, #10B981, #34D399)' : `linear-gradient(90deg, ${c.color}, ${c.color}cc)` }}
+            >
+              {done ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & say it'}
+            </button>
+          </div>
         </div>
       </div>
       {done && (
