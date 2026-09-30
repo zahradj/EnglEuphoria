@@ -475,6 +475,11 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
     sfx.click();
     await safeSpeak(current.sentence, current.who ? voiceOf(current.who) : 'teacher');
   };
+  const hearWord = async () => {
+    if (!current) return;
+    sfx.click();
+    await safeSpeak(current.label, current.who ? voiceOf(current.who) : 'teacher');
+  };
   const dismiss = () => {
     if (isRemoteMirror) return;
     publish(step + 1, false);
@@ -552,44 +557,22 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
           </button>
         );
       })()}
-      {/* Label tag, not a full-screen modal: the old version darkened and
-          centered a big card over the ENTIRE scene, hiding the very object
-          it was labeling — replaced on request with a small tag anchored
-          right where the arrow already points, so the art stays visible
-          and the word reads as "attached to this object" rather than as an
-          interruption. Positioned with the same left/top/GAP math as the
-          arrow above (same `dir` side), just nudged further out so the two
-          don't overlap. */}
-      {current && revealed && (() => {
-        const dir = current.dir ?? 'down';
-        // Nudged out further to clear the now-bigger arrow (GAP 90 above)
-        // by the same margin it used to clear the old smaller one.
-        const GAP = 150;
-        const pos = dir === 'down'
-          ? { left: current.left, top: `calc(${current.top} - ${GAP}px)` }
-          : dir === 'right'
-          ? { left: `calc(${current.left} - ${GAP}px)`, top: current.top }
-          : { left: `calc(${current.left} + ${GAP}px)`, top: current.top };
-        // The bigger chip (below) is wide enough that centering it on a
-        // point near the left/right edge (e.g. a room hotspot at left:
-        // 18%) pushed it half off-screen — confirmed live, the emoji icon
-        // was clipped by the viewport edge. Anchor from whichever side has
-        // room instead of always centering, so the chip grows INTO the
-        // scene rather than off of it.
-        const leftPct = parseFloat(current.left);
-        const translateX = leftPct < 25 ? '0%' : leftPct > 75 ? '-100%' : '-50%';
-        return (
-          <div
-            className="pointer-events-none absolute z-40 px-2"
-            style={{ ...pos, transform: `translate(${translateX}, -50%)`, animation: 'lep1-pop 0.25s ease-out' }}
-          >
-            {/* Bumped up a full size tier across the board (icon, text,
-                buttons, border, padding) — the old chip read as a barely-
-                visible sliver of text against a full scene background,
-                reported live as "the vocabulary stickers... don't look
-                much visible to the student." */}
-            <div className="pointer-events-auto flex items-center gap-3 rounded-full border-[3px] border-white bg-white/97 py-3 pl-3 pr-3 shadow-2xl backdrop-blur">
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-3xl" style={{ background: `${current.color}22` }}>{current.emoji}</span>
+      {/* Label banner, not a small tag anchored to the arrow: the arrow
+          stays in place pointing at the actual object, but the revealed
+          word itself now pops up in its own fixed strip along the bottom
+          of the frame — genuinely empty space, never competing with
+          whatever the arrow is pointing at for room. Per direct request:
+          "it pops up on the empty space... big enough for the student to
+          see," in the Chewy display font, and clicking it repeats the
+          word's audio. */}
+      {current && revealed && (
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-6 z-40 flex justify-center px-4"
+          style={{ animation: 'lep1-pop 0.25s ease-out' }}
+        >
+          <div className="pointer-events-auto flex items-center gap-3 rounded-[2.5rem] border-[3px] border-white bg-white/97 py-3 pl-3 pr-3 shadow-2xl backdrop-blur">
+            <button onClick={hearWord} aria-label={`Hear "${current.label}" again`} className="flex items-center gap-3 transition active:scale-95">
+              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full text-4xl" style={{ background: `${current.color}22` }}>{current.emoji}</span>
               {/* Fixed dark neutral, NOT `current.color`: that per-item theme
                   color is picked for icon/marker variety, not guaranteed
                   legible as TEXT on this near-white pill — a pale color
@@ -598,14 +581,16 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
                   or a filled button background. Confirmed live: a lesson's
                   own `#9A8C98` marker color made its label read as
                   invisible. Word legibility must never depend on which
-                  color a given lesson happens to pick. */}
-              <span className="text-2xl font-black whitespace-nowrap text-neutral-800 sm:text-3xl">{current.label}</span>
-              <button onClick={hearSentence} aria-label={`Hear "${current.label}" in a sentence`} className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-xl text-neutral-400 transition active:scale-90 hover:text-neutral-600">🔊</button>
-              <button onClick={dismiss} aria-label="Got it" className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-2xl text-white shadow transition active:scale-90" style={{ background: current.color }}>✓</button>
-            </div>
+                  color a given lesson happens to pick. Chewy per direct
+                  request, loaded globally in index.html alongside the
+                  app's other display fonts. */}
+              <span className="whitespace-nowrap text-4xl text-neutral-800 sm:text-5xl" style={{ fontFamily: "'Chewy', 'Fredoka', system-ui, sans-serif" }}>{current.label}</span>
+            </button>
+            <button onClick={hearSentence} aria-label={`Hear "${current.label}" in a sentence`} className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-2xl text-neutral-400 transition active:scale-90 hover:text-neutral-600">🔊</button>
+            <button onClick={dismiss} aria-label="Got it" className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-2xl text-white shadow transition active:scale-90" style={{ background: current.color }}>✓</button>
           </div>
-        );
-      })()}
+        </div>
+      )}
       {done && (
         <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
           <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">All found! ⭐ Next</button>
