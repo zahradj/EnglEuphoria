@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ChatCloud } from '../ChatCloud';
 import type { Scene, CharKey } from './scenes';
 import { CAST, PROP_THEME, getEmotionSprite, COLOR_SKETCH, comicPointForward } from './scenes';
 import { safeSpeak, cueSpeak, cueSpeakOnce, stopSpeaking, isSpeaking, speak, speakOnce, playLetterPhonic, playLetterName, unlockAudio, type Character } from './audio';
@@ -457,11 +458,14 @@ function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kin
           <div className="animate-[lep1-pop-fade_1.1s_ease-out_forwards] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 text-2xl font-black text-white shadow-2xl">+10 XP 💎</div>
         </div>
       )}
+      {/* The character's line as a chat cloud (tap = hear it again). */}
       {phase !== 'idle' && (
-        <div className="absolute top-[calc(14*var(--svh,1vh))] right-4 sm:right-8 z-20 max-w-[42%] sm:max-w-[34%]">
-          <button onClick={replayIntro} className="group relative w-full rounded-3xl border-4 bg-white px-5 py-4 text-left text-xl sm:text-2xl font-black shadow-2xl active:scale-95" style={{ color: c.color, borderColor: c.color }}>
-            <span className="mr-2 text-xl">{c.emoji}</span>“{scene.line}”
-          </button>
+        <div className="pointer-events-none absolute right-[5%] top-[calc(12*var(--svh,1vh))] z-20 max-w-[40%]">
+          <ChatCloud color={c.color} tail="left" onClick={replayIntro} ariaLabel={`Hear ${c.name} again`}>
+            <span className="flex items-center justify-center gap-2 text-[calc(3.4*var(--svh,1vh))] font-black leading-tight">
+              <span aria-hidden>{c.emoji}</span>“{scene.line}”
+            </span>
+          </ChatCloud>
         </div>
       )}
       {phase === 'idle' && (
@@ -469,25 +473,27 @@ function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kin
           <span className="animate-pulse rounded-full bg-white/95 px-5 py-2 text-base font-bold shadow-xl" style={{ color: c.color }}>👆 Tap {c.name} {c.emoji}</span>
         </div>
       )}
+      {/* "Your turn" as one slim bar along the bottom instead of a tall
+          sheet over the character. */}
       {(phase === 'repeat' || phase === 'done') && (
-        <div className="absolute inset-x-0 bottom-0 z-30 mx-auto max-w-md" style={{ animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
-          <div className="rounded-t-[2rem] border-t-4 p-4 shadow-2xl" style={{ borderColor: c.color, background: 'linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85))', backdropFilter: 'blur(20px)' }}>
-            <div className="flex items-center justify-between">
-              <span className="rounded-full px-3 py-1 text-xs font-black uppercase tracking-widest text-white" style={{ background: c.color }}>🎤 Your turn</span>
-              <span className="text-xs font-bold text-neutral-500">Hold & repeat</span>
-            </div>
-            <p className="mt-2 text-center text-2xl font-black" style={{ color: c.color }}>“{repeatWord}”</p>
-            <button onClick={hearRepeat} className="mt-3 w-full rounded-full bg-white py-2 text-sm font-bold text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">
-              🔊 Hear it {heardRepeat > 0 && <span className="opacity-60">({heardRepeat})</span>}
+        <div className="absolute inset-x-0 bottom-[calc(1.5*var(--svh,1vh))] z-30 flex justify-center px-3" style={{ animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
+          <div className="flex items-center gap-2 rounded-full bg-white/90 p-1.5 pl-3 shadow-2xl ring-2 backdrop-blur" style={{ ['--tw-ring-color' as string]: c.color }}>
+            <span className="whitespace-nowrap text-xs font-black uppercase tracking-widest" style={{ color: c.color }}>🎤 “{repeatWord}”</span>
+            <button onClick={hearRepeat} aria-label="Hear it" title="Hear it" className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-lg shadow ring-2 ring-orange-200 active:scale-95">
+              🔊
             </button>
             <button
               onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
-              className={`mt-2 w-full rounded-full py-5 text-xl font-black text-white shadow-xl transition ${held ? 'scale-95' : ''}`}
+              className={`whitespace-nowrap rounded-full px-6 py-3 text-base font-black text-white shadow-lg transition ${held ? 'scale-95' : ''}`}
               style={{ background: phase === 'done' ? 'linear-gradient(90deg, #10B981, #34D399)' : `linear-gradient(90deg, ${c.color}, #FEBE4C)` }}
             >
               {phase === 'done' ? '✅ Nailed it!' : held ? '🎤 Keep talking…' : '🎤 Hold to say it'}
             </button>
-            <PrimaryButton onClick={onNext} disabled={phase !== 'done'}>{phase === 'done' ? 'Next Quest →' : 'Say it first!'}</PrimaryButton>
+            {phase === 'done' && (
+              <button onClick={onNext} className="whitespace-nowrap rounded-full bg-orange-500 px-5 py-3 text-base font-black text-white shadow-lg active:scale-95">
+                Next →
+              </button>
+            )}
           </div>
         </div>
       )}
