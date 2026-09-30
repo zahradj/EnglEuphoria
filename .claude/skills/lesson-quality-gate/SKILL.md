@@ -69,6 +69,14 @@ upstream data it's reading is already wrong.
    - *Visual:* the wheel (`wheelAt`, default centre, ~36% of the height)
      covers no badge and no picture; badges don't overlap each other or the
      "Spin!" banner; `emoji`/`img` only for pictures NOT already in the art.
+   **Picture ↔ word match scenes (`picture-match`):**
+   - *Semantic:* every `word` is exactly what its picture shows (re-open
+     each `img`); words are unique; spelling matches how the lesson taught it.
+   - *Pedagogical:* 2-8 items (4-6 ideal), all taught earlier in the lesson;
+     `studentOnly: true` only when the teacher note really describes an
+     independent self-check.
+   - *Visual:* pictures read clearly at card size (no tiny or cropped art);
+     the longest word fits its tile/slot without wrapping awkwardly.
 5. **Narrative pass**: step back from individual scenes and read the full
    scene array top to bottom as a learner would experience it. Check setting
    variety, event order, character-role stability, and (if the lesson is

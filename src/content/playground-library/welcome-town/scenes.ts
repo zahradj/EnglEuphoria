@@ -1,4 +1,5 @@
 import type { SpinWheelSceneData } from '../SpinWheelScene';
+import type { PictureMatchSceneData } from '../PictureMatchScene';
 /* =============================================================================
  * Welcome Town — A1 Unit 1 Lesson 1: "Hello, Class!"
  *
@@ -139,6 +140,8 @@ export type Scene =
   // Universal numbered spinner activity — shared with every scene library;
   // see ../SpinWheelScene.tsx for the authoring contract.
   | SpinWheelSceneData
+  // Universal word-to-picture matching activity; see ../PictureMatchScene.tsx.
+  | PictureMatchSceneData
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string; cta?: string }
   | { id: string; kind: 'cinematic'; bg: string; title: string; subtitle: string; narrator: CharKey; script: { who: CharKey; line: string }[]; cta: string }
   // `cardSide` lets the teacher-instruction/repeat cards dock to whichever

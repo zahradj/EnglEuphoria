@@ -1,5 +1,6 @@
 import type { Character } from './audio';
 import type { SpinWheelSceneData } from '../SpinWheelScene';
+import type { PictureMatchSceneData } from '../PictureMatchScene';
 
 /**
  * Little Explorers Phonics — Lesson 1 "The Forest of Hellos" (H + M sounds).
@@ -16,6 +17,8 @@ export type Scene =
   // Universal numbered spinner activity — shared with every scene library;
   // see ../SpinWheelScene.tsx for the authoring contract.
   | SpinWheelSceneData
+  // Universal word-to-picture matching activity; see ../PictureMatchScene.tsx.
+  | PictureMatchSceneData
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string }
   | {
       id: string; kind: 'cinematic'; bg: string; title: string; subtitle: string; narrator: Character;

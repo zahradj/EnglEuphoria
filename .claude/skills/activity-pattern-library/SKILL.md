@@ -109,7 +109,7 @@ new Pre-A1 lesson needs it, that's exactly when to run the Research Step.
 | Purpose | `kind`s |
 |---|---|
 | **Discovery / model** (new content, teacher-led, first exposure) | `meet`, `meet-group`, `meet-greet`, `name-gate`, `sound-model`, `color-model`, `shape-model`, `toy-model`, `numbers-learn`, `he-she-model`, `listen-repeat-cards` |
-| **Controlled / recognition practice** (low-risk, guided) | `echo`, `trace`, `sound-sort`, `color-sort`, `shape-sort`, `plural-sort`, `he-she-sort`, `color-spot`, `color-spy`, `alphabet-order`, `alphabet-blocks`, `basket`, `count-balloons`, `age-balloons` |
+| **Controlled / recognition practice** (low-risk, guided) | `picture-match`, `echo`, `trace`, `sound-sort`, `color-sort`, `shape-sort`, `plural-sort`, `he-she-sort`, `color-spot`, `color-spy`, `alphabet-order`, `alphabet-blocks`, `basket`, `count-balloons`, `age-balloons` |
 | **Interactive game practice** (student-led, real stakes, game-feel) | `word-build`, `sentence-build`, `dash`, `catch-sort`, `sound-pop`, `brick-crush`, `gather`, `memory`, `puzzle`, `hello-doors`, `friend-pop`, `feed-monsters`, `color-simon`, `train-recall`, `feelings-dice`, `feelings-wheel`, `x-is-feeling`, `i-am-feeling`, `age-sentence-match`, `who-said-it` |
 | **Speaking production** | `roleplay`, `join-stage`, `voice-stage`, `he-she-say`, `spin-wheel` |
 | **Story** | `flipbook` |
@@ -131,7 +131,7 @@ versa). ~23 `kind`s as of the true-false addition below:
 | Purpose | `kind`s |
 |---|---|
 | **Discovery / model** | `meet`, `sound-model` |
-| **Controlled / recognition practice** | `echo`, `trace`, `vocab-spot`, `drag-match`, `frequency-ladder`, `pronoun-sort`, `true-false` |
+| **Controlled / recognition practice** | `echo`, `trace`, `vocab-spot`, `drag-match`, `frequency-ladder`, `pronoun-sort`, `true-false`, `picture-match` |
 | **Interactive game practice** | `choice`, `listen-tap`, `memory`, `word-build`, `letter-game`, `jigsaw-puzzle`, `hello-doors` |
 | **Speaking production** | `roleplay`, `join-stage`, `spin-wheel` |
 | **Story** | `flipbook` |
@@ -212,6 +212,46 @@ place two `spin-wheel` scenes back to back.
 - Badge numbers are the item order — keep the picture ↔ number ↔ `label`
   mapping exact (the quality gate checks it against the art).
 - `label` is exactly the target word/phrase the student should say.
+
+## Universal — Picture ↔ word match (`picture-match`, every Playground scene library)
+
+`src/content/playground-library/PictureMatchScene.tsx`, registered in both
+the Pre-A1 and the A1/A2 renderers, fully synced (`REAL_SYNC_KINDS`). The
+classic matching slide: picture cards with an empty dashed slot in two side
+columns, the word tiles (shuffled — identically on both screens) in the
+middle. The student drags a word into the slot under its picture, or taps
+the word then the slot (easier on tablets). Right = snaps in + spoken;
+wrong = shake, back to the middle (costs a heart). Gem when all are matched.
+
+**Purpose:** controlled practice / self-check of known words (recognition +
+reading). Not first exposure. 4-6 items ideal (2-8 allowed); the words must
+be unique. Counts as its own mechanic for the Variety Rule.
+
+**`studentOnly: true` — auto-evaluation slides.** Any scene can set it (the
+lesson players support it generically): the student gets the floor without
+a teacher unlock, their "Watching your teacher" lock is hidden, and the
+teacher's copy becomes a live, non-interactive view with a "Student is
+doing this on their own" badge. Use it for self-check slides whose teacher
+note says the student works "independently, without help from the teacher".
+
+```ts
+{
+  id: 'u5-food-match', kind: 'picture-match',
+  prompt: 'Match the words to the pictures',   // optional banner
+  studentOnly: true,                           // auto-evaluation slide
+  teacher: 'Auto-evaluation slide. The student does the exercise independently, without help from the teacher.',
+  items: [                                     // left column = first half, right = second half
+    { word: 'muffins', img: imgMuffins },      // img preferred; emoji fallback
+    { word: 'bread',   img: imgBread },
+    { word: 'cheese',  emoji: '🧀' },
+  ],
+  bg: bgKitchen,                               // optional; default soft sky→pink gradient
+}
+```
+
+Reusable activities are listed (with paste-ready examples) in
+`src/content/playground-library/reusableActivities.ts`, shown on the
+`/activity-catalog` page — add every new shared activity there too.
 
 ## Academy / Success hub — Arcade + vocab-games
 

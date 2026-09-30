@@ -39,7 +39,7 @@ interface PlayWelcomeTownLessonProps {
 /** Gem-eligible scene kinds — every activity kind that ever calls onWin(true)
  *  exactly once when completed. Kept in sync manually with SceneRenderer.tsx
  *  (title-card/cinematic never award a gem; finale is the end screen). */
-const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'letter-game', 'jigsaw-puzzle', 'spin-wheel']);
+const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'letter-game', 'jigsaw-puzzle', 'spin-wheel', 'picture-match']);
 
 /** Scene kinds that own real synced state (see `activityState` below)
  *  instead of relying on the generic scene_tap DOM-click-mirror. Whoever
@@ -66,7 +66,7 @@ const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot'
 const REAL_SYNC_KINDS = new Set<Scene['kind']>([
   'vocab-spot', 'meet', 'echo', 'memory', 'choice', 'listen-tap', 'true-false',
   'frequency-ladder', 'roleplay', 'join-stage', 'hello-doors', 'flipbook',
-  'sound-model', 'word-build', 'letter-game', 'spin-wheel',
+  'sound-model', 'word-build', 'letter-game', 'spin-wheel', 'picture-match',
 ]);
 
 const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcomeTownLessonProps>(function PlayWelcomeTownLesson(
@@ -176,11 +176,17 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   // driving state at a time, or both sides would independently compute and
   // broadcast conflicting snapshots. So this must flip, not just extend, for
   // the teacher once the student is unlocked.
+  // `studentOnly` scenes (self-check / auto-evaluation slides) give the
+  // student the floor outright: no teacher unlock needed, and the teacher's
+  // copy is a live, non-interactive view of the student's work.
+  const studentDriven = isSynced && (scene as { studentOnly?: boolean }).studentOnly === true;
   const hasActivityAuthority = !isSynced
     ? true
-    : role === 'student'
-      ? interactionUnlocked
-      : !interactionUnlocked;
+    : studentDriven
+      ? role === 'student'
+      : role === 'student'
+        ? interactionUnlocked
+        : !interactionUnlocked;
   const usesRealSync = REAL_SYNC_KINDS.has(scene.kind);
 
   const [activityState, setActivityStateLocal] = useState<unknown>(null);
@@ -600,16 +606,21 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
             heartsRemaining={hearts}
             activitySync={activitySync}
           />
-          {isSynced && role === 'student' && !interactionUnlocked && (
+          {isSynced && role === 'student' && !interactionUnlocked && !studentDriven && (
             <div className="absolute inset-0 z-40 cursor-not-allowed" aria-hidden="true">
               <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
                 👀 Watching your teacher
               </div>
             </div>
           )}
-          {isSynced && role === 'teacher' && interactionUnlocked && (
+          {isSynced && role === 'teacher' && interactionUnlocked && !studentDriven && (
             <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-emerald-600/80 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
               ✋ Student is trying this
+            </div>
+          )}
+          {isSynced && role === 'teacher' && studentDriven && (
+            <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-sky-600/85 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
+              🧑‍🎓 Student is doing this on their own — you're watching live
             </div>
           )}
         </div>

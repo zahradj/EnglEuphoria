@@ -33,7 +33,7 @@ const REAL_SYNC_KINDS = new Set<string>([
   'x-is-feeling', 'he-she-model', 'feelings-dice', 'he-she-say', 'i-am-feeling',
   'feeling-quiz', 'feelings-bingo',
   'numbers-learn', 'numbers-review', 'candle-cake', 'count-balloons',
-  'age-balloons', 'meet-greet', 'age-quiz', 'spin-wheel',
+  'age-balloons', 'meet-greet', 'age-quiz', 'spin-wheel', 'picture-match',
 ]);
 
 export interface PlayUnitLessonHandle {
@@ -209,11 +209,17 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   // time, or both would independently compute and broadcast conflicting
   // snapshots.
   const usesRealSync = REAL_SYNC_KINDS.has(SCENES[sceneIdx]?.kind as string);
+  // `studentOnly` scenes (self-check / auto-evaluation slides) give the
+  // student the floor outright: no teacher unlock needed, and the teacher's
+  // copy is a live, non-interactive view of the student's work.
+  const studentDriven = isSynced && (SCENES[sceneIdx] as { studentOnly?: boolean } | undefined)?.studentOnly === true;
   const hasActivityAuthority = !isSynced
     ? true
-    : role === 'student'
-      ? interactionUnlocked
-      : !interactionUnlocked;
+    : studentDriven
+      ? role === 'student'
+      : role === 'student'
+        ? interactionUnlocked
+        : !interactionUnlocked;
 
   const [activityState, setActivityStateLocal] = useState<unknown>(null);
 
@@ -700,16 +706,21 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
             activityUnlocked={activityUnlocked}
             activitySync={activitySync}
           />
-          {isSynced && role === 'student' && !effectiveUnlocked && (
+          {isSynced && role === 'student' && !effectiveUnlocked && !studentDriven && (
             <div className="absolute inset-0 z-40 cursor-not-allowed" aria-hidden="true">
               <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
                 👀 Watching your teacher
               </div>
             </div>
           )}
-          {isSynced && role === 'teacher' && interactionUnlocked && !skipsLock && (
+          {isSynced && role === 'teacher' && interactionUnlocked && !skipsLock && !studentDriven && (
             <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-emerald-600/80 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
               ✋ Student is trying this
+            </div>
+          )}
+          {isSynced && role === 'teacher' && studentDriven && (
+            <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-sky-600/85 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
+              🧑‍🎓 Student is doing this on their own — you're watching live
             </div>
           )}
         </div>
