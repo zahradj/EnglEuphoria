@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTeacherPayoutCurrency } from "@/hooks/useTeacherPayoutCurrency";
+import { formatPay } from "@/lib/teacherPay";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -67,6 +69,8 @@ function Ring({ score, className }: { score: number; className: string }) {
 export function KpiPulseCard() {
   const { user } = useAuth();
   const { policy } = useBonusPolicy();
+  // Local teachers are paid in DZD, international in EUR.
+  const currency = useTeacherPayoutCurrency();
   const [metric, setMetric] = useState<Metric | null>(null);
   const [spark, setSpark] = useState<number[]>([]);
   const [earnings30d, setEarnings30d] = useState(0);
@@ -241,7 +245,7 @@ export function KpiPulseCard() {
             <div className="rounded-xl bg-muted/40 border border-border px-4 py-3">
               <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Projected bonus · 30d</div>
               <div className="text-2xl font-black tabular-nums text-foreground">
-                ${bonus.bonusAmount.toFixed(2)}
+                {formatPay(bonus.bonusAmount, currency)}
               </div>
               <div className="text-[11px] text-muted-foreground">
                 {bonus.basePct}% base

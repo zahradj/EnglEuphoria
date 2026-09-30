@@ -29,3 +29,12 @@ export function formatPay(amount: number | string | null | undefined, currency: 
   }
   return `€${n.toFixed(2)}`;
 }
+
+/** Compact form for tight stat tiles: "€2.8k" / "125k DA". */
+export function formatPayCompact(amount: number | string | null | undefined, currency: PayoutCurrency): string {
+  const n = Number(amount ?? 0);
+  if (currency === 'DZD') {
+    return n >= 1000 ? `${(n / 1000).toFixed(n >= 100_000 ? 0 : 1)}k DA` : `${n.toFixed(0)} DA`;
+  }
+  return n >= 1000 ? `€${(n / 1000).toFixed(1)}k` : `€${n.toFixed(0)}`;
+}
