@@ -43,7 +43,16 @@ export async function resolveActiveCoreLesson(
     null;
   if (stepLesson) return stepLesson as string;
 
-  // 3) Fallback: first published lesson in this hub
+  // 3) Fallback: first published lesson in this hub. Postgres gives no
+  // ordering guarantee among rows that tie on every ORDER BY column (very
+  // common here — many stub/placeholder rows share the same null
+  // sequence_order/order_index), so without a final deterministic
+  // tiebreaker this "first" pick can silently return a DIFFERENT lesson
+  // on every call. Confirmed live: the exact same booking resolved to
+  // three different A1 lessons (Unit 1 Lesson 1, Unit 2 Lesson 3, Unit 9
+  // Lesson 1) across three reloads seconds apart — the classroom kept
+  // jumping between lessons instead of settling on one. `id` as the final
+  // tiebreaker makes repeated calls for the same data return the same row.
   const targets = HUB_TO_TARGET_SYSTEM[hub];
   const { data: first } = await supabase
     .from('curriculum_lessons')
@@ -53,6 +62,7 @@ export async function resolveActiveCoreLesson(
     .order('slot_cefr_level', { ascending: true, nullsFirst: false })
     .order('sequence_order', { ascending: true, nullsFirst: false })
     .order('order_index', { ascending: true, nullsFirst: false })
+    .order('id', { ascending: true })
     .limit(1)
     .maybeSingle();
   return first?.id ?? null;
