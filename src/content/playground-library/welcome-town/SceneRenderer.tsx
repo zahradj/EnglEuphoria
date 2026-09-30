@@ -225,7 +225,7 @@ function TitleCardScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'titl
             // track that smoothly, a continuous vw-based size does,
             // matching the same fluid-clamp pattern already used for
             // EchoScene's modeling-sentence text elsewhere in this file.
-            fontSize: 'clamp(2.5rem, 1rem + 4vw, 4.5rem)',
+            fontSize: 'clamp(2.5rem, 1rem + 4 * var(--svw, 1vw), 4.5rem)',
           }}
         >
           {scene.title}
