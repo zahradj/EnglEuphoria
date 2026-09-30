@@ -206,13 +206,26 @@ function TitleCardScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'titl
       </div>
       <div className="absolute inset-x-0 top-24 flex flex-col items-center px-6 text-center sm:top-20">
         <h1
-          className="inline-block -rotate-2 text-5xl leading-[1.05] sm:text-7xl md:text-8xl"
+          className="inline-block -rotate-2 leading-[1.05]"
           style={{
             fontFamily: "'Bungee', 'Fredoka', system-ui, sans-serif",
             background: 'linear-gradient(180deg, #FFF3B0 0%, #FFD34E 35%, #FF8A3D 70%, #E5561A 100%)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', WebkitTextStroke: '5px #2A1200',
             paintOrder: 'stroke fill', filter: 'drop-shadow(0 8px 0 #B23A00) drop-shadow(0 12px 18px rgba(0,0,0,0.45))',
             letterSpacing: '0.02em', animation: 'lep1-hop 1.8s ease-in-out infinite',
+            // Was three fixed Tailwind breakpoint jumps (5xl -> sm:7xl ->
+            // md:8xl), flat at 96px from 768px all the way up. Reported
+            // live: the same title read as oversized on a laptop screen
+            // but properly proportioned on an external monitor. Two
+            // devices both past the md: threshold get the identical fixed
+            // 96px base size, and this scene is itself wrapped in
+            // useFrameScale's own viewport-relative scaling (see that
+            // hook's doc comment) that compensates differently per
+            // device's own aspect ratio — a hard breakpoint cliff doesn't
+            // track that smoothly, a continuous vw-based size does,
+            // matching the same fluid-clamp pattern already used for
+            // EchoScene's modeling-sentence text elsewhere in this file.
+            fontSize: 'clamp(2.5rem, 1rem + 4vw, 4.5rem)',
           }}
         >
           {scene.title}
