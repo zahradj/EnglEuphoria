@@ -49,12 +49,16 @@
 
 const W = '/welcome-town';
 
-export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo';
+export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat';
 
 /** Every one of these maps onto an audio.ts voice already built for that
  *  exact character (pip/mia/bella/willow/leo are the same characters as the
  *  Pre-A1 curriculum, reusing their established voices) — Marigold plays a
- *  teacher role, so she uses the existing generic 'teacher' key. */
+ *  teacher role, so she uses the existing generic 'teacher' key. Coco (Unit
+ *  2, Jungle Adventure), Wim, and Cat-cat (Unit 9, Magic Castle) are new
+ *  characters with no dedicated recorded voice yet — routed to 'teacher'
+ *  like Marigold until one exists, rather than silently reusing an
+ *  established character's voice for a different one. */
 export const VOICE_KEY: Record<CharKey, 'pip' | 'mia' | 'bella' | 'willow' | 'leo' | 'teacher'> = {
   pip: 'pip',
   marigold: 'teacher',
@@ -62,10 +66,18 @@ export const VOICE_KEY: Record<CharKey, 'pip' | 'mia' | 'bella' | 'willow' | 'le
   bella: 'bella',
   willow: 'willow',
   leo: 'leo',
+  coco: 'teacher',
+  wim: 'teacher',
+  catcat: 'teacher',
 };
 
 /** No `img` field — every character appears painted directly into a scene's
- *  `bg`, never as a standalone floating image (see the file banner above). */
+ *  `bg`, never as a standalone floating image (see the file banner above).
+ *  Coco the Monkey is Unit 2's (Jungle Adventure) new character — see
+ *  ../jungle-adventure/scenes.ts. Wim (a young castle wizard) and Cat-cat
+ *  (his familiar) are Unit 9's (Magic Castle) new characters — the world's
+ *  own designed mascots per src/curriculum/worlds/a1Worlds.ts, not
+ *  invented ones — see ../magic-castle/scenes.ts. */
 export const CAST: Record<CharKey, { name: string; emoji: string; color: string }> = {
   pip: { name: 'Pip', emoji: '\u{1F98A}', color: '#FE6A2F' },
   marigold: { name: 'Miss Marigold', emoji: '\u{1F989}', color: '#8ECAE6' },
@@ -73,6 +85,9 @@ export const CAST: Record<CharKey, { name: string; emoji: string; color: string 
   bella: { name: 'Bella', emoji: '\u{1F430}', color: '#E76FA5' },
   willow: { name: 'Willow', emoji: '\u{1F426}', color: '#4FA9E0' },
   leo: { name: 'Leo', emoji: '\u{1F981}', color: '#C97A2F' },
+  coco: { name: 'Coco', emoji: '\u{1F412}', color: '#8B5A2B' },
+  wim: { name: 'Wim', emoji: '\u{1F9D9}', color: '#4A4E69' },
+  catcat: { name: 'Cat-cat', emoji: '\u{1F431}', color: '#9A8C98' },
 };
 
 const bgWide = `${W}/scenes/bg-classroom-wide.png`;
@@ -130,6 +145,19 @@ export type Scene =
   | { id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string }
   | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string }[] }
   | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: { label: string; color: string; targetLeft: string; targetTop: string; who?: CharKey }[]; showBlanks?: boolean; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
+  /** Live teacher-driven placement, matching a real competitor pattern the
+   *  user pointed to directly (a house-cutaway slide where the teacher
+   *  freely drags a character between rooms while quizzing the student out
+   *  loud — no in-app scoring at all, the teacher IS the check). Each
+   *  sticker starts at its own position and can be re-dragged anywhere, any
+   *  number of times — there is no "correct" zone, no quiz phase, nothing
+   *  to grade. Deliberately left OUT of REAL_SYNC_KINDS/no `sync` prop,
+   *  same as drag-match — see PlayWelcomeTownLesson.tsx's REAL_SYNC_KINDS
+   *  comment: it relies on the generic DOM pointer-event tap/drag mirror
+   *  instead of the structured ActivitySync channel, which is what makes a
+   *  continuous drag gesture sync live between teacher and student at all
+   *  today. */
+  | { id: string; kind: 'drag-sticker'; bg: string; teacher: string; stickers: { who: CharKey; stickerImg: string; startLeft: string; startTop: string }[] }
   | { id: string; kind: 'vocab-spot'; bg: string; teacher: string; items: { label: string; sentence: string; emoji: string; left: string; top: string; color: string; dir?: 'down' | 'left' | 'right'; who?: CharKey }[] }
   | { id: string; kind: 'choice'; bg: string; who: CharKey; teacher: string; prompt: string; options: { label: string; emoji: string; correct?: boolean }[]; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
   // Listen-and-tap-in-the-scene: unlike `vocab-spot` (one guided arrow at a

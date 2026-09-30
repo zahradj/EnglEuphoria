@@ -146,6 +146,7 @@ export function SceneRenderer(props: {
       case 'echo': return <EchoScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
       case 'memory': return <MemoryScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'drag-match': return <DragMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+      case 'drag-sticker': return <DragStickerScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'vocab-spot': return <VocabSpotScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'choice': return <ChoiceScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'listen-tap': return <ListenTapScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
@@ -230,7 +231,16 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
       for (let i = 0; i < scene.script.length; i++) {
         if (cancelled) return;
         setStep(i);
+        const lineStart = Date.now();
         await safeSpeak(scene.script[i].line, voiceOf(scene.script[i].who));
+        if (cancelled) return;
+        // Advancing the instant TTS finishes let short lines flash by
+        // before a young reader could actually read them — floor each
+        // line at a minimum on-screen time (scaled to length, so long
+        // lines aren't held back once their audio already covers it).
+        const minMs = Math.min(5500, Math.max(2200, scene.script[i].line.length * 60));
+        const elapsed = Date.now() - lineStart;
+        if (elapsed < minMs) await new Promise((r) => setTimeout(r, minMs - elapsed));
       }
       if (!cancelled) setStep(scene.script.length);
     }
@@ -506,16 +516,45 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
           </button>
         );
       })()}
-      {current && revealed && (
-        <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/40 px-6" onClick={dismiss} style={{ animation: 'lep1-pop 0.25s ease-out' }}>
-          <div className="flex w-full max-w-sm flex-col items-center gap-2 rounded-[2rem] border-4 border-white bg-white px-6 py-6 text-center shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <span className="grid h-16 w-16 place-items-center rounded-full text-4xl" style={{ background: `${current.color}22` }}>{current.emoji}</span>
-            <span className="text-3xl font-black" style={{ color: current.color }}>{current.label}</span>
-            <button onClick={hearSentence} className="text-sm font-semibold text-neutral-500 underline decoration-dotted active:scale-95">🔊 Hear it in a sentence: “{current.sentence}”</button>
-            <button onClick={dismiss} className="mt-2 rounded-full px-6 py-2 text-sm font-black uppercase tracking-widest text-white shadow active:scale-95" style={{ background: current.color }}>Got it!</button>
+      {/* Label tag, not a full-screen modal: the old version darkened and
+          centered a big card over the ENTIRE scene, hiding the very object
+          it was labeling — replaced on request with a small tag anchored
+          right where the arrow already points, so the art stays visible
+          and the word reads as "attached to this object" rather than as an
+          interruption. Positioned with the same left/top/GAP math as the
+          arrow above (same `dir` side), just nudged further out so the two
+          don't overlap. */}
+      {current && revealed && (() => {
+        const dir = current.dir ?? 'down';
+        const GAP = 118;
+        const pos = dir === 'down'
+          ? { left: current.left, top: `calc(${current.top} - ${GAP}px)` }
+          : dir === 'right'
+          ? { left: `calc(${current.left} - ${GAP}px)`, top: current.top }
+          : { left: `calc(${current.left} + ${GAP}px)`, top: current.top };
+        return (
+          <div
+            className="pointer-events-none absolute z-40 -translate-x-1/2 -translate-y-1/2 px-2"
+            style={{ ...pos, animation: 'lep1-pop 0.25s ease-out' }}
+          >
+            <div className="pointer-events-auto flex items-center gap-2 rounded-full border-2 border-white bg-white/97 py-2 pl-3 pr-2 shadow-xl backdrop-blur">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-xl" style={{ background: `${current.color}22` }}>{current.emoji}</span>
+              {/* Fixed dark neutral, NOT `current.color`: that per-item theme
+                  color is picked for icon/marker variety, not guaranteed
+                  legible as TEXT on this near-white pill — a pale color
+                  (grey-mauve, light amber, etc.) reads as barely-there here
+                  even though the same hex works fine as a small icon tint
+                  or a filled button background. Confirmed live: a lesson's
+                  own `#9A8C98` marker color made its label read as
+                  invisible. Word legibility must never depend on which
+                  color a given lesson happens to pick. */}
+              <span className="text-base font-black whitespace-nowrap text-neutral-800">{current.label}</span>
+              <button onClick={hearSentence} aria-label={`Hear "${current.label}" in a sentence`} className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-neutral-400 transition active:scale-90 hover:text-neutral-600">🔊</button>
+              <button onClick={dismiss} aria-label="Got it" className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-white shadow transition active:scale-90" style={{ background: current.color }}>✓</button>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
       {done && (
         <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
           <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">All found! ⭐ Next</button>
@@ -640,7 +679,12 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
   const total = scene.items.length;
   const containerRef = useRef<HTMLDivElement>(null);
   const [placed, setPlaced] = useState<Set<number>>(new Set());
-  const [drag, setDrag] = useState<{ idx: number; x: number; y: number; startX: number; startY: number } | null>(null);
+  // xPct/yPct: the drag ghost's position expressed as a percentage of the
+  // scene container, NOT raw viewport pixels — see the ghost's render below
+  // for why. x/y (raw client coords) are kept for the drop hit-test only,
+  // which already measures everything in that same raw-viewport space and
+  // is unaffected by this.
+  const [drag, setDrag] = useState<{ idx: number; x: number; y: number; startX: number; startY: number; xPct: number; yPct: number } | null>(null);
   const [wrongIdx, setWrongIdx] = useState<number | null>(null);
   const gemDone = useRef(false);
   // The tray's left-to-right order is scattered rather than matching each
@@ -661,16 +705,24 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
     void safeSpeak(item.label, item.who ? voiceOf(item.who) : 'teacher');
   };
 
+  // Container-relative percentage for a raw viewport point — used for the
+  // ghost chip's position (see its render below).
+  const toPct = (clientX: number, clientY: number) => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect || rect.width === 0 || rect.height === 0) return { xPct: 50, yPct: 50 };
+    return { xPct: ((clientX - rect.left) / rect.width) * 100, yPct: ((clientY - rect.top) / rect.height) * 100 };
+  };
+
   const startDrag = (e: React.PointerEvent, idx: number) => {
     if (placed.has(idx)) return;
     e.preventDefault();
     hear(idx);
-    setDrag({ idx, x: e.clientX, y: e.clientY, startX: e.clientX, startY: e.clientY });
+    setDrag({ idx, x: e.clientX, y: e.clientY, startX: e.clientX, startY: e.clientY, ...toPct(e.clientX, e.clientY) });
   };
 
   useEffect(() => {
     if (!drag) return;
-    const move = (e: PointerEvent) => setDrag((d) => (d ? { ...d, x: e.clientX, y: e.clientY } : d));
+    const move = (e: PointerEvent) => setDrag((d) => (d ? { ...d, x: e.clientX, y: e.clientY, ...toPct(e.clientX, e.clientY) } : d));
     const up = (e: PointerEvent) => {
       const movedDist = Math.hypot(e.clientX - drag.startX, e.clientY - drag.startY);
       // A short tap (barely moved) is just "hear the word again," not a
@@ -771,10 +823,23 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
           );
         })}
       </div>
+      {/* `absolute` + percentage left/top, NOT `fixed` + raw client pixels:
+          this scene renders inside MainStage's scaled letterbox frame (see
+          useFrameScale), and a `transform: scale(...)` on ANY ancestor makes
+          that ancestor the containing block for every `position: fixed`
+          descendant per the CSS spec — so a `fixed` ghost here was actually
+          positioned relative to the SCALED frame, not the real viewport,
+          while its left/top came from raw (unscaled) pointer coordinates.
+          The two disagreed by roughly the frame's own scale factor, so the
+          ghost visibly drifted away from the real cursor/finger the moment
+          the frame was scaled at all — reported live as "the arrow is far
+          away from the word I'm dragging." Percentages of the scene
+          container (which IS inside the same scaled space as the pointer)
+          track correctly regardless of scale. */}
       {drag && (
         <div
-          className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-xl px-4 py-3 shadow-2xl ring-4 ring-white"
-          style={{ left: drag.x, top: drag.y, background: scene.items[drag.idx].color }}
+          className="pointer-events-none absolute z-50 -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-xl px-4 py-3 shadow-2xl ring-4 ring-white"
+          style={{ left: `${drag.xPct}%`, top: `${drag.yPct}%`, background: scene.items[drag.idx].color }}
         >
           <span className="text-sm font-black uppercase tracking-wide text-white">{scene.items[drag.idx].label}</span>
         </div>
@@ -784,6 +849,107 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
           <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Great job! ⭐ Next</button>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ---------- Drag sticker (free teacher-placed characters, no scoring) ----------
+ * Matches a real reference the user pointed to directly: a competitor's
+ * house-cutaway slide where the teacher freely drags a character between
+ * rooms while quizzing the student out loud — "Drag Sally into them as you
+ * go." There is no quiz phase, no correct zone, nothing scored in-app; the
+ * teacher IS the check. Each sticker in `scene.stickers` is independently,
+ * repeatedly draggable — pick it up, drop it, pick it up again, as many
+ * times as the conversation needs.
+ *
+ * Deliberately mirrors DragMatchScene's own plain-`useState` drag physics
+ * (no `sync` prop, no ActivitySync/useSyncedState) — see
+ * PlayWelcomeTownLesson.tsx's REAL_SYNC_KINDS comment: continuous pointer
+ * gestures sync live via the generic DOM pointer-event tap/drag mirror
+ * (sendSceneTap's pointerdown/pointermove/pointerup replay), not the
+ * structured broadcast channel, so this scene must stay OFF
+ * REAL_SYNC_KINDS and un-wrapped in `sync` for that mirror to apply at all. */
+
+function DragStickerScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'drag-sticker' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [positions, setPositions] = useState<Record<string, { xPct: number; yPct: number }>>({});
+  const [dragKey, setDragKey] = useState<string | null>(null);
+  const [dragPos, setDragPos] = useState<{ xPct: number; yPct: number } | null>(null);
+  const gemDone = useRef(false);
+
+  // Container-relative percentage — see DragMatchScene's identical helper/
+  // comment for why this must be a percentage of the scene container, not
+  // raw viewport pixels, inside the classroom's scaled letterbox frame.
+  const toPct = (clientX: number, clientY: number) => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect || rect.width === 0 || rect.height === 0) return { xPct: 50, yPct: 50 };
+    return { xPct: ((clientX - rect.left) / rect.width) * 100, yPct: ((clientY - rect.top) / rect.height) * 100 };
+  };
+
+  const startDrag = (e: React.PointerEvent, key: string) => {
+    e.preventDefault();
+    sfx.click();
+    setDragKey(key);
+    setDragPos(toPct(e.clientX, e.clientY));
+  };
+
+  useEffect(() => {
+    if (!dragKey) return;
+    const move = (e: PointerEvent) => setDragPos(toPct(e.clientX, e.clientY));
+    const up = (e: PointerEvent) => {
+      const p = toPct(e.clientX, e.clientY);
+      setPositions((prev) => ({ ...prev, [dragKey]: p }));
+      if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+      setDragKey(null);
+      setDragPos(null);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    return () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dragKey]);
+
+  return (
+    <div ref={containerRef} className="absolute inset-0 overflow-hidden bg-cover bg-center touch-none" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        {scene.teacher}
+      </div>
+
+      {/* A real paper sticker, not an emoji chip: the source art already has
+          its own white die-cut border baked in (see magic-castle/scenes.ts's
+          sticker-wim.png/sticker-catcat.png generation) and a transparent
+          background around it, so this just adds the physical
+          "placed on the page" cues — a soft shadow and a slight tilt. */}
+      {scene.stickers.map((s) => {
+        const key = s.who;
+        const isDragging = dragKey === key;
+        const pos = isDragging && dragPos ? dragPos : (positions[key] ?? { xPct: parseFloat(s.startLeft), yPct: parseFloat(s.startTop) });
+        if (isDragging) {
+          return (
+            <img
+              key={key} src={s.stickerImg} alt={CAST[s.who].name}
+              className="pointer-events-none absolute z-50 h-28 w-28 -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow-[0_16px_24px_rgba(0,0,0,0.5)] sm:h-36 sm:w-36"
+              style={{ left: `${pos.xPct}%`, top: `${pos.yPct}%`, transform: 'translate(-50%, -50%) scale(1.08) rotate(-3deg)' }}
+            />
+          );
+        }
+        return (
+          <button
+            key={key}
+            onPointerDown={(e) => startDrag(e, key)}
+            aria-label={`Drag ${CAST[s.who].name}`}
+            className="pointer-events-auto absolute z-30 -translate-x-1/2 -translate-y-1/2 touch-none transition active:scale-95"
+            style={{ left: `${pos.xPct}%`, top: `${pos.yPct}%` }}
+          >
+            <img src={s.stickerImg} alt={CAST[s.who].name} className="h-28 w-28 object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)] sm:h-36 sm:w-36" style={{ transform: 'rotate(4deg)' }} />
+          </button>
+        );
+      })}
+
+      <div className="absolute inset-x-0 bottom-6 z-40 flex justify-center">
+        <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Great job! ⭐ Next</button>
+      </div>
     </div>
   );
 }
@@ -2206,8 +2372,18 @@ function JigsawPuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
   const { rows, cols, image } = scene;
   const total = rows * cols;
   const containerRef = useRef<HTMLDivElement>(null);
+  // The ghost piece renders as a child of the OUTER scene root (see its
+  // render below), not of containerRef's inner framed box — so its
+  // percentage position needs to be measured against that outer root, a
+  // separate ref from containerRef (which stays scoped to the drop-tolerance
+  // math against the inner box, unaffected by this).
+  const outerRef = useRef<HTMLDivElement>(null);
   const [placed, setPlaced] = useState<Set<number>>(new Set());
-  const [drag, setDrag] = useState<{ idx: number; x: number; y: number; startX: number; startY: number } | null>(null);
+  // xPct/yPct: see DragMatchScene's identical comment — `position: fixed`
+  // breaks once any ancestor (MainStage's letterbox scale) has a CSS
+  // transform, so the ghost piece must be `absolute` + container-relative
+  // percentage instead of `fixed` + raw client pixels.
+  const [drag, setDrag] = useState<{ idx: number; x: number; y: number; startX: number; startY: number; xPct: number; yPct: number } | null>(null);
   const [wrongIdx, setWrongIdx] = useState<number | null>(null);
   const gemDone = useRef(false);
 
@@ -2230,16 +2406,22 @@ function JigsawPuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
     };
   };
 
+  const toPct = (clientX: number, clientY: number) => {
+    const rect = outerRef.current?.getBoundingClientRect();
+    if (!rect || rect.width === 0 || rect.height === 0) return { xPct: 50, yPct: 50 };
+    return { xPct: ((clientX - rect.left) / rect.width) * 100, yPct: ((clientY - rect.top) / rect.height) * 100 };
+  };
+
   const startDrag = (e: React.PointerEvent, idx: number) => {
     if (placed.has(idx)) return;
     e.preventDefault();
     sfx.click();
-    setDrag({ idx, x: e.clientX, y: e.clientY, startX: e.clientX, startY: e.clientY });
+    setDrag({ idx, x: e.clientX, y: e.clientY, startX: e.clientX, startY: e.clientY, ...toPct(e.clientX, e.clientY) });
   };
 
   useEffect(() => {
     if (!drag) return;
-    const move = (e: PointerEvent) => setDrag((d) => (d ? { ...d, x: e.clientX, y: e.clientY } : d));
+    const move = (e: PointerEvent) => setDrag((d) => (d ? { ...d, x: e.clientX, y: e.clientY, ...toPct(e.clientX, e.clientY) } : d));
     const up = (e: PointerEvent) => {
       const movedDist = Math.hypot(e.clientX - drag.startX, e.clientY - drag.startY);
       if (movedDist < 20) { setDrag(null); return; }
@@ -2274,7 +2456,7 @@ function JigsawPuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
   const done = placed.size === total;
 
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 bg-gradient-to-b from-orange-50 to-pink-50 px-4 pb-28 pt-16 touch-none">
+    <div ref={outerRef} className="absolute inset-0 flex flex-col items-center justify-center gap-5 bg-gradient-to-b from-orange-50 to-pink-50 px-4 pb-28 pt-16 touch-none">
       <div className="pointer-events-none absolute inset-x-0 top-4 z-30 flex justify-center px-4">
         <div className="max-w-[92%] rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl sm:text-base">
           {'\u{1F9E9}'} {scene.teacher} <span className="ml-1 opacity-60">({placed.size}/{total})</span>
@@ -2310,8 +2492,11 @@ function JigsawPuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
           );
         })}
       </div>
+      {/* absolute + percentage, not fixed + raw pixels — see DragMatchScene's
+          comment on its own ghost for why (MainStage's scaled letterbox
+          frame breaks `position: fixed`'s viewport-relative assumption). */}
       {drag && (
-        <div className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-1/2 rounded-xl shadow-2xl ring-4 ring-white" style={{ left: drag.x, top: drag.y, width: 72, height: 72, ...pieceStyle(drag.idx) }} />
+        <div className="pointer-events-none absolute z-50 -translate-x-1/2 -translate-y-1/2 rounded-xl shadow-2xl ring-4 ring-white" style={{ left: `${drag.xPct}%`, top: `${drag.yPct}%`, width: 72, height: 72, ...pieceStyle(drag.idx) }} />
       )}
       {done && (
         <div className="absolute inset-x-0 bottom-8 z-40 flex justify-center">

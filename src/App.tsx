@@ -159,12 +159,15 @@ const PlayWelcomeTown1 = lazy(() => import("./pages/playground-scene/PlayWelcome
 const PlayWelcomeTown2 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown2"));
 const PlayWelcomeTown3 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown3"));
 const PlayWelcomeTown4 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown4"));
+const PlayJungleLesson1 = lazy(() => import("./pages/playground-scene/PlayJungleLesson1"));
+const PlayMagicCastleLesson1 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson1"));
 const PlayA2Unit1Lesson1 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson1"));
 const PlayA2Unit1Lesson2 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson2"));
 const PlayA2Unit1Lesson3 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson3"));
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundLibraryPublic = lazy(() => import("./pages/playground-library/PlaygroundLibraryPublic"));
 const AcademyLibraryPage = lazy(() => import("./pages/playground-library/AcademyLibraryPage"));
+const AcademyLibraryPublic = lazy(() => import("./pages/playground-library/AcademyLibraryPublic"));
 // New Academy lesson engine (Phase 1) — canonical AcademyDemo.tsx schema/renderer,
 // routed to for any curriculum_lessons row with ai_metadata.contentFormat === 'academy-v2'.
 const PlayAcademyLesson = lazy(() => import("./pages/academy-scene/PlayAcademyLesson"));
@@ -361,6 +364,18 @@ const App = () => {
                           <Suspense fallback={<LoadingFallback />}><PlayWelcomeTown4 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
+                      {/* A1 tier — Jungle Adventure, Unit 2 Lesson 1 ("Jungle Animals: Lion, Monkey, Bird"). */}
+                      <Route path="/playground-scene/jungle-lesson-1" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayJungleLesson1 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Magic Castle, Unit 9 Lesson 1 ("Rooms in the Castle: Kitchen, Bedroom"). */}
+                      <Route path="/playground-scene/castle-lesson-1" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMagicCastleLesson1 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
                       {/* A2 tier — Welcome Town, Unit 1 Lesson 1 ("My Day"). */}
                       <Route path="/playground-scene/a2-unit-1-lesson-1" element={
                         <ImprovedProtectedRoute>
@@ -399,6 +414,13 @@ const App = () => {
                         <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
                           <Suspense fallback={<LoadingFallback />}><AcademyLibraryPage /></Suspense>
                         </ImprovedProtectedRoute>
+                      } />
+                      {/* Public, read-only mirror of the library above — anyone with the
+                          link can browse PUBLISHED Academy lessons, no account required.
+                          Same split as /library/playground: the catalog is link-shareable,
+                          but /academy-scene/:id itself still requires login to actually play. */}
+                      <Route path="/library/academy" element={
+                        <Suspense fallback={<LoadingFallback />}><AcademyLibraryPublic /></Suspense>
                       } />
                       <Route path="/play/:lessonId" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />
                       <Route path="/play" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />
