@@ -32,15 +32,18 @@ export const HW_A1U9L1_INTRO = {
 } as const;
 
 /** House puzzle — bg-castle-overview.png cut into its six rooms (percent
- *  boxes measured on the 1376×768 art). The student hears "Find the ___."
- *  and drops that room's piece into its place until the castle is whole. */
+ *  boxes measured on the 1376×768 art). Each empty slot shows a number;
+ *  the student hears "Number one. Cat-cat is playing in the living room."
+ *  and must pick that room's piece (pieces carry no labels) and drop it on
+ *  slot 1 — a full-sentence listening check, in number order, until the
+ *  castle is whole. Numbers are scattered across the house on purpose. */
 export const HW_A1U9L1_PUZZLE = [
-  { room: 'kitchen', x: 35.6, y: 64.1, w: 29.1, h: 32.3, line: 'Find the kitchen.' },
-  { room: 'bedroom', x: 12.1, y: 64.1, w: 22.6, h: 32.3, line: 'Find the bedroom.' },
-  { room: 'living room', x: 12.1, y: 28.9, w: 26.0, h: 33.3, line: 'Find the living room.' },
-  { room: 'bathroom', x: 61.9, y: 28.9, w: 26.0, h: 33.3, line: 'Find the bathroom.' },
-  { room: 'dining room', x: 65.6, y: 64.1, w: 22.3, h: 32.3, line: 'Find the dining room.' },
-  { room: 'hallway', x: 39.1, y: 28.9, w: 21.8, h: 33.3, line: 'Find the hallway.' },
+  { n: 1, room: 'living room', x: 12.1, y: 28.9, w: 26.0, h: 33.3, line: 'Number one. Cat-cat is playing in the living room.' },
+  { n: 2, room: 'kitchen', x: 35.6, y: 64.1, w: 29.1, h: 32.3, line: 'Number two. Wim is cooking in the kitchen.' },
+  { n: 3, room: 'bedroom', x: 12.1, y: 64.1, w: 22.6, h: 32.3, line: 'Number three. Pip is sleeping in the bedroom.' },
+  { n: 4, room: 'bathroom', x: 61.9, y: 28.9, w: 26.0, h: 33.3, line: 'Number four. Cat-cat is having a bath in the bathroom.' },
+  { n: 5, room: 'dining room', x: 65.6, y: 64.1, w: 22.3, h: 32.3, line: 'Number five. Wim is eating in the dining room.' },
+  { n: 6, room: 'hallway', x: 39.1, y: 28.9, w: 21.8, h: 33.3, line: 'Number six. Pip is walking in the hallway.' },
 ] as const;
 
 /** Furniture stickers dragged onto bg-castle-rooms.png (kitchen left,
