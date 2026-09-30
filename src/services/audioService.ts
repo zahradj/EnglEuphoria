@@ -66,6 +66,10 @@ export const audioService = {
       '👍': 'emoji_thumbsup',
       '❤️': 'emoji_heart',
       '❤': 'emoji_heart',
+      '🔥': 'emoji_fire',
+      '💯': 'emoji_100',
+      '🌟': 'star',
+      '⭐': 'star',
     };
     const key = map[emoji] ?? 'badge';
     play(key, () => soundEffectsService.playPowerUp());

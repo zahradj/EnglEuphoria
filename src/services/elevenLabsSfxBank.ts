@@ -35,7 +35,9 @@ export type SfxKey =
   | "emoji_laugh"
   | "emoji_party"
   | "emoji_thumbsup"
-  | "emoji_heart";
+  | "emoji_heart"
+  | "emoji_fire"
+  | "emoji_100";
 
 interface SfxSpec {
   prompt: string;
@@ -50,8 +52,8 @@ const SFX_PROMPTS: Record<SfxKey, SfxSpec> = {
     duration: 0.4, influence: 0.75, volume: 0.7,
   },
   star: {
-    prompt: "Sparkling magical star pickup, fast bright glittery upward chime with shimmer, energetic arcade reward",
-    duration: 1.0, influence: 0.65, volume: 1.0,
+    prompt: "Magical gold star reward for a child: a bright rising sparkle glissando that bursts into a joyful triumphant ta-da chime with twinkling bells, a confetti pop and a short happy kids' cheer, bright and uplifting",
+    duration: 2.2, influence: 0.6, volume: 1.0,
   },
   badge: {
     prompt: "Triumphant badge unlock fanfare, punchy ascending bells with shimmer and a confident hit, short and energetic, AAA game achievement",
@@ -94,8 +96,8 @@ const SFX_PROMPTS: Record<SfxKey, SfxSpec> = {
     duration: 0.6, influence: 0.75, volume: 0.7,
   },
   emoji_clap: {
-    prompt: "Energetic burst of enthusiastic audience applause, lots of clapping hands, bright and lively, no cheering, no music",
-    duration: 1.8, influence: 0.8, volume: 1.0,
+    prompt: "Passionate joyful applause for a child who did great: an excited crowd clapping hard and fast with happy cheers, whoops and 'yay!', warm, celebratory and full of joy, no music",
+    duration: 2.6, influence: 0.7, volume: 1.0,
   },
   emoji_laugh: {
     prompt: "Joyful group of kids laughing out loud together, hearty contagious giggles, warm and energetic, no music",
@@ -109,13 +111,21 @@ const SFX_PROMPTS: Record<SfxKey, SfxSpec> = {
     prompt: "Snappy high-energy cartoon pop, single bright bouncy bubble pop with a tiny sparkle, punchy and crisp",
     duration: 0.45, influence: 0.85, volume: 1.0,
   },
+  emoji_fire: {
+    prompt: "Exciting fiery whoosh that ignites into a bright crackling burst with sparkles, energetic and positive, like a cartoon power-up, short",
+    duration: 1.2, influence: 0.7, volume: 0.95,
+  },
+  emoji_100: {
+    prompt: "Perfect score celebration: three quick bright victorious dings rising in pitch, then a happy kids' 'yay!' and sparkles, cheerful game show win, short",
+    duration: 1.6, influence: 0.65, volume: 1.0,
+  },
   emoji_heart: {
     prompt: "Energetic juicy bubble pop with a sweet sparkle tail, bright punchy cartoon heart pop, lively and crisp",
     duration: 0.6, influence: 0.85, volume: 1.0,
   },
 };
 
-const STORAGE_PREFIX = "ee_sfx_v3::"; // bumped: re-energized prompts + emoji_heart
+const STORAGE_PREFIX = "ee_sfx_v4::"; // bumped: joyful clap/star + fire/100 emoji sounds
 const audioPool = new Map<SfxKey, HTMLAudioElement>();
 const inflight = new Map<SfxKey, Promise<string | null>>();
 
