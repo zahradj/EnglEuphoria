@@ -171,21 +171,6 @@ const VOICE_ID: Record<Character, string> = {
   narrator: 'jsCqWAovK2LkecY7zXl4', // Freya
 };
 
-// Browser speechSynthesis fallback (used only if ElevenLabs and the local
-// clip both fail) — paced to match SPEECH_SPEED above for pre-k listeners,
-// pitch raised to stay consistent with the childlike ElevenLabs cast.
-// SpeechSynthesisUtterance.pitch is clamped to [0, 2] by the Web Speech API
-// spec, so 2.0 (mia) is the ceiling this path can reach.
-const FALLBACK_VOICE: Record<Character, { rate: number; pitch: number }> = {
-  pip: { rate: 0.78, pitch: 1.5 },
-  mia: { rate: 0.63, pitch: 2.0 },
-  bella: { rate: 0.63, pitch: 1.7 },
-  willow: { rate: 0.63, pitch: 1.6 },
-  leo: { rate: 0.58, pitch: 1.4 },
-  teacher: { rate: 0.78, pitch: 1.3 },
-  narrator: { rate: 0.78, pitch: 1.3 },
-};
-
 // Raw fetched clips are cached as Blobs, playable directly via HTMLAudioElement.
 const blobCache = new Map<string, Blob>();
 const inFlight = new Map<string, Promise<Blob | null>>();
@@ -392,60 +377,16 @@ function stopCurrent() {
     }
     currentAudioEl = null;
   }
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-    try {
-      window.speechSynthesis.cancel();
-    } catch {
-      /* noop */
-    }
-  }
 }
 
-/** Waits briefly for the browser's voice list to finish loading (it loads
- *  asynchronously on some browsers) and returns whatever is available. */
-function getVoicesReady(): Promise<SpeechSynthesisVoice[]> {
-  return new Promise((resolve) => {
-    const v = window.speechSynthesis.getVoices();
-    if (v.length) { resolve(v); return; }
-    const timer = window.setTimeout(() => resolve(window.speechSynthesis.getVoices()), 500);
-    window.speechSynthesis.onvoiceschanged = () => {
-      window.clearTimeout(timer);
-      resolve(window.speechSynthesis.getVoices());
-    };
-  });
-}
-
-async function playFallback(text: string, character: Character): Promise<void> {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-
-  // This fallback only exists for the rare case the real character-voice
-  // fetch fails outright. If the device has no English voice installed at
-  // all, the browser will substitute whatever its default system voice is
-  // (observed in the wild: a French voice) regardless of the `lang` we ask
-  // for — that's worse than staying silent for a beat, since the teacher is
-  // narrating live anyway. So refuse to speak rather than guess wrong.
-  const voices = await getVoicesReady();
-  const english = voices.filter((v) => v.lang.toLowerCase().startsWith('en'));
-  if (!english.length) {
-    console.warn('[lep1 voice] no English system voice installed — skipping fallback speech for:', text);
-    return;
-  }
-  const voice =
-    english.find((v) => /en-US/i.test(v.lang)) ??
-    english.find((v) => /female/i.test(v.name)) ??
-    english[0];
-
-  return new Promise((resolve) => {
-    const u = new SpeechSynthesisUtterance(text);
-    const f = FALLBACK_VOICE[character];
-    u.rate = f.rate;
-    u.pitch = f.pitch;
-    u.lang = voice.lang;
-    u.voice = voice;
-    u.onend = () => resolve();
-    u.onerror = () => resolve();
-    window.speechSynthesis.speak(u);
-  });
+/** No browser text-to-speech, ever. The device's built-in voices speak with
+ *  whatever accent/language the device has (reported in class as an
+ *  unacceptable accent), so a line whose recorded character clip can't be
+ *  fetched stays silent for that beat instead of switching to a different,
+ *  robotic voice. The next attempt retries the real clip (the server keeps
+ *  every generated line, see elevenlabs-tts). */
+async function playFallback(text: string, _character: Character): Promise<void> {
+  console.warn('[lep1 voice] character clip unavailable — staying silent (no browser voice):', text);
 }
 
 /** Slows down playback without pitch-shifting (modern browsers preserve
@@ -509,13 +450,6 @@ export function unlockAudio() {
     );
     a.volume = 0.01;
     void a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(() => {});
-  } catch { /* noop */ }
-  try {
-    if ('speechSynthesis' in window) {
-      const u = new SpeechSynthesisUtterance(' ');
-      u.volume = 0;
-      window.speechSynthesis.speak(u);
-    }
   } catch { /* noop */ }
 }
 
