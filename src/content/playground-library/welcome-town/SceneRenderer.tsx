@@ -41,7 +41,13 @@ export function GlassCard({ children, className = '' }: { children: React.ReactN
  *  tap-to-reveal behavior — this one only ever points, it never opens a
  *  flashcard. */
 function CharacterPointer({ left, top, dir = 'down', color }: { left: string; top: string; dir?: 'down' | 'left' | 'right'; color: string }) {
-  const GAP = 62;
+  // GAP and the arrow's own size were tuned small enough that on a real
+  // classroom-scaled frame (letterboxed well below full viewport size, see
+  // useFrameScale) the arrow read as a barely-visible sliver — reported
+  // live as "the arrows look very small." Both bumped ~45%; GAP grows with
+  // the arrow so it still sits fully clear of whatever it's pointing at
+  // rather than overlapping it.
+  const GAP = 90;
   const pos = dir === 'down'
     ? { left, top: `calc(${top} - ${GAP}px)` }
     : dir === 'right'
@@ -63,8 +69,8 @@ function CharacterPointer({ left, top, dir = 'down', color }: { left: string; to
       />
       <div className="pointer-events-none absolute z-20" style={{ ...pos, transform: `translate(-50%, -50%) rotate(${angle}deg)` }}>
         <span className="relative block" style={{ animation: 'lep1-hop 0.9s ease-in-out infinite' }}>
-          <span className="pointer-events-none absolute bottom-0 left-1/2 h-12 w-12 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${color}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
-          <svg width="52" height="76" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
+          <span className="pointer-events-none absolute bottom-0 left-1/2 h-16 w-16 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${color}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
+          <svg width="76" height="110" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
             <path
               d="M13 3 C13 1.9 13.9 1 15 1 L25 1 C26.1 1 27 1.9 27 3 L27 21 L36 21 C37.9 21 38.8 23.3 37.4 24.6 L21.4 43.6 C20.6 44.5 19.4 44.5 18.6 43.6 L2.6 24.6 C1.2 23.3 2.1 21 4 21 L13 21 Z"
               fill={color}
@@ -477,7 +483,10 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
           `dir`, whichever side actually has room in that background. */}
       {current && (() => {
         const dir = current.dir ?? 'down';
-        const GAP = 62;
+        // Matches CharacterPointer's own bump (52x76 -> 76x110, GAP 62 ->
+        // 90) — same "arrows look very small" report applied to this
+        // scene's own separately-drawn arrow.
+        const GAP = 90;
         const pos = dir === 'down'
           ? { left: current.left, top: `calc(${current.top} - ${GAP}px)` }
           : dir === 'right'
@@ -501,9 +510,9 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
                 each other on the shared `transform` property. */}
             <span className="relative block" style={{ animation: revealed ? undefined : 'lep1-hop 0.9s ease-in-out infinite' }}>
               {!revealed && (
-                <span className="pointer-events-none absolute bottom-0 left-1/2 h-12 w-12 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${current.color}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
+                <span className="pointer-events-none absolute bottom-0 left-1/2 h-16 w-16 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${current.color}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
               )}
-              <svg width="52" height="76" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
+              <svg width="76" height="110" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
                 <path
                   d="M13 3 C13 1.9 13.9 1 15 1 L25 1 C26.1 1 27 1.9 27 3 L27 21 L36 21 C37.9 21 38.8 23.3 37.4 24.6 L21.4 43.6 C20.6 44.5 19.4 44.5 18.6 43.6 L2.6 24.6 C1.2 23.3 2.1 21 4 21 L13 21 Z"
                   fill={current.color}
@@ -526,19 +535,34 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
           don't overlap. */}
       {current && revealed && (() => {
         const dir = current.dir ?? 'down';
-        const GAP = 118;
+        // Nudged out further to clear the now-bigger arrow (GAP 90 above)
+        // by the same margin it used to clear the old smaller one.
+        const GAP = 150;
         const pos = dir === 'down'
           ? { left: current.left, top: `calc(${current.top} - ${GAP}px)` }
           : dir === 'right'
           ? { left: `calc(${current.left} - ${GAP}px)`, top: current.top }
           : { left: `calc(${current.left} + ${GAP}px)`, top: current.top };
+        // The bigger chip (below) is wide enough that centering it on a
+        // point near the left/right edge (e.g. a room hotspot at left:
+        // 18%) pushed it half off-screen — confirmed live, the emoji icon
+        // was clipped by the viewport edge. Anchor from whichever side has
+        // room instead of always centering, so the chip grows INTO the
+        // scene rather than off of it.
+        const leftPct = parseFloat(current.left);
+        const translateX = leftPct < 25 ? '0%' : leftPct > 75 ? '-100%' : '-50%';
         return (
           <div
-            className="pointer-events-none absolute z-40 -translate-x-1/2 -translate-y-1/2 px-2"
-            style={{ ...pos, animation: 'lep1-pop 0.25s ease-out' }}
+            className="pointer-events-none absolute z-40 px-2"
+            style={{ ...pos, transform: `translate(${translateX}, -50%)`, animation: 'lep1-pop 0.25s ease-out' }}
           >
-            <div className="pointer-events-auto flex items-center gap-2 rounded-full border-2 border-white bg-white/97 py-2 pl-3 pr-2 shadow-xl backdrop-blur">
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-xl" style={{ background: `${current.color}22` }}>{current.emoji}</span>
+            {/* Bumped up a full size tier across the board (icon, text,
+                buttons, border, padding) — the old chip read as a barely-
+                visible sliver of text against a full scene background,
+                reported live as "the vocabulary stickers... don't look
+                much visible to the student." */}
+            <div className="pointer-events-auto flex items-center gap-3 rounded-full border-[3px] border-white bg-white/97 py-3 pl-3 pr-3 shadow-2xl backdrop-blur">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-3xl" style={{ background: `${current.color}22` }}>{current.emoji}</span>
               {/* Fixed dark neutral, NOT `current.color`: that per-item theme
                   color is picked for icon/marker variety, not guaranteed
                   legible as TEXT on this near-white pill — a pale color
@@ -548,9 +572,9 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
                   own `#9A8C98` marker color made its label read as
                   invisible. Word legibility must never depend on which
                   color a given lesson happens to pick. */}
-              <span className="text-base font-black whitespace-nowrap text-neutral-800">{current.label}</span>
-              <button onClick={hearSentence} aria-label={`Hear "${current.label}" in a sentence`} className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-neutral-400 transition active:scale-90 hover:text-neutral-600">🔊</button>
-              <button onClick={dismiss} aria-label="Got it" className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-white shadow transition active:scale-90" style={{ background: current.color }}>✓</button>
+              <span className="text-2xl font-black whitespace-nowrap text-neutral-800 sm:text-3xl">{current.label}</span>
+              <button onClick={hearSentence} aria-label={`Hear "${current.label}" in a sentence`} className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-xl text-neutral-400 transition active:scale-90 hover:text-neutral-600">🔊</button>
+              <button onClick={dismiss} aria-label="Got it" className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-2xl text-white shadow transition active:scale-90" style={{ background: current.color }}>✓</button>
             </div>
           </div>
         );
@@ -813,16 +837,44 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
         const rect = container.getBoundingClientRect();
         const targetX = rect.left + (parseFloat(item.targetLeft) / 100) * rect.width;
         const targetY = rect.top + (parseFloat(item.targetTop) / 100) * rect.height;
-        const dist = Math.hypot(e.clientX - targetX, e.clientY - targetY);
         // Vocab-matching drops (no showBlanks landing-zone box drawn) land
-        // anywhere on a full character illustration, not a pinpoint — 0.14
-        // was tight enough that dropping on a visibly-correct character
-        // (e.g. Mia) still missed and registered as wrong. Widened so the
-        // whole character's rendered footprint is a comfortable hit area;
-        // sentence-builder (showBlanks) drops stay tighter since those have
-        // a small drawn blank to aim at, not a full illustration.
-        const tolerance = Math.min(rect.width, rect.height) * (scene.showBlanks ? 0.14 : 0.22);
-        if (dist <= tolerance) {
+        // anywhere on a full illustration, not a pinpoint — 0.14 was tight
+        // enough that dropping on a visibly-correct object still missed
+        // and registered as wrong. Widened so a typical character/object's
+        // rendered footprint is a comfortable hit area; sentence-builder
+        // (showBlanks) drops stay tighter since those have a small drawn
+        // blank to aim at, not a full illustration.
+        //
+        // When an item declares its own targetWidth/targetHeight (a wide,
+        // short object like a table isn't well covered by ANY single
+        // circle radius — too small and it misses the edges, too big and
+        // it starts overlapping a neighboring item), test against that
+        // rectangle instead, padded a little so a drop just outside the
+        // drawn edge still counts.
+        let hit: boolean;
+        if (item.targetWidth && item.targetHeight) {
+          // targetLeft/targetTop is where the OBJECT STANDS, not its
+          // visual center — every *_SPOT convention in this app anchors
+          // near an object's base/floor-contact point (same reason a
+          // character's own left/top works for CharacterPointer). A box
+          // centered on that anchor undershoots the top of anything tall
+          // (a chair's backrest sits mostly ABOVE its anchor, almost none
+          // below it) — confirmed live, a drop right on the chair's
+          // backrest still missed. So the box extends the object's full
+          // height UPWARD from the anchor, with only a small pad below
+          // it, rather than splitting the height evenly both ways.
+          const w = (parseFloat(item.targetWidth) / 100) * rect.width;
+          const h = (parseFloat(item.targetHeight) / 100) * rect.height;
+          const pad = Math.min(rect.width, rect.height) * 0.08;
+          const withinX = Math.abs(e.clientX - targetX) <= w / 2 + pad;
+          const withinY = e.clientY <= targetY + pad && e.clientY >= targetY - h - pad;
+          hit = withinX && withinY;
+        } else {
+          const dist = Math.hypot(e.clientX - targetX, e.clientY - targetY);
+          const tolerance = Math.min(rect.width, rect.height) * (scene.showBlanks ? 0.14 : 0.26);
+          hit = dist <= tolerance;
+        }
+        if (hit) {
           sfx.match();
           setPlaced((prev) => {
             const next = new Set(prev).add(drag.idx);
@@ -876,13 +928,18 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
           <span className="invisible text-lg font-black uppercase tracking-wide sm:text-xl">{item.label}</span>
         </div>
       ))}
+      {/* Unified to the same larger size as the tray buttons (below) —
+          previously kept smaller here on the theory that a passive
+          confirmation chip didn't need to match the interactive tray
+          button's size, but reported live as still too small to read
+          once placed. */}
       {scene.items.map((item, i) => placed.has(i) && (
         <div
           key={`placed-${i}`}
-          className={`pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 grid place-items-center shadow-xl ring-4 ring-white ${scene.showBlanks ? 'rounded-2xl px-6 py-4' : 'rounded-xl px-3 py-2'}`}
+          className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-2xl px-7 py-5 shadow-xl ring-4 ring-white"
           style={{ left: item.targetLeft, top: item.targetTop, background: item.color, animation: 'lep1-pop 0.4s ease-out' }}
         >
-          <span className={`font-black uppercase tracking-wide text-white ${scene.showBlanks ? 'text-lg sm:text-xl' : 'text-sm'}`}>{item.label}</span>
+          <span className="text-xl font-black uppercase tracking-wide text-white sm:text-2xl">{item.label}</span>
         </div>
       ))}
       <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex flex-wrap justify-center gap-3 px-4">
@@ -910,10 +967,15 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
               key={`tray-${i}`}
               onPointerDown={(e) => startDrag(e, i)}
               aria-label={`Drag the word ${item.label}`}
-              className={`touch-none shadow-2xl ring-4 ring-white transition active:scale-95 ${scene.showBlanks ? 'rounded-2xl px-6 py-4' : 'rounded-xl px-4 py-3'} ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''} ${isBeingDragged ? 'pointer-events-none opacity-0' : 'pointer-events-auto'}`}
+              className={`touch-none shadow-2xl ring-4 ring-white transition active:scale-95 rounded-2xl px-7 py-5 ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''} ${isBeingDragged ? 'pointer-events-none opacity-0' : 'pointer-events-auto'}`}
               style={{ background: item.color, animation: isBeingDragged || wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
             >
-              <span className={`font-black uppercase tracking-wide text-white ${scene.showBlanks ? 'text-lg sm:text-xl' : 'text-sm'}`}>{item.label}</span>
+              {/* Unified to one large size regardless of showBlanks — the
+                  smaller vocab-matching variant (text-sm, px-4 py-3) read
+                  as a tiny target on a real classroom-scaled frame,
+                  reported live as "the grab and drop buttons are too
+                  small on the screen." */}
+              <span className="text-xl font-black uppercase tracking-wide text-white sm:text-2xl">{item.label}</span>
             </button>
           );
         })}

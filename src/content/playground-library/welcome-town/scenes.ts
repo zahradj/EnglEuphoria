@@ -166,7 +166,21 @@ export type Scene =
       wordColors?: (string | null)[];
     }
   | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string }[] }
-  | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: { label: string; color: string; targetLeft: string; targetTop: string; who?: CharKey }[]; showBlanks?: boolean; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
+  | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: {
+      label: string; color: string; targetLeft: string; targetTop: string;
+      /** Optional real footprint of the target object, as percentages of
+       *  the scene (same convention as targetLeft/targetTop). When set,
+       *  a drop is scored against a rectangle of this size around the
+       *  target point instead of the default fixed-radius circle — a
+       *  wide, short object (a table) needs a wide, short hit area, not
+       *  a circle sized to fit a person-shaped character. Per direct
+       *  request after a table drop kept missing near its edges: "it
+       *  should match with any space that the table is in." Omit for
+       *  anything roughly circular/character-shaped, where the circular
+       *  fallback already covers the whole illustration comfortably. */
+      targetWidth?: string; targetHeight?: string;
+      who?: CharKey;
+    }[]; showBlanks?: boolean; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
   /** Live teacher-driven placement, matching a real competitor pattern the
    *  user pointed to directly (a house-cutaway slide where the teacher
    *  freely drags a character between rooms while quizzing the student out

@@ -166,6 +166,20 @@ const KITCHEN_SPOT = { left: '20%', top: '75%' };
 const BEDROOM_SPOT = { left: '80%', top: '55%' };
 const TABLE_SPOT = { left: '32%', top: '75%' };
 const CHAIR_SPOT = { left: '63%', top: '78%' };
+// Real approximate footprint of each piece of furniture in
+// bg-castle-kitchen.png, as percentages of the scene — passed to
+// mc-drag-furniture's items as targetWidth/targetHeight below so a drop
+// is scored against the object's actual (wide-and-low for the table,
+// narrower-and-taller for the chair) shape instead of one fixed-radius
+// circle. Per direct report: dropping near the table's edge, and
+// separately near the top of the chair's backrest, still registered as a
+// miss with the old single-radius circle. Generous on purpose — these
+// two items sit far enough apart in the scene that over-covering either
+// one carries no real risk of matching the wrong item (see
+// DragMatchScene's hit-test: a drop is only ever checked against the
+// item currently being dragged, never compared against its neighbor).
+const TABLE_SIZE = { targetWidth: '42%', targetHeight: '26%' };
+const CHAIR_SIZE = { targetWidth: '26%', targetHeight: '55%' };
 
 export const LESSON_A1U9L1_TITLE = 'Rooms in the Castle: Kitchen, Bedroom';
 export const LESSON_A1U9L1_OBJECTIVE =
@@ -330,8 +344,8 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     id: 'mc-drag-furniture', kind: 'drag-match', bg: bgKitchen,
     teacher: 'Listen, then drag each word onto the matching furniture!',
     items: [
-      { label: 'Table', color: '#8B5A2B', targetLeft: TABLE_SPOT.left, targetTop: TABLE_SPOT.top },
-      { label: 'Chair', color: '#C97A2F', targetLeft: CHAIR_SPOT.left, targetTop: CHAIR_SPOT.top },
+      { label: 'Table', color: '#8B5A2B', targetLeft: TABLE_SPOT.left, targetTop: TABLE_SPOT.top, ...TABLE_SIZE },
+      { label: 'Chair', color: '#C97A2F', targetLeft: CHAIR_SPOT.left, targetTop: CHAIR_SPOT.top, ...CHAIR_SIZE },
     ],
   },
 
