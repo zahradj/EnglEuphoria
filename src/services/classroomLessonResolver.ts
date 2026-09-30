@@ -130,6 +130,7 @@ export async function resolveBookingLesson(booking: {
   const isTrialBooking = String(booking.booking_type ?? '').toLowerCase() === 'trial';
   const allowTrialSlides = isTrialBooking && booking.use_trial_fallback !== false;
 
+  let unresolvedLessonRowTitle: string | null = null;
   if (!curriculumLessonId && booking.lesson_id) {
     const { data: lessonRow } = await supabase
       .from('lessons')
@@ -139,17 +140,35 @@ export async function resolveBookingLesson(booking: {
     curriculumLessonId = (lessonRow as any)?.curriculum_lesson_id ?? null;
 
     if (!curriculumLessonId) {
-      const lessonTitle = (lessonRow as any)?.title ?? null;
-      const hubType = bookingHub;
-      const trialSlides = allowTrialSlides ? buildTrialLessonSlides(hubType, booking.cefr_level) : [];
-      const slides = trialSlides.length ? trialSlides : appendHomeworkSlides([], hubType, lessonTitle);
-      return {
-        hubType,
-        lesson: null,
-        lessonId: booking.lesson_id,
-        lessonTitle: trialSlides.length ? getTrialLessonTitle(hubType) : lessonTitle,
-        slides,
-      };
+      // A real, committed incident: a booking's `lessons` row existing but
+      // never getting linked to a real curriculum_lessons row (created
+      // with curriculum_lesson_id left null) used to dead-end HERE with an
+      // immediate return — permanently pinning the booking to a blank
+      // "Playground Lesson with Teacher, content isn't available yet"
+      // screen for BOTH participants, even though the student's own
+      // student_curriculum_progress correctly pointed at a real, built
+      // lesson (confirmed live: booking eb8ce92f's lessons row has
+      // curriculum_lesson_id=null, but the student was mid-lesson on Pre-A1
+      // Unit 2 Lesson 3). Trial bookings still want their special
+      // diagnostic-only content immediately — a first-time student usually
+      // has no curriculum progress yet, so letting them fall through to
+      // resolveActiveCoreLesson below would hand them a real lesson's FIRST
+      // page instead of the intended trial flow. Every other booking now
+      // falls through to try the Master Library / student progress lookup
+      // first, and only uses this blank/trial fallback if that ALSO finds
+      // nothing — never before trying it.
+      if (allowTrialSlides) {
+        const hubType = bookingHub;
+        const trialSlides = buildTrialLessonSlides(hubType, booking.cefr_level);
+        return {
+          hubType,
+          lesson: null,
+          lessonId: booking.lesson_id,
+          lessonTitle: getTrialLessonTitle(hubType),
+          slides: trialSlides,
+        };
+      }
+      unresolvedLessonRowTitle = (lessonRow as any)?.title ?? null;
     }
   }
 
@@ -220,8 +239,8 @@ export async function resolveBookingLesson(booking: {
   return {
     hubType,
     lesson,
-    lessonId: lesson?.id ?? null,
-    lessonTitle: lesson?.title ?? (allowTrialSlides ? getTrialLessonTitle(hubType) : null),
+    lessonId: lesson?.id ?? booking.lesson_id ?? null,
+    lessonTitle: lesson?.title ?? (allowTrialSlides ? getTrialLessonTitle(hubType) : unresolvedLessonRowTitle),
     slides,
   };
 }
