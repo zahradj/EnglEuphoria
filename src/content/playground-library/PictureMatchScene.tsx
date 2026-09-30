@@ -8,9 +8,10 @@ import * as sfx from './unit1/sfx';
  * `picture-match` — reusable "match the word to the picture" activity,
  * shared by every scene library (Welcome Town / Magic Castle / Jungle
  * Adventure and Pre-A1 Unit 1). Same shape as a classic ESL matching slide:
- * picture cards with an empty dashed slot in two side columns, the word
- * tiles in the middle; the student drags each word into the slot under its
- * picture (or taps a word, then a slot — easier on tablets). A right word
+ * big picture cards (each shaped to its own picture, so nothing is cropped)
+ * with an empty slot under each, and the word pills along the bottom; the
+ * student drags each word into the slot under its picture (or taps a word,
+ * then a slot — easier on tablets). A right word
  * snaps in and is spoken; a wrong one shakes and returns to the middle.
  *
  * Any vocabulary set / background can reuse it — see the authoring contract
@@ -34,21 +35,18 @@ export interface PictureMatchItem {
   imgAspect?: number;
 }
 
-/** Part of an image, letterboxed to fit its box without stretching: an SVG
- *  whose viewBox is the crop window (image drawn at 100·aspect × 100 units). */
+/** Part of an image, scaled to FILL its box (like object-fit: cover): an
+ *  SVG whose viewBox is the crop window (image drawn at 100·aspect × 100
+ *  units). The rounded tile around it does the clipping. */
 function CroppedImage({ src, crop, aspect }: { src: string; crop: { x: number; y: number; w: number; h: number }; aspect: number }) {
-  const vx = crop.x * aspect;
-  const vw = crop.w * aspect;
-  const clipId = `pm-crop-${Math.round(vx * 100)}-${Math.round(crop.y * 100)}-${Math.round(vw * 100)}-${Math.round(crop.h * 100)}`;
-  const r = Math.min(vw, crop.h) * 0.06;
   return (
-    <svg viewBox={`${vx} ${crop.y} ${vw} ${crop.h}`} preserveAspectRatio="xMidYMid meet" className="h-full w-full" aria-hidden="true">
-      <defs>
-        <clipPath id={clipId}>
-          <rect x={vx} y={crop.y} width={vw} height={crop.h} rx={r} ry={r} />
-        </clipPath>
-      </defs>
-      <image href={src} x={0} y={0} width={100 * aspect} height={100} preserveAspectRatio="none" clipPath={`url(#${clipId})`} />
+    <svg
+      viewBox={`${crop.x * aspect} ${crop.y} ${crop.w * aspect} ${crop.h}`}
+      preserveAspectRatio="xMidYMid slice"
+      className="absolute inset-0 h-full w-full"
+      aria-hidden="true"
+    >
+      <image href={src} x={0} y={0} width={100 * aspect} height={100} preserveAspectRatio="none" />
     </svg>
   );
 }
@@ -192,41 +190,56 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
     if (holding != null) attempt(holding, slot);
   };
 
-  const half = Math.ceil(n / 2);
-  const columns = [items.slice(0, half).map((_, i) => i), items.slice(half).map((_, i) => i + half)];
+  // Picture-first design: pictures in a 2-row grid, each card shaped to its
+  // own picture (so the whole room/object is visible — no cropping, no
+  // letterbox bars) and as large as its cell allows; the drop slot is a
+  // label strip UNDER the picture so it never hides anything; the word pills
+  // run along the bottom.
+  const cols = n <= 3 ? n : Math.ceil(n / 2);
+  const PICTURE_SHARE = 0.78; // picture height ÷ card height (rest = slot)
 
   const renderCard = (slot: number) => {
     const item = items[slot];
     const isPlaced = placed.includes(slot);
     const isWrong = wrongSlot === slot;
+    const isTarget = holding != null && !isPlaced;
+    const pictureAspect = item.crop ? ((item.crop.w * (item.imgAspect ?? 16 / 9)) / item.crop.h) : 4 / 3;
+    const cardAspect = pictureAspect * PICTURE_SHARE;
     return (
-      <div key={slot} className="flex min-h-0 flex-1 flex-col items-center rounded-[28px] bg-white/95 p-[4%] shadow-lg">
-        <div className="flex min-h-0 w-full flex-1 items-center justify-center">
-          {item.img && item.crop ? (
-            <CroppedImage src={item.img} crop={item.crop} aspect={item.imgAspect ?? 16 / 9} />
-          ) : item.img ? (
-            <img src={item.img} alt="" className="max-h-full max-w-full object-contain" draggable={false} />
-          ) : (
-            <span className="text-[clamp(2rem,7vh,4.5rem)] leading-none">{item.emoji}</span>
-          )}
-        </div>
-        <button
-          type="button"
-          data-match-slot={slot}
-          onClick={() => onSlotTap(slot)}
-          aria-label={isPlaced ? item.word : `Empty slot ${slot + 1}`}
-          className={`mt-[4%] flex h-[30%] min-h-[2.5rem] w-[80%] items-center justify-center rounded-xl text-[clamp(1rem,3.4vh,2rem)] font-semibold transition ${
-            isPlaced
-              ? 'border-2 border-emerald-400 bg-emerald-50 text-emerald-800'
-              : isWrong
-                ? 'animate-[lep1-shake_0.4s_ease-in-out] border-2 border-dashed border-red-400 bg-red-50'
-                : holding != null
-                  ? 'border-2 border-dashed border-orange-400 bg-orange-50/60'
-                  : 'border-2 border-dashed border-orange-200'
+      <div key={slot} className="flex min-h-0 min-w-0 items-center justify-center" style={{ containerType: 'size' }}>
+        <div
+          className={`relative flex flex-col overflow-hidden rounded-[20px] bg-white shadow-[0_10px_28px_rgba(15,23,42,0.18)] ring-4 transition ${
+            isPlaced ? 'ring-emerald-400' : isWrong ? 'ring-red-400' : isTarget ? 'ring-orange-300' : 'ring-white'
           }`}
+          style={{ width: `min(100cqw, calc(100cqh * ${cardAspect}))`, aspectRatio: cardAspect }}
         >
-          {isPlaced ? item.word : ''}
-        </button>
+          <div className="relative w-full" style={{ height: `${PICTURE_SHARE * 100}%` }}>
+            {item.img && item.crop ? (
+              <CroppedImage src={item.img} crop={item.crop} aspect={item.imgAspect ?? 16 / 9} />
+            ) : item.img ? (
+              <img src={item.img} alt="" className="absolute inset-0 h-full w-full object-contain" draggable={false} />
+            ) : (
+              <span className="absolute inset-0 flex items-center justify-center text-[clamp(2.5rem,12cqh,6rem)] leading-none">{item.emoji}</span>
+            )}
+          </div>
+          <button
+            type="button"
+            data-match-slot={slot}
+            onClick={() => onSlotTap(slot)}
+            aria-label={isPlaced ? item.word : `Empty slot ${slot + 1}`}
+            className={`m-[2.5%] flex flex-1 items-center justify-center rounded-xl text-[clamp(0.95rem,7cqh,1.8rem)] font-bold transition ${
+              isPlaced
+                ? 'bg-emerald-500 text-white'
+                : isWrong
+                  ? 'animate-[lep1-shake_0.4s_ease-in-out] border-[3px] border-dashed border-red-400 bg-red-50'
+                  : isTarget
+                    ? 'animate-pulse border-[3px] border-dashed border-orange-400 bg-orange-50'
+                    : 'border-[3px] border-dashed border-slate-300 bg-slate-50'
+            }`}
+          >
+            {isPlaced ? `✓ ${item.word}` : ''}
+          </button>
+        </div>
       </div>
     );
   };
@@ -234,50 +247,62 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
   return (
     <div
       className="absolute inset-0 overflow-hidden bg-cover bg-center select-none"
-      style={scene.bg ? { backgroundImage: `url(${scene.bg})` } : { background: 'linear-gradient(160deg, #d7f1fb 0%, #e8def7 55%, #f6c9c4 100%)' }}
+      style={scene.bg ? { backgroundImage: `url(${scene.bg})` } : { background: 'linear-gradient(160deg, #eaf6fd 0%, #f1ecfb 55%, #fdeee9 100%)' }}
     >
-      {scene.prompt && (
-        <div className="pointer-events-none absolute inset-x-0 top-3 z-20 flex justify-center px-4">
-          <div className="rounded-full bg-white/95 px-5 py-2 text-center text-base font-bold text-orange-800 shadow-lg sm:text-lg">{scene.prompt}</div>
-        </div>
-      )}
+      {/* Pictures */}
+      <div
+        className="absolute inset-x-[3%] top-[3%] bottom-[21%] grid gap-x-[2.5%] gap-y-[3.5%]"
+        style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`, gridTemplateRows: `repeat(${n <= 3 ? 1 : 2}, minmax(0, 1fr))` }}
+      >
+        {items.map((_, slot) => renderCard(slot))}
+      </div>
 
-      <div className={`absolute inset-x-[3%] bottom-[4%] grid grid-cols-[1fr_minmax(0,0.85fr)_1fr] gap-[4%] ${scene.prompt ? 'top-[12%]' : 'top-[4%]'}`}>
-        <div className="flex min-h-0 flex-col gap-[4%]">{columns[0].map(renderCard)}</div>
-
-        <div className="flex min-h-0 flex-col items-center justify-center gap-[3%]">
-          {order.map((itemIdx, tile) => {
-            const matched = placed.includes(itemIdx);
-            const isHeld = holding === tile;
-            const isDragging = drag?.tile === tile;
-            return (
-              <button
-                key={tile}
-                type="button"
-                onPointerDown={onTilePointerDown(tile)}
-                disabled={isMirror || matched}
-                aria-label={items[itemIdx].word}
-                style={{ touchAction: 'none' }}
-                className={`w-full max-w-[16rem] rounded-2xl border-2 px-3 py-[3%] text-center text-[clamp(1.1rem,4vh,2.4rem)] font-semibold shadow-md transition ${
-                  matched
-                    ? 'invisible'
-                    : isHeld
-                      ? 'scale-105 border-orange-400 bg-orange-100 text-slate-900 ring-4 ring-orange-300/60'
-                      : 'border-[#E9C9A5] bg-[#FDEBD3] text-slate-900 hover:-translate-y-0.5'
-                } ${isDragging ? 'opacity-40' : ''} ${isMirror ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}`}
-              >
-                {items[itemIdx].word}
-              </button>
-            );
-          })}
-          {done && (
-            <button type="button" onClick={onNext} className="mt-2 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-xl font-black text-white shadow-2xl active:scale-95">
-              Next ⭐
+      {/* Instruction, then the word pills (wrap to a second row if needed;
+          a matched word leaves the row), then Next when done. */}
+      <div className="absolute inset-x-[3%] bottom-[2.5%] flex h-[17%] flex-col items-center justify-center gap-[6%]">
+        {/* On a student-only (self-check) page the teacher's copy is a live
+            view: say so right where they'd try to drag, instead of pills
+            that look draggable but don't respond. */}
+        {!done && isMirror && scene.studentOnly ? (
+          <div className="shrink-0 rounded-full bg-sky-100 px-4 py-1 text-[clamp(0.85rem,2.3vh,1.15rem)] font-bold text-sky-800">
+            👀 Your student is matching on their own — each answer appears here live
+          </div>
+        ) : scene.prompt && !done ? (
+          <div className="shrink-0 text-[clamp(0.85rem,2.4vh,1.25rem)] font-extrabold uppercase tracking-wide text-slate-500">{scene.prompt}</div>
+        ) : null}
+        <div className="flex max-w-full flex-wrap items-center justify-center gap-x-[1.2vw] gap-y-2">
+        {order.map((itemIdx, tile) => {
+          const matched = placed.includes(itemIdx);
+          const isHeld = holding === tile;
+          const isDragging = drag?.tile === tile;
+          return (
+            <button
+              key={tile}
+              type="button"
+              onPointerDown={onTilePointerDown(tile)}
+              disabled={isMirror || matched}
+              aria-label={items[itemIdx].word}
+              style={{ touchAction: 'none' }}
+              className={`rounded-full px-[1.2em] py-[0.5em] text-center text-[clamp(0.9rem,2.9vh,1.6rem)] font-bold leading-none whitespace-nowrap shadow-[0_4px_14px_rgba(15,23,42,0.14)] transition ${
+                matched
+                  ? 'hidden'
+                  : isHeld
+                    ? 'scale-105 bg-orange-500 text-white ring-4 ring-orange-200'
+                    : isMirror
+                      ? 'bg-white/70 text-slate-500 shadow-none ring-1 ring-slate-200'
+                      : 'bg-white text-slate-800 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(15,23,42,0.18)]'
+              } ${isDragging ? 'opacity-30' : ''} ${isMirror ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}`}
+            >
+              {items[itemIdx].word}
             </button>
-          )}
+          );
+        })}
+        {done && (
+          <button type="button" onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-xl font-black text-white shadow-2xl active:scale-95">
+            Well done! Next ⭐
+          </button>
+        )}
         </div>
-
-        <div className="flex min-h-0 flex-col gap-[4%]">{columns[1].map(renderCard)}</div>
       </div>
 
       {/* Drag ghost following the finger/mouse (local only). Portalled to
@@ -285,7 +310,7 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
           would otherwise offset a fixed-position element. */}
       {drag && createPortal(
         <div
-          className="pointer-events-none fixed z-[100] -translate-x-1/2 -translate-y-1/2 rounded-2xl border-2 border-orange-400 bg-[#FDEBD3] px-5 py-2 text-2xl font-semibold text-slate-900 shadow-2xl"
+          className="pointer-events-none fixed z-[100] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500 px-6 py-2.5 text-2xl font-bold text-white shadow-2xl ring-4 ring-orange-200"
           style={{ left: drag.x, top: drag.y }}
         >
           {items[order[drag.tile]].word}

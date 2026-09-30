@@ -217,9 +217,10 @@ place two `spin-wheel` scenes back to back.
 
 `src/content/playground-library/PictureMatchScene.tsx`, registered in both
 the Pre-A1 and the A1/A2 renderers, fully synced (`REAL_SYNC_KINDS`). The
-classic matching slide: picture cards with an empty dashed slot in two side
-columns, the word tiles (shuffled — identically on both screens) in the
-middle. The student drags a word into the slot under its picture, or taps
+classic matching slide, picture-first: big picture cards in a 2-row grid,
+each card shaped to its own picture (whole room/object visible, never
+cropped or letterboxed) with an empty slot strip under it, and the word
+pills (shuffled — identically on both screens) along the bottom. The student drags a word into the slot under its picture, or taps
 the word then the slot (easier on tablets). Right = snaps in + spoken;
 wrong = shake, back to the middle (costs a heart). Gem when all are matched.
 
@@ -240,8 +241,10 @@ note says the student works "independently, without help from the teacher".
   prompt: 'Match the words to the pictures',   // optional banner
   studentOnly: true,                           // auto-evaluation slide
   teacher: 'Auto-evaluation slide. The student does the exercise independently, without help from the teacher.',
-  items: [                                     // left column = first half, right = second half
+  items: [                                     // grid order: first row, then second row
     { word: 'muffins', img: imgMuffins },      // img preferred; emoji fallback
+    // Part of an existing background: crop = % window of the image
+    // { word: 'kitchen', img: bgRooms, crop: { x: 5.5, y: 17, w: 46.5, h: 69 } },
     { word: 'bread',   img: imgBread },
     { word: 'cheese',  emoji: '🧀' },
   ],
