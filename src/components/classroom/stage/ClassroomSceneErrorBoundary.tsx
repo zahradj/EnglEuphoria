@@ -96,7 +96,16 @@ export class ClassroomSceneErrorBoundary extends Component<Props, State> {
         </div>
       );
     }
-    return <div key={this.state.attempt}>{this.props.children}</div>;
+    // The scene player's own content is `position: absolute` (out of
+    // normal flow), so this wrapper MUST also be absolutely positioned and
+    // fill its container — a plain unstyled div collapses to zero size
+    // when its only children are absolutely positioned, which silently
+    // hid the entire scene canvas behind the classroom's own chrome
+    // (video tiles, chat, nav bar all kept working since that state
+    // flows through separate callbacks) while `onNavState` still fired
+    // normally. Reported live as "blank page, both sides" right after
+    // this boundary shipped.
+    return <div key={this.state.attempt} className="absolute inset-0">{this.props.children}</div>;
   }
 }
 
