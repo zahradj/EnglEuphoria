@@ -519,8 +519,51 @@ export function unlockAudio() {
   } catch { /* noop */ }
 }
 
+/* --------------------------------------------------------------------------
+ * Live-class relay. In a synced classroom activity only the side that "has
+ * the floor" runs the scene logic that speaks, so the other side heard
+ * nothing. The lesson player installs a relay on the driving side: every
+ * line/clip played here is also sent to the other screen, which plays it
+ * with playRelayedSpeech(). Lines some scenes already speak on both sides
+ * (e.g. from an effect on synced state) are de-duplicated on the receiving
+ * side by text within a short window.
+ * -------------------------------------------------------------------------- */
+export type SpeechRelayEvent =
+  | { kind: 'speak'; text: string; character: Character }
+  | { kind: 'clip'; url: string; label: string }
+  | { kind: 'stop' };
+let speechRelay: ((e: SpeechRelayEvent) => void) | null = null;
+let dedupeReceived = false;
+const recentStarts = new Map<string, number>();
+const DEDUPE_MS = 2500;
+
+export function setSpeechRelay(fn: ((e: SpeechRelayEvent) => void) | null) { speechRelay = fn; }
+export function setSpeechDedupe(on: boolean) { dedupeReceived = on; if (!on) recentStarts.clear(); }
+
+function seenRecently(k: string): boolean {
+  if (!dedupeReceived) return false;
+  const now = Date.now();
+  const at = recentStarts.get(k);
+  recentStarts.set(k, now);
+  return at !== undefined && now - at < DEDUPE_MS;
+}
+
+/** Play an event relayed from the other screen (never re-relayed). */
+export function playRelayedSpeech(e: SpeechRelayEvent) {
+  const relay = speechRelay;
+  speechRelay = null;
+  try {
+    if (e.kind === 'stop') stopSpeaking();
+    else if (e.kind === 'speak') void speak(e.text, e.character).catch(() => {});
+    else void playPhonicsClip(e.url, e.label);
+  } finally {
+    speechRelay = relay;
+  }
+}
+
 /** Stop everything currently playing and invalidate the queue. */
 export function stopSpeaking() {
+  if (queueDepth > 0) speechRelay?.({ kind: 'stop' });
   sessionId++;
   stopCurrent();
   playChain = Promise.resolve();
@@ -553,6 +596,8 @@ export function speak(text: string, character: Character = 'teacher'): Promise<v
   const trimmed = text.trim();
   if (!trimmed) return Promise.resolve();
   const spoken = ttsSafe(trimmed);
+  if (seenRecently(`speak:${trimmed}`)) return Promise.resolve();
+  speechRelay?.({ kind: 'speak', text: trimmed, character });
 
   const mySession = sessionId;
   queueDepth++;
@@ -676,6 +721,8 @@ function playClip(url: string): Promise<void> {
  */
 async function playPhonicsClip(clip: string | undefined, label: string): Promise<void> {
   if (!clip) { console.warn(`[phonics] no recorded clip for "${label}" — playing nothing (no ElevenLabs fallback, by design)`); return; }
+  if (seenRecently(`clip:${clip}`)) return;
+  speechRelay?.({ kind: 'clip', url: clip, label });
   try {
     await playClip(clip);
   } catch (err) {

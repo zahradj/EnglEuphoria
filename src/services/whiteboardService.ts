@@ -251,6 +251,16 @@ type SceneAdvanceRequestListener = (payload: SceneAdvanceRequestPayload) => void
  *  state shape is intentionally untyped `any` here since it's owned
  *  entirely by whichever scene kind uses it (e.g. vocab-spot's
  *  `{ step, revealed }`), not by this transport. */
+/** A voice line/clip played by the side driving a synced scene, relayed so
+ *  the other screen hears it too (see unit1/audio.ts setSpeechRelay). */
+export interface SceneSpeechPayload {
+  event: import('@/content/playground-library/unit1/audio').SpeechRelayEvent;
+  senderId: string;
+  sceneId: string;
+  timestamp: number;
+}
+type SceneSpeechListener = (payload: SceneSpeechPayload) => void;
+
 export interface SceneActivityStatePayload {
   state: unknown;
   senderId: string;
@@ -347,6 +357,7 @@ interface RoomChannel {
   sceneInteractionPermissionListeners: Set<SceneInteractionPermissionListener>;
   sceneAdvanceRequestListeners: Set<SceneAdvanceRequestListener>;
   sceneActivityStateListeners: Set<SceneActivityStateListener>;
+  sceneSpeechListeners: Set<SceneSpeechListener>;
   sceneStateRequestListeners: Set<SceneStateRequestListener>;
   refCount: number;
 }
@@ -386,6 +397,7 @@ class WhiteboardService {
     const sceneInteractionPermissionListeners = new Set<SceneInteractionPermissionListener>();
     const sceneAdvanceRequestListeners = new Set<SceneAdvanceRequestListener>();
     const sceneActivityStateListeners = new Set<SceneActivityStateListener>();
+    const sceneSpeechListeners = new Set<SceneSpeechListener>();
     const sceneStateRequestListeners = new Set<SceneStateRequestListener>();
     const statusListeners = new Set<(status: string) => void>();
 
@@ -482,6 +494,9 @@ class WhiteboardService {
       .on('broadcast', { event: 'scene_activity_state' }, (payload) => {
         sceneActivityStateListeners.forEach((cb) => cb(payload.payload as SceneActivityStatePayload));
       })
+      .on('broadcast', { event: 'scene_speech' }, (payload) => {
+        sceneSpeechListeners.forEach((cb) => cb(payload.payload as SceneSpeechPayload));
+      })
       .on('broadcast', { event: 'scene_state_request' }, (payload) => {
         sceneStateRequestListeners.forEach((cb) => cb(payload.payload as SceneStateRequestPayload));
       });
@@ -521,6 +536,7 @@ class WhiteboardService {
       sceneInteractionPermissionListeners,
       sceneAdvanceRequestListeners,
       sceneActivityStateListeners,
+      sceneSpeechListeners,
       sceneStateRequestListeners,
       refCount: 0,
     };
@@ -997,6 +1013,19 @@ class WhiteboardService {
     });
   }
 
+  async sendSceneSpeech(roomId: string, payload: Omit<SceneSpeechPayload, 'timestamp'>): Promise<void> {
+    const room = this.getRoom(roomId);
+    await room.ready;
+    await room.channel.send({ type: 'broadcast', event: 'scene_speech', payload: { ...payload, timestamp: Date.now() } satisfies SceneSpeechPayload });
+  }
+
+  subscribeToSceneSpeech(roomId: string, onSpeech: SceneSpeechListener): () => void {
+    const room = this.getRoom(roomId);
+    room.sceneSpeechListeners.add(onSpeech);
+    room.refCount += 1;
+    return () => this.release(roomId, () => room.sceneSpeechListeners.delete(onSpeech));
+  }
+
   subscribeToSceneActivityState(roomId: string, onState: SceneActivityStateListener): () => void {
     const room = this.getRoom(roomId);
     room.sceneActivityStateListeners.add(onState);
@@ -1064,6 +1093,7 @@ class WhiteboardService {
       room.sceneInteractionPermissionListeners.size === 0 &&
       room.sceneAdvanceRequestListeners.size === 0 &&
       room.sceneActivityStateListeners.size === 0 &&
+      room.sceneSpeechListeners.size === 0 &&
       room.sceneStateRequestListeners.size === 0 &&
       room.statusListeners.size === 0
     ) {

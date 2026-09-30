@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import type { Scene } from '@/content/playground-library/welcome-town/scenes';
 import { VOICE_KEY } from '@/content/playground-library/welcome-town/scenes';
 import { SceneRenderer, Hearts, MAX_HEARTS, Lep1Keyframes } from '@/content/playground-library/welcome-town/SceneRenderer';
-import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-library/unit1/audio';
+import { stopSpeaking, prefetch, unlockAudio, setSpeechRelay, setSpeechDedupe, playRelayedSpeech } from '@/content/playground-library/unit1/audio';
 import { whiteboardService } from '@/services/whiteboardService';
 import { getDomPath, getElementAtPath, withPointerCaptureNoop } from '@/content/playground-library/unit1/scenePathSync';
 
@@ -249,6 +249,24 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
     });
     return unsubscribe;
   }, [isSynced, hasActivityAuthority, roomId, scene.id]);
+
+  // Voices in synced activities: only the driving side runs the scene
+  // logic that speaks, so relay each line to the other screen so the
+  // student (or the teacher, when the student drives) hears it too.
+  useEffect(() => {
+    if (!isSynced || !roomId || !role || !usesRealSync) return;
+    const sceneId = scene.id;
+    if (hasActivityAuthority) {
+      setSpeechRelay((event) => { void whiteboardService.sendSceneSpeech(roomId, { event, senderId: role, sceneId }); });
+      return () => setSpeechRelay(null);
+    }
+    setSpeechDedupe(true);
+    const unsubscribe = whiteboardService.subscribeToSceneSpeech(roomId, (payload) => {
+      if (payload.sceneId !== sceneId || payload.senderId === role) return;
+      playRelayedSpeech(payload.event);
+    });
+    return () => { unsubscribe(); setSpeechDedupe(false); };
+  }, [isSynced, roomId, role, usesRealSync, hasActivityAuthority, scene.id]);
 
   const activitySync = usesRealSync
     ? { isSynced, isAuthority: hasActivityAuthority, state: activityState, setState: setActivityState }
