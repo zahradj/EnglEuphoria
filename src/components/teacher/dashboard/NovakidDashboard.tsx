@@ -9,6 +9,7 @@ import { NextLessonCard } from './NextLessonCard';
 import { MonthlyStatsCard } from './MonthlyStatsCard';
 import { LessonsListCard } from './LessonsListCard';
 import { KpiPulseCard } from './KpiPulseCard';
+import { asPayoutCurrency } from '@/lib/teacherPay';
 
 interface NovakidDashboardProps {
   teacherId: string;
@@ -23,7 +24,7 @@ export const NovakidDashboard: React.FC<NovakidDashboardProps> = ({ teacherId, p
   const { data: bookingStats } = useQuery({
     queryKey: ['teacher-dashboard-booking-stats', teacherId],
     queryFn: async () => {
-      const [bookingsRes, earningsRes] = await Promise.all([
+      const [bookingsRes, earningsRes, profileRes] = await Promise.all([
         supabase
           .from('class_bookings')
           .select('scheduled_at, duration, student_id, status, booking_type')
@@ -33,6 +34,13 @@ export const NovakidDashboard: React.FC<NovakidDashboardProps> = ({ teacherId, p
           .from('teacher_earnings')
           .select('teacher_amount, earned_at')
           .eq('teacher_id', teacherId),
+        // Local teachers are paid in DZD, international in EUR.
+        // payout_currency isn't in the generated Supabase types yet.
+        (supabase as any)
+          .from('teacher_profiles')
+          .select('payout_currency')
+          .eq('user_id', teacherId)
+          .maybeSingle(),
       ]);
 
       if (bookingsRes.error) throw bookingsRes.error;
@@ -87,6 +95,7 @@ export const NovakidDashboard: React.FC<NovakidDashboardProps> = ({ teacherId, p
         totalStudents,
         weeklyHours: Math.round((weeklyMinutes / 60) * 10) / 10,
         monthlyEarnings: Math.round(monthlyEarnings * 100) / 100,
+        earningsCurrency: asPayoutCurrency(profileRes?.data?.payout_currency),
         totalLessonsThisMonth,
         regularStudents: regularStudentIds.size,
         trialStudents: trialStudentIds.size,
@@ -112,6 +121,7 @@ export const NovakidDashboard: React.FC<NovakidDashboardProps> = ({ teacherId, p
         totalStudents={bookingStats?.totalStudents ?? 0}
         weeklyHours={bookingStats?.weeklyHours ?? 0}
         monthlyEarnings={bookingStats?.monthlyEarnings ?? 0}
+        earningsCurrency={bookingStats?.earningsCurrency ?? 'EUR'}
       />
 
       <div className="space-y-6">

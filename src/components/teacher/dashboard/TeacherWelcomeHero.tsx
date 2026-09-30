@@ -5,6 +5,7 @@ import logoImage from '@/assets/engleuphoria-logo.png';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import type { PayoutCurrency } from '@/lib/teacherPay';
 
 interface TeacherWelcomeHeroProps {
   teacherName: string;
@@ -13,6 +14,8 @@ interface TeacherWelcomeHeroProps {
   totalStudents?: number;
   weeklyHours?: number;
   monthlyEarnings?: number;
+  /** Local teachers are paid in DZD, international teachers in EUR. */
+  earningsCurrency?: PayoutCurrency;
   profileImageUrl?: string | null;
 }
 
@@ -23,6 +26,7 @@ export const TeacherWelcomeHero: React.FC<TeacherWelcomeHeroProps> = ({
   totalStudents = 0,
   weeklyHours = 0,
   monthlyEarnings = 0,
+  earningsCurrency = 'EUR',
   profileImageUrl = null,
 }) => {
   const { user } = useAuth();
@@ -111,7 +115,8 @@ export const TeacherWelcomeHero: React.FC<TeacherWelcomeHeroProps> = ({
             icon={Wallet}
             label="Payments · MTD"
             value={monthlyEarnings}
-            prefix="$"
+            prefix={earningsCurrency === 'EUR' ? '€' : undefined}
+            suffix={earningsCurrency === 'DZD' ? 'DA' : undefined}
             highlight
           />
         </div>

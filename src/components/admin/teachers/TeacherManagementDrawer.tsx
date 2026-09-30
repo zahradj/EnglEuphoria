@@ -17,6 +17,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Loader2, CheckCircle2, Coins, Layers, Receipt } from 'lucide-react';
 import type { RosterTeacher } from './TeacherRoster';
+import { currencySymbol, formatPay, TEACHER_KIND_LABEL, type PayoutCurrency } from '@/lib/teacherPay';
 
 interface Props {
   teacher: RosterTeacher | null;
@@ -39,6 +40,7 @@ interface EarningRow {
   earned_at: string;
   adjustment_note: string | null;
   adjusted_at: string | null;
+  currency: PayoutCurrency;
 }
 
 const MARKETS = [
@@ -50,6 +52,8 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
   const [hubs, setHubs] = useState<string[]>([]);
   const [markets, setMarkets] = useState<string[]>([]);
   const [rate, setRate] = useState('0');
+  // Local teacher → paid in DZD; international teacher → paid in EUR.
+  const [currency, setCurrency] = useState<PayoutCurrency>('EUR');
   const [savingPerm, setSavingPerm] = useState(false);
   const [savingComp, setSavingComp] = useState(false);
   const [marking, setMarking] = useState(false);
@@ -66,6 +70,7 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
     setHubs(teacher.assigned_hubs);
     setMarkets(teacher.market_access);
     setRate(String(teacher.per_class_rate ?? 0));
+    setCurrency(teacher.payout_currency);
     void refreshPayroll(teacher.user_id);
   }, [teacher]);
 
@@ -79,7 +84,7 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
       supabase.from('teacher_payouts_ledger').select('*').eq('teacher_user_id', uid).eq('status', 'paid').order('paid_at', { ascending: false }).limit(12),
       (supabase as any)
         .from('teacher_earnings')
-        .select('id, booking_id, teacher_amount, platform_amount, status, earned_at, adjustment_note, adjusted_at')
+        .select('id, booking_id, teacher_amount, platform_amount, status, earned_at, adjustment_note, adjusted_at, currency')
         .eq('teacher_id', uid)
         .gte('earned_at', monthStart)
         .order('earned_at', { ascending: false }),
@@ -174,12 +179,13 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
     }
     setSavingComp(true);
     try {
-      const { error } = await supabase
+      // payout_currency isn't in the generated Supabase types yet.
+      const { error } = await (supabase as any)
         .from('teacher_profiles')
-        .update({ per_class_rate: numeric })
+        .update({ per_class_rate: numeric, payout_currency: currency })
         .eq('user_id', teacher.user_id);
       if (error) throw error;
-      toast.success('Pay rate updated');
+      toast.success('Pay settings updated');
       await refreshPayroll(teacher.user_id);
       onSaved();
     } catch (e: any) {
@@ -201,7 +207,7 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
         classes_count: owed.classes_count,
         rate_applied: teacher.per_class_rate,
         amount: owed.amount,
-        currency: 'EUR',
+        currency: teacher.payout_currency,
         status: 'paid',
         paid_by: auth?.user?.id ?? null,
       });
@@ -215,7 +221,7 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
         .gte('earned_at', owed.period_start)
         .lt('earned_at', new Date(new Date(owed.period_end).getTime() + 86_400_000).toISOString());
       if (settleErr) console.error('[TeacherManagementDrawer] settle earnings failed', settleErr);
-      toast.success(`Marked €${owed.amount.toFixed(2)} as paid`);
+      toast.success(`Marked ${formatPay(owed.amount, teacher.payout_currency)} as paid`);
       await refreshPayroll(teacher.user_id);
     } catch (e: any) {
       toast.error(e?.message ?? 'Failed to record payout');
@@ -278,12 +284,35 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
           {/* TAB 2 */}
           <TabsContent value="compensation" className="space-y-6 mt-6">
             <div>
-              <Label htmlFor="rate" className="text-sm font-semibold">Per-class rate (EUR)</Label>
-              <p className="text-xs text-muted-foreground mb-2">Amount paid per completed 30-min session.</p>
+              <Label className="text-sm font-semibold">Teacher type</Label>
+              <p className="text-xs text-muted-foreground mb-2">
+                Decides the currency this teacher is paid in. Separate from which students they can teach (Market access).
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {(['DZD', 'EUR'] as const).map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setCurrency(c)}
+                    className={`rounded-lg border-2 p-3 text-left text-sm transition ${
+                      currency === c ? 'border-primary bg-primary/5 font-semibold' : 'border-border hover:border-primary/40'
+                    }`}
+                  >
+                    {c === 'DZD' ? '🇩🇿 ' : '🌍 '}{TEACHER_KIND_LABEL[c]}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="rate" className="text-sm font-semibold">Per-class rate ({currency})</Label>
+              <p className="text-xs text-muted-foreground mb-2">
+                Amount paid per completed session. Leave at 0 to pay the teacher's hourly rate pro-rated to the lesson length.
+              </p>
               <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">€</span>
-                  <Input id="rate" type="number" step="0.01" min="0" value={rate} onChange={(e) => setRate(e.target.value)} className="pl-7" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{currencySymbol(currency)}</span>
+                  <Input id="rate" type="number" step="0.01" min="0" value={rate} onChange={(e) => setRate(e.target.value)} className="pl-9" />
                 </div>
                 <Button onClick={saveCompensation} disabled={savingComp}>
                   {savingComp ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
@@ -293,9 +322,9 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
 
             <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-1">
               <div className="text-xs uppercase font-semibold text-muted-foreground">Quick preview</div>
-              <div className="text-sm">10 classes → <span className="font-bold tabular-nums">€{(Number(rate || '0') * 10).toFixed(2)}</span></div>
-              <div className="text-sm">25 classes → <span className="font-bold tabular-nums">€{(Number(rate || '0') * 25).toFixed(2)}</span></div>
-              <div className="text-sm">50 classes → <span className="font-bold tabular-nums">€{(Number(rate || '0') * 50).toFixed(2)}</span></div>
+              <div className="text-sm">10 classes → <span className="font-bold tabular-nums">{formatPay(Number(rate || '0') * 10, currency)}</span></div>
+              <div className="text-sm">25 classes → <span className="font-bold tabular-nums">{formatPay(Number(rate || '0') * 25, currency)}</span></div>
+              <div className="text-sm">50 classes → <span className="font-bold tabular-nums">{formatPay(Number(rate || '0') * 50, currency)}</span></div>
             </div>
           </TabsContent>
 
@@ -303,7 +332,7 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
           <TabsContent value="payroll" className="space-y-6 mt-6">
             <div className="rounded-xl border-2 border-primary/40 bg-primary/5 p-6 text-center">
               <div className="text-xs uppercase tracking-wide font-bold text-primary mb-2">Total owed this month</div>
-              <div className="text-5xl font-extrabold tabular-nums">€{(owed?.amount ?? 0).toFixed(2)}</div>
+              <div className="text-5xl font-extrabold tabular-nums">{formatPay(owed?.amount ?? 0, teacher.payout_currency)}</div>
               <div className="text-sm text-muted-foreground mt-2">
                 {owed?.classes_count ?? 0} unpaid lesson{owed?.classes_count === 1 ? '' : 's'} this month
               </div>
@@ -343,12 +372,12 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
                         </div>
                         <div className="flex gap-2">
                           <div className="relative w-28 shrink-0">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">€</span>
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{currencySymbol(row.currency)}</span>
                             <Input
                               type="number" step="0.01" min="0" disabled={isPaid}
                               value={draft.amount}
                               onChange={(e) => setDrafts((d) => ({ ...d, [row.id]: { ...draft, amount: e.target.value } }))}
-                              className="pl-7"
+                              className="pl-9"
                             />
                           </div>
                           <Input
@@ -376,7 +405,7 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
                   {ledger.map((row: any) => (
                     <li key={row.id} className="flex items-center justify-between rounded-lg border border-border p-3 text-sm">
                       <div>
-                        <div className="font-semibold tabular-nums">€{Number(row.amount).toFixed(2)}</div>
+                        <div className="font-semibold tabular-nums">{formatPay(row.amount, row.currency === 'DZD' ? 'DZD' : 'EUR')}</div>
                         <div className="text-xs text-muted-foreground">
                           {row.classes_count} classes · {new Date(row.period_start).toLocaleDateString()} → {new Date(row.period_end).toLocaleDateString()}
                         </div>

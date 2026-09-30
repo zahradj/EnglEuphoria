@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { DollarSign, Clock, CheckCircle2, Wallet, BookOpen } from 'lucide-react';
+import { asPayoutCurrency, formatPay, type PayoutCurrency } from '@/lib/teacherPay';
 
 interface TeacherEarningsProps {
   teacherId: string;
@@ -17,14 +18,17 @@ interface EarningRow {
   booking_id: string | null;
   /** Set when an admin adjusted this lesson's pay (bonus / deduction). */
   adjustment_note: string | null;
+  currency: string | null;
 }
 
 // adjustment_note isn't in the generated Supabase types yet, hence `as any`.
-const EARNING_COLS = 'id, amount, teacher_amount, status, created_at, booking_id, adjustment_note';
+const EARNING_COLS = 'id, amount, teacher_amount, status, created_at, booking_id, adjustment_note, currency';
 
 export const TeacherEarnings: React.FC<TeacherEarningsProps> = ({ teacherId }) => {
   const [rows, setRows] = useState<EarningRow[]>([]);
   const [hourlyRate, setHourlyRate] = useState(0);
+  // Local teachers are paid in DZD, international teachers in EUR.
+  const [currency, setCurrency] = useState<PayoutCurrency>('EUR');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,23 +36,28 @@ export const TeacherEarnings: React.FC<TeacherEarningsProps> = ({ teacherId }) =
     (async () => {
       setLoading(true);
 
-      const [{ data: earnings }, { data: profile }] = await Promise.all([
+      const [{ data: earnings }, { data: profile }]: any[] = await Promise.all([
         (supabase as any)
           .from('teacher_earnings')
           .select(EARNING_COLS)
           .eq('teacher_id', teacherId)
           .order('created_at', { ascending: false })
           .limit(200),
-        supabase
+        (supabase as any)
           .from('teacher_profiles')
-          .select('per_class_rate, hourly_rate_eur')
+          .select('per_class_rate, hourly_rate_eur, hourly_rate_dzd, payout_currency')
           .eq('user_id', teacherId)
           .maybeSingle(),
       ]);
 
       if (cancelled) return;
       setRows((earnings as EarningRow[] | null) ?? []);
-      setHourlyRate(Number((profile as any)?.per_class_rate ?? (profile as any)?.hourly_rate_eur ?? 0));
+      const cur = asPayoutCurrency((profile as any)?.payout_currency);
+      setCurrency(cur);
+      const perClass = Number((profile as any)?.per_class_rate ?? 0);
+      const hourly = Number((cur === 'DZD' ? (profile as any)?.hourly_rate_dzd : (profile as any)?.hourly_rate_eur) ?? 0);
+      // Same rule as the server: per-class rate, else hourly pro-rated to a 30-min class.
+      setHourlyRate(perClass > 0 ? perClass : hourly / 2);
       setLoading(false);
     })();
 
@@ -119,7 +128,7 @@ export const TeacherEarnings: React.FC<TeacherEarningsProps> = ({ teacherId }) =
               </div>
               <div>
                 <p className="text-xs text-muted-foreground uppercase tracking-wider">Pending Clearance</p>
-                <p className="text-2xl font-bold text-muted-foreground">€{pending.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-muted-foreground">{formatPay(pending, currency)}</p>
                 <p className="text-xs text-muted-foreground">clears in 24h</p>
               </div>
             </div>
@@ -135,7 +144,7 @@ export const TeacherEarnings: React.FC<TeacherEarningsProps> = ({ teacherId }) =
               </div>
               <div>
                 <p className="text-xs text-emerald-700/80 uppercase tracking-wider font-medium">Available for Payout</p>
-                <p className="text-2xl font-bold text-emerald-700">€{payable.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-emerald-700">{formatPay(payable, currency)}</p>
                 <p className="text-xs text-emerald-700/70">ready to withdraw</p>
               </div>
             </div>
@@ -165,7 +174,7 @@ export const TeacherEarnings: React.FC<TeacherEarningsProps> = ({ teacherId }) =
               </div>
               <div>
                 <p className="text-xs text-muted-foreground uppercase tracking-wider">Per-Class Rate</p>
-                <p className="text-2xl font-bold text-amber-600">€{hourlyRate}</p>
+                <p className="text-2xl font-bold text-amber-600">{formatPay(hourlyRate, currency)}</p>
                 <p className="text-xs text-muted-foreground">credited per lesson</p>
               </div>
             </div>
@@ -178,7 +187,7 @@ export const TeacherEarnings: React.FC<TeacherEarningsProps> = ({ teacherId }) =
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-base text-[#6B21A8]">Recent earnings</CardTitle>
           <span className="text-xs text-muted-foreground">
-            Total paid out: <span className="font-semibold text-foreground">€{paid.toFixed(2)}</span>
+            Total paid out: <span className="font-semibold text-foreground">{formatPay(paid, currency)}</span>
           </span>
         </CardHeader>
         <CardContent>
@@ -207,7 +216,7 @@ export const TeacherEarnings: React.FC<TeacherEarningsProps> = ({ teacherId }) =
                 return (
                   <li key={r.id} className="flex items-center justify-between py-3">
                     <div>
-                      <p className="text-sm font-medium text-foreground">€{amt.toFixed(2)}</p>
+                      <p className="text-sm font-medium text-foreground">{formatPay(amt, r.currency ? asPayoutCurrency(r.currency) : currency)}</p>
                       <p className="text-xs text-muted-foreground">
                         {new Date(r.created_at).toLocaleString()}
                       </p>
