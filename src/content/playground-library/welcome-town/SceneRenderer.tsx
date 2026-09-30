@@ -809,14 +809,30 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
       <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex flex-wrap justify-center gap-3 px-4">
         {trayOrder.map((i) => {
           const item = scene.items[i];
-          if (placed.has(i) || drag?.idx === i) return null;
+          if (placed.has(i)) return null;
+          // The tray button for the item currently being dragged stays
+          // MOUNTED (just visually hidden) rather than unmounting — see the
+          // sticker-drag scene's identical fix just above this component
+          // for why: the live-classroom DOM-tap mirror caches ONE element
+          // reference from the initial pointerdown and dispatches every
+          // later pointermove/pointerup straight at it. If that node
+          // unmounts (or, worse, is fully removed from the tree like this
+          // used to do), the cached reference goes fully detached —
+          // dispatching events on a detached node never bubbles to the
+          // `window` listeners this scene's own drag-move/up handlers are
+          // registered on, so the OTHER participant's view of the drag
+          // freezes after the very first frame. Reported live as "the
+          // grab and drag / matching game doesn't work." The moving ghost
+          // chip below is still what's visually shown while dragging;
+          // this button just needs to keep existing at the same DOM path.
+          const isBeingDragged = drag?.idx === i;
           return (
             <button
               key={`tray-${i}`}
               onPointerDown={(e) => startDrag(e, i)}
               aria-label={`Drag the word ${item.label}`}
-              className={`pointer-events-auto touch-none shadow-2xl ring-4 ring-white transition active:scale-95 ${scene.showBlanks ? 'rounded-2xl px-6 py-4' : 'rounded-xl px-4 py-3'} ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
-              style={{ background: item.color, animation: wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
+              className={`touch-none shadow-2xl ring-4 ring-white transition active:scale-95 ${scene.showBlanks ? 'rounded-2xl px-6 py-4' : 'rounded-xl px-4 py-3'} ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''} ${isBeingDragged ? 'pointer-events-none opacity-0' : 'pointer-events-auto'}`}
+              style={{ background: item.color, animation: isBeingDragged || wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
             >
               <span className={`font-black uppercase tracking-wide text-white ${scene.showBlanks ? 'text-lg sm:text-xl' : 'text-sm'}`}>{item.label}</span>
             </button>
@@ -925,24 +941,30 @@ function DragStickerScene({ scene, onNext, onWin }: { scene: Extract<Scene, { ki
         const key = s.who;
         const isDragging = dragKey === key;
         const pos = isDragging && dragPos ? dragPos : (positions[key] ?? { xPct: parseFloat(s.startLeft), yPct: parseFloat(s.startTop) });
-        if (isDragging) {
-          return (
-            <img
-              key={key} src={s.stickerImg} alt={CAST[s.who].name}
-              className="pointer-events-none absolute z-50 h-28 w-28 -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow-[0_16px_24px_rgba(0,0,0,0.5)] sm:h-36 sm:w-36"
-              style={{ left: `${pos.xPct}%`, top: `${pos.yPct}%`, transform: 'translate(-50%, -50%) scale(1.08) rotate(-3deg)' }}
-            />
-          );
-        }
+        // ALWAYS the same <button> element across the whole gesture — never
+        // swap to a bare <img> while dragging. In a live classroom, the
+        // teacher's raw pointerdown/move/up gets mirrored onto the other
+        // side's matching DOM node by caching ONE element reference from
+        // the initial pointerdown and dispatching every later move/up
+        // event straight at it (see PlayWelcomeTownLesson's scene_tap
+        // subscriber). Swapping the tag mid-drag makes React destroy that
+        // node, so the cached reference on the OTHER participant's screen
+        // goes stale after the very first frame — their view of the
+        // sticker never follows the drag. Reported live as "the grab and
+        // drag ('Where is Wim?') doesn't work."
         return (
           <button
             key={key}
             onPointerDown={(e) => startDrag(e, key)}
             aria-label={`Drag ${CAST[s.who].name}`}
-            className="pointer-events-auto absolute z-30 -translate-x-1/2 -translate-y-1/2 touch-none transition active:scale-95"
+            className={`absolute z-30 -translate-x-1/2 -translate-y-1/2 touch-none transition-transform ${isDragging ? 'z-50 pointer-events-none' : 'pointer-events-auto active:scale-95'}`}
             style={{ left: `${pos.xPct}%`, top: `${pos.yPct}%` }}
           >
-            <img src={s.stickerImg} alt={CAST[s.who].name} className="h-28 w-28 object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)] sm:h-36 sm:w-36" style={{ transform: 'rotate(4deg)' }} />
+            <img
+              src={s.stickerImg} alt={CAST[s.who].name}
+              className={`object-contain sm:h-36 sm:w-36 ${isDragging ? 'h-28 w-28 drop-shadow-[0_16px_24px_rgba(0,0,0,0.5)]' : 'h-28 w-28 drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]'}`}
+              style={{ transform: isDragging ? 'scale(1.08) rotate(-3deg)' : 'rotate(4deg)' }}
+            />
           </button>
         );
       })}
@@ -2480,14 +2502,20 @@ function JigsawPuzzleScene({ scene, onNext, onWin, onLose }: { scene: Extract<Sc
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex flex-wrap justify-center gap-3 px-4">
         {trayOrder.map((i) => {
-          if (placed.has(i) || drag?.idx === i) return null;
+          if (placed.has(i)) return null;
+          // Stays mounted (just hidden) while dragged — same fix as
+          // DragMatchScene's tray button, same reason: unmounting the
+          // element the live-classroom DOM-tap mirror cached a reference
+          // to detaches it, so the other participant's screen never
+          // receives the pointermove/pointerup that would move it.
+          const isBeingDragged = drag?.idx === i;
           return (
             <button
               key={`tray-${i}`}
               onPointerDown={(e) => startDrag(e, i)}
               aria-label={`Puzzle piece ${i + 1}`}
-              className={`pointer-events-auto touch-none rounded-xl shadow-2xl ring-4 ring-white transition active:scale-95 ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
-              style={{ width: 64, height: 64, ...pieceStyle(i), animation: wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
+              className={`touch-none rounded-xl shadow-2xl ring-4 ring-white transition active:scale-95 ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''} ${isBeingDragged ? 'pointer-events-none opacity-0' : 'pointer-events-auto'}`}
+              style={{ width: 64, height: 64, ...pieceStyle(i), animation: isBeingDragged || wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
             />
           );
         })}
