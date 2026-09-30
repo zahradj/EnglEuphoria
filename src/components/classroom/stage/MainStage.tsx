@@ -14,6 +14,7 @@ import { EmbeddedWelcomeTownLesson } from './EmbeddedWelcomeTownLesson';
 import { ClassroomSceneErrorBoundary } from './ClassroomSceneErrorBoundary';
 import { useLetterboxSize } from '@/hooks/useLetterboxSize';
 import { isWelcomeTownFamilyFormat } from '@/content/playground-library/sceneLessonFormats';
+import { LiveReactionBar, STUDENT_REACTIONS } from '@/components/classroom/engagement/LiveReactionBar';
 
 /** The two embedded scene players (Pre-A1 lep1-rich, A1/A2 wt-rich/wt-a2-rich)
  *  expose the same 4 imperative methods from different source files —
@@ -369,16 +370,19 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                       </button>
                     </>
                   ) : (
-                    // Always rendered (only the text changes): this row used
-                    // to exist only while unlocked, so granting/revoking
-                    // interaction added/removed its height and re-letterboxed
-                    // — the student's whole lesson frame visibly jumped.
-                    <div className="mx-auto flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-xs font-extrabold text-slate-800 shadow-lg backdrop-blur tabular-nums">
-                      {sceneNav.interactionUnlocked ? (
-                        <><span aria-hidden>✋</span> Your turn! Try the activity</>
-                      ) : (
-                        <><span aria-hidden>👩‍🏫</span> Your teacher is guiding · {sceneNav.sceneIdx + 1} / {sceneNav.total}</>
-                      )}
+                    // Always rendered (nothing inside it depends on
+                    // interactionUnlocked): this row used to show a status
+                    // pill whose text/presence changed with the unlock
+                    // state, so granting/revoking interaction added/removed
+                    // its height and re-letterboxed — the student's whole
+                    // lesson frame visibly jumped. Replaced the status pill
+                    // with the student's reaction dock, embedded here
+                    // (placement="inline") instead of floating over the
+                    // stage, per direct request to remove the "Your teacher
+                    // is guiding" pill and put the reactions horizontally
+                    // under the lesson.
+                    <div className="mx-auto">
+                      <LiveReactionBar roomId={roomId} userId={userId} hubType={hubType} reactions={STUDENT_REACTIONS} placement="inline" />
                     </div>
                   )}
                 </div>

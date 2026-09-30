@@ -11,10 +11,13 @@ interface LiveReactionBarProps {
   canSend?: boolean;
   /** Which emoji buttons this side's dock shows. Defaults to the full set. */
   reactions?: readonly string[];
-  /** 'bottom' (default): horizontal dock, bottom-centre. 'side': vertical
-   *  dock on the right edge — keeps the bottom of the stage (scene progress
-   *  dots, nav) clear. */
-  placement?: 'bottom' | 'side';
+  /** 'bottom' (default): horizontal dock, fixed to the page's bottom-centre.
+   *  'side': vertical dock fixed to the right edge — keeps the bottom of
+   *  the stage (scene progress dots, nav) clear. 'inline': not
+   *  page-fixed at all — a plain horizontal row sized to its parent, for
+   *  embedding directly inside a layout (e.g. the scene lesson's own nav
+   *  row) instead of floating over it. */
+  placement?: 'bottom' | 'side' | 'inline';
   /** Called for each reaction received from the other side. */
   onReceive?: (emoji: string) => void;
 }
@@ -56,6 +59,7 @@ export const LiveReactionBar: React.FC<LiveReactionBarProps> = ({
   onReceive,
 }) => {
   const isSide = placement === 'side';
+  const isInline = placement === 'inline';
   // Latest callback without re-subscribing the channel on every render.
   const onReceiveRef = useRef(onReceive);
   onReceiveRef.current = onReceive;
@@ -127,15 +131,20 @@ export const LiveReactionBar: React.FC<LiveReactionBarProps> = ({
         </AnimatePresence>
       </div>
 
-      {/* Reaction dock */}
+      {/* Reaction dock — 'inline' sits in normal document flow (no `fixed`,
+          no page-level positioning) so it can be embedded directly inside
+          a layout, e.g. the scene lesson's own nav row, instead of
+          floating over the stage. */}
       {canSend && (
         <motion.div
           initial={{ opacity: 0, ...(isSide ? { x: 20 } : { y: 20 }) }}
           animate={{ opacity: 1, x: 0, y: 0 }}
-          className={`fixed z-40 flex items-center gap-1 backdrop-blur-xl bg-white/80 border border-white/60 ${theme.radiusClass} ${
-            isSide
-              ? 'right-3 top-1/2 -translate-y-1/2 flex-col px-1.5 py-2'
-              : 'bottom-6 left-1/2 -translate-x-1/2 px-2 py-1.5'
+          className={`flex items-center gap-1 backdrop-blur-xl bg-white/80 border border-white/60 ${theme.radiusClass} ${
+            isInline
+              ? 'px-2 py-1.5'
+              : isSide
+              ? 'fixed z-40 right-3 top-1/2 -translate-y-1/2 flex-col px-1.5 py-2'
+              : 'fixed z-40 bottom-6 left-1/2 -translate-x-1/2 px-2 py-1.5'
           }`}
           style={theme.glowShadow}
         >

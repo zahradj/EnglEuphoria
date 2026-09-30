@@ -617,16 +617,25 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
               hubType={hubType}
             />
           </div>
-          <LiveReactionBar
-            roomId={roomId}
-            userId={studentId}
-            hubType={hubType}
-            reactions={STUDENT_REACTIONS}
-            // Vertical strip on the right edge: at the bottom-centre it sat
-            // on top of the scene lesson's progress dots / nav.
-            placement="side"
-            canSend
-          />
+          {/* A Playground scene lesson (hubType 'playground' + stageMode
+              'slide') renders its OWN reaction dock embedded in its nav
+              row (see MainStage's isSceneLessonStage branch) — this
+              page-level floating dock would just duplicate it there, so
+              it's skipped for that combination and kept as the fallback
+              for every other hub/stage mode (Academy, Success, Playground
+              web/blank content, etc). */}
+          {!(hubType === 'playground' && stageMode === 'slide') && (
+            <LiveReactionBar
+              roomId={roomId}
+              userId={studentId}
+              hubType={hubType}
+              reactions={STUDENT_REACTIONS}
+              // Vertical strip on the right edge: at the bottom-centre it sat
+              // on top of the scene lesson's progress dots / nav.
+              placement="side"
+              canSend
+            />
+          )}
         </>
       )}
 

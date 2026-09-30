@@ -138,8 +138,19 @@ export type { CharKey, Scene };
 export { CAST, VOICE_KEY };
 
 const M = '/magic-castle';
+// Regenerated per direct request: now shows Pip standing alongside Wim and
+// Cat-cat (previously just the two of them), same hallway/door/tapestry
+// composition. Nothing else references this file, so it was updated in
+// place rather than introducing a second near-duplicate title image.
 const bgTitle = `${M}/scenes/bg-castle-title.png`;
+// bgWide is reused by several OTHER scenes below (the storybook chapters,
+// hello-doors) that depend on its hallway/door composition specifically —
+// left untouched. mc-setting-castle's own "Castle!" reveal gets its own
+// new bgCastleExterior instead (see that scene), regenerated per direct
+// request: the old bgWide was just the same interior hallway already
+// shown twice by this point, not an actual castle building.
 const bgWide = `${M}/scenes/bg-castle-wide.png`;
+const bgCastleExterior = `${M}/scenes/bg-castle-exterior.png`;
 const bgDoorPip = `${M}/scenes/bg-castle-door-pip.png`;
 const bgWim = `${M}/scenes/bg-castle-wim.png`;
 const bgCatcat = `${M}/scenes/bg-castle-catcat.png`;
@@ -210,7 +221,12 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     cta: '\u{1F6AA} OPEN THE DOOR!',
   },
 
-  { id: 'mc-setting-castle', kind: 'echo', bg: bgWide, who: 'pip', teacher: 'Shh... listen! Creaky floors, flickering torches, echoing halls! We found somewhere old and magical.', word: 'Castle!' },
+  // bgCastleExterior is composed with the castle filling the left ~2/3 of
+  // the frame and open sky on the right — textSide explicitly set to
+  // 'right' (matches the default, but stated directly per the exact
+  // "castle on the left, word on the right" request rather than relying
+  // silently on EchoScene's fallback).
+  { id: 'mc-setting-castle', kind: 'echo', bg: bgCastleExterior, who: 'pip', textSide: 'right', teacher: 'Shh... listen! Creaky floors, flickering torches, echoing halls! We found somewhere old and magical.', word: 'Castle!' },
 
   { id: 'mc-meet-wim', kind: 'meet', bg: bgWim, who: 'wim', teacher: 'Tap Wim to meet the castle wizard!', line: 'Hello! I am Wim. I am a wizard!', repeat: 'I am a wizard!' },
   { id: 'mc-meet-catcat', kind: 'meet', bg: bgCatcat, who: 'catcat', teacher: 'Here is Wim’s magical friend! Tap Cat-cat to say hi.', line: 'Meow! I am Cat-cat. I am a cat!', repeat: 'I am a cat!' },

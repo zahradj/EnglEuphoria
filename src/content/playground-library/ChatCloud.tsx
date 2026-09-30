@@ -2,10 +2,10 @@ import type { ReactNode } from 'react';
 
 /**
  * A white "chat cloud" speech bubble for a character's line: a soft cloud
- * silhouette (body + bumps on top) with trailing puffs pointing at whoever
- * is speaking. Replaces the big white cards that used to cover the
- * character. Sizes use --svh (see MainStage's design canvas) so it looks
- * the same on every screen in the classroom.
+ * silhouette (body + two overlapping top bumps) with one teardrop tail
+ * pointing at whoever is speaking. Replaces the big white cards that used
+ * to cover the character. Sizes use --svh (see MainStage's design canvas)
+ * so it looks the same on every screen in the classroom.
  */
 export function ChatCloud({
   children,
@@ -23,7 +23,6 @@ export function ChatCloud({
   ariaLabel?: string;
 }) {
   const Tag = onClick ? 'button' : 'div';
-  const puffSide = tail === 'left' ? { left: '6%' } : { right: '6%' };
   return (
     <Tag
       type={onClick ? 'button' : undefined}
@@ -34,10 +33,13 @@ export function ChatCloud({
       // as a single cloud instead of separate shapes.
       style={{ filter: 'drop-shadow(0 6px 14px rgba(0,0,0,0.28))', animation: 'lep1-pop 0.4s ease-out' }}
     >
-      {/* Cloud bumps along the top edge */}
-      <span aria-hidden className="absolute rounded-full bg-white" style={{ width: '38%', height: '70%', left: '8%', top: '-22%' }} />
-      <span aria-hidden className="absolute rounded-full bg-white" style={{ width: '44%', height: '82%', left: '34%', top: '-34%' }} />
-      <span aria-hidden className="absolute rounded-full bg-white" style={{ width: '30%', height: '60%', right: '6%', top: '-16%' }} />
+      {/* Cloud bumps along the top edge — two, deeply tucked into the body
+          (large negative top offset kept small) rather than three shallow
+          ones, so the top edge reads as one continuous poofy silhouette
+          instead of three separate circles balanced on a pill. Reported
+          live: "the shape of it does not look good." */}
+      <span aria-hidden className="absolute rounded-full bg-white" style={{ width: '46%', height: '78%', left: '10%', top: '-14%' }} />
+      <span aria-hidden className="absolute rounded-full bg-white" style={{ width: '46%', height: '78%', right: '10%', top: '-14%' }} />
       {/* Body */}
       <span
         className="relative block rounded-[999px] bg-white px-[calc(3.2*var(--svh,1vh))] py-[calc(1.6*var(--svh,1vh))]"
@@ -45,16 +47,19 @@ export function ChatCloud({
       >
         {children}
       </span>
-      {/* Trailing puffs toward the speaker */}
-      <span aria-hidden className="absolute rounded-full bg-white" style={{ ...puffSide, bottom: 'calc(-2.6 * var(--svh, 1vh))', width: 'calc(2.8 * var(--svh, 1vh))', height: 'calc(2.8 * var(--svh, 1vh))' }} />
+      {/* Single teardrop tail toward the speaker — a rotated rounded
+          square overlapping the body's bottom corner reads as one
+          attached point, unlike the old two free-floating dot "puffs"
+          that looked like stray debris rather than a tail. */}
       <span
         aria-hidden
-        className="absolute rounded-full bg-white"
+        className="absolute rounded-[30%] bg-white"
         style={{
-          ...(tail === 'left' ? { left: '1%' } : { right: '1%' }),
-          bottom: 'calc(-5.4 * var(--svh, 1vh))',
-          width: 'calc(1.6 * var(--svh, 1vh))',
-          height: 'calc(1.6 * var(--svh, 1vh))',
+          ...(tail === 'left' ? { left: '10%' } : { right: '10%' }),
+          bottom: 'calc(-1.6 * var(--svh, 1vh))',
+          width: 'calc(2.6 * var(--svh, 1vh))',
+          height: 'calc(2.6 * var(--svh, 1vh))',
+          transform: 'rotate(45deg)',
         }}
       />
     </Tag>
