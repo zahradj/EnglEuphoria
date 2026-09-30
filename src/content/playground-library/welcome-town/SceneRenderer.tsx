@@ -394,10 +394,10 @@ function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kin
         <div className={`pointer-events-none absolute top-[calc(11*var(--svh,1vh))] z-20 max-w-[40%] ${cloudPosClass}`}>
           <ChatCloud color={c.color} tail={cloudTail} onClick={replayIntro} ariaLabel={`Hear ${c.name} again`}>
             <span className="flex items-center justify-center gap-2 text-[calc(3.6*var(--svh,1vh))] font-black leading-tight">
-              <span aria-hidden>{c.emoji}</span>{repeatWord}
+              {repeatWord}
             </span>
             {scene.line !== repeatWord && (
-              <span className="mt-1 block text-[calc(1.8*var(--svh,1vh))] font-semibold leading-snug text-neutral-500">🔊 “{scene.line}”</span>
+              <span className="mt-1 block text-[calc(2.6*var(--svh,1vh))] font-semibold leading-snug text-neutral-500">🔊 “{scene.line}”</span>
             )}
           </ChatCloud>
         </div>
