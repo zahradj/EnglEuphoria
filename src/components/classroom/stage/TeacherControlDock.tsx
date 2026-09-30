@@ -285,7 +285,9 @@ export const TeacherControlDock: React.FC<TeacherControlDockProps> = ({
         {onGiveStar && (
           <div className="pl-2 ml-1 border-l border-border">
             <SoundButton
-              soundType="star"
+              // Just a click: the big-star sound plays from StarCelebration
+              // itself so the student hears it too (and not twice for us).
+              soundType="click"
               onClick={onGiveStar}
               title="Give a star"
               aria-label="Give star reward"
