@@ -313,21 +313,34 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     // as the very first version of this activity.
     id: 'mc-listen-find-wim', kind: 'listen-tap', bg: bgCastleOverview,
     teacher: 'Listen carefully, then tap where Wim or Cat-cat is hiding!',
-    targets: [
-      { label: 'Living Room', ...OVERVIEW_LIVING_ROOM, color: '#8B5A2B' },
-      { label: 'Hallway', ...OVERVIEW_HALLWAY, color: '#F4A340' },
-      { label: 'Bathroom', ...OVERVIEW_BATHROOM, color: '#2EC4B6' },
-      { label: 'Bedroom', ...OVERVIEW_BEDROOM, color: '#2EC4B6' },
-      { label: 'Kitchen', ...OVERVIEW_KITCHEN, color: '#C97A2F' },
-      { label: 'Dining Room', ...OVERVIEW_DINING_ROOM, color: '#C97A2F' },
-    ],
+    // ROOM_HIT: the whole 6-room cutaway is a clean 3-column x 2-row grid
+    // (matches the OVERVIEW_* anchor spacing above) — every room gets the
+    // SAME generous region size so the entire room is clickable, not just
+    // an ~88px dot at its center. Per direct report: with the resting
+    // circle now invisible (see ListenTapScene), a student had nothing to
+    // aim at and kept mis-clicking blank space.
+    targets: (() => {
+      const ROOM_HIT = { hitWidth: '30%', hitHeight: '36%' };
+      return [
+        { label: 'Living Room', ...OVERVIEW_LIVING_ROOM, ...ROOM_HIT, color: '#8B5A2B' },
+        { label: 'Hallway', ...OVERVIEW_HALLWAY, ...ROOM_HIT, color: '#F4A340' },
+        { label: 'Bathroom', ...OVERVIEW_BATHROOM, ...ROOM_HIT, color: '#2EC4B6' },
+        { label: 'Bedroom', ...OVERVIEW_BEDROOM, ...ROOM_HIT, color: '#2EC4B6' },
+        { label: 'Kitchen', ...OVERVIEW_KITCHEN, ...ROOM_HIT, color: '#C97A2F' },
+        { label: 'Dining Room', ...OVERVIEW_DINING_ROOM, ...ROOM_HIT, color: '#C97A2F' },
+      ];
+    })(),
+    // stickerWim/stickerCatcat (already generated for drag-sticker above)
+    // reused here so a correct tap reveals the real character art instead
+    // of the generic CAST-emoji fallback — "more clean, more presentable"
+    // per direct request.
     rounds: [
-      { prompt: 'Where is Wim? He is in the kitchen!', answerLabel: 'Kitchen', who: 'wim' },
-      { prompt: 'Where is Cat-cat? She is in the living room!', answerLabel: 'Living Room', who: 'catcat' },
-      { prompt: 'Where is Wim? He is in the bathroom!', answerLabel: 'Bathroom', who: 'wim' },
-      { prompt: 'Where is Cat-cat? She is in the bedroom!', answerLabel: 'Bedroom', who: 'catcat' },
-      { prompt: 'Where is Wim? He is in the dining room!', answerLabel: 'Dining Room', who: 'wim' },
-      { prompt: 'Where is Cat-cat? She is in the hallway!', answerLabel: 'Hallway', who: 'catcat' },
+      { prompt: 'Where is Wim? He is in the kitchen!', answerLabel: 'Kitchen', who: 'wim', stickerImg: stickerWim },
+      { prompt: 'Where is Cat-cat? She is in the living room!', answerLabel: 'Living Room', who: 'catcat', stickerImg: stickerCatcat },
+      { prompt: 'Where is Wim? He is in the bathroom!', answerLabel: 'Bathroom', who: 'wim', stickerImg: stickerWim },
+      { prompt: 'Where is Cat-cat? She is in the bedroom!', answerLabel: 'Bedroom', who: 'catcat', stickerImg: stickerCatcat },
+      { prompt: 'Where is Wim? He is in the dining room!', answerLabel: 'Dining Room', who: 'wim', stickerImg: stickerWim },
+      { prompt: 'Where is Cat-cat? She is in the hallway!', answerLabel: 'Hallway', who: 'catcat', stickerImg: stickerCatcat },
     ],
   },
 

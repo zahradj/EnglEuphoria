@@ -1254,19 +1254,74 @@ function ListenTapScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract
         // spot — same "a stuck student always has a way forward" pattern
         // as the Pre-A1 find-in-scene game this mechanic was modeled on.
         const revealCorrect = misses >= 2 && t.label === r!.answerLabel && !correct;
+        // Resting state is now a fully invisible hit-zone — the old
+        // permanently-visible ring (border-white/70 bg-white/10) marked
+        // every tappable spot before the student ever listened, turning a
+        // listening check into a "click the circle you can already see"
+        // game. Reported live: "remove the circles... to not be
+        // visible." The only circle a student ever sees now is transient
+        // feedback: red on a wrong tap, or the revealCorrect hint after
+        // they've genuinely struggled — never a standing giveaway.
         return (
           <button
             key={t.label}
             onClick={() => tap(t.label)}
             disabled={correct}
             aria-label={t.label}
-            className={`absolute z-20 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 transition active:scale-90 ${isWrong ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400 bg-red-400/20' : isRight ? 'scale-110 border-green-400 bg-green-400/30' : revealCorrect ? 'border-white bg-white/25' : 'border-white/70 bg-white/10'}`}
+            className={`absolute z-20 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center border-4 transition active:scale-[0.98] ${t.hitWidth ? 'rounded-3xl' : 'rounded-full'} ${isWrong ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400 bg-red-400/20' : revealCorrect ? 'border-white bg-white/25' : 'border-transparent bg-transparent'}`}
             style={{
-              left: t.left, top: t.top, width: 88, height: 88,
-              boxShadow: isRight ? `0 0 0 6px ${t.color}aa` : revealCorrect ? '0 0 0 6px rgba(255,255,255,0.85)' : undefined,
+              left: t.left, top: t.top,
+              width: t.hitWidth ?? 88, height: t.hitHeight ?? 88,
               animation: revealCorrect && !isRight ? 'lep1-ping 1s ease-in-out infinite' : undefined,
             }}
-          />
+          >
+            {/* On the correct tap, the character the prompt was ABOUT
+                (r.who — e.g. "Where is Cat-cat? She is in the living
+                room!") visibly appears right where the student tapped,
+                instead of just a colored ring — per direct request: "when
+                the student clicks a place, the character appears."
+                Three tiers, cleanest available wins: a real sticker image
+                (r.stickerImg, matching drag-sticker's own art convention —
+                "more clean, more presentable" per direct follow-up) when
+                one exists for this round; the CAST emoji in a colored
+                badge when it doesn't (works for every character in every
+                world with zero new art); a plain checkmark when the round
+                names no character at all, so feedback never silently
+                disappears. */}
+            {isRight && (
+              r.stickerImg ? (
+                <img
+                  src={r.stickerImg}
+                  alt={r.who ? CAST[r.who].name : t.label}
+                  className="h-40 w-40 object-contain drop-shadow-[0_14px_22px_rgba(0,0,0,0.5)] sm:h-48 sm:w-48"
+                  // The parent button is a fixed 88x88 hit-box (t's tap
+                  // target size) — Tailwind's own preflight reset sets
+                  // `img { max-width: 100% }`, which silently capped this
+                  // image's rendered width to that 88px box regardless of
+                  // the h-40/sm:h-48 classes above, no matter how large
+                  // they said to render. Overriding max-width/max-height
+                  // here lets the sticker render at its actual intended
+                  // size, free to visually overflow the (now-invisible,
+                  // already-tapped) hit-box beneath it.
+                  style={{ animation: 'lep1-pop 0.35s ease-out', maxWidth: 'none', maxHeight: 'none' }}
+                />
+              ) : r.who ? (
+                <span
+                  className="grid h-20 w-20 place-items-center rounded-full text-4xl shadow-2xl ring-4 ring-white"
+                  style={{ background: CAST[r.who].color, animation: 'lep1-pop 0.35s ease-out' }}
+                >
+                  {CAST[r.who].emoji}
+                </span>
+              ) : (
+                <span
+                  className="grid h-16 w-16 place-items-center rounded-full text-3xl font-black text-white shadow-2xl ring-4 ring-white"
+                  style={{ background: t.color, animation: 'lep1-pop 0.35s ease-out' }}
+                >
+                  ✓
+                </span>
+              )
+            )}
+          </button>
         );
       })}
     </div>

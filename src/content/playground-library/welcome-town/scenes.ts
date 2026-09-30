@@ -207,7 +207,32 @@ export type Scene =
   // student can tap (reused verbatim from that same bg's own vocab-spot/
   // drag-match hotspot coordinates elsewhere in this file); each round in
   // `rounds` plays one spoken line and names which target answers it.
-  | { id: string; kind: 'listen-tap'; bg: string; teacher: string; targets: { label: string; left: string; top: string; color: string }[]; rounds: { prompt: string; answerLabel: string; who?: CharKey }[] }
+  | { id: string; kind: 'listen-tap'; bg: string; teacher: string; targets: {
+      label: string; left: string; top: string; color: string;
+      /** Real clickable region around the target, as percentages of the
+       *  scene (same convention as targetWidth/targetHeight on
+       *  drag-match). The resting hit-zone is invisible by design (see
+       *  ListenTapScene), so without this a student has to blind-guess a
+       *  small ~88px circle around `left`/`top` — reported live as
+       *  "clicking, clicking, clicking... they don't know what to
+       *  click." Set this whenever the target represents a whole real
+       *  area of the background (a room in a house cutaway, a zone of a
+       *  wider scene) so the ENTIRE area is clickable, not just its
+       *  center point. Omit for a small/precise target (a single
+       *  character or object) where the default fixed hit-zone is
+       *  already an easy, unambiguous tap. */
+      hitWidth?: string; hitHeight?: string;
+    }[]; rounds: {
+      prompt: string; answerLabel: string; who?: CharKey;
+      /** A real character sticker (transparent-background PNG, matching
+       *  drag-sticker's own art convention) shown on a correct tap
+       *  instead of the generic CAST-emoji badge — cleaner and more
+       *  presentable per direct request. Optional: most characters don't
+       *  have a dedicated sticker asset yet, so omitting it keeps the
+       *  emoji-badge fallback working exactly as before. Only supply
+       *  this when a real sticker image already exists for `who`. */
+      stickerImg?: string;
+    }[] }
   // A spoken statement, judged True or False — a third, genuinely different
   // listening-check modality from `choice` (pick from 3 text buttons) and
   // `listen-tap` (tap a real object in the scene): a fast binary call, no
