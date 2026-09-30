@@ -557,40 +557,58 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
           </button>
         );
       })()}
-      {/* Label banner, not a small tag anchored to the arrow: the arrow
-          stays in place pointing at the actual object, but the revealed
-          word itself now pops up in its own fixed strip along the bottom
-          of the frame — genuinely empty space, never competing with
-          whatever the arrow is pointing at for room. Per direct request:
-          "it pops up on the empty space... big enough for the student to
-          see," in the Chewy display font, and clicking it repeats the
-          word's audio. */}
-      {current && revealed && (
-        <div
-          className="pointer-events-none absolute inset-x-0 bottom-6 z-40 flex justify-center px-4"
-          style={{ animation: 'lep1-pop 0.25s ease-out' }}
-        >
-          <div className="pointer-events-auto flex items-center gap-3 rounded-[2.5rem] border-[3px] border-white bg-white/97 py-3 pl-3 pr-3 shadow-2xl backdrop-blur">
-            <button onClick={hearWord} aria-label={`Hear "${current.label}" again`} className="flex items-center gap-3 transition active:scale-95">
-              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full text-4xl" style={{ background: `${current.color}22` }}>{current.emoji}</span>
-              {/* Fixed dark neutral, NOT `current.color`: that per-item theme
-                  color is picked for icon/marker variety, not guaranteed
-                  legible as TEXT on this near-white pill — a pale color
-                  (grey-mauve, light amber, etc.) reads as barely-there here
-                  even though the same hex works fine as a small icon tint
-                  or a filled button background. Confirmed live: a lesson's
-                  own `#9A8C98` marker color made its label read as
-                  invisible. Word legibility must never depend on which
-                  color a given lesson happens to pick. Chewy per direct
-                  request, loaded globally in index.html alongside the
-                  app's other display fonts. */}
-              <span className="whitespace-nowrap text-4xl text-neutral-800 sm:text-5xl" style={{ fontFamily: "'Chewy', 'Fredoka', system-ui, sans-serif" }}>{current.label}</span>
+      {/* Label, anchored back next to the arrow (same dir/GAP math it
+          uses) per direct follow-up after the bottom-banner version —
+          "back to anchored near the arrow." The word itself is now BARE
+          on the image (white fill, thin black outline, Chewy — same
+          "kawaii" stroke-outline technique EchoScene's bare words use),
+          not sitting inside a white card: white-on-white inside a pill
+          would defeat the whole point of making it white. The small
+          icon/replay/dismiss controls keep their own compact white pill
+          just below it. */}
+      {current && revealed && (() => {
+        const dir = current.dir ?? 'down';
+        const GAP = 150;
+        const pos = dir === 'down'
+          ? { left: current.left, top: `calc(${current.top} - ${GAP}px)` }
+          : dir === 'right'
+          ? { left: `calc(${current.left} - ${GAP}px)`, top: current.top }
+          : { left: `calc(${current.left} + ${GAP}px)`, top: current.top };
+        const leftPct = parseFloat(current.left);
+        const translateX = leftPct < 25 ? '0%' : leftPct > 75 ? '-100%' : '-50%';
+        return (
+          <div
+            className="pointer-events-none absolute z-40 flex flex-col items-center gap-2 px-2"
+            style={{ ...pos, transform: `translate(${translateX}, -50%)`, animation: 'lep1-pop 0.25s ease-out' }}
+          >
+            <button onClick={hearWord} aria-label={`Hear "${current.label}" again`} className="pointer-events-auto flex items-center gap-2 transition active:scale-95">
+              <span className="text-4xl drop-shadow-[0_3px_6px_rgba(0,0,0,0.45)]" aria-hidden>{current.emoji}</span>
+              {/* White fill + thin dark outline instead of a card: reads
+                  clearly against any part of the scene without covering
+                  it, matching the arrow's own white/thin-outline fix and
+                  the bare-word treatment used elsewhere for modeling
+                  text. Chewy per direct request, loaded globally in
+                  index.html alongside the app's other display fonts. */}
+              <span
+                className="whitespace-nowrap text-4xl font-black leading-none sm:text-5xl"
+                style={{
+                  fontFamily: "'Chewy', 'Fredoka', system-ui, sans-serif",
+                  color: 'white',
+                  WebkitTextStroke: '2px #1A1A1A',
+                  paintOrder: 'stroke fill',
+                  filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))',
+                }}
+              >
+                {current.label}
+              </span>
             </button>
-            <button onClick={hearSentence} aria-label={`Hear "${current.label}" in a sentence`} className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-2xl text-neutral-400 transition active:scale-90 hover:text-neutral-600">🔊</button>
-            <button onClick={dismiss} aria-label="Got it" className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-2xl text-white shadow transition active:scale-90" style={{ background: current.color }}>✓</button>
+            <div className="pointer-events-auto flex items-center gap-2 rounded-full border-2 border-white bg-white/95 py-1.5 pl-2 pr-2 shadow-xl backdrop-blur">
+              <button onClick={hearSentence} aria-label={`Hear "${current.label}" in a sentence`} className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-xl text-neutral-400 transition active:scale-90 hover:text-neutral-600">🔊</button>
+              <button onClick={dismiss} aria-label="Got it" className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-xl text-white shadow transition active:scale-90" style={{ background: current.color }}>✓</button>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
       {done && (
         <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
           <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">All found! ⭐ Next</button>
