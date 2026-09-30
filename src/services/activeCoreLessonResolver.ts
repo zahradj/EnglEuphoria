@@ -9,9 +9,64 @@ const HUB_TO_TARGET_SYSTEM: Record<Hub, string[]> = {
 };
 
 /**
+ * Per-student "current lesson" pointer. Deliberately NOT
+ * student_curriculum_progress: that legacy table requires a curriculum_id
+ * the app never has, FKs current_lesson_id to lessons_content (not
+ * curriculum_lessons), and has no unique key on student_id alone — so every
+ * write to it failed and no student ever advanced. See migration
+ * 20260930150000_student_lesson_pointers.sql. Not in the generated
+ * Supabase types yet, hence the `any` casts.
+ */
+const POINTER_TABLE = 'student_lesson_pointers';
+
+export async function readLessonPointer(studentId: string): Promise<string | null> {
+  const { data, error } = await (supabase as any)
+    .from(POINTER_TABLE)
+    .select('current_lesson_id')
+    .eq('student_id', studentId)
+    .maybeSingle();
+  if (error) {
+    console.warn('[activeCoreLessonResolver] lesson pointer read failed:', error);
+    return null;
+  }
+  return (data?.current_lesson_id as string | null) ?? null;
+}
+
+/** Batched read for list views (admin student table). */
+export async function readLessonPointers(studentIds: string[]): Promise<Map<string, string>> {
+  const result = new Map<string, string>();
+  if (studentIds.length === 0) return result;
+  const { data, error } = await (supabase as any)
+    .from(POINTER_TABLE)
+    .select('student_id, current_lesson_id')
+    .in('student_id', studentIds);
+  if (error) {
+    console.warn('[activeCoreLessonResolver] lesson pointer batch read failed:', error);
+    return result;
+  }
+  for (const row of (data ?? []) as { student_id: string; current_lesson_id: string | null }[]) {
+    if (row.current_lesson_id) result.set(row.student_id, row.current_lesson_id);
+  }
+  return result;
+}
+
+export async function writeLessonPointer(
+  studentId: string,
+  lessonId: string,
+): Promise<{ error: unknown | null }> {
+  const { error } = await (supabase as any)
+    .from(POINTER_TABLE)
+    .upsert(
+      { student_id: studentId, current_lesson_id: lessonId, updated_at: new Date().toISOString() },
+      { onConflict: 'student_id' },
+    );
+  return { error: error ?? null };
+}
+
+/**
  * Resolve which lesson the student should be working on right now.
  * Order:
- *   1. student_curriculum_progress.current_lesson_id
+ *   1. student_lesson_pointers.current_lesson_id
  *   2. personalized_learning_paths.path_data[current_step].lesson_id
  *   3. First lesson in the hub by (slot_cefr_level, sequence_order, order_index)
  */
@@ -19,13 +74,10 @@ export async function resolveActiveCoreLesson(
   studentId: string,
   hub: Hub,
 ): Promise<string | null> {
-  // 1) student_curriculum_progress
-  const { data: scp } = await supabase
-    .from('student_curriculum_progress')
-    .select('current_lesson_id')
-    .eq('student_id', studentId)
-    .maybeSingle();
-  if (scp?.current_lesson_id) return scp.current_lesson_id as string;
+  // 1) Current-lesson pointer (advanced after each completed lesson, or set
+  //    by a teacher mid-class / an admin).
+  const pointed = await readLessonPointer(studentId);
+  if (pointed) return pointed;
 
   // 2) personalized_learning_paths
   const { data: plp } = await supabase
@@ -137,8 +189,10 @@ function compareLessons(a: LessonMeta, b: LessonMeta): number {
 }
 
 /**
- * Advance student_curriculum_progress.current_lesson_id to the next lesson
- * after they've completed the current one.
+ * Advance the student's current-lesson pointer to the next lesson after
+ * they've completed the current one. Returns the next lesson id, or null if
+ * there is no next lesson or the write failed (so callers don't report an
+ * advance that never happened).
  */
 export async function advanceCurriculumProgress(
   studentId: string,
@@ -146,13 +200,11 @@ export async function advanceCurriculumProgress(
 ): Promise<string | null> {
   const next = await getAdjacentLesson(completedLessonId, 'next');
   if (!next) return null;
-  const { error: advanceErr } = await supabase
-    .from('student_curriculum_progress')
-    .upsert(
-      { student_id: studentId, current_lesson_id: next.id, last_activity_at: new Date().toISOString() },
-      { onConflict: 'student_id' },
-    );
-  if (advanceErr) console.error('[activeCoreLessonResolver] student_curriculum_progress advance failed:', advanceErr);
+  const { error: advanceErr } = await writeLessonPointer(studentId, next.id);
+  if (advanceErr) {
+    console.error('[activeCoreLessonResolver] lesson pointer advance failed:', advanceErr);
+    return null;
+  }
   return next.id;
 }
 
@@ -185,17 +237,16 @@ export async function setCurrentLesson(
   adminUserId: string | null,
   previousLessonId?: string | null,
 ): Promise<void> {
-  await supabase
-    .from('student_curriculum_progress')
-    .upsert(
-      { student_id: studentId, current_lesson_id: lessonId, last_activity_at: new Date().toISOString() },
-      { onConflict: 'student_id' },
-    );
+  // Throw on failure so the admin UI's catch shows "Could not update" and
+  // rolls back its optimistic row, instead of toasting a success that
+  // never persisted (which is what the old silent upsert did).
+  const { error } = await writeLessonPointer(studentId, lessonId);
+  if (error) throw error;
   try {
     await supabase.from('audit_logs').insert({
       user_id: adminUserId,
       action: 'admin_set_current_lesson',
-      resource_type: 'student_curriculum_progress',
+      resource_type: 'student_lesson_pointers',
       resource_id: studentId,
       old_values: { current_lesson_id: previousLessonId ?? null },
       new_values: { current_lesson_id: lessonId },

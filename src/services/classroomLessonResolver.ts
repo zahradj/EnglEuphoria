@@ -173,7 +173,7 @@ export async function resolveBookingLesson(booking: {
   }
 
   // No explicit booking.lesson_id (or it didn't resolve) → fall back to the
-  // Master Library via student_curriculum_progress / placement CEFR.
+  // Master Library via student_lesson_pointers / placement CEFR.
   if (!curriculumLessonId && booking.student_id) {
     const coreHub: CoreHub = bookingHub === 'professional' ? 'success' : bookingHub;
     try {

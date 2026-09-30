@@ -317,7 +317,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
 
         // Automated next-lesson advance — only on a completed outcome. When
         // the teacher instead marks "Had issues" (outcome === 'not_completed'),
-        // student_curriculum_progress.current_lesson_id is deliberately left
+        // student_lesson_pointers.current_lesson_id is deliberately left
         // untouched, so the student's next booking resumes this same lesson
         // (the "redo" behavior) instead of skipping ahead.
         if (outcome === 'completed' && studentId && lessonId) {
