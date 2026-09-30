@@ -14,6 +14,11 @@ import { useToast } from '@/hooks/use-toast';
 interface PostClassFeedbackModalProps {
   isOpen: boolean;
   onClose: () => void;
+  /**
+   * When provided (class still running), dismissing the dialog keeps the
+   * student in class instead of leaving, and a "Stay in class" button is shown.
+   */
+  onStay?: () => void;
   teacherName: string;
   teacherId: string;
   lessonId: string;
@@ -23,6 +28,7 @@ interface PostClassFeedbackModalProps {
 export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
   isOpen,
   onClose,
+  onStay,
   teacherName,
   teacherId,
   lessonId,
@@ -97,7 +103,7 @@ export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={() => onClose()}>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) (onStay ?? onClose)(); }}>
       <DialogContent className="sm:max-w-md bg-background border-border">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-center">
@@ -177,8 +183,13 @@ export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
             onClick={onClose}
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            Skip
+            {onStay ? 'Skip & leave' : 'Skip'}
           </button>
+          {onStay && (
+            <Button type="button" variant="outline" onClick={onStay}>
+              Stay in class
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

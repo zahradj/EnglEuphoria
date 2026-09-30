@@ -229,10 +229,10 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
   // Notify when teacher joins
   const prevParticipantCount = useRef(0);
   useEffect(() => {
-    if (participants.length > prevParticipantCount.current && prevParticipantCount.current >= 0) {
-      if (prevParticipantCount.current > 0) {
-        toast({ title: "👋 Teacher Joined", description: "Your teacher has joined the classroom", className: "bg-green-900 border-green-700" });
-      }
+    // Fire on the 0 → 1 transition too — that's the moment the student is
+    // actually waiting for (the old `> 0` guard meant it never fired then).
+    if (participants.length > prevParticipantCount.current) {
+      toast({ title: "👋 Teacher Joined", description: `${teacherName} has joined the classroom`, className: "bg-green-900 border-green-700" });
     }
     prevParticipantCount.current = participants.length;
   }, [participants.length]);
@@ -314,7 +314,17 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
       title: 'Left Classroom',
       description: 'You have left the classroom session.'
     });
-    navigate('/playground');
+    // Send each student back to their own hub's dashboard — this used to be
+    // hardcoded to /playground, dropping Academy/Success students into the
+    // kids' hub after every lesson.
+    navigate(hubType === 'playground' ? '/playground' : hubType === 'professional' ? '/hub' : '/academy');
+  };
+
+  // "Leave" sits right next to the mic/camera buttons, so a mis-tap is easy.
+  // Dismissing the leave dialog (Esc, click outside, "Stay in class") must
+  // keep the student in the lesson rather than exit it.
+  const handleStayInClass = () => {
+    setShowFeedbackModal(false);
   };
 
   const handleReconnect = async () => {
@@ -436,7 +446,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
               onExitZen={() => setIsZenMode(false)}
             />
             <PictureInPicture
-              name="Teacher"
+              name={teacherName}
               isConnected={rtcConnected}
               stream={participants[0]?.stream || null}
             />
@@ -478,7 +488,10 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
 
       {/* Media Permission Error Overlay */}
       {media.error && (
-        <div className="fixed inset-0 z-[60] bg-black/70 flex items-center justify-center">
+        // z-[130]: must sit above the "Waiting for your teacher" wall (z-[120]),
+        // otherwise a student whose mic was blocked just waits forever with
+        // no idea why the teacher can't start the class.
+        <div className="fixed inset-0 z-[130] bg-black/70 flex items-center justify-center">
           <div className="bg-white rounded-2xl p-8 max-w-md text-center space-y-4">
             <h2 className="text-xl font-bold text-gray-900">Camera & Microphone Required</h2>
             <p className="text-gray-600">{media.error}</p>
@@ -615,6 +628,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
       <PostClassFeedbackModal
         isOpen={showFeedbackModal}
         onClose={handleFeedbackClose}
+        onStay={sessionEnded ? undefined : handleStayInClass}
         teacherName={teacherName || (sessionContext as any)?.teacherName || 'Teacher'}
         teacherId={(sessionContext as any)?.teacherId || ''}
         lessonId={roomId}

@@ -892,8 +892,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     setShowStartNudge(true);
   }, [studentPresent, classStarted, toast, studentName]);
 
-  const handleStartClass = useCallback(async () => {
-    if (!studentPresent) {
+  const handleStartClass = useCallback(async (opts?: { force?: boolean }) => {
+    if (!studentPresent && !opts?.force) {
       toast({ title: 'Waiting for student', description: 'You can start the lesson once the student joins.', variant: 'destructive' });
       return;
     }
@@ -935,7 +935,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             <div className="flex flex-col gap-2">
               <Button
                 size="lg"
-                onClick={handleStartClass}
+                onClick={() => void handleStartClass()}
                 disabled={!studentPresent}
                 className="px-6 py-5 text-sm font-bold rounded-full shadow-lg disabled:opacity-50 disabled:cursor-not-allowed w-full"
                 style={studentPresent ? { background: hubTheme.hexGradient, color: '#fff' } : { background: '#E5E7EB', color: '#6B7280' }}
@@ -950,6 +950,23 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
               >
                 📝  Prepare for class
               </Button>
+              {/* "Student present" is only detected once their video/audio
+                  connection is up. If the student is in the room but their
+                  camera/mic or network blocks the call, neither side could
+                  ever get past this screen — give the teacher a way through. */}
+              {!studentPresent && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm(`Start the lesson without a video connection to ${studentName}? They will see the lesson as soon as they are in the classroom.`)) {
+                      void handleStartClass({ force: true });
+                    }
+                  }}
+                  className="text-[11px] text-gray-500 underline hover:text-gray-700"
+                >
+                  Student here but video won't connect? Start anyway
+                </button>
+              )}
               <p className="text-[11px] text-gray-500 mt-1">
                 Set up materials inside the classroom. We'll ping you when the student arrives.
               </p>
@@ -982,7 +999,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             </div>
             <Button
               size="sm"
-              onClick={handleStartClass}
+              onClick={() => void handleStartClass()}
               disabled={!studentPresent}
               className="w-full rounded-full text-sm font-bold disabled:opacity-50"
               style={studentPresent ? { background: hubTheme.hexGradient, color: '#fff' } : { background: '#E5E7EB', color: '#6B7280' }}

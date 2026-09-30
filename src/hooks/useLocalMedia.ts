@@ -158,11 +158,26 @@ export function useLocalMedia() {
             if (micId) clearSavedDevice(MIC_KEY);
           }
 
-          if (errorName === "OverconstrainedError" || errorName === "NotFoundError") {
+          if (errorName === "OverconstrainedError" || errorName === "NotFoundError" || errorName === "NotReadableError" || errorName === "AbortError") {
             continue;
           }
 
           throw attemptError;
+        }
+      }
+
+      // Camera missing or busy (another app / tab holds it) shouldn't lock a
+      // student out of class entirely: without a stream WebRTC never starts,
+      // the teacher never sees the student arrive, and "Start Class" stays
+      // disabled for both sides. Fall back to microphone-only so the lesson
+      // can still happen (camera can be retried later via device settings).
+      const lastErrorName = lastMediaError instanceof Error ? lastMediaError.name : "";
+      if (!userStream && (lastErrorName === "NotFoundError" || lastErrorName === "NotReadableError" || lastErrorName === "OverconstrainedError" || lastErrorName === "AbortError")) {
+        try {
+          userStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: getGenericAudioConstraints() });
+          logger.warn("Camera unavailable — joined with microphone only", { lastErrorName });
+        } catch (audioOnlyError) {
+          lastMediaError = audioOnlyError;
         }
       }
 
@@ -183,7 +198,7 @@ export function useLocalMedia() {
 
       setStream(userStream);
       mediaRef.current = userStream;
-      setIsCameraOff(false);
+      setIsCameraOff(userStream.getVideoTracks().length === 0);
       setIsMuted(false);
       setIsConnected(true);
       setError(null);

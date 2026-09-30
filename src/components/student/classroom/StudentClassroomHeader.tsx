@@ -249,7 +249,7 @@ export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
     {/* Connection warning banner */}
     {quality === 'poor' && suggestion && (
       <div className="bg-yellow-500/20 border-b border-yellow-500/30 px-4 py-2 text-center">
-        <p className="text-xs text-yellow-300">⚠️ {suggestion}</p>
+        <p className="text-xs text-amber-800">⚠️ {suggestion}</p>
       </div>
     )}
     </div>
