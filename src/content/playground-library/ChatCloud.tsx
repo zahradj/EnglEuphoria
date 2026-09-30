@@ -72,8 +72,13 @@ export function ChatCloud({
       {/* Body padding, tuned against the now-tightly-cropped art (see
           above): generous side/top padding to clear the puffy outline,
           and extra bottom padding since the tail eats a real chunk of the
-          image's lower portion and text must stay clear of it. */}
-      <span className="relative block px-[calc(5.5*var(--svh,1vh))] pt-[calc(4*var(--svh,1vh))] pb-[calc(7*var(--svh,1vh))]" style={{ color }}>
+          image's lower portion and text must stay clear of it. Padding
+          only gives a safety margin for the TEXT's own box — it can't
+          compensate for the box's overall shape getting distorted by a
+          long wrapped line (see the word-count font sizing callers use
+          for that), so keep both in mind when a line still crowds the
+          outline. */}
+      <span className="relative block px-[calc(6.5*var(--svh,1vh))] pt-[calc(5*var(--svh,1vh))] pb-[calc(8*var(--svh,1vh))]" style={{ color }}>
         {children}
       </span>
     </Tag>

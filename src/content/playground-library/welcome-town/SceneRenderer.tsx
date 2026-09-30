@@ -73,12 +73,18 @@ function CharacterPointer({ left, top, dir = 'down', color }: { left: string; to
       <div className="pointer-events-none absolute z-20" style={{ ...pos, transform: `translate(-50%, -50%) rotate(${angle}deg)` }}>
         <span className="relative block" style={{ animation: 'lep1-hop 0.9s ease-in-out infinite' }}>
           <span className="pointer-events-none absolute bottom-0 left-1/2 h-16 w-16 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${color}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
+          {/* White fill + a thin dark outline (not the character/room's own
+              color) so the arrow itself always reads as crisp and bright
+              against any background — reported live as looking "black,
+              dark" when filled with a darker accent colour like brown or
+              teal. The colored glow just below still carries that per-item
+              color cue. */}
           <svg width="76" height="110" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
             <path
               d="M13 3 C13 1.9 13.9 1 15 1 L25 1 C26.1 1 27 1.9 27 3 L27 21 L36 21 C37.9 21 38.8 23.3 37.4 24.6 L21.4 43.6 C20.6 44.5 19.4 44.5 18.6 43.6 L2.6 24.6 C1.2 23.3 2.1 21 4 21 L13 21 Z"
-              fill={color}
-              stroke="white"
-              strokeWidth="3"
+              fill="white"
+              stroke="#2A2A2A"
+              strokeWidth="1.5"
               strokeLinejoin="round"
             />
           </svg>
@@ -344,6 +350,17 @@ function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kin
   const charJustifyClass = scene.cardSide === 'right' ? 'justify-start pl-6 sm:pl-14'
     : scene.cardSide === 'left' ? 'justify-end pr-6 sm:pr-14'
     : 'justify-center';
+  // The cloud's own art is a fixed-aspect image stretched (object-fit:
+  // fill) to whatever box the text forces — a longer line wrapping to
+  // several lines grows that box tall and narrow, distorting the cloud
+  // shape enough that the text can end up touching the outline. Sized
+  // down for longer lines, same word-count-tiered approach already used
+  // for EchoScene's modeling sentences, so a long line wraps to fewer,
+  // wider lines instead of many narrow ones.
+  const lineWordCount = scene.line.trim().split(/\s+/).length;
+  const cloudFontSize = lineWordCount <= 2 ? 'calc(3.4 * var(--svh, 1vh))'
+    : lineWordCount <= 4 ? 'calc(3 * var(--svh, 1vh))'
+    : 'calc(2.5 * var(--svh, 1vh))';
 
   return (
     <div className="relative min-h-[calc(78*var(--svh,1vh))]">
@@ -391,9 +408,9 @@ function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kin
           quoted one — replaces the big white card that used to cover the
           character. */}
       {phase !== 'idle' && (
-        <div className={`pointer-events-none absolute top-[calc(11*var(--svh,1vh))] z-20 max-w-[40%] ${cloudPosClass}`}>
+        <div className={`pointer-events-none absolute top-[calc(11*var(--svh,1vh))] z-20 max-w-[52%] ${cloudPosClass}`}>
           <ChatCloud color={c.color} tail={cloudTail} onClick={tapCloud} ariaLabel={`Hear ${c.name} again`}>
-            <span className="block text-[calc(3*var(--svh,1vh))] font-black leading-snug">🔊 {scene.line}</span>
+            <span className="block font-black leading-snug" style={{ fontSize: cloudFontSize }}>🔊 {scene.line}</span>
           </ChatCloud>
         </div>
       )}
@@ -518,12 +535,16 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
               {!revealed && (
                 <span className="pointer-events-none absolute bottom-0 left-1/2 h-16 w-16 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${current.color}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
               )}
+              {/* White fill + thin dark outline, matching CharacterPointer's
+                  identical fix — see its comment for why (reported live as
+                  looking "black, dark" when filled with the item's own
+                  accent color). */}
               <svg width="76" height="110" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
                 <path
                   d="M13 3 C13 1.9 13.9 1 15 1 L25 1 C26.1 1 27 1.9 27 3 L27 21 L36 21 C37.9 21 38.8 23.3 37.4 24.6 L21.4 43.6 C20.6 44.5 19.4 44.5 18.6 43.6 L2.6 24.6 C1.2 23.3 2.1 21 4 21 L13 21 Z"
-                  fill={current.color}
-                  stroke="white"
-                  strokeWidth="3"
+                  fill="white"
+                  stroke="#2A2A2A"
+                  strokeWidth="1.5"
                   strokeLinejoin="round"
                 />
               </svg>
