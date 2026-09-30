@@ -530,11 +530,17 @@ class WhiteboardService {
 
   async saveStroke(roomId: string, stroke: Omit<WhiteboardStroke, 'id'>): Promise<void> {
     const room = this.getRoom(roomId);
+    const payload = { ...stroke, id: `${Date.now()}-${Math.random()}` } as WhiteboardStroke;
+    // Local echo — the channel is `self: false`, so without this the
+    // drawer's own strokes never entered their own stroke list: a pen line
+    // vanished from their screen on the next redraw, and text/shapes (only
+    // ever drawn as a preview) never showed for them at all.
+    try { room.strokeListeners.forEach((cb) => cb(payload)); } catch { /* noop */ }
     await room.ready;
     await room.channel.send({
       type: 'broadcast',
       event: 'whiteboard_stroke',
-      payload: { ...stroke, id: `${Date.now()}-${Math.random()}` },
+      payload,
     });
   }
 
