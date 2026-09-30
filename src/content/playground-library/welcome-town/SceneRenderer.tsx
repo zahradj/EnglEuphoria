@@ -563,7 +563,7 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
       {/* Label, anchored back next to the arrow (same dir/GAP math it
           uses) per direct follow-up after the bottom-banner version —
           "back to anchored near the arrow." The word itself is now BARE
-          on the image (white fill, thin black outline, Chewy — same
+          on the image (white fill, thin black outline, Tajawal — same
           "kawaii" stroke-outline technique EchoScene's bare words use),
           not sitting inside a white card: white-on-white inside a pill
           would defeat the whole point of making it white. The small
@@ -590,12 +590,16 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
                   clearly against any part of the scene without covering
                   it, matching the arrow's own white/thin-outline fix and
                   the bare-word treatment used elsewhere for modeling
-                  text. Chewy per direct request, loaded globally in
-                  index.html alongside the app's other display fonts. */}
+                  text. Font changed from Chewy to Tajawal per direct
+                  follow-up ("use this font better than chewy," pointing
+                  at a screenshot of this app's own EchoScene "Castle!"
+                  text) — Tajawal is already the page's own inherited
+                  body font (see index.css), so this just states it
+                  explicitly rather than introducing a new one. */}
               <span
                 className="whitespace-nowrap text-4xl font-black leading-none sm:text-5xl"
                 style={{
-                  fontFamily: "'Chewy', 'Fredoka', system-ui, sans-serif",
+                  fontFamily: "'Tajawal', 'Cairo', 'Segoe UI', system-ui, sans-serif",
                   color: 'white',
                   WebkitTextStroke: '2px #1A1A1A',
                   paintOrder: 'stroke fill',
