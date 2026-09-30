@@ -36,6 +36,7 @@ export type SfxKey =
   | "emoji_party"
   | "emoji_thumbsup"
   | "emoji_heart"
+  | "star_big"
   | "emoji_fire"
   | "emoji_100";
 
@@ -54,6 +55,11 @@ const SFX_PROMPTS: Record<SfxKey, SfxSpec> = {
   star: {
     prompt: "Magical gold star reward for a child: a bright rising sparkle glissando that bursts into a joyful triumphant ta-da chime with twinkling bells, a confetti pop and a short happy kids' cheer, bright and uplifting",
     duration: 2.2, influence: 0.6, volume: 1.0,
+  },
+  // The big star celebration (both teacher and student hear it).
+  star_big: {
+    prompt: "Super joyful kids celebration for winning a gold star: a group of happy children cheering 'Yaaay!' and laughing, a party popper and confetti burst, bright magical sparkle chimes and a cheerful triumphant ta-da, full of joy and excitement, no speech other than yay",
+    duration: 2.4, influence: 0.55, volume: 1.0,
   },
   badge: {
     prompt: "Triumphant badge unlock fanfare, punchy ascending bells with shimmer and a confident hit, short and energetic, AAA game achievement",

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, PartyPopper, Sparkles, Trophy, Crown } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { audioService } from '@/services/audioService';
 
 // Above the celebration overlay (z-[100]); canvas-confetti defaults to 100.
 const fire = (opts: confetti.Options) => confetti({ zIndex: 250, ...opts });
@@ -33,6 +34,9 @@ export const StarCelebration: React.FC<StarCelebrationProps> = ({
   useEffect(() => {
     if (isVisible) {
       setShowContent(true);
+      // Played here (not on the teacher's Star button) so the teacher AND the
+      // student hear it, in sync with the animation.
+      audioService.playBigStarSound(isMilestone);
 
       // Keep all confetti firing within ~700ms so the overlay (auto-hides at 1000ms)
       // never ends with particles still spawning. Both teacher & student see the

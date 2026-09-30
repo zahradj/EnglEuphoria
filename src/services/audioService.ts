@@ -75,6 +75,13 @@ export const audioService = {
     play(key, () => soundEffectsService.playPowerUp());
   },
 
+  /** The big star celebration overlay — joyful kids' "yay!" + confetti.
+   *  Milestones (every 5th star) use the bigger party celebration. */
+  playBigStarSound: (isMilestone = false) =>
+    isMilestone
+      ? play('celebration', () => soundEffectsService.playCelebration())
+      : play('star_big', () => soundEffectsService.playPerfectStreak()),
+
   /** Single-star earned (top bar pop). */
   playStarSound: () =>
     play('star', () => soundEffectsService.playStarEarned()),
