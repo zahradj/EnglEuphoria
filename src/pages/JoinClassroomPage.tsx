@@ -74,6 +74,15 @@ export default function JoinClassroomPage() {
           return;
         }
 
+        // classroom_invite_flow_active was only ever meant to protect THIS
+        // sign-in — stopping HomeGate/Dashboard from racing it into the
+        // wrong place before the real session settles. It was never
+        // cleared anywhere, so it silently suppressed role re-hydration
+        // for the rest of the tab's life: any LATER auth event would still
+        // skip the real DB role check and fall back to a guessed role.
+        // Same bug, same fix as interview_flow_active in
+        // InterviewMagicEntry.tsx — clear it now that sign-in is confirmed.
+        try { sessionStorage.removeItem('classroom_invite_flow_active'); } catch {/* ignore */}
         setStatus('Taking you to your classroom…');
         navigate(`/classroom/${data.bookingId}`, { replace: true });
       } catch (e: any) {
