@@ -583,47 +583,79 @@ function EchoScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, { kin
   };
   const endHold = () => { setState((s) => ({ ...s, held: false })); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
-  // Universal fix (not just this one scene): the old layout put everything
-  // — instruction, word, Listen, Hold&say, Next — inside one big centered
-  // GlassCard, which sat directly on top of the full-bleed scene image the
-  // player already sees behind it (PlayWelcomeTownLesson paints `scene.bg`
-  // once, full-frame, before this component renders its own overlay — see
-  // that file's own backgroundImage line). For an "echo" used as a plain
-  // vocabulary-introduction card that's harmless; for one used as a
-  // MODELING scene — e.g. "look, Wim is really standing right there in the
-  // bedroom" — the card covered the exact thing the scene exists to show.
-  // Reported live as "that card frame is covering the image and the
-  // scene." Replaced with the same small-floating-pill language every
-  // other non-card scene in this file already uses (MemoryScene's teacher
-  // banner, VocabSpotScene's reveal tag): the instruction and the word
-  // float over the still-fully-visible scene instead of blocking it.
+  // UNIVERSAL RULE for every modeling/vocabulary scene, not just this one
+  // (see unit1/SceneRenderer.tsx's ListenRepeatCardsScene `bare`/`textSide`
+  // mode, the proven original of this exact pattern): student clarity
+  // comes first. The old layout put everything — instruction, word,
+  // Listen, Hold&say, Next — inside one centered GlassCard sitting on top
+  // of the full-bleed scene image already behind it, which (a) covered
+  // the exact thing a modeling scene exists to show (e.g. "look, Wim is
+  // really standing right there") and (b) is not how a young student
+  // actually reads best — a small pill is easy to skip past, not a real
+  // reading target. The word is now large enough to read at a glance and
+  // placed on whichever side of the frame is actually empty, so it never
+  // overlaps the character/subject it's paired with — never guess which
+  // side is safe; look at the background and choose `textSide`
+  // deliberately per scene.
+  const side = scene.textSide ?? 'right';
+  // This mode serves two different-length cases: a single vocabulary word
+  // ("Hello!") and a full modeling sentence ("Wim is in the bedroom!").
+  // One fixed huge size fits the first and wraps the second onto 2+ lines
+  // at that same size — long enough to run down into the character it's
+  // paired with. Scale down as word count grows so a full sentence still
+  // reads clearly (still large, still high-contrast) without doing that.
+  const wordCount = scene.word.trim().split(/\s+/).length;
+  const fontSize =
+    wordCount <= 1
+      ? (side === 'top' ? 'clamp(3.5rem, 10vw, 7rem)' : 'clamp(4.5rem, 13vw, 10rem)')
+      : wordCount <= 3
+      ? (side === 'top' ? 'clamp(2.5rem, 7vw, 4.5rem)' : 'clamp(2.75rem, 8vw, 5rem)')
+      : (side === 'top' ? 'clamp(2rem, 5.5vw, 3.5rem)' : 'clamp(2.25rem, 6vw, 4rem)');
   return (
     <div className="absolute inset-0">
-      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
-        {scene.teacher}
+      <div className="pointer-events-none absolute inset-x-0 top-4 z-30 flex justify-center px-4">
+        <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
+          {scene.teacher}
+        </div>
       </div>
-      <div className="pointer-events-none absolute left-1/2 top-16 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full border-2 border-white bg-white/95 py-2 pl-3 pr-4 shadow-xl backdrop-blur sm:top-20">
-        <span className="text-2xl" style={{ animation: 'lep1-hop 1.4s ease-in-out infinite' }}>{c.emoji}</span>
-        <span className="text-[11px] font-black uppercase tracking-widest sm:text-xs" style={{ color: c.color }}>{c.name} says</span>
-        <span className="text-base font-black sm:text-lg" style={{ color: c.color }}>"{scene.word}"</span>
-      </div>
-      <div className="absolute inset-x-0 bottom-6 z-40 flex flex-col items-center gap-3 px-4">
-        <div className="flex items-center gap-3">
-          <button onClick={hear} className="rounded-full bg-white/95 px-5 py-3 text-sm font-bold text-orange-700 shadow-xl backdrop-blur active:scale-95 sm:text-base">
+      <div className={
+        side === 'top'
+          ? 'absolute inset-x-0 top-24 z-20 flex flex-col items-center gap-6 px-4'
+          : `absolute inset-y-0 z-20 flex w-1/2 flex-col items-center justify-center gap-8 px-1 ${side === 'right' ? 'right-0' : 'left-0'}`
+      }>
+        <p
+          className="max-w-[90vw] text-center font-black leading-tight text-white drop-shadow-[0_6px_14px_rgba(0,0,0,0.7)]"
+          style={{ fontSize }}
+        >
+          {scene.wordColors
+            ? scene.word.split(' ').map((w, i) => (
+                <span key={i} style={scene.wordColors![i] ? { color: scene.wordColors![i]! } : undefined}>
+                  {w}{i < scene.word.split(' ').length - 1 ? ' ' : ''}
+                </span>
+              ))
+            : scene.word}
+        </p>
+        <p className="text-sm font-black uppercase tracking-widest text-white drop-shadow-[0_3px_8px_rgba(0,0,0,0.7)] sm:text-base" style={{ color: c.color }}>
+          {c.name} says
+        </p>
+        <div className={side === 'top' ? 'flex flex-row items-center gap-3' : 'flex flex-col items-center gap-3'}>
+          <button onClick={hear} className="rounded-full bg-white/95 px-6 py-3 text-sm font-bold text-orange-700 shadow-xl ring-2 ring-orange-200 active:scale-95 sm:text-base">
             🔊 Listen {heard > 0 && <span className="opacity-60">({heard})</span>}
           </button>
           <button
             onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold} disabled={heard === 0}
-            className={`rounded-full px-6 py-3 text-base font-black text-white shadow-xl transition sm:text-lg ${held ? 'scale-95' : ''} disabled:opacity-40`}
+            className={`rounded-full px-6 py-3 text-sm font-black text-white shadow-xl transition sm:text-base ${held ? 'scale-95' : ''} disabled:opacity-40`}
             style={{ background: done ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
           >
             {done ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & say it'}
           </button>
         </div>
-        {done && (
-          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next →</button>
-        )}
       </div>
+      {done && (
+        <div className="absolute inset-x-0 bottom-6 z-40 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next →</button>
+        </div>
+      )}
     </div>
   );
 }

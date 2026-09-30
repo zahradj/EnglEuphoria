@@ -142,7 +142,29 @@ export type Scene =
   // composed into the opposite side) instead of floating centered over the
   // character's face — omit for the default centered layout.
   | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string; cardSide?: 'left' | 'right' }
-  | { id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string }
+  | {
+      id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string;
+      /** Which side of the frame is empty enough for the big bare word —
+       *  same convention as listen-repeat-cards' own bare/textSide (see
+       *  that scene's comment for the full reasoning: student clarity
+       *  first — the word must be large enough to actually read AND never
+       *  overlap the important part of the image, e.g. a character's
+       *  face). 'top' suits a background with no single clean empty side
+       *  (the subject roughly centered). Defaults to 'right'. */
+      textSide?: 'left' | 'right' | 'top';
+      /** Per-word color for a modeling SENTENCE (not a single vocabulary
+       *  word) — same convention and reasoning as listen-repeat-cards'
+       *  own wordColors: a fixed grammar chunk ("is in the") keeps one
+       *  consistent color across every scene that uses it so the student
+       *  learns to recognize the pattern by color, not just position or
+       *  memorization, while the actual taught word (e.g. the room name)
+       *  gets its own distinct color. Aligned by index to
+       *  `word.split(' ')`; null/omitted stays the default white.
+       *  Required for every scene whose `word` is a full sentence, not a
+       *  single word — color coding is how a student parses sentence
+       *  structure at a glance, not optional polish. */
+      wordColors?: (string | null)[];
+    }
   | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string }[] }
   | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: { label: string; color: string; targetLeft: string; targetTop: string; who?: CharKey }[]; showBlanks?: boolean; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
   /** Live teacher-driven placement, matching a real competitor pattern the
@@ -1198,7 +1220,7 @@ export const LESSON_4_SCENES: Scene[] = [
     // First real use of `echo` in the Welcome Town family — see the file
     // banner above. A quick single-word speaking rep, deliberately shorter
     // than `meet`'s full modeled line, right after that longer model.
-    id: 'wt4-echo-hello', kind: 'echo', bg: bgExpressHelloV2, who: 'pip', teacher: 'Now you try! Hold the button and say it with Pip!', word: 'Hello!',
+    id: 'wt4-echo-hello', kind: 'echo', bg: bgExpressHelloV2, who: 'pip', textSide: 'top', teacher: 'Now you try! Hold the button and say it with Pip!', word: 'Hello!',
   },
 
   {
@@ -1225,7 +1247,7 @@ export const LESSON_4_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'wt4-echo-friend', kind: 'echo', bg: bgExpressFriendV2, who: 'mia', teacher: 'Say it with Mia! Hold and say it!', word: 'Friend!',
+    id: 'wt4-echo-friend', kind: 'echo', bg: bgExpressFriendV2, who: 'mia', textSide: 'top', teacher: 'Say it with Mia! Hold and say it!', word: 'Friend!',
   },
 
   {

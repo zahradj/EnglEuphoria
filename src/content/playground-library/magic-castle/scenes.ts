@@ -252,9 +252,16 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     // similar sentences on their own. Classic gradual-release sequencing
     // (model → guided practice), added directly on request, right before
     // the game it prepares the student for.
-    id: 'mc-model-wim-bedroom', kind: 'echo', bg: bgBedroomWim, who: 'pip',
+    id: 'mc-model-wim-bedroom', kind: 'echo', bg: bgBedroomWim, who: 'pip', textSide: 'top',
     teacher: 'Look! Do you see Wim? Listen to what Pip says about him.',
     word: 'Wim is in the bedroom!',
+    // Wim -> his own CAST color (#4A4E69, matches every pointer/chip that
+    // names him elsewhere); "is in the" -> one fixed color shared by every
+    // future "<char> is in the <room>" scene so the pattern reads as one
+    // recognizable chunk; "bedroom!" -> the room's own established teal
+    // (#2EC4B6, same hotspot color used for Bedroom at lines 196 and 299 in
+    // this file) so the taught word visually ties back to the room itself.
+    wordColors: ['#4A4E69', '#EF4444', '#EF4444', '#EF4444', '#2EC4B6'],
   },
 
   {
