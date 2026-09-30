@@ -39,7 +39,7 @@ interface PlayWelcomeTownLessonProps {
 /** Gem-eligible scene kinds — every activity kind that ever calls onWin(true)
  *  exactly once when completed. Kept in sync manually with SceneRenderer.tsx
  *  (title-card/cinematic never award a gem; finale is the end screen). */
-const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'letter-game', 'jigsaw-puzzle']);
+const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'letter-game', 'jigsaw-puzzle']);
 
 /** Scene kinds that own real synced state (see `activityState` below)
  *  instead of relying on the generic scene_tap DOM-click-mirror. Whoever
@@ -164,17 +164,23 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   const setActivityState = useCallback((next: unknown) => {
     setActivityStateLocal(next);
     if (isSynced && hasActivityAuthority && roomId && role) {
-      void whiteboardService.sendSceneActivityState(roomId, { state: next, senderId: role });
+      void whiteboardService.sendSceneActivityState(roomId, { state: next, senderId: role, sceneId: scene.id });
     }
-  }, [isSynced, hasActivityAuthority, roomId, role]);
+  }, [isSynced, hasActivityAuthority, roomId, role, scene.id]);
 
   useEffect(() => {
     if (!isSynced || hasActivityAuthority || !roomId) return;
     const unsubscribe = whiteboardService.subscribeToSceneActivityState(roomId, (payload) => {
+      // Discard snapshots for any scene other than the one currently on
+      // screen — a broadcast sent right as the sender navigates away can
+      // otherwise arrive while this side is still on (or has already
+      // moved to) a different scene, handing that scene's useSyncedState a
+      // wrong-shaped object it then crashes reading a field off of.
+      if (payload.sceneId !== scene.id) return;
       setActivityStateLocal(payload.state);
     });
     return unsubscribe;
-  }, [isSynced, hasActivityAuthority, roomId]);
+  }, [isSynced, hasActivityAuthority, roomId, scene.id]);
 
   const activitySync = usesRealSync
     ? { isSynced, isAuthority: hasActivityAuthority, state: activityState, setState: setActivityState }

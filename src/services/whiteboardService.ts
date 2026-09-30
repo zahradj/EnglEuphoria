@@ -230,6 +230,16 @@ export interface SceneActivityStatePayload {
   state: unknown;
   senderId: string;
   timestamp: number;
+  /** The scene this snapshot belongs to. Without this, a broadcast sent
+   *  right as the sender navigates to a new scene can arrive at the other
+   *  side while THEY are still rendering the previous scene (or have
+   *  already moved to a third one) — that scene's useSyncedState blindly
+   *  trusted whatever shape arrived, so a listen-tap scene receiving a
+   *  vocab-spot snapshot (or vice versa) read `undefined.prompt` /
+   *  `undefined.img` / `undefined.line` and crashed. Confirmed via
+   *  production crash logs across multiple scene kinds. Receivers now
+   *  discard any payload whose sceneId doesn't match their current scene. */
+  sceneId: string;
 }
 type SceneActivityStateListener = (payload: SceneActivityStatePayload) => void;
 

@@ -193,20 +193,28 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   // sceneIdx changes, so this needs no broadcast of its own.
   useEffect(() => { setActivityStateLocal(null); }, [sceneIdx]);
 
+  const currentSceneId = (SCENES[sceneIdx] ?? SCENES[0])?.id ?? '';
+
   const setActivityState = useCallback((next: unknown) => {
     setActivityStateLocal(next);
     if (isSynced && hasActivityAuthority && roomId && role) {
-      void whiteboardService.sendSceneActivityState(roomId, { state: next, senderId: role });
+      void whiteboardService.sendSceneActivityState(roomId, { state: next, senderId: role, sceneId: currentSceneId });
     }
-  }, [isSynced, hasActivityAuthority, roomId, role]);
+  }, [isSynced, hasActivityAuthority, roomId, role, currentSceneId]);
 
   useEffect(() => {
     if (!isSynced || hasActivityAuthority || !roomId) return;
     const unsubscribe = whiteboardService.subscribeToSceneActivityState(roomId, (payload) => {
+      // Discard snapshots for any scene other than the one currently on
+      // screen — a broadcast sent right as the sender navigates away can
+      // otherwise arrive while this side is still on (or has already
+      // moved to) a different scene, handing that scene's useSyncedState a
+      // wrong-shaped object it then crashes reading a field off of.
+      if (payload.sceneId !== currentSceneId) return;
       setActivityStateLocal(payload.state);
     });
     return unsubscribe;
-  }, [isSynced, hasActivityAuthority, roomId]);
+  }, [isSynced, hasActivityAuthority, roomId, currentSceneId]);
 
   const activitySync = usesRealSync
     ? { isSynced, isAuthority: hasActivityAuthority, state: activityState, setState: setActivityState }
