@@ -29,7 +29,7 @@ const REACTIONS = ['👍', '❤️', '🎉', '🤔', '❓', '👏'] as const;
 /** Simplified dock — just a thumbs up/down. */
 export const THUMBS_REACTIONS = ['👍', '👎'] as const;
 /** The student's dock: quick, wordless signals a child can send mid-lesson. */
-export const STUDENT_REACTIONS = ['👍', '❤️', '🤔', '❓', '🙉', '👎'] as const;
+export const STUDENT_REACTIONS = ['👍', '❤️', '🤔', '❓', '🔇', '👎'] as const;
 /** Tooltip / screen-reader meaning of each reaction. */
 export const REACTION_LABELS: Record<string, string> = {
   '👍': 'Thumbs up',
@@ -37,7 +37,7 @@ export const REACTION_LABELS: Record<string, string> = {
   '❤️': 'I love it',
   '🤔': "I'm thinking",
   '❓': 'I have a question',
-  '🙉': "I can't hear you",
+  '🔇': "I can't hear you",
   '🎉': 'Hooray',
   '👏': 'Well done',
 };
