@@ -24,6 +24,33 @@ export interface PictureMatchItem {
   word: string;
   img?: string;
   emoji?: string;
+  /** Show only part of `img` (percent of the image: left x, top y, width w,
+   *  height h) — lets a card reuse one room / object out of existing lesson
+   *  art (e.g. the kitchen half of a two-room cutaway) instead of needing
+   *  new images. */
+  crop?: { x: number; y: number; w: number; h: number };
+  /** Width ÷ height of `img`, used with `crop`. Defaults to 16:9 (the
+   *  Playground scene backgrounds). */
+  imgAspect?: number;
+}
+
+/** Part of an image, letterboxed to fit its box without stretching: an SVG
+ *  whose viewBox is the crop window (image drawn at 100·aspect × 100 units). */
+function CroppedImage({ src, crop, aspect }: { src: string; crop: { x: number; y: number; w: number; h: number }; aspect: number }) {
+  const vx = crop.x * aspect;
+  const vw = crop.w * aspect;
+  const clipId = `pm-crop-${Math.round(vx * 100)}-${Math.round(crop.y * 100)}-${Math.round(vw * 100)}-${Math.round(crop.h * 100)}`;
+  const r = Math.min(vw, crop.h) * 0.06;
+  return (
+    <svg viewBox={`${vx} ${crop.y} ${vw} ${crop.h}`} preserveAspectRatio="xMidYMid meet" className="h-full w-full" aria-hidden="true">
+      <defs>
+        <clipPath id={clipId}>
+          <rect x={vx} y={crop.y} width={vw} height={crop.h} rx={r} ry={r} />
+        </clipPath>
+      </defs>
+      <image href={src} x={0} y={0} width={100 * aspect} height={100} preserveAspectRatio="none" clipPath={`url(#${clipId})`} />
+    </svg>
+  );
 }
 
 export interface PictureMatchSceneData {
@@ -175,7 +202,9 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
     return (
       <div key={slot} className="flex min-h-0 flex-1 flex-col items-center rounded-[28px] bg-white/95 p-[4%] shadow-lg">
         <div className="flex min-h-0 w-full flex-1 items-center justify-center">
-          {item.img ? (
+          {item.img && item.crop ? (
+            <CroppedImage src={item.img} crop={item.crop} aspect={item.imgAspect ?? 16 / 9} />
+          ) : item.img ? (
             <img src={item.img} alt="" className="max-h-full max-w-full object-contain" draggable={false} />
           ) : (
             <span className="text-[clamp(2rem,7vh,4.5rem)] leading-none">{item.emoji}</span>

@@ -60,7 +60,7 @@
  * designs stay locked across every scene — the same two-reference method
  * that fixed Jungle Adventure's style-drift problem.
  *
- * 24 scenes (extended from an initial 16 after direct feedback that the
+ * 25 scenes (extended from an initial 16 after direct feedback that the
  * first pass felt short and under-challenging for a 30-minute slot — see
  * the added scenes below, each grounded in a named, researched technique
  * or an explicit user request rather than added as filler). Hard Variety
@@ -70,9 +70,9 @@
  * both at the 2-in-a-row cap. The garden `echo` reveal leads that block
  * (not trails it) specifically so vocab-spot never touches scene 6's own
  * room-intro vocab-spot and runs three in a row. Kinds used: title-card,
- * cinematic, echo ×3, meet ×2, vocab-spot ×4, drag-sticker, drag-match,
- * join-stage, listen-tap ×3, true-false ×2, flipbook ×2, roleplay,
- * hello-doors, finale — eight-plus distinct purpose categories per
+ * cinematic, echo ×3, meet ×2, vocab-spot ×4, drag-sticker, picture-match,
+ * drag-match, join-stage, listen-tap ×3, true-false ×2, flipbook ×2,
+ * roleplay, hello-doors, finale — eight-plus distinct purpose categories per
  * smart-lesson-architect §18. join-stage stays mid-lesson (not saved for
  * the end): it is this lesson's actual objective made speakable — "There
  * is a ___" produced live — not another recognition/matching rep.
@@ -110,6 +110,13 @@
  *     one — giving the lesson a real narrative arc and one more authentic
  *     reason to produce "there is / there is no" before the closing
  *     production and assessment scenes. Reuses existing art, no new images.
+ *
+ * `mc-match-rooms` (scene 13, on request): a self-check picture ↔ word
+ * matching slide for the six rooms, right after the listen-and-tap — the
+ * rooms block's written-word check (every earlier room scene was spoken).
+ * Sequence around it stays within the Hard Variety Rule: drag-sticker →
+ * listen-tap → picture-match → vocab-spot → drag-match (no kind repeated
+ * back to back).
  *
  * Three more scenes were added directly on request — a "click the room"
  * tour of five more castle places: living room, hallway, bathroom, dining
@@ -162,6 +169,12 @@ const OVERVIEW_DINING_ROOM = { left: '73%', top: '80%' };
 // cutaway; table left-of-center / chair right-of-center in the kitchen
 // interior) — reused across every scene built on that same background so
 // "where the word lives" always matches "where the student already looked".
+// Crop windows (percent of the image) for the left / right room of each
+// two-room cutaway (bg-castle-rooms, -livingroom-hallway, -bathroom-dining),
+// used by mc-match-rooms' picture cards.
+const ROOM_LEFT = { x: 5.5, y: 17, w: 46.5, h: 69 };
+const ROOM_RIGHT = { x: 55.5, y: 17, w: 39, h: 69 };
+
 const KITCHEN_SPOT = { left: '20%', top: '75%' };
 const BEDROOM_SPOT = { left: '80%', top: '55%' };
 const TABLE_SPOT = { left: '32%', top: '75%' };
@@ -307,6 +320,34 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
       { prompt: 'Where is Cat-cat? She is in the bedroom!', answerLabel: 'Bedroom', who: 'catcat' },
       { prompt: 'Where is Wim? He is in the dining room!', answerLabel: 'Dining Room', who: 'wim' },
       { prompt: 'Where is Cat-cat? She is in the hallway!', answerLabel: 'Hallway', who: 'catcat' },
+    ],
+  },
+
+  {
+    // Added on direct request (page 13, right after the "Where is Wim?"
+    // listen-and-tap): the student's own reading check of the six rooms,
+    // modelled on a competitor's auto-evaluation matching slide — pictures
+    // with empty slots, room names in the middle, the student drags each
+    // name under its room on their own (`studentOnly`), the teacher watches.
+    // Closes the rooms block with the one skill it hadn't asked for yet:
+    // recognising the WRITTEN word (the tour/listen-tap were all spoken).
+    //
+    // Pictures are crops of the exact two-room cutaways the words were
+    // taught on (mc-vocab-rooms / -living-hall / -bath-dining), so each card
+    // shows the same room the student already met under that name. Crop
+    // boxes checked against the art: left room ≈ 5.5-52% x, right room ≈
+    // 55.5-94.5% x, both ≈ 17-86% y of the 1376×768 images.
+    id: 'mc-match-rooms', kind: 'picture-match',
+    prompt: 'Match the rooms!',
+    studentOnly: true,
+    teacher: 'Self-check: the student drags each room name under its picture on their own — no help needed. Afterwards point to a picture and ask: "What room is this?"',
+    items: [
+      { word: 'kitchen', img: bgRooms, crop: ROOM_LEFT },
+      { word: 'bathroom', img: bgCastleBathDining, crop: ROOM_LEFT },
+      { word: 'hallway', img: bgCastleLivingHall, crop: ROOM_RIGHT },
+      { word: 'bedroom', img: bgRooms, crop: ROOM_RIGHT },
+      { word: 'living room', img: bgCastleLivingHall, crop: ROOM_LEFT },
+      { word: 'dining room', img: bgCastleBathDining, crop: ROOM_RIGHT },
     ],
   },
 
