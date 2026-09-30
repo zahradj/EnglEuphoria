@@ -302,13 +302,9 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
 
 function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'meet' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
   type Phase = 'idle' | 'talking' | 'repeat' | 'done';
-  const [state, setState] = useSyncedState(sync, { phase: 'idle' as Phase, held: false, heardRepeat: 0, xpBurst: false, glow: false });
-  const { phase, held, heardRepeat, xpBurst, glow } = state;
-  // The hold-to-talk timeout handle is a per-side UI detail, not shared
-  // state — nothing meaningful to mirror about "a timer is running."
-  const holdTimer = useRef<number | null>(null);
+  const [state, setState] = useSyncedState(sync, { phase: 'idle' as Phase, xpBurst: false, glow: false });
+  const { phase, xpBurst, glow } = state;
   const c = CAST[scene.who];
-  const repeatWord = scene.repeat ?? scene.line;
 
   const tapCharacter = async () => {
     if (phase !== 'idle') return;
@@ -318,20 +314,19 @@ function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kin
     setTimeout(() => setState((s) => ({ ...s, phase: 'repeat' })), 500);
     setTimeout(() => setState((s) => ({ ...s, glow: false })), 1600);
   };
-  const hearRepeat = async () => { sfx.click(); setState((s) => ({ ...s, heardRepeat: s.heardRepeat + 1 })); await safeSpeak(repeatWord, voiceOf(scene.who)); };
-  const replayIntro = async () => { sfx.click(); setState((s) => ({ ...s, glow: true })); await safeSpeak(scene.line, voiceOf(scene.who)); setTimeout(() => setState((s) => ({ ...s, glow: false })), 1200); };
-  const startHold = () => {
-    if (phase !== 'repeat') return;
-    setState((s) => ({ ...s, held: true }));
-    holdTimer.current = window.setTimeout(async () => {
-      setState((s) => ({ ...s, held: false, phase: 'done', xpBurst: true }));
-      sfx.gem();
-      setTimeout(() => setState((s) => ({ ...s, xpBurst: false })), 1200);
-      onWin(true);
-      await safeSpeak('Awesome voice! Great job!', 'pip');
-    }, 1300);
+  // Tapping the cloud both replays the line AND, the first time (while
+  // still in 'repeat'), completes the scene — no separate hold-to-talk
+  // gesture or "Your turn" bar. Per direct request: a teacher wanting the
+  // student to repeat the line just has them tap the cloud themselves;
+  // a second production-practice step was redundant with that.
+  const tapCloud = async () => {
+    sfx.click();
+    const completing = phase === 'repeat';
+    setState((s) => ({ ...s, glow: true, ...(completing ? { phase: 'done', xpBurst: true } : {}) }));
+    if (completing) { sfx.gem(); onWin(true); setTimeout(() => setState((s) => ({ ...s, xpBurst: false })), 1200); }
+    await safeSpeak(scene.line, voiceOf(scene.who));
+    setTimeout(() => setState((s) => ({ ...s, glow: false })), 1200);
   };
-  const endHold = () => { setState((s) => ({ ...s, held: false })); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
   // The character is painted into one side of `scene.bg` (left/right third),
   // leaving the opposite side open for these floating cards — dock them
@@ -388,17 +383,17 @@ function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kin
           <div className="animate-[lep1-pop-fade_1.1s_ease-out_forwards] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 text-2xl font-black text-white shadow-2xl">+10 XP 💎</div>
         </div>
       )}
-      {/* The character's line as a chat cloud beside them (tap = hear it
-          again) — replaces the big white card that covered the character. */}
+      {/* The character's line as a chat cloud beside them — tap it to hear
+          it again, and (per direct request) that same tap is also the
+          student's "turn": the first tap while in 'repeat' completes the
+          scene, no separate hold-to-talk bar needed. Just the one
+          sentence now, not a short repeat-word line above a smaller
+          quoted one — replaces the big white card that used to cover the
+          character. */}
       {phase !== 'idle' && (
         <div className={`pointer-events-none absolute top-[calc(11*var(--svh,1vh))] z-20 max-w-[40%] ${cloudPosClass}`}>
-          <ChatCloud color={c.color} tail={cloudTail} onClick={replayIntro} ariaLabel={`Hear ${c.name} again`}>
-            <span className="flex items-center justify-center gap-2 text-[calc(3.6*var(--svh,1vh))] font-black leading-tight">
-              {repeatWord}
-            </span>
-            {scene.line !== repeatWord && (
-              <span className="mt-1 block text-[calc(2.6*var(--svh,1vh))] font-semibold leading-snug text-neutral-500">🔊 “{scene.line}”</span>
-            )}
+          <ChatCloud color={c.color} tail={cloudTail} onClick={tapCloud} ariaLabel={`Hear ${c.name} again`}>
+            <span className="block text-[calc(3*var(--svh,1vh))] font-black leading-snug">🔊 {scene.line}</span>
           </ChatCloud>
         </div>
       )}
@@ -407,28 +402,9 @@ function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kin
           <span className="animate-pulse rounded-full bg-white/95 px-5 py-2 text-base font-bold shadow-xl" style={{ color: c.color }}>👆 Tap {c.name} {c.emoji}</span>
         </div>
       )}
-      {/* "Your turn" as one slim bar along the bottom instead of a tall
-          sheet over the character. */}
-      {(phase === 'repeat' || phase === 'done') && (
-        <div className="absolute inset-x-0 bottom-[calc(1.5*var(--svh,1vh))] z-30 flex justify-center px-3" style={{ animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
-          <div className="flex items-center gap-2 rounded-full bg-white/90 p-1.5 pl-3 shadow-2xl ring-2 backdrop-blur" style={{ ['--tw-ring-color' as string]: c.color }}>
-            <span className="whitespace-nowrap text-xs font-black uppercase tracking-widest" style={{ color: c.color }}>🎤 Your turn</span>
-            <button onClick={hearRepeat} aria-label="Hear it" title="Hear it" className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-lg shadow ring-2 ring-orange-200 active:scale-95">
-              🔊
-            </button>
-            <button
-              onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
-              className={`whitespace-nowrap rounded-full px-6 py-3 text-base font-black text-white shadow-lg transition ${held ? 'scale-95' : ''}`}
-              style={{ background: phase === 'done' ? 'linear-gradient(90deg, #10B981, #34D399)' : `linear-gradient(90deg, ${c.color}, #FEBE4C)` }}
-            >
-              {phase === 'done' ? '✅ Nailed it!' : held ? '🎤 Keep talking…' : '🎤 Hold to say it'}
-            </button>
-            {phase === 'done' && (
-              <button onClick={onNext} className="whitespace-nowrap rounded-full bg-orange-500 px-5 py-3 text-base font-black text-white shadow-lg active:scale-95">
-                Next →
-              </button>
-            )}
-          </div>
+      {phase === 'done' && (
+        <div className="absolute inset-x-0 bottom-[calc(1.5*var(--svh,1vh))] z-30 flex justify-center" style={{ animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next →</button>
         </div>
       )}
     </div>
