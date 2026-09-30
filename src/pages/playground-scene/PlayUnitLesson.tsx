@@ -103,6 +103,19 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
     const n = s ? Number(s) : 0;
     return Number.isFinite(n) && n >= 0 && n < SCENES.length ? n : 0;
   });
+  // Whether this tab already had its own saved position for this lesson
+  // (same-tab reload, e.g. Force Refresh). A teacher opening the class in a
+  // new tab/device has none, and must adopt the class's saved position
+  // instead of announcing scene 0 over it — see the adoption effect below.
+  const hadStoredSceneIdxRef = useRef<boolean>(
+    typeof window !== 'undefined' && window.sessionStorage.getItem(sessionKey) != null,
+  );
+  // Teacher: whether sceneIdx reflects the class's real position yet (so a
+  // catch-up reply never announces a not-yet-restored scene 0).
+  const teacherPositionKnownRef = useRef<boolean>(hadStoredSceneIdxRef.current);
+  // Whether interactionUnlocked reflects the class's real lock state yet
+  // (restored from the DB, or set by the teacher) — same reason.
+  const unlockKnownRef = useRef(false);
   const [hearts, setHearts] = useState(MAX_HEARTS);
   const [gems, setGems] = useState(0);
 
@@ -134,6 +147,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   const effectiveUnlocked = interactionUnlocked || skipsLock;
 
   const setInteractionUnlocked = useCallback((next: boolean) => {
+    unlockKnownRef.current = true;
     setInteractionUnlockedState(next);
     if (isSynced && role === 'teacher' && roomId) {
       void whiteboardService.sendSceneInteractionPermission(roomId, { unlocked: next, senderId: 'teacher' });
@@ -142,7 +156,14 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
 
   // Each new activity starts locked — the teacher re-grants per activity
   // rather than an unlock silently carrying over to unrelated content.
+  // Only on a real scene change — never on mount. Running on mount made
+  // every teacher reload (including Force Refresh) re-lock the student's
+  // activity and persist that as the class state, so a student who was
+  // mid-activity came back locked out.
+  const prevSceneIdxRef = useRef(sceneIdx);
   useEffect(() => {
+    if (prevSceneIdxRef.current === sceneIdx) return;
+    prevSceneIdxRef.current = sceneIdx;
     if (isSynced && role === 'teacher') setInteractionUnlocked(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sceneIdx]);
@@ -162,13 +183,21 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   useEffect(() => {
     if (!isSynced) return;
     if (persistedInteractionUnlocked == null) return;
+    unlockKnownRef.current = true;
     setInteractionUnlockedState(persistedInteractionUnlocked);
   }, [isSynced, persistedInteractionUnlocked]);
 
   // Teacher: persist the unlock gate whenever it changes, the same way
   // sceneIdx is persisted below via onSceneIdxPersist.
+  // Skips its mount-time run: that would write the initial `false` over the
+  // class's saved value before the recovery effect above can apply it.
+  const skipFirstUnlockPersistRef = useRef(true);
   useEffect(() => {
     if (!isSynced || role !== 'teacher') return;
+    if (skipFirstUnlockPersistRef.current) {
+      skipFirstUnlockPersistRef.current = false;
+      return;
+    }
     onInteractionUnlockedPersist?.(interactionUnlocked);
   }, [isSynced, role, interactionUnlocked, onInteractionUnlockedPersist]);
 
@@ -386,8 +415,16 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   // student's view always mirrors whatever the teacher is showing, and
   // persist it so a late-joining/reconnecting student can catch up even if
   // they missed the (non-replayable) broadcast.
+  const skipFirstTeacherNavRef = useRef(!hadStoredSceneIdxRef.current);
   useEffect(() => {
     if (!isSynced || role !== 'teacher' || !roomId) return;
+    // New tab/device with no saved position: don't announce/persist scene 0
+    // over the class's real position before the adoption effect restores it.
+    if (skipFirstTeacherNavRef.current) {
+      skipFirstTeacherNavRef.current = false;
+      return;
+    }
+    teacherPositionKnownRef.current = true;
     void whiteboardService.sendSceneLessonNav(roomId, {
       unitNumber: unitNumber ?? 0,
       lessonNumber: lessonNumber ?? 0,
@@ -416,6 +453,81 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
     if (persistedSceneIdx == null) return;
     setSceneIdx(Math.max(0, Math.min(SCENES.length - 1, persistedSceneIdx)));
   }, [isSynced, role, persistedSceneIdx, SCENES.length]);
+
+  // Teacher in a new tab/device: adopt the class's saved scene once, instead
+  // of starting everyone over at scene 0.
+  const adoptedPersistedIdxRef = useRef(false);
+  useEffect(() => {
+    if (!isSynced || role !== 'teacher') return;
+    if (hadStoredSceneIdxRef.current || adoptedPersistedIdxRef.current) return;
+    if (persistedSceneIdx == null) return;
+    adoptedPersistedIdxRef.current = true;
+    teacherPositionKnownRef.current = true;
+    const target = Math.max(0, Math.min(SCENES.length - 1, persistedSceneIdx));
+    setSceneIdx((cur) => {
+      if (cur !== 0) return cur; // the teacher already moved on their own
+      // Restoring position isn't a real scene change — keep the student's
+      // current unlock state rather than re-locking it.
+      prevSceneIdxRef.current = target;
+      return target;
+    });
+  }, [isSynced, role, persistedSceneIdx, SCENES.length]);
+
+  // Catch-up handshake (see SceneStateRequestPayload): every sync message is
+  // a no-replay broadcast, so after joining, reconnecting or returning to
+  // the foreground this side asks the other for the current state, and it
+  // answers the other side's requests the same way.
+  const syncSnapshotRef = useRef({ sceneIdx, interactionUnlocked, activityState, hasActivityAuthority, usesRealSync, sceneId: currentSceneId });
+  syncSnapshotRef.current = { sceneIdx, interactionUnlocked, activityState, hasActivityAuthority, usesRealSync, sceneId: currentSceneId };
+  useEffect(() => {
+    if (!isSynced || !role || !roomId) return;
+    const unsubscribeRequests = whiteboardService.subscribeToSceneStateRequest(roomId, (payload) => {
+      if (payload.senderRole === role) return;
+      const snap = syncSnapshotRef.current;
+      if (role === 'teacher') {
+        if (teacherPositionKnownRef.current) {
+          void whiteboardService.sendSceneLessonNav(roomId, {
+            unitNumber: unitNumber ?? 0,
+            lessonNumber: lessonNumber ?? 0,
+            sceneIdx: snap.sceneIdx,
+            senderId: 'teacher',
+          });
+        }
+        if (unlockKnownRef.current) {
+          void whiteboardService.sendSceneInteractionPermission(roomId, { unlocked: snap.interactionUnlocked, senderId: 'teacher' });
+        }
+      }
+      if (snap.usesRealSync && snap.hasActivityAuthority && snap.activityState != null) {
+        // Sent a beat after the scene index, so a requester that first has
+        // to move to this scene is already on it (receivers discard
+        // snapshots for any other scene).
+        const { activityState: state, sceneId } = snap;
+        setTimeout(() => {
+          void whiteboardService.sendSceneActivityState(roomId, { state, senderId: role, sceneId });
+        }, 500);
+      }
+    });
+    const request = () => { void whiteboardService.sendSceneStateRequest(roomId, { senderRole: role }); };
+    request();
+    let subscribed = true; // the initial request above covers the first SUBSCRIBED
+    const unsubscribeStatus = whiteboardService.subscribeToStatus(roomId, (status) => {
+      if (status === 'SUBSCRIBED') {
+        if (!subscribed) request(); // reconnected after a drop
+        subscribed = true;
+      } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+        subscribed = false;
+      }
+    });
+    const onVisibility = () => { if (document.visibilityState === 'visible') request(); };
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('online', request);
+    return () => {
+      unsubscribeRequests();
+      unsubscribeStatus();
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('online', request);
+    };
+  }, [isSynced, role, roomId, unitNumber, lessonNumber]);
 
   useEffect(() => {
     let cancelled = false;

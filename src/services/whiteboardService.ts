@@ -243,6 +243,21 @@ export interface SceneActivityStatePayload {
 }
 type SceneActivityStateListener = (payload: SceneActivityStatePayload) => void;
 
+/** Either side → the other: "I just joined, reconnected, or came back to
+ *  the foreground, and may have missed live messages — send me where we
+ *  are." Every scene-sync message above is fire-and-forget broadcast with
+ *  no replay, so without this a single dropped message (Wi-Fi blip, reload,
+ *  a tablet app backgrounded mid-lesson) left the two screens showing
+ *  different scenes/lock states/activity progress until the next change —
+ *  "the teacher can't see what the student is doing" or vice versa. The
+ *  teacher answers with its scene index + unlock state; whichever side
+ *  holds the activity floor answers with its current activity snapshot. */
+export interface SceneStateRequestPayload {
+  senderRole: 'teacher' | 'student';
+  timestamp: number;
+}
+type SceneStateRequestListener = (payload: SceneStateRequestPayload) => void;
+
 /** Teacher's authoritative snapshot pushed on demand by the "Force Sync" button. */
 export interface ForceSyncPayload {
   slideIndex: number;
@@ -307,6 +322,7 @@ interface RoomChannel {
   sceneInteractionPermissionListeners: Set<SceneInteractionPermissionListener>;
   sceneAdvanceRequestListeners: Set<SceneAdvanceRequestListener>;
   sceneActivityStateListeners: Set<SceneActivityStateListener>;
+  sceneStateRequestListeners: Set<SceneStateRequestListener>;
   refCount: number;
 }
 
@@ -345,6 +361,7 @@ class WhiteboardService {
     const sceneInteractionPermissionListeners = new Set<SceneInteractionPermissionListener>();
     const sceneAdvanceRequestListeners = new Set<SceneAdvanceRequestListener>();
     const sceneActivityStateListeners = new Set<SceneActivityStateListener>();
+    const sceneStateRequestListeners = new Set<SceneStateRequestListener>();
     const statusListeners = new Set<(status: string) => void>();
 
     const channel = supabase
@@ -439,6 +456,9 @@ class WhiteboardService {
       })
       .on('broadcast', { event: 'scene_activity_state' }, (payload) => {
         sceneActivityStateListeners.forEach((cb) => cb(payload.payload as SceneActivityStatePayload));
+      })
+      .on('broadcast', { event: 'scene_state_request' }, (payload) => {
+        sceneStateRequestListeners.forEach((cb) => cb(payload.payload as SceneStateRequestPayload));
       });
 
     const ready = new Promise<void>((resolve) => {
@@ -476,6 +496,7 @@ class WhiteboardService {
       sceneInteractionPermissionListeners,
       sceneAdvanceRequestListeners,
       sceneActivityStateListeners,
+      sceneStateRequestListeners,
       refCount: 0,
     };
     this.rooms.set(channelName, room);
@@ -952,6 +973,28 @@ class WhiteboardService {
     return () => this.release(roomId, () => room.sceneActivityStateListeners.delete(onState));
   }
 
+  /** Ask the other side to re-send the current scene state; see
+   *  SceneStateRequestPayload. */
+  async sendSceneStateRequest(
+    roomId: string,
+    payload: Omit<SceneStateRequestPayload, 'timestamp'>,
+  ): Promise<void> {
+    const room = this.getRoom(roomId);
+    await room.ready;
+    await room.channel.send({
+      type: 'broadcast',
+      event: 'scene_state_request',
+      payload: { ...payload, timestamp: Date.now() } satisfies SceneStateRequestPayload,
+    });
+  }
+
+  subscribeToSceneStateRequest(roomId: string, onRequest: SceneStateRequestListener): () => void {
+    const room = this.getRoom(roomId);
+    room.sceneStateRequestListeners.add(onRequest);
+    room.refCount += 1;
+    return () => this.release(roomId, () => room.sceneStateRequestListeners.delete(onRequest));
+  }
+
   subscribeToStatus(roomId: string, onStatus: (status: string) => void): () => void {
     const room = this.getRoom(roomId);
     room.statusListeners.add(onStatus);
@@ -990,6 +1033,7 @@ class WhiteboardService {
       room.sceneInteractionPermissionListeners.size === 0 &&
       room.sceneAdvanceRequestListeners.size === 0 &&
       room.sceneActivityStateListeners.size === 0 &&
+      room.sceneStateRequestListeners.size === 0 &&
       room.statusListeners.size === 0
     ) {
       supabase.removeChannel(room.channel);

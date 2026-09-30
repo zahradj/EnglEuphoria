@@ -288,14 +288,29 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   }, [studentContext, isConnected]);
 
   // When the booking has a linked Master Library lesson, push the real slides
-  // into the shared session once on connect — replacing any stale placeholder
-  // (e.g. "Magic Forest: Lesson 1") that earlier sessions wrote.
-  const pushedLibraryRef = React.useRef(false);
+  // into the shared session on connect — replacing any stale placeholder
+  // (e.g. "Magic Forest: Lesson 1") that earlier sessions wrote — and again
+  // whenever the resolved lesson itself changes mid-class (LessonSwitcher
+  // re-resolves it; before, this only ever ran once per page load, so a
+  // switch never reached the student until someone reloaded).
+  //
+  // On a reload (Force Refresh, F5, reconnect) the shared session is the
+  // source of truth for "where the class is": if it already holds a
+  // different lesson the teacher loaded mid-class from the Library, keep it
+  // instead of snapping both sides back to the booking's original lesson.
+  // It also no longer clears embeddedUrl, which closed any open web page on
+  // every teacher reload.
+  const pushedLessonKeyRef = React.useRef<string | null>(null);
   useEffect(() => {
-    if (pushedLibraryRef.current) return;
     if (!isConnected) return;
     if (!initialSlides || initialSlides.length === 0) return;
-    pushedLibraryRef.current = true;
+    const lessonKey = String(lessonId ?? lessonTitle ?? '');
+    if (pushedLessonKeyRef.current === lessonKey) return;
+    const isFirstPush = pushedLessonKeyRef.current === null;
+    pushedLessonKeyRef.current = lessonKey;
+    const sessionShowsOtherLesson =
+      syncedLessonSlides.length > 0 && !!syncedLessonTitle && !!lessonTitle && syncedLessonTitle !== lessonTitle;
+    if (isFirstPush && sessionShowsOtherLesson) return;
     const mapped = initialSlides.map((s: any, i: number) => ({
       ...s,
       id: String(s?.id ?? i + 1),
@@ -303,12 +318,23 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
       imageUrl: s?.imageUrl || s?.image_url || s?.generated_image_url || s?.media_url || s?.content?.imageUrl,
     }));
     setRawSlides(mapped);
-    void updateSharedDisplay({
-      lessonSlides: mapped,
-      lessonTitle: lessonTitle,
-      embeddedUrl: null,
-    });
-  }, [isConnected, initialSlides, lessonTitle, updateSharedDisplay]);
+    void (async () => {
+      if (!isFirstPush) {
+        // A genuinely new lesson: start it from the top on both sides. Reset
+        // BEFORE swapping the slides in — the new lesson's player mounts as
+        // soon as they land and adopts whatever scene index is saved then.
+        await updateSceneLessonIdx(0);
+        await updateSlide(0);
+      }
+      await updateSharedDisplay({
+        lessonSlides: mapped,
+        lessonTitle: lessonTitle,
+      });
+    })();
+    // syncedLessonSlides/syncedLessonTitle are read only to decide the
+    // first push; re-running on their changes would fight the teacher.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConnected, initialSlides, lessonId, lessonTitle, updateSharedDisplay]);
 
   const teacherUserId = user?.id || sessionStorage.getItem('demo-teacher-id') || 'teacher';
   const [channelStatus, setChannelStatus] = useState<'CONNECTING' | 'SUBSCRIBED' | 'CLOSED' | 'CHANNEL_ERROR' | 'TIMED_OUT'>('CONNECTING');
@@ -724,10 +750,18 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
       s?.type === 'homework_task' || s?.slide_type === 'homework_task';
     const hasHw = base.some(isHw);
     if (hasHw) return base;
+    // Only when the deck on stage IS the booking's resolved lesson — after
+    // the teacher loads a different lesson from the Library, appending the
+    // original lesson's homework (then pushed to the student by the sync
+    // effect below) mixed two lessons in one deck (seen live: the castle
+    // scene followed by "Hello, My Name Is..." homework).
+    const deckIsResolvedLesson =
+      syncedLessonSlides.length === 0 || !lessonTitle || syncedLessonTitle === lessonTitle;
+    if (!deckIsResolvedLesson) return base;
     const hwFromInitial = (initialSlides ?? []).filter(isHw);
     if (hwFromInitial.length) return [...base, ...hwFromInitial];
     return base;
-  }, [syncedLessonSlides, slides, initialSlides]);
+  }, [syncedLessonSlides, slides, initialSlides, syncedLessonTitle, lessonTitle]);
   const activeLessonTitle = syncedLessonTitle || lessonTitle;
 
   // Whether the unified stage is currently showing an embedded Playground
@@ -1535,6 +1569,11 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             }];
             setRawSlides(sceneSlides);
             try {
+              // Start the new lesson at its first scene — otherwise the saved
+              // scene index from the previous lesson carried over into it.
+              // Reset BEFORE swapping the slides in: the new lesson's player
+              // mounts as soon as they land and adopts the index saved then.
+              await updateSceneLessonIdx(0);
               await updateSharedDisplay({ lessonSlides: sceneSlides, lessonTitle: title, embeddedUrl: null });
               await updateSlide(0);
               await setStageMode('slide');
