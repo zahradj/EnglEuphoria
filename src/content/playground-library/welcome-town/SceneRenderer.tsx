@@ -583,27 +583,47 @@ function EchoScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, { kin
   };
   const endHold = () => { setState((s) => ({ ...s, held: false })); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
+  // Universal fix (not just this one scene): the old layout put everything
+  // — instruction, word, Listen, Hold&say, Next — inside one big centered
+  // GlassCard, which sat directly on top of the full-bleed scene image the
+  // player already sees behind it (PlayWelcomeTownLesson paints `scene.bg`
+  // once, full-frame, before this component renders its own overlay — see
+  // that file's own backgroundImage line). For an "echo" used as a plain
+  // vocabulary-introduction card that's harmless; for one used as a
+  // MODELING scene — e.g. "look, Wim is really standing right there in the
+  // bedroom" — the card covered the exact thing the scene exists to show.
+  // Reported live as "that card frame is covering the image and the
+  // scene." Replaced with the same small-floating-pill language every
+  // other non-card scene in this file already uses (MemoryScene's teacher
+  // banner, VocabSpotScene's reveal tag): the instruction and the word
+  // float over the still-fully-visible scene instead of blocking it.
   return (
-    <div className="absolute inset-x-0 top-8 z-20 flex justify-center px-4 sm:top-12">
-      <GlassCard className="w-full max-w-sm">
-        <p className="text-center text-lg font-bold text-orange-700">{scene.teacher}</p>
-        <div className="mt-4 grid place-items-center rounded-3xl bg-white/60 p-6">
-          <span className="text-5xl" style={{ animation: 'lep1-hop 1.4s ease-in-out infinite' }}>{c.emoji}</span>
-          <p className="mt-2 text-sm font-black uppercase tracking-widest" style={{ color: c.color }}>{c.name} says</p>
-          <p className="mt-1 text-3xl font-black" style={{ color: c.color }}>"{scene.word}"</p>
+    <div className="absolute inset-0">
+      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
+        {scene.teacher}
+      </div>
+      <div className="pointer-events-none absolute left-1/2 top-16 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full border-2 border-white bg-white/95 py-2 pl-3 pr-4 shadow-xl backdrop-blur sm:top-20">
+        <span className="text-2xl" style={{ animation: 'lep1-hop 1.4s ease-in-out infinite' }}>{c.emoji}</span>
+        <span className="text-[11px] font-black uppercase tracking-widest sm:text-xs" style={{ color: c.color }}>{c.name} says</span>
+        <span className="text-base font-black sm:text-lg" style={{ color: c.color }}>"{scene.word}"</span>
+      </div>
+      <div className="absolute inset-x-0 bottom-6 z-40 flex flex-col items-center gap-3 px-4">
+        <div className="flex items-center gap-3">
+          <button onClick={hear} className="rounded-full bg-white/95 px-5 py-3 text-sm font-bold text-orange-700 shadow-xl backdrop-blur active:scale-95 sm:text-base">
+            🔊 Listen {heard > 0 && <span className="opacity-60">({heard})</span>}
+          </button>
+          <button
+            onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold} disabled={heard === 0}
+            className={`rounded-full px-6 py-3 text-base font-black text-white shadow-xl transition sm:text-lg ${held ? 'scale-95' : ''} disabled:opacity-40`}
+            style={{ background: done ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
+          >
+            {done ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & say it'}
+          </button>
         </div>
-        <button onClick={hear} className="mt-4 w-full rounded-full bg-white py-3 text-lg font-bold text-orange-700 shadow-md ring-2 ring-orange-200 active:scale-95">
-          🔊 Listen {heard > 0 && <span className="text-sm opacity-60">({heard})</span>}
-        </button>
-        <button
-          onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold} disabled={heard === 0}
-          className={`mt-3 w-full rounded-full py-6 text-2xl font-black text-white shadow-xl transition ${held ? 'scale-95' : ''} disabled:opacity-40`}
-          style={{ background: done ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
-        >
-          {done ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & say it'}
-        </button>
-        <PrimaryButton onClick={onNext} disabled={!done}>Next →</PrimaryButton>
-      </GlassCard>
+        {done && (
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next →</button>
+        )}
+      </div>
     </div>
   );
 }
@@ -968,10 +988,15 @@ function DragStickerScene({ scene, onNext, onWin }: { scene: Extract<Scene, { ki
           </button>
         );
       })}
-
-      <div className="absolute inset-x-0 bottom-6 z-40 flex justify-center">
-        <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Great job! ⭐ Next</button>
-      </div>
+      {/* No in-scene "Next" button here on purpose — this is an open-ended,
+       *  teacher-paced free-drag scene with no completion state to gate on,
+       *  so the button was ALWAYS visible from the moment the scene loaded.
+       *  Both the solo player's own bottom nav bar and the classroom's
+       *  external Back/Next controls already advance the lesson; this
+       *  second, always-on button just sat permanently over the lower
+       *  rooms of the castle, blocking exactly the content the teacher and
+       *  student are dragging characters into. Reported live as "Great
+       *  job! Next is covering the view." */}
     </div>
   );
 }
