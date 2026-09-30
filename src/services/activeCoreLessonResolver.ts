@@ -43,29 +43,36 @@ export async function resolveActiveCoreLesson(
     null;
   if (stepLesson) return stepLesson as string;
 
-  // 3) Fallback: first published lesson in this hub. Postgres gives no
-  // ordering guarantee among rows that tie on every ORDER BY column (very
-  // common here — many stub/placeholder rows share the same null
-  // sequence_order/order_index), so without a final deterministic
-  // tiebreaker this "first" pick can silently return a DIFFERENT lesson
-  // on every call. Confirmed live: the exact same booking resolved to
-  // three different A1 lessons (Unit 1 Lesson 1, Unit 2 Lesson 3, Unit 9
-  // Lesson 1) across three reloads seconds apart — the classroom kept
-  // jumping between lessons instead of settling on one. `id` as the final
-  // tiebreaker makes repeated calls for the same data return the same row.
+  // 3) Fallback: first published lesson in this hub. Two problems fixed
+  // here together:
+  //  - Postgres gives no ordering guarantee among rows that tie on every
+  //    ORDER BY column, so without a final deterministic tiebreaker this
+  //    "first" pick could silently return a DIFFERENT lesson on every
+  //    call. Confirmed live: the exact same booking resolved to three
+  //    different A1 lessons across three reloads seconds apart.
+  //  - sequence_order/order_index aren't populated consistently across
+  //    curriculum_lessons (many stub/placeholder rows share null), so
+  //    sorting by them doesn't reliably put a genuine "Unit 1 Lesson 1"
+  //    first — confirmed live: this fallback picked Pre-A1 Unit 3 Lesson 1
+  //    ahead of Unit 1 Lesson 1. slot_unit_number/slot_lesson_number (the
+  //    actual curriculum position, sourced from ai_metadata) are the real
+  //    ordering signal; sorted client-side since PostgREST can't order by
+  //    a JSON path on this column directly. `id` stays as the final
+  //    tiebreaker for full determinism.
   const targets = HUB_TO_TARGET_SYSTEM[hub];
-  const { data: first } = await supabase
+  const { data: candidates } = await supabase
     .from('curriculum_lessons')
-    .select('id')
+    .select('id, slot_cefr_level, slot_unit_number, slot_lesson_number')
     .in('target_system', targets)
-    .eq('is_published', true)
-    .order('slot_cefr_level', { ascending: true, nullsFirst: false })
-    .order('sequence_order', { ascending: true, nullsFirst: false })
-    .order('order_index', { ascending: true, nullsFirst: false })
-    .order('id', { ascending: true })
-    .limit(1)
-    .maybeSingle();
-  return first?.id ?? null;
+    .eq('is_published', true);
+  if (!candidates?.length) return null;
+  const sorted = [...candidates].sort((a, b) =>
+    cefrRank(a.slot_cefr_level) - cefrRank(b.slot_cefr_level) ||
+    num(a.slot_unit_number) - num(b.slot_unit_number) ||
+    num(a.slot_lesson_number) - num(b.slot_lesson_number) ||
+    (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
+  );
+  return sorted[0]?.id ?? null;
 }
 
 export interface LessonMeta {
@@ -118,7 +125,17 @@ export async function getAdjacentLesson(
 }
 
 function num(v: unknown, fallback = Number.MAX_SAFE_INTEGER): number {
-  return typeof v === 'number' ? v : fallback;
+  if (typeof v === 'number') return v;
+  // slot_unit_number/slot_lesson_number/sequence_order/order_index are all
+  // TEXT columns in the DB despite LessonMeta typing them as `number | null`
+  // — the Supabase client returns whatever the column's real runtime type
+  // is, so a numeric-string check is required or every row silently ties
+  // at `fallback` and this sort key contributes nothing at all.
+  if (typeof v === 'string' && v.trim() !== '') {
+    const n = Number(v);
+    if (Number.isFinite(n)) return n;
+  }
+  return fallback;
 }
 function cefrRank(v: string | null): number {
   const order = ['pre-a1', 'a1', 'a2', 'b1', 'b2', 'c1', 'c2'];
