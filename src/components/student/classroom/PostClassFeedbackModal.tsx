@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ThumbsUp, ThumbsDown, Clock } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { sendStudentFeedbackToTeacher } from '@/components/classroom/StudentLessonOutcomeDialog';
 
 interface PostClassFeedbackModalProps {
   isOpen: boolean;
@@ -77,14 +78,14 @@ export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
-      const { error } = await supabase.from('post_class_feedback').insert({
-        student_id: user.id,
-        teacher_id: teacherId,
-        lesson_id: lessonId,
-        thumbs_up: thumbsUp,
-        submitted_by_role: 'student',
-        submitted_by_user_id: user.id,
-        improvement_suggestion: !thumbsUp ? (suggestion.trim() || null) : null,
+      // teacherId is often '' here (the session context rarely carries it),
+      // which made every insert fail — the helper falls back to the booking.
+      const { error } = await sendStudentFeedbackToTeacher({
+        roomId: lessonId,
+        studentId: user.id,
+        teacherId,
+        thumbsUp,
+        suggestion: suggestion.trim() || null,
       });
 
       if (error) throw error;

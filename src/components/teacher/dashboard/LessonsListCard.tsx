@@ -29,6 +29,8 @@ interface Lesson {
   classroomId: string | null;
   studentId: string | null;
   hubType: string | null;
+  /** The student's own post-class 👍/👎 (post_class_feedback), if given. */
+  studentFeedback: { thumbsUp: boolean; suggestion: string | null } | null;
 }
 
 /** Outcome badge for a lesson that has actually ended (Past / No Feedback
@@ -49,6 +51,10 @@ const OutcomeBadge: React.FC<{ rawStatus: BookingStatus; faultParty: Lesson['fau
   }
   if (rawStatus === 'teacher_absent') {
     return <Badge className="text-xs bg-purple-100 text-purple-700 hover:bg-purple-100 border-purple-200">Teacher no-show</Badge>;
+  }
+  if (rawStatus === 'scheduled' || rawStatus === 'confirmed') {
+    // Slot is over but no session report yet — end_lesson hasn't run.
+    return <Badge className="text-xs bg-sky-100 text-sky-700 hover:bg-sky-100 border-sky-200">Awaiting report</Badge>;
   }
   if (rawStatus === 'ended_early') {
     return <Badge className="text-xs bg-amber-100 text-amber-700 hover:bg-amber-100 border-amber-200">Ended early</Badge>;
@@ -85,6 +91,15 @@ const LessonItem: React.FC<LessonItemProps> = ({ lesson, onOpenFeedback, onWrite
           {(lesson.status === 'completed' || lesson.status === 'needs-feedback') && (
             <OutcomeBadge rawStatus={lesson.rawStatus} faultParty={lesson.faultParty} />
           )}
+          {lesson.studentFeedback && (
+            <Badge
+              variant="outline"
+              className={`text-xs ${lesson.studentFeedback.thumbsUp ? 'border-emerald-300 text-emerald-700' : 'border-rose-300 text-rose-700'}`}
+              title={lesson.studentFeedback.suggestion ?? undefined}
+            >
+              Student: {lesson.studentFeedback.thumbsUp ? '👍' : '👎'}
+            </Badge>
+          )}
         </div>
         <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
@@ -100,6 +115,9 @@ const LessonItem: React.FC<LessonItemProps> = ({ lesson, onOpenFeedback, onWrite
             {lesson.studentName}{lesson.studentAge ? ` (${lesson.studentAge}y)` : ''}
           </span>
         </div>
+        {lesson.studentFeedback?.suggestion && (
+          <p className="mt-1 text-xs italic text-rose-700 line-clamp-2">“{lesson.studentFeedback.suggestion}”</p>
+        )}
       </div>
 
       {lesson.status === 'needs-feedback' && (
@@ -148,12 +166,13 @@ export const LessonsListCard: React.FC = () => {
     // so it's excluded from the ENDED_NEEDING_REPORT set below.
     const ENDED_STATUSES = new Set(['completed', 'failed_technical', 'ended_early', 'student_absent', 'teacher_absent']);
     const ENDED_NEEDING_REPORT = new Set(['completed', 'failed_technical']);
+    const NEVER_HAPPENED = new Set(['cancelled', 'canceled', 'rescheduled', 'refunded']);
 
     const loadLessons = async () => {
       try {
         const { data, error } = await supabase
           .from('class_bookings')
-          .select('id, classroom_id, scheduled_at, status, technical_fault_party, hub_type, notes, student_id')
+          .select('id, classroom_id, scheduled_at, duration, ended_at, status, technical_fault_party, hub_type, notes, student_id')
           .eq('teacher_id', user.id)
           .order('scheduled_at', { ascending: true });
 
@@ -187,12 +206,38 @@ export const LessonsListCard: React.FC = () => {
           feedbackSet = new Set((fbs ?? []).map((f: any) => f.lesson_id));
         }
 
+        // The student's 👍/👎 about each lesson (keyed by booking id).
+        const studentFeedbackMap = new Map<string, Lesson['studentFeedback']>();
+        if (bookingIds.length) {
+          const { data: sfb } = await supabase
+            .from('post_class_feedback')
+            .select('lesson_id, thumbs_up, improvement_suggestion, submitted_by_role')
+            .in('lesson_id', bookingIds)
+            .eq('submitted_by_role', 'student');
+          for (const f of (sfb ?? []) as any[]) {
+            if (f.lesson_id && f.thumbs_up !== null) {
+              studentFeedbackMap.set(f.lesson_id, { thumbsUp: !!f.thumbs_up, suggestion: f.improvement_suggestion ?? null });
+            }
+          }
+        }
+
         const mapped: Lesson[] = (data ?? []).map((row: any) => {
           const scheduledAt = new Date(row.scheduled_at);
           const rawStatus: BookingStatus = row.status;
           let status: Lesson['status'] = 'upcoming';
           if (ENDED_STATUSES.has(rawStatus)) {
             status = ENDED_NEEDING_REPORT.has(rawStatus) && !feedbackSet.has(row.id) ? 'needs-feedback' : 'completed';
+          } else if (!NEVER_HAPPENED.has(rawStatus)) {
+            // Still 'scheduled'/'confirmed' but the teacher ended it (ended_at
+            // stamped by End Class) or its slot is over: the booking only
+            // flips to 'completed' when the session report is submitted
+            // (end_lesson), so until then it belongs in "No Feedback" —
+            // previously it vanished from every tab.
+            const durationMin = Number(row.duration) > 0 ? Number(row.duration) : 30;
+            const slotOver = scheduledAt.getTime() + (durationMin + 5) * 60_000 < Date.now();
+            if (row.ended_at || slotOver) {
+              status = feedbackSet.has(row.id) ? 'completed' : 'needs-feedback';
+            }
           }
           return {
             id: row.id,
@@ -206,6 +251,7 @@ export const LessonsListCard: React.FC = () => {
             classroomId: row.classroom_id ?? null,
             studentId: row.student_id ?? null,
             hubType: row.hub_type ?? null,
+            studentFeedback: studentFeedbackMap.get(row.id) ?? null,
           };
         });
         setLessons(mapped);
@@ -244,8 +290,10 @@ export const LessonsListCard: React.FC = () => {
     };
   }, [user?.id]);
 
-  const pastLessons = lessons.filter(l => l.status === 'completed');
-  const needsFeedback = lessons.filter(l => l.status === 'needs-feedback');
+  // Most recent first.
+  const byNewest = (a: Lesson, b: Lesson) => b.scheduledAt.getTime() - a.scheduledAt.getTime();
+  const pastLessons = lessons.filter(l => l.status === 'completed').sort(byNewest);
+  const needsFeedback = lessons.filter(l => l.status === 'needs-feedback').sort(byNewest);
 
   const handleOpenFeedback = (lesson: Lesson) => {
     setFeedbackLesson(lesson);

@@ -157,8 +157,11 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
       }
 
       // Insert feedback
+      // Keyed by the BOOKING id: every reader (teacher dashboard's
+      // Past / No Feedback tabs, student lesson history, parent card,
+      // FeedbackReportDialog) looks feedback up by class_bookings.id.
       const { error: feedbackErr } = await supabase.from('lesson_feedback_submissions').insert({
-        lesson_id: lessonId || null,
+        lesson_id: bookingId || lessonId || null,
         teacher_id: teacherId,
         student_id: studentId || null,
         feedback_content: {
@@ -168,10 +171,15 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
           outcome,
           incident_flags: incidentFlags,
         },
-        student_performance_rating: rating,
+        // DB check allows 1-5 only; "no stars picked" must be null, not 0.
+        student_performance_rating: rating >= 1 ? rating : null,
         lesson_objectives_met: outcome === 'completed'
       });
-      if (feedbackErr) console.error('[LessonWrapUp] lesson_feedback_submissions insert failed:', feedbackErr);
+      // The report IS the deliverable — don't toast "saved" when it wasn't.
+      if (feedbackErr) {
+        console.error('[LessonWrapUp] lesson_feedback_submissions insert failed:', feedbackErr);
+        throw feedbackErr;
+      }
 
 
       // Save shared notes to lesson_completions
@@ -359,7 +367,11 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
       setShowSkillScores(false);
     } catch (err) {
       console.error('Failed to submit feedback:', err);
-      toast({ title: 'Error', description: 'Failed to save feedback.', variant: 'destructive' });
+      toast({
+        title: 'Report not saved',
+        description: (err as any)?.message ?? 'Failed to save the report. Please try again.',
+        variant: 'destructive',
+      });
     } finally {
       setSubmitting(false);
     }

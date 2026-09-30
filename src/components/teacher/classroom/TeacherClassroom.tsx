@@ -155,7 +155,6 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   const sessionDuration: 25 | 55 = isInterview ? 25 : (timePolicy.mandatoryMinutes as 25 | 55);
   const smartTimer = useSmartTimer(classTime, sessionDuration);
 
-  const wrapUpAutoOpenedRef = React.useRef(false);
 
   // Auto-hide for the top bar only — the video sidebar must never dim
   // (per direct report: seeing each other's face is critical throughout
@@ -444,13 +443,10 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Auto-open wrap-up dialog at urgent phase
-  useEffect(() => {
-    if (smartTimer.shouldPulseWrapUp && !wrapUpAutoOpenedRef.current && !wrapUpOpen) {
-      wrapUpAutoOpenedRef.current = true;
-      setWrapUpOpen(true);
-    }
-  }, [smartTimer.shouldPulseWrapUp, wrapUpOpen]);
+  // The session report opens only when the teacher clicks End Class
+  // (handleEndClass below) — it used to auto-open at the timer's "urgent"
+  // phase (~25 min), covering the lesson mid-activity. Near the end the
+  // wrap-up button just pulses (shouldPulseWrapUp) as a reminder.
 
   // Zen mode elapsed timer
   useEffect(() => {

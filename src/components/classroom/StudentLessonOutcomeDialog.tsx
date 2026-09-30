@@ -8,6 +8,56 @@ import { useToast } from '@/hooks/use-toast';
 import { IncidentFlag, STUDENT_FLAG_OPTIONS, FLAG_META } from './incidentFlags';
 import { getClassroomHubTheme, type ClassroomHubKey } from '@/components/teacher/classroom/hubClassroomTheme';
 
+/**
+ * Record the student's post-class 👍/👎 for the teacher (post_class_feedback,
+ * keyed by the booking id). The teacher is resolved from the booking itself,
+ * since the classroom's session context often has no teacherId. One row per
+ * student per lesson — a repeat answer is ignored.
+ */
+export async function sendStudentFeedbackToTeacher(p: {
+  roomId: string;
+  studentId: string;
+  thumbsUp: boolean;
+  suggestion: string | null;
+  teacherId?: string | null;
+}): Promise<{ error: unknown | null }> {
+  try {
+    let teacherId = p.teacherId || null;
+    if (!teacherId) {
+      const { data: booking } = await supabase
+        .from('class_bookings')
+        .select('teacher_id')
+        .eq('id', p.roomId)
+        .maybeSingle();
+      teacherId = (booking as any)?.teacher_id ?? null;
+    }
+    if (!teacherId) return { error: new Error('No teacher found for this lesson') };
+    const { data: existing } = await supabase
+      .from('post_class_feedback')
+      .select('id')
+      .eq('lesson_id', p.roomId)
+      .eq('student_id', p.studentId)
+      .eq('submitted_by_role', 'student')
+      .limit(1)
+      .maybeSingle();
+    if (existing) return { error: null };
+    const { error } = await supabase.from('post_class_feedback').insert({
+      student_id: p.studentId,
+      teacher_id: teacherId,
+      lesson_id: p.roomId,
+      thumbs_up: p.thumbsUp,
+      submitted_by_role: 'student',
+      submitted_by_user_id: p.studentId,
+      improvement_suggestion: p.thumbsUp ? null : p.suggestion,
+    });
+    if (error) console.warn('[sendStudentFeedbackToTeacher] insert failed', error);
+    return { error: error ?? null };
+  } catch (e) {
+    console.warn('[sendStudentFeedbackToTeacher] failed', e);
+    return { error: e };
+  }
+}
+
 interface Props {
   roomId: string;
   onDone?: () => void;
@@ -66,6 +116,15 @@ export const StudentLessonOutcomeDialog: React.FC<Props> = ({ roomId, onDone, hu
       toast({ title: 'Could not save', description: error.message, variant: 'destructive' });
       return;
     }
+    // Hand the 👍/👎 to the teacher too — lesson_incident_reports is an
+    // ops/verdict table the teacher never sees; post_class_feedback is what
+    // the teacher dashboard (and parent card) read. Best-effort.
+    void sendStudentFeedbackToTeacher({
+      roomId,
+      studentId: user.id,
+      thumbsUp: outcome === 'completed',
+      suggestion: notes.trim() || null,
+    });
     // Trigger AI Senior Engineer verdict (fire-and-forget)
     supabase.functions.invoke('classroom-incident-verdict', { body: { room_id: roomId } })
       .catch((e) => console.warn('verdict invoke failed', e));

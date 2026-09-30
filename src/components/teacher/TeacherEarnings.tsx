@@ -15,7 +15,12 @@ interface EarningRow {
   status: string;
   created_at: string;
   booking_id: string | null;
+  /** Set when an admin adjusted this lesson's pay (bonus / deduction). */
+  adjustment_note: string | null;
 }
+
+// adjustment_note isn't in the generated Supabase types yet, hence `as any`.
+const EARNING_COLS = 'id, amount, teacher_amount, status, created_at, booking_id, adjustment_note';
 
 export const TeacherEarnings: React.FC<TeacherEarningsProps> = ({ teacherId }) => {
   const [rows, setRows] = useState<EarningRow[]>([]);
@@ -28,9 +33,9 @@ export const TeacherEarnings: React.FC<TeacherEarningsProps> = ({ teacherId }) =
       setLoading(true);
 
       const [{ data: earnings }, { data: profile }] = await Promise.all([
-        supabase
+        (supabase as any)
           .from('teacher_earnings')
-          .select('id, amount, teacher_amount, status, created_at, booking_id')
+          .select(EARNING_COLS)
           .eq('teacher_id', teacherId)
           .order('created_at', { ascending: false })
           .limit(200),
@@ -55,13 +60,13 @@ export const TeacherEarnings: React.FC<TeacherEarningsProps> = ({ teacherId }) =
         { event: '*', schema: 'public', table: 'teacher_earnings', filter: `teacher_id=eq.${teacherId}` },
         () => {
           // simplest: refetch
-          supabase
+          (supabase as any)
             .from('teacher_earnings')
-            .select('id, amount, teacher_amount, status, created_at, booking_id')
+            .select(EARNING_COLS)
             .eq('teacher_id', teacherId)
             .order('created_at', { ascending: false })
             .limit(200)
-            .then(({ data }) => setRows((data as EarningRow[] | null) ?? []));
+            .then(({ data }: { data: EarningRow[] | null }) => setRows(data ?? []));
         },
       )
       .subscribe();
@@ -206,6 +211,9 @@ export const TeacherEarnings: React.FC<TeacherEarningsProps> = ({ teacherId }) =
                       <p className="text-xs text-muted-foreground">
                         {new Date(r.created_at).toLocaleString()}
                       </p>
+                      {r.adjustment_note && (
+                        <p className="text-xs text-amber-700 mt-0.5">Adjusted by admin: {r.adjustment_note}</p>
+                      )}
                     </div>
                     {badge}
                   </li>
