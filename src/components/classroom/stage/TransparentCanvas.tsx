@@ -43,7 +43,13 @@ export const TransparentCanvas: React.FC<TransparentCanvasProps> = ({
   // (mode === 'web' && iframeUnlocked), the student's overlay must step aside
   // even if drawing was on, so clicks land on the page.
   const studentBypassForIframe = role === 'student' && mode === 'web' && !!iframeUnlocked;
-  const passThrough = !drawingEnabled || activeTool === 'pointer' || studentBypassForIframe;
+  // `drawingEnabled` is the teacher's "Let Student Interact" permission — it
+  // gates the STUDENT only. The teacher can always annotate with a pen tool;
+  // tying the teacher's own pen to that flag meant the teacher could never
+  // draw for a watching (locked) student, and picking up a pen had to unlock
+  // the student as a side effect.
+  const canDrawHere = activeTool !== 'pointer' && (role === 'teacher' || drawingEnabled);
+  const passThrough = !canDrawHere || studentBypassForIframe;
 
   return (
     <div
@@ -55,7 +61,7 @@ export const TransparentCanvas: React.FC<TransparentCanvasProps> = ({
         userId={userId}
         userName={userName}
         role={role}
-        canDraw={drawingEnabled && activeTool !== 'pointer'}
+        canDraw={canDrawHere}
         activeTool={activeTool === 'pointer' ? 'pen' : activeTool}
         activeColor={activeColor}
         strokes={strokes}

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { WhiteboardStroke, StageMode, whiteboardService } from '@/services/whiteboardService';
 import { MainStage } from '@/components/classroom/stage/MainStage';
 import { StudentMiniDock } from '@/components/classroom/stage/StudentMiniDock';
@@ -108,11 +108,22 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
   const isPollSlide = currentSlide?.type === 'poll';
 
   // Local pen tool state (whether the local pen is active is gated by `drawingEnabled` from teacher)
-  const [studentTool, setStudentTool] = useState<'pointer' | 'pen' | 'eraser'>('pen');
+  // Pointer by default: "Let Student Interact" unlocks both drawing AND the
+  // lesson's tap/drag activities, and with the pen selected the drawing
+  // layer swallows every tap — a child told "tap the answer" drew a line
+  // instead and the activity never responded. Drawing is now an explicit
+  // choice from the dock.
+  const [studentTool, setStudentTool] = useState<'pointer' | 'pen' | 'eraser'>('pointer');
   const [studentColor, setStudentColor] = useState<string>(activeColor || STUDENT_COLORS[0]);
 
   // Effective draw permission: legacy flag OR new unified flag
   const canStudentDraw = drawingEnabled || studentCanDraw;
+
+  // Each time the teacher grants interaction, start from the pointer so the
+  // first tap reaches the activity rather than the drawing layer.
+  useEffect(() => {
+    if (canStudentDraw) setStudentTool('pointer');
+  }, [canStudentDraw]);
 
   // NOTE: every hook must run before the early returns below (screen share /
   // quiz / poll). Declaring them after those returns made React throw

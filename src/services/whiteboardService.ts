@@ -98,15 +98,26 @@ export interface RewardPayload {
   timestamp: number;
 }
 
-export type ToolName = 'dice' | 'timer' | 'wheel' | 'xo';
+export type ToolName = 'dice' | 'timer' | 'wheel' | 'xo' | 'sync';
+
+/** Snapshot of the stage tools currently open on one side — the reply to a
+ *  tool 'sync' request (see ToolActionPayload.syncRole). */
+export interface ToolSyncState {
+  dice?: { value: number } | null;
+  wheel?: { options: string[]; winner?: string } | null;
+  xo?: Array<'X' | 'O' | null> | null;
+  timer?: { remaining: number; running: boolean } | null;
+}
 export interface ToolActionPayload {
   tool: ToolName;
   /** Numeric result of the action — e.g. dice value 1-6 (dice/wheel index) */
   result?: number;
   /** Timer: duration in seconds. */
   durationSec?: number;
-  /** Timer: 'start' | 'stop' | 'reset'. Also reused by dice/wheel: 'stop' broadcasts a dismiss so the other side's ClassroomToolOverlay closes too, instead of only clearing local state. */
-  status?: 'start' | 'stop' | 'reset';
+  /** Timer: 'start' | 'pause' | 'stop' | 'reset' ('pause' carries the
+   *  remaining seconds in durationSec; resuming is a 'start' with that
+   *  remaining time). Also reused by dice/wheel: 'stop' broadcasts a dismiss so the other side's ClassroomToolOverlay closes too, instead of only clearing local state. */
+  status?: 'start' | 'pause' | 'stop' | 'reset';
   /** Wheel: options to display. */
   options?: string[];
   /** Wheel: chosen option label. */
@@ -119,6 +130,13 @@ export interface ToolActionPayload {
   mark?: 'X' | 'O';
   /** Unique id so the overlay can re-trigger animation. */
   actionId?: string;
+  /** tool 'sync': which side sent it. Tool events are no-replay broadcasts,
+   *  so a side that joins, reloads or returns to the foreground sends a
+   *  request (no syncState) and the OTHER side replies with its open tools
+   *  (syncState) — otherwise one screen kept a dice/wheel/XO board/timer
+   *  the other no longer had (e.g. a reloaded student couldn't play O). */
+  syncRole?: 'teacher' | 'student';
+  syncState?: ToolSyncState;
   senderId: string;
   timestamp: number;
 }

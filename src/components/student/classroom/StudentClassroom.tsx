@@ -65,6 +65,9 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
 
   // Instant broadcast-driven overlays (separate from slow DB-backed sync)
   const [liveStar, setLiveStar] = useState<{ count: number; isMilestone: boolean; key: number } | null>(null);
+  // When the instant star broadcast arrived; the DB-backed celebration below
+  // is only a fallback for a missed broadcast, not a second copy of it.
+  const lastLiveStarAtRef = useRef(0);
   const [liveSticker, setLiveSticker] = useState<{ emoji: string; key: number } | null>(null);
 
   const headerIdle = useIdleOpacity({ idleTimeout: 3000, idleOpacity: 0.4 });
@@ -179,6 +182,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
     const unsubReward = whiteboardService.subscribeToRewards(roomId, (payload) => {
       if (payload.senderId === studentId) return;
       if (payload.rewardType === 'star') {
+        lastLiveStarAtRef.current = Date.now();
         setLiveStar({
           count: payload.starCount ?? 1,
           isMilestone: !!payload.isMilestone,
@@ -376,7 +380,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
       )}
       {/* Star Celebration Overlay (DB-backed) */}
       <StarCelebration
-        isVisible={showStarCelebration}
+        isVisible={showStarCelebration && Date.now() - lastLiveStarAtRef.current > 3000}
         starCount={starCount}
         studentName={studentName}
         isMilestone={isMilestone}

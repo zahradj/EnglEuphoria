@@ -623,16 +623,28 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   // Notify when student joins
   const prevParticipantCount = React.useRef(0);
   useEffect(() => {
-    if (participants.length > prevParticipantCount.current && prevParticipantCount.current >= 0) {
-      if (prevParticipantCount.current > 0) {
-        toast({ title: "👋 Student Joined", description: "A student has joined the classroom", className: "bg-green-900 border-green-700" });
-      }
+    // Mid-class (re)joins only — before Start Class the bell + "Student has
+    // joined" toast below already covers arrival. The old `> 0` guard meant
+    // this never fired for the 0 → 1 case, i.e. a student reconnecting after
+    // a dropped call went unannounced.
+    const classIsLive = !!(sessionContext as any)?.classStarted;
+    if (classIsLive && participants.length > prevParticipantCount.current) {
+      toast({ title: "👋 Student Joined", description: `${studentName} is back in the classroom`, className: "bg-green-900 border-green-700" });
     }
     prevParticipantCount.current = participants.length;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [participants.length]);
 
   const toggleMute = useCallback(() => { media.toggleMicrophone(); }, [media]);
   const toggleCamera = useCallback(() => { media.toggleCamera(); }, [media]);
+
+  // Resume the star count from the shared session after a reload / Force
+  // Refresh. It used to restart at 0, so the next star wrote starCount=1
+  // and the student's star bar dropped from e.g. 6 back to 1.
+  const savedStarCount = session?.starCount ?? 0;
+  useEffect(() => {
+    setStudentStars((current) => Math.max(current, savedStarCount));
+  }, [savedStarCount]);
 
   const handleGiveStar = useCallback(async () => {
     const newStarCount = studentStars + 1;
@@ -845,20 +857,49 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     return () => clearInterval(interval);
   }, [timerRunning, timerValue, toast]);
 
-  const startTimer = () => {
-    setTimerValue(timerSeconds);
+  // Paused mid-countdown (Resume continues from timerValue instead of
+  // restarting from the full duration).
+  const [timerPaused, setTimerPaused] = useState(false);
+  const startTimer = (fromSeconds: number = timerSeconds) => {
+    setTimerValue(fromSeconds);
     setTimerRunning(true);
+    setTimerPaused(false);
     void whiteboardService.sendToolAction(roomName, {
       tool: 'timer',
       status: 'start',
-      durationSec: timerSeconds,
+      durationSec: fromSeconds,
       actionId: `${Date.now()}`,
       senderId: teacherUserId,
     }).catch((e) => console.error('Timer broadcast failed:', e));
     setTimerDialogOpen(false);
   };
+  const pauseTimer = () => {
+    setTimerRunning(false);
+    setTimerPaused(true);
+    // Tell the student's overlay too — Pause used to be local-only, so the
+    // student's timer kept running to 0:00 while the teacher's was frozen.
+    void whiteboardService.sendToolAction(roomName, {
+      tool: 'timer',
+      status: 'pause',
+      durationSec: timerValue,
+      senderId: teacherUserId,
+    }).catch((e) => console.error('Timer pause broadcast failed:', e));
+  };
+  // The overlay's own dismiss (✕) on the stage sends a timer 'stop' — keep
+  // this dialog's countdown in step with it instead of ticking on to a
+  // phantom "Time's up".
+  useEffect(() => {
+    if (!roomName) return;
+    return whiteboardService.subscribeToToolActions(roomName, (p) => {
+      if (p.tool === 'timer' && (p.status === 'stop' || p.status === 'reset')) {
+        setTimerRunning(false);
+        setTimerPaused(false);
+      }
+    });
+  }, [roomName]);
   const resetTimer = () => {
     setTimerRunning(false);
+    setTimerPaused(false);
     setTimerValue(timerSeconds);
     void whiteboardService.sendToolAction(roomName, {
       tool: 'timer',
@@ -1259,8 +1300,9 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             <div className="absolute left-3 top-1/2 -translate-y-1/2 z-[60] flex flex-col items-center gap-1.5 p-2 rounded-2xl bg-white shadow-xl ring-1 ring-black/5 pointer-events-auto animate-in slide-in-from-left-2 fade-in duration-150">
               <button
                 onClick={async () => {
-                  if (drawingEnabled) await setDrawingEnabled(false);
-                  await setStudentCanDraw(false);
+                  // Put the pen down; the student's permission is left alone
+                  // (it's the separate "Let Student Interact" toggle).
+                  await handleToolChange('pointer');
                   setPenRailOpen(false);
                 }}
                 title="Hide pen tools"
@@ -1286,13 +1328,11 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
                   <button
                     key={t.id}
                     onClick={async () => {
-                      if (t.id === 'pointer') {
-                        if (drawingEnabled) await setDrawingEnabled(false);
-                        await setStudentCanDraw(false);
-                      } else if (!drawingEnabled) {
-                        await setDrawingEnabled(true);
-                        await setStudentCanDraw(true);
-                      }
+                      // The teacher's own pen no longer flips the student's
+                      // permission: picking up a pen used to unlock the
+                      // student (who could then scribble or tap mid-demo)
+                      // and picking the pointer silently re-locked them.
+                      // The teacher can always draw (see TransparentCanvas).
                       await handleToolChange(t.id);
                     }}
                     title={t.label}
@@ -1521,7 +1561,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
               {Math.floor(timerValue / 60).toString().padStart(2, '0')}:
               {(timerValue % 60).toString().padStart(2, '0')}
             </div>
-            {!timerRunning && (
+            {!timerRunning && !timerPaused && (
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-500">Set time (seconds):</span>
                 <Input
@@ -1534,13 +1574,18 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
               </div>
             )}
             <div className="flex gap-2">
-              {!timerRunning ? (
-                <Button onClick={startTimer} className={hubTheme.buttonPrimary}>Start Timer</Button>
-              ) : (
+              {timerRunning ? (
                 <>
-                  <Button onClick={() => setTimerRunning(false)} variant="outline" className="border-gray-200">Pause</Button>
+                  <Button onClick={pauseTimer} variant="outline" className="border-gray-200">Pause</Button>
                   <Button onClick={resetTimer} variant="destructive">Reset</Button>
                 </>
+              ) : timerPaused && timerValue > 0 ? (
+                <>
+                  <Button onClick={() => startTimer(timerValue)} className={hubTheme.buttonPrimary}>Resume</Button>
+                  <Button onClick={resetTimer} variant="destructive">Reset</Button>
+                </>
+              ) : (
+                <Button onClick={() => startTimer()} className={hubTheme.buttonPrimary}>Start Timer</Button>
               )}
             </div>
           </div>

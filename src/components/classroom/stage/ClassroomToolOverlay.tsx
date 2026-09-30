@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Timer as TimerIcon, X, RotateCcw } from 'lucide-react';
-import { whiteboardService, type ToolActionPayload } from '@/services/whiteboardService';
+import { whiteboardService, type ToolActionPayload, type ToolSyncState } from '@/services/whiteboardService';
 
 const DICE_ICONS = [Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
 
@@ -30,9 +30,50 @@ export const ClassroomToolOverlay: React.FC<ClassroomToolOverlayProps> = ({ room
   const wheelTimer = useRef<number | null>(null);
   const localMark: 'X' | 'O' = localRole === 'teacher' ? 'X' : 'O';
 
+  // Latest open tools, read by the catch-up reply below without
+  // re-subscribing on every change.
+  const openToolsRef = useRef<ToolSyncState>({});
+  openToolsRef.current = {
+    dice: dice && !dice.rolling ? { value: dice.value } : null,
+    wheel: wheel && !wheel.spinning ? { options: wheel.options, winner: wheel.winner } : null,
+    xo: xoBoard,
+    timer: timer ? { remaining: timer.remaining, running: timer.running } : null,
+  };
+
   useEffect(() => {
     if (!roomId) return;
     const unsub = whiteboardService.subscribeToToolActions(roomId, (p: ToolActionPayload) => {
+      if (p.tool === 'sync') {
+        // Our own echo, or the same role on another device — nothing to do.
+        if (p.syncRole === localRole) return;
+        if (!p.syncState) {
+          // The other side (re)joined: tell it which tools are open here.
+          const open = openToolsRef.current;
+          if (open.dice || open.wheel || open.xo || open.timer) {
+            void whiteboardService.sendToolAction(roomId, {
+              tool: 'sync', syncRole: localRole, syncState: open, senderId: 'local',
+            }).catch(() => {});
+          }
+          return;
+        }
+        // A reply: restore only what isn't already open here, so a reply
+        // can never undo something newer on this screen.
+        const st = p.syncState;
+        if (st.dice) setDice((d) => d ?? { id: `sync-${p.timestamp}`, rolling: false, value: st.dice!.value });
+        if (st.wheel) setWheel((w) => w ?? { id: `sync-${p.timestamp}`, options: st.wheel!.options, winner: st.wheel!.winner, spinning: false });
+        if (st.xo) setXoBoard((b) => b ?? st.xo!.slice());
+        if (st.timer) {
+          const { remaining, running } = st.timer;
+          setTimer((t) => t ?? {
+            id: `sync-${p.timestamp}`,
+            endsAt: Date.now() + remaining * 1000,
+            durationSec: remaining,
+            remaining,
+            running: running && remaining > 0,
+          });
+        }
+        return;
+      }
       if (p.tool === 'dice' && p.status === 'stop') {
         // Dismiss, broadcast from the other side — see the "Dismiss dice"
         // button below. Previously that button only called local setDice
@@ -70,8 +111,22 @@ export const ClassroomToolOverlay: React.FC<ClassroomToolOverlayProps> = ({ room
           setTimer(null);
           return;
         }
-        const dur = Math.max(1, p.durationSec ?? 60);
         const id = p.actionId ?? String(p.timestamp);
+        if (p.status === 'pause') {
+          // Freeze at the teacher's remaining time. Before, Pause only
+          // stopped the teacher's own countdown and the student's kept
+          // running down to a flashing red 0:00.
+          const rem = Math.max(0, Math.round(p.durationSec ?? 0));
+          setTimer((t) => ({
+            id: t?.id ?? id,
+            endsAt: Date.now() + rem * 1000,
+            durationSec: t?.durationSec ?? rem,
+            remaining: rem,
+            running: false,
+          }));
+          return;
+        }
+        const dur = Math.max(1, p.durationSec ?? 60);
         setTimer({ id, endsAt: Date.now() + dur * 1000, durationSec: dur, remaining: dur, running: true });
       } else if (p.tool === 'xo') {
         if (p.xoAction === 'close') {
@@ -96,7 +151,26 @@ export const ClassroomToolOverlay: React.FC<ClassroomToolOverlayProps> = ({ room
       if (diceTimer.current) window.clearTimeout(diceTimer.current);
       if (wheelTimer.current) window.clearTimeout(wheelTimer.current);
     };
-  }, [roomId]);
+  }, [roomId, localRole]);
+
+  // Ask the other side for its open tools on mount, when the tab returns to
+  // the foreground, and when the network comes back (see syncRole).
+  useEffect(() => {
+    if (!roomId) return;
+    const request = () => {
+      void whiteboardService.sendToolAction(roomId, {
+        tool: 'sync', syncRole: localRole, senderId: 'local',
+      }).catch(() => {});
+    };
+    request();
+    const onVisibility = () => { if (document.visibilityState === 'visible') request(); };
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('online', request);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('online', request);
+    };
+  }, [roomId, localRole]);
 
   // Timer tick
   useEffect(() => {
@@ -127,6 +201,9 @@ export const ClassroomToolOverlay: React.FC<ClassroomToolOverlayProps> = ({ room
             <span className="text-5xl font-extrabold tabular-nums tracking-tight">
               {formatTime(timer.remaining)}
             </span>
+            {!timer.running && timer.remaining > 0 && (
+              <span className="text-sm font-bold uppercase tracking-wider text-white/80">Paused</span>
+            )}
             {canDismiss && (
               <button
                 onClick={() => {
