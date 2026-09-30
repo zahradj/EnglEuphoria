@@ -153,7 +153,10 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
   // --svw/--svh (set below to 1% of the design canvas; they fall back to
   // real vw/vh in the solo player), so both screens render the SAME
   // pixel layout, just scaled.
-  const sceneFrameSize = useLetterboxSize(sceneStageAreaRef, SCENE_DESIGN_W / SCENE_DESIGN_H);
+  // Keyed on the scene-lesson branch being on stage: that area only exists
+  // once the lesson has loaded, which on the student's side is AFTER mount.
+  const sceneLessonKey = sceneLessonRef ? `${hubType}-${mode}-${sceneLessonRef.contentFormat ?? ''}-${sceneLessonRef.unitNumber}-${sceneLessonRef.lessonNumber}` : null;
+  const sceneFrameSize = useLetterboxSize(sceneStageAreaRef, SCENE_DESIGN_W / SCENE_DESIGN_H, sceneLessonKey);
   const sceneFrameRef = useRef<HTMLDivElement>(null);
   const sceneFrameScale = sceneFrameSize.width > 0 ? sceneFrameSize.width / SCENE_DESIGN_W : 1;
   const [sceneNav, setSceneNav] = useState({ sceneIdx: 0, total: 0, canNavigate: true, interactionUnlocked: false, lockToggleApplicable: true });
@@ -277,6 +280,9 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                     position: 'absolute', top: 0, left: 0,
                     width: SCENE_DESIGN_W, height: SCENE_DESIGN_H,
                     transform: `scale(${sceneFrameScale})`, transformOrigin: 'top left',
+                    // Not measured yet → don't show the unscaled 1440px
+                    // canvas spilling out of the frame for a frame or two.
+                    visibility: sceneFrameSize.width > 0 ? 'visible' : 'hidden',
                     ['--svw' as string]: `${SCENE_DESIGN_W / 100}px`,
                     ['--svh' as string]: `${SCENE_DESIGN_H / 100}px`,
                   }}>

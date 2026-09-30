@@ -3,6 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Star, PartyPopper, Sparkles, Trophy, Crown } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
+// Above the celebration overlay (z-[100]); canvas-confetti defaults to 100.
+const fire = (opts: confetti.Options) => confetti({ zIndex: 250, ...opts });
+
+const CELEBRATION_MS = 2200;
+
 interface StarCelebrationProps {
   isVisible: boolean;
   starCount: number;
@@ -38,7 +43,7 @@ export const StarCelebration: React.FC<StarCelebrationProps> = ({
 
       if (isMilestone) {
         // One big burst + two side cannons — all complete inside 1s.
-        confetti({
+        fire({
           particleCount: 120,
           spread: 220,
           origin: { y: 0.5, x: 0.5 },
@@ -46,7 +51,7 @@ export const StarCelebration: React.FC<StarCelebrationProps> = ({
           startVelocity: 55,
           scalar: 1.4,
         });
-        confetti({
+        fire({
           particleCount: 30,
           spread: 90,
           origin: { x: 0.5, y: 0.5 },
@@ -55,7 +60,7 @@ export const StarCelebration: React.FC<StarCelebrationProps> = ({
           scalar: 1.8,
         });
         setTimeout(() => {
-          confetti({
+          fire({
             particleCount: 40,
             angle: 60,
             spread: 55,
@@ -63,7 +68,7 @@ export const StarCelebration: React.FC<StarCelebrationProps> = ({
             colors,
             startVelocity: 40,
           });
-          confetti({
+          fire({
             particleCount: 40,
             angle: 120,
             spread: 55,
@@ -73,32 +78,26 @@ export const StarCelebration: React.FC<StarCelebrationProps> = ({
           });
         }, 200);
       } else {
-        confetti({
-          particleCount: 50,
-          spread: 100,
-          origin: { y: 0.6 },
-          colors,
-          startVelocity: 34,
-          scalar: 1,
-        });
+        // Joyful multi-colour burst: two cannons from the bottom corners,
+        // star-shaped confetti popping out of the star itself, then a light
+        // shower from the top. Everything fires in the first ~900ms.
+        const party = ['#FFD700', '#FF6B6B', '#4ECDC4', '#FF9FF3', '#54A0FF', '#FF9500', '#7BED9F', '#FFFFFF'];
+        fire({ particleCount: 70, angle: 60, spread: 60, origin: { x: 0, y: 0.85 }, colors: party, startVelocity: 62 });
+        fire({ particleCount: 70, angle: 120, spread: 60, origin: { x: 1, y: 0.85 }, colors: party, startVelocity: 62 });
         setTimeout(() => {
-          confetti({
-            particleCount: 22,
-            spread: 60,
-            origin: { x: 0.5, y: 0.5 },
-            colors: ['#ffd700'],
-            shapes: ['star'],
-            scalar: 1.3,
-          });
-        }, 140);
+          fire({ particleCount: 40, spread: 360, startVelocity: 28, origin: { x: 0.5, y: 0.45 }, colors: ['#FFD700', '#FFE066', '#FFFFFF'], shapes: ['star'], scalar: 1.6, gravity: 0.7 });
+        }, 250);
+        setTimeout(() => {
+          fire({ particleCount: 80, spread: 160, startVelocity: 18, origin: { x: 0.5, y: -0.05 }, colors: party, gravity: 0.9, ticks: 260 });
+        }, 550);
       }
 
-      // Total visible time: 1 second. Then immediately fire onComplete so the
-      // parent can clear the celebration state.
+      // Total visible time ~2.2s (was 1s — over before a child could enjoy
+      // it). Then fire onComplete so the parent can clear the state.
       const timer = setTimeout(() => {
         setShowContent(false);
         onCompleteRef.current?.();
-      }, 1000);
+      }, CELEBRATION_MS);
 
       return () => clearTimeout(timer);
     } else {
@@ -119,12 +118,12 @@ export const StarCelebration: React.FC<StarCelebrationProps> = ({
           {/* Full background overlay */}
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: isMilestone ? 0.85 : 0.7 }}
+            animate={{ opacity: isMilestone ? 0.85 : 1 }}
             exit={{ opacity: 0 }}
             className={`absolute inset-0 ${
               isMilestone 
                 ? 'bg-gradient-to-br from-purple-900 via-pink-800 to-yellow-700' 
-                : 'bg-gradient-to-br from-amber-900/80 via-yellow-800/80 to-orange-900/80'
+                : 'bg-[radial-gradient(circle_at_center,rgba(255,200,40,0.55)_0%,rgba(255,140,0,0.25)_35%,rgba(0,0,0,0.25)_75%)]'
             }`}
           />
 
@@ -225,9 +224,29 @@ export const StarCelebration: React.FC<StarCelebrationProps> = ({
               }}
               className={`relative ${isMilestone ? 'mb-8' : 'mb-6'}`}
             >
-              <Star 
-                className={`${isMilestone ? 'w-48 h-48' : 'w-36 h-36'} text-yellow-400 fill-yellow-400 drop-shadow-[0_0_60px_rgba(250,204,21,0.9)]`}
+              {/* Rotating sunburst behind the star */}
+              <motion.div
+                aria-hidden
+                animate={{ rotate: 360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+                className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                style={{
+                  background: 'repeating-conic-gradient(from 0deg, rgba(255,230,120,0.55) 0deg 9deg, transparent 9deg 22.5deg)',
+                  WebkitMaskImage: 'radial-gradient(circle, black 30%, transparent 70%)',
+                  maskImage: 'radial-gradient(circle, black 30%, transparent 70%)',
+                }}
               />
+              <GlossyStar size={isMilestone ? 200 : 170} />
+              {!isMilestone && (
+                <motion.span
+                  initial={{ scale: 0, y: 10 }}
+                  animate={{ scale: [0, 1.3, 1], y: 0 }}
+                  transition={{ delay: 0.35, duration: 0.5 }}
+                  className="absolute -right-6 -top-2 rounded-full bg-white px-3 py-1 text-2xl font-black text-orange-500 shadow-xl ring-4 ring-yellow-300"
+                >
+                  +1 ⭐
+                </motion.span>
+              )}
               {isMilestone && (
                 <>
                   <motion.div
@@ -362,3 +381,26 @@ export const StarCelebration: React.FC<StarCelebrationProps> = ({
     </AnimatePresence>
   );
 };
+
+/** A glossy golden star (gradient body, white rim, shine highlight). */
+function GlossyStar({ size }: { size: number }) {
+  const d = 'M50 4 L61.8 36.2 L96 37.6 L69.1 58.8 L78.5 92 L50 72.8 L21.5 92 L30.9 58.8 L4 37.6 L38.2 36.2 Z';
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" className="drop-shadow-[0_0_40px_rgba(255,200,0,0.95)]" aria-hidden>
+      <defs>
+        <linearGradient id="gs-body" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#FFF6A8" />
+          <stop offset="45%" stopColor="#FFD21F" />
+          <stop offset="100%" stopColor="#FF9A00" />
+        </linearGradient>
+        <linearGradient id="gs-shine" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.85" />
+          <stop offset="60%" stopColor="#FFFFFF" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path d={d} fill="url(#gs-body)" stroke="#FFFFFF" strokeWidth="4" strokeLinejoin="round" />
+      <path d={d} fill="url(#gs-shine)" transform="translate(50 50) scale(0.62) translate(-50 -56)" />
+      <circle cx="38" cy="30" r="4" fill="#FFFFFF" opacity="0.9" />
+    </svg>
+  );
+}

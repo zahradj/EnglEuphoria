@@ -15,7 +15,15 @@ import { useLayoutEffect, useState, type RefObject } from 'react';
  * Measuring explicitly and setting real pixel width/height sidesteps that
  * entirely.
  */
-export function useLetterboxSize(containerRef: RefObject<HTMLElement>, ratio: number) {
+/**
+ * `remeasureKey`: change it whenever the measured element may have been
+ * mounted/unmounted (e.g. a conditionally rendered branch). The effect only
+ * finds the element if it exists when the effect runs — without this, a
+ * container that mounted AFTER this hook's first run was never measured and
+ * the size stayed 0 (the student's scene lesson arrives after the stage, so
+ * its frame was never scaled and the lesson overflowed the frame).
+ */
+export function useLetterboxSize(containerRef: RefObject<HTMLElement>, ratio: number, remeasureKey?: unknown) {
   const [size, setSize] = useState({ width: 0, height: 0 });
   useLayoutEffect(() => {
     const el = containerRef.current;
@@ -65,6 +73,6 @@ export function useLetterboxSize(containerRef: RefObject<HTMLElement>, ratio: nu
       window.removeEventListener('resize', recompute);
       window.visualViewport?.removeEventListener('resize', recompute);
     };
-  }, [containerRef, ratio]);
+  }, [containerRef, ratio, remeasureKey]);
   return size;
 }

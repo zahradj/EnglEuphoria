@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-
-import { requireAuth } from "../_shared/authGuard.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,28 +12,30 @@ const corsHeaders = {
  * Returns raw MP3 bytes (audio/mpeg) so the client can play with `new Audio()`.
  *
  * Body: { prompt: string, durationSeconds?: number, promptInfluence?: number }
+ *
+ * Server-side cache: each (prompt, duration, influence) is generated ONCE
+ * and stored in the public `sfx-cache` bucket; every later request returns
+ * that same file. Before this, each browser generated its own clip, so the
+ * teacher and student heard different random versions of the same sound
+ * (and every new device spent ElevenLabs credits again).
+ *
+ * Auth: none, matching the previously deployed version (verify_jwt off) —
+ * the repo copy had gained a requireAuth guard that was never deployed.
  */
+const BUCKET = "sfx-cache";
+
+async function cacheKey(prompt: string, dur: number, influence: number): Promise<string> {
+  const data = new TextEncoder().encode(JSON.stringify([prompt.trim(), dur, influence]));
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, "0")).join("") + ".mp3";
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const _auth = await requireAuth(req);
-  if (!_auth.ok) return new Response(JSON.stringify(_auth.body), { status: _auth.status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-
-
   try {
-    const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
-    if (!ELEVENLABS_API_KEY) {
-      return new Response(
-        JSON.stringify({ error: "ELEVENLABS_API_KEY not configured" }),
-        {
-          status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
-    }
-
     const { prompt, durationSeconds, promptInfluence } = await req.json();
     if (!prompt || typeof prompt !== "string" || prompt.trim().length === 0) {
       return new Response(JSON.stringify({ error: "prompt is required" }), {
@@ -54,6 +55,35 @@ serve(async (req) => {
       ),
       1
     );
+
+    const audioHeaders = {
+      ...corsHeaders,
+      "Content-Type": "audio/mpeg",
+      "Cache-Control": "public, max-age=31536000, immutable",
+    };
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    const admin = supabaseUrl && serviceKey ? createClient(supabaseUrl, serviceKey) : null;
+    const key = await cacheKey(prompt, dur, influence);
+
+    if (admin) {
+      const { data: cached } = await admin.storage.from(BUCKET).download(key);
+      if (cached) {
+        return new Response(await cached.arrayBuffer(), { headers: audioHeaders });
+      }
+    }
+
+    const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
+    if (!ELEVENLABS_API_KEY) {
+      return new Response(
+        JSON.stringify({ error: "ELEVENLABS_API_KEY not configured" }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
 
     const response = await fetch(
       "https://api.elevenlabs.io/v1/sound-generation",
@@ -84,13 +114,23 @@ serve(async (req) => {
     }
 
     const audioBuffer = await response.arrayBuffer();
-    return new Response(audioBuffer, {
-      headers: {
-        ...corsHeaders,
-        "Content-Type": "audio/mpeg",
-        "Cache-Control": "public, max-age=31536000, immutable",
-      },
-    });
+    if (admin) {
+      // upsert:false — if two requests race, the first stored clip wins and
+      // stays the one everybody hears.
+      const { error: upErr } = await admin.storage
+        .from(BUCKET)
+        .upload(key, new Blob([audioBuffer], { type: "audio/mpeg" }), { contentType: "audio/mpeg", upsert: false });
+      if (upErr) {
+        if (/exists|duplicate/i.test(upErr.message)) {
+          // Lost the race: serve the stored clip so everyone hears the same one.
+          const { data: winner } = await admin.storage.from(BUCKET).download(key);
+          if (winner) return new Response(await winner.arrayBuffer(), { headers: audioHeaders });
+        } else {
+          console.warn("sfx cache upload failed:", upErr.message);
+        }
+      }
+    }
+    return new Response(audioBuffer, { headers: audioHeaders });
   } catch (error) {
     console.error("SFX route error:", error);
     return new Response(
