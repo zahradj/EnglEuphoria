@@ -273,9 +273,20 @@ export type Scene =
        * songs generated before this field existed. */
       lineDurationsMs?: number[];
     }
-  | { id: string; kind: 'sound-model'; bg: string; who: CharKey; letter: string; phoneme: string; sound: string; teacher: string; anchors: { word: string; emoji: string; img?: string }[] }
+  | { id: string; kind: 'sound-model'; bg: string; who: CharKey; letter: string; phoneme: string; sound: string; teacher: string; anchors: { word: string; emoji: string; img?: string }[]; /** Wizard/magic styling (night-sky glow + sparkles). */ magic?: boolean }
   | { id: string; kind: 'trace'; bg: string; who: CharKey; letter: string; phoneme: string; word: string; teacher: string }
-  | { id: string; kind: 'word-build'; bg: string; teacher: string; rounds: { word: string; blankIndex: number; answer: string; choices: string[]; img?: string; emoji: string }[] }
+  | {
+      id: string; kind: 'word-build'; bg: string; teacher: string; magic?: boolean;
+      /** `tiles` splits the word into sound tiles (e.g. ['ch','i','p']) so a
+       *  digraph can be one blank; blankIndex then indexes `tiles`. */
+      rounds: { word: string; blankIndex: number; answer: string; choices: string[]; img?: string; emoji: string; tiles?: string[] }[];
+    }
+  | {
+      /** Tongue twister: hear it once, then say it three times — slow,
+       *  faster, magic speed — while a wand bounces word by word at that
+       *  pace. `focus` letters are glowing in the text. */
+      id: string; kind: 'tongue-twister'; bg: string; who: CharKey; teacher: string; line: string; focus: string;
+    }
   | { id: string; kind: 'letter-game'; bg: string; who: CharKey; teacher: string; mode: 'name' | 'sound'; rounds: { letter: string; phoneme?: string; choices: string[] }[] }
   | { id: string; kind: 'jigsaw-puzzle'; bg: string; teacher: string; image: string; rows: number; cols: number }
   | { id: string; kind: 'finale'; bg: string; who: CharKey; line: string };

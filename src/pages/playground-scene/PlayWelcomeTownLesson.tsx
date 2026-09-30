@@ -79,6 +79,7 @@ const REAL_SYNC_KINDS = new Set<Scene['kind']>([
   'vocab-spot', 'meet', 'echo', 'memory', 'choice', 'listen-tap', 'true-false',
   'frequency-ladder', 'roleplay', 'join-stage', 'hello-doors', 'flipbook',
   'sound-model', 'word-build', 'letter-game', 'spin-wheel', 'picture-match',
+  'tongue-twister',
 ]);
 
 const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcomeTownLessonProps>(function PlayWelcomeTownLesson(
