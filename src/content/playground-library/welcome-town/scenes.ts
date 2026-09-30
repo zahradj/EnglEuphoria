@@ -149,9 +149,45 @@ export type Scene =
   // composed into the opposite side) instead of floating centered over the
   // character's face — omit for the default centered layout.
   | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string; cardSide?: 'left' | 'right' }
-  | { id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string }
+  | {
+      id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string;
+      /** Which side of the frame is empty enough for the big bare word —
+       *  same convention as listen-repeat-cards' own bare/textSide (see
+       *  that scene's comment for the full reasoning: student clarity
+       *  first — the word must be large enough to actually read AND never
+       *  overlap the important part of the image, e.g. a character's
+       *  face). 'top' suits a background with no single clean empty side
+       *  (the subject roughly centered). Defaults to 'right'. */
+      textSide?: 'left' | 'right' | 'top';
+      /** Per-word color for a modeling SENTENCE (not a single vocabulary
+       *  word) — same convention and reasoning as listen-repeat-cards'
+       *  own wordColors: a fixed grammar chunk ("is in the") keeps one
+       *  consistent color across every scene that uses it so the student
+       *  learns to recognize the pattern by color, not just position or
+       *  memorization, while the actual taught word (e.g. the room name)
+       *  gets its own distinct color. Aligned by index to
+       *  `word.split(' ')`; null/omitted stays the default white.
+       *  Required for every scene whose `word` is a full sentence, not a
+       *  single word — color coding is how a student parses sentence
+       *  structure at a glance, not optional polish. */
+      wordColors?: (string | null)[];
+    }
   | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string }[] }
-  | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: { label: string; color: string; targetLeft: string; targetTop: string; who?: CharKey }[]; showBlanks?: boolean; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
+  | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: {
+      label: string; color: string; targetLeft: string; targetTop: string;
+      /** Optional real footprint of the target object, as percentages of
+       *  the scene (same convention as targetLeft/targetTop). When set,
+       *  a drop is scored against a rectangle of this size around the
+       *  target point instead of the default fixed-radius circle — a
+       *  wide, short object (a table) needs a wide, short hit area, not
+       *  a circle sized to fit a person-shaped character. Per direct
+       *  request after a table drop kept missing near its edges: "it
+       *  should match with any space that the table is in." Omit for
+       *  anything roughly circular/character-shaped, where the circular
+       *  fallback already covers the whole illustration comfortably. */
+      targetWidth?: string; targetHeight?: string;
+      who?: CharKey;
+    }[]; showBlanks?: boolean; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
   /** Live teacher-driven placement, matching a real competitor pattern the
    *  user pointed to directly (a house-cutaway slide where the teacher
    *  freely drags a character between rooms while quizzing the student out
@@ -178,7 +214,32 @@ export type Scene =
   // student can tap (reused verbatim from that same bg's own vocab-spot/
   // drag-match hotspot coordinates elsewhere in this file); each round in
   // `rounds` plays one spoken line and names which target answers it.
-  | { id: string; kind: 'listen-tap'; bg: string; teacher: string; targets: { label: string; left: string; top: string; color: string }[]; rounds: { prompt: string; answerLabel: string; who?: CharKey }[] }
+  | { id: string; kind: 'listen-tap'; bg: string; teacher: string; targets: {
+      label: string; left: string; top: string; color: string;
+      /** Real clickable region around the target, as percentages of the
+       *  scene (same convention as targetWidth/targetHeight on
+       *  drag-match). The resting hit-zone is invisible by design (see
+       *  ListenTapScene), so without this a student has to blind-guess a
+       *  small ~88px circle around `left`/`top` — reported live as
+       *  "clicking, clicking, clicking... they don't know what to
+       *  click." Set this whenever the target represents a whole real
+       *  area of the background (a room in a house cutaway, a zone of a
+       *  wider scene) so the ENTIRE area is clickable, not just its
+       *  center point. Omit for a small/precise target (a single
+       *  character or object) where the default fixed hit-zone is
+       *  already an easy, unambiguous tap. */
+      hitWidth?: string; hitHeight?: string;
+    }[]; rounds: {
+      prompt: string; answerLabel: string; who?: CharKey;
+      /** A real character sticker (transparent-background PNG, matching
+       *  drag-sticker's own art convention) shown on a correct tap
+       *  instead of the generic CAST-emoji badge — cleaner and more
+       *  presentable per direct request. Optional: most characters don't
+       *  have a dedicated sticker asset yet, so omitting it keeps the
+       *  emoji-badge fallback working exactly as before. Only supply
+       *  this when a real sticker image already exists for `who`. */
+      stickerImg?: string;
+    }[] }
   // A spoken statement, judged True or False — a third, genuinely different
   // listening-check modality from `choice` (pick from 3 text buttons) and
   // `listen-tap` (tap a real object in the scene): a fast binary call, no
@@ -1205,7 +1266,7 @@ export const LESSON_4_SCENES: Scene[] = [
     // First real use of `echo` in the Welcome Town family — see the file
     // banner above. A quick single-word speaking rep, deliberately shorter
     // than `meet`'s full modeled line, right after that longer model.
-    id: 'wt4-echo-hello', kind: 'echo', bg: bgExpressHelloV2, who: 'pip', teacher: 'Now you try! Hold the button and say it with Pip!', word: 'Hello!',
+    id: 'wt4-echo-hello', kind: 'echo', bg: bgExpressHelloV2, who: 'pip', textSide: 'top', teacher: 'Now you try! Hold the button and say it with Pip!', word: 'Hello!',
   },
 
   {
@@ -1232,7 +1293,7 @@ export const LESSON_4_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'wt4-echo-friend', kind: 'echo', bg: bgExpressFriendV2, who: 'mia', teacher: 'Say it with Mia! Hold and say it!', word: 'Friend!',
+    id: 'wt4-echo-friend', kind: 'echo', bg: bgExpressFriendV2, who: 'mia', textSide: 'top', teacher: 'Say it with Mia! Hold and say it!', word: 'Friend!',
   },
 
   {

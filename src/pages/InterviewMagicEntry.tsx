@@ -241,6 +241,20 @@ export default function InterviewMagicEntry() {
         if (data.session?.user?.id) break;
         await new Promise((r) => setTimeout(r, 100));
       }
+      // interview_flow_active was only ever meant to protect THIS entry
+      // sequence — stopping HomeGate/Dashboard from racing the initial
+      // magic-link sign-in into the wrong place before the real session
+      // settles. It was never cleared anywhere, so it silently suppressed
+      // role re-hydration for the rest of the tab's life: any LATER auth
+      // event (e.g. the several supabase.auth calls TeacherClassroom's
+      // handleEndClass makes when the lesson ends) would still hit the
+      // suppressed path in AuthContext, skip the real DB role check, and
+      // fall back to a guessed role — which is exactly how a teacher
+      // finishing an interview-demo lesson could get bounced into a
+      // student hub's placement test. Clear it now: the session is
+      // confirmed real at this point, so every later auth event should
+      // hydrate normally again.
+      try { sessionStorage.removeItem('interview_flow_active'); } catch {/* ignore */}
       navigate(`/classroom/${sessionId}?interview=1`, { replace: true });
     } catch (e: any) {
       toast.error(e?.message ?? 'Could not enter the classroom.');

@@ -179,6 +179,20 @@ const KITCHEN_SPOT = { left: '20%', top: '75%' };
 const BEDROOM_SPOT = { left: '80%', top: '55%' };
 const TABLE_SPOT = { left: '32%', top: '75%' };
 const CHAIR_SPOT = { left: '63%', top: '78%' };
+// Real approximate footprint of each piece of furniture in
+// bg-castle-kitchen.png, as percentages of the scene — passed to
+// mc-drag-furniture's items as targetWidth/targetHeight below so a drop
+// is scored against the object's actual (wide-and-low for the table,
+// narrower-and-taller for the chair) shape instead of one fixed-radius
+// circle. Per direct report: dropping near the table's edge, and
+// separately near the top of the chair's backrest, still registered as a
+// miss with the old single-radius circle. Generous on purpose — these
+// two items sit far enough apart in the scene that over-covering either
+// one carries no real risk of matching the wrong item (see
+// DragMatchScene's hit-test: a drop is only ever checked against the
+// item currently being dragged, never compared against its neighbor).
+const TABLE_SIZE = { targetWidth: '42%', targetHeight: '26%' };
+const CHAIR_SIZE = { targetWidth: '26%', targetHeight: '55%' };
 
 export const LESSON_A1U9L1_TITLE = 'Rooms in the Castle: Kitchen, Bedroom';
 export const LESSON_A1U9L1_OBJECTIVE =
@@ -265,9 +279,16 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     // similar sentences on their own. Classic gradual-release sequencing
     // (model → guided practice), added directly on request, right before
     // the game it prepares the student for.
-    id: 'mc-model-wim-bedroom', kind: 'echo', bg: bgBedroomWim, who: 'pip',
+    id: 'mc-model-wim-bedroom', kind: 'echo', bg: bgBedroomWim, who: 'pip', textSide: 'top',
     teacher: 'Look! Do you see Wim? Listen to what Pip says about him.',
     word: 'Wim is in the bedroom!',
+    // Wim -> his own CAST color (#4A4E69, matches every pointer/chip that
+    // names him elsewhere); "is in the" -> one fixed color shared by every
+    // future "<char> is in the <room>" scene so the pattern reads as one
+    // recognizable chunk; "bedroom!" -> the room's own established teal
+    // (#2EC4B6, same hotspot color used for Bedroom at lines 196 and 299 in
+    // this file) so the taught word visually ties back to the room itself.
+    wordColors: ['#4A4E69', '#EF4444', '#EF4444', '#EF4444', '#2EC4B6'],
   },
 
   {
@@ -305,21 +326,34 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     // as the very first version of this activity.
     id: 'mc-listen-find-wim', kind: 'listen-tap', bg: bgCastleOverview,
     teacher: 'Listen carefully, then tap where Wim or Cat-cat is hiding!',
-    targets: [
-      { label: 'Living Room', ...OVERVIEW_LIVING_ROOM, color: '#8B5A2B' },
-      { label: 'Hallway', ...OVERVIEW_HALLWAY, color: '#F4A340' },
-      { label: 'Bathroom', ...OVERVIEW_BATHROOM, color: '#2EC4B6' },
-      { label: 'Bedroom', ...OVERVIEW_BEDROOM, color: '#2EC4B6' },
-      { label: 'Kitchen', ...OVERVIEW_KITCHEN, color: '#C97A2F' },
-      { label: 'Dining Room', ...OVERVIEW_DINING_ROOM, color: '#C97A2F' },
-    ],
+    // ROOM_HIT: the whole 6-room cutaway is a clean 3-column x 2-row grid
+    // (matches the OVERVIEW_* anchor spacing above) — every room gets the
+    // SAME generous region size so the entire room is clickable, not just
+    // an ~88px dot at its center. Per direct report: with the resting
+    // circle now invisible (see ListenTapScene), a student had nothing to
+    // aim at and kept mis-clicking blank space.
+    targets: (() => {
+      const ROOM_HIT = { hitWidth: '30%', hitHeight: '36%' };
+      return [
+        { label: 'Living Room', ...OVERVIEW_LIVING_ROOM, ...ROOM_HIT, color: '#8B5A2B' },
+        { label: 'Hallway', ...OVERVIEW_HALLWAY, ...ROOM_HIT, color: '#F4A340' },
+        { label: 'Bathroom', ...OVERVIEW_BATHROOM, ...ROOM_HIT, color: '#2EC4B6' },
+        { label: 'Bedroom', ...OVERVIEW_BEDROOM, ...ROOM_HIT, color: '#2EC4B6' },
+        { label: 'Kitchen', ...OVERVIEW_KITCHEN, ...ROOM_HIT, color: '#C97A2F' },
+        { label: 'Dining Room', ...OVERVIEW_DINING_ROOM, ...ROOM_HIT, color: '#C97A2F' },
+      ];
+    })(),
+    // stickerWim/stickerCatcat (already generated for drag-sticker above)
+    // reused here so a correct tap reveals the real character art instead
+    // of the generic CAST-emoji fallback — "more clean, more presentable"
+    // per direct request.
     rounds: [
-      { prompt: 'Where is Wim? He is in the kitchen!', answerLabel: 'Kitchen', who: 'wim' },
-      { prompt: 'Where is Cat-cat? She is in the living room!', answerLabel: 'Living Room', who: 'catcat' },
-      { prompt: 'Where is Wim? He is in the bathroom!', answerLabel: 'Bathroom', who: 'wim' },
-      { prompt: 'Where is Cat-cat? She is in the bedroom!', answerLabel: 'Bedroom', who: 'catcat' },
-      { prompt: 'Where is Wim? He is in the dining room!', answerLabel: 'Dining Room', who: 'wim' },
-      { prompt: 'Where is Cat-cat? She is in the hallway!', answerLabel: 'Hallway', who: 'catcat' },
+      { prompt: 'Where is Wim? He is in the kitchen!', answerLabel: 'Kitchen', who: 'wim', stickerImg: stickerWim },
+      { prompt: 'Where is Cat-cat? She is in the living room!', answerLabel: 'Living Room', who: 'catcat', stickerImg: stickerCatcat },
+      { prompt: 'Where is Wim? He is in the bathroom!', answerLabel: 'Bathroom', who: 'wim', stickerImg: stickerWim },
+      { prompt: 'Where is Cat-cat? She is in the bedroom!', answerLabel: 'Bedroom', who: 'catcat', stickerImg: stickerCatcat },
+      { prompt: 'Where is Wim? He is in the dining room!', answerLabel: 'Dining Room', who: 'wim', stickerImg: stickerWim },
+      { prompt: 'Where is Cat-cat? She is in the hallway!', answerLabel: 'Hallway', who: 'catcat', stickerImg: stickerCatcat },
     ],
   },
 
@@ -364,8 +398,8 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     id: 'mc-drag-furniture', kind: 'drag-match', bg: bgKitchen,
     teacher: 'Listen, then drag each word onto the matching furniture!',
     items: [
-      { label: 'Table', color: '#8B5A2B', targetLeft: TABLE_SPOT.left, targetTop: TABLE_SPOT.top },
-      { label: 'Chair', color: '#C97A2F', targetLeft: CHAIR_SPOT.left, targetTop: CHAIR_SPOT.top },
+      { label: 'Table', color: '#8B5A2B', targetLeft: TABLE_SPOT.left, targetTop: TABLE_SPOT.top, ...TABLE_SIZE },
+      { label: 'Chair', color: '#C97A2F', targetLeft: CHAIR_SPOT.left, targetTop: CHAIR_SPOT.top, ...CHAIR_SIZE },
     ],
   },
 

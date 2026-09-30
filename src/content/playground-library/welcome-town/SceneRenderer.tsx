@@ -43,7 +43,13 @@ export function GlassCard({ children, className = '' }: { children: React.ReactN
  *  tap-to-reveal behavior — this one only ever points, it never opens a
  *  flashcard. */
 function CharacterPointer({ left, top, dir = 'down', color }: { left: string; top: string; dir?: 'down' | 'left' | 'right'; color: string }) {
-  const GAP = 62;
+  // GAP and the arrow's own size were tuned small enough that on a real
+  // classroom-scaled frame (letterboxed well below full viewport size, see
+  // useFrameScale) the arrow read as a barely-visible sliver — reported
+  // live as "the arrows look very small." Both bumped ~45%; GAP grows with
+  // the arrow so it still sits fully clear of whatever it's pointing at
+  // rather than overlapping it.
+  const GAP = 90;
   const pos = dir === 'down'
     ? { left, top: `calc(${top} - ${GAP}px)` }
     : dir === 'right'
@@ -65,8 +71,8 @@ function CharacterPointer({ left, top, dir = 'down', color }: { left: string; to
       />
       <div className="pointer-events-none absolute z-20" style={{ ...pos, transform: `translate(-50%, -50%) rotate(${angle}deg)` }}>
         <span className="relative block" style={{ animation: 'lep1-hop 0.9s ease-in-out infinite' }}>
-          <span className="pointer-events-none absolute bottom-0 left-1/2 h-12 w-12 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${color}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
-          <svg width="52" height="76" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
+          <span className="pointer-events-none absolute bottom-0 left-1/2 h-16 w-16 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${color}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
+          <svg width="76" height="110" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
             <path
               d="M13 3 C13 1.9 13.9 1 15 1 L25 1 C26.1 1 27 1.9 27 3 L27 21 L36 21 C37.9 21 38.8 23.3 37.4 24.6 L21.4 43.6 C20.6 44.5 19.4 44.5 18.6 43.6 L2.6 24.6 C1.2 23.3 2.1 21 4 21 L13 21 Z"
               fill={color}
@@ -481,7 +487,10 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
           `dir`, whichever side actually has room in that background. */}
       {current && (() => {
         const dir = current.dir ?? 'down';
-        const GAP = 62;
+        // Matches CharacterPointer's own bump (52x76 -> 76x110, GAP 62 ->
+        // 90) — same "arrows look very small" report applied to this
+        // scene's own separately-drawn arrow.
+        const GAP = 90;
         const pos = dir === 'down'
           ? { left: current.left, top: `calc(${current.top} - ${GAP}px)` }
           : dir === 'right'
@@ -505,9 +514,9 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
                 each other on the shared `transform` property. */}
             <span className="relative block" style={{ animation: revealed ? undefined : 'lep1-hop 0.9s ease-in-out infinite' }}>
               {!revealed && (
-                <span className="pointer-events-none absolute bottom-0 left-1/2 h-12 w-12 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${current.color}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
+                <span className="pointer-events-none absolute bottom-0 left-1/2 h-16 w-16 -translate-x-1/2 translate-y-1/2 rounded-full" style={{ background: `radial-gradient(circle, ${current.color}88, transparent 65%)`, animation: 'lep1-ping 1.4s ease-out infinite' }} />
               )}
-              <svg width="52" height="76" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
+              <svg width="76" height="110" viewBox="0 0 40 58" className="relative drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]">
                 <path
                   d="M13 3 C13 1.9 13.9 1 15 1 L25 1 C26.1 1 27 1.9 27 3 L27 21 L36 21 C37.9 21 38.8 23.3 37.4 24.6 L21.4 43.6 C20.6 44.5 19.4 44.5 18.6 43.6 L2.6 24.6 C1.2 23.3 2.1 21 4 21 L13 21 Z"
                   fill={current.color}
@@ -530,19 +539,34 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
           don't overlap. */}
       {current && revealed && (() => {
         const dir = current.dir ?? 'down';
-        const GAP = 118;
+        // Nudged out further to clear the now-bigger arrow (GAP 90 above)
+        // by the same margin it used to clear the old smaller one.
+        const GAP = 150;
         const pos = dir === 'down'
           ? { left: current.left, top: `calc(${current.top} - ${GAP}px)` }
           : dir === 'right'
           ? { left: `calc(${current.left} - ${GAP}px)`, top: current.top }
           : { left: `calc(${current.left} + ${GAP}px)`, top: current.top };
+        // The bigger chip (below) is wide enough that centering it on a
+        // point near the left/right edge (e.g. a room hotspot at left:
+        // 18%) pushed it half off-screen — confirmed live, the emoji icon
+        // was clipped by the viewport edge. Anchor from whichever side has
+        // room instead of always centering, so the chip grows INTO the
+        // scene rather than off of it.
+        const leftPct = parseFloat(current.left);
+        const translateX = leftPct < 25 ? '0%' : leftPct > 75 ? '-100%' : '-50%';
         return (
           <div
-            className="pointer-events-none absolute z-40 -translate-x-1/2 -translate-y-1/2 px-2"
-            style={{ ...pos, animation: 'lep1-pop 0.25s ease-out' }}
+            className="pointer-events-none absolute z-40 px-2"
+            style={{ ...pos, transform: `translate(${translateX}, -50%)`, animation: 'lep1-pop 0.25s ease-out' }}
           >
-            <div className="pointer-events-auto flex items-center gap-2 rounded-full border-2 border-white bg-white/97 py-2 pl-3 pr-2 shadow-xl backdrop-blur">
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-xl" style={{ background: `${current.color}22` }}>{current.emoji}</span>
+            {/* Bumped up a full size tier across the board (icon, text,
+                buttons, border, padding) — the old chip read as a barely-
+                visible sliver of text against a full scene background,
+                reported live as "the vocabulary stickers... don't look
+                much visible to the student." */}
+            <div className="pointer-events-auto flex items-center gap-3 rounded-full border-[3px] border-white bg-white/97 py-3 pl-3 pr-3 shadow-2xl backdrop-blur">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-3xl" style={{ background: `${current.color}22` }}>{current.emoji}</span>
               {/* Fixed dark neutral, NOT `current.color`: that per-item theme
                   color is picked for icon/marker variety, not guaranteed
                   legible as TEXT on this near-white pill — a pale color
@@ -552,9 +576,9 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
                   own `#9A8C98` marker color made its label read as
                   invisible. Word legibility must never depend on which
                   color a given lesson happens to pick. */}
-              <span className="text-base font-black whitespace-nowrap text-neutral-800">{current.label}</span>
-              <button onClick={hearSentence} aria-label={`Hear "${current.label}" in a sentence`} className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-neutral-400 transition active:scale-90 hover:text-neutral-600">🔊</button>
-              <button onClick={dismiss} aria-label="Got it" className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-white shadow transition active:scale-90" style={{ background: current.color }}>✓</button>
+              <span className="text-2xl font-black whitespace-nowrap text-neutral-800 sm:text-3xl">{current.label}</span>
+              <button onClick={hearSentence} aria-label={`Hear "${current.label}" in a sentence`} className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-xl text-neutral-400 transition active:scale-90 hover:text-neutral-600">🔊</button>
+              <button onClick={dismiss} aria-label="Got it" className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-2xl text-white shadow transition active:scale-90" style={{ background: current.color }}>✓</button>
             </div>
           </div>
         );
@@ -587,27 +611,106 @@ function EchoScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, { kin
   };
   const endHold = () => { setState((s) => ({ ...s, held: false })); if (holdTimer.current) window.clearTimeout(holdTimer.current); };
 
+  // UNIVERSAL RULE for every modeling/vocabulary scene, not just this one
+  // (see unit1/SceneRenderer.tsx's ListenRepeatCardsScene `bare`/`textSide`
+  // mode, the proven original of this exact pattern): student clarity
+  // comes first. The old layout put everything — instruction, word,
+  // Listen, Hold&say, Next — inside one centered GlassCard sitting on top
+  // of the full-bleed scene image already behind it, which (a) covered
+  // the exact thing a modeling scene exists to show (e.g. "look, Wim is
+  // really standing right there") and (b) is not how a young student
+  // actually reads best — a small pill is easy to skip past, not a real
+  // reading target. The word is now large enough to read at a glance and
+  // placed on whichever side of the frame is actually empty, so it never
+  // overlaps the character/subject it's paired with — never guess which
+  // side is safe; look at the background and choose `textSide`
+  // deliberately per scene.
+  const side = scene.textSide ?? 'right';
+  // This mode serves two different-length cases: a single vocabulary word
+  // ("Hello!") and a full modeling sentence ("Wim is in the bedroom!").
+  // One fixed huge size fits the first and wraps the second onto 2+ lines
+  // at that same size — long enough to run down into the character it's
+  // paired with. Scale down as word count grows so a full sentence still
+  // reads clearly (still large, still high-contrast) without doing that.
+  const wordCount = scene.word.trim().split(/\s+/).length;
+  const fontSize =
+    wordCount <= 1
+      ? (side === 'top' ? 'clamp(3.5rem, 10vw, 7rem)' : 'clamp(4.5rem, 13vw, 10rem)')
+      : wordCount <= 3
+      ? (side === 'top' ? 'clamp(2.5rem, 7vw, 4.5rem)' : 'clamp(2.75rem, 8vw, 5rem)')
+      : (side === 'top' ? 'clamp(2rem, 5.5vw, 3.5rem)' : 'clamp(2.25rem, 6vw, 4rem)');
   return (
-    <div className="absolute inset-x-0 top-8 z-20 flex justify-center px-4 sm:top-12">
-      <GlassCard className="w-full max-w-sm">
-        <p className="text-center text-lg font-bold text-orange-700">{scene.teacher}</p>
-        <div className="mt-4 grid place-items-center rounded-3xl bg-white/60 p-6">
-          <span className="text-5xl" style={{ animation: 'lep1-hop 1.4s ease-in-out infinite' }}>{c.emoji}</span>
-          <p className="mt-2 text-sm font-black uppercase tracking-widest" style={{ color: c.color }}>{c.name} says</p>
-          <p className="mt-1 text-3xl font-black" style={{ color: c.color }}>"{scene.word}"</p>
+    <div className="absolute inset-0">
+      <div className="pointer-events-none absolute inset-x-0 top-4 z-30 flex justify-center px-4">
+        <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
+          {scene.teacher}
         </div>
-        <button onClick={hear} className="mt-4 w-full rounded-full bg-white py-3 text-lg font-bold text-orange-700 shadow-md ring-2 ring-orange-200 active:scale-95">
-          🔊 Listen {heard > 0 && <span className="text-sm opacity-60">({heard})</span>}
-        </button>
-        <button
-          onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold} disabled={heard === 0}
-          className={`mt-3 w-full rounded-full py-6 text-2xl font-black text-white shadow-xl transition ${held ? 'scale-95' : ''} disabled:opacity-40`}
-          style={{ background: done ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
+      </div>
+      <div className={
+        side === 'top'
+          ? 'absolute inset-x-0 top-24 z-20 flex flex-col items-center gap-6 px-4'
+          : `absolute inset-y-0 z-20 flex w-1/2 flex-col items-center justify-center gap-8 px-1 ${side === 'right' ? 'right-0' : 'left-0'}`
+      }>
+        <p
+          className="max-w-[90vw] text-center font-black leading-tight text-white"
+          style={{
+            fontSize,
+            // A dark contrast shadow (readability on any background) plus a
+            // soft glow in the speaking character's own color underneath it
+            // — same purpose as a card used to serve (giving the bare text
+            // a "presence" of its own) without bringing back the card that
+            // was covering the scene.
+            filter: `drop-shadow(0 6px 14px rgba(0,0,0,0.7)) drop-shadow(0 0 22px ${c.color}88)`,
+          }}
         >
-          {done ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & say it'}
-        </button>
-        <PrimaryButton onClick={onNext} disabled={!done}>Next →</PrimaryButton>
-      </GlassCard>
+          {scene.wordColors
+            ? scene.word.split(' ').map((w, i) => (
+                <span key={i} style={scene.wordColors![i] ? { color: scene.wordColors![i]! } : undefined}>
+                  {w}{i < scene.word.split(' ').length - 1 ? ' ' : ''}
+                </span>
+              ))
+            : scene.word}
+        </p>
+        {/* One grouped control cluster instead of a lone floating "PIP SAYS"
+            label sitting disconnected above two generic white pills — the
+            speaker chip (avatar + name, character-colored) now visually
+            leads straight into the buttons below it, and both buttons pick
+            up the character's own CAST color as their accent instead of a
+            fixed orange, tying them to the rest of this lesson's chip
+            language (e.g. the vocab-spot room labels). Reported as "still
+            doesn't feel satisfying" on the plain flat-shadow-text version. */}
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex items-center gap-2 rounded-full bg-white/95 py-1.5 pl-1.5 pr-4 shadow-xl backdrop-blur">
+            <span className="grid h-7 w-7 place-items-center rounded-full text-base shadow-inner" style={{ background: c.color }}>
+              {c.emoji}
+            </span>
+            <span className="text-xs font-black uppercase tracking-widest sm:text-sm" style={{ color: c.color }}>
+              {c.name} says
+            </span>
+          </div>
+          <div className={side === 'top' ? 'flex flex-row items-center gap-3' : 'flex flex-col items-center gap-3'}>
+            <button
+              onClick={hear}
+              className="rounded-full border-2 bg-white px-6 py-3 text-sm font-bold shadow-xl transition active:scale-95 sm:text-base"
+              style={{ color: c.color, borderColor: c.color }}
+            >
+              🔊 Listen {heard > 0 && <span className="opacity-60">({heard})</span>}
+            </button>
+            <button
+              onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold} disabled={heard === 0}
+              className={`rounded-full px-6 py-3 text-sm font-black text-white shadow-xl transition sm:text-base ${held ? 'scale-95' : ''} disabled:opacity-40`}
+              style={{ background: done ? 'linear-gradient(90deg, #10B981, #34D399)' : `linear-gradient(90deg, ${c.color}, ${c.color}cc)` }}
+            >
+              {done ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & say it'}
+            </button>
+          </div>
+        </div>
+      </div>
+      {done && (
+        <div className="absolute inset-x-0 bottom-6 z-40 flex justify-center">
+          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next →</button>
+        </div>
+      )}
     </div>
   );
 }
@@ -738,16 +841,44 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
         const rect = container.getBoundingClientRect();
         const targetX = rect.left + (parseFloat(item.targetLeft) / 100) * rect.width;
         const targetY = rect.top + (parseFloat(item.targetTop) / 100) * rect.height;
-        const dist = Math.hypot(e.clientX - targetX, e.clientY - targetY);
         // Vocab-matching drops (no showBlanks landing-zone box drawn) land
-        // anywhere on a full character illustration, not a pinpoint — 0.14
-        // was tight enough that dropping on a visibly-correct character
-        // (e.g. Mia) still missed and registered as wrong. Widened so the
-        // whole character's rendered footprint is a comfortable hit area;
-        // sentence-builder (showBlanks) drops stay tighter since those have
-        // a small drawn blank to aim at, not a full illustration.
-        const tolerance = Math.min(rect.width, rect.height) * (scene.showBlanks ? 0.14 : 0.22);
-        if (dist <= tolerance) {
+        // anywhere on a full illustration, not a pinpoint — 0.14 was tight
+        // enough that dropping on a visibly-correct object still missed
+        // and registered as wrong. Widened so a typical character/object's
+        // rendered footprint is a comfortable hit area; sentence-builder
+        // (showBlanks) drops stay tighter since those have a small drawn
+        // blank to aim at, not a full illustration.
+        //
+        // When an item declares its own targetWidth/targetHeight (a wide,
+        // short object like a table isn't well covered by ANY single
+        // circle radius — too small and it misses the edges, too big and
+        // it starts overlapping a neighboring item), test against that
+        // rectangle instead, padded a little so a drop just outside the
+        // drawn edge still counts.
+        let hit: boolean;
+        if (item.targetWidth && item.targetHeight) {
+          // targetLeft/targetTop is where the OBJECT STANDS, not its
+          // visual center — every *_SPOT convention in this app anchors
+          // near an object's base/floor-contact point (same reason a
+          // character's own left/top works for CharacterPointer). A box
+          // centered on that anchor undershoots the top of anything tall
+          // (a chair's backrest sits mostly ABOVE its anchor, almost none
+          // below it) — confirmed live, a drop right on the chair's
+          // backrest still missed. So the box extends the object's full
+          // height UPWARD from the anchor, with only a small pad below
+          // it, rather than splitting the height evenly both ways.
+          const w = (parseFloat(item.targetWidth) / 100) * rect.width;
+          const h = (parseFloat(item.targetHeight) / 100) * rect.height;
+          const pad = Math.min(rect.width, rect.height) * 0.08;
+          const withinX = Math.abs(e.clientX - targetX) <= w / 2 + pad;
+          const withinY = e.clientY <= targetY + pad && e.clientY >= targetY - h - pad;
+          hit = withinX && withinY;
+        } else {
+          const dist = Math.hypot(e.clientX - targetX, e.clientY - targetY);
+          const tolerance = Math.min(rect.width, rect.height) * (scene.showBlanks ? 0.14 : 0.26);
+          hit = dist <= tolerance;
+        }
+        if (hit) {
           sfx.match();
           setPlaced((prev) => {
             const next = new Set(prev).add(drag.idx);
@@ -801,13 +932,18 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
           <span className="invisible text-lg font-black uppercase tracking-wide sm:text-xl">{item.label}</span>
         </div>
       ))}
+      {/* Unified to the same larger size as the tray buttons (below) —
+          previously kept smaller here on the theory that a passive
+          confirmation chip didn't need to match the interactive tray
+          button's size, but reported live as still too small to read
+          once placed. */}
       {scene.items.map((item, i) => placed.has(i) && (
         <div
           key={`placed-${i}`}
-          className={`pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 grid place-items-center shadow-xl ring-4 ring-white ${scene.showBlanks ? 'rounded-2xl px-6 py-4' : 'rounded-xl px-3 py-2'}`}
+          className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-2xl px-7 py-5 shadow-xl ring-4 ring-white"
           style={{ left: item.targetLeft, top: item.targetTop, background: item.color, animation: 'lep1-pop 0.4s ease-out' }}
         >
-          <span className={`font-black uppercase tracking-wide text-white ${scene.showBlanks ? 'text-lg sm:text-xl' : 'text-sm'}`}>{item.label}</span>
+          <span className="text-xl font-black uppercase tracking-wide text-white sm:text-2xl">{item.label}</span>
         </div>
       ))}
       <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex flex-wrap justify-center gap-3 px-4">
@@ -835,10 +971,15 @@ function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
               key={`tray-${i}`}
               onPointerDown={(e) => startDrag(e, i)}
               aria-label={`Drag the word ${item.label}`}
-              className={`touch-none shadow-2xl ring-4 ring-white transition active:scale-95 ${scene.showBlanks ? 'rounded-2xl px-6 py-4' : 'rounded-xl px-4 py-3'} ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''} ${isBeingDragged ? 'pointer-events-none opacity-0' : 'pointer-events-auto'}`}
+              className={`touch-none shadow-2xl ring-4 ring-white transition active:scale-95 rounded-2xl px-7 py-5 ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''} ${isBeingDragged ? 'pointer-events-none opacity-0' : 'pointer-events-auto'}`}
               style={{ background: item.color, animation: isBeingDragged || wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
             >
-              <span className={`font-black uppercase tracking-wide text-white ${scene.showBlanks ? 'text-lg sm:text-xl' : 'text-sm'}`}>{item.label}</span>
+              {/* Unified to one large size regardless of showBlanks — the
+                  smaller vocab-matching variant (text-sm, px-4 py-3) read
+                  as a tiny target on a real classroom-scaled frame,
+                  reported live as "the grab and drop buttons are too
+                  small on the screen." */}
+              <span className="text-xl font-black uppercase tracking-wide text-white sm:text-2xl">{item.label}</span>
             </button>
           );
         })}
@@ -972,10 +1113,15 @@ function DragStickerScene({ scene, onNext, onWin }: { scene: Extract<Scene, { ki
           </button>
         );
       })}
-
-      <div className="absolute inset-x-0 bottom-6 z-40 flex justify-center">
-        <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Great job! ⭐ Next</button>
-      </div>
+      {/* No in-scene "Next" button here on purpose — this is an open-ended,
+       *  teacher-paced free-drag scene with no completion state to gate on,
+       *  so the button was ALWAYS visible from the moment the scene loaded.
+       *  Both the solo player's own bottom nav bar and the classroom's
+       *  external Back/Next controls already advance the lesson; this
+       *  second, always-on button just sat permanently over the lower
+       *  rooms of the castle, blocking exactly the content the teacher and
+       *  student are dragging characters into. Reported live as "Great
+       *  job! Next is covering the view." */}
     </div>
   );
 }
@@ -1112,19 +1258,74 @@ function ListenTapScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract
         // spot — same "a stuck student always has a way forward" pattern
         // as the Pre-A1 find-in-scene game this mechanic was modeled on.
         const revealCorrect = misses >= 2 && t.label === r!.answerLabel && !correct;
+        // Resting state is now a fully invisible hit-zone — the old
+        // permanently-visible ring (border-white/70 bg-white/10) marked
+        // every tappable spot before the student ever listened, turning a
+        // listening check into a "click the circle you can already see"
+        // game. Reported live: "remove the circles... to not be
+        // visible." The only circle a student ever sees now is transient
+        // feedback: red on a wrong tap, or the revealCorrect hint after
+        // they've genuinely struggled — never a standing giveaway.
         return (
           <button
             key={t.label}
             onClick={() => tap(t.label)}
             disabled={correct}
             aria-label={t.label}
-            className={`absolute z-20 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 transition active:scale-90 ${isWrong ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400 bg-red-400/20' : isRight ? 'scale-110 border-green-400 bg-green-400/30' : revealCorrect ? 'border-white bg-white/25' : 'border-white/70 bg-white/10'}`}
+            className={`absolute z-20 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center border-4 transition active:scale-[0.98] ${t.hitWidth ? 'rounded-3xl' : 'rounded-full'} ${isWrong ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400 bg-red-400/20' : revealCorrect ? 'border-white bg-white/25' : 'border-transparent bg-transparent'}`}
             style={{
-              left: t.left, top: t.top, width: 88, height: 88,
-              boxShadow: isRight ? `0 0 0 6px ${t.color}aa` : revealCorrect ? '0 0 0 6px rgba(255,255,255,0.85)' : undefined,
+              left: t.left, top: t.top,
+              width: t.hitWidth ?? 88, height: t.hitHeight ?? 88,
               animation: revealCorrect && !isRight ? 'lep1-ping 1s ease-in-out infinite' : undefined,
             }}
-          />
+          >
+            {/* On the correct tap, the character the prompt was ABOUT
+                (r.who — e.g. "Where is Cat-cat? She is in the living
+                room!") visibly appears right where the student tapped,
+                instead of just a colored ring — per direct request: "when
+                the student clicks a place, the character appears."
+                Three tiers, cleanest available wins: a real sticker image
+                (r.stickerImg, matching drag-sticker's own art convention —
+                "more clean, more presentable" per direct follow-up) when
+                one exists for this round; the CAST emoji in a colored
+                badge when it doesn't (works for every character in every
+                world with zero new art); a plain checkmark when the round
+                names no character at all, so feedback never silently
+                disappears. */}
+            {isRight && (
+              r.stickerImg ? (
+                <img
+                  src={r.stickerImg}
+                  alt={r.who ? CAST[r.who].name : t.label}
+                  className="h-40 w-40 object-contain drop-shadow-[0_14px_22px_rgba(0,0,0,0.5)] sm:h-48 sm:w-48"
+                  // The parent button is a fixed 88x88 hit-box (t's tap
+                  // target size) — Tailwind's own preflight reset sets
+                  // `img { max-width: 100% }`, which silently capped this
+                  // image's rendered width to that 88px box regardless of
+                  // the h-40/sm:h-48 classes above, no matter how large
+                  // they said to render. Overriding max-width/max-height
+                  // here lets the sticker render at its actual intended
+                  // size, free to visually overflow the (now-invisible,
+                  // already-tapped) hit-box beneath it.
+                  style={{ animation: 'lep1-pop 0.35s ease-out', maxWidth: 'none', maxHeight: 'none' }}
+                />
+              ) : r.who ? (
+                <span
+                  className="grid h-20 w-20 place-items-center rounded-full text-4xl shadow-2xl ring-4 ring-white"
+                  style={{ background: CAST[r.who].color, animation: 'lep1-pop 0.35s ease-out' }}
+                >
+                  {CAST[r.who].emoji}
+                </span>
+              ) : (
+                <span
+                  className="grid h-16 w-16 place-items-center rounded-full text-3xl font-black text-white shadow-2xl ring-4 ring-white"
+                  style={{ background: t.color, animation: 'lep1-pop 0.35s ease-out' }}
+                >
+                  ✓
+                </span>
+              )
+            )}
+          </button>
         );
       })}
     </div>
