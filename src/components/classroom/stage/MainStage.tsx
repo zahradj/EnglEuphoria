@@ -12,10 +12,8 @@ import { ClassroomToolOverlay } from './ClassroomToolOverlay';
 import { EmbeddedSceneLesson } from './EmbeddedSceneLesson';
 import { EmbeddedWelcomeTownLesson } from './EmbeddedWelcomeTownLesson';
 import { ClassroomSceneErrorBoundary } from './ClassroomSceneErrorBoundary';
-import { useFrameScale } from '@/hooks/useFrameScale';
 import { useLetterboxSize } from '@/hooks/useLetterboxSize';
 import { isWelcomeTownFamilyFormat } from '@/content/playground-library/sceneLessonFormats';
-import { useViewportRatio } from '@/hooks/useViewportRatio';
 
 /** The two embedded scene players (Pre-A1 lep1-rich, A1/A2 wt-rich/wt-a2-rich)
  *  expose the same 4 imperative methods from different source files —
@@ -84,6 +82,12 @@ export interface MainStageHandle {
   setSceneInteractionUnlocked: (unlocked: boolean) => void;
 }
 
+// Fixed design canvas every classroom scene lesson is laid out on before
+// being scaled into the (16:9) scene frame — identical on every screen.
+// A typical laptop viewport, i.e. the size the scene art/layout was tuned on.
+const SCENE_DESIGN_W = 1440;
+const SCENE_DESIGN_H = 810;
+
 const MODE_META: Record<StageMode, { label: string; Icon: React.ComponentType<{ className?: string }> }> = {
   slide: { label: 'Slide', Icon: Layout },
   web: { label: 'Web Content', Icon: Globe },
@@ -136,21 +140,21 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
 
   const sceneLessonHandleRef = useRef<SceneLessonHandle>(null);
   const sceneStageAreaRef = useRef<HTMLDivElement>(null);
-  // Match the frame's shape to the real device viewport's shape (portrait
-  // phone -> portrait frame, landscape desktop -> landscape frame) instead
-  // of a fixed 16:9 landscape box. The scene player's own vh/vw-based
-  // content is authored to fill a full-viewport-shaped space (see
-  // useFrameScale's doc comment) — on a portrait phone, forcing a 16:9 box
-  // produced a short, squat frame, and useFrameScale then had to shrink
-  // that vh/vw content drastically to cram it in, reported live as "the
-  // lesson is zoomed in, bigger than the frame" on phone/tablet specifically
-  // (desktop, whose real viewport ratio is already close to 16:9, looked
-  // fine). See the comment further down for the original desktop bug this
-  // letterboxing mechanism exists to fix — a dynamic ratio fixes both.
-  const viewportRatio = useViewportRatio();
-  const sceneFrameSize = useLetterboxSize(sceneStageAreaRef, viewportRatio);
+  // The scene frame uses ONE fixed 16:9
+  // shape and the scene is laid out on a fixed-size design canvas
+  // (SCENE_DESIGN_W x SCENE_DESIGN_H) that is scaled to fit. Tracking each
+  // device's own ratio meant the teacher's and student's frames were
+  // different shapes — the bg art cropped differently and every
+  // percentage-placed element (and every vw/vh-sized one, whose units
+  // followed each browser window) landed on a different spot of the
+  // picture on each screen, and pen strokes (normalized to a differently-
+  // shaped box) came out shifted/skewed. Scene content now sizes in
+  // --svw/--svh (set below to 1% of the design canvas; they fall back to
+  // real vw/vh in the solo player), so both screens render the SAME
+  // pixel layout, just scaled.
+  const sceneFrameSize = useLetterboxSize(sceneStageAreaRef, SCENE_DESIGN_W / SCENE_DESIGN_H);
   const sceneFrameRef = useRef<HTMLDivElement>(null);
-  const sceneFrameScale = useFrameScale(sceneFrameRef);
+  const sceneFrameScale = sceneFrameSize.width > 0 ? sceneFrameSize.width / SCENE_DESIGN_W : 1;
   const [sceneNav, setSceneNav] = useState({ sceneIdx: 0, total: 0, canNavigate: true, interactionUnlocked: false, lockToggleApplicable: true });
   const handleSceneNavState = useCallback(
     (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean; lockToggleApplicable: boolean }) => {
@@ -196,6 +200,8 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
   // for scene lessons below, via the same useLetterboxSize hook) means
   // every viewer's canvas is normalized against an identically-shaped box,
   // so a normalized point lands in the same visual spot for everyone.
+  // Scene lessons mount their own pen layer inside the scene frame.
+  const isSceneLessonStage = !customStage && hubType === 'playground' && mode === 'slide' && !!sceneLessonRef;
   const isPlainStageContent =
     !customStage &&
     !(hubType === 'playground' && mode === 'slide' && !!sceneLessonRef) &&
@@ -249,16 +255,10 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                   bigger share of width than the header eats of height), and
                   bg-cover cropped/zoomed heavily to fill that mismatched
                   shape -- reported live as "looks zoomed in, doesn't show
-                  the whole image." A fixed 16:9 fixed the desktop case but
-                  broke portrait phone/tablet the same way in reverse (a
-                  16:9 box is short and squat inside a tall narrow area, so
-                  useFrameScale then had to shrink the vh/vw-based scene
-                  content drastically to fit) -- reported live as "the lesson
-                  is zoomed in, bigger than the frame" on phone/tablet.
-                  useViewportRatio's real device ratio (portrait phone ->
-                  portrait frame, landscape desktop -> landscape frame) fixes
-                  both, since the scene content is authored to fill whatever
-                  shape the real device viewport is, not specifically 16:9.
+                  the whole image." The frame is a fixed 16:9 on every screen and
+                  the scene is drawn on a fixed design canvas scaled into it
+                  (see sceneFrameScale above), so teacher and student see
+                  an identical layout.
                   useLetterboxSize measures the available area and sets
                   explicit pixel width/height for the largest matching-ratio
                   box that fits -- a pure-CSS aspect-ratio attempt here first
@@ -272,7 +272,13 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                 style={sceneFrameSize.width > 0 ? { width: sceneFrameSize.width, height: sceneFrameSize.height } : { width: '100%', height: '100%' }}
               >
                 <div className="absolute inset-0 overflow-hidden">
-                  <div style={{ position: 'absolute', top: 0, left: 0, width: `${100 / sceneFrameScale}%`, height: `${100 / sceneFrameScale}%`, transform: `scale(${sceneFrameScale})`, transformOrigin: 'top left' }}>
+                  <div style={{
+                    position: 'absolute', top: 0, left: 0,
+                    width: SCENE_DESIGN_W, height: SCENE_DESIGN_H,
+                    transform: `scale(${sceneFrameScale})`, transformOrigin: 'top left',
+                    ['--svw' as string]: `${SCENE_DESIGN_W / 100}px`,
+                    ['--svh' as string]: `${SCENE_DESIGN_H / 100}px`,
+                  }}>
                   <ClassroomSceneErrorBoundary resetKey={`${sceneLessonRef.contentFormat}-${sceneLessonRef.unitNumber}-${sceneLessonRef.lessonNumber}`}>
                   {isWelcomeTownScene ? (
                     <EmbeddedWelcomeTownLesson
@@ -307,6 +313,22 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                   </ClassroomSceneErrorBoundary>
                   </div>
                 </div>
+                {/* Pen layer INSIDE the fixed-ratio frame (not over the
+                    whole stage area) so its 0..1 coordinates mean the
+                    same spot of the picture on every screen. */}
+                <TransparentCanvas
+                  roomId={roomId}
+                  userId={userId}
+                  userName={userName}
+                  role={role}
+                  drawingEnabled={drawingEnabled}
+                  activeTool={activeTool}
+                  activeColor={activeColor}
+                  strokes={strokes}
+                  onAddStroke={onAddStroke}
+                  mode={mode}
+                  iframeUnlocked={iframeUnlocked}
+                />
               </div>
               </div>
 
@@ -436,7 +458,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
             those, unchanged from before. The plain-slide case renders its
             own copy above, inside the letterboxed frame, instead of this
             one, so it's never mounted twice at once. */}
-        {!isPlainStageContent && (
+        {!isPlainStageContent && !isSceneLessonStage && (
           <TransparentCanvas
             roomId={roomId}
             userId={userId}

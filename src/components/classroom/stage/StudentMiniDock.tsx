@@ -1,14 +1,16 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Pencil, Eraser, MousePointer2, Lock } from 'lucide-react';
+import { Pencil, Eraser, MousePointer2, Lock, ArrowUpRight, Type } from 'lucide-react';
+
+export type StudentTool = 'pointer' | 'pen' | 'arrow' | 'text' | 'eraser';
 
 const STUDENT_COLORS = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#AA96DA', '#2D4059', '#000000'];
 
 interface StudentMiniDockProps {
   drawingEnabled: boolean;
-  activeTool: 'pen' | 'eraser' | 'pointer';
-  onToolChange: (tool: 'pen' | 'eraser' | 'pointer') => void;
+  activeTool: StudentTool;
+  onToolChange: (tool: StudentTool) => void;
   activeColor: string;
   onColorChange: (color: string) => void;
   hubType?: 'playground' | 'academy' | 'professional';
@@ -59,6 +61,24 @@ export const StudentMiniDock: React.FC<StudentMiniDockProps> = ({
           title="Pen"
         >
           <Pencil className="h-4 w-4" />
+        </Button>
+        <Button
+          size="icon"
+          variant={activeTool === 'arrow' ? 'default' : 'ghost'}
+          onClick={() => onToolChange('arrow')}
+          className={`h-8 w-8 rounded-full ${activeTool === 'arrow' ? activeClassName : ''}`}
+          title="Arrow"
+        >
+          <ArrowUpRight className="h-4 w-4" />
+        </Button>
+        <Button
+          size="icon"
+          variant={activeTool === 'text' ? 'default' : 'ghost'}
+          onClick={() => onToolChange('text')}
+          className={`h-8 w-8 rounded-full ${activeTool === 'text' ? activeClassName : ''}`}
+          title="Text"
+        >
+          <Type className="h-4 w-4" />
         </Button>
         <Button
           size="icon"

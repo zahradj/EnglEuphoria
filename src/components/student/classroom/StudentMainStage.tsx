@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { WhiteboardStroke, StageMode, whiteboardService } from '@/services/whiteboardService';
 import { MainStage } from '@/components/classroom/stage/MainStage';
-import { StudentMiniDock } from '@/components/classroom/stage/StudentMiniDock';
+import { StudentMiniDock, type StudentTool } from '@/components/classroom/stage/StudentMiniDock';
 import { StudentQuizView } from './StudentQuizView';
 import { StudentPollView } from './StudentPollView';
 import { TargetWordsOverlay } from '@/components/classroom/TargetWordsOverlay';
@@ -113,7 +113,7 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
   // layer swallows every tap — a child told "tap the answer" drew a line
   // instead and the activity never responded. Drawing is now an explicit
   // choice from the dock.
-  const [studentTool, setStudentTool] = useState<'pointer' | 'pen' | 'eraser'>('pointer');
+  const [studentTool, setStudentTool] = useState<StudentTool>('pointer');
   const [studentColor, setStudentColor] = useState<string>(activeColor || STUDENT_COLORS[0]);
 
   // Effective draw permission: legacy flag OR new unified flag

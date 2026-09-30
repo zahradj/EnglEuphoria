@@ -27,6 +27,8 @@ interface CollaborativeCanvasProps {
 }
 
 const SHAPE_TOOLS: ToolKind[] = ['rect', 'circle', 'arrow', 'line'];
+/** Text height as a fraction of the canvas height (~22px on a laptop stage). */
+const TEXT_SIZE_FRACTION = 0.045;
 const isShape = (t: ToolKind) => SHAPE_TOOLS.includes(t);
 
 export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
@@ -77,7 +79,10 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
     ctx.lineJoin = 'round';
 
     if (tool === 'text' && text) {
-      const fs = fontSize ?? 20;
+      // New strokes store the size as a fraction of the canvas height so text
+      // is the same size relative to the picture on every screen; older
+      // strokes stored plain pixels.
+      const fs = fontSize == null ? 20 : fontSize < 1 ? Math.max(10, fontSize * canvasH) : fontSize;
       ctx.fillStyle = color;
       ctx.font = `600 ${fs}px Inter, system-ui, sans-serif`;
       ctx.textBaseline = 'top';
@@ -195,7 +200,7 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
       if (activeTool === 'text') {
         const text = window.prompt('Type text to place on the slide:');
         if (text && text.trim()) {
-          commitStroke('text', [point], { text: text.trim(), fontSize: 22 });
+          commitStroke('text', [point], { text: text.trim(), fontSize: TEXT_SIZE_FRACTION });
         }
         return;
       }
@@ -219,6 +224,10 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
 
       // Shape preview: redraw committed strokes + preview the in-progress shape.
       if (isShape(activeTool) && startPointRef.current) {
+        // Track the drag end — stopDrawing commits [start, last]. This was
+        // missing, so every shape was saved with start === end (zero size)
+        // and never appeared on the other screen.
+        lastPointRef.current = point;
         redrawAll();
         const preview: WhiteboardStroke = {
           id: 'preview',
@@ -272,7 +281,13 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
     if (!isDrawing) return;
 
     if (isShape(activeTool) && startPointRef.current && lastPointRef.current) {
-      commitStroke(activeTool as any, [startPointRef.current, lastPointRef.current]);
+      const s0 = startPointRef.current, s1 = lastPointRef.current;
+      // A click without a drag isn't a shape.
+      if (Math.hypot(s1.x - s0.x, s1.y - s0.y) >= 4) {
+        commitStroke(activeTool as any, [s0, s1]);
+      } else {
+        redrawAll();
+      }
       setIsDrawing(false);
       setCurrentPoints([]);
       startPointRef.current = null;
@@ -295,7 +310,7 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
     setCurrentPoints([]);
     lastPointRef.current = null;
     startPointRef.current = null;
-  }, [isDrawing, currentPoints, activeTool, activeColor]);
+  }, [isDrawing, currentPoints, activeTool, activeColor, redrawAll]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

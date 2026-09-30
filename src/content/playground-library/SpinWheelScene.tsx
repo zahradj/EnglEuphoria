@@ -176,7 +176,7 @@ export function SpinWheelScene({ scene, onNext, onWin, sync }: {
           rotation={rotation}
           spinning={spinning}
           highlight={result}
-          size="min(36vh, 30vw)"
+          size="min(calc(36*var(--svh,1vh)), calc(30*var(--svw,1vw)))"
           onSpin={isMirror ? undefined : spin}
         />
       </div>
