@@ -11,6 +11,7 @@ import { getLessonById, getLibraryLessonSlides, type LibraryLesson } from './les
 import { resolveActiveCoreLesson, type Hub as CoreHub } from './activeCoreLessonResolver';
 import { buildPreviewHomeworkPack } from '@/components/lesson-player/buildPreviewHomeworkPack';
 import type { HubType } from '@/components/admin/lesson-builder/ai-wizard/types';
+import { isSceneLessonFormat } from '@/content/playground-library/sceneLessonFormats';
 
 
 export type ClassroomHub = 'playground' | 'academy' | 'professional';
@@ -186,7 +187,7 @@ export async function resolveBookingLesson(booking: {
     (lesson?.content as any)?.playground_lesson ??
     null;
   const contentFormat = (lesson?.ai_metadata as any)?.contentFormat;
-  const isSceneLesson = contentFormat === 'lep1-rich' || contentFormat === 'wt-rich' || contentFormat === 'wt-a2-rich';
+  const isSceneLesson = isSceneLessonFormat(contentFormat);
   if (hubType === 'playground' && isSceneLesson) {
     // Scene-based lessons (Little Explorers Phonics = lep1-rich, Welcome
     // Town A1/A2 = wt-rich/wt-a2-rich) render through <EmbeddedSceneLesson/>

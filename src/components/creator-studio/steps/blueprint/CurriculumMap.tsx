@@ -13,6 +13,7 @@ import { LessonActionsMenu, type LessonAction } from './LessonActionsMenu';
 import { LessonBlueprintModal } from './LessonBlueprintModal';
 import { loadLessonBlueprintFromCurriculum } from '@/services/contentCreator/curriculumBinding';
 import type { LessonBlueprint } from '@/services/contentCreator/lessonBlueprint';
+import { LIBRARY_READY_FORMATS } from '@/content/playground-library/sceneLessonFormats';
 import type { LessonStage } from '@/services/contentCreator/unifiedLessonGenerator';
 
 interface Props {
@@ -258,14 +259,54 @@ export const CurriculumMap: React.FC<Props> = ({ data, loading }) => {
     };
     const difficulty = cefrToDifficulty(cefr);
 
+    // Which existing slots already have REAL content, so the upsert below
+    // never touches them. This is the actual fix for a real incident: this
+    // function's upsert used to unconditionally overwrite `content` and
+    // `ai_metadata` for any row occupying the same (creator, hub, cefr,
+    // unit, lesson) slot — on 2026-08-02 it silently blew away the
+    // ai_metadata.contentFormat pointer that linked A1 Unit 1's 4 lessons to
+    // their real, already-built Welcome Town scene content (which lives in
+    // welcome-town/scenes.ts, not in this row's `content` column at all —
+    // same architecture Pre-A1 uses), replacing it with a fresh empty
+    // scaffold. The lessons themselves kept working fine at their direct
+    // URLs the whole time; only the library catalog's pointer to them broke,
+    // reported live as "the lessons vanished." "Ready" here means either
+    // shape of real content: a contentFormat pointing at a built
+    // scene-player lesson (lep1-rich/wt-rich/wt-a2-rich/scene-player/
+    // academy-v2), or actual slides/playground_unit content directly in
+    // this row — the two content models used elsewhere in this codebase.
+    const READY_CONTENT_FORMATS = new Set([...LIBRARY_READY_FORMATS, 'academy-v2']);
+    const isRowAlreadyBuilt = (row: { ai_metadata: any; content: any }): boolean => {
+      const fmt = row.ai_metadata?.contentFormat;
+      if (fmt && READY_CONTENT_FORMATS.has(fmt)) return true;
+      if (Array.isArray(row.content?.slides) && row.content.slides.length > 0) return true;
+      if (row.content?.playground_unit) return true;
+      return false;
+    };
+    const { data: existingRows } = await supabase
+      .from('curriculum_lessons')
+      .select('ai_metadata, content')
+      .eq('created_by', uid)
+      .eq('target_system', targetSystem);
+    const builtSlotKeys = new Set(
+      (existingRows ?? [])
+        .filter((row) => isRowAlreadyBuilt(row as any))
+        .map((row) => `${(row.ai_metadata?.cefr_level ?? '').toUpperCase()}:${row.ai_metadata?.unit_number}:${row.ai_metadata?.lesson_number}`),
+    );
+
+    let skippedAlreadyBuilt = 0;
     const lessonsToInsert = payload.units.flatMap((unit, uIdx) => {
       const unitNumber = unit.unit_number ?? uIdx + 1;
-      return unit.lessons.map((lesson, lIdx) => {
+      return unit.lessons.flatMap((lesson, lIdx) => {
         const lessonNumber = lIdx + 1;
+        if (builtSlotKeys.has(`${cefr}:${unitNumber}:${lessonNumber}`)) {
+          skippedAlreadyBuilt += 1;
+          return [];
+        }
         // Strict sequential global order: U1L1=101, U1L2=102, U2L1=201...
         // Keeps unit grouping AND lesson order intact via a single column.
         const globalOrder = unitNumber * 100 + lessonNumber;
-        return {
+        return [{
           title: lesson.title,
           description: lesson.objective || lesson.learning_objective || null,
           target_system: targetSystem,
@@ -285,13 +326,22 @@ export const CurriculumMap: React.FC<Props> = ({ data, loading }) => {
             theme_hint: payload.theme_hint ?? null,
             hub: payload.hub,
           },
-        };
+        }];
       });
     });
+
+    if (skippedAlreadyBuilt > 0 && !opts.silent) {
+      toast.info(`Skipped ${skippedAlreadyBuilt} lesson${skippedAlreadyBuilt === 1 ? '' : 's'} that already have real content saved — not overwritten.`);
+    }
+    if (lessonsToInsert.length === 0) {
+      if (!opts.silent) toast.success('Nothing to save — every slot in this blueprint already has real content.');
+      return { ok: true, count: 0 };
+    }
 
     try {
       // Upsert against the partial unique index (creator + hub + cefr + unit + lesson).
       // If a row already exists for this slot, UPDATE it instead of creating a duplicate.
+      // (Rows with real content were already filtered out above.)
       const { data: inserted, error } = await supabase
         .from('curriculum_lessons')
         .upsert(lessonsToInsert as any, {

@@ -9,14 +9,7 @@ import { getSceneLesson, getSceneLessonMeta } from '@/content/playground-library
 import { getWelcomeTownLesson } from '@/content/playground-library/welcomeTownLessonRegistry';
 import { extractTaughtLetters, completeSceneLesson } from '@/services/sceneLessonCompletionService';
 import type { PlaygroundLesson } from '@/hooks/usePlaygroundLessons';
-
-/** Welcome Town (A1/A2) formats route to PlayWelcomeTownLesson + the
- *  welcomeTownLessonRegistry; everything else (including the default
- *  undefined case, matching this modal's original lep1-only behavior)
- *  routes to PlayUnitLesson + sceneLessonRegistry. Keep in sync with the
- *  identical format list KidsWorldMap.tsx uses to decide whether to open
- *  this modal at all, and with classroomLessonResolver.ts's isSceneLesson. */
-const WELCOME_TOWN_FORMATS = new Set(['wt-rich', 'wt-a2-rich']);
+import { isWelcomeTownFamilyFormat } from '@/content/playground-library/sceneLessonFormats';
 
 interface SceneLessonPlayerModalProps {
   isOpen: boolean;
@@ -50,7 +43,7 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
     }
   }, [isOpen, lesson?.id]);
 
-  const isWelcomeTown = !!lesson?.contentFormat && WELCOME_TOWN_FORMATS.has(lesson.contentFormat);
+  const isWelcomeTown = isWelcomeTownFamilyFormat(lesson?.contentFormat);
   const key = lesson?.unitNumber != null && lesson?.lessonNumber != null ? `${lesson.unitNumber}-${lesson.lessonNumber}` : null;
 
   const welcomeTownLesson = useMemo(

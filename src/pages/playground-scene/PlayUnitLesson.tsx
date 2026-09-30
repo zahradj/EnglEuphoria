@@ -498,9 +498,25 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
     onNavState?.({ sceneIdx, total: SCENES.length, canNavigate, interactionUnlocked: effectiveUnlocked, lockToggleApplicable: !skipsLock });
   }, [sceneIdx, SCENES.length, canNavigate, effectiveUnlocked, skipsLock, onNavState]);
 
+  // Every scene kind's own renderer either receives `onWin` and calls it
+  // exactly once on completion (real gem opportunity), or doesn't receive
+  // it at all (pure narrative/display, no completion condition). The old
+  // version of this list hand-enumerated ~13 "counts" kinds and silently
+  // fell out of sync as new kinds were added over time (confirmed: dash,
+  // memory, puzzle, trace, word-build, shape-model, shape-sort, song, and
+  // ~30 others all DO call onWin but were never counted here) — students
+  // were shown a gem count that undercounted what they could actually
+  // earn (e.g. "9/6"). An exclude-list of the few kinds that genuinely
+  // have no onWin prop at all is much shorter and can't drift the same
+  // way: a newly added kind defaults to counting unless explicitly opted
+  // out here, the opposite of the old always-opt-in list.
+  const NON_GEM_KINDS = useMemo(
+    () => new Set<Scene['kind']>(['title-card', 'cinematic', 'finale', 'sound-model', 'video-story', 'feelings', 'feelings-tap', 'numbers-learn']),
+    [],
+  );
   const totalGemsPossible = useMemo(
-    () => SCENES.filter((s) => s.kind === 'basket' || s.kind === 'who-said-it' || s.kind === 'name-gate' || s.kind === 'voice-stage' || s.kind === 'roleplay' || s.kind === 'join-stage' || s.kind === 'sound-pop' || s.kind === 'flipbook' || s.kind === 'color-model' || s.kind === 'color-sort' || s.kind === 'color-quiz' || s.kind === 'listen-repeat-cards' || (s.kind === 'meet' && s.repeat)).length,
-    [SCENES],
+    () => SCENES.filter((s) => !NON_GEM_KINDS.has(s.kind)).length,
+    [SCENES, NON_GEM_KINDS],
   );
 
   const isFinale = scene.kind === 'finale';

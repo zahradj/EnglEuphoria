@@ -2889,6 +2889,25 @@ export const LESSON_U2L2_SCENES: Scene[] = [
  * isolated before it's asked to combine with the old unit (color). This is
  * now a holistic rule, not a one-lesson fix: see the smart-lesson-architect
  * methodology memory's "Progressive combination rule".
+ *
+ * HARD VARIETY RULE FIX (2026-09-30): the lesson shipped with two runs of
+ * 3 consecutive same-kind scenes — u2l3-dash-circle/square/triangle and
+ * u2l3-roleplay-circle/square/triangle — violating activity-pattern-
+ * library's "no more than 2 consecutive same-kind scenes" rule (the exact
+ * class of issue that rule exists to catch, per its own Welcome Town
+ * Lesson 3 case study). Fixed by inserting one palette-cleanser scene
+ * into each run: u2l3-memory-shapes (between the two dash rounds, a
+ * shape-matching pairs game) and u2l3-sound-pop (between the two
+ * roleplay rounds, a phonics balloon-pop arcade round on the C/S/T
+ * sounds) — both reuse already-established art/items (zero new asset
+ * generation) and add a genuinely different skill rather than just
+ * reordering the existing scenes. u2l3-sound-pop replaces an earlier
+ * "guess the friend" character-portrait version of this same slot, per
+ * direct user correction: this lesson's focus is shapes and colors, not
+ * characters, and the correction also asked for real sound/phonics
+ * reinforcement — sound-pop's own renderer already plays a recorded
+ * phonic sound per target and a pop sound effect per balloon, so no new
+ * audio needed either.
  * ========================================================================= */
 
 const itemBall = `${A}/items/item-ball.png`;
@@ -2968,18 +2987,12 @@ export const LESSON_U2L3_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u2l3-who', kind: 'listen-repeat-cards', bg: bgU2L3ShapeParade, teacher: 'Listen to each friend, then repeat!',
-    cards: [
-      { who: 'bella', sentence: 'The ball is a circle!', img: itemBall, imgLabel: 'Circle' },
-      { who: 'mia', sentence: 'The book is a square!', img: itemBook, imgLabel: 'Square' },
-      { who: 'leo', sentence: 'The pizza is a triangle!', img: itemPizza, imgLabel: 'Triangle' },
-    ],
-  },
-  {
     // The TARGET frame for this lesson: shape + the color that object's own
     // art already shows, combined into one noun phrase — not a repeat of
-    // Lessons 1-2's bare color sentences or this lesson's own bare shape
-    // sentences (u2l3-who, just above, already drilled those in isolation).
+    // Lessons 1-2's bare color sentences. (The isolated bare-shape-sentence
+    // drill that used to sit here, u2l3-who, was removed per direct user
+    // request — word-build just above already tests shape-word recognition
+    // in isolation, so this scene now follows it directly.)
     id: 'u2l3-sentence-practice', kind: 'listen-repeat-cards', bg: bgU2L3ShapeParade, teacher: "Now let's put color AND shape together! Listen, then repeat!",
     cards: [
       { who: 'bella', sentence: "It's a red circle!", img: itemBall, imgLabel: 'Red circle' },
@@ -3010,6 +3023,20 @@ export const LESSON_U2L3_SCENES: Scene[] = [
       { word: 'flag', letter: 'TRIANGLE', emoji: '\u{1F6A9}' },
       { word: 'ball', letter: 'CIRCLE', emoji: '\u{26BD}' },
       { word: 'moon', letter: 'CIRCLE', emoji: '\u{1F315}' },
+    ],
+  },
+  {
+    // Palette-cleanser between two `dash` rounds — Hard Variety Rule (no
+    // more than 2 consecutive same-kind scenes; see activity-pattern-
+    // library skill). Reuses the exact items already established in
+    // u2l3-sort-shapes/dash above (ball, moon, book, box, pizza, flag) —
+    // zero new art — but tests shape-word recognition through matching
+    // instead of a timed chase, a genuinely different skill/pace.
+    id: 'u2l3-memory-shapes', kind: 'memory', bg: bgMeadow, teacher: 'Find the pairs! Match each shape to its friend.',
+    pairs: [
+      { id: 'circle', label: 'Circle', emoji: '\u{26AA}', img: itemBall },
+      { id: 'square', label: 'Square', emoji: '\u{25FC}️', img: itemBook },
+      { id: 'triangle', label: 'Triangle', emoji: '\u{1F53A}', img: itemPizza },
     ],
   },
   {
@@ -3064,6 +3091,34 @@ export const LESSON_U2L3_SCENES: Scene[] = [
     script: [
       { who: 'mia', line: "It's a blue square!", repeat: true },
       { who: 'pip', line: "I don't like blue squares!", repeat: true },
+    ],
+  },
+  {
+    // Palette-cleanser between two `roleplay` scenes — Hard Variety Rule
+    // (same rule as u2l3-memory-shapes above). REVISION (direct user
+    // correction): the first version of this scene ("Guess the friend")
+    // centered on character portraits, but this lesson is about shapes
+    // and colors, not characters — replaced with a real phonics arcade
+    // round instead. sound-pop is a genuine balloon-popping game (its own
+    // renderer already plays a real recorded phonic sound on each target
+    // change and a pop sound effect on every hit/miss — exactly the
+    // "sounds, balloon-popping, phonics" the correction asked for) themed
+    // on the C/S/T sounds this lesson already teaches (C gets the full
+    // model+trace treatment in u2l3-model-c/trace-c above; S/T are
+    // lighter review, same as u2l3-sort-shapes' own phonics hint). Items
+    // reuse the exact same colored shape images already established for
+    // this lesson's target color+shape frame (red circle/blue square/
+    // yellow triangle) — zero new art, and shapes+colors stay the focus.
+    id: 'u2l3-sound-pop', kind: 'sound-pop', bg: bgU2L3SoundGarden, teacher: 'Pop the balloon with the right sound! Listen first, then pop!', who: 'bella', goal: 8, seconds: 45,
+    targets: [
+      { letter: 'C', phoneme: '/k/' },
+      { letter: 'S', phoneme: '/s/' },
+      { letter: 'T', phoneme: '/t/' },
+    ],
+    items: [
+      { word: 'circle', letter: 'C', img: itemBall, emoji: '\u{26AA}' },
+      { word: 'square', letter: 'S', img: itemBook, emoji: '\u{25FC}️' },
+      { word: 'triangle', letter: 'T', img: itemPizza, emoji: '\u{1F53A}' },
     ],
   },
   {

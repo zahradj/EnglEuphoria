@@ -4,8 +4,7 @@ import { buildHomeworkContent } from '@/services/sceneLessonCompletionService';
 import { getSceneLesson } from '@/content/playground-library/sceneLessonRegistry';
 import { getWelcomeTownLesson } from '@/content/playground-library/welcomeTownLessonRegistry';
 import HomeworkPlayer from '@/components/student/homework/HomeworkPlayer';
-
-const WELCOME_TOWN_FORMATS = new Set(['wt-rich', 'wt-a2-rich']);
+import { isWelcomeTownFamilyFormat } from '@/content/playground-library/sceneLessonFormats';
 
 interface HomeworkPreviewModalProps {
   lessonId: string;
@@ -38,7 +37,7 @@ export function HomeworkPreviewModal({
   onClose,
 }: HomeworkPreviewModalProps) {
   const [view, setView] = useState<'play' | 'list'>('play');
-  const isWelcomeTown = WELCOME_TOWN_FORMATS.has(contentFormat);
+  const isWelcomeTown = isWelcomeTownFamilyFormat(contentFormat);
   const welcomeTownLesson = isWelcomeTown ? getWelcomeTownLesson(contentFormat, unitNumber, lessonNumber) : null;
   const scenes = isWelcomeTown ? welcomeTownLesson?.scenes ?? null : getSceneLesson(unitNumber, lessonNumber);
 

@@ -10,6 +10,7 @@ import {
   type ClassroomSlide,
   type LibraryLessonCard,
 } from '@/services/lessonLibraryService';
+import { isSceneLessonFormat } from '@/content/playground-library/sceneLessonFormats';
 
 
 export interface SceneLessonMeta {
@@ -240,7 +241,7 @@ export default function LibraryDrawer({
       const lesson = await getLessonById(lessonId);
       const contentFormat = (lesson.ai_metadata as any)?.contentFormat;
       const sceneMeta: SceneLessonMeta | undefined =
-        contentFormat === 'lep1-rich' || contentFormat === 'wt-rich' || contentFormat === 'wt-a2-rich'
+        isSceneLessonFormat(contentFormat)
           ? {
               contentFormat,
               unitNumber: Number((lesson.ai_metadata as any)?.unit_number ?? 1),

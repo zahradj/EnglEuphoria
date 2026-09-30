@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { isLibraryReadyFormat } from '@/content/playground-library/sceneLessonFormats';
 
 interface LessonRow {
   id: string;
@@ -21,7 +22,7 @@ interface LessonRow {
 
 const LEVELS: { code: string; curriculum: string | null }[] = [
   { code: 'Pre-A1', curriculum: 'Little Explorers Phonics' },
-  { code: 'A1', curriculum: 'A1 Playground — Foundational General English' },
+  { code: 'A1', curriculum: 'A1 Playground — Wonder Worlds' },
   { code: 'A2', curriculum: 'A2 Playground — Growing Confidence' },
   { code: 'B1', curriculum: null },
   { code: 'B2', curriculum: null },
@@ -108,7 +109,7 @@ export default function PlaygroundLibraryPublic() {
 
   const handleLessonClick = (row: LessonRow) => {
     const fmt = row.ai_metadata?.contentFormat;
-    if (!fmt || (fmt !== 'lep1-rich' && fmt !== 'wt-rich' && fmt !== 'wt-a2-rich' && fmt !== 'scene-player')) {
+    if (!isLibraryReadyFormat(fmt)) {
       // Not built yet — nothing to open for a public visitor.
       return;
     }
@@ -127,6 +128,16 @@ export default function PlaygroundLibraryPublic() {
       const unitNum = row.ai_metadata?.unit_number ?? 1;
       const lessonNum = row.ai_metadata?.lesson_number ?? 1;
       navigate(`/playground-scene/a2-unit-${unitNum}-lesson-${lessonNum}`);
+      return;
+    }
+    if (fmt === 'jungle-rich') {
+      const lessonNum = row.ai_metadata?.lesson_number ?? 1;
+      navigate(`/playground-scene/jungle-lesson-${lessonNum}`);
+      return;
+    }
+    if (fmt === 'castle-rich') {
+      const lessonNum = row.ai_metadata?.lesson_number ?? 1;
+      navigate(`/playground-scene/castle-lesson-${lessonNum}`);
       return;
     }
     if (fmt === 'scene-player') {
@@ -211,7 +222,7 @@ export default function PlaygroundLibraryPublic() {
           <div className="space-y-4">
             {units.map((u) => {
               const art = UNIT_ART[(u.unit_number - 1) % UNIT_ART.length];
-              const readyCount = u.lessons.filter((l) => l.ai_metadata?.contentFormat === 'lep1-rich' || l.ai_metadata?.contentFormat === 'wt-rich' || l.ai_metadata?.contentFormat === 'wt-a2-rich' || l.ai_metadata?.contentFormat === 'scene-player').length;
+              const readyCount = u.lessons.filter((l) => isLibraryReadyFormat(l.ai_metadata?.contentFormat)).length;
               const isOpen = openUnit === u.unit_number;
               return (
                 <div key={u.unit_number} className="overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-orange-100">
@@ -242,7 +253,7 @@ export default function PlaygroundLibraryPublic() {
                   {isOpen && (
                     <div className="grid grid-cols-1 gap-3 border-t border-orange-100 bg-orange-50/40 p-5 sm:grid-cols-2 lg:grid-cols-3">
                       {u.lessons.map((l) => {
-                        const ready = l.ai_metadata?.contentFormat === 'lep1-rich' || l.ai_metadata?.contentFormat === 'wt-rich' || l.ai_metadata?.contentFormat === 'wt-a2-rich' || l.ai_metadata?.contentFormat === 'scene-player';
+                        const ready = isLibraryReadyFormat(l.ai_metadata?.contentFormat);
                         return (
                           <button
                             key={l.id}

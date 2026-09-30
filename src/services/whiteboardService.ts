@@ -976,6 +976,9 @@ class WhiteboardService {
       room.forceReloadListeners.size === 0 &&
       room.studentActionListeners.size === 0 &&
       room.sceneLessonNavListeners.size === 0 &&
+      room.sceneTapListeners.size === 0 &&
+      room.sceneInteractionPermissionListeners.size === 0 &&
+      room.sceneAdvanceRequestListeners.size === 0 &&
       room.sceneActivityStateListeners.size === 0 &&
       room.statusListeners.size === 0
     ) {

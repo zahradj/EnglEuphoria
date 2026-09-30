@@ -11,8 +11,10 @@ import type { PlaygroundLessonNumber } from '@/playground-blueprint/unitTemplate
 import { ClassroomToolOverlay } from './ClassroomToolOverlay';
 import { EmbeddedSceneLesson } from './EmbeddedSceneLesson';
 import { EmbeddedWelcomeTownLesson } from './EmbeddedWelcomeTownLesson';
+import { ClassroomSceneErrorBoundary } from './ClassroomSceneErrorBoundary';
 import { useFrameScale } from '@/hooks/useFrameScale';
 import { useLetterboxSize } from '@/hooks/useLetterboxSize';
+import { isWelcomeTownFamilyFormat } from '@/content/playground-library/sceneLessonFormats';
 import { useViewportRatio } from '@/hooks/useViewportRatio';
 
 /** The two embedded scene players (Pre-A1 lep1-rich, A1/A2 wt-rich/wt-a2-rich)
@@ -130,7 +132,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
   const sceneLessonRef = (rawSlides as any)?.[0]?.sceneLessonRef as
     | { unitNumber: number; lessonNumber: number; contentFormat?: string }
     | undefined;
-  const isWelcomeTownScene = sceneLessonRef?.contentFormat === 'wt-rich' || sceneLessonRef?.contentFormat === 'wt-a2-rich';
+  const isWelcomeTownScene = isWelcomeTownFamilyFormat(sceneLessonRef?.contentFormat);
 
   const sceneLessonHandleRef = useRef<SceneLessonHandle>(null);
   const sceneStageAreaRef = useRef<HTMLDivElement>(null);
@@ -207,9 +209,24 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
         ref={stageRef}
         className="relative flex-1 w-full h-full bg-background overflow-hidden"
       >
-        {/* Slide entrance animation — keyed on slide index for a soft fade-in */}
+        {/* Slide entrance animation — keyed on slide index for a soft fade-in.
+            Deliberately STABLE (no mode/currentSlideIndex in the key) while a
+            Playground scene lesson is on stage: that branch renders the lazy
+            EmbeddedSceneLesson/EmbeddedWelcomeTownLesson player, which owns
+            its OWN per-scene fade-in (see PlayUnitLesson's key={scene.id})
+            and, more importantly, its live whiteboardService realtime
+            subscriptions. Keying this wrapper on mode/currentSlideIndex meant
+            ANY change to either — including a spurious one from a realtime
+            reconnect re-delivering a stale/duplicate session update, which
+            this classroom sees often under an unstable connection — force-
+            unmounted and remounted the whole scene player on BOTH teacher
+            and student screens: replaying the fade animation (reported live
+            as "flickering") and tearing down + re-establishing every
+            realtime subscription from scratch (reported live as "lagging").
+            A regular slide deck still gets its per-slide fade via this key
+            as before. */}
         <div
-          key={`stage-${mode}-${currentSlideIndex}`}
+          key={sceneLessonRef ? 'scene-lesson' : `stage-${mode}-${currentSlideIndex}`}
           className="absolute inset-0 animate-fade-in"
         >
           {customStage ? (
@@ -256,6 +273,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
               >
                 <div className="absolute inset-0 overflow-hidden">
                   <div style={{ position: 'absolute', top: 0, left: 0, width: `${100 / sceneFrameScale}%`, height: `${100 / sceneFrameScale}%`, transform: `scale(${sceneFrameScale})`, transformOrigin: 'top left' }}>
+                  <ClassroomSceneErrorBoundary resetKey={`${sceneLessonRef.contentFormat}-${sceneLessonRef.unitNumber}-${sceneLessonRef.lessonNumber}`}>
                   {isWelcomeTownScene ? (
                     <EmbeddedWelcomeTownLesson
                       ref={sceneLessonHandleRef}
@@ -286,6 +304,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                       onInteractionUnlockedPersist={onPersistSceneInteractionUnlocked}
                     />
                   )}
+                  </ClassroomSceneErrorBoundary>
                   </div>
                 </div>
               </div>

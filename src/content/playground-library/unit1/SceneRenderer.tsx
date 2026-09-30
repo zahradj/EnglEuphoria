@@ -1085,13 +1085,34 @@ function WordBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
 
   const letters = r.word.split('');
   const side = scene.side;
-  // Only positions solved in an EARLIER round are revealed — a not-yet-reached
-  // letter must never be shown, or the "hint" gives the answer away before the
-  // student earns it. Per direct user request: the student builds the whole
-  // word letter by letter with no hints, not fill-in-the-one-blank with the
-  // rest of the word pre-printed.
+  // Two different puzzle shapes share this one scene kind:
+  //  (a) progressive spelling — every round has the SAME word, one more
+  //      blank than the last (e.g. u5l1-word-build-mom: 'mom' at index 0,
+  //      then 1, then 2). Here a not-yet-reached letter must stay hidden,
+  //      or the hint gives the answer away before the student earns it.
+  //  (b) first-letter-only recognition — every round is a DIFFERENT word
+  //      testing just its own first letter (the far more common case in
+  //      this file: circle/square/triangle, red/blue/yellow, etc.), where
+  //      the non-blank letters were never meant to be a secret — the
+  //      student reads the rest of the word to help predict the missing
+  //      one. Reported live as "the word isn't written for the student to
+  //      predict... all the letter blocks are empty" — case (b) was
+  //      rendering every position as blank because the old logic only
+  //      ever revealed a position once an EARLIER round's blankIndex
+  //      solved it, which never happens when every round is a different
+  //      word.
+  // A position only needs to stay hidden if THIS SAME WORD tests it as a
+  // blank in some round — current or upcoming. Otherwise it's just part
+  // of the word and can show immediately. This reproduces case (a)'s
+  // exact existing behavior (every position of a shared word is tested
+  // eventually) while fixing case (b) (no other round ever shares that
+  // word, so nothing stays hidden).
+  const isTestedInThisWord = (i: number) => scene.rounds.some((rd) => rd.word === r.word && rd.blankIndex === i);
   const revealed = new Set<number>();
-  for (let i = 0; i < round; i++) revealed.add(scene.rounds[i].blankIndex);
+  for (let i = 0; i < round; i++) {
+    const rd = scene.rounds[i];
+    if (rd.word === r.word) revealed.add(rd.blankIndex);
+  }
   const choiceGradients = [
     'linear-gradient(135deg,#FE6A2F,#FF8A4C)', // orange
     'linear-gradient(135deg,#4FA9E0,#6EC6F0)', // blue
@@ -1120,11 +1141,14 @@ function WordBuildScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene
             {letters.map((ch, i) => {
               const isCurrent = i === r.blankIndex;
               const isRevealed = revealed.has(i);
-              const display = isCurrent ? (filled ?? '_') : isRevealed ? ch : '_';
+              const isGiven = !isCurrent && !isRevealed && !isTestedInThisWord(i);
+              const display = isCurrent ? (filled ?? '_') : (isRevealed || isGiven) ? ch : '_';
               const tileTone = isCurrent
                 ? (filled ? 'border-green-400 bg-green-50 text-green-600' : 'border-dashed border-amber-400 bg-amber-50 text-amber-400')
                 : isRevealed
                 ? 'border-green-300 bg-green-50 text-green-700'
+                : isGiven
+                ? 'border-neutral-200 bg-white text-neutral-700'
                 : 'border-dashed border-neutral-300 bg-neutral-100 text-neutral-300';
               return <div key={i} className={`grid place-items-center rounded-3xl border-4 font-black uppercase shadow-md transition-colors ${tileTone}`} style={{ width: 66, height: 82, fontSize: 44 }}>{display}</div>;
             })}

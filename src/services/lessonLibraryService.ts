@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { GeneratedSlide, HubType } from '@/components/admin/lesson-builder/ai-wizard/types';
+import { LIBRARY_READY_FORMATS } from '@/content/playground-library/sceneLessonFormats';
 
 export interface LibraryLesson {
   id: string;
@@ -52,7 +53,7 @@ export interface LibraryLessonCard {
   isReady: boolean;
 }
 
-const READY_CONTENT_FORMATS = new Set(['lep1-rich', 'scene-player', 'wt-rich', 'wt-a2-rich']);
+const READY_CONTENT_FORMATS = LIBRARY_READY_FORMATS;
 
 export interface ClassroomSlide {
   id: string;
@@ -117,6 +118,12 @@ export function resolvePlaygroundLessonRoute(
   }
   if (fmt === 'wt-a2-rich') {
     return `/playground-scene/a2-unit-${unitNum}-lesson-${lessonNum}`;
+  }
+  if (fmt === 'jungle-rich') {
+    return `/playground-scene/jungle-lesson-${lessonNum}`;
+  }
+  if (fmt === 'castle-rich') {
+    return `/playground-scene/castle-lesson-${lessonNum}`;
   }
   if (fmt === 'scene-player') {
     return `/playground-scene/play/${lessonId}`;

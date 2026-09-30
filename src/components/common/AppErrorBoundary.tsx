@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { AlertTriangle, Home, RotateCcw } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AppErrorBoundaryState {
   hasError: boolean;
@@ -27,6 +28,33 @@ export class AppErrorBoundary extends Component<AppErrorBoundaryProps, AppErrorB
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('🚨 App Error Boundary caught an error:', error, errorInfo);
+    // This boundary sits closer to the crash than GlobalErrorBoundary
+    // (main.tsx), so React always hands the error to THIS one first —
+    // GlobalErrorBoundary's own system_errors logging never runs for
+    // anything caught here. Previously that meant every crash this
+    // boundary caught (including live classroom crashes) left no record
+    // anywhere once the tab closed — "something went wrong" with no way
+    // to find out what. Log here too, same shape, so there's always a
+    // queryable trace.
+    void this.logError(error, errorInfo);
+  }
+
+  private async logError(error: Error, errorInfo: ErrorInfo) {
+    try {
+      const { data: auth } = await supabase.auth.getUser();
+      const componentName =
+        errorInfo.componentStack?.trim().split('\n')[0]?.trim().replace(/^in\s+/i, '') ?? null;
+      await supabase.from('system_errors').insert({
+        error_message: error.message?.slice(0, 4000) ?? 'Unknown error',
+        stack_trace: [error.stack, errorInfo.componentStack].filter(Boolean).join('\n\n---\n\n'),
+        component_name: componentName,
+        route: typeof window !== 'undefined' ? window.location.pathname : null,
+        user_id: auth.user?.id ?? null,
+        status: 'open',
+      });
+    } catch (logErr) {
+      console.warn('[AppErrorBoundary] Failed to log error:', logErr);
+    }
   }
 
   render() {

@@ -12,6 +12,7 @@ import { GiantGoButton } from './GiantGoButton';
 import { LessonPlayerModal } from './LessonPlayerModal';
 import { SceneLessonPlayerModal } from './SceneLessonPlayerModal';
 import { PlaygroundLesson } from '@/hooks/usePlaygroundLessons';
+import { isSceneLessonFormat } from '@/content/playground-library/sceneLessonFormats';
 
 export type ThemeType = 'jungle' | 'space' | 'underwater';
 
@@ -301,9 +302,7 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
           the real lesson. Keep this format list in sync with
           SceneLessonPlayerModal.tsx's own WELCOME_TOWN_FORMATS and
           classroomLessonResolver.ts's isSceneLesson. */}
-      {selectedLesson?.contentFormat === 'lep1-rich'
-        || selectedLesson?.contentFormat === 'wt-rich'
-        || selectedLesson?.contentFormat === 'wt-a2-rich' ? (
+      {isSceneLessonFormat(selectedLesson?.contentFormat) ? (
         <SceneLessonPlayerModal
           isOpen={isModalOpen}
           lesson={selectedLesson}
