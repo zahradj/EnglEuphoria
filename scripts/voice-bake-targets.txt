@@ -1,0 +1,5 @@
+# One target per line for .github/workflows/bake-voice.yml: a lesson's
+# exported scene-array name (e.g. LESSON_A1U9L1_SCENES) or HOMEWORK.
+# Only lines without a clip in public/audio-cache/ are generated.
+LESSON_A1U9L1_SCENES
+HOMEWORK

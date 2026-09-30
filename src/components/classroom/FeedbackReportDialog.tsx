@@ -26,6 +26,9 @@ interface FeedbackContent {
   areas_for_improvement?: string[];
   quick_notes?: string;
   skill_scores?: Record<string, number>;
+  strengths?: string[];
+  resume_from?: string;
+  teacher_note?: string;
 }
 
 interface HistoryEntry {
@@ -189,6 +192,23 @@ export const FeedbackReportDialog: React.FC<FeedbackReportDialogProps> = ({
               </div>
             )}
 
+            {/* Where the next class picks up (lesson stopped early) */}
+            {parsedContent?.resume_from && (
+              <div className="p-3 rounded-lg border border-amber-500/40 bg-amber-500/10 text-sm">
+                <span className="font-semibold">🔁 Next class continues from:</span> {parsedContent.resume_from}
+              </div>
+            )}
+
+            {/* Great at */}
+            {parsedContent?.strengths && parsedContent.strengths.length > 0 && (
+              <div>
+                <p className="text-sm font-medium mb-2">Great at</p>
+                <ul className="space-y-1 text-sm">
+                  {parsedContent.strengths.map((s) => <li key={s}>⭐ {s}</li>)}
+                </ul>
+              </div>
+            )}
+
             {/* Areas for Improvement */}
             {parsedContent?.areas_for_improvement && parsedContent.areas_for_improvement.length > 0 && (
               <div>
@@ -221,9 +241,19 @@ export const FeedbackReportDialog: React.FC<FeedbackReportDialogProps> = ({
             {/* Quick Notes */}
             {parsedContent?.quick_notes && (
               <div>
-                <p className="text-sm font-medium mb-2">Teacher Notes</p>
+                <p className="text-sm font-medium mb-2">Message from the teacher</p>
                 <div className="p-3 rounded-lg bg-muted/40 border border-border/50 text-sm whitespace-pre-wrap">
                   {parsedContent.quick_notes}
+                </div>
+              </div>
+            )}
+
+            {/* Note for teachers — never shown to students/parents */}
+            {viewerRole === 'teacher' && parsedContent?.teacher_note && (
+              <div>
+                <p className="text-sm font-medium mb-2">Note for teachers</p>
+                <div className="p-3 rounded-lg bg-muted/40 border border-border/50 text-sm whitespace-pre-wrap">
+                  {parsedContent.teacher_note}
                 </div>
               </div>
             )}
@@ -266,6 +296,12 @@ export const FeedbackReportDialog: React.FC<FeedbackReportDialogProps> = ({
                           />
                         ))}
                       </div>
+                    )}
+                    {h.content.resume_from && (
+                      <p className="text-xs font-semibold text-amber-600 mb-1">🔁 Continue from: {h.content.resume_from}</p>
+                    )}
+                    {h.content.teacher_note && (
+                      <p className="text-xs text-foreground/80 whitespace-pre-wrap mb-1">📝 {h.content.teacher_note}</p>
                     )}
                     {h.content.quick_notes && (
                       <p className="text-xs text-foreground/80 whitespace-pre-wrap">{h.content.quick_notes}</p>

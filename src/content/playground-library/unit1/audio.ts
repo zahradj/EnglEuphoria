@@ -171,21 +171,6 @@ const VOICE_ID: Record<Character, string> = {
   narrator: 'jsCqWAovK2LkecY7zXl4', // Freya
 };
 
-// Browser speechSynthesis fallback (used only if ElevenLabs and the local
-// clip both fail) — paced to match SPEECH_SPEED above for pre-k listeners,
-// pitch raised to stay consistent with the childlike ElevenLabs cast.
-// SpeechSynthesisUtterance.pitch is clamped to [0, 2] by the Web Speech API
-// spec, so 2.0 (mia) is the ceiling this path can reach.
-const FALLBACK_VOICE: Record<Character, { rate: number; pitch: number }> = {
-  pip: { rate: 0.78, pitch: 1.5 },
-  mia: { rate: 0.63, pitch: 2.0 },
-  bella: { rate: 0.63, pitch: 1.7 },
-  willow: { rate: 0.63, pitch: 1.6 },
-  leo: { rate: 0.58, pitch: 1.4 },
-  teacher: { rate: 0.78, pitch: 1.3 },
-  narrator: { rate: 0.78, pitch: 1.3 },
-};
-
 // Raw fetched clips are cached as Blobs, playable directly via HTMLAudioElement.
 const blobCache = new Map<string, Blob>();
 const inFlight = new Map<string, Promise<Blob | null>>();
@@ -392,60 +377,16 @@ function stopCurrent() {
     }
     currentAudioEl = null;
   }
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-    try {
-      window.speechSynthesis.cancel();
-    } catch {
-      /* noop */
-    }
-  }
 }
 
-/** Waits briefly for the browser's voice list to finish loading (it loads
- *  asynchronously on some browsers) and returns whatever is available. */
-function getVoicesReady(): Promise<SpeechSynthesisVoice[]> {
-  return new Promise((resolve) => {
-    const v = window.speechSynthesis.getVoices();
-    if (v.length) { resolve(v); return; }
-    const timer = window.setTimeout(() => resolve(window.speechSynthesis.getVoices()), 500);
-    window.speechSynthesis.onvoiceschanged = () => {
-      window.clearTimeout(timer);
-      resolve(window.speechSynthesis.getVoices());
-    };
-  });
-}
-
-async function playFallback(text: string, character: Character): Promise<void> {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-
-  // This fallback only exists for the rare case the real character-voice
-  // fetch fails outright. If the device has no English voice installed at
-  // all, the browser will substitute whatever its default system voice is
-  // (observed in the wild: a French voice) regardless of the `lang` we ask
-  // for — that's worse than staying silent for a beat, since the teacher is
-  // narrating live anyway. So refuse to speak rather than guess wrong.
-  const voices = await getVoicesReady();
-  const english = voices.filter((v) => v.lang.toLowerCase().startsWith('en'));
-  if (!english.length) {
-    console.warn('[lep1 voice] no English system voice installed — skipping fallback speech for:', text);
-    return;
-  }
-  const voice =
-    english.find((v) => /en-US/i.test(v.lang)) ??
-    english.find((v) => /female/i.test(v.name)) ??
-    english[0];
-
-  return new Promise((resolve) => {
-    const u = new SpeechSynthesisUtterance(text);
-    const f = FALLBACK_VOICE[character];
-    u.rate = f.rate;
-    u.pitch = f.pitch;
-    u.lang = voice.lang;
-    u.voice = voice;
-    u.onend = () => resolve();
-    u.onerror = () => resolve();
-    window.speechSynthesis.speak(u);
-  });
+/** No browser text-to-speech, ever. The device's built-in voices speak with
+ *  whatever accent/language the device has (reported in class as an
+ *  unacceptable accent), so a line whose recorded character clip can't be
+ *  fetched stays silent for that beat instead of switching to a different,
+ *  robotic voice. The next attempt retries the real clip (the server keeps
+ *  every generated line, see elevenlabs-tts). */
+async function playFallback(text: string, _character: Character): Promise<void> {
+  console.warn('[lep1 voice] character clip unavailable — staying silent (no browser voice):', text);
 }
 
 /** Slows down playback without pitch-shifting (modern browsers preserve
@@ -510,17 +451,76 @@ export function unlockAudio() {
     a.volume = 0.01;
     void a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(() => {});
   } catch { /* noop */ }
+}
+
+/* --------------------------------------------------------------------------
+ * Live-class relay. In a synced classroom activity only the side that "has
+ * the floor" runs the scene logic that speaks, so the other side heard
+ * nothing. The lesson player installs a relay on the driving side: every
+ * line/clip played here is also sent to the other screen, which plays it
+ * with playRelayedSpeech(). Lines some scenes already speak on both sides
+ * (e.g. from an effect on synced state) are de-duplicated on the receiving
+ * side by text within a short window.
+ * -------------------------------------------------------------------------- */
+export type SpeechRelayEvent =
+  | { kind: 'speak'; text: string; character: Character }
+  | { kind: 'clip'; url: string; label: string }
+  | { kind: 'stop' }
+  | { kind: 'sfx'; name: string }
+  // Latency probe: the driving side pings, the other side pongs back.
+  | { kind: 'ping'; id: number }
+  | { kind: 'pong'; id: number };
+let speechRelay: ((e: SpeechRelayEvent) => void) | null = null;
+/** How long the driving side holds back its own playback of a relayed line
+ *  (≈ one-way network time to the other screen), so both start together. */
+let relayLeadMs = 0;
+export function setSpeechRelayLead(ms: number) { relayLeadMs = Math.max(0, Math.min(400, Math.round(ms))); }
+const waitUntil = (t: number) => { const d = t - Date.now(); return d > 0 ? new Promise<void>((res) => setTimeout(res, d)) : Promise.resolve(); };
+let dedupeReceived = false;
+const recentStarts = new Map<string, number>();
+const DEDUPE_MS = 2500;
+
+export function setSpeechRelay(fn: ((e: SpeechRelayEvent) => void) | null) { speechRelay = fn; if (!fn) relayLeadMs = 0; }
+export function setSpeechDedupe(on: boolean) { dedupeReceived = on; if (!on) recentStarts.clear(); }
+
+function seenRecently(k: string, windowMs = DEDUPE_MS): boolean {
+  if (!dedupeReceived) return false;
+  const now = Date.now();
+  const at = recentStarts.get(k);
+  recentStarts.set(k, now);
+  return at !== undefined && now - at < windowMs;
+}
+
+let sfxPlayer: ((name: string) => void) | null = null;
+export function registerSfxPlayer(fn: (name: string) => void) { sfxPlayer = fn; }
+/** Called by sfx.ts before playing a sound. Returns the start delay in
+ *  seconds to apply locally (the network lead while relaying), or -1 to skip
+ *  it because the same sound just arrived from the other screen. */
+export function relaySfx(name: string): number {
+  if (seenRecently(`sfx:${name}`, 400)) return -1;
+  if (!speechRelay) return 0;
+  speechRelay({ kind: 'sfx', name });
+  return relayLeadMs / 1000;
+}
+
+/** Play an event relayed from the other screen (never re-relayed). */
+export function playRelayedSpeech(e: SpeechRelayEvent) {
+  const relay = speechRelay;
+  speechRelay = null;
   try {
-    if ('speechSynthesis' in window) {
-      const u = new SpeechSynthesisUtterance(' ');
-      u.volume = 0;
-      window.speechSynthesis.speak(u);
-    }
-  } catch { /* noop */ }
+    if (e.kind === 'ping' || e.kind === 'pong') return;
+    if (e.kind === 'sfx') { if (!seenRecently(`sfx:${e.name}`, 400)) sfxPlayer?.(e.name); return; }
+    if (e.kind === 'stop') stopSpeaking();
+    else if (e.kind === 'speak') void speak(e.text, e.character).catch(() => {});
+    else void playPhonicsClip(e.url, e.label);
+  } finally {
+    speechRelay = relay;
+  }
 }
 
 /** Stop everything currently playing and invalidate the queue. */
 export function stopSpeaking() {
+  if (queueDepth > 0) speechRelay?.({ kind: 'stop' });
   sessionId++;
   stopCurrent();
   playChain = Promise.resolve();
@@ -553,13 +553,29 @@ export function speak(text: string, character: Character = 'teacher'): Promise<v
   const trimmed = text.trim();
   if (!trimmed) return Promise.resolve();
   const spoken = ttsSafe(trimmed);
+  if (seenRecently(`speak:${trimmed}`)) return Promise.resolve();
+  // Live class: send the line to the other screen and hold our own start
+  // back by the network lead so both start together. A clip that's already
+  // here is sent at once (the other screen warmed the same ready-made clip);
+  // one that must be generated is sent only once it exists, so the other
+  // screen gets the server's saved copy instead of generating it a second
+  // time.
+  const relay = speechRelay;
+  const k = key(character, spoken);
+  const ready = blobCache.has(k);
+  let sentAt = Date.now();
+  if (relay && ready) relay({ kind: 'speak', text: trimmed, character });
 
   const mySession = sessionId;
   queueDepth++;
+  const blobPromise = fetchClipBlob(k, spoken, character).then((b) => {
+    if (relay && !ready && mySession === sessionId) { sentAt = Date.now(); relay({ kind: 'speak', text: trimmed, character }); }
+    return b;
+  });
   const job = playChain.then(async () => {
     if (mySession !== sessionId) return;
-    const k = key(character, spoken);
-    const blob = await fetchClipBlob(k, spoken, character);
+    const blob = await blobPromise;
+    if (relay && relayLeadMs) await waitUntil(sentAt + relayLeadMs);
     if (mySession !== sessionId) return;
     const played = blob ? await playClipBlob(blob) : false;
     // A clip that was deliberately interrupted mid-playback (stopSpeaking()
@@ -585,6 +601,48 @@ export function speak(text: string, character: Character = 'teacher'): Promise<v
 export function speakOnce(text: string, character: Character = 'teacher'): Promise<void> {
   if (queueDepth > 0) return Promise.resolve();
   return speak(text, character);
+}
+
+const CHARACTERS = new Set<Character>(['pip', 'mia', 'bella', 'willow', 'leo', 'teacher', 'narrator']);
+const SPOKEN_KEYS = ['line', 'hearWord', 'word', 'answer', 'question'] as const;
+
+/** Every voice line a scene can speak (objects with a `who` plus a line/
+ *  word/answer), so both screens can warm them before the activity starts
+ *  and a relayed line plays instantly instead of waiting on a fetch.
+ *  `voiceOf` maps a scene's speaker key to an audio character. */
+export function collectSceneLines(scene: unknown, voiceOf: (who: string) => Character | null = (w) => (CHARACTERS.has(w as Character) ? (w as Character) : null)): { text: string; who: Character }[] {
+  const out = new Map<string, { text: string; who: Character }>();
+  const walk = (node: unknown, inheritedWho: Character | null, depth: number) => {
+    if (!node || typeof node !== 'object' || depth > 6 || out.size >= 24) return;
+    if (Array.isArray(node)) { node.forEach((n) => walk(n, inheritedWho, depth + 1)); return; }
+    const o = node as Record<string, unknown>;
+    const who = typeof o.who === 'string' ? voiceOf(o.who) : inheritedWho;
+    for (const k of SPOKEN_KEYS) {
+      const v = o[k];
+      const speaker = k === 'question' ? (who ?? 'teacher') : who;
+      if (typeof v === 'string' && v.trim() && speaker) out.set(`${speaker}::${v.trim()}`, { text: v.trim(), who: speaker });
+    }
+    for (const [k, v] of Object.entries(o)) if (v && typeof v === 'object' && k !== 'bg') walk(v, who, depth + 1);
+  };
+  walk(scene, null, 0);
+  return Array.from(out.values());
+}
+
+/** Warm the clip cache from ALREADY-MADE clips only (the pre-generated
+ *  static files, or this device's saved copies) — never asks the live TTS
+ *  service to generate anything, so warming can't add load, cost or lag to
+ *  the lesson. A line with no ready-made clip is simply fetched when it's
+ *  actually spoken, as before. */
+export async function warmReadyClip(text: string, character: Character = 'teacher') {
+  const trimmed = text.trim();
+  if (!trimmed || typeof window === 'undefined') return;
+  const spoken = ttsSafe(trimmed);
+  const k = key(character, spoken);
+  if (blobCache.has(k)) return;
+  const baked = await fetchStaticClip(character, spoken);
+  if (baked) { blobCache.set(k, baked); return; }
+  const stored = await idbGet(k);
+  if (stored && stored.size) blobCache.set(k, stored);
 }
 
 /** Warm the clip cache without playing. */
@@ -676,6 +734,12 @@ function playClip(url: string): Promise<void> {
  */
 async function playPhonicsClip(clip: string | undefined, label: string): Promise<void> {
   if (!clip) { console.warn(`[phonics] no recorded clip for "${label}" — playing nothing (no ElevenLabs fallback, by design)`); return; }
+  if (seenRecently(`clip:${clip}`)) return;
+  if (speechRelay) {
+    const sentAt = Date.now();
+    speechRelay({ kind: 'clip', url: clip, label });
+    if (relayLeadMs) await waitUntil(sentAt + relayLeadMs);
+  }
   try {
     await playClip(clip);
   } catch (err) {

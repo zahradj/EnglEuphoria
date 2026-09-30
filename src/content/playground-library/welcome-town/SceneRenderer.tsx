@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { LiveStageFill, useStageDrop } from '../LiveStageFrame';
+import type { CallRole } from '@/components/classroom/stage/callStreams';
 import { ChatCloud } from '../ChatCloud';
 import type { Scene, CharKey } from './scenes';
 import { CAST, VOICE_KEY } from './scenes';
@@ -175,6 +177,7 @@ export function SceneRenderer(props: {
       case 'song': return <SongScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'sound-model': return <SoundModelScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;
       case 'trace': return <TraceScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+      case 'tongue-twister': return <TongueTwisterScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'word-build': return <WordBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'letter-game': return <LetterGameScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'jigsaw-puzzle': return <JigsawPuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
@@ -1773,26 +1776,14 @@ function RoleplayScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, {
 /* ---------- Join stage ---------- */
 
 function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'join-stage' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
-  const [state, setState] = useSyncedState(sync, { turnIdx: 0, gemDone: false });
+  const [state, setState] = useSyncedState(sync, { turnIdx: 0, gemDone: false, onStage: null as CallRole | null });
   const { turnIdx, gemDone } = state;
-  // The live camera preview below is always THIS device's own webcam, never
-  // synced or mirrored — only the turn/gem progression is shared state.
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-
-  useEffect(() => () => { streamRef.current?.getTracks().forEach((t) => t.stop()); }, [scene.id]);
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 480 }, audio: false });
-        if (cancelled) { s.getTracks().forEach((t) => t.stop()); return; }
-        streamRef.current = s;
-        if (videoRef.current) { videoRef.current.srcObject = s; await videoRef.current.play().catch(() => {}); }
-      } catch { /* fallback: no video */ }
-    })();
-    return () => { cancelled = true; };
-  }, []);
+  // No camera of its own: whoever is dragged here from the call tiles is
+  // shown (synced), see LiveStageFrame.
+  const onStage = state.onStage ?? null;
+  const placeOnStage = (role: CallRole | null) => setState((s) => ({ ...s, onStage: role }));
+  const canControl = !sync?.isSynced || sync.isAuthority;
+  const { over, dropProps } = useStageDrop(placeOnStage);
 
   const currentTurn = turnIdx < scene.turns.length ? scene.turns[turnIdx] : null;
   const isStudentTurn = currentTurn?.who === 'student';
@@ -1835,10 +1826,9 @@ function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, 
           </div>
         </div>
       )}
-      <div className="absolute left-1/2 z-30" style={{ top: '58%', transform: 'translate(-50%, -50%)' }}>
-        <div className={`relative flex items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-all ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`} style={{ width: 'clamp(300px, calc(46*var(--svw,1vw)), 500px)', height: 'clamp(300px, calc(46*var(--svw,1vw)), 500px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}>
-          <video ref={videoRef} muted playsInline className="h-full w-full object-cover" />
-          <span className="absolute right-6 top-6 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white"><span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" /> Live</span>
+      <div className="absolute left-1/2 z-30" style={{ top: '62%', transform: 'translate(-50%, -50%)' }}>
+        <div {...dropProps} className={`relative flex items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-all ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`} style={{ width: 'clamp(300px, calc(46*var(--svw,1vw)), 500px)', height: 'clamp(300px, calc(46*var(--svw,1vw)), 500px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}>
+          <LiveStageFill onStage={onStage} onPlace={placeOnStage} over={over} canControl={canControl} />
         </div>
         <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '-48px' }}>
           <div className={`relative flex items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-orange-700 shadow-2xl ring-4 ring-white transition-transform ${isStudentTurn ? 'scale-110' : ''}`} style={{ width: 96, height: 96 }}>
@@ -2277,10 +2267,10 @@ function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene, { kind
 
   return (
     <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
-      <div className="pointer-events-none absolute inset-0 bg-black/15" />
+      {scene.magic ? <MagicLayer /> : <div className="pointer-events-none absolute inset-0 bg-black/15" />}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
-        <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: `linear-gradient(90deg, ${c.color}, #FEBE4C)` }}>
-          🔊 Sound Quest · {scene.letter} says {scene.phoneme}
+        <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: scene.magic ? MAGIC_GRADIENT : `linear-gradient(90deg, ${c.color}, #FEBE4C)` }}>
+          {scene.magic ? '🪄 Magic Sound' : '🔊 Sound Quest'} · {scene.letter} says {scene.phoneme}
         </div>
       </div>
       <div className="pointer-events-none absolute inset-x-0 top-10 z-10 flex justify-center px-4">
@@ -2294,7 +2284,7 @@ function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene, { kind
           onClick={playLetterSound}
           aria-label={`Hear the ${scene.letter} sound again`}
           className="grid place-items-center rounded-[2.5rem] border-8 bg-white/95 font-black shadow-2xl backdrop-blur transition active:scale-95"
-          style={{ color: c.color, borderColor: c.color, width: 'clamp(140px, calc(26*var(--svh,1vh)), 220px)', height: 'clamp(140px, calc(26*var(--svh,1vh)), 220px)', fontSize: 'clamp(70px, calc(14*var(--svh,1vh)), 110px)', lineHeight: 1, animation: beat >= 0 ? 'lep1-pop 0.5s ease-out' : 'lep1-wiggle 4s ease-in-out infinite' }}
+          style={{ color: scene.magic ? MAGIC_PURPLE : c.color, borderColor: scene.magic ? MAGIC_GOLD : c.color, boxShadow: scene.magic ? MAGIC_GLOW : undefined, width: 'clamp(140px, calc(26*var(--svh,1vh)), 220px)', height: 'clamp(140px, calc(26*var(--svh,1vh)), 220px)', fontSize: 'clamp(70px, calc(14*var(--svh,1vh)), 110px)', lineHeight: 1, animation: beat >= 0 ? 'lep1-pop 0.5s ease-out' : 'lep1-wiggle 4s ease-in-out infinite' }}
         >
           {scene.letter}
         </button>
@@ -2492,18 +2482,18 @@ function WordBuildScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract
   if (complete) {
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+        {scene.magic ? <MagicLayer /> : <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />}
         <Confetti count={50} />
         <button onClick={onNext} className="relative z-10 animate-[lep1-slide-up_0.4s_ease-out] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">You read {total} words! ⭐ Next</button>
       </div>
     );
   }
 
-  const letters = r.word.split('');
+  const letters = r.tiles ?? r.word.split('');
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
-      <div className="absolute inset-0 bg-black/15" />
-      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">🧩 {scene.teacher} <span className="ml-1 opacity-70">({round + 1}/{total})</span></div>
+      {scene.magic ? <MagicLayer /> : <div className="absolute inset-0 bg-black/15" />}
+      <div className={`pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full px-4 py-2 text-center text-sm font-black shadow-xl backdrop-blur sm:text-base ${scene.magic ? 'text-white' : 'bg-white/95 text-orange-700'}`} style={scene.magic ? { background: MAGIC_GRADIENT } : undefined}>{scene.magic ? '🪄' : '🧩'} {scene.teacher} <span className="ml-1 opacity-70">({round + 1}/{total})</span></div>
       <div className="relative z-10 flex w-full max-w-[560px] flex-col items-center gap-6 px-4">
         <button onClick={() => void safeSpeak(r.word, 'pip')} className="grid h-44 w-44 place-items-center rounded-3xl p-2 transition active:scale-95 sm:h-52 sm:w-52" aria-label={`Hear ${r.word}`}>
           {r.img ? <img src={r.img} alt={r.word} className="h-full w-full object-contain drop-shadow-2xl" draggable={false} /> : <span className="text-7xl drop-shadow-2xl">{r.emoji}</span>}
@@ -2512,15 +2502,155 @@ function WordBuildScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract
           {letters.map((ch, i) => {
             const isBlank = i === r.blankIndex;
             const display = isBlank ? (filled ?? '_') : ch;
-            return <div key={i} className={`grid place-items-center rounded-2xl border-4 font-black uppercase shadow-lg ${isBlank ? (filled ? 'border-green-400 bg-green-100 text-green-700' : 'border-dashed border-white bg-white/70 text-orange-700') : 'border-white bg-white/90 text-orange-700'}`} style={{ width: 62, height: 78, fontSize: 42 }}>{display}</div>;
+            return <div key={i} className={`grid place-items-center rounded-2xl border-4 font-black uppercase shadow-lg ${isBlank ? (filled ? 'border-green-400 bg-green-100 text-green-700' : 'border-dashed border-white bg-white/70 text-orange-700') : 'border-white bg-white/90 text-orange-700'}`} style={{ minWidth: 62, padding: '0 8px', height: 78, fontSize: 42 }}>{display}</div>;
           })}
         </div>
         <button onClick={() => void safeSpeak(r.word, 'pip')} className="rounded-full bg-white/95 px-6 py-2 text-sm font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔊 Listen</button>
         <div className="flex flex-wrap justify-center gap-3">
           {r.choices.map((L, i) => (
-            <button key={L} onClick={() => tap(L)} disabled={!!filled} className={`grid h-20 w-20 place-items-center rounded-2xl border-4 border-white text-4xl font-black text-white shadow-2xl transition active:scale-95 disabled:opacity-40 sm:h-24 sm:w-24 sm:text-5xl ${wrong === L ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`} style={{ background: i % 2 === 0 ? 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' : 'linear-gradient(135deg,#B85CD1,#D57BE6)' }}>{L}</button>
+            <button key={L} onClick={() => tap(L)} disabled={!!filled} className={`grid h-20 w-20 place-items-center rounded-2xl border-4 border-white text-4xl font-black text-white shadow-2xl transition active:scale-95 disabled:opacity-40 sm:h-24 sm:w-24 sm:text-5xl ${wrong === L ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`} style={{ background: scene.magic ? (i % 2 === 0 ? 'linear-gradient(135deg,#6D28D9,#A855F7)' : 'linear-gradient(135deg,#B45309,#F59E0B)') : i % 2 === 0 ? 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' : 'linear-gradient(135deg,#B85CD1,#D57BE6)' }}>{L}</button>
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Wizard / magic styling (phonics segment of Magic Castle) ---------- */
+
+const MAGIC_PURPLE = '#6D28D9';
+const MAGIC_GOLD = '#F5C542';
+const MAGIC_GRADIENT = 'linear-gradient(90deg, #6D28D9, #A855F7 55%, #F59E0B)';
+const MAGIC_GLOW = '0 0 0 4px rgba(245,197,66,0.55), 0 0 40px rgba(168,85,247,0.75)';
+const MAGIC_STARS = Array.from({ length: 28 }, (_, i) => ({
+  left: `${(i * 37 + 7) % 100}%`, top: `${(i * 53 + 11) % 94}%`, size: 2 + (i % 3) * 2,
+  dur: 1400 + (i % 5) * 320, delay: (i * 170) % 1700,
+}));
+
+/** Night-sky wash + twinkling stars + drifting sparkles over a scene bg. */
+function MagicLayer() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 38%, rgba(124,58,237,0.28), rgba(24,8,56,0.78) 78%)' }} />
+      {MAGIC_STARS.map((st, i) => (
+        <span key={i} className="absolute rounded-full bg-amber-100" style={{ left: st.left, top: st.top, width: st.size, height: st.size, boxShadow: '0 0 8px 2px rgba(255,230,160,0.9)', animation: `lep1-twinkle ${st.dur}ms ease-in-out ${st.delay}ms infinite` }} />
+      ))}
+      {['8%', '88%', '14%', '80%'].map((left, i) => (
+        <span key={`sp-${i}`} className="absolute text-2xl" style={{ left, top: i < 2 ? '18%' : '70%', animation: `lep1-twinkle ${1800 + i * 400}ms ease-in-out ${i * 300}ms infinite` }}>✨</span>
+      ))}
+    </div>
+  );
+}
+
+/** Splits `line` into words, marking the `focus` letters in each. */
+function focusParts(word: string, focus: string): { text: string; hit: boolean }[] {
+  if (!focus) return [{ text: word, hit: false }];
+  const out: { text: string; hit: boolean }[] = [];
+  const lower = word.toLowerCase(), f = focus.toLowerCase();
+  let i = 0;
+  while (i < word.length) {
+    const j = lower.indexOf(f, i);
+    if (j < 0) { out.push({ text: word.slice(i), hit: false }); break; }
+    if (j > i) out.push({ text: word.slice(i, j), hit: false });
+    out.push({ text: word.slice(j, j + f.length), hit: true });
+    i = j + f.length;
+  }
+  return out;
+}
+
+const TWISTER_ROUNDS = [
+  { label: 'Slow', icon: '🐢', msPerWord: 900 },
+  { label: 'Faster', icon: '🐇', msPerWord: 560 },
+  { label: 'Magic speed!', icon: '🚀', msPerWord: 330 },
+] as const;
+
+function TongueTwisterScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'tongue-twister' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
+  // step 0 = listen to the wizard; 1..3 = say it at each speed; 4 = done.
+  // `run` bumps each time the wand should sweep the line, so both screens
+  // animate the same sweep from the synced state.
+  const [state, setState] = useSyncedState(sync, { step: 0, run: 0, gemDone: false });
+  const { step, run, gemDone } = state;
+  const words = useMemo(() => scene.line.split(/\s+/), [scene.line]);
+  const [wandAt, setWandAt] = useState(-1);
+  const round = step >= 1 && step <= 3 ? TWISTER_ROUNDS[step - 1] : null;
+  const done = step >= 4;
+
+  const hear = () => { sfx.reveal(); void safeSpeak(scene.line, voiceOf(scene.who)); setState((st) => ({ ...st, run: st.run + 1 })); };
+
+  // Wand sweep: word by word at this round's pace (listen step uses the
+  // slow pace alongside the voice).
+  useEffect(() => {
+    if (run === 0 || done) return;
+    const ms = round?.msPerWord ?? TWISTER_ROUNDS[0].msPerWord;
+    let i = 0;
+    setWandAt(0);
+    const iv = window.setInterval(() => { i += 1; if (i >= words.length) { window.clearInterval(iv); window.setTimeout(() => setWandAt(-1), ms); } else setWandAt(i); }, ms);
+    return () => window.clearInterval(iv);
+  }, [run, step, done, round, words.length]);
+
+  const start = () => { sfx.pop(); setState((st) => ({ ...st, run: st.run + 1 })); };
+  const saidIt = () => {
+    sfx.match();
+    const next = step + 1;
+    const awardGem = next >= 4 && !gemDone;
+    if (awardGem) { sfx.gem(); onWin(true); }
+    setState((st) => ({ ...st, step: next, run: next <= 3 ? st.run + 1 : st.run, gemDone: st.gemDone || awardGem }));
+  };
+
+  return (
+    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <MagicLayer />
+      {done && <Confetti count={60} />}
+      <div className="pointer-events-none absolute inset-x-0 top-3 z-20 flex justify-center">
+        <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: MAGIC_GRADIENT }}>
+          🪄 Wizard’s Tongue Twister
+        </div>
+      </div>
+      <div className="absolute inset-x-0 top-12 z-20 flex justify-center px-4">
+        <div className="max-w-xl rounded-2xl px-4 py-2 text-center text-sm font-bold text-white shadow-2xl sm:text-base" style={{ background: 'rgba(20,6,48,0.6)', backdropFilter: 'blur(6px)' }}>
+          {done ? 'Magic! You said it at magic speed! ⭐' : step === 0 ? scene.teacher : `Your turn — say it ${round!.label.toLowerCase()} ${round!.icon}`}
+        </div>
+      </div>
+
+      {/* The spell scroll */}
+      <div className="absolute inset-x-0 top-1/2 z-20 flex -translate-y-1/2 justify-center px-4">
+        <div className="relative w-full max-w-[900px] rounded-[2rem] border-4 px-6 py-8 text-center shadow-2xl"
+          style={{ borderColor: MAGIC_GOLD, background: 'linear-gradient(180deg, #FFF8E7, #FCEFC9)', boxShadow: MAGIC_GLOW }}>
+          <span className="absolute -left-4 -top-5 text-4xl">🧙</span>
+          <span className="absolute -right-3 -top-5 text-4xl" style={{ animation: 'lep1-twinkle 1.6s ease-in-out infinite' }}>✨</span>
+          <div className="flex flex-wrap justify-center gap-x-3 gap-y-2 font-black leading-tight text-[#3B0764]" style={{ fontSize: 'clamp(28px, calc(5.2*var(--svh,1vh)), 54px)' }}>
+            {words.map((w, i) => (
+              <span key={i} className="relative inline-block rounded-xl px-1 transition-transform duration-150"
+                style={{ transform: wandAt === i ? 'translateY(-8px) scale(1.12)' : undefined, background: wandAt === i ? 'rgba(168,85,247,0.18)' : undefined }}>
+                {wandAt === i && <span className="absolute -top-9 left-1/2 -translate-x-1/2 text-3xl">🪄</span>}
+                {focusParts(w, scene.focus).map((p, k) => (
+                  <span key={k} style={p.hit ? { color: MAGIC_PURPLE, textShadow: '0 0 12px rgba(245,197,66,0.95)', textDecoration: 'underline', textDecorationColor: MAGIC_GOLD, textUnderlineOffset: 6 } : undefined}>{p.text}</span>
+                ))}
+              </span>
+            ))}
+          </div>
+          {/* Three potions fill as each speed is said */}
+          <div className="mt-6 flex items-center justify-center gap-6">
+            {TWISTER_ROUNDS.map((rd, i) => {
+              const filled = step > i + 1 || done;
+              const active = step === i + 1;
+              return (
+                <div key={rd.label} className={`flex flex-col items-center gap-1 transition ${active ? 'scale-110' : ''}`}>
+                  <span className="text-4xl" style={{ filter: filled ? 'drop-shadow(0 0 10px rgba(245,197,66,0.95))' : active ? undefined : 'grayscale(0.8) opacity(0.55)' }}>{filled ? '🧪' : '⚗️'}</span>
+                  <span className={`text-xs font-black ${active ? 'text-[#6D28D9]' : 'text-[#6B7280]'}`}>{rd.icon} {rd.label}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute inset-x-0 bottom-5 z-30 mx-auto flex max-w-lg flex-wrap justify-center gap-2 px-4">
+        <button onClick={hear} className="rounded-full bg-white/95 px-5 py-3 text-sm font-black text-[#6D28D9] shadow-xl ring-2 ring-purple-200 active:scale-95">🔊 Hear the wizard</button>
+        {step === 0 && <button onClick={() => { sfx.pop(); setState((st) => ({ ...st, step: 1, run: st.run + 1 })); }} className="rounded-full px-6 py-3 text-sm font-black text-white shadow-xl active:scale-95" style={{ background: MAGIC_GRADIENT }}>🎤 My turn →</button>}
+        {round && <button onClick={start} className="rounded-full bg-white/95 px-5 py-3 text-sm font-black text-[#6D28D9] shadow-xl ring-2 ring-purple-200 active:scale-95">{round.icon} Wand again</button>}
+        {round && <button onClick={saidIt} className="rounded-full px-6 py-3 text-sm font-black text-white shadow-xl active:scale-95" style={{ background: MAGIC_GRADIENT }}>✨ I said it!</button>}
+        {done && <button onClick={onNext} className="rounded-full px-8 py-3 text-base font-black text-white shadow-2xl active:scale-95" style={{ background: MAGIC_GRADIENT }}>⭐ Next</button>}
       </div>
     </div>
   );

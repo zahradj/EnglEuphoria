@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import type { Scene } from '@/content/playground-library/unit1/scenes';
 import { SceneRenderer, Hearts, MAX_HEARTS, Lep1Keyframes } from '@/content/playground-library/unit1/SceneRenderer';
-import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-library/unit1/audio';
+import { stopSpeaking, unlockAudio, setSpeechRelay, setSpeechDedupe, playRelayedSpeech, setSpeechRelayLead, collectSceneLines, warmReadyClip } from '@/content/playground-library/unit1/audio';
 import { whiteboardService } from '@/services/whiteboardService';
 import { getDomPath, getElementAtPath, withPointerCaptureNoop } from '@/content/playground-library/unit1/scenePathSync';
 
@@ -46,6 +46,7 @@ const REAL_SYNC_KINDS = new Set<string>([
   'feeling-quiz', 'feelings-bingo',
   'numbers-learn', 'numbers-review', 'candle-cake', 'count-balloons',
   'age-balloons', 'meet-greet', 'age-quiz', 'spin-wheel', 'picture-match',
+  'gather', 'voice-stage',
 ]);
 
 export interface PlayUnitLessonHandle {
@@ -283,6 +284,47 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
     });
     return unsubscribe;
   }, [isSynced, hasActivityAuthority, roomId, currentSceneId]);
+
+  // Voices in synced activities: only the driving side runs the scene
+  // logic that speaks, so relay each line to the other screen so the
+  // student (or the teacher, when the student drives) hears it too.
+  useEffect(() => {
+    if (!isSynced || !roomId || !role || !usesRealSync) return;
+    const sceneId = currentSceneId;
+    if (hasActivityAuthority) {
+      setSpeechRelay((event) => { void whiteboardService.sendSceneSpeech(roomId, { event, senderId: role, sceneId }); });
+      // Measure the one-way time to the other screen (half the ping round
+      // trip, smoothed) and hold our own playback back by that much so both
+      // screens start each line together.
+      const sentPings = new Map<number, number>();
+      let rtt: number | null = null;
+      const unsubPong = whiteboardService.subscribeToSceneSpeech(roomId, (payload) => {
+        if (payload.senderId === role || payload.event.kind !== 'pong') return;
+        const t0 = sentPings.get(payload.event.id);
+        if (t0 === undefined) return;
+        sentPings.delete(payload.event.id);
+        const sample = Date.now() - t0;
+        rtt = rtt === null ? sample : rtt * 0.7 + sample * 0.3;
+        setSpeechRelayLead(rtt / 2);
+      });
+      let n = 0;
+      const ping = () => { const id = ++n; sentPings.set(id, Date.now()); void whiteboardService.sendSceneSpeech(roomId, { event: { kind: 'ping', id }, senderId: role, sceneId }); };
+      ping();
+      const iv = window.setInterval(ping, 8000);
+      return () => { window.clearInterval(iv); unsubPong(); setSpeechRelay(null); };
+    }
+    setSpeechDedupe(true);
+    const unsubscribe = whiteboardService.subscribeToSceneSpeech(roomId, (payload) => {
+      if (payload.senderId === role) return;
+      if (payload.event.kind === 'ping') {
+        void whiteboardService.sendSceneSpeech(roomId, { event: { kind: 'pong', id: payload.event.id }, senderId: role, sceneId });
+        return;
+      }
+      if (payload.sceneId !== sceneId) return;
+      playRelayedSpeech(payload.event);
+    });
+    return () => { unsubscribe(); setSpeechDedupe(false); };
+  }, [isSynced, roomId, role, usesRealSync, hasActivityAuthority, currentSceneId]);
 
   const activitySync = usesRealSync
     ? { isSynced, isAuthority: hasActivityAuthority, state: activityState, setState: setActivityState }
@@ -577,20 +619,14 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
 
   useEffect(() => {
     let cancelled = false;
-    const upcoming = SCENES.slice(sceneIdx, sceneIdx + 2);
-    const lines: { text: string; who: any }[] = [];
-    for (const s of upcoming) {
-      if (s.kind === 'meet') lines.push({ text: s.line, who: s.who });
-      if (s.kind === 'echo') lines.push({ text: s.hearWord ?? s.word, who: s.who });
-      if (s.kind === 'sound-model') s.anchors.forEach((a) => lines.push({ text: a.word, who: s.who }));
-      if (s.kind === 'who-said-it') s.rounds.forEach((r) => lines.push({ text: r.line, who: r.who }));
-      if (s.kind === 'finale') lines.push({ text: s.line, who: s.who });
-    }
+    // Warm every voice line of this activity and the next one on BOTH
+    // screens, so a line relayed from the other side plays straight away.
+    const lines = SCENES.slice(sceneIdx, sceneIdx + 2).flatMap((sc) => collectSceneLines(sc));
     (async () => {
-      for (const line of lines.slice(0, 3)) {
+      for (const line of lines) {
         if (cancelled) return;
-        try { await prefetch(line.text, line.who); } catch { /* noop */ }
-        await new Promise((r) => setTimeout(r, 180));
+        try { await warmReadyClip(line.text, line.who); } catch { /* noop */ }
+        await new Promise((r) => setTimeout(r, 30));
       }
     })();
     return () => { cancelled = true; stopSpeaking(); };

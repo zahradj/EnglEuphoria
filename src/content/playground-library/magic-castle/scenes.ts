@@ -207,7 +207,7 @@ const CHAIR_SIZE = { targetWidth: '26%', targetHeight: '55%' };
 
 export const LESSON_A1U9L1_TITLE = 'Rooms in the Castle: Kitchen, Bedroom';
 export const LESSON_A1U9L1_OBJECTIVE =
-  'Name two castle rooms (kitchen, bedroom) and two furniture items (table, chair), and say what is (and is not) in a room using "There is a ___" / "There is no ___." (Reviews Unit 3’s in/on prepositions; Lesson 2 continues with bed, lamp, door, window.)';
+  'Name two castle rooms (kitchen, bedroom) and two furniture items (table, chair), and say what is (and is not) in a room using "There is a ___" / "There is no ___." Phonics: the CH /tʃ/ sound (chair, kitchen, cheese, chick) with a tongue twister and a short reading. (Reviews Unit 3’s in/on prepositions; Lesson 2 continues with bed, lamp, door, window.)';
 
 export const LESSON_A1U9L1_SCENES: Scene[] = [
   { id: 'mc-title', kind: 'title-card', bg: bgTitle, level: 'A1', unit: 'Unit 9', lessonLabel: 'Lesson 1', title: 'Magic Castle: Where Is It?', subtitle: 'Explore the castle with Wim and Cat-cat', cta: '\u{1F3F0} LET’S GO!' },
@@ -559,5 +559,62 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     ],
   },
 
-  { id: 'mc-finale', kind: 'finale', bg: bgFriends, who: 'pip', line: 'You explored the castle and learned kitchen, bedroom, table, and chair! Look around your home tonight and say "There is a ___!" ✨\u{1F3F0}' },
+  /* ---- Phonics segment: Wim's Sound Magic (CH /tʃ/) ------------------
+   * End-of-lesson phonics block in the castle's wizard theme (per direct
+   * request: phonics at the end, magic/wizard style, with a tongue twister
+   * and reading). CH is chosen because it's already inside this lesson's
+   * own words (CHair, kitCHen) — the sound is discovered in vocabulary the
+   * student just learned rather than introduced cold — and a real recorded
+   * /tʃ/ clip exists (public/lep1/audio/letters/phon-ch.ogg). Sequence is
+   * the standard hear → blend/build → say fluently → read: sound-model,
+   * word-build (CH as ONE tile, so the digraph is treated as one sound),
+   * tongue-twister (fluency, three speeds), then a short decodable
+   * flipbook whose text is written to match this unit's existing art. */
+  {
+    id: 'mc-ph-sound-ch', kind: 'sound-model', bg: bgWim, who: 'wim', magic: true,
+    letter: 'CH', phoneme: '/tʃ/', sound: 'ch',
+    teacher: 'Wim’s magic sound is CH! Say /ch/ /ch/ like a train: ch-ch-ch! Tap each magic box to find a CH word.',
+    anchors: [
+      { word: 'chair', emoji: '\u{1FA91}' },
+      { word: 'kitchen', emoji: '\u{1F373}' },
+      { word: 'cheese', emoji: '\u{1F9C0}' },
+      { word: 'chick', emoji: '\u{1F424}' },
+    ],
+  },
+
+  {
+    id: 'mc-ph-build-ch', kind: 'word-build', bg: bgKitchen, magic: true,
+    teacher: 'Cast the spell! Which magic sound finishes the word?',
+    rounds: [
+      { word: 'chip', tiles: ['ch', 'i', 'p'], blankIndex: 0, answer: 'ch', choices: ['ch', 'sh', 'c'], emoji: '\u{1F35F}' },
+      { word: 'chick', tiles: ['ch', 'i', 'ck'], blankIndex: 0, answer: 'ch', choices: ['s', 'ch', 't'], emoji: '\u{1F424}' },
+      { word: 'chest', tiles: ['ch', 'e', 's', 't'], blankIndex: 0, answer: 'ch', choices: ['ch', 'b', 'sh'], emoji: '\u{1F9F0}' },
+      { word: 'lunch', tiles: ['l', 'u', 'n', 'ch'], blankIndex: 3, answer: 'ch', choices: ['sh', 'ch', 'k'], emoji: '\u{1F371}' },
+    ],
+  },
+
+  {
+    id: 'mc-ph-twister', kind: 'tongue-twister', bg: bgWim, who: 'wim', focus: 'ch',
+    teacher: 'Listen to Wim’s magic tongue twister. Then say it slow, faster, and at magic speed!',
+    line: 'Wim’s chick chews cheese chips on a chair.',
+  },
+
+  {
+    // Decodable reading: every sentence uses this lesson's words + CH words
+    // + "there is", and each page's text matches what its picture shows.
+    id: 'mc-ph-reading', kind: 'flipbook', bg: bgWide, title: '✨ Read with Wim: Chip, Chop, Cheese!',
+    pages: [
+      { who: 'wim', img: bgWim, text: 'Wim is a wizard. His magic spell is "Chip, chop, cheese!"' },
+      { who: 'wim', img: bgKitchen, text: 'Wim is in the kitchen. There is a chair. There is a pot on the fire.' },
+      { who: 'catcat', img: bgCatcat, text: '"Is it lunch? Is it cheese?" asks Cat-cat.' },
+      { who: 'wim', img: bgKitchen, text: 'Wim waves his wand. "Chip, chop, cheese!" Chips pop out of the pot!' },
+      { who: 'pip', img: bgFriends, text: 'Wim, Cat-cat and Pip have lunch. Chomp, chomp! Cheers!' },
+    ],
+    checkpoints: [
+      { afterPage: 2, who: 'wim', question: 'Where is Wim?', options: ['In the kitchen', 'In the bedroom', 'In the garden'], answer: 'In the kitchen' },
+      { afterPage: 4, who: 'catcat', question: 'What is Wim’s magic spell?', options: ['Chip, chop, cheese!', 'Hocus pocus!', 'Hello, hello!'], answer: 'Chip, chop, cheese!' },
+    ],
+  },
+
+  { id: 'mc-finale', kind: 'finale', bg: bgFriends, who: 'pip', line: 'You explored the castle and learned kitchen, bedroom, table, and chair — and the magic CH sound! Look around your home tonight and say "There is a ___!" ✨\u{1F3F0}' },
 ];

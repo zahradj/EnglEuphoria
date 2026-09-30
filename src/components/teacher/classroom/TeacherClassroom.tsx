@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
+import { publishCallStreams, clearCallStreams } from "@/components/classroom/stage/callStreams";
 import { useNavigate } from "react-router-dom";
 import { supabaseUrl, supabaseAnonKey } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -615,6 +616,15 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     localStream: media.stream,
     enabled: media.isConnected
   });
+
+  // Share the call streams with lesson content (the Live Stage frame shows
+  // whoever is dragged onto it from the video tiles).
+  const stageTeacherStream = media.stream;
+  const stageStudentStream = participants[0]?.stream || null;
+  useEffect(() => {
+    publishCallStreams({ self: 'teacher', teacher: stageTeacherStream, student: stageStudentStream });
+  }, [stageTeacherStream, stageStudentStream]);
+  useEffect(() => () => clearCallStreams(), []);
 
   // Notify when student joins
   const prevParticipantCount = React.useRef(0);
@@ -1543,6 +1553,13 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         hubType={hubType}
         isTrial={isTrial}
         trialCefr={trialCefr}
+        lessonTitle={activeLessonTitle}
+        classSummary={{
+          minutes: classTime > 0 ? Math.round(classTime / 60) : null,
+          stars: studentStars,
+          pagesReached: sceneNavState.total > 0 ? sceneNavState.sceneIdx + 1 : null,
+          totalPages: sceneNavState.total || null,
+        }}
       />
 
       {/* Dice Roller Dialog */}

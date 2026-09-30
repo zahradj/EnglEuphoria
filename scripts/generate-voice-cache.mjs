@@ -48,6 +48,8 @@ import { fileURLToPath } from 'node:url';
 import * as unit1Scenes from '../src/content/playground-library/unit1/scenes.ts';
 import * as wtScenes from '../src/content/playground-library/welcome-town/scenes.ts';
 import * as wtA2Scenes from '../src/content/playground-library/welcome-town-a2/scenes.ts';
+import * as magicCastleScenes from '../src/content/playground-library/magic-castle/scenes.ts';
+import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.join(__dirname, '..', 'public', 'audio-cache');
@@ -363,6 +365,7 @@ const WT_EXTRACTORS = {
   trace: (s) => [[s.who, s.word]],
   'word-build': (s) => (s.rounds ?? []).map((r) => ['pip', r.word]),
   finale: (s) => (s.line ? [[s.who, s.line]] : []),
+  'tongue-twister': (s) => [[s.who, s.line]],
   // The reveal line (r.line) is verbatim; the "How often do you {action}?"
   // prompt is a template, but s.rounds[].action is scene-authored (not
   // open-ended user input) and always spoken by a fixed 'teacher' voice, so
@@ -406,7 +409,12 @@ const ENGINES = [
   { scenesModule: unit1Scenes, extractors: UNIT1_EXTRACTORS, resolveWho: (who) => who },
   { scenesModule: wtScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   { scenesModule: wtA2Scenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
+  // Magic Castle (A1 Unit 9) plays through welcome-town's renderer too.
+  { scenesModule: magicCastleScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
 ];
+
+/** Homework games: every line they can say, already as (voice, text). */
+const HOMEWORK_LINES = [...homeworkA1U9L1Lines()];
 
 function collectPairs(lessonFilter) {
   const seen = new Map(); // cacheKey -> [character, text]
@@ -417,6 +425,7 @@ function collectPairs(lessonFilter) {
   };
 
   for (const [character, text] of FIXED_LINES) add(character, text);
+  if (!lessonFilter || lessonFilter === 'HOMEWORK') for (const [character, text] of HOMEWORK_LINES) add(character, text);
 
   for (const { scenesModule, extractors, resolveWho } of ENGINES) {
     const sceneArrayNames = Object.keys(scenesModule).filter((k) => /^LESSON_.*_SCENES$/.test(k));

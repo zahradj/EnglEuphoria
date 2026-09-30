@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { publishCallStreams, clearCallStreams } from "@/components/classroom/stage/callStreams";
 import { useNavigate } from 'react-router-dom';
 import { PostClassFeedbackModal } from './PostClassFeedbackModal';
 import { useToast } from '@/hooks/use-toast';
@@ -229,6 +230,15 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
     localStream: media.stream,
     enabled: media.isConnected
   });
+
+  // Share the call streams with lesson content (the Live Stage frame shows
+  // whoever is dragged onto it from the video tiles).
+  const stageTeacherStream = participants[0]?.stream || null;
+  const stageStudentStream = media.stream;
+  useEffect(() => {
+    publishCallStreams({ self: 'student', teacher: stageTeacherStream, student: stageStudentStream });
+  }, [stageTeacherStream, stageStudentStream]);
+  useEffect(() => () => clearCallStreams(), []);
 
   // Notify when teacher joins
   const prevParticipantCount = useRef(0);

@@ -2,6 +2,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
+import { installNoBrowserVoice } from './lib/noBrowserVoice'
 import './index.css'
 import './playground-blueprint/styles.css'
 // Creator Studio workspace fonts
@@ -81,6 +82,8 @@ import('@/lib/unitProgressReport').then(({ recordVocabArcForUnit }) => {
     if (unitId) recordVocabArcForUnit(unitId, detail);
   });
 });
+
+installNoBrowserVoice()
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

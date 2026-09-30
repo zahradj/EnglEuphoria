@@ -1,0 +1,46 @@
+name: Bake voice clips
+
+# Records lesson/homework lines with the platform's character voices (via
+# the elevenlabs-tts edge function) into public/audio-cache/ and commits
+# them, so lessons and homework play recorded clips, never a live or
+# browser voice. See CLAUDE.md "Voice".
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/voice-bake-targets.txt'
+      - 'scripts/generate-voice-cache.mjs'
+      - 'src/content/playground-library/**/scenes.ts'
+      - 'src/content/playground-library/**/homework.ts'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bake-voice-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  bake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Record missing clips
+        run: |
+          set -e
+          grep -v '^\s*#' scripts/voice-bake-targets.txt | grep -v '^\s*$' | while read -r target; do
+            echo "== $target"
+            npx -y tsx scripts/generate-voice-cache.mjs --lesson="$target"
+          done
+      - name: Commit new clips
+        run: |
+          git add public/audio-cache
+          if git diff --cached --quiet; then echo "No new clips."; exit 0; fi
+          git config user.name "voice-bake-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "Bake voice clips ($(git diff --cached --name-only | wc -l) new)"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { LiveStageFill, useStageDrop } from '../LiveStageFrame';
+import type { CallRole } from '@/components/classroom/stage/callStreams';
 import { ChatCloud } from '../ChatCloud';
 import type { Scene, CharKey } from './scenes';
 import { CAST, PROP_THEME, getEmotionSprite, COLOR_SKETCH, comicPointForward } from './scenes';
@@ -234,7 +236,7 @@ export function SceneRenderer(props: {
     case 'video-check': return <VideoCheckScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
     case 'sentence-build': return <SentenceBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
     case 'who-said-it': return <WhoSaidItScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
-    case 'gather': return <GatherScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
+    case 'gather': return <GatherScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'memory': return <MemoryScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'dash': return <DashScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'catch-sort': return <CatchSortScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
@@ -264,7 +266,7 @@ export function SceneRenderer(props: {
     case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
     case 'name-gate': return <NameGateScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'meet-group': return <MeetGroupScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
-    case 'voice-stage': return <VoiceStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+    case 'voice-stage': return <VoiceStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
     case 'sound-pop': return <SoundPopScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'brick-crush': return <BrickCrushScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
     case 'friend-pop': return <FriendPopScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
@@ -1518,18 +1520,23 @@ function WhoSaidItScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, 
 
 /* ---------- Gather ---------- */
 
-function GatherScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'gather' }>; onNext: () => void; onWin: (gem: boolean) => void }) {
+function GatherScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'gather' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
   const IMG_W = 1920, IMG_H = 1152;
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [viewport, setViewport] = useState({ w: 0, h: 0 });
-  const [spoken, setSpoken] = useState<Set<CharKey>>(new Set());
-  const [camActive, setCamActive] = useState(false);
-  const [camError, setCamError] = useState<string | null>(null);
-  const [dragging, setDragging] = useState(false);
-  const [dragPos, setDragPos] = useState<{ x: number; y: number } | null>(null);
-  const [gemDone, setGemDone] = useState(false);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
+  // Synced: which friends have spoken + who is on the daisy stage. The
+  // stage shows a video-call tile dragged onto it (see LiveStageFrame) —
+  // no camera of its own.
+  const [state, setState] = useSyncedState(sync, { spoken: [] as CharKey[], onStage: null as CallRole | null, gemDone: false });
+  const spoken = useMemo(() => new Set(state.spoken ?? []), [state.spoken]);
+  const onStage = state.onStage ?? null;
+  const camActive = onStage !== null;
+  const canControl = !sync?.isSynced || sync.isAuthority;
+  const placeOnStage = (role: CallRole | null) => {
+    if (role && !state.gemDone) { sfx.gem(); onWin(true); }
+    setState((st) => ({ ...st, onStage: role, gemDone: st.gemDone || !!role }));
+  };
+  const { over, dropProps } = useStageDrop(placeOnStage);
 
   // Measure our own bounded container (not the browser window) so hotspot
   // math stays correct when this scene is embedded in the smaller classroom
@@ -1543,7 +1550,6 @@ function GatherScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: '
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
-  useEffect(() => () => { streamRef.current?.getTracks().forEach((t) => t.stop()); }, []);
 
   const project = (x: number, y: number, r: number) => {
     const w = viewport.w || IMG_W, h = viewport.h || IMG_H;
@@ -1551,47 +1557,8 @@ function GatherScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: '
   };
   const stagePos = project(scene.stage.x, scene.stage.y, scene.stage.r);
 
-  const tapHotspot = async (h: (typeof scene.hotspots)[number]) => { sfx.match(); setSpoken((s) => new Set(s).add(h.who)); await safeSpeak(h.line, h.who); };
+  const tapHotspot = async (h: (typeof scene.hotspots)[number]) => { sfx.match(); setState((st) => ({ ...st, spoken: st.spoken.includes(h.who) ? st.spoken : [...st.spoken, h.who] })); await safeSpeak(h.line, h.who); };
 
-  const startCamera = async () => {
-    setCamError(null);
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
-      streamRef.current = stream;
-      if (videoRef.current) { videoRef.current.srcObject = stream; await videoRef.current.play().catch(() => {}); }
-      setCamActive(true); sfx.gem();
-      if (!gemDone) { setGemDone(true); onWin(true); }
-    } catch {
-      setCamError('Camera unavailable — you can still say your name out loud!');
-      setCamActive(true);
-      if (!gemDone) { setGemDone(true); onWin(true); }
-    }
-  };
-
-  // All pointer coordinates below are converted from viewport-relative
-  // (e.clientX/Y) to container-relative, matching the container-relative
-  // `project()` math above.
-  const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (camActive) return;
-    (e.target as Element).setPointerCapture?.(e.pointerId);
-    const rect = containerRef.current?.getBoundingClientRect();
-    setDragging(true);
-    setDragPos({ x: e.clientX - (rect?.left ?? 0), y: e.clientY - (rect?.top ?? 0) });
-  };
-  const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (!dragging) return;
-    const rect = containerRef.current?.getBoundingClientRect();
-    setDragPos({ x: e.clientX - (rect?.left ?? 0), y: e.clientY - (rect?.top ?? 0) });
-  };
-  const onPointerUp = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (!dragging) return;
-    setDragging(false);
-    const rect = containerRef.current?.getBoundingClientRect();
-    const dx = (e.clientX - (rect?.left ?? 0)) - stagePos.left, dy = (e.clientY - (rect?.top ?? 0)) - stagePos.top;
-    const inside = Math.hypot(dx, dy) <= stagePos.size / 2 + 40;
-    setDragPos(null);
-    if (inside) void startCamera(); else sfx.wrong();
-  };
   const allSpoken = spoken.size >= scene.hotspots.length;
 
   return (
@@ -1610,32 +1577,19 @@ function GatherScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: '
           </div>
         );
       })}
-      <div className="absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ left: stagePos.left, top: stagePos.top, width: stagePos.size, height: stagePos.size, boxShadow: camActive ? '0 0 0 6px rgba(59,130,246,0.7), 0 0 60px rgba(59,130,246,0.55)' : dragging ? '0 0 0 8px rgba(254,106,47,0.85), 0 0 60px rgba(254,106,47,0.55)' : '0 0 0 4px rgba(255,255,255,0.7), 0 0 30px rgba(255,255,255,0.4)', transition: 'box-shadow 0.2s' }}>
-        {camActive ? (
-          <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-white shadow-2xl bg-black">
-            <video ref={videoRef} playsInline muted autoPlay className="h-full w-full object-cover" style={{ transform: 'scaleX(-1)' }} />
-            <span className="pointer-events-none absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-orange-500 px-4 py-1 text-xs font-black uppercase text-white shadow-lg">You ⭐</span>
-          </div>
-        ) : (
-          <div className="pointer-events-none flex h-full w-full items-center justify-center"><span className="text-4xl animate-bounce">📸</span></div>
-        )}
-      </div>
-      {!camActive && (
-        <button onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}
-          className="absolute z-30 flex select-none items-center gap-2 rounded-full bg-white/95 px-4 py-3 font-black text-orange-700 shadow-2xl backdrop-blur-md ring-4 ring-orange-400 active:scale-95"
-          style={{ left: dragPos ? dragPos.x : 24, top: dragPos ? dragPos.y : (viewport.h || 600) - 120, transform: dragging ? 'translate(-50%, -50%) scale(1.1)' : undefined, touchAction: 'none', transition: dragging ? 'none' : 'transform 0.15s' }}
-        >
-          <span className="text-3xl">🎥</span><span className="text-sm">Drag me!</span>
-        </button>
-      )}
-      <div className="pointer-events-none absolute inset-x-0 top-4 flex justify-center px-4">
-        <div className="pointer-events-auto max-w-lg rounded-3xl bg-white/90 px-5 py-3 text-center text-sm font-black text-orange-700 shadow-lg backdrop-blur">
-          {camActive ? '🌟 Your turn! Say: Hello, my name is ______.' : allSpoken ? 'Great! Now drag 🎥 to the daisy circle for your turn.' : scene.teacher}
+      <div {...dropProps} className="absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ left: stagePos.left, top: stagePos.top, width: stagePos.size, height: stagePos.size, boxShadow: camActive ? '0 0 0 6px rgba(59,130,246,0.7), 0 0 60px rgba(59,130,246,0.55)' : over ? '0 0 0 8px rgba(254,106,47,0.85), 0 0 60px rgba(254,106,47,0.55)' : '0 0 0 4px rgba(255,255,255,0.7), 0 0 30px rgba(255,255,255,0.4)', transition: 'box-shadow 0.2s' }}>
+        <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-white shadow-2xl" style={{ background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}>
+          <LiveStageFill onStage={onStage} onPlace={placeOnStage} over={over} canControl={canControl} />
+          {onStage === 'student' && <span className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-orange-500 px-4 py-1 text-xs font-black uppercase text-white shadow-lg">You ⭐</span>}
         </div>
       </div>
-      {camError && <div className="absolute inset-x-0 bottom-24 flex justify-center px-4"><div className="rounded-2xl bg-yellow-100 px-4 py-2 text-sm font-bold text-yellow-900 shadow">{camError}</div></div>}
+      <div className="pointer-events-none absolute inset-x-0 top-4 flex justify-center px-4">
+        <div className="pointer-events-auto max-w-lg rounded-3xl bg-white/90 px-5 py-3 text-center text-sm font-black text-orange-700 shadow-lg backdrop-blur">
+          {camActive ? '🌟 Your turn! Say: Hello, my name is ______.' : allSpoken ? 'Great! Now drag the student’s video into the daisy circle for their turn.' : scene.teacher}
+        </div>
+      </div>
       <div className="absolute inset-x-0 bottom-6 flex justify-center">
-        <button onClick={() => { streamRef.current?.getTracks().forEach((t) => t.stop()); onNext(); }} disabled={!camActive && !allSpoken} className="rounded-full bg-orange-500 px-8 py-3 text-lg font-black text-white shadow-2xl transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 hover:bg-orange-600">
+        <button onClick={onNext} disabled={!camActive && !allSpoken} className="rounded-full bg-orange-500 px-8 py-3 text-lg font-black text-white shadow-2xl transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 hover:bg-orange-600">
           {camActive ? 'I did it! ➜' : 'Next ➜'}
         </button>
       </div>
@@ -2150,12 +2104,15 @@ function RoleplayScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, {
 /* ---------- Join stage ---------- */
 
 function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'join-stage' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
-  const [state, setState] = useSyncedState(sync, { turnIdx: 0, gemDone: false });
+  const [state, setState] = useSyncedState(sync, { turnIdx: 0, gemDone: false, onStage: null as CallRole | null });
   const { turnIdx, gemDone } = state;
-  // The draggable camera-bubble position below is a per-device UI
-  // preference (each screen's own open space differs), never synced.
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
+  // No camera of its own: whoever is dragged here from the call tiles is
+  // shown (synced), see LiveStageFrame. The circle's position below is a
+  // per-device UI preference (each screen's own open space differs).
+  const onStage = state.onStage ?? null;
+  const placeOnStage = (role: CallRole | null) => setState((s) => ({ ...s, onStage: role }));
+  const canControl = !sync?.isSynced || sync.isAuthority;
+  const { over, dropProps } = useStageDrop(placeOnStage);
   const stageRef = useRef<HTMLDivElement | null>(null);
   // Defaults to the open right-side space the scene art was built to leave
   // clear (see u2l3-join-stage's *-solo backgrounds) — draggable so the
@@ -2180,19 +2137,7 @@ function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, 
   };
   const onCirclePointerUp = () => { draggingRef.current = false; };
 
-  useEffect(() => () => { stopSpeaking(); streamRef.current?.getTracks().forEach((t) => t.stop()); }, [scene.id]);
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 480 }, audio: false });
-        if (cancelled) { s.getTracks().forEach((t) => t.stop()); return; }
-        streamRef.current = s;
-        if (videoRef.current) { videoRef.current.srcObject = s; await videoRef.current.play().catch(() => {}); }
-      } catch { /* fallback: no video */ }
-    })();
-    return () => { cancelled = true; };
-  }, []);
+  useEffect(() => () => { stopSpeaking(); }, [scene.id]);
 
   const currentTurn = turnIdx < scene.turns.length ? scene.turns[turnIdx] : null;
   const isStudentTurn = currentTurn?.who === 'student';
@@ -2247,6 +2192,7 @@ function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, 
         style={{ left: `${circlePos.xPct}%`, top: `${circlePos.yPct}%`, transform: 'translate(-50%, -50%)' }}
       >
         <div
+          {...dropProps}
           onPointerDown={onCirclePointerDown}
           onPointerMove={onCirclePointerMove}
           onPointerUp={onCirclePointerUp}
@@ -2254,8 +2200,7 @@ function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, 
           className={`relative flex cursor-grab items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-colors active:cursor-grabbing ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`}
           style={{ width: 'clamp(200px, calc(30*var(--svw,1vw)), 360px)', height: 'clamp(200px, calc(30*var(--svw,1vw)), 360px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}
         >
-          <video ref={videoRef} muted playsInline className="pointer-events-none h-full w-full object-cover" />
-          <span className="pointer-events-none absolute right-6 top-6 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white"><span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" /> Live</span>
+          <LiveStageFill onStage={onStage} onPlace={placeOnStage} over={over} canControl={canControl} />
           <span className="pointer-events-none absolute left-6 top-6 rounded-full bg-black/50 px-2 py-1 text-xs">✥</span>
         </div>
         <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '-40px' }}>
@@ -4902,46 +4847,23 @@ function MeetGroupScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, 
 
 /* ---------- Voice stage ---------- */
 
-function VoiceStageScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'voice-stage' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const [round, setRound] = useState(0);
-  const [phase, setPhase] = useState<'ready' | 'listening' | 'guess' | 'reveal' | 'pleasantry' | 'done'>('ready');
-  const [feedback, setFeedback] = useState<null | { who: CharKey; ok: boolean }>(null);
-  const [gemDone, setGemDone] = useState(false);
-  const [placed, setPlaced] = useState(false);
-  const [dragging, setDragging] = useState(false);
-  const [pos, setPos] = useState({ x: 12, y: 82 });
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-
-  useEffect(() => { return () => { streamRef.current?.getTracks().forEach((t) => t.stop()); }; }, [scene.id]);
-
-  useEffect(() => {
-    if (!placed) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 320 }, audio: false });
-        if (cancelled) { s.getTracks().forEach((t) => t.stop()); return; }
-        streamRef.current = s;
-        if (videoRef.current) { videoRef.current.srcObject = s; await videoRef.current.play().catch(() => {}); }
-      } catch { /* fallback: no video */ }
-    })();
-    return () => { cancelled = true; };
-  }, [placed]);
-
-  const DROP = { cx: 50, cy: 78, r: 12 };
-  const onPointerDown = (e: React.PointerEvent) => { if (placed) return; setDragging(true); (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); };
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (!dragging || placed) return;
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    setPos({ x: ((e.clientX - rect.left) / rect.width) * 100, y: ((e.clientY - rect.top) / rect.height) * 100 });
-  };
-  const onPointerUp = () => {
-    if (!dragging) return;
-    setDragging(false);
-    const dx = pos.x - DROP.cx, dy = pos.y - DROP.cy;
-    if (Math.hypot(dx, dy) <= DROP.r + 4) { setPlaced(true); setPos({ x: DROP.cx, y: DROP.cy }); }
-  };
+function VoiceStageScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'voice-stage' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  type Phase = 'ready' | 'listening' | 'guess' | 'reveal' | 'pleasantry' | 'done';
+  const [state, setState] = useSyncedState(sync, {
+    round: 0, phase: 'ready' as Phase, feedback: null as null | { who: CharKey; ok: boolean }, gemDone: false, onStage: null as CallRole | null,
+  });
+  const { round, phase, feedback, gemDone } = state;
+  const setRound = (round: number) => setState((st) => ({ ...st, round }));
+  const setPhase = (phase: Phase) => setState((st) => ({ ...st, phase }));
+  const setFeedback = (feedback: null | { who: CharKey; ok: boolean }) => setState((st) => ({ ...st, feedback }));
+  const setGemDone = (gemDone: boolean) => setState((st) => ({ ...st, gemDone }));
+  // The drop circle shows a video-call tile dragged onto it (synced, see
+  // LiveStageFrame) — no camera of its own.
+  const onStage = state.onStage ?? null;
+  const placed = onStage !== null;
+  const canControl = !sync?.isSynced || sync.isAuthority;
+  const placeOnStage = (role: CallRole | null) => setState((st) => ({ ...st, onStage: role }));
+  const { over, dropProps } = useStageDrop(placeOnStage);
 
   const stageSpots = [{ left: '22%', top: '48%' }, { left: '50%', top: '44%' }, { left: '78%', top: '48%' }];
 
@@ -4985,7 +4907,7 @@ function VoiceStageScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
   const currentRound = scene.rounds[Math.min(round, scene.rounds.length - 1)];
 
   return (
-    <div className="absolute inset-0 z-10 overflow-hidden select-none" onPointerMove={onPointerMove} onPointerUp={onPointerUp}>
+    <div className="absolute inset-0 z-10 overflow-hidden select-none">
       <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }} />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/45" />
       <div className="absolute inset-x-0 top-5 z-30 flex justify-center px-4">
@@ -5006,11 +4928,8 @@ function VoiceStageScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
           </button>
         );
       })}
-      <div className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-dashed transition ${placed ? 'border-orange-400/70 bg-orange-300/10' : 'border-white/85 bg-white/10'} backdrop-blur-sm`} style={{ left: `${DROP.cx}%`, top: `${DROP.cy}%`, width: `calc(${DROP.r * 2}*var(--svw,1vw))`, height: `calc(${DROP.r * 2}*var(--svw,1vw))`, maxWidth: 220, maxHeight: 220, minWidth: 140, minHeight: 140 }}>
-        {!placed && <div className="flex h-full w-full items-center justify-center text-center text-[11px] font-black uppercase tracking-widest text-white drop-shadow">🎤 Drop your<br />camera here</div>}
-      </div>
-      <div onPointerDown={onPointerDown} className={`absolute z-30 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-4 shadow-2xl transition-transform sm:h-32 sm:w-32 ${placed ? 'border-orange-400 ring-4 ring-orange-300/60' : 'border-white cursor-grab active:cursor-grabbing'} ${dragging ? 'scale-110' : ''}`} style={{ left: `${pos.x}%`, top: `${pos.y}%`, background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)', touchAction: 'none' }}>
-        <video ref={videoRef} muted playsInline className="h-full w-full object-cover" />
+      <div {...dropProps} className={`absolute z-30 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full border-4 transition ${placed ? 'border-orange-400 ring-4 ring-orange-300/60' : 'border-dashed border-white/85'} ${over ? 'scale-105' : ''}`} style={{ left: '50%', top: '78%', width: 'calc(24*var(--svw,1vw))', height: 'calc(24*var(--svw,1vw))', maxWidth: 220, maxHeight: 220, minWidth: 140, minHeight: 140, background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}>
+        <LiveStageFill onStage={onStage} onPlace={placeOnStage} over={over} canControl={canControl} />
       </div>
       <div className="absolute right-4 top-1/2 z-30 flex w-[240px] -translate-y-1/2 flex-col items-stretch gap-3 sm:right-8 sm:w-[280px]">
         <div className="rounded-3xl bg-white/95 px-4 py-3 text-center shadow-2xl ring-2 ring-orange-200">
@@ -5028,7 +4947,7 @@ function VoiceStageScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scen
             {phase === 'listening' ? 'Listening…' : phase === 'guess' ? 'Your turn 🎤' : '🔊 Ask & repeat'}
           </button>
         )}
-        {!placed && <div className="rounded-2xl bg-black/50 px-3 py-2 text-center text-[11px] font-black uppercase tracking-widest text-white shadow">⬅ Drag your camera into the circle</div>}
+        {!placed && <div className="rounded-2xl bg-black/50 px-3 py-2 text-center text-[11px] font-black uppercase tracking-widest text-white shadow">⬇ Drag the student’s video into the circle</div>}
       </div>
       {phase === 'pleasantry' && currentRound && (
         <div className="pointer-events-none absolute inset-x-0 bottom-32 z-40 flex justify-center px-4">
