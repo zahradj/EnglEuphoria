@@ -1543,6 +1543,13 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         hubType={hubType}
         isTrial={isTrial}
         trialCefr={trialCefr}
+        lessonTitle={activeLessonTitle}
+        classSummary={{
+          minutes: classTime > 0 ? Math.round(classTime / 60) : null,
+          stars: studentStars,
+          pagesReached: sceneNavState.total > 0 ? sceneNavState.sceneIdx + 1 : null,
+          totalPages: sceneNavState.total || null,
+        }}
       />
 
       {/* Dice Roller Dialog */}
