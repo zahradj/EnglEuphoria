@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { writeLessonPointer } from '@/services/activeCoreLessonResolver';
 
 type HubType = 'playground' | 'academy' | 'professional';
 
@@ -40,7 +41,7 @@ interface Props {
  * lesson in the hub's sequence (Pre-A1 -> A1 -> A2..., unit, then lesson
  * number) rather than letting the teacher jump anywhere in the catalog.
  * Persists the choice to `class_bookings.curriculum_lesson_id` (preferred by
- * resolver on re-entry) AND `student_curriculum_progress.current_lesson_id`
+ * resolver on re-entry) AND `student_lesson_pointers.current_lesson_id`
  * (drives future bookings). Broadcasts a `lesson_switched` event on the
  * classroom realtime channel so the student sees a toast.
  */
@@ -116,14 +117,9 @@ export const LessonSwitcher: React.FC<Props> = ({
         .eq('id', bookingId);
       if (bookingErr) console.error('[LessonSwitcher] class_bookings update failed:', bookingErr);
 
-      // Also advance the student's Master Library pointer for future bookings.
-      const { error: progressErr } = await supabase
-        .from('student_curriculum_progress')
-        .upsert(
-          { student_id: studentId, current_lesson_id: lessonId, last_activity_at: new Date().toISOString() },
-          { onConflict: 'student_id' },
-        );
-      if (progressErr) console.error('[LessonSwitcher] student_curriculum_progress upsert failed:', progressErr);
+      // Also move the student's current-lesson pointer for future bookings.
+      const { error: progressErr } = await writeLessonPointer(studentId, lessonId);
+      if (progressErr) console.error('[LessonSwitcher] lesson pointer write failed:', progressErr);
 
       // Audit trail — best-effort, never blocks the switch.
       try {

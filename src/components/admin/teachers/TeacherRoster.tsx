@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Search, Users, Coins, Globe2, Star, Undo2 } from 'lucide-react';
 import { TeacherManagementDrawer } from './TeacherManagementDrawer';
+import { asPayoutCurrency, formatPay, type PayoutCurrency } from '@/lib/teacherPay';
 
 export interface RosterTeacher {
   user_id: string;
@@ -26,6 +27,8 @@ export interface RosterTeacher {
   assigned_hubs: string[];
   market_access: string[];
   per_class_rate: number;
+  /** Local teachers are paid in DZD, international teachers in EUR. */
+  payout_currency: PayoutCurrency;
   owed_this_month: number;
   owed_classes: number;
 }
@@ -75,9 +78,10 @@ export function TeacherRoster() {
   async function load() {
     setLoading(true);
     try {
-      const { data: profiles, error } = await supabase
+      // payout_currency isn't in the generated Supabase types yet.
+      const { data: profiles, error } = await (supabase as any)
         .from('teacher_profiles')
-        .select('user_id, profile_image_url, per_class_rate, assigned_hubs, market_access, hub_role')
+        .select('user_id, profile_image_url, per_class_rate, payout_currency, assigned_hubs, market_access, hub_role')
         .eq('profile_complete', true)
         .eq('profile_approved_by_admin', true);
       if (error) throw error;
@@ -108,6 +112,7 @@ export function TeacherRoster() {
           assigned_hubs: assigned,
           market_access: Array.isArray(p.market_access) && p.market_access.length ? p.market_access : ['DZ'],
           per_class_rate: Number(p.per_class_rate ?? 0),
+          payout_currency: asPayoutCurrency(p.payout_currency),
           owed_this_month: o?.amount ?? 0,
           owed_classes: o?.n ?? 0,
         };
@@ -129,7 +134,10 @@ export function TeacherRoster() {
     );
   }, [rows, q]);
 
-  const totalOwed = rows.reduce((s, r) => s + r.owed_this_month, 0);
+  // Local (DZD) and international (EUR) pay are never added together.
+  const owedIn = (c: PayoutCurrency) =>
+    rows.filter((r) => r.payout_currency === c).reduce((s, r) => s + r.owed_this_month, 0);
+  const totalOwedLabel = `${formatPay(owedIn('DZD'), 'DZD')} · ${formatPay(owedIn('EUR'), 'EUR')}`;
 
   return (
     <div className="space-y-6">
@@ -142,7 +150,7 @@ export function TeacherRoster() {
 
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard icon={<Users className="h-4 w-4" />} label="Active teachers" value={rows.length.toString()} />
-        <StatCard icon={<Coins className="h-4 w-4" />} label="Total owed this month" value={`€${totalOwed.toFixed(2)}`} accent />
+        <StatCard icon={<Coins className="h-4 w-4" />} label="Total owed this month" value={totalOwedLabel} accent />
         <StatCard icon={<Globe2 className="h-4 w-4" />} label="Markets covered"
           value={`${rows.filter(r => r.market_access.includes('DZ')).length} DZ · ${rows.filter(r => r.market_access.includes('INTL')).length} INTL`} />
       </div>
@@ -168,6 +176,7 @@ export function TeacherRoster() {
                 <TableHead>Teacher</TableHead>
                 <TableHead>Hubs</TableHead>
                 <TableHead>Market</TableHead>
+                <TableHead>Paid in</TableHead>
                 <TableHead className="text-right">Rate / class</TableHead>
                 <TableHead className="text-right">Owed this month</TableHead>
                 <TableHead className="text-right">Promotion</TableHead>
@@ -203,9 +212,16 @@ export function TeacherRoster() {
                       ))}
                     </div>
                   </TableCell>
-                  <TableCell className="text-right tabular-nums">€{r.per_class_rate.toFixed(2)}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="text-xs">
+                      {r.payout_currency === 'DZD' ? 'Local · DZD' : 'International · EUR'}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {r.per_class_rate > 0 ? formatPay(r.per_class_rate, r.payout_currency) : <span className="text-muted-foreground text-xs">hourly rate</span>}
+                  </TableCell>
                   <TableCell className="text-right">
-                    <div className="font-bold text-base tabular-nums">€{r.owed_this_month.toFixed(2)}</div>
+                    <div className="font-bold text-base tabular-nums">{formatPay(r.owed_this_month, r.payout_currency)}</div>
                     <div className="text-[11px] text-muted-foreground">{r.owed_classes} classes</div>
                   </TableCell>
                   <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>

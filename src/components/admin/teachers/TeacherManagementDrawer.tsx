@@ -17,6 +17,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Loader2, CheckCircle2, Coins, Layers, Receipt } from 'lucide-react';
 import type { RosterTeacher } from './TeacherRoster';
+import { currencySymbol, formatPay, TEACHER_KIND_LABEL, type PayoutCurrency } from '@/lib/teacherPay';
 
 interface Props {
   teacher: RosterTeacher | null;
@@ -30,6 +31,18 @@ const HUBS = [
   { key: 'success', label: 'Success (Pro)' },
 ] as const;
 
+interface EarningRow {
+  id: string;
+  booking_id: string | null;
+  teacher_amount: number;
+  platform_amount: number | null;
+  status: string | null;
+  earned_at: string;
+  adjustment_note: string | null;
+  adjusted_at: string | null;
+  currency: PayoutCurrency;
+}
+
 const MARKETS = [
   { key: 'DZ', label: 'Local DZ' },
   { key: 'INTL', label: 'International' },
@@ -39,28 +52,87 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
   const [hubs, setHubs] = useState<string[]>([]);
   const [markets, setMarkets] = useState<string[]>([]);
   const [rate, setRate] = useState('0');
+  // Local teacher → paid in DZD; international teacher → paid in EUR.
+  const [currency, setCurrency] = useState<PayoutCurrency>('EUR');
   const [savingPerm, setSavingPerm] = useState(false);
   const [savingComp, setSavingComp] = useState(false);
   const [marking, setMarking] = useState(false);
   const [ledger, setLedger] = useState<any[]>([]);
   const [owed, setOwed] = useState<{ amount: number; classes_count: number; period_start: string; period_end: string } | null>(null);
+  // This month's per-lesson earnings rows — each one editable (bonus,
+  // deduction, correction) with a reason; "owed" is their sum.
+  const [earnings, setEarnings] = useState<EarningRow[]>([]);
+  const [drafts, setDrafts] = useState<Record<string, { amount: string; note: string }>>({});
+  const [savingEarningId, setSavingEarningId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!teacher) return;
     setHubs(teacher.assigned_hubs);
     setMarkets(teacher.market_access);
     setRate(String(teacher.per_class_rate ?? 0));
+    setCurrency(teacher.payout_currency);
     void refreshPayroll(teacher.user_id);
   }, [teacher]);
 
   async function refreshPayroll(uid: string) {
-    const [{ data: owedRows }, { data: ledgerRows }] = await Promise.all([
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+    const [{ data: owedRows }, { data: ledgerRows }, { data: earningRows }] = await Promise.all([
       supabase.rpc('get_teacher_monthly_owed', { p_teacher_user_id: uid }),
-      supabase.from('teacher_payouts_ledger').select('*').eq('teacher_user_id', uid).order('paid_at', { ascending: false }).limit(12),
+      // Only real payouts — end_lesson also writes a per-lesson
+      // 'pending_clearance' row here, which isn't a payment.
+      supabase.from('teacher_payouts_ledger').select('*').eq('teacher_user_id', uid).eq('status', 'paid').order('paid_at', { ascending: false }).limit(12),
+      (supabase as any)
+        .from('teacher_earnings')
+        .select('id, booking_id, teacher_amount, platform_amount, status, earned_at, adjustment_note, adjusted_at, currency')
+        .eq('teacher_id', uid)
+        .gte('earned_at', monthStart)
+        .order('earned_at', { ascending: false }),
     ]);
     const row: any = Array.isArray(owedRows) ? owedRows[0] : owedRows;
     setOwed(row ? { amount: Number(row.amount), classes_count: Number(row.classes_count), period_start: row.period_start, period_end: row.period_end } : null);
     setLedger(ledgerRows ?? []);
+    const rows = (earningRows ?? []) as EarningRow[];
+    setEarnings(rows);
+    setDrafts(Object.fromEntries(rows.map((r) => [r.id, { amount: String(Number(r.teacher_amount)), note: r.adjustment_note ?? '' }])));
+  }
+
+  async function saveEarning(row: EarningRow) {
+    if (!teacher) return;
+    const draft = drafts[row.id];
+    const amount = Number(draft?.amount);
+    if (!draft || draft.amount.trim() === '' || Number.isNaN(amount) || amount < 0) {
+      toast.error('Enter a valid non-negative amount');
+      return;
+    }
+    if (amount !== Number(row.teacher_amount) && !draft.note.trim()) {
+      toast.error('Add a reason for the change (the teacher sees it)');
+      return;
+    }
+    setSavingEarningId(row.id);
+    try {
+      const { data: auth } = await supabase.auth.getUser();
+      const platform = Number(row.platform_amount ?? 0);
+      const { error } = await (supabase as any)
+        .from('teacher_earnings')
+        .update({
+          teacher_amount: amount,
+          amount,
+          // valid_amounts check: teacher + platform = gross
+          gross_amount: amount + platform,
+          adjustment_note: draft.note.trim() || null,
+          adjusted_by: auth?.user?.id ?? null,
+          adjusted_at: new Date().toISOString(),
+        })
+        .eq('id', row.id);
+      if (error) throw error;
+      toast.success('Earning updated');
+      await refreshPayroll(teacher.user_id);
+    } catch (e: any) {
+      toast.error(e?.message ?? 'Failed to update earning');
+    } finally {
+      setSavingEarningId(null);
+    }
   }
 
   function toggleHub(hub: string, on: boolean) {
@@ -107,12 +179,13 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
     }
     setSavingComp(true);
     try {
-      const { error } = await supabase
+      // payout_currency isn't in the generated Supabase types yet.
+      const { error } = await (supabase as any)
         .from('teacher_profiles')
-        .update({ per_class_rate: numeric })
+        .update({ per_class_rate: numeric, payout_currency: currency })
         .eq('user_id', teacher.user_id);
       if (error) throw error;
-      toast.success('Pay rate updated');
+      toast.success('Pay settings updated');
       await refreshPayroll(teacher.user_id);
       onSaved();
     } catch (e: any) {
@@ -134,12 +207,21 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
         classes_count: owed.classes_count,
         rate_applied: teacher.per_class_rate,
         amount: owed.amount,
-        currency: 'EUR',
+        currency: teacher.payout_currency,
         status: 'paid',
         paid_by: auth?.user?.id ?? null,
       });
       if (error) throw error;
-      toast.success(`Marked €${owed.amount.toFixed(2)} as paid`);
+      // Settle the individual lesson earnings that made up this payout.
+      const { error: settleErr } = await (supabase as any)
+        .from('teacher_earnings')
+        .update({ status: 'paid', paid_at: new Date().toISOString() })
+        .eq('teacher_id', teacher.user_id)
+        .neq('status', 'paid')
+        .gte('earned_at', owed.period_start)
+        .lt('earned_at', new Date(new Date(owed.period_end).getTime() + 86_400_000).toISOString());
+      if (settleErr) console.error('[TeacherManagementDrawer] settle earnings failed', settleErr);
+      toast.success(`Marked ${formatPay(owed.amount, teacher.payout_currency)} as paid`);
       await refreshPayroll(teacher.user_id);
     } catch (e: any) {
       toast.error(e?.message ?? 'Failed to record payout');
@@ -202,12 +284,35 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
           {/* TAB 2 */}
           <TabsContent value="compensation" className="space-y-6 mt-6">
             <div>
-              <Label htmlFor="rate" className="text-sm font-semibold">Per-class rate (EUR)</Label>
-              <p className="text-xs text-muted-foreground mb-2">Amount paid per completed 30-min session.</p>
+              <Label className="text-sm font-semibold">Teacher type</Label>
+              <p className="text-xs text-muted-foreground mb-2">
+                Decides the currency this teacher is paid in. Separate from which students they can teach (Market access).
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {(['DZD', 'EUR'] as const).map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setCurrency(c)}
+                    className={`rounded-lg border-2 p-3 text-left text-sm transition ${
+                      currency === c ? 'border-primary bg-primary/5 font-semibold' : 'border-border hover:border-primary/40'
+                    }`}
+                  >
+                    {c === 'DZD' ? '🇩🇿 ' : '🌍 '}{TEACHER_KIND_LABEL[c]}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="rate" className="text-sm font-semibold">Per-class rate ({currency})</Label>
+              <p className="text-xs text-muted-foreground mb-2">
+                Amount paid per completed session. Leave at 0 to pay the teacher's hourly rate pro-rated to the lesson length.
+              </p>
               <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">€</span>
-                  <Input id="rate" type="number" step="0.01" min="0" value={rate} onChange={(e) => setRate(e.target.value)} className="pl-7" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{currencySymbol(currency)}</span>
+                  <Input id="rate" type="number" step="0.01" min="0" value={rate} onChange={(e) => setRate(e.target.value)} className="pl-9" />
                 </div>
                 <Button onClick={saveCompensation} disabled={savingComp}>
                   {savingComp ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
@@ -217,9 +322,9 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
 
             <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-1">
               <div className="text-xs uppercase font-semibold text-muted-foreground">Quick preview</div>
-              <div className="text-sm">10 classes → <span className="font-bold tabular-nums">€{(Number(rate || '0') * 10).toFixed(2)}</span></div>
-              <div className="text-sm">25 classes → <span className="font-bold tabular-nums">€{(Number(rate || '0') * 25).toFixed(2)}</span></div>
-              <div className="text-sm">50 classes → <span className="font-bold tabular-nums">€{(Number(rate || '0') * 50).toFixed(2)}</span></div>
+              <div className="text-sm">10 classes → <span className="font-bold tabular-nums">{formatPay(Number(rate || '0') * 10, currency)}</span></div>
+              <div className="text-sm">25 classes → <span className="font-bold tabular-nums">{formatPay(Number(rate || '0') * 25, currency)}</span></div>
+              <div className="text-sm">50 classes → <span className="font-bold tabular-nums">{formatPay(Number(rate || '0') * 50, currency)}</span></div>
             </div>
           </TabsContent>
 
@@ -227,9 +332,9 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
           <TabsContent value="payroll" className="space-y-6 mt-6">
             <div className="rounded-xl border-2 border-primary/40 bg-primary/5 p-6 text-center">
               <div className="text-xs uppercase tracking-wide font-bold text-primary mb-2">Total owed this month</div>
-              <div className="text-5xl font-extrabold tabular-nums">€{(owed?.amount ?? 0).toFixed(2)}</div>
+              <div className="text-5xl font-extrabold tabular-nums">{formatPay(owed?.amount ?? 0, teacher.payout_currency)}</div>
               <div className="text-sm text-muted-foreground mt-2">
-                {owed?.classes_count ?? 0} completed × €{teacher.per_class_rate.toFixed(2)}
+                {owed?.classes_count ?? 0} unpaid lesson{owed?.classes_count === 1 ? '' : 's'} this month
               </div>
               <Button
                 onClick={markAsPaid}
@@ -243,6 +348,55 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
             </div>
 
             <div>
+              <h3 className="text-sm font-bold uppercase tracking-wide text-muted-foreground mb-1">This month's lessons</h3>
+              <p className="text-xs text-muted-foreground mb-3">
+                Adjust any lesson's pay (bonus, deduction or correction). A reason is required and is shown to the teacher.
+              </p>
+              {earnings.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-6">No paid lessons this month yet.</p>
+              ) : (
+                <ul className="space-y-2">
+                  {earnings.map((row) => {
+                    const draft = drafts[row.id] ?? { amount: String(row.teacher_amount), note: '' };
+                    const isPaid = row.status === 'paid';
+                    const dirty = Number(draft.amount) !== Number(row.teacher_amount) || draft.note !== (row.adjustment_note ?? '');
+                    return (
+                      <li key={row.id} className="rounded-lg border border-border p-3 text-sm space-y-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs text-muted-foreground">
+                            {new Date(row.earned_at).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+                          </span>
+                          <Badge variant={isPaid ? 'default' : 'secondary'} className="text-[10px]">
+                            {isPaid ? 'Paid' : 'Unpaid'}{row.adjusted_at ? ' · adjusted' : ''}
+                          </Badge>
+                        </div>
+                        <div className="flex gap-2">
+                          <div className="relative w-28 shrink-0">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{currencySymbol(row.currency)}</span>
+                            <Input
+                              type="number" step="0.01" min="0" disabled={isPaid}
+                              value={draft.amount}
+                              onChange={(e) => setDrafts((d) => ({ ...d, [row.id]: { ...draft, amount: e.target.value } }))}
+                              className="pl-9"
+                            />
+                          </div>
+                          <Input
+                            placeholder="Reason (e.g. bonus, late start)" disabled={isPaid}
+                            value={draft.note}
+                            onChange={(e) => setDrafts((d) => ({ ...d, [row.id]: { ...draft, note: e.target.value } }))}
+                          />
+                          <Button size="sm" onClick={() => saveEarning(row)} disabled={isPaid || !dirty || savingEarningId === row.id}>
+                            {savingEarningId === row.id ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
+                          </Button>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+
+            <div>
               <h3 className="text-sm font-bold uppercase tracking-wide text-muted-foreground mb-3">Ledger history</h3>
               {ledger.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center py-6">No payouts recorded yet.</p>
@@ -251,7 +405,7 @@ export function TeacherManagementDrawer({ teacher, onClose, onSaved }: Props) {
                   {ledger.map((row: any) => (
                     <li key={row.id} className="flex items-center justify-between rounded-lg border border-border p-3 text-sm">
                       <div>
-                        <div className="font-semibold tabular-nums">€{Number(row.amount).toFixed(2)}</div>
+                        <div className="font-semibold tabular-nums">{formatPay(row.amount, row.currency === 'DZD' ? 'DZD' : 'EUR')}</div>
                         <div className="text-xs text-muted-foreground">
                           {row.classes_count} classes · {new Date(row.period_start).toLocaleDateString()} → {new Date(row.period_end).toLocaleDateString()}
                         </div>

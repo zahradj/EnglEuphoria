@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react';
 import { ACTIVITY_CATALOG, ALL_ACTIVITY_TYPES } from '@/activities/catalog/activityCatalog';
 import { HUB_ACTIVITY_PROFILES } from '@/activities/catalog/hubActivityProfiles';
 import { ACTIVITY_EXAMPLES } from '@/activities/catalog/activityExamples';
+import { REUSABLE_ACTIVITIES } from '@/content/playground-library/reusableActivities';
 import type { ActivityType } from '@/activities/types';
 import type { Hub } from '@/governance/types';
 
@@ -152,6 +153,32 @@ export default function ActivityCatalogPage() {
             </tbody>
           </table>
         </div>
+
+        {/* The vault of concrete, already-built lesson activities that any
+            lesson can reuse with its own vocabulary / pictures. */}
+        <section className="mt-10">
+          <h2 className="text-xl font-bold text-slate-900">Reusable lesson activities</h2>
+          <p className="mt-1 text-sm text-slate-600 max-w-3xl">
+            Ready-made Playground activities, shared by every lesson series. Copy the example into a lesson's
+            scene list and swap in that lesson's words and pictures.
+          </p>
+          <div className="mt-4 grid gap-4">
+            {REUSABLE_ACTIVITIES.map((a) => (
+              <div key={a.kind} className="rounded-xl border border-slate-200 bg-white p-4">
+                <div className="flex flex-wrap items-baseline gap-2">
+                  <span className="font-bold text-slate-900">{a.name}</span>
+                  <code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-700">kind: '{a.kind}'</code>
+                  <code className="text-xs text-slate-500">{a.file}</code>
+                </div>
+                <div className="mt-2 text-sm text-slate-700"><span className="font-semibold">Use for:</span> {a.purpose}</div>
+                <div className="mt-1 text-sm text-slate-700"><span className="font-semibold">How it works:</span> {a.howItWorks}</div>
+                <pre className="mt-3 rounded-lg bg-slate-900 text-emerald-200 text-xs p-3 overflow-auto max-h-72">
+{JSON.stringify(a.example, null, 2)}
+                </pre>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <footer className="mt-6 text-xs text-slate-500">
           Source of truth: <code>src/activities/catalog/activityCatalog.ts</code> +{' '}

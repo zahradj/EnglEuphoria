@@ -8,6 +8,10 @@ import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-librar
 import { whiteboardService } from '@/services/whiteboardService';
 import { getDomPath, getElementAtPath, withPointerCaptureNoop } from '@/content/playground-library/unit1/scenePathSync';
 
+// How long a live broadcast takes precedence over the DB-persisted copy
+// of the same classroom state (see teacherChangedUnlockRef).
+const LIVE_OVER_DB_MS = 4000;
+
 export interface PlayWelcomeTownLessonHandle {
   goNext: () => void;
   goBack: () => void;
@@ -39,7 +43,7 @@ interface PlayWelcomeTownLessonProps {
 /** Gem-eligible scene kinds — every activity kind that ever calls onWin(true)
  *  exactly once when completed. Kept in sync manually with SceneRenderer.tsx
  *  (title-card/cinematic never award a gem; finale is the end screen). */
-const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'letter-game', 'jigsaw-puzzle']);
+const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'letter-game', 'jigsaw-puzzle', 'spin-wheel', 'picture-match']);
 
 /** Scene kinds that own real synced state (see `activityState` below)
  *  instead of relying on the generic scene_tap DOM-click-mirror. Whoever
@@ -66,7 +70,7 @@ const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot'
 const REAL_SYNC_KINDS = new Set<Scene['kind']>([
   'vocab-spot', 'meet', 'echo', 'memory', 'choice', 'listen-tap', 'true-false',
   'frequency-ladder', 'roleplay', 'join-stage', 'hello-doors', 'flipbook',
-  'sound-model', 'word-build', 'letter-game',
+  'sound-model', 'word-build', 'letter-game', 'spin-wheel', 'picture-match',
 ]);
 
 const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcomeTownLessonProps>(function PlayWelcomeTownLesson(
@@ -83,6 +87,32 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
     const n = s ? Number(s) : 0;
     return Number.isFinite(n) && n >= 0 && n < SCENES.length ? n : 0;
   });
+  // Whether this tab already had its own saved position for this lesson
+  // (same-tab reload, e.g. Force Refresh). A teacher opening the class in a
+  // new tab/device has none, and must adopt the class's saved position
+  // instead of announcing scene 0 over it — see the adoption effect below.
+  const hadStoredSceneIdxRef = useRef<boolean>(
+    typeof window !== 'undefined' && window.sessionStorage.getItem(sessionKey) != null,
+  );
+  // Teacher: whether sceneIdx reflects the class's real position yet (so a
+  // catch-up reply never announces a not-yet-restored scene 0).
+  const teacherPositionKnownRef = useRef<boolean>(hadStoredSceneIdxRef.current);
+  // Whether interactionUnlocked reflects the class's real lock state yet
+  // (restored from the DB, or set by the teacher) — same reason.
+  const unlockKnownRef = useRef(false);
+  // The DB copies of the unlock gate / scene index are for RECOVERY (a
+  // refresh, a late join), not live instructions. Every classroom write
+  // echoes the whole session row back over realtime, and the "let student
+  // interact" button fires several writes at once — so an echo taken
+  // before the unlock write landed still says "locked". The teacher's
+  // player used to adopt that stale echo, re-lock, and persist "locked";
+  // the next echo said "unlocked", it re-unlocked and persisted that, and
+  // so on: a self-sustaining ping-pong that flipped the student's lock
+  // overlay and "Your turn" bar on and off (reported live as the lesson
+  // flickering and shaking once interaction was granted).
+  const teacherChangedUnlockRef = useRef(false);
+  const lastLiveUnlockAtRef = useRef(0);
+  const lastLiveNavAtRef = useRef(0);
   const [hearts, setHearts] = useState(MAX_HEARTS);
   const [gems, setGems] = useState(0);
   const scene = SCENES[sceneIdx] ?? SCENES[0];
@@ -104,13 +134,22 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   const justMirroredTapRef = useRef(false);
 
   const setInteractionUnlocked = useCallback((next: boolean) => {
+    unlockKnownRef.current = true;
+    teacherChangedUnlockRef.current = true;
     setInteractionUnlockedState(next);
     if (isSynced && role === 'teacher' && roomId) {
       void whiteboardService.sendSceneInteractionPermission(roomId, { unlocked: next, senderId: 'teacher' });
     }
   }, [isSynced, role, roomId]);
 
+  // Only on a real scene change — never on mount. Running on mount made
+  // every teacher reload (including Force Refresh) re-lock the student's
+  // activity and persist that as the class state, so a student who was
+  // mid-activity came back locked out.
+  const prevSceneIdxRef = useRef(sceneIdx);
   useEffect(() => {
+    if (prevSceneIdxRef.current === sceneIdx) return;
+    prevSceneIdxRef.current = sceneIdx;
     if (isSynced && role === 'teacher') setInteractionUnlocked(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sceneIdx]);
@@ -118,6 +157,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   useEffect(() => {
     if (!isSynced || role !== 'student' || !roomId) return;
     const unsubscribe = whiteboardService.subscribeToSceneInteractionPermission(roomId, (payload) => {
+      lastLiveUnlockAtRef.current = Date.now();
       setInteractionUnlockedState(payload.unlocked);
     });
     return unsubscribe;
@@ -130,13 +170,27 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   useEffect(() => {
     if (!isSynced) return;
     if (persistedInteractionUnlocked == null) return;
+    // Teacher: once they've toggled, they are the source of truth — never
+    // take an echo of their own (possibly out-of-order) writes back.
+    if (role === 'teacher' && teacherChangedUnlockRef.current) return;
+    // Student: the teacher's live broadcast wins over a DB echo arriving
+    // right behind it (which may predate the change).
+    if (role === 'student' && Date.now() - lastLiveUnlockAtRef.current < LIVE_OVER_DB_MS) return;
+    unlockKnownRef.current = true;
     setInteractionUnlockedState(persistedInteractionUnlocked);
-  }, [isSynced, persistedInteractionUnlocked]);
+  }, [isSynced, role, persistedInteractionUnlocked]);
 
   // Teacher: persist the unlock gate whenever it changes, the same way
   // sceneIdx is persisted below via onSceneIdxPersist.
+  // Skips its mount-time run: that would write the initial `false` over the
+  // class's saved value before the recovery effect above can apply it.
+  const skipFirstUnlockPersistRef = useRef(true);
   useEffect(() => {
     if (!isSynced || role !== 'teacher') return;
+    if (skipFirstUnlockPersistRef.current) {
+      skipFirstUnlockPersistRef.current = false;
+      return;
+    }
     onInteractionUnlockedPersist?.(interactionUnlocked);
   }, [isSynced, role, interactionUnlocked, onInteractionUnlockedPersist]);
 
@@ -147,11 +201,17 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   // driving state at a time, or both sides would independently compute and
   // broadcast conflicting snapshots. So this must flip, not just extend, for
   // the teacher once the student is unlocked.
+  // `studentOnly` scenes (self-check / auto-evaluation slides) give the
+  // student the floor outright: no teacher unlock needed, and the teacher's
+  // copy is a live, non-interactive view of the student's work.
+  const studentDriven = isSynced && (scene as { studentOnly?: boolean }).studentOnly === true;
   const hasActivityAuthority = !isSynced
     ? true
-    : role === 'student'
-      ? interactionUnlocked
-      : !interactionUnlocked;
+    : studentDriven
+      ? role === 'student'
+      : role === 'student'
+        ? interactionUnlocked
+        : !interactionUnlocked;
   const usesRealSync = REAL_SYNC_KINDS.has(scene.kind);
 
   const [activityState, setActivityStateLocal] = useState<unknown>(null);
@@ -325,8 +385,16 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
 
   useEffect(() => { window.sessionStorage.setItem(sessionKey, String(sceneIdx)); }, [sceneIdx, sessionKey]);
 
+  const skipFirstTeacherNavRef = useRef(!hadStoredSceneIdxRef.current);
   useEffect(() => {
     if (!isSynced || role !== 'teacher' || !roomId) return;
+    // New tab/device with no saved position: don't announce/persist scene 0
+    // over the class's real position before the adoption effect restores it.
+    if (skipFirstTeacherNavRef.current) {
+      skipFirstTeacherNavRef.current = false;
+      return;
+    }
+    teacherPositionKnownRef.current = true;
     void whiteboardService.sendSceneLessonNav(roomId, {
       unitNumber: unitNumber ?? 0,
       lessonNumber: lessonNumber ?? 0,
@@ -341,6 +409,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
     const unsubscribe = whiteboardService.subscribeToSceneLessonNav(roomId, (payload) => {
       if (unitNumber != null && payload.unitNumber !== unitNumber) return;
       if (lessonNumber != null && payload.lessonNumber !== lessonNumber) return;
+      lastLiveNavAtRef.current = Date.now();
       setSceneIdx(Math.max(0, Math.min(SCENES.length - 1, payload.sceneIdx)));
     });
     return unsubscribe;
@@ -349,8 +418,86 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   useEffect(() => {
     if (!isSynced || role !== 'student') return;
     if (persistedSceneIdx == null) return;
+    // Same rule as the unlock gate: a live nav broadcast beats a DB echo
+    // that may be from before it (would bounce the page back and forth).
+    if (Date.now() - lastLiveNavAtRef.current < LIVE_OVER_DB_MS) return;
     setSceneIdx(Math.max(0, Math.min(SCENES.length - 1, persistedSceneIdx)));
   }, [isSynced, role, persistedSceneIdx, SCENES.length]);
+
+  // Teacher in a new tab/device: adopt the class's saved scene once, instead
+  // of starting everyone over at scene 0.
+  const adoptedPersistedIdxRef = useRef(false);
+  useEffect(() => {
+    if (!isSynced || role !== 'teacher') return;
+    if (hadStoredSceneIdxRef.current || adoptedPersistedIdxRef.current) return;
+    if (persistedSceneIdx == null) return;
+    adoptedPersistedIdxRef.current = true;
+    teacherPositionKnownRef.current = true;
+    const target = Math.max(0, Math.min(SCENES.length - 1, persistedSceneIdx));
+    setSceneIdx((cur) => {
+      if (cur !== 0) return cur; // the teacher already moved on their own
+      // Restoring position isn't a real scene change — keep the student's
+      // current unlock state rather than re-locking it.
+      prevSceneIdxRef.current = target;
+      return target;
+    });
+  }, [isSynced, role, persistedSceneIdx, SCENES.length]);
+
+  // Catch-up handshake (see SceneStateRequestPayload): every sync message is
+  // a no-replay broadcast, so after joining, reconnecting or returning to
+  // the foreground this side asks the other for the current state, and it
+  // answers the other side's requests the same way.
+  const syncSnapshotRef = useRef({ sceneIdx, interactionUnlocked, activityState, hasActivityAuthority, usesRealSync, sceneId: scene.id });
+  syncSnapshotRef.current = { sceneIdx, interactionUnlocked, activityState, hasActivityAuthority, usesRealSync, sceneId: scene.id };
+  useEffect(() => {
+    if (!isSynced || !role || !roomId) return;
+    const unsubscribeRequests = whiteboardService.subscribeToSceneStateRequest(roomId, (payload) => {
+      if (payload.senderRole === role) return;
+      const snap = syncSnapshotRef.current;
+      if (role === 'teacher') {
+        if (teacherPositionKnownRef.current) {
+          void whiteboardService.sendSceneLessonNav(roomId, {
+            unitNumber: unitNumber ?? 0,
+            lessonNumber: lessonNumber ?? 0,
+            sceneIdx: snap.sceneIdx,
+            senderId: 'teacher',
+          });
+        }
+        if (unlockKnownRef.current) {
+          void whiteboardService.sendSceneInteractionPermission(roomId, { unlocked: snap.interactionUnlocked, senderId: 'teacher' });
+        }
+      }
+      if (snap.usesRealSync && snap.hasActivityAuthority && snap.activityState != null) {
+        // Sent a beat after the scene index, so a requester that first has
+        // to move to this scene is already on it (receivers discard
+        // snapshots for any other scene).
+        const { activityState: state, sceneId } = snap;
+        setTimeout(() => {
+          void whiteboardService.sendSceneActivityState(roomId, { state, senderId: role, sceneId });
+        }, 500);
+      }
+    });
+    const request = () => { void whiteboardService.sendSceneStateRequest(roomId, { senderRole: role }); };
+    request();
+    let subscribed = true; // the initial request above covers the first SUBSCRIBED
+    const unsubscribeStatus = whiteboardService.subscribeToStatus(roomId, (status) => {
+      if (status === 'SUBSCRIBED') {
+        if (!subscribed) request(); // reconnected after a drop
+        subscribed = true;
+      } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+        subscribed = false;
+      }
+    });
+    const onVisibility = () => { if (document.visibilityState === 'visible') request(); };
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('online', request);
+    return () => {
+      unsubscribeRequests();
+      unsubscribeStatus();
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('online', request);
+    };
+  }, [isSynced, role, roomId, unitNumber, lessonNumber]);
 
   useEffect(() => {
     let cancelled = false;
@@ -488,16 +635,21 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
             heartsRemaining={hearts}
             activitySync={activitySync}
           />
-          {isSynced && role === 'student' && !interactionUnlocked && (
+          {isSynced && role === 'student' && !interactionUnlocked && !studentDriven && (
             <div className="absolute inset-0 z-40 cursor-not-allowed" aria-hidden="true">
               <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
                 👀 Watching your teacher
               </div>
             </div>
           )}
-          {isSynced && role === 'teacher' && interactionUnlocked && (
+          {isSynced && role === 'teacher' && interactionUnlocked && !studentDriven && (
             <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-emerald-600/80 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
               ✋ Student is trying this
+            </div>
+          )}
+          {isSynced && role === 'teacher' && studentDriven && (
+            <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-sky-600/85 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
+              🧑‍🎓 Student is doing this on their own — you're watching live
             </div>
           )}
         </div>

@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Gift, Check, X, Settings2 } from "lucide-react";
 import { toast } from "sonner";
 import { useBonusPolicy } from "@/hooks/useBonusPolicy";
+import { asPayoutCurrency, formatPay } from "@/lib/teacherPay";
 
 type LedgerRow = {
   id: string;
@@ -112,7 +113,7 @@ export default function BonusApprovalQueue() {
     if (decision === "paid") {
       Object.assign(templateData, {
         amount: Number(row.amount),
-        currency: row.currency ?? "USD",
+        currency: asPayoutCurrency(row.currency),
         ratePct: Number(row.rate_applied),
         notes: row.notes ?? undefined,
       });
@@ -168,7 +169,10 @@ export default function BonusApprovalQueue() {
     }
   };
 
-  const totalPending = rows.filter((r) => r.status === "pending")
+  // Local teachers' bonuses are in DZD, international teachers' in EUR —
+  // never summed together.
+  const pendingIn = (c: "DZD" | "EUR") => rows
+    .filter((r) => r.status === "pending" && asPayoutCurrency(r.currency) === c)
     .reduce((s, r) => s + Number(r.amount), 0);
 
   return (
@@ -198,7 +202,7 @@ export default function BonusApprovalQueue() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <div className="text-xs text-muted-foreground">Pending total</div>
-              <div className="text-2xl font-bold">${totalPending.toFixed(2)}</div>
+              <div className="text-2xl font-bold">{formatPay(pendingIn("DZD"), "DZD")} · {formatPay(pendingIn("EUR"), "EUR")}</div>
             </div>
             <Badge variant="secondary">{rows.length} awaiting approval</Badge>
           </CardContent>
@@ -246,7 +250,7 @@ export default function BonusApprovalQueue() {
                       <TableCell>{r.classes_count}</TableCell>
                       <TableCell className="font-mono">{Number(r.rate_applied).toFixed(0)}%</TableCell>
                       <TableCell className="font-mono font-bold text-emerald-600">
-                        ${Number(r.amount).toFixed(2)}
+                        {formatPay(r.amount, asPayoutCurrency(r.currency))}
                       </TableCell>
                       <TableCell>
                         <Badge className={`${STATUS_COLORS[r.status] ?? "bg-muted"} text-white border-0`}>

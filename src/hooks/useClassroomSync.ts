@@ -238,6 +238,38 @@ export const useClassroomSync = ({
     };
   }, [roomId]);
 
+  // Student catch-up: realtime row updates missed while the tab was in the
+  // background (tablets/phones suspend it) or the network dropped are never
+  // replayed, which left the student on a stale slide / stage / lesson until
+  // the teacher's next change. Re-read the row whenever the tab comes back
+  // or the connection returns. Student-only: the teacher is the writer, and
+  // a re-read racing its own in-flight write could briefly roll it back.
+  useEffect(() => {
+    if (!roomId || role === 'teacher') return;
+    let cancelled = false;
+    const refetch = async () => {
+      const latest = await classroomSyncService.getActiveSession(roomId);
+      if (cancelled || !latest) return;
+      setSession(latest);
+      setCurrentSlideIndex(latest.currentSlideIndex ?? 0);
+      setStageModeState(prev => deriveStageModeFromSession(latest, prev));
+      setDrawingEnabledState(latest.drawingEnabled ?? false);
+      setIframeUnlockedState(latest.iframeUnlocked ?? false);
+      setActivityUnlockedState(latest.sceneActivityUnlocked ?? false);
+      setSceneInteractionUnlockedState(latest.sceneInteractionUnlocked ?? false);
+      setIsConnected(true);
+    };
+    const onVisibility = () => { if (document.visibilityState === 'visible') void refetch(); };
+    const onOnline = () => { void refetch(); };
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('online', onOnline);
+    return () => {
+      cancelled = true;
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('online', onOnline);
+    };
+  }, [roomId, role]);
+
   // Subscribe to whiteboard strokes
   useEffect(() => {
     if (!roomId) return;

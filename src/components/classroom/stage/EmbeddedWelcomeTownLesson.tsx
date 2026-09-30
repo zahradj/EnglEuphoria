@@ -48,6 +48,10 @@ export const EmbeddedWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle,
         <PlayWelcomeTownLesson
           ref={ref}
           scenes={lesson.scenes}
+          // Keyed by lesson so loading a different lesson mid-class mounts a
+          // fresh player (its own saved position, lock and activity state)
+          // instead of reusing the previous lesson's scene index.
+          key={`wt-scene-${contentFormat}-${unitNumber}-${lessonNumber}-${roomId}`}
           sessionKey={`wt-scene-${contentFormat}-${unitNumber}-${lessonNumber}-${roomId}`}
           embedded
           unitNumber={unitNumber}

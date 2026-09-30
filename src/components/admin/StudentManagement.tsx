@@ -14,7 +14,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Users, Calendar, TrendingUp, BookOpen, CreditCard, Plus, Trash2, Loader2, Copy, GraduationCap, Check, X, Pencil } from 'lucide-react';
 import { toast } from 'sonner';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { fetchHubLessonSequence, setCurrentLesson, type Hub, type LessonMeta } from '@/services/activeCoreLessonResolver';
+import { fetchHubLessonSequence, readLessonPointers, setCurrentLesson, type Hub, type LessonMeta } from '@/services/activeCoreLessonResolver';
 import { LevelChangeRequestsPanel } from './LevelChangeRequestsPanel';
 
 const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const;
@@ -154,21 +154,11 @@ export const StudentManagement = () => {
         ])
       );
 
-      // Current-lesson pointer (student_curriculum_progress) — "which
-      // lesson does this student start from", per direct request to make
-      // this visible/editable in the admin dashboard. Batched once for all
+      // Current-lesson pointer (student_lesson_pointers) — "which lesson
+      // does this student start from", per direct request to make this
+      // visible/editable in the admin dashboard. Batched once for all
       // students rather than per-row, same reasoning as credits above.
-      const { data: progressData } = userIds.length
-        ? await supabase
-            .from('student_curriculum_progress')
-            .select('student_id, current_lesson_id')
-            .in('student_id', userIds)
-        : { data: [] };
-      const lessonIdByStudent = new Map(
-        (progressData || [])
-          .filter((p: any) => p.current_lesson_id)
-          .map((p: any) => [p.student_id, p.current_lesson_id as string])
-      );
+      const lessonIdByStudent = await readLessonPointers(userIds);
       const lessonIds = Array.from(new Set(Array.from(lessonIdByStudent.values())));
       const { data: lessonTitles } = lessonIds.length
         ? await supabase.from('curriculum_lessons').select('id, title').in('id', lessonIds)

@@ -11,7 +11,7 @@ import { StudentMainStage } from './StudentMainStage';
 import { StarCelebration } from '@/components/teacher/classroom/StarCelebration';
 import { DiceRoller } from '@/components/teacher/classroom/DiceRoller';
 
-import { LiveReactionBar, THUMBS_REACTIONS } from '@/components/classroom/engagement/LiveReactionBar';
+import { LiveReactionBar, STUDENT_REACTIONS } from '@/components/classroom/engagement/LiveReactionBar';
 import { XPStreakIndicator } from '@/components/classroom/engagement/XPStreakIndicator';
 import { ZenModeOverlay } from '@/components/classroom/ZenModeOverlay';
 import { PictureInPicture } from '@/components/classroom/PictureInPicture';
@@ -65,6 +65,9 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
 
   // Instant broadcast-driven overlays (separate from slow DB-backed sync)
   const [liveStar, setLiveStar] = useState<{ count: number; isMilestone: boolean; key: number } | null>(null);
+  // When the instant star broadcast arrived; the DB-backed celebration below
+  // is only a fallback for a missed broadcast, not a second copy of it.
+  const lastLiveStarAtRef = useRef(0);
   const [liveSticker, setLiveSticker] = useState<{ emoji: string; key: number } | null>(null);
 
   const headerIdle = useIdleOpacity({ idleTimeout: 3000, idleOpacity: 0.4 });
@@ -179,6 +182,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
     const unsubReward = whiteboardService.subscribeToRewards(roomId, (payload) => {
       if (payload.senderId === studentId) return;
       if (payload.rewardType === 'star') {
+        lastLiveStarAtRef.current = Date.now();
         setLiveStar({
           count: payload.starCount ?? 1,
           isMilestone: !!payload.isMilestone,
@@ -229,10 +233,10 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
   // Notify when teacher joins
   const prevParticipantCount = useRef(0);
   useEffect(() => {
-    if (participants.length > prevParticipantCount.current && prevParticipantCount.current >= 0) {
-      if (prevParticipantCount.current > 0) {
-        toast({ title: "👋 Teacher Joined", description: "Your teacher has joined the classroom", className: "bg-green-900 border-green-700" });
-      }
+    // Fire on the 0 → 1 transition too — that's the moment the student is
+    // actually waiting for (the old `> 0` guard meant it never fired then).
+    if (participants.length > prevParticipantCount.current) {
+      toast({ title: "👋 Teacher Joined", description: `${teacherName} has joined the classroom`, className: "bg-green-900 border-green-700" });
     }
     prevParticipantCount.current = participants.length;
   }, [participants.length]);
@@ -314,7 +318,17 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
       title: 'Left Classroom',
       description: 'You have left the classroom session.'
     });
-    navigate('/playground');
+    // Send each student back to their own hub's dashboard — this used to be
+    // hardcoded to /playground, dropping Academy/Success students into the
+    // kids' hub after every lesson.
+    navigate(hubType === 'playground' ? '/playground' : hubType === 'professional' ? '/hub' : '/academy');
+  };
+
+  // "Leave" sits right next to the mic/camera buttons, so a mis-tap is easy.
+  // Dismissing the leave dialog (Esc, click outside, "Stay in class") must
+  // keep the student in the lesson rather than exit it.
+  const handleStayInClass = () => {
+    setShowFeedbackModal(false);
   };
 
   const handleReconnect = async () => {
@@ -366,7 +380,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
       )}
       {/* Star Celebration Overlay (DB-backed) */}
       <StarCelebration
-        isVisible={showStarCelebration}
+        isVisible={showStarCelebration && Date.now() - lastLiveStarAtRef.current > 3000}
         starCount={starCount}
         studentName={studentName}
         isMilestone={isMilestone}
@@ -436,7 +450,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
               onExitZen={() => setIsZenMode(false)}
             />
             <PictureInPicture
-              name="Teacher"
+              name={teacherName}
               isConnected={rtcConnected}
               stream={participants[0]?.stream || null}
             />
@@ -478,7 +492,10 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
 
       {/* Media Permission Error Overlay */}
       {media.error && (
-        <div className="fixed inset-0 z-[60] bg-black/70 flex items-center justify-center">
+        // z-[130]: must sit above the "Waiting for your teacher" wall (z-[120]),
+        // otherwise a student whose mic was blocked just waits forever with
+        // no idea why the teacher can't start the class.
+        <div className="fixed inset-0 z-[130] bg-black/70 flex items-center justify-center">
           <div className="bg-white rounded-2xl p-8 max-w-md text-center space-y-4">
             <h2 className="text-xl font-bold text-gray-900">Camera & Microphone Required</h2>
             <p className="text-gray-600">{media.error}</p>
@@ -604,7 +621,10 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
             roomId={roomId}
             userId={studentId}
             hubType={hubType}
-            reactions={THUMBS_REACTIONS}
+            reactions={STUDENT_REACTIONS}
+            // Vertical strip on the right edge: at the bottom-centre it sat
+            // on top of the scene lesson's progress dots / nav.
+            placement="side"
             canSend
           />
         </>
@@ -615,6 +635,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
       <PostClassFeedbackModal
         isOpen={showFeedbackModal}
         onClose={handleFeedbackClose}
+        onStay={sessionEnded ? undefined : handleStayInClass}
         teacherName={teacherName || (sessionContext as any)?.teacherName || 'Teacher'}
         teacherId={(sessionContext as any)?.teacherId || ''}
         lessonId={roomId}

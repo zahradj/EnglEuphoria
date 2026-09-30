@@ -48,6 +48,10 @@ export const EmbeddedSceneLesson = forwardRef<PlayUnitLessonHandle, EmbeddedScen
         <PlayUnitLesson
           ref={ref}
           scenes={scenes}
+          // Keyed by lesson so loading a different lesson mid-class mounts a
+          // fresh player (its own saved position, lock and activity state)
+          // instead of reusing the previous lesson's scene index.
+          key={`lep-scene-${unitNumber}-${lessonNumber}-${roomId}`}
           sessionKey={`lep-scene-${unitNumber}-${lessonNumber}-${roomId}`}
           embedded
           unitNumber={unitNumber}

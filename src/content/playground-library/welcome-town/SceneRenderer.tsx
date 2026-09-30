@@ -7,6 +7,8 @@ import { Confetti } from '../unit1/fx';
 import { Hearts, MAX_HEARTS, Lep1Keyframes } from '../unit1/SceneRenderer';
 import engleuphoriaLogo from '@/assets/engleuphoria-logo.png';
 import { type ActivitySync, useSyncedState } from '../sceneActivitySync';
+import { SpinWheelScene } from '../SpinWheelScene';
+import { PictureMatchScene } from '../PictureMatchScene';
 
 export type { ActivitySync };
 
@@ -169,6 +171,8 @@ export function SceneRenderer(props: {
       case 'word-build': return <WordBuildScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'letter-game': return <LetterGameScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'jigsaw-puzzle': return <JigsawPuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
+      case 'spin-wheel': return <SpinWheelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+      case 'picture-match': return <PictureMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
       default: return null;
     }

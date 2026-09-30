@@ -14,6 +14,7 @@ import { TrendingUp, Users, Clock, Star, AlertTriangle, Download, RefreshCw, Gif
 import { LineChart, Line, ResponsiveContainer, YAxis, Tooltip } from "recharts";
 import { toast } from "sonner";
 import { calculateKpiBonus, formatBonusNote } from "@/lib/kpiBonus";
+import { asPayoutCurrency, formatPay, type PayoutCurrency } from "@/lib/teacherPay";
 
 type TeacherRow = {
   teacher_id: string;
@@ -32,6 +33,8 @@ type TeacherRow = {
   overall_kpi_score: number;
   last_lesson_at: string | null;
   earnings_30d: number;
+  /** Local teachers are paid in DZD, international in EUR. */
+  payout_currency: PayoutCurrency;
   completions_30d: number;
   cancellations_30d: number;
   active_students: number;
@@ -60,7 +63,8 @@ export default function TeacherKpiDashboard() {
 
     const [metrics, profiles, earnings, bookings, snaps, alertRows] = await Promise.all([
       supabase.from("teacher_performance_metrics").select("*"),
-      supabase.from("teacher_profiles").select("user_id, profile_image_url, rating, total_reviews"),
+      // payout_currency isn't in the generated Supabase types yet.
+      (supabase as any).from("teacher_profiles").select("user_id, profile_image_url, rating, total_reviews, payout_currency"),
       supabase.from("teacher_earnings").select("teacher_id, teacher_amount, earned_at").gte("earned_at", since),
       supabase.from("class_bookings").select("teacher_id, status, scheduled_at").gte("scheduled_at", since),
       supabase.from("teacher_kpi_snapshots").select("teacher_id, snapshot_date, overall_kpi_score")
@@ -87,7 +91,7 @@ export default function TeacherKpiDashboard() {
       .select("id, first_name, last_name, email")
       .in("id", teacherIds.length ? teacherIds : ["00000000-0000-0000-0000-000000000000"]);
 
-    const profileByUser = new Map((profiles.data ?? []).map((p: any) => [p.user_id, p]));
+    const profileByUser = new Map<string, any>((profiles.data ?? []).map((p: any) => [p.user_id, p]));
     const userById = new Map((users ?? []).map((u: any) => [u.id, u]));
 
     const earnById = new Map<string, number>();
@@ -122,6 +126,7 @@ export default function TeacherKpiDashboard() {
         overall_kpi_score: Number(m.overall_kpi_score ?? 0),
         last_lesson_at: m.last_lesson_at,
         earnings_30d: earnById.get(m.teacher_id) ?? 0,
+        payout_currency: asPayoutCurrency(p.payout_currency),
         completions_30d: compById.get(m.teacher_id) ?? 0,
         cancellations_30d: cancById.get(m.teacher_id) ?? 0,
         active_students: Number(m.active_students ?? 0),
@@ -161,7 +166,7 @@ export default function TeacherKpiDashboard() {
   };
 
   const exportCsv = () => {
-    const header = ["Teacher","KPI","Quality","Attendance","Progress","Response","Feedback","Curriculum","Rating","Reviews","Students","Retention%","Lessons","Minutes","30d Completed","30d Cancelled","30d Earnings"];
+    const header = ["Teacher","KPI","Quality","Attendance","Progress","Response","Feedback","Curriculum","Rating","Reviews","Students","Retention%","Lessons","Minutes","30d Completed","30d Cancelled","30d Earnings","Currency"];
     const csv = [header.join(",")].concat(
       filtered.map((r) => [
         `"${r.name.replace(/"/g,'""')}"`, r.overall_kpi_score.toFixed(0),
@@ -171,7 +176,7 @@ export default function TeacherKpiDashboard() {
         r.rating.toFixed(1), r.total_reviews,
         r.active_students, r.retention_rate.toFixed(0),
         r.lessons_taught, r.total_minutes_taught,
-        r.completions_30d, r.cancellations_30d, r.earnings_30d.toFixed(0),
+        r.completions_30d, r.cancellations_30d, r.earnings_30d.toFixed(0), r.payout_currency,
       ].join(","))
     ).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
@@ -282,7 +287,7 @@ export default function TeacherKpiDashboard() {
                     <TableHead>Lessons</TableHead>
                     <TableHead>Trend</TableHead>
                     <TableHead>30d ✓ / ✗</TableHead>
-                    <TableHead>30d €</TableHead>
+                    <TableHead>Earnings 30d</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -365,7 +370,7 @@ export default function TeacherKpiDashboard() {
                           {" / "}
                           <span className="text-red-600">{r.cancellations_30d}</span>
                         </TableCell>
-                        <TableCell className="font-mono">€{r.earnings_30d.toFixed(0)}</TableCell>
+                        <TableCell className="font-mono">{formatPay(r.earnings_30d, r.payout_currency)}</TableCell>
                       </TableRow>
                     );
                   })}
@@ -525,7 +530,8 @@ function BonusPanel({ row }: { row: TeacherRow }) {
       classes_count: row.completions_30d,
       rate_applied: calc.totalPct,
       amount: calc.bonusAmount,
-      currency: "USD",
+      // The bonus is a share of earnings, so it's paid in the same currency.
+      currency: row.payout_currency,
       status: "pending",
       notes: formatBonusNote(calc, periodLabel),
     }).select("id").single();
@@ -535,7 +541,7 @@ function BonusPanel({ row }: { row: TeacherRow }) {
       return;
     }
     setQueuedId(data?.id ?? null);
-    toast.success(`Bonus of $${calc.bonusAmount.toFixed(2)} queued`);
+    toast.success(`Bonus of ${formatPay(calc.bonusAmount, row.payout_currency)} queued`);
   };
 
   return (
@@ -556,12 +562,12 @@ function BonusPanel({ row }: { row: TeacherRow }) {
         </div>
         <div>
           <div className="text-xs text-muted-foreground">Earnings Base</div>
-          <div className="font-mono">${row.earnings_30d.toFixed(2)}</div>
+          <div className="font-mono">{formatPay(row.earnings_30d, row.payout_currency)}</div>
         </div>
         <div>
           <div className="text-xs text-muted-foreground">Bonus</div>
           <div className="font-mono font-bold text-emerald-600">
-            ${calc.bonusAmount.toFixed(2)}
+            {formatPay(calc.bonusAmount, row.payout_currency)}
           </div>
         </div>
       </div>
@@ -587,7 +593,7 @@ function BonusPanel({ row }: { row: TeacherRow }) {
         onClick={queueBonus}
         disabled={!calc.eligible || calc.bonusAmount <= 0 || queuing || !!queuedId}
       >
-        {queuedId ? "Queued ✓" : queuing ? "Queuing…" : `Queue $${calc.bonusAmount.toFixed(2)} bonus`}
+        {queuedId ? "Queued ✓" : queuing ? "Queuing…" : `Queue ${formatPay(calc.bonusAmount, row.payout_currency)} bonus`}
       </Button>
     </div>
   );

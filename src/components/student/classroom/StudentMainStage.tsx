@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { WhiteboardStroke, StageMode, whiteboardService } from '@/services/whiteboardService';
 import { MainStage } from '@/components/classroom/stage/MainStage';
 import { StudentMiniDock } from '@/components/classroom/stage/StudentMiniDock';
@@ -108,11 +108,78 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
   const isPollSlide = currentSlide?.type === 'poll';
 
   // Local pen tool state (whether the local pen is active is gated by `drawingEnabled` from teacher)
-  const [studentTool, setStudentTool] = useState<'pointer' | 'pen' | 'eraser'>('pen');
+  // Pointer by default: "Let Student Interact" unlocks both drawing AND the
+  // lesson's tap/drag activities, and with the pen selected the drawing
+  // layer swallows every tap — a child told "tap the answer" drew a line
+  // instead and the activity never responded. Drawing is now an explicit
+  // choice from the dock.
+  const [studentTool, setStudentTool] = useState<'pointer' | 'pen' | 'eraser'>('pointer');
   const [studentColor, setStudentColor] = useState<string>(activeColor || STUDENT_COLORS[0]);
 
   // Effective draw permission: legacy flag OR new unified flag
   const canStudentDraw = drawingEnabled || studentCanDraw;
+
+  // Each time the teacher grants interaction, start from the pointer so the
+  // first tap reaches the activity rather than the drawing layer.
+  useEffect(() => {
+    if (canStudentDraw) setStudentTool('pointer');
+  }, [canStudentDraw]);
+
+  // NOTE: every hook must run before the early returns below (screen share /
+  // quiz / poll). Declaring them after those returns made React throw
+  // "Rendered fewer hooks than expected" and crash the student's classroom
+  // the moment the teacher started a screen share or opened a quiz/poll slide.
+  // Bi-directional sync: capture interactive clicks/drags bubbling up from
+  // the CreatorSlideRenderer / DynamicSlideRenderer / embedded Playground
+  // scene games, and broadcast a compact payload so the teacher's screen
+  // highlights what the student selected or dragged.
+  const lastBroadcastRef = useRef<{ key: string; ts: number } | null>(null);
+  const broadcastInteraction = useCallback((target: HTMLElement | null, kind: 'Selected' | 'Dropped on') => {
+    if (!target) return;
+    const interactive = target.closest(
+      'button, [role="button"], [role="option"], [role="radio"], [role="checkbox"], [data-option], [data-answer], [data-draggable], [data-droppable], li[tabindex], label[for]'
+    ) as HTMLElement | null;
+    if (!interactive) return;
+    // Skip the student's own dock controls
+    if (interactive.closest('[data-student-dock]')) return;
+    const label =
+      interactive.getAttribute('aria-label') ||
+      interactive.getAttribute('data-answer') ||
+      interactive.getAttribute('data-option') ||
+      (interactive.textContent || '').trim().slice(0, 80);
+    if (!label) return;
+    const slide = slides[currentSlideIndex];
+    const key = `${currentSlideIndex}:${label}`;
+    const now = Date.now();
+    // Debounce identical events within 300ms — also collapses the click AND
+    // pointerup that both fire for a simple tap into a single broadcast.
+    if (lastBroadcastRef.current?.key === key && now - lastBroadcastRef.current.ts < 300) return;
+    lastBroadcastRef.current = { key, ts: now };
+    void whiteboardService.sendStudentAction(roomId, {
+      slideId: String(slide?.id ?? currentSlideIndex),
+      slideIndex: currentSlideIndex,
+      label: `${kind}: ${label}`,
+      data: { text: label },
+      senderId: userId,
+      senderName: userName,
+    }).catch(() => {});
+  }, [slides, currentSlideIndex, roomId, userId, userName]);
+
+  const handleStageClickCapture = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    broadcastInteraction(e.target as HTMLElement | null, 'Selected');
+  }, [broadcastInteraction]);
+
+  // Drag-and-drop games (Playground's basket/sort scenes, etc.) release via
+  // pointerup on a target that's usually different from the pointerdown
+  // origin — browsers only synthesize a 'click' event when press and release
+  // land on (near) the same point, so a real drag gesture never fires
+  // onClickCapture at all. That made every drag-and-drop activity invisible
+  // to the teacher's live indicator even though tap-based activities worked.
+  // pointerup always fires regardless, so mirror the same broadcast there.
+  const handleStagePointerUpCapture = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const dropTarget = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
+    broadcastInteraction(dropTarget ?? (e.target as HTMLElement | null), 'Dropped on');
+  }, [broadcastInteraction]);
 
   // Screen sharing takes precedence
   if (isScreenSharing) {
@@ -167,58 +234,6 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
       </div>
     );
   }
-
-  // Bi-directional sync: capture interactive clicks/drags bubbling up from
-  // the CreatorSlideRenderer / DynamicSlideRenderer / embedded Playground
-  // scene games, and broadcast a compact payload so the teacher's screen
-  // highlights what the student selected or dragged.
-  const lastBroadcastRef = useRef<{ key: string; ts: number } | null>(null);
-  const broadcastInteraction = useCallback((target: HTMLElement | null, kind: 'Selected' | 'Dropped on') => {
-    if (!target) return;
-    const interactive = target.closest(
-      'button, [role="button"], [role="option"], [role="radio"], [role="checkbox"], [data-option], [data-answer], [data-draggable], [data-droppable], li[tabindex], label[for]'
-    ) as HTMLElement | null;
-    if (!interactive) return;
-    // Skip the student's own dock controls
-    if (interactive.closest('[data-student-dock]')) return;
-    const label =
-      interactive.getAttribute('aria-label') ||
-      interactive.getAttribute('data-answer') ||
-      interactive.getAttribute('data-option') ||
-      (interactive.textContent || '').trim().slice(0, 80);
-    if (!label) return;
-    const slide = slides[currentSlideIndex];
-    const key = `${currentSlideIndex}:${label}`;
-    const now = Date.now();
-    // Debounce identical events within 300ms — also collapses the click AND
-    // pointerup that both fire for a simple tap into a single broadcast.
-    if (lastBroadcastRef.current?.key === key && now - lastBroadcastRef.current.ts < 300) return;
-    lastBroadcastRef.current = { key, ts: now };
-    void whiteboardService.sendStudentAction(roomId, {
-      slideId: String(slide?.id ?? currentSlideIndex),
-      slideIndex: currentSlideIndex,
-      label: `${kind}: ${label}`,
-      data: { text: label },
-      senderId: userId,
-      senderName: userName,
-    }).catch(() => {});
-  }, [slides, currentSlideIndex, roomId, userId, userName]);
-
-  const handleStageClickCapture = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    broadcastInteraction(e.target as HTMLElement | null, 'Selected');
-  }, [broadcastInteraction]);
-
-  // Drag-and-drop games (Playground's basket/sort scenes, etc.) release via
-  // pointerup on a target that's usually different from the pointerdown
-  // origin — browsers only synthesize a 'click' event when press and release
-  // land on (near) the same point, so a real drag gesture never fires
-  // onClickCapture at all. That made every drag-and-drop activity invisible
-  // to the teacher's live indicator even though tap-based activities worked.
-  // pointerup always fires regardless, so mirror the same broadcast there.
-  const handleStagePointerUpCapture = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    const dropTarget = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
-    broadcastInteraction(dropTarget ?? (e.target as HTMLElement | null), 'Dropped on');
-  }, [broadcastInteraction]);
 
   return (
     <div

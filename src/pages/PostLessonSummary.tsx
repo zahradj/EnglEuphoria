@@ -11,6 +11,7 @@ import maxEagle from '@/assets/max-eagle-mascot-v2.png';
 import { FLAG_META, IncidentFlag, toneClasses } from '@/components/classroom/incidentFlags';
 import { PostLessonRatingCard } from '@/components/student/PostLessonRatingCard';
 import { StudentLessonOutcomeDialog } from '@/components/classroom/StudentLessonOutcomeDialog';
+import { useForceEnglishLocale } from '@/hooks/useForceEnglishLocale';
 
 
 type Hub = 'playground' | 'academy' | 'professional';
@@ -82,6 +83,11 @@ const STUDENT_PRAISE = ['Great job!', 'Amazing work!', 'You did it!', 'Super sta
 const TEACHER_PRAISE = ['Class wrapped!', 'Beautifully done.', 'Another one in the books.'];
 
 const PostLessonSummary: React.FC = () => {
+  // English + left-to-right like the classroom it follows. Leaving the
+  // classroom restored the user's platform language direction (e.g. Arabic
+  // RTL), so this English page rendered right-to-left with its punctuation
+  // flipped ("?How was your class", "!Amazing work").
+  useForceEnglishLocale();
   const { id: bookingId } = useParams<{ id: string }>();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();

@@ -10,10 +10,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { ThumbsUp, ThumbsDown, Clock } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { sendStudentFeedbackToTeacher } from '@/components/classroom/StudentLessonOutcomeDialog';
 
 interface PostClassFeedbackModalProps {
   isOpen: boolean;
   onClose: () => void;
+  /**
+   * When provided (class still running), dismissing the dialog keeps the
+   * student in class instead of leaving, and a "Stay in class" button is shown.
+   */
+  onStay?: () => void;
   teacherName: string;
   teacherId: string;
   lessonId: string;
@@ -23,6 +29,7 @@ interface PostClassFeedbackModalProps {
 export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
   isOpen,
   onClose,
+  onStay,
   teacherName,
   teacherId,
   lessonId,
@@ -71,14 +78,14 @@ export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
-      const { error } = await supabase.from('post_class_feedback').insert({
-        student_id: user.id,
-        teacher_id: teacherId,
-        lesson_id: lessonId,
-        thumbs_up: thumbsUp,
-        submitted_by_role: 'student',
-        submitted_by_user_id: user.id,
-        improvement_suggestion: !thumbsUp ? (suggestion.trim() || null) : null,
+      // teacherId is often '' here (the session context rarely carries it),
+      // which made every insert fail — the helper falls back to the booking.
+      const { error } = await sendStudentFeedbackToTeacher({
+        roomId: lessonId,
+        studentId: user.id,
+        teacherId,
+        thumbsUp,
+        suggestion: suggestion.trim() || null,
       });
 
       if (error) throw error;
@@ -97,7 +104,7 @@ export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={() => onClose()}>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) (onStay ?? onClose)(); }}>
       <DialogContent className="sm:max-w-md bg-background border-border">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-center">
@@ -177,8 +184,13 @@ export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
             onClick={onClose}
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            Skip
+            {onStay ? 'Skip & leave' : 'Skip'}
           </button>
+          {onStay && (
+            <Button type="button" variant="outline" onClick={onStay}>
+              Stay in class
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

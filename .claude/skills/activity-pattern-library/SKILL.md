@@ -109,9 +109,9 @@ new Pre-A1 lesson needs it, that's exactly when to run the Research Step.
 | Purpose | `kind`s |
 |---|---|
 | **Discovery / model** (new content, teacher-led, first exposure) | `meet`, `meet-group`, `meet-greet`, `name-gate`, `sound-model`, `color-model`, `shape-model`, `toy-model`, `numbers-learn`, `he-she-model`, `listen-repeat-cards` |
-| **Controlled / recognition practice** (low-risk, guided) | `echo`, `trace`, `sound-sort`, `color-sort`, `shape-sort`, `plural-sort`, `he-she-sort`, `color-spot`, `color-spy`, `alphabet-order`, `alphabet-blocks`, `basket`, `count-balloons`, `age-balloons` |
+| **Controlled / recognition practice** (low-risk, guided) | `picture-match`, `echo`, `trace`, `sound-sort`, `color-sort`, `shape-sort`, `plural-sort`, `he-she-sort`, `color-spot`, `color-spy`, `alphabet-order`, `alphabet-blocks`, `basket`, `count-balloons`, `age-balloons` |
 | **Interactive game practice** (student-led, real stakes, game-feel) | `word-build`, `sentence-build`, `dash`, `catch-sort`, `sound-pop`, `brick-crush`, `gather`, `memory`, `puzzle`, `hello-doors`, `friend-pop`, `feed-monsters`, `color-simon`, `train-recall`, `feelings-dice`, `feelings-wheel`, `x-is-feeling`, `i-am-feeling`, `age-sentence-match`, `who-said-it` |
-| **Speaking production** | `roleplay`, `join-stage`, `voice-stage`, `he-she-say` |
+| **Speaking production** | `roleplay`, `join-stage`, `voice-stage`, `he-she-say`, `spin-wheel` |
 | **Story** | `flipbook` |
 | **Review / assessment / boss** | `trophy-chest`, `feelings-bingo`, `age-quiz`, `color-quiz`, `feeling-quiz` (plus any of the interactive-practice kinds above, re-run at higher difficulty with no new content) |
 | **Structural / closing** (not gem-eligible, don't count for variety) | `title-card`, `cinematic`, `song`, `finale`, `feelings` (a vocab-reveal scene, not a game) |
@@ -131,9 +131,9 @@ versa). ~23 `kind`s as of the true-false addition below:
 | Purpose | `kind`s |
 |---|---|
 | **Discovery / model** | `meet`, `sound-model` |
-| **Controlled / recognition practice** | `echo`, `trace`, `vocab-spot`, `drag-match`, `frequency-ladder`, `pronoun-sort`, `true-false` |
+| **Controlled / recognition practice** | `echo`, `trace`, `vocab-spot`, `drag-match`, `frequency-ladder`, `pronoun-sort`, `true-false`, `picture-match` |
 | **Interactive game practice** | `choice`, `listen-tap`, `memory`, `word-build`, `letter-game`, `jigsaw-puzzle`, `hello-doors` |
-| **Speaking production** | `roleplay`, `join-stage` |
+| **Speaking production** | `roleplay`, `join-stage`, `spin-wheel` |
 | **Story** | `flipbook` |
 | **Structural / closing** | `title-card`, `cinematic`, `song`, `finale` |
 
@@ -162,6 +162,99 @@ running the Variety Rule check once, right after picking a promising new
 mechanic, is not enough — a fresh mechanic can get over-relied on just as
 easily as an old one. Re-check the full `kind` sequence after every
 editing pass, not just once at the start of the design.
+
+## Universal — the Spin Wheel (`spin-wheel`, every Playground scene library)
+
+One numbered spinner is shared by the whole platform
+(`src/components/classroom/shared/SpinWheel.tsx`): segments 1..N clockwise
+with N at the top, the reference palette (periwinkle, slate, cyan, coral,
+graphite, light blue), a centre SPIN button and +/− for the segment count.
+It appears in two places, and both look and behave identically:
+
+1. **The classroom tool** (teacher dock → Tools → Spin Wheel). Opens over
+   *any* slide or scene; the teacher sets N with +/−; teacher OR student
+   presses SPIN; the landed number is identical on both screens. Use it when
+   a slide already shows numbered pictures ("Spin! 1-6") — no special
+   scene needed, just number the pictures 1..N consecutively.
+2. **The `spin-wheel` lesson activity** (`src/content/playground-library/
+   SpinWheelScene.tsx`, registered in both the Pre-A1 and the A1/A2
+   renderers). A background picture with numbered yellow badges placed on
+   things in the art, plus the wheel. SPIN lands on a number → that badge
+   lights up → the student says the word (🔊 models and reveals it). Tapping
+   a badge picks it directly — the "do it without the spinner" route. A
+   round covers every number once (the wheel prefers unpractised numbers);
+   the gem is awarded when every picture has been said. Fully synced
+   (`REAL_SYNC_KINDS`), so a missed message is recovered by the catch-up
+   handshake.
+
+**Purpose:** speaking production / retrieval of a small known set (4-6
+items is the sweet spot; 2-8 allowed). It's a *review* mechanic — use it
+after the words were modelled (`meet`, `vocab-spot`, `flipbook`…), never
+as first exposure. Counts as its own mechanic for the Variety Rule; don't
+place two `spin-wheel` scenes back to back.
+
+**Authoring contract:**
+
+```ts
+{
+  id: 'u3-spin-actions', kind: 'spin-wheel', bg: bgSkyPlayground,
+  title: 'Spin!',            // '' when the background art already has a banner
+  teacher: 'Have the student spin the wheel and say the word that matches the number. If you prefer, do the activity without the spinner.',
+  items: [                   // badge n = items[n-1]; % positions on bg
+    { label: 'jump', left: '78%', top: '44%' },
+    { label: 'run',  left: '62%', top: '82%' },
+    { label: 'swim', left: '30%', top: '30%', emoji: '🏊' }, // emoji/img only if NOT painted in bg
+  ],
+  wheelAt: { left: '50%', top: '55%' }, // optional; keep it clear of every badge
+}
+```
+
+- Badge numbers are the item order — keep the picture ↔ number ↔ `label`
+  mapping exact (the quality gate checks it against the art).
+- `label` is exactly the target word/phrase the student should say.
+
+## Universal — Picture ↔ word match (`picture-match`, every Playground scene library)
+
+`src/content/playground-library/PictureMatchScene.tsx`, registered in both
+the Pre-A1 and the A1/A2 renderers, fully synced (`REAL_SYNC_KINDS`). The
+classic matching slide, picture-first: big picture cards in a 2-row grid,
+each card shaped to its own picture (whole room/object visible, never
+cropped or letterboxed) with an empty slot strip under it, and the word
+pills (shuffled — identically on both screens) along the bottom. The student drags a word into the slot under its picture, or taps
+the word then the slot (easier on tablets). Right = snaps in + spoken;
+wrong = shake, back to the middle (costs a heart). Gem when all are matched.
+
+**Purpose:** controlled practice / self-check of known words (recognition +
+reading). Not first exposure. 4-6 items ideal (2-8 allowed); the words must
+be unique. Counts as its own mechanic for the Variety Rule.
+
+**`studentOnly: true` — auto-evaluation slides.** Any scene can set it (the
+lesson players support it generically): the student gets the floor without
+a teacher unlock, their "Watching your teacher" lock is hidden, and the
+teacher's copy becomes a live, non-interactive view with a "Student is
+doing this on their own" badge. Use it for self-check slides whose teacher
+note says the student works "independently, without help from the teacher".
+
+```ts
+{
+  id: 'u5-food-match', kind: 'picture-match',
+  prompt: 'Match the words to the pictures',   // optional banner
+  studentOnly: true,                           // auto-evaluation slide
+  teacher: 'Auto-evaluation slide. The student does the exercise independently, without help from the teacher.',
+  items: [                                     // grid order: first row, then second row
+    { word: 'muffins', img: imgMuffins },      // img preferred; emoji fallback
+    // Part of an existing background: crop = % window of the image
+    // { word: 'kitchen', img: bgRooms, crop: { x: 5.5, y: 17, w: 46.5, h: 69 } },
+    { word: 'bread',   img: imgBread },
+    { word: 'cheese',  emoji: '🧀' },
+  ],
+  bg: bgKitchen,                               // optional; default soft sky→pink gradient
+}
+```
+
+Reusable activities are listed (with paste-ready examples) in
+`src/content/playground-library/reusableActivities.ts`, shown on the
+`/activity-catalog` page — add every new shared activity there too.
 
 ## Academy / Success hub — Arcade + vocab-games
 

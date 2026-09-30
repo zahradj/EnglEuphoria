@@ -155,7 +155,6 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   const sessionDuration: 25 | 55 = isInterview ? 25 : (timePolicy.mandatoryMinutes as 25 | 55);
   const smartTimer = useSmartTimer(classTime, sessionDuration);
 
-  const wrapUpAutoOpenedRef = React.useRef(false);
 
   // Auto-hide for the top bar only — the video sidebar must never dim
   // (per direct report: seeing each other's face is critical throughout
@@ -288,14 +287,29 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   }, [studentContext, isConnected]);
 
   // When the booking has a linked Master Library lesson, push the real slides
-  // into the shared session once on connect — replacing any stale placeholder
-  // (e.g. "Magic Forest: Lesson 1") that earlier sessions wrote.
-  const pushedLibraryRef = React.useRef(false);
+  // into the shared session on connect — replacing any stale placeholder
+  // (e.g. "Magic Forest: Lesson 1") that earlier sessions wrote — and again
+  // whenever the resolved lesson itself changes mid-class (LessonSwitcher
+  // re-resolves it; before, this only ever ran once per page load, so a
+  // switch never reached the student until someone reloaded).
+  //
+  // On a reload (Force Refresh, F5, reconnect) the shared session is the
+  // source of truth for "where the class is": if it already holds a
+  // different lesson the teacher loaded mid-class from the Library, keep it
+  // instead of snapping both sides back to the booking's original lesson.
+  // It also no longer clears embeddedUrl, which closed any open web page on
+  // every teacher reload.
+  const pushedLessonKeyRef = React.useRef<string | null>(null);
   useEffect(() => {
-    if (pushedLibraryRef.current) return;
     if (!isConnected) return;
     if (!initialSlides || initialSlides.length === 0) return;
-    pushedLibraryRef.current = true;
+    const lessonKey = String(lessonId ?? lessonTitle ?? '');
+    if (pushedLessonKeyRef.current === lessonKey) return;
+    const isFirstPush = pushedLessonKeyRef.current === null;
+    pushedLessonKeyRef.current = lessonKey;
+    const sessionShowsOtherLesson =
+      syncedLessonSlides.length > 0 && !!syncedLessonTitle && !!lessonTitle && syncedLessonTitle !== lessonTitle;
+    if (isFirstPush && sessionShowsOtherLesson) return;
     const mapped = initialSlides.map((s: any, i: number) => ({
       ...s,
       id: String(s?.id ?? i + 1),
@@ -303,12 +317,23 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
       imageUrl: s?.imageUrl || s?.image_url || s?.generated_image_url || s?.media_url || s?.content?.imageUrl,
     }));
     setRawSlides(mapped);
-    void updateSharedDisplay({
-      lessonSlides: mapped,
-      lessonTitle: lessonTitle,
-      embeddedUrl: null,
-    });
-  }, [isConnected, initialSlides, lessonTitle, updateSharedDisplay]);
+    void (async () => {
+      if (!isFirstPush) {
+        // A genuinely new lesson: start it from the top on both sides. Reset
+        // BEFORE swapping the slides in — the new lesson's player mounts as
+        // soon as they land and adopts whatever scene index is saved then.
+        await updateSceneLessonIdx(0);
+        await updateSlide(0);
+      }
+      await updateSharedDisplay({
+        lessonSlides: mapped,
+        lessonTitle: lessonTitle,
+      });
+    })();
+    // syncedLessonSlides/syncedLessonTitle are read only to decide the
+    // first push; re-running on their changes would fight the teacher.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConnected, initialSlides, lessonId, lessonTitle, updateSharedDisplay]);
 
   const teacherUserId = user?.id || sessionStorage.getItem('demo-teacher-id') || 'teacher';
   const [channelStatus, setChannelStatus] = useState<'CONNECTING' | 'SUBSCRIBED' | 'CLOSED' | 'CHANNEL_ERROR' | 'TIMED_OUT'>('CONNECTING');
@@ -418,13 +443,10 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Auto-open wrap-up dialog at urgent phase
-  useEffect(() => {
-    if (smartTimer.shouldPulseWrapUp && !wrapUpAutoOpenedRef.current && !wrapUpOpen) {
-      wrapUpAutoOpenedRef.current = true;
-      setWrapUpOpen(true);
-    }
-  }, [smartTimer.shouldPulseWrapUp, wrapUpOpen]);
+  // The session report opens only when the teacher clicks End Class
+  // (handleEndClass below) — it used to auto-open at the timer's "urgent"
+  // phase (~25 min), covering the lesson mid-activity. Near the end the
+  // wrap-up button just pulses (shouldPulseWrapUp) as a reminder.
 
   // Zen mode elapsed timer
   useEffect(() => {
@@ -597,16 +619,28 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   // Notify when student joins
   const prevParticipantCount = React.useRef(0);
   useEffect(() => {
-    if (participants.length > prevParticipantCount.current && prevParticipantCount.current >= 0) {
-      if (prevParticipantCount.current > 0) {
-        toast({ title: "👋 Student Joined", description: "A student has joined the classroom", className: "bg-green-900 border-green-700" });
-      }
+    // Mid-class (re)joins only — before Start Class the bell + "Student has
+    // joined" toast below already covers arrival. The old `> 0` guard meant
+    // this never fired for the 0 → 1 case, i.e. a student reconnecting after
+    // a dropped call went unannounced.
+    const classIsLive = !!(sessionContext as any)?.classStarted;
+    if (classIsLive && participants.length > prevParticipantCount.current) {
+      toast({ title: "👋 Student Joined", description: `${studentName} is back in the classroom`, className: "bg-green-900 border-green-700" });
     }
     prevParticipantCount.current = participants.length;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [participants.length]);
 
   const toggleMute = useCallback(() => { media.toggleMicrophone(); }, [media]);
   const toggleCamera = useCallback(() => { media.toggleCamera(); }, [media]);
+
+  // Resume the star count from the shared session after a reload / Force
+  // Refresh. It used to restart at 0, so the next star wrote starCount=1
+  // and the student's star bar dropped from e.g. 6 back to 1.
+  const savedStarCount = session?.starCount ?? 0;
+  useEffect(() => {
+    setStudentStars((current) => Math.max(current, savedStarCount));
+  }, [savedStarCount]);
 
   const handleGiveStar = useCallback(async () => {
     const newStarCount = studentStars + 1;
@@ -649,19 +683,15 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
       senderId: teacherUserId,
     }).catch((e) => console.error('Dice broadcast failed:', e));
   }, [roomName, teacherUserId]);
+  // Opens the shared numbered spinner (1..N, +/− on the wheel) over whatever
+  // is on stage — lesson "Spin!" slides number their pictures to match. It
+  // no longer asks for names through a browser prompt first.
   const handleSpinWheel = useCallback(() => {
-    const raw = window.prompt(
-      'Enter wheel options (comma-separated):',
-      'Sara,Tom,Mia,Leo,Ana,Max'
-    );
-    if (!raw) return;
-    const options = raw.split(',').map((s) => s.trim()).filter(Boolean).slice(0, 8);
-    if (options.length < 2) return;
-    const winner = options[Math.floor(Math.random() * options.length)];
     void whiteboardService.sendToolAction(roomName, {
       tool: 'wheel',
-      options,
-      winner,
+      count: 6,
+      rotation: 0,
+      spinning: false,
       actionId: `${Date.now()}`,
       senderId: teacherUserId,
     }).catch((e) => console.error('Wheel broadcast failed:', e));
@@ -724,10 +754,18 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
       s?.type === 'homework_task' || s?.slide_type === 'homework_task';
     const hasHw = base.some(isHw);
     if (hasHw) return base;
+    // Only when the deck on stage IS the booking's resolved lesson — after
+    // the teacher loads a different lesson from the Library, appending the
+    // original lesson's homework (then pushed to the student by the sync
+    // effect below) mixed two lessons in one deck (seen live: the castle
+    // scene followed by "Hello, My Name Is..." homework).
+    const deckIsResolvedLesson =
+      syncedLessonSlides.length === 0 || !lessonTitle || syncedLessonTitle === lessonTitle;
+    if (!deckIsResolvedLesson) return base;
     const hwFromInitial = (initialSlides ?? []).filter(isHw);
     if (hwFromInitial.length) return [...base, ...hwFromInitial];
     return base;
-  }, [syncedLessonSlides, slides, initialSlides]);
+  }, [syncedLessonSlides, slides, initialSlides, syncedLessonTitle, lessonTitle]);
   const activeLessonTitle = syncedLessonTitle || lessonTitle;
 
   // Whether the unified stage is currently showing an embedded Playground
@@ -811,20 +849,49 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     return () => clearInterval(interval);
   }, [timerRunning, timerValue, toast]);
 
-  const startTimer = () => {
-    setTimerValue(timerSeconds);
+  // Paused mid-countdown (Resume continues from timerValue instead of
+  // restarting from the full duration).
+  const [timerPaused, setTimerPaused] = useState(false);
+  const startTimer = (fromSeconds: number = timerSeconds) => {
+    setTimerValue(fromSeconds);
     setTimerRunning(true);
+    setTimerPaused(false);
     void whiteboardService.sendToolAction(roomName, {
       tool: 'timer',
       status: 'start',
-      durationSec: timerSeconds,
+      durationSec: fromSeconds,
       actionId: `${Date.now()}`,
       senderId: teacherUserId,
     }).catch((e) => console.error('Timer broadcast failed:', e));
     setTimerDialogOpen(false);
   };
+  const pauseTimer = () => {
+    setTimerRunning(false);
+    setTimerPaused(true);
+    // Tell the student's overlay too — Pause used to be local-only, so the
+    // student's timer kept running to 0:00 while the teacher's was frozen.
+    void whiteboardService.sendToolAction(roomName, {
+      tool: 'timer',
+      status: 'pause',
+      durationSec: timerValue,
+      senderId: teacherUserId,
+    }).catch((e) => console.error('Timer pause broadcast failed:', e));
+  };
+  // The overlay's own dismiss (✕) on the stage sends a timer 'stop' — keep
+  // this dialog's countdown in step with it instead of ticking on to a
+  // phantom "Time's up".
+  useEffect(() => {
+    if (!roomName) return;
+    return whiteboardService.subscribeToToolActions(roomName, (p) => {
+      if (p.tool === 'timer' && (p.status === 'stop' || p.status === 'reset')) {
+        setTimerRunning(false);
+        setTimerPaused(false);
+      }
+    });
+  }, [roomName]);
   const resetTimer = () => {
     setTimerRunning(false);
+    setTimerPaused(false);
     setTimerValue(timerSeconds);
     void whiteboardService.sendToolAction(roomName, {
       tool: 'timer',
@@ -892,8 +959,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     setShowStartNudge(true);
   }, [studentPresent, classStarted, toast, studentName]);
 
-  const handleStartClass = useCallback(async () => {
-    if (!studentPresent) {
+  const handleStartClass = useCallback(async (opts?: { force?: boolean }) => {
+    if (!studentPresent && !opts?.force) {
       toast({ title: 'Waiting for student', description: 'You can start the lesson once the student joins.', variant: 'destructive' });
       return;
     }
@@ -935,7 +1002,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             <div className="flex flex-col gap-2">
               <Button
                 size="lg"
-                onClick={handleStartClass}
+                onClick={() => void handleStartClass()}
                 disabled={!studentPresent}
                 className="px-6 py-5 text-sm font-bold rounded-full shadow-lg disabled:opacity-50 disabled:cursor-not-allowed w-full"
                 style={studentPresent ? { background: hubTheme.hexGradient, color: '#fff' } : { background: '#E5E7EB', color: '#6B7280' }}
@@ -950,6 +1017,23 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
               >
                 📝  Prepare for class
               </Button>
+              {/* "Student present" is only detected once their video/audio
+                  connection is up. If the student is in the room but their
+                  camera/mic or network blocks the call, neither side could
+                  ever get past this screen — give the teacher a way through. */}
+              {!studentPresent && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm(`Start the lesson without a video connection to ${studentName}? They will see the lesson as soon as they are in the classroom.`)) {
+                      void handleStartClass({ force: true });
+                    }
+                  }}
+                  className="text-[11px] text-gray-500 underline hover:text-gray-700"
+                >
+                  Student here but video won't connect? Start anyway
+                </button>
+              )}
               <p className="text-[11px] text-gray-500 mt-1">
                 Set up materials inside the classroom. We'll ping you when the student arrives.
               </p>
@@ -982,7 +1066,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             </div>
             <Button
               size="sm"
-              onClick={handleStartClass}
+              onClick={() => void handleStartClass()}
               disabled={!studentPresent}
               className="w-full rounded-full text-sm font-bold disabled:opacity-50"
               style={studentPresent ? { background: hubTheme.hexGradient, color: '#fff' } : { background: '#E5E7EB', color: '#6B7280' }}
@@ -1208,8 +1292,9 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             <div className="absolute left-3 top-1/2 -translate-y-1/2 z-[60] flex flex-col items-center gap-1.5 p-2 rounded-2xl bg-white shadow-xl ring-1 ring-black/5 pointer-events-auto animate-in slide-in-from-left-2 fade-in duration-150">
               <button
                 onClick={async () => {
-                  if (drawingEnabled) await setDrawingEnabled(false);
-                  await setStudentCanDraw(false);
+                  // Put the pen down; the student's permission is left alone
+                  // (it's the separate "Let Student Interact" toggle).
+                  await handleToolChange('pointer');
                   setPenRailOpen(false);
                 }}
                 title="Hide pen tools"
@@ -1235,13 +1320,11 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
                   <button
                     key={t.id}
                     onClick={async () => {
-                      if (t.id === 'pointer') {
-                        if (drawingEnabled) await setDrawingEnabled(false);
-                        await setStudentCanDraw(false);
-                      } else if (!drawingEnabled) {
-                        await setDrawingEnabled(true);
-                        await setStudentCanDraw(true);
-                      }
+                      // The teacher's own pen no longer flips the student's
+                      // permission: picking up a pen used to unlock the
+                      // student (who could then scribble or tap mid-demo)
+                      // and picking the pointer silently re-locked them.
+                      // The teacher can always draw (see TransparentCanvas).
                       await handleToolChange(t.id);
                     }}
                     title={t.label}
@@ -1436,6 +1519,15 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
           userId={user?.id || ''}
           hubType={hubType}
           canSend
+          // A floating emoji is easy to miss mid-explanation; the two
+          // reactions that need the teacher to act also get a toast.
+          onReceive={(emoji) => {
+            if (emoji === '🔇') {
+              toast({ title: `🔇 ${studentName} can't hear you`, description: 'Check your microphone and speaker.', variant: 'destructive' });
+            } else if (emoji === '❓') {
+              toast({ title: `❓ ${studentName} has a question` });
+            }
+          }}
         />
       )}
 
@@ -1470,7 +1562,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
               {Math.floor(timerValue / 60).toString().padStart(2, '0')}:
               {(timerValue % 60).toString().padStart(2, '0')}
             </div>
-            {!timerRunning && (
+            {!timerRunning && !timerPaused && (
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-500">Set time (seconds):</span>
                 <Input
@@ -1483,13 +1575,18 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
               </div>
             )}
             <div className="flex gap-2">
-              {!timerRunning ? (
-                <Button onClick={startTimer} className={hubTheme.buttonPrimary}>Start Timer</Button>
-              ) : (
+              {timerRunning ? (
                 <>
-                  <Button onClick={() => setTimerRunning(false)} variant="outline" className="border-gray-200">Pause</Button>
+                  <Button onClick={pauseTimer} variant="outline" className="border-gray-200">Pause</Button>
                   <Button onClick={resetTimer} variant="destructive">Reset</Button>
                 </>
+              ) : timerPaused && timerValue > 0 ? (
+                <>
+                  <Button onClick={() => startTimer(timerValue)} className={hubTheme.buttonPrimary}>Resume</Button>
+                  <Button onClick={resetTimer} variant="destructive">Reset</Button>
+                </>
+              ) : (
+                <Button onClick={() => startTimer()} className={hubTheme.buttonPrimary}>Start Timer</Button>
               )}
             </div>
           </div>
@@ -1518,6 +1615,11 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             }];
             setRawSlides(sceneSlides);
             try {
+              // Start the new lesson at its first scene — otherwise the saved
+              // scene index from the previous lesson carried over into it.
+              // Reset BEFORE swapping the slides in: the new lesson's player
+              // mounts as soon as they land and adopts the index saved then.
+              await updateSceneLessonIdx(0);
               await updateSharedDisplay({ lessonSlides: sceneSlides, lessonTitle: title, embeddedUrl: null });
               await updateSlide(0);
               await setStageMode('slide');

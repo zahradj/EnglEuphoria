@@ -98,19 +98,37 @@ export interface RewardPayload {
   timestamp: number;
 }
 
-export type ToolName = 'dice' | 'timer' | 'wheel' | 'xo';
+export type ToolName = 'dice' | 'timer' | 'wheel' | 'xo' | 'sync';
+
+/** Snapshot of the stage tools currently open on one side — the reply to a
+ *  tool 'sync' request (see ToolActionPayload.syncRole). */
+export interface ToolSyncState {
+  dice?: { value: number } | null;
+  wheel?: { count: number; rotation: number; options?: string[] } | null;
+  xo?: Array<'X' | 'O' | null> | null;
+  timer?: { remaining: number; running: boolean } | null;
+}
 export interface ToolActionPayload {
   tool: ToolName;
   /** Numeric result of the action — e.g. dice value 1-6 (dice/wheel index) */
   result?: number;
   /** Timer: duration in seconds. */
   durationSec?: number;
-  /** Timer: 'start' | 'stop' | 'reset'. Also reused by dice/wheel: 'stop' broadcasts a dismiss so the other side's ClassroomToolOverlay closes too, instead of only clearing local state. */
-  status?: 'start' | 'stop' | 'reset';
-  /** Wheel: options to display. */
+  /** Timer: 'start' | 'pause' | 'stop' | 'reset' ('pause' carries the
+   *  remaining seconds in durationSec; resuming is a 'start' with that
+   *  remaining time). Also reused by dice/wheel: 'stop' broadcasts a dismiss so the other side's ClassroomToolOverlay closes too, instead of only clearing local state. */
+  status?: 'start' | 'pause' | 'stop' | 'reset';
+  /** Wheel (legacy): option labels. New wheels are numbered — see count. */
   options?: string[];
-  /** Wheel: chosen option label. */
+  /** Wheel (legacy): chosen option label. */
   winner?: string;
+  /** Wheel: number of numbered segments (2-8). */
+  count?: number;
+  /** Wheel: absolute rotation to animate to, computed once by whoever
+   *  pressed SPIN so every screen lands on the same number. */
+  rotation?: number;
+  /** Wheel: true for a spin (animate), false/absent for open / +/−. */
+  spinning?: boolean;
   /** XO (tic-tac-toe) action verb. */
   xoAction?: 'start' | 'move' | 'reset' | 'close';
   /** XO: 0-8 board cell index. */
@@ -119,6 +137,13 @@ export interface ToolActionPayload {
   mark?: 'X' | 'O';
   /** Unique id so the overlay can re-trigger animation. */
   actionId?: string;
+  /** tool 'sync': which side sent it. Tool events are no-replay broadcasts,
+   *  so a side that joins, reloads or returns to the foreground sends a
+   *  request (no syncState) and the OTHER side replies with its open tools
+   *  (syncState) — otherwise one screen kept a dice/wheel/XO board/timer
+   *  the other no longer had (e.g. a reloaded student couldn't play O). */
+  syncRole?: 'teacher' | 'student';
+  syncState?: ToolSyncState;
   senderId: string;
   timestamp: number;
 }
@@ -243,6 +268,21 @@ export interface SceneActivityStatePayload {
 }
 type SceneActivityStateListener = (payload: SceneActivityStatePayload) => void;
 
+/** Either side → the other: "I just joined, reconnected, or came back to
+ *  the foreground, and may have missed live messages — send me where we
+ *  are." Every scene-sync message above is fire-and-forget broadcast with
+ *  no replay, so without this a single dropped message (Wi-Fi blip, reload,
+ *  a tablet app backgrounded mid-lesson) left the two screens showing
+ *  different scenes/lock states/activity progress until the next change —
+ *  "the teacher can't see what the student is doing" or vice versa. The
+ *  teacher answers with its scene index + unlock state; whichever side
+ *  holds the activity floor answers with its current activity snapshot. */
+export interface SceneStateRequestPayload {
+  senderRole: 'teacher' | 'student';
+  timestamp: number;
+}
+type SceneStateRequestListener = (payload: SceneStateRequestPayload) => void;
+
 /** Teacher's authoritative snapshot pushed on demand by the "Force Sync" button. */
 export interface ForceSyncPayload {
   slideIndex: number;
@@ -307,6 +347,7 @@ interface RoomChannel {
   sceneInteractionPermissionListeners: Set<SceneInteractionPermissionListener>;
   sceneAdvanceRequestListeners: Set<SceneAdvanceRequestListener>;
   sceneActivityStateListeners: Set<SceneActivityStateListener>;
+  sceneStateRequestListeners: Set<SceneStateRequestListener>;
   refCount: number;
 }
 
@@ -345,6 +386,7 @@ class WhiteboardService {
     const sceneInteractionPermissionListeners = new Set<SceneInteractionPermissionListener>();
     const sceneAdvanceRequestListeners = new Set<SceneAdvanceRequestListener>();
     const sceneActivityStateListeners = new Set<SceneActivityStateListener>();
+    const sceneStateRequestListeners = new Set<SceneStateRequestListener>();
     const statusListeners = new Set<(status: string) => void>();
 
     const channel = supabase
@@ -439,6 +481,9 @@ class WhiteboardService {
       })
       .on('broadcast', { event: 'scene_activity_state' }, (payload) => {
         sceneActivityStateListeners.forEach((cb) => cb(payload.payload as SceneActivityStatePayload));
+      })
+      .on('broadcast', { event: 'scene_state_request' }, (payload) => {
+        sceneStateRequestListeners.forEach((cb) => cb(payload.payload as SceneStateRequestPayload));
       });
 
     const ready = new Promise<void>((resolve) => {
@@ -476,6 +521,7 @@ class WhiteboardService {
       sceneInteractionPermissionListeners,
       sceneAdvanceRequestListeners,
       sceneActivityStateListeners,
+      sceneStateRequestListeners,
       refCount: 0,
     };
     this.rooms.set(channelName, room);
@@ -952,6 +998,28 @@ class WhiteboardService {
     return () => this.release(roomId, () => room.sceneActivityStateListeners.delete(onState));
   }
 
+  /** Ask the other side to re-send the current scene state; see
+   *  SceneStateRequestPayload. */
+  async sendSceneStateRequest(
+    roomId: string,
+    payload: Omit<SceneStateRequestPayload, 'timestamp'>,
+  ): Promise<void> {
+    const room = this.getRoom(roomId);
+    await room.ready;
+    await room.channel.send({
+      type: 'broadcast',
+      event: 'scene_state_request',
+      payload: { ...payload, timestamp: Date.now() } satisfies SceneStateRequestPayload,
+    });
+  }
+
+  subscribeToSceneStateRequest(roomId: string, onRequest: SceneStateRequestListener): () => void {
+    const room = this.getRoom(roomId);
+    room.sceneStateRequestListeners.add(onRequest);
+    room.refCount += 1;
+    return () => this.release(roomId, () => room.sceneStateRequestListeners.delete(onRequest));
+  }
+
   subscribeToStatus(roomId: string, onStatus: (status: string) => void): () => void {
     const room = this.getRoom(roomId);
     room.statusListeners.add(onStatus);
@@ -990,6 +1058,7 @@ class WhiteboardService {
       room.sceneInteractionPermissionListeners.size === 0 &&
       room.sceneAdvanceRequestListeners.size === 0 &&
       room.sceneActivityStateListeners.size === 0 &&
+      room.sceneStateRequestListeners.size === 0 &&
       room.statusListeners.size === 0
     ) {
       supabase.removeChannel(room.channel);

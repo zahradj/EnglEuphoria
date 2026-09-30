@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTeacherPayoutCurrency } from "@/hooks/useTeacherPayoutCurrency";
+import { formatPay } from "@/lib/teacherPay";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -223,6 +225,8 @@ export default function TeacherKpiSelfView() {
 }
 
 function BonusPreview({ metric, earnings30d }: { metric: Metric; earnings30d: number }) {
+  // Local teachers are paid in DZD, international in EUR.
+  const currency = useTeacherPayoutCurrency();
   const { policy } = useBonusPolicy();
   const calc = useMemo(
     () => calculateKpiBonus(metric, earnings30d, policy),
@@ -279,12 +283,12 @@ function BonusPreview({ metric, earnings30d }: { metric: Metric; earnings30d: nu
           </div>
           <div>
             <div className="text-xs text-muted-foreground">Earnings base</div>
-            <div className="font-mono">${earnings30d.toFixed(2)}</div>
+            <div className="font-mono">{formatPay(earnings30d, currency)}</div>
           </div>
           <div>
             <div className="text-xs text-muted-foreground">Projected bonus</div>
             <div className="font-mono font-bold text-emerald-600 text-lg">
-              ${calc.bonusAmount.toFixed(2)}
+              {formatPay(calc.bonusAmount, currency)}
             </div>
           </div>
         </div>
