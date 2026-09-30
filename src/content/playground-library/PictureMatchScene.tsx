@@ -264,13 +264,13 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
             view: say so right where they'd try to drag, instead of pills
             that look draggable but don't respond. */}
         {!done && isMirror && scene.studentOnly ? (
-          <div className="shrink-0 rounded-full bg-sky-100 px-4 py-1 text-[clamp(0.85rem,2.3vh,1.15rem)] font-bold text-sky-800">
+          <div className="shrink-0 rounded-full bg-sky-100 px-4 py-1 text-[clamp(0.85rem,calc(2.3*var(--svh,1vh)),1.15rem)] font-bold text-sky-800">
             👀 Your student is matching on their own — each answer appears here live
           </div>
         ) : scene.prompt && !done ? (
-          <div className="shrink-0 text-[clamp(0.85rem,2.4vh,1.25rem)] font-extrabold uppercase tracking-wide text-slate-500">{scene.prompt}</div>
+          <div className="shrink-0 text-[clamp(0.85rem,calc(2.4*var(--svh,1vh)),1.25rem)] font-extrabold uppercase tracking-wide text-slate-500">{scene.prompt}</div>
         ) : null}
-        <div className="flex max-w-full flex-wrap items-center justify-center gap-x-[1.2vw] gap-y-2">
+        <div className="flex max-w-full flex-wrap items-center justify-center gap-x-[calc(1.2*var(--svw,1vw))] gap-y-2">
         {order.map((itemIdx, tile) => {
           const matched = placed.includes(itemIdx);
           const isHeld = holding === tile;
@@ -283,7 +283,7 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
               disabled={isMirror || matched}
               aria-label={items[itemIdx].word}
               style={{ touchAction: 'none' }}
-              className={`rounded-full px-[1.2em] py-[0.5em] text-center text-[clamp(0.9rem,2.9vh,1.6rem)] font-bold leading-none whitespace-nowrap shadow-[0_4px_14px_rgba(15,23,42,0.14)] transition ${
+              className={`rounded-full px-[1.2em] py-[0.5em] text-center text-[clamp(0.9rem,calc(2.9*var(--svh,1vh)),1.6rem)] font-bold leading-none whitespace-nowrap shadow-[0_4px_14px_rgba(15,23,42,0.14)] transition ${
                 matched
                   ? 'hidden'
                   : isHeld

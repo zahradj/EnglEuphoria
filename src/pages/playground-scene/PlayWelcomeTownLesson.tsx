@@ -12,6 +12,14 @@ import { getDomPath, getElementAtPath, withPointerCaptureNoop } from '@/content/
 // of the same classroom state (see teacherChangedUnlockRef).
 const LIVE_OVER_DB_MS = 4000;
 
+/** On-screen px per layout px of `el` (the classroom scales the lesson to
+ *  fit each screen). Drag distances are mirrored in layout px so a drag on
+ *  a big screen replays the same distance on a small one. */
+function renderScale(el: HTMLElement): number {
+  const w = el.offsetWidth;
+  return w > 0 ? el.getBoundingClientRect().width / w : 1;
+}
+
 export interface PlayWelcomeTownLessonHandle {
   goNext: () => void;
   goBack: () => void;
@@ -292,7 +300,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
       if (now - drag.lastSent < MOVE_THROTTLE_MS) return;
       drag.lastSent = now;
       void whiteboardService.sendSceneTap(roomId, {
-        path: drag.path, kind: 'pointermove', dx: e.clientX - drag.downX, dy: e.clientY - drag.downY,
+        path: drag.path, kind: 'pointermove', dx: (e.clientX - drag.downX) / renderScale(rootEl), dy: (e.clientY - drag.downY) / renderScale(rootEl),
         pointerId: e.pointerId, senderRole: role, senderId: role,
       });
     };
@@ -303,7 +311,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
       drags.delete(e.pointerId);
       void whiteboardService.sendSceneTap(roomId, {
         path: drag.path, kind: e.type === 'pointercancel' ? 'pointercancel' : 'pointerup',
-        dx: e.clientX - drag.downX, dy: e.clientY - drag.downY,
+        dx: (e.clientX - drag.downX) / renderScale(rootEl), dy: (e.clientY - drag.downY) / renderScale(rootEl),
         pointerId: e.pointerId, senderRole: role, senderId: role,
       });
     };
@@ -368,8 +376,11 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
         }
         const drag = dragTargets.get(pointerId);
         if (!drag) return;
-        const clientX = drag.startX + (payload.dx ?? 0);
-        const clientY = drag.startY + (payload.dy ?? 0);
+        // dx/dy arrive in layout (design-canvas) px — convert to this
+        // screen's rendered px, since each side scales the lesson differently.
+        const k = renderScale(rootEl);
+        const clientX = drag.startX + (payload.dx ?? 0) * k;
+        const clientY = drag.startY + (payload.dy ?? 0) * k;
         withPointerCaptureNoop(() => {
           drag.el.dispatchEvent(new PointerEvent(kind, {
             bubbles: true, cancelable: true, pointerId, pointerType: 'mouse', isPrimary: true, clientX, clientY,

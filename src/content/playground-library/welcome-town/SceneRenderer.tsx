@@ -268,7 +268,7 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
         <p className="mt-1 text-sm font-semibold text-white/95 drop-shadow sm:text-base">{scene.subtitle}</p>
       </div>
       {step >= 0 && step < scene.script.length && (
-        <div className="absolute bottom-[52vh] left-1/2 max-w-[520px] -translate-x-1/2 px-4">
+        <div className="absolute bottom-[calc(52*var(--svh,1vh))] left-1/2 max-w-[520px] -translate-x-1/2 px-4">
           <div className="relative rounded-3xl bg-white px-6 py-4 text-center text-2xl font-black text-orange-800 shadow-2xl">
             “{currentLine}”
             <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 border-x-[14px] border-t-[16px] border-x-transparent border-t-white" />
@@ -332,7 +332,7 @@ function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kin
     : 'justify-center';
 
   return (
-    <div className="relative min-h-[78vh]">
+    <div className="relative min-h-[calc(78*var(--svh,1vh))]">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
         <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: `linear-gradient(90deg, ${c.color}, #FEBE4C)` }}>
           ⚔️ Quest · Meet {c.name}
@@ -347,9 +347,9 @@ function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kin
           no separate sprite on top, just a broad tap affordance over the
           area where they're standing, with the same pulsing ring cue used
           for this exact idle-tap pattern in the Pre-A1 lessons. */}
-      {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 h-[60vh] w-full cursor-pointer bg-transparent" />}
+      {phase === 'idle' && <button onClick={tapCharacter} aria-label={`Tap ${c.name} to say hello`} className="absolute inset-0 z-10 h-[calc(60*var(--svh,1vh))] w-full cursor-pointer bg-transparent" />}
       {phase === 'idle' && (
-        <div className={`pointer-events-none absolute inset-x-0 top-[26vh] z-10 flex ${charJustifyClass}`}>
+        <div className={`pointer-events-none absolute inset-x-0 top-[calc(26*var(--svh,1vh))] z-10 flex ${charJustifyClass}`}>
           <div className="relative h-40 w-40" style={{ animation: 'lep1-wiggle 3s ease-in-out infinite' }}>
             <span className="absolute inset-0 rounded-full" style={{ background: `radial-gradient(circle, ${c.color}55, transparent 65%)`, animation: 'lep1-ping 2s ease-out infinite' }} />
             <span className="absolute inset-6 rounded-full border-4" style={{ borderColor: c.color, animation: 'lep1-ping 2s ease-out 0.4s infinite' }} />
@@ -360,17 +360,17 @@ function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kin
           the painted background right as they speak, then the vocabulary
           card below pops up already illustrating the word on its own. */}
       {glow && (
-        <div className={`pointer-events-none absolute inset-x-0 top-[8vh] z-10 h-[55vh] flex ${charJustifyClass}`} style={{ animation: 'lep1-twinkle 1.4s ease-in-out' }}>
+        <div className={`pointer-events-none absolute inset-x-0 top-[calc(8*var(--svh,1vh))] z-10 h-[calc(55*var(--svh,1vh))] flex ${charJustifyClass}`} style={{ animation: 'lep1-twinkle 1.4s ease-in-out' }}>
           <div className="h-full w-full max-w-md rounded-full" style={{ background: `radial-gradient(circle, ${c.color}66 0%, ${c.color}22 45%, transparent 70%)` }} />
         </div>
       )}
       {xpBurst && (
-        <div className={`pointer-events-none absolute inset-x-0 top-[32vh] z-30 flex ${charJustifyClass}`}>
+        <div className={`pointer-events-none absolute inset-x-0 top-[calc(32*var(--svh,1vh))] z-30 flex ${charJustifyClass}`}>
           <div className="animate-[lep1-pop-fade_1.1s_ease-out_forwards] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 text-2xl font-black text-white shadow-2xl">+10 XP 💎</div>
         </div>
       )}
       {phase !== 'idle' && (
-        <div className="pointer-events-none absolute inset-x-0 top-[12vh] z-20 flex justify-center px-4">
+        <div className="pointer-events-none absolute inset-x-0 top-[calc(12*var(--svh,1vh))] z-20 flex justify-center px-4">
           <button onClick={replayIntro} className={`group pointer-events-auto relative flex w-full max-w-sm flex-col items-center gap-2 rounded-[2rem] border-4 bg-white px-6 py-5 text-center shadow-2xl active:scale-95 ${cardAlignClass}`} style={{ borderColor: c.color, animation: 'lep1-pop 0.4s ease-out' }}>
             <span className="grid h-16 w-16 place-items-center rounded-full text-4xl shadow-inner" style={{ background: `${c.color}22` }}>{c.emoji}</span>
             <span className="text-2xl font-black sm:text-3xl" style={{ color: c.color }}>{repeatWord}</span>
@@ -379,7 +379,7 @@ function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kin
         </div>
       )}
       {phase === 'idle' && (
-        <div className={`pointer-events-none absolute inset-x-0 top-[44vh] z-20 flex ${charJustifyClass}`}>
+        <div className={`pointer-events-none absolute inset-x-0 top-[calc(44*var(--svh,1vh))] z-20 flex ${charJustifyClass}`}>
           <span className="animate-pulse rounded-full bg-white/95 px-5 py-2 text-base font-bold shadow-xl" style={{ color: c.color }}>👆 Tap {c.name} {c.emoji}</span>
         </div>
       )}
@@ -635,10 +635,10 @@ function EchoScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, { kin
   const wordCount = scene.word.trim().split(/\s+/).length;
   const fontSize =
     wordCount <= 1
-      ? (side === 'top' ? 'clamp(3.5rem, 10vw, 7rem)' : 'clamp(4.5rem, 13vw, 10rem)')
+      ? (side === 'top' ? 'clamp(3.5rem, calc(10*var(--svw,1vw)), 7rem)' : 'clamp(4.5rem, calc(13*var(--svw,1vw)), 10rem)')
       : wordCount <= 3
-      ? (side === 'top' ? 'clamp(2.5rem, 7vw, 4.5rem)' : 'clamp(2.75rem, 8vw, 5rem)')
-      : (side === 'top' ? 'clamp(2rem, 5.5vw, 3.5rem)' : 'clamp(2.25rem, 6vw, 4rem)');
+      ? (side === 'top' ? 'clamp(2.5rem, calc(7*var(--svw,1vw)), 4.5rem)' : 'clamp(2.75rem, calc(8*var(--svw,1vw)), 5rem)')
+      : (side === 'top' ? 'clamp(2rem, calc(5.5*var(--svw,1vw)), 3.5rem)' : 'clamp(2.25rem, calc(6*var(--svw,1vw)), 4rem)');
   return (
     <div className="absolute inset-0">
       <div className="pointer-events-none absolute inset-x-0 top-4 z-30 flex justify-center px-4">
@@ -652,7 +652,7 @@ function EchoScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, { kin
           : `absolute inset-y-0 z-20 flex w-1/2 flex-col items-center justify-center gap-8 px-1 ${side === 'right' ? 'right-0' : 'left-0'}`
       }>
         <p
-          className="max-w-[90vw] text-center font-black leading-tight text-white"
+          className="max-w-[calc(90*var(--svw,1vw))] text-center font-black leading-tight text-white"
           style={{
             fontSize,
             // A dark contrast shadow (readability on any background) plus a
@@ -1806,7 +1806,7 @@ function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, 
         </div>
       )}
       <div className="absolute left-1/2 z-30" style={{ top: '58%', transform: 'translate(-50%, -50%)' }}>
-        <div className={`relative flex items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-all ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`} style={{ width: 'clamp(300px, 46vw, 500px)', height: 'clamp(300px, 46vw, 500px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}>
+        <div className={`relative flex items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-all ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`} style={{ width: 'clamp(300px, calc(46*var(--svw,1vw)), 500px)', height: 'clamp(300px, calc(46*var(--svw,1vw)), 500px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}>
           <video ref={videoRef} muted playsInline className="h-full w-full object-cover" />
           <span className="absolute right-6 top-6 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white"><span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" /> Live</span>
         </div>
@@ -2185,13 +2185,13 @@ function SongScene({ scene, onNext, onWin }: { scene: Extract<Scene, { kind: 'so
           {['🎵', '🎶', '🎵', '🎶', '🎵'].map((n, i) => <span key={i} className="absolute text-3xl" style={{ left: `${10 + i * 18}%`, bottom: '45%', animation: `lep1-noteFloat ${3 + (i % 3)}s ease-in-out ${i * 0.4}s infinite` }}>{n}</span>)}
         </div>
       )}
-      <div className="absolute left-1/2 w-[94%] max-w-5xl -translate-x-1/2 rounded-[2rem] bg-white/95 p-8 text-center shadow-2xl ring-8 ring-[#FE6A2F]/40 backdrop-blur-md" style={{ top: '40vh', zIndex: 15 }}>
+      <div className="absolute left-1/2 w-[94%] max-w-5xl -translate-x-1/2 rounded-[2rem] bg-white/95 p-8 text-center shadow-2xl ring-8 ring-[#FE6A2F]/40 backdrop-blur-md" style={{ top: 'calc(40*var(--svh,1vh))', zIndex: 15 }}>
         {status === 'error' ? (
           <div className="text-xl font-bold text-red-600">Song unavailable — try again in a moment.</div>
         ) : current ? (
           <>
             <div className="mb-3 text-sm font-black uppercase tracking-widest text-[#FE6A2F] sm:text-base">🎤 {CAST[current.who]?.name.toUpperCase() ?? current.who.toUpperCase()} sings</div>
-            <div key={idx} className="font-black leading-tight text-slate-800" style={{ fontSize: 'clamp(28px, 5vw, 64px)', animation: 'lep1-lyricPop 0.4s ease-out' }}>{current.text}</div>
+            <div key={idx} className="font-black leading-tight text-slate-800" style={{ fontSize: 'clamp(28px, calc(5*var(--svw,1vw)), 64px)', animation: 'lep1-lyricPop 0.4s ease-out' }}>{current.text}</div>
             <div className="mt-5 flex justify-center gap-2">
               {scene.lyrics.map((_, i) => <span key={i} className={`h-3 w-10 rounded-full ${i <= idx ? 'bg-[#FE6A2F]' : 'bg-slate-200'}`} />)}
             </div>
@@ -2264,7 +2264,7 @@ function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene, { kind
           onClick={playLetterSound}
           aria-label={`Hear the ${scene.letter} sound again`}
           className="grid place-items-center rounded-[2.5rem] border-8 bg-white/95 font-black shadow-2xl backdrop-blur transition active:scale-95"
-          style={{ color: c.color, borderColor: c.color, width: 'clamp(140px, 26vh, 220px)', height: 'clamp(140px, 26vh, 220px)', fontSize: 'clamp(70px, 14vh, 110px)', lineHeight: 1, animation: beat >= 0 ? 'lep1-pop 0.5s ease-out' : 'lep1-wiggle 4s ease-in-out infinite' }}
+          style={{ color: c.color, borderColor: c.color, width: 'clamp(140px, calc(26*var(--svh,1vh)), 220px)', height: 'clamp(140px, calc(26*var(--svh,1vh)), 220px)', fontSize: 'clamp(70px, calc(14*var(--svh,1vh)), 110px)', lineHeight: 1, animation: beat >= 0 ? 'lep1-pop 0.5s ease-out' : 'lep1-wiggle 4s ease-in-out infinite' }}
         >
           {scene.letter}
         </button>
