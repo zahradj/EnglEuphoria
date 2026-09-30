@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar, Clock, User, MessageSquare, ChevronRight, History, CheckCircle2, Loader2 } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, isToday } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { EmptyState } from '@/components/ui/empty-state';
@@ -31,6 +32,10 @@ interface Lesson {
   hubType: string | null;
   /** The student's own post-class 👍/👎 (post_class_feedback), if given. */
   studentFeedback: { thumbsUp: boolean; suggestion: string | null } | null;
+  /** Slot length in minutes (class_bookings.duration). */
+  durationMin: number;
+  /** The teacher's own session report for this lesson, if submitted. */
+  report: { rating: number | null; notes: string | null; outcome: string | null } | null;
 }
 
 /** Outcome badge for a lesson that has actually ended (Past / No Feedback
@@ -66,12 +71,17 @@ interface LessonItemProps {
   lesson: Lesson;
   onOpenFeedback?: (lesson: Lesson) => void;
   onWriteFeedback?: (lesson: Lesson) => void;
+  /** Upcoming lessons: open the classroom (only shown close to start). */
+  onEnter?: (lesson: Lesson) => void;
 }
+
+/** Bookings that were called off — never shown as upcoming or needing a report. */
+const NEVER_HAPPENED_STATUSES = new Set(['cancelled', 'canceled', 'rescheduled', 'refunded']);
 
 /** First letter of the student's name, for the row avatar. */
 const initial = (name: string) => (name.trim()[0] || '?').toUpperCase();
 
-const LessonItem: React.FC<LessonItemProps> = ({ lesson, onOpenFeedback, onWriteFeedback }) => {
+const LessonItem: React.FC<LessonItemProps> = ({ lesson, onOpenFeedback, onWriteFeedback, onEnter }) => {
   const handleRowClick = () => {
     if (lesson.status === 'completed') onOpenFeedback?.(lesson);
     else if (lesson.status === 'needs-feedback') onWriteFeedback?.(lesson);
@@ -86,35 +96,50 @@ const LessonItem: React.FC<LessonItemProps> = ({ lesson, onOpenFeedback, onWrite
       </div>
 
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1 flex-wrap">
-          <p className="font-medium text-foreground truncate">{lesson.title}</p>
+        {/* Student first — the lesson type sits underneath. */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <p className="font-semibold text-foreground truncate">
+            {lesson.studentName}{lesson.studentAge ? ` (${lesson.studentAge}y)` : ''}
+          </p>
           {(lesson.status === 'completed' || lesson.status === 'needs-feedback') && (
             <OutcomeBadge rawStatus={lesson.rawStatus} faultParty={lesson.faultParty} />
           )}
-          {lesson.studentFeedback && (
-            <Badge
-              variant="outline"
-              className={`text-xs ${lesson.studentFeedback.thumbsUp ? 'border-emerald-300 text-emerald-700' : 'border-rose-300 text-rose-700'}`}
-              title={lesson.studentFeedback.suggestion ?? undefined}
-            >
-              Student: {lesson.studentFeedback.thumbsUp ? '👍' : '👎'}
-            </Badge>
-          )}
         </div>
-        <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+        <div className="mt-0.5 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+          <span className="font-medium text-foreground/80">{lesson.title}</span>
           <span className="flex items-center gap-1">
             <Calendar className="w-3 h-3" />
-            {format(lesson.scheduledAt, 'MMM d')}
+            {isToday(lesson.scheduledAt) ? 'Today' : format(lesson.scheduledAt, 'EEE, MMM d')}
           </span>
           <span className="flex items-center gap-1">
             <Clock className="w-3 h-3" />
             {format(lesson.scheduledAt, 'h:mm a')}
           </span>
-          <span className="flex items-center gap-1">
-            <User className="w-3 h-3" />
-            {lesson.studentName}{lesson.studentAge ? ` (${lesson.studentAge}y)` : ''}
-          </span>
         </div>
+
+        {/* Feedback, both ways: the teacher's report and the student's 👍/👎. */}
+        {(lesson.report || lesson.studentFeedback) && (
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+            {lesson.report && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-amber-800 ring-1 ring-amber-200">
+                <MessageSquare className="w-3 h-3" />
+                Your report
+                {lesson.report.rating ? <span aria-label={`${lesson.report.rating} of 5`}> · {'★'.repeat(lesson.report.rating)}{'☆'.repeat(5 - lesson.report.rating)}</span> : null}
+              </span>
+            )}
+            {lesson.studentFeedback && (
+              <span
+                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 ring-1 ${lesson.studentFeedback.thumbsUp ? 'bg-emerald-50 text-emerald-700 ring-emerald-200' : 'bg-rose-50 text-rose-700 ring-rose-200'}`}
+                title={lesson.studentFeedback.suggestion ?? undefined}
+              >
+                Student: {lesson.studentFeedback.thumbsUp ? '👍' : '👎'}
+              </span>
+            )}
+          </div>
+        )}
+        {lesson.report?.notes && (
+          <p className="mt-1 text-xs text-muted-foreground line-clamp-2">📝 {lesson.report.notes}</p>
+        )}
         {lesson.studentFeedback?.suggestion && (
           <p className="mt-1 text-xs italic text-rose-700 line-clamp-2">“{lesson.studentFeedback.suggestion}”</p>
         )}
@@ -132,14 +157,34 @@ const LessonItem: React.FC<LessonItemProps> = ({ lesson, onOpenFeedback, onWrite
       )}
 
       {lesson.status === 'completed' && (
-        <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 transition-transform group-hover:translate-x-0.5" />
+        <Button
+          size="sm"
+          variant="outline"
+          className="gap-1 shrink-0"
+          onClick={(e) => { e.stopPropagation(); onOpenFeedback?.(lesson); }}
+        >
+          View feedback
+          <ChevronRight className="w-4 h-4" />
+        </Button>
+      )}
+
+      {lesson.status === 'upcoming' && onEnter && (
+        <Button
+          size="sm"
+          className="gap-1 shrink-0"
+          onClick={(e) => { e.stopPropagation(); onEnter(lesson); }}
+        >
+          Enter
+          <ChevronRight className="w-4 h-4" />
+        </Button>
       )}
     </div>
   );
 };
 
 export const LessonsListCard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('past');
+  const [activeTab, setActiveTab] = useState('upcoming');
+  const navigate = useNavigate();
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
@@ -166,7 +211,7 @@ export const LessonsListCard: React.FC = () => {
     // so it's excluded from the ENDED_NEEDING_REPORT set below.
     const ENDED_STATUSES = new Set(['completed', 'failed_technical', 'ended_early', 'student_absent', 'teacher_absent']);
     const ENDED_NEEDING_REPORT = new Set(['completed', 'failed_technical']);
-    const NEVER_HAPPENED = new Set(['cancelled', 'canceled', 'rescheduled', 'refunded']);
+    const NEVER_HAPPENED = NEVER_HAPPENED_STATUSES;
 
     const loadLessons = async () => {
       try {
@@ -198,12 +243,23 @@ export const LessonsListCard: React.FC = () => {
         // happened or how it ended).
         const bookingIds = (data ?? []).map((r: any) => r.id);
         let feedbackSet = new Set<string>();
+        const reportMap = new Map<string, NonNullable<Lesson['report']>>();
         if (bookingIds.length) {
           const { data: fbs } = await supabase
             .from('lesson_feedback_submissions')
-            .select('lesson_id')
-            .in('lesson_id', bookingIds);
+            .select('lesson_id, student_performance_rating, feedback_content, submitted_at')
+            .in('lesson_id', bookingIds)
+            .order('submitted_at', { ascending: true });
           feedbackSet = new Set((fbs ?? []).map((f: any) => f.lesson_id));
+          for (const f of (fbs ?? []) as any[]) {
+            let content: any = f.feedback_content;
+            if (typeof content === 'string') { try { content = JSON.parse(content); } catch { content = null; } }
+            reportMap.set(f.lesson_id, {
+              rating: typeof f.student_performance_rating === 'number' && f.student_performance_rating > 0 ? f.student_performance_rating : null,
+              notes: (content?.quick_notes && String(content.quick_notes).trim()) || null,
+              outcome: content?.outcome ?? null,
+            });
+          }
         }
 
         // The student's 👍/👎 about each lesson (keyed by booking id).
@@ -252,6 +308,8 @@ export const LessonsListCard: React.FC = () => {
             studentId: row.student_id ?? null,
             hubType: row.hub_type ?? null,
             studentFeedback: studentFeedbackMap.get(row.id) ?? null,
+            report: reportMap.get(row.id) ?? null,
+            durationMin: Number(row.duration) > 0 ? Number(row.duration) : 30,
           };
         });
         setLessons(mapped);
@@ -292,6 +350,12 @@ export const LessonsListCard: React.FC = () => {
 
   // Most recent first.
   const byNewest = (a: Lesson, b: Lesson) => b.scheduledAt.getTime() - a.scheduledAt.getTime();
+  // Upcoming: not cancelled and not over yet, soonest first.
+  const nowMs = Date.now();
+  const upcomingLessons = lessons
+    .filter(l => l.status === 'upcoming' && !NEVER_HAPPENED_STATUSES.has(l.rawStatus)
+      && l.scheduledAt.getTime() + l.durationMin * 60_000 > nowMs)
+    .sort((a, b) => a.scheduledAt.getTime() - b.scheduledAt.getTime());
   const pastLessons = lessons.filter(l => l.status === 'completed').sort(byNewest);
   const needsFeedback = lessons.filter(l => l.status === 'needs-feedback').sort(byNewest);
 
@@ -340,7 +404,11 @@ export const LessonsListCard: React.FC = () => {
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2 mb-4">
+          <TabsList className="grid w-full grid-cols-3 mb-4">
+            <TabsTrigger value="upcoming" className="text-xs sm:text-sm gap-1.5">
+              <Calendar className="w-3.5 h-3.5" />
+              Upcoming ({upcomingLessons.length})
+            </TabsTrigger>
             <TabsTrigger value="past" className="text-xs sm:text-sm gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5" />
               Past ({pastLessons.length})
@@ -358,6 +426,28 @@ export const LessonsListCard: React.FC = () => {
             </div>
           ) : (
             <>
+              <TabsContent value="upcoming" className="space-y-2">
+                {upcomingLessons.length > 0 ? (
+                  upcomingLessons.map(lesson => (
+                    <LessonItem
+                      key={lesson.id}
+                      lesson={lesson}
+                      // Classroom opens from 15 min before the start.
+                      onEnter={lesson.scheduledAt.getTime() - nowMs <= 15 * 60_000
+                        ? (l) => navigate(`/classroom/${l.id}`)
+                        : undefined}
+                    />
+                  ))
+                ) : (
+                  <EmptyState
+                    icon={Calendar}
+                    title="No upcoming classes"
+                    description="New bookings will appear here as soon as a student books one of your slots."
+                    compact
+                  />
+                )}
+              </TabsContent>
+
               <TabsContent value="past" className="space-y-2">
                 {pastLessons.length > 0 ? (
                   pastLessons.map(lesson => (
