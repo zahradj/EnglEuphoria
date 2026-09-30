@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { participantDragProps } from '@/components/classroom/stage/callStreams';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -142,6 +143,7 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
     const isXs = size === 'xs';
     return (
     <div
+      {...participantDragProps('teacher')}
       className={`group relative aspect-[4/3] overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all ${
         isXs ? 'w-14 shrink-0 rounded-lg' :
         size === 'md' ? 'flex-1 max-w-[240px] rounded-2xl' :
@@ -182,6 +184,7 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
     const isXs = size === 'xs';
     return (
     <div
+      {...participantDragProps('student')}
       className={`group relative aspect-[4/3] overflow-hidden shadow-[0_8px_28px_-12px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-all ${
         isXs ? 'w-14 shrink-0 rounded-lg' :
         size === 'md' ? 'flex-1 max-w-[240px] rounded-2xl' :

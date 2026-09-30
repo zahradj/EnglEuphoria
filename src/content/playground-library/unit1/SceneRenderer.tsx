@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { LiveStageFill, useStageDrop } from '../LiveStageFrame';
+import type { CallRole } from '@/components/classroom/stage/callStreams';
 import { ChatCloud } from '../ChatCloud';
 import type { Scene, CharKey } from './scenes';
 import { CAST, PROP_THEME, getEmotionSprite, COLOR_SKETCH, comicPointForward } from './scenes';
@@ -2150,12 +2152,15 @@ function RoleplayScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, {
 /* ---------- Join stage ---------- */
 
 function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'join-stage' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
-  const [state, setState] = useSyncedState(sync, { turnIdx: 0, gemDone: false });
+  const [state, setState] = useSyncedState(sync, { turnIdx: 0, gemDone: false, onStage: null as CallRole | null });
   const { turnIdx, gemDone } = state;
-  // The draggable camera-bubble position below is a per-device UI
-  // preference (each screen's own open space differs), never synced.
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
+  // No camera of its own: whoever is dragged here from the call tiles is
+  // shown (synced), see LiveStageFrame. The circle's position below is a
+  // per-device UI preference (each screen's own open space differs).
+  const onStage = state.onStage ?? null;
+  const placeOnStage = (role: CallRole | null) => setState((s) => ({ ...s, onStage: role }));
+  const canControl = !sync?.isSynced || sync.isAuthority;
+  const { over, dropProps } = useStageDrop(placeOnStage);
   const stageRef = useRef<HTMLDivElement | null>(null);
   // Defaults to the open right-side space the scene art was built to leave
   // clear (see u2l3-join-stage's *-solo backgrounds) — draggable so the
@@ -2180,19 +2185,7 @@ function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, 
   };
   const onCirclePointerUp = () => { draggingRef.current = false; };
 
-  useEffect(() => () => { stopSpeaking(); streamRef.current?.getTracks().forEach((t) => t.stop()); }, [scene.id]);
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 480 }, audio: false });
-        if (cancelled) { s.getTracks().forEach((t) => t.stop()); return; }
-        streamRef.current = s;
-        if (videoRef.current) { videoRef.current.srcObject = s; await videoRef.current.play().catch(() => {}); }
-      } catch { /* fallback: no video */ }
-    })();
-    return () => { cancelled = true; };
-  }, []);
+  useEffect(() => () => { stopSpeaking(); }, [scene.id]);
 
   const currentTurn = turnIdx < scene.turns.length ? scene.turns[turnIdx] : null;
   const isStudentTurn = currentTurn?.who === 'student';
@@ -2247,6 +2240,7 @@ function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, 
         style={{ left: `${circlePos.xPct}%`, top: `${circlePos.yPct}%`, transform: 'translate(-50%, -50%)' }}
       >
         <div
+          {...dropProps}
           onPointerDown={onCirclePointerDown}
           onPointerMove={onCirclePointerMove}
           onPointerUp={onCirclePointerUp}
@@ -2254,8 +2248,7 @@ function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, 
           className={`relative flex cursor-grab items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-colors active:cursor-grabbing ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`}
           style={{ width: 'clamp(200px, calc(30*var(--svw,1vw)), 360px)', height: 'clamp(200px, calc(30*var(--svw,1vw)), 360px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}
         >
-          <video ref={videoRef} muted playsInline className="pointer-events-none h-full w-full object-cover" />
-          <span className="pointer-events-none absolute right-6 top-6 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white"><span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" /> Live</span>
+          <LiveStageFill onStage={onStage} onPlace={placeOnStage} over={over} canControl={canControl} />
           <span className="pointer-events-none absolute left-6 top-6 rounded-full bg-black/50 px-2 py-1 text-xs">✥</span>
         </div>
         <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '-40px' }}>

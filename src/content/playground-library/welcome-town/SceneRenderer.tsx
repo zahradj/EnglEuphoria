@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { LiveStageFill, useStageDrop } from '../LiveStageFrame';
+import type { CallRole } from '@/components/classroom/stage/callStreams';
 import { ChatCloud } from '../ChatCloud';
 import type { Scene, CharKey } from './scenes';
 import { CAST, VOICE_KEY } from './scenes';
@@ -1769,26 +1771,14 @@ function RoleplayScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, {
 /* ---------- Join stage ---------- */
 
 function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, { kind: 'join-stage' }>; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
-  const [state, setState] = useSyncedState(sync, { turnIdx: 0, gemDone: false });
+  const [state, setState] = useSyncedState(sync, { turnIdx: 0, gemDone: false, onStage: null as CallRole | null });
   const { turnIdx, gemDone } = state;
-  // The live camera preview below is always THIS device's own webcam, never
-  // synced or mirrored — only the turn/gem progression is shared state.
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-
-  useEffect(() => () => { streamRef.current?.getTracks().forEach((t) => t.stop()); }, [scene.id]);
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 480 }, audio: false });
-        if (cancelled) { s.getTracks().forEach((t) => t.stop()); return; }
-        streamRef.current = s;
-        if (videoRef.current) { videoRef.current.srcObject = s; await videoRef.current.play().catch(() => {}); }
-      } catch { /* fallback: no video */ }
-    })();
-    return () => { cancelled = true; };
-  }, []);
+  // No camera of its own: whoever is dragged here from the call tiles is
+  // shown (synced), see LiveStageFrame.
+  const onStage = state.onStage ?? null;
+  const placeOnStage = (role: CallRole | null) => setState((s) => ({ ...s, onStage: role }));
+  const canControl = !sync?.isSynced || sync.isAuthority;
+  const { over, dropProps } = useStageDrop(placeOnStage);
 
   const currentTurn = turnIdx < scene.turns.length ? scene.turns[turnIdx] : null;
   const isStudentTurn = currentTurn?.who === 'student';
@@ -1831,10 +1821,9 @@ function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, 
           </div>
         </div>
       )}
-      <div className="absolute left-1/2 z-30" style={{ top: '58%', transform: 'translate(-50%, -50%)' }}>
-        <div className={`relative flex items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-all ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`} style={{ width: 'clamp(300px, calc(46*var(--svw,1vw)), 500px)', height: 'clamp(300px, calc(46*var(--svw,1vw)), 500px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}>
-          <video ref={videoRef} muted playsInline className="h-full w-full object-cover" />
-          <span className="absolute right-6 top-6 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white"><span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" /> Live</span>
+      <div className="absolute left-1/2 z-30" style={{ top: '62%', transform: 'translate(-50%, -50%)' }}>
+        <div {...dropProps} className={`relative flex items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-all ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`} style={{ width: 'clamp(300px, calc(46*var(--svw,1vw)), 500px)', height: 'clamp(300px, calc(46*var(--svw,1vw)), 500px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}>
+          <LiveStageFill onStage={onStage} onPlace={placeOnStage} over={over} canControl={canControl} />
         </div>
         <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '-48px' }}>
           <div className={`relative flex items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-orange-700 shadow-2xl ring-4 ring-white transition-transform ${isStudentTurn ? 'scale-110' : ''}`} style={{ width: 96, height: 96 }}>
