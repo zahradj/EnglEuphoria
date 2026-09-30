@@ -531,21 +531,42 @@ export function unlockAudio() {
 export type SpeechRelayEvent =
   | { kind: 'speak'; text: string; character: Character }
   | { kind: 'clip'; url: string; label: string }
-  | { kind: 'stop' };
+  | { kind: 'stop' }
+  | { kind: 'sfx'; name: string }
+  // Latency probe: the driving side pings, the other side pongs back.
+  | { kind: 'ping'; id: number }
+  | { kind: 'pong'; id: number };
 let speechRelay: ((e: SpeechRelayEvent) => void) | null = null;
+/** How long the driving side holds back its own playback of a relayed line
+ *  (≈ one-way network time to the other screen), so both start together. */
+let relayLeadMs = 0;
+export function setSpeechRelayLead(ms: number) { relayLeadMs = Math.max(0, Math.min(400, Math.round(ms))); }
+const waitUntil = (t: number) => { const d = t - Date.now(); return d > 0 ? new Promise<void>((res) => setTimeout(res, d)) : Promise.resolve(); };
 let dedupeReceived = false;
 const recentStarts = new Map<string, number>();
 const DEDUPE_MS = 2500;
 
-export function setSpeechRelay(fn: ((e: SpeechRelayEvent) => void) | null) { speechRelay = fn; }
+export function setSpeechRelay(fn: ((e: SpeechRelayEvent) => void) | null) { speechRelay = fn; if (!fn) relayLeadMs = 0; }
 export function setSpeechDedupe(on: boolean) { dedupeReceived = on; if (!on) recentStarts.clear(); }
 
-function seenRecently(k: string): boolean {
+function seenRecently(k: string, windowMs = DEDUPE_MS): boolean {
   if (!dedupeReceived) return false;
   const now = Date.now();
   const at = recentStarts.get(k);
   recentStarts.set(k, now);
-  return at !== undefined && now - at < DEDUPE_MS;
+  return at !== undefined && now - at < windowMs;
+}
+
+let sfxPlayer: ((name: string) => void) | null = null;
+export function registerSfxPlayer(fn: (name: string) => void) { sfxPlayer = fn; }
+/** Called by sfx.ts before playing a sound. Returns the start delay in
+ *  seconds to apply locally (the network lead while relaying), or -1 to skip
+ *  it because the same sound just arrived from the other screen. */
+export function relaySfx(name: string): number {
+  if (seenRecently(`sfx:${name}`, 400)) return -1;
+  if (!speechRelay) return 0;
+  speechRelay({ kind: 'sfx', name });
+  return relayLeadMs / 1000;
 }
 
 /** Play an event relayed from the other screen (never re-relayed). */
@@ -553,6 +574,8 @@ export function playRelayedSpeech(e: SpeechRelayEvent) {
   const relay = speechRelay;
   speechRelay = null;
   try {
+    if (e.kind === 'ping' || e.kind === 'pong') return;
+    if (e.kind === 'sfx') { if (!seenRecently(`sfx:${e.name}`, 400)) sfxPlayer?.(e.name); return; }
     if (e.kind === 'stop') stopSpeaking();
     else if (e.kind === 'speak') void speak(e.text, e.character).catch(() => {});
     else void playPhonicsClip(e.url, e.label);
@@ -597,14 +620,28 @@ export function speak(text: string, character: Character = 'teacher'): Promise<v
   if (!trimmed) return Promise.resolve();
   const spoken = ttsSafe(trimmed);
   if (seenRecently(`speak:${trimmed}`)) return Promise.resolve();
-  speechRelay?.({ kind: 'speak', text: trimmed, character });
+  // Live class: send the line to the other screen and hold our own start
+  // back by the network lead so both start together. A clip that's already
+  // here is sent at once (the other screen warmed the same ready-made clip);
+  // one that must be generated is sent only once it exists, so the other
+  // screen gets the server's saved copy instead of generating it a second
+  // time.
+  const relay = speechRelay;
+  const k = key(character, spoken);
+  const ready = blobCache.has(k);
+  let sentAt = Date.now();
+  if (relay && ready) relay({ kind: 'speak', text: trimmed, character });
 
   const mySession = sessionId;
   queueDepth++;
+  const blobPromise = fetchClipBlob(k, spoken, character).then((b) => {
+    if (relay && !ready && mySession === sessionId) { sentAt = Date.now(); relay({ kind: 'speak', text: trimmed, character }); }
+    return b;
+  });
   const job = playChain.then(async () => {
     if (mySession !== sessionId) return;
-    const k = key(character, spoken);
-    const blob = await fetchClipBlob(k, spoken, character);
+    const blob = await blobPromise;
+    if (relay && relayLeadMs) await waitUntil(sentAt + relayLeadMs);
     if (mySession !== sessionId) return;
     const played = blob ? await playClipBlob(blob) : false;
     // A clip that was deliberately interrupted mid-playback (stopSpeaking()
@@ -630,6 +667,48 @@ export function speak(text: string, character: Character = 'teacher'): Promise<v
 export function speakOnce(text: string, character: Character = 'teacher'): Promise<void> {
   if (queueDepth > 0) return Promise.resolve();
   return speak(text, character);
+}
+
+const CHARACTERS = new Set<Character>(['pip', 'mia', 'bella', 'willow', 'leo', 'teacher', 'narrator']);
+const SPOKEN_KEYS = ['line', 'hearWord', 'word', 'answer', 'question'] as const;
+
+/** Every voice line a scene can speak (objects with a `who` plus a line/
+ *  word/answer), so both screens can warm them before the activity starts
+ *  and a relayed line plays instantly instead of waiting on a fetch.
+ *  `voiceOf` maps a scene's speaker key to an audio character. */
+export function collectSceneLines(scene: unknown, voiceOf: (who: string) => Character | null = (w) => (CHARACTERS.has(w as Character) ? (w as Character) : null)): { text: string; who: Character }[] {
+  const out = new Map<string, { text: string; who: Character }>();
+  const walk = (node: unknown, inheritedWho: Character | null, depth: number) => {
+    if (!node || typeof node !== 'object' || depth > 6 || out.size >= 24) return;
+    if (Array.isArray(node)) { node.forEach((n) => walk(n, inheritedWho, depth + 1)); return; }
+    const o = node as Record<string, unknown>;
+    const who = typeof o.who === 'string' ? voiceOf(o.who) : inheritedWho;
+    for (const k of SPOKEN_KEYS) {
+      const v = o[k];
+      const speaker = k === 'question' ? (who ?? 'teacher') : who;
+      if (typeof v === 'string' && v.trim() && speaker) out.set(`${speaker}::${v.trim()}`, { text: v.trim(), who: speaker });
+    }
+    for (const [k, v] of Object.entries(o)) if (v && typeof v === 'object' && k !== 'bg') walk(v, who, depth + 1);
+  };
+  walk(scene, null, 0);
+  return Array.from(out.values());
+}
+
+/** Warm the clip cache from ALREADY-MADE clips only (the pre-generated
+ *  static files, or this device's saved copies) — never asks the live TTS
+ *  service to generate anything, so warming can't add load, cost or lag to
+ *  the lesson. A line with no ready-made clip is simply fetched when it's
+ *  actually spoken, as before. */
+export async function warmReadyClip(text: string, character: Character = 'teacher') {
+  const trimmed = text.trim();
+  if (!trimmed || typeof window === 'undefined') return;
+  const spoken = ttsSafe(trimmed);
+  const k = key(character, spoken);
+  if (blobCache.has(k)) return;
+  const baked = await fetchStaticClip(character, spoken);
+  if (baked) { blobCache.set(k, baked); return; }
+  const stored = await idbGet(k);
+  if (stored && stored.size) blobCache.set(k, stored);
 }
 
 /** Warm the clip cache without playing. */
@@ -722,7 +801,11 @@ function playClip(url: string): Promise<void> {
 async function playPhonicsClip(clip: string | undefined, label: string): Promise<void> {
   if (!clip) { console.warn(`[phonics] no recorded clip for "${label}" — playing nothing (no ElevenLabs fallback, by design)`); return; }
   if (seenRecently(`clip:${clip}`)) return;
-  speechRelay?.({ kind: 'clip', url: clip, label });
+  if (speechRelay) {
+    const sentAt = Date.now();
+    speechRelay({ kind: 'clip', url: clip, label });
+    if (relayLeadMs) await waitUntil(sentAt + relayLeadMs);
+  }
   try {
     await playClip(clip);
   } catch (err) {

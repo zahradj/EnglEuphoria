@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import type { Scene } from '@/content/playground-library/welcome-town/scenes';
 import { VOICE_KEY } from '@/content/playground-library/welcome-town/scenes';
 import { SceneRenderer, Hearts, MAX_HEARTS, Lep1Keyframes } from '@/content/playground-library/welcome-town/SceneRenderer';
-import { stopSpeaking, prefetch, unlockAudio, setSpeechRelay, setSpeechDedupe, playRelayedSpeech } from '@/content/playground-library/unit1/audio';
+import { stopSpeaking, prefetch, unlockAudio, setSpeechRelay, setSpeechDedupe, playRelayedSpeech, setSpeechRelayLead, collectSceneLines, warmReadyClip } from '@/content/playground-library/unit1/audio';
 import { whiteboardService } from '@/services/whiteboardService';
 import { getDomPath, getElementAtPath, withPointerCaptureNoop } from '@/content/playground-library/unit1/scenePathSync';
 
@@ -258,11 +258,34 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
     const sceneId = scene.id;
     if (hasActivityAuthority) {
       setSpeechRelay((event) => { void whiteboardService.sendSceneSpeech(roomId, { event, senderId: role, sceneId }); });
-      return () => setSpeechRelay(null);
+      // Measure the one-way time to the other screen (half the ping round
+      // trip, smoothed) and hold our own playback back by that much so both
+      // screens start each line together.
+      const sentPings = new Map<number, number>();
+      let rtt: number | null = null;
+      const unsubPong = whiteboardService.subscribeToSceneSpeech(roomId, (payload) => {
+        if (payload.senderId === role || payload.event.kind !== 'pong') return;
+        const t0 = sentPings.get(payload.event.id);
+        if (t0 === undefined) return;
+        sentPings.delete(payload.event.id);
+        const sample = Date.now() - t0;
+        rtt = rtt === null ? sample : rtt * 0.7 + sample * 0.3;
+        setSpeechRelayLead(rtt / 2);
+      });
+      let n = 0;
+      const ping = () => { const id = ++n; sentPings.set(id, Date.now()); void whiteboardService.sendSceneSpeech(roomId, { event: { kind: 'ping', id }, senderId: role, sceneId }); };
+      ping();
+      const iv = window.setInterval(ping, 8000);
+      return () => { window.clearInterval(iv); unsubPong(); setSpeechRelay(null); };
     }
     setSpeechDedupe(true);
     const unsubscribe = whiteboardService.subscribeToSceneSpeech(roomId, (payload) => {
-      if (payload.sceneId !== sceneId || payload.senderId === role) return;
+      if (payload.senderId === role) return;
+      if (payload.event.kind === 'ping') {
+        void whiteboardService.sendSceneSpeech(roomId, { event: { kind: 'pong', id: payload.event.id }, senderId: role, sceneId });
+        return;
+      }
+      if (payload.sceneId !== sceneId) return;
       playRelayedSpeech(payload.event);
     });
     return () => { unsubscribe(); setSpeechDedupe(false); };
@@ -530,18 +553,14 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
 
   useEffect(() => {
     let cancelled = false;
-    const upcoming = SCENES.slice(sceneIdx, sceneIdx + 2);
-    const lines: { text: string; who: Parameters<typeof prefetch>[1] }[] = [];
-    for (const s of upcoming) {
-      if (s.kind === 'meet') lines.push({ text: s.line, who: VOICE_KEY[s.who] });
-      if (s.kind === 'echo') lines.push({ text: s.word, who: VOICE_KEY[s.who] });
-      if (s.kind === 'finale') lines.push({ text: s.line, who: VOICE_KEY[s.who] });
-    }
+    // Warm every voice line of this activity and the next one on BOTH
+    // screens, so a line relayed from the other side plays straight away.
+    const lines = SCENES.slice(sceneIdx, sceneIdx + 2).flatMap((sc) => collectSceneLines(sc, (w) => (VOICE_KEY as Record<string, Parameters<typeof prefetch>[1]>)[w] ?? (w === 'teacher' || w === 'narrator' ? w : null)));
     (async () => {
-      for (const line of lines.slice(0, 3)) {
+      for (const line of lines) {
         if (cancelled) return;
-        try { await prefetch(line.text, line.who); } catch { /* noop */ }
-        await new Promise((r) => setTimeout(r, 180));
+        try { await warmReadyClip(line.text, line.who); } catch { /* noop */ }
+        await new Promise((r) => setTimeout(r, 30));
       }
     })();
     return () => { cancelled = true; stopSpeaking(); };
