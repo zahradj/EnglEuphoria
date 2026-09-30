@@ -5,7 +5,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { CheckCircle2, AlertTriangle } from 'lucide-react';
 import { IncidentFlag, STUDENT_FLAG_OPTIONS, FLAG_META } from './incidentFlags';
 import { getClassroomHubTheme, type ClassroomHubKey } from '@/components/teacher/classroom/hubClassroomTheme';
 
@@ -83,29 +82,32 @@ export const StudentLessonOutcomeDialog: React.FC<Props> = ({ roomId, onDone, hu
         </DialogHeader>
 
         {step === 'outcome' ? (
-          <div className="grid grid-cols-2 gap-3 py-2">
+          // Just a thumbs up or down — the easiest possible answer for a child.
+          // 👍 saves "all good" in one tap; 👎 opens the short "what
+          // happened?" list so real problems still get reported.
+          <div className="grid grid-cols-2 gap-4 py-3">
             <button
               onClick={() => submit('completed')}
               disabled={submitting}
-              className="rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-emerald-100 hover:border-emerald-400 transition p-5 flex flex-col items-center gap-2"
+              aria-label="Good class"
+              className="rounded-3xl border-2 border-emerald-200 bg-emerald-50 hover:border-emerald-400 hover:scale-[1.03] active:scale-95 transition p-6 flex flex-col items-center gap-2"
             >
-              <CheckCircle2 className="w-10 h-10 text-emerald-600" />
-              <span className="font-bold text-emerald-800">All good 👍</span>
-              <span className="text-[11px] text-emerald-700/80 text-center">No problems</span>
+              <span className="text-7xl leading-none">👍</span>
+              <span className="text-lg font-bold text-emerald-800">Good</span>
             </button>
             <button
               onClick={() => setStep('flags')}
               disabled={submitting}
-              className="rounded-2xl border-2 border-rose-200 bg-gradient-to-br from-rose-50 to-rose-100 hover:border-rose-400 transition p-5 flex flex-col items-center gap-2"
+              aria-label="Not a good class"
+              className="rounded-3xl border-2 border-rose-200 bg-rose-50 hover:border-rose-400 hover:scale-[1.03] active:scale-95 transition p-6 flex flex-col items-center gap-2"
             >
-              <AlertTriangle className="w-10 h-10 text-rose-600" />
-              <span className="font-bold text-rose-800">Something went wrong</span>
-              <span className="text-[11px] text-rose-700/80 text-center">Flag the issue</span>
+              <span className="text-7xl leading-none">👎</span>
+              <span className="text-lg font-bold text-rose-800">Not good</span>
             </button>
           </div>
         ) : (
           <div className="space-y-3 py-2">
-            <p className="text-sm text-slate-600">Tap anything that happened:</p>
+            <p className="text-sm text-slate-600">What went wrong? Tap anything that happened:</p>
             <div className="flex flex-wrap gap-2">
               {STUDENT_FLAG_OPTIONS.map((f) => {
                 const meta = FLAG_META[f];
