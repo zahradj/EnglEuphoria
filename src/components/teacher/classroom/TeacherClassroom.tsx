@@ -1523,6 +1523,15 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
           userId={user?.id || ''}
           hubType={hubType}
           canSend
+          // A floating emoji is easy to miss mid-explanation; the two
+          // reactions that need the teacher to act also get a toast.
+          onReceive={(emoji) => {
+            if (emoji === '🙉') {
+              toast({ title: `🙉 ${studentName} can't hear you`, description: 'Check your microphone and speaker.', variant: 'destructive' });
+            } else if (emoji === '❓') {
+              toast({ title: `❓ ${studentName} has a question` });
+            }
+          }}
         />
       )}
 

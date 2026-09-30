@@ -11,6 +11,12 @@ interface LiveReactionBarProps {
   canSend?: boolean;
   /** Which emoji buttons this side's dock shows. Defaults to the full set. */
   reactions?: readonly string[];
+  /** 'bottom' (default): horizontal dock, bottom-centre. 'side': vertical
+   *  dock on the right edge — keeps the bottom of the stage (scene progress
+   *  dots, nav) clear. */
+  placement?: 'bottom' | 'side';
+  /** Called for each reaction received from the other side. */
+  onReceive?: (emoji: string) => void;
 }
 
 interface FloatingReaction {
@@ -20,8 +26,21 @@ interface FloatingReaction {
 }
 
 const REACTIONS = ['👍', '❤️', '🎉', '🤔', '❓', '👏'] as const;
-/** Simplified dock for the student side — just a thumbs up/down. */
+/** Simplified dock — just a thumbs up/down. */
 export const THUMBS_REACTIONS = ['👍', '👎'] as const;
+/** The student's dock: quick, wordless signals a child can send mid-lesson. */
+export const STUDENT_REACTIONS = ['👍', '❤️', '🤔', '❓', '🙉', '👎'] as const;
+/** Tooltip / screen-reader meaning of each reaction. */
+export const REACTION_LABELS: Record<string, string> = {
+  '👍': 'Thumbs up',
+  '👎': 'Thumbs down',
+  '❤️': 'I love it',
+  '🤔': "I'm thinking",
+  '❓': 'I have a question',
+  '🙉': "I can't hear you",
+  '🎉': 'Hooray',
+  '👏': 'Well done',
+};
 
 /**
  * Floating reaction dock. Broadcasts via Supabase Realtime (no DB writes) so
@@ -33,7 +52,13 @@ export const LiveReactionBar: React.FC<LiveReactionBarProps> = ({
   hubType = 'academy',
   canSend = true,
   reactions = REACTIONS,
+  placement = 'bottom',
+  onReceive,
 }) => {
+  const isSide = placement === 'side';
+  // Latest callback without re-subscribing the channel on every render.
+  const onReceiveRef = useRef(onReceive);
+  onReceiveRef.current = onReceive;
   const theme = useHubClassroomTheme(hubType);
   const [floating, setFloating] = useState<FloatingReaction[]>([]);
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
@@ -54,7 +79,10 @@ export const LiveReactionBar: React.FC<LiveReactionBarProps> = ({
     });
     ch.on('broadcast', { event: 'reaction' }, (payload: any) => {
       const emoji = payload?.payload?.emoji;
-      if (typeof emoji === 'string') pushFloating(emoji);
+      if (typeof emoji === 'string') {
+        pushFloating(emoji);
+        onReceiveRef.current?.(emoji);
+      }
     }).subscribe();
     channelRef.current = ch;
     return () => {
@@ -81,7 +109,7 @@ export const LiveReactionBar: React.FC<LiveReactionBarProps> = ({
   return (
     <>
       {/* Floating layer (does not catch pointer events) */}
-      <div className="pointer-events-none fixed bottom-24 right-6 w-32 h-64 z-30 overflow-visible">
+      <div className={`pointer-events-none fixed w-32 h-64 z-30 overflow-visible ${isSide ? 'right-20 top-[18%]' : 'bottom-24 right-6'}`}>
         <AnimatePresence>
           {floating.map((r) => (
             <motion.div
@@ -102,17 +130,22 @@ export const LiveReactionBar: React.FC<LiveReactionBarProps> = ({
       {/* Reaction dock */}
       {canSend && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 px-2 py-1.5 backdrop-blur-xl bg-white/70 border border-white/60 ${theme.radiusClass}`}
+          initial={{ opacity: 0, ...(isSide ? { x: 20 } : { y: 20 }) }}
+          animate={{ opacity: 1, x: 0, y: 0 }}
+          className={`fixed z-40 flex items-center gap-1 backdrop-blur-xl bg-white/80 border border-white/60 ${theme.radiusClass} ${
+            isSide
+              ? 'right-3 top-1/2 -translate-y-1/2 flex-col px-1.5 py-2'
+              : 'bottom-6 left-1/2 -translate-x-1/2 px-2 py-1.5'
+          }`}
           style={theme.glowShadow}
         >
           {reactions.map((emoji) => (
             <button
               key={emoji}
               onClick={() => send(emoji)}
-              className="w-9 h-9 rounded-full flex items-center justify-center text-xl hover:bg-white hover:scale-125 transition-transform"
-              aria-label={`Send ${emoji} reaction`}
+              className={`rounded-full flex items-center justify-center hover:bg-white hover:scale-125 active:scale-95 transition-transform ${isSide ? 'w-11 h-11 text-2xl' : 'w-9 h-9 text-xl'}`}
+              title={REACTION_LABELS[emoji] ?? emoji}
+              aria-label={REACTION_LABELS[emoji] ?? `Send ${emoji} reaction`}
             >
               {emoji}
             </button>

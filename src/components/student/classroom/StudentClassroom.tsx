@@ -11,7 +11,7 @@ import { StudentMainStage } from './StudentMainStage';
 import { StarCelebration } from '@/components/teacher/classroom/StarCelebration';
 import { DiceRoller } from '@/components/teacher/classroom/DiceRoller';
 
-import { LiveReactionBar, THUMBS_REACTIONS } from '@/components/classroom/engagement/LiveReactionBar';
+import { LiveReactionBar, STUDENT_REACTIONS } from '@/components/classroom/engagement/LiveReactionBar';
 import { XPStreakIndicator } from '@/components/classroom/engagement/XPStreakIndicator';
 import { ZenModeOverlay } from '@/components/classroom/ZenModeOverlay';
 import { PictureInPicture } from '@/components/classroom/PictureInPicture';
@@ -621,7 +621,10 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
             roomId={roomId}
             userId={studentId}
             hubType={hubType}
-            reactions={THUMBS_REACTIONS}
+            reactions={STUDENT_REACTIONS}
+            // Vertical strip on the right edge: at the bottom-centre it sat
+            // on top of the scene lesson's progress dots / nav.
+            placement="side"
             canSend
           />
         </>
