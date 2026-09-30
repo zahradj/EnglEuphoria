@@ -8,6 +8,10 @@ import { stopSpeaking, prefetch, unlockAudio } from '@/content/playground-librar
 import { whiteboardService } from '@/services/whiteboardService';
 import { getDomPath, getElementAtPath, withPointerCaptureNoop } from '@/content/playground-library/unit1/scenePathSync';
 
+// How long a live broadcast takes precedence over the DB-persisted copy
+// of the same classroom state (see teacherChangedUnlockRef).
+const LIVE_OVER_DB_MS = 4000;
+
 export interface PlayWelcomeTownLessonHandle {
   goNext: () => void;
   goBack: () => void;
@@ -96,6 +100,19 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   // Whether interactionUnlocked reflects the class's real lock state yet
   // (restored from the DB, or set by the teacher) — same reason.
   const unlockKnownRef = useRef(false);
+  // The DB copies of the unlock gate / scene index are for RECOVERY (a
+  // refresh, a late join), not live instructions. Every classroom write
+  // echoes the whole session row back over realtime, and the "let student
+  // interact" button fires several writes at once — so an echo taken
+  // before the unlock write landed still says "locked". The teacher's
+  // player used to adopt that stale echo, re-lock, and persist "locked";
+  // the next echo said "unlocked", it re-unlocked and persisted that, and
+  // so on: a self-sustaining ping-pong that flipped the student's lock
+  // overlay and "Your turn" bar on and off (reported live as the lesson
+  // flickering and shaking once interaction was granted).
+  const teacherChangedUnlockRef = useRef(false);
+  const lastLiveUnlockAtRef = useRef(0);
+  const lastLiveNavAtRef = useRef(0);
   const [hearts, setHearts] = useState(MAX_HEARTS);
   const [gems, setGems] = useState(0);
   const scene = SCENES[sceneIdx] ?? SCENES[0];
@@ -118,6 +135,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
 
   const setInteractionUnlocked = useCallback((next: boolean) => {
     unlockKnownRef.current = true;
+    teacherChangedUnlockRef.current = true;
     setInteractionUnlockedState(next);
     if (isSynced && role === 'teacher' && roomId) {
       void whiteboardService.sendSceneInteractionPermission(roomId, { unlocked: next, senderId: 'teacher' });
@@ -139,6 +157,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   useEffect(() => {
     if (!isSynced || role !== 'student' || !roomId) return;
     const unsubscribe = whiteboardService.subscribeToSceneInteractionPermission(roomId, (payload) => {
+      lastLiveUnlockAtRef.current = Date.now();
       setInteractionUnlockedState(payload.unlocked);
     });
     return unsubscribe;
@@ -151,9 +170,15 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   useEffect(() => {
     if (!isSynced) return;
     if (persistedInteractionUnlocked == null) return;
+    // Teacher: once they've toggled, they are the source of truth — never
+    // take an echo of their own (possibly out-of-order) writes back.
+    if (role === 'teacher' && teacherChangedUnlockRef.current) return;
+    // Student: the teacher's live broadcast wins over a DB echo arriving
+    // right behind it (which may predate the change).
+    if (role === 'student' && Date.now() - lastLiveUnlockAtRef.current < LIVE_OVER_DB_MS) return;
     unlockKnownRef.current = true;
     setInteractionUnlockedState(persistedInteractionUnlocked);
-  }, [isSynced, persistedInteractionUnlocked]);
+  }, [isSynced, role, persistedInteractionUnlocked]);
 
   // Teacher: persist the unlock gate whenever it changes, the same way
   // sceneIdx is persisted below via onSceneIdxPersist.
@@ -384,6 +409,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
     const unsubscribe = whiteboardService.subscribeToSceneLessonNav(roomId, (payload) => {
       if (unitNumber != null && payload.unitNumber !== unitNumber) return;
       if (lessonNumber != null && payload.lessonNumber !== lessonNumber) return;
+      lastLiveNavAtRef.current = Date.now();
       setSceneIdx(Math.max(0, Math.min(SCENES.length - 1, payload.sceneIdx)));
     });
     return unsubscribe;
@@ -392,6 +418,9 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   useEffect(() => {
     if (!isSynced || role !== 'student') return;
     if (persistedSceneIdx == null) return;
+    // Same rule as the unlock gate: a live nav broadcast beats a DB echo
+    // that may be from before it (would bounce the page back and forth).
+    if (Date.now() - lastLiveNavAtRef.current < LIVE_OVER_DB_MS) return;
     setSceneIdx(Math.max(0, Math.min(SCENES.length - 1, persistedSceneIdx)));
   }, [isSynced, role, persistedSceneIdx, SCENES.length]);
 
