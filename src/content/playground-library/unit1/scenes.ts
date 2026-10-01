@@ -122,8 +122,15 @@ export type Scene =
       id: string; kind: 'join-stage'; bg: string; teacher: string; cast: CharKey[];
       /** `bg` on a turn overrides the scene's own default for that turn only —
        *  lets each question show the specific object/color/shape it's asking
-       *  about instead of one static wide scene for every turn. */
-      turns: { who: CharKey | 'student'; line: string; bg?: string }[];
+       *  about instead of one static wide scene for every turn.
+       *  `arrow`, when set, points at the exact object the line is asking
+       *  about — same bouncing-arrow visual as `color-spot` (left/top/dir),
+       *  reused here so a question like "What color is it?" stays unambiguous
+       *  even on a background with more than one similarly-colored object.
+       *  First added for Unit 2 Lesson 1 per direct user feedback that a
+       *  free-floating question over a busy scene left students unsure which
+       *  object "it" referred to. */
+      turns: { who: CharKey | 'student'; line: string; bg?: string; arrow?: { left: string; top: string; dir?: 'down' | 'left' | 'right' } }[];
     }
   | { id: string; kind: 'hello-doors'; bg: string; teacher: string; cast: CharKey[]; rounds: { target: CharKey; prompt: string; helloLine: string; echoLine: string }[] }
   | {
@@ -178,6 +185,24 @@ export type Scene =
       id: string; kind: 'flipbook'; bg: string; title: string;
       pages: { who?: CharKey; img: string; text: string }[];
       checkpoints: { afterPage: number; who?: CharKey; question: string; options: string[]; answer: string }[];
+    }
+  | {
+      /** Pre-A1's first dedicated pre-reading activity: a printed WORD is
+       *  the prompt (tap to hear it read aloud), and the student picks the
+       *  matching picture from 3 choices — whole-word shape recognition,
+       *  not phonetic decoding. Modeled on Cambridge Pre-A1 Starters' own
+       *  wordlist picture book (picture + matching word-card flashcard
+       *  pairs, explicitly meant for non-readers to "find and name words
+       *  within pictures") and Oxford Phonics World's picture-matching
+       *  activities, scaled down from sentence-level to single-word level
+       *  for this CEFR band. Framed as reading the carnival stand signs
+       *  (BALLOONS/COTTON CANDY/POPCORN) the lesson's own art already
+       *  shows, so no new art was needed. Added per direct user request
+       *  for a reading-readiness activity appropriate for non-readers —
+       *  distinct from color-quiz (audio-led "which one is RED?", picture-
+       *  only options) because here the printed word is the primary prompt. */
+      id: string; kind: 'word-picture-match'; bg: string; teacher: string;
+      rounds: { word: string; who?: CharKey; correctImg: string; correctLabel: string; distractors: { img: string; label: string }[] }[];
     }
   | {
       id: string; kind: 'color-model'; bg: string; teacher: string;
@@ -2094,6 +2119,28 @@ export const LESSON_6_SCENES: Scene[] = [
  *   (Floppy's Phonics, Level 1) independently pairs a carnival setting with
  *   environmental/letter-sound teaching — the same carnival+phonics pairing
  *   this lesson already uses for its R/Y/B sound-model scenes.
+ * - Second follow-up round, per direct user feedback on the live build:
+ *   (1) the three carnival-stand backgrounds (red balloon/blue cotton
+ *   candy/yellow popcorn) were regenerated decluttered — the originals had
+ *   a ferris wheel, a carousel horse, and (on the red/blue stands) a SECOND
+ *   cluster of differently-colored balloons/candy competing with the one
+ *   the scene was actually about, which made "what color is it?" genuinely
+ *   ambiguous for a non-reading Pre-A1 student. Same const, so roleplay-red/
+ *   yellow/blue and the storybook pages inherit the fix automatically.
+ *   (2) join-stage's three "ask" turns got a new `arrow` field (same
+ *   bouncing-arrow visual as color-spot) pointing at the exact object in
+ *   frame, and the questions were unified to one plain "What color is it?"
+ *   instead of mixed wording ("What color is the balloon?" / "Do you like
+ *   blue?") — the arrow disambiguates now, not the sentence; dropping "I
+ *   like/I don't like" from join-stage isn't losing that practice from the
+ *   lesson, since roleplay-blue already models it. (3) added a new scene
+ *   kind, 'word-picture-match' ("Read the Sign!"), the lesson's first
+ *   dedicated pre-reading activity — printed word as the prompt, tap to
+ *   hear it, pick the matching picture from 3 choices. Reuses the carnival
+ *   stand signage (BALLOONS/COTTON CANDY/POPCORN) already visible in the
+ *   lesson's own art and the already-transparent item icons, so no new art
+ *   was needed. See the type's own comment for the Cambridge/Oxford
+ *   research behind it.
  * ========================================================================= */
 
 const itemYarn = `${A}/items/item-yarn.png`;
@@ -2383,17 +2430,24 @@ export const LESSON_U2L1_SCENES: Scene[] = [
     ],
   },
   {
-    // Free production — "It's ___ / I like ___ / I don't like ___" with no
-    // line modeled right before it. Each question shows the actual stand
-    // it's asking about, not one wide hero shot for every turn.
+    // Free production — "It's ___" with no line modeled right before it.
+    // Each question shows the actual stand it's asking about (now a
+    // decluttered single-object version, no ferris wheel/second balloon
+    // cluster competing for attention — direct user fix), AND an arrow
+    // points at the exact object, same as color-spot's pattern. Questions
+    // simplified to one uniform "What color is it?" per direct user
+    // request — the arrow does the disambiguating, not the wording. The
+    // "I like/I don't like" negative-form practice stays covered by
+    // roleplay-blue ("It's blue!"/"I don't like blue!"), so dropping it
+    // here isn't losing that practice from the lesson, just de-duplicating.
     id: 'u2l1-join-stage', kind: 'join-stage', bg: bgU2L1CHero, teacher: 'Your turn! When it says YOU, say the color.', cast: ['pip', 'willow', 'bella'],
     turns: [
-      { who: 'pip', line: 'What color is the balloon?', bg: bgU2L1CRedBalloonStand },
-      { who: 'student', line: "It's ______.", bg: bgU2L1CRedBalloonStand },
-      { who: 'willow', line: 'Do you like blue?', bg: bgU2L1CBlueCottonCandyStand },
-      { who: 'student', line: 'I like ______. / I don’t like ______.', bg: bgU2L1CBlueCottonCandyStand },
-      { who: 'bella', line: 'What color is the popcorn?', bg: bgU2L1CYellowPopcornStand },
-      { who: 'student', line: "It's ______.", bg: bgU2L1CYellowPopcornStand },
+      { who: 'pip', line: 'What color is it?', bg: bgU2L1CRedBalloonStand, arrow: { left: '72%', top: '20%', dir: 'down' } },
+      { who: 'student', line: "It's ______.", bg: bgU2L1CRedBalloonStand, arrow: { left: '72%', top: '20%', dir: 'down' } },
+      { who: 'willow', line: 'What color is it?', bg: bgU2L1CBlueCottonCandyStand, arrow: { left: '49%', top: '38%', dir: 'down' } },
+      { who: 'student', line: "It's ______.", bg: bgU2L1CBlueCottonCandyStand, arrow: { left: '49%', top: '38%', dir: 'down' } },
+      { who: 'bella', line: 'What color is it?', bg: bgU2L1CYellowPopcornStand, arrow: { left: '27%', top: '70%', dir: 'down' } },
+      { who: 'student', line: "It's ______.", bg: bgU2L1CYellowPopcornStand, arrow: { left: '27%', top: '70%', dir: 'down' } },
     ],
   },
   {
@@ -2410,6 +2464,19 @@ export const LESSON_U2L1_SCENES: Scene[] = [
     checkpoints: [
       { afterPage: 0, who: 'pip', question: 'What color is the balloon?', options: ['Red', 'Blue', 'Yellow'], answer: 'Red' },
       { afterPage: 2, who: 'willow', question: 'What color is the popcorn?', options: ['Red', 'Blue', 'Yellow'], answer: 'Yellow' },
+    ],
+  },
+  {
+    // Reading-readiness activity — see the 'word-picture-match' type comment
+    // for the Cambridge/Oxford research behind this. Reuses the carnival's
+    // own stand signage (BALLOONS/COTTON CANDY/POPCORN) as the reading
+    // target, and the already-transparent item icons as picture choices —
+    // no new art needed.
+    id: 'u2l1-read-signs', kind: 'word-picture-match', bg: bgU2L1CBunting, teacher: 'Read the carnival signs, then find the matching prize!',
+    rounds: [
+      { word: 'BALLOONS', who: 'bella', correctImg: itemBalloonRed, correctLabel: 'Balloon', distractors: [{ img: itemCottonCandyBlue, label: 'Cotton Candy' }, { img: itemPopcornYellow, label: 'Popcorn' }] },
+      { word: 'COTTON CANDY', who: 'willow', correctImg: itemCottonCandyBlue, correctLabel: 'Cotton Candy', distractors: [{ img: itemBalloonRed, label: 'Balloon' }, { img: itemPopcornYellow, label: 'Popcorn' }] },
+      { word: 'POPCORN', who: 'pip', correctImg: itemPopcornYellow, correctLabel: 'Popcorn', distractors: [{ img: itemBalloonRed, label: 'Balloon' }, { img: itemCottonCandyBlue, label: 'Cotton Candy' }] },
     ],
   },
   {
