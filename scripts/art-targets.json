@@ -62,5 +62,44 @@
       "public/magic-castle/stickers/chair.png"
     ],
     "prompt": "The SAME treasure chest as the first reference image, now OPEN with the lid lifted back, overflowing with shiny gold coins, sparkling jewels and a purple gem, a few gold sparkles above it, three-quarter view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY this one object — no room, no walls, no floor, no characters."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-castle-bedroom-tour.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-bedroom-wim.png",
+      "public/magic-castle/scenes/bg-castle-friends.png"
+    ],
+    "prompt": "A wide castle bedroom interior seen from the front, spread from edge to edge. On the FAR LEFT wall: a big arched wooden door with black iron hinges and a ring handle (like the door in the second reference). On the back wall, CENTER-LEFT: one tall arched window with blue sky and clouds. On the RIGHT: a four-poster bed with red curtains and pillows. Between the window and the bed: a small wooden bedside table with ONE glowing brass oil lamp standing on it. In the middle of the floor, small and not covering any furniture: Pip the orange fox and Cat-cat the small grey cat (exactly as in the second reference) standing side by side, looking around happily. No wizard in this picture. The door, window, lamp and bed are each clearly separate and fully visible. Same flat kawaii cartoon art style, lavender stone castle walls, warm-dark outlines and colours as the reference images. Characters keep their exact designs from the references with chibi proportions (big round head, tiny body). Full-bleed 16:9 scene, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-castle-bedroom-nolamp.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-bedroom-tour.png"
+    ],
+    "prompt": "Redraw the reference image EXACTLY — same room, same camera, same door, window, bed, bedside table, Pip and Cat-cat, same colours — with ONE change only: the lamp is GONE. The bedside table is empty. Nothing else changes. Full-bleed, no frame, no text."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-castle-catcat-pip-door.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-friends.png",
+      "public/magic-castle/scenes/bg-castle-bedroom-wim.png"
+    ],
+    "prompt": "A castle hallway with lavender stone walls and torches. On the RIGHT side: a big closed arched wooden bedroom door. Cat-cat the small grey cat (exactly as in the first reference) stands next to the door pointing at it with one paw, smiling. On the LEFT: Pip the orange fox (exactly as in the first reference) walking towards the door, excited and curious. The upper half of the picture is calm empty wall space. No wizard. Same flat kawaii cartoon art style, lavender stone castle walls, warm-dark outlines and colours as the reference images. Characters keep their exact designs from the references with chibi proportions (big round head, tiny body). Full-bleed 16:9 scene, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/magic-castle/stickers/door.png",
+    "sticker": true,
+    "refs": [
+      "public/magic-castle/stickers/chair.png"
+    ],
+    "prompt": "One single arched wooden castle door with black iron hinges and a ring handle, front view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY the door — no wall, no floor."
+  },
+  {
+    "out": "public/magic-castle/stickers/window.png",
+    "sticker": true,
+    "refs": [
+      "public/magic-castle/stickers/chair.png"
+    ],
+    "prompt": "One single tall arched castle window with a stone frame, wooden cross bars and blue sky with a small cloud behind the glass, front view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat colours), isolated alone on a plain pure white background. Show ONLY the window — no wall around it."
   }
 ]

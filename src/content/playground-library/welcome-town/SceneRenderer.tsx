@@ -2443,6 +2443,8 @@ const TRACE_SEGMENTS: Record<string, TraceSegment[]> = {
   S: [{ from: { x: 400, y: 175 }, to: { x: 200, y: 175 } }, { from: { x: 200, y: 175 }, to: { x: 200, y: 295 } }, { from: { x: 200, y: 295 }, to: { x: 400, y: 295 } }, { from: { x: 400, y: 295 }, to: { x: 400, y: 415 } }, { from: { x: 400, y: 415 }, to: { x: 200, y: 415 } }],
   A: [{ from: { x: 300, y: 130 }, to: { x: 150, y: 470 } }, { from: { x: 300, y: 130 }, to: { x: 450, y: 470 } }, { from: { x: 205, y: 340 }, to: { x: 395, y: 340 } }],
   T: [{ from: { x: 150, y: 150 }, to: { x: 450, y: 150 } }, { from: { x: 300, y: 150 }, to: { x: 300, y: 470 } }],
+  L: [{ from: { x: 220, y: 130 }, to: { x: 220, y: 470 } }, { from: { x: 220, y: 470 }, to: { x: 430, y: 470 } }],
+  W: [{ from: { x: 120, y: 150 }, to: { x: 210, y: 460 } }, { from: { x: 210, y: 460 }, to: { x: 300, y: 260 } }, { from: { x: 300, y: 260 }, to: { x: 390, y: 460 } }, { from: { x: 390, y: 460 }, to: { x: 480, y: 150 } }],
 };
 const TRACE_HIT_RADIUS = 72;
 const TRACE_BUCKETS_PER_SEGMENT = 16;
@@ -2662,10 +2664,13 @@ function MagicLayer() {
 function focusParts(word: string, focus: string): { text: string; hit: boolean }[] {
   if (!focus) return [{ text: word, hit: false }];
   const out: { text: string; hit: boolean }[] = [];
-  const lower = word.toLowerCase(), f = focus.toLowerCase();
+  // `focus` may list alternatives: 'l|w' marks every l and every w.
+  const alts = focus.toLowerCase().split('|').filter(Boolean);
+  const lower = word.toLowerCase();
   let i = 0;
   while (i < word.length) {
-    const j = lower.indexOf(f, i);
+    let j = -1, f = '';
+    for (const a of alts) { const k = lower.indexOf(a, i); if (k >= 0 && (j < 0 || k < j)) { j = k; f = a; } }
     if (j < 0) { out.push({ text: word.slice(i), hit: false }); break; }
     if (j > i) out.push({ text: word.slice(i, j), hit: false });
     out.push({ text: word.slice(j, j + f.length), hit: true });

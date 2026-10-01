@@ -161,6 +161,8 @@ const PlayWelcomeTown3 = lazy(() => import("./pages/playground-scene/PlayWelcome
 const PlayWelcomeTown4 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown4"));
 const PlayJungleLesson1 = lazy(() => import("./pages/playground-scene/PlayJungleLesson1"));
 const PlayMagicCastleLesson1 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson1"));
+const PlayMagicCastleLesson2 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson2"));
+const HomeworkQuestPage = lazy(() => import("./pages/HomeworkQuestPage"));
 const PlayA2Unit1Lesson1 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson1"));
 const PlayA2Unit1Lesson2 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson2"));
 const PlayA2Unit1Lesson3 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson3"));
@@ -374,6 +376,12 @@ const App = () => {
                       <Route path="/playground-scene/castle-lesson-1" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayMagicCastleLesson1 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Magic Castle, Unit 9 Lesson 2 ("Castle Furniture"). */}
+                      <Route path="/playground-scene/castle-lesson-2" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMagicCastleLesson2 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* A2 tier — Welcome Town, Unit 1 Lesson 1 ("My Day"). */}
@@ -600,6 +608,12 @@ const App = () => {
                       } />
 
                       {/* Interactive Homework Player */}
+                      {/* Gamified Homework Quests (one per Playground lesson). */}
+                      <Route path="/homework-quest/:questId" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><HomeworkQuestPage /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
                       <Route path="/homework/:assignmentId" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><HomeworkPage /></Suspense>
