@@ -1421,7 +1421,7 @@ function ListenTapScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract
               style={{ left: t.left, top: t.top }}
             >
               <div
-                className="h-28 w-28 overflow-hidden rounded-2xl border-4 bg-white shadow-xl sm:h-36 sm:w-36"
+                className="h-40 w-40 overflow-hidden rounded-3xl border-[6px] bg-white shadow-xl sm:h-52 sm:w-52"
                 style={{
                   borderColor: isRight ? '#22C55E' : isWrong ? '#EF4444' : revealCorrect ? '#FFFFFF' : t.color,
                   animation: revealCorrect && !isRight ? 'lep1-ping 1s ease-in-out infinite' : isRight ? 'lep1-pop 0.35s ease-out' : undefined,
