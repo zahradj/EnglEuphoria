@@ -187,8 +187,8 @@
     "out": "public/magic-castle/stickers/box.png",
     "sticker": true,
     "refs": [
-      "public/magic-castle/stickers/chair.png"
+      "public/magic-castle/stickers/chest-closed.png"
     ],
-    "prompt": "One single OPEN wooden toy box (a square wooden crate with no lid, open top, you can see a little inside), three-quarter view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY this one object — no room, no walls, no floor, nothing inside it."
+    "prompt": "One single plain OPEN cardboard-brown wooden box with NO lid: a simple square crate, four flat sides, the top completely open so you can see the dark empty inside, seen from the front and a little above. It is NOT a chair: no backrest, no legs, no seat. Drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chest (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY this one box — nothing inside it, no room, no floor."
   }
 ]
