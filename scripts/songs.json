@@ -1,0 +1,54 @@
+{
+  "hello": {
+    "publicPath": "public/lep1/audio/hello-song.mp3",
+    "durationSec": 20,
+    "style": "Cheerful upbeat kids hello song, sweet real singing with a warm teacher voice and a small kids choir, ukulele plus light claps, bright and welcoming.",
+    "positiveStyles": ["children's choir", "kids voices", "warm teacher voice", "playful", "cheerful", "nursery rhyme", "ukulele", "hand claps"],
+    "negativeStyles": ["adult vocals", "rap", "dark", "aggressive", "instrumental only", "extra verses"],
+    "lines": [
+      "Hello, hello, hello my friend!",
+      "Come with me, the fun begins!",
+      "Clap your hands and wave up high",
+      "Hello, hello, hi hi hi!"
+    ]
+  },
+  "goodbye": {
+    "publicPath": "public/lep1/audio/goodbye-song.mp3",
+    "durationSec": 20,
+    "style": "Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and a small kids choir, ukulele plus light claps, ending with a happy Byeeee!",
+    "positiveStyles": ["children's choir", "kids voices", "warm teacher voice", "playful", "cheerful", "nursery rhyme", "ukulele", "hand claps"],
+    "negativeStyles": ["adult vocals", "rap", "dark", "aggressive", "instrumental only", "extra verses"],
+    "lines": [
+      "Goodbye, goodbye, goodbye my friend",
+      "Goodbye, goodbye, see you again",
+      "Wave your hand and say goodbye",
+      "Byeeee, friend! See you soon!"
+    ]
+  },
+  "wt-goodbye": {
+    "publicPath": "public/welcome-town/audio/goodbye-song.mp3",
+    "durationSec": 20,
+    "style": "Cheerful upbeat kids goodbye song for a happy school, sweet real singing with a teacher voice and a small kids choir, ukulele plus light claps, ending with a happy Byeeee!",
+    "positiveStyles": ["children's choir", "kids voices", "warm teacher voice", "playful", "cheerful", "nursery rhyme", "ukulele", "hand claps"],
+    "negativeStyles": ["adult vocals", "rap", "dark", "aggressive", "instrumental only", "extra verses"],
+    "lines": [
+      "Goodbye, goodbye, my new friend",
+      "Goodbye, goodbye, see you again",
+      "Welcome Town School is happy today",
+      "Byeeee, friends! See you soon!"
+    ]
+  },
+  "mc-warmup": {
+    "publicPath": "public/magic-castle/audio/warmup-song.mp3",
+    "durationSec": 20,
+    "style": "Upbeat kids POP song with a magical wizard theme, driving pop beat with punchy drums and bright synths, confident energetic pop vocals (a cheerful young wizard voice and a playful cat-like voice trading lines), big and exciting like a real radio pop hit, NOT soft, NOT slow, NOT a lullaby.",
+    "positiveStyles": ["pop", "upbeat pop beat", "punchy drums", "bright synths", "catchy", "energetic", "confident vocals", "children's pop song", "wizard voice", "playful cat-like voice", "exciting", "fun", "danceable"],
+    "negativeStyles": ["lullaby", "slow", "soft", "sleepy", "ambient", "ballad", "adult vocals only", "rap", "dark", "scary", "aggressive", "instrumental only", "extra verses"],
+    "lines": [
+      "Abracadabra, rise and shine!",
+      "Meow, meow, it's story time!",
+      "Magic Castle, open the door!",
+      "Let's have fun and learn some more!"
+    ]
+  }
+}

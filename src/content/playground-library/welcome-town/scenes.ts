@@ -174,7 +174,23 @@ export type Scene =
        *  structure at a glance, not optional polish. */
       wordColors?: (string | null)[];
     }
-  | { id: string; kind: 'memory'; bg: string; teacher: string; pairs: { id: string; label: string; emoji: string }[] }
+  | {
+      id: string; kind: 'memory'; bg: string; teacher: string;
+      pairs: {
+        id: string; label: string; emoji: string;
+        /** When set, this pair's two cards are DIFFERENT instead of
+         *  identical — one shows the WORD (reading practice), the other
+         *  shows this picture (meaning/recognition), so the student
+         *  matches a word to its picture instead of two identical emoji.
+         *  `crop`/`imgAspect` reuse the same convention as picture-match's
+         *  `PictureMatchItem`, so an existing scene image can be reused
+         *  without generating a new standalone picture. Omit for the
+         *  original identical-emoji-pair behavior. */
+        img?: string;
+        crop?: { x: number; y: number; w: number; h: number };
+        imgAspect?: number;
+      }[];
+    }
   | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: {
       label: string; color: string; targetLeft: string; targetTop: string;
       /** Optional real footprint of the target object, as percentages of

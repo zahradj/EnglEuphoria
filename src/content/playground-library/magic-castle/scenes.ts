@@ -220,6 +220,32 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
   { id: 'mc-title', kind: 'title-card', bg: bgTitle, level: 'A1', unit: 'Unit 9', lessonLabel: 'Lesson 1', title: 'Magic Castle: Where Is It?', subtitle: 'Explore the castle with Wim and Cat-cat', cta: '\u{1F3F0} LET’S GO!' },
 
   {
+    // Warm-up song, per direct request ("add a song, with magic wizard
+    // vibe, as a warm up in the beginning, for both lesson one and two").
+    // Reuses bgWim — Wim's own magical wizard room, already used for his
+    // phonics spellcasting scenes — so the "wizard vibe" comes from the
+    // same established visual, not a new one-off asset. Same song/lyrics
+    // reused in both lessons (same convention as the Welcome Town goodbye
+    // song, shared across every lesson in that world). Audio generated via
+    // ElevenLabs Music singing these exact lines (scripts/songs.json's
+    // "mc-warmup" entry, verified word-for-word with scripts/verify-song.py
+    // — score 0.91, real pop production per direct follow-up "make it pop
+    // style... not like a lullaby" — before shipping), per the project's
+    // standing rule that songs must sing the real on-screen lyrics, never
+    // a placeholder or paraphrased take.
+    id: 'mc-warmup-song', kind: 'song', bg: bgWim, title: '\u{2728} Wim’s Magic Warm-Up Song \u{2728}',
+    teacher: 'Let’s warm up with a little magic! Sing along with Wim and Cat-cat!',
+    songUrl: `${M}/audio/warmup-song.mp3`, durationSeconds: 20, bigWord: 'Magic!',
+    lyrics: [
+      { who: 'wim', text: '\u{1F52E} Abracadabra, rise and shine!' },
+      { who: 'catcat', text: '\u{1F431} Meow, meow, it’s story time!' },
+      { who: 'wim', text: '\u{1F3F0} Magic Castle, open the door!' },
+      { who: 'catcat', text: '\u{2728} Let’s have fun and learn some more!' },
+    ],
+    lineDurationsMs: [3500, 4040, 4420, 8102],
+  },
+
+  {
     id: 'mc-intro', kind: 'cinematic', bg: bgDoorPip, title: 'A Mysterious Door', subtitle: 'Pip finds an old castle door', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Whoa, look at this big door! I wonder what is behind it...' },
@@ -685,6 +711,8 @@ const bgBedroomNoLamp = `${M}/scenes/bg-castle-bedroom-nolamp.png`;
 const bgCatcatPipDoor = `${M}/scenes/bg-castle-catcat-pip-door.png`;
 const bgTitleL2 = `${M}/scenes/bg-castle-title-l2.png`;
 const bgM2PrepReminder = `${M}/scenes/mc2-prep-reminder.png`;
+const iconChair = `${M}/scenes/icon-chair.png`;
+const iconTable = `${M}/scenes/icon-table.png`;
 
 const DOOR_SPOT = { left: '17%', top: '42%' };
 const WINDOW_SPOT = { left: '47%', top: '30%' };
@@ -705,6 +733,21 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
   // calm cream-card look stays on the story opener (mc2-intro) and
   // finale, which weren't part of this request.
   { id: 'mc2-title', kind: 'title-card', bg: bgTitleL2, level: 'A1', unit: 'Unit 9', lessonLabel: 'Lesson 2', title: 'Magic Castle: Castle Furniture', subtitle: 'Explore the bedroom with Cat-cat and Pip', cta: '\u{1F6CF}️ LET’S GO!' },
+
+  // Same warm-up song as Lesson 1 (mc-warmup-song) — see its comment there
+  // for the full rationale/generation notes.
+  {
+    id: 'mc2-warmup-song', kind: 'song', bg: bgWim, title: '\u{2728} Wim’s Magic Warm-Up Song \u{2728}',
+    teacher: 'Let’s warm up with a little magic! Sing along with Wim and Cat-cat!',
+    songUrl: `${M}/audio/warmup-song.mp3`, durationSeconds: 20, bigWord: 'Magic!',
+    lyrics: [
+      { who: 'wim', text: '\u{1F52E} Abracadabra, rise and shine!' },
+      { who: 'catcat', text: '\u{1F431} Meow, meow, it’s story time!' },
+      { who: 'wim', text: '\u{1F3F0} Magic Castle, open the door!' },
+      { who: 'catcat', text: '\u{2728} Let’s have fun and learn some more!' },
+    ],
+    lineDurationsMs: [3500, 4040, 4420, 8102],
+  },
 
   {
     // Full warm-up review of Lesson 1 before anything new (per direct
@@ -866,15 +909,27 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
 
   {
     // Cumulative with Lesson 1: the two kitchen words come back.
+    // Word<->picture pairs for every word (per direct follow-up: "it
+    // should be finding the word bed... and the image of a BED", then
+    // "generate images, real images, do not use emojis") — bed/lamp/
+    // door/window reuse the exact crop boxes mc2-match already measured
+    // on bgBedroomTour (same picture the student already matched the
+    // word to there); table/chair get their own dedicated generated
+    // icons (no existing crop of them on this bedroom art, since they're
+    // Lesson 1's kitchen words). `emoji` is kept only as the unused
+    // fallback the shared type still declares, never rendered once `img`
+    // is set. The deck layout is a real per-play shuffle (see
+    // MemoryScene's synced `order`), not the fixed layout this scene
+    // used to show every time.
     id: 'mc2-memory', kind: 'memory', bg: bgRooms,
-    teacher: 'Find the matching pairs! Say each word when you flip it.',
+    teacher: 'Find the matching word and picture! Say each one when you flip it.',
     pairs: [
-      { id: 'bed', label: 'Bed', emoji: '\u{1F6CF}️' },
-      { id: 'lamp', label: 'Lamp', emoji: '\u{1FA94}' },
-      { id: 'door', label: 'Door', emoji: '\u{1F6AA}' },
-      { id: 'window', label: 'Window', emoji: '\u{1FA9F}' },
-      { id: 'table', label: 'Table', emoji: '\u{1FAB5}' },
-      { id: 'chair', label: 'Chair', emoji: '\u{1FA91}' },
+      { id: 'bed', label: 'Bed', emoji: '\u{1F6CF}️', img: bgBedroomTour, crop: { x: 64, y: 8, w: 36, h: 80 } },
+      { id: 'lamp', label: 'Lamp', emoji: '\u{1FA94}', img: bgBedroomTour, crop: { x: 54, y: 42, w: 13, h: 22 } },
+      { id: 'door', label: 'Door', emoji: '\u{1F6AA}', img: bgBedroomTour, crop: { x: 4, y: 6, w: 28, h: 80 } },
+      { id: 'window', label: 'Window', emoji: '\u{1FA9F}', img: bgBedroomTour, crop: { x: 38, y: 5, w: 18, h: 52 } },
+      { id: 'table', label: 'Table', emoji: '\u{1FAB5}', img: iconTable, imgAspect: 1 },
+      { id: 'chair', label: 'Chair', emoji: '\u{1FA91}', img: iconChair, imgAspect: 1 },
     ],
   },
 
@@ -914,19 +969,6 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
       { label: 'There is a window.', ...WINDOW_SPOT },
       { label: 'There is a lamp.', ...LAMP_SPOT },
       { label: 'There is a bed.', ...BED_SPOT },
-    ],
-  },
-
-  {
-    // Knock-knock doors fits a lesson about doors: each friend answers with
-    // one of today's sentences.
-    id: 'mc2-hello-doors', kind: 'hello-doors', bg: bgWide,
-    teacher: 'Knock knock! Listen for the clue, then tap the right door!',
-    cast: ['catcat', 'pip', 'wim'],
-    rounds: [
-      { target: 'catcat', prompt: 'Who says "There is a lamp"?', helloLine: 'I say there is a lamp!', echoLine: 'There is a lamp.' },
-      { target: 'pip', prompt: 'Who says "There is a window"?', helloLine: 'I say there is a window!', echoLine: 'There is a window.' },
-      { target: 'wim', prompt: 'Who says "There is a door"?', helloLine: 'I say there is a door!', echoLine: 'There is a door.' },
     ],
   },
 
