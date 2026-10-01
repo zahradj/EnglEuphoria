@@ -1446,7 +1446,13 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
               await setStageMode('web');
               await updateCanvasTab('web');
             }}
-            drawingEnabled={drawingEnabled}
+            // The button shows the REAL combined state: on a scene lesson the
+            // student is only free when drawing is on AND the scene is
+            // unlocked. Scene lessons re-lock themselves on every page change,
+            // and the button used to keep showing "on" from drawingEnabled
+            // alone — so the next tap turned it OFF and the teacher had to
+            // tap twice ("deactivate and activate again") to unlock.
+            drawingEnabled={drawingEnabled && (sceneNavState.total > 0 && sceneNavState.lockToggleApplicable ? sceneNavState.interactionUnlocked : true)}
             onToggleDrawing={async (enabled) => {
               // Combined "let student interact" toggle — one button covers
               // drawing AND the active scene lesson's own drag-and-drop/tap
