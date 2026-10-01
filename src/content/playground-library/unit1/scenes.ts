@@ -2163,6 +2163,15 @@ export const LESSON_6_SCENES: Scene[] = [
  *   lesson's own art and the already-transparent item icons, so no new art
  *   was needed. See the type's own comment for the Cambridge/Oxford
  *   research behind it.
+ * - Third follow-up round: added a controlled 'sentence-build' practice
+ *   scene ("It's ___", red/blue/yellow) between the sentence-modeling pass
+ *   and the free-production join-stage — there was previously a gap
+ *   straight from listening/repeating to unsupported production, per
+ *   direct user feedback. Also added a real 'jigsaw-puzzle' finale scene
+ *   (see that type's own comment) that reassembles the lesson's hero image,
+ *   with pieces scattered into side trays rather than piled on the board
+ *   and a shared, enlarged board size (`PUZZLE_BOARD_SIZE` in
+ *   SceneRenderer.tsx) applied to both puzzle-family scene kinds.
  * ========================================================================= */
 
 const itemYarn = `${A}/items/item-yarn.png`;
