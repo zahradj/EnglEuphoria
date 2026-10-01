@@ -2430,6 +2430,21 @@ export const LESSON_U2L1_SCENES: Scene[] = [
     ],
   },
   {
+    // Guided/controlled practice of the exact "It's ___" sentences just
+    // modeled above — per direct user request: production needs a
+    // scaffolded practice step between modeling (listen-repeat-cards) and
+    // free production (join-stage, no model at all). Student taps the
+    // shuffled words into order rather than just listening/repeating, and
+    // each tile shows the word only once placed (the pattern this kind
+    // already uses elsewhere — see the 'sentence-build' type comment).
+    id: 'u2l1-sentence-build', kind: 'sentence-build', bg: bgU2L1CBunting, teacher: 'The words are mixed up! Tap them in order to build the sentence.',
+    rounds: [
+      { words: ["It's", 'red'], colors: [null, '#E63946'], img: itemBalloonRed },
+      { words: ["It's", 'blue'], colors: [null, '#3B82F6'], img: itemCottonCandyBlue },
+      { words: ["It's", 'yellow'], colors: [null, '#FBBF24'], img: itemPopcornYellow },
+    ],
+  },
+  {
     // Free production — "It's ___" with no line modeled right before it.
     // Each question shows the actual stand it's asking about (now a
     // decluttered single-object version, no ferris wheel/second balloon
