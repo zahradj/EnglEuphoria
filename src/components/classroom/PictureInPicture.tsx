@@ -1,4 +1,5 @@
 import React from 'react';
+import { attachStream } from '@/lib/attachStream';
 import { Rnd } from 'react-rnd';
 import { User, Pin, VideoOff, Mic, MicOff } from 'lucide-react';
 
@@ -46,7 +47,7 @@ export const PictureInPicture: React.FC<PictureInPictureProps> = ({
       <div className="w-full h-full rounded-xl overflow-hidden bg-gray-800 border border-gray-700/50 shadow-2xl shadow-black/50 relative group cursor-grab active:cursor-grabbing">
         {stream && !isCameraOff ? (
           <video
-            ref={el => { if (el && stream) el.srcObject = stream; }}
+            ref={el => attachStream(el, stream)}
             autoPlay
             playsInline
             muted={mirrored}

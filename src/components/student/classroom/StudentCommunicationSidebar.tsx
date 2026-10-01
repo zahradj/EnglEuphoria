@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { participantDragProps } from '@/components/classroom/stage/callStreams';
+import { attachStream } from '@/lib/attachStream';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -78,8 +79,8 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
     { id: 'sys-start', sender: 'system', text: 'Class session started' }
   ]);
   const [newMessage, setNewMessage] = useState('');
-  const teacherVideoRef = useRef<HTMLVideoElement>(null);
-  const studentVideoRef = useRef<HTMLVideoElement>(null);
+  const teacherVideoRef = useRef<HTMLVideoElement | null>(null);
+  const studentVideoRef = useRef<HTMLVideoElement | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -153,7 +154,7 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
     >
       <div className={`absolute overflow-hidden bg-gray-900 ${isXs ? 'inset-[1px] rounded-[10px]' : 'inset-[2px] rounded-[14px]'}`}>
         {remoteStream ? (
-          <video ref={teacherVideoRef} autoPlay playsInline className="w-full h-full object-cover" />
+          <video ref={(el) => { teacherVideoRef.current = el; attachStream(el, remoteStream); }} autoPlay playsInline className="w-full h-full object-cover" />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
             <div className="text-center space-y-1">
@@ -194,7 +195,7 @@ export const StudentCommunicationSidebar: React.FC<StudentCommunicationSidebarPr
     >
       <div className={`absolute overflow-hidden bg-gray-900 ${isXs ? 'inset-[1px] rounded-[10px]' : 'inset-[2px] rounded-[14px]'}`}>
         {localStream && !isCameraOff ? (
-          <video ref={studentVideoRef} autoPlay playsInline muted className="w-full h-full object-cover" style={{ transform: 'scaleX(-1)' }} />
+          <video ref={(el) => { studentVideoRef.current = el; attachStream(el, localStream); }} autoPlay playsInline muted className="w-full h-full object-cover" style={{ transform: 'scaleX(-1)' }} />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
             <div className={`${isXs ? 'w-8 h-8' : 'w-16 h-16'} rounded-full ${theme.accentSoftBg} flex items-center justify-center shadow-inner`}>

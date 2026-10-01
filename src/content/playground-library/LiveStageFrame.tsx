@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type DragEvent, type PointerEvent as RPointerEvent, type MouseEvent as RMouseEvent } from 'react';
+import { attachStream } from '@/lib/attachStream';
 import { PARTICIPANT_DRAG_TYPE, useCallStreams, type CallRole } from '@/components/classroom/stage/callStreams';
 
 /**
@@ -36,6 +37,19 @@ export function LiveStageFill({ onStage, onPlace, over, canControl }: {
   const streams = useCallStreams();
   const inClassroom = streams.self !== null;
   const stream = onStage ? streams[onStage] : null;
+  // Camera off (track disabled/muted/ended) → show a picture, not a black disc.
+  const [camOn, setCamOn] = useState(true);
+  useEffect(() => {
+    const check = () => {
+      const t = stream?.getVideoTracks()[0];
+      setCamOn(!!t && t.enabled && !t.muted && t.readyState === 'live');
+    };
+    check();
+    const tracks = stream?.getVideoTracks() ?? [];
+    tracks.forEach((t) => { t.addEventListener('mute', check); t.addEventListener('unmute', check); t.addEventListener('ended', check); });
+    const iv = window.setInterval(check, 1000);
+    return () => { window.clearInterval(iv); tracks.forEach((t) => { t.removeEventListener('mute', check); t.removeEventListener('unmute', check); t.removeEventListener('ended', check); }); };
+  }, [stream]);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
@@ -50,8 +64,8 @@ export function LiveStageFill({ onStage, onPlace, over, canControl }: {
   if (onStage) {
     return (
       <>
-        {stream ? (
-          <video ref={videoRef} muted playsInline autoPlay className="pointer-events-none h-full w-full object-cover"
+        {stream && camOn ? (
+          <video ref={(el) => { videoRef.current = el; attachStream(el, stream); }} muted playsInline autoPlay className="pointer-events-none h-full w-full object-cover"
             style={{ transform: onStage === streams.self ? 'scaleX(-1)' : undefined }} />
         ) : (
           <div className="pointer-events-none flex h-full w-full items-center justify-center text-7xl">{onStage === 'student' ? '🧒' : '🧑‍🏫'}</div>
