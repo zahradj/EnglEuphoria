@@ -1245,6 +1245,46 @@ export const LESSON_A1U9L3_SCENES: Scene[] = [
   },
 
   {
+    // Requested: the whole castle again (Lesson 1's six-room cutaway) with
+    // its furniture — "Where is the ___?" / "It's in the ___." Everything
+    // asked about is painted in that picture except the clock, which is
+    // added as a sticker on the hallway wall.
+    id: 'mc3-castle-where', kind: 'where-castle', bg: bgCastleOverview,
+    teacher: 'Listen to Wim. Tap the room, then say the answer!',
+    asker: 'wim', answerer: 'catcat',
+    rooms: [
+      { room: 'living room', box: { x: 12.1, y: 28.9, w: 26.0, h: 33.3 } },
+      { room: 'hallway', box: { x: 39.1, y: 28.9, w: 21.8, h: 33.3 } },
+      { room: 'bathroom', box: { x: 61.9, y: 28.9, w: 26.0, h: 33.3 } },
+      { room: 'bedroom', box: { x: 12.1, y: 64.1, w: 22.6, h: 32.3 } },
+      { room: 'kitchen', box: { x: 35.6, y: 64.1, w: 29.1, h: 32.3 } },
+      { room: 'dining room', box: { x: 65.6, y: 64.1, w: 22.3, h: 32.3 } },
+    ],
+    stickers: [{ img: `${STK}/clock.png`, left: 54, top: 36, width: 4 }],
+    rounds: [
+      { item: 'sofa', img: `${STK}/sofa.png`, room: 'living room', at: { left: 29.8, top: 50 } },
+      { item: 'bed', img: `${STK}/bed.png`, room: 'bedroom', at: { left: 19.6, top: 83 } },
+      { item: 'mirror', img: `${STK}/mirror.png`, room: 'bathroom', at: { left: 84.7, top: 40 } },
+      { item: 'pot', img: `${STK}/pot.png`, room: 'kitchen', at: { left: 50, top: 81 } },
+      { item: 'clock', img: `${STK}/clock.png`, room: 'hallway', at: { left: 54, top: 36 } },
+      { item: 'chair', img: `${STK}/chair.png`, room: 'dining room', at: { left: 73.4, top: 89 } },
+      { item: 'bookcase', img: `${STK}/bookcase.png`, room: 'living room', at: { left: 17, top: 46 } },
+    ],
+  },
+
+  {
+    id: 'mc3-castle-stage', kind: 'join-stage', bg: bgCastleOverview,
+    teacher: 'Castle questions! When it says YOU, look at the castle and answer: "It’s in the ___!"',
+    cast: ['wim', 'catcat'],
+    turns: [
+      { who: 'wim', line: 'Where is the bed?' },
+      { who: 'catcat', line: 'It’s in the bedroom!' },
+      { who: 'wim', line: 'Where is the sofa?' },
+      { who: 'student', line: 'Now YOU! Look and say: "It’s in the ___!"' },
+    ],
+  },
+
+  {
     id: 'mc3-true-false', kind: 'true-false', bg: bgHuntKitchen,
     teacher: 'Look at the kitchen. Listen. True or false?',
     rounds: [

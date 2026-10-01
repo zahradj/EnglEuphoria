@@ -391,6 +391,15 @@ export type Scene =
       id: string; kind: 'torch-hunt'; bg: string; who: CharKey; teacher: string; ask?: string;
       rounds: { bg: string; spot: { left: number; top: number; r: number }; question?: string; answer: string; options: string[] }[];
     }
+  /** "Where is the ___?" — "It's in the ___." on a castle cutaway (see
+   *  WhereGames.tsx): rooms are % boxes, `at` is where the thing is drawn
+   *  (for the found glow), `stickers` adds things not painted in `bg`. */
+  | {
+      id: string; kind: 'where-castle'; bg: string; teacher: string; asker: CharKey; answerer: CharKey; askerName?: string;
+      rooms: { room: string; box: { x: number; y: number; w: number; h: number } }[];
+      stickers?: { img: string; left: number; top: number; width: number }[];
+      rounds: { item: string; img: string; room: string; at: { left: number; top: number } }[];
+    }
   | { id: string; kind: 'finale'; bg: string; who: CharKey; line: string; cast?: CharKey[]; look?: 'card' };
 
 export const LESSON_1_TITLE = 'Hello, Class!';

@@ -363,3 +363,102 @@ export function TorchHuntScene({ scene, onNext, onWin, onLose, sync }: { scene: 
     </SceneFrame>
   );
 }
+
+/* ------------------------------------------------------------ where-castle */
+
+/**
+ * "Where is the sofa?" — "It's in the living room." on the whole castle
+ * cutaway: hear the question (with the thing's picture), tap the room it's
+ * in, then the full answer is shown and spoken and the student says it.
+ * Furniture already painted in the castle is pointed at directly; anything
+ * not painted there is added as a sticker (`stickers`).
+ */
+type WhereCastle = Extract<Scene, { kind: 'where-castle' }>;
+
+export function WhereCastleScene({ scene, onNext, onWin, onLose, sync }: { scene: WhereCastle; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
+  const [state, setState] = useSyncedState(sync, { round: 0, wrong: null as string | null, correct: false });
+  const { round, wrong, correct } = state;
+  const total = scene.rounds.length;
+  const complete = round >= total;
+  const r = !complete ? scene.rounds[round] : null;
+  const asker = voiceOf(scene.asker);
+  const answerer = voiceOf(scene.answerer);
+  const gemDone = useRef(false);
+  const answerText = r ? `It’s in the ${r.room}.` : '';
+
+  useEffect(() => {
+    if (complete) return;
+    setState((s) => ({ ...s, wrong: null, correct: false }));
+    const t = window.setTimeout(() => cueSpeakOnce(`Where is the ${r!.item}?`, asker), 350);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round, complete]);
+
+  const tapRoom = (room: string) => {
+    if (!r || correct) return;
+    if (room !== r.room) {
+      sfx.wrong(); onLose();
+      setState((s) => ({ ...s, wrong: room }));
+      window.setTimeout(() => setState((s) => ({ ...s, wrong: null })), 600);
+      return;
+    }
+    sfx.match();
+    setState((s) => ({ ...s, correct: true }));
+    if (!gemDone.current) { gemDone.current = true; sfx.gem(); onWin(true); }
+    cueSpeak(answerText, answerer);
+  };
+
+  if (complete) return <DoneScreen bg={scene.bg} label="You know every room! ⭐ Next" onNext={onNext} />;
+
+  return (
+    <SceneFrame
+      bg={scene.bg}
+      stage={() => (
+        <div className="absolute inset-0">
+          {(scene.stickers ?? []).map((s) => (
+            <img key={s.img} src={s.img} alt="" draggable={false} className="pointer-events-none absolute select-none" style={{ left: `${s.left}%`, top: `${s.top}%`, width: `${s.width}%`, transform: 'translate(-50%, -50%)', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,.3))' }} />
+          ))}
+          {scene.rooms.map((rm) => {
+            const isWrong = wrong === rm.room;
+            const isRight = correct && rm.room === r!.room;
+            return (
+              <button key={rm.room} onClick={() => tapRoom(rm.room)} disabled={correct} aria-label={rm.room}
+                className={`absolute rounded-xl border-[5px] transition ${isWrong ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400 bg-red-400/25' : isRight ? 'border-green-400 bg-green-300/20' : 'border-transparent hover:border-white/70'}`}
+                style={{ left: `${rm.box.x}%`, top: `${rm.box.y}%`, width: `${rm.box.w}%`, height: `${rm.box.h}%` }}>
+                {isRight && (
+                  <span className="absolute left-1/2 top-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-green-500 px-3 py-1 text-sm font-black capitalize text-white shadow-lg sm:text-base" style={{ animation: 'lep1-pop 0.35s ease-out' }}>{rm.room} ✓</span>
+                )}
+              </button>
+            );
+          })}
+          {/* the asked-about thing glows where it is once found */}
+          {correct && (
+            <div className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-[5px] border-white" style={{ left: `${r!.at.left}%`, top: `${r!.at.top}%`, width: '9%', aspectRatio: '1', boxShadow: '0 0 0 4px #FFD34E, 0 0 26px 8px rgba(255,211,78,.7)', animation: 'lep1-ping 1.7s ease-in-out infinite' }} />
+          )}
+        </div>
+      )}
+    >
+      <Banner>🏰 {scene.teacher} <span className="ml-1 opacity-60">({round + 1}/{total})</span></Banner>
+      {/* question card with the thing's picture */}
+      <div className="absolute left-3 top-16 z-40 flex items-center gap-3 rounded-3xl bg-white/95 py-2 pl-2 pr-5 shadow-2xl" style={{ animation: 'lep1-pop 0.35s ease-out' }} key={round}>
+        <img src={r!.img} alt={r!.item} className="h-14 w-14 object-contain sm:h-16 sm:w-16" />
+        <div className="text-left">
+          <div className="text-[11px] font-black uppercase tracking-widest text-orange-500">{scene.askerName ?? 'Wim'} asks</div>
+          <div className="text-xl font-black text-neutral-800 sm:text-2xl">Where is the <span style={{ color: '#C0392B' }}>{r!.item}</span>?</div>
+          <button onClick={() => cueSpeak(`Where is the ${r!.item}?`, asker)} className="text-xs font-bold text-neutral-500 underline decoration-dotted">🔊 Hear it again</button>
+        </div>
+      </div>
+      {/* answer card: model + say it */}
+      {correct && (
+        <div className="absolute right-3 top-16 z-40 flex flex-col items-end gap-2" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
+          <div className="rounded-3xl bg-white/95 px-5 py-3 text-right shadow-2xl">
+            <div className="text-[11px] font-black uppercase tracking-widest text-emerald-600">🎤 Now you say it!</div>
+            <div className="text-xl font-black text-neutral-800 sm:text-2xl">It’s <span className="rounded-lg px-1.5 text-white" style={{ background: PREP_COLOR.in }}>in</span> the <span style={{ color: '#0EA5E9' }}>{r!.room}</span>.</div>
+            <button onClick={() => cueSpeak(answerText, answerer)} className="text-xs font-bold text-neutral-500 underline decoration-dotted">🔊 Hear it</button>
+          </div>
+          <button onClick={() => setState((s) => ({ ...s, round: s.round + 1 }))} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-6 py-2 text-lg font-black text-white shadow-xl active:scale-95">I said it! ▶</button>
+        </div>
+      )}
+    </SceneFrame>
+  );
+}

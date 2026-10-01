@@ -12,7 +12,7 @@ import engleuphoriaLogo from '@/assets/engleuphoria-logo.png';
 import { type ActivitySync, useSyncedState } from '../sceneActivitySync';
 import { SpinWheelScene } from '../SpinWheelScene';
 import { PictureMatchScene, CroppedImage } from '../PictureMatchScene';
-import { PlaceItScene, TorchHuntScene } from './WhereGames';
+import { PlaceItScene, TorchHuntScene, WhereCastleScene } from './WhereGames';
 
 export type { ActivitySync };
 
@@ -187,6 +187,7 @@ export function SceneRenderer(props: {
       case 'picture-match': return <PictureMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'place-it': return <PlaceItScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'torch-hunt': return <TorchHuntScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'where-castle': return <WhereCastleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
       default: return null;
     }

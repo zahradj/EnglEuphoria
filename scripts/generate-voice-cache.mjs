@@ -376,6 +376,7 @@ const WT_EXTRACTORS = {
   'place-it': (s) => s.mode === 'learn'
     ? (s.spots ?? []).map((sp) => [s.who, s.learnLines?.[sp.prep] ?? `The ${s.item.label} is ${sp.prep} the ${s.anchor.label}.`])
     : (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.answer ?? `Yes! The ${s.item.label} is ${r.prep} the ${s.anchor.label}.`]]),
+  'where-castle': (s) => (s.rounds ?? []).flatMap((r) => [[s.asker, `Where is the ${r.item}?`], [s.answerer, `It’s in the ${r.room}.`]]),
   'torch-hunt': (s) => [[s.who, s.ask ?? 'Where is the lamp? Find it with your torch!'], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.question ?? 'Where is the lamp?'], [s.who, r.answer]])],
   // The reveal line (r.line) is verbatim; the "How often do you {action}?"
   // prompt is a template, but s.rounds[].action is scene-authored (not
