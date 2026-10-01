@@ -2087,8 +2087,14 @@ function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<
   );
 
   if (done) {
+    // Close on the story's own final illustration (the happy-ending beat
+    // the student just read) rather than the scene's generic establishing
+    // background — a blurred stock hallway behind "The End!" undersold the
+    // dedicated closing artwork right after the student had just seen it
+    // in full a moment earlier.
+    const lastPageImg = scene.pages[scene.pages.length - 1]?.img ?? scene.bg;
     return (
-      <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${lastPageImg})` }}>
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/60 backdrop-blur-sm" />
         <Confetti count={60} />
         <div className="relative z-10 flex flex-col items-center gap-5 px-6 text-center">
