@@ -157,6 +157,7 @@ const bgCatcat = `${M}/scenes/bg-castle-catcat.png`;
 const bgRooms = `${M}/scenes/bg-castle-rooms.png`;
 const bgKitchen = `${M}/scenes/bg-castle-kitchen.png`;
 const bgKitchenNoChair = `${M}/scenes/bg-castle-kitchen-nochair.png`;
+const bgPrepPlain = `${M}/scenes/bg-prep-plain.png`;
 const bgFriends = `${M}/scenes/bg-castle-friends.png`;
 const bgCastleLivingHall = `${M}/scenes/bg-castle-livingroom-hallway.png`;
 const bgCastleBathDining = `${M}/scenes/bg-castle-bathroom-dining.png`;
@@ -528,8 +529,13 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     // preposition, matching mc-preposition-intro's own three pictures —
     // all three the SAME page-20 kitchen background with only Cat-cat's
     // position changing (under the table / on the table / in the fireplace
-    // pot), per direct follow-up, rather than mismatched locations.
-    id: 'mc-preposition-review', kind: 'listen-tap', bg: bgKitchen,
+    // pot), per direct follow-up, rather than mismatched locations. The
+    // scene's own backdrop is a plain stone wall (bgPrepPlain), not the
+    // busy kitchen photo again — each card already shows the kitchen
+    // from its own angle, so repeating it behind all three as well just
+    // added visual noise ("make the images bigger... change the
+    // background to a plain one, so it won't be very charged").
+    id: 'mc-preposition-review', kind: 'listen-tap', bg: bgPrepPlain,
     teacher: 'Listen carefully, then tap the picture for UNDER, ON, or IN!',
     targets: [
       { label: 'Under', left: '18%', top: '58%', color: '#8B5A2B', img: `${S1}/prep-under-table.png` },
@@ -573,16 +579,6 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     checkpoints: [
       { afterPage: 2, who: 'pip', question: 'Where does Pip look first?', options: ['Great hall', 'Kitchen', 'Bedroom'], answer: 'Great hall' },
       { afterPage: 4, who: 'catcat', question: 'Where do they find the wand?', options: ['On the table', 'Under the bed', 'In the window'], answer: 'On the table' },
-    ],
-  },
-
-  {
-    id: 'mc-hello-doors', kind: 'hello-doors', bg: bgWide,
-    teacher: 'Knock knock! Listen for the clue, then tap the right door!',
-    cast: ['wim', 'catcat'],
-    rounds: [
-      { target: 'wim', prompt: 'Who says "There is a table"?', helloLine: 'I say there is a table!', echoLine: 'There is a table.' },
-      { target: 'catcat', prompt: 'Who says "There is a bed"?', helloLine: 'I say there is a bed!', echoLine: 'There is a bed.' },
     ],
   },
 
