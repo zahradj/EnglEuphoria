@@ -50,6 +50,7 @@ import * as wtScenes from '../src/content/playground-library/welcome-town/scenes
 import * as wtA2Scenes from '../src/content/playground-library/welcome-town-a2/scenes.ts';
 import * as magicCastleScenes from '../src/content/playground-library/magic-castle/scenes.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
+import { allQuestLines } from '../src/content/homework-quests/registry.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.join(__dirname, '..', 'public', 'audio-cache');
@@ -414,7 +415,7 @@ const ENGINES = [
 ];
 
 /** Homework games: every line they can say, already as (voice, text). */
-const HOMEWORK_LINES = [...homeworkA1U9L1Lines()];
+const HOMEWORK_LINES = [...homeworkA1U9L1Lines(), ...allQuestLines()];
 
 function collectPairs(lessonFilter) {
   const seen = new Map(); // cacheKey -> [character, text]
