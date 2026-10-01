@@ -69,6 +69,7 @@ import ScrollToTop from "@/components/common/ScrollToTop";
 // Only the landing page is eagerly loaded (entry point)
 import LandingPage from "./pages/LandingPage";
 import { HomeGate } from "./components/auth/HomeGate";
+import UnknownRouteReload from "./components/routing/UnknownRouteReload";
 
 
 // All other pages are lazy-loaded for bundle optimization
@@ -1010,7 +1011,7 @@ const App = () => {
                       <Route path="/admin-dashboard" element={<Navigate to="/super-admin" replace />} />
 
                       {/* 404 - Redirect to Login */}
-                      <Route path="*" element={<Navigate to="/" replace />} />
+                      <Route path="*" element={<UnknownRouteReload />} />
                     </Routes>
                     <ProfileDebugPanel />
                   </SentinelErrorBoundary>
