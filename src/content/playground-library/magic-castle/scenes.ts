@@ -684,6 +684,7 @@ const bgBedroomTour = `${M}/scenes/bg-castle-bedroom-tour.png`;
 const bgBedroomNoLamp = `${M}/scenes/bg-castle-bedroom-nolamp.png`;
 const bgCatcatPipDoor = `${M}/scenes/bg-castle-catcat-pip-door.png`;
 const bgTitleL2 = `${M}/scenes/bg-castle-title-l2.png`;
+const bgM2PrepReminder = `${M}/scenes/mc2-prep-reminder.png`;
 
 const DOOR_SPOT = { left: '17%', top: '42%' };
 const WINDOW_SPOT = { left: '47%', top: '30%' };
@@ -734,6 +735,25 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
   },
 
   {
+    // A quick spiral-review touch of Lesson 1's under/on/in, right after
+    // the rooms review and before Lesson 2's new bedroom vocabulary starts
+    // — per direct request ("just remind the student of the vocabulary"),
+    // not a new teach or a quiz. One combined image (not three separate
+    // cards) showing Cat-cat under/on/in three pieces of furniture in one
+    // room, closely modelled on a reference the user shared; same default
+    // arrow + tap-to-reveal VocabSpotScene flow as any other vocabulary
+    // reminder in this engine. Same per-preposition colors as Lesson 1's
+    // mc-preposition-intro/review for visual continuity.
+    id: 'mc2-prep-reminder', kind: 'vocab-spot', bg: bgM2PrepReminder,
+    teacher: 'Remember UNDER, ON, and IN? Tap each one!',
+    items: [
+      { label: 'Under', sentence: 'Cat-cat is under the sofa.', emoji: '\u{2B07}\u{FE0F}', left: '22%', top: '80%', dir: 'down', color: '#8B5A2B', who: 'catcat' },
+      { label: 'On', sentence: 'Cat-cat is on the armchair.', emoji: '\u{1FA91}', left: '53%', top: '46%', dir: 'down', color: '#F4A340', who: 'catcat' },
+      { label: 'In', sentence: 'Cat-cat is in the box.', emoji: '\u{1F4E6}', left: '82%', top: '58%', dir: 'down', color: '#3B7FC9', who: 'catcat' },
+    ],
+  },
+
+  {
     id: 'mc2-intro', kind: 'cinematic', bg: bgCatcatPipDoor, title: 'Cat-cat’s Secret Room', subtitle: 'Cat-cat has something to show Pip', narrator: 'catcat',
     script: [
       { who: 'catcat', line: 'Pip! Come here! This is my favourite room in the castle.' },
@@ -778,6 +798,26 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
     teacher: 'Listen to Cat-cat, then say the whole sentence!',
     word: 'There is a lamp in the bedroom!',
     wordColors: ['#EF4444', '#EF4444', '#EF4444', '#F4A340', '#6B7280', '#6B7280', '#2EC4B6'],
+  },
+
+  {
+    // Guided practice between the model (hears the full sentence once) and
+    // join-stage (free speaking production) — per direct request ("use the
+    // lesson two vocabulary to make sentences... the model sentence should
+    // be 'there is'"). mc2-drag-words only matches single WORDS to objects;
+    // this is the first place the student actually builds the FULL
+    // sentence themselves, one round per vocabulary word, reusing each
+    // word's own established color (same chunk coloring as mc2-model:
+    // "There is a" red, the vocab word its own color, "in the" grey,
+    // "bedroom" teal).
+    id: 'mc2-sentence-build', kind: 'sentence-build', bg: bgBedroomTour,
+    teacher: 'The words are mixed up! Tap them in order to make the sentence.',
+    rounds: [
+      { words: ['There', 'is', 'a', 'bed', 'in', 'the', 'bedroom.'], colors: ['#EF4444', '#EF4444', '#EF4444', '#C0392B', '#6B7280', '#6B7280', '#2EC4B6'], emoji: '\u{1F6CF}\u{FE0F}' },
+      { words: ['There', 'is', 'a', 'lamp', 'in', 'the', 'bedroom.'], colors: ['#EF4444', '#EF4444', '#EF4444', '#F4A340', '#6B7280', '#6B7280', '#2EC4B6'], emoji: '\u{1FA94}' },
+      { words: ['There', 'is', 'a', 'door', 'in', 'the', 'bedroom.'], colors: ['#EF4444', '#EF4444', '#EF4444', '#8B5A2B', '#6B7280', '#6B7280', '#2EC4B6'], emoji: '\u{1F6AA}' },
+      { words: ['There', 'is', 'a', 'window', 'in', 'the', 'bedroom.'], colors: ['#EF4444', '#EF4444', '#EF4444', '#4FA9E0', '#6B7280', '#6B7280', '#2EC4B6'], emoji: '\u{1FA9F}' },
+    ],
   },
 
   {

@@ -329,6 +329,22 @@ export type Scene =
       rounds: { word: string; blankIndex: number; answer: string; choices: string[]; img?: string; emoji: string; tiles?: string[] }[];
     }
   | {
+      // Ported from unit1's sentence-build (same shape/mechanic): tap
+      // shuffled word tiles back into order to build a full sentence,
+      // rather than just hearing/repeating one already assembled. Added
+      // for Magic Castle Lesson 2's "There is a ___ in the bedroom"
+      // pattern, which previously had no guided-practice step between
+      // mc2-model (hears the model sentence once) and mc2-join-stage
+      // (free speaking production) — mc2-drag-words only matches single
+      // words to objects, not the full sentence.
+      id: string; kind: 'sentence-build'; bg: string; teacher: string;
+      /** img/emoji: a non-reader tapping words into order has no way to
+       *  confirm WHAT sentence they're building from the (initially
+       *  blank) tiles alone — a picture anchors the meaning. */
+      rounds: { words: string[]; colors?: (string | null)[]; img?: string; emoji?: string }[];
+      side?: 'left' | 'right' | 'top';
+    }
+  | {
       /** Tongue twister: hear it once, then say it three times — slow,
        *  faster, magic speed — while a wand bounces word by word at that
        *  pace. `focus` letters are glowing in the text. */
