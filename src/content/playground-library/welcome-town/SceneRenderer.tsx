@@ -684,26 +684,51 @@ function EchoScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, { kin
           ? 'absolute inset-x-0 top-24 z-20 flex flex-col items-center gap-6 px-4'
           : `absolute inset-y-0 z-20 flex w-1/2 flex-col items-center justify-center gap-8 px-1 ${side === 'right' ? 'right-0' : 'left-0'}`
       }>
-        <p
-          className="max-w-[calc(90*var(--svw,1vw))] text-center font-black leading-tight text-white"
-          style={{
-            fontSize,
-            // A dark contrast shadow (readability on any background) plus a
-            // soft glow in the speaking character's own color underneath it
-            // — same purpose as a card used to serve (giving the bare text
-            // a "presence" of its own) without bringing back the card that
-            // was covering the scene.
-            filter: `drop-shadow(0 6px 14px rgba(0,0,0,0.7)) drop-shadow(0 0 22px ${c.color}88)`,
-          }}
-        >
-          {scene.wordColors
-            ? scene.word.split(' ').map((w, i) => (
+        {/* A full modeling SENTENCE (wordColors set) gets a small stone-
+            plaque frame — castle-themed (warm stone tones, a double-ring
+            border evoking carved masonry), sized to fit the text only,
+            not a background panel spanning extra image. A single
+            vocabulary word (no wordColors, e.g. "Castle!"/"Garden!")
+            stays fully bare as before. Per direct request: "a small
+            frame or bricks to frame the parts of the sentence" — circled
+            the whole multi-word sentence, not individual words. */}
+        {scene.wordColors ? (
+          <div
+            className="inline-block rounded-2xl px-[calc(2.2*var(--svw,1vw))] py-[calc(1.1*var(--svw,1vw))]"
+            style={{
+              background: 'linear-gradient(135deg, rgba(58,38,22,0.55), rgba(30,18,10,0.55))',
+              border: '3px solid rgba(222,196,152,0.9)',
+              boxShadow: 'inset 0 0 0 3px rgba(46,28,16,0.85), 0 10px 24px rgba(0,0,0,0.4)',
+              backdropFilter: 'blur(1.5px)',
+            }}
+          >
+            <p
+              className="max-w-[calc(84*var(--svw,1vw))] text-center font-black leading-tight text-white"
+              style={{ fontSize, filter: `drop-shadow(0 4px 10px rgba(0,0,0,0.6)) drop-shadow(0 0 18px ${c.color}88)` }}
+            >
+              {scene.word.split(' ').map((w, i) => (
                 <span key={i} style={scene.wordColors![i] ? { color: scene.wordColors![i]! } : undefined}>
                   {w}{i < scene.word.split(' ').length - 1 ? ' ' : ''}
                 </span>
-              ))
-            : scene.word}
-        </p>
+              ))}
+            </p>
+          </div>
+        ) : (
+          <p
+            className="max-w-[calc(90*var(--svw,1vw))] text-center font-black leading-tight text-white"
+            style={{
+              fontSize,
+              // A dark contrast shadow (readability on any background) plus a
+              // soft glow in the speaking character's own color underneath it
+              // — same purpose as a card used to serve (giving the bare text
+              // a "presence" of its own) without bringing back the card that
+              // was covering the scene.
+              filter: `drop-shadow(0 6px 14px rgba(0,0,0,0.7)) drop-shadow(0 0 22px ${c.color}88)`,
+            }}
+          >
+            {scene.word}
+          </p>
+        )}
         {/* One grouped control cluster instead of a lone floating "PIP SAYS"
             label sitting disconnected above two generic white pills — the
             speaker chip (avatar + name, character-colored) now visually
