@@ -537,8 +537,8 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
       { label: 'In', left: '82%', top: '58%', color: '#3B7FC9', img: `${S1}/prep-in.png` },
     ],
     rounds: [
-      { prompt: 'Cat-cat is hiding under the table!', answerLabel: 'Under', who: 'catcat' },
-      { prompt: 'Cat-cat is sitting on the table!', answerLabel: 'On', who: 'wim' },
+      { prompt: 'Cat-cat is under the table!', answerLabel: 'Under', who: 'catcat' },
+      { prompt: 'Cat-cat is on the table!', answerLabel: 'On', who: 'wim' },
       { prompt: 'Cat-cat is in the pot!', answerLabel: 'In', who: 'wim' },
     ],
   },
