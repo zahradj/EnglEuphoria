@@ -1,9 +1,10 @@
 import { questLines, type HomeworkQuest, type QuestVoice } from './types';
 import { QUEST_MAGIC_CASTLE_U9L1 } from './magic-castle-u9l1';
+import { QUEST_MAGIC_CASTLE_U9L2 } from './magic-castle-u9l2';
 
 /** Every Homework Quest, by id (also the URL /homework-quest/<id>). */
 export const HOMEWORK_QUESTS: Record<string, HomeworkQuest> = Object.fromEntries(
-  [QUEST_MAGIC_CASTLE_U9L1].map((q) => [q.id, q]),
+  [QUEST_MAGIC_CASTLE_U9L1, QUEST_MAGIC_CASTLE_U9L2].map((q) => [q.id, q]),
 );
 
 export const getHomeworkQuest = (id: string): HomeworkQuest | null => HOMEWORK_QUESTS[id] ?? null;

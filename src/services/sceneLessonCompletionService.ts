@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { questForLesson } from '@/content/homework-quests/registry';
 
 /**
  * Runs when a student finishes a scene-based Playground lesson — either
@@ -52,6 +53,8 @@ interface CompleteSceneLessonArgs {
   lessonRowId: string;
   title: string;
   scenes: CompletionScene[];
+  /** Registry key (e.g. 'castle-rich-9-1') — picks the lesson's Homework Quest. */
+  lessonKey?: string | null;
 }
 
 interface CompleteSceneLessonResult {
@@ -81,216 +84,12 @@ function wordsOf(line: string): string[] {
   return line.replace(/[.,!?;:"']/g, '').trim().split(/\s+/).filter(Boolean);
 }
 
-interface HomeworkContent {
-  activity_1_recognition: {
-    instructions?: string;
-    items: {
-      audio_text: string; correct_answer: string; wrong_options: string[];
-      /** Pre-A1/Welcome Town kids can't read the choice text yet — these
-       *  let the player show a real picture from the lesson (the item's
-       *  own icon, or the vocab scene's own illustration) next to each
-       *  choice instead of relying on the word alone. Keyed by the
-       *  (lowercased) word so it covers the correct answer and every
-       *  wrong option from one map. */
-      choice_images?: Record<string, string>;
-      /** The character who originally spoke this word in the lesson (see
-       *  CompletionScene.who) — lets the player look up the exact same
-       *  pre-generated static clip instead of generating new audio. */
-      audio_character?: string;
-    }[];
-  };
-  activity_2_syntax: {
-    instructions?: string;
-    items: {
-      // "Listen & Point" shape (preferred) — tap the picture that matches
-      // the phrase you just heard. No token requires being told apart by
-      // its text, unlike arranging word tiles: function words ("my",
-      // "is", "am") have no vocabulary icon of their own, so even with
-      // word_images below, some tiles are always text-only — which a
-      // non-reading student can't use at all. Only built when the lesson
-      // has at least 2 distinct phrase illustrations to choose between;
-      // falls back to the tile-arranging shape otherwise.
-      audio_text?: string;
-      correct_image?: string;
-      image_options?: string[];
-      // Tile-arranging shape (fallback for lessons without enough scene
-      // art, and for already-generated homework rows from before this
-      // shape existed).
-      scrambled_words?: string[]; correct_order?: string;
-      /** Same reasoning as choice_images above, one entry per token. */
-      word_images?: Record<string, string>;
-      /** The lesson's own illustration for this line, if one exists —
-       *  shown above the activity so the picture (not the text) anchors
-       *  what's being built. */
-      image?: string;
-      /** Same reasoning as activity 1's audio_character. */
-      audio_character?: string;
-    }[];
-  };
-  activity_3_production: { instructions?: string; prompt: string; target_words_to_detect?: string[]; example_response?: string; image?: string; audio_character?: string };
-  meta?: { hub?: string; title?: string; vocabulary?: string[]; lesson_id?: string | null };
-}
-
-const norm = (s: string) => s.trim().toLowerCase();
-
-/** Builds the exact 3-activity shape HomeworkPlayer expects, from the
- *  lesson's own basket/echo/roleplay scene data — including, wherever
- *  possible, the same images the lesson itself used, since most Pre-A1
- *  and many Welcome Town students can't read yet. Homework built purely
- *  from text would silently assume a skill the lesson never required. */
-export function buildHomeworkContent(scenes: CompletionScene[], title: string, lessonRowId: string): HomeworkContent {
-  // A word/phrase -> illustration lookup, built once from every scene in
-  // the lesson: basket item icons for single words, and each echo/meet
-  // scene's own full-bleed background for whatever phrase it teaches.
-  const imageByText = new Map<string, string>();
-  // Word/phrase -> the character who speaks it in the lesson (scene-level
-  // `who`), so homework audio can find the exact same pre-generated static
-  // clip the lesson itself plays instead of generating fresh audio with no
-  // character voice at all. See unit1/audio.ts's speak()/fetchStaticClip().
-  const charByText = new Map<string, string>();
-  for (const s of scenes) {
-    if (s.kind === 'basket' && s.items) {
-      for (const item of s.items) {
-        if (item.img) imageByText.set(norm(item.word), item.img);
-        if (s.who) charByText.set(norm(item.word), s.who);
-      }
-    }
-    if (s.kind === 'echo' && s.word && s.bg) imageByText.set(norm(s.word), s.bg);
-    if (s.kind === 'echo' && s.word && s.who) charByText.set(norm(s.word), s.who);
-    if (s.kind === 'meet' && s.bg) {
-      const phrase = s.repeat ?? s.word;
-      if (phrase) imageByText.set(norm(phrase), s.bg);
-    }
-    if (s.kind === 'meet' && s.who) {
-      const phrase = s.repeat ?? s.word;
-      if (phrase) charByText.set(norm(phrase), s.who);
-    }
-  }
-
-  // Activity 1 — vocab words from basket scenes (hit:true = target, hit:false = distractor pool).
-  // Welcome Town lessons have no 'basket' kind at all, and Pre-A1 review
-  // lessons (e.g. L4-L6) skip it too — both fall back to short echo-scene
-  // phrases (every lesson family has those) rather than generic filler.
-  const correctWords: string[] = [];
-  const distractorPool: string[] = [];
-  for (const s of scenes) {
-    if (s.kind !== 'basket' || !s.items) continue;
-    for (const item of s.items) {
-      if (item.hit) correctWords.push(item.word);
-      else distractorPool.push(item.word);
-    }
-  }
-  if (correctWords.length === 0) {
-    const echoPhrases = Array.from(
-      new Set(scenes.filter((s) => s.kind === 'echo' && s.word).map((s) => s.word!)),
-    );
-    correctWords.push(...echoPhrases);
-    distractorPool.push(...echoPhrases);
-  }
-  const uniqueCorrect = Array.from(new Set(correctWords)).slice(0, 4);
-  const uniqueDistractors = Array.from(new Set(distractorPool));
-  const activity1Items = (uniqueCorrect.length > 0 ? uniqueCorrect : ['Hello!']).map((word, i) => {
-    // Excludes `word` up front so the wrap-around fallback below can never
-    // pull the correct answer back in as one of its own wrong options (it
-    // used to index into the unfiltered pool, which still contained `word`
-    // whenever the same term appeared as a distractor in another basket
-    // scene — e.g. 'house' is hit:true in basket-h but hit:false in
-    // basket-m — producing two identical choice cards for that item).
-    const pool = uniqueDistractors.filter((w) => w !== word);
-    const wrongOptions = new Set(pool.slice(i, i + 3));
-    let cursor = 0;
-    while (wrongOptions.size < 2 && cursor < pool.length) {
-      wrongOptions.add(pool[(i + cursor) % pool.length]);
-      cursor++;
-    }
-    const finalWrong = Array.from(wrongOptions).slice(0, 3);
-    const choiceImages: Record<string, string> = {};
-    for (const w of [word, ...finalWrong]) {
-      const img = imageByText.get(norm(w));
-      if (img) choiceImages[norm(w)] = img;
-    }
-    return {
-      audio_text: word,
-      correct_answer: word,
-      wrong_options: finalWrong,
-      choice_images: Object.keys(choiceImages).length > 0 ? choiceImages : undefined,
-      audio_character: charByText.get(norm(word)),
-    };
-  });
-
-  // Activity 2 — short lines from echo/roleplay scenes, 3+ words
-  const candidateLines: string[] = [];
-  for (const s of scenes) {
-    if (s.kind === 'echo' && s.word) candidateLines.push(s.word);
-    if (s.kind === 'roleplay' && s.script) candidateLines.push(...s.script.map((line) => line.line));
-  }
-  const goodLines = Array.from(new Set(candidateLines)).filter((l) => wordsOf(l).length >= 3).slice(0, 3);
-  const finalLines = goodLines.length > 0 ? goodLines : ['Hello I am here'];
-
-  // Phrase-level illustrations for those same lines (a subset of
-  // imageByText — only the meet/echo scenes, which are whole spoken
-  // lines, not single basket words). Need at least 2 distinct images
-  // across the WHOLE lesson to build a real multiple-choice round;
-  // below that there's nothing to tell apart by picture.
-  const phraseImagePool = Array.from(
-    new Set(
-      scenes
-        .filter((s) => (s.kind === 'echo' || s.kind === 'meet') && s.bg)
-        .map((s) => s.bg!),
-    ),
-  );
-  const canDoPictureMatch = phraseImagePool.length >= 2;
-
-  const activity2Items = finalLines.map((line) => {
-    const correctImage = imageByText.get(norm(line));
-    if (canDoPictureMatch && correctImage) {
-      const distractorImages = phraseImagePool.filter((img) => img !== correctImage);
-      const chosenDistractors = distractorImages.slice(0, 3);
-      const imageOptions = [correctImage, ...chosenDistractors].sort(() => Math.random() - 0.5);
-      return { audio_text: line, correct_image: correctImage, image_options: imageOptions, audio_character: charByText.get(norm(line)) };
-    }
-    // Fallback: no distinct picture for this specific line (or not enough
-    // art in the lesson overall) — tile-arranging, still audio + word
-    // images wherever those individually exist.
-    const tokens = wordsOf(line);
-    const scrambled = [...tokens].sort(() => Math.random() - 0.5);
-    const wordImages: Record<string, string> = {};
-    for (const t of tokens) {
-      const img = imageByText.get(norm(t));
-      if (img) wordImages[norm(t)] = img;
-    }
-    return {
-      scrambled_words: scrambled,
-      correct_order: tokens.join(' '),
-      word_images: Object.keys(wordImages).length > 0 ? wordImages : undefined,
-      image: correctImage,
-      audio_character: charByText.get(norm(line)),
-    };
-  });
-
-  // Activity 3 — speaking prompt built from the strongest candidate line
-  const speakingLine = goodLines[0] ?? activity2Items[0].correct_order ?? finalLines[0];
-  const targetWords = wordsOf(speakingLine).filter((w) => w.length > 2).slice(0, 4);
-
-  return {
-    activity_1_recognition: { instructions: 'Tap what you hear.', items: activity1Items },
-    activity_2_syntax: { instructions: canDoPictureMatch ? 'Listen, then tap the matching picture.' : 'Put the words in the right order.', items: activity2Items },
-    activity_3_production: {
-      instructions: 'Say it out loud, just like in class!',
-      prompt: speakingLine,
-      target_words_to_detect: targetWords,
-      image: imageByText.get(norm(speakingLine)),
-      audio_character: charByText.get(norm(speakingLine)),
-    },
-    meta: { hub: 'playground', title, vocabulary: uniqueCorrect, lesson_id: lessonRowId },
-  };
-}
-
 export async function completeSceneLesson({
   userId,
   lessonRowId,
   title,
   scenes,
+  lessonKey,
 }: CompleteSceneLessonArgs): Promise<CompleteSceneLessonResult> {
   const result: CompleteSceneLessonResult = {
     progressOk: false,
@@ -342,17 +141,22 @@ export async function completeSceneLesson({
     result.phonicsOk = true; // nothing to sync — not a failure
   }
 
-  // 3. Homework
-  try {
-    const content = buildHomeworkContent(scenes, title, lessonRowId);
-    const { data, error } = await supabase.functions.invoke('create-lep1-homework', {
-      body: { lessonId: lessonRowId, title: `Practice: ${title}`, content },
-    });
-    if (error) throw error;
-    result.homeworkOk = true;
-    result.homeworkAssignmentId = (data as { assignment_id?: string } | null)?.assignment_id ?? null;
-  } catch (err) {
-    console.error('[sceneLessonCompletion] homework creation failed', err);
+  // 3. Homework — the lesson's gamified Homework Quest, if it has one.
+  //    (The old auto-generated 3-activity homework is retired.)
+  const quest = lessonKey ? questForLesson(lessonKey) : null;
+  if (quest) {
+    try {
+      const { data, error } = await supabase.functions.invoke('create-lep1-homework', {
+        body: { lessonId: lessonRowId, title: quest.title ?? `Practice: ${title}`, content: { type: 'quest', questId: quest.id } },
+      });
+      if (error) throw error;
+      result.homeworkOk = true;
+      result.homeworkAssignmentId = (data as { assignment_id?: string } | null)?.assignment_id ?? null;
+    } catch (err) {
+      console.error('[sceneLessonCompletion] homework quest assignment failed', err);
+    }
+  } else {
+    result.homeworkOk = true; // no quest for this lesson yet — nothing to assign
   }
 
   return result;

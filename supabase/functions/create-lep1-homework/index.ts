@@ -73,13 +73,13 @@ Deno.serve(async (req) => {
     });
   }
 
-  const content = body?.content;
-  if (
+  const content = body?.content as any;
+  const isQuest = content?.type === "quest" && typeof content?.questId === "string";
+  if (!isQuest && (
     !content?.activity_1_recognition?.items?.length ||
     !content?.activity_2_syntax?.items?.length ||
-    !content?.activity_3_production?.prompt ||
-    !body?.title
-  ) {
+    !content?.activity_3_production?.prompt
+  ) || !body?.title) {
     return new Response(JSON.stringify({ error: "Missing or malformed homework content" }), {
       status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -99,7 +99,7 @@ Deno.serve(async (req) => {
       lesson_id: body.lessonId ?? null,
       title: body.title.slice(0, 60),
       description: "Auto-generated practice from your Playground lesson.",
-      instructions: "Complete all 3 quick activities. About 5 minutes.",
+      instructions: isQuest ? "Play the Homework Quest and collect the stars!" : "Complete all 3 quick activities. About 5 minutes.",
       content,
       source: "lep1-auto",
       status: "active",

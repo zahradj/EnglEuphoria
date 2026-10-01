@@ -77,7 +77,7 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
   const handleFinale = async () => {
     setPhase('saving');
     if (user?.id) {
-      const result = await completeSceneLesson({ userId: user.id, lessonRowId: lesson.id, title: meta.title, scenes });
+      const result = await completeSceneLesson({ userId: user.id, lessonRowId: lesson.id, title: meta.title, scenes, lessonKey: lesson.contentFormat && key ? `${lesson.contentFormat}-${key}` : null });
       setHomeworkAssignmentId(result.homeworkAssignmentId);
     }
     onComplete(lesson.id, 100);

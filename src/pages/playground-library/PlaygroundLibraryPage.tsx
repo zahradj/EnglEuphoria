@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { HomeworkPreviewModal } from './HomeworkPreviewModal';
+import HomeworkQuest from '@/components/homework-quest/HomeworkQuest';
+import { questForLesson } from '@/content/homework-quests/registry';
 import { isLibraryReadyFormat } from '@/content/playground-library/sceneLessonFormats';
 
 interface LessonRow {
@@ -51,6 +52,13 @@ const UNIT_ART = [
   { emoji: '😊', bg: 'linear-gradient(135deg,#EC4899,#8B5CF6)' },
   { emoji: '🏆', bg: 'linear-gradient(135deg,#FBBF24,#FE6A2F)' },
 ];
+
+/** The lesson's gamified Homework Quest (old auto-generated homework is retired). */
+function questForLessonRow(l: LessonRow) {
+  const m = l.ai_metadata;
+  if (!m?.contentFormat || m.unit_number == null || m.lesson_number == null) return null;
+  return questForLesson(`${m.contentFormat}-${m.unit_number}-${m.lesson_number}`);
+}
 
 export default function PlaygroundLibraryPage() {
   const navigate = useNavigate();
@@ -263,6 +271,7 @@ export default function PlaygroundLibraryPage() {
                     <div className="grid grid-cols-1 gap-3 border-t border-orange-100 bg-orange-50/40 p-5 sm:grid-cols-2 lg:grid-cols-3">
                       {u.lessons.map((l) => {
                         const ready = isLibraryReadyFormat(l.ai_metadata?.contentFormat);
+                        const quest = ready ? questForLessonRow(l) : null;
                         return (
                           <div
                             key={l.id}
@@ -282,7 +291,7 @@ export default function PlaygroundLibraryPage() {
                               <p className="text-sm font-bold text-neutral-800">{ready ? l.title : (l.ai_metadata?.lesson_role ?? l.title)}</p>
                               {!ready && <p className="text-xs text-neutral-500">We'll build this together.</p>}
                             </button>
-                            {ready && (
+                            {quest && (
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -290,7 +299,7 @@ export default function PlaygroundLibraryPage() {
                                 }}
                                 className="mt-1 flex items-center gap-1 rounded-full bg-orange-50 px-2.5 py-1 text-[11px] font-black text-orange-600 ring-1 ring-orange-200 transition hover:bg-orange-100"
                               >
-                                <BookOpen className="h-3 w-3" /> Homework
+                                <BookOpen className="h-3 w-3" /> Homework Quest
                               </button>
                             )}
                           </div>
@@ -305,15 +314,10 @@ export default function PlaygroundLibraryPage() {
         )}
       </main>
 
-      {homeworkPreview && homeworkPreview.ai_metadata?.contentFormat && homeworkPreview.ai_metadata?.unit_number != null && homeworkPreview.ai_metadata?.lesson_number != null && (
-        <HomeworkPreviewModal
-          lessonId={homeworkPreview.id}
-          title={homeworkPreview.title}
-          contentFormat={homeworkPreview.ai_metadata.contentFormat}
-          unitNumber={homeworkPreview.ai_metadata.unit_number}
-          lessonNumber={homeworkPreview.ai_metadata.lesson_number}
-          onClose={() => setHomeworkPreview(null)}
-        />
+      {homeworkPreview && questForLessonRow(homeworkPreview) && (
+        <div className="fixed inset-0 z-[100] overflow-y-auto">
+          <HomeworkQuest quest={questForLessonRow(homeworkPreview)!} onExit={() => setHomeworkPreview(null)} />
+        </div>
       )}
     </div>
   );
