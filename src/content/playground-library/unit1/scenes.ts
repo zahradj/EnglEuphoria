@@ -1,6 +1,8 @@
 import type { Character } from './audio';
 import type { SpinWheelSceneData } from '../SpinWheelScene';
 import type { PictureMatchSceneData } from '../PictureMatchScene';
+import type { FirstSoundSceneData } from '../FirstSoundScene';
+import type { LetterMatchSceneData, LetterBlocksSceneData } from '../LetterTilesScene';
 
 /**
  * Little Explorers Phonics — Lesson 1 "The Forest of Hellos" (H + M sounds).
@@ -19,6 +21,11 @@ export type Scene =
   | SpinWheelSceneData
   // Universal word-to-picture matching activity; see ../PictureMatchScene.tsx.
   | PictureMatchSceneData
+  // Alphabet & phonics games shared with every scene library; see
+  // ../FirstSoundScene.tsx and ../LetterTilesScene.tsx.
+  | FirstSoundSceneData
+  | LetterMatchSceneData
+  | LetterBlocksSceneData
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string }
   | {
       id: string; kind: 'cinematic'; bg: string; title: string; subtitle: string; narrator: Character;
@@ -117,6 +124,21 @@ export type Scene =
     }
   | { id: string; kind: 'feelings'; bg: string; teacher: string; options: { label: string; emoji: string; reply: string }[] }
   | { id: string; kind: 'puzzle'; bg: string; teacher: string; rounds: { who: CharKey; img: string; hint: string; emotion?: 'happy' | 'sad' | 'angry' | 'neutral' }[] }
+  | {
+      /** A REAL jigsaw puzzle — interlocking tab/blank piece shapes (not
+       *  plain squares), dragged from a scattered pile into their correct
+       *  grid slot to reassemble one whole picture. Distinct from `puzzle`
+       *  above, which is actually a "reveal squares, guess who" game with
+       *  no dragging and no puzzle-shaped pieces — added per direct user
+       *  request for "a real puzzle game... pieces should take the same
+       *  shape as puzzle pieces". Piece paths are generated procedurally
+       *  (seeded by `id` so they're stable across renders): each internal
+       *  grid edge gets one random tab/blank direction shared by both
+       *  neighboring pieces (opposite sign), so placed pieces interlock
+       *  with no gaps/overlaps. `image` should be a square asset — the
+       *  board is always rendered 1:1. */
+      id: string; kind: 'jigsaw-puzzle'; bg: string; teacher: string; image: string; rows?: number; cols?: number;
+    }
   | { id: string; kind: 'roleplay'; bg: string; teacher: string; cast: CharKey[]; script: { who: CharKey; line: string; repeat?: boolean }[] }
   | {
       id: string; kind: 'join-stage'; bg: string; teacher: string; cast: CharKey[];
@@ -2493,6 +2515,13 @@ export const LESSON_U2L1_SCENES: Scene[] = [
       { word: 'COTTON CANDY', who: 'willow', correctImg: itemCottonCandyBlue, correctLabel: 'Cotton Candy', distractors: [{ img: itemBalloonRed, label: 'Balloon' }, { img: itemPopcornYellow, label: 'Popcorn' }] },
       { word: 'POPCORN', who: 'pip', correctImg: itemPopcornYellow, correctLabel: 'Popcorn', distractors: [{ img: itemBalloonRed, label: 'Balloon' }, { img: itemCottonCandyBlue, label: 'Cotton Candy' }] },
     ],
+  },
+  {
+    // Real jigsaw finale — see the 'jigsaw-puzzle' type comment for how the
+    // interlocking piece shapes are generated. Reassembles the lesson's own
+    // hero image (the carnival scene shown at the very start), so finishing
+    // the puzzle doubles as a visual "you explored this whole place" recap.
+    id: 'u2l1-jigsaw', kind: 'jigsaw-puzzle', bg: bgU2L1CBunting, teacher: 'Drag the pieces to build the carnival picture!', image: bgU2L1CHero,
   },
   {
     id: 'u2l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the Color Carnival! Sing along together.',
