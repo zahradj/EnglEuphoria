@@ -700,9 +700,11 @@ export const LESSON_A1U9L2_OBJECTIVE =
   'Name four more things in a castle bedroom (bed, lamp, door, window) and say what is (and is not) in the room with "There is a ___" / "There is no ___." Phonics: the L /l/ and W /w/ sounds with word spells, a tongue twister and a short reading. (Reviews Lesson 1’s rooms and furniture; Lesson 3 adds where things are: in, on, under, next to, behind.)';
 
 export const LESSON_A1U9L2_SCENES: Scene[] = [
-  // Lesson 2 uses the calm cream-card look (look: 'card') on its title,
-  // story opener and finale, on request; L1 keeps the classic hopping title.
-  { id: 'mc2-title', kind: 'title-card', bg: bgTitleL2, level: 'A1', unit: 'Unit 9', lessonLabel: 'Lesson 2', title: 'Magic Castle: Castle Furniture', subtitle: 'Explore the bedroom with Cat-cat and Pip', cta: '\u{1F6CF}️ LET’S GO!', look: 'card' },
+  // Title now matches Lesson 1's classic hopping-title look, per direct
+  // follow-up ("the intro page should be like lesson one style") — the
+  // calm cream-card look stays on the story opener (mc2-intro) and
+  // finale, which weren't part of this request.
+  { id: 'mc2-title', kind: 'title-card', bg: bgTitleL2, level: 'A1', unit: 'Unit 9', lessonLabel: 'Lesson 2', title: 'Magic Castle: Castle Furniture', subtitle: 'Explore the bedroom with Cat-cat and Pip', cta: '\u{1F6CF}️ LET’S GO!' },
 
   {
     // Full warm-up review of Lesson 1 before anything new (per direct
