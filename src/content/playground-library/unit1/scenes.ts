@@ -229,7 +229,7 @@ export type Scene =
        *  Lesson 1 rebuild, where every other color activity teaches on an
        *  abstract card instead of a real scene. */
       id: string; kind: 'color-spot'; bg: string; teacher: string;
-      items: { colorWord: string; colorHex: string; who: CharKey; label: string; sentence: string; left: string; top: string; dir?: 'down' | 'left' | 'right' }[];
+      items: { colorWord: string; colorHex: string; who: CharKey; label: string; sentence: string; left: string; top: string; dir?: 'down' | 'left' | 'right'; splashImg?: string }[];
     }
   | {
       /** Shape counterpart to color-model — same tap/hold/repeat progression
@@ -447,7 +447,8 @@ export const LESSON_1_SCENES: Scene[] = [
   { id: 'title-1', kind: 'title-card', bg: bgTitleForest, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 1', title: 'The Forest of Hellos', subtitle: 'Greetings & the /h/ and /m/ sounds' },
   {
     id: 'l1-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: "Warm up with Pip! Sing along and wave on every 'hello'.",
-    durationSeconds: 24, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3`,
+    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
+    lineDurationsMs: [5200, 4300, 4500, 6100],
     songPrompt: 'Cheerful upbeat kids hello song, sweet real singing with a warm teacher voice and small kids choir, ukulele plus light claps, bright and welcoming.',
     lyrics: [
       { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
@@ -636,13 +637,14 @@ export const LESSON_1_SCENES: Scene[] = [
   { id: 'l1-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Drag the letters into ABC order!', sequences: ['ABCD', 'EFGH', 'HIJK'] },
   {
     id: 'l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: "Everyone waves goodbye! Sing together and wave on every 'goodbye'.",
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-u1l1.mp3`,
+    lineDurationsMs: [3560, 3840, 5340, 7322],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
-      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
-      { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
-      { who: 'bella', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, forest friends', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F333} We said hello and waved again', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F590}️ Wave your hand, it\'s time to go', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F496} Byeeee, friends! See you soon!', emotion: 'happy' },
     ],
   },
   { id: 'finale', kind: 'finale', bg: bgBigTree, who: 'pip', line: 'You did it! You made three new friends! Hello, hello, hello!' },
@@ -870,13 +872,14 @@ export const LESSON_2_SCENES: Scene[] = [
   { id: 'l2-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Drag the letters into ABC order!', sequences: ['EFGH', 'IJKL', 'MNOP'] },
   {
     id: 'l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to Willow and all the friends! Sing along together.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-u1l2.mp3`,
+    lineDurationsMs: [3200, 4820, 3720, 8322],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
-      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
-      { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
-      { who: 'bella', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, carnival fun', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F3AA} My name is Pip, what\'s your name?', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F39F}️ We said our names, now wave goodbye', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F496} Byeeee, friends! See you soon!', emotion: 'happy' },
     ],
   },
   { id: 'l2-finale', kind: 'finale', bg: bgWillowMeadow, who: 'willow', line: 'You did it! You met Willow! What is your name? My name is Willow!' },
@@ -1176,13 +1179,14 @@ export const LESSON_3_SCENES: Scene[] = [
   { id: 'l3-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Put the letters in ABC order!', sequences: ['KLMN', 'MNOP', 'PQRS'] },
   {
     id: 'l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to your feelings friends! Sing along together.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-u1l3.mp3`,
+    lineDurationsMs: [4340, 3580, 4860, 7282],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
-      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
-      { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
-      { who: 'bella', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, how are you?', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F60A} Happy, sad and angry too', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F49B} Every feeling is okay', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F496} Byeeee, friends! See you soon!', emotion: 'happy' },
     ],
   },
   { id: 'l3-finale', kind: 'finale', bg: bgMeadow, who: 'leo', line: 'You did it! You met Leo and shared your feelings! How are you? I am happy!' },
@@ -1388,13 +1392,14 @@ export const LESSON_4_SCENES: Scene[] = [
   { id: 'l4-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Drag the letters into ABC order!', sequences: ['OPQR', 'STUV', 'WXYZ'] },
   {
     id: 'l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Everyone waves goodbye! Sing together and wave on every goodbye.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-u1l4.mp3`,
+    lineDurationsMs: [4360, 3700, 4120, 7882],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
-      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
-      { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
-      { who: 'bella', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, birthday friends', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F382} Happy birthday, Bella, hooray', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F388} How old are you? Let\'s count and cheer', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F496} Byeeee, friends! See you soon!', emotion: 'happy' },
     ],
   },
   { id: 'l4-finale', kind: 'finale', bg: bgL4BellaBirthdayCake, who: 'bella', line: 'You did it! You know my age! Goodbye, friend! See you next lesson!' },
@@ -1681,13 +1686,14 @@ export const LESSON_5_SCENES: Scene[] = [
   },
   {
     id: 'l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-u1l5.mp3`,
+    lineDurationsMs: [3320, 4760, 3700, 8282],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
-      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
-      { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
-      { who: 'bella', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, shiny star', emotion: 'happy' },
+      { who: 'pip', text: '\u{2B50} Leo found it under the tree', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F333} Wave to the star, wave to me', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F496} Byeeee, friends! See you soon!', emotion: 'happy' },
     ],
   },
   { id: 'l5-finale', kind: 'finale', bg: bgL5FoundTree, who: 'leo', line: 'Thank you for helping me find my star — and you read HAT, MAT, and BAT all by yourself! Tonight, find a hat at home and read it out loud!' },
@@ -1988,13 +1994,14 @@ export const LESSON_6_SCENES: Scene[] = [
   },
   {
     id: 'l6-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F3C6} Trophy Goodbye Song \u{1F3C6}', teacher: 'Wave goodbye and celebrate! Sing along together.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-u1l6.mp3`,
+    lineDurationsMs: [3670, 3590, 6140, 6662],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
-      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
-      { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
-      { who: 'bella', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, we won today', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F3C6} Trophy time, hip hip hooray', emotion: 'happy' },
+      { who: 'mia', text: '\u{2B50} You learned so much, you\'re a star', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F496} Byeeee, friends! See you soon!', emotion: 'happy' },
     ],
   },
   { id: 'l6-finale', kind: 'finale', bg: bgL6TrophyPodium, who: 'pip', line: 'You did it! You earned the Unit 1 Trophy! Hello, names, feelings, and all 8 letter sounds — you know it all! \u{1F3C6} Tonight, say hello to your family, tell them your age, and show them how you feel!' },
@@ -2005,407 +2012,347 @@ export const LESSON_6_SCENES: Scene[] = [
  * Same cast/world as Unit 1 (no new characters or background art exist for
  * a distinct Unit 2 world yet) — see the playground-library-lesson-builder
  * skill, section 6, for why this stays in unit1/scenes.ts despite the DB's
- * unit_number being 2.
+ * unit_number being 2. Curriculum blueprint objective for this exact slot
+ * (curriculum_lessons id f05e22f7-...): identify and name red/blue/yellow —
+ * no letter-sound target, purely "what color is this, and can you say it
+ * back." Cast-color mapping (Bella=red, Willow=blue, Pip=yellow) kept
+ * unchanged from every earlier version of this lesson, since Lesson 2
+ * ("Green, Orange, Purple!") deliberately avoided reusing these three
+ * colors for its own new cast assignments — changing it here would
+ * contradict that already-shipped lesson.
  *
- * An earlier version of this lesson taught the /r/ and /y/ LETTER SOUNDS
- * (using "Red"/"Yellow" only as example words), reasoning that Unit 2
- * should continue Unit 1's alphabet-sound progression. The actual
- * curriculum blueprint's stated objective for this slot is color-vocabulary
- * acquisition ("Identify and name basic colors"), not phonics — rebuilt to
- * match that: this lesson has no letter-sound target at all, it's purely
- * "what color is this, and can you say it back."
+ * ===================== FULL REBUILD: "The Color Carnival" =================
+ * Per direct request: full rebuild, not a patch, with a fresh theme and a
+ * fresh game mix — the lesson was already solid (themed, gamified, built
+ * through several earlier feedback rounds) but the user explicitly wanted
+ * a different take, not a touch-up. Re-ran the quality checklist from
+ * scratch rather than carrying the old build's choices forward:
  *
- * New scene kinds added for this: 'color-model' / 'color-sort' — built as
- * their own components (not reused from the sound-model/basket/sound-sort
- * phonics kinds) because those hard-depend on playLetterPhonic()'s
- * per-letter audio lookup and a single-glyph-sized display box, neither of
- * which fits a color word. These use safeSpeak() for audio and an actual
- * colored swatch (scene.colorHex) for the visual, so "red" genuinely
- * renders as red rather than an arbitrary character theme color standing
- * in for it.
- *
- * Deliberately kept separate from any phonics scene, and structured as a
- * real PPP arc rather than a pile of similar drills:
- *   1. 'cinematic' story hook (u2l1-intro)
- *   2. 'color-model' — ALL 3 target words illustrated together in one row
- *      (not scattered), tap to hear, hold to repeat (u2l1-vocab-colors)
- *   3. 'color-sort' — the practice/production stage: drag-and-drop match
- *      each object to its color (u2l1-sort-colors)
- * Everything after that (color-friends, word-build, memory, dash, etc.) is
- * recycling/consolidation, not a second presentation of the same words —
- * an earlier draft had 3 separate model scenes + 3 echo scenes + 2 basket
- * scenes doing largely the same job; consolidated to avoid exactly that
- * "scattered activities with no clear objective" failure mode.
- *
- * Expanded for more practice reps (17 scenes total, ~30 min): added a new
- * 'color-quiz' kind (tap-select multiple choice — a genuinely different
- * interaction from color-sort's drag, not just a repaint of it), a second
- * harder color-sort round whose instruction explicitly calls out each
- * color word's own initial sound (/r/ed, /b/lue, /y/ellow) as a retrieval
- * cue, a second dash round targeting a different color, and grew memory
- * from 4 to 6 pairs — all recycling the same 3-color/6-item vocabulary
- * set through different mechanics rather than introducing new content.
- *
- * 'color-model' (u2l1-vocab-colors) is a 3-stage presentation per item, not
- * a single tap-and-done card: color word -> hold&repeat -> the OBJECT word
- * is revealed on its own (Apple/Water/Sun get introduced as vocabulary in
- * their own right, not just glued onto the color) -> hold&repeat -> the two
- * combine into one full sentence ("The apple is red.") -> hold&repeat. This
- * mirrors the intended teaching order: color, then object, then the
- * sentence that joins them — never the sentence first.
- *
- * 'color-friends' (u2l1-color-friends) now supports a `vocabItems` mode
- * (hand-coded SVG line-art via VocabOutline, no new image assets) that
- * colors the VOCABULARY OBJECTS themselves (apple/water/sun) rather than a
- * character — reinforcing "the apple is red" instead of "Bella is red."
- *
- * 'listen-repeat-cards' (u2l1-who, replacing the old 'who-said-it' scene)
- * presents one character+sentence+object-image card at a time with
- * approximate karaoke-style word highlighting timed to safeSpeak() (no true
- * word-boundary TTS API available, so timing is estimated from sentence
- * length) instead of a flat character-only quote list.
+ * - Theme: a traveling fairground ("the Color Carnival") the three friends
+ *   are visiting — Bella at a red balloon stand, Willow at a blue cotton
+ *   candy cart, Pip at a yellow popcorn stand/ring-toss booth. Distinct
+ *   from the old "Rainbow Meadow" setting while keeping the same cast,
+ *   colors, and sentence patterns — a fresh backdrop for the same, already
+ *   curriculum-correct target language, not a reason to touch the
+ *   objective. Carnival games (ring toss, balloon dart, duck pond) double
+ *   as natural framing for the lesson's own practice activities instead of
+ *   needing invented justifications.
+ * - Activity-pattern-library's Hard Variety Rule (no kind 3x in a row) is
+ *   now respected by construction, not patched after the fact: the three
+ *   'dash' rounds (one per color) are separated by color-quiz/color-friends
+ *   instead of running back to back, and the three 'roleplay' scenes (one
+ *   per color, each needing its own single-object background per the
+ *   pre-reading-image rule below) are interleaved one per phonics triplet
+ *   (sound-model -> trace -> roleplay for R, then Y, then B) instead of
+ *   grouped at the end. 'color-sort' / 'color-quiz' / 'color-friends' /
+ *   'word-build' / 'color-simon' never sit adjacent to their own kind
+ *   either.
+ * - One genuinely new mechanic for this lesson: 'sound-pop' ("Balloon Letter
+ *   Pop!", already built for other unit1 lessons' phonics review but never
+ *   used here) reinforces R/Y/B by literally popping the right balloon —
+ *   a real carnival game mechanic, not a reskinned existing one.
+ * - Pre-reading rule (every image IS the message, not a supporting visual
+ *   next to text to fall back on) still applies throughout: each roleplay
+ *   scene and each flipbook page gets its own single-object stand image
+ *   (red balloon stand / blue cotton candy stand / yellow popcorn stand),
+ *   never a shared busy image asked to carry two different sentences.
+ * - Sentence pattern family unchanged: "It's ___," "I like ___," "I don't
+ *   like ___" (negative form modeled once, on blue, exactly as before) —
+ *   this was already the correct, simplified pattern; no reason to change
+ *   working language just because the art changed.
+ * - color-friends reuses the existing hand-coded VocabOutline silhouettes
+ *   ('apple'/'sun'/'water' — generic paintable shapes, not literally
+ *   fruit/sun/water-specific) rather than adding new SVG shapes, the same
+ *   way Lesson 2 already reused them for leaf/orange/grapes — no new code
+ *   needed for a different vocabulary set.
+ * - All 11 new images generated fresh (3 single-character stand scenes, 1
+ *   hero group scene, 1 plain bunting backdrop for game-mechanic scenes, 1
+ *   prize-ticket booth for phonics, 1 dash arcade arena, 4 vocabulary
+ *   icons), each explicitly demanding full-bleed/anti-frame/anti-sticker
+ *   formatting up front — the exact failure mode the old build's art had
+ *   to be regenerated for after the fact.
+ * - Follow-up fixes after initial build, per direct user feedback: (1) every
+ *   generated vocab/prize icon exported with a transparent background (via
+ *   Canva's remove-background + transparent_background export), never white
+ *   — the balloon/ring/cotton-candy/popcorn icons and the color-spot reveal
+ *   card's paint-splash icon (color-spot's optional `splashImg` field,
+ *   SceneRenderer.tsx) all follow this; (2) no emoji or 3D renders for
+ *   vocabulary items — Ribbon/Ball/Bear/Duck, previously emoji-only anchors,
+ *   got real flat-2D generated images; (3) the three color-targeted 'dash'
+ *   scenes (red/blue/yellow) now each use their own dash-arena background
+ *   variant with the Balloon Dart stall recolored to match that round's
+ *   target color, instead of all three sharing one rainbow-balloon
+ *   background — sound-pop (letter-targeted, not color-targeted) keeps the
+ *   original rainbow variant, which is correct there.
+ * - Research step (activity-pattern-library's Required Research Step, now
+ *   also a standing project rule for this and future lessons): checked
+ *   real ESL sources before/alongside this design. Cambridge-aligned young-
+ *   learner color-teaching resources (teach-this.com/vocabulary/colours,
+ *   games4esl.com) independently confirm this lesson's flashcard ->
+ *   sort -> "I Spy" progression as standard practice, not an invented
+ *   sequence. Oxford Reading Tree's own phonics title "At the Carnival"
+ *   (Floppy's Phonics, Level 1) independently pairs a carnival setting with
+ *   environmental/letter-sound teaching — the same carnival+phonics pairing
+ *   this lesson already uses for its R/Y/B sound-model scenes.
  * ========================================================================= */
 
-/* =========================== Full rebuild (per direct request) ===========
- * Kept the existing objective, cast-color mapping (Bella=red, Willow=blue,
- * Pip=yellow), and the already-solid model->practice->consolidate arc
- * documented above — those were sound. What changed:
- *
- * 1. New hero art, bg-u2l1-color-parade.png: Bella holding a real red
- *    apple, Willow beside a real splash of blue water, and Pip next to a
- *    real yellow sunflower, all three together — generated by editing the
- *    actual bella-happy/willow-hello/pip-happy sprites (never text-to-image
- *    a character from scratch), so it's a genuine group "hero shot" of this
- *    lesson's exact premise instead of a pretty-but-empty flower field.
- *    Used for title, intro, and finale (a real callback, not a re-use of
- *    convenience) and for listen-repeat-cards, replacing bg-hideseek.jpg —
- *    a forest-clearing image with zero connection to a colors lesson,
- *    reused there only because it already existed. The new art actually
- *    shows the three sentences ("the apple is red," "the water is blue,"
- *    "the sunflower is yellow") being narrated.
- * 2. New scene kind 'color-spot' (u2l1-color-spot, SceneRenderer.tsx) —
- *    every other activity here teaches a color on an abstract card/icon;
- *    this is the one place a learner finds the color by tapping the real
- *    illustrated object inside a full scene. Ported from Welcome Town's
- *    vocab-spot arrow-and-flashcard pattern (same arrow SVG, same
- *    tap-to-reveal flashcard), swapped to color vocabulary. The sunflower
- *    is labeled "Sunflower," not "Sun" — the hero art draws a sunflower,
- *    not a sun disc, and a hotspot should describe what's actually drawn.
- * 3. New 'flipbook' storybook (u2l1-storybook) — "A Colorful Day," 4 pages
- *    + 2 checkpoints. This lesson had no narrative throughline at all
- *    before; every other unit1 lesson with a flipbook uses it as the
- *    lesson's own recap.
- * 4. Trimmed for pacing: dropped the near-duplicate second color-sort round
- *    and second dash round (folded the first's phonics retrieval cue —
- *    /r/ed, /b/lue, /y/ellow — into the single remaining sort round instead
- *    of a whole extra scene), and dropped 'puzzle' (guess-the-friend),
- *    which tests character recognition, not colors — off-objective filler.
- *    Net: 16 scenes instead of 17, with two genuinely new activity types in
- *    place of three that were repeating an already-covered mechanic.
- * 5. Corrected per direct feedback — Pre-A1 learners can't read, so an
- *    image is the ENTIRE message, not a supporting visual next to text
- *    they can fall back on reading. Two places broke this:
- *      a) The roleplay was one scene reusing bg-u2l1-pip-bella-apple-
- *         water.png for BOTH the "red apple" lines AND the "blue water"
- *         lines — the image never changed even though the dialogue moved
- *         from one object to a different one. Split into
- *         u2l1-roleplay-apple and u2l1-roleplay-water, the second using a
- *         new bg-u2l1-water-only.png (just Pip and Bella at a stream, no
- *         apple/tree in frame) so the background actually follows the
- *         vocabulary being said.
- *      b) The flipbook's water and sunflower pages first reused the busy
- *         multi-color hero art (apple AND water AND sunflower all visible
- *         at once) for sentences that each name only ONE of those things —
- *         a non-reading child has no way to know which object the sentence
- *         means. Fixed with two new dedicated single-object images:
- *         bg-u2l1-water-only.png and bg-u2l1-sunflower-group.png (all
- *         three friends gathered around one sunflower, nothing else in
- *         frame). The hero art stays reserved for the one page that's
- *         genuinely about all three colors together — the capstone.
- * 6. Added the phonics teaching this lesson was missing — word-build and
- *    color-sort already used R/B/Y as retrieval cues, but nothing ever
- *    TAUGHT the letter sound first, unlike every other unit1 lesson's
- *    sound-model+trace pair. All three colors now get one: R (Bella,
- *    u2l1-model-r/trace-r), Y (Pip, u2l1-model-y/trace-y), and B (Willow,
- *    u2l1-model-b/trace-b — added after direct feedback that B had been
- *    skipped, reasoning it was "already taught in Lesson 4"; that's true,
- *    but this lesson's own color-sort cue still needed its own model
- *    moment, not just a bare retrieval hint). Each is anchored to real
- *    words beyond just the color itself (Rose, Rabbit / Yo-yo, Yarn / Ball,
- *    Balloon). Same sound-model/trace system as every other lesson, on its
- *    own well-generated garden backdrop (bg-u2l1-sound-garden.png) rather
- *    than reusing a mismatched cave theme or the plain meadow.
- * 7. Sentences simplified per direct feedback to a fixed pattern family —
- *    "It's ___," "I like ___," "I don't like ___" — in the roleplay
- *    (u2l1-roleplay-apple/water), replacing longer object-specific frames
- *    ("Look! A red apple!"). The lesson's other vocabulary-naming
- *    activities (color-spot, listen-repeat-cards, the flipbook) keep
- *    fuller sentences since naming the object IS their point — only the
- *    roleplay's spoken/repeated dialogue was simplified.
- * 8. Fixed ColorSortScene, SoundSortScene, and BasketScene (all share the
- *    same drag-and-collect mechanic): a successfully-matched item used to
- *    render as a checkmark floating at its original scatter position,
- *    never actually inside the target it was dropped into — and on
- *    wide/short viewports, scattered items could clip past the screen
- *    edges or crowd the target row above them, since their size and row
- *    positions were fixed pixels/percentages tuned for a taller aspect
- *    ratio. Collected items now render as children of their target
- *    (basket/circle) instead of a separately-measured floating div, and
- *    scattered item sizes are viewport-height-relative (clamp) instead of
- *    fixed. SoundModelScene's floating anchor props got the same
- *    treatment — they could overlap each other or clip off-screen on wide
- *    viewports; repositioned to two clearly-separated columns with
- *    clamp-based sizing.
- * 9. Replaced 'feelings' (a generic SEL check-in with no tie to this
- *    lesson's own objective) with u2l1-join-stage — free production of
- *    "It's ___ / I like ___ / I don't like ___" with no modeled line right
- *    before it, per direct feedback to swap in whatever activities best
- *    serve the objective rather than defaulting to the same SEL template
- *    every lesson uses regardless of topic.
- * 10. Two more roleplay fixes per direct feedback: (a) only the second line
- *     of each apple/water exchange had repeat:true, so the student only
- *     ever practiced "I like ___" out loud, never "It's ___" — now every
- *     line in all three roleplay scenes gets its own repeat turn; (b) red
- *     and blue had roleplay scenes but yellow didn't — added
- *     u2l1-roleplay-yellow (Pip + Bella, "It's yellow! / I like yellow!")
- *     on the dedicated sunflower art, closing the gap.
- * 11. Replaced 'memory' and the single RED-only 'dash' round (per direct
- *     feedback to change both) with three dash rounds — u2l1-dash-red/
- *     blue/yellow — covering all three colors with the same proven
- *     timed-tap mechanic. 'memory' tested recall of object names, not
- *     really the colors; the old single dash round gave RED a real
- *     challenge and left BLUE/YELLOW with none.
- * 12. All three dash rounds moved off bg-clearing.jpg (a generic autumn
- *     forest with no connection to colors, reused only because it already
- *     existed for other lessons' dash scenes) onto a new dedicated
- *     bg-u2l1-dash-arena.png — a winding path lined with red/blue/yellow
- *     flowers under a rainbow, actually themed to what this lesson is
- *     about. (First generation rendered as a framed canvas hanging on a
- *     wall instead of full-bleed scenery — regenerated with explicit
- *     anti-frame instructions.)
- * 13. Added u2l1-sentence-practice (listen-repeat-cards) per direct
- *     feedback for another activity building full sentences — models all
- *     six patterns ("It's red/blue/yellow," "I like red/blue/yellow") as a
- *     listen-and-repeat drill, positioned right before u2l1-join-stage so
- *     the student hears every sentence modeled at least once before
- *     being asked to produce them from memory with no model.
- * ========================================================================= */
-
-const itemRose = `${A}/items/item-rose.png`;
 const itemYarn = `${A}/items/item-yarn.png`;
 const itemYoyo = `${A}/items/item-yoyo.png`;
+// Kept (not part of the Lesson 1 rebuild below) — Lessons 4 and 6 still
+// reuse this original art for their own later color-review/recap scenes.
+const itemRose = `${A}/items/item-rose.png`;
 const bgU2L1ColorParade = `${A}/scenes/bg-u2l1-color-parade.png`;
 const bgU2L1WaterOnly = `${A}/scenes/bg-u2l1-water-only.png`;
 const bgU2L1SunflowerGroup = `${A}/scenes/bg-u2l1-sunflower-group.png`;
-const bgU2L1SoundGarden = `${A}/scenes/bg-u2l1-sound-garden.png`;
 const bgU2L1DashArena = `${A}/scenes/bg-u2l1-dash-arena.png`;
+const itemBalloonRed = `${A}/items/item-balloon-red.png`;
+const itemCottonCandyBlue = `${A}/items/item-cottoncandy-blue.png`;
+const itemPopcornYellow = `${A}/items/item-popcorn-yellow.png`;
+const itemRing = `${A}/items/item-ring.png`;
+const bgU2L1CHero = `${A}/scenes/bg-u2l1c-hero.png`;
+const bgU2L1CBunting = `${A}/scenes/bg-u2l1c-bunting.png`;
+const bgU2L1CTickets = `${A}/scenes/bg-u2l1c-tickets.png`;
+const bgU2L1CRedBalloonStand = `${A}/scenes/bg-u2l1c-red-balloon-stand.png`;
+const bgU2L1CBlueCottonCandyStand = `${A}/scenes/bg-u2l1c-blue-cottoncandy-stand.png`;
+const bgU2L1CYellowPopcornStand = `${A}/scenes/bg-u2l1c-yellow-popcorn-stand.png`;
+const bgU2L1CDashArena = `${A}/scenes/bg-u2l1c-dash-arena.png`;
+// Color-matched dash-arena variants — same stalls/layout, but the Balloon
+// Dart stall's balloons are recolored to the color being practiced in that
+// round, instead of the shared background's neutral rainbow mix. The
+// rainbow original stays in use for sound-pop, which is letter- not
+// color-targeted ("Balloon Letter Pop!"), so a mixed palette is correct there.
+const bgU2L1CDashArenaRed = `${A}/scenes/bg-u2l1c-dash-arena-red.png`;
+const bgU2L1CDashArenaBlue = `${A}/scenes/bg-u2l1c-dash-arena-blue.png`;
+const bgU2L1CDashArenaYellow = `${A}/scenes/bg-u2l1c-dash-arena-yellow.png`;
+// Color-specific paint-splash icons (transparent bg) — replace the generic
+// 🎨 emoji in ColorSpotScene's reveal card, one per taught color.
+const iconSplashRed = `${A}/items/item-splash-red.png`;
+const iconSplashBlue = `${A}/items/item-splash-blue.png`;
+const iconSplashYellow = `${A}/items/item-splash-yellow.png`;
+// Real flat-2D images (transparent bg, NOT emoji, NOT 3D/photo) replacing
+// the last emoji-only vocabulary items in this lesson's R/B anchors and sort/dash games.
+const itemRibbonBlue = `${A}/items/item-ribbon-blue.png`;
+const itemDuckYellow = `${A}/items/item-duck-yellow.png`;
+const itemBall = `${A}/items/item-ball.png`;
+const itemBear = `${A}/items/item-bear.png`;
 
 export const LESSON_U2L1_TITLE = 'Red, Blue, Yellow!';
-export const LESSON_U2L1_OBJECTIVE = 'Identify and name the colors red, blue, and yellow, use them in simple sentences ("It\'s red," "I like blue," "I don\'t like yellow"), and recognize the R and Y letter sounds.';
+export const LESSON_U2L1_OBJECTIVE = 'Identify and name the colors red, blue, and yellow, use them in simple sentences ("It\'s red," "I like blue," "I don\'t like yellow"), and recognize the R, Y, and B letter sounds.';
 
 export const LESSON_U2L1_SCENES: Scene[] = [
-  { id: 'u2l1-title', kind: 'title-card', bg: bgU2L1ColorParade, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 1', title: 'Red, Blue, Yellow!', subtitle: 'Learn to name the colors all around us' },
+  { id: 'u2l1-title', kind: 'title-card', bg: bgU2L1CHero, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 1', title: 'Red, Blue, Yellow!', subtitle: 'Welcome to the Color Carnival!' },
   {
-    id: 'u2l1-intro', kind: 'cinematic', bg: bgU2L1ColorParade, title: 'Red, Blue, Yellow!', subtitle: 'A meadow full of colors', narrator: 'pip', hidePipOverlay: true,
+    id: 'u2l1-intro', kind: 'cinematic', bg: bgU2L1CHero, title: 'Red, Blue, Yellow!', subtitle: 'A carnival full of colors', narrator: 'pip', hidePipOverlay: true,
     script: [
-      { who: 'pip', line: 'Look at all the colors today!' },
-      { who: 'pip', line: 'Bella has a red apple, Willow found blue water, and I found a yellow sunflower!' },
+      { who: 'pip', line: 'Welcome to the Color Carnival!' },
+      { who: 'pip', line: 'Look! Bella has a red balloon, Willow has blue cotton candy, and I have yellow popcorn!' },
     ],
-    cta: "Let's look!",
+    cta: "Let's play!",
   },
   {
-    id: 'u2l1-vocab-colors', kind: 'color-model', bg: bgMeadow,
+    id: 'u2l1-vocab-colors', kind: 'color-model', bg: bgU2L1CBunting,
     teacher: 'Look! Tap a color to hear it, say it back, learn the word, then say the sentence!',
     items: [
-      { colorWord: 'RED', colorHex: '#E63946', who: 'bella', exampleWord: 'Apple', exampleImg: itemApple },
-      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', exampleWord: 'Water', exampleImg: itemWater },
-      { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip', exampleWord: 'Sun', exampleImg: itemSun },
+      { colorWord: 'RED', colorHex: '#E63946', who: 'bella', exampleWord: 'Balloon', exampleImg: itemBalloonRed },
+      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', exampleWord: 'Cotton Candy', exampleImg: itemCottonCandyBlue },
+      { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip', exampleWord: 'Popcorn', exampleImg: itemPopcornYellow },
     ],
   },
   {
-    // New: every other activity in this lesson teaches a color on an
-    // abstract card/icon — this is the one place a learner finds the color
-    // by tapping the real illustrated object inside a full scene (Welcome
-    // Town's vocab-spot pattern, ported here for colors). "Sunflower," not
-    // "Sun" — the hero art draws a sunflower, and a hotspot should describe
-    // what's actually drawn.
-    id: 'u2l1-color-spot', kind: 'color-spot', bg: bgU2L1ColorParade,
+    // Every other activity in this lesson teaches a color on an abstract
+    // card/icon — this is the one place a learner finds the color by
+    // tapping the real illustrated stand inside the carnival hero scene.
+    // Coordinates measured on bg-u2l1c-hero.png's own stall positions.
+    id: 'u2l1-color-spot', kind: 'color-spot', bg: bgU2L1CHero,
     teacher: 'Find the colors! Tap the arrow to learn each one.',
     items: [
-      { colorWord: 'RED', colorHex: '#E63946', who: 'bella', label: 'Apple', sentence: 'The apple is red!', left: '22%', top: '63%' },
-      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', label: 'Water', sentence: 'The water is blue!', left: '47%', top: '80%' },
-      { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip', label: 'Sunflower', sentence: 'The sunflower is yellow!', left: '81%', top: '27%' },
+      { colorWord: 'RED', colorHex: '#E63946', who: 'bella', label: 'Balloon', sentence: 'The balloon is red!', left: '13%', top: '20%', splashImg: iconSplashRed },
+      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', label: 'Cotton Candy', sentence: 'The cotton candy is blue!', left: '55%', top: '38%', splashImg: iconSplashBlue },
+      { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip', label: 'Popcorn', sentence: 'The popcorn is yellow!', left: '88%', top: '45%', splashImg: iconSplashYellow },
     ],
   },
   {
-    // New: researched what actually works for this exact age/skill combo
-    // (color recognition, Pre-A1) rather than only reusing this project's
-    // own existing mechanics — "I Spy" is one of the most established
-    // color games for this age group precisely because it requires
-    // picking the right answer out of several visible at once, which
-    // color-spot's one-at-a-time reveal never asks for. Reuses the same
-    // hero image and verified coordinates as color-spot, just shows all
-    // three at once instead of one after another.
-    id: 'u2l1-color-spy', kind: 'color-spy', bg: bgU2L1ColorParade, teacher: 'I Spy! Find the color I say.', who: 'pip',
+    // "I Spy" — one of the most established color games for this exact
+    // age/skill combo, since it requires picking the right answer out of
+    // several visible at once, which color-spot's one-at-a-time reveal
+    // never asks for. Same hero image and coordinates as color-spot.
+    id: 'u2l1-color-spy', kind: 'color-spy', bg: bgU2L1CHero, teacher: 'I Spy! Find the color I say.', who: 'pip',
     spots: [
-      { colorWord: 'RED', colorHex: '#E63946', label: 'Apple', left: '22%', top: '63%' },
-      { colorWord: 'BLUE', colorHex: '#3B82F6', label: 'Water', left: '47%', top: '80%' },
-      { colorWord: 'YELLOW', colorHex: '#FBBF24', label: 'Sunflower', left: '81%', top: '27%' },
+      { colorWord: 'RED', colorHex: '#E63946', label: 'Balloon', left: '13%', top: '20%' },
+      { colorWord: 'BLUE', colorHex: '#3B82F6', label: 'Cotton Candy', left: '55%', top: '38%' },
+      { colorWord: 'YELLOW', colorHex: '#FBBF24', label: 'Popcorn', left: '88%', top: '45%' },
     ],
     clueOrder: ['BLUE', 'YELLOW', 'RED'],
   },
   {
-    // New: this lesson used R/B/Y only as retrieval cues (word-build's
-    // missing-letter game, color-sort's "listen for the sound" hint) —
-    // nothing ever actually TAUGHT the letter sound first, unlike every
-    // other unit1 lesson's sound-model+trace pair. B was already taught in
-    // Lesson 4 (Bag/Ball/Bye); R and Y are the two genuinely new letters
-    // this slot introduces, each anchored to the color word itself plus
-    // two more real words so the letter isn't only ever seen glued to
-    // "red"/"yellow". Same 'sound-model'/'trace' system as every other
-    // unit1 lesson, just given its own well-generated garden backdrop
-    // (bg-u2l1-sound-garden.png) instead of a mismatched cave.
-    id: 'u2l1-model-r', kind: 'sound-model', bg: bgU2L1SoundGarden, who: 'bella', letter: 'R', phoneme: '/r/', sound: 'rrr', teacher: 'Bella models the /r/ sound! Listen first: /r/ /r/ Red. /r/ /r/ Rose.',
+    // R, Y, B each get their own sound-model+trace pair, same as every
+    // other unit1 lesson, anchored to real carnival words beyond just the
+    // color itself — Ring (ring-toss) and Ribbon (prize ribbon) for R,
+    // matching this lesson's own carnival setting instead of generic
+    // filler words. Own prize-ticket-booth backdrop (bg-u2l1c-tickets.png).
+    id: 'u2l1-model-r', kind: 'sound-model', bg: bgU2L1CTickets, who: 'bella', letter: 'R', phoneme: '/r/', sound: 'rrr', teacher: 'Bella models the /r/ sound! Listen first: /r/ /r/ Red. /r/ /r/ Ring.',
     anchors: [
-      { word: 'Red', emoji: '\u{1F534}', img: itemApple },
-      { word: 'Rose', emoji: '\u{1F339}', img: itemRose },
-      { word: 'Rabbit', emoji: '\u{1F430}' },
+      { word: 'Red', emoji: '\u{1F534}', img: itemBalloonRed },
+      { word: 'Ring', emoji: '\u{1F3AF}', img: itemRing },
+      { word: 'Ribbon', emoji: '\u{1F380}', img: itemRibbonBlue },
     ],
   },
-  { id: 'u2l1-trace-r', kind: 'trace', bg: bgU2L1SoundGarden, who: 'bella', letter: 'R', phoneme: '/r/', word: 'Red', teacher: 'Trace the ready R. /r/ /r/ Red!' },
+  { id: 'u2l1-trace-r', kind: 'trace', bg: bgU2L1CTickets, who: 'bella', letter: 'R', phoneme: '/r/', word: 'Red', teacher: 'Trace the ready R. /r/ /r/ Red!' },
   {
-    id: 'u2l1-model-y', kind: 'sound-model', bg: bgU2L1SoundGarden, who: 'pip', letter: 'Y', phoneme: '/y/', sound: 'yuh', teacher: 'Pip models the /y/ sound! Listen first: /y/ /y/ Yellow. /y/ /y/ Yo-yo.',
+    // Interleaved right after R's model+trace (not grouped with the other
+    // two roleplay scenes at the end) so the Hard Variety Rule's "no kind
+    // 3x in a row" holds without merging three scenes that each need a
+    // different single-object background into one.
+    id: 'u2l1-roleplay-red', kind: 'roleplay', bg: bgU2L1CRedBalloonStand, teacher: 'Story time! Listen to Bella and Pip, then repeat.', cast: ['bella', 'pip'],
+    script: [
+      { who: 'bella', line: "It's red!", repeat: true },
+      { who: 'pip', line: 'I like red!', repeat: true },
+    ],
+  },
+  {
+    id: 'u2l1-model-y', kind: 'sound-model', bg: bgU2L1CTickets, who: 'pip', letter: 'Y', phoneme: '/y/', sound: 'yuh', teacher: 'Pip models the /y/ sound! Listen first: /y/ /y/ Yellow. /y/ /y/ Yo-yo.',
     anchors: [
-      { word: 'Yellow', emoji: '\u{1F7E1}', img: itemSun },
-      // Yo-yo and Yarn had no `img` (emoji-only, which the Scene type
-      // allows) — but SoundModelScene's opened-state always rendered
-      // `<img src={a.img}>` with no fallback to `a.emoji`, so tapping either
-      // showed a broken-image icon (looked exactly like a missing asset).
-      // Fixed the renderer to fall back to the emoji when `img` is absent
-      // (SceneRenderer.tsx); gave these two a real generated icon anyway,
-      // matching every other anchor in this lesson.
+      { word: 'Yellow', emoji: '\u{1F7E1}', img: itemPopcornYellow },
       { word: 'Yo-yo', emoji: '\u{1FA80}', img: itemYoyo },
       { word: 'Yarn', emoji: '\u{1F9F6}', img: itemYarn },
     ],
   },
-  { id: 'u2l1-trace-y', kind: 'trace', bg: bgU2L1SoundGarden, who: 'pip', letter: 'Y', phoneme: '/y/', word: 'Yellow', teacher: 'Trace the young Y. /y/ /y/ Yellow!' },
+  { id: 'u2l1-trace-y', kind: 'trace', bg: bgU2L1CTickets, who: 'pip', letter: 'Y', phoneme: '/y/', word: 'Yellow', teacher: 'Trace the young Y. /y/ /y/ Yellow!' },
   {
-    // B per direct feedback — R and Y got their own model+trace pair but B
-    // (already introduced in Lesson 4 with Bag/Ball/Bye) didn't get one
-    // here at all, leaving color-sort's "/b/lue" cue with nothing that
-    // actually modeled the sound in THIS lesson. Willow models it, since
-    // blue is her color.
-    id: 'u2l1-model-b', kind: 'sound-model', bg: bgU2L1SoundGarden, who: 'willow', letter: 'B', phoneme: '/b/', sound: 'buh', teacher: 'Willow models the /b/ sound! Listen first: /b/ /b/ Blue. /b/ /b/ Ball.',
-    anchors: [
-      { word: 'Blue', emoji: '\u{1F535}', img: itemWater },
-      { word: 'Ball', emoji: '\u{26BD}' },
-      { word: 'Balloon', emoji: '\u{1F388}' },
+    id: 'u2l1-roleplay-yellow', kind: 'roleplay', bg: bgU2L1CYellowPopcornStand, teacher: 'Now listen to Pip and Bella talk about the popcorn, then repeat.', cast: ['pip', 'bella'],
+    script: [
+      { who: 'pip', line: "It's yellow!", repeat: true },
+      { who: 'bella', line: 'I like yellow!', repeat: true },
     ],
   },
-  { id: 'u2l1-trace-b', kind: 'trace', bg: bgU2L1SoundGarden, who: 'willow', letter: 'B', phoneme: '/b/', word: 'Blue', teacher: 'Trace the bouncy B. /b/ /b/ Blue!' },
   {
-    id: 'u2l1-sort-colors', kind: 'color-sort', bg: bgMeadow, teacher: "Listen for the sound! /r/ed, /b/lue, /y/ellow — now drag each thing to its color!",
+    // B already introduced in Lesson 4 (Bag/Ball/Bye), but this lesson's
+    // own color-sort/dash cues still need their own model moment here, not
+    // just a bare retrieval hint. Willow models it, since blue is her color.
+    id: 'u2l1-model-b', kind: 'sound-model', bg: bgU2L1CTickets, who: 'willow', letter: 'B', phoneme: '/b/', sound: 'buh', teacher: 'Willow models the /b/ sound! Listen first: /b/ /b/ Blue. /b/ /b/ Ball.',
+    anchors: [
+      { word: 'Blue', emoji: '\u{1F535}', img: itemCottonCandyBlue },
+      { word: 'Ball', emoji: '\u{26BD}', img: itemBall },
+      { word: 'Bear', emoji: '\u{1F9F8}', img: itemBear },
+    ],
+  },
+  { id: 'u2l1-trace-b', kind: 'trace', bg: bgU2L1CTickets, who: 'willow', letter: 'B', phoneme: '/b/', word: 'Blue', teacher: 'Trace the bouncy B. /b/ /b/ Blue!' },
+  {
+    // Also models the negative form ("I don't like ___") — a real, friendly
+    // difference in preference, not a disagreement — so the lesson covers
+    // all three simple patterns, not just the positive one.
+    id: 'u2l1-roleplay-blue', kind: 'roleplay', bg: bgU2L1CBlueCottonCandyStand, teacher: 'Now listen to Willow and Pip talk about the cotton candy, then repeat.', cast: ['willow', 'pip'],
+    script: [
+      { who: 'willow', line: "It's blue!", repeat: true },
+      { who: 'pip', line: "I don't like blue!", repeat: true },
+    ],
+  },
+  {
+    id: 'u2l1-sort-colors', kind: 'color-sort', bg: bgU2L1CBunting, teacher: "Listen for the sound! /r/ed, /b/lue, /y/ellow — now drag each thing to its color!",
     targets: [
       { colorWord: 'RED', colorHex: '#E63946', who: 'bella' },
       { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow' },
       { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip' },
     ],
     items: [
-      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, colorWord: 'RED' },
-      { word: 'rose', emoji: '\u{1F339}', img: itemRose, colorWord: 'RED' },
-      { word: 'water', emoji: '\u{1F4A7}', img: itemWater, colorWord: 'BLUE' },
-      { word: 'wave', emoji: '\u{1F30A}', img: itemWave, colorWord: 'BLUE' },
-      { word: 'sun', emoji: '\u{2600}️', img: itemSun, colorWord: 'YELLOW' },
-      { word: 'moon', emoji: '\u{1F319}', img: itemMoon, colorWord: 'YELLOW' },
+      { word: 'balloon', emoji: '\u{1F388}', img: itemBalloonRed, colorWord: 'RED' },
+      { word: 'ring', emoji: '\u{1F3AF}', img: itemRing, colorWord: 'RED' },
+      { word: 'cotton candy', emoji: '\u{1F36C}', img: itemCottonCandyBlue, colorWord: 'BLUE' },
+      { word: 'ribbon', emoji: '\u{1F397}️', img: itemRibbonBlue, colorWord: 'BLUE' },
+      { word: 'popcorn', emoji: '\u{1F37F}', img: itemPopcornYellow, colorWord: 'YELLOW' },
+      { word: 'duck', emoji: '\u{1F986}', img: itemDuckYellow, colorWord: 'YELLOW' },
     ],
   },
   {
-    id: 'u2l1-color-quiz', kind: 'color-quiz', bg: bgMeadow, teacher: 'Which one is the right color? Tap it!',
+    // Dash round 1 of 3 — separated from rounds 2 and 3 by color-quiz and
+    // color-friends (Hard Variety Rule) instead of all three in a row.
+    id: 'u2l1-dash-red', kind: 'dash', bg: bgU2L1CDashArenaRed, teacher: 'Bella Dash! Tap only the RED things as they run by. Get 6 rings!', who: 'bella', targetLetter: 'RED', targetPhoneme: '', goal: 6, seconds: 40,
+    items: [
+      { word: 'balloon', letter: 'RED', img: itemBalloonRed, emoji: '\u{1F388}' },
+      { word: 'ring', letter: 'RED', img: itemRing, emoji: '\u{1F3AF}' },
+      { word: 'cotton candy', letter: 'BLUE', img: itemCottonCandyBlue, emoji: '\u{1F36C}' },
+      { word: 'ribbon', letter: 'BLUE', img: itemRibbonBlue, emoji: '\u{1F397}️' },
+      { word: 'popcorn', letter: 'YELLOW', img: itemPopcornYellow, emoji: '\u{1F37F}' },
+      { word: 'duck', letter: 'YELLOW', img: itemDuckYellow, emoji: '\u{1F986}' },
+    ],
+  },
+  {
+    id: 'u2l1-color-quiz', kind: 'color-quiz', bg: bgU2L1CBunting, teacher: 'Which one is the right color? Tap it!',
     rounds: [
-      { colorWord: 'RED', colorHex: '#E63946', who: 'bella', correctImg: itemApple, correctLabel: 'Apple', distractors: [{ img: itemWater, label: 'Water' }, { img: itemSun, label: 'Sun' }] },
-      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', correctImg: itemWave, correctLabel: 'Wave', distractors: [{ img: itemRose, label: 'Rose' }, { img: itemMoon, label: 'Moon' }] },
-      { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip', correctImg: itemSun, correctLabel: 'Sun', distractors: [{ img: itemApple, label: 'Apple' }, { img: itemWater, label: 'Water' }] },
+      { colorWord: 'RED', colorHex: '#E63946', who: 'bella', correctImg: itemBalloonRed, correctLabel: 'Balloon', distractors: [{ img: itemCottonCandyBlue, label: 'Cotton Candy' }, { img: itemPopcornYellow, label: 'Popcorn' }] },
+      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', correctImg: itemCottonCandyBlue, correctLabel: 'Cotton Candy', distractors: [{ img: itemBalloonRed, label: 'Balloon' }, { img: itemPopcornYellow, label: 'Popcorn' }] },
+      { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip', correctImg: itemPopcornYellow, correctLabel: 'Popcorn', distractors: [{ img: itemBalloonRed, label: 'Balloon' }, { img: itemCottonCandyBlue, label: 'Cotton Candy' }] },
     ],
   },
   {
-    // Colors the vocabulary itself (apple/water/sun) instead of a character —
-    // "the apple is red, the water is blue, the sun is yellow" reinforced by
-    // actually painting each one its real color, not a generic bonus round.
-    id: 'u2l1-color-friends', kind: 'color-friends', bg: bgMeadow, teacher: 'Rainbow time! Color each thing its real color!',
-    // Hex values match PAINT_COLORS in ColorFriendsScene exactly (not the
-    // #E63946/#FBBF24 used elsewhere in this lesson) so the palette's
-    // suggested-swatch pulse actually finds and highlights the right one.
+    // Dash round 2 of 3.
+    id: 'u2l1-dash-blue', kind: 'dash', bg: bgU2L1CDashArenaBlue, teacher: 'Willow Dash! Tap only the BLUE things as they run by. Get 6 rings!', who: 'willow', targetLetter: 'BLUE', targetPhoneme: '', goal: 6, seconds: 40,
+    items: [
+      { word: 'cotton candy', letter: 'BLUE', img: itemCottonCandyBlue, emoji: '\u{1F36C}' },
+      { word: 'ribbon', letter: 'BLUE', img: itemRibbonBlue, emoji: '\u{1F397}️' },
+      { word: 'popcorn', letter: 'YELLOW', img: itemPopcornYellow, emoji: '\u{1F37F}' },
+      { word: 'duck', letter: 'YELLOW', img: itemDuckYellow, emoji: '\u{1F986}' },
+      { word: 'balloon', letter: 'RED', img: itemBalloonRed, emoji: '\u{1F388}' },
+      { word: 'ring', letter: 'RED', img: itemRing, emoji: '\u{1F3AF}' },
+    ],
+  },
+  {
+    // Colors the vocabulary objects themselves instead of a character —
+    // "the balloon is red" reinforced by actually painting it red, not a
+    // generic bonus round. Reuses VocabOutline's existing generic
+    // silhouettes (round shapes, not literally fruit/sun/water-specific —
+    // Lesson 2 already reused the same three for leaf/orange/grapes).
+    // Hex values match PAINT_COLORS in ColorFriendsScene exactly so the
+    // palette's suggested-swatch pulse finds and highlights the right one.
+    id: 'u2l1-color-friends', kind: 'color-friends', bg: bgU2L1CBunting, teacher: 'Carnival colors! Paint each prize its real color!',
     vocabItems: [
-      { label: 'Apple', targetColorHex: '#EF4444', targetColorName: 'Red', outline: 'apple' },
-      { label: 'Water', targetColorHex: '#3B82F6', targetColorName: 'Blue', outline: 'water' },
-      { label: 'Sun', targetColorHex: '#FACC15', targetColorName: 'Yellow', outline: 'sun' },
+      { label: 'Balloon', targetColorHex: '#EF4444', targetColorName: 'Red', outline: 'apple' },
+      { label: 'Cotton Candy', targetColorHex: '#3B82F6', targetColorName: 'Blue', outline: 'sun' },
+      { label: 'Popcorn', targetColorHex: '#FACC15', targetColorName: 'Yellow', outline: 'water' },
     ],
   },
   {
-    id: 'u2l1-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Listen! Tap the missing letter to make the word.',
+    // Dash round 3 of 3.
+    id: 'u2l1-dash-yellow', kind: 'dash', bg: bgU2L1CDashArenaYellow, teacher: 'Pip Dash! Tap only the YELLOW things as they run by. Get 6 rings!', who: 'pip', targetLetter: 'YELLOW', targetPhoneme: '', goal: 6, seconds: 40,
+    items: [
+      { word: 'popcorn', letter: 'YELLOW', img: itemPopcornYellow, emoji: '\u{1F37F}' },
+      { word: 'duck', letter: 'YELLOW', img: itemDuckYellow, emoji: '\u{1F986}' },
+      { word: 'balloon', letter: 'RED', img: itemBalloonRed, emoji: '\u{1F388}' },
+      { word: 'ring', letter: 'RED', img: itemRing, emoji: '\u{1F3AF}' },
+      { word: 'cotton candy', letter: 'BLUE', img: itemCottonCandyBlue, emoji: '\u{1F36C}' },
+      { word: 'ribbon', letter: 'BLUE', img: itemRibbonBlue, emoji: '\u{1F397}️' },
+    ],
+  },
+  {
+    // Genuinely new mechanic for this lesson (not a reskin): "Balloon
+    // Letter Pop!" — already built for other unit1 lessons' phonics
+    // review but never used here. A real carnival balloon-pop game
+    // reinforcing the R/Y/B letters just modeled, not another sort/quiz.
+    id: 'u2l1-sound-pop', kind: 'sound-pop', bg: bgU2L1CDashArena, teacher: 'Balloon Letter Pop! Listen for the letter, then pop only that balloon!', who: 'bella', goal: 8, seconds: 45,
+    targets: [
+      { letter: 'R', phoneme: '/r/' },
+      { letter: 'Y', phoneme: '/y/' },
+      { letter: 'B', phoneme: '/b/' },
+    ],
+    items: [
+      { word: 'R', letter: 'R', emoji: 'R' },
+      { word: 'Y', letter: 'Y', emoji: 'Y' },
+      { word: 'B', letter: 'B', emoji: 'B' },
+    ],
+  },
+  {
+    id: 'u2l1-word-build', kind: 'word-build', bg: bgU2L1CTickets, teacher: 'Listen! Tap the missing letter to make the word.',
     rounds: [
-      { word: 'red', blankIndex: 0, answer: 'R', choices: ['R', 'B', 'Y'], img: itemApple, emoji: '\u{1F34E}' },
-      { word: 'blue', blankIndex: 0, answer: 'B', choices: ['R', 'B', 'Y'], img: itemWater, emoji: '\u{1F4A7}' },
-      { word: 'yellow', blankIndex: 0, answer: 'Y', choices: ['R', 'B', 'Y'], img: itemSun, emoji: '\u{2600}️' },
+      { word: 'red', blankIndex: 0, answer: 'R', choices: ['R', 'B', 'Y'], img: itemBalloonRed, emoji: '\u{1F534}' },
+      { word: 'blue', blankIndex: 0, answer: 'B', choices: ['R', 'B', 'Y'], img: itemCottonCandyBlue, emoji: '\u{1F535}' },
+      { word: 'yellow', blankIndex: 0, answer: 'Y', choices: ['R', 'B', 'Y'], img: itemPopcornYellow, emoji: '\u{1F7E1}' },
     ],
   },
   {
-    // bg upgraded from bg-hideseek.jpg (a forest-clearing image with no
-    // connection to a colors lesson, reused only because it existed) to the
-    // new hero art, which actually shows all three of these sentences.
-    id: 'u2l1-who', kind: 'listen-repeat-cards', bg: bgU2L1ColorParade, teacher: 'Listen to each friend, then repeat!',
-    cards: [
-      { who: 'bella', sentence: 'The apple is red!', img: itemApple, imgLabel: 'Apple' },
-      { who: 'willow', sentence: 'The water is blue!', img: itemWater, imgLabel: 'Water' },
-      { who: 'pip', sentence: 'The sun is yellow!', img: itemSun, imgLabel: 'Sun' },
-    ],
-  },
-  {
-    // Replaced 'memory' (a generic icon-matching game — testing recall of
-    // object names, not really the colors themselves) and the single
-    // RED-only 'dash' round per direct feedback that both felt generic
-    // rather than tied to the objective. Three dash rounds now cover all
-    // three colors with the same proven timed-tap mechanic, instead of one
-    // color getting a real challenge and the other two getting none.
-    id: 'u2l1-dash-red', kind: 'dash', bg: bgU2L1DashArena, teacher: 'Bella Dash! Tap only the RED things as they run by. Get 6 rings!', who: 'bella', targetLetter: 'RED', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'apple', letter: 'RED', img: itemApple, emoji: '\u{1F34E}' },
-      { word: 'rose', letter: 'RED', img: itemRose, emoji: '\u{1F339}' },
-      { word: 'water', letter: 'BLUE', img: itemWater, emoji: '\u{1F4A7}' },
-      { word: 'wave', letter: 'BLUE', img: itemWave, emoji: '\u{1F30A}' },
-      { word: 'sun', letter: 'YELLOW', img: itemSun, emoji: '\u{2600}️' },
-      { word: 'moon', letter: 'YELLOW', img: itemMoon, emoji: '\u{1F319}' },
-    ],
-  },
-  {
-    id: 'u2l1-dash-blue', kind: 'dash', bg: bgU2L1DashArena, teacher: 'Willow Dash! Tap only the BLUE things as they run by. Get 6 rings!', who: 'willow', targetLetter: 'BLUE', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'water', letter: 'BLUE', img: itemWater, emoji: '\u{1F4A7}' },
-      { word: 'wave', letter: 'BLUE', img: itemWave, emoji: '\u{1F30A}' },
-      { word: 'sun', letter: 'YELLOW', img: itemSun, emoji: '\u{2600}️' },
-      { word: 'moon', letter: 'YELLOW', img: itemMoon, emoji: '\u{1F319}' },
-      { word: 'apple', letter: 'RED', img: itemApple, emoji: '\u{1F34E}' },
-      { word: 'rose', letter: 'RED', img: itemRose, emoji: '\u{1F339}' },
-    ],
-  },
-  {
-    id: 'u2l1-dash-yellow', kind: 'dash', bg: bgU2L1DashArena, teacher: 'Pip Dash! Tap only the YELLOW things as they run by. Get 6 rings!', who: 'pip', targetLetter: 'YELLOW', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'sun', letter: 'YELLOW', img: itemSun, emoji: '\u{2600}️' },
-      { word: 'moon', letter: 'YELLOW', img: itemMoon, emoji: '\u{1F319}' },
-      { word: 'apple', letter: 'RED', img: itemApple, emoji: '\u{1F34E}' },
-      { word: 'rose', letter: 'RED', img: itemRose, emoji: '\u{1F339}' },
-      { word: 'water', letter: 'BLUE', img: itemWater, emoji: '\u{1F4A7}' },
-      { word: 'wave', letter: 'BLUE', img: itemWave, emoji: '\u{1F30A}' },
-    ],
-  },
-  {
-    // New: "Simon Says" is one of the most well-established gamified
-    // memory mechanics for this age group — a genuinely different skill
-    // (short-term sequence memory + color-word/swatch mapping under mild
-    // pressure) from anything else in this lesson, not a repeat of
-    // color-sort or dash's own mechanics.
-    id: 'u2l1-color-simon', kind: 'color-simon', bg: bgMeadow, teacher: 'Simon says... watch, then copy the color pattern!', maxRounds: 4,
+    // "Ringmaster Says" — Simon Says color-sequence memory, a genuinely
+    // different skill (short-term sequence memory + color-word/swatch
+    // mapping under mild pressure) from anything else in this lesson.
+    id: 'u2l1-color-simon', kind: 'color-simon', bg: bgU2L1CBunting, teacher: 'The Ringmaster says... watch, then copy the color pattern!', maxRounds: 4,
     colors: [
       { colorWord: 'RED', colorHex: '#E63946', who: 'bella' },
       { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow' },
@@ -2413,111 +2360,62 @@ export const LESSON_U2L1_SCENES: Scene[] = [
     ],
   },
   {
-    // New: models all six sentences ("It's ___" for all three colors, then
-    // "I like ___" for all three) as a listen-and-repeat drill, one
+    id: 'u2l1-who', kind: 'listen-repeat-cards', bg: bgU2L1CHero, teacher: 'Listen to each friend, then repeat!',
+    cards: [
+      { who: 'bella', sentence: 'The balloon is red!', img: itemBalloonRed, imgLabel: 'Balloon' },
+      { who: 'willow', sentence: 'The cotton candy is blue!', img: itemCottonCandyBlue, imgLabel: 'Cotton Candy' },
+      { who: 'pip', sentence: 'The popcorn is yellow!', img: itemPopcornYellow, imgLabel: 'Popcorn' },
+    ],
+  },
+  {
+    // Models all six sentences ("It's ___" for all three colors, then "I
+    // like ___" for all three) as a listen-and-repeat drill, one
     // consolidated place to practice the full pattern set before
     // join-stage asks for the same sentences from memory with no model.
-    // Each color keeps its established speaker (Bella=red, Willow=blue,
-    // Pip=yellow) for consistency with every other scene in this lesson.
-    id: 'u2l1-sentence-practice', kind: 'listen-repeat-cards', bg: bgU2L1ColorParade, teacher: 'Listen to each sentence, then repeat!',
+    id: 'u2l1-sentence-practice', kind: 'listen-repeat-cards', bg: bgU2L1CHero, teacher: 'Listen to each sentence, then repeat!',
     cards: [
-      { who: 'bella', sentence: "It's red!", img: itemApple, imgLabel: 'Red' },
-      { who: 'willow', sentence: "It's blue!", img: itemWater, imgLabel: 'Blue' },
-      { who: 'pip', sentence: "It's yellow!", img: itemSun, imgLabel: 'Yellow' },
-      { who: 'bella', sentence: 'I like red!', img: itemApple, imgLabel: 'Red' },
-      { who: 'willow', sentence: 'I like blue!', img: itemWater, imgLabel: 'Blue' },
-      { who: 'pip', sentence: 'I like yellow!', img: itemSun, imgLabel: 'Yellow' },
+      { who: 'bella', sentence: "It's red!", img: itemBalloonRed, imgLabel: 'Red' },
+      { who: 'willow', sentence: "It's blue!", img: itemCottonCandyBlue, imgLabel: 'Blue' },
+      { who: 'pip', sentence: "It's yellow!", img: itemPopcornYellow, imgLabel: 'Yellow' },
+      { who: 'bella', sentence: 'I like red!', img: itemBalloonRed, imgLabel: 'Red' },
+      { who: 'willow', sentence: 'I like blue!', img: itemCottonCandyBlue, imgLabel: 'Blue' },
+      { who: 'pip', sentence: 'I like yellow!', img: itemPopcornYellow, imgLabel: 'Yellow' },
     ],
   },
   {
-    // Replaced 'feelings' (a generic SEL check-in with no real tie to this
-    // lesson's own objective) per direct feedback to swap in activities
-    // that actually serve it. Every other speaking moment in this lesson
-    // is listen-and-repeat; this is the one place the student produces
-    // "It's ___ / I like ___ / I don't like ___" from memory, with no line
-    // modeled right before it to lean on.
-    // Each question shows the actual object it's asking about (not one wide
-    // parade shot for every turn) so the student can see what they're
-    // naming instead of relying on memory alone.
-    id: 'u2l1-join-stage', kind: 'join-stage', bg: bgU2L1ColorParade, teacher: 'Your turn! When it says YOU, say the color.', cast: ['pip', 'bella', 'willow'],
+    // Free production — "It's ___ / I like ___ / I don't like ___" with no
+    // line modeled right before it. Each question shows the actual stand
+    // it's asking about, not one wide hero shot for every turn.
+    id: 'u2l1-join-stage', kind: 'join-stage', bg: bgU2L1CHero, teacher: 'Your turn! When it says YOU, say the color.', cast: ['pip', 'willow', 'bella'],
     turns: [
-      { who: 'pip', line: 'What color is the apple?', bg: bgU2L1PipBellaAppleWater },
-      { who: 'student', line: "It's ______.", bg: bgU2L1PipBellaAppleWater },
-      { who: 'bella', line: 'Do you like blue?', bg: bgU2L1WaterOnly },
-      { who: 'student', line: 'I like ______. / I don’t like ______.', bg: bgU2L1WaterOnly },
-      { who: 'willow', line: 'What color is the sunflower?', bg: bgU2L1SunflowerGroup },
-      { who: 'student', line: "It's ______.", bg: bgU2L1SunflowerGroup },
+      { who: 'pip', line: 'What color is the balloon?', bg: bgU2L1CRedBalloonStand },
+      { who: 'student', line: "It's ______.", bg: bgU2L1CRedBalloonStand },
+      { who: 'willow', line: 'Do you like blue?', bg: bgU2L1CBlueCottonCandyStand },
+      { who: 'student', line: 'I like ______. / I don’t like ______.', bg: bgU2L1CBlueCottonCandyStand },
+      { who: 'bella', line: 'What color is the popcorn?', bg: bgU2L1CYellowPopcornStand },
+      { who: 'student', line: "It's ______.", bg: bgU2L1CYellowPopcornStand },
     ],
   },
   {
-    // New: this lesson had no narrative throughline before — every scene
-    // taught colors but nothing tied them into one story. Each page's text
-    // matches exactly what its image shows (bg-u2l1-pip-bella-apple-water.png
-    // is Pip pointing at a red apple in a tree next to blue water; the new
-    // hero art shows all three friends with all three colors).
-    // For a pre-reading audience the image IS the message — no shared or
-    // busy images across pages that talk about different things. Each page
-    // below shows ONLY the one object its sentence names (apple / water /
-    // sunflower); only the final capstone page deliberately shows all three
+    // "A Day at the Color Carnival" — each page shows ONLY the one object
+    // its sentence names; only the final capstone page shows all three
     // together, since that page is the recap.
-    id: 'u2l1-storybook', kind: 'flipbook', bg: bgU2L1ColorParade, title: 'A Colorful Day',
+    id: 'u2l1-storybook', kind: 'flipbook', bg: bgU2L1CHero, title: 'A Day at the Color Carnival',
     pages: [
-      { who: 'pip', img: bgU2L1PipBellaAppleWater, text: 'Pip and Bella found a big red apple in a tree!' },
-      { who: 'bella', img: bgU2L1WaterOnly, text: 'Then they saw the blue water flowing by.' },
-      { who: 'willow', img: bgU2L1SunflowerGroup, text: 'Willow, Bella, and Pip found a bright yellow sunflower too!' },
-      { who: 'pip', img: bgU2L1ColorParade, text: 'Red, blue, yellow — what a colorful day with friends!' },
+      { who: 'bella', img: bgU2L1CRedBalloonStand, text: 'Bella found a big red balloon at the carnival!' },
+      { who: 'willow', img: bgU2L1CBlueCottonCandyStand, text: 'Then Willow got some blue cotton candy.' },
+      { who: 'pip', img: bgU2L1CYellowPopcornStand, text: 'Pip found yellow popcorn, too!' },
+      { who: 'pip', img: bgU2L1CHero, text: 'Red, blue, yellow — what a colorful day at the carnival!' },
     ],
     checkpoints: [
-      { afterPage: 0, who: 'pip', question: 'What color is the apple?', options: ['Red', 'Blue', 'Yellow'], answer: 'Red' },
-      { afterPage: 2, who: 'willow', question: 'What color is the sunflower?', options: ['Red', 'Blue', 'Yellow'], answer: 'Yellow' },
+      { afterPage: 0, who: 'pip', question: 'What color is the balloon?', options: ['Red', 'Blue', 'Yellow'], answer: 'Red' },
+      { afterPage: 2, who: 'willow', question: 'What color is the popcorn?', options: ['Red', 'Blue', 'Yellow'], answer: 'Yellow' },
     ],
   },
   {
-    // Split into two scenes (was one roleplay reusing a single image for
-    // both the apple AND water lines) — for a pre-reading audience the
-    // background has to change with what's being said, not stay fixed
-    // while the dialogue moves on to a different object.
-    // Sentences simplified per direct feedback to a fixed, tiny pattern
-    // family — "It's ___," "I like ___," "I don't like ___" — instead of
-    // longer object-specific frames ("Look! A red apple!"). Simple enough
-    // for a pre-reading learner to actually repeat back whole.
-    // Fixed per direct feedback: only the SECOND line of each exchange had
-    // repeat:true, so the student only ever practiced "I like ___" out
-    // loud, never "It's ___" — even though that's the first, simpler
-    // pattern this whole lesson is trying to teach. Every line in all
-    // three roleplay scenes now gets its own repeat turn.
-    id: 'u2l1-roleplay-apple', kind: 'roleplay', bg: bgU2L1PipBellaAppleWater, teacher: 'Story time! Listen to Pip and Bella, then repeat.', cast: ['pip', 'bella'],
-    script: [
-      { who: 'pip', line: "It's red!", repeat: true },
-      { who: 'bella', line: 'I like red!', repeat: true },
-    ],
-  },
-  {
-    // Also models the negative form ("I don't like ___") — a real,
-    // friendly difference in preference, not a disagreement — so the
-    // lesson covers all three simple patterns, not just the positive one.
-    id: 'u2l1-roleplay-water', kind: 'roleplay', bg: bgU2L1WaterOnly, teacher: 'Now listen to them talk about the water, then repeat.', cast: ['pip', 'bella'],
-    script: [
-      { who: 'bella', line: "It's blue!", repeat: true },
-      { who: 'pip', line: "I don't like blue!", repeat: true },
-    ],
-  },
-  {
-    // Added per direct feedback — the apple/water roleplay pair covered
-    // red and blue but never yellow, leaving this lesson's third color
-    // with no roleplay practice at all. Pip introduces it since yellow is
-    // his own color throughout this lesson (color-model, color-spot);
-    // uses the dedicated sunflower art, not the busy hero shot, so the
-    // scene shows exactly the one object being talked about.
-    id: 'u2l1-roleplay-yellow', kind: 'roleplay', bg: bgU2L1SunflowerGroup, teacher: 'Now listen to them talk about the sunflower, then repeat.', cast: ['pip', 'bella'],
-    script: [
-      { who: 'pip', line: "It's yellow!", repeat: true },
-      { who: 'bella', line: 'I like yellow!', repeat: true },
-    ],
-  },
-  {
-    id: 'u2l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the colorful meadow! Sing along together.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    id: 'u2l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the Color Carnival! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
       { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
@@ -2526,7 +2424,7 @@ export const LESSON_U2L1_SCENES: Scene[] = [
       { who: 'pip', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
     ],
   },
-  { id: 'u2l1-finale', kind: 'finale', bg: bgU2L1ColorParade, who: 'bella', line: 'You did it! You can name red, blue, and yellow! \u{1F308}' },
+  { id: 'u2l1-finale', kind: 'finale', bg: bgU2L1CHero, who: 'bella', line: 'You did it! You can name red, blue, and yellow at the Color Carnival! \u{1F3A1}' },
 ];
 
 /* =============================================================================
@@ -2822,7 +2720,8 @@ export const LESSON_U2L2_SCENES: Scene[] = [
   },
   {
     id: 'u2l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the colorful garden! Sing along together.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
       { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
@@ -2917,7 +2816,6 @@ export const LESSON_U2L2_SCENES: Scene[] = [
  * audio needed either.
  * ========================================================================= */
 
-const itemBall = `${A}/items/item-ball.png`;
 const itemBook = `${A}/items/item-book.png`;
 const itemPizza = `${A}/items/item-pizza.png`;
 const bgU2L3ShapeParade = `${A}/scenes/bg-u2l3-shape-parade.png`;
@@ -3137,7 +3035,8 @@ export const LESSON_U2L3_SCENES: Scene[] = [
   },
   {
     id: 'u2l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the shapes garden! Sing along together.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
       { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
@@ -3380,7 +3279,8 @@ export const LESSON_U2L4_SCENES: Scene[] = [
   },
   {
     id: 'u2l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
       { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
@@ -3500,7 +3400,8 @@ export const LESSON_U2L5_SCENES: Scene[] = [
   },
   {
     id: 'u2l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the rainbow fish! Sing along together.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
       { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
@@ -3764,7 +3665,8 @@ export const LESSON_U2L6_SCENES: Scene[] = [
   },
   {
     id: 'u2l6-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F3C6} Rainbow Meadow Goodbye Song \u{1F3C6}', teacher: 'Wave goodbye to the whole Rainbow Meadow! Sing along together.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
       { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
@@ -4041,7 +3943,8 @@ export const LESSON_U3L1_SCENES: Scene[] = [
   },
   {
     id: 'u3l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the playroom! Sing along together.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
       { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
@@ -4256,7 +4159,8 @@ export const LESSON_U3L2_SCENES: Scene[] = [
   },
   {
     id: 'u3l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the playroom! Sing along together.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
       { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
@@ -4559,7 +4463,8 @@ export const LESSON_U5L1_SCENES: Scene[] = [
   },
   {
     id: 'u5l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
-    durationSeconds: 30, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3`,
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
     songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
     lyrics: [
       { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },

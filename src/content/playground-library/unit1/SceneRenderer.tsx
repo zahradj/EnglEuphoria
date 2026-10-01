@@ -3505,7 +3505,9 @@ function ColorSpotScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, 
       {current && revealed && (
         <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/40 px-6" onClick={dismiss} style={{ animation: 'lep1-pop 0.25s ease-out' }}>
           <div className="flex w-full max-w-sm flex-col items-center gap-2 rounded-[2rem] border-4 border-white bg-white px-6 py-6 text-center shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <span className="grid h-16 w-16 place-items-center rounded-full text-4xl" style={{ background: `${current.colorHex}22` }}>🎨</span>
+            <span className="grid h-16 w-16 place-items-center rounded-full text-4xl" style={{ background: `${current.colorHex}22` }}>
+              {current.splashImg ? <img src={current.splashImg} alt="" className="h-12 w-12 object-contain" /> : '🎨'}
+            </span>
             <span className="text-3xl font-black uppercase" style={{ color: current.colorHex }}>{current.colorWord}</span>
             <span className="text-lg font-bold text-slate-700">{current.label}</span>
             <button onClick={hearSentence} className="text-sm font-semibold text-neutral-500 underline decoration-dotted active:scale-95">🔊 Hear it in a sentence: “{current.sentence}”</button>
