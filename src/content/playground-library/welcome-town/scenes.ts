@@ -203,7 +203,23 @@ export type Scene =
    *  continuous drag gesture sync live between teacher and student at all
    *  today. */
   | { id: string; kind: 'drag-sticker'; bg: string; teacher: string; stickers: { who: CharKey; stickerImg: string; startLeft: string; startTop: string }[] }
-  | { id: string; kind: 'vocab-spot'; bg: string; teacher: string; items: { label: string; sentence: string; emoji: string; left: string; top: string; color: string; dir?: 'down' | 'left' | 'right'; who?: CharKey }[] }
+  | {
+      id: string; kind: 'vocab-spot'; bg: string; teacher: string;
+      items: {
+        label: string; sentence: string; emoji: string; left: string; top: string; color: string; dir?: 'down' | 'left' | 'right'; who?: CharKey;
+        /** An illustrated picture card shown in place of the usual
+         *  arrow-points-at-the-photo presentation — for introducing a
+         *  word that ISN'T literally drawn in `bg` (e.g. an abstract
+         *  concept like a preposition), where there's nothing real in
+         *  the background to point an arrow at. When set, VocabSpotScene
+         *  shows this image as a centered, bordered card at left/top
+         *  instead of the arrow + bare-word-on-photo flow; everything
+         *  else (tap to hear, replay, dismiss, step counter) is
+         *  unchanged. Omit for the standard point-at-the-real-thing
+         *  version of this activity. */
+        img?: string;
+      }[];
+    }
   | { id: string; kind: 'choice'; bg: string; who: CharKey; teacher: string; prompt: string; options: { label: string; emoji: string; correct?: boolean }[]; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
   // Listen-and-tap-in-the-scene: unlike `vocab-spot` (one guided arrow at a
   // time, no wrong answer possible) every real object/character already
@@ -231,6 +247,16 @@ export type Scene =
        *  character or object) where the default fixed hit-zone is
        *  already an easy, unambiguous tap. */
       hitWidth?: string; hitHeight?: string;
+      /** An always-visible illustrated picture card for this target,
+       *  instead of the default invisible hotspot. Use this when the
+       *  targets themselves ARE the thing being taught (e.g. one picture
+       *  each for "under"/"on"/"in") rather than real objects already
+       *  sitting in a photographic scene — there's no "real photo" to
+       *  avoid spoiling by showing a marker early, so the normal
+       *  invisible-until-tapped convention (see ListenTapScene) doesn't
+       *  apply. Omit for the standard find-the-real-object-in-the-scene
+       *  version of this activity. */
+      img?: string;
     }[]; rounds: {
       prompt: string; answerLabel: string; who?: CharKey;
       /** A real character sticker (transparent-background PNG, matching
