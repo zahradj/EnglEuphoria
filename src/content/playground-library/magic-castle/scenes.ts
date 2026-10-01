@@ -931,19 +931,6 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
     ],
   },
 
-  {
-    // Knock-knock doors fits a lesson about doors: each friend answers with
-    // one of today's sentences.
-    id: 'mc2-hello-doors', kind: 'hello-doors', bg: bgWide,
-    teacher: 'Knock knock! Listen for the clue, then tap the right door!',
-    cast: ['catcat', 'pip', 'wim'],
-    rounds: [
-      { target: 'catcat', prompt: 'Who says "There is a lamp"?', helloLine: 'I say there is a lamp!', echoLine: 'There is a lamp.' },
-      { target: 'pip', prompt: 'Who says "There is a window"?', helloLine: 'I say there is a window!', echoLine: 'There is a window.' },
-      { target: 'wim', prompt: 'Who says "There is a door"?', helloLine: 'I say there is a door!', echoLine: 'There is a door.' },
-    ],
-  },
-
   /* ---- Phonics segment: Wim's Sound Magic (L /l/, W /w/) ----------------
    * The blueprint's own phonics focus for this lesson: /l/ (lamp) and /w/
    * (window) — both inside today's words, so the sounds are discovered in
