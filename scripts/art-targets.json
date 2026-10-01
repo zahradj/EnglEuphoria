@@ -45,5 +45,22 @@
       "public/magic-castle/stickers/chair.png"
     ],
     "prompt": "One single black iron cooking pot (cauldron) with a handle, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat colours), isolated alone on a plain pure white background, nothing else in the picture, no fire. Show ONLY this one object — no room, no walls, no floor, no other furniture."
+  },
+  {
+    "out": "public/magic-castle/stickers/chest-closed.png",
+    "sticker": true,
+    "refs": [
+      "public/magic-castle/stickers/chair.png"
+    ],
+    "prompt": "One single CLOSED wooden pirate treasure chest with a curved lid, gold metal bands, gold corners and a big gold lock on the front, three-quarter view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY this one object — no room, no walls, no floor, no characters."
+  },
+  {
+    "out": "public/magic-castle/stickers/chest-open.png",
+    "sticker": true,
+    "refs": [
+      "public/magic-castle/stickers/chest-closed.png",
+      "public/magic-castle/stickers/chair.png"
+    ],
+    "prompt": "The SAME treasure chest as the first reference image, now OPEN with the lid lifted back, overflowing with shiny gold coins, sparkling jewels and a purple gem, a few gold sparkles above it, three-quarter view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY this one object — no room, no walls, no floor, no characters."
   }
 ]
