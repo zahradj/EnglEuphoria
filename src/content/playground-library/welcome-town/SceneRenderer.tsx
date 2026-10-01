@@ -11,7 +11,7 @@ import { Hearts, MAX_HEARTS, Lep1Keyframes } from '../unit1/SceneRenderer';
 import engleuphoriaLogo from '@/assets/engleuphoria-logo.png';
 import { type ActivitySync, useSyncedState } from '../sceneActivitySync';
 import { SpinWheelScene } from '../SpinWheelScene';
-import { PictureMatchScene } from '../PictureMatchScene';
+import { PictureMatchScene, CroppedImage } from '../PictureMatchScene';
 
 export type { ActivitySync };
 
@@ -865,17 +865,46 @@ function EchoScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, { kin
 /* ---------- Memory ---------- */
 
 function MemoryScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Scene, { kind: 'memory' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
-  type Card = { key: string; pairId: string; label: string; emoji: string };
-  const deck = useMemo<Card[]>(() => {
-    const base = scene.pairs.flatMap((p) => [{ key: `${p.id}-a`, pairId: p.id, label: p.label, emoji: p.emoji }, { key: `${p.id}-b`, pairId: p.id, label: p.label, emoji: p.emoji }]);
-    return base.map((c, i) => ({ c, r: (i * 9301 + 49297) % 233280 })).sort((a, b) => a.r - b.r).map((x) => x.c);
-  }, [scene.id]);
+  type Card = {
+    key: string; pairId: string; label: string; emoji: string; variant: 'emoji' | 'word' | 'pic';
+    img?: string; crop?: { x: number; y: number; w: number; h: number }; imgAspect?: number;
+  };
+  // Unshuffled and identical on both screens without needing to travel
+  // over the sync channel — only the LAYOUT (see `order` below) needs
+  // syncing, not which cards exist.
+  const baseCards = useMemo<Card[]>(() => scene.pairs.flatMap((p) =>
+    p.img
+      ? [
+          { key: `${p.id}-word`, pairId: p.id, label: p.label, emoji: p.emoji, variant: 'word' as const },
+          { key: `${p.id}-pic`, pairId: p.id, label: p.label, emoji: p.emoji, img: p.img, crop: p.crop, imgAspect: p.imgAspect, variant: 'pic' as const },
+        ]
+      : [
+          { key: `${p.id}-a`, pairId: p.id, label: p.label, emoji: p.emoji, variant: 'emoji' as const },
+          { key: `${p.id}-b`, pairId: p.id, label: p.label, emoji: p.emoji, variant: 'emoji' as const },
+        ]
+  ), [scene.id]);
+
   // `matched` is a plain string[] (not a Set) because the synced snapshot
   // travels as JSON over the broadcast channel, which would silently
-  // flatten a Set to `{}`.
-  const [state, setState] = useSyncedState(sync, { flipped: [] as string[], matched: [] as string[], busy: false, gemDone: false });
-  const { flipped, matched, busy, gemDone } = state;
+  // flatten a Set to `{}`. `order` is the shuffled layout (indices into
+  // baseCards) — it used to be baked into a fixed, non-random formula
+  // keyed only by card position, so the SAME layout appeared every single
+  // time this scene was played. Real Math.random() shuffling needs to
+  // travel as synced state instead (same pattern as HelloDoorsScene's own
+  // `order`): only the authority side shuffles, so both screens land on
+  // the identical random layout rather than two different ones.
+  const [state, setState] = useSyncedState(sync, { order: [] as number[], flipped: [] as string[], matched: [] as string[], busy: false, gemDone: false });
+  const { order, flipped, matched, busy, gemDone } = state;
   const matchedSet = useMemo(() => new Set(matched), [matched]);
+  const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
+
+  useEffect(() => {
+    if (isRemoteMirror) return;
+    setState((s) => ({ ...s, order: shuffledIndices(baseCards.length), flipped: [], matched: [], busy: false, gemDone: false }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scene.id, isRemoteMirror]);
+
+  const deck = order.length === baseCards.length ? order.map((i) => baseCards[i]) : baseCards;
 
   const tap = async (card: Card) => {
     if (busy || matchedSet.has(card.pairId) || flipped.includes(card.key)) return;
@@ -913,9 +942,24 @@ function MemoryScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<Sc
             <button key={card.key} onClick={() => tap(card)} disabled={busy || isMatched} className="relative aspect-square [perspective:800px]" aria-label={isFlipped ? card.label : 'Hidden card'}>
               <div className="absolute inset-0 transition-transform duration-500 [transform-style:preserve-3d]" style={{ transform: isFlipped ? 'rotateY(180deg)' : undefined }}>
                 <div className="absolute inset-0 flex items-center justify-center rounded-2xl border-4 border-white text-3xl font-black text-white shadow-xl [backface-visibility:hidden]" style={{ background: 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' }}>?</div>
-                <div className={`absolute inset-0 flex flex-col items-center justify-center rounded-2xl border-4 bg-white p-2 shadow-xl [backface-visibility:hidden] [transform:rotateY(180deg)] ${isMatched ? 'border-green-400 ring-4 ring-green-300/60' : 'border-white'}`}>
-                  <span className="text-4xl">{card.emoji}</span>
-                  <span className="mt-1 text-[10px] font-black text-orange-700 sm:text-xs">{card.label}</span>
+                <div className={`absolute inset-0 flex flex-col items-center justify-center overflow-hidden rounded-2xl border-4 bg-white shadow-xl [backface-visibility:hidden] [transform:rotateY(180deg)] ${card.variant === 'pic' ? '' : 'p-2'} ${isMatched ? 'border-green-400 ring-4 ring-green-300/60' : 'border-white'}`}>
+                  {card.variant === 'pic' ? (
+                    card.img && card.crop ? (
+                      <CroppedImage src={card.img} crop={card.crop} aspect={card.imgAspect ?? 16 / 9} />
+                    ) : (
+                      <img src={card.img} alt={card.label} className="h-full w-full object-cover" />
+                    )
+                  ) : card.variant === 'word' ? (
+                    // Word card: reading practice half of a word<->picture
+                    // pair — just the text, no emoji, so the match is
+                    // genuinely word-to-meaning rather than icon-to-icon.
+                    <span className="px-1 text-center text-xl font-black leading-tight text-orange-700 sm:text-2xl">{card.label}</span>
+                  ) : (
+                    <>
+                      <span className="text-4xl">{card.emoji}</span>
+                      <span className="mt-1 text-[10px] font-black text-orange-700 sm:text-xs">{card.label}</span>
+                    </>
+                  )}
                 </div>
               </div>
             </button>

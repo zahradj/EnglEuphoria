@@ -685,6 +685,8 @@ const bgBedroomNoLamp = `${M}/scenes/bg-castle-bedroom-nolamp.png`;
 const bgCatcatPipDoor = `${M}/scenes/bg-castle-catcat-pip-door.png`;
 const bgTitleL2 = `${M}/scenes/bg-castle-title-l2.png`;
 const bgM2PrepReminder = `${M}/scenes/mc2-prep-reminder.png`;
+const iconChair = `${M}/scenes/icon-chair.png`;
+const iconTable = `${M}/scenes/icon-table.png`;
 
 const DOOR_SPOT = { left: '17%', top: '42%' };
 const WINDOW_SPOT = { left: '47%', top: '30%' };
@@ -866,15 +868,27 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
 
   {
     // Cumulative with Lesson 1: the two kitchen words come back.
+    // Word<->picture pairs for every word (per direct follow-up: "it
+    // should be finding the word bed... and the image of a BED", then
+    // "generate images, real images, do not use emojis") — bed/lamp/
+    // door/window reuse the exact crop boxes mc2-match already measured
+    // on bgBedroomTour (same picture the student already matched the
+    // word to there); table/chair get their own dedicated generated
+    // icons (no existing crop of them on this bedroom art, since they're
+    // Lesson 1's kitchen words). `emoji` is kept only as the unused
+    // fallback the shared type still declares, never rendered once `img`
+    // is set. The deck layout is a real per-play shuffle (see
+    // MemoryScene's synced `order`), not the fixed layout this scene
+    // used to show every time.
     id: 'mc2-memory', kind: 'memory', bg: bgRooms,
-    teacher: 'Find the matching pairs! Say each word when you flip it.',
+    teacher: 'Find the matching word and picture! Say each one when you flip it.',
     pairs: [
-      { id: 'bed', label: 'Bed', emoji: '\u{1F6CF}️' },
-      { id: 'lamp', label: 'Lamp', emoji: '\u{1FA94}' },
-      { id: 'door', label: 'Door', emoji: '\u{1F6AA}' },
-      { id: 'window', label: 'Window', emoji: '\u{1FA9F}' },
-      { id: 'table', label: 'Table', emoji: '\u{1FAB5}' },
-      { id: 'chair', label: 'Chair', emoji: '\u{1FA91}' },
+      { id: 'bed', label: 'Bed', emoji: '\u{1F6CF}️', img: bgBedroomTour, crop: { x: 64, y: 8, w: 36, h: 80 } },
+      { id: 'lamp', label: 'Lamp', emoji: '\u{1FA94}', img: bgBedroomTour, crop: { x: 54, y: 42, w: 13, h: 22 } },
+      { id: 'door', label: 'Door', emoji: '\u{1F6AA}', img: bgBedroomTour, crop: { x: 4, y: 6, w: 28, h: 80 } },
+      { id: 'window', label: 'Window', emoji: '\u{1FA9F}', img: bgBedroomTour, crop: { x: 38, y: 5, w: 18, h: 52 } },
+      { id: 'table', label: 'Table', emoji: '\u{1FAB5}', img: iconTable, imgAspect: 1 },
+      { id: 'chair', label: 'Chair', emoji: '\u{1FA91}', img: iconChair, imgAspect: 1 },
     ],
   },
 

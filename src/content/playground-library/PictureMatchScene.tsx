@@ -38,7 +38,7 @@ export interface PictureMatchItem {
 /** Part of an image, scaled to FILL its box (like object-fit: cover): an
  *  SVG whose viewBox is the crop window (image drawn at 100·aspect × 100
  *  units). The rounded tile around it does the clipping. */
-function CroppedImage({ src, crop, aspect }: { src: string; crop: { x: number; y: number; w: number; h: number }; aspect: number }) {
+export function CroppedImage({ src, crop, aspect }: { src: string; crop: { x: number; y: number; w: number; h: number }; aspect: number }) {
   return (
     <svg
       viewBox={`${crop.x * aspect} ${crop.y} ${crop.w * aspect} ${crop.h}`}
