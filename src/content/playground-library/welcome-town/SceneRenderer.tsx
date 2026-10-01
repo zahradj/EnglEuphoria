@@ -2113,34 +2113,125 @@ function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<
         ✦ {scene.title} ✦ <span className="ml-1 opacity-60">({pageIdx + 1}/{total})</span>
       </div>
 
-      <div className="absolute inset-0 z-10 flex items-center justify-center px-4 pb-24 pt-16" style={{ perspective: 1400 }}>
-        <div
-          onClick={turnPage}
-          className="relative w-full max-w-[600px] cursor-pointer select-none rounded-[30px] p-[7px]"
-          style={{
-            aspectRatio: '4 / 3',
-            background: 'linear-gradient(135deg, #F5D67D 0%, #C9932F 45%, #8A5A1E 100%)',
-            transformOrigin: 'right center',
-            transform: flipping ? 'rotateY(-130deg) scaleX(0.85)' : 'rotateY(0deg)',
-            transition: 'transform 0.45s cubic-bezier(0.45,0.05,0.55,0.95)',
-            backfaceVisibility: 'hidden',
-            animation: flipping ? undefined : 'lep1-bookGlow 3.2s ease-in-out infinite',
-          }}
-        >
-          <div className="relative h-full w-full overflow-hidden rounded-[24px] bg-gradient-to-b from-[#FFFBF0] to-[#FFF2D0]">
-            <div className="h-[68%] w-full overflow-hidden">
-              <img src={page.img} alt="" className="h-full w-full object-cover" />
+      {/* Manga-style panel layout (A1+ only — see FlipbookScene's story
+          data, none of which exists below A1): the page fills the WHOLE
+          lesson frame edge-to-edge instead of sitting in a small centered
+          card with dead margins around it. Two diagonally-cut panels —
+          a dominant story-art panel and a smaller character "reaction"
+          panel — share the frame with a thin gutter between them, the
+          classic comic-panel composition. The gutter is just the dark
+          background showing through a gap between the two panels' own
+          clip-paths, not a drawn line, so it scales cleanly to any screen
+          size without needing exact-pixel seam math. */}
+      <div
+        onClick={turnPage}
+        className="absolute inset-0 z-10 flex cursor-pointer select-none flex-col overflow-hidden"
+        style={{ background: '#15101a' }}
+      >
+        {/* Art area: takes the remaining space above the caption bar, but
+            the panel composition itself is capped to a sane aspect ratio
+            (not simply stretched to fill whatever height is left) —
+            without this cap, a tall/narrow stage (e.g. a phone in portrait)
+            forced the panels' object-cover crop into a severe zoom, since
+            cropping a landscape photo into a very tall box keeps only a
+            thin vertical sliver of it. Centering a bounded box here keeps
+            every screen's crop close to what the art was actually composed
+            for, and any leftover space is just more of the gutter color
+            (the same dark background already used between panels). */}
+        <div className="relative min-h-0 flex-1">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div
+              key={pageIdx}
+              className="relative w-full"
+              style={{
+                aspectRatio: '16 / 10',
+                maxHeight: '100%',
+                opacity: flipping ? 0 : 1,
+                transform: flipping ? 'scale(0.96)' : 'scale(1)',
+                transition: 'opacity 0.3s ease, transform 0.3s ease',
+              }}
+            >
+              {page.splash ? (
+                /* Climax/reveal beat: one full-bleed panel, no cuts. Real
+                   manga signals a story's emotional high point by giving it
+                   MORE space and LESS interruption, not more chopping — the
+                   same "page" grammar as a splash page, just sized to this
+                   engine's single-beat-per-page unit instead of a full
+                   physical page. */
+                <div className="absolute inset-0 overflow-hidden rounded-[6px]">
+                  <img src={page.img} alt="" className="h-full w-full object-cover" />
+                  <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(ellipse at center 55%, rgba(255,224,150,0.12) 0%, rgba(10,6,16,0) 55%, rgba(10,6,16,0.45) 100%)' }} />
+                </div>
+              ) : (
+                <>
+                  {/* Section 1 — the one dynamic panel on the page. Real
+                      comic pages use a diagonal, energy-breaking cut
+                      sparingly (one or two panels, never the whole grid) —
+                      so only this dominant panel gets the angled edge; the
+                      other three stay calm rectangles instead of repeating
+                      the same diagonal four times, which reads as chaotic
+                      rather than dynamic. */}
+                  <div className="absolute inset-0" style={{ clipPath: 'polygon(0 0, 64% 0, 50% 100%, 0 100%)' }}>
+                    <img src={page.img} alt="" className="h-full w-full object-cover" />
+                    <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,6,16,0.6) 0%, rgba(10,6,16,0) 40%)' }} />
+                  </div>
+
+                  {/* Sections 2–4 — a calm straight-edged right-hand column,
+                      each panel its own small bounding box (not the full
+                      frame) before any crop is applied. Sizing contain/cover
+                      art against the panel's OWN small box — instead of the
+                      full 16:10 frame — is what keeps a portrait close-up
+                      from being cropped down to a single eye: the mismatch
+                      between a tall source image and a wide sliver of the
+                      full frame is much smaller once the box itself is
+                      already close to the art's own shape. */}
+                  <div className="absolute overflow-hidden" style={{ left: '68%', top: '0%', width: '32%', height: '31%' }}>
+                    <div className="absolute inset-0" style={{ background: page.who ? `linear-gradient(160deg, ${CAST[page.who].color}dd, #241428)` : 'linear-gradient(160deg,#4a3a5c,#241428)' }}>
+                      {page.img2 ? (
+                        <img src={page.img2} alt="" className="h-full w-full object-contain" />
+                      ) : page.who && (
+                        <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-center">
+                          <span className="text-3xl drop-shadow-[0_3px_6px_rgba(0,0,0,0.5)] sm:text-4xl">{CAST[page.who].emoji}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="absolute overflow-hidden bg-[#241428]" style={{ left: '68%', top: '34.5%', width: '32%', height: '31%' }}>
+                    <img
+                      src={page.img}
+                      alt=""
+                      className="h-full w-full object-cover"
+                      style={{ objectPosition: '70% 35%', transform: 'scale(1.3)' }}
+                    />
+                    <div className="absolute inset-0" style={{ background: 'rgba(20,10,30,0.18)' }} />
+                  </div>
+
+                  <div className="absolute overflow-hidden" style={{ left: '68%', top: '69%', width: '32%', height: '31%' }}>
+                    <div
+                      className="flex h-full w-full flex-col items-center justify-center gap-0.5 text-center"
+                      style={{ background: page.who ? `linear-gradient(200deg, #241428, ${CAST[page.who].color}dd)` : 'linear-gradient(200deg,#241428,#4a3a5c)' }}
+                    >
+                      {page.who && (
+                        <>
+                          <span className="text-2xl drop-shadow-[0_3px_6px_rgba(0,0,0,0.5)] sm:text-3xl">{CAST[page.who].emoji}</span>
+                          <span className="text-[8px] font-black uppercase tracking-widest text-white/80 sm:text-[10px]">{CAST[page.who].name}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
-            <div className="flex h-[32%] flex-col items-center justify-center gap-1 px-6 text-center">
-              <p className="text-base font-bold text-orange-900 sm:text-lg">{page.text}</p>
-              {page.who && <span className="text-xs font-black uppercase tracking-widest text-amber-600">— {CAST[page.who].name}</span>}
-            </div>
-            <div className="pointer-events-none absolute inset-y-0 left-1/2 w-8 -translate-x-1/2" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.16) 45%, rgba(0,0,0,0.16) 55%, transparent)' }} />
-            <div className="pointer-events-none absolute bottom-0 right-0 h-9 w-9" style={{ background: 'linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.18) 50%)', borderRadius: '0 0 24px 0' }} />
           </div>
           {!flipping && (
-            <div className="absolute -right-4 top-1/2 grid h-14 w-14 -translate-y-1/2 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-orange-600 text-2xl text-white shadow-xl ring-2 ring-white/70 animate-pulse">▶</div>
+            <div className="pointer-events-none absolute bottom-3 right-4 z-20 grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-orange-600 text-xl text-white shadow-xl ring-2 ring-white/70 animate-pulse sm:h-14 sm:w-14 sm:text-2xl">▶</div>
           )}
+        </div>
+
+        <div className="relative z-20 shrink-0 bg-gradient-to-b from-[#FFFBF0] to-[#FFF2D0] px-5 pb-5 pt-4 text-center shadow-[0_-6px_20px_rgba(0,0,0,0.35)]">
+          <p className="mx-auto max-w-[640px] text-base font-bold text-orange-900 sm:text-lg">{page.text}</p>
+          {page.who && <span className="mt-1 block text-xs font-black uppercase tracking-widest text-amber-600">— {CAST[page.who].name}</span>}
         </div>
       </div>
 

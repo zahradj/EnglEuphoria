@@ -162,6 +162,12 @@ const bgCastleLivingHall = `${M}/scenes/bg-castle-livingroom-hallway.png`;
 const bgCastleBathDining = `${M}/scenes/bg-castle-bathroom-dining.png`;
 const bgCastleGarden = `${M}/scenes/bg-castle-garden.png`;
 const bgCastleOverview = `${M}/scenes/bg-castle-overview.png`;
+// Dedicated manga-panel story art for mc-storybook (per-page, generated to
+// match this lesson's existing flat-vector illustration style rather than
+// reusing the room-establishing backgrounds above) — see FlipbookScene's
+// two-panel diagonal-cut layout. "-main" is the dominant story-beat panel,
+// "-accent" is the smaller character reaction close-up.
+const S1 = `${M}/scenes`;
 const stickerWim = `${M}/scenes/sticker-wim.png`;
 const stickerCatcat = `${M}/scenes/sticker-catcat.png`;
 const bgBedroomWim = `${M}/scenes/bg-castle-bedroom-wim.png`;
@@ -474,11 +480,11 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     // reviews Unit 3's in/on/under prepositions inside a real narrative.
     id: 'mc-storybook', kind: 'flipbook', bg: bgWide, title: 'Cat-cat’s Hiding Game',
     pages: [
-      { who: 'catcat', img: bgKitchen, text: 'Cat-cat loves to hide! Today she hides in the kitchen.' },
-      { who: 'catcat', img: bgKitchen, text: 'There is a cat... under the table!' },
-      { who: 'wim', img: bgWim, text: 'Wim looks everywhere. Is Cat-cat in his study?' },
-      { who: 'catcat', img: bgCatcat, text: 'There is a cat... on the windowsill!' },
-      { who: 'wim', img: bgFriends, text: 'Wim finds her at last! "There you are, Cat-cat!"' },
+      { who: 'catcat', img: `${S1}/story1-p1-main.png`, img2: `${S1}/story1-p1-accent.png`, text: 'Cat-cat loves to hide! Today she hides in the kitchen.' },
+      { who: 'catcat', img: `${S1}/story1-p2-main.png`, img2: `${S1}/story1-p2-accent.png`, text: 'There is a cat... under the table!' },
+      { who: 'wim', img: `${S1}/story1-p3-main.png`, img2: `${S1}/story1-p3-accent.png`, text: 'Wim looks everywhere. Is Cat-cat in his study?' },
+      { who: 'catcat', img: bgCatcat, img2: `${S1}/story1-p4-accent.png`, text: 'There is a cat... on the windowsill!' },
+      { who: 'wim', img: `${S1}/story1-p5-splash.png`, splash: true, text: 'Wim finds her at last! "There you are, Cat-cat!"' },
     ],
     checkpoints: [
       { afterPage: 2, who: 'pip', question: 'Where is Cat-cat hiding?', options: ['Under the table', 'On the bed', 'In the kitchen'], answer: 'Under the table' },
