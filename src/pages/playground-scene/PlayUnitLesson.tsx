@@ -204,6 +204,22 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
     return unsubscribe;
   }, [isSynced, role, roomId]);
 
+  // Teacher: re-send the current unlock state every few seconds. A single
+  // dropped realtime message used to leave the student locked while the
+  // teacher's button said "unlocked" (only a re-toggle fixed it); the
+  // heartbeat makes the student converge on its own within seconds, and
+  // keeps the student's DB-echo guard (LIVE_OVER_DB_MS) fresh.
+  const unlockForHeartbeatRef = useRef(interactionUnlocked);
+  unlockForHeartbeatRef.current = interactionUnlocked;
+  useEffect(() => {
+    if (!isSynced || role !== 'teacher' || !roomId) return;
+    const iv = window.setInterval(() => {
+      if (!unlockKnownRef.current && !unlockForHeartbeatRef.current) return;
+      void whiteboardService.sendSceneInteractionPermission(roomId, { unlocked: unlockForHeartbeatRef.current, senderId: 'teacher' });
+    }, 3000);
+    return () => window.clearInterval(iv);
+  }, [isSynced, role, roomId]);
+
   // Recover the current unlock state from the DB-persisted value on mount
   // or reconnect, for BOTH roles — previously this gate was broadcast-only,
   // so a refreshed tab (teacher or student) always reset to locked/false
