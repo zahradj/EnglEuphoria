@@ -1,0 +1,17 @@
+[
+  {
+    "out": "public/magic-castle/scenes/bg-castle-rooms-empty.png",
+    "refs": ["public/magic-castle/scenes/bg-castle-rooms.png"],
+    "prompt": "Redraw the reference image EXACTLY — same castle cutaway with the kitchen on the left and the bedroom on the right, same camera, framing, walls, stone pillars, wooden ceiling beams, floor tiles, fireplace, arched doorway, bedroom window, sky and art style — but with BOTH ROOMS COMPLETELY EMPTY: remove every piece of furniture and every object (no table, no stools, no cupboard, no shelves, no jars, no pots, no cauldron, no utensils, no bed, no curtains, no rug). Only empty rooms, ready to be furnished."
+  },
+  { "out": "public/magic-castle/stickers/chair.png", "sticker": true, "refs": ["public/magic-castle/scenes/bg-castle-rooms.png"],
+    "prompt": "One single wooden castle kitchen chair with a backrest, three-quarter view, drawn in exactly the same cartoon art style as the reference image (bold dark outlines, flat warm colours), isolated alone on a plain pure white background, nothing else in the picture." },
+  { "out": "public/magic-castle/stickers/table.png", "sticker": true, "refs": ["public/magic-castle/scenes/bg-castle-rooms.png"],
+    "prompt": "One single rustic wooden castle kitchen table, three-quarter view, drawn in exactly the same cartoon art style as the reference image (bold dark outlines, flat warm colours), isolated alone on a plain pure white background, nothing else in the picture." },
+  { "out": "public/magic-castle/stickers/bed.png", "sticker": true, "refs": ["public/magic-castle/scenes/bg-castle-rooms.png"],
+    "prompt": "One single castle bed with a wooden frame, pillow and red checked blanket, three-quarter view, drawn in exactly the same cartoon art style as the reference image (bold dark outlines, flat warm colours), isolated alone on a plain pure white background, nothing else in the picture." },
+  { "out": "public/magic-castle/stickers/lamp.png", "sticker": true, "refs": ["public/magic-castle/scenes/bg-castle-rooms.png"],
+    "prompt": "One single old-fashioned castle table lamp (a brass oil lamp with a warm glowing flame), drawn in exactly the same cartoon art style as the reference image (bold dark outlines, flat warm colours), isolated alone on a plain pure white background, nothing else in the picture." },
+  { "out": "public/magic-castle/stickers/pot.png", "sticker": true, "refs": ["public/magic-castle/scenes/bg-castle-rooms.png"],
+    "prompt": "One single black iron cooking pot (cauldron) with a handle, drawn in exactly the same cartoon art style as the reference image (bold dark outlines, flat colours), isolated alone on a plain pure white background, nothing else in the picture, no fire." }
+]
