@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { LiveStageFill, useStageDrop } from '../LiveStageFrame';
+import { LiveStageFill, StageFrame, useStageDrop } from '../LiveStageFrame';
 import type { CallRole } from '@/components/classroom/stage/callStreams';
 import { ChatCloud } from '../ChatCloud';
 import type { Scene, CharKey } from './scenes';
@@ -2191,24 +2191,10 @@ function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, 
         className="absolute z-30 touch-none"
         style={{ left: `${circlePos.xPct}%`, top: `${circlePos.yPct}%`, transform: 'translate(-50%, -50%)' }}
       >
-        <div
-          {...dropProps}
-          onPointerDown={onCirclePointerDown}
-          onPointerMove={onCirclePointerMove}
-          onPointerUp={onCirclePointerUp}
-          onPointerCancel={onCirclePointerUp}
-          className={`relative flex cursor-grab items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-colors active:cursor-grabbing ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`}
-          style={{ width: 'clamp(200px, calc(30*var(--svw,1vw)), 360px)', height: 'clamp(200px, calc(30*var(--svw,1vw)), 360px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}
-        >
+        <StageFrame onStage={onStage} onPlace={placeOnStage} canControl={canControl} active={isStudentTurn}
+          frameProps={{ ...dropProps, onPointerDown: onCirclePointerDown, onPointerMove: onCirclePointerMove, onPointerUp: onCirclePointerUp, onPointerCancel: onCirclePointerUp, className: 'cursor-grab active:cursor-grabbing', title: 'Drag to move the stage' }}>
           <LiveStageFill onStage={onStage} onPlace={placeOnStage} over={over} canControl={canControl} />
-          <span className="pointer-events-none absolute left-6 top-6 rounded-full bg-black/50 px-2 py-1 text-xs">✥</span>
-        </div>
-        <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '-40px' }}>
-          <div className={`relative flex items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-orange-700 shadow-2xl ring-4 ring-white transition-transform ${isStudentTurn ? 'scale-110' : ''}`} style={{ width: 80, height: 80 }}>
-            {isStudentTurn && <span className="absolute inset-0 rounded-full bg-orange-400/50 animate-ping" />}
-            <span className="relative text-4xl drop-shadow-md">🎤</span>
-          </div>
-        </div>
+        </StageFrame>
       </div>
       {done && <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center"><button onClick={onNext} className="rounded-full bg-orange-500 px-8 py-4 text-base font-black uppercase tracking-widest text-white shadow-2xl active:scale-95">✨ Next</button></div>}
     </div>
