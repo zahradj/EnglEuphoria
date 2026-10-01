@@ -1,0 +1,47 @@
+name: Bake lesson art
+
+# Generates the pictures listed in scripts/art-targets.json with the
+# platform's own image function (styled from the lesson's existing art),
+# cuts stickers out of their white background, and commits them.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/art-targets.json'
+      - 'scripts/generate-art.mjs'
+      - 'scripts/cutout-stickers.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bake-art-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  art:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate missing art
+        run: node scripts/generate-art.mjs
+      - name: Cut out stickers
+        run: |
+          pip install --quiet pillow
+          python scripts/cutout-stickers.py art-stickers.txt
+          rm -f art-stickers.txt
+      - name: Commit new art
+        run: |
+          git add public
+          if git diff --cached --quiet; then echo "No new art."; exit 0; fi
+          git config user.name "art-bake-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "Bake lesson art ($(git diff --cached --name-only | wc -l) files)"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

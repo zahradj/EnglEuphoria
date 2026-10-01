@@ -19,6 +19,7 @@ export type HomeworkVoice = 'teacher' | 'pip';
 
 export const HW_A1U9L1_INTRO = {
   puzzle: 'Listen, and build the castle, room by room!',
+  puzzleListen: 'Listen to the whole sentence. Which room is it?',
   furniture: 'Drag each sticker into the right room.',
   rooms: 'Listen. Where is Wim? Tap the room.',
   trueFalse: 'Look at the picture. Listen. True or false?',
@@ -31,16 +32,39 @@ export const HW_A1U9L1_INTRO = {
   win: 'Amazing! You are a CH wizard!',
 } as const;
 
-/** House puzzle — bg-castle-overview.png cut into its six rooms (percent
- *  boxes measured on the 1376×768 art). The student hears "Find the ___."
- *  and drops that room's piece into its place until the castle is whole. */
+/** Room boxes on bg-castle-overview.png (percent of the 1376×768 art). */
+const ROOM_BOX = {
+  'living room': { x: 12.1, y: 28.9, w: 26.0, h: 33.3 },
+  hallway: { x: 39.1, y: 28.9, w: 21.8, h: 33.3 },
+  bathroom: { x: 61.9, y: 28.9, w: 26.0, h: 33.3 },
+  bedroom: { x: 12.1, y: 64.1, w: 22.6, h: 32.3 },
+  kitchen: { x: 35.6, y: 64.1, w: 29.1, h: 32.3 },
+  'dining room': { x: 65.6, y: 64.1, w: 22.3, h: 32.3 },
+} as const;
+
+/** Level 1 — House puzzle: "Find the kitchen." → drop the kitchen piece
+ *  into its place, until the castle is whole. */
 export const HW_A1U9L1_PUZZLE = [
-  { room: 'kitchen', x: 35.6, y: 64.1, w: 29.1, h: 32.3, line: 'Find the kitchen.' },
-  { room: 'bedroom', x: 12.1, y: 64.1, w: 22.6, h: 32.3, line: 'Find the bedroom.' },
-  { room: 'living room', x: 12.1, y: 28.9, w: 26.0, h: 33.3, line: 'Find the living room.' },
-  { room: 'bathroom', x: 61.9, y: 28.9, w: 26.0, h: 33.3, line: 'Find the bathroom.' },
-  { room: 'dining room', x: 65.6, y: 64.1, w: 22.3, h: 32.3, line: 'Find the dining room.' },
-  { room: 'hallway', x: 39.1, y: 28.9, w: 21.8, h: 33.3, line: 'Find the hallway.' },
+  { room: 'kitchen', ...ROOM_BOX.kitchen, line: 'Find the kitchen.' },
+  { room: 'bedroom', ...ROOM_BOX.bedroom, line: 'Find the bedroom.' },
+  { room: 'living room', ...ROOM_BOX['living room'], line: 'Find the living room.' },
+  { room: 'bathroom', ...ROOM_BOX.bathroom, line: 'Find the bathroom.' },
+  { room: 'dining room', ...ROOM_BOX['dining room'], line: 'Find the dining room.' },
+  { room: 'hallway', ...ROOM_BOX.hallway, line: 'Find the hallway.' },
+] as const;
+
+/** Level 2 — Listen & Build: numbered slots and full sentences ("Number
+ *  one. Cat-cat is playing in the living room."). The student works out the
+ *  room from the sentence and drops that (unlabelled) piece on slot 1, and
+ *  so on — a harder listening check right after level 1. Numbers are
+ *  scattered across the house on purpose. */
+export const HW_A1U9L1_PUZZLE_LISTEN = [
+  { n: 1, room: 'living room', ...ROOM_BOX['living room'], line: 'Number one. Cat-cat is playing in the living room.' },
+  { n: 2, room: 'kitchen', ...ROOM_BOX.kitchen, line: 'Number two. Wim is cooking in the kitchen.' },
+  { n: 3, room: 'bedroom', ...ROOM_BOX.bedroom, line: 'Number three. Pip is sleeping in the bedroom.' },
+  { n: 4, room: 'bathroom', ...ROOM_BOX.bathroom, line: 'Number four. Cat-cat is having a bath in the bathroom.' },
+  { n: 5, room: 'dining room', ...ROOM_BOX['dining room'], line: 'Number five. Wim is eating in the dining room.' },
+  { n: 6, room: 'hallway', ...ROOM_BOX.hallway, line: 'Number six. Pip is walking in the hallway.' },
 ] as const;
 
 /** Furniture stickers dragged onto bg-castle-rooms.png (kitchen left,
@@ -120,6 +144,7 @@ export function homeworkA1U9L1Lines(): [HomeworkVoice, string][] {
   const out: [HomeworkVoice, string][] = [];
   Object.values(HW_A1U9L1_INTRO).forEach((t) => out.push(['teacher', t]));
   HW_A1U9L1_PUZZLE.forEach((r) => out.push(['teacher', r.line]));
+  HW_A1U9L1_PUZZLE_LISTEN.forEach((r) => out.push(['teacher', r.line]));
   HW_A1U9L1_FURNITURE.forEach((r) => out.push(['teacher', r.line]));
   HW_A1U9L1_ROOMS.forEach((r) => out.push(['teacher', r.line]));
   HW_A1U9L1_TRUE_FALSE.forEach((r) => out.push(['teacher', r.line]));
