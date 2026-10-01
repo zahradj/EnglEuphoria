@@ -28,8 +28,10 @@ const isImg = (s: string) => s.startsWith('/') || s.startsWith('http');
 const Icon = ({ s, size = '70%' }: { s: string; size?: string }) => (isImg(s) ? <img src={s} alt="" style={{ width: size }} draggable={false} /> : <>{s}</>);
 const highlight = (text: string, focus?: string) => {
   if (!focus) return text;
+  // `focus` may be one sound ('ch') or several ('l|w').
   const parts = text.split(new RegExp(`(${focus})`, 'gi'));
-  return parts.map((p, i) => (p.toLowerCase() === focus.toLowerCase() ? <b key={i}>{p}</b> : <span key={i}>{p}</span>));
+  const isFocus = new RegExp(`^(?:${focus})$`, 'i');
+  return parts.map((p, i) => (p && isFocus.test(p) ? <b key={i}>{p}</b> : <span key={i}>{p}</span>));
 };
 
 /* ---------- tiny sound effects (synth tones, not speech) ---------- */

@@ -12,6 +12,7 @@ on:
       - 'scripts/generate-voice-cache.mjs'
       - 'src/content/playground-library/**/scenes.ts'
       - 'src/content/playground-library/**/homework.ts'
+      - 'src/content/homework-quests/**'
 
 permissions:
   contents: write
