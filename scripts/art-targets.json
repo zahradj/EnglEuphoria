@@ -190,5 +190,67 @@
       "public/magic-castle/stickers/chest-closed.png"
     ],
     "prompt": "One single plain OPEN cardboard-brown wooden box with NO lid: a simple square crate, four flat sides, the top completely open so you can see the dark empty inside, seen from the front and a little above. It is NOT a chair: no backrest, no legs, no seat. Drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chest (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY this one box — nothing inside it, no room, no floor."
+  },
+  {
+    "out": "public/magic-castle/stickers/sofa.png",
+    "sticker": true,
+    "refs": [
+      "public/magic-castle/stickers/chair.png",
+      "public/magic-castle/scenes/bg-hunt-living-nextto.png"
+    ],
+    "prompt": "One single red castle SOFA (a long couch for two or three people) with two cushions, exactly like the red sofa in the second reference, three-quarter view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY this one object — no room, no walls, no floor, no other furniture, no characters."
+  },
+  {
+    "out": "public/magic-castle/stickers/armchair.png",
+    "sticker": true,
+    "refs": [
+      "public/magic-castle/stickers/chair.png",
+      "public/magic-castle/scenes/bg-hunt-living-nextto.png"
+    ],
+    "prompt": "One single comfy ARMCHAIR (a soft chair for ONE person with two arm rests), dark green fabric with wooden feet — clearly a single-seat armchair, not a sofa, three-quarter view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY this one object — no room, no walls, no floor, no other furniture, no characters."
+  },
+  {
+    "out": "public/magic-castle/stickers/mirror.png",
+    "sticker": true,
+    "refs": [
+      "public/magic-castle/stickers/chair.png",
+      "public/magic-castle/scenes/bg-hunt-living-nextto.png"
+    ],
+    "prompt": "One single oval wall MIRROR with an ornate gold frame and a shiny light-blue glass with a white shine streak, three-quarter view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY this one object — no room, no walls, no floor, no other furniture, no characters."
+  },
+  {
+    "out": "public/magic-castle/stickers/bookcase.png",
+    "sticker": true,
+    "refs": [
+      "public/magic-castle/stickers/chair.png",
+      "public/magic-castle/scenes/bg-hunt-living-nextto.png"
+    ],
+    "prompt": "One single tall wooden BOOKCASE full of colourful books on four shelves, like the bookcase in the second reference, three-quarter view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY this one object — no room, no walls, no floor, no other furniture, no characters."
+  },
+  {
+    "out": "public/magic-castle/stickers/clock.png",
+    "sticker": true,
+    "refs": [
+      "public/magic-castle/stickers/chair.png",
+      "public/magic-castle/scenes/bg-hunt-living-nextto.png"
+    ],
+    "prompt": "One single round wooden wall CLOCK with a cream face, big black numbers 12, 3, 6, 9 and two black hands, three-quarter view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY this one object — no room, no walls, no floor, no other furniture, no characters."
+  },
+  {
+    "out": "public/magic-castle/stickers/desk.png",
+    "sticker": true,
+    "refs": [
+      "public/magic-castle/stickers/chair.png",
+      "public/magic-castle/scenes/bg-hunt-living-nextto.png"
+    ],
+    "prompt": "One single wooden writing DESK with one drawer and four legs, a few sheets of paper and a quill pen on top — clearly a desk for writing, not a dining table, three-quarter view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY this one object — no room, no walls, no floor, no other furniture, no characters."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-castle-furniture-room.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-hunt-living-nextto.png",
+      "public/magic-castle/scenes/bg-castle-wim.png"
+    ],
+    "prompt": "A wide, cosy castle sitting room seen from the front, filling the whole frame edge to edge. Six pieces of furniture, each clearly separate, fully visible and not overlapping, from LEFT to RIGHT: a tall wooden BOOKCASE full of colourful books against the far-left wall; a long red SOFA with two cushions; on the wall high above the sofa, a round wooden wall CLOCK with a cream face; a single comfy dark-green ARMCHAIR; on the wall high above the armchair, an oval wall MIRROR with a gold frame; on the far right, a wooden writing DESK with paper and a quill. Stone walls, wooden floor, warm light. No characters, no lamp, no rug clutter. Same flat kawaii cartoon art style, bold warm-dark outlines and colours as the reference images. Full-bleed 16:9 scene, no frame, no border, no text, no letters, no numbers on anything except the clock face."
   }
 ]
