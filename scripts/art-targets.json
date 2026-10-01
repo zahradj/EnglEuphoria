@@ -109,5 +109,86 @@
       "public/magic-castle/scenes/bg-castle-friends.png"
     ],
     "prompt": "Title picture for a children's lesson called 'Castle Furniture'. The SAME castle bedroom as the first reference (arched wooden door on the left, tall arched window, a small bedside table with a glowing brass lamp, a four-poster bed with red curtains on the right). In the lower half of the picture, standing together on the floor and waving happily at the viewer: Pip the orange fox, Wim the young wizard in a purple hat and robe, and Cat-cat the small grey cat — all three exactly as in the second reference, chibi proportions. The upper-center of the picture is calm open wall space (a title card will be placed there). Same flat kawaii cartoon style, lavender stone walls. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-castle-title-l3.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-title-l2.png",
+      "public/magic-castle/scenes/bg-castle-wim.png",
+      "public/magic-castle/stickers/lamp.png"
+    ],
+    "prompt": "Title picture: inside Wizard Wim's cosy tower study at night (bookshelves, round window with stars and the moon, a desk). Wizard Wim (the boy wizard in the purple hat and robe, exactly as in the references) holds a big magnifying glass to his eye and searches with a curious face; Cat-cat the small grey cat (exactly as in the first reference) sniffs the floor beside him. Glowing purple footprints and little sparkles trail across the floor towards the right edge, where the glow of the magic lamp peeks out from behind a wooden chest. Wim's magic lamp is the SAME brass oil lamp as the lamp reference sticker (glass chimney, warm glowing flame) with a soft purple magic sparkle around it. Characters keep their exact designs with chibi proportions. Leave the top third of the picture calm (wall and bookshelf) for a title. Same flat kawaii cartoon art style, bold warm-dark outlines and colours as the reference images. Full-bleed 16:9 scene filling the whole frame edge to edge, no frame, no border, no sky margin, no text, no letters."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-castle-lostlamp.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-wim.png",
+      "public/magic-castle/scenes/bg-castle-title-l2.png"
+    ],
+    "prompt": "Story picture: Wizard Wim's tower study, the same room as the first reference (bookshelves, round window, desk on the left). Wizard Wim (exactly as in the references) stands in the middle with both hands on his cheeks, surprised and worried, looking at his EMPTY desk where a dusty circle shows a lamp used to stand. Cat-cat the small grey cat (exactly as in the second reference) sits on the floor next to him looking up with a question face. No lamp anywhere in the picture. Characters keep their exact designs with chibi proportions. Same flat kawaii cartoon art style, bold warm-dark outlines and colours as the reference images. Full-bleed 16:9 scene filling the whole frame edge to edge, no frame, no border, no sky margin, no text, no letters."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-castle-study-empty.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-wim.png"
+    ],
+    "prompt": "Redraw the reference room — Wizard Wim's tower study with bookshelves, the round window and wooden floor — but with NO characters and NO furniture in the middle: the whole centre of the picture is an open, empty wooden floor in front of a plain warm wall, so objects can be placed there. Keep bookshelves only at the far left and far right edges. Calm, uncluttered middle. Same flat kawaii cartoon art style, bold warm-dark outlines and colours as the reference images. Full-bleed 16:9 scene filling the whole frame edge to edge, no frame, no border, no sky margin, no text, no letters."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-hunt-kitchen-under.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-kitchen.png",
+      "public/magic-castle/stickers/lamp.png"
+    ],
+    "prompt": "Redraw the reference kitchen EXACTLY — same table, chair, shelves, window and fireplace with the pot, same camera and colours — with ONE addition: Wim's magic lamp is the SAME brass oil lamp as the lamp reference sticker (glass chimney, warm glowing flame) with a soft purple magic sparkle around it, standing on the stone floor UNDER the table, between the table legs, clearly under the tabletop. Nothing on the table. No characters. Same flat kawaii cartoon art style, bold warm-dark outlines and colours as the reference images. Full-bleed 16:9 scene filling the whole frame edge to edge, no frame, no border, no sky margin, no text, no letters."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-hunt-bedroom-behind.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-bedroom-nolamp.png",
+      "public/magic-castle/stickers/lamp.png"
+    ],
+    "prompt": "Redraw the reference bedroom (door, window, four-poster bed with red curtains, empty bedside table) but with NO characters at all — no fox, no cat. ONE addition: Wim's magic lamp is the SAME brass oil lamp as the lamp reference sticker (glass chimney, warm glowing flame) with a soft purple magic sparkle around it, hidden BEHIND the bed: only its top half and its glow peek out from behind the foot of the bed, clearly behind it. The bedside table stays empty. Same flat kawaii cartoon art style, bold warm-dark outlines and colours as the reference images. Full-bleed 16:9 scene filling the whole frame edge to edge, no frame, no border, no sky margin, no text, no letters."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-hunt-living-nextto.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-livingroom-hallway.png",
+      "public/magic-castle/stickers/lamp.png"
+    ],
+    "prompt": "A single castle LIVING ROOM interior filling the whole frame (no cutaway, no sky, no hallway): the stone fireplace on the left, the red sofa with two cushions in the middle, the bookshelf, the castle painting on the wall, the round rug and the small coffee table — all as in the reference living room. ONE addition: Wim's magic lamp is the SAME brass oil lamp as the lamp reference sticker (glass chimney, warm glowing flame) with a soft purple magic sparkle around it, standing on the floor right NEXT TO the sofa, on its right side, touching nothing. No characters. Same flat kawaii cartoon art style, bold warm-dark outlines and colours as the reference images. Full-bleed 16:9 scene filling the whole frame edge to edge, no frame, no border, no sky margin, no text, no letters."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-hunt-dining-on.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-bathroom-dining.png",
+      "public/magic-castle/stickers/lamp.png"
+    ],
+    "prompt": "A single castle DINING ROOM interior filling the whole frame (no cutaway, no sky, no bathroom): the long wooden table with plates, cups and a bowl of fruit, the candle chandelier, the arched window and the two banners, all as in the reference dining room, with THREE wooden chairs clearly visible and one empty chair pulled out at the front right. ONE addition: Wim's magic lamp is the SAME brass oil lamp as the lamp reference sticker (glass chimney, warm glowing flame) with a soft purple magic sparkle around it, standing ON the seat of that pulled-out chair. Nothing else on that chair. No characters. Same flat kawaii cartoon art style, bold warm-dark outlines and colours as the reference images. Full-bleed 16:9 scene filling the whole frame edge to edge, no frame, no border, no sky margin, no text, no letters."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-hunt-bathroom-in.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-bathroom-dining.png",
+      "public/magic-castle/stickers/lamp.png"
+    ],
+    "prompt": "A single castle BATHROOM interior filling the whole frame (no cutaway, no sky, no dining room): the white claw-foot bathtub, the sink with the mirror, the shelf with towels and jars, a small arched window, all as in the reference bathroom, a little bigger. ONE addition: Wim's magic lamp is the SAME brass oil lamp as the lamp reference sticker (glass chimney, warm glowing flame) with a soft purple magic sparkle around it, sitting IN the empty bathtub, its glow shining up over the rim — clearly inside the tub. No water, no characters. Same flat kawaii cartoon art style, bold warm-dark outlines and colours as the reference images. Full-bleed 16:9 scene filling the whole frame edge to edge, no frame, no border, no sky margin, no text, no letters."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-castle-lamp-found.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-title-l2.png",
+      "public/magic-castle/scenes/bg-castle-wim.png",
+      "public/magic-castle/stickers/lamp.png"
+    ],
+    "prompt": "Happy ending picture in Wizard Wim's tower study at night: Wizard Wim (exactly as in the references) holds his magic lamp high above his head with a big happy smile; Wim's magic lamp is the SAME brass oil lamp as the lamp reference sticker (glass chimney, warm glowing flame) with a soft purple magic sparkle around it, glowing brightly and filling the room with warm light and purple sparkles. Pip the orange fox and Cat-cat the small grey cat (exactly as in the first reference) cheer and jump beside him. Characters keep their exact designs with chibi proportions. Same flat kawaii cartoon art style, bold warm-dark outlines and colours as the reference images. Full-bleed 16:9 scene filling the whole frame edge to edge, no frame, no border, no sky margin, no text, no letters."
+  },
+  {
+    "out": "public/magic-castle/stickers/box.png",
+    "sticker": true,
+    "refs": [
+      "public/magic-castle/stickers/chair.png"
+    ],
+    "prompt": "One single OPEN wooden toy box (a square wooden crate with no lid, open top, you can see a little inside), three-quarter view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat warm colours), isolated alone on a plain pure white background. Show ONLY this one object — no room, no walls, no floor, nothing inside it."
   }
 ]
