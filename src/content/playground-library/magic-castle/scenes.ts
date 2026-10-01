@@ -530,14 +530,16 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     // mini-mystery with its own stakes (Wim's lost wand) that gives the
     // student a reason to apply "there is / there is no" one more time in
     // a real narrative, right before the lesson's closing production and
-    // assessment scenes. Reuses existing art; no new images needed.
+    // assessment scenes. Dedicated manga-panel art per page (same pipeline
+    // as mc-storybook — see story1-p*.png and project_manga_panel_layout_
+    // implementation.md), not reused room backgrounds.
     id: 'mc-storybook-2', kind: 'flipbook', bg: bgWide, title: 'Chapter 2: The Missing Wand',
     pages: [
-      { who: 'wim', img: bgWim, text: 'Oh no! Wim can’t find his magic wand. "Where is it?" he asks.' },
-      { who: 'pip', img: bgWide, text: 'Pip looks in the great hall. "There is no wand here," says Pip.' },
-      { who: 'catcat', img: bgCatcat, text: 'Cat-cat looks by the window. "There is no wand here either!" says Cat-cat.' },
-      { who: 'wim', img: bgKitchen, text: 'They look in the kitchen. "There it is! There is a wand on the table!" says Wim.' },
-      { who: 'wim', img: bgFriends, text: '"Thank you, friends!" says Wim. Everyone is happy again.' },
+      { who: 'wim', img: `${S1}/story2-p1-main.png`, img2: `${S1}/story2-p1-accent.png`, text: 'Oh no! Wim can’t find his magic wand. "Where is it?" he asks.' },
+      { who: 'pip', img: `${S1}/story2-p2-main.png`, img2: `${S1}/story2-p2-accent.png`, text: 'Pip looks in the great hall. "There is no wand here," says Pip.' },
+      { who: 'catcat', img: `${S1}/story2-p3-main.png`, img2: `${S1}/story2-p3-accent.png`, text: 'Cat-cat looks by the window. "There is no wand here either!" says Cat-cat.' },
+      { who: 'wim', img: `${S1}/story2-p4-main.png`, img2: `${S1}/story2-p4-accent.png`, text: 'They look in the kitchen. "There it is! There is a wand on the table!" says Wim.' },
+      { who: 'wim', img: `${S1}/story2-p5-splash.png`, splash: true, text: '"Thank you, friends!" says Wim. Everyone is happy again.' },
     ],
     checkpoints: [
       { afterPage: 2, who: 'pip', question: 'Where does Pip look first?', options: ['Great hall', 'Kitchen', 'Bedroom'], answer: 'Great hall' },

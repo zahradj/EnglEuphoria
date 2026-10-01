@@ -2113,115 +2113,32 @@ function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<
         ✦ {scene.title} ✦ <span className="ml-1 opacity-60">({pageIdx + 1}/{total})</span>
       </div>
 
-      {/* Manga-style panel layout (A1+ only — see FlipbookScene's story
-          data, none of which exists below A1): the page fills the WHOLE
-          lesson frame edge-to-edge instead of sitting in a small centered
-          card with dead margins around it. Two diagonally-cut panels —
-          a dominant story-art panel and a smaller character "reaction"
-          panel — share the frame with a thin gutter between them, the
-          classic comic-panel composition. The gutter is just the dark
-          background showing through a gap between the two panels' own
-          clip-paths, not a drawn line, so it scales cleanly to any screen
-          size without needing exact-pixel seam math. */}
-      <div
-        onClick={turnPage}
-        className="absolute inset-0 z-10 flex cursor-pointer select-none flex-col overflow-hidden"
-        style={{ background: '#15101a' }}
-      >
-        {/* Art area: takes the remaining space above the caption bar, but
-            the panel composition itself is capped to a sane aspect ratio
-            (not simply stretched to fill whatever height is left) —
-            without this cap, a tall/narrow stage (e.g. a phone in portrait)
-            forced the panels' object-cover crop into a severe zoom, since
-            cropping a landscape photo into a very tall box keeps only a
-            thin vertical sliver of it. Centering a bounded box here keeps
-            every screen's crop close to what the art was actually composed
-            for, and any leftover space is just more of the gutter color
-            (the same dark background already used between panels). */}
+      {/* Storybook page: one full illustration per beat, framed like a
+          page from a picture book — not chopped into comic/manga panels.
+          That multi-panel layout was tried this session (diagonal hero +
+          3 side panels, then an all-rectangle bordered grid) and reported
+          as not looking good as a manga; the simpler single-illustration
+          page reads better for this engine's one-beat-per-page unit and
+          lets each full generated illustration (see mc-storybook/-2's
+          story*-p*-main.png) be seen in full rather than sliced up. Still
+          fills the whole lesson frame edge-to-edge (not a small centered
+          card with dead margins) per the earlier "it should fit" note. */}
+      <div onClick={turnPage} className="absolute inset-0 z-10 flex cursor-pointer select-none flex-col overflow-hidden">
         <div className="relative min-h-0 flex-1">
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center p-[2%]">
             <div
               key={pageIdx}
-              className="relative w-full"
+              className="relative w-full overflow-hidden rounded-2xl"
               style={{
                 aspectRatio: '16 / 10',
                 maxHeight: '100%',
+                boxShadow: '0 0 0 6px #FFF2D0, 0 0 0 9px #C9932F, 0 10px 30px rgba(0,0,0,0.45)',
                 opacity: flipping ? 0 : 1,
                 transform: flipping ? 'scale(0.96)' : 'scale(1)',
                 transition: 'opacity 0.3s ease, transform 0.3s ease',
               }}
             >
-              {page.splash ? (
-                /* Climax/reveal beat: one full-bleed panel, no cuts. Real
-                   manga signals a story's emotional high point by giving it
-                   MORE space and LESS interruption, not more chopping — the
-                   same "page" grammar as a splash page, just sized to this
-                   engine's single-beat-per-page unit instead of a full
-                   physical page. */
-                <div className="absolute inset-0 overflow-hidden rounded-[6px]">
-                  <img src={page.img} alt="" className="h-full w-full object-cover" />
-                  <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(ellipse at center 55%, rgba(255,224,150,0.12) 0%, rgba(10,6,16,0) 55%, rgba(10,6,16,0.45) 100%)' }} />
-                </div>
-              ) : (
-                <>
-                  {/* Section 1 — the one dynamic panel on the page. Real
-                      comic pages use a diagonal, energy-breaking cut
-                      sparingly (one or two panels, never the whole grid) —
-                      so only this dominant panel gets the angled edge; the
-                      other three stay calm rectangles instead of repeating
-                      the same diagonal four times, which reads as chaotic
-                      rather than dynamic. */}
-                  <div className="absolute inset-0" style={{ clipPath: 'polygon(0 0, 64% 0, 50% 100%, 0 100%)' }}>
-                    <img src={page.img} alt="" className="h-full w-full object-cover" />
-                    <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,6,16,0.6) 0%, rgba(10,6,16,0) 40%)' }} />
-                  </div>
-
-                  {/* Sections 2–4 — a calm straight-edged right-hand column,
-                      each panel its own small bounding box (not the full
-                      frame) before any crop is applied. Sizing contain/cover
-                      art against the panel's OWN small box — instead of the
-                      full 16:10 frame — is what keeps a portrait close-up
-                      from being cropped down to a single eye: the mismatch
-                      between a tall source image and a wide sliver of the
-                      full frame is much smaller once the box itself is
-                      already close to the art's own shape. */}
-                  <div className="absolute overflow-hidden" style={{ left: '68%', top: '0%', width: '32%', height: '31%' }}>
-                    <div className="absolute inset-0" style={{ background: page.who ? `linear-gradient(160deg, ${CAST[page.who].color}dd, #241428)` : 'linear-gradient(160deg,#4a3a5c,#241428)' }}>
-                      {page.img2 ? (
-                        <img src={page.img2} alt="" className="h-full w-full object-contain" />
-                      ) : page.who && (
-                        <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-center">
-                          <span className="text-3xl drop-shadow-[0_3px_6px_rgba(0,0,0,0.5)] sm:text-4xl">{CAST[page.who].emoji}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="absolute overflow-hidden bg-[#241428]" style={{ left: '68%', top: '34.5%', width: '32%', height: '31%' }}>
-                    <img
-                      src={page.img}
-                      alt=""
-                      className="h-full w-full object-cover"
-                      style={{ objectPosition: '70% 35%', transform: 'scale(1.3)' }}
-                    />
-                    <div className="absolute inset-0" style={{ background: 'rgba(20,10,30,0.18)' }} />
-                  </div>
-
-                  <div className="absolute overflow-hidden" style={{ left: '68%', top: '69%', width: '32%', height: '31%' }}>
-                    <div
-                      className="flex h-full w-full flex-col items-center justify-center gap-0.5 text-center"
-                      style={{ background: page.who ? `linear-gradient(200deg, #241428, ${CAST[page.who].color}dd)` : 'linear-gradient(200deg,#241428,#4a3a5c)' }}
-                    >
-                      {page.who && (
-                        <>
-                          <span className="text-2xl drop-shadow-[0_3px_6px_rgba(0,0,0,0.5)] sm:text-3xl">{CAST[page.who].emoji}</span>
-                          <span className="text-[8px] font-black uppercase tracking-widest text-white/80 sm:text-[10px]">{CAST[page.who].name}</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </>
-              )}
+              <img src={page.img} alt="" className="h-full w-full object-cover" />
             </div>
           </div>
           {!flipping && (
