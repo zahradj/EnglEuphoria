@@ -12,9 +12,11 @@ import React from 'react';
  * so every screen animates to the identical result.
  */
 
-/** Colour by segment number (1-based), repeating: periwinkle, slate, cyan,
- *  coral, graphite, light blue — the reference spinner's palette. */
-export const SPIN_WHEEL_COLORS = ['#97A8E5', '#475569', '#5ED0F5', '#EE6F73', '#565E6B', '#9FE0F8'];
+/** Colour by segment number (1-based), repeating — EnglEuphoria's own
+ *  Playground palette (orange, sunflower, violet, mint, sky, pink). Was a
+ *  copy of a reference spinner's periwinkle/slate/coral palette; replaced on
+ *  request so the wheel is our own design, not identical to the reference. */
+export const SPIN_WHEEL_COLORS = ['#FE6A2F', '#FEBE4C', '#7C3AED', '#22C59A', '#3FA2E8', '#E7569E'];
 
 export const SPIN_WHEEL_MIN = 2;
 export const SPIN_WHEEL_MAX = 8;
@@ -83,17 +85,34 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({
   const fontSize = count <= 6 ? 30 : 25;
   const canSpin = !!onSpin && !spinning;
 
+  const BULBS = 16;
   return (
     <div className="relative inline-flex items-center gap-3">
+      <style>{`
+        @keyframes ee-bulb { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+        @keyframes ee-tick { 0%,100% { transform: translateX(-50%) rotate(0deg); } 50% { transform: translateX(-50%) rotate(-14deg); } }
+        @keyframes ee-hub { 0%,100% { transform: translate(-50%,-50%) scale(1); } 50% { transform: translate(-50%,-50%) scale(1.07); } }
+      `}</style>
       <div className="relative" style={{ width: size, height: size }}>
-        {/* White rim + soft shadow (static) */}
-        <div className="absolute inset-0 rounded-full bg-white shadow-[0_10px_30px_rgba(15,23,42,0.28)]" />
+        {/* Gold marquee rim with light bulbs (static); bulbs chase while spinning */}
+        <div className="absolute inset-0 rounded-full" style={{ background: 'radial-gradient(circle at 30% 25%, #FFF3B0, #FFD34E 35%, #E59A00 75%, #B86E00)', boxShadow: '0 12px 30px rgba(120,60,0,0.35), inset 0 -4px 8px rgba(0,0,0,0.25)' }} />
+        {Array.from({ length: BULBS }, (_, i) => {
+          const a = (i * 360) / BULBS;
+          return (
+            <span key={i} className="absolute h-[4.2%] w-[4.2%] rounded-full" style={{
+              left: `${50 + 47.5 * Math.sin((a * Math.PI) / 180)}%`, top: `${50 - 47.5 * Math.cos((a * Math.PI) / 180)}%`, transform: 'translate(-50%,-50%)',
+              background: i % 2 ? '#FFFBEA' : '#FFE27A', boxShadow: '0 0 6px 2px rgba(255,236,150,0.9)',
+              animation: spinning ? `ee-bulb 0.5s ease-in-out ${(i % 2) * 0.25}s infinite` : undefined,
+            }} />
+          );
+        })}
         {/* Rotating face */}
         <div
-          className="absolute inset-[3.5%]"
+          className="absolute inset-[7%] overflow-hidden rounded-full"
           style={{
             transform: `rotate(${rotation}deg)`,
             transition: spinning ? `transform ${SPIN_DURATION_MS}ms cubic-bezier(0.12, 0.8, 0.18, 1)` : 'none',
+            boxShadow: 'inset 0 0 0 3px rgba(255,255,255,0.9)',
           }}
         >
           <svg viewBox="0 0 200 200" className="h-full w-full" aria-hidden="true">
@@ -104,50 +123,57 @@ export const SpinWheel: React.FC<SpinWheelProps> = ({
               const a1 = c + slice / 2;
               const large = slice > 180 ? 1 : 0;
               const isHit = !spinning && highlight === n;
+              const color = SPIN_WHEEL_COLORS[i % SPIN_WHEEL_COLORS.length];
               const text = labels?.[i] ?? String(n);
+              const dim = !(isHit || highlight == null || spinning);
               return (
-                <g key={n}>
-                  <path
-                    d={`M 100 100 L ${point(a0, R + 8)} A ${R + 8} ${R + 8} 0 ${large} 1 ${point(a1, R + 8)} Z`}
-                    fill={SPIN_WHEEL_COLORS[i % SPIN_WHEEL_COLORS.length]}
-                    opacity={isHit || highlight == null || spinning ? 0.95 : 0.7}
-                  />
-                  <text
-                    x={100}
-                    y={100 - R * 0.66}
-                    transform={`rotate(${c} 100 100)`}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fill="#fff"
-                    fontSize={labels ? Math.min(fontSize, 18) : isHit ? fontSize * 1.25 : fontSize}
-                    fontWeight={900}
-                    style={{ fontFamily: "'Fredoka', 'Nunito', system-ui, sans-serif" }}
-                  >
-                    {text}
-                  </text>
+                <g key={n} opacity={dim ? 0.55 : 1}>
+                  <path d={`M 100 100 L ${point(a0, R + 8)} A ${R + 8} ${R + 8} 0 ${large} 1 ${point(a1, R + 8)} Z`} fill={color} stroke="#fff" strokeWidth={2.5} />
+                  {/* glossy band near the rim */}
+                  <path d={`M ${point(a0 + 2, R + 2)} A ${R + 2} ${R + 2} 0 ${large} 1 ${point(a1 - 2, R + 2)} L ${point(a1 - 2, R - 14)} A ${R - 14} ${R - 14} 0 ${large} 0 ${point(a0 + 2, R - 14)} Z`} fill="rgba(255,255,255,0.18)" />
+                  <g transform={`rotate(${c} 100 100)`}>
+                    {labels ? (
+                      <text x={100} y={100 - R * 0.62} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize={Math.min(fontSize, 18)} fontWeight={900}
+                        style={{ fontFamily: "'Fredoka', 'Nunito', system-ui, sans-serif", paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.25)', strokeWidth: 3 }}>{text}</text>
+                    ) : (
+                      <>
+                        <circle cx={100} cy={100 - R * 0.62} r={isHit ? 17 : 14} fill="#fff" stroke={isHit ? '#FFD34E' : 'none'} strokeWidth={4} />
+                        <text x={100} y={100 - R * 0.62 + 1} textAnchor="middle" dominantBaseline="middle" fill={color} fontSize={isHit ? 22 : 18} fontWeight={900}
+                          style={{ fontFamily: "'Fredoka', 'Nunito', system-ui, sans-serif" }}>{text}</text>
+                        <text x={100} y={100 - R * 0.3} textAnchor="middle" dominantBaseline="middle" fontSize={11} fill="rgba(255,255,255,0.85)">★</text>
+                      </>
+                    )}
+                  </g>
                 </g>
               );
             })}
           </svg>
         </div>
-        {/* Pointer (static) — small white triangle on top of the hub */}
-        <div
-          className="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2"
-          style={{ marginTop: `calc(-11% - 10px)` }}
-        >
-          <div className="h-0 w-0 border-x-[7px] border-b-[11px] border-x-transparent border-b-white drop-shadow" />
+        {/* Pointer (static) — gold star pin above the rim, ticks while spinning */}
+        <div className="pointer-events-none absolute left-1/2 z-10" style={{ top: '-7%', width: '17%', transform: 'translateX(-50%)', transformOrigin: '50% 20%', animation: spinning ? 'ee-tick 0.18s ease-in-out infinite' : undefined }}>
+          <svg viewBox="0 0 40 52" className="w-full drop-shadow-[0_4px_4px_rgba(0,0,0,0.35)]" aria-hidden="true">
+            <path d="M20 50 L9 26 H31 Z" fill="#E59A00" stroke="#7A4A00" strokeWidth="2" strokeLinejoin="round" />
+            <path d="M20 2 L24.7 12.3 L36 13.5 L27.5 21 L30 32 L20 26.3 L10 32 L12.5 21 L4 13.5 L15.3 12.3 Z" fill="#FFD34E" stroke="#7A4A00" strokeWidth="2" strokeLinejoin="round" />
+          </svg>
         </div>
-        {/* Hub — the SPIN button */}
+        {/* Hub — the SPIN! button */}
         <button
           type="button"
           onClick={canSpin ? onSpin : undefined}
           disabled={!canSpin}
           aria-label={canSpin ? 'Spin the wheel' : 'Spinner'}
-          className={`absolute left-1/2 top-1/2 z-20 flex h-[22%] w-[22%] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[11px] font-bold uppercase tracking-wide text-slate-400 shadow-md ring-1 ring-slate-200 transition ${
-            canSpin ? 'cursor-pointer hover:scale-105 hover:text-slate-600 active:scale-95' : 'cursor-default'
-          }`}
+          className={`absolute left-1/2 top-1/2 z-20 flex h-[26%] w-[26%] flex-col items-center justify-center rounded-full font-black uppercase leading-none text-white ring-4 ring-white transition ${canSpin ? 'cursor-pointer active:scale-95' : 'cursor-default'}`}
+          style={{
+            transform: 'translate(-50%,-50%)',
+            background: 'radial-gradient(circle at 35% 30%, #FFB27A, #FE6A2F 45%, #E7569E)',
+            boxShadow: '0 6px 0 #B8410F, 0 10px 18px rgba(0,0,0,0.3)',
+            fontFamily: "'Fredoka', 'Nunito', system-ui, sans-serif",
+            fontSize: 'clamp(11px, 6.5%, 22px)',
+            animation: canSpin ? 'ee-hub 1.4s ease-in-out infinite' : undefined,
+          }}
         >
-          Spin
+          <span style={{ fontSize: '1.25em' }}>★</span>
+          <span>Spin!</span>
         </button>
       </div>
       {onCountChange && (
