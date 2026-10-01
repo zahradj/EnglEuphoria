@@ -2123,32 +2123,41 @@ function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<
           story*-p*-main.png) be seen in full rather than sliced up. Still
           fills the whole lesson frame edge-to-edge (not a small centered
           card with dead margins) per the earlier "it should fit" note. */}
-      <div onClick={turnPage} className="absolute inset-0 z-10 flex cursor-pointer select-none flex-col overflow-hidden">
-        <div className="relative min-h-0 flex-1">
-          <div className="absolute inset-0 flex items-center justify-center p-[2%]">
-            <div
-              key={pageIdx}
-              className="relative w-full overflow-hidden rounded-2xl"
-              style={{
-                aspectRatio: '16 / 10',
-                maxHeight: '100%',
-                boxShadow: '0 0 0 6px #FFF2D0, 0 0 0 9px #C9932F, 0 10px 30px rgba(0,0,0,0.45)',
-                opacity: flipping ? 0 : 1,
-                transform: flipping ? 'scale(0.96)' : 'scale(1)',
-                transition: 'opacity 0.3s ease, transform 0.3s ease',
-              }}
-            >
-              <img src={page.img} alt="" className="h-full w-full object-cover" />
-            </div>
+      {/* The story text lives ON the illustration itself — a caption band
+          across the bottom of the framed picture, the way a real picture
+          book prints its text over (or right under, inset into) the art
+          on the same page — not as a second stacked block below the image.
+          A separate below-image text row could grow past 1 line and, in a
+          shorter embedded frame (e.g. the live classroom's scaled stage),
+          get pushed below the visible area entirely. Keeping it INSIDE the
+          same bounded, aspect-capped box as the art guarantees it's always
+          on screen, whatever the surrounding frame's height is. */}
+      <div onClick={turnPage} className="absolute inset-0 z-10 flex cursor-pointer select-none items-center justify-center overflow-hidden p-[2%]">
+        <div
+          key={pageIdx}
+          className="relative w-full select-none overflow-hidden rounded-2xl"
+          style={{
+            aspectRatio: '16 / 10',
+            maxHeight: '100%',
+            boxShadow: '0 0 0 6px #FFF2D0, 0 0 0 9px #C9932F, 0 10px 30px rgba(0,0,0,0.45)',
+            opacity: flipping ? 0 : 1,
+            transform: flipping ? 'scale(0.96)' : 'scale(1)',
+            transition: 'opacity 0.3s ease, transform 0.3s ease',
+          }}
+        >
+          <img src={page.img} alt="" className="h-full w-full object-cover" />
+          {/* Large, high-contrast story text — A1 students CAN read (unlike
+              Pre-A1, which has no reading segment at all — see
+              project_manga_panel_layout_a1_plus_only), so this sentence is
+              the actual reading-practice target of the scene, not just a
+              caption for the picture. */}
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#FFF2D0] via-[#FFF2D0]/97 to-[#FFF2D0]/0 px-4 pb-3 pt-10 text-center sm:px-6 sm:pb-4">
+            <p className="mx-auto max-w-[94%] text-lg font-black leading-snug text-orange-900 drop-shadow-[0_1px_0_rgba(255,255,255,0.6)] sm:text-2xl">{page.text}</p>
+            {page.who && <span className="mt-1 block text-[11px] font-black uppercase tracking-widest text-amber-700 sm:text-xs">— {CAST[page.who].name}</span>}
           </div>
           {!flipping && (
-            <div className="pointer-events-none absolute bottom-3 right-4 z-20 grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-orange-600 text-xl text-white shadow-xl ring-2 ring-white/70 animate-pulse sm:h-14 sm:w-14 sm:text-2xl">▶</div>
+            <div className="pointer-events-none absolute right-3 top-3 z-20 grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-orange-600 text-lg text-white shadow-xl ring-2 ring-white/70 animate-pulse sm:h-12 sm:w-12 sm:text-xl">▶</div>
           )}
-        </div>
-
-        <div className="relative z-20 shrink-0 bg-gradient-to-b from-[#FFFBF0] to-[#FFF2D0] px-5 pb-5 pt-4 text-center shadow-[0_-6px_20px_rgba(0,0,0,0.35)]">
-          <p className="mx-auto max-w-[640px] text-base font-bold text-orange-900 sm:text-lg">{page.text}</p>
-          {page.who && <span className="mt-1 block text-xs font-black uppercase tracking-widest text-amber-600">— {CAST[page.who].name}</span>}
         </div>
       </div>
 
