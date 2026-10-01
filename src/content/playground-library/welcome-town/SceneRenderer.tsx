@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { LiveStageFill, useStageDrop } from '../LiveStageFrame';
+import { LiveStageFill, StageFrame, useStageDrop } from '../LiveStageFrame';
 import type { CallRole } from '@/components/classroom/stage/callStreams';
 import { ChatCloud } from '../ChatCloud';
 import type { Scene, CharKey } from './scenes';
@@ -1978,16 +1978,11 @@ function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, 
           </div>
         </div>
       )}
-      <div className="absolute left-1/2 z-30" style={{ top: '62%', transform: 'translate(-50%, -50%)' }}>
-        <div {...dropProps} className={`relative flex items-center justify-center overflow-hidden rounded-full border-[10px] shadow-[0_30px_80px_rgba(0,0,0,0.5)] transition-all ${isStudentTurn ? 'border-orange-400 ring-8 ring-orange-300/70' : 'border-white/95 ring-4 ring-white/40'}`} style={{ width: 'clamp(300px, calc(46*var(--svw,1vw)), 500px)', height: 'clamp(300px, calc(46*var(--svw,1vw)), 500px)', background: 'linear-gradient(135deg, #FE6A2F, #FEBE4C)' }}>
+      {/* Compact Live Stage frame on the right, below the question card. */}
+      <div className="absolute z-30" style={{ right: '5%', bottom: '9%' }}>
+        <StageFrame onStage={onStage} onPlace={placeOnStage} canControl={canControl} active={isStudentTurn} frameProps={dropProps}>
           <LiveStageFill onStage={onStage} onPlace={placeOnStage} over={over} canControl={canControl} />
-        </div>
-        <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '-48px' }}>
-          <div className={`relative flex items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-orange-700 shadow-2xl ring-4 ring-white transition-transform ${isStudentTurn ? 'scale-110' : ''}`} style={{ width: 96, height: 96 }}>
-            {isStudentTurn && <span className="absolute inset-0 rounded-full bg-orange-400/50 animate-ping" />}
-            <span className="relative text-5xl drop-shadow-md">🎤</span>
-          </div>
-        </div>
+        </StageFrame>
       </div>
       {done && <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center"><button onClick={onNext} className="rounded-full bg-orange-500 px-8 py-4 text-base font-black uppercase tracking-widest text-white shadow-2xl active:scale-95">✨ Next</button></div>}
     </div>
