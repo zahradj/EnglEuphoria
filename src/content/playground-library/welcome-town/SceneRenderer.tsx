@@ -197,7 +197,25 @@ export function SceneRenderer(props: {
 
 /* ---------- Title card ---------- */
 
+/* Calm cream-card look (opt-in per scene via `look: 'card'`). */
+const CARD_STYLE: React.CSSProperties = { background: '#FFF6DF', color: '#2A1459', boxShadow: '0 20px 50px rgba(0,0,0,0.45)' };
+const CARD_FONT = "'Fredoka', 'Grandstander', system-ui, sans-serif";
+
 function TitleCardScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'title-card' }>; onNext: () => void }) {
+  if (scene.look === 'card') {
+    return (
+      <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="absolute left-1/2 top-[3%] w-[min(92%,640px)] -translate-x-1/2 rounded-[2rem] px-8 py-7 text-center animate-[lep1-fade-slide_0.5s_ease-out]" style={CARD_STYLE}>
+          <p className="text-base font-black sm:text-lg" style={{ color: '#7C3AED', fontFamily: CARD_FONT }}>{scene.level} · {scene.unit} · {scene.lessonLabel}</p>
+          <h1 className="mt-1 font-black leading-[1.05]" style={{ fontFamily: CARD_FONT, fontSize: 'clamp(2rem, 1rem + 2.6 * var(--svw, 1vw), 3.4rem)' }}>{scene.title}</h1>
+          <p className="mt-3 text-base font-bold sm:text-xl" style={{ fontFamily: CARD_FONT }}>{scene.subtitle}</p>
+          <button onClick={() => { unlockAudio(); onNext(); }} className="mt-5 rounded-full bg-[#FE6A2F] px-8 py-3 text-xl font-black text-white shadow-lg transition hover:scale-105 active:scale-95" style={{ fontFamily: CARD_FONT }}>
+            {scene.cta ?? 'Start Lesson →'}
+          </button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0) 55%, rgba(254,106,47,0.35) 100%)' }} />
@@ -282,6 +300,23 @@ function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind: 'cine
   }, [scene.id]);
 
   const currentLine = step < 0 ? '…' : step < scene.script.length ? scene.script[step].line : 'Ready?';
+
+  if (scene.look === 'card') {
+    return (
+      <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="absolute left-1/2 top-[6%] w-[min(90%,620px)] -translate-x-1/2 rounded-[2rem] px-7 py-5 text-center" style={CARD_STYLE}>
+          <h1 className="font-black leading-tight" style={{ fontFamily: CARD_FONT, fontSize: 'clamp(1.8rem, 1rem + 2 * var(--svw, 1vw), 2.8rem)' }}>{scene.title}</h1>
+          <p className="mt-1 text-base font-bold sm:text-lg" style={{ fontFamily: CARD_FONT }}>{scene.subtitle}</p>
+          {step >= 0 && step < scene.script.length && (
+            <p className="mt-3 rounded-2xl bg-white px-4 py-2 text-xl font-black" style={{ fontFamily: CARD_FONT, color: CAST[scene.script[step].who]?.color ?? '#2A1459' }}>
+              {CAST[scene.script[step].who]?.name}: “{currentLine}”
+            </p>
+          )}
+          <button onClick={onNext} className="mt-4 rounded-full bg-[#FE6A2F] px-7 py-3 text-lg font-black text-white shadow-lg transition hover:scale-105 active:scale-95" style={{ fontFamily: CARD_FONT }}>{scene.cta}</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
@@ -2940,14 +2975,14 @@ function FinaleScene({ scene, hearts, gems, onRestart }: { scene: Extract<Scene,
     <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center px-4" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/40" />
       <Confetti />
-      <div className="relative z-10 w-full max-w-sm rounded-3xl border border-white/40 bg-white/95 p-5 text-center text-neutral-900 shadow-2xl backdrop-blur-2xl ring-1 ring-white/30">
-        <p className="text-sm font-bold uppercase tracking-widest text-orange-500">Lesson Complete!</p>
-        <h2 className="mt-1 text-4xl font-black text-orange-800">You did it!</h2>
+      <div className={`relative z-10 w-full max-w-sm rounded-3xl p-5 text-center shadow-2xl ${scene.look === 'card' ? '' : 'border border-white/40 bg-white/95 text-neutral-900 backdrop-blur-2xl ring-1 ring-white/30'}`} style={scene.look === 'card' ? { ...CARD_STYLE, fontFamily: CARD_FONT } : undefined}>
+        <p className="text-sm font-bold uppercase tracking-widest" style={{ color: scene.look === 'card' ? '#7C3AED' : '#F97316' }}>Lesson Complete!</p>
+        <h2 className={`mt-1 text-4xl font-black ${scene.look === 'card' ? '' : 'text-orange-800'}`}>🎉 You did it!</h2>
         <div className="my-4 flex justify-center gap-2 text-5xl">
           {[0, 1, 2, 3].map((i) => <span key={i} className={i < stars ? '' : 'opacity-20'}>⭐</span>)}
         </div>
         <div className="mx-auto grid grid-cols-3 gap-2 rounded-3xl bg-white/70 p-3">
-          {(['marigold', 'pip', 'mia', 'bella', 'willow', 'leo'] as const).map((k, i) => {
+          {(scene.cast ?? (['marigold', 'pip', 'mia', 'bella', 'willow', 'leo'] as const)).map((k, i) => {
             const c = CAST[k];
             return (
               <div key={k} className="grid place-items-center">

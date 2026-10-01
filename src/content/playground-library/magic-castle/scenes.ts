@@ -650,6 +650,7 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
 const bgBedroomTour = `${M}/scenes/bg-castle-bedroom-tour.png`;
 const bgBedroomNoLamp = `${M}/scenes/bg-castle-bedroom-nolamp.png`;
 const bgCatcatPipDoor = `${M}/scenes/bg-castle-catcat-pip-door.png`;
+const bgTitleL2 = `${M}/scenes/bg-castle-title-l2.png`;
 
 const DOOR_SPOT = { left: '17%', top: '42%' };
 const WINDOW_SPOT = { left: '47%', top: '30%' };
@@ -665,21 +666,37 @@ export const LESSON_A1U9L2_OBJECTIVE =
   'Name four more things in a castle bedroom (bed, lamp, door, window) and say what is (and is not) in the room with "There is a ___" / "There is no ___." Phonics: the L /l/ and W /w/ sounds with word spells, a tongue twister and a short reading. (Reviews Lesson 1’s rooms and furniture; Lesson 3 adds where things are: in, on, under, next to, behind.)';
 
 export const LESSON_A1U9L2_SCENES: Scene[] = [
-  { id: 'mc2-title', kind: 'title-card', bg: bgTitle, level: 'A1', unit: 'Unit 9', lessonLabel: 'Lesson 2', title: 'Magic Castle: Castle Furniture', subtitle: 'Explore the bedroom with Cat-cat and Pip', cta: '\u{1F6CF}️ LET’S GO!' },
+  // Lesson 2 uses the calm cream-card look (look: 'card') on its title,
+  // story opener and finale, on request; L1 keeps the classic hopping title.
+  { id: 'mc2-title', kind: 'title-card', bg: bgTitleL2, level: 'A1', unit: 'Unit 9', lessonLabel: 'Lesson 2', title: 'Magic Castle: Castle Furniture', subtitle: 'Explore the bedroom with Cat-cat and Pip', cta: '\u{1F6CF}️ LET’S GO!', look: 'card' },
 
   {
-    // Warm-up review of Lesson 1 before anything new: a quick listen-and-tap
-    // on the same kitchen/bedroom cutaway the rooms were taught on.
-    id: 'mc2-review-rooms', kind: 'listen-tap', bg: bgRooms,
-    teacher: 'Remember the castle rooms? Listen and tap the room!',
-    targets: [
-      { label: 'Kitchen', ...KITCHEN_SPOT, color: '#C97A2F', hitWidth: '44%', hitHeight: '64%' },
-      { label: 'Bedroom', ...BEDROOM_SPOT, color: '#2EC4B6', hitWidth: '40%', hitHeight: '64%' },
-    ],
+    // Full warm-up review of Lesson 1 before anything new (per direct
+    // request: "all of the rooms of the house — a full revision of the
+    // first lesson"): the same six-room castle cutaway L1 taught on, one
+    // round per room, each spoken with L1's own sentences (This is the ___ /
+    // There is a ___ in the ___), so every room and both furniture words
+    // come back before the bedroom tour starts.
+    id: 'mc2-review-rooms', kind: 'listen-tap', bg: bgCastleOverview,
+    teacher: 'Remember Wim’s castle? Listen and tap the right room!',
+    targets: (() => {
+      const ROOM_HIT = { hitWidth: '30%', hitHeight: '36%' };
+      return [
+        { label: 'Living Room', ...OVERVIEW_LIVING_ROOM, ...ROOM_HIT, color: '#8B5A2B' },
+        { label: 'Hallway', ...OVERVIEW_HALLWAY, ...ROOM_HIT, color: '#F4A340' },
+        { label: 'Bathroom', ...OVERVIEW_BATHROOM, ...ROOM_HIT, color: '#2EC4B6' },
+        { label: 'Bedroom', ...OVERVIEW_BEDROOM, ...ROOM_HIT, color: '#2EC4B6' },
+        { label: 'Kitchen', ...OVERVIEW_KITCHEN, ...ROOM_HIT, color: '#C97A2F' },
+        { label: 'Dining Room', ...OVERVIEW_DINING_ROOM, ...ROOM_HIT, color: '#C97A2F' },
+      ];
+    })(),
     rounds: [
       { prompt: 'There is a table in the kitchen.', answerLabel: 'Kitchen', who: 'wim' },
-      { prompt: 'There is a bed in the bedroom.', answerLabel: 'Bedroom', who: 'catcat' },
-      { prompt: 'There is a chair in the kitchen.', answerLabel: 'Kitchen', who: 'catcat' },
+      { prompt: 'This is the bedroom.', answerLabel: 'Bedroom', who: 'catcat' },
+      { prompt: 'This is the living room.', answerLabel: 'Living Room', who: 'pip' },
+      { prompt: 'This is the bathroom.', answerLabel: 'Bathroom', who: 'wim' },
+      { prompt: 'There is a chair in the dining room.', answerLabel: 'Dining Room', who: 'catcat' },
+      { prompt: 'This is the hallway.', answerLabel: 'Hallway', who: 'pip' },
     ],
   },
 
@@ -690,6 +707,7 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
       { who: 'pip', line: 'A secret room? Open the door, Cat-cat!' },
     ],
     cta: '\u{1F6AA} OPEN THE DOOR!',
+    look: 'card',
   },
 
   {
@@ -911,5 +929,5 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
     ],
   },
 
-  { id: 'mc2-finale', kind: 'finale', bg: bgFriends, who: 'pip', line: 'You explored the bedroom and learned bed, lamp, door and window — and the magic L and W sounds! Tonight, look around your room and say "There is a ___!" ✨\u{1F6CF}️' },
+  { id: 'mc2-finale', kind: 'finale', bg: bgFriends, who: 'pip', look: 'card', cast: ['pip', 'wim', 'catcat'], line: 'You explored the bedroom and learned bed, lamp, door and window — and the magic L and W sounds! Tonight, look around your room and say "There is a ___!" ✨\u{1F6CF}️' },
 ];
