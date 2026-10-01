@@ -354,6 +354,27 @@ export type Scene =
   | { id: string; kind: 'jigsaw-puzzle'; bg: string; teacher: string; image: string; rows: number; cols: number }
   /** `cast`: the friends shown on the finale card (defaults to Welcome Town's
    *  class); `look: 'card'` = cream-card styling. */
+  /** Move-it preposition game (see WhereGames.tsx). Positions are % of a
+   *  16:9 stage: left = centre x, top = the FOOT (where it stands). `width`
+   *  is % of the stage width. `behind: true` draws the item under the
+   *  furniture sticker, so "behind"/"under" really look hidden. */
+  | {
+      id: string; kind: 'place-it'; bg: string; who: CharKey; teacher: string; mode: 'learn' | 'listen';
+      item: { label: string; img: string; width: number; height?: number; homeLeft?: number; homeTop?: number };
+      anchor: { label: string; img: string; left: number; top: number; width: number };
+      box?: { label: string; img: string; left: number; top: number; width: number };
+      spots: { prep: 'in' | 'on' | 'under' | 'next to' | 'behind'; left: number; top: number; behind?: boolean; scale?: number }[];
+      startAt?: 'in' | 'on' | 'under' | 'next to' | 'behind';
+      learnLines?: Partial<Record<'in' | 'on' | 'under' | 'next to' | 'behind', string>>;
+      rounds?: { prep: 'in' | 'on' | 'under' | 'next to' | 'behind'; line: string; answer?: string }[];
+    }
+  /** Torch hunt in a dark room (see WhereGames.tsx): find the hidden thing
+   *  (spot = % of the 16:9 picture, r = radius in % of width), then pick
+   *  the sentence that says where it is. */
+  | {
+      id: string; kind: 'torch-hunt'; bg: string; who: CharKey; teacher: string; ask?: string;
+      rounds: { bg: string; spot: { left: number; top: number; r: number }; question?: string; answer: string; options: string[] }[];
+    }
   | { id: string; kind: 'finale'; bg: string; who: CharKey; line: string; cast?: CharKey[]; look?: 'card' };
 
 export const LESSON_1_TITLE = 'Hello, Class!';
