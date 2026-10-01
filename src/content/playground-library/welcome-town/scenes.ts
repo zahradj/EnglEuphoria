@@ -266,7 +266,26 @@ export type Scene =
   | { id: string; kind: 'roleplay'; bg: string; teacher: string; cast: CharKey[]; script: { who: CharKey; line: string; repeat?: boolean }[] }
   | { id: string; kind: 'join-stage'; bg: string; teacher: string; cast: CharKey[]; turns: { who: CharKey | 'student'; line: string }[] }
   | { id: string; kind: 'hello-doors'; bg: string; teacher: string; cast: CharKey[]; rounds: { target: CharKey; prompt: string; helloLine: string; echoLine: string }[] }
-  | { id: string; kind: 'flipbook'; bg: string; title: string; pages: { who?: CharKey; img: string; text: string }[]; checkpoints: { afterPage: number; who: CharKey; question: string; options: string[]; answer: string }[] }
+  | {
+      id: string; kind: 'flipbook'; bg: string; title: string;
+      pages: {
+        who?: CharKey; img: string; text: string;
+        /** Dedicated art for the manga layout's smaller "reaction" panel —
+         * a close-up of the speaking character, generated per page rather
+         * than reused room art, so the second panel isn't just a flat
+         * color badge. Optional: older/un-illustrated flipbook pages fall
+         * back to the plain color+emoji accent panel in FlipbookScene. */
+        img2?: string;
+        /** Render this page as a single full-bleed "splash" panel instead
+         * of the usual multi-section manga layout — reserved for a
+         * climax/reveal beat (per real manga/comics convention: panel size
+         * and whether it's cut up at all signals importance, and chopping
+         * the emotional high point into the same small sections as every
+         * other beat undersells it instead of landing it). */
+        splash?: boolean;
+      }[];
+      checkpoints: { afterPage: number; who: CharKey; question: string; options: string[]; answer: string }[];
+    }
   | {
       id: string; kind: 'song'; bg: string; title: string; teacher: string; songUrl?: string; durationSeconds?: number; bigWord?: string; lyrics: { who: CharKey; text: string }[];
       /** Exact per-line duration (ms), same length as `lyrics`. See unit1/scenes.ts's

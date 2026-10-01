@@ -2122,8 +2122,14 @@ function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<
   );
 
   if (done) {
+    // Close on the story's own final illustration (the happy-ending beat
+    // the student just read) rather than the scene's generic establishing
+    // background — a blurred stock hallway behind "The End!" undersold the
+    // dedicated closing artwork right after the student had just seen it
+    // in full a moment earlier.
+    const lastPageImg = scene.pages[scene.pages.length - 1]?.img ?? scene.bg;
     return (
-      <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+      <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${lastPageImg})` }}>
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/60 backdrop-blur-sm" />
         <Confetti count={60} />
         <div className="relative z-10 flex flex-col items-center gap-5 px-6 text-center">
@@ -2148,33 +2154,50 @@ function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract<
         ✦ {scene.title} ✦ <span className="ml-1 opacity-60">({pageIdx + 1}/{total})</span>
       </div>
 
-      <div className="absolute inset-0 z-10 flex items-center justify-center px-4 pb-24 pt-16" style={{ perspective: 1400 }}>
+      {/* Storybook page: one full illustration per beat, framed like a
+          page from a picture book — not chopped into comic/manga panels.
+          That multi-panel layout was tried this session (diagonal hero +
+          3 side panels, then an all-rectangle bordered grid) and reported
+          as not looking good as a manga; the simpler single-illustration
+          page reads better for this engine's one-beat-per-page unit and
+          lets each full generated illustration (see mc-storybook/-2's
+          story*-p*-main.png) be seen in full rather than sliced up. Still
+          fills the whole lesson frame edge-to-edge (not a small centered
+          card with dead margins) per the earlier "it should fit" note. */}
+      {/* The story text lives ON the illustration itself — a caption band
+          across the bottom of the framed picture, the way a real picture
+          book prints its text over (or right under, inset into) the art
+          on the same page — not as a second stacked block below the image.
+          A separate below-image text row could grow past 1 line and, in a
+          shorter embedded frame (e.g. the live classroom's scaled stage),
+          get pushed below the visible area entirely. Keeping it INSIDE the
+          same bounded, aspect-capped box as the art guarantees it's always
+          on screen, whatever the surrounding frame's height is. */}
+      <div onClick={turnPage} className="absolute inset-0 z-10 flex cursor-pointer select-none items-center justify-center overflow-hidden p-[2%]">
         <div
-          onClick={turnPage}
-          className="relative w-full max-w-[600px] cursor-pointer select-none rounded-[30px] p-[7px]"
+          key={pageIdx}
+          className="relative w-full select-none overflow-hidden rounded-2xl"
           style={{
-            aspectRatio: '4 / 3',
-            background: 'linear-gradient(135deg, #F5D67D 0%, #C9932F 45%, #8A5A1E 100%)',
-            transformOrigin: 'right center',
-            transform: flipping ? 'rotateY(-130deg) scaleX(0.85)' : 'rotateY(0deg)',
-            transition: 'transform 0.45s cubic-bezier(0.45,0.05,0.55,0.95)',
-            backfaceVisibility: 'hidden',
-            animation: flipping ? undefined : 'lep1-bookGlow 3.2s ease-in-out infinite',
+            aspectRatio: '16 / 10',
+            maxHeight: '100%',
+            boxShadow: '0 0 0 6px #FFF2D0, 0 0 0 9px #C9932F, 0 10px 30px rgba(0,0,0,0.45)',
+            opacity: flipping ? 0 : 1,
+            transform: flipping ? 'scale(0.96)' : 'scale(1)',
+            transition: 'opacity 0.3s ease, transform 0.3s ease',
           }}
         >
-          <div className="relative h-full w-full overflow-hidden rounded-[24px] bg-gradient-to-b from-[#FFFBF0] to-[#FFF2D0]">
-            <div className="h-[68%] w-full overflow-hidden">
-              <img src={page.img} alt="" className="h-full w-full object-cover" />
-            </div>
-            <div className="flex h-[32%] flex-col items-center justify-center gap-1 px-6 text-center">
-              <p className="text-base font-bold text-orange-900 sm:text-lg">{page.text}</p>
-              {page.who && <span className="text-xs font-black uppercase tracking-widest text-amber-600">— {CAST[page.who].name}</span>}
-            </div>
-            <div className="pointer-events-none absolute inset-y-0 left-1/2 w-8 -translate-x-1/2" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.16) 45%, rgba(0,0,0,0.16) 55%, transparent)' }} />
-            <div className="pointer-events-none absolute bottom-0 right-0 h-9 w-9" style={{ background: 'linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.18) 50%)', borderRadius: '0 0 24px 0' }} />
+          <img src={page.img} alt="" className="h-full w-full object-cover" />
+          {/* Large, high-contrast story text — A1 students CAN read (unlike
+              Pre-A1, which has no reading segment at all — see
+              project_manga_panel_layout_a1_plus_only), so this sentence is
+              the actual reading-practice target of the scene, not just a
+              caption for the picture. */}
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#FFF2D0] via-[#FFF2D0]/97 to-[#FFF2D0]/0 px-4 pb-3 pt-10 text-center sm:px-6 sm:pb-4">
+            <p className="mx-auto max-w-[94%] text-lg font-black leading-snug text-orange-900 drop-shadow-[0_1px_0_rgba(255,255,255,0.6)] sm:text-2xl">{page.text}</p>
+            {page.who && <span className="mt-1 block text-[11px] font-black uppercase tracking-widest text-amber-700 sm:text-xs">— {CAST[page.who].name}</span>}
           </div>
           {!flipping && (
-            <div className="absolute -right-4 top-1/2 grid h-14 w-14 -translate-y-1/2 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-orange-600 text-2xl text-white shadow-xl ring-2 ring-white/70 animate-pulse">▶</div>
+            <div className="pointer-events-none absolute right-3 top-3 z-20 grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-orange-600 text-lg text-white shadow-xl ring-2 ring-white/70 animate-pulse sm:h-12 sm:w-12 sm:text-xl">▶</div>
           )}
         </div>
       </div>
