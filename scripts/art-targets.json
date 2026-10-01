@@ -101,5 +101,13 @@
       "public/magic-castle/stickers/chair.png"
     ],
     "prompt": "One single tall arched castle window with a stone frame, wooden cross bars and blue sky with a small cloud behind the glass, front view, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference chair (bold dark outlines, flat colours), isolated alone on a plain pure white background. Show ONLY the window — no wall around it."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-castle-title-l2.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-bedroom-tour.png",
+      "public/magic-castle/scenes/bg-castle-friends.png"
+    ],
+    "prompt": "Title picture for a children's lesson called 'Castle Furniture'. The SAME castle bedroom as the first reference (arched wooden door on the left, tall arched window, a small bedside table with a glowing brass lamp, a four-poster bed with red curtains on the right). In the lower half of the picture, standing together on the floor and waving happily at the viewer: Pip the orange fox, Wim the young wizard in a purple hat and robe, and Cat-cat the small grey cat — all three exactly as in the second reference, chibi proportions. The upper-center of the picture is calm open wall space (a title card will be placed there). Same flat kawaii cartoon style, lavender stone walls. Full-bleed 16:9, no frame, no border, no text, no letters."
   }
 ]

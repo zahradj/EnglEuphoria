@@ -8,7 +8,10 @@ import type { Scene } from './welcome-town/scenes';
  *  scenes/SceneRenderer modules from Pre-A1's `lep1-rich` unit1 lessons —
  *  unit/lesson numbers alone collide across the two families (both have a
  *  "Unit 1, Lesson 1"), so lookups are keyed by contentFormat too. */
-const WELCOME_TOWN_LESSON_REGISTRY: Record<string, { scenes: Scene[]; title: string; objective: string }> = {
+/** `skin: 'quest'` — the lesson plays in the Homework Quest look (see
+ *  PlayWelcomeTownLesson's QUEST_SKIN_CSS); omit for the classic look. */
+export type LessonSkin = 'quest';
+const WELCOME_TOWN_LESSON_REGISTRY: Record<string, { scenes: Scene[]; title: string; objective: string; skin?: LessonSkin }> = {
   'wt-rich-1-1': { scenes: LESSON_1_SCENES, title: LESSON_1_TITLE, objective: LESSON_1_OBJECTIVE },
   'wt-rich-1-2': { scenes: LESSON_2_SCENES, title: LESSON_2_TITLE, objective: LESSON_2_OBJECTIVE },
   'wt-rich-1-3': { scenes: LESSON_3_SCENES, title: LESSON_3_TITLE, objective: LESSON_3_OBJECTIVE },
@@ -17,13 +20,13 @@ const WELCOME_TOWN_LESSON_REGISTRY: Record<string, { scenes: Scene[]; title: str
   'wt-a2-rich-1-2': { scenes: LESSON_A2U1L2_SCENES, title: LESSON_A2U1L2_TITLE, objective: LESSON_A2U1L2_OBJECTIVE },
   'wt-a2-rich-1-3': { scenes: LESSON_A2U1L3_SCENES, title: LESSON_A2U1L3_TITLE, objective: LESSON_A2U1L3_OBJECTIVE },
   'castle-rich-9-1': { scenes: LESSON_A1U9L1_SCENES, title: LESSON_A1U9L1_TITLE, objective: LESSON_A1U9L1_OBJECTIVE },
-  'castle-rich-9-2': { scenes: LESSON_A1U9L2_SCENES, title: LESSON_A1U9L2_TITLE, objective: LESSON_A1U9L2_OBJECTIVE },
+  'castle-rich-9-2': { scenes: LESSON_A1U9L2_SCENES, title: LESSON_A1U9L2_TITLE, objective: LESSON_A1U9L2_OBJECTIVE, skin: 'quest' },
 };
 
 export function getWelcomeTownLesson(
   contentFormat: string,
   unitNumber: number,
   lessonNumber: number,
-): { scenes: Scene[]; title: string; objective: string } | null {
+): { scenes: Scene[]; title: string; objective: string; skin?: LessonSkin } | null {
   return WELCOME_TOWN_LESSON_REGISTRY[`${contentFormat}-${unitNumber}-${lessonNumber}`] ?? null;
 }

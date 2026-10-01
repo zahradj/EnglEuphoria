@@ -54,6 +54,7 @@ export const EmbeddedWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle,
           key={`wt-scene-${contentFormat}-${unitNumber}-${lessonNumber}-${roomId}`}
           sessionKey={`wt-scene-${contentFormat}-${unitNumber}-${lessonNumber}-${roomId}`}
           embedded
+          skin={lesson.skin}
           unitNumber={unitNumber}
           lessonNumber={lessonNumber}
           role={role}

@@ -142,8 +142,10 @@ export type Scene =
   | SpinWheelSceneData
   // Universal word-to-picture matching activity; see ../PictureMatchScene.tsx.
   | PictureMatchSceneData
-  | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string; cta?: string }
-  | { id: string; kind: 'cinematic'; bg: string; title: string; subtitle: string; narrator: CharKey; script: { who: CharKey; line: string }[]; cta: string }
+  /** `look: 'card'` — calm cream-card styling (Magic Castle Lesson 2) instead
+   *  of the big hopping 3D title; same content, same behaviour. */
+  | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string; cta?: string; look?: 'card' }
+  | { id: string; kind: 'cinematic'; bg: string; title: string; subtitle: string; narrator: CharKey; script: { who: CharKey; line: string }[]; cta: string; look?: 'card' }
   // `cardSide` lets the teacher-instruction/repeat cards dock to whichever
   // side of the full-bleed `bg` was left empty for them (the character is
   // composed into the opposite side) instead of floating centered over the
@@ -334,7 +336,9 @@ export type Scene =
     }
   | { id: string; kind: 'letter-game'; bg: string; who: CharKey; teacher: string; mode: 'name' | 'sound'; rounds: { letter: string; phoneme?: string; choices: string[] }[] }
   | { id: string; kind: 'jigsaw-puzzle'; bg: string; teacher: string; image: string; rows: number; cols: number }
-  | { id: string; kind: 'finale'; bg: string; who: CharKey; line: string };
+  /** `cast`: the friends shown on the finale card (defaults to Welcome Town's
+   *  class); `look: 'card'` = cream-card styling. */
+  | { id: string; kind: 'finale'; bg: string; who: CharKey; line: string; cast?: CharKey[]; look?: 'card' };
 
 export const LESSON_1_TITLE = 'Hello, Class!';
 export const LESSON_1_OBJECTIVE = "Part 1: Greet your new class and share your name (\"Hello! My name is ___.\"). Part 2: Learn the sounds S, A, T and read your first word.";
