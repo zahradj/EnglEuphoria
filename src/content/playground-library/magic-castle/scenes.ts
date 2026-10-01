@@ -1081,6 +1081,7 @@ const bgHuntBedroom = `${M}/scenes/bg-hunt-bedroom-behind.png`;
 const bgHuntLiving = `${M}/scenes/bg-hunt-living-nextto.png`;
 const bgHuntDining = `${M}/scenes/bg-hunt-dining-on.png`;
 const bgHuntBathroom = `${M}/scenes/bg-hunt-bathroom-in.png`;
+const bgFurnitureRoom = `${M}/scenes/bg-castle-furniture-room.png`;
 const STK = `${M}/stickers`;
 
 /** One coloured chunk per preposition, used in every sentence of the
@@ -1108,9 +1109,19 @@ const PLACE_STAGE = {
   ],
 };
 
+/** Centres of the six new furniture words on bg-castle-furniture-room. */
+const FR = {
+  bookcase: { left: '11.6%', top: '49%' },
+  clock: { left: '39.5%', top: '23%' },
+  mirror: { left: '63.8%', top: '31%' },
+  sofa: { left: '41%', top: '66%' },
+  armchair: { left: '71%', top: '65%' },
+  desk: { left: '90%', top: '73%' },
+};
+
 export const LESSON_A1U9L3_TITLE = 'Listen: Where Is the Magic Lamp?';
 export const LESSON_A1U9L3_OBJECTIVE =
-  'Listen and say where something is with in, on, under, next to and behind ("Where is the lamp?" — "It’s under the table."), stressing the preposition. Wizard Wim has lost his magic lamp: move it, hunt for it with a torch in five castle rooms, and follow its story. (Reviews Lesson 1’s rooms and Lesson 2’s furniture.)';
+  'Name six more pieces of furniture (sofa, armchair, mirror, bookcase, clock, desk), then listen and say where something is with in, on, under, next to and behind ("Where is the lamp?" — "It’s under the table."), stressing the preposition. Wizard Wim has lost his magic lamp: move it, hunt for it with a torch in five castle rooms, and follow its story. (Reviews Lesson 1’s rooms and Lesson 2’s furniture.)';
 
 export const LESSON_A1U9L3_SCENES: Scene[] = [
   { id: 'mc3-title', kind: 'title-card', bg: bgTitleL3, level: 'A1', unit: 'Unit 9', lessonLabel: 'Lesson 3', title: 'Where Is the Magic Lamp?', subtitle: 'Help Wizard Wim find his lamp', cta: '\u{1F526} LET’S FIND IT!' },
@@ -1140,6 +1151,47 @@ export const LESSON_A1U9L3_SCENES: Scene[] = [
     ],
     cta: '\u{1F50D} LET’S LOOK!',
     look: 'card',
+  },
+
+  {
+    // New furniture words (requested): the rooms Wim will search are full
+    // of them. Two scenes of three, one arrow at a time.
+    id: 'mc3-vocab-a', kind: 'vocab-spot', bg: bgFurnitureRoom,
+    teacher: 'Wim’s sitting room! Tap each arrow to learn a new word.',
+    items: [
+      { label: 'Sofa', sentence: 'There is a sofa.', emoji: '\u{1F6CB}\u{FE0F}', ...FR.sofa, color: '#C0392B', who: 'wim' },
+      { label: 'Armchair', sentence: 'There is an armchair.', emoji: '\u{1FA91}', ...FR.armchair, color: '#2E7D32', who: 'catcat' },
+      { label: 'Bookcase', sentence: 'There is a bookcase.', emoji: '\u{1F4DA}', ...FR.bookcase, color: '#8B5A2B', who: 'wim' },
+    ],
+  },
+  {
+    id: 'mc3-vocab-b', kind: 'vocab-spot', bg: bgFurnitureRoom,
+    teacher: 'Three more! Tap the clock, the mirror and the desk.',
+    items: [
+      { label: 'Clock', sentence: 'There is a clock.', emoji: '\u{1F570}\u{FE0F}', ...FR.clock, color: '#B45309', who: 'catcat' },
+      { label: 'Mirror', sentence: 'There is a mirror.', emoji: '\u{1FA9E}', ...FR.mirror, color: '#D4A017', who: 'wim' },
+      { label: 'Desk', sentence: 'There is a desk.', emoji: '\u{1F5C4}\u{FE0F}', ...FR.desk, color: '#6D4C2F', who: 'catcat' },
+    ],
+  },
+  {
+    id: 'mc3-furniture-tap', kind: 'listen-tap', bg: bgFurnitureRoom,
+    teacher: 'Listen to Wim, then tap the right furniture!',
+    targets: [
+      { label: 'Bookcase', ...FR.bookcase, color: '#8B5A2B', hitWidth: '18%', hitHeight: '75%' },
+      { label: 'Clock', ...FR.clock, color: '#B45309', hitWidth: '13%', hitHeight: '24%' },
+      { label: 'Mirror', ...FR.mirror, color: '#D4A017', hitWidth: '13%', hitHeight: '32%' },
+      { label: 'Sofa', ...FR.sofa, color: '#C0392B', hitWidth: '38%', hitHeight: '30%' },
+      { label: 'Armchair', ...FR.armchair, color: '#2E7D32', hitWidth: '19%', hitHeight: '32%' },
+      { label: 'Desk', ...FR.desk, color: '#6D4C2F', hitWidth: '19%', hitHeight: '40%' },
+    ],
+    rounds: [
+      { prompt: 'Where is the clock?', answerLabel: 'Clock', who: 'wim' },
+      { prompt: 'Where is the armchair?', answerLabel: 'Armchair', who: 'catcat' },
+      { prompt: 'Where is the desk?', answerLabel: 'Desk', who: 'wim' },
+      { prompt: 'Where is the mirror?', answerLabel: 'Mirror', who: 'catcat' },
+      { prompt: 'Where is the bookcase?', answerLabel: 'Bookcase', who: 'wim' },
+      { prompt: 'Where is the sofa?', answerLabel: 'Sofa', who: 'catcat' },
+    ],
   },
 
   {
@@ -1227,6 +1279,21 @@ export const LESSON_A1U9L3_SCENES: Scene[] = [
       { words: ['The', 'lamp', 'is', 'under', 'the', 'table.'], colors: [null, LAMP_C, null, P_COLOR.under, null, PLACE_C], img: bgHuntKitchen },
       { words: ['The', 'lamp', 'is', 'next', 'to', 'the', 'sofa.'], colors: [null, LAMP_C, null, P_COLOR.nextTo, P_COLOR.nextTo, null, PLACE_C], img: bgHuntLiving },
       { words: ['The', 'lamp', 'is', 'behind', 'the', 'bed.'], colors: [null, LAMP_C, null, P_COLOR.behind, null, PLACE_C], img: bgHuntBedroom },
+      { words: ['The', 'armchair', 'is', 'next', 'to', 'the', 'sofa.'], colors: [null, '#2E7D32', null, P_COLOR.nextTo, P_COLOR.nextTo, null, PLACE_C], img: bgFurnitureRoom },
+    ],
+  },
+
+  {
+    // Word ↔ picture pairs for the six new furniture words.
+    id: 'mc3-memory', kind: 'memory', bg: bgFurnitureRoom,
+    teacher: 'Memory game! Find each word and its picture. Say the word when you flip it.',
+    pairs: [
+      { id: 'sofa', label: 'sofa', emoji: '\u{1F6CB}\u{FE0F}', img: `${STK}/sofa.png` },
+      { id: 'armchair', label: 'armchair', emoji: '\u{1FA91}', img: `${STK}/armchair.png` },
+      { id: 'mirror', label: 'mirror', emoji: '\u{1FA9E}', img: `${STK}/mirror.png` },
+      { id: 'bookcase', label: 'bookcase', emoji: '\u{1F4DA}', img: `${STK}/bookcase.png` },
+      { id: 'clock', label: 'clock', emoji: '\u{1F570}\u{FE0F}', img: `${STK}/clock.png` },
+      { id: 'desk', label: 'desk', emoji: '\u{1F5C4}\u{FE0F}', img: `${STK}/desk.png` },
     ],
   },
 
@@ -1285,5 +1352,5 @@ export const LESSON_A1U9L3_SCENES: Scene[] = [
     ],
   },
 
-  { id: 'mc3-finale', kind: 'finale', bg: bgLampFound, who: 'wim', look: 'card', cast: ['wim', 'catcat', 'pip'], line: 'You found Wim’s magic lamp! You can say where things are: in, on, under, next to and behind. Tonight, hide a toy and ask: "Where is it?" ✨\u{1FA94}' },
+  { id: 'mc3-finale', kind: 'finale', bg: bgLampFound, who: 'wim', look: 'card', cast: ['wim', 'catcat', 'pip'], line: 'You found Wim’s magic lamp! You learned sofa, armchair, mirror, bookcase, clock and desk, and you can say where things are: in, on, under, next to and behind. Tonight, hide a toy and ask: "Where is it?" ✨\u{1FA94}' },
 ];
