@@ -220,6 +220,32 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
   { id: 'mc-title', kind: 'title-card', bg: bgTitle, level: 'A1', unit: 'Unit 9', lessonLabel: 'Lesson 1', title: 'Magic Castle: Where Is It?', subtitle: 'Explore the castle with Wim and Cat-cat', cta: '\u{1F3F0} LET’S GO!' },
 
   {
+    // Warm-up song, per direct request ("add a song, with magic wizard
+    // vibe, as a warm up in the beginning, for both lesson one and two").
+    // Reuses bgWim — Wim's own magical wizard room, already used for his
+    // phonics spellcasting scenes — so the "wizard vibe" comes from the
+    // same established visual, not a new one-off asset. Same song/lyrics
+    // reused in both lessons (same convention as the Welcome Town goodbye
+    // song, shared across every lesson in that world). Audio generated via
+    // ElevenLabs Music singing these exact lines (scripts/songs.json's
+    // "mc-warmup" entry, verified word-for-word with scripts/verify-song.py
+    // — score 0.91, real pop production per direct follow-up "make it pop
+    // style... not like a lullaby" — before shipping), per the project's
+    // standing rule that songs must sing the real on-screen lyrics, never
+    // a placeholder or paraphrased take.
+    id: 'mc-warmup-song', kind: 'song', bg: bgWim, title: '\u{2728} Wim’s Magic Warm-Up Song \u{2728}',
+    teacher: 'Let’s warm up with a little magic! Sing along with Wim and Cat-cat!',
+    songUrl: `${M}/audio/warmup-song.mp3`, durationSeconds: 20, bigWord: 'Magic!',
+    lyrics: [
+      { who: 'wim', text: '\u{1F52E} Abracadabra, rise and shine!' },
+      { who: 'catcat', text: '\u{1F431} Meow, meow, it’s story time!' },
+      { who: 'wim', text: '\u{1F3F0} Magic Castle, open the door!' },
+      { who: 'catcat', text: '\u{2728} Let’s have fun and learn some more!' },
+    ],
+    lineDurationsMs: [3500, 4040, 4420, 8102],
+  },
+
+  {
     id: 'mc-intro', kind: 'cinematic', bg: bgDoorPip, title: 'A Mysterious Door', subtitle: 'Pip finds an old castle door', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Whoa, look at this big door! I wonder what is behind it...' },
@@ -707,6 +733,21 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
   // calm cream-card look stays on the story opener (mc2-intro) and
   // finale, which weren't part of this request.
   { id: 'mc2-title', kind: 'title-card', bg: bgTitleL2, level: 'A1', unit: 'Unit 9', lessonLabel: 'Lesson 2', title: 'Magic Castle: Castle Furniture', subtitle: 'Explore the bedroom with Cat-cat and Pip', cta: '\u{1F6CF}️ LET’S GO!' },
+
+  // Same warm-up song as Lesson 1 (mc-warmup-song) — see its comment there
+  // for the full rationale/generation notes.
+  {
+    id: 'mc2-warmup-song', kind: 'song', bg: bgWim, title: '\u{2728} Wim’s Magic Warm-Up Song \u{2728}',
+    teacher: 'Let’s warm up with a little magic! Sing along with Wim and Cat-cat!',
+    songUrl: `${M}/audio/warmup-song.mp3`, durationSeconds: 20, bigWord: 'Magic!',
+    lyrics: [
+      { who: 'wim', text: '\u{1F52E} Abracadabra, rise and shine!' },
+      { who: 'catcat', text: '\u{1F431} Meow, meow, it’s story time!' },
+      { who: 'wim', text: '\u{1F3F0} Magic Castle, open the door!' },
+      { who: 'catcat', text: '\u{2728} Let’s have fun and learn some more!' },
+    ],
+    lineDurationsMs: [3500, 4040, 4420, 8102],
+  },
 
   {
     // Full warm-up review of Lesson 1 before anything new (per direct
