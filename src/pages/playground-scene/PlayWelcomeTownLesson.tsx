@@ -31,6 +31,9 @@ interface PlayWelcomeTownLessonProps {
   scenes: Scene[];
   sessionKey: string;
   embedded?: boolean;
+  /** 'quest' = Homework Quest look (gold-framed stage, parchment cards,
+   *  quest fonts/HUD); games, pointers and behaviour are unchanged. */
+  skin?: 'quest';
   pageTitle?: string;
   pageDescription?: string;
   unitNumber?: number;
@@ -83,7 +86,7 @@ const REAL_SYNC_KINDS = new Set<Scene['kind']>([
 ]);
 
 const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcomeTownLessonProps>(function PlayWelcomeTownLesson(
-  { scenes, sessionKey, embedded = false, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
+  { scenes, sessionKey, embedded = false, skin, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
   ref,
 ) {
   const navigate = useNavigate();
@@ -644,13 +647,15 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
           {pageDescription && <meta name="description" content={pageDescription} />}
         </Helmet>
       )}
+      {skin === 'quest' && <style>{QUEST_SKIN_CSS}</style>}
       <div
       dir="ltr"
       onPointerDownCapture={unlockAudio}
-      className={`relative w-full overflow-hidden transition-[background-image] duration-500 [container-type:size] ${embedded ? 'h-full' : 'min-h-screen'}`}
+      className={`relative w-full overflow-hidden transition-[background-image] duration-500 [container-type:size] ${embedded ? 'h-full' : 'min-h-screen'} ${skin === 'quest' ? 'ee-quest' : ''}`}
       style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
     >
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/55" />
+      {skin === 'quest' && <div className="ee-quest-frame pointer-events-none absolute inset-2 z-[5] rounded-[26px]" aria-hidden="true" />}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,0.35)_100%)]" />
 
       <div className={`relative z-10 mx-auto flex w-full flex-col px-0 pb-6 pt-4 ${embedded ? 'min-h-full' : 'min-h-screen'}`}>
@@ -665,7 +670,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
               ← Map
             </button>
           )}
-          <div className="flex items-center gap-2 rounded-full bg-white/85 px-4 py-2 text-lg font-black shadow-lg ring-1 ring-white/60 backdrop-blur">
+          <div className="ee-quest-hud flex items-center gap-2 rounded-full bg-white/85 px-4 py-2 text-lg font-black shadow-lg ring-1 ring-white/60 backdrop-blur">
             <Hearts count={hearts} />
             <span className="mx-1 text-orange-300">·</span>
             <span className="text-orange-700">💎 {gems}/{totalGemsPossible}</span>
@@ -706,7 +711,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
         {!isFinale && (
           <div className="mt-4 flex flex-wrap justify-center gap-1.5 px-4">
             {SCENES.map((s, i) => (
-              <span key={s.id} className={`h-2 rounded-full transition-all ${i === sceneIdx ? 'w-8 bg-white shadow-lg' : i < sceneIdx ? 'w-2 bg-white/80' : 'w-2 bg-white/30'}`} />
+              <span key={s.id} className={`ee-dot h-2 rounded-full transition-all ${i === sceneIdx ? 'w-8 bg-white shadow-lg ee-dot-on' : i < sceneIdx ? 'w-2 bg-white/80 ee-dot-done' : 'w-2 bg-white/30'}`} />
             ))}
           </div>
         )}
@@ -715,7 +720,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
       {!hideInternalNav && (canNavigate ? (
         <div className={`pointer-events-none inset-x-0 bottom-4 z-[80] flex items-center justify-between px-4 ${embedded ? 'absolute' : 'fixed'}`}>
           <button type="button" onClick={goBack} disabled={sceneIdx === 0} aria-label="Previous scene"
-            className="pointer-events-auto flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-base font-bold text-slate-800 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
+            className="ee-back pointer-events-auto flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-base font-bold text-slate-800 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
             <span aria-hidden>◀</span> Back
           </button>
           <div className="pointer-events-auto flex items-center gap-2">
@@ -728,7 +733,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
             <div className="rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">{sceneIdx + 1} / {SCENES.length}</div>
           </div>
           <button type="button" onClick={goNext} disabled={sceneIdx >= SCENES.length - 1} aria-label="Next scene"
-            className="pointer-events-auto flex items-center gap-2 rounded-full bg-[#FE6A2F] px-5 py-3 text-base font-bold text-white shadow-xl backdrop-blur transition hover:scale-105 hover:bg-[#ff7a45] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
+            className="ee-next pointer-events-auto flex items-center gap-2 rounded-full bg-[#FE6A2F] px-5 py-3 text-base font-bold text-white shadow-xl backdrop-blur transition hover:scale-105 hover:bg-[#ff7a45] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100">
             Next <span aria-hidden>▶</span>
           </button>
         </div>
@@ -751,3 +756,28 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
 });
 
 export default PlayWelcomeTownLesson;
+
+/* Homework Quest skin for the lesson player (opt-in per lesson via
+ * `skin: 'quest'`, e.g. Magic Castle Lesson 2). Restyles the shared chrome —
+ * gold-framed stage, parchment pills and instruction cards in dark ink,
+ * Grandstander/Lexend type, gold progress dots, quest buttons — while every
+ * scene's game, pointer arrows and behaviour stay exactly as they are.
+ * Scene banners are matched by their shared Tailwind classes, so new scenes
+ * pick the skin up without extra wiring. */
+const QUEST_SKIN_CSS = `
+.ee-quest { font-family: "Lexend", "Fredoka", system-ui, sans-serif; }
+.ee-quest h1, .ee-quest h2, .ee-quest [class*="font-black"] { font-family: "Grandstander", "Fredoka", system-ui, sans-serif; }
+.ee-quest-frame { border: 4px solid #f5c542; box-shadow: inset 0 0 0 2px rgba(255,255,255,.35), 0 0 0 9999px rgba(20,8,50,.0), inset 0 0 60px rgba(124,58,237,.25); }
+.ee-quest [class*="bg-white/85"], .ee-quest [class*="bg-white/90"], .ee-quest [class*="bg-white/95"] { background-color: #fff6df !important; }
+.ee-quest [class*="bg-white/85"], .ee-quest [class*="bg-white/90"], .ee-quest [class*="bg-white/95"],
+.ee-quest [class*="bg-white/85"] *, .ee-quest [class*="bg-white/90"] *, .ee-quest [class*="bg-white/95"] * { color: #2a1459; }
+.ee-quest [class*="ring-orange-2"], .ee-quest [class*="ring-white/6"] { --tw-ring-color: rgba(245,197,66,.85) !important; }
+.ee-quest [class*="bg-white/85"], .ee-quest [class*="bg-white/90"], .ee-quest [class*="bg-white/95"] { box-shadow: 0 6px 0 rgba(0,0,0,.22), 0 12px 24px rgba(0,0,0,.25) !important; }
+.ee-quest .ee-quest-hud { background: #fff6df !important; border: 2px solid #f5c542; }
+.ee-quest .ee-dot { background: rgba(255,255,255,.28); }
+.ee-quest .ee-dot-done { background: rgba(245,197,66,.75) !important; }
+.ee-quest .ee-dot-on { background: #f5c542 !important; box-shadow: 0 0 10px #f5c542 !important; }
+.ee-quest .ee-next { background: #fe6a2f !important; box-shadow: 0 6px 0 #b8410f !important; border-radius: 999px; }
+.ee-quest .ee-back { background: #fff6df !important; color: #2a1459 !important; border: 2px solid #f5c542; box-shadow: 0 6px 0 rgba(0,0,0,.2) !important; }
+`;
+
