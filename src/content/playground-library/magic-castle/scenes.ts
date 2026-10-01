@@ -493,24 +493,53 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
   },
 
   {
+    // A dedicated Discovery/model step for under/on/in, sitting right
+    // before mc-preposition-review — the review only ever tested the
+    // prepositions, it never actually taught them first (per direct
+    // follow-up: "it should be an introduction of the vocabulary").
+    // Reuses VocabSpotScene's own tap-to-hear/reveal/dismiss flow (its
+    // `img`-item variant, added alongside listen-tap's `img`-target one)
+    // with the same three illustrations the review uses, so the student
+    // meets each picture once, calmly, before being asked to listen and
+    // pick between them. All three images are the SAME page-20 kitchen
+    // background (table/chair/fireplace pot) with only Cat-cat's position
+    // changing, rather than three unrelated locations (windowsill, a
+    // standalone basket) — per direct follow-up ("keep the background
+    // image from page 20... use just the cat").
+    id: 'mc-preposition-intro', kind: 'vocab-spot', bg: bgKitchen,
+    teacher: 'Let’s learn UNDER, ON, and IN! Tap each picture to hear the word.',
+    items: [
+      { label: 'Under', sentence: 'Cat-cat is under the table.', emoji: '\u{2B07}\u{FE0F}', left: '18%', top: '46%', color: '#8B5A2B', who: 'catcat', img: `${S1}/prep-under-table.png` },
+      { label: 'On', sentence: 'Cat-cat is on the table.', emoji: '\u{1FA9F}', left: '50%', top: '46%', color: '#F4A340', who: 'catcat', img: `${S1}/prep-on-table.png` },
+      { label: 'In', sentence: 'Cat-cat is in the pot.', emoji: '\u{1F9FA}', left: '82%', top: '46%', color: '#3B7FC9', who: 'catcat', img: `${S1}/prep-in.png` },
+    ],
+  },
+
+  {
     // British Council/Oxford ELT's "Do As I Say" preposition game has
     // students act out in/on/under commands live — this engine has no
     // motion capture, so the honest adaptation is listen-and-locate
-    // instead of listen-and-move: the target language (Unit 3's in/on/
-    // under, this lesson's own reviewTarget) does the same cognitive work
-    // without pretending a tap is a physical action. Adds a third item
-    // (the cooking pot) purely as contextual exposure, not a taught word.
+    // instead of listen-and-move. Originally this reused Table/Chair/Pot
+    // as invisible hotspots on the kitchen photo, which tested room-
+    // furniture vocabulary (already covered earlier in the lesson) rather
+    // than the actual preposition — reviewed for clarity and redesigned
+    // to directly test in/on/under: three always-visible illustrated
+    // cards (see ListenTapScene's `img`-target variant), one per
+    // preposition, matching mc-preposition-intro's own three pictures —
+    // all three the SAME page-20 kitchen background with only Cat-cat's
+    // position changing (under the table / on the table / in the fireplace
+    // pot), per direct follow-up, rather than mismatched locations.
     id: 'mc-preposition-review', kind: 'listen-tap', bg: bgKitchen,
-    teacher: 'Listen carefully and tap what Wim and Cat-cat are talking about!',
+    teacher: 'Listen carefully, then tap the picture for UNDER, ON, or IN!',
     targets: [
-      { label: 'Table', ...TABLE_SPOT, color: '#8B5A2B' },
-      { label: 'Chair', ...CHAIR_SPOT, color: '#C97A2F' },
-      { label: 'Pot', left: '82%', top: '42%', color: '#F4A340' },
+      { label: 'Under', left: '18%', top: '58%', color: '#8B5A2B', img: `${S1}/prep-under-table.png` },
+      { label: 'On', left: '50%', top: '58%', color: '#F4A340', img: `${S1}/prep-on-table.png` },
+      { label: 'In', left: '82%', top: '58%', color: '#3B7FC9', img: `${S1}/prep-in.png` },
     ],
     rounds: [
-      { prompt: 'The cooking pot is on the fire.', answerLabel: 'Pot', who: 'wim' },
-      { prompt: 'There is a chair in the kitchen.', answerLabel: 'Chair', who: 'catcat' },
-      { prompt: 'There is a table in the kitchen.', answerLabel: 'Table', who: 'wim' },
+      { prompt: 'Cat-cat is hiding under the table!', answerLabel: 'Under', who: 'catcat' },
+      { prompt: 'Cat-cat is sitting on the table!', answerLabel: 'On', who: 'wim' },
+      { prompt: 'Cat-cat is in the pot!', answerLabel: 'In', who: 'wim' },
     ],
   },
 

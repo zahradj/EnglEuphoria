@@ -505,6 +505,59 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
       <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
         {scene.teacher} <span className="ml-1 opacity-60">({Math.min(step, total)}/{total})</span>
       </div>
+      {/* Picture-card variant (current.img set): for introducing a word
+          that has no real counterpart drawn in `bg` to point an arrow at
+          (an abstract concept like a preposition) — the illustration IS
+          the content. A first pass showed it as a small 132px card, which
+          read as cramped for a single-word introduction; per direct
+          follow-up ("full screen... light images") this now uses the
+          same big, bright, golden-framed single-illustration treatment
+          as the storybook pages (FlipbookScene) — large, unmissable, one
+          picture at a time — instead of a small floating card. */}
+      {current?.img && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center p-[4%] pt-20">
+          <button
+            onClick={tap}
+            disabled={revealed}
+            aria-label={`Learn the word ${current.label}`}
+            className="relative w-full overflow-hidden rounded-2xl transition active:scale-[0.98] disabled:pointer-events-none"
+            style={{
+              aspectRatio: '1 / 1',
+              maxHeight: '100%',
+              boxShadow: '0 0 0 6px #FFF2D0, 0 0 0 9px #C9932F, 0 10px 30px rgba(0,0,0,0.45)',
+            }}
+          >
+            {!revealed && (
+              <span className="pointer-events-none absolute inset-0 z-10" style={{ boxShadow: `inset 0 0 0 10px ${current.color}66`, animation: 'lep1-ping 1.6s ease-out infinite' }} />
+            )}
+            <img src={current.img} alt={current.label} className="h-full w-full object-cover" />
+            {/* The word is printed on the card from the start — this is an
+                introduction (pairing word + picture + audio together is
+                the whole point), not a listening test like the review
+                scene, where hiding the label until a correct tap is
+                deliberate so reading can't substitute for listening. */}
+            <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-[#FFF2D0] via-[#FFF2D0]/97 to-[#FFF2D0]/0 px-4 pb-10 pt-4 text-center">
+              {/* White fill + dark brown outline reads far better at this size
+                  than a solid brown fill on the cream band (direct feedback:
+                  "remove the brown... should be white with a brown border").
+                  paintOrder keeps the stroke from eating into the fill at
+                  the letterforms' sharp corners. */}
+              <span
+                className="text-5xl font-black leading-snug sm:text-6xl"
+                style={{ color: '#FFFFFF', WebkitTextStroke: '3px #5C3A1E', paintOrder: 'stroke fill', textShadow: '0 3px 0 rgba(0,0,0,0.25)' }}
+              >
+                {current.label}
+              </span>
+            </div>
+          </button>
+          {revealed && (
+            <div className="absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full border-2 border-white bg-white/95 py-1.5 pl-2 pr-2 shadow-xl backdrop-blur" style={{ animation: 'lep1-pop 0.25s ease-out' }}>
+              <button onClick={hearSentence} aria-label={`Hear "${current.label}" in a sentence`} className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-xl text-neutral-400 transition active:scale-90 hover:text-neutral-600">🔊</button>
+              <button onClick={dismiss} aria-label="Got it" className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-xl text-white shadow transition active:scale-90" style={{ background: current.color }}>✓</button>
+            </div>
+          )}
+        </div>
+      )}
       {/* Every word is already visibly drawn in scene.bg — only ONE arrow is
           ever on screen, pointing at the current word, so attention isn't
           split across the whole scene at once. It never carries a floating
@@ -512,7 +565,7 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
           sits a fixed gap away from the actual target (never touching it)
           and can approach from above, the left, or the right depending on
           `dir`, whichever side actually has room in that background. */}
-      {current && (() => {
+      {current && !current.img && (() => {
         const dir = current.dir ?? 'down';
         // Matches CharacterPointer's own bump (52x76 -> 76x110, GAP 62 ->
         // 90) — same "arrows look very small" report applied to this
@@ -569,7 +622,7 @@ function VocabSpotScene({ scene, onNext, onWin, sync }: {
           would defeat the whole point of making it white. The small
           icon/replay/dismiss controls keep their own compact white pill
           just below it. */}
-      {current && revealed && (() => {
+      {current && !current.img && revealed && (() => {
         const dir = current.dir ?? 'down';
         const GAP = 150;
         const pos = dir === 'down'
@@ -1316,6 +1369,45 @@ function ListenTapScene({ scene, onNext, onWin, onLose, sync }: { scene: Extract
         // spot — same "a stuck student always has a way forward" pattern
         // as the Pre-A1 find-in-scene game this mechanic was modeled on.
         const revealCorrect = misses >= 2 && t.label === r!.answerLabel && !correct;
+
+        // Illustrated-card variant (t.img set): the target itself IS the
+        // concept being taught (e.g. a picture for "under"/"on"/"in"), so
+        // it must be visible the whole time — there's no real background
+        // object to avoid spoiling by showing it early (see the invisible-
+        // hotspot note just below, which is about the OTHER variant).
+        if (t.img) {
+          return (
+            <button
+              key={t.label}
+              onClick={() => tap(t.label)}
+              disabled={correct}
+              aria-label={t.label}
+              className={`absolute z-20 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1.5 transition active:scale-95 ${isWrong ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
+              style={{ left: t.left, top: t.top }}
+            >
+              <div
+                className="h-28 w-28 overflow-hidden rounded-2xl border-4 bg-white shadow-xl sm:h-36 sm:w-36"
+                style={{
+                  borderColor: isRight ? '#22C55E' : isWrong ? '#EF4444' : revealCorrect ? '#FFFFFF' : t.color,
+                  animation: revealCorrect && !isRight ? 'lep1-ping 1s ease-in-out infinite' : isRight ? 'lep1-pop 0.35s ease-out' : undefined,
+                }}
+              >
+                <img src={t.img} alt={t.label} className="h-full w-full object-cover" />
+              </div>
+              {/* The word label only appears AFTER a correct tap (as
+                  reading reinforcement), not before — showing it up front
+                  would let a student match by reading the word instead of
+                  by listening to the spoken prompt, undermining the one
+                  thing this activity is meant to check. */}
+              {isRight && (
+                <span className="rounded-full bg-[#22C55E] px-3 py-1 text-sm font-black text-white shadow-lg sm:text-base" style={{ animation: 'lep1-pop 0.35s ease-out' }}>
+                  {t.label} ✓
+                </span>
+              )}
+            </button>
+          );
+        }
+
         // Resting state is now a fully invisible hit-zone — the old
         // permanently-visible ring (border-white/70 bg-white/10) marked
         // every tappable spot before the student ever listened, turning a
