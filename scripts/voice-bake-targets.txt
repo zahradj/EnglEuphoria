@@ -3,3 +3,4 @@
 # Only lines without a clip in public/audio-cache/ are generated.
 LESSON_A1U9L1_SCENES
 HOMEWORK
+LESSON_A1U9L2_SCENES

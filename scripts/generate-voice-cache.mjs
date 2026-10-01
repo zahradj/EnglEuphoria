@@ -367,6 +367,11 @@ const WT_EXTRACTORS = {
   'word-build': (s) => (s.rounds ?? []).map((r) => ['pip', r.word]),
   finale: (s) => (s.line ? [[s.who, s.line]] : []),
   'tongue-twister': (s) => [[s.who, s.line]],
+  // Verified against welcome-town/SceneRenderer.tsx call sites.
+  'listen-tap': (s) => (s.rounds ?? []).flatMap((r) => [[r.who ?? 'marigold', r.prompt], [r.who ?? 'marigold', `Yes! ${r.answerLabel}!`]]),
+  'true-false': (s) => (s.rounds ?? []).map((r) => [r.who, r.statement]),
+  'spin-wheel': (s) => (s.items ?? []).map((it) => ['teacher', it.label]),
+  'picture-match': (s) => (s.items ?? []).map((it) => ['teacher', it.word]),
   // The reveal line (r.line) is verbatim; the "How often do you {action}?"
   // prompt is a template, but s.rounds[].action is scene-authored (not
   // open-ended user input) and always spoken by a fixed 'teacher' voice, so

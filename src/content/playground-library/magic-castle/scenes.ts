@@ -618,3 +618,298 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
 
   { id: 'mc-finale', kind: 'finale', bg: bgFriends, who: 'pip', line: 'You explored the castle and learned kitchen, bedroom, table, and chair — and the magic CH sound! Look around your home tonight and say "There is a ___!" ✨\u{1F3F0}' },
 ];
+
+/* =============================================================================
+ * Magic Castle — A1 Unit 9 Lesson 2: "Castle Furniture: Bed, Lamp, Door, Window"
+ *
+ * Scope from the curriculum_lessons blueprint for this lesson (row
+ * 9f083b5c…): objective "name more furniture (bed, lamp, door, window) and
+ * use 'There is a ___' for each"; story — Cat-cat leads Pip through the
+ * bedroom, pointing out furniture one piece at a time; phonics /l/ (lamp)
+ * and /w/ (window); review target = Lesson 1's rooms. No new grammar: L2
+ * consolidates "There is a ___" (and L1's "There is no ___") on four new
+ * nouns; prepositions (next to / behind) stay in Lesson 3 as planned.
+ *
+ * New art (scripts/art-targets.json, styled from bg-castle-bedroom-wim +
+ * bg-castle-friends so Pip and Cat-cat keep their exact designs):
+ * bg-castle-bedroom-tour.png (door / window / lamp / bed, each clearly
+ * separate, Pip and Cat-cat painted in), bg-castle-bedroom-nolamp.png (the
+ * same room with only the lamp removed — the "there is no lamp" evidence),
+ * bg-castle-catcat-pip-door.png (the cinematic opener). Hotspots below are
+ * measured on the 1376×768 tour art.
+ *
+ * Shape (25 scenes, ~30 min live): warm-up review of L1 → story hook →
+ * teach 4 nouns in two pairs → written-word drag → model sentence →
+ * production → listening check → find-the-difference (there is no) →
+ * memory with L1 furniture → self-check picture match → roleplay →
+ * spin-and-say → knock-knock doors → wizard phonics segment (L, W, word
+ * spells, tongue twister, decodable reading) → finale. No kind runs more
+ * than twice in a row (Hard Variety Rule).
+ * ========================================================================= */
+
+const bgBedroomTour = `${M}/scenes/bg-castle-bedroom-tour.png`;
+const bgBedroomNoLamp = `${M}/scenes/bg-castle-bedroom-nolamp.png`;
+const bgCatcatPipDoor = `${M}/scenes/bg-castle-catcat-pip-door.png`;
+
+const DOOR_SPOT = { left: '17%', top: '42%' };
+const WINDOW_SPOT = { left: '47%', top: '30%' };
+const LAMP_SPOT = { left: '60%', top: '52%' };
+const BED_SPOT = { left: '83%', top: '58%' };
+const DOOR_SIZE = { targetWidth: '24%', targetHeight: '72%' };
+const WINDOW_SIZE = { targetWidth: '15%', targetHeight: '48%' };
+const LAMP_SIZE = { targetWidth: '9%', targetHeight: '18%' };
+const BED_SIZE = { targetWidth: '32%', targetHeight: '62%' };
+
+export const LESSON_A1U9L2_TITLE = 'Castle Furniture: Bed, Lamp, Door, Window';
+export const LESSON_A1U9L2_OBJECTIVE =
+  'Name four more things in a castle bedroom (bed, lamp, door, window) and say what is (and is not) in the room with "There is a ___" / "There is no ___." Phonics: the L /l/ and W /w/ sounds with word spells, a tongue twister and a short reading. (Reviews Lesson 1’s rooms and furniture; Lesson 3 adds where things are: in, on, under, next to, behind.)';
+
+export const LESSON_A1U9L2_SCENES: Scene[] = [
+  { id: 'mc2-title', kind: 'title-card', bg: bgTitle, level: 'A1', unit: 'Unit 9', lessonLabel: 'Lesson 2', title: 'Magic Castle: Castle Furniture', subtitle: 'Explore the bedroom with Cat-cat and Pip', cta: '\u{1F6CF}️ LET’S GO!' },
+
+  {
+    // Warm-up review of Lesson 1 before anything new: a quick listen-and-tap
+    // on the same kitchen/bedroom cutaway the rooms were taught on.
+    id: 'mc2-review-rooms', kind: 'listen-tap', bg: bgRooms,
+    teacher: 'Remember the castle rooms? Listen and tap the room!',
+    targets: [
+      { label: 'Kitchen', ...KITCHEN_SPOT, color: '#C97A2F', hitWidth: '44%', hitHeight: '64%' },
+      { label: 'Bedroom', ...BEDROOM_SPOT, color: '#2EC4B6', hitWidth: '40%', hitHeight: '64%' },
+    ],
+    rounds: [
+      { prompt: 'There is a table in the kitchen.', answerLabel: 'Kitchen', who: 'wim' },
+      { prompt: 'There is a bed in the bedroom.', answerLabel: 'Bedroom', who: 'catcat' },
+      { prompt: 'There is a chair in the kitchen.', answerLabel: 'Kitchen', who: 'catcat' },
+    ],
+  },
+
+  {
+    id: 'mc2-intro', kind: 'cinematic', bg: bgCatcatPipDoor, title: 'Cat-cat’s Secret Room', subtitle: 'Cat-cat has something to show Pip', narrator: 'catcat',
+    script: [
+      { who: 'catcat', line: 'Pip! Come here! This is my favourite room in the castle.' },
+      { who: 'pip', line: 'A secret room? Open the door, Cat-cat!' },
+    ],
+    cta: '\u{1F6AA} OPEN THE DOOR!',
+  },
+
+  {
+    id: 'mc2-vocab-bed-lamp', kind: 'vocab-spot', bg: bgBedroomTour,
+    teacher: 'Welcome to the bedroom! Tap to learn two new things.',
+    items: [
+      { label: 'Bed', sentence: 'There is a bed.', emoji: '\u{1F6CF}️', ...BED_SPOT, color: '#C0392B', who: 'catcat' },
+      { label: 'Lamp', sentence: 'There is a lamp.', emoji: '\u{1FA94}', ...LAMP_SPOT, color: '#F4A340', who: 'pip' },
+    ],
+  },
+  {
+    id: 'mc2-vocab-door-window', kind: 'vocab-spot', bg: bgBedroomTour,
+    teacher: 'Two more! Tap the door and the window.',
+    items: [
+      { label: 'Door', sentence: 'There is a door.', emoji: '\u{1F6AA}', ...DOOR_SPOT, color: '#8B5A2B', who: 'pip' },
+      { label: 'Window', sentence: 'There is a window.', emoji: '\u{1FA9F}', ...WINDOW_SPOT, color: '#4FA9E0', who: 'catcat' },
+    ],
+  },
+
+  {
+    id: 'mc2-drag-words', kind: 'drag-match', bg: bgBedroomTour,
+    teacher: 'Listen, then drag each word onto the right thing in the bedroom!',
+    items: [
+      { label: 'Bed', color: '#C0392B', targetLeft: BED_SPOT.left, targetTop: BED_SPOT.top, ...BED_SIZE },
+      { label: 'Lamp', color: '#F4A340', targetLeft: LAMP_SPOT.left, targetTop: LAMP_SPOT.top, ...LAMP_SIZE },
+      { label: 'Door', color: '#8B5A2B', targetLeft: DOOR_SPOT.left, targetTop: DOOR_SPOT.top, ...DOOR_SIZE },
+      { label: 'Window', color: '#4FA9E0', targetLeft: WINDOW_SPOT.left, targetTop: WINDOW_SPOT.top, ...WINDOW_SIZE },
+    ],
+  },
+
+  {
+    // Model before production: the full target sentence, once, in the
+    // same colour chunks L1 used ("There is a" = one red chunk).
+    id: 'mc2-model', kind: 'echo', bg: bgBedroomTour, who: 'catcat', textSide: 'top',
+    teacher: 'Listen to Cat-cat, then say the whole sentence!',
+    word: 'There is a lamp in the bedroom!',
+    wordColors: ['#EF4444', '#EF4444', '#EF4444', '#F4A340', '#6B7280', '#6B7280', '#2EC4B6'],
+  },
+
+  {
+    id: 'mc2-join-stage', kind: 'join-stage', bg: bgBedroomTour,
+    teacher: 'Your turn! When it says YOU, look around the bedroom and say "There is a ___!"',
+    cast: ['catcat', 'pip'],
+    turns: [
+      { who: 'catcat', line: 'There is a bed in the bedroom!' },
+      { who: 'pip', line: 'There is a window in the bedroom!' },
+      { who: 'student', line: 'Now YOU! Look and say: "There is a ___!"' },
+    ],
+  },
+
+  {
+    id: 'mc2-listen-tap', kind: 'listen-tap', bg: bgBedroomTour,
+    teacher: 'Listen carefully, then tap what you hear!',
+    targets: [
+      { label: 'Door', ...DOOR_SPOT, color: '#8B5A2B', hitWidth: '24%', hitHeight: '70%' },
+      { label: 'Window', ...WINDOW_SPOT, color: '#4FA9E0', hitWidth: '15%', hitHeight: '46%' },
+      { label: 'Lamp', ...LAMP_SPOT, color: '#F4A340', hitWidth: '10%', hitHeight: '20%' },
+      { label: 'Bed', ...BED_SPOT, color: '#C0392B', hitWidth: '30%', hitHeight: '60%' },
+    ],
+    rounds: [
+      { prompt: 'There is a window.', answerLabel: 'Window', who: 'pip' },
+      { prompt: 'There is a lamp.', answerLabel: 'Lamp', who: 'catcat' },
+      { prompt: 'There is a door.', answerLabel: 'Door', who: 'pip' },
+      { prompt: 'There is a bed.', answerLabel: 'Bed', who: 'catcat' },
+    ],
+  },
+
+  {
+    // Same Find-the-Differences adaptation as L1's mc-find-differences, now
+    // on the bedroom: the lamp has really gone (bg-castle-bedroom-nolamp),
+    // so "there is no lamp" has visual evidence.
+    id: 'mc2-find-differences', kind: 'true-false', bg: bgBedroomNoLamp,
+    teacher: 'Uh-oh! Something is missing from the bedroom! Is each sentence true or false?',
+    rounds: [
+      { who: 'catcat', statement: 'There is a lamp in the bedroom.', isTrue: false },
+      { who: 'pip', statement: 'There is a window in the bedroom.', isTrue: true },
+      { who: 'catcat', statement: 'There is no lamp in the bedroom.', isTrue: true },
+      { who: 'pip', statement: 'There is no bed in the bedroom.', isTrue: false },
+    ],
+  },
+
+  {
+    // Cumulative with Lesson 1: the two kitchen words come back.
+    id: 'mc2-memory', kind: 'memory', bg: bgRooms,
+    teacher: 'Find the matching pairs! Say each word when you flip it.',
+    pairs: [
+      { id: 'bed', label: 'Bed', emoji: '\u{1F6CF}️' },
+      { id: 'lamp', label: 'Lamp', emoji: '\u{1FA94}' },
+      { id: 'door', label: 'Door', emoji: '\u{1F6AA}' },
+      { id: 'window', label: 'Window', emoji: '\u{1FA9F}' },
+      { id: 'table', label: 'Table', emoji: '\u{1FAB5}' },
+      { id: 'chair', label: 'Chair', emoji: '\u{1FA91}' },
+    ],
+  },
+
+  {
+    // Written-word self-check, cropped from the very picture the words were
+    // taught on (crop boxes measured on the 1376×768 tour art).
+    id: 'mc2-match', kind: 'picture-match',
+    prompt: 'Match the words!',
+    studentOnly: true,
+    teacher: 'Self-check: the student drags each word under its picture on their own. Afterwards point to a picture and ask: "What is this?"',
+    items: [
+      { word: 'door', img: bgBedroomTour, crop: { x: 4, y: 6, w: 28, h: 80 } },
+      { word: 'window', img: bgBedroomTour, crop: { x: 38, y: 5, w: 18, h: 52 } },
+      { word: 'lamp', img: bgBedroomTour, crop: { x: 54, y: 42, w: 13, h: 22 } },
+      { word: 'bed', img: bgBedroomTour, crop: { x: 64, y: 8, w: 36, h: 80 } },
+    ],
+  },
+
+  {
+    id: 'mc2-roleplay', kind: 'roleplay', bg: bgBedroomTour,
+    teacher: 'Story time! Listen to Cat-cat and Pip, then repeat each line.',
+    cast: ['catcat', 'pip'],
+    script: [
+      { who: 'catcat', line: 'Welcome to my bedroom, Pip!', repeat: true },
+      { who: 'pip', line: 'Wow! There is a big bed!', repeat: true },
+      { who: 'catcat', line: 'There is a lamp, too.', repeat: true },
+      { who: 'pip', line: 'And there is a window. I love this room!', repeat: true },
+    ],
+  },
+
+  {
+    id: 'mc2-spin', kind: 'spin-wheel', bg: bgBedroomTour,
+    title: 'Spin and say!',
+    teacher: 'Have the student spin the wheel, then say "There is a ___" for the thing with that number. If you prefer, tap a number instead of spinning.',
+    items: [
+      { label: 'There is a door.', ...DOOR_SPOT },
+      { label: 'There is a window.', ...WINDOW_SPOT },
+      { label: 'There is a lamp.', ...LAMP_SPOT },
+      { label: 'There is a bed.', ...BED_SPOT },
+    ],
+  },
+
+  {
+    // Knock-knock doors fits a lesson about doors: each friend answers with
+    // one of today's sentences.
+    id: 'mc2-hello-doors', kind: 'hello-doors', bg: bgWide,
+    teacher: 'Knock knock! Listen for the clue, then tap the right door!',
+    cast: ['catcat', 'pip', 'wim'],
+    rounds: [
+      { target: 'catcat', prompt: 'Who says "There is a lamp"?', helloLine: 'I say there is a lamp!', echoLine: 'There is a lamp.' },
+      { target: 'pip', prompt: 'Who says "There is a window"?', helloLine: 'I say there is a window!', echoLine: 'There is a window.' },
+      { target: 'wim', prompt: 'Who says "There is a door"?', helloLine: 'I say there is a door!', echoLine: 'There is a door.' },
+    ],
+  },
+
+  /* ---- Phonics segment: Wim's Sound Magic (L /l/, W /w/) ----------------
+   * The blueprint's own phonics focus for this lesson: /l/ (lamp) and /w/
+   * (window) — both inside today's words, so the sounds are discovered in
+   * vocabulary the student just learned. Same wizard styling and sequence
+   * as Lesson 1's CH segment: hear → trace → build → discriminate → say
+   * fluently → read. Both letters are straight-line, so they trace cleanly
+   * (TRACE_SEGMENTS gained L and W). */
+  {
+    id: 'mc2-ph-sound-l', kind: 'sound-model', bg: bgWim, who: 'wim', magic: true,
+    letter: 'L', phoneme: '/l/', sound: 'lll',
+    teacher: 'Wim’s first magic sound is L! Say /l/ /l/ with your tongue up. Tap each magic box to find an L word.',
+    anchors: [
+      { word: 'lamp', emoji: '\u{1FA94}' },
+      { word: 'lion', emoji: '\u{1F981}' },
+      { word: 'leaf', emoji: '\u{1F343}' },
+      { word: 'lollipop', emoji: '\u{1F36D}' },
+    ],
+  },
+  { id: 'mc2-ph-trace-l', kind: 'trace', bg: bgWim, who: 'wim', letter: 'L', phoneme: '/l/', word: 'lamp', teacher: 'Trace the letter L! Say /l/ /l/ /l/ as you draw.' },
+  {
+    id: 'mc2-ph-sound-w', kind: 'sound-model', bg: bgWim, who: 'wim', magic: true,
+    letter: 'W', phoneme: '/w/', sound: 'www',
+    teacher: 'Now the W sound! Make a little circle with your lips: /w/ /w/. Tap each box to find a W word.',
+    anchors: [
+      { word: 'window', emoji: '\u{1FA9F}' },
+      { word: 'wand', emoji: '\u{1FA84}' },
+      { word: 'wizard', emoji: '\u{1F9D9}' },
+      { word: 'web', emoji: '\u{1F578}️' },
+    ],
+  },
+  { id: 'mc2-ph-trace-w', kind: 'trace', bg: bgWim, who: 'wim', letter: 'W', phoneme: '/w/', word: 'window', teacher: 'Trace the letter W! Say /w/ /w/ /w/ as you draw.' },
+  {
+    id: 'mc2-ph-listen', kind: 'letter-game', bg: bgWim, who: 'wim', mode: 'sound',
+    teacher: 'Listen to the sound. Is it L or W?',
+    rounds: [
+      { letter: 'L', phoneme: '/l/', choices: ['W', 'L', 'M'] },
+      { letter: 'W', phoneme: '/w/', choices: ['L', 'W', 'T'] },
+      { letter: 'L', phoneme: '/l/', choices: ['L', 'W', 'S'] },
+      { letter: 'W', phoneme: '/w/', choices: ['W', 'A', 'L'] },
+    ],
+  },
+  {
+    id: 'mc2-ph-build', kind: 'word-build', bg: bgBedroomTour, magic: true,
+    teacher: 'Cast the spell! Which magic sound starts the word?',
+    rounds: [
+      { word: 'lamp', tiles: ['l', 'a', 'm', 'p'], blankIndex: 0, answer: 'l', choices: ['w', 'l', 'b'], emoji: '\u{1FA94}' },
+      { word: 'web', tiles: ['w', 'e', 'b'], blankIndex: 0, answer: 'w', choices: ['w', 'l', 'd'], emoji: '\u{1F578}️' },
+      { word: 'leg', tiles: ['l', 'e', 'g'], blankIndex: 0, answer: 'l', choices: ['t', 'w', 'l'], emoji: '\u{1F9B5}' },
+      { word: 'wig', tiles: ['w', 'i', 'g'], blankIndex: 0, answer: 'w', choices: ['l', 'p', 'w'], emoji: '\u{1F487}' },
+    ],
+  },
+  {
+    id: 'mc2-ph-twister', kind: 'tongue-twister', bg: bgWim, who: 'wim', focus: 'l|w',
+    teacher: 'Listen to Wim’s magic tongue twister. Then say it slow, faster, and at magic speed!',
+    line: 'Wim’s little lamp wobbles by the window.',
+  },
+  {
+    // Decodable reading built from today's nouns, "there is / there is no"
+    // and L/W words; each page's text matches its picture (the lamp really
+    // vanishes on page 3 — bg-castle-bedroom-nolamp).
+    id: 'mc2-ph-reading', kind: 'flipbook', bg: bgWide, title: '✨ Read with Wim: The Lost Lamp',
+    pages: [
+      { who: 'catcat', img: bgBedroomTour, text: 'Look, Pip! There is a little lamp in the bedroom.' },
+      { who: 'pip', img: bgBedroomTour, text: 'There is a big window, and there is a wooden door.' },
+      { who: 'catcat', img: bgBedroomNoLamp, text: 'Oh no! Where is the lamp? There is no lamp!' },
+      { who: 'wim', img: bgWim, text: 'Wim waves his wand. "Wiggle, wobble, lamp come back!"' },
+      { who: 'pip', img: bgBedroomTour, text: 'Look! The lamp is back. Well done, Wim!' },
+    ],
+    checkpoints: [
+      { afterPage: 3, who: 'catcat', question: 'What is missing?', options: ['The lamp', 'The bed', 'The window'], answer: 'The lamp' },
+      { afterPage: 5, who: 'pip', question: 'Who brings the lamp back?', options: ['Wim', 'Pip', 'Cat-cat'], answer: 'Wim' },
+    ],
+  },
+
+  { id: 'mc2-finale', kind: 'finale', bg: bgFriends, who: 'pip', line: 'You explored the bedroom and learned bed, lamp, door and window — and the magic L and W sounds! Tonight, look around your room and say "There is a ___!" ✨\u{1F6CF}️' },
+];
