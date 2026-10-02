@@ -34,7 +34,7 @@ if (!found.length && run.status !== 0) {
   process.exit(1);
 }
 
-const known = new Set(existsSync(BASELINE) ? readFileSync(BASELINE, 'utf8').split('\n').filter(Boolean) : []);
+const known = new Set(existsSync(BASELINE) ? readFileSync(BASELINE, 'utf8').split(/\r?\n/).filter(Boolean) : []);
 const fresh = found.filter((e) => !known.has(e));
 const fixed = [...known].filter((e) => !found.includes(e));
 
