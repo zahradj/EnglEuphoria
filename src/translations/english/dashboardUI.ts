@@ -97,6 +97,7 @@ export const dashboardUITranslations = {
   'sd.menu.dashboard': 'Dashboard',
   'sd.menu.classes': 'Classes',
   'sd.menu.homework': 'Homework',
+  'sd.menu.reports': 'Lesson Reports',
   'sd.menu.lessons': 'My Lessons',
   'sd.menu.learningPath': 'My Learning Path',
   'sd.menu.sounds': 'Map of Sounds',

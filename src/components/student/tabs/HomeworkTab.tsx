@@ -6,6 +6,8 @@ import { BookMarked, Gamepad2, Zap, Loader2, ArrowLeft, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { HomeworkForestWidget } from '@/components/student/kids/HomeworkForestWidget';
+import { useThemeMode } from '@/hooks/useThemeMode';
 import {
   listAssignments,
   recordPlay,
@@ -42,6 +44,7 @@ export function HomeworkTab() {
   const { user } = useAuth();
   const { studentLevel } = useStudentLevel();
   const accent = HUB_ACCENT[studentLevel || 'playground'];
+  const { resolvedTheme } = useThemeMode();
   const [searchParams, setSearchParams] = useSearchParams();
   const zoneParam = (searchParams.get('zone') || '') as AcademyZoneId | '';
 
@@ -126,6 +129,11 @@ export function HomeworkTab() {
           Assigned by your teacher and synced to your Academy Journey zones.
         </p>
       </div>
+
+      {/* Homework Forest (pending quests) — moved here from the dashboard home page. */}
+      {(studentLevel === 'playground' || studentLevel === 'academy') && (
+        <HomeworkForestWidget isDark={resolvedTheme === 'dark'} />
+      )}
 
       {/* Zone filter chips — keep in sync with the Quest Map */}
       {(Object.keys(ZONE_LABEL) as AcademyZoneId[]).some((z) => zoneCounts[z]) && (

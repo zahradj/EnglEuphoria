@@ -14,8 +14,12 @@ import { Loader2, Gamepad2, Sparkles, Trophy, Play, Zap, ArrowLeft, CheckCircle2
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { LIBRARY_GAMES } from '@/content/playground-library/gamesCatalog';
+import { GamesGrid } from '@/components/games/GamesGrid';
 
 const GamePlayer = lazy(() => import('@/components/games/GamePlayer'));
+// Built-in Playground games (Alphabet Express) — not stored in the database.
+const GamePlayerView = lazy(() => import('@/components/games/GamePlayerView').then((m) => ({ default: m.GamePlayerView })));
 
 const HUB_THEME: Record<GameHub, { accent: string; chip: string; ring: string; soft: string }> = {
   playground: { accent: 'text-orange-600', chip: 'bg-orange-500 text-white', ring: 'ring-orange-400/40', soft: 'bg-orange-50 dark:bg-orange-950/30' },
@@ -138,6 +142,7 @@ export function GamesTab() {
   const [games, setGames] = useState<StudentGameWithProgress[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeGame, setActiveGame] = useState<StudentGameWithProgress | null>(null);
+  const [builtInGameId, setBuiltInGameId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!hubReady || !hub || !user?.id) return;
@@ -177,6 +182,29 @@ export function GamesTab() {
       const rows = await listLibrary({ userId: user.id, hub, level: cefrLevel });
       setGames(rows);
     }
+  }
+
+  // Built-in games ship with the app (no teacher publishing step), so they show
+  // for the Playground hub even when the database library is empty.
+  const builtIns = hub === 'playground' ? LIBRARY_GAMES : [];
+
+  if (builtInGameId && builtIns.length > 0) {
+    return (
+      <div className="space-y-4">
+        <Button variant="ghost" onClick={() => setBuiltInGameId(null)} className="gap-2">
+          <ArrowLeft className="w-4 h-4" /> Back to library
+        </Button>
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center p-10 text-muted-foreground">
+              <Loader2 className="w-6 h-6 animate-spin" />
+            </div>
+          }
+        >
+          <GamePlayerView gameId={builtInGameId} onBack={() => setBuiltInGameId(null)} />
+        </Suspense>
+      </div>
+    );
   }
 
   if (activeGame) {
@@ -240,11 +268,20 @@ export function GamesTab() {
           </p>
         </div>
         <Badge className={cn('text-xs px-2.5 py-1', theme.chip)}>
-          {games.length} games available
+          {games.length + builtIns.length} games available
         </Badge>
       </header>
 
-      {noGamesAtAll ? (
+      {builtIns.length > 0 && (
+        <section>
+          <h2 className="flex items-center gap-2 text-lg font-bold mb-3">
+            <Sparkles className="w-5 h-5" /> Featured game
+          </h2>
+          <GamesGrid compact onPlay={(id) => setBuiltInGameId(id)} />
+        </section>
+      )}
+
+      {noGamesAtAll ? (builtIns.length > 0 ? null : (
         <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 p-12 text-center">
           <Gamepad2 className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
           <h3 className="font-semibold text-lg mb-1">No games yet</h3>
@@ -252,7 +289,7 @@ export function GamesTab() {
             Your teacher hasn't published any {hub} games yet. Check back soon!
           </p>
         </div>
-      ) : (
+      )) : (
         <>
           <Row
             title="Continue Playing"

@@ -91,6 +91,7 @@ export const dashboardUITranslations = {
   'sd.menu.dashboard': 'Tableau de bord',
   'sd.menu.classes': 'Classes',
   'sd.menu.homework': 'Devoirs',
+  'sd.menu.reports': 'Rapports de cours',
   'sd.menu.lessons': 'Mes cours',
   'sd.menu.learningPath': 'Mon parcours',
   'sd.menu.sounds': 'Carte des sons',

@@ -2,8 +2,6 @@ import React from 'react';
 import { JoinLessonHero } from '@/components/student/JoinLessonHero';
 import { ProgressStrip } from './ProgressStrip';
 import { JumpBackInCard } from './JumpBackInCard';
-import { HomeworkForestWidget } from '@/components/student/kids/HomeworkForestWidget';
-import { RecentLessonReports } from '@/components/student/RecentLessonReports';
 import { SkillsRadarChart } from '@/components/student/hub/SkillsRadarChart';
 import { AcademyJourneyHub } from '@/components/student/hub/AcademyJourneyHub';
 import { useThemeMode } from '@/hooks/useThemeMode';
@@ -23,7 +21,8 @@ interface DashboardHomeProps {
  *   1) Today's class CTA (next 1-on-1 booking)
  *   2) Compact progress strip (XP / Streak / Coins / Mastery)
  *   3) Single "Jump back in" lesson card
- *   4) Playground only: Homework Forest (pending quests)
+ * Everything else lives in its own sidebar tab: Homework (incl. the Homework
+ * Forest), Lesson Reports, Games — so this first page stays short and clean.
  */
 export const DashboardHome: React.FC<DashboardHomeProps> = ({ hub, studentName }) => {
   const { resolvedTheme } = useThemeMode();
@@ -80,16 +79,6 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({ hub, studentName }
 
       {hub === 'academy' && <AcademyJourneyHub isDarkMode={isDark} />}
 
-      {/* Homework surface — Playground shows the forest, Academy mirrors it
-          (the gate that locks the next lesson behind ≥80% homework score is
-          enforced inside the homework attempt flow, not the dashboard). */}
-      {(hub === 'playground' || hub === 'academy') && (
-        <HomeworkForestWidget isDark={isDark} />
-      )}
-
-      {/* Teacher's session reports — progress verification the student can
-          actually see, right where they already look for "what's next". */}
-      <RecentLessonReports hubId={hub} limit={3} />
     </div>
   );
 };

@@ -1,7 +1,6 @@
 // Live preview of the shared alphabet/phonics games (first-sound, letter-match,
 // letter-blocks). Route: /games-preview — no auth, no lesson needed.
 import { useState } from 'react';
-import { GamesShelf } from '@/components/student/kids/GamesShelf';
 import { FirstSoundScene, type FirstSoundSceneData } from '@/content/playground-library/FirstSoundScene';
 import { LetterMatchScene, LetterBlocksScene, type LetterMatchSceneData, type LetterBlocksSceneData } from '@/content/playground-library/LetterTilesScene';
 
@@ -24,7 +23,7 @@ const blocksSounds: LetterBlocksSceneData = {
   rounds: [{ blocks: 'abcdefghijklmnopqrstuvwxyz'.split('') }],
 };
 
-const TABS = ['First Sound', 'Big & Small', 'ABC Blocks', 'Sound Blocks', 'Student shelf'] as const;
+const TABS = ['First Sound', 'Big & Small', 'ABC Blocks', 'Sound Blocks'] as const;
 
 export default function GamesPreview() {
   const [tab, setTab] = useState<(typeof TABS)[number]>('First Sound');
@@ -42,7 +41,6 @@ export default function GamesPreview() {
         {tab === 'First Sound' && <FirstSoundScene scene={firstSound} onNext={noop} onWin={() => {}} />}
         {tab === 'Big & Small' && <LetterMatchScene scene={letterMatch} onNext={noop} onWin={() => {}} />}
         {tab === 'ABC Blocks' && <LetterBlocksScene scene={blocksLetters} onNext={noop} onWin={() => {}} />}
-        {tab === 'Student shelf' && <div className="absolute inset-0 overflow-auto bg-[#FFF8E7] p-4"><GamesShelf /></div>}
         {tab === 'Sound Blocks' && <LetterBlocksScene scene={blocksSounds} onNext={noop} onWin={() => {}} />}
       </div>
     </div>

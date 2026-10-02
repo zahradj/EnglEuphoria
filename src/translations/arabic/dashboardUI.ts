@@ -91,6 +91,7 @@ export const dashboardUITranslations = {
   'sd.menu.dashboard': 'اللوحة الرئيسية',
   'sd.menu.classes': 'الحصص',
   'sd.menu.homework': 'الواجبات',
+  'sd.menu.reports': 'تقارير الدروس',
   'sd.menu.lessons': 'دروسي',
   'sd.menu.learningPath': 'مسار تعلّمي',
   'sd.menu.sounds': 'خريطة الأصوات',

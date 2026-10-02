@@ -684,12 +684,8 @@ const App = () => {
                           <Suspense fallback={<LoadingFallback />}><DailyPlayPage /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
-                      {/* Playground games — the student's own list and player. */}
-                      <Route path="/dashboard/games" element={
-                        <ImprovedProtectedRoute requiredRole="student">
-                          <Suspense fallback={<LoadingFallback />}><StudentGamesPage /></Suspense>
-                        </ImprovedProtectedRoute>
-                      } />
+                      {/* Deep link to one built-in Playground game. The list itself is the Game
+                          Library tab above (GamesHubPage -> GamesTab). */}
                       <Route path="/dashboard/games/:gameId" element={
                         <ImprovedProtectedRoute requiredRole="student">
                           <Suspense fallback={<LoadingFallback />}><StudentGamesPage /></Suspense>

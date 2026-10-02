@@ -32,6 +32,7 @@ import { CertificatesTab } from "@/components/student/tabs/CertificatesTab";
 import { ReferralTab } from "@/components/student/tabs/ReferralTab";
 import { HomeworkTab } from "@/components/student/tabs/HomeworkTab";
 import { GamesTab } from "@/components/student/tabs/GamesTab";
+import { LessonReportsTab } from "@/components/student/tabs/LessonReportsTab";
 import { MyLessonsTab } from "@/components/student/tabs/MyLessonsTab";
 import { MyPathTab } from "@/components/student/tabs/MyPathTab";
 import { MapOfSoundsTab } from "@/components/student/tabs/MapOfSoundsTab";
@@ -222,6 +223,7 @@ const StudentDashboard = () => {
       "learning-path": () => <MyPathTab />,
       lessons: () => <MyLessonsTab />,
       homework: () => <HomeworkTab />,
+      reports: () => <LessonReportsTab />,
       games: () => <GamesTab />,
       sounds: () => <MapOfSoundsTab />,
       vocabulary: () => <VocabularyVaultTab />,
