@@ -25,6 +25,15 @@ reported live, intermittently, from `Cannot read properties of undefined
 4. The players keep activity state **scene-scoped** (`useSceneScopedState`): the
    render right after a scene change must never see the previous scene's state.
 
+## Where scene code lives (one file per activity)
+
+`unit1/SceneRenderer.tsx` and `welcome-town/SceneRenderer.tsx` are only the **dispatcher** (a `switch` on `scene.kind`) plus a few re-exports. Each activity is its own file:
+
+- `<hub>/scene-components/<Name>Scene.tsx` — the scene and any helper/constant only it uses.
+- `<hub>/scene-components/shared.tsx` — helpers used by 2+ scenes (GlassCard, Hearts, CharacterPointer…).
+
+Adding a new scene kind: create `scene-components/MyScene.tsx` (`export function MyScene`), import it in the hub's `SceneRenderer.tsx`, add the `case`. If another scene needs one of your helpers, move it to `shared.tsx` — never import one scene from another's internals. `classroomHygiene.test.ts` scans every file in these folders.
+
 ## Safety nets already in place (don't remove)
 - `SceneCrashGuard` (inside both players): crash #1 → quiet remount, crash #2 → remount
   in **safe mode** (`activitySync` undefined = no live sync), crash #3 → card with
@@ -46,5 +55,7 @@ Labels read `Scene <id> [<kind>] · student mirror · safe mode · crash #n`.
 
 ## Type-check gotcha
 `npm run typecheck` / `tsc -p .` check **nothing** (root tsconfig has `"files": []`).
-Use `tsc --noEmit -p tsconfig.app.json` (very slow, ~7 min) or a scoped config that
-`extends ./tsconfig.app.json` with a small `include` list.
+Use **`npm run typecheck:classroom`** (~20s): it checks the lesson players, every scene and MainStage via `tsconfig.classroom.json`, and fails only on errors that are not in `scripts/typecheck-classroom.baseline.txt` (10 older ones). Fixing an old error? Re-record with `node scripts/typecheck-classroom.mjs --update`. Never add a new error to the baseline.
+
+## Deploy gate
+Vercel builds with `npm run build:vercel` (see `vercel.json`): classroom type-check → `vitest run src/content/playground-library` → `vite build`. If any step fails the deploy is blocked and the live site keeps the previous version. CI runs the same type-check.

@@ -74,6 +74,8 @@ project_id = "dcoxpyzoqjvmuuygvlme"
     verify_jwt = false
   [functions.auto-complete-lessons]
     verify_jwt = false
+  [functions.classroom-crash-alert]
+    verify_jwt = false
   [functions.batch-generate-lesson-audio]
     verify_jwt = false
   [functions.batch-generate-lesson-images]
