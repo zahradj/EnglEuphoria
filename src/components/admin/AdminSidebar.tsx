@@ -17,7 +17,7 @@ interface AdminSidebarProps {
 
 export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
   const { signOut } = useAuth();
-  const { profileApprovals, applications, pendingBonuses, atRiskTeachers } = useAdminPendingCounts();
+  const { profileApprovals, applications, pendingBonuses, atRiskTeachers, levelRequests } = useAdminPendingCounts();
 
   const topItems = [
     { id: "overview", label: "Overview", icon: LayoutDashboard },
@@ -43,7 +43,7 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
     {
       label: "Students",
       items: [
-        { id: "students", label: "Students", icon: Users },
+        { id: "students", label: "Students", icon: Users, badge: levelRequests },
         { id: "users", label: "User Manager", icon: Users },
       ],
     },

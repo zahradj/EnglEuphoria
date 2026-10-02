@@ -12,29 +12,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { fetchLevelMap, normalizeCefr, type LevelMapUnit } from '@/services/activeCoreLessonResolver';
+import { normalizeCefr } from '@/services/activeCoreLessonResolver';
+import {
+  UnitKnowledgeChecklist,
+  UNITS_PER_LEVEL,
+  startUnitFor,
+  toLevelMapHub,
+  type UnitMarks,
+} from './UnitKnowledgeChecklist';
 
 const LEVELS = ['Pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1'];
-const UNITS_PER_LEVEL = 10;
-
-type Mark = 'known' | 'partly' | 'not_yet';
-type Marks = Record<number, Mark>;
-
-const MARK_LABEL: Record<Mark, string> = { known: 'Knows it', partly: 'Partly', not_yet: 'Not yet' };
-const MARK_STYLE: Record<Mark, string> = {
-  known: 'bg-emerald-500 text-white',
-  partly: 'bg-amber-400 text-amber-950',
-  not_yet: 'bg-muted-foreground/80 text-background',
-};
-
-/** First unit the student doesn't already know — where the path starts. */
-function startUnitFor(marks: Marks): number {
-  for (let u = 1; u <= UNITS_PER_LEVEL; u++) {
-    if (marks[u] !== 'known') return u;
-  }
-  return UNITS_PER_LEVEL;
-}
-
 interface Props {
   bookingId: string;
   studentId?: string;
@@ -57,8 +44,7 @@ export const TrialLevelPicker: React.FC<Props> = ({ bookingId, studentId, hubTyp
   const [startUnit, setStartUnit] = useState<number>(1);
   const [saving, setSaving] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const [map, setMap] = useState<LevelMapUnit[] | null>(null);
-  const [marks, setMarks] = useState<Marks>({});
+  const [marks, setMarks] = useState<UnitMarks>({});
   const { toast } = useToast();
   const qc = useQueryClient();
 
@@ -79,38 +65,27 @@ export const TrialLevelPicker: React.FC<Props> = ({ bookingId, studentId, hubTyp
         .maybeSingle();
       if (cancelled || !data) return;
       if (normalizeCefr(data.cefr_level) === normalizeCefr(initialLevel)) {
-        setMarks((data.unit_marks ?? {}) as Marks);
+        setMarks((data.unit_marks ?? {}) as UnitMarks);
         setStartUnit(data.start_unit ?? 1);
       }
     })();
     return () => { cancelled = true; };
   }, [studentId, initialLevel]);
 
-  // Level map for the dialog.
-  useEffect(() => {
-    if (!open || !level) return;
-    let cancelled = false;
-    setMap(null);
-    fetchLevelMap(hubType === 'professional' ? 'success' : hubType, level).then((m) => {
-      if (!cancelled) setMap(m);
-    });
-    return () => { cancelled = true; };
-  }, [open, level, hubType]);
-
-  const save = async (nextLevel: string, nextMarks: Marks, savingKey: string) => {
-    const start = startUnitFor(nextMarks);
+  const save = async (nextLevel: string, nextUnitMarks: UnitMarks, savingKey: string) => {
+    const start = startUnitFor(nextUnitMarks);
     setSaving(savingKey);
     try {
       const { data, error } = await (supabase as any).rpc('set_trial_start', {
         p_booking_id: bookingId,
         p_cefr: nextLevel,
         p_start_unit: start,
-        p_marks: nextMarks,
+        p_marks: nextUnitMarks,
       });
       if (error) throw error;
       const saved = normalizeCefr(data?.level) ?? nextLevel;
       setLevel(saved);
-      setMarks(nextMarks);
+      setMarks(nextUnitMarks);
       setStartUnit(data?.start_unit ?? start);
 
       try {
@@ -159,14 +134,6 @@ export const TrialLevelPicker: React.FC<Props> = ({ bookingId, studentId, hubTyp
   };
 
   const draftStart = useMemo(() => startUnitFor(marks), [marks]);
-  const units = useMemo(() => {
-    const byNumber = new Map((map ?? []).map((u) => [u.unitNumber, u]));
-    return Array.from({ length: UNITS_PER_LEVEL }, (_, i) => byNumber.get(i + 1) ?? { unitNumber: i + 1, unitTitle: null, lessons: [] });
-  }, [map]);
-  const setUnit = (u: number, m: Mark) => setMarks((prev) => ({ ...prev, [u]: m }));
-  const markFirst = (n: number) =>
-    setMarks(Object.fromEntries(Array.from({ length: UNITS_PER_LEVEL }, (_, i) => [i + 1, i < n ? 'known' : 'not_yet'])) as Marks);
-
   return (
     <>
       <div className="flex items-center gap-1 h-8 rounded-md bg-background/80 backdrop-blur border border-border/60 px-1.5">
@@ -211,56 +178,9 @@ export const TrialLevelPicker: React.FC<Props> = ({ bookingId, studentId, hubTyp
             </DialogDescription>
           </DialogHeader>
 
-          <div className="flex flex-wrap items-center gap-1.5 text-xs">
-            <span className="text-muted-foreground mr-1">Quick:</span>
-            <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => markFirst(0)}>Start from Unit 1</Button>
-            <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => markFirst(5)}>Units 1–5 known</Button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto -mx-1 px-1 space-y-1.5">
-            {!map ? (
-              <div className="flex items-center justify-center py-10 text-muted-foreground text-sm">
-                <Loader2 className="h-4 w-4 animate-spin mr-2" /> Loading the {level} units…
-              </div>
-            ) : (
-              units.map((u) => {
-                const mark: Mark = marks[u.unitNumber] ?? 'not_yet';
-                const built = u.lessons.filter((l) => l.published).length;
-                const isStart = u.unitNumber === draftStart;
-                return (
-                  <div
-                    key={u.unitNumber}
-                    className={`rounded-lg border p-2.5 ${isStart ? 'border-primary bg-primary/5' : 'border-border/60'}`}
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <div className="text-sm font-semibold">
-                          Unit {u.unitNumber}{u.unitTitle ? ` · ${u.unitTitle}` : ''}
-                          {isStart && <span className="ml-2 text-[10px] font-bold uppercase text-primary">Starts here</span>}
-                        </div>
-                        <div className="text-[11px] text-muted-foreground line-clamp-2">
-                          {u.lessons.length ? u.lessons.map((l) => l.title).join(' · ') : 'Not planned yet'}
-                        </div>
-                        <div className="text-[10px] text-muted-foreground mt-0.5">
-                          {u.lessons.length ? (built === u.lessons.length ? 'All lessons built' : `${built} of ${u.lessons.length} lessons built`) : ''}
-                        </div>
-                      </div>
-                      <div className="flex shrink-0 rounded-md border border-border/60 overflow-hidden">
-                        {(['known', 'partly', 'not_yet'] as Mark[]).map((m) => (
-                          <button
-                            key={m}
-                            type="button"
-                            onClick={() => setUnit(u.unitNumber, m)}
-                            className={`px-2 py-1 text-[11px] font-semibold ${mark === m ? MARK_STYLE[m] : 'hover:bg-muted'}`}
-                          >
-                            {MARK_LABEL[m]}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
+          <div className="flex-1 overflow-y-auto -mx-1 px-1">
+            {level && (
+              <UnitKnowledgeChecklist hub={toLevelMapHub(hubType)} level={level} marks={marks} onChange={setMarks} />
             )}
           </div>
 

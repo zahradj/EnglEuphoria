@@ -41,6 +41,7 @@ import { whiteboardService, type SmartWorksheet, type NativeGameType, type Stage
 import { supabase } from "@/integrations/supabase/client";
 import { LessonSwitcher } from "./LessonSwitcher";
 import { TrialLevelPicker } from "./TrialLevelPicker";
+import { LevelChangeRequestDialog } from "@/components/teacher/LevelChangeRequestDialog";
 
 
 type HubType = 'playground' | 'academy' | 'professional';
@@ -89,6 +90,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   const { user } = useAuth();
   const media = useLocalMedia();
   const [participantCount, setParticipantCount] = useState(2);
+  const [levelRequestOpen, setLevelRequestOpen] = useState(false);
   const [activeTool, setActiveTool] = useState('pointer');
   const [activeColor, setActiveColor] = useState('#FF6B6B');
   const [penRailOpen, setPenRailOpen] = useState(false);
@@ -1246,6 +1248,16 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
           {isTrial && hubType !== 'professional' && (
             <TrialLevelPicker bookingId={classId} studentId={studentId} hubType={hubType} initialLevel={trialCefr} classStarted={classStarted} />
           )}
+          {/* After the trial, a level change goes through an admin-approved request. */}
+          {!isTrial && studentId && (
+            <button
+              type="button"
+              onClick={() => setLevelRequestOpen(true)}
+              className="h-7 rounded-md bg-background/80 backdrop-blur border border-border/60 px-2 text-[11px] font-semibold text-foreground hover:bg-muted"
+            >
+              Request level change
+            </button>
+          )}
         </div>
       )}
 
@@ -1722,6 +1734,14 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
           }
         }}
       />
+      {!isTrial && studentId && (
+        <LevelChangeRequestDialog
+          open={levelRequestOpen}
+          onOpenChange={setLevelRequestOpen}
+          student={{ id: studentId, name: studentName || 'Student', hub: hubType }}
+          bookingId={classId}
+        />
+      )}
     </div>
   );
 };

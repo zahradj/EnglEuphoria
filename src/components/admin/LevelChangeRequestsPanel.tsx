@@ -15,6 +15,9 @@ interface LevelChangeRequest {
   requested_level: string;
   reason: string | null;
   created_at: string;
+  hub: string | null;
+  requested_start_unit: number | null;
+  unit_marks: Record<string, string> | null;
   student_name: string;
   teacher_name: string;
 }
@@ -34,14 +37,14 @@ export const LevelChangeRequestsPanel: React.FC<LevelChangeRequestsPanelProps> =
   const fetchRequests = async () => {
     setLoading(true);
     try {
-      const { data: pending, error } = await supabase
+      const { data: pending, error } = await (supabase as any)
         .from('level_change_requests')
-        .select('id, student_id, teacher_id, current_level, requested_level, reason, created_at')
+        .select('id, student_id, teacher_id, current_level, requested_level, reason, created_at, hub, requested_start_unit, unit_marks')
         .eq('status', 'pending')
         .order('created_at', { ascending: true });
       if (error) throw error;
 
-      const ids = Array.from(new Set((pending || []).flatMap(r => [r.student_id, r.teacher_id])));
+      const ids = Array.from(new Set(((pending || []) as any[]).flatMap(r => [r.student_id, r.teacher_id])));
       const { data: users } = ids.length
         ? await supabase.from('users').select('id, full_name, email').in('id', ids)
         : { data: [] };
@@ -69,28 +72,14 @@ export const LevelChangeRequestsPanel: React.FC<LevelChangeRequestsPanelProps> =
   const resolve = async (request: LevelChangeRequest, decision: 'approved' | 'rejected') => {
     setBusyId(request.id);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-
-      if (decision === 'approved') {
-        const { error: profileError } = await supabase
-          .from('student_profiles')
-          .upsert(
-            { user_id: request.student_id, cefr_level: request.requested_level },
-            { onConflict: 'user_id' }
-          );
-        if (profileError) throw profileError;
-      }
-
-      const { error: requestError } = await supabase
-        .from('level_change_requests')
-        .update({
-          status: decision,
-          admin_id: user?.id ?? null,
-          admin_notes: notes[request.id] || null,
-          resolved_at: new Date().toISOString(),
-        })
-        .eq('id', request.id);
-      if (requestError) throw requestError;
+      // Approval applies the change everywhere: placement (dashboard level),
+      // profile, prior-knowledge marks and the learning path (start unit).
+      const { error } = await (supabase as any).rpc('review_level_change', {
+        p_request: request.id,
+        p_approve: decision === 'approved',
+        p_note: notes[request.id] || null,
+      });
+      if (error) throw error;
 
       setRequests(prev => prev.filter(r => r.id !== request.id));
       toast.success(decision === 'approved' ? `Level updated to ${request.requested_level}` : 'Request rejected');
@@ -126,12 +115,26 @@ export const LevelChangeRequestsPanel: React.FC<LevelChangeRequestsPanelProps> =
               <div className="flex items-center gap-1.5 text-sm">
                 <Badge variant="outline">{request.current_level || 'unset'}</Badge>
                 <span className="text-muted-foreground">→</span>
-                <Badge>{request.requested_level}</Badge>
+                <Badge>{request.requested_level}{request.requested_start_unit ? ` · Unit ${request.requested_start_unit}` : ''}</Badge>
               </div>
             </div>
             {request.reason && (
               <p className="text-sm text-muted-foreground">{request.reason}</p>
             )}
+            {(() => {
+              const known = Object.entries(request.unit_marks ?? {})
+                .filter(([, m]) => m === 'known').map(([u]) => Number(u)).sort((a, b) => a - b);
+              const partly = Object.entries(request.unit_marks ?? {})
+                .filter(([, m]) => m === 'partly').map(([u]) => Number(u)).sort((a, b) => a - b);
+              return (
+                <p className="text-xs text-muted-foreground">
+                  {request.hub ? `${request.hub} · ` : ''}
+                  Starts at Unit {request.requested_start_unit ?? 1}
+                  {known.length ? ` · knows Units ${known.join(', ')}` : ''}
+                  {partly.length ? ` · partly ${partly.join(', ')}` : ''}
+                </p>
+              );
+            })()}
             <Textarea
               placeholder="Optional note (visible in history)"
               value={notes[request.id] || ''}

@@ -94,8 +94,16 @@ export const LessonSwitcher: React.FC<Props> = ({
     () => sequence.findIndex((l) => l.id === currentLessonId),
     [sequence, currentLessonId],
   );
-  const prevLesson = currentIndex > 0 ? sequence[currentIndex - 1] : null;
-  const nextLesson = currentIndex >= 0 && currentIndex < sequence.length - 1 ? sequence[currentIndex + 1] : null;
+  // Stepping stays inside the student's level: a different level is a
+  // level change, which after the trial lesson needs an approved request
+  // (the database refuses moving the path across levels too).
+  const currentLevel = currentIndex >= 0 ? (sequence[currentIndex].slot_cefr_level ?? '').toLowerCase() : null;
+  const sameLevel = (l: LessonRow | undefined) => !!l && (l.slot_cefr_level ?? '').toLowerCase() === currentLevel;
+  const prevCandidate = currentIndex > 0 ? sequence[currentIndex - 1] : undefined;
+  const nextCandidate = currentIndex >= 0 && currentIndex < sequence.length - 1 ? sequence[currentIndex + 1] : undefined;
+  const prevLesson = sameLevel(prevCandidate) ? prevCandidate! : null;
+  const nextLesson = sameLevel(nextCandidate) ? nextCandidate! : null;
+  const levelEdgeHint = 'Start of a new level — send a level change request';
 
   const handlePick = async (lessonId: string, lessonTitle: string) => {
     if (!studentId) {
@@ -166,7 +174,7 @@ export const LessonSwitcher: React.FC<Props> = ({
         size="icon"
         className="h-6 w-6"
         disabled={!prevLesson || saving || isLoading}
-        title={prevLesson ? `Previous: ${prevLesson.title}` : 'No previous lesson'}
+        title={prevLesson ? `Previous: ${prevLesson.title}` : prevCandidate ? levelEdgeHint : 'No previous lesson'}
         onClick={() => prevLesson && handlePick(prevLesson.id, prevLesson.title)}
       >
         <ChevronLeft className="h-3.5 w-3.5" />
@@ -179,7 +187,7 @@ export const LessonSwitcher: React.FC<Props> = ({
         size="icon"
         className="h-6 w-6"
         disabled={!nextLesson || saving || isLoading}
-        title={nextLesson ? `Next: ${nextLesson.title}` : 'No next lesson'}
+        title={nextLesson ? `Next: ${nextLesson.title}` : nextCandidate ? levelEdgeHint : 'No next lesson'}
         onClick={() => nextLesson && handlePick(nextLesson.id, nextLesson.title)}
       >
         <ChevronRight className="h-3.5 w-3.5" />

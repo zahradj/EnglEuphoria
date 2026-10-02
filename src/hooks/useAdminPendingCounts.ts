@@ -6,6 +6,8 @@ export interface AdminPendingCounts {
   applications: number;
   pendingBonuses: number;
   atRiskTeachers: number;
+  /** level_change_requests awaiting approval (teacher → admin) */
+  levelRequests: number;
   loading: boolean;
   refetch: () => void;
 }
@@ -22,6 +24,7 @@ export const useAdminPendingCounts = (pollMs = 60_000): AdminPendingCounts => {
   const [applications, setApplications] = useState(0);
   const [pendingBonuses, setPendingBonuses] = useState(0);
   const [atRiskTeachers, setAtRiskTeachers] = useState(0);
+  const [levelRequests, setLevelRequests] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const fetchCounts = useCallback(async () => {
@@ -32,6 +35,7 @@ export const useAdminPendingCounts = (pollMs = 60_000): AdminPendingCounts => {
         { count: appCount },
         { count: bonusCount },
         { count: atRiskCount },
+        { count: levelRequestCount },
       ] = await Promise.all([
         supabase
           .from('teacher_profiles')
@@ -51,11 +55,16 @@ export const useAdminPendingCounts = (pollMs = 60_000): AdminPendingCounts => {
           .select('*', { count: 'exact', head: true })
           .gte('week_start', sevenDaysAgo)
           .gte('consecutive_weeks', 2),
+        supabase
+          .from('level_change_requests')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'pending'),
       ]);
       setProfileApprovals(profileCount ?? 0);
       setApplications(appCount ?? 0);
       setPendingBonuses(bonusCount ?? 0);
       setAtRiskTeachers(atRiskCount ?? 0);
+      setLevelRequests(levelRequestCount ?? 0);
     } catch (err) {
       console.warn('useAdminPendingCounts: fetch failed', err);
     } finally {
@@ -69,5 +78,5 @@ export const useAdminPendingCounts = (pollMs = 60_000): AdminPendingCounts => {
     return () => clearInterval(id);
   }, [fetchCounts, pollMs]);
 
-  return { profileApprovals, applications, pendingBonuses, atRiskTeachers, loading, refetch: fetchCounts };
+  return { profileApprovals, applications, pendingBonuses, atRiskTeachers, levelRequests, loading, refetch: fetchCounts };
 };
