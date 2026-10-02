@@ -370,27 +370,6 @@ export default function LibraryDrawer({
               </button>
             </div>
 
-            {/* Lessons | Games */}
-            {gamesAvailable && (
-              <div className="flex gap-1.5 px-5 pt-3 shrink-0" role="tablist" aria-label="Library section">
-                {([['lessons', 'Lessons'], ['games', 'Games']] as const).map(([id, label]) => (
-                  <button
-                    key={id}
-                    role="tab"
-                    aria-selected={view === id}
-                    onClick={() => setView(id)}
-                    className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide border transition-colors ${
-                      view === id
-                        ? `${accent.tabActive} text-white`
-                        : `bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 ${accent.tabHover}`
-                    }`}
-                  >
-                    {label}{id === 'games' ? ` · ${LIBRARY_GAMES.length}` : ''}
-                  </button>
-                ))}
-              </div>
-            )}
-
             {/* Search */}
             <div className="px-5 py-3 border-b border-slate-100 dark:border-slate-800 shrink-0">
               <div className="relative">
@@ -405,18 +384,19 @@ export default function LibraryDrawer({
               </div>
             </div>
 
-            {/* Level tabs — horizontal, only shown while not searching (a
-                search spans every level, so tabs would just be confusing
-                filters-on-top-of-a-filter). */}
-            {view === 'lessons' && !loading && !isSearching && grouped.length > 0 && (
-              <div className="flex gap-1.5 px-5 py-3 border-b border-slate-100 dark:border-slate-800 shrink-0 overflow-x-auto">
-                {grouped.map(({ level, units }) => {
+            {/* Level tabs + Games — one row: the levels, then a Games tab beside them. Level tabs are
+                hidden while searching lessons (a search spans every level); Games stays reachable. */}
+            {(gamesAvailable || (!loading && !isSearching && grouped.length > 0)) && (
+              <div className="flex gap-1.5 px-5 py-3 border-b border-slate-100 dark:border-slate-800 shrink-0 overflow-x-auto" role="tablist" aria-label="Levels and games">
+                {!loading && !isSearching && grouped.map(({ level, units }) => {
                   const lessonCount = units.reduce((sum, u) => sum + u.lessons.length, 0);
-                  const active = level === selectedLevel;
+                  const active = view === 'lessons' && level === selectedLevel;
                   return (
                     <button
                       key={level}
-                      onClick={() => setSelectedLevel(level)}
+                      role="tab"
+                      aria-selected={active}
+                      onClick={() => { setView('lessons'); setSelectedLevel(level); }}
                       className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide border transition-colors ${
                         active
                           ? `${accent.tabActive} text-white`
@@ -428,6 +408,21 @@ export default function LibraryDrawer({
                     </button>
                   );
                 })}
+                {gamesAvailable && (
+                  <button
+                    role="tab"
+                    aria-selected={view === 'games'}
+                    onClick={() => setView('games')}
+                    className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide border transition-colors ${
+                      view === 'games'
+                        ? `${accent.tabActive} text-white`
+                        : `bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 ${accent.tabHover}`
+                    }`}
+                  >
+                    Games
+                    <span className={view === 'games' ? accent.tabActiveText : 'text-slate-400'}> · {LIBRARY_GAMES.length}</span>
+                  </button>
+                )}
               </div>
             )}
 
