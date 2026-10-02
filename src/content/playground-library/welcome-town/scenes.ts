@@ -465,6 +465,7 @@ export const LESSON_1_SCENES: Scene[] = [
     id: 'wt-hello-song', kind: 'song', bg: bgL1Class, title: '\u{1F3B5} The Hello Song \u{1F3B5}', teacher: 'Wave and sing! Point to you when we say “name”.',
     durationSeconds: 20, bigWord: 'Hello',
     songUrl: `${W}/audio/hello-song.mp3?v=1`,
+    lineDurationsMs: [3640, 4120, 4320, 7982],
     lyrics: [
       { who: 'marigold', text: 'Hello, hello, hello to you!' },
       { who: 'pip', text: 'Hi, hi, hi! And hi to you!' },
