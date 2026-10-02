@@ -54,7 +54,7 @@ import { allQuestLines } from '../src/content/homework-quests/registry.ts';
 import { spokenText } from '../src/content/playground-library/unit1/spokenText.ts';
 import { LIBRARY_GAMES } from '../src/content/playground-library/gamesCatalog.ts';
 import { artFor } from '../src/content/playground-library/alphabetArt.ts';
-import { VOICE_PROFILES, approvedVoiceId, normalizeForSpeech, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
+import { VOICE_PROFILES, approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.join(__dirname, '..', 'public', 'audio-cache');
@@ -82,6 +82,8 @@ const VOICE_ID = {
 const KEY_VERSION = 'v11';
 const CHARACTER_CLIP_VERSION = { mia: 'v12', leo: 'v12' };
 function cacheKey(character, text) {
+  // Mirrors audio.ts key(): short lines are recorded English-locked (v13s).
+  if (isShortLine(text)) return `${character}::${SHORT_LINE_CLIP_VERSION}::${text}`;
   return `${character}::${CHARACTER_CLIP_VERSION[character] ?? KEY_VERSION}::${text}`;
 }
 
