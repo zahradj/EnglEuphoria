@@ -531,7 +531,7 @@ const UnifiedClassroomPage: React.FC = () => {
       : showTrailLesson && normalizedHub === 'academy'
         ? <AcademyTrailLesson roomId={booking.id} role={classroomRole} />
         : showTrailLesson && normalizedHub === 'playground'
-          ? <PlaygroundTrailLesson roomId={booking.id} role={classroomRole} cefr={trialCefr ?? null} />
+          ? <PlaygroundTrailLesson roomId={booking.id} role={classroomRole} />
           : undefined;
 
 

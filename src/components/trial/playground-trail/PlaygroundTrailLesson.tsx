@@ -1,9 +1,7 @@
 import { useState } from "react";
 
 import PlayUnitLesson from "@/pages/playground-scene/PlayUnitLesson";
-import PlayWelcomeTownLesson from "@/pages/playground-scene/PlayWelcomeTownLesson";
 import { PLAYGROUND_TRIAL_SCENES } from "@/content/playground-library/trial/trialScenes";
-import { PLAYGROUND_A1_TRIAL_SCENES, PLAYGROUND_A2_TRIAL_SCENES } from "@/content/playground-library/trial/welcomeTownTrials";
 import { ScaledFrame } from "@/components/common/ScaledFrame";
 
 import logo from "@/assets/playground-trail/logo.png";
@@ -13,20 +11,9 @@ import mascot from "@/assets/playground-trail/mascot.png";
 // A short, no-reading-required welcome adventure for true first-time
 // English learners — meet Pip, Mia and Bella, play, and sing together.
 // Meant to be a fun, memorable first impression of the school.
-/** Which trial fits the student: Pre-A1 (and unknown) → "The Forest of
- *  Hellos" trial; A1 → Welcome Town Lesson 1 trial; A2 and above → A2
- *  "My Day" trial. Each is a short version of that level's first lesson. */
-export function playgroundTrialLevel(cefr?: string | null): "pre-a1" | "a1" | "a2" {
-  const c = String(cefr ?? "").toUpperCase().replace(/\s|-/g, "");
-  if (c === "A1") return "a1";
-  if (/^(A2|B1|B2|C1|C2)/.test(c)) return "a2";
-  return "pre-a1";
-}
-
 export function PlaygroundTrailLesson({
   roomId,
-  cefr,
-}: { roomId?: string; role?: "teacher" | "student"; cefr?: string | null } = {}) {
+}: { roomId?: string; role?: "teacher" | "student" } = {}) {
   const [started, setStarted] = useState(false);
 
   if (started) {
@@ -38,19 +25,11 @@ export function PlaygroundTrailLesson({
     // see TrialCreator.tsx's `h-[80vh]` wrapper.
     return (
       <ScaledFrame className="relative h-full w-full overflow-hidden">
-        {playgroundTrialLevel(cefr) === "pre-a1" ? (
-          <PlayUnitLesson
-            scenes={PLAYGROUND_TRIAL_SCENES}
-            sessionKey={`playground-trial-${roomId ?? "anon"}`}
-            embedded
-          />
-        ) : (
-          <PlayWelcomeTownLesson
-            scenes={playgroundTrialLevel(cefr) === "a1" ? PLAYGROUND_A1_TRIAL_SCENES : PLAYGROUND_A2_TRIAL_SCENES}
-            sessionKey={`playground-trial-${playgroundTrialLevel(cefr)}-${roomId ?? "anon"}`}
-            embedded
-          />
-        )}
+        <PlayUnitLesson
+          scenes={PLAYGROUND_TRIAL_SCENES}
+          sessionKey={`playground-trial-${roomId ?? "anon"}`}
+          embedded
+        />
       </ScaledFrame>
     );
   }
