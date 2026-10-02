@@ -10,7 +10,8 @@
 // device (double cost, a seconds-long wait on the second screen, and two
 // slightly different takes of the same line).
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { approvedVoiceId, languageLock, normalizeForSpeech, safeVoiceSettings, ttsModelFor } from "../_shared/speechPolicy.ts";
+import { approvedVoiceId, languageLock, normalizeForSpeech, safeVoiceSettings, SHORT_LINE_TTS_MODEL, ttsModelFor } from "../_shared/speechPolicy.ts";
+import { withPhonemes } from "../_shared/pronunciations.ts";
 
 const BUCKET = "sfx-cache";
 async function cacheKey(text: string, voiceId: string, speed: number | null, model: string): Promise<string> {
@@ -80,7 +81,8 @@ Deno.serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          text,
+          // Short lines: English-only model + the dictionary pronunciation of each word.
+          text: model === SHORT_LINE_TTS_MODEL ? withPhonemes(text) : text,
           model_id: model,
           ...languageLock(model),
           voice_settings: safeVoiceSettings({

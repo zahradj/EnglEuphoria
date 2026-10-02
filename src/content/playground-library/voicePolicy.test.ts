@@ -88,6 +88,10 @@ describe('voice policy: every ElevenLabs edge function follows it', () => {
   it('the server copy of the policy is byte-identical to the client copy (Deno cannot import from src/)', () => {
     expect(eol(read('supabase/functions/_shared/speechPolicy.ts'))).toBe(eol(read('src/lib/speechPolicy.ts')));
   });
+
+  it('the server copy of the word pronunciations is byte-identical to the client copy', () => {
+    expect(eol(read('supabase/functions/_shared/pronunciations.ts'))).toBe(eol(read('src/lib/pronunciations.ts')));
+  });
 });
 
 describe('voice policy: accurate pronunciation of the words the games teach', () => {

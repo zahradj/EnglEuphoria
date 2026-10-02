@@ -115,14 +115,15 @@ export function languageLock(modelId: string): { language_code?: string } {
 }
 
 /** The default model guesses the language from the text, so a line of one or two
- *  words can be read as another language: "hat" came out as German "hot", "wand"
- *  as "vant" (2026-10-02 audit; English-locked takes were heard correctly). Short
- *  lines therefore use an English-locked model (see languageLock). */
+ *  words can be read as another language: "hat" came out as German /hat/, "wand"
+ *  as /vand/. Even the English-locked v2.5 model still did that (2026-10-02
+ *  sound-level audit), so short lines use the English-ONLY Turbo v2 model, with
+ *  each word's dictionary pronunciation as a <phoneme> tag (pronunciations.ts). */
 export const DEFAULT_TTS_MODEL = 'eleven_multilingual_v2';
-export const SHORT_LINE_TTS_MODEL = 'eleven_turbo_v2_5';
+export const SHORT_LINE_TTS_MODEL = 'eleven_turbo_v2';
 export const SHORT_LINE_MAX_WORDS = 2;
-/** Clip-cache version for short lines, so their old (language-guessed) clips are re-recorded. */
-export const SHORT_LINE_CLIP_VERSION = 'v13s';
+/** Clip-cache version for short lines, so their old (mispronounced) clips are re-recorded. */
+export const SHORT_LINE_CLIP_VERSION = 'v14s';
 
 export function isShortLine(text: string): boolean {
   const words = text.replace(/[^\p{L}\p{N}'’\s-]/gu, ' ').trim().split(/\s+/).filter(Boolean);
