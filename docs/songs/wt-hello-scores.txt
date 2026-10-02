@@ -1,15 +1,15 @@
 
-=== docs/songs/wt-hello-take1.mp3  length=20.1s  score=0.96  missing=1  extra=1
-heard: hello hello hello to you hi hi hi and i to you what's your name what's your name say your name say your name
-line starts (s): [np.float64(0.0), np.float64(3.6), 7.8, np.float64(12.1)]
-lineDurationsMs: [3640, 4120, 4320, 7982]
+=== docs/songs/wt-hello-take1.mp3  length=20.1s  score=0.94  missing=2  extra=1
+heard: hello hello hello please hi hi hi and hi to you what's your name what's your name say your name say your name
+line starts (s): [np.float64(0.0), 4.5, np.float64(8.4), np.float64(13.0)]
+lineDurationsMs: [4460, 3900, 4620, 7082]
 
-=== docs/songs/wt-hello-take2.mp3  length=20.1s  score=0.82  missing=4  extra=5
-heard: hello hello hello to you high high high high and high to you what's your name what's your name say your name say your name
-line starts (s): [np.float64(0.0), np.float64(5.8), np.float64(7.1), np.float64(12.0)]
-lineDurationsMs: [5800, 1340, 4840, 8082]
+=== docs/songs/wt-hello-take2.mp3  length=20.1s  score=0.98  missing=1  extra=0
+heard: hello hello hello to you hi hi hi hi to you what's your name what's your name say your name say your name
+line starts (s): [np.float64(0.0), np.float64(3.2), 7.8, np.float64(12.0)]
+lineDurationsMs: [3220, 4540, 4200, 8102]
 
-=== docs/songs/wt-hello-take3.mp3  length=20.1s  score=0.83  missing=4  extra=4
-heard: hello hello hello to you high high high and why to you what's your name what's your name say your name say your name
-line starts (s): [np.float64(0.0), np.float64(5.1), 7.8, np.float64(12.0)]
-lineDurationsMs: [5060, 2700, 4280, 8022]
+=== docs/songs/wt-hello-take3.mp3  length=20.1s  score=0.79  missing=5  extra=5
+heard: go hello hello to you high high high and high to you what's your name what's your name say your name say your name
+line starts (s): [np.float64(0.6), np.float64(5.7), 7.9, np.float64(12.0)]
+lineDurationsMs: [5680, 2200, 4120, 8062]
