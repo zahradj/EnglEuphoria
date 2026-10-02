@@ -90,9 +90,8 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
           fontSize={plateFontSize(scene.line)}
           bottom="calc(12*var(--svh,1vh))"
           ariaLabel={`Hear ${c.name} again`}
-        >
-          “{scene.line}”
-        </DialoguePlate>
+          focusLine={{ text: scene.line, focus: scene.focus, reveal: (phase === 'repeat' || phase === 'done') && !speaking, before: '“', after: '”' }}
+        />
       )}
       {phase === 'idle' && (
         <div className="pointer-events-none absolute inset-x-0 top-[calc(44*var(--svh,1vh))] z-20 grid place-items-center">

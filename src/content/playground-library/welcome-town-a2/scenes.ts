@@ -131,7 +131,7 @@ export const LESSON_A2U1L1_SCENES: Scene[] = [
   },
 
   {
-    id: 'a2u1-meet-wakeup', kind: 'meet', bg: bgMorning, who: 'pip',
+    id: 'a2u1-meet-wakeup', kind: 'meet', focus: ['wake up'], bg: bgMorning, who: 'pip',
     teacher: 'Tap Pip to see how his day starts! Then stretch your arms like you just woke up too.',
     line: 'Every morning, I wake up! Good morning!', repeat: 'I wake up.',
   },
@@ -141,19 +141,19 @@ export const LESSON_A2U1L1_SCENES: Scene[] = [
     // category table (Action -> mime/TPR, not just tap-and-look) and the
     // user's own preference for varying teaching method by objective, not
     // defaulting to one mechanical template.
-    id: 'a2u1-meet-brushteeth', kind: 'meet', bg: bgBathroom, who: 'pip',
+    id: 'a2u1-meet-brushteeth', kind: 'meet', focus: ['brush my teeth'], bg: bgBathroom, who: 'pip',
     teacher: 'Tap Pip, then show me — brush your teeth up and down, up and down!',
     line: 'Every morning, I brush my teeth!', repeat: 'I brush my teeth.',
   },
 
   {
-    id: 'a2u1-meet-breakfast', kind: 'meet', bg: bgKitchen, who: 'pip',
+    id: 'a2u1-meet-breakfast', kind: 'meet', focus: ['hungry', 'breakfast'], bg: bgKitchen, who: 'pip',
     teacher: 'Tap Pip, then rub your tummy and say "Yum, yum!"',
     line: 'I am hungry! So I eat my breakfast. Yum, yum!', repeat: 'I am hungry.',
   },
 
   {
-    id: 'a2u1-meet-walk', kind: 'meet', bg: bgStreet, who: 'pip',
+    id: 'a2u1-meet-walk', kind: 'meet', focus: ['walk to school'], bg: bgStreet, who: 'pip',
     teacher: 'Tap Pip, then march in place like YOU are walking to school!',
     line: 'I put on my backpack, and I walk to school!', repeat: 'I walk to school.',
   },
@@ -199,7 +199,7 @@ export const LESSON_A2U1L1_SCENES: Scene[] = [
     // Pip sitting on the playground grass, drinking from a water bottle,
     // with a sweat drop and his backpack beside him — same playground
     // setting the recess scenes just used, actually showing the action.
-    id: 'a2u1-meet-thirsty', kind: 'meet', bg: bgThirsty, who: 'pip',
+    id: 'a2u1-meet-thirsty', kind: 'meet', focus: ['thirsty'], bg: bgThirsty, who: 'pip',
     teacher: 'Tap Pip, then pretend to drink from a cup!',
     line: 'After playing, I am thirsty! I drink some water.', repeat: 'I am thirsty.',
   },
@@ -322,14 +322,14 @@ export const LESSON_A2U1L1_SCENES: Scene[] = [
     // Semantic fix: bg-a2-bedroom-night.png genuinely shows Pip himself
     // reading (not a reused classroom image where the teacher holds the
     // book) — "who: pip" now actually matches what's drawn.
-    id: 'a2u1-meet-read', kind: 'meet', bg: bgBedroomNight, who: 'pip',
+    id: 'a2u1-meet-read', kind: 'meet', focus: ['read', 'book'], bg: bgBedroomNight, who: 'pip',
     teacher: 'Tap Pip to hear what he does before bed.',
     line: 'At night, I read my favorite book.', repeat: 'I read a book.',
   },
   {
     // Semantic fix: "sleep" now points at dedicated art of Pip actually
     // asleep, not a generic unlabeled rabbit in someone else's scene.
-    id: 'a2u1-meet-sleep', kind: 'meet', bg: bgBedroomAsleep, who: 'pip',
+    id: 'a2u1-meet-sleep', kind: 'meet', focus: ['sleep'], bg: bgBedroomAsleep, who: 'pip',
     teacher: 'Tap Pip, then close your eyes like YOU are falling asleep too!',
     line: 'Then I close my eyes. I sleep. Good night!', repeat: 'I sleep.',
   },

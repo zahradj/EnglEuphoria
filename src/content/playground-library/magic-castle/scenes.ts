@@ -261,8 +261,8 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
   // silently on EchoScene's fallback).
   { id: 'mc-setting-castle', kind: 'echo', bg: bgCastleExterior, who: 'pip', textSide: 'right', teacher: 'Shh... listen! Creaky floors, flickering torches, echoing halls! We found somewhere old and magical.', word: 'Castle!' },
 
-  { id: 'mc-meet-wim', kind: 'meet', bg: bgWim, who: 'wim', teacher: 'Tap Wim to meet the castle wizard!', line: 'Hello! I am Wim. I am a wizard!', repeat: 'I am a wizard!' },
-  { id: 'mc-meet-catcat', kind: 'meet', bg: bgCatcat, who: 'catcat', teacher: 'Here is Wim’s magical friend! Tap Cat-cat to say hi.', line: 'Meow! I am Cat-cat. I am a cat!', repeat: 'I am a cat!' },
+  { id: 'mc-meet-wim', kind: 'meet', focus: ['wizard'], bg: bgWim, who: 'wim', teacher: 'Tap Wim to meet the castle wizard!', line: 'Hello! I am Wim. I am a wizard!', repeat: 'I am a wizard!' },
+  { id: 'mc-meet-catcat', kind: 'meet', focus: ['cat'], bg: bgCatcat, who: 'catcat', teacher: 'Here is Wim’s magical friend! Tap Cat-cat to say hi.', line: 'Meow! I am Cat-cat. I am a cat!', repeat: 'I am a cat!' },
 
   {
     id: 'mc-vocab-rooms', kind: 'vocab-spot', bg: bgRooms,

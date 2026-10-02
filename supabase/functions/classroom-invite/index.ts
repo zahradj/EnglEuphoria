@@ -212,6 +212,18 @@ Deno.serve(async (req) => {
             console.error('[CLASSROOM-INVITE] could not set student market', marketErr)
           }
         }
+
+        // Tell the admin a new student account now exists. Accounts made through an
+        // invite never went through the sign-up form, so no admin ever heard about
+        // them (the form fires this same notification itself). Never blocks the invite.
+        try {
+          const { error: notifyErr } = await adminClient.functions.invoke('notify-admin-new-student', {
+            body: { record: { id: studentId, email: normalizedEmail, full_name: studentName || normalizedEmail, role: 'student' } },
+          })
+          if (notifyErr) console.error('[CLASSROOM-INVITE] admin notification failed', notifyErr)
+        } catch (e) {
+          console.error('[CLASSROOM-INVITE] admin notification threw', e)
+        }
       }
 
       // A trial is where the teacher sets the student's level — only once

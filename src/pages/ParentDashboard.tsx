@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { ParentStudentList } from '@/components/parent/ParentStudentList';
+import { AddChildDialog } from '@/components/parent/AddChildDialog';
 import { ParentStudentProgress } from '@/components/parent/ParentStudentProgress';
 import { ParentMessages } from '@/components/parent/ParentMessages';
 import { ParentNotificationSettings } from '@/components/parent/ParentNotificationSettings';
@@ -96,11 +97,14 @@ const ParentDashboard: React.FC = () => {
         className="container mx-auto py-4 md:py-8 px-3 md:px-4"
         style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 24px)' }}
       >
-        <div className="hidden md:block mb-8">
-          <h1 className="text-3xl font-bold text-foreground">{t('pd.title')}</h1>
-          <p className="text-muted-foreground mt-2">
-            {t('pd.subtitleDesktop')}
-          </p>
+        <div className="mb-4 flex items-start justify-end gap-4 md:mb-8 md:justify-between">
+          <div className="hidden md:block">
+            <h1 className="text-3xl font-bold text-foreground">{t('pd.title')}</h1>
+            <p className="text-muted-foreground mt-2">
+              {t('pd.subtitleDesktop')}
+            </p>
+          </div>
+          {user?.id && <AddChildDialog parentId={user.id} existingCount={students.length} />}
         </div>
 
         <Tabs defaultValue="students" className="space-y-4 md:space-y-6">

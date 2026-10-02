@@ -33,11 +33,8 @@ export function ParentStudentList({ students, onSelectStudent }: ParentStudentLi
       <Card className="p-8 text-center">
         <User className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
         <h3 className="text-lg font-semibold mb-2">{t('pd.students.empty.title')}</h3>
-        <p className="text-muted-foreground mb-4">
+        <p className="text-muted-foreground">
           {t('pd.students.empty.body')}
-        </p>
-        <p className="text-sm text-muted-foreground">
-          {t('pd.students.empty.cta')}
         </p>
       </Card>
     );
@@ -52,9 +49,12 @@ export function ParentStudentList({ students, onSelectStudent }: ParentStudentLi
               <h3 className="font-semibold text-lg">
                 {relationship.student.full_name}
               </h3>
-              <p className="text-sm text-muted-foreground">
-                {relationship.student.email}
-              </p>
+              {/* Managed child profiles carry a reserved placeholder address - never show it. */}
+              {relationship.student.email && !relationship.student.email.endsWith('.invalid') && (
+                <p className="text-sm text-muted-foreground">
+                  {relationship.student.email}
+                </p>
+              )}
             </div>
             {relationship.is_primary_contact && (
               <Badge variant="secondary">{t('pd.students.primary')}</Badge>

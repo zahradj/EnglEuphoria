@@ -26,6 +26,8 @@ project_id = "dcoxpyzoqjvmuuygvlme"
     verify_jwt = false
   [functions.admin-create-user]
     verify_jwt = false
+  [functions.create-family-children]
+    verify_jwt = false
   [functions.admin-delete-user]
     verify_jwt = false
   [functions.ai-activity-generator]
@@ -210,6 +212,8 @@ project_id = "dcoxpyzoqjvmuuygvlme"
   [functions.interview-token-auth]
     verify_jwt = false
   [functions.classroom-invite]
+    verify_jwt = false
+  [functions.send-lesson-report]
     verify_jwt = false
   [functions.interview-book-slot]
     verify_jwt = false

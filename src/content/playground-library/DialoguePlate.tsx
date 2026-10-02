@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { FocusLine } from './FocusLine';
 
 /**
  * A character's line as a clean "dialogue plate" docked at the bottom of the
@@ -65,13 +66,14 @@ export function DialoguePlate({
   bottom = 'calc(2*var(--svh,1vh))',
   fontSize = 'calc(4.2*var(--svh,1vh))',
   look = 'paper',
+  focusLine,
 }: {
   /** Speaker's name for the tab. */
   name: string;
   /** Speaker's colour (name tab, speaker button). */
   color: string;
   /** The line itself. */
-  children: ReactNode;
+  children?: ReactNode;
   /** Replays the line (and, for callers that want it, completes the scene). */
   onTap: () => void;
   /** The recorded voice is playing right now. */
@@ -85,6 +87,8 @@ export function DialoguePlate({
   bottom?: string;
   fontSize?: string;
   look?: PlateLook;
+  /** Highlight the vocabulary in the line once the voice has finished (replaces `children`). */
+  focusLine?: { text: string; focus?: string[]; reveal: boolean; before?: ReactNode; after?: ReactNode };
 }) {
   const L = lookFor(look, color);
   return (
@@ -118,7 +122,7 @@ export function DialoguePlate({
           style={L.plate}
         >
           <span className="min-w-0 flex-1 font-extrabold leading-snug" style={{ fontSize, textWrap: 'balance' as never, ...L.text }}>
-            {children}
+            {focusLine ? <FocusLine {...focusLine} look={look} color={color} /> : children}
           </span>
 
           {/* Speaker: equalizer bars while the voice plays, a calm icon otherwise */}
