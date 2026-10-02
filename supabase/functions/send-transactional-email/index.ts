@@ -41,8 +41,14 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders })
   }
 
-  const authError = requireInternalSecret(req, corsHeaders)
-  if (authError) return authError
+  // The secret gate only applies once INTERNAL_FUNCTION_SECRET has been set on the
+  // project AND every caller function has been redeployed to send it. Until then the
+  // function must keep working as it did in production (which had no gate): failing
+  // closed here with the secret unset rejected every email on the site.
+  if (Deno.env.get('INTERNAL_FUNCTION_SECRET')) {
+    const authError = requireInternalSecret(req, corsHeaders)
+    if (authError) return authError
+  }
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL')
   const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
