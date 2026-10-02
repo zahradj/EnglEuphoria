@@ -297,6 +297,30 @@ export function TheatreBackdrop() {
   );
 }
 
+/** Market stall for Market Sort: sky, a striped awning, a wooden counter and a grassy ground. */
+export function MarketBackdrop() {
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: 'linear-gradient(180deg, #bae6fd 0%, #e0f2fe 38%, #fef3c7 38%, #fde68a 100%)' }}>
+      <div className="gt-idle absolute rounded-full bg-white/90" style={{ left: '8%', top: '10%', width: '16cqw', height: '5cqh', animation: 'gt-drift 60s linear infinite' }} />
+      <div className="absolute inset-x-0 top-0" style={{ height: '9%', background: 'repeating-linear-gradient(90deg, #ef4444 0, #ef4444 6cqw, #fff 6cqw, #fff 12cqw)', boxShadow: '0 1cqh 0 rgba(0,0,0,.18)', borderRadius: '0 0 3cqh 3cqh' }} />
+      <div className="absolute inset-x-0" style={{ top: '47%', height: '4%', background: 'linear-gradient(180deg, #d19a5b, #a8692f)', boxShadow: '0 1cqh 1.6cqh rgba(0,0,0,.3)' }} />
+      <div className="absolute inset-x-0 bottom-0" style={{ top: '51%', background: 'repeating-linear-gradient(90deg, #b9793c 0, #b9793c 8cqw, #a96a33 8cqw, #a96a33 8.4cqw), linear-gradient(180deg, #c98a4b, #8a5a2b)', backgroundBlendMode: 'multiply' }} />
+    </div>
+  );
+}
+
+/** Garden for Grammar Garden: bright sky, rolling lawn and a picket fence. */
+export function GardenBackdrop() {
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: 'linear-gradient(180deg, #bae6fd 0%, #e0f2fe 30%, #bbf7d0 30%, #4ade80 100%)' }}>
+      <div className="gt-idle absolute rounded-full bg-white/90" style={{ left: '6%', top: '9%', width: '15cqw', height: '5cqh', animation: 'gt-drift 70s linear infinite' }} />
+      <div className="gt-idle absolute rounded-full bg-white/80" style={{ left: '55%', top: '15%', width: '11cqw', height: '4cqh', animation: 'gt-drift 90s linear infinite' }} />
+      <div className="absolute inset-x-0" style={{ top: '27%', height: '9%', background: 'repeating-linear-gradient(90deg, #fff 0, #fff 3cqw, transparent 3cqw, transparent 4.4cqw)', clipPath: 'polygon(0 30%, 100% 30%, 100% 100%, 0 100%)', opacity: 0.9 }} />
+      <div className="absolute inset-x-0 bottom-0" style={{ top: '60%', background: 'radial-gradient(ellipse at 50% 0%, #86efac 0%, #22c55e 70%)', borderRadius: '50% 50% 0 0 / 8% 8% 0 0' }} />
+    </div>
+  );
+}
+
 export function TopHatIcon({ height = '5cqh' }: { height?: string }) {
   return (
     <svg viewBox="0 0 64 56" style={{ height }} aria-hidden="true">

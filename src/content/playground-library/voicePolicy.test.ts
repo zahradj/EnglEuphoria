@@ -92,10 +92,16 @@ describe('voice policy: every ElevenLabs edge function follows it', () => {
 
 describe('voice policy: accurate pronunciation of the words the games teach', () => {
   const words = new Set<string>();
+  const grammarLines = new Set<string>();
   for (const game of LIBRARY_GAMES) {
     for (const stage of game.stages) {
       const scene = stage.scene;
       if (scene.kind === 'whats-missing') scene.rounds.forEach((r) => r.items.forEach((i) => words.add(i.word)));
+      if (scene.kind === 'grammar-gap') {
+        (scene.examples ?? []).forEach((e) => grammarLines.add(e));
+        scene.rounds.forEach((r) => grammarLines.add([r.before, r.answer, r.after].map((p) => p.trim()).filter(Boolean).join(' ')));
+      }
+      if (scene.kind === 'sort-basket') { scene.baskets.forEach((b) => words.add(b.label)); scene.items.forEach((i) => words.add(i.word)); }
       if (scene.kind === 'first-sound') scene.rounds.forEach((r) => words.add(r.word));
       if (scene.kind === 'letter-blocks') scene.rounds.forEach((r) => (r.word ? words.add(r.word) : r.blocks.forEach((b) => { const a = artFor(b); if (a) words.add(a.word); })));
     }
@@ -113,6 +119,11 @@ describe('voice policy: accurate pronunciation of the words the games teach', ()
       expect(spoken, w).toMatch(/^[a-z' ]+$/);
       expect(unresolvedSpeechRisks(w), w).toEqual([]);
     }
+  });
+
+  it('every grammar sentence reads cleanly (no unresolved pronunciation risks)', () => {
+    expect(grammarLines.size).toBeGreaterThan(20);
+    for (const line of grammarLines) expect(unresolvedSpeechRisks(line), line).toEqual([]);
   });
 
   it('"yo-yo" is spoken as two words, not read as a hyphenated blob', () => {

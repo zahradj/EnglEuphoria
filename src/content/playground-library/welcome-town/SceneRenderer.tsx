@@ -7,6 +7,8 @@ import { PictureMatchScene } from '../PictureMatchScene';
 import { FirstSoundScene } from '../FirstSoundScene';
 import { LetterMatchScene, LetterBlocksScene } from '../LetterTilesScene';
 import { WhatsMissingScene } from '../WhatsMissingScene';
+import { SortBasketScene } from '../SortBasketScene';
+import { GrammarGapScene } from '../GrammarGapScene';
 import { PlaceItScene, TorchHuntScene, WhereCastleScene } from './WhereGames';
 import { TitleCardScene } from './scene-components/TitleCardScene';
 import { CinematicScene } from './scene-components/CinematicScene';
@@ -134,6 +136,8 @@ export function SceneRenderer(props: {
       case 'letter-match': return <LetterMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'letter-blocks': return <LetterBlocksScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'whats-missing': return <WhatsMissingScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+      case 'sort-basket': return <SortBasketScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+      case 'grammar-gap': return <GrammarGapScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'place-it': return <PlaceItScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'torch-hunt': return <TorchHuntScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'where-castle': return <WhereCastleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
