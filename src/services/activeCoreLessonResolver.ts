@@ -78,17 +78,29 @@ export async function resolveActiveCoreLesson(
   //    (resolve_student_lesson): the built lesson at the pointer, or — when
   //    the pointer sits on a unit not built yet — the latest built lesson
   //    before it (review), until a lesson is published at that slot.
+  // A student's pointer / learning path is hub-agnostic, but a booking is for
+  // ONE hub. Using a pointer lesson from another hub (e.g. a Playground lesson
+  // for an Academy booking) opened the wrong classroom, so every candidate must
+  // belong to the requested hub or it is skipped.
+  const inHub = async (lessonId: string | null | undefined): Promise<string | null> => {
+    if (!lessonId) return null;
+    const meta = await fetchLessonMeta(lessonId);
+    const target = (meta?.target_system ?? '').toLowerCase();
+    return HUB_TO_TARGET_SYSTEM[hub].includes(target) ? lessonId : null;
+  };
+
   const studentPath = await resolveStudentPath(studentId);
   if (studentPath) {
-    if (studentPath.lessonId) return studentPath.lessonId;
+    const pathLesson = await inHub(studentPath.lessonId);
+    if (pathLesson) return pathLesson;
     if (studentPath.pointerId) {
-      // Nothing built before the pointer at its level yet: open the
-      // level's first built lesson rather than another level's.
+      // Nothing built before the pointer at its level yet (or the pointer is in
+      // another hub): open this hub's first built lesson for the level.
       const first = await findFirstLessonForLevel(hub, studentPath.level);
       if (first) return first;
     }
   } else {
-    const pointed = await readLessonPointer(studentId);
+    const pointed = await inHub(await readLessonPointer(studentId));
     if (pointed) return pointed;
   }
 
@@ -106,7 +118,8 @@ export async function resolveActiveCoreLesson(
     Array.isArray(path?.steps) ? path.steps[step]?.lesson_id :
     Array.isArray(path) ? path[step]?.lesson_id :
     null;
-  if (stepLesson) return stepLesson as string;
+  const stepInHub = await inHub(stepLesson as string | null);
+  if (stepInHub) return stepInHub;
 
   // 3) Fallback: first published lesson in this hub. Two problems fixed
   // here together:
