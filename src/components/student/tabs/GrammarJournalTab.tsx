@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { BookText, Volume2, ChevronDown } from 'lucide-react';
 import { useStudentLevel } from '@/hooks/useStudentLevel';
 import { useAuth } from '@/contexts/AuthContext';
+import { LESSON_GRAMMAR } from '@/content/playground-library/lessonGrammar';
+import { playgroundLessonKey } from '@/content/playground-library/lessonRoutes';
 import { supabase } from '@/integrations/supabase/client';
 import { useSpeak } from '@/hooks/useSpeak';
 import { cn } from '@/lib/utils';
@@ -58,9 +60,42 @@ export function GrammarJournalTab() {
         .eq('student_id', user.id)
         .order('completed_at', { ascending: false })
         .limit(200);
+
+      // Scene-based Playground lessons record finishing in student_lesson_progress
+      // (not lesson_completions) and keep their grammar in code (LESSON_GRAMMAR).
+      const { data: sceneDone } = await (supabase as any)
+        .from('student_lesson_progress')
+        .select('lesson_id, completed_at')
+        .eq('user_id', user.id)
+        .eq('status', 'completed')
+        .order('completed_at', { ascending: false })
+        .limit(200);
+      const sceneIds = Array.from(new Set((sceneDone ?? []).map((r: any) => r.lesson_id).filter(Boolean)));
+      const sceneEntries: GrammarEntry[] = [];
+      if (sceneIds.length > 0) {
+        const { data: sceneRows } = await (supabase as any)
+          .from('curriculum_lessons')
+          .select('id, title, ai_metadata')
+          .in('id', sceneIds);
+        const doneAt = new Map<string, string | null>((sceneDone ?? []).map((r: any) => [r.lesson_id, r.completed_at ?? null]));
+        for (const l of sceneRows ?? []) {
+          const key = playgroundLessonKey(l.ai_metadata);
+          const g = key ? LESSON_GRAMMAR[key] : null;
+          if (!g) continue;
+          sceneEntries.push({
+            lessonId: l.id,
+            title: l.title ?? 'Lesson',
+            pattern: g.pattern,
+            cefr: g.cefr,
+            package: { form_cards: g.forms.map((f) => ({ label: f.label, formula: f.formula })), examples: g.examples },
+            completedAt: doneAt.get(l.id) ?? null,
+          });
+        }
+      }
+
       const ids = Array.from(new Set((comp ?? []).map((r: any) => r.lesson_id).filter(Boolean)));
       if (ids.length === 0) {
-        setRows([]);
+        setRows(sceneEntries);
         setLoading(false);
         return;
       }
@@ -84,6 +119,8 @@ export function GrammarJournalTab() {
           completedAt: c.completed_at ?? null,
         });
       }
+      merged.push(...sceneEntries);
+      merged.sort((a, b) => (b.completedAt ?? '').localeCompare(a.completedAt ?? ''));
       // de-duplicate by lessonId, keep first (newest)
       const seen = new Set<string>();
       const unique = merged.filter((m) => (seen.has(m.lessonId) ? false : (seen.add(m.lessonId), true)));

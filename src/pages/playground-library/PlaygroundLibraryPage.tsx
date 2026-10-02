@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import HomeworkQuest from '@/components/homework-quest/HomeworkQuest';
 import { questForLesson } from '@/content/homework-quests/registry';
 import { isLibraryReadyFormat } from '@/content/playground-library/sceneLessonFormats';
+import { playgroundLessonPath } from '@/content/playground-library/lessonRoutes';
 
 interface LessonRow {
   id: string;
@@ -120,50 +121,10 @@ export default function PlaygroundLibraryPage() {
   }, [rows, activeLevel]);
 
   const handleLessonClick = (row: LessonRow) => {
-    const fmt = row.ai_metadata?.contentFormat;
-    if (fmt === 'lep1-rich') {
-      const unitNum = row.ai_metadata?.unit_number ?? 1;
-      const lessonNum = row.ai_metadata?.lesson_number ?? 1;
-      // Unit 1's routes predate per-unit routing (/playground-scene/lesson-N) —
-      // keep them stable. Every other unit gets a unit-scoped path so lesson
-      // numbers don't collide across units (every unit has its own Lesson 1).
-      navigate(unitNum === 1 ? `/playground-scene/lesson-${lessonNum}` : `/playground-scene/unit-${unitNum}-lesson-${lessonNum}`);
-      return;
-    }
-    if (fmt === 'wt-rich') {
-      // A1's "Welcome Town" world — its own module/route family, separate
-      // from Pre-A1's lep1-rich numbering so the two don't collide.
-      const lessonNum = row.ai_metadata?.lesson_number ?? 1;
-      navigate(`/playground-scene/welcome-town-lesson-${lessonNum}`);
-      return;
-    }
-    if (fmt === 'wt-a2-rich') {
-      // A2's own Welcome Town lessons — separate route family per unit/lesson
-      // since A2 has its own Unit 1 (distinct from A1's Unit 1).
-      const unitNum = row.ai_metadata?.unit_number ?? 1;
-      const lessonNum = row.ai_metadata?.lesson_number ?? 1;
-      navigate(`/playground-scene/a2-unit-${unitNum}-lesson-${lessonNum}`);
-      return;
-    }
-    if (fmt === 'jungle-rich') {
-      // A1 Unit 2's "Jungle Adventure" world — its own route family, since
-      // "wt-rich" is reserved for Welcome Town lessons specifically.
-      const lessonNum = row.ai_metadata?.lesson_number ?? 1;
-      navigate(`/playground-scene/jungle-lesson-${lessonNum}`);
-      return;
-    }
-    if (fmt === 'castle-rich') {
-      // A1 Unit 9's "Magic Castle" world — its own route family.
-      const lessonNum = row.ai_metadata?.lesson_number ?? 1;
-      navigate(`/playground-scene/castle-lesson-${lessonNum}`);
-      return;
-    }
-    if (fmt === 'scene-player') {
-      navigate(`/playground-scene/play/${row.id}`);
-      return;
-    }
+    // Same routing as the student dashboard's My Lessons tab (one source of truth).
+    const path = playgroundLessonPath(row.id, row.ai_metadata);
     // Empty scaffold slot — jump into the generic authoring tool to start building it.
-    navigate(`/playground-creator?lessonId=${row.id}`);
+    navigate(path ?? `/playground-creator?lessonId=${row.id}`);
   };
 
   return (

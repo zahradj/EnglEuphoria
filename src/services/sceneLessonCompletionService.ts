@@ -10,6 +10,8 @@ import { questForLesson } from '@/content/homework-quests/registry';
  *   1. student_lesson_progress — marks the map node complete.
  *   2. student_phonics_progress — adds the letters this lesson teaches to
  *      the "Map of Sounds" tab.
+ *   2b. student_vocabulary_progress — the words it teaches, for the
+ *      "Vocabulary Vault" tab.
  *   3. homework_assignments (via the create-lep1-homework edge function,
  *      since students have no direct INSERT policy on that table) — makes
  *      practice for this lesson appear in the Homework Forest widget.
@@ -61,6 +63,8 @@ interface CompleteSceneLessonResult {
   progressOk: boolean;
   phonicsLetters: string[];
   phonicsOk: boolean;
+  vocabularyWords: string[];
+  vocabularyOk: boolean;
   homeworkOk: boolean;
   /** The newly-created homework_assignments row id, if the homework step
    *  succeeded — lets the caller offer a direct "do it now" link. */
@@ -80,6 +84,43 @@ export function extractTaughtLetters(scenes: CompletionScene[]): string[] {
   return letters;
 }
 
+/** Words this lesson teaches (with their picture when the scene has one),
+ *  first-seen order, deduped — feeds the student's Vocabulary Vault. Reads
+ *  the vocabulary-bearing fields the scene kinds share across both families:
+ *  sound-model anchors, color/shape/toy-model examples, color-spot labels,
+ *  sort/quiz items, listen-repeat cards and word-picture-match rounds. */
+export function extractTaughtVocabulary(scenes: CompletionScene[]): { word: string; img?: string }[] {
+  const out = new Map<string, { word: string; img?: string }>();
+  const add = (raw: unknown, img?: unknown) => {
+    if (typeof raw !== 'string') return;
+    const word = raw.trim().toLowerCase();
+    // Single words / short noun phrases only — never sentences.
+    if (!word || word.length > 24 || word.split(/\s+/).length > 3 || /[.!?]/.test(word)) return;
+    const imgStr = typeof img === 'string' && img.startsWith('/') ? img : undefined;
+    const prev = out.get(word);
+    if (!prev) out.set(word, { word, img: imgStr });
+    else if (!prev.img && imgStr) prev.img = imgStr;
+  };
+  for (const scene of scenes) {
+    const s = scene as unknown as Record<string, unknown>;
+    const each = (key: string, fn: (o: Record<string, unknown>) => void) => {
+      const arr = s[key];
+      if (Array.isArray(arr)) for (const o of arr) if (o && typeof o === 'object') fn(o as Record<string, unknown>);
+    };
+    switch (s.kind) {
+      case 'sound-model': each('anchors', (a) => add(a.word, a.img)); break;
+      case 'color-model': case 'shape-model': case 'toy-model': each('items', (i) => add(i.exampleWord, i.exampleImg)); break;
+      case 'color-spot': each('items', (i) => add(i.label, i.splashImg)); break;
+      case 'color-sort': case 'dash': case 'sound-pop': each('items', (i) => add(i.word, i.img)); break;
+      case 'listen-repeat-cards': each('cards', (c) => add(c.imgLabel, c.img)); break;
+      case 'word-picture-match': each('rounds', (r) => add(r.correctLabel, r.correctImg)); break;
+      case 'vocab-spot': each('items', (i) => add(i.word ?? i.label, i.img)); break;
+      default: break;
+    }
+  }
+  return Array.from(out.values());
+}
+
 function wordsOf(line: string): string[] {
   return line.replace(/[.,!?;:"']/g, '').trim().split(/\s+/).filter(Boolean);
 }
@@ -95,6 +136,8 @@ export async function completeSceneLesson({
     progressOk: false,
     phonicsLetters: [],
     phonicsOk: false,
+    vocabularyWords: [],
+    vocabularyOk: false,
     homeworkOk: false,
     homeworkAssignmentId: null,
   };
@@ -139,6 +182,36 @@ export async function completeSceneLesson({
     }
   } else {
     result.phonicsOk = true; // nothing to sync — not a failure
+  }
+
+  // 2b. Words learned — the "Vocabulary Vault" tab. Insert-only: a word the
+  //     student already has keeps its mastery/review history.
+  const vocab = extractTaughtVocabulary(scenes);
+  result.vocabularyWords = vocab.map((v) => v.word);
+  if (vocab.length > 0) {
+    try {
+      const now = new Date().toISOString();
+      const rows = vocab.map((v) => ({
+        student_id: userId,
+        word: v.word,
+        image_url: v.img ?? null,
+        sticker_image_url: v.img ?? null,
+        mastery_level: 1,
+        mastered: false,
+        times_reviewed: 1,
+        first_seen_at: now,
+        last_reviewed_at: now,
+      }));
+      const { error } = await supabase
+        .from('student_vocabulary_progress')
+        .upsert(rows, { onConflict: 'student_id,word', ignoreDuplicates: true });
+      if (error) throw error;
+      result.vocabularyOk = true;
+    } catch (err) {
+      console.error('[sceneLessonCompletion] vocabulary upsert failed', err);
+    }
+  } else {
+    result.vocabularyOk = true; // nothing to sync — not a failure
   }
 
   // 3. Homework — the lesson's gamified Homework Quest, if it has one.

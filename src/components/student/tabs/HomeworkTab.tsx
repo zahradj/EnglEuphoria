@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState, lazy, Suspense } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useStudentLevel } from '@/hooks/useStudentLevel';
-import { BookMarked, Gamepad2, Zap, Loader2, ArrowLeft, X } from 'lucide-react';
+import { BookMarked, Gamepad2, Zap, Loader2, ArrowLeft, X, Lock, Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -15,6 +15,9 @@ import {
   type StudentGameWithProgress,
 } from '@/services/studentGames';
 import { zoneForTags, type AcademyZoneId } from '@/hooks/academy/useAcademyZones';
+import { usePlaygroundLessons } from '@/hooks/usePlaygroundLessons';
+import { HOMEWORK_QUESTS } from '@/content/homework-quests/registry';
+import { playgroundLessonKey, playgroundLessonPath } from '@/content/playground-library/lessonRoutes';
 
 const GamePlayer = lazy(() => import('@/components/games/GamePlayer'));
 
@@ -39,6 +42,72 @@ const ZONE_CHIP: Record<AcademyZoneId, string> = {
   speaking: 'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-200',
   writing:  'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-200',
 };
+
+/** Playground: every Homework Quest, linked to the lesson it practises.
+ *  Quests open once that lesson is finished; until then the card links back
+ *  to the lesson itself. */
+function HomeworkQuestsSection() {
+  const navigate = useNavigate();
+  const { lessons, loading } = usePlaygroundLessons();
+
+  const cards = useMemo(() => {
+    const byKey = new Map<string, (typeof lessons)[number]>();
+    for (const l of lessons) {
+      const key = playgroundLessonKey({ contentFormat: l.contentFormat, unit_number: l.unitNumber, lesson_number: l.lessonNumber });
+      if (key) byKey.set(key, l);
+    }
+    return Object.values(HOMEWORK_QUESTS)
+      .filter((q) => q.level === 'Pre-A1' || q.level === 'A1' || q.level === 'A2')
+      .map((q) => {
+        const lesson = byKey.get(q.lessonKey) ?? null;
+        const lessonPath = lesson
+          ? playgroundLessonPath(lesson.id, { contentFormat: lesson.contentFormat, unit_number: lesson.unitNumber, lesson_number: lesson.lessonNumber })
+          : null;
+        return { quest: q, lesson, lessonPath, ready: lesson?.status === 'completed' };
+      })
+      // Ready quests first, then by title.
+      .sort((a, b) => Number(b.ready) - Number(a.ready) || a.quest.title.localeCompare(b.quest.title));
+  }, [lessons]);
+
+  if (loading) return <div className="h-28 animate-pulse rounded-2xl bg-muted/60" />;
+  if (cards.length === 0) return null;
+
+  return (
+    <section className="space-y-3" aria-label="Homework quests">
+      <h2 className="text-lg font-bold">Homework quests</h2>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {cards.map(({ quest, lesson, lessonPath, ready }) => (
+          <div key={quest.id} className="flex flex-col gap-3 rounded-2xl border bg-card p-4 ring-1 ring-border/60">
+            <div className="flex items-start gap-3">
+              <img src={quest.theme.guide} alt="" className="h-12 w-12 shrink-0 rounded-xl bg-muted/60 object-contain" draggable={false} />
+              <div className="min-w-0">
+                <h3 className="text-sm font-bold leading-tight">{quest.title}</h3>
+                <p className="mt-0.5 text-xs text-muted-foreground">{quest.subtitle}</p>
+                {ready && <Badge className="mt-1.5 bg-emerald-600 px-1.5 py-0 text-[10px] text-white">Ready to play</Badge>}
+              </div>
+            </div>
+            {ready ? (
+              <button
+                onClick={() => navigate(`/homework-quest/${quest.id}`)}
+                className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-orange-500 px-4 py-2 text-xs font-extrabold text-white shadow active:scale-95"
+              >
+                <Play className="h-3.5 w-3.5" /> Start quest
+              </button>
+            ) : (
+              <button
+                onClick={() => lessonPath && navigate(lessonPath)}
+                disabled={!lessonPath}
+                className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-extrabold text-orange-700 ring-2 ring-orange-200 active:scale-95 disabled:opacity-50"
+              >
+                <Lock className="h-3.5 w-3.5" /> {lesson ? 'Finish the lesson to unlock' : 'Lesson coming soon'}
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export function HomeworkTab() {
   const { user } = useAuth();
@@ -129,6 +198,8 @@ export function HomeworkTab() {
           Assigned by your teacher and synced to your Academy Journey zones.
         </p>
       </div>
+
+      {studentLevel === 'playground' && <HomeworkQuestsSection />}
 
       {/* Homework Forest (pending quests) — moved here from the dashboard home page. */}
       {(studentLevel === 'playground' || studentLevel === 'academy') && (
