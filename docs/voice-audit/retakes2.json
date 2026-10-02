@@ -1,110 +1,5 @@
 [
  {
-  "file": "5c8f20a8.mp3",
-  "voice": "teacher",
-  "text": "yo-yo",
-  "before": 1.29,
-  "after": 0.81,
-  "take": {
-   "model": "eleven_turbo_v2_5",
-   "seed": 304,
-   "phonemes": false
-  }
- },
- {
-  "file": "d81a371e.mp3",
-  "voice": "teacher",
-  "text": "I am",
-  "before": 1.73,
-  "after": 0.0,
-  "take": {
-   "model": "eleven_turbo_v2",
-   "seed": 112,
-   "phonemes": true
-  },
-  "replaced": true
- },
- {
-  "file": "af4b2b11.mp3",
-  "voice": "pip",
-  "text": "Wow, perfect!",
-  "before": 2.09,
-  "after": 2.02,
-  "take": {
-   "model": "eleven_flash_v2",
-   "seed": 202,
-   "phonemes": true
-  }
- },
- {
-  "file": "6978c032.mp3",
-  "voice": "teacher",
-  "text": "van",
-  "before": 1.69,
-  "after": 0.2,
-  "take": {
-   "model": "eleven_turbo_v2",
-   "seed": 106,
-   "phonemes": true
-  },
-  "replaced": true
- },
- {
-  "file": "cd13e877.mp3",
-  "voice": "pip",
-  "text": "Hat.",
-  "before": 4.12,
-  "after": 1.45,
-  "take": {
-   "model": "eleven_turbo_v2_5",
-   "seed": 304,
-   "phonemes": false
-  },
-  "replaced": true
- },
- {
-  "file": "4ce79c57.mp3",
-  "voice": "pip",
-  "text": "hat.",
-  "before": 3.69,
-  "after": 1.32,
-  "take": {
-   "model": "eleven_turbo_v2_5",
-   "seed": 304,
-   "phonemes": false
-  },
-  "replaced": true
- },
- {
-  "file": "b7514df8.mp3",
-  "voice": "pip",
-  "text": "Ham",
-  "before": 1.37,
-  "after": 1.37,
-  "take": null
- },
- {
-  "file": "5e37cd47.mp3",
-  "voice": "bella",
-  "text": "bag.",
-  "before": 1.02,
-  "after": 0.14,
-  "take": {
-   "model": "eleven_flash_v2",
-   "seed": 201,
-   "phonemes": true
-  },
-  "replaced": true
- },
- {
-  "file": "c2c64b69.mp3",
-  "voice": "pip",
-  "text": "nut.",
-  "before": 2.63,
-  "after": 2.63,
-  "take": null
- },
- {
   "file": "163f5693.mp3",
   "voice": "pip",
   "text": "duck",
@@ -135,10 +30,73 @@
   "voice": "mia",
   "text": "Book",
   "before": 1.24,
-  "after": 0.93,
+  "after": 0.9,
   "take": {
    "model": "eleven_turbo_v2",
    "seed": 112,
+   "phonemes": true
+  }
+ },
+ {
+  "file": "4ce79c57.mp3",
+  "voice": "pip",
+  "text": "hat.",
+  "before": 3.69,
+  "after": 1.32,
+  "take": {
+   "model": "eleven_turbo_v2_5",
+   "seed": 304,
+   "phonemes": false
+  },
+  "replaced": true
+ },
+ {
+  "file": "5c8f20a8.mp3",
+  "voice": "teacher",
+  "text": "yo-yo",
+  "before": 1.29,
+  "after": 0.81,
+  "take": {
+   "model": "eleven_turbo_v2_5",
+   "seed": 304,
+   "phonemes": false
+  }
+ },
+ {
+  "file": "5e37cd47.mp3",
+  "voice": "bella",
+  "text": "bag.",
+  "before": 1.02,
+  "after": 0.14,
+  "take": {
+   "model": "eleven_flash_v2",
+   "seed": 201,
+   "phonemes": true
+  },
+  "replaced": true
+ },
+ {
+  "file": "6978c032.mp3",
+  "voice": "teacher",
+  "text": "van",
+  "before": 1.69,
+  "after": 0.2,
+  "take": {
+   "model": "eleven_turbo_v2",
+   "seed": 106,
+   "phonemes": true
+  },
+  "replaced": true
+ },
+ {
+  "file": "af4b2b11.mp3",
+  "voice": "pip",
+  "text": "Wow, perfect!",
+  "before": 2.09,
+  "after": 2.0,
+  "take": {
+   "model": "eleven_flash_v2",
+   "seed": 202,
    "phonemes": true
   }
  },
@@ -149,5 +107,47 @@
   "before": 2.41,
   "after": 2.41,
   "take": null
+ },
+ {
+  "file": "b7514df8.mp3",
+  "voice": "pip",
+  "text": "Ham",
+  "before": 1.37,
+  "after": 1.37,
+  "take": null
+ },
+ {
+  "file": "c2c64b69.mp3",
+  "voice": "pip",
+  "text": "nut.",
+  "before": 2.63,
+  "after": 2.63,
+  "take": null
+ },
+ {
+  "file": "cd13e877.mp3",
+  "voice": "pip",
+  "text": "Hat.",
+  "before": 4.12,
+  "after": 1.22,
+  "take": {
+   "model": "eleven_turbo_v2_5",
+   "seed": 304,
+   "phonemes": false
+  },
+  "replaced": true
+ },
+ {
+  "file": "d81a371e.mp3",
+  "voice": "teacher",
+  "text": "I am",
+  "before": 1.73,
+  "after": 0.0,
+  "take": {
+   "model": "eleven_turbo_v2",
+   "seed": 112,
+   "phonemes": true
+  },
+  "replaced": true
  }
 ]
