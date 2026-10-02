@@ -142,4 +142,21 @@ export const REUSABLE_ACTIVITIES: ReusableActivity[] = [
       ],
     },
   },
+  {
+    kind: 'sort-basket',
+    name: 'Market Sort (sort into baskets)',
+    file: 'src/content/playground-library/SortBasketScene.tsx',
+    purpose: 'Vocabulary + categories: name each picture, then tap the basket it belongs in (toys / food / animals…).',
+    howItWorks:
+      'A market stall with 2-3 baskets. The baskets are named aloud first (model first); then one picture at a time arrives on the counter '
+      + 'and is named. The student taps its basket. A right pick drops it in (the basket keeps count); a wrong pick wobbles (no hearts) and after two '
+      + 'the right basket glows. Taps, not drags, so it works with the smart pen. Fully synced; safe on the student mirror.',
+    example: {
+      id: 'u1-market-sort',
+      kind: 'sort-basket',
+      teacher: 'Name each picture with the student, then let them tap the right basket.',
+      baskets: [{ label: 'toys', emoji: '🧸' }, { label: 'food', emoji: '🍎' }],
+      items: [{ word: 'ball', img: '<picture import>', basket: 0 }, { word: 'apple', img: '<picture import>', basket: 1 }],
+    },
+  },
 ];

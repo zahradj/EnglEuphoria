@@ -4,6 +4,7 @@ import type { PictureMatchSceneData } from '../PictureMatchScene';
 import type { FirstSoundSceneData } from '../FirstSoundScene';
 import type { LetterMatchSceneData, LetterBlocksSceneData } from '../LetterTilesScene';
 import type { WhatsMissingSceneData } from '../WhatsMissingScene';
+import type { SortBasketSceneData } from '../SortBasketScene';
 
 /**
  * Little Explorers Phonics — Lesson 1 "The Forest of Hellos" (H + M sounds).
@@ -28,6 +29,7 @@ export type Scene =
   | LetterMatchSceneData
   | LetterBlocksSceneData
   | WhatsMissingSceneData
+  | SortBasketSceneData
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string }
   | {
       id: string; kind: 'cinematic'; bg: string; title: string; subtitle: string; narrator: Character;

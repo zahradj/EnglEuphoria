@@ -96,6 +96,7 @@ describe('voice policy: accurate pronunciation of the words the games teach', ()
     for (const stage of game.stages) {
       const scene = stage.scene;
       if (scene.kind === 'whats-missing') scene.rounds.forEach((r) => r.items.forEach((i) => words.add(i.word)));
+      if (scene.kind === 'sort-basket') { scene.baskets.forEach((b) => words.add(b.label)); scene.items.forEach((i) => words.add(i.word)); }
       if (scene.kind === 'first-sound') scene.rounds.forEach((r) => words.add(r.word));
       if (scene.kind === 'letter-blocks') scene.rounds.forEach((r) => (r.word ? words.add(r.word) : r.blocks.forEach((b) => { const a = artFor(b); if (a) words.add(a.word); })));
     }

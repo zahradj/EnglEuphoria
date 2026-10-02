@@ -1,5 +1,6 @@
 import type { FirstSoundSceneData } from './FirstSoundScene';
 import type { LetterBlocksSceneData, LetterMatchSceneData } from './LetterTilesScene';
+import type { SortBasket, SortBasketSceneData, SortItem } from './SortBasketScene';
 import type { WhatsMissingItem, WhatsMissingRound, WhatsMissingSceneData } from './WhatsMissingScene';
 
 /**
@@ -11,7 +12,7 @@ import type { WhatsMissingItem, WhatsMissingRound, WhatsMissingSceneData } from 
  *
  * To add another game: add an entry with its own `stages`.
  */
-export type GameScene = FirstSoundSceneData | LetterBlocksSceneData | LetterMatchSceneData | WhatsMissingSceneData;
+export type GameScene = FirstSoundSceneData | LetterBlocksSceneData | LetterMatchSceneData | WhatsMissingSceneData | SortBasketSceneData;
 
 export interface GameStage {
   id: string;
@@ -54,8 +55,8 @@ const it = (word: string, file: string): WhatsMissingItem => ({ word, img: `/lep
 
 const TOYS = [it('ball', 'item-ball.png'), it('teddy', 'item-teddy.png'), it('doll', 'item-doll.png'), it('car', 'item-car.png'), it('train', 'item-train.png'), it('blocks', 'item-blocks.png')];
 const FOOD = [it('apple', 'item-apple.png'), it('orange', 'item-orange.png'), it('grapes', 'item-grapes.png'), it('pizza', 'item-pizza.png'), it('popcorn', 'item-popcorn-yellow.png'), it('milk', 'item-milk.png')];
-const ANIMALS = [it('cat', 'item-cat.png'), it('duck', 'item-duck-yellow.png'), it('bear', 'item-bear.png'), it('turtle', 'item-turtle.png'), it('snake', 'item-snake.png'), it('butterfly', 'item-butterfly.png')];
-const THINGS = [it('book', 'item-book.png'), it('hat', 'item-hat.png'), it('bag', 'item-bag.png'), it('ring', 'item-ring.png'), it('rose', 'item-rose.png'), it('tree', 'item-tree.png')];
+const ANIMALS = [it('cat', 'item-cat.png'), it('duck', 'item-duck-yellow.png'), it('bear', 'item-bear.png'), it('turtle', 'item-turtle.svg'), it('snake', 'item-snake.png'), it('butterfly', 'item-butterfly.svg')];
+const THINGS = [it('book', 'item-book.png'), it('hat', 'item-hat.png'), it('bag', 'item-bag.png'), it('ring', 'item-ring.png'), it('rose', 'item-rose.png'), it('tree', 'item-tree.svg')];
 
 /** Each trick shows a few pictures from the pool; `miss` is the position (within the shown set) that vanishes.
  *  The sets grow from 3 to 5 pictures so every stop gets a little harder. */
@@ -64,6 +65,61 @@ function tricks(pool: WhatsMissingItem[], plan: { set: number[]; miss: number }[
 }
 const PLAN_A = [{ set: [0, 1, 2], miss: 1 }, { set: [3, 4, 5], miss: 0 }, { set: [0, 2, 3, 4], miss: 3 }, { set: [1, 2, 3, 4, 5], miss: 2 }];
 const PLAN_B = [{ set: [0, 1, 2], miss: 2 }, { set: [2, 3, 4], miss: 0 }, { set: [0, 1, 4, 5], miss: 1 }, { set: [0, 1, 2, 3, 5], miss: 4 }];
+
+/* ------------------------------------------------------------------ Market Sort */
+
+const sb = (word: string, file: string, basket: number): SortItem => ({ word, img: `/lep1/items/${file}`, basket });
+const TOYS_BASKET: SortBasket = { label: 'toys', emoji: '🧸' };
+const FOOD_BASKET: SortBasket = { label: 'food', emoji: '🍎' };
+const ANIMAL_BASKET: SortBasket = { label: 'animals', emoji: '🐾' };
+const THING_BASKET: SortBasket = { label: 'things', emoji: '🎒' };
+
+function marketSort(): LibraryGame {
+  const stop = (id: string, station: string, title: string, blurb: string, baskets: SortBasket[], items: SortItem[]): GameStage => ({
+    id,
+    station,
+    title,
+    blurb,
+    art: items[0].img!,
+    units: items.length,
+    scene: { id: `market-${id}`, kind: 'sort-basket', teacher: `Name each picture with the student, then let them tap the right basket (${baskets.map((b) => b.label).join(' or ')}).`, title: station, bg: '/lep1/games/market-sort-cover.jpg', baskets, items },
+  });
+  return {
+    id: 'market-sort',
+    title: 'Market Sort',
+    tagline: 'Customers are waiting! Sort every picture into the right basket: toys, food, animals and things.',
+    skill: 'Vocabulary & Categories',
+    levels: ['Pre-A1', 'A1'],
+    minutes: '8–12 min',
+    gradient: 'linear-gradient(135deg,#16A34A 0%,#84CC16 50%,#F59E0B 100%)',
+    cover: '/lep1/games/market-sort-cover.jpg',
+    art: [`/lep1/items/item-teddy.png`, `/lep1/items/item-pizza.png`, `/lep1/items/item-duck-yellow.png`, `/lep1/items/item-book.png`],
+    howToPlay: [
+      'Listen to the names of the baskets.',
+      'A picture arrives on the counter and you hear its name.',
+      'Tap the basket where it belongs. Wrong? That is okay: try again!',
+      'Sort every picture at each stop to earn your stars.',
+    ],
+    stages: [
+      stop('toy-or-food', 'Toys or Food', 'Market Sort: Toys & Food', 'Is it a toy, or is it food?', [TOYS_BASKET, FOOD_BASKET], [
+        sb('ball', 'item-ball.png', 0), sb('apple', 'item-apple.png', 1), sb('teddy', 'item-teddy.png', 0), sb('pizza', 'item-pizza.png', 1),
+        sb('car', 'item-car.png', 0), sb('milk', 'item-milk.png', 1), sb('doll', 'item-doll.png', 0), sb('grapes', 'item-grapes.png', 1),
+      ]),
+      stop('animal-or-thing', 'Animals or Things', 'Market Sort: Animals & Things', 'Is it an animal, or is it a thing?', [ANIMAL_BASKET, THING_BASKET], [
+        sb('cat', 'item-cat.png', 0), sb('book', 'item-book.png', 1), sb('duck', 'item-duck-yellow.png', 0), sb('bag', 'item-bag.png', 1),
+        sb('bear', 'item-bear.png', 0), sb('hat', 'item-hat.png', 1), sb('snake', 'item-snake.png', 0), sb('ring', 'item-ring.png', 1),
+      ]),
+      stop('three-baskets', 'Three Baskets', 'Market Sort: Three Baskets', 'Toys, food or animals? Now there are three baskets!', [TOYS_BASKET, FOOD_BASKET, ANIMAL_BASKET], [
+        sb('train', 'item-train.png', 0), sb('orange', 'item-orange.png', 1), sb('mouse', 'item-mouse.png', 2), sb('blocks', 'item-blocks.png', 0),
+        sb('popcorn', 'item-popcorn-yellow.png', 1), sb('cat', 'item-cat.png', 2), sb('ball', 'item-ball.png', 0), sb('apple', 'item-apple.png', 1), sb('bear', 'item-bear.png', 2),
+      ]),
+      stop('market-day', 'Market Day', 'Market Sort: Market Day', 'The big market! Toys, animals or things?', [TOYS_BASKET, ANIMAL_BASKET, THING_BASKET], [
+        sb('teddy', 'item-teddy.png', 0), sb('duck', 'item-duck-yellow.png', 1), sb('hat', 'item-hat.png', 2), sb('doll', 'item-doll.png', 0),
+        sb('snake', 'item-snake.png', 1), sb('bag', 'item-bag.png', 2), sb('car', 'item-car.png', 0), sb('mouse', 'item-mouse.png', 1), sb('book', 'item-book.png', 2), sb('ring', 'item-ring.png', 2),
+      ]),
+    ],
+  };
+}
 
 function magicShow(): LibraryGame {
   const stop = (id: string, station: string, title: string, blurb: string, pool: WhatsMissingItem[], plan: typeof PLAN_A): GameStage => ({
@@ -186,6 +242,7 @@ export const LIBRARY_GAMES: LibraryGame[] = [
     ],
   },
   magicShow(),
+  marketSort(),
 ];
 
 export function getLibraryGame(id: string | undefined): LibraryGame | undefined {
