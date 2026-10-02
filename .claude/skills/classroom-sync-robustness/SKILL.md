@@ -55,5 +55,7 @@ Labels read `Scene <id> [<kind>] · student mirror · safe mode · crash #n`.
 
 ## Type-check gotcha
 `npm run typecheck` / `tsc -p .` check **nothing** (root tsconfig has `"files": []`).
-Use `tsc --noEmit -p tsconfig.app.json` (very slow, ~7 min) or a scoped config that
-`extends ./tsconfig.app.json` with a small `include` list.
+Use **`npm run typecheck:classroom`** (~20s): it checks the lesson players, every scene and MainStage via `tsconfig.classroom.json`, and fails only on errors that are not in `scripts/typecheck-classroom.baseline.txt` (10 older ones). Fixing an old error? Re-record with `node scripts/typecheck-classroom.mjs --update`. Never add a new error to the baseline.
+
+## Deploy gate
+Vercel builds with `npm run build:vercel` (see `vercel.json`): classroom type-check → `vitest run src/content/playground-library` → `vite build`. If any step fails the deploy is blocked and the live site keeps the previous version. CI runs the same type-check.

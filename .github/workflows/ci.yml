@@ -23,8 +23,10 @@ jobs:
       - name: Run linter
         run: npm run lint
       
-      - name: TypeScript check (main)
-        run: npm run typecheck
+      # `npm run typecheck` (tsc -p .) checks nothing: root tsconfig has "files": [].
+      # This is the real, ~20s check for the live-classroom code; it fails on NEW errors only.
+      - name: TypeScript check (live classroom)
+        run: npm run typecheck:classroom
       
       - name: TypeScript check (strict)
         run: npm run typecheck:strict

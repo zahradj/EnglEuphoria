@@ -1,0 +1,10 @@
+src/components/academy/splitSlide.tsx :: TS2339 :: Property 'lineA' does not exist on type '{ type: "role_play"; block: Block; title: string; characters: { id: s
+src/components/academy/splitSlide.tsx :: TS2339 :: Property 'lineB' does not exist on type '{ type: "role_play"; block: Block; title: string; characters: { id: s
+src/components/lesson-player/grammarMarkup.tsx :: TS2322 :: Type 'Element[] | ReactNode[]' is not assignable to type 'Element | readonly Element[]'.
+src/content/playground-library/unit1/scenes.ts :: TS2322 :: Type '"teacher"' is not assignable to type '"student" | CharKey'.
+src/content/playground-library/welcome-town/scene-components/MemoryScene.tsx :: TS2322 :: Type '({ key: string; pairId: string; label: string; emoji: string; variant: "word"; img?: undefined; crop?: u
+src/content/playground-library/welcome-town/scene-components/PronounSortScene.tsx :: TS2322 :: Type 'string | [string, string]' is not assignable to type 'string'.
+src/content/playground-library/welcome-town/scene-components/RoleplayScene.tsx :: TS2739 :: Type '{ pip: "start"; marigold: "end"; mia: "center"; bella: "center"; willow: "center"; leo: "end"; }' is mis
+src/pages/AcademyDemo.tsx :: TS2353 :: Object literal may only specify known properties, and 'lineA' does not exist in type '{ type: "role_play"; blo
+src/pages/playground-scene/PlayUnitLesson.tsx :: TS2322 :: Type '{ scene: Scene; onWin: (didGem: boolean) => void; onLose: () => void; onNext: () => void; onRestart: () 
+src/pages/playground-scene/PlayUnitLesson.tsx :: TS2339 :: Property 'bg' does not exist on type 'Scene'.

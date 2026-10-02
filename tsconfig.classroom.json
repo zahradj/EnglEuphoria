@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.app.json",
+  "include": [],
+  "files": [
+    "src/vite-env.d.ts",
+    "src/content/playground-library/unit1/SceneRenderer.tsx",
+    "src/content/playground-library/welcome-town/SceneRenderer.tsx",
+    "src/pages/playground-scene/PlayUnitLesson.tsx",
+    "src/pages/playground-scene/PlayWelcomeTownLesson.tsx",
+    "src/components/classroom/stage/MainStage.tsx"
+  ]
+}
