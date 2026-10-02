@@ -1,6 +1,6 @@
 import { Component, ReactNode, ErrorInfo } from 'react';
 import { RotateCcw } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { logClassroomCrash } from '@/lib/classroomCrashLog';
 
 interface Props {
   children: ReactNode;
@@ -81,21 +81,8 @@ export class ClassroomSceneErrorBoundary extends Component<Props, State> {
   }
 
   private async logError(error: Error, errorInfo: ErrorInfo) {
-    try {
-      const { data: auth } = await supabase.auth.getUser();
-      const componentName =
-        errorInfo.componentStack?.trim().split('\n')[0]?.trim().replace(/^in\s+/i, '') ?? null;
-      await supabase.from('system_errors').insert({
-        error_message: error.message?.slice(0, 4000) ?? 'Unknown error',
-        stack_trace: [error.stack, errorInfo.componentStack].filter(Boolean).join('\n\n---\n\n'),
-        component_name: `ClassroomScenePlayer > ${componentName ?? 'unknown'}`,
-        route: typeof window !== 'undefined' ? window.location.pathname : null,
-        user_id: auth.user?.id ?? null,
-        status: 'open',
-      });
-    } catch (logErr) {
-      console.warn('[ClassroomSceneErrorBoundary] Failed to log error:', logErr);
-    }
+    const componentName = errorInfo.componentStack?.trim().split('\n')[0]?.trim().replace(/^in\s+/i, '') ?? 'unknown';
+    await logClassroomCrash(error, errorInfo, { label: `Lesson player (outer) > ${componentName}` });
   }
 
   private handleRetry = () => {

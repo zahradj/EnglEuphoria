@@ -1,4 +1,5 @@
 import { useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
+import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -786,20 +787,32 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
         </div>
 
         <div key={scene.id} ref={sceneRootRef} className="relative flex-1 animate-[lep1-fade-slide_0.45s_ease-out]">
-          <SceneRenderer
-            scene={scene}
-            onWin={registerWin}
-            onLose={loseHeart}
-            onNext={goNext}
-            onRestart={restart}
-            gemsCollected={gems}
-            heartsRemaining={hearts}
-            lessonNumber={lessonNumber}
-            role={role}
-            roomId={roomId}
-            activityUnlocked={activityUnlocked}
-            activitySync={activitySync}
-          />
+          <SceneCrashGuard
+            sceneId={scene.id}
+            sceneKind={scene.kind}
+            side={!isSynced ? 'solo' : role === 'teacher' ? 'teacher' : 'student mirror'}
+            canSkip={!isSynced || role === 'teacher'}
+            onSkip={goNext}
+          >
+            {({ safeMode }) => (
+              <SceneRenderer
+                scene={scene}
+                onWin={registerWin}
+                onLose={loseHeart}
+                onNext={goNext}
+                onRestart={restart}
+                gemsCollected={gems}
+                heartsRemaining={hearts}
+                lessonNumber={lessonNumber}
+                role={role}
+                roomId={roomId}
+                activityUnlocked={activityUnlocked}
+                // Safe mode: after repeated crashes, run this activity purely on
+                // its own data — nothing the other screen sent can break it.
+                activitySync={safeMode ? undefined : activitySync}
+              />
+            )}
+          </SceneCrashGuard>
           {isSynced && role === 'student' && !effectiveUnlocked && !studentDriven && (
             <div className="absolute inset-0 z-40 cursor-not-allowed" aria-hidden="true">
               <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">

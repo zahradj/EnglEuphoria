@@ -51,16 +51,24 @@ const isPlainObject = (v: unknown): v is Record<string, unknown> =>
  *  rendering. */
 export function reconcileSyncedState<T>(remote: unknown, initial: T): T {
   if (remote == null) return initial;
-  if (!isPlainObject(initial) || !isPlainObject(remote)) {
-    return (typeof remote === typeof initial ? remote : initial) as T;
+  if (!isPlainObject(initial)) {
+    // Scene state that isn't an object (rare): accept only the same primitive/array type.
+    return (Array.isArray(initial) === Array.isArray(remote) && typeof remote === typeof initial ? remote : initial) as T;
   }
-  const out: Record<string, unknown> = { ...initial, ...remote };
+  // The scene's state is an object: anything else (an array, a string, a
+  // number, …) is not a snapshot of this scene.
+  if (!isPlainObject(remote)) return initial;
+  const out: Record<string, unknown> = { ...remote };
   for (const k of Object.keys(initial)) {
     const dflt = initial[k];
     const got = remote[k];
-    if (got === undefined) out[k] = dflt;
-    else if (Array.isArray(dflt) && !Array.isArray(got)) out[k] = dflt;
-    else if (isPlainObject(dflt) && !isPlainObject(got)) out[k] = dflt;
+    const ok =
+      dflt === null || dflt === undefined ? true // nullable field: take what was sent
+      : Array.isArray(dflt) ? Array.isArray(got) && (dflt.length === 0 || got.every((x) => typeof x === typeof dflt[0]))
+      : isPlainObject(dflt) ? isPlainObject(got)
+      : typeof dflt === 'number' ? typeof got === 'number' && Number.isFinite(got)
+      : typeof got === typeof dflt;
+    if (got === undefined || !ok) out[k] = dflt;
   }
   return out as T;
 }
