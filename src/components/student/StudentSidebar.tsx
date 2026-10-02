@@ -99,7 +99,10 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
         { id: 'dashboard', label: t('sd.menu.dashboard'), icon: Home },
         { id: 'lessons', label: t('sd.menu.lessons', 'My Lessons'), icon: PlayCircle },
         { id: 'homework', label: t('sd.menu.homework', 'Homework'), icon: BookMarked },
-        { id: 'reports', label: t('sd.menu.reports', 'Lesson Reports'), icon: ClipboardCheck },
+        // Playground students read the teacher's notes inside the quest map instead.
+        ...(hubKey === 'playground'
+          ? []
+          : [{ id: 'reports', label: t('sd.menu.reports', 'Lesson Reports'), icon: ClipboardCheck }]),
         { id: 'books', label: t('sd.menu.books', 'My Books'), icon: BookOpen, href: '/library' },
         { id: 'games', label: t('sd.menu.games', 'Games'), icon: Gamepad2 },
       ],

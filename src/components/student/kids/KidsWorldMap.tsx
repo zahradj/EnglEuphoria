@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { ClipboardCheck, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { JungleTheme } from './JungleTheme';
@@ -10,6 +11,7 @@ import { WindingPath } from './WindingPath';
 import { FloatingBackpack } from './FloatingBackpack';
 import { GiantGoButton } from './GiantGoButton';
 import { LessonPlayerModal } from './LessonPlayerModal';
+import { RecentLessonReports } from '@/components/student/RecentLessonReports';
 import { SceneLessonPlayerModal } from './SceneLessonPlayerModal';
 import { PlaygroundLesson } from '@/hooks/usePlaygroundLessons';
 import { isSceneLessonFormat } from '@/content/playground-library/sceneLessonFormats';
@@ -72,6 +74,8 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
   const [selectedTheme] = useState<ThemeType>(theme);
   const [selectedLesson, setSelectedLesson] = useState<PlaygroundLesson | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // The teacher's lesson reports live inside the quest (not on the dashboard home page).
+  const [notesOpen, setNotesOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleHomeworkClick = useCallback((homeworkId: string) => {
@@ -217,14 +221,62 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
           <span className="font-bold text-purple-700">Hi, {studentName}!</span>
         </div>
         
-        {/* Progress indicator */}
-        <div className="bg-white/90 backdrop-blur rounded-full px-4 py-2 shadow-lg flex items-center gap-2">
-          <span className="text-lg">📚</span>
-          <span className="font-bold text-emerald-700">
-            {lessons.filter(l => l.status === 'completed').length}/{lessons.length}
-          </span>
+        <div className="flex items-center gap-2">
+          {/* Teacher's notes: the lesson reports, opened over the map */}
+          <button
+            type="button"
+            onClick={() => setNotesOpen(true)}
+            className="bg-white/90 backdrop-blur rounded-full px-4 py-2 shadow-lg flex items-center gap-2 font-bold text-orange-700 transition hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-orange-300"
+          >
+            <ClipboardCheck className="w-5 h-5" />
+            <span>Teacher's notes</span>
+          </button>
+
+          {/* Progress indicator */}
+          <div className="bg-white/90 backdrop-blur rounded-full px-4 py-2 shadow-lg flex items-center gap-2">
+            <span className="text-lg">📚</span>
+            <span className="font-bold text-emerald-700">
+              {lessons.filter(l => l.status === 'completed').length}/{lessons.length}
+            </span>
+          </div>
         </div>
       </motion.div>
+
+      {/* Teacher's notes panel (only mounted while open, so nothing is fetched until a student looks) */}
+      {notesOpen && (
+        <div
+          className="absolute inset-0 z-[60] flex items-center justify-center bg-black/45 p-3 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Teacher's notes"
+          onClick={() => setNotesOpen(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-h-[92%] w-full max-w-xl overflow-y-auto rounded-3xl bg-amber-50 p-4 shadow-2xl ring-4 ring-white/80 sm:p-5"
+          >
+            <div className="mb-3 flex items-start justify-between gap-3">
+              <div>
+                <h2 className="flex items-center gap-2 text-xl font-bold text-orange-700">
+                  <ClipboardCheck className="w-6 h-6" /> Teacher's notes
+                </h2>
+                <p className="text-sm text-orange-900/70">What your teacher wrote about your classes.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNotesOpen(false)}
+                aria-label="Close teacher's notes"
+                className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white text-orange-700 shadow transition hover:scale-110"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <RecentLessonReports hubId="playground" limit={10} />
+          </motion.div>
+        </div>
+      )}
 
       {/* Floating zone labels */}
       {zoneLabels.map((zone, i) => (
