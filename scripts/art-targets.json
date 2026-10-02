@@ -252,5 +252,133 @@
       "public/magic-castle/scenes/bg-castle-wim.png"
     ],
     "prompt": "A wide, cosy castle sitting room seen from the front, filling the whole frame edge to edge. Six pieces of furniture, each clearly separate, fully visible and not overlapping, from LEFT to RIGHT: a tall wooden BOOKCASE full of colourful books against the far-left wall; a long red SOFA with two cushions; on the wall high above the sofa, a round wooden wall CLOCK with a cream face; a single comfy dark-green ARMCHAIR; on the wall high above the armchair, an oval wall MIRROR with a gold frame; on the far right, a wooden writing DESK with paper and a quill. Stone walls, wooden floor, warm light. No characters, no lamp, no rug clutter. Same flat kawaii cartoon art style, bold warm-dark outlines and colours as the reference images. Full-bleed 16:9 scene, no frame, no border, no text, no letters, no numbers on anything except the clock face."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-classroom-wide-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-classroom-wide.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-classroom-wide.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-classroom-circle-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-classroom-circle.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-classroom-circle.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-vocab-pip-happy-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-vocab-pip-happy.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-vocab-pip-happy.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-vocab-leo-tired-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-vocab-leo-tired.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-vocab-leo-tired.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-vocab-mia-sad-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-vocab-mia-sad.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-vocab-mia-sad.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-vocab-bella-angry-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-vocab-bella-angry.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-vocab-bella-angry.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-vocab-willow-hungry-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-vocab-willow-hungry.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-vocab-willow-hungry.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-classroom-feelings-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-classroom-feelings.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-classroom-feelings.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-heshe-intro-pip-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-heshe-intro-pip.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-heshe-intro-pip.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-heshe-together-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-heshe-together.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-heshe-together.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-classroom-reading-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-classroom-reading.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-classroom-reading.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-classroom-supplies2-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-classroom-supplies2.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-classroom-supplies2.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-prep-in-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-prep-in.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-prep-in.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-prep-on-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-prep-on.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-prep-on.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-prep-next-to-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-prep-next-to.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-prep-next-to.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-express-goodbye-wide.png",
+    "outpaintFrom": "public/welcome-town/scenes/bg-express-goodbye.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-express-goodbye.png"
+    ],
+    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
   }
 ]

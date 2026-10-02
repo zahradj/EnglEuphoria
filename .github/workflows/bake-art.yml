@@ -10,6 +10,7 @@ on:
       - 'scripts/art-targets.json'
       - 'scripts/generate-art.mjs'
       - 'scripts/cutout-stickers.py'
+      - 'scripts/outpaint-composite.py'
 
 permissions:
   contents: write
@@ -35,7 +36,8 @@ jobs:
         run: |
           pip install --quiet pillow
           python scripts/cutout-stickers.py art-stickers.txt
-          rm -f art-stickers.txt
+          python scripts/outpaint-composite.py art-outpaint.txt
+          rm -f art-stickers.txt art-outpaint.txt
       - name: Commit new art
         run: |
           git add public
