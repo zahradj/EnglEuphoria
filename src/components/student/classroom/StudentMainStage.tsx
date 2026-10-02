@@ -284,10 +284,11 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
             data-student-dock
             onClick={() => setStudentTool('pointer')}
             className="pointer-events-auto flex items-center gap-2 rounded-full bg-amber-400 px-4 py-2 text-sm font-extrabold text-slate-900 shadow-xl ring-2 ring-white transition hover:scale-105 active:scale-95"
-            aria-label="Drawing is on. Tap to go back to playing"
+            aria-label="The pen is on. Tap to put it down and go back to the pointer"
           >
-            <span aria-hidden>✏️</span> Drawing is on
-            <span className="rounded-full bg-white/80 px-2.5 py-0.5">👆 Tap to play</span>
+            <span aria-hidden>✏️</span>
+            {stageMode === 'web' ? 'Drawing is on' : 'Pen is on — you can still play'}
+            <span className="rounded-full bg-white/80 px-2.5 py-0.5">{stageMode === 'web' ? '👆 Tap to play' : '👆 Stop drawing'}</span>
           </button>
         </div>
       )}
