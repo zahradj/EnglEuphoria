@@ -21,6 +21,7 @@ import { template as welcomeStudent } from './welcome-student.tsx'
 import { template as welcomeTeacher } from './welcome-teacher.tsx'
 import { template as adminNewRegistration } from './admin-new-registration.tsx'
 import { template as adminNewStudent } from './admin-new-student.tsx'
+import { template as adminClassroomCrash } from './admin-classroom-crash.tsx'
 import { template as teacherBooking } from './teacher-booking.tsx'
 import { template as studentLessonReady } from './student-lesson-ready.tsx'
 import { template as lessonReminder } from './lesson-reminder.tsx'
@@ -55,6 +56,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'welcome-teacher': welcomeTeacher,
   'admin-new-registration': adminNewRegistration,
   'admin-new-student': adminNewStudent,
+  'admin-classroom-crash': adminClassroomCrash,
   'teacher-booking': teacherBooking,
   'student-lesson-ready': studentLessonReady,
   'lesson-reminder': lessonReminder,
