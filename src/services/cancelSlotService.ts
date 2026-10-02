@@ -119,40 +119,18 @@ export async function cancelBookedSeries({
     (s: any) => JSON.stringify(s.recurring_pattern) === anchorSig,
   );
 
-  // 1. Refund each student's credit (teacher cancellations always refund,
-  // regardless of timing — same rule as the single-occurrence path) and
-  // cancel every booked lesson in the series.
-  const lessonIds = matching.map((s: any) => s.lesson_id).filter(Boolean) as string[];
+  // 1. Cancel every booked occurrence through the same atomic RPC as the
+  // single-occurrence path (refund, class_bookings/lessons update, student
+  // notification, late-cancel penalty). Done one by one so a failure on one
+  // lesson never leaves the others half-cancelled.
+  const bookedSlots = matching.filter((s: any) => s.lesson_id);
   let cancelledBookings = 0;
-  if (lessonIds.length > 0) {
-    await Promise.all(
-      lessonIds.map((lessonId) =>
-        supabase.rpc("refund_lesson_credit", { p_lesson_id: lessonId }).then(({ error }) => {
-          if (error) console.error(`Failed to refund credit for lesson ${lessonId}:`, error);
-        }),
-      ),
-    );
-
-    const { error: lessonErr } = await supabase
-      .from("lessons")
-      .update({ status: "cancelled", cancellation_reason: reason ?? "Series cancelled by teacher" })
-      .in("id", lessonIds);
-    if (lessonErr) throw lessonErr;
-
-    const { error: bookErr, count } = await supabase
-      .from("class_bookings")
-      .update(
-        {
-          status: "cancelled",
-          cancelled_at: new Date().toISOString(),
-          cancelled_by: "teacher",
-          cancellation_reason: reason ?? "Series cancelled by teacher",
-        },
-        { count: "exact" },
-      )
-      .in("lesson_id", lessonIds);
-    if (bookErr) throw bookErr;
-    cancelledBookings = count ?? 0;
+  for (const s of bookedSlots) {
+    await cancelBookedSlot({
+      slotId: s.id,
+      reason: reason ?? "Series cancelled by teacher",
+    });
+    cancelledBookings += 1;
   }
 
   // 2. Remove every future slot in the series

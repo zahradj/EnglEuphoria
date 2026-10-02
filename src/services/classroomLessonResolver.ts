@@ -205,8 +205,29 @@ export async function resolveBookingLesson(booking: {
     }
   }
 
+  // The booking's hub is authoritative: an Academy booking opens the Academy
+  // classroom, a Playground booking the Playground classroom, a Success booking
+  // the Success classroom — never decided by whichever lesson a student's
+  // progress pointer happened to resolve to. If the resolved lesson belongs to
+  // a different hub, drop it and use the booking hub's own first lesson.
+  const bookingHubIsExplicit = !!booking.hub_type;
+  if (lesson && bookingHubIsExplicit && normalizeHub(lesson.target_system) !== bookingHub) {
+    console.warn('[classroomLessonResolver] lesson hub mismatch — ignoring', {
+      bookingHub, lessonHub: lesson.target_system, lessonId: lesson.id,
+    });
+    lesson = null;
+    if (bookingHub !== 'professional') {
+      try {
+        const sameHubId = await findFirstLessonForLevel(bookingHub, booking.cefr_level);
+        if (sameHubId) lesson = await getLessonById(sameHubId);
+      } catch (e) {
+        console.warn('[classroomLessonResolver] same-hub fallback failed:', e);
+      }
+    }
+  }
+
   const hubFromLesson = lesson ? normalizeHub(lesson.target_system) : null;
-  const hubType = hubFromLesson ?? bookingHub;
+  const hubType = bookingHubIsExplicit ? bookingHub : (hubFromLesson ?? bookingHub);
   let baseSlides = lesson ? getLibraryLessonSlides(lesson) : (allowTrialSlides ? buildTrialLessonSlides(hubType, booking.cefr_level) : []);
 
   // Playground lessons render through <PlaygroundLessonPlayer/>, which reads
@@ -237,6 +258,16 @@ export async function resolveBookingLesson(booking: {
   } else if (hubType === 'playground' && playgroundUnit && baseSlides.length > 0) {
     baseSlides = baseSlides.map((s, i) =>
       i === 0 ? { ...s, playgroundUnit } : s,
+    );
+  }
+
+  // Academy lessons carry one illustrated background per pedagogical block
+  // (content.blockImages). The student player paints it behind each slide; stamp
+  // it onto the slide so the live classroom can do the same.
+  const blockImages = (lesson?.content as any)?.blockImages as Record<string, string> | undefined;
+  if (blockImages && hubType === 'academy') {
+    baseSlides = baseSlides.map((sl: any) =>
+      sl && sl.block && blockImages[sl.block] ? { ...sl, _blockImage: blockImages[sl.block] } : sl,
     );
   }
 

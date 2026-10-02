@@ -47,6 +47,21 @@ export const UpcomingClassesTab = () => {
     fetchLessons();
   }, []);
 
+  // Live refresh: when the teacher cancels (or anything else moves a lesson),
+  // the list updates without a page reload.
+  useEffect(() => {
+    if (!user?.id) return;
+    const channel = supabase
+      .channel(`student-lessons-${user.id}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'lessons', filter: `student_id=eq.${user.id}` },
+        () => { fetchLessons(); }
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [user?.id]);
+
   const fetchLessons = async () => {
     try {
       const { data: user } = await supabase.auth.getUser();
@@ -263,6 +278,8 @@ export const UpcomingClassesTab = () => {
             id: managementModal.lesson.id,
             title: managementModal.lesson.title,
             scheduled_at: managementModal.lesson.scheduled_at,
+            teacher_id: managementModal.lesson.teacher_id,
+            duration: managementModal.lesson.duration,
             teacher_name: managementModal.lesson.teacher_name || 'Teacher',
             lesson_price: managementModal.lesson.lesson_price || 0,
             hub_type: managementModal.lesson.hub_type,

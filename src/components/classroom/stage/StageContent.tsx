@@ -367,7 +367,13 @@ export const StageContent: React.FC<StageContentProps> = ({
             );
           }
         : undefined;
-    const inner = (
+    // Academy slides lay themselves out (full-bleed scene or card, own scroll),
+    // so they skip the generic mode wrapper that would constrain/pad them.
+    const inner = hubType === 'academy' ? (
+      <div className="absolute inset-0 h-full w-full overflow-hidden" data-slide-mode={slideMode}>
+        <CreatorSlideRenderer slide={rawSrc} hub={hubType} theme="light" onAnswer={onAnswer} />
+      </div>
+    ) : (
       <div
         className={wrapper.className}
         style={hubGradient ? { background: hubGradient } : wrapper.style}
