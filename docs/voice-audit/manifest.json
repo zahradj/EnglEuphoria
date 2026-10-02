@@ -73,8 +73,8 @@
   },
   {
     "character": "teacher",
-    "text": "Listen. Is it ch, or sh?",
-    "file": "a781760b.mp3",
+    "text": "Listen to the word. Which sound do you hear?",
+    "file": "a2f6efd1.mp3",
     "exists": true
   },
   {
@@ -91,8 +91,8 @@
   },
   {
     "character": "teacher",
-    "text": "Read the spell book. Then answer the questions.",
-    "file": "03c13c78.mp3",
+    "text": "Reed the spell book. Then answer the questions.",
+    "file": "27be790c.mp3",
     "exists": true
   },
   {
@@ -103,8 +103,8 @@
   },
   {
     "character": "teacher",
-    "text": "Amazing! You are a CH wizard!",
-    "file": "a33417a0.mp3",
+    "text": "Amazing! You are a sound wizard!",
+    "file": "38b14b42.mp3",
     "exists": true
   },
   {
@@ -313,8 +313,8 @@
   },
   {
     "character": "pip",
-    "text": "chick",
-    "file": "994b3852.mp3",
+    "text": "chick.",
+    "file": "cd69eb34.mp3",
     "exists": true
   },
   {
@@ -415,8 +415,8 @@
   },
   {
     "character": "pip",
-    "text": "Listen. Is it ch, or sh?",
-    "file": "3dda4c1e.mp3",
+    "text": "Listen to the word. Which sound do you hear?",
+    "file": "b7b5a97c.mp3",
     "exists": true
   },
   {
@@ -619,8 +619,8 @@
   },
   {
     "character": "pip",
-    "text": "web",
-    "file": "bb04d098.mp3",
+    "text": "web.",
+    "file": "1e948e82.mp3",
     "exists": true
   },
   {
@@ -631,8 +631,8 @@
   },
   {
     "character": "pip",
-    "text": "wand",
-    "file": "a2b777dc.mp3",
+    "text": "wand.",
+    "file": "18d1d1f6.mp3",
     "exists": true
   },
   {
@@ -655,8 +655,8 @@
   },
   {
     "character": "teacher",
-    "text": "Read the story. Then answer the questions.",
-    "file": "13f1f146.mp3",
+    "text": "Reed the story. Then answer the questions.",
+    "file": "6693f6ea.mp3",
     "exists": true
   },
   {
@@ -1158,6 +1158,168 @@
     "exists": true
   },
   {
+    "character": "teacher",
+    "text": "Listen. Is it hello, or goodbye?",
+    "file": "f35a0582.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Hello!",
+    "file": "2245bec8.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Bye!",
+    "file": "684bed58.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Hi!",
+    "file": "d51509e3.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Goodbye!",
+    "file": "c0bf41a9.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Listen to the name. Tap the friend!",
+    "file": "25e45374.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Find Mia.",
+    "file": "275e64e5.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Find Leo.",
+    "file": "ea42ccf6.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Find Willow.",
+    "file": "d6bc6904.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Find Bella.",
+    "file": "97a5edba.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Look and listen. True or false?",
+    "file": "dcda93b5.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Hello, Leo!",
+    "file": "853b00b2.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Hello, Mia!",
+    "file": "a0c8d9dd.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Hi, Willow!",
+    "file": "c70a380d.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Hi, Pip!",
+    "file": "b69d338c.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Listen. Build what you hear!",
+    "file": "c804c15c.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "What’s your name?",
+    "file": "9daa5764.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "My name’s Pip.",
+    "file": "ee51ce9d.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Hello! I’m Mia.",
+    "file": "9892b93a.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Listen to the word. Which sound does it start with?",
+    "file": "619cb4ba.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "sun",
+    "file": "6ba1c378.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "apple",
+    "file": "64cfae1a.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "tiger",
+    "file": "43a8c301.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "sock",
+    "file": "ddddda4e.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "ant.",
+    "file": "60221a5b.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Tap the party box to open it!",
+    "file": "b31b24f1.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "You did it! Hello, party star! Bye-bye!",
+    "file": "a4ed952a.mp3",
+    "exists": true
+  },
+  {
     "character": "pip",
     "text": "Hi, hi, hi! I am Pip!",
     "file": "bc72855d.mp3",
@@ -1189,8 +1351,8 @@
   },
   {
     "character": "pip",
-    "text": "Hat",
-    "file": "b942acb7.mp3",
+    "text": "Hat.",
+    "file": "3cf5b4db.mp3",
     "exists": true
   },
   {
@@ -1207,8 +1369,8 @@
   },
   {
     "character": "teacher",
-    "text": "hat",
-    "file": "fab45c34.mp3",
+    "text": "hat.",
+    "file": "c3ecfcee.mp3",
     "exists": true
   },
   {
@@ -1219,8 +1381,8 @@
   },
   {
     "character": "teacher",
-    "text": "moon",
-    "file": "d91abf82.mp3",
+    "text": "moon.",
+    "file": "711bbbc4.mp3",
     "exists": true
   },
   {
@@ -1231,8 +1393,8 @@
   },
   {
     "character": "pip",
-    "text": "Yes! The H portal is open!",
-    "file": "52ab7996.mp3",
+    "text": "Yes! The portal is open!",
+    "file": "7405dad6.mp3",
     "exists": true
   },
   {
@@ -1255,8 +1417,8 @@
   },
   {
     "character": "mia",
-    "text": "Moon",
-    "file": "f0cf424b.mp3",
+    "text": "Moon.",
+    "file": "7b4584ff.mp3",
     "exists": true
   },
   {
@@ -1267,20 +1429,20 @@
   },
   {
     "character": "teacher",
-    "text": "mouse",
-    "file": "1e35e3ee.mp3",
+    "text": "mouse.",
+    "file": "4ed58740.mp3",
     "exists": true
   },
   {
     "character": "mia",
-    "text": "mouse",
-    "file": "7ef165e5.mp3",
+    "text": "mouse.",
+    "file": "a1033e91.mp3",
     "exists": true
   },
   {
     "character": "mia",
-    "text": "moon",
-    "file": "70fb8e6b.mp3",
+    "text": "moon.",
+    "file": "2100f69f.mp3",
     "exists": true
   },
   {
@@ -1291,8 +1453,8 @@
   },
   {
     "character": "mia",
-    "text": "Yes! The M portal is open!",
-    "file": "a7b19aad.mp3",
+    "text": "Yes! The portal is open!",
+    "file": "816318b6.mp3",
     "exists": true
   },
   {
@@ -1303,8 +1465,8 @@
   },
   {
     "character": "pip",
-    "text": "hat",
-    "file": "56b81517.mp3",
+    "text": "hat.",
+    "file": "bcc968bb.mp3",
     "exists": true
   },
   {
@@ -1315,8 +1477,8 @@
   },
   {
     "character": "pip",
-    "text": "moon",
-    "file": "6e3c1e8b.mp3",
+    "text": "moon.",
+    "file": "2da43dbf.mp3",
     "exists": true
   },
   {
@@ -1375,14 +1537,14 @@
   },
   {
     "character": "teacher",
-    "text": "Hat",
-    "file": "98283194.mp3",
+    "text": "Hat.",
+    "file": "414647ce.mp3",
     "exists": true
   },
   {
     "character": "teacher",
-    "text": "Moon",
-    "file": "58ee7362.mp3",
+    "text": "Moon.",
+    "file": "4b5f80a4.mp3",
     "exists": true
   },
   {
@@ -1393,8 +1555,8 @@
   },
   {
     "character": "pip",
-    "text": "mouse",
-    "file": "0b93e385.mp3",
+    "text": "mouse.",
+    "file": "e4cf6631.mp3",
     "exists": true
   },
   {
@@ -1447,8 +1609,8 @@
   },
   {
     "character": "pip",
-    "text": "Pip",
-    "file": "4e9837cb.mp3",
+    "text": "Pip.",
+    "file": "9e9ffd7f.mp3",
     "exists": true
   },
   {
@@ -1549,20 +1711,14 @@
   },
   {
     "character": "pip",
-    "text": "HAT",
-    "file": "99922c37.mp3",
+    "text": "Mat.",
+    "file": "055f075e.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "MAT",
-    "file": "92165204.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "HAM",
-    "file": "a092373c.mp3",
+    "text": "Ham",
+    "file": "c042b7bc.mp3",
     "exists": true
   },
   {
@@ -1639,14 +1795,14 @@
   },
   {
     "character": "pip",
-    "text": "Wind",
-    "file": "cbd634f4.mp3",
+    "text": "Wind.",
+    "file": "bc35332e.mp3",
     "exists": true
   },
   {
     "character": "mia",
-    "text": "Nut",
-    "file": "7d41c0d1.mp3",
+    "text": "Nut.",
+    "file": "2d82d16d.mp3",
     "exists": true
   },
   {
@@ -1723,8 +1879,8 @@
   },
   {
     "character": "pip",
-    "text": "wind",
-    "file": "4ba9e8d4.mp3",
+    "text": "wind.",
+    "file": "1679c18e.mp3",
     "exists": true
   },
   {
@@ -1741,8 +1897,8 @@
   },
   {
     "character": "mia",
-    "text": "nut",
-    "file": "dfcdeb71.mp3",
+    "text": "nut.",
+    "file": "b029868d.mp3",
     "exists": true
   },
   {
@@ -1795,8 +1951,8 @@
   },
   {
     "character": "willow",
-    "text": "wind",
-    "file": "8f5bea4b.mp3",
+    "text": "wind.",
+    "file": "12b1fcff.mp3",
     "exists": true
   },
   {
@@ -1819,8 +1975,8 @@
   },
   {
     "character": "willow",
-    "text": "hat",
-    "file": "f3c7135e.mp3",
+    "text": "hat.",
+    "file": "32639950.mp3",
     "exists": true
   },
   {
@@ -1933,14 +2089,14 @@
   },
   {
     "character": "pip",
-    "text": "MAN",
-    "file": "9c1661c2.mp3",
+    "text": "Man",
+    "file": "7bc67d82.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "WIN",
-    "file": "f9c25f58.mp3",
+    "text": "Win",
+    "file": "1972dfd8.mp3",
     "exists": true
   },
   {
@@ -2017,14 +2173,8 @@
   },
   {
     "character": "bella",
-    "text": "Sad",
-    "file": "7bcbe45b.mp3",
-    "exists": true
-  },
-  {
-    "character": "mia",
-    "text": "Happy 😊",
-    "file": "066c998f.mp3",
+    "text": "Sad.",
+    "file": "56f8a42f.mp3",
     "exists": true
   },
   {
@@ -2035,8 +2185,8 @@
   },
   {
     "character": "pip",
-    "text": "Happy 😊",
-    "file": "3830a8af.mp3",
+    "text": "Happy",
+    "file": "e0b5ba68.mp3",
     "exists": true
   },
   {
@@ -2047,20 +2197,14 @@
   },
   {
     "character": "bella",
-    "text": "Sad 😢",
-    "file": "c07dac82.mp3",
-    "exists": true
-  },
-  {
-    "character": "bella",
     "text": "Bella is sad!",
     "file": "9be6a5c8.mp3",
     "exists": true
   },
   {
     "character": "leo",
-    "text": "Angry 😠",
-    "file": "065bba07.mp3",
+    "text": "Angry",
+    "file": "d46262e6.mp3",
     "exists": true
   },
   {
@@ -2071,20 +2215,8 @@
   },
   {
     "character": "mia",
-    "text": "Sad 😢",
-    "file": "df5e8809.mp3",
-    "exists": true
-  },
-  {
-    "character": "mia",
     "text": "Mia is sad!",
     "file": "0fde3194.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "Angry 😠",
-    "file": "4b1ae1b4.mp3",
     "exists": true
   },
   {
@@ -2203,20 +2335,14 @@
   },
   {
     "character": "leo",
-    "text": "Ant",
-    "file": "5588ad8e.mp3",
+    "text": "Ant.",
+    "file": "462952e0.mp3",
     "exists": true
   },
   {
     "character": "leo",
     "text": "Cat",
     "file": "1caa58ef.mp3",
-    "exists": true
-  },
-  {
-    "character": "mia",
-    "text": "Sad",
-    "file": "136a8e92.mp3",
     "exists": true
   },
   {
@@ -2251,14 +2377,14 @@
   },
   {
     "character": "mia",
-    "text": "sad",
-    "file": "75f52632.mp3",
+    "text": "sad.",
+    "file": "cceafe14.mp3",
     "exists": true
   },
   {
     "character": "leo",
-    "text": "ant",
-    "file": "f08219ee.mp3",
+    "text": "ant.",
+    "file": "5cce8940.mp3",
     "exists": true
   },
   {
@@ -2271,24 +2397,6 @@
     "character": "leo",
     "text": "Perfect ears! You popped the sounds!",
     "file": "b70ba07b.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "apple",
-    "file": "64cfae1a.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "sun",
-    "file": "6ba1c378.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "ant",
-    "file": "2a1a2137.mp3",
     "exists": true
   },
   {
@@ -2653,8 +2761,8 @@
   },
   {
     "character": "pip",
-    "text": "SAD",
-    "file": "a8ad6df2.mp3",
+    "text": "Sad.",
+    "file": "c7de3ad4.mp3",
     "exists": true
   },
   {
@@ -2749,8 +2857,8 @@
   },
   {
     "character": "pip",
-    "text": "Two",
-    "file": "873bc80c.mp3",
+    "text": "Two.",
+    "file": "051c0d86.mp3",
     "exists": true
   },
   {
@@ -2761,8 +2869,8 @@
   },
   {
     "character": "pip",
-    "text": "Four",
-    "file": "a6bfc626.mp3",
+    "text": "Four.",
+    "file": "87e4be98.mp3",
     "exists": true
   },
   {
@@ -2797,14 +2905,14 @@
   },
   {
     "character": "pip",
-    "text": "Ten",
-    "file": "8868e93d.mp3",
+    "text": "Ten.",
+    "file": "d026e8e9.mp3",
     "exists": true
   },
   {
     "character": "bella",
-    "text": "I am FIVE! Tap FIVE candles on my cake!",
-    "file": "e56db1f4.mp3",
+    "text": "I am five! Tap five candles on my cake!",
+    "file": "fac82434.mp3",
     "exists": true
   },
   {
@@ -2815,8 +2923,8 @@
   },
   {
     "character": "mia",
-    "text": "I am SIX! Tap SIX candles for Mia!",
-    "file": "ac7db068.mp3",
+    "text": "I am six! Tap six candles for Mia!",
+    "file": "4901b028.mp3",
     "exists": true
   },
   {
@@ -2827,8 +2935,8 @@
   },
   {
     "character": "pip",
-    "text": "I am SIX too! Give Pip SIX candles!",
-    "file": "1666f50b.mp3",
+    "text": "I am six too! Give Pip six candles!",
+    "file": "5ba1060b.mp3",
     "exists": true
   },
   {
@@ -2839,14 +2947,14 @@
   },
   {
     "character": "pip",
-    "text": "Your turn! How old are you? Tap your age, then put candles on YOUR cake and blow!",
-    "file": "e30629a9.mp3",
+    "text": "Your turn! How old are you? Tap your age, then put candles on your cake and blow!",
+    "file": "53020b69.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "Happy birthday to YOU!",
-    "file": "a5e926e4.mp3",
+    "text": "Happy birthday to you!",
+    "file": "717f9fc4.mp3",
     "exists": true
   },
   {
@@ -2929,8 +3037,8 @@
   },
   {
     "character": "teacher",
-    "text": "How old is Bella? 🎂",
-    "file": "3975560b.mp3",
+    "text": "How old is Bella?",
+    "file": "5788b137.mp3",
     "exists": true
   },
   {
@@ -2959,8 +3067,8 @@
   },
   {
     "character": "teacher",
-    "text": "How old is Mia? 🎂",
-    "file": "91eb35a2.mp3",
+    "text": "How old is Mia?",
+    "file": "9e7c49c0.mp3",
     "exists": true
   },
   {
@@ -2989,8 +3097,8 @@
   },
   {
     "character": "teacher",
-    "text": "How old is Leo? 🎂",
-    "file": "6e25e2c7.mp3",
+    "text": "How old is Leo?",
+    "file": "dce7b0c3.mp3",
     "exists": true
   },
   {
@@ -3019,8 +3127,8 @@
   },
   {
     "character": "teacher",
-    "text": "How old is Willow? 🎂",
-    "file": "b0f9a431.mp3",
+    "text": "How old is Willow?",
+    "file": "e640ca95.mp3",
     "exists": true
   },
   {
@@ -3085,44 +3193,38 @@
   },
   {
     "character": "teacher",
-    "text": "I am ___ years old!",
-    "file": "59a183a3.mp3",
+    "text": "I am … years old!",
+    "file": "1aae0a20.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "🎂 Happy birthday to you",
-    "file": "1081f4ff.mp3",
+    "text": "Happy birthday to you",
+    "file": "8e25cb8d.mp3",
     "exists": true
   },
   {
     "character": "mia",
-    "text": "🎈 Happy birthday to you",
-    "file": "9f900b6d.mp3",
+    "text": "Happy birthday to you",
+    "file": "e36871ad.mp3",
     "exists": true
   },
   {
     "character": "leo",
-    "text": "🎉 Happy birthday dear Bella",
-    "file": "eebc5513.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "🎁 Happy birthday to you!",
-    "file": "88a89335.mp3",
+    "text": "Happy birthday dear Bella",
+    "file": "6b299f0a.mp3",
     "exists": true
   },
   {
     "character": "bella",
-    "text": "🥳 Yaaay! Happy birthday to me!",
-    "file": "0c5bd125.mp3",
+    "text": "Yaaay! Happy birthday to me!",
+    "file": "26487fce.mp3",
     "exists": true
   },
   {
     "character": "bella",
-    "text": "Bag",
-    "file": "0be119b5.mp3",
+    "text": "Bag.",
+    "file": "4e5b4f01.mp3",
     "exists": true
   },
   {
@@ -3139,20 +3241,20 @@
   },
   {
     "character": "leo",
-    "text": "Two",
-    "file": "46e535e1.mp3",
+    "text": "Two.",
+    "file": "69d3b4dd.mp3",
     "exists": true
   },
   {
     "character": "leo",
-    "text": "Ten",
-    "file": "25c26fac.mp3",
+    "text": "Ten.",
+    "file": "f31589a6.mp3",
     "exists": true
   },
   {
     "character": "leo",
-    "text": "Toy",
-    "file": "38aa88af.mp3",
+    "text": "Toy.",
+    "file": "b574e313.mp3",
     "exists": true
   },
   {
@@ -3169,8 +3271,8 @@
   },
   {
     "character": "pip",
-    "text": "two",
-    "file": "24b1306c.mp3",
+    "text": "two.",
+    "file": "04eef7e6.mp3",
     "exists": true
   },
   {
@@ -3271,20 +3373,14 @@
   },
   {
     "character": "pip",
-    "text": "BAT",
-    "file": "2afa85c1.mp3",
+    "text": "Bat.",
+    "file": "b2aabefd.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "TEN",
-    "file": "a8b73a7d.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "BAG",
-    "file": "17fa67d8.mp3",
+    "text": "Bag.",
+    "file": "d07b9002.mp3",
     "exists": true
   },
   {
@@ -3333,7 +3429,7 @@
     "character": "bella",
     "text": "My name is Bella. Let’s go help Leo find his star.",
     "file": "3e341d71.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "mia",
@@ -3373,8 +3469,8 @@
   },
   {
     "character": "teacher",
-    "text": "Ant",
-    "file": "825713ac.mp3",
+    "text": "Ant.",
+    "file": "b113b5a6.mp3",
     "exists": true
   },
   {
@@ -3397,15 +3493,15 @@
   },
   {
     "character": "leo",
-    "text": "Wait! I see some of my things. Read them with me!",
-    "file": "2cbc2db0.mp3",
-    "exists": false
+    "text": "Wait! I see some of my things. Reed them with me!",
+    "file": "959d6434.mp3",
+    "exists": true
   },
   {
     "character": "leo",
     "text": "One more thing! Keep reading with me!",
     "file": "921d05b1.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
@@ -3469,8 +3565,8 @@
   },
   {
     "character": "bella",
-    "text": "bag",
-    "file": "6e6d4455.mp3",
+    "text": "bag.",
+    "file": "5102cda1.mp3",
     "exists": true
   },
   {
@@ -3481,14 +3577,14 @@
   },
   {
     "character": "leo",
-    "text": "two",
-    "file": "e45a9e41.mp3",
+    "text": "two.",
+    "file": "e9a768bd.mp3",
     "exists": true
   },
   {
     "character": "leo",
-    "text": "toy",
-    "file": "d61e5e0f.mp3",
+    "text": "toy.",
+    "file": "32ce2df3.mp3",
     "exists": true
   },
   {
@@ -3505,8 +3601,8 @@
   },
   {
     "character": "pip",
-    "text": "bag",
-    "file": "d5be2178.mp3",
+    "text": "bag.",
+    "file": "d04e7a62.mp3",
     "exists": true
   },
   {
@@ -3535,14 +3631,14 @@
   },
   {
     "character": "bella",
-    "text": "hat",
-    "file": "1fa61f26.mp3",
+    "text": "hat.",
+    "file": "da82d998.mp3",
     "exists": true
   },
   {
     "character": "bella",
-    "text": "two",
-    "file": "1f5c204d.mp3",
+    "text": "two.",
+    "file": "c106fbd9.mp3",
     "exists": true
   },
   {
@@ -3571,9 +3667,9 @@
   },
   {
     "character": "leo",
-    "text": "Thank you for helping me find my star — and you read HAT, MAT, and BAT all by yourself! Tonight, find a hat at home and read it out loud!",
-    "file": "05a58d3b.mp3",
-    "exists": false
+    "text": "Thank you for helping me find my star — and you reed hat, mat, and bat all by yourself! Tonight, find a hat at home and reed it out loud!",
+    "file": "d188fbc3.mp3",
+    "exists": true
   },
   {
     "character": "pip",
@@ -3595,8 +3691,8 @@
   },
   {
     "character": "willow",
-    "text": "ant",
-    "file": "206e019a.mp3",
+    "text": "ant.",
+    "file": "c12cae5c.mp3",
     "exists": true
   },
   {
@@ -3645,19 +3741,19 @@
     "character": "pip",
     "text": "Hello! What is your name?",
     "file": "c53d6092.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "How old are you?",
     "file": "6957f082.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "mia",
     "text": "How are you?",
     "file": "111600a2.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
@@ -3739,50 +3835,26 @@
   },
   {
     "character": "pip",
-    "text": "HAS",
-    "file": "9692277e.mp3",
+    "text": "Has",
+    "file": "b642a7fe.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "SAM",
-    "file": "b1ad7c1d.mp3",
+    "text": "Sam",
+    "file": "d15dfc9d.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "Find the H sound!",
-    "file": "ddc40878.mp3",
+    "text": "Find this sound!",
+    "file": "6d39b003.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "Find the M sound!",
-    "file": "3a509a15.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "Find the N sound!",
-    "file": "afbe1fbe.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "nut",
-    "file": "cd31b311.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "Find the W sound!",
-    "file": "6049191f.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "Find the S sound!",
-    "file": "9961c46b.mp3",
+    "text": "nut.",
+    "file": "443d2c2d.mp3",
     "exists": true
   },
   {
@@ -3793,26 +3865,8 @@
   },
   {
     "character": "pip",
-    "text": "Find the A sound!",
-    "file": "050e7bc9.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
     "text": "alligator",
     "file": "641e87f1.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "Find the B sound!",
-    "file": "1687a9e2.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "Find the T sound!",
-    "file": "e5ab4374.mp3",
     "exists": true
   },
   {
@@ -3841,105 +3895,99 @@
   },
   {
     "character": "teacher",
-    "text": "Now everyone is happy together! Pip, Mia, Bella, Leo, and Willow are all friends! ✨",
-    "file": "9e3b3487.mp3",
+    "text": "Now everyone is happy together! Pip, Mia, Bella, Leo, and Willow are all friends!",
+    "file": "dab1e817.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "You did it! You earned the Unit 1 Trophy! Hello, names, feelings, and all 8 letter sounds — you know it all! 🏆 Tonight, say hello to your family, tell them your age, and show them how you feel!",
-    "file": "50308622.mp3",
+    "text": "You did it! You earned the Unit 1 Trophy! Hello, names, feelings, and all 8 letter sounds — you know it all! Tonight, say hello to your family, tell them your age, and show them how you feel!",
+    "file": "7ef1f942.mp3",
     "exists": true
   },
   {
     "character": "pip",
     "text": "Welcome to the Color Carnival!",
     "file": "9b53627e.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Look! Bella has a red balloon, Willow has blue cotton candy, and I have yellow popcorn!",
     "file": "4ddd8fd3.mp3",
-    "exists": false
-  },
-  {
-    "character": "bella",
-    "text": "RED",
-    "file": "e6693b38.mp3",
     "exists": true
   },
   {
     "character": "bella",
-    "text": "Balloon",
-    "file": "d87f5d10.mp3",
-    "exists": false
+    "text": "Red",
+    "file": "c61956f8.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "Balloon.",
+    "file": "0e7fc89a.mp3",
+    "exists": true
   },
   {
     "character": "bella",
     "text": "The balloon is red.",
     "file": "cc469aa0.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
-    "text": "BLUE",
-    "file": "360784d1.mp3",
+    "text": "Blue",
+    "file": "babe98f1.mp3",
     "exists": true
   },
   {
     "character": "willow",
     "text": "Cotton Candy",
     "file": "8c37d407.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "The cotton candy is blue.",
     "file": "f7322778.mp3",
-    "exists": false
-  },
-  {
-    "character": "pip",
-    "text": "YELLOW",
-    "file": "0e3b59a6.mp3",
     "exists": true
   },
   {
     "character": "pip",
     "text": "Popcorn",
     "file": "20ac2c2b.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "The popcorn is yellow.",
     "file": "c2ad1b66.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Wonderful! The balloon is red. The cotton candy is blue. The popcorn is yellow.",
     "file": "af91ca81.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "The balloon is red!",
     "file": "db46b23d.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "The cotton candy is blue!",
     "file": "f63225e5.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "The popcorn is yellow!",
     "file": "cdad2cb7.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
@@ -3963,37 +4011,31 @@
     "character": "pip",
     "text": "Yes! Balloon!",
     "file": "49a8df5a.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Yes! Cotton Candy!",
     "file": "2c4a4c21.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Yes! Popcorn!",
     "file": "4a9f9e1c.mp3",
-    "exists": false
-  },
-  {
-    "character": "bella",
-    "text": "Red",
-    "file": "c61956f8.mp3",
     "exists": true
   },
   {
     "character": "bella",
     "text": "Ring",
     "file": "fdc0b13f.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "Ribbon",
     "file": "1786994d.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
@@ -4005,7 +4047,7 @@
     "character": "pip",
     "text": "I like red!",
     "file": "dc1be836.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
@@ -4021,12 +4063,6 @@
   },
   {
     "character": "willow",
-    "text": "Blue",
-    "file": "babe98f1.mp3",
-    "exists": true
-  },
-  {
-    "character": "willow",
     "text": "Ball",
     "file": "f30fdf40.mp3",
     "exists": true
@@ -4035,7 +4071,7 @@
     "character": "willow",
     "text": "Bear",
     "file": "c7f46de7.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
@@ -4057,177 +4093,177 @@
   },
   {
     "character": "bella",
-    "text": "balloon",
-    "file": "972346b0.mp3",
-    "exists": false
+    "text": "balloon.",
+    "file": "8a882aba.mp3",
+    "exists": true
   },
   {
     "character": "bella",
     "text": "ring",
     "file": "64a0485f.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "cotton candy",
     "file": "8ac53dc7.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "ribbon",
     "file": "ce1eb755.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "popcorn",
     "file": "0950058b.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "duck",
     "file": "56254d77.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "cotton candy",
     "file": "a93e229f.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "ribbon",
     "file": "04e3696d.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "popcorn",
     "file": "96c8737e.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "duck",
     "file": "cbf6539c.mp3",
-    "exists": false
-  },
-  {
-    "character": "bella",
-    "text": "Which one is RED?",
-    "file": "16846286.mp3",
     "exists": true
   },
   {
     "character": "bella",
-    "text": "Yes! Balloon is RED!",
-    "file": "111688ce.mp3",
-    "exists": false
+    "text": "Which one is red?",
+    "file": "fc056126.mp3",
+    "exists": true
   },
   {
-    "character": "willow",
-    "text": "Which one is BLUE?",
-    "file": "679cc99b.mp3",
+    "character": "bella",
+    "text": "Yes! Balloon is red!",
+    "file": "2c335aee.mp3",
     "exists": true
   },
   {
     "character": "willow",
-    "text": "Yes! Cotton Candy is BLUE!",
-    "file": "2670a50a.mp3",
-    "exists": false
+    "text": "Which one is blue?",
+    "file": "5712e55b.mp3",
+    "exists": true
   },
   {
-    "character": "pip",
-    "text": "Which one is YELLOW?",
-    "file": "e7fd0d70.mp3",
+    "character": "willow",
+    "text": "Yes! Cotton Candy is blue!",
+    "file": "e925810a.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "Yes! Popcorn is YELLOW!",
-    "file": "6f12d63c.mp3",
-    "exists": false
+    "text": "Which one is yellow?",
+    "file": "445a26b0.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Yes! Popcorn is yellow!",
+    "file": "c55681fc.mp3",
+    "exists": true
   },
   {
     "character": "willow",
     "text": "popcorn",
     "file": "36fb6376.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "duck",
     "file": "328f9864.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
-    "text": "balloon",
-    "file": "033c0b08.mp3",
+    "text": "balloon.",
+    "file": "3d858cd2.mp3",
     "exists": true
   },
   {
     "character": "willow",
     "text": "ring",
     "file": "2cf778d7.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Yes! The balloon is red!",
     "file": "70a548da.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Cotton Candy!",
     "file": "b8eefb90.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Yes! The cotton candy is blue!",
     "file": "04232ca6.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Popcorn!",
     "file": "c34eaff3.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Yes! The popcorn is yellow!",
     "file": "1a0cb191.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
-    "text": "balloon",
-    "file": "e8462469.mp3",
-    "exists": false
+    "text": "balloon.",
+    "file": "ed6b1bc5.mp3",
+    "exists": true
   },
   {
     "character": "pip",
     "text": "ring",
     "file": "98c01894.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "cotton candy",
     "file": "b4926168.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "ribbon",
     "file": "15ef8792.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
@@ -4269,49 +4305,49 @@
     "character": "pip",
     "text": "What color is it?",
     "file": "4c20777b.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "What color is it?",
     "file": "85bd9dea.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "What color is it?",
     "file": "e58f2e72.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "Bella found a big red balloon at the carnival!",
     "file": "48f8e231.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "Then Willow got some blue cotton candy.",
     "file": "86746bb2.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Pip found yellow popcorn, too!",
     "file": "2db0a679.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Red, blue, yellow — what a colorful day at the carnival!",
     "file": "919f9d9d.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
-    "text": "You did it! You can name red, blue, and yellow at the Color Carnival! 🎡",
-    "file": "a8ef2f54.mp3",
-    "exists": false
+    "text": "You did it! You can name red, blue, and yellow at the Color Carnival!",
+    "file": "811c9a21.mp3",
+    "exists": true
   },
   {
     "character": "pip",
@@ -4327,8 +4363,8 @@
   },
   {
     "character": "willow",
-    "text": "GREEN",
-    "file": "c66c0400.mp3",
+    "text": "Green",
+    "file": "cb4f6440.mp3",
     "exists": true
   },
   {
@@ -4345,12 +4381,6 @@
   },
   {
     "character": "leo",
-    "text": "ORANGE",
-    "file": "6895c6e3.mp3",
-    "exists": true
-  },
-  {
-    "character": "leo",
     "text": "Orange",
     "file": "84e8bc83.mp3",
     "exists": true
@@ -4363,8 +4393,8 @@
   },
   {
     "character": "mia",
-    "text": "PURPLE",
-    "file": "cc2be53c.mp3",
+    "text": "Purple",
+    "file": "5ba169dc.mp3",
     "exists": true
   },
   {
@@ -4441,12 +4471,6 @@
   },
   {
     "character": "willow",
-    "text": "Green",
-    "file": "cb4f6440.mp3",
-    "exists": true
-  },
-  {
-    "character": "willow",
     "text": "Grapes",
     "file": "3f3054e5.mp3",
     "exists": true
@@ -4467,12 +4491,6 @@
     "character": "leo",
     "text": "Owl",
     "file": "1d0460cd.mp3",
-    "exists": true
-  },
-  {
-    "character": "mia",
-    "text": "Purple",
-    "file": "5ba169dc.mp3",
     "exists": true
   },
   {
@@ -4519,44 +4537,44 @@
   },
   {
     "character": "mia",
-    "text": "balloon",
-    "file": "a02207c9.mp3",
+    "text": "balloon.",
+    "file": "fc9270a5.mp3",
     "exists": true
   },
   {
     "character": "willow",
-    "text": "Which one is GREEN?",
-    "file": "b01dcb22.mp3",
+    "text": "Which one is green?",
+    "file": "60cd4802.mp3",
     "exists": true
   },
   {
     "character": "willow",
-    "text": "Yes! Leaf is GREEN!",
-    "file": "48940f7b.mp3",
+    "text": "Yes! Leaf is green!",
+    "file": "4b994bdb.mp3",
     "exists": true
   },
   {
     "character": "leo",
-    "text": "Which one is ORANGE?",
-    "file": "f839a9a9.mp3",
+    "text": "Which one is orange?",
+    "file": "156f1ce9.mp3",
     "exists": true
   },
   {
     "character": "leo",
-    "text": "Yes! Orange is ORANGE!",
-    "file": "9280d81c.mp3",
+    "text": "Yes! Orange is orange!",
+    "file": "ce29dd5c.mp3",
     "exists": true
   },
   {
     "character": "mia",
-    "text": "Which one is PURPLE?",
-    "file": "f6a04d22.mp3",
+    "text": "Which one is purple?",
+    "file": "11aae922.mp3",
     "exists": true
   },
   {
     "character": "mia",
-    "text": "Yes! Grapes is PURPLE!",
-    "file": "e0fdf141.mp3",
+    "text": "Yes! Grapes is purple!",
+    "file": "52008641.mp3",
     "exists": true
   },
   {
@@ -4669,8 +4687,8 @@
   },
   {
     "character": "leo",
-    "text": "balloon",
-    "file": "3076c574.mp3",
+    "text": "balloon.",
+    "file": "a4f8acae.mp3",
     "exists": true
   },
   {
@@ -4771,8 +4789,8 @@
   },
   {
     "character": "pip",
-    "text": "You did it! You can name green, orange, and purple! 🌈",
-    "file": "04eef885.mp3",
+    "text": "You did it! You can name green, orange, and purple!",
+    "file": "dfbdf373.mp3",
     "exists": true
   },
   {
@@ -4789,8 +4807,8 @@
   },
   {
     "character": "bella",
-    "text": "CIRCLE",
-    "file": "82d18e6d.mp3",
+    "text": "Circle",
+    "file": "a01c800d.mp3",
     "exists": true
   },
   {
@@ -4801,8 +4819,8 @@
   },
   {
     "character": "mia",
-    "text": "SQUARE",
-    "file": "90ae9c4d.mp3",
+    "text": "Square",
+    "file": "ed5c21ed.mp3",
     "exists": true
   },
   {
@@ -4819,8 +4837,8 @@
   },
   {
     "character": "leo",
-    "text": "TRIANGLE",
-    "file": "a43ab74d.mp3",
+    "text": "Triangle",
+    "file": "7fe4b86d.mp3",
     "exists": true
   },
   {
@@ -4843,20 +4861,14 @@
   },
   {
     "character": "bella",
-    "text": "Circle",
-    "file": "a01c800d.mp3",
-    "exists": true
-  },
-  {
-    "character": "bella",
     "text": "Cat",
     "file": "9e9dfd5b.mp3",
     "exists": true
   },
   {
     "character": "bella",
-    "text": "Car",
-    "file": "a49e06cd.mp3",
+    "text": "Car.",
+    "file": "07c4d759.mp3",
     "exists": true
   },
   {
@@ -4867,8 +4879,8 @@
   },
   {
     "character": "bella",
-    "text": "moon",
-    "file": "707e5344.mp3",
+    "text": "moon.",
+    "file": "80dd4fde.mp3",
     "exists": true
   },
   {
@@ -4995,19 +5007,19 @@
     "character": "teacher",
     "text": "Circle",
     "file": "88ac2b73.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Square",
     "file": "096ac4f4.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Triangle",
     "file": "80251ad7.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
@@ -5017,8 +5029,8 @@
   },
   {
     "character": "leo",
-    "text": "moon",
-    "file": "e3a5d8d8.mp3",
+    "text": "moon.",
+    "file": "54148b42.mp3",
     "exists": true
   },
   {
@@ -5095,8 +5107,8 @@
   },
   {
     "character": "pip",
-    "text": "You did it! You can name red circles, blue squares, and yellow triangles! 🌈",
-    "file": "05bca9cd.mp3",
+    "text": "You did it! You can name red circles, blue squares, and yellow triangles!",
+    "file": "7ff2c9ab.mp3",
     "exists": true
   },
   {
@@ -5113,20 +5125,20 @@
   },
   {
     "character": "bella",
-    "text": "Yes! Apple is RED!",
-    "file": "77573835.mp3",
+    "text": "Yes! Apple is red!",
+    "file": "d9669b55.mp3",
     "exists": true
   },
   {
     "character": "willow",
-    "text": "Yes! Wave is BLUE!",
-    "file": "25a0fa53.mp3",
+    "text": "Yes! Wave is blue!",
+    "file": "61f42253.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "Yes! Sun is YELLOW!",
-    "file": "e35ef7d9.mp3",
+    "text": "Yes! Sun is yellow!",
+    "file": "9682c5d9.mp3",
     "exists": true
   },
   {
@@ -5263,8 +5275,8 @@
   },
   {
     "character": "pip",
-    "text": "Amazing! You remember red, blue, yellow, green, orange, AND purple — plus red circles, blue squares, and yellow triangles! 🌈🏆",
-    "file": "373fcd9a.mp3",
+    "text": "Amazing! You remember red, blue, yellow, green, orange, and purple — plus red circles, blue squares, and yellow triangles!",
+    "file": "ad59f860.mp3",
     "exists": true
   },
   {
@@ -5329,8 +5341,8 @@
   },
   {
     "character": "pip",
-    "text": "Now the little fish has every color — red, orange, yellow, green, blue, AND purple! \"You are a rainbow fish!\" said Pip and Bella.",
-    "file": "b609b1e9.mp3",
+    "text": "Now the little fish has every color — red, orange, yellow, green, blue, and purple! \"You are a rainbow fish!\" said Pip and Bella.",
+    "file": "069b2989.mp3",
     "exists": true
   },
   {
@@ -5383,14 +5395,14 @@
   },
   {
     "character": "pip",
-    "text": "You did it! You know the whole rainbow — red, orange, yellow, green, blue, AND purple! 🌈🐟",
-    "file": "ed772dd0.mp3",
+    "text": "You did it! You know the whole rainbow — red, orange, yellow, green, blue, and purple!",
+    "file": "5487ab84.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "Six colors, three shapes — we learned SO much in the Rainbow Meadow!",
-    "file": "4cc4857a.mp3",
+    "text": "Six colors, three shapes — we learned so much in the Rainbow Meadow!",
+    "file": "9edc3dfa.mp3",
     "exists": true
   },
   {
@@ -5533,8 +5545,8 @@
   },
   {
     "character": "pip",
-    "text": "You are a Rainbow Meadow champion! Six colors, three shapes, AND you can put them together — red circles, blue squares, yellow triangles, and everything in between! 🏆🌈",
-    "file": "a3b145f9.mp3",
+    "text": "You are a Rainbow Meadow champion! Six colors, three shapes, and you can put them together — red circles, blue squares, yellow triangles, and everything in between!",
+    "file": "f5cebc2d.mp3",
     "exists": true
   },
   {
@@ -5575,20 +5587,14 @@
   },
   {
     "character": "bella",
-    "text": "BALL",
-    "file": "078dfd88.mp3",
-    "exists": true
-  },
-  {
-    "character": "bella",
     "text": "It's a red ball.",
     "file": "35f5a293.mp3",
     "exists": true
   },
   {
     "character": "willow",
-    "text": "CAR",
-    "file": "7056aa95.mp3",
+    "text": "Car.",
+    "file": "7824dca1.mp3",
     "exists": true
   },
   {
@@ -5599,8 +5605,8 @@
   },
   {
     "character": "mia",
-    "text": "DOLL",
-    "file": "091baad3.mp3",
+    "text": "Doll.",
+    "file": "87f7b367.mp3",
     "exists": true
   },
   {
@@ -5617,14 +5623,8 @@
   },
   {
     "character": "mia",
-    "text": "Doll",
-    "file": "c464fb73.mp3",
-    "exists": true
-  },
-  {
-    "character": "mia",
-    "text": "Duck",
-    "file": "d8b87137.mp3",
+    "text": "Duck.",
+    "file": "435a0a5b.mp3",
     "exists": true
   },
   {
@@ -5641,14 +5641,14 @@
   },
   {
     "character": "teacher",
-    "text": "Car",
-    "file": "b6d3010b.mp3",
+    "text": "Car.",
+    "file": "f32acd3f.mp3",
     "exists": true
   },
   {
     "character": "teacher",
-    "text": "Doll",
-    "file": "2fc63606.mp3",
+    "text": "Doll.",
+    "file": "5d0740f8.mp3",
     "exists": true
   },
   {
@@ -5689,14 +5689,14 @@
   },
   {
     "character": "pip",
-    "text": "car",
-    "file": "3d013460.mp3",
+    "text": "car.",
+    "file": "56e556ca.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "doll",
-    "file": "41d36ab3.mp3",
+    "text": "doll.",
+    "file": "3cd0d527.mp3",
     "exists": true
   },
   {
@@ -5755,26 +5755,26 @@
   },
   {
     "character": "bella",
-    "text": "car",
-    "file": "072a316d.mp3",
+    "text": "car.",
+    "file": "8a6b8c79.mp3",
     "exists": true
   },
   {
     "character": "bella",
-    "text": "doll",
-    "file": "00234c40.mp3",
+    "text": "doll.",
+    "file": "a591512a.mp3",
     "exists": true
   },
   {
     "character": "willow",
-    "text": "car",
-    "file": "ed7c2eb5.mp3",
+    "text": "car.",
+    "file": "757d5e01.mp3",
     "exists": true
   },
   {
     "character": "willow",
-    "text": "doll",
-    "file": "d91866a8.mp3",
+    "text": "doll.",
+    "file": "476964f2.mp3",
     "exists": true
   },
   {
@@ -5785,14 +5785,14 @@
   },
   {
     "character": "mia",
-    "text": "doll",
-    "file": "470bb093.mp3",
+    "text": "doll.",
+    "file": "94673987.mp3",
     "exists": true
   },
   {
     "character": "mia",
-    "text": "car",
-    "file": "4f9d6cc0.mp3",
+    "text": "car.",
+    "file": "42d27aaa.mp3",
     "exists": true
   },
   {
@@ -5857,8 +5857,8 @@
   },
   {
     "character": "pip",
-    "text": "You did it! You can name a red ball, a blue car, and a green doll! 🎉🧸",
-    "file": "a6125c9c.mp3",
+    "text": "You did it! You can name a red ball, a blue car, and a green doll!",
+    "file": "69a4ad6b.mp3",
     "exists": true
   },
   {
@@ -5869,14 +5869,14 @@
   },
   {
     "character": "pip",
-    "text": "Leo has ONE teddy bear. But Bella has MANY blocks — they are blocks!",
-    "file": "dad8daf5.mp3",
+    "text": "Leo has one teddy bear. But Bella has many blocks — they are blocks!",
+    "file": "63dab115.mp3",
     "exists": true
   },
   {
     "character": "leo",
-    "text": "TEDDY BEAR",
-    "file": "b286ecd9.mp3",
+    "text": "Teddy bear",
+    "file": "1c5e6b99.mp3",
     "exists": true
   },
   {
@@ -5887,8 +5887,8 @@
   },
   {
     "character": "bella",
-    "text": "BLOCKS",
-    "file": "d9490617.mp3",
+    "text": "Blocks",
+    "file": "7c9b8077.mp3",
     "exists": true
   },
   {
@@ -5899,8 +5899,8 @@
   },
   {
     "character": "willow",
-    "text": "TRAIN",
-    "file": "9199709d.mp3",
+    "text": "Train",
+    "file": "9447a05d.mp3",
     "exists": true
   },
   {
@@ -5953,32 +5953,26 @@
   },
   {
     "character": "pip",
-    "text": "TEDDY BEAR",
-    "file": "ca3217a6.mp3",
+    "text": "Teddy bear",
+    "file": "d5691c26.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "BLOCKS",
-    "file": "882b33f8.mp3",
+    "text": "Blocks",
+    "file": "f63b4658.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "TRAIN",
-    "file": "16fd4f04.mp3",
+    "text": "Train",
+    "file": "14ee8304.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "BALL",
-    "file": "9524a9ef.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "DOLL",
-    "file": "7fc37073.mp3",
+    "text": "Doll.",
+    "file": "628d1047.mp3",
     "exists": true
   },
   {
@@ -6091,8 +6085,8 @@
   },
   {
     "character": "leo",
-    "text": "teddy",
-    "file": "1cb26969.mp3",
+    "text": "teddy.",
+    "file": "73dbbac5.mp3",
     "exists": true
   },
   {
@@ -6115,8 +6109,8 @@
   },
   {
     "character": "willow",
-    "text": "teddy",
-    "file": "0240dc45.mp3",
+    "text": "teddy.",
+    "file": "f71afc71.mp3",
     "exists": true
   },
   {
@@ -6181,297 +6175,447 @@
   },
   {
     "character": "pip",
-    "text": "You did it! You know one teddy bear, one train, AND many blocks! 🎉🚂",
-    "file": "67d367c7.mp3",
+    "text": "You did it! You know one teddy bear, one train, and many blocks!",
+    "file": "debc3a1d.mp3",
     "exists": true
   },
   {
     "character": "bella",
     "text": "Hello! Remember our toys — ball, car, doll?",
     "file": "66b5af59.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "Today it's something new — Pip's family!",
     "file": "48cf842b.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "mia",
     "text": "Let's go and meet them!",
     "file": "4524113a.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
-    "text": "Welcome to my home! Today you meet MY family!",
-    "file": "c3b962a3.mp3",
-    "exists": false
+    "text": "Welcome to my home! Today you meet my family!",
+    "file": "fdc95223.mp3",
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Let's meet them one at a time!",
     "file": "65f2eea0.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Mom!",
     "file": "b76e2444.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Dad!",
     "file": "9d758aee.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Me! I am Pip!",
     "file": "27d164d2.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Family! This is my family!",
     "file": "a0837d7e.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "mom",
     "file": "1c376d6d.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "dad",
     "file": "1b8fbe9b.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Mom",
     "file": "cabde75e.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Dad",
     "file": "b11dd2d0.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Baby",
     "file": "d1b6f977.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Family",
     "file": "c1056dab.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "This is my mom!",
     "file": "8d1bddb6.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "I love my mom!",
     "file": "54966f6b.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "This is my dad!",
     "file": "41bdc31c.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "I love my dad!",
     "file": "d8b12795.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "This is my family!",
     "file": "0bd85977.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "I love my family!",
     "file": "e10af4f8.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Pip woke up at home. Mom and Dad were making breakfast!",
     "file": "75b6ebbd.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "This is my mom. She makes yummy pancakes!",
     "file": "c1af4a42.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "This is my dad. He reads me a story every night!",
     "file": "d41a2c6d.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "I love my mom and my dad. We are a happy family!",
     "file": "5b842a12.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "Hi, Pip's mom! Nice to meet you!",
     "file": "7f9827bc.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "Hi, Pip's dad! Nice to meet you!",
     "file": "02e7ed9a.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Who is this?",
     "file": "72642d7b.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "And who is this?",
     "file": "5f982e53.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "Do you love your family?",
     "file": "163f2931.mp3",
-    "exists": false
-  },
-  {
-    "character": "pip",
-    "text": "You did it! You can say \"This is my mom!\" and \"This is my dad!\" 🎉👨‍👩‍👦",
-    "file": "87a9fc36.mp3",
-    "exists": false
-  },
-  {
-    "character": "teacher",
-    "text": "Good morning, class! Today is a very special day.",
-    "file": "cd1b187e.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "We have a new friend joining us. Let’s all say hello!",
-    "file": "a8929f84.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "Hello! I am Miss Marigold, your teacher. Welcome to our class!",
-    "file": "5bd676f1.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "Hello!",
-    "file": "2245bec8.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "Hi! My name is Pip. I am 7 years old. I am new here!",
-    "file": "c9182113.mp3",
+    "text": "You did it! You can say \"This is my mom!\" and \"This is my dad!\"",
+    "file": "deb751e1.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Hello, class! I’m Miss Marigold.",
+    "file": "2184fa7c.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "Student",
-    "file": "bab12615.mp3",
+    "text": "Hi! My name’s Pip. What’s your name?",
+    "file": "75e33ebf.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "This is the student.",
-    "file": "3270dd54.mp3",
+    "text": "Hi!",
+    "file": "f4569150.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "What’s your name?",
+    "file": "18932863.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "Hi! I’m Leo. What’s your name?",
+    "file": "7da4ccb7.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Hello, Leo! My name’s Pip.",
+    "file": "ec09d299.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "Goodbye, Pip!",
+    "file": "9475e3c4.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Bye, Leo!",
+    "file": "da8a1c9d.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Goodbye, Miss Marigold! Bye!",
+    "file": "97b18018.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Goodbye!",
+    "file": "4beb56ac.mp3",
     "exists": true
   },
   {
     "character": "teacher",
-    "text": "Teacher",
-    "file": "62e39417.mp3",
+    "text": "Pip comes in. What does he say?",
+    "file": "ff64de30.mp3",
     "exists": true
   },
   {
     "character": "teacher",
-    "text": "This is the teacher.",
-    "file": "71eaf396.mp3",
+    "text": "Yes! Hello!",
+    "file": "866d6e34.mp3",
     "exists": true
   },
   {
     "character": "teacher",
-    "text": "Door",
-    "file": "43c416eb.mp3",
+    "text": "Pip goes home. What does he say?",
+    "file": "0185132b.mp3",
     "exists": true
   },
   {
     "character": "teacher",
-    "text": "This is the door.",
-    "file": "8488f4c8.mp3",
+    "text": "Yes! Bye!",
+    "file": "9c16a09c.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "It’s a party! New friends are at the door.",
+    "file": "a08c996a.mp3",
     "exists": true
   },
   {
     "character": "teacher",
-    "text": "Board",
-    "file": "f5ed07e1.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "This is the board.",
-    "file": "a8cf557c.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "Window",
-    "file": "7ccdcc13.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "This is the window.",
-    "file": "5c76c308.mp3",
+    "text": "Say hello and ask their names. Then the door opens!",
+    "file": "e10ea5d0.mp3",
     "exists": true
   },
   {
     "character": "mia",
-    "text": "Bella is my friend! Mia, Bella, Willow, and Leo are all Pip’s new friends!",
-    "file": "bbd96bc9.mp3",
-    "exists": false
+    "text": "Knock, knock!",
+    "file": "2c1325a9.mp3",
+    "exists": true
   },
   {
     "character": "mia",
-    "text": "My friend!",
-    "file": "45fc6a8b.mp3",
-    "exists": false
+    "text": "Hi! My name’s Mia.",
+    "file": "cf064136.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Hello! What’s your name?",
+    "file": "d875f148.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Welcome, Mia!",
+    "file": "befa866e.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "Knock, knock! Hello!",
+    "file": "3c356cb3.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "Hello! I’m Bella.",
+    "file": "8424a7a3.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Hi! What’s your name?",
+    "file": "7417cc91.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Welcome, Bella!",
+    "file": "aec9defd.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "Hello, Pip!",
+    "file": "64c289a7.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "My name’s Pip.",
+    "file": "c3c7e208.mp3",
+    "exists": true
+  },
+  {
+    "character": "willow",
+    "text": "Knock, knock!",
+    "file": "ba981ea0.mp3",
+    "exists": true
+  },
+  {
+    "character": "willow",
+    "text": "Hi! My name’s Willow.",
+    "file": "54d23b48.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Welcome, Willow!",
+    "file": "65e52887.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Now you ask me!",
+    "file": "56d48b55.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "My name’s Pip!",
+    "file": "c2c7e075.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Now ask your teacher!",
+    "file": "6ffc1dd0.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Find the letter P!",
+    "file": "db857e50.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Great job!",
+    "file": "250fe9ae.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Find the letter B!",
+    "file": "efa8300e.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Find the letter L!",
+    "file": "63a2d67c.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "How do you spell Pip?",
+    "file": "edb00865.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "How do you spell Mia?",
+    "file": "3c4cc28d.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "How do you spell Leo?",
+    "file": "47b77686.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Now make your name badge!",
+    "file": "9a325bfb.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Great! Now say: My name is…",
+    "file": "b45de935.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "sat.",
+    "file": "a7d99544.mp3",
+    "exists": true
   },
   {
     "character": "teacher",
@@ -6487,236 +6631,20 @@
   },
   {
     "character": "teacher",
-    "text": "Friend",
-    "file": "561be98f.mp3",
+    "text": "Party",
+    "file": "18de3f0d.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Goodbye, everyone! Bye-bye!",
+    "file": "02206432.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "Which word means HELLO?",
-    "file": "940fd604.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "Yes! Hello!",
-    "file": "ac711103.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "Hello! My name is Miss Marigold.",
-    "file": "4462cfac.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "How old are you, Pip?",
-    "file": "47874eb5.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "I am 7 years old.",
-    "file": "a0325aa3.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "Nice to meet you, Pip!",
-    "file": "1b14001d.mp3",
-    "exists": true
-  },
-  {
-    "character": "mia",
-    "text": "Welcome to our class, Pip!",
-    "file": "3d5c63f5.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "Hello! What is your name?",
-    "file": "862e8a85.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "Nice to meet you! Welcome to our class!",
-    "file": "3f9b93f2.mp3",
-    "exists": true
-  },
-  {
-    "character": "leo",
-    "text": "We are so happy you are here!",
-    "file": "4a5d4dc9.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "Desk",
-    "file": "b853523e.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "This is my desk.",
-    "file": "1c53e0c8.mp3",
-    "exists": false
-  },
-  {
-    "character": "teacher",
-    "text": "Chair",
-    "file": "db5d86c4.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "This is my chair.",
-    "file": "4ecd4256.mp3",
-    "exists": false
-  },
-  {
-    "character": "teacher",
-    "text": "Bag",
-    "file": "3890a2bb.mp3",
-    "exists": false
-  },
-  {
-    "character": "teacher",
-    "text": "This is my bag.",
-    "file": "31b871c7.mp3",
-    "exists": false
-  },
-  {
-    "character": "teacher",
-    "text": "It is Pip's first day at school. Pip feels a little shy.",
-    "file": "f16bc63b.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "Pip meets the teacher. \"Hello! My name is Pip.\"",
-    "file": "a7dec051.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "\"Hello, Pip! Welcome to our class!\"",
-    "file": "ffa23753.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "Now Pip is not shy anymore. Pip has new friends! ✨",
-    "file": "21acd1a7.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "sun",
-    "file": "d538dfcb.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "sock",
-    "file": "0ad60edb.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "snake",
-    "file": "1cf67159.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "top",
-    "file": "db388fc2.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "ten",
-    "file": "ed4623a2.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "tiger",
-    "file": "888905aa.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "SAT",
-    "file": "b8ad8722.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "AT",
-    "file": "04da899b.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "Find the letter S!",
-    "file": "6df4d476.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "S! Great job!",
-    "file": "d69ab517.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "Find the letter A!",
-    "file": "da210b18.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "A! Great job!",
-    "file": "e78a87a1.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "Find the letter T!",
-    "file": "ee00d6e9.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "T! Great job!",
-    "file": "736a5eaa.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "S! Great job!",
-    "file": "3ca73bc0.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "A! Great job!",
-    "file": "197e2c0a.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "T! Great job!",
-    "file": "cf0ee981.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "You said hello, met your new class, and read two real words — SAT and AT! ✨🏆",
-    "file": "ec9c61b6.mp3",
+    "text": "You said hello, asked names, and made your own name badge! Bye-bye!",
+    "file": "7c0c3088.mp3",
     "exists": true
   },
   {
@@ -6753,67 +6681,61 @@
     "character": "pip",
     "text": "Happy!",
     "file": "071440eb.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "Leo is tired!",
     "file": "ad99951a.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "Tired!",
     "file": "4ca4d9e4.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "mia",
     "text": "Sad!",
     "file": "43bea3c9.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "Bella is angry!",
     "file": "7858614b.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "Angry!",
     "file": "0acd9bd1.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "Willow is hungry!",
     "file": "451c4329.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "Hungry!",
     "file": "db863da3.mp3",
-    "exists": false
-  },
-  {
-    "character": "pip",
-    "text": "Happy",
-    "file": "e0b5ba68.mp3",
     "exists": true
   },
   {
     "character": "leo",
     "text": "Tired",
     "file": "2ca07d2d.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "Leo is tired.",
     "file": "a09980a3.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "mia",
@@ -6825,31 +6747,31 @@
     "character": "bella",
     "text": "Angry",
     "file": "603cdbaa.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "Bella is angry.",
     "file": "75585c92.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "Hungry",
     "file": "e0fa9d90.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "Willow is hungry.",
     "file": "4e1c5154.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Happy",
     "file": "b882aa83.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
@@ -6859,9 +6781,9 @@
   },
   {
     "character": "teacher",
-    "text": "Sad",
-    "file": "7c7b281d.mp3",
-    "exists": false
+    "text": "Sad.",
+    "file": "28e04849.mp3",
+    "exists": true
   },
   {
     "character": "teacher",
@@ -6873,7 +6795,7 @@
     "character": "teacher",
     "text": "Hungry",
     "file": "241fbad6.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
@@ -6909,7 +6831,7 @@
     "character": "pip",
     "text": "Who is happy?",
     "file": "82dc3c75.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
@@ -6921,199 +6843,199 @@
     "character": "mia",
     "text": "Who is sad?",
     "file": "048e5a57.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "mia",
     "text": "Yes! Sad!",
     "file": "5053cd17.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "Who is angry?",
     "file": "45dbdff9.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "Yes! Angry!",
     "file": "77678d05.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "This is Pip. Pip is a boy. He is a boy!",
     "file": "de5e2d0a.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "He!",
     "file": "5c4ca7ac.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "mia",
     "text": "This is Mia. Tap Mia — She is a girl!",
     "file": "335b5c71.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "mia",
     "text": "Yes! Mia!",
     "file": "f54194a8.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Tap He — the boy!",
     "file": "89ba682e.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Yes! Pip!",
     "file": "cc4e80a8.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "mia",
     "text": "Tap She — the girl!",
     "file": "766d9f23.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Tap He!",
     "file": "d790d5b5.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "Leo is a boy. We say...",
     "file": "7d1e24cd.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "Yes! He!",
     "file": "457544a1.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "Bella is a girl. We say...",
     "file": "4ba5b65d.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "Yes! She!",
     "file": "2b11cd68.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Look at Pip! He is happy.",
     "file": "cdbccc0e.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Look at Mia! She is sad.",
     "file": "7d11dbdb.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Look at Leo and Willow! They are tired and hungry.",
     "file": "95ece859.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Yes! He is happy!",
     "file": "03204852.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "mia",
     "text": "Yes! She is sad!",
     "file": "e092fe41.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "I am tired.",
     "file": "524e308a.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "Yes! He is tired!",
     "file": "d78e782f.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "I am angry.",
     "file": "62d4f8b7.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "Yes! She is angry!",
     "file": "64e2ec95.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "I am hungry.",
     "file": "a4122057.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "Yes! She is hungry!",
     "file": "6aa84937.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "We are tired and hungry.",
     "file": "3b7815a1.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "Yes! They are tired and hungry!",
     "file": "189067ae.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "We are happy and sad.",
     "file": "1801089f.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Yes! They are happy and sad!",
     "file": "65f6e07a.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Point to a friend. Is your friend a boy or a girl?",
     "file": "0e0a48ec.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Great practice!",
     "file": "eeda654b.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
@@ -7135,8 +7057,8 @@
   },
   {
     "character": "teacher",
-    "text": "Now Pip feels happy again! ✨",
-    "file": "ac7aa936.mp3",
+    "text": "Now Pip feels happy again!",
+    "file": "936a291e.mp3",
     "exists": true
   },
   {
@@ -7183,32 +7105,14 @@
   },
   {
     "character": "pip",
-    "text": "SIT",
-    "file": "c8c1280a.mp3",
+    "text": "Sit.",
+    "file": "8eec7a2c.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "PIN",
-    "file": "7c48ce55.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "PIP",
-    "file": "6e48b84b.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "Find the letter P!",
-    "file": "db857e50.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "P! Great job!",
-    "file": "5687e535.mp3",
+    "text": "Pin.",
+    "file": "bec2c221.mp3",
     "exists": true
   },
   {
@@ -7219,141 +7123,129 @@
   },
   {
     "character": "teacher",
-    "text": "I! Great job!",
-    "file": "04ccebd2.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
     "text": "Find the letter N!",
     "file": "579e466a.mp3",
     "exists": true
   },
   {
     "character": "teacher",
-    "text": "N! Great job!",
-    "file": "306ef4bf.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
     "text": "Book",
     "file": "4d9f9c16.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "This is my book.",
     "file": "18eb5ca0.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Pencil",
     "file": "691887ca.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "This is my pencil.",
     "file": "7f232424.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Pen",
     "file": "b5f75106.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "This is my pen.",
     "file": "cd722240.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
-    "text": "Look! The book is IN the bag.",
-    "file": "7f0a9024.mp3",
-    "exists": false
+    "text": "Look! The book is in the bag.",
+    "file": "97f489a4.mp3",
+    "exists": true
   },
   {
     "character": "pip",
     "text": "In the bag!",
     "file": "63d31527.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "mia",
-    "text": "Look! The apple is ON the desk.",
-    "file": "8faae2ac.mp3",
-    "exists": false
+    "text": "Look! The apple is on the desk.",
+    "file": "1d2e80ec.mp3",
+    "exists": true
   },
   {
     "character": "mia",
     "text": "On the desk!",
     "file": "80214714.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
-    "text": "Look! The chair is NEXT TO the desk.",
-    "file": "507ad331.mp3",
-    "exists": false
+    "text": "Look! The chair is next to the desk.",
+    "file": "46aa1171.mp3",
+    "exists": true
   },
   {
     "character": "leo",
     "text": "Next to the desk!",
     "file": "44148056.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
-    "text": "You said how you feel, and read three more real words — SIT, PIN, and PIP! ✨🏆",
-    "file": "f598d70e.mp3",
+    "text": "You said how you feel, and read three more real words — sit, pin, and pip!",
+    "file": "306596b0.mp3",
     "exists": true
   },
   {
     "character": "teacher",
     "text": "Welcome back, class! Today we play a listening game.",
     "file": "f4f750b2.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Listen carefully to each friend, then choose the right answer!",
     "file": "134d3bd5.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "I love listening games! Let’s go!",
     "file": "eca17b3c.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Hello! Welcome to our class!",
     "file": "26aeba22.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Yes! Saying hello!",
     "file": "3530f9e1.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "I am seven years old.",
     "file": "dd3c2b5b.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Yes! His age!",
     "file": "d8d86446.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
@@ -7365,13 +7257,13 @@
     "character": "mia",
     "text": "Knock knock! Who is it?",
     "file": "0969efc5.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "Knock again! Who is it?",
     "file": "12ef6864.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
@@ -7383,253 +7275,259 @@
     "character": "bella",
     "text": "One more! Who is it?",
     "file": "42cbfc4f.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "Last one! Who is it?",
     "file": "6b56af42.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "willow",
     "text": "Hello, Willow!",
     "file": "2d7baa44.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "mia",
     "text": "I am sad today.",
     "file": "bb019386.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "I am so tired.",
     "file": "7120f4c4.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "Yes! Leo!",
     "file": "4014b3fe.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "I am your teacher.",
     "file": "1a114ae9.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Yes! Teacher!",
     "file": "ffa83906.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "This is the student.",
     "file": "b2f97985.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Yes! Student!",
     "file": "36071fed.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "This is called a board.",
     "file": "c7a6fdc1.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "A bag is a chair.",
     "file": "00db0a9c.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "I carry my books in my bag.",
     "file": "816c25af.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "I sleep in my chair.",
     "file": "a080f516.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Age",
     "file": "a76d143a.mp3",
-    "exists": false
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Friend",
+    "file": "561be98f.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Teacher",
+    "file": "62e39417.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Hello! What is your name?",
+    "file": "862e8a85.mp3",
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Great listening today!",
     "file": "5a64c522.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
-    "text": "You listened carefully to hello, names, ages, feelings, friends, and your teacher — great job! ✨👂",
-    "file": "e5cb5fab.mp3",
-    "exists": false
+    "text": "You listened carefully to hello, names, ages, feelings, friends, and your teacher — great job!",
+    "file": "58c2591c.mp3",
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Welcome back, class! Today we practice something new.",
     "file": "283edb5d.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "You will meet a partner and have a real conversation!",
     "file": "833255dc.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "I love talking to my friends! Let’s go!",
     "file": "c2e5f504.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Watch me! Hello! My name is Miss Marigold. Nice to meet you!",
     "file": "4bdcc35b.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "Hi Pip! My name is Leo.",
     "file": "49b5e445.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "Nice to meet you too! How are you today?",
     "file": "e2678f97.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "I am fine, thank you!",
     "file": "6fa46e80.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "mia",
     "text": "Friend!",
     "file": "fe76d8d1.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "leo",
     "text": "Nice to meet you! How are you?",
     "file": "032f520e.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Wonderful! You had a real conversation!",
     "file": "1b01d427.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "This is my friend, Bella!",
     "file": "4573369b.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "bella",
     "text": "Hello! Nice to meet you too!",
     "file": "5758c169.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "Now you try! Point to a friend and introduce them!",
     "file": "10ef089e.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Nice to meet you",
     "file": "787a4529.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "fan",
     "file": "19e6861f.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
     "text": "fox",
     "file": "2be22547.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
-    "text": "FAN",
-    "file": "9e9c073f.mp3",
-    "exists": false
+    "text": "Fan",
+    "file": "7eeb86bf.mp3",
+    "exists": true
   },
   {
     "character": "pip",
-    "text": "FIN",
-    "file": "7e884d27.mp3",
-    "exists": false
+    "text": "Fin",
+    "file": "9ed83167.mp3",
+    "exists": true
   },
   {
     "character": "pip",
-    "text": "SIP",
-    "file": "c4c121be.mp3",
-    "exists": false
+    "text": "Sip",
+    "file": "e471a23e.mp3",
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Find the letter F!",
     "file": "47b1b4f2.mp3",
-    "exists": false
-  },
-  {
-    "character": "teacher",
-    "text": "F! Great job!",
-    "file": "3e3f2ff7.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "Find the letter A!",
     "file": "d7aa48dd.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "pip",
-    "text": "F! Great job!",
-    "file": "ffb5d4e0.mp3",
-    "exists": false
+    "text": "Great job!",
+    "file": "7aace1af.mp3",
+    "exists": true
   },
   {
     "character": "pip",
-    "text": "N! Great job!",
-    "file": "a99f4a88.mp3",
-    "exists": false
-  },
-  {
-    "character": "pip",
-    "text": "You met a partner, had a real conversation, and learned a new sound — F is for friend, and F is for Fox, just like me! ✨🗣️",
-    "file": "25f90e8c.mp3",
-    "exists": false
+    "text": "You met a partner, had a real conversation, and learned a new sound — F is for friend, and F is for Fox, just like me!",
+    "file": "20445593.mp3",
+    "exists": true
   },
   {
     "character": "pip",
@@ -7771,8 +7669,8 @@
   },
   {
     "character": "teacher",
-    "text": "Pip and Mia are playing together. ______ are happy.",
-    "file": "752e77fc.mp3",
+    "text": "Pip and Mia are playing together. … are happy.",
+    "file": "cce12a6c.mp3",
     "exists": true
   },
   {
@@ -7837,8 +7735,8 @@
   },
   {
     "character": "leo",
-    "text": "He",
-    "file": "2b51625e.mp3",
+    "text": "He.",
+    "file": "a11df650.mp3",
     "exists": true
   },
   {
@@ -7861,8 +7759,8 @@
   },
   {
     "character": "pip",
-    "text": "are",
-    "file": "195f2af8.mp3",
+    "text": "are.",
+    "file": "c6d06ee2.mp3",
     "exists": true
   },
   {
@@ -7873,14 +7771,14 @@
   },
   {
     "character": "pip",
-    "text": "At night, I read my favorite book.",
-    "file": "1e5ea51b.mp3",
+    "text": "At night, I reed my favorite book.",
+    "file": "6a23991f.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "I read a book.",
-    "file": "d5b53289.mp3",
+    "text": "I reed a book.",
+    "file": "fa137505.mp3",
     "exists": true
   },
   {
@@ -7927,8 +7825,8 @@
   },
   {
     "character": "pip",
-    "text": "I read a book. Then I sleep.",
-    "file": "bae5e98e.mp3",
+    "text": "I reed a book. Then I sleep.",
+    "file": "47b4f172.mp3",
     "exists": true
   },
   {
@@ -7951,8 +7849,8 @@
   },
   {
     "character": "pip",
-    "text": "Which word means SLEEP?",
-    "file": "27ef834d.mp3",
+    "text": "Which word means sleep?",
+    "file": "83715d2d.mp3",
     "exists": true
   },
   {
@@ -8017,20 +7915,20 @@
   },
   {
     "character": "pip",
-    "text": "CAPE",
-    "file": "4f3d2f59.mp3",
+    "text": "Cape",
+    "file": "92174679.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "KITE",
-    "file": "f6aec935.mp3",
+    "text": "Kite.",
+    "file": "52d492e1.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "HOPE",
-    "file": "0ed7da40.mp3",
+    "text": "Hope",
+    "file": "91b25620.mp3",
     "exists": true
   },
   {
@@ -8071,8 +7969,8 @@
   },
   {
     "character": "pip",
-    "text": "You did it! You can talk about your whole day, and you read words with the magic E! 🏆 Tonight, tell your family what you do every morning — and try reading a magic-E word together!",
-    "file": "a3d4cb80.mp3",
+    "text": "You did it! You can talk about your whole day, and you read words with the magic E! Tonight, tell your family what you do every morning — and try reading a magic-E word together!",
+    "file": "353b31e8.mp3",
     "exists": true
   },
   {
@@ -8119,8 +8017,8 @@
   },
   {
     "character": "pip",
-    "text": "On Wednesday, I read a new book.",
-    "file": "03481e5a.mp3",
+    "text": "On Wednesday, I reed a new book.",
+    "file": "aa62f08e.mp3",
     "exists": true
   },
   {
@@ -8173,8 +8071,8 @@
   },
   {
     "character": "teacher",
-    "text": "Pip, what do you ALWAYS do in the morning?",
-    "file": "85c817fb.mp3",
+    "text": "Pip, what do you always do in the morning?",
+    "file": "72ba4a3b.mp3",
     "exists": true
   },
   {
@@ -8185,8 +8083,8 @@
   },
   {
     "character": "teacher",
-    "text": "What do you USUALLY do after school?",
-    "file": "378449b2.mp3",
+    "text": "What do you usually do after school?",
+    "file": "f518f692.mp3",
     "exists": true
   },
   {
@@ -8197,8 +8095,8 @@
   },
   {
     "character": "teacher",
-    "text": "Do you SOMETIMES eat pizza?",
-    "file": "fa444c08.mp3",
+    "text": "Do you sometimes eat pizza?",
+    "file": "4283c968.mp3",
     "exists": true
   },
   {
@@ -8215,14 +8113,14 @@
   },
   {
     "character": "pip",
-    "text": "No! I NEVER go to school on Sunday. It is the weekend!",
-    "file": "700e3f43.mp3",
+    "text": "No! I never go to school on Sunday. It is the weekend!",
+    "file": "63785de3.mp3",
     "exists": true
   },
   {
     "character": "teacher",
-    "text": "Which word means EVERY single day — 100% of the time?",
-    "file": "31cfc457.mp3",
+    "text": "Which word means every single day — 100% of the time?",
+    "file": "332b80b7.mp3",
     "exists": true
   },
   {
@@ -8257,14 +8155,14 @@
   },
   {
     "character": "teacher",
-    "text": "How often do you read before bed?",
-    "file": "8bd4aa80.mp3",
+    "text": "How often do you reed before bed?",
+    "file": "86cae814.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "I usually read before bed.",
-    "file": "c7564e9a.mp3",
+    "text": "I usually reed before bed.",
+    "file": "ddfe6626.mp3",
     "exists": true
   },
   {
@@ -8293,8 +8191,8 @@
   },
   {
     "character": "pip",
-    "text": "No school today! Which day is part of the WEEKEND?",
-    "file": "fee76e2f.mp3",
+    "text": "No school today! Which day is part of the weekend?",
+    "file": "646aab8f.mp3",
     "exists": true
   },
   {
@@ -8311,8 +8209,8 @@
   },
   {
     "character": "pip",
-    "text": "How often do you read a book?",
-    "file": "45ed6b3b.mp3",
+    "text": "How often do you reed a book?",
+    "file": "cdeaf84f.mp3",
     "exists": true
   },
   {
@@ -8371,26 +8269,20 @@
   },
   {
     "character": "teacher",
-    "text": "Listen: d-ay, day! Now try “play” and “stay” — same “ay” sound!",
-    "file": "531eed16.mp3",
+    "text": "Listen: day! Now try “play” and “stay” — they have the same sound!",
+    "file": "3cad812d.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "DAY",
-    "file": "896a196c.mp3",
+    "text": "Day",
+    "file": "691a352c.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "PLAY",
-    "file": "f01acab0.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "STAY",
-    "file": "dad80ac3.mp3",
+    "text": "Stay",
+    "file": "5db286a3.mp3",
     "exists": true
   },
   {
@@ -8419,8 +8311,8 @@
   },
   {
     "character": "teacher",
-    "text": "Which word has the long A “ay” sound?",
-    "file": "36471c53.mp3",
+    "text": "Which word has the same sound as “day”?",
+    "file": "492151f2.mp3",
     "exists": true
   },
   {
@@ -8431,14 +8323,14 @@
   },
   {
     "character": "pip",
-    "text": "You did it! You know the days of the week, and you can say how often you do things! 🏆 Tonight, tell your family what you ALWAYS do every week — and try reading an “ay” word together!",
-    "file": "c5d4326b.mp3",
+    "text": "You did it! You know the days of the week, and you can say how often you do things! Tonight, tell your family what you always do every week — and try reading an “ay” word together!",
+    "file": "2d52a10b.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "Hi! Do you remember my day? Today I want to tell you about YESTERDAY!",
-    "file": "42d73ead.mp3",
+    "text": "Hi! Do you remember my day? Today I want to tell you about yesterday!",
+    "file": "1915e80d.mp3",
     "exists": true
   },
   {
@@ -8479,14 +8371,14 @@
   },
   {
     "character": "pip",
-    "text": "I read a book, and then I slept!",
-    "file": "2842d3ef.mp3",
+    "text": "I reed a book, and then I slept!",
+    "file": "b9508dcb.mp3",
     "exists": true
   },
   {
     "character": "teacher",
-    "text": "Which word means it already happened — YESTERDAY?",
-    "file": "f196e4e1.mp3",
+    "text": "Which word means it already happened — yesterday?",
+    "file": "1e22a481.mp3",
     "exists": true
   },
   {
@@ -8497,8 +8389,8 @@
   },
   {
     "character": "teacher",
-    "text": "“Walked” — is this REGULAR (-ed) or IRREGULAR?",
-    "file": "8c8a6a34.mp3",
+    "text": "“Walked” — is this regular or irregular?",
+    "file": "d3f32341.mp3",
     "exists": true
   },
   {
@@ -8509,8 +8401,8 @@
   },
   {
     "character": "teacher",
-    "text": "“Woke up” — is this REGULAR (-ed) or IRREGULAR?",
-    "file": "e354832b.mp3",
+    "text": "“Woke up” — is this regular or irregular?",
+    "file": "76e6d07e.mp3",
     "exists": true
   },
   {
@@ -8521,14 +8413,14 @@
   },
   {
     "character": "teacher",
-    "text": "“Played” — is this REGULAR (-ed) or IRREGULAR?",
-    "file": "f516c8c9.mp3",
+    "text": "“Played” — is this regular or irregular?",
+    "file": "fe78d26c.mp3",
     "exists": true
   },
   {
     "character": "teacher",
-    "text": "“Ate” — is this REGULAR (-ed) or IRREGULAR?",
-    "file": "96a0aae6.mp3",
+    "text": "“Ate” — is this regular or irregular?",
+    "file": "750e24cb.mp3",
     "exists": true
   },
   {
@@ -8617,8 +8509,8 @@
   },
   {
     "character": "pip",
-    "text": "At night, he read his favorite book.",
-    "file": "7af5dacf.mp3",
+    "text": "At night, he reed his favorite book.",
+    "file": "50ac43b3.mp3",
     "exists": true
   },
   {
@@ -8635,26 +8527,26 @@
   },
   {
     "character": "teacher",
-    "text": "Listen: s-ee, see! Now try “tree” and “sleep” — same “ee” sound!",
-    "file": "fa4c0b54.mp3",
+    "text": "Listen: see! Now try “tree” and “sleep” — they have the same sound!",
+    "file": "94da7324.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "SEE",
-    "file": "09a37949.mp3",
+    "text": "See",
+    "file": "e9552809.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "TREE",
-    "file": "22c2d9e2.mp3",
+    "text": "Tree",
+    "file": "a59d55c2.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "SLEEP",
-    "file": "c0160e41.mp3",
+    "text": "Sleep",
+    "file": "c4f7db81.mp3",
     "exists": true
   },
   {
@@ -8683,8 +8575,8 @@
   },
   {
     "character": "teacher",
-    "text": "Which word has the long E “ee” sound?",
-    "file": "af1b42b7.mp3",
+    "text": "Which word has the same sound as “see”?",
+    "file": "14515b2b.mp3",
     "exists": true
   },
   {
@@ -8695,8 +8587,8 @@
   },
   {
     "character": "pip",
-    "text": "You did it! You can talk about YESTERDAY, and you know regular and irregular verbs! 🏆 Tonight, tell your family what you did yesterday — and try reading an “ee” word together!",
-    "file": "f010238e.mp3",
+    "text": "You did it! You can talk about yesterday, and you know regular and irregular verbs! Tonight, tell your family what you did yesterday — and try reading an “ee” word together!",
+    "file": "64fba7a0.mp3",
     "exists": true
   },
   {
@@ -8935,14 +8827,20 @@
   },
   {
     "character": "teacher",
-    "text": "Table",
-    "file": "cf0e77cd.mp3",
+    "text": "Table.",
+    "file": "d6c6ba59.mp3",
     "exists": true
   },
   {
     "character": "teacher",
     "text": "There is a table.",
     "file": "6d8c9f10.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Chair",
+    "file": "db5d86c4.mp3",
     "exists": true
   },
   {
@@ -9019,8 +8917,8 @@
   },
   {
     "character": "teacher",
-    "text": "On",
-    "file": "84b35c66.mp3",
+    "text": "On.",
+    "file": "2e5a4558.mp3",
     "exists": true
   },
   {
@@ -9031,8 +8929,8 @@
   },
   {
     "character": "teacher",
-    "text": "In",
-    "file": "84aedf38.mp3",
+    "text": "In.",
+    "file": "f5492fa2.mp3",
     "exists": true
   },
   {
@@ -9121,8 +9019,8 @@
   },
   {
     "character": "teacher",
-    "text": "chick",
-    "file": "f5761e59.mp3",
+    "text": "chick.",
+    "file": "dff1f555.mp3",
     "exists": true
   },
   {
@@ -9163,8 +9061,8 @@
   },
   {
     "character": "pip",
-    "text": "You explored the castle and learned kitchen, bedroom, table, and chair — and the magic CH sound! Look around your home tonight and say \"There is a ___!\" ✨🏰",
-    "file": "2e0738db.mp3",
+    "text": "You explored the castle and learned kitchen, bedroom, table, and chair — and the magic ch sound! Look around your home tonight and say \"There is a …!\"",
+    "file": "46efc3a6.mp3",
     "exists": true
   },
   {
@@ -9265,6 +9163,12 @@
   },
   {
     "character": "teacher",
+    "text": "Window",
+    "file": "7ccdcc13.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
     "text": "There is a window.",
     "file": "5fa43dd8.mp3",
     "exists": true
@@ -9273,6 +9177,12 @@
     "character": "teacher",
     "text": "Lamp",
     "file": "a541a739.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Door",
+    "file": "43c416eb.mp3",
     "exists": true
   },
   {
@@ -9415,8 +9325,8 @@
   },
   {
     "character": "teacher",
-    "text": "wand",
-    "file": "40c67f95.mp3",
+    "text": "wand.",
+    "file": "b37b1361.mp3",
     "exists": true
   },
   {
@@ -9427,20 +9337,8 @@
   },
   {
     "character": "teacher",
-    "text": "web",
-    "file": "7dd43313.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "L! Great job!",
-    "file": "c23c4759.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "W! Great job!",
-    "file": "2c5c009c.mp3",
+    "text": "web.",
+    "file": "520ca907.mp3",
     "exists": true
   },
   {
@@ -9481,8 +9379,8 @@
   },
   {
     "character": "pip",
-    "text": "You explored the bedroom and learned bed, lamp, door and window — and the magic L and W sounds! Tonight, look around your room and say \"There is a ___!\" ✨🛏️",
-    "file": "6ac5f132.mp3",
+    "text": "You explored the bedroom and learned bed, lamp, door and window — and the magic L and W sounds! Tonight, look around your room and say \"There is a …!\"",
+    "file": "83971c98.mp3",
     "exists": true
   },
   {
@@ -9561,6 +9459,12 @@
     "character": "teacher",
     "text": "There is a mirror.",
     "file": "d5ea97f9.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Desk",
+    "file": "b853523e.mp3",
     "exists": true
   },
   {
@@ -9649,8 +9553,8 @@
   },
   {
     "character": "teacher",
-    "text": "It’s UNDER the table!",
-    "file": "ffebb2a6.mp3",
+    "text": "It’s under the table!",
+    "file": "41991686.mp3",
     "exists": true
   },
   {
@@ -9961,8 +9865,8 @@
   },
   {
     "character": "teacher",
-    "text": "You found Wim’s magic lamp! You learned sofa, armchair, mirror, bookcase, clock and desk, and you can say where things are: in, on, under, next to and behind. Tonight, hide a toy and ask: \"Where is it?\" ✨🪔",
-    "file": "641f0978.mp3",
+    "text": "You found Wim’s magic lamp! You learned sofa, armchair, mirror, bookcase, clock and desk, and you can say where things are: in, on, under, next to and behind. Tonight, hide a toy and ask: \"Where is it?\"",
+    "file": "9288c582.mp3",
     "exists": true
   }
 ]

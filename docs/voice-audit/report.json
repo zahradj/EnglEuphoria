@@ -1,137 +1,13 @@
 [
   {
-    "file": "d61e5e0f.mp3",
-    "voice": "leo",
-    "text": "toy",
-    "heard": "Two thirty toy",
-    "distance": 2,
-    "rate": 2,
-    "ops": [
-      "extra \"two\"",
-      "extra \"thirty\""
-    ]
-  },
-  {
-    "file": "1fa61f26.mp3",
-    "voice": "bella",
-    "text": "hat",
-    "heard": "Had a",
-    "distance": 2,
-    "rate": 2,
-    "ops": [
-      "extra \"had\"",
-      "\"hat\"→\"a\""
-    ]
-  },
-  {
-    "file": "04da899b.mp3",
+    "file": "6ba1c378.mp3",
     "voice": "pip",
-    "text": "AT",
-    "heard": "H-I",
-    "distance": 2,
-    "rate": 2,
-    "ops": [
-      "extra \"h\"",
-      "\"at\"→\"i\""
-    ]
-  },
-  {
-    "file": "994b3852.mp3",
-    "voice": "pip",
-    "text": "chick",
-    "heard": "Check",
+    "text": "sun",
+    "heard": "Son",
     "distance": 1,
     "rate": 1,
     "ops": [
-      "\"chick\"→\"check\""
-    ]
-  },
-  {
-    "file": "a2b777dc.mp3",
-    "voice": "pip",
-    "text": "wand",
-    "heard": "One",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"wand\"→\"one\""
-    ]
-  },
-  {
-    "file": "b942acb7.mp3",
-    "voice": "pip",
-    "text": "Hat",
-    "heard": "Hot",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"hat\"→\"hot\""
-    ]
-  },
-  {
-    "file": "6e3c1e8b.mp3",
-    "voice": "pip",
-    "text": "moon",
-    "heard": "The moon",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "extra \"the\""
-    ]
-  },
-  {
-    "file": "98283194.mp3",
-    "voice": "teacher",
-    "text": "Hat",
-    "heard": "Hi.",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"hat\"→\"hi\""
-    ]
-  },
-  {
-    "file": "0b93e385.mp3",
-    "voice": "pip",
-    "text": "mouse",
-    "heard": "Mouseu",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"mouse\"→\"mouseu\""
-    ]
-  },
-  {
-    "file": "99922c37.mp3",
-    "voice": "pip",
-    "text": "HAT",
-    "heard": "Hot",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"hat\"→\"hot\""
-    ]
-  },
-  {
-    "file": "92165204.mp3",
-    "voice": "pip",
-    "text": "MAT",
-    "heard": "Matey",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"mat\"→\"matey\""
-    ]
-  },
-  {
-    "file": "7d41c0d1.mp3",
-    "voice": "mia",
-    "text": "Nut",
-    "heard": "Not",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"nut\"→\"not\""
+      "\"sun\"→\"son\""
     ]
   },
   {
@@ -146,50 +22,6 @@
     ]
   },
   {
-    "file": "8f5bea4b.mp3",
-    "voice": "willow",
-    "text": "wind",
-    "heard": "When",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"wind\"→\"when\""
-    ]
-  },
-  {
-    "file": "df5e8809.mp3",
-    "voice": "mia",
-    "text": "Sad 😢",
-    "heard": "Sod",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"sad\"→\"sod\""
-    ]
-  },
-  {
-    "file": "5588ad8e.mp3",
-    "voice": "leo",
-    "text": "Ant",
-    "heard": "And",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"ant\"→\"and\""
-    ]
-  },
-  {
-    "file": "136a8e92.mp3",
-    "voice": "mia",
-    "text": "Sad",
-    "heard": "Sat",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"sad\"→\"sat\""
-    ]
-  },
-  {
     "file": "1938fb38.mp3",
     "voice": "mia",
     "text": "Sun",
@@ -201,127 +33,6 @@
     ]
   },
   {
-    "file": "f08219ee.mp3",
-    "voice": "leo",
-    "text": "ant",
-    "heard": "And",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"ant\"→\"and\""
-    ]
-  },
-  {
-    "file": "6ba1c378.mp3",
-    "voice": "pip",
-    "text": "sun",
-    "heard": "Son",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"sun\"→\"son\""
-    ]
-  },
-  {
-    "file": "2a1a2137.mp3",
-    "voice": "pip",
-    "text": "ant",
-    "heard": "And",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"ant\"→\"and\""
-    ]
-  },
-  {
-    "file": "a8ad6df2.mp3",
-    "voice": "pip",
-    "text": "SAD",
-    "heard": "Saturday",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"sad\"→\"saturday\""
-    ]
-  },
-  {
-    "file": "a6bfc626.mp3",
-    "voice": "pip",
-    "text": "Four",
-    "heard": "Fool",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"four\"→\"fool\""
-    ]
-  },
-  {
-    "file": "0be119b5.mp3",
-    "voice": "bella",
-    "text": "Bag",
-    "heard": "Bug",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"bag\"→\"bug\""
-    ]
-  },
-  {
-    "file": "25c26fac.mp3",
-    "voice": "leo",
-    "text": "Ten",
-    "heard": "Then",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"ten\"→\"then\""
-    ]
-  },
-  {
-    "file": "2afa85c1.mp3",
-    "voice": "pip",
-    "text": "BAT",
-    "heard": "But",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"bat\"→\"but\""
-    ]
-  },
-  {
-    "file": "825713ac.mp3",
-    "voice": "teacher",
-    "text": "Ant",
-    "heard": "And",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"ant\"→\"and\""
-    ]
-  },
-  {
-    "file": "6e6d4455.mp3",
-    "voice": "bella",
-    "text": "bag",
-    "heard": "Bug",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"bag\"→\"bug\""
-    ]
-  },
-  {
-    "file": "e45a9e41.mp3",
-    "voice": "leo",
-    "text": "two",
-    "heard": "Section two",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "extra \"section\""
-    ]
-  },
-  {
     "file": "b875e83d.mp3",
     "voice": "bella",
     "text": "sun",
@@ -330,237 +41,6 @@
     "rate": 1,
     "ops": [
       "\"sun\"→\"soon\""
-    ]
-  },
-  {
-    "file": "206e019a.mp3",
-    "voice": "willow",
-    "text": "ant",
-    "heard": "Enter",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"ant\"→\"enter\""
-    ]
-  },
-  {
-    "file": "cd31b311.mp3",
-    "voice": "pip",
-    "text": "nut",
-    "heard": "Nude",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"nut\"→\"nude\""
-    ]
-  },
-  {
-    "file": "3076c574.mp3",
-    "voice": "leo",
-    "text": "balloon",
-    "heard": "The balloon",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "extra \"the\""
-    ]
-  },
-  {
-    "file": "d8b87137.mp3",
-    "voice": "mia",
-    "text": "Duck",
-    "heard": "Dock",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"duck\"→\"dock\""
-    ]
-  },
-  {
-    "file": "3d013460.mp3",
-    "voice": "pip",
-    "text": "car",
-    "heard": "Yeah",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"car\"→\"yeah\""
-    ]
-  },
-  {
-    "file": "7fc37073.mp3",
-    "voice": "pip",
-    "text": "DOLL",
-    "heard": "Dull",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"doll\"→\"dull\""
-    ]
-  },
-  {
-    "file": "1cb26969.mp3",
-    "voice": "leo",
-    "text": "teddy",
-    "heard": "A teddy",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "extra \"a\""
-    ]
-  },
-  {
-    "file": "f5ed07e1.mp3",
-    "voice": "teacher",
-    "text": "Board",
-    "heard": "Bored?",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"board\"→\"bored\""
-    ]
-  },
-  {
-    "file": "b8ad8722.mp3",
-    "voice": "pip",
-    "text": "SAT",
-    "heard": "Sought",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"sat\"→\"sought\""
-    ]
-  },
-  {
-    "file": "c8c1280a.mp3",
-    "voice": "pip",
-    "text": "SIT",
-    "heard": "Sight",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"sit\"→\"sight\""
-    ]
-  },
-  {
-    "file": "7c48ce55.mp3",
-    "voice": "pip",
-    "text": "PIN",
-    "heard": "Pine",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"pin\"→\"pine\""
-    ]
-  },
-  {
-    "file": "6e48b84b.mp3",
-    "voice": "pip",
-    "text": "PIP",
-    "heard": "PI",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"pip\"→\"pi\""
-    ]
-  },
-  {
-    "file": "2b51625e.mp3",
-    "voice": "leo",
-    "text": "He",
-    "heard": "P",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"he\"→\"p\""
-    ]
-  },
-  {
-    "file": "195f2af8.mp3",
-    "voice": "pip",
-    "text": "are",
-    "heard": "Um",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"are\"→\"um\""
-    ]
-  },
-  {
-    "file": "f6aec935.mp3",
-    "voice": "pip",
-    "text": "KITE",
-    "heard": "Kaiti",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"kite\"→\"kaiti\""
-    ]
-  },
-  {
-    "file": "cf0e77cd.mp3",
-    "voice": "teacher",
-    "text": "Table",
-    "heard": "The table",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "extra \"the\""
-    ]
-  },
-  {
-    "file": "84b35c66.mp3",
-    "voice": "teacher",
-    "text": "On",
-    "heard": "Um",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"on\"→\"um\""
-    ]
-  },
-  {
-    "file": "84aedf38.mp3",
-    "voice": "teacher",
-    "text": "In",
-    "heard": "In Nar",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "extra \"nar\""
-    ]
-  },
-  {
-    "file": "f5761e59.mp3",
-    "voice": "teacher",
-    "text": "chick",
-    "heard": "Check.",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"chick\"→\"check\""
-    ]
-  },
-  {
-    "file": "40c67f95.mp3",
-    "voice": "teacher",
-    "text": "wand",
-    "heard": "One",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"wand\"→\"one\""
-    ]
-  },
-  {
-    "file": "7dd43313.mp3",
-    "voice": "teacher",
-    "text": "web",
-    "heard": "Hiya",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"web\"→\"hiya\""
     ]
   },
   {
@@ -612,118 +92,6 @@
     ]
   },
   {
-    "file": "fa4c0b54.mp3",
-    "voice": "teacher",
-    "text": "Listen: s-ee, see! Now try “tree” and “sleep” — same “ee” sound!",
-    "heard": "Listen, C, C. Now try tree and sleep. Same E sound",
-    "distance": 4,
-    "rate": 0.33,
-    "ops": [
-      "missing \"s\"",
-      "\"ee\"→\"c\"",
-      "\"see\"→\"c\"",
-      "\"ee\"→\"e\""
-    ]
-  },
-  {
-    "file": "a781760b.mp3",
-    "voice": "teacher",
-    "text": "Listen. Is it ch, or sh?",
-    "heard": "Listen, is it he or she?",
-    "distance": 2,
-    "rate": 0.33,
-    "ops": [
-      "\"ch\"→\"he\"",
-      "\"sh\"→\"she\""
-    ]
-  },
-  {
-    "file": "d69ab517.mp3",
-    "voice": "pip",
-    "text": "S! Great job!",
-    "heard": "Yes, great job",
-    "distance": 1,
-    "rate": 0.33,
-    "ops": [
-      "\"s\"→\"yes\""
-    ]
-  },
-  {
-    "file": "e78a87a1.mp3",
-    "voice": "pip",
-    "text": "A! Great job!",
-    "heard": "Hey, great job",
-    "distance": 1,
-    "rate": 0.33,
-    "ops": [
-      "\"a\"→\"hey\""
-    ]
-  },
-  {
-    "file": "306ef4bf.mp3",
-    "voice": "teacher",
-    "text": "N! Great job!",
-    "heard": "Then great job",
-    "distance": 1,
-    "rate": 0.33,
-    "ops": [
-      "\"n\"→\"then\""
-    ]
-  },
-  {
-    "file": "2c5c009c.mp3",
-    "voice": "teacher",
-    "text": "W! Great job!",
-    "heard": "You, great job",
-    "distance": 1,
-    "rate": 0.33,
-    "ops": [
-      "\"w\"→\"you\""
-    ]
-  },
-  {
-    "file": "2e0738db.mp3",
-    "voice": "pip",
-    "text": "You explored the castle and learned kitchen, bedroom, table, and chair — and the magic CH sound! Look around your home tonight and say \"There is a ___!\" ✨🏰",
-    "heard": "You explored the castle and learned kitchen, bedroom, table, and chair, and the magic C-H sound. Look around your home tonight and say, \"There is a wom chom chow wow loo wow.\"",
-    "distance": 8,
-    "rate": 0.31,
-    "ops": [
-      "extra \"c\"",
-      "\"ch\"→\"h\"",
-      "extra \"wom\"",
-      "extra \"chom\"",
-      "extra \"chow\"",
-      "extra \"wow\"",
-      "extra \"loo\"",
-      "extra \"wow\""
-    ]
-  },
-  {
-    "file": "f516c8c9.mp3",
-    "voice": "teacher",
-    "text": "“Played” — is this REGULAR (-ed) or IRREGULAR?",
-    "heard": "Played. Is this regular E-D or irregular?",
-    "distance": 2,
-    "rate": 0.29,
-    "ops": [
-      "extra \"e\"",
-      "\"ed\"→\"d\""
-    ]
-  },
-  {
-    "file": "96a0aae6.mp3",
-    "voice": "teacher",
-    "text": "“Ate” — is this REGULAR (-ed) or IRREGULAR?",
-    "heard": "I mean, is this regular ed or irregular?",
-    "distance": 2,
-    "rate": 0.29,
-    "ops": [
-      "extra \"i\"",
-      "\"ate\"→\"mean\""
-    ]
-  },
-  {
     "file": "e5ad6bde.mp3",
     "voice": "teacher",
     "text": "The chair is next to the table.",
@@ -733,19 +101,6 @@
     "ops": [
       "missing \"chair\"",
       "\"is\"→\"chairs\""
-    ]
-  },
-  {
-    "file": "531eed16.mp3",
-    "voice": "teacher",
-    "text": "Listen: d-ay, day! Now try “play” and “stay” — same “ay” sound!",
-    "heard": "Listen to \"eye day\". Now try \"play\" and \"stay\". Same \"I\" sound",
-    "distance": 3,
-    "rate": 0.25,
-    "ops": [
-      "\"d\"→\"to\"",
-      "\"ay\"→\"eye\"",
-      "\"ay\"→\"i\""
     ]
   },
   {
@@ -768,28 +123,6 @@
     "rate": 0.25,
     "ops": [
       "\"grrr\"→\"grr\""
-    ]
-  },
-  {
-    "file": "59a183a3.mp3",
-    "voice": "teacher",
-    "text": "I am ___ years old!",
-    "heard": "I am Bobby, years old",
-    "distance": 1,
-    "rate": 0.25,
-    "ops": [
-      "extra \"bobby\""
-    ]
-  },
-  {
-    "file": "afbe1fbe.mp3",
-    "voice": "pip",
-    "text": "Find the N sound!",
-    "heard": "Find the end sound",
-    "distance": 1,
-    "rate": 0.25,
-    "ops": [
-      "\"n\"→\"end\""
     ]
   },
   {
@@ -829,17 +162,6 @@
     ]
   },
   {
-    "file": "0c5bd125.mp3",
-    "voice": "bella",
-    "text": "🥳 Yaaay! Happy birthday to me!",
-    "heard": "Yay! Happy birthday to me",
-    "distance": 1,
-    "rate": 0.2,
-    "ops": [
-      "\"yaaay\"→\"yay\""
-    ]
-  },
-  {
     "file": "17d9ba3d.mp3",
     "voice": "teacher",
     "text": "Remember the castle? Listen. Where is Cat-cat? Tap the room.",
@@ -849,28 +171,6 @@
     "ops": [
       "missing \"cat\"",
       "\"cat\"→\"catcat\""
-    ]
-  },
-  {
-    "file": "3dda4c1e.mp3",
-    "voice": "pip",
-    "text": "Listen. Is it ch, or sh?",
-    "heard": "Listen, is it Chai or sh?",
-    "distance": 1,
-    "rate": 0.17,
-    "ops": [
-      "\"ch\"→\"chai\""
-    ]
-  },
-  {
-    "file": "a7b19aad.mp3",
-    "voice": "mia",
-    "text": "Yes! The M portal is open!",
-    "heard": "Yes, the End Portal is open",
-    "distance": 1,
-    "rate": 0.17,
-    "ops": [
-      "\"m\"→\"end\""
     ]
   },
   {
@@ -929,20 +229,6 @@
     ]
   },
   {
-    "file": "6ac5f132.mp3",
-    "voice": "pip",
-    "text": "You explored the bedroom and learned bed, lamp, door and window — and the magic L and W sounds! Tonight, look around your room and say \"There is a ___!\" ✨🛏️",
-    "heard": "You explored the bedroom and learned bed, lamp, door, and window, and the magic L and W sounds. Tonight, look around your room and say, \"There is a w-window to freeze.\"",
-    "distance": 4,
-    "rate": 0.14,
-    "ops": [
-      "extra \"w\"",
-      "extra \"window\"",
-      "extra \"to\"",
-      "extra \"freeze\""
-    ]
-  },
-  {
     "file": "b8142155.mp3",
     "voice": "teacher",
     "text": "Great job! Today we learn something new.",
@@ -954,18 +240,6 @@
     ]
   },
   {
-    "file": "ec9c61b6.mp3",
-    "voice": "pip",
-    "text": "You said hello, met your new class, and read two real words — SAT and AT! ✨🏆",
-    "heard": "You said hello, met your new class, and read two real words, 'saty' and 'ate'.",
-    "distance": 2,
-    "rate": 0.13,
-    "ops": [
-      "\"sat\"→\"saty\"",
-      "\"at\"→\"ate\""
-    ]
-  },
-  {
     "file": "84b6bc09.mp3",
     "voice": "teacher",
     "text": "Nice try! Let's pop more next time.",
@@ -974,50 +248,6 @@
     "rate": 0.13,
     "ops": [
       "\"pop\"→\"pot\""
-    ]
-  },
-  {
-    "file": "752e77fc.mp3",
-    "voice": "teacher",
-    "text": "Pip and Mia are playing together. ______ are happy.",
-    "heard": "Pip and Mia are playing together. Higgins are happy",
-    "distance": 1,
-    "rate": 0.13,
-    "ops": [
-      "extra \"higgins\""
-    ]
-  },
-  {
-    "file": "36471c53.mp3",
-    "voice": "teacher",
-    "text": "Which word has the long A “ay” sound?",
-    "heard": "Which word has the long A A sound?",
-    "distance": 1,
-    "rate": 0.13,
-    "ops": [
-      "\"ay\"→\"a\""
-    ]
-  },
-  {
-    "file": "e354832b.mp3",
-    "voice": "teacher",
-    "text": "“Woke up” — is this REGULAR (-ed) or IRREGULAR?",
-    "heard": "Woke up and is this regular, Ed, or irregular?",
-    "distance": 1,
-    "rate": 0.13,
-    "ops": [
-      "extra \"and\""
-    ]
-  },
-  {
-    "file": "af1b42b7.mp3",
-    "voice": "teacher",
-    "text": "Which word has the long E “ee” sound?",
-    "heard": "Which word has the long E-E sound?",
-    "distance": 1,
-    "rate": 0.13,
-    "ops": [
-      "\"ee\"→\"e\""
     ]
   },
   {
@@ -1051,28 +281,6 @@
     "rate": 0.09,
     "ops": [
       "\"favourite\"→\"favorite\""
-    ]
-  },
-  {
-    "file": "c5d4326b.mp3",
-    "voice": "pip",
-    "text": "You did it! You know the days of the week, and you can say how often you do things! 🏆 Tonight, tell your family what you ALWAYS do every week — and try reading an “ay” word together!",
-    "heard": "You did it! You know the days of the week, and you can say how often you do things. Tonight, tell your family what you always do every week, and try reading an I word together",
-    "distance": 1,
-    "rate": 0.03,
-    "ops": [
-      "\"ay\"→\"i\""
-    ]
-  },
-  {
-    "file": "f010238e.mp3",
-    "voice": "pip",
-    "text": "You did it! You can talk about YESTERDAY, and you know regular and irregular verbs! 🏆 Tonight, tell your family what you did yesterday — and try reading an “ee” word together!",
-    "heard": "You did it! You can talk about yesterday, and you know regular and irregular verbs. Tonight, tell your family what you did yesterday and try reading an e-word together",
-    "distance": 1,
-    "rate": 0.03,
-    "ops": [
-      "\"ee\"→\"e\""
     ]
   }
 ]
