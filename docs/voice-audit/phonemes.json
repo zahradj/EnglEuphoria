@@ -32,8 +32,8 @@
   "per": 1.5,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "ð a",
-  "altMargin": 0.57
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "0d0a2254.mp3",
@@ -44,8 +44,8 @@
   "per": 1.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "h a t",
-  "altMargin": 0.02
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "2c5b7541.mp3",
@@ -68,8 +68,8 @@
   "per": 1.0,
   "vowelMismatch": true,
   "words": 2,
-  "bestAlternative": "j oʊ j a",
-  "altMargin": 1.44
+  "bestAlternative": "j oʊ j ɑː",
+  "altMargin": 1.31
  },
  {
   "file": "59449f60.mp3",
@@ -92,8 +92,8 @@
   "per": 1.0,
   "vowelMismatch": true,
   "words": 2,
-  "bestAlternative": "j a j oʊ",
-  "altMargin": 4.96
+  "bestAlternative": "j ɑː j oʊ",
+  "altMargin": 3.31
  },
  {
   "file": "7345f636.mp3",
@@ -224,8 +224,8 @@
   "per": 0.75,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "h a p i",
-  "altMargin": 4.79
+  "bestAlternative": "h ɑː p i",
+  "altMargin": 0.15
  },
  {
   "file": "c104501b.mp3",
@@ -248,8 +248,8 @@
   "per": 0.667,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "h a t",
-  "altMargin": 1.43
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "67f18a93.mp3",
@@ -272,8 +272,8 @@
   "per": 0.667,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "n a t",
-  "altMargin": 4.24
+  "bestAlternative": "n ɑː t",
+  "altMargin": 2.12
  },
  {
   "file": "18920149.mp3",
@@ -284,8 +284,8 @@
   "per": 0.667,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "n a t",
-  "altMargin": 4.23
+  "bestAlternative": "n ɑː t",
+  "altMargin": 1.09
  },
  {
   "file": "92322f99.mp3",
@@ -296,8 +296,8 @@
   "per": 0.667,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "k a t",
-  "altMargin": 4.52
+  "bestAlternative": "k ɑː t",
+  "altMargin": 0.18
  },
  {
   "file": "f9420632.mp3",
@@ -308,8 +308,8 @@
   "per": 0.667,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "w a n",
-  "altMargin": 0.38
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "40f4623c.mp3",
@@ -332,8 +332,8 @@
   "per": 0.667,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b a t",
-  "altMargin": 4.77
+  "bestAlternative": "b ɑː t",
+  "altMargin": 2.89
  },
  {
   "file": "15dbeab1.mp3",
@@ -416,8 +416,8 @@
   "per": 0.667,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "s a d",
-  "altMargin": 6.46
+  "bestAlternative": "s ɑː d",
+  "altMargin": 2.54
  },
  {
   "file": "ac2972e9.mp3",
@@ -428,8 +428,8 @@
   "per": 0.667,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "p a n",
-  "altMargin": 2.29
+  "bestAlternative": "p ɛ n",
+  "altMargin": 1.34
  },
  {
   "file": "8e544e32.mp3",
@@ -536,8 +536,8 @@
   "per": 0.5,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "t a d i",
-  "altMargin": 0.8
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "d81a371e.mp3",
@@ -632,8 +632,8 @@
   "per": 0.5,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "t a d i",
-  "altMargin": 3.83
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "754a5632.mp3",
@@ -752,8 +752,8 @@
   "per": 0.429,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "p a p k ɔːɹ n",
-  "altMargin": 0.72
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "957750c6.mp3",
@@ -860,8 +860,8 @@
   "per": 0.4,
   "vowelMismatch": true,
   "words": 2,
-  "bestAlternative": "t a p h iː",
-  "altMargin": 4.71
+  "bestAlternative": "t ɑː p h iː",
+  "altMargin": 0.34
  },
  {
   "file": "002b8eb9.mp3",
@@ -884,8 +884,8 @@
   "per": 0.4,
   "vowelMismatch": true,
   "words": 2,
-  "bestAlternative": "j a s ɔ n",
-  "altMargin": 4.4
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "87d21c94.mp3",
@@ -968,8 +968,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "a n t",
-  "altMargin": 0.71
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "edd4c3b4.mp3",
@@ -980,8 +980,8 @@
   "per": 0.333,
   "vowelMismatch": false,
   "words": 1,
-  "bestAlternative": "b a l",
-  "altMargin": 4.09
+  "bestAlternative": "b ɑː l",
+  "altMargin": 3.25
  },
  {
   "file": "969d5897.mp3",
@@ -1004,8 +1004,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "d a k",
-  "altMargin": 5.89
+  "bestAlternative": "d ɑː k",
+  "altMargin": 2.82
  },
  {
   "file": "f032bb53.mp3",
@@ -1052,8 +1052,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b a k",
-  "altMargin": 3.93
+  "bestAlternative": "b ɑː k",
+  "altMargin": 3.38
  },
  {
   "file": "0e7991d6.mp3",
@@ -1076,8 +1076,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "h a t",
-  "altMargin": 6.35
+  "bestAlternative": "h ɑː t",
+  "altMargin": 5.67
  },
  {
   "file": "5018139f.mp3",
@@ -1100,8 +1100,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "h a t",
-  "altMargin": 6.9
+  "bestAlternative": "h ɑː t",
+  "altMargin": 6.25
  },
  {
   "file": "d3e7141a.mp3",
@@ -1124,8 +1124,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "m a t",
-  "altMargin": 3.49
+  "bestAlternative": "m ɛ t",
+  "altMargin": 0.78
  },
  {
   "file": "b7514df8.mp3",
@@ -1208,8 +1208,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "s a d",
-  "altMargin": 5.2
+  "bestAlternative": "s ɛ d",
+  "altMargin": 2.7
  },
  {
   "file": "4e12a281.mp3",
@@ -1244,8 +1244,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "s a n",
-  "altMargin": 1.83
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "60e7448c.mp3",
@@ -1256,8 +1256,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "s a n",
-  "altMargin": 0.17
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "e984fb50.mp3",
@@ -1268,8 +1268,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "s a d",
-  "altMargin": 6.29
+  "bestAlternative": "s ɑː d",
+  "altMargin": 1.41
  },
  {
   "file": "0f73e7ee.mp3",
@@ -1292,8 +1292,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "s a d",
-  "altMargin": 6.41
+  "bestAlternative": "s ɑː d",
+  "altMargin": 1.39
  },
  {
   "file": "c5176467.mp3",
@@ -1304,8 +1304,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b a ɡ",
-  "altMargin": 3.58
+  "bestAlternative": "b ɑː ɡ",
+  "altMargin": 2.09
  },
  {
   "file": "56d2e56d.mp3",
@@ -1364,8 +1364,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b a ɡ",
-  "altMargin": 4.77
+  "bestAlternative": "b ɛ ɡ",
+  "altMargin": 1.36
  },
  {
   "file": "5e37cd47.mp3",
@@ -1376,8 +1376,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b a ɡ",
-  "altMargin": 5.87
+  "bestAlternative": "b ɑː ɡ",
+  "altMargin": 3.15
  },
  {
   "file": "56a5cfcd.mp3",
@@ -1400,8 +1400,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b a ɡ",
-  "altMargin": 3.05
+  "bestAlternative": "b ɛ ɡ",
+  "altMargin": 1.46
  },
  {
   "file": "c2c64b69.mp3",
@@ -1424,8 +1424,8 @@
   "per": 0.333,
   "vowelMismatch": false,
   "words": 1,
-  "bestAlternative": "b a l",
-  "altMargin": 5.16
+  "bestAlternative": "b ɑː l",
+  "altMargin": 4.18
  },
  {
   "file": "84c7ca09.mp3",
@@ -1448,8 +1448,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "d a k",
-  "altMargin": 4.45
+  "bestAlternative": "d ɑː k",
+  "altMargin": 4.12
  },
  {
   "file": "2cbe9c96.mp3",
@@ -1460,8 +1460,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "d a k",
-  "altMargin": 5.8
+  "bestAlternative": "d ɑː k",
+  "altMargin": 4.28
  },
  {
   "file": "e214450e.mp3",
@@ -1472,8 +1472,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "d a k",
-  "altMargin": 3.87
+  "bestAlternative": "d ɑː k",
+  "altMargin": 2.79
  },
  {
   "file": "5af1da83.mp3",
@@ -1508,8 +1508,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b a k",
-  "altMargin": 6.38
+  "bestAlternative": "b ɑː k",
+  "altMargin": 5.46
  },
  {
   "file": "be51dfff.mp3",
@@ -1532,8 +1532,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b a k",
-  "altMargin": 4.29
+  "bestAlternative": "b ɑː k",
+  "altMargin": 3.03
  },
  {
   "file": "5b1dccca.mp3",
@@ -1592,8 +1592,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "d a k",
-  "altMargin": 5.58
+  "bestAlternative": "d ɑː k",
+  "altMargin": 2.41
  },
  {
   "file": "6e010fd4.mp3",
@@ -1640,8 +1640,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "m a m",
-  "altMargin": 3.74
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "cd2195ea.mp3",
@@ -1664,8 +1664,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "d a d",
-  "altMargin": 2.25
+  "bestAlternative": "d ɛ d",
+  "altMargin": 1.08
  },
  {
   "file": "bbcc4858.mp3",
@@ -1676,8 +1676,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "m a m",
-  "altMargin": 0.53
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "bc7cf186.mp3",
@@ -1712,8 +1712,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 2,
-  "bestAlternative": "n a k n ɑː k",
-  "altMargin": 1.83
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "58f74e9b.mp3",
@@ -1724,8 +1724,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 2,
-  "bestAlternative": "j a s s æ d",
-  "altMargin": 2.55
+  "bestAlternative": "j ɛ s s ɑː d",
+  "altMargin": 0.27
  },
  {
   "file": "7581c31c.mp3",
@@ -1736,8 +1736,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 2,
-  "bestAlternative": "j a s m iə",
-  "altMargin": 5.1
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "8315aaa6.mp3",
@@ -1760,8 +1760,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "n a t",
-  "altMargin": 3.1
+  "bestAlternative": "n ɑː t",
+  "altMargin": 2.57
  },
  {
   "file": "fa6722e8.mp3",
@@ -1772,8 +1772,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b a k",
-  "altMargin": 3.62
+  "bestAlternative": "b ɑː k",
+  "altMargin": 2.2
  },
  {
   "file": "ff927c2c.mp3",
@@ -1844,8 +1844,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 2,
-  "bestAlternative": "j a s b ɛ d",
-  "altMargin": 4.04
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "7c4de5f4.mp3",
@@ -1892,8 +1892,8 @@
   "per": 0.3,
   "vowelMismatch": true,
   "words": 2,
-  "bestAlternative": "j ɛ s p a p k ɔːɹ n",
-  "altMargin": 0.83
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "b0c80ef1.mp3",
@@ -1976,8 +1976,8 @@
   "per": 0.286,
   "vowelMismatch": false,
   "words": 1,
-  "bestAlternative": "p a p k ɔːɹ n",
-  "altMargin": 0.69
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "617fc22a.mp3",
@@ -2012,8 +2012,8 @@
   "per": 0.286,
   "vowelMismatch": true,
   "words": 2,
-  "bestAlternative": "j a s k aɪ t",
-  "altMargin": 2.21
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "fe78d26c.mp3",
@@ -2048,8 +2048,8 @@
   "per": 0.286,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "l ɑː l ɪ p a p",
-  "altMargin": 0.8
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "3cfca13f.mp3",
@@ -2108,8 +2108,8 @@
   "per": 0.25,
   "vowelMismatch": false,
   "words": 1,
-  "bestAlternative": "tʃ a p",
-  "altMargin": 2.19
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "343096b8.mp3",
@@ -2264,8 +2264,8 @@
   "per": 0.25,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "n a s t",
-  "altMargin": 1.88
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "26bd6b74.mp3",
@@ -2276,8 +2276,8 @@
   "per": 0.25,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "n a s t",
-  "altMargin": 3.23
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "2f771d99.mp3",
@@ -2324,8 +2324,8 @@
   "per": 0.25,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "h a p i",
-  "altMargin": 7.06
+  "bestAlternative": "h ɑː p i",
+  "altMargin": 1.36
  },
  {
   "file": "9361dd5c.mp3",
@@ -2336,8 +2336,8 @@
   "per": 0.25,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "h a p i",
-  "altMargin": 2.16
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "d93bfe2c.mp3",
@@ -2348,8 +2348,8 @@
   "per": 0.25,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "p l a m",
-  "altMargin": 1.78
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "f4a15db9.mp3",
@@ -2372,8 +2372,8 @@
   "per": 0.25,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "t ɹ a k",
-  "altMargin": 0.95
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "6fce7e18.mp3",
@@ -2408,8 +2408,8 @@
   "per": 0.25,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "h a p i",
-  "altMargin": 2.39
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "26aeba22.mp3",
@@ -2444,8 +2444,8 @@
   "per": 0.25,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "h a p i",
-  "altMargin": 8.07
+  "bestAlternative": "h ɑː p i",
+  "altMargin": 1.57
  },
  {
   "file": "9bd7d51a.mp3",
@@ -3056,8 +3056,8 @@
   "per": 0.167,
   "vowelMismatch": true,
   "words": 2,
-  "bestAlternative": "n a k n ɑː k",
-  "altMargin": 0.3
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "900ce5c0.mp3",
@@ -14132,8 +14132,8 @@
   "per": 0.0,
   "vowelMismatch": false,
   "words": 1,
-  "bestAlternative": "b a l",
-  "altMargin": 3.97
+  "bestAlternative": "b ɑː l",
+  "altMargin": 3.8
  },
  {
   "file": "1fd56cf1.mp3",
@@ -16208,8 +16208,8 @@
   "per": 0.0,
   "vowelMismatch": false,
   "words": 1,
-  "bestAlternative": "b a l",
-  "altMargin": 5.17
+  "bestAlternative": "b ɑː l",
+  "altMargin": 4.96
  },
  {
   "file": "c41fb399.mp3",
@@ -17060,8 +17060,8 @@
   "per": 0.0,
   "vowelMismatch": false,
   "words": 1,
-  "bestAlternative": "b a l",
-  "altMargin": 5.07
+  "bestAlternative": "b ɑː l",
+  "altMargin": 3.37
  },
  {
   "file": "698d7c23.mp3",
@@ -17492,8 +17492,8 @@
   "per": 0.0,
   "vowelMismatch": false,
   "words": 1,
-  "bestAlternative": "m a m",
-  "altMargin": 1.62
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "5f238a79.mp3",
