@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { ChatCloud } from '../../ChatCloud';
+import { useRef, useState } from 'react';
+import { DialoguePlate, plateFontSize } from '../../DialoguePlate';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
 import { safeSpeak } from '../audio';
@@ -15,17 +15,23 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
   const holdTimer = useRef<number | null>(null);
   const c = CAST[scene.who];
   const repeatWord = scene.repeat ?? scene.line;
+  // Local on purpose (not synced): each screen shows its own equalizer while its own voice plays.
+  const [speaking, setSpeaking] = useState(false);
+  const sayLine = async () => {
+    setSpeaking(true);
+    try { await safeSpeak(scene.line, scene.who); } finally { setSpeaking(false); }
+  };
 
 
   const tapCharacter = async () => {
     if (phase !== 'idle') return;
     sfx.pop();
     setState((s) => ({ ...s, phase: 'talking' }));
-    await safeSpeak(scene.line, scene.who);
+    await sayLine();
     setTimeout(() => setState((s) => ({ ...s, phase: 'repeat' })), 500);
   };
   const hearRepeat = async () => { sfx.click(); setState((s) => ({ ...s, heardRepeat: s.heardRepeat + 1 })); await safeSpeak(repeatWord, scene.who); };
-  const replayIntro = async () => { sfx.click(); await safeSpeak(scene.line, scene.who); };
+  const replayIntro = async () => { sfx.click(); await sayLine(); };
   const startHold = () => {
     if (phase !== 'repeat') return;
     setState((s) => ({ ...s, held: true }));
@@ -41,12 +47,14 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
 
   return (
     <div className="relative min-h-[calc(78*var(--svh,1vh))]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
+      {/* Quest tag and the teacher's instruction share one column, so a wrapped
+          instruction can never run underneath the tag. */}
+      <div className="relative z-20 mx-auto flex max-w-md flex-col items-center gap-2 pt-1">
+        <div className="pointer-events-none">
         <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: `linear-gradient(90deg, ${c.color}, #FEBE4C)` }}>
-          ⚔️ Quest · Meet {c.name}
+            ⚔️ Quest · Meet {c.name}
+          </div>
         </div>
-      </div>
-      <div className="mx-auto mt-8 max-w-md">
         <div className="rounded-2xl px-4 py-3 text-center text-lg font-bold text-white shadow-2xl" style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.35))', backdropFilter: 'blur(8px)', textShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
           {scene.teacher}
         </div>
@@ -71,15 +79,20 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
           <div className="animate-[lep1-pop-fade_1.1s_ease-out_forwards] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 text-2xl font-black text-white shadow-2xl">+10 XP 💎</div>
         </div>
       )}
-      {/* The character's line as a chat cloud (tap = hear it again). */}
+      {/* The character's line on a dialogue plate (tap = hear it again). It sits above the
+          "your turn" bar that runs along the very bottom. */}
       {phase !== 'idle' && (
-        <div className="pointer-events-none absolute right-[5%] top-[calc(12*var(--svh,1vh))] z-20 max-w-[40%]">
-          <ChatCloud color={c.color} tail="left" onClick={replayIntro} ariaLabel={`Hear ${c.name} again`}>
-            <span className="flex items-center justify-center gap-2 text-[calc(3.4*var(--svh,1vh))] font-black leading-tight">
-              <span aria-hidden>{c.emoji}</span>“{scene.line}”
-            </span>
-          </ChatCloud>
-        </div>
+        <DialoguePlate
+          name={c.name}
+          color={c.color}
+          onTap={replayIntro}
+          speaking={speaking}
+          fontSize={plateFontSize(scene.line)}
+          bottom="calc(12*var(--svh,1vh))"
+          ariaLabel={`Hear ${c.name} again`}
+        >
+          “{scene.line}”
+        </DialoguePlate>
       )}
       {phase === 'idle' && (
         <div className="pointer-events-none absolute inset-x-0 top-[calc(44*var(--svh,1vh))] z-20 grid place-items-center">

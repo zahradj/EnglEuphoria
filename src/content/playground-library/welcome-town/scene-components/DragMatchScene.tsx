@@ -98,10 +98,36 @@ export function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
           const withinX = Math.abs(e.clientX - targetX) <= w / 2 + pad;
           const withinY = e.clientY <= targetY + pad && e.clientY >= targetY - h - pad;
           hit = withinX && withinY;
+        } else if (scene.showBlanks) {
+          // Sentence builder: the drawn dashed blank IS the target, so the whole
+          // box (plus a small margin) accepts the drop — not a small circle
+          // around its centre that rejected the box's own edges.
+          const blank = container.querySelector<HTMLElement>(`[data-blank="${drag.idx}"]`);
+          const br = blank?.getBoundingClientRect();
+          if (br) {
+            const margin = Math.min(rect.width, rect.height) * 0.05;
+            hit = e.clientX >= br.left - margin && e.clientX <= br.right + margin
+              && e.clientY >= br.top - margin && e.clientY <= br.bottom + margin;
+          } else {
+            hit = Math.hypot(e.clientX - targetX, e.clientY - targetY) <= Math.min(rect.width, rect.height) * 0.2;
+          }
         } else {
-          const dist = Math.hypot(e.clientX - targetX, e.clientY - targetY);
-          const tolerance = Math.min(rect.width, rect.height) * (scene.showBlanks ? 0.14 : 0.26);
-          hit = dist <= tolerance;
+          // Vocab matching: only ONE anchor point per object is stored, but the
+          // object itself is big (a board, a door, a window), so a fixed circle
+          // around the anchor rejected drops on the object's own edges — "it
+          // keeps rejecting". Use a generous oval (objects are wider than tall
+          // and the stage is 16:9) around the anchor, AND accept any drop that
+          // is nearer to this item's anchor than to every other item's anchor,
+          // so the whole footprint of the right object counts while a drop on a
+          // DIFFERENT object still reads as wrong.
+          const reach = (item2: { targetLeft: string; targetTop: string }) => {
+            const ax = rect.left + (parseFloat(item2.targetLeft) / 100) * rect.width;
+            const ay = rect.top + (parseFloat(item2.targetTop) / 100) * rect.height;
+            return Math.hypot((e.clientX - ax) / (rect.width * 0.24), (e.clientY - ay) / (rect.height * 0.36));
+          };
+          const own = reach(item);
+          const nearestOther = scene.items.reduce((min, other, k) => (k === drag.idx ? min : Math.min(min, reach(other))), Infinity);
+          hit = own <= 1 || (own <= 1.7 && own < nearestOther);
         }
         if (hit) {
           sfx.match();
@@ -151,6 +177,7 @@ export function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
       {scene.showBlanks && scene.items.map((item, i) => !placed.has(i) && (
         <div
           key={`blank-${i}`}
+          data-blank={i}
           className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-2xl border-[5px] border-dashed border-white/85 bg-black/10 px-6 py-4"
           style={{ left: item.targetLeft, top: item.targetTop, minWidth: `${Math.max(3, item.label.length) * 1.7}ch` }}
         >

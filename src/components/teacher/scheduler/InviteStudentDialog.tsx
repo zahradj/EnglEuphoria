@@ -53,7 +53,13 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
 
   // Duration follows the hub, matching the app-wide rule (Playground = 30
   // min, Academy/Success = 60 min) rather than a separately pickable value.
-  const duration = HUB_OPTIONS.find((h) => h.id === selectedHub)?.duration ?? 60;
+  // Playground defaults to 30 minutes but a teacher can invite for a full hour
+  // (two back-to-back 30-minute slots).
+  const [playgroundHour, setPlaygroundHour] = useState(false);
+  const duration =
+    selectedHub === 'playground' && playgroundHour && lessonType !== 'trial'
+      ? 60
+      : (HUB_OPTIONS.find((h) => h.id === selectedHub)?.duration ?? 60);
 
   // Re-sync the default each time the dialog opens — `hub` can still be
   // loading (or change) at the moment this component first mounts, before
@@ -69,6 +75,7 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
     setTime('');
     setSelectedHub(hub);
     setLessonType('regular');
+    setPlaygroundHour(false);
     setJoinLink(null);
     setCopied(false);
   };
@@ -240,7 +247,22 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-muted-foreground">{duration}-minute lesson</p>
+              {selectedHub === 'playground' && lessonType !== 'trial' ? (
+                <div className="flex items-center gap-2">
+                  {([false, true] as const).map((hour) => (
+                    <button
+                      key={String(hour)}
+                      type="button"
+                      onClick={() => setPlaygroundHour(hour)}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${playgroundHour === hour ? 'bg-primary text-primary-foreground border-primary' : 'bg-background text-foreground border-border hover:bg-muted'}`}
+                    >
+                      {hour ? '1 hour' : '30 minutes'}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-muted-foreground">{duration}-minute lesson</p>
+              )}
             </div>
             <DialogFooter>
               <Button type="submit" disabled={busy} className="w-full">

@@ -157,17 +157,11 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
     }
   }, [isSynced, role, roomId]);
 
-  // Only on a real scene change — never on mount. Running on mount made
-  // every teacher reload (including Force Refresh) re-lock the student's
-  // activity and persist that as the class state, so a student who was
-  // mid-activity came back locked out.
   const prevSceneIdxRef = useRef(sceneIdx);
-  useEffect(() => {
-    if (prevSceneIdxRef.current === sceneIdx) return;
-    prevSceneIdxRef.current = sceneIdx;
-    if (isSynced && role === 'teacher') setInteractionUnlocked(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sceneIdx]);
+  // Interaction is NOT re-locked on a scene change any more. The student's
+  // drag / tap / draw stays on from "Start Class" to the end of the lesson, and
+  // only the teacher's Pause button turns it off (and back on). It used to snap
+  // back to locked on every scene, so the teacher had to unlock again each time.
 
   useEffect(() => {
     if (!isSynced || role !== 'student' || !roomId) return;
@@ -723,7 +717,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
           {isSynced && role === 'student' && !interactionUnlocked && !studentDriven && (
             <div className="absolute inset-0 z-40 cursor-not-allowed" aria-hidden="true">
               <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
-                👀 Watching your teacher
+                ⏸ Your teacher paused this — watch for now
               </div>
             </div>
           )}
@@ -758,7 +752,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
             {isSynced && (
               <button type="button" onClick={() => setInteractionUnlocked(!interactionUnlocked)}
                 className={`rounded-full px-4 py-3 text-sm font-bold shadow-xl backdrop-blur transition hover:scale-105 ${interactionUnlocked ? 'bg-emerald-500 text-white' : 'bg-white/90 text-slate-800'}`}>
-                {interactionUnlocked ? '🔓 Student can try' : '🔒 Let student try'}
+                {interactionUnlocked ? '⏸ Pause student' : '▶ Resume student'}
               </button>
             )}
             <div className="rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">{sceneIdx + 1} / {SCENES.length}</div>

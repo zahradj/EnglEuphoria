@@ -28,6 +28,7 @@ interface Lesson {
   completed_at?: string;
   room_link?: string;
   lesson_price?: number;
+  credits_used?: number;
   hub_type?: string;
 }
 
@@ -70,7 +71,7 @@ export const UpcomingClassesTab = () => {
       const { data: lessons, error } = await supabase
         .from('lessons')
         .select(`
-          id, title, teacher_id, scheduled_at, duration, status, completed_at, room_link, lesson_price, hub_type,
+          id, title, teacher_id, scheduled_at, duration, status, completed_at, room_link, lesson_price, credits_used, hub_type,
           users!lessons_teacher_id_fkey(full_name)
         `)
         .eq('student_id', user.user.id)
@@ -282,6 +283,7 @@ export const UpcomingClassesTab = () => {
             duration: managementModal.lesson.duration,
             teacher_name: managementModal.lesson.teacher_name || 'Teacher',
             lesson_price: managementModal.lesson.lesson_price || 0,
+            credits_used: managementModal.lesson.credits_used ?? 0,
             hub_type: managementModal.lesson.hub_type,
           }}
           onSuccess={fetchLessons}

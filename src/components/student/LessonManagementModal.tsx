@@ -34,6 +34,8 @@ interface LessonManagementModalProps {
     teacher_name: string;
     duration?: number;
     lesson_price: number;
+    /** Credits this booking actually consumed (0 = free trial). The real paid/free signal. */
+    credits_used?: number;
     hub_type?: string;
   };
   onSuccess?: () => void;
@@ -75,6 +77,7 @@ export function LessonManagementModal({
 
   const [reason, setReason] = useState('');
   const [selectedReason, setSelectedReason] = useState('');
+  const isPlaygroundHour = lesson.hub_type?.toLowerCase() === 'playground' && (lesson.duration ?? 30) === 60;
   const [openSlots, setOpenSlots] = useState<{ id: string; start_time: string }[]>([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState('');
@@ -90,7 +93,7 @@ export function LessonManagementModal({
       .from('teacher_availability')
       .select('id, start_time')
       .eq('teacher_id', lesson.teacher_id)
-      .eq('duration', lesson.duration ?? 30)
+      .eq('duration', isPlaygroundHour ? 30 : (lesson.duration ?? 30))
       .eq('is_available', true)
       .eq('is_booked', false)
       .gt('start_time', new Date().toISOString())
@@ -98,15 +101,23 @@ export function LessonManagementModal({
       .limit(60)
       .then(({ data }) => {
         if (cancelled) return;
-        setOpenSlots(((data ?? []) as { id: string; start_time: string }[]).filter(
+        let rows = ((data ?? []) as { id: string; start_time: string }[]).filter(
           (s) => s.start_time !== lesson.scheduled_at,
-        ));
+        );
+        if (isPlaygroundHour) {
+          // A one-hour Playground lesson needs two back-to-back 30-minute slots.
+          const starts = new Set(rows.map((r) => new Date(r.start_time).getTime()));
+          rows = rows.filter((r) => starts.has(new Date(r.start_time).getTime() + 30 * 60 * 1000));
+        }
+        setOpenSlots(rows);
         setSlotsLoading(false);
       });
     return () => { cancelled = true; };
-  }, [open, mode, lesson.teacher_id, lesson.duration, lesson.scheduled_at]);
+  }, [open, mode, lesson.teacher_id, lesson.duration, lesson.scheduled_at, isPlaygroundHour]);
 
-  const isTrialOrFree = !lesson.lesson_price || lesson.lesson_price === 0;
+  // lesson_price is 0 on every booked lesson; credits_used is what really says paid vs free.
+  const paidUnits = lesson.credits_used ?? lesson.lesson_price;
+  const isTrialOrFree = !paidUnits;
   const hoursUntil = getHoursUntilLesson(lesson.scheduled_at);
   const daysUntil = Math.floor(hoursUntil / 24);
 
@@ -133,7 +144,7 @@ export function LessonManagementModal({
     }
   };
 
-  const refundInfo = getRefundInfo(lesson.scheduled_at, lesson.lesson_price);
+  const refundInfo = getRefundInfo(lesson.scheduled_at, paidUnits);
   const canProceed = mode === 'cancel'
     ? canCancel(lesson.scheduled_at, isTrialOrFree)
     : canReschedule(lesson.scheduled_at, isTrialOrFree);
@@ -213,15 +224,19 @@ export function LessonManagementModal({
               {!isTrialOrFree && (
                 <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-lg">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-emerald-700">Refund Amount</span>
+                    <span className="text-sm font-medium text-emerald-700">
+                      {lesson.credits_used !== undefined ? 'Credits returned' : 'Refund Amount'}
+                    </span>
                     <div className="flex items-center gap-1">
-                      <Euro className="h-4 w-4 text-emerald-600" />
+                      {lesson.credits_used === undefined && <Euro className="h-4 w-4 text-emerald-600" />}
                       <span className="text-lg font-bold text-emerald-700">
-                        {refundInfo.refundAmount.toFixed(2)}
+                        {lesson.credits_used !== undefined
+                          ? refundInfo.refundAmount
+                          : refundInfo.refundAmount.toFixed(2)}
                       </span>
                     </div>
                   </div>
-                  {refundInfo.penalty > 0 && (
+                  {refundInfo.penalty > 0 && lesson.credits_used === undefined && (
                     <p className="text-xs text-emerald-600 mt-1">
                       Cancellation fee: €{refundInfo.penalty.toFixed(2)}
                     </p>

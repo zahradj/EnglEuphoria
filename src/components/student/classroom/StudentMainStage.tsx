@@ -2,12 +2,16 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { WhiteboardStroke, StageMode, whiteboardService } from '@/services/whiteboardService';
 import { MainStage } from '@/components/classroom/stage/MainStage';
 import { StudentMiniDock, type StudentTool } from '@/components/classroom/stage/StudentMiniDock';
+import { usePenAutoReturn } from '@/hooks/classroom/usePenAutoReturn';
 import { StudentQuizView } from './StudentQuizView';
 import { StudentPollView } from './StudentPollView';
 import { TargetWordsOverlay } from '@/components/classroom/TargetWordsOverlay';
 import { SmartSummaryTip } from '@/components/classroom/SmartSummaryTip';
 import { Badge } from '@/components/ui/badge';
 import { Monitor } from 'lucide-react';
+
+/** How long the pen stays on with no new stroke before it returns to the pointer. */
+const PEN_IDLE_RETURN_MS = 8000;
 
 const STUDENT_COLORS = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#AA96DA', '#2D4059', '#000000'];
 
@@ -124,6 +128,12 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
   useEffect(() => {
     if (canStudentDraw) setStudentTool('pointer');
   }, [canStudentDraw]);
+
+  // A child who picks the pen and forgets it is on can't drag or tap the activity
+  // (the pen layer catches every touch). So the pen hands itself back to the
+  // pointer after a few quiet seconds — every new stroke restarts the wait.
+  const penActive = canStudentDraw && studentTool !== 'pointer';
+  usePenAutoReturn(penActive, `${studentTool}:${strokes.length}`, () => setStudentTool('pointer'), PEN_IDLE_RETURN_MS);
 
   // NOTE: every hook must run before the early returns below (screen share /
   // quiz / poll). Declaring them after those returns made React throw

@@ -7,6 +7,10 @@
     "src/content/playground-library/welcome-town/SceneRenderer.tsx",
     "src/pages/playground-scene/PlayUnitLesson.tsx",
     "src/pages/playground-scene/PlayWelcomeTownLesson.tsx",
-    "src/components/classroom/stage/MainStage.tsx"
+    "src/components/classroom/stage/MainStage.tsx",
+    "src/components/classroom/stage/TransparentCanvas.tsx",
+    "src/components/classroom/shared/CollaborativeCanvas.tsx",
+    "src/hooks/classroom/usePenAutoReturn.ts",
+    "src/lib/penPassThrough.ts"
   ]
 }

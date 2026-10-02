@@ -92,14 +92,43 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
 
   const hasCredits = totalCredits > 0 || trialAvailable;
   const config = HUB_CONFIG[selectedHub];
+  // Slot length is the hub's building block (Playground = 30). A Playground
+  // student can also book a one-hour lesson: two back-to-back 30-minute slots,
+  // booked atomically, costing two credits.
   const slotDuration = config.duration;
+  const [playgroundMinutes, setPlaygroundMinutes] = useState<30 | 60>(30);
+  const lessonMinutes = selectedHub === 'playground' ? playgroundMinutes : slotDuration;
+  const creditsPerLesson = selectedHub === 'playground' && lessonMinutes === 60 ? 2 : 1;
 
   // Compute display slots based on hub selection
   const displaySlots: (TimeSlot & { sourceSlotIds?: string[] })[] = useMemo(() => {
     // Strict per-hub duration: Playground = 30, Academy/Success = 60
     const filtered = rawSlots.filter(s => s.duration === slotDuration);
+    if (selectedHub === 'playground' && lessonMinutes === 60) {
+      // Every start time that has a back-to-back 30-minute slot right after it.
+      const byTeacher = new Map<string, TimeSlot[]>();
+      for (const s of filtered) {
+        byTeacher.set(s.teacherId, [...(byTeacher.get(s.teacherId) ?? []), s]);
+      }
+      const pairs: (TimeSlot & { sourceSlotIds?: string[] })[] = [];
+      for (const list of byTeacher.values()) {
+        for (const a of list) {
+          const b = list.find(x => x.startTime.getTime() === a.endTime.getTime());
+          if (b) {
+            pairs.push({
+              ...a,
+              id: `${a.id}_${b.id}`,
+              endTime: b.endTime,
+              duration: 60,
+              sourceSlotIds: [a.id, b.id],
+            });
+          }
+        }
+      }
+      return pairs.sort((x, y) => x.startTime.getTime() - y.startTime.getTime());
+    }
     return filtered.map(s => ({ ...s, sourceSlotIds: [s.id] }));
-  }, [rawSlots, slotDuration]);
+  }, [rawSlots, slotDuration, selectedHub, lessonMinutes]);
 
   // Allowed teacher hub_roles for this student's hub
   const allowedHubRoles = useMemo<string[]>(() => {
@@ -223,10 +252,11 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
       return;
     }
 
-    const isTrial = trialAvailable;
+    // The free trial lesson is always the 30-minute one.
+    const isTrial = trialAvailable && creditsPerLesson === 1;
     // Recurring bookings cannot use the free trial — each session needs a credit
     const useRecurring = repeatWeekly && !isTrial;
-    const requiredCredits = useRecurring ? repeatWeeks : 1;
+    const requiredCredits = (useRecurring ? repeatWeeks : 1) * creditsPerLesson;
 
     // Trial bookings bypass the credit gate
     if (!isTrial && totalCredits < requiredCredits) {
@@ -234,7 +264,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
         title: 'Not enough credits',
         description: useRecurring
           ? `Weekly series needs ${requiredCredits} credits (you have ${totalCredits}). Add more credits or pick fewer weeks.`
-          : 'You need credits to book this session. Redirecting to purchase...',
+          : `You need ${requiredCredits} credit${requiredCredits === 1 ? '' : 's'} to book this session (you have ${totalCredits}). Redirecting to purchase...`,
         variant: 'destructive',
       });
       setTimeout(() => {
@@ -262,7 +292,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
         p_slot_ids: ids,
         p_teacher_id: teacherId,
         p_scheduled_at: startIso,
-        p_duration: slotDuration,
+        p_duration: lessonMinutes,
         p_hub_type: hubType,
         p_lesson_title: lessonTitle,
         p_is_trial: trial,
@@ -290,25 +320,30 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
           const windowStart = new Date(targetStart.getTime() - 60 * 1000).toISOString();
           const windowEnd = new Date(targetStart.getTime() + 60 * 1000).toISOString();
 
-          const { data: match } = await supabase
+          const wantedStarts = [targetStart.getTime()];
+          if (creditsPerLesson === 2) wantedStarts.push(targetStart.getTime() + slotDuration * 60 * 1000);
+          const { data: matches } = await supabase
             .from('teacher_availability')
-            .select('id')
+            .select('id, start_time')
             .eq('teacher_id', slot.teacherId)
             .eq('duration', slotDuration)
             .eq('is_available', true)
             .eq('is_booked', false)
-            .gte('start_time', windowStart)
-            .lte('start_time', windowEnd)
-            .limit(1)
-            .maybeSingle();
+            .gte('start_time', new Date(wantedStarts[0] - 60 * 1000).toISOString())
+            .lte('start_time', new Date(wantedStarts[wantedStarts.length - 1] + 60 * 1000).toISOString());
 
-          if (!match?.id) {
+          const matchIds = wantedStarts
+            .map(t => (matches ?? []).find(m => Math.abs(new Date(m.start_time).getTime() - t) < 60 * 1000)?.id)
+            .filter(Boolean) as string[];
+          const match = matchIds.length === wantedStarts.length ? { ids: matchIds } : null;
+
+          if (!match) {
             skippedCount++;
             continue;
           }
 
           try {
-            await bookOnce([match.id], slot.teacherId, targetStart.toISOString(), false);
+            await bookOnce(match.ids, slot.teacherId, targetStart.toISOString(), false);
             bookedCount++;
           } catch (err) {
             console.warn('[BookMyClassModal] recurring week failed', week, err);
@@ -326,7 +361,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
         title: useRecurring ? '🎉 Weekly series booked!' : '🎉 Class booked!',
         description: useRecurring
           ? `Booked ${bookedCount} of ${repeatWeeks} weekly sessions${skippedCount ? ` (${skippedCount} skipped — teacher unavailable)` : ''}.`
-          : `Success! Your ${slotDuration}-minute ${config.label} session has been booked.`,
+          : `Success! Your ${lessonMinutes}-minute ${config.label} session has been booked.`,
       });
 
       setTimeout(() => {
@@ -406,7 +441,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                 </button>
               </DialogTitle>
               <p className="text-white/80 text-sm mt-1">
-                {config.description} • {slotDuration} minutes per session
+                {config.description} • {lessonMinutes} minutes per session
               </p>
             </DialogHeader>
           </div>
@@ -419,9 +454,31 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                 "bg-primary/10 text-primary border-primary/20"
               )}>
                 <span>{config.icon}</span>
-                {config.label} • {slotDuration} min sessions
+                {config.label} • {lessonMinutes} min sessions
               </div>
             </div>
+
+            {/* Playground: choose a 30-minute lesson (1 credit) or a one-hour lesson (2 credits) */}
+            {selectedHub === 'playground' && !booked && (
+              <div className="mb-5 flex flex-wrap items-center gap-2">
+                <span className="text-sm font-medium text-muted-foreground">Lesson length:</span>
+                {([30, 60] as const).map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => setPlaygroundMinutes(m)}
+                    className={cn(
+                      "px-4 py-2 rounded-full text-sm font-semibold border transition-colors",
+                      playgroundMinutes === m
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-background text-foreground border-border hover:bg-muted"
+                    )}
+                  >
+                    {m === 30 ? '30 min · 1 credit' : '1 hour · 2 credits'}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* No credits warning */}
             {!creditsLoading && !hasCredits && !booked && (
@@ -487,7 +544,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                   </motion.div>
                   <h3 className="text-2xl font-bold text-foreground">Booking Confirmed! 🎉</h3>
                   <p className="text-muted-foreground max-w-sm">
-                    Your {slotDuration}-minute {config.label} session is booked.
+                    Your {lessonMinutes}-minute {config.label} session is booked.
                   </p>
                   {meetingLink && (
                     <div className={cn(
@@ -531,8 +588,8 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                   </h3>
                   <p className="text-sm text-muted-foreground max-w-sm">
                     {teacherId
-                      ? `This teacher has no upcoming ${slotDuration}-minute openings yet. Try again later.`
-                      : `No ${slotDuration}-minute slots are open in this hub yet. Please check back soon.`}
+                      ? `This teacher has no upcoming ${lessonMinutes}-minute openings yet. Try again later.`
+                      : `No ${lessonMinutes}-minute slots are open in this hub yet. Please check back soon.`}
                   </p>
                   <Button variant="outline" size="sm" onClick={fetchSlots} disabled={loadingSlots}>
                     Refresh availability
@@ -563,7 +620,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                             Book this slot every week
                           </Label>
                           <p className="text-xs text-muted-foreground mt-0.5">
-                            Same teacher, same weekday & time. Uses 1 credit per week.
+                            Same teacher, same weekday & time. Uses {creditsPerLesson} credit{creditsPerLesson === 1 ? '' : 's'} per week.
                             {trialAvailable && ' (Disabled while a free trial is available.)'}
                           </p>
                         </div>
@@ -595,7 +652,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                           </button>
                         ))}
                         <Badge variant="outline" className="ml-auto text-xs">
-                          Needs {repeatWeeks} credits · you have {totalCredits}
+                          Needs {repeatWeeks * creditsPerLesson} credits · you have {totalCredits}
                         </Badge>
                       </div>
                     )}
