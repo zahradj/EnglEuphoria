@@ -129,11 +129,13 @@ const gg = (before: string, after: string, choices: string[], answer: string, fi
 const PINK = '#db2777', BLUE = '#2563eb', ORANGE = '#ea580c', GREEN = '#16a34a', PURPLE = '#7c3aed';
 const sp = (single: string): Record<string, string> => ({ [single]: GREEN, [`${single}s`]: PURPLE });
 
-function grammarGarden(): LibraryGame {
-  const stop = (id: string, station: string, title: string, blurb: string, art: string, examples: string[], rule: string, colors: Record<string, string>, legend: { word: string; note: string; color?: string }[], rounds: GrammarGapRound[]): GameStage => ({
+const gardenStop = (bg: string, id: string, station: string, title: string, blurb: string, art: string, examples: string[], rule: string, colors: Record<string, string>, legend: { word: string; note: string; color?: string }[], rounds: GrammarGapRound[]): GameStage => ({
     id, station, title, blurb, art: `${I}/${art}`, units: rounds.length,
-    scene: { id: `garden-${id}`, kind: 'grammar-gap', teacher: `Read the examples together, then let the student pick the flower that fits the gap. (${rule})`, title: station, bg: '/lep1/games/grammar-garden-cover.jpg', examples, rule, colors, legend, rounds },
+    scene: { id: `garden-${id}`, kind: 'grammar-gap', teacher: `Read the examples together, then let the student pick the flower that fits the gap. (${rule})`, title: station, bg, examples, rule, colors, legend, rounds },
   });
+
+function grammarGarden(): LibraryGame {
+  const stop = (...args: Parameters<typeof gardenStop> extends [string, ...infer R] ? R : never) => gardenStop('/lep1/games/grammar-garden-cover.jpg', ...args);
   return {
     id: 'grammar-garden',
     title: 'Grammar Garden',
@@ -190,6 +192,71 @@ function grammarGarden(): LibraryGame {
         gg('They', 'at school.', ['am', 'is', 'are'], 'are', undefined, 1, 'They'),
         gg('It', 'a cat.', ['am', 'is', 'are'], 'is', 'item-cat.png', 1, 'It'),
         gg('I', 'six.', ['am', 'is', 'are'], 'am', undefined, 1, 'I'),
+      ]),
+    ],
+  };
+}
+
+/* ------------------------------------------------------------------ Sentence Sprouts */
+
+function sentenceSprouts(): LibraryGame {
+  const stop = (...args: Parameters<typeof gardenStop> extends [string, ...infer R] ? R : never) => gardenStop('/lep1/games/sentence-sprouts-cover.jpg', ...args);
+  return {
+    id: 'sentence-sprouts',
+    title: 'Sentence Sprouts',
+    tagline: 'Grow your sentences! Practise have / has, it / they, a / some and do / does with colour-coded flowers.',
+    skill: 'Grammar',
+    levels: ['A1'],
+    minutes: '10–14 min',
+    gradient: 'linear-gradient(135deg,#0EA5E9 0%,#22C55E 50%,#FACC15 100%)',
+    cover: '/lep1/games/sentence-sprouts-cover.jpg',
+    art: [`${I}/item-pizza.png`, `${I}/item-doll.png`, `${I}/item-grapes.png`, `${I}/item-duck-yellow.png`],
+    howToPlay: [
+      'Listen to the examples. They show you the pattern.',
+      'Read the sentence on the sign. One word is missing!',
+      'Look at the colour key: each colour is a rule. Tap the flower that fits.',
+      'Wrong? That is okay: try again! Finish a stop to earn your stars.',
+    ],
+    stages: [
+      stop('have-or-has', 'Have or Has', 'Sentence Sprouts: have / has', 'Who has it? I have. She has.', 'item-doll.png', ['I have a ball.', 'She has a doll.'], 'I, you, we, they: have. He, she, it: has.', { have: BLUE, has: ORANGE }, [{ word: 'have', note: 'I · you · we · they' }, { word: 'has', note: 'he · she · it' }], [
+        gg('I', 'a ball.', ['have', 'has'], 'have', 'item-ball.png', 1, 'I'),
+        gg('She', 'a doll.', ['have', 'has'], 'has', 'item-doll.png', 1, 'She'),
+        gg('We', 'two books.', ['have', 'has'], 'have', 'item-book.png', 2, 'We'),
+        gg('He', 'a car.', ['have', 'has'], 'has', 'item-car.png', 1, 'He'),
+        gg('They', 'three hats.', ['have', 'has'], 'have', 'item-hat.png', 3, 'They'),
+        gg('It', 'a bag.', ['have', 'has'], 'has', 'item-bag.png', 1, 'It'),
+        gg('You', 'a teddy.', ['have', 'has'], 'have', 'item-teddy.png', 1, 'You'),
+        gg('My sister', 'an apple.', ['have', 'has'], 'has', 'item-apple.png', 1, 'sister'),
+      ]),
+      stop('it-or-they', 'It or They', 'Sentence Sprouts: it / they', 'One thing: it. Many things: they.', 'item-duck-yellow.png', ['It is a ball.', 'They are balls.'], 'One thing: it is. Many things: they are.', { It: GREEN, They: PURPLE }, [{ word: 'It', note: 'one thing' }, { word: 'They', note: 'two or more' }], [
+        gg('', 'is a ball.', ['It', 'They'], 'It', 'item-ball.png', 1, 'is'),
+        gg('', 'are cats.', ['It', 'They'], 'They', 'item-cat.png', 2, 'are'),
+        gg('', 'is an apple.', ['It', 'They'], 'It', 'item-apple.png', 1, 'is'),
+        gg('', 'are ducks.', ['It', 'They'], 'They', 'item-duck-yellow.png', 3, 'are'),
+        gg('', 'is a book.', ['It', 'They'], 'It', 'item-book.png', 1, 'is'),
+        gg('', 'are hats.', ['It', 'They'], 'They', 'item-hat.png', 4, 'are'),
+        gg('', 'is a car.', ['It', 'They'], 'It', 'item-car.png', 1, 'is'),
+        gg('', 'are bears.', ['It', 'They'], 'They', 'item-bear.png', 2, 'are'),
+      ]),
+      stop('a-or-some', 'A or Some', 'Sentence Sprouts: a / some', 'One thing: a. More than one: some.', 'item-grapes.png', ['I have a ball.', 'I have some balls.'], 'One thing: a. Two or more: some.', { a: PINK, some: PURPLE }, [{ word: 'a', note: 'one' }, { word: 'some', note: 'two or more' }], [
+        gg('I have', 'ball.', ['a', 'some'], 'a', 'item-ball.png', 1, 'ball'),
+        gg('I have', 'balls.', ['a', 'some'], 'some', 'item-ball.png', 3, 'balls'),
+        gg('I have', 'cat.', ['a', 'some'], 'a', 'item-cat.png', 1, 'cat'),
+        gg('I have', 'books.', ['a', 'some'], 'some', 'item-book.png', 2, 'books'),
+        gg('I have', 'hat.', ['a', 'some'], 'a', 'item-hat.png', 1, 'hat'),
+        gg('I have', 'ducks.', ['a', 'some'], 'some', 'item-duck-yellow.png', 4, 'ducks'),
+        gg('I have', 'bag.', ['a', 'some'], 'a', 'item-bag.png', 1, 'bag'),
+        gg('I have', 'cars.', ['a', 'some'], 'some', 'item-car.png', 2, 'cars'),
+      ]),
+      stop('do-or-does', 'Do or Does', 'Sentence Sprouts: do / does', 'Asking a question? Do you? Does she?', 'item-pizza.png', ['Do you like pizza?', 'Does she like milk?'], 'I, you, we, they: do. He, she, it: does.', { Do: BLUE, Does: ORANGE }, [{ word: 'Do', note: 'I · you · we · they' }, { word: 'Does', note: 'he · she · it' }], [
+        gg('', 'you like pizza?', ['Do', 'Does'], 'Do', 'item-pizza.png', 1, 'you'),
+        gg('', 'she like milk?', ['Do', 'Does'], 'Does', 'item-milk.png', 1, 'she'),
+        gg('', 'they like apples?', ['Do', 'Does'], 'Do', 'item-apple.png', 2, 'they'),
+        gg('', 'he like grapes?', ['Do', 'Does'], 'Does', 'item-grapes.png', 1, 'he'),
+        gg('', 'we like oranges?', ['Do', 'Does'], 'Do', 'item-orange.png', 2, 'we'),
+        gg('', 'it like milk?', ['Do', 'Does'], 'Does', 'item-milk.png', 1, 'it'),
+        gg('', 'I like popcorn?', ['Do', 'Does'], 'Do', 'item-popcorn-yellow.png', 1, 'I'),
+        gg('', 'your sister like pizza?', ['Do', 'Does'], 'Does', 'item-pizza.png', 1, 'sister'),
       ]),
     ],
   };
@@ -318,6 +385,7 @@ export const LIBRARY_GAMES: LibraryGame[] = [
   magicShow(),
   marketSort(),
   grammarGarden(),
+  sentenceSprouts(),
 ];
 
 export function getLibraryGame(id: string | undefined): LibraryGame | undefined {
