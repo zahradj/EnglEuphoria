@@ -70,30 +70,48 @@ export const CreatorSlideRenderer: React.FC<Props> = ({ slide, hub, theme = 'lig
     ? { backgroundImage: `linear-gradient(rgba(8,8,24,0.35), rgba(8,8,24,0.35)), url("${bgImage}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
     : { background: 'linear-gradient(160deg, #171335 0%, #100e28 55%, #0b0a1f 100%)' };
 
-  if (fullBleed) {
-    return (
-      <div className="relative h-full w-full overflow-hidden" style={sceneStyle}>
-        <div className="absolute inset-0 flex items-center justify-center">
-          {needsJournalFrame(slide) ? (
-            <div className="mx-4 max-h-full w-full max-w-3xl overflow-y-auto rounded-3xl border-4 border-emerald-800 bg-[#fbf8ee] p-6 text-slate-900 shadow-xl md:p-8">
-              <AcademySlideRenderer slide={slide as any} t={academyThemeMap.light} fullBleed={false} onAnswer={onAnswer} />
-            </div>
-          ) : (
-            <AcademySlideRenderer slide={slide as any} t={academyThemeMap.dark} fullBleed={slide?.type !== 'intro'} onAnswer={onAnswer} />
-          )}
-        </div>
+  // Soft rounded "picture frame" around every Academy slide: margins on all
+  // sides, extra room at the bottom so the floating teacher toolbar never sits
+  // on top of lesson content, rounded corners, a drop shadow and an inner
+  // vignette so the edges fade instead of cutting off hard.
+  const frame = (children: React.ReactNode) => (
+    <div
+      className="h-full w-full p-3 pb-[88px] md:p-5 md:pb-[92px]"
+      style={{ background: 'linear-gradient(135deg, hsl(220 100% 97%) 0%, hsl(260 60% 94%) 100%)' }}
+    >
+      <div
+        className="relative h-full w-full overflow-hidden rounded-[28px] ring-1 ring-white/50 shadow-[0_12px_40px_rgba(30,27,75,0.28)]"
+        style={sceneStyle}
+      >
+        {children}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-[28px]"
+          style={{ boxShadow: 'inset 0 0 70px 6px rgba(8,8,24,0.35)' }}
+        />
       </div>
+    </div>
+  );
+
+  if (fullBleed) {
+    return frame(
+      <div className={`absolute inset-0 flex items-center justify-center ${slide?.type === 'intro' ? '[&>div]:!min-h-0' : ''}`}>
+        {needsJournalFrame(slide) ? (
+          <div className="mx-4 max-h-full w-full max-w-3xl overflow-y-auto rounded-3xl border-4 border-emerald-800 bg-[#fbf8ee] p-6 text-slate-900 shadow-xl md:p-8">
+            <AcademySlideRenderer slide={slide as any} t={academyThemeMap.light} fullBleed={false} onAnswer={onAnswer} />
+          </div>
+        ) : (
+          <AcademySlideRenderer slide={slide as any} t={academyThemeMap.dark} fullBleed={slide?.type !== 'intro'} onAnswer={onAnswer} />
+        )}
+      </div>,
     );
   }
 
-  return (
-    <div className="relative h-full w-full overflow-hidden" style={sceneStyle}>
-      <div className="absolute inset-0 flex items-center justify-center px-4 py-4 md:px-8">
-        <div className="max-h-full w-full max-w-3xl overflow-y-auto rounded-3xl border-4 border-emerald-800 bg-white p-5 text-slate-900 shadow-xl md:p-7">
-          <AcademySlideRenderer slide={slide as any} t={academyThemeMap.light} onAnswer={onAnswer} />
-        </div>
+  return frame(
+    <div className="absolute inset-0 flex items-center justify-center px-4 py-4 md:px-8">
+      <div className="max-h-full w-full max-w-3xl overflow-y-auto rounded-3xl border-4 border-emerald-800 bg-white p-5 text-slate-900 shadow-xl md:p-7">
+        <AcademySlideRenderer slide={slide as any} t={academyThemeMap.light} onAnswer={onAnswer} />
       </div>
-    </div>
+    </div>,
   );
 };
 
