@@ -30,6 +30,26 @@ import { asPayoutCurrency, formatPay } from '@/lib/teacherPay';
 
 const REPORT_DEADLINE_MS = 24 * 60 * 60 * 1000;
 
+// Trial lesson assessment — what the family reads first about their level.
+const TRIAL_ENGLISH = [
+  'Knows a few words',
+  'Understands simple questions',
+  'Speaks in short sentences',
+  'Speaks with confidence',
+];
+const TRIAL_CONFIDENCE = ['Shy at first, warmed up', 'Happy and chatty', 'Needs lots of encouragement', 'Very confident'];
+const TRIAL_LEVELS = ['Pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
+// Languages the emailed report can be written in (matches users.preferred_language).
+const REPORT_LANGUAGES: { code: string; label: string }[] = [
+  { code: 'en', label: 'English' },
+  { code: 'fr', label: 'Français' },
+  { code: 'es', label: 'Español' },
+  { code: 'ar', label: 'العربية' },
+  { code: 'tr', label: 'Türkçe' },
+  { code: 'it', label: 'Italiano' },
+];
+
 type Progress = 'finished' | 'most' | 'early';
 type Level = 'low' | 'mid' | 'good';
 
@@ -154,11 +174,22 @@ interface Draft {
   teacherNote: string;
   homeworkOn: boolean;
   homework: string;
+  /** Trial lesson assessment + recommended plan. */
+  trialLevel: string;
+  trialEnglish: string;
+  trialConfidence: string;
+  trialGoal: string;
+  trialLessons: number;
+  /** null = not touched yet: defaults to ON when the lesson was an email invite. */
+  emailOn: boolean | null;
+  /** null = the student's saved language (falls back to English). */
+  emailLang: string | null;
 }
 
 const emptyDraft = (): Draft => ({
   step: 1, progress: 'finished', resumeFrom: '', issues: [], skills: {}, great: [], more: [], extraGreat: '', extraMore: '',
   family: '', familyEdited: false, parentNote: '', teacherNote: '', homeworkOn: false, homework: '',
+  trialLevel: '', trialEnglish: '', trialConfidence: '', trialGoal: '', trialLessons: 0, emailOn: null, emailLang: null,
 });
 
 const draftKey = (bookingId?: string) => (bookingId ? `wrapup-draft:${bookingId}` : null);
@@ -194,6 +225,10 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   const [studentFeedback, setStudentFeedback] = useState<boolean | null>(null);
   const [resolvedName, setResolvedName] = useState<string | null>(studentName ?? null);
   const [done, setDone] = useState<null | { lines: [string, string][] }>(null);
+  // Looked up from the booking itself so the report works the same from the
+  // classroom and from the dashboard list (which doesn't pass isTrial).
+  const [bookingMeta, setBookingMeta] = useState<{ isTrial: boolean; inviteEmail: string | null; language: string | null }>({ isTrial: false, inviteEmail: null, language: null });
+  const isTrialLesson = isTrial || bookingMeta.isTrial;
 
   const name = resolvedName || 'The student';
   const set = useCallback(<K extends keyof Draft>(k: K, v: Draft[K]) => setD((p) => ({ ...p, [k]: v })), []);
@@ -217,6 +252,30 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
     if (!key) return;
     try { localStorage.setItem(key, JSON.stringify(d)); } catch { /* noop */ }
   }, [d, open, bookingId, done]);
+
+  // Trial or not, and the email the teacher invited the student with (if any).
+  useEffect(() => {
+    if (!open || !bookingId) return;
+    let cancelled = false;
+    (async () => {
+      const [{ data: b }, checkRes, { data: pref }] = await Promise.all([
+        supabase.from('class_bookings').select('booking_type').eq('id', bookingId).maybeSingle(),
+        // Asked of the server: only lessons created with "Invite a Student" can be emailed.
+        supabase.functions.invoke('send-lesson-report', { body: { action: 'check', booking_id: bookingId } })
+          .catch(() => ({ data: null, error: null })),
+        studentId
+          ? supabase.from('users').select('preferred_language').eq('id', studentId).maybeSingle()
+          : Promise.resolve({ data: null }),
+      ]);
+      if (cancelled) return;
+      setBookingMeta({
+        isTrial: String((b as any)?.booking_type ?? '').toLowerCase() === 'trial',
+        inviteEmail: ((checkRes as any)?.data?.can_email ? (checkRes as any).data.to : null) as string | null,
+        language: (pref as any)?.preferred_language ?? null,
+      });
+    })();
+    return () => { cancelled = true; };
+  }, [open, bookingId, studentId]);
 
   // Booking end time → 24h payment countdown.
   useEffect(() => {
@@ -266,10 +325,15 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
     })()
     : null;
 
+  // The trial's starting level: set in the classroom, else picked in this report.
+  const trialLevel = trialCefr || d.trialLevel || '';
+
   // Family message drafted from the taps until the teacher edits it.
   const draftedFamily = useMemo(() => {
     const topic = lessonTitle ? `“${lessonTitle}”` : 'today’s lesson';
-    const opener = {
+    const opener = isTrialLesson
+      ? `Thank you for joining ${name}'s trial lesson! It was lovely to meet ${name}${trialLevel ? ` — we'll start at level ${trialLevel}` : ''}.`
+      : {
       finished: `${name} did a great job today! We worked on ${topic}.`,
       most: `Good class today! ${name} worked on ${topic}.`,
       early: `Today we started ${topic}. We'll carry on with it next class.`,
@@ -279,8 +343,12 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
     if (moreList.length) msg += `\n\n💪 Let's practise:\n${moreList.map((x) => `• ${x}`).join('\n')}`;
     if (d.homeworkOn && d.homework.trim()) msg += `\n\n📚 Homework: ${d.homework.trim()}`;
     return msg;
-  }, [name, lessonTitle, d.progress, greatList, moreList, d.homeworkOn, d.homework]);
+  }, [name, lessonTitle, d.progress, greatList, moreList, d.homeworkOn, d.homework, isTrialLesson, trialLevel]);
   const familyText = d.familyEdited ? d.family : draftedFamily;
+  // Emailing is only for lessons the teacher created via "Invite a Student".
+  const canEmail = !!bookingMeta.inviteEmail;
+  const emailOn = canEmail && (d.emailOn ?? true);
+  const emailLang = d.emailLang ?? (REPORT_LANGUAGES.some((l) => l.code === bookingMeta.language) ? bookingMeta.language! : 'en');
 
   const toggleIn = (k: 'issues' | 'great' | 'more', v: string) =>
     setD((p) => ({ ...p, [k]: p[k].includes(v) ? p[k].filter((x) => x !== v) : [...p[k], v] }));
@@ -342,6 +410,13 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
           areas_for_improvement: moreList,
           quick_notes: familyText.trim(),
           teacher_note: d.teacherNote.trim() || undefined,
+          trial: isTrialLesson ? {
+            level: trialLevel || undefined,
+            english_today: d.trialEnglish || undefined,
+            confidence: d.trialConfidence || undefined,
+            goal: d.trialGoal.trim() || undefined,
+            lessons_per_week: d.trialLessons || undefined,
+          } : undefined,
         } as any,
         student_performance_rating: rating,
         lesson_objectives_met: outcome === 'completed',
@@ -423,12 +498,12 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
 
         if (studentId) void evaluateAndAssignExtraPractice({ bookingId, studentId, hub: hubType as any });
 
-        if (isTrial && trialCefr && studentId) {
+        if (isTrialLesson && trialLevel && studentId) {
           // Saves the level to the student's profile, placement and learning
           // path (skipped if the teacher already set it with the level picker).
           try {
             const { error } = await (supabase as any).rpc('set_trial_level', {
-              p_booking_id: bookingId, p_cefr: trialCefr, p_only_if_unset: true,
+              p_booking_id: bookingId, p_cefr: trialLevel, p_only_if_unset: true,
             });
             if (error) throw error;
           } catch (e) { console.warn('[LessonWrapUpDialog] trial handoff failed', e); }
@@ -442,6 +517,39 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
           } catch (e) { console.warn('[LessonWrapUpDialog] advanceCurriculumProgress failed', e); }
         } else if (outcome === 'not_completed') {
           lines.splice(1, 0, ['🔁', `Next class stays on this lesson, starting from: ${resumeFrom}`]);
+        }
+      }
+
+      // Optional: email the report to the student (the address the teacher
+      // invited them with). Never blocks or fails the report itself.
+      if (emailOn && bookingId) {
+        try {
+          const { data: mail, error: mailErr } = await supabase.functions.invoke('send-lesson-report', {
+            body: {
+              booking_id: bookingId,
+              report: {
+                language: emailLang,
+                studentName: name,
+                lessonTitle: lessonTitle ?? '',
+                progress: d.progress,
+                skills: Object.entries(d.skills).map(([k, lvl]) => ({ label: (skillProfile.labels as Record<string, string>)[k] ?? k, level: lvl })),
+                message: familyText.trim(),
+                homework: homework ?? '',
+                trial: isTrialLesson ? {
+                  level: trialLevel, englishToday: d.trialEnglish, confidence: d.trialConfidence,
+                  lessonsPerWeek: d.trialLessons || undefined, goal: d.trialGoal.trim(),
+                } : undefined,
+              },
+            },
+          });
+          if (mailErr) throw mailErr;
+          const langLabel = REPORT_LANGUAGES.find((l) => l.code === mail?.language)?.label;
+          lines.push(mail?.sent
+            ? ['✉️', `${isTrialLesson ? 'Trial report' : 'Report'} emailed to ${mail.to}${langLabel ? ` in ${langLabel}` : ''}${emailLang !== 'en' && !mail.translated ? ' (translation unavailable — sent in English)' : ''}`]
+            : ['⚠️', `Report saved, but the email was not sent${mail?.reason ? ` — ${mail.reason}` : ''}`]);
+        } catch (mailEx: any) {
+          console.warn('[LessonWrapUp] report email failed', mailEx);
+          lines.push(['⚠️', 'Report saved, but the email could not be sent']);
         }
       }
 
@@ -503,7 +611,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
         <div className="px-6 pt-5 pb-4 text-white" style={{ background: theme.hexGradient }}>
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0">
-              <div className="text-[11px] font-extrabold uppercase tracking-[0.14em] opacity-90">Session report</div>
+              <div className="text-[11px] font-extrabold uppercase tracking-[0.14em] opacity-90">{isTrialLesson ? 'Trial lesson report' : 'Session report'}</div>
               <h2 className="mt-0.5 text-xl font-extrabold leading-snug">{lessonTitle || 'How did today’s class go?'}</h2>
               <div className="text-sm opacity-95">{resolvedName ?? ''}</div>
             </div>
@@ -513,7 +621,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
           </div>
           {!done && (
             <div className="mt-3 grid grid-cols-3 gap-2">
-              {(['The class', 'How they did', 'Messages'] as const).map((label, i) => {
+              {([isTrialLesson ? 'The trial' : 'The class', 'How they did', isTrialLesson ? 'Plan & message' : 'Messages'] as const).map((label, i) => {
                 const n = (i + 1) as 1 | 2 | 3;
                 return (
                   <button key={label} type="button" onClick={() => set('step', n)} className={`grid gap-1 text-left text-xs font-extrabold ${n === step ? 'text-white' : 'text-white/75'}`}>
@@ -601,6 +709,44 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
 
               {step === 2 && (
                 <>
+                  {isTrialLesson && (
+                    <section className="grid gap-3 rounded-2xl border-2 p-4" style={{ borderColor: accent, background: `${accent}0F` }}>
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <h3 className="text-base font-extrabold">Trial assessment</h3>
+                        <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-extrabold text-emerald-600 dark:text-emerald-400">Goes in the family’s report</span>
+                      </div>
+                      <div className="grid gap-1.5">
+                        <div className="text-sm font-extrabold">Starting level</div>
+                        {trialCefr ? (
+                          <div className="flex items-center gap-2 text-sm">
+                            <span className="rounded-full px-3 py-1 text-sm font-extrabold text-white" style={{ background: accent }}>{trialCefr}</span>
+                            <span className="text-xs text-muted-foreground">Set in the classroom</span>
+                          </div>
+                        ) : (
+                          <div className="flex flex-wrap gap-1.5">
+                            {TRIAL_LEVELS.map((lv) => <Chip key={lv} on={d.trialLevel === lv} onClick={() => set('trialLevel', d.trialLevel === lv ? '' : lv)}>{lv}</Chip>)}
+                          </div>
+                        )}
+                      </div>
+                      <div className="grid gap-1.5">
+                        <div className="text-sm font-extrabold">{name}’s English today</div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {TRIAL_ENGLISH.map((t) => <Chip key={t} on={d.trialEnglish === t} onClick={() => set('trialEnglish', d.trialEnglish === t ? '' : t)}>{t}</Chip>)}
+                        </div>
+                      </div>
+                      <div className="grid gap-1.5">
+                        <div className="text-sm font-extrabold">In class</div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {TRIAL_CONFIDENCE.map((t) => <Chip key={t} on={d.trialConfidence === t} onClick={() => set('trialConfidence', d.trialConfidence === t ? '' : t)}>{t}</Chip>)}
+                        </div>
+                      </div>
+                      <div className="grid gap-1.5">
+                        <div className="text-sm font-extrabold">Learning goal <span className="font-semibold text-muted-foreground">(optional)</span></div>
+                        <Input value={d.trialGoal} onChange={(e) => set('trialGoal', e.target.value)} placeholder="e.g. Speak with confidence at school / pass an exam / travel" />
+                      </div>
+                    </section>
+                  )}
+
                   <section className="grid gap-2">
                     <h3 className="text-base font-extrabold">How did {name} do?</h3>
                     <p className="-mt-1 text-xs text-muted-foreground">One tap per skill. These update the student’s Skill Radar. Skip any you didn’t see today.</p>
@@ -652,6 +798,20 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
 
               {step === 3 && (
                 <>
+                  {isTrialLesson && (
+                    <section className="grid gap-2">
+                      <h3 className="text-base font-extrabold">Recommended plan</h3>
+                      <p className="-mt-1 text-xs text-muted-foreground">How often would you suggest {name} has lessons? It appears in the trial report.</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {[1, 2, 3].map((n) => (
+                          <Chip key={n} on={d.trialLessons === n} onClick={() => set('trialLessons', d.trialLessons === n ? 0 : n)}>
+                            {n} lesson{n === 1 ? '' : 's'} / week
+                          </Chip>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
                   <section className="grid gap-2">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <h3 className="text-base font-extrabold">For the family</h3>
@@ -671,6 +831,36 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
                       ))}
                     </div>
                   </section>
+
+                  {canEmail && (
+                  <section className="grid gap-2">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <div className="text-sm font-extrabold">✉️ Email this {isTrialLesson ? 'trial report' : 'report'} to the student</div>
+                        <div className="text-xs text-muted-foreground">
+                          Sent to {bookingMeta.inviteEmail}
+                        </div>
+                      </div>
+                      <Switch checked={emailOn} onCheckedChange={(v) => set('emailOn', v)} aria-label="Email this report" />
+                    </div>
+                    {emailOn && (
+                      <div className="grid gap-1.5">
+                        <div className="text-xs font-bold text-muted-foreground">
+                          Write the email in
+                          {bookingMeta.language && bookingMeta.language !== 'en' && d.emailLang === null ? ' (the family’s language)' : ''}:
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {REPORT_LANGUAGES.map((l) => (
+                            <Chip key={l.code} on={emailLang === l.code} onClick={() => set('emailLang', l.code)}>{l.label}</Chip>
+                          ))}
+                        </div>
+                        {emailLang !== 'en' && (
+                          <p className="text-xs text-muted-foreground">Your message and notes are translated automatically; labels are fixed translations. The in-app report stays in English.</p>
+                        )}
+                      </div>
+                    )}
+                  </section>
+                  )}
 
                   <section className="grid gap-2">
                     <div className="flex items-center justify-between gap-3">
