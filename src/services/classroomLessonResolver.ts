@@ -261,6 +261,16 @@ export async function resolveBookingLesson(booking: {
     );
   }
 
+  // Academy lessons carry one illustrated background per pedagogical block
+  // (content.blockImages). The student player paints it behind each slide; stamp
+  // it onto the slide so the live classroom can do the same.
+  const blockImages = (lesson?.content as any)?.blockImages as Record<string, string> | undefined;
+  if (blockImages && hubType === 'academy') {
+    baseSlides = baseSlides.map((sl: any) =>
+      sl && sl.block && blockImages[sl.block] ? { ...sl, _blockImage: blockImages[sl.block] } : sl,
+    );
+  }
+
   const homeworkPack = lesson
     ? ((lesson.content as any)?.homework_pack ?? (lesson.ai_metadata as any)?.unified_output?.homework_pack ?? null)
     : null;
