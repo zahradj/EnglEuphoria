@@ -255,19 +255,17 @@
   },
   {
     "out": "public/welcome-town/scenes/bg-classroom-wide-wide.png",
-    "outpaintFrom": "public/welcome-town/scenes/bg-classroom-wide.png",
     "refs": [
       "public/welcome-town/scenes/bg-classroom-wide.png"
     ],
-    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+    "prompt": "Redraw this exact classroom scene as a 16:9 widescreen picture that fills the WHOLE frame edge to edge: remove the white border/frame around the original completely — no white margins anywhere. Keep everything from the original (same characters, poses, objects, colours and art style), and extend the room naturally to the left and right with matching walls, floor and furniture. Add NO new characters. Full-bleed 16:9, no frame, no border, no text, no letters."
   },
   {
     "out": "public/welcome-town/scenes/bg-classroom-circle-wide.png",
-    "outpaintFrom": "public/welcome-town/scenes/bg-classroom-circle.png",
     "refs": [
       "public/welcome-town/scenes/bg-classroom-circle.png"
     ],
-    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+    "prompt": "Redraw this exact classroom scene as a 16:9 widescreen picture that fills the WHOLE frame edge to edge: remove the white border/frame around the original completely — no white margins anywhere. Keep everything from the original (same characters, poses, objects, colours and art style), and extend the room naturally to the left and right with matching walls, floor and furniture. Add NO new characters. Full-bleed 16:9, no frame, no border, no text, no letters."
   },
   {
     "out": "public/welcome-town/scenes/bg-vocab-pip-happy-wide.png",
@@ -343,11 +341,10 @@
   },
   {
     "out": "public/welcome-town/scenes/bg-classroom-supplies2-wide.png",
-    "outpaintFrom": "public/welcome-town/scenes/bg-classroom-supplies2.png",
     "refs": [
       "public/welcome-town/scenes/bg-classroom-supplies2.png"
     ],
-    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+    "prompt": "Redraw this exact classroom scene as a 16:9 widescreen picture that fills the WHOLE frame edge to edge: remove the white border/frame around the original completely — no white margins anywhere. Keep everything from the original (same characters, poses, objects, colours and art style), and extend the room naturally to the left and right with matching walls, floor and furniture. Add NO new characters. Full-bleed 16:9, no frame, no border, no text, no letters."
   },
   {
     "out": "public/welcome-town/scenes/bg-prep-in-wide.png",
