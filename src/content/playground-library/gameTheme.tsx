@@ -309,6 +309,18 @@ export function MarketBackdrop() {
   );
 }
 
+/** Garden for Grammar Garden: bright sky, rolling lawn and a picket fence. */
+export function GardenBackdrop() {
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: 'linear-gradient(180deg, #bae6fd 0%, #e0f2fe 30%, #bbf7d0 30%, #4ade80 100%)' }}>
+      <div className="gt-idle absolute rounded-full bg-white/90" style={{ left: '6%', top: '9%', width: '15cqw', height: '5cqh', animation: 'gt-drift 70s linear infinite' }} />
+      <div className="gt-idle absolute rounded-full bg-white/80" style={{ left: '55%', top: '15%', width: '11cqw', height: '4cqh', animation: 'gt-drift 90s linear infinite' }} />
+      <div className="absolute inset-x-0" style={{ top: '27%', height: '9%', background: 'repeating-linear-gradient(90deg, #fff 0, #fff 3cqw, transparent 3cqw, transparent 4.4cqw)', clipPath: 'polygon(0 30%, 100% 30%, 100% 100%, 0 100%)', opacity: 0.9 }} />
+      <div className="absolute inset-x-0 bottom-0" style={{ top: '60%', background: 'radial-gradient(ellipse at 50% 0%, #86efac 0%, #22c55e 70%)', borderRadius: '50% 50% 0 0 / 8% 8% 0 0' }} />
+    </div>
+  );
+}
+
 export function TopHatIcon({ height = '5cqh' }: { height?: string }) {
   return (
     <svg viewBox="0 0 64 56" style={{ height }} aria-hidden="true">

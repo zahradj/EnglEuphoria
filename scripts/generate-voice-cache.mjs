@@ -455,6 +455,10 @@ function gameLines() {
       const scene = stage.scene;
       if (scene.kind === 'first-sound') scene.rounds.forEach((r) => words.add(r.word));
       if (scene.kind === 'whats-missing') scene.rounds.forEach((r) => r.items.forEach((i) => words.add(i.word)));
+      if (scene.kind === 'grammar-gap') {
+        (scene.examples || []).forEach((e) => words.add(e));
+        scene.rounds.forEach((r) => words.add([r.before, r.answer, r.after].map((p) => (p || '').trim()).filter(Boolean).join(' ')));
+      }
       if (scene.kind === 'sort-basket') { scene.baskets.forEach((b) => words.add(b.label)); scene.items.forEach((i) => words.add(i.word)); }
       if (scene.kind === 'letter-blocks') scene.rounds.forEach((r) => {
         if (r.word) words.add(r.word);

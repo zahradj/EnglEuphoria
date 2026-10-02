@@ -7,6 +7,7 @@ import { FirstSoundScene } from '../FirstSoundScene';
 import { LetterMatchScene, LetterBlocksScene } from '../LetterTilesScene';
 import { WhatsMissingScene } from '../WhatsMissingScene';
 import { SortBasketScene } from '../SortBasketScene';
+import { GrammarGapScene } from '../GrammarGapScene';
 import { TitleCardScene } from './scene-components/TitleCardScene';
 import { CinematicScene } from './scene-components/CinematicScene';
 import { MeetScene } from './scene-components/MeetScene';
@@ -242,6 +243,7 @@ export function SceneRenderer(props: {
     case 'letter-blocks': return <LetterBlocksScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'whats-missing': return <WhatsMissingScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'sort-basket': return <SortBasketScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+    case 'grammar-gap': return <GrammarGapScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     default: return null;
   }
   })();

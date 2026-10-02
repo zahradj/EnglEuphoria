@@ -159,4 +159,22 @@ export const REUSABLE_ACTIVITIES: ReusableActivity[] = [
       items: [{ word: 'ball', img: '<picture import>', basket: 0 }, { word: 'apple', img: '<picture import>', basket: 1 }],
     },
   },
+  {
+    kind: 'grammar-gap',
+    name: 'Grammar Garden (fill the gap)',
+    file: 'src/content/playground-library/GrammarGapScene.tsx',
+    purpose: 'Grammar: choose the correct form for the gap (a/an, is/are, singular/plural, am/is/are).',
+    howItWorks:
+      'A wooden sign shows a sentence with one gap and, when useful, a picture repeated count times (so one cat / two cats is seen). '
+      + 'Worked examples are read aloud first (model first). The student taps the flower with the right word; it blooms into the gap and the whole sentence '
+      + 'is read aloud. A wrong pick wobbles (no hearts) and after two the right flower glows. Taps, not drags. Fully synced; safe on the student mirror.',
+    example: {
+      id: 'u1-grammar-garden',
+      kind: 'grammar-gap',
+      teacher: 'Read the examples with the student, then let them pick the flower that fits.',
+      examples: ['a ball', 'an apple'],
+      rule: 'Use an before a, e, i, o, u.',
+      rounds: [{ before: 'This is', after: 'ball.', choices: ['a', 'an'], answer: 'a', img: '<picture import>' }],
+    },
+  },
 ];

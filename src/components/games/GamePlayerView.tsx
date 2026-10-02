@@ -4,6 +4,7 @@ import { FirstSoundScene } from '@/content/playground-library/FirstSoundScene';
 import { LetterBlocksScene, LetterMatchScene } from '@/content/playground-library/LetterTilesScene';
 import { WhatsMissingScene } from '@/content/playground-library/WhatsMissingScene';
 import { SortBasketScene } from '@/content/playground-library/SortBasketScene';
+import { GrammarGapScene } from '@/content/playground-library/GrammarGapScene';
 import { getLibraryGame, starsFor } from '@/content/playground-library/gamesCatalog';
 import { getGameProgress, overallStars, recordStageResult } from '@/content/playground-library/gameProgress';
 import { unlockAudio } from '@/content/playground-library/unit1/audio';
@@ -126,6 +127,7 @@ export function GamePlayerView({ gameId, onBack }: { gameId: string | undefined;
         {!intro && scene.kind === 'first-sound' && <FirstSoundScene key={`${stage.id}-${runKey}`} scene={scene} onNext={finishStage} onWin={noop} onResult={onResult} />}
         {!intro && scene.kind === 'letter-blocks' && <LetterBlocksScene key={`${stage.id}-${runKey}`} scene={scene} onNext={finishStage} onWin={noop} onResult={onResult} />}
         {!intro && scene.kind === 'letter-match' && <LetterMatchScene key={`${stage.id}-${runKey}`} scene={scene} onNext={finishStage} onWin={noop} onResult={onResult} />}
+        {!intro && scene.kind === 'grammar-gap' && <GrammarGapScene key={`${stage.id}-${runKey}`} scene={scene} onNext={finishStage} onWin={noop} onResult={onResult} />}
         {!intro && scene.kind === 'sort-basket' && <SortBasketScene key={`${stage.id}-${runKey}`} scene={scene} onNext={finishStage} onWin={noop} onResult={onResult} />}
         {!intro && scene.kind === 'whats-missing' && <WhatsMissingScene key={`${stage.id}-${runKey}`} scene={scene} onNext={finishStage} onWin={noop} onResult={onResult} />}
 
