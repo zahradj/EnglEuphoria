@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Video, Clock, Zap, Rocket, CalendarPlus, CalendarX, CalendarClock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import { pickJoinableBooking, joinLookbackIso } from '@/services/joinableBooking';
 import { useAuth } from '@/contexts/AuthContext';
 import { HubId, HUB_THEMES } from '@/utils/hubTheme';
 import { cn } from '@/lib/utils';
@@ -71,16 +72,18 @@ export const JoinLessonHero: React.FC<JoinLessonHeroProps> = ({ hubId, isDark = 
       const now = new Date();
       const fiveMinAgo = new Date(now.getTime() - 5 * 60000).toISOString();
 
-      // Primary: check class_bookings (has correct session_id & meeting_link)
-      const { data: booking } = await supabase
+      // Primary: check class_bookings (has correct session_id & meeting_link).
+      // A booking stays joinable until its classroom window closes (see
+      // joinableBooking.ts) — not just for the first 5 minutes after the start.
+      const { data: candidates } = await supabase
         .from('class_bookings')
-        .select('id, session_id, meeting_link, scheduled_at')
+        .select('id, session_id, meeting_link, scheduled_at, duration, hub_type, ended_at')
         .eq('student_id', user.id)
         .in('status', ['scheduled', 'confirmed'])
-        .gte('scheduled_at', fiveMinAgo)
+        .gte('scheduled_at', joinLookbackIso(now))
         .order('scheduled_at', { ascending: true })
-        .limit(1)
-        .maybeSingle();
+        .limit(20);
+      const booking = pickJoinableBooking(candidates as any[] | null, now);
 
       if (booking) {
         setLesson({

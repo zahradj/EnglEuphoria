@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useStudentHandlers } from "@/hooks/useStudentHandlers";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { pickJoinableBooking, joinLookbackIso } from "@/services/joinableBooking";
 import { HomeworkSubmissionModal } from "./HomeworkSubmissionModal";
 import { TeacherMessageModal } from "./TeacherMessageModal";
 import { StudentLessonTracker } from "@/components/dashboard/student/StudentLessonTracker";
@@ -55,16 +56,16 @@ export const DashboardTab = ({ studentName, studentId, hasProfile, studentProfil
 
   const handleJoinClassroom = async () => {
     try {
-      const fiveMinAgo = new Date(Date.now() - 5 * 60000).toISOString();
-      const { data: nextBooking } = await supabase
+      // Joinable until the classroom window closes, not just the first 5 minutes.
+      const { data: candidates } = await supabase
         .from('class_bookings')
-        .select('id')
+        .select('id, scheduled_at, duration, hub_type, ended_at')
         .eq('student_id', studentId)
         .in('status', ['scheduled', 'confirmed'])
-        .gte('scheduled_at', fiveMinAgo)
+        .gte('scheduled_at', joinLookbackIso())
         .order('scheduled_at', { ascending: true })
-        .limit(1)
-        .maybeSingle();
+        .limit(20);
+      const nextBooking = pickJoinableBooking(candidates as any[] | null);
 
       if (nextBooking?.id) {
         navigate(`/classroom/${nextBooking.id}`);
