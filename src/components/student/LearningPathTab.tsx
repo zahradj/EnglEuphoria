@@ -23,7 +23,7 @@ import { useStudentLevel } from '@/hooks/useStudentLevel';
 import {
   fetchHubLessonSequence,
   normalizeCefr,
-  readLessonPointer,
+  readLessonPointerState,
   type Hub,
   type LessonMeta,
 } from '@/services/activeCoreLessonResolver';
@@ -73,7 +73,7 @@ export const LearningPathTab = () => {
     enabled: !!user?.id,
     queryFn: async () => {
       const uid = user!.id;
-      const [placementRes, profileRes, pointerId, sequence] = await Promise.all([
+      const [placementRes, profileRes, pointer, sequence] = await Promise.all([
         (supabase as any)
           .from('placement_results')
           .select('cefr_level, method, created_at')
@@ -86,7 +86,7 @@ export const LearningPathTab = () => {
           .select('final_cefr_level')
           .eq('user_id', uid)
           .maybeSingle(),
-        readLessonPointer(uid),
+        readLessonPointerState(uid),
         fetchHubLessonSequence(hub),
       ]);
 
@@ -96,6 +96,7 @@ export const LearningPathTab = () => {
 
       // The pointer may sit in a later level once the student moves up —
       // follow it; otherwise show the saved level.
+      const pointerId = pointer.currentLessonId;
       const pointerLesson = pointerId ? sequence.find(l => l.id === pointerId) ?? null : null;
       const pathLevel = normalizeCefr(pointerLesson?.slot_cefr_level) ?? savedLevel;
 
@@ -118,6 +119,8 @@ export const LearningPathTab = () => {
         pathLevel,
         fromTrial: placementRes.data?.method === 'trial_lesson',
         pointerId: pointerLesson ? pointerId : null,
+        // Finished everything published at this level so far.
+        finishedPointer: !!pointerLesson && pointer.lastCompletedLessonId === pointerId,
         lessons: levelLessons.map(l => ({
           ...l,
           description: null,
@@ -132,11 +135,18 @@ export const LearningPathTab = () => {
   const lessons = data?.lessons ?? [];
   const pointerIndex = data?.pointerId ? lessons.findIndex(l => l.id === data.pointerId) : -1;
 
+  const finishedPointer = !!data?.finishedPointer && pointerIndex >= 0;
   const isDone = (l: PathLesson, i: number) =>
-    progressMap[l.id]?.status === 'completed' || (pointerIndex >= 0 && i < pointerIndex);
+    progressMap[l.id]?.status === 'completed' ||
+    (pointerIndex >= 0 && (i < pointerIndex || (finishedPointer && i === pointerIndex)));
 
-  // Up next: the pointer lesson, else the first lesson not yet done.
-  const upNextIndex = pointerIndex >= 0 ? pointerIndex : lessons.findIndex((l, i) => !isDone(l, i));
+  // Up next: the pointer lesson — or, once it's finished, the next lesson
+  // published at this level since (new units join the path in order).
+  // Without a pointer: the first lesson not yet done.
+  const upNextIndex = pointerIndex >= 0
+    ? (finishedPointer ? (pointerIndex + 1 < lessons.length ? pointerIndex + 1 : -1) : pointerIndex)
+    : lessons.findIndex((l, i) => !isDone(l, i));
+  const waitingForNew = finishedPointer && upNextIndex < 0;
 
   const groups: UnitGroup[] = React.useMemo(() => {
     const byUnit = new Map<string, UnitGroup>();
@@ -212,6 +222,23 @@ export const LearningPathTab = () => {
               <div className="font-semibold truncate">{upNext.title}</div>
               <div className="text-xs text-muted-foreground">
                 {levelLabel} · Unit {upNext.slot_unit_number ?? '—'} · Lesson {upNext.slot_lesson_number ?? '—'}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {waitingForNew && (
+        <Card className="ring-2 ring-emerald-400/60 bg-emerald-50/60 dark:bg-emerald-950/20">
+          <CardContent className="flex items-center gap-4 py-5">
+            <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center">
+              <CheckCircle className="h-5 w-5" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">All caught up</div>
+              <div className="font-semibold">You finished every {levelLabel} lesson so far!</div>
+              <div className="text-xs text-muted-foreground">
+                New lessons are on the way. The next one appears here, in order, as soon as it's added.
               </div>
             </div>
           </CardContent>

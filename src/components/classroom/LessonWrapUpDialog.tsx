@@ -438,7 +438,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
         if (outcome === 'completed' && studentId && lessonId) {
           try {
             const next = await advanceCurriculumProgress(studentId, lessonId);
-            lines.splice(1, 0, ['➡️', next ? 'Next class moves on to the next lesson' : 'Progress saved']);
+            lines.splice(1, 0, ['➡️', next ? 'Next class moves on to the next lesson' : 'Progress saved · the next lesson at this level opens as soon as it is added to the library']);
           } catch (e) { console.warn('[LessonWrapUpDialog] advanceCurriculumProgress failed', e); }
         } else if (outcome === 'not_completed') {
           lines.splice(1, 0, ['🔁', `Next class stays on this lesson, starting from: ${resumeFrom}`]);

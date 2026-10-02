@@ -19,6 +19,29 @@ const HUB_TO_TARGET_SYSTEM: Record<Hub, string[]> = {
  */
 const POINTER_TABLE = 'student_lesson_pointers';
 
+export interface LessonPointerState {
+  currentLessonId: string | null;
+  /** Last lesson finished. Equal to currentLessonId when the student has
+   *  finished everything published at their level so far ("waiting"). */
+  lastCompletedLessonId: string | null;
+}
+
+export async function readLessonPointerState(studentId: string): Promise<LessonPointerState> {
+  const { data, error } = await (supabase as any)
+    .from(POINTER_TABLE)
+    .select('current_lesson_id, last_completed_lesson_id')
+    .eq('student_id', studentId)
+    .maybeSingle();
+  if (error) {
+    console.warn('[activeCoreLessonResolver] lesson pointer read failed:', error);
+    return { currentLessonId: null, lastCompletedLessonId: null };
+  }
+  return {
+    currentLessonId: (data?.current_lesson_id as string | null) ?? null,
+    lastCompletedLessonId: (data?.last_completed_lesson_id as string | null) ?? null,
+  };
+}
+
 export async function readLessonPointer(studentId: string): Promise<string | null> {
   const { data, error } = await (supabase as any)
     .from(POINTER_TABLE)
@@ -75,9 +98,20 @@ export async function resolveActiveCoreLesson(
   hub: Hub,
 ): Promise<string | null> {
   // 1) Current-lesson pointer (advanced after each completed lesson, or set
-  //    by a teacher mid-class / an admin).
-  const pointed = await readLessonPointer(studentId);
-  if (pointed) return pointed;
+  //    by a teacher mid-class / an admin). If the student had finished
+  //    everything published at their level, pick up a lesson added since.
+  const pointer = await readLessonPointerState(studentId);
+  if (pointer.currentLessonId) {
+    if (pointer.lastCompletedLessonId === pointer.currentLessonId) {
+      const next = await getNextLessonInLevel(pointer.currentLessonId);
+      if (next) {
+        // Best-effort (teachers/admins can write; students only read).
+        void writeLessonPointer(studentId, next.id);
+        return next.id;
+      }
+    }
+    return pointer.currentLessonId;
+  }
 
   // 2) personalized_learning_paths
   const { data: plp } = await supabase
@@ -206,23 +240,59 @@ function compareLessons(a: LessonMeta, b: LessonMeta): number {
 }
 
 /**
- * Advance the student's current-lesson pointer to the next lesson after
- * they've completed the current one. Returns the next lesson id, or null if
- * there is no next lesson or the write failed (so callers don't report an
- * advance that never happened).
+ * The next published lesson after this one at the SAME CEFR level (same
+ * hub), in teaching order (unit, then lesson). Null when nothing later is
+ * published at that level yet. Moving up a level is the teacher's call
+ * (LessonSwitcher's next arrow crosses levels), so finishing the last
+ * lesson built so far never drops a student into the next level.
+ */
+export async function getNextLessonInLevel(lessonId: string): Promise<LessonMeta | null> {
+  const current = await fetchLessonMeta(lessonId);
+  if (!current?.target_system) return null;
+  const { data: all } = await supabase
+    .from('curriculum_lessons')
+    .select(META_COLS)
+    .eq('target_system', current.target_system)
+    .eq('is_published', true);
+  const level = cefrRank(current.slot_cefr_level);
+  const sorted = ([...((all as unknown as LessonMeta[]) ?? [])])
+    .filter(l => cefrRank(l.slot_cefr_level) === level)
+    .sort(compareLessons);
+  const idx = sorted.findIndex(l => l.id === lessonId);
+  if (idx >= 0) return sorted[idx + 1] ?? null;
+  // Lesson unpublished since: first one that sorts after it.
+  return sorted.find(l => compareLessons(current, l) < 0) ?? null;
+}
+
+/**
+ * Advance the student's current-lesson pointer after they've completed the
+ * current one — to the next lesson at their level. If none is published
+ * yet, the pointer stays put and is marked finished, and the next lesson
+ * added at that level is picked up automatically (resolveActiveCoreLesson,
+ * Learning Path). Returns the next lesson id, or null if there is none yet
+ * or the write failed.
  */
 export async function advanceCurriculumProgress(
   studentId: string,
   completedLessonId: string,
 ): Promise<string | null> {
-  const next = await getAdjacentLesson(completedLessonId, 'next');
-  if (!next) return null;
-  const { error: advanceErr } = await writeLessonPointer(studentId, next.id);
+  const next = await getNextLessonInLevel(completedLessonId);
+  const { error: advanceErr } = await (supabase as any)
+    .from(POINTER_TABLE)
+    .upsert(
+      {
+        student_id: studentId,
+        current_lesson_id: next?.id ?? completedLessonId,
+        last_completed_lesson_id: completedLessonId,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'student_id' },
+    );
   if (advanceErr) {
     console.error('[activeCoreLessonResolver] lesson pointer advance failed:', advanceErr);
     return null;
   }
-  return next.id;
+  return next?.id ?? null;
 }
 
 /** All published lessons for one hub, in the same real teaching order
