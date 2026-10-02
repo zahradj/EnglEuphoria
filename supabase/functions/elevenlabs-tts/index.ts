@@ -10,13 +10,11 @@
 // device (double cost, a seconds-long wait on the second screen, and two
 // slightly different takes of the same line).
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { approvedVoiceId, normalizeForSpeech, safeVoiceSettings } from "../_shared/speechPolicy.ts";
+import { approvedVoiceId, languageLock, normalizeForSpeech, safeVoiceSettings, ttsModelFor } from "../_shared/speechPolicy.ts";
 
 const BUCKET = "sfx-cache";
-const MODEL_ID = "eleven_multilingual_v2";
-
-async function cacheKey(text: string, voiceId: string, speed: number | null): Promise<string> {
-  const data = new TextEncoder().encode(JSON.stringify([text, voiceId, speed, MODEL_ID]));
+async function cacheKey(text: string, voiceId: string, speed: number | null, model: string): Promise<string> {
+  const data = new TextEncoder().encode(JSON.stringify([text, voiceId, speed, model]));
   const hash = await crypto.subtle.digest("SHA-256", data);
   return "tts/" + Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, "0")).join("") + ".mp3";
 }
@@ -57,7 +55,9 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     const admin = supabaseUrl && serviceKey ? createClient(supabaseUrl, serviceKey) : null;
-    const key = await cacheKey(text, voiceId, speed);
+    // One or two words: English-locked model (the default one guesses the language).
+    const model = ttsModelFor(text);
+    const key = await cacheKey(text, voiceId, speed, model);
     if (admin) {
       const { data: cached } = await admin.storage.from(BUCKET).download(key);
       if (cached) return new Response(await cached.arrayBuffer(), { headers: audioHeaders });
@@ -81,7 +81,8 @@ Deno.serve(async (req) => {
         },
         body: JSON.stringify({
           text,
-          model_id: MODEL_ID,
+          model_id: model,
+          ...languageLock(model),
           voice_settings: safeVoiceSettings({
             stability: 0.5,
             similarity_boost: 0.75,

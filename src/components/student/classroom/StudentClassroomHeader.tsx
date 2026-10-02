@@ -29,6 +29,7 @@ interface StudentClassroomHeaderProps {
   studentStars?: number;
   /** Booking scheduled_at — drives the read-only countdown that mirrors the teacher's smart timer. */
   scheduledAt?: string | Date | null;
+  bookedMinutes?: number | null;
   /** Mobile only — opens the video/chat drawer that's otherwise a docked sidebar on desktop. */
   onToggleComms?: () => void;
   /** True on any portrait device (phone or tablet) — the comms toggle must stay reachable there even above the `md` width breakpoint, since a portrait tablet's width alone can be ≥768px. */
@@ -50,6 +51,7 @@ export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
   onReconnect,
   studentStars = 0,
   scheduledAt = null,
+  bookedMinutes = null,
   onToggleComms,
   isPortrait = false,
 }) => {
@@ -59,7 +61,7 @@ export const StudentClassroomHeader: React.FC<StudentClassroomHeaderProps> = ({
   // Read-only timer mirror — same clock as the teacher's ClassroomTopBar.
   const policyHub = hubType === 'professional' ? 'success' : hubType;
   const { classTime } = useClassroomTimer(scheduledAt);
-  const policy = useLessonTimePolicy(policyHub as any, classTime);
+  const policy = useLessonTimePolicy(policyHub as any, classTime, { bookedMinutes });
   const fmt = (s: number) => {
     const m = Math.floor(s / 60);
     const r = s % 60;

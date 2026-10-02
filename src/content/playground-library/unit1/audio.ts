@@ -6,7 +6,7 @@
 // returns the binary body intact.
 import { spokenText } from './spokenText';
 import { supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
-import { approvedVoiceId, normalizeForSpeech } from '@/lib/speechPolicy';
+import { approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION } from '@/lib/speechPolicy';
 
 const FUNCTIONS_URL = `${supabaseUrl}/functions/v1`;
 const ANON_KEY = supabaseAnonKey;
@@ -265,6 +265,9 @@ function key(character: Character, text: string) {
   // entries are bumped, so every other character's baked clips stay valid; mia's and
   // leo's old static clips (recorded in the accented voice) now 404 and are re-baked
   // by scripts/generate-voice-cache.mjs — never played in the old voice.
+  // v13s: one- or two-word lines are now recorded with English locked (see
+  // speechPolicy isShortLine) — "hat" was read as German "hot".
+  if (isShortLine(text)) return `${character}::${SHORT_LINE_CLIP_VERSION}::${text}`;
   return `${character}::${CHARACTER_CLIP_VERSION[character] ?? 'v11'}::${text}`;
 }
 

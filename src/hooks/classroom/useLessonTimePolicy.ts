@@ -4,10 +4,10 @@ export type HubKey = 'playground' | 'academy' | 'professional' | 'success';
 export type LessonPhase = 'mandatory' | 'bonus' | 'overtime';
 
 export interface LessonTimePolicy {
-  /** Minutes the teacher MUST stay for the session to count (25 for Playground, 55 for Academy/Success). */
-  mandatoryMinutes: 0 | 25 | 55;
-  /** Full booked duration including the optional 5-minute bonus (30 for Playground, 60 for Academy/Success). */
-  totalMinutes: 25 | 30 | 60;
+  /** Minutes the teacher MUST stay for the session to count (booked length − 5; 25 / 55 by default). */
+  mandatoryMinutes: number;
+  /** Full booked duration including the optional 5-minute bonus (30 / 60 by default). */
+  totalMinutes: number;
 
   mandatorySeconds: number;
   totalSeconds: number;
@@ -34,6 +34,9 @@ export interface LessonTimePolicy {
  * - Playground = 25 mandatory + 5 optional bonus = 30 booked.
  * - Academy / Success = 55 mandatory + 5 optional bonus = 60 booked.
  *
+ * A booking's own length wins (e.g. a 60-minute Playground lesson = 55 + 5):
+ * pass `bookedMinutes`. Without it the hub default above applies.
+ *
  * The first chunk MUST be attended — leaving before it ends marks the session
  * as "left early". The trailing 5 minutes are an optional bonus the teacher
  * can use to wrap up or extend; ending during this window is normal.
@@ -41,19 +44,20 @@ export interface LessonTimePolicy {
 export function useLessonTimePolicy(
   hubType: HubKey | null | undefined,
   elapsedSeconds: number,
-  options?: { isInterview?: boolean; isTrial?: boolean },
+  options?: { isInterview?: boolean; isTrial?: boolean; bookedMinutes?: number | null },
 ): LessonTimePolicy {
   const isInterview = options?.isInterview === true;
   const isTrial = options?.isTrial === true;
+  const booked = typeof options?.bookedMinutes === 'number' && options.bookedMinutes > 5 ? Math.round(options.bookedMinutes) : null;
   return useMemo(() => {
     const isPlayground = hubType === 'playground';
     // Interviews are uniformly 25 minutes for every hub and have NO mandatory
     // floor — the teacher can wrap up at any time without an "early leave" penalty.
     // Trial lessons (first booking) are uniformly 25 mandatory + 5 optional across every hub.
-    const mandatoryMinutes: 0 | 25 | 55 =
-      isInterview ? 0 : isTrial ? 25 : isPlayground ? 25 : 55;
-    const totalMinutes: 25 | 30 | 60 =
-      isInterview ? 25 : isTrial ? 30 : isPlayground ? 30 : 60;
+    const mandatoryMinutes: number =
+      isInterview ? 0 : isTrial ? 25 : booked ? booked - 5 : isPlayground ? 25 : 55;
+    const totalMinutes: number =
+      isInterview ? 25 : isTrial ? 30 : booked ?? (isPlayground ? 30 : 60);
 
 
     const mandatorySeconds = isInterview ? 0 : mandatoryMinutes * 60;
@@ -92,5 +96,5 @@ export function useLessonTimePolicy(
       bonusSecondsRemaining,
       phaseLabel,
     };
-  }, [hubType, elapsedSeconds, isInterview, isTrial]);
+  }, [hubType, elapsedSeconds, isInterview, isTrial, booked]);
 }

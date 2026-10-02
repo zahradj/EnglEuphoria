@@ -114,6 +114,25 @@ export function languageLock(modelId: string): { language_code?: string } {
   return /^eleven_(turbo|flash)_v2_5/.test(modelId) ? { language_code: 'en' } : {};
 }
 
+/** The default model guesses the language from the text, so a line of one or two
+ *  words can be read as another language: "hat" came out as German "hot", "wand"
+ *  as "vant" (2026-10-02 audit; English-locked takes were heard correctly). Short
+ *  lines therefore use an English-locked model (see languageLock). */
+export const DEFAULT_TTS_MODEL = 'eleven_multilingual_v2';
+export const SHORT_LINE_TTS_MODEL = 'eleven_turbo_v2_5';
+export const SHORT_LINE_MAX_WORDS = 2;
+/** Clip-cache version for short lines, so their old (language-guessed) clips are re-recorded. */
+export const SHORT_LINE_CLIP_VERSION = 'v13s';
+
+export function isShortLine(text: string): boolean {
+  const words = text.replace(/[^\p{L}\p{N}'’\s-]/gu, ' ').trim().split(/\s+/).filter(Boolean);
+  return words.length > 0 && words.length <= SHORT_LINE_MAX_WORDS;
+}
+
+export function ttsModelFor(text: string): string {
+  return isShortLine(text) ? SHORT_LINE_TTS_MODEL : DEFAULT_TTS_MODEL;
+}
+
 /* ------------------------------------------------------------------ pronunciation */
 
 /** Words a TTS reads wrongly as written -> how a teacher would say them. Keys are lowercase. */

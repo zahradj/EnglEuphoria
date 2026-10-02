@@ -1,18 +1,18 @@
 [
   {
-    "file": "5b34e948.mp3",
+    "file": "8ab3b06a.mp3",
     "voice": "mia",
     "text": "Nose",
-    "heard": "No s",
+    "heard": "No, see",
     "distance": 2,
     "rate": 2,
     "ops": [
       "extra \"no\"",
-      "\"nose\"→\"s\""
+      "\"nose\"→\"see\""
     ]
   },
   {
-    "file": "db089d28.mp3",
+    "file": "080cfb4a.mp3",
     "voice": "mia",
     "text": "nose",
     "heard": "No, sir",
@@ -24,7 +24,7 @@
     ]
   },
   {
-    "file": "c7f46de7.mp3",
+    "file": "1d1cd23a.mp3",
     "voice": "willow",
     "text": "Bear",
     "heard": "Is there",
@@ -36,19 +36,7 @@
     ]
   },
   {
-    "file": "5d6d016a.mp3",
-    "voice": "teacher",
-    "text": "yo-yo",
-    "heard": "Jojo",
-    "distance": 2,
-    "rate": 1,
-    "ops": [
-      "missing \"yo\"",
-      "\"yo\"→\"jojo\""
-    ]
-  },
-  {
-    "file": "cd69eb34.mp3",
+    "file": "1aff274f.mp3",
     "voice": "pip",
     "text": "chick.",
     "heard": "Check",
@@ -59,7 +47,7 @@
     ]
   },
   {
-    "file": "18d1d1f6.mp3",
+    "file": "92e91323.mp3",
     "voice": "pip",
     "text": "wand.",
     "heard": "One",
@@ -70,7 +58,18 @@
     ]
   },
   {
-    "file": "6ba1c378.mp3",
+    "file": "2030d38b.mp3",
+    "voice": "pip",
+    "text": "Yarn",
+    "heard": "Yan",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"yarn\"→\"yan\""
+    ]
+  },
+  {
+    "file": "00a3ee01.mp3",
     "voice": "pip",
     "text": "sun",
     "heard": "Son",
@@ -81,7 +80,7 @@
     ]
   },
   {
-    "file": "60221a5b.mp3",
+    "file": "50413188.mp3",
     "voice": "pip",
     "text": "ant.",
     "heard": "And",
@@ -92,7 +91,7 @@
     ]
   },
   {
-    "file": "21d80b1d.mp3",
+    "file": "9dafa8ce.mp3",
     "voice": "teacher",
     "text": "cat",
     "heard": "A cat",
@@ -103,7 +102,7 @@
     ]
   },
   {
-    "file": "c3ecfcee.mp3",
+    "file": "810c2e27.mp3",
     "voice": "teacher",
     "text": "hat.",
     "heard": "Hot",
@@ -114,18 +113,7 @@
     ]
   },
   {
-    "file": "14221d54.mp3",
-    "voice": "teacher",
-    "text": "van",
-    "heard": "From",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"van\"→\"from\""
-    ]
-  },
-  {
-    "file": "3cf5b4db.mp3",
+    "file": "d587dd84.mp3",
     "voice": "pip",
     "text": "Hat.",
     "heard": "Hot",
@@ -136,7 +124,18 @@
     ]
   },
   {
-    "file": "bcc968bb.mp3",
+    "file": "c4966da6.mp3",
+    "voice": "mia",
+    "text": "Mia",
+    "heard": "Yeah",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"mia\"→\"yeah\""
+    ]
+  },
+  {
+    "file": "55b429a4.mp3",
     "voice": "pip",
     "text": "hat.",
     "heard": "Hot",
@@ -147,7 +146,7 @@
     ]
   },
   {
-    "file": "055f075e.mp3",
+    "file": "f33e3029.mp3",
     "voice": "pip",
     "text": "Mat.",
     "heard": "Matt",
@@ -158,7 +157,7 @@
     ]
   },
   {
-    "file": "868045fc.mp3",
+    "file": "2fef1b52.mp3",
     "voice": "mia",
     "text": "Nut.",
     "heard": "Not",
@@ -169,7 +168,7 @@
     ]
   },
   {
-    "file": "926bc12d.mp3",
+    "file": "557cdbab.mp3",
     "voice": "mia",
     "text": "Nest",
     "heard": "Yes",
@@ -180,10 +179,10 @@
     ]
   },
   {
-    "file": "97e07325.mp3",
+    "file": "5ecf0bab.mp3",
     "voice": "mia",
     "text": "Sad.",
-    "heard": "said",
+    "heard": "said,",
     "distance": 1,
     "rate": 1,
     "ops": [
@@ -191,7 +190,7 @@
     ]
   },
   {
-    "file": "6d25a9cf.mp3",
+    "file": "e3db1001.mp3",
     "voice": "mia",
     "text": "Sun",
     "heard": "Son",
@@ -202,7 +201,7 @@
     ]
   },
   {
-    "file": "0a9b122f.mp3",
+    "file": "81507861.mp3",
     "voice": "mia",
     "text": "sun",
     "heard": "Son",
@@ -213,7 +212,7 @@
     ]
   },
   {
-    "file": "f1dbda35.mp3",
+    "file": "ffa76afd.mp3",
     "voice": "leo",
     "text": "ant.",
     "heard": "And",
@@ -224,7 +223,7 @@
     ]
   },
   {
-    "file": "b2aabefd.mp3",
+    "file": "bd8010f2.mp3",
     "voice": "pip",
     "text": "Bat.",
     "heard": "That",
@@ -235,29 +234,18 @@
     ]
   },
   {
-    "file": "b113b5a6.mp3",
-    "voice": "teacher",
-    "text": "Ant.",
-    "heard": "Aunt",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"ant\"→\"aunt\""
-    ]
-  },
-  {
-    "file": "b875e83d.mp3",
+    "file": "21bbfaf2.mp3",
     "voice": "bella",
     "text": "sun",
-    "heard": "Soon",
+    "heard": "Son",
     "distance": 1,
     "rate": 1,
     "ops": [
-      "\"sun\"→\"soon\""
+      "\"sun\"→\"son\""
     ]
   },
   {
-    "file": "c12cae5c.mp3",
+    "file": "2b5aa711.mp3",
     "voice": "willow",
     "text": "ant.",
     "heard": "And",
@@ -268,7 +256,7 @@
     ]
   },
   {
-    "file": "d15dfc9d.mp3",
+    "file": "9ae7b4dc.mp3",
     "voice": "pip",
     "text": "Sam",
     "heard": "Sam, Mia",
@@ -279,7 +267,7 @@
     ]
   },
   {
-    "file": "443d2c2d.mp3",
+    "file": "80249552.mp3",
     "voice": "pip",
     "text": "nut.",
     "heard": "Not",
@@ -290,7 +278,7 @@
     ]
   },
   {
-    "file": "56254d77.mp3",
+    "file": "eb416898.mp3",
     "voice": "pip",
     "text": "duck",
     "heard": "Doc",
@@ -301,7 +289,7 @@
     ]
   },
   {
-    "file": "2c6a9168.mp3",
+    "file": "11c8b732.mp3",
     "voice": "mia",
     "text": "box",
     "heard": "Fox",
@@ -312,18 +300,18 @@
     ]
   },
   {
-    "file": "3cd0d527.mp3",
-    "voice": "pip",
-    "text": "doll.",
-    "heard": "Dull",
+    "file": "c73f95ba.mp3",
+    "voice": "willow",
+    "text": "sun",
+    "heard": "Son",
     "distance": 1,
     "rate": 1,
     "ops": [
-      "\"doll\"→\"dull\""
+      "\"sun\"→\"son\""
     ]
   },
   {
-    "file": "628d1047.mp3",
+    "file": "81ea13c6.mp3",
     "voice": "pip",
     "text": "Doll.",
     "heard": "Dull",
@@ -334,7 +322,7 @@
     ]
   },
   {
-    "file": "b11dd2d0.mp3",
+    "file": "3a4a141f.mp3",
     "voice": "teacher",
     "text": "Dad",
     "heard": "Dana",
@@ -345,7 +333,7 @@
     ]
   },
   {
-    "file": "5c4ca7ac.mp3",
+    "file": "857f5db5.mp3",
     "voice": "pip",
     "text": "He!",
     "heard": "Hey",
@@ -356,7 +344,18 @@
     ]
   },
   {
-    "file": "9ed83167.mp3",
+    "file": "7226068c.mp3",
+    "voice": "pip",
+    "text": "pan",
+    "heard": "Pun",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"pan\"→\"pun\""
+    ]
+  },
+  {
+    "file": "86afbc1a.mp3",
     "voice": "pip",
     "text": "Fin",
     "heard": "Fun",
@@ -367,10 +366,10 @@
     ]
   },
   {
-    "file": "c6d06ee2.mp3",
+    "file": "1b6b61f9.mp3",
     "voice": "pip",
     "text": "are.",
-    "heard": "Uh",
+    "heard": "Uh,",
     "distance": 1,
     "rate": 1,
     "ops": [
@@ -378,7 +377,7 @@
     ]
   },
   {
-    "file": "dff1f555.mp3",
+    "file": "0ecd6328.mp3",
     "voice": "teacher",
     "text": "chick.",
     "heard": "Check",
@@ -389,7 +388,7 @@
     ]
   },
   {
-    "file": "b37b1361.mp3",
+    "file": "80585f2a.mp3",
     "voice": "teacher",
     "text": "wand.",
     "heard": "One",
@@ -437,7 +436,7 @@
     ]
   },
   {
-    "file": "d790d5b5.mp3",
+    "file": "7b7dc6b4.mp3",
     "voice": "pip",
     "text": "Tap He!",
     "heard": "Tap hey",
@@ -448,7 +447,7 @@
     ]
   },
   {
-    "file": "327a0d77.mp3",
+    "file": "3e60bdae.mp3",
     "voice": "teacher",
     "text": "Yes! In!",
     "heard": "Yes, and",

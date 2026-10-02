@@ -54,7 +54,7 @@ import { allQuestLines } from '../src/content/homework-quests/registry.ts';
 import { spokenText } from '../src/content/playground-library/unit1/spokenText.ts';
 import { LIBRARY_GAMES } from '../src/content/playground-library/gamesCatalog.ts';
 import { artFor } from '../src/content/playground-library/alphabetArt.ts';
-import { VOICE_PROFILES, approvedVoiceId, normalizeForSpeech, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
+import { VOICE_PROFILES, approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.join(__dirname, '..', 'public', 'audio-cache');
@@ -82,6 +82,8 @@ const VOICE_ID = {
 const KEY_VERSION = 'v11';
 const CHARACTER_CLIP_VERSION = { mia: 'v12', leo: 'v12' };
 function cacheKey(character, text) {
+  // Mirrors audio.ts key(): short lines are recorded English-locked (v13s).
+  if (isShortLine(text)) return `${character}::${SHORT_LINE_CLIP_VERSION}::${text}`;
   return `${character}::${CHARACTER_CLIP_VERSION[character] ?? KEY_VERSION}::${text}`;
 }
 
@@ -579,7 +581,7 @@ async function main() {
   if (manifestArg) {
     const out = pairs.map(([character, text]) => {
       const file = `${cacheFileName(character, text)}.mp3`;
-      return { character, text, file, exists: fs.existsSync(path.join(OUT_DIR, file)) };
+      return { character, text, synth: normalizeForSpeech(text), file, exists: fs.existsSync(path.join(OUT_DIR, file)) };
     });
     fs.writeFileSync(manifestArg.slice('--manifest='.length), JSON.stringify(out, null, 2));
     console.log(`Wrote manifest of ${out.length} clips (${out.filter((c) => c.exists).length} on disk).`);
