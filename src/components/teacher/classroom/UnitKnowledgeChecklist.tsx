@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { fetchLevelMap, type Hub, type LevelMapUnit } from '@/services/activeCoreLessonResolver';
+import { getKnowledgeCheck } from '@/curriculum/knowledgeChecks';
 
 export const UNITS_PER_LEVEL = 10;
 
@@ -21,6 +22,12 @@ export function startUnitFor(marks: UnitMarks): number {
     if (marks[u] !== 'known') return u;
   }
   return UNITS_PER_LEVEL;
+}
+
+/** 3/3 = Knows it, 1–2 = Partly, 0 = Not yet. */
+export function markForScore(correct: number, total: number): UnitMark {
+  if (total > 0 && correct >= total) return 'known';
+  return correct > 0 ? 'partly' : 'not_yet';
 }
 
 export function toLevelMapHub(hub: string | null | undefined): Hub {
@@ -44,10 +51,15 @@ interface Props {
  */
 export const UnitKnowledgeChecklist: React.FC<Props> = ({ hub, level, marks, onChange }) => {
   const [map, setMap] = useState<LevelMapUnit[] | null>(null);
+  const [openUnit, setOpenUnit] = useState<number | null>(null);
+  // Ticked probes per unit (only for this dialog session; the mark is what's saved).
+  const [ticks, setTicks] = useState<Record<number, boolean[]>>({});
 
   useEffect(() => {
     let cancelled = false;
     setMap(null);
+    setTicks({});
+    setOpenUnit(null);
     fetchLevelMap(hub, level).then((m) => {
       if (!cancelled) setMap(m);
     });
@@ -64,6 +76,10 @@ export const UnitKnowledgeChecklist: React.FC<Props> = ({ hub, level, marks, onC
 
   return (
     <div className="space-y-2">
+      <p className="text-[11px] text-muted-foreground">
+        Go in order: open a unit's check, ask the 3 questions and tick what the student gets right without help
+        (3 = Knows it, 1–2 = Partly, 0 = Not yet). Stop at the first unit that isn't “Knows it”.
+      </p>
       <div className="flex flex-wrap items-center gap-1.5 text-xs">
         <span className="text-muted-foreground mr-1">Quick:</span>
         <Button type="button" size="sm" variant="outline" className="h-7 text-xs" onClick={() => markFirst(0)}>Start from Unit 1</Button>
@@ -79,6 +95,9 @@ export const UnitKnowledgeChecklist: React.FC<Props> = ({ hub, level, marks, onC
             const mark: UnitMark = marks[u.unitNumber] ?? 'not_yet';
             const built = u.lessons.filter((l) => l.published).length;
             const isStart = u.unitNumber === start;
+            const check = getKnowledgeCheck(hub, level, u.unitNumber);
+            const open = openUnit === u.unitNumber;
+            const unitTicks = ticks[u.unitNumber] ?? [];
             return (
               <div
                 key={u.unitNumber}
@@ -97,7 +116,8 @@ export const UnitKnowledgeChecklist: React.FC<Props> = ({ hub, level, marks, onC
                       {u.lessons.length ? (built === u.lessons.length ? 'All lessons built' : `${built} of ${u.lessons.length} lessons built`) : ''}
                     </div>
                   </div>
-                  <div className="flex shrink-0 rounded-md border border-border/60 overflow-hidden">
+                  <div className="flex shrink-0 flex-col items-end gap-1">
+                  <div className="flex rounded-md border border-border/60 overflow-hidden">
                     {(['known', 'partly', 'not_yet'] as UnitMark[]).map((m) => (
                       <button
                         key={m}
@@ -109,7 +129,44 @@ export const UnitKnowledgeChecklist: React.FC<Props> = ({ hub, level, marks, onC
                       </button>
                     ))}
                   </div>
+                  {check && (
+                    <button
+                      type="button"
+                      onClick={() => setOpenUnit(open ? null : u.unitNumber)}
+                      className="text-[11px] font-semibold text-primary flex items-center gap-0.5"
+                    >
+                      {open ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
+                      Check{unitTicks.some(Boolean) ? ` · ${unitTicks.filter(Boolean).length}/${check.probes.length}` : ''}
+                    </button>
+                  )}
+                  </div>
                 </div>
+                {check && open && (
+                  <div className="mt-2 rounded-md bg-muted/40 p-2 space-y-1.5">
+                    <div className="text-[11px]">
+                      <span className="font-semibold">Can do: </span>
+                      {check.canDo.join(' · ')}
+                    </div>
+                    {check.probes.map((p, i) => (
+                      <label key={i} className="flex items-start gap-2 text-[12px] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          className="mt-0.5"
+                          checked={!!unitTicks[i]}
+                          onChange={(e) => {
+                            const next = check.probes.map((_, j) => (j === i ? e.target.checked : !!unitTicks[j]));
+                            setTicks((prev) => ({ ...prev, [u.unitNumber]: next }));
+                            onChange({ ...marks, [u.unitNumber]: markForScore(next.filter(Boolean).length, check.probes.length) });
+                          }}
+                        />
+                        <span>
+                          {p.ask}
+                          <span className="block text-[11px] text-muted-foreground">✓ {p.expect}</span>
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                )}
               </div>
             );
           })

@@ -202,3 +202,34 @@ begin
 end $$;
 revoke all on function public.review_level_change(uuid, boolean, text) from public;
 grant execute on function public.review_level_change(uuid, boolean, text) to authenticated;
+
+-- Notifications (bell): admins on a new request; the teacher when it's
+-- approved or rejected.
+create or replace function public._notify_level_request() returns trigger
+language plpgsql security definer set search_path = public as $$
+declare v_student text;
+begin
+  select coalesce(full_name, email, 'a student') into v_student from users where id = new.student_id;
+  if tg_op = 'INSERT' and new.status = 'pending' then
+    insert into notifications (user_id, title, content, type, action_url)
+      select ur.user_id, 'Level change request',
+        format('%s → %s%s for %s: %s', coalesce(new.current_level, 'unset'), new.requested_level,
+          case when new.requested_start_unit > 1 then ' · Unit ' || new.requested_start_unit else '' end,
+          v_student, left(coalesce(new.reason, ''), 140)),
+        'admin_alert', '/super-admin?tab=students'
+      from user_roles ur where ur.role = 'admin'::app_role;
+  elsif tg_op = 'UPDATE' and old.status = 'pending' and new.status in ('approved','rejected')
+        and coalesce(new.admin_notes, '') <> 'Replaced by a newer request' then
+    insert into notifications (user_id, title, content, type)
+      values (new.teacher_id,
+        case when new.status = 'approved' then 'Level change approved' else 'Level change not approved' end,
+        format('%s → %s for %s%s', coalesce(new.current_level, 'unset'), new.requested_level, v_student,
+          case when coalesce(new.admin_notes, '') <> '' then ' — ' || new.admin_notes else '' end),
+        'level_change');
+  end if;
+  return new;
+end $$;
+do $$ begin
+  create trigger notify_level_request after insert or update on public.level_change_requests
+    for each row execute function public._notify_level_request();
+exception when duplicate_object then null; end $$;
