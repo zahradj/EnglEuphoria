@@ -142,10 +142,10 @@ const UnifiedClassroomPage: React.FC = () => {
 
   const isTrialLesson = String((booking as any)?.booking_type ?? '').toLowerCase() === 'trial';
 
-  // Trail lesson (self-contained gamified deck) may ONLY render for the
-  // student's very first lesson on the platform. Every subsequent booking
-  // — even if still typed 'trial' — must flow through the Master Library
-  // resolver keyed by the student's placement-test CEFR level.
+  // Trial tools (level picker, prior knowledge, Unit 1 Lesson 1 of the
+  // level) only for the student's trial: their very first booking, or a
+  // trial booked later while no other trial has set their level. Any other
+  // booking — even if typed 'trial' — flows through the learning path.
   const { data: isFirstLesson } = useQuery({
     queryKey: ['classroom-is-first-lesson', (booking as any)?.student_id, booking?.id],
     queryFn: async () => {
@@ -162,7 +162,16 @@ const UnifiedClassroomPage: React.FC = () => {
         console.warn('[UnifiedClassroomPage] first-lesson check failed', error);
         return false;
       }
-      return (count ?? 0) === 0;
+      if ((count ?? 0) === 0) return true;
+      // A trial booked later (e.g. a teacher's trial invite for a student
+      // who already had classes) still counts as the trial as long as no
+      // other trial class has set the student's level.
+      const { data: prior } = await (supabase as any)
+        .from('student_prior_knowledge')
+        .select('set_in_booking')
+        .eq('student_id', studentId)
+        .maybeSingle();
+      return !prior?.set_in_booking || prior.set_in_booking === booking!.id;
     },
     enabled: !!booking?.id && isTrialLesson,
   });

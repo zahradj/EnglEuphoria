@@ -38,6 +38,7 @@ async function sendClassroomInviteEmail(
     lessonTimeLabel: string
     joinLink: string
     hub: Hub
+    isTrial?: boolean
   },
 ): Promise<boolean> {
   const messageId = crypto.randomUUID()
@@ -91,7 +92,7 @@ async function sendClassroomInviteEmail(
       body: JSON.stringify({
         from: 'EngleEuphoria <noreply@engleuphoria.com>',
         to: [props.recipientEmail],
-        subject: `Your lesson with ${props.teacherName} — join here`,
+        subject: `Your ${props.isTrial ? 'trial lesson' : 'lesson'} with ${props.teacherName} — join here`,
         html: renderClassroomInviteHtml(props),
         text: renderClassroomInviteText(props),
       }),
@@ -152,7 +153,8 @@ Deno.serve(async (req) => {
       const auth = await requireAuth(req, { allowedRoles: ['teacher', 'admin'] })
       if (!auth.ok) return json(auth.body, auth.status)
 
-      const { studentEmail, studentName, scheduledAt, duration, lessonId, hub, timeZone } = body
+      const { studentEmail, studentName, scheduledAt, duration, lessonId, hub, timeZone, lessonType } = body
+      const isTrial = lessonType === 'trial'
       if (!studentEmail || typeof studentEmail !== 'string') {
         return json({ error: 'studentEmail is required' }, 400)
       }
@@ -212,6 +214,22 @@ Deno.serve(async (req) => {
         }
       }
 
+      // A trial is where the teacher sets the student's level — only once
+      // per student. Someone whose level was already set in an earlier
+      // trial gets a regular lesson (or a level change request) instead.
+      if (isTrial) {
+        const { data: prior } = await adminClient
+          .from('student_prior_knowledge')
+          .select('set_in_booking')
+          .eq('student_id', studentId)
+          .maybeSingle()
+        if (prior?.set_in_booking) {
+          return json({
+            error: 'This student already had their trial lesson and has a level. Book a regular lesson instead.',
+          }, 400)
+        }
+      }
+
       const { data: booking, error: bookingErr } = await adminClient
         .from('class_bookings')
         .insert({
@@ -221,7 +239,7 @@ Deno.serve(async (req) => {
           scheduled_at: scheduledAt,
           duration: durationMinutes,
           status: 'scheduled',
-          booking_type: 'regular',
+          booking_type: isTrial ? 'trial' : 'regular',
           hub_type: hubType,
         })
         .select('id, scheduled_at, duration')
@@ -242,20 +260,30 @@ Deno.serve(async (req) => {
       // is an existing, real value in this table's lesson_type CHECK
       // constraint, distinct from the open-slot 'free_slot' default.
       const startTime = new Date(scheduledAt)
-      const endTime = new Date(startTime.getTime() + durationMinutes * 60_000)
-      const { error: availabilityErr } = await adminClient.from('teacher_availability').insert({
-        teacher_id: auth.userId,
-        student_id: studentId,
-        start_time: startTime.toISOString(),
-        end_time: endTime.toISOString(),
-        duration: durationMinutes,
-        is_available: false,
-        is_booked: true,
-        lesson_type: 'direct_booking',
-        lesson_id: lessonId || null,
-        lesson_title: studentName ? `Lesson with ${studentName}` : null,
-        hub_specialty: hubSpecialty,
+      // A one-hour Playground lesson is shown on the grid as two back-to-back
+      // 30-minute booked rows (Playground's slot size); every other lesson is
+      // one row of its own length.
+      const rowMinutes = hubType === 'playground' && durationMinutes === 60 ? 30 : durationMinutes
+      const rowCount = durationMinutes / rowMinutes
+      const availabilityRows = Array.from({ length: rowCount }, (_, i) => {
+        const rowStart = new Date(startTime.getTime() + i * rowMinutes * 60_000)
+        return {
+          teacher_id: auth.userId,
+          student_id: studentId,
+          start_time: rowStart.toISOString(),
+          end_time: new Date(rowStart.getTime() + rowMinutes * 60_000).toISOString(),
+          duration: rowMinutes,
+          is_available: false,
+          is_booked: true,
+          lesson_type: 'direct_booking',
+          lesson_id: lessonId || null,
+          lesson_title: studentName
+            ? `${isTrial ? 'Trial lesson' : 'Lesson'} with ${studentName}`
+            : (isTrial ? 'Trial lesson' : null),
+          hub_specialty: hubSpecialty,
+        }
       })
+      const { error: availabilityErr } = await adminClient.from('teacher_availability').insert(availabilityRows)
       if (availabilityErr) {
         // Non-fatal: the booking + invite are already valid and the student
         // can still join. Only the teacher's calendar-grid display degrades.
@@ -318,9 +346,10 @@ Deno.serve(async (req) => {
         lessonTimeLabel,
         joinLink,
         hub: hubType as Hub,
+        isTrial,
       })
 
-      return json({ success: true, bookingId: booking.id, joinLink, emailSent })
+      return json({ success: true, bookingId: booking.id, joinLink, emailSent, isTrial })
     }
 
     // ── Public: redeem an invite token for a one-time sign-in credential.

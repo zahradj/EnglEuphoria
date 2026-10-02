@@ -46,6 +46,7 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [selectedHub, setSelectedHub] = useState<HubChoice>(hub);
+  const [lessonType, setLessonType] = useState<'regular' | 'trial'>('regular');
   const [busy, setBusy] = useState(false);
   const [joinLink, setJoinLink] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -67,6 +68,7 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
     setDate('');
     setTime('');
     setSelectedHub(hub);
+    setLessonType('regular');
     setJoinLink(null);
     setCopied(false);
   };
@@ -107,6 +109,7 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           duration,
           hub: selectedHub,
+          lessonType,
         },
         headers: { Authorization: `Bearer ${accessToken}` },
       });
@@ -125,7 +128,7 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
 
       setJoinLink(data.joinLink);
       toast({
-        title: 'Lesson booked ✅',
+        title: lessonType === 'trial' ? 'Trial lesson booked ✅' : 'Lesson booked ✅',
         description: data.emailSent
           ? `An invite email was sent to ${studentEmail}.`
           : `Booked, but the invite email could not be sent — share the link below manually.`,
@@ -196,6 +199,30 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
               </div>
             </div>
             <div className="space-y-2">
+              <Label>Lesson type</Label>
+              <div className="inline-flex rounded-lg bg-muted p-1">
+                {([
+                  { id: 'regular', label: 'Regular lesson' },
+                  { id: 'trial', label: 'Trial lesson' },
+                ] as const).map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => setLessonType(opt.id)}
+                    className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${lessonType === opt.id ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+              {lessonType === 'trial' && (
+                <p className="text-xs text-muted-foreground">
+                  The student's first class: it opens Unit 1 Lesson 1, and you set their level and prior knowledge in class.
+                  Saved to their profile and learning path.
+                </p>
+              )}
+            </div>
+            <div className="space-y-2">
               <Label>Hub</Label>
               {/* Explicit per-lesson choice — a teacher's profile can be
                   assigned to more than one hub, so it can't reliably stand
@@ -218,7 +245,7 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
             <DialogFooter>
               <Button type="submit" disabled={busy} className="w-full">
                 {busy ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Mail className="h-4 w-4 mr-2" />}
-                Book & Send Invite
+                {lessonType === 'trial' ? 'Book Trial & Send Invite' : 'Book & Send Invite'}
               </Button>
             </DialogFooter>
           </form>

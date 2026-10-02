@@ -41,6 +41,8 @@ export interface ClassroomInviteEmailProps {
   lessonTimeLabel: string
   joinLink: string
   hub: Hub
+  /** A trial lesson (the student's first class, where the teacher finds their level). */
+  isTrial?: boolean
 }
 
 export function renderClassroomInviteHtml(props: ClassroomInviteEmailProps): string {
@@ -50,6 +52,7 @@ export function renderClassroomInviteHtml(props: ClassroomInviteEmailProps): str
   const lessonDateLabel = esc(props.lessonDateLabel)
   const lessonTimeLabel = esc(props.lessonTimeLabel)
   const joinLink = esc(props.joinLink)
+  const lessonWord = props.isTrial ? 'trial lesson' : 'lesson'
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -62,13 +65,16 @@ export function renderClassroomInviteHtml(props: ClassroomInviteEmailProps): str
     <div style="padding:32px;">
       <p style="font-size:16px;font-weight:600;color:${palette.text};margin:0 0 20px;">Hi ${studentName},</p>
       <p style="font-size:15px;color:#37474F;line-height:1.7;margin:0 0 16px;">
-        ${teacherName} has scheduled your English lesson${lessonDateLabel ? ` for ${lessonDateLabel}` : ''}${lessonTimeLabel ? ` at ${lessonTimeLabel}` : ''}.
+        ${teacherName} has scheduled your English ${lessonWord}${lessonDateLabel ? ` for ${lessonDateLabel}` : ''}${lessonTimeLabel ? ` at ${lessonTimeLabel}` : ''}.
       </p>
       <p style="font-size:15px;color:#37474F;line-height:1.7;margin:0 0 24px;">
         No password or account setup needed — just tap the button below when it's time for class, and you'll be taken straight into the live classroom.
-      </p>
+      </p>${props.isTrial ? `
+      <p style="font-size:15px;color:#37474F;line-height:1.7;margin:0 0 24px;">
+        In this first lesson your teacher gets to know you and finds the right level for you, so your lessons start exactly where you are.
+      </p>` : ''}
       <div style="background:${palette.soft};border-radius:10px;padding:16px 24px;margin:0 0 24px;border-left:4px solid ${palette.primary};">
-        <p style="font-size:14px;color:${palette.text};font-weight:700;margin:0 0 4px;">Lesson time</p>
+        <p style="font-size:14px;color:${palette.text};font-weight:700;margin:0 0 4px;">${props.isTrial ? 'Trial lesson time' : 'Lesson time'}</p>
         <p style="font-size:14px;color:#374151;line-height:1.6;margin:0;">${lessonDateLabel || 'TBD'}${lessonTimeLabel ? ` at ${lessonTimeLabel}` : ''}</p>
       </div>
       <div style="text-align:center;margin:24px 0;">
@@ -93,7 +99,7 @@ export function renderClassroomInviteText(props: ClassroomInviteEmailProps): str
   return [
     `Hi ${props.studentName},`,
     '',
-    `${props.teacherName} has scheduled your English lesson${props.lessonDateLabel ? ` for ${props.lessonDateLabel}` : ''}${props.lessonTimeLabel ? ` at ${props.lessonTimeLabel}` : ''}.`,
+    `${props.teacherName} has scheduled your English ${props.isTrial ? 'trial lesson' : 'lesson'}${props.lessonDateLabel ? ` for ${props.lessonDateLabel}` : ''}${props.lessonTimeLabel ? ` at ${props.lessonTimeLabel}` : ''}.`,
     '',
     `Join your classroom: ${props.joinLink}`,
     '',
