@@ -103,7 +103,7 @@ def main():
     expected = phonemize(texts, language='en-us', backend='espeak', strip=True, with_stress=False,
                          preserve_punctuation=False, separator=Separator(phone='', word=' '), njobs=4)
     tokens = phonemize(texts, language='en-us', backend='espeak', strip=True, with_stress=False,
-                       preserve_punctuation=False, separator=Separator(phone=' ', word=' '), njobs=4)
+                       preserve_punctuation=False, separator=Separator(phone=' ', word=' | '), njobs=4)
     proc = AutoProcessor.from_pretrained(MODEL)
     model = AutoModelForCTC.from_pretrained(MODEL).eval()
     torch.set_num_threads(4)
@@ -119,7 +119,7 @@ def main():
         e, h = fold(exp), fold(heard)
         alt, margin = (None, None)
         if len(exp.split()) <= 2:
-            alt, margin = forced_choice(logits, proc.tokenizer, tok.split())
+            alt, margin = forced_choice(logits, proc.tokenizer, [t for t in tok.split() if t != '|'])
         ev, hv = [x for x in e if x in VOWELS], [x for x in h if x in VOWELS]
         out.append({
             'file': c['file'], 'voice': c['character'], 'text': c['text'], 'expected': exp, 'heard': heard,
