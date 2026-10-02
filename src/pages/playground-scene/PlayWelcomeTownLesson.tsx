@@ -1,3 +1,5 @@
+import { useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
+import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -243,12 +245,12 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
         : !interactionUnlocked;
   const usesRealSync = REAL_SYNC_KINDS.has(scene.kind);
 
-  const [activityState, setActivityStateLocal] = useState<unknown>(null);
+  // Scene-tagged: the render right after a scene change must never see the previous scene's state.
+  const [activityState, setActivityStateLocal] = useSceneScopedState(scene.id);
 
   // A new scene starts with no activity state on both sides — each side
   // resets independently in lockstep as soon as its own (already-synced)
   // sceneIdx changes, so this needs no broadcast of its own.
-  useEffect(() => { setActivityStateLocal(null); }, [sceneIdx]);
 
   const setActivityState = useCallback((next: unknown) => {
     setActivityStateLocal(next);
@@ -696,16 +698,28 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
         </div>
 
         <div key={scene.id} ref={sceneRootRef} className="relative flex-1 animate-[lep1-fade-slide_0.45s_ease-out]">
-          <SceneRenderer
-            scene={scene}
-            onWin={registerWin}
-            onLose={loseHeart}
-            onNext={goNext}
-            onRestart={restart}
-            gemsCollected={gems}
-            heartsRemaining={hearts}
-            activitySync={activitySync}
-          />
+          <SceneCrashGuard
+            sceneId={scene.id}
+            sceneKind={scene.kind}
+            side={!isSynced ? 'solo' : role === 'teacher' ? 'teacher' : 'student mirror'}
+            canSkip={!isSynced || role === 'teacher'}
+            onSkip={goNext}
+          >
+            {({ safeMode }) => (
+              <SceneRenderer
+                scene={scene}
+                onWin={registerWin}
+                onLose={loseHeart}
+                onNext={goNext}
+                onRestart={restart}
+                gemsCollected={gems}
+                heartsRemaining={hearts}
+                // Safe mode: after repeated crashes, run this activity purely on
+                // its own data — nothing the other screen sent can break it.
+                activitySync={safeMode ? undefined : activitySync}
+              />
+            )}
+          </SceneCrashGuard>
           {isSynced && role === 'student' && !interactionUnlocked && !studentDriven && (
             <div className="absolute inset-0 z-40 cursor-not-allowed" aria-hidden="true">
               <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">

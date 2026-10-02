@@ -1,6 +1,6 @@
 import { Component, ReactNode, ErrorInfo } from 'react';
 import { RotateCcw } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { logClassroomCrash } from '@/lib/classroomCrashLog';
 
 interface Props {
   children: ReactNode;
@@ -14,7 +14,18 @@ interface Props {
 interface State {
   hasError: boolean;
   attempt: number;
+  /** An automatic remount is scheduled — show a calm "reconnecting" state
+   *  instead of the crash card. */
+  recovering: boolean;
 }
+
+/** Many crashes here are one-render races (a synced snapshot landing a beat
+ *  before/after a scene change) that a fresh mount simply doesn't hit again.
+ *  So remount quietly up to this many times per burst before bothering the
+ *  teacher; a burst ends after this long without a new crash. */
+const AUTO_RETRY_LIMIT = 2;
+const AUTO_RETRY_WINDOW_MS = 20_000;
+const AUTO_RETRY_DELAY_MS = 350;
 
 /**
  * Scoped error boundary for the live classroom's scene-player area only.
@@ -34,7 +45,10 @@ interface State {
  * possibly still-corrupted component tree in place.
  */
 export class ClassroomSceneErrorBoundary extends Component<Props, State> {
-  state: State = { hasError: false, attempt: 0 };
+  state: State = { hasError: false, attempt: 0, recovering: false };
+  private autoRetries = 0;
+  private lastErrorAt = 0;
+  private retryTimer: number | null = null;
 
   static getDerivedStateFromError(): Partial<State> {
     return { hasError: true };
@@ -43,39 +57,47 @@ export class ClassroomSceneErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('🚨 Classroom scene crashed:', error, errorInfo);
     void this.logError(error, errorInfo);
+
+    const now = Date.now();
+    if (now - this.lastErrorAt > AUTO_RETRY_WINDOW_MS) this.autoRetries = 0;
+    this.lastErrorAt = now;
+    if (this.autoRetries < AUTO_RETRY_LIMIT) {
+      this.autoRetries += 1;
+      this.setState({ recovering: true });
+      this.retryTimer = window.setTimeout(this.handleRetry, AUTO_RETRY_DELAY_MS);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.retryTimer !== null) window.clearTimeout(this.retryTimer);
   }
 
   componentDidUpdate(prevProps: Props) {
     if (this.state.hasError && prevProps.resetKey !== this.props.resetKey) {
       // The scene changed (e.g. teacher navigated away) — drop the crash
       // screen automatically instead of stranding the class on it.
-      this.setState((s) => ({ hasError: false, attempt: s.attempt + 1 }));
+      this.setState((s) => ({ hasError: false, recovering: false, attempt: s.attempt + 1 }));
     }
   }
 
   private async logError(error: Error, errorInfo: ErrorInfo) {
-    try {
-      const { data: auth } = await supabase.auth.getUser();
-      const componentName =
-        errorInfo.componentStack?.trim().split('\n')[0]?.trim().replace(/^in\s+/i, '') ?? null;
-      await supabase.from('system_errors').insert({
-        error_message: error.message?.slice(0, 4000) ?? 'Unknown error',
-        stack_trace: [error.stack, errorInfo.componentStack].filter(Boolean).join('\n\n---\n\n'),
-        component_name: `ClassroomScenePlayer > ${componentName ?? 'unknown'}`,
-        route: typeof window !== 'undefined' ? window.location.pathname : null,
-        user_id: auth.user?.id ?? null,
-        status: 'open',
-      });
-    } catch (logErr) {
-      console.warn('[ClassroomSceneErrorBoundary] Failed to log error:', logErr);
-    }
+    const componentName = errorInfo.componentStack?.trim().split('\n')[0]?.trim().replace(/^in\s+/i, '') ?? 'unknown';
+    await logClassroomCrash(error, errorInfo, { label: `Lesson player (outer) > ${componentName}` });
   }
 
   private handleRetry = () => {
-    this.setState((s) => ({ hasError: false, attempt: s.attempt + 1 }));
+    this.retryTimer = null;
+    this.setState((s) => ({ hasError: false, recovering: false, attempt: s.attempt + 1 }));
   };
 
   render() {
+    if (this.state.hasError && this.state.recovering) {
+      return (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-900/70 p-6 text-center" role="status">
+          <p className="rounded-full bg-white/95 px-5 py-2 text-sm font-semibold text-slate-600 shadow-lg">Reconnecting the activity…</p>
+        </div>
+      );
+    }
     if (this.state.hasError) {
       return (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-900/90 p-6 text-center backdrop-blur">

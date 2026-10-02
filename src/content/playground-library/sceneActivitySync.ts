@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 /**
  * Real synced state for interactive scene kinds, shared by every scene
@@ -40,6 +40,51 @@ export interface ActivitySync {
  *  State must be JSON-serializable (it travels over a Supabase realtime
  *  broadcast) — a `Set`/`Map` silently flattens to `{}`; use a plain
  *  array instead and derive a Set locally with `useMemo` if needed. */
+const isPlainObject = (v: unknown): v is Record<string, unknown> =>
+  typeof v === 'object' && v !== null && !Array.isArray(v);
+
+/** Make a snapshot that arrived over the wire safe to read: any field the
+ *  snapshot is missing — or whose container type is wrong (an array that
+ *  isn't one) — falls back to the scene's own default, so a partial,
+ *  older-shaped or other-scene snapshot can never make a scene dereference
+ *  `undefined` (`state.order.length`, `state.rounds[i].prompt`, …) while
+ *  rendering. */
+export function reconcileSyncedState<T>(remote: unknown, initial: T): T {
+  if (remote == null) return initial;
+  if (!isPlainObject(initial)) {
+    // Scene state that isn't an object (rare): accept only the same primitive/array type.
+    return (Array.isArray(initial) === Array.isArray(remote) && typeof remote === typeof initial ? remote : initial) as T;
+  }
+  // The scene's state is an object: anything else (an array, a string, a
+  // number, …) is not a snapshot of this scene.
+  if (!isPlainObject(remote)) return initial;
+  const out: Record<string, unknown> = { ...remote };
+  for (const k of Object.keys(initial)) {
+    const dflt = initial[k];
+    const got = remote[k];
+    const ok =
+      dflt === null || dflt === undefined ? true // nullable field: take what was sent
+      : Array.isArray(dflt) ? Array.isArray(got) && (dflt.length === 0 || got.every((x) => typeof x === typeof dflt[0]))
+      : isPlainObject(dflt) ? isPlainObject(got)
+      : typeof dflt === 'number' ? typeof got === 'number' && Number.isFinite(got)
+      : typeof got === typeof dflt;
+    if (got === undefined || !ok) out[k] = dflt;
+  }
+  return out as T;
+}
+
+/** The lesson player's per-scene activity snapshot. Tagged with the scene it
+ *  belongs to and only handed out while that scene is still the one on
+ *  screen — so the render right after a scene change never sees the PREVIOUS
+ *  scene's state (a reset effect only runs after that render commits, which
+ *  is exactly when the student's mirror used to crash). */
+export function useSceneScopedState(sceneId: string): [unknown, (next: unknown) => void] {
+  const [scoped, setScoped] = useState<{ sceneId: string; state: unknown } | null>(null);
+  const state = scoped && scoped.sceneId === sceneId ? scoped.state : null;
+  const set = useCallback((next: unknown) => setScoped({ sceneId, state: next }), [sceneId]);
+  return [state, set];
+}
+
 export function useSyncedState<T>(sync: ActivitySync | undefined, initial: T): [T, (updater: T | ((prev: T) => T)) => void] {
   const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
   const [local, setLocal] = useState<T>(initial);
@@ -52,7 +97,10 @@ export function useSyncedState<T>(sync: ActivitySync | undefined, initial: T): [
   // setState updater.
   const localRef = useRef(local);
   localRef.current = local;
-  const value = isRemoteMirror ? ((sync!.state as T) ?? initial) : local;
+  const remote = isRemoteMirror ? sync!.state : undefined;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const mirrored = useMemo(() => reconcileSyncedState<T>(remote, initial), [remote]);
+  const value = isRemoteMirror ? mirrored : local;
   const set = (updater: T | ((prev: T) => T)) => {
     if (isRemoteMirror) return; // mirror side never drives state
     const next = typeof updater === 'function' ? (updater as (prev: T) => T)(localRef.current) : updater;

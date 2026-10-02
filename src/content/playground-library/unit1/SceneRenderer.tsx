@@ -5043,16 +5043,16 @@ function NameGateScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene, {
           const spot = boothSpots[round?.who ?? 'pip'] ?? { left: '50%', top: '50%', size: 160 };
           if (!round) return null;
           return (
-            <div key={`bubble-${active}-${opened.has(active) ? 'a' : 'q'}`} className="pointer-events-none absolute z-30" style={{ left: spot.left, top: `calc(${spot.top} - 18%)`, transform: 'translate(-50%, -50%)' }}>
+            <div key={`bubble-${active}-${openedSet.has(active) ? 'a' : 'q'}`} className="pointer-events-none absolute z-30" style={{ left: spot.left, top: `calc(${spot.top} - 18%)`, transform: 'translate(-50%, -50%)' }}>
               <div className="relative max-w-[280px] rounded-3xl bg-white/95 px-5 py-3 text-center text-lg font-black text-orange-800 shadow-2xl">
-                “{opened.has(active) ? round.answer : round.question}”
+                “{openedSet.has(active) ? round.answer : round.question}”
               </div>
             </div>
           );
         })()}
       </div>
       <div className="absolute inset-x-0 bottom-7 z-30 flex justify-center px-4">
-        {!done && <div className="rounded-full bg-white/90 px-5 py-2 text-sm font-black text-orange-700 shadow-xl">Name tickets {opened.size}/{scene.rounds.length}</div>}
+        {!done && <div className="rounded-full bg-white/90 px-5 py-2 text-sm font-black text-orange-700 shadow-xl">Name tickets {opened.length}/{scene.rounds.length}</div>}
       </div>
       {done && (
         <div onClick={handleOpenGate} className={`absolute inset-0 z-40 flex items-center justify-center ${gateOpening ? 'pointer-events-none' : 'cursor-pointer'}`}>
@@ -5865,7 +5865,7 @@ function FeelingsTapScene({ scene, onNext, sync }: { scene: Extract<Scene, { kin
       <div className="absolute inset-x-0 bottom-4 flex justify-center">
         {allTapped
           ? <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95 animate-[lep1-slide-up_0.4s_ease-out]">Great job! Next →</button>
-          : <div className="rounded-full bg-white/85 px-4 py-2 text-xs font-black text-orange-700 shadow">👉 Tap each friend ({tapped.size}/{total})</div>}
+          : <div className="rounded-full bg-white/85 px-4 py-2 text-xs font-black text-orange-700 shadow">👉 Tap each friend ({tapped.length}/{total})</div>}
       </div>
     </div>
   );
