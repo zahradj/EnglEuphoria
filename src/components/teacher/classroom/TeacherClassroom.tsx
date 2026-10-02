@@ -978,8 +978,18 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
       return;
     }
     await updateSessionContext({ ...(sessionContext || {}), classStarted: true, startedAt: new Date().toISOString() });
-    toast({ title: '🎬 Class started', description: 'Your student can now see the lesson.' });
-  }, [studentPresent, sessionContext, updateSessionContext, toast]);
+    // Interaction (drag / tap / pen) is ON from the moment the class starts and stays
+    // on to the end of the lesson. The teacher's "Interaction" button pauses it.
+    try {
+      await setDrawingEnabled(true);
+      await setStudentCanDraw(true); // keep the legacy flag in sync
+      setActivityUnlocked(true);
+      mainStageRef.current?.setSceneInteractionUnlocked(true);
+    } catch (e) {
+      console.warn('[TeacherClassroom] could not switch student interaction on at start', e);
+    }
+    toast({ title: '🎬 Class started', description: 'Your student can now see the lesson and join in.' });
+  }, [studentPresent, sessionContext, updateSessionContext, toast, setDrawingEnabled, setStudentCanDraw, setActivityUnlocked]);
 
   return (
     <div className={`h-dvh w-full ${hubBg} text-gray-900 flex flex-col overflow-hidden relative`}>

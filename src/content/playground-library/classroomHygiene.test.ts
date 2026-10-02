@@ -72,4 +72,12 @@ describe('classroom hygiene', () => {
       'src/components/classroom/stage/ClassroomSceneErrorBoundary.tsx',
     ]) expect(read(f), f).toContain('logClassroomCrash');
   });
+  it('interaction stays on for the whole lesson: scene changes never re-lock it, Start Class turns it on', () => {
+    for (const f of ['src/pages/playground-scene/PlayUnitLesson.tsx', 'src/pages/playground-scene/PlayWelcomeTownLesson.tsx']) {
+      // The old rule re-locked the student on every scene change. Only the teacher's Pause button may lock.
+      expect(read(f), `${f} must not re-lock interaction on a scene change`).not.toMatch(/prevSceneIdxRef\.current = sceneIdx;[\s\S]{0,160}setInteractionUnlocked\(false\)/);
+    }
+    const teacher = read('src/components/teacher/classroom/TeacherClassroom.tsx');
+    expect(teacher).toMatch(/handleStartClass[\s\S]{0,1400}setSceneInteractionUnlocked\(true\)/);
+  });
 });

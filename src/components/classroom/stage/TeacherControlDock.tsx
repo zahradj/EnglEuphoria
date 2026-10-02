@@ -304,7 +304,7 @@ export const TeacherControlDock: React.FC<TeacherControlDockProps> = ({
           </div>
         )}
 
-        {/* Let Student Interact — standalone always-visible toggle, between
+        {/* Student interaction on/pause — standalone always-visible toggle, between
             Star and Tools per direct request (was buried inside the Tools
             popover before, one extra click away from a control teachers
             reach for constantly). Same drawingEnabled/onToggleDrawing wiring
@@ -316,11 +316,12 @@ export const TeacherControlDock: React.FC<TeacherControlDockProps> = ({
             variant={drawingEnabled ? 'default' : 'outline'}
             className={`h-9 gap-1.5 text-sm ${drawingEnabled ? accent.primary : accent.outline}`}
             onClick={() => onToggleDrawing(!drawingEnabled)}
-            title={drawingEnabled ? 'Student can interact — tap to lock' : 'Student is locked — tap to let them interact'}
-            aria-label="Let the student draw and interact with the shared stage"
+            title={drawingEnabled ? 'Student interaction is ON — tap to pause it (pen and activities)' : 'Student interaction is PAUSED — tap to resume'}
+            aria-label={drawingEnabled ? 'Pause student interaction' : 'Resume student interaction'}
+            aria-pressed={drawingEnabled}
           >
             {drawingEnabled ? <Unlock className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
-            Let Student Interact
+            {drawingEnabled ? 'Interaction On' : 'Interaction Paused'}
           </Button>
         </div>
 
