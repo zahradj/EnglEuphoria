@@ -14,6 +14,7 @@ import { SpinWheelScene } from '../SpinWheelScene';
 import { PictureMatchScene, CroppedImage } from '../PictureMatchScene';
 import { FirstSoundScene } from '../FirstSoundScene';
 import { LetterMatchScene, LetterBlocksScene } from '../LetterTilesScene';
+import { PlaceItScene, TorchHuntScene, WhereCastleScene } from './WhereGames';
 
 export type { ActivitySync };
 
@@ -189,6 +190,9 @@ export function SceneRenderer(props: {
       case 'first-sound': return <FirstSoundScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'letter-match': return <LetterMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'letter-blocks': return <LetterBlocksScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+      case 'place-it': return <PlaceItScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'torch-hunt': return <TorchHuntScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'where-castle': return <WhereCastleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
       default: return null;
     }

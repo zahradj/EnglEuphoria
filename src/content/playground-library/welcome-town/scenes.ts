@@ -377,6 +377,36 @@ export type Scene =
   | { id: string; kind: 'jigsaw-puzzle'; bg: string; teacher: string; image: string; rows: number; cols: number }
   /** `cast`: the friends shown on the finale card (defaults to Welcome Town's
    *  class); `look: 'card'` = cream-card styling. */
+  /** Move-it preposition game (see WhereGames.tsx). Positions are % of a
+   *  16:9 stage: left = centre x, top = the FOOT (where it stands). `width`
+   *  is % of the stage width. `behind: true` draws the item under the
+   *  furniture sticker, so "behind"/"under" really look hidden. */
+  | {
+      id: string; kind: 'place-it'; bg: string; who: CharKey; teacher: string; mode: 'learn' | 'listen';
+      item: { label: string; img: string; width: number; height?: number; homeLeft?: number; homeTop?: number };
+      anchor: { label: string; img: string; left: number; top: number; width: number };
+      box?: { label: string; img: string; left: number; top: number; width: number };
+      spots: { prep: 'in' | 'on' | 'under' | 'next to' | 'behind'; left: number; top: number; behind?: boolean; scale?: number }[];
+      startAt?: 'in' | 'on' | 'under' | 'next to' | 'behind';
+      learnLines?: Partial<Record<'in' | 'on' | 'under' | 'next to' | 'behind', string>>;
+      rounds?: { prep: 'in' | 'on' | 'under' | 'next to' | 'behind'; line: string; answer?: string }[];
+    }
+  /** Torch hunt in a dark room (see WhereGames.tsx): find the hidden thing
+   *  (spot = % of the 16:9 picture, r = radius in % of width), then pick
+   *  the sentence that says where it is. */
+  | {
+      id: string; kind: 'torch-hunt'; bg: string; who: CharKey; teacher: string; ask?: string;
+      rounds: { bg: string; spot: { left: number; top: number; r: number }; question?: string; answer: string; options: string[] }[];
+    }
+  /** "Where is the ___?" — "It's in the ___." on a castle cutaway (see
+   *  WhereGames.tsx): rooms are % boxes, `at` is where the thing is drawn
+   *  (for the found glow), `stickers` adds things not painted in `bg`. */
+  | {
+      id: string; kind: 'where-castle'; bg: string; teacher: string; asker: CharKey; answerer: CharKey; askerName?: string;
+      rooms: { room: string; box: { x: number; y: number; w: number; h: number } }[];
+      stickers?: { img: string; left: number; top: number; width: number }[];
+      rounds: { item: string; img: string; room: string; at: { left: number; top: number } }[];
+    }
   | { id: string; kind: 'finale'; bg: string; who: CharKey; line: string; cast?: CharKey[]; look?: 'card' };
 
 export const LESSON_1_TITLE = 'Hello, Class!';
@@ -691,11 +721,31 @@ export const LESSON_1_SCENES: Scene[] = [
 export const LESSON_2_TITLE = 'How Are You?';
 export const LESSON_2_OBJECTIVE = 'Part 1: Ask and answer "How are you?", name a feeling (happy, sad, tired, angry, hungry), and use He, She and They to say how a friend feels — plus three new school-supplies words (book, pencil, pen) and a first listen at classroom-description language ("There is...", "next to", "on"), heard and repeated once, not yet formally taught. Part 2: Learn the sounds P, I, N and read three more real words.';
 
+/** A1 Unit 1 Lesson 2 uses 16:9 widenings of its square art (the
+ *  original sits untouched in the centre; see scripts/outpaint-composite.py)
+ *  so nothing is cropped off the top and bottom any more. */
+const bgWideW = `${W}/scenes/bg-classroom-wide-wide.png`;
+const bgCircleW = `${W}/scenes/bg-classroom-circle-wide.png`;
+const bgVocabPipHappyW = `${W}/scenes/bg-vocab-pip-happy-wide.png`;
+const bgVocabLeoTiredW = `${W}/scenes/bg-vocab-leo-tired-wide.png`;
+const bgVocabMiaSadW = `${W}/scenes/bg-vocab-mia-sad-wide.png`;
+const bgVocabBellaAngryW = `${W}/scenes/bg-vocab-bella-angry-wide.png`;
+const bgVocabWillowHungryW = `${W}/scenes/bg-vocab-willow-hungry-wide.png`;
+const bgFeelingsW = `${W}/scenes/bg-classroom-feelings-wide.png`;
+const bgHeIntroPipW = `${W}/scenes/bg-heshe-intro-pip-wide.png`;
+const bgHeSheTogetherW = `${W}/scenes/bg-heshe-together-wide.png`;
+const bgReadingW = `${W}/scenes/bg-classroom-reading-wide.png`;
+const bgSupplies2W = `${W}/scenes/bg-classroom-supplies2-wide.png`;
+const bgPrepInW = `${W}/scenes/bg-prep-in-wide.png`;
+const bgPrepOnW = `${W}/scenes/bg-prep-on-wide.png`;
+const bgPrepNextToW = `${W}/scenes/bg-prep-next-to-wide.png`;
+const bgExpressGoodbyeW = `${W}/scenes/bg-express-goodbye-wide.png`;
+
 export const LESSON_2_SCENES: Scene[] = [
-  { id: 'wt2-title', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'How Are You?', subtitle: 'Say hello, then share how you feel today', cta: '\u{1F392} LET’S GO!' },
+  { id: 'wt2-title', kind: 'title-card', bg: bgWideW, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'How Are You?', subtitle: 'Say hello, then share how you feel today', cta: '\u{1F392} LET’S GO!' },
 
   {
-    id: 'wt2-intro', kind: 'cinematic', bg: bgCircle, title: 'Back to Welcome Town School', subtitle: 'A quick hello before today’s lesson', narrator: 'marigold',
+    id: 'wt2-intro', kind: 'cinematic', bg: bgCircleW, title: 'Back to Welcome Town School', subtitle: 'A quick hello before today’s lesson', narrator: 'marigold',
     script: [
       { who: 'marigold', line: 'Welcome back, class! Let’s remember what we learned.' },
       { who: 'pip', line: 'Hello! My name is Pip. I am 7 years old!' },
@@ -705,7 +755,7 @@ export const LESSON_2_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt2-howareyou', kind: 'meet', bg: bgCircle, who: 'marigold',
+    id: 'wt2-howareyou', kind: 'meet', bg: bgCircleW, who: 'marigold',
     teacher: 'Tap Miss Marigold to hear a new question!',
     line: 'How are you today? I am fine, thank you!', repeat: 'I am fine, thank you!',
   },
@@ -718,25 +768,25 @@ export const LESSON_2_SCENES: Scene[] = [
   {
     // Character composed into the LEFT third of bg-vocab-pip-happy.png —
     // cards dock right, onto the empty side.
-    id: 'wt2-vocab-pip-happy', kind: 'meet', bg: bgVocabPipHappy, who: 'pip', cardSide: 'right',
+    id: 'wt2-vocab-pip-happy', kind: 'meet', bg: bgVocabPipHappyW, who: 'pip', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'Pip is happy!', repeat: 'Happy!',
   },
   {
     // Character composed into the RIGHT third of bg-vocab-leo-tired.png —
     // cards dock left.
-    id: 'wt2-vocab-leo-tired', kind: 'meet', bg: bgVocabLeoTired, who: 'leo', cardSide: 'left',
+    id: 'wt2-vocab-leo-tired', kind: 'meet', bg: bgVocabLeoTiredW, who: 'leo', cardSide: 'left',
     teacher: 'Listen, then repeat!', line: 'Leo is tired!', repeat: 'Tired!',
   },
   {
-    id: 'wt2-vocab-mia-sad', kind: 'meet', bg: bgVocabMiaSad, who: 'mia', cardSide: 'right',
+    id: 'wt2-vocab-mia-sad', kind: 'meet', bg: bgVocabMiaSadW, who: 'mia', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'Mia is sad!', repeat: 'Sad!',
   },
   {
-    id: 'wt2-vocab-bella-angry', kind: 'meet', bg: bgVocabBellaAngry, who: 'bella', cardSide: 'left',
+    id: 'wt2-vocab-bella-angry', kind: 'meet', bg: bgVocabBellaAngryW, who: 'bella', cardSide: 'left',
     teacher: 'Listen, then repeat!', line: 'Bella is angry!', repeat: 'Angry!',
   },
   {
-    id: 'wt2-vocab-willow-hungry', kind: 'meet', bg: bgVocabWillowHungry, who: 'willow', cardSide: 'right',
+    id: 'wt2-vocab-willow-hungry', kind: 'meet', bg: bgVocabWillowHungryW, who: 'willow', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'Willow is hungry!', repeat: 'Hungry!',
   },
 
@@ -747,14 +797,14 @@ export const LESSON_2_SCENES: Scene[] = [
     // rule that a vocab-spot scene needs its target words large, clean,
     // and unambiguous rather than borrowed from an unrelated narrative
     // scene.
-    id: 'wt2-vocab-feelings', kind: 'vocab-spot', bg: bgFeelings,
+    id: 'wt2-vocab-feelings', kind: 'vocab-spot', bg: bgFeelingsW,
     teacher: 'Look at each friend! Tap the arrow to learn how they feel.',
     items: [
-      { label: 'Happy', sentence: 'Pip is happy.', emoji: '\u{1F60A}', left: '14%', top: '58%', color: '#FE6A2F', who: 'pip' },
-      { label: 'Tired', sentence: 'Leo is tired.', emoji: '\u{1F62A}', left: '33%', top: '60%', color: '#C97A2F', who: 'leo' },
-      { label: 'Sad', sentence: 'Mia is sad.', emoji: '\u{1F622}', left: '52%', top: '64%', color: '#B85CD1', who: 'mia' },
-      { label: 'Angry', sentence: 'Bella is angry.', emoji: '\u{1F620}', left: '71%', top: '62%', color: '#E76FA5', who: 'bella' },
-      { label: 'Hungry', sentence: 'Willow is hungry.', emoji: '\u{1F924}', left: '90%', top: '64%', color: '#4FA9E0', who: 'willow' },
+      { label: 'Happy', sentence: 'Pip is happy.', emoji: '\u{1F60A}', left: '29.8%', top: '54.5%', color: '#FE6A2F', who: 'pip' },
+      { label: 'Tired', sentence: 'Leo is tired.', emoji: '\u{1F62A}', left: '40.4%', top: '55.6%', color: '#C97A2F', who: 'leo' },
+      { label: 'Sad', sentence: 'Mia is sad.', emoji: '\u{1F622}', left: '51.1%', top: '57.9%', color: '#B85CD1', who: 'mia' },
+      { label: 'Angry', sentence: 'Bella is angry.', emoji: '\u{1F620}', left: '61.8%', top: '56.8%', color: '#E76FA5', who: 'bella' },
+      { label: 'Hungry', sentence: 'Willow is hungry.', emoji: '\u{1F924}', left: '72.5%', top: '57.9%', color: '#4FA9E0', who: 'willow' },
     ],
   },
 
@@ -762,13 +812,13 @@ export const LESSON_2_SCENES: Scene[] = [
     // Practice step right after discovery — target coordinates match
     // wt2-vocab-feelings' own hotspots one-for-one, same as Lesson 1's
     // drag-match scenes.
-    id: 'wt2-drag-feelings', kind: 'drag-match', bg: bgFeelings, teacher: 'Listen, then drag each word onto the friend who feels that way!',
+    id: 'wt2-drag-feelings', kind: 'drag-match', bg: bgFeelingsW, teacher: 'Listen, then drag each word onto the friend who feels that way!',
     items: [
-      { label: 'Happy', color: '#FE6A2F', who: 'pip', targetLeft: '14%', targetTop: '58%' },
-      { label: 'Tired', color: '#C97A2F', who: 'leo', targetLeft: '33%', targetTop: '60%' },
-      { label: 'Sad', color: '#B85CD1', who: 'mia', targetLeft: '52%', targetTop: '64%' },
-      { label: 'Angry', color: '#E76FA5', who: 'bella', targetLeft: '71%', targetTop: '62%' },
-      { label: 'Hungry', color: '#4FA9E0', who: 'willow', targetLeft: '90%', targetTop: '64%' },
+      { label: 'Happy', color: '#FE6A2F', who: 'pip', targetLeft: '29.8%', targetTop: '54.5%' },
+      { label: 'Tired', color: '#C97A2F', who: 'leo', targetLeft: '40.4%', targetTop: '55.6%' },
+      { label: 'Sad', color: '#B85CD1', who: 'mia', targetLeft: '51.1%', targetTop: '57.9%' },
+      { label: 'Angry', color: '#E76FA5', who: 'bella', targetLeft: '61.8%', targetTop: '56.8%' },
+      { label: 'Hungry', color: '#4FA9E0', who: 'willow', targetLeft: '72.5%', targetTop: '57.9%' },
     ],
   },
 
@@ -778,7 +828,7 @@ export const LESSON_2_SCENES: Scene[] = [
     // mechanic from the vocab-spot/drag-match pair just above (matching
     // the Hard Variety Rule), same `memory` shape already proven by
     // wt-memory-words (Lesson 1) and wt3-memory (Lesson 3).
-    id: 'wt2-feelings-memory', kind: 'memory', bg: bgFeelings, teacher: 'Memory game! Find the matching feelings pairs!',
+    id: 'wt2-feelings-memory', kind: 'memory', bg: bgFeelingsW, teacher: 'Memory game! Find the matching feelings pairs!',
     pairs: [
       { id: 'happy', label: 'Happy', emoji: '\u{1F60A}' },
       { id: 'tired', label: 'Tired', emoji: '\u{1F62A}' },
@@ -789,7 +839,7 @@ export const LESSON_2_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt2-roleplay', kind: 'roleplay', bg: bgCircle, teacher: 'Story time! Listen to Pip and Miss Marigold, then repeat each line.', cast: ['pip', 'marigold'],
+    id: 'wt2-roleplay', kind: 'roleplay', bg: bgCircleW, teacher: 'Story time! Listen to Pip and Miss Marigold, then repeat each line.', cast: ['pip', 'marigold'],
     script: [
       { who: 'marigold', line: 'How are you today, Pip?', repeat: true },
       { who: 'pip', line: 'I am happy! How are you?', repeat: true },
@@ -798,7 +848,7 @@ export const LESSON_2_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt2-join-stage', kind: 'join-stage', bg: bgCircle, teacher: 'Your turn! When it says YOU, say how you feel out loud!', cast: ['pip', 'marigold', 'leo'],
+    id: 'wt2-join-stage', kind: 'join-stage', bg: bgCircleW, teacher: 'Your turn! When it says YOU, say how you feel out loud!', cast: ['pip', 'marigold', 'leo'],
     turns: [
       { who: 'marigold', line: 'How are you today?' },
       { who: 'student', line: 'I am ______.' },
@@ -816,13 +866,13 @@ export const LESSON_2_SCENES: Scene[] = [
     // own established hotspot coordinates verbatim (same ones wt2-vocab-
     // feelings/wt2-drag-feelings already use) — no new art needed, and
     // now covers three feelings in one game instead of just one.
-    id: 'wt2-choice', kind: 'listen-tap', bg: bgFeelings, teacher: 'Listen, then tap the right friend!',
+    id: 'wt2-choice', kind: 'listen-tap', bg: bgFeelingsW, teacher: 'Listen, then tap the right friend!',
     targets: [
-      { label: 'Happy', left: '14%', top: '58%', color: '#FE6A2F' },
-      { label: 'Tired', left: '33%', top: '60%', color: '#C97A2F' },
-      { label: 'Sad', left: '52%', top: '64%', color: '#B85CD1' },
-      { label: 'Angry', left: '71%', top: '62%', color: '#E76FA5' },
-      { label: 'Hungry', left: '90%', top: '64%', color: '#4FA9E0' },
+      { label: 'Happy', left: '29.8%', top: '54.5%', color: '#FE6A2F' },
+      { label: 'Tired', left: '40.4%', top: '55.6%', color: '#C97A2F' },
+      { label: 'Sad', left: '51.1%', top: '57.9%', color: '#B85CD1' },
+      { label: 'Angry', left: '61.8%', top: '56.8%', color: '#E76FA5' },
+      { label: 'Hungry', left: '72.5%', top: '57.9%', color: '#4FA9E0' },
     ],
     rounds: [
       { prompt: 'Who is happy?', answerLabel: 'Happy', who: 'pip' },
@@ -838,7 +888,7 @@ export const LESSON_2_SCENES: Scene[] = [
    * He/She/They sort-and-produce sequence right below still does the real
    * teaching — this just gives students a concrete first foothold. */
   {
-    id: 'wt2-heshe-intro-pip', kind: 'meet', bg: bgHeIntroPip, who: 'pip', cardSide: 'right',
+    id: 'wt2-heshe-intro-pip', kind: 'meet', bg: bgHeIntroPipW, who: 'pip', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'This is Pip. Pip is a boy. He is a boy!', repeat: 'He!',
   },
   {
@@ -851,10 +901,10 @@ export const LESSON_2_SCENES: Scene[] = [
     // adapted via the same listen-tap mechanic already proven above.
     // Mia still gets introduced here — the very first round names her
     // directly — just inside a game instead of a passive tap-once card.
-    id: 'wt2-heshe-together', kind: 'listen-tap', bg: bgHeSheTogether, teacher: 'Listen, then tap the right friend!',
+    id: 'wt2-heshe-together', kind: 'listen-tap', bg: bgHeSheTogetherW, teacher: 'Listen, then tap the right friend!',
     targets: [
-      { label: 'Pip', left: '28%', top: '55%', color: '#FE6A2F' },
-      { label: 'Mia', left: '72%', top: '55%', color: '#B85CD1' },
+      { label: 'Pip', left: '37.6%', top: '52.8%', color: '#FE6A2F' },
+      { label: 'Mia', left: '62.4%', top: '52.8%', color: '#B85CD1' },
     ],
     rounds: [
       { prompt: 'This is Mia. Tap Mia — She is a girl!', answerLabel: 'Mia', who: 'mia' },
@@ -867,7 +917,7 @@ export const LESSON_2_SCENES: Scene[] = [
     // Quick generalization check with two DIFFERENT characters than the
     // ones just modeled, reusing their existing vocab-scene art (no new
     // images needed) — confirms He/She isn't just memorized for Pip/Mia.
-    id: 'wt2-heshe-check-leo', kind: 'choice', bg: bgVocabLeoTired, who: 'leo', teacher: 'Look at Leo. Is Leo a boy or a girl?',
+    id: 'wt2-heshe-check-leo', kind: 'choice', bg: bgVocabLeoTiredW, who: 'leo', teacher: 'Look at Leo. Is Leo a boy or a girl?',
     prompt: 'Leo is a boy. We say...',
     options: [
       { label: 'He', emoji: '\u{1F466}', correct: true },
@@ -875,7 +925,7 @@ export const LESSON_2_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'wt2-heshe-check-bella', kind: 'choice', bg: bgVocabBellaAngry, who: 'bella', teacher: 'Look at Bella. Is Bella a boy or a girl?',
+    id: 'wt2-heshe-check-bella', kind: 'choice', bg: bgVocabBellaAngryW, who: 'bella', teacher: 'Look at Bella. Is Bella a boy or a girl?',
     prompt: 'Bella is a girl. We say...',
     options: [
       { label: 'She', emoji: '\u{1F467}', correct: true },
@@ -888,7 +938,7 @@ export const LESSON_2_SCENES: Scene[] = [
    * new grammar operating on them. Model (roleplay) -> practice (a real
    * drag-to-bin sort game, not another choice scene) -> produce (join-stage). */
   {
-    id: 'wt2-pronoun-model', kind: 'roleplay', bg: bgFeelings, teacher: 'New words! Listen to Miss Marigold, then repeat.', cast: ['marigold'],
+    id: 'wt2-pronoun-model', kind: 'roleplay', bg: bgFeelingsW, teacher: 'New words! Listen to Miss Marigold, then repeat.', cast: ['marigold'],
     script: [
       { who: 'marigold', line: 'Look at Pip! He is happy.', repeat: true },
       { who: 'marigold', line: 'Look at Mia! She is sad.', repeat: true },
@@ -901,7 +951,7 @@ export const LESSON_2_SCENES: Scene[] = [
     // Willow -> She. The two pair rounds are the only "They" practice —
     // built from character pairs already modeled together above and in
     // the vocab section, not a new grouping.
-    id: 'wt2-pronoun-sort', kind: 'pronoun-sort', bg: bgFeelings, teacher: 'Drag each friend to He, She, or They!',
+    id: 'wt2-pronoun-sort', kind: 'pronoun-sort', bg: bgFeelingsW, teacher: 'Drag each friend to He, She, or They!',
     rounds: [
       { who: 'pip', img: `${W}/sprites/pip-happy.png`, emotion: 'happy', answer: 'He' },
       { who: 'mia', img: `${W}/sprites/mia-sad.png`, emotion: 'sad', answer: 'She' },
@@ -913,7 +963,7 @@ export const LESSON_2_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'wt2-pronoun-join', kind: 'join-stage', bg: bgFeelings, teacher: 'Your turn! Point to a friend and say He or She!', cast: ['pip', 'mia', 'marigold'],
+    id: 'wt2-pronoun-join', kind: 'join-stage', bg: bgFeelingsW, teacher: 'Your turn! Point to a friend and say He or She!', cast: ['pip', 'mia', 'marigold'],
     turns: [
       { who: 'marigold', line: 'Point to a friend. Is your friend a boy or a girl?' },
       { who: 'student', line: 'He is ______. / She is ______.' },
@@ -922,7 +972,7 @@ export const LESSON_2_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt2-storybook', kind: 'flipbook', bg: bgWide, title: "Pip's Tired Day",
+    id: 'wt2-storybook', kind: 'flipbook', bg: bgWideW, title: "Pip's Tired Day",
     pages: [
       { who: 'pip', img: `${W}/scenes/bg-story-pip-tired.png`, text: 'Pip feels tired today. "I am so tired!"' },
       { who: 'mia', img: `${W}/scenes/bg-story-mia-checks-pip.png`, text: 'Mia asks, "Are you okay, Pip?"' },
@@ -937,7 +987,7 @@ export const LESSON_2_SCENES: Scene[] = [
 
   {
     // A natural pause point, same as Lesson 1 — the Part 1/Part 2 seam.
-    id: 'wt2-break', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Break Time', title: 'Great Job!', subtitle: 'Stretch, get some water, then come back for Part 2!', cta: '\u{1F938} I’m Ready!',
+    id: 'wt2-break', kind: 'title-card', bg: bgWideW, level: 'A1', unit: 'Unit 1', lessonLabel: 'Break Time', title: 'Great Job!', subtitle: 'Stretch, get some water, then come back for Part 2!', cta: '\u{1F938} I’m Ready!',
   },
 
   /* =========================== Part 2: Reading Review =========================
@@ -945,10 +995,10 @@ export const LESSON_2_SCENES: Scene[] = [
    * per reading-engine's own progression table for A1 (review-through-
    * reading, not first-time letter discovery). */
 
-  { id: 'wt2-part2-title', kind: 'title-card', bg: bgReading, level: 'A1', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time!', subtitle: 'You know S, A, T — now learn P, I, N!', cta: '\u{1F4D6} LET’S READ!' },
+  { id: 'wt2-part2-title', kind: 'title-card', bg: bgReadingW, level: 'A1', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time!', subtitle: 'You know S, A, T — now learn P, I, N!', cta: '\u{1F4D6} LET’S READ!' },
 
   {
-    id: 'wt2-model-p', kind: 'sound-model', bg: bgReading, who: 'pip', letter: 'P', phoneme: '/p/', sound: 'puh',
+    id: 'wt2-model-p', kind: 'sound-model', bg: bgReadingW, who: 'pip', letter: 'P', phoneme: '/p/', sound: 'puh',
     teacher: 'A brand-new sound! /p/ /p/ Pig!',
     anchors: [
       { word: 'pig', emoji: '\u{1F437}' },
@@ -956,10 +1006,10 @@ export const LESSON_2_SCENES: Scene[] = [
       { word: 'pan', emoji: '\u{1F373}' },
     ],
   },
-  { id: 'wt2-trace-p', kind: 'trace', bg: bgReading, who: 'pip', letter: 'P', phoneme: '/p/', word: 'pig', teacher: 'Trace the letter P! Say /p/ /p/ /p/ as you draw.' },
+  { id: 'wt2-trace-p', kind: 'trace', bg: bgReadingW, who: 'pip', letter: 'P', phoneme: '/p/', word: 'pig', teacher: 'Trace the letter P! Say /p/ /p/ /p/ as you draw.' },
 
   {
-    id: 'wt2-model-i', kind: 'sound-model', bg: bgReading, who: 'marigold', letter: 'I', phoneme: '/\u{026A}/', sound: 'ih',
+    id: 'wt2-model-i', kind: 'sound-model', bg: bgReadingW, who: 'marigold', letter: 'I', phoneme: '/\u{026A}/', sound: 'ih',
     teacher: 'A brand-new sound! /i/ /i/ Ink!',
     anchors: [
       { word: 'ink', emoji: '\u{1F58B}\u{FE0F}' },
@@ -967,10 +1017,10 @@ export const LESSON_2_SCENES: Scene[] = [
       { word: 'insect', emoji: '\u{1F41B}' },
     ],
   },
-  { id: 'wt2-trace-i', kind: 'trace', bg: bgReading, who: 'marigold', letter: 'I', phoneme: '/\u{026A}/', word: 'ink', teacher: 'Trace the letter I! Say /i/ /i/ /i/ as you draw.' },
+  { id: 'wt2-trace-i', kind: 'trace', bg: bgReadingW, who: 'marigold', letter: 'I', phoneme: '/\u{026A}/', word: 'ink', teacher: 'Trace the letter I! Say /i/ /i/ /i/ as you draw.' },
 
   {
-    id: 'wt2-model-n', kind: 'sound-model', bg: bgReading, who: 'pip', letter: 'N', phoneme: '/n/', sound: 'nnn',
+    id: 'wt2-model-n', kind: 'sound-model', bg: bgReadingW, who: 'pip', letter: 'N', phoneme: '/n/', sound: 'nnn',
     teacher: 'A brand-new sound! /n/ /n/ Nut!',
     anchors: [
       { word: 'nut', emoji: '\u{1F95C}' },
@@ -978,10 +1028,10 @@ export const LESSON_2_SCENES: Scene[] = [
       { word: 'nose', emoji: '\u{1F443}' },
     ],
   },
-  { id: 'wt2-trace-n', kind: 'trace', bg: bgReading, who: 'pip', letter: 'N', phoneme: '/n/', word: 'nut', teacher: 'Trace the letter N! Say /n/ /n/ /n/ as you draw.' },
+  { id: 'wt2-trace-n', kind: 'trace', bg: bgReadingW, who: 'pip', letter: 'N', phoneme: '/n/', word: 'nut', teacher: 'Trace the letter N! Say /n/ /n/ /n/ as you draw.' },
 
   {
-    id: 'wt2-word-build', kind: 'word-build', bg: bgReading, teacher: 'You know 6 sounds now! Read three more real words!',
+    id: 'wt2-word-build', kind: 'word-build', bg: bgReadingW, teacher: 'You know 6 sounds now! Read three more real words!',
     rounds: [
       { word: 'SIT', blankIndex: 1, answer: 'I', choices: ['I', 'O', 'U'], emoji: '\u{1FA91}' },
       { word: 'PIN', blankIndex: 0, answer: 'P', choices: ['P', 'B', 'D'], emoji: '\u{1F4CC}' },
@@ -990,7 +1040,7 @@ export const LESSON_2_SCENES: Scene[] = [
   },
 
   {
-    id: 'wt2-letter-hunt', kind: 'letter-game', bg: bgReading, who: 'marigold', mode: 'name',
+    id: 'wt2-letter-hunt', kind: 'letter-game', bg: bgReadingW, who: 'marigold', mode: 'name',
     teacher: 'Alphabet game! Find the letter I say.',
     rounds: [
       { letter: 'P', choices: ['P', 'B', 'D'] },
@@ -1008,24 +1058,24 @@ export const LESSON_2_SCENES: Scene[] = [
   // "book" is already-known vocabulary by the time "The book is IN the
   // bag" plays, not a brand-new word inside a grammar-focused sentence.
   {
-    id: 'wt2-vocab-supplies2', kind: 'vocab-spot', bg: bgSupplies2,
+    id: 'wt2-vocab-supplies2', kind: 'vocab-spot', bg: bgSupplies2W,
     teacher: 'Remember desk and chair? Now learn three new school words!',
     items: [
-      { label: 'Book', sentence: 'This is my book.', emoji: '\u{1F4D6}', left: '39%', top: '58%', color: '#2563EB' },
-      { label: 'Pencil', sentence: 'This is my pencil.', emoji: '\u{270F}\u{FE0F}', left: '53%', top: '58%', color: '#F59E0B' },
-      { label: 'Pen', sentence: 'This is my pen.', emoji: '\u{1F58A}\u{FE0F}', left: '61%', top: '55%', color: '#0EA5E9' },
+      { label: 'Book', sentence: 'This is my book.', emoji: '\u{1F4D6}', left: '44.7%', top: '60.5%', color: '#2563EB' },
+      { label: 'Pencil', sentence: 'This is my pencil.', emoji: '\u{270F}\u{FE0F}', left: '51.1%', top: '56%', color: '#F59E0B' },
+      { label: 'Pen', sentence: 'This is my pen.', emoji: '\u{1F58A}\u{FE0F}', left: '55.8%', top: '56.6%', color: '#0EA5E9' },
     ],
   },
   {
-    id: 'wt2-drag-supplies2', kind: 'drag-match', bg: bgSupplies2, teacher: 'Listen, then drag each word onto the matching thing on the desk!',
+    id: 'wt2-drag-supplies2', kind: 'drag-match', bg: bgSupplies2W, teacher: 'Listen, then drag each word onto the matching thing on the desk!',
     items: [
-      { label: 'Book', color: '#2563EB', targetLeft: '39%', targetTop: '58%' },
-      { label: 'Pencil', color: '#F59E0B', targetLeft: '53%', targetTop: '58%' },
-      { label: 'Pen', color: '#0EA5E9', targetLeft: '61%', targetTop: '55%' },
+      { label: 'Book', color: '#2563EB', targetLeft: '44.7%', targetTop: '60.5%' },
+      { label: 'Pencil', color: '#F59E0B', targetLeft: '51.1%', targetTop: '56%' },
+      { label: 'Pen', color: '#0EA5E9', targetLeft: '55.8%', targetTop: '56.6%' },
     ],
   },
   {
-    id: 'wt2-class-puzzle', kind: 'jigsaw-puzzle', bg: bgFeelings, teacher: 'Puzzle game! Drag the pieces to put the picture back together!',
+    id: 'wt2-class-puzzle', kind: 'jigsaw-puzzle', bg: bgFeelingsW, teacher: 'Puzzle game! Drag the pieces to put the picture back together!',
     image: bgFeelings, rows: 2, cols: 3,
   },
 
@@ -1055,23 +1105,23 @@ export const LESSON_2_SCENES: Scene[] = [
   // single-concept-per-scene discipline every other `meet`/`vocab-spot`
   // scene in this file already follows.
   {
-    id: 'wt2-prep-in', kind: 'meet', bg: bgPrepIn, who: 'pip',
+    id: 'wt2-prep-in', kind: 'meet', bg: bgPrepInW, who: 'pip',
     teacher: 'Tap Pip to hear a new word!',
     line: 'Look! The book is IN the bag.', repeat: 'In the bag!',
   },
   {
-    id: 'wt2-prep-on', kind: 'meet', bg: bgPrepOn, who: 'mia',
+    id: 'wt2-prep-on', kind: 'meet', bg: bgPrepOnW, who: 'mia',
     teacher: 'Tap Mia to hear a new word!',
     line: 'Look! The apple is ON the desk.', repeat: 'On the desk!',
   },
   {
-    id: 'wt2-prep-next-to', kind: 'meet', bg: bgPrepNextTo, who: 'leo',
+    id: 'wt2-prep-next-to', kind: 'meet', bg: bgPrepNextToW, who: 'leo',
     teacher: 'Tap Leo to hear a new word!',
     line: 'Look! The chair is NEXT TO the desk.', repeat: 'Next to the desk!',
   },
 
   {
-    id: 'wt2-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    id: 'wt2-goodbye-song', kind: 'song', bg: bgExpressGoodbyeW, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
     songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
     lineDurationsMs: [3600, 4120, 4020, 8322],
@@ -1083,7 +1133,7 @@ export const LESSON_2_SCENES: Scene[] = [
     ],
   },
 
-  { id: 'wt2-finale', kind: 'finale', bg: bgWide, who: 'pip', line: 'You said how you feel, and read three more real words — SIT, PIN, and PIP! ✨\u{1F3C6}' },
+  { id: 'wt2-finale', kind: 'finale', bg: bgWideW, who: 'pip', line: 'You said how you feel, and read three more real words — SIT, PIN, and PIP! ✨\u{1F3C6}' },
 ];
 
 /* =============================================================================

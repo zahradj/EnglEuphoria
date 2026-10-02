@@ -69,6 +69,7 @@ import ScrollToTop from "@/components/common/ScrollToTop";
 // Only the landing page is eagerly loaded (entry point)
 import LandingPage from "./pages/LandingPage";
 import { HomeGate } from "./components/auth/HomeGate";
+import UnknownRouteReload from "./components/routing/UnknownRouteReload";
 
 
 // All other pages are lazy-loaded for bundle optimization
@@ -165,6 +166,7 @@ const PlayWelcomeTown4 = lazy(() => import("./pages/playground-scene/PlayWelcome
 const PlayJungleLesson1 = lazy(() => import("./pages/playground-scene/PlayJungleLesson1"));
 const PlayMagicCastleLesson1 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson1"));
 const PlayMagicCastleLesson2 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson2"));
+const PlayMagicCastleLesson3 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson3"));
 const HomeworkQuestPage = lazy(() => import("./pages/HomeworkQuestPage"));
 const PlayA2Unit1Lesson1 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson1"));
 const PlayA2Unit1Lesson2 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson2"));
@@ -386,6 +388,12 @@ const App = () => {
                       <Route path="/playground-scene/castle-lesson-2" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayMagicCastleLesson2 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Magic Castle, Unit 9 Lesson 3 ("Listen: Where Is the Magic Lamp?"). */}
+                      <Route path="/playground-scene/castle-lesson-3" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMagicCastleLesson3 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* A2 tier — Welcome Town, Unit 1 Lesson 1 ("My Day"). */}
@@ -1022,7 +1030,7 @@ const App = () => {
                       <Route path="/admin-dashboard" element={<Navigate to="/super-admin" replace />} />
 
                       {/* 404 - Redirect to Login */}
-                      <Route path="*" element={<Navigate to="/" replace />} />
+                      <Route path="*" element={<UnknownRouteReload />} />
                     </Routes>
                     <ProfileDebugPanel />
                   </SentinelErrorBoundary>

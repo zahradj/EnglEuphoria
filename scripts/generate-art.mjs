@@ -17,6 +17,7 @@ const ANON_KEY = fs.readFileSync(new URL('./generate-voice-cache.mjs', import.me
 const targets = JSON.parse(fs.readFileSync(new URL('./art-targets.json', import.meta.url), 'utf8'));
 
 let made = 0, failed = 0;
+const madeFiles = [];
 for (const t of targets) {
   if (fs.existsSync(t.out)) { console.log(`= exists ${t.out}`); continue; }
   const referenceImages = (t.refs ?? []).map((p) => ({ mimeType: 'image/png', data: fs.readFileSync(p).toString('base64') }));
@@ -36,7 +37,7 @@ for (const t of targets) {
       fs.mkdirSync(path.dirname(t.out), { recursive: true });
       fs.writeFileSync(t.out, buf);
       console.log(`+ ${t.out} (${buf.length}B)`);
-      made++; ok = true;
+      made++; ok = true; madeFiles.push(t.out);
     } catch (e) {
       console.warn(`! ${t.out} attempt ${attempt}: ${e.message}`);
       await new Promise((r) => setTimeout(r, 3000 * attempt));
@@ -44,6 +45,10 @@ for (const t of targets) {
   }
   if (!ok) failed++;
 }
+// Wide versions of square art: the original is pasted back exactly into
+// the centre afterwards (scripts/outpaint-composite.py), so only the
+// extended sides are new.
+fs.writeFileSync('art-outpaint.txt', targets.filter((t) => t.outpaintFrom && madeFiles.includes(t.out)).map((t) => `${t.out}\t${t.outpaintFrom}`).join('\n'));
 fs.writeFileSync('art-stickers.txt', targets.filter((t) => t.sticker).map((t) => t.out).join('\n'));
 console.log(`Done. made ${made}, failed ${failed}`);
 if (failed) process.exitCode = 1;
