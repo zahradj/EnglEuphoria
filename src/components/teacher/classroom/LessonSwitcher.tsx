@@ -10,8 +10,8 @@ type HubType = 'playground' | 'academy' | 'professional';
 
 const HUB_TO_TARGET_SYSTEM: Record<HubType, string[]> = {
   playground: ['playground', 'kids'],
-  academy: ['academy', 'teens'],
-  professional: ['success', 'professional', 'adults'],
+  academy: ['academy', 'teen', 'teens'],
+  professional: ['success', 'professional', 'adult', 'adults'],
 };
 
 // CEFR ordering for the curriculum sequence — anything not in this list

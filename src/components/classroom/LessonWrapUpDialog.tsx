@@ -424,12 +424,13 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
         if (studentId) void evaluateAndAssignExtraPractice({ bookingId, studentId, hub: hubType as any });
 
         if (isTrial && trialCefr && studentId) {
+          // Saves the level to the student's profile, placement and learning
+          // path (skipped if the teacher already set it with the level picker).
           try {
-            const { data: existing } = await (supabase as any).from('placement_results').select('id')
-              .eq('student_id', studentId).eq('method', 'trial_lesson').limit(1).maybeSingle();
-            if (!existing?.id) {
-              await (supabase as any).from('placement_results').insert({ student_id: studentId, cefr_level: trialCefr, method: 'trial_lesson', hub: hubType });
-            }
+            const { error } = await (supabase as any).rpc('set_trial_level', {
+              p_booking_id: bookingId, p_cefr: trialCefr, p_only_if_unset: true,
+            });
+            if (error) throw error;
           } catch (e) { console.warn('[LessonWrapUpDialog] trial handoff failed', e); }
         }
 

@@ -4,8 +4,8 @@ export type Hub = 'playground' | 'academy' | 'success';
 
 const HUB_TO_TARGET_SYSTEM: Record<Hub, string[]> = {
   playground: ['playground', 'kids'],
-  academy: ['academy', 'teens'],
-  success: ['success', 'professional', 'adults'],
+  academy: ['academy', 'teen', 'teens'],
+  success: ['success', 'professional', 'adult', 'adults'],
 };
 
 /**
@@ -271,4 +271,22 @@ export async function setCurrentLesson(
   } catch (e) {
     console.warn('[setCurrentLesson] audit log failed', e);
   }
+}
+
+/** Normalise any CEFR spelling ("pre-a1", "PreA1", "a1") to the slot form
+ *  curriculum_lessons uses ("Pre-A1", "A1", …). */
+export function normalizeCefr(v?: string | null): string | null {
+  const s = String(v ?? '').toUpperCase().replace(/[\s_-]/g, '');
+  if (!s) return null;
+  if (s === 'PREA1') return 'Pre-A1';
+  return ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].includes(s) ? s : null;
+}
+
+/** Unit 1 Lesson 1 (or the earliest lesson) of one level in a hub — the
+ *  lesson a trial class opens, and where a new student's path starts. */
+export async function findFirstLessonForLevel(hub: Hub, cefr?: string | null): Promise<string | null> {
+  const level = normalizeCefr(cefr) ?? 'Pre-A1';
+  const seq = await fetchHubLessonSequence(hub);
+  const atLevel = seq.filter(l => cefrRank(l.slot_cefr_level) === cefrRank(level));
+  return atLevel[0]?.id ?? null;
 }

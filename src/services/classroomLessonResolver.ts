@@ -8,7 +8,7 @@
  */
 import { supabase } from '@/integrations/supabase/client';
 import { getLessonById, getLibraryLessonSlides, type LibraryLesson } from './lessonLibraryService';
-import { resolveActiveCoreLesson, type Hub as CoreHub } from './activeCoreLessonResolver';
+import { resolveActiveCoreLesson, findFirstLessonForLevel, type Hub as CoreHub } from './activeCoreLessonResolver';
 import { buildPreviewHomeworkPack } from '@/components/lesson-player/buildPreviewHomeworkPack';
 import type { HubType } from '@/components/admin/lesson-builder/ai-wizard/types';
 import { isSceneLessonFormat } from '@/content/playground-library/sceneLessonFormats';
@@ -129,6 +129,18 @@ export async function resolveBookingLesson(booking: {
   const bookingHub = normalizeHub(booking.hub_type);
   const isTrialBooking = String(booking.booking_type ?? '').toLowerCase() === 'trial';
   const allowTrialSlides = isTrialBooking && booking.use_trial_fallback !== false;
+
+  // A trial class opens the real Unit 1 Lesson 1 of the student's level
+  // (the teacher can change the level in class; that pins
+  // curriculum_lesson_id, which then wins above). Success has no library
+  // lessons yet, so it keeps its own trial stage.
+  if (!curriculumLessonId && allowTrialSlides && bookingHub !== 'professional') {
+    try {
+      curriculumLessonId = await findFirstLessonForLevel(bookingHub, booking.cefr_level);
+    } catch (e) {
+      console.warn('[classroomLessonResolver] trial level lesson lookup failed:', e);
+    }
+  }
 
   let unresolvedLessonRowTitle: string | null = null;
   if (!curriculumLessonId && booking.lesson_id) {

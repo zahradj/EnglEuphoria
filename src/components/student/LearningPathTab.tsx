@@ -1,68 +1,65 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Target, 
-  Calendar, 
-  Clock, 
-  Star, 
-  BookOpen, 
-  Play, 
+import {
+  Target,
+  Calendar,
+  Clock,
+  Star,
+  BookOpen,
   CheckCircle,
   Trophy,
-  Rocket,
   Zap,
   Layers,
-  Loader2
+  Loader2,
+  ArrowRight,
 } from "lucide-react";
 import { useAuth } from '@/contexts/AuthContext';
-import { useUserProgress, useProgressStats } from '@/hooks/useProgress';
-import { LessonPlayer } from './LessonPlayer';
+import { useUserProgress } from '@/hooks/useProgress';
+import { useStudentLevel } from '@/hooks/useStudentLevel';
+import {
+  fetchHubLessonSequence,
+  normalizeCefr,
+  readLessonPointer,
+  type Hub,
+  type LessonMeta,
+} from '@/services/activeCoreLessonResolver';
 import { MemoryBank } from './MemoryBank';
-import { CanvasLessonPlayer } from './CanvasLessonPlayer';
-import { ProgressOverview } from './ProgressOverview';
 
-interface CurriculumLesson {
-  id: string;
-  title: string;
+const LEVEL_ORDER = ['Pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
+interface PathLesson extends LessonMeta {
   description: string | null;
-  sequence_order: number | null;
   duration_minutes: number | null;
   xp_reward: number | null;
-  difficulty_level: string;
-  content: any;
-  unit?: {
-    id: string;
-    title: string;
-    unit_number: number;
-  } | null;
 }
 
-interface GroupedLessons {
-  unit: {
-    id: string;
-    title: string;
-    unit_number: number;
-  } | null;
-  lessons: CurriculumLesson[];
+interface UnitGroup {
+  unitNumber: number | null;
+  lessons: PathLesson[];
 }
 
+function toCoreHub(level: string | null): Hub {
+  if (level === 'professional') return 'success';
+  if (level === 'academy') return 'academy';
+  return 'playground';
+}
+
+/**
+ * The student's learning path: the level their teacher saved in the trial
+ * class (or their placement test), that level's lessons for their hub in
+ * teaching order, and "Up next" on the lesson their path points to
+ * (student_lesson_pointers — the same pointer the classroom opens).
+ */
 export const LearningPathTab = () => {
-  const navigate = useNavigate();
   const { user } = useAuth();
-  const [profile, setProfile] = useState<any>(null);
-  const [playingLesson, setPlayingLesson] = useState<CurriculumLesson | null>(null);
+  const { studentLevel } = useStudentLevel();
+  const hub = toCoreHub(studentLevel);
 
-  // Fetch user progress
   const { data: userProgress = [] } = useUserProgress(user?.id);
-  const { data: progressStats } = useProgressStats(user?.id);
-
-  // Create a map of lesson progress for quick lookup
   const progressMap = React.useMemo(() => {
     const map: Record<string, { status: string; score: number | null }> = {};
     userProgress.forEach((p: any) => {
@@ -71,96 +68,86 @@ export const LearningPathTab = () => {
     return map;
   }, [userProgress]);
 
-  useEffect(() => {
-    const savedProfile = localStorage.getItem('studentProfile');
-    if (savedProfile) {
-      setProfile(JSON.parse(savedProfile));
-    }
-  }, []);
-
-  // Fetch real curriculum lessons
-  const { data: lessons = [], isLoading } = useQuery({
-    queryKey: ['learning-path-lessons'],
+  const { data, isLoading } = useQuery({
+    queryKey: ['learning-path', user?.id, hub],
+    enabled: !!user?.id,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('curriculum_lessons')
-        .select(`
-          id,
-          title,
-          description,
-          sequence_order,
-          duration_minutes,
-          xp_reward,
-          difficulty_level,
-          content,
-          unit:curriculum_units(id, title, unit_number)
-        `)
-        .eq('is_published', true)
-        .order('sequence_order', { ascending: true });
+      const uid = user!.id;
+      const [placementRes, profileRes, pointerId, sequence] = await Promise.all([
+        (supabase as any)
+          .from('placement_results')
+          .select('cefr_level, method, created_at')
+          .eq('student_id', uid)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        (supabase as any)
+          .from('student_profiles')
+          .select('final_cefr_level')
+          .eq('user_id', uid)
+          .maybeSingle(),
+        readLessonPointer(uid),
+        fetchHubLessonSequence(hub),
+      ]);
 
-      if (error) throw error;
-      
-      // Transform the data to handle Supabase's array return for single relations
-      return (data || []).map((item: any) => ({
-        ...item,
-        unit: Array.isArray(item.unit) ? item.unit[0] : item.unit,
-      })) as CurriculumLesson[];
+      const savedLevel =
+        normalizeCefr(placementRes.data?.cefr_level) ??
+        normalizeCefr(profileRes.data?.final_cefr_level);
+
+      // The pointer may sit in a later level once the student moves up —
+      // follow it; otherwise show the saved level.
+      const pointerLesson = pointerId ? sequence.find(l => l.id === pointerId) ?? null : null;
+      const pathLevel = normalizeCefr(pointerLesson?.slot_cefr_level) ?? savedLevel;
+
+      const levelLessons = pathLevel
+        ? sequence.filter(l => normalizeCefr(l.slot_cefr_level) === pathLevel)
+        : [];
+
+      // Extra display fields for just this level's lessons.
+      let extras: Record<string, Partial<PathLesson>> = {};
+      if (levelLessons.length) {
+        const { data: rows } = await supabase
+          .from('curriculum_lessons')
+          .select('id, description, duration_minutes, xp_reward')
+          .in('id', levelLessons.map(l => l.id));
+        extras = Object.fromEntries((rows ?? []).map((r: any) => [r.id, r]));
+      }
+
+      return {
+        savedLevel,
+        pathLevel,
+        fromTrial: placementRes.data?.method === 'trial_lesson',
+        pointerId: pointerLesson ? pointerId : null,
+        lessons: levelLessons.map(l => ({
+          ...l,
+          description: null,
+          duration_minutes: null,
+          xp_reward: null,
+          ...extras[l.id],
+        })) as PathLesson[],
+      };
     },
   });
 
-  // Group lessons by unit
-  const groupedLessons: GroupedLessons[] = React.useMemo(() => {
-    const groups: Map<string | null, GroupedLessons> = new Map();
-    
-    lessons.forEach((lesson) => {
-      const unitKey = lesson.unit?.id || null;
-      
-      if (!groups.has(unitKey)) {
-        groups.set(unitKey, {
-          unit: lesson.unit || null,
-          lessons: [],
-        });
-      }
-      
-      groups.get(unitKey)!.lessons.push(lesson);
-    });
+  const lessons = data?.lessons ?? [];
+  const pointerIndex = data?.pointerId ? lessons.findIndex(l => l.id === data.pointerId) : -1;
 
-    // Sort by unit number
-    return Array.from(groups.values()).sort((a, b) => {
-      if (!a.unit) return 1;
-      if (!b.unit) return -1;
-      return a.unit.unit_number - b.unit.unit_number;
-    });
-  }, [lessons]);
+  const isDone = (l: PathLesson, i: number) =>
+    progressMap[l.id]?.status === 'completed' || (pointerIndex >= 0 && i < pointerIndex);
 
-  const getTotalProgress = () => {
-    if (lessons.length === 0) return 0;
-    const completed = lessons.filter(l => progressMap[l.id]?.status === 'completed').length;
-    return Math.round((completed / lessons.length) * 100);
-  };
+  // Up next: the pointer lesson, else the first lesson not yet done.
+  const upNextIndex = pointerIndex >= 0 ? pointerIndex : lessons.findIndex((l, i) => !isDone(l, i));
 
-  const getTotalXP = () => {
-    return progressStats?.completedLessons 
-      ? lessons.filter(l => progressMap[l.id]?.status === 'completed')
-          .reduce((sum, l) => sum + (l.xp_reward || 0), 0)
-      : 0;
-  };
-
-  const getNextLesson = () => {
-    // Find first lesson that isn't completed
-    for (const group of groupedLessons) {
-      for (const lesson of group.lessons) {
-        if (progressMap[lesson.id]?.status !== 'completed') {
-          return lesson;
-        }
-      }
+  const groups: UnitGroup[] = React.useMemo(() => {
+    const byUnit = new Map<string, UnitGroup>();
+    for (const l of lessons) {
+      const n = l.slot_unit_number == null || String(l.slot_unit_number).trim() === '' ? null : Number(l.slot_unit_number);
+      const key = String(n);
+      if (!byUnit.has(key)) byUnit.set(key, { unitNumber: n, lessons: [] });
+      byUnit.get(key)!.lessons.push(l);
     }
-    return null;
-  };
-
-  const handleStartLesson = (lesson: CurriculumLesson) => {
-    setPlayingLesson(lesson);
-  };
+    return Array.from(byUnit.values());
+  }, [lessons]);
 
   if (isLoading) {
     return (
@@ -175,116 +162,86 @@ export const LearningPathTab = () => {
     );
   }
 
-  if (!profile) {
-    return (
-      <div className="space-y-6">
-        <Card>
-          <CardContent className="text-center py-12">
-            <Rocket className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">
-              Complete Your Profile First!
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              To see your personalized learning path, please complete your student application form.
-            </p>
-            <Button 
-              onClick={() => navigate('/student-application')}
-              className="bg-gradient-to-r from-emerald-600 to-blue-600"
-            >
-              Complete Profile
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  const nextLesson = getNextLesson();
-
-  // If playing a lesson, show the player
-  if (playingLesson && user) {
-    // Detect canvas-based lessons (slides with canvasElements)
-    const slides = playingLesson.content?.slides || [];
-    const isCanvasLesson = slides.some((s: any) => s.canvasElements && s.canvasElements.length > 0);
-
-    if (isCanvasLesson) {
-      return (
-        <CanvasLessonPlayer
-          slides={slides}
-          lessonTitle={playingLesson.title}
-          onClose={() => setPlayingLesson(null)}
-          onComplete={(score) => {
-            setPlayingLesson(null);
-          }}
-        />
-      );
-    }
-
-    return (
-      <LessonPlayer
-        lessonId={playingLesson.id}
-        lessonTitle={playingLesson.title}
-        slides={slides}
-        userId={user.id}
-        xpReward={playingLesson.xp_reward || 100}
-        onClose={() => setPlayingLesson(null)}
-        onComplete={() => {
-          setPlayingLesson(null);
-        }}
-      />
-    );
-  }
+  const doneCount = lessons.filter((l, i) => isDone(l, i)).length;
+  const progressPct = lessons.length ? Math.round((doneCount / lessons.length) * 100) : 0;
+  const earnedXP = lessons.filter((l, i) => isDone(l, i)).reduce((sum, l) => sum + (l.xp_reward || 0), 0);
+  const upNext = upNextIndex >= 0 ? lessons[upNextIndex] : null;
+  const levelLabel = data?.pathLevel ?? null;
 
   return (
     <div className="space-y-6">
-      {/* Header with Progress */}
-      <div className="flex items-center justify-between">
+      {/* Header with level */}
+      <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <Target className="h-6 w-6 text-primary" />
             Your Path to Fluency
           </h1>
           <p className="text-muted-foreground mt-1">
-            Personalized just for you, {profile?.basicInfo?.name || 'Learner'}! 🌟
+            {levelLabel
+              ? data?.fromTrial && data.savedLevel === levelLabel
+                ? `Level ${levelLabel} · set by your teacher in your trial lesson`
+                : `Level ${levelLabel}`
+              : 'Your level appears here after your trial lesson or placement test.'}
           </p>
         </div>
-        <div className="text-right">
-          <div className="text-2xl font-bold text-primary">{getTotalXP()} XP</div>
-          <div className="text-sm text-muted-foreground">Total Earned</div>
+        <div className="flex items-center gap-4">
+          {levelLabel && (
+            <div className="rounded-full px-4 py-1.5 text-lg font-extrabold bg-primary/10 text-primary ring-1 ring-primary/30">
+              {levelLabel}
+            </div>
+          )}
+          <div className="text-right">
+            <div className="text-2xl font-bold text-primary">{earnedXP} XP</div>
+            <div className="text-sm text-muted-foreground">Total Earned</div>
+          </div>
         </div>
       </div>
 
       {/* Long-term memory widget — Spaced Repetition System */}
       <MemoryBank />
 
+      {upNext && (
+        <Card className="ring-2 ring-primary bg-primary/5">
+          <CardContent className="flex items-center gap-4 py-5">
+            <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+              <ArrowRight className="h-5 w-5" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-xs font-semibold uppercase tracking-wider text-primary">Up next in your class</div>
+              <div className="font-semibold truncate">{upNext.title}</div>
+              <div className="text-xs text-muted-foreground">
+                {levelLabel} · Unit {upNext.slot_unit_number ?? '—'} · Lesson {upNext.slot_lesson_number ?? '—'}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Overall Progress */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Trophy className="h-5 w-5 text-yellow-500" />
-            Your Progress Journey
+            Your Progress Journey{levelLabel ? ` · ${levelLabel}` : ''}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex justify-between text-sm">
-              <span>Overall Progress</span>
-              <span>{Math.round(getTotalProgress())}% Complete</span>
+              <span>Level progress</span>
+              <span>{progressPct}% Complete</span>
             </div>
-            <Progress value={getTotalProgress()} className="h-3" />
-            
+            <Progress value={progressPct} className="h-3" />
+
             <div className="grid grid-cols-3 gap-4 mt-4">
               <div className="text-center">
-                <div className="text-lg font-bold text-primary">
-                  {groupedLessons.length}
-                </div>
-                <div className="text-xs text-muted-foreground">Total Units</div>
+                <div className="text-lg font-bold text-primary">{groups.length}</div>
+                <div className="text-xs text-muted-foreground">Units</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold text-blue-600">
-                  {lessons.length}
-                </div>
-                <div className="text-xs text-muted-foreground">Total Lessons</div>
+                <div className="text-lg font-bold text-blue-600">{doneCount} / {lessons.length}</div>
+                <div className="text-xs text-muted-foreground">Lessons done</div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-bold text-purple-600">
@@ -303,121 +260,98 @@ export const LearningPathTab = () => {
           <Calendar className="h-5 w-5 text-blue-600" />
           Your Learning Journey
         </h2>
-        
-        {groupedLessons.length === 0 ? (
+
+        {groups.length === 0 ? (
           <Card>
             <CardContent className="text-center py-12">
               <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No lessons available yet</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                {levelLabel ? `No ${levelLabel} lessons yet` : 'Your path starts after your trial lesson'}
+              </h3>
               <p className="text-muted-foreground">
-                Check back soon for new curriculum content!
+                {levelLabel
+                  ? 'Check back soon for new lessons at your level!'
+                  : 'Your teacher will set your level in your trial class, and your lessons will appear here.'}
               </p>
             </CardContent>
           </Card>
         ) : (
-          groupedLessons.map((group, groupIndex) => (
-            <Card 
-              key={group.unit?.id || 'no-unit'} 
-              className={`transition-all duration-200 hover:shadow-md ${
-                groupIndex === 0 ? 'ring-2 ring-primary bg-primary/5' : ''
-              }`}
-            >
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-3">
-                    <div className={`
-                      w-10 h-10 rounded-full flex items-center justify-center text-white font-bold
-                      ${groupIndex === 0 ? 'bg-primary' : 'bg-muted-foreground/50'}
-                    `}>
-                      {group.unit ? (
+          groups.map((group) => {
+            const isCurrentUnit = upNext ? group.lessons.some(l => l.id === upNext.id) : false;
+            return (
+              <Card
+                key={String(group.unitNumber)}
+                className={`transition-all duration-200 hover:shadow-md ${isCurrentUnit ? 'ring-2 ring-primary bg-primary/5' : ''}`}
+              >
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${isCurrentUnit ? 'bg-primary' : 'bg-muted-foreground/50'}`}>
                         <Layers className="h-5 w-5" />
-                      ) : (
-                        groupIndex + 1
-                      )}
-                    </div>
-                    <div>
-                      <div className="text-lg">
-                        {group.unit 
-                          ? `Unit ${group.unit.unit_number}: ${group.unit.title}`
-                          : 'General Lessons'
-                        }
                       </div>
-                      <div className="text-sm text-muted-foreground font-normal">
-                        {group.lessons.length} lesson{group.lessons.length !== 1 ? 's' : ''}
+                      <div>
+                        <div className="text-lg">
+                          {group.unitNumber != null ? `${levelLabel} · Unit ${group.unitNumber}` : `${levelLabel} lessons`}
+                        </div>
+                        <div className="text-sm text-muted-foreground font-normal">
+                          {group.lessons.length} lesson{group.lessons.length !== 1 ? 's' : ''}
+                        </div>
                       </div>
-                    </div>
-                  </CardTitle>
-                  
-                  <div className="flex items-center gap-2">
-                    {groupIndex === 0 && (
-                      <Badge variant="default" className="bg-primary">
-                        Current
-                      </Badge>
+                    </CardTitle>
+                    {isCurrentUnit && (
+                      <Badge variant="default" className="bg-primary">Current</Badge>
                     )}
-                    <div className="text-right">
-                      <div className="text-sm font-medium">
-                        {group.lessons.reduce((acc, l) => acc + (l.xp_reward || 0), 0)} XP
-                      </div>
-                      <div className="text-xs text-muted-foreground">Total</div>
-                    </div>
                   </div>
-                </div>
-              </CardHeader>
-              
-              <CardContent>
-                <div className="space-y-2">
-                  {group.lessons.map((lesson, lessonIndex) => (
-                    <div 
-                      key={lesson.id} 
-                      className="flex items-center justify-between p-3 bg-background rounded-lg border"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`
-                          w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium
-                          ${lessonIndex === 0 && groupIndex === 0 
-                            ? 'bg-green-500 text-white' 
-                            : 'bg-muted text-muted-foreground'
-                          }
-                        `}>
-                          {lessonIndex === 0 && groupIndex === 0 
-                            ? <CheckCircle className="h-3 w-3" /> 
-                            : lesson.sequence_order || lessonIndex + 1
-                          }
-                        </div>
-                        <div>
-                          <div className="font-medium text-sm">{lesson.title}</div>
-                          <div className="text-xs text-muted-foreground flex items-center gap-2">
-                            {lesson.duration_minutes && (
-                              <>
-                                <Clock className="h-3 w-3" />
-                                {lesson.duration_minutes} min
-                              </>
-                            )}
-                            <span>•</span>
-                            <span className="capitalize">{lesson.difficulty_level}</span>
-                            {lesson.xp_reward && (
-                              <>
-                                <span>•</span>
-                                <Star className="h-3 w-3 text-yellow-500" />
-                                {lesson.xp_reward} XP
-                              </>
-                            )}
+                </CardHeader>
+
+                <CardContent>
+                  <div className="space-y-2">
+                    {group.lessons.map((lesson) => {
+                      const i = lessons.indexOf(lesson);
+                      const done = isDone(lesson, i);
+                      const next = i === upNextIndex;
+                      return (
+                        <div
+                          key={lesson.id}
+                          className={`flex items-center justify-between p-3 rounded-lg border ${next ? 'bg-primary/10 border-primary/40' : 'bg-background'}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
+                              done ? 'bg-green-500 text-white' : next ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                            }`}>
+                              {done ? <CheckCircle className="h-3 w-3" /> : lesson.slot_lesson_number ?? i + 1}
+                            </div>
+                            <div>
+                              <div className="font-medium text-sm">{lesson.title}</div>
+                              <div className="text-xs text-muted-foreground flex items-center gap-2">
+                                <span>Lesson {lesson.slot_lesson_number ?? i + 1}</span>
+                                {lesson.duration_minutes ? (
+                                  <>
+                                    <span>•</span>
+                                    <Clock className="h-3 w-3" />
+                                    {lesson.duration_minutes} min
+                                  </>
+                                ) : null}
+                                {lesson.xp_reward ? (
+                                  <>
+                                    <span>•</span>
+                                    <Star className="h-3 w-3 text-yellow-500" />
+                                    {lesson.xp_reward} XP
+                                  </>
+                                ) : null}
+                              </div>
+                            </div>
                           </div>
+                          {next && <Badge className="bg-primary">Up next</Badge>}
+                          {done && !next && <Badge variant="outline" className="text-green-600 border-green-300">Done</Badge>}
                         </div>
-                      </div>
-                      
-                      {groupIndex === 0 && lessonIndex === 1 && (
-                        <Button size="sm" variant="outline">
-                          <Play className="h-3 w-3 mr-1" />
-                          Start
-                        </Button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })
         )}
       </div>
 
@@ -427,7 +361,7 @@ export const LearningPathTab = () => {
           <Zap className="h-8 w-8 mx-auto mb-2 text-yellow-300" />
           <h3 className="text-lg font-bold mb-2">You're Doing Amazing!</h3>
           <p className="opacity-90">
-            Keep going, {profile?.basicInfo?.name || 'Learner'}! Every lesson brings you closer to English fluency. 🚀
+            Every lesson brings you closer to English fluency. 🚀
           </p>
         </CardContent>
       </Card>

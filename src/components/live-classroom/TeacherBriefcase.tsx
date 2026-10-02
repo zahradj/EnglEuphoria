@@ -26,8 +26,8 @@ const CEFR_LEVELS = ['Pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1'];
 
 const HUB_TO_TARGET_SYSTEM: Record<Props['hub'], string[]> = {
   playground: ['playground', 'kids'],
-  academy: ['academy', 'teens'],
-  success: ['success', 'professional', 'adults'],
+  academy: ['academy', 'teen', 'teens'],
+  success: ['success', 'professional', 'adult', 'adults'],
 };
 
 interface LibItem { id: string; title: string; cefr: string; kind: SupplementalKind }

@@ -12,6 +12,7 @@ interface PlacementResult {
   items_answered: number | null;
   created_at: string | null;
   trail: any | null;
+  method: string | null;
 }
 
 const HUB_ACCENT: Record<string, { text: string; ring: string; bg: string }> = {
@@ -33,7 +34,7 @@ export function PlacementSummaryCard({ hub = 'academy' }: { hub?: string }) {
       setLoading(true);
       const { data: rows } = await (supabase as any)
         .from('placement_results')
-        .select('cefr_level, hub, ability_theta, items_answered, created_at, trail')
+        .select('cefr_level, hub, ability_theta, items_answered, created_at, trail, method')
         .eq('student_id', user.id)
         .order('created_at', { ascending: false })
         .limit(1)
@@ -70,7 +71,8 @@ export function PlacementSummaryCard({ hub = 'academy' }: { hub?: string }) {
   const strengths = ranked.slice(0, 2).map((r) => r.skill);
   const gaps = ranked.slice(-2).map((r) => r.skill).filter((s) => !strengths.includes(s));
 
-  const cefr = (data.cefr_level || '').toUpperCase();
+  const cefr = (data.cefr_level || '').toUpperCase().replace(/^PRE-?A1$/, 'Pre-A1');
+  const fromTrial = data.method === 'trial_lesson';
   const taken = data.created_at ? new Date(data.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '';
 
   return (
@@ -79,10 +81,12 @@ export function PlacementSummaryCard({ hub = 'academy' }: { hub?: string }) {
         <div>
           <div className="flex items-center gap-2">
             <Sparkles className={cn('w-4 h-4', accent.text)} />
-            <h2 className={cn('font-bold text-lg', accent.text)}>Your placement result</h2>
+            <h2 className={cn('font-bold text-lg', accent.text)}>{fromTrial ? 'Your level' : 'Your placement result'}</h2>
           </div>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Where you started · taken {taken || 'recently'}
+            {fromTrial
+              ? `Set by your teacher in your trial lesson · ${taken || 'recently'}`
+              : `Where you started · taken ${taken || 'recently'}`}
           </p>
         </div>
         <div className={cn('rounded-full px-3 py-1 text-sm font-extrabold bg-background/70 ring-1', accent.text, accent.ring)}>
@@ -109,12 +113,12 @@ export function PlacementSummaryCard({ hub = 'academy' }: { hub?: string }) {
         </div>
       </div>
 
-      <div className="mt-3 flex items-center gap-3 text-[11px] text-muted-foreground">
+      {!fromTrial && <div className="mt-3 flex items-center gap-3 text-[11px] text-muted-foreground">
         <span>{data.items_answered ?? '—'} questions answered</span>
         {typeof data.ability_theta === 'number' && (
           <span>ability θ {data.ability_theta.toFixed(2)}</span>
         )}
-      </div>
+      </div>}
     </div>
   );
 }

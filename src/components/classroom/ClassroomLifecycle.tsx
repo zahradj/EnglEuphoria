@@ -65,7 +65,13 @@ export const ClassroomLifecycle: React.FC<Props> = ({ bookingId, role, hubType =
             description: payload?.lessonTitle ? `Now: ${payload.lessonTitle}` : 'Loading the new lesson…',
           });
         }
-        qc.invalidateQueries({ queryKey: ['classroom-resolved-lesson'] });
+        // The booking row carries the new curriculum_lesson_id (and a trial
+        // level change also updates the saved level), so refresh those
+        // before re-resolving the lesson.
+        Promise.all([
+          qc.invalidateQueries({ queryKey: ['classroom-booking'] }),
+          qc.invalidateQueries({ queryKey: ['classroom-trial-cefr'] }),
+        ]).finally(() => qc.invalidateQueries({ queryKey: ['classroom-resolved-lesson'] }));
       })
       .subscribe();
     return () => {
@@ -154,23 +160,18 @@ export const ClassroomLifecycle: React.FC<Props> = ({ bookingId, role, hubType =
           if (!next) return;
           setStatus((prev) => {
             if (next === 'ended' && prev !== 'ended' && role === 'teacher' && trialHandoff?.studentId && trialHandoff.cefrLevel) {
-              // Trial → CEFR handoff (teacher-side, deduped by student+method).
+              // Trial → CEFR handoff (teacher-side). A direct insert here was
+              // blocked by RLS (students-only), so the level never saved; the
+              // set_trial_level RPC saves it to the profile, placement and
+              // learning path, and skips if the teacher already set a level.
               (async () => {
                 try {
-                  const { data: existing } = await (supabase as any)
-                    .from('placement_results')
-                    .select('id')
-                    .eq('student_id', trialHandoff.studentId)
-                    .eq('method', 'trial_lesson')
-                    .limit(1)
-                    .maybeSingle();
-                  if (existing?.id) return;
-                  await (supabase as any).from('placement_results').insert({
-                    student_id: trialHandoff.studentId,
-                    cefr_level: trialHandoff.cefrLevel,
-                    method: 'trial_lesson',
-                    hub: hubType,
+                  const { error } = await (supabase as any).rpc('set_trial_level', {
+                    p_booking_id: bookingId,
+                    p_cefr: trialHandoff.cefrLevel,
+                    p_only_if_unset: true,
                   });
+                  if (error) throw error;
                 } catch (e) {
                   console.warn('[ClassroomLifecycle] trial handoff failed', e);
                 }

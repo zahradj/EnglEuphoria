@@ -40,6 +40,7 @@ import { useLessonTimePolicy } from "@/hooks/classroom/useLessonTimePolicy";
 import { whiteboardService, type SmartWorksheet, type NativeGameType, type StageMode } from "@/services/whiteboardService";
 import { supabase } from "@/integrations/supabase/client";
 import { LessonSwitcher } from "./LessonSwitcher";
+import { TrialLevelPicker } from "./TrialLevelPicker";
 
 
 type HubType = 'playground' | 'academy' | 'professional';
@@ -1230,7 +1231,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
 
       {/* Master Library lesson switcher — teacher-only mid-lesson swap */}
       {!isZenMode && classId && (
-        <div className="absolute top-14 left-4 z-40">
+        <div className="absolute top-14 left-4 z-40 flex flex-col items-start gap-1.5">
           <LessonSwitcher
             bookingId={classId}
             studentId={studentId}
@@ -1239,6 +1240,12 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             currentLessonTitle={activeLessonTitle}
             classStarted={classStarted}
           />
+          {/* Trial: the teacher sets the student's level — saved to their
+              profile, dashboard and learning path (Success keeps the
+              level picker inside its own trial stage). */}
+          {isTrial && hubType !== 'professional' && (
+            <TrialLevelPicker bookingId={classId} initialLevel={trialCefr} classStarted={classStarted} />
+          )}
         </div>
       )}
 

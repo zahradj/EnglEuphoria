@@ -14,8 +14,6 @@ import { SoundSettingsLauncher } from '@/components/classroom/settings/SoundSett
 import { resolveBookingLesson, normalizeHub } from '@/services/classroomLessonResolver';
 import { ClassroomLifecycle } from '@/components/classroom/ClassroomLifecycle';
 import { SuccessTrailLesson } from '@/components/trial/success-trail/SuccessTrailLesson';
-import { AcademyTrailLesson } from '@/components/trial/academy-trail/AcademyTrailLesson';
-import { PlaygroundTrailLesson } from '@/components/trial/playground-trail/PlaygroundTrailLesson';
 
 import { useForceEnglishLocale } from '@/hooks/useForceEnglishLocale';
 import { LessonWindowGate, bookedMinutesFor } from '@/components/classroom/LessonWindowGate';
@@ -188,13 +186,15 @@ const UnifiedClassroomPage: React.FC = () => {
 
       if (placement?.cefr_level) return placement.cefr_level as string;
 
+      // final_cefr_level is what the trial teacher saved (set_trial_level);
+      // teachers can read it even where placement_results is student-only.
       const { data: profile } = await (supabase as any)
         .from('student_profiles')
-        .select('current_level')
+        .select('final_cefr_level')
         .eq('user_id', studentId)
         .maybeSingle();
 
-      return (profile?.current_level as string | null) ?? null;
+      return (profile?.final_cefr_level as string | null) ?? null;
     },
     enabled: !!booking?.id && isTrialLesson,
   });
@@ -202,7 +202,7 @@ const UnifiedClassroomPage: React.FC = () => {
   // Resolve the Master Library lesson + canonical hub for this booking.
   // Must be declared before any early return to keep hook order stable.
   const { data: resolved, isLoading: lessonLoading } = useQuery({
-    queryKey: ['classroom-resolved-lesson', booking?.id, trialCefr, isFirstLesson],
+    queryKey: ['classroom-resolved-lesson', booking?.id, (booking as any)?.curriculum_lesson_id, trialCefr, isFirstLesson],
     queryFn: () => resolveBookingLesson({
       id: booking!.id,
       lesson_id: (booking as any).lesson_id,
@@ -523,16 +523,14 @@ const UnifiedClassroomPage: React.FC = () => {
   const studentFullName =
     studentRow?.full_name || studentRow?.email?.split('@')[0] || 'Student';
 
-  // Hub-aware trail lesson rendering — first lesson only. Subsequent
-  // lessons fall through to the Master Library resolver (CEFR-aware).
+  // Playground and Academy trials open the real Unit 1 Lesson 1 of the
+  // student's level (classroomLessonResolver), and the teacher can change
+  // the level in class. Success has no library lessons yet, so it keeps its
+  // own trail stage.
   const trailStage =
     showTrailLesson && normalizedHub === 'professional'
       ? <SuccessTrailLesson roomId={booking.id} role={classroomRole} />
-      : showTrailLesson && normalizedHub === 'academy'
-        ? <AcademyTrailLesson roomId={booking.id} role={classroomRole} />
-        : showTrailLesson && normalizedHub === 'playground'
-          ? <PlaygroundTrailLesson roomId={booking.id} role={classroomRole} />
-          : undefined;
+      : undefined;
 
 
 
