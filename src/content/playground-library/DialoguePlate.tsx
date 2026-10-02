@@ -21,6 +21,38 @@ export function plateFontSize(line: string): string {
   return words <= 4 ? 'calc(5*var(--svh,1vh))' : words <= 9 ? 'calc(4.2*var(--svh,1vh))' : 'calc(3.5*var(--svh,1vh))';
 }
 
+/**
+ * The plate's look follows the lesson's setting:
+ *  • 'paper' (default) — a warm picture-book caption card; fits every storybook scene.
+ *  • 'chalk' — a chalkboard in a wooden frame, for scenes set in the classroom.
+ */
+export type PlateLook = 'paper' | 'chalk';
+
+interface Look {
+  plate: React.CSSProperties;
+  text: React.CSSProperties;
+  tab: React.CSSProperties;
+  speakerBg: string;
+  speakerFg: string;
+}
+
+const lookFor = (look: PlateLook, color: string): Look =>
+  look === 'chalk'
+    ? {
+        plate: { background: 'radial-gradient(120% 140% at 30% 20%, #3C7048, #2A5535)', border: 'calc(1.4*var(--svh,1vh)) solid #B07A3E', boxShadow: '0 12px 24px rgba(0,0,0,.4), inset 0 0 34px rgba(0,0,0,.38)' },
+        text: { color: '#F8F6EA', textShadow: '0 1px 0 rgba(255,255,255,.18)' },
+        tab: { background: '#FFE08A', color: '#5A3A12', border: '2px solid #fff6d6' },
+        speakerBg: '#FFE08A',
+        speakerFg: '#5A3A12',
+      }
+    : {
+        plate: { background: 'linear-gradient(180deg,#FFFBEF,#FBEBCB)', border: '3px solid #E3A857', boxShadow: '0 10px 26px rgba(120,70,20,.35), inset 0 0 0 5px rgba(255,255,255,.55)' },
+        text: { color: '#5A3417' },
+        tab: { background: color, color: '#fff', border: '2px solid #fff' },
+        speakerBg: color,
+        speakerFg: '#fff',
+      };
+
 export function DialoguePlate({
   name,
   color,
@@ -32,6 +64,7 @@ export function DialoguePlate({
   ariaLabel,
   bottom = 'calc(2*var(--svh,1vh))',
   fontSize = 'calc(4.2*var(--svh,1vh))',
+  look = 'paper',
 }: {
   /** Speaker's name for the tab. */
   name: string;
@@ -51,7 +84,9 @@ export function DialoguePlate({
   /** CSS `bottom` offset, for scenes that keep another bar along the bottom edge. */
   bottom?: string;
   fontSize?: string;
+  look?: PlateLook;
 }) {
+  const L = lookFor(look, color);
   return (
     <div
       className="pointer-events-none absolute inset-x-0 z-20 flex justify-center px-[calc(2.5*var(--svh,1vh))]"
@@ -69,8 +104,8 @@ export function DialoguePlate({
       >
         {/* Name tab, sitting on the plate's top-left edge */}
         <span
-          className="absolute left-[calc(2.6*var(--svh,1vh))] top-0 z-10 -translate-y-1/2 rounded-full px-[calc(2*var(--svh,1vh))] py-[calc(.5*var(--svh,1vh))] font-black uppercase tracking-[0.14em] text-white shadow-lg ring-2 ring-white/70"
-          style={{ background: color, fontSize: 'calc(1.9*var(--svh,1vh))' }}
+          className="absolute left-[calc(2.6*var(--svh,1vh))] top-0 z-10 -translate-y-1/2 rounded-full px-[calc(2*var(--svh,1vh))] py-[calc(.5*var(--svh,1vh))] font-black uppercase tracking-[0.14em] shadow-lg"
+          style={{ fontSize: 'calc(1.9*var(--svh,1vh))', ...L.tab }}
         >
           {name}
         </span>
@@ -79,26 +114,23 @@ export function DialoguePlate({
           type="button"
           onClick={onTap}
           aria-label={ariaLabel ?? `Hear ${name} again`}
-          className="flex min-w-0 flex-1 items-center gap-[calc(2*var(--svh,1vh))] rounded-[calc(2.6*var(--svh,1vh))] border border-white/20 px-[calc(3*var(--svh,1vh))] pb-[calc(2.6*var(--svh,1vh))] pt-[calc(3.6*var(--svh,1vh))] text-left text-white shadow-2xl transition active:scale-[0.99]"
-          style={{
-            background: 'linear-gradient(180deg, rgba(17,24,39,.78), rgba(17,24,39,.86))',
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
-          }}
+          className="flex min-w-0 flex-1 items-center gap-[calc(2*var(--svh,1vh))] rounded-[calc(2.6*var(--svh,1vh))] border border-white/20 px-[calc(3*var(--svh,1vh))] pb-[calc(2.6*var(--svh,1vh))] pt-[calc(3.6*var(--svh,1vh))] text-left transition active:scale-[0.99]"
+          style={L.plate}
         >
-          <span className="min-w-0 flex-1 font-extrabold leading-snug" style={{ fontSize, textWrap: 'balance' as never }}>
+          <span className="min-w-0 flex-1 font-extrabold leading-snug" style={{ fontSize, textWrap: 'balance' as never, ...L.text }}>
             {children}
           </span>
 
           {/* Speaker: equalizer bars while the voice plays, a calm icon otherwise */}
           <span
             aria-hidden
-            className="dp-anim relative grid shrink-0 place-items-center rounded-full bg-white"
+            className="dp-anim relative grid shrink-0 place-items-center rounded-full"
             style={{
+              background: L.speakerBg,
               width: 'calc(8.4*var(--svh,1vh))',
               height: 'calc(8.4*var(--svh,1vh))',
               animation: nudge && !speaking ? 'dp-ring 1.4s ease-out infinite' : undefined,
-              color,
+              color: L.speakerFg,
             }}
           >
             {speaking ? (
@@ -107,7 +139,7 @@ export function DialoguePlate({
                   <span
                     key={i}
                     className="dp-anim block w-[calc(.9*var(--svh,1vh))] origin-center rounded-full"
-                    style={{ height: '100%', background: color, animation: `dp-bar .8s ease-in-out ${i * 0.13}s infinite` }}
+                    style={{ height: '100%', background: L.speakerFg, animation: `dp-bar .8s ease-in-out ${i * 0.13}s infinite` }}
                   />
                 ))}
               </span>

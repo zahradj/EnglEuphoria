@@ -104,6 +104,7 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
         <DialoguePlate
           name={c.name}
           color={c.color}
+          look={scene.look ?? 'paper'}
           onTap={tapCloud}
           speaking={speaking}
           nudge={phase === 'repeat'}
