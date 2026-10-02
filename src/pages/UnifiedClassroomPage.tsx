@@ -13,8 +13,6 @@ import { Button } from '@/components/ui/button';
 import { SoundSettingsLauncher } from '@/components/classroom/settings/SoundSettingsLauncher';
 import { resolveBookingLesson, normalizeHub } from '@/services/classroomLessonResolver';
 import { ClassroomLifecycle } from '@/components/classroom/ClassroomLifecycle';
-import { StudentLobbyGate } from '@/components/classroom/lobby/StudentLobbyGate';
-import { TeacherStartBar } from '@/components/classroom/lobby/TeacherStartBar';
 import { SuccessTrailLesson } from '@/components/trial/success-trail/SuccessTrailLesson';
 
 import { useForceEnglishLocale } from '@/hooks/useForceEnglishLocale';
@@ -573,38 +571,32 @@ const UnifiedClassroomPage: React.FC = () => {
           }
         />
         <SoundSettingsLauncher />
-        {/* Waiting room: the student can't enter until this is pressed. */}
-        <TeacherStartBar bookingId={booking.id} teacherId={user.id} studentName={studentFullName} />
       </LessonWindowGate>
     );
   }
 
   return (
     <LessonWindowGate scheduledAt={scheduledAtIso} bookedMinutes={bookedMinutes} bypass={isAdmin}>
-      {/* Everything the student mounts sits behind the waiting room, so nobody is
-          counted as "joined" until the teacher has started the class. */}
-      <StudentLobbyGate bookingId={booking.id} studentId={user.id} teacherName={teacherFullName}>
-        <StudentClassroom
-          roomId={booking.id}
-          studentId={user.id}
-          studentName={displayName}
-          teacherName={teacherFullName}
-          hubType={normalizedHub}
-          scheduledAt={scheduledAtIso}
-          customStage={trailStage}
-        />
-        <ClassroomLifecycle
-          bookingId={booking.id}
-          role="student"
-          hubType={normalizedHub}
-          trialHandoff={
-            isTrialLesson && isFirstLesson === true && (booking as any).student_id
-              ? { studentId: (booking as any).student_id, cefrLevel: trialCefr ?? null }
-              : null
-          }
-        />
-        <SoundSettingsLauncher />
-      </StudentLobbyGate>
+      <StudentClassroom
+        roomId={booking.id}
+        studentId={user.id}
+        studentName={displayName}
+        teacherName={teacherFullName}
+        hubType={normalizedHub}
+        scheduledAt={scheduledAtIso}
+        customStage={trailStage}
+      />
+      <ClassroomLifecycle
+        bookingId={booking.id}
+        role="student"
+        hubType={normalizedHub}
+        trialHandoff={
+          isTrialLesson && isFirstLesson === true && (booking as any).student_id
+            ? { studentId: (booking as any).student_id, cefrLevel: trialCefr ?? null }
+            : null
+        }
+      />
+      <SoundSettingsLauncher />
     </LessonWindowGate>
   );
 };

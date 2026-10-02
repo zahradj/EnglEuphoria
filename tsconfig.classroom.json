@@ -7,8 +7,6 @@
     "src/content/playground-library/welcome-town/SceneRenderer.tsx",
     "src/pages/playground-scene/PlayUnitLesson.tsx",
     "src/pages/playground-scene/PlayWelcomeTownLesson.tsx",
-    "src/components/classroom/stage/MainStage.tsx",
-    "src/components/classroom/lobby/StudentLobbyGate.tsx",
-    "src/components/classroom/lobby/TeacherStartBar.tsx"
+    "src/components/classroom/stage/MainStage.tsx"
   ]
 }
