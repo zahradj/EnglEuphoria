@@ -189,6 +189,27 @@ Deno.serve(async (req) => {
           return json({ error: `Could not create student account: ${createErr?.message || 'unknown error'}` }, 500)
         }
         studentId = created.user.id
+
+        // A brand-new account defaults to the INTL market, and the booking
+        // trigger (enforce_booking_market) rejects any student whose market the
+        // teacher doesn't serve. The teacher is explicitly inviting this person,
+        // so place the new student in the teacher's own market.
+        const { data: teacherProfile } = await adminClient
+          .from('teacher_profiles')
+          .select('market_region, market_access')
+          .eq('user_id', auth.userId)
+          .maybeSingle()
+        const teacherMarket =
+          teacherProfile?.market_region ?? teacherProfile?.market_access?.[0] ?? null
+        if (teacherMarket) {
+          const { error: marketErr } = await adminClient
+            .from('users')
+            .update({ market_region: teacherMarket })
+            .eq('id', studentId)
+          if (marketErr) {
+            console.error('[CLASSROOM-INVITE] could not set student market', marketErr)
+          }
+        }
       }
 
       const { data: booking, error: bookingErr } = await adminClient
@@ -206,7 +227,12 @@ Deno.serve(async (req) => {
         .select('id, scheduled_at, duration')
         .single()
       if (bookingErr || !booking) {
-        return json({ error: `Could not create booking: ${bookingErr?.message || 'unknown error'}` }, 500)
+        const msg = bookingErr?.message || 'unknown error'
+        return json({
+          error: msg.includes('Cross-market')
+            ? 'This student is registered in a market you do not teach in, so they cannot be booked with you.'
+            : `Could not create booking: ${msg}`,
+        }, msg.includes('Cross-market') ? 400 : 500)
       }
 
       // The teacher's calendar grid (ClassScheduler/useAvailabilityManager)
