@@ -334,6 +334,16 @@ const StudentSignUp = () => {
             Log in
           </Button>
         </p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Signing up your child?{' '}
+          <Button
+            variant="link"
+            className="h-auto p-0 font-semibold text-violet-600 hover:text-violet-700"
+            onClick={() => navigate('/parent-signup')}
+          >
+            Create a family account
+          </Button>
+        </p>
       </div>
     </AuthPageLayout>
     </>

@@ -104,29 +104,32 @@ serve(async (req) => {
       email,
       password: generatedPassword,
       user_metadata: { full_name: fullName, role: assignedRole },
+      // handle_new_user() only honours privileged roles (admin, content_creator) from app_metadata,
+      // which the browser can never write.
+      app_metadata: { role: assignedRole },
       email_confirm: true,
     });
     if (authError || !authData?.user) {
       return json({ error: authError?.message ?? 'Failed to create auth user' }, 400);
     }
 
-    const { error: profileError } = await admin.from('users').insert({
+    const { error: profileError } = await admin.from('users').upsert({
       id: authData.user.id,
       email,
       full_name: fullName,
       role: assignedRole,
-    });
+    }, { onConflict: 'id' });
     if (profileError) {
       console.error('[admin-create-user] profile insert failed', profileError);
       await admin.auth.admin.deleteUser(authData.user.id);
       return json({ error: 'Failed to create user profile' }, 500);
     }
 
-    const { error: roleError } = await admin.from('user_roles').insert({
+    const { error: roleError } = await admin.from('user_roles').upsert({
       user_id: authData.user.id,
       role: assignedRole,
       assigned_by: caller.id,
-    });
+    }, { onConflict: 'user_id,role' });
     if (roleError) {
       console.error('[admin-create-user] role insert failed', roleError);
       await admin.from('users').delete().eq('id', authData.user.id);

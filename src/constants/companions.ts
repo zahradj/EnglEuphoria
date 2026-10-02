@@ -8,52 +8,66 @@ export interface Companion {
   avatar_url: string;
 }
 
+// Learning buddies are the hub's own recurring characters - the same faces students meet in
+// their lessons - not a separate set of generic mascots.
 export const COMPANIONS: Companion[] = [
-  // Playground (Kids) — cute animals
+  // Playground (Kids) - the lesson cast (art in /lep1/characters)
   {
-    id: 'pg-fox',
-    name: 'Finn the Fox',
+    id: 'pg-pip',
+    name: 'Pip the Fox',
     hub: 'playground',
-    description: 'Curious and quick — loves new words and big adventures.',
-    avatar_url: '/avatars/fox.svg',
+    description: 'Curious and cheeky — loves new words and big adventures.',
+    avatar_url: '/lep1/characters/pip-happy.png',
   },
   {
-    id: 'pg-rabbit',
-    name: 'Rosie the Rabbit',
+    id: 'pg-bella',
+    name: 'Bella the Bunny',
     hub: 'playground',
-    description: 'Cheerful and bouncy — perfect for cheering you on.',
-    avatar_url: '/avatars/rabbit.svg',
+    description: 'Sweet and kind — the gentle storyteller of the Playground.',
+    avatar_url: '/lep1/characters/bella-happy.png',
   },
   {
-    id: 'pg-bear',
-    name: 'Benny the Bear',
+    id: 'pg-mia',
+    name: 'Mia',
     hub: 'playground',
-    description: 'Calm and brave — your cozy buddy for tough words.',
-    avatar_url: '/avatars/bear.svg',
+    description: 'Cheerful and bold — always first to try a new word.',
+    avatar_url: '/lep1/characters/mia-happy.png',
   },
-  // Academy (Teens) — cool modern human/avatars
+  // Academy (Teens) - the Academy cast vault (shared characters)
   {
-    id: 'ac-nova',
-    name: 'Nova',
+    id: 'ac-ava',
+    name: 'Ava',
     hub: 'academy',
-    description: 'Bold creator — keeps your study sessions on fire.',
+    description: 'Conversation lead — keeps every chat moving.',
+    // No individual portrait yet (the cast vault image is a shared sheet); picker shows the name.
     avatar_url: '/placeholder.svg',
   },
   {
-    id: 'ac-kai',
-    name: 'Kai',
+    id: 'ac-theo',
+    name: 'Theo',
     hub: 'academy',
-    description: 'Chill strategist — plans your week and keeps you focused.',
+    description: 'Relaxed and curious — loves a good debate.',
     avatar_url: '/placeholder.svg',
   },
   {
-    id: 'ac-zara',
-    name: 'Zara',
+    id: 'ac-vee',
+    name: 'Vee',
     hub: 'academy',
-    description: 'Energetic explorer — loves vocab challenges and quizzes.',
-    avatar_url: '/placeholder.svg',
+    description: 'Your Academy mentor — plans your week and keeps you focused.',
+    avatar_url:
+      'https://dcoxpyzoqjvmuuygvlme.supabase.co/storage/v1/object/public/lesson-assets/studio/academy-cast-vault/ai-image-vee-avatar-1787676635290.png',
   },
 ];
+
+// Ids saved before the switch to hub characters keep resolving to a sensible buddy.
+const LEGACY_COMPANION_IDS: Record<string, string> = {
+  'pg-fox': 'pg-pip',
+  'pg-rabbit': 'pg-bella',
+  'pg-bear': 'pg-mia',
+  'ac-nova': 'ac-ava',
+  'ac-kai': 'ac-theo',
+  'ac-zara': 'ac-vee',
+};
 
 export function getCompanionsForHub(hub: CompanionHub | string | undefined | null): Companion[] {
   if (hub === 'playground' || hub === 'academy') {
@@ -64,7 +78,8 @@ export function getCompanionsForHub(hub: CompanionHub | string | undefined | nul
 
 export function getCompanionById(id?: string | null): Companion | undefined {
   if (!id) return undefined;
-  return COMPANIONS.find((c) => c.id === id);
+  const resolved = LEGACY_COMPANION_IDS[id] ?? id;
+  return COMPANIONS.find((c) => c.id === resolved);
 }
 
 export function getDefaultCompanionForHub(hub: CompanionHub | string | undefined | null): Companion {
