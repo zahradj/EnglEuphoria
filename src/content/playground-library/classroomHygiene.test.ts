@@ -21,10 +21,16 @@ function walk(dir: string, out: string[] = []): string[] {
 }
 
 describe('classroom hygiene', () => {
-  const rendererFiles = [
-    'src/content/playground-library/unit1/SceneRenderer.tsx',
-    'src/content/playground-library/welcome-town/SceneRenderer.tsx',
+  // Each scene lives in its own file under <hub>/scene-components/; the
+  // SceneRenderer.tsx next to it is only the dispatcher.
+  const rendererDirs = [
+    'src/content/playground-library/unit1',
+    'src/content/playground-library/welcome-town',
   ];
+  const rendererFiles = rendererDirs.flatMap((d) => [
+    `${d}/SceneRenderer.tsx`,
+    ...walk(`${d}/scene-components`),
+  ]);
 
   it('synced state starts as plain JSON — never a Set, Map or Date (they do not survive the wire)', () => {
     const offenders: string[] = [];
