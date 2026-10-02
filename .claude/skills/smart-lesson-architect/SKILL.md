@@ -413,6 +413,21 @@ Keep new content controlled and recycle previously learned content through space
 
 ---
 
+
+## 12b. Sequencing rule: input -> vocabulary -> notice -> practice -> produce (Academy lessons)
+
+Learned the hard way on Academy B1 U1 L1 (a student could not answer slides that used words and structures not yet
+taught): **never ask a student to find, say or write language that has not been introduced.**
+1. Warm-up = receptive only: a hook the student can answer with no new language (picture/emoji poll, personal worry),
+   then a SHORT story (about 80 words) with the new words tappable, then a gist check (true/false). No production.
+2. Vocabulary next: the words the story just used, with pictures; games that retrieve them come AFTER they are taught
+   (find-it-in-the-scene on a dialogue picture is retrieval, not warm-up).
+3. Listening/reading for detail: dialogue/guide that carries the target structure in context (no gap-fill gates yet).
+4. Grammar noticing, then controlled practice, and only then the first written/spoken production, with sentence starters.
+5. Every level states an objective: `content.levels[block].ican` ("I can …") shows on the level intro, and the cover
+   carries the lesson's can-do line.
+Check on every slide: "Has the student met every word and pattern this slide requires?" If not, reorder.
+
 # 13. Grammar logic
 
 Grammar must emerge from the lesson objective and context.

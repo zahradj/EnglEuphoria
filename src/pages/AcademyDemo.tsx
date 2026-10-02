@@ -12,6 +12,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAcademyAudio } from '@/hooks/useAcademyAudio';
 import type { CanvasGameSlide, LivingCanvasSlide, ScaffoldedMediaSlide } from '@/components/creator-studio/shared/canvasSchema';
 import { LivingCanvas } from '@/components/creator-studio/shared/LivingCanvas';
+import { ExpeditionGame, type ExpeditionSlide } from '@/components/academy/game/ExpeditionGame';
 import { ScaffoldedPlayer } from '@/components/creator-studio/shared/ScaffoldedPlayer';
 import { SoloVocabCard } from '@/components/creator-studio/shared/SoloVocabCard';
 import { StoryEngineSlot } from '@/story-engine';
@@ -277,6 +278,7 @@ export type Slide =
   | { type: 'speaking_task'; block: Block; prompt: string; starters?: string[]; image_url?: string }
   | { type: 'reflection'; block: Block; prompt: string }
   | { type: 'cluster'; block: Block; title: string; content?: string; activities: ClusterActivity[]; image_url?: string }
+  | (ExpeditionSlide & { block: Block })
   | (CanvasGameSlide & { block: Block })
   | (LivingCanvasSlide & { block: Block })
   | (ScaffoldedMediaSlide & { block: Block })
@@ -411,7 +413,7 @@ function ListenButton({ text, label = 'Listen', variant = 'pill' }: { text: stri
   const base = 'inline-flex items-center gap-2 font-medium rounded-md transition focus:outline-none focus:ring-2 focus:ring-indigo-500';
   const sizes = variant === 'block'
     ? 'px-5 py-3 text-base bg-indigo-600 hover:bg-indigo-500 text-white'
-    : 'px-3 py-1.5 text-sm bg-indigo-600/90 hover:bg-indigo-500 text-white';
+    : 'px-4 py-2.5 text-sm bg-indigo-600/90 hover:bg-indigo-500 text-white';
   return (
     <button onClick={() => playVoice(text)} className={`${base} ${sizes}`} aria-label={label}>
       {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Volume2 className={`w-4 h-4 ${isPlaying ? 'animate-pulse' : ''}`} />}
@@ -822,7 +824,7 @@ function ListeningSlide({ slide, t }: { slide: Extract<Slide, { type: 'listening
       <div className={`text-xs uppercase tracking-widest ${t.muted}`}>Listening</div>
       <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
       <ListenButton text={slide.transcript} label="Play audio" variant="block" />
-      <button onClick={() => setShowTranscript((s) => !s)} className={`text-sm underline ${t.muted} hover:text-indigo-400`}>
+      <button onClick={() => setShowTranscript((s) => !s)} className="min-h-[44px] rounded-lg border-2 border-slate-300 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-100">
         {showTranscript ? 'Hide transcript' : 'Show transcript'}
       </button>
       {showTranscript && <p className={`italic border-l-2 border-indigo-500 pl-4 ${t.muted}`}>{slide.transcript}</p>}
@@ -997,6 +999,7 @@ const ROLE_STYLES: Record<string, { pill: string; label: string; name: string }>
   adv:      { pill: 'bg-cyan-100 text-cyan-900 border-cyan-300',         label: 'text-cyan-700',   name: 'Adverb' },
   question: { pill: 'bg-indigo-100 text-indigo-900 border-indigo-300',   label: 'text-indigo-700', name: 'Question word' },
   conn:     { pill: 'bg-slate-100 text-slate-900 border-slate-300',      label: 'text-slate-700',  name: 'Connector' },
+  purpose:  { pill: 'bg-orange-100 text-orange-900 border-orange-300',   label: 'text-orange-700', name: 'Purpose (why)' },
   other:    { pill: 'bg-slate-50 text-slate-900 border-slate-200',       label: 'text-slate-700',  name: 'Other' },
 };
 const roleStyle = (r?: string) => ROLE_STYLES[(r || 'other').toLowerCase()] || ROLE_STYLES.other;
@@ -1012,7 +1015,7 @@ function GrammarColorDecodeSlide({ slide, t }: { slide: Extract<Slide, { type: '
         const s = roleStyle(c.role);
         return (
           <div key={i} className="flex flex-col items-center gap-1">
-            <span className={`uppercase tracking-widest text-[10px] font-semibold ${s.label}`}>{s.name}</span>
+            <span className={`uppercase tracking-widest text-xs font-semibold ${s.label}`}>{s.name}</span>
             <span className={`inline-flex items-center rounded-xl border-2 ${s.pill} ${big ? 'px-4 py-3 text-xl md:text-2xl font-semibold' : 'px-3 py-2 text-base md:text-lg'} shadow-sm`}>
               {c.text}
             </span>
@@ -1132,11 +1135,11 @@ function GrammarFormulaSlide({ slide, t }: { slide: Extract<Slide, { type: 'gram
           return (
             <React.Fragment key={`t${i}`}>
               <div className="flex flex-col items-center gap-1">
-                <span className={`text-[10px] uppercase tracking-widest font-semibold ${s.label}`}>{s.name}</span>
+                <span className={`text-xs uppercase tracking-widest font-semibold ${s.label}`}>{s.name}</span>
                 <span className={`inline-flex items-center rounded-xl border-2 ${s.pill} px-4 py-3 text-lg md:text-xl font-semibold shadow-sm`}>
                   {term.label}
                 </span>
-                {term.note && <span className={`text-[11px] ${t.muted}`}>{term.note}</span>}
+                {term.note && <span className={`text-xs ${t.muted}`}>{term.note}</span>}
               </div>
               {i < slide.terms.length - 1 && (
                 <span className="text-3xl md:text-4xl font-light text-slate-400">+</span>
@@ -1171,13 +1174,13 @@ function GrammarFormulaSlide({ slide, t }: { slide: Extract<Slide, { type: 'gram
 function ItemPager({ total, index, setIndex, score, t }: { total: number; index: number; setIndex: (i: number) => void; score: number; t: ThemeTokens }) {
   if (total <= 1) return null;
   return (
-    <div className={`flex items-center justify-between text-xs ${t.muted}`}>
+    <div className={`flex items-center justify-between gap-3 text-sm ${t.muted}`}>
       <span>Item {index + 1} of {total} · Score: {score}/{total}</span>
       <div className="flex gap-2">
         <button disabled={index === 0} onClick={() => setIndex(Math.max(0, index - 1))}
-          className="px-2 py-1 rounded border border-slate-700 disabled:opacity-30">← Prev</button>
+          className="min-h-[44px] rounded-lg border-2 border-slate-400 px-4 text-sm font-semibold text-slate-800 hover:bg-slate-100 disabled:opacity-30">← Prev</button>
         <button disabled={index >= total - 1} onClick={() => setIndex(Math.min(total - 1, index + 1))}
-          className="px-2 py-1 rounded border border-slate-700 disabled:opacity-30">Next →</button>
+          className="min-h-[44px] rounded-lg border-2 border-indigo-500 bg-indigo-50 px-4 text-sm font-semibold text-indigo-800 hover:bg-indigo-100 disabled:opacity-30">Next →</button>
       </div>
     </div>
   );
@@ -2602,36 +2605,45 @@ function StoryPageSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 's
     });
   }, [slide]);
 
+  // Explorer's-journal frame: an opaque parchment card with a green header bar,
+  // docked to the right so the illustration (the page background) stays
+  // visible on the left. The text scrolls INSIDE the card, so long passages
+  // are never clipped by the viewport (they were, with the old translucent
+  // centred card at text-2xl).
   const page = (
-    <div className={`relative w-full ${fullBleed ? 'max-w-lg' : 'max-w-2xl'} space-y-4 rounded-[2rem] bg-white/95 p-7 shadow-2xl backdrop-blur-sm md:p-9`}>
-      <div className="text-xs font-bold uppercase tracking-widest text-indigo-500">📖 {slide.title || 'Read Together!'}</div>
-      <button
-        onClick={() => playVoice(slide.passage)}
-        className="flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg transition active:scale-95"
-      >
-        🔊 Listen to the story
-      </button>
-      <p className="text-2xl font-bold leading-relaxed text-slate-800">
-        {tokens.map((p, i) =>
-          p.hit ? (
-            <button
-              key={i}
-              onClick={() => playVoice(p.hit!.word)}
-              className="mx-0.5 rounded-lg px-1.5 py-0.5 font-black transition active:scale-95"
-              style={{ background: `${p.hit.color}22`, color: p.hit.color }}
-            >
-              {p.hit.emoji} {p.tok.trim()}
-            </button>
-          ) : (
-            <React.Fragment key={i}>{p.tok}</React.Fragment>
-          ),
-        )}
-      </p>
+    <div className={`relative flex max-h-[62%] w-full flex-col overflow-hidden rounded-xl md:max-h-full border-[3px] border-amber-900/80 bg-[#fbf3df] shadow-2xl ${fullBleed ? 'max-w-xl md:ml-auto' : 'max-w-2xl'}`}>
+      <div className="flex shrink-0 items-center justify-between gap-3 bg-emerald-900 px-5 py-2.5 text-amber-100">
+        <div className="text-xs font-bold uppercase tracking-widest">📖 {slide.title || 'Read Together!'}</div>
+        <button
+          onClick={() => playVoice(slide.passage)}
+          className="flex min-h-[40px] items-center gap-2 rounded-full bg-amber-300 px-4 py-2 text-sm font-bold text-emerald-950 shadow transition active:scale-95"
+        >
+          🔊 Listen
+        </button>
+      </div>
+      <div className="min-h-0 overflow-y-auto px-6 py-5">
+        <p className="text-lg font-medium leading-relaxed text-stone-800 md:text-xl">
+          {tokens.map((p, i) =>
+            p.hit ? (
+              <button
+                key={i}
+                onClick={() => playVoice(p.hit!.word)}
+                className="mx-0.5 rounded-lg px-1.5 py-0.5 font-extrabold transition active:scale-95"
+                style={{ background: `${p.hit.color}26`, color: p.hit.color, filter: 'brightness(0.72)' }}
+              >
+                {p.hit.emoji} {p.tok.trim()}
+              </button>
+            ) : (
+              <React.Fragment key={i}>{p.tok}</React.Fragment>
+            ),
+          )}
+        </p>
+      </div>
     </div>
   );
 
   return (
-    <div className={fullBleed ? 'relative flex h-full w-full items-center justify-center overflow-hidden px-4' : 'relative w-full max-w-3xl aspect-video overflow-hidden rounded-2xl shadow-2xl mx-auto flex items-center justify-center px-4'}>
+    <div className={fullBleed ? 'relative flex h-full w-full items-end justify-center overflow-hidden px-4 py-2 md:items-center md:px-10' : 'relative w-full max-w-3xl aspect-video overflow-hidden rounded-2xl shadow-2xl mx-auto flex items-center justify-center px-4'}>
       {!fullBleed && <img src={slide.bg_image_url} alt="" className="absolute inset-0 h-full w-full object-cover" />}
       {!fullBleed && <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />}
       {page}
@@ -3187,10 +3199,37 @@ function VocabDeckSlide({ slide, t }: { slide: Extract<Slide, { type: 'vocab_dec
   const prev = () => setI((n) => Math.max(0, n - 1));
   const next = () => setI((n) => Math.min(cards.length - 1, n + 1));
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-5">
-      <div className="flex items-center justify-between">
-        <div className={`text-xs uppercase tracking-widest ${t.muted}`}>{slide.title || 'Vocabulary'}</div>
-        <div className={`text-xs font-semibold ${t.muted}`}>{i + 1} / {cards.length}</div>
+    <div className="w-full max-w-5xl mx-auto space-y-3">
+      {/* Header: title, progress dots and the card controls live together at the TOP so they are
+          always on screen (student comfort: never make a control reachable only by scrolling). */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <div className={`truncate text-xs font-semibold uppercase tracking-widest ${t.muted}`}>{slide.title || 'Vocabulary'}</div>
+          <div className="mt-1 flex gap-1.5" aria-hidden>
+            {cards.map((_, idx) => (
+              <span key={idx} className={`h-2 w-2 rounded-full ${idx === i ? 'bg-indigo-600' : 'bg-indigo-200'}`} />
+            ))}
+          </div>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <span className={`text-sm font-semibold tabular-nums ${t.muted}`}>{i + 1} / {cards.length}</span>
+          <button
+            onClick={prev}
+            disabled={i === 0}
+            aria-label="Previous word"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg border-2 border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            onClick={next}
+            disabled={i >= cards.length - 1}
+            aria-label="Next word"
+            className="inline-flex h-11 min-w-[5.5rem] items-center justify-center gap-1 rounded-lg bg-indigo-600 px-3 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Next word <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
       </div>
       <AnimatePresence mode="wait">
         <motion.div
@@ -3198,49 +3237,28 @@ function VocabDeckSlide({ slide, t }: { slide: Extract<Slide, { type: 'vocab_dec
           initial={{ opacity: 0, x: 24 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -24 }}
-          transition={{ duration: 0.25 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center"
+          transition={{ duration: 0.2 }}
+          className="grid grid-cols-1 items-center gap-4 md:grid-cols-2 md:gap-6"
         >
-          <div className="w-full h-[42vh] rounded-xl overflow-hidden bg-indigo-50/40 border border-indigo-100 flex items-center justify-center">
+          <div className="flex h-[22vh] min-h-[140px] w-full items-center justify-center overflow-hidden rounded-xl border border-indigo-100 bg-white md:h-[30vh]">
             {card.image_url ? (
-              <img src={card.image_url} alt={card.word} className="object-cover w-full h-full" />
+              <img src={card.image_url} alt={card.word} className="h-full w-full object-contain" />
             ) : (
-              <div className="text-indigo-300 text-6xl">🖼️</div>
+              <div className="px-4 text-center text-5xl font-bold text-indigo-200" aria-hidden>{card.word.slice(0, 1).toUpperCase()}</div>
             )}
           </div>
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 flex-wrap">
-              <h2 className={`text-4xl md:text-5xl font-semibold ${t.text}`}>{card.word}</h2>
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <h2 className={`text-3xl font-semibold md:text-4xl ${t.text}`}>{card.word}</h2>
               <ListenButton text={card.word} label="Listen" />
             </div>
-            <p className={`text-lg ${t.text}`}>{card.definition}</p>
+            <p className={`text-base md:text-lg ${t.text}`}>{card.definition}</p>
             {card.example && (
-              <p className={`text-base italic border-l-2 border-indigo-500 pl-4 ${t.muted}`}>“{card.example}”</p>
+              <p className={`border-l-2 border-indigo-500 pl-4 text-base italic ${t.muted}`}>“{card.example}”</p>
             )}
           </div>
         </motion.div>
       </AnimatePresence>
-      <div className="flex items-center justify-between pt-2">
-        <button
-          onClick={prev}
-          disabled={i === 0}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          <ChevronLeft className="w-4 h-4" /> Previous
-        </button>
-        <div className="flex gap-1.5">
-          {cards.map((_, idx) => (
-            <span key={idx} className={`w-2 h-2 rounded-full ${idx === i ? 'bg-indigo-600' : 'bg-indigo-200'}`} />
-          ))}
-        </div>
-        <button
-          onClick={next}
-          disabled={i >= cards.length - 1}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          Next <ChevronRight className="w-4 h-4" />
-        </button>
-      </div>
     </div>
   );
 }
@@ -3332,7 +3350,7 @@ function VocabImageMatchSlide({ slide, t }: { slide: Extract<Slide, { type: 'voc
       </div>
 
       {/* 2×2 image grid — aligned, equal squares, centered */}
-      <div className="grid grid-cols-2 gap-5 w-full max-w-[28rem] mx-auto place-items-center">
+      <div className="grid grid-cols-2 gap-4 w-full max-w-[28rem] md:grid-cols-4 md:max-w-3xl mx-auto place-items-center">
         {shuffledImages.map((p) => {
           const matchedWord = Object.entries(solved).find(([, url]) => url === p.image_url)?.[0];
           const isWrong = wrongImg === p.image_url;
@@ -3405,6 +3423,7 @@ function renderSlideInner({ slide, t, fullBleed, onAnswer }: { slide: Slide; t: 
     case 'say_it_game': return <SayItGameSlide slide={slide} />;
     case 'sound_challenge_game': return <SoundChallengeGameSlide slide={slide} />;
     case 'find_in_scene_game': return <FindInSceneGameSlide slide={slide} />;
+    case 'expedition_game': return <ExpeditionGame slide={slide as ExpeditionSlide} onAnswer={onAnswer} />;
     case 'story_page': return <StoryPageSlide slide={slide} fullBleed={fullBleed} />;
     case 'speaking_task': return <SpeakingTaskSlide slide={slide} t={t} />;
     case 'reflection': return <ReflectionSlide slide={slide} t={t} />;
@@ -3432,11 +3451,11 @@ function LanguageEngineSlide({ slide, t }: { slide: any; t: ThemeTokens }) {
   const hub = slide.hub || 'academy';
   const cefr = slide.cefr || 'A2';
   return (
-    <div className="w-full max-w-4xl space-y-4">
-      <div className="rounded-2xl border border-indigo-500/30 bg-indigo-950/40 p-4">
-        <div className="text-xs uppercase tracking-[0.2em] text-indigo-300">Interactive language mission</div>
-        <h2 className={`text-2xl font-semibold ${t.text}`}>{slide.title || 'Language Game'}</h2>
-        {slide.objective && <p className={`mt-2 text-sm ${t.muted}`}>{slide.objective}</p>}
+    <div className="max-h-full w-full max-w-3xl space-y-3 overflow-y-auto px-2 py-1">
+      <div className="rounded-2xl border-2 border-emerald-400/60 bg-emerald-950/95 p-4 shadow-xl">
+        <div className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-300">Interactive language mission</div>
+        <h2 className="text-2xl font-semibold text-white">{slide.title || 'Language Game'}</h2>
+        {slide.objective && <p className="mt-1 text-sm text-emerald-100">{slide.objective}</p>}
       </div>
       {slide.type === 'story_engine_slot' && slide.graph && <StoryEngineSlot hub={hub} cefr={cefr} graph={slide.graph} lessonId={slide.lessonId} />}
       {slide.type === 'escape_room_slot' && slide.room && <EscapeRoomSlot hub={hub} cefr={cefr} room={slide.room} lessonId={slide.lessonId} />}
@@ -3468,7 +3487,7 @@ const BESPOKE_FULLBLEED_TYPES = new Set([
   'number_chart', 'number_quiz_game', 'letter_sound_game', 'word_blend',
   'picture_match_game', 'say_it_game', 'sound_challenge_game', 'find_in_scene_game',
   'story_page', 'scaffolded_media', 'vocab_solo', 'vocab_deck', 'vocab_image_match',
-  'story_engine_slot', 'escape_room_slot', 'detective_mystery_slot', 'hidden_object_slot',
+  'story_engine_slot', 'escape_room_slot', 'detective_mystery_slot', 'hidden_object_slot', 'expedition_game',
 ]);
 
 export function SlideRenderer({ slide, t, fullBleed, onAnswer }: { slide: Slide; t: ThemeTokens; fullBleed?: boolean; onAnswer?: OnAnswer }) {
@@ -3513,24 +3532,24 @@ function AcademyLessonSummary({ slide, t }: { slide: Extract<Slide, { type: 'les
       <div className={`text-xs uppercase tracking-[0.2em] ${t.muted}`}>📋 Lesson Recap</div>
       <h2 className={`text-3xl md:text-4xl font-semibold ${t.text}`}>{slide.title || 'Review Sheet'}</h2>
       {slide.vocab_recap?.length > 0 && (
-        <div className={`rounded-md border border-slate-700/50 p-4 space-y-2`}>
-          <div className="text-xs uppercase tracking-widest text-indigo-400">Vocabulary mastered</div>
+        <div className={`rounded-md border border-slate-300 p-4 space-y-2`}>
+          <div className="text-xs font-semibold uppercase tracking-widest text-indigo-700">Vocabulary mastered</div>
           <div className="flex flex-wrap gap-2">
-            {slide.vocab_recap.slice(0, 5).map((w) => (
-              <span key={w} className="px-3 py-1 rounded-full bg-indigo-500/15 text-indigo-300 text-sm font-medium border border-indigo-500/30">{w}</span>
+            {slide.vocab_recap.slice(0, 14).map((w) => (
+              <span key={w} className="px-3 py-1.5 rounded-full bg-indigo-100 text-indigo-900 text-sm font-semibold border border-indigo-300">{w}</span>
             ))}
           </div>
         </div>
       )}
       {slide.grammar_recap && (
-        <div className={`rounded-md border border-slate-700/50 p-4 space-y-1`}>
-          <div className="text-xs uppercase tracking-widest text-indigo-400">Grammar rule</div>
+        <div className={`rounded-md border border-slate-300 p-4 space-y-1`}>
+          <div className="text-xs font-semibold uppercase tracking-widest text-indigo-700">Grammar rule</div>
           <p className={`text-base ${t.text}`}>{slide.grammar_recap}</p>
         </div>
       )}
       {slide.takeaway && (
-        <div className={`rounded-md border border-indigo-500/40 p-4 space-y-1`}>
-          <div className="text-xs uppercase tracking-widest text-indigo-400">Your takeaway</div>
+        <div className={`rounded-md border border-indigo-400 bg-indigo-50 p-4 space-y-1`}>
+          <div className="text-xs font-semibold uppercase tracking-widest text-indigo-700">Your takeaway</div>
           <p className={`text-base ${t.text}`}>{slide.takeaway}</p>
         </div>
       )}

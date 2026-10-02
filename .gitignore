@@ -34,3 +34,6 @@ dist-ssr
 
 # Personal local Claude Code settings
 .claude/settings.local.json
+
+# lesson comfort-audit screenshots (scripts/academy-comfort-audit.mjs)
+academy-audit/

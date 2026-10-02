@@ -101,10 +101,10 @@ export function LivingCanvas({ slide, hub, onAllSolved, authoring, onMoveElement
           {slide.instruction && (
             <button
               onClick={() => speak(slide.instruction_audio || slide.instruction)}
-              className={fullBleed ? 'inline-flex items-center gap-2 text-white/90 mt-1 hover:text-white drop-shadow' : 'inline-flex items-center gap-2 text-slate-700 mt-1 hover:text-slate-900'}
+              className={fullBleed ? (hub === 'academy' ? 'inline-flex min-h-[40px] items-center gap-2 rounded-full bg-black/40 px-4 py-2 text-white mt-1 hover:bg-black/55 drop-shadow' : 'inline-flex items-center gap-2 text-white/90 mt-1 hover:text-white drop-shadow') : 'inline-flex items-center gap-2 text-slate-700 mt-1 hover:text-slate-900'}
             >
               <Volume2 className="w-4 h-4" />
-              <span className="text-sm">{slide.instruction}</span>
+              <span className={hub === 'academy' ? 'text-base font-medium' : 'text-sm'}>{slide.instruction}</span>
             </button>
           )}
         </div>
@@ -152,7 +152,9 @@ export function LivingCanvas({ slide, hub, onAllSolved, authoring, onMoveElement
         {/* Reset */}
         <button
           onClick={handleReset}
-          className="absolute bottom-3 right-3 z-50 bg-white/90 hover:bg-white text-slate-700 rounded-full px-3 py-1.5 text-xs font-semibold shadow-md flex items-center gap-1.5"
+          className={hub === 'academy'
+            ? 'absolute bottom-3 right-3 z-50 min-h-[40px] bg-white/95 hover:bg-white text-slate-800 rounded-full px-4 py-2 text-sm font-semibold shadow-md flex items-center gap-2'
+            : 'absolute bottom-3 right-3 z-50 bg-white/90 hover:bg-white text-slate-700 rounded-full px-3 py-1.5 text-xs font-semibold shadow-md flex items-center gap-1.5'}
           title="Reset game"
         >
           <RotateCcw className="w-3.5 h-3.5" />
