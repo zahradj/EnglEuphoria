@@ -174,7 +174,6 @@ function LetterTilesScene({ scene, variant, onNext, onWin, onResult, sync }: {
 
   useEffect(() => {
     if (finished) fireBurst(50, 42, 46, 46);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finished]);
 
   useEffect(() => {

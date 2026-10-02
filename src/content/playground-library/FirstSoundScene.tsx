@@ -117,7 +117,6 @@ export function FirstSoundScene({ scene, onNext, onWin, onResult, sync }: {
 
   useEffect(() => {
     if (finished) fireBurst(50, 40, 48, 48);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finished]);
 
   // The right fish splashes on both screens (teacher and student see it).
@@ -130,7 +129,6 @@ export function FirstSoundScene({ scene, onNext, onWin, onResult, sync }: {
     const er = el.getBoundingClientRect();
     fireBurst(((er.left + er.width / 2 - rr.left) / rr.width) * 100, ((er.top + er.height / 2 - rr.top) / rr.height) * 100, 22, 22);
     fireBurst(50, 30, 14, 16); // and the picture bubble pops with joy
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [solved, round]);
 
   useEffect(() => {
