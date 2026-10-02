@@ -5,6 +5,7 @@ import { SpinWheelScene } from '../SpinWheelScene';
 import { PictureMatchScene } from '../PictureMatchScene';
 import { FirstSoundScene } from '../FirstSoundScene';
 import { LetterMatchScene, LetterBlocksScene } from '../LetterTilesScene';
+import { WhatsMissingScene } from '../WhatsMissingScene';
 import { TitleCardScene } from './scene-components/TitleCardScene';
 import { CinematicScene } from './scene-components/CinematicScene';
 import { MeetScene } from './scene-components/MeetScene';
@@ -238,6 +239,7 @@ export function SceneRenderer(props: {
     case 'first-sound': return <FirstSoundScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'letter-match': return <LetterMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'letter-blocks': return <LetterBlocksScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+    case 'whats-missing': return <WhatsMissingScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     default: return null;
   }
   })();

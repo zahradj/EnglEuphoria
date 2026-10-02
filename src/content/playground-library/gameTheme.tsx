@@ -275,3 +275,35 @@ export function TrainCar({ unit, color, children, glyph, sound = false, rolling 
     </div>
   );
 }
+
+/** Theatre for the Magic Show: deep-purple hall, spotlight beams, a gold table edge and a wooden stage floor. */
+export function TheatreBackdrop() {
+  const stars = [{ l: 8, t: 6, d: 0 }, { l: 24, t: 3, d: 1.1 }, { l: 47, t: 5, d: 0.5 }, { l: 71, t: 4, d: 1.7 }, { l: 90, t: 7, d: 0.9 }, { l: 62, t: 9, d: 2.2 }];
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: 'linear-gradient(180deg, #2a0f52 0%, #4c2185 55%, #6d3aa8 100%)' }}>
+      {[{ left: '14%', rot: -9 }, { left: '60%', rot: 9 }].map((b) => (
+        <div
+          key={b.left}
+          className="gt-idle absolute top-0"
+          style={{ left: b.left, width: '28%', height: '78%', background: 'linear-gradient(180deg, rgba(255,246,196,.34), rgba(255,246,196,0))', clipPath: 'polygon(40% 0, 60% 0, 100% 100%, 0 100%)', transform: `rotate(${b.rot}deg)`, transformOrigin: '50% 0', animation: 'gt-ray 5.5s ease-in-out infinite' }}
+        />
+      ))}
+      {stars.map((st, i) => (
+        <span key={i} className="gt-idle absolute rounded-full bg-yellow-200" style={{ left: `${st.l}%`, top: `${st.t}%`, width: '0.9cqh', height: '0.9cqh', animation: `gt-ray ${2 + (i % 3) * 0.7}s ease-in-out ${st.d}s infinite` }} />
+      ))}
+      <div className="absolute inset-x-0" style={{ top: '53.5%', height: '3.6%', background: 'linear-gradient(180deg, #f6c453, #c98a1b)', boxShadow: '0 0.8cqh 1.6cqh rgba(0,0,0,.35)' }} />
+      <div className="absolute inset-x-0 bottom-0" style={{ top: '57%', background: 'repeating-linear-gradient(90deg, #a96a33 0, #a96a33 9cqw, #94582a 9cqw, #94582a 9.4cqw), linear-gradient(180deg, #b9793c, #7d4a22)', backgroundBlendMode: 'multiply' }} />
+    </div>
+  );
+}
+
+export function TopHatIcon({ height = '5cqh' }: { height?: string }) {
+  return (
+    <svg viewBox="0 0 64 56" style={{ height }} aria-hidden="true">
+      <ellipse cx="32" cy="46" rx="29" ry="8" fill="#3b1d63" stroke="#1f0e36" strokeWidth="3" />
+      <path d="M16 46V16C16 8 22 4 32 4s16 4 16 12v30Z" fill="#5b2d96" stroke="#1f0e36" strokeWidth="3" strokeLinejoin="round" />
+      <rect x="16" y="32" width="32" height="8" fill="#f6c453" stroke="#1f0e36" strokeWidth="2.5" />
+      <path d="M44 10l2 4 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1Z" fill="#fde047" />
+    </svg>
+  );
+}

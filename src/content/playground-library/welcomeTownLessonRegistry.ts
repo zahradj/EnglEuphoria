@@ -2,6 +2,7 @@ import { LESSON_1_SCENES, LESSON_1_TITLE, LESSON_1_OBJECTIVE, LESSON_2_SCENES, L
 import { LESSON_A2U1L1_SCENES, LESSON_A2U1L1_TITLE, LESSON_A2U1L1_OBJECTIVE, LESSON_A2U1L2_SCENES, LESSON_A2U1L2_TITLE, LESSON_A2U1L2_OBJECTIVE, LESSON_A2U1L3_SCENES, LESSON_A2U1L3_TITLE, LESSON_A2U1L3_OBJECTIVE } from './welcome-town-a2/scenes';
 import { LESSON_A1U9L1_SCENES, LESSON_A1U9L1_TITLE, LESSON_A1U9L1_OBJECTIVE, LESSON_A1U9L2_SCENES, LESSON_A1U9L2_TITLE, LESSON_A1U9L2_OBJECTIVE, LESSON_A1U9L3_SCENES, LESSON_A1U9L3_TITLE, LESSON_A1U9L3_OBJECTIVE } from './magic-castle/scenes';
 import type { Scene } from './welcome-town/scenes';
+import { GAME_LESSON_FORMAT, getGameClassroomLesson } from './gameLessons';
 
 /** Mirrors sceneLessonRegistry.ts's shape, but for the Welcome Town family
  *  (A1 `wt-rich` and A2 `wt-a2-rich`), which lives in a separate pair of
@@ -29,5 +30,6 @@ export function getWelcomeTownLesson(
   unitNumber: number,
   lessonNumber: number,
 ): { scenes: Scene[]; title: string; objective: string; skin?: LessonSkin } | null {
+  if (contentFormat === GAME_LESSON_FORMAT) return getGameClassroomLesson(lessonNumber);
   return WELCOME_TOWN_LESSON_REGISTRY[`${contentFormat}-${unitNumber}-${lessonNumber}`] ?? null;
 }

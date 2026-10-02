@@ -2,6 +2,7 @@ import type { SpinWheelSceneData } from '../SpinWheelScene';
 import type { PictureMatchSceneData } from '../PictureMatchScene';
 import type { FirstSoundSceneData } from '../FirstSoundScene';
 import type { LetterMatchSceneData, LetterBlocksSceneData } from '../LetterTilesScene';
+import type { WhatsMissingSceneData } from '../WhatsMissingScene';
 /* =============================================================================
  * Welcome Town — A1 Unit 1 Lesson 1: "Hello, Class!"
  *
@@ -149,6 +150,7 @@ export type Scene =
   | FirstSoundSceneData
   | LetterMatchSceneData
   | LetterBlocksSceneData
+  | WhatsMissingSceneData
   /** `look: 'card'` — calm cream-card styling (Magic Castle Lesson 2) instead
    *  of the big hopping 3D title; same content, same behaviour. */
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string; cta?: string; look?: 'card' }
