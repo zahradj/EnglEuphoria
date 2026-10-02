@@ -116,9 +116,9 @@ export const LESSON_A1U2L1_SCENES: Scene[] = [
 
   { id: 'ja-setting-jungle', kind: 'echo', bg: bgWide, who: 'pip', teacher: 'Shh... listen! Rustling leaves, buzzing bugs, chirping birds! We found a wild, green place. Say it with me...', word: 'Jungle!' },
 
-  { id: 'ja-meet-leo', kind: 'meet', bg: bgLeoDen, who: 'leo', teacher: 'Tap Leo to hear him say hello!', line: 'Hello! I am Leo. I am a lion!', repeat: 'I am a lion!' },
-  { id: 'ja-meet-coco', kind: 'meet', bg: bgCocoVines, who: 'coco', teacher: 'Here comes a new friend! Tap Coco to say hi.', line: 'Hi! My name is Coco. I am a monkey!', repeat: 'I am a monkey!' },
-  { id: 'ja-meet-willow', kind: 'meet', bg: bgWillowNest, who: 'willow', teacher: 'Willow lives in the jungle too! Tap her to say hi.', line: 'Tweet tweet! I am Willow. I am a bird!', repeat: 'I am a bird!' },
+  { id: 'ja-meet-leo', kind: 'meet', focus: ['lion'], bg: bgLeoDen, who: 'leo', teacher: 'Tap Leo to hear him say hello!', line: 'Hello! I am Leo. I am a lion!', repeat: 'I am a lion!' },
+  { id: 'ja-meet-coco', kind: 'meet', focus: ['monkey'], bg: bgCocoVines, who: 'coco', teacher: 'Here comes a new friend! Tap Coco to say hi.', line: 'Hi! My name is Coco. I am a monkey!', repeat: 'I am a monkey!' },
+  { id: 'ja-meet-willow', kind: 'meet', focus: ['bird'], bg: bgWillowNest, who: 'willow', teacher: 'Willow lives in the jungle too! Tap her to say hi.', line: 'Tweet tweet! I am Willow. I am a bird!', repeat: 'I am a bird!' },
 
   {
     id: 'ja-vocab-animals', kind: 'vocab-spot', bg: bgPathAnimals,

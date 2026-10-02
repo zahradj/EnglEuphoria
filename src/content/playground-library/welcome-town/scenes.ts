@@ -163,7 +163,7 @@ export type Scene =
   // side of the full-bleed `bg` was left empty for them (the character is
   // composed into the opposite side) instead of floating centered over the
   // character's face — omit for the default centered layout.
-  | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string; cardSide?: 'left' | 'right'; /** Dialogue-plate look: 'chalk' for classroom scenes, default 'paper'. */ look?: 'paper' | 'chalk' }
+  | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string; cardSide?: 'left' | 'right'; /** Dialogue-plate look: 'chalk' for classroom scenes, default 'paper'. */ look?: 'paper' | 'chalk'; /** Vocabulary in `line` to highlight after the voice has read it. */ focus?: string[] }
   | {
       id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string;
       /** Which side of the frame is empty enough for the big bare word —
@@ -485,8 +485,8 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
   },
 
   /* ---- Present: hello / hi, then the name question ---- */
-  { id: 'wt-meet-marigold', kind: 'meet', bg: bgL1Hello, who: 'marigold', cardSide: 'right', teacher: 'Tap Miss Marigold. Then wave and say hello!', line: 'Hello, class! I’m Miss Marigold.', repeat: 'Hello!' },
-  { id: 'wt-meet-pip', kind: 'meet', bg: bgL1Hello, who: 'pip', cardSide: 'left', teacher: 'Tap Pip. Then say hi!', line: 'Hi! My name’s Pip. What’s your name?', repeat: 'Hi!' },
+  { id: 'wt-meet-marigold', kind: 'meet', focus: ['Hello'], bg: bgL1Hello, who: 'marigold', cardSide: 'right', teacher: 'Tap Miss Marigold. Then wave and say hello!', line: 'Hello, class! I’m Miss Marigold.', repeat: 'Hello!' },
+  { id: 'wt-meet-pip', kind: 'meet', focus: ['name'], bg: bgL1Hello, who: 'pip', cardSide: 'left', teacher: 'Tap Pip. Then say hi!', line: 'Hi! My name’s Pip. What’s your name?', repeat: 'Hi!' },
   {
     id: 'wt-echo-question', kind: 'echo', bg: bgL1Peers, who: 'pip', textSide: 'top',
     teacher: 'Listen and say it with Pip!', word: 'What’s your name?',
@@ -501,7 +501,7 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
       { who: 'pip', line: 'Bye, Leo!', repeat: true },
     ],
   },
-  { id: 'wt-goodbye-pip', kind: 'meet', bg: bgL1Goodbye, who: 'pip', cardSide: 'right', teacher: 'Pip is going home. Tap him, then wave and say goodbye!', line: 'Goodbye, Miss Marigold! Bye!', repeat: 'Goodbye!' },
+  { id: 'wt-goodbye-pip', kind: 'meet', focus: ['Goodbye'], bg: bgL1Goodbye, who: 'pip', cardSide: 'right', teacher: 'Pip is going home. Tap him, then wave and say goodbye!', line: 'Goodbye, Miss Marigold! Bye!', repeat: 'Goodbye!' },
 
   /* ---- Practice: hello or goodbye? ---- */
   {
@@ -621,7 +621,7 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
   },
 
   /* ---- Goodbye (this lesson's own ending) ---- */
-  { id: 'wt-goodbye-class', kind: 'meet', bg: bgL1Goodbye, who: 'marigold', cardSide: 'left', teacher: 'Time to go! Wave and say goodbye to Miss Marigold.', line: 'Goodbye, everyone! Bye-bye!', repeat: 'Goodbye!' },
+  { id: 'wt-goodbye-class', kind: 'meet', focus: ['Goodbye'], bg: bgL1Goodbye, who: 'marigold', cardSide: 'left', teacher: 'Time to go! Wave and say goodbye to Miss Marigold.', line: 'Goodbye, everyone! Bye-bye!', repeat: 'Goodbye!' },
 
   { id: 'wt-finale', kind: 'finale', bg: bgL1Class, who: 'pip', line: 'You said hello, asked names, and made your own name badge! Bye-bye!' },
 ]);
@@ -684,7 +684,7 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
   },
 
   {
-    id: 'wt2-howareyou', kind: 'meet', bg: bgCircleW, who: 'marigold',
+    id: 'wt2-howareyou', kind: 'meet', focus: ['fine'], bg: bgCircleW, who: 'marigold',
     teacher: 'Tap Miss Marigold to hear a new question!',
     line: 'How are you today? I am fine, thank you!', repeat: 'I am fine, thank you!',
   },
@@ -697,25 +697,25 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
   {
     // Character composed into the LEFT third of bg-vocab-pip-happy.png —
     // cards dock right, onto the empty side.
-    id: 'wt2-vocab-pip-happy', kind: 'meet', bg: bgVocabPipHappyW, who: 'pip', cardSide: 'right',
+    id: 'wt2-vocab-pip-happy', kind: 'meet', focus: ['happy'], bg: bgVocabPipHappyW, who: 'pip', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'Pip is happy!', repeat: 'Happy!',
   },
   {
     // Character composed into the RIGHT third of bg-vocab-leo-tired.png —
     // cards dock left.
-    id: 'wt2-vocab-leo-tired', kind: 'meet', bg: bgVocabLeoTiredW, who: 'leo', cardSide: 'left',
+    id: 'wt2-vocab-leo-tired', kind: 'meet', focus: ['tired'], bg: bgVocabLeoTiredW, who: 'leo', cardSide: 'left',
     teacher: 'Listen, then repeat!', line: 'Leo is tired!', repeat: 'Tired!',
   },
   {
-    id: 'wt2-vocab-mia-sad', kind: 'meet', bg: bgVocabMiaSadW, who: 'mia', cardSide: 'right',
+    id: 'wt2-vocab-mia-sad', kind: 'meet', focus: ['sad'], bg: bgVocabMiaSadW, who: 'mia', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'Mia is sad!', repeat: 'Sad!',
   },
   {
-    id: 'wt2-vocab-bella-angry', kind: 'meet', bg: bgVocabBellaAngryW, who: 'bella', cardSide: 'left',
+    id: 'wt2-vocab-bella-angry', kind: 'meet', focus: ['angry'], bg: bgVocabBellaAngryW, who: 'bella', cardSide: 'left',
     teacher: 'Listen, then repeat!', line: 'Bella is angry!', repeat: 'Angry!',
   },
   {
-    id: 'wt2-vocab-willow-hungry', kind: 'meet', bg: bgVocabWillowHungryW, who: 'willow', cardSide: 'right',
+    id: 'wt2-vocab-willow-hungry', kind: 'meet', focus: ['hungry'], bg: bgVocabWillowHungryW, who: 'willow', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'Willow is hungry!', repeat: 'Hungry!',
   },
 
@@ -817,7 +817,7 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
    * He/She/They sort-and-produce sequence right below still does the real
    * teaching — this just gives students a concrete first foothold. */
   {
-    id: 'wt2-heshe-intro-pip', kind: 'meet', bg: bgHeIntroPipW, who: 'pip', cardSide: 'right',
+    id: 'wt2-heshe-intro-pip', kind: 'meet', focus: ['He'], bg: bgHeIntroPipW, who: 'pip', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'This is Pip. Pip is a boy. He is a boy!', repeat: 'He!',
   },
   {
@@ -1034,17 +1034,17 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
   // single-concept-per-scene discipline every other `meet`/`vocab-spot`
   // scene in this file already follows.
   {
-    id: 'wt2-prep-in', kind: 'meet', bg: bgPrepInW, who: 'pip',
+    id: 'wt2-prep-in', kind: 'meet', focus: ['IN'], bg: bgPrepInW, who: 'pip',
     teacher: 'Tap Pip to hear a new word!',
     line: 'Look! The book is IN the bag.', repeat: 'In the bag!',
   },
   {
-    id: 'wt2-prep-on', kind: 'meet', bg: bgPrepOnW, who: 'mia',
+    id: 'wt2-prep-on', kind: 'meet', focus: ['ON'], bg: bgPrepOnW, who: 'mia',
     teacher: 'Tap Mia to hear a new word!',
     line: 'Look! The apple is ON the desk.', repeat: 'On the desk!',
   },
   {
-    id: 'wt2-prep-next-to', kind: 'meet', bg: bgPrepNextToW, who: 'leo',
+    id: 'wt2-prep-next-to', kind: 'meet', focus: ['NEXT TO'], bg: bgPrepNextToW, who: 'leo',
     teacher: 'Tap Leo to hear a new word!',
     line: 'Look! The chair is NEXT TO the desk.', repeat: 'Next to the desk!',
   },
@@ -1339,7 +1339,7 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
   },
 
   {
-    id: 'wt4-meet-model', kind: 'meet', bg: bgExpressHelloV2, who: 'marigold',
+    id: 'wt4-meet-model', kind: 'meet', focus: ['Nice to meet you'], bg: bgExpressHelloV2, who: 'marigold',
     teacher: 'Tap Miss Marigold to hear a full greeting!',
     line: 'Watch me! Hello! My name is Miss Marigold. Nice to meet you!', repeat: 'Nice to meet you!',
   },

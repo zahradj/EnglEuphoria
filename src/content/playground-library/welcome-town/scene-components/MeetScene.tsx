@@ -110,6 +110,7 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
           nudge={phase === 'repeat'}
           fontSize={lineFontSize}
           ariaLabel={`Hear ${c.name} again`}
+          focusLine={{ text: scene.line, focus: scene.focus, reveal: (phase === 'repeat' || phase === 'done') && !speaking }}
           action={phase === 'done' ? (
             <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-[calc(4*var(--svh,1vh))] py-[calc(2*var(--svh,1vh))] text-[calc(2.6*var(--svh,1vh))] font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
               Next ▶
