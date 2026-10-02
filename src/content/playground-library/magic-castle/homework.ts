@@ -24,12 +24,12 @@ export const HW_A1U9L1_INTRO = {
   rooms: 'Listen. Where is Wim? Tap the room.',
   trueFalse: 'Look at the picture. Listen. True or false?',
   build: 'Look and listen. Build the sentence.',
-  ears: 'Listen. Is it ch, or sh?',
+  ears: 'Listen to the word. Which sound do you hear?',
   twister: 'Build my tongue twister before the sand runs out!',
   sayIt: 'Now say it slow, faster, and at magic speed!',
   reading: 'Read the spell book. Then answer the questions.',
   chest: 'Tap the chest to open it!',
-  win: 'Amazing! You are a CH wizard!',
+  win: 'Amazing! You are a sound wizard!',
 } as const;
 
 /** Room boxes on bg-castle-overview.png (percent of the 1376×768 art). */

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
-import { safeSpeak, playLetterPhonic } from '../../unit1/audio';
+import { safeSpeak, playLetterPhonic, playLetterName } from '../../unit1/audio';
 import * as sfx from '../../unit1/sfx';
 import { Confetti } from '../../unit1/fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
@@ -38,7 +38,10 @@ export function LetterGameScene({ scene, onNext, onWin, onLose, sync }: { scene:
     if (letter === r.letter) {
       sfx.match();
       setState((s) => ({ ...s, correctPick: true }));
-      await safeSpeak(`${r.letter}! Great job!`, voiceOf(scene.who));
+      // The letter is the recorded letter-name clip; a voice reading "S!"
+      // alone came out as "Yes!" / "N!" as "Then" (2026-10-02 audit).
+      await playLetterName(r.letter);
+      await safeSpeak('Great job!', voiceOf(scene.who));
       window.setTimeout(() => {
         const next = round + 1;
         const awardGem = next >= total && !gemDone;

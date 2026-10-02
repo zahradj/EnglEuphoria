@@ -23,6 +23,8 @@ import { PronounSortScene } from './scene-components/PronounSortScene';
 import { RoleplayScene } from './scene-components/RoleplayScene';
 import { JoinStageScene } from './scene-components/JoinStageScene';
 import { HelloDoorsScene } from './scene-components/HelloDoorsScene';
+import { WelcomePartyScene } from './scene-components/WelcomePartyScene';
+import { NameBadgeScene } from './scene-components/NameBadgeScene';
 import { FlipbookScene } from './scene-components/FlipbookScene';
 import { SongScene } from './scene-components/SongScene';
 import { SoundModelScene } from './scene-components/SoundModelScene';
@@ -114,6 +116,8 @@ export function SceneRenderer(props: {
       case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'welcome-party': return <WelcomePartyScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'name-badge': return <NameBadgeScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'song': return <SongScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'sound-model': return <SoundModelScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;

@@ -407,294 +407,212 @@ export type Scene =
       stickers?: { img: string; left: number; top: number; width: number }[];
       rounds: { item: string; img: string; room: string; at: { left: number; top: number } }[];
     }
+  | {
+      /** Guests knock; the right greeting / answer opens the door (A1 U1 L1). */
+      id: string; kind: 'welcome-party'; bg: string; teacher: string; host: CharKey;
+      /** Doorway box in % of the stage (left/top/width/height). */
+      door: { left: number; top: number; width: number; height: number };
+      rounds: {
+        guest: CharKey; sprite: string; knock: string; mode: 'greet' | 'answer';
+        options: { line: string; correct?: boolean }[]; reply: string; names: string[];
+      }[];
+    }
+  | {
+      /** Spell names with recorded letter names, then build your own badge. */
+      id: string; kind: 'name-badge'; bg: string; teacher: string; who: CharKey;
+      rounds: { name: string; sprite?: string; choices: string[] }[];
+    }
   | { id: string; kind: 'finale'; bg: string; who: CharKey; line: string; cast?: CharKey[]; look?: 'card' };
 
-export const LESSON_1_TITLE = 'Hello, Class!';
-export const LESSON_1_OBJECTIVE = "Part 1: Greet your new class and share your name (\"Hello! My name is ___.\"). Part 2: Learn the sounds S, A, T and read your first word.";
+/* =============================================================================
+ * A1 Unit 1, Lesson 1: "Hello, My Name Is…" (rebuilt 2026-10-02)
+ *
+ * Unit plan: Unit 1 "Greetings & Introductions", 7 lessons (Cambridge Pre A1
+ * Starters: greetings, "What's your name?", spelling a name). L1 teaches ONLY:
+ * hello, hi, goodbye, bye, name · "What's your name?" · "My name's… / I'm…" ·
+ * spelling a name with the alphabet. Classroom objects, feelings, age and
+ * "friend/teacher" moved to their own lessons/units (they were used here
+ * before being taught).
+ *
+ * Signature game: Pip's Welcome Party (welcome-party): a guest only comes in
+ * when the child says/chooses the right line. Then Name Badge (name-badge):
+ * names are spelled with the RECORDED letter-name clips, and the child builds
+ * their own badge. Role swap: the child asks the name (wt-your-turn). One
+ * phonics micro-moment: /s/ /a/ /t/ → read "sat". Ends with a goodbye scene
+ * (not the old song + jigsaw every lesson used).
+ * All art is wide 16:9.
+ * ========================================================================== */
+const bgL1Class = `${W}/scenes/bg-classroom-wide-wide.png`;
+const bgL1Circle = `${W}/scenes/bg-classroom-circle-wide.png`;
+const bgL1Hello = `${W}/scenes/bg-express-hello-v2.png`;
+const bgL1Peers = `${W}/scenes/bg-classroom-peers-v2.png`;
+const bgL1Goodbye = `${W}/scenes/bg-express-goodbye-wide.png`;
+const bgL1Party = `${W}/scenes/bg-party-door-wide.png`;
+const bgL1Reading = `${W}/scenes/bg-classroom-reading-wide.png`;
+const spr = (who: CharKey) => `${W}/sprites/${who}-wave.png`;
+/** The party door on bg-party-door-wide.png (percent of the 1376×768 art). */
+const PARTY_DOOR = { left: 21.4, top: 17, width: 19.8, height: 63 };
+
+export const LESSON_1_TITLE = 'Hello, My Name Is…';
+export const LESSON_1_OBJECTIVE = "Say hello and goodbye, ask \"What's your name?\", answer \"My name's… / I'm…\", and spell your name.";
 
 export const LESSON_1_SCENES: Scene[] = [
-  { id: 'wt-title', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 1', title: 'Welcome Town School: Hello, Class!', subtitle: 'Meet the class, say your name, and read your first word' },
+  { id: 'wt-title', kind: 'title-card', bg: bgL1Class, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 1', title: 'Hello, My Name Is…', subtitle: 'Say hello, ask a name, and spell your name', cta: '\u{1F44B} LET’S GO!' },
 
   {
-    id: 'wt-intro', kind: 'cinematic', bg: bgDoor, title: 'Welcome Town School', subtitle: 'A new friend joins the class today', narrator: 'marigold',
+    // Warm-up: the unit's Hello Song (scripts/songs.json "wt-hello"). Wave on
+    // "hello", point to yourself on "say your name".
+    id: 'wt-hello-song', kind: 'song', bg: bgL1Class, title: '\u{1F3B5} The Hello Song \u{1F3B5}', teacher: 'Wave and sing! Point to you when we say “name”.',
+    durationSeconds: 20, bigWord: 'Hello',
+    songUrl: `${W}/audio/hello-song.mp3?v=1`,
+    lyrics: [
+      { who: 'marigold', text: 'Hello, hello, hello to you!' },
+      { who: 'pip', text: 'Hi, hi, hi! And hi to you!' },
+      { who: 'marigold', text: 'What’s your name? What’s your name?' },
+      { who: 'pip', text: 'Say your name! Say your name!' },
+    ],
+  },
+
+  /* ---- Present: hello / hi, then the name question ---- */
+  { id: 'wt-meet-marigold', kind: 'meet', bg: bgL1Hello, who: 'marigold', cardSide: 'right', teacher: 'Tap Miss Marigold. Then wave and say hello!', line: 'Hello, class! I’m Miss Marigold.', repeat: 'Hello!' },
+  { id: 'wt-meet-pip', kind: 'meet', bg: bgL1Hello, who: 'pip', cardSide: 'left', teacher: 'Tap Pip. Then say hi!', line: 'Hi! My name’s Pip. What’s your name?', repeat: 'Hi!' },
+  {
+    id: 'wt-echo-question', kind: 'echo', bg: bgL1Peers, who: 'pip', textSide: 'top',
+    teacher: 'Listen and say it with Pip!', word: 'What’s your name?',
+  },
+  {
+    // Model dialogue: the whole L1 exchange, including goodbye/bye.
+    id: 'wt-roleplay-names', kind: 'roleplay', bg: bgL1Peers, teacher: 'Listen to Pip and Leo. Say each line after them!', cast: ['leo', 'pip'],
     script: [
-      { who: 'marigold', line: 'Good morning, class! Today is a very special day.' },
-      { who: 'marigold', line: 'We have a new friend joining us. Let’s all say hello!' },
-    ],
-    cta: '\u{1F392} LET’S GO!',
-  },
-
-  { id: 'wt-meet-marigold', kind: 'meet', bg: bgExpressHello, who: 'marigold', teacher: 'Tap Miss Marigold to hear her say hello!', line: 'Hello! I am Miss Marigold, your teacher. Welcome to our class!', repeat: 'Hello!' },
-  { id: 'wt-meet-pip', kind: 'meet', bg: bgDoor, who: 'pip', teacher: 'Here comes Pip! Tap him to say hi.', line: 'Hi! My name is Pip. I am 7 years old. I am new here!', repeat: 'My name is Pip.' },
-
-  {
-    // 2-3 hotspots per scene, not 5 — per attention-engine's own cognitive-
-    // load rule, and direct feedback. Each vocab-spot scene gets its own
-    // dedicated, purpose-built background (never reused from a narrative
-    // scene) so every target word is large, clean, and unambiguous.
-    // Per direct user report: "mixed up between the teacher and the
-    // student" -- the label/who/emoji pairing was swapped relative to
-    // where the two characters actually stand in bg-classroom-people.png
-    // (Pip the fox is on the LEFT, Miss Marigold the owl is on the
-    // RIGHT), so the "Teacher" hotspot sat on Pip and "Student" sat on
-    // Marigold. left/top are unchanged (they correctly mark each
-    // character's real position) -- only the word/emoji/color/who
-    // attached to each position were fixed.
-    id: 'wt-vocab-people', kind: 'vocab-spot', bg: bgPeople,
-    teacher: 'Look around! Tap the arrow to learn a classroom word.',
-    items: [
-      { label: 'Student', sentence: 'This is the student.', emoji: '\u{1F98A}', left: '26%', top: '42%', color: '#FE6A2F', who: 'pip' },
-      { label: 'Teacher', sentence: 'This is the teacher.', emoji: '\u{1F989}', left: '68%', top: '48%', color: '#8ECAE6', who: 'marigold' },
+      { who: 'leo', line: 'Hi! I’m Leo. What’s your name?', repeat: true },
+      { who: 'pip', line: 'Hello, Leo! My name’s Pip.', repeat: true },
+      { who: 'leo', line: 'Goodbye, Pip!', repeat: true },
+      { who: 'pip', line: 'Bye, Leo!', repeat: true },
     ],
   },
-  {
-    // A dedicated scene purpose-built for this hotspot trio (not reused
-    // from the arrival/door narrative scene) — Door, Board, and Window are
-    // each large, clean, and evenly spaced here.
-    id: 'wt-vocab-room', kind: 'vocab-spot', bg: bgFixtures,
-    teacher: 'Now find these things in the room!',
-    items: [
-      { label: 'Door', sentence: 'This is the door.', emoji: '\u{1F6AA}', left: '16%', top: '48%', color: '#8B5CF6' },
-      { label: 'Board', sentence: 'This is the board.', emoji: '\u{1F4CB}', left: '49%', top: '49%', color: '#22C55E' },
-      { label: 'Window', sentence: 'This is the window.', emoji: '\u{1FA9F}', left: '81%', top: '47%', color: '#06B6D4' },
-    ],
-  },
+  { id: 'wt-goodbye-pip', kind: 'meet', bg: bgL1Goodbye, who: 'pip', cardSide: 'right', teacher: 'Pip is going home. Tap him, then wave and say goodbye!', line: 'Goodbye, Miss Marigold! Bye!', repeat: 'Goodbye!' },
 
+  /* ---- Practice: hello or goodbye? ---- */
   {
-    // The "Practice" step right after vocabulary discovery (per visual-
-    // learning-engine's Scene → Discovery → Flashcards → PRACTICE flow) —
-    // listen-and-drag: tap a token to hear its word, then drag it onto that
-    // exact object in the same full-bleed scene it was just discovered in.
-    // Target coordinates deliberately match wt-vocab-people's own hotspots
-    // one-for-one, so "drop zone" and "where the word lives" are the same
-    // point the learner already looked at.
-    id: 'wt-drag-people', kind: 'drag-match', bg: bgPeople, teacher: 'Listen, then drag each word onto the matching classroom member!',
-    items: [
-      { label: 'Student', color: '#FE6A2F', who: 'pip', targetLeft: '26%', targetTop: '42%' },
-      { label: 'Teacher', color: '#8ECAE6', who: 'marigold', targetLeft: '68%', targetTop: '48%' },
-    ],
-  },
-  {
-    id: 'wt-drag-room', kind: 'drag-match', bg: bgFixtures, teacher: 'Listen, then drag each word onto the matching thing in the room!',
-    items: [
-      { label: 'Door', color: '#8B5CF6', targetLeft: '16%', targetTop: '48%' },
-      { label: 'Board', color: '#22C55E', targetLeft: '49%', targetTop: '49%' },
-      { label: 'Window', color: '#06B6D4', targetLeft: '81%', targetTop: '47%' },
-    ],
-  },
-
-  {
-    // Per direct user request: this page's vocabulary should be ONLY
-    // "friend" -- dropped "teacher" (already its own word on wt-vocab-
-    // people). The art (bg-express-friend.png) shows Mia and Bella
-    // hugging with hearts -- no Miss Marigold in it at all -- so `who`
-    // was also wrong (voiced as Marigold, who isn't even pictured);
-    // switched to Mia, who is.
-    id: 'wt-vocab-friend', kind: 'meet', bg: bgExpressFriend, who: 'mia',
-    teacher: 'Tap Mia to learn a new word: friend!',
-    line: 'Bella is my friend! Mia, Bella, Willow, and Leo are all Pip’s new friends!', repeat: 'My friend!',
-  },
-
-  {
-    id: 'wt-memory-words', kind: 'memory', bg: bgCircle, teacher: 'Match the matching pairs! Hello, goodbye, name, friend, teacher.',
-    pairs: [
-      { id: 'hello', label: 'Hello', emoji: '\u{1F44B}' },
-      { id: 'goodbye', label: 'Goodbye', emoji: '\u{1F44B}' },
-      { id: 'name', label: 'Name', emoji: '\u{1F3F7}️' },
-      { id: 'friend', label: 'Friend', emoji: '\u{1F91D}' },
-      { id: 'teacher', label: 'Teacher', emoji: '\u{1F469}‍\u{1F3EB}' },
-    ],
-  },
-
-  {
-    id: 'wt-choice-hello', kind: 'choice', bg: bgCircle, who: 'pip', teacher: 'Listen carefully, then tap the right answer!',
-    prompt: 'Which word means HELLO?',
+    id: 'wt-choice-arrive', kind: 'choice', bg: bgL1Hello, who: 'marigold', teacher: 'Pip comes in. What does he say?',
+    prompt: 'Pip comes in. What does he say?',
     options: [
-      { label: 'Hello', emoji: '\u{1F44B}', correct: true },
-      { label: 'Goodbye', emoji: '\u{1F44B}' },
-      { label: 'Friend', emoji: '\u{1F91D}' },
+      { label: 'Hello', emoji: '\u{1F64B}', correct: true },
+      { label: 'Goodbye', emoji: '\u{1F6AA}' },
+    ],
+  },
+  {
+    id: 'wt-choice-leave', kind: 'choice', bg: bgL1Goodbye, who: 'marigold', teacher: 'Pip goes home. What does he say?',
+    prompt: 'Pip goes home. What does he say?',
+    options: [
+      { label: 'Hi', emoji: '\u{1F64B}' },
+      { label: 'Bye', emoji: '\u{1F6AA}', correct: true },
     ],
   },
 
+  /* ---- Signature game: Pip's Welcome Party ---- */
   {
-    id: 'wt-roleplay', kind: 'roleplay', bg: bgCircle, teacher: 'Story time! Listen to Pip and Miss Marigold, then repeat each line.', cast: ['pip', 'marigold', 'mia'],
+    id: 'wt-party-intro', kind: 'cinematic', bg: bgL1Party, title: 'Pip’s Welcome Party', subtitle: 'New friends are at the door!', narrator: 'marigold',
     script: [
-      { who: 'marigold', line: 'Hello! My name is Miss Marigold.', repeat: true },
-      { who: 'pip', line: 'Hello! My name is Pip.', repeat: true },
-      { who: 'marigold', line: 'How old are you, Pip?', repeat: true },
-      { who: 'pip', line: 'I am 7 years old.', repeat: true },
-      { who: 'marigold', line: 'Nice to meet you, Pip!', repeat: true },
-      { who: 'pip', line: 'Nice to meet you too!', repeat: true },
-      { who: 'mia', line: 'Welcome to our class, Pip!' },
+      { who: 'pip', line: 'It’s a party! New friends are at the door.' },
+      { who: 'marigold', line: 'Say hello and ask their names. Then the door opens!' },
+    ],
+    cta: '\u{1F389} PARTY TIME!',
+  },
+  {
+    id: 'wt-welcome-party', kind: 'welcome-party', bg: bgL1Party, host: 'pip', door: PARTY_DOOR,
+    teacher: 'Say the line out loud, then tap it to open the door!',
+    rounds: [
+      {
+        guest: 'mia', sprite: spr('mia'), mode: 'greet', knock: 'Knock, knock!',
+        options: [{ line: 'Hello! What’s your name?', correct: true }, { line: 'Goodbye! Bye!' }],
+        reply: 'Hi! My name’s Mia.', names: ['Mia', 'Bella', 'Leo'],
+      },
+      {
+        guest: 'bella', sprite: spr('bella'), mode: 'greet', knock: 'Knock, knock! Hello!',
+        options: [{ line: 'Bye!' }, { line: 'Hi! What’s your name?', correct: true }],
+        reply: 'Hello! I’m Bella.', names: ['Willow', 'Bella', 'Mia'],
+      },
+      {
+        guest: 'leo', sprite: spr('leo'), mode: 'answer', knock: 'Hi! I’m Leo. What’s your name?',
+        options: [{ line: 'Goodbye!' }, { line: 'My name’s Pip.', correct: true }, { line: 'What’s your name?' }],
+        reply: 'Hello, Pip!', names: [],
+      },
+      {
+        guest: 'willow', sprite: spr('willow'), mode: 'greet', knock: 'Knock, knock!',
+        options: [{ line: 'Hello! What’s your name?', correct: true }, { line: 'My name’s Willow.' }, { line: 'Goodbye!' }],
+        reply: 'Hi! My name’s Willow.', names: ['Leo', 'Willow', 'Bella'],
+      },
     ],
   },
 
+  /* ---- Role swap: the child answers AND asks ---- */
   {
-    id: 'wt-join-stage', kind: 'join-stage', bg: bgCircle, teacher: 'Your turn! When it says YOU, say your own name and age out loud!', cast: ['pip', 'marigold', 'leo'],
+    id: 'wt-your-turn', kind: 'join-stage', bg: bgL1Circle, teacher: 'Your turn! When it says YOU, say it out loud.', cast: ['pip', 'marigold'],
     turns: [
-      { who: 'marigold', line: 'Hello! What is your name?' },
-      { who: 'student', line: 'Hello! My name is ______.' },
-      { who: 'pip', line: 'How old are you?' },
-      { who: 'student', line: 'I am ______ years old.' },
-      { who: 'marigold', line: 'Nice to meet you! Welcome to our class!' },
-      { who: 'leo', line: 'We are so happy you are here!' },
+      { who: 'pip', line: 'Hi! What’s your name?' },
+      { who: 'student', line: 'Hello! My name’s …' },
+      { who: 'pip', line: 'Now you ask me!' },
+      { who: 'student', line: 'What’s your name?' },
+      { who: 'pip', line: 'My name’s Pip!' },
+      { who: 'marigold', line: 'Now ask your teacher!' },
+      { who: 'student', line: 'What’s your name?' },
     ],
   },
 
+  /* ---- Spelling a name (A–Z) ---- */
   {
-    // Per direct user request: replaced the old cubby-guessing game here
-    // (no real vocabulary content -- Mia and Leo are already introduced
-    // by name in wt-roleplay/wt-join-stage above) with real school/
-    // classroom vocabulary: Desk, Chair, Bag -- distinct from
-    // wt-vocab-room's Door/Board/Window, same 2-3-hotspot pattern.
-    // Per direct user request, renamed from "Backpack" to the simpler
-    // "Bag" project-wide (this scene's own art still shows a backpack --
-    // a backpack IS a bag, so the simpler word is still an accurate label
-    // for the same object, not a mismatch with the art).
-    id: 'wt-vocab-supplies', kind: 'vocab-spot', bg: bgSupplies,
-    teacher: 'A new part of the room! Tap the arrow to learn a school word.',
-    items: [
-      { label: 'Desk', sentence: 'This is my desk.', emoji: '\u{1F34E}', left: '20%', top: '58%', color: '#F59E0B' },
-      { label: 'Chair', sentence: 'This is my chair.', emoji: '\u{1FA91}', left: '55%', top: '62%', color: '#22C55E' },
-      { label: 'Bag', sentence: 'This is my bag.', emoji: '\u{1F392}', left: '85%', top: '62%', color: '#16A34A' },
-    ],
-  },
-  {
-    // The practice/review step right after, matching the exact Scene →
-    // Discovery → PRACTICE pattern wt-vocab-people/wt-vocab-room already
-    // use — per direct user request for "an exercise for the student to
-    // remember the vocabulary." Target coordinates match wt-vocab-
-    // supplies' own hotspots one-for-one.
-    id: 'wt-drag-supplies', kind: 'drag-match', bg: bgSupplies, teacher: 'Listen, then drag each word onto the matching thing in the room!',
-    items: [
-      { label: 'Desk', color: '#F59E0B', targetLeft: '20%', targetTop: '58%' },
-      { label: 'Chair', color: '#22C55E', targetLeft: '55%', targetTop: '62%' },
-      { label: 'Bag', color: '#16A34A', targetLeft: '85%', targetTop: '62%' },
-    ],
-  },
-
-  {
-    id: 'wt-storybook', kind: 'flipbook', bg: bgWide, title: "Pip's First Day at Welcome Town School",
-    pages: [
-      { img: bgDoor, text: "It is Pip's first day at school. Pip feels a little shy." },
-      { who: 'pip', img: bgDoor, text: 'Pip meets the teacher. "Hello! My name is Pip."' },
-      { who: 'marigold', img: bgCircle, text: '"Hello, Pip! Welcome to our class!"' },
-      { img: bgWide, text: 'Now Pip is not shy anymore. Pip has new friends! ✨' },
-    ],
-    checkpoints: [
-      { afterPage: 0, who: 'pip', question: 'How does Pip feel at first?', options: ['Happy', 'Shy', 'Angry'], answer: 'Shy' },
-      { afterPage: 2, who: 'marigold', question: 'Who welcomes Pip to the class?', options: ['Miss Marigold', 'Mia', 'Bella'], answer: 'Miss Marigold' },
-    ],
-  },
-
-  /* =========================== Part 2: Reading Review =========================
-   * A1 per reading-engine's own progression table assumes Pre-A1's letter-
-   * sound discovery is already done — this is framed as REVIEW-through-
-   * reading ("remember this sound? now read it in a word"), not first-time
-   * discovery, and spends more of its time on actual decoding (two real
-   * words: SAT and AT) than on re-teaching individual sounds. See
-   * .agents/skills/reading-engine/SKILL.md. */
-
-  {
-    // A natural pause point for a young A1 learner — the lesson runs
-    // ~28-32 minutes end to end with no other seam this clean to split on.
-    // Reuses the title-card scene kind (title + subtitle + CTA over a full-
-    // bleed bg) rather than a new scene kind, since a break screen is
-    // structurally identical to a section title — just break-themed copy.
-    id: 'wt-break', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Break Time', title: 'Great Job!', subtitle: 'Stretch, get some water, then come back for Part 2!', cta: '\u{1F938} I’m Ready!',
-  },
-
-  { id: 'wt-part2-title', kind: 'title-card', bg: bgReading, level: 'A1', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time!', subtitle: 'Remember your sounds — then read two real words', cta: '\u{1F4D6} LET’S READ!' },
-
-  {
-    id: 'wt-model-s', kind: 'sound-model', bg: bgReading, who: 'marigold', letter: 'S', phoneme: '/s/', sound: 'sss',
-    teacher: "Remember this sound? /s/ /s/ Snake!",
-    anchors: [
-      { word: 'sun', emoji: '\u{2600}️' },
-      { word: 'sock', emoji: '\u{1F9E6}' },
-      { word: 'snake', emoji: '\u{1F40D}' },
-    ],
-  },
-  { id: 'wt-trace-s', kind: 'trace', bg: bgReading, who: 'marigold', letter: 'S', phoneme: '/s/', word: 'sun', teacher: 'Trace the letter S! Say /s/ /s/ /s/ as you draw.' },
-
-  {
-    id: 'wt-model-a', kind: 'sound-model', bg: bgReading, who: 'pip', letter: 'A', phoneme: '/æ/', sound: 'aaa',
-    teacher: "Remember this sound? /a/ /a/ Apple!",
-    anchors: [
-      { word: 'apple', emoji: '\u{1F34E}' },
-      { word: 'ant', emoji: '\u{1F41C}' },
-      { word: 'alligator', emoji: '\u{1F40A}' },
-    ],
-  },
-  { id: 'wt-trace-a', kind: 'trace', bg: bgReading, who: 'pip', letter: 'A', phoneme: '/æ/', word: 'apple', teacher: 'Trace the letter A! Say /a/ /a/ /a/ as you draw.' },
-
-  {
-    id: 'wt-model-t', kind: 'sound-model', bg: bgReading, who: 'marigold', letter: 'T', phoneme: '/t/', sound: 'tuh',
-    teacher: "Remember this sound? /t/ /t/ Top!",
-    anchors: [
-      { word: 'top', emoji: '\u{1F3A9}' },
-      { word: 'ten', emoji: '\u{1F51F}' },
-      { word: 'tiger', emoji: '\u{1F42F}' },
-    ],
-  },
-  { id: 'wt-trace-t', kind: 'trace', bg: bgReading, who: 'marigold', letter: 'T', phoneme: '/t/', word: 'top', teacher: 'Trace the letter T! Say /t/ /t/ /t/ as you draw.' },
-
-  {
-    id: 'wt-word-build-sat', kind: 'word-build', bg: bgReading, teacher: 'You know all 3 sounds! Now read two real words: SAT and AT!',
+    id: 'wt-letter-hunt', kind: 'letter-game', bg: bgL1Reading, who: 'marigold', mode: 'name',
+    teacher: 'Alphabet game! Find the letter you hear.',
     rounds: [
-      { word: 'SAT', blankIndex: 0, answer: 'S', choices: ['S', 'M', 'B'], emoji: '\u{1FA91}' },
-      { word: 'SAT', blankIndex: 2, answer: 'T', choices: ['T', 'P', 'N'], emoji: '\u{1FA91}' },
-      { word: 'AT', blankIndex: 0, answer: 'A', choices: ['A', 'I', 'O'], emoji: '\u{1F4CD}' },
+      { letter: 'P', choices: ['P', 'B', 'D'] },
+      { letter: 'B', choices: ['D', 'B', 'P'] },
+      { letter: 'L', choices: ['I', 'T', 'L'] },
     ],
   },
-
-  /* ===================== End-of-lesson review games =====================
-   * Three retrieval-practice mini-games reviewing this lesson's own S/A/T
-   * sounds and classmates — no new vocabulary, per playground-curriculum-
-   * engine's spiral-review principle (this is consolidation, not a new
-   * teaching beat), right before the finale. */
-
   {
-    id: 'wt-letter-hunt', kind: 'letter-game', bg: bgReading, who: 'pip', mode: 'name',
-    teacher: 'Alphabet game! Find the letter I say.',
+    id: 'wt-name-badge', kind: 'name-badge', bg: bgL1Party, who: 'marigold',
+    teacher: 'Listen to the letters. Tap them in order!',
     rounds: [
-      { letter: 'S', choices: ['S', 'H', 'E'] },
-      { letter: 'A', choices: ['A', 'O', 'U'] },
-      { letter: 'T', choices: ['T', 'L', 'F'] },
+      { name: 'Pip', sprite: spr('pip'), choices: ['A', 'P', 'T', 'I'] },
+      { name: 'Mia', sprite: spr('mia'), choices: ['N', 'A', 'M', 'I'] },
+      { name: 'Leo', sprite: spr('leo'), choices: ['O', 'L', 'A', 'E'] },
     ],
   },
+
+  /* ---- Phonics micro-moment: s-a-t ---- */
   {
-    id: 'wt-sound-hunt', kind: 'letter-game', bg: bgReading, who: 'marigold', mode: 'sound',
+    id: 'wt-sound-hunt', kind: 'letter-game', bg: bgL1Reading, who: 'marigold', mode: 'sound',
     teacher: 'Sound game! Listen, then tap the letter that makes that sound.',
     rounds: [
       { letter: 'S', phoneme: '/s/', choices: ['S', 'M', 'B'] },
-      { letter: 'A', phoneme: '/æ/', choices: ['A', 'I', 'O'] },
-      { letter: 'T', phoneme: '/t/', choices: ['T', 'D', 'P'] },
+      { letter: 'A', phoneme: '/æ/', choices: ['O', 'A', 'I'] },
+      { letter: 'T', phoneme: '/t/', choices: ['D', 'P', 'T'] },
     ],
   },
   {
-    id: 'wt-class-puzzle', kind: 'jigsaw-puzzle', bg: bgWide, teacher: 'Puzzle game! Drag the pieces to put the class picture back together!',
-    image: bgWide, rows: 2, cols: 3,
-  },
-
-  {
-    // Moved to the very end of the lesson (was right after the storybook,
-    // mid-Part-1) — "goodbye" now plays as the actual closing beat, right
-    // before the finale screen, instead of a mid-lesson song ahead of Part
-    // 2's phonics content.
-    id: 'wt-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
-    durationSeconds: 20, bigWord: 'Goodbye',
-    songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
-    lineDurationsMs: [3600, 4120, 4020, 8322],
-    lyrics: [
-      { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
-      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },
-      { who: 'marigold', text: '\u{1F3EB} Welcome Town School is happy today' },
-      { who: 'pip', text: '\u{1F496} Byeeee, friends! See you soon!' },
+    id: 'wt-word-build-sat', kind: 'word-build', bg: bgL1Reading, teacher: 'Find the missing sound. Then read the word: sat!',
+    rounds: [
+      { word: 'sat', blankIndex: 0, answer: 's', choices: ['s', 'm', 't'], emoji: '\u{1FA91}' },
+      { word: 'sat', blankIndex: 2, answer: 't', choices: ['p', 't', 'n'], emoji: '\u{1FA91}' },
     ],
   },
 
-  { id: 'wt-finale', kind: 'finale', bg: bgWide, who: 'pip', line: 'You said hello, met your new class, and read two real words — SAT and AT! ✨\u{1F3C6}' },
+  /* ---- Review ---- */
+  {
+    id: 'wt-memory-words', kind: 'memory', bg: bgL1Circle, teacher: 'Find the pairs! Say each word when you see it.',
+    pairs: [
+      { id: 'hello', label: 'Hello', emoji: '\u{1F64B}' },
+      { id: 'goodbye', label: 'Goodbye', emoji: '\u{1F6AA}' },
+      { id: 'name', label: 'Name', emoji: '\u{1F3F7}\u{FE0F}' },
+      { id: 'party', label: 'Party', emoji: '\u{1F389}' },
+    ],
+  },
+
+  /* ---- Goodbye (this lesson's own ending) ---- */
+  { id: 'wt-goodbye-class', kind: 'meet', bg: bgL1Goodbye, who: 'marigold', cardSide: 'left', teacher: 'Time to go! Wave and say goodbye to Miss Marigold.', line: 'Goodbye, everyone! Bye-bye!', repeat: 'Goodbye!' },
+
+  { id: 'wt-finale', kind: 'finale', bg: bgL1Class, who: 'pip', line: 'You said hello, asked names, and made your own name badge! Bye-bye!' },
 ];
 
 /* =============================================================================
