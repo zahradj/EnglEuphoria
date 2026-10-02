@@ -1566,6 +1566,36 @@
     "exists": true
   },
   {
+    "character": "teacher",
+    "text": "toys",
+    "file": "e3201fba.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "food",
+    "file": "86a98113.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "animals",
+    "file": "4c980f94.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "things",
+    "file": "67862bfe.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "mouse.",
+    "file": "4ed58740.mp3",
+    "exists": true
+  },
+  {
     "character": "pip",
     "text": "Hi, hi, hi! I am Pip!",
     "file": "bc72855d.mp3",
@@ -1653,12 +1683,6 @@
     "character": "mia",
     "text": "Milk",
     "file": "b31c0660.mp3",
-    "exists": true
-  },
-  {
-    "character": "teacher",
-    "text": "mouse.",
-    "file": "4ed58740.mp3",
     "exists": true
   },
   {
