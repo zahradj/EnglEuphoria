@@ -33,7 +33,12 @@ async function run(batch) {
   const res = await fetch(FN, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', apikey: ANON, Authorization: `Bearer ${ANON}` },
-    body: JSON.stringify({ token: TOKEN, files: batch }),
+    // Audio goes inline from the checkout, so clips not deployed yet work too.
+    body: JSON.stringify({
+      token: TOKEN,
+      files: batch,
+      audio: Object.fromEntries(batch.map((f) => [f, fs.readFileSync(`public/audio-cache/${f}`).toString('base64')])),
+    }),
   });
   if (!res.ok) throw new Error(`voice-audit ${res.status}: ${await res.text()}`);
   return (await res.json()).results ?? [];
