@@ -82,7 +82,12 @@ serve(async (req) => {
       },
       headers: internalAuthHeaders(),
     });
-    if (mailErr) throw mailErr;
+    if (mailErr) {
+      // supabase-js hides the real reason behind a generic message; read the response body.
+      let detail = mailErr.message;
+      try { detail = (await (mailErr as { context?: Response }).context?.text()) ?? detail; } catch { /* keep generic message */ }
+      throw new Error(`email send failed: ${detail}`);
+    }
 
     // Only mark as alerted once the email was accepted, so a failed send retries next run.
     const { error: markErr } = await supabase
