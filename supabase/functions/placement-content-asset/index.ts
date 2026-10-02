@@ -7,6 +7,7 @@
 // Admin or content_creator only.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { approvedVoiceId, languageLock, normalizeForSpeech, safeVoiceSettings } from "../_shared/speechPolicy.ts";
 import { generateGoogleImage, GoogleImageError } from "../_shared/googleImageClient.ts";
 
 const corsHeaders = {
@@ -148,13 +149,13 @@ Deno.serve(async (req) => {
           status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const text = (body.text || "").trim();
+      const text = normalizeForSpeech((body.text || "").trim());
       if (!text) {
         return new Response(JSON.stringify({ error: "text required" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const voiceId = (body.voiceId || "kPtEHAvRnjUJFv7SK9WI").trim();
+      const voiceId = approvedVoiceId((body.voiceId || "kPtEHAvRnjUJFv7SK9WI").trim());
       await ensureBucket(admin, AUDIO_BUCKET);
       const r = await fetch(
         `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`,
@@ -164,13 +165,14 @@ Deno.serve(async (req) => {
           body: JSON.stringify({
             text,
             model_id: "eleven_turbo_v2_5",
-            voice_settings: {
+            ...languageLock("eleven_turbo_v2_5"),
+            voice_settings: safeVoiceSettings({
               stability: 0.3,
               similarity_boost: 0.85,
               style: 0.8,
               use_speaker_boost: true,
               speed: 1.0,
-            },
+            }),
           }),
         },
       );

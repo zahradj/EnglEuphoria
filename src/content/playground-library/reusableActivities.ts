@@ -124,4 +124,22 @@ export const REUSABLE_ACTIVITIES: ReusableActivity[] = [
       rounds: [{ blocks: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('') }],
     },
   },
+  {
+    kind: 'whats-missing',
+    name: "Magic Show (What's missing?)",
+    file: 'src/content/playground-library/WhatsMissingScene.tsx',
+    purpose: 'Vocabulary + memory: say the words, remember 3-6 pictures, then spot the one that vanished.',
+    howItWorks:
+      "A magician's stage shows the pictures. Round 1 says every word aloud (model first); the student presses Hide, the curtains "
+      + "close, one picture vanishes in a puff of stars and the curtains open. The student taps the missing one. A right pick brings it back "
+      + "and says the word; a wrong pick wobbles (no hearts) and after two the right one glows. Fully synced; safe on the student mirror.",
+    example: {
+      id: 'u1-magic-show',
+      kind: 'whats-missing',
+      teacher: 'Say the words with the student, press Hide, then let them find what is missing.',
+      rounds: [
+        { items: [{ word: 'ball', img: '<picture import>' }, { word: 'teddy', img: '<picture import>' }, { word: 'doll', img: '<picture import>' }], missing: 1 },
+      ],
+    },
+  },
 ];

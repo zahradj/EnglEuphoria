@@ -36,6 +36,9 @@ export const WELCOME_TOWN_FAMILY_FORMATS = new Set([
   'wt-a2-rich',
   'jungle-rich',
   'castle-rich',
+  // Playground GAMES opened from the classroom Lesson Library (see gameLessons.ts).
+  // Not in SCENE_LESSON_FORMATS on purpose: that set is for curriculum_lessons DB rows.
+  'game-rich',
 ]);
 
 export function isWelcomeTownFamilyFormat(contentFormat: string | null | undefined): boolean {

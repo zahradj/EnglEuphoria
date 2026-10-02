@@ -2,6 +2,7 @@ import type { SpinWheelSceneData } from '../SpinWheelScene';
 import type { PictureMatchSceneData } from '../PictureMatchScene';
 import type { FirstSoundSceneData } from '../FirstSoundScene';
 import type { LetterMatchSceneData, LetterBlocksSceneData } from '../LetterTilesScene';
+import type { WhatsMissingSceneData } from '../WhatsMissingScene';
 /* =============================================================================
  * Welcome Town — A1 Unit 1 Lesson 1: "Hello, Class!"
  *
@@ -149,6 +150,7 @@ export type Scene =
   | FirstSoundSceneData
   | LetterMatchSceneData
   | LetterBlocksSceneData
+  | WhatsMissingSceneData
   /** `look: 'card'` — calm cream-card styling (Magic Castle Lesson 2) instead
    *  of the big hopping 3D title; same content, same behaviour. */
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string; cta?: string; look?: 'card' }
@@ -157,7 +159,7 @@ export type Scene =
   // side of the full-bleed `bg` was left empty for them (the character is
   // composed into the opposite side) instead of floating centered over the
   // character's face — omit for the default centered layout.
-  | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string; cardSide?: 'left' | 'right' }
+  | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string; cardSide?: 'left' | 'right'; /** Dialogue-plate look: 'chalk' for classroom scenes, default 'paper'. */ look?: 'paper' | 'chalk' }
   | {
       id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string;
       /** Which side of the frame is empty enough for the big bare word —
@@ -456,7 +458,11 @@ const PARTY_DOOR = { left: 21.4, top: 17, width: 19.8, height: 63 };
 export const LESSON_1_TITLE = 'Hello, My Name Is…';
 export const LESSON_1_OBJECTIVE = "Say hello and goodbye, ask \"What's your name?\", answer \"My name's… / I'm…\", and spell your name.";
 
-export const LESSON_1_SCENES: Scene[] = [
+/** Welcome Town School is all set in the classroom, so its characters speak on the chalkboard plate. */
+const classroomLook = (scenes: Scene[]): Scene[] =>
+  scenes.map((sc) => (sc.kind === 'meet' && !sc.look ? { ...sc, look: 'chalk' as const } : sc));
+
+export const LESSON_1_SCENES: Scene[] = classroomLook([
   { id: 'wt-title', kind: 'title-card', bg: bgL1Class, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 1', title: 'Hello, My Name Is…', subtitle: 'Say hello, ask a name, and spell your name', cta: '\u{1F44B} LET’S GO!' },
 
   {
@@ -614,7 +620,7 @@ export const LESSON_1_SCENES: Scene[] = [
   { id: 'wt-goodbye-class', kind: 'meet', bg: bgL1Goodbye, who: 'marigold', cardSide: 'left', teacher: 'Time to go! Wave and say goodbye to Miss Marigold.', line: 'Goodbye, everyone! Bye-bye!', repeat: 'Goodbye!' },
 
   { id: 'wt-finale', kind: 'finale', bg: bgL1Class, who: 'pip', line: 'You said hello, asked names, and made your own name badge! Bye-bye!' },
-];
+]);
 
 /* =============================================================================
  * A1 Unit 1, Lesson 2: "How Are You?"
@@ -660,7 +666,7 @@ const bgPrepOnW = `${W}/scenes/bg-prep-on-wide.png`;
 const bgPrepNextToW = `${W}/scenes/bg-prep-next-to-wide.png`;
 const bgExpressGoodbyeW = `${W}/scenes/bg-express-goodbye-wide.png`;
 
-export const LESSON_2_SCENES: Scene[] = [
+export const LESSON_2_SCENES: Scene[] = classroomLook([
   { id: 'wt2-title', kind: 'title-card', bg: bgWideW, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'How Are You?', subtitle: 'Say hello, then share how you feel today', cta: '\u{1F392} LET’S GO!' },
 
   {
@@ -1053,7 +1059,7 @@ export const LESSON_2_SCENES: Scene[] = [
   },
 
   { id: 'wt2-finale', kind: 'finale', bg: bgWideW, who: 'pip', line: 'You said how you feel, and read three more real words — SIT, PIN, and PIP! ✨\u{1F3C6}' },
-];
+]);
 
 /* =============================================================================
  * A1 Unit 1, Lesson 3: "Listen & Greet!"
@@ -1094,7 +1100,7 @@ export const LESSON_2_SCENES: Scene[] = [
 export const LESSON_3_TITLE = 'Listen & Greet!';
 export const LESSON_3_OBJECTIVE = 'Listen carefully to short greetings and introductions from Welcome Town School and show you understand — a listening review of everything from Lessons 1 and 2, no new words.';
 
-export const LESSON_3_SCENES: Scene[] = [
+export const LESSON_3_SCENES: Scene[] = classroomLook([
   { id: 'wt3-title', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 3', title: 'Listen & Greet!', subtitle: 'Put on your listening ears!', cta: '👂 LET’S LISTEN!' },
 
   {
@@ -1266,7 +1272,7 @@ export const LESSON_3_SCENES: Scene[] = [
   },
 
   { id: 'wt3-finale', kind: 'finale', bg: bgWide, who: 'pip', line: 'You listened carefully to hello, names, ages, feelings, friends, and your teacher — great job! ✨👂' },
-];
+]);
 
 /* =============================================================================
  * A1 Unit 1, Lesson 4: "Speak & Meet!"
@@ -1315,7 +1321,7 @@ export const LESSON_3_SCENES: Scene[] = [
 export const LESSON_4_TITLE = 'Speak & Meet!';
 export const LESSON_4_OBJECTIVE = 'Part 1: Greet a partner and introduce yourself AND a friend, combining everything from Lessons 1-3 into one real conversation. Part 2: Learn the sound F and read three more real words.';
 
-export const LESSON_4_SCENES: Scene[] = [
+export const LESSON_4_SCENES: Scene[] = classroomLook([
   { id: 'wt4-title', kind: 'title-card', bg: bgWideV2, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 4', title: 'Speak & Meet!', subtitle: 'Say hello and meet a new friend!', cta: '🗣️ LET’S TALK!' },
 
   {
@@ -1470,4 +1476,4 @@ export const LESSON_4_SCENES: Scene[] = [
   },
 
   { id: 'wt4-finale', kind: 'finale', bg: bgWideV2, who: 'pip', line: 'You met a partner, had a real conversation, and learned a new sound — F is for friend, and F is for Fox, just like me! ✨🗣️' },
-];
+]);

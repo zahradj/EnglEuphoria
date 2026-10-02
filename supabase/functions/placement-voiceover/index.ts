@@ -7,6 +7,7 @@
 // Response : { url: string, cached: boolean }
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { approvedVoiceId, languageLock, normalizeForSpeech, safeVoiceSettings } from "../_shared/speechPolicy.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -46,7 +47,8 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { text, voiceId } = (await req.json()) as { text?: string; voiceId?: string };
+    const { text: rawText, voiceId } = (await req.json()) as { text?: string; voiceId?: string };
+    const text = typeof rawText === "string" ? normalizeForSpeech(rawText) : rawText;
     if (!text || !text.trim()) {
       return new Response(JSON.stringify({ error: "text is required" }), {
         status: 400,
@@ -54,7 +56,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const voice = (voiceId || DEFAULT_VOICE_ID).trim();
+    const voice = approvedVoiceId((voiceId || DEFAULT_VOICE_ID).trim());
     const admin = createClient(SUPABASE_URL, SERVICE_KEY);
     await ensureBucket(admin);
 
@@ -84,13 +86,14 @@ Deno.serve(async (req) => {
         body: JSON.stringify({
           text,
           model_id: "eleven_turbo_v2_5",
-          voice_settings: {
+          ...languageLock("eleven_turbo_v2_5"),
+          voice_settings: safeVoiceSettings({
             stability: 0.3,
             similarity_boost: 0.85,
             style: 0.8,
             use_speaker_boost: true,
             speed: 1.0,
-          },
+          }),
         }),
       },
     );

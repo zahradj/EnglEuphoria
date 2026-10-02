@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { WhiteboardStroke } from '@/services/whiteboardService';
+import { isActivityTarget } from '@/lib/penPassThrough';
 
 type ToolKind =
   | 'pen'
@@ -24,6 +25,12 @@ interface CollaborativeCanvasProps {
   strokes: WhiteboardStroke[];
   onAddStroke: (stroke: Omit<WhiteboardStroke, 'id' | 'roomId' | 'timestamp'>) => void;
   slideImageUrl?: string;
+  /**
+   * Student "smart pen": the layer is click-through, and a touch only starts a stroke when it
+   * lands on empty space — a touch on a game piece goes to the game. The host element (the
+   * stage the layer sits in) listens instead of this canvas. Teacher / web-page modes leave it off.
+   */
+  smartPen?: boolean;
 }
 
 const SHAPE_TOOLS: ToolKind[] = ['rect', 'circle', 'arrow', 'line'];
@@ -39,12 +46,16 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
   activeColor,
   strokes,
   onAddStroke,
+  smartPen = false,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentPoints, setCurrentPoints] = useState<Array<{ x: number; y: number }>>([]);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
   const startPointRef = useRef<{ x: number; y: number } | null>(null);
+  // Synchronous mirrors of the drawing state: fast pointer events can arrive before React re-renders.
+  const isDrawingRef = useRef(false);
+  const pointsRef = useRef<Array<{ x: number; y: number }>>([]);
 
   const drawArrowHead = (
     ctx: CanvasRenderingContext2D,
@@ -156,7 +167,8 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
     redrawAll();
   }, [redrawAll]);
 
-  const getCanvasPoint = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+  type PointerLike = React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement> | { clientX: number; clientY: number };
+  const getCanvasPoint = (e: PointerLike) => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
     const rect = canvas.getBoundingClientRect();
@@ -166,7 +178,8 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
       const touch = e.touches[0];
       return { x: (touch.clientX - rect.left) * scaleX, y: (touch.clientY - rect.top) * scaleY };
     }
-    return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+    const c = e as { clientX: number; clientY: number };
+    return { x: (c.clientX - rect.left) * scaleX, y: (c.clientY - rect.top) * scaleY };
   };
 
   const commitStroke = (
@@ -192,7 +205,7 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
   };
 
   const startDrawing = useCallback(
-    (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    (e: PointerLike) => {
       if (!canDraw || activeTool === 'pointer' || activeTool === 'laser') return;
       const point = getCanvasPoint(e);
       if (!point) return;
@@ -206,6 +219,8 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
       }
 
       setIsDrawing(true);
+      isDrawingRef.current = true;
+      pointsRef.current = [point];
       startPointRef.current = point;
       setCurrentPoints([point]);
       lastPointRef.current = point;
@@ -214,8 +229,8 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
   );
 
   const draw = useCallback(
-    (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-      if (!isDrawing || !canDraw) return;
+    (e: PointerLike) => {
+      if (!(isDrawing || isDrawingRef.current) || !canDraw) return;
       const point = getCanvasPoint(e);
       if (!point) return;
       const canvas = canvasRef.current;
@@ -271,6 +286,7 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
         ctx.stroke();
         ctx.restore();
       }
+      pointsRef.current = [...pointsRef.current, point];
       setCurrentPoints((prev) => [...prev, point]);
       lastPointRef.current = point;
     },
@@ -278,7 +294,8 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
   );
 
   const stopDrawing = useCallback(() => {
-    if (!isDrawing) return;
+    if (!(isDrawing || isDrawingRef.current)) return;
+    isDrawingRef.current = false;
 
     if (isShape(activeTool) && startPointRef.current && lastPointRef.current) {
       const s0 = startPointRef.current, s1 = lastPointRef.current;
@@ -295,7 +312,9 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
       return;
     }
 
-    if (currentPoints.length < 2) {
+    const finalPoints = pointsRef.current.length >= currentPoints.length ? pointsRef.current : currentPoints;
+    pointsRef.current = [];
+    if (finalPoints.length < 2) {
       setIsDrawing(false);
       setCurrentPoints([]);
       lastPointRef.current = null;
@@ -304,13 +323,71 @@ export const CollaborativeCanvas: React.FC<CollaborativeCanvasProps> = ({
     }
 
     const tool = activeTool === 'eraser' ? 'eraser' : activeTool === 'highlighter' ? 'highlighter' : 'pen';
-    commitStroke(tool, currentPoints);
+    commitStroke(tool, finalPoints);
 
     setIsDrawing(false);
     setCurrentPoints([]);
     lastPointRef.current = null;
     startPointRef.current = null;
   }, [isDrawing, currentPoints, activeTool, activeColor, redrawAll]);
+
+  // Student smart pen. Always point at the latest handlers (they close over fresh state each render).
+  const handlersRef = useRef({ startDrawing, draw, stopDrawing });
+  handlersRef.current = { startDrawing, draw, stopDrawing };
+
+  useEffect(() => {
+    if (!smartPen || !canDraw || activeTool === 'pointer' || activeTool === 'laser') return;
+    const host = canvasRef.current?.parentElement?.parentElement; // canvas → pen layer → stage
+    if (!host) return;
+
+    let activePointer: number | null = null;
+    let moved = false;
+
+    const onDown = (e: PointerEvent) => {
+      if (activePointer !== null) return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      // A game piece under the finger gets the touch; only empty space draws.
+      if (isActivityTarget(e.target, host)) return;
+      activePointer = e.pointerId;
+      moved = false;
+      handlersRef.current.startDrawing(e);
+      e.preventDefault();
+      e.stopPropagation();
+    };
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerId !== activePointer) return;
+      moved = true;
+      e.preventDefault();
+      handlersRef.current.draw(e);
+    };
+    const onUp = (e: PointerEvent) => {
+      if (e.pointerId !== activePointer) return;
+      activePointer = null;
+      handlersRef.current.stopDrawing();
+      if (moved) {
+        // The browser still sends a click after a drag; don't let it "tap" whatever the stroke ended on.
+        const swallow = (ev: Event) => ev.stopPropagation();
+        host.addEventListener('click', swallow, true);
+        window.setTimeout(() => host.removeEventListener('click', swallow, true), 400);
+      }
+    };
+
+    host.addEventListener('pointerdown', onDown, true);
+    window.addEventListener('pointermove', onMove, { passive: false });
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
+    // Without this a finger-drag on empty space scrolls/pans instead of drawing.
+    const previousTouchAction = host.style.touchAction;
+    host.style.touchAction = 'none';
+
+    return () => {
+      host.removeEventListener('pointerdown', onDown, true);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+      host.style.touchAction = previousTouchAction || '';
+    };
+  }, [smartPen, canDraw, activeTool]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

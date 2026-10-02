@@ -49,7 +49,12 @@ export const TransparentCanvas: React.FC<TransparentCanvasProps> = ({
   // draw for a watching (locked) student, and picking up a pen had to unlock
   // the student as a side effect.
   const canDrawHere = activeTool !== 'pointer' && (role === 'teacher' || drawingEnabled);
-  const passThrough = !canDrawHere || studentBypassForIframe;
+  // Student "smart pen": the layer is always click-through, and the canvas decides per touch —
+  // a game piece under the finger gets the touch (so the student can still drag / match / tap
+  // with the pen on), empty space draws. Web-page mode keeps the old full-capture layer,
+  // because touches inside an embedded page never reach this document.
+  const smartPen = role === 'student' && mode !== 'web';
+  const passThrough = !canDrawHere || studentBypassForIframe || smartPen;
 
   return (
     <div
@@ -66,6 +71,7 @@ export const TransparentCanvas: React.FC<TransparentCanvasProps> = ({
         activeColor={activeColor}
         strokes={strokes}
         onAddStroke={onAddStroke}
+        smartPen={smartPen}
       />
     </div>
   );

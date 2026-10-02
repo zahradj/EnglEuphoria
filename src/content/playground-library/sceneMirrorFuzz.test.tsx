@@ -27,10 +27,15 @@ import * as wt from './welcome-town/scenes';
 import * as wtA2 from './welcome-town-a2/scenes';
 import * as castle from './magic-castle/scenes';
 import * as jungle from './jungle-adventure/scenes';
+import { LIBRARY_GAMES } from './gamesCatalog';
+import { gameToScenes } from './gameLessons';
 
 type AnyScene = { id: string; kind: string };
 const lessonsOf = (mod: Record<string, unknown>) =>
   Object.entries(mod).filter(([k, v]) => /^LESSON_.*_SCENES$/.test(k) && Array.isArray(v)) as [string, AnyScene[]][];
+
+// Playground GAMES run in the classroom through the same scene players, so they get the same guarantee.
+const gameLessons = LIBRARY_GAMES.map((g) => [`GAME_${g.id}`, gameToScenes(g) as unknown as AnyScene[]] as [string, AnyScene[]]);
 
 const ENGINES: { name: string; Renderer: ComponentType<any>; lessons: [string, AnyScene[]][] }[] = [
   { name: 'unit1 (Pre-A1)', Renderer: Unit1Renderer, lessons: lessonsOf(unit1) },
@@ -38,6 +43,8 @@ const ENGINES: { name: string; Renderer: ComponentType<any>; lessons: [string, A
   { name: 'welcome-town-a2 (A2)', Renderer: WtRenderer, lessons: lessonsOf(wtA2) },
   { name: 'magic-castle (A1 U9)', Renderer: WtRenderer, lessons: lessonsOf(castle) },
   { name: 'jungle (A1 U2)', Renderer: WtRenderer, lessons: lessonsOf(jungle) },
+  { name: 'games in the classroom library (Welcome Town player)', Renderer: WtRenderer, lessons: gameLessons },
+  { name: 'games in the classroom library (Pre-A1 player)', Renderer: Unit1Renderer, lessons: gameLessons },
 ];
 
 /** What a student's mirror can be handed that is NOT the scene's own state:

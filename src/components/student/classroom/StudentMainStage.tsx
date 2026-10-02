@@ -276,22 +276,6 @@ export const StudentMainStage: React.FC<StudentMainStageProps> = ({
         onAddStroke={onAddStroke}
       />
 
-      {/* Pen mode is always visible, with a big way back to playing. */}
-      {penActive && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-4 z-[70] flex justify-center px-3">
-          <button
-            type="button"
-            data-student-dock
-            onClick={() => setStudentTool('pointer')}
-            className="pointer-events-auto flex items-center gap-2 rounded-full bg-amber-400 px-4 py-2 text-sm font-extrabold text-slate-900 shadow-xl ring-2 ring-white transition hover:scale-105 active:scale-95"
-            aria-label="Drawing is on. Tap to go back to playing"
-          >
-            <span aria-hidden>✏️</span> Drawing is on
-            <span className="rounded-full bg-white/80 px-2.5 py-0.5">👆 Tap to play</span>
-          </button>
-        </div>
-      )}
-
       <div data-student-dock>
         <StudentMiniDock
           drawingEnabled={canStudentDraw}

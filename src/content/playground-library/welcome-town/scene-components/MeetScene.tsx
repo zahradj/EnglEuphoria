@@ -1,4 +1,5 @@
-import { ChatCloud } from '../../ChatCloud';
+import { useState } from 'react';
+import { DialoguePlate, plateFontSize } from '../../DialoguePlate';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
 import { safeSpeak } from '../../unit1/audio';
@@ -13,12 +14,18 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
   const [state, setState] = useSyncedState(sync, { phase: 'idle' as Phase, xpBurst: false, glow: false });
   const { phase, xpBurst, glow } = state;
   const c = CAST[scene.who];
+  // Local on purpose (not synced): each screen shows its own equalizer while its own voice plays.
+  const [speaking, setSpeaking] = useState(false);
+  const speakLine = async () => {
+    setSpeaking(true);
+    try { await safeSpeak(scene.line, voiceOf(scene.who)); } finally { setSpeaking(false); }
+  };
 
   const tapCharacter = async () => {
     if (phase !== 'idle') return;
     sfx.pop();
     setState((s) => ({ ...s, glow: true, phase: 'talking' }));
-    await safeSpeak(scene.line, voiceOf(scene.who));
+    await speakLine();
     setTimeout(() => setState((s) => ({ ...s, phase: 'repeat' })), 500);
     setTimeout(() => setState((s) => ({ ...s, glow: false })), 1600);
   };
@@ -32,7 +39,7 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
     const completing = phase === 'repeat';
     setState((s) => ({ ...s, glow: true, ...(completing ? { phase: 'done', xpBurst: true } : {}) }));
     if (completing) { sfx.gem(); onWin(true); setTimeout(() => setState((s) => ({ ...s, xpBurst: false })), 1200); }
-    await safeSpeak(scene.line, voiceOf(scene.who));
+    await speakLine();
     setTimeout(() => setState((s) => ({ ...s, glow: false })), 1200);
   };
 
@@ -44,34 +51,21 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
   const cardAlignClass = scene.cardSide === 'left' ? 'mr-auto ml-2 sm:ml-8'
     : scene.cardSide === 'right' ? 'ml-auto mr-2 sm:mr-8'
     : 'mx-auto';
-  // Chat cloud beside the character, puffs pointing at them.
-  const cloudPosClass = scene.cardSide === 'left' ? 'left-[5%]'
-    : scene.cardSide === 'right' ? 'right-[5%]'
-    : 'left-[56%]';
-  const cloudTail: 'left' | 'right' = scene.cardSide === 'left' ? 'right' : 'left';
   const charJustifyClass = scene.cardSide === 'right' ? 'justify-start pl-6 sm:pl-14'
     : scene.cardSide === 'left' ? 'justify-end pr-6 sm:pr-14'
     : 'justify-center';
-  // The cloud's own art is a fixed-aspect image stretched (object-fit:
-  // fill) to whatever box the text forces — a longer line wrapping to
-  // several lines grows that box tall and narrow, distorting the cloud
-  // shape enough that the text can end up touching the outline. Sized
-  // down for longer lines, same word-count-tiered approach already used
-  // for EchoScene's modeling sentences, so a long line wraps to fewer,
-  // wider lines instead of many narrow ones.
-  const lineWordCount = scene.line.trim().split(/\s+/).length;
-  const cloudFontSize = lineWordCount <= 2 ? 'calc(3.4 * var(--svh, 1vh))'
-    : lineWordCount <= 4 ? 'calc(3 * var(--svh, 1vh))'
-    : 'calc(2.5 * var(--svh, 1vh))';
+  const lineFontSize = plateFontSize(scene.line);
 
   return (
     <div className="relative min-h-[calc(78*var(--svh,1vh))]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center">
+      {/* Quest tag and the teacher's instruction share one column, so a wrapped
+          instruction can never run underneath the tag. */}
+      <div className={`relative z-20 flex max-w-md flex-col items-center gap-2 pt-1 ${cardAlignClass}`}>
+        <div className="pointer-events-none">
         <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: `linear-gradient(90deg, ${c.color}, #FEBE4C)` }}>
-          ⚔️ Quest · Meet {c.name}
+            ⚔️ Quest · Meet {c.name}
+          </div>
         </div>
-      </div>
-      <div className={`mt-8 max-w-md ${cardAlignClass}`}>
         <div className="rounded-2xl px-4 py-3 text-center text-lg font-bold text-white shadow-2xl" style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.35))', backdropFilter: 'blur(8px)', textShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
           {scene.teacher}
         </div>
@@ -102,28 +96,32 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
           <div className="animate-[lep1-pop-fade_1.1s_ease-out_forwards] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 text-2xl font-black text-white shadow-2xl">+10 XP 💎</div>
         </div>
       )}
-      {/* The character's line as a chat cloud beside them — tap it to hear
-          it again, and (per direct request) that same tap is also the
-          student's "turn": the first tap while in 'repeat' completes the
-          scene, no separate hold-to-talk bar needed. Just the one
-          sentence now, not a short repeat-word line above a smaller
-          quoted one — replaces the big white card that used to cover the
-          character. */}
+      {/* The character's line on a dialogue plate along the bottom — tap it to hear it
+          again, and (per direct request) that same tap is also the student's "turn":
+          the first tap while in 'repeat' completes the scene. The Next button
+          lives on the plate once the scene is done. */}
       {phase !== 'idle' && (
-        <div className={`pointer-events-none absolute top-[calc(11*var(--svh,1vh))] z-20 max-w-[52%] ${cloudPosClass}`}>
-          <ChatCloud color={c.color} tail={cloudTail} onClick={tapCloud} ariaLabel={`Hear ${c.name} again`}>
-            <span className="block font-black leading-snug" style={{ fontSize: cloudFontSize }}>🔊 {scene.line}</span>
-          </ChatCloud>
-        </div>
+        <DialoguePlate
+          name={c.name}
+          color={c.color}
+          look={scene.look ?? 'paper'}
+          onTap={tapCloud}
+          speaking={speaking}
+          nudge={phase === 'repeat'}
+          fontSize={lineFontSize}
+          ariaLabel={`Hear ${c.name} again`}
+          action={phase === 'done' ? (
+            <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-[calc(4*var(--svh,1vh))] py-[calc(2*var(--svh,1vh))] text-[calc(2.6*var(--svh,1vh))] font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
+              Next ▶
+            </button>
+          ) : undefined}
+        >
+          {scene.line}
+        </DialoguePlate>
       )}
       {phase === 'idle' && (
         <div className={`pointer-events-none absolute inset-x-0 top-[calc(44*var(--svh,1vh))] z-20 flex ${charJustifyClass}`}>
           <span className="animate-pulse rounded-full bg-white/95 px-5 py-2 text-base font-bold shadow-xl" style={{ color: c.color }}>👆 Tap {c.name} {c.emoji}</span>
-        </div>
-      )}
-      {phase === 'done' && (
-        <div className="absolute inset-x-0 bottom-[calc(1.5*var(--svh,1vh))] z-30 flex justify-center" style={{ animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
-          <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next →</button>
         </div>
       )}
     </div>

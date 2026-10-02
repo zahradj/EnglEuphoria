@@ -34,6 +34,12 @@ reported live, intermittently, from `Cannot read properties of undefined
 
 Adding a new scene kind: create `scene-components/MyScene.tsx` (`export function MyScene`), import it in the hub's `SceneRenderer.tsx`, add the `case`. If another scene needs one of your helpers, move it to `shared.tsx` — never import one scene from another's internals. `classroomHygiene.test.ts` scans every file in these folders.
 
+## Student interaction & the pen (how it works now)
+- **Interaction is ON from "Start Class" to the end.** `TeacherClassroom.handleStartClass` switches on pen + activities; scene changes never re-lock (a source guard in `classroomHygiene.test.ts` enforces this). The dock button reads **Interaction On / Paused** — the teacher's pause stops both the pen and the activities, and the student sees "Your teacher paused this".
+- **Smart pen (student, non-web stages):** the pen layer is click-through. A touch that lands on a game piece goes to the game; a touch on empty space draws. Detection is `src/lib/penPassThrough.ts` — it needs **no per-activity markup**: it reads React's own props (`__reactProps$…`) for click/drag handlers, plus native controls, `draggable`, `data-activity`, and any element that sets `touch-action` (framer-motion / custom drags). Elements covering ≥60% of the stage are treated as backdrops. If a new activity's piece can't be detected, add `data-activity` to it.
+- **Web-page stages** keep the old full-capture pen layer (touches inside an embedded page never reach our document).
+- **Pen auto-return:** `usePenAutoReturn` puts the pen back to the pointer after 8 quiet seconds; the "Pen is on" chip is always visible while it is on.
+
 ## Safety nets already in place (don't remove)
 - `SceneCrashGuard` (inside both players): crash #1 → quiet remount, crash #2 → remount
   in **safe mode** (`activitySync` undefined = no live sync), crash #3 → card with

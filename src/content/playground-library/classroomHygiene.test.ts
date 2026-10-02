@@ -59,7 +59,7 @@ describe('classroom hygiene', () => {
       return guard === -1 || guard > usage;
     });
     expect(unguarded, `Wrap <SceneRenderer> in <SceneCrashGuard>:\n${unguarded.join('\n')}`).toEqual([]);
-  });
+  }, 30_000); // scans every file under src — slow on a busy build machine, so don't rely on the 5s default
 
   it('lesson players keep per-scene activity state in useSceneScopedState, not a reset-in-effect useState', () => {
     const players = ['src/pages/playground-scene/PlayUnitLesson.tsx', 'src/pages/playground-scene/PlayWelcomeTownLesson.tsx'];

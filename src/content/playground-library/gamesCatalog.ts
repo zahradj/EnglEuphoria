@@ -1,5 +1,6 @@
 import type { FirstSoundSceneData } from './FirstSoundScene';
 import type { LetterBlocksSceneData, LetterMatchSceneData } from './LetterTilesScene';
+import type { WhatsMissingItem, WhatsMissingRound, WhatsMissingSceneData } from './WhatsMissingScene';
 
 /**
  * The Playground GAMES catalog. Right now it holds ONE game — the Alphabet
@@ -10,7 +11,7 @@ import type { LetterBlocksSceneData, LetterMatchSceneData } from './LetterTilesS
  *
  * To add another game: add an entry with its own `stages`.
  */
-export type GameScene = FirstSoundSceneData | LetterBlocksSceneData | LetterMatchSceneData;
+export type GameScene = FirstSoundSceneData | LetterBlocksSceneData | LetterMatchSceneData | WhatsMissingSceneData;
 
 export interface GameStage {
   id: string;
@@ -46,6 +47,58 @@ const I = '/lep1/items';
 const A = '/lep1/alphabet';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+/* ------------------------------------------------------------------ Magic Show */
+
+const it = (word: string, file: string): WhatsMissingItem => ({ word, img: `/lep1/items/${file}` });
+
+const TOYS = [it('ball', 'item-ball.png'), it('teddy', 'item-teddy.png'), it('doll', 'item-doll.png'), it('car', 'item-car.png'), it('train', 'item-train.png'), it('blocks', 'item-blocks.png')];
+const FOOD = [it('apple', 'item-apple.png'), it('orange', 'item-orange.png'), it('grapes', 'item-grapes.png'), it('pizza', 'item-pizza.png'), it('popcorn', 'item-popcorn-yellow.png'), it('milk', 'item-milk.png')];
+const ANIMALS = [it('cat', 'item-cat.png'), it('duck', 'item-duck-yellow.png'), it('bear', 'item-bear.png'), it('turtle', 'item-turtle.png'), it('snake', 'item-snake.png'), it('butterfly', 'item-butterfly.png')];
+const THINGS = [it('book', 'item-book.png'), it('hat', 'item-hat.png'), it('bag', 'item-bag.png'), it('ring', 'item-ring.png'), it('rose', 'item-rose.png'), it('tree', 'item-tree.png')];
+
+/** Each trick shows a few pictures from the pool; `miss` is the position (within the shown set) that vanishes.
+ *  The sets grow from 3 to 5 pictures so every stop gets a little harder. */
+function tricks(pool: WhatsMissingItem[], plan: { set: number[]; miss: number }[]): WhatsMissingRound[] {
+  return plan.map((p) => ({ items: p.set.map((i) => pool[i]), missing: p.miss }));
+}
+const PLAN_A = [{ set: [0, 1, 2], miss: 1 }, { set: [3, 4, 5], miss: 0 }, { set: [0, 2, 3, 4], miss: 3 }, { set: [1, 2, 3, 4, 5], miss: 2 }];
+const PLAN_B = [{ set: [0, 1, 2], miss: 2 }, { set: [2, 3, 4], miss: 0 }, { set: [0, 1, 4, 5], miss: 1 }, { set: [0, 1, 2, 3, 5], miss: 4 }];
+
+function magicShow(): LibraryGame {
+  const stop = (id: string, station: string, title: string, blurb: string, pool: WhatsMissingItem[], plan: typeof PLAN_A): GameStage => ({
+    id,
+    station,
+    title,
+    blurb,
+    art: pool[0].img!,
+    units: plan.length,
+    scene: { id: `magic-${id}`, kind: 'whats-missing', teacher: `Say the ${station.toLowerCase()} words together, press Hide, then let the student find what vanished.`, title: station, bg: '/lep1/games/magic-show-cover.jpg', rounds: tricks(pool, plan) },
+  });
+  return {
+    id: 'magic-show',
+    title: 'Magic Show',
+    tagline: "Watch the curtains close. One thing vanishes! Can you remember what's missing?",
+    skill: 'Memory & Vocabulary',
+    levels: ['Pre-A1', 'A1'],
+    minutes: '8–12 min',
+    gradient: 'linear-gradient(135deg,#6D28D9 0%,#C026D3 55%,#F59E0B 100%)',
+    cover: '/lep1/games/magic-show-cover.jpg',
+    art: [`/lep1/items/item-ball.png`, `/lep1/items/item-teddy.png`, `/lep1/items/item-apple.png`, `/lep1/items/item-cat.png`],
+    howToPlay: [
+      'Listen to each word and look at every picture.',
+      'Press "Hide!" and watch the curtains close. One picture vanishes!',
+      'When the curtains open, tap the picture that is missing.',
+      'Finish four tricks at every stop to earn your stars.',
+    ],
+    stages: [
+      stop('toy-box', 'Toy Box', 'Magic Show: Toys', 'Toys on the stage. Which one disappears?', TOYS, PLAN_A),
+      stop('fruit-stand', 'Fruit Stand', 'Magic Show: Food', 'Yummy things on the stage. Which one disappears?', FOOD, PLAN_B),
+      stop('animal-park', 'Animal Park', 'Magic Show: Animals', 'Animal friends on the stage. Which one disappears?', ANIMALS, PLAN_A),
+      stop('treasure-chest', 'Treasure Chest', 'Magic Show: Things', 'Treasures on the stage. Which one disappears?', THINGS, PLAN_B),
+    ],
+  };
+}
 
 export const LIBRARY_GAMES: LibraryGame[] = [
   {
@@ -132,6 +185,7 @@ export const LIBRARY_GAMES: LibraryGame[] = [
       },
     ],
   },
+  magicShow(),
 ];
 
 export function getLibraryGame(id: string | undefined): LibraryGame | undefined {

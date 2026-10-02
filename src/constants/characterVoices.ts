@@ -12,6 +12,7 @@
  * voice, Academy teens with a peer-like voice, etc.
  */
 import type { CharacterHub } from '@/types/character';
+import { voiceStatus } from '@/lib/speechPolicy';
 
 export interface VoiceOption {
   id: string;            // ElevenLabs voice id
@@ -20,7 +21,9 @@ export interface VoiceOption {
   tags: string[];        // Personality keywords used by the auto-picker
 }
 
-export const VOICES_BY_HUB: Record<CharacterHub, VoiceOption[]> = {
+/** Every voice we ever offered. Kept ONLY so characters saved with an older voice still resolve by id.
+ *  Pickers use VOICES_BY_HUB (no accented voices) — product rule: no accent in any voice clip. */
+const ALL_VOICES_BY_HUB: Record<CharacterHub, VoiceOption[]> = {
   playground: [
     { id: 'kPtEHAvRnjUJFv7SK9WI', label: 'Pip the Fox — Playground Mascot', description: 'Curious, cheeky fox cub — the Playground signature voice (matches the placement test)', tags: ['pip','fox','mascot','playground','curious','cheeky','cub','kid','child','animal','friendly','playful'] },
     { id: 'pFZP5JQG7iQjIQuC4Bku', label: 'Lily — Playful Kid', description: 'Bright, energetic, child-friendly cartoon voice', tags: ['playful','energetic','kid','child','girl','silly','funny','happy','bright','cheerful','curious'] },
@@ -48,10 +51,17 @@ export const VOICES_BY_HUB: Record<CharacterHub, VoiceOption[]> = {
   ],
 };
 
+/** What the Cast Vault offers and the auto-picker chooses from: accented voices (British, Australian, Swedish...) are left out. */
+export const VOICES_BY_HUB: Record<CharacterHub, VoiceOption[]> = {
+  playground: ALL_VOICES_BY_HUB.playground.filter((v) => voiceStatus(v.id) !== 'accented'),
+  academy: ALL_VOICES_BY_HUB.academy.filter((v) => voiceStatus(v.id) !== 'accented'),
+  success: ALL_VOICES_BY_HUB.success.filter((v) => voiceStatus(v.id) !== 'accented'),
+};
+
 export function findVoiceById(id: string | null | undefined): VoiceOption | null {
   if (!id) return null;
-  for (const hub of Object.keys(VOICES_BY_HUB) as CharacterHub[]) {
-    const hit = VOICES_BY_HUB[hub].find((v) => v.id === id);
+  for (const hub of Object.keys(ALL_VOICES_BY_HUB) as CharacterHub[]) {
+    const hit = ALL_VOICES_BY_HUB[hub].find((v) => v.id === id);
     if (hit) return hit;
   }
   return null;
