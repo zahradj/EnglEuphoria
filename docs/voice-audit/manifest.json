@@ -1831,28 +1831,28 @@
     "text": "toys",
     "synth": "toys",
     "file": "9f63e193.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "food",
     "synth": "food",
     "file": "ef3ba1ea.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "animals",
     "synth": "animals",
     "file": "635f0197.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "things",
     "synth": "things",
     "file": "1005f2fb.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
@@ -1866,14 +1866,14 @@
     "text": "a ball",
     "synth": "a ball",
     "file": "9f76deb6.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "an apple",
     "synth": "an apple",
     "file": "bfc53f7d.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
@@ -1999,14 +1999,14 @@
     "text": "one cat",
     "synth": "one cat",
     "file": "60932eaa.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "two cats",
     "synth": "two cats",
     "file": "6f757aed.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
@@ -2069,21 +2069,21 @@
     "text": "I am",
     "synth": "I am",
     "file": "8d78f889.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "you are",
     "synth": "you are",
     "file": "11afd217.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
     "text": "she is",
     "synth": "she is",
     "file": "6b493e14.mp3",
-    "exists": false
+    "exists": true
   },
   {
     "character": "teacher",
@@ -2139,6 +2139,230 @@
     "text": "I am six.",
     "synth": "I am six.",
     "file": "63f1d75e.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "I have a ball.",
+    "synth": "I have a ball.",
+    "file": "a11a3356.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "She has a doll.",
+    "synth": "She has a doll.",
+    "file": "de183dc5.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "We have two books.",
+    "synth": "We have two books.",
+    "file": "520be88b.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "He has a car.",
+    "synth": "He has a car.",
+    "file": "9dff6cc5.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "They have three hats.",
+    "synth": "They have three hats.",
+    "file": "32bbad29.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "It has a bag.",
+    "synth": "It has a bag.",
+    "file": "6b5d3d8b.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "You have a teddy.",
+    "synth": "You have a teddy.",
+    "file": "aa96deb1.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "My sister has an apple.",
+    "synth": "My sister has an apple.",
+    "file": "7caa8c80.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "It is a ball.",
+    "synth": "It is a ball.",
+    "file": "dbce6f80.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "They are balls.",
+    "synth": "They are balls.",
+    "file": "10fc6e11.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "They are cats.",
+    "synth": "They are cats.",
+    "file": "632d9b06.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "It is an apple.",
+    "synth": "It is an apple.",
+    "file": "fd6802c1.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "They are ducks.",
+    "synth": "They are ducks.",
+    "file": "c31d52dd.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "It is a book.",
+    "synth": "It is a book.",
+    "file": "abb177a8.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "They are hats.",
+    "synth": "They are hats.",
+    "file": "9cd64d87.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "It is a car.",
+    "synth": "It is a car.",
+    "file": "702743bf.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "They are bears.",
+    "synth": "They are bears.",
+    "file": "b9da25ba.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "I have some balls.",
+    "synth": "I have some balls.",
+    "file": "4afab578.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "I have a cat.",
+    "synth": "I have a cat.",
+    "file": "ada9ce93.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "I have some books.",
+    "synth": "I have some books.",
+    "file": "683f6408.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "I have a hat.",
+    "synth": "I have a hat.",
+    "file": "9e1f40fc.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "I have some ducks.",
+    "synth": "I have some ducks.",
+    "file": "e045d874.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "I have a bag.",
+    "synth": "I have a bag.",
+    "file": "dadb8c55.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "I have some cars.",
+    "synth": "I have some cars.",
+    "file": "75732f87.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Do you like pizza?",
+    "synth": "Do you like pizza?",
+    "file": "13b92537.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Does she like milk?",
+    "synth": "Does she like milk?",
+    "file": "f6a5fc2f.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Do they like apples?",
+    "synth": "Do they like apples?",
+    "file": "9c9a96dd.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Does he like grapes?",
+    "synth": "Does he like grapes?",
+    "file": "62c8c5b5.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Do we like oranges?",
+    "synth": "Do we like oranges?",
+    "file": "ed125003.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Does it like milk?",
+    "synth": "Does it like milk?",
+    "file": "cfba158a.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Do I like popcorn?",
+    "synth": "Do I like popcorn?",
+    "file": "73f4cc06.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Does your sister like pizza?",
+    "synth": "Does your sister like pizza?",
+    "file": "a251b089.mp3",
     "exists": true
   },
   {
