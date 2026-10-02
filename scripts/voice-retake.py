@@ -38,9 +38,23 @@ def with_phonemes(text):
                                                     if m.group(0).lower() in ARPABET else m.group(0)), text)
 
 
+ROUND = int(os.environ.get('RETAKE_ROUND', '1'))
+
+
 def candidates(text, voice):
     ph = with_phonemes(text)
     c = []
+    if ROUND >= 2:
+        # Stubborn clips: many more takes of the best-scoring set-ups.
+        for seed in range(101, 113):
+            c.append({'text': ph, 'model': 'eleven_turbo_v2', 'seed': seed, 'stability': 0.5 + 0.1 * (seed % 4)})
+        for seed in range(201, 205):
+            c.append({'text': ph, 'model': 'eleven_flash_v2', 'seed': seed})
+        for seed in range(301, 305):
+            c.append({'text': text, 'model': 'eleven_turbo_v2_5', 'lang': True, 'seed': seed})
+        for x in c:
+            x['voiceId'] = voice
+        return c
     for seed in (11, 22, 33):
         c.append({'text': ph, 'model': 'eleven_turbo_v2', 'seed': seed})
     for seed in (11, 22):
@@ -70,6 +84,10 @@ def main():
     def benign(r):
         return any(k in r['expected'] and v in (r.get('bestAlternative') or '') for k, v in BENIGN)
     todo = [r for r in rows if r['altMargin'] > 1.5 and not benign(r)]
+    if ROUND >= 2:
+        # Only the clips round 1 couldn't get right.
+        prev = {e['file']: e for e in json.load(open(f'{OUT}/retakes.json'))}
+        todo = [{**r, 'file': f} for f, e in prev.items() if e['after'] > 1.0 for r in [{'file': f}]]
     manifest = {c['file']: c for c in json.load(open(f'{OUT}/manifest.json'))}
     print(f'{len(todo)} clips to re-take', flush=True)
     proc = audit.AutoProcessor.from_pretrained(audit.MODEL)
@@ -113,7 +131,7 @@ def main():
             entry['replaced'] = True
         log.append(entry)
         print(json.dumps(entry, ensure_ascii=False), flush=True)
-    json.dump(log, open(f'{OUT}/retakes.json', 'w'), ensure_ascii=False, indent=1)
+    json.dump(log, open(f'{OUT}/retakes{"" if ROUND == 1 else ROUND}.json', 'w'), ensure_ascii=False, indent=1)
     print(f"replaced {sum(1 for e in log if e.get('replaced'))} of {len(log)}")
 
 

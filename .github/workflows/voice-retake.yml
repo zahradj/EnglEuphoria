@@ -30,10 +30,12 @@ jobs:
       - name: Re-take
         env:
           AUDIT_TOKEN: de472b713779b6c3f2c462fb886213e1861db78b10aa2021
-        run: python scripts/voice-retake.py
+        run: |
+          ROUND=$(grep -oE '^round [0-9]+' scripts/voice-retake-run.txt | tail -1 | grep -oE '[0-9]+' || echo 1)
+          RETAKE_ROUND=${ROUND:-1} python scripts/voice-retake.py
       - name: Commit
         run: |
-          git add public/audio-cache docs/voice-audit/retakes.json
+          git add public/audio-cache docs/voice-audit/retakes*.json
           if git diff --cached --quiet; then echo "No changes."; exit 0; fi
           git config user.name "voice-retake-bot"
           git config user.email "actions@users.noreply.github.com"
