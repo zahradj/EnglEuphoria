@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { approvedVoiceId, normalizeForSpeech, safeVoiceSettings } from "../_shared/speechPolicy.ts";
 import { encode as base64Encode } from "https://deno.land/std@0.168.0/encoding/base64.ts";
 
 const corsHeaders = {
@@ -12,7 +13,8 @@ serve(async (req) => {
   }
 
   try {
-    const { audioTexts, voice = 'EXAVITQu4vr4xnSDxMaL' } = await req.json(); // Default: Sarah
+    const { audioTexts, voice: rawVoice = 'EXAVITQu4vr4xnSDxMaL' } = await req.json(); // Default: Sarah
+    const voice = approvedVoiceId(rawVoice);
     const ELEVENLABS_API_KEY = Deno.env.get('ELEVENLABS_API_KEY');
 
     if (!ELEVENLABS_API_KEY) {
@@ -41,12 +43,12 @@ serve(async (req) => {
               'xi-api-key': ELEVENLABS_API_KEY,
             },
             body: JSON.stringify({
-              text: text as string,
+              text: normalizeForSpeech(String(text)),
               model_id: 'eleven_multilingual_v2',
-              voice_settings: {
+              voice_settings: safeVoiceSettings({
                 stability: 0.5,
                 similarity_boost: 0.75,
-              },
+              }),
             }),
           }
         );

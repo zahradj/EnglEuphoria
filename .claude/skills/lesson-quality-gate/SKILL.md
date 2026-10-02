@@ -3,7 +3,7 @@ name: lesson-quality-gate
 description: >
   REQUIRED final pass before presenting any Playground lesson as done —
   whether newly built or edited. Runs five specialized checks in sequence
-  (Semantic, Pedagogical, Visual, Narrative, Student comfort) and only signs off when all five
+  (Semantic, Pedagogical, Visual, Narrative, Student comfort, Voice) and only signs off when all six
   pass. Use this any time a lesson's scene array has been created or
   modified, right before telling the user the lesson is ready — it is the
   review layer, not a content generator.
@@ -13,9 +13,9 @@ description: >
 
 ## Purpose
 
-Four specialized engines, one review pass. Each engine owns a distinct
+Six specialized engines, one review pass. Each engine owns a distinct
 failure mode; none of them substitutes for the others, and running only one
-or two gives false confidence. This skill's job is to actually run all four
+or two gives false confidence. This skill's job is to actually run all six
 against the lesson's real, current scene array and art — not to assume they
 already pass because the content "looks reasonable."
 
@@ -24,7 +24,7 @@ already pass because the content "looks reasonable."
 > correct first — pedagogy, mechanics, and continuity are built on top of
 > that foundation, not instead of it.
 
-## The five engines
+## The six engines
 
 | # | Engine | Owns | Skill |
 |---|---|---|---|
@@ -33,6 +33,7 @@ already pass because the content "looks reasonable."
 | 3 | **Visual** | Are hotspots/arrows/flashcards mechanically correct — one at a time, full flashcard+audio+sentence, no floating objects? | `visual-learning-engine` + `attention-engine` |
 | 4 | **Narrative** | Does the sequence of scenes, taken together, tell one consistent story with real setting variety and stable character roles? | `narrative-engine` |
 | 5 | **Student comfort** (top priority — the user's standing rule) | Can a student SEE every word, REACH every control and ENJOY the interaction on a normal laptop AND a phone, without scrolling to find a button, squinting, or guessing what to do? | this file, section below + `scripts/academy-comfort-audit.mjs` |
+| 6 | **Voice** (standing rule: no accent, accurate pronunciation) | Does every recorded or synthesized line sound like a standard native American English speaker and say each word correctly? | this file, section below + `src/lib/speechPolicy.ts`, `voicePolicy.test.ts`, `generate-voice-cache.mjs --audit` |
 
 Run them in this order. Each later engine assumes the earlier ones already
 passed — don't skip ahead. If an earlier engine fails, fix it and re-run
@@ -148,6 +149,26 @@ Academy B1 U1 L1 — every slide "reported" the cover).
 `EscapeRoomSlot.tsx`), not per lesson — comfort bugs are almost always shared-component bugs.
 
 
+## Engine 6 — Voice (no accent, accurate pronunciation)
+
+Product rule: **no voice clip may carry an accent** (target = standard native General American; change `REQUIRED_ACCENT`
+in `src/lib/speechPolicy.ts` if the owner ever wants a different one) and every word must be pronounced correctly.
+Applies to ALL hubs and ALL paths: client `speak()`, `scripts/generate-voice-cache.mjs`, every ElevenLabs edge function,
+voice catalogs.
+
+1. **Voice**: every character's voice id must be `approved` in `VOICE_PROFILES` (library accent label = American).
+   Accented voices (British, Australian, Swedish...) are swapped by `approvedVoiceId()`; custom/unknown ids show as
+   `unverified` — check them by ear or with `npm run audit:voice`.
+2. **Text**: all speech goes through `normalizeForSpeech()` (digits to words, abbreviations, ALL-CAPS, "yo-yo", emoji...).
+   Clips are still looked up by the ORIGINAL text. Spelled-out sounds ("sss") and /phoneme/ notation cannot be spoken
+   by TTS: they must be recorded files (phonics rule).
+3. **Delivery**: `safeVoiceSettings()` keeps stability >= 0.5 and style <= 0.4 (loose settings drift into odd accents);
+   `languageLock()` adds `language_code: 'en'` on turbo/flash models.
+4. **Run**: `npx tsx scripts/generate-voice-cache.mjs --audit` (exit 1 on any problem) and `vitest run src/content/playground-library/voicePolicy.test.ts`
+   (in the deploy gate). When you re-cast a character, bump its entry in `CHARACTER_CLIP_VERSION` (client AND script) and re-bake.
+5. **Limit**: tests prove policy, not sound. A human must still listen to a sample of new clips.
+   The edge functions copy `src/lib/speechPolicy.ts` to `supabase/functions/_shared/` — keep them identical (a test enforces it).
+
 ## When to run this
 
 - Every time a lesson's scene array is created from scratch.
@@ -155,7 +176,7 @@ Academy B1 U1 L1 — every slide "reported" the cover).
   edited — even a "small" wording change can silently break a semantic match
   that used to hold.
 - Whenever a user reports a lesson "doesn't make sense" or "feels off" —
-  that symptom almost always means one of these five checks was skipped,
+  that symptom almost always means one of these six checks was skipped,
   not that the lesson needs more content.
 
 ## Anti-pattern this exists to prevent

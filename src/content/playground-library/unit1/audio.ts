@@ -5,6 +5,7 @@
 // synthesis on every single line. A plain fetch() against the function URL
 // returns the binary body intact.
 import { supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
+import { approvedVoiceId, normalizeForSpeech } from '@/lib/speechPolicy';
 
 const FUNCTIONS_URL = `${supabaseUrl}/functions/v1`;
 const ANON_KEY = supabaseAnonKey;
@@ -163,13 +164,16 @@ export type Character = 'pip' | 'mia' | 'bella' | 'willow' | 'leo' | 'teacher' |
 
 const VOICE_ID: Record<Character, string> = {
   pip: 'MF3mGyEYCl7XYWbV9V6O', // Elli — brightest, most consistent of every candidate tested
-  mia: 'pFZP5JQG7iQjIQuC4Bku', // Lily
+  mia: 'cgSgspJ2msm6clMCkdW9', // Jessica — American (was Lily, a British voice: re-cast for the no-accent rule)
   bella: 'XrExE9yKIg1WjnnlVkGX', // Matilda
   willow: 'piTKgcLEGmPE4e6mEKli', // Nicole
-  leo: 'zrHiDhphv9ZnVXBqCLjz', // Mimi
+  leo: 'TX3LPaxmHKxFdv7VOQHJ', // Liam — American boy (was Mimi, a Swedish-accented girl's voice: re-cast for the no-accent rule)
   teacher: 'jsCqWAovK2LkecY7zXl4', // Freya
   narrator: 'jsCqWAovK2LkecY7zXl4', // Freya
 };
+
+/** Per-character clip version (see key()). Bump a character's entry whenever its voice is re-cast. */
+export const CHARACTER_CLIP_VERSION: Partial<Record<Character, string>> = { mia: 'v12', leo: 'v12' };
 
 // Raw fetched clips are cached as Blobs, playable directly via HTMLAudioElement.
 const blobCache = new Map<string, Blob>();
@@ -256,7 +260,11 @@ function key(character: Character, text: string) {
   // (dropping the Web Audio detune path) only changes local playback
   // processing, not clip generation, so it doesn't need a version bump —
   // already-cached clips are still valid.
-  return `${character}::v11::${text}`;
+  // v12 (mia, leo only): re-cast from accented voices to American ones. Only their
+  // entries are bumped, so every other character's baked clips stay valid; mia's and
+  // leo's old static clips (recorded in the accented voice) now 404 and are re-baked
+  // by scripts/generate-voice-cache.mjs — never played in the old voice.
+  return `${character}::${CHARACTER_CLIP_VERSION[character] ?? 'v11'}::${text}`;
 }
 
 /** FNV-1a — turns an arbitrary cache key into a short, filesystem-safe hex
@@ -340,7 +348,9 @@ async function fetchClipBlob(k: string, text: string, character: Character): Pro
             // Mia/Bella/Willow/Leo take the Web Audio resample path
             // instead, which masks the same double-slowdown better. This
             // was the actual root cause of "Pip's voice is dragging."
-            body: JSON.stringify({ text, voiceId: VOICE_ID[character] }),
+            // Policy (src/lib/speechPolicy.ts): speak the CLEANED text in an APPROVED (no-accent) voice. The clip is still
+            // looked up / cached by the original text, so scene data and baked filenames don't change.
+            body: JSON.stringify({ text: normalizeForSpeech(text), voiceId: approvedVoiceId(VOICE_ID[character]) }),
           });
           if (!res.ok) throw new Error(`tts ${res.status}`);
           const blob = await res.blob();

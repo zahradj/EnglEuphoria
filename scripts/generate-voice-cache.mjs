@@ -51,6 +51,9 @@ import * as wtA2Scenes from '../src/content/playground-library/welcome-town-a2/s
 import * as magicCastleScenes from '../src/content/playground-library/magic-castle/scenes.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
 import { allQuestLines } from '../src/content/homework-quests/registry.ts';
+import { LIBRARY_GAMES } from '../src/content/playground-library/gamesCatalog.ts';
+import { artFor } from '../src/content/playground-library/alphabetArt.ts';
+import { VOICE_PROFILES, approvedVoiceId, normalizeForSpeech, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.join(__dirname, '..', 'public', 'audio-cache');
@@ -66,18 +69,19 @@ const ANON_KEY =
 // and fall back to live regeneration instead of playing the old voice.
 const VOICE_ID = {
   pip: 'MF3mGyEYCl7XYWbV9V6O',
-  mia: 'pFZP5JQG7iQjIQuC4Bku',
+  mia: 'cgSgspJ2msm6clMCkdW9', // Jessica (American) — was Lily (British)
   bella: 'XrExE9yKIg1WjnnlVkGX',
   willow: 'piTKgcLEGmPE4e6mEKli',
-  leo: 'zrHiDhphv9ZnVXBqCLjz',
+  leo: 'TX3LPaxmHKxFdv7VOQHJ', // Liam (American) — was Mimi (Swedish)
   teacher: 'jsCqWAovK2LkecY7zXl4',
   narrator: 'jsCqWAovK2LkecY7zXl4',
 };
 
-// Mirrors unit1/audio.ts's key()'s version tag.
+// Mirrors unit1/audio.ts's key() + CHARACTER_CLIP_VERSION.
 const KEY_VERSION = 'v11';
+const CHARACTER_CLIP_VERSION = { mia: 'v12', leo: 'v12' };
 function cacheKey(character, text) {
-  return `${character}::${KEY_VERSION}::${text}`;
+  return `${character}::${CHARACTER_CLIP_VERSION[character] ?? KEY_VERSION}::${text}`;
 }
 
 // FNV-1a — byte-for-byte identical to audio.ts's fnv1a(). Must stay in sync
@@ -428,6 +432,24 @@ const ENGINES = [
 /** Homework games: every line they can say, already as (voice, text). */
 const HOMEWORK_LINES = [...homeworkA1U9L1Lines(), ...allQuestLines()];
 
+/** Playground GAMES (Alphabet Express, Magic Show…): every picture-word the games say, always by the 'teacher'
+ *  voice (scenes call safeSpeak(word, 'teacher')). Mirrors FirstSoundScene / WhatsMissingScene / LetterTilesScene. */
+function gameLines() {
+  const words = new Set();
+  for (const game of LIBRARY_GAMES) {
+    for (const stage of game.stages) {
+      const scene = stage.scene;
+      if (scene.kind === 'first-sound') scene.rounds.forEach((r) => words.add(r.word));
+      if (scene.kind === 'whats-missing') scene.rounds.forEach((r) => r.items.forEach((i) => words.add(i.word)));
+      if (scene.kind === 'letter-blocks') scene.rounds.forEach((r) => {
+        if (r.word) words.add(r.word);
+        else r.blocks.forEach((b) => { const art = artFor(b); if (art) words.add(art.word); });
+      });
+    }
+  }
+  return [...words].map((w) => ['teacher', w]);
+}
+
 function collectPairs(lessonFilter) {
   const seen = new Map(); // cacheKey -> [character, text]
   const add = (character, text) => {
@@ -438,6 +460,7 @@ function collectPairs(lessonFilter) {
 
   for (const [character, text] of FIXED_LINES) add(character, text);
   if (!lessonFilter || lessonFilter === 'HOMEWORK') for (const [character, text] of HOMEWORK_LINES) add(character, text);
+  if (!lessonFilter || lessonFilter === 'GAMES') for (const [character, text] of gameLines()) add(character, text);
 
   for (const { scenesModule, extractors, resolveWho } of ENGINES) {
     const sceneArrayNames = Object.keys(scenesModule).filter((k) => /^LESSON_.*_SCENES$/.test(k));
@@ -464,7 +487,8 @@ async function generateClip(character, text) {
       const res = await fetch(`${SUPABASE_URL}/functions/v1/elevenlabs-tts`, {
         method: 'POST',
         headers: { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, voiceId }),
+        // Speech policy: the CLEANED text, in an APPROVED (no-accent) voice. The clip filename still derives from the original text.
+        body: JSON.stringify({ text: normalizeForSpeech(text), voiceId: approvedVoiceId(voiceId) }),
       });
       if (!res.ok) throw new Error(`tts ${res.status}`);
       const buf = Buffer.from(await res.arrayBuffer());
@@ -480,12 +504,52 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+/** Quality audit ("Voice" engine): no accent, accurate pronunciation. Exit code 1 = something to fix. */
+function audit(pairs) {
+  let problems = 0;
+  console.log('\n=== VOICE AUDIT ===\n');
+  console.log('Characters -> voice -> accent status');
+  for (const [character, id] of Object.entries(VOICE_ID)) {
+    const profile = VOICE_PROFILES.find((v) => v.id === id);
+    const status = voiceStatus(id);
+    const mark = status === 'approved' ? 'OK ' : 'BAD';
+    if (status !== 'approved') problems++;
+    console.log(`  ${mark} ${character.padEnd(9)} ${profile ? profile.name : id}  (${profile ? profile.accent : 'unknown'}, ${status})`);
+  }
+  const perChar = {};
+  let baked = 0, missing = 0;
+  for (const [character, text] of pairs) {
+    perChar[character] = (perChar[character] || 0) + 1;
+    if (fs.existsSync(path.join(OUT_DIR, `${cacheFileName(character, text)}.mp3`))) baked++; else missing++;
+  }
+  console.log(`\nLines: ${pairs.length}  (baked ${baked}, still to bake ${missing})`);
+  console.log('  per character:', Object.entries(perChar).map(([c, n]) => `${c} ${n}`).join(', '));
+  const risky = [];
+  for (const [character, text] of pairs) {
+    const risks = unresolvedSpeechRisks(text);
+    if (risks.length) risky.push({ character, text, risks });
+  }
+  console.log(`\nPronunciation risks that cleanup cannot fix (a human must reword, or the sound must be a recorded file): ${risky.length}`);
+  for (const r of risky.slice(0, 60)) console.log(`  [${r.character}] "${r.text}"  ->  ${r.risks.map((x) => `${x.code}:${x.match}`).join(', ')}`);
+  if (risky.length > 60) console.log(`  ... and ${risky.length - 60} more`);
+  problems += risky.length;
+  const changed = pairs.filter(([, t]) => normalizeForSpeech(t) !== t).length;
+  console.log(`\nLines whose spoken text is cleaned up before synthesis (numbers, caps, abbreviations, hyphens...): ${changed}`);
+  console.log(problems ? `\n${problems} problem(s) found.` : '\nAll clear.');
+  return problems ? 1 : 0;
+}
+
 async function main() {
   const lessonArg = process.argv.find((a) => a.startsWith('--lesson='));
   const lessonFilter = lessonArg ? lessonArg.slice('--lesson='.length) : null;
 
   const pairs = collectPairs(lessonFilter);
   console.log(`${lessonFilter ? `Scoped to "${lessonFilter}"` : 'Full run'}: ${pairs.length} unique (character, text) pairs.`);
+
+  if (process.argv.includes('--audit')) {
+    process.exitCode = audit(pairs);
+    return;
+  }
 
   if (process.argv.includes('--dry')) {
     for (const [character, text] of pairs) console.log(`  [${character}] "${text}"`);

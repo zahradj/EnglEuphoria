@@ -1,5 +1,6 @@
 // Generate a voiceover MP3 with ElevenLabs and upload it to lesson-assets.
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { approvedVoiceId, languageLock, normalizeForSpeech, safeVoiceSettings } from "../_shared/speechPolicy.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
@@ -32,14 +33,14 @@ serve(async (req) => {
       });
     }
 
-    const vid = (voiceId && typeof voiceId === "string" ? voiceId : DEFAULT_VOICE_ID);
+    const vid = approvedVoiceId(voiceId && typeof voiceId === "string" ? voiceId : DEFAULT_VOICE_ID);
     const isPhonetic = mode === "phonetic";
 
     // Phonetic mode: speak the SOUND of the letter, not its alphabet name.
     // ElevenLabs supports SSML <phoneme> tags only on eleven_multilingual_v2.
     // Auto-wrap a single bare letter in <phoneme> with a small heuristic IPA map
     // so teachers don't have to hand-author SSML; pass-through if already SSML.
-    let spoken = text.trim();
+    let spoken = normalizeForSpeech(text.trim()); // SSML (<phoneme>) passes through untouched
     if (isPhonetic && !/<phoneme/i.test(spoken)) {
       const ipaMap: Record<string, string> = {
         a: "æ", e: "ɛ", i: "ɪ", o: "ɒ", u: "ʌ",
@@ -66,12 +67,13 @@ serve(async (req) => {
           text: spoken,
           // Multilingual v2 is required for SSML <phoneme>; turbo for normal speech.
           model_id: isPhonetic ? "eleven_multilingual_v2" : "eleven_turbo_v2_5",
-          voice_settings: {
+          ...(isPhonetic ? {} : languageLock("eleven_turbo_v2_5")),
+          voice_settings: safeVoiceSettings({
             stability: isPhonetic ? 0.7 : 0.5,
             similarity_boost: 0.8,
             style: isPhonetic ? 0.1 : 0.55,
             use_speaker_boost: true,
-          },
+          }),
         }),
       },
     );

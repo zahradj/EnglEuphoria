@@ -1,4 +1,5 @@
 import { requireAuth } from "../_shared/authGuard.ts";
+import { approvedVoiceId, languageLock, normalizeForSpeech, safeVoiceSettings } from "../_shared/speechPolicy.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import "https://deno.land/x/xhr@0.1.0/mod.ts"
 
@@ -18,7 +19,9 @@ serve(async (req) => {
 
 
   try {
-    const { text, voiceId = '9BWtsMINqrJLrRacOk9x' } = await req.json();
+    const { text: rawText, voiceId: rawVoiceId = '9BWtsMINqrJLrRacOk9x' } = await req.json();
+    const text = typeof rawText === 'string' ? normalizeForSpeech(rawText) : rawText;
+    const voiceId = approvedVoiceId(rawVoiceId);
     
     if (!text) {
       return new Response(
@@ -44,12 +47,13 @@ serve(async (req) => {
       body: JSON.stringify({
         text,
         model_id: 'eleven_turbo_v2_5',
-        voice_settings: {
+        ...languageLock('eleven_turbo_v2_5'),
+        voice_settings: safeVoiceSettings({
           stability: 0.5,
           similarity_boost: 0.8,
           style: 0.6,
           use_speaker_boost: true
-        }
+        })
       })
     });
 

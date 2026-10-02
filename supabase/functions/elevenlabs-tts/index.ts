@@ -10,6 +10,7 @@
 // device (double cost, a seconds-long wait on the second screen, and two
 // slightly different takes of the same line).
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { approvedVoiceId, normalizeForSpeech, safeVoiceSettings } from "../_shared/speechPolicy.ts";
 
 const BUCKET = "sfx-cache";
 const MODEL_ID = "eleven_multilingual_v2";
@@ -34,10 +35,10 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json().catch(() => ({} as any));
-    const text = typeof body.text === "string" ? body.text.slice(0, 2000) : "";
-    const voiceId = typeof body.voiceId === "string" && body.voiceId
+    const text = normalizeForSpeech(typeof body.text === "string" ? body.text.slice(0, 2000) : "");
+    const voiceId = approvedVoiceId(typeof body.voiceId === "string" && body.voiceId
       ? body.voiceId
-      : "EXAVITQu4vr4xnSDxMaL"; // Sarah
+      : "EXAVITQu4vr4xnSDxMaL"); // Sarah (accented voices are swapped for an approved one)
     // Only forwarded when the caller asks for it (matches the deployed
     // behaviour: no speed in voice_settings by default).
     const speed = typeof body.speed === "number" ? body.speed : null;
@@ -81,13 +82,13 @@ Deno.serve(async (req) => {
         body: JSON.stringify({
           text,
           model_id: MODEL_ID,
-          voice_settings: {
+          voice_settings: safeVoiceSettings({
             stability: 0.5,
             similarity_boost: 0.75,
             style: 0.3,
             use_speaker_boost: true,
             ...(speed !== null ? { speed } : {}),
-          },
+          }),
         }),
       },
     );

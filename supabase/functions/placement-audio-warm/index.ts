@@ -7,6 +7,7 @@
 // Skips rows already populated. NEVER called by student client — admin-only.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { approvedVoiceId, normalizeForSpeech, safeVoiceSettings, type VoiceSettings } from "../_shared/speechPolicy.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -72,7 +73,7 @@ async function ensureBucket(admin: ReturnType<typeof createClient>) {
 
 async function synthesizeMp3(text: string, profile: VoiceProfile): Promise<ArrayBuffer> {
   const r = await fetch(
-    `https://api.elevenlabs.io/v1/text-to-speech/${profile.voiceId}?output_format=mp3_44100_128`,
+    `https://api.elevenlabs.io/v1/text-to-speech/${approvedVoiceId(profile.voiceId)}?output_format=mp3_44100_128`,
     {
       method: "POST",
       headers: {
@@ -80,9 +81,9 @@ async function synthesizeMp3(text: string, profile: VoiceProfile): Promise<Array
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        text,
+        text: normalizeForSpeech(text),
         model_id: "eleven_multilingual_v2",
-        voice_settings: profile.settings,
+        voice_settings: safeVoiceSettings(profile.settings as VoiceSettings),
       }),
     },
   );

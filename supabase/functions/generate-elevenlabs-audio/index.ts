@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { approvedVoiceId, normalizeForSpeech, safeVoiceSettings } from "../_shared/speechPolicy.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,8 +14,8 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const text: string = body.text;
-    const voiceId: string = body.voice_id || body.voiceId || "Xb7hH8MSUJpSbSDYk0k2";
+    const text: string = normalizeForSpeech(typeof body.text === "string" ? body.text : "");
+    const voiceId: string = approvedVoiceId(body.voice_id || body.voiceId || "Xb7hH8MSUJpSbSDYk0k2");
     const speed: number = body.speed || 1.0;
 
     const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
@@ -37,13 +38,13 @@ serve(async (req) => {
         body: JSON.stringify({
           text,
           model_id: "eleven_multilingual_v2",
-          voice_settings: {
+          voice_settings: safeVoiceSettings({
             stability: 0.75,
             similarity_boost: 0.75,
             style: 0.3,
             use_speaker_boost: true,
             speed,
-          },
+          }),
         }),
       }
     );

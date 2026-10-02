@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { approvedVoiceId, languageLock, normalizeForSpeech, safeVoiceSettings } from "../_shared/speechPolicy.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 
 const corsHeaders = {
@@ -35,7 +36,8 @@ serve(async (req) => {
   }
 
   try {
-    const { text, characterType = 'default', settings = {} } = await req.json();
+    const { text: rawText, characterType = 'default', settings = {} } = await req.json();
+    const text = typeof rawText === 'string' ? normalizeForSpeech(rawText) : rawText;
     
     if (!text) {
       return new Response(
@@ -54,7 +56,7 @@ serve(async (req) => {
     }
 
     // Get the appropriate voice for this character type
-    const voiceId = (CHARACTER_VOICES as Record<string, string>)[characterType] || CHARACTER_VOICES.default;
+    const voiceId = approvedVoiceId((CHARACTER_VOICES as Record<string, string>)[characterType] || CHARACTER_VOICES.default);
     
     console.log(`Generating voice for character: ${characterType}, text: "${text.substring(0, 50)}..."`);
 
@@ -66,7 +68,7 @@ serve(async (req) => {
       use_speaker_boost: true
     };
 
-    const voiceSettings = { ...defaultSettings, ...settings };
+    const voiceSettings = safeVoiceSettings({ ...defaultSettings, ...settings });
 
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
       method: 'POST',
@@ -77,6 +79,7 @@ serve(async (req) => {
       body: JSON.stringify({
         text,
         model_id: 'eleven_turbo_v2_5',
+        ...languageLock('eleven_turbo_v2_5'),
         voice_settings: voiceSettings
       })
     });
