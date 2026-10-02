@@ -1,0 +1,49 @@
+name: Generate lesson song takes
+
+# Generates takes of a song from scripts/songs.json (key in
+# scripts/song-gen-request.txt) through the song-proxy edge function, scores
+# each take against the lyrics with faster-whisper (scripts/verify-song.py),
+# and commits the takes + scores to docs/songs/ on the branch it ran on.
+# A person/agent then copies the best take to the song's publicPath.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/song-gen-request.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  songs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Generate takes
+        env:
+          SONG_PROXY_URL: https://dcoxpyzoqjvmuuygvlme.supabase.co/functions/v1/song-proxy
+          SONG_PROXY_TOKEN: de472b713779b6c3f2c462fb886213e1861db78b10aa2021
+        run: |
+          KEY=$(grep -v '^\s*#' scripts/song-gen-request.txt | head -1 | tr -d '[:space:]')
+          echo "KEY=$KEY" >> "$GITHUB_ENV"
+          node scripts/generate-songs.mjs --out=docs/songs --only="$KEY" --takes=3
+      - name: Score takes
+        run: |
+          pip install -q faster-whisper
+          python scripts/verify-song.py "$KEY" docs/songs/$KEY-take*.mp3 | tee docs/songs/$KEY-scores.txt
+      - name: Commit
+        run: |
+          git add docs/songs
+          if git diff --cached --quiet; then echo "No changes."; exit 0; fi
+          git config user.name "song-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "Song takes: $KEY"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

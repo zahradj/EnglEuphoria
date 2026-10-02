@@ -378,5 +378,44 @@
       "You learned so much, you're a star",
       "Byeeee, friends! See you soon!"
     ]
+  },
+  "wt-hello": {
+    "publicPath": "public/welcome-town/audio/hello-song.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP hello song for the first day at school, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Hello, hello, hello to you!",
+      "Hi, hi, hi! And hi to you!",
+      "What's your name? What's your name?",
+      "Say your name! Say your name!"
+    ]
   }
 }

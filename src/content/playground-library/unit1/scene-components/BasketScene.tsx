@@ -20,7 +20,7 @@ export function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<S
   const done = got >= scene.goal;
 
   useEffect(() => {
-    if (done && !gemAwarded) { setGemAwarded(true); onWin(true); cueSpeak(`Yes! The ${scene.letter} portal is open!`, scene.who); }
+    if (done && !gemAwarded) { setGemAwarded(true); onWin(true); cueSpeak('Yes! The portal is open!', scene.who); }
   }, [done, gemAwarded]);
 
   function onDown(idx: number) {

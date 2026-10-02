@@ -655,7 +655,7 @@ export const LESSON_A2U1L2_SCENES: Scene[] = [
     id: 'a2u1l2-ay-intro', kind: 'cinematic', bg: bgBedroomNight, title: 'The AY Sound', subtitle: 'Two letters that make one long sound', narrator: 'marigold',
     script: [
       { who: 'marigold', line: 'Look at the word “day.” Two letters, A and Y, together make one long A sound!' },
-      { who: 'marigold', line: 'Listen: d-ay, day! Now try “play” and “stay” — same “ay” sound!' },
+      { who: 'marigold', line: 'Listen: day! Now try “play” and “stay” — they have the same sound!' },
     ],
     cta: 'Try it!',
   },
@@ -692,7 +692,7 @@ export const LESSON_A2U1L2_SCENES: Scene[] = [
     // L1's own silent-e long-A/I spelling, not just "a word that sounds
     // long."
     id: 'a2u1l2-review-choice', kind: 'choice', bg: bgBedroomNight, who: 'marigold', teacher: 'Listen carefully, then tap the word with the “ay” sound!',
-    prompt: 'Which word has the long A “ay” sound?',
+    prompt: 'Which word has the same sound as “day”?',
     options: [
       { label: 'Play', emoji: '\u{26BD}', correct: true },
       { label: 'Cat', emoji: '\u{1F408}' },
@@ -889,7 +889,7 @@ export const LESSON_A2U1L3_SCENES: Scene[] = [
     id: 'a2u1l3-ee-intro', kind: 'cinematic', bg: bgBedroomNight, title: 'The EE Sound', subtitle: 'Two letters that make one long sound', narrator: 'marigold',
     script: [
       { who: 'marigold', line: 'Look at the word “see.” Two letters, E and E, together make one long E sound!' },
-      { who: 'marigold', line: 'Listen: s-ee, see! Now try “tree” and “sleep” — same “ee” sound!' },
+      { who: 'marigold', line: 'Listen: see! Now try “tree” and “sleep” — they have the same sound!' },
     ],
     cta: 'Try it!',
   },
@@ -925,7 +925,7 @@ export const LESSON_A2U1L3_SCENES: Scene[] = [
     // (L1 silent-e, L2 ay) plus a plain short vowel — this reviews the
     // whole reading arc, not just today's slice of it.
     id: 'a2u1l3-review-choice', kind: 'choice', bg: bgBedroomNight, who: 'marigold', teacher: 'Listen carefully, then tap the word with the “ee” sound!',
-    prompt: 'Which word has the long E “ee” sound?',
+    prompt: 'Which word has the same sound as “see”?',
     options: [
       { label: 'Tree', emoji: '\u{1F333}', correct: true },
       { label: 'Play', emoji: '\u{26BD}' },

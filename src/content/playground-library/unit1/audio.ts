@@ -4,6 +4,7 @@
 // fails to decode as audio and silently falls back to browser speech
 // synthesis on every single line. A plain fetch() against the function URL
 // returns the binary body intact.
+import { spokenText } from './spokenText';
 import { supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
 import { approvedVoiceId, normalizeForSpeech } from '@/lib/speechPolicy';
 
@@ -542,20 +543,9 @@ export function isSpeaking(): boolean {
   return queueDepth > 0;
 }
 
-/** A few English words are spelled identically but pronounced differently
- *  depending on tense/part of speech ("read" the present-tense verb, rhymes
- *  with "reed," vs. "read" the past tense, rhymes with "red"). ElevenLabs
- *  guesses from the surrounding sentence and gets this wrong often enough
- *  on short, standalone lines — e.g. "I read a book" (present tense, the
- *  daily-routine grammar point Welcome Town A2 actually teaches) came back
- *  pronounced as the past tense. This curriculum only ever uses the present/
- *  base form of these words in spoken content, so it's safe to always
- *  rewrite them to an unambiguous phonetic spelling before they reach
- *  ElevenLabs — this only changes what gets SPOKEN, never the on-screen
- *  caption text, which is rendered straight from the scene data elsewhere. */
-function ttsSafe(text: string): string {
-  return text.replace(/\bread\b/g, (m) => (m === m.toUpperCase() ? 'REED' : m[0] === m[0].toUpperCase() ? 'Reed' : 'reed'));
-}
+/** What a line sounds like (caps, emoji, blanks, "read", retakes): see
+ *  spokenText.ts. Captions keep the original text. */
+const ttsSafe = spokenText;
 
 /** Speak `text` as `character`. Utterances are sequenced. */
 export function speak(text: string, character: Character = 'teacher'): Promise<void> {

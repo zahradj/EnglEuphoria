@@ -1,0 +1,856 @@
+[
+  {
+    "file": "5b34e948.mp3",
+    "voice": "mia",
+    "text": "Nose",
+    "heard": "No s",
+    "distance": 2,
+    "rate": 2,
+    "ops": [
+      "extra \"no\"",
+      "\"nose\"→\"s\""
+    ]
+  },
+  {
+    "file": "db089d28.mp3",
+    "voice": "mia",
+    "text": "nose",
+    "heard": "No, sir",
+    "distance": 2,
+    "rate": 2,
+    "ops": [
+      "extra \"no\"",
+      "\"nose\"→\"sir\""
+    ]
+  },
+  {
+    "file": "c7f46de7.mp3",
+    "voice": "willow",
+    "text": "Bear",
+    "heard": "Is there",
+    "distance": 2,
+    "rate": 2,
+    "ops": [
+      "extra \"is\"",
+      "\"bear\"→\"there\""
+    ]
+  },
+  {
+    "file": "5d6d016a.mp3",
+    "voice": "teacher",
+    "text": "yo-yo",
+    "heard": "Jojo",
+    "distance": 2,
+    "rate": 1,
+    "ops": [
+      "missing \"yo\"",
+      "\"yo\"→\"jojo\""
+    ]
+  },
+  {
+    "file": "cd69eb34.mp3",
+    "voice": "pip",
+    "text": "chick.",
+    "heard": "Check",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"chick\"→\"check\""
+    ]
+  },
+  {
+    "file": "18d1d1f6.mp3",
+    "voice": "pip",
+    "text": "wand.",
+    "heard": "One",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"wand\"→\"one\""
+    ]
+  },
+  {
+    "file": "6ba1c378.mp3",
+    "voice": "pip",
+    "text": "sun",
+    "heard": "Son",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"sun\"→\"son\""
+    ]
+  },
+  {
+    "file": "60221a5b.mp3",
+    "voice": "pip",
+    "text": "ant.",
+    "heard": "And",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"ant\"→\"and\""
+    ]
+  },
+  {
+    "file": "21d80b1d.mp3",
+    "voice": "teacher",
+    "text": "cat",
+    "heard": "A cat",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "extra \"a\""
+    ]
+  },
+  {
+    "file": "c3ecfcee.mp3",
+    "voice": "teacher",
+    "text": "hat.",
+    "heard": "Hot",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"hat\"→\"hot\""
+    ]
+  },
+  {
+    "file": "14221d54.mp3",
+    "voice": "teacher",
+    "text": "van",
+    "heard": "From",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"van\"→\"from\""
+    ]
+  },
+  {
+    "file": "3cf5b4db.mp3",
+    "voice": "pip",
+    "text": "Hat.",
+    "heard": "Hot",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"hat\"→\"hot\""
+    ]
+  },
+  {
+    "file": "bcc968bb.mp3",
+    "voice": "pip",
+    "text": "hat.",
+    "heard": "Hot",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"hat\"→\"hot\""
+    ]
+  },
+  {
+    "file": "055f075e.mp3",
+    "voice": "pip",
+    "text": "Mat.",
+    "heard": "Matt",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"mat\"→\"matt\""
+    ]
+  },
+  {
+    "file": "868045fc.mp3",
+    "voice": "mia",
+    "text": "Nut.",
+    "heard": "Not",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"nut\"→\"not\""
+    ]
+  },
+  {
+    "file": "926bc12d.mp3",
+    "voice": "mia",
+    "text": "Nest",
+    "heard": "Yes",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"nest\"→\"yes\""
+    ]
+  },
+  {
+    "file": "97e07325.mp3",
+    "voice": "mia",
+    "text": "Sad.",
+    "heard": "said",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"sad\"→\"said\""
+    ]
+  },
+  {
+    "file": "6d25a9cf.mp3",
+    "voice": "mia",
+    "text": "Sun",
+    "heard": "Son",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"sun\"→\"son\""
+    ]
+  },
+  {
+    "file": "0a9b122f.mp3",
+    "voice": "mia",
+    "text": "sun",
+    "heard": "Son",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"sun\"→\"son\""
+    ]
+  },
+  {
+    "file": "f1dbda35.mp3",
+    "voice": "leo",
+    "text": "ant.",
+    "heard": "And",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"ant\"→\"and\""
+    ]
+  },
+  {
+    "file": "b2aabefd.mp3",
+    "voice": "pip",
+    "text": "Bat.",
+    "heard": "That",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"bat\"→\"that\""
+    ]
+  },
+  {
+    "file": "b113b5a6.mp3",
+    "voice": "teacher",
+    "text": "Ant.",
+    "heard": "Aunt",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"ant\"→\"aunt\""
+    ]
+  },
+  {
+    "file": "b875e83d.mp3",
+    "voice": "bella",
+    "text": "sun",
+    "heard": "Soon",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"sun\"→\"soon\""
+    ]
+  },
+  {
+    "file": "c12cae5c.mp3",
+    "voice": "willow",
+    "text": "ant.",
+    "heard": "And",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"ant\"→\"and\""
+    ]
+  },
+  {
+    "file": "d15dfc9d.mp3",
+    "voice": "pip",
+    "text": "Sam",
+    "heard": "Sam, Mia",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "extra \"mia\""
+    ]
+  },
+  {
+    "file": "443d2c2d.mp3",
+    "voice": "pip",
+    "text": "nut.",
+    "heard": "Not",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"nut\"→\"not\""
+    ]
+  },
+  {
+    "file": "56254d77.mp3",
+    "voice": "pip",
+    "text": "duck",
+    "heard": "Doc",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"duck\"→\"doc\""
+    ]
+  },
+  {
+    "file": "2c6a9168.mp3",
+    "voice": "mia",
+    "text": "box",
+    "heard": "Fox",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"box\"→\"fox\""
+    ]
+  },
+  {
+    "file": "3cd0d527.mp3",
+    "voice": "pip",
+    "text": "doll.",
+    "heard": "Dull",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"doll\"→\"dull\""
+    ]
+  },
+  {
+    "file": "628d1047.mp3",
+    "voice": "pip",
+    "text": "Doll.",
+    "heard": "Dull",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"doll\"→\"dull\""
+    ]
+  },
+  {
+    "file": "b11dd2d0.mp3",
+    "voice": "teacher",
+    "text": "Dad",
+    "heard": "Dana",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"dad\"→\"dana\""
+    ]
+  },
+  {
+    "file": "5c4ca7ac.mp3",
+    "voice": "pip",
+    "text": "He!",
+    "heard": "Hey",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"he\"→\"hey\""
+    ]
+  },
+  {
+    "file": "9ed83167.mp3",
+    "voice": "pip",
+    "text": "Fin",
+    "heard": "Fun",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"fin\"→\"fun\""
+    ]
+  },
+  {
+    "file": "c6d06ee2.mp3",
+    "voice": "pip",
+    "text": "are.",
+    "heard": "Uh",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"are\"→\"uh\""
+    ]
+  },
+  {
+    "file": "dff1f555.mp3",
+    "voice": "teacher",
+    "text": "chick.",
+    "heard": "Check",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"chick\"→\"check\""
+    ]
+  },
+  {
+    "file": "b37b1361.mp3",
+    "voice": "teacher",
+    "text": "wand.",
+    "heard": "One",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"wand\"→\"one\""
+    ]
+  },
+  {
+    "file": "b67e4670.mp3",
+    "voice": "leo",
+    "text": "I am angry — grrr grrr grrr!",
+    "heard": "I am angry. Grr, grr, grr",
+    "distance": 3,
+    "rate": 0.5,
+    "ops": [
+      "\"grrr\"→\"grr\"",
+      "\"grrr\"→\"grr\"",
+      "\"grrr\"→\"grr\""
+    ]
+  },
+  {
+    "file": "8069a786.mp3",
+    "voice": "willow",
+    "text": "The water is blue!",
+    "heard": "The water's blue",
+    "distance": 2,
+    "rate": 0.5,
+    "ops": [
+      "missing \"water\"",
+      "\"is\"→\"waters\""
+    ]
+  },
+  {
+    "file": "488db998.mp3",
+    "voice": "mia",
+    "text": "Tap She — the girl!",
+    "heard": "Tapshi, the girl",
+    "distance": 2,
+    "rate": 0.5,
+    "ops": [
+      "missing \"tap\"",
+      "\"she\"→\"tapshi\""
+    ]
+  },
+  {
+    "file": "d790d5b5.mp3",
+    "voice": "pip",
+    "text": "Tap He!",
+    "heard": "Tap hey",
+    "distance": 1,
+    "rate": 0.5,
+    "ops": [
+      "\"he\"→\"hey\""
+    ]
+  },
+  {
+    "file": "327a0d77.mp3",
+    "voice": "teacher",
+    "text": "Yes! In!",
+    "heard": "Yes, and",
+    "distance": 1,
+    "rate": 0.5,
+    "ops": [
+      "\"in\"→\"and\""
+    ]
+  },
+  {
+    "file": "c47e11f6.mp3",
+    "voice": "teacher",
+    "text": "Where does Cat-cat sleep?",
+    "heard": "Where does CatCat sleep?",
+    "distance": 2,
+    "rate": 0.4,
+    "ops": [
+      "missing \"cat\"",
+      "\"cat\"→\"catcat\""
+    ]
+  },
+  {
+    "file": "0b522a23.mp3",
+    "voice": "mia",
+    "text": "I am happy — yes I am! Ha ha ha!",
+    "heard": "I am happy. Yes, I am. ",
+    "distance": 3,
+    "rate": 0.33,
+    "ops": [
+      "missing \"ha\"",
+      "missing \"ha\"",
+      "missing \"ha\""
+    ]
+  },
+  {
+    "file": "750e24cb.mp3",
+    "voice": "teacher",
+    "text": "“Ate” — is this regular or irregular?",
+    "heard": "Uh, yeah. Is this regular or irregular?",
+    "distance": 2,
+    "rate": 0.33,
+    "ops": [
+      "extra \"uh\"",
+      "\"ate\"→\"yeah\""
+    ]
+  },
+  {
+    "file": "45dbdff9.mp3",
+    "voice": "bella",
+    "text": "Who is angry?",
+    "heard": "Who was angry?",
+    "distance": 1,
+    "rate": 0.33,
+    "ops": [
+      "\"is\"→\"was\""
+    ]
+  },
+  {
+    "file": "e5ad6bde.mp3",
+    "voice": "teacher",
+    "text": "The chair is next to the table.",
+    "heard": "The chair's next to the table",
+    "distance": 2,
+    "rate": 0.29,
+    "ops": [
+      "missing \"chair\"",
+      "\"is\"→\"chairs\""
+    ]
+  },
+  {
+    "file": "54a3af1b.mp3",
+    "voice": "teacher",
+    "text": "You write at it.",
+    "heard": "You right at it",
+    "distance": 1,
+    "rate": 0.25,
+    "ops": [
+      "\"write\"→\"right\""
+    ]
+  },
+  {
+    "file": "ce543421.mp3",
+    "voice": "leo",
+    "text": "I am angry! Grrr!",
+    "heard": "I am angry. Grr",
+    "distance": 1,
+    "rate": 0.25,
+    "ops": [
+      "\"grrr\"→\"grr\""
+    ]
+  },
+  {
+    "file": "fa137505.mp3",
+    "voice": "pip",
+    "text": "I reed a book.",
+    "heard": "I read a book",
+    "distance": 1,
+    "rate": 0.25,
+    "ops": [
+      "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "0408caad.mp3",
+    "voice": "teacher",
+    "text": "Meow! I am Cat-cat. I am a cat!",
+    "heard": "Meow. I am CatCat. I am a cat",
+    "distance": 2,
+    "rate": 0.22,
+    "ops": [
+      "missing \"cat\"",
+      "\"cat\"→\"catcat\""
+    ]
+  },
+  {
+    "file": "970f33d0.mp3",
+    "voice": "teacher",
+    "text": "Wim looks everywhere. Is Cat-cat in his study?",
+    "heard": "Wim looks everywhere. Is CatCat in his study?",
+    "distance": 2,
+    "rate": 0.22,
+    "ops": [
+      "missing \"cat\"",
+      "\"cat\"→\"catcat\""
+    ]
+  },
+  {
+    "file": "6f1bd73e.mp3",
+    "voice": "pip",
+    "text": "Wim, Cat-cat and Pip have lunch. Chomp, chomp! Cheers!",
+    "heard": "Wim, CatCat, and Pip have lunch. Chomp, chomp. Cheers!",
+    "distance": 2,
+    "rate": 0.2,
+    "ops": [
+      "missing \"cat\"",
+      "\"cat\"→\"catcat\""
+    ]
+  },
+  {
+    "file": "26487fce.mp3",
+    "voice": "bella",
+    "text": "Yaaay! Happy birthday to me!",
+    "heard": "Yay, happy birthday to me",
+    "distance": 1,
+    "rate": 0.2,
+    "ops": [
+      "\"yaaay\"→\"yay\""
+    ]
+  },
+  {
+    "file": "ddfe6626.mp3",
+    "voice": "pip",
+    "text": "I usually reed before bed.",
+    "heard": "I usually read before bed",
+    "distance": 1,
+    "rate": 0.2,
+    "ops": [
+      "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "17d9ba3d.mp3",
+    "voice": "teacher",
+    "text": "Remember the castle? Listen. Where is Cat-cat? Tap the room.",
+    "heard": "Remember the castle? Listen. Where is CatCat? Tap the room",
+    "distance": 2,
+    "rate": 0.18,
+    "ops": [
+      "missing \"cat\"",
+      "\"cat\"→\"catcat\""
+    ]
+  },
+  {
+    "file": "a54e392f.mp3",
+    "voice": "willow",
+    "text": "Perfect ears! You popped the sounds!",
+    "heard": "Perfect ears, you pop the sounds",
+    "distance": 1,
+    "rate": 0.17,
+    "ops": [
+      "\"popped\"→\"pop\""
+    ]
+  },
+  {
+    "file": "c7e2425e.mp3",
+    "voice": "leo",
+    "text": "Perfect ears! You popped the sounds!",
+    "heard": "Perfect ears. You pop the sounds",
+    "distance": 1,
+    "rate": 0.17,
+    "ops": [
+      "\"popped\"→\"pop\""
+    ]
+  },
+  {
+    "file": "1f804677.mp3",
+    "voice": "bella",
+    "text": "Perfect ears! You popped the sounds!",
+    "heard": "Perfect ears. You pop the sounds",
+    "distance": 1,
+    "rate": 0.17,
+    "ops": [
+      "\"popped\"→\"pop\""
+    ]
+  },
+  {
+    "file": "ab979f73.mp3",
+    "voice": "pip",
+    "text": "We looked together in the meadow.",
+    "heard": "We look together in the meadow",
+    "distance": 1,
+    "rate": 0.17,
+    "ops": [
+      "\"looked\"→\"look\""
+    ]
+  },
+  {
+    "file": "6693f6ea.mp3",
+    "voice": "teacher",
+    "text": "Reed the story. Then answer the questions.",
+    "heard": "Read the story, then answer the questions",
+    "distance": 1,
+    "rate": 0.14,
+    "ops": [
+      "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "b8142155.mp3",
+    "voice": "teacher",
+    "text": "Great job! Today we learn something new.",
+    "heard": "Great job. Today we learned something new",
+    "distance": 1,
+    "rate": 0.14,
+    "ops": [
+      "\"learn\"→\"learned\""
+    ]
+  },
+  {
+    "file": "6a23991f.mp3",
+    "voice": "pip",
+    "text": "At night, I reed my favorite book.",
+    "heard": "At night, I read my favorite book",
+    "distance": 1,
+    "rate": 0.14,
+    "ops": [
+      "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "47b4f172.mp3",
+    "voice": "pip",
+    "text": "I reed a book. Then I sleep.",
+    "heard": "I read a book, then I sleep",
+    "distance": 1,
+    "rate": 0.14,
+    "ops": [
+      "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "aa62f08e.mp3",
+    "voice": "pip",
+    "text": "On Wednesday, I reed a new book.",
+    "heard": "On Wednesday, I read a new book",
+    "distance": 1,
+    "rate": 0.14,
+    "ops": [
+      "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "86cae814.mp3",
+    "voice": "teacher",
+    "text": "How often do you reed before bed?",
+    "heard": "How often do you read before bed?",
+    "distance": 1,
+    "rate": 0.14,
+    "ops": [
+      "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "cdeaf84f.mp3",
+    "voice": "pip",
+    "text": "How often do you reed a book?",
+    "heard": "How often do you read a book?",
+    "distance": 1,
+    "rate": 0.14,
+    "ops": [
+      "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "50ac43b3.mp3",
+    "voice": "pip",
+    "text": "At night, he reed his favorite book.",
+    "heard": "At night, he read his favorite book",
+    "distance": 1,
+    "rate": 0.14,
+    "ops": [
+      "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "84b6bc09.mp3",
+    "voice": "teacher",
+    "text": "Nice try! Let's pop more next time.",
+    "heard": "Nice try. Let's pot more next time",
+    "distance": 1,
+    "rate": 0.13,
+    "ops": [
+      "\"pop\"→\"pot\""
+    ]
+  },
+  {
+    "file": "27be790c.mp3",
+    "voice": "teacher",
+    "text": "Reed the spell book. Then answer the questions.",
+    "heard": "Read the spell book, then answer the questions",
+    "distance": 1,
+    "rate": 0.13,
+    "ops": [
+      "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "b9508dcb.mp3",
+    "voice": "pip",
+    "text": "I reed a book, and then I slept!",
+    "heard": "I read a book and then I slept",
+    "distance": 1,
+    "rate": 0.13,
+    "ops": [
+      "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "793ada2b.mp3",
+    "voice": "teacher",
+    "text": "\"Is it lunch? Is it cheese?\" asks Cat-cat.",
+    "heard": "\"Is it lunch? Is it cheese?\" asked Cat Cat",
+    "distance": 1,
+    "rate": 0.11,
+    "ops": [
+      "\"asks\"→\"asked\""
+    ]
+  },
+  {
+    "file": "39914743.mp3",
+    "voice": "leo",
+    "text": "Wait! I see some of my things. Reed them with me!",
+    "heard": "Wait, I see some of my things. Read them with me",
+    "distance": 1,
+    "rate": 0.09,
+    "ops": [
+      "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "7ce93f66.mp3",
+    "voice": "teacher",
+    "text": "Pip! Come here! This is my favourite room in the castle.",
+    "heard": "Pip, come here. This is my favorite room in the castle",
+    "distance": 1,
+    "rate": 0.09,
+    "ops": [
+      "\"favourite\"→\"favorite\""
+    ]
+  },
+  {
+    "file": "7559a9a0.mp3",
+    "voice": "leo",
+    "text": "Thank you for helping me find my star — and you reed hat, mat, and bat all by yourself! Tonight, find a hat at home and reed it out loud!",
+    "heard": "Thank you for helping me find my star and you read Hat, Mat, and Bat all by yourself. Tonight, find a hat at home and read it out loud",
+    "distance": 2,
+    "rate": 0.07,
+    "ops": [
+      "\"reed\"→\"read\"",
+      "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "2d52a10b.mp3",
+    "voice": "pip",
+    "text": "You did it! You know the days of the week, and you can say how often you do things! Tonight, tell your family what you always do every week — and try reading an “ay” word together!",
+    "heard": "You did it! You know the days of the week, and you can say how often you do things. Tonight, tell your family what you always do every week, and try reading an I word together",
+    "distance": 1,
+    "rate": 0.03,
+    "ops": [
+      "\"ay\"→\"i\""
+    ]
+  },
+  {
+    "file": "64fba7a0.mp3",
+    "voice": "pip",
+    "text": "You did it! You can talk about yesterday, and you know regular and irregular verbs! Tonight, tell your family what you did yesterday — and try reading an “ee” word together!",
+    "heard": "You did it! You can talk about yesterday and you know regular and irregular verbs. Tonight, tell your family what you did yesterday and try reading an E-word together",
+    "distance": 1,
+    "rate": 0.03,
+    "ops": [
+      "\"ee\"→\"e\""
+    ]
+  }
+]

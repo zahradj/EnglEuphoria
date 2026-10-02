@@ -51,6 +51,7 @@ import * as wtA2Scenes from '../src/content/playground-library/welcome-town-a2/s
 import * as magicCastleScenes from '../src/content/playground-library/magic-castle/scenes.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
 import { allQuestLines } from '../src/content/homework-quests/registry.ts';
+import { spokenText } from '../src/content/playground-library/unit1/spokenText.ts';
 import { LIBRARY_GAMES } from '../src/content/playground-library/gamesCatalog.ts';
 import { artFor } from '../src/content/playground-library/alphabetArt.ts';
 import { VOICE_PROFILES, approvedVoiceId, normalizeForSpeech, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
@@ -205,7 +206,7 @@ const UNIT1_EXTRACTORS = {
     return out;
   },
   'sound-pop': (s) => [[s.who, 'Perfect ears! You popped the sounds!']],
-  'trophy-chest': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, `Find the ${r.letter} sound!`], [s.who, r.word]]),
+  'trophy-chest': (s) => [[s.who, 'Find this sound!'], ...(s.rounds ?? []).map((r) => [s.who, r.word])],
   'friend-pop': (s) => (s.rounds ?? []).flatMap((r) => {
     const helloMode = !!r.sayLine && /hello|hi\b/i.test(r.sayLine);
     const pronounMode = !helloMode && /^\s*(he|she)\b/i.test(r.prompt);
@@ -328,7 +329,7 @@ const UNIT1_EXTRACTORS = {
   basket: (s) => {
     const out = (s.items ?? []).map((it) => ['teacher', it.word]);
     if (s.announceOnDrop !== false) for (const it of s.items ?? []) if (it.hit) out.push([s.who, it.word]);
-    out.push([s.who, `Yes! The ${s.letter} portal is open!`]);
+    out.push([s.who, 'Yes! The portal is open!']);
     return out;
   },
 };
@@ -364,6 +365,19 @@ const WT_EXTRACTORS = {
     }
     return out;
   },
+  // Mirrors WelcomePartyScene.tsx's welcomePartyLines().
+  'welcome-party': (s) => (s.rounds ?? []).flatMap((r) => [
+    [r.guest, r.knock],
+    [r.guest, r.reply],
+    ...(r.options ?? []).filter((o) => o.correct).map((o) => [s.host, o.line]),
+    ...(r.mode === 'greet' ? [[s.host, `Welcome, ${wtScenes.CAST[r.guest]?.name ?? r.guest}!`]] : []),
+  ]),
+  // Mirrors NameBadgeScene.tsx's nameBadgeLines(); letters are recorded clips.
+  'name-badge': (s) => [
+    ...(s.rounds ?? []).map((r) => [s.who, `How do you spell ${r.name}?`]),
+    [s.who, 'Now make your name badge!'],
+    [s.who, 'Great! Now say: My name is…'],
+  ],
   flipbook: (s) => (s.pages ?? []).map((p) => [p.who ?? 'teacher', p.text]),
   'sound-model': (s) => (s.anchors ?? []).map((a) => [s.who, a.word]),
   // Simplified the same way as unit1's trace — see UNIT1_EXTRACTORS comment.
@@ -411,7 +425,7 @@ const WT_EXTRACTORS = {
   'letter-game': (s) => (s.rounds ?? []).flatMap((r) => {
     const out = [];
     if (s.mode !== 'sound') out.push([s.who, `Find the letter ${r.letter}!`]);
-    out.push([s.who, `${r.letter}! Great job!`]);
+    out.push([s.who, 'Great job!']);
     return out;
   }),
 };
@@ -453,7 +467,9 @@ function gameLines() {
 
 function collectPairs(lessonFilter) {
   const seen = new Map(); // cacheKey -> [character, text]
-  const add = (character, text) => {
+  const add = (character, raw) => {
+    // Same text the app sends (spokenText.ts), so both land on one clip file.
+    const text = raw ? spokenText(raw) : '';
     if (!character || !text) return;
     if (!VOICE_ID[character]) { console.warn(`  ! unknown character "${character}", skipping: ${text}`); return; }
     seen.set(cacheKey(character, text), [character, text]);
@@ -549,6 +565,20 @@ async function main() {
 
   if (process.argv.includes('--audit')) {
     process.exitCode = audit(pairs);
+    return;
+  }
+
+  // --manifest=<file>: write every (voice, text, clip file) as JSON — used
+  // by scripts/voice-audit.mjs to transcribe the clips and compare them
+  // with the text they were meant to say.
+  const manifestArg = process.argv.find((a) => a.startsWith('--manifest='));
+  if (manifestArg) {
+    const out = pairs.map(([character, text]) => {
+      const file = `${cacheFileName(character, text)}.mp3`;
+      return { character, text, file, exists: fs.existsSync(path.join(OUT_DIR, file)) };
+    });
+    fs.writeFileSync(manifestArg.slice('--manifest='.length), JSON.stringify(out, null, 2));
+    console.log(`Wrote manifest of ${out.length} clips (${out.filter((c) => c.exists).length} on disk).`);
     return;
   }
 

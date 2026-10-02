@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
-import { safeSpeak, cueSpeakOnce } from '../audio';
+import { safeSpeak, playLetterPhonic } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 
@@ -41,7 +41,9 @@ export function TrophyChestScene({ scene, onNext, onWin, onLose, sync }: { scene
   const round = scene.rounds[roundIdx];
   const c = CAST[scene.who];
 
-  useEffect(() => { if (round && !revealed) cueSpeakOnce(`Find the ${round.letter} sound!`, scene.who); }, [roundIdx]);
+  // The sound itself is the recorded phonics clip: a voice reading "the N
+  // sound" was heard as "the end sound" (2026-10-02 audit).
+  useEffect(() => { if (round && !revealed) void safeSpeak('Find this sound!', scene.who).then(() => playLetterPhonic(round.letter)); }, [roundIdx]);
 
   const pick = async (choice: string) => {
     if (revealed || finished || !round) return;

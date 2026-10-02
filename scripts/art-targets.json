@@ -376,5 +376,61 @@
       "public/welcome-town/scenes/bg-express-goodbye.png"
     ],
     "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+  },
+  {
+    "out": "public/welcome-town/sprites/pip-wave.png",
+    "sticker": true,
+    "refs": [
+      "public/welcome-town/scenes/bg-classroom-wide-v2.png"
+    ],
+    "prompt": "Pip the small orange fox with a white-tipped tail and a little green backpack, exactly the same character design as in the reference image, standing and waving hello with one hand, happy friendly smile, full body from head to feet, front view, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture, no text."
+  },
+  {
+    "out": "public/welcome-town/sprites/mia-wave.png",
+    "sticker": true,
+    "refs": [
+      "public/welcome-town/scenes/bg-classroom-wide-v2.png"
+    ],
+    "prompt": "Mia the small grey mouse with big round pink ears and a red bow, exactly the same character design as in the reference image, standing and waving hello with one hand, happy friendly smile, full body from head to feet, front view, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture, no text."
+  },
+  {
+    "out": "public/welcome-town/sprites/bella-wave.png",
+    "sticker": true,
+    "refs": [
+      "public/welcome-town/scenes/bg-classroom-wide-v2.png"
+    ],
+    "prompt": "Bella the small white bunny with long pink-lined ears, exactly the same character design as in the reference image, standing and waving hello with one hand, happy friendly smile, full body from head to feet, front view, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture, no text."
+  },
+  {
+    "out": "public/welcome-town/sprites/willow-wave.png",
+    "sticker": true,
+    "refs": [
+      "public/welcome-town/scenes/bg-classroom-wide-v2.png"
+    ],
+    "prompt": "Willow the small blue bird with a green neckerchief, exactly the same character design as in the reference image, standing and waving hello with one hand, happy friendly smile, full body from head to feet, front view, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture, no text."
+  },
+  {
+    "out": "public/welcome-town/sprites/leo-wave.png",
+    "sticker": true,
+    "refs": [
+      "public/welcome-town/scenes/bg-classroom-wide-v2.png"
+    ],
+    "prompt": "Leo the small yellow lion with a big orange mane, exactly the same character design as in the reference image, standing and waving hello with one hand, happy friendly smile, full body from head to feet, front view, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture, no text."
+  },
+  {
+    "out": "public/welcome-town/sprites/marigold-wave.png",
+    "sticker": true,
+    "refs": [
+      "public/welcome-town/scenes/bg-classroom-wide-v2.png"
+    ],
+    "prompt": "Miss Marigold the brown owl teacher with round glasses and a blue scarf, exactly the same character design as in the reference image, standing and waving hello with one hand, happy friendly smile, full body from head to feet, front view, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture, no text."
+  },
+  {
+    "out": "public/welcome-town/scenes/bg-party-door-wide.png",
+    "refs": [
+      "public/welcome-town/scenes/bg-express-goodbye-v2.png",
+      "public/welcome-town/scenes/bg-classroom-wide-v2.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture of the same classroom as the references, decorated for a welcome party: a big closed wooden classroom door on the LEFT third of the picture with a round door knob, colourful balloons and paper bunting along the top of the wall, a long blank paper banner (no letters on it) above the door, a small table on the far right with cupcakes and juice. The middle of the floor in front of the door is clear and empty. No characters, no animals, no people, no text or letters anywhere. Same cartoon art style as the references (bold dark outlines, warm flat colours), filling the whole frame edge to edge with no white border."
   }
 ]
