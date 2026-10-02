@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { ParentStudentList } from '@/components/parent/ParentStudentList';
-import { AddChildDialog } from '@/components/parent/AddChildDialog';
 import { ParentStudentProgress } from '@/components/parent/ParentStudentProgress';
 import { ParentMessages } from '@/components/parent/ParentMessages';
 import { ParentNotificationSettings } from '@/components/parent/ParentNotificationSettings';
@@ -104,7 +103,7 @@ const ParentDashboard: React.FC = () => {
               {t('pd.subtitleDesktop')}
             </p>
           </div>
-          {user?.id && <AddChildDialog parentId={user.id} existingCount={students.length} />}
+          {/* "Add a child" (AddChildDialog) returns once src/components/parent/AddChildDialog.tsx is committed. */}
         </div>
 
         <Tabs defaultValue="students" className="space-y-4 md:space-y-6">

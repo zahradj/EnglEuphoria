@@ -334,16 +334,9 @@ const StudentSignUp = () => {
             Log in
           </Button>
         </p>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Signing up your child?{' '}
-          <Button
-            variant="link"
-            className="h-auto p-0 font-semibold text-violet-600 hover:text-violet-700"
-            onClick={() => navigate('/parent-signup')}
-          >
-            Create a family account
-          </Button>
-        </p>
+        {/* "Signing up your child? Create a family account" (/parent-signup)
+            returns once src/pages/ParentSignUp.tsx is committed — the route was
+            added without the page and broke every production build. */}
       </div>
     </AuthPageLayout>
     </>

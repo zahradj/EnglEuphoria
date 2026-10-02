@@ -92,7 +92,6 @@ const MarketingAgentPage = lazy(() => import("./pages/marketing-agent/MarketingA
 const MarketingAgentAutomationsPage = lazy(() => import("./pages/marketing-agent/AutomationsPage"));
 const TemplateMarketplace = lazy(() => import("./pages/TemplateMarketplace"));
 const StudentSignUp = lazy(() => import("./pages/StudentSignUp"));
-const ParentSignUp = lazy(() => import("./pages/ParentSignUp"));
 const StudentApplication = lazy(() => import("./pages/StudentApplication"));
 const EmailVerification = lazy(() => import("./pages/EmailVerification"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
@@ -491,7 +490,6 @@ const App = () => {
                       <Route path="/signup" element={<Navigate to="/student-signup" replace />} />
                       <Route path="/teacher-signup" element={<Navigate to="/for-teachers" replace />} />
                       <Route path="/student-signup" element={<Suspense fallback={<LoadingFallback />}><StudentSignUp /></Suspense>} />
-                      <Route path="/parent-signup" element={<Suspense fallback={<LoadingFallback />}><ParentSignUp /></Suspense>} />
                       <Route path="/teacher-application" element={<Navigate to="/for-teachers" replace />} />
                       <Route path="/student-application" element={<Suspense fallback={<LoadingFallback />}><StudentApplication /></Suspense>} />
                       <Route path="/email-verification" element={<Suspense fallback={<LoadingFallback />}><EmailVerification /></Suspense>} />
