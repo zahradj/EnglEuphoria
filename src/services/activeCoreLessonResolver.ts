@@ -19,29 +19,6 @@ const HUB_TO_TARGET_SYSTEM: Record<Hub, string[]> = {
  */
 const POINTER_TABLE = 'student_lesson_pointers';
 
-export interface LessonPointerState {
-  currentLessonId: string | null;
-  /** Last lesson finished. Equal to currentLessonId when the student has
-   *  finished everything published at their level so far ("waiting"). */
-  lastCompletedLessonId: string | null;
-}
-
-export async function readLessonPointerState(studentId: string): Promise<LessonPointerState> {
-  const { data, error } = await (supabase as any)
-    .from(POINTER_TABLE)
-    .select('current_lesson_id, last_completed_lesson_id')
-    .eq('student_id', studentId)
-    .maybeSingle();
-  if (error) {
-    console.warn('[activeCoreLessonResolver] lesson pointer read failed:', error);
-    return { currentLessonId: null, lastCompletedLessonId: null };
-  }
-  return {
-    currentLessonId: (data?.current_lesson_id as string | null) ?? null,
-    lastCompletedLessonId: (data?.last_completed_lesson_id as string | null) ?? null,
-  };
-}
-
 export async function readLessonPointer(studentId: string): Promise<string | null> {
   const { data, error } = await (supabase as any)
     .from(POINTER_TABLE)
@@ -97,20 +74,22 @@ export async function resolveActiveCoreLesson(
   studentId: string,
   hub: Hub,
 ): Promise<string | null> {
-  // 1) Current-lesson pointer (advanced after each completed lesson, or set
-  //    by a teacher mid-class / an admin). If the student had finished
-  //    everything published at their level, pick up a lesson added since.
-  const pointer = await readLessonPointerState(studentId);
-  if (pointer.currentLessonId) {
-    if (pointer.lastCompletedLessonId === pointer.currentLessonId) {
-      const next = await getNextLessonInLevel(pointer.currentLessonId);
-      if (next) {
-        // Best-effort (teachers/admins can write; students only read).
-        void writeLessonPointer(studentId, next.id);
-        return next.id;
-      }
+  // 1) Current-lesson pointer, resolved against the curriculum blueprint
+  //    (resolve_student_lesson): the built lesson at the pointer, or — when
+  //    the pointer sits on a unit not built yet — the latest built lesson
+  //    before it (review), until a lesson is published at that slot.
+  const studentPath = await resolveStudentPath(studentId);
+  if (studentPath) {
+    if (studentPath.lessonId) return studentPath.lessonId;
+    if (studentPath.pointerId) {
+      // Nothing built before the pointer at its level yet: open the
+      // level's first built lesson rather than another level's.
+      const first = await findFirstLessonForLevel(hub, studentPath.level);
+      if (first) return first;
     }
-    return pointer.currentLessonId;
+  } else {
+    const pointed = await readLessonPointer(studentId);
+    if (pointed) return pointed;
   }
 
   // 2) personalized_learning_paths
@@ -239,60 +218,87 @@ function compareLessons(a: LessonMeta, b: LessonMeta): number {
   );
 }
 
-/**
- * The next published lesson after this one at the SAME CEFR level (same
- * hub), in teaching order (unit, then lesson). Null when nothing later is
- * published at that level yet. Moving up a level is the teacher's call
- * (LessonSwitcher's next arrow crosses levels), so finishing the last
- * lesson built so far never drops a student into the next level.
- */
-export async function getNextLessonInLevel(lessonId: string): Promise<LessonMeta | null> {
-  const current = await fetchLessonMeta(lessonId);
-  if (!current?.target_system) return null;
-  const { data: all } = await supabase
-    .from('curriculum_lessons')
-    .select(META_COLS)
-    .eq('target_system', current.target_system)
-    .eq('is_published', true);
-  const level = cefrRank(current.slot_cefr_level);
-  const sorted = ([...((all as unknown as LessonMeta[]) ?? [])])
-    .filter(l => cefrRank(l.slot_cefr_level) === level)
-    .sort(compareLessons);
-  const idx = sorted.findIndex(l => l.id === lessonId);
-  if (idx >= 0) return sorted[idx + 1] ?? null;
-  // Lesson unpublished since: first one that sorts after it.
-  return sorted.find(l => compareLessons(current, l) < 0) ?? null;
+export type PathMode = 'current' | 'review' | 'level_complete' | 'none';
+
+export interface StudentPath {
+  mode: PathMode;
+  /** Blueprint slot the student is on (may be a unit not built yet). */
+  pointerId: string | null;
+  /** Built lesson to teach now (null when nothing is built yet). */
+  lessonId: string | null;
+  level: string | null;
+  unit: number | null;
+  lesson: number | null;
+}
+
+/** The student's place on their path (server: resolve_student_lesson).
+ *  Null if the call failed. */
+export async function resolveStudentPath(studentId: string): Promise<StudentPath | null> {
+  const { data, error } = await (supabase as any).rpc('resolve_student_lesson', { p_student: studentId });
+  if (error) {
+    console.warn('[activeCoreLessonResolver] resolve_student_lesson failed:', error);
+    return null;
+  }
+  return {
+    mode: (data?.mode ?? 'none') as PathMode,
+    pointerId: data?.pointer_id ?? null,
+    lessonId: data?.lesson_id ?? null,
+    level: data?.level ?? null,
+    unit: typeof data?.unit === 'number' ? data.unit : null,
+    lesson: typeof data?.lesson === 'number' ? data.lesson : null,
+  };
 }
 
 /**
- * Advance the student's current-lesson pointer after they've completed the
- * current one — to the next lesson at their level. If none is published
- * yet, the pointer stays put and is marked finished, and the next lesson
- * added at that level is picked up automatically (resolveActiveCoreLesson,
- * Learning Path). Returns the next lesson id, or null if there is none yet
- * or the write failed.
+ * After a completed lesson, move the student to the next slot of their
+ * level in the curriculum blueprint (unit, then lesson) — built or not, so
+ * the path stays in order and an unbuilt unit is picked up as soon as it's
+ * published. Never moves backwards (e.g. after a review class) and never
+ * into the next level (that's the teacher's call). Server:
+ * advance_student_path. Returns the next lesson id when it's already built,
+ * else null (also when the write failed).
  */
 export async function advanceCurriculumProgress(
   studentId: string,
   completedLessonId: string,
 ): Promise<string | null> {
-  const next = await getNextLessonInLevel(completedLessonId);
-  const { error: advanceErr } = await (supabase as any)
-    .from(POINTER_TABLE)
-    .upsert(
-      {
-        student_id: studentId,
-        current_lesson_id: next?.id ?? completedLessonId,
-        last_completed_lesson_id: completedLessonId,
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: 'student_id' },
-    );
-  if (advanceErr) {
-    console.error('[activeCoreLessonResolver] lesson pointer advance failed:', advanceErr);
+  const { data, error } = await (supabase as any).rpc('advance_student_path', {
+    p_student: studentId,
+    p_completed: completedLessonId,
+  });
+  if (error) {
+    console.error('[activeCoreLessonResolver] advance_student_path failed:', error);
     return null;
   }
-  return next?.id ?? null;
+  return data?.next_published ? (data.next_id as string) : null;
+}
+
+export interface LevelMapLesson {
+  lesson: number;
+  title: string;
+  id: string;
+  published: boolean;
+}
+
+export interface LevelMapUnit {
+  unitNumber: number;
+  unitTitle: string | null;
+  lessons: LevelMapLesson[];
+}
+
+/** The level's units and lesson slots from the curriculum blueprint —
+ *  built and "coming soon" alike (server: get_level_map). */
+export async function fetchLevelMap(hub: Hub | 'professional', cefr: string): Promise<LevelMapUnit[]> {
+  const { data, error } = await (supabase as any).rpc('get_level_map', { p_hub: hub, p_cefr: cefr });
+  if (error) {
+    console.warn('[activeCoreLessonResolver] get_level_map failed:', error);
+    return [];
+  }
+  return ((data ?? []) as any[]).map((r) => ({
+    unitNumber: r.unit_number,
+    unitTitle: r.unit_title ?? null,
+    lessons: (r.lessons ?? []) as LevelMapLesson[],
+  }));
 }
 
 /** All published lessons for one hub, in the same real teaching order

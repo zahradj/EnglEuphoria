@@ -7,40 +7,30 @@ import { Progress } from "@/components/ui/progress";
 import {
   Target,
   Calendar,
-  Clock,
-  Star,
-  BookOpen,
   CheckCircle,
   Trophy,
   Zap,
   Layers,
   Loader2,
   ArrowRight,
+  Clock,
+  Sparkles,
 } from "lucide-react";
 import { useAuth } from '@/contexts/AuthContext';
-import { useUserProgress } from '@/hooks/useProgress';
 import { useStudentLevel } from '@/hooks/useStudentLevel';
 import {
-  fetchHubLessonSequence,
+  fetchLevelMap,
   normalizeCefr,
-  readLessonPointerState,
+  resolveStudentPath,
   type Hub,
-  type LessonMeta,
+  type LevelMapUnit,
+  type StudentPath,
 } from '@/services/activeCoreLessonResolver';
 import { MemoryBank } from './MemoryBank';
 
-const LEVEL_ORDER = ['Pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+const UNITS_PER_LEVEL = 10;
 
-interface PathLesson extends LessonMeta {
-  description: string | null;
-  duration_minutes: number | null;
-  xp_reward: number | null;
-}
-
-interface UnitGroup {
-  unitNumber: number | null;
-  lessons: PathLesson[];
-}
+type SlotStatus = 'known' | 'done' | 'next' | 'next_soon' | 'upcoming' | 'coming_soon';
 
 function toCoreHub(level: string | null): Hub {
   if (level === 'professional') return 'success';
@@ -49,115 +39,81 @@ function toCoreHub(level: string | null): Hub {
 }
 
 /**
- * The student's learning path: the level their teacher saved in the trial
- * class (or their placement test), that level's lessons for their hub in
- * teaching order, and "Up next" on the lesson their path points to
- * (student_lesson_pointers — the same pointer the classroom opens).
+ * The student's learning path for their level: all 10 units of the
+ * curriculum blueprint (built or coming soon), in order. Units the trial
+ * teacher marked as already known show as "Known", finished lessons as
+ * done, the lesson their path points to as "Up next", and lessons not built
+ * yet as "Coming soon" — they join the path automatically once added.
  */
 export const LearningPathTab = () => {
   const { user } = useAuth();
   const { studentLevel } = useStudentLevel();
   const hub = toCoreHub(studentLevel);
 
-  const { data: userProgress = [] } = useUserProgress(user?.id);
-  const progressMap = React.useMemo(() => {
-    const map: Record<string, { status: string; score: number | null }> = {};
-    userProgress.forEach((p: any) => {
-      map[p.lesson_id] = { status: p.status, score: p.score };
-    });
-    return map;
-  }, [userProgress]);
-
   const { data, isLoading } = useQuery({
     queryKey: ['learning-path', user?.id, hub],
     enabled: !!user?.id,
     queryFn: async () => {
       const uid = user!.id;
-      const [placementRes, profileRes, pointer, sequence] = await Promise.all([
+      const [path, priorRes, placementRes] = await Promise.all([
+        resolveStudentPath(uid),
+        (supabase as any)
+          .from('student_prior_knowledge')
+          .select('cefr_level, start_unit, unit_marks')
+          .eq('student_id', uid)
+          .maybeSingle(),
         (supabase as any)
           .from('placement_results')
-          .select('cefr_level, method, created_at')
+          .select('cefr_level, method')
           .eq('student_id', uid)
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle(),
-        (supabase as any)
-          .from('student_profiles')
-          .select('final_cefr_level')
-          .eq('user_id', uid)
-          .maybeSingle(),
-        readLessonPointerState(uid),
-        fetchHubLessonSequence(hub),
       ]);
-
-      const savedLevel =
-        normalizeCefr(placementRes.data?.cefr_level) ??
-        normalizeCefr(profileRes.data?.final_cefr_level);
-
-      // The pointer may sit in a later level once the student moves up —
-      // follow it; otherwise show the saved level.
-      const pointerId = pointer.currentLessonId;
-      const pointerLesson = pointerId ? sequence.find(l => l.id === pointerId) ?? null : null;
-      const pathLevel = normalizeCefr(pointerLesson?.slot_cefr_level) ?? savedLevel;
-
-      const levelLessons = pathLevel
-        ? sequence.filter(l => normalizeCefr(l.slot_cefr_level) === pathLevel)
-        : [];
-
-      // Extra display fields for just this level's lessons.
-      let extras: Record<string, Partial<PathLesson>> = {};
-      if (levelLessons.length) {
-        const { data: rows } = await supabase
-          .from('curriculum_lessons')
-          .select('id, description, duration_minutes, xp_reward')
-          .in('id', levelLessons.map(l => l.id));
-        extras = Object.fromEntries((rows ?? []).map((r: any) => [r.id, r]));
-      }
-
+      const prior = priorRes.data as { cefr_level: string | null; start_unit: number; unit_marks: Record<string, string> } | null;
+      const level =
+        normalizeCefr(path?.level) ??
+        normalizeCefr(prior?.cefr_level) ??
+        normalizeCefr(placementRes.data?.cefr_level);
+      const map = level ? await fetchLevelMap(hub, level) : [];
       return {
-        savedLevel,
-        pathLevel,
+        path: path as StudentPath | null,
+        level,
+        map,
+        prior: prior && normalizeCefr(prior.cefr_level) === level ? prior : null,
         fromTrial: placementRes.data?.method === 'trial_lesson',
-        pointerId: pointerLesson ? pointerId : null,
-        // Finished everything published at this level so far.
-        finishedPointer: !!pointerLesson && pointer.lastCompletedLessonId === pointerId,
-        lessons: levelLessons.map(l => ({
-          ...l,
-          description: null,
-          duration_minutes: null,
-          xp_reward: null,
-          ...extras[l.id],
-        })) as PathLesson[],
       };
     },
   });
 
-  const lessons = data?.lessons ?? [];
-  const pointerIndex = data?.pointerId ? lessons.findIndex(l => l.id === data.pointerId) : -1;
+  const level = data?.level ?? null;
+  const path = data?.path ?? null;
+  const prior = data?.prior ?? null;
 
-  const finishedPointer = !!data?.finishedPointer && pointerIndex >= 0;
-  const isDone = (l: PathLesson, i: number) =>
-    progressMap[l.id]?.status === 'completed' ||
-    (pointerIndex >= 0 && (i < pointerIndex || (finishedPointer && i === pointerIndex)));
+  const units: LevelMapUnit[] = React.useMemo(() => {
+    const byNumber = new Map((data?.map ?? []).map(u => [u.unitNumber, u]));
+    return Array.from({ length: UNITS_PER_LEVEL }, (_, i) =>
+      byNumber.get(i + 1) ?? { unitNumber: i + 1, unitTitle: null, lessons: [] });
+  }, [data?.map]);
 
-  // Up next: the pointer lesson — or, once it's finished, the next lesson
-  // published at this level since (new units join the path in order).
-  // Without a pointer: the first lesson not yet done.
-  const upNextIndex = pointerIndex >= 0
-    ? (finishedPointer ? (pointerIndex + 1 < lessons.length ? pointerIndex + 1 : -1) : pointerIndex)
-    : lessons.findIndex((l, i) => !isDone(l, i));
-  const waitingForNew = finishedPointer && upNextIndex < 0;
-
-  const groups: UnitGroup[] = React.useMemo(() => {
-    const byUnit = new Map<string, UnitGroup>();
-    for (const l of lessons) {
-      const n = l.slot_unit_number == null || String(l.slot_unit_number).trim() === '' ? null : Number(l.slot_unit_number);
-      const key = String(n);
-      if (!byUnit.has(key)) byUnit.set(key, { unitNumber: n, lessons: [] });
-      byUnit.get(key)!.lessons.push(l);
+  const statusOf = (unit: number, lesson: number, published: boolean): SlotStatus => {
+    const pu = path?.unit ?? null;
+    const pl = path?.lesson ?? null;
+    if (pu == null || pl == null) {
+      return published ? 'upcoming' : 'coming_soon';
     }
-    return Array.from(byUnit.values());
-  }, [lessons]);
+    const before = unit < pu || (unit === pu && lesson < pl);
+    const at = unit === pu && lesson === pl;
+    if (before) {
+      const knownUnit = prior && (unit < (prior.start_unit ?? 1) || prior.unit_marks?.[String(unit)] === 'known');
+      return knownUnit ? 'known' : 'done';
+    }
+    if (at) {
+      if (path?.mode === 'level_complete') return 'done';
+      return published ? 'next' : 'next_soon';
+    }
+    return published ? 'upcoming' : 'coming_soon';
+  };
 
   if (isLoading) {
     return (
@@ -172,11 +128,12 @@ export const LearningPathTab = () => {
     );
   }
 
-  const doneCount = lessons.filter((l, i) => isDone(l, i)).length;
-  const progressPct = lessons.length ? Math.round((doneCount / lessons.length) * 100) : 0;
-  const earnedXP = lessons.filter((l, i) => isDone(l, i)).reduce((sum, l) => sum + (l.xp_reward || 0), 0);
-  const upNext = upNextIndex >= 0 ? lessons[upNextIndex] : null;
-  const levelLabel = data?.pathLevel ?? null;
+  const slots = units.flatMap(u => u.lessons.map(l => ({ u: u.unitNumber, l, status: statusOf(u.unitNumber, l.lesson, l.published) })));
+  const doneCount = slots.filter(s => s.status === 'done' || s.status === 'known').length;
+  const progressPct = slots.length ? Math.round((doneCount / slots.length) * 100) : 0;
+  const builtCount = slots.filter(s => s.l.published).length;
+  const upNext = slots.find(s => s.status === 'next' || s.status === 'next_soon') ?? null;
+  const upNextUnit = upNext ? units.find(u => u.unitNumber === upNext.u) : null;
 
   return (
     <div className="space-y-6">
@@ -188,69 +145,62 @@ export const LearningPathTab = () => {
             Your Path to Fluency
           </h1>
           <p className="text-muted-foreground mt-1">
-            {levelLabel
-              ? data?.fromTrial && data.savedLevel === levelLabel
-                ? `Level ${levelLabel} · set by your teacher in your trial lesson`
-                : `Level ${levelLabel}`
+            {level
+              ? data?.fromTrial
+                ? `Level ${level} · set by your teacher in your trial lesson${prior && prior.start_unit > 1 ? ` · starting at Unit ${prior.start_unit}` : ''}`
+                : `Level ${level}`
               : 'Your level appears here after your trial lesson or placement test.'}
           </p>
         </div>
-        <div className="flex items-center gap-4">
-          {levelLabel && (
-            <div className="rounded-full px-4 py-1.5 text-lg font-extrabold bg-primary/10 text-primary ring-1 ring-primary/30">
-              {levelLabel}
-            </div>
-          )}
-          <div className="text-right">
-            <div className="text-2xl font-bold text-primary">{earnedXP} XP</div>
-            <div className="text-sm text-muted-foreground">Total Earned</div>
+        {level && (
+          <div className="rounded-full px-4 py-1.5 text-lg font-extrabold bg-primary/10 text-primary ring-1 ring-primary/30">
+            {level}
           </div>
-        </div>
+        )}
       </div>
 
       {/* Long-term memory widget — Spaced Repetition System */}
       <MemoryBank />
 
-      {upNext && (
-        <Card className="ring-2 ring-primary bg-primary/5">
-          <CardContent className="flex items-center gap-4 py-5">
-            <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-              <ArrowRight className="h-5 w-5" />
-            </div>
-            <div className="min-w-0">
-              <div className="text-xs font-semibold uppercase tracking-wider text-primary">Up next in your class</div>
-              <div className="font-semibold truncate">{upNext.title}</div>
-              <div className="text-xs text-muted-foreground">
-                {levelLabel} · Unit {upNext.slot_unit_number ?? '—'} · Lesson {upNext.slot_lesson_number ?? '—'}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {waitingForNew && (
+      {path?.mode === 'level_complete' ? (
         <Card className="ring-2 ring-emerald-400/60 bg-emerald-50/60 dark:bg-emerald-950/20">
           <CardContent className="flex items-center gap-4 py-5">
             <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center">
-              <CheckCircle className="h-5 w-5" />
+              <Trophy className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Level complete</div>
+              <div className="font-semibold">You finished every {level} lesson!</div>
+              <div className="text-xs text-muted-foreground">Your teacher will move you up to the next level.</div>
+            </div>
+          </CardContent>
+        </Card>
+      ) : upNext ? (
+        <Card className="ring-2 ring-primary bg-primary/5">
+          <CardContent className="flex items-center gap-4 py-5">
+            <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+              {upNext.status === 'next' ? <ArrowRight className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
             </div>
             <div className="min-w-0">
-              <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">All caught up</div>
-              <div className="font-semibold">You finished every {levelLabel} lesson so far!</div>
+              <div className="text-xs font-semibold uppercase tracking-wider text-primary">
+                {upNext.status === 'next' ? 'Up next in your class' : 'Up next · coming soon'}
+              </div>
+              <div className="font-semibold truncate">{upNext.l.title}</div>
               <div className="text-xs text-muted-foreground">
-                New lessons are on the way. The next one appears here, in order, as soon as it's added.
+                {level} · Unit {upNext.u}{upNextUnit?.unitTitle ? ` (${upNextUnit.unitTitle})` : ''} · Lesson {upNext.l.lesson}
+                {upNext.status === 'next_soon' && ' — this lesson is being made. Your classes review earlier lessons until it opens.'}
               </div>
             </div>
           </CardContent>
         </Card>
-      )}
+      ) : null}
 
       {/* Overall Progress */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Trophy className="h-5 w-5 text-yellow-500" />
-            Your Progress Journey{levelLabel ? ` · ${levelLabel}` : ''}
+            Your Progress Journey{level ? ` · ${level}` : ''}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -260,21 +210,18 @@ export const LearningPathTab = () => {
               <span>{progressPct}% Complete</span>
             </div>
             <Progress value={progressPct} className="h-3" />
-
             <div className="grid grid-cols-3 gap-4 mt-4">
               <div className="text-center">
-                <div className="text-lg font-bold text-primary">{groups.length}</div>
+                <div className="text-lg font-bold text-primary">{UNITS_PER_LEVEL}</div>
                 <div className="text-xs text-muted-foreground">Units</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold text-blue-600">{doneCount} / {lessons.length}</div>
+                <div className="text-lg font-bold text-blue-600">{doneCount} / {slots.length}</div>
                 <div className="text-xs text-muted-foreground">Lessons done</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold text-purple-600">
-                  {lessons.reduce((acc, l) => acc + (l.xp_reward || 0), 0)}
-                </div>
-                <div className="text-xs text-muted-foreground">Available XP</div>
+                <div className="text-lg font-bold text-purple-600">{builtCount}</div>
+                <div className="text-xs text-muted-foreground">Lessons ready</div>
               </div>
             </div>
           </div>
@@ -288,94 +235,92 @@ export const LearningPathTab = () => {
           Your Learning Journey
         </h2>
 
-        {groups.length === 0 ? (
+        {!level ? (
           <Card>
             <CardContent className="text-center py-12">
-              <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">
-                {levelLabel ? `No ${levelLabel} lessons yet` : 'Your path starts after your trial lesson'}
-              </h3>
+              <Sparkles className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Your path starts after your trial lesson</h3>
               <p className="text-muted-foreground">
-                {levelLabel
-                  ? 'Check back soon for new lessons at your level!'
-                  : 'Your teacher will set your level in your trial class, and your lessons will appear here.'}
+                Your teacher will set your level in your trial class, and your lessons will appear here.
               </p>
             </CardContent>
           </Card>
         ) : (
-          groups.map((group) => {
-            const isCurrentUnit = upNext ? group.lessons.some(l => l.id === upNext.id) : false;
+          units.map((unit) => {
+            const unitSlots = slots.filter(s => s.u === unit.unitNumber);
+            const isCurrentUnit = upNext?.u === unit.unitNumber;
+            const allKnown = unitSlots.length > 0 && unitSlots.every(s => s.status === 'known');
+            const allDone = unitSlots.length > 0 && unitSlots.every(s => s.status === 'done' || s.status === 'known');
+            const anyBuilt = unitSlots.some(s => s.l.published);
             return (
               <Card
-                key={String(group.unitNumber)}
-                className={`transition-all duration-200 hover:shadow-md ${isCurrentUnit ? 'ring-2 ring-primary bg-primary/5' : ''}`}
+                key={unit.unitNumber}
+                className={`transition-all duration-200 ${isCurrentUnit ? 'ring-2 ring-primary bg-primary/5' : ''} ${!anyBuilt && !allDone ? 'opacity-75' : ''}`}
               >
                 <CardHeader>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-3">
                     <CardTitle className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${isCurrentUnit ? 'bg-primary' : 'bg-muted-foreground/50'}`}>
-                        <Layers className="h-5 w-5" />
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${
+                        allDone ? 'bg-green-500' : isCurrentUnit ? 'bg-primary' : 'bg-muted-foreground/50'
+                      }`}>
+                        {allDone ? <CheckCircle className="h-5 w-5" /> : <Layers className="h-5 w-5" />}
                       </div>
                       <div>
                         <div className="text-lg">
-                          {group.unitNumber != null ? `${levelLabel} · Unit ${group.unitNumber}` : `${levelLabel} lessons`}
+                          Unit {unit.unitNumber}{unit.unitTitle ? `: ${unit.unitTitle}` : ''}
                         </div>
                         <div className="text-sm text-muted-foreground font-normal">
-                          {group.lessons.length} lesson{group.lessons.length !== 1 ? 's' : ''}
+                          {unitSlots.length
+                            ? `${unitSlots.length} lessons${anyBuilt ? '' : ' · coming soon'}`
+                            : 'Coming soon'}
                         </div>
                       </div>
                     </CardTitle>
-                    {isCurrentUnit && (
-                      <Badge variant="default" className="bg-primary">Current</Badge>
-                    )}
+                    {allKnown ? (
+                      <Badge variant="outline" className="text-emerald-700 border-emerald-300">Known (from trial)</Badge>
+                    ) : allDone ? (
+                      <Badge variant="outline" className="text-green-600 border-green-300">Done</Badge>
+                    ) : isCurrentUnit ? (
+                      <Badge className="bg-primary">Current</Badge>
+                    ) : !anyBuilt ? (
+                      <Badge variant="outline" className="text-muted-foreground">Coming soon</Badge>
+                    ) : null}
                   </div>
                 </CardHeader>
 
-                <CardContent>
-                  <div className="space-y-2">
-                    {group.lessons.map((lesson) => {
-                      const i = lessons.indexOf(lesson);
-                      const done = isDone(lesson, i);
-                      const next = i === upNextIndex;
-                      return (
-                        <div
-                          key={lesson.id}
-                          className={`flex items-center justify-between p-3 rounded-lg border ${next ? 'bg-primary/10 border-primary/40' : 'bg-background'}`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-                              done ? 'bg-green-500 text-white' : next ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
-                            }`}>
-                              {done ? <CheckCircle className="h-3 w-3" /> : lesson.slot_lesson_number ?? i + 1}
-                            </div>
-                            <div>
-                              <div className="font-medium text-sm">{lesson.title}</div>
-                              <div className="text-xs text-muted-foreground flex items-center gap-2">
-                                <span>Lesson {lesson.slot_lesson_number ?? i + 1}</span>
-                                {lesson.duration_minutes ? (
-                                  <>
-                                    <span>•</span>
-                                    <Clock className="h-3 w-3" />
-                                    {lesson.duration_minutes} min
-                                  </>
-                                ) : null}
-                                {lesson.xp_reward ? (
-                                  <>
-                                    <span>•</span>
-                                    <Star className="h-3 w-3 text-yellow-500" />
-                                    {lesson.xp_reward} XP
-                                  </>
-                                ) : null}
+                {unitSlots.length > 0 && !allKnown && (
+                  <CardContent>
+                    <div className="space-y-2">
+                      {unitSlots.map(({ l, status }) => {
+                        const next = status === 'next' || status === 'next_soon';
+                        const done = status === 'done' || status === 'known';
+                        const soon = status === 'coming_soon' || status === 'next_soon';
+                        return (
+                          <div
+                            key={l.id}
+                            className={`flex items-center justify-between p-3 rounded-lg border ${next ? 'bg-primary/10 border-primary/40' : 'bg-background'} ${soon && !next ? 'opacity-70' : ''}`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
+                                done ? 'bg-green-500 text-white' : next ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                              }`}>
+                                {done ? <CheckCircle className="h-3 w-3" /> : l.lesson}
+                              </div>
+                              <div>
+                                <div className="font-medium text-sm">{l.title}</div>
+                                <div className="text-xs text-muted-foreground">Lesson {l.lesson}</div>
                               </div>
                             </div>
+                            {next && <Badge className="bg-primary">{status === 'next' ? 'Up next' : 'Up next · soon'}</Badge>}
+                            {status === 'done' && <Badge variant="outline" className="text-green-600 border-green-300">Done</Badge>}
+                            {status === 'known' && <Badge variant="outline" className="text-emerald-700 border-emerald-300">Known</Badge>}
+                            {status === 'coming_soon' && <Badge variant="outline" className="text-muted-foreground">Coming soon</Badge>}
                           </div>
-                          {next && <Badge className="bg-primary">Up next</Badge>}
-                          {done && !next && <Badge variant="outline" className="text-green-600 border-green-300">Done</Badge>}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </CardContent>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                )}
               </Card>
             );
           })

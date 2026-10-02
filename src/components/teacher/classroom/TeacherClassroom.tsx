@@ -1244,7 +1244,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
               profile, dashboard and learning path (Success keeps the
               level picker inside its own trial stage). */}
           {isTrial && hubType !== 'professional' && (
-            <TrialLevelPicker bookingId={classId} initialLevel={trialCefr} classStarted={classStarted} />
+            <TrialLevelPicker bookingId={classId} studentId={studentId} hubType={hubType} initialLevel={trialCefr} classStarted={classStarted} />
           )}
         </div>
       )}

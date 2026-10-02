@@ -1,29 +1,64 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ListChecks } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { normalizeCefr } from '@/services/activeCoreLessonResolver';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { fetchLevelMap, normalizeCefr, type LevelMapUnit } from '@/services/activeCoreLessonResolver';
 
 const LEVELS = ['Pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1'];
+const UNITS_PER_LEVEL = 10;
+
+type Mark = 'known' | 'partly' | 'not_yet';
+type Marks = Record<number, Mark>;
+
+const MARK_LABEL: Record<Mark, string> = { known: 'Knows it', partly: 'Partly', not_yet: 'Not yet' };
+const MARK_STYLE: Record<Mark, string> = {
+  known: 'bg-emerald-500 text-white',
+  partly: 'bg-amber-400 text-amber-950',
+  not_yet: 'bg-muted-foreground/80 text-background',
+};
+
+/** First unit the student doesn't already know — where the path starts. */
+function startUnitFor(marks: Marks): number {
+  for (let u = 1; u <= UNITS_PER_LEVEL; u++) {
+    if (marks[u] !== 'known') return u;
+  }
+  return UNITS_PER_LEVEL;
+}
 
 interface Props {
   bookingId: string;
+  studentId?: string;
+  hubType: 'playground' | 'academy' | 'professional';
   /** The level the class opened with (saved trial level, else placement). */
   initialLevel?: string | null;
   classStarted?: boolean;
 }
 
 /**
- * Trial-class level picker. The teacher decides the student's level; the
- * `set_trial_level` RPC saves it everywhere at once — the student's profile
- * and dashboard level, a trial placement result, and the learning path
- * (current-lesson pointer → Unit 1 Lesson 1 of that level) — and pins this
- * booking to that lesson, so both screens reload into it.
+ * Trial-class level + prior-knowledge picker. The teacher picks the
+ * student's level, then marks which of the level's 10 units (from the
+ * curriculum blueprint, built or not) the student already knows. The path
+ * starts at the first unit not known. `set_trial_start` saves it all — the
+ * level on the profile/dashboard, the marks, and the learning path — and
+ * pins this class to the lesson to teach now, so both screens reload.
  */
-export const TrialLevelPicker: React.FC<Props> = ({ bookingId, initialLevel, classStarted = false }) => {
+export const TrialLevelPicker: React.FC<Props> = ({ bookingId, studentId, hubType, initialLevel, classStarted = false }) => {
   const [level, setLevel] = useState<string | null>(normalizeCefr(initialLevel));
+  const [startUnit, setStartUnit] = useState<number>(1);
   const [saving, setSaving] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const [map, setMap] = useState<LevelMapUnit[] | null>(null);
+  const [marks, setMarks] = useState<Marks>({});
   const { toast } = useToast();
   const qc = useQueryClient();
 
@@ -32,23 +67,51 @@ export const TrialLevelPicker: React.FC<Props> = ({ bookingId, initialLevel, cla
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialLevel]);
 
-  const pick = async (next: string) => {
-    if (saving || next === level) return;
-    if (classStarted) {
-      const ok = window.confirm(
-        `Set the student's level to ${next}?\n\nThis saves ${next} on their profile and learning path, and opens ${next} Unit 1 Lesson 1 for both of you.`,
-      );
-      if (!ok) return;
-    }
-    setSaving(next);
+  // The marks saved so far (same level only).
+  useEffect(() => {
+    if (!studentId) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await (supabase as any)
+        .from('student_prior_knowledge')
+        .select('cefr_level, start_unit, unit_marks')
+        .eq('student_id', studentId)
+        .maybeSingle();
+      if (cancelled || !data) return;
+      if (normalizeCefr(data.cefr_level) === normalizeCefr(initialLevel)) {
+        setMarks((data.unit_marks ?? {}) as Marks);
+        setStartUnit(data.start_unit ?? 1);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [studentId, initialLevel]);
+
+  // Level map for the dialog.
+  useEffect(() => {
+    if (!open || !level) return;
+    let cancelled = false;
+    setMap(null);
+    fetchLevelMap(hubType === 'professional' ? 'success' : hubType, level).then((m) => {
+      if (!cancelled) setMap(m);
+    });
+    return () => { cancelled = true; };
+  }, [open, level, hubType]);
+
+  const save = async (nextLevel: string, nextMarks: Marks, savingKey: string) => {
+    const start = startUnitFor(nextMarks);
+    setSaving(savingKey);
     try {
-      const { data, error } = await (supabase as any).rpc('set_trial_level', {
+      const { data, error } = await (supabase as any).rpc('set_trial_start', {
         p_booking_id: bookingId,
-        p_cefr: next,
+        p_cefr: nextLevel,
+        p_start_unit: start,
+        p_marks: nextMarks,
       });
       if (error) throw error;
-      const saved = normalizeCefr(data?.level) ?? next;
+      const saved = normalizeCefr(data?.level) ?? nextLevel;
       setLevel(saved);
+      setMarks(nextMarks);
+      setStartUnit(data?.start_unit ?? start);
 
       try {
         const channel = supabase.channel(`classroom-events:${bookingId}`);
@@ -56,7 +119,7 @@ export const TrialLevelPicker: React.FC<Props> = ({ bookingId, initialLevel, cla
         await channel.send({
           type: 'broadcast',
           event: 'lesson_switched',
-          payload: { lessonId: data?.lesson_id ?? null, lessonTitle: `${saved} · Unit 1 Lesson 1` },
+          payload: { lessonId: data?.lesson_id ?? null, lessonTitle: `${saved} · Unit ${data?.start_unit ?? start}` },
         });
         supabase.removeChannel(channel);
       } catch (e) {
@@ -66,43 +129,161 @@ export const TrialLevelPicker: React.FC<Props> = ({ bookingId, initialLevel, cla
       await qc.invalidateQueries({ queryKey: ['classroom-booking'] });
       await qc.invalidateQueries({ queryKey: ['classroom-trial-cefr'] });
       await qc.invalidateQueries({ queryKey: ['classroom-resolved-lesson'] });
+      const unitText = `Unit ${data?.start_unit ?? start}`;
       toast({
-        title: `Level saved: ${saved}`,
-        description: data?.lesson_id
-          ? "Saved on the student's profile and learning path. Opening Unit 1 Lesson 1…"
-          : `Saved on the student's profile. No ${saved} lesson is published for this hub yet.`,
+        title: `Saved: ${saved} · starts at ${unitText}`,
+        description: !data?.pointer_id
+          ? `Saved on the student's profile. No ${saved} lessons exist for this hub yet.`
+          : data?.start_built
+            ? `Saved on the student's profile and learning path. Opening ${unitText}, Lesson 1…`
+            : `Saved on the student's profile and learning path. ${unitText} isn't built yet — this class uses the nearest built lesson, and ${unitText} opens automatically once it's added.`,
       });
+      return true;
     } catch (e: any) {
-      toast({ title: 'Could not save the level', description: e?.message ?? 'Please try again.', variant: 'destructive' });
+      toast({ title: 'Could not save', description: e?.message ?? 'Please try again.', variant: 'destructive' });
+      return false;
     } finally {
       setSaving(null);
     }
   };
 
+  const pickLevel = async (next: string) => {
+    if (saving || next === level) return;
+    if (classStarted) {
+      const ok = window.confirm(
+        `Set the student's level to ${next}?\n\nThis saves ${next} on their profile and learning path and opens ${next} Unit 1 for both of you. You can then mark the units they already know.`,
+      );
+      if (!ok) return;
+    }
+    await save(next, {}, next);
+  };
+
+  const draftStart = useMemo(() => startUnitFor(marks), [marks]);
+  const units = useMemo(() => {
+    const byNumber = new Map((map ?? []).map((u) => [u.unitNumber, u]));
+    return Array.from({ length: UNITS_PER_LEVEL }, (_, i) => byNumber.get(i + 1) ?? { unitNumber: i + 1, unitTitle: null, lessons: [] });
+  }, [map]);
+  const setUnit = (u: number, m: Mark) => setMarks((prev) => ({ ...prev, [u]: m }));
+  const markFirst = (n: number) =>
+    setMarks(Object.fromEntries(Array.from({ length: UNITS_PER_LEVEL }, (_, i) => [i + 1, i < n ? 'known' : 'not_yet'])) as Marks);
+
   return (
-    <div className="flex items-center gap-1 h-8 rounded-md bg-background/80 backdrop-blur border border-border/60 px-1.5">
-      <span className="text-[11px] font-semibold text-muted-foreground pr-1">Trial level</span>
-      {LEVELS.map((l) => {
-        const active = l === level;
-        return (
-          <button
-            key={l}
-            type="button"
-            disabled={!!saving}
-            onClick={() => pick(l)}
-            title={active ? `Saved level: ${l}` : `Set level to ${l}`}
-            className={
-              'h-6 min-w-[2.25rem] rounded px-1.5 text-[11px] font-bold transition-colors disabled:opacity-60 ' +
-              (active
-                ? 'bg-primary text-primary-foreground'
-                : 'text-foreground hover:bg-muted')
-            }
-          >
-            {saving === l ? <Loader2 className="h-3 w-3 animate-spin inline" /> : l}
-          </button>
-        );
-      })}
-    </div>
+    <>
+      <div className="flex items-center gap-1 h-8 rounded-md bg-background/80 backdrop-blur border border-border/60 px-1.5">
+        <span className="text-[11px] font-semibold text-muted-foreground pr-1">Trial level</span>
+        {LEVELS.map((l) => {
+          const active = l === level;
+          return (
+            <button
+              key={l}
+              type="button"
+              disabled={!!saving}
+              onClick={() => pickLevel(l)}
+              title={active ? `Saved level: ${l}` : `Set level to ${l}`}
+              className={
+                'h-6 min-w-[2.25rem] rounded px-1.5 text-[11px] font-bold transition-colors disabled:opacity-60 ' +
+                (active ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted')
+              }
+            >
+              {saving === l ? <Loader2 className="h-3 w-3 animate-spin inline" /> : l}
+            </button>
+          );
+        })}
+        <span className="mx-1 h-4 w-px bg-border" />
+        <button
+          type="button"
+          disabled={!level || !!saving}
+          onClick={() => setOpen(true)}
+          title={level ? 'Mark the units the student already knows' : 'Pick a level first'}
+          className="h-6 rounded px-1.5 text-[11px] font-bold text-foreground hover:bg-muted disabled:opacity-50 flex items-center gap-1"
+        >
+          <ListChecks className="h-3.5 w-3.5" />
+          Prior knowledge · Unit {startUnit}
+        </button>
+      </div>
+
+      <Dialog open={open} onOpenChange={(o) => !saving && setOpen(o)}>
+        <DialogContent className="max-w-2xl max-h-[85vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle>Prior knowledge · {level}</DialogTitle>
+            <DialogDescription>
+              Mark what the student already knows well. Their path starts at the first unit that isn't “Knows it”.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex flex-wrap items-center gap-1.5 text-xs">
+            <span className="text-muted-foreground mr-1">Quick:</span>
+            <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => markFirst(0)}>Start from Unit 1</Button>
+            <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => markFirst(5)}>Units 1–5 known</Button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto -mx-1 px-1 space-y-1.5">
+            {!map ? (
+              <div className="flex items-center justify-center py-10 text-muted-foreground text-sm">
+                <Loader2 className="h-4 w-4 animate-spin mr-2" /> Loading the {level} units…
+              </div>
+            ) : (
+              units.map((u) => {
+                const mark: Mark = marks[u.unitNumber] ?? 'not_yet';
+                const built = u.lessons.filter((l) => l.published).length;
+                const isStart = u.unitNumber === draftStart;
+                return (
+                  <div
+                    key={u.unitNumber}
+                    className={`rounded-lg border p-2.5 ${isStart ? 'border-primary bg-primary/5' : 'border-border/60'}`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="text-sm font-semibold">
+                          Unit {u.unitNumber}{u.unitTitle ? ` · ${u.unitTitle}` : ''}
+                          {isStart && <span className="ml-2 text-[10px] font-bold uppercase text-primary">Starts here</span>}
+                        </div>
+                        <div className="text-[11px] text-muted-foreground line-clamp-2">
+                          {u.lessons.length ? u.lessons.map((l) => l.title).join(' · ') : 'Not planned yet'}
+                        </div>
+                        <div className="text-[10px] text-muted-foreground mt-0.5">
+                          {u.lessons.length ? (built === u.lessons.length ? 'All lessons built' : `${built} of ${u.lessons.length} lessons built`) : ''}
+                        </div>
+                      </div>
+                      <div className="flex shrink-0 rounded-md border border-border/60 overflow-hidden">
+                        {(['known', 'partly', 'not_yet'] as Mark[]).map((m) => (
+                          <button
+                            key={m}
+                            type="button"
+                            onClick={() => setUnit(u.unitNumber, m)}
+                            className={`px-2 py-1 text-[11px] font-semibold ${mark === m ? MARK_STYLE[m] : 'hover:bg-muted'}`}
+                          >
+                            {MARK_LABEL[m]}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+
+          <DialogFooter className="items-center gap-2 sm:justify-between">
+            <div className="text-sm">
+              Starts at <b>{level} · Unit {draftStart}, Lesson 1</b>
+              {Object.values(marks).filter((m) => m === 'known').length === UNITS_PER_LEVEL && (
+                <div className="text-xs text-amber-600">Knows the whole level — consider the next level.</div>
+              )}
+            </div>
+            <Button
+              disabled={!level || !!saving}
+              onClick={async () => {
+                if (level && (await save(level, marks, 'marks'))) setOpen(false);
+              }}
+            >
+              {saving === 'marks' ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
+              Save starting point
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
