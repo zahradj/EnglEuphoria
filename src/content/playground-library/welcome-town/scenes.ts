@@ -1053,17 +1053,17 @@ export const LESSON_2_SCENES: Scene[] = [
     id: 'wt2-vocab-supplies2', kind: 'vocab-spot', bg: bgSupplies2W,
     teacher: 'Remember desk and chair? Now learn three new school words!',
     items: [
-      { label: 'Book', sentence: 'This is my book.', emoji: '\u{1F4D6}', left: '43.8%', top: '54.5%', color: '#2563EB' },
-      { label: 'Pencil', sentence: 'This is my pencil.', emoji: '\u{270F}\u{FE0F}', left: '51.7%', top: '54.5%', color: '#F59E0B' },
-      { label: 'Pen', sentence: 'This is my pen.', emoji: '\u{1F58A}\u{FE0F}', left: '56.2%', top: '52.8%', color: '#0EA5E9' },
+      { label: 'Book', sentence: 'This is my book.', emoji: '\u{1F4D6}', left: '44.7%', top: '60.5%', color: '#2563EB' },
+      { label: 'Pencil', sentence: 'This is my pencil.', emoji: '\u{270F}\u{FE0F}', left: '51.1%', top: '56%', color: '#F59E0B' },
+      { label: 'Pen', sentence: 'This is my pen.', emoji: '\u{1F58A}\u{FE0F}', left: '55.8%', top: '56.6%', color: '#0EA5E9' },
     ],
   },
   {
     id: 'wt2-drag-supplies2', kind: 'drag-match', bg: bgSupplies2W, teacher: 'Listen, then drag each word onto the matching thing on the desk!',
     items: [
-      { label: 'Book', color: '#2563EB', targetLeft: '43.8%', targetTop: '54.5%' },
-      { label: 'Pencil', color: '#F59E0B', targetLeft: '51.7%', targetTop: '54.5%' },
-      { label: 'Pen', color: '#0EA5E9', targetLeft: '56.2%', targetTop: '52.8%' },
+      { label: 'Book', color: '#2563EB', targetLeft: '44.7%', targetTop: '60.5%' },
+      { label: 'Pencil', color: '#F59E0B', targetLeft: '51.1%', targetTop: '56%' },
+      { label: 'Pen', color: '#0EA5E9', targetLeft: '55.8%', targetTop: '56.6%' },
     ],
   },
   {

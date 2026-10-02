@@ -269,11 +269,10 @@
   },
   {
     "out": "public/welcome-town/scenes/bg-vocab-pip-happy-wide.png",
-    "outpaintFrom": "public/welcome-town/scenes/bg-vocab-pip-happy.png",
     "refs": [
       "public/welcome-town/scenes/bg-vocab-pip-happy.png"
     ],
-    "prompt": "Widen this exact picture into a 16:9 widescreen scene. Keep the ENTIRE original picture unchanged in the CENTRE (same characters, same poses, same objects, same colours, same camera, same size — nothing moved, nothing cropped), and extend the same room naturally to the LEFT and RIGHT with matching walls, floor, furniture and light so it continues seamlessly. Add NO new characters and no new people or animals in the extended sides. Same cartoon art style. Full-bleed 16:9, no frame, no border, no text, no letters."
+    "prompt": "Redraw this scene as a 16:9 widescreen picture that fills the WHOLE frame edge to edge: Pip the orange fox (exactly the same character, same happy jumping pose with arms up and a big smile, same style) in the LEFT third of a bright, cosy classroom corner with the same window, wall and wooden floor; the right half of the picture is the same room continuing with a calm, plain wall and floor (no blank panel, no white or cream block, no card shape). No other characters. Same soft cartoon art style and colours. Full-bleed 16:9, no frame, no border, no text, no letters."
   },
   {
     "out": "public/welcome-town/scenes/bg-vocab-leo-tired-wide.png",
