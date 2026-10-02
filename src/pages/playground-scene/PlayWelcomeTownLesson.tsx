@@ -1,3 +1,4 @@
+import { useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -243,12 +244,12 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
         : !interactionUnlocked;
   const usesRealSync = REAL_SYNC_KINDS.has(scene.kind);
 
-  const [activityState, setActivityStateLocal] = useState<unknown>(null);
+  // Scene-tagged: the render right after a scene change must never see the previous scene's state.
+  const [activityState, setActivityStateLocal] = useSceneScopedState(scene.id);
 
   // A new scene starts with no activity state on both sides — each side
   // resets independently in lockstep as soon as its own (already-synced)
   // sceneIdx changes, so this needs no broadcast of its own.
-  useEffect(() => { setActivityStateLocal(null); }, [sceneIdx]);
 
   const setActivityState = useCallback((next: unknown) => {
     setActivityStateLocal(next);
