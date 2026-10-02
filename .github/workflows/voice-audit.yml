@@ -1,0 +1,36 @@
+name: Voice pronunciation audit
+
+# One-off (2026-10-02): transcribes every baked voice clip and compares it
+# with the text it was meant to say. Writes docs/voice-audit/ and commits it
+# to the branch it ran on. Triggered by pushing scripts/voice-audit-run.txt.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/voice-audit-run.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Transcribe and compare
+        env:
+          AUDIT_TOKEN: de472b713779b6c3f2c462fb886213e1861db78b10aa2021
+        run: node scripts/voice-audit-run.mjs
+      - name: Commit report
+        run: |
+          git add docs/voice-audit
+          if git diff --cached --quiet; then echo "No changes."; exit 0; fi
+          git config user.name "voice-audit-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "Voice audit report"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

@@ -487,6 +487,20 @@ async function main() {
   const pairs = collectPairs(lessonFilter);
   console.log(`${lessonFilter ? `Scoped to "${lessonFilter}"` : 'Full run'}: ${pairs.length} unique (character, text) pairs.`);
 
+  // --manifest=<file>: write every (voice, text, clip file) as JSON — used
+  // by scripts/voice-audit.mjs to transcribe the clips and compare them
+  // with the text they were meant to say.
+  const manifestArg = process.argv.find((a) => a.startsWith('--manifest='));
+  if (manifestArg) {
+    const out = pairs.map(([character, text]) => {
+      const file = `${cacheFileName(character, text)}.mp3`;
+      return { character, text, file, exists: fs.existsSync(path.join(OUT_DIR, file)) };
+    });
+    fs.writeFileSync(manifestArg.slice('--manifest='.length), JSON.stringify(out, null, 2));
+    console.log(`Wrote manifest of ${out.length} clips (${out.filter((c) => c.exists).length} on disk).`);
+    return;
+  }
+
   if (process.argv.includes('--dry')) {
     for (const [character, text] of pairs) console.log(`  [${character}] "${text}"`);
     return;
