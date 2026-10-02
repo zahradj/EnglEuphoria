@@ -22,6 +22,11 @@ const manifest = JSON.parse(fs.readFileSync(`${OUT}/manifest.json`, 'utf8'));
 const files = [...new Set(manifest.filter((c) => c.exists).map((c) => c.file))];
 
 const transcripts = new Map();
+// Re-runs only transcribe clips that are new since the last report (a fixed
+// line gets a new clip file name); earlier transcripts are kept.
+if (fs.existsSync(`${OUT}/transcripts.json`)) {
+  for (const t of JSON.parse(fs.readFileSync(`${OUT}/transcripts.json`, 'utf8'))) if (files.includes(t.file)) transcripts.set(t.file, t.text);
+}
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function run(batch) {
@@ -34,7 +39,8 @@ async function run(batch) {
   return (await res.json()).results ?? [];
 }
 
-let pending = files;
+let pending = files.filter((f) => !transcripts.has(f));
+console.log(`${pending.length} clips to transcribe (${transcripts.size} already done).`);
 for (let pass = 0; pass < 4 && pending.length; pass++) {
   const failed = [];
   for (let i = 0; i < pending.length; i += 20) {
