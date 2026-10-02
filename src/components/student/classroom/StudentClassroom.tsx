@@ -37,6 +37,8 @@ interface StudentClassroomProps {
   hubType?: HubType;
   /** Booking scheduled_at — used to anchor the lesson timer / gating. */
   scheduledAt?: string | Date | null;
+  /** The booking's own length (e.g. 60-minute Playground); overrides the hub default. */
+  bookedMinutes?: number | null;
   /** Optional fully-custom stage content (e.g. Success Hub Trail Lesson). */
   customStage?: React.ReactNode;
   /** True for interview/demo classrooms — see MainStage. */
@@ -50,6 +52,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
   teacherName = "Teacher",
   hubType = "academy",
   scheduledAt,
+  bookedMinutes,
   customStage,
   isInterview = false,
 }) => {
@@ -543,6 +546,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
             onReconnect={handleReconnect}
             studentStars={starCount}
             scheduledAt={scheduledAt ?? null}
+            bookedMinutes={bookedMinutes ?? null}
             onToggleComms={() => setMobileCommsOpen(v => !v)}
             isPortrait={isPortrait}
           />

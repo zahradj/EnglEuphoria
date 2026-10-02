@@ -21,14 +21,17 @@ interface SmartTimerResult {
  */
 export function useSmartTimer(
   elapsedSeconds: number,
-  sessionDurationMinutes: 25 | 55 = 25
+  sessionDurationMinutes: number = 25
 ): SmartTimerResult {
   return useMemo(() => {
     const totalSec = sessionDurationMinutes * 60;
 
     // Thresholds in seconds
-    const warningAt = sessionDurationMinutes === 25 ? 20 * 60 : 45 * 60;
-    const urgentAt = sessionDurationMinutes === 25 ? 23 * 60 : 50 * 60;
+    // Short lessons (25 core): warn 5 min / urge 2 min before the end;
+    // long ones (55 core, e.g. 60-min Playground or Academy): 10 / 5.
+    const long = sessionDurationMinutes >= 45;
+    const warningAt = totalSec - (long ? 10 : 5) * 60;
+    const urgentAt = totalSec - (long ? 5 : 2) * 60;
 
     let phase: TimerPhase = "normal";
     if (elapsedSeconds >= totalSec) {

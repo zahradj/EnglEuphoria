@@ -38,7 +38,7 @@ interface ClassroomTopBarProps {
   onToggleZenMode?: () => void;
   shouldPulseWrapUp?: boolean;
   elapsedSeconds?: number;
-  sessionDuration?: 25 | 55;
+  sessionDuration?: number;
   /** Hub-aware time-policy phase derived from elapsedSeconds. */
   lessonPhase?: LessonPhase;
   lessonPhaseLabel?: string;
@@ -49,7 +49,7 @@ interface ClassroomTopBarProps {
   /** Seconds until the mandatory portion completes (for the "left early" pill). */
   secondsUntilMandatoryEnd?: number;
   /** Full booked duration including bonus (30 or 60). */
-  totalMinutes?: 30 | 60;
+  totalMinutes?: number;
   hubType?: HubType;
   rtcConnected?: boolean;
   onReconnect?: () => void;
@@ -119,7 +119,7 @@ export const ClassroomTopBar: React.FC<ClassroomTopBarProps> = ({
   const overtimeSec = isOvertime ? elapsedSeconds - totalSec : 0;
 
   // Buffer time: last 5 min for 55-min, last 2 min for 25-min
-  const bufferSec = sessionDuration === 55 ? 5 * 60 : 2 * 60;
+  const bufferSec = sessionDuration >= 45 ? 5 * 60 : 2 * 60;
   const inBuffer = remaining <= bufferSec && !isOvertime;
 
   const fmt = (seconds: number) => {

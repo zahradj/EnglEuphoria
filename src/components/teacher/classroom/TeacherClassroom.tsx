@@ -64,6 +64,8 @@ interface TeacherClassroomProps {
   isInterview?: boolean;
   /** Trial (student's first booking) — 25 mandatory + 5 optional across every hub. */
   isTrial?: boolean;
+  /** The booking's own length (e.g. a 60-minute Playground lesson); overrides the hub default. */
+  bookedMinutes?: number | null;
   /** Student's resolved CEFR level for this trial — written to placement_results on wrap-up. */
   trialCefr?: string | null;
 }
@@ -82,6 +84,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   customStage,
   isInterview = false,
   isTrial = false,
+  bookedMinutes,
   trialCefr = null,
 }) => {
 
@@ -155,8 +158,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
 
   // Hub-aware lesson time policy (Playground = 25+5, Academy/Success = 55+5).
   const { classTime } = useClassroomTimer(scheduledAt ?? null);
-  const timePolicy = useLessonTimePolicy(hubType, classTime, { isInterview, isTrial });
-  const sessionDuration: 25 | 55 = isInterview ? 25 : (timePolicy.mandatoryMinutes as 25 | 55);
+  const timePolicy = useLessonTimePolicy(hubType, classTime, { isInterview, isTrial, bookedMinutes });
+  const sessionDuration: number = isInterview ? 25 : timePolicy.mandatoryMinutes;
   const smartTimer = useSmartTimer(classTime, sessionDuration);
 
 
@@ -1218,7 +1221,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             bonusSecondsRemaining={timePolicy.bonusSecondsRemaining}
             wouldBeLeftEarly={timePolicy.wouldBeLeftEarly}
             secondsUntilMandatoryEnd={timePolicy.secondsUntilMandatoryEnd}
-            totalMinutes={timePolicy.totalMinutes as 30 | 60}
+            totalMinutes={timePolicy.totalMinutes}
             hubType={hubType}
             rtcConnected={rtcConnected}
             localStream={media.stream}

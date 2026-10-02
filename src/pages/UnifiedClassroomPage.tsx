@@ -17,6 +17,7 @@ import { SuccessTrailLesson } from '@/components/trial/success-trail/SuccessTrai
 
 import { useForceEnglishLocale } from '@/hooks/useForceEnglishLocale';
 import { LessonWindowGate, bookedMinutesFor } from '@/components/classroom/LessonWindowGate';
+import { useLessonSessionTimes } from '@/hooks/useLessonSessionTimes';
 import { getMockLesson } from '@/data/interviewMockLessons';
 import { useDevBypass } from '@/hooks/useDevBypass';
 
@@ -139,6 +140,9 @@ const UnifiedClassroomPage: React.FC = () => {
     },
     enabled: !!bookingId && !!user?.id,
   });
+
+  // Joins + heartbeats: the classroom stays open while the class is live.
+  const { data: sessionTimes, isLoading: sessionTimesLoading } = useLessonSessionTimes(booking?.id);
 
   const isTrialLesson = String((booking as any)?.booking_type ?? '').toLowerCase() === 'trial';
 
@@ -545,7 +549,7 @@ const UnifiedClassroomPage: React.FC = () => {
 
   if (classroomRole === 'teacher') {
     return (
-      <LessonWindowGate scheduledAt={scheduledAtIso} bookedMinutes={bookedMinutes} bypass={isAdmin}>
+      <LessonWindowGate scheduledAt={scheduledAtIso} bookedMinutes={bookedMinutes} bypass={isAdmin} session={sessionTimes} sessionLoading={sessionTimesLoading}>
         <TeacherClassroom
           classId={booking.id}
           teacherName={displayName}
@@ -559,6 +563,7 @@ const UnifiedClassroomPage: React.FC = () => {
           customStage={trailStage}
           isTrial={isTrialLesson && isFirstLesson === true}
           trialCefr={trialCefr ?? null}
+          bookedMinutes={(booking as any)?.duration ?? null}
         />
         <ClassroomLifecycle
           bookingId={booking.id}
@@ -576,7 +581,7 @@ const UnifiedClassroomPage: React.FC = () => {
   }
 
   return (
-    <LessonWindowGate scheduledAt={scheduledAtIso} bookedMinutes={bookedMinutes} bypass={isAdmin}>
+    <LessonWindowGate scheduledAt={scheduledAtIso} bookedMinutes={bookedMinutes} bypass={isAdmin} session={sessionTimes} sessionLoading={sessionTimesLoading}>
       <StudentClassroom
         roomId={booking.id}
         studentId={user.id}
@@ -584,6 +589,7 @@ const UnifiedClassroomPage: React.FC = () => {
         teacherName={teacherFullName}
         hubType={normalizedHub}
         scheduledAt={scheduledAtIso}
+        bookedMinutes={(booking as any)?.duration ?? null}
         customStage={trailStage}
       />
       <ClassroomLifecycle

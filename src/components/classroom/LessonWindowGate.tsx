@@ -1,6 +1,7 @@
 import React from 'react';
 import { Loader2, ShieldOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { isLiveNow, windowCloseMs, type SessionTimes } from '@/services/lessonTiming';
 
 export type ClassroomHub = 'playground' | 'academy' | 'professional';
 
@@ -22,13 +23,21 @@ export interface LessonWindowGateProps {
   earlyOpenMinutes?: number;
   /** Minutes of bonus / overtime after the booked end. Default 5. */
   bonusMinutes?: number;
+  /** The live session (joins + heartbeats). A class that started late gets its
+   *  full booked time, and a class that is still live never closes on a refresh. */
+  session?: SessionTimes | null;
+  /** True until the session row has loaded (the gate waits instead of closing). */
+  sessionLoading?: boolean;
   children: React.ReactNode;
 }
 
 /**
  * Gates the classroom to its real lesson window.
  *  - Opens `earlyOpenMinutes` before `scheduled_at`
- *  - Closes at `scheduled_at + bookedMinutes + bonusMinutes`
+ *  - Closes `bookedMinutes + bonusMinutes` after the real start (the booked
+ *    start, or later if both joined later) — but never while the class is
+ *    still live (a teacher or student heartbeat in the last 3 minutes), so a
+ *    refresh during an over-running class doesn't lock anyone out.
  * Outside that range a friendly screen is shown instead of the classroom.
  */
 export const LessonWindowGate: React.FC<LessonWindowGateProps> = ({
@@ -37,6 +46,8 @@ export const LessonWindowGate: React.FC<LessonWindowGateProps> = ({
   bypass = false,
   earlyOpenMinutes = 30,
   bonusMinutes = 5,
+  session,
+  sessionLoading = false,
   children,
 }) => {
   if (bypass || !scheduledAt) return <>{children}</>;
@@ -47,7 +58,7 @@ export const LessonWindowGate: React.FC<LessonWindowGateProps> = ({
 
   const nowMs = Date.now();
   const openMs = startMs - earlyOpenMinutes * 60_000;
-  const closeMs = startMs + (bookedMinutes + bonusMinutes) * 60_000;
+  const closeMs = windowCloseMs(startMs, bookedMinutes, bonusMinutes, session);
 
   if (nowMs < openMs) {
     const opensIn = Math.ceil((openMs - nowMs) / 60_000);
@@ -69,7 +80,14 @@ export const LessonWindowGate: React.FC<LessonWindowGateProps> = ({
     );
   }
 
-  if (nowMs > closeMs) {
+  if (nowMs > closeMs && !isLiveNow(session, nowMs)) {
+    if (sessionLoading) {
+      return (
+        <div className="min-h-dvh flex items-center justify-center bg-background">
+          <Loader2 className="w-10 h-10 animate-spin text-primary" />
+        </div>
+      );
+    }
     return (
       <div className="min-h-dvh flex items-center justify-center bg-background p-6">
         <div className="text-center space-y-4 max-w-md">

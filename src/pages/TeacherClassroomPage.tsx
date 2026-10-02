@@ -9,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useForceEnglishLocale } from '@/hooks/useForceEnglishLocale';
 import { LessonWindowGate, bookedMinutesFor } from '@/components/classroom/LessonWindowGate';
+import { useLessonSessionTimes } from '@/hooks/useLessonSessionTimes';
 
 const TeacherClassroomPage: React.FC = () => {
   useForceEnglishLocale();
@@ -31,6 +32,9 @@ const TeacherClassroomPage: React.FC = () => {
     },
     enabled: !!id && !!user?.id,
   });
+
+  // Joins + heartbeats: the classroom stays open while the class is live.
+  const { data: sessionTimes, isLoading: sessionTimesLoading } = useLessonSessionTimes(booking?.id);
 
   if (!id) {
     return <Navigate to="/teacher" replace />;
@@ -66,11 +70,12 @@ const TeacherClassroomPage: React.FC = () => {
 
   return (
     <SessionPrivacyGuard sessionId={id}>
-      <LessonWindowGate scheduledAt={scheduledAtIso} bookedMinutes={bookedMinutes}>
+      <LessonWindowGate scheduledAt={scheduledAtIso} bookedMinutes={bookedMinutes} session={sessionTimes} sessionLoading={sessionTimesLoading}>
         <TeacherClassroom
           classId={id}
           teacherName={teacherName}
           scheduledAt={scheduledAtIso}
+          bookedMinutes={(booking as any)?.duration ?? null}
         />
       </LessonWindowGate>
     </SessionPrivacyGuard>
