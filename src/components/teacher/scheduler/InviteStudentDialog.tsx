@@ -111,7 +111,16 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
         headers: { Authorization: `Bearer ${accessToken}` },
       });
 
-      if (error) throw error;
+      if (error) {
+        // supabase-js hides the function's JSON body behind a generic
+        // "non-2xx status code" message — pull out the real reason.
+        let detail = '';
+        try {
+          const body = await (error as any).context?.json?.();
+          detail = typeof body?.error === 'string' ? body.error : '';
+        } catch { /* body wasn't JSON — fall through to generic message */ }
+        throw new Error(detail || error.message);
+      }
       if (data?.error) throw new Error(data.error);
 
       setJoinLink(data.joinLink);

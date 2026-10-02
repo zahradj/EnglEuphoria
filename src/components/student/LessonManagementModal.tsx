@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Calendar } from '@/components/ui/calendar';
+import { supabase } from '@/integrations/supabase/client';
 import { useCancelReschedule } from '@/hooks/useCancelReschedule';
 import { AlertCircle, Calendar as CalendarIcon, Clock, Euro, Gift, AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -30,7 +30,9 @@ interface LessonManagementModalProps {
     id: string;
     title: string;
     scheduled_at: string;
+    teacher_id?: string;
     teacher_name: string;
+    duration?: number;
     lesson_price: number;
     hub_type?: string;
   };
@@ -73,8 +75,36 @@ export function LessonManagementModal({
 
   const [reason, setReason] = useState('');
   const [selectedReason, setSelectedReason] = useState('');
-  const [newDate, setNewDate] = useState<Date>();
-  const [newTime, setNewTime] = useState('');
+  const [openSlots, setOpenSlots] = useState<{ id: string; start_time: string }[]>([]);
+  const [slotsLoading, setSlotsLoading] = useState(false);
+  const [selectedSlot, setSelectedSlot] = useState('');
+
+  // Reschedule can only move onto a slot the teacher has actually opened
+  // (the server enforces the same rule), so list those instead of free-form time.
+  useEffect(() => {
+    if (!open || mode !== 'reschedule' || !lesson.teacher_id) return;
+    let cancelled = false;
+    setSlotsLoading(true);
+    setSelectedSlot('');
+    supabase
+      .from('teacher_availability')
+      .select('id, start_time')
+      .eq('teacher_id', lesson.teacher_id)
+      .eq('duration', lesson.duration ?? 30)
+      .eq('is_available', true)
+      .eq('is_booked', false)
+      .gt('start_time', new Date().toISOString())
+      .order('start_time', { ascending: true })
+      .limit(60)
+      .then(({ data }) => {
+        if (cancelled) return;
+        setOpenSlots(((data ?? []) as { id: string; start_time: string }[]).filter(
+          (s) => s.start_time !== lesson.scheduled_at,
+        ));
+        setSlotsLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [open, mode, lesson.teacher_id, lesson.duration, lesson.scheduled_at]);
 
   const isTrialOrFree = !lesson.lesson_price || lesson.lesson_price === 0;
   const hoursUntil = getHoursUntilLesson(lesson.scheduled_at);
@@ -89,15 +119,11 @@ export function LessonManagementModal({
         onClose();
       }
     } else if (mode === 'reschedule') {
-      if (!newDate || !newTime) return;
-
-      const [hours, minutes] = newTime.split(':');
-      const newDateTime = new Date(newDate);
-      newDateTime.setHours(parseInt(hours), parseInt(minutes));
+      if (!selectedSlot) return;
 
       const success = await rescheduleLesson(
         lesson.id,
-        newDateTime.toISOString(),
+        new Date(selectedSlot).toISOString(),
         reason
       );
       if (success) {
@@ -235,24 +261,32 @@ export function LessonManagementModal({
           {mode === 'reschedule' && (canProceed || isTrialOrFree) && (
             <>
               <div className="space-y-2">
-                <Label>Select New Date</Label>
-                <Calendar
-                  mode="single"
-                  selected={newDate}
-                  onSelect={setNewDate}
-                  disabled={(date) => date < new Date()}
-                  className="rounded-md border"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Select New Time</Label>
-                <input
-                  type="time"
-                  value={newTime}
-                  onChange={(e) => setNewTime(e.target.value)}
-                  className="w-full px-3 py-2 border border-border rounded-md bg-background"
-                />
+                <Label>Choose a new time *</Label>
+                {slotsLoading ? (
+                  <p className="text-sm text-muted-foreground">Loading {lesson.teacher_name}'s open times…</p>
+                ) : openSlots.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    {lesson.teacher_name} has no other open times right now. Please check back later.
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1">
+                    {openSlots.map((slot) => (
+                      <Button
+                        key={slot.id}
+                        type="button"
+                        size="sm"
+                        variant={selectedSlot === slot.start_time ? 'default' : 'outline'}
+                        onClick={() => setSelectedSlot(slot.start_time)}
+                        className="justify-start text-xs h-auto py-2"
+                      >
+                        {new Date(slot.start_time).toLocaleString(undefined, {
+                          weekday: 'short', month: 'short', day: 'numeric',
+                          hour: '2-digit', minute: '2-digit',
+                        })}
+                      </Button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -278,7 +312,7 @@ export function LessonManagementModal({
               loading ||
               (!canProceed && !isTrialOrFree) ||
               (mode === 'cancel' && !selectedReason) ||
-              (mode === 'reschedule' && (!newDate || !newTime))
+              (mode === 'reschedule' && !selectedSlot)
             }
             variant={mode === 'cancel' ? 'destructive' : 'default'}
           >
