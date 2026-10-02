@@ -52,7 +52,10 @@ def edits(a, b):
 # languages on a lone syllable, so instead score the right pronunciation
 # against the same word with each other vowel ("hat" /hæt/ vs /hɑt/, /hɛt/,
 # /hʌt/, /hɪt/ ...) and see which one the audio fits best (CTC loss).
-CHOICE_VOWELS = ['æ', 'ɑː', 'ɛ', 'ʌ', 'ɪ', 'iː', 'ɔː', 'ʊ', 'uː', 'eɪ', 'oʊ', 'a']
+# English vowels only: the recogniser (trained on many languages) is drawn to
+# a bare /a/, which isn't an English vowel and "won" even for book and ball.
+# Normal American merges (ball /bɑːl/, carrot /kɛɹət/) aren't counted as errors.
+CHOICE_VOWELS = ['æ', 'ɑː', 'ɛ', 'ʌ', 'ɪ', 'iː', 'ɔː', 'ʊ', 'uː', 'eɪ', 'oʊ']
 
 
 def forced_choice(model_logits, tokenizer, phones):
