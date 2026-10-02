@@ -48,5 +48,10 @@
     "path": "public/lep1/audio/goodbye-u1l6.mp3",
     "bytes": 321037,
     "sha256": "99b468b2dbf7380c804a2f1ac06f91af7196c87d5360529937229b8daee97bef"
+  },
+  "wt-hello": {
+    "path": "public/welcome-town/audio/hello-song.mp3",
+    "bytes": 321037,
+    "sha256": "188bf6ecbf44723ca514ff49f41bf5a49ae92b20d17cbc588b2e390fff1a2c17"
   }
 }
