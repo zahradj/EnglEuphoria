@@ -70,4 +70,58 @@ export const REUSABLE_ACTIVITIES: ReusableActivity[] = [
       ],
     },
   },
+  {
+    kind: 'first-sound',
+    name: 'First Sound Fishing',
+    file: 'src/content/playground-library/FirstSoundScene.tsx',
+    purpose: "Phonics: hear a picture's word and pick the letter it STARTS with (beginning-sound recognition).",
+    howItWorks:
+      "Underwater scene: a picture floats in a bubble and its word is spoken; the student catches the fish wearing the first "
+      + "letter (2-4 fish). A right catch plays the letter's recorded sound (file-only, no TTS), then the word again, and the "
+      + "missing first letter drops into the word sign. A wrong fish swims off, costs no heart, the word is repeated, and after "
+      + "two misses the right fish glows. Any letters per round, so it fits any phonics focus.",
+    example: {
+      id: 'u1-first-sound',
+      kind: 'first-sound',
+      teacher: 'Say the word with the student, then let them pick the first letter.',
+      rounds: [
+        { word: 'moon', letter: 'M', choices: ['M', 'H', 'S'], img: '<picture import>' },
+        { word: 'hat', letter: 'H', choices: ['H', 'M', 'T'], img: '<picture import>' },
+      ],
+    },
+  },
+  {
+    kind: 'letter-match',
+    name: 'Letter Homes (big & small letters)',
+    file: 'src/content/playground-library/LetterTilesScene.tsx',
+    purpose: 'Alphabet: match capital letters to their small letters (2-6 letters).',
+    howItWorks:
+      "Each capital letter lives in a house; the student drags (or taps, then taps the door) the small letter home. "
+      + "Each match plays the recorded letter NAME. No penalty for a wrong drop.",
+    example: {
+      id: 'u1-letter-homes',
+      kind: 'letter-match',
+      teacher: 'Take each small letter home to its big letter.',
+      letters: ['A', 'B', 'M', 'S'],
+    },
+  },
+  {
+    kind: 'letter-blocks',
+    name: 'Alphabet Train / Sound Train',
+    file: 'src/content/playground-library/LetterTilesScene.tsx',
+    purpose: 'Alphabet / phonics sequencing: couple train cars in ABC order, or letter SOUNDS in order — up to the whole alphabet (26).',
+    howItWorks:
+      "MODEL FIRST: when every block has an illustration (alphabetArt.ts) the game opens with the illustrated Alphabet "
+      + "Station (letter + picture + \"A is for apple\", spoken, with an A-Z strip) BEFORE the ordering; `model: false` skips it. "
+      + "Then the student drags (or taps car, then slot) cars into numbered track slots. mode \"letters\": tapping says the "
+      + "letter name. mode \"sounds\": tapping plays the recorded sound; give a `word` (+ picture) to order a word's sounds, "
+      + "or omit it to order the 26 letter sounds a-z. Short rows are read out / blended at the end; 26-car rows skip the read-out.",
+    example: {
+      id: 'u1-alphabet-train',
+      kind: 'letter-blocks',
+      mode: 'letters',
+      teacher: 'Visit every station, then couple the whole alphabet in order, A to Z.',
+      rounds: [{ blocks: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('') }],
+    },
+  },
 ];

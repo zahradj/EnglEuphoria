@@ -1,5 +1,7 @@
 import type { SpinWheelSceneData } from '../SpinWheelScene';
 import type { PictureMatchSceneData } from '../PictureMatchScene';
+import type { FirstSoundSceneData } from '../FirstSoundScene';
+import type { LetterMatchSceneData, LetterBlocksSceneData } from '../LetterTilesScene';
 /* =============================================================================
  * Welcome Town — A1 Unit 1 Lesson 1: "Hello, Class!"
  *
@@ -142,6 +144,11 @@ export type Scene =
   | SpinWheelSceneData
   // Universal word-to-picture matching activity; see ../PictureMatchScene.tsx.
   | PictureMatchSceneData
+  // Alphabet & phonics games shared with every scene library; see
+  // ../FirstSoundScene.tsx and ../LetterTilesScene.tsx.
+  | FirstSoundSceneData
+  | LetterMatchSceneData
+  | LetterBlocksSceneData
   /** `look: 'card'` — calm cream-card styling (Magic Castle Lesson 2) instead
    *  of the big hopping 3D title; same content, same behaviour. */
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string; cta?: string; look?: 'card' }
@@ -647,7 +654,8 @@ export const LESSON_1_SCENES: Scene[] = [
     // 2's phonics content.
     id: 'wt-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
-    songUrl: `${W}/audio/goodbye-song.mp3`,
+    songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3600, 4120, 4020, 8322],
     lyrics: [
       { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
       { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },
@@ -1065,7 +1073,8 @@ export const LESSON_2_SCENES: Scene[] = [
   {
     id: 'wt2-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
-    songUrl: `${W}/audio/goodbye-song.mp3`,
+    songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3600, 4120, 4020, 8322],
     lyrics: [
       { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
       { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },
@@ -1277,7 +1286,8 @@ export const LESSON_3_SCENES: Scene[] = [
   {
     id: 'wt3-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '🎵 Welcome Town School Goodbye Song 🎵', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
-    songUrl: `${W}/audio/goodbye-song.mp3`,
+    songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3600, 4120, 4020, 8322],
     lyrics: [
       { who: 'marigold', text: '👋 Goodbye, goodbye, my new friend' },
       { who: 'pip', text: '👋 Goodbye, goodbye, see you again' },
@@ -1480,7 +1490,8 @@ export const LESSON_4_SCENES: Scene[] = [
   {
     id: 'wt4-goodbye-song', kind: 'song', bg: bgExpressGoodbyeV2, title: '🎵 Welcome Town School Goodbye Song 🎵', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
-    songUrl: `${W}/audio/goodbye-song.mp3`,
+    songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3600, 4120, 4020, 8322],
     lyrics: [
       { who: 'marigold', text: '👋 Goodbye, goodbye, my new friend' },
       { who: 'pip', text: '👋 Goodbye, goodbye, see you again' },

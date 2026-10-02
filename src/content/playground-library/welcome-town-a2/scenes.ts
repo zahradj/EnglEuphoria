@@ -451,7 +451,8 @@ export const LESSON_A2U1L1_SCENES: Scene[] = [
   {
     id: 'a2u1-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
-    songUrl: `${W}/audio/goodbye-song.mp3`,
+    songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3600, 4120, 4020, 8322],
     lyrics: [
       { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
       { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },
@@ -702,7 +703,8 @@ export const LESSON_A2U1L2_SCENES: Scene[] = [
   {
     id: 'a2u1l2-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
-    songUrl: `${W}/audio/goodbye-song.mp3`,
+    songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3600, 4120, 4020, 8322],
     lyrics: [
       { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
       { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },
@@ -934,7 +936,8 @@ export const LESSON_A2U1L3_SCENES: Scene[] = [
   {
     id: 'a2u1l3-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
-    songUrl: `${W}/audio/goodbye-song.mp3`,
+    songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3600, 4120, 4020, 8322],
     lyrics: [
       { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
       { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },

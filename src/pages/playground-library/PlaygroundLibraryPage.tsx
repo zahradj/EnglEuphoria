@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { GamesGrid, LibrarySectionToggle } from '@/components/games/GamesGrid';
 import { BookOpen } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -62,6 +63,10 @@ function questForLessonRow(l: LessonRow) {
 
 export default function PlaygroundLibraryPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const section: 'lessons' | 'games' = searchParams.get('section') === 'games' ? 'games' : 'lessons';
+  const setSection = (s: 'lessons' | 'games') => setSearchParams(s === 'games' ? { section: 'games' } : {}, { replace: true });
   const { user } = useAuth();
   const [rows, setRows] = useState<LessonRow[] | null>(null);
   const [loading, setLoading] = useState(true);
@@ -182,6 +187,9 @@ export default function PlaygroundLibraryPage() {
 
         {/* CEFR level tier — Pre-A1 is live (Little Explorers Phonics); A1–B2
             are upcoming levels, added one at a time. */}
+        <LibrarySectionToggle section={section} onChange={setSection} />
+
+        {section === 'lessons' && (
         <div className="mx-auto flex max-w-6xl flex-wrap gap-2 px-6 pb-4">
           {LEVELS.map((lvl) => {
             const active = activeLevel === lvl.code;
@@ -204,9 +212,20 @@ export default function PlaygroundLibraryPage() {
             );
           })}
         </div>
+        )}
       </header>
 
       <main className="mx-auto max-w-6xl px-6 py-8">
+        {section === 'games' ? (
+          <>
+            <div className="mb-6 flex items-center gap-2">
+              <span className="rounded-full bg-orange-500 px-3 py-1 text-xs font-black uppercase tracking-wider text-white">Games</span>
+              <h2 className="text-2xl font-black text-orange-900" style={{ fontFamily: "'Fredoka', system-ui, sans-serif" }}>Alphabet &amp; phonics games</h2>
+            </div>
+            <GamesGrid onPlay={(id) => navigate(`/library/playground/games/${id}`, { state: { from: `${location.pathname}?section=games` } })} />
+          </>
+        ) : (
+        <>
         {(() => {
           const levelMeta = LEVELS.find((l) => l.code === activeLevel);
           if (levelMeta?.curriculum) {
@@ -311,6 +330,8 @@ export default function PlaygroundLibraryPage() {
               );
             })}
           </div>
+        )}
+        </>
         )}
       </main>
 

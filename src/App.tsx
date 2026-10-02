@@ -75,6 +75,9 @@ import { HomeGate } from "./components/auth/HomeGate";
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const MethodologyPage = lazy(() => import("./pages/Methodology"));
 const ActivityCatalogPage = lazy(() => import("./pages/ActivityCatalogPage"));
+const GamesPreview = lazy(() => import("./pages/GamesPreview"));
+const PlaygroundGamePage = lazy(() => import("./pages/playground-library/PlaygroundGamePage"));
+const StudentGamesPage = lazy(() => import("./pages/student/StudentGamesPage"));
 const CastChatQuest = lazy(() => import("./pages/CastChatQuest"));
 const ForTeachersPage = lazy(() => import("./pages/ForTeachersPage"));
 const PricingPage = lazy(() => import("./pages/PricingPage"));
@@ -244,6 +247,7 @@ const App = () => {
                       <Route path="/" element={<HomeGateWrapper />} />
                       <Route path="/about" element={<Suspense fallback={<LoadingFallback />}><AboutPage /></Suspense>} />
                      <Route path="/methodology" element={<Suspense fallback={<LoadingFallback />}><MethodologyPage /></Suspense>} />
+                     <Route path="/games-preview" element={<Suspense fallback={<LoadingFallback />}><GamesPreview /></Suspense>} />
                      <Route path="/activity-catalog" element={<Suspense fallback={<LoadingFallback />}><ActivityCatalogPage /></Suspense>} />
                      <Route path="/games/cast-chat-quest" element={<Suspense fallback={<LoadingFallback />}><CastChatQuest /></Suspense>} />
 
@@ -411,6 +415,10 @@ const App = () => {
                       } />
                       {/* Public, read-only mirror of the library above — anyone with the
                           link can browse published lessons, no account required. */}
+                      {/* One Playground game, playable without an account. */}
+                      <Route path="/library/playground/games/:gameId" element={
+                        <Suspense fallback={<LoadingFallback />}><PlaygroundGamePage /></Suspense>
+                      } />
                       <Route path="/library/playground" element={
                         <Suspense fallback={<LoadingFallback />}><PlaygroundLibraryPublic /></Suspense>
                       } />
@@ -666,6 +674,17 @@ const App = () => {
                       <Route path="/dashboard/play" element={
                         <ImprovedProtectedRoute requiredRole="student">
                           <Suspense fallback={<LoadingFallback />}><DailyPlayPage /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* Playground games — the student's own list and player. */}
+                      <Route path="/dashboard/games" element={
+                        <ImprovedProtectedRoute requiredRole="student">
+                          <Suspense fallback={<LoadingFallback />}><StudentGamesPage /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/dashboard/games/:gameId" element={
+                        <ImprovedProtectedRoute requiredRole="student">
+                          <Suspense fallback={<LoadingFallback />}><StudentGamesPage /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/arcade/alphabet" element={

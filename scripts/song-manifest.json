@@ -1,0 +1,52 @@
+{
+  "hello": {
+    "path": "public/lep1/audio/hello-song.mp3",
+    "bytes": 321037,
+    "sha256": "be05f85e4c18116556364021c7842d394f82d516dc581d2d3882b6e7e28d784e"
+  },
+  "goodbye": {
+    "path": "public/lep1/audio/goodbye-song.mp3",
+    "bytes": 321037,
+    "sha256": "06351b2bc4f1d5aaed721845641591f591bb43beb23b35d0b16affcfded4f953"
+  },
+  "wt-goodbye": {
+    "path": "public/welcome-town/audio/goodbye-song.mp3",
+    "bytes": 321037,
+    "sha256": "a5b1e504d692759da5a6ad7f7043b8b6503bc45c91aafce2ff0f55a9feb390c7"
+  },
+  "mc-warmup": {
+    "path": "public/magic-castle/audio/warmup-song.mp3",
+    "bytes": 321037,
+    "sha256": "44694935fa65d79d70b85c38d59ff37577b0789bc632c577207e948edaed6560"
+  },
+  "u1l1-goodbye": {
+    "path": "public/lep1/audio/goodbye-u1l1.mp3",
+    "bytes": 321037,
+    "sha256": "e73fb86fd892a5c4930abaa94aeed58a3fce2c0446970aeb12eae188cebe38e3"
+  },
+  "u1l2-goodbye": {
+    "path": "public/lep1/audio/goodbye-u1l2.mp3",
+    "bytes": 321037,
+    "sha256": "6ff6e227fe3019692dc01163ae5c69c1e0e2dcded8f2c888818b17ac876d1594"
+  },
+  "u1l3-goodbye": {
+    "path": "public/lep1/audio/goodbye-u1l3.mp3",
+    "bytes": 321037,
+    "sha256": "a726640156e05699ea1102665b5cd8ca2aee292fd41fda2d23c6b415f4d9fb9a"
+  },
+  "u1l4-goodbye": {
+    "path": "public/lep1/audio/goodbye-u1l4.mp3",
+    "bytes": 321037,
+    "sha256": "eeda8961bdc8a7517547c451c288e61ecb18673a417631735ccbba3cea41c087"
+  },
+  "u1l5-goodbye": {
+    "path": "public/lep1/audio/goodbye-u1l5.mp3",
+    "bytes": 321037,
+    "sha256": "4c24695d29ed1f4b398d5e37c31e16715cbf87d3f857a40be30fe1b6c8199e4f"
+  },
+  "u1l6-goodbye": {
+    "path": "public/lep1/audio/goodbye-u1l6.mp3",
+    "bytes": 321037,
+    "sha256": "99b468b2dbf7380c804a2f1ac06f91af7196c87d5360529937229b8daee97bef"
+  }
+}

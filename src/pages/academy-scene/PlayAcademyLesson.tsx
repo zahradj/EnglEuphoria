@@ -12,12 +12,20 @@ import {
   type Slide,
   type Theme,
   type Block,
+  type AnswerEvent,
 } from '@/pages/AcademyDemo';
 import { AcademyHubProvider } from '@/components/academy/HubGuard';
 import ProfileAvatar from '@/components/academy/ProfileAvatar';
 import CoinBalance from '@/components/academy/CoinBalance';
 import AcademyLessonCompleteModal from '@/components/academy/AcademyLessonCompleteModal';
 import { awardAcademyCoins, ACADEMY_COINS_PER_BLOCK } from '@/lib/academy/coins';
+import { QuestHud, LevelSplash, LevelCleared, XpPops, type XpPopItem } from '@/components/academy/game/QuestUi';
+import { resolveQuestLevel, type QuestLevelOverrides } from '@/lib/academy/questLevels';
+import { sfx, isSfxMuted, setSfxMuted } from '@/lib/academy/sfx';
+import { extractImageUrls, loadResume, saveResume, clearResume } from '@/lib/academy/playerSafety';
+import { SlideErrorBoundary, RenderGuard, OfflineChip } from '@/components/academy/player/PlayerSafety';
+import { SlideNavigator } from '@/components/academy/player/SlideNavigator';
+import { useDevBypass } from '@/hooks/useDevBypass';
 
 /**
  * The new, canonical Academy lesson player (Phase 1 of the "new Academy
@@ -73,6 +81,8 @@ interface LessonRow {
    *  shared/generic asset. Absent on lessons not yet illustrated this way;
    *  BLOCK_SCENES' CSS gradients are the fallback for those. */
   blockImages?: Partial<Record<Block, string>>;
+  /** Optional per-lesson quest level names/goals (see lib/academy/questLevels.ts). */
+  levels?: QuestLevelOverrides;
 }
 
 const SESSION_KEY_PREFIX = 'academy-scene-idx:';
@@ -152,6 +162,17 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
   const [lesson, setLesson] = useState<LessonRow | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [reloadKey, setReloadKey] = useState(0);
+  const [maxReached, setMaxReached] = useState(0);
+  const [navOpen, setNavOpen] = useState(false);
+  const [badImages, setBadImages] = useState<Set<string>>(() => new Set());
+  const preloaded = useRef<Set<string>>(new Set());
+  const { isDevBypassActive, bypassRole } = useDevBypass();
+  // Teachers / admins / content creators (and the dev-bypass teacher) may jump to any slide in the lesson map.
+  const isTeacher =
+    role === 'teacher' ||
+    ['teacher', 'admin', 'content_creator'].includes(String((user as any)?.role ?? '')) ||
+    (isDevBypassActive && (bypassRole === 'teacher' || bypassRole === 'admin'));
 
   const [theme, setTheme] = useState<Theme>('dark');
   const [i, setI] = useState(0);
@@ -184,15 +205,22 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
           throw new Error('This lesson has no content yet.');
         }
         if (!cancelled) {
+          // Read the saved position BEFORE touching any state: setting the lesson re-renders slide 1 and the
+          // "save progress" effect would overwrite the saved position with 0 before we could read it.
+          const saved = sessionStorage.getItem(`${SESSION_KEY_PREFIX}${lessonId}`);
+          const resume = loadResume(lessonId, slides.length);
+          const savedIdx = saved ? parseInt(saved, 10) : resume ? resume.i : 0;
+          const startIdx = Number.isFinite(savedIdx) ? Math.min(Math.max(savedIdx, 0), slides.length - 1) : 0;
+          setI(startIdx);
+          setMaxReached(Math.max(startIdx, resume?.max ?? 0));
+          if (resume && !saved) setXp(resume.xp);
           setLesson({
             id: data.id,
             title: data.title,
             slides: slides as Slide[],
             blockImages: (data?.content as any)?.blockImages ?? undefined,
+            levels: (data?.content as any)?.levels ?? undefined,
           });
-          const saved = sessionStorage.getItem(`${SESSION_KEY_PREFIX}${lessonId}`);
-          const savedIdx = saved ? parseInt(saved, 10) : 0;
-          setI(Number.isFinite(savedIdx) ? Math.min(Math.max(savedIdx, 0), slides.length - 1) : 0);
         }
       } catch (err: any) {
         if (!cancelled) setLoadError(err?.message || 'Failed to load this lesson.');
@@ -203,17 +231,114 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
     return () => {
       cancelled = true;
     };
-  }, [lessonId]);
+  }, [lessonId, reloadKey]);
 
   const slides = lesson?.slides ?? [];
   const slide = slides[i];
+
+  // ───────────── Quest / game layer ─────────────
+  // Every block is a "level". The student earns XP + a streak for correct answers, sees a level intro and a
+  // level-cleared celebration, and follows a trail map in the header. Nothing here can fail the student: a
+  // wrong answer only resets the streak (gentle sound, encouraging pop-up) — no lives, no locks.
+  const [xp, setXp] = useState(0);
+  const [streak, setStreak] = useState(0);
+  const [pops, setPops] = useState<XpPopItem[]>([]);
+  type QuestOverlay = null | { kind: 'splash'; block: Block } | { kind: 'cleared'; block: Block; nextIndex: number };
+  const [overlay, setOverlay] = useState<QuestOverlay>(null);
+  const [sfxMuted, setSfxMutedState] = useState<boolean>(() => isSfxMuted());
+  const overlayRef = useRef<QuestOverlay>(null);
+  overlayRef.current = overlay;
+  const shownSplash = useRef<Set<string>>(new Set());
+  const visitedSlides = useRef<Set<number>>(new Set());
+  const blockStats = useRef<Record<string, { correct: number; total: number; xp: number }>>({});
+  const streakRef = useRef(0);
+  const popId = useRef(0);
+  const blockRef = useRef<string>('');
+  blockRef.current = slide?.block ?? '';
+  const nextRef = useRef<() => void>();
+  const finishedLevelRef = useRef(false);
+
+  const questLevels = useMemo(
+    () => BLOCKS.map((b) => ({ id: b.id as string, level: resolveQuestLevel(b.id, lesson?.levels) })),
+    [lesson?.levels],
+  );
+  const levelIndex = slide ? Math.max(0, BLOCKS.findIndex((b) => b.id === slide.block)) : 0;
+  const currentLevel = questLevels[levelIndex]?.level ?? resolveQuestLevel('warmup');
+
+  const addPop = (text: string, tone: XpPopItem['tone']) => {
+    const id = ++popId.current;
+    setPops((p) => [...p.slice(-2), { id, text, tone }]);
+    window.setTimeout(() => setPops((p) => p.filter((x) => x.id !== id)), 1100);
+  };
+
+  const handleAnswer = (e: AnswerEvent) => {
+    const st = (blockStats.current[blockRef.current] ||= { correct: 0, total: 0, xp: 0 });
+    st.total += 1;
+    if (e.isCorrect) {
+      st.correct += 1;
+      const n = streakRef.current + 1;
+      streakRef.current = n;
+      setStreak(n);
+      const gain = n >= 3 ? 15 : 10;
+      st.xp += gain;
+      setXp((x) => x + gain);
+      addPop(n >= 3 ? `🔥 x${n}  +${gain} XP` : `+${gain} XP`, n >= 3 ? 'streak' : 'good');
+      sfx.correct();
+    } else {
+      streakRef.current = 0;
+      setStreak(0);
+      addPop('Nice try — keep going!', 'soft');
+      sfx.wrong();
+    }
+  };
+
+  // First visit to a slide = +5 XP (silently); first visit to a block = level intro splash.
+  useEffect(() => {
+    if (!slide) return;
+    setMaxReached((m) => (i > m ? i : m));
+    if (!visitedSlides.current.has(i)) {
+      visitedSlides.current.add(i);
+      setXp((x) => x + 5);
+    }
+    if (!shownSplash.current.has(slide.block) && !overlayRef.current) {
+      shownSplash.current.add(slide.block);
+      setOverlay({ kind: 'splash', block: slide.block as Block });
+      sfx.go();
+    }
+    if (i !== slides.length - 1) finishedLevelRef.current = false;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i, lesson?.id]);
+
+  const toggleMute = () => {
+    const next = !sfxMuted;
+    setSfxMuted(next);
+    setSfxMutedState(next);
+    if (!next) sfx.tap();
+  };
 
   // Persist the current slide so a refresh/back-nav resumes where the
   // student left off, mirroring PlayUnitLesson.tsx's sessionStorage pattern.
   useEffect(() => {
     if (!lessonId || !slides.length) return;
     sessionStorage.setItem(`${SESSION_KEY_PREFIX}${lessonId}`, String(i));
-  }, [lessonId, i, slides.length]);
+    saveResume(lessonId, { i, xp, max: Math.max(maxReached, i) });
+  }, [lessonId, i, slides.length, xp, maxReached]);
+
+  // Preload the next two slides' pictures (and every level backdrop) so scenes never pop in blank; a picture
+  // that fails to load is remembered so the player falls back to the level gradient instead of a broken image.
+  useEffect(() => {
+    if (!lesson) return;
+    const urls = new Set<string>();
+    for (const k of [i, i + 1, i + 2]) extractImageUrls(lesson.slides[k]).forEach((u) => urls.add(u));
+    Object.values(lesson.blockImages ?? {}).forEach((u) => u && urls.add(u));
+    urls.forEach((u) => {
+      if (preloaded.current.has(u)) return;
+      preloaded.current.add(u);
+      const img = new Image();
+      img.onerror = () => setBadImages((prev) => (prev.has(u) ? prev : new Set(prev).add(u)));
+      img.src = u;
+    });
+  }, [i, lesson]);
 
   // Award coins the first time the student visits each block this session —
   // same idempotent-via-DB-unique-index pattern as AcademyDemo.tsx, but
@@ -234,8 +359,10 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (!slides.length) return;
-      if (e.key === 'ArrowRight') setI((n) => Math.min(slides.length - 1, n + 1));
+      if (!slides.length || overlayRef.current) return;
+      const tag = (e.target as HTMLElement | null)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return; // never steal arrow keys while typing
+      if (e.key === 'ArrowRight') nextRef.current?.();
       if (e.key === 'ArrowLeft') setI((n) => Math.max(0, n - 1));
     };
     window.addEventListener('keydown', onKey);
@@ -267,7 +394,7 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
       : slide?.type === 'canvas_game' || slide?.type === 'living_canvas'
         ? (slide as any).background_image
         : undefined;
-  const pageBgImage = slideOwnImage || realSceneImage;
+  const pageBgImage = [slideOwnImage, realSceneImage].find((u) => !!u && !badImages.has(u as string)) as string | undefined;
   // scene_dialogue, conversation_fill, number_chart, number_quiz_game,
   // role_play, canvas_game/living_canvas, and intro all render their own
   // complete, self-contained visual already (a full scene, a game board,
@@ -292,6 +419,11 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
     slide?.type === 'sound_challenge_game' ||
     slide?.type === 'find_in_scene_game' ||
     slide?.type === 'story_page' ||
+    slide?.type === 'escape_room_slot' ||
+    slide?.type === 'expedition_game' ||
+    slide?.type === 'hidden_object_slot' ||
+    slide?.type === 'detective_mystery_slot' ||
+    slide?.type === 'story_engine_slot' ||
     slide?.type === 'canvas_game' ||
     slide?.type === 'living_canvas' ||
     slide?.type === 'vocab' ||
@@ -342,18 +474,57 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
   };
 
   const handleNext = () => {
-    if (!slides.length) return;
-    if (i === slides.length - 1) {
+    if (!slides.length || overlayRef.current) return;
+    const isLast = i === slides.length - 1;
+    const nextSlide = slides[i + 1];
+    if (isLast && !finishedLevelRef.current) {
+      finishedLevelRef.current = true;
+      sfx.levelUp();
+      setOverlay({ kind: 'cleared', block: slide.block as Block, nextIndex: -1 });
+      return;
+    }
+    if (!isLast && nextSlide && nextSlide.block !== slide.block) {
+      sfx.levelUp();
+      setOverlay({ kind: 'cleared', block: slide.block as Block, nextIndex: i + 1 });
+      return;
+    }
+    if (isLast) {
       void persistCompletion();
       setCompleteOpen(true);
       return;
     }
     setI((n) => Math.min(slides.length - 1, n + 1));
   };
+  nextRef.current = handleNext;
+
+  // Wrap a rendered slide so ONE broken slide can never take the whole lesson down.
+  const guarded = (node: React.ReactNode) => (
+    <SlideErrorBoundary resetKey={i} slide={slide} canSkip={i < slides.length - 1} onSkip={() => nextRef.current?.()}>
+      <RenderGuard resetKey={i} slide={slide} canSkip={i < slides.length - 1} onSkip={() => nextRef.current?.()}>
+        {node}
+      </RenderGuard>
+    </SlideErrorBoundary>
+  );
+
+  const closeSplash = () => setOverlay(null);
+  const closeCleared = () => {
+    const o = overlayRef.current;
+    setOverlay(null);
+    if (!o || o.kind !== 'cleared') return;
+    if (o.nextIndex === -1) {
+      void persistCompletion();
+      setCompleteOpen(true);
+    } else {
+      setI(o.nextIndex);
+    }
+  };
 
   const handleCompleteClose = () => {
     setCompleteOpen(false);
-    if (lessonId) sessionStorage.removeItem(`${SESSION_KEY_PREFIX}${lessonId}`);
+    if (lessonId) {
+      sessionStorage.removeItem(`${SESSION_KEY_PREFIX}${lessonId}`);
+      clearResume(lessonId);
+    }
     navigate('/dashboard');
   };
 
@@ -369,12 +540,20 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
     return (
       <div dir="ltr" className="min-h-dvh flex flex-col items-center justify-center gap-3 bg-[#0B0F1A] text-white px-6 text-center">
         <p className="text-lg font-semibold">{loadError || 'This lesson could not be loaded.'}</p>
-        <button
-          onClick={() => navigate('/dashboard')}
-          className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 text-sm font-medium"
-        >
-          Back to dashboard
-        </button>
+        <div className="flex flex-wrap justify-center gap-3">
+          <button
+            onClick={() => setReloadKey((k) => k + 1)}
+            className="min-h-[44px] rounded-md bg-emerald-600 px-5 text-sm font-semibold hover:bg-emerald-500"
+          >
+            Try again
+          </button>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="min-h-[44px] rounded-md bg-indigo-600 px-5 text-sm font-medium hover:bg-indigo-500"
+          >
+            Back to dashboard
+          </button>
+        </div>
       </div>
     );
   }
@@ -405,7 +584,7 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
         data-hub="academy"
         style={
           pageBgImage
-            ? { backgroundImage: `url(${pageBgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }
+            ? { backgroundImage: `url(${pageBgImage})`, backgroundSize: 'cover', backgroundPosition: (slideOwnImage && (slide as any)?.bg_position) || 'center', backgroundRepeat: 'no-repeat' }
             : { background: cssScene.background }
         }
       >
@@ -420,20 +599,30 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
 
         <div className="relative z-10 flex h-full w-full flex-col px-0 pb-4 pt-4">
           {/* Top chrome — lesson chip, block label, minimal controls. */}
-          <header className="flex items-center justify-between gap-4 px-4 md:px-8">
+          <header className="relative flex items-center justify-between gap-3 px-4 pb-2 md:px-8">
             <div className="flex min-w-0 items-center gap-3 rounded-full bg-black/30 py-1.5 pl-1.5 pr-4 backdrop-blur-md ring-1 ring-white/10">
               <img
                 src="/favicon.png?v=10"
                 alt="EnglEuphoria"
                 className="h-8 w-8 shrink-0 rounded-full bg-white/95 object-contain p-0.5 ring-1 ring-white/20"
               />
-              <div className="min-w-0">
+              <div className="hidden min-w-0 2xl:block">
                 <div className="truncate text-sm font-semibold leading-tight">{lesson.title}</div>
                 <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: cssScene.accent }}>
                   {blockLabel}
                 </div>
               </div>
             </div>
+            <QuestHud
+              levels={questLevels}
+              currentIndex={levelIndex}
+              progress={slides.length > 1 ? i / (slides.length - 1) : 0}
+              xp={xp}
+              streak={streak}
+              accent={cssScene.accent}
+              muted={sfxMuted}
+              onToggleMute={toggleMute}
+            />
             <div className="flex shrink-0 items-center gap-2 rounded-full bg-black/30 px-2 py-1.5 backdrop-blur-md ring-1 ring-white/10">
               <CoinBalance />
               <ProfileAvatar size="sm" />
@@ -468,31 +657,37 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.25 }}
                 >
-                  <SlideRenderer slide={slide} t={t} fullBleed={slide.type !== 'intro'} />
+                  {/* Slide types that draw NO card of their own (reading text, grammar rows, clusters,
+                      vocab) used to paint dark-theme text straight onto the busy scene — dark-on-dark
+                      grammar rows and unframed paragraphs the student could barely read. Give them a
+                      themed, high-contrast "journal page" frame (light theme tokens, scrolls inside). */}
+                  {['reading_passage', 'grammar_pattern', 'cluster', 'vocab'].includes(String(slide.type)) && !(slide as any).image_url ? (
+                    <div className="mx-4 max-h-full w-full max-w-3xl overflow-y-auto rounded-3xl border-4 border-emerald-800 bg-[#fbf8ee] p-6 text-slate-900 shadow-[0_8px_0_0_#064e3b,0_24px_44px_rgba(0,0,0,0.4)] md:p-8">
+                      {guarded(<SlideRenderer slide={slide} t={themeMap.light} fullBleed={false} onAnswer={handleAnswer} />)}
+                    </div>
+                  ) : (
+                    guarded(<SlideRenderer slide={slide} t={t} fullBleed={slide.type !== 'intro'} onAnswer={handleAnswer} />)
+                  )}
                 </motion.div>
               ) : (
                 <motion.div
                   key={i}
-                  className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-xl px-4 md:px-8"
+                  className="absolute inset-x-0 bottom-0 mx-auto flex max-h-full w-full max-w-3xl flex-col px-4 md:px-8"
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -16 }}
                   transition={{ duration: 0.25 }}
                 >
-                  <span
-                    className="mb-1.5 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-widest shadow"
-                    style={{ color: cssScene.accent }}
-                  >
-                    🗣 Ava
+                  <span className="mb-2 inline-flex w-fit items-center gap-2 rounded-full border-2 border-white/90 bg-emerald-800 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-white shadow-[0_4px_0_0_rgba(0,0,0,0.4)]">
+                    <span aria-hidden>{currentLevel.emoji}</span> {currentLevel.title}
                   </span>
-                  <div className="relative max-h-[50vh] overflow-y-auto rounded-2xl bg-white px-5 py-4 shadow-2xl md:px-7 md:py-6">
-                    <SlideRenderer slide={slide} t={themeMap.light} />
+                  {/* Mission card: chunky border + 3D drop, accent strip on top — a game panel, not a slide. */}
+                  <div className="relative flex min-h-0 flex-col overflow-hidden rounded-3xl border-4 border-emerald-800 bg-white text-slate-900 shadow-[0_8px_0_0_#064e3b,0_24px_44px_rgba(0,0,0,0.4)]">
+                    <div className="h-2 shrink-0" style={{ background: `linear-gradient(90deg, ${cssScene.accent}, #fbbf24, #34d399)` }} />
+                    <div className="min-h-0 overflow-y-auto px-5 py-4 md:px-7 md:py-5 [&_button:not(:disabled)]:transition [&_button:not(:disabled):active]:translate-y-px">
+                      {guarded(<SlideRenderer slide={slide} t={themeMap.light} onAnswer={handleAnswer} />)}
+                    </div>
                   </div>
-                  {/* Speech-bubble tail, pointing down toward the "speaker". */}
-                  <div
-                    className="absolute bottom-[calc(100%-1.5rem)] left-8 h-5 w-5 rotate-45 bg-white"
-                    style={{ boxShadow: '2px 2px 2px rgba(0,0,0,0.04)' }}
-                  />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -525,9 +720,13 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
           >
             <ChevronLeft className="h-4 w-4" /> Back
           </button>
-          <div className="rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold text-slate-800 shadow-xl backdrop-blur tabular-nums">
-            {i + 1} / {slides.length}
-          </div>
+          <button
+            onClick={() => setNavOpen(true)}
+            aria-label={`Slide ${i + 1} of ${slides.length}. Open the lesson map`}
+            className="min-h-[44px] rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold tabular-nums text-slate-800 shadow-xl backdrop-blur transition hover:bg-white"
+          >
+            {i + 1} / {slides.length} <span aria-hidden className="ml-1 text-slate-500">▾</span>
+          </button>
           <button
             onClick={handleNext}
             disabled={saving}
@@ -537,6 +736,50 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
             {i === slides.length - 1 ? (saving ? 'Saving…' : 'Finish') : 'Next'} <ChevronRight className="h-4 w-4" />
           </button>
         </div>
+
+        <OfflineChip />
+        <SlideNavigator
+          open={navOpen}
+          onClose={() => setNavOpen(false)}
+          slides={slides}
+          current={i}
+          maxReached={maxReached}
+          unlockAll={isTeacher}
+          levelFor={(block) => {
+            const idx = BLOCKS.findIndex((b) => b.id === block);
+            return { index: idx, level: resolveQuestLevel((idx === -1 ? 'warmup' : block) as Block, lesson?.levels) };
+          }}
+          onJump={(idx) => { setI(idx); }}
+        />
+        <XpPops pops={pops} />
+        <AnimatePresence>
+          {overlay?.kind === 'splash' && (
+            <LevelSplash
+              key={`splash-${overlay.block}`}
+              index={Math.max(0, BLOCKS.findIndex((b) => b.id === overlay.block))}
+              total={BLOCKS.length}
+              level={resolveQuestLevel(overlay.block, lesson?.levels)}
+              accent={cssScene.accent}
+              onGo={closeSplash}
+            />
+          )}
+          {overlay?.kind === 'cleared' && (() => {
+            const st = blockStats.current[overlay.block];
+            const ratio = st && st.total > 0 ? st.correct / st.total : 1;
+            const stars = ratio >= 0.8 ? 3 : ratio >= 0.5 ? 2 : 1;
+            return (
+              <LevelCleared
+                key={`cleared-${overlay.block}`}
+                level={resolveQuestLevel(overlay.block, lesson?.levels)}
+                stars={stars}
+                coins={ACADEMY_COINS_PER_BLOCK}
+                xp={(st?.xp ?? 0) + 25}
+                isLast={overlay.nextIndex === -1}
+                onNext={closeCleared}
+              />
+            );
+          })()}
+        </AnimatePresence>
 
         <AcademyLessonCompleteModal
           open={completeOpen}

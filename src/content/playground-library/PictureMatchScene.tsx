@@ -78,7 +78,7 @@ const INITIAL: MatchState = { placed: [], holding: null, wrongSlot: null };
 
 /** Same shuffle on every screen for a given scene (seeded by its id), and
  *  never the identity order so words don't simply line up with pictures. */
-function seededOrder(n: number, seedText: string): number[] {
+export function seededOrder(n: number, seedText: string): number[] {
   let h = 2166136261;
   for (let i = 0; i < seedText.length; i++) h = Math.imul(h ^ seedText.charCodeAt(i), 16777619);
   const rand = () => {

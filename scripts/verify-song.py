@@ -30,8 +30,10 @@ lyric_words, line_of = [], []
 for i, line in enumerate(lines):
     for w in line.split():
         n = norm(w)
-        if n:
-            lyric_words.append(n); line_of.append(i)
+        # Whisper writes sung "goodbye" as "good-bye" (two tokens)
+        for part in (["good", "bye"] if n == "goodbye" else [n]):
+            if part:
+                lyric_words.append(part); line_of.append(i)
 
 model = WhisperModel("base.en", device="cpu", compute_type="int8")
 for take in takes:

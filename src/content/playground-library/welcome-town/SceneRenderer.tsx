@@ -12,6 +12,8 @@ import engleuphoriaLogo from '@/assets/engleuphoria-logo.png';
 import { type ActivitySync, useSyncedState } from '../sceneActivitySync';
 import { SpinWheelScene } from '../SpinWheelScene';
 import { PictureMatchScene, CroppedImage } from '../PictureMatchScene';
+import { FirstSoundScene } from '../FirstSoundScene';
+import { LetterMatchScene, LetterBlocksScene } from '../LetterTilesScene';
 
 export type { ActivitySync };
 
@@ -184,6 +186,9 @@ export function SceneRenderer(props: {
       case 'jigsaw-puzzle': return <JigsawPuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'spin-wheel': return <SpinWheelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'picture-match': return <PictureMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'first-sound': return <FirstSoundScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+      case 'letter-match': return <LetterMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+      case 'letter-blocks': return <LetterBlocksScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
       default: return null;
     }

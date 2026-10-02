@@ -288,6 +288,34 @@ Not a `Scene[]` file — a cross-hub catalog + component system:
   one, when the task is actually building a new Academy/Success game;
   use this skill's tables to know what already exists first.
 
+### Researched Academy mechanics (Oct 2026, Academy B1 U1 L1 — mechanics only, no copied content)
+
+Run the Required Research Step before inventing anything; these were found and used, reuse them:
+
+| Mechanic | Source | Built as | Trains |
+|---|---|---|---|
+| Collaborative decision task: pairs choose N of M items, *suggest / agree / disagree politely / justify* | Cambridge English B1 Preliminary (for Schools) Speaking Part 3 — cambridgeenglish.org "B1 Preliminary for Schools Speaking Part 3" PDF | `speaking_task` "Final mission — decide together" with negotiation starters | functional language + the target grammar under real communicative pressure; matches the exam format teens will meet |
+| Sentence-matching race (problem → solution sentence) | teach-this.com/grammar/adverbial-clauses | `matching` slide, full sentences on the right | meaning of connectors in context |
+| "Card + connector, 30 seconds" sentence challenge | teach-this.com/grammar/adverbial-clauses | partner `speaking_task` "Gear Card Challenge" (hint always allowed — no stress) | spontaneous controlled production |
+| Mixed-puzzle escape room, one puzzle type per door | eslteacher365.com/esl-escape-room, twinkl ESL escape-room blog | `escape_room_slot` (unscramble / cloze / order / riddle) | retrieval across skills |
+| Picture → situation drag ("which tool solves this problem?") | own design from the above | `canvas_game` with image tiles dragged onto problem cards | links vocabulary to purpose before the grammar is named |
+
+Academy kinds worth knowing (all render in `PlayAcademyLesson`): `canvas_game` (drag text/images onto slots),
+`find_in_scene_game` (tap objects inside a painted scene), `escape_room_slot`, `matching`, `vocab_image_match`,
+`picture_match_game`, `conversation_fill`, `sentence_builder`, `story_page`, `role_play`, `sound_challenge_game`.
+Student-comfort rules for all of them: see `lesson-quality-gate` → Engine 5.
+
+### Signature mechanic — `expedition_game` (original, Academy; language-as-mechanic)
+
+`src/components/academy/game/ExpeditionGame.tsx`, slide `{type:'expedition_game', slots, items[], dangers[]}`. Plan a limited
+backpack against a forecast of dangers (a real decision; some tools are plausible decoys), then beat each danger by BUILDING
+the justification sentence from chips (`We took <tool> <link> <purpose>`); wrong grammar gets the exact rule, wrong meaning
+gets a meaning hint; the student ends with their own Expedition Log (stars + read-aloud). Reuse the SHAPE for any
+"choose, then justify in the target structure" objective by swapping `items`/`dangers`/`phrases` (each danger lists 4
+phrases: base-form ok, clause-form ok, two wrong-meaning). Only the link set (`to / in order to / so that`) is hard-wired for
+purpose clauses — fork the component for another structure (e.g. first conditional: link = if…will). Rule 9 of
+`lesson-quality-gate` explains why every lesson needs one signature mechanic like this.
+
 ## Worked example of applying the Variety Rule (what should have happened for Lesson 3)
 
 Purpose breakdown for "listen and identify greetings/intros" (all

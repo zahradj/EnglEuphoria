@@ -1,6 +1,7 @@
 import React from 'react';
 import DashboardHome from '../dashboard/DashboardHome';
 import { KidsWorldMap } from '@/components/student/kids/KidsWorldMap';
+import { GamesShelf } from '@/components/student/kids/GamesShelf';
 import { usePlaygroundLessons } from '@/hooks/usePlaygroundLessons';
 import { useStudentLanguageSync } from '@/hooks/useStudentLanguageSync';
 
@@ -27,9 +28,7 @@ export const PlaygroundDashboard: React.FC<PlaygroundDashboardProps> = ({
     <div className="space-y-6">
       <DashboardHome hub="playground" studentName={studentName} />
 
-
-
-
+      <GamesShelf />
 
       <section
         aria-label="Adventure World"

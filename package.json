@@ -16,6 +16,7 @@
     "typecheck": "tsc --noEmit",
     "typecheck:strict": "tsc -p tsconfig.strict.json --noEmit",
     "hygiene:check": "node scripts/hygiene-check.mjs",
+    "songs:check": "node scripts/song-manifest.mjs",
     "check:schema": "node scripts/check-supabase-schema.mjs"
   },
   "dependencies": {

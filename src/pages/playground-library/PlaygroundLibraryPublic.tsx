@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { GamesGrid, LibrarySectionToggle } from '@/components/games/GamesGrid';
 import { supabase } from '@/integrations/supabase/client';
 import { isLibraryReadyFormat } from '@/content/playground-library/sceneLessonFormats';
 
@@ -58,6 +59,10 @@ const UNIT_ART = [
  */
 export default function PlaygroundLibraryPublic() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const section: 'lessons' | 'games' = searchParams.get('section') === 'games' ? 'games' : 'lessons';
+  const setSection = (s: 'lessons' | 'games') => setSearchParams(s === 'games' ? { section: 'games' } : {}, { replace: true });
   const [rows, setRows] = useState<LessonRow[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [openUnit, setOpenUnit] = useState<number | null>(1);
@@ -165,6 +170,9 @@ export default function PlaygroundLibraryPublic() {
           </button>
         </div>
 
+        <LibrarySectionToggle section={section} onChange={setSection} />
+
+        {section === 'lessons' && (
         <div className="mx-auto flex max-w-6xl flex-wrap gap-2 px-6 pb-4">
           {LEVELS.map((lvl) => {
             const active = activeLevel === lvl.code;
@@ -187,9 +195,20 @@ export default function PlaygroundLibraryPublic() {
             );
           })}
         </div>
+        )}
       </header>
 
       <main className="mx-auto max-w-6xl px-6 py-8">
+        {section === 'games' ? (
+          <>
+            <div className="mb-6 flex items-center gap-2">
+              <span className="rounded-full bg-orange-500 px-3 py-1 text-xs font-black uppercase tracking-wider text-white">Games</span>
+              <h2 className="text-2xl font-black text-orange-900" style={{ fontFamily: "'Fredoka', system-ui, sans-serif" }}>Alphabet &amp; phonics games</h2>
+            </div>
+            <GamesGrid onPlay={(id) => navigate(`/library/playground/games/${id}`, { state: { from: `${location.pathname}?section=games` } })} />
+          </>
+        ) : (
+        <>
         {(() => {
           const levelMeta = LEVELS.find((l) => l.code === activeLevel);
           if (levelMeta?.curriculum) {
@@ -284,6 +303,8 @@ export default function PlaygroundLibraryPublic() {
               );
             })}
           </div>
+        )}
+        </>
         )}
       </main>
     </div>
