@@ -1,0 +1,42 @@
+name: Voice re-take picker
+
+# For one- and two-word clips the sound-level audit flags, records several
+# candidate takes and keeps the one whose vowels fit best
+# (scripts/voice-retake.py). Commits the winning clips + a log to the branch it
+# ran on. Triggered by pushing scripts/voice-retake-run.txt.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/voice-retake-run.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  retake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq espeak-ng ffmpeg
+          pip install -q torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -q transformers phonemizer numpy
+      - name: Re-take
+        env:
+          AUDIT_TOKEN: de472b713779b6c3f2c462fb886213e1861db78b10aa2021
+        run: python scripts/voice-retake.py
+      - name: Commit
+        run: |
+          git add public/audio-cache docs/voice-audit/retakes.json
+          if git diff --cached --quiet; then echo "No changes."; exit 0; fi
+          git config user.name "voice-retake-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "Voice re-takes: best-fitting takes for flagged short clips"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
