@@ -1,5 +1,17 @@
 [
  {
+  "file": "5c8f20a8.mp3",
+  "voice": "teacher",
+  "text": "yo-yo",
+  "expected": "joʊ joʊ",
+  "heard": "j ɑu5 j ɑu5",
+  "per": 1.5,
+  "vowelMismatch": true,
+  "words": 2,
+  "bestAlternative": "j oʊ j ɑː",
+  "altMargin": 1.29
+ },
+ {
   "file": "1b475e08.mp3",
   "voice": "pip",
   "text": "He!",
@@ -84,18 +96,6 @@
   "altMargin": 0.0
  },
  {
-  "file": "5c8f20a8.mp3",
-  "voice": "teacher",
-  "text": "yo-yo",
-  "expected": "joʊ joʊ",
-  "heard": "j ɑu5 j ɔ",
-  "per": 1.0,
-  "vowelMismatch": true,
-  "words": 2,
-  "bestAlternative": "j ɑː j oʊ",
-  "altMargin": 3.31
- },
- {
   "file": "7345f636.mp3",
   "voice": "teacher",
   "text": "doll.",
@@ -144,18 +144,6 @@
   "altMargin": 0.0
  },
  {
-  "file": "ab7290ed.mp3",
-  "voice": "pip",
-  "text": "See",
-  "expected": "siː",
-  "heard": "",
-  "per": 1.0,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "s eɪ",
-  "altMargin": 2.53
- },
- {
   "file": "35d4549f.mp3",
   "voice": "teacher",
   "text": "Kitchen",
@@ -178,18 +166,6 @@
   "words": 1,
   "bestAlternative": "h ɑː l w eɪ",
   "altMargin": 0.53
- },
- {
-  "file": "1e782dff.mp3",
-  "voice": "teacher",
-  "text": "kitchen",
-  "expected": "kɪtʃən",
-  "heard": "k ɛ ts.h y5 n",
-  "per": 0.833,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "k ɛ tʃ ə n",
-  "altMargin": 3.46
  },
  {
   "file": "baeed9c6.mp3",
@@ -252,6 +228,30 @@
   "altMargin": 0.0
  },
  {
+  "file": "d4c2e0c2.mp3",
+  "voice": "teacher",
+  "text": "nut.",
+  "expected": "nʌt",
+  "heard": "n aː",
+  "per": 0.667,
+  "vowelMismatch": true,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "4ce79c57.mp3",
+  "voice": "pip",
+  "text": "hat.",
+  "expected": "hæt",
+  "heard": "h a n t",
+  "per": 0.667,
+  "vowelMismatch": true,
+  "words": 1,
+  "bestAlternative": "h ɑː t",
+  "altMargin": 3.69
+ },
+ {
   "file": "67f18a93.mp3",
   "voice": "pip",
   "text": "Pip.",
@@ -264,16 +264,28 @@
   "altMargin": 0.88
  },
  {
+  "file": "b7514df8.mp3",
+  "voice": "pip",
+  "text": "Ham",
+  "expected": "hæm",
+  "heard": "h a n",
+  "per": 0.667,
+  "vowelMismatch": true,
+  "words": 1,
+  "bestAlternative": "h iː m",
+  "altMargin": 1.37
+ },
+ {
   "file": "31b1a0a9.mp3",
   "voice": "mia",
   "text": "Nut.",
   "expected": "nʌt",
-  "heard": "n a d",
+  "heard": "n a",
   "per": 0.667,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "n ɑː t",
-  "altMargin": 2.12
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "18920149.mp3",
@@ -286,6 +298,18 @@
   "words": 1,
   "bestAlternative": "n ɑː t",
   "altMargin": 1.09
+ },
+ {
+  "file": "76fd1a9e.mp3",
+  "voice": "willow",
+  "text": "hat.",
+  "expected": "hæt",
+  "heard": "h aː d",
+  "per": 0.667,
+  "vowelMismatch": true,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "92322f99.mp3",
@@ -324,18 +348,6 @@
   "altMargin": 0.0
  },
  {
-  "file": "82f066c9.mp3",
-  "voice": "pip",
-  "text": "Bat.",
-  "expected": "bæt",
-  "heard": "d a t",
-  "per": 0.667,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "b ɑː t",
-  "altMargin": 2.89
- },
- {
   "file": "15dbeab1.mp3",
   "voice": "teacher",
   "text": "Sun",
@@ -348,16 +360,16 @@
   "altMargin": 0.0
  },
  {
-  "file": "02819638.mp3",
-  "voice": "teacher",
-  "text": "Ant.",
-  "expected": "ænt",
-  "heard": "ɛ t",
+  "file": "c2c64b69.mp3",
+  "voice": "pip",
+  "text": "nut.",
+  "expected": "nʌt",
+  "heard": "n ɑː",
   "per": 0.667,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "ɛ n t",
-  "altMargin": 4.27
+  "bestAlternative": "n ɑː t",
+  "altMargin": 2.63
  },
  {
   "file": "a4adf86d.mp3",
@@ -406,18 +418,6 @@
   "words": 1,
   "bestAlternative": null,
   "altMargin": 0.0
- },
- {
-  "file": "0f2a494d.mp3",
-  "voice": "mia",
-  "text": "Sad!",
-  "expected": "sæd",
-  "heard": "s a r",
-  "per": 0.667,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "s ɑː d",
-  "altMargin": 2.54
  },
  {
   "file": "ac2972e9.mp3",
@@ -526,6 +526,18 @@
   "words": 3,
   "bestAlternative": null,
   "altMargin": null
+ },
+ {
+  "file": "23e3a8ad.mp3",
+  "voice": "teacher",
+  "text": "igloo",
+  "expected": "ɪɡluː",
+  "heard": "e ɡ l ʉ",
+  "per": 0.5,
+  "vowelMismatch": true,
+  "words": 1,
+  "bestAlternative": "ɛ ɡ l uː",
+  "altMargin": 0.32
  },
  {
   "file": "be01713d.mp3",
@@ -716,8 +728,8 @@
   "per": 0.5,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "iː n",
-  "altMargin": 3.15
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "b9146a96.mp3",
@@ -754,18 +766,6 @@
   "words": 1,
   "bestAlternative": null,
   "altMargin": 0.0
- },
- {
-  "file": "957750c6.mp3",
-  "voice": "leo",
-  "text": "Hello, Leo!",
-  "expected": "həloʊ liːoʊ",
-  "heard": "h ɛ l oʊ l ʉ j oʊ",
-  "per": 0.429,
-  "vowelMismatch": true,
-  "words": 2,
-  "bestAlternative": "h ə l oʊ l ʌ oʊ",
-  "altMargin": 2.14
  },
  {
   "file": "9892b93a.mp3",
@@ -928,12 +928,12 @@
   "voice": "pip",
   "text": "Wow, perfect!",
   "expected": "waʊ pɜːfɛkt",
-  "heard": "w æ p ɜː f ɪ k t",
+  "heard": "w æ l p ɜː f ɪ k t",
   "per": 0.333,
   "vowelMismatch": true,
   "words": 2,
   "bestAlternative": "w aʊ p ɜː f ɪ k t",
-  "altMargin": 3.05
+  "altMargin": 2.09
  },
  {
   "file": "5f683f26.mp3",
@@ -1004,8 +1004,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "d ɑː k",
-  "altMargin": 2.82
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "f032bb53.mp3",
@@ -1020,40 +1020,28 @@
   "altMargin": 0.6
  },
  {
-  "file": "d4c2e0c2.mp3",
-  "voice": "teacher",
-  "text": "nut.",
-  "expected": "nʌt",
-  "heard": "n ɑː t",
-  "per": 0.333,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "n ɑː t",
-  "altMargin": 5.48
- },
- {
   "file": "6978c032.mp3",
   "voice": "teacher",
   "text": "van",
   "expected": "væn",
-  "heard": "v ɛ n",
+  "heard": "v eː n",
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
   "bestAlternative": "v ɛ n",
-  "altMargin": 2.93
+  "altMargin": 1.69
  },
  {
   "file": "7a3943c8.mp3",
   "voice": "teacher",
   "text": "book",
   "expected": "bʊk",
-  "heard": "b a k",
+  "heard": "b ɔ k",
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b ɑː k",
-  "altMargin": 3.38
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "0e7991d6.mp3",
@@ -1077,7 +1065,7 @@
   "vowelMismatch": true,
   "words": 1,
   "bestAlternative": "h ɑː t",
-  "altMargin": 5.67
+  "altMargin": 4.12
  },
  {
   "file": "5018139f.mp3",
@@ -1090,18 +1078,6 @@
   "words": 1,
   "bestAlternative": null,
   "altMargin": 0.0
- },
- {
-  "file": "4ce79c57.mp3",
-  "voice": "pip",
-  "text": "hat.",
-  "expected": "hæt",
-  "heard": "h a t",
-  "per": 0.333,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "h ɑː t",
-  "altMargin": 6.25
  },
  {
   "file": "d3e7141a.mp3",
@@ -1128,18 +1104,6 @@
   "altMargin": 0.78
  },
  {
-  "file": "b7514df8.mp3",
-  "voice": "pip",
-  "text": "Ham",
-  "expected": "hæm",
-  "heard": "h ɛ m",
-  "per": 0.333,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "h ɛ m",
-  "altMargin": 2.91
- },
- {
   "file": "2dc05ee0.mp3",
   "voice": "pip",
   "text": "what",
@@ -1150,18 +1114,6 @@
   "words": 1,
   "bestAlternative": null,
   "altMargin": 0.0
- },
- {
-  "file": "76fd1a9e.mp3",
-  "voice": "willow",
-  "text": "hat.",
-  "expected": "hæt",
-  "heard": "h ɛ t",
-  "per": 0.333,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "h ɛ t",
-  "altMargin": 1.74
  },
  {
   "file": "c2b544d9.mp3",
@@ -1208,8 +1160,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "s ɛ d",
-  "altMargin": 2.7
+  "bestAlternative": "s ɑː d",
+  "altMargin": 0.95
  },
  {
   "file": "4e12a281.mp3",
@@ -1300,12 +1252,12 @@
   "voice": "bella",
   "text": "Bag.",
   "expected": "bæɡ",
-  "heard": "b a ɡ",
+  "heard": "b ɛ ɡ",
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b ɑː ɡ",
-  "altMargin": 2.09
+  "bestAlternative": "b ɛ ɡ",
+  "altMargin": 0.97
  },
  {
   "file": "56d2e56d.mp3",
@@ -1324,12 +1276,12 @@
   "voice": "pip",
   "text": "ball",
   "expected": "bɔːl",
-  "heard": "b o l",
+  "heard": "b oː l",
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b uː l",
-  "altMargin": 4.78
+  "bestAlternative": "b ʌ l",
+  "altMargin": 1.0
  },
  {
   "file": "fc180642.mp3",
@@ -1356,6 +1308,18 @@
   "altMargin": 0.0
  },
  {
+  "file": "82f066c9.mp3",
+  "voice": "pip",
+  "text": "Bat.",
+  "expected": "bæt",
+  "heard": "b a t",
+  "per": 0.333,
+  "vowelMismatch": true,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
   "file": "8110b74e.mp3",
   "voice": "pip",
   "text": "Bag.",
@@ -1368,6 +1332,18 @@
   "altMargin": 1.36
  },
  {
+  "file": "02819638.mp3",
+  "voice": "teacher",
+  "text": "Ant.",
+  "expected": "ænt",
+  "heard": "æ n d",
+  "per": 0.333,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
   "file": "5e37cd47.mp3",
   "voice": "bella",
   "text": "bag.",
@@ -1376,8 +1352,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b ɑː ɡ",
-  "altMargin": 3.15
+  "bestAlternative": "b ɛ ɡ",
+  "altMargin": 1.02
  },
  {
   "file": "56a5cfcd.mp3",
@@ -1402,18 +1378,6 @@
   "words": 1,
   "bestAlternative": "b ɛ ɡ",
   "altMargin": 1.46
- },
- {
-  "file": "c2c64b69.mp3",
-  "voice": "pip",
-  "text": "nut.",
-  "expected": "nʌt",
-  "heard": "n ɑː t",
-  "per": 0.333,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "n ɑː t",
-  "altMargin": 5.11
  },
  {
   "file": "ce48b5be.mp3",
@@ -1461,7 +1425,7 @@
   "vowelMismatch": true,
   "words": 1,
   "bestAlternative": "d ɑː k",
-  "altMargin": 4.28
+  "altMargin": 2.87
  },
  {
   "file": "e214450e.mp3",
@@ -1472,8 +1436,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "d ɑː k",
-  "altMargin": 2.79
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "5af1da83.mp3",
@@ -1504,12 +1468,12 @@
   "voice": "mia",
   "text": "Book",
   "expected": "bʊk",
-  "heard": "b a k",
+  "heard": "b ɔ k",
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
   "bestAlternative": "b ɑː k",
-  "altMargin": 5.46
+  "altMargin": 1.24
  },
  {
   "file": "be51dfff.mp3",
@@ -1532,8 +1496,8 @@
   "per": 0.333,
   "vowelMismatch": true,
   "words": 1,
-  "bestAlternative": "b ɑː k",
-  "altMargin": 3.03
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "5b1dccca.mp3",
@@ -1716,6 +1680,18 @@
   "altMargin": 0.0
  },
  {
+  "file": "0f2a494d.mp3",
+  "voice": "mia",
+  "text": "Sad!",
+  "expected": "sæd",
+  "heard": "s a d",
+  "per": 0.333,
+  "vowelMismatch": true,
+  "words": 1,
+  "bestAlternative": "s ɛ d",
+  "altMargin": 0.15
+ },
+ {
   "file": "58f74e9b.mp3",
   "voice": "mia",
   "text": "Yes! Sad!",
@@ -1738,42 +1714,6 @@
   "words": 2,
   "bestAlternative": null,
   "altMargin": 0.0
- },
- {
-  "file": "8315aaa6.mp3",
-  "voice": "pip",
-  "text": "pig",
-  "expected": "pɪɡ",
-  "heard": "p e ɡ",
-  "per": 0.333,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "p ɛ ɡ",
-  "altMargin": 1.78
- },
- {
-  "file": "4aeaea4d.mp3",
-  "voice": "pip",
-  "text": "net",
-  "expected": "nɛt",
-  "heard": "n ɑ t",
-  "per": 0.333,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "n ɑː t",
-  "altMargin": 2.57
- },
- {
-  "file": "fa6722e8.mp3",
-  "voice": "teacher",
-  "text": "Book",
-  "expected": "bʊk",
-  "heard": "b ɔ k",
-  "per": 0.333,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "b ɑː k",
-  "altMargin": 2.2
  },
  {
   "file": "ff927c2c.mp3",
@@ -2172,18 +2112,6 @@
   "altMargin": 0.0
  },
  {
-  "file": "23e3a8ad.mp3",
-  "voice": "teacher",
-  "text": "igloo",
-  "expected": "ɪɡluː",
-  "heard": "e ɡ l uː",
-  "per": 0.25,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "ɛ ɡ l uː",
-  "altMargin": 3.45
- },
- {
   "file": "57c295ac.mp3",
   "voice": "teacher",
   "text": "toys",
@@ -2385,7 +2313,7 @@
   "vowelMismatch": true,
   "words": 1,
   "bestAlternative": "b oʊ l z",
-  "altMargin": 1.54
+  "altMargin": 0.96
  },
  {
   "file": "d19fa7cf.mp3",
@@ -2436,18 +2364,6 @@
   "altMargin": 0.0
  },
  {
-  "file": "eda66bbc.mp3",
-  "voice": "pip",
-  "text": "happy",
-  "expected": "hæpi",
-  "heard": "h a p iː",
-  "per": 0.25,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "h ɑː p i",
-  "altMargin": 1.57
- },
- {
   "file": "9bd7d51a.mp3",
   "voice": "teacher",
   "text": "chair",
@@ -2469,7 +2385,7 @@
   "vowelMismatch": true,
   "words": 1,
   "bestAlternative": "tʃ ɛ k",
-  "altMargin": 2.61
+  "altMargin": 0.26
  },
  {
   "file": "41ca27d3.mp3",
@@ -3004,12 +2920,12 @@
   "voice": "pip",
   "text": "Hi, Pip!",
   "expected": "haɪ pɪp",
-  "heard": "h aɪ p eː p",
+  "heard": "h aɪ p ɪ b",
   "per": 0.167,
-  "vowelMismatch": true,
+  "vowelMismatch": false,
   "words": 2,
-  "bestAlternative": "h aɪ p ɛ p",
-  "altMargin": 2.95
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "6a760c79.mp3",
@@ -3144,6 +3060,18 @@
   "altMargin": 0.0
  },
  {
+  "file": "1e782dff.mp3",
+  "voice": "teacher",
+  "text": "kitchen",
+  "expected": "kɪtʃən",
+  "heard": "k ɪ tʃ ɪ n",
+  "per": 0.167,
+  "vowelMismatch": true,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
   "file": "366514c7.mp3",
   "voice": "pip",
   "text": "Yes! Door!",
@@ -3214,16 +3142,6 @@
   "words": 4,
   "bestAlternative": null,
   "altMargin": null
- },
- {
-  "file": "13b92537.mp3",
-  "voice": "teacher",
-  "text": "Do you like pizza?",
-  "expected": "duː juː laɪk piːtsə",
-  "heard": "d uː j uː l aɪ k p iː t ɚ",
-  "per": 0.154,
-  "vowelMismatch": false,
-  "words": 4
  },
  {
   "file": "fac94481.mp3",
@@ -3610,6 +3528,18 @@
   "altMargin": null
  },
  {
+  "file": "957750c6.mp3",
+  "voice": "leo",
+  "text": "Hello, Leo!",
+  "expected": "həloʊ liːoʊ",
+  "heard": "h e l o l i o",
+  "per": 0.143,
+  "vowelMismatch": true,
+  "words": 2,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
   "file": "e15183aa.mp3",
   "voice": "teacher",
   "text": "Armchair",
@@ -3956,16 +3886,6 @@
   "words": 3,
   "bestAlternative": null,
   "altMargin": null
- },
- {
-  "file": "b9da25ba.mp3",
-  "voice": "teacher",
-  "text": "They are bears.",
-  "expected": "ðeɪ ɑːɹ bɛɹz",
-  "heard": "ð eɪ ɑːɹ b ɛ z",
-  "per": 0.125,
-  "vowelMismatch": false,
-  "words": 3
  },
  {
   "file": "ffd45c2e.mp3",
@@ -4616,46 +4536,6 @@
   "altMargin": null
  },
  {
-  "file": "de183dc5.mp3",
-  "voice": "teacher",
-  "text": "She has a doll.",
-  "expected": "ʃiː hɐz ɐ dɑːl",
-  "heard": "ʃ iː h æ z ɐ d ɑː l",
-  "per": 0.111,
-  "vowelMismatch": true,
-  "words": 4
- },
- {
-  "file": "9dff6cc5.mp3",
-  "voice": "teacher",
-  "text": "He has a car.",
-  "expected": "hiː hɐz ɐ kɑːɹ",
-  "heard": "h iː ɐ z ɐ k ɑːɹ",
-  "per": 0.111,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "6b5d3d8b.mp3",
-  "voice": "teacher",
-  "text": "It has a bag.",
-  "expected": "ɪt hɐz ɐ bæɡ",
-  "heard": "ɪ t h æ z ɐ b æ ɡ",
-  "per": 0.111,
-  "vowelMismatch": true,
-  "words": 4
- },
- {
-  "file": "dadb8c55.mp3",
-  "voice": "teacher",
-  "text": "I have a bag.",
-  "expected": "aɪ hæv ɐ bæɡ",
-  "heard": "aɪ h ɛ v ɐ b æ ɡ",
-  "per": 0.111,
-  "vowelMismatch": true,
-  "words": 4
- },
- {
   "file": "055fcb43.mp3",
   "voice": "willow",
   "text": "Where is Willow?",
@@ -5232,16 +5112,6 @@
   "altMargin": null
  },
  {
-  "file": "aa96deb1.mp3",
-  "voice": "teacher",
-  "text": "You have a teddy.",
-  "expected": "juː hæv ɐ tɛdi",
-  "heard": "j uː h æ v ɐ t ɛ ɹ i",
-  "per": 0.1,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
   "file": "3ba2ad6e.mp3",
   "voice": "pip",
   "text": "Hello, friends!",
@@ -5540,16 +5410,6 @@
   "words": 5,
   "bestAlternative": null,
   "altMargin": null
- },
- {
-  "file": "a251b089.mp3",
-  "voice": "teacher",
-  "text": "Does your sister like pizza?",
-  "expected": "dʌz jʊɹ sɪstɚ laɪk piːtsə",
-  "heard": "d ʌ z j ɔːɹ s ɪ s t ɚ l aɪ k p iː t ts ə",
-  "per": 0.095,
-  "vowelMismatch": true,
-  "words": 5
  },
  {
   "file": "eab706ba.mp3",
@@ -6140,26 +6000,6 @@
   "altMargin": null
  },
  {
-  "file": "32bbad29.mp3",
-  "voice": "teacher",
-  "text": "They have three hats.",
-  "expected": "ðeɪ hæv θɹiː hæts",
-  "heard": "ð eɪ h ʌ v θ ɹ iː h æ t s",
-  "per": 0.083,
-  "vowelMismatch": true,
-  "words": 4
- },
- {
-  "file": "e045d874.mp3",
-  "voice": "teacher",
-  "text": "I have some ducks.",
-  "expected": "aɪ hæv sʌm dʌks",
-  "heard": "aɪ h æ v s ʌ m d a k s",
-  "per": 0.083,
-  "vowelMismatch": true,
-  "words": 4
- },
- {
   "file": "011fb1f8.mp3",
   "voice": "pip",
   "text": "To open a booth, ask: What is your name?",
@@ -6604,16 +6444,6 @@
   "altMargin": null
  },
  {
-  "file": "f6a5fc2f.mp3",
-  "voice": "teacher",
-  "text": "Does she like milk?",
-  "expected": "dʌz ʃiː laɪk mɪlk",
-  "heard": "d ʌ ʃ iː l aɪ k m ɪ l k",
-  "per": 0.077,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
   "file": "5d05f8b4.mp3",
   "voice": "willow",
   "text": "You did it! You met Willow! What is your name? My name is Willow!",
@@ -6972,16 +6802,6 @@
   "words": 4,
   "bestAlternative": null,
   "altMargin": null
- },
- {
-  "file": "62c8c5b5.mp3",
-  "voice": "teacher",
-  "text": "Does he like grapes?",
-  "expected": "dʌz hiː laɪk ɡɹeɪps",
-  "heard": "d ʌ z iː l aɪ k ɡ ɹ eɪ p s",
-  "per": 0.071,
-  "vowelMismatch": false,
-  "words": 4
  },
  {
   "file": "0a4fcb66.mp3",
@@ -7990,16 +7810,6 @@
   "words": 5,
   "bestAlternative": null,
   "altMargin": null
- },
- {
-  "file": "7caa8c80.mp3",
-  "voice": "teacher",
-  "text": "My sister has an apple.",
-  "expected": "maɪ sɪstɚ hɐz ɐn æpəl",
-  "heard": "m aɪ s ɪ s t ɚ h æ z ɐ n æ p əl",
-  "per": 0.056,
-  "vowelMismatch": true,
-  "words": 5
  },
  {
   "file": "a42de0f5.mp3",
@@ -12404,196 +12214,6 @@
   "words": 4,
   "bestAlternative": null,
   "altMargin": null
- },
- {
-  "file": "a11a3356.mp3",
-  "voice": "teacher",
-  "text": "I have a ball.",
-  "expected": "aɪ hæv ɐ bɔːl",
-  "heard": "aɪ h æ v ɐ b ɔː l",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "520be88b.mp3",
-  "voice": "teacher",
-  "text": "We have two books.",
-  "expected": "wiː hæv tuː bʊks",
-  "heard": "w iː h æ v t uː b ʊ k s",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "dbce6f80.mp3",
-  "voice": "teacher",
-  "text": "It is a ball.",
-  "expected": "ɪɾ ɪz ɐ bɔːl",
-  "heard": "ɪ ɾ ɪ z ɐ b ɔː l",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "10fc6e11.mp3",
-  "voice": "teacher",
-  "text": "They are balls.",
-  "expected": "ðeɪ ɑːɹ bɔːlz",
-  "heard": "ð eɪ ɑːɹ b ɔː l z",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 3
- },
- {
-  "file": "632d9b06.mp3",
-  "voice": "teacher",
-  "text": "They are cats.",
-  "expected": "ðeɪ ɑːɹ kæts",
-  "heard": "ð eɪ ɑːɹ k æ t s",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 3
- },
- {
-  "file": "fd6802c1.mp3",
-  "voice": "teacher",
-  "text": "It is an apple.",
-  "expected": "ɪɾ ɪz ɐn æpəl",
-  "heard": "ɪ ɾ ɪ z ɐ n æ p əl",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "c31d52dd.mp3",
-  "voice": "teacher",
-  "text": "They are ducks.",
-  "expected": "ðeɪ ɑːɹ dʌks",
-  "heard": "ð eɪ ɑːɹ d ʌ k s",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 3
- },
- {
-  "file": "abb177a8.mp3",
-  "voice": "teacher",
-  "text": "It is a book.",
-  "expected": "ɪɾ ɪz ɐ bʊk",
-  "heard": "ɪ ɾ ɪ z ɐ b ʊ k",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "9cd64d87.mp3",
-  "voice": "teacher",
-  "text": "They are hats.",
-  "expected": "ðeɪ ɑːɹ hæts",
-  "heard": "ð eɪ ɑːɹ h æ t s",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 3
- },
- {
-  "file": "702743bf.mp3",
-  "voice": "teacher",
-  "text": "It is a car.",
-  "expected": "ɪɾ ɪz ɐ kɑːɹ",
-  "heard": "ɪ ɾ ɪ z ɐ k ɑːɹ",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "4afab578.mp3",
-  "voice": "teacher",
-  "text": "I have some balls.",
-  "expected": "aɪ hæv sʌm bɔːlz",
-  "heard": "aɪ h æ v s ʌ m b ɔː l z",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "ada9ce93.mp3",
-  "voice": "teacher",
-  "text": "I have a cat.",
-  "expected": "aɪ hæv ɐ kæt",
-  "heard": "aɪ h æ v ɐ k æ t",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "683f6408.mp3",
-  "voice": "teacher",
-  "text": "I have some books.",
-  "expected": "aɪ hæv sʌm bʊks",
-  "heard": "aɪ h æ v s ʌ m b ʊ k s",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "9e1f40fc.mp3",
-  "voice": "teacher",
-  "text": "I have a hat.",
-  "expected": "aɪ hæv ɐ hæt",
-  "heard": "aɪ h æ v ɐ h æ t",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "75732f87.mp3",
-  "voice": "teacher",
-  "text": "I have some cars.",
-  "expected": "aɪ hæv sʌm kɑːɹz",
-  "heard": "aɪ h æ v s ʌ m k ɑːɹ z",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "9c9a96dd.mp3",
-  "voice": "teacher",
-  "text": "Do they like apples?",
-  "expected": "duː ðeɪ laɪk æpəlz",
-  "heard": "d uː ð eɪ l aɪ k æ p əl z",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "ed125003.mp3",
-  "voice": "teacher",
-  "text": "Do we like oranges?",
-  "expected": "duː wiː laɪk ɔɹɪndʒᵻz",
-  "heard": "d uː w iː l aɪ k ɔː ɹ ɪ n dʒ ᵻ z",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "cfba158a.mp3",
-  "voice": "teacher",
-  "text": "Does it like milk?",
-  "expected": "dʌz ɪt laɪk mɪlk",
-  "heard": "d ʌ z ɪ t l aɪ k m ɪ l k",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
- },
- {
-  "file": "73f4cc06.mp3",
-  "voice": "teacher",
-  "text": "Do I like popcorn?",
-  "expected": "duː aɪ laɪk pɑːpkɔːɹn",
-  "heard": "d uː aɪ l aɪ k p ɑː p k ɔːɹ n",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4
  },
  {
   "file": "0daca48a.mp3",
@@ -18584,6 +18204,18 @@
   "altMargin": null
  },
  {
+  "file": "8315aaa6.mp3",
+  "voice": "pip",
+  "text": "pig",
+  "expected": "pɪɡ",
+  "heard": "p ɪ ɡ",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
   "file": "ac20788d.mp3",
   "voice": "pip",
   "text": "pen",
@@ -18620,6 +18252,18 @@
   "altMargin": 0.0
  },
  {
+  "file": "4aeaea4d.mp3",
+  "voice": "pip",
+  "text": "net",
+  "expected": "nɛt",
+  "heard": "n ɛ t",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
   "file": "8aacffd8.mp3",
   "voice": "pip",
   "text": "Sit.",
@@ -18637,6 +18281,18 @@
   "text": "Pin.",
   "expected": "pɪn",
   "heard": "p ɪ n",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "fa6722e8.mp3",
+  "voice": "teacher",
+  "text": "Book",
+  "expected": "bʊk",
+  "heard": "b ʊ k",
   "per": 0.0,
   "vowelMismatch": false,
   "words": 1,
@@ -19292,6 +18948,18 @@
   "altMargin": 0.0
  },
  {
+  "file": "eda66bbc.mp3",
+  "voice": "pip",
+  "text": "happy",
+  "expected": "hæpi",
+  "heard": "h æ p i",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
   "file": "fa137505.mp3",
   "voice": "pip",
   "text": "I reed a book.",
@@ -19878,6 +19546,18 @@
   "words": 12,
   "bestAlternative": null,
   "altMargin": null
+ },
+ {
+  "file": "ab7290ed.mp3",
+  "voice": "pip",
+  "text": "See",
+  "expected": "siː",
+  "heard": "s i",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "4dbad8c6.mp3",
