@@ -1,0 +1,13 @@
+
+=== docs/songs/wt-hello-take1.mp3  length=20.1s  score=0.67  missing=8  extra=8
+heard: slow slow wait slow high high high here we go what's your name what's your name my name is it now say your name
+line starts (s): [None, np.float64(6.0), 8.0, np.float64(11.8)]
+
+=== docs/songs/wt-hello-take2.mp3  length=20.1s  score=0.86  missing=3  extra=4
+heard: hello hello wake up low hi hi hi here we go what's your name what's your name my name is dan now say your name
+line starts (s): [np.float64(0.0), np.float64(3.9), np.float64(7.8), np.float64(12.2)]
+lineDurationsMs: [3940, 3840, 4380, 7902]
+
+=== docs/songs/wt-hello-take3.mp3  length=20.1s  score=0.65  missing=8  extra=9
+heard: love love way down love high high high here we go what's your name what's your name my name is dave now say your name
+line starts (s): [None, np.float64(6.0), 8.0, np.float64(12.1)]
