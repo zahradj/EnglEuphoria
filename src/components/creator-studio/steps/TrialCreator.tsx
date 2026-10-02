@@ -229,7 +229,8 @@ export const TrialCreator: React.FC = () => {
                           real, bounded height here rather than the unconstrained
                           padding this panel had before. */}
                       <div className="h-[80vh] overflow-hidden rounded-xl">
-                        <h.Component />
+                        {/* Playground picks its trial by level (Pre-A1 / A1 / A2) — preview the one for the level chosen above. */}
+                        {h.id === "playground" ? <PlaygroundTrailLesson cefr={cefrLevel} /> : <h.Component />}
                       </div>
                     </div>
                   )}
