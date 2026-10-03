@@ -311,6 +311,8 @@ const UNIT1_EXTRACTORS = {
     ...(s.spots ?? []).map((sp) => [s.who, `Yes! ${sp.label}!`]),
   ],
   'color-simon': (s) => (s.colors ?? []).map((c) => [c.who, c.colorWord]),
+  // WordPictureMatchScene.tsx: says the word, then "Yes! <word>!" (had no extractor).
+  'word-picture-match': (s) => (s.rounds ?? []).flatMap((r) => [[r.who ?? 'pip', r.word], [r.who ?? 'pip', `Yes! ${r.word}!`]]),
   // Mirrors ShapeBuilderScene.tsx's shapeBuilderLines().
   'shape-builder': (s) => [
     [s.who, 'What shape is it?'],
