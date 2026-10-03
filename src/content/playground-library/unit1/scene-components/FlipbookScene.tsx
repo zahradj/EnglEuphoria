@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
-import { cueSpeakOnce } from '../audio';
+import { cueSpeak, cueSpeakOnce } from '../audio';
 import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
@@ -26,6 +26,8 @@ export function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: E
   const total = scene.pages.length;
 
   useEffect(() => { if (page) cueSpeakOnce(page.text, page.who ?? 'teacher'); }, [pageIdx]);
+  // Pre-A1 children can't read the question yet: the character asks it.
+  useEffect(() => { if (checkpoint) cueSpeak(checkpoint.question, checkpoint.who ?? 'teacher'); }, [checkpoint?.afterPage]);
 
   const advance = () => {
     setState((s) => ({ ...s, flipping: true }));

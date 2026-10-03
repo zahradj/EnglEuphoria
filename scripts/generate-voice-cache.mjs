@@ -262,7 +262,10 @@ const UNIT1_EXTRACTORS = {
     for (const age of s.studentAges ?? []) out.push(['teacher', `I am ${age}!`]);
     return out;
   },
-  flipbook: (s) => (s.pages ?? []).map((p) => [p.who ?? 'teacher', p.text]),
+  flipbook: (s) => [
+    ...(s.pages ?? []).map((p) => [p.who ?? 'teacher', p.text]),
+    ...(s.checkpoints ?? []).map((c) => [c.who ?? 'teacher', c.question]),
+  ],
   'color-model': (s) => {
     const out = (s.items ?? []).flatMap((it) => [
       [it.who, it.colorWord], [it.who, it.exampleWord], [it.who, buildColorSentence(it.colorWord, it.exampleWord)],
