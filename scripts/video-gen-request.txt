@@ -1,2 +1,2 @@
-u2l5-shelly
-# Higgsfield re-run 2026-10-03: beats 05b-green, 05c-orange (first run made them but the commit hit a log conflict)
+u2l6-loops
+# Higgsfield run 2026-10-03: living game backgrounds (meadow, beach, garden now; river after its picture is baked)

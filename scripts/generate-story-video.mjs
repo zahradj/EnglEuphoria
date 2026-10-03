@@ -40,6 +40,7 @@ const negative = story.negativePrompt ?? 'text, letters, words, subtitles, water
 async function makeClip(beat) {
   const file = path.join(story.out, `${beat.id}.mp4`);
   if (fs.existsSync(file)) { console.log(`skip ${beat.id} (exists)`); return true; }
+  if (!fs.existsSync(beat.image)) { console.log(`wait ${beat.id}: picture ${beat.image} not made yet`); return false; }
   const contentType = /\.jpe?g$/i.test(beat.image) ? 'image/jpeg' : 'image/png';
   const up = await call({ action: 'upload', base64: fs.readFileSync(beat.image).toString('base64'), contentType });
   if (!up.ok || !up.j.public_url) { console.error(`upload ${beat.id} failed: ${up.status} ${JSON.stringify(up.j).slice(0, 300)}`); return false; }
@@ -77,4 +78,4 @@ for (let i = 0; i < todo.length; i += 3) {
   ok += res.filter(Boolean).length;
 }
 console.log(`${ok}/${todo.length} clips ready for ${key}`);
-if (ok === 0) process.exit(1);
+if (ok === 0 && todo.some((b) => fs.existsSync(b.image))) process.exit(1);

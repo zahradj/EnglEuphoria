@@ -1244,5 +1244,22 @@
       "public/lep1/items/item-gem-red-circle.png"
     ],
     "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). The same sunny beach as the first reference image. On the sand in the LOWER half lie SIX big shiny treasure gems in ONE neat row from left to right, evenly spaced with clear space between them: a RED CIRCLE, an ORANGE SQUARE, a YELLOW TRIANGLE, a GREEN CIRCLE, a BLUE SQUARE, a PURPLE TRIANGLE. Each gem appears only once. A small open wooden treasure chest sits far away on the right edge. The upper half is calm sky and sea with open space. No characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-river-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-meadow.jpg",
+      "public/lep1/scenes/bg-u2l6-beach-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft colours, friendly picture-book look, gentle depth). A wide sparkling blue RIVER seen from slightly above: it comes from far-away green hills at the top of the picture and flows down toward the viewer, and it is WIDE, filling the middle of the picture from about 14% to 86% of the width. On the far LEFT edge and the far RIGHT edge are grassy river banks with flowers, reeds and small bushes. The water has soft ripples, little white wave highlights and a few lily pads near the banks only. The open water in the middle is EMPTY: no stones, no rocks, no boats, no characters, no animals. Sunny sky with soft clouds at the very top. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-stone.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-gem-red-circle.png",
+      "public/lep1/items/item-hat.png"
+    ],
+    "prompt": "one big round flat RIVER STEPPING STONE seen from slightly above: a smooth light-grey rock with a soft rounded 3D shape, a glossy wet highlight on top, a little green moss on one side and a darker grey underside, drawn in exactly the same cartoon sticker style as the reference images (bold dark outline, soft shading), isolated alone on a plain pure white background, nothing else in the picture. No text."
   }
 ]

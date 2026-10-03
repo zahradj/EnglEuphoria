@@ -132,5 +132,35 @@
         "prompt": "Under the big oak tree the lion hugs the shiny golden star and jumps for joy; the friends cheer, clap and dance around him. Stars twinkle in the sky."
       }
     ]
+  },
+  "u2l6-loops": {
+    "lesson": "Pre-A1 Unit 2 Lesson 6 — living game backgrounds (looped ping-pong in the games)",
+    "provider": "higgsfield",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "seconds": 5,
+    "style": "Keep exactly the flat 2D cartoon picture-book style and everything in the first frame. Seamless gentle ambient LOOP for a game background: the camera does not move at all, nothing new appears, nothing leaves the picture, characters stay in place.",
+    "out": "public/lep1/video/clips/u2l6-loops",
+    "beats": [
+      {
+        "id": "river",
+        "image": "public/lep1/scenes/bg-u2l6-river-wide.png",
+        "prompt": "The river water flows gently toward the viewer with sparkling ripples, reeds and flowers on the banks sway softly in the breeze, clouds drift slowly."
+      },
+      {
+        "id": "meadow",
+        "image": "public/lep1/scenes/bg-meadow.jpg",
+        "prompt": "Flowers and grass sway softly in a light breeze, a few butterflies flutter gently, the sun glows and clouds drift slowly."
+      },
+      {
+        "id": "beach",
+        "image": "public/lep1/scenes/bg-u2l6-beach-wide.png",
+        "prompt": "Small waves roll gently onto the sand, the blue bird breathes, blinks and flaps one wing softly, clouds drift slowly."
+      },
+      {
+        "id": "garden",
+        "image": "public/lep1/scenes/bg-u2l6-garden-wide.png",
+        "prompt": "Flowers sway softly in a light breeze, the white bunny breathes, blinks and twitches her ears gently, clouds drift slowly."
+      }
+    ]
   }
 }
