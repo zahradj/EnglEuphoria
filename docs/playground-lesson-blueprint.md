@@ -73,6 +73,30 @@
 
 ---
 
+## 3a. Story lessons get REAL video (hard rule, Pre-A1)
+
+**Lesson 5 of every Pre-A1 unit is the story lesson, and its story MUST be a
+real animated video** — characters that actually move, talk and act out the
+story (generated video clips: image-to-video / text-to-video), cut together
+with the narration. A slideshow of still pictures with zoom/pan ("Ken Burns")
+is **not** acceptable for Lesson 5; it is only a temporary fallback while the
+real clips are being generated, and the lesson is not "done" until they are.
+
+| Requirement | Detail |
+|---|---|
+| Which lessons | Lesson 5 of every Pre-A1 unit (the storybook slot of the unit arc) |
+| What | One clip per story beat (≈ 5-8 s each, 6-8 beats), real motion: walking, giving, swimming, opening, laughing |
+| Consistency | Every clip starts from the lesson's own approved story picture (image-to-video), so characters look exactly like the Playground cast |
+| Content | Matches the story line for that beat word for word (semantic check against the narration); no text in the frame |
+| Audio | The clip's own sound is muted; narration = the recorded character voices (`speak()`), never generated speech, never browser TTS |
+| Format | One stitched MP4 (H.264, faststart) + WebM fallback in `public/lep1/video/`, with `atSec` marking where each beat starts; picture-answer questions pause it |
+| Fallback | If a clip cannot be generated yet, that beat may use the still picture — the lesson is flagged "video pending" and must be finished before it goes live |
+
+Other lessons may keep picture-films (`story-video` built from stills) for
+short story openers and payoffs; Lesson 5 may not.
+
+---
+
 ## 3b. Extra Time — brain breaks & bonus activities (every lesson)
 
 A 30-minute class rarely runs exactly to plan: a confident child finishes

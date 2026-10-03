@@ -143,6 +143,8 @@ avoid-forever rule for a `kind` that's otherwise fine elsewhere.
 | Sticker Book reward | Khan Academy Kids collectibles, sticker charts | `sticker-reward` | motivation (effort, not score) |
 | Home Mission | Novakid / Oxford home-link tasks | `home-mission` | transfer to real life with family |
 
+**Pre-A1 Lesson 5 (story lesson) = real animated video**, never a stills slideshow — see `docs/playground-lesson-blueprint.md` §3a.
+
 **Every lesson ends with an Extra-time block** (brain break + 2 bonus games) — see `docs/playground-lesson-blueprint.md` §3b.
 
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.

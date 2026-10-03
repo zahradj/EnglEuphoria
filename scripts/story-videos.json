@@ -1,0 +1,19 @@
+{
+  "u2l5-shelly": {
+    "lesson": "Pre-A1 Unit 2 Lesson 5 — The Rainbow Fish's Scales",
+    "out": "public/lep1/video/clips/u2l5-shelly",
+    "model": "veo-3.1-fast-generate-preview",
+    "seconds": 8,
+    "style": "Keep exactly the flat 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, gentle animation for young children. The camera stays steady. No text, no new characters.",
+    "beats": [
+      { "id": "01-sea", "image": "public/lep1/scenes/bg-u2l5-sea-wide.png", "prompt": "The five animal friends on the little red ship wave happily and the ship bobs gently on the waves. Under the water the small grey fish swims slowly and looks up at them. Bubbles rise." },
+      { "id": "02-sad", "image": "public/lep1/scenes/bg-u2l5-shelly-sad-wide.png", "prompt": "The small grey fish swims slowly in place, looks down at her plain grey body and looks sad; one small tear floats away. Soft bubbles rise." },
+      { "id": "03-red", "image": "public/lep1/scenes/bg-u2l5-shelly-red-wide.png", "prompt": "The white bunny leans over the side of the red ship and gently drops a shiny red circle scale into the water. The red circle sinks slowly and sticks onto the grey fish's side. The fish wiggles and smiles." },
+      { "id": "04-blue", "image": "public/lep1/scenes/bg-u2l5-shelly-blue-wide.png", "prompt": "The grey mouse with the orange bow leans over the side of the red ship and gently drops a shiny blue square scale into the water. The blue square sinks and sticks onto the fish. The fish smiles happily." },
+      { "id": "05-yellow", "image": "public/lep1/scenes/bg-u2l5-shelly-yellow-wide.png", "prompt": "The yellow lion leans over the side of the red ship and gently drops a shiny yellow triangle scale into the water. The yellow triangle sinks and sticks onto the fish. The fish does a happy little spin." },
+      { "id": "06-rainbow", "image": "public/lep1/scenes/bg-u2l5-shelly-rainbow-wide.png", "prompt": "The colourful rainbow fish leaps happily out of the water and splashes back down, her coloured circle, square and triangle scales sparkling. The friends on the ship cheer and clap." },
+      { "id": "07-crab", "image": "public/lep1/scenes/bg-u2l5-crab-wide.png", "prompt": "On the sandy sea floor the rainbow fish swims to the small sad grey crab and gently gives it one shiny purple circle scale. The crab holds it and slowly starts to smile." },
+      { "id": "08-friends", "image": "public/lep1/scenes/bg-u2l5-crab-wide.png", "prompt": "The rainbow fish and the happy little crab dance together on the sandy sea floor, the fish swimming in a happy circle around the crab. Little hearts and bubbles float up." }
+    ]
+  }
+}

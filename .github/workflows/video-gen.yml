@@ -1,0 +1,43 @@
+name: Generate story video clips
+
+# Real animated video for Pre-A1 Lesson 5 stories (blueprint §3a): runs
+# scripts/generate-story-video.mjs for the story named in
+# scripts/video-gen-request.txt (beats in scripts/story-videos.json) through
+# the video-proxy edge function (Veo image-to-video) and commits the clips.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/video-gen-request.txt'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: video-gen-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  clips:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Generate clips
+        env:
+          VIDEO_PROXY_URL: https://dcoxpyzoqjvmuuygvlme.supabase.co/functions/v1/video-proxy
+          VIDEO_PROXY_TOKEN: de472b713779b6c3f2c462fb886213e1861db78b10aa2021
+        run: node scripts/generate-story-video.mjs
+      - name: Commit clips
+        if: always()
+        run: |
+          git add public/lep1/video
+          if git diff --cached --quiet; then echo "No new clips."; exit 0; fi
+          git config user.name "video-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "Story video clips ($(git diff --cached --name-only | wc -l) files)"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
