@@ -2,8 +2,7 @@
   "u2l5-shelly": {
     "lesson": "Pre-A1 Unit 2 Lesson 5 — The Rainbow Fish's Scales",
     "out": "public/lep1/video/clips/u2l5-shelly",
-    "model": "veo-3.1-fast-generate-preview",
-    "seconds": 8,
+    "seconds": 10,
     "style": "Keep exactly the flat 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, gentle animation for young children. The camera stays steady. No text, no new characters.",
     "beats": [
       {
@@ -46,6 +45,9 @@
         "image": "public/lep1/scenes/bg-u2l5-crab-wide.png",
         "prompt": "The rainbow fish and the happy little crab dance together on the sandy sea floor, the fish swimming in a happy circle around the crab. Little hearts and bubbles float up."
       }
-    ]
+    ],
+    "provider": "higgsfield",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "note": "Beats 01-03 and 06-08 were made before the Higgsfield-only rule (kept). Clips are trimmed to 8 s when stitched."
   }
 }
