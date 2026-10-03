@@ -348,6 +348,8 @@ export type Scene =
       spots: { colorWord: string; colorHex: string; label: string; left: string; top: string }[];
       clueOrder: string[];
       who: CharKey;
+      /** 'a' → "I spy a circle!" (nouns such as shapes); default "I spy something red!". */
+      article?: 'a';
     }
   | {
       /** "Simon Says" color-sequence memory game — press-back a growing
@@ -367,6 +369,16 @@ export type Scene =
       paints: { colorWord: string; colorHex: string }[];
       answers: { colorWord: string; colorHex: string }[];
       rounds: { a: string; b: string; result: string; resultHex: string; who: CharKey; img: string; label: string; line: string }[];
+    }
+  | {
+      /** "Shape Builders" — build a picture piece by piece: name each empty
+       *  outline's shape, then pick the piece in the colour you hear
+       *  (Unit 2 Lesson 3). Piece boxes are in a 100×70 board space. */
+      id: string; kind: 'shape-builder'; bg: string; teacher: string; who: CharKey;
+      rounds: {
+        who: CharKey; label: string; intro: string; line: string; alive: 'bounce' | 'launch' | 'wiggle';
+        pieces: { shape: 'circle' | 'square' | 'triangle'; colorWord: string; colorHex: string; x: number; y: number; w: number; h: number; flip?: boolean }[];
+      }[];
     };
 
 const A = '/lep1'; // public asset root
@@ -398,6 +410,8 @@ export const PROP_THEME: Record<string, { closed: string; label: string; tint: s
   // was silently falling through to Pip's shell theme from Lesson 1 for a birthday-themed lesson.
   bella: { closed: '\u{1F381}', label: 'gift', tint: '#E76FA5' },
   leo: { closed: '\u{1F381}', label: 'gift', tint: '#C97A2F' },
+  // Willow (Unit 2 Lesson 2's /g/) fell through to Pip's shells too.
+  willow: { closed: '\u{1FAB6}', label: 'feather', tint: '#4FA9E0' },
 };
 
 export const CHARACTER_STAGE: Record<CharKey, { side: 'left' | 'right' }> = {
@@ -2975,219 +2989,257 @@ const bgU2L3TriangleSolo = `${A}/scenes/bg-u2l3-triangle-solo.png`;
 const bgU2L3SoundGarden = `${A}/scenes/bg-u2l3-sound-garden.png`;
 const bgU2L3DashArena = `${A}/scenes/bg-u2l3-dash-arena.png`;
 
+/* REBUILD (2026-10-03) on the same blueprints as Lesson 2 (wide art, 6 core
+ * words, one phonics micro-moment, the child asks as well as answers, its own
+ * song, one signature game). Replaces the first version, which had square
+ * art, emoji objects, three dashes and three role-plays, the shared goodbye
+ * song — and two real teaching errors: it taught "/k/ /k/ Circle" (circle
+ * starts with an /s/ sound) and its C trace was checked against an H (C had
+ * no outline in TraceScene).
+ *
+ * Core words: circle, square, triangle (+ clock, window, pizza; cookie,
+ * present, flag as second examples). Chunks: "What shape is it?" / "It's a
+ * circle." / "I like circles." Colours from Lessons 1-2 come back inside the
+ * signature game ("A red triangle!"), which Lesson 4 builds on.
+ * Signature game: Shape Builders (shape-builder) — name each shape, pick it in
+ * the colour you hear, build a house, a rocket and an ice cream.
+ * Phonics micro-moment: C says /k/ — clock, cat, car (words that really start
+ * with /k/). Cast as before: Bella = circle, Mia = square, Leo = triangle.
+ * Research: shape-collage / "make a picture with shapes" (googooenglish.com,
+ * twinkl.com ESL 2D shapes), "What shape is it?" Q&A (englishclub.com,
+ * "How to teach shapes to young learners": circle first — no corners). */
+const itemClock = `${A}/items/item-clock.png`;
+const itemWindow = `${A}/items/item-window.png`;
+const itemPizzaSlice = `${A}/items/item-pizza-slice.png`;
+const itemCookie = `${A}/items/item-cookie.png`;
+const itemPresent = `${A}/items/item-present.png`;
+const itemFlag = `${A}/items/item-flag.png`;
+const itemCarC = `${A}/items/item-car.png`; // itemCar is declared further down (Unit 3)
+const shapeCircle = `${A}/items/shape-circle.svg`;
+const shapeSquare = `${A}/items/shape-square.svg`;
+const shapeTriangle = `${A}/items/shape-triangle.svg`;
+const bgU2L3Town = `${A}/scenes/bg-u2l3-town-wide.png`;
+const bgU2L3Builder = `${A}/scenes/bg-u2l3-builder-wide.png`;
+const bgU2L3Clock = `${A}/scenes/bg-u2l3-clock-wide.png`;
+const bgU2L3Window = `${A}/scenes/bg-u2l3-window-wide.png`;
+const bgU2L3Pizza = `${A}/scenes/bg-u2l3-pizza-wide.png`;
+const RED = '#EF4444';
+const BLUE = '#3B82F6';
+const YELLOW = '#FACC15';
+
 export const LESSON_U2L3_TITLE = 'Circle, Square, Triangle!';
-export const LESSON_U2L3_OBJECTIVE = 'Identify and name the shapes circle, square, and triangle, then combine them with previously-learned colors into full noun phrases ("It\'s a red circle," "I like blue squares," "I don\'t like yellow triangles"), and recognize the C letter sound.';
+export const LESSON_U2L3_OBJECTIVE = 'Name circle, square and triangle (clock, window, pizza), ask and answer "What shape is it?" — "It\'s a circle.", say "I like circles.", build pictures from shapes in the colours you hear ("A red triangle!"), and hear C say /k/ (clock, cat, car).';
 
 export const LESSON_U2L3_SCENES: Scene[] = [
-  { id: 'u2l3-title', kind: 'title-card', bg: bgU2L3ShapeParade, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 3', title: 'Circle, Square, Triangle!', subtitle: 'Shapes are all around us' },
+  { id: 'u2l3-title', kind: 'title-card', bg: bgU2L3Town, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 3', title: 'Circle, Square, Triangle!', subtitle: 'Build with shapes' },
+
   {
-    id: 'u2l3-intro', kind: 'cinematic', bg: bgU2L3ShapeParade, title: 'Circle, Square, Triangle!', subtitle: 'A garden full of shapes', narrator: 'pip',
+    // Warm-up: the lesson's shapes song (scripts/songs.json "u2l3-shapes").
+    id: 'u2l3-song', kind: 'song', bg: bgU2L3Town, title: '\u{1F3B5} The Shapes Song \u{1F3B5}', teacher: 'Sing and draw each shape in the air with your finger!',
+    durationSeconds: 20, bigWord: 'Shapes', songUrl: `${A}/audio/shapes-song-u2l3.mp3?v=1`,
+    lineDurationsMs: [3600, 4000, 4100, 8362],
+    songPrompt: 'Upbeat kids pop shapes song',
+    lyrics: [
+      { who: 'bella', text: 'Circle, circle, the clock is a circle!', emotion: 'happy' },
+      { who: 'mia', text: 'Square, square, the window is a square!', emotion: 'happy' },
+      { who: 'leo', text: 'Triangle, triangle, the pizza is a triangle!', emotion: 'happy' },
+      { who: 'pip', text: 'What shape is it? What shape is it?', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u2l3-intro', kind: 'cinematic', bg: bgU2L3Town, title: 'Shape Town', subtitle: 'Shapes are everywhere', narrator: 'pip',
     script: [
-      { who: 'pip', line: 'Look! Today we find shapes, not colors!' },
-      { who: 'pip', line: 'Bella has a round ball, Mia has square books, and Leo has a triangle pizza!' },
+      { who: 'pip', line: 'Hello! Remember red, blue and yellow?' },
+      { who: 'pip', line: 'Look! Shapes are everywhere in our town!' },
     ],
     cta: "Let's look!",
   },
+
+  /* ---- Input: the three shapes on three clear objects ---- */
   {
-    id: 'u2l3-vocab-shapes', kind: 'shape-model', bg: bgMeadow,
-    teacher: 'Look! Tap a shape to hear it, say it back, learn the word, then say the sentence!',
+    id: 'u2l3-vocab-shapes', kind: 'shape-model', bg: bgU2L3Town,
+    teacher: 'Tap a shape. Listen, say it, then say the sentence!',
     items: [
-      { shapeWord: 'CIRCLE', shapeColor: '#EF4444', who: 'bella', exampleWord: 'Ball', exampleImg: itemBall },
-      { shapeWord: 'SQUARE', shapeColor: '#3B82F6', who: 'mia', exampleWord: 'Book', exampleImg: itemBook },
-      { shapeWord: 'TRIANGLE', shapeColor: '#F59E0B', who: 'leo', exampleWord: 'Pizza', exampleImg: itemPizza },
+      { shapeWord: 'CIRCLE', shapeColor: RED, who: 'bella', exampleWord: 'Clock', exampleImg: itemClock },
+      { shapeWord: 'SQUARE', shapeColor: BLUE, who: 'mia', exampleWord: 'Window', exampleImg: itemWindow },
+      { shapeWord: 'TRIANGLE', shapeColor: YELLOW, who: 'leo', exampleWord: 'Pizza', exampleImg: itemPizzaSlice },
     ],
   },
   {
-    id: 'u2l3-model-c', kind: 'sound-model', bg: bgU2L3SoundGarden, who: 'bella', letter: 'C', phoneme: '/k/', sound: 'kuh', teacher: 'Bella models the /k/ sound! Listen first: /k/ /k/ Circle. /k/ /k/ Cat.',
-    anchors: [
-      { word: 'Circle', emoji: '\u{2B55}' },
-      { word: 'Cat', emoji: '\u{1F408}' },
-      { word: 'Car', emoji: '\u{1F697}' },
-    ],
-  },
-  { id: 'u2l3-trace-c', kind: 'trace', bg: bgU2L3SoundGarden, who: 'bella', letter: 'C', phoneme: '/k/', word: 'Circle', teacher: 'Trace the curvy C. /k/ /k/ Circle!' },
-  {
-    // S (Lesson 3) and T (Lesson 4) are already-taught letters — same
-    // lighter, retrieval-only treatment Lesson 2 gave B: a phonics hint
-    // here and in word-build, no full model+trace pair repeated.
-    id: 'u2l3-sort-shapes', kind: 'shape-sort', bg: bgMeadow, teacher: "Listen for the sound! /c/ircle, /s/quare, /t/riangle — now drag each thing to its shape!",
-    targets: [
-      { shapeWord: 'CIRCLE', shapeColor: '#EF4444', who: 'bella' },
-      { shapeWord: 'SQUARE', shapeColor: '#3B82F6', who: 'mia' },
-      { shapeWord: 'TRIANGLE', shapeColor: '#F59E0B', who: 'leo' },
-    ],
+    id: 'u2l3-shape-spot', kind: 'color-spot', bg: bgU2L3Town,
+    teacher: 'Find the shapes in the town! Tap each arrow.',
     items: [
-      { word: 'ball', emoji: '\u{26BD}', shapeWord: 'CIRCLE' },
-      { word: 'moon', emoji: '\u{1F315}', shapeWord: 'CIRCLE' },
-      { word: 'book', emoji: '\u{1F4D8}', shapeWord: 'SQUARE' },
-      { word: 'box', emoji: '\u{1F4E6}', shapeWord: 'SQUARE' },
-      { word: 'pizza', emoji: '\u{1F355}', shapeWord: 'TRIANGLE' },
-      { word: 'flag', emoji: '\u{1F6A9}', shapeWord: 'TRIANGLE' },
+      { colorWord: 'CIRCLE', colorHex: RED, who: 'bella', label: 'Clock', sentence: 'The clock is a circle!', left: '16.5%', top: '22%', splashImg: itemClock },
+      { colorWord: 'SQUARE', colorHex: BLUE, who: 'mia', label: 'Window', sentence: 'The window is a square!', left: '50%', top: '42%', splashImg: itemWindow },
+      { colorWord: 'TRIANGLE', colorHex: '#F59E0B', who: 'leo', label: 'Flag', sentence: 'The flag is a triangle!', left: '80%', top: '13%', splashImg: itemFlag },
     ],
   },
   {
-    id: 'u2l3-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Listen! Tap the missing letter to make the word.',
-    rounds: [
-      { word: 'circle', blankIndex: 0, answer: 'C', choices: ['C', 'S', 'T'], img: itemBall, emoji: '\u{26BD}' },
-      { word: 'square', blankIndex: 0, answer: 'S', choices: ['C', 'S', 'T'], img: itemBook, emoji: '\u{1F4D8}' },
-      { word: 'triangle', blankIndex: 0, answer: 'T', choices: ['C', 'S', 'T'], img: itemPizza, emoji: '\u{1F355}' },
-    ],
-  },
-  {
-    // The TARGET frame for this lesson: shape + the color that object's own
-    // art already shows, combined into one noun phrase — not a repeat of
-    // Lessons 1-2's bare color sentences. (The isolated bare-shape-sentence
-    // drill that used to sit here, u2l3-who, was removed per direct user
-    // request — word-build just above already tests shape-word recognition
-    // in isolation, so this scene now follows it directly.)
-    id: 'u2l3-sentence-practice', kind: 'listen-repeat-cards', bg: bgU2L3ShapeParade, teacher: "Now let's put color AND shape together! Listen, then repeat!",
+    id: 'u2l3-question-model', kind: 'listen-repeat-cards', bg: bgU2L3Town, teacher: 'Listen to the question and the answer. Then say them!',
     cards: [
-      { who: 'bella', sentence: "It's a red circle!", img: itemBall, imgLabel: 'Red circle' },
-      { who: 'mia', sentence: "It's a blue square!", img: itemBook, imgLabel: 'Blue square' },
-      { who: 'leo', sentence: "It's a yellow triangle!", img: itemPizza, imgLabel: 'Yellow triangle' },
-      { who: 'bella', sentence: 'I like red circles!', img: itemBall, imgLabel: 'Red circle' },
-      { who: 'mia', sentence: "I don't like blue squares!", img: itemBook, imgLabel: 'Blue square' },
-      { who: 'leo', sentence: 'I like yellow triangles!', img: itemPizza, imgLabel: 'Yellow triangle' },
+      { who: 'pip', sentence: 'What shape is it?', img: itemClock, imgLabel: 'Clock' },
+      { who: 'bella', sentence: "It's a circle!", img: itemClock, imgLabel: 'Circle' },
+      { who: 'pip', sentence: 'What shape is it?', img: itemWindow, imgLabel: 'Window' },
+      { who: 'mia', sentence: "It's a square!", img: itemWindow, imgLabel: 'Square' },
+      { who: 'pip', sentence: 'What shape is it?', img: itemPizzaSlice, imgLabel: 'Pizza' },
+      { who: 'leo', sentence: "It's a triangle!", img: itemPizzaSlice, imgLabel: 'Triangle' },
     ],
   },
+
+  /* ---- Signature game ---- */
   {
-    id: 'u2l3-dash-circle', kind: 'dash', bg: bgU2L3DashArena, teacher: 'Bella Dash! Tap only the CIRCLE things as they run by. Get 6 rings!', who: 'bella', targetLetter: 'CIRCLE', targetPhoneme: '', goal: 6, seconds: 40,
+    id: 'u2l3-shape-builders', kind: 'shape-builder', bg: bgU2L3Builder, who: 'pip',
+    teacher: 'Shape Builders! Name the shape, then pick the color you hear.',
+    rounds: [
+      {
+        who: 'mia', label: 'House', intro: "Let's build a house!", line: "It's a house!", alive: 'bounce',
+        pieces: [
+          { shape: 'square', colorWord: 'BLUE', colorHex: BLUE, x: 32, y: 32, w: 36, h: 36 },
+          { shape: 'triangle', colorWord: 'RED', colorHex: RED, x: 26, y: 6, w: 48, h: 26 },
+          { shape: 'circle', colorWord: 'YELLOW', colorHex: YELLOW, x: 43, y: 41, w: 14, h: 14 },
+        ],
+      },
+      {
+        who: 'leo', label: 'Rocket', intro: "Let's build a rocket!", line: "It's a rocket!", alive: 'launch',
+        pieces: [
+          { shape: 'triangle', colorWord: 'PURPLE', colorHex: '#A855F7', x: 37, y: 4, w: 26, h: 22 },
+          { shape: 'square', colorWord: 'ORANGE', colorHex: '#F97316', x: 37, y: 26, w: 26, h: 26 },
+          { shape: 'circle', colorWord: 'BLUE', colorHex: BLUE, x: 44, y: 32, w: 12, h: 12 },
+        ],
+      },
+      {
+        who: 'bella', label: 'Ice cream', intro: "Let's build an ice cream!", line: "It's an ice cream!", alive: 'wiggle',
+        pieces: [
+          { shape: 'triangle', colorWord: 'ORANGE', colorHex: '#F97316', x: 38, y: 34, w: 24, h: 34, flip: true },
+          { shape: 'circle', colorWord: 'GREEN', colorHex: '#22C55E', x: 35, y: 12, w: 30, h: 30 },
+          { shape: 'circle', colorWord: 'RED', colorHex: RED, x: 45, y: 3, w: 10, h: 10 },
+        ],
+      },
+    ],
+  },
+
+  /* ---- Controlled practice ---- */
+  {
+    id: 'u2l3-sort-shapes', kind: 'shape-sort', bg: bgU2L3Town, teacher: 'Listen, then drag each thing to its shape!',
+    targets: [
+      { shapeWord: 'CIRCLE', shapeColor: RED, who: 'bella' },
+      { shapeWord: 'SQUARE', shapeColor: BLUE, who: 'mia' },
+      { shapeWord: 'TRIANGLE', shapeColor: YELLOW, who: 'leo' },
+    ],
     items: [
-      { word: 'ball', letter: 'CIRCLE', emoji: '\u{26BD}' },
-      { word: 'moon', letter: 'CIRCLE', emoji: '\u{1F315}' },
-      { word: 'book', letter: 'SQUARE', emoji: '\u{1F4D8}' },
-      { word: 'box', letter: 'SQUARE', emoji: '\u{1F4E6}' },
-      { word: 'pizza', letter: 'TRIANGLE', emoji: '\u{1F355}' },
-      { word: 'flag', letter: 'TRIANGLE', emoji: '\u{1F6A9}' },
+      { word: 'clock', img: itemClock, emoji: '\u{1F570}️', shapeWord: 'CIRCLE' },
+      { word: 'cookie', img: itemCookie, emoji: '\u{1F36A}', shapeWord: 'CIRCLE' },
+      { word: 'window', img: itemWindow, emoji: '\u{1FA9F}', shapeWord: 'SQUARE' },
+      { word: 'present', img: itemPresent, emoji: '\u{1F381}', shapeWord: 'SQUARE' },
+      { word: 'pizza', img: itemPizzaSlice, emoji: '\u{1F355}', shapeWord: 'TRIANGLE' },
+      { word: 'flag', img: itemFlag, emoji: '\u{1F6A9}', shapeWord: 'TRIANGLE' },
     ],
   },
+
+  /* ---- Phonics micro-moment: C says /k/ ---- */
   {
-    id: 'u2l3-dash-square', kind: 'dash', bg: bgU2L3DashArena, teacher: 'Mia Dash! Tap only the SQUARE things as they run by. Get 6 rings!', who: 'mia', targetLetter: 'SQUARE', targetPhoneme: '', goal: 6, seconds: 40,
+    id: 'u2l3-model-c', kind: 'sound-model', bg: bgU2L3Clock, who: 'bella', letter: 'C', phoneme: '/k/', sound: 'kuh',
+    teacher: 'Listen to the /k/ sound. Clock, cat, car!',
+    anchors: [
+      { word: 'clock', emoji: '\u{1F570}️', img: itemClock },
+      { word: 'cat', emoji: '\u{1F431}', img: itemCat },
+      { word: 'car', emoji: '\u{1F697}', img: itemCarC },
+    ],
+  },
+  { id: 'u2l3-trace-c', kind: 'trace', bg: bgU2L3Clock, who: 'bella', letter: 'C', phoneme: '/k/', word: 'clock', teacher: 'Trace the big C! Say /k/ /k/ as you draw.' },
+
+  /* ---- Games ---- */
+  {
+    id: 'u2l3-shape-spy', kind: 'color-spy', bg: bgU2L3Town, who: 'pip', article: 'a', teacher: 'I Spy! Find the shape Pip says.',
+    spots: [
+      { colorWord: 'CIRCLE', colorHex: RED, label: 'The clock', left: '16.5%', top: '28%' },
+      { colorWord: 'SQUARE', colorHex: BLUE, label: 'The window', left: '50%', top: '50%' },
+      { colorWord: 'TRIANGLE', colorHex: '#F59E0B', label: 'The flag', left: '80%', top: '19%' },
+    ],
+    clueOrder: ['TRIANGLE', 'CIRCLE', 'SQUARE'],
+  },
+  {
+    id: 'u2l3-dash-triangle', kind: 'dash', bg: bgU2L3Pizza, teacher: 'Leo Dash! Tap only the TRIANGLES. Get 6!', who: 'leo', targetLetter: 'TRIANGLE', targetPhoneme: '', goal: 6, seconds: 40,
     items: [
-      { word: 'book', letter: 'SQUARE', emoji: '\u{1F4D8}' },
-      { word: 'box', letter: 'SQUARE', emoji: '\u{1F4E6}' },
-      { word: 'pizza', letter: 'TRIANGLE', emoji: '\u{1F355}' },
-      { word: 'flag', letter: 'TRIANGLE', emoji: '\u{1F6A9}' },
-      { word: 'ball', letter: 'CIRCLE', emoji: '\u{26BD}' },
-      { word: 'moon', letter: 'CIRCLE', emoji: '\u{1F315}' },
+      { word: 'pizza', letter: 'TRIANGLE', img: itemPizzaSlice, emoji: '\u{1F355}' },
+      { word: 'flag', letter: 'TRIANGLE', img: itemFlag, emoji: '\u{1F6A9}' },
+      { word: 'clock', letter: 'CIRCLE', img: itemClock, emoji: '\u{1F570}️' },
+      { word: 'cookie', letter: 'CIRCLE', img: itemCookie, emoji: '\u{1F36A}' },
+      { word: 'window', letter: 'SQUARE', img: itemWindow, emoji: '\u{1FA9F}' },
+      { word: 'present', letter: 'SQUARE', img: itemPresent, emoji: '\u{1F381}' },
     ],
   },
+
+  /* ---- Speaking: the child answers, then asks ---- */
   {
-    // Palette-cleanser between two `dash` rounds — Hard Variety Rule (no
-    // more than 2 consecutive same-kind scenes; see activity-pattern-
-    // library skill). Reuses the exact items already established in
-    // u2l3-sort-shapes/dash above (ball, moon, book, box, pizza, flag) —
-    // zero new art — but tests shape-word recognition through matching
-    // instead of a timed chase, a genuinely different skill/pace.
-    id: 'u2l3-memory-shapes', kind: 'memory', bg: bgMeadow, teacher: 'Find the pairs! Match each shape to its friend.',
-    pairs: [
-      { id: 'circle', label: 'Circle', emoji: '\u{26AA}', img: itemBall },
-      { id: 'square', label: 'Square', emoji: '\u{25FC}️', img: itemBook },
-      { id: 'triangle', label: 'Triangle', emoji: '\u{1F53A}', img: itemPizza },
-    ],
-  },
-  {
-    id: 'u2l3-dash-triangle', kind: 'dash', bg: bgU2L3DashArena, teacher: 'Leo Dash! Tap only the TRIANGLE things as they run by. Get 6 rings!', who: 'leo', targetLetter: 'TRIANGLE', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'pizza', letter: 'TRIANGLE', emoji: '\u{1F355}' },
-      { word: 'flag', letter: 'TRIANGLE', emoji: '\u{1F6A9}' },
-      { word: 'ball', letter: 'CIRCLE', emoji: '\u{26BD}' },
-      { word: 'moon', letter: 'CIRCLE', emoji: '\u{1F315}' },
-      { word: 'book', letter: 'SQUARE', emoji: '\u{1F4D8}' },
-      { word: 'box', letter: 'SQUARE', emoji: '\u{1F4E6}' },
-    ],
-  },
-  {
-    // Each question now shows the actual object being asked about (its own
-    // single-CHARACTER image, not the two-character -Only shots the roleplay
-    // scenes use) — direct user correction: two characters left no clear
-    // open space for the student's own draggable video circle, which used
-    // to default dead-center and cover whoever/whatever it landed on.
-    id: 'u2l3-join-stage', kind: 'join-stage', bg: bgU2L3ShapeParade, teacher: 'Your turn! When it says YOU, say the color AND the shape.', cast: ['pip', 'bella', 'mia', 'leo'],
+    id: 'u2l3-you-answer', kind: 'join-stage', bg: bgU2L3Town, teacher: 'Your turn! When it says YOU, say the shape.', cast: ['pip', 'bella', 'mia', 'leo'],
     turns: [
-      { who: 'pip', line: 'What color and shape is the ball?', bg: bgU2L3CircleSolo },
-      { who: 'student', line: "It's a ______ ______. (red circle)", bg: bgU2L3CircleSolo },
-      { who: 'mia', line: 'Do you like blue squares?', bg: bgU2L3SquareSolo },
-      { who: 'student', line: 'I like ______ ______. / I don’t like ______ ______.', bg: bgU2L3SquareSolo },
-      { who: 'leo', line: 'What color and shape is the pizza?', bg: bgU2L3TriangleSolo },
-      { who: 'student', line: "It's a ______ ______. (yellow triangle)", bg: bgU2L3TriangleSolo },
+      { who: 'pip', line: 'What shape is the clock?', bg: bgU2L3Clock, arrow: { left: '40%', top: '30%' } },
+      { who: 'student', line: "It's a …", bg: bgU2L3Clock, arrow: { left: '40%', top: '30%' } },
+      { who: 'pip', line: 'What shape is the window?', bg: bgU2L3Window, arrow: { left: '43%', top: '46%' } },
+      { who: 'student', line: "It's a …", bg: bgU2L3Window, arrow: { left: '43%', top: '46%' } },
+      { who: 'pip', line: 'What shape is the pizza?', bg: bgU2L3Pizza, arrow: { left: '39%', top: '36%' } },
+      { who: 'student', line: "It's a …", bg: bgU2L3Pizza, arrow: { left: '39%', top: '36%' } },
     ],
   },
   {
-    id: 'u2l3-storybook', kind: 'flipbook', bg: bgU2L3ShapeParade, title: 'A Day of Shapes',
+    id: 'u2l3-you-ask', kind: 'join-stage', bg: bgU2L3Town, teacher: 'Now YOU ask! Say: What shape is it?', cast: ['bella', 'mia', 'leo'],
+    turns: [
+      { who: 'student', line: 'Ask Bella: What shape is it?', bg: bgU2L3Clock, arrow: { left: '40%', top: '30%' } },
+      { who: 'bella', line: "It's a circle!", bg: bgU2L3Clock },
+      { who: 'student', line: 'Ask Leo: What shape is it?', bg: bgU2L3Pizza, arrow: { left: '39%', top: '36%' } },
+      { who: 'leo', line: "It's a triangle!", bg: bgU2L3Pizza },
+      { who: 'student', line: 'Ask your teacher: What shape is it?', bg: bgU2L3Window, arrow: { left: '43%', top: '46%' } },
+    ],
+  },
+
+  /* ---- Game break ---- */
+  {
+    id: 'u2l3-memory', kind: 'memory', bg: bgU2L3Town, teacher: 'Find the pairs! Say the shape of each one.',
+    pairs: [
+      { id: 'clock', label: 'Circle', emoji: '\u{1F570}️', img: itemClock },
+      { id: 'window', label: 'Square', emoji: '\u{1FA9F}', img: itemWindow },
+      { id: 'pizza', label: 'Triangle', emoji: '\u{1F355}', img: itemPizzaSlice },
+      { id: 'present', label: 'Square', emoji: '\u{1F381}', img: itemPresent },
+    ],
+  },
+
+  /* ---- Personal production ---- */
+  {
+    id: 'u2l3-my-shape', kind: 'join-stage', bg: bgU2L3Town, teacher: 'What shape do YOU like? Say: I like …', cast: ['bella', 'leo', 'pip'],
+    turns: [
+      { who: 'bella', line: 'I like circles! What shape do you like?' },
+      { who: 'student', line: 'I like …' },
+      { who: 'leo', line: "I like triangles! I don't like squares." },
+      { who: 'student', line: "I like … I don't like …" },
+    ],
+  },
+
+  /* ---- Story payoff ---- */
+  {
+    id: 'u2l3-storybook', kind: 'flipbook', bg: bgU2L3Town, title: 'Shape Town',
     pages: [
-      { who: 'bella', img: bgU2L3CircleOnly, text: 'Bella found a round red ball. It is a red circle!' },
-      { who: 'mia', img: bgU2L3SquareOnly, text: 'Then Mia found a blue square book.' },
-      { who: 'leo', img: bgU2L3TriangleOnly, text: 'Leo found a yellow triangle pizza too!' },
-      { who: 'pip', img: bgU2L3ShapeParade, text: 'Red circle, blue square, yellow triangle — so many shapes with friends!' },
+      { who: 'pip', img: bgU2L3Town, text: 'Pip and his friends look for shapes.' },
+      { who: 'bella', img: bgU2L3Clock, text: 'Bella finds a circle. It is a clock!' },
+      { who: 'mia', img: bgU2L3Window, text: 'Mia finds a square. It is a window!' },
+      { who: 'leo', img: bgU2L3Pizza, text: 'Leo finds a triangle. It is a pizza. Yum!' },
+      { who: 'pip', img: bgU2L3Builder, text: 'Now they build a house with shapes!' },
     ],
     checkpoints: [
-      { afterPage: 0, who: 'bella', question: 'What shape is the ball?', options: ['Circle', 'Square', 'Triangle'], answer: 'Circle' },
-      { afterPage: 2, who: 'leo', question: 'What shape is the pizza?', options: ['Circle', 'Square', 'Triangle'], answer: 'Triangle' },
+      { afterPage: 1, who: 'bella', question: 'What shape is the clock?', options: ['Circle', 'Square', 'Triangle'], answer: 'Circle' },
+      { afterPage: 3, who: 'leo', question: 'What shape is the pizza?', options: ['Circle', 'Square', 'Triangle'], answer: 'Triangle' },
     ],
   },
   {
-    id: 'u2l3-roleplay-circle', kind: 'roleplay', bg: bgU2L3CircleOnly, teacher: 'Story time! Listen to Pip and Bella, then repeat.', cast: ['pip', 'bella'],
-    script: [
-      { who: 'bella', line: "It's a red circle!", repeat: true },
-      { who: 'pip', line: 'I like red circles!', repeat: true },
+    id: 'u2l3-read-words', kind: 'word-picture-match', bg: bgU2L3Town, teacher: 'Read the word. Tap the shape!',
+    rounds: [
+      { word: 'circle', who: 'bella', correctImg: shapeCircle, correctLabel: 'Circle', distractors: [{ img: shapeSquare, label: 'Square' }, { img: shapeTriangle, label: 'Triangle' }] },
+      { word: 'triangle', who: 'leo', correctImg: shapeTriangle, correctLabel: 'Triangle', distractors: [{ img: shapeCircle, label: 'Circle' }, { img: shapeSquare, label: 'Square' }] },
+      { word: 'square', who: 'mia', correctImg: shapeSquare, correctLabel: 'Square', distractors: [{ img: shapeTriangle, label: 'Triangle' }, { img: shapeCircle, label: 'Circle' }] },
     ],
   },
-  {
-    id: 'u2l3-roleplay-square', kind: 'roleplay', bg: bgU2L3SquareOnly, teacher: 'Now listen to them talk about the books, then repeat.', cast: ['pip', 'mia'],
-    script: [
-      { who: 'mia', line: "It's a blue square!", repeat: true },
-      { who: 'pip', line: "I don't like blue squares!", repeat: true },
-    ],
-  },
-  {
-    // Palette-cleanser between two `roleplay` scenes — Hard Variety Rule
-    // (same rule as u2l3-memory-shapes above). REVISION (direct user
-    // correction): the first version of this scene ("Guess the friend")
-    // centered on character portraits, but this lesson is about shapes
-    // and colors, not characters — replaced with a real phonics arcade
-    // round instead. sound-pop is a genuine balloon-popping game (its own
-    // renderer already plays a real recorded phonic sound on each target
-    // change and a pop sound effect on every hit/miss — exactly the
-    // "sounds, balloon-popping, phonics" the correction asked for) themed
-    // on the C/S/T sounds this lesson already teaches (C gets the full
-    // model+trace treatment in u2l3-model-c/trace-c above; S/T are
-    // lighter review, same as u2l3-sort-shapes' own phonics hint). Items
-    // reuse the exact same colored shape images already established for
-    // this lesson's target color+shape frame (red circle/blue square/
-    // yellow triangle) — zero new art, and shapes+colors stay the focus.
-    id: 'u2l3-sound-pop', kind: 'sound-pop', bg: bgU2L3SoundGarden, teacher: 'Pop the balloon with the right sound! Listen first, then pop!', who: 'bella', goal: 8, seconds: 45,
-    targets: [
-      { letter: 'C', phoneme: '/k/' },
-      { letter: 'S', phoneme: '/s/' },
-      { letter: 'T', phoneme: '/t/' },
-    ],
-    items: [
-      { word: 'circle', letter: 'C', img: itemBall, emoji: '\u{26AA}' },
-      { word: 'square', letter: 'S', img: itemBook, emoji: '\u{25FC}️' },
-      { word: 'triangle', letter: 'T', img: itemPizza, emoji: '\u{1F53A}' },
-    ],
-  },
-  {
-    id: 'u2l3-roleplay-triangle', kind: 'roleplay', bg: bgU2L3TriangleOnly, teacher: 'Now listen to them talk about the pizza, then repeat.', cast: ['pip', 'leo'],
-    script: [
-      { who: 'leo', line: "It's a yellow triangle!", repeat: true },
-      { who: 'pip', line: 'I like yellow triangles!', repeat: true },
-    ],
-  },
-  {
-    id: 'u2l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the shapes garden! Sing along together.',
-    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
-    lineDurationsMs: [3580, 4020, 4980, 7482],
-    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
-    lyrics: [
-      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
-      { who: 'mia', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
-      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
-    ],
-  },
-  { id: 'u2l3-finale', kind: 'finale', bg: bgU2L3ShapeParade, who: 'pip', line: 'You did it! You can name red circles, blue squares, and yellow triangles! \u{1F308}' },
+
+  { id: 'u2l3-finale', kind: 'finale', bg: bgU2L3Town, who: 'pip', line: 'You found circles, squares and triangles! Goodbye, friends!' },
 ];
 
 /* =============================================================================

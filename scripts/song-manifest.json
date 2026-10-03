@@ -58,5 +58,10 @@
     "path": "public/lep1/audio/colors-song-u2l2.mp3",
     "bytes": 321037,
     "sha256": "b4e8d2feede45f34660192ec746037dfb4ad21e2219ab368e59ef64109c853cd"
+  },
+  "u2l3-shapes": {
+    "path": "public/lep1/audio/shapes-song-u2l3.mp3",
+    "bytes": 321037,
+    "sha256": "dcff03caad0a427bbeff1b543e28facdab66d2f2a9c5c65ec896592d2ec7cf17"
   }
 }

@@ -307,10 +307,19 @@ const UNIT1_EXTRACTORS = {
     ...(s.targets ?? []).map((t) => [t.who, t.shapeWord]),
   ],
   'color-spy': (s) => [
-    ...(s.clueOrder ?? []).map((clue) => [s.who, `I spy something ${clue.toLowerCase()}!`]),
+    ...(s.clueOrder ?? []).map((clue) => [s.who, s.article ? `I spy a ${clue.toLowerCase()}!` : `I spy something ${clue.toLowerCase()}!`]),
     ...(s.spots ?? []).map((sp) => [s.who, `Yes! ${sp.label}!`]),
   ],
   'color-simon': (s) => (s.colors ?? []).map((c) => [c.who, c.colorWord]),
+  // Mirrors ShapeBuilderScene.tsx's shapeBuilderLines().
+  'shape-builder': (s) => [
+    [s.who, 'What shape is it?'],
+    ...(s.rounds ?? []).flatMap((r) => [
+      [r.who, r.intro],
+      [r.who, r.line],
+      ...(r.pieces ?? []).flatMap((p) => [[s.who, `It's a ${p.shape}!`], [s.who, `${/^[aeiou]/i.test(p.colorWord) ? 'An' : 'A'} ${p.colorWord.toLowerCase()} ${p.shape}!`]]),
+    ]),
+  ],
   // Mirrors ColorMixScene.tsx's colorMixLines().
   'color-mix': (s) => [
     [s.who, 'What color is it?'],

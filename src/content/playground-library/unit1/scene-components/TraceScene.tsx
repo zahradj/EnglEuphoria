@@ -20,6 +20,15 @@ export function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { k
     M: [{ from: { x: 155, y: 470 }, to: { x: 195, y: 130 } }, { from: { x: 195, y: 130 }, to: { x: 300, y: 455 } }, { from: { x: 300, y: 455 }, to: { x: 405, y: 130 } }, { from: { x: 405, y: 130 }, to: { x: 455, y: 235 } }],
     A: [{ from: { x: 300, y: 130 }, to: { x: 150, y: 470 } }, { from: { x: 300, y: 130 }, to: { x: 450, y: 470 } }, { from: { x: 205, y: 340 }, to: { x: 395, y: 340 } }],
     S: [{ from: { x: 400, y: 175 }, to: { x: 200, y: 175 } }, { from: { x: 200, y: 175 }, to: { x: 200, y: 295 } }, { from: { x: 200, y: 295 }, to: { x: 400, y: 295 } }, { from: { x: 400, y: 295 }, to: { x: 400, y: 415 } }, { from: { x: 400, y: 415 }, to: { x: 200, y: 415 } }],
+    // Curved / later letters (C, D, G, N, R, W, Y) had no outline, so tracing them
+    // was silently checked against an H. Points follow the dashed font glyph.
+    C: [{ from: { x: 431, y: 171 }, to: { x: 288, y: 106 } }, { from: { x: 288, y: 106 }, to: { x: 159, y: 203 } }, { from: { x: 159, y: 203 }, to: { x: 159, y: 377 } }, { from: { x: 159, y: 377 }, to: { x: 288, y: 474 } }, { from: { x: 288, y: 474 }, to: { x: 431, y: 409 } }],
+    D: [{ from: { x: 180, y: 110 }, to: { x: 180, y: 470 } }, { from: { x: 180, y: 110 }, to: { x: 393, y: 180 } }, { from: { x: 393, y: 180 }, to: { x: 430, y: 290 } }, { from: { x: 430, y: 290 }, to: { x: 393, y: 400 } }, { from: { x: 393, y: 400 }, to: { x: 180, y: 470 } }],
+    G: [{ from: { x: 431, y: 171 }, to: { x: 282, y: 107 } }, { from: { x: 282, y: 107 }, to: { x: 154, y: 215 } }, { from: { x: 154, y: 215 }, to: { x: 168, y: 393 } }, { from: { x: 168, y: 393 }, to: { x: 311, y: 475 } }, { from: { x: 311, y: 475 }, to: { x: 448, y: 383 } }, { from: { x: 455, y: 300 }, to: { x: 330, y: 300 } }, { from: { x: 455, y: 300 }, to: { x: 455, y: 430 } }],
+    N: [{ from: { x: 175, y: 470 }, to: { x: 175, y: 110 } }, { from: { x: 175, y: 110 }, to: { x: 425, y: 470 } }, { from: { x: 425, y: 470 }, to: { x: 425, y: 110 } }],
+    R: [{ from: { x: 180, y: 470 }, to: { x: 180, y: 110 } }, { from: { x: 180, y: 110 }, to: { x: 350, y: 115 } }, { from: { x: 350, y: 115 }, to: { x: 405, y: 200 } }, { from: { x: 405, y: 200 }, to: { x: 350, y: 285 } }, { from: { x: 350, y: 285 }, to: { x: 180, y: 290 } }, { from: { x: 280, y: 290 }, to: { x: 420, y: 470 } }],
+    W: [{ from: { x: 120, y: 110 }, to: { x: 205, y: 470 } }, { from: { x: 205, y: 470 }, to: { x: 300, y: 170 } }, { from: { x: 300, y: 170 }, to: { x: 395, y: 470 } }, { from: { x: 395, y: 470 }, to: { x: 480, y: 110 } }],
+    Y: [{ from: { x: 160, y: 110 }, to: { x: 300, y: 300 } }, { from: { x: 440, y: 110 }, to: { x: 300, y: 300 } }, { from: { x: 300, y: 300 }, to: { x: 300, y: 470 } }],
     T: [{ from: { x: 150, y: 150 }, to: { x: 450, y: 150 } }, { from: { x: 300, y: 150 }, to: { x: 300, y: 470 } }],
     B: [
       { from: { x: 180, y: 130 }, to: { x: 180, y: 470 } },
