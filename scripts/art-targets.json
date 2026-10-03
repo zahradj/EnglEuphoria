@@ -743,5 +743,61 @@
       "public/lep1/scenes/bg-u2l5-sea-wide.png"
     ],
     "prompt": "Shelly the rainbow fish: a small round fish covered in shiny scales shaped like circles, squares and triangles in red, orange, yellow, green, blue and purple, big friendly eyes, side view (same fish as the rainbow reference), drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-map-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A sunny green meadow. Pip the orange fox (same design as the reference) stands in the middle-left holding up a big old paper treasure MAP with both paws, looking excited. The map shows a winding dotted path with three simple marks on it: one red circle, one blue square and one yellow triangle, and a big red X at the end. Behind Pip the other four friends lean in to look: Willow the blue bird with a green scarf, Bella the white bunny, Mia the grey mouse with an orange bow, Leo the yellow lion. The right third of the picture is open meadow and sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-garden-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A flower garden full of colourful flowers. Bella the white bunny (same design as the reference) kneels on the LEFT and holds up one shiny flat RED CIRCLE gem, round like a coin, smiling with surprise. The right half of the picture is open garden and sky. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-beach-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A sunny sandy beach by the sea. Willow the blue bird with a green scarf (same design as the reference) stands on the LEFT next to a little hole in the sand and holds up one shiny flat BLUE SQUARE gem with four equal sides, smiling. The right half is open beach, sea and sky. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-cave-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Inside a cosy rocky cave lit by a warm torch. Leo the yellow lion (same design as the reference) stands on the LEFT holding a torch (flashlight) whose beam shines on one shiny flat YELLOW TRIANGLE gem on a rock in the middle. The right third is plain rocky cave wall. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-chest-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A sunny meadow. A big closed wooden treasure chest stands in the middle. Its lid has three empty holes: one round circle hole, one square hole and one triangle hole. Mia the grey mouse with an orange bow (same design as the reference) puts a shiny red circle gem into the circle hole. A blue square gem and a yellow triangle gem lie next to the chest. The other friends watch excitedly from the left: Pip the orange fox, Willow the blue bird with a green scarf, Bella the white bunny, Leo the yellow lion. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-rainbow-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A sunny meadow. A big wooden treasure chest stands OPEN in the middle and a bright RAINBOW with six clear bands (red, orange, yellow, green, blue, purple) bursts up out of it into the sky with sparkles. The five friends from the references cheer and jump around the chest: Pip the orange fox, Willow the blue bird with a green scarf, Bella the white bunny, Mia the grey mouse with an orange bow, Leo the yellow lion. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-cave-empty-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Inside a big empty rocky cave, seen straight on: a wide smooth grey-brown rock wall fills the whole picture edge to edge, with a few small stones on the sandy floor at the bottom. Soft even light. Calm and plain, nothing on the wall. No characters, no objects. No text, letters or numbers anywhere."
   }
 ]
