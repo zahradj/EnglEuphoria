@@ -58,6 +58,7 @@ import { StoryOrderScene } from './scene-components/StoryOrderScene';
 import { StoryVideoScene } from './scene-components/StoryVideoScene';
 import { OddOneOutScene } from './scene-components/OddOneOutScene';
 import { ShapeTorchScene } from './scene-components/ShapeTorchScene';
+import { MysteryBagScene } from './scene-components/MysteryBagScene';
 import { ColorMixScene } from './scene-components/ColorMixScene';
 import { FlipbookScene } from './scene-components/FlipbookScene';
 import { SongScene } from './scene-components/SongScene';
@@ -224,6 +225,7 @@ export function SceneRenderer(props: {
     case 'story-order': return <StoryOrderScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'story-video': return <StoryVideoScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'odd-one-out': return <OddOneOutScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
+    case 'mystery-bag': return <MysteryBagScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'shape-torch': return <ShapeTorchScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;

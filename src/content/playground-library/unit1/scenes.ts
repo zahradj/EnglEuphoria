@@ -450,6 +450,13 @@ export type Scene =
       id: string; kind: 'shape-torch'; bg: string; teacher: string; who: CharKey;
       gems: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle'; x: number; y: number; size: number }[];
       targets: number[];
+    }
+  | {
+      /** "The Mystery Bag" — a toy's silhouette peeks out of a bag; tap which
+       *  toy it is, then it jumps out in colour ("It's a red ball!") and the
+       *  child says it (Unit 3 Lesson 1). */
+      id: string; kind: 'mystery-bag'; bg: string; teacher: string; who: CharKey;
+      rounds: { img: string; toyWord: string; colorWord: string; colorHex: string; options: { toyWord: string; img: string }[] }[];
     };
 
 const A = '/lep1'; // public asset root
@@ -4232,281 +4239,268 @@ export const LESSON_U2L6_SCENES: Scene[] = [
 ];
 
 /* =============================================================================
- * Pre-A1 Unit 3, Lesson 1 — "Ball, Car, Doll!"
+ * Pre-A1 Unit 3, Lesson 1 — "Ball, Car, Doll!" (Toys & Playtime opens)
  *
- * The curriculum blueprint's own pre-seeded stub for this slot (curriculum_
- * lessons row daacfe9c-f714-425c-b670-4bfa74cf4f3d) names the topic: Unit 3
- * ("Toys & Playtime") opens here with its first three toy nouns. Per the
- * generate-lesson skill's unit shape (.agents/skills/generate-lesson), this
- * is a Lesson 1 — core vocabulary, light production, Straight Arrow ESA.
+ * REBUILD (2026-10-03) to the Unit 2 standard, replacing a version with
+ * reading tasks (fill the first letter, text-only flipbook) and runs of
+ * three identical games in a row (three dashes, three role-plays).
+ * Pre-A1 children can't read: everything is heard, tapped, built or said.
  *
- * PROGRESSIVE COMBINATION FROM THE START: unlike Unit 2 Lesson 1 (which
- * taught colors in isolation, only combining with shapes three lessons
- * later), this lesson combines the brand-new toy nouns with colors already
- * mastered in Unit 2 from its very first practice round — "It's a red
- * ball," never a bare "It's a ball." The color skill needs no re-teaching;
- * only the toy nouns are new. See the smart-lesson-architect methodology's
- * "Progressive combination rule."
+ * Target language: ball, car, doll + a colour from Unit 2 straight away
+ * ("It's a red ball!"), "I like … / I don't like …", "What's in the bag?",
+ * Unit 2 Lesson 5's "I want …, please. — Here you are! — Thank you!" again
+ * in a toy shop, and D says /d/ (doll, dog, duck, door). B and C were taught
+ * earlier and are only heard again.
+ * Cast: Bella = red ball, Willow = blue car, Mia = green doll; Pip hosts.
  *
- * - Cast: Bella=BALL (red), Willow=CAR (blue), Mia=DOLL (green) — fixed,
- *   single colors per toy (not each character's own established color
- *   ownership from Unit 2, which doesn't apply here; picked classic,
- *   maximally distinct combos). Pip stays narrator/host.
- * - Phonics: of the three toy words' initial letters (B, C, D), only D is
- *   new — B was taught in Unit 1, C in Unit 2 Lesson 3. D gets a full
- *   sound-model+trace pair; B and C get retrieval-only practice (a
- *   phonics hint in word-build's letter choices), matching the
- *   established "already-taught letter gets lighter treatment" pattern.
- * - Mechanics: added two new Scene kinds mirroring shape-model's proven
- *   tap/hold/repeat progression — 'toy-model' (teaches the toy noun, then
- *   the combined color+toy sentence). The sort round reuses 'color-sort'
- *   directly rather than adding a third new kind: it's fully generic
- *   (colorWord as a plain matching key, colorHex as the swatch fill), so
- *   setting colorWord to the toy noun (BALL/CAR/DOLL) instead of an actual
- *   color name works with zero code changes.
- * - Art: every scene needing a specific character+toy gets its own
- *   dedicated single-object image — a parade hero (all 4 cast + all 3
- *   toys), a two-character "-only" image per toy for roleplay/flipbook,
- *   and a separate one-character "-solo" image per toy (owner alone, open
- *   space on the right) for join-stage, per the U2L3 lesson learned this
- *   session: two-character images leave no clear space for the student's
- *   draggable video circle. All backgrounds needed a full-bleed retry —
- *   the first attempt for all four hero/roleplay shots rendered as a
- *   small oval rug floating on white instead of filling the canvas: fixed
- *   by explicitly describing the floor and wall as extending edge-to-edge
- *   rather than just asking for "no white space." One retry was also
- *   needed for bg-u3l1-doll-only (first attempt drew Pip twice instead of
- *   Pip+Mia) and bg-u3l1-car-solo (first attempt had a flat, windowless
- *   wall with a visual streak artifact, inconsistent with the other two
- *   solo shots).
+ * Frame: Pip's playroom and toy box. A short film ("Pip's Toy Box") shows the
+ * three toys coming out of the box; the toy shop at the end puts the words to
+ * use. Signature game: the Mystery Bag (ESL "feely bag": guess the toy from
+ * its silhouette, then say it with its colour). Shape Builders from Unit 2
+ * become a toy workshop (build a car from shapes).
+ * Art: 8 new wide pictures (bg-u3l1-*-wide) + single-colour toy stickers;
+ * film public/lep1/video/toybox-story-u3l1.mp4/.webm.
  * ========================================================================= */
 
-const bgU3L1ToyParade = `${A}/scenes/bg-u3l1-toy-parade.png`;
-const bgU3L1BallOnly = `${A}/scenes/bg-u3l1-ball-only.png`;
-const bgU3L1CarOnly = `${A}/scenes/bg-u3l1-car-only.png`;
-const bgU3L1DollOnly = `${A}/scenes/bg-u3l1-doll-only.png`;
-const bgU3L1BallSolo = `${A}/scenes/bg-u3l1-ball-solo.png`;
-const bgU3L1CarSolo = `${A}/scenes/bg-u3l1-car-solo.png`;
-const bgU3L1DollSolo = `${A}/scenes/bg-u3l1-doll-solo.png`;
-const bgU3L1SoundGarden = `${A}/scenes/bg-u3l1-sound-garden.png`;
 const bgU3L1DashArena = `${A}/scenes/bg-u3l1-dash-arena.png`;
 const itemCar = `${A}/items/item-car.png`;
 const itemDoll = `${A}/items/item-doll.png`;
+const bgU3L1Playroom = `${A}/scenes/bg-u3l1-playroom-wide.png`;
+const bgU3L1Toybox = `${A}/scenes/bg-u3l1-toybox-wide.png`;
+const bgU3L1Ball = `${A}/scenes/bg-u3l1-ball-wide.png`;
+const bgU3L1Car = `${A}/scenes/bg-u3l1-car-wide.png`;
+const bgU3L1Doll = `${A}/scenes/bg-u3l1-doll-wide.png`;
+const bgU3L1Play = `${A}/scenes/bg-u3l1-play-wide.png`;
+const bgU3L1Shop = `${A}/scenes/bg-u3l1-shop-wide.png`;
+const bgU3L1Shelf = `${A}/scenes/bg-u3l1-shelf-wide.png`;
+const itemBallRed = `${A}/items/item-ball-red.png`;
+const itemBallBlue = `${A}/items/item-ball-blue.png`;
+const itemBallYellow = `${A}/items/item-ball-yellow.png`;
+const itemCarRed = `${A}/items/item-car-red.png`;
+const itemCarGreen = `${A}/items/item-car-green.png`;
+const itemDollPurple = `${A}/items/item-doll-purple.png`;
+const itemDollYellow = `${A}/items/item-doll-yellow.png`;
+const itemDog = `${A}/items/item-dog.png`;
+const itemDoor = `${A}/items/item-door.png`;
+const itemDuck = `${A}/items/item-duck-yellow.png`;
 
 export const LESSON_U3L1_TITLE = 'Ball, Car, Doll!';
-export const LESSON_U3L1_OBJECTIVE = 'Identify and name the toys ball, car, and doll, combine them immediately with previously-learned colors into full noun phrases ("It\'s a red ball," "I like blue cars," "I don\'t like green dolls"), and recognize the D letter sound.';
+export const LESSON_U3L1_OBJECTIVE = 'Name the toys ball, car and doll with a colour ("It\'s a red ball!"), say what you like ("I like blue cars! I don\'t like dolls!"), ask for a toy in a shop ("I want a red ball, please!"), and hear D say /d/ (doll, dog, duck, door) — all by listening, tapping and speaking, no reading.';
+
+const bagOptions = [
+  { toyWord: 'BALL', img: itemBallRed },
+  { toyWord: 'CAR', img: itemCar },
+  { toyWord: 'DOLL', img: itemDoll },
+];
 
 export const LESSON_U3L1_SCENES: Scene[] = [
-  { id: 'u3l1-title', kind: 'title-card', bg: bgU3L1ToyParade, level: 'Pre-A1', unit: 'Unit 3', lessonLabel: 'Lesson 1', title: 'Ball, Car, Doll!', subtitle: 'Playtime with Pip and friends' },
+  { id: 'u3l1-title', kind: 'title-card', bg: bgU3L1Playroom, level: 'Pre-A1', unit: 'Unit 3', lessonLabel: 'Lesson 1', title: 'Ball, Car, Doll!', subtitle: "Pip's Toy Box" },
+
   {
-    // Warmup hello moment, per direct user request — every lesson so far
-    // opened straight into the cinematic intro with no dedicated warmup.
-    // Uses 'roleplay' (spoken live via the app's own TTS voices, same as
-    // every other line in the app) rather than 'song' — 'song' depends on
-    // a pre-recorded audio file, and unlike goodbye-song.mp3 (which
-    // already exists and is reused by every lesson), no hello-song.mp3
-    // exists anywhere in this project. SongScene has no way to advance
-    // past a song whose audio fails to load (the Continue button only
-    // appears once the audio's onended fires), so using 'song' here would
-    // have soft-locked the lesson at this very first activity. Doubles as
-    // the "revision if necessary" the user also asked about: the middle
-    // two lines briefly call back to Unit 2's own six colors before the
-    // new toy content starts, without a whole separate review activity —
-    // those colors get real practice again a moment later anyway, fused
-    // into this lesson's own target sentences.
-    id: 'u3l1-hello', kind: 'roleplay', bg: bgU3L1ToyParade, teacher: 'Good morning! Let’s say hello and warm up together.', cast: ['pip', 'bella', 'willow', 'mia'],
+    id: 'u3l1-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'A new unit! Warm up with Pip: sing and wave on every "hello".',
+    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
+    lineDurationsMs: [5200, 4300, 4500, 6100],
+    songPrompt: 'Cheerful upbeat kids hello song',
+    lyrics: [
+      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u3l1-intro', kind: 'cinematic', bg: bgU3L1Toybox, hidePipOverlay: true, title: "Pip's Toy Box", subtitle: 'What is inside?', narrator: 'pip',
     script: [
-      { who: 'pip', line: 'Hello, hello, hello my friend!', repeat: true },
-      { who: 'bella', line: "Hello! Let's play again!" },
-      { who: 'willow', line: 'Remember red, blue, yellow, green?', repeat: true },
-      { who: 'mia', line: "Today it's toys — let's go and see!" },
+      { who: 'pip', line: 'Welcome to my playroom!' },
+      { who: 'pip', line: "Look! My toy box! What's inside? Let's see!" },
     ],
+    cta: 'Open it!',
   },
+
+  /* ---- New words ---- */
   {
-    id: 'u3l1-intro', kind: 'cinematic', bg: bgU3L1ToyParade, title: 'Ball, Car, Doll!', subtitle: 'A playroom full of toys', narrator: 'pip', hidePipOverlay: true,
-    script: [
-      { who: 'pip', line: 'Look! Today we find toys, not colors or shapes!' },
-      { who: 'pip', line: 'Bella has a red ball, Willow has a blue car, and Mia has a green doll!' },
-    ],
-    cta: "Let's play!",
-  },
-  {
-    id: 'u3l1-vocab-toys', kind: 'toy-model', bg: bgMeadow,
-    teacher: 'Look! Tap a toy to hear it, say it back, then say the sentence!',
+    id: 'u3l1-vocab-toys', kind: 'toy-model', bg: bgU3L1Playroom,
+    teacher: 'Tap a toy to hear it, say it back, then say the color too: "It\'s a red ball!"',
     items: [
-      { toyWord: 'BALL', colorWord: 'RED', colorHex: '#EF4444', who: 'bella', img: itemBall },
-      { toyWord: 'CAR', colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', img: itemCar },
-      { toyWord: 'DOLL', colorWord: 'GREEN', colorHex: '#22C55E', who: 'mia', img: itemDoll },
+      { toyWord: 'BALL', colorWord: 'RED', colorHex: C4.RED, who: 'bella', img: itemBallRed },
+      { toyWord: 'CAR', colorWord: 'BLUE', colorHex: C4.BLUE, who: 'willow', img: itemCar },
+      { toyWord: 'DOLL', colorWord: 'GREEN', colorHex: C4.GREEN, who: 'mia', img: itemDoll },
     ],
   },
   {
-    id: 'u3l1-model-d', kind: 'sound-model', bg: bgU3L1SoundGarden, who: 'mia', letter: 'D', phoneme: '/d/', sound: 'duh', teacher: 'Mia models the /d/ sound! Listen first: /d/ /d/ Doll. /d/ /d/ Duck.',
-    anchors: [
-      { word: 'Doll', emoji: '\u{1FA86}' },
-      { word: 'Duck', emoji: '\u{1F986}' },
-      { word: 'Dinosaur', emoji: '\u{1F995}' },
-    ],
-  },
-  { id: 'u3l1-trace-d', kind: 'trace', bg: bgU3L1SoundGarden, who: 'mia', letter: 'D', phoneme: '/d/', word: 'Doll', teacher: 'Trace the tall D. /d/ /d/ Doll!' },
-  {
-    // Direct user request for genuinely new (not "copycat") mechanics,
-    // backed by live research: toy-vocabulary memory-matching is one of
-    // the most common, proven activities for retention at this age —
-    // and the `memory` kind has never been used anywhere in Unit 2 or 3
-    // before this. 8 pairs = a clean 4x4 grid.
-    id: 'u3l1-memory', kind: 'memory', bg: bgMeadow, teacher: 'Memory game! Find the matching toy pairs!',
-    pairs: [
-      { id: 'ball', label: 'Ball', emoji: '\u{26BD}', img: itemBall },
-      { id: 'car', label: 'Car', emoji: '\u{1F697}', img: itemCar },
-      { id: 'doll', label: 'Doll', emoji: '\u{1FA86}', img: itemDoll },
-    ],
-  },
-  {
-    // B (Unit 1) and C (Unit 2 Lesson 3) are already-taught letters — same
-    // lighter, retrieval-only treatment established for repeated letters:
-    // a phonics hint here and in word-build, no full model+trace pair.
-    // Reuses 'color-sort' directly (fully generic — colorWord is just a
-    // matching key) rather than adding a third new scene kind for toys.
-    id: 'u3l1-sort-toys', kind: 'color-sort', bg: bgMeadow, teacher: "Listen for the sound! /b/all, /c/ar, /d/oll — now drag each thing to its toy!",
-    targets: [
-      { colorWord: 'BALL', colorHex: '#EF4444', who: 'bella' },
-      { colorWord: 'CAR', colorHex: '#3B82F6', who: 'willow' },
-      { colorWord: 'DOLL', colorHex: '#22C55E', who: 'mia' },
-    ],
-    items: [
-      { word: 'soccer ball', emoji: '\u{26BD}', colorWord: 'BALL' },
-      { word: 'basketball', emoji: '\u{1F3C0}', colorWord: 'BALL' },
-      { word: 'taxi', emoji: '\u{1F695}', colorWord: 'CAR' },
-      { word: 'truck', emoji: '\u{1F69A}', colorWord: 'CAR' },
-      { word: 'teddy bear', emoji: '\u{1F9F8}', colorWord: 'DOLL' },
-      { word: 'toy figure', emoji: '\u{1FA86}', colorWord: 'DOLL' },
-    ],
-  },
-  {
-    id: 'u3l1-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Listen! Tap the missing letter to make the word.',
-    rounds: [
-      { word: 'ball', blankIndex: 0, answer: 'B', choices: ['B', 'C', 'D'], img: itemBall, emoji: '\u{26BD}' },
-      { word: 'car', blankIndex: 0, answer: 'C', choices: ['B', 'C', 'D'], img: itemCar, emoji: '\u{1F697}' },
-      { word: 'doll', blankIndex: 0, answer: 'D', choices: ['B', 'C', 'D'], img: itemDoll, emoji: '\u{1FA86}' },
-    ],
-  },
-  {
-    id: 'u3l1-who', kind: 'listen-repeat-cards', bg: bgU3L1ToyParade, teacher: 'Listen to each friend, then repeat!',
-    cards: [
-      { who: 'bella', sentence: 'Bella has a ball!', img: itemBall, imgLabel: 'Ball' },
-      { who: 'willow', sentence: 'Willow has a car!', img: itemCar, imgLabel: 'Car' },
-      { who: 'mia', sentence: 'Mia has a doll!', img: itemDoll, imgLabel: 'Doll' },
-    ],
-  },
-  {
-    // The TARGET frame for this lesson: toy + the color that object's own
-    // art already shows, combined into one noun phrase from the very
-    // first practice round — colors need no re-teaching, only the toy
-    // nouns are new.
-    id: 'u3l1-sentence-practice', kind: 'listen-repeat-cards', bg: bgU3L1ToyParade, teacher: "Now let's put color AND toy together! Listen, then repeat!",
-    cards: [
-      { who: 'bella', sentence: "It's a red ball!", img: itemBall, imgLabel: 'Red ball' },
-      { who: 'willow', sentence: "It's a blue car!", img: itemCar, imgLabel: 'Blue car' },
-      { who: 'mia', sentence: "It's a green doll!", img: itemDoll, imgLabel: 'Green doll' },
-      { who: 'bella', sentence: 'I like red balls!', img: itemBall, imgLabel: 'Red ball' },
-      { who: 'willow', sentence: "I don't like blue cars!", img: itemCar, imgLabel: 'Blue car' },
-      { who: 'mia', sentence: 'I like green dolls!', img: itemDoll, imgLabel: 'Green doll' },
-    ],
-  },
-  {
-    id: 'u3l1-dash-ball', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Bella Dash! Tap only the BALL things as they run by. Get 6 rings!', who: 'bella', targetLetter: 'BALL', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'ball', letter: 'BALL', img: itemBall, emoji: '\u{26BD}' },
-      { word: 'ball', letter: 'BALL', img: itemBall, emoji: '\u{1F3C0}' },
-      { word: 'car', letter: 'CAR', img: itemCar, emoji: '\u{1F697}' },
-      { word: 'car', letter: 'CAR', img: itemCar, emoji: '\u{1F695}' },
-      { word: 'doll', letter: 'DOLL', img: itemDoll, emoji: '\u{1FA86}' },
-      { word: 'doll', letter: 'DOLL', img: itemDoll, emoji: '\u{1F9F8}' },
-    ],
-  },
-  {
-    id: 'u3l1-dash-car', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Willow Dash! Tap only the CAR things as they run by. Get 6 rings!', who: 'willow', targetLetter: 'CAR', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'car', letter: 'CAR', img: itemCar, emoji: '\u{1F697}' },
-      { word: 'car', letter: 'CAR', img: itemCar, emoji: '\u{1F695}' },
-      { word: 'doll', letter: 'DOLL', img: itemDoll, emoji: '\u{1FA86}' },
-      { word: 'doll', letter: 'DOLL', img: itemDoll, emoji: '\u{1F9F8}' },
-      { word: 'ball', letter: 'BALL', img: itemBall, emoji: '\u{26BD}' },
-      { word: 'ball', letter: 'BALL', img: itemBall, emoji: '\u{1F3C0}' },
-    ],
-  },
-  {
-    id: 'u3l1-dash-doll', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Mia Dash! Tap only the DOLL things as they run by. Get 6 rings!', who: 'mia', targetLetter: 'DOLL', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'doll', letter: 'DOLL', img: itemDoll, emoji: '\u{1FA86}' },
-      { word: 'doll', letter: 'DOLL', img: itemDoll, emoji: '\u{1F9F8}' },
-      { word: 'ball', letter: 'BALL', img: itemBall, emoji: '\u{26BD}' },
-      { word: 'ball', letter: 'BALL', img: itemBall, emoji: '\u{1F3C0}' },
-      { word: 'car', letter: 'CAR', img: itemCar, emoji: '\u{1F697}' },
-      { word: 'car', letter: 'CAR', img: itemCar, emoji: '\u{1F695}' },
-    ],
-  },
-  {
-    // Each question shows the actual object being asked about (its own
-    // single-CHARACTER solo image, open space preserved for the student's
-    // draggable video circle) — the fix established in U2L3/U2L4/U2L6.
-    id: 'u3l1-join-stage', kind: 'join-stage', bg: bgU3L1ToyParade, teacher: 'Your turn! When it says YOU, say the color AND the toy.', cast: ['pip', 'bella', 'willow', 'mia'],
-    turns: [
-      { who: 'pip', line: 'What color and toy is this?', bg: bgU3L1BallSolo },
-      { who: 'student', line: "It's a ______ ______. (red ball)", bg: bgU3L1BallSolo },
-      { who: 'willow', line: 'Do you like blue cars?', bg: bgU3L1CarSolo },
-      { who: 'student', line: 'I like ______ ______. / I don’t like ______ ______.', bg: bgU3L1CarSolo },
-      { who: 'mia', line: 'What color and toy is this?', bg: bgU3L1DollSolo },
-      { who: 'student', line: "It's a ______ ______. (green doll)", bg: bgU3L1DollSolo },
-    ],
-  },
-  {
-    id: 'u3l1-storybook', kind: 'flipbook', bg: bgU3L1ToyParade, title: 'Playtime with Pip and Friends',
+    // The story as a short film: the toys come out of the box.
+    id: 'u3l1-story-video', kind: 'story-video', bg: bgU3L1Toybox, videoUrl: `${A}/video/toybox-story-u3l1.mp4?v=1`, title: "Pip's Toy Box",
+    teacher: 'Watch together. Say each toy with the friends; answer the picture questions.',
     pages: [
-      { who: 'bella', img: bgU3L1BallOnly, text: 'Bella found her favorite toy. It is a red ball!' },
-      { who: 'willow', img: bgU3L1CarOnly, text: 'Willow zoomed her toy car. It is a blue car!' },
-      { who: 'mia', img: bgU3L1DollOnly, text: 'Mia hugged her soft doll. It is a green doll!' },
-      { who: 'pip', img: bgU3L1ToyParade, text: 'Red ball, blue car, green doll — so many toys with friends!' },
+      { img: bgU3L1Toybox, who: 'pip', line: "What's in the toy box? Let's see!", motion: 'zoom-in', fx: 'sparkles', atSec: 0 },
+      { img: bgU3L1Ball, who: 'bella', line: "A ball! It's a red ball!", motion: 'pan-right', fx: 'sparkles', atSec: 5 },
+      { img: bgU3L1Car, who: 'willow', line: "A car! It's a blue car!", motion: 'pan-left', fx: 'sparkles', atSec: 10 },
+      { img: bgU3L1Doll, who: 'mia', line: "A doll! It's a green doll!", motion: 'pan-right', fx: 'hearts', atSec: 15 },
+      { img: bgU3L1Play, who: 'pip', line: "Let's play! I like toys!", motion: 'zoom-out', fx: 'sparkles', atSec: 20 },
     ],
     checkpoints: [
-      { afterPage: 0, who: 'bella', question: 'What color is the ball?', options: ['Red', 'Blue', 'Green'], answer: 'Red' },
-      { afterPage: 2, who: 'mia', question: 'What color is the doll?', options: ['Red', 'Blue', 'Green'], answer: 'Green' },
+      { afterPage: 1, who: 'bella', question: 'What color is the ball?', answer: 'Red', options: [{ label: 'Blue', colorHex: C4.BLUE }, { label: 'Red', colorHex: C4.RED }, { label: 'Yellow', colorHex: C4.YELLOW }] },
+      { afterPage: 3, who: 'mia', question: 'What does Mia have?', answer: 'A doll', options: [{ label: 'A car', img: itemCar }, { label: 'A ball', img: itemBallRed }, { label: 'A doll', img: itemDoll }] },
     ],
   },
   {
-    id: 'u3l1-roleplay-ball', kind: 'roleplay', bg: bgU3L1BallOnly, teacher: 'Story time! Listen to Pip and Bella, then repeat.', cast: ['pip', 'bella'],
-    script: [
-      { who: 'bella', line: "It's a red ball!", repeat: true },
-      { who: 'pip', line: 'I like red balls!', repeat: true },
+    // Signature game: guess the toy from its silhouette, then say it with its colour.
+    id: 'u3l1-mystery-bag', kind: 'mystery-bag', bg: bgU3L1Toybox, who: 'pip',
+    teacher: "The Mystery Bag! Look at the shape. What's in the bag? Tap it, then say it with its color.",
+    rounds: [
+      { img: itemBallRed, toyWord: 'BALL', colorWord: 'RED', colorHex: C4.RED, options: bagOptions },
+      { img: itemCar, toyWord: 'CAR', colorWord: 'BLUE', colorHex: C4.BLUE, options: bagOptions },
+      { img: itemDoll, toyWord: 'DOLL', colorWord: 'GREEN', colorHex: C4.GREEN, options: bagOptions },
+      { img: itemBallYellow, toyWord: 'BALL', colorWord: 'YELLOW', colorHex: C4.YELLOW, options: bagOptions },
+      { img: itemDollPurple, toyWord: 'DOLL', colorWord: 'PURPLE', colorHex: C4.PURPLE, options: bagOptions },
+      { img: itemCarRed, toyWord: 'CAR', colorWord: 'RED', colorHex: C4.RED, options: bagOptions },
     ],
   },
   {
-    id: 'u3l1-roleplay-car', kind: 'roleplay', bg: bgU3L1CarOnly, teacher: 'Now listen to them talk about the car, then repeat.', cast: ['pip', 'willow'],
-    script: [
-      { who: 'willow', line: "It's a blue car!", repeat: true },
-      { who: 'pip', line: "I don't like blue cars!", repeat: true },
+    id: 'u3l1-i-like', kind: 'listen-repeat-cards', bg: bgU3L1Play, teacher: 'What do the friends like? Listen, then say it. Show thumbs up or down!',
+    cards: [
+      { who: 'bella', sentence: 'I like red balls!', img: itemBallRed, imgLabel: 'Red ball \u{1F44D}' },
+      { who: 'willow', sentence: 'I like blue cars!', img: itemCar, imgLabel: 'Blue car \u{1F44D}' },
+      { who: 'mia', sentence: 'I like dolls!', img: itemDoll, imgLabel: 'Doll \u{1F44D}' },
+      { who: 'leo', sentence: "I don't like dolls!", img: itemDollYellow, imgLabel: 'Doll \u{1F44E}' },
+    ],
+  },
+
+  /* ---- The sound: D ---- */
+  {
+    id: 'u3l1-model-d', kind: 'sound-model', bg: bgU3L1Playroom, who: 'mia', letter: 'D', phoneme: '/d/', sound: 'duh',
+    teacher: 'D says /d/ — like doll! Doll, dog, duck!',
+    anchors: [
+      { word: 'doll', emoji: '\u{1FA86}', img: itemDoll },
+      { word: 'dog', emoji: '\u{1F436}', img: itemDog },
+      { word: 'duck', emoji: '\u{1F986}', img: itemDuck },
+    ],
+  },
+  { id: 'u3l1-trace-d', kind: 'trace', bg: bgU3L1Playroom, who: 'mia', letter: 'D', phoneme: '/d/', word: 'doll', teacher: 'Trace the D! /d/ /d/ doll!' },
+
+  /* ---- Practice games ---- */
+  {
+    id: 'u3l1-sort-toys', kind: 'color-sort', bg: bgU3L1Playroom, teacher: 'Tidy up! Put each toy in its box: balls, cars, dolls. Say each one!',
+    targets: [
+      { colorWord: 'BALL', colorHex: C4.RED, who: 'bella' },
+      { colorWord: 'CAR', colorHex: C4.BLUE, who: 'willow' },
+      { colorWord: 'DOLL', colorHex: C4.GREEN, who: 'mia' },
+    ],
+    items: [
+      { word: 'ball', img: itemBallBlue, emoji: '\u{26BD}', colorWord: 'BALL' },
+      { word: 'car', img: itemCarGreen, emoji: '\u{1F697}', colorWord: 'CAR' },
+      { word: 'doll', img: itemDollPurple, emoji: '\u{1FA86}', colorWord: 'DOLL' },
+      { word: 'ball', img: itemBallYellow, emoji: '\u{26BD}', colorWord: 'BALL' },
+      { word: 'car', img: itemCarRed, emoji: '\u{1F697}', colorWord: 'CAR' },
+      { word: 'doll', img: itemDollYellow, emoji: '\u{1FA86}', colorWord: 'DOLL' },
     ],
   },
   {
-    id: 'u3l1-roleplay-doll', kind: 'roleplay', bg: bgU3L1DollOnly, teacher: 'Now listen to them talk about the doll, then repeat.', cast: ['pip', 'mia'],
-    script: [
-      { who: 'mia', line: "It's a green doll!", repeat: true },
-      { who: 'pip', line: 'I like green dolls!', repeat: true },
+    id: 'u3l1-odd-one-out', kind: 'odd-one-out', bg: bgU3L1Ball, who: 'bella',
+    teacher: 'Which one is different? Tap it, then say why.',
+    rounds: [
+      { items: [{ label: 'red ball', img: itemBallRed }, { label: 'blue ball', img: itemBallBlue }, { label: 'red car', img: itemCarRed }, { label: 'yellow ball', img: itemBallYellow }], odd: 2, line: "It's a car! The others are balls." },
+      { items: [{ label: 'green doll', img: itemDoll }, { label: 'blue ball', img: itemBallBlue }, { label: 'purple doll', img: itemDollPurple }, { label: 'yellow doll', img: itemDollYellow }], odd: 1, line: "It's a ball! The others are dolls." },
+      { items: [{ label: 'red car', img: itemCarRed }, { label: 'red ball', img: itemBallRed }, { label: 'blue car', img: itemCar }, { label: 'red balloon', img: itemBalloonRed }], odd: 2, line: "It's blue! The others are red." },
+      { items: [{ label: 'blue car', img: itemCar }, { label: 'green car', img: itemCarGreen }, { label: 'purple doll', img: itemDollPurple }, { label: 'red car', img: itemCarRed }], odd: 2, line: "It's a doll! The others are cars." },
     ],
   },
   {
-    id: 'u3l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the playroom! Sing along together.',
+    // Badges sit on the toys painted on bg-u3l1-shelf-wide (checked against the art).
+    id: 'u3l1-spin', kind: 'spin-wheel', bg: bgU3L1Shelf, title: 'Spin and say!',
+    teacher: 'Have the student spin the wheel and say the toy with its color: "It\'s a red ball!" If you prefer, tap a number instead.',
+    items: [
+      { label: "It's a red ball!", left: '22%', top: '22%' },
+      { label: "It's a blue car!", left: '50%', top: '22%' },
+      { label: "It's a green doll!", left: '78%', top: '22%' },
+      { label: "It's a yellow ball!", left: '22%', top: '52%' },
+      { label: "It's a purple doll!", left: '50%', top: '52%' },
+      { label: "It's an orange car!", left: '78%', top: '52%' },
+    ],
+  },
+  {
+    id: 'u3l1-dash-d', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Mia Dash! Tap only the /d/ words: doll, dog, duck, door. Get 6!', who: 'mia', targetLetter: 'D', targetPhoneme: '/d/', goal: 6, seconds: 40,
+    items: [
+      { word: 'doll', letter: 'D', img: itemDoll, emoji: '\u{1FA86}' },
+      { word: 'dog', letter: 'D', img: itemDog, emoji: '\u{1F436}' },
+      { word: 'duck', letter: 'D', img: itemDuck, emoji: '\u{1F986}' },
+      { word: 'door', letter: 'D', img: itemDoor, emoji: '\u{1F6AA}' },
+      { word: 'ball', letter: 'B', img: itemBallRed, emoji: '\u{26BD}' },
+      { word: 'car', letter: 'C', img: itemCar, emoji: '\u{1F697}' },
+      { word: 'cat', letter: 'C', img: itemCat, emoji: '\u{1F431}' },
+    ],
+  },
+  {
+    // Unit 2's Shape Builders as a toy workshop.
+    id: 'u3l1-toy-workshop', kind: 'shape-builder', bg: bgU2L3Builder, who: 'pip',
+    teacher: 'The toy workshop! Build a toy: name each shape, then pick the color you hear.',
+    rounds: [
+      {
+        who: 'willow', label: 'Car', intro: "Let's build a car!", line: "It's a car!", alive: 'launch',
+        pieces: [
+          { shape: 'square', colorWord: 'BLUE', colorHex: C4.BLUE, x: 18, y: 28, w: 58, h: 18 },
+          { shape: 'square', colorWord: 'YELLOW', colorHex: C4.YELLOW, x: 32, y: 12, w: 28, h: 16 },
+          { shape: 'circle', colorWord: 'RED', colorHex: C4.RED, x: 22, y: 42, w: 16, h: 16 },
+          { shape: 'circle', colorWord: 'RED', colorHex: C4.RED, x: 56, y: 42, w: 16, h: 16 },
+        ],
+      },
+      {
+        who: 'mia', label: 'Doll', intro: "Let's build a doll!", line: "It's a doll!", alive: 'wiggle',
+        pieces: [
+          { shape: 'circle', colorWord: 'ORANGE', colorHex: C4.ORANGE, x: 40, y: 4, w: 18, h: 18 },
+          { shape: 'triangle', colorWord: 'PURPLE', colorHex: C4.PURPLE, x: 30, y: 22, w: 38, h: 36 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'u3l1-my-toy', kind: 'join-stage', bg: bgU3L1Play, teacher: 'Show a real toy from home! Answer Pip.', cast: ['pip', 'bella', 'willow'],
+    turns: [
+      { who: 'pip', line: 'Show me a toy! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's a … ! (show it)", bubble: 'right' },
+      { who: 'bella', line: 'What color is it?', bubble: 'right' },
+      { who: 'student', line: "It's … !", bubble: 'right' },
+      { who: 'willow', line: 'Do you like cars?', bubble: 'right' },
+      { who: 'student', line: "I like cars! / I don't like cars!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u3l1-memory', kind: 'memory', bg: bgU3L1Playroom, teacher: 'Find the pairs! Say each one: "A red ball!"',
+    pairs: [
+      { id: 'ball', label: 'Red ball', emoji: '\u{26BD}', img: itemBallRed },
+      { id: 'car', label: 'Blue car', emoji: '\u{1F697}', img: itemCar },
+      { id: 'doll', label: 'Green doll', emoji: '\u{1FA86}', img: itemDoll },
+      { id: 'dog', label: 'Dog', emoji: '\u{1F436}', img: itemDog },
+      { id: 'duck', label: 'Duck', emoji: '\u{1F986}', img: itemDuck },
+      { id: 'door', label: 'Door', emoji: '\u{1F6AA}', img: itemDoor },
+    ],
+  },
+  {
+    // Unit 2 Lesson 5's "I want …, please" in a new place: the toy shop.
+    id: 'u3l1-toy-shop', kind: 'join-stage', bg: bgU3L1Shop, teacher: 'The toy shop! Pip sells toys. Ask for a toy with its color, then say thank you.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Hello! Welcome to my toy shop! What do you want?', bubble: 'right' },
+      { who: 'student', line: 'I want a red ball, please!', bubble: 'right' },
+      { who: 'pip', line: 'Here you are! A red ball!', bubble: 'right' },
+      { who: 'student', line: 'Thank you!', bubble: 'right' },
+      { who: 'pip', line: 'What color car do you want?', bubble: 'right' },
+      { who: 'student', line: 'I want a … car, please!', bubble: 'right' },
+    ],
+  },
+
+  {
+    id: 'u3l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the toys! Sing along together.',
     durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
     lineDurationsMs: [3580, 4020, 4980, 7482],
-    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    songPrompt: 'Cheerful upbeat kids goodbye song',
     lyrics: [
       { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
       { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
-      { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
     ],
   },
-  { id: 'u3l1-finale', kind: 'finale', bg: bgU3L1ToyParade, who: 'pip', line: 'You did it! You can name a red ball, a blue car, and a green doll! \u{1F389}\u{1F9F8}' },
+  { id: 'u3l1-finale', kind: 'finale', bg: bgU3L1Play, who: 'pip', line: 'A red ball, a blue car, a green doll. You know the toys! Bye bye!' },
 ];
 
 /* =============================================================================

@@ -83,6 +83,18 @@ export const LESSON_GRAMMAR: Record<string, LessonGrammarEntry> = {
     ],
     examples: ["It's a red circle!", "It's a blue square!", 'Find a green triangle!', 'Is it purple?', 'I like orange!'],
   },
+  // Pre-A1 Unit 3 Lesson 1 — Ball, Car, Doll!
+  'lep1-rich-3-1': {
+    pattern: "It's a + color + toy",
+    cefr: 'Pre-A1',
+    forms: [
+      { label: 'Say the toy', formula: "It's a + ball / car / doll" },
+      { label: 'Toy and color', formula: "It's a + red + ball" },
+      { label: 'Say what you like', formula: 'I like + cars / I don’t like + dolls' },
+      { label: 'Ask for a toy', formula: 'I want a + blue + car, please!' },
+    ],
+    examples: ["What's in the bag?", "It's a ball!", "It's a red ball!", 'I like blue cars!', 'I want a green doll, please!'],
+  },
   // A1 Unit 9 Lesson 1 — Magic Castle: rooms and furniture
   'castle-rich-9-1': {
     pattern: 'There is / There is no',

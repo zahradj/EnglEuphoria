@@ -331,6 +331,14 @@ const UNIT1_EXTRACTORS = {
     ...(s.checkpoints ?? []).flatMap((c) => [[c.who, c.question], [c.who, `Yes! ${c.answer}!`]]),
   ],
   'story-order': (s) => (s.frames ?? []).map((f) => [f.who ?? s.who, f.caption]),
+  // Mirrors MysteryBagScene.tsx's mysteryBagLines().
+  'mystery-bag': (s) => {
+    const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
+    return [[s.who, "What's in the bag?"], ...(s.rounds ?? []).flatMap((r) => [
+      [s.who, `It's ${art(r.toyWord)} ${r.toyWord.toLowerCase()}!`],
+      [s.who, `It's ${art(r.colorWord)} ${r.colorWord.toLowerCase()} ${r.toyWord.toLowerCase()}!`],
+    ])];
+  },
   // Mirrors OddOneOutScene.tsx's oddOneOutLines().
   'odd-one-out': (s) => [[s.who, 'Which one is different?'], ...(s.rounds ?? []).map((r) => [s.who, r.line])],
   // Mirrors ShapeTorchScene.tsx's shapeTorchLines() (find / found / "That's a … ." for every gem).

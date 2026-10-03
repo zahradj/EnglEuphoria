@@ -223,6 +223,7 @@ export function Lep1Keyframes() {
       @keyframes lep1-fade-in { from { opacity: 0; } to { opacity: 1; } }
       @keyframes lep1-bubble-up { from { transform: translateY(0); opacity: 0.9; } to { transform: translateY(-110vh); opacity: 0; } }
       @keyframes lep1-bubble-rise { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 100% { transform: translateY(-40vh); opacity: 0; } }
+      @keyframes lep1-bag-wiggle { 0%, 100% { transform: rotate(0deg); } 20% { transform: rotate(-4deg); } 40% { transform: rotate(4deg); } 60% { transform: rotate(-2deg); } 80% { transform: rotate(2deg); } }
       @keyframes lep1-tear { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(60px); opacity: 0; } }
       @keyframes lep1-walk { 0% { transform: translateX(-60%) rotate(-4deg); } 25% { transform: translateX(-20%) rotate(3deg) translateY(-6px); } 50% { transform: translateX(20%) rotate(-3deg); } 75% { transform: translateX(60%) rotate(3deg) translateY(-6px); } 100% { transform: translateX(-60%) rotate(-4deg); } }
       @keyframes lep1-wiggle { 0%,100% { transform: rotate(-3deg) translateY(0); } 25% { transform: rotate(3deg) translateY(-4px); } 50% { transform: rotate(-2deg) translateY(0); } 75% { transform: rotate(4deg) translateY(-4px); } }
