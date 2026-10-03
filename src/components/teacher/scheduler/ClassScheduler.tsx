@@ -35,14 +35,21 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
   const [bookedSlot, setBookedSlot] = useState<AvailabilitySlot | null>(null);
   const [inviteOpen, setInviteOpen] = useState(false);
 
-  const { hubKind, allowedDurations, loading: hubLoading } = useTeacherHubRole(teacherId);
+  const { hubKind, allowedDurations, loading: hubLoading, hubs, isMultiHub } = useTeacherHubRole(teacherId);
+
+  // A teacher holding two or more hubs picks which hub they are opening slots for.
+  const [pickedHub, setPickedHub] = useState<'playground' | 'academy' | 'success' | null>(null);
+  const activeHub = isMultiHub
+    ? (pickedHub && hubs.includes(pickedHub) ? pickedHub : (hubs.find((h) => h !== 'playground') ?? hubs[0]))
+    : null;
 
   const resolvedHubSpecialty = useMemo<'Playground' | 'Academy' | 'Professional'>(() => {
     if (hubSpecialty) return hubSpecialty;
+    if (activeHub) return activeHub === 'playground' ? 'Playground' : activeHub === 'success' ? 'Professional' : 'Academy';
     if (hubKind === 'playground') return 'Playground';
     if (hubKind === 'professional') return 'Professional';
     return 'Academy';
-  }, [hubSpecialty, hubKind]);
+  }, [hubSpecialty, hubKind, activeHub]);
 
   const {
     slotDuration,
@@ -59,6 +66,13 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
     goToThisWeek,
     refresh,
   } = useAvailabilityManager(allowedDurations, teacherId);
+
+  // Slot length follows the hub: Playground 30 min, Academy / Success 60 min.
+  React.useEffect(() => {
+    if (activeHub) setSlotDuration(activeHub === 'playground' ? 30 : 60);
+  }, [activeHub, setSlotDuration]);
+  // With Playground in the mix the grid needs 30-minute rows to show every slot.
+  const gridDuration: 30 | 60 = isMultiHub && hubs.includes('playground') ? 30 : slotDuration;
 
   const weekDates = getWeekDates();
   const hubForSlots: 'playground' | 'academy' | 'success' =
@@ -116,6 +130,27 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
         }
         // ── INSERT: tap an empty cell ──
         else if (!existing) {
+          // Mixed 30/60-minute slots must never overlap.
+          if (isMultiHub) {
+            const shift = (t: string, delta: number) => {
+              const [hh, mm] = t.split(':').map(Number);
+              const total = hh * 60 + mm + delta;
+              if (total < 0 || total >= 1440) return null;
+              return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+            };
+            const before = shift(time, -30);
+            const after = shift(time, 30);
+            const prevLong = before ? getSlotAt(day, before) : undefined;
+            const nextAny = after ? getSlotAt(day, after) : undefined;
+            if ((prevLong && prevLong.duration === 60) || (slotDuration === 60 && nextAny)) {
+              toast({
+                title: 'That overlaps another slot',
+                description: 'A 60-minute slot and a 30-minute slot cannot share the same time. Pick a free time.',
+                variant: 'destructive',
+              });
+              return;
+            }
+          }
           if (mode === 'weekly') {
             const created = await openWeeklyRecurringSelections({
               teacherId,
@@ -162,7 +197,7 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
         setBusy(false);
       }
     },
-    [busy, getSlotAt, isSlotInPast, weekDates, slotDuration, mode, teacherId, hubForSlots, resolvedHubSpecialty, refresh, toast],
+    [busy, getSlotAt, isSlotInPast, weekDates, slotDuration, mode, teacherId, hubForSlots, resolvedHubSpecialty, refresh, toast, isMultiHub],
   );
 
   const onlyOneDuration = allowedDurations.length === 1;
@@ -227,8 +262,30 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
             </button>
           </div>
 
-          {/* Duration toggle (or locked badge) */}
-          {onlyOneDuration ? (
+          {/* Multi-hub teacher: choose the hub; the slot length follows it */}
+          {isMultiHub ? (
+            <div className="inline-flex rounded-xl bg-muted p-1" role="tablist" aria-label="Hub for new slots">
+              {([
+                ['playground', '🎪 Playground', '30 min', 'from-orange-400 to-rose-500'],
+                ['academy', '📘 Academy', '60 min', 'from-violet-500 to-indigo-600'],
+                ['success', '🏆 Success', '60 min', 'from-teal-500 to-emerald-600'],
+              ] as const).filter(([k]) => hubs.includes(k)).map(([k, label, len, grad]) => (
+                <button
+                  key={k}
+                  role="tab"
+                  aria-selected={activeHub === k}
+                  onClick={() => setPickedHub(k)}
+                  className={cn(
+                    'flex flex-col items-center rounded-lg px-3 py-1 text-xs font-semibold transition-all',
+                    activeHub === k ? `bg-gradient-to-br ${grad} text-white shadow-sm` : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  <span>{label}</span>
+                  <span className="text-[9px] font-medium opacity-80">{len}</span>
+                </button>
+              ))}
+            </div>
+          ) : onlyOneDuration ? (
             <div className="inline-flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 px-2.5 py-1.5 text-xs font-semibold text-primary">
               <Lock className="h-3 w-3" />
               {allowedDurations[0]}-min only
@@ -323,7 +380,8 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
           isSlotInPast={isSlotInPast}
           onSlotClick={handleCellClick}
           onBookedSlotClick={setBookedSlot}
-          slotDuration={slotDuration}
+          slotDuration={gridDuration}
+          showHubTags={isMultiHub}
         />
       </div>
 

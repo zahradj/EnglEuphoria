@@ -207,6 +207,24 @@ const FindTeacher: React.FC = () => {
         }
       });
 
+      // Teachers with two or more assigned hubs show every one of them (the single
+      // hub_role can't express e.g. Playground + Academy + Success).
+      try {
+        const { data: mapRows } = await (supabase as any).rpc('get_teacher_hub_map');
+        const label = (h: string) => (h === 'success' ? 'Professional' : h === 'playground' ? 'Playground' : 'Academy');
+        const byUser = new Map<string, string[]>(
+          ((mapRows ?? []) as { user_id: string; hubs: string[] }[])
+            .filter((r) => Array.isArray(r.hubs) && r.hubs.length > 1)
+            .map((r) => [r.user_id, r.hubs.map(label)]),
+        );
+        teacherList.forEach((t) => {
+          const hubs = byUser.get((t as any).user_id);
+          if (hubs) (t as any)._hubs = hubs;
+        });
+      } catch (e) {
+        console.warn('[FindTeacher] hub map unavailable, using hub roles only', e);
+      }
+
       setTeachers(teacherList);
     } catch (err) {
       console.error('Error fetching teachers:', err);
