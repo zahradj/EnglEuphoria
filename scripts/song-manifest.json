@@ -63,5 +63,10 @@
     "path": "public/lep1/audio/shapes-song-u2l3.mp3",
     "bytes": 321037,
     "sha256": "dcff03caad0a427bbeff1b543e28facdab66d2f2a9c5c65ec896592d2ec7cf17"
+  },
+  "u2l5-shelly": {
+    "path": "public/lep1/audio/shelly-song-u2l5.mp3",
+    "bytes": 688812,
+    "sha256": "e9cbec81efebfd9f17beeaaf2e0b0b00b88a0f6584d9296213add0f4031bb623"
   }
 }

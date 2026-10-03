@@ -3706,7 +3706,8 @@ export const LESSON_U2L5_SCENES: Scene[] = [
   {
     // Warm-up: Shelly's song (scripts/songs.json "u2l5-shelly"; chant until the music is made).
     id: 'u2l5-song', kind: 'song', bg: bgU2L5Sea, title: "\u{1F3B5} Shelly's Song \u{1F3B5}", teacher: 'Sing and swim like a fish! Show the shapes with your hands.',
-    durationSeconds: 20, bigWord: 'Shelly', songUrl: `${A}/audio/shelly-song-u2l5.mp3?v=1`,
+    durationSeconds: 28, bigWord: 'Shelly', songUrl: `${A}/audio/shelly-song-u2l5.mp3?v=1`,
+    lineDurationsMs: [7830, 4760, 4410, 11447],
     songPrompt: 'Upbeat kids pop story song',
     lyrics: [
       { who: 'pip', text: 'Shelly, Shelly, little gray fish!', emotion: 'happy' },
