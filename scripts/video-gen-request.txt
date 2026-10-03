@@ -1,2 +1,2 @@
-u1l5-leo
-# Higgsfield run 2026-10-03: all 8 beats (Kling 2.5 Turbo Pro)
+u2l5-shelly
+# Higgsfield run 2026-10-03: new beats 05b-green, 05c-orange (existing clips are skipped)
