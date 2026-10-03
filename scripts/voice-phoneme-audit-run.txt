@@ -3,3 +3,4 @@ run 2: 2026-10-02T22:04:45Z after English-only + dictionary re-record (v14s)
 run 3: 2026-10-02T22:26:25Z forced-choice vowel check
 run 4: 2026-10-02T22:30:26Z forced-choice (separator fix)
 run 5: 2026-10-02T22:47:39Z forced-choice, English vowels only
+run 6: 2026-10-03T09:53:48Z new Pre-A1 U2 L2 clips
