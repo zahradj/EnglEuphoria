@@ -852,6 +852,18 @@
   "altMargin": 0.0
  },
  {
+  "file": "c46a2c79.mp3",
+  "voice": "mia",
+  "text": "square",
+  "expected": "skwɛɹ",
+  "heard": "s k w eɪ",
+  "per": 0.4,
+  "vowelMismatch": true,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
   "file": "e90c2c99.mp3",
   "voice": "pip",
   "text": "square",
@@ -2232,6 +2244,18 @@
   "altMargin": 0.0
  },
  {
+  "file": "97c8c2c3.mp3",
+  "voice": "leo",
+  "text": "Yes! carrot!",
+  "expected": "jɛs kæɹət",
+  "heard": "j ɛ s k ɛ ɹ ɪ t",
+  "per": 0.25,
+  "vowelMismatch": true,
+  "words": 2,
+  "bestAlternative": "j ɛ s k ɛ ɹ ə t",
+  "altMargin": 0.22
+ },
+ {
   "file": "5641ef0d.mp3",
   "voice": "bella",
   "text": "cookie",
@@ -2254,6 +2278,18 @@
   "words": 1,
   "bestAlternative": "k uː k i",
   "altMargin": 0.64
+ },
+ {
+  "file": "08895756.mp3",
+  "voice": "mia",
+  "text": "Yes! square!",
+  "expected": "jɛs skwɛɹ",
+  "heard": "j ɛ s s k w eɪ",
+  "per": 0.25,
+  "vowelMismatch": true,
+  "words": 2,
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "f4a15db9.mp3",
@@ -2609,6 +2645,30 @@
   "text": "cotton candy",
   "expected": "kɑːʔn̩ kændi",
   "heard": "k ɔ t ə n k æ n d i",
+  "per": 0.2,
+  "vowelMismatch": true,
+  "words": 2,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "57b1a9e1.mp3",
+  "voice": "willow",
+  "text": "Cotton candy",
+  "expected": "kɑːʔn̩ kændi",
+  "heard": "k ɑː t ə n k æ n d i",
+  "per": 0.2,
+  "vowelMismatch": true,
+  "words": 2,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "e5f2d490.mp3",
+  "voice": "pip",
+  "text": "Yes! popcorn!",
+  "expected": "jɛs pɑːpkɔːɹn",
+  "heard": "j ɛ s p ɔ p k oː n",
   "per": 0.2,
   "vowelMismatch": true,
   "words": 2,
@@ -3197,6 +3257,18 @@
   "text": "Yes! Cotton Candy!",
   "expected": "jɛs kɑːʔn̩ kændi",
   "heard": "j ɛ s k ɔ t ə n k æ n d i",
+  "per": 0.154,
+  "vowelMismatch": true,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "3c19e0b6.mp3",
+  "voice": "willow",
+  "text": "Yes! cotton candy!",
+  "expected": "jɛs kɑːʔn̩ kændi",
+  "heard": "j ɛ s k ɑː t ə n k æ n d i",
   "per": 0.154,
   "vowelMismatch": true,
   "words": 3,
@@ -15840,6 +15912,30 @@
   "altMargin": null
  },
  {
+  "file": "87a03b1f.mp3",
+  "voice": "bella",
+  "text": "Balloons",
+  "expected": "bəluːnz",
+  "heard": "b ə l uː n z",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "16198f26.mp3",
+  "voice": "bella",
+  "text": "Yes! balloons!",
+  "expected": "jɛs bəluːnz",
+  "heard": "j ɛ s b ə l uː n z",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 2,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
   "file": "afb3f88e.mp3",
   "voice": "pip",
   "text": "Today we find three new colors in the meadow!",
@@ -16378,6 +16474,30 @@
   "words": 5,
   "bestAlternative": null,
   "altMargin": null
+ },
+ {
+  "file": "9c858508.mp3",
+  "voice": "willow",
+  "text": "Yes! frog!",
+  "expected": "jɛs fɹɑːɡ",
+  "heard": "j ɛ s f ɹ ɔ ɡ",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 2,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "62afed8f.mp3",
+  "voice": "mia",
+  "text": "Yes! grapes!",
+  "expected": "jɛs ɡɹeɪps",
+  "heard": "j ɛ s ɡ ɹ eɪ p s",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 2,
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "4ca52f9b.mp3",
@@ -16954,6 +17074,54 @@
   "words": 5,
   "bestAlternative": null,
   "altMargin": null
+ },
+ {
+  "file": "1fde6a7b.mp3",
+  "voice": "bella",
+  "text": "circle",
+  "expected": "sɜːkəl",
+  "heard": "s ɜː k əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "ea3ff122.mp3",
+  "voice": "bella",
+  "text": "Yes! circle!",
+  "expected": "jɛs sɜːkəl",
+  "heard": "j ɛ s s ɜː k əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 2,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "4796739b.mp3",
+  "voice": "leo",
+  "text": "triangle",
+  "expected": "tɹaɪæŋɡəl",
+  "heard": "t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "9c95fb0a.mp3",
+  "voice": "leo",
+  "text": "Yes! triangle!",
+  "expected": "jɛs tɹaɪæŋɡəl",
+  "heard": "j ɛ s t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 2,
+  "bestAlternative": null,
+  "altMargin": 0.0
  },
  {
   "file": "cc8531bf.mp3",

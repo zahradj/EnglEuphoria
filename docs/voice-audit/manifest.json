@@ -6119,6 +6119,41 @@
   },
   {
     "character": "bella",
+    "text": "Balloons",
+    "synth": "Balloons",
+    "file": "87a03b1f.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "Yes! balloons!",
+    "synth": "Yes! balloons!",
+    "file": "16198f26.mp3",
+    "exists": true
+  },
+  {
+    "character": "willow",
+    "text": "Cotton candy",
+    "synth": "Cotton candy",
+    "file": "57b1a9e1.mp3",
+    "exists": true
+  },
+  {
+    "character": "willow",
+    "text": "Yes! cotton candy!",
+    "synth": "Yes! cotton candy!",
+    "file": "3c19e0b6.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Yes! popcorn!",
+    "synth": "Yes! popcorn!",
+    "file": "e5f2d490.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
     "text": "You did it! You can name red, blue, and yellow at the Color Carnival!",
     "synth": "You did it! You can name red, blue, and yellow at the Color Carnival!",
     "file": "811c9a21.mp3",
@@ -6577,6 +6612,27 @@
     "text": "What color are the grapes?",
     "synth": "What color are the grapes?",
     "file": "fe936352.mp3",
+    "exists": true
+  },
+  {
+    "character": "willow",
+    "text": "Yes! frog!",
+    "synth": "Yes! frog!",
+    "file": "9c858508.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "Yes! carrot!",
+    "synth": "Yes! carrot!",
+    "file": "97c8c2c3.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "Yes! grapes!",
+    "synth": "Yes! grapes!",
+    "file": "62afed8f.mp3",
     "exists": true
   },
   {
@@ -7074,6 +7130,48 @@
     "text": "What shape is the pizza?",
     "synth": "What shape is the pizza?",
     "file": "d46e65e9.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "circle",
+    "synth": "circle",
+    "file": "1fde6a7b.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "Yes! circle!",
+    "synth": "Yes! circle!",
+    "file": "ea3ff122.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "triangle",
+    "synth": "triangle",
+    "file": "4796739b.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "Yes! triangle!",
+    "synth": "Yes! triangle!",
+    "file": "9c95fb0a.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "square",
+    "synth": "square",
+    "file": "c46a2c79.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "Yes! square!",
+    "synth": "Yes! square!",
+    "file": "08895756.mp3",
     "exists": true
   },
   {
