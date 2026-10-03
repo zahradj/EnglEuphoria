@@ -1,25 +1,15 @@
-03-sad: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
-02-wind: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
-started 03-sad: 7c240dfc-698f-4c9b-9356-9fe92c16c2fb
-started 02-wind: c5250d29-5513-4809-a8f8-91afd5f3baea
-01-play: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
-started 01-play: 77a52229-d26d-418d-8d36-6e010b52ea16
-saved public/lep1/video/clips/u1l5-leo/03-sad.mp4 (10939555 bytes)
-saved public/lep1/video/clips/u1l5-leo/02-wind.mp4 (19095576 bytes)
-saved public/lep1/video/clips/u1l5-leo/01-play.mp4 (12928092 bytes)
-05-hat: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
-04-friends: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
-started 04-friends: dd7d431c-0e9f-4857-93cb-415e9d67d2a8
-started 05-hat: 9276bf0f-15f3-40ef-ae18-d3322e76d80f
-06-mat: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
-started 06-mat: ec1fe4f4-d94b-4ba4-be15-7311fbbe1fed
-saved public/lep1/video/clips/u1l5-leo/05-hat.mp4 (13241168 bytes)
-saved public/lep1/video/clips/u1l5-leo/04-friends.mp4 (14999562 bytes)
-saved public/lep1/video/clips/u1l5-leo/06-mat.mp4 (10940080 bytes)
-08-found: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
-started 08-found: f3e7312d-cb2e-497f-aaa0-7483c6fbf756
-07-glow: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
-started 07-glow: 8b422e10-edb4-4267-9734-4038e5812f86
-saved public/lep1/video/clips/u1l5-leo/07-glow.mp4 (12991585 bytes)
-saved public/lep1/video/clips/u1l5-leo/08-found.mp4 (21144797 bytes)
-8/8 clips ready for u1l5-leo
+skip 01-sea (exists)
+skip 02-sad (exists)
+skip 03-red (exists)
+skip 04-blue (exists)
+skip 05-yellow (exists)
+05b-green: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
+started 05b-green: e398fd62-0cf8-4480-bc9c-94aa456cdaee
+saved public/lep1/video/clips/u2l5-shelly/05b-green.mp4 (11342086 bytes)
+skip 06-rainbow (exists)
+skip 07-crab (exists)
+05c-orange: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
+started 05c-orange: 134843c2-158b-4ee4-a0c9-187a56a6bb07
+saved public/lep1/video/clips/u2l5-shelly/05c-orange.mp4 (10724286 bytes)
+skip 08-friends (exists)
+10/10 clips ready for u2l5-shelly
