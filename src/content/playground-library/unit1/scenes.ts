@@ -1745,13 +1745,13 @@ export const LESSON_5_SCENES: Scene[] = [
     id: 'l5-spin', kind: 'spin-wheel', bg: bgL5Friends, title: '',
     teacher: 'Have the student spin and say: "Hello! It\'s Mia!" (or "This is Mia. She is happy."). Or tap a number.',
     items: [
-      { label: "Hello! It's Pip!", left: '12%', top: '30%' },
-      { label: "Hello! It's Mia!", left: '31%', top: '30%' },
-      { label: "Hello! It's Bella!", left: '50%', top: '30%' },
-      { label: "Hello! It's Willow!", left: '69%', top: '30%' },
-      { label: "Hello! It's Leo!", left: '88%', top: '30%' },
+      { label: "Hello! It's Pip!", left: '19%', top: '41%' },
+      { label: "Hello! It's Mia!", left: '34%', top: '48%' },
+      { label: "Hello! It's Bella!", left: '48%', top: '40%' },
+      { label: "Hello! It's Willow!", left: '63%', top: '49%' },
+      { label: "Hello! It's Leo!", left: '77%', top: '43%' },
     ],
-    wheelAt: { left: '50%', top: '80%' },
+    wheelAt: { left: '33%', top: '25%' },
   },
 
   /* 10-13 Communicative + game break + personal */
