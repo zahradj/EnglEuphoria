@@ -497,7 +497,7 @@ export type Scene =
        *  ("Take Pip to the purple circle!"); the child draws a line with a
        *  finger from the character to it, and the character walks the line.
        *  `spots` are things placed on the picture (x/y = centre %, size = width %). */
-      id: string; kind: 'draw-path'; bg: string; teacher: string; who: CharKey; walker: CharKey;
+      id: string; kind: 'draw-path'; bg: string; bgVideo?: string; teacher: string; who: CharKey; walker: CharKey;
       start: { x: number; y: number };
       spots: (Thing & { x: number; y: number; size: number })[];
       rounds: { line: string; target: number; reply: string }[];
@@ -506,22 +506,25 @@ export type Scene =
       /** Image Reveal (Wordwall "Image quiz"): a hidden picture uncovers tile
        *  by tile; the child guesses early by tapping one of the answer
        *  pictures and says it. Fewer tiles gone = more stars. */
-      id: string; kind: 'tile-reveal'; bg: string; teacher: string; who: CharKey;
+      id: string; kind: 'tile-reveal'; bg: string; bgVideo?: string; teacher: string; who: CharKey;
       rounds: { img: string; word: string; line: string; options: Thing[] }[];
     }
   | {
       /** Shadow Match (Khan Academy Kids-style shadow puzzles): drag each
        *  coloured picture onto its dark shadow (or tap it, then the shadow);
        *  it snaps in and is named ("It's a clock. It's a circle!"). */
-      id: string; kind: 'shadow-match'; bg: string; teacher: string; who: CharKey;
+      id: string; kind: 'shadow-match'; bg: string; bgVideo?: string; teacher: string; who: CharKey;
       items: (Thing & { line: string })[];
     }
   | {
       /** Stepping Stones (the classic floor game "jump on the red circle!"):
        *  the character crosses a river; each round three stones float ahead
        *  and the voice names one. Tap it and the character hops on; the
-       *  wrong one wobbles and sinks back. */
-      id: string; kind: 'stepping-stones'; bg: string; teacher: string; who: CharKey; walker: CharKey;
+       *  wrong one wobbles and sinks back. `bgVideo` (all four newer games) =
+       *  a seamless looping clip of `bg` — the living game world. */
+      id: string; kind: 'stepping-stones'; bg: string; bgVideo?: string;
+      /** true when `bg` already paints the river (no drawn river); `stoneImg` = stone sticker. */
+      riverPainted?: boolean; stoneImg?: string; teacher: string; who: CharKey; walker: CharKey;
       rounds: { line: string; options: Thing[]; answer: number; reply: string }[];
       goal: { img: string; label: string; line: string };
     };
@@ -4062,6 +4065,10 @@ const itemGemPurpleCircle = `${A}/items/item-gem-purple-circle.png`;
 const itemGemOrangeSquare = `${A}/items/item-gem-orange-square.png`;
 const itemMedalRainbow = `${A}/items/item-medal-rainbow.png`;
 const bgU2L6Gems = `${A}/scenes/bg-u2l6-gems-wide.png`;
+const bgU2L6River = `${A}/scenes/bg-u2l6-river-wide.png`;
+const itemStone = `${A}/items/item-stone.png`;
+/** Seamless looping clips of the game pictures (Higgsfield, ping-pong looped) — the living game worlds. */
+const loopU2L6 = (name: string) => `${A}/video/loops/u2l6-${name}.mp4`;
 
 export const LESSON_U2L6_TITLE = 'Color & Shape Hunt';
 export const LESSON_U2L6_OBJECTIVE = 'Review the whole unit on a treasure hunt, with no reading: name all six colours and three shapes, find "a green triangle" by listening, say "It\'s a red circle.", ask "Is it…?", group things by colour and shape, find real things at home ("Show me something red!"), and hear C, WH and SH.';
@@ -4147,7 +4154,7 @@ export const LESSON_U2L6_SCENES: Scene[] = [
   /* ---- Stop 2: the beach — shapes ---- */
   {
     // NEW (2026-10): Shadow Match — recognise the SHAPE from the outline alone.
-    id: 'u2l6-shadows', kind: 'shadow-match', bg: bgU2L6Beach, who: 'willow',
+    id: 'u2l6-shadows', kind: 'shadow-match', bg: bgU2L6Beach, bgVideo: loopU2L6('beach'), who: 'willow',
     teacher: 'Hunt stop 2! Drag each thing onto its shadow (or tap it, then the shadow). Say the shape!',
     items: [
       { label: 'clock', img: itemClock, line: "It's a clock. It's a circle!" },
@@ -4207,7 +4214,7 @@ export const LESSON_U2L6_SCENES: Scene[] = [
   /* ---- Stop 3: the garden — colours ---- */
   {
     // NEW (2026-10): Image Reveal — guess the picture before all the tiles are gone.
-    id: 'u2l6-reveal', kind: 'tile-reveal', bg: bgU2L6Garden, who: 'bella',
+    id: 'u2l6-reveal', kind: 'tile-reveal', bg: bgU2L6Garden, bgVideo: loopU2L6('garden'), who: 'bella',
     teacher: 'What is it? Tiles pop off one by one — guess early and say it with its color!',
     rounds: [
       { img: itemFrog, word: 'frog', line: "It's a green frog!", options: [{ label: 'leaf', img: itemLeaf }, { label: 'frog', img: itemFrog }, { label: 'apple', img: itemApple }] },
@@ -4244,7 +4251,7 @@ export const LESSON_U2L6_SCENES: Scene[] = [
   /* ---- Stop 4: the treasure chest ---- */
   {
     // NEW (2026-10): Stepping Stones — listen, then hop across the river.
-    id: 'u2l6-stones', kind: 'stepping-stones', bg: bgMeadow, who: 'pip', walker: 'pip',
+    id: 'u2l6-stones', kind: 'stepping-stones', bg: bgU2L6River, bgVideo: loopU2L6('river'), riverPainted: true, stoneImg: itemStone, who: 'pip', walker: 'pip',
     teacher: 'Help Pip cross the river! Listen and tap the stone. Say it as Pip jumps!',
     rounds: [
       { line: 'Jump on the purple circle!', answer: 1, reply: 'A purple circle! Hop!', options: [{ label: 'purple square', shape: 'square', colorHex: C4.PURPLE }, { label: 'purple circle', shape: 'circle', colorHex: C4.PURPLE }, { label: 'red circle', shape: 'circle', colorHex: C4.RED }] },
@@ -4256,7 +4263,7 @@ export const LESSON_U2L6_SCENES: Scene[] = [
   },
   {
     // NEW (2026-10): Draw Path (Lingokids) — listen, then draw Leo's way to the gem.
-    id: 'u2l6-draw-path', kind: 'draw-path', bg: bgMeadow, who: 'leo', walker: 'leo',
+    id: 'u2l6-draw-path', kind: 'draw-path', bg: bgMeadow, bgVideo: loopU2L6('meadow'), who: 'leo', walker: 'leo',
     teacher: 'Listen and draw! Draw a line from Leo to the gem he says. Leo walks your line.',
     start: { x: 9, y: 84 },
     spots: [
@@ -4351,7 +4358,7 @@ export const LESSON_U2L6_SCENES: Scene[] = [
   },
   {
     // Extra time E2: Stepping Stones again with Bella and new stones.
-    id: 'u2l6-stones-2', kind: 'stepping-stones', bg: bgMeadow, who: 'bella', walker: 'bella',
+    id: 'u2l6-stones-2', kind: 'stepping-stones', bg: bgU2L6River, bgVideo: loopU2L6('river'), riverPainted: true, stoneImg: itemStone, who: 'bella', walker: 'bella',
     teacher: 'Extra time: Help Bella cross the river! Listen and tap the stone.',
     rounds: [
       { line: 'Jump on the red square!', answer: 2, reply: 'A red square! Hop!', options: [{ label: 'red circle', shape: 'circle', colorHex: C4.RED }, { label: 'blue square', shape: 'square', colorHex: C4.BLUE }, { label: 'red square', shape: 'square', colorHex: C4.RED }] },
@@ -4362,7 +4369,7 @@ export const LESSON_U2L6_SCENES: Scene[] = [
   },
   {
     // Extra time E3: Image Reveal with new pictures.
-    id: 'u2l6-reveal-2', kind: 'tile-reveal', bg: bgU2L6Garden, who: 'willow',
+    id: 'u2l6-reveal-2', kind: 'tile-reveal', bg: bgU2L6Garden, bgVideo: loopU2L6('garden'), who: 'willow',
     teacher: 'Extra time: What is it? Guess early and say it with its color!',
     rounds: [
       { img: itemApple, word: 'apple', line: "It's a red apple!", options: [{ label: 'apple', img: itemApple }, { label: 'balloon', img: itemBalloonRed }, { label: 'carrot', img: itemCarrot }] },

@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
 import { cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
-import { CLAY_BUTTON, CLAY_CARD, STICKER_FILTER, ThingArt, sayWithin } from './shared';
+import { CLAY_BUTTON, CLAY_CARD, ThingArt, sayWithin } from './shared';
+import { Bursts, Hopper, LivingBg, idleFloat, useBursts, useShake } from './gameFx';
 
 /* ---------- Draw Path ----------
  * Lingokids' "Draw Path" adventure (2026): the child draws a line with a
@@ -37,6 +39,10 @@ export function DrawPathScene({ scene, onWin, onLose, onNext, sync }: { scene: D
   const [live, setLive] = useState<Pt[]>([]);
   const drawing = useRef(false);
   const [walkAt, setWalkAt] = useState<Pt | null>(null);
+  const [bursts, fire] = useBursts();
+  const [shakeCtl, shake] = useShake();
+  // Gems already collected (targets of the rounds before this one).
+  const collected = new Set(scene.rounds.slice(0, round).map((q) => q.target));
 
   // Where the character stands now: the start, or the spot reached last round.
   const prev = round > 0 ? scene.rounds[round - 1] : undefined;
@@ -98,7 +104,7 @@ export function DrawPathScene({ scene, onWin, onLose, onNext, sync }: { scene: D
     if (hit !== r.target) {
       setLive([]);
       if (hit >= 0) {
-        sfx.wrong(); onLose();
+        sfx.wrong(); onLose(); shake();
         setState((s) => ({ ...s, wrong: hit }));
         window.setTimeout(() => setState((s) => ({ ...s, wrong: -1 })), 700);
       }
@@ -114,6 +120,7 @@ export function DrawPathScene({ scene, onWin, onLose, onNext, sync }: { scene: D
     setState((s) => ({ ...s, phase: 'walk', path: slim.flatMap((p) => [Math.round(p.x * 10) / 10, Math.round(p.y * 10) / 10]) }));
     await new Promise((res) => setTimeout(res, 1700));
     sfx.match();
+    fire(target.x, target.y, 'stars');
     await sayWithin(r.reply, scene.who, 4000);
     const next = round + 1;
     const awardGem = next >= total && !gemDone;
@@ -129,15 +136,16 @@ export function DrawPathScene({ scene, onWin, onLose, onNext, sync }: { scene: D
   for (let i = 0; i + 1 < path.length; i += 2) synced.push({ x: path[i], y: path[i + 1] });
 
   return (
-    <div
+    <motion.div
       ref={stage}
-      className="absolute inset-0 touch-none select-none overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: `url(${scene.bg})` }}
+      className="absolute inset-0 touch-none select-none overflow-hidden"
+      animate={shakeCtl}
       onPointerDown={down}
       onPointerMove={move}
       onPointerUp={up}
       onPointerCancel={() => { drawing.current = false; setLive([]); }}
     >
+      <LivingBg img={scene.bg} video={scene.bgVideo} />
       {done && <Confetti count={60} />}
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-base font-black text-orange-700 shadow-xl sm:text-xl">
         {r ? `✏️ ${r.line}` : '🎉 You did it!'}
@@ -145,30 +153,49 @@ export function DrawPathScene({ scene, onWin, onLose, onNext, sync }: { scene: D
       </div>
       {r && <button onPointerDown={(e) => e.stopPropagation()} onClick={() => cueSpeak(r.line, scene.who)} className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>}
 
-      {/* The line: dotted while drawing, a bright trail while walking. */}
+      {/* The line: a glowing rainbow trail while drawing, a golden path while walking. */}
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 z-10 h-full w-full">
-        {live.length > 1 && <path d={lineD(live)} fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="1 18" vectorEffect="non-scaling-stroke" style={{ strokeWidth: 12, filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.35))' }} />}
-        {phase === 'walk' && synced.length > 1 && <path d={lineD(synced)} fill="none" stroke="#FE6A2F" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" style={{ strokeWidth: 8, opacity: 0.85 }} />}
+        <defs>
+          <linearGradient id="dp-rainbow" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" stopColor="#F43F5E" /><stop offset="0.25" stopColor="#F97316" /><stop offset="0.5" stopColor="#FACC15" /><stop offset="0.75" stopColor="#22C55E" /><stop offset="1" stopColor="#3B82F6" />
+          </linearGradient>
+        </defs>
+        {live.length > 1 && <path d={lineD(live)} fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" style={{ strokeWidth: 22, opacity: 0.55 }} />}
+        {live.length > 1 && <path d={lineD(live)} fill="none" stroke="url(#dp-rainbow)" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" style={{ strokeWidth: 11 }} />}
+        {phase === 'walk' && synced.length > 1 && <path d={lineD(synced)} fill="none" stroke="#FDE047" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 14" vectorEffect="non-scaling-stroke" style={{ strokeWidth: 10, filter: 'drop-shadow(0 0 6px #FDE047)' }} />}
       </svg>
-
-      {scene.spots.map((s, i) => (
-        <div
-          key={i}
-          className={`pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 ${wrong === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
-          style={{ left: `${s.x}%`, top: `${s.y}%`, width: `${s.size}%`, aspectRatio: '1' }}
-        >
-          <ThingArt thing={s} />
-        </div>
+      {/* sparkles that trail the finger */}
+      {live.slice(-6).map((p, i) => (
+        <motion.span key={`${live.length}-${i}`} className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-1/2 text-xl" style={{ left: `${p.x}%`, top: `${p.y}%` }} initial={{ scale: 1.2, opacity: 1 }} animate={{ scale: 0, opacity: 0, y: -18 }} transition={{ duration: 0.7 }}>✨</motion.span>
       ))}
 
-      {/* The character, with a pulsing ring where the finger should start. */}
-      <div className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-[85%]" style={{ left: `${at.x}%`, top: `${at.y}%`, width: '11%' }}>
-        {phase === 'draw' && r && <span className="absolute inset-x-[10%] bottom-0 aspect-square rounded-full bg-yellow-200/70" style={{ animation: 'lep1-ping 1.6s ease-in-out infinite' }} />}
-        <img src={walker.img} alt={walker.name} draggable={false} className="relative w-full" style={{ filter: STICKER_FILTER, animation: phase === 'walk' ? 'lep1-bob 0.35s ease-in-out infinite' : undefined }} />
-      </div>
-      {phase === 'draw' && r && round === 0 && live.length === 0 && (
-        <div className="pointer-events-none absolute z-30 text-4xl" style={{ left: `${home.x + 3}%`, top: `${home.y + 2}%`, animation: 'lep1-bob 1.2s ease-in-out infinite' }}>👆</div>
+      <AnimatePresence>
+        {scene.spots.map((s, i) => collected.has(i) ? null : (
+          <motion.div
+            key={i}
+            className="pointer-events-none absolute z-20"
+            style={{ left: `${s.x}%`, top: `${s.y}%`, width: `${s.size}%`, aspectRatio: '1', translateX: '-50%', translateY: '-50%' }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1, transition: { type: 'spring', stiffness: 260, damping: 14, delay: i * 0.1 } }}
+            exit={{ scale: [1, 1.6, 0], y: -120, opacity: [1, 1, 0], transition: { duration: 0.8 } }}
+          >
+            <motion.div className="h-full w-full" {...(wrong === i ? { animate: { rotate: [0, -18, 18, -10, 10, 0] }, transition: { duration: 0.5 } } : idleFloat(i))}>
+              <motion.span className="absolute inset-[-18%] rounded-full bg-white/40 blur-lg" animate={{ opacity: [0.3, 0.8, 0.3] }} transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.3 }} />
+              <ThingArt thing={s} />
+            </motion.div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+
+      {/* A pulsing ring where the finger should start */}
+      {phase === 'draw' && r && (
+        <motion.span className="pointer-events-none absolute z-10 block h-[12%] w-[7%] rounded-full border-4 border-yellow-300" style={{ left: `${home.x}%`, top: `${home.y}%`, translateX: '-50%', translateY: '-50%' }} animate={{ scale: [0.8, 1.3], opacity: [0.9, 0] }} transition={{ duration: 1.2, repeat: Infinity }} />
       )}
+      <Hopper img={walker.img} alt={walker.name} x={at.x} y={at.y + 4} width={12} walking={phase === 'walk'} />
+      {phase === 'draw' && r && round === 0 && live.length === 0 && (
+        <motion.div className="pointer-events-none absolute z-30 text-4xl" style={{ left: `${home.x + 3}%`, top: `${home.y - 2}%` }} animate={{ x: [0, 60, 0], y: [0, -40, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}>👆</motion.div>
+      )}
+      <Bursts items={bursts} />
 
       {done && (
         <div className="absolute inset-x-0 bottom-[8%] z-30 flex flex-col items-center gap-3">
@@ -176,7 +203,7 @@ export function DrawPathScene({ scene, onWin, onLose, onNext, sync }: { scene: D
           <button onPointerDown={(e) => e.stopPropagation()} onClick={onNext} className={`${CLAY_BUTTON} px-10 py-3 text-xl`}>Next ⭐</button>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 
