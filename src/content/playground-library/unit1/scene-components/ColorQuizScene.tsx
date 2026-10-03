@@ -46,7 +46,11 @@ export function ColorQuizScene({ scene, onNext, onWin, onLose, sync }: { scene: 
     }
     sfx.match();
     setState((s) => ({ ...s, picked: label, correct: true }));
-    if (round) await safeSpeak(`Yes! ${round.correctLabel} is ${round.colorWord}!`, round.who);
+    // "Yes! The leaf is green!" / "Yes! The grapes are purple!"
+    if (round) {
+      const w = round.correctLabel.toLowerCase();
+      await safeSpeak(`Yes! The ${w} ${/[^s]s$/.test(w) ? 'are' : 'is'} ${round.colorWord.toLowerCase()}!`, round.who);
+    }
   };
 
   const next = () => {

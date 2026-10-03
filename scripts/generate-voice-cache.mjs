@@ -132,7 +132,9 @@ function numberSpeech(n) {
   return w ? w.charAt(0) + w.slice(1).toLowerCase() : String(n);
 }
 function buildColorSentence(colorWord, exampleWord) {
-  return `The ${exampleWord.toLowerCase()} is ${colorWord.toLowerCase()}.`;
+  // Mirrors ColorModelScene.tsx: plural nouns take "are".
+  const w = exampleWord.toLowerCase();
+  return `The ${w} ${/[^s]s$/.test(w) ? 'are' : 'is'} ${colorWord.toLowerCase()}.`;
 }
 function buildShapeSentence(shapeWord, exampleWord) {
   return `The ${exampleWord.toLowerCase()} is a ${shapeWord.toLowerCase()}.`;
@@ -273,7 +275,7 @@ const UNIT1_EXTRACTORS = {
     ...(s.items ?? []).map((it) => [(s.targets ?? []).find((t) => t.colorWord === it.colorWord)?.who ?? 'pip', it.word]),
     ...(s.targets ?? []).map((t) => [t.who, t.colorWord]),
   ],
-  'color-quiz': (s) => (s.rounds ?? []).flatMap((r) => [[r.who, `Which one is ${r.colorWord}?`], [r.who, `Yes! ${r.correctLabel} is ${r.colorWord}!`]]),
+  'color-quiz': (s) => (s.rounds ?? []).flatMap((r) => [[r.who, `Which one is ${r.colorWord}?`], [r.who, `Yes! The ${r.correctLabel.toLowerCase()} ${/[^s]s$/.test(r.correctLabel.toLowerCase()) ? 'are' : 'is'} ${r.colorWord.toLowerCase()}!`]]),
   'listen-repeat-cards': (s) => (s.cards ?? []).map((c) => [c.who, c.sentence]),
   'color-spot': (s) => (s.items ?? []).flatMap((it) => [[it.who, it.colorWord], [it.who, it.sentence]]),
   'shape-model': (s) => {
@@ -306,6 +308,15 @@ const UNIT1_EXTRACTORS = {
     ...(s.spots ?? []).map((sp) => [s.who, `Yes! ${sp.label}!`]),
   ],
   'color-simon': (s) => (s.colors ?? []).map((c) => [c.who, c.colorWord]),
+  // Mirrors ColorMixScene.tsx's colorMixLines().
+  'color-mix': (s) => [
+    [s.who, 'What color is it?'],
+    ...(s.rounds ?? []).flatMap((r) => [
+      [s.who, `Mix ${r.a.toLowerCase()} and ${r.b.toLowerCase()}!`],
+      [s.who, `It's ${r.result.toLowerCase()}!`],
+      [r.who, r.line],
+    ]),
+  ],
   'join-stage': (s) => (s.turns ?? []).filter((t) => t.who !== 'student').map((t) => [t.who, t.line]),
   'hello-doors': (s) => {
     const out = (s.cast ?? []).map((who) => [who, CAST[who]?.name ?? who]);

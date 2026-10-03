@@ -359,6 +359,14 @@ export type Scene =
       id: string; kind: 'color-simon'; bg: string; teacher: string;
       colors: { colorWord: string; colorHex: string; who: CharKey }[];
       maxRounds: number;
+    }
+  | {
+      /** "Magic Paint Pots" — mix two of Lesson 1's paints into a new colour,
+       *  then name it to bring the round's object to life (Unit 2 Lesson 2). */
+      id: string; kind: 'color-mix'; bg: string; teacher: string; who: CharKey; potImg: string;
+      paints: { colorWord: string; colorHex: string }[];
+      answers: { colorWord: string; colorHex: string }[];
+      rounds: { a: string; b: string; result: string; resultHex: string; who: CharKey; img: string; label: string; line: string }[];
     };
 
 const A = '/lep1'; // public asset root
@@ -2617,246 +2625,254 @@ const bgU2L2PurpleOnly = `${A}/scenes/bg-u2l2-purple-only.png`;
 const bgU2L2SoundGarden = `${A}/scenes/bg-u2l2-sound-garden.png`;
 const bgU2L2DashArena = `${A}/scenes/bg-u2l2-dash-arena.png`;
 
+/* REBUILD (2026-10-03) per the curriculum + lesson blueprints (22-slide
+ * skeleton, 6 core words, one phonics micro-moment, child asks as well as
+ * answers, home mission). Replaces the first version, which had square art,
+ * three new letters (G, O, P — "Owl" isn't a short-o word), a colouring game
+ * on mismatched outlines (leaf in an apple outline), a "purple" balloon drawn
+ * red, three dashes and three role-plays in a row, no review of Lesson 1's
+ * colours, and the same goodbye song as every lesson.
+ *
+ * Core words: green, orange, purple (+ frog, carrot, grapes; leaf, pumpkin,
+ * plum as second examples). Chunks: "What color is it?" / "It's green." /
+ * "I like purple." Signature game: Magic Paint Pots (color-mix) — mix
+ * Lesson 1's red/blue/yellow into the new colours and NAME the result.
+ * Phonics micro-moment: /g/ (green, grapes, goat). Wide 16:9 art. */
+const itemFrog = `${A}/items/item-frog.png`;
+const itemCarrot = `${A}/items/item-carrot.png`;
+const itemPumpkin = `${A}/items/item-pumpkin.png`;
+const itemPlum = `${A}/items/item-plum.png`;
+const itemPaintPot = `${A}/items/item-paint-pot-empty.png`;
+const bgU2L2Meadow = `${A}/scenes/bg-u2l2-meadow-wide.png`;
+const bgU2L2PaintLab = `${A}/scenes/bg-u2l2-paint-lab-wide.png`;
+const bgU2L2Green = `${A}/scenes/bg-u2l2-green-wide.png`;
+const bgU2L2Orange = `${A}/scenes/bg-u2l2-orange-wide.png`;
+const bgU2L2Purple = `${A}/scenes/bg-u2l2-purple-wide.png`;
+const GREEN = '#22C55E';
+const ORANGE = '#F97316';
+const PURPLE = '#A855F7';
+
 export const LESSON_U2L2_TITLE = 'Green, Orange, Purple!';
-export const LESSON_U2L2_OBJECTIVE = 'Identify and name the colors green, orange, and purple, use them in simple sentences ("It\'s green," "I like orange," "I don\'t like purple"), and recognize the G, O, and P letter sounds.';
+export const LESSON_U2L2_OBJECTIVE = 'Name green, orange and purple (frog, carrot, grapes), ask and answer "What color is it?" — "It\'s green.", say "I like purple.", and mix Lesson 1\'s red, blue and yellow to make the new colours.';
 
 export const LESSON_U2L2_SCENES: Scene[] = [
-  { id: 'u2l2-title', kind: 'title-card', bg: bgU2L2ColorParade, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 2', title: 'Green, Orange, Purple!', subtitle: 'More colors all around us' },
+  { id: 'u2l2-title', kind: 'title-card', bg: bgU2L2Meadow, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 2', title: 'Green, Orange, Purple!', subtitle: 'Mix the magic paints' },
+
   {
-    id: 'u2l2-intro', kind: 'cinematic', bg: bgU2L2ColorParade, title: 'Green, Orange, Purple!', subtitle: 'A garden full of more colors', narrator: 'pip', hidePipOverlay: true,
+    // Warm-up: the lesson's colours song (scripts/songs.json "u2l2-colors").
+    id: 'u2l2-song', kind: 'song', bg: bgU2L2Meadow, title: '\u{1F3B5} The Colors Song \u{1F3B5}', teacher: 'Sing and point! Point to the frog, the carrots and the grapes.',
+    durationSeconds: 20, bigWord: 'Colors', songUrl: `${A}/audio/colors-song-u2l2.mp3?v=1`,
+    lineDurationsMs: [4120, 4000, 4140, 7802],
+    songPrompt: 'Upbeat kids pop colours song',
+    lyrics: [
+      { who: 'willow', text: 'Green, green, the frog is green!', emotion: 'happy' },
+      { who: 'leo', text: 'Orange, orange, the carrot is orange!', emotion: 'happy' },
+      { who: 'mia', text: 'Purple, purple, the grapes are purple!', emotion: 'happy' },
+      { who: 'pip', text: 'What color is it? What color is it?', emotion: 'happy' },
+    ],
+  },
+
+  {
+    id: 'u2l2-intro', kind: 'cinematic', bg: bgU2L2Meadow, title: 'The Rainbow Meadow', subtitle: 'Three new colors are hiding here', narrator: 'pip',
     script: [
-      { who: 'pip', line: 'Look! Even more colors today!' },
-      { who: 'pip', line: 'Willow has a green leaf, Leo found an orange, and Mia has purple grapes!' },
+      { who: 'pip', line: 'Hello! Remember red, blue and yellow?' },
+      { who: 'pip', line: 'Today we find three new colors in the meadow!' },
     ],
     cta: "Let's look!",
   },
+
+  /* ---- Input: the three new colours on three clear objects ---- */
   {
-    id: 'u2l2-vocab-colors', kind: 'color-model', bg: bgMeadow,
-    teacher: 'Look! Tap a color to hear it, say it back, learn the word, then say the sentence!',
+    id: 'u2l2-vocab-colors', kind: 'color-model', bg: bgU2L2Meadow,
+    teacher: 'Tap a color. Listen, say it, then say the sentence!',
     items: [
-      { colorWord: 'GREEN', colorHex: '#22C55E', who: 'willow', exampleWord: 'Leaf', exampleImg: itemLeaf },
-      { colorWord: 'ORANGE', colorHex: '#F97316', who: 'leo', exampleWord: 'Orange', exampleImg: itemOrange },
-      { colorWord: 'PURPLE', colorHex: '#A855F7', who: 'mia', exampleWord: 'Grapes', exampleImg: itemGrapes },
+      { colorWord: 'GREEN', colorHex: GREEN, who: 'willow', exampleWord: 'Frog', exampleImg: itemFrog },
+      { colorWord: 'ORANGE', colorHex: ORANGE, who: 'leo', exampleWord: 'Carrot', exampleImg: itemCarrot },
+      { colorWord: 'PURPLE', colorHex: PURPLE, who: 'mia', exampleWord: 'Grapes', exampleImg: itemGrapes },
     ],
   },
   {
-    // Same pattern as u2l1-color-spot: the one place a learner finds the
-    // color by tapping the real illustrated object inside a full scene,
-    // not an abstract card.
-    id: 'u2l2-color-spot', kind: 'color-spot', bg: bgU2L2ColorParade,
-    teacher: 'Find the colors! Tap the arrow to learn each one.',
+    id: 'u2l2-color-spot', kind: 'color-spot', bg: bgU2L2Meadow,
+    teacher: 'Find the colors in the meadow! Tap each arrow.',
     items: [
-      { colorWord: 'GREEN', colorHex: '#22C55E', who: 'willow', label: 'Leaf', sentence: 'The leaf is green!', left: '18%', top: '48%' },
-      { colorWord: 'ORANGE', colorHex: '#F97316', who: 'leo', label: 'Orange', sentence: 'The orange is orange!', left: '48%', top: '78%' },
-      { colorWord: 'PURPLE', colorHex: '#A855F7', who: 'mia', label: 'Grapes', sentence: 'The grapes are purple!', left: '82%', top: '68%' },
+      { colorWord: 'GREEN', colorHex: GREEN, who: 'willow', label: 'Frog', sentence: 'The frog is green!', left: '11%', top: '66%' },
+      { colorWord: 'ORANGE', colorHex: ORANGE, who: 'leo', label: 'Carrots', sentence: 'The carrots are orange!', left: '55%', top: '72%' },
+      { colorWord: 'PURPLE', colorHex: PURPLE, who: 'mia', label: 'Grapes', sentence: 'The grapes are purple!', left: '91%', top: '46%' },
     ],
   },
   {
-    // New: "I Spy" — one of the most established color games for this
-    // exact age/skill combo, researched rather than only reusing this
-    // project's own existing mechanics. Genuinely different from
-    // color-spot: all three spots are visible at once, so finding the
-    // right one among the others is the actual task, not a one-at-a-time
-    // reveal. Reuses the same hero image and verified coordinates.
-    id: 'u2l2-color-spy', kind: 'color-spy', bg: bgU2L2ColorParade, teacher: 'I Spy! Find the color I say.', who: 'pip',
-    spots: [
-      { colorWord: 'GREEN', colorHex: '#22C55E', label: 'Leaf', left: '18%', top: '48%' },
-      { colorWord: 'ORANGE', colorHex: '#F97316', label: 'Orange', left: '48%', top: '78%' },
-      { colorWord: 'PURPLE', colorHex: '#A855F7', label: 'Grapes', left: '82%', top: '68%' },
-    ],
-    clueOrder: ['ORANGE', 'PURPLE', 'GREEN'],
-  },
-  {
-    id: 'u2l2-model-g', kind: 'sound-model', bg: bgU2L2SoundGarden, who: 'willow', letter: 'G', phoneme: '/g/', sound: 'guh', teacher: 'Willow models the /g/ sound! Listen first: /g/ /g/ Green. /g/ /g/ Grapes.',
-    anchors: [
-      { word: 'Green', emoji: '\u{1F49A}' },
-      { word: 'Grapes', emoji: '\u{1F347}' },
-      { word: 'Goat', emoji: '\u{1F410}' },
+    // The question chunk, modeled before anyone has to use it.
+    id: 'u2l2-question-model', kind: 'listen-repeat-cards', bg: bgU2L2Meadow, teacher: 'Listen to the question and the answer. Then say them!',
+    cards: [
+      { who: 'pip', sentence: 'What color is it?', img: itemFrog, imgLabel: 'Frog' },
+      { who: 'willow', sentence: "It's green!", img: itemFrog, imgLabel: 'Green' },
+      { who: 'pip', sentence: 'What color is it?', img: itemCarrot, imgLabel: 'Carrot' },
+      { who: 'leo', sentence: "It's orange!", img: itemCarrot, imgLabel: 'Orange' },
     ],
   },
-  { id: 'u2l2-trace-g', kind: 'trace', bg: bgU2L2SoundGarden, who: 'willow', letter: 'G', phoneme: '/g/', word: 'Green', teacher: 'Trace the great G. /g/ /g/ Green!' },
+
+  /* ---- Signature game ---- */
   {
-    id: 'u2l2-model-o', kind: 'sound-model', bg: bgU2L2SoundGarden, who: 'leo', letter: 'O', phoneme: '/o/', sound: 'ah', teacher: 'Leo models the /o/ sound! Listen first: /o/ /o/ Orange. /o/ /o/ Octopus.',
-    anchors: [
-      { word: 'Orange', emoji: '\u{1F34A}' },
-      { word: 'Octopus', emoji: '\u{1F419}' },
-      { word: 'Owl', emoji: '\u{1F989}' },
+    id: 'u2l2-paint-pots', kind: 'color-mix', bg: bgU2L2PaintLab, who: 'pip', potImg: itemPaintPot,
+    teacher: 'Magic Paint Pots! Mix two paints, then name the new color.',
+    paints: [
+      { colorWord: 'RED', colorHex: '#EF4444' },
+      { colorWord: 'BLUE', colorHex: '#3B82F6' },
+      { colorWord: 'YELLOW', colorHex: '#FACC15' },
+    ],
+    answers: [
+      { colorWord: 'GREEN', colorHex: GREEN },
+      { colorWord: 'ORANGE', colorHex: ORANGE },
+      { colorWord: 'PURPLE', colorHex: PURPLE },
+    ],
+    rounds: [
+      { a: 'BLUE', b: 'YELLOW', result: 'GREEN', resultHex: GREEN, who: 'willow', img: itemFrog, label: 'Frog', line: 'The frog is green!' },
+      { a: 'RED', b: 'YELLOW', result: 'ORANGE', resultHex: ORANGE, who: 'leo', img: itemCarrot, label: 'Carrot', line: 'The carrot is orange!' },
+      { a: 'RED', b: 'BLUE', result: 'PURPLE', resultHex: PURPLE, who: 'mia', img: itemGrapes, label: 'Grapes', line: 'The grapes are purple!' },
     ],
   },
-  { id: 'u2l2-trace-o', kind: 'trace', bg: bgU2L2SoundGarden, who: 'leo', letter: 'O', phoneme: '/o/', word: 'Orange', teacher: 'Trace the round O. /o/ /o/ Orange!' },
+
+  /* ---- Controlled practice ---- */
   {
-    id: 'u2l2-model-p', kind: 'sound-model', bg: bgU2L2SoundGarden, who: 'mia', letter: 'P', phoneme: '/p/', sound: 'puh', teacher: 'Mia models the /p/ sound! Listen first: /p/ /p/ Purple. /p/ /p/ Plum.',
-    anchors: [
-      { word: 'Purple', emoji: '\u{1F49C}' },
-      { word: 'Plum', emoji: '\u{1F351}' },
-      { word: 'Pig', emoji: '\u{1F437}' },
-    ],
-  },
-  { id: 'u2l2-trace-p', kind: 'trace', bg: bgU2L2SoundGarden, who: 'mia', letter: 'P', phoneme: '/p/', word: 'Purple', teacher: 'Trace the proud P. /p/ /p/ Purple!' },
-  {
-    id: 'u2l2-sort-colors', kind: 'color-sort', bg: bgMeadow, teacher: "Listen for the sound! /g/reen, /o/range, /p/urple — now drag each thing to its color!",
+    id: 'u2l2-sort-colors', kind: 'color-sort', bg: bgU2L2Meadow, teacher: 'Listen, then drag each thing to its color!',
     targets: [
-      { colorWord: 'GREEN', colorHex: '#22C55E', who: 'willow' },
-      { colorWord: 'ORANGE', colorHex: '#F97316', who: 'leo' },
-      { colorWord: 'PURPLE', colorHex: '#A855F7', who: 'mia' },
+      { colorWord: 'GREEN', colorHex: GREEN, who: 'willow' },
+      { colorWord: 'ORANGE', colorHex: ORANGE, who: 'leo' },
+      { colorWord: 'PURPLE', colorHex: PURPLE, who: 'mia' },
     ],
     items: [
-      { word: 'leaf', emoji: '\u{1F343}', colorWord: 'GREEN' },
-      { word: 'frog', emoji: '\u{1F438}', colorWord: 'GREEN' },
-      { word: 'orange', emoji: '\u{1F34A}', colorWord: 'ORANGE' },
-      { word: 'carrot', emoji: '\u{1F955}', colorWord: 'ORANGE' },
-      { word: 'grapes', emoji: '\u{1F347}', colorWord: 'PURPLE' },
-      { word: 'balloon', emoji: '\u{1F388}', colorWord: 'PURPLE' },
+      { word: 'frog', img: itemFrog, emoji: '\u{1F438}', colorWord: 'GREEN' },
+      { word: 'leaf', img: itemLeaf, emoji: '\u{1F343}', colorWord: 'GREEN' },
+      { word: 'carrot', img: itemCarrot, emoji: '\u{1F955}', colorWord: 'ORANGE' },
+      { word: 'pumpkin', img: itemPumpkin, emoji: '\u{1F383}', colorWord: 'ORANGE' },
+      { word: 'grapes', img: itemGrapes, emoji: '\u{1F347}', colorWord: 'PURPLE' },
+      { word: 'plum', img: itemPlum, emoji: '\u{1F7E3}', colorWord: 'PURPLE' },
+    ],
+  },
+
+  /* ---- Phonics micro-moment: /g/ ---- */
+  {
+    id: 'u2l2-model-g', kind: 'sound-model', bg: bgU2L2Green, who: 'willow', letter: 'G', phoneme: '/g/', sound: 'guh',
+    teacher: 'Listen to the /g/ sound. Green, grapes, goat!',
+    anchors: [
+      { word: 'green', emoji: '\u{1F49A}', img: itemLeaf },
+      { word: 'grapes', emoji: '\u{1F347}', img: itemGrapes },
+      { word: 'goat', emoji: '\u{1F410}' },
+    ],
+  },
+  { id: 'u2l2-trace-g', kind: 'trace', bg: bgU2L2Green, who: 'willow', letter: 'G', phoneme: '/g/', word: 'green', teacher: 'Trace the big G! Say /g/ /g/ as you draw.' },
+
+  /* ---- Games ---- */
+  {
+    id: 'u2l2-color-spy', kind: 'color-spy', bg: bgU2L2Meadow, who: 'pip', teacher: 'I Spy! Find the color Pip says.',
+    spots: [
+      { colorWord: 'GREEN', colorHex: GREEN, label: 'Frog', left: '11%', top: '74%' },
+      { colorWord: 'ORANGE', colorHex: ORANGE, label: 'Carrots', left: '55%', top: '84%' },
+      { colorWord: 'PURPLE', colorHex: PURPLE, label: 'Grapes', left: '91%', top: '58%' },
+    ],
+    clueOrder: ['PURPLE', 'GREEN', 'ORANGE'],
+  },
+  {
+    id: 'u2l2-dash-purple', kind: 'dash', bg: bgU2L2Meadow, teacher: 'Mia Dash! Tap only the PURPLE things. Get 6!', who: 'mia', targetLetter: 'PURPLE', targetPhoneme: '', goal: 6, seconds: 40,
+    items: [
+      { word: 'grapes', letter: 'PURPLE', img: itemGrapes, emoji: '\u{1F347}' },
+      { word: 'plum', letter: 'PURPLE', img: itemPlum, emoji: '\u{1F7E3}' },
+      { word: 'frog', letter: 'GREEN', img: itemFrog, emoji: '\u{1F438}' },
+      { word: 'leaf', letter: 'GREEN', img: itemLeaf, emoji: '\u{1F343}' },
+      { word: 'carrot', letter: 'ORANGE', img: itemCarrot, emoji: '\u{1F955}' },
+      { word: 'pumpkin', letter: 'ORANGE', img: itemPumpkin, emoji: '\u{1F383}' },
     ],
   },
   {
-    id: 'u2l2-color-quiz', kind: 'color-quiz', bg: bgMeadow, teacher: 'Which one is the right color? Tap it!',
+    id: 'u2l2-color-quiz', kind: 'color-quiz', bg: bgU2L2Meadow, teacher: 'Listen! Tap the right one.',
     rounds: [
-      { colorWord: 'GREEN', colorHex: '#22C55E', who: 'willow', correctImg: itemLeaf, correctLabel: 'Leaf', distractors: [{ img: itemOrange, label: 'Orange' }, { img: itemGrapes, label: 'Grapes' }] },
-      { colorWord: 'ORANGE', colorHex: '#F97316', who: 'leo', correctImg: itemOrange, correctLabel: 'Orange', distractors: [{ img: itemLeaf, label: 'Leaf' }, { img: itemGrapes, label: 'Grapes' }] },
-      { colorWord: 'PURPLE', colorHex: '#A855F7', who: 'mia', correctImg: itemGrapes, correctLabel: 'Grapes', distractors: [{ img: itemLeaf, label: 'Leaf' }, { img: itemOrange, label: 'Orange' }] },
+      { colorWord: 'GREEN', colorHex: GREEN, who: 'willow', correctImg: itemLeaf, correctLabel: 'Leaf', distractors: [{ img: itemPumpkin, label: 'Pumpkin' }, { img: itemPlum, label: 'Plum' }] },
+      { colorWord: 'ORANGE', colorHex: ORANGE, who: 'leo', correctImg: itemPumpkin, correctLabel: 'Pumpkin', distractors: [{ img: itemPlum, label: 'Plum' }, { img: itemLeaf, label: 'Leaf' }] },
+      { colorWord: 'PURPLE', colorHex: PURPLE, who: 'mia', correctImg: itemPlum, correctLabel: 'Plum', distractors: [{ img: itemLeaf, label: 'Leaf' }, { img: itemPumpkin, label: 'Pumpkin' }] },
     ],
   },
+
+  /* ---- Speaking: the child answers, then asks ---- */
   {
-    id: 'u2l2-color-friends', kind: 'color-friends', bg: bgMeadow, teacher: 'Rainbow time! Color each thing its real color!',
-    vocabItems: [
-      { label: 'Leaf', targetColorHex: '#22C55E', targetColorName: 'Green', outline: 'apple' },
-      { label: 'Orange', targetColorHex: '#F97316', targetColorName: 'Orange', outline: 'sun' },
-      { label: 'Grapes', targetColorHex: '#A855F7', targetColorName: 'Purple', outline: 'water' },
-    ],
-  },
-  {
-    id: 'u2l2-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Listen! Tap the missing letter to make the word.',
-    rounds: [
-      { word: 'green', blankIndex: 0, answer: 'G', choices: ['G', 'O', 'P'], img: itemLeaf, emoji: '\u{1F343}' },
-      { word: 'orange', blankIndex: 0, answer: 'O', choices: ['G', 'O', 'P'], img: itemOrange, emoji: '\u{1F34A}' },
-      { word: 'purple', blankIndex: 0, answer: 'P', choices: ['G', 'O', 'P'], img: itemGrapes, emoji: '\u{1F347}' },
-    ],
-  },
-  {
-    id: 'u2l2-who', kind: 'listen-repeat-cards', bg: bgU2L2ColorParade, teacher: 'Listen to each friend, then repeat!',
-    cards: [
-      { who: 'willow', sentence: 'The leaf is green!', img: itemLeaf, imgLabel: 'Leaf' },
-      { who: 'leo', sentence: 'The orange is orange!', img: itemOrange, imgLabel: 'Orange' },
-      { who: 'mia', sentence: 'The grapes are purple!', img: itemGrapes, imgLabel: 'Grapes' },
-    ],
-  },
-  {
-    // Models all six simple sentences before join-stage asks for the same
-    // ones from memory with no model — the exact model-then-produce order
-    // Lesson 1 only arrived at after a separate round of direct feedback.
-    id: 'u2l2-sentence-practice', kind: 'listen-repeat-cards', bg: bgU2L2ColorParade, teacher: 'Listen to each sentence, then repeat!',
-    cards: [
-      { who: 'willow', sentence: "It's green!", img: itemLeaf, imgLabel: 'Green' },
-      { who: 'leo', sentence: "It's orange!", img: itemOrange, imgLabel: 'Orange' },
-      { who: 'mia', sentence: "It's purple!", img: itemGrapes, imgLabel: 'Purple' },
-      { who: 'willow', sentence: 'I like green!', img: itemLeaf, imgLabel: 'Green' },
-      { who: 'leo', sentence: 'I like orange!', img: itemOrange, imgLabel: 'Orange' },
-      { who: 'mia', sentence: 'I like purple!', img: itemGrapes, imgLabel: 'Purple' },
-    ],
-  },
-  {
-    id: 'u2l2-dash-green', kind: 'dash', bg: bgU2L2DashArena, teacher: 'Willow Dash! Tap only the GREEN things as they run by. Get 6 rings!', who: 'willow', targetLetter: 'GREEN', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'leaf', letter: 'GREEN', emoji: '\u{1F343}' },
-      { word: 'frog', letter: 'GREEN', emoji: '\u{1F438}' },
-      { word: 'orange', letter: 'ORANGE', emoji: '\u{1F34A}' },
-      { word: 'carrot', letter: 'ORANGE', emoji: '\u{1F955}' },
-      { word: 'grapes', letter: 'PURPLE', emoji: '\u{1F347}' },
-      { word: 'balloon', letter: 'PURPLE', emoji: '\u{1F388}' },
-    ],
-  },
-  {
-    id: 'u2l2-dash-orange', kind: 'dash', bg: bgU2L2DashArena, teacher: 'Leo Dash! Tap only the ORANGE things as they run by. Get 6 rings!', who: 'leo', targetLetter: 'ORANGE', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'orange', letter: 'ORANGE', emoji: '\u{1F34A}' },
-      { word: 'carrot', letter: 'ORANGE', emoji: '\u{1F955}' },
-      { word: 'grapes', letter: 'PURPLE', emoji: '\u{1F347}' },
-      { word: 'balloon', letter: 'PURPLE', emoji: '\u{1F388}' },
-      { word: 'leaf', letter: 'GREEN', emoji: '\u{1F343}' },
-      { word: 'frog', letter: 'GREEN', emoji: '\u{1F438}' },
-    ],
-  },
-  {
-    id: 'u2l2-dash-purple', kind: 'dash', bg: bgU2L2DashArena, teacher: 'Mia Dash! Tap only the PURPLE things as they run by. Get 6 rings!', who: 'mia', targetLetter: 'PURPLE', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'grapes', letter: 'PURPLE', emoji: '\u{1F347}' },
-      { word: 'balloon', letter: 'PURPLE', emoji: '\u{1F388}' },
-      { word: 'leaf', letter: 'GREEN', emoji: '\u{1F343}' },
-      { word: 'frog', letter: 'GREEN', emoji: '\u{1F438}' },
-      { word: 'orange', letter: 'ORANGE', emoji: '\u{1F34A}' },
-      { word: 'carrot', letter: 'ORANGE', emoji: '\u{1F955}' },
-    ],
-  },
-  {
-    // New: "Simon Says" — see u2l1-color-simon for the research/reasoning.
-    id: 'u2l2-color-simon', kind: 'color-simon', bg: bgMeadow, teacher: 'Simon says... watch, then copy the color pattern!', maxRounds: 4,
-    colors: [
-      { colorWord: 'GREEN', colorHex: '#22C55E', who: 'willow' },
-      { colorWord: 'ORANGE', colorHex: '#F97316', who: 'leo' },
-      { colorWord: 'PURPLE', colorHex: '#A855F7', who: 'mia' },
-    ],
-  },
-  {
-    // Each question shows the actual object it's asking about, same fix as
-    // u2l1-join-stage above.
-    id: 'u2l2-join-stage', kind: 'join-stage', bg: bgU2L2ColorParade, teacher: 'Your turn! When it says YOU, say the color.', cast: ['pip', 'willow', 'leo', 'mia'],
+    id: 'u2l2-you-answer', kind: 'join-stage', bg: bgU2L2Meadow, teacher: 'Your turn! When it says YOU, say the color.', cast: ['pip', 'willow', 'leo', 'mia'],
     turns: [
-      { who: 'pip', line: 'What color is the leaf?', bg: bgU2L2GreenOnly },
-      { who: 'student', line: "It's ______.", bg: bgU2L2GreenOnly },
-      { who: 'leo', line: 'Do you like purple?', bg: bgU2L2PurpleOnly },
-      { who: 'student', line: 'I like ______. / I don’t like ______.', bg: bgU2L2PurpleOnly },
-      { who: 'mia', line: 'What color are the grapes?', bg: bgU2L2PurpleOnly },
-      { who: 'student', line: "It's ______.", bg: bgU2L2PurpleOnly },
+      { who: 'pip', line: 'What color is the frog?', bg: bgU2L2Green, arrow: { left: '50%', top: '42%' } },
+      { who: 'student', line: "It's …", bg: bgU2L2Green, arrow: { left: '50%', top: '42%' } },
+      { who: 'pip', line: 'What color is the carrot?', bg: bgU2L2Orange, arrow: { left: '38%', top: '28%' } },
+      { who: 'student', line: "It's …", bg: bgU2L2Orange, arrow: { left: '38%', top: '28%' } },
+      { who: 'pip', line: 'What color are the grapes?', bg: bgU2L2Purple, arrow: { left: '38%', top: '38%' } },
+      { who: 'student', line: "They're …", bg: bgU2L2Purple, arrow: { left: '38%', top: '38%' } },
     ],
   },
   {
-    id: 'u2l2-storybook', kind: 'flipbook', bg: bgU2L2ColorParade, title: 'More Colors, More Friends',
+    // Role swap: now the child asks the question.
+    id: 'u2l2-you-ask', kind: 'join-stage', bg: bgU2L2Meadow, teacher: 'Now YOU ask! Say: What color is it?', cast: ['willow', 'leo', 'mia'],
+    turns: [
+      { who: 'student', line: 'Ask Leo: What color is it?', bg: bgU2L2Orange, arrow: { left: '38%', top: '28%' } },
+      { who: 'leo', line: "It's orange!", bg: bgU2L2Orange },
+      { who: 'student', line: 'Ask Mia: What color is it?', bg: bgU2L2Purple, arrow: { left: '38%', top: '38%' } },
+      { who: 'mia', line: "It's purple!", bg: bgU2L2Purple },
+      { who: 'student', line: 'Ask your teacher: What color is it?', bg: bgU2L2Green, arrow: { left: '50%', top: '42%' } },
+    ],
+  },
+
+  /* ---- Game break ---- */
+  {
+    id: 'u2l2-color-simon', kind: 'color-simon', bg: bgU2L2PaintLab, teacher: 'Simon says... watch, then copy the colors!', maxRounds: 4,
+    colors: [
+      { colorWord: 'GREEN', colorHex: GREEN, who: 'willow' },
+      { colorWord: 'ORANGE', colorHex: ORANGE, who: 'leo' },
+      { colorWord: 'PURPLE', colorHex: PURPLE, who: 'mia' },
+    ],
+  },
+  {
+    id: 'u2l2-memory', kind: 'memory', bg: bgU2L2Meadow, teacher: 'Find the pairs! Say the color of each one.',
+    pairs: [
+      { id: 'frog', label: 'Green', emoji: '\u{1F438}', img: itemFrog },
+      { id: 'carrot', label: 'Orange', emoji: '\u{1F955}', img: itemCarrot },
+      { id: 'grapes', label: 'Purple', emoji: '\u{1F347}', img: itemGrapes },
+      { id: 'pumpkin', label: 'Orange', emoji: '\u{1F383}', img: itemPumpkin },
+    ],
+  },
+
+  /* ---- Personal production ---- */
+  {
+    id: 'u2l2-my-color', kind: 'join-stage', bg: bgU2L2Meadow, teacher: 'What color do YOU like? Say: I like …', cast: ['mia', 'leo', 'pip'],
+    turns: [
+      { who: 'mia', line: 'I like purple! What color do you like?' },
+      { who: 'student', line: 'I like …' },
+      { who: 'leo', line: "I like orange! I don't like green." },
+      { who: 'student', line: "I like … I don't like …" },
+    ],
+  },
+
+  /* ---- Story payoff ---- */
+  {
+    id: 'u2l2-storybook', kind: 'flipbook', bg: bgU2L2Meadow, title: 'The Magic Paint Pots',
     pages: [
-      { who: 'willow', img: bgU2L2GreenOnly, text: 'Willow found a big green leaf on a bush!' },
-      { who: 'leo', img: bgU2L2OrangeOnly, text: 'Then Leo found a bright orange orange on a tree.' },
-      { who: 'mia', img: bgU2L2PurpleOnly, text: 'Mia found a bunch of purple grapes too!' },
-      { who: 'pip', img: bgU2L2ColorParade, text: 'Green, orange, purple — so many colors with friends!' },
+      { who: 'pip', img: bgU2L2PaintLab, text: 'Pip has red, blue and yellow paint.' },
+      { who: 'willow', img: bgU2L2Green, text: 'Blue and yellow make green. The frog is green!' },
+      { who: 'leo', img: bgU2L2Orange, text: 'Red and yellow make orange. The carrot is orange!' },
+      { who: 'mia', img: bgU2L2Purple, text: 'Red and blue make purple. The grapes are purple!' },
+      { who: 'pip', img: bgU2L2Meadow, text: 'Now the meadow has six colors!' },
     ],
     checkpoints: [
-      { afterPage: 0, who: 'willow', question: 'What color is the leaf?', options: ['Green', 'Orange', 'Purple'], answer: 'Green' },
-      { afterPage: 2, who: 'mia', question: 'What color are the grapes?', options: ['Green', 'Orange', 'Purple'], answer: 'Purple' },
+      { afterPage: 1, who: 'willow', question: 'What color is the frog?', options: ['Green', 'Orange', 'Purple'], answer: 'Green' },
+      { afterPage: 3, who: 'mia', question: 'What color are the grapes?', options: ['Green', 'Orange', 'Purple'], answer: 'Purple' },
     ],
   },
   {
-    id: 'u2l2-roleplay-green', kind: 'roleplay', bg: bgU2L2GreenOnly, teacher: 'Story time! Listen to Pip and Willow, then repeat.', cast: ['pip', 'willow'],
-    script: [
-      { who: 'willow', line: "It's green!", repeat: true },
-      { who: 'pip', line: 'I like green!', repeat: true },
+    // Reading readiness: the printed word is the prompt.
+    id: 'u2l2-read-words', kind: 'word-picture-match', bg: bgU2L2Meadow, teacher: 'Read the word. Tap the picture!',
+    rounds: [
+      { word: 'frog', who: 'willow', correctImg: itemFrog, correctLabel: 'Frog', distractors: [{ img: itemCarrot, label: 'Carrot' }, { img: itemGrapes, label: 'Grapes' }] },
+      { word: 'carrot', who: 'leo', correctImg: itemCarrot, correctLabel: 'Carrot', distractors: [{ img: itemPlum, label: 'Plum' }, { img: itemFrog, label: 'Frog' }] },
+      { word: 'grapes', who: 'mia', correctImg: itemGrapes, correctLabel: 'Grapes', distractors: [{ img: itemFrog, label: 'Frog' }, { img: itemPumpkin, label: 'Pumpkin' }] },
     ],
   },
-  {
-    id: 'u2l2-roleplay-orange', kind: 'roleplay', bg: bgU2L2OrangeOnly, teacher: 'Now listen to them talk about the orange, then repeat.', cast: ['pip', 'leo'],
-    script: [
-      { who: 'leo', line: "It's orange!", repeat: true },
-      { who: 'pip', line: "I don't like orange!", repeat: true },
-    ],
-  },
-  {
-    id: 'u2l2-roleplay-purple', kind: 'roleplay', bg: bgU2L2PurpleOnly, teacher: 'Now listen to them talk about the grapes, then repeat.', cast: ['pip', 'mia'],
-    script: [
-      { who: 'mia', line: "It's purple!", repeat: true },
-      { who: 'pip', line: 'I like purple!', repeat: true },
-    ],
-  },
-  {
-    id: 'u2l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the colorful garden! Sing along together.',
-    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
-    lineDurationsMs: [3580, 4020, 4980, 7482],
-    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
-    lyrics: [
-      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
-      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
-      { who: 'mia', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
-    ],
-  },
-  { id: 'u2l2-finale', kind: 'finale', bg: bgU2L2ColorParade, who: 'pip', line: 'You did it! You can name green, orange, and purple! \u{1F308}' },
+
+  /* ---- Rainbow parade ending (this lesson's own, not the shared goodbye song) ---- */
+  { id: 'u2l2-finale', kind: 'finale', bg: bgU2L2Meadow, who: 'pip', line: 'You mixed the magic paints! Green, orange, purple — goodbye, friends!' },
 ];
 
 /* =============================================================================

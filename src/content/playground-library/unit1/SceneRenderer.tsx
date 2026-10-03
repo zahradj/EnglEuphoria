@@ -48,6 +48,7 @@ import { TrainRecallScene } from './scene-components/TrainRecallScene';
 import { ShapeSortScene } from './scene-components/ShapeSortScene';
 import { ColorSpyScene } from './scene-components/ColorSpyScene';
 import { ColorSimonScene } from './scene-components/ColorSimonScene';
+import { ColorMixScene } from './scene-components/ColorMixScene';
 import { FlipbookScene } from './scene-components/FlipbookScene';
 import { SongScene } from './scene-components/SongScene';
 import { FinaleScene } from './scene-components/FinaleScene';
@@ -203,6 +204,7 @@ export function SceneRenderer(props: {
     case 'shape-sort': return <ShapeSortScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} />;
     case 'color-spy': return <ColorSpyScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'color-simon': return <ColorSimonScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
+    case 'color-mix': return <ColorMixScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'join-stage': return <JoinStageScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;

@@ -24,6 +24,17 @@ export const LESSON_GRAMMAR: Record<string, LessonGrammarEntry> = {
     ],
     examples: ["It's red!", "It's blue!", "It's yellow!", 'I like red!', 'I don’t like blue!'],
   },
+  // Pre-A1 Unit 2 Lesson 2 — Green, Orange, Purple! (The Magic Paint Pots)
+  'lep1-rich-2-2': {
+    pattern: 'What color is it? — It\'s + color',
+    cefr: 'Pre-A1',
+    forms: [
+      { label: 'Ask the color', formula: 'What color is it?' },
+      { label: 'Say the color', formula: "It's + green / orange / purple" },
+      { label: 'Say what you like', formula: 'I like + color' },
+    ],
+    examples: ['What color is it?', "It's green!", "It's orange!", 'I like purple!', 'I don’t like green!'],
+  },
   // A1 Unit 9 Lesson 1 — Magic Castle: rooms and furniture
   'castle-rich-9-1': {
     pattern: 'There is / There is no',

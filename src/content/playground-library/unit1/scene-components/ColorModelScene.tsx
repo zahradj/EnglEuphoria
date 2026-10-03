@@ -17,7 +17,9 @@ import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
  * practice/matching stage (ColorSortScene) that follows it. */
 
 function buildColorSentence(colorWord: string, exampleWord: string): string {
-  return `The ${exampleWord.toLowerCase()} is ${colorWord.toLowerCase()}.`;
+  // "The grapes are purple", not "is" (plural nouns ending in -s).
+  const w = exampleWord.toLowerCase();
+  return `The ${w} ${/[^s]s$/.test(w) ? 'are' : 'is'} ${colorWord.toLowerCase()}.`;
 }
 
 /** Per-item progression, three real steps rather than a single word:

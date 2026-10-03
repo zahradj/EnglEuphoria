@@ -53,5 +53,10 @@
     "path": "public/welcome-town/audio/hello-song.mp3",
     "bytes": 321037,
     "sha256": "188bf6ecbf44723ca514ff49f41bf5a49ae92b20d17cbc588b2e390fff1a2c17"
+  },
+  "u2l2-colors": {
+    "path": "public/lep1/audio/colors-song-u2l2.mp3",
+    "bytes": 321037,
+    "sha256": "b4e8d2feede45f34660192ec746037dfb4ad21e2219ab368e59ef64109c853cd"
   }
 }
