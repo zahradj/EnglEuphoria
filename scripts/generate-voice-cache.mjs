@@ -313,6 +313,11 @@ const UNIT1_EXTRACTORS = {
   'color-simon': (s) => (s.colors ?? []).map((c) => [c.who, c.colorWord]),
   // WordPictureMatchScene.tsx: says the word, then "Yes! <word>!" (had no extractor).
   'word-picture-match': (s) => (s.rounds ?? []).flatMap((r) => [[r.who ?? 'pip', r.word], [r.who ?? 'pip', `Yes! ${r.word}!`]]),
+  // Mirrors SecretCardScene.tsx's secretCardLines().
+  'secret-card': (s) => [
+    [s.who, 'I have a secret card. Ask me!'], [s.who, 'Yes, it is!'], [s.who, "No, it isn't!"],
+    ...(s.rounds ?? []).map((r) => s.cards?.[r.secret]).filter(Boolean).map((c) => [s.who, `You found it! It's a ${c.colorWord.toLowerCase()} ${c.shape}!`]),
+  ],
   // Mirrors ShapeBuilderScene.tsx's shapeBuilderLines().
   'shape-builder': (s) => [
     [s.who, 'What shape is it?'],
