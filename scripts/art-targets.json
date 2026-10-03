@@ -985,5 +985,12 @@
       "public/lep1/items/item-doll.png"
     ],
     "prompt": "one simple wooden front door with a round knob, closed, seen straight on, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-room-empty-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference image (bold dark outlines, soft flat colours, friendly picture-book look). The same cosy children's playroom as the reference — warm wooden floor and soft yellow walls filling the whole picture edge to edge, the window with curtains, a round rug — but EMPTY and calm: no characters, no toys, no toy box, nothing on the floor. Only the plain room. No text, letters or numbers anywhere."
   }
 ]

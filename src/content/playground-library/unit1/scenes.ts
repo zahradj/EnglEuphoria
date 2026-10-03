@@ -4273,6 +4273,7 @@ const bgU3L1Doll = `${A}/scenes/bg-u3l1-doll-wide.png`;
 const bgU3L1Play = `${A}/scenes/bg-u3l1-play-wide.png`;
 const bgU3L1Shop = `${A}/scenes/bg-u3l1-shop-wide.png`;
 const bgU3L1Shelf = `${A}/scenes/bg-u3l1-shelf-wide.png`;
+const bgU3L1Room = `${A}/scenes/bg-u3l1-room-empty-wide.png`;
 const itemBallRed = `${A}/items/item-ball-red.png`;
 const itemBallBlue = `${A}/items/item-ball-blue.png`;
 const itemBallYellow = `${A}/items/item-ball-yellow.png`;
@@ -4319,7 +4320,7 @@ export const LESSON_U3L1_SCENES: Scene[] = [
 
   /* ---- New words ---- */
   {
-    id: 'u3l1-vocab-toys', kind: 'toy-model', bg: bgU3L1Playroom,
+    id: 'u3l1-vocab-toys', kind: 'toy-model', bg: bgU3L1Room,
     teacher: 'Tap a toy to hear it, say it back, then say the color too: "It\'s a red ball!"',
     items: [
       { toyWord: 'BALL', colorWord: 'RED', colorHex: C4.RED, who: 'bella', img: itemBallRed },
@@ -4368,7 +4369,7 @@ export const LESSON_U3L1_SCENES: Scene[] = [
 
   /* ---- The sound: D ---- */
   {
-    id: 'u3l1-model-d', kind: 'sound-model', bg: bgU3L1Playroom, who: 'mia', letter: 'D', phoneme: '/d/', sound: 'duh',
+    id: 'u3l1-model-d', kind: 'sound-model', bg: bgU3L1Room, who: 'mia', letter: 'D', phoneme: '/d/', sound: 'duh',
     teacher: 'D says /d/ — like doll! Doll, dog, duck!',
     anchors: [
       { word: 'doll', emoji: '\u{1FA86}', img: itemDoll },
@@ -4376,11 +4377,11 @@ export const LESSON_U3L1_SCENES: Scene[] = [
       { word: 'duck', emoji: '\u{1F986}', img: itemDuck },
     ],
   },
-  { id: 'u3l1-trace-d', kind: 'trace', bg: bgU3L1Playroom, who: 'mia', letter: 'D', phoneme: '/d/', word: 'doll', teacher: 'Trace the D! /d/ /d/ doll!' },
+  { id: 'u3l1-trace-d', kind: 'trace', bg: bgU3L1Room, who: 'mia', letter: 'D', phoneme: '/d/', word: 'doll', teacher: 'Trace the D! /d/ /d/ doll!' },
 
   /* ---- Practice games ---- */
   {
-    id: 'u3l1-sort-toys', kind: 'color-sort', bg: bgU3L1Playroom, teacher: 'Tidy up! Put each toy in its box: balls, cars, dolls. Say each one!',
+    id: 'u3l1-sort-toys', kind: 'color-sort', bg: bgU3L1Room, teacher: 'Tidy up! Put each toy in its box: balls, cars, dolls. Say each one!',
     targets: [
       { colorWord: 'BALL', colorHex: C4.RED, who: 'bella' },
       { colorWord: 'CAR', colorHex: C4.BLUE, who: 'willow' },
@@ -4410,13 +4411,15 @@ export const LESSON_U3L1_SCENES: Scene[] = [
     id: 'u3l1-spin', kind: 'spin-wheel', bg: bgU3L1Shelf, title: 'Spin and say!',
     teacher: 'Have the student spin the wheel and say the toy with its color: "It\'s a red ball!" If you prefer, tap a number instead.',
     items: [
-      { label: "It's a red ball!", left: '22%', top: '22%' },
-      { label: "It's a blue car!", left: '50%', top: '22%' },
-      { label: "It's a green doll!", left: '78%', top: '22%' },
-      { label: "It's a yellow ball!", left: '22%', top: '52%' },
-      { label: "It's a purple doll!", left: '50%', top: '52%' },
-      { label: "It's an orange car!", left: '78%', top: '52%' },
+      { label: "It's a red ball!", left: '24.5%', top: '15%' },
+      { label: "It's a blue car!", left: '50%', top: '17%' },
+      { label: "It's a green doll!", left: '76%', top: '15%' },
+      { label: "It's a yellow ball!", left: '24.5%', top: '43%' },
+      { label: "It's a purple doll!", left: '50%', top: '42%' },
+      { label: "It's an orange car!", left: '76%', top: '45%' },
     ],
+    // The wheel sits on the bottom shelf (its toys aren't used here), clear of every badge.
+    wheelAt: { left: '50%', top: '83%' },
   },
   {
     id: 'u3l1-dash-d', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Mia Dash! Tap only the /d/ words: doll, dog, duck, door. Get 6!', who: 'mia', targetLetter: 'D', targetPhoneme: '/d/', goal: 6, seconds: 40,
@@ -4465,7 +4468,7 @@ export const LESSON_U3L1_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u3l1-memory', kind: 'memory', bg: bgU3L1Playroom, teacher: 'Find the pairs! Say each one: "A red ball!"',
+    id: 'u3l1-memory', kind: 'memory', bg: bgU3L1Room, teacher: 'Find the pairs! Say each one: "A red ball!"',
     pairs: [
       { id: 'ball', label: 'Red ball', emoji: '\u{26BD}', img: itemBallRed },
       { id: 'car', label: 'Blue car', emoji: '\u{1F697}', img: itemCar },

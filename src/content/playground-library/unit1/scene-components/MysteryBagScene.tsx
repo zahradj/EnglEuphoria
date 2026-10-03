@@ -118,7 +118,7 @@ export function MysteryBagScene({ scene, onWin, onLose, onNext, sync }: { scene:
           draggable={false}
           className="absolute left-1/2 w-[46%] -translate-x-1/2 object-contain transition-all duration-700 ease-out"
           style={{
-            top: revealed ? '-18%' : '18%',
+            top: revealed ? '-18%' : '30%',
             filter: revealed ? 'drop-shadow(0 8px 14px rgba(0,0,0,.35))' : 'brightness(0) opacity(0.85)',
             transform: `translateX(-50%) ${revealed ? 'scale(1.25) rotate(-4deg)' : 'scale(1)'}`,
           }}
