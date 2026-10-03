@@ -3,3 +3,4 @@ run 2: 2026-10-02T19:58:50Z re-check the re-recorded clips
 run 3: 2026-10-02T20:05:13Z inline audio
 run 4: 2026-10-02T21:14:24Z after English-lock re-record
 run 5: 2026-10-03T09:53:48Z new Pre-A1 U2 L2 clips
+run 6: 2026-10-03T10:57:12Z new Pre-A1 U2 L3 clips

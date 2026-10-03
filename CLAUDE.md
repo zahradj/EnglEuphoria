@@ -13,3 +13,9 @@
 - **No accent, accurate pronunciation.** Every voice a student or teacher hears must be a standard native American English voice, saying each word correctly.
 - Policy lives in `src/lib/speechPolicy.ts` (mirrored byte-identically in `supabase/functions/_shared/speechPolicy.ts`): approved voices, `approvedVoiceId()`, `normalizeForSpeech()`, `safeVoiceSettings()`, `languageLock()`.
 - Any new TTS call, edge function, catalog voice or bake script MUST use it; `voicePolicy.test.ts` (deploy gate) fails otherwise. Audit: `npx tsx scripts/generate-voice-cache.mjs --audit`. See the Voice engine in `.claude/skills/lesson-quality-gate`.
+
+## Video generation (hard rule — it costs money and is for children; LESSONS only, never games)
+
+- **Never order a generated video (Veo/Gemini, Higgsfield/Seedance, FAL) before the gate passes.** Follow `.claude/skills/video-quality-gate`: brief in `videoBriefs.ts` -> `npm run audit:video` clean -> user-approved start image -> **ONE clip only** -> frame-by-frame review with the user -> only then more clips.
+- Image-to-video only, calm ambient motion, cartoon cast only, silent (no speech/text), <= 8 s, conservative and child-safe. `lintVideoPrompt` in `src/lib/videoPolicy.ts` is enforced server-side; do not bypass it.
+- Higgsfield credentials: only in `scripts/higgsfield/.env.local` (git-ignored), entered by the user locally. Never ask for them in chat, never read, print or commit them.

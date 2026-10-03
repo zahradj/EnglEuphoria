@@ -35,6 +35,18 @@ export const LESSON_GRAMMAR: Record<string, LessonGrammarEntry> = {
     ],
     examples: ['What color is it?', "It's green!", "It's orange!", 'I like purple!', 'I don’t like green!'],
   },
+  // Pre-A1 Unit 2 Lesson 3 — Circle, Square, Triangle!
+  'lep1-rich-2-3': {
+    pattern: 'What shape is it? — It\'s a + shape',
+    cefr: 'Pre-A1',
+    forms: [
+      { label: 'Ask the shape', formula: 'What shape is it?' },
+      { label: 'Say the shape', formula: "It's a + circle / square / triangle" },
+      { label: 'Color and shape', formula: 'a + red + circle' },
+      { label: 'Say what you like', formula: 'I like + circles / squares / triangles' },
+    ],
+    examples: ['What shape is it?', "It's a circle!", "It's a square!", 'A red triangle!', 'I like circles!'],
+  },
   // A1 Unit 9 Lesson 1 — Magic Castle: rooms and furniture
   'castle-rich-9-1': {
     pattern: 'There is / There is no',

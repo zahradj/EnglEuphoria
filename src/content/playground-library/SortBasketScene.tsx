@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { type ActivitySync, useSyncedState } from './sceneActivitySync';
+import { type ActivitySync, isSharedFollower, useSyncedState } from './sceneActivitySync';
 import { Burst, GAME_FONT, GameStyles, HudBar, MarketBackdrop, ProgressPill, PromptChip, TitleRibbon } from './gameTheme';
 import { safeSpeak } from './unit1/audio';
 import * as sfx from './unit1/sfx';
@@ -85,6 +85,8 @@ export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
   const items = allItems.filter((it) => it && Number.isInteger(it.basket) && it.basket >= 0 && it.basket < baskets.length);
   const [state, setState] = useSyncedState<SortState>(sync, INITIAL);
   const isMirror = !!sync?.isSynced && !sync.isAuthority;
+  /** Shared play: only the leader (teacher) runs the automatic sequences; the follower gets them relayed. */
+  const isFollower = isSharedFollower(sync);
 
   // ---- everything below is read defensively: a mirror may hold any snapshot
   const finished = state.finished === true;
@@ -131,7 +133,7 @@ export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
   }, [scene.id]);
 
   useEffect(() => {
-    if (finished && !gemDone.current && !isMirror) {
+    if (finished && !gemDone.current && !isMirror && !isFollower) {
       gemDone.current = true;
       sfx.whoop();
       sfx.gem();
@@ -143,7 +145,7 @@ export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
 
   // ---- model first: say each basket's name aloud, one by one
   useEffect(() => {
-    if (isMirror || finished || !introEnabled || state.introDone === true || !n) return;
+    if (isMirror || isFollower || finished || !introEnabled || state.introDone === true || !n) return;
     const mine = ++token.current;
     (async () => {
       await sleep(500);
@@ -162,7 +164,7 @@ export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
 
   // ---- name each picture aloud as it arrives on the counter
   useEffect(() => {
-    if (isMirror || finished || !introDone || !item || flying) return;
+    if (isMirror || isFollower || finished || !introDone || !item || flying) return;
     const mine = ++token.current;
     (async () => {
       await sleep(450);

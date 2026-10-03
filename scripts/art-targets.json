@@ -507,5 +507,99 @@
       "public/lep1/scenes/bg-u2l2-color-parade.png"
     ],
     "prompt": "One empty round clay paint pot seen from the front and slightly above, the inside is plain white and empty, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l3-town-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-shape-parade.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A sunny little cartoon town square with green grass in front. The same four friends as the references stand on the grass across the lower middle: Pip the orange fox, Bella the white bunny with pink ears, Mia the grey mouse with an orange bow, Leo the yellow lion with a brown mane, all smiling and waving. On the far LEFT a small tower with one big ROUND clock face (a perfect circle, plain hands, no numbers). In the MIDDLE behind the friends a little cottage with one big SQUARE window. On the far RIGHT a tall pole with one big red TRIANGLE flag. Blue sky with soft clouds. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l3-builder-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-shape-parade.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). An outdoor building corner in a sunny meadow: a few colourful wooden toy blocks and a small toolbox sit at the far left and far right edges on the grass, flowers at the edges, blue sky with soft clouds. The whole middle of the picture is open, flat and uncluttered green grass and sky (empty space). No characters, no animals. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l3-clock-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-shape-parade.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Bella the white bunny with pink ears (same design as the reference) stands on the LEFT third of the picture pointing happily at one big ROUND clock (a perfect circle, plain hands, no numbers) on a little wooden post in the middle. Grass and sky; the right third of the picture is open grass. Only one clock. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l3-window-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-shape-parade.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Mia the grey mouse with an orange bow (same design as the reference) stands on the LEFT third of the picture pointing happily at a little cottage in the middle that has one big SQUARE window with four equal sides. Grass and sky; the right third of the picture is open grass. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l3-pizza-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-shape-parade.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Leo the yellow lion with a brown mane (same design as the reference) stands on the LEFT third of the picture holding up one big TRIANGLE slice of pizza, smiling. A picnic blanket on the grass. The right third of the picture is open grass and sky. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-clock.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-shape-parade.png"
+    ],
+    "prompt": "One round wall clock, a perfect CIRCLE with a red rim, white face and two simple hands, no numbers, front view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-window.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-shape-parade.png"
+    ],
+    "prompt": "One SQUARE cottage window with a wooden frame, four equal sides, cross bars and light blue glass, front view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-pizza-slice.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-shape-parade.png"
+    ],
+    "prompt": "One TRIANGLE slice of pizza with cheese and red pepperoni, pointing up, front view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-cookie.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-shape-parade.png"
+    ],
+    "prompt": "One round chocolate chip cookie, a CIRCLE, front view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-present.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-shape-parade.png"
+    ],
+    "prompt": "One SQUARE gift box seen straight from the front, blue paper with a yellow ribbon and bow, four equal sides, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-flag.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-shape-parade.png"
+    ],
+    "prompt": "One red TRIANGLE flag on a short wooden pole, side view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
   }
 ]

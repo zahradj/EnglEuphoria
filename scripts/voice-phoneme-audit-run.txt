@@ -4,3 +4,5 @@ run 3: 2026-10-02T22:26:25Z forced-choice vowel check
 run 4: 2026-10-02T22:30:26Z forced-choice (separator fix)
 run 5: 2026-10-02T22:47:39Z forced-choice, English vowels only
 run 6: 2026-10-03T09:53:48Z new Pre-A1 U2 L2 clips
+run 7: 2026-10-03T10:57:12Z new Pre-A1 U2 L3 clips
+run 8: 2026-10-03T11:19:12Z cookie/present re-record

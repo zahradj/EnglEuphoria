@@ -65,9 +65,18 @@ export function SongScene({ scene, onNext, onWin }: { scene: Extract<Scene, { ki
           {['🎵', '🎶', '🎵', '🎶', '🎵'].map((n, i) => <span key={i} className="absolute text-3xl" style={{ left: `${10 + i * 18}%`, bottom: '45%', animation: `lep1-noteFloat ${3 + (i % 3)}s ease-in-out ${i * 0.4}s infinite` }}>{n}</span>)}
         </div>
       )}
-      <div className="absolute left-1/2 w-[94%] max-w-5xl -translate-x-1/2 rounded-[2rem] bg-white/95 p-8 text-center shadow-2xl ring-8 ring-[#FE6A2F]/40 backdrop-blur-md" style={{ top: 'calc(40*var(--svh,1vh))', zIndex: 15 }}>
+      <div className="absolute left-1/2 w-[94%] max-w-5xl -translate-x-1/2 rounded-[2rem] bg-white/95 p-8 text-center shadow-2xl ring-8 ring-[#FE6A2F]/40 backdrop-blur-md" style={{ top: status === 'error' ? 'calc(16*var(--svh,1vh))' : 'calc(40*var(--svh,1vh))', zIndex: 15 }}>
         {status === 'error' ? (
-          <div className="text-xl font-bold text-red-600">Song unavailable — try again in a moment.</div>
+          // No music file (not made yet, or it failed to load): the words still
+          // work as a chant the teacher and child say together.
+          <>
+            <div className="mb-3 text-sm font-black uppercase tracking-widest text-[#FE6A2F] sm:text-base">🎤 Chant it together — clap the beat!</div>
+            <div className="flex flex-col gap-2">
+              {scene.lyrics.map((l, i) => (
+                <div key={i} className="font-black leading-tight text-slate-800" style={{ fontSize: 'clamp(18px, calc(3*var(--svw,1vw)), 36px)' }}>{l.text}</div>
+              ))}
+            </div>
+          </>
         ) : current ? (
           <>
             <div className="mb-3 text-sm font-black uppercase tracking-widest text-[#FE6A2F] sm:text-base">🎤 {current.who.toUpperCase()} sings</div>
@@ -85,11 +94,11 @@ export function SongScene({ scene, onNext, onWin }: { scene: Extract<Scene, { ki
       <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-3">
         {(status === 'idle' || status === 'done' || status === 'error') && (
           <button onClick={playSong} className="rounded-full bg-[#FE6A2F] px-6 py-3 text-lg font-black text-white shadow-xl transition hover:scale-105 active:scale-95">
-            {status === 'done' ? '🔁 Sing Again' : status === 'error' ? '🔁 Retry' : '▶️ Play the Song'}
+            {status === 'done' ? '🔁 Sing Again' : status === 'error' ? '🔁 Try the music again' : '▶️ Play the Song'}
           </button>
         )}
         {isDone && <button onClick={onNext} className="rounded-full bg-emerald-500 px-6 py-3 text-lg font-black text-white shadow-xl transition hover:scale-105 active:scale-95">Continue ➜</button>}
-        {status === 'error' && <button onClick={onNext} className="rounded-full bg-slate-400 px-6 py-3 text-lg font-black text-white shadow-xl transition hover:scale-105 active:scale-95">Skip ➜</button>}
+        {status === 'error' && <button onClick={onNext} className="rounded-full bg-emerald-500 px-6 py-3 text-lg font-black text-white shadow-xl transition hover:scale-105 active:scale-95">Continue ➜</button>}
       </div>
     </div>
   );

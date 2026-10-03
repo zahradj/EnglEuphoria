@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { type ActivitySync, useSyncedState } from './sceneActivitySync';
+import { type ActivitySync, isSharedFollower, useSyncedState } from './sceneActivitySync';
 import { seededOrder } from './PictureMatchScene';
 import { Burst, GAME_FONT, GameStyles, GardenBackdrop, HudBar, ProgressPill, PromptChip, TitleRibbon } from './gameTheme';
 import { safeSpeak } from './unit1/audio';
@@ -132,6 +132,8 @@ export function GrammarGapScene({ scene, onNext, onWin, onResult, sync }: {
   const examples = (Array.isArray(scene.examples) ? scene.examples : []).filter((e) => typeof e === 'string' && e.trim());
   const [state, setState] = useSyncedState<GapState>(sync, INITIAL);
   const isMirror = !!sync?.isSynced && !sync.isAuthority;
+  /** Shared play: only the leader (teacher) runs the automatic sequences; the follower gets them relayed. */
+  const isFollower = isSharedFollower(sync);
 
   // ---- everything below is read defensively: a mirror may hold any snapshot
   const finished = state.finished === true;
@@ -176,7 +178,7 @@ export function GrammarGapScene({ scene, onNext, onWin, onResult, sync }: {
   }, [scene.id]);
 
   useEffect(() => {
-    if (finished && !gemDone.current && !isMirror) {
+    if (finished && !gemDone.current && !isMirror && !isFollower) {
       gemDone.current = true;
       sfx.whoop();
       sfx.gem();
@@ -196,7 +198,7 @@ export function GrammarGapScene({ scene, onNext, onWin, onResult, sync }: {
 
   // ---- model first: read the worked examples aloud, one by one
   useEffect(() => {
-    if (isMirror || finished || examples.length === 0 || state.introDone === true) return;
+    if (isMirror || isFollower || finished || examples.length === 0 || state.introDone === true) return;
     const mine = ++token.current;
     (async () => {
       await sleep(600);

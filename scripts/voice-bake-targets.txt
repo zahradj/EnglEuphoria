@@ -25,3 +25,4 @@ LESSON_U3L1_SCENES
 LESSON_U3L2_SCENES
 LESSON_U5L1_SCENES
 GAMES
+# 2026-10-03: re-record cookie/present after adding their dictionary entries

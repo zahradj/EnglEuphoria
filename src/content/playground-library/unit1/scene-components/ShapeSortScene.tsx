@@ -82,11 +82,12 @@ export function ShapeSortScene({ scene, onWin, onLose, onNext }: { scene: Extrac
           const total = slots.filter((s) => s.it.shapeWord === t.shapeWord).length;
           return (
             <button key={t.shapeWord} type="button" ref={(el) => { targetRefs.current[t.shapeWord] = el; }} onClick={() => void safeSpeak(t.shapeWord, t.who)}
-              className={`relative grid h-40 w-40 place-items-center border-4 border-dashed shadow-2xl backdrop-blur transition-all sm:h-48 sm:w-48 cursor-pointer active:scale-95 ${hot ? 'scale-110 border-green-400 bg-green-100/90' : 'border-white/80 bg-white/40'}`}
-              style={{ borderRadius: ShapeSwatchStyle(t.shapeWord, 'transparent').borderRadius, clipPath: ShapeSwatchStyle(t.shapeWord, 'transparent').clipPath }}
+              className={`relative grid h-40 w-40 place-items-center rounded-[2rem] border-4 border-dashed shadow-2xl backdrop-blur transition-all sm:h-48 sm:w-48 cursor-pointer active:scale-95 ${hot ? 'scale-110 border-green-400 bg-green-100/90' : 'border-white/80 bg-white/40'}`}
             >
+              {/* The word sits under the shape, not inside it: a triangle clipped "TRIANGLE". */}
               <div className="pointer-events-none relative flex flex-col items-center gap-1">
-                <span className="grid h-24 w-24 place-items-center text-lg font-black uppercase text-white shadow-lg sm:h-28 sm:w-28 sm:text-xl" style={{ ...ShapeSwatchStyle(t.shapeWord, t.shapeColor), textShadow: '0 2px 8px rgba(0,0,0,0.55)' }}>{t.shapeWord}</span>
+                <span className="block h-20 w-20 shadow-lg sm:h-24 sm:w-24" style={ShapeSwatchStyle(t.shapeWord, t.shapeColor)} />
+                <span className="rounded-full bg-white/95 px-3 py-0.5 text-sm font-black uppercase shadow sm:text-base" style={{ color: t.shapeColor === '#FACC15' ? '#B45309' : t.shapeColor }}>{t.shapeWord}</span>
                 <p className="text-[10px] font-bold text-orange-700">⭐ {collectedItems.length}/{total}</p>
                 {collectedItems.length > 0 && (
                   <div className="mt-0.5 flex flex-wrap items-center justify-center gap-1">

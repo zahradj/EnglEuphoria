@@ -1,4 +1,4 @@
-import { useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
+import { SHARED_PLAY_KINDS, useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
 import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -42,7 +42,7 @@ const REAL_SYNC_KINDS = new Set<string>([
   'meet', 'sound-model', 'echo', 'video-check', 'sentence-build', 'who-said-it',
   'listen-repeat-cards', 'roleplay', 'join-stage', 'alphabet-blocks',
   'trophy-chest', 'color-model', 'color-quiz', 'color-spot', 'shape-model', 'toy-model',
-  'train-recall', 'color-spy', 'color-simon', 'color-mix', 'flipbook',
+  'train-recall', 'color-spy', 'color-simon', 'color-mix', 'shape-builder', 'flipbook',
   'name-gate', 'meet-group', 'friend-pop', 'feelings-tap', 'feelings-wheel',
   'x-is-feeling', 'he-she-model', 'feelings-dice', 'he-she-say', 'i-am-feeling',
   'feeling-quiz', 'feelings-bingo',
@@ -257,13 +257,19 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   // student the floor outright: no teacher unlock needed, and the teacher's
   // copy is a live, non-interactive view of the student's work.
   const studentDriven = isSynced && (SCENES[sceneIdx] as { studentOnly?: boolean } | undefined)?.studentOnly === true;
+  // SHARED PLAY: a real game (SHARED_PLAY_KINDS) is played by the teacher AND the student together, as one
+  // player, whenever the student isn't paused. Both screens then drive and publish state (last write wins);
+  // while the student is paused the teacher alone drives and the student's screen is a live mirror.
+  const sharedPlay = isSynced && !studentDriven && SHARED_PLAY_KINDS.has(SCENES[sceneIdx]?.kind as string) && (role === 'teacher' || interactionUnlocked);
   const hasActivityAuthority = !isSynced
     ? true
-    : studentDriven
-      ? role === 'student'
-      : role === 'student'
-        ? interactionUnlocked
-        : !interactionUnlocked;
+    : sharedPlay
+      ? true
+      : studentDriven
+        ? role === 'student'
+        : role === 'student'
+          ? interactionUnlocked
+          : !interactionUnlocked;
 
   // Scene-tagged: the render right after a scene change must never see the previous scene's state.
   const [activityState, setActivityStateLocal] = useSceneScopedState((SCENES[sceneIdx] ?? SCENES[0])?.id ?? '');
@@ -282,8 +288,9 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   }, [isSynced, hasActivityAuthority, roomId, role, currentSceneId]);
 
   useEffect(() => {
-    if (!isSynced || hasActivityAuthority || !roomId) return;
+    if (!isSynced || (hasActivityAuthority && !sharedPlay) || !roomId) return;
     const unsubscribe = whiteboardService.subscribeToSceneActivityState(roomId, (payload) => {
+      if (sharedPlay && payload.senderId === role) return; // our own broadcast
       // Discard snapshots for any scene other than the one currently on
       // screen — a broadcast sent right as the sender navigates away can
       // otherwise arrive while this side is still on (or has already
@@ -293,7 +300,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
       setActivityStateLocal(payload.state);
     });
     return unsubscribe;
-  }, [isSynced, hasActivityAuthority, roomId, currentSceneId]);
+  }, [isSynced, hasActivityAuthority, sharedPlay, role, roomId, currentSceneId]);
 
   // Voices in synced activities: only the driving side runs the scene
   // logic that speaks, so relay each line to the other screen so the
@@ -321,7 +328,22 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
       const ping = () => { const id = ++n; sentPings.set(id, Date.now()); void whiteboardService.sendSceneSpeech(roomId, { event: { kind: 'ping', id }, senderId: role, sceneId }); };
       ping();
       const iv = window.setInterval(ping, 8000);
-      return () => { window.clearInterval(iv); unsubPong(); setSpeechRelay(null); };
+      // Shared play: the other screen speaks too (its taps run scene logic there), so also play what it relays
+      // and answer its pings.
+      let unsubShared = () => {};
+      if (sharedPlay) {
+        setSpeechDedupe(true);
+        unsubShared = whiteboardService.subscribeToSceneSpeech(roomId, (payload) => {
+          if (payload.senderId === role) return;
+          if (payload.event.kind === 'ping') {
+            void whiteboardService.sendSceneSpeech(roomId, { event: { kind: 'pong', id: payload.event.id }, senderId: role, sceneId });
+            return;
+          }
+          if (payload.event.kind === 'pong' || payload.sceneId !== sceneId) return;
+          playRelayedSpeech(payload.event);
+        });
+      }
+      return () => { window.clearInterval(iv); unsubPong(); unsubShared(); if (sharedPlay) setSpeechDedupe(false); setSpeechRelay(null); };
     }
     setSpeechDedupe(true);
     const unsubscribe = whiteboardService.subscribeToSceneSpeech(roomId, (payload) => {
@@ -334,10 +356,10 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
       playRelayedSpeech(payload.event);
     });
     return () => { unsubscribe(); setSpeechDedupe(false); };
-  }, [isSynced, roomId, role, usesRealSync, hasActivityAuthority, currentSceneId]);
+  }, [isSynced, roomId, role, usesRealSync, hasActivityAuthority, sharedPlay, currentSceneId]);
 
   const activitySync = usesRealSync
-    ? { isSynced, isAuthority: hasActivityAuthority, state: activityState, setState: setActivityState }
+    ? { isSynced, isAuthority: hasActivityAuthority, state: activityState, setState: setActivityState, ...(sharedPlay ? { shared: true, leader: role === 'teacher' } : {}) }
     : undefined;
 
   // skipsLock activities are bidirectional for both roles at once — safe
