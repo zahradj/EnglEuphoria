@@ -32,11 +32,18 @@ export function TprActionsScene({ scene, onWin, onNext, sync }: { scene: Tpr; on
   const clear = () => { timer.current.forEach((t) => window.clearTimeout(t)); timer.current = []; };
   useEffect(() => clear, []);
 
-  // Each round: say the action, then "Go!" and the move timer, then a star.
+  // Each round: say the action ('ready'), "Go!" starts the move timer
+  // ('move'), and when it runs out the child gets a star ('star').
   useEffect(() => {
-    if (!r || phase !== 'ready') return;
+    if (!r) return;
     clear();
-    timer.current.push(window.setTimeout(() => cueSpeak(r.line, scene.who), 400));
+    if (phase === 'ready') timer.current.push(window.setTimeout(() => cueSpeak(r.line, scene.who), 400));
+    if (phase === 'move') {
+      timer.current.push(window.setTimeout(() => {
+        sfx.match();
+        setState((s) => (s.phase === 'move' ? { ...s, phase: 'star', stars: s.stars + 1 } : s));
+      }, (r.seconds ?? MOVE_SECONDS) * 1000));
+    }
     return clear;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round, phase, scene.id]);
@@ -44,12 +51,7 @@ export function TprActionsScene({ scene, onWin, onNext, sync }: { scene: Tpr; on
   const go = () => {
     if (!r) return;
     sfx.pop();
-    clear();
     setState((s) => ({ ...s, phase: 'move' }));
-    timer.current.push(window.setTimeout(() => {
-      sfx.match();
-      setState((s) => ({ ...s, phase: 'star', stars: s.stars + 1 }));
-    }, (r.seconds ?? MOVE_SECONDS) * 1000));
   };
 
   const next = () => {

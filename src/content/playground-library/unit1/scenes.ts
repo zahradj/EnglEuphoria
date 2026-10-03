@@ -4681,7 +4681,7 @@ export const LESSON_U3L2_SCENES: Scene[] = [
   },
   {
     // Badges on the toys painted on bg-u3l2-shelf-wide (checked against the art).
-    id: 'u3l2-spin', kind: 'spin-wheel', bg: bgU3L2Shelf, title: 'Spin and say!',
+    id: 'u3l2-spin', kind: 'spin-wheel', bg: bgU3L2Shelf, title: '',
     teacher: 'Have the student spin and say ONE or MANY: "It\'s a train!" / "They are teddy bears!" Or tap a number.',
     items: [
       { label: "It's a teddy bear!", left: '13%', top: '47%' },
@@ -4692,7 +4692,7 @@ export const LESSON_U3L2_SCENES: Scene[] = [
       { label: 'They are balls!', left: '69%', top: '84%' },
     ],
     // Wheel on the plain wall above the shelf, clear of the badges.
-    wheelAt: { left: '50%', top: '16%' },
+    wheelAt: { left: '50%', top: '20%' },
   },
 
   /* 10-13 Communicative + game break */
@@ -4749,7 +4749,7 @@ export const LESSON_U3L2_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u3l2-quick-fire', kind: 'rapid-recall', bg: bgU3L2Party, who: 'pip', seconds: 3,
+    id: 'u3l2-quick-fire', kind: 'rapid-recall', bg: bgU3L1Room, who: 'pip', seconds: 3,
     teacher: 'Quick-fire! Say each picture before the ring runs out.',
     cards: [
       { img: itemTeddy, word: 'Teddy bear', say: "It's a teddy bear!" },
@@ -4808,14 +4808,14 @@ export const LESSON_U3L2_SCENES: Scene[] = [
     parentNote: 'Ask your child to show you one toy, then many toys, and to name them in English: "It\'s a train!" / "They are cars!"',
     steps: [
       { emoji: '\u{1F50D}', img: itemTeddy, say: 'Find' },
-      { emoji: '\u{1F468}\u{200D}\u{1F469}\u{200D}\u{1F467}', say: 'Show' },
+      { emoji: '\u{1F3E0}', say: 'Show' },
       { emoji: '\u{1F5E3}️', img: itemBlocks, say: 'Say it!' },
     ],
   },
 
   /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
   {
-    id: 'u3l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU3L2Cake, who: 'pip',
+    id: 'u3l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU3L1Room, who: 'pip',
     teacher: 'Extra time — Brain Break! Stand up and move together. Skip with Next if there is no time.',
     rounds: [
       { line: 'Stand up and stretch!', emoji: '\u{1F646}' },

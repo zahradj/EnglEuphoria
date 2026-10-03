@@ -72,7 +72,8 @@ export function PluralSortScene({ scene, onWin, onLose, onNext }: { scene: Extra
     }));
   };
 
-  const scattered = scatterPositions(slots.length);
+  // Rows kept clear of the bins and of the Back/Next bar at the bottom.
+  const scattered = scatterPositions(slots.length, [15, 68]);
 
   return (
     <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
