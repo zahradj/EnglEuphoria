@@ -1180,5 +1180,21 @@
       "public/lep1/items/item-bag.png"
     ],
     "prompt": "one shiny golden five-point STAR toy with a cute happy face and little sparkles, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-green-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-shelly-yellow-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). SAME PLACE, SAME SHIP AND SAME FISH as the FIRST reference image (same sea, same little red wooden boat on the LEFT, same small round fish under the surface on the right). Now Pip the orange fox (same design as in the second reference image) sits in the boat instead of the lion, leans over the side and drops one shiny GREEN CIRCLE-shaped scale into the water. Shelly, the small round light-GREY fish with big friendly eyes, is just below the surface on the right, now with one red circle, one blue square, one yellow triangle and one green circle scale on her side, smiling. The rest of the fish is still grey. Only Pip in the boat. Blue sea, sunny sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-orange-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-shelly-yellow-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). SAME PLACE, SAME SHIP AND SAME FISH as the FIRST reference image (same sea, same little red wooden boat on the LEFT, same small round fish under the surface on the right). Now Willow the blue bird with a green scarf (same design as in the second reference image) flies just above the boat and drops two shiny scales into the water: one ORANGE SQUARE and one PURPLE TRIANGLE. Shelly, the small round light-GREY fish with big friendly eyes, is just below the surface on the right, now with a red circle, a blue square, a yellow triangle and a green circle scale on her side, looking up excited. The boat is empty. Blue sea, sunny sky. No text, letters or numbers anywhere."
   }
 ]
