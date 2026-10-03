@@ -799,5 +799,14 @@
       "public/lep1/scenes/bg-u2l5-sea-wide.png"
     ],
     "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Inside a big empty rocky cave, seen straight on: a wide smooth grey-brown rock wall fills the whole picture edge to edge, with a few small stones on the sandy floor at the bottom. Soft even light. Calm and plain, nothing on the wall. No characters, no objects. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-rainbow.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-shell.png",
+      "public/lep1/items/item-ship.png"
+    ],
+    "prompt": "One single cute cartoon RAINBOW arch with six clear bands (red, orange, yellow, green, blue, purple from the outside in) and a small fluffy white cloud at each end, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No text."
   }
 ]
