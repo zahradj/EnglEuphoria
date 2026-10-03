@@ -3776,6 +3776,8 @@ const bgU2L5Sad = `${A}/scenes/bg-u2l5-shelly-sad-wide.png`;
 const bgU2L5Red = `${A}/scenes/bg-u2l5-shelly-red-wide.png`;
 const bgU2L5Blue = `${A}/scenes/bg-u2l5-shelly-blue-wide.png`;
 const bgU2L5Yellow = `${A}/scenes/bg-u2l5-shelly-yellow-wide.png`;
+const bgU2L5Green = `${A}/scenes/bg-u2l5-shelly-green-wide.png`;
+const bgU2L5Orange = `${A}/scenes/bg-u2l5-shelly-orange-wide.png`;
 const bgU2L5Rainbow = `${A}/scenes/bg-u2l5-shelly-rainbow-wide.png`;
 const bgU2L5Crab = `${A}/scenes/bg-u2l5-crab-wide.png`;
 const itemShip = `${A}/items/item-ship.png`;
@@ -3837,7 +3839,7 @@ export const LESSON_U2L5_SCENES: Scene[] = [
   {
     // The story as an animated, narrated cartoon: Pre-A1 children can't read
     // yet, so nothing here needs reading (answers are pictures).
-    id: 'u2l5-story-video', kind: 'story-video', bg: bgU2L5Sea, videoUrl: `${A}/video/shelly-story-u2l5.mp4?v=3`, title: "Shelly's Scales",
+    id: 'u2l5-story-video', kind: 'story-video', bg: bgU2L5Sea, videoUrl: `${A}/video/shelly-story-u2l5.mp4?v=4`, title: "Shelly's Scales",
     teacher: 'Press play and watch together. Point and repeat key words; answer the picture questions.',
     pages: [
       { img: bgU2L5Sea, who: 'pip', line: 'This is Shelly. Shelly is a little fish.', motion: 'zoom-in', fx: 'bubbles' , atSec: 0 },
@@ -3845,14 +3847,17 @@ export const LESSON_U2L5_SCENES: Scene[] = [
       { img: bgU2L5Red, who: 'bella', line: 'Bella says, Here you are! A red circle!', motion: 'pan-right', fx: 'sparkles' , atSec: 16 },
       { img: bgU2L5Blue, who: 'mia', line: 'Mia gives Shelly a blue square.', motion: 'pan-left', fx: 'sparkles' , atSec: 24 },
       { img: bgU2L5Yellow, who: 'leo', line: 'Leo gives Shelly a yellow triangle.', motion: 'pan-right', fx: 'sparkles' , atSec: 32 },
-      { img: bgU2L5Rainbow, who: 'willow', line: 'Now Shelly has six colors! She is a rainbow fish!', motion: 'zoom-out', fx: 'sparkles' , atSec: 40 },
-      { img: bgU2L5Crab, who: 'pip', line: 'A little crab is gray and sad. Shelly gives him a purple circle.', motion: 'zoom-in', fx: 'bubbles' , atSec: 48 },
-      { img: bgU2L5Crab, who: 'willow', line: 'Thank you, Shelly! Now they are friends.', motion: 'zoom-out', fx: 'hearts' , atSec: 56 },
+      { img: bgU2L5Green, who: 'pip', line: 'Pip gives Shelly a green circle.', motion: 'pan-right', fx: 'sparkles' , atSec: 40 },
+      { img: bgU2L5Orange, who: 'willow', line: 'Willow gives Shelly an orange square and a purple triangle.', motion: 'pan-left', fx: 'sparkles' , atSec: 48 },
+      { img: bgU2L5Rainbow, who: 'willow', line: 'Now Shelly has six colors! She is a rainbow fish!', motion: 'zoom-out', fx: 'sparkles' , atSec: 56 },
+      { img: bgU2L5Crab, who: 'pip', line: 'A little crab is gray and sad. Shelly gives him a purple circle.', motion: 'zoom-in', fx: 'bubbles' , atSec: 64 },
+      { img: bgU2L5Crab, who: 'willow', line: 'Thank you, Shelly! Now they are friends.', motion: 'zoom-out', fx: 'hearts' , atSec: 72 },
     ],
     checkpoints: [
       { afterPage: 1, who: 'pip', question: 'What color is Shelly?', answer: 'Gray', options: [{ label: 'Red', colorHex: '#EF4444' }, { label: 'Gray', colorHex: '#9CA3AF' }, { label: 'Blue', colorHex: '#3B82F6' }] },
       { afterPage: 4, who: 'leo', question: 'What shape is the yellow scale?', answer: 'Triangle', options: [{ label: 'Circle', shape: 'circle', colorHex: '#FACC15' }, { label: 'Square', shape: 'square', colorHex: '#FACC15' }, { label: 'Triangle', shape: 'triangle', colorHex: '#FACC15' }] },
-      { afterPage: 6, who: 'pip', question: 'What does Shelly give the crab?', answer: 'A purple circle', options: [{ label: 'A red square', shape: 'square', colorHex: '#EF4444' }, { label: 'A purple circle', shape: 'circle', colorHex: '#A855F7' }, { label: 'A blue triangle', shape: 'triangle', colorHex: '#3B82F6' }] },
+      { afterPage: 5, who: 'pip', question: 'What color is the circle from Pip?', answer: 'Green', options: [{ label: 'Red', shape: 'circle', colorHex: '#EF4444' }, { label: 'Green', shape: 'circle', colorHex: '#22C55E' }, { label: 'Blue', shape: 'circle', colorHex: '#3B82F6' }] },
+      { afterPage: 8, who: 'pip', question: 'What does Shelly give the crab?', answer: 'A purple circle', options: [{ label: 'A red square', shape: 'square', colorHex: '#EF4444' }, { label: 'A purple circle', shape: 'circle', colorHex: '#A855F7' }, { label: 'A blue triangle', shape: 'triangle', colorHex: '#3B82F6' }] },
     ],
   },
 

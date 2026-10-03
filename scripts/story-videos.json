@@ -31,6 +31,16 @@
         "prompt": "The yellow lion leans over the side of the red ship and drops ONE small shiny yellow triangle into the water. The yellow triangle sinks and sticks onto the grey fish's side next to the red circle and the blue square. The rest of the fish stays grey. The fish smiles and swims in a small happy circle under the water."
       },
       {
+        "id": "05b-green",
+        "image": "public/lep1/scenes/bg-u2l5-shelly-green-wide.png",
+        "prompt": "The orange fox leans over the side of the red boat and drops ONE small shiny green circle into the water. The green circle sinks and sticks onto the grey fish's side next to the red, blue and yellow scales. The rest of the fish stays grey. The fish smiles and wiggles her tail."
+      },
+      {
+        "id": "05c-orange",
+        "image": "public/lep1/scenes/bg-u2l5-shelly-orange-wide.png",
+        "prompt": "The blue bird with the green scarf flaps her wings above the boat and drops ONE small shiny orange square and ONE small shiny purple triangle into the water. They sink slowly and stick onto the fish's side. The fish spins round with joy as more colours sparkle on her body."
+      },
+      {
         "id": "06-rainbow",
         "image": "public/lep1/scenes/bg-u2l5-shelly-rainbow-wide.png",
         "prompt": "The colourful rainbow fish leaps happily out of the water and splashes back down, her coloured circle, square and triangle scales sparkling. The friends on the ship cheer and clap."
@@ -48,7 +58,7 @@
     ],
     "provider": "higgsfield",
     "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
-    "note": "All 8 beats are real clips: 01-03, 06-08 made before the Higgsfield-only rule (kept); 04-05 by Higgsfield (Kling 2.5 Turbo Pro). Trimmed to 8 s each when stitched.",
+    "note": "All 10 beats are real clips: 01-03, 06-08 made before the Higgsfield-only rule (kept); 04, 05, 05b, 05c by Higgsfield (Kling 2.5 Turbo Pro). Trimmed to 8 s each when stitched.",
     "film": "public/lep1/video/shelly-story-u2l5",
     "beatSeconds": 8
   },
