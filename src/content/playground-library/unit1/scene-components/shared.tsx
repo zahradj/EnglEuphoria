@@ -1,6 +1,6 @@
 // Helpers used by more than one scene. Anything used by a single scene lives next to it.
 import { useEffect, useState } from 'react';
-import type { CharKey } from '../scenes';
+import type { CharKey, Thing } from '../scenes';
 import { CAST, getEmotionSprite } from '../scenes';
 import { safeSpeak } from '../audio';
 import * as sfx from '../sfx';
@@ -454,5 +454,17 @@ export function StickerButton({ onClick, label, tilt = 0, state, size = 'h-[min(
       </span>
       {state === 'right' && <span className="absolute -right-1 -top-1 grid h-9 w-9 place-items-center rounded-full bg-emerald-500 text-lg text-white shadow-lg" style={{ animation: 'lep1-pop 0.4s ease-out' }}>✓</span>}
     </button>
+  );
+}
+
+/** A Thing (picture or coloured shape) drawn as a sticker. `shadow` paints it as a dark silhouette. */
+export function ThingArt({ thing, shadow = false }: { thing: Thing; shadow?: boolean }) {
+  const style = shadow ? { filter: 'brightness(0)', opacity: 0.5 } : { filter: STICKER_FILTER };
+  return (
+    <span className="block h-full w-full" style={style}>
+      {thing.img
+        ? <img src={thing.img} alt={shadow ? '' : thing.label} draggable={false} className="h-full w-full object-contain" />
+        : <ShapeIcon shape={thing.shape ?? 'circle'} fill={thing.colorHex ?? '#F97316'} />}
+    </span>
   );
 }

@@ -342,6 +342,14 @@ const UNIT1_EXTRACTORS = {
   'home-mission': (s) => [[s.who, s.line], [s.who, 'Mission accepted!']],
   // Mirrors LiftFlapScene.tsx's liftFlapLines().
   'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal]])],
+  // Mirrors DrawPathScene.tsx's drawPathLines().
+  'draw-path': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, `Start at ${({ pip: 'Pip', mia: 'Mia', bella: 'Bella', willow: 'Willow', leo: 'Leo' })[s.walker] ?? s.walker}!`]],
+  // Mirrors TileRevealScene.tsx's tileRevealLines().
+  'tile-reveal': (s) => [[s.who, 'What is it?'], ...(s.rounds ?? []).map((r) => [s.who, r.line])],
+  // Mirrors ShadowMatchScene.tsx's shadowMatchLines().
+  'shadow-match': (s) => [[s.who, 'Find the shadow!'], ...(s.items ?? []).map((it) => [s.who, it.line])],
+  // Mirrors SteppingStonesScene.tsx's steppingStonesLines().
+  'stepping-stones': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, s.goal?.line]],
   // Mirrors MysteryBagScene.tsx's mysteryBagLines().
   'mystery-bag': (s) => {
     const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
