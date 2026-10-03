@@ -61,6 +61,9 @@ export function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<
     setState((s) => ({ ...s, turnIdx: s.turnIdx + 1, gemDone: s.gemDone || awardGem }));
   };
 
+  // A turn whose object sits high in the picture puts its bubble at the bottom.
+  const bubblePos = currentTurn?.bubble === 'bottom' ? 'bottom-20' : 'top-20';
+
   return (
     <div ref={stageRef} className="absolute inset-0 overflow-hidden select-none" style={{ backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.05) 55%, rgba(254,106,47,0.35) 100%)' }} />
@@ -95,7 +98,7 @@ export function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<
         );
       })()}
       {currentTurn && isFriendTurn && (
-        <div className="absolute inset-x-0 top-20 z-30 flex justify-center px-4">
+        <div className={`absolute inset-x-0 ${bubblePos} z-30 flex justify-center px-4`}>
           <div className="max-w-[720px] rounded-[28px] bg-white px-8 py-5 text-center shadow-[0_30px_80px_rgba(0,0,0,0.35)] ring-4 ring-orange-200">
             <div className="mb-1 flex items-center justify-center gap-2 text-[11px] font-black uppercase tracking-[0.25em]" style={{ color: friendMeta?.color ?? '#FE6A2F' }}><span className="text-lg">{friendMeta?.emoji ?? '🎓'}</span> {friendMeta?.name ?? 'Teacher'} asks</div>
             <div className="text-3xl font-black text-orange-800 sm:text-4xl">“{currentTurn.line}”</div>
@@ -105,7 +108,7 @@ export function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<
         </div>
       )}
       {currentTurn && isStudentTurn && (
-        <div className="absolute inset-x-0 top-20 z-40 flex justify-center px-4">
+        <div className={`absolute inset-x-0 ${bubblePos} z-40 flex justify-center px-4`}>
           <div className="w-full max-w-[700px] rounded-[32px] bg-white p-6 text-center shadow-[0_30px_80px_rgba(0,0,0,0.4)] ring-4 ring-orange-300">
             <div className="text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">Your turn — say it!</div>
             <div className="mt-1 text-3xl font-black text-orange-700 sm:text-4xl">“{currentTurn.line}”</div>

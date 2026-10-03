@@ -77,6 +77,7 @@ function Board({ rd, placed, ghost, alive, small }: { rd: Round; placed: number;
     >
       <g className={alive && rd.alive === 'bounce' ? 'animate-[lep1-hop_0.8s_ease-in-out_infinite]' : alive && rd.alive === 'wiggle' ? 'animate-[lep1-shake_0.6s_ease-in-out_infinite]' : ''} style={{ transformBox: 'fill-box', transformOrigin: 'center' }}>
         {rd.pieces.map((pc, i) => (i < placed ? <PieceShape key={i} p={pc} fill={pc.colorHex} /> : null))}
+        {ghost != null && rd.pieces.map((pc, i) => (i > ghost ? <g key={`f${i}`} opacity={0.35}><PieceShape p={pc} fill="" ghost /></g> : null))}
         {ghost != null && rd.pieces[ghost] && <g className="animate-pulse"><PieceShape p={rd.pieces[ghost]} fill="" ghost /></g>}
       </g>
       {alive && rd.alive === 'launch' && (
