@@ -1,1 +1,2 @@
 u2l5-shelly
+# re-run 2026-10-03: beats 04, 05 (fish must stay mostly grey)
