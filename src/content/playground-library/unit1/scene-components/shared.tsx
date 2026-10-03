@@ -237,3 +237,14 @@ export function Lep1Keyframes() {
     `}</style>
   );
 }
+
+/** A shape icon for the answer buttons (fills its own square box). */
+export function ShapeIcon({ shape, fill }: { shape: string; fill: string }) {
+  return (
+    <svg viewBox="0 0 40 40" className="h-full w-full" aria-hidden>
+      {shape === 'circle' && <circle cx="20" cy="20" r="16" fill={fill} stroke="#2B1E17" strokeWidth="2.5" />}
+      {shape === 'square' && <rect x="5" y="5" width="30" height="30" rx="2" fill={fill} stroke="#2B1E17" strokeWidth="2.5" />}
+      {shape === 'triangle' && <polygon points="20,4 37,35 3,35" fill={fill} stroke="#2B1E17" strokeWidth="2.5" strokeLinejoin="round" />}
+    </svg>
+  );
+}

@@ -47,6 +47,18 @@ export const LESSON_GRAMMAR: Record<string, LessonGrammarEntry> = {
     ],
     examples: ['What shape is it?', "It's a circle!", "It's a square!", 'A red triangle!', 'I like circles!'],
   },
+  // Pre-A1 Unit 2 Lesson 4 — What Color Is This?
+  'lep1-rich-2-4': {
+    pattern: 'What color / shape is this? — Is it …? Yes, it is. / No, it isn\'t.',
+    cefr: 'Pre-A1',
+    forms: [
+      { label: 'Ask the color', formula: 'What color is this?' },
+      { label: 'Ask the shape', formula: 'What shape is this?' },
+      { label: 'Yes / no question', formula: 'Is it + red? / Is it + a circle?' },
+      { label: 'Short answers', formula: "Yes, it is. / No, it isn't." },
+    ],
+    examples: ['What color is this?', "It's red!", 'What shape is this?', "It's a circle!", 'Is it blue?', "No, it isn't!", 'Yes, it is!'],
+  },
   // A1 Unit 9 Lesson 1 — Magic Castle: rooms and furniture
   'castle-rich-9-1': {
     pattern: 'There is / There is no',

@@ -379,6 +379,14 @@ export type Scene =
         who: CharKey; label: string; intro: string; line: string; alive: 'bounce' | 'launch' | 'wiggle';
         pieces: { shape: 'circle' | 'square' | 'triangle'; colorWord: string; colorHex: string; x: number; y: number; w: number; h: number; flip?: boolean }[];
       }[];
+    }
+  | {
+      /** "Pip's Secret Card" — Guess Who with colours and shapes: the child
+       *  asks "Is it red?" / "Is it a circle?" and Pip answers yes/no until
+       *  one card is left (Unit 2 Lesson 4). `secret` indexes `cards`. */
+      id: string; kind: 'secret-card'; bg: string; teacher: string; who: CharKey;
+      cards: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' }[];
+      rounds: { secret: number }[];
     };
 
 const A = '/lep1'; // public asset root
@@ -3301,189 +3309,222 @@ export const LESSON_U2L3_SCENES: Scene[] = [
  * of just repeating six colors a second time.
  * ========================================================================= */
 
-export const LESSON_U2L4_TITLE = 'What Color is This?';
-export const LESSON_U2L4_OBJECTIVE = 'Review and confidently name all six colors from Unit 2 (red, blue, yellow, green, orange, purple), plus the combined color+shape phrases from Lesson 3 ("It\'s a yellow triangle"), through mixed recall activities — no new vocabulary, pure consolidation.';
+/* REBUILD (2026-10-03), same blueprints as Lessons 2-3. The curriculum goal is
+ * "Ask and answer about colors and shapes" (title: "What Color Is This?"), but
+ * the first version never asked that question: it was pure review (two
+ * dashes, two I-spies, square art, the shared goodbye song). Now the lesson is
+ * built around the questions — "What color is this?", "What shape is this?",
+ * "Is it red? — Yes, it is. / No, it isn't." — and the child ASKS as much as
+ * answers. Words are all review (red/blue/yellow, green/orange/purple,
+ * circle/square/triangle); the new language is the question frames.
+ * Signature game: Pip's Secret Card (secret-card) — Guess Who with coloured
+ * shapes; the child can only win by asking yes/no questions.
+ * Phonics micro-moment: WH says /w/ — whale, wheel, whistle (and "what").
+ * Research: Guess Who / 20 questions information-gap games for yes/no
+ * questions (eslkidsgames / teach-this "Is it…?" guessing), Cambridge Pre A1
+ * Starters "What colour is…?" / "Is it…?" question forms. */
+const bgU2L4Party = `${A}/scenes/bg-u2l4-party-wide.png`;
+const bgU2L4Secret = `${A}/scenes/bg-u2l4-secret-wide.png`;
+const bgU2L4Whale = `${A}/scenes/bg-u2l4-whale-wide.png`;
+const itemWhale = `${A}/items/item-whale.png`;
+const itemWheel = `${A}/items/item-wheel.png`;
+const itemWhistle = `${A}/items/item-whistle.png`;
+const C4 = { RED: '#EF4444', BLUE: '#3B82F6', YELLOW: '#FACC15', GREEN: '#22C55E', ORANGE: '#F97316', PURPLE: '#A855F7' };
+
+export const LESSON_U2L4_TITLE = 'What Color Is This?';
+export const LESSON_U2L4_OBJECTIVE = 'Ask and answer about colours and shapes — "What color is this? — It\'s red.", "What shape is this? — It\'s a circle.", "Is it blue? — Yes, it is. / No, it isn\'t." — reviewing all six colours and three shapes, and hear WH say /w/ (whale, wheel, whistle).';
 
 export const LESSON_U2L4_SCENES: Scene[] = [
-  { id: 'u2l4-title', kind: 'title-card', bg: bgU2L1ColorParade, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 4', title: 'What Color is This?', subtitle: 'Let’s remember ALL our colors!' },
+  { id: 'u2l4-title', kind: 'title-card', bg: bgU2L4Party, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 4', title: 'What Color Is This?', subtitle: 'Ask and answer' },
+
   {
-    id: 'u2l4-intro', kind: 'cinematic', bg: bgU2L2ColorParade, title: 'What Color is This?', subtitle: 'Six colors, one big review!', narrator: 'pip', hidePipOverlay: true,
+    // Warm-up: the lesson's question song (scripts/songs.json "u2l4-what-color").
+    id: 'u2l4-song', kind: 'song', bg: bgU2L4Party, title: '\u{1F3B5} The Question Song \u{1F3B5}', teacher: 'Sing, point to a color, and nod for YES, shake your head for NO!',
+    durationSeconds: 20, bigWord: 'Ask!', songUrl: `${A}/audio/what-color-song-u2l4.mp3?v=1`,
+    songPrompt: 'Upbeat kids pop question song',
+    lyrics: [
+      { who: 'bella', text: "What color is this? It's red! It's red!", emotion: 'happy' },
+      { who: 'mia', text: "What shape is this? It's a circle, a circle!", emotion: 'happy' },
+      { who: 'willow', text: 'Is it blue? Yes, it is! Yes, it is!', emotion: 'happy' },
+      { who: 'leo', text: "Is it green? No, it isn't! No, it isn't!", emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u2l4-intro', kind: 'cinematic', bg: bgU2L4Party, hidePipOverlay: true, title: 'The Question Party', subtitle: 'Colors and shapes everywhere', narrator: 'pip',
     script: [
-      { who: 'pip', line: 'Red, blue, yellow, green, orange, purple — six colors!' },
-      { who: 'pip', line: 'Let’s see how many you remember!' },
+      { who: 'pip', line: 'Hello! Remember colors and shapes?' },
+      { who: 'pip', line: 'Today YOU ask the questions!' },
     ],
-    cta: "I'm ready!",
+    cta: "Let's play!",
   },
+
+  /* ---- Input: the question frames ---- */
   {
-    id: 'u2l4-quiz', kind: 'color-quiz', bg: bgMeadow, teacher: 'Which one is the right color? Tap it!',
-    rounds: [
-      { colorWord: 'RED', colorHex: '#E63946', who: 'bella', correctImg: itemApple, correctLabel: 'Apple', distractors: [{ img: itemWater, label: 'Water' }, { img: itemLeaf, label: 'Leaf' }] },
-      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow', correctImg: itemWave, correctLabel: 'Wave', distractors: [{ img: itemOrange, label: 'Orange' }, { img: itemGrapes, label: 'Grapes' }] },
-      { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip', correctImg: itemSun, correctLabel: 'Sun', distractors: [{ img: itemRose, label: 'Rose' }, { img: itemMoon, label: 'Moon' }] },
-      { colorWord: 'GREEN', colorHex: '#22C55E', who: 'willow', correctImg: itemLeaf, correctLabel: 'Leaf', distractors: [{ img: itemApple, label: 'Apple' }, { img: itemOrange, label: 'Orange' }] },
-      { colorWord: 'ORANGE', colorHex: '#F97316', who: 'leo', correctImg: itemOrange, correctLabel: 'Orange', distractors: [{ img: itemGrapes, label: 'Grapes' }, { img: itemSun, label: 'Sun' }] },
-      { colorWord: 'PURPLE', colorHex: '#A855F7', who: 'mia', correctImg: itemGrapes, correctLabel: 'Grapes', distractors: [{ img: itemWater, label: 'Water' }, { img: itemLeaf, label: 'Leaf' }] },
-    ],
-  },
-  {
-    // Boss round: all six colors sorted at once, not three — genuinely
-    // harder than either teaching lesson's own color-sort, and the reason
-    // ColorSortScene needed the flex-wrap fix described above.
-    id: 'u2l4-sort', kind: 'color-sort', bg: bgMeadow, teacher: 'Six colors this time! Listen, then drag each thing to its color!',
-    targets: [
-      { colorWord: 'RED', colorHex: '#E63946', who: 'bella' },
-      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow' },
-      { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip' },
-      { colorWord: 'GREEN', colorHex: '#22C55E', who: 'willow' },
-      { colorWord: 'ORANGE', colorHex: '#F97316', who: 'leo' },
-      { colorWord: 'PURPLE', colorHex: '#A855F7', who: 'mia' },
-    ],
-    items: [
-      { word: 'apple', emoji: '\u{1F34E}', img: itemApple, colorWord: 'RED' },
-      { word: 'water', emoji: '\u{1F4A7}', img: itemWater, colorWord: 'BLUE' },
-      { word: 'sun', emoji: '\u{2600}️', img: itemSun, colorWord: 'YELLOW' },
-      { word: 'leaf', emoji: '\u{1F343}', img: itemLeaf, colorWord: 'GREEN' },
-      { word: 'orange', emoji: '\u{1F34A}', img: itemOrange, colorWord: 'ORANGE' },
-      { word: 'grapes', emoji: '\u{1F347}', img: itemGrapes, colorWord: 'PURPLE' },
-    ],
-  },
-  {
-    // Split into two 3-spot rounds (one per lesson's own hero image) rather
-    // than forcing six simultaneous spots onto a single new combined image.
-    id: 'u2l4-spy-a', kind: 'color-spy', bg: bgU2L1ColorParade, teacher: 'I Spy! Find the color I say.', who: 'pip',
-    spots: [
-      { colorWord: 'RED', colorHex: '#E63946', label: 'Apple', left: '22%', top: '63%' },
-      { colorWord: 'BLUE', colorHex: '#3B82F6', label: 'Water', left: '47%', top: '80%' },
-      { colorWord: 'YELLOW', colorHex: '#FBBF24', label: 'Sunflower', left: '81%', top: '27%' },
-    ],
-    clueOrder: ['YELLOW', 'RED', 'BLUE'],
-  },
-  {
-    id: 'u2l4-spy-b', kind: 'color-spy', bg: bgU2L2ColorParade, teacher: 'I Spy! Find the color I say.', who: 'pip',
-    spots: [
-      { colorWord: 'GREEN', colorHex: '#22C55E', label: 'Leaf', left: '18%', top: '48%' },
-      { colorWord: 'ORANGE', colorHex: '#F97316', label: 'Orange', left: '48%', top: '78%' },
-      { colorWord: 'PURPLE', colorHex: '#A855F7', label: 'Grapes', left: '82%', top: '68%' },
-    ],
-    clueOrder: ['PURPLE', 'GREEN', 'ORANGE'],
-  },
-  {
-    id: 'u2l4-word-build', kind: 'word-build', bg: bgMeadow, teacher: 'Listen! Tap the missing letter to make the word.',
-    rounds: [
-      { word: 'red', blankIndex: 0, answer: 'R', choices: ['R', 'B', 'Y'], img: itemApple, emoji: '\u{1F34E}' },
-      { word: 'blue', blankIndex: 0, answer: 'B', choices: ['R', 'B', 'Y'], img: itemWater, emoji: '\u{1F4A7}' },
-      { word: 'yellow', blankIndex: 0, answer: 'Y', choices: ['R', 'B', 'Y'], img: itemSun, emoji: '\u{2600}️' },
-      { word: 'green', blankIndex: 0, answer: 'G', choices: ['G', 'O', 'P'], img: itemLeaf, emoji: '\u{1F343}' },
-      { word: 'orange', blankIndex: 0, answer: 'O', choices: ['G', 'O', 'P'], img: itemOrange, emoji: '\u{1F34A}' },
-      { word: 'purple', blankIndex: 0, answer: 'P', choices: ['G', 'O', 'P'], img: itemGrapes, emoji: '\u{1F347}' },
-    ],
-  },
-  {
-    // Boss round: six colors, five rounds of growing sequence length —
-    // harder than either teaching lesson's own four-round Simon Says.
-    id: 'u2l4-simon', kind: 'color-simon', bg: bgMeadow, teacher: 'Simon says... watch closely, then copy the pattern!', maxRounds: 5,
-    colors: [
-      { colorWord: 'RED', colorHex: '#E63946', who: 'bella' },
-      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow' },
-      { colorWord: 'YELLOW', colorHex: '#FBBF24', who: 'pip' },
-      { colorWord: 'GREEN', colorHex: '#22C55E', who: 'willow' },
-      { colorWord: 'ORANGE', colorHex: '#F97316', who: 'leo' },
-      { colorWord: 'PURPLE', colorHex: '#A855F7', who: 'mia' },
-    ],
-  },
-  {
-    id: 'u2l4-who', kind: 'listen-repeat-cards', bg: bgMeadow, teacher: 'Listen to each friend, then repeat!',
+    id: 'u2l4-question-model', kind: 'listen-repeat-cards', bg: bgU2L4Party, teacher: 'Listen to the question and the answer. Then say them!',
     cards: [
-      { who: 'bella', sentence: 'The apple is red!', img: itemApple, imgLabel: 'Red' },
-      { who: 'willow', sentence: 'The water is blue!', img: itemWater, imgLabel: 'Blue' },
-      { who: 'pip', sentence: 'The sun is yellow!', img: itemSun, imgLabel: 'Yellow' },
-      { who: 'willow', sentence: 'The leaf is green!', img: itemLeaf, imgLabel: 'Green' },
-      { who: 'leo', sentence: 'The orange is orange!', img: itemOrange, imgLabel: 'Orange' },
-      { who: 'mia', sentence: 'The grapes are purple!', img: itemGrapes, imgLabel: 'Purple' },
+      { who: 'pip', sentence: 'What color is this?', img: itemBalloonRed, imgLabel: 'Balloon' },
+      { who: 'bella', sentence: "It's red!", img: itemBalloonRed, imgLabel: 'Red' },
+      { who: 'pip', sentence: 'What shape is this?', img: itemClock, imgLabel: 'Clock' },
+      { who: 'bella', sentence: "It's a circle!", img: itemClock, imgLabel: 'Circle' },
+      { who: 'pip', sentence: 'Is it blue?', img: itemFrog, imgLabel: 'Frog' },
+      { who: 'willow', sentence: "No, it isn't! It's green!", img: itemFrog, imgLabel: 'Green' },
+      { who: 'pip', sentence: 'Is it a triangle?', img: itemPizzaSlice, imgLabel: 'Pizza' },
+      { who: 'leo', sentence: 'Yes, it is!', img: itemPizzaSlice, imgLabel: 'Triangle' },
     ],
   },
   {
-    // The harder, combined checkpoint: color recall above was isolated
-    // ("The apple is red!"); this drills Lesson 3's target frame (color +
-    // shape fused into one noun phrase) using that lesson's own items —
-    // reviewing BOTH units' skills at once, not just colors a second time.
-    id: 'u2l4-combo-review', kind: 'listen-repeat-cards', bg: bgU2L3ShapeParade, teacher: 'Remember shapes AND colors together! Listen, then repeat!',
+    id: 'u2l4-party-spot', kind: 'color-spot', bg: bgU2L4Party,
+    teacher: 'What color is this? What shape is this? Tap each arrow!',
+    items: [
+      { colorWord: 'RED CIRCLE', colorHex: C4.RED, who: 'bella', label: 'Balloon', sentence: "It's a red circle!", left: '7%', top: '12%', splashImg: itemBalloonRed },
+      { colorWord: 'GREEN SQUARE', colorHex: C4.GREEN, who: 'willow', label: 'Present', sentence: "It's a green square!", left: '49%', top: '50%', splashImg: itemPresent },
+      { colorWord: 'YELLOW TRIANGLE', colorHex: '#F59E0B', who: 'leo', label: 'Flag', sentence: "It's a yellow triangle!", left: '88%', top: '12%', splashImg: itemFlag },
+    ],
+  },
+
+  /* ---- Signature game ---- */
+  {
+    id: 'u2l4-secret-card', kind: 'secret-card', bg: bgU2L4Secret, who: 'pip',
+    teacher: "Pip's Secret Card! Ask: Is it red? Is it a circle? Find Pip's card!",
     cards: [
-      { who: 'bella', sentence: "It's a red circle!", img: itemBall, imgLabel: 'Red circle' },
-      { who: 'mia', sentence: "It's a blue square!", img: itemBook, imgLabel: 'Blue square' },
-      { who: 'leo', sentence: "It's a yellow triangle!", img: itemPizza, imgLabel: 'Yellow triangle' },
-      { who: 'bella', sentence: 'I like red circles!', img: itemBall, imgLabel: 'Red circle' },
-      { who: 'leo', sentence: "I don't like yellow triangles!", img: itemPizza, imgLabel: 'Yellow triangle' },
+      { colorWord: 'RED', colorHex: C4.RED, shape: 'circle' },
+      { colorWord: 'BLUE', colorHex: C4.BLUE, shape: 'circle' },
+      { colorWord: 'YELLOW', colorHex: C4.YELLOW, shape: 'triangle' },
+      { colorWord: 'RED', colorHex: C4.RED, shape: 'triangle' },
+      { colorWord: 'BLUE', colorHex: C4.BLUE, shape: 'square' },
+      { colorWord: 'YELLOW', colorHex: C4.YELLOW, shape: 'square' },
+    ],
+    rounds: [{ secret: 4 }, { secret: 3 }, { secret: 0 }],
+  },
+
+  /* ---- Controlled practice: all six colours ---- */
+  {
+    id: 'u2l4-color-quiz', kind: 'color-quiz', bg: bgU2L4Party, teacher: 'Listen! Tap the right one.',
+    rounds: [
+      { colorWord: 'BLUE', colorHex: C4.BLUE, who: 'willow', correctImg: itemCottonCandyBlue, correctLabel: 'Cotton candy', distractors: [{ img: itemBalloonRed, label: 'Balloon' }, { img: itemPopcornYellow, label: 'Popcorn' }] },
+      { colorWord: 'ORANGE', colorHex: C4.ORANGE, who: 'leo', correctImg: itemCarrot, correctLabel: 'Carrot', distractors: [{ img: itemGrapes, label: 'Grapes' }, { img: itemFrog, label: 'Frog' }] },
+      { colorWord: 'PURPLE', colorHex: C4.PURPLE, who: 'mia', correctImg: itemPlum, correctLabel: 'Plum', distractors: [{ img: itemLeaf, label: 'Leaf' }, { img: itemPopcornYellow, label: 'Popcorn' }] },
     ],
   },
+
+  /* ---- Phonics micro-moment: WH says /w/ ---- */
   {
-    // Harder discrimination than either teaching lesson's own dash: the
-    // distractor pool spans all six colors, not three.
-    id: 'u2l4-dash-a', kind: 'dash', bg: bgU2L2DashArena, teacher: 'Willow Dash! Tap only the GREEN things as they run by. Get 6 rings!', who: 'willow', targetLetter: 'GREEN', targetPhoneme: '', goal: 6, seconds: 45,
-    items: [
-      { word: 'leaf', letter: 'GREEN', img: itemLeaf, emoji: '\u{1F343}' },
-      { word: 'apple', letter: 'RED', img: itemApple, emoji: '\u{1F34E}' },
-      { word: 'water', letter: 'BLUE', img: itemWater, emoji: '\u{1F4A7}' },
-      { word: 'sun', letter: 'YELLOW', img: itemSun, emoji: '\u{2600}️' },
-      { word: 'orange', letter: 'ORANGE', img: itemOrange, emoji: '\u{1F34A}' },
-      { word: 'grapes', letter: 'PURPLE', img: itemGrapes, emoji: '\u{1F347}' },
+    id: 'u2l4-model-wh', kind: 'sound-model', bg: bgU2L4Whale, who: 'willow', letter: 'Wh', phoneme: '/w/', sound: 'wuh',
+    teacher: 'W and H together say /w/ — like in WHAT. Whale, wheel, whistle!',
+    anchors: [
+      { word: 'whale', emoji: '\u{1F433}', img: itemWhale },
+      { word: 'wheel', emoji: '\u{1F6DE}', img: itemWheel },
+      { word: 'whistle', emoji: '\u{1F4E2}', img: itemWhistle },
     ],
   },
+  { id: 'u2l4-trace-w', kind: 'trace', bg: bgU2L4Whale, who: 'willow', letter: 'W', phoneme: '/w/', word: 'whale', teacher: 'Trace the big W! W and H say /w/ — whale!' },
+
+  /* ---- Game: build with colours and shapes ---- */
   {
-    id: 'u2l4-dash-b', kind: 'dash', bg: bgU2L1DashArena, teacher: 'Bella Dash! Tap only the RED things as they run by. Get 6 rings!', who: 'bella', targetLetter: 'RED', targetPhoneme: '', goal: 6, seconds: 45,
-    items: [
-      { word: 'apple', letter: 'RED', img: itemApple, emoji: '\u{1F34E}' },
-      { word: 'leaf', letter: 'GREEN', img: itemLeaf, emoji: '\u{1F343}' },
-      { word: 'water', letter: 'BLUE', img: itemWater, emoji: '\u{1F4A7}' },
-      { word: 'sun', letter: 'YELLOW', img: itemSun, emoji: '\u{2600}️' },
-      { word: 'orange', letter: 'ORANGE', img: itemOrange, emoji: '\u{1F34A}' },
-      { word: 'grapes', letter: 'PURPLE', img: itemGrapes, emoji: '\u{1F347}' },
+    id: 'u2l4-shape-builders', kind: 'shape-builder', bg: bgU2L3Builder, who: 'pip',
+    teacher: 'Shape Builders again! Name the shape, then pick the color you hear.',
+    rounds: [
+      {
+        who: 'bella', label: 'Clown', intro: "Let's build a clown!", line: "It's a clown!", alive: 'wiggle',
+        pieces: [
+          { shape: 'circle', colorWord: 'YELLOW', colorHex: C4.YELLOW, x: 32, y: 26, w: 36, h: 36 },
+          { shape: 'triangle', colorWord: 'BLUE', colorHex: C4.BLUE, x: 36, y: 2, w: 28, h: 25 },
+          { shape: 'circle', colorWord: 'RED', colorHex: C4.RED, x: 45, y: 40, w: 10, h: 10 },
+        ],
+      },
+      {
+        who: 'willow', label: 'Tree', intro: "Let's build a tree!", line: "It's a tree!", alive: 'bounce',
+        pieces: [
+          { shape: 'triangle', colorWord: 'GREEN', colorHex: C4.GREEN, x: 28, y: 6, w: 40, h: 42 },
+          { shape: 'square', colorWord: 'ORANGE', colorHex: C4.ORANGE, x: 41, y: 48, w: 14, h: 14 },
+          { shape: 'circle', colorWord: 'YELLOW', colorHex: C4.YELLOW, x: 76, y: 4, w: 16, h: 16 },
+        ],
+      },
     ],
   },
+
+  /* ---- Speaking: the child answers, then asks ---- */
   {
-    // Each question shows the actual object it's asking about, same fix as
-    // the teaching lessons' own join-stage scenes.
-    id: 'u2l4-join-stage', kind: 'join-stage', bg: bgU2L2ColorParade, teacher: 'Your turn! When it says YOU, say the color — and sometimes the shape too!', cast: ['pip', 'bella', 'willow', 'leo', 'mia'],
+    id: 'u2l4-you-answer', kind: 'join-stage', bg: bgU2L4Party, teacher: 'Your turn! Answer Pip.', cast: ['pip', 'bella', 'willow', 'leo'],
     turns: [
-      { who: 'pip', line: 'What color is the apple?', bg: bgU2L1PipBellaAppleWater },
-      { who: 'student', line: "It's ______.", bg: bgU2L1PipBellaAppleWater },
-      { who: 'leo', line: 'Do you like purple?', bg: bgU2L2PurpleOnly },
-      { who: 'student', line: 'I like ______. / I don’t like ______.', bg: bgU2L2PurpleOnly },
-      { who: 'mia', line: 'What color is the leaf?', bg: bgU2L2GreenOnly },
-      { who: 'student', line: "It's ______.", bg: bgU2L2GreenOnly },
-      { who: 'bella', line: 'What color and shape is the ball?', bg: bgU2L3CircleOnly },
-      { who: 'student', line: "It's a ______ ______. (red circle)", bg: bgU2L3CircleOnly },
+      { who: 'pip', line: 'What color is this?', arrow: { left: '7%', top: '12%' } },
+      { who: 'student', line: "It's …", arrow: { left: '7%', top: '12%' } },
+      { who: 'pip', line: 'What shape is this?', arrow: { left: '49%', top: '50%' } },
+      { who: 'student', line: "It's a …", arrow: { left: '49%', top: '50%' } },
+      { who: 'pip', line: 'Is it a triangle?', arrow: { left: '88%', top: '12%' } },
+      { who: 'student', line: "Yes, it is! / No, it isn't!", arrow: { left: '88%', top: '12%' } },
     ],
   },
   {
-    id: 'u2l4-storybook', kind: 'flipbook', bg: bgU2L1ColorParade, title: 'The Big Color Review',
+    id: 'u2l4-you-ask', kind: 'join-stage', bg: bgU2L4Party, teacher: 'Now YOU ask! What color is this? Is it …?', cast: ['willow', 'mia', 'leo'],
+    turns: [
+      { who: 'student', line: 'Ask Willow: Is it green?', bg: bgU2L2Green, arrow: { left: '50%', top: '42%' } },
+      { who: 'willow', line: 'Yes, it is!', bg: bgU2L2Green, bubble: 'right' },
+      { who: 'student', line: 'Ask Mia: What color is this?', bg: bgU2L2Purple, arrow: { left: '38%', top: '38%' } },
+      { who: 'mia', line: "It's purple!", bg: bgU2L2Purple, bubble: 'right' },
+      { who: 'student', line: 'Ask Leo: Is it a circle?', bg: bgU2L3Pizza, arrow: { left: '39%', top: '36%' } },
+      { who: 'leo', line: "No, it isn't! It's a triangle!", bg: bgU2L3Pizza, bubble: 'right' },
+    ],
+  },
+
+  /* ---- Game break ---- */
+  {
+    id: 'u2l4-memory', kind: 'memory', bg: bgU2L4Party, teacher: 'Find the pairs! Say the color AND the shape.',
+    pairs: [
+      { id: 'clock', label: 'Circle', emoji: '\u{1F570}️', img: itemClock },
+      { id: 'frog', label: 'Green', emoji: '\u{1F438}', img: itemFrog },
+      { id: 'pizza', label: 'Triangle', emoji: '\u{1F355}', img: itemPizzaSlice },
+      { id: 'grapes', label: 'Purple', emoji: '\u{1F347}', img: itemGrapes },
+    ],
+  },
+  {
+    id: 'u2l4-color-simon', kind: 'color-simon', bg: bgU2L4Party, teacher: 'Simon says... watch, then copy the colors!', maxRounds: 4,
+    colors: [
+      { colorWord: 'RED', colorHex: C4.RED, who: 'bella' },
+      { colorWord: 'BLUE', colorHex: C4.BLUE, who: 'willow' },
+      { colorWord: 'YELLOW', colorHex: C4.YELLOW, who: 'pip' },
+      { colorWord: 'GREEN', colorHex: C4.GREEN, who: 'willow' },
+      { colorWord: 'ORANGE', colorHex: C4.ORANGE, who: 'leo' },
+      { colorWord: 'PURPLE', colorHex: C4.PURPLE, who: 'mia' },
+    ],
+  },
+
+  /* ---- Real-world production: find it at home ---- */
+  {
+    id: 'u2l4-show-me', kind: 'join-stage', bg: bgU2L4Party, teacher: 'Find it in YOUR room! Show it on camera and say it.', cast: ['pip', 'mia'],
+    turns: [
+      { who: 'pip', line: 'Find something red! Show me! What color is it?' },
+      { who: 'student', line: "It's red!" },
+      { who: 'mia', line: 'Find something round! What shape is it?' },
+      { who: 'student', line: "It's a circle!" },
+    ],
+  },
+
+  /* ---- Story payoff ---- */
+  {
+    id: 'u2l4-storybook', kind: 'flipbook', bg: bgU2L4Party, title: "Pip's Mystery Box",
     pages: [
-      { who: 'bella', img: bgU2L1PipBellaAppleWater, text: 'Bella and Pip found a red apple.' },
-      { who: 'bella', img: bgU2L1WaterOnly, text: 'Then they saw blue water flowing by.' },
-      { who: 'pip', img: bgU2L1SunflowerGroup, text: 'They found a yellow sunflower too!' },
-      { who: 'willow', img: bgU2L2GreenOnly, text: 'Willow found a green leaf.' },
-      { who: 'leo', img: bgU2L2OrangeOnly, text: 'Leo found an orange orange.' },
-      { who: 'mia', img: bgU2L2PurpleOnly, text: 'And Mia found purple grapes!' },
-      { who: 'pip', img: bgU2L1ColorParade, text: 'Red, blue, yellow, green, orange, purple — I remember them all!' },
+      { who: 'pip', img: bgU2L4Party, text: 'Pip has a mystery box. What is in it?' },
+      { who: 'bella', img: bgU2L4Party, text: "Bella asks, Is it red? No, it isn't." },
+      { who: 'mia', img: bgU2L4Party, text: 'Mia asks, Is it yellow? Yes, it is!' },
+      { who: 'leo', img: bgU2L4Party, text: 'Leo asks, Is it a triangle? Yes, it is!' },
+      { who: 'pip', img: bgU2L3Pizza, text: "It's a yellow triangle. It's pizza! Yum!" },
     ],
     checkpoints: [
-      { afterPage: 1, who: 'bella', question: 'What color was the water?', options: ['Red', 'Blue', 'Yellow'], answer: 'Blue' },
-      { afterPage: 5, who: 'mia', question: 'What color were the grapes?', options: ['Green', 'Orange', 'Purple'], answer: 'Purple' },
+      { afterPage: 1, who: 'bella', question: 'Is it red?', options: ['Yes, it is!', "No, it isn't!"], answer: "No, it isn't!" },
+      { afterPage: 3, who: 'leo', question: 'What shape is it?', options: ['Circle', 'Square', 'Triangle'], answer: 'Triangle' },
     ],
   },
   {
-    id: 'u2l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
-    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
-    lineDurationsMs: [3580, 4020, 4980, 7482],
-    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
-    lyrics: [
-      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
-      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
-      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    id: 'u2l4-read-words', kind: 'word-picture-match', bg: bgU2L4Party, teacher: 'Read the words. Tap the picture!',
+    rounds: [
+      { word: 'red circle', who: 'bella', correctImg: shapeCircle, correctLabel: 'Red circle', distractors: [{ img: shapeSquare, label: 'Blue square' }, { img: shapeTriangle, label: 'Yellow triangle' }] },
+      { word: 'yellow triangle', who: 'leo', correctImg: shapeTriangle, correctLabel: 'Yellow triangle', distractors: [{ img: shapeCircle, label: 'Red circle' }, { img: shapeSquare, label: 'Blue square' }] },
+      { word: 'blue square', who: 'willow', correctImg: shapeSquare, correctLabel: 'Blue square', distractors: [{ img: shapeTriangle, label: 'Yellow triangle' }, { img: shapeCircle, label: 'Red circle' }] },
     ],
   },
-  { id: 'u2l4-finale', kind: 'finale', bg: bgU2L2ColorParade, who: 'pip', line: 'Amazing! You remember red, blue, yellow, green, orange, AND purple — plus red circles, blue squares, and yellow triangles! \u{1F308}\u{1F3C6}' },
+
+  { id: 'u2l4-finale', kind: 'finale', bg: bgU2L4Party, who: 'pip', line: 'You asked and answered! Colors and shapes! Goodbye, friends!' },
 ];
 
 /* =============================================================================

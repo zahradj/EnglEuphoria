@@ -4,6 +4,7 @@ import { CAST } from '../scenes';
 import { safeSpeak, cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
+import { ShapeIcon } from './shared';
 
 /* ---------- Shape Builders (Pre-A1 Unit 2 Lesson 3 signature game) ----------
  * The "make a picture with shapes" activity of ESL shape lessons (shape-collage
@@ -55,16 +56,6 @@ function PieceShape({ p, fill, ghost }: { p: Piece; fill: string; ghost?: boolea
   return <polygon points={pts} strokeLinejoin="round" {...common} />;
 }
 
-/** A shape icon for the answer buttons (fills its own square box). */
-export function ShapeIcon({ shape, fill }: { shape: string; fill: string }) {
-  return (
-    <svg viewBox="0 0 40 40" className="h-full w-full" aria-hidden>
-      {shape === 'circle' && <circle cx="20" cy="20" r="16" fill={fill} stroke="#2B1E17" strokeWidth="2.5" />}
-      {shape === 'square' && <rect x="5" y="5" width="30" height="30" rx="2" fill={fill} stroke="#2B1E17" strokeWidth="2.5" />}
-      {shape === 'triangle' && <polygon points="20,4 37,35 3,35" fill={fill} stroke="#2B1E17" strokeWidth="2.5" strokeLinejoin="round" />}
-    </svg>
-  );
-}
 
 function Board({ rd, placed, ghost, alive, small }: { rd: Round; placed: number; ghost?: number; alive?: boolean; small?: boolean }) {
   return (
