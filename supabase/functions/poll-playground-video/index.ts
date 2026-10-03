@@ -7,6 +7,7 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { checkVeo, downloadVeo } from "../_shared/veoClient.ts";
 
 const FAL_QUEUE = "https://queue.fal.run";
 
@@ -14,7 +15,7 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
-    const FAL_KEY = Deno.env.get("FAL_KEY")!;
+    const FAL_KEY = Deno.env.get("FAL_KEY") ?? "";
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -44,6 +45,28 @@ Deno.serve(async (req) => {
       return json({ ...row, signed_url: signed.data?.signedUrl ?? row.video_url });
     }
     if (row.status === "failed") return json(row);
+
+    // Gemini (Veo) clips: prediction_id is "gemini::<veo model>::<operation name>"
+    if (String(row.prediction_id ?? "").startsWith("gemini::")) {
+      const GEMINI_KEY = Deno.env.get("GEMINI_API_KEY")!;
+      const operation = String(row.prediction_id).split("::").slice(2).join("::");
+      const v = await checkVeo(GEMINI_KEY, operation);
+      if (v.state === "rendering") return json({ ...row, status: "rendering" });
+      if (v.state === "failed") {
+        await admin.from("playground_videos").update({ status: "failed", error: v.error }).eq("id", id);
+        return json({ ...row, status: "failed", error: v.error });
+      }
+      const mp4 = await downloadVeo(GEMINI_KEY, v.uri);
+      const path = `${userId}/${id}.mp4`;
+      const up = await admin.storage.from("playground-videos").upload(path, mp4, { contentType: "video/mp4", upsert: true });
+      if (up.error) {
+        await admin.from("playground_videos").update({ status: "failed", error: up.error.message }).eq("id", id);
+        return json({ ...row, status: "failed", error: up.error.message });
+      }
+      await admin.from("playground_videos").update({ status: "ready", storage_path: path, video_url: null }).eq("id", id);
+      const signed = await admin.storage.from("playground-videos").createSignedUrl(path, 60 * 60 * 6);
+      return json({ ...row, status: "ready", storage_path: path, signed_url: signed.data?.signedUrl });
+    }
 
     // prediction_id is stored as "model::request_id"
     const [model, requestId] = String(row.prediction_id ?? "").split("::");
