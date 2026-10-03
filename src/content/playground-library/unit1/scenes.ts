@@ -3376,7 +3376,7 @@ export const LESSON_U2L4_SCENES: Scene[] = [
     id: 'u2l4-party-spot', kind: 'color-spot', bg: bgU2L4Party,
     teacher: 'What color is this? What shape is this? Tap each arrow!',
     items: [
-      { colorWord: 'RED CIRCLE', colorHex: C4.RED, who: 'bella', label: 'Balloon', sentence: "It's a red circle!", left: '7%', top: '12%', splashImg: itemBalloonRed },
+      { colorWord: 'RED CIRCLE', colorHex: C4.RED, who: 'bella', label: 'Balloon', sentence: "It's a red circle!", left: '7%', top: '22%', splashImg: itemBalloonRed },
       { colorWord: 'GREEN SQUARE', colorHex: C4.GREEN, who: 'willow', label: 'Present', sentence: "It's a green square!", left: '49%', top: '50%', splashImg: itemPresent },
       { colorWord: 'YELLOW TRIANGLE', colorHex: '#F59E0B', who: 'leo', label: 'Flag', sentence: "It's a yellow triangle!", left: '88%', top: '12%', splashImg: itemFlag },
     ],
@@ -3447,8 +3447,8 @@ export const LESSON_U2L4_SCENES: Scene[] = [
   {
     id: 'u2l4-you-answer', kind: 'join-stage', bg: bgU2L4Party, teacher: 'Your turn! Answer Pip.', cast: ['pip', 'bella', 'willow', 'leo'],
     turns: [
-      { who: 'pip', line: 'What color is this?', arrow: { left: '7%', top: '12%' } },
-      { who: 'student', line: "It's …", arrow: { left: '7%', top: '12%' } },
+      { who: 'pip', line: 'What color is this?', arrow: { left: '7%', top: '22%' } },
+      { who: 'student', line: "It's …", arrow: { left: '7%', top: '22%' } },
       { who: 'pip', line: 'What shape is this?', arrow: { left: '49%', top: '50%' } },
       { who: 'student', line: "It's a …", arrow: { left: '49%', top: '50%' } },
       { who: 'pip', line: 'Is it a triangle?', arrow: { left: '88%', top: '12%' } },

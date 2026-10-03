@@ -53,7 +53,8 @@ export function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene,
           onClick={playLetterSound}
           aria-label={`Hear the ${scene.letter} sound again`}
           className="pointer-events-auto grid place-items-center rounded-[2.5rem] border-8 bg-white/95 font-black shadow-2xl backdrop-blur transition active:scale-95"
-          style={{ color: theme.tint, borderColor: theme.tint, width: 'min(calc(60*var(--svh,1vh)), 22rem)', height: 'min(calc(60*var(--svh,1vh)), 22rem)', fontSize: 'min(calc(48*var(--svh,1vh)), 18rem)', lineHeight: 1, animation: beat >= 0 ? 'lep1-pop 0.5s ease-out' : 'lep1-wiggle 4s ease-in-out infinite' }}
+          style={{ color: theme.tint, borderColor: theme.tint, width: 'min(calc(60*var(--svh,1vh)), 22rem)', height: 'min(calc(60*var(--svh,1vh)), 22rem)', // Two-letter sounds (Wh, Sh, Ch…) need a smaller font to fit the card.
+            fontSize: scene.letter.length > 1 ? 'min(calc(30*var(--svh,1vh)), 11rem)' : 'min(calc(48*var(--svh,1vh)), 18rem)', lineHeight: 1, animation: beat >= 0 ? 'lep1-pop 0.5s ease-out' : 'lep1-wiggle 4s ease-in-out infinite' }}
         >
           {scene.letter}
         </button>

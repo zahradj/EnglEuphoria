@@ -248,3 +248,8 @@ export function ShapeIcon({ shape, fill }: { shape: string; fill: string }) {
     </svg>
   );
 }
+
+/** Speak, but never let a slow or missing clip stall a game's next step. */
+export function sayWithin(text: string, who: Parameters<typeof safeSpeak>[1], maxMs = 3500) {
+  return Promise.race([safeSpeak(text, who), new Promise<void>((res) => setTimeout(res, maxMs))]);
+}

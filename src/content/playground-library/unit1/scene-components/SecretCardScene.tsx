@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from 'react';
 import type { Scene } from '../scenes';
-import { safeSpeak, cueSpeak } from '../audio';
+import { cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
-import { ShapeIcon } from './shared';
+import { ShapeIcon, sayWithin } from './shared';
 
 /* ---------- Pip's Secret Card (Pre-A1 Unit 2 Lesson 4 signature game) ----------
  * "Guess Who" with Unit 2's colours and shapes: Pip hides one of six coloured
@@ -74,7 +74,7 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
     const yes = kind === 'color' ? secret.colorWord === word : secret.shape === word;
     const a = yes ? YES_LINE : NO_LINE;
     setState((s) => ({ ...s, answer: a }));
-    await safeSpeak(a, scene.who);
+    await sayWithin(a, scene.who);
     const fits = (c: Card) => (kind === 'color' ? c.colorWord === word : c.shape === word) === yes;
     const nextOut = scene.cards.map((c, i) => (outSet.has(i) || !fits(c) ? i : -1)).filter((i) => i >= 0);
     yes ? sfx.match() : sfx.click();
@@ -87,7 +87,7 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
     await new Promise((res) => setTimeout(res, 700));
     setState((s) => ({ ...s, phase: 'found' }));
     sfx.reveal();
-    await safeSpeak(foundLine(secret.colorWord, secret.shape), scene.who);
+    await sayWithin(foundLine(secret.colorWord, secret.shape), scene.who, 5000);
     await new Promise((res) => setTimeout(res, 1200));
     const next = round + 1;
     const awardGem = next >= total && !gemDone;
@@ -144,7 +144,6 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
               key={i}
               aria-label={`${c.colorWord.toLowerCase()} ${c.shape}`}
               className={`grid aspect-[4/3] place-items-center rounded-3xl border-4 p-3 shadow-xl transition-all duration-500 ${gone ? 'scale-90 border-white/40 bg-white/30 opacity-30 grayscale' : 'border-white bg-white/95'} ${isSecret ? 'scale-110 ring-8 ring-yellow-300 animate-[lep1-hop_0.8s_ease-in-out_infinite]' : ''}`}
-              style={{ transform: gone ? 'rotateY(180deg) scale(0.9)' : undefined }}
             >
               <span className="block h-[10vh] w-[10vh] max-w-full"><ShapeIcon shape={c.shape} fill={c.colorHex} /></span>
             </div>

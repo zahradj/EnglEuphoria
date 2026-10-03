@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
-import { safeSpeak, cueSpeak } from '../audio';
+import { cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
-import { ShapeIcon } from './shared';
+import { ShapeIcon, sayWithin } from './shared';
 
 /* ---------- Shape Builders (Pre-A1 Unit 2 Lesson 3 signature game) ----------
  * The "make a picture with shapes" activity of ESL shape lessons (shape-collage
@@ -98,7 +98,7 @@ export function ShapeBuilderScene({ scene, onWin, onLose, onNext, sync }: { scen
     if (!r) return;
     setState((s) => ({ ...s, piece: 0, phase: 'name', wrong: '' }));
     const t = window.setTimeout(async () => {
-      await safeSpeak(r.intro, r.who);
+      await sayWithin(r.intro, r.who);
       cueSpeak(SHAPE_QUESTION, scene.who);
     }, 400);
     return () => window.clearTimeout(t);
@@ -116,8 +116,8 @@ export function ShapeBuilderScene({ scene, onWin, onLose, onNext, sync }: { scen
     if (w !== p.shape) { shake(w); return; }
     sfx.pop();
     setState((s) => ({ ...s, phase: 'pick' }));
-    await safeSpeak(namedLine(p.shape), scene.who);
-    await safeSpeak(pieceLine(p.colorWord, p.shape), scene.who);
+    await sayWithin(namedLine(p.shape), scene.who);
+    await sayWithin(pieceLine(p.colorWord, p.shape), scene.who);
   };
 
   // Three pieces of the asked shape: the right colour + two others (fixed per
@@ -144,7 +144,7 @@ export function ShapeBuilderScene({ scene, onWin, onLose, onNext, sync }: { scen
     }
     setState((s) => ({ ...s, piece: nextPiece, phase: 'done' }));
     sfx.reveal();
-    await safeSpeak(r.line, r.who);
+    await sayWithin(r.line, r.who);
     await new Promise((res) => setTimeout(res, 1200));
     const next = round + 1;
     const awardGem = next >= total && !gemDone;

@@ -1,9 +1,10 @@
 import { useEffect, useMemo } from 'react';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
-import { safeSpeak, cueSpeak } from '../audio';
+import { cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
+import { sayWithin } from './shared';
 
 /* ---------- Magic Paint Pots (Pre-A1 Unit 2 Lesson 2 signature game) ----------
  * Lesson 1's colours make Lesson 2's: Pip names two paints ("Mix blue and
@@ -62,7 +63,7 @@ export function ColorMixScene({ scene, onWin, onLose, onNext, sync }: { scene: E
       sfx.reveal();
       await new Promise((res) => setTimeout(res, 1400));
       setState((s) => ({ ...s, phase: 'name' }));
-      await safeSpeak(MIX_QUESTION, scene.who);
+      await sayWithin(MIX_QUESTION, scene.who);
     }
   };
 
@@ -76,8 +77,8 @@ export function ColorMixScene({ scene, onWin, onLose, onNext, sync }: { scene: E
     }
     sfx.match();
     setState((s) => ({ ...s, phase: 'reveal' }));
-    await safeSpeak(resultLine(r.result), scene.who);
-    await safeSpeak(r.line, r.who);
+    await sayWithin(resultLine(r.result), scene.who);
+    await sayWithin(r.line, r.who);
     await new Promise((res) => setTimeout(res, 700));
     const next = round + 1;
     const awardGem = next >= total && !gemDone;
