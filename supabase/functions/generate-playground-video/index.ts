@@ -3,6 +3,7 @@
 // then returns the row id immediately. Client polls via `poll-playground-video`.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { startVeo, VeoError } from "../_shared/veoClient.ts";
+import { HiggsfieldError, higgsfieldCredentials, startHiggsfield } from "../_shared/higgsfieldClient.ts";
 import { estimateClipCostUsd, finalVideoPrompt, lintVideoPrompt } from "../_shared/videoPolicy.ts";
 
 const corsHeaders = {
@@ -20,9 +21,6 @@ Deno.serve(async (req) => {
   try {
     const FAL_KEY = Deno.env.get("FAL_KEY");
     const GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
-    if (!FAL_KEY && !GEMINI_KEY) {
-      return json({ error: "Neither GEMINI_API_KEY nor FAL_KEY is configured. Add one in Project Secrets." }, 503);
-    }
 
     const authHeader = req.headers.get("Authorization") ?? "";
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -37,7 +35,10 @@ Deno.serve(async (req) => {
 
     const body = await req.json().catch(() => ({}));
     const prompt: string = (body?.prompt ?? "").toString().slice(0, 800);
-    const imageUrl: string | undefined = body?.image_url;
+    // Start images may be site paths ("/lep1/scenes/x.jpg"): the video providers need an absolute URL.
+    const SITE = Deno.env.get("PUBLIC_SITE_URL") ?? "https://www.engleuphoria.com";
+    const rawImage: string | undefined = body?.image_url;
+    const imageUrl: string | undefined = rawImage && rawImage.startsWith("/") ? `${SITE}${rawImage}` : rawImage;
     const lessonId: string | undefined = body?.lesson_id;
     if (!prompt && !imageUrl) return json({ error: "prompt or image_url required" }, 400);
 
@@ -49,6 +50,28 @@ Deno.serve(async (req) => {
     }
     const safePrompt = finalVideoPrompt(prompt);
     console.log("[generate-playground-video] approved; warnings:", lint.issues.map((i) => i.code).join(",") || "none", "est. cost USD", estimateClipCostUsd("veo-3.0-fast-generate-001", 8));
+
+    if (!FAL_KEY && !GEMINI_KEY && body?.provider !== "higgsfield") {
+      return json({ error: "Neither GEMINI_API_KEY nor FAL_KEY is configured. Add one in Project Secrets." }, 503);
+    }
+
+    // Higgsfield (Seedance 2.5) when asked for explicitly: image-to-video, silent, 8 s.
+    if (body?.provider === "higgsfield") {
+      try {
+        const requestId = await startHiggsfield(higgsfieldCredentials(), safePrompt, imageUrl!, 8);
+        const admin = createClient(supabaseUrl, serviceKey);
+        const { data: row, error: insErr } = await admin
+          .from("playground_videos")
+          .insert({ user_id: userId, lesson_id: lessonId ?? null, prompt, status: "rendering", provider: "higgsfield", prediction_id: `higgsfield::${requestId}`, source_image_url: imageUrl ?? null })
+          .select("id")
+          .single();
+        if (insErr) return json({ error: insErr.message }, 500);
+        return json({ id: row.id, prediction_id: requestId, status: "rendering", provider: "higgsfield" });
+      } catch (e) {
+        const status = e instanceof HiggsfieldError ? e.status : 502;
+        return json({ error: (e as Error).message }, status);
+      }
+    }
 
     // Gemini (Veo) is the default backend; FAL (Wan 2.2) is kept as the fallback / explicit choice.
     const wantFal = body?.provider === "fal";

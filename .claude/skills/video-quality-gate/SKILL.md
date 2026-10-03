@@ -58,7 +58,8 @@ is added afterwards from the recorded clips.
 - `src/lib/videoPolicy.ts` (mirrored to `supabase/functions/_shared/videoPolicy.ts`): lint, final prompt, cost, review checklist.
 - `generate-playground-video` edge function runs the lint **before** it contacts Veo/FAL; a blocked prompt returns HTTP 422 and costs nothing.
 - `src/content/playground-library/videoPolicy.test.ts` (deploy gate) lints every brief, checks the start image exists, enforces the mirror and "gate runs first".
-- Higgsfield / Seedance example: `scripts/higgsfield/` — it must go through steps 1-5 as well (same briefs, same lint, one clip first).
+- Providers: `generate-playground-video` takes `provider`: `gemini` (Veo, default), `higgsfield` (Seedance 2.5 image-to-video, silent: `generate_audio:false`) or `fal`. Keys live in Supabase secrets (`GEMINI_API_KEY`; Higgsfield `HF_CREDENTIALS` as `key-id:key-secret` — other names are tried, see `_shared/higgsfieldClient.ts`). All go through the same gate.
+- Local Higgsfield / Seedance example: `scripts/higgsfield/` — it must go through steps 1-5 as well (same briefs, same lint, one clip first).
 
 ## Anti-patterns
 

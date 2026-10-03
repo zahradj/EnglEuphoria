@@ -8,6 +8,7 @@ const corsHeaders = {
 };
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { checkVeo, downloadVeo } from "../_shared/veoClient.ts";
+import { checkHiggsfield, higgsfieldCredentials } from "../_shared/higgsfieldClient.ts";
 
 const FAL_QUEUE = "https://queue.fal.run";
 
@@ -45,6 +46,27 @@ Deno.serve(async (req) => {
       return json({ ...row, signed_url: signed.data?.signedUrl ?? row.video_url });
     }
     if (row.status === "failed") return json(row);
+
+    // Higgsfield (Seedance) clips: prediction_id is "higgsfield::<request id>"
+    if (String(row.prediction_id ?? "").startsWith("higgsfield::")) {
+      const requestId = String(row.prediction_id).split("::")[1];
+      const h = await checkHiggsfield(higgsfieldCredentials(), requestId);
+      if (h.state === "rendering") return json({ ...row, status: "rendering" });
+      if (h.state === "failed") {
+        await admin.from("playground_videos").update({ status: "failed", error: h.error }).eq("id", id);
+        return json({ ...row, status: "failed", error: h.error });
+      }
+      const mp4 = await fetch(h.url).then((r) => r.arrayBuffer());
+      const path = `${userId}/${id}.mp4`;
+      const up = await admin.storage.from("playground-videos").upload(path, mp4, { contentType: "video/mp4", upsert: true });
+      if (up.error) {
+        await admin.from("playground_videos").update({ status: "failed", error: up.error.message }).eq("id", id);
+        return json({ ...row, status: "failed", error: up.error.message });
+      }
+      await admin.from("playground_videos").update({ status: "ready", storage_path: path, video_url: h.url }).eq("id", id);
+      const signed = await admin.storage.from("playground-videos").createSignedUrl(path, 60 * 60 * 6);
+      return json({ ...row, status: "ready", storage_path: path, video_url: h.url, signed_url: signed.data?.signedUrl });
+    }
 
     // Gemini (Veo) clips: prediction_id is "gemini::<veo model>::<operation name>"
     if (String(row.prediction_id ?? "").startsWith("gemini::")) {
