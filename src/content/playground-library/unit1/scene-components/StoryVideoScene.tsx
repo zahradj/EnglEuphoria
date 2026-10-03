@@ -236,9 +236,9 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
           onTimeUpdate={onTime}
           onEnded={onEnded}
         >
-          {/* WebM (VP9) first, MP4 (H.264) second: every browser plays one of them. */}
-          <source src={scene.videoUrl.replace(/\.mp4(\?|$)/, '.webm$1')} type="video/webm" />
+          {/* MP4 (H.264) first for Safari/iPad, WebM (VP9) as the fallback. */}
           <source src={scene.videoUrl} type="video/mp4" />
+          <source src={scene.videoUrl.replace(/\.mp4(\?|$)/, '.webm$1')} type="video/webm" />
         </video>
       ) : (
       /* The moving picture */
