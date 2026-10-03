@@ -199,3 +199,27 @@ export function formatValidationResult(ctx: ValidationContext, r: ValidationResu
   r.warnings.forEach((w) => lines.push(`  warn  ${w.code}: ${w.message}${w.sceneId ? ` (${w.sceneId})` : ''}`));
   return lines.join('\n');
 }
+
+/**
+ * Games by lesson slot (docs/playground-lesson-blueprint.md §3d, owner's rule
+ * 2026-10-03): each lesson NUMBER owns its signature games, so inside one unit
+ * a child never meets the same game twice. Kinds not listed here are shared
+ * routine or topic kinds and may appear in any slot.
+ */
+export const SLOT_GAMES: Record<1 | 2 | 3 | 4 | 5 | 6, readonly string[]> = {
+  1: ['mystery-bag', 'picture-match', 'memory', 'sound-pop', 'rapid-recall', 'hello-doors'],
+  2: ['listen-colour', 'catch-sort', 'feed-monsters', 'dash', 'train-recall', 'friend-pop'],
+  3: ['puzzle', 'basket', 'jigsaw-puzzle', 'brick-crush', 'pattern-train', 'word-build'],
+  4: ['secret-card', 'sound-sort', 'color-simon', 'gather', 'shape-fishing', 'alphabet-order'],
+  5: ['lift-flap', 'tick-cross', 'who-said-it', 'alphabet-blocks'],
+  6: ['shape-torch', 'shadow-match', 'draw-path', 'trophy-chest', 'tile-reveal', 'stepping-stones', 'odd-one-out'],
+};
+
+/** Games in `scenes` that belong to another lesson slot (empty = the lesson keeps to its own set). */
+export function checkSlotGames(slot: 1 | 2 | 3 | 4 | 5 | 6, scenes: readonly { id: string; kind: string }[]): ValidationIssue[] {
+  const owner = new Map<string, number>();
+  for (const [n, kinds] of Object.entries(SLOT_GAMES)) for (const k of kinds) owner.set(k, Number(n));
+  return scenes
+    .filter((s) => owner.has(s.kind) && owner.get(s.kind) !== slot)
+    .map((s) => ({ level: 'warning' as const, code: 'slot-game', sceneId: s.id, message: `"${s.kind}" is a Lesson ${owner.get(s.kind)} game (blueprint §3d); Lesson ${slot} should use its own set.` }));
+}

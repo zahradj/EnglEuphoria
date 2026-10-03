@@ -165,6 +165,41 @@ Starters (picture-based tasks, tick-or-cross, listen-and-colour), ESL toy
 lessons (feely box → Mystery Bag; "What are these? — They're bears" → one vs
 many), 2025-26 kids' app design (claymorphism, custom illustration).
 
+## 3d. Games by lesson slot — no game twice in a unit (hard rule, Pre-A1)
+
+Owner's rule (2026-10-03): *"each lesson is kind of boring — lesson one in
+each unit, lesson two in each unit has a different activity."* Every lesson
+NUMBER owns its own signature games. Lesson 1 of every unit uses the Lesson-1
+set (with that unit's words), Lesson 2 the Lesson-2 set, and so on — so inside
+one unit a child never meets the same game twice, and each lesson number
+feels different. The map lives in code (`SLOT_GAMES` in
+`unit1/sceneValidator.ts`); `checkSlotGames()` flags a game borrowed from
+another slot.
+
+| Slot | Feel | Reveal (6) | Match / sort (7) | Game break (12) | Phonics game (14) | Recall (15) | Extra-time favourite |
+|---|---|---|---|---|---|---|---|
+| L1 | Meet the words | `mystery-bag` | `picture-match` | `memory` | `sound-pop` | `rapid-recall` | `hello-doors` |
+| L2 | More words, sort them | `listen-colour` | `catch-sort` | `feed-monsters` | `dash` | `train-recall` | `friend-pop` |
+| L3 | Make & build | `puzzle` | `basket` | `jigsaw-puzzle` | `brick-crush` | `pattern-train` | `word-build` |
+| L4 | Ask & answer | `secret-card` | `sound-sort` | `color-simon` | `gather` | `shape-fishing` | `alphabet-order` |
+| L5 | Story (real video) | `lift-flap` | `tick-cross` | `who-said-it` | `alphabet-blocks` | `story-order` | — |
+| L6 | Review hunt | `shape-torch` | `shadow-match` | `draw-path` | `trophy-chest` | `tile-reveal` | `stepping-stones`, `odd-one-out` |
+
+- **Shared by every lesson** (the routine children rely on, not "games"):
+  `title-card`, `song`, `cinematic`, `story-video`, `story-order` (after any
+  film), `listen-repeat-cards`, `tpr-actions` (Move & Say, brain break),
+  `join-stage`, `spin-wheel`, `sound-model`, `trace`, `echo`,
+  `sticker-reward`, `home-mission`, `finale`.
+- **Topic kinds** (`color-*`, `shape-model`/`shape-sort`/`shape-builder`,
+  `toy-model`, `feelings-*`, `age-*`, `he-she-*`, `numbers-*`,
+  `plural-sort`, `x-is-feeling`…) go in the lesson that teaches that topic,
+  at most **2 lessons per unit**.
+- Extra time replays the slot's own games with NEW rounds (E2/E3), never a
+  game from another slot.
+- New mechanics (2026-10 research: Lingokids *Draw Path*, Wordwall *Image
+  quiz*, Khan Academy Kids shadow puzzles, the stepping-stones floor game)
+  join a slot that is short of games, so the set keeps growing.
+
 ---
 
 ## 4. Built-in Learning Loops

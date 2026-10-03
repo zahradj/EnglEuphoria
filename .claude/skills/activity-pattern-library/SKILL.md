@@ -147,6 +147,27 @@ avoid-forever rule for a `kind` that's otherwise fine elsewhere.
 
 **Every lesson ends with an Extra-time block** (brain break + 2 bonus games) — see `docs/playground-lesson-blueprint.md` §3b.
 
+### Games by lesson slot (owner's rule, 2026-10-03 — blueprint §3d)
+
+Each lesson NUMBER owns its signature games (`SLOT_GAMES` + `checkSlotGames()` in
+`unit1/sceneValidator.ts`); inside a unit a child never meets the same game twice.
+L1 mystery-bag · picture-match · memory · sound-pop · rapid-recall · hello-doors |
+L2 listen-colour · catch-sort · feed-monsters · dash · train-recall · friend-pop |
+L3 puzzle · basket · jigsaw-puzzle · brick-crush · pattern-train · word-build |
+L4 secret-card · sound-sort · color-simon · gather · shape-fishing · alphabet-order |
+L5 lift-flap · tick-cross · who-said-it · alphabet-blocks |
+L6 shape-torch · shadow-match · draw-path · trophy-chest · tile-reveal · stepping-stones · odd-one-out.
+Run `checkSlotGames(slot, scenes)` before calling a lesson done.
+
+### Researched Pre-A1 mechanics (Oct 2026, round 2 — "every lesson feels the same")
+
+| Mechanic | Source | Kind | Trains |
+|---|---|---|---|
+| Draw a line from the character to the thing you hear; it walks the line | Lingokids "Draw Path" (2026) | `draw-path` | listening for colour + shape, fine motor |
+| Picture uncovers tile by tile; guess early from a part | Wordwall "Image quiz" template | `tile-reveal` | noticing colour/shape, saying the word |
+| Drag each coloured picture onto its dark shadow | Khan Academy Kids shadow puzzles / preschool shadow cards | `shadow-match` | shape recognition from outline |
+| Cross the river: tap the stone the voice names, the character hops | classroom stepping-stones floor game, app river levels | `stepping-stones` | listening + forward progress |
+
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
 
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)

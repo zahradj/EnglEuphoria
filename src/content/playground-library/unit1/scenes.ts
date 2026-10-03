@@ -4194,33 +4194,17 @@ export const LESSON_U2L6_SCENES: Scene[] = [
     ],
   },
   {
-    // The child ASKS: "Is it green?" "Is it a circle?" — now with all six colours.
-    id: 'u2l6-secret', kind: 'secret-card', bg: bgU2L4Secret, who: 'pip',
-    teacher: "Pip has a secret gem! Ask: Is it green? Is it a triangle? Find Pip's gem!",
-    cards: [
-      { colorWord: 'GREEN', colorHex: C4.GREEN, shape: 'triangle' },
-      { colorWord: 'PURPLE', colorHex: C4.PURPLE, shape: 'circle' },
-      { colorWord: 'ORANGE', colorHex: C4.ORANGE, shape: 'square' },
-      { colorWord: 'GREEN', colorHex: C4.GREEN, shape: 'circle' },
-      { colorWord: 'PURPLE', colorHex: C4.PURPLE, shape: 'square' },
-      { colorWord: 'ORANGE', colorHex: C4.ORANGE, shape: 'triangle' },
+    // Slide 11: role swap — now the child ASKS (Lesson 4 taught "Is it…?").
+    id: 'u2l6-you-ask', kind: 'join-stage', bg: bgU2L6Gems, teacher: 'Swap! Now the student asks Pip about a gem.', cast: ['pip'],
+    turns: [
+      { who: 'student', line: 'Ask Pip: What color is it?', bubble: 'right' },
+      { who: 'pip', line: "It's purple!", bubble: 'right' },
+      { who: 'student', line: 'Ask Pip: Is it a triangle?', bubble: 'right' },
+      { who: 'pip', line: "Yes! It's a purple triangle!", bubble: 'right' },
     ],
-    rounds: [{ secret: 1 }, { secret: 5 }, { secret: 3 }],
   },
 
   /* ---- Stop 3: the garden — colours ---- */
-  {
-    // Slide 12: memory match with the six treasure gems (sticker cards).
-    id: 'u2l6-memory', kind: 'memory', bg: bgU2L6Chest, teacher: 'Find the gem pairs! Say each one: "a red circle".',
-    pairs: [
-      { id: 'red-circle', label: 'A red circle', emoji: '\u{1F534}', img: itemGemRedCircle },
-      { id: 'blue-square', label: 'A blue square', emoji: '\u{1F7E6}', img: itemGemBlueSquare },
-      { id: 'yellow-triangle', label: 'A yellow triangle', emoji: '\u{1F53A}', img: itemGemYellowTriangle },
-      { id: 'green-triangle', label: 'A green triangle', emoji: '\u{1F49A}', img: itemGemGreenTriangle },
-      { id: 'purple-circle', label: 'A purple circle', emoji: '\u{1F7E3}', img: itemGemPurpleCircle },
-      { id: 'orange-square', label: 'An orange square', emoji: '\u{1F7E7}', img: itemGemOrangeSquare },
-    ],
-  },
   {
     // NEW (2026-10): Image Reveal — guess the picture before all the tiles are gone.
     id: 'u2l6-reveal', kind: 'tile-reveal', bg: bgU2L6Garden, who: 'bella',
@@ -4254,20 +4238,6 @@ export const LESSON_U2L6_SCENES: Scene[] = [
       { letter: 'C', phoneme: '/k/', word: 'car', img: itemCarC, emoji: '\u{1F697}', choices: ['C', 'WH', 'SH'] },
       { letter: 'SH', phoneme: '/sh/', word: 'shell', img: itemShell, emoji: '\u{1F41A}', choices: ['C', 'WH', 'SH'] },
       { letter: 'WH', phoneme: '/w/', word: 'wheel', img: itemWheel, emoji: '\u{1F6DE}', choices: ['C', 'WH', 'SH'] },
-    ],
-  },
-  {
-    // Slide 15: quick-fire flashcards — 3 seconds to say each gem.
-    id: 'u2l6-quick-fire', kind: 'rapid-recall', bg: bgU2L6Map, who: 'pip', seconds: 3,
-    teacher: 'Quick fire! Say the color and the shape before the ring closes.',
-    cards: [
-      { img: itemGemGreenTriangle, word: 'Green triangle', say: "It's a green triangle!" },
-      { img: itemGemOrangeSquare, word: 'Orange square', say: "It's an orange square!" },
-      { img: itemGemRedCircle, word: 'Red circle', say: "It's a red circle!" },
-      { img: itemGemPurpleCircle, word: 'Purple circle', say: "It's a purple circle!" },
-      { img: itemGemBlueSquare, word: 'Blue square', say: "It's a blue square!" },
-      { img: itemGemYellowTriangle, word: 'Yellow triangle', say: "It's a yellow triangle!" },
-      { img: itemRainbow, word: 'Rainbow', say: "It's a rainbow!" },
     ],
   },
 
@@ -4380,28 +4350,24 @@ export const LESSON_U2L6_SCENES: Scene[] = [
     ],
   },
   {
-    // Circles vs squares on the move: a decision on every catch.
-    id: 'u2l6-catch', kind: 'catch-sort', bg: bgU2L6Beach, teacher: 'Extra time: Catch it! Is it a circle or a square? Say it as you catch it!', goal: 8, seconds: 45,
-    left: { label: 'Circle', emoji: '\u{26AA}' },
-    right: { label: 'Square', emoji: '\u{1F7E6}' },
-    items: [
-      { word: 'clock', img: itemClock, emoji: '\u{1F570}️', target: 'left' },
-      { word: 'ball', img: itemBall, emoji: '\u{26BD}', target: 'left' },
-      { word: 'cookie', img: itemCookie, emoji: '\u{1F36A}', target: 'left' },
-      { word: 'window', img: itemWindow, emoji: '\u{1FA9F}', target: 'right' },
-      { word: 'present', img: itemPresent, emoji: '\u{1F381}', target: 'right' },
-      { word: 'book', img: itemBook, emoji: '\u{1F4D8}', target: 'right' },
+    // Extra time E2: Stepping Stones again with Bella and new stones.
+    id: 'u2l6-stones-2', kind: 'stepping-stones', bg: bgMeadow, who: 'bella', walker: 'bella',
+    teacher: 'Extra time: Help Bella cross the river! Listen and tap the stone.',
+    rounds: [
+      { line: 'Jump on the red square!', answer: 2, reply: 'A red square! Hop!', options: [{ label: 'red circle', shape: 'circle', colorHex: C4.RED }, { label: 'blue square', shape: 'square', colorHex: C4.BLUE }, { label: 'red square', shape: 'square', colorHex: C4.RED }] },
+      { line: 'Jump on the yellow circle!', answer: 0, reply: 'A yellow circle! Hop!', options: [{ label: 'yellow circle', shape: 'circle', colorHex: C4.YELLOW }, { label: 'yellow triangle', shape: 'triangle', colorHex: C4.YELLOW }, { label: 'green circle', shape: 'circle', colorHex: C4.GREEN }] },
+      { line: 'Jump on the purple triangle!', answer: 1, reply: 'A purple triangle! Hop!', options: [{ label: 'orange triangle', shape: 'triangle', colorHex: C4.ORANGE }, { label: 'purple triangle', shape: 'triangle', colorHex: C4.PURPLE }, { label: 'purple square', shape: 'square', colorHex: C4.PURPLE }] },
     ],
+    goal: { img: itemRainbow, label: 'rainbow', line: 'Bella is over the river! A rainbow!' },
   },
   {
-    id: 'u2l6-simon', kind: 'color-simon', bg: bgU2L6Chest, teacher: 'Extra time: The chest has a color lock! Watch, then copy the colors. Say each one!', maxRounds: 5,
-    colors: [
-      { colorWord: 'RED', colorHex: C4.RED, who: 'bella' },
-      { colorWord: 'BLUE', colorHex: C4.BLUE, who: 'willow' },
-      { colorWord: 'YELLOW', colorHex: C4.YELLOW, who: 'leo' },
-      { colorWord: 'GREEN', colorHex: C4.GREEN, who: 'willow' },
-      { colorWord: 'ORANGE', colorHex: C4.ORANGE, who: 'leo' },
-      { colorWord: 'PURPLE', colorHex: C4.PURPLE, who: 'mia' },
+    // Extra time E3: Image Reveal with new pictures.
+    id: 'u2l6-reveal-2', kind: 'tile-reveal', bg: bgU2L6Garden, who: 'willow',
+    teacher: 'Extra time: What is it? Guess early and say it with its color!',
+    rounds: [
+      { img: itemApple, word: 'apple', line: "It's a red apple!", options: [{ label: 'apple', img: itemApple }, { label: 'balloon', img: itemBalloonRed }, { label: 'carrot', img: itemCarrot }] },
+      { img: itemSun, word: 'sun', line: "It's a yellow sun!", options: [{ label: 'cookie', img: itemCookie }, { label: 'sun', img: itemSun }, { label: 'pumpkin', img: itemPumpkin }] },
+      { img: itemWater, word: 'water', line: "It's blue water!", options: [{ label: 'grapes', img: itemGrapes }, { label: 'leaf', img: itemLeaf }, { label: 'water', img: itemWater }] },
     ],
   },
   {
