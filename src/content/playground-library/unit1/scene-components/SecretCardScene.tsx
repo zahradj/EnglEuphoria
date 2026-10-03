@@ -78,7 +78,7 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
     await sayWithin(a, scene.who);
     const fits = (c: Card) => (kind === 'color' ? c.colorWord === word : c.shape === word) === yes;
     const nextOut = scene.cards.map((c, i) => (outSet.has(i) || !fits(c) ? i : -1)).filter((i) => i >= 0);
-    yes ? sfx.match() : sfx.click();
+    if (yes) sfx.match(); else sfx.click();
     setState((s) => ({ ...s, out: nextOut }));
     const remaining = scene.cards.length - nextOut.length;
     if (remaining > 1) {
