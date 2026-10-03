@@ -91,6 +91,7 @@ real clips are being generated, and the lesson is not "done" until they are.
 | Audio | The clip's own sound is muted; narration = the recorded character voices (`speak()`), never generated speech, never browser TTS |
 | Format | One stitched MP4 (H.264, faststart) + WebM fallback in `public/lep1/video/`, with `atSec` marking where each beat starts; picture-answer questions pause it |
 | Fallback | If a clip cannot be generated yet, that beat may use the still picture — the lesson is flagged "video pending" and must be finished before it goes live |
+| Generator | **Higgsfield only** (owner's rule, 2026-10-03) — image-to-video from the story picture through the Higgsfield tools/API. No other video service (Veo, fal, PixVerse…) for new clips. Clips already made before this rule stay. |
 
 Other lessons may keep picture-films (`story-video` built from stills) for
 short story openers and payoffs; Lesson 5 may not.

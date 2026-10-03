@@ -10,6 +10,10 @@
  * gaps). Stitching + narration timing is done afterwards (ffmpeg).
  *
  * Env: VIDEO_PROXY_URL, VIDEO_PROXY_TOKEN.
+ *
+ * RETIRED for new clips: the owner's rule (2026-10-03) is Higgsfield only for
+ * video generation. The beat list in scripts/story-videos.json is still the
+ * source of truth for prompts; generate with Higgsfield image-to-video.
  */
 import fs from 'node:fs';
 import path from 'node:path';

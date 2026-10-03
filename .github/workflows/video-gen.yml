@@ -4,11 +4,10 @@ name: Generate story video clips
 # scripts/generate-story-video.mjs for the story named in
 # scripts/video-gen-request.txt (beats in scripts/story-videos.json) through
 # the video-proxy edge function (Veo image-to-video) and commits the clips.
+# RETIRED for new clips (owner's rule 2026-10-03: Higgsfield only). Kept for
+# manual runs only; no automatic trigger.
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - 'scripts/video-gen-request.txt'
 
 permissions:
   contents: write

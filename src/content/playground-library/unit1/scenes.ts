@@ -3798,17 +3798,17 @@ export const LESSON_U2L5_SCENES: Scene[] = [
   {
     // The story as an animated, narrated cartoon: Pre-A1 children can't read
     // yet, so nothing here needs reading (answers are pictures).
-    id: 'u2l5-story-video', kind: 'story-video', bg: bgU2L5Sea, videoUrl: `${A}/video/shelly-story-u2l5.mp4?v=1`, title: "Shelly's Scales",
+    id: 'u2l5-story-video', kind: 'story-video', bg: bgU2L5Sea, videoUrl: `${A}/video/shelly-story-u2l5.mp4?v=2`, title: "Shelly's Scales",
     teacher: 'Press play and watch together. Point and repeat key words; answer the picture questions.',
     pages: [
       { img: bgU2L5Sea, who: 'pip', line: 'This is Shelly. Shelly is a little fish.', motion: 'zoom-in', fx: 'bubbles' , atSec: 0 },
-      { img: bgU2L5Sad, who: 'pip', line: 'Shelly is gray. She is sad. I want colors!', motion: 'zoom-in', fx: 'tear' , atSec: 5 },
-      { img: bgU2L5Red, who: 'bella', line: 'Bella says, Here you are! A red circle!', motion: 'pan-right', fx: 'sparkles' , atSec: 10 },
-      { img: bgU2L5Blue, who: 'mia', line: 'Mia gives Shelly a blue square.', motion: 'pan-left', fx: 'sparkles' , atSec: 15 },
-      { img: bgU2L5Yellow, who: 'leo', line: 'Leo gives Shelly a yellow triangle.', motion: 'pan-right', fx: 'sparkles' , atSec: 20 },
-      { img: bgU2L5Rainbow, who: 'willow', line: 'Now Shelly has six colors! She is a rainbow fish!', motion: 'zoom-out', fx: 'sparkles' , atSec: 25 },
-      { img: bgU2L5Crab, who: 'pip', line: 'A little crab is gray and sad. Shelly gives him a purple circle.', motion: 'zoom-in', fx: 'bubbles' , atSec: 30 },
-      { img: bgU2L5Crab, who: 'willow', line: 'Thank you, Shelly! Now they are friends.', motion: 'zoom-out', fx: 'hearts' , atSec: 35 },
+      { img: bgU2L5Sad, who: 'pip', line: 'Shelly is gray. She is sad. I want colors!', motion: 'zoom-in', fx: 'tear' , atSec: 8 },
+      { img: bgU2L5Red, who: 'bella', line: 'Bella says, Here you are! A red circle!', motion: 'pan-right', fx: 'sparkles' , atSec: 16 },
+      { img: bgU2L5Blue, who: 'mia', line: 'Mia gives Shelly a blue square.', motion: 'pan-left', fx: 'sparkles' , atSec: 24 },
+      { img: bgU2L5Yellow, who: 'leo', line: 'Leo gives Shelly a yellow triangle.', motion: 'pan-right', fx: 'sparkles' , atSec: 32 },
+      { img: bgU2L5Rainbow, who: 'willow', line: 'Now Shelly has six colors! She is a rainbow fish!', motion: 'zoom-out', fx: 'sparkles' , atSec: 40 },
+      { img: bgU2L5Crab, who: 'pip', line: 'A little crab is gray and sad. Shelly gives him a purple circle.', motion: 'zoom-in', fx: 'bubbles' , atSec: 48 },
+      { img: bgU2L5Crab, who: 'willow', line: 'Thank you, Shelly! Now they are friends.', motion: 'zoom-out', fx: 'hearts' , atSec: 56 },
     ],
     checkpoints: [
       { afterPage: 1, who: 'pip', question: 'What color is Shelly?', answer: 'Gray', options: [{ label: 'Red', colorHex: '#EF4444' }, { label: 'Gray', colorHex: '#9CA3AF' }, { label: 'Blue', colorHex: '#3B82F6' }] },
