@@ -1,3 +1,7 @@
-Higgsfield: 1 pictures to make
-+ public/lep1/scenes/bg-u2l5-shelly-orange-wide.png (2038026B, Higgsfield)
-Done. made 1, failed 0
+Higgsfield: 5 pictures to make
++ public/lep1/items/item-gem-green-triangle.png (1798784B, Higgsfield)
++ public/lep1/items/item-medal-rainbow.png (2300112B, Higgsfield)
++ public/lep1/items/item-gem-purple-circle.png (1796795B, Higgsfield)
++ public/lep1/items/item-gem-orange-square.png (1782277B, Higgsfield)
++ public/lep1/scenes/bg-u2l6-gems-wide.png (2357095B, Higgsfield)
+Done. made 5, failed 0
