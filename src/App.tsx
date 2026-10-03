@@ -495,7 +495,8 @@ const App = () => {
                       <Route path="/signup" element={<Navigate to="/student-signup" replace />} />
                       <Route path="/teacher-signup" element={<Navigate to="/for-teachers" replace />} />
                       <Route path="/student-signup" element={<Suspense fallback={<LoadingFallback />}><StudentSignUp /></Suspense>} />
-                      <Route path="/parent-signup" element={<Suspense fallback={<LoadingFallback />}><ParentSignUp /></Suspense>} />                      <Route path="/who-is-learning" element={
+                      <Route path="/parent-signup" element={<Suspense fallback={<LoadingFallback />}><ParentSignUp /></Suspense>} />
+                      <Route path="/who-is-learning" element={
                         <ImprovedProtectedRoute requiredRole={['parent', 'student']}>
                           <Suspense fallback={<LoadingFallback />}><WhoIsLearning /></Suspense>
                         </ImprovedProtectedRoute>

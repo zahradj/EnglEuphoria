@@ -267,6 +267,11 @@
   box-shadow: 0 10px 18px -10px rgba(35, 38, 89, 0.55);
   pointer-events: none;
 }
+/* Academy busts are already head-and-shoulders: just fill the circle, face a little high. */
+.fd-child__portrait--bust img {
+  transform: scale(1.14);
+  transform-origin: 50% 36%;
+}
 /* Cast portraits are full-body: scale in on the face and shoulders. */
 .fd-child__portrait img {
   width: 100%;

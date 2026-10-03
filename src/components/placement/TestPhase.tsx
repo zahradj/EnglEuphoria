@@ -4,6 +4,8 @@ import { Volume2, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import ChatBubble from './ChatBubble';
 import { accentFor } from './hubAccent';
+import { placementClipUrl } from './placementAudio';
+import { placementVoiceForHub } from './placementLines';
 import { supabase, supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { VocabularyImage } from '@/components/ui/VocabularyImage';
@@ -60,6 +62,8 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
+  // True when this question's sound could not be played; answers then unlock so the test can always be finished.
+  const [audioFailed, setAudioFailed] = useState(false);
   const audioCacheRef = useRef<Map<number, string>>(new Map());
   const currentAudioRef = useRef<HTMLAudioElement | null>(null);
   const currentQIndex = current?.index ?? -1;
@@ -71,6 +75,7 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
   // Reset listening lock whenever the question advances
   useEffect(() => {
     setHasPlayedOnce(false);
+    setAudioFailed(false);
     setIsPlaying(false);
     setIsLoadingAudio(false);
     if (currentAudioRef.current) {
@@ -95,61 +100,25 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
     const q = current?.item;
     if (!q?.audio_script || isPlaying || isLoadingAudio) return;
 
-    const FAILURE_MSG = 'Failed to load audio. Please check your connection or try again.';
+    // Friendly and non-technical: a provider error must never reach a student's screen.
+    const FAILURE_MSG = "Sound isn't available right now. Choose the answer you think is best.";
     setIsLoadingAudio(true);
 
     try {
       let url = audioCacheRef.current.get(currentQIndex);
       if (!url) {
-        // Bypass supabase.functions.invoke() because it can mis-parse binary
-        // audio responses as JSON. Direct fetch guarantees a clean blob.
-        const SUPABASE_URL = supabaseUrl;
-        const SUPABASE_KEY = supabaseAnonKey;
-        const { data: sessionData } = await supabase.auth.getSession();
-        const accessToken = sessionData.session?.access_token ?? SUPABASE_KEY;
-
-        const response = await fetch(`${SUPABASE_URL}/functions/v1/elevenlabs-tts`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            apikey: SUPABASE_KEY,
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({ text: q.audio_script, voiceId: q.voice_id }),
-        });
-
-        const contentType = response.headers.get('content-type') || '';
-        console.log('[Placement audio] response', {
-          questionIndex: currentQIndex,
-          status: response.status,
-          contentType,
-        });
-
-        if (!response.ok || contentType.includes('application/json')) {
-          // Edge function returned a JSON error payload (or HTTP failure).
-          let msg = FAILURE_MSG;
-          try {
-            const payload = await response.json();
-            console.error('[Placement audio] error payload', { questionIndex: currentQIndex, payload });
-            if (typeof payload?.error === 'string') msg = payload.error;
-          } catch {
-            /* ignore parse error */
-          }
-          throw new Error(msg);
+        // Saved clip only (made once by the bake script). No live speech generation, ever.
+        const clip = await placementClipUrl(q.audio_script, placementVoiceForHub(resolvedHub));
+        if (!clip) {
+          console.warn('[Placement audio] no saved clip for this question', { questionIndex: currentQIndex });
+          setIsPlaying(false);
+          setIsLoadingAudio(false);
+          // Never trap the student behind a listening lock they cannot open.
+          setAudioFailed(true);
+          toast.message(FAILURE_MSG);
+          return;
         }
-
-        const blob = await response.blob();
-        if (!blob || blob.size === 0) {
-          console.error('[Placement audio] empty blob', { questionIndex: currentQIndex });
-          throw new Error(FAILURE_MSG);
-        }
-
-        // Force the MIME type to audio/mpeg in case the server omitted it.
-        const audioBlob = blob.type.startsWith('audio/')
-          ? blob
-          : new Blob([blob], { type: 'audio/mpeg' });
-
-        url = URL.createObjectURL(audioBlob);
+        url = clip;
         audioCacheRef.current.set(currentQIndex, url);
       }
 
@@ -170,24 +139,27 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
         console.error('[Placement audio] element error', { questionIndex: currentQIndex, error: e });
         setIsPlaying(false);
         setIsLoadingAudio(false);
-        toast.error(FAILURE_MSG);
+        setAudioFailed(true);
+        toast.message(FAILURE_MSG);
       };
 
       try {
         await audio.play();
         setHasPlayedOnce(true);
       } catch (playErr) {
-        console.error('[Placement audio] play() rejected', { questionIndex: currentQIndex, voiceId: q.voice_id, err: playErr });
+        console.error('[Placement audio] play() rejected', { questionIndex: currentQIndex, err: playErr });
         setIsPlaying(false);
         setIsLoadingAudio(false);
-        toast.error(FAILURE_MSG);
+        // Autoplay/permission refusal is not a missing clip: let them tap play again, but don't trap them.
+        setAudioFailed(true);
+        toast.message(FAILURE_MSG);
       }
     } catch (err) {
-      console.error('[Placement audio]', { questionIndex: currentQIndex, voiceId: q.voice_id, err });
+      console.error('[Placement audio]', { questionIndex: currentQIndex, err });
       setIsPlaying(false);
       setIsLoadingAudio(false);
-      const msg = err instanceof Error && err.message ? err.message : FAILURE_MSG;
-      toast.error(msg);
+      setAudioFailed(true);
+      toast.message(FAILURE_MSG);
     }
   };
 
@@ -375,7 +347,7 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
                           </>
                         )}
                       </button>
-                      {!hasPlayedOnce && (
+                      {!hasPlayedOnce && !audioFailed && (
                         <p className="text-white/60 text-xs">{t('placement.audio.hint')}</p>
                       )}
                     </div>
@@ -385,7 +357,7 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
             })()}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {currentQuestion.options.map((opt, i) => {
-                const lockedByListening = !!currentQuestion.audio_script && !hasPlayedOnce;
+                const lockedByListening = !!currentQuestion.audio_script && !hasPlayedOnce && !audioFailed;
                 return (
                   <motion.button
                     key={i}

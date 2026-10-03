@@ -41,9 +41,9 @@ export function ChildCard({ child, onViewProgress }: Props) {
     <article className="fd-child" style={hubStyle(profile?.hub)} aria-label={child.name}>
       <div className="fd-child__top">
         <span className="fd-hubchip">{brand.label}</span>
-        {art && art.startsWith('http') ? (
-          // Academy cast art is a photographic portrait with its own background: crop it round.
-          <span className="fd-child__portrait" aria-hidden>
+        {art && (art.startsWith('http') || art.includes('/avatars/academy/')) ? (
+          // Academy cast art is a head-and-shoulders portrait (not a leaning cut-out): show it in a round frame.
+          <span className={`fd-child__portrait${art.startsWith('http') ? '' : ' fd-child__portrait--bust'}`} aria-hidden>
             <img src={art} alt="" loading="lazy" />
           </span>
         ) : art ? (

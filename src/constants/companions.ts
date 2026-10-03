@@ -39,23 +39,22 @@ export const COMPANIONS: Companion[] = [
     name: 'Ava',
     hub: 'academy',
     description: 'Conversation lead — keeps every chat moving.',
-    // No individual portrait yet (the cast vault image is a shared sheet); picker shows the name.
-    avatar_url: '/placeholder.svg',
+    // Flat-vector portrait on a transparent background. "-v2" file names defeat the offline cache's old copies.
+    avatar_url: '/avatars/academy/ava-v2.webp',
   },
   {
     id: 'ac-theo',
     name: 'Theo',
     hub: 'academy',
     description: 'Relaxed and curious — loves a good debate.',
-    avatar_url: '/placeholder.svg',
+    avatar_url: '/avatars/academy/theo-v2.webp',
   },
   {
     id: 'ac-vee',
     name: 'Vee',
     hub: 'academy',
     description: 'Your Academy mentor — plans your week and keeps you focused.',
-    avatar_url:
-      'https://dcoxpyzoqjvmuuygvlme.supabase.co/storage/v1/object/public/lesson-assets/studio/academy-cast-vault/ai-image-vee-avatar-1787676635290.png',
+    avatar_url: '/avatars/academy/vee-v2.webp',
   },
 ];
 

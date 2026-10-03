@@ -51,6 +51,16 @@ import * as wtA2Scenes from '../src/content/playground-library/welcome-town-a2/s
 import * as magicCastleScenes from '../src/content/playground-library/magic-castle/scenes.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
 import { allQuestLines } from '../src/content/homework-quests/registry.ts';
+import { placementLines } from '../src/components/placement/placementLines.ts';
+
+// The kids' picture placement defaults live in a module that imports the browser Supabase client; load it
+// defensively so a Node-side import problem can never stop the rest of the placement lines from baking.
+let KIDS_PLACEMENT_DEFAULTS = null;
+try {
+  ({ DEFAULT_PLAYGROUND_CONTENT: KIDS_PLACEMENT_DEFAULTS } = await import('../src/placement/hubContent.ts'));
+} catch (e) {
+  console.warn(`  ! kids placement defaults not loaded (${e.message}); only the question-bank placement lines will be baked.`);
+}
 import { spokenText } from '../src/content/playground-library/unit1/spokenText.ts';
 import { LIBRARY_GAMES } from '../src/content/playground-library/gamesCatalog.ts';
 import { artFor } from '../src/content/playground-library/alphabetArt.ts';
@@ -509,6 +519,8 @@ function collectPairs(lessonFilter) {
   for (const [character, text] of FIXED_LINES) add(character, text);
   if (!lessonFilter || lessonFilter === 'HOMEWORK') for (const [character, text] of HOMEWORK_LINES) add(character, text);
   if (!lessonFilter || lessonFilter === 'GAMES') for (const [character, text] of gameLines()) add(character, text);
+  // Placement tests play these saved files and never generate speech live (see placementAudio.ts).
+  if (!lessonFilter || lessonFilter === 'PLACEMENT') for (const [character, text] of placementLines(KIDS_PLACEMENT_DEFAULTS)) add(character, text);
 
   for (const { scenesModule, extractors, resolveWho } of ENGINES) {
     const sceneArrayNames = Object.keys(scenesModule).filter((k) => /^LESSON_.*_SCENES$/.test(k));

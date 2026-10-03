@@ -184,7 +184,7 @@ export const DEFAULT_ACADEMY_CONTENT: HubPlacementContent = {
     label: 'Nova the Owl',
     intro: "Hi! I'm Nova. Take a deep breath and pick the best answer — you've got this.",
     encouragements: ['Nice thinking!', 'Keep it up!', 'Strong choice.', 'You got this.'],
-    avatarUrl: '/mascots/nova-owl-welcome.png',
+    avatarUrl: '/mascots/nova-owl-welcome-v2.png',
   },
   passThreshold: 0.7,
   sections: [
@@ -344,6 +344,11 @@ export function resetHubContentCache(hub?: HubKey) {
   }
 }
 
+/** Old mascot image path -> redrawn art (Academy's Nova). Add a line whenever a mascot file is replaced. */
+const MASCOT_ART_UPGRADES: Record<string, string> = {
+  '/mascots/nova-owl-welcome.png': '/mascots/nova-owl-welcome-v2.png',
+};
+
 export async function loadHubPlacementContent(
   hub: HubKey,
   opts: { force?: boolean } = {},
@@ -361,7 +366,12 @@ export async function loadHubPlacementContent(
         .maybeSingle();
       if (error) throw error;
       if (data?.content) {
-        cache[hub] = data.content as HubPlacementContent;
+        const content = data.content as HubPlacementContent;
+        // Saved content may still point at mascot art that has since been redrawn. The new files use new names
+        // (the offline cache keeps old image URLs for 30 days), so map the old paths to the new art here.
+        const upgraded = MASCOT_ART_UPGRADES[content.pip?.avatarUrl ?? ''];
+        if (upgraded) content.pip = { ...content.pip, avatarUrl: upgraded };
+        cache[hub] = content;
         return cache[hub]!;
       }
     } catch (e) {

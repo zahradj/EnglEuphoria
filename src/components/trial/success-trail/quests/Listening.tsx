@@ -3,7 +3,7 @@ import { GhostButton, PrimaryButton, QuestShell } from "../QuestShell";
 import { ChoiceButton } from "../ChoiceButton";
 import { LISTENING, type Track } from "../levels";
 import type { AnswerRecord } from "../useLesson";
-import { supabase } from "@/integrations/supabase/client";
+import { placementClipUrl } from "@/components/placement/placementAudio";
 
 export function Listening({
   onDone,
@@ -31,28 +31,20 @@ export function Listening({
         return;
       }
       setLoading(true);
-      const { data, error } = await supabase.functions.invoke("elevenlabs-tts", {
-        body: { text: item.script },
-      });
-      if (error) throw error;
-      const blob =
-        data instanceof Blob ? data : new Blob([data as ArrayBuffer], { type: "audio/mpeg" });
-      const url = URL.createObjectURL(blob);
+      // Saved clip only (made once by the bake script). No live generation and NO browser voice, ever
+      // (project voice rule): if the clip is missing we stay silent and the script stays available to read.
+      const url = await placementClipUrl(item.script, "teacher");
+      if (!url) throw new Error("no saved clip");
       audioUrlRef.current = url;
       const audio = new Audio(url);
       audioRef.current = audio;
       await audio.play();
       setPlayed(true);
     } catch (e) {
-      console.error("ElevenLabs TTS failed, falling back to browser TTS", e);
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        const u = new SpeechSynthesisUtterance(item.script);
-        u.rate = 0.95;
-        u.lang = "en-US";
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(u);
-        setPlayed(true);
-      }
+      console.warn("[Listening] no saved clip to play", e);
+      // Nothing to hear: let the student read the script instead of being stuck.
+      setShowScript(true);
+      setPlayed(true);
     } finally {
       setLoading(false);
     }
