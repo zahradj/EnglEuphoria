@@ -1,2 +1,2 @@
-# u2l2: Pre-A1 Unit 2 Lesson 2 colours song
-u2l2-colors
+# u2l3: Pre-A1 Unit 2 Lesson 3 shapes song
+u2l3-shapes
