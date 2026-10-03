@@ -158,7 +158,7 @@ export const NextLessonCard: React.FC<NextLessonCardProps> = ({ disabled = false
             {/* bigCountdown: the time until the lesson, large and central */}
             <div
               className={cn(
-                'rounded-3xl px-4 py-5 text-center ring-1 transition-colors',
+                'rounded-3xl px-4 py-4 text-center ring-1 transition-colors',
                 hot
                   ? 'bg-gradient-to-br from-emerald-500/15 to-teal-500/10 ring-emerald-400/40'
                   : 'bg-gradient-to-br from-primary/10 to-violet-500/10 ring-primary/15',
@@ -171,7 +171,7 @@ export const NextLessonCard: React.FC<NextLessonCardProps> = ({ disabled = false
               <p
                 className={cn(
                   'mt-1 font-black tabular-nums leading-none tracking-tight',
-                  isSessionLive || hasStarted ? 'text-4xl sm:text-5xl' : formattedTime.length > 5 ? 'text-4xl sm:text-5xl' : 'text-6xl sm:text-7xl',
+                  isSessionLive || hasStarted ? 'text-3xl sm:text-4xl' : formattedTime.length > 5 ? 'text-3xl sm:text-4xl' : 'text-4xl sm:text-5xl',
                   hot ? 'text-emerald-600 dark:text-emerald-400' : 'bg-gradient-to-r from-primary to-violet-500 bg-clip-text text-transparent',
                 )}
               >
