@@ -3798,7 +3798,7 @@ export const LESSON_U2L5_SCENES: Scene[] = [
   {
     // The story as an animated, narrated cartoon: Pre-A1 children can't read
     // yet, so nothing here needs reading (answers are pictures).
-    id: 'u2l5-story-video', kind: 'story-video', bg: bgU2L5Sea, videoUrl: `${A}/video/shelly-story-u2l5.mp4?v=2`, title: "Shelly's Scales",
+    id: 'u2l5-story-video', kind: 'story-video', bg: bgU2L5Sea, videoUrl: `${A}/video/shelly-story-u2l5.mp4?v=3`, title: "Shelly's Scales",
     teacher: 'Press play and watch together. Point and repeat key words; answer the picture questions.',
     pages: [
       { img: bgU2L5Sea, who: 'pip', line: 'This is Shelly. Shelly is a little fish.', motion: 'zoom-in', fx: 'bubbles' , atSec: 0 },

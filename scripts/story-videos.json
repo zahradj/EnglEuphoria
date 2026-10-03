@@ -48,6 +48,8 @@
     ],
     "provider": "higgsfield",
     "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
-    "note": "Beats 01-03 and 06-08 were made before the Higgsfield-only rule (kept). Clips are trimmed to 8 s when stitched."
+    "note": "All 8 beats are real clips: 01-03, 06-08 made before the Higgsfield-only rule (kept); 04-05 by Higgsfield (Kling 2.5 Turbo Pro). Trimmed to 8 s each when stitched.",
+    "film": "public/lep1/video/shelly-story-u2l5",
+    "beatSeconds": 8
   }
 }
