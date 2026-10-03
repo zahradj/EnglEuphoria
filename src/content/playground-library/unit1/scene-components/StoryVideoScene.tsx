@@ -85,7 +85,7 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
 
   // Play the current page: narrate, hold, then advance (or open its question).
   useEffect(() => {
-    if (!playing || !p || cp || done) return;
+    if (scene.videoUrl || !playing || !p || cp || done) return;
     const id = ++runId.current;
     const startedOn = page;
     (async () => {
@@ -122,7 +122,7 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [done]);
 
-  const start = () => { sfx.click(); setState((s) => ({ ...s, page: 0, playing: true, done: false, quiz: -1, solved: [] })); };
+  const start = () => { sfx.click(); if (videoRef.current) videoRef.current.currentTime = 0; setState((s) => ({ ...s, page: 0, playing: true, done: false, quiz: -1, solved: [] })); };
   const togglePause = () => { if (playing) stopSpeaking(); setState((s) => ({ ...s, playing: !s.playing })); };
   const replayPage = () => { stopSpeaking(); runId.current++; setState((s) => ({ ...s, playing: true })); if (p) cueSpeak(p.line, p.who); };
 
@@ -137,12 +137,56 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
     sfx.match();
     const qi = quiz;
     await sayWithin(`Yes! ${cp.answer}!`, cp.who, 3000);
+    if (scene.videoUrl) {
+      const ended = videoRef.current?.ended;
+      setState((s) => {
+        if (s.quiz !== qi) return s;
+        const solvedNext = [...s.solved, qi];
+        if (ended) return { ...s, quiz: -1, solved: solvedNext, playing: false, done: true };
+        return { ...s, quiz: -1, solved: solvedNext, page: Math.min(s.page + 1, total - 1), playing: true };
+      });
+      return;
+    }
     setState((s) => {
       if (s.quiz !== qi) return s;
       const solvedNext = [...s.solved, qi];
       if (s.page + 1 >= total) return { ...s, quiz: -1, solved: solvedNext, playing: false, done: true };
       return { ...s, quiz: -1, solved: solvedNext, page: s.page + 1 };
     });
+  };
+
+  // --- Real video mode: the MP4 plays; narration and questions follow its clock. ---
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const starts = scene.pages.map((pg, i) => pg.atSec ?? i * 5);
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!scene.videoUrl || !v) return;
+    if (playing && !cp && !done) void v.play().catch(() => {});
+    else v.pause();
+  }, [playing, quiz, done, page]);
+  // Narrate each page as the video reaches it.
+  useEffect(() => {
+    if (!scene.videoUrl || !playing || !p || cp) return;
+    cueSpeak(p.line, p.who);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, playing]);
+  const onTime = () => {
+    const v = videoRef.current;
+    if (!v || cp || done) return;
+    const t = v.currentTime;
+    let idx = 0;
+    for (let i = 0; i < starts.length; i++) if (t >= starts[i]) idx = i;
+    if (idx <= page) return;
+    // Leaving `page`: its question first, if it has one.
+    const qi = scene.checkpoints.findIndex((c, i) => c.afterPage === page && !solved.includes(i));
+    if (qi >= 0) { v.pause(); setState((s) => (s.quiz < 0 ? { ...s, quiz: qi } : s)); return; }
+    const from = page;
+    setState((s) => (s.page === from ? { ...s, page: idx } : s));
+  };
+  const onEnded = () => {
+    const qi = scene.checkpoints.findIndex((c, i) => c.afterPage === total - 1 && !solved.includes(i));
+    if (qi >= 0) { setState((s) => ({ ...s, quiz: qi })); return; }
+    setState((s) => ({ ...s, playing: false, done: true }));
   };
 
   // Poster
@@ -181,7 +225,23 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-black">
-      {/* The moving picture */}
+      {scene.videoUrl ? (
+        <video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full object-cover"
+          playsInline
+          muted
+          preload="auto"
+          poster={scene.pages[0]?.img}
+          onTimeUpdate={onTime}
+          onEnded={onEnded}
+        >
+          {/* WebM (VP9) first, MP4 (H.264) second: every browser plays one of them. */}
+          <source src={scene.videoUrl.replace(/\.mp4(\?|$)/, '.webm$1')} type="video/webm" />
+          <source src={scene.videoUrl} type="video/mp4" />
+        </video>
+      ) : (
+      /* The moving picture */
       <img
         key={page}
         src={p.img}
@@ -190,7 +250,8 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
         style={{ animation: `${MOTION[p.motion ?? 'zoom-in']} ${(p.holdMs ?? 4500) / 1000 + 6}s ease-in-out forwards, lep1-fade-in 0.8s ease-out`, animationPlayState: playing ? 'running' : 'paused' }}
         draggable={false}
       />
-      <Fx fx={p.fx} />
+      )}
+      {!scene.videoUrl && <Fx fx={p.fx} />}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/35" />
 
       {/* Who is talking (picture, no reading needed) */}
