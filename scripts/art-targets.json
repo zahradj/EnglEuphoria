@@ -1090,5 +1090,95 @@
       "public/lep1/items/item-teddy.png"
     ],
     "prompt": "THREE baby dolls in GREEN dresses sitting together, exactly like the doll reference, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-play-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. Leo the yellow lion (same design as the reference) sits on the grass in the middle-left, happily holding up one shiny golden STAR toy with both paws, smiling. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-wind-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. A gust of wind blows; the shiny golden star toy flies out of Leo's paws and away into the tall grass on the right. Leo the yellow lion (same design as the reference) reaches after it with a surprised, worried face. Leaves and petals blow in the wind. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-sad-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. Leo the yellow lion (same design as the reference) sits on the grass on the LEFT looking SAD with a small tear, empty paws. Pip the orange fox walks up beside him and waves hello kindly. The right third of the picture is open meadow. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-friends-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. All five friends stand in a row on the grass, each one ONLY ONCE, waving hello: from left to right Pip the orange fox, Mia the grey mouse with an orange bow, Bella the white bunny, Willow the blue bird with a green scarf, Leo the yellow lion. Leo still looks a little sad; the others smile kindly. Clear space between the friends. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-hat-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. Bella the white bunny (same design as the reference) on the LEFT lifts a big round straw HAT from the grass; under it is a tiny friendly cartoon BAT that flutters up, surprised. No star. The right half is open meadow. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-mat-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. Mia the grey mouse with an orange bow (same design as the reference) on the LEFT lifts the corner of a red picnic MAT on the grass; under it is one tiny friendly cartoon ANT waving. No star. The right half is open meadow. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-glow-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. Willow the blue bird with a green scarf (same design as the reference) flies high in the sky in the middle and points down with her wing at a warm golden GLOW under the big oak tree on the right. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-found-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge, now darker with many twinkling stars. Under the big oak tree Leo the yellow lion hugs the shiny golden star, very happy. The other friends cheer and jump around him: Pip the orange fox, Mia the grey mouse with an orange bow, Bella the white bunny, Willow the blue bird with a green scarf. Each friend appears only once. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-empty-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. Calm and EMPTY: no characters and no objects on the grass, only the meadow, the big oak tree on the right and the evening sky. Plenty of open grass in the lower half. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-tree.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-hat.png",
+      "public/lep1/items/item-bag.png"
+    ],
+    "prompt": "one big round friendly oak tree with a thick brown trunk and a full green leafy top, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/items/item-star-gold.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-hat.png",
+      "public/lep1/items/item-bag.png"
+    ],
+    "prompt": "one shiny golden five-point STAR toy with a cute happy face and little sparkles, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
   }
 ]
