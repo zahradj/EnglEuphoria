@@ -47,6 +47,13 @@ photorealistic or real people/children (cartoon only), religion/politics, other 
 speech/singing, on-screen text, text-only video (no start image), prompts < 40 or > 700 chars, clips > 8 s.
 Characters: our own cartoon cast only, modest and friendly. Culturally conservative by default.
 
+## Sound (decided 2026-10-03)
+
+The owner allows ElevenLabs or Gemini voice for sound. Generated clips stay silent (`generate_audio:false` / negative prompt); any
+narration or sound is added afterwards. **Speech must use ElevenLabs through `speechPolicy.ts`** (approved no-accent American voices,
+baked clips, `npm run audit:voice`). Gemini TTS voices cannot be checked against the accent policy, so do not use them for speech
+unless the owner listens and approves each voice first; Gemini/ElevenLabs may be used for non-speech sound (soft music, ambience).
+
 ## Silent video (voice policy)
 
 Every voice a student hears is a recorded, no-accent American voice (see the Voice engine in `lesson-quality-gate`). Generated video is
@@ -59,6 +66,7 @@ is added afterwards from the recorded clips.
 - `generate-playground-video` edge function runs the lint **before** it contacts Veo/FAL; a blocked prompt returns HTTP 422 and costs nothing.
 - `src/content/playground-library/videoPolicy.test.ts` (deploy gate) lints every brief, checks the start image exists, enforces the mirror and "gate runs first".
 - Providers: `generate-playground-video` takes `provider`: `gemini` (Veo, default), `higgsfield` (Seedance 2.5 image-to-video, silent: `generate_audio:false`) or `fal`. Keys live in Supabase secrets (`GEMINI_API_KEY`; Higgsfield `HF_CREDENTIALS` as `key-id:key-secret` — other names are tried, see `_shared/higgsfieldClient.ts`). All go through the same gate.
+- Admin page `/admin/video-briefs` (src/pages/admin/VideoBriefs.tsx): shows each brief's preflight + cost + checklist and orders ONE clip with Higgsfield; disabled unless the brief is `ready` and has no clip yet.
 - Local Higgsfield / Seedance example: `scripts/higgsfield/` — it must go through steps 1-5 as well (same briefs, same lint, one clip first).
 
 ## Anti-patterns

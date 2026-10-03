@@ -49,6 +49,7 @@ const TeacherAuraDetail = lazy(() => import("@/pages/teacher/TeacherAuraDetail")
 const BonusApprovalQueue = lazy(() => import("@/pages/admin/BonusApprovalQueue"));
 const PublishQueue = lazy(() => import("@/pages/admin/PublishQueue"));
 const PlaygroundLessonBuilder = lazy(() => import("@/pages/admin/PlaygroundLessonBuilder"));
+const VideoBriefs = lazy(() => import("@/pages/admin/VideoBriefs"));
 const ArcadeHome = lazy(() => import("@/pages/student/arcade/ArcadeHome"));
 const AlphabetArcadeStandalone = lazy(() => import("@/pages/student/arcade/AlphabetArcadeStandalone"));
 const AdventureMapPage = lazy(() => import("@/playground/pages/AdventureMapPage"));
@@ -608,6 +609,11 @@ const App = () => {
                       <Route path="/admin/publish-queue" element={
                         <ImprovedProtectedRoute requiredRole="admin">
                           <Suspense fallback={<LoadingFallback />}><PublishQueue /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/admin/video-briefs" element={
+                        <ImprovedProtectedRoute requiredRole="admin">
+                          <Suspense fallback={<LoadingFallback />}><VideoBriefs /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/admin/playground-lesson-builder" element={
