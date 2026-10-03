@@ -8,6 +8,7 @@ export const dashboardUITranslations = {
   'pd.tab.students': 'Élèves',
   'pd.tab.progress': 'Progression',
   'pd.tab.messages': 'Messages',
+  'pd.tab.calendar': 'Calendrier',
   'pd.tab.alerts': 'Alertes',
 
   'pd.students.empty.title': 'Aucun élève associé',

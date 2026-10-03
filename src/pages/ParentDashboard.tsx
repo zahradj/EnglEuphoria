@@ -7,9 +7,10 @@ import { ParentStudentList } from '@/components/parent/ParentStudentList';
 import { ParentStudentProgress } from '@/components/parent/ParentStudentProgress';
 import { ParentMessages } from '@/components/parent/ParentMessages';
 import { ParentNotificationSettings } from '@/components/parent/ParentNotificationSettings';
+import { FamilyCalendarView } from '@/components/parent/FamilyCalendarView';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Users, TrendingUp, MessageSquare, Bell } from 'lucide-react';
+import { Users, TrendingUp, MessageSquare, Bell, CalendarDays } from 'lucide-react';
 
 interface StudentRelationship {
   id: string;
@@ -110,7 +111,7 @@ const ParentDashboard: React.FC = () => {
           {/* Sticky bottom-sheet style tabs on mobile, inline on desktop */}
           <TabsList
             className="
-              grid w-full grid-cols-4 h-14 md:h-10 gap-1
+              grid w-full grid-cols-5 h-14 md:h-10 gap-1
               sticky top-[60px] md:top-auto md:relative
               z-20 bg-card/90 backdrop-blur-xl
               lg:w-auto lg:inline-grid
@@ -122,6 +123,13 @@ const ParentDashboard: React.FC = () => {
             >
               <Users className="h-5 w-5 md:h-4 md:w-4" />
               <span>{t('pd.tab.students')}</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="calendar"
+              className="flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-2 text-[11px] md:text-sm min-h-[44px]"
+            >
+              <CalendarDays className="h-5 w-5 md:h-4 md:w-4" />
+              <span>{t('pd.tab.calendar')}</span>
             </TabsTrigger>
             <TabsTrigger
               value="progress"
@@ -151,6 +159,10 @@ const ParentDashboard: React.FC = () => {
               students={students} 
               onSelectStudent={setSelectedStudentId} 
             />
+          </TabsContent>
+
+          <TabsContent value="calendar">
+            {user?.id && <FamilyCalendarView parentId={user.id} />}
           </TabsContent>
 
           <TabsContent value="progress">
