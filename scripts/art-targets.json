@@ -652,5 +652,96 @@
       "public/lep1/scenes/bg-u2l3-town-wide.png"
     ],
     "prompt": "One shiny silver whistle with a red cord, side view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-sea-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A calm blue sea under a sunny sky. On the LEFT half a small red wooden SHIP floats on the water with the five friends from the reference standing on its deck and waving: Pip the orange fox, Willow the blue bird with a green scarf, Bella the white bunny, Mia the grey mouse with an orange bow, Leo the yellow lion. On the RIGHT, under the clear water, one small round light-GREY fish with big friendly eyes looks up at them a little sadly. A few pink SHELLS lie on the sandy sea floor at the bottom. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-sad-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Underwater close-up: Shelly, a small round light-GREY fish with big friendly eyes and a little tail fin (same fish as in the first reference image) swims in the middle-right of the picture looking SAD, with a small tear. She is completely grey with NO colours. Soft blue water, bubbles, sandy floor with pink shells. The left third is open blue water. No other animals. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-red-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Bella the white bunny (same design as the reference) leans over the side of the small red wooden ship on the LEFT and drops one shiny RED CIRCLE-shaped scale into the water. Shelly, a small round light-GREY fish with big friendly eyes and a little tail fin (same fish as in the first reference image) is just below the surface on the right, now with exactly ONE red circle scale on her side, smiling. Blue sea, sunny sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-blue-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Mia the grey mouse with an orange bow (same design as the reference) leans over the side of the small red wooden ship on the LEFT and drops one shiny BLUE SQUARE-shaped scale into the water. Shelly, a small round light-GREY fish with big friendly eyes and a little tail fin (same fish as in the first reference image) is just below the surface on the right, with one red circle scale and one blue square scale on her side, smiling. Blue sea, sunny sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-yellow-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Leo the yellow lion (same design as the reference) leans over the side of the small red wooden ship on the LEFT and drops one shiny YELLOW TRIANGLE-shaped scale into the water. Shelly, a small round light-GREY fish with big friendly eyes and a little tail fin (same fish as in the first reference image) is just below the surface on the right, with one red circle, one blue square and one yellow triangle scale on her side, happy. Blue sea, sunny sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-rainbow-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Shelly, a small round fish with big friendly eyes and a little tail fin (same fish as in the first reference image) is now a RAINBOW fish: her body is covered in shiny scales shaped like circles, squares and triangles in red, orange, yellow, green, blue and purple. She leaps happily out of the water in the middle-right with sparkles. On the LEFT the small red wooden ship with the five friends from the reference cheering. Blue sea, sunny sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-crab-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Underwater on the sandy sea floor: the rainbow fish Shelly (round fish covered in red, orange, yellow, green, blue and purple circle, square and triangle scales, same fish as the references) on the RIGHT gives one shiny PURPLE CIRCLE scale to a small sad grey crab on the LEFT. The crab starts to smile. Pink shells, bubbles, soft blue water. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-ship.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "One small red wooden toy ship with a white sail, side view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-shoe.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "One single red children's sneaker shoe, side view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-shell.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "One pink spiral sea shell, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-shelly.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-shelly-rainbow-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "Shelly the rainbow fish: a small round fish covered in shiny scales shaped like circles, squares and triangles in red, orange, yellow, green, blue and purple, big friendly eyes, side view (same fish as the rainbow reference), drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
   }
 ]
