@@ -63,6 +63,7 @@ import { TprActionsScene } from './scene-components/TprActionsScene';
 import { RapidRecallScene } from './scene-components/RapidRecallScene';
 import { StickerRewardScene } from './scene-components/StickerRewardScene';
 import { HomeMissionScene } from './scene-components/HomeMissionScene';
+import { LiftFlapScene } from './scene-components/LiftFlapScene';
 import { ColorMixScene } from './scene-components/ColorMixScene';
 import { FlipbookScene } from './scene-components/FlipbookScene';
 import { SongScene } from './scene-components/SongScene';
@@ -233,6 +234,7 @@ export function SceneRenderer(props: {
     case 'rapid-recall': return <RapidRecallScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'sticker-reward': return <StickerRewardScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'home-mission': return <HomeMissionScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'lift-flap': return <LiftFlapScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'mystery-bag': return <MysteryBagScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'shape-torch': return <ShapeTorchScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'roleplay': return <RoleplayScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;

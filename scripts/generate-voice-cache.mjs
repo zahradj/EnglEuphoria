@@ -340,6 +340,8 @@ const UNIT1_EXTRACTORS = {
   'rapid-recall': (s) => (s.cards ?? []).map((c) => [s.who, c.say ?? c.word]),
   'sticker-reward': (s) => [[s.who, 'You earned a sticker!'], [s.who, s.line]],
   'home-mission': (s) => [[s.who, s.line], [s.who, 'Mission accepted!']],
+  // Mirrors LiftFlapScene.tsx's liftFlapLines().
+  'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal]])],
   // Mirrors MysteryBagScene.tsx's mysteryBagLines().
   'mystery-bag': (s) => {
     const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a');

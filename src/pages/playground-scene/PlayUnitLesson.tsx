@@ -42,7 +42,7 @@ const REAL_SYNC_KINDS = new Set<string>([
   'meet', 'sound-model', 'echo', 'video-check', 'sentence-build', 'who-said-it',
   'listen-repeat-cards', 'roleplay', 'join-stage', 'alphabet-blocks',
   'trophy-chest', 'color-model', 'color-quiz', 'color-spot', 'shape-model', 'toy-model',
-  'train-recall', 'color-spy', 'color-simon', 'color-mix', 'shape-builder', 'secret-card', 'listen-colour', 'shape-fishing', 'pattern-train', 'tick-cross', 'story-order', 'story-video', 'odd-one-out', 'shape-torch', 'mystery-bag', 'tpr-actions', 'rapid-recall', 'sticker-reward', 'home-mission', 'flipbook',
+  'train-recall', 'color-spy', 'color-simon', 'color-mix', 'shape-builder', 'secret-card', 'listen-colour', 'shape-fishing', 'pattern-train', 'tick-cross', 'story-order', 'story-video', 'odd-one-out', 'shape-torch', 'mystery-bag', 'tpr-actions', 'rapid-recall', 'sticker-reward', 'home-mission', 'lift-flap', 'flipbook',
   'name-gate', 'meet-group', 'friend-pop', 'feelings-tap', 'feelings-wheel',
   'x-is-feeling', 'he-she-model', 'feelings-dice', 'he-she-say', 'i-am-feeling',
   'feeling-quiz', 'feelings-bingo',
