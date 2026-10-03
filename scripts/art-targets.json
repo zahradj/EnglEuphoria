@@ -1196,5 +1196,53 @@
       "public/lep1/scenes/bg-u2l4-party-wide.png"
     ],
     "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). SAME PLACE, SAME SHIP AND SAME FISH as the FIRST reference image (same sea, same little red wooden boat on the LEFT, same small round fish under the surface on the right). Now Willow the blue bird with a green scarf (same design as in the second reference image) flies just above the boat and drops two shiny scales into the water: one ORANGE SQUARE and one PURPLE TRIANGLE. Shelly, the small round light-GREY fish with big friendly eyes, is just below the surface on the right, now with a red circle, a blue square, a yellow triangle and a green circle scale on her side, looking up excited. The red boat is completely EMPTY: nothing inside it, no shapes in or near the boat, no yellow triangle anywhere except the one already on the fish's side. Blue sea, sunny sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-gem-green-triangle.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-gem-red-circle.png",
+      "public/lep1/items/item-gem-blue-square.png",
+      "public/lep1/items/item-gem-yellow-triangle.png"
+    ],
+    "prompt": "one shiny GREEN TRIANGLE-shaped treasure gem, cut and sparkling exactly like the gems in the reference images (same cartoon sticker style, bold dark outline, soft flat colours, little white shine), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-gem-purple-circle.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-gem-red-circle.png",
+      "public/lep1/items/item-gem-blue-square.png",
+      "public/lep1/items/item-gem-yellow-triangle.png"
+    ],
+    "prompt": "one shiny PURPLE CIRCLE-shaped treasure gem, cut and sparkling exactly like the gems in the reference images (same cartoon sticker style, bold dark outline, soft flat colours, little white shine), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-gem-orange-square.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-gem-red-circle.png",
+      "public/lep1/items/item-gem-blue-square.png",
+      "public/lep1/items/item-gem-yellow-triangle.png"
+    ],
+    "prompt": "one shiny ORANGE SQUARE-shaped treasure gem, cut and sparkling exactly like the gems in the reference images (same cartoon sticker style, bold dark outline, soft flat colours, little white shine), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-medal-rainbow.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-gem-red-circle.png",
+      "public/lep1/items/item-gem-blue-square.png",
+      "public/lep1/items/item-gem-yellow-triangle.png"
+    ],
+    "prompt": "one round golden champion MEDAL with a rainbow-striped ribbon (red, orange, yellow, green, blue, purple) and, on the gold disc, a small red circle, blue square and yellow triangle in relief; same cartoon sticker style as the reference images (bold dark outline, soft flat colours, shine), isolated alone on a plain pure white background, nothing else in the picture. No text, letters or numbers."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-gems-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l6-beach-wide.png",
+      "public/lep1/items/item-gem-red-circle.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). The same sunny beach as the first reference image. On the sand in the LOWER half lie SIX big shiny treasure gems in ONE neat row from left to right, evenly spaced with clear space between them: a RED CIRCLE, an ORANGE SQUARE, a YELLOW TRIANGLE, a GREEN CIRCLE, a BLUE SQUARE, a PURPLE TRIANGLE. Each gem appears only once. A small open wooden treasure chest sits far away on the right edge. The upper half is calm sky and sea with open space. No characters. No text, letters or numbers anywhere."
   }
 ]
