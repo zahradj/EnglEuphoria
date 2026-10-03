@@ -1,0 +1,15 @@
+
+=== docs/songs/u2l2-colors-take1.mp3  length=20.1s  score=0.98  missing=0  extra=1
+heard: green green the frog is green orange orange the carrot is orange purple purple all the grapes are purple what color is it what color is it
+line starts (s): [np.float64(0.0), np.float64(3.1), 8.0, np.float64(11.4)]
+lineDurationsMs: [3140, 4860, 3440, 8622]
+
+=== docs/songs/u2l2-colors-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: green green the frog is green orange orange the carrot is orange purple purple the grapes are purple what color is it what color is it
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(8.1), np.float64(12.3)]
+lineDurationsMs: [4120, 4000, 4140, 7802]
+
+=== docs/songs/u2l2-colors-take3.mp3  length=20.1s  score=0.96  missing=1  extra=1
+heard: green green the fog is green orange orange the carrot is orange purple purple the grapes are purple what color is it what color is it
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(8.1), np.float64(12.1)]
+lineDurationsMs: [4060, 4020, 4040, 7942]
