@@ -73,7 +73,7 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
       if (slot?.status === 'booked') {
         return cn(
           HUB_BOOKED[slot.hub ?? 'academy'],
-          'text-white opacity-90 cursor-default shadow-md ring-1',
+          'text-white opacity-60 cursor-default shadow-sm ring-1',
           (joinTop || joinBottom) && 'shadow-none bg-[length:100%_200%]',
           joinBottom && !joinTop && 'bg-top',
           joinTop && !joinBottom && 'bg-bottom',
