@@ -601,5 +601,56 @@
       "public/lep1/scenes/bg-u2l3-shape-parade.png"
     ],
     "prompt": "One red TRIANGLE flag on a short wooden pole, side view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l4-party-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-town-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A sunny garden party in a meadow. The same five friends as the references stand on the grass across the lower part of the picture: Pip the orange fox, Willow the blue bird with a green scarf, Bella the white bunny, Mia the grey mouse with an orange bow, Leo the yellow lion, all smiling. On the far LEFT a bunch of three ROUND balloons (one red, one blue, one yellow) tied to a post. In the MIDDLE on a small wooden table one big GREEN SQUARE present box with a yellow ribbon. Across the TOP a string of bunting made of TRIANGLE flags in red, blue and yellow. Blue sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l4-secret-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-town-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Pip the orange fox (same design as the reference) sits on the LEFT third of the picture behind a small wooden table, holding one playing card face-down against his chest, smiling playfully with a finger on his lips (it's a secret). The middle and right two thirds of the picture are open, plain, calm meadow grass and sky with nothing in them. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l4-whale-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-town-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Willow the blue bird with a green scarf (same design as the reference) stands on a sandy beach on the LEFT third of the picture, pointing happily at one big friendly blue WHALE in the sea in the middle, spouting water. The right third is open sea and sky. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-whale.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-town-wide.png"
+    ],
+    "prompt": "One cute friendly blue whale, side view, spouting a little water, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-wheel.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-town-wide.png"
+    ],
+    "prompt": "One single round wooden cart wheel with spokes, front view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-whistle.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-town-wide.png"
+    ],
+    "prompt": "One shiny silver whistle with a red cord, side view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
   }
 ]
