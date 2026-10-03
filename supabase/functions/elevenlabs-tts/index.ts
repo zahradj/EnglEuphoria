@@ -12,6 +12,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { approvedVoiceId, languageLock, normalizeForSpeech, safeVoiceSettings, SHORT_LINE_TTS_MODEL, ttsModelFor } from "../_shared/speechPolicy.ts";
 import { withPhonemes } from "../_shared/pronunciations.ts";
+import { elevenLabsKeys, fetchElevenLabs } from "../_shared/elevenKeys.ts";
 
 const BUCKET = "sfx-cache";
 async function cacheKey(text: string, voiceId: string, speed: number | null, model: string): Promise<string> {
@@ -64,20 +65,19 @@ Deno.serve(async (req) => {
       if (cached) return new Response(await cached.arrayBuffer(), { headers: audioHeaders });
     }
 
-    const apiKey = Deno.env.get("ELEVENLABS_API_KEY");
-    if (!apiKey) {
+    if (elevenLabsKeys().length === 0) {
       return new Response(JSON.stringify({ error: "ElevenLabs not connected" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const r = await fetch(
+    // Tries each configured key in turn (a used-up monthly quota moves on to the next).
+    const r = await fetchElevenLabs(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`,
       {
         method: "POST",
         headers: {
-          "xi-api-key": apiKey,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
