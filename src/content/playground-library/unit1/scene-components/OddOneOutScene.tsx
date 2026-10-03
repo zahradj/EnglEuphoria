@@ -84,7 +84,7 @@ export function OddOneOutScene({ scene, onWin, onLose, onNext, sync }: { scene: 
                 key={`${round}-${i}`}
                 onClick={() => tap(i)}
                 aria-label={it.label}
-                className={`relative grid h-[30vh] w-[30vh] max-h-48 max-w-48 place-items-center rounded-3xl border-[5px] bg-white/95 p-4 shadow-2xl transition active:scale-95 ${wrong === i ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : solved && isOdd ? 'scale-110 border-green-400 ring-8 ring-green-300/60' : 'border-white'} ${dim ? 'opacity-50' : ''}`}
+                className={`relative grid h-[min(30vh,25vw)] w-[min(30vh,25vw)] max-h-48 max-w-48 place-items-center rounded-3xl border-[5px] bg-white/95 p-4 shadow-2xl transition active:scale-95 ${wrong === i ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : solved && isOdd ? 'scale-110 border-green-400 ring-8 ring-green-300/60' : 'border-white'} ${dim ? 'opacity-50' : ''}`}
                 style={{ animation: wrong === i ? undefined : `lep1-pop 0.35s ease-out ${i * 0.08}s both` }}
               >
                 {it.img
