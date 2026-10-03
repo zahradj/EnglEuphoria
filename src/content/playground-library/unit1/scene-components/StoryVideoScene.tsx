@@ -19,12 +19,9 @@ import { ShapeIcon, sayWithin } from './shared';
 type Page = Extract<Scene, { kind: 'story-video' }>['pages'][number];
 type Option = Extract<Scene, { kind: 'story-video' }>['checkpoints'][number]['options'][number];
 
-const MOTION: Record<string, string> = {
-  'zoom-in': 'lep1-kb-zoom-in',
-  'zoom-out': 'lep1-kb-zoom-out',
-  'pan-left': 'lep1-kb-pan-left',
-  'pan-right': 'lep1-kb-pan-right',
-};
+// Owner's rule (2026-10-03): story pictures never zoom or pan (Ken Burns) —
+// it read as shaking. A picture holds still and fades in; real movement comes
+// from the film itself. `page.motion` is kept in the data but ignored.
 
 function Fx({ fx }: { fx?: Page['fx'] }) {
   if (fx === 'bubbles') {
@@ -193,7 +190,7 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
   if (page < 0) {
     return (
       <div className="absolute inset-0 overflow-hidden bg-black">
-        <img src={scene.pages[0]?.img ?? scene.bg} alt="" className="absolute inset-0 h-full w-full object-cover opacity-80" style={{ animation: 'lep1-kb-zoom-in 20s ease-in-out infinite alternate' }} draggable={false} />
+        <img src={scene.pages[0]?.img ?? scene.bg} alt="" className="absolute inset-0 h-full w-full object-cover opacity-80" draggable={false} />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/50" />
         <div className="absolute inset-x-0 top-[10%] text-center text-4xl font-black text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.7)] sm:text-6xl">🎬 {scene.title}</div>
         {/* Centred by the wrapper: the bounce animation would otherwise replace the centring transform. */}
@@ -241,13 +238,13 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
           <source src={scene.videoUrl.replace(/\.mp4(\?|$)/, '.webm$1')} type="video/webm" />
         </video>
       ) : (
-      /* The moving picture */
+      /* The picture (still; it fades in) */
       <img
         key={page}
         src={p.img}
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
-        style={{ animation: `${MOTION[p.motion ?? 'zoom-in']} ${(p.holdMs ?? 4500) / 1000 + 6}s ease-in-out forwards, lep1-fade-in 0.8s ease-out`, animationPlayState: playing ? 'running' : 'paused' }}
+        style={{ animation: 'lep1-fade-in 0.8s ease-out' }}
         draggable={false}
       />
       )}

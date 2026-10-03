@@ -3,7 +3,8 @@
 
 Reads scripts/story-videos.json[<key>]: every beat's clip <out>/<id>.mp4 is
 muted, scaled to 1280x720 @30fps, trimmed to `beatSeconds` (default 8) with a
-short fade in/out; a beat whose clip is missing falls back to a slow zoom on
+short fade in/out; a beat whose clip is missing falls back to the still picture (never a
+zoom/pan — owner's rule 2026-10-03: zoompan shakes) on
 its still picture (blueprint §3a "video pending"). Writes <film>.mp4 (H.264,
 faststart) and <film>.webm next to it. Beat i starts at i * beatSeconds, which
 is what the lesson's story-video `atSec` values must say.
@@ -33,7 +34,7 @@ def stitch(film, beats):
           src = 'clip'
       else:
           n = secs * 30
-          cmd = [FF, '-y', '-loop', '1', '-i', b['image'], '-vf', f"scale=2752:1536,zoompan=z='1+0.12*on/{n}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={n}:s=1280x720:fps=30,format=yuv420p,{fade}", '-frames:v', str(n), '-c:v', 'libx264', '-profile:v', 'main', '-crf', '21', out]
+          cmd = [FF, '-y', '-loop', '1', '-i', b['image'], '-vf', f"scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,fps=30,format=yuv420p,{fade}", '-frames:v', str(n), '-c:v', 'libx264', '-profile:v', 'main', '-crf', '21', out]
           src = 'STILL (video pending)'
       r = subprocess.run(cmd, capture_output=True, text=True)
       if r.returncode: sys.exit(f'{b["id"]}: {r.stderr[-400:]}')

@@ -171,6 +171,10 @@ of the picture (never over the character), ≥ 80 px tap targets, wide 16:9 art.
   dragged; every right answer bursts (stars / splash / confetti — `useBursts`);
   a wrong answer wobbles the screen softly (`useShake`) — never a punishment.
 - Respect reduced motion; nothing flashes; the still game must stay playable.
+- **Never zoom or pan a still picture** (no Ken Burns, no ffmpeg `zoompan`, no CSS
+  scale/translate loops on story pictures) — owner, 2026-10-03: it shakes. Stills
+  hold perfectly still and cross-fade (`scripts/make-stills-film.py`); real
+  movement comes only from real animation (Higgsfield clips, living loops).
 
 **Research behind the 2026-10 additions:** Khan Academy Kids (guide
 characters, collectible rewards → Sticker Book), Novakid / Oxford *Toy Team*
