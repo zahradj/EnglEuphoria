@@ -137,6 +137,13 @@ avoid-forever rule for a `kind` that's otherwise fine elsewhere.
 | Jumbled pictures → retell | storytelling retell research (Kids Club English) | `story-order` | sequence + retell |
 | Which one is different? (odd one out) | Khan Academy Kids / Lingokids sorting, preschool odd-one-out | `odd-one-out` | grouping by colour/shape, saying why |
 | Torch hunt in the dark (picture-only) | "flashlight I spy" hidden-object apps; A1 Magic Castle `torch-hunt` | `shape-torch` | colour+shape listening, exploration |
+| Mystery / feely bag | ESL "feel the toy in the box" (eslkidstuff toys lesson) | `mystery-bag` | noun from its shape, then colour + noun |
+| Move & Say (TPR) + Brain Break | Oxford *Toy Team* / *Everybody Up*, Novakid TPR | `tpr-actions` (`mode: 'break'` for extra time) | word ↔ action, movement first |
+| Quick-fire flashcards (3 s) | blueprint slide 15; flash-card warm-ups in every YL course | `rapid-recall` | fast retrieval |
+| Sticker Book reward | Khan Academy Kids collectibles, sticker charts | `sticker-reward` | motivation (effort, not score) |
+| Home Mission | Novakid / Oxford home-link tasks | `home-mission` | transfer to real life with family |
+
+**Every lesson ends with an Extra-time block** (brain break + 2 bonus games) — see `docs/playground-lesson-blueprint.md` §3b.
 
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
 

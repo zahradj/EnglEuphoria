@@ -331,6 +331,11 @@ const UNIT1_EXTRACTORS = {
     ...(s.checkpoints ?? []).flatMap((c) => [[c.who, c.question], [c.who, `Yes! ${c.answer}!`]]),
   ],
   'story-order': (s) => (s.frames ?? []).map((f) => [f.who ?? s.who, f.caption]),
+  // Mirror TprActionsScene / RapidRecallScene / StickerRewardScene / HomeMissionScene line helpers.
+  'tpr-actions': (s) => (s.rounds ?? []).map((r) => [s.who, r.line]),
+  'rapid-recall': (s) => (s.cards ?? []).map((c) => [s.who, c.say ?? c.word]),
+  'sticker-reward': (s) => [[s.who, 'You earned a sticker!'], [s.who, s.line]],
+  'home-mission': (s) => [[s.who, s.line], [s.who, 'Mission accepted!']],
   // Mirrors MysteryBagScene.tsx's mysteryBagLines().
   'mystery-bag': (s) => {
     const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a');

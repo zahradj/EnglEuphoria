@@ -457,6 +457,31 @@ export type Scene =
        *  child says it (Unit 3 Lesson 1). */
       id: string; kind: 'mystery-bag'; bg: string; teacher: string; who: CharKey;
       rounds: { img: string; toyWord: string; colorWord: string; colorHex: string; options: { toyWord: string; img: string }[] }[];
+    }
+  | {
+      /** "Move & Say" (TPR) — say an action with the new word, the child does
+       *  it while a ring counts down, then a star. `mode: 'break'` = extra-time
+       *  brain break (stretch, dance, freeze). Blueprint slides 1/5 + extra time. */
+      id: string; kind: 'tpr-actions'; bg: string; teacher: string; who: CharKey; mode?: 'learn' | 'break';
+      rounds: { line: string; emoji: string; img?: string; seconds?: number }[];
+    }
+  | {
+      /** Quick-fire flashcards (blueprint slide 15): a picture, a 3-second
+       *  ring to say it, then the word is shown and spoken. */
+      id: string; kind: 'rapid-recall'; bg: string; teacher: string; who: CharKey; seconds?: number;
+      cards: { img: string; word: string; say?: string }[];
+    }
+  | {
+      /** Sticker Book reward (blueprint slide 19): open a pack, keep the
+       *  lesson's sticker in a book that remembers earlier lessons' stickers. */
+      id: string; kind: 'sticker-reward'; bg: string; teacher: string; who: CharKey; line: string;
+      sticker: { img: string; label: string };
+    }
+  | {
+      /** Home Mission (blueprint slide 20): 2-3 picture steps to do with the
+       *  family, read aloud, plus a short note for the parent. */
+      id: string; kind: 'home-mission'; bg: string; teacher: string; who: CharKey; line: string; parentNote: string;
+      steps: { emoji: string; img?: string; say?: string }[];
     };
 
 const A = '/lep1'; // public asset root

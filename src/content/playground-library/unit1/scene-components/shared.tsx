@@ -224,6 +224,10 @@ export function Lep1Keyframes() {
       @keyframes lep1-bubble-up { from { transform: translateY(0); opacity: 0.9; } to { transform: translateY(-110vh); opacity: 0; } }
       @keyframes lep1-bubble-rise { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 100% { transform: translateY(-40vh); opacity: 0; } }
       @keyframes lep1-bag-wiggle { 0%, 100% { transform: rotate(0deg); } 20% { transform: rotate(-4deg); } 40% { transform: rotate(4deg); } 60% { transform: rotate(-2deg); } 80% { transform: rotate(2deg); } }
+      @keyframes lep1-ring { from { stroke-dashoffset: 0; } to { stroke-dashoffset: 283; } }
+      @keyframes lep1-wobble { 0%, 100% { transform: rotate(-3deg) scale(1); } 50% { transform: rotate(3deg) scale(1.05); } }
+      @keyframes lep1-fly-book { 0% { transform: translate(0,0) scale(1) rotate(0); } 100% { transform: translate(var(--fx), var(--fy)) scale(0.25) rotate(20deg); opacity: 0.2; } }
+      @keyframes lep1-stamp { 0% { transform: scale(2.4) rotate(-20deg); opacity: 0; } 60% { transform: scale(0.9) rotate(-12deg); opacity: 1; } 100% { transform: scale(1) rotate(-12deg); opacity: 1; } }
       @keyframes lep1-tear { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(60px); opacity: 0; } }
       @keyframes lep1-walk { 0% { transform: translateX(-60%) rotate(-4deg); } 25% { transform: translateX(-20%) rotate(3deg) translateY(-6px); } 50% { transform: translateX(20%) rotate(-3deg); } 75% { transform: translateX(60%) rotate(3deg) translateY(-6px); } 100% { transform: translateX(-60%) rotate(-4deg); } }
       @keyframes lep1-wiggle { 0%,100% { transform: rotate(-3deg) translateY(0); } 25% { transform: rotate(3deg) translateY(-4px); } 50% { transform: rotate(-2deg) translateY(0); } 75% { transform: rotate(4deg) translateY(-4px); } }
@@ -273,4 +277,19 @@ export function BoardShape({ shape, x, y, w, h, fill, stroke = '#2B1E17', dashed
   if (shape === 'square') return <rect x={x} y={y} width={w} height={h} rx={1.2} {...common} />;
   const pts = flip ? `${x},${y} ${x + w},${y} ${x + w / 2},${y + h}` : `${x + w / 2},${y} ${x + w},${y + h} ${x},${y + h}`;
   return <polygon points={pts} strokeLinejoin="round" {...common} />;
+}
+
+/** "Clay" card look (puffy, rounded, toy-like — the kids'-app claymorphism style):
+ *  soft top highlight, darker bottom lip and a deep soft shadow. */
+export const CLAY_CARD = 'rounded-[28px] bg-gradient-to-b from-white to-orange-50 shadow-[inset_0_4px_0_rgba(255,255,255,0.95),inset_0_-7px_0_rgba(234,88,12,0.14),0_14px_28px_rgba(60,30,10,0.28)]';
+export const CLAY_BUTTON = 'rounded-full bg-gradient-to-b from-orange-400 to-pink-500 font-black text-white shadow-[inset_0_3px_0_rgba(255,255,255,0.45),inset_0_-5px_0_rgba(0,0,0,0.15),0_10px_20px_rgba(236,72,153,0.35)] active:translate-y-0.5 active:scale-95';
+
+/** A countdown ring (SVG) that empties over `seconds`; `runKey` restarts it. */
+export function CountdownRing({ seconds, runKey, color = '#F97316' }: { seconds: number; runKey: string | number; color?: string }) {
+  return (
+    <svg key={runKey} viewBox="0 0 100 100" className="pointer-events-none absolute inset-0 h-full w-full -rotate-90" aria-hidden>
+      <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="7" />
+      <circle cx="50" cy="50" r="45" fill="none" stroke={color} strokeWidth="7" strokeLinecap="round" strokeDasharray="283" style={{ animation: `lep1-ring ${seconds}s linear forwards` }} />
+    </svg>
+  );
 }

@@ -73,6 +73,75 @@
 
 ---
 
+## 3b. Extra Time — brain breaks & bonus activities (every lesson)
+
+A 30-minute class rarely runs exactly to plan: a confident child finishes
+early, a shy one needs a break. **Every lesson ends with an optional
+"Extra time" block, placed after the Home Mission and before the goodbye**,
+that the teacher can use or skip (Next skips it; nothing in it is new):
+
+| Slot | What | Scene kind | Time |
+|---|---|---|---|
+| E1 | **Brain Break** — stand up and move: stretch, jump like a ball, drive the train, "Freeze!" (5-8 moves) | `tpr-actions` with `mode: 'break'` | 1-2 min |
+| E2 | **Bonus game** — a favourite game of the lesson again with new rounds (Mystery Bag, Torch Hunt, Odd One Out, Spin…) | any game kind, `teacher` note starts "Extra time:" | 2-4 min |
+| E3 | **Bonus game 2** — a different mechanic from E2 (memory, quick-fire cards, pattern train…) | any game kind | 2-4 min |
+
+Rules:
+- A brain break is also allowed mid-lesson after a long sitting stretch
+  (blueprint "low attention day" knob) — same `tpr-actions` break mode.
+- Bonus games use only words already taught in this lesson or earlier.
+- The Variety Rule still applies: no more than 2 of the same kind in a row,
+  counting the extra block.
+- The finale (celebration) and goodbye song come after the extra block, so
+  the lesson always **exits on a high**.
+
+---
+
+## 3c. Slide → scene kind map (Pre-A1 scene lessons)
+
+How each skeleton slide is built with the real scene kinds (see
+`.claude/skills/activity-pattern-library`):
+
+| # | Stage | Scene kinds |
+|---|---|---|
+| 1 | Warm-up song (TPR) | `song` |
+| 2 | Pip greeting + question | `cinematic` |
+| 3 | Story opener | `story-video` (a narrated film — non-readers) |
+| 4 | Vocab reveal | `toy-model` / `color-model` / `shape-model` |
+| 5 | Echo + move | `tpr-actions` (Move & Say) or `listen-repeat-cards` |
+| 6 | Reveal game | `mystery-bag`, `shape-torch`, `color-spy` |
+| 7 | Drag & match | `color-sort`, `shape-sort`, `plural-sort` |
+| 8 | Implicit grammar model | `listen-repeat-cards` (one picture per chunk) |
+| 9 | Spinner → sentence | `spin-wheel` |
+| 10-11 | Q→A, role swap | `join-stage` |
+| 12 | Memory match | `memory`, `train-recall` |
+| 13 | Personal choice | `join-stage` with a real object, `secret-card` |
+| 14 | Phonics micro-moment | `sound-model` + `trace` or `dash` |
+| 15 | Quick-fire flashcards (3 s) | `rapid-recall` |
+| 16 | Story payoff | `story-video` (part 2) |
+| 17-18 | Sing-back / show your favourite | `song`, `join-stage` |
+| 19 | Sticker unlock | `sticker-reward` (Sticker Book, kept across lessons) |
+| 20 | Home Mission | `home-mission` (picture steps + parent note) |
+| E1-E3 | Extra time | `tpr-actions` break + 2 bonus games |
+| 21-22 | Celebration, goodbye | `song`, `finale` |
+
+**Pre-A1 = non-readers:** every prompt is spoken; answers are pictures, taps,
+actions or speech; printed text is a small caption for the adult (≤ 5 words).
+
+**Look & feel:** Playground orange `#FE6A2F` + cream, large rounded "clay"
+cards (puffy highlight, bottom lip, soft deep shadow — `CLAY_CARD` /
+`CLAY_BUTTON` in `unit1/scene-components/shared.tsx`), cards on the open side
+of the picture (never over the character), ≥ 80 px tap targets, wide 16:9 art.
+
+**Research behind the 2026-10 additions:** Khan Academy Kids (guide
+characters, collectible rewards → Sticker Book), Novakid / Oxford *Toy Team*
+and *Everybody Up* (TPR + songs → Move & Say, brain breaks), Cambridge Pre A1
+Starters (picture-based tasks, tick-or-cross, listen-and-colour), ESL toy
+lessons (feely box → Mystery Bag; "What are these? — They're bears" → one vs
+many), 2025-26 kids' app design (claymorphism, custom illustration).
+
+---
+
 ## 4. Built-in Learning Loops
 
 - **Multi-sensory cycle per concept:** see → hear → mimic → move → speak → play
