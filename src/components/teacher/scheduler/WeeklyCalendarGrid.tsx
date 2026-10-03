@@ -67,12 +67,23 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
     const isPast = isSlotInPast(day, time);
 
     if (isPast) {
-      // Gently faded with a fine diagonal hatch — clearly "already gone" without
-      // the heavy grey blocks. A booked lesson that already happened keeps its
-      // hub colour, just softened, so history stays readable.
+      // Lessons that already happened keep their full hub colour (only very
+      // slightly softened), so the history of the week stays vivid and readable.
+      // Empty past time just gets a fine diagonal hatch.
       if (slot?.status === 'booked') {
-        const hub = HUB_BOOKED[slot.hub ?? 'academy'];
-        return cn(hub, 'text-white opacity-45 saturate-50 cursor-not-allowed shadow-none');
+        return cn(
+          HUB_BOOKED[slot.hub ?? 'academy'],
+          'text-white opacity-90 cursor-default shadow-md ring-1',
+          (joinTop || joinBottom) && 'shadow-none bg-[length:100%_200%]',
+          joinBottom && !joinTop && 'bg-top',
+          joinTop && !joinBottom && 'bg-bottom',
+        );
+      }
+      if (slot?.cancelledBy === 'teacher') {
+        return 'cursor-default bg-slate-100 text-slate-600 ring-1 ring-slate-300 dark:bg-slate-800/70 dark:text-slate-300 dark:ring-slate-600';
+      }
+      if (slot?.cancelledBy === 'student') {
+        return 'cursor-default bg-amber-50 text-amber-800 ring-1 ring-amber-300 dark:bg-amber-500/15 dark:text-amber-200 dark:ring-amber-500/40';
       }
       return 'cursor-not-allowed bg-[repeating-linear-gradient(135deg,transparent,transparent_6px,rgba(100,116,139,0.07)_6px,rgba(100,116,139,0.07)_7px)] opacity-80';
     }
