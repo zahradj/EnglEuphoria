@@ -4,8 +4,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, Clock, Video, User, CheckCircle, MoreVertical, CalendarClock, XCircle } from "lucide-react";
+import { Calendar, Clock, Video, User, CheckCircle, MoreVertical, CalendarClock, XCircle, CalendarDays } from "lucide-react";
 import { CompletedLessonCard } from "./CompletedLessonCard";
+import { StudentCalendarView } from "./calendar/StudentCalendarView";
 import { LessonManagementModal } from "./LessonManagementModal";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
@@ -154,7 +155,7 @@ export const UpcomingClassesTab = () => {
       </div>
 
       <Tabs defaultValue="upcoming" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="upcoming" className="flex items-center gap-2">
             <Calendar className="h-4 w-4" />
             Upcoming ({upcomingLessons.length})
@@ -162,6 +163,10 @@ export const UpcomingClassesTab = () => {
           <TabsTrigger value="completed" className="flex items-center gap-2">
             <CheckCircle className="h-4 w-4" />
             Completed ({completedLessons.length})
+          </TabsTrigger>
+          <TabsTrigger value="calendar" className="flex items-center gap-2">
+            <CalendarDays className="h-4 w-4" />
+            Calendar
           </TabsTrigger>
         </TabsList>
 
@@ -266,6 +271,10 @@ export const UpcomingClassesTab = () => {
               <CompletedLessonCard key={lesson.id} lesson={lesson} onUpdate={fetchLessons} />
             ))
           )}
+        </TabsContent>
+
+        <TabsContent value="calendar" className="space-y-4">
+          <StudentCalendarView />
         </TabsContent>
       </Tabs>
 

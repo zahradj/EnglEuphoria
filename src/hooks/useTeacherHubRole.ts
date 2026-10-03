@@ -10,6 +10,17 @@ export type HubRole =
 
 export type HubKind = 'playground' | 'academy' | 'professional';
 
+/** One hub a teacher can teach (a teacher may hold several). */
+export type TeachableHub = 'playground' | 'academy' | 'success';
+
+const normalizeHubKey = (h: string): TeachableHub | null => {
+  const v = String(h ?? '').toLowerCase();
+  if (v.includes('playground') || v === 'kids') return 'playground';
+  if (v.includes('success') || v.includes('professional') || v.startsWith('adult')) return 'success';
+  if (v.includes('academy') || v.startsWith('teen')) return 'academy';
+  return null;
+};
+
 /**
  * Single source of truth for a teacher's hub assignment.
  * Returns the raw hub_role plus a normalized hub kind and the
@@ -20,6 +31,10 @@ export type HubKind = 'playground' | 'academy' | 'professional';
  */
 export const useTeacherHubRole = (teacherId: string | undefined) => {
   const [hubRole, setHubRole] = useState<HubRole>(null);
+  // Every hub the teacher is assigned. When the admin ticked two or more hubs this is
+  // the source of truth (isMultiHub); otherwise it just mirrors the single hub_role.
+  const [hubs, setHubs] = useState<TeachableHub[]>([]);
+  const [isMultiHub, setIsMultiHub] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,6 +67,14 @@ export const useTeacherHubRole = (teacherId: string | undefined) => {
                   ? 'playground_specialist'
                   : derived;
         }
+        const explicit = Array.from(new Set(assigned.map(normalizeHubKey).filter(Boolean) as TeachableHub[]));
+        const fromRole: TeachableHub[] =
+          derived === 'playground_specialist' ? ['playground']
+          : derived === 'success_mentor' ? ['success']
+          : derived === 'academy_success_mentor' ? ['academy', 'success']
+          : derived === 'academy_mentor' ? ['academy'] : [];
+        setHubs(explicit.length ? explicit : fromRole);
+        setIsMultiHub(explicit.length >= 2);
         setHubRole(derived);
         setLoading(false);
       }
@@ -83,7 +106,10 @@ export const useTeacherHubRole = (teacherId: string | undefined) => {
       ? 'professional'
       : 'academy';
 
-  const allowedDurations: (30 | 60)[] = isPlayground ? [30] : [60];
+  // A multi-hub teacher can open 30-minute (Playground) and 60-minute (Academy / Success) slots.
+  const allowedDurations: (30 | 60)[] = isMultiHub
+    ? [...(hubs.includes('playground') ? [30 as const] : []), ...(hubs.some((h) => h !== 'playground') ? [60 as const] : [])]
+    : isPlayground ? [30] : [60];
 
-  return { hubRole, hubKind, allowedDurations, isPlayground, loading };
+  return { hubRole, hubKind, allowedDurations, isPlayground, loading, hubs, isMultiHub };
 };

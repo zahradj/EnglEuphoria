@@ -153,7 +153,24 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
       // directory already uses) — it safely bypasses that per-row
       // restriction while only ever exposing public-facing fields.
       const { data: approvedTeachers, error: hubError } = await supabase.rpc('get_approved_teachers');
-      const hubTeachers = (approvedTeachers || []).filter((t: any) => allowedHubRoles.includes(t.hub_role));
+
+      // Teachers the admin gave two or more hubs to (e.g. Playground + Academy + Success):
+      // matched by their hub list and by each slot's hub tag, not by the single hub_role.
+      const hubKey = selectedHub === 'professional' ? 'success' : selectedHub;
+      const hubTag = selectedHub === 'playground' ? 'Playground' : selectedHub === 'academy' ? 'Academy' : 'Professional';
+      const multiHubs = new Map<string, string[]>();
+      try {
+        const { data: mapRows } = await (supabase as any).rpc('get_teacher_hub_map');
+        ((mapRows ?? []) as { user_id: string; hubs: string[] }[]).forEach((r) => {
+          if (Array.isArray(r.hubs) && r.hubs.length > 1) multiHubs.set(r.user_id, r.hubs);
+        });
+      } catch (e) {
+        console.warn('[BookMyClassModal] hub map unavailable, using hub roles only', e);
+      }
+      const hubTeachers = (approvedTeachers || []).filter((t: any) => {
+        const hubs = multiHubs.get(t.user_id);
+        return hubs ? hubs.includes(hubKey) : allowedHubRoles.includes(t.hub_role);
+      });
 
       console.log('[BookMyClassModal] hub:', selectedHub, 'allowedHubRoles:', allowedHubRoles);
       console.log('[BookMyClassModal] hubTeachers:', hubTeachers, 'hub error:', hubError);
@@ -185,11 +202,16 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
         return;
       }
 
-      const { data, error } = await query;
+      const { data: rawData, error } = await query;
 
-      console.log('[BookMyClassModal] Fetched slots:', data, 'Fetch error:', error);
+      console.log('[BookMyClassModal] Fetched slots:', rawData, 'Fetch error:', error);
 
       if (error) throw error;
+
+      // A multi-hub teacher's slots are only for the hub they are tagged with.
+      const data = rawData
+        ? rawData.filter((s: any) => !multiHubs.has(s.teacher_id) || s.hub_specialty === hubTag)
+        : rawData;
 
       if (data) {
         const usedTeacherIds = [...new Set(data.map(s => s.teacher_id))];

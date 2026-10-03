@@ -5,6 +5,7 @@ import { PostClassFeedbackModal } from './PostClassFeedbackModal';
 import { useToast } from '@/hooks/use-toast';
 import { useClassroomSync } from '@/hooks/useClassroomSync';
 import { useLocalMedia } from '@/hooks/useLocalMedia';
+import { TalkTimeMeter } from '@/components/classroom/TalkTimeMeter';
 import { useWebRTCConnection } from '@/hooks/useWebRTCConnection';
 import { StudentClassroomHeader } from './StudentClassroomHeader';
 import { StudentCommunicationSidebar } from './StudentCommunicationSidebar';
@@ -366,6 +367,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
       className="h-dvh w-full text-gray-900 flex flex-col overflow-hidden relative"
       style={hubTheme.meshGradient}
     >
+      <TalkTimeMeter bookingId={roomId} stream={media.stream} />
       {!classStarted && (
         <div className="absolute inset-0 z-[120] flex items-center justify-center bg-white/95 backdrop-blur-sm">
           <div className="text-center max-w-sm px-6">

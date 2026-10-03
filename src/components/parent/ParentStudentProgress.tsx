@@ -1,9 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
 import { BookOpen, Trophy, Zap, Calendar, TrendingUp } from "lucide-react";
 import { format } from "date-fns";
 import { ParentTeacherFeedbackCard } from "./ParentTeacherFeedbackCard";
@@ -31,6 +28,7 @@ export function ParentStudentProgress({
   const activeStudentId = selectedStudentId || students[0]?.student_id;
 
   const { data: progressData, isLoading } = useQuery({
+    // Same key + function as the dashboard's per-child snapshot, so this is usually already cached.
     queryKey: ["student-progress", activeStudentId],
     queryFn: async () => {
       if (!activeStudentId) return null;
@@ -51,126 +49,90 @@ export function ParentStudentProgress({
 
   if (students.length === 0) {
     return (
-      <Card className="p-8 text-center">
-        <p className="text-muted-foreground">{t('pd.progress.empty')}</p>
-      </Card>
+      <div className="fd-surface fd-empty">
+        <p style={{ color: "var(--fd-ink-soft)" }}>{t('pd.progress.empty')}</p>
+      </div>
     );
   }
 
+  const p = progressData as any;
+  const tiles = [
+    { key: "lessons", icon: BookOpen, label: t('pd.progress.totalLessons'), value: p?.total_lessons || 0 },
+    { key: "upcoming", icon: Calendar, label: t('pd.progress.upcoming'), value: p?.upcoming_lessons || 0 },
+    { key: "achievements", icon: Trophy, label: t('pd.progress.achievements'), value: p?.achievements_count || 0 },
+    { key: "xp", icon: Zap, label: t('pd.progress.totalXp'), value: p?.total_xp || 0 },
+  ];
+
   return (
     <div className="space-y-6">
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">{t('pd.progress.selectStudent')}</h3>
-        <Select value={activeStudentId} onValueChange={onSelectStudent}>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {students.map((student) => (
-              <SelectItem key={student.student_id} value={student.student_id}>
-                {student.student.full_name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </Card>
+      <div>
+        <h2 className="mb-3 text-sm font-bold" style={{ color: "var(--fd-ink-soft)" }}>
+          {t('pd.progress.selectStudent')}
+        </h2>
+        <div className="fd-chips">
+          {students.map((s) => (
+            <button
+              key={s.student_id}
+              type="button"
+              className="fd-chip"
+              aria-pressed={s.student_id === activeStudentId}
+              onClick={() => onSelectStudent(s.student_id)}
+            >
+              <span className="fd-chip__face" aria-hidden>{s.student.full_name.slice(0, 1).toUpperCase()}</span>
+              {s.student.full_name}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {isLoading ? (
-        <Card className="p-8">
-          <div className="animate-pulse space-y-4">
-            <div className="h-4 bg-muted rounded w-3/4"></div>
-            <div className="h-4 bg-muted rounded w-1/2"></div>
-          </div>
-        </Card>
-      ) : (progressData as any)?.error ? (
-        <Card className="p-8 text-center">
-          <p className="text-destructive">{(progressData as any).error}</p>
-        </Card>
+        <div className="fd-tiles" aria-busy="true">
+          {[0, 1, 2, 3].map((i) => <div key={i} className="fd-skel h-[110px] rounded-[22px]" />)}
+        </div>
+      ) : p?.error ? (
+        <div className="fd-surface fd-empty">
+          <p className="text-destructive">{p.error}</p>
+        </div>
       ) : (
         <>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg">
-                  <BookOpen className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">{t('pd.progress.totalLessons')}</p>
-                  <p className="text-2xl font-bold">{(progressData as any)?.total_lessons || 0}</p>
-                </div>
+          <div className="fd-tiles">
+            {tiles.map(({ key, icon: Icon, label, value }) => (
+              <div key={key} className="fd-tile">
+                <div className="fd-tile__label"><Icon className="h-4 w-4" aria-hidden /> {label}</div>
+                <div className="fd-tile__value fd-num">{value}</div>
               </div>
-            </Card>
-
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-blue-500/10 rounded-lg">
-                  <Calendar className="h-6 w-6 text-blue-500" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">{t('pd.progress.upcoming')}</p>
-                  <p className="text-2xl font-bold">{(progressData as any)?.upcoming_lessons || 0}</p>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-amber-500/10 rounded-lg">
-                  <Trophy className="h-6 w-6 text-amber-500" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">{t('pd.progress.achievements')}</p>
-                  <p className="text-2xl font-bold">{(progressData as any)?.achievements_count || 0}</p>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-purple-500/10 rounded-lg">
-                  <Zap className="h-6 w-6 text-purple-500" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">{t('pd.progress.totalXp')}</p>
-                  <p className="text-2xl font-bold">{(progressData as any)?.total_xp || 0}</p>
-                </div>
-              </div>
-            </Card>
+            ))}
           </div>
 
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
+          <section className="fd-surface p-5 md:p-6">
+            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold">
+              <TrendingUp className="h-5 w-5" aria-hidden />
               {t('pd.progress.learningProgress')}
             </h3>
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between mb-2">
-                  <span className="text-sm font-medium">{t('pd.progress.level')} {(progressData as any)?.current_level || 1}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {(progressData as any)?.total_xp || 0} XP
-                  </span>
-                </div>
-                <Progress value={(((progressData as any)?.total_xp || 0) % 500) / 5} />
-              </div>
 
-              {(progressData as any)?.cefr_level && (
-                <div className="pt-4 border-t">
-                  <p className="text-sm text-muted-foreground mb-1">{t('pd.progress.cefrLevel')}</p>
-                  <p className="text-lg font-semibold">{(progressData as any).cefr_level}</p>
-                </div>
-              )}
-
-              {(progressData as any)?.last_lesson_date && (
-                <div className="pt-4 border-t">
-                  <p className="text-sm text-muted-foreground mb-1">{t('pd.progress.lastLesson')}</p>
-                  <p className="text-lg font-semibold">
-                    {format(new Date((progressData as any).last_lesson_date), "PPP")}
-                  </p>
-                </div>
-              )}
+            <div className="mb-2 flex items-baseline justify-between">
+              <span className="font-bold">{t('pd.progress.level')} <span className="fd-num">{p?.current_level || 1}</span></span>
+              <span className="fd-num text-sm" style={{ color: "var(--fd-ink-soft)" }}>{p?.total_xp || 0} XP</span>
             </div>
-          </Card>
+            <div className="fd-bar" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(((p?.total_xp || 0) % 500) / 5)}>
+              <span style={{ width: `${Math.max(4, ((p?.total_xp || 0) % 500) / 5)}%` }} />
+            </div>
+
+            <dl className="mt-5 grid gap-4 sm:grid-cols-2">
+              {p?.cefr_level && (
+                <div>
+                  <dt className="text-xs font-bold" style={{ color: "var(--fd-ink-soft)" }}>{t('pd.progress.cefrLevel')}</dt>
+                  <dd className="fd-num mt-1 text-2xl font-bold">{p.cefr_level}</dd>
+                </div>
+              )}
+              {p?.last_lesson_date && (
+                <div>
+                  <dt className="text-xs font-bold" style={{ color: "var(--fd-ink-soft)" }}>{t('pd.progress.lastLesson')}</dt>
+                  <dd className="mt-1 text-lg font-bold">{format(new Date(p.last_lesson_date), "PPP")}</dd>
+                </div>
+              )}
+            </dl>
+          </section>
 
           {activeStudentId && <ParentTeacherFeedbackCard studentId={activeStudentId} />}
         </>
