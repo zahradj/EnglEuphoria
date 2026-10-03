@@ -1,4 +1,3 @@
-Higgsfield: 2 pictures to make
-+ public/lep1/scenes/bg-u2l5-shelly-orange-wide.png (2124623B, Higgsfield)
-+ public/lep1/scenes/bg-u2l5-shelly-green-wide.png (2230681B, Higgsfield)
-Done. made 2, failed 0
+Higgsfield: 1 pictures to make
++ public/lep1/scenes/bg-u2l5-shelly-orange-wide.png (2038026B, Higgsfield)
+Done. made 1, failed 0
