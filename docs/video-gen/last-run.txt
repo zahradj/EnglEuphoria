@@ -1,0 +1,13 @@
+skip 01-sea (exists)
+skip 02-sad (exists)
+skip 03-red (exists)
+skip 06-rainbow (exists)
+04-blue: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
+05-yellow: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
+started 05-yellow: f98336b1-df2a-421e-8214-b6194b230c3f
+started 04-blue: bcd7c719-5ff0-4934-9830-e1ced061d97f
+saved public/lep1/video/clips/u2l5-shelly/04-blue.mp4 (11004294 bytes)
+saved public/lep1/video/clips/u2l5-shelly/05-yellow.mp4 (11550105 bytes)
+skip 07-crab (exists)
+skip 08-friends (exists)
+8/8 clips ready for u2l5-shelly
