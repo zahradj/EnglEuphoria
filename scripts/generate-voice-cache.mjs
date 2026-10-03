@@ -295,7 +295,11 @@ const UNIT1_EXTRACTORS = {
     out.push(['pip', `Wonderful! ${(s.items ?? []).map((it) => buildToySentence(it.colorWord, it.toyWord, it.plural)).join(' ')}`]);
     return out;
   },
-  'plural-sort': (s) => [['teacher', 'Amazing! One or many, you know them all!'], ...(s.items ?? []).map((it) => [s.who, it.word])],
+  // Mirrors PluralSortScene.tsx (pluralLine for every correct drop).
+  'plural-sort': (s) => [[s.who, 'Amazing! One or many, you know them all!'], [s.who, 'It is'], [s.who, 'They are'], ...(s.items ?? []).flatMap((it) => [
+    [s.who, it.word],
+    [s.who, it.plural ? `They are ${it.word}!` : `It's ${/^[aeiou]/i.test(it.word) ? 'an' : 'a'} ${it.word}!`],
+  ])],
   'train-recall': (s) => [
     ...(s.cars ?? []).map((c) => ['pip', c.word]),
     ['pip', "Choo choo! One car is empty. Which toy is missing?"],

@@ -318,7 +318,7 @@ export type Scene =
        *  lesson. Mixes brand-new items with earlier lessons' own already-
        *  verified single-object images for spiral review. */
       id: string; kind: 'plural-sort'; bg: string; teacher: string; who: CharKey;
-      items: { word: string; img?: string; emoji: string; plural: boolean }[];
+      items: { word: string; img?: string; emoji: string; plural: boolean; group?: boolean }[];
     }
   | {
       /** A row of toy-train cars, each with a different toy in its window.
@@ -4532,219 +4532,344 @@ export const LESSON_U3L1_SCENES: Scene[] = [
 ];
 
 /* =============================================================================
- * Pre-A1 Unit 3, Lesson 2 — "Teddy Bear, Blocks, Train!"
+ * Pre-A1 Unit 3, Lesson 2 — "Teddy Bear, Blocks, Train!" (Leo's Birthday)
  *
- * The curriculum blueprint's own pre-seeded stub for this slot (curriculum_
- * lessons row 51785a84-2d77-4a02-b2b0-7b50f349ac38) names the topic. No new
- * phonics letter this lesson — teddy(T)/blocks(B)/train(T) were all taught
- * in Unit 1, matching the DB stub's own "review" marking — freeing the
- * whole lesson to focus on new GRAMMAR instead: singular ("It's a teddy
- * bear") vs. plural ("They are blocks"), the natural next rung after L1's
- * color+toy combination, since "blocks" is a toy that's inherently plural
- * in real usage.
+ * REBUILD (2026-10-03) as the flagship of the Universal Playground Lesson
+ * Blueprint (docs/playground-lesson-blueprint.md): the 22-slide arc plus the
+ * Extra-time block (brain break + 2 bonus games). Replaces a version with a
+ * text storybook and runs of identical games (three role-plays in a row).
+ * Pre-A1 = non-readers: every prompt is spoken, every answer is a picture,
+ * an action or speech.
  *
- * DIRECT USER REQUEST for genuine uniqueness — this lesson should not feel
- * like a copycat of Lesson 1's own activity set, and should be backed by
- * real research into what actually helps kids retain vocabulary and enjoy
- * a grammar-focused lesson. Two brand-new Scene kinds were added rather
- * than reusing L1's exact mechanic set:
- * - 'plural-sort': a two-bin drag sort ("It is" vs "They are"), directly
- *   modeled on the "toss the card in the Singular or Plural basket" game
- *   found in live research (multiple ESL-kids sources). Mixes new toys
- *   with L1's own ball/doll for spiral review of both units at once.
- * - 'train-recall': a "missing car" visual-memory game, directly modeled
- *   on the "Phonics Train" mechanic found in the same research pass (show
- *   a train of cards, remove one, ask what's missing) — a natural fit
- *   given the lesson's own train toy, not used anywhere else in this app.
- * The 'memory' kind (matching pairs) is also new to Unit 3 — it exists
- * elsewhere in this codebase (Unit 1, and Unit 2's own capstone) but had
- * never been used in any Unit 3 lesson before this one.
- * - Cast: Leo=TEDDY BEAR (brown, singular), Bella=BLOCKS (blue, plural),
- *   Willow=TRAIN (red, singular) — deliberately rotates Leo in and Mia out
- *   relative to L1's own cast (Bella/Willow/Mia), so the same three
- *   characters aren't carrying every lesson.
- * - Art: same full-bleed lesson from L1 held up (all 7 new backgrounds
- *   passed full-bleed on the first attempt), but two of the four
- *   two-character "-only" shots needed a retry for a DIFFERENT bug this
- *   time: bg-u3l2-teddy-only drew Pip twice instead of Pip+Leo, and
- *   bg-u3l2-train-only omitted Willow entirely, leaving Pip alone — both
- *   fixed by explicitly describing each character's physical differences
- *   from Pip (species, colors, body shape) rather than just naming them.
+ * Target language (6 words, each met 5+ times): teddy bear, blocks, train
+ * (new) + ball, car, doll (Lesson 1). Implicit grammar: ONE or MANY —
+ * "It's a train!" / "They are blocks!" / "What is it? — What are they?".
+ * Phonics micro-moment: T (teddy, train, ten), taught in Unit 1.
+ * Story spine: Leo's birthday — three presents (film 1), then the party where
+ * everyone plays with them (film 2). Cast: Leo = teddy bear, Bella = blocks,
+ * Willow = train.
+ *
+ * Research behind the new pieces (mechanics only): Khan Academy Kids
+ * (collectibles → Sticker Book), Oxford Toy Team / Everybody Up and Novakid
+ * (TPR → Move & Say, brain break), ESL toy lessons (feely box → Mystery Bag;
+ * "What are these? — They're bears" → one vs many), the blueprint's quick-fire
+ * flashcards and Home Mission. Look: clay cards (shared CLAY_CARD).
+ * Art: 6 wide pictures (bg-u3l2-*-wide) + "many" stickers; two films.
  * ========================================================================= */
 
-const bgU3L2ToyParade = `${A}/scenes/bg-u3l2-toy-parade.png`;
-const bgU3L2TeddyOnly = `${A}/scenes/bg-u3l2-teddy-only.png`;
-const bgU3L2BlocksOnly = `${A}/scenes/bg-u3l2-blocks-only.png`;
-const bgU3L2TrainOnly = `${A}/scenes/bg-u3l2-train-only.png`;
-const bgU3L2TeddySolo = `${A}/scenes/bg-u3l2-teddy-solo.png`;
-const bgU3L2BlocksSolo = `${A}/scenes/bg-u3l2-blocks-solo.png`;
-const bgU3L2TrainSolo = `${A}/scenes/bg-u3l2-train-solo.png`;
 const itemTeddy = `${A}/items/item-teddy.png`;
 const itemBlocks = `${A}/items/item-blocks.png`;
 const itemTrain = `${A}/items/item-train.png`;
+const bgU3L2Party = `${A}/scenes/bg-u3l2-party-wide.png`;
+const bgU3L2Teddy = `${A}/scenes/bg-u3l2-teddy-wide.png`;
+const bgU3L2Blocks = `${A}/scenes/bg-u3l2-blocks-wide.png`;
+const bgU3L2Train = `${A}/scenes/bg-u3l2-train-wide.png`;
+const bgU3L2Cake = `${A}/scenes/bg-u3l2-cake-wide.png`;
+const bgU3L2Shelf = `${A}/scenes/bg-u3l2-shelf-wide.png`;
+const itemTeddies = `${A}/items/item-teddies.png`;
+const itemTrains = `${A}/items/item-trains.png`;
+const itemBalls = `${A}/items/item-balls.png`;
+const itemCars = `${A}/items/item-cars.png`;
+const itemDolls = `${A}/items/item-dolls.png`;
 
 export const LESSON_U3L2_TITLE = 'Teddy Bear, Blocks, Train!';
-export const LESSON_U3L2_OBJECTIVE = 'Identify and name teddy bear, blocks, and train, keep combining toys with colors ("It\'s a brown teddy bear"), and introduce singular vs. plural ("It\'s a train" / "They are blocks").';
+export const LESSON_U3L2_OBJECTIVE = 'Name teddy bear, blocks and train (and recycle ball, car, doll), tell ONE from MANY — "It\'s a train!" / "They are blocks!" — ask "What is it? / What are they?", hear T (teddy, train, ten), and take the words home in a Home Mission — all by listening, moving, tapping and speaking.';
+
+const bagToys = [
+  { toyWord: 'TRAIN', img: itemTrain },
+  { toyWord: 'BALL', img: itemBallRed },
+  { toyWord: 'CAR', img: itemCar },
+  { toyWord: 'DOLL', img: itemDoll },
+];
 
 export const LESSON_U3L2_SCENES: Scene[] = [
-  { id: 'u3l2-title', kind: 'title-card', bg: bgU3L2ToyParade, level: 'Pre-A1', unit: 'Unit 3', lessonLabel: 'Lesson 2', title: 'Teddy Bear, Blocks, Train!', subtitle: 'More toys, and one is many!' },
+  { id: 'u3l2-title', kind: 'title-card', bg: bgU3L2Party, level: 'Pre-A1', unit: 'Unit 3', lessonLabel: 'Lesson 2', title: 'Teddy Bear, Blocks, Train!', subtitle: "Leo's Birthday" },
+
+  /* 1-3 Hook + story opener */
   {
-    id: 'u3l2-intro', kind: 'cinematic', bg: bgU3L2ToyParade, title: 'Teddy Bear, Blocks, Train!', subtitle: 'More toys join the playroom', narrator: 'pip', hidePipOverlay: true,
-    script: [
-      { who: 'pip', line: 'Look! More toys today — a teddy bear, blocks, and a train!' },
-      { who: 'pip', line: 'Leo has ONE teddy bear. But Bella has MANY blocks — they are blocks!' },
+    id: 'u3l2-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
+    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
+    lineDurationsMs: [5200, 4300, 4500, 6100],
+    songPrompt: 'Cheerful upbeat kids hello song',
+    lyrics: [
+      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
     ],
-    cta: "Let's play!",
   },
   {
-    id: 'u3l2-vocab-toys', kind: 'toy-model', bg: bgMeadow,
-    teacher: 'Look! Tap a toy to hear it, say it back, then say the sentence!',
+    id: 'u3l2-intro', kind: 'cinematic', bg: bgU3L2Party, hidePipOverlay: true, title: "Leo's Birthday", subtitle: 'Three presents!', narrator: 'leo',
+    script: [
+      { who: 'leo', line: "Hello! It's my birthday today!" },
+      { who: 'pip', line: "Look! Three presents! What's inside?" },
+    ],
+    cta: "Let's see!",
+  },
+  {
+    id: 'u3l2-story-presents', kind: 'story-video', bg: bgU3L2Party, videoUrl: `${A}/video/presents-story-u3l2.mp4?v=1`, title: "Leo's Presents",
+    teacher: 'Watch together. Say each present with Leo; answer the picture questions.',
+    pages: [
+      { img: bgU3L2Party, who: 'leo', line: "It's my birthday! Look, three presents!", motion: 'zoom-in', fx: 'sparkles', atSec: 0 },
+      { img: bgU3L2Teddy, who: 'leo', line: "A teddy bear! It's a teddy bear!", motion: 'pan-right', fx: 'hearts', atSec: 5 },
+      { img: bgU3L2Blocks, who: 'bella', line: 'Blocks! They are blocks!', motion: 'pan-left', fx: 'sparkles', atSec: 10 },
+      { img: bgU3L2Train, who: 'willow', line: "A train! It's a train! Choo choo!", motion: 'pan-right', fx: 'sparkles', atSec: 15 },
+    ],
+    checkpoints: [
+      { afterPage: 1, who: 'leo', question: 'What is it?', answer: 'A teddy bear', options: [{ label: 'A ball', img: itemBallRed }, { label: 'A teddy bear', img: itemTeddy }, { label: 'A car', img: itemCar }] },
+      { afterPage: 2, who: 'bella', question: 'What are they?', answer: 'Blocks', options: [{ label: 'Blocks', img: itemBlocks }, { label: 'Dolls', img: itemDolls }, { label: 'Cars', img: itemCars }] },
+    ],
+  },
+
+  /* 4-6 Input: words, move & say, reveal game */
+  {
+    id: 'u3l2-vocab-toys', kind: 'toy-model', bg: bgU3L1Room,
+    teacher: 'Tap a present to hear it, then say it: "It\'s a teddy bear!"',
     items: [
       { toyWord: 'TEDDY BEAR', colorWord: 'BROWN', colorHex: '#92400E', who: 'leo', img: itemTeddy },
-      { toyWord: 'BLOCKS', colorWord: 'BLUE', colorHex: '#3B82F6', who: 'bella', img: itemBlocks, plural: true },
-      { toyWord: 'TRAIN', colorWord: 'RED', colorHex: '#EF4444', who: 'willow', img: itemTrain },
+      { toyWord: 'BLOCKS', colorWord: 'BLUE', colorHex: C4.BLUE, who: 'bella', img: itemBlocks, plural: true },
+      { toyWord: 'TRAIN', colorWord: 'RED', colorHex: C4.RED, who: 'willow', img: itemTrain },
     ],
   },
   {
-    // New singular/plural sort — direct research match: "toss the card in
-    // the Singular or Plural basket." Mixes today's new toys with L1's own
-    // ball/doll for spiral review of both lessons at once.
-    id: 'u3l2-plural-sort', kind: 'plural-sort', bg: bgMeadow, who: 'pip',
-    teacher: 'Is it ONE, or is it MANY? Drag each picture to "It is" or "They are"!',
+    id: 'u3l2-move-say', kind: 'tpr-actions', bg: bgU3L1Room, who: 'leo',
+    teacher: 'Move and say! Do each action with the child and say the toy.',
+    rounds: [
+      { line: 'Hug the teddy bear!', emoji: '\u{1F917}', img: itemTeddy },
+      { line: 'Build the blocks!', emoji: '\u{1F64C}', img: itemBlocks },
+      { line: 'Drive the train! Choo choo!', emoji: '\u{1F682}', img: itemTrain },
+      { line: 'Bounce the ball!', emoji: '\u{1F3C0}', img: itemBallRed },
+      { line: 'Rock the doll!', emoji: '\u{1F476}', img: itemDoll },
+    ],
+  },
+  {
+    id: 'u3l2-mystery-bag', kind: 'mystery-bag', bg: bgU3L1Toybox, who: 'pip',
+    teacher: "The Mystery Bag is back! What's in the bag? Tap it, then say it with its color.",
+    rounds: [
+      { img: itemTrain, toyWord: 'TRAIN', colorWord: 'RED', colorHex: C4.RED, options: bagToys },
+      { img: itemBallYellow, toyWord: 'BALL', colorWord: 'YELLOW', colorHex: C4.YELLOW, options: bagToys },
+      { img: itemCarGreen, toyWord: 'CAR', colorWord: 'GREEN', colorHex: C4.GREEN, options: bagToys },
+      { img: itemDollPurple, toyWord: 'DOLL', colorWord: 'PURPLE', colorHex: C4.PURPLE, options: bagToys },
+    ],
+  },
+
+  /* 7-9 Controlled practice: one or many */
+  {
+    // Implicit grammar model: each card is ONE picture for ONE chunk.
+    id: 'u3l2-one-many', kind: 'listen-repeat-cards', bg: bgU3L2Cake, teacher: 'One or many? Listen, show one finger or two hands, and repeat!',
+    cards: [
+      { who: 'leo', sentence: "It's a teddy bear!", img: itemTeddy, imgLabel: '☝️ One' },
+      { who: 'leo', sentence: 'They are teddy bears!', img: itemTeddies, imgLabel: '🙌 Many' },
+      { who: 'willow', sentence: "It's a train!", img: itemTrain, imgLabel: '☝️ One' },
+      { who: 'willow', sentence: 'They are trains!', img: itemTrains, imgLabel: '🙌 Many' },
+      { who: 'bella', sentence: 'They are blocks!', img: itemBlocks, imgLabel: '🙌 Many' },
+    ],
+  },
+  {
+    id: 'u3l2-plural-sort', kind: 'plural-sort', bg: bgU3L1Room, who: 'pip',
+    teacher: 'One or many? Drag each picture: one finger (It is) or two hands (They are).',
     items: [
       { word: 'teddy bear', img: itemTeddy, emoji: '\u{1F9F8}', plural: false },
-      { word: 'teddy bears', img: itemTeddy, emoji: '\u{1F9F8}', plural: true },
+      { word: 'teddy bears', img: itemTeddies, emoji: '\u{1F9F8}', plural: true, group: true },
       { word: 'train', img: itemTrain, emoji: '\u{1F682}', plural: false },
-      { word: 'blocks', img: itemBlocks, emoji: '\u{1F9F1}', plural: true },
-      { word: 'doll', img: itemDoll, emoji: '\u{1FA86}', plural: false },
-      { word: 'balls', img: itemBall, emoji: '\u{26BD}', plural: true },
+      { word: 'trains', img: itemTrains, emoji: '\u{1F682}', plural: true, group: true },
+      { word: 'blocks', img: itemBlocks, emoji: '\u{1F9F1}', plural: true, group: true },
+      { word: 'car', img: itemCar, emoji: '\u{1F697}', plural: false },
+      { word: 'cars', img: itemCars, emoji: '\u{1F697}', plural: true, group: true },
+      { word: 'balls', img: itemBalls, emoji: '\u{26BD}', plural: true, group: true },
     ],
   },
   {
-    // New "missing car" visual-memory game, directly modeled on the
-    // "Phonics Train" mechanic found in live research — a natural fit
-    // given this lesson's own train toy.
-    id: 'u3l2-train-recall', kind: 'train-recall', bg: bgU3L2ToyParade, teacher: 'All aboard! Watch the toy train — remember what is in each car!',
+    // Badges on the toys painted on bg-u3l2-shelf-wide (checked against the art).
+    id: 'u3l2-spin', kind: 'spin-wheel', bg: bgU3L2Shelf, title: 'Spin and say!',
+    teacher: 'Have the student spin and say ONE or MANY: "It\'s a train!" / "They are teddy bears!" Or tap a number.',
+    items: [
+      { label: "It's a teddy bear!", left: '13%', top: '47%' },
+      { label: 'They are teddy bears!', left: '39%', top: '47%' },
+      { label: "It's a train!", left: '69%', top: '47%' },
+      { label: 'They are blocks!', left: '14%', top: '84%' },
+      { label: "It's a ball!", left: '45%', top: '84%' },
+      { label: 'They are balls!', left: '69%', top: '84%' },
+    ],
+    // Wheel on the plain wall above the shelf, clear of the badges.
+    wheelAt: { left: '50%', top: '16%' },
+  },
+
+  /* 10-13 Communicative + game break */
+  {
+    id: 'u3l2-leo-asks', kind: 'join-stage', bg: bgU3L2Teddy, teacher: 'Leo asks about his presents. Answer him!', cast: ['leo', 'bella', 'willow'],
+    turns: [
+      { who: 'leo', line: 'What is it?', bg: bgU3L2Teddy, bubble: 'right' },
+      { who: 'student', line: "It's a teddy bear!", bg: bgU3L2Teddy, bubble: 'right' },
+      { who: 'bella', line: 'What are they?', bg: bgU3L2Blocks, bubble: 'right' },
+      { who: 'student', line: 'They are blocks!', bg: bgU3L2Blocks, bubble: 'right' },
+      { who: 'willow', line: 'What is it?', bg: bgU3L2Train, bubble: 'right' },
+      { who: 'student', line: "It's a train!", bg: bgU3L2Train, bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u3l2-you-ask', kind: 'join-stage', bg: bgU3L2Party, teacher: 'Swap! Now YOU ask Leo. Point and ask: What is it? What are they?', cast: ['leo'],
+    turns: [
+      { who: 'student', line: 'Ask Leo: What are they?', bg: bgU3L2Blocks, bubble: 'right' },
+      { who: 'leo', line: 'They are blocks!', bg: bgU3L2Blocks, bubble: 'right' },
+      { who: 'student', line: 'Ask Leo: What is it?', bg: bgU3L2Train, bubble: 'right' },
+      { who: 'leo', line: "It's a train! Choo choo!", bg: bgU3L2Train, bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u3l2-memory', kind: 'memory', bg: bgU3L1Room, teacher: 'Find the pairs! Say one or many: "They are trains!"',
+    pairs: [
+      { id: 'teddy', label: 'Teddy bear', emoji: '\u{1F9F8}', img: itemTeddy },
+      { id: 'teddies', label: 'Teddy bears', emoji: '\u{1F9F8}', img: itemTeddies },
+      { id: 'train', label: 'Train', emoji: '\u{1F682}', img: itemTrain },
+      { id: 'trains', label: 'Trains', emoji: '\u{1F682}', img: itemTrains },
+      { id: 'blocks', label: 'Blocks', emoji: '\u{1F9F1}', img: itemBlocks },
+      { id: 'balls', label: 'Balls', emoji: '\u{26BD}', img: itemBalls },
+    ],
+  },
+  {
+    id: 'u3l2-train-recall', kind: 'train-recall', bg: bgU3L2Train, teacher: "All aboard Willow's train! Remember the toy in each car.",
     cars: [
       { word: 'TEDDY BEAR', img: itemTeddy, emoji: '\u{1F9F8}' },
       { word: 'BLOCKS', img: itemBlocks, emoji: '\u{1F9F1}' },
-      { word: 'TRAIN', img: itemTrain, emoji: '\u{1F682}' },
-      { word: 'BALL', img: itemBall, emoji: '\u{26BD}' },
+      { word: 'BALL', img: itemBallRed, emoji: '\u{26BD}' },
+      { word: 'CAR', img: itemCar, emoji: '\u{1F697}' },
       { word: 'DOLL', img: itemDoll, emoji: '\u{1FA86}' },
     ],
   },
+
+  /* 14-16 Phonics, quick-fire, story payoff */
   {
-    // 'memory' kind already existed in this codebase but had never been
-    // used in any Unit 3 lesson — genuinely fresh mechanic for this unit.
-    id: 'u3l2-memory', kind: 'memory', bg: bgMeadow, teacher: 'Find the matching pairs!',
-    pairs: [
-      { id: 'teddy', label: 'Teddy Bear', emoji: '\u{1F9F8}', img: itemTeddy },
-      { id: 'blocks', label: 'Blocks', emoji: '\u{1F9F1}', img: itemBlocks },
-      { id: 'train', label: 'Train', emoji: '\u{1F682}', img: itemTrain },
-      { id: 'ball', label: 'Ball', emoji: '\u{26BD}', img: itemBall },
-      { id: 'doll', label: 'Doll', emoji: '\u{1FA86}', img: itemDoll },
-      { id: 'car', label: 'Car', emoji: '\u{1F697}', img: itemCar },
+    id: 'u3l2-model-t', kind: 'sound-model', bg: bgU3L1Room, who: 'leo', letter: 'T', phoneme: '/t/', sound: 'tuh',
+    teacher: 'T says /t/ — teddy, train, ten!',
+    anchors: [
+      { word: 'teddy', emoji: '\u{1F9F8}', img: itemTeddy },
+      { word: 'train', emoji: '\u{1F682}', img: itemTrain },
+      { word: 'ten', emoji: '\u{1F51F}', img: itemTen },
     ],
   },
   {
-    id: 'u3l2-who', kind: 'listen-repeat-cards', bg: bgU3L2ToyParade, teacher: 'Listen to each friend, then repeat!',
+    id: 'u3l2-quick-fire', kind: 'rapid-recall', bg: bgU3L2Party, who: 'pip', seconds: 3,
+    teacher: 'Quick-fire! Say each picture before the ring runs out.',
     cards: [
-      { who: 'leo', sentence: 'Leo has a teddy bear!', img: itemTeddy, imgLabel: 'Teddy bear' },
-      { who: 'bella', sentence: 'Bella has blocks!', img: itemBlocks, imgLabel: 'Blocks' },
-      { who: 'willow', sentence: 'Willow has a train!', img: itemTrain, imgLabel: 'Train' },
+      { img: itemTeddy, word: 'Teddy bear', say: "It's a teddy bear!" },
+      { img: itemBlocks, word: 'Blocks', say: 'They are blocks!' },
+      { img: itemTrain, word: 'Train', say: "It's a train!" },
+      { img: itemBalls, word: 'Balls', say: 'They are balls!' },
+      { img: itemCar, word: 'Car', say: "It's a car!" },
+      { img: itemDolls, word: 'Dolls', say: 'They are dolls!' },
     ],
   },
   {
-    id: 'u3l2-sentence-practice', kind: 'listen-repeat-cards', bg: bgU3L2ToyParade, teacher: "Now let's say the full sentence — one, or many!",
-    cards: [
-      { who: 'leo', sentence: "It's a brown teddy bear!", img: itemTeddy, imgLabel: 'Brown teddy bear' },
-      { who: 'bella', sentence: 'They are blue blocks!', img: itemBlocks, imgLabel: 'Blue blocks' },
-      { who: 'willow', sentence: "It's a red train!", img: itemTrain, imgLabel: 'Red train' },
-      { who: 'leo', sentence: 'I like brown teddy bears!', img: itemTeddy, imgLabel: 'Brown teddy bear' },
-      { who: 'bella', sentence: "I don't like blue blocks!", img: itemBlocks, imgLabel: 'Blue blocks' },
-      { who: 'willow', sentence: 'I like red trains!', img: itemTrain, imgLabel: 'Red train' },
-    ],
-  },
-  {
-    id: 'u3l2-dash-teddy', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Leo Dash! Tap only the TEDDY BEAR things as they run by. Get 6 rings!', who: 'leo', targetLetter: 'TEDDY', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'teddy', letter: 'TEDDY', img: itemTeddy, emoji: '\u{1F9F8}' },
-      { word: 'teddy', letter: 'TEDDY', img: itemTeddy, emoji: '\u{1F9F8}' },
-      { word: 'blocks', letter: 'BLOCKS', img: itemBlocks, emoji: '\u{1F9F1}' },
-      { word: 'blocks', letter: 'BLOCKS', img: itemBlocks, emoji: '\u{1F9F1}' },
-      { word: 'train', letter: 'TRAIN', img: itemTrain, emoji: '\u{1F682}' },
-      { word: 'train', letter: 'TRAIN', img: itemTrain, emoji: '\u{1F682}' },
-    ],
-  },
-  {
-    id: 'u3l2-dash-train', kind: 'dash', bg: bgU3L1DashArena, teacher: 'Willow Dash! Tap only the TRAIN things as they run by. Get 6 rings!', who: 'willow', targetLetter: 'TRAIN', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'train', letter: 'TRAIN', img: itemTrain, emoji: '\u{1F682}' },
-      { word: 'train', letter: 'TRAIN', img: itemTrain, emoji: '\u{1F682}' },
-      { word: 'teddy', letter: 'TEDDY', img: itemTeddy, emoji: '\u{1F9F8}' },
-      { word: 'teddy', letter: 'TEDDY', img: itemTeddy, emoji: '\u{1F9F8}' },
-      { word: 'blocks', letter: 'BLOCKS', img: itemBlocks, emoji: '\u{1F9F1}' },
-      { word: 'blocks', letter: 'BLOCKS', img: itemBlocks, emoji: '\u{1F9F1}' },
-    ],
-  },
-  {
-    id: 'u3l2-join-stage', kind: 'join-stage', bg: bgU3L2ToyParade, teacher: 'Your turn! Is it ONE, or is it MANY?', cast: ['pip', 'leo', 'bella', 'willow'],
-    turns: [
-      { who: 'pip', line: 'What color and toy is this?', bg: bgU3L2TeddySolo },
-      { who: 'student', line: "It's a ______ ______. (brown teddy bear)", bg: bgU3L2TeddySolo },
-      { who: 'bella', line: 'Is it one block, or many blocks?', bg: bgU3L2BlocksSolo },
-      { who: 'student', line: 'They are ______ ______. (blue blocks)', bg: bgU3L2BlocksSolo },
-      { who: 'willow', line: 'What color and toy is this?', bg: bgU3L2TrainSolo },
-      { who: 'student', line: "It's a ______ ______. (red train)", bg: bgU3L2TrainSolo },
-    ],
-  },
-  {
-    id: 'u3l2-storybook', kind: 'flipbook', bg: bgU3L2ToyParade, title: 'One Toy, Many Toys',
+    id: 'u3l2-story-party', kind: 'story-video', bg: bgU3L2Cake, videoUrl: `${A}/video/party-story-u3l2.mp4?v=1`, title: "Leo's Party",
+    teacher: 'The story ends! Watch, say the toys, answer the questions.',
     pages: [
-      { who: 'leo', img: bgU3L2TeddyOnly, text: 'Leo has one toy. It is a brown teddy bear!' },
-      { who: 'bella', img: bgU3L2BlocksOnly, text: 'Bella has many toys. They are blue blocks!' },
-      { who: 'willow', img: bgU3L2TrainOnly, text: 'Willow has one toy. It is a red train!' },
-      { who: 'pip', img: bgU3L2ToyParade, text: 'One teddy bear, one train, but many blocks — playtime is the best with friends!' },
+      { img: bgU3L2Cake, who: 'pip', line: "Happy birthday, Leo! Let's play!", motion: 'zoom-in', fx: 'sparkles', atSec: 0 },
+      { img: bgU3L2Blocks, who: 'bella', line: 'Bella builds a big tower. They are blocks!', motion: 'pan-right', fx: 'sparkles', atSec: 5 },
+      { img: bgU3L2Train, who: 'willow', line: 'The train goes round and round. Choo choo!', motion: 'pan-left', fx: 'sparkles', atSec: 10 },
+      { img: bgU3L2Teddy, who: 'leo', line: "Leo loves his teddy bear. It's a teddy bear!", motion: 'zoom-in', fx: 'hearts', atSec: 15 },
+      { img: bgU3L2Cake, who: 'leo', line: 'Thank you, friends! I love my presents!', motion: 'zoom-out', fx: 'hearts', atSec: 20 },
     ],
     checkpoints: [
-      { afterPage: 1, who: 'leo', question: 'Is the teddy bear one, or many?', options: ['One', 'Many'], answer: 'One' },
-      { afterPage: 2, who: 'bella', question: 'Are the blocks one, or many?', options: ['One', 'Many'], answer: 'Many' },
+      { afterPage: 1, who: 'bella', question: 'What are they?', answer: 'Blocks', options: [{ label: 'Teddy bears', img: itemTeddies }, { label: 'Blocks', img: itemBlocks }, { label: 'Trains', img: itemTrains }] },
+      { afterPage: 3, who: 'leo', question: 'What does Leo love?', answer: 'His teddy bear', options: [{ label: 'His teddy bear', img: itemTeddy }, { label: 'A ball', img: itemBallRed }, { label: 'A doll', img: itemDoll }] },
+    ],
+  },
+
+  /* 17-20 Check, personal, reward, home mission */
+  {
+    id: 'u3l2-odd-one-out', kind: 'odd-one-out', bg: bgU3L2Train, who: 'willow',
+    teacher: 'Which one is different? Tap it and say it.',
+    rounds: [
+      { items: [{ label: 'teddy bears', img: itemTeddies }, { label: 'trains', img: itemTrains }, { label: 'one train', img: itemTrain }, { label: 'balls', img: itemBalls }], odd: 2, line: "It's a train! Just one!" },
+      { items: [{ label: 'teddy bear', img: itemTeddy }, { label: 'cars', img: itemCars }, { label: 'ball', img: itemBallRed }, { label: 'doll', img: itemDoll }], odd: 1, line: 'They are cars! Many cars!' },
+      { items: [{ label: 'teddy bear', img: itemTeddy }, { label: 'dog', img: itemDog }, { label: 'train', img: itemTrain }, { label: 'blocks', img: itemBlocks }], odd: 1, line: "It's a dog! The others are toys." },
     ],
   },
   {
-    id: 'u3l2-roleplay-teddy', kind: 'roleplay', bg: bgU3L2TeddyOnly, teacher: 'Story time! Listen to Pip and Leo, then repeat.', cast: ['pip', 'leo'],
-    script: [
-      { who: 'leo', line: "It's a brown teddy bear!", repeat: true },
-      { who: 'pip', line: 'I like brown teddy bears!', repeat: true },
+    id: 'u3l2-show-me', kind: 'join-stage', bg: bgU3L2Cake, teacher: 'Show and tell with real toys from home! One toy, then many toys.', cast: ['pip', 'leo'],
+    turns: [
+      { who: 'pip', line: 'Show me one toy! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's a … ! (show it)", bubble: 'right' },
+      { who: 'leo', line: 'Show me many toys! What are they?', bubble: 'right' },
+      { who: 'student', line: 'They are … !', bubble: 'right' },
+      { who: 'leo', line: 'Do you like teddy bears?', bubble: 'right' },
+      { who: 'student', line: 'I like teddy bears! / I like …!', bubble: 'right' },
     ],
   },
   {
-    id: 'u3l2-roleplay-blocks', kind: 'roleplay', bg: bgU3L2BlocksOnly, teacher: 'Now listen to them talk about the blocks, then repeat.', cast: ['pip', 'bella'],
-    script: [
-      { who: 'bella', line: 'They are blue blocks!', repeat: true },
-      { who: 'pip', line: "I don't like blue blocks!", repeat: true },
+    id: 'u3l2-sticker', kind: 'sticker-reward', bg: bgU3L2Party, who: 'leo', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You earned a teddy bear sticker! Well done!', sticker: { img: itemTeddy, label: 'Teddy bear' },
+  },
+  {
+    id: 'u3l2-home-mission', kind: 'home-mission', bg: bgU3L1Room, who: 'leo',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: find your toys at home. Show your family. Say: It\'s a teddy bear! They are blocks!',
+    parentNote: 'Ask your child to show you one toy, then many toys, and to name them in English: "It\'s a train!" / "They are cars!"',
+    steps: [
+      { emoji: '\u{1F50D}', img: itemTeddy, say: 'Find' },
+      { emoji: '\u{1F468}\u{200D}\u{1F469}\u{200D}\u{1F467}', say: 'Show' },
+      { emoji: '\u{1F5E3}️', img: itemBlocks, say: 'Say it!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u3l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU3L2Cake, who: 'pip',
+    teacher: 'Extra time — Brain Break! Stand up and move together. Skip with Next if there is no time.',
+    rounds: [
+      { line: 'Stand up and stretch!', emoji: '\u{1F646}' },
+      { line: 'Jump like a ball!', emoji: '\u{1F3C0}' },
+      { line: 'Walk like a robot!', emoji: '\u{1F916}' },
+      { line: 'Choo choo like a train!', emoji: '\u{1F682}' },
+      { line: 'Hug yourself like a teddy bear!', emoji: '\u{1F917}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
     ],
   },
   {
-    id: 'u3l2-roleplay-train', kind: 'roleplay', bg: bgU3L2TrainOnly, teacher: 'Now listen to them talk about the train, then repeat.', cast: ['pip', 'willow'],
-    script: [
-      { who: 'willow', line: "It's a red train!", repeat: true },
-      { who: 'pip', line: 'I like red trains!', repeat: true },
+    id: 'u3l2-bonus-builder', kind: 'shape-builder', bg: bgU2L3Builder, who: 'pip',
+    teacher: 'Extra time — Build a train! Name each shape, then pick the color you hear.',
+    rounds: [
+      {
+        who: 'willow', label: 'Train', intro: "Let's build a train!", line: "It's a train! Choo choo!", alive: 'launch',
+        pieces: [
+          { shape: 'square', colorWord: 'RED', colorHex: C4.RED, x: 8, y: 20, w: 28, h: 30 },
+          { shape: 'triangle', colorWord: 'YELLOW', colorHex: C4.YELLOW, x: 12, y: 4, w: 12, h: 16 },
+          { shape: 'square', colorWord: 'BLUE', colorHex: C4.BLUE, x: 40, y: 28, w: 22, h: 22 },
+          { shape: 'square', colorWord: 'GREEN', colorHex: C4.GREEN, x: 66, y: 28, w: 22, h: 22 },
+          { shape: 'circle', colorWord: 'PURPLE', colorHex: C4.PURPLE, x: 14, y: 48, w: 14, h: 14 },
+        ],
+      },
     ],
   },
   {
-    id: 'u3l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the playroom! Sing along together.',
+    id: 'u3l2-bonus-catch', kind: 'catch-sort', bg: bgU3L2Party, teacher: 'Extra time — Catch it! One toy or many toys? Say it as you catch it!', goal: 8, seconds: 45,
+    left: { label: 'One', emoji: '☝️' },
+    right: { label: 'Many', emoji: '\u{1F64C}' },
+    items: [
+      { word: 'teddy bear', img: itemTeddy, emoji: '\u{1F9F8}', target: 'left' },
+      { word: 'train', img: itemTrain, emoji: '\u{1F682}', target: 'left' },
+      { word: 'car', img: itemCar, emoji: '\u{1F697}', target: 'left' },
+      { word: 'teddy bears', img: itemTeddies, emoji: '\u{1F9F8}', target: 'right' },
+      { word: 'blocks', img: itemBlocks, emoji: '\u{1F9F1}', target: 'right' },
+      { word: 'balls', img: itemBalls, emoji: '\u{26BD}', target: 'right' },
+    ],
+  },
+
+  /* 21-22 Closing */
+  {
+    id: 'u3l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to Leo! Sing along together.',
     durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
     lineDurationsMs: [3580, 4020, 4980, 7482],
-    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    songPrompt: 'Cheerful upbeat kids goodbye song',
     lyrics: [
-      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
-      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
-      { who: 'willow', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
     ],
   },
-  { id: 'u3l2-finale', kind: 'finale', bg: bgU3L2ToyParade, who: 'pip', line: "You did it! You know one teddy bear, one train, AND many blocks! \u{1F389}\u{1F682}" },
+  { id: 'u3l2-finale', kind: 'finale', bg: bgU3L2Cake, who: 'leo', line: 'A teddy bear, blocks and a train. One or many, you know them! Thank you for my party!' },
 ];
 
 /* =============================================================================

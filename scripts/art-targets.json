@@ -1031,7 +1031,7 @@
       "public/lep1/scenes/bg-u3l1-playroom-wide.png",
       "public/lep1/scenes/bg-u2l4-party-wide.png"
     ],
-    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). The birthday party in the same cosy playroom as the first reference (warm wooden floor, soft yellow walls filling the whole picture edge to edge, window with curtains). All five friends from the references play together: a tall tower of colourful toy blocks, a red toy train going round a track, Leo the yellow lion hugging a brown teddy bear, and a birthday cake with candles on a little table. Everyone is laughing. Balloons and garlands. No text, letters or numbers anywhere."
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). The birthday party in the same cosy playroom as the first reference (warm wooden floor, soft yellow walls filling the whole picture edge to edge, window with curtains). EXACTLY five friends, each one appearing ONLY ONCE (never draw any character twice): ONE Pip the orange fox, ONE Willow the blue bird with a green scarf, ONE Bella the white bunny, ONE Mia the grey mouse with an orange bow, ONE Leo the yellow lion. They play together: a tall tower of colourful toy blocks, a red toy train going round a track, Leo the yellow lion hugging a brown teddy bear, and a birthday cake with candles on a little table. Everyone is laughing. Balloons and garlands. No text, letters or numbers anywhere."
   },
   {
     "out": "public/lep1/scenes/bg-u3l2-shelf-wide.png",
