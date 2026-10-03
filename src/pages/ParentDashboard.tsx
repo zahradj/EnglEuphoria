@@ -12,6 +12,7 @@ import { ParentNotificationSettings } from '@/components/parent/ParentNotificati
 import { FamilyCalendarView } from '@/components/parent/FamilyCalendarView';
 import { AddChildDialog } from '@/components/parent/AddChildDialog';
 import { FamilyHero } from '@/components/parent/FamilyHero';
+import { FamilyTopBar } from '@/components/family/FamilyTopBar';
 import type { ChildCardData } from '@/components/parent/ChildCard';
 import type { FamilyChildProfile } from '@/lib/familyBuddy';
 import { useChildSnapshots } from '@/hooks/useChildSnapshots';
@@ -161,6 +162,8 @@ const ParentDashboard: React.FC = () => {
         className="mx-auto max-w-6xl space-y-6 px-4 py-4 md:py-8"
         style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 32px)' }}
       >
+        <FamilyTopBar backTo="/" />
+
         <FamilyHero
           parentName={parentName}
           children={children.map((c) => ({ studentId: c.studentId, name: c.name, profile: c.profile }))}
