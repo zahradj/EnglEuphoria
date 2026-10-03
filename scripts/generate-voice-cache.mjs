@@ -313,6 +313,18 @@ const UNIT1_EXTRACTORS = {
   'color-simon': (s) => (s.colors ?? []).map((c) => [c.who, c.colorWord]),
   // WordPictureMatchScene.tsx: says the word, then "Yes! <word>!" (had no extractor).
   'word-picture-match': (s) => (s.rounds ?? []).flatMap((r) => [[r.who ?? 'pip', r.word], [r.who ?? 'pip', `Yes! ${r.word}!`]]),
+  // Mirror ListenColourScene / ShapeFishingScene / PatternTrainScene line helpers.
+  'listen-colour': (s) => (s.rounds ?? []).flatMap((r) => {
+    const it = (s.items ?? []).find((i) => i.id === r.item);
+    return it ? [[s.who, `Color the ${it.size} ${it.shape} ${r.colorWord.toLowerCase()}!`], [s.who, `Yes! The ${it.size} ${it.shape} is ${r.colorWord.toLowerCase()}!`]] : [];
+  }),
+  'shape-fishing': (s) => (s.targets ?? []).map((i) => s.fish?.[i]).filter(Boolean).flatMap((f) => [
+    [s.who, `Catch a ${f.colorWord.toLowerCase()} ${f.shape}!`], [s.who, `You caught a ${f.colorWord.toLowerCase()} ${f.shape}!`],
+  ]),
+  'pattern-train': (s) => [
+    [s.who, 'What comes next?'],
+    ...(s.rounds ?? []).map((r) => [s.who, `Yes! ${/^[aeiou]/i.test(r.answer.colorWord) ? 'An' : 'A'} ${r.answer.colorWord.toLowerCase()} ${r.answer.shape}!`]),
+  ],
   // Mirrors SecretCardScene.tsx's secretCardLines().
   'secret-card': (s) => [
     [s.who, 'I have a secret card. Ask me!'], [s.who, 'Yes, it is!'], [s.who, "No, it isn't!"],
