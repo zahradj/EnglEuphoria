@@ -1,15 +1,11 @@
-skip 01-sea (exists)
-skip 02-sad (exists)
-skip 03-red (exists)
-skip 04-blue (exists)
-skip 05-yellow (exists)
-05b-green: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
-started 05b-green: e398fd62-0cf8-4480-bc9c-94aa456cdaee
-saved public/lep1/video/clips/u2l5-shelly/05b-green.mp4 (11342086 bytes)
-skip 06-rainbow (exists)
-skip 07-crab (exists)
-05c-orange: estimate {"type":"estimate","credits":"9.520","usd":"0.595","discount":{"percentage":"15.00","credits":"1.680","usd":"0.105"}}
-started 05c-orange: 134843c2-158b-4ee4-a0c9-187a56a6bb07
-saved public/lep1/video/clips/u2l5-shelly/05c-orange.mp4 (10724286 bytes)
-skip 08-friends (exists)
-10/10 clips ready for u2l5-shelly
+wait river: picture public/lep1/scenes/bg-u2l6-river-wide.png not made yet
+meadow: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+beach: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started meadow: 54941b2b-6e2a-4082-b7a9-3a21d64abfb2
+started beach: c6ab1304-5357-4dfa-8fb5-04a762e56e6f
+saved public/lep1/video/clips/u2l6-loops/meadow.mp4 (9359348 bytes)
+saved public/lep1/video/clips/u2l6-loops/beach.mp4 (5314352 bytes)
+garden: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started garden: a26241da-7967-4053-a0fb-db47875efeab
+saved public/lep1/video/clips/u2l6-loops/garden.mp4 (10130095 bytes)
+3/4 clips ready for u2l6-loops
