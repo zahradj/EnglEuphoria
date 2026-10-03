@@ -13,6 +13,17 @@ export interface LessonGrammarEntry {
 }
 
 export const LESSON_GRAMMAR: Record<string, LessonGrammarEntry> = {
+  // Pre-A1 Unit 1 Lesson 5 — Leo's Lost Star (story lesson, review of Unit 1)
+  'lep1-rich-1-5': {
+    pattern: 'Is it under the hat? — No! It\'s a bat! / Yes! Here it is!',
+    cefr: 'Pre-A1',
+    forms: [
+      { label: 'Ask where something is', formula: 'Is it under the + thing? / Is it in the + thing?' },
+      { label: 'Answer', formula: "No! It's a/an + thing. / Yes! Here it is!" },
+      { label: 'Say how someone feels', formula: 'He is / She is + sad / happy.' },
+    ],
+    examples: ['Is it under the hat? No! It\'s a bat!', 'Is it in the bag? No! It\'s a nut!', 'I am sad. I lost my star.', 'He is happy!'],
+  },
   // Pre-A1 Unit 2 Lesson 1 — Red, Blue, Yellow! (The Color Carnival)
   'lep1-rich-2-1': {
     pattern: "It's + color",
