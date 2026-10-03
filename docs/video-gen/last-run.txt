@@ -1,11 +1,7 @@
-wait river: picture public/lep1/scenes/bg-u2l6-river-wide.png not made yet
-meadow: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-beach: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started meadow: 54941b2b-6e2a-4082-b7a9-3a21d64abfb2
-started beach: c6ab1304-5357-4dfa-8fb5-04a762e56e6f
-saved public/lep1/video/clips/u2l6-loops/meadow.mp4 (9359348 bytes)
-saved public/lep1/video/clips/u2l6-loops/beach.mp4 (5314352 bytes)
-garden: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started garden: a26241da-7967-4053-a0fb-db47875efeab
-saved public/lep1/video/clips/u2l6-loops/garden.mp4 (10130095 bytes)
-3/4 clips ready for u2l6-loops
+skip meadow (exists)
+skip beach (exists)
+river: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started river: cc602732-aa98-47eb-800f-5dee8d1a793f
+saved public/lep1/video/clips/u2l6-loops/river.mp4 (10090550 bytes)
+skip garden (exists)
+4/4 clips ready for u2l6-loops
