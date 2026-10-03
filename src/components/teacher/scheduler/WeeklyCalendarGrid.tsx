@@ -11,6 +11,8 @@ interface WeeklyCalendarGridProps {
   onSlotClick: (day: string, time: string) => void;
   onBookedSlotClick?: (slot: AvailabilitySlot) => void;
   slotDuration: 30 | 60;
+  /** Multi-hub teachers: tint and label open slots by hub. */
+  showHubTags?: boolean;
 }
 
 type Period = 'night' | 'morning' | 'afternoon' | 'evening';
@@ -52,6 +54,7 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
   onSlotClick,
   onBookedSlotClick,
   slotDuration,
+  showHubTags = false,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -115,6 +118,14 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
     }
     if (slot.cancelledBy === 'student') {
       return 'bg-amber-50 text-amber-800 ring-1 ring-amber-300 hover:bg-amber-100 dark:bg-amber-500/15 dark:text-amber-200 dark:ring-amber-500/40 cursor-pointer transition-all';
+    }
+
+    // Multi-hub teachers: an open slot takes its hub's tint so Playground / Academy / Success read apart.
+    if (showHubTags && slot.hub === 'playground') {
+      return 'bg-orange-50 text-orange-700 ring-1 ring-orange-200 hover:bg-orange-100 dark:bg-orange-500/15 dark:text-orange-200 dark:ring-orange-500/30 cursor-pointer shadow-sm transition-all duration-150';
+    }
+    if (showHubTags && slot.hub === 'academy') {
+      return 'bg-violet-50 text-violet-700 ring-1 ring-violet-200 hover:bg-violet-100 dark:bg-violet-500/15 dark:text-violet-200 dark:ring-violet-500/30 cursor-pointer shadow-sm transition-all duration-150';
     }
 
     // Available: a calm mint chip, so it never competes with booked lessons.
@@ -199,6 +210,9 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
       <span className="inline-flex items-center gap-1 text-[10px] font-bold">
         <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
         {slot.duration}m
+        {showHubTags && slot.hub && (
+          <span aria-hidden>{slot.hub === 'playground' ? '🎪' : slot.hub === 'success' ? '🏆' : '📘'}</span>
+        )}
       </span>
     );
   };
