@@ -1,0 +1,13 @@
+Higgsfield: 11 pictures to make
++ public/lep1/items/item-tree.png (2614195B, Higgsfield)
++ public/lep1/items/item-star-gold.png (1875912B, Higgsfield)
++ public/lep1/scenes/bg-l5-empty-wide.png (4599121B, Higgsfield)
++ public/lep1/scenes/bg-l5-play-wide.png (4700004B, Higgsfield)
++ public/lep1/scenes/bg-l5-sad-wide.png (4884617B, Higgsfield)
++ public/lep1/scenes/bg-l5-wind-wide.png (4920519B, Higgsfield)
++ public/lep1/scenes/bg-l5-friends-wide.png (4964646B, Higgsfield)
++ public/lep1/scenes/bg-l5-hat-wide.png (4727293B, Higgsfield)
++ public/lep1/scenes/bg-l5-found-wide.png (4968224B, Higgsfield)
++ public/lep1/scenes/bg-l5-mat-wide.png (4633012B, Higgsfield)
++ public/lep1/scenes/bg-l5-glow-wide.png (4722118B, Higgsfield)
+Done. made 11, failed 0
