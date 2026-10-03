@@ -112,7 +112,7 @@ new Pre-A1 lesson needs it, that's exactly when to run the Research Step.
 | **Controlled / recognition practice** (low-risk, guided) | `listen-colour`, `picture-match`, `echo`, `trace`, `sound-sort`, `color-sort`, `shape-sort`, `plural-sort`, `he-she-sort`, `color-spot`, `color-spy`, `alphabet-order`, `alphabet-blocks`, `basket`, `count-balloons`, `age-balloons` |
 | **Interactive game practice** (student-led, real stakes, game-feel) | `word-build`, `sentence-build`, `dash`, `catch-sort`, `sound-pop`, `brick-crush`, `gather`, `memory`, `puzzle`, `hello-doors`, `friend-pop`, `feed-monsters`, `color-simon`, `train-recall`, `feelings-dice`, `feelings-wheel`, `x-is-feeling`, `i-am-feeling`, `age-sentence-match`, `who-said-it`, `color-mix`, `shape-builder`, `shape-fishing`, `pattern-train` |
 | **Speaking production** | `roleplay`, `join-stage`, `voice-stage`, `he-she-say`, `spin-wheel`, `secret-card` (child asks yes/no questions) |
-| **Story** | `flipbook` |
+| **Story** | `story-video` (animated, narrated, picture questions — preferred for Pre-A1 non-readers), `flipbook` (text pages; needs an adult to read), `story-order` (jumbled pictures → retell), `tick-cross` (listen: true or false?) |
 | **Review / assessment / boss** | `trophy-chest`, `feelings-bingo`, `age-quiz`, `color-quiz`, `feeling-quiz` (plus any of the interactive-practice kinds above, re-run at higher difficulty with no new content) |
 | **Structural / closing** (not gem-eligible, don't count for variety) | `title-card`, `cinematic`, `song`, `finale`, `feelings` (a vocab-reveal scene, not a game) |
 
@@ -132,6 +132,11 @@ avoid-forever rule for a `kind` that's otherwise fine elsewhere.
 | Listen and colour (big/small + shape + colour) | Cambridge Pre A1 Starters Listening Part 5 | `listen-colour` | detailed listening, exam format |
 | Go fishing for the shape you hear | classroom magnet-fishing game, shape fishing apps | `shape-fishing` | colour+shape listening, arcade feel |
 | What comes next? pattern train | Khan Academy Kids pattern/sorting activities | `pattern-train` | logic + saying the answer |
+| Story as an animated film (no reading) | pre/while/post storytelling for very young learners (Cambridge ELT blog) | `story-video` | following a story by listening; picture-answer checks |
+| Tick or cross | Cambridge Pre A1 Starters R&W Part 1 (listening-first for non-readers) | `tick-cross` | comprehension |
+| Jumbled pictures → retell | storytelling retell research (Kids Club English) | `story-order` | sequence + retell |
+
+**Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
 
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)
 
