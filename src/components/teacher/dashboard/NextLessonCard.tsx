@@ -80,12 +80,6 @@ export const NextLessonCard: React.FC<NextLessonCardProps> = ({ disabled = false
     navigate(`/classroom/${targetId}`);
   };
 
-  const getBadgeContent = () => {
-    if (!nextLesson) return 'No upcoming lessons';
-    if (hasStarted) return 'Starting Now!';
-    return `In ${formattedTime}`;
-  };
-
   const getBadgeVariant = (): 'default' | 'secondary' | 'destructive' => {
     if (!nextLesson) return 'secondary';
     if (hasStarted) return 'destructive';
@@ -117,12 +111,12 @@ export const NextLessonCard: React.FC<NextLessonCardProps> = ({ disabled = false
                 LIVE
               </span>
             )}
-            {!isLoading && (
+            {!isLoading && nextLesson && (isSessionLive || hasStarted || isStartingSoon) && (
               <Badge
                 variant={getBadgeVariant()}
                 className={cn('rounded-full px-3 py-1 text-xs font-bold', hot && 'animate-pulse bg-emerald-500 text-white hover:bg-emerald-500')}
               >
-                {isSessionLive ? 'In Session!' : getBadgeContent()}
+                {isSessionLive ? 'In Session!' : hasStarted ? 'Starting Now!' : 'Starting soon'}
               </Badge>
             )}
           </div>
@@ -159,6 +153,33 @@ export const NextLessonCard: React.FC<NextLessonCardProps> = ({ disabled = false
                   {nextLesson.title || 'English Lesson'}
                 </p>
               </div>
+            </div>
+
+            {/* bigCountdown: the time until the lesson, large and central */}
+            <div
+              className={cn(
+                'rounded-3xl px-4 py-5 text-center ring-1 transition-colors',
+                hot
+                  ? 'bg-gradient-to-br from-emerald-500/15 to-teal-500/10 ring-emerald-400/40'
+                  : 'bg-gradient-to-br from-primary/10 to-violet-500/10 ring-primary/15',
+              )}
+              aria-live="polite"
+            >
+              <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-muted-foreground">
+                {isSessionLive ? 'Your class is' : hasStarted ? 'Your lesson is' : 'Lesson starts in'}
+              </p>
+              <p
+                className={cn(
+                  'mt-1 font-black tabular-nums leading-none tracking-tight',
+                  isSessionLive || hasStarted ? 'text-4xl sm:text-5xl' : formattedTime.length > 5 ? 'text-4xl sm:text-5xl' : 'text-6xl sm:text-7xl',
+                  hot ? 'text-emerald-600 dark:text-emerald-400' : 'bg-gradient-to-r from-primary to-violet-500 bg-clip-text text-transparent',
+                )}
+              >
+                {isSessionLive ? 'LIVE' : hasStarted ? 'Starting now' : formattedTime}
+              </p>
+              {!isSessionLive && !hasStarted && formattedTime.length <= 5 && (
+                <p className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.3em] text-muted-foreground/80">min&nbsp;&nbsp;·&nbsp;&nbsp;sec</p>
+              )}
             </div>
 
             {/* When */}
