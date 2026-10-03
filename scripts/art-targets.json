@@ -432,5 +432,80 @@
       "public/welcome-town/scenes/bg-classroom-wide-v2.png"
     ],
     "prompt": "A 16:9 widescreen cartoon picture of the same classroom as the references, decorated for a welcome party: a big closed wooden classroom door on the LEFT third of the picture with a round door knob, colourful balloons and paper bunting along the top of the wall, a long blank paper banner (no letters on it) above the door, a small table on the far right with cupcakes and juice. The middle of the floor in front of the door is clear and empty. No characters, no animals, no people, no text or letters anywhere. Same cartoon art style as the references (bold dark outlines, warm flat colours), filling the whole frame edge to edge with no white border."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-color-parade.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture of a sunny rainbow meadow, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours, friendly picture-book look). The same four friends as the reference stand on the grass across the middle: Pip the orange fox, Willow the blue bird with a green scarf, Leo the yellow lion, Mia the grey mouse with an orange bow, all smiling and waving. On the left a bright GREEN frog sits on a lily pad by a little pond; in the middle a patch of ORANGE carrots grows in the soil; on the right a vine with big PURPLE grapes. A faint rainbow in the blue sky. No text or letters anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l2-paint-lab-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-color-parade.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture of an outdoor painting corner in a sunny meadow, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours, friendly picture-book look). A long low wooden table runs across the bottom of the picture, completely EMPTY on top (nothing on the table). Behind it a wooden easel with a blank white canvas on the far right, a few colourful paint splashes on the grass, flowers at the edges, blue sky. The whole middle of the picture is open and uncluttered. No characters, no animals, no text or letters anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l2-green-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-color-parade.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours, friendly picture-book look): Willow the blue bird with a green scarf (same design as the reference) stands on the LEFT third of the picture pointing happily at a big bright GREEN frog sitting on a green lily pad in a small pond in the middle. Grass and sky, the right third of the picture is open grass. Only one frog. No other characters, no text."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l2-orange-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-color-parade.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours, friendly picture-book look): Leo the yellow lion with an orange mane (same design as the reference) stands on the LEFT third of the picture holding up one big bright ORANGE carrot with green leaves, smiling. A small vegetable patch behind him. The right third of the picture is open grass and sky. No other characters, no text."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l2-purple-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-color-parade.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours, friendly picture-book look): Mia the grey mouse with an orange bow (same design as the reference) stands on the LEFT third of the picture holding up one big bunch of bright PURPLE grapes, smiling. A grape vine behind her. The right third of the picture is open grass and sky. No other characters, no text."
+  },
+  {
+    "out": "public/lep1/items/item-frog.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-color-parade.png"
+    ],
+    "prompt": "One cute bright GREEN frog sitting, front view, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text."
+  },
+  {
+    "out": "public/lep1/items/item-carrot.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-color-parade.png"
+    ],
+    "prompt": "One bright ORANGE carrot with a small green leafy top, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text."
+  },
+  {
+    "out": "public/lep1/items/item-pumpkin.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-color-parade.png"
+    ],
+    "prompt": "One round bright ORANGE pumpkin with a short green stem, no face, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text."
+  },
+  {
+    "out": "public/lep1/items/item-plum.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-color-parade.png"
+    ],
+    "prompt": "One round PURPLE plum with a small green leaf on the stem, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text."
+  },
+  {
+    "out": "public/lep1/items/item-paint-pot-empty.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-color-parade.png"
+    ],
+    "prompt": "One empty round clay paint pot seen from the front and slightly above, the inside is plain white and empty, drawn in exactly the same cartoon art style as the reference (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text."
   }
 ]
