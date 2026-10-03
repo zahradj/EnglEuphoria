@@ -158,6 +158,20 @@ cards (puffy highlight, bottom lip, soft deep shadow — `CLAY_CARD` /
 `CLAY_BUTTON` in `unit1/scene-components/shared.tsx`), cards on the open side
 of the picture (never over the character), ≥ 80 px tap targets, wide 16:9 art.
 
+**Game feel — an animated video game, not flat cards (owner, 2026-10-03):**
+- **Living world:** each game scene gets a seamless looping clip of its own
+  picture (`bgVideo`; Higgsfield image-to-video → `scripts/make-game-loops.py`
+  ping-pongs it, ~1 MB): water flows, flowers sway, the character blinks. The
+  still picture stays as the poster/fallback.
+- **Painted game pieces,** never plain CSS boxes: river, stones, chests, gems
+  are illustrated art (art-targets, Higgsfield) used as stickers.
+- **Motion with physics** (`unit1/scene-components/gameFx.tsx`, framer-motion):
+  characters breathe when idle and hop in an arc with squash & stretch
+  (`Hopper`); pieces spring in, float idly (`idleFloat`), lift and tilt when
+  dragged; every right answer bursts (stars / splash / confetti — `useBursts`);
+  a wrong answer wobbles the screen softly (`useShake`) — never a punishment.
+- Respect reduced motion; nothing flashes; the still game must stay playable.
+
 **Research behind the 2026-10 additions:** Khan Academy Kids (guide
 characters, collectible rewards → Sticker Book), Novakid / Oxford *Toy Team*
 and *Everybody Up* (TPR + songs → Move & Say, brain breaks), Cambridge Pre A1
