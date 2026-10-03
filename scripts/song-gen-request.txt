@@ -1,2 +1,2 @@
-# run 2: clearer lyrics (no names)
-wt-hello
+# u2l2: Pre-A1 Unit 2 Lesson 2 colours song
+u2l2-colors
