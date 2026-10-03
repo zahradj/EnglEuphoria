@@ -171,7 +171,7 @@ export const NextLessonCard: React.FC<NextLessonCardProps> = ({ disabled = false
               <p
                 className={cn(
                   'mt-1 font-black tabular-nums leading-none tracking-tight',
-                  isSessionLive || hasStarted ? 'text-3xl sm:text-4xl' : formattedTime.length > 5 ? 'text-3xl sm:text-4xl' : 'text-4xl sm:text-5xl',
+                  isSessionLive || hasStarted ? 'text-2xl sm:text-3xl' : formattedTime.length > 5 ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl',
                   hot ? 'text-emerald-600 dark:text-emerald-400' : 'bg-gradient-to-r from-primary to-violet-500 bg-clip-text text-transparent',
                 )}
               >
