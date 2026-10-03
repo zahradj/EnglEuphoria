@@ -158,7 +158,7 @@ export type Scene =
        *  First added for Unit 2 Lesson 1 per direct user feedback that a
        *  free-floating question over a busy scene left students unsure which
        *  object "it" referred to. */
-      turns: { who: CharKey | 'student'; line: string; bg?: string; arrow?: { left: string; top: string; dir?: 'down' | 'left' | 'right' }; bubble?: 'top' | 'bottom' }[];
+      turns: { who: CharKey | 'student'; line: string; bg?: string; arrow?: { left: string; top: string; dir?: 'down' | 'left' | 'right' }; bubble?: 'top' | 'bottom' | 'left' | 'right' }[];
     }
   | { id: string; kind: 'hello-doors'; bg: string; teacher: string; cast: CharKey[]; rounds: { target: CharKey; prompt: string; helloLine: string; echoLine: string }[] }
   | {
@@ -3174,21 +3174,21 @@ export const LESSON_U2L3_SCENES: Scene[] = [
   {
     id: 'u2l3-you-answer', kind: 'join-stage', bg: bgU2L3Town, teacher: 'Your turn! When it says YOU, say the shape.', cast: ['pip', 'bella', 'mia', 'leo'],
     turns: [
-      { who: 'pip', line: 'What shape is the clock?', bg: bgU2L3Clock, arrow: { left: '40%', top: '30%' }, bubble: 'bottom' },
-      { who: 'student', line: "It's a …", bg: bgU2L3Clock, arrow: { left: '40%', top: '30%' }, bubble: 'bottom' },
+      { who: 'pip', line: 'What shape is the clock?', bg: bgU2L3Clock, arrow: { left: '40%', top: '30%' } },
+      { who: 'student', line: "It's a …", bg: bgU2L3Clock, arrow: { left: '40%', top: '30%' } },
       { who: 'pip', line: 'What shape is the window?', bg: bgU2L3Window, arrow: { left: '43%', top: '46%' } },
       { who: 'student', line: "It's a …", bg: bgU2L3Window, arrow: { left: '43%', top: '46%' } },
-      { who: 'pip', line: 'What shape is the pizza?', bg: bgU2L3Pizza, arrow: { left: '39%', top: '36%' }, bubble: 'bottom' },
-      { who: 'student', line: "It's a …", bg: bgU2L3Pizza, arrow: { left: '39%', top: '36%' }, bubble: 'bottom' },
+      { who: 'pip', line: 'What shape is the pizza?', bg: bgU2L3Pizza, arrow: { left: '39%', top: '36%' } },
+      { who: 'student', line: "It's a …", bg: bgU2L3Pizza, arrow: { left: '39%', top: '36%' } },
     ],
   },
   {
     id: 'u2l3-you-ask', kind: 'join-stage', bg: bgU2L3Town, teacher: 'Now YOU ask! Say: What shape is it?', cast: ['bella', 'mia', 'leo'],
     turns: [
-      { who: 'student', line: 'Ask Bella: What shape is it?', bg: bgU2L3Clock, arrow: { left: '40%', top: '30%' }, bubble: 'bottom' },
-      { who: 'bella', line: "It's a circle!", bg: bgU2L3Clock, bubble: 'bottom' },
-      { who: 'student', line: 'Ask Leo: What shape is it?', bg: bgU2L3Pizza, arrow: { left: '39%', top: '36%' }, bubble: 'bottom' },
-      { who: 'leo', line: "It's a triangle!", bg: bgU2L3Pizza, bubble: 'bottom' },
+      { who: 'student', line: 'Ask Bella: What shape is it?', bg: bgU2L3Clock, arrow: { left: '40%', top: '30%' } },
+      { who: 'bella', line: "It's a circle!", bg: bgU2L3Clock, bubble: 'right' },
+      { who: 'student', line: 'Ask Leo: What shape is it?', bg: bgU2L3Pizza, arrow: { left: '39%', top: '36%' } },
+      { who: 'leo', line: "It's a triangle!", bg: bgU2L3Pizza, bubble: 'right' },
       { who: 'student', line: 'Ask your teacher: What shape is it?', bg: bgU2L3Window, arrow: { left: '43%', top: '46%' } },
     ],
   },

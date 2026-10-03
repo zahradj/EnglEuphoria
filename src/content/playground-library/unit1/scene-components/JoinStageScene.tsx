@@ -61,8 +61,16 @@ export function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<
     setState((s) => ({ ...s, turnIdx: s.turnIdx + 1, gemDone: s.gemDone || awardGem }));
   };
 
-  // A turn whose object sits high in the picture puts its bubble at the bottom.
-  const bubblePos = currentTurn?.bubble === 'bottom' ? 'bottom-20' : 'top-20';
+  // The card must never cover what the child is talking about: when the turn
+  // points at an object, the card goes to the other side of the picture.
+  const arrowX = currentTurn?.arrow ? parseFloat(currentTurn.arrow.left) : NaN;
+  const place = currentTurn?.bubble ?? (Number.isNaN(arrowX) ? 'top' : arrowX > 55 ? 'left' : 'right');
+  const side = place === 'left' || place === 'right';
+  const bubblePos = place === 'bottom' ? 'inset-x-0 bottom-20 justify-center px-4'
+    : place === 'left' ? 'left-[3%] top-[14%] w-[36%] max-w-[440px]'
+    : place === 'right' ? 'right-[3%] top-[14%] w-[36%] max-w-[440px]'
+    : 'inset-x-0 top-20 justify-center px-4';
+  const lineSize = side ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl';
 
   return (
     <div ref={stageRef} className="absolute inset-0 overflow-hidden select-none" style={{ backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
@@ -98,20 +106,20 @@ export function JoinStageScene({ scene, onNext, onWin, sync }: { scene: Extract<
         );
       })()}
       {currentTurn && isFriendTurn && (
-        <div className={`absolute inset-x-0 ${bubblePos} z-30 flex justify-center px-4`}>
-          <div className="max-w-[720px] rounded-[28px] bg-white px-8 py-5 text-center shadow-[0_30px_80px_rgba(0,0,0,0.35)] ring-4 ring-orange-200">
+        <div className={`absolute ${bubblePos} z-30 flex`}>
+          <div className={`${side ? "w-full px-5 py-4" : "max-w-[720px] px-8 py-5"} rounded-[28px] bg-white text-center shadow-[0_30px_80px_rgba(0,0,0,0.35)] ring-4 ring-orange-200`}>
             <div className="mb-1 flex items-center justify-center gap-2 text-[11px] font-black uppercase tracking-[0.25em]" style={{ color: friendMeta?.color ?? '#FE6A2F' }}><span className="text-lg">{friendMeta?.emoji ?? '🎓'}</span> {friendMeta?.name ?? 'Teacher'} asks</div>
-            <div className="text-3xl font-black text-orange-800 sm:text-4xl">“{currentTurn.line}”</div>
+            <div className={`${lineSize} font-black text-orange-800`}>“{currentTurn.line}”</div>
             {friendKey && <button onClick={() => cueSpeakOnce(currentTurn.line, friendKey)} className="mt-3 mr-2 rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-widest text-orange-700 ring-2 ring-orange-300 shadow active:scale-95">🔊 Hear again</button>}
             <button onClick={advance} className="mt-3 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 px-7 py-3 text-sm font-black uppercase tracking-widest text-white shadow-xl active:scale-95">🎤 My turn</button>
           </div>
         </div>
       )}
       {currentTurn && isStudentTurn && (
-        <div className={`absolute inset-x-0 ${bubblePos} z-40 flex justify-center px-4`}>
+        <div className={`absolute ${bubblePos} z-40 flex`}>
           <div className="w-full max-w-[700px] rounded-[32px] bg-white p-6 text-center shadow-[0_30px_80px_rgba(0,0,0,0.4)] ring-4 ring-orange-300">
             <div className="text-[11px] font-black uppercase tracking-[0.25em] text-orange-500">Your turn — say it!</div>
-            <div className="mt-1 text-3xl font-black text-orange-700 sm:text-4xl">“{currentTurn.line}”</div>
+            <div className={`mt-1 ${lineSize} font-black text-orange-700`}>“{currentTurn.line}”</div>
             <button onClick={advance} className="mt-4 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 px-7 py-3 text-base font-black uppercase tracking-widest text-white shadow-xl active:scale-95">✅ I answered</button>
           </div>
         </div>
