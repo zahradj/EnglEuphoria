@@ -516,18 +516,6 @@
   "altMargin": 0.29
  },
  {
-  "file": "61cfe67c.mp3",
-  "voice": "mia",
-  "text": "pizza",
-  "expected": "piːtsə",
-  "heard": "ph i5 ts ə1",
-  "per": 0.6,
-  "vowelMismatch": false,
-  "words": 1,
-  "bestAlternative": null,
-  "altMargin": 0.0
- },
- {
   "file": "86112950.mp3",
   "voice": "pip",
   "text": "purple",
@@ -1008,6 +996,18 @@
   "altMargin": 0.0
  },
  {
+  "file": "0766f65e.mp3",
+  "voice": "pip",
+  "text": "car.",
+  "expected": "kɑːɹ",
+  "heard": "k ɑ",
+  "per": 0.333,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
   "file": "edd4c3b4.mp3",
   "voice": "teacher",
   "text": "ball",
@@ -1464,32 +1464,8 @@
   "altMargin": 0.0
  },
  {
-  "file": "3ba997df.mp3",
-  "voice": "mia",
-  "text": "Book",
-  "expected": "bʊk",
-  "heard": "b ɔ k",
-  "per": 0.333,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": "b ɑː k",
-  "altMargin": 1.24
- },
- {
   "file": "be51dfff.mp3",
   "voice": "mia",
-  "text": "book",
-  "expected": "bʊk",
-  "heard": "b ɔ k",
-  "per": 0.333,
-  "vowelMismatch": true,
-  "words": 1,
-  "bestAlternative": null,
-  "altMargin": 0.0
- },
- {
-  "file": "591af04e.mp3",
-  "voice": "bella",
   "text": "book",
   "expected": "bʊk",
   "heard": "b ɔ k",
@@ -1570,18 +1546,6 @@
   "words": 1,
   "bestAlternative": "b ɑː l",
   "altMargin": 2.46
- },
- {
-  "file": "0766f65e.mp3",
-  "voice": "pip",
-  "text": "car.",
-  "expected": "kɑːɹ",
-  "heard": "k ɑ",
-  "per": 0.333,
-  "vowelMismatch": false,
-  "words": 1,
-  "bestAlternative": null,
-  "altMargin": 0.0
  },
  {
   "file": "f8f900be.mp3",
@@ -2268,6 +2232,30 @@
   "altMargin": 0.0
  },
  {
+  "file": "5641ef0d.mp3",
+  "voice": "bella",
+  "text": "cookie",
+  "expected": "kʊki",
+  "heard": "k ɔ k i",
+  "per": 0.25,
+  "vowelMismatch": true,
+  "words": 1,
+  "bestAlternative": "k ɑː k i",
+  "altMargin": 1.48
+ },
+ {
+  "file": "927bc3f9.mp3",
+  "voice": "leo",
+  "text": "cookie",
+  "expected": "kʊki",
+  "heard": "k ɔ k i",
+  "per": 0.25,
+  "vowelMismatch": true,
+  "words": 1,
+  "bestAlternative": "k uː k i",
+  "altMargin": 0.64
+ },
+ {
   "file": "f4a15db9.mp3",
   "voice": "teacher",
   "text": "Yellow",
@@ -2405,6 +2393,18 @@
   "text": "Mia is 5!",
   "expected": "miə ɪz faɪv",
   "heard": "m iː h ɐ z f aɪ v",
+  "per": 0.222,
+  "vowelMismatch": true,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "f82ce9ec.mp3",
+  "voice": "pip",
+  "text": "It's a square!",
+  "expected": "ɪts ɐ skwɛɹ",
+  "heard": "ɪ t s ɐ s k w eɪ",
   "per": 0.222,
   "vowelMismatch": true,
   "words": 3,
@@ -2628,6 +2628,18 @@
   "altMargin": 0.0
  },
  {
+  "file": "fb7a8566.mp3",
+  "voice": "mia",
+  "text": "Window",
+  "expected": "wɪndoʊ",
+  "heard": "w ɪ n d oʊ l",
+  "per": 0.2,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
   "file": "e37f47b6.mp3",
   "voice": "teacher",
   "text": "Square",
@@ -2784,6 +2796,18 @@
   "altMargin": null
  },
  {
+  "file": "2732ae74.mp3",
+  "voice": "teacher",
+  "text": "Find a square.",
+  "expected": "faɪnd ɐ skwɛɹ",
+  "heard": "f aɪ n d ɐ s k w eɪ",
+  "per": 0.182,
+  "vowelMismatch": true,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "18a73675.mp3",
   "voice": "teacher",
   "text": "There are two balls.",
@@ -2914,6 +2938,18 @@
   "words": 2,
   "bestAlternative": null,
   "altMargin": 0.0
+ },
+ {
+  "file": "a561438e.mp3",
+  "voice": "pip",
+  "text": "I spy a square!",
+  "expected": "aɪ spaɪ ɐ skwɛɹ",
+  "heard": "aɪ s p aɪ ɐ s k w eɪ",
+  "per": 0.167,
+  "vowelMismatch": true,
+  "words": 4,
+  "bestAlternative": null,
+  "altMargin": null
  },
  {
   "file": "6a760c79.mp3",
@@ -3168,6 +3204,18 @@
   "altMargin": null
  },
  {
+  "file": "83029bf4.mp3",
+  "voice": "pip",
+  "text": "Look! Shapes are everywhere in our town!",
+  "expected": "lʊk ʃeɪps ɑːɹ ɛvɹɪwɛɹ ɪn aʊɚ taʊn",
+  "heard": "l ʊ k ʃ eɪ p s ɑːɹ ɹ ɛ v ɹ i w ɛ ɹ ɪ n aʊ t aʊ n",
+  "per": 0.154,
+  "vowelMismatch": true,
+  "words": 7,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "8069a786.mp3",
   "voice": "willow",
   "text": "The water is blue!",
@@ -3228,6 +3276,18 @@
   "altMargin": null
  },
  {
+  "file": "a4293a40.mp3",
+  "voice": "leo",
+  "text": "Is the teddy bear one, or many?",
+  "expected": "ɪz ðə tɛdi bɛɹ wʌn ɔːɹ mɛni",
+  "heard": "ɪ z ð ə t ɛ ɾ i b ɜː w ʌ n ɔːɹ m ɛ n i",
+  "per": 0.15,
+  "vowelMismatch": true,
+  "words": 7,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "97b18018.mp3",
   "voice": "pip",
   "text": "Goodbye, Miss Marigold! Bye!",
@@ -3248,18 +3308,6 @@
   "per": 0.148,
   "vowelMismatch": true,
   "words": 9,
-  "bestAlternative": null,
-  "altMargin": null
- },
- {
-  "file": "d81a1faf.mp3",
-  "voice": "pip",
-  "text": "Bella has a round ball, Mia has square books, and Leo has a triangle pizza!",
-  "expected": "bɛlə hɐz ɐ ɹaʊnd bɔːl miə hɐz skwɛɹ bʊks ænd liːoʊ hɐz ɐ tɹaɪæŋɡəl piːtsə",
-  "heard": "b ɛ l ə h æ z ɐ ɹ aʊ n d b oʊ l m eɪ ɚ h ɐ z s k w ɛ b ʊ k s æ n d l iː oʊ h æ z ɐ t ɹ aɪ æ ŋ ɡ əl p iː t ɚ",
-  "per": 0.145,
-  "vowelMismatch": true,
-  "words": 15,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -3667,6 +3715,30 @@
   "heard": "n ɑː k n a k w ɛɹ ɹ z w ɪ l oʊ",
   "per": 0.133,
   "vowelMismatch": true,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "664d834f.mp3",
+  "voice": "pip",
+  "text": "What shape is the pizza?",
+  "expected": "wʌt ʃeɪp ɪz ðə piːtsə",
+  "heard": "w ʌ t ʃ eɪ p ɪ z ð ə p iː s ɚ",
+  "per": 0.133,
+  "vowelMismatch": false,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "d46e65e9.mp3",
+  "voice": "leo",
+  "text": "What shape is the pizza?",
+  "expected": "wʌt ʃeɪp ɪz ðə piːtsə",
+  "heard": "w ʌ t ʃ eɪ p ɪ z ð ə p iː t ɚ",
+  "per": 0.133,
+  "vowelMismatch": false,
   "words": 5,
   "bestAlternative": null,
   "altMargin": null
@@ -4172,6 +4244,18 @@
   "per": 0.12,
   "vowelMismatch": false,
   "words": 8,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "c37dea19.mp3",
+  "voice": "pip",
+  "text": "Pip and his friends look for shapes.",
+  "expected": "pɪp ænd hɪz fɹɛndz lʊk fɔːɹ ʃeɪps",
+  "heard": "p ɪ p æ n ɪ z f ɹ ɛ n d z l ʊ k f ɚ ʃ eɪ p s",
+  "per": 0.12,
+  "vowelMismatch": true,
+  "words": 7,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -4704,6 +4788,30 @@
   "altMargin": 0.0
  },
  {
+  "file": "c7c9affd.mp3",
+  "voice": "mia",
+  "text": "It's a square!",
+  "expected": "ɪts ɐ skwɛɹ",
+  "heard": "ɪ t s ɐ s k w eɪ ɹ",
+  "per": 0.111,
+  "vowelMismatch": true,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "16659801.mp3",
+  "voice": "pip",
+  "text": "A blue square!",
+  "expected": "ɐ bluː skwɛɹ",
+  "heard": "ɐ b l uː s k w ɛ",
+  "per": 0.111,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "499e63cc.mp3",
   "voice": "bella",
   "text": "basketball",
@@ -4896,6 +5004,18 @@
   "altMargin": null
  },
  {
+  "file": "d70943b9.mp3",
+  "voice": "teacher",
+  "text": "The pizza is a triangle.",
+  "expected": "ðə piːtsə ɪz ɐ tɹaɪæŋɡəl",
+  "heard": "ð ə p iː t ts ɚ ɪ z ɐ t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.105,
+  "vowelMismatch": false,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "f7eb4178.mp3",
   "voice": "leo",
   "text": "Hi! I am Leo. I am seven!",
@@ -4925,18 +5045,6 @@
   "text": "The pizza is a triangle.",
   "expected": "ðə piːtsə ɪz ɐ tɹaɪæŋɡəl",
   "heard": "ð ə p iː t ɚ ɪ z ɐ t ɹ aɪ æ ŋ ɡ əl",
-  "per": 0.105,
-  "vowelMismatch": false,
-  "words": 5,
-  "bestAlternative": null,
-  "altMargin": null
- },
- {
-  "file": "3fa01431.mp3",
-  "voice": "pip",
-  "text": "I don't like blue squares!",
-  "expected": "aɪ doʊnt laɪk bluː skwɛɹz",
-  "heard": "aɪ d oʊ t l aɪ k b l uː s k w ɛ z",
   "per": 0.105,
   "vowelMismatch": false,
   "words": 5,
@@ -5964,6 +6072,18 @@
   "altMargin": null
  },
  {
+  "file": "74d5906b.mp3",
+  "voice": "teacher",
+  "text": "You did it! Circle, square, triangle! Great building!",
+  "expected": "juː dɪd ɪt sɜːkəl skwɛɹ tɹaɪæŋɡəl ɡɹeɪt bɪldɪŋ",
+  "heard": "j uː d ɪ d ɪ t s ɜː k əl s k w eɪ t ɹ aɪ ŋ ɡ əl ɡ ɹ eɪ t b ɪ l d ɪ ŋ",
+  "per": 0.083,
+  "vowelMismatch": true,
+  "words": 8,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "43c312c7.mp3",
   "voice": "teacher",
   "text": "There are four hats.",
@@ -6264,6 +6384,18 @@
   "altMargin": null
  },
  {
+  "file": "0e14c30b.mp3",
+  "voice": "bella",
+  "text": "Bella finds a circle. It is a clock!",
+  "expected": "bɛlə faɪndz ɐ sɜːkəl ɪɾ ɪz ɐ klɑːk",
+  "heard": "v ɛ l ɐ f aɪ n z ɐ s ɜː k əl ɪ ɾ ɪ z ɐ k l ɑː k",
+  "per": 0.08,
+  "vowelMismatch": false,
+  "words": 8,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "084c1669.mp3",
   "voice": "willow",
   "text": "Willow has one toy. It is a red train!",
@@ -6516,14 +6648,14 @@
   "altMargin": null
  },
  {
-  "file": "09aa005d.mp3",
-  "voice": "mia",
-  "text": "The book is a square.",
-  "expected": "ðə bʊk ɪz ɐ skwɛɹ",
-  "heard": "ð ə b ʊ k ɪ z ɐ s k w eɪ ɹ",
+  "file": "d791d3e7.mp3",
+  "voice": "pip",
+  "text": "An orange square!",
+  "expected": "ɐn ɔɹɪndʒ skwɛɹ",
+  "heard": "ɐ n ɔː ɹ ɪ n dʒ s k w ɛ",
   "per": 0.077,
-  "vowelMismatch": true,
-  "words": 5,
+  "vowelMismatch": false,
+  "words": 3,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -6536,6 +6668,18 @@
   "per": 0.077,
   "vowelMismatch": true,
   "words": 4,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "ebf52cc4.mp3",
+  "voice": "pip",
+  "text": "Who makes pancakes?",
+  "expected": "huː meɪks pæŋkeɪks",
+  "heard": "h uː m eɪ k s p æ n k eɪ k s",
+  "per": 0.077,
+  "vowelMismatch": false,
+  "words": 3,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -6672,18 +6816,6 @@
   "altMargin": null
  },
  {
-  "file": "b9d1aaac.mp3",
-  "voice": "pip",
-  "text": "Wonderful! The ball is a circle. The book is a square. The pizza is a triangle.",
-  "expected": "wʌndɚfəl ðə bɔːl ɪz ɐ sɜːkəl ðə bʊk ɪz ɐ skwɛɹ ðə piːtsə ɪz ɐ tɹaɪæŋɡəl",
-  "heard": "w ʌ n d ɚ f əl ð ə b oʊ l ɪ z ɐ s ɜː k əl ð ə b ʊ k ɪ z ɐ s k w eɪ ð ə p iː t s ɚ ɪ z ɐ t ɹ aɪ æ ŋ ɡ əl",
-  "per": 0.074,
-  "vowelMismatch": true,
-  "words": 16,
-  "bestAlternative": null,
-  "altMargin": null
- },
- {
   "file": "b97663c1.mp3",
   "voice": "willow",
   "text": "Willow zoomed her toy car. It is a blue car!",
@@ -6792,6 +6924,18 @@
   "altMargin": null
  },
  {
+  "file": "13be2708.mp3",
+  "voice": "teacher",
+  "text": "The clock is a square.",
+  "expected": "ðə klɑːk ɪz ɐ skwɛɹ",
+  "heard": "ð ə k l ɑː k ɪ z ɐ s k w ɛ",
+  "per": 0.071,
+  "vowelMismatch": false,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "62c8c5b5.mp3",
   "voice": "teacher",
   "text": "Does he like grapes?",
@@ -6860,6 +7004,18 @@
   "per": 0.071,
   "vowelMismatch": true,
   "words": 7,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "932636f4.mp3",
+  "voice": "bella",
+  "text": "How did Bella feel before Pip helped her?",
+  "expected": "haʊ dɪd bɛlə fiːl bᵻfoːɹ pɪp hɛlpt hɜː",
+  "heard": "h aʊ d ᵻ d b ɛ l ɐ f iː l b ᵻ f oːɹ p ɪ p h ɛ l p t ɚ",
+  "per": 0.071,
+  "vowelMismatch": false,
+  "words": 8,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -7080,6 +7236,18 @@
   "altMargin": null
  },
  {
+  "file": "3812ba32.mp3",
+  "voice": "pip",
+  "text": "Wonderful! The clock is a circle. The window is a square. The pizza is a triangle.",
+  "expected": "wʌndɚfəl ðə klɑːk ɪz ɐ sɜːkəl ðə wɪndoʊ ɪz ɐ skwɛɹ ðə piːtsə ɪz ɐ tɹaɪæŋɡəl",
+  "heard": "w ʌ n d ɚ f əl ð ə k l ɔ k ɪ z ɐ s ɜː k əl ð ə w ɪ n d oʊ ɪ z ɐ s k w eɪ ɛ ð ə p iː t s ɚ ɹ ɪ z ɐ t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.07,
+  "vowelMismatch": true,
+  "words": 16,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "e0e13572.mp3",
   "voice": "pip",
   "text": "Listen. Does it start with l, or w?",
@@ -7100,18 +7268,6 @@
   "per": 0.069,
   "vowelMismatch": true,
   "words": 16,
-  "bestAlternative": null,
-  "altMargin": null
- },
- {
-  "file": "691e58e6.mp3",
-  "voice": "leo",
-  "text": "Leo found a yellow triangle pizza too!",
-  "expected": "liːoʊ faʊnd ɐ jɛloʊ tɹaɪæŋɡəl piːtsə tuː",
-  "heard": "l iː oʊ f aʊ n d ɐ j ɛ l oʊ t ɹ aɪ ŋ ɡ əl p iː t s ɚ t uː",
-  "per": 0.069,
-  "vowelMismatch": true,
-  "words": 7,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -7268,6 +7424,30 @@
   "per": 0.067,
   "vowelMismatch": true,
   "words": 4,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "c63c2142.mp3",
+  "voice": "mia",
+  "text": "The window is a square.",
+  "expected": "ðə wɪndoʊ ɪz ɐ skwɛɹ",
+  "heard": "ð ə w ɪ n d oʊ ɪ z ɐ s k w eɪ ɹ",
+  "per": 0.067,
+  "vowelMismatch": true,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "c93c25fb.mp3",
+  "voice": "mia",
+  "text": "The window is a square!",
+  "expected": "ðə wɪndoʊ ɪz ɐ skwɛɹ",
+  "heard": "ð ə w ɪ n d oʊ ɪ z ɐ s k w eɪ ɹ",
+  "per": 0.067,
+  "vowelMismatch": true,
+  "words": 5,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -7524,6 +7704,30 @@
   "altMargin": null
  },
  {
+  "file": "3b7614a0.mp3",
+  "voice": "leo",
+  "text": "I like triangles! I don't like squares.",
+  "expected": "aɪ laɪk tɹaɪæŋɡəlz aɪ doʊnt laɪk skwɛɹz",
+  "heard": "aɪ l aɪ k t ɹ aɪ æ ŋ ɡ əl z aɪ d oʊ t l aɪ k s k w ɛ z",
+  "per": 0.062,
+  "vowelMismatch": false,
+  "words": 7,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "81c0ed6d.mp3",
+  "voice": "leo",
+  "text": "Leo finds a triangle. It is a pizza. Yum!",
+  "expected": "liːoʊ faɪndz ɐ tɹaɪæŋɡəl ɪɾ ɪz ɐ piːtsə jʌm",
+  "heard": "l iː oʊ f aɪ n d z ɐ t ɹ aɪ ŋ ɡ əl ɪ ɾ ɪ z ɐ p iː t s ɚ j ʌ m",
+  "per": 0.062,
+  "vowelMismatch": true,
+  "words": 9,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "4658aa7c.mp3",
   "voice": "leo",
   "text": "The orange is orange!",
@@ -7704,6 +7908,18 @@
   "altMargin": null
  },
  {
+  "file": "97c5c481.mp3",
+  "voice": "teacher",
+  "text": "Tap the box to open it!",
+  "expected": "tæp ðə bɑːks tʊ oʊpən ɪt",
+  "heard": "t æ p ð ə b ɑː k s t ə oʊ p ə n ɪ t",
+  "per": 0.059,
+  "vowelMismatch": true,
+  "words": 6,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "50136d01.mp3",
   "voice": "pip",
   "text": "That is okay. I am with you.",
@@ -7752,18 +7968,6 @@
   "altMargin": null
  },
  {
-  "file": "197422c5.mp3",
-  "voice": "mia",
-  "text": "Do you like blue squares?",
-  "expected": "duː juː laɪk bluː skwɛɹz",
-  "heard": "d uː j uː l aɪ k b l uː s k w ɛ z",
-  "per": 0.059,
-  "vowelMismatch": false,
-  "words": 5,
-  "bestAlternative": null,
-  "altMargin": null
- },
- {
   "file": "cd0ecf2d.mp3",
   "voice": "mia",
   "text": "Yes! The grapes are purple!",
@@ -7796,6 +8000,18 @@
   "per": 0.057,
   "vowelMismatch": true,
   "words": 22,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "da652ca8.mp3",
+  "voice": "pip",
+  "text": "You made green, orange and purple! Goodbye, friends!",
+  "expected": "juː meɪd ɡɹiːn ɔɹɪndʒ ænd pɜːpəl ɡʊdbaɪ fɹɛndz",
+  "heard": "j uː m eɪ d ɡ ɹ iː n ɔː ɹ ɪ n dʒ æ n d p ɜː p əl ɡ ə d b aɪ f ɹ ɛ n z",
+  "per": 0.057,
+  "vowelMismatch": true,
+  "words": 8,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -7916,6 +8132,18 @@
   "per": 0.056,
   "vowelMismatch": false,
   "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "00046b81.mp3",
+  "voice": "bella",
+  "text": "Are the blocks one, or many?",
+  "expected": "ɑːɹ ðə blɑːks wʌn ɔːɹ mɛni",
+  "heard": "ɑːɹ ð ə b l ɑː k s w ʌ n ɚ m ɛ n i",
+  "per": 0.056,
+  "vowelMismatch": true,
+  "words": 6,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -8304,6 +8532,18 @@
   "altMargin": null
  },
  {
+  "file": "d3ae6937.mp3",
+  "voice": "willow",
+  "text": "What color is the popcorn?",
+  "expected": "wʌt kʌlɚɹ ɪz ðə pɑːpkɔːɹn",
+  "heard": "w ʌ t k ʌ l ɚ ɪ z ð ə p ɑː p k ɔːɹ n",
+  "per": 0.05,
+  "vowelMismatch": false,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "94b3d262.mp3",
   "voice": "pip",
   "text": "Red, blue, yellow, green, orange, purple — I remember them all!",
@@ -8515,18 +8755,6 @@
   "heard": "aɪ l ɑː s t m aɪ s t ɑːɹ ɹ aɪ w ʌ z s æ d",
   "per": 0.048,
   "vowelMismatch": false,
-  "words": 7,
-  "bestAlternative": null,
-  "altMargin": null
- },
- {
-  "file": "052806bc.mp3",
-  "voice": "pip",
-  "text": "What color and shape is the ball?",
-  "expected": "wʌt kʌlɚ ænd ʃeɪp ɪz ðə bɔːl",
-  "heard": "w ʌ t k ʌ l ɚ æ n d ʃ eɪ p ɪ z ð ə b oʊ l",
-  "per": 0.048,
-  "vowelMismatch": true,
   "words": 7,
   "bestAlternative": null,
   "altMargin": null
@@ -8784,18 +9012,6 @@
   "altMargin": null
  },
  {
-  "file": "bf5d3ca7.mp3",
-  "voice": "leo",
-  "text": "What color and shape is the pizza?",
-  "expected": "wʌt kʌlɚ ænd ʃeɪp ɪz ðə piːtsə",
-  "heard": "w ʌ t k ʌ l ɚ ɹ æ n d ʃ eɪ p ɪ z ð ə p iː ts ə",
-  "per": 0.043,
-  "vowelMismatch": false,
-  "words": 7,
-  "bestAlternative": null,
-  "altMargin": null
- },
- {
   "file": "f250e898.mp3",
   "voice": "pip",
   "text": "Let’s see how many you remember!",
@@ -8804,6 +9020,18 @@
   "per": 0.043,
   "vowelMismatch": false,
   "words": 6,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "bf5d3ca7.mp3",
+  "voice": "leo",
+  "text": "What color and shape is the pizza?",
+  "expected": "wʌt kʌlɚ ænd ʃeɪp ɪz ðə piːtsə",
+  "heard": "w ʌ t k ʌ l ɚ ɹ æ n d ʃ eɪ p ɪ z ð ə p iː ts ə",
+  "per": 0.043,
+  "vowelMismatch": false,
+  "words": 7,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -8876,6 +9104,18 @@
   "per": 0.042,
   "vowelMismatch": false,
   "words": 7,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "e2411646.mp3",
+  "voice": "leo",
+  "text": "What color and shape was the pizza?",
+  "expected": "wʌt kʌlɚ ænd ʃeɪp wʌzðə piːtsə",
+  "heard": "w ʌ t k ʌ l ɚ ɹ æ n d ʃ eɪ p w ʌ z ð ə p iː t s ə",
+  "per": 0.042,
+  "vowelMismatch": false,
+  "words": 6,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -8969,18 +9209,6 @@
   "text": "Wonderful! The frog is green. The carrot is orange. The grapes are purple.",
   "expected": "wʌndɚfəl ðə fɹɑːɡ ɪz ɡɹiːn ðə kæɹət ɪz ɔɹɪndʒ ðə ɡɹeɪps ɑːɹ pɜːpəl",
   "heard": "w ʌ n d ɚ f əl ð ə f ɹ ɔ ɡ ɪ z ɡ ɹ iː n ð ə k æ ɹ ᵻ ɾ ɪ z ɔː ɹ ɪ n dʒ ð ə ɡ ɹ eɪ p s ɚ p ɜː p əl",
-  "per": 0.04,
-  "vowelMismatch": true,
-  "words": 13,
-  "bestAlternative": null,
-  "altMargin": null
- },
- {
-  "file": "7ff2c9ab.mp3",
-  "voice": "pip",
-  "text": "You did it! You can name red circles, blue squares, and yellow triangles!",
-  "expected": "juː dɪd ɪt juː kæn neɪm ɹɛd sɜːkəlz bluː skwɛɹz ænd jɛloʊ tɹaɪæŋɡəlz",
-  "heard": "j uː d ɪ d ɪ t j uː k ə n n eɪ m ɹ ɛ d s ɜː k əl z b l uː s k w ɛ z æ n d j ɛ l oʊ t ɹ aɪ æ ŋ ɡ əl z",
   "per": 0.04,
   "vowelMismatch": true,
   "words": 13,
@@ -9284,6 +9512,18 @@
   "per": 0.036,
   "vowelMismatch": false,
   "words": 9,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "c3c9e800.mp3",
+  "voice": "leo",
+  "text": "How did Leo feel before Pip helped him?",
+  "expected": "haʊ dɪd liːoʊ fiːl bᵻfoːɹ pɪp hɛlpt hɪm",
+  "heard": "h aʊ d ᵻ d l iː oʊ f iː l b ᵻ f oːɹ p ɪ p h ɛ l p t ɪ m",
+  "per": 0.036,
+  "vowelMismatch": false,
+  "words": 8,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -9876,6 +10116,18 @@
   "altMargin": null
  },
  {
+  "file": "d31cd130.mp3",
+  "voice": "pip",
+  "text": "You found circles, squares and triangles! Goodbye, friends!",
+  "expected": "juː faʊnd sɜːkəlz skwɛɹz ænd tɹaɪæŋɡəlz ɡʊdbaɪ fɹɛndz",
+  "heard": "j uː f aʊ n d s ɜː k əl z s k w ɛ z æ n d t ɹ aɪ æ ŋ ɡ əl z ɡ ʊ d b aɪ f ɹ ɛ n d z",
+  "per": 0.023,
+  "vowelMismatch": false,
+  "words": 8,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "16ee28eb.mp3",
   "voice": "pip",
   "text": "On Saturday, Pip flies his kite all afternoon. No school today!",
@@ -9918,30 +10170,6 @@
   "expected": "ɔn fɹaɪdeɪ pɪp ɪz vɛɹi hæpi piːtsə naɪt təmɑːɹoʊ ɪz sæɾɚdeɪ",
   "heard": "ɔ n f ɹ aɪ d eɪ p ɪ p ɪ z v ɛ ɹ i h æ p i p iː t s ə n aɪ t t ə m ɑː ɹ oʊ ɪ z s æ ɚ d eɪ",
   "per": 0.022,
-  "vowelMismatch": false,
-  "words": 11,
-  "bestAlternative": null,
-  "altMargin": null
- },
- {
-  "file": "6f2541c2.mp3",
-  "voice": "pip",
-  "text": "You mixed the magic paints! Green, orange, purple — goodbye, friends!",
-  "expected": "juː mɪkst ðə mædʒɪk peɪnts ɡɹiːn ɔɹɪndʒ pɜːpəl ɡʊdbaɪ fɹɛndz",
-  "heard": "j uː m ɪ k s ð ə m æ dʒ ɪ k p eɪ n t s ɡ ɹ iː n ɔː ɹ ɪ n dʒ p ɜː p əl ɡ ʊ d b aɪ f ɹ ɛ n d z",
-  "per": 0.021,
-  "vowelMismatch": false,
-  "words": 10,
-  "bestAlternative": null,
-  "altMargin": null
- },
- {
-  "file": "ea8166bf.mp3",
-  "voice": "pip",
-  "text": "Red circle, blue square, yellow triangle — so many shapes with friends!",
-  "expected": "ɹɛd sɜːkəl bluː skwɛɹ jɛloʊ tɹaɪæŋɡəl soʊ mɛni ʃeɪps wɪð fɹɛndz",
-  "heard": "ɹ ɛ d s ɜː k əl b l uː s k w ɛ j ɛ l oʊ t ɹ aɪ æ ŋ ɡ əl s oʊ m ɛ n i ʃ eɪ p s w ɪ ð f ɹ ɛ n d z",
-  "per": 0.021,
   "vowelMismatch": false,
   "words": 11,
   "bestAlternative": null,
@@ -11489,6 +11717,126 @@
   "text": "blue",
   "expected": "bluː",
   "heard": "b l uː",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "65cd5b6e.mp3",
+  "voice": "teacher",
+  "text": "Listen. Tap the right shape!",
+  "expected": "lɪsən tæp ðə ɹaɪt ʃeɪp",
+  "heard": "l ɪ s ə n t æ p ð ə ɹ aɪ t ʃ eɪ p",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "b3dcec51.mp3",
+  "voice": "teacher",
+  "text": "Find a circle.",
+  "expected": "faɪnd ɐ sɜːkəl",
+  "heard": "f aɪ n d ɐ s ɜː k əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "c41e35c5.mp3",
+  "voice": "teacher",
+  "text": "Find a triangle.",
+  "expected": "faɪnd ɐ tɹaɪæŋɡəl",
+  "heard": "f aɪ n d ɐ t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "124df8d5.mp3",
+  "voice": "teacher",
+  "text": "The clock is a circle.",
+  "expected": "ðə klɑːk ɪz ɐ sɜːkəl",
+  "heard": "ð ə k l ɑː k ɪ z ɐ s ɜː k əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "5cd6e80b.mp3",
+  "voice": "teacher",
+  "text": "The window is a triangle.",
+  "expected": "ðə wɪndoʊ ɪz ɐ tɹaɪæŋɡəl",
+  "heard": "ð ə w ɪ n d oʊ ɪ z ɐ t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "67d7dee2.mp3",
+  "voice": "teacher",
+  "text": "What shape is it?",
+  "expected": "wʌt ʃeɪp ɪz ɪt",
+  "heard": "w ʌ t ʃ eɪ p ɪ z ɪ t",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 4,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "fc6c1443.mp3",
+  "voice": "teacher",
+  "text": "It’s a circle.",
+  "expected": "ɪts ɐ sɜːkəl",
+  "heard": "ɪ t s ɐ s ɜː k əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "3dcbb5f6.mp3",
+  "voice": "teacher",
+  "text": "I like triangles.",
+  "expected": "aɪ laɪk tɹaɪæŋɡəlz",
+  "heard": "aɪ l aɪ k t ɹ aɪ æ ŋ ɡ əl z",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "8ea9b424.mp3",
+  "voice": "pip",
+  "text": "clock",
+  "expected": "klɑːk",
+  "heard": "k l ɔ k",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "6a101f9e.mp3",
+  "voice": "pip",
+  "text": "cat",
+  "expected": "kæt",
+  "heard": "k æ t",
   "per": 0.0,
   "vowelMismatch": false,
   "words": 1,
@@ -14988,6 +15336,18 @@
   "altMargin": 0.0
  },
  {
+  "file": "0d376a74.mp3",
+  "voice": "mia",
+  "text": "How does Mia feel?",
+  "expected": "haʊ dʌz miə fiːl",
+  "heard": "h aʊ d ə z m iː ɐ f iː l",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 4,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "3efb7e92.mp3",
   "voice": "bella",
   "text": "Red",
@@ -15464,6 +15824,18 @@
   "per": 0.0,
   "vowelMismatch": false,
   "words": 10,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "7873461e.mp3",
+  "voice": "pip",
+  "text": "What color is the balloon?",
+  "expected": "wʌt kʌlɚɹ ɪz ðə bəluːn",
+  "heard": "w ʌ t k ʌ l ɚ ɹ ɪ z ð ə b ə l uː n",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 5,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -15984,14 +16356,26 @@
   "altMargin": null
  },
  {
-  "file": "5a024772.mp3",
-  "voice": "pip",
-  "text": "Look! Today we find shapes, not colors!",
-  "expected": "lʊk tədeɪ wiː faɪnd ʃeɪps nɑːt kʌlɚz",
-  "heard": "l ʊ k t ə d eɪ w iː f aɪ n d ʃ eɪ p s n ɑː t k ʌ l ɚ z",
+  "file": "cc0d1f60.mp3",
+  "voice": "willow",
+  "text": "What color is the frog?",
+  "expected": "wʌt kʌlɚɹ ɪz ðə fɹɑːɡ",
+  "heard": "w ʌ t k ʌ l ɚ ɹ ɪ z ð ə f ɹ ɑː ɡ",
   "per": 0.0,
   "vowelMismatch": false,
-  "words": 7,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "fe936352.mp3",
+  "voice": "mia",
+  "text": "What color are the grapes?",
+  "expected": "wʌt kʌlɚɹ ɑːɹ ðə ɡɹeɪps",
+  "heard": "w ʌ t k ʌ l ɚ ɹ ɑːɹ ð ə ɡ ɹ eɪ p s",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 5,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -16008,11 +16392,23 @@
   "altMargin": 0.0
  },
  {
-  "file": "16ced31e.mp3",
+  "file": "8ced7af7.mp3",
   "voice": "bella",
-  "text": "The ball is a circle.",
-  "expected": "ðə bɔːl ɪz ɐ sɜːkəl",
-  "heard": "ð ə b ɔː l ɪ z ɐ s ɜː k əl",
+  "text": "Clock",
+  "expected": "klɑːk",
+  "heard": "k l ɑː k",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "2d21356f.mp3",
+  "voice": "bella",
+  "text": "The clock is a circle.",
+  "expected": "ðə klɑːk ɪz ɐ sɜːkəl",
+  "heard": "ð ə k l ɑː k ɪ z ɐ s ɜː k əl",
   "per": 0.0,
   "vowelMismatch": false,
   "words": 5,
@@ -16044,47 +16440,275 @@
   "altMargin": 0.0
  },
  {
-  "file": "b1dbc095.mp3",
+  "file": "32213d4e.mp3",
   "voice": "bella",
-  "text": "Cat",
-  "expected": "kæt",
-  "heard": "k æ t",
+  "text": "The clock is a circle!",
+  "expected": "ðə klɑːk ɪz ɐ sɜːkəl",
+  "heard": "ð ə k l ɑː k ɪ z ɐ s ɜː k əl",
   "per": 0.0,
   "vowelMismatch": false,
-  "words": 1,
+  "words": 5,
   "bestAlternative": null,
-  "altMargin": 0.0
+  "altMargin": null
  },
  {
-  "file": "97e12977.mp3",
-  "voice": "bella",
-  "text": "Car.",
-  "expected": "kɑːɹ",
-  "heard": "k ɑːɹ",
+  "file": "666d7d31.mp3",
+  "voice": "leo",
+  "text": "The flag is a triangle!",
+  "expected": "ðə flæɡ ɪz ɐ tɹaɪæŋɡəl",
+  "heard": "ð ə f l æ ɡ ɪ z ɐ t ɹ aɪ æ ŋ ɡ əl",
   "per": 0.0,
   "vowelMismatch": false,
-  "words": 1,
+  "words": 5,
   "bestAlternative": null,
-  "altMargin": 0.0
+  "altMargin": null
  },
  {
-  "file": "0401354c.mp3",
-  "voice": "bella",
-  "text": "moon.",
-  "expected": "muːn",
-  "heard": "m uː n",
+  "file": "6e4a0ced.mp3",
+  "voice": "pip",
+  "text": "What shape is it?",
+  "expected": "wʌt ʃeɪp ɪz ɪt",
+  "heard": "w ʌ t ʃ eɪ p ɪ z ɪ t",
   "per": 0.0,
   "vowelMismatch": false,
-  "words": 1,
+  "words": 4,
   "bestAlternative": null,
-  "altMargin": 0.0
+  "altMargin": null
  },
  {
-  "file": "38764697.mp3",
+  "file": "429ed7e6.mp3",
+  "voice": "bella",
+  "text": "It's a circle!",
+  "expected": "ɪts ɐ sɜːkəl",
+  "heard": "ɪ t s ɐ s ɜː k əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "d2047cd3.mp3",
+  "voice": "leo",
+  "text": "It's a triangle!",
+  "expected": "ɪts ɐ tɹaɪæŋɡəl",
+  "heard": "ɪ t s ɐ t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "466fba9c.mp3",
   "voice": "mia",
-  "text": "box",
-  "expected": "bɑːks",
-  "heard": "b ɑː k s",
+  "text": "Let's build a house!",
+  "expected": "lɛts bɪld ɐ haʊs",
+  "heard": "l ɛ t s b ɪ l d ɐ h aʊ s",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 4,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "3690a6f6.mp3",
+  "voice": "mia",
+  "text": "It's a house!",
+  "expected": "ɪts ɐ haʊs",
+  "heard": "ɪ t s ɐ h aʊ s",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "ef8bdfa5.mp3",
+  "voice": "pip",
+  "text": "It's a triangle!",
+  "expected": "ɪts ɐ tɹaɪæŋɡəl",
+  "heard": "ɪ t s ɐ t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "7012bb09.mp3",
+  "voice": "pip",
+  "text": "A red triangle!",
+  "expected": "ɐ ɹɛd tɹaɪæŋɡəl",
+  "heard": "ɐ ɹ ɛ d t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "34bb3d0d.mp3",
+  "voice": "pip",
+  "text": "It's a circle!",
+  "expected": "ɪts ɐ sɜːkəl",
+  "heard": "ɪ t s ɐ s ɜː k əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "ac6ee1c4.mp3",
+  "voice": "pip",
+  "text": "A yellow circle!",
+  "expected": "ɐ jɛloʊ sɜːkəl",
+  "heard": "ɐ j ɛ l oʊ s ɜː k əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "9f08ce13.mp3",
+  "voice": "leo",
+  "text": "Let's build a rocket!",
+  "expected": "lɛts bɪld ɐ ɹɑːkɪt",
+  "heard": "l ɛ t s b ɪ l d ɐ ɹ ɑː k ɪ t",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 4,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "95815317.mp3",
+  "voice": "leo",
+  "text": "It's a rocket!",
+  "expected": "ɪts ɐ ɹɑːkɪt",
+  "heard": "ɪ t s ɐ ɹ ɑː k ɪ t",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "7721d66e.mp3",
+  "voice": "pip",
+  "text": "A purple triangle!",
+  "expected": "ɐ pɜːpəl tɹaɪæŋɡəl",
+  "heard": "ɐ p ɜː p əl t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "72bf3e04.mp3",
+  "voice": "pip",
+  "text": "A blue circle!",
+  "expected": "ɐ bluː sɜːkəl",
+  "heard": "ɐ b l uː s ɜː k əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "a3e96c65.mp3",
+  "voice": "bella",
+  "text": "Let's build an ice cream!",
+  "expected": "lɛts bɪld ɐn aɪs kɹiːm",
+  "heard": "l ɛ t s b ɪ l d ə n aɪ s k ɹ iː m",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "2f6a0b9b.mp3",
+  "voice": "bella",
+  "text": "It's an ice cream!",
+  "expected": "ɪts ɐn aɪs kɹiːm",
+  "heard": "ɪ t s ə n aɪ s k ɹ iː m",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 4,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "0616dc0a.mp3",
+  "voice": "pip",
+  "text": "An orange triangle!",
+  "expected": "ɐn ɔɹɪndʒ tɹaɪæŋɡəl",
+  "heard": "ɐ n ɔː ɹ ɪ n dʒ t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "88db0159.mp3",
+  "voice": "pip",
+  "text": "A green circle!",
+  "expected": "ɐ ɡɹiːn sɜːkəl",
+  "heard": "ɐ ɡ ɹ iː n s ɜː k əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "179d9349.mp3",
+  "voice": "pip",
+  "text": "A red circle!",
+  "expected": "ɐ ɹɛd sɜːkəl",
+  "heard": "ɐ ɹ ɛ d s ɜː k əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "007ebe57.mp3",
+  "voice": "bella",
+  "text": "clock",
+  "expected": "klɑːk",
+  "heard": "k l ɑː k",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "70477986.mp3",
+  "voice": "mia",
+  "text": "window",
+  "expected": "wɪndoʊ",
+  "heard": "w ɪ n d oʊ",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "c3e71d45.mp3",
+  "voice": "mia",
+  "text": "present",
+  "expected": "pɹɛzənt",
+  "heard": "p ɹ ɛ z ə n t",
   "per": 0.0,
   "vowelMismatch": false,
   "words": 1,
@@ -16116,35 +16740,47 @@
   "altMargin": 0.0
  },
  {
-  "file": "307df282.mp3",
+  "file": "4f5128f5.mp3",
+  "voice": "bella",
+  "text": "cat",
+  "expected": "kæt",
+  "heard": "k æ t",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "17b4dd57.mp3",
+  "voice": "bella",
+  "text": "car.",
+  "expected": "kɑːɹ",
+  "heard": "k ɑːɹ",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "866fbf0b.mp3",
   "voice": "pip",
-  "text": "circle",
-  "expected": "sɜːkəl",
-  "heard": "s ɜː k əl",
+  "text": "I spy a triangle!",
+  "expected": "aɪ spaɪ ɐ tɹaɪæŋɡəl",
+  "heard": "aɪ s p aɪ ɐ t ɹ aɪ æ ŋ ɡ əl",
   "per": 0.0,
   "vowelMismatch": false,
-  "words": 1,
+  "words": 4,
   "bestAlternative": null,
-  "altMargin": 0.0
+  "altMargin": null
  },
  {
-  "file": "3b8e6a22.mp3",
+  "file": "a73ccb23.mp3",
   "voice": "pip",
-  "text": "triangle",
-  "expected": "tɹaɪæŋɡəl",
-  "heard": "t ɹ aɪ æ ŋ ɡ əl",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 1,
-  "bestAlternative": null,
-  "altMargin": 0.0
- },
- {
-  "file": "ee9d0105.mp3",
-  "voice": "bella",
-  "text": "It's a red circle!",
-  "expected": "ɪts ɐ ɹɛd sɜːkəl",
-  "heard": "ɪ t s ɐ ɹ ɛ d s ɜː k əl",
+  "text": "I spy a circle!",
+  "expected": "aɪ spaɪ ɐ sɜːkəl",
+  "heard": "aɪ s p aɪ ɐ s ɜː k əl",
   "per": 0.0,
   "vowelMismatch": false,
   "words": 4,
@@ -16152,100 +16788,100 @@
   "altMargin": null
  },
  {
-  "file": "1d91753b.mp3",
+  "file": "9f243f78.mp3",
+  "voice": "pip",
+  "text": "Yes! The clock!",
+  "expected": "jɛs ðə klɑːk",
+  "heard": "j ɛ s ð ə k l ɑː k",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "ffa5aad8.mp3",
+  "voice": "pip",
+  "text": "Yes! The window!",
+  "expected": "jɛs ðə wɪndoʊ",
+  "heard": "j ɛ s ð ə w ɪ n d oʊ",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "36e6e826.mp3",
+  "voice": "pip",
+  "text": "Yes! The flag!",
+  "expected": "jɛs ðə flæɡ",
+  "heard": "j ɛ s ð ə f l æ ɡ",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 3,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "59cf3303.mp3",
   "voice": "leo",
-  "text": "It's a yellow triangle!",
-  "expected": "ɪts ɐ jɛloʊ tɹaɪæŋɡəl",
-  "heard": "ɪ t s ɐ j ɛ l oʊ t ɹ aɪ æ ŋ ɡ əl",
+  "text": "clock",
+  "expected": "klɑːk",
+  "heard": "k l ɑː k",
   "per": 0.0,
   "vowelMismatch": false,
-  "words": 4,
+  "words": 1,
   "bestAlternative": null,
-  "altMargin": null
+  "altMargin": 0.0
  },
  {
-  "file": "b3eb7394.mp3",
-  "voice": "bella",
-  "text": "I like red circles!",
-  "expected": "aɪ laɪk ɹɛd sɜːkəlz",
-  "heard": "aɪ l aɪ k ɹ ɛ d s ɜː k əl z",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4,
-  "bestAlternative": null,
-  "altMargin": null
- },
- {
-  "file": "53fbf336.mp3",
+  "file": "578d36b7.mp3",
   "voice": "leo",
-  "text": "I like yellow triangles!",
-  "expected": "aɪ laɪk jɛloʊ tɹaɪæŋɡəlz",
-  "heard": "aɪ l aɪ k j ɛ l oʊ t ɹ aɪ æ ŋ ɡ əl z",
+  "text": "window",
+  "expected": "wɪndoʊ",
+  "heard": "w ɪ n d oʊ",
   "per": 0.0,
   "vowelMismatch": false,
-  "words": 4,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "e74975de.mp3",
+  "voice": "leo",
+  "text": "present",
+  "expected": "pɹɛzənt",
+  "heard": "p ɹ ɛ z ə n t",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "23749c87.mp3",
+  "voice": "pip",
+  "text": "What shape is the clock?",
+  "expected": "wʌt ʃeɪp ɪz ðə klɑːk",
+  "heard": "w ʌ t ʃ eɪ p ɪ z ð ə k l ɑː k",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 5,
   "bestAlternative": null,
   "altMargin": null
  },
  {
-  "file": "c1ac5214.mp3",
-  "voice": "bella",
-  "text": "box",
-  "expected": "bɑːks",
-  "heard": "b ɑː k s",
+  "file": "4a95cb25.mp3",
+  "voice": "pip",
+  "text": "What shape is the window?",
+  "expected": "wʌt ʃeɪp ɪz ðə wɪndoʊ",
+  "heard": "w ʌ t ʃ eɪ p ɪ z ð ə w ɪ n d oʊ",
   "per": 0.0,
   "vowelMismatch": false,
-  "words": 1,
+  "words": 5,
   "bestAlternative": null,
-  "altMargin": 0.0
- },
- {
-  "file": "082e8837.mp3",
-  "voice": "bella",
-  "text": "pizza",
-  "expected": "piːtsə",
-  "heard": "p iː ts ə",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 1,
-  "bestAlternative": null,
-  "altMargin": 0.0
- },
- {
-  "file": "b225067d.mp3",
-  "voice": "bella",
-  "text": "flag",
-  "expected": "flæɡ",
-  "heard": "f l æ ɡ",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 1,
-  "bestAlternative": null,
-  "altMargin": 0.0
- },
- {
-  "file": "23e9bc54.mp3",
-  "voice": "mia",
-  "text": "flag",
-  "expected": "flæɡ",
-  "heard": "f l æ ɡ",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 1,
-  "bestAlternative": null,
-  "altMargin": 0.0
- },
- {
-  "file": "b26944db.mp3",
-  "voice": "mia",
-  "text": "ball",
-  "expected": "bɔːl",
-  "heard": "b ɔ l",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 1,
-  "bestAlternative": "b ɑː l",
-  "altMargin": 4.96
+  "altMargin": null
  },
  {
   "file": "c41fb399.mp3",
@@ -16272,35 +16908,35 @@
   "altMargin": 0.0
  },
  {
-  "file": "9a65ee18.mp3",
-  "voice": "leo",
-  "text": "box",
-  "expected": "bɑːks",
-  "heard": "b ɑː k s",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 1,
-  "bestAlternative": null,
-  "altMargin": 0.0
- },
- {
-  "file": "cb7077a6.mp3",
+  "file": "d83a9822.mp3",
   "voice": "bella",
-  "text": "Bella found a round red ball. It is a red circle!",
-  "expected": "bɛlə faʊnd ɐ ɹaʊnd ɹɛd bɔːl ɪɾ ɪz ɐ ɹɛd sɜːkəl",
-  "heard": "b ɛ l ə f aʊ n d ɐ ɹ aʊ n d ɹ ɛ d b ɔː l ɪ ɾ ɪ z ɐ ɹ ɛ d s ɜː k əl",
+  "text": "I like circles! What shape do you like?",
+  "expected": "aɪ laɪk sɜːkəlz wʌt ʃeɪp duː juː laɪk",
+  "heard": "aɪ l aɪ k s ɜː k əl z w ʌ t ʃ eɪ p d uː j uː l aɪ k",
   "per": 0.0,
   "vowelMismatch": false,
-  "words": 11,
+  "words": 8,
   "bestAlternative": null,
   "altMargin": null
  },
  {
-  "file": "60de0b14.mp3",
+  "file": "77825657.mp3",
   "voice": "mia",
-  "text": "Then Mia found a blue square book.",
-  "expected": "ðɛn miə faʊnd ɐ bluː skwɛɹ bʊk",
-  "heard": "ð ɛ n m iː ɐ f aʊ n d ɐ b l uː s k w ɛɹ b ʊ k",
+  "text": "Mia finds a square. It is a window!",
+  "expected": "miə faɪndz ɐ skwɛɹ ɪɾ ɪz ɐ wɪndoʊ",
+  "heard": "m iː ɐ f aɪ n d z ɐ s k w ɛ ɹ ɪ ɾ ɪ z ɐ w ɪ n d oʊ",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 8,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "1c5defd4.mp3",
+  "voice": "pip",
+  "text": "Now they build a house with shapes!",
+  "expected": "naʊ ðeɪ bɪld ɐ haʊs wɪð ʃeɪps",
+  "heard": "n aʊ ð eɪ b ɪ l d ɐ h aʊ s w ɪ ð ʃ eɪ p s",
   "per": 0.0,
   "vowelMismatch": false,
   "words": 7,
@@ -16308,26 +16944,14 @@
   "altMargin": null
  },
  {
-  "file": "7acbcca1.mp3",
-  "voice": "pip",
-  "text": "I like red circles!",
-  "expected": "aɪ laɪk ɹɛd sɜːkəlz",
-  "heard": "aɪ l aɪ k ɹ ɛ d s ɜː k əl z",
+  "file": "df23a4a4.mp3",
+  "voice": "bella",
+  "text": "What shape is the clock?",
+  "expected": "wʌt ʃeɪp ɪz ðə klɑːk",
+  "heard": "w ʌ t ʃ eɪ p ɪ z ð ə k l ɑː k",
   "per": 0.0,
   "vowelMismatch": false,
-  "words": 4,
-  "bestAlternative": null,
-  "altMargin": null
- },
- {
-  "file": "214a3150.mp3",
-  "voice": "pip",
-  "text": "I like yellow triangles!",
-  "expected": "aɪ laɪk jɛloʊ tɹaɪæŋɡəlz",
-  "heard": "aɪ l aɪ k j ɛ l oʊ t ɹ aɪ æ ŋ ɡ əl z",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 4,
+  "words": 5,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -16500,6 +17124,42 @@
   "altMargin": null
  },
  {
+  "file": "ee9d0105.mp3",
+  "voice": "bella",
+  "text": "It's a red circle!",
+  "expected": "ɪts ɐ ɹɛd sɜːkəl",
+  "heard": "ɪ t s ɐ ɹ ɛ d s ɜː k əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 4,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "1d91753b.mp3",
+  "voice": "leo",
+  "text": "It's a yellow triangle!",
+  "expected": "ɪts ɐ jɛloʊ tɹaɪæŋɡəl",
+  "heard": "ɪ t s ɐ j ɛ l oʊ t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 4,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "b3eb7394.mp3",
+  "voice": "bella",
+  "text": "I like red circles!",
+  "expected": "aɪ laɪk ɹɛd sɜːkəlz",
+  "heard": "aɪ l aɪ k ɹ ɛ d s ɜː k əl z",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 4,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "94727dfb.mp3",
   "voice": "willow",
   "text": "sun",
@@ -16644,6 +17304,30 @@
   "altMargin": null
  },
  {
+  "file": "5c48c266.mp3",
+  "voice": "bella",
+  "text": "What color was the water?",
+  "expected": "wʌt kʌlɚ wʌzðə wɔːɾɚ",
+  "heard": "w ʌ t k ʌ l ɚ w ʌ z ð ə w ɑː ɾ ɚ",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 4,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "3928e7e5.mp3",
+  "voice": "mia",
+  "text": "What color were the grapes?",
+  "expected": "wʌt kʌlɚ wɜː ðə ɡɹeɪps",
+  "heard": "w ʌ t k ʌ l ɚ w ɜː ð ə ɡ ɹ eɪ p s",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
   "file": "d31cd571.mp3",
   "voice": "bella",
   "text": "Oh! But this fish has no color at all!",
@@ -16676,6 +17360,42 @@
   "per": 0.0,
   "vowelMismatch": false,
   "words": 13,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "fb84ee7f.mp3",
+  "voice": "pip",
+  "text": "What color did the fish turn first?",
+  "expected": "wʌt kʌlɚ dɪd ðə fɪʃ tɜːn fɜːst",
+  "heard": "w ʌ t k ʌ l ɚ d ɪ d ð ə f ɪ ʃ t ɜː n f ɜː s t",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 7,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "06cfa418.mp3",
+  "voice": "bella",
+  "text": "What color was the lily pad?",
+  "expected": "wʌt kʌlɚ wʌzðə lɪli pæd",
+  "heard": "w ʌ t k ʌ l ɚ w ʌ z ð ə l ɪ l i p æ d",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "2d8827e1.mp3",
+  "voice": "pip",
+  "text": "What color did the fish turn last?",
+  "expected": "wʌt kʌlɚ dɪd ðə fɪʃ tɜːn læst",
+  "heard": "w ʌ t k ʌ l ɚ d ɪ d ð ə f ɪ ʃ t ɜː n l æ s t",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 7,
   "bestAlternative": null,
   "altMargin": null
  },
@@ -16800,6 +17520,66 @@
   "altMargin": null
  },
  {
+  "file": "0401354c.mp3",
+  "voice": "bella",
+  "text": "moon.",
+  "expected": "muːn",
+  "heard": "m uː n",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "38764697.mp3",
+  "voice": "mia",
+  "text": "box",
+  "expected": "bɑːks",
+  "heard": "b ɑː k s",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "53fbf336.mp3",
+  "voice": "leo",
+  "text": "I like yellow triangles!",
+  "expected": "aɪ laɪk jɛloʊ tɹaɪæŋɡəlz",
+  "heard": "aɪ l aɪ k j ɛ l oʊ t ɹ aɪ æ ŋ ɡ əl z",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 4,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "307df282.mp3",
+  "voice": "pip",
+  "text": "circle",
+  "expected": "sɜːkəl",
+  "heard": "s ɜː k əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "3b8e6a22.mp3",
+  "voice": "pip",
+  "text": "triangle",
+  "expected": "tɹaɪæŋɡəl",
+  "heard": "t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
   "file": "76327a4c.mp3",
   "voice": "teacher",
   "text": "Red",
@@ -16853,6 +17633,18 @@
   "text": "Triangle!",
   "expected": "tɹaɪæŋɡəl",
   "heard": "t ɹ aɪ æ ŋ ɡ əl",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": null,
+  "altMargin": 0.0
+ },
+ {
+  "file": "9a65ee18.mp3",
+  "voice": "leo",
+  "text": "box",
+  "expected": "bɑːks",
+  "heard": "b ɑː k s",
   "per": 0.0,
   "vowelMismatch": false,
   "words": 1,
@@ -17100,18 +17892,6 @@
   "altMargin": null
  },
  {
-  "file": "17b4dd57.mp3",
-  "voice": "bella",
-  "text": "car.",
-  "expected": "kɑːɹ",
-  "heard": "k ɑːɹ",
-  "per": 0.0,
-  "vowelMismatch": false,
-  "words": 1,
-  "bestAlternative": null,
-  "altMargin": 0.0
- },
- {
   "file": "69713250.mp3",
   "voice": "bella",
   "text": "doll.",
@@ -17160,11 +17940,47 @@
   "altMargin": 0.0
  },
  {
+  "file": "b26944db.mp3",
+  "voice": "mia",
+  "text": "ball",
+  "expected": "bɔːl",
+  "heard": "b ɔ l",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 1,
+  "bestAlternative": "b ɑː l",
+  "altMargin": 4.96
+ },
+ {
   "file": "64a53c3e.mp3",
   "voice": "willow",
   "text": "Do you like blue cars?",
   "expected": "duː juː laɪk bluː kɑːɹz",
   "heard": "d uː j uː l aɪ k b l uː k ɑːɹ z",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "c1468451.mp3",
+  "voice": "bella",
+  "text": "What color is the ball?",
+  "expected": "wʌt kʌlɚɹ ɪz ðə bɔːl",
+  "heard": "w ʌ t k ʌ l ɚ ɹ ɪ z ð ə b ɔː l",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 5,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "1d27fea3.mp3",
+  "voice": "mia",
+  "text": "What color is the doll?",
+  "expected": "wʌt kʌlɚɹ ɪz ðə dɑːl",
+  "heard": "w ʌ t k ʌ l ɚ ɹ ɪ z ð ə d ɑː l",
   "per": 0.0,
   "vowelMismatch": false,
   "words": 5,
@@ -17660,6 +18476,18 @@
   "per": 0.0,
   "vowelMismatch": false,
   "words": 11,
+  "bestAlternative": null,
+  "altMargin": null
+ },
+ {
+  "file": "82da7eda.mp3",
+  "voice": "pip",
+  "text": "Who reads a story?",
+  "expected": "huː ɹiːdz ɐ stoːɹi",
+  "heard": "h uː ɹ iː d z ɐ s t oʊ ɹ i",
+  "per": 0.0,
+  "vowelMismatch": false,
+  "words": 4,
   "bestAlternative": null,
   "altMargin": null
  },
