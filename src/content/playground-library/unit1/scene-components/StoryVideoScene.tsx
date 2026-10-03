@@ -152,7 +152,10 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
         <img src={scene.pages[0]?.img ?? scene.bg} alt="" className="absolute inset-0 h-full w-full object-cover opacity-80" style={{ animation: 'lep1-kb-zoom-in 20s ease-in-out infinite alternate' }} draggable={false} />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/50" />
         <div className="absolute inset-x-0 top-[10%] text-center text-4xl font-black text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.7)] sm:text-6xl">🎬 {scene.title}</div>
-        <button onClick={start} aria-label="Play the story" className="absolute left-1/2 top-1/2 grid h-36 w-36 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/95 text-7xl text-orange-500 shadow-2xl ring-8 ring-orange-400/60 transition active:scale-95" style={{ animation: 'lep1-hop 1.6s ease-in-out infinite' }}>▶</button>
+        {/* Centred by the wrapper: the bounce animation would otherwise replace the centring transform. */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <button onClick={start} aria-label="Play the story" className="grid h-36 w-36 place-items-center rounded-full bg-white/95 text-7xl text-orange-500 shadow-2xl ring-8 ring-orange-400/60 active:scale-95" style={{ animation: 'lep1-hop 1.6s ease-in-out infinite' }}>▶</button>
+        </div>
       </div>
     );
   }
