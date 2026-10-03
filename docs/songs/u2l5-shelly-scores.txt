@@ -1,0 +1,13 @@
+
+=== docs/songs/u2l5-shelly-take1.mp3  length=66.7s  score=0.40  missing=3  extra=64
+heard: shally shally little gray fish a red circle a blue square a yellow triangle let's count the sides and let's count the points jump up and down and move your joints green and orange and purple too shelly is a rainbow fish women are round in a big blue sea happy as happy as can be green and orange and purple too shelly is a rainbow fish shine in so bright for all to see a beautiful friend for you and me yes a rainbow fish
+line starts (s): [np.float64(10.1), np.float64(11.5), np.float64(23.8), np.float64(27.2)]
+lineDurationsMs: [11500, 12280, 3440, 39523]
+
+=== docs/songs/u2l5-shelly-take2.mp3  length=61.5s  score=0.49  missing=6  extra=33
+heard: a red circle a blue square a yellow triangle green and an orange and purple too shelley is a rainbow fish look at all the colors shining so bright shelley's gonna dance in the morning light green and an orange and purple too shelly is a rainbow fan yeah yeah yeah yeah
+line starts (s): [None, np.float64(17.0), np.float64(25.4), np.float64(49.1)]
+
+=== docs/songs/u2l5-shelly-take3.mp3  length=35.6s  score=0.69  missing=5  extra=13
+heard: a red circle a blue square a yellow triangle green and orange and purple too shelly is a rainbow fish green and orange and purple too shall we use a rainbow fish fish
+line starts (s): [None, np.float64(4.3), np.float64(9.6), np.float64(14.0)]
