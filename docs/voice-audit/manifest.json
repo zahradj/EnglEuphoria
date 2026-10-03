@@ -1667,6 +1667,118 @@
   },
   {
     "character": "teacher",
+    "text": "Listen. Tap the right shape!",
+    "synth": "Listen. Tap the right shape!",
+    "file": "65cd5b6e.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Find a circle.",
+    "synth": "Find a circle.",
+    "file": "b3dcec51.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Find a square.",
+    "synth": "Find a square.",
+    "file": "2732ae74.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Find a triangle.",
+    "synth": "Find a triangle.",
+    "file": "c41e35c5.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "The clock is a circle.",
+    "synth": "The clock is a circle.",
+    "file": "124df8d5.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "The window is a triangle.",
+    "synth": "The window is a triangle.",
+    "file": "5cd6e80b.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "The pizza is a triangle.",
+    "synth": "The pizza is a triangle.",
+    "file": "d70943b9.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "The clock is a square.",
+    "synth": "The clock is a square.",
+    "file": "13be2708.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "What shape is it?",
+    "synth": "What shape is it?",
+    "file": "67d7dee2.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "It’s a circle.",
+    "synth": "It's a circle.",
+    "file": "fc6c1443.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "I like triangles.",
+    "synth": "I like triangles.",
+    "file": "3dcbb5f6.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "clock",
+    "synth": "clock",
+    "file": "8ea9b424.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "cat",
+    "synth": "cat",
+    "file": "6a101f9e.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "car.",
+    "synth": "car.",
+    "file": "0766f65e.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "Tap the box to open it!",
+    "synth": "Tap the box to open it!",
+    "file": "97c5c481.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
+    "text": "You did it! Circle, square, triangle! Great building!",
+    "synth": "You did it! Circle, square, triangle! Great building!",
+    "file": "74d5906b.mp3",
+    "exists": true
+  },
+  {
+    "character": "teacher",
     "text": "apple",
     "synth": "apple",
     "file": "52dbb0ef.mp3",
@@ -5474,6 +5586,27 @@
     "exists": true
   },
   {
+    "character": "mia",
+    "text": "How does Mia feel?",
+    "synth": "How does Mia feel?",
+    "file": "0d376a74.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "How did Bella feel before Pip helped her?",
+    "synth": "How did Bella feel before Pip helped her?",
+    "file": "932636f4.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "How did Leo feel before Pip helped him?",
+    "synth": "How did Leo feel before Pip helped him?",
+    "file": "c3c9e800.mp3",
+    "exists": true
+  },
+  {
     "character": "pip",
     "text": "You did it! You earned the Unit 1 Trophy! Hello, names, feelings, and all 8 letter sounds — you know it all! Tonight, say hello to your family, tell them your age, and show them how you feel!",
     "synth": "You did it! You earned the Unit one Trophy! Hello, names, feelings, and all eight letter sounds, you know it all! Tonight, say hello to your family, tell them your age, and show them how you feel!",
@@ -5971,6 +6104,20 @@
     "exists": true
   },
   {
+    "character": "pip",
+    "text": "What color is the balloon?",
+    "synth": "What color is the balloon?",
+    "file": "7873461e.mp3",
+    "exists": true
+  },
+  {
+    "character": "willow",
+    "text": "What color is the popcorn?",
+    "synth": "What color is the popcorn?",
+    "file": "d3ae6937.mp3",
+    "exists": true
+  },
+  {
     "character": "bella",
     "text": "You did it! You can name red, blue, and yellow at the Color Carnival!",
     "synth": "You did it! You can name red, blue, and yellow at the Color Carnival!",
@@ -6419,24 +6566,31 @@
     "exists": true
   },
   {
-    "character": "pip",
-    "text": "You mixed the magic paints! Green, orange, purple — goodbye, friends!",
-    "synth": "You mixed the magic paints! Green, orange, purple, goodbye, friends!",
-    "file": "6f2541c2.mp3",
+    "character": "willow",
+    "text": "What color is the frog?",
+    "synth": "What color is the frog?",
+    "file": "cc0d1f60.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "What color are the grapes?",
+    "synth": "What color are the grapes?",
+    "file": "fe936352.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "Look! Today we find shapes, not colors!",
-    "synth": "Look! Today we find shapes, not colors!",
-    "file": "5a024772.mp3",
+    "text": "You made green, orange and purple! Goodbye, friends!",
+    "synth": "You made green, orange and purple! Goodbye, friends!",
+    "file": "da652ca8.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "Bella has a round ball, Mia has square books, and Leo has a triangle pizza!",
-    "synth": "Bella has a round ball, Mia has square books, and Leo has a triangle pizza!",
-    "file": "d81a1faf.mp3",
+    "text": "Look! Shapes are everywhere in our town!",
+    "synth": "Look! Shapes are everywhere in our town!",
+    "file": "83029bf4.mp3",
     "exists": true
   },
   {
@@ -6448,9 +6602,16 @@
   },
   {
     "character": "bella",
-    "text": "The ball is a circle.",
-    "synth": "The ball is a circle.",
-    "file": "16ced31e.mp3",
+    "text": "Clock",
+    "synth": "Clock",
+    "file": "8ced7af7.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "The clock is a circle.",
+    "synth": "The clock is a circle.",
+    "file": "2d21356f.mp3",
     "exists": true
   },
   {
@@ -6462,16 +6623,16 @@
   },
   {
     "character": "mia",
-    "text": "Book",
-    "synth": "Book",
-    "file": "3ba997df.mp3",
+    "text": "Window",
+    "synth": "Window",
+    "file": "fb7a8566.mp3",
     "exists": true
   },
   {
     "character": "mia",
-    "text": "The book is a square.",
-    "synth": "The book is a square.",
-    "file": "09aa005d.mp3",
+    "text": "The window is a square.",
+    "synth": "The window is a square.",
+    "file": "c63c2142.mp3",
     "exists": true
   },
   {
@@ -6497,23 +6658,184 @@
   },
   {
     "character": "pip",
-    "text": "Wonderful! The ball is a circle. The book is a square. The pizza is a triangle.",
-    "synth": "Wonderful! The ball is a circle. The book is a square. The pizza is a triangle.",
-    "file": "b9d1aaac.mp3",
+    "text": "Wonderful! The clock is a circle. The window is a square. The pizza is a triangle.",
+    "synth": "Wonderful! The clock is a circle. The window is a square. The pizza is a triangle.",
+    "file": "3812ba32.mp3",
     "exists": true
   },
   {
     "character": "bella",
-    "text": "Cat",
-    "synth": "Cat",
-    "file": "b1dbc095.mp3",
+    "text": "The clock is a circle!",
+    "synth": "The clock is a circle!",
+    "file": "32213d4e.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "The window is a square!",
+    "synth": "The window is a square!",
+    "file": "c93c25fb.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "The flag is a triangle!",
+    "synth": "The flag is a triangle!",
+    "file": "666d7d31.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "What shape is it?",
+    "synth": "What shape is it?",
+    "file": "6e4a0ced.mp3",
     "exists": true
   },
   {
     "character": "bella",
-    "text": "Car.",
-    "synth": "Car.",
-    "file": "97e12977.mp3",
+    "text": "It's a circle!",
+    "synth": "It's a circle!",
+    "file": "429ed7e6.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "It's a square!",
+    "synth": "It's a square!",
+    "file": "c7c9affd.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "It's a triangle!",
+    "synth": "It's a triangle!",
+    "file": "d2047cd3.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "Let's build a house!",
+    "synth": "Let's build a house!",
+    "file": "466fba9c.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "It's a house!",
+    "synth": "It's a house!",
+    "file": "3690a6f6.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "It's a square!",
+    "synth": "It's a square!",
+    "file": "f82ce9ec.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "A blue square!",
+    "synth": "A blue square!",
+    "file": "16659801.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "It's a triangle!",
+    "synth": "It's a triangle!",
+    "file": "ef8bdfa5.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "A red triangle!",
+    "synth": "A red triangle!",
+    "file": "7012bb09.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "It's a circle!",
+    "synth": "It's a circle!",
+    "file": "34bb3d0d.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "A yellow circle!",
+    "synth": "A yellow circle!",
+    "file": "ac6ee1c4.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "Let's build a rocket!",
+    "synth": "Let's build a rocket!",
+    "file": "9f08ce13.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "It's a rocket!",
+    "synth": "It's a rocket!",
+    "file": "95815317.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "A purple triangle!",
+    "synth": "A purple triangle!",
+    "file": "7721d66e.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "An orange square!",
+    "synth": "An orange square!",
+    "file": "d791d3e7.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "A blue circle!",
+    "synth": "A blue circle!",
+    "file": "72bf3e04.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "Let's build an ice cream!",
+    "synth": "Let's build an ice cream!",
+    "file": "a3e96c65.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "It's an ice cream!",
+    "synth": "It's an ice cream!",
+    "file": "2f6a0b9b.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "An orange triangle!",
+    "synth": "An orange triangle!",
+    "file": "0616dc0a.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "A green circle!",
+    "synth": "A green circle!",
+    "file": "88db0159.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "A red circle!",
+    "synth": "A red circle!",
+    "file": "179d9349.mp3",
     "exists": true
   },
   {
@@ -6525,23 +6847,30 @@
   },
   {
     "character": "bella",
-    "text": "moon.",
-    "synth": "moon.",
-    "file": "0401354c.mp3",
+    "text": "clock",
+    "synth": "clock",
+    "file": "007ebe57.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "cookie",
+    "synth": "cookie",
+    "file": "5641ef0d.mp3",
     "exists": true
   },
   {
     "character": "mia",
-    "text": "book",
-    "synth": "book",
-    "file": "be51dfff.mp3",
+    "text": "window",
+    "synth": "window",
+    "file": "70477986.mp3",
     "exists": true
   },
   {
     "character": "mia",
-    "text": "box",
-    "synth": "box",
-    "file": "38764697.mp3",
+    "text": "present",
+    "synth": "present",
+    "file": "c3e71d45.mp3",
     "exists": true
   },
   {
@@ -6559,115 +6888,108 @@
     "exists": true
   },
   {
-    "character": "pip",
-    "text": "circle",
-    "synth": "circle",
-    "file": "307df282.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "square",
-    "synth": "square",
-    "file": "e90c2c99.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "triangle",
-    "synth": "triangle",
-    "file": "3b8e6a22.mp3",
+    "character": "bella",
+    "text": "cat",
+    "synth": "cat",
+    "file": "4f5128f5.mp3",
     "exists": true
   },
   {
     "character": "bella",
-    "text": "It's a red circle!",
-    "synth": "It's a red circle!",
-    "file": "ee9d0105.mp3",
+    "text": "car.",
+    "synth": "car.",
+    "file": "17b4dd57.mp3",
     "exists": true
   },
   {
-    "character": "mia",
-    "text": "It's a blue square!",
-    "synth": "It's a blue square!",
-    "file": "691b80eb.mp3",
+    "character": "pip",
+    "text": "I spy a triangle!",
+    "synth": "I spy a triangle!",
+    "file": "866fbf0b.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "I spy a circle!",
+    "synth": "I spy a circle!",
+    "file": "a73ccb23.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "I spy a square!",
+    "synth": "I spy a square!",
+    "file": "a561438e.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Yes! The clock!",
+    "synth": "Yes! The clock!",
+    "file": "9f243f78.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Yes! The window!",
+    "synth": "Yes! The window!",
+    "file": "ffa5aad8.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Yes! The flag!",
+    "synth": "Yes! The flag!",
+    "file": "36e6e826.mp3",
     "exists": true
   },
   {
     "character": "leo",
-    "text": "It's a yellow triangle!",
-    "synth": "It's a yellow triangle!",
-    "file": "1d91753b.mp3",
-    "exists": true
-  },
-  {
-    "character": "bella",
-    "text": "I like red circles!",
-    "synth": "I like red circles!",
-    "file": "b3eb7394.mp3",
-    "exists": true
-  },
-  {
-    "character": "mia",
-    "text": "I don't like blue squares!",
-    "synth": "I don't like blue squares!",
-    "file": "2824f718.mp3",
+    "text": "clock",
+    "synth": "clock",
+    "file": "59cf3303.mp3",
     "exists": true
   },
   {
     "character": "leo",
-    "text": "I like yellow triangles!",
-    "synth": "I like yellow triangles!",
-    "file": "53fbf336.mp3",
+    "text": "cookie",
+    "synth": "cookie",
+    "file": "927bc3f9.mp3",
     "exists": true
   },
   {
-    "character": "bella",
-    "text": "book",
-    "synth": "book",
-    "file": "591af04e.mp3",
+    "character": "leo",
+    "text": "window",
+    "synth": "window",
+    "file": "578d36b7.mp3",
     "exists": true
   },
   {
-    "character": "bella",
-    "text": "box",
-    "synth": "box",
-    "file": "c1ac5214.mp3",
+    "character": "leo",
+    "text": "present",
+    "synth": "present",
+    "file": "e74975de.mp3",
     "exists": true
   },
   {
-    "character": "bella",
-    "text": "pizza",
-    "synth": "pizza",
-    "file": "082e8837.mp3",
+    "character": "pip",
+    "text": "What shape is the clock?",
+    "synth": "What shape is the clock?",
+    "file": "23749c87.mp3",
     "exists": true
   },
   {
-    "character": "bella",
-    "text": "flag",
-    "synth": "flag",
-    "file": "b225067d.mp3",
+    "character": "pip",
+    "text": "What shape is the window?",
+    "synth": "What shape is the window?",
+    "file": "4a95cb25.mp3",
     "exists": true
   },
   {
-    "character": "mia",
-    "text": "pizza",
-    "synth": "pizza",
-    "file": "61cfe67c.mp3",
-    "exists": true
-  },
-  {
-    "character": "mia",
-    "text": "flag",
-    "synth": "flag",
-    "file": "23e9bc54.mp3",
-    "exists": true
-  },
-  {
-    "character": "mia",
-    "text": "ball",
-    "synth": "ball",
-    "file": "b26944db.mp3",
+    "character": "pip",
+    "text": "What shape is the pizza?",
+    "synth": "What shape is the pizza?",
+    "file": "664d834f.mp3",
     "exists": true
   },
   {
@@ -6692,108 +7014,73 @@
     "exists": true
   },
   {
-    "character": "leo",
-    "text": "ball",
-    "synth": "ball",
-    "file": "5b1dccca.mp3",
+    "character": "bella",
+    "text": "I like circles! What shape do you like?",
+    "synth": "I like circles! What shape do you like?",
+    "file": "d83a9822.mp3",
     "exists": true
   },
   {
     "character": "leo",
-    "text": "moon.",
-    "synth": "moon.",
-    "file": "029557b0.mp3",
-    "exists": true
-  },
-  {
-    "character": "leo",
-    "text": "book",
-    "synth": "book",
-    "file": "69ae91d2.mp3",
-    "exists": true
-  },
-  {
-    "character": "leo",
-    "text": "box",
-    "synth": "box",
-    "file": "9a65ee18.mp3",
+    "text": "I like triangles! I don't like squares.",
+    "synth": "I like triangles! I don't like squares.",
+    "file": "3b7614a0.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "What color and shape is the ball?",
-    "synth": "What color and shape is the ball?",
-    "file": "052806bc.mp3",
-    "exists": true
-  },
-  {
-    "character": "mia",
-    "text": "Do you like blue squares?",
-    "synth": "Do you like blue squares?",
-    "file": "197422c5.mp3",
-    "exists": true
-  },
-  {
-    "character": "leo",
-    "text": "What color and shape is the pizza?",
-    "synth": "What color and shape is the pizza?",
-    "file": "bf5d3ca7.mp3",
+    "text": "Pip and his friends look for shapes.",
+    "synth": "Pip and his friends look for shapes.",
+    "file": "c37dea19.mp3",
     "exists": true
   },
   {
     "character": "bella",
-    "text": "Bella found a round red ball. It is a red circle!",
-    "synth": "Bella found a round red ball. It is a red circle!",
-    "file": "cb7077a6.mp3",
+    "text": "Bella finds a circle. It is a clock!",
+    "synth": "Bella finds a circle. It is a clock!",
+    "file": "0e14c30b.mp3",
     "exists": true
   },
   {
     "character": "mia",
-    "text": "Then Mia found a blue square book.",
-    "synth": "Then Mia found a blue square book.",
-    "file": "60de0b14.mp3",
+    "text": "Mia finds a square. It is a window!",
+    "synth": "Mia finds a square. It is a window!",
+    "file": "77825657.mp3",
     "exists": true
   },
   {
     "character": "leo",
-    "text": "Leo found a yellow triangle pizza too!",
-    "synth": "Leo found a yellow triangle pizza too!",
-    "file": "691e58e6.mp3",
+    "text": "Leo finds a triangle. It is a pizza. Yum!",
+    "synth": "Leo finds a triangle. It is a pizza. Yum!",
+    "file": "81c0ed6d.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "Red circle, blue square, yellow triangle — so many shapes with friends!",
-    "synth": "Red circle, blue square, yellow triangle, so many shapes with friends!",
-    "file": "ea8166bf.mp3",
+    "text": "Now they build a house with shapes!",
+    "synth": "Now they build a house with shapes!",
+    "file": "1c5defd4.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "What shape is the clock?",
+    "synth": "What shape is the clock?",
+    "file": "df23a4a4.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "What shape is the pizza?",
+    "synth": "What shape is the pizza?",
+    "file": "d46e65e9.mp3",
     "exists": true
   },
   {
     "character": "pip",
-    "text": "I like red circles!",
-    "synth": "I like red circles!",
-    "file": "7acbcca1.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "I don't like blue squares!",
-    "synth": "I don't like blue squares!",
-    "file": "3fa01431.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "I like yellow triangles!",
-    "synth": "I like yellow triangles!",
-    "file": "214a3150.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
-    "text": "You did it! You can name red circles, blue squares, and yellow triangles!",
-    "synth": "You did it! You can name red circles, blue squares, and yellow triangles!",
-    "file": "7ff2c9ab.mp3",
+    "text": "You found circles, squares and triangles! Goodbye, friends!",
+    "synth": "You found circles, squares and triangles! Goodbye, friends!",
+    "file": "d31cd130.mp3",
     "exists": true
   },
   {
@@ -6944,6 +7231,34 @@
     "exists": true
   },
   {
+    "character": "bella",
+    "text": "It's a red circle!",
+    "synth": "It's a red circle!",
+    "file": "ee9d0105.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "It's a blue square!",
+    "synth": "It's a blue square!",
+    "file": "691b80eb.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "It's a yellow triangle!",
+    "synth": "It's a yellow triangle!",
+    "file": "1d91753b.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "I like red circles!",
+    "synth": "I like red circles!",
+    "file": "b3eb7394.mp3",
+    "exists": true
+  },
+  {
     "character": "leo",
     "text": "I don't like yellow triangles!",
     "synth": "I don't like yellow triangles!",
@@ -7063,6 +7378,20 @@
     "exists": true
   },
   {
+    "character": "bella",
+    "text": "What color was the water?",
+    "synth": "What color was the water?",
+    "file": "5c48c266.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "What color were the grapes?",
+    "synth": "What color were the grapes?",
+    "file": "3928e7e5.mp3",
+    "exists": true
+  },
+  {
     "character": "pip",
     "text": "Amazing! You remember red, blue, yellow, green, orange, and purple — plus red circles, blue squares, and yellow triangles!",
     "synth": "Amazing! You remember red, blue, yellow, green, orange, and purple, plus red circles, blue squares, and yellow triangles!",
@@ -7148,6 +7477,27 @@
   },
   {
     "character": "pip",
+    "text": "What color did the fish turn first?",
+    "synth": "What color did the fish turn first?",
+    "file": "fb84ee7f.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "What color was the lily pad?",
+    "synth": "What color was the lily pad?",
+    "file": "06cfa418.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "What color did the fish turn last?",
+    "synth": "What color did the fish turn last?",
+    "file": "2d8827e1.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
     "text": "It's red!",
     "synth": "It's red!",
     "file": "c695f5b1.mp3",
@@ -7224,6 +7574,62 @@
     "exists": true
   },
   {
+    "character": "bella",
+    "text": "moon.",
+    "synth": "moon.",
+    "file": "0401354c.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "book",
+    "synth": "book",
+    "file": "be51dfff.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "box",
+    "synth": "box",
+    "file": "38764697.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "I don't like blue squares!",
+    "synth": "I don't like blue squares!",
+    "file": "2824f718.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "I like yellow triangles!",
+    "synth": "I like yellow triangles!",
+    "file": "53fbf336.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "circle",
+    "synth": "circle",
+    "file": "307df282.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "square",
+    "synth": "square",
+    "file": "e90c2c99.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "triangle",
+    "synth": "triangle",
+    "file": "3b8e6a22.mp3",
+    "exists": true
+  },
+  {
     "character": "teacher",
     "text": "Red",
     "synth": "Red",
@@ -7294,6 +7700,34 @@
     "exists": true
   },
   {
+    "character": "leo",
+    "text": "ball",
+    "synth": "ball",
+    "file": "5b1dccca.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "moon.",
+    "synth": "moon.",
+    "file": "029557b0.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "book",
+    "synth": "book",
+    "file": "69ae91d2.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "box",
+    "synth": "box",
+    "file": "9a65ee18.mp3",
+    "exists": true
+  },
+  {
     "character": "pip",
     "text": "pizza",
     "synth": "pizza",
@@ -7312,6 +7746,13 @@
     "text": "What color is the leaf?",
     "synth": "What color is the leaf?",
     "file": "4a13df76.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "What color and shape is the pizza?",
+    "synth": "What color and shape is the pizza?",
+    "file": "bf5d3ca7.mp3",
     "exists": true
   },
   {
@@ -7347,6 +7788,13 @@
     "text": "We even met a little fish who found every color in the whole rainbow!",
     "synth": "We even met a little fish who found every color in the whole rainbow!",
     "file": "8eff41b5.mp3",
+    "exists": true
+  },
+  {
+    "character": "leo",
+    "text": "What color and shape was the pizza?",
+    "synth": "What color and shape was the pizza?",
+    "file": "e2411646.mp3",
     "exists": true
   },
   {
@@ -7519,13 +7967,6 @@
   },
   {
     "character": "pip",
-    "text": "car.",
-    "synth": "car.",
-    "file": "0766f65e.mp3",
-    "exists": true
-  },
-  {
-    "character": "pip",
     "text": "doll.",
     "synth": "doll.",
     "file": "532a7cc3.mp3",
@@ -7596,13 +8037,6 @@
   },
   {
     "character": "bella",
-    "text": "car.",
-    "synth": "car.",
-    "file": "17b4dd57.mp3",
-    "exists": true
-  },
-  {
-    "character": "bella",
     "text": "doll.",
     "synth": "doll.",
     "file": "69713250.mp3",
@@ -7634,6 +8068,13 @@
     "text": "doll.",
     "synth": "doll.",
     "file": "698d7c23.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "ball",
+    "synth": "ball",
+    "file": "b26944db.mp3",
     "exists": true
   },
   {
@@ -7690,6 +8131,20 @@
     "text": "Red ball, blue car, green doll — so many toys with friends!",
     "synth": "Red ball, blue car, green doll, so many toys with friends!",
     "file": "1ed2c30a.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "What color is the ball?",
+    "synth": "What color is the ball?",
+    "file": "c1468451.mp3",
+    "exists": true
+  },
+  {
+    "character": "mia",
+    "text": "What color is the doll?",
+    "synth": "What color is the doll?",
+    "file": "1d27fea3.mp3",
     "exists": true
   },
   {
@@ -8064,6 +8519,20 @@
     "exists": true
   },
   {
+    "character": "leo",
+    "text": "Is the teddy bear one, or many?",
+    "synth": "Is the teddy bear one, or many?",
+    "file": "a4293a40.mp3",
+    "exists": true
+  },
+  {
+    "character": "bella",
+    "text": "Are the blocks one, or many?",
+    "synth": "Are the blocks one, or many?",
+    "file": "00046b81.mp3",
+    "exists": true
+  },
+  {
     "character": "pip",
     "text": "I like brown teddy bears!",
     "synth": "I like brown teddy bears!",
@@ -8264,6 +8733,20 @@
     "text": "I love my mom and my dad. We are a happy family!",
     "synth": "I love my mom and my dad. We are a happy family!",
     "file": "5b842a12.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Who makes pancakes?",
+    "synth": "Who makes pancakes?",
+    "file": "ebf52cc4.mp3",
+    "exists": true
+  },
+  {
+    "character": "pip",
+    "text": "Who reads a story?",
+    "synth": "Who reads a story?",
+    "file": "82da7eda.mp3",
     "exists": true
   },
   {

@@ -1324,22 +1324,6 @@
   "text": "I spy something green"
  },
  {
-  "file": "5a024772.mp3",
-  "text": "Look, today we find shapes, not colors"
- },
- {
-  "file": "d81a1faf.mp3",
-  "text": "Bella has a round ball, Mia has square books, and Leo has a triangle pizza."
- },
- {
-  "file": "16ced31e.mp3",
-  "text": "The ball is a circle"
- },
- {
-  "file": "b9d1aaac.mp3",
-  "text": "Wonderful! The ball is a circle. The book is a square. The pizza is a triangle"
- },
- {
   "file": "3750b628.mp3",
   "text": "Amazing. All shapes sorted"
  },
@@ -1350,30 +1334,6 @@
  {
   "file": "b3eb7394.mp3",
   "text": "I like red circles"
- },
- {
-  "file": "052806bc.mp3",
-  "text": "What color and shape is the ball?"
- },
- {
-  "file": "cb7077a6.mp3",
-  "text": "Bella found a round red ball. It is a red circle"
- },
- {
-  "file": "ea8166bf.mp3",
-  "text": "Red circle, blue square, yellow triangle. So many shapes with friends"
- },
- {
-  "file": "7acbcca1.mp3",
-  "text": "I like red circles"
- },
- {
-  "file": "3fa01431.mp3",
-  "text": "I don't like blue squares"
- },
- {
-  "file": "214a3150.mp3",
-  "text": "I like yellow triangles"
  },
  {
   "file": "cc8531bf.mp3",
@@ -2872,10 +2832,6 @@
   "text": "Which one is green?"
  },
  {
-  "file": "7ff2c9ab.mp3",
-  "text": "You did it! You can name red circles, blue squares, and yellow triangles."
- },
- {
   "file": "ad59f860.mp3",
   "text": "Amazing! You remember red, blue, yellow, green, orange, and purple, plus red circles, blue squares, and yellow triangles"
  },
@@ -3916,10 +3872,6 @@
   "text": "Do you like purple?"
  },
  {
-  "file": "09aa005d.mp3",
-  "text": "The book is a square"
- },
- {
   "file": "ef941f32.mp3",
   "text": "The pizza is a triangle"
  },
@@ -3940,20 +3892,8 @@
   "text": "I like yellow triangles"
  },
  {
-  "file": "197422c5.mp3",
-  "text": "Do you like blue squares?"
- },
- {
   "file": "bf5d3ca7.mp3",
   "text": "What color and shape is the pizza?"
- },
- {
-  "file": "60de0b14.mp3",
-  "text": "Then Mia found a blue square book"
- },
- {
-  "file": "691e58e6.mp3",
-  "text": "Leo found a yellow triangle pizza too"
  },
  {
   "file": "03d1febc.mp3",
@@ -5868,10 +5808,6 @@
   "text": "Now the meadow has six colors"
  },
  {
-  "file": "6f2541c2.mp3",
-  "text": "You mix the magic paints. Green, orange, purple. Goodbye, friends"
- },
- {
   "file": "4ca52f9b.mp3",
   "text": "Circle"
  },
@@ -5880,24 +5816,12 @@
   "text": "Square"
  },
  {
-  "file": "3ba997df.mp3",
-  "text": "Book"
- },
- {
   "file": "c39ed5bb.mp3",
   "text": "Triangle"
  },
  {
   "file": "55b8fb03.mp3",
   "text": "Pizza"
- },
- {
-  "file": "b1dbc095.mp3",
-  "text": "Cat"
- },
- {
-  "file": "97e12977.mp3",
-  "text": "Car"
  },
  {
   "file": "0401354c.mp3",
@@ -5930,30 +5854,6 @@
  {
   "file": "3b8e6a22.mp3",
   "text": "Triangle"
- },
- {
-  "file": "591af04e.mp3",
-  "text": "Look"
- },
- {
-  "file": "c1ac5214.mp3",
-  "text": "Box"
- },
- {
-  "file": "082e8837.mp3",
-  "text": "Pizza"
- },
- {
-  "file": "b225067d.mp3",
-  "text": "Flag"
- },
- {
-  "file": "61cfe67c.mp3",
-  "text": "Pizza"
- },
- {
-  "file": "23e9bc54.mp3",
-  "text": "Flag"
  },
  {
   "file": "b26944db.mp3",
@@ -7074,5 +6974,381 @@
  {
   "file": "090e3a68.mp3",
   "text": "Desk"
+ },
+ {
+  "file": "65cd5b6e.mp3",
+  "text": "Listen. Tap the right shape"
+ },
+ {
+  "file": "b3dcec51.mp3",
+  "text": "Find a circle"
+ },
+ {
+  "file": "2732ae74.mp3",
+  "text": "Find a square"
+ },
+ {
+  "file": "c41e35c5.mp3",
+  "text": "Find a triangle"
+ },
+ {
+  "file": "124df8d5.mp3",
+  "text": "The clock is a circle"
+ },
+ {
+  "file": "5cd6e80b.mp3",
+  "text": "The window is a triangle"
+ },
+ {
+  "file": "d70943b9.mp3",
+  "text": "The pizza is a triangle"
+ },
+ {
+  "file": "13be2708.mp3",
+  "text": "The clock is a square"
+ },
+ {
+  "file": "67d7dee2.mp3",
+  "text": "What shape is it?"
+ },
+ {
+  "file": "fc6c1443.mp3",
+  "text": "It's a circle"
+ },
+ {
+  "file": "3dcbb5f6.mp3",
+  "text": "I like triangles"
+ },
+ {
+  "file": "8ea9b424.mp3",
+  "text": "Clock"
+ },
+ {
+  "file": "6a101f9e.mp3",
+  "text": "Cat"
+ },
+ {
+  "file": "97c5c481.mp3",
+  "text": "Tap the box to open it"
+ },
+ {
+  "file": "74d5906b.mp3",
+  "text": "You did it. Circle, square, triangle. Great building"
+ },
+ {
+  "file": "0d376a74.mp3",
+  "text": "How does Mia feel?"
+ },
+ {
+  "file": "932636f4.mp3",
+  "text": "How did Bella feel before Pip helped her?"
+ },
+ {
+  "file": "c3c9e800.mp3",
+  "text": "How did Leo feel before Pip helped him?"
+ },
+ {
+  "file": "7873461e.mp3",
+  "text": "What color is the balloon?"
+ },
+ {
+  "file": "d3ae6937.mp3",
+  "text": "What color is the popcorn?"
+ },
+ {
+  "file": "cc0d1f60.mp3",
+  "text": "What color is the frog?"
+ },
+ {
+  "file": "fe936352.mp3",
+  "text": "What color are the grapes?"
+ },
+ {
+  "file": "da652ca8.mp3",
+  "text": "You made green, orange, and purple. Goodbye, friends"
+ },
+ {
+  "file": "83029bf4.mp3",
+  "text": "Look, shapes are everywhere in our town"
+ },
+ {
+  "file": "8ced7af7.mp3",
+  "text": "Clock"
+ },
+ {
+  "file": "2d21356f.mp3",
+  "text": "The clock is a circle."
+ },
+ {
+  "file": "fb7a8566.mp3",
+  "text": "Window"
+ },
+ {
+  "file": "c63c2142.mp3",
+  "text": "The window is a square"
+ },
+ {
+  "file": "3812ba32.mp3",
+  "text": "Wonderful! The clock is a circle. The window is a square. The pizza is a triangle"
+ },
+ {
+  "file": "32213d4e.mp3",
+  "text": "The clock is a circle"
+ },
+ {
+  "file": "c93c25fb.mp3",
+  "text": "The window is a square"
+ },
+ {
+  "file": "666d7d31.mp3",
+  "text": "The flag is a triangle"
+ },
+ {
+  "file": "6e4a0ced.mp3",
+  "text": "What shape is it?"
+ },
+ {
+  "file": "429ed7e6.mp3",
+  "text": "It's a circle"
+ },
+ {
+  "file": "c7c9affd.mp3",
+  "text": "It's a square"
+ },
+ {
+  "file": "d2047cd3.mp3",
+  "text": "It's a triangle"
+ },
+ {
+  "file": "466fba9c.mp3",
+  "text": "Let's build a house"
+ },
+ {
+  "file": "3690a6f6.mp3",
+  "text": "It's a house"
+ },
+ {
+  "file": "f82ce9ec.mp3",
+  "text": "It's a square"
+ },
+ {
+  "file": "16659801.mp3",
+  "text": "A blue square"
+ },
+ {
+  "file": "ef8bdfa5.mp3",
+  "text": "It's a triangle"
+ },
+ {
+  "file": "7012bb09.mp3",
+  "text": "A red triangle"
+ },
+ {
+  "file": "34bb3d0d.mp3",
+  "text": "It's a circle"
+ },
+ {
+  "file": "ac6ee1c4.mp3",
+  "text": "A yellow circle"
+ },
+ {
+  "file": "9f08ce13.mp3",
+  "text": "Let's build a rocket"
+ },
+ {
+  "file": "95815317.mp3",
+  "text": "It's a rocket"
+ },
+ {
+  "file": "7721d66e.mp3",
+  "text": "A purple triangle"
+ },
+ {
+  "file": "d791d3e7.mp3",
+  "text": "An orange square"
+ },
+ {
+  "file": "72bf3e04.mp3",
+  "text": "A blue circle"
+ },
+ {
+  "file": "a3e96c65.mp3",
+  "text": "Let's build an ice cream"
+ },
+ {
+  "file": "2f6a0b9b.mp3",
+  "text": "It's an ice cream"
+ },
+ {
+  "file": "0616dc0a.mp3",
+  "text": "An orange triangle"
+ },
+ {
+  "file": "88db0159.mp3",
+  "text": "A green circle"
+ },
+ {
+  "file": "179d9349.mp3",
+  "text": "A red circle"
+ },
+ {
+  "file": "007ebe57.mp3",
+  "text": "Clock"
+ },
+ {
+  "file": "5641ef0d.mp3",
+  "text": "Cookie?"
+ },
+ {
+  "file": "70477986.mp3",
+  "text": "Window"
+ },
+ {
+  "file": "c3e71d45.mp3",
+  "text": "Present"
+ },
+ {
+  "file": "4f5128f5.mp3",
+  "text": "Cat"
+ },
+ {
+  "file": "866fbf0b.mp3",
+  "text": "I spy a triangle"
+ },
+ {
+  "file": "a73ccb23.mp3",
+  "text": "I spy a circle"
+ },
+ {
+  "file": "a561438e.mp3",
+  "text": "I spy a square"
+ },
+ {
+  "file": "9f243f78.mp3",
+  "text": "Yes, the clock"
+ },
+ {
+  "file": "ffa5aad8.mp3",
+  "text": "Yes, the window"
+ },
+ {
+  "file": "36e6e826.mp3",
+  "text": "Yes, the flag"
+ },
+ {
+  "file": "59cf3303.mp3",
+  "text": "Clock"
+ },
+ {
+  "file": "927bc3f9.mp3",
+  "text": "Cookie"
+ },
+ {
+  "file": "578d36b7.mp3",
+  "text": "Window"
+ },
+ {
+  "file": "e74975de.mp3",
+  "text": "Present"
+ },
+ {
+  "file": "23749c87.mp3",
+  "text": "What shape is the clock?"
+ },
+ {
+  "file": "4a95cb25.mp3",
+  "text": "What shape is the window?"
+ },
+ {
+  "file": "664d834f.mp3",
+  "text": "What shape is the pizza?"
+ },
+ {
+  "file": "d83a9822.mp3",
+  "text": "I like circles. What shape do you like?"
+ },
+ {
+  "file": "3b7614a0.mp3",
+  "text": "I like triangles. I don't like squares"
+ },
+ {
+  "file": "c37dea19.mp3",
+  "text": "Pip and his friends look for shapes"
+ },
+ {
+  "file": "0e14c30b.mp3",
+  "text": "Bella finds a circle. It is a clock"
+ },
+ {
+  "file": "77825657.mp3",
+  "text": "Mia finds a square. It is a window"
+ },
+ {
+  "file": "81c0ed6d.mp3",
+  "text": "Leo finds a triangle. It is a pizza. Yum!"
+ },
+ {
+  "file": "1c5defd4.mp3",
+  "text": "Now they build a house with shapes"
+ },
+ {
+  "file": "df23a4a4.mp3",
+  "text": "What shape is the clock?"
+ },
+ {
+  "file": "d46e65e9.mp3",
+  "text": "What shape is the pizza?"
+ },
+ {
+  "file": "d31cd130.mp3",
+  "text": "You found circles, squares, and triangles. Goodbye, friends"
+ },
+ {
+  "file": "5c48c266.mp3",
+  "text": "What color was the water?"
+ },
+ {
+  "file": "3928e7e5.mp3",
+  "text": "What color were the grapes?"
+ },
+ {
+  "file": "fb84ee7f.mp3",
+  "text": "What color did the fish turn first?"
+ },
+ {
+  "file": "06cfa418.mp3",
+  "text": "What color was the lily pad?"
+ },
+ {
+  "file": "2d8827e1.mp3",
+  "text": "What color did the fish turn last?"
+ },
+ {
+  "file": "e2411646.mp3",
+  "text": "What color and shape was the pizza?"
+ },
+ {
+  "file": "c1468451.mp3",
+  "text": "What color is the ball?"
+ },
+ {
+  "file": "1d27fea3.mp3",
+  "text": "What color is the doll?"
+ },
+ {
+  "file": "a4293a40.mp3",
+  "text": "Is the teddy bear one or many?"
+ },
+ {
+  "file": "00046b81.mp3",
+  "text": "Are the blocks one or many?"
+ },
+ {
+  "file": "ebf52cc4.mp3",
+  "text": "Who makes pancakes?"
+ },
+ {
+  "file": "82da7eda.mp3",
+  "text": "Who reads a story?"
  }
 ]

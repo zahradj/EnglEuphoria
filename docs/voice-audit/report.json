@@ -299,17 +299,6 @@
     ]
   },
   {
-    "file": "591af04e.mp3",
-    "voice": "bella",
-    "text": "book",
-    "heard": "Look",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"book\"→\"look\""
-    ]
-  },
-  {
     "file": "94727dfb.mp3",
     "voice": "willow",
     "text": "sun",
@@ -804,17 +793,6 @@
     "rate": 0.11,
     "ops": [
       "\"asks\"→\"asked\""
-    ]
-  },
-  {
-    "file": "6f2541c2.mp3",
-    "voice": "pip",
-    "text": "You mixed the magic paints! Green, orange, purple — goodbye, friends!",
-    "heard": "You mix the magic paints. Green, orange, purple. Goodbye, friends",
-    "distance": 1,
-    "rate": 0.1,
-    "ops": [
-      "\"mixed\"→\"mix\""
     ]
   },
   {
