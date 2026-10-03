@@ -35,8 +35,8 @@ export const VIDEO_BRIEFS: VideoBrief[] = [
     startImage: '/lep1/scenes/bg-feelings-meadow.jpg',
     motion: 'The butterflies drift slowly across the sky. Tiny hearts and sparkles float gently upward. The flowers sway very slightly in a soft breeze. The sun glows softly and the clouds drift slowly. The camera makes a slow, gentle push forward. The bench and the tree stay still.',
     seconds: 8,
-    stillApproved: false, // set to true once the user has confirmed this exact picture
-    status: 'draft',
+    stillApproved: true, // approved by the owner 2026-10-03
+    status: 'ready',
   },
   {
     // Second: one cartoon character. Order only after the first clip passed the full review.
