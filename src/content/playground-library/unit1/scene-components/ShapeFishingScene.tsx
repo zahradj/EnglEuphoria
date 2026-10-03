@@ -39,15 +39,19 @@ function Fish({ shape, colorHex }: { shape: string; colorHex: string }) {
         </linearGradient>
       </defs>
       {/* tail */}
-      <path d="M 26 40 L 4 18 Q 0 40 4 62 Z" fill={`url(#${id}f)`} stroke="#2B1E17" strokeWidth="2.5" strokeLinejoin="round" />
-      <path d="M 9 28 L 20 40 L 9 52" fill="none" stroke="#EA580C" strokeWidth="1.8" strokeLinecap="round" opacity="0.7" />
+      <g style={{ transformOrigin: '26px 40px', animation: 'lep1-tail 0.5s ease-in-out infinite' }}>
+        <path d="M 26 40 L 4 18 Q 0 40 4 62 Z" fill={`url(#${id}f)`} stroke="#2B1E17" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M 9 28 L 20 40 L 9 52" fill="none" stroke="#EA580C" strokeWidth="1.8" strokeLinecap="round" opacity="0.7" />
+      </g>
       {/* top fin */}
       <path d="M 52 14 Q 68 0 88 12" fill={`url(#${id}f)`} stroke="#2B1E17" strokeWidth="2.5" strokeLinejoin="round" />
       {/* body */}
       <ellipse cx="72" cy="42" rx="50" ry="30" fill={`url(#${id}b)`} stroke="#2B1E17" strokeWidth="2.5" />
       <ellipse cx="78" cy="26" rx="26" ry="6" fill="#fff" opacity="0.8" />
       {/* side fin */}
-      <path d="M 66 56 Q 74 70 84 60 Z" fill={`url(#${id}f)`} stroke="#2B1E17" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M 66 56 Q 74 70 84 60 Z" fill={`url(#${id}f)`} stroke="#2B1E17" strokeWidth="2" strokeLinejoin="round" style={{ transformOrigin: '70px 57px', animation: 'lep1-tail 0.7s ease-in-out infinite reverse' }} />
+      {/* little bubbles from the mouth */}
+      <circle cx="124" cy="40" r="2.5" fill="#fff" opacity="0.8" style={{ transformBox: 'fill-box', transformOrigin: 'center', animation: 'lep1-smoke 2.4s ease-out infinite' }} />
       {/* eye, cheek, smile */}
       <circle cx="104" cy="34" r="7.5" fill="#fff" stroke="#2B1E17" strokeWidth="2" />
       <circle cx="105.5" cy="34.5" r="4.4" fill="#2B1E17" />

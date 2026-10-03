@@ -3,7 +3,7 @@ import type { Scene } from '../scenes';
 import { cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
-import { ShapeIcon, sayWithin } from './shared';
+import { STICKER_TILTS, ShapeIcon, StickerButton, sayWithin } from './shared';
 
 /* ---------- Which One Is Different? (odd one out) ----------
  * The "which one doesn't belong?" classification game from Khan Academy
@@ -75,23 +75,22 @@ export function OddOneOutScene({ scene, onWin, onLose, onNext, sync }: { scene: 
 
       {/* Cards on the open right side, so the character in the picture stays visible. */}
       <div className="absolute bottom-[9%] right-[4%] top-[14%] z-20 flex w-[58%] items-center justify-center">
-        <div className="grid grid-cols-2 gap-4 sm:gap-5">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-4">
           {r.items.map((it, i) => {
             const isOdd = i === r.odd;
-            const dim = solved && !isOdd;
             return (
-              <button
+              <StickerButton
                 key={`${round}-${i}`}
                 onClick={() => tap(i)}
-                aria-label={it.label}
-                className={`relative grid h-[min(30vh,25vw)] w-[min(30vh,25vw)] max-h-48 max-w-48 place-items-center rounded-3xl border-[5px] bg-white/95 p-4 shadow-2xl transition active:scale-95 ${wrong === i ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : solved && isOdd ? 'scale-110 border-green-400 ring-8 ring-green-300/60' : 'border-white'} ${dim ? 'opacity-50' : ''}`}
-                style={{ animation: wrong === i ? undefined : `lep1-pop 0.35s ease-out ${i * 0.08}s both` }}
+                label={it.label}
+                tilt={STICKER_TILTS[(i + round) % STICKER_TILTS.length]}
+                state={wrong === i ? 'wrong' : solved && isOdd ? 'right' : solved ? 'dim' : undefined}
+                delay={i * 0.08}
               >
                 {it.img
                   ? <img src={it.img} alt="" draggable={false} className="h-full w-full object-contain" />
-                  : <span className="block h-full w-full"><ShapeIcon shape={it.shape ?? 'circle'} fill={it.colorHex ?? '#ccc'} /></span>}
-                {solved && isOdd && <span className="absolute -right-3 -top-3 grid h-10 w-10 place-items-center rounded-full bg-green-500 text-xl text-white shadow-lg">✓</span>}
-              </button>
+                  : <span className="block h-full w-full p-[8%]"><ShapeIcon shape={it.shape ?? 'circle'} fill={it.colorHex ?? '#ccc'} /></span>}
+              </StickerButton>
             );
           })}
         </div>

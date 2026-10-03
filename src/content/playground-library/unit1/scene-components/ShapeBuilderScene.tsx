@@ -4,7 +4,7 @@ import { CAST } from '../scenes';
 import { cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
-import { ShapeIcon, sayWithin } from './shared';
+import { STICKER_TILTS, ShapeIcon, StickerButton, sayWithin, shade } from './shared';
 
 /* ---------- Shape Builders (Pre-A1 Unit 2 Lesson 3 signature game) ----------
  * The "make a picture with shapes" activity of ESL shape lessons (shape-collage
@@ -40,20 +40,40 @@ type Round = Extract<Scene, { kind: 'shape-builder' }>['rounds'][number];
 type Piece = Round['pieces'][number];
 
 /** One shape drawn in the board's 100×70 coordinate space. */
-function PieceShape({ p, fill, ghost }: { p: Piece; fill: string; ghost?: boolean }) {
+const gradId = (hex: string) => `pg-${hex.replace('#', '')}`;
+
+/** Glossy toy-piece look (lighter top, shine, darker edge); ghosts stay dashed outlines. */
+function PieceShape({ p, fill, ghost, pop }: { p: Piece; fill: string; ghost?: boolean; pop?: boolean }) {
   const common = ghost
     ? { fill: 'rgba(255,255,255,0.55)', stroke: '#FE6A2F', strokeWidth: 0.8, strokeDasharray: '2 1.4' }
-    : { fill, stroke: '#2B1E17', strokeWidth: 0.7 };
+    : { fill: `url(#${gradId(fill)})`, stroke: shade(fill, -0.45), strokeWidth: 0.9 };
+  const shine = { fill: '#fff', opacity: 0.45 };
+  const anim = pop ? { style: { transformBox: 'fill-box' as const, transformOrigin: 'center', animation: 'lep1-pop 0.5s ease-out' } } : {};
   if (p.shape === 'circle') {
-    return <ellipse cx={p.x + p.w / 2} cy={p.y + p.h / 2} rx={p.w / 2} ry={p.h / 2} {...common} />;
+    return (
+      <g {...anim}>
+        <ellipse cx={p.x + p.w / 2} cy={p.y + p.h / 2} rx={p.w / 2} ry={p.h / 2} {...common} />
+        {!ghost && <ellipse cx={p.x + p.w * 0.36} cy={p.y + p.h * 0.3} rx={p.w * 0.16} ry={p.h * 0.09} {...shine} transform={`rotate(-25 ${p.x + p.w * 0.36} ${p.y + p.h * 0.3})`} />}
+      </g>
+    );
   }
   if (p.shape === 'square') {
-    return <rect x={p.x} y={p.y} width={p.w} height={p.h} rx={1.2} {...common} />;
+    return (
+      <g {...anim}>
+        <rect x={p.x} y={p.y} width={p.w} height={p.h} rx={Math.min(p.w, p.h) * 0.12} {...common} />
+        {!ghost && <rect x={p.x + p.w * 0.12} y={p.y + p.h * 0.12} width={p.w * 0.42} height={Math.max(1, p.h * 0.12)} rx={p.h * 0.06} {...shine} />}
+      </g>
+    );
   }
   const pts = p.flip
     ? `${p.x},${p.y} ${p.x + p.w},${p.y} ${p.x + p.w / 2},${p.y + p.h}`
     : `${p.x + p.w / 2},${p.y} ${p.x + p.w},${p.y + p.h} ${p.x},${p.y + p.h}`;
-  return <polygon points={pts} strokeLinejoin="round" {...common} />;
+  return (
+    <g {...anim}>
+      <polygon points={pts} strokeLinejoin="round" {...common} />
+      {!ghost && !p.flip && <line x1={p.x + p.w * 0.46} y1={p.y + p.h * 0.22} x2={p.x + p.w * 0.3} y2={p.y + p.h * 0.6} stroke="#fff" strokeWidth={Math.max(0.8, p.w * 0.05)} strokeLinecap="round" opacity={0.45} />}
+    </g>
+  );
 }
 
 
@@ -66,8 +86,17 @@ function Board({ rd, placed, ghost, alive, small }: { rd: Round; placed: number;
       style={alive && rd.alive === 'launch' ? { transform: 'translateY(-70vh)' } : undefined}
       aria-label={rd.label}
     >
+      <defs>
+        {[...new Set(rd.pieces.map((pc) => pc.colorHex))].map((hex) => (
+          <linearGradient key={hex} id={gradId(hex)} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor={shade(hex, 0.35)} />
+            <stop offset="0.55" stopColor={hex} />
+            <stop offset="1" stopColor={shade(hex, -0.12)} />
+          </linearGradient>
+        ))}
+      </defs>
       <g className={alive && rd.alive === 'bounce' ? 'animate-[lep1-hop_0.8s_ease-in-out_infinite]' : alive && rd.alive === 'wiggle' ? 'animate-[lep1-shake_0.6s_ease-in-out_infinite]' : ''} style={{ transformBox: 'fill-box', transformOrigin: 'center' }}>
-        {rd.pieces.map((pc, i) => (i < placed ? <PieceShape key={i} p={pc} fill={pc.colorHex} /> : null))}
+        {rd.pieces.map((pc, i) => (i < placed ? <PieceShape key={i} p={pc} fill={pc.colorHex} pop={i === placed - 1} /> : null))}
         {ghost != null && rd.pieces.map((pc, i) => (i > ghost ? <g key={`f${i}`} opacity={0.35}><PieceShape p={pc} fill="" ghost /></g> : null))}
         {ghost != null && rd.pieces[ghost] && <g className="animate-pulse"><PieceShape p={rd.pieces[ghost]} fill="" ghost /></g>}
       </g>
@@ -196,24 +225,17 @@ export function ShapeBuilderScene({ scene, onWin, onLose, onNext, sync }: { scen
       {/* Answers: the three shape words, then three pieces of that shape */}
       <div className="absolute inset-x-0 bottom-[5%] z-30 flex flex-wrap justify-center gap-4 px-4">
         {phase === 'name' && SHAPE_WORDS.map((w) => (
-          <button
-            key={w}
-            onClick={() => tapName(w)}
-            className={`flex min-h-[64px] flex-col items-center rounded-3xl border-4 bg-white px-5 py-2 shadow-2xl transition active:scale-95 ${wrong === w ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : 'border-white'}`}
-          >
-            <span className="block h-12 w-12"><ShapeIcon shape={w} fill="#FEFBDD" /></span>
-            <span className="mt-1 text-lg font-black text-neutral-800">{w}</span>
-          </button>
+          <div key={w} className="flex flex-col items-center">
+            <StickerButton onClick={() => tapName(w)} label={w} tilt={STICKER_TILTS[SHAPE_WORDS.indexOf(w)]} state={wrong === w ? 'wrong' : undefined} size="h-20 w-20 sm:h-24 sm:w-24">
+              <span className="block h-full w-full p-[6%]"><ShapeIcon shape={w} fill="#E7E5E4" /></span>
+            </StickerButton>
+            <span className="-mt-1 rounded-full bg-white/85 px-2 text-sm font-black text-neutral-700 shadow">{w}</span>
+          </div>
         ))}
         {phase === 'pick' && p && tray.map((c) => (
-          <button
-            key={c.colorWord}
-            onClick={() => tapPiece(c.colorWord)}
-            aria-label={`${c.colorWord.toLowerCase()} ${p.shape}`}
-            className={`grid h-24 w-24 place-items-center rounded-3xl border-4 bg-white p-2 shadow-2xl transition active:scale-95 ${wrong === c.colorWord ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : 'border-white'}`}
-          >
-            <ShapeIcon shape={p.shape} fill={c.colorHex} />
-          </button>
+          <StickerButton key={c.colorWord} onClick={() => tapPiece(c.colorWord)} label={`${c.colorWord.toLowerCase()} ${p.shape}`} tilt={STICKER_TILTS[tray.indexOf(c) % STICKER_TILTS.length]} state={wrong === c.colorWord ? 'wrong' : undefined} size="h-24 w-24 sm:h-28 sm:w-28">
+            <span className="block h-full w-full p-[6%]"><ShapeIcon shape={p.shape} fill={c.colorHex} /></span>
+          </StickerButton>
         ))}
       </div>
     </div>

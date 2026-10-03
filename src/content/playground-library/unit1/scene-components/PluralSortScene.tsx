@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Scene } from '../scenes';
 import { cueSpeak, cueSpeakOnce } from '../audio';
 import * as sfx from '../sfx';
-import { scatterPositions } from './shared';
+import { STICKER_FILTER, STICKER_TILTS, scatterPositions } from './shared';
 
 /* ---------- Plural sort (drag each picture into "It is" or "They are") ----------
  * Non-reader version: the bins are pictures (one finger = ONE, two hands =
@@ -105,8 +105,8 @@ export function PluralSortScene({ scene, onWin, onLose, onNext }: { scene: Extra
           <button
             key={s.idx}
             onPointerDown={onDown(s.idx)} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-            className={`absolute z-20 flex items-center justify-center rounded-3xl border-4 border-white bg-white shadow-xl transition ${s.dragging ? 'scale-110' : ''} ${s.flash === 'bad' ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`}
-            style={{ left: pos.left, top: pos.top, width: 'clamp(88px, calc(16*var(--svh,1vh)), 208px)', height: 'clamp(88px, calc(16*var(--svh,1vh)), 208px)', transform: s.dragging ? `translate(${s.dx}px, ${s.dy}px) scale(1.1)` : undefined, touchAction: 'none' }}
+            className={`absolute z-20 flex items-center justify-center transition ${s.dragging ? 'scale-110' : ''} ${s.flash === 'bad' ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`}
+            style={{ left: pos.left, top: pos.top, width: 'clamp(96px, calc(19*var(--svh,1vh)), 220px)', height: 'clamp(96px, calc(19*var(--svh,1vh)), 220px)', transform: s.dragging ? `translate(${s.dx}px, ${s.dy}px) scale(1.1)` : `rotate(${STICKER_TILTS[s.idx % STICKER_TILTS.length]}deg)`, touchAction: 'none', filter: STICKER_FILTER }}
             aria-label={s.it.word}
           >
             {s.it.plural && s.it.group && s.it.img ? (

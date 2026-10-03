@@ -4464,7 +4464,7 @@ export const LESSON_U3L1_SCENES: Scene[] = [
     teacher: 'The toy workshop! Build a toy: name each shape, then pick the color you hear.',
     rounds: [
       {
-        who: 'willow', label: 'Car', intro: "Let's build a car!", line: "It's a car!", alive: 'launch',
+        who: 'willow', label: 'Car', intro: "Let's build a car!", line: "It's a car!", alive: 'bounce',
         pieces: [
           { shape: 'square', colorWord: 'BLUE', colorHex: C4.BLUE, x: 18, y: 28, w: 58, h: 18 },
           { shape: 'square', colorWord: 'YELLOW', colorHex: C4.YELLOW, x: 32, y: 12, w: 28, h: 16 },
@@ -4728,7 +4728,7 @@ export const LESSON_U3L2_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u3l2-train-recall', kind: 'train-recall', bg: bgU3L2Train, teacher: "All aboard Willow's train! Remember the toy in each car.",
+    id: 'u3l2-train-recall', kind: 'train-recall', bg: bgU3L1Room, teacher: "All aboard Willow's train! Remember the toy in each car.",
     cars: [
       { word: 'TEDDY BEAR', img: itemTeddy, emoji: '\u{1F9F8}' },
       { word: 'BLOCKS', img: itemBlocks, emoji: '\u{1F9F1}' },
@@ -4831,7 +4831,7 @@ export const LESSON_U3L2_SCENES: Scene[] = [
     teacher: 'Extra time — Build a train! Name each shape, then pick the color you hear.',
     rounds: [
       {
-        who: 'willow', label: 'Train', intro: "Let's build a train!", line: "It's a train! Choo choo!", alive: 'launch',
+        who: 'willow', label: 'Train', intro: "Let's build a train!", line: "It's a train! Choo choo!", alive: 'bounce',
         pieces: [
           { shape: 'square', colorWord: 'RED', colorHex: C4.RED, x: 8, y: 20, w: 28, h: 30 },
           { shape: 'triangle', colorWord: 'YELLOW', colorHex: C4.YELLOW, x: 12, y: 4, w: 12, h: 16 },

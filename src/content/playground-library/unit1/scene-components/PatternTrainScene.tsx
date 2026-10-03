@@ -3,7 +3,7 @@ import type { Scene } from '../scenes';
 import { cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
-import { ShapeIcon, sayWithin } from './shared';
+import { STICKER_TILTS, ShapeIcon, StickerButton, TrainEngine, TrainTrack, TrainWagon, sayWithin } from './shared';
 
 /* ---------- What Comes Next? (pattern train) ----------
  * Pattern completion as in Khan Academy Kids' pattern / sorting activities
@@ -20,6 +20,7 @@ export function nextLine(colorWord: string, shape: string) {
 
 type Car = { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' };
 const key = (c: Car) => `${c.colorWord}:${c.shape}`;
+const WAGON_COLORS = ['#3B82F6', '#22C55E', '#F59E0B', '#A855F7', '#14B8A6', '#EC4899'];
 
 export function PatternTrainScene({ scene, onWin, onLose, onNext, sync }: { scene: Extract<Scene, { kind: 'pattern-train' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void; sync?: ActivitySync }) {
   const [state, setState] = useSyncedState(sync, {
@@ -79,32 +80,34 @@ export function PatternTrainScene({ scene, onWin, onLose, onNext, sync }: { scen
         <span className="ml-2 rounded-full bg-orange-100 px-2 py-0.5 text-sm text-orange-600">{round + 1}/{total}</span>
       </div>
 
-      {/* The train */}
-      <div className="absolute inset-x-0 top-[26%] z-20 flex justify-center px-3">
-        <div className="flex items-end gap-2 transition-transform duration-[1200ms] ease-in" style={{ transform: solved ? 'translateX(120vw)' : undefined }}>
-          <div className="grid h-[17vh] w-[15vh] place-items-center rounded-t-3xl rounded-bl-3xl bg-red-500 text-[8vh] shadow-xl ring-4 ring-white">🚂</div>
+      {/* The train: a drawn toy train on a track; it chugs away when the pattern is done. */}
+      <div className="absolute inset-x-0 top-[24%] z-20 flex flex-col items-center px-3">
+        <div className="flex items-end gap-1 transition-transform duration-[1600ms] ease-in" style={{ transform: solved ? 'translateX(-130vw)' : undefined }}>
+          <TrainEngine moving={solved} className="h-[19vh] w-[23vh] shrink-0" />
           {cars.map((c, i) => (
-            <div key={i} className="flex flex-col items-center">
-              <div className={`grid h-[15vh] w-[15vh] place-items-center rounded-2xl border-4 shadow-xl ${c ? 'border-white bg-amber-100' : 'animate-pulse border-dashed border-orange-400 bg-white/80'}`}>
-                {c ? <span className="block h-[10vh] w-[10vh]"><ShapeIcon shape={c.shape} fill={c.colorHex} /></span> : <span className="text-[7vh] font-black text-orange-400">?</span>}
-              </div>
-              <div className="-mt-1 flex gap-4"><span className="block h-4 w-4 rounded-full bg-neutral-700" /><span className="block h-4 w-4 rounded-full bg-neutral-700" /></div>
-            </div>
+            <TrainWagon key={i} color={WAGON_COLORS[i % WAGON_COLORS.length]} moving={solved} glow={!c} className="h-[19vh] w-[17.5vh] shrink-0">
+              {c
+                ? <span className="block h-[8.5vh] w-[8.5vh]" style={{ animation: i === cars.length - 1 ? 'lep1-pop 0.5s ease-out' : undefined }}><ShapeIcon shape={c.shape} fill={c.colorHex} /></span>
+                : <span className="text-[6vh] font-black text-orange-400">?</span>}
+            </TrainWagon>
           ))}
         </div>
+        <TrainTrack moving={solved} className="-mt-[1.2vh] w-[96%]" />
       </div>
 
       {/* Choices */}
       <div className="absolute inset-x-0 bottom-[6%] z-30 flex flex-wrap justify-center gap-4 px-4">
         {r.options.map((c) => (
-          <button
+          <StickerButton
             key={key(c)}
             onClick={() => pick(c)}
-            aria-label={`${c.colorWord.toLowerCase()} ${c.shape}`}
-            className={`grid h-24 w-24 place-items-center rounded-3xl border-4 bg-white p-3 shadow-2xl transition active:scale-95 ${wrong === key(c) ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : 'border-white'}`}
+            label={`${c.colorWord.toLowerCase()} ${c.shape}`}
+            tilt={STICKER_TILTS[r.options.indexOf(c) % STICKER_TILTS.length]}
+            state={wrong === key(c) ? 'wrong' : undefined}
+            size="h-24 w-24 sm:h-28 sm:w-28"
           >
-            <ShapeIcon shape={c.shape} fill={c.colorHex} />
-          </button>
+            <span className="block h-full w-full p-[6%]"><ShapeIcon shape={c.shape} fill={c.colorHex} /></span>
+          </StickerButton>
         ))}
       </div>
     </div>

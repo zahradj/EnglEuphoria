@@ -3,7 +3,7 @@ import type { Scene } from '../scenes';
 import { cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
-import { ShapeIcon, sayWithin } from './shared';
+import { sayWithin, ShapeIcon, STICKER_FILTER, STICKER_TILTS } from './shared';
 
 /* ---------- Pip's Secret Card (Pre-A1 Unit 2 Lesson 4 signature game) ----------
  * "Guess Who" with Unit 2's colours and shapes: Pip hides one of six coloured
@@ -144,9 +144,13 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
             <div
               key={i}
               aria-label={`${c.colorWord.toLowerCase()} ${c.shape}`}
-              className={`grid aspect-[4/3] place-items-center rounded-3xl border-4 p-3 shadow-xl transition-all duration-500 ${gone ? 'scale-90 border-white/40 bg-white/30 opacity-30 grayscale' : 'border-white bg-white/95'} ${isSecret ? 'scale-110 ring-8 ring-yellow-300 animate-[lep1-hop_0.8s_ease-in-out_infinite]' : ''}`}
+              className={`grid aspect-[4/3] place-items-center transition-all duration-500 ${gone ? 'scale-75 opacity-25 grayscale' : ''} ${isSecret ? 'scale-125 animate-[lep1-hop_0.8s_ease-in-out_infinite]' : ''}`}
             >
-              <span className="block h-[10vh] w-[10vh] max-w-full"><ShapeIcon shape={c.shape} fill={c.colorHex} /></span>
+              {/* Each card is a die-cut sticker of its shape (no white frame). */}
+              <span className="relative block h-[12vh] w-[12vh] max-w-full" style={{ filter: STICKER_FILTER, transform: `rotate(${STICKER_TILTS[i % STICKER_TILTS.length]}deg)` }}>
+                {isSecret && <span className="absolute -inset-3 rounded-full bg-yellow-300/70 blur-xl" />}
+                <ShapeIcon shape={c.shape} fill={c.colorHex} />
+              </span>
             </div>
           );
         })}

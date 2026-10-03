@@ -3,7 +3,7 @@ import type { Scene } from '../scenes';
 import { cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
-import { sayWithin } from './shared';
+import { STICKER_TILTS, StickerButton, sayWithin } from './shared';
 
 /* ---------- The Mystery Bag ----------
  * The ESL "feely bag / mystery bag" game (games4esl.com and eslkidsgames
@@ -130,15 +130,17 @@ export function MysteryBagScene({ scene, onWin, onLose, onNext, sync }: { scene:
       {/* Picture answers (guess) / say-it card (reveal) */}
       <div className="absolute bottom-[5%] right-[4%] z-30 flex w-[60%] flex-wrap justify-center gap-4">
         {!revealed ? r.options.map((o, i) => (
-          <button
+          <StickerButton
             key={`${round}-${i}`}
             onClick={() => guess(i)}
-            aria-label={o.toyWord.toLowerCase()}
-            className={`grid h-[min(17vh,15vw)] w-[min(17vh,15vw)] place-items-center rounded-3xl border-4 bg-white p-2 shadow-2xl transition active:scale-95 ${wrong === i ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : 'border-white'}`}
-            style={{ animation: wrong === i ? undefined : `lep1-pop 0.35s ease-out ${i * 0.08}s both` }}
+            label={o.toyWord.toLowerCase()}
+            tilt={STICKER_TILTS[i % STICKER_TILTS.length]}
+            state={wrong === i ? 'wrong' : undefined}
+            size="h-[min(17vh,14vw)] w-[min(17vh,14vw)]"
+            delay={i * 0.08}
           >
             <img src={o.img} alt="" draggable={false} className="h-full w-full object-contain" />
-          </button>
+          </StickerButton>
         )) : (
           <div className="flex flex-col items-center gap-2" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
             <div className="rounded-3xl bg-white/95 px-5 py-2 text-center shadow-2xl">
