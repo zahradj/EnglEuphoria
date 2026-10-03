@@ -2872,7 +2872,7 @@ export const LESSON_U2L2_SCENES: Scene[] = [
   },
 
   /* ---- Rainbow parade ending (this lesson's own, not the shared goodbye song) ---- */
-  { id: 'u2l2-finale', kind: 'finale', bg: bgU2L2Meadow, who: 'pip', line: 'You mixed the magic paints! Green, orange, purple — goodbye, friends!' },
+  { id: 'u2l2-finale', kind: 'finale', bg: bgU2L2Meadow, who: 'pip', line: 'You made green, orange and purple! Goodbye, friends!' },
 ];
 
 /* =============================================================================
