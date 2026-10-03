@@ -992,5 +992,103 @@
       "public/lep1/scenes/bg-u3l1-playroom-wide.png"
     ],
     "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference image (bold dark outlines, soft flat colours, friendly picture-book look). The same cosy children's playroom as the reference — warm wooden floor and soft yellow walls filling the whole picture edge to edge, the window with curtains, a round rug — but EMPTY and calm: no characters, no toys, no toy box, nothing on the floor. Only the plain room. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l2-party-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A birthday party in the same cosy playroom as the first reference (warm wooden floor, soft yellow walls filling the whole picture edge to edge, window with curtains), with balloons and paper garlands. Leo the yellow lion (same design as the reference) wears a little party hat in the middle and smiles; in front of him are THREE wrapped presents with bows (one big, one long, one round). The other friends cheer around him: Pip the orange fox, Willow the blue bird with a green scarf, Bella the white bunny, Mia the grey mouse with an orange bow. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l2-teddy-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). the same cosy playroom as the first reference (warm wooden floor, soft yellow walls filling the whole picture edge to edge, window with curtains). Leo the yellow lion (same design as the reference) on the LEFT hugs one soft BROWN TEDDY BEAR, eyes closed, very happy, torn wrapping paper at his feet. The right half of the picture is open playroom. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l2-blocks-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). the same cosy playroom as the first reference (warm wooden floor, soft yellow walls filling the whole picture edge to edge, window with curtains). Bella the white bunny (same design as the reference) on the LEFT kneels and stacks colourful toy BLOCKS (red, blue, yellow, green cubes) into a little tower, more blocks on the floor. The right half is open playroom. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l2-train-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). the same cosy playroom as the first reference (warm wooden floor, soft yellow walls filling the whole picture edge to edge, window with curtains). Willow the blue bird with a green scarf (same design as the reference) on the LEFT kneels next to one RED TOY TRAIN (an engine and two small wagons) on a little wooden track, smiling. The right half is open playroom. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l2-cake-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). The birthday party in the same cosy playroom as the first reference (warm wooden floor, soft yellow walls filling the whole picture edge to edge, window with curtains). All five friends from the references play together: a tall tower of colourful toy blocks, a red toy train going round a track, Leo the yellow lion hugging a brown teddy bear, and a birthday cake with candles on a little table. Everyone is laughing. Balloons and garlands. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l2-shelf-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A wide wooden toy shelf seen straight on, filling the picture, with TWO long shelves and plain warm wall behind. Six groups of toys stand apart with clear space between them. TOP shelf, left to right: ONE brown teddy bear alone; THREE brown teddy bears sitting together; ONE red toy train alone. BOTTOM shelf, left to right: a pile of colourful toy blocks; ONE red ball alone; THREE red balls together. No characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-teddies.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png",
+      "public/lep1/items/item-teddy.png"
+    ],
+    "prompt": "THREE soft brown teddy bears sitting close together side by side, like the teddy bear reference, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/items/item-trains.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png",
+      "public/lep1/items/item-teddy.png"
+    ],
+    "prompt": "TWO small red toy trains side by side, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/items/item-balls.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png",
+      "public/lep1/items/item-teddy.png"
+    ],
+    "prompt": "THREE plain round RED toy balls with cute happy faces, grouped together, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/items/item-cars.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png",
+      "public/lep1/items/item-teddy.png"
+    ],
+    "prompt": "THREE small BLUE toy cars with cute happy faces, grouped together, exactly like the blue car reference, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/items/item-dolls.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png",
+      "public/lep1/items/item-teddy.png"
+    ],
+    "prompt": "THREE baby dolls in GREEN dresses sitting together, exactly like the doll reference, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
   }
 ]
