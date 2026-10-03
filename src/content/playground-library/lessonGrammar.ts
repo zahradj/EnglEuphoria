@@ -59,6 +59,30 @@ export const LESSON_GRAMMAR: Record<string, LessonGrammarEntry> = {
     ],
     examples: ['What color is this?', "It's red!", 'What shape is this?', "It's a circle!", 'Is it blue?', "No, it isn't!", 'Yes, it is!'],
   },
+  // Pre-A1 Unit 2 Lesson 5 — The Rainbow Fish's Scales (Shelly's story)
+  'lep1-rich-2-5': {
+    pattern: 'What color do you want? — I want + color, please.',
+    cefr: 'Pre-A1',
+    forms: [
+      { label: 'Ask what someone wants', formula: 'What color do you want?' },
+      { label: 'Say what you want', formula: 'I want + red, please!' },
+      { label: 'Give it', formula: 'Here you are!' },
+      { label: 'Say thanks', formula: 'Thank you!' },
+    ],
+    examples: ['What color do you want?', 'I want red, please!', 'Here you are! A red circle!', 'Thank you!'],
+  },
+  // Pre-A1 Unit 2 Lesson 6 — Color & Shape Hunt (unit review)
+  'lep1-rich-2-6': {
+    pattern: "It's a + color + shape",
+    cefr: 'Pre-A1',
+    forms: [
+      { label: 'Color and shape together', formula: 'a + green + triangle' },
+      { label: 'Say what it is', formula: "It's a + blue + square" },
+      { label: 'Yes / no question', formula: 'Is it + green? / Is it + a circle?' },
+      { label: 'Say what you like', formula: 'I like + color' },
+    ],
+    examples: ["It's a red circle!", "It's a blue square!", 'Find a green triangle!', 'Is it purple?', 'I like orange!'],
+  },
   // A1 Unit 9 Lesson 1 — Magic Castle: rooms and furniture
   'castle-rich-9-1': {
     pattern: 'There is / There is no',

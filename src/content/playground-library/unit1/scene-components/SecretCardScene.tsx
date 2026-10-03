@@ -19,7 +19,8 @@ export function askLine(kind: 'color' | 'shape', word: string) {
   return kind === 'color' ? `Is it ${word.toLowerCase()}?` : `Is it a ${word.toLowerCase()}?`;
 }
 export function foundLine(colorWord: string, shape: string) {
-  return `You found it! It's a ${colorWord.toLowerCase()} ${shape}!`;
+  const c = colorWord.toLowerCase();
+  return `You found it! It's ${/^[aeiou]/.test(c) ? 'an' : 'a'} ${c} ${shape}!`;
 }
 
 type Card = Extract<Scene, { kind: 'secret-card' }>['cards'][number];

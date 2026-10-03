@@ -110,7 +110,7 @@ new Pre-A1 lesson needs it, that's exactly when to run the Research Step.
 |---|---|
 | **Discovery / model** (new content, teacher-led, first exposure) | `meet`, `meet-group`, `meet-greet`, `name-gate`, `sound-model`, `color-model`, `shape-model`, `toy-model`, `numbers-learn`, `he-she-model`, `listen-repeat-cards` |
 | **Controlled / recognition practice** (low-risk, guided) | `listen-colour`, `picture-match`, `echo`, `trace`, `sound-sort`, `color-sort`, `shape-sort`, `plural-sort`, `he-she-sort`, `color-spot`, `color-spy`, `alphabet-order`, `alphabet-blocks`, `basket`, `count-balloons`, `age-balloons` |
-| **Interactive game practice** (student-led, real stakes, game-feel) | `word-build`, `sentence-build`, `dash`, `catch-sort`, `sound-pop`, `brick-crush`, `gather`, `memory`, `puzzle`, `hello-doors`, `friend-pop`, `feed-monsters`, `color-simon`, `train-recall`, `feelings-dice`, `feelings-wheel`, `x-is-feeling`, `i-am-feeling`, `age-sentence-match`, `who-said-it`, `color-mix`, `shape-builder`, `shape-fishing`, `pattern-train` |
+| **Interactive game practice** (student-led, real stakes, game-feel) | `word-build`, `sentence-build`, `dash`, `catch-sort`, `sound-pop`, `brick-crush`, `gather`, `memory`, `puzzle`, `hello-doors`, `friend-pop`, `feed-monsters`, `color-simon`, `train-recall`, `odd-one-out`, `shape-torch`, `feelings-dice`, `feelings-wheel`, `x-is-feeling`, `i-am-feeling`, `age-sentence-match`, `who-said-it`, `color-mix`, `shape-builder`, `shape-fishing`, `pattern-train` |
 | **Speaking production** | `roleplay`, `join-stage`, `voice-stage`, `he-she-say`, `spin-wheel`, `secret-card` (child asks yes/no questions) |
 | **Story** | `story-video` (animated, narrated, picture questions — preferred for Pre-A1 non-readers), `flipbook` (text pages; needs an adult to read), `story-order` (jumbled pictures → retell), `tick-cross` (listen: true or false?) |
 | **Review / assessment / boss** | `trophy-chest`, `feelings-bingo`, `age-quiz`, `color-quiz`, `feeling-quiz` (plus any of the interactive-practice kinds above, re-run at higher difficulty with no new content) |
@@ -135,6 +135,8 @@ avoid-forever rule for a `kind` that's otherwise fine elsewhere.
 | Story as an animated film (no reading) | pre/while/post storytelling for very young learners (Cambridge ELT blog) | `story-video` | following a story by listening; picture-answer checks |
 | Tick or cross | Cambridge Pre A1 Starters R&W Part 1 (listening-first for non-readers) | `tick-cross` | comprehension |
 | Jumbled pictures → retell | storytelling retell research (Kids Club English) | `story-order` | sequence + retell |
+| Which one is different? (odd one out) | Khan Academy Kids / Lingokids sorting, preschool odd-one-out | `odd-one-out` | grouping by colour/shape, saying why |
+| Torch hunt in the dark (picture-only) | "flashlight I spy" hidden-object apps; A1 Magic Castle `torch-hunt` | `shape-torch` | colour+shape listening, exploration |
 
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
 

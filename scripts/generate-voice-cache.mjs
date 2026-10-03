@@ -331,10 +331,21 @@ const UNIT1_EXTRACTORS = {
     ...(s.checkpoints ?? []).flatMap((c) => [[c.who, c.question], [c.who, `Yes! ${c.answer}!`]]),
   ],
   'story-order': (s) => (s.frames ?? []).map((f) => [f.who ?? s.who, f.caption]),
+  // Mirrors OddOneOutScene.tsx's oddOneOutLines().
+  'odd-one-out': (s) => [[s.who, 'Which one is different?'], ...(s.rounds ?? []).map((r) => [s.who, r.line])],
+  // Mirrors ShapeTorchScene.tsx's shapeTorchLines() (find / found / "That's a … ." for every gem).
+  'shape-torch': (s) => {
+    const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
+    const t = (s.targets ?? []).map((i) => s.gems?.[i]).filter(Boolean).flatMap((g) => [
+      [s.who, `Find ${art(g.colorWord)} ${g.colorWord.toLowerCase()} ${g.shape}!`],
+      [s.who, `Yes! ${art(g.colorWord) === 'an' ? 'An' : 'A'} ${g.colorWord.toLowerCase()} ${g.shape}!`],
+    ]);
+    return [...t, ...(s.gems ?? []).map((g) => [s.who, `That's ${art(g.colorWord)} ${g.colorWord.toLowerCase()} ${g.shape}.`])];
+  },
   // Mirrors SecretCardScene.tsx's secretCardLines().
   'secret-card': (s) => [
     [s.who, 'I have a secret card. Ask me!'], [s.who, 'Yes, it is!'], [s.who, "No, it isn't!"],
-    ...(s.rounds ?? []).map((r) => s.cards?.[r.secret]).filter(Boolean).map((c) => [s.who, `You found it! It's a ${c.colorWord.toLowerCase()} ${c.shape}!`]),
+    ...(s.rounds ?? []).map((r) => s.cards?.[r.secret]).filter(Boolean).map((c) => [s.who, `You found it! It's ${/^[aeiou]/i.test(c.colorWord) ? 'an' : 'a'} ${c.colorWord.toLowerCase()} ${c.shape}!`]),
   ],
   // Mirrors ShapeBuilderScene.tsx's shapeBuilderLines().
   'shape-builder': (s) => [
