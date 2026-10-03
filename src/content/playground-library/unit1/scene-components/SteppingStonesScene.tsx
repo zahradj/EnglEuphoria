@@ -122,7 +122,7 @@ export function SteppingStonesScene({ scene, onWin, onLose, onNext, sync }: { sc
       </div>
 
       {/* The character hops (transition) to where it stands */}
-      <div className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-[88%] transition-all duration-700" style={{ left: `${at.x}%`, top: `${at.y}%`, width: '9%', transitionTimingFunction: 'cubic-bezier(.3,1.6,.5,1)' }}>
+      <div className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-[88%] transition-all duration-700" style={{ left: `${at.x}%`, top: `${at.y}%`, width: '12%', transitionTimingFunction: 'cubic-bezier(.3,1.6,.5,1)' }}>
         <img src={walker.img} alt={walker.name} draggable={false} className="w-full" style={{ filter: STICKER_FILTER }} />
       </div>
 

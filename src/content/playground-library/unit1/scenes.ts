@@ -4256,15 +4256,15 @@ export const LESSON_U2L6_SCENES: Scene[] = [
   },
   {
     // NEW (2026-10): Draw Path (Lingokids) — listen, then draw Leo's way to the gem.
-    id: 'u2l6-draw-path', kind: 'draw-path', bg: bgU2L6Map, who: 'leo', walker: 'leo',
+    id: 'u2l6-draw-path', kind: 'draw-path', bg: bgMeadow, who: 'leo', walker: 'leo',
     teacher: 'Listen and draw! Draw a line from Leo to the gem he says. Leo walks your line.',
-    start: { x: 10, y: 72 },
+    start: { x: 9, y: 84 },
     spots: [
-      { label: 'purple circle', img: itemGemPurpleCircle, x: 30, y: 38, size: 9 },
-      { label: 'green triangle', img: itemGemGreenTriangle, x: 52, y: 70, size: 9 },
-      { label: 'orange square', img: itemGemOrangeSquare, x: 70, y: 34, size: 9 },
-      { label: 'red circle', img: itemGemRedCircle, x: 86, y: 66, size: 9 },
-      { label: 'blue square', img: itemGemBlueSquare, x: 44, y: 50, size: 8 },
+      { label: 'purple circle', img: itemGemPurpleCircle, x: 30, y: 60, size: 9 },
+      { label: 'green triangle', img: itemGemGreenTriangle, x: 50, y: 84, size: 9 },
+      { label: 'orange square', img: itemGemOrangeSquare, x: 66, y: 58, size: 9 },
+      { label: 'red circle', img: itemGemRedCircle, x: 86, y: 78, size: 9 },
+      { label: 'blue square', img: itemGemBlueSquare, x: 46, y: 66, size: 8 },
     ],
     rounds: [
       { line: 'Take Leo to the purple circle!', target: 0, reply: "It's a purple circle!" },
