@@ -1,2 +1,2 @@
-# u2l5: Shelly song, strict lyric check (retry)
+# u2l5: Shelly song, round 2
 u2l5-shelly
