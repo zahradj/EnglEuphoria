@@ -11,6 +11,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import { EmptyState } from '@/components/ui/empty-state';
 import { FeedbackReportDialog } from '@/components/classroom/FeedbackReportDialog';
 import { LessonWrapUpDialog } from '@/components/classroom/LessonWrapUpDialog';
+import { cn } from '@/lib/utils';
+import { resolveCalendarColor } from '@/lib/calendarColors';
+import { formatTimeRange } from '@/lib/timeRange';
 
 /** Raw class_bookings.status values this card cares about. */
 type BookingStatus = 'scheduled' | 'confirmed' | 'completed' | 'failed_technical' | 'ended_early' | 'cancelled' | 'student_absent' | 'teacher_absent' | string;
@@ -86,35 +89,55 @@ const LessonItem: React.FC<LessonItemProps> = ({ lesson, onOpenFeedback, onWrite
     if (lesson.status === 'completed') onOpenFeedback?.(lesson);
     else if (lesson.status === 'needs-feedback') onWriteFeedback?.(lesson);
   };
+  const clickable = lesson.status === 'completed' || lesson.status === 'needs-feedback';
+  // The lesson's hub colour (Playground orange, Academy violet, Success green).
+  const hubColor = resolveCalendarColor(lesson.hubType);
+  const end = new Date(lesson.scheduledAt.getTime() + lesson.durationMin * 60_000);
+  const minsToStart = Math.round((lesson.scheduledAt.getTime() - Date.now()) / 60_000);
+  const startingSoon = lesson.status === 'upcoming' && minsToStart <= 60 && minsToStart > -lesson.durationMin;
+  const soonLabel = minsToStart <= 0 ? 'Happening now' : minsToStart < 60 ? `Starts in ${minsToStart} min` : 'Starts in 1 h';
+
   return (
     <div
-      className="group flex items-center gap-3 p-3 rounded-xl border border-border/50 bg-card hover:border-border hover:shadow-sm transition-all cursor-pointer"
+      className={cn(
+        'group relative flex items-center gap-3.5 overflow-hidden rounded-2xl border border-border/60 bg-card p-3.5 pl-5 shadow-sm transition-all duration-150 hover:-translate-y-px hover:shadow-md',
+        clickable && 'cursor-pointer',
+      )}
       onClick={handleRowClick}
     >
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+      {/* Hub-colour accent down the left edge */}
+      <span className={cn('absolute inset-y-0 left-0 w-1.5', hubColor.card)} aria-hidden />
+
+      <div className={cn('flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-base font-extrabold text-white shadow-md', hubColor.card)}>
         {initial(lesson.studentName)}
       </div>
 
       <div className="flex-1 min-w-0">
-        {/* Student first — the lesson type sits underneath. */}
         <div className="flex items-center gap-2 flex-wrap">
-          <p className="font-semibold text-foreground truncate">
+          <p className="font-bold text-foreground truncate">
             {lesson.studentName}{lesson.studentAge ? ` (${lesson.studentAge}y)` : ''}
           </p>
+          {startingSoon && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-white shadow-sm">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+              {soonLabel}
+            </span>
+          )}
           {(lesson.status === 'completed' || lesson.status === 'needs-feedback') && (
             <OutcomeBadge rawStatus={lesson.rawStatus} faultParty={lesson.faultParty} />
           )}
         </div>
-        <div className="mt-0.5 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-          <span className="font-medium text-foreground/80">{lesson.title}</span>
-          <span className="flex items-center gap-1">
+        <p className="text-xs font-medium text-muted-foreground truncate">{lesson.title}</p>
+        <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px] font-semibold">
+          <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-foreground/80">
             <Calendar className="w-3 h-3" />
             {isToday(lesson.scheduledAt) ? 'Today' : format(lesson.scheduledAt, 'EEE, MMM d')}
           </span>
-          <span className="flex items-center gap-1">
+          <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-foreground/80">
             <Clock className="w-3 h-3" />
-            {format(lesson.scheduledAt, 'h:mm a')}
+            {formatTimeRange(lesson.scheduledAt, end)}
           </span>
+          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-primary">{lesson.durationMin} min</span>
         </div>
 
         {/* Feedback, both ways: the teacher's report and the student's 👍/👎. */}
@@ -148,7 +171,7 @@ const LessonItem: React.FC<LessonItemProps> = ({ lesson, onOpenFeedback, onWrite
       {lesson.status === 'needs-feedback' && (
         <Button
           size="sm"
-          className="gap-1.5 shrink-0"
+          className="gap-1.5 shrink-0 rounded-full bg-gradient-to-r from-primary to-violet-500 shadow-md shadow-primary/25 hover:brightness-110"
           onClick={(e) => { e.stopPropagation(); onWriteFeedback?.(lesson); }}
         >
           <MessageSquare className="w-4 h-4" />
@@ -160,7 +183,7 @@ const LessonItem: React.FC<LessonItemProps> = ({ lesson, onOpenFeedback, onWrite
         <Button
           size="sm"
           variant="outline"
-          className="gap-1 shrink-0"
+          className="gap-1 shrink-0 rounded-full"
           onClick={(e) => { e.stopPropagation(); onOpenFeedback?.(lesson); }}
         >
           View feedback
@@ -171,7 +194,7 @@ const LessonItem: React.FC<LessonItemProps> = ({ lesson, onOpenFeedback, onWrite
       {lesson.status === 'upcoming' && onEnter && (
         <Button
           size="sm"
-          className="gap-1 shrink-0"
+          className="gap-1 shrink-0 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 px-5 shadow-md shadow-emerald-500/25 hover:brightness-110"
           onClick={(e) => { e.stopPropagation(); onEnter(lesson); }}
         >
           Enter
@@ -383,12 +406,12 @@ export const LessonsListCard: React.FC = () => {
   };
 
   return (
-    <Card>
+    <Card className="overflow-hidden rounded-3xl border-border/60 shadow-sm">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-              <History className="w-4.5 h-4.5 text-primary" />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-violet-500 shadow-md shadow-primary/25">
+              <History className="w-5 h-5 text-white" />
             </div>
             <div>
               <CardTitle className="text-base leading-tight">Lessons Details</CardTitle>
@@ -404,16 +427,16 @@ export const LessonsListCard: React.FC = () => {
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3 mb-4">
-            <TabsTrigger value="upcoming" className="text-xs sm:text-sm gap-1.5">
+          <TabsList className="mb-4 grid h-auto w-full grid-cols-3 rounded-2xl bg-muted/60 p-1">
+            <TabsTrigger value="upcoming" className="gap-1.5 rounded-xl py-2 text-xs sm:text-sm data-[state=active]:bg-card data-[state=active]:font-bold data-[state=active]:shadow-sm">
               <Calendar className="w-3.5 h-3.5" />
               Upcoming ({upcomingLessons.length})
             </TabsTrigger>
-            <TabsTrigger value="past" className="text-xs sm:text-sm gap-1.5">
+            <TabsTrigger value="past" className="gap-1.5 rounded-xl py-2 text-xs sm:text-sm data-[state=active]:bg-card data-[state=active]:font-bold data-[state=active]:shadow-sm">
               <CheckCircle2 className="w-3.5 h-3.5" />
               Past ({pastLessons.length})
             </TabsTrigger>
-            <TabsTrigger value="feedback" className="text-xs sm:text-sm gap-1.5">
+            <TabsTrigger value="feedback" className="gap-1.5 rounded-xl py-2 text-xs sm:text-sm data-[state=active]:bg-card data-[state=active]:font-bold data-[state=active]:shadow-sm">
               <MessageSquare className="w-3.5 h-3.5" />
               No Feedback ({needsFeedback.length})
             </TabsTrigger>

@@ -10,7 +10,8 @@ import {
   ChevronRight,
   Loader2,
   Radio,
-  CalendarClock
+  CalendarClock,
+  Hourglass
 } from 'lucide-react';
 import { format, isToday, isTomorrow } from 'date-fns';
 import { useNextClassCountdown } from '@/hooks/useNextClassCountdown';
@@ -18,6 +19,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 import { useLiveClassroomStatus } from '@/hooks/useLiveClassroomStatus';
+import { cn } from '@/lib/utils';
+import { formatTimeRange } from '@/lib/timeRange';
 
 /** First letter of the student's name, for the avatar. */
 const initial = (name: string) => (name?.trim()[0] || '?').toUpperCase();
@@ -90,30 +93,34 @@ export const NextLessonCard: React.FC<NextLessonCardProps> = ({ disabled = false
     return 'secondary';
   };
 
+  const end = scheduledAt && nextLesson ? new Date(scheduledAt.getTime() + (Number(nextLesson.duration) || 30) * 60_000) : null;
+  const hot = !!nextLesson && (isStartingSoon || hasStarted || isSessionLive);
+
   return (
-    <Card className="overflow-hidden border-primary/10 shadow-sm">
-      <CardHeader className="relative bg-gradient-to-br from-primary/15 via-primary/5 to-transparent pb-4">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Video className="w-5 h-5 text-primary" />
+    <Card className="relative overflow-hidden rounded-3xl border-primary/15 shadow-lg shadow-primary/5">
+      {/* Soft colour wash behind the whole card */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-emerald-400/10" aria-hidden />
+      <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/15 blur-3xl" aria-hidden />
+
+      <CardHeader className="relative pb-3">
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle className="flex items-center gap-2.5 text-lg">
+            <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-violet-500 shadow-md shadow-primary/25">
+              <Video className="h-4.5 w-4.5 text-white" />
+            </span>
             Next Lesson
           </CardTitle>
           <div className="flex items-center gap-2">
-            {/* LIVE badge — shows when session is active */}
             {isSessionLive && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500 text-white text-xs font-bold shadow-md">
-                <Radio className="w-3 h-3 animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500 px-2.5 py-1 text-xs font-bold text-white shadow-md">
+                <Radio className="h-3 w-3 animate-pulse" />
                 LIVE
               </span>
             )}
             {!isLoading && (
               <Badge
                 variant={getBadgeVariant()}
-                className={`${
-                  (isStartingSoon || hasStarted || isSessionLive) && nextLesson
-                    ? 'animate-pulse bg-emerald-500 text-white'
-                    : ''
-                }`}
+                className={cn('rounded-full px-3 py-1 text-xs font-bold', hot && 'animate-pulse bg-emerald-500 text-white hover:bg-emerald-500')}
               >
                 {isSessionLive ? 'In Session!' : getBadgeContent()}
               </Badge>
@@ -122,51 +129,57 @@ export const NextLessonCard: React.FC<NextLessonCardProps> = ({ disabled = false
         </div>
       </CardHeader>
 
-      <CardContent className="pt-4 space-y-4">
+      <CardContent className="relative space-y-4 pt-1">
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="w-6 h-6 animate-spin text-primary" />
+            <Loader2 className="h-6 w-6 animate-spin text-primary" />
           </div>
         ) : !nextLesson ? (
-          <div className="flex flex-col items-center text-center py-6 gap-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted mb-1">
-              <CalendarClock className="w-6 h-6 text-muted-foreground" />
+          <div className="flex flex-col items-center gap-2 py-6 text-center">
+            <div className="mb-1 flex h-14 w-14 items-center justify-center rounded-3xl bg-gradient-to-br from-primary/15 to-emerald-400/15">
+              <CalendarClock className="h-7 w-7 text-primary" />
             </div>
-            <p className="text-foreground text-sm font-medium">No upcoming lessons scheduled</p>
-            <p className="text-muted-foreground text-xs">
-              Students will appear here once they book a slot.
+            <p className="text-sm font-bold text-foreground">No upcoming lessons</p>
+            <p className="max-w-[260px] text-xs text-muted-foreground">
+              When a student books one of your slots, or you invite one, the next lesson shows up here.
             </p>
           </div>
         ) : (
           <>
-            {/* Student + lesson title */}
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-base font-semibold text-primary ring-2 ring-primary/10">
+            {/* Student */}
+            <div className="flex items-center gap-3.5">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-violet-500 text-xl font-extrabold text-white shadow-lg shadow-primary/25">
                 {initial(nextLesson.student_name)}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="font-semibold text-foreground truncate">
+                <p className="truncate text-lg font-extrabold leading-tight text-foreground">
                   {nextLesson.student_name || 'Student'}
                 </p>
-                <p className="text-sm text-muted-foreground truncate">
+                <p className="truncate text-sm text-muted-foreground">
                   {nextLesson.title || 'English Lesson'}
                 </p>
               </div>
             </div>
 
-            {/* Date, time & duration */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm rounded-lg bg-muted/50 px-3 py-2.5">
-              <div className="flex items-center gap-1.5 text-foreground font-medium">
-                <Calendar className="w-4 h-4 text-primary" />
-                <span>{friendlyDay(new Date(nextLesson.scheduled_at))}</span>
+            {/* When */}
+            <div className="grid grid-cols-3 gap-2">
+              <div className="rounded-2xl bg-card/80 px-3 py-2.5 text-center ring-1 ring-border/60">
+                <Calendar className="mx-auto mb-1 h-4 w-4 text-primary" />
+                <p className="text-[13px] font-extrabold text-foreground">{friendlyDay(new Date(nextLesson.scheduled_at))}</p>
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Day</p>
               </div>
-              <div className="flex items-center gap-1.5 text-muted-foreground">
-                <Clock className="w-4 h-4" />
-                <span>{format(new Date(nextLesson.scheduled_at), 'h:mm a')}</span>
+              <div className="rounded-2xl bg-card/80 px-3 py-2.5 text-center ring-1 ring-border/60">
+                <Clock className="mx-auto mb-1 h-4 w-4 text-primary" />
+                <p className="text-[13px] font-extrabold text-foreground">
+                  {end ? formatTimeRange(new Date(nextLesson.scheduled_at), end) : format(new Date(nextLesson.scheduled_at), 'h:mm a')}
+                </p>
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Time</p>
               </div>
-              <span className="ml-auto text-xs text-muted-foreground">
-                {nextLesson.duration} min
-              </span>
+              <div className="rounded-2xl bg-card/80 px-3 py-2.5 text-center ring-1 ring-border/60">
+                <Hourglass className="mx-auto mb-1 h-4 w-4 text-primary" />
+                <p className="text-[13px] font-extrabold text-foreground">{nextLesson.duration} min</p>
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Length</p>
+              </div>
             </div>
           </>
         )}
@@ -176,29 +189,30 @@ export const NextLessonCard: React.FC<NextLessonCardProps> = ({ disabled = false
             onClick={handleEnterClassroom}
             size="lg"
             disabled={disabled}
-            className={`w-full transition-all duration-300 ${
+            className={cn(
+              'w-full rounded-2xl text-white transition-all duration-300 hover:brightness-110',
               isSessionLive
-                ? 'bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white shadow-lg shadow-red-500/30 animate-pulse'
-                : 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg shadow-emerald-500/25'
-            }`}
+                ? 'animate-pulse bg-gradient-to-r from-red-500 to-rose-600 shadow-lg shadow-red-500/30'
+                : 'bg-gradient-to-r from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/25',
+            )}
           >
             {isSessionLive ? (
               <>
-                <Radio className="w-5 h-5 mr-2 animate-pulse" />
-                🔴 Join LIVE Class
+                <Radio className="mr-2 h-5 w-5 animate-pulse" />
+                Join LIVE Class
               </>
             ) : (
               <>
-                <Video className="w-5 h-5 mr-2" />
+                <Video className="mr-2 h-5 w-5" />
                 Enter Classroom
-                <ChevronRight className="w-5 h-5 ml-2" />
+                <ChevronRight className="ml-2 h-5 w-5" />
               </>
             )}
           </Button>
         )}
 
         {disabled && (
-          <p className="text-xs text-center text-muted-foreground">
+          <p className="text-center text-xs text-muted-foreground">
             Available after profile approval
           </p>
         )}

@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { resolveCalendarColor } from '@/lib/calendarColors';
+import { formatTimeRange } from '@/lib/timeRange';
 
 /**
  * Week calendar for students and families — one lesson per card, placed by its
@@ -195,7 +196,7 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ events, onSelect, cl
                         >
                           <span className={cn('block truncate text-[11px] font-bold', cancelled && 'line-through decoration-1')}>{ev.title}</span>
                           <span className="block truncate text-[10px] font-medium opacity-90">
-                            {format(ev.start, 'h:mm')}–{format(end, 'h:mm a')}
+                            {formatTimeRange(ev.start, end)}
                             {ev.subtitle ? ` · ${ev.subtitle}` : ''}
                           </span>
                         </button>
