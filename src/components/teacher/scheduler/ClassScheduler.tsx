@@ -283,25 +283,30 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
       </div>
 
       {/* Helper hint + legend */}
-      <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground px-1">
-        <span className="font-medium text-foreground">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl border border-border/50 bg-card/70 px-4 py-2.5 text-xs text-muted-foreground backdrop-blur">
+        <span className="font-semibold text-foreground">
           Tap a cell to {mode === 'weekly' ? 'open it every week for 12 weeks' : 'open a single slot'}.
         </span>
-        <span className="opacity-50">·</span>
+        <span className="hidden h-4 w-px bg-border sm:block" />
         <span className="inline-flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded bg-emerald-500" /> Available
+          <span className="inline-block h-3 w-3 rounded-md bg-emerald-50 ring-1 ring-emerald-300" /> Available
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded bg-violet-600" /> Booked (locked)
+          <span className="inline-flex -space-x-1">
+            <span className="inline-block h-3 w-3 rounded-full bg-gradient-to-br from-orange-400 to-rose-500 ring-2 ring-card" />
+            <span className="inline-block h-3 w-3 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 ring-2 ring-card" />
+            <span className="inline-block h-3 w-3 rounded-full bg-gradient-to-br from-teal-500 to-cyan-600 ring-2 ring-card" />
+          </span>
+          Booked (Playground · Academy · Success)
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded bg-slate-400" /> Cancelled by you
+          <span className="inline-block h-3 w-3 rounded-md bg-slate-100 ring-1 ring-slate-300" /> Cancelled by you
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded bg-amber-500" /> Cancelled by student
+          <span className="inline-block h-3 w-3 rounded-md bg-amber-50 ring-1 ring-amber-300" /> Cancelled by student
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded bg-muted" /> Empty
+          <span className="inline-block h-0.5 w-4 rounded-full bg-rose-500" /> Now
         </span>
       </div>
 
