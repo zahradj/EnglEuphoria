@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 /**
  * Real synced state for interactive scene kinds, shared by every scene
@@ -27,7 +27,23 @@ export interface ActivitySync {
   isAuthority: boolean;
   state: unknown;
   setState: (next: unknown) => void;
+  /** SHARED PLAY: both screens drive the same game at once (teacher + unlocked student, one player).
+   *  Both sides are authorities (`isAuthority` is true on both): every change is broadcast, and the
+   *  other side's snapshot is applied to local state (last write wins). */
+  shared?: boolean;
+  /** Only meaningful with `shared`: the screen that runs a scene's automatic sequences (model-first
+   *  intro, saying a picture's word when it appears). The follower skips them — the leader's speech is
+   *  relayed — so nothing plays or is written twice. The teacher leads. */
+  leader?: boolean;
 }
+
+/** Scene kinds that are real games: in a live class the teacher AND the unlocked student play them together. */
+export const SHARED_PLAY_KINDS: ReadonlySet<string> = new Set([
+  'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap',
+]);
+
+/** True on the screen that must NOT run a shared scene's automatic sequences. */
+export const isSharedFollower = (sync?: ActivitySync) => !!sync?.isSynced && !!sync.shared && sync.leader === false;
 
 /** Drop-in replacement for a scene's own `useState` for whatever piece of
  *  state needs to look the same on both screens. Each scene keeps exactly
@@ -97,15 +113,37 @@ export function useSyncedState<T>(sync: ActivitySync | undefined, initial: T): [
   // setState updater.
   const localRef = useRef(local);
   localRef.current = local;
+  const isShared = !!sync?.isSynced && !!sync.shared && !isRemoteMirror;
+  // True only while the scene's mount effects run (they reset state); cleared right after, before any tap.
+  const starting = useRef(true);
+  useEffect(() => {
+    const t = window.setTimeout(() => { starting.current = false; }, 0);
+    return () => window.clearTimeout(t);
+  }, []);
   const remote = isRemoteMirror ? sync!.state : undefined;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const mirrored = useMemo(() => reconcileSyncedState<T>(remote, initial), [remote]);
   const value = isRemoteMirror ? mirrored : local;
+  // Shared play: the other screen's snapshots arrive as `sync.state`; fold them into local state.
+  // (Our own writes also come back through `sync.state`, but they already equal local state.)
+  const sharedRemote = isShared ? sync!.state : undefined;
+  useEffect(() => {
+    if (!isShared || sharedRemote == null) return;
+    const incoming = reconcileSyncedState<T>(sharedRemote, initial);
+    if (JSON.stringify(incoming) !== JSON.stringify(localRef.current)) {
+      localRef.current = incoming;
+      setLocal(incoming);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sharedRemote, isShared]);
   const set = (updater: T | ((prev: T) => T)) => {
     if (isRemoteMirror) return; // mirror side never drives state
     const next = typeof updater === 'function' ? (updater as (prev: T) => T)(localRef.current) : updater;
     localRef.current = next;
     setLocal(next);
+    // A follower that has only just mounted must not broadcast its start-up reset: the leader may be
+    // mid-game, and "back to the beginning" from a late joiner would wipe their progress.
+    if (isShared && sync!.leader === false && starting.current) return;
     sync?.setState(next);
   };
   return [value, set];

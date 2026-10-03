@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { type ActivitySync, useSyncedState } from './sceneActivitySync';
+import { type ActivitySync, isSharedFollower, useSyncedState } from './sceneActivitySync';
 import { seededOrder } from './PictureMatchScene';
 import { artFor } from './alphabetArt';
 import { Burst, GAME_FONT, GameStyles, HouseIcon, HudBar, LocoIcon, ProgressPill, PromptChip, SkyBackdrop, TitleRibbon, TrainCar } from './gameTheme';
@@ -121,6 +121,8 @@ function LetterTilesScene({ scene, variant, onNext, onWin, onResult, sync }: {
   const [state, setState] = useSyncedState<TilesState>(sync, initial);
   const { phase, modelIdx, seen, round, holding, wrongSlot, misses, busy, finished } = state;
   const isMirror = !!sync?.isSynced && !sync.isAuthority;
+  /** Shared play: only the leader (teacher) runs the automatic sequences; the follower gets them relayed. */
+  const isFollower = isSharedFollower(sync);
   const current = rounds[Math.min(round, rounds.length - 1)];
   const targets = current.targets;
   const n = targets.length;
@@ -188,7 +190,7 @@ function LetterTilesScene({ scene, variant, onNext, onWin, onResult, sync }: {
   }, [scene.id]);
 
   useEffect(() => {
-    if (finished && !gemDone.current && !isMirror) {
+    if (finished && !gemDone.current && !isMirror && !isFollower) {
       gemDone.current = true;
       sfx.whoop();
       sfx.gem();
@@ -200,7 +202,7 @@ function LetterTilesScene({ scene, variant, onNext, onWin, onResult, sync }: {
 
   // 'sounds' mode with a word: say the word when each round appears.
   useEffect(() => {
-    if (variant !== 'sounds' || isMirror || !current.word || phase !== 'play') return;
+    if (variant !== 'sounds' || isMirror || isFollower || !current.word || phase !== 'play') return;
     const t = window.setTimeout(() => { void safeSpeak(current.word!, 'teacher'); }, 450);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -224,7 +226,7 @@ function LetterTilesScene({ scene, variant, onNext, onWin, onResult, sync }: {
 
   // Model stage: arriving at a letter plays it and ticks it off.
   useEffect(() => {
-    if (phase !== 'model' || isMirror || !hasModel) return;
+    if (phase !== 'model' || isMirror || isFollower || !hasModel) return;
     const letter = modelLetters[modelIdx];
     if (!letter) return;
     setState((s) => (s.seen.includes(modelIdx) ? s : { ...s, seen: [...s.seen, modelIdx] }));
