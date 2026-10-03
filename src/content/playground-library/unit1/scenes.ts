@@ -387,6 +387,29 @@ export type Scene =
       id: string; kind: 'secret-card'; bg: string; teacher: string; who: CharKey;
       cards: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' }[];
       rounds: { secret: number }[];
+    }
+  | {
+      /** Cambridge Starters "Listen and colour": "Color the big circle red!" —
+       *  pick the paint, tap the shape. Items live in a 100×62 board. */
+      id: string; kind: 'listen-colour'; bg: string; teacher: string; who: CharKey;
+      items: { id: string; shape: 'circle' | 'square' | 'triangle'; size: 'big' | 'small'; x: number; y: number; w: number; h: number; flip?: boolean }[];
+      rounds: { item: string; colorWord: string }[];
+    }
+  | {
+      /** "Shape Fishing": "Catch a blue triangle!" — tap the fish carrying it.
+       *  `targets` index `fish`, one catch per round. */
+      id: string; kind: 'shape-fishing'; bg: string; teacher: string; who: CharKey;
+      fish: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' }[];
+      targets: number[];
+    }
+  | {
+      /** "What comes next?" — finish a colour/shape pattern train. */
+      id: string; kind: 'pattern-train'; bg: string; teacher: string; who: CharKey;
+      rounds: {
+        pattern: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' }[];
+        answer: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' };
+        options: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' }[];
+      }[];
     };
 
 const A = '/lep1'; // public asset root
@@ -3399,11 +3422,23 @@ export const LESSON_U2L4_SCENES: Scene[] = [
 
   /* ---- Controlled practice: all six colours ---- */
   {
-    id: 'u2l4-color-quiz', kind: 'color-quiz', bg: bgU2L4Party, teacher: 'Listen! Tap the right one.',
+    // Cambridge Pre A1 Starters Listening Part 5 "Listen and colour", as a game.
+    id: 'u2l4-listen-colour', kind: 'listen-colour', bg: bgU2L4Party, who: 'pip',
+    teacher: 'Listen and color! Pick the paint, then tap the shape. Big or small?',
+    items: [
+      { id: 'bigCircle', shape: 'circle', size: 'big', x: 4, y: 4, w: 26, h: 26 },
+      { id: 'smallSquare', shape: 'square', size: 'small', x: 8, y: 44, w: 12, h: 12 },
+      { id: 'bigTriangle', shape: 'triangle', size: 'big', x: 34, y: 4, w: 28, h: 30 },
+      { id: 'smallCircle', shape: 'circle', size: 'small', x: 40, y: 44, w: 12, h: 12 },
+      { id: 'bigSquare', shape: 'square', size: 'big', x: 62, y: 30, w: 28, h: 28 },
+      { id: 'smallTriangle', shape: 'triangle', size: 'small', x: 76, y: 4, w: 14, h: 14 },
+    ],
     rounds: [
-      { colorWord: 'BLUE', colorHex: C4.BLUE, who: 'willow', correctImg: itemCottonCandyBlue, correctLabel: 'Cotton candy', distractors: [{ img: itemBalloonRed, label: 'Balloon' }, { img: itemPopcornYellow, label: 'Popcorn' }] },
-      { colorWord: 'ORANGE', colorHex: C4.ORANGE, who: 'leo', correctImg: itemCarrot, correctLabel: 'Carrot', distractors: [{ img: itemGrapes, label: 'Grapes' }, { img: itemFrog, label: 'Frog' }] },
-      { colorWord: 'PURPLE', colorHex: C4.PURPLE, who: 'mia', correctImg: itemPlum, correctLabel: 'Plum', distractors: [{ img: itemLeaf, label: 'Leaf' }, { img: itemPopcornYellow, label: 'Popcorn' }] },
+      { item: 'bigCircle', colorWord: 'RED' },
+      { item: 'smallTriangle', colorWord: 'GREEN' },
+      { item: 'bigSquare', colorWord: 'BLUE' },
+      { item: 'smallCircle', colorWord: 'YELLOW' },
+      { item: 'bigTriangle', colorWord: 'PURPLE' },
     ],
   },
 
@@ -3469,12 +3504,41 @@ export const LESSON_U2L4_SCENES: Scene[] = [
 
   /* ---- Game break ---- */
   {
-    id: 'u2l4-memory', kind: 'memory', bg: bgU2L4Party, teacher: 'Find the pairs! Say the color AND the shape.',
-    pairs: [
-      { id: 'clock', label: 'Circle', emoji: '\u{1F570}️', img: itemClock },
-      { id: 'frog', label: 'Green', emoji: '\u{1F438}', img: itemFrog },
-      { id: 'pizza', label: 'Triangle', emoji: '\u{1F355}', img: itemPizzaSlice },
-      { id: 'grapes', label: 'Purple', emoji: '\u{1F347}', img: itemGrapes },
+    // The ESL "go fishing" game: catch the fish with the shape you hear.
+    id: 'u2l4-shape-fishing', kind: 'shape-fishing', bg: bgU2L4Whale, who: 'willow',
+    teacher: 'Shape Fishing! Listen and catch the right fish.',
+    fish: [
+      { colorWord: 'RED', colorHex: C4.RED, shape: 'circle' },
+      { colorWord: 'BLUE', colorHex: C4.BLUE, shape: 'triangle' },
+      { colorWord: 'YELLOW', colorHex: C4.YELLOW, shape: 'square' },
+      { colorWord: 'GREEN', colorHex: C4.GREEN, shape: 'circle' },
+      { colorWord: 'BLUE', colorHex: C4.BLUE, shape: 'square' },
+      { colorWord: 'RED', colorHex: C4.RED, shape: 'triangle' },
+      { colorWord: 'PURPLE', colorHex: C4.PURPLE, shape: 'circle' },
+      { colorWord: 'ORANGE', colorHex: C4.ORANGE, shape: 'triangle' },
+    ],
+    targets: [1, 3, 5, 2, 6],
+  },
+  {
+    // Pattern completion (Khan Academy Kids-style colour/shape patterns).
+    id: 'u2l4-pattern-train', kind: 'pattern-train', bg: bgU2L4Party, who: 'pip',
+    teacher: 'What comes next? Say it, then tap it!',
+    rounds: [
+      {
+        pattern: [{ colorWord: 'RED', colorHex: C4.RED, shape: 'circle' }, { colorWord: 'BLUE', colorHex: C4.BLUE, shape: 'square' }, { colorWord: 'RED', colorHex: C4.RED, shape: 'circle' }, { colorWord: 'BLUE', colorHex: C4.BLUE, shape: 'square' }],
+        answer: { colorWord: 'RED', colorHex: C4.RED, shape: 'circle' },
+        options: [{ colorWord: 'BLUE', colorHex: C4.BLUE, shape: 'square' }, { colorWord: 'RED', colorHex: C4.RED, shape: 'circle' }, { colorWord: 'YELLOW', colorHex: C4.YELLOW, shape: 'triangle' }],
+      },
+      {
+        pattern: [{ colorWord: 'YELLOW', colorHex: C4.YELLOW, shape: 'triangle' }, { colorWord: 'GREEN', colorHex: C4.GREEN, shape: 'triangle' }, { colorWord: 'YELLOW', colorHex: C4.YELLOW, shape: 'triangle' }, { colorWord: 'GREEN', colorHex: C4.GREEN, shape: 'triangle' }],
+        answer: { colorWord: 'YELLOW', colorHex: C4.YELLOW, shape: 'triangle' },
+        options: [{ colorWord: 'YELLOW', colorHex: C4.YELLOW, shape: 'circle' }, { colorWord: 'GREEN', colorHex: C4.GREEN, shape: 'triangle' }, { colorWord: 'YELLOW', colorHex: C4.YELLOW, shape: 'triangle' }],
+      },
+      {
+        pattern: [{ colorWord: 'RED', colorHex: C4.RED, shape: 'circle' }, { colorWord: 'BLUE', colorHex: C4.BLUE, shape: 'square' }, { colorWord: 'YELLOW', colorHex: C4.YELLOW, shape: 'triangle' }, { colorWord: 'RED', colorHex: C4.RED, shape: 'circle' }, { colorWord: 'BLUE', colorHex: C4.BLUE, shape: 'square' }],
+        answer: { colorWord: 'YELLOW', colorHex: C4.YELLOW, shape: 'triangle' },
+        options: [{ colorWord: 'YELLOW', colorHex: C4.YELLOW, shape: 'triangle' }, { colorWord: 'YELLOW', colorHex: C4.YELLOW, shape: 'square' }, { colorWord: 'RED', colorHex: C4.RED, shape: 'circle' }],
+      },
     ],
   },
   {

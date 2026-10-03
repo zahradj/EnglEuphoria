@@ -30,7 +30,7 @@ export const SCENE_KINDS = [
   'numbers-learn', 'numbers-review', 'candle-cake', 'count-balloons',
   'age-balloons', 'age-sentence-match', 'meet-greet', 'age-quiz',
   'trophy-chest', 'flipbook', 'color-model', 'color-sort', 'color-quiz', 'listen-repeat-cards',
-  'color-spot', 'shape-model', 'shape-sort', 'color-spy', 'color-simon', 'color-mix', 'shape-builder', 'secret-card', 'toy-model',
+  'color-spot', 'shape-model', 'shape-sort', 'color-spy', 'color-simon', 'color-mix', 'shape-builder', 'secret-card', 'listen-colour', 'shape-fishing', 'pattern-train', 'toy-model',
   'plural-sort', 'train-recall',
   'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap',
   'sentence-build', 'word-picture-match', 'jigsaw-puzzle',

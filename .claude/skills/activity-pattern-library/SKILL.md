@@ -109,9 +109,9 @@ new Pre-A1 lesson needs it, that's exactly when to run the Research Step.
 | Purpose | `kind`s |
 |---|---|
 | **Discovery / model** (new content, teacher-led, first exposure) | `meet`, `meet-group`, `meet-greet`, `name-gate`, `sound-model`, `color-model`, `shape-model`, `toy-model`, `numbers-learn`, `he-she-model`, `listen-repeat-cards` |
-| **Controlled / recognition practice** (low-risk, guided) | `picture-match`, `echo`, `trace`, `sound-sort`, `color-sort`, `shape-sort`, `plural-sort`, `he-she-sort`, `color-spot`, `color-spy`, `alphabet-order`, `alphabet-blocks`, `basket`, `count-balloons`, `age-balloons` |
-| **Interactive game practice** (student-led, real stakes, game-feel) | `word-build`, `sentence-build`, `dash`, `catch-sort`, `sound-pop`, `brick-crush`, `gather`, `memory`, `puzzle`, `hello-doors`, `friend-pop`, `feed-monsters`, `color-simon`, `train-recall`, `feelings-dice`, `feelings-wheel`, `x-is-feeling`, `i-am-feeling`, `age-sentence-match`, `who-said-it` |
-| **Speaking production** | `roleplay`, `join-stage`, `voice-stage`, `he-she-say`, `spin-wheel` |
+| **Controlled / recognition practice** (low-risk, guided) | `listen-colour`, `picture-match`, `echo`, `trace`, `sound-sort`, `color-sort`, `shape-sort`, `plural-sort`, `he-she-sort`, `color-spot`, `color-spy`, `alphabet-order`, `alphabet-blocks`, `basket`, `count-balloons`, `age-balloons` |
+| **Interactive game practice** (student-led, real stakes, game-feel) | `word-build`, `sentence-build`, `dash`, `catch-sort`, `sound-pop`, `brick-crush`, `gather`, `memory`, `puzzle`, `hello-doors`, `friend-pop`, `feed-monsters`, `color-simon`, `train-recall`, `feelings-dice`, `feelings-wheel`, `x-is-feeling`, `i-am-feeling`, `age-sentence-match`, `who-said-it`, `color-mix`, `shape-builder`, `shape-fishing`, `pattern-train` |
+| **Speaking production** | `roleplay`, `join-stage`, `voice-stage`, `he-she-say`, `spin-wheel`, `secret-card` (child asks yes/no questions) |
 | **Story** | `flipbook` |
 | **Review / assessment / boss** | `trophy-chest`, `feelings-bingo`, `age-quiz`, `color-quiz`, `feeling-quiz` (plus any of the interactive-practice kinds above, re-run at higher difficulty with no new content) |
 | **Structural / closing** (not gem-eligible, don't count for variety) | `title-card`, `cinematic`, `song`, `finale`, `feelings` (a vocab-reveal scene, not a game) |
@@ -121,6 +121,17 @@ unit — a user rejection of "Family Bingo" for Unit 5 Lesson 1 earlier this
 project was about that *specific lesson's* bingo concept, not a blanket ban
 on the bingo mechanic; don't over-generalize a one-lesson rejection into an
 avoid-forever rule for a `kind` that's otherwise fine elsewhere.
+
+### Researched Pre-A1 mechanics (Oct 2026, Unit 2 Lessons 2-4)
+
+| Mechanic | Source | Kind | Trains |
+|---|---|---|---|
+| Mix two paints, name the new colour | colour-mixing play (Lingokids / preschool art) | `color-mix` | new colour words as the result of an action |
+| Build a picture from shapes (name shape, pick colour heard) | shape-collage house, "Let's make shape art" (googooenglish, twinkl) | `shape-builder` | shape words + colour listening |
+| Guess Who with coloured shapes | information-gap guessing games | `secret-card` | the child ASKS "Is it red?" / "Is it a circle?" |
+| Listen and colour (big/small + shape + colour) | Cambridge Pre A1 Starters Listening Part 5 | `listen-colour` | detailed listening, exam format |
+| Go fishing for the shape you hear | classroom magnet-fishing game, shape fishing apps | `shape-fishing` | colour+shape listening, arcade feel |
+| What comes next? pattern train | Khan Academy Kids pattern/sorting activities | `pattern-train` | logic + saying the answer |
 
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)
 

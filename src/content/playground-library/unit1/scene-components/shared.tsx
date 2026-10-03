@@ -213,6 +213,9 @@ export function Lep1Keyframes() {
       @keyframes lep1-float { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-12px) rotate(1deg); } }
       @keyframes lep1-shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-10px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-8px); } 80% { transform: translateX(8px); } }
       @keyframes lep1-hop { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+      @keyframes lep1-swim-r { from { transform: translateX(-30vw); } to { transform: translateX(110vw); } }
+      @keyframes lep1-swim-l { from { transform: translateX(110vw) scaleX(-1); } to { transform: translateX(-30vw) scaleX(-1); } }
+      @keyframes lep1-bob { 0%,100% { margin-top: 0; } 50% { margin-top: 10px; } }
       @keyframes lep1-walk { 0% { transform: translateX(-60%) rotate(-4deg); } 25% { transform: translateX(-20%) rotate(3deg) translateY(-6px); } 50% { transform: translateX(20%) rotate(-3deg); } 75% { transform: translateX(60%) rotate(3deg) translateY(-6px); } 100% { transform: translateX(-60%) rotate(-4deg); } }
       @keyframes lep1-wiggle { 0%,100% { transform: rotate(-3deg) translateY(0); } 25% { transform: rotate(3deg) translateY(-4px); } 50% { transform: rotate(-2deg) translateY(0); } 75% { transform: rotate(4deg) translateY(-4px); } }
       @keyframes lep1-ping { 75%, 100% { transform: scale(2); opacity: 0; } }
@@ -252,4 +255,13 @@ export function ShapeIcon({ shape, fill }: { shape: string; fill: string }) {
 /** Speak, but never let a slow or missing clip stall a game's next step. */
 export function sayWithin(text: string, who: Parameters<typeof safeSpeak>[1], maxMs = 3500) {
   return Promise.race([safeSpeak(text, who), new Promise<void>((res) => setTimeout(res, maxMs))]);
+}
+
+/** A circle / square / triangle drawn in a board's own SVG coordinates. */
+export function BoardShape({ shape, x, y, w, h, fill, stroke = '#2B1E17', dashed, flip }: { shape: string; x: number; y: number; w: number; h: number; fill: string; stroke?: string; dashed?: boolean; flip?: boolean }) {
+  const common = { fill, stroke, strokeWidth: 0.8, strokeDasharray: dashed ? '2 1.4' : undefined };
+  if (shape === 'circle') return <ellipse cx={x + w / 2} cy={y + h / 2} rx={w / 2} ry={h / 2} {...common} />;
+  if (shape === 'square') return <rect x={x} y={y} width={w} height={h} rx={1.2} {...common} />;
+  const pts = flip ? `${x},${y} ${x + w},${y} ${x + w / 2},${y + h}` : `${x + w / 2},${y} ${x + w},${y + h} ${x},${y + h}`;
+  return <polygon points={pts} strokeLinejoin="round" {...common} />;
 }
