@@ -325,6 +325,12 @@ const UNIT1_EXTRACTORS = {
     [s.who, 'What comes next?'],
     ...(s.rounds ?? []).map((r) => [s.who, `Yes! ${/^[aeiou]/i.test(r.answer.colorWord) ? 'An' : 'A'} ${r.answer.colorWord.toLowerCase()} ${r.answer.shape}!`]),
   ],
+  'tick-cross': (s) => [[s.who, "That's right!"], ...(s.rounds ?? []).map((r) => [s.who, r.sentence])],
+  'story-video': (s) => [
+    ...(s.pages ?? []).map((p) => [p.who, p.line]),
+    ...(s.checkpoints ?? []).flatMap((c) => [[c.who, c.question], [c.who, `Yes! ${c.answer}!`]]),
+  ],
+  'story-order': (s) => (s.frames ?? []).map((f) => [f.who ?? s.who, f.caption]),
   // Mirrors SecretCardScene.tsx's secretCardLines().
   'secret-card': (s) => [
     [s.who, 'I have a secret card. Ask me!'], [s.who, 'Yes, it is!'], [s.who, "No, it isn't!"],

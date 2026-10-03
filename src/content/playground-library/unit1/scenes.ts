@@ -394,6 +394,8 @@ export type Scene =
       id: string; kind: 'listen-colour'; bg: string; teacher: string; who: CharKey;
       items: { id: string; shape: 'circle' | 'square' | 'triangle'; size: 'big' | 'small'; x: number; y: number; w: number; h: number; flip?: boolean }[];
       rounds: { item: string; colorWord: string }[];
+      /** 'fish' draws Shelly's body behind the shapes (her scales). */
+      backdrop?: 'fish';
     }
   | {
       /** "Shape Fishing": "Catch a blue triangle!" — tap the fish carrying it.
@@ -410,6 +412,26 @@ export type Scene =
         answer: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' };
         options: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' }[];
       }[];
+    }
+  | {
+      /** Cambridge Starters "Look and read — tick or cross": picture + sentence, ✓ / ✗. */
+      id: string; kind: 'tick-cross'; bg: string; teacher: string; who: CharKey;
+      rounds: { img: string; sentence: string; isTrue: boolean }[];
+    }
+  | {
+      /** Jumbled story pictures → put them in order → the story is told back. */
+      id: string; kind: 'story-order'; bg: string; teacher: string; who: CharKey;
+      frames: { img: string; caption: string; who?: CharKey }[];
+    }
+  | {
+      /** The story as an animated, narrated cartoon (no reading needed): each
+       *  page moves (Ken Burns + effects) while the character tells it, then
+       *  auto-advances; picture-answer questions pause it. */
+      id: string; kind: 'story-video'; bg: string; teacher: string; title: string;
+      pages: { img: string; line: string; who: CharKey; motion?: 'zoom-in' | 'zoom-out' | 'pan-left' | 'pan-right'; fx?: 'bubbles' | 'sparkles' | 'tear' | 'hearts'; holdMs?: number }[];
+      checkpoints: { afterPage: number; who: CharKey; question: string; answer: string; options: { label: string; img?: string; colorHex?: string; shape?: 'circle' | 'square' | 'triangle' }[] }[];
+      /** Small caption for the adult (default on). */
+      captions?: boolean;
     };
 
 const A = '/lep1'; // public asset root
@@ -3643,73 +3665,221 @@ const bgU2L5FishGreen = `${A}/scenes/bg-u2l5-fish-green.png`;
 const bgU2L5FishBlue = `${A}/scenes/bg-u2l5-fish-blue.png`;
 const bgU2L5FishPurple = `${A}/scenes/bg-u2l5-fish-purple.png`;
 
+/* REBUILD (2026-10-03) as a full story lesson (pre-story → story → post-story),
+ * replacing a 6-scene version on square art with the shared goodbye song.
+ * Original story (not the published "Rainbow Fish" book): Shelly, a little
+ * gray fish, is sad; Pip's friends sail by on their SHIP and give her colored
+ * SCALES — a red circle, a blue square, a yellow triangle… — until she is a
+ * rainbow fish, and she shares one with a sad little crab. Unit 2's colours
+ * and shapes in a story (curriculum: "Colors and shapes in a story", SH).
+ * Story chunks: "I want colors!" · "What color do you want? — I want red,
+ * please!" · "Here you are!" · "Thank you!"
+ * Shape: pre-story (key chunks, SH sound) → while-story (flipbook with
+ * spoken check questions) → post-story (Cambridge Starters tick-or-cross,
+ * jumbled-picture retell, colour Shelly's scales, role-play as Shelly, the
+ * child gives scales, retell questions, read the words). Research: pre/
+ * while/post storytelling and jumbled-picture retelling for young EFL
+ * learners (Cambridge ELT blog "Storytelling online with young learners";
+ * Kids Club English "How to use stories"), Cambridge Pre A1 Starters R&W
+ * Part 1 (tick or cross). */
+const bgU2L5Sea = `${A}/scenes/bg-u2l5-sea-wide.png`;
+const bgU2L5Sad = `${A}/scenes/bg-u2l5-shelly-sad-wide.png`;
+const bgU2L5Red = `${A}/scenes/bg-u2l5-shelly-red-wide.png`;
+const bgU2L5Blue = `${A}/scenes/bg-u2l5-shelly-blue-wide.png`;
+const bgU2L5Yellow = `${A}/scenes/bg-u2l5-shelly-yellow-wide.png`;
+const bgU2L5Rainbow = `${A}/scenes/bg-u2l5-shelly-rainbow-wide.png`;
+const bgU2L5Crab = `${A}/scenes/bg-u2l5-crab-wide.png`;
+const itemShip = `${A}/items/item-ship.png`;
+const itemShoe = `${A}/items/item-shoe.png`;
+const itemShell = `${A}/items/item-shell.png`;
+const itemShelly = `${A}/items/item-shelly.png`;
+
 export const LESSON_U2L5_TITLE = "The Rainbow Fish's Scales";
-export const LESSON_U2L5_OBJECTIVE = 'Follow an original story about a fish who gains all six colors from Unit 2 (red, orange, yellow, green, blue, purple), reviewing "It\'s red!" / "I like red!" sentence patterns through narrative instead of drills.';
+export const LESSON_U2L5_OBJECTIVE = 'Follow a story about Shelly, a gray fish who gets colored scales (a red circle, a blue square, a yellow triangle…); understand and retell it with pictures; use "What color do you want? — I want red, please!", "Here you are!" and "Thank you!"; hear SH (ship, shell, shoe, fish).';
 
 export const LESSON_U2L5_SCENES: Scene[] = [
-  { id: 'u2l5-title', kind: 'title-card', bg: bgU2L5FishPond, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 5', title: "The Rainbow Fish's Scales", subtitle: 'A story about a very special fish' },
+  { id: 'u2l5-title', kind: 'title-card', bg: bgU2L5Sea, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 5', title: "The Rainbow Fish's Scales", subtitle: "Shelly's story" },
+
   {
-    id: 'u2l5-intro', kind: 'cinematic', bg: bgU2L5FishPond, title: "The Rainbow Fish's Scales", subtitle: 'Pip and Bella find a new friend', narrator: 'pip', hidePipOverlay: true,
-    script: [
-      { who: 'pip', line: 'Look, Bella! There is a little fish in the pond!' },
-      { who: 'bella', line: 'Oh! But this fish has no color at all!' },
-      { who: 'pip', line: "Let's watch what happens..." },
+    // Warm-up: Shelly's song (scripts/songs.json "u2l5-shelly"; chant until the music is made).
+    id: 'u2l5-song', kind: 'song', bg: bgU2L5Sea, title: "\u{1F3B5} Shelly's Song \u{1F3B5}", teacher: 'Sing and swim like a fish! Show the shapes with your hands.',
+    durationSeconds: 20, bigWord: 'Shelly', songUrl: `${A}/audio/shelly-song-u2l5.mp3?v=1`,
+    songPrompt: 'Upbeat kids pop story song',
+    lyrics: [
+      { who: 'pip', text: 'Shelly, Shelly, little gray fish!', emotion: 'happy' },
+      { who: 'bella', text: 'A red circle, a blue square, a yellow triangle!', emotion: 'happy' },
+      { who: 'willow', text: 'Green and orange and purple too!', emotion: 'happy' },
+      { who: 'mia', text: 'Shelly is a rainbow fish!', emotion: 'happy' },
     ],
-    cta: "Let's watch!",
   },
   {
-    id: 'u2l5-storybook', kind: 'flipbook', bg: bgU2L5FishPond, title: "The Rainbow Fish's Scales",
+    id: 'u2l5-intro', kind: 'cinematic', bg: bgU2L5Sea, hidePipOverlay: true, title: "Shelly's Story", subtitle: 'A little fish in the big blue sea', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Look! A little gray fish!' },
+      { who: 'bella', line: 'Her name is Shelly. She looks sad.' },
+    ],
+    cta: "Let's help!",
+  },
+
+  /* ---- Pre-story: the words and chunks of the story ---- */
+  {
+    id: 'u2l5-story-words', kind: 'listen-repeat-cards', bg: bgU2L5Sea, teacher: 'These words are in the story. Listen, then say them!',
+    cards: [
+      { who: 'pip', sentence: "It's a ship!", img: itemShip, imgLabel: 'Ship' },
+      { who: 'pip', sentence: 'This is Shelly. She is a fish.', img: bgU2L5Sad, imgLabel: 'Fish' },
+      { who: 'mia', sentence: 'I want colors!', img: bgU2L5Sad, imgLabel: 'I want…' },
+      { who: 'bella', sentence: 'Here you are!', img: bgU2L5Red, imgLabel: 'Here you are' },
+      { who: 'willow', sentence: 'Thank you!', img: bgU2L5Crab, imgLabel: 'Thank you' },
+    ],
+  },
+  {
+    id: 'u2l5-model-sh', kind: 'sound-model', bg: bgU2L5Sea, who: 'mia', letter: 'Sh', phoneme: '/sh/', sound: 'shh',
+    teacher: 'S and H together say /sh/ — like Shelly! Ship, shell, shoe!',
+    anchors: [
+      { word: 'ship', emoji: '\u{1F6A2}', img: itemShip },
+      { word: 'shell', emoji: '\u{1F41A}', img: itemShell },
+      { word: 'shoe', emoji: '\u{1F45F}', img: itemShoe },
+    ],
+  },
+  { id: 'u2l5-trace-s', kind: 'trace', bg: bgU2L5Sea, who: 'mia', letter: 'S', phoneme: '/sh/', word: 'ship', teacher: 'Trace the S! S and H say /sh/ — ship!' },
+
+  /* ---- The story ---- */
+  {
+    // The story as an animated, narrated cartoon: Pre-A1 children can't read
+    // yet, so nothing here needs reading (answers are pictures).
+    id: 'u2l5-story-video', kind: 'story-video', bg: bgU2L5Sea, title: "Shelly's Scales",
+    teacher: 'Press play and watch together. Point and repeat key words; answer the picture questions.',
     pages: [
-      { who: 'pip', img: bgU2L5FishGrey, text: 'Once there was a little fish with no color at all. It felt very sad.' },
-      { who: 'pip', img: bgU2L5FishRed, text: 'The fish swam by a red flower. Its scales turned red! "It\'s red!" said the fish.' },
-      { who: 'bella', img: bgU2L5FishOrange, text: 'Next, it swam by an orange flower. Its scales turned orange too! "It\'s orange!"' },
-      { who: 'pip', img: bgU2L5FishYellow, text: 'Then it swam by a yellow flower. Its scales turned yellow! "It\'s yellow!"' },
-      { who: 'bella', img: bgU2L5FishGreen, text: 'It swam by a green lily pad. Its scales turned green! "It\'s green!"' },
-      { who: 'pip', img: bgU2L5FishBlue, text: 'It swam by a blue flower. Its scales turned blue! "It\'s blue!"' },
-      { who: 'bella', img: bgU2L5FishPurple, text: 'Last, it swam by a purple flower. Its scales turned purple! "It\'s purple!"' },
-      { who: 'pip', img: bgU2L5FishPond, text: 'Now the little fish has every color — red, orange, yellow, green, blue, AND purple! "You are a rainbow fish!" said Pip and Bella.' },
+      { img: bgU2L5Sea, who: 'pip', line: 'This is Shelly. Shelly is a little fish.', motion: 'zoom-in', fx: 'bubbles' },
+      { img: bgU2L5Sad, who: 'pip', line: 'Shelly is gray. She is sad. I want colors!', motion: 'zoom-in', fx: 'tear' },
+      { img: bgU2L5Red, who: 'bella', line: 'Bella says, Here you are! A red circle!', motion: 'pan-right', fx: 'sparkles' },
+      { img: bgU2L5Blue, who: 'mia', line: 'Mia gives Shelly a blue square.', motion: 'pan-left', fx: 'sparkles' },
+      { img: bgU2L5Yellow, who: 'leo', line: 'Leo gives Shelly a yellow triangle.', motion: 'pan-right', fx: 'sparkles' },
+      { img: bgU2L5Rainbow, who: 'willow', line: 'Now Shelly has six colors! She is a rainbow fish!', motion: 'zoom-out', fx: 'sparkles' },
+      { img: bgU2L5Crab, who: 'pip', line: 'A little crab is gray and sad. Shelly gives him a purple circle.', motion: 'zoom-in', fx: 'bubbles' },
+      { img: bgU2L5Crab, who: 'willow', line: 'Thank you, Shelly! Now they are friends.', motion: 'zoom-out', fx: 'hearts' },
     ],
     checkpoints: [
-      { afterPage: 1, who: 'pip', question: 'What color did the fish turn first?', options: ['Red', 'Blue', 'Green'], answer: 'Red' },
-      { afterPage: 4, who: 'bella', question: 'What color was the lily pad?', options: ['Yellow', 'Green', 'Purple'], answer: 'Green' },
-      { afterPage: 6, who: 'pip', question: 'What color did the fish turn last?', options: ['Orange', 'Blue', 'Purple'], answer: 'Purple' },
+      { afterPage: 1, who: 'pip', question: 'What color is Shelly?', answer: 'Gray', options: [{ label: 'Red', colorHex: '#EF4444' }, { label: 'Gray', colorHex: '#9CA3AF' }, { label: 'Blue', colorHex: '#3B82F6' }] },
+      { afterPage: 4, who: 'leo', question: 'What shape is the yellow scale?', answer: 'Triangle', options: [{ label: 'Circle', shape: 'circle', colorHex: '#FACC15' }, { label: 'Square', shape: 'square', colorHex: '#FACC15' }, { label: 'Triangle', shape: 'triangle', colorHex: '#FACC15' }] },
+      { afterPage: 6, who: 'pip', question: 'What does Shelly give the crab?', answer: 'A purple circle', options: [{ label: 'A red square', shape: 'square', colorHex: '#EF4444' }, { label: 'A purple circle', shape: 'circle', colorHex: '#A855F7' }, { label: 'A blue triangle', shape: 'triangle', colorHex: '#3B82F6' }] },
+    ],
+  },
+
+  /* ---- Post-story: check, order, retell ---- */
+  {
+    id: 'u2l5-tick-cross', kind: 'tick-cross', bg: bgU2L5Sea, who: 'pip', teacher: 'Listen. Is it right? Tap ✔ or ✘.',
+    rounds: [
+      { img: bgU2L5Sad, sentence: 'Shelly is gray.', isTrue: true },
+      { img: bgU2L5Red, sentence: 'Bella gives Shelly a blue square.', isTrue: false },
+      { img: bgU2L5Yellow, sentence: 'Leo gives Shelly a yellow triangle.', isTrue: true },
+      { img: bgU2L5Rainbow, sentence: 'Shelly is sad.', isTrue: false },
+      { img: bgU2L5Crab, sentence: 'Shelly gives the crab a purple circle.', isTrue: true },
     ],
   },
   {
-    id: 'u2l5-recap', kind: 'listen-repeat-cards', bg: bgU2L5FishPond, teacher: 'Let’s remember the rainbow fish! Listen, then repeat!',
-    cards: [
-      { who: 'pip', sentence: "It's red!", img: bgU2L5FishRed, imgLabel: 'Red' },
-      { who: 'bella', sentence: "It's orange!", img: bgU2L5FishOrange, imgLabel: 'Orange' },
-      { who: 'pip', sentence: "It's yellow!", img: bgU2L5FishYellow, imgLabel: 'Yellow' },
-      { who: 'bella', sentence: "It's green!", img: bgU2L5FishGreen, imgLabel: 'Green' },
-      { who: 'pip', sentence: "It's blue!", img: bgU2L5FishBlue, imgLabel: 'Blue' },
-      { who: 'bella', sentence: "It's purple!", img: bgU2L5FishPurple, imgLabel: 'Purple' },
+    id: 'u2l5-story-order', kind: 'story-order', bg: bgU2L5Sea, who: 'pip', teacher: 'Put the story in order! What happens first?',
+    frames: [
+      { img: bgU2L5Sad, caption: 'Shelly is gray and sad.', who: 'pip' },
+      { img: bgU2L5Red, caption: 'Bella gives her a red circle.', who: 'bella' },
+      { img: bgU2L5Rainbow, caption: 'Shelly is a rainbow fish!', who: 'willow' },
+      { img: bgU2L5Crab, caption: 'Shelly gives the crab a purple circle.', who: 'pip' },
     ],
   },
   {
-    id: 'u2l5-join-stage', kind: 'join-stage', bg: bgU2L5FishPond, teacher: 'Your turn! When it says YOU, tell the story.', cast: ['pip', 'bella'],
+    id: 'u2l5-color-shelly', kind: 'listen-colour', bg: bgU2L5Sea, who: 'bella', backdrop: 'fish',
+    teacher: "Color Shelly's scales! Listen: big or small? Which shape? Which color?",
+    items: [
+      { id: 'bigCircle', shape: 'circle', size: 'big', x: 20, y: 12, w: 18, h: 18 },
+      { id: 'smallTriangle', shape: 'triangle', size: 'small', x: 44, y: 8, w: 10, h: 10 },
+      { id: 'bigSquare', shape: 'square', size: 'big', x: 44, y: 24, w: 16, h: 16 },
+      { id: 'smallCircle', shape: 'circle', size: 'small', x: 68, y: 14, w: 9, h: 9 },
+      { id: 'bigTriangle', shape: 'triangle', size: 'big', x: 64, y: 30, w: 18, h: 18 },
+      { id: 'smallSquare', shape: 'square', size: 'small', x: 26, y: 38, w: 9, h: 9 },
+    ],
+    rounds: [
+      { item: 'bigCircle', colorWord: 'RED' },
+      { item: 'bigSquare', colorWord: 'BLUE' },
+      { item: 'bigTriangle', colorWord: 'YELLOW' },
+      { item: 'smallCircle', colorWord: 'GREEN' },
+      { item: 'smallTriangle', colorWord: 'ORANGE' },
+      { item: 'smallSquare', colorWord: 'PURPLE' },
+    ],
+  },
+
+  /* ---- Speaking: be Shelly, then be the giver ---- */
+  {
+    id: 'u2l5-be-shelly', kind: 'join-stage', bg: bgU2L5Sea, teacher: 'You are Shelly! Ask for a color, then say thank you.', cast: ['bella', 'mia'],
     turns: [
-      { who: 'pip', line: 'What color was the fish at the start?' },
-      { who: 'student', line: '______. (It had no color!)' },
-      { who: 'bella', line: 'What color is the fish now?' },
-      { who: 'student', line: "It's a ______ fish! (rainbow)" },
-      { who: 'pip', line: 'Do you like the rainbow fish?' },
-      { who: 'student', line: 'I like ______. / I don’t like ______.' },
+      { who: 'bella', line: 'Hello, Shelly! What color do you want?', bg: bgU2L5Red, bubble: 'right' },
+      { who: 'student', line: 'I want red, please!', bg: bgU2L5Red, bubble: 'right' },
+      { who: 'bella', line: 'Here you are! A red circle!', bg: bgU2L5Red, bubble: 'right' },
+      { who: 'student', line: 'Thank you!', bg: bgU2L5Red, bubble: 'right' },
+      { who: 'mia', line: 'What color do you want?', bg: bgU2L5Blue, bubble: 'right' },
+      { who: 'student', line: 'I want …, please!', bg: bgU2L5Blue, bubble: 'right' },
     ],
   },
   {
-    id: 'u2l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to the rainbow fish! Sing along together.',
-    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
-    lineDurationsMs: [3580, 4020, 4980, 7482],
-    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
-    lyrics: [
-      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
-      { who: 'bella', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    id: 'u2l5-you-give', kind: 'join-stage', bg: bgU2L5Sea, teacher: 'Now YOU give the scales! Ask, then say: Here you are!', cast: ['leo', 'willow'],
+    turns: [
+      { who: 'student', line: 'Ask Leo: What color do you want?', bg: bgU2L5Yellow, bubble: 'right' },
+      { who: 'leo', line: 'I want yellow, please!', bg: bgU2L5Yellow, bubble: 'right' },
+      { who: 'student', line: 'Here you are!', bg: bgU2L5Yellow, bubble: 'right' },
+      { who: 'leo', line: 'Thank you!', bg: bgU2L5Yellow, bubble: 'right' },
+      { who: 'student', line: 'Ask your teacher: What color do you want?' },
     ],
   },
-  { id: 'u2l5-finale', kind: 'finale', bg: bgU2L5FishPond, who: 'pip', line: 'You did it! You know the whole rainbow — red, orange, yellow, green, blue, AND purple! \u{1F308}\u{1F41F}' },
+
+  /* ---- Games ---- */
+  {
+    id: 'u2l5-sh-dash', kind: 'dash', bg: bgU2L5Sea, teacher: 'Mia Dash! Tap only the /sh/ words. Get 6!', who: 'mia', targetLetter: 'SH', targetPhoneme: '/sh/', goal: 6, seconds: 40,
+    items: [
+      { word: 'ship', letter: 'SH', img: itemShip, emoji: '\u{1F6A2}' },
+      { word: 'shell', letter: 'SH', img: itemShell, emoji: '\u{1F41A}' },
+      { word: 'shoe', letter: 'SH', img: itemShoe, emoji: '\u{1F45F}' },
+      { word: 'clock', letter: 'C', img: itemClock, emoji: '\u{1F570}️' },
+      { word: 'whale', letter: 'WH', img: itemWhale, emoji: '\u{1F433}' },
+      { word: 'frog', letter: 'F', img: itemFrog, emoji: '\u{1F438}' },
+    ],
+  },
+  {
+    id: 'u2l5-memory', kind: 'memory', bg: bgU2L5Sea, teacher: 'Find the pairs! Say each word.',
+    pairs: [
+      { id: 'ship', label: 'Ship', emoji: '\u{1F6A2}', img: itemShip },
+      { id: 'shell', label: 'Shell', emoji: '\u{1F41A}', img: itemShell },
+      { id: 'shoe', label: 'Shoe', emoji: '\u{1F45F}', img: itemShoe },
+      { id: 'fish', label: 'Fish', emoji: '\u{1F41F}', img: itemShelly },
+    ],
+  },
+  {
+    id: 'u2l5-retell', kind: 'join-stage', bg: bgU2L5Sea, teacher: 'Tell the story! Answer Pip.', cast: ['pip', 'bella'],
+    turns: [
+      { who: 'pip', line: 'What color is Shelly at the start?', bg: bgU2L5Sad, bubble: 'left' },
+      { who: 'student', line: 'She is gray.', bg: bgU2L5Sad, bubble: 'left' },
+      { who: 'pip', line: 'What is Shelly at the end?', bg: bgU2L5Rainbow, bubble: 'right' },
+      { who: 'student', line: 'She is a rainbow fish!', bg: bgU2L5Rainbow, bubble: 'right' },
+      { who: 'bella', line: 'What color scale do YOU want?' },
+      { who: 'student', line: 'I want a … …, please!' },
+    ],
+  },
+  {
+    // Listening game in Shelly's sea (replaces reading words: the children can't read yet).
+    id: 'u2l5-scale-fishing', kind: 'shape-fishing', bg: bgU2L5Sea, who: 'mia',
+    teacher: "Catch Shelly's scales! Listen: which color and shape?",
+    fish: [
+      { colorWord: 'RED', colorHex: '#EF4444', shape: 'circle' },
+      { colorWord: 'BLUE', colorHex: '#3B82F6', shape: 'square' },
+      { colorWord: 'YELLOW', colorHex: '#FACC15', shape: 'triangle' },
+      { colorWord: 'GREEN', colorHex: '#22C55E', shape: 'circle' },
+      { colorWord: 'PURPLE', colorHex: '#A855F7', shape: 'circle' },
+      { colorWord: 'ORANGE', colorHex: '#F97316', shape: 'square' },
+      { colorWord: 'BLUE', colorHex: '#3B82F6', shape: 'triangle' },
+      { colorWord: 'RED', colorHex: '#EF4444', shape: 'square' },
+    ],
+    targets: [0, 1, 2, 4, 6],
+  },
+
+  { id: 'u2l5-finale', kind: 'finale', bg: bgU2L5Rainbow, who: 'pip', line: 'Shelly is a rainbow fish! Share and be kind. Goodbye, friends!' },
 ];
 
 /* =============================================================================

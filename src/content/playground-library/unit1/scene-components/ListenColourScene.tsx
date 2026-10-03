@@ -89,6 +89,15 @@ export function ListenColourScene({ scene, onWin, onLose, onNext, sync }: { scen
       <div className="absolute inset-x-0 top-[13%] z-10 flex justify-center px-4">
         <div className="rounded-[2rem] bg-white p-3 shadow-2xl ring-8 ring-orange-100">
           <svg viewBox="0 0 100 62" className="h-[48vh] w-auto max-w-full" aria-label="Colouring page">
+            {scene.backdrop === 'fish' && (
+              // Shelly's outline behind her scales.
+              <g aria-hidden>
+                <polygon points="12,31 0,14 0,48" fill="#F1F5F9" stroke="#2B1E17" strokeWidth="0.8" strokeLinejoin="round" />
+                <ellipse cx="54" cy="31" rx="44" ry="28" fill="#F1F5F9" stroke="#2B1E17" strokeWidth="0.8" />
+                <circle cx="88" cy="24" r="3" fill="#2B1E17" />
+                <path d="M 90 34 Q 93 37 96 34" fill="none" stroke="#2B1E17" strokeWidth="0.8" strokeLinecap="round" />
+              </g>
+            )}
             {scene.items.map((it) => (
               <g
                 key={it.id}

@@ -216,6 +216,13 @@ export function Lep1Keyframes() {
       @keyframes lep1-swim-r { from { transform: translateX(-30vw); } to { transform: translateX(110vw); } }
       @keyframes lep1-swim-l { from { transform: translateX(110vw) scaleX(-1); } to { transform: translateX(-30vw) scaleX(-1); } }
       @keyframes lep1-bob { 0%,100% { margin-top: 0; } 50% { margin-top: 10px; } }
+      @keyframes lep1-kb-zoom-in { from { transform: scale(1); } to { transform: scale(1.18); } }
+      @keyframes lep1-kb-zoom-out { from { transform: scale(1.2); } to { transform: scale(1); } }
+      @keyframes lep1-kb-pan-left { from { transform: scale(1.15) translateX(4%); } to { transform: scale(1.15) translateX(-4%); } }
+      @keyframes lep1-kb-pan-right { from { transform: scale(1.15) translateX(-4%); } to { transform: scale(1.15) translateX(4%); } }
+      @keyframes lep1-fade-in { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes lep1-bubble-up { from { transform: translateY(0); opacity: 0.9; } to { transform: translateY(-110vh); opacity: 0; } }
+      @keyframes lep1-tear { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(60px); opacity: 0; } }
       @keyframes lep1-walk { 0% { transform: translateX(-60%) rotate(-4deg); } 25% { transform: translateX(-20%) rotate(3deg) translateY(-6px); } 50% { transform: translateX(20%) rotate(-3deg); } 75% { transform: translateX(60%) rotate(3deg) translateY(-6px); } 100% { transform: translateX(-60%) rotate(-4deg); } }
       @keyframes lep1-wiggle { 0%,100% { transform: rotate(-3deg) translateY(0); } 25% { transform: rotate(3deg) translateY(-4px); } 50% { transform: rotate(-2deg) translateY(0); } 75% { transform: rotate(4deg) translateY(-4px); } }
       @keyframes lep1-ping { 75%, 100% { transform: scale(2); opacity: 0; } }

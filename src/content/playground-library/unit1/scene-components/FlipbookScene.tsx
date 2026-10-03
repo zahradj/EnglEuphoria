@@ -5,6 +5,20 @@ import { cueSpeak, cueSpeakOnce } from '../audio';
 import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
+import { ShapeIcon } from './shared';
+
+// Non-readers: an answer word gets a picture beside it (colour blob, shape, 👍/👎).
+const OPTION_HEX: Record<string, string> = { red: '#EF4444', blue: '#3B82F6', yellow: '#FACC15', green: '#22C55E', orange: '#F97316', purple: '#A855F7', gray: '#9CA3AF', grey: '#9CA3AF', pink: '#F472B6', black: '#111827', white: '#FFFFFF', brown: '#92400E' };
+function OptionPicture({ text }: { text: string }) {
+  const words = text.toLowerCase().replace(/[^a-z' ]/g, '').split(' ');
+  const color = words.find((w) => OPTION_HEX[w]);
+  const shape = words.find((w) => w === 'circle' || w === 'square' || w === 'triangle');
+  if (shape) return <span className="block h-10 w-10 shrink-0"><ShapeIcon shape={shape} fill={color ? OPTION_HEX[color] : '#FEFBDD'} /></span>;
+  if (color) return <span className="block h-10 w-10 shrink-0 rounded-full border-4 border-white shadow" style={{ backgroundColor: OPTION_HEX[color] }} />;
+  if (words[0] === 'yes') return <span className="text-3xl">👍</span>;
+  if (words[0] === 'no') return <span className="text-3xl">👎</span>;
+  return null;
+}
 
 /* ---------- Flipbook (page-flip storybook with comprehension checkpoints) ---------- */
 
@@ -146,9 +160,9 @@ export function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: E
             <div className="flex flex-col gap-2">
               {checkpoint.options.map((opt) => (
                 <button key={opt} onClick={() => answer(opt)}
-                  className={`rounded-2xl border-4 border-white py-3 text-lg font-black text-white shadow-lg transition active:scale-95 ${wrongPick === opt ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
+                  className={`flex items-center justify-center gap-3 rounded-2xl border-4 border-white py-2 text-lg font-black text-white shadow-lg transition active:scale-95 ${wrongPick === opt ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`}
                   style={{ background: 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' }}>
-                  {opt}
+                  <OptionPicture text={opt} />{opt}
                 </button>
               ))}
             </div>
