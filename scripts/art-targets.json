@@ -808,5 +808,32 @@
       "public/lep1/items/item-ship.png"
     ],
     "prompt": "One single cute cartoon RAINBOW arch with six clear bands (red, orange, yellow, green, blue, purple from the outside in) and a small fluffy white cloud at each end, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-gem-red-circle.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-rainbow.png",
+      "public/lep1/scenes/bg-u2l6-garden-wide.png"
+    ],
+    "prompt": "One single treasure gem: a shiny flat RED CIRCLE gem, perfectly round like a coin, with a little sparkle highlight, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), seen straight on, isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-gem-blue-square.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-rainbow.png",
+      "public/lep1/scenes/bg-u2l6-garden-wide.png"
+    ],
+    "prompt": "One single treasure gem: a shiny flat BLUE SQUARE gem with four equal straight sides, with a little sparkle highlight, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), seen straight on, isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-gem-yellow-triangle.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-rainbow.png",
+      "public/lep1/scenes/bg-u2l6-garden-wide.png"
+    ],
+    "prompt": "One single treasure gem: a shiny flat YELLOW TRIANGLE gem with three straight sides, with a little sparkle highlight, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), seen straight on, isolated alone on a plain pure white background, nothing else in the picture. No text."
   }
 ]
