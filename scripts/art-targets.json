@@ -832,5 +832,158 @@
       "public/lep1/items/item-rainbow.png"
     ],
     "prompt": "One single treasure gem: a shiny flat YELLOW TRIANGLE gem with three straight sides, with a little sparkle highlight, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), seen straight on, isolated alone on a plain pure white background, nothing else in the picture. No flowers, no plants, no grass, no scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a cosy children's playroom: warm wooden floor and soft yellow walls that fill the whole picture edge to edge, a window with curtains, a rug. In the middle stands a big open wooden toy box. The five friends from the reference sit and stand around it, smiling: Pip the orange fox, Willow the blue bird with a green scarf, Bella the white bunny, Mia the grey mouse with an orange bow, Leo the yellow lion. On the floor in front: one plain RED ball, one small BLUE toy car and one baby doll in a GREEN dress. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-toybox-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a cosy children's playroom: warm wooden floor and soft yellow walls that fill the whole picture edge to edge, a window with curtains, a rug. Pip the orange fox (same design as the reference) on the LEFT lifts the lid of a big closed wooden toy box and peeks inside with a curious, excited face; a soft magical glow comes out of the box. The right third of the picture is open playroom. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-ball-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a cosy children's playroom: warm wooden floor and soft yellow walls that fill the whole picture edge to edge, a window with curtains, a rug. Bella the white bunny (same design as the reference) on the LEFT happily bounces one big plain RED ball (one solid red colour, no stripes). The right half of the picture is open playroom floor and wall. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-car-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a cosy children's playroom: warm wooden floor and soft yellow walls that fill the whole picture edge to edge, a window with curtains, a rug. Willow the blue bird with a green scarf (same design as the reference) on the LEFT pushes one small plain BLUE toy car across the floor, smiling. The right half is open playroom. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-doll-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a cosy children's playroom: warm wooden floor and soft yellow walls that fill the whole picture edge to edge, a window with curtains, a rug. Mia the grey mouse with an orange bow (same design as the reference) on the LEFT hugs one baby doll in a GREEN dress, smiling. The right half is open playroom. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-play-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a cosy children's playroom: warm wooden floor and soft yellow walls that fill the whole picture edge to edge, a window with curtains, a rug. All five friends from the reference play together happily: Bella throws a plain RED ball to Leo, Willow drives a BLUE toy car on the rug, Mia rocks a doll in a GREEN dress, Pip claps and laughs. Bright, joyful. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-shop-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A bright toy shop: wooden shelves fill the back wall edge to edge with toys of many colours — balls, toy cars and dolls. Pip the orange fox (same design as the reference) stands on the LEFT behind a small wooden shop counter, smiling and waving like a shopkeeper. The right third of the picture is open shop floor in front of the shelves. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-shelf-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A wide wooden toy shelf seen straight on, filling the picture, with three long shelves and plain warm wall behind. Nine toys stand apart from each other with clear space between them, three on each shelf: TOP shelf from left to right: a plain RED ball, a BLUE toy car, a doll in a GREEN dress. MIDDLE shelf: a plain YELLOW ball, a doll in a PURPLE dress, an ORANGE toy car. BOTTOM shelf: a GREEN toy car, a plain BLUE ball, a doll in a RED dress. No characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-ball-red.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one plain round toy ball in solid RED (one single colour, no stripes) with a cute small happy face, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-ball-blue.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one plain round toy ball in solid BLUE (one single colour, no stripes) with a cute small happy face, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-ball-yellow.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one plain round toy ball in solid YELLOW (one single colour, no stripes) with a cute small happy face, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-car-red.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one small toy car in solid RED, side view, with a cute happy face, exactly like the blue toy car reference but red, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-car-green.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one small toy car in solid GREEN, side view, with a cute happy face, exactly like the blue toy car reference but green, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-doll-purple.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one baby doll in a PURPLE dress, exactly like the doll reference but with a purple dress, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-doll-yellow.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one baby doll in a YELLOW dress, exactly like the doll reference but with a yellow dress, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-dog.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one cute friendly brown puppy dog sitting, smiling, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-door.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one simple wooden front door with a round knob, closed, seen straight on, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
   }
 ]
