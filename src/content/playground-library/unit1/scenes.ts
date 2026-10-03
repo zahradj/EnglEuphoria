@@ -4168,16 +4168,16 @@ export const LESSON_U2L6_SCENES: Scene[] = [
     ],
   },
   {
-    // Slide 9: spinner → sentence. Badges sit on the six gems painted in bg-u2l6-gems-wide.
+    // Slide 9: spinner → sentence. Badges sit just above the six gems painted in bg-u2l6-gems-wide (checked against the art).
     id: 'u2l6-spin', kind: 'spin-wheel', bg: bgU2L6Gems, title: '',
     teacher: 'Have the student spin and say the gem: "It\'s a red circle!" Or tap a number.',
     items: [
-      { label: "It's a red circle!", left: '12%', top: '62%' },
-      { label: "It's an orange square!", left: '27%', top: '62%' },
-      { label: "It's a yellow triangle!", left: '42%', top: '62%' },
-      { label: "It's a green circle!", left: '57%', top: '62%' },
-      { label: "It's a blue square!", left: '72%', top: '62%' },
-      { label: "It's a purple triangle!", left: '87%', top: '62%' },
+      { label: "It's a red circle!", left: '13.5%', top: '58%' },
+      { label: "It's an orange square!", left: '28.5%', top: '58%' },
+      { label: "It's a yellow triangle!", left: '43%', top: '58%' },
+      { label: "It's a green circle!", left: '57%', top: '58%' },
+      { label: "It's a blue square!", left: '71.5%', top: '58%' },
+      { label: "It's a purple triangle!", left: '85.5%', top: '58%' },
     ],
     wheelAt: { left: '50%', top: '28%' },
   },
