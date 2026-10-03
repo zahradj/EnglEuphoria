@@ -96,7 +96,6 @@ describe('approved video briefs', () => {
     if (!VIDEO_BRIEFS.some((b) => b.status === 'clip-approved')) expect(ready.length).toBeLessThanOrEqual(1);
   });
 });
-});
 
 describe('server copy', () => {
   it('supabase/functions/_shared/videoPolicy.ts is byte-identical to src/lib/videoPolicy.ts', () => {
