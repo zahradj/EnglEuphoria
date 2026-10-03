@@ -1,0 +1,15 @@
+
+=== docs/songs/u2l5-shelly-take1.mp3  length=62.7s  score=0.79  missing=4  extra=7
+heard: shall we shall we little great fish a red circle a blue square a yellow triangle green and orange and purple too shelly is the rainbow fish you
+line starts (s): [np.float64(9.9), np.float64(11.4), np.float64(15.6), np.float64(18.8)]
+lineDurationsMs: [11440, 4160, 3160, 43986]
+
+=== docs/songs/u2l5-shelly-take2.mp3  length=28.4s  score=0.92  missing=2  extra=2
+heard: shelly shelly little gray fish a red circle a blue square a yellow triangle green and orange and purple too shelly in a rainbow fish
+line starts (s): [np.float64(0.0), np.float64(7.8), np.float64(12.6), 17.0]
+lineDurationsMs: [7830, 4760, 4410, 11447]
+
+=== docs/songs/u2l5-shelly-take3.mp3  length=61.8s  score=0.88  missing=2  extra=4
+heard: shall we shall eat little grey fish a red circle a blue square a yellow triangle green and orange and purple too shelly is a rainbow fish
+line starts (s): [np.float64(8.7), np.float64(11.1), np.float64(15.5), np.float64(55.5)]
+lineDurationsMs: [11100, 4380, 40020, 6332]
