@@ -520,9 +520,10 @@ export type Scene =
        *  out from under the chair. The voice says "The teddy is under the
        *  chair!"; the child taps that toy in THAT place (the same toy may also
        *  peek somewhere else, so the place word matters). `places`: x/y = where
-       *  a peeking toy sits (%), `from` = the side it peeks from. */
+       *  a peeking toy sits (%), `from` = the side it peeks from, `size` = toy
+       *  size in vh (default 19; smaller to fit under a chair). */
       id: string; kind: 'peek-pop'; bg: string; bgVideo?: string; teacher: string; who: CharKey;
-      places: { label: string; x: number; y: number; from: 'below' | 'above' | 'left' | 'right' }[];
+      places: { label: string; x: number; y: number; from: 'below' | 'above' | 'left' | 'right'; size?: number }[];
       toys: Thing[];
       rounds: { toy: number; place: number; line: string; reply: string; decoys: [number, number][] }[];
     }
@@ -5638,9 +5639,9 @@ export const LESSON_U3L5_SCENES: Scene[] = [
   {
     id: 'u3l5-in-on-under', kind: 'listen-repeat-cards', bg: bgU3L5Room, teacher: 'In, on, under! Show each one with your hands, then say it.',
     cards: [
-      { who: 'bella', sentence: 'In! The ball is in the box.', img: bgU3L5BallBox, imgLabel: 'In' },
-      { who: 'mia', sentence: 'On! The teddy is on the bed.', img: bgU3L5TeddyBed, imgLabel: 'On' },
-      { who: 'leo', sentence: 'Under! The car is under the chair.', img: bgU3L5CarChair, imgLabel: 'Under' },
+      { who: 'bella', sentence: 'In! The ball is in the box.', img: itemToyBox, imgLabel: 'In' },
+      { who: 'mia', sentence: 'On! The teddy is on the bed.', img: itemTeddy, imgLabel: 'On' },
+      { who: 'leo', sentence: 'Under! The car is under the chair.', img: itemCar, imgLabel: 'Under' },
     ],
   },
   {
@@ -5677,9 +5678,9 @@ export const LESSON_U3L5_SCENES: Scene[] = [
   {
     id: 'u3l5-where-is', kind: 'listen-repeat-cards', bg: bgU3L5Room, teacher: 'Ask and answer! "Where is the ball?" — "It\'s in the box!"',
     cards: [
-      { who: 'pip', sentence: "Where is the ball? It's in the box!", img: bgU3L5BallBox, imgLabel: 'In the box' },
-      { who: 'pip', sentence: "Where is the teddy? It's on the bed!", img: bgU3L5TeddyBed, imgLabel: 'On the bed' },
-      { who: 'pip', sentence: "Where is the car? It's under the chair!", img: bgU3L5CarChair, imgLabel: 'Under the chair' },
+      { who: 'pip', sentence: "Where is the ball? It's in the box!", img: itemBallRed, imgLabel: 'In the box' },
+      { who: 'pip', sentence: "Where is the teddy? It's on the bed!", img: itemTeddy, imgLabel: 'On the bed' },
+      { who: 'pip', sentence: "Where is the car? It's under the chair!", img: itemCar, imgLabel: 'Under the chair' },
     ],
   },
   {
@@ -5689,7 +5690,7 @@ export const LESSON_U3L5_SCENES: Scene[] = [
     places: [
       { label: 'in the box', x: 59, y: 42, from: 'below' },
       { label: 'on the bed', x: 23, y: 41, from: 'above' },
-      { label: 'under the chair', x: 79, y: 59, from: 'right' },
+      { label: 'under the chair', x: 85, y: 60, from: 'right', size: 11 },
     ],
     toys: [
       { label: 'ball', img: itemBallRed },

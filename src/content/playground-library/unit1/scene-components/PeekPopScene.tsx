@@ -103,7 +103,7 @@ export function PeekPopScene({ scene, onWin, onLose, onNext, sync }: { scene: Pe
             key={j}
             className={`absolute z-20 ${clip ? 'overflow-hidden' : ''}`}
             // 'below': the bottom edge is the rim the toy rises from; 'left'/'right': the side it slides out of.
-            style={{ left: `${p.x}%`, top: `${p.y}%`, width: 'min(19vh, 13vw)', aspectRatio: '1', transform: p.from === 'below' ? 'translate(-50%, -100%)' : 'translate(-50%, -50%)' }}
+            style={{ left: `${p.x}%`, top: `${p.y}%`, width: `min(${p.size ?? 19}vh, ${((p.size ?? 19) * 13) / 19}vw)`, aspectRatio: '1', transform: p.from === 'below' ? 'translate(-50%, -100%)' : 'translate(-50%, -50%)' }}
           >
             <AnimatePresence>
               {toy && who && (
@@ -113,7 +113,7 @@ export function PeekPopScene({ scene, onWin, onLose, onNext, sync }: { scene: Pe
                   aria-label={`${toy.label} ${p.label}`}
                   className="absolute inset-0 grid place-items-center"
                   initial={hidden}
-                  animate={ducking ? { ...hidden, transition: { duration: 0.3 } } : { x: 0, y: 0, opacity: 1, scaleY: [0.8, 1.1, 1], rotate: found ? [0, -10, 10, 0] : [-4, 4, -4] }}
+                  animate={ducking ? { ...hidden, transition: { duration: 0.3 } } : { x: 0, y: p.from === 'below' ? '28%' : 0, opacity: 1, scaleY: [0.8, 1.1, 1], rotate: found ? [0, -10, 10, 0] : [-4, 4, -4] }}
                   exit={{ ...hidden, transition: { duration: 0.35, ease: 'easeIn' } }}
                   transition={{ type: 'spring', stiffness: 300, damping: 14, rotate: { duration: found ? 0.6 : 1.4, repeat: found ? 0 : Infinity } }}
                   whileTap={{ scale: 0.88 }}
