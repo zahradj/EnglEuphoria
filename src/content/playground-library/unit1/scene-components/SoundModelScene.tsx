@@ -91,9 +91,9 @@ export function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene,
           <div key={a.word} className="absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: spot.left, top: spot.top, animation: `lep1-float 3s ease-in-out ${i * 0.3}s infinite` }}>
             <button
               onClick={() => openProp(i)}
-              className={`relative grid place-items-center rounded-3xl bg-transparent p-0 transition-transform active:scale-90 ${!isOpen && phase === 'invite' ? 'animate-pulse' : ''}`}
+              className="relative grid place-items-center rounded-3xl bg-transparent p-0 transition-transform active:scale-90"
               style={{ width: isOpen ? 'clamp(96px, calc(20*var(--svh,1vh)), 180px)' : 'clamp(76px, calc(14*var(--svh,1vh)), 140px)', height: isOpen ? 'clamp(96px, calc(20*var(--svh,1vh)), 180px)' : 'clamp(76px, calc(14*var(--svh,1vh)), 140px)', transform: `rotate(${spot.rot}deg)`, filter: `drop-shadow(0 0 18px ${theme.tint}) drop-shadow(0 12px 24px rgba(0,0,0,0.35))` }}
-              aria-label={isOpen ? `Hear ${a.word} again` : `Open ${theme.label}`}
+              aria-label={isOpen ? `Hear ${a.word} again` : `Open mystery card ${i + 1}`}
             >
               {isOpen ? (
                 a.img ? (
@@ -105,10 +105,18 @@ export function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene,
                   // a genuinely missing asset.
                   <span className="animate-[lep1-pop_0.6s_ease-out]" style={{ fontSize: 'clamp(2.5rem, calc(7*var(--svh,1vh)), 4.5rem)' }}>{a.emoji}</span>
                 )
-              ) : theme.img ? (
-                <img src={theme.img} alt={theme.label} className="h-full w-full object-contain" />
               ) : (
-                <span style={{ fontSize: 'clamp(2.5rem, calc(7*var(--svh,1vh)), 4.5rem)' }}>{theme.closed}</span>
+                // Closed: a big, bright mystery card (owner 2026-10-04: the small pale prop icons —
+                // feathers, leaves… — were hard to see and nobody knew they could be tapped).
+                <span
+                  className="relative grid h-full w-full place-items-center rounded-[28%] border-[6px] border-white font-black text-white"
+                  style={{ background: "linear-gradient(160deg, #FF9F45, #FE6A2F 60%, #EC4899)", boxShadow: "inset 0 6px 0 rgba(255,255,255,0.45), inset 0 -8px 0 rgba(0,0,0,0.15), 0 10px 22px rgba(60,30,10,0.35)", fontSize: 'clamp(2.8rem, calc(9*var(--svh,1vh)), 5rem)', textShadow: '0 3px 0 rgba(0,0,0,0.2)' }}
+                >
+                  ?
+                  {i === scene.anchors.findIndex((_, k) => !openedSet.has(k)) && (
+                    <span className="pointer-events-none absolute -bottom-3 -right-3 animate-bounce" style={{ fontSize: 'clamp(1.8rem, calc(6*var(--svh,1vh)), 3rem)' }}>{'\u{1F446}'}</span>
+                  )}
+                </span>
               )}
             </button>
             {isOpen && (
