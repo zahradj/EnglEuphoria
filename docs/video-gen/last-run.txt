@@ -1,4 +1,4 @@
-willow-stir: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started willow-stir: 05737997-246b-4dcd-9c43-f0b6f85bb3ef
-saved public/lep1/video/clips/u2l2-mix/willow-stir.mp4 (4766450 bytes)
+willow-pour1: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started willow-pour1: 25c9629d-0dc6-4643-815d-6d40a14ff290
+saved public/lep1/video/clips/u2l2-mix/willow-pour1.mp4 (4647820 bytes)
 1/1 clips ready for u2l2-mix
