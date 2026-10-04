@@ -464,7 +464,8 @@
         "action": "Willow slowly stirs the paint in the glass bowl with the wooden spoon; the blue and yellow paint swirl together into green",
         "prompt": "Willow the blue bird slowly stirs the paint in the glass bowl with the wooden spoon in small circles. The blue and yellow paint swirl together and turn green. Her feet, the table and both jars stay still. Nobody else is in the picture. The camera stays steady.",
         "ownerApproved": true,
-        "approvedNote": "owner: \"create the video of this lesson\" 2026-10-04, after reading the scenario (scenario shot 3, first clip only)"
+        "approvedNote": "owner: \"create the video of this lesson\" 2026-10-04, after reading the scenario (scenario shot 3, first clip only)",
+        "review": "2026-10-04 review-clip: START 0.99, END 0.97, POSE 0.62 (fail). Frame review: the stir action is right (one wing, spoon in the bowl, feet/table/jars still, nobody else, no text), but the paint turns mostly YELLOW at ~4.3 s and ends blotchy yellow/green, not the clean green of the end picture. Not in the lesson; waiting for the owner (use with a fade into the green picture, or reject). No other clip ordered."
       }
     ]
   }
