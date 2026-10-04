@@ -3515,15 +3515,19 @@ export const LESSON_U2L4_SCENES: Scene[] = [
   { id: 'u2l4-title', kind: 'title-card', bg: bgU2L4Party, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 4', title: 'What Color Is This?', subtitle: 'Ask and answer' },
 
   {
-    // Warm-up: the lesson's question song (scripts/songs.json "u2l4-what-color").
-    id: 'u2l4-song', kind: 'song', bg: bgU2L4Party, title: '\u{1F3B5} The Question Song \u{1F3B5}', teacher: 'Sing, point to a color, and nod for YES, shake your head for NO!',
-    durationSeconds: 20, bigWord: 'Ask!', songUrl: `${A}/audio/what-color-song-u2l4.mp3?v=1`,
-    songPrompt: 'Upbeat kids pop question song',
+    // Warm-up: the Colors Song from Lesson 2 (it ends "What color is it?", this
+    // lesson's question). The lesson's own Question Song is in scripts/songs.json
+    // ("u2l4-what-color") but not generated yet (music credits ran out on
+    // 2026-10-03); switch songUrl/lyrics back to it once it is baked.
+    id: 'u2l4-song', kind: 'song', bg: bgU2L4Party, title: '\u{1F3B5} The Colors Song \u{1F3B5}', teacher: 'Sing and point! On "What color is it?" point to something and answer.',
+    durationSeconds: 20, bigWord: 'Colors', songUrl: `${A}/audio/colors-song-u2l2.mp3?v=1`,
+    lineDurationsMs: [4120, 4000, 4140, 7802],
+    songPrompt: 'Upbeat kids pop colours song',
     lyrics: [
-      { who: 'bella', text: "What color is this? It's red! It's red!", emotion: 'happy' },
-      { who: 'mia', text: "What shape is this? It's a circle, a circle!", emotion: 'happy' },
-      { who: 'willow', text: 'Is it blue? Yes, it is! Yes, it is!', emotion: 'happy' },
-      { who: 'leo', text: "Is it green? No, it isn't! No, it isn't!", emotion: 'happy' },
+      { who: 'willow', text: 'Green, green, the frog is green!', emotion: 'happy' },
+      { who: 'leo', text: 'Orange, orange, the carrot is orange!', emotion: 'happy' },
+      { who: 'mia', text: 'Purple, purple, the grapes are purple!', emotion: 'happy' },
+      { who: 'pip', text: 'What color is it? What color is it?', emotion: 'happy' },
     ],
   },
   {
