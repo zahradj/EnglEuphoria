@@ -37,7 +37,8 @@ const call = async (body) => {
 };
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 const style = story.style ?? '';
-const negative = story.negativePrompt ?? 'text, letters, words, subtitles, watermark, logo, extra characters, duplicated characters, photorealistic, 3D render, distorted faces, blurry';
+// Anatomy + extra-motion terms from the 2026-10-04 research (video-quality-gate "Accuracy method").
+const negative = story.negativePrompt ?? 'text, letters, words, subtitles, watermark, logo, extra characters, duplicated characters, missing characters, extra limbs, extra arms, extra paws, extra fingers, fused fingers, missing limbs, deformed hands, morphing, melting, flicker, dancing, waving, walking, marching, jumping, camera shake, zoom, photorealistic, 3D render, distorted faces, blurry';
 
 async function makeClip(beat) {
   const file = path.join(story.out, `${beat.id}.mp4`);
@@ -47,8 +48,17 @@ async function makeClip(beat) {
   const up = await call({ action: 'upload', base64: fs.readFileSync(beat.image).toString('base64'), contentType });
   if (!up.ok || !up.j.public_url) { console.error(`upload ${beat.id} failed: ${up.status} ${JSON.stringify(up.j).slice(0, 300)}`); return false; }
   const input = { image_url: up.j.public_url, prompt: `${beat.prompt} ${style}`.trim(), duration: beat.seconds ?? story.seconds ?? 10, negative_prompt: negative };
+  // Start + END frame (keyframe interpolation): the model only fills in the motion between two approved pictures,
+  // so it cannot invent a different action. Kling 2.5 Turbo Pro takes the end picture as tail_image_url.
+  if (beat.endImage) {
+    const tail = await call({ action: 'upload', base64: fs.readFileSync(beat.endImage).toString('base64'), contentType: /\.jpe?g$/i.test(beat.endImage) ? 'image/jpeg' : 'image/png' });
+    if (!tail.ok || !tail.j.public_url) { console.error(`upload end picture ${beat.id} failed: ${tail.status}`); return false; }
+    input.tail_image_url = tail.j.public_url;
+  }
+  if (typeof story.cfgScale === 'number') input.cfg_scale = story.cfgScale;
   const est = await call({ action: 'estimate', endpoint, input });
   console.log(`${beat.id}: estimate ${JSON.stringify(est.j)}`);
+  if (!est.ok) { console.error(`${beat.id}: the estimate was refused (${est.status}) — nothing ordered. If it names tail_image_url, this endpoint has no end-frame support: pick one that has.`); return false; }
   const st = await call({ action: 'start', endpoint, input, idempotencyKey: `${key}-${beat.id}-${Date.now()}` });
   const id = st.j.request_id;
   if (!st.ok || !id) { console.error(`start ${beat.id} failed: ${st.status} ${JSON.stringify(st.j).slice(0, 400)}`); return false; }

@@ -11,6 +11,9 @@
 //   leader         who leads/does it, and that name must be in `prompt` (e.g. "Willow")
 //   ownerApproved  true ONLY after the owner has read the written storyboard (line + action + prompt) and said yes — never set it yourself
 //   seconds        <= 5 (short clips = fewer mistakes, fewer credits)
+//   endImage       the approved picture of the pose the clip must END in (start + end frame: the model only fills in
+//                  the motion between two pictures, so it cannot invent another action) — OR holdPose: true when the
+//                  start picture already shows the action and the clip only adds a breath/blink.
 //
 // The prompt must describe that one action and nothing else: extra moves (dancing, waving, clapping, swinging…) are refused unless the
 // line itself asks for them, and so are crowds of actions ("then", "and then", lists of moves).
@@ -19,6 +22,7 @@ import fs from 'node:fs';
 const EXTRA_MOVES = ['dance', 'dancing', 'wave', 'waves', 'waving', 'clap', 'claps', 'clapping', 'swing', 'swinging', 'sway', 'sways', 'swaying', 'jump', 'jumps', 'jumping', 'spin', 'spins', 'spinning', 'run', 'runs', 'running', 'hug', 'hugs', 'bounce', 'bouncing', 'wiggle', 'wiggling', 'shake', 'shaking', 'hop', 'hopping', 'twirl'];
 const SEQUENCE = /\b(then|and then|after that|next|again|repeatedly|several|many moves)\b/i;
 const MAX_SECONDS = 5;
+const MAX_PROMPT_WORDS = 50; // image-to-video prompts describe motion only (Kling guides: ~15-40 words); long prompts re-describe the picture
 
 export function checkBeat(beat) {
   const errs = [];
@@ -50,6 +54,11 @@ export function checkBeat(beat) {
   }
   if (SEQUENCE.test(beat.prompt ?? '')) errs.push('the prompt chains several moves ("then/next/again…"): one clip = one action');
   if (beat.image && !fs.existsSync(beat.image)) errs.push(`start picture missing: ${beat.image}`);
+  if (!beat.endImage && beat.holdPose !== true) errs.push('no endImage: give the approved picture of the final pose (start + end frame), or holdPose: true if the start picture already shows the action');
+  if (beat.endImage && !fs.existsSync(beat.endImage)) errs.push(`end picture missing: ${beat.endImage}`);
+  if (beat.endImage && beat.endImage === beat.image) errs.push('endImage is the same picture as image: use holdPose: true instead');
+  const words = String(beat.prompt ?? '').trim().split(/\s+/).filter(Boolean).length;
+  if (words > MAX_PROMPT_WORDS) errs.push(`prompt has ${words} words (max ${MAX_PROMPT_WORDS}): describe the motion only, not the picture`);
   return errs;
 }
 
