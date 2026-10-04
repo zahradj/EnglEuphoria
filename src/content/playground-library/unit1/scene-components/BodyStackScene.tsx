@@ -110,18 +110,17 @@ export function BodyStackScene({ scene, onWin, onLose, onNext, sync }: { scene: 
       </motion.div>
 
       {/* The tray of mixed-up slices (right). */}
-      <div className="absolute right-[5%] top-[16%] z-20 flex h-[74%] w-[40%] flex-col items-center justify-center gap-[2vh]">
+      <div className="absolute right-[5%] top-[16%] z-20 flex h-[78%] w-[40%] flex-col items-center justify-center gap-[1.6vh]">
         {tray.map((i, k) => {
           const sl = scene.slices[i];
           const gone = placedSet.has(i);
-          const hPct = (sl.y1 - sl.y0) * 100;
           return (
             <motion.button
               key={i}
               onClick={() => pick(i)}
               aria-label={sl.label}
               className={`relative overflow-hidden rounded-2xl border-4 border-white bg-white/60 shadow-xl ${gone ? 'pointer-events-none' : ''}`}
-              style={{ height: `${Math.max(12, Math.min(24, hPct * 0.42))}vh`, aspectRatio: `${aspect / (sl.y1 - sl.y0)}`, rotate: STICKER_TILTS[k % STICKER_TILTS.length], ...sliceStyle(scene.img, scene.source, sl.y0, sl.y1) }}
+              style={{ width: `${FRAME.h * 0.6 * aspect}vh`, aspectRatio: `${aspect / (sl.y1 - sl.y0)}`, rotate: STICKER_TILTS[k % STICKER_TILTS.length], ...sliceStyle(scene.img, scene.source, sl.y0, sl.y1) }}
               initial={{ scale: 0, x: 80 }}
               animate={gone ? { scale: 0, opacity: 0 } : wrong === i ? { x: [0, -12, 12, -8, 8, 0], scale: 1 } : { scale: 1, x: 0, opacity: 1 }}
               transition={wrong === i ? { duration: 0.45 } : { type: 'spring', stiffness: 260, damping: 15, delay: gone ? 0 : k * 0.07 }}
