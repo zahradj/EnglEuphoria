@@ -238,7 +238,8 @@
         "leader": "Willow",
         "action": "Willow points one wing at her own head; the four friends slowly put both paws on top of their head and keep them there",
         "prompt": "Willow the blue bird points one wing at the top of her own head. Pip, Mia, Leo and Bella slowly lift both paws and rest them on top of their head, and they keep their paws resting on their head until the end. They stay in their places. The camera stays steady.",
-        "ownerApproved": false
+        "ownerApproved": true,
+        "approvedNote": "owner: \"go\" 2026-10-04 (clip 1 only)"
       },
       {
         "id": "03-shoulders",

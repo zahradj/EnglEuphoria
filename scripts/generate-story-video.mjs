@@ -21,8 +21,9 @@ const PROXY = process.env.HF_PROXY_URL;
 const TOKEN = process.env.HF_PROXY_TOKEN;
 if (!PROXY || !TOKEN) { console.error('HF_PROXY_URL / HF_PROXY_TOKEN missing'); process.exit(1); }
 
-const key = (process.argv.find((a) => a.startsWith('--only=')) ?? '').slice(7)
-  || fs.readFileSync('scripts/video-gen-request.txt', 'utf8').split('\n').map((l) => l.trim()).find((l) => l && !l.startsWith('#'));
+// Request line: "<story key> [--beats=<id>]" (strict mode: one beat at a time).
+const reqLine = (fs.readFileSync('scripts/video-gen-request.txt', 'utf8').split('\n').map((l) => l.trim()).find((l) => l && !l.startsWith('#')) ?? '').split(/\s+/);
+const key = (process.argv.find((a) => a.startsWith('--only=')) ?? '').slice(7) || reqLine[0];
 const all = JSON.parse(fs.readFileSync('scripts/story-videos.json', 'utf8'));
 const story = all[key];
 if (!story) { console.error(`No story "${key}" in scripts/story-videos.json`); process.exit(1); }
@@ -72,7 +73,7 @@ async function makeClip(beat) {
 }
 
 let ok = 0;
-const beats = (process.argv.find((a) => a.startsWith('--beats=')) ?? '').slice(8).split(',').filter(Boolean);
+const beats = (process.argv.find((a) => a.startsWith('--beats=')) ?? reqLine.find((a) => a.startsWith('--beats=')) ?? '').slice(8).split(',').filter(Boolean);
 const wanted = (beats.length ? story.beats.filter((b) => beats.includes(b.id)) : story.beats).filter((b) => !b.rejected);
 
 // STRICT MODE (owner, 2026-10-04): nothing is uploaded or paid for unless every wanted beat passes the storyboard check

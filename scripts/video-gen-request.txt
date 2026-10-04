@@ -1,1 +1,2 @@
-# (no request) — strict mode: clips are ordered only after the owner approves the written storyboard
+u4l1-dance --beats=02-head
+# STRICT MODE: owner approved clip 1 ("Touch your head!") on 2026-10-04 — one clip only
