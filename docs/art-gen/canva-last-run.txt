@@ -1,5 +1,5 @@
 cut out: public/lep1/items/item-claw.png (786, 956)
-cut out: public/lep1/items/item-ring.png (1018, 760)
+cut out: public/lep1/items/item-toss-ring.png (1018, 760)
 + public/lep1/scenes/bg-u3l6-fair-wide.png (1376, 768)
 + public/lep1/scenes/bg-u3l6-claw-machine-wide.png (1376, 768)
 + public/lep1/scenes/bg-u3l6-ring-toss-wide.png (1376, 768)
@@ -7,5 +7,5 @@ cut out: public/lep1/items/item-ring.png (1018, 760)
 + public/lep1/scenes/bg-u3l6-bella-ring-wide.png (1376, 768)
 + public/lep1/scenes/bg-u3l6-prizes-wide.png (1376, 768)
 + public/lep1/items/item-claw.png (1024, 1024)
-+ public/lep1/items/item-ring.png (1024, 1024)
++ public/lep1/items/item-toss-ring.png (1024, 1024)
 8/8 saved
