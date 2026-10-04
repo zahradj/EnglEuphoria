@@ -1,9 +1,5 @@
-cut out: public/lep1/items/item-card-head.png (1024, 1024)
-cut out: public/lep1/items/item-card-shoulders.png (1024, 1024)
-cut out: public/lep1/items/item-card-knees.png (1024, 1024)
-cut out: public/lep1/items/item-card-toes.png (1024, 1024)
-+ public/lep1/items/item-card-head.png (1024, 1024)
-+ public/lep1/items/item-card-shoulders.png (1024, 1024)
-+ public/lep1/items/item-card-knees.png (1024, 1024)
-+ public/lep1/items/item-card-toes.png (1024, 1024)
++ public/lep1/scenes/bg-u4l1-act-head-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l1-act-shoulders-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l1-act-knees-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l1-act-toes-wide.png (1376, 768)
 4/4 saved
