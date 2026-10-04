@@ -96,6 +96,12 @@ real clips are being generated, and the lesson is not "done" until they are.
 Other lessons may keep picture-films (`story-video` built from stills) for
 short story openers and payoffs; Lesson 5 may not.
 
+**Demonstration pages ("watch and copy": body parts, actions, TPR, point-to) — every lesson**
+(owner-approved standard, U4L1 page 4, 2026-10-04): follow `.claude/skills/kids-demo-video`. ONE character, full body,
+front view, one picture per spoken line (Canva edits of one base picture), the target word added by us with a line to the
+exact spot (`scripts/label-video.py`; both sides for pairs), stills film first; AI motion only through strict mode with
+start + end key pictures.
+
 ---
 
 ## 3b. Extra Time — brain breaks & bonus activities (every lesson)

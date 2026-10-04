@@ -177,6 +177,13 @@ Run `npx vitest run src/content/playground-library/lessonVariety.test.ts` and re
 slot of the previous unit; fewer than 4 games; no new or upgraded mechanic; fewer than 3 researched sources; or the story
 frame repeats one of the previous two lessons. Fix the lesson, never the check.
 
+## Demonstration pages (kids-demo-video standard)
+
+Any page that shows the child what to do or point at must meet `.claude/skills/kids-demo-video` (one character, full
+body, front view, one picture per line showing exactly that line, target word labelled with a line to the exact spot,
+stills cross-fade, labels timed to the line). Re-open each picture and a frame per label; a dot off the part, a group
+shot, a cropped body or an AI-written word fails the gate.
+
 ## When to run this
 
 - Every time a lesson's scene array is created from scratch.

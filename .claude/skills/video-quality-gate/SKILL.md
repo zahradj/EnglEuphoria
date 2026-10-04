@@ -55,6 +55,11 @@ match the words. So, for every story clip, before ANY credit is spent:
    fix the brief (do not just re-roll: re-rolling burns money).
 6. **Then the rest** — one brief at a time, each reviewed. Only the user sets a brief to `clip-approved`.
 
+## Demonstration pages first: `.claude/skills/kids-demo-video`
+
+For any "watch and copy" page, build the owner-approved labelled stills film with that skill BEFORE thinking about paid
+motion; the clips below then animate between its pictures.
+
 ## ACCURACY METHOD — keyframes, not words (research 2026-10-04, owner: "accurate without any mistakes")
 
 Why the first two U4L1 clips failed: the model got ONE picture plus words and had to invent the action, so it improvised

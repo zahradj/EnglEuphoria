@@ -23,6 +23,10 @@
 - **Games: background loops only** (owner, 2026-10-04: games should feel like an animated video game). A game may use a short, silent, calm image-to-video loop of a game picture the owner has seen (`bgVideo`, ping-ponged by `scripts/make-game-loops.py`, still picture as fallback). Never characters doing new actions, never speech or text. Everything else in a game is live UI motion (`unit1/scene-components/gameFx.tsx`).
 - **Never zoom or pan a still picture** (no Ken Burns / `zoompan` / CSS scale loops on story pictures): it shakes. Stills hold still and cross-fade (`scripts/make-stills-film.py`).
 
+## Demonstration pages (hard rule — owner, 2026-10-04: "way better, keep it as a skill")
+
+- Every "watch and copy" page (body parts, actions, TPR, point-to) follows `.claude/skills/kids-demo-video`: ONE character, full body, front view, one picture per spoken line, the word added by us with a line to the exact spot (`scripts/label-video.py`), stills film first; AI motion only via strict mode with start + end key pictures.
+
 ## Media generators (hard rule — owner, 2026-10-04)
 
 - **Pictures: Canva only** (Canva `generate-image`, reference images uploaded to Canva for character consistency; `remove-background` for stickers). **Never generate pictures with Higgsfield** — not backgrounds, not stickers, not "just this once".
