@@ -1,4 +1,4 @@
-mia-pour1: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started mia-pour1: 19636beb-0575-4112-bf5a-2cae3b8e3468
-saved public/lep1/video/clips/u2l2-mix/mia-pour1.mp4 (3947035 bytes)
+mia-pour2: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started mia-pour2: f2f9ea44-d363-4e5a-8430-297327c9d65f
+saved public/lep1/video/clips/u2l2-mix/mia-pour2.mp4 (4651087 bytes)
 1/1 clips ready for u2l2-mix
