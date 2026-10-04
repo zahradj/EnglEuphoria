@@ -70,7 +70,7 @@ forgiving.
   locked, nothing new appears, characters stay put), ping-ponged into a seamless ~1 MB loop by
   `scripts/make-game-loops.py`; `LivingBg` plays it muted/looped over the still poster (fallback = still).
   Rules in CLAUDE.md / video-quality-gate: silent, calm, art the owner has seen, one clip first.
-- Game pieces are **painted art** (Higgsfield art-targets, sticker cut-outs), never plain CSS boxes: stones, chests, gems,
+- Game pieces are **painted art** (made with **Canva** — never Higgsfield for pictures; sticker cut-outs), never plain CSS boxes: stones, chests, gems,
   rivers, shelves. CSS only for UI chrome (pills, buttons, rings).
 - Depth: ground shadows under everything that floats or jumps (blurred ellipse, scaleX pulse), drop-shadows on stickers,
   slight parallax (foreground pieces move more than background).

@@ -164,7 +164,8 @@ of the picture (never over the character), ≥ 80 px tap targets, wide 16:9 art.
   ping-pongs it, ~1 MB): water flows, flowers sway, the character blinks. The
   still picture stays as the poster/fallback.
 - **Painted game pieces,** never plain CSS boxes: river, stones, chests, gems
-  are illustrated art (art-targets, Higgsfield) used as stickers.
+  are illustrated art used as stickers. **Pictures are made with Canva only;
+  Higgsfield is for video only** (owner, 2026-10-04).
 - **Motion with physics** (`unit1/scene-components/gameFx.tsx`, framer-motion):
   characters breathe when idle and hop in an arc with squash & stretch
   (`Hopper`); pieces spring in, float idly (`idleFloat`), lift and tilt when
