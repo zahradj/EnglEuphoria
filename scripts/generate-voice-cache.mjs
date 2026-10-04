@@ -64,6 +64,7 @@ try {
 import { spokenText } from '../src/content/playground-library/unit1/spokenText.ts';
 import { LIBRARY_GAMES } from '../src/content/playground-library/gamesCatalog.ts';
 import { artFor } from '../src/content/playground-library/alphabetArt.ts';
+import { colorPlayLines } from '../src/content/playground-library/colorPlayText.ts';
 import { VOICE_PROFILES, approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -553,6 +554,7 @@ function gameLines() {
       const scene = stage.scene;
       if (scene.kind === 'first-sound') scene.rounds.forEach((r) => words.add(r.word));
       if (scene.kind === 'whats-missing') scene.rounds.forEach((r) => r.items.forEach((i) => words.add(i.word)));
+      if (scene.kind === 'color-play') colorPlayLines(scene.mode, scene.rounds, scene.intro).forEach((l) => words.add(l));
       if (scene.kind === 'grammar-gap') {
         (scene.examples || []).forEach((e) => words.add(e));
         scene.rounds.forEach((r) => words.add([r.before, r.answer, r.after].map((p) => (p || '').trim()).filter(Boolean).join(' ')));

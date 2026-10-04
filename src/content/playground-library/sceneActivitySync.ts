@@ -39,7 +39,7 @@ export interface ActivitySync {
 
 /** Scene kinds that are real games: in a live class the teacher AND the unlocked student play them together. */
 export const SHARED_PLAY_KINDS: ReadonlySet<string> = new Set([
-  'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap',
+  'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play',
 ]);
 
 /** True on the screen that must NOT run a shared scene's automatic sequences. */

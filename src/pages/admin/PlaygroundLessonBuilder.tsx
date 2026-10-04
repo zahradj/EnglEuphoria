@@ -26,7 +26,7 @@ const KIND_GROUPS: { label: string; kinds: string[] }[] = [
   { label: 'Phonics core', kinds: ['sound-model', 'echo', 'trace'] },
   { label: 'Discrimination', kinds: ['basket', 'sound-sort', 'sound-pop', 'dash', 'brick-crush'] },
   { label: 'Blending / spell', kinds: ['word-build', 'alphabet-blocks', 'alphabet-order'] },
-  { label: 'Game scenes (alphabet, memory)', kinds: ['first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap'] },
+  { label: 'Game scenes (alphabet, memory)', kinds: ['first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play'] },
   { label: 'Retrieval', kinds: ['memory', 'puzzle', 'friend-pop', 'who-said-it', 'gather'] },
   {
     label: 'Feelings & grammar',
