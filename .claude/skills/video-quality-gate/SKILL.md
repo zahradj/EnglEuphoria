@@ -64,6 +64,12 @@ control the motion with **pictures at both ends**, keep prompts to motion only, 
 1. **Key pictures first (Canva, free).** For every line, the pose the line names is a Canva picture the owner approves.
    Make them as a CHAIN OF EDITS of one base picture ("keep everything identical, only move the paws to …", reference = the
    previous key picture). Same framing, light, characters, spots on the floor; only the moving body parts differ.
+   **Precision and camera angle (owner, 2026-10-04: "precision and angles are very important, especially for kids").**
+   Every key picture of one story uses the SAME camera: front view, child's eye level, whole bodies including feet in frame,
+   no tilt, no close-up, no camera move inside a clip ("the camera stays steady"). Choose the angle that SHOWS the target body
+   part: the paw must visibly TOUCH it (contact, not hovering near it), seen from the front, never hidden behind another
+   character or cropped by the frame. Each character keeps exactly two arms/two legs, the same props (scarf, bow, whistle)
+   and the same floor spot in every key picture. A key picture that fails any of this is remade before approval.
 2. **Overlay check (free).** Blend each pair 50/50 (start/end). Anything doubled except the moving paws/bodies = the model will
    slide or morph it → remake the picture before any credit is spent. A character missing from one picture = remake.
 3. **Start + END frame clip.** `image` = pose before the line, `endImage` = pose the line names (Kling 2.5 Turbo Pro
