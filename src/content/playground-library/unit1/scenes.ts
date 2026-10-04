@@ -5885,6 +5885,302 @@ export const LESSON_U3L5_SCENES: Scene[] = [
   { id: 'u3l5-finale', kind: 'finale', bg: bgU3L5Kitten, who: 'pip', line: 'Great tidying! The ball is in the box, the teddy is on the bed, and the kitten is in the box too! Goodbye, friend!' },
 ];
 
+/* ===================== Pre-A1 Unit 3 · Lesson 6 — The Toy Fair =====================
+ * Toys & Playtime (6/6), the unit review. Every Unit 3 toy with its colour,
+ * "I want the …, please!", "What's your favorite toy?", big / small and the
+ * Unit 3 sounds (D, T, K, P, O) — at a toy fair where the friends play fair
+ * games and win prizes. Lesson-Variety Engine: researched toy-grabber apps
+ * (Yateland "Claw Machine Games for kids"), Wordwall's quick review templates
+ * and Khan Academy Kids / Duolingo ABC review & mastery loops; two new games —
+ * Toy Grabber (a claw machine that never slips: only the right words win) and
+ * Ring Toss (rings stay on the pegs). New setting (outdoor fair), new look
+ * (sunny day → golden evening with string lights). Pictures made with Canva. */
+const bgU3L6Fair = `${A}/scenes/bg-u3l6-fair-wide.png`;
+const bgU3L6Claw = `${A}/scenes/bg-u3l6-claw-machine-wide.png`;
+const bgU3L6Toss = `${A}/scenes/bg-u3l6-ring-toss-wide.png`;
+const bgU3L6LeoClaw = `${A}/scenes/bg-u3l6-leo-claw-wide.png`;
+const bgU3L6BellaRing = `${A}/scenes/bg-u3l6-bella-ring-wide.png`;
+const bgU3L6Prizes = `${A}/scenes/bg-u3l6-prizes-wide.png`;
+const itemClaw = `${A}/items/item-claw.png`;
+const itemTossRing = `${A}/items/item-toss-ring.png`;
+/* The glass box and the four pegs painted in the fair pictures (checked on a % grid). */
+const U3L6_GLASS = { x: 49, y: 43, w: 50, h: 52 };
+const U3L6_PEGS = [{ x: 30, y: 58 }, { x: 42, y: 58 }, { x: 54, y: 58 }, { x: 66, y: 58 }];
+
+export const LESSON_U3L6_TITLE = 'The Toy Fair';
+export const LESSON_U3L6_OBJECTIVE = 'Review all of Unit 3: name every toy with its colour ("the blue ball"), ask for a prize ("I want the robot, please!"), say your favorite toy, use big / small and in / on / under, and hear D, T, K, P and O at the start of words — by playing fair games (a claw machine and a ring toss), spotting, guessing and speaking, no reading.';
+
+export const LESSON_U3L6_SCENES: Scene[] = [
+  { id: 'u3l6-title', kind: 'title-card', bg: bgU3L6Fair, level: 'Pre-A1', unit: 'Unit 3', lessonLabel: 'Lesson 6', title: 'The Toy Fair', subtitle: 'Play, win, say it!' },
+
+  /* 1-3 Hook + story */
+  {
+    id: 'u3l6-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
+    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
+    lineDurationsMs: [5200, 4300, 4500, 6100],
+    songPrompt: 'Cheerful upbeat kids hello song',
+    lyrics: [
+      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u3l6-intro', kind: 'cinematic', bg: bgU3L6Fair, hidePipOverlay: true, title: 'The Toy Fair', subtitle: 'Play games, win toys!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Welcome to the Toy Fair! We can play games and win toys!' },
+      { who: 'willow', line: "Hooray! Let's play!" },
+    ],
+    cta: "Let's go!",
+  },
+  {
+    id: 'u3l6-story-fair', kind: 'story-video', bg: bgU3L6Fair, videoUrl: `${A}/video/fair-story-u3l6-a.mp4?v=1`, title: 'At the Toy Fair',
+    teacher: 'Press play and watch. What do Leo and Bella want?',
+    pages: [
+      { img: bgU3L6Fair, who: 'pip', line: 'We are at the Toy Fair! Look at all the games!', atSec: 0 },
+      { img: bgU3L6LeoClaw, who: 'leo', line: 'I want the robot, please! Press the button... I got it!', atSec: 5 },
+      { img: bgU3L6BellaRing, who: 'bella', line: 'I want the red kite! Throw the ring... Yes! I won!', atSec: 10 },
+    ],
+    checkpoints: [
+      { afterPage: 1, who: 'leo', question: 'What does Leo want?', answer: 'The robot', options: [{ label: 'The teddy', img: itemTeddy }, { label: 'The robot', img: itemRobot }, { label: 'The ball', img: itemBallRed }] },
+      { afterPage: 2, who: 'bella', question: 'What does Bella win?', answer: 'The kite', options: [{ label: 'The kite', img: itemKite }, { label: 'The car', img: itemCar }, { label: 'The doll', img: itemDoll }] },
+    ],
+  },
+
+  /* 4-6 Review the words, move, first fair game */
+  {
+    id: 'u3l6-review-cards', kind: 'listen-repeat-cards', bg: bgU3L6Fair, teacher: 'Our toy words! Listen, then say it like the friends.',
+    cards: [
+      { who: 'leo', sentence: 'I want the robot, please!', img: itemRobot, imgLabel: 'Robot' },
+      { who: 'bella', sentence: "It's a big red kite!", img: itemKite, imgLabel: 'Kite' },
+      { who: 'mia', sentence: 'My favorite toy is my doll!', img: itemDoll, imgLabel: 'Doll' },
+    ],
+  },
+  {
+    id: 'u3l6-move-say', kind: 'tpr-actions', bg: bgU3L6Fair, who: 'pip',
+    teacher: 'Stand up! Play with the toys — say it with Pip, then do it before the ring runs out.',
+    rounds: [
+      { line: 'Fly a kite! Up, up, up!', emoji: '\u{1FA81}', img: itemKite },
+      { line: 'Drive a car! Vroom!', emoji: '\u{1F697}', img: itemCar },
+      { line: 'Walk like a robot!', emoji: '\u{1F916}', img: itemRobot },
+      { line: 'Bounce a ball!', emoji: '\u{26BD}', img: itemBallRed },
+      { line: 'Hug a teddy bear!', emoji: '\u{1F9F8}', img: itemTeddy },
+    ],
+  },
+  {
+    // Signature game (new): a claw machine where only the right words win.
+    id: 'u3l6-claw', kind: 'claw-machine', bg: bgU3L6Claw, who: 'pip', clawImg: itemClaw,
+    teacher: 'Toy Grabber! Listen to Pip. Tap the toy (or ◀ ▶) to move the claw, then press the big red button. Say the toy and its color!',
+    glass: U3L6_GLASS,
+    toys: [
+      { label: 'red ball', img: itemBallRed, x: 12, size: 8 },
+      { label: 'blue car', img: itemCar, x: 30, size: 9 },
+      { label: 'teddy bear', img: itemTeddy, x: 48, size: 9 },
+      { label: 'blue ball', img: itemBallBlue, x: 66, size: 8 },
+      { label: 'robot', img: itemRobot, x: 86, size: 9 },
+    ],
+    rounds: [
+      { target: 3, line: 'Get the blue ball!', reply: 'You got the blue ball!' },
+      { target: 2, line: 'Get the teddy bear!', reply: 'You got the teddy bear!' },
+      { target: 4, line: 'Get the robot!', reply: 'You got the robot!' },
+    ],
+  },
+
+  /* 7-11 Asking for a prize */
+  {
+    id: 'u3l6-i-want', kind: 'listen-repeat-cards', bg: bgU3L6Prizes, teacher: 'Ask for a prize! "What do you want?" — "I want the …, please!"',
+    cards: [
+      { who: 'willow', sentence: 'What do you want? I want the blue car, please!', img: itemCar, imgLabel: 'Blue car' },
+      { who: 'pip', sentence: 'What do you want? I want the red ball, please!', img: itemBallRed, imgLabel: 'Red ball' },
+      { who: 'mia', sentence: 'What do you want? I want the doll, please!', img: itemDoll, imgLabel: 'Doll' },
+    ],
+  },
+  {
+    // Badges on the prizes painted in bg-u3l6-prizes-wide (checked on a % grid).
+    id: 'u3l6-spin', kind: 'spin-wheel', bg: bgU3L6Prizes, title: '',
+    teacher: 'Have the student spin, point to the prize and say: "I want the red ball, please!" Or tap a number.',
+    items: [
+      { label: 'I want the red ball, please!', left: '21%', top: '80%' },
+      { label: 'I want the doll, please!', left: '39%', top: '84%' },
+      { label: 'I want the robot, please!', left: '48%', top: '79%' },
+      { label: 'I want the kite, please!', left: '63%', top: '81%' },
+      { label: 'I want the blue car, please!', left: '79%', top: '82%' },
+    ],
+    wheelAt: { left: '86%', top: '22%' },
+  },
+  {
+    id: 'u3l6-willow-asks', kind: 'join-stage', bg: bgU3L6Toss, teacher: 'Willow runs the prize stall. The student asks for a prize!', cast: ['willow'],
+    turns: [
+      { who: 'willow', line: 'Hello! What do you want?', bubble: 'right' },
+      { who: 'student', line: 'I want the …, please!', bubble: 'right' },
+      { who: 'willow', line: 'Here you are! Is it big or small?', bubble: 'right' },
+      { who: 'student', line: "It's big! / It's small! Thank you!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u3l6-you-ask', kind: 'join-stage', bg: bgU3L6Prizes, teacher: 'Swap! The student asks Leo about his prize.', cast: ['leo'],
+    turns: [
+      { who: 'student', line: "Ask Leo: What's your favorite toy?", bubble: 'right' },
+      { who: 'leo', line: 'My favorite toy is my robot!', bubble: 'right' },
+      { who: 'student', line: 'Ask Leo: What color is it?', bubble: 'right' },
+      { who: 'leo', line: "It's gray!", bubble: 'right' },
+    ],
+  },
+
+  /* 12-15 Fair games: ring toss, shadows, guess the prize, sounds */
+  {
+    // Second new game: rings stay on the pegs.
+    id: 'u3l6-ring-toss', kind: 'ring-toss', bg: bgU3L6Toss, who: 'bella', ringImg: itemTossRing,
+    teacher: 'Ring Toss! Listen to Bella and tap the prize to throw the ring. Say the toy!',
+    pegs: U3L6_PEGS,
+    prizes: [
+      { label: 'kite', img: itemKite },
+      { label: 'train', img: itemTrain },
+      { label: 'doll', img: itemDoll },
+      { label: 'plane', img: itemPlane },
+    ],
+    rounds: [
+      { target: 0, line: 'Throw the ring on the kite!', reply: 'Yes! You won the kite!' },
+      { target: 2, line: 'Throw the ring on the doll!', reply: 'Yes! You won the doll!' },
+      { target: 3, line: 'Throw the ring on the plane!', reply: 'Yes! You won the plane!' },
+      { target: 1, line: 'Throw the ring on the train!', reply: 'Yes! You won the train! Ring toss champion!' },
+    ],
+  },
+  {
+    id: 'u3l6-shadows', kind: 'shadow-match', bg: bgU3L6Fair, who: 'mia',
+    teacher: 'The prize shadows! Drag each toy onto its shadow (or tap it, then the shadow). Say the toy!',
+    items: [
+      { label: 'teddy bear', img: itemTeddy, line: "It's a teddy bear!" },
+      { label: 'kite', img: itemKite, line: "It's a kite!" },
+      { label: 'robot', img: itemRobot, line: "It's a robot!" },
+      { label: 'plane', img: itemPlane, line: "It's a plane!" },
+      { label: 'train', img: itemTrain, line: "It's a train!" },
+    ],
+  },
+  {
+    id: 'u3l6-mystery-prize', kind: 'tile-reveal', bg: bgU3L6Prizes, who: 'pip',
+    teacher: 'Mystery prize! Tiles pop off one by one — guess early and say it with its color!',
+    rounds: [
+      { img: itemCarGreen, word: 'car', line: "It's a green car!", options: [{ label: 'train', img: itemTrain }, { label: 'car', img: itemCarGreen }, { label: 'plane', img: itemPlane }] },
+      { img: itemDollPurple, word: 'doll', line: "It's a purple doll!", options: [{ label: 'doll', img: itemDollPurple }, { label: 'teddy bear', img: itemTeddy }, { label: 'robot', img: itemRobot }] },
+      { img: itemBallYellow, word: 'ball', line: "It's a yellow ball!", options: [{ label: 'kite', img: itemKite }, { label: 'blocks', img: itemBlocks }, { label: 'ball', img: itemBallYellow }] },
+    ],
+  },
+  {
+    // Unit 3 sounds, played at the ring toss: the prize that starts with the sound.
+    id: 'u3l6-ring-sounds', kind: 'ring-toss', bg: bgU3L6Toss, who: 'pip', ringImg: itemTossRing,
+    teacher: 'Sound Toss! Listen to the sound and throw the ring on the prize that starts with it.',
+    pegs: U3L6_PEGS,
+    prizes: [
+      { label: 'pizza', img: itemPizza },
+      { label: 'doll', img: itemDoll },
+      { label: 'kite', img: itemKite },
+      { label: 'octopus', img: itemOctopus },
+    ],
+    rounds: [
+      { target: 1, line: '/d/ /d/ /d/! Throw the ring on the D word!', reply: 'Yes! D, doll!' },
+      { target: 2, line: '/k/ /k/ /k/! Throw the ring on the K word!', reply: 'Yes! K, kite!' },
+      { target: 0, line: '/p/ /p/ /p/! Throw the ring on the P word!', reply: 'Yes! P, pizza!' },
+      { target: 3, line: '/o/ /o/ /o/! Throw the ring on the O word!', reply: 'Yes! O, octopus!' },
+    ],
+  },
+
+  /* 16-18 Story payoff + retell + personal */
+  {
+    id: 'u3l6-story-prizes', kind: 'story-video', bg: bgU3L6Prizes, videoUrl: `${A}/video/fair-story-u3l6-b.mp4?v=1`, title: 'Our Prizes',
+    teacher: 'Press play. Point to each friend\'s prize when you hear it!',
+    pages: [
+      { img: bgU3L6Prizes, who: 'pip', line: 'Look at our prizes! I have a red ball.', atSec: 0 },
+      { img: bgU3L6Prizes, who: 'mia', line: 'I have a doll. Leo has a robot. Bella has a kite!', atSec: 5 },
+      { img: bgU3L6Prizes, who: 'willow', line: 'And I have a little blue car! What a happy day!', atSec: 10 },
+    ],
+    checkpoints: [
+      { afterPage: 1, who: 'pip', question: 'Who has the kite?', answer: 'Bella', options: [{ label: 'Mia', img: CAST.mia.img }, { label: 'Bella', img: CAST.bella.img }, { label: 'Willow', img: CAST.willow.img }] },
+    ],
+  },
+  {
+    id: 'u3l6-story-order', kind: 'story-order', bg: bgU3L6Fair, who: 'pip', teacher: 'Put the day in order, then tell it: first, then, then, at the end!',
+    frames: [
+      { img: bgU3L6Fair, caption: 'The friends go to the Toy Fair.', who: 'pip' },
+      { img: bgU3L6LeoClaw, caption: 'Leo wins a robot.', who: 'leo' },
+      { img: bgU3L6BellaRing, caption: 'Bella wins a kite.', who: 'bella' },
+      { img: bgU3L6Prizes, caption: 'Everyone has a prize!', who: 'willow' },
+    ],
+  },
+  {
+    id: 'u3l6-my-prize', kind: 'join-stage', bg: bgU3L6Prizes, teacher: 'The student picks a prize from the whole unit and talks about it.', cast: ['pip', 'mia'],
+    turns: [
+      { who: 'pip', line: 'You win a prize! What do you want?', bubble: 'right' },
+      { who: 'student', line: 'I want the …, please!', bubble: 'right' },
+      { who: 'mia', line: 'What color is it? Is it big or small?', bubble: 'right' },
+      { who: 'student', line: "It's a big red … ! / It's a small blue … !", bubble: 'right' },
+    ],
+  },
+
+  /* 19-20 Sticker + Home Mission */
+  {
+    id: 'u3l6-sticker', kind: 'sticker-reward', bg: bgU3L6Prizes, who: 'pip', teacher: 'Unit 3 is done! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You finished Unit 3! Here is a robot sticker for you!', sticker: { img: itemRobot, label: 'Robot' },
+  },
+  {
+    id: 'u3l6-home-mission', kind: 'home-mission', bg: bgU3L6Fair, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: make a toy fair at home! Put three toys on a table and ask: What do you want?',
+    parentNote: 'Make a mini toy fair: put three toys on a table. Your child is the stall keeper and asks "What do you want?" — you answer "I want the red ball, please!" Then swap. Ask: "What color is it? Is it big or small? Where is it?"',
+    steps: [
+      { emoji: '\u{1F3AA}', img: itemToyBox, say: 'Make a fair' },
+      { emoji: '\u{1F5E3}️', say: 'What do you want?' },
+      { emoji: '\u{1F381}', img: itemRobot, say: 'I want the …, please!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u3l6-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU3L6Fair, who: 'pip',
+    teacher: 'Extra time: Brain Break! Ride the fair with Pip.',
+    rounds: [
+      { line: 'Ride the carousel! Up and down!', emoji: '\u{1F3A0}' },
+      { line: 'Throw a ring!', emoji: '\u{2B55}' },
+      { line: 'Press the big red button!', emoji: '\u{1F534}' },
+      { line: 'Fly like a plane!', emoji: '\u{2708}\u{FE0F}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u3l6-claw-2', kind: 'claw-machine', bg: bgU3L6Claw, who: 'leo', clawImg: itemClaw,
+    teacher: 'Extra time: Toy Grabber again! Listen to Leo: which color?',
+    glass: U3L6_GLASS,
+    toys: [
+      { label: 'green car', img: itemCarGreen, x: 12, size: 9 },
+      { label: 'yellow ball', img: itemBallYellow, x: 30, size: 8 },
+      { label: 'red car', img: itemCarRed, x: 48, size: 9 },
+      { label: 'kite', img: itemKite, x: 66, size: 9 },
+      { label: 'red ball', img: itemBallRed, x: 86, size: 8 },
+    ],
+    rounds: [
+      { target: 2, line: 'Get the red car!', reply: 'You got the red car!' },
+      { target: 1, line: 'Get the yellow ball!', reply: 'You got the yellow ball!' },
+      { target: 0, line: 'Get the green car!', reply: 'You got the green car! Super grabbing!' },
+    ],
+  },
+
+  /* 21-22 Goodbye */
+  {
+    id: 'u3l6-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u3l6-finale', kind: 'finale', bg: bgU3L6Prizes, who: 'pip', line: 'What a Toy Fair! Balls, cars, dolls, teddies, kites and robots — you know them all! Unit 3 is done. Goodbye, friend!' },
+];
+
 /* =============================================================================
  * Pre-A1 Unit 5, Lesson 1 — "Mom, Dad, Me!"
  *

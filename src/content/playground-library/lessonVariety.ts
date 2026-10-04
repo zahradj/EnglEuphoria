@@ -54,6 +54,7 @@ export const GRANDFATHERED: readonly string[] = ['5-1'];
 export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '3-3': { settings: ['workshop', 'park'], look: 'sunny outdoor park, kites in a blue sky' },
   '3-4': { settings: ['classroom', 'garden pool'], look: 'Show and Tell circle on the rainbow rug; summer garden with a paddling pool' },
+  '3-6': { settings: ['toy fair'], look: 'outdoor fair: sunny day with striped tents, then a golden evening with string lights' },
   '3-5': { settings: ['bedroom'], look: 'cozy bedroom in warm afternoon light; tidy-up mission with a surprise kitten' },
 };
 
@@ -74,6 +75,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the same toy peeks from two places at once, so the child must hear the PLACE word (apps only check the noun)',
       'tidied toys stay where the child put them: the room visibly gets tidier (permanence), with arcs and squash',
       'drag OR tap-tap, never a timer, wrong answers wobble back gently',
+    ],
+  },
+  '3-6': {
+    sources: ['Toy-grabber apps (Yateland "Claw Machine Games for kids")', 'Wordwall', 'Khan Academy Kids', 'Duolingo ABC'],
+    mechanics: [
+      'claw machine (toy grabber) → Toy Grabber: steer the claw to the toy the voice names',
+      'fairground ring toss with Wordwall-style one-tap review → Ring Toss (toys, then Unit 3 sounds)',
+      'end-of-unit review loop (Khan Academy Kids mastery, Duolingo ABC review) → every Unit 3 skill replayed in one story world',
+    ],
+    betterThan: [
+      'our claw never slips: luck never decides, only choosing the toy the words describe wins (claw apps are random)',
+      'the colour decides: two balls and two cars, so "the blue ball" must be heard, not just "ball"',
+      'rings stay on the pegs and prizes pile up on a shelf (permanence); wrong throws bounce back gently',
     ],
   },
 };
