@@ -27,6 +27,13 @@
 
 - Every "watch and copy" page (body parts, actions, TPR, point-to) follows `.claude/skills/kids-demo-video`: ONE character, full body, front view, one picture per spoken line, the word added by us with a line to the exact spot (`scripts/label-video.py`), stills film first; AI motion only via strict mode with start + end key pictures.
 
+## Lesson hand-off — every finished lesson goes to the Playground Library (hard rule — owner, 2026-10-04)
+
+- When a lesson is built or rebuilt, before reporting it done:
+  1. Its `curriculum_lessons` row (Supabase, `ai_metadata->>'hub' = 'playground'`, unit/lesson number) gets the real title (no "· Coming Soon") and `ai_metadata.contentFormat = 'lep1-rich'`, so the content-creator Playground Library shows it as **▶ Ready**. Keep `is_published = false` until the branch is merged into `main` (students must not reach a page the live site doesn't have yet).
+  2. Push with `[preview]` in the commit message (one preview build of the work branch, see `scripts/vercel-ignore.sh`).
+  3. Give the owner the preview links: `<preview>/playground-library` (the library) and `<preview>/playground-scene/unit-<U>-lesson-<L>` (the lesson).
+
 ## Media generators (hard rule — owner, 2026-10-04)
 
 - **Pictures: Canva only** (Canva `generate-image`, reference images uploaded to Canva for character consistency; `remove-background` for stickers). **Never generate pictures with Higgsfield** — not backgrounds, not stickers, not "just this once".

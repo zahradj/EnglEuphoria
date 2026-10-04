@@ -184,6 +184,11 @@ body, front view, one picture per line showing exactly that line, target word la
 stills cross-fade, labels timed to the line). Re-open each picture and a frame per label; a dot off the part, a group
 shot, a cropped body or an AI-written word fails the gate.
 
+## Hand-off (after all engines pass)
+
+Put the lesson on the Playground Library for the owner's review (CLAUDE.md "Lesson hand-off"): DB row title +
+`contentFormat: 'lep1-rich'` (unpublished until merged), push with `[preview]`, send the library + lesson links.
+
 ## When to run this
 
 - Every time a lesson's scene array is created from scratch.
