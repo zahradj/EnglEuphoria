@@ -1,4 +1,4 @@
-leo-pour1: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started leo-pour1: badd9a28-756e-457f-acc2-1c2fa479052d
-saved public/lep1/video/clips/u2l2-mix/leo-pour1.mp4 (4007776 bytes)
+leo-pour2: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started leo-pour2: e34f34dc-5694-41fd-8b50-5d20c3505445
+saved public/lep1/video/clips/u2l2-mix/leo-pour2.mp4 (4645352 bytes)
 1/1 clips ready for u2l2-mix
