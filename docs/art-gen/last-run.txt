@@ -1,4 +1,17 @@
-Higgsfield: 2 pictures to make
-+ public/lep1/items/item-stone.png (1807996B, Higgsfield)
-+ public/lep1/scenes/bg-u2l6-river-wide.png (4766160B, Higgsfield)
-Done. made 2, failed 0
+Higgsfield: 14 pictures to make
++ public/lep1/scenes/bg-u3l3-kite-wide.png (5434501B, Higgsfield)
++ public/lep1/scenes/bg-u3l3-robot-wide.png (5183369B, Higgsfield)
++ public/lep1/scenes/bg-u3l3-plane-wide.png (5132367B, Higgsfield)
++ public/lep1/scenes/bg-u3l3-park-wide.png (5865065B, Higgsfield)
+! public/lep1/scenes/bg-u3l3-park-empty-wide.png attempt 1: failed {"status":"failed","error":"This model is temporarily unavailable. Please try again later or contact support.","request_id":"d2b2c1a6-a231-475d-91d5-22789127deb7","status_url":"https://platform.higgsfield.ai/requests/d2b2c1a6-a231-475d-91d5-22789127deb7/status","cancel_url":"https://platform.higgsfi
++ public/lep1/scenes/bg-u3l3-stuck-wide.png (5745709B, Higgsfield)
++ public/lep1/scenes/bg-u3l3-workshop-wide.png (4048354B, Higgsfield)
++ public/lep1/scenes/bg-u3l3-together-wide.png (5765818B, Higgsfield)
++ public/lep1/scenes/bg-u3l3-park-empty-wide.png (5608800B, Higgsfield)
++ public/lep1/items/item-kite.png (1601191B, Higgsfield)
++ public/lep1/items/item-robot.png (2007686B, Higgsfield)
++ public/lep1/items/item-plane.png (1737499B, Higgsfield)
++ public/lep1/items/item-key.png (1580798B, Higgsfield)
++ public/lep1/items/item-king.png (2335838B, Higgsfield)
++ public/lep1/items/item-kangaroo.png (2130761B, Higgsfield)
+Done. made 14, failed 0
