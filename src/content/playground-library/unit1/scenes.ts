@@ -47,7 +47,7 @@ export type Scene =
   | { id: string; kind: 'sound-model'; bg: string; who: CharKey; prop?: string; letter: string; phoneme: string; sound: string; teacher: string; anchors: { word: string; emoji: string; img?: string }[] }
   | { id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string; hearWord?: string }
   | {
-      id: string; kind: 'basket'; bg: string; letter: string; phoneme: string; who: CharKey; teacher: string; items: BasketItem[]; goal: number;
+      id: string; kind: 'basket'; bg: string; bgVideo?: string; letter: string; phoneme: string; who: CharKey; teacher: string; items: BasketItem[]; goal: number;
       /** When false, dropping a correct item into the basket skips the "{phoneme}! {word}!" voice
        * line — the teacher voice already announces the same word on pickup, so on some scenes
        * (basket-h) hearing it a second time right after felt like a doubled-up audio bug. Defaults
@@ -143,7 +143,7 @@ export type Scene =
        *  neighboring pieces (opposite sign), so placed pieces interlock
        *  with no gaps/overlaps. `image` should be a square asset — the
        *  board is always rendered 1:1. */
-      id: string; kind: 'jigsaw-puzzle'; bg: string; teacher: string; image: string; rows?: number; cols?: number;
+      id: string; kind: 'jigsaw-puzzle'; bg: string; bgVideo?: string; teacher: string; image: string; rows?: number; cols?: number;
     }
   | { id: string; kind: 'roleplay'; bg: string; teacher: string; cast: CharKey[]; script: { who: CharKey; line: string; repeat?: boolean }[] }
   | {
@@ -406,11 +406,12 @@ export type Scene =
     }
   | {
       /** "What comes next?" — finish a colour/shape pattern train. */
-      id: string; kind: 'pattern-train'; bg: string; teacher: string; who: CharKey;
+      id: string; kind: 'pattern-train'; bg: string; bgVideo?: string; teacher: string; who: CharKey;
+      /** A wagon carries a coloured shape, or a picture (`img` + `word`, e.g. a toy: "A kite!"). */
       rounds: {
-        pattern: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' }[];
-        answer: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' };
-        options: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' }[];
+        pattern: PatternCar[];
+        answer: PatternCar;
+        options: PatternCar[];
       }[];
     }
   | {
@@ -528,6 +529,9 @@ export type Scene =
       rounds: { line: string; options: Thing[]; answer: number; reply: string }[];
       goal: { img: string; label: string; line: string };
     };
+
+/** One pattern-train wagon: a coloured shape, or a picture with its word. */
+export type PatternCar = { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle'; img?: string; word?: string };
 
 /** A picture or a coloured shape — what the newer games show. */
 export type Thing = { label: string; img?: string; shape?: 'circle' | 'square' | 'triangle'; colorHex?: string };
@@ -4999,6 +5003,273 @@ export const LESSON_U3L2_SCENES: Scene[] = [
     ],
   },
   { id: 'u3l2-finale', kind: 'finale', bg: bgU3L2Cake, who: 'leo', line: 'A teddy bear, blocks and a train. One or many, you know them! Thank you for my party!' },
+];
+
+/* ===================== Pre-A1 Unit 3 · Lesson 3 — What Do You Like to Play? =====================
+ * Toys & Playtime (3/6). New toys kite, robot, plane (Cambridge Pre A1 Starters
+ * word list), the question "Do you like…? — Yes, I do! / No, I don't." (Lesson 1
+ * taught "I like / I don't like"), "Let's play!", and K /k/ (kite, key,
+ * kangaroo, king). Lesson-3 "make & build" game set (blueprint §3d): jigsaw,
+ * pattern train, basket, brick crush — all with the game-animation kit. */
+const bgU3L3Park = `${A}/scenes/bg-u3l3-park-wide.png`;
+const bgU3L3Kite = `${A}/scenes/bg-u3l3-kite-wide.png`;
+const bgU3L3Robot = `${A}/scenes/bg-u3l3-robot-wide.png`;
+const bgU3L3Plane = `${A}/scenes/bg-u3l3-plane-wide.png`;
+const bgU3L3Stuck = `${A}/scenes/bg-u3l3-stuck-wide.png`;
+const bgU3L3Together = `${A}/scenes/bg-u3l3-together-wide.png`;
+const bgU3L3ParkEmpty = `${A}/scenes/bg-u3l3-park-empty-wide.png`;
+const bgU3L3Workshop = `${A}/scenes/bg-u3l3-workshop-wide.png`;
+const itemKite = `${A}/items/item-kite.png`;
+const itemRobot = `${A}/items/item-robot.png`;
+const itemPlane = `${A}/items/item-plane.png`;
+const itemKey = `${A}/items/item-key.png`;
+const itemKangaroo = `${A}/items/item-kangaroo.png`;
+const itemKing = `${A}/items/item-king.png`;
+/** Living game worlds (Higgsfield loops, ping-ponged) — see game-animation skill. */
+const loopU3L3 = (name: string) => `${A}/video/loops/u3l3-${name}.mp4`;
+const K_KITE = { colorWord: 'RED', colorHex: '#EF4444', shape: 'circle' as const, img: itemKite, word: 'kite' };
+const K_ROBOT = { colorWord: 'GRAY', colorHex: '#9CA3AF', shape: 'square' as const, img: itemRobot, word: 'robot' };
+const K_PLANE = { colorWord: 'BLUE', colorHex: '#3B82F6', shape: 'triangle' as const, img: itemPlane, word: 'plane' };
+const K_BALL = { colorWord: 'RED', colorHex: '#EF4444', shape: 'circle' as const, img: itemBallRed, word: 'ball' };
+const K_TEDDY = { colorWord: 'BROWN', colorHex: '#92400E', shape: 'circle' as const, img: itemTeddy, word: 'teddy bear' };
+
+export const LESSON_U3L3_TITLE = 'What Do You Like to Play?';
+export const LESSON_U3L3_OBJECTIVE = 'Name three new toys — kite, robot, plane — ask and answer "Do you like kites? — Yes, I do! / No, I don\'t.", invite a friend with "Let\'s play!", follow a short park story (Pip\'s kite gets stuck in a tree), and hear K say /k/ (kite, key, kangaroo, king) — by listening, moving, building, tapping and speaking, no reading.';
+
+export const LESSON_U3L3_SCENES: Scene[] = [
+  { id: 'u3l3-title', kind: 'title-card', bg: bgU3L3Park, level: 'Pre-A1', unit: 'Unit 3', lessonLabel: 'Lesson 3', title: 'What Do You Like to Play?', subtitle: 'A day in the park' },
+
+  /* 1-3 Hook + story opener */
+  {
+    id: 'u3l3-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
+    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
+    lineDurationsMs: [5200, 4300, 4500, 6100],
+    songPrompt: 'Cheerful upbeat kids hello song',
+    lyrics: [
+      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u3l3-intro', kind: 'cinematic', bg: bgU3L3Park, hidePipOverlay: true, title: 'A Day in the Park', subtitle: 'Do you like toys?', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Hello! How are you today? Do you like toys?' },
+      { who: 'leo', line: "Me too! Let's go to the park. Let's play!" },
+    ],
+    cta: "Let's play!",
+  },
+  {
+    // Slide 3: the story opener — a still-picture film (no zoom), new toys in context.
+    id: 'u3l3-story-park', kind: 'story-video', bg: bgU3L3Park, videoUrl: `${A}/video/kite-story-u3l3-a.mp4?v=1`, title: 'In the Park',
+    teacher: 'Press play and watch together. Point to each toy and say it.',
+    pages: [
+      { img: bgU3L3Park, who: 'pip', line: "The friends are in the park. Let's play!", atSec: 0 },
+      { img: bgU3L3Kite, who: 'pip', line: 'Pip has a kite. I like my red kite!', atSec: 5 },
+      { img: bgU3L3Robot, who: 'leo', line: 'Leo has a robot. I like robots!', atSec: 10 },
+      { img: bgU3L3Plane, who: 'mia', line: 'Mia has a plane. Whoosh! It flies!', atSec: 15 },
+    ],
+    checkpoints: [
+      { afterPage: 1, who: 'pip', question: 'What does Pip have?', answer: 'A kite', options: [{ label: 'A robot', img: itemRobot }, { label: 'A kite', img: itemKite }, { label: 'A plane', img: itemPlane }] },
+      { afterPage: 3, who: 'mia', question: 'What does Mia have?', answer: 'A plane', options: [{ label: 'A plane', img: itemPlane }, { label: 'A ball', img: itemBallRed }, { label: 'A kite', img: itemKite }] },
+    ],
+  },
+
+  /* 4-5 New words + move */
+  {
+    id: 'u3l3-words', kind: 'listen-repeat-cards', bg: bgU3L3ParkEmpty, teacher: 'Three new toys! Listen, then say each one with the action.',
+    cards: [
+      { who: 'pip', sentence: "It's a kite!", img: itemKite, imgLabel: 'Kite' },
+      { who: 'leo', sentence: "It's a robot!", img: itemRobot, imgLabel: 'Robot' },
+      { who: 'mia', sentence: "It's a plane!", img: itemPlane, imgLabel: 'Plane' },
+    ],
+  },
+  {
+    id: 'u3l3-move-say', kind: 'tpr-actions', bg: bgU3L3ParkEmpty, who: 'pip',
+    teacher: 'Stand up! Say it with Pip, then do it before the ring runs out.',
+    rounds: [
+      { line: 'Fly like a plane!', emoji: '\u{2708}\u{FE0F}', img: itemPlane },
+      { line: 'Walk like a robot!', emoji: '\u{1F916}', img: itemRobot },
+      { line: 'Run and fly your kite!', emoji: '\u{1FA81}', img: itemKite },
+      { line: 'Clap if you like robots!', emoji: '\u{1F44F}' },
+      { line: "Jump and say: Let's play!", emoji: '\u{1F929}' },
+    ],
+  },
+
+  /* 6-7 Build (Lesson-3 "make & build" set) */
+  {
+    id: 'u3l3-build-robot', kind: 'jigsaw-puzzle', bg: bgU3L3Workshop, bgVideo: loopU3L3('workshop'), teacher: 'Build the robot! Drag each piece to its place.',
+    image: itemRobot, rows: 3, cols: 3,
+  },
+
+  /* 8-11 The question: Do you like…? */
+  {
+    id: 'u3l3-do-you-like', kind: 'listen-repeat-cards', bg: bgU3L3Park, teacher: 'Ask and answer! Nod for "Yes, I do!", shake your head for "No, I don\'t."',
+    cards: [
+      { who: 'pip', sentence: 'Do you like kites? Yes, I do!', img: itemKite, imgLabel: 'Yes, I do!' },
+      { who: 'leo', sentence: 'Do you like robots? Yes, I do!', img: itemRobot, imgLabel: 'Yes, I do!' },
+      { who: 'bella', sentence: "Do you like planes? No, I don't.", img: itemPlane, imgLabel: "No, I don't." },
+    ],
+  },
+  {
+    // Slide 9: badges on the friends and toys painted in bg-u3l3-park-wide (checked against the art).
+    id: 'u3l3-spin', kind: 'spin-wheel', bg: bgU3L3Park, title: '',
+    teacher: 'Have the student spin and say the toy: "It\'s a kite!" Then ask: "Do you like kites?" Or tap a number.',
+    items: [
+      { label: "It's a kite!", left: '20%', top: '22%' },
+      { label: "It's a robot!", left: '50%', top: '55%' },
+      { label: "It's a plane!", left: '78%', top: '40%' },
+    ],
+    wheelAt: { left: '50%', top: '28%' },
+  },
+  {
+    id: 'u3l3-leo-asks', kind: 'join-stage', bg: bgU3L3Robot, teacher: 'Leo asks you. Answer him: "Yes, I do!" or "No, I don\'t."', cast: ['leo'],
+    turns: [
+      { who: 'leo', line: 'Hello! Do you like robots?', bubble: 'right' },
+      { who: 'student', line: "Yes, I do! / No, I don't.", bubble: 'right' },
+      { who: 'leo', line: 'Do you like kites?', bubble: 'right' },
+      { who: 'student', line: "Yes, I do! / No, I don't.", bubble: 'right' },
+      { who: 'leo', line: "Let's play!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u3l3-you-ask', kind: 'join-stage', bg: bgU3L3Plane, teacher: 'Swap! Now the student asks Mia.', cast: ['mia'],
+    turns: [
+      { who: 'student', line: 'Ask Mia: Do you like planes?', bubble: 'right' },
+      { who: 'mia', line: 'Yes, I do! I like my blue plane!', bubble: 'right' },
+      { who: 'student', line: 'Ask Mia: Do you like robots?', bubble: 'right' },
+      { who: 'mia', line: "No, I don't. I like planes!", bubble: 'right' },
+    ],
+  },
+
+  /* 12 Game break: what comes next? */
+  {
+    id: 'u3l3-toy-train', kind: 'pattern-train', bg: bgU3L3ParkEmpty, bgVideo: loopU3L3('park'), who: 'leo',
+    teacher: 'The toy train! What comes next? Say it, then tap it!',
+    rounds: [
+      { pattern: [K_KITE, K_ROBOT, K_KITE, K_ROBOT], answer: K_KITE, options: [K_PLANE, K_KITE, K_ROBOT] },
+      { pattern: [K_PLANE, K_PLANE, K_KITE, K_PLANE, K_PLANE], answer: K_KITE, options: [K_KITE, K_ROBOT, K_PLANE] },
+      { pattern: [K_ROBOT, K_PLANE, K_KITE, K_ROBOT, K_PLANE], answer: K_KITE, options: [K_ROBOT, K_BALL, K_KITE] },
+    ],
+  },
+
+  /* 13-16 Phonics: K says /k/ */
+  {
+    id: 'u3l3-model-k', kind: 'sound-model', bg: bgU3L3ParkEmpty, who: 'pip', letter: 'K', phoneme: '/k/', sound: 'kuh',
+    teacher: 'K says /k/ — kite, key, kangaroo!',
+    anchors: [
+      { word: 'kite', emoji: '\u{1FA81}', img: itemKite },
+      { word: 'key', emoji: '\u{1F511}', img: itemKey },
+      { word: 'kangaroo', emoji: '\u{1F998}', img: itemKangaroo },
+    ],
+  },
+  { id: 'u3l3-trace-k', kind: 'trace', bg: bgU3L3ParkEmpty, who: 'pip', letter: 'K', phoneme: '/k/', word: 'kite', speakWord: false, teacher: 'Trace the big K with your finger! /k/ /k/ kite!' },
+  {
+    id: 'u3l3-basket-k', kind: 'basket', bg: bgU3L3ParkEmpty, bgVideo: loopU3L3('park'), letter: 'K', phoneme: '/k/', who: 'pip',
+    teacher: "Drag the /k/ words into Pip's K basket! Kite, key…", goal: 4,
+    items: [
+      { word: 'kite', emoji: '\u{1FA81}', hit: true, img: itemKite },
+      { word: 'key', emoji: '\u{1F511}', hit: true, img: itemKey },
+      { word: 'kangaroo', emoji: '\u{1F998}', hit: true, img: itemKangaroo },
+      { word: 'king', emoji: '\u{1F451}', hit: true, img: itemKing },
+      { word: 'robot', emoji: '\u{1F916}', hit: false, img: itemRobot },
+      { word: 'plane', emoji: '\u{2708}\u{FE0F}', hit: false, img: itemPlane },
+      { word: 'ball', emoji: '\u{26BD}', hit: false, img: itemBallRed },
+    ],
+  },
+  { id: 'u3l3-brick-crush', kind: 'brick-crush', bg: bgU3L3ParkEmpty, teacher: 'Brick Crush! Listen to the sound, then tap every brick with that letter.', who: 'pip', letters: ['K', 'T', 'D', 'B'], rows: 4, cols: 6, goal: 12, seconds: 60 },
+
+  /* 17-19 Story payoff, retell, personal */
+  {
+    id: 'u3l3-story-tree', kind: 'story-video', bg: bgU3L3Stuck, videoUrl: `${A}/video/kite-story-u3l3-b.mp4?v=1`, title: 'The Kite in the Tree',
+    teacher: 'Press play. Is Pip happy or sad? Who helps?',
+    pages: [
+      { img: bgU3L3Stuck, who: 'pip', line: 'Oh no! My kite is in the tree!', atSec: 0 },
+      { img: bgU3L3Stuck, who: 'willow', line: "Don't be sad, Pip. I can help!", atSec: 5 },
+      { img: bgU3L3Together, who: 'pip', line: "Here is my kite! Thank you, Willow! Let's play together!", atSec: 10 },
+      { img: bgU3L3Together, who: 'leo', line: 'Do you like to play? Yes, we do!', atSec: 15 },
+    ],
+    checkpoints: [
+      { afterPage: 0, who: 'pip', question: 'Where is the kite?', answer: 'In the tree', options: [{ label: 'In the tree', img: itemTree }, { label: 'On the robot', img: itemRobot }, { label: 'In the plane', img: itemPlane }] },
+      { afterPage: 1, who: 'willow', question: 'Who helps Pip?', answer: 'Willow', options: [{ label: 'Leo', img: CAST.leo.img }, { label: 'Willow', img: CAST.willow.img }, { label: 'Mia', img: CAST.mia.img }] },
+    ],
+  },
+  {
+    id: 'u3l3-story-order', kind: 'story-order', bg: bgU3L3ParkEmpty, who: 'pip', teacher: 'Put the story in order, then tell it: first, then, then, at the end!',
+    frames: [
+      { img: bgU3L3Kite, caption: 'Pip flies his kite.', who: 'pip' },
+      { img: bgU3L3Stuck, caption: 'The kite is in the tree!', who: 'pip' },
+      { img: bgU3L3Stuck, caption: 'Willow helps.', who: 'willow' },
+      { img: bgU3L3Together, caption: "Let's play together!", who: 'leo' },
+    ],
+  },
+  {
+    id: 'u3l3-show-me', kind: 'join-stage', bg: bgU3L3Together, teacher: 'Show and tell with a real toy from home!', cast: ['pip', 'bella'],
+    turns: [
+      { who: 'pip', line: 'What do you like to play with? Show me!', bubble: 'right' },
+      { who: 'student', line: 'I like my … ! (show it)', bubble: 'right' },
+      { who: 'bella', line: 'Wow! Do you like kites?', bubble: 'right' },
+      { who: 'student', line: "Yes, I do! / No, I don't.", bubble: 'right' },
+    ],
+  },
+
+  /* 19-20 Sticker + Home Mission */
+  {
+    id: 'u3l3-sticker', kind: 'sticker-reward', bg: bgU3L3Together, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the kite sticker in their Sticker Book.',
+    line: 'You helped me find my kite! Here is a kite sticker for you!', sticker: { img: itemKite, label: 'Kite' },
+  },
+  {
+    id: 'u3l3-home-mission', kind: 'home-mission', bg: bgU3L3ParkEmpty, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: ask your family "Do you like kites?" Then play with your favourite toy together!',
+    parentNote: 'Your child will ask you "Do you like kites / robots / planes?" — answer "Yes, I do!" or "No, I don\'t." Then ask them back, and play with one toy together saying "Let\'s play!".',
+    steps: [
+      { emoji: '\u{2753}', img: itemKite, say: 'Ask' },
+      { emoji: '\u{1F44D}', say: 'Yes, I do!' },
+      { emoji: '\u{1F3AE}', img: itemRobot, say: "Let's play!" },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u3l3-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU3L3Together, who: 'pip',
+    teacher: 'Extra time: Brain Break! Stand up and move with Pip.',
+    rounds: [
+      { line: 'Spin like a robot!', emoji: '\u{1F916}' },
+      { line: 'Fly high like a kite!', emoji: '\u{1FA81}' },
+      { line: 'Hop like a kangaroo!', emoji: '\u{1F998}' },
+      { line: 'Zoom like a plane!', emoji: '\u{2708}\u{FE0F}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u3l3-build-plane', kind: 'jigsaw-puzzle', bg: bgU3L3Workshop, bgVideo: loopU3L3('workshop'), teacher: 'Extra time: Build the plane! Drag each piece to its place.',
+    image: itemPlane, rows: 3, cols: 3,
+  },
+  {
+    id: 'u3l3-toy-train-2', kind: 'pattern-train', bg: bgU3L3ParkEmpty, bgVideo: loopU3L3('park'), who: 'mia',
+    teacher: 'Extra time: Mia\'s toy train! What comes next?',
+    rounds: [
+      { pattern: [K_BALL, K_TEDDY, K_BALL, K_TEDDY], answer: K_BALL, options: [K_TEDDY, K_BALL, K_PLANE] },
+      { pattern: [K_PLANE, K_KITE, K_ROBOT, K_PLANE, K_KITE], answer: K_ROBOT, options: [K_ROBOT, K_KITE, K_TEDDY] },
+    ],
+  },
+
+  /* 21-22 Goodbye */
+  {
+    id: 'u3l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u3l3-finale', kind: 'finale', bg: bgU3L3Together, who: 'pip', line: "A kite, a robot and a plane! Do you like to play? Yes, we do! Thank you for helping me. Goodbye, friend!" },
 ];
 
 /* =============================================================================

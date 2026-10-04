@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+import { motion, useAnimationControls } from 'framer-motion';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
 import { safeSpeak, cueSpeak, cueSpeakOnce, playLetterPhonic } from '../audio';
 import * as sfx from '../sfx';
 import { scatterPositions } from './shared';
+import { Bursts, LivingBg, useBursts, useShake } from './gameFx';
 
 /* ---------- Basket ---------- */
 
@@ -18,6 +20,9 @@ export function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<S
   const c = CAST[scene.who];
   const got = slots.filter((s) => s.collected).length;
   const done = got >= scene.goal;
+  const [bursts, fire] = useBursts();
+  const [shakeCtl, shake] = useShake();
+  const basketCtl = useAnimationControls();
 
   useEffect(() => {
     if (done && !gemAwarded) { setGemAwarded(true); onWin(true); cueSpeak('Yes! The portal is open!', scene.who); }
@@ -54,8 +59,8 @@ export function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<S
     setSlots((p) => p.map((x) => {
       if (x.idx !== idx) return x;
       if (!dropped) return { ...x, dragging: false, dx: 0, dy: 0 };
-      if (x.it.hit) { sfx.match(); if (scene.announceOnDrop !== false) void playLetterPhonic(scene.letter).then(() => safeSpeak(x.it.word, scene.who)); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
-      sfx.wrong(); onLose();
+      if (x.it.hit) { sfx.match(); fire(50, 30, 'stars'); void basketCtl.start({ scale: [1, 1.18, 0.94, 1.04, 1], rotate: [0, -6, 5, -2, 0], transition: { duration: 0.6 } }); if (scene.announceOnDrop !== false) void playLetterPhonic(scene.letter).then(() => safeSpeak(x.it.word, scene.who)); return { ...x, collected: true, dragging: false, dx: 0, dy: 0, flash: 'good' }; }
+      sfx.wrong(); onLose(); shake();
       return { ...x, dragging: false, dx: 0, dy: 0, flash: 'bad' };
     }));
     window.setTimeout(() => setSlots((p) => p.map((x) => (x.idx === idx ? { ...x, flash: 'none' } : x))), 700);
@@ -68,9 +73,11 @@ export function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<S
   const collectedItems = slots.filter((s) => s.collected);
 
   return (
-    <div className="absolute inset-0">
+    <motion.div className="absolute inset-0" animate={shakeCtl}>
+      {scene.bgVideo && <LivingBg img={scene.bg} video={scene.bgVideo} />}
       <div className="pointer-events-none absolute left-4 top-4 z-30 max-w-[260px] rounded-2xl bg-white/95 px-3 py-2 text-sm font-bold text-neutral-800 shadow-xl backdrop-blur sm:max-w-[320px] sm:text-base">{scene.teacher}</div>
-      <div ref={basketRef} className={`absolute left-1/2 top-16 z-10 grid h-56 w-56 -translate-x-1/2 place-items-center rounded-full border-4 border-dashed shadow-2xl backdrop-blur transition-all sm:h-72 sm:w-72 ${basketHot ? 'scale-110 border-green-400 bg-green-100/90' : 'border-white/80 bg-white/40'}`}>
+      <motion.div animate={basketCtl} className="absolute left-1/2 top-16 z-10" style={{ translateX: '-50%' }}>
+      <div ref={basketRef} className={`relative z-10 grid h-56 w-56 place-items-center rounded-full border-4 border-dashed shadow-2xl backdrop-blur transition-all sm:h-72 sm:w-72 ${basketHot ? 'scale-110 border-green-400 bg-green-100/90' : 'border-white/80 bg-white/40'}`}>
         <div className={`absolute inset-0 rounded-full opacity-70 ${done ? '' : 'animate-pulse'}`} style={{ background: `radial-gradient(circle at center, ${c.color}cc, transparent 70%)` }} />
         <div className="relative flex flex-col items-center gap-1 text-center">
           <span className="grid h-28 w-28 place-items-center rounded-3xl text-7xl font-black text-white shadow-lg sm:h-36 sm:w-36 sm:text-8xl" style={{ background: `linear-gradient(135deg, ${c.color}, #FEBE4C)` }}>{scene.letter}</span>
@@ -89,6 +96,7 @@ export function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<S
           )}
         </div>
       </div>
+      </motion.div>
       {slots.map((s, i) => {
         if (s.collected) return null;
         const pos = orbit[i % orbit.length];
@@ -108,6 +116,7 @@ export function BasketScene({ scene, onWin, onLose, onNext }: { scene: Extract<S
           <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95 animate-[lep1-slide-up_0.4s_ease-out]">✨ Portal open! Next →</button>
         </div>
       )}
-    </div>
+      <Bursts items={bursts} />
+    </motion.div>
   );
 }

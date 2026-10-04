@@ -337,7 +337,7 @@ const UNIT1_EXTRACTORS = {
   ]),
   'pattern-train': (s) => [
     [s.who, 'What comes next?'],
-    ...(s.rounds ?? []).map((r) => [s.who, `Yes! ${/^[aeiou]/i.test(r.answer.colorWord) ? 'An' : 'A'} ${r.answer.colorWord.toLowerCase()} ${r.answer.shape}!`]),
+    ...(s.rounds ?? []).map((r) => { const c = r.answer.word ? r.answer.word.toLowerCase() : `${r.answer.colorWord.toLowerCase()} ${r.answer.shape}`; return [s.who, `Yes! ${/^[aeiou]/.test(c) ? 'An' : 'A'} ${c}!`]; }),
   ],
   'tick-cross': (s) => [[s.who, "That's right!"], ...(s.rounds ?? []).map((r) => [s.who, r.sentence])],
   'story-video': (s) => [
