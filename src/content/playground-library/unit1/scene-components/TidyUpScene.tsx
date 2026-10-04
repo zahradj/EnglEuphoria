@@ -34,7 +34,7 @@ export function TidyUpScene({ scene, onWin, onLose, onNext, sync }: { scene: Tid
   const done = round >= total;
   // Where each toy is now: tidied toys sit where their round put them.
   const homes = useMemo(() => {
-    const m = new Map<number, { x: number; y: number }>();
+    const m = new Map<number, { x: number; y: number; scale?: number }>();
     scene.rounds.forEach((rr, k) => { if (k < round || (k === round && flying)) m.set(rr.toy, rr.at); });
     return m;
   }, [scene.rounds, round, flying]);
@@ -134,7 +134,7 @@ export function TidyUpScene({ scene, onWin, onLose, onNext, sync }: { scene: Tid
             onPointerDown={(e) => start(i, e)}
             aria-label={t.label}
             className={`absolute z-20 grid place-items-center ${home ? 'pointer-events-none' : ''}`}
-            style={{ width: `${home ? t.size * 0.8 : t.size}%`, aspectRatio: '1', translateX: '-50%', translateY: '-50%', rotate: home ? 0 : STICKER_TILTS[i % STICKER_TILTS.length] }}
+            style={{ width: `${home ? t.size * (home.scale ?? 0.8) : t.size}%`, aspectRatio: '1', translateX: '-50%', translateY: '-50%', rotate: home ? 0 : STICKER_TILTS[i % STICKER_TILTS.length] }}
             initial={{ left: `${t.x}%`, top: `${t.y}%`, scale: 0 }}
             animate={isFlying
               ? { left: [`${t.x}%`, `${(t.x + pos.x) / 2}%`, `${pos.x}%`], top: [`${t.y}%`, `${Math.min(t.y, pos.y) - 22}%`, `${pos.y}%`], scale: [1, 1.15, 0.8], scaleY: [1, 1, 0.8] }

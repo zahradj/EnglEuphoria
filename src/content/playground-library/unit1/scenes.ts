@@ -506,11 +506,12 @@ export type Scene =
        *  ball in the box!"; the child drags the toy (or taps toy, then place)
        *  to the right place painted in the picture. The toy flies there in an
        *  arc and lands with a bounce; tidied toys stay. `places` = drop zones
-       *  (x/y = centre %, w/h = size %); `at` = where the toy lands (% of the scene). */
+       *  (x/y = centre %, w/h = size %); `at` = where the toy lands (% of the scene),
+       *  `scale` shrinks it to fit (e.g. under a chair). */
       id: string; kind: 'tidy-up'; bg: string; bgVideo?: string; teacher: string; who: CharKey;
       places: { label: string; x: number; y: number; w: number; h: number }[];
       toys: (Thing & { x: number; y: number; size: number })[];
-      rounds: { toy: number; place: number; at: { x: number; y: number }; line: string; reply: string }[];
+      rounds: { toy: number; place: number; at: { x: number; y: number; scale?: number }; line: string; reply: string }[];
     }
   | {
       /** Peekaboo Toys (classroom "hide the toy — where is it?" games, ESL
@@ -5563,6 +5564,302 @@ export const LESSON_U3L4_SCENES: Scene[] = [
     ],
   },
   { id: 'u3l4-finale', kind: 'finale', bg: bgU3L4Share, who: 'pip', line: "Great Show and Tell! A big teddy bear, a small robot, and friends who share. What's your favorite toy? Goodbye, friend!" },
+];
+
+/* ===================== Pre-A1 Unit 3 · Lesson 5 — Tidy Up Time! =====================
+ * Toys & Playtime (5/6), the story lesson. IN, ON, UNDER with every Unit 3
+ * toy ("The ball goes in the box!", "Where is the teddy? It's on the bed!"),
+ * and O says /o/ (octopus, box, dog, on). Story: Pip's room is messy; the
+ * friends tidy it up together — then the toy box wobbles... the kitten is in
+ * the box! Lesson-Variety Engine (lessonVariety.ts): researched Lingokids
+ * (Toy Story "pack the box", clean-up and prepositions games), Cambridge
+ * Starters Listening Part 4, Khan Academy Kids, VIPKid/Novakid; two new
+ * games — Tidy Up and Peekaboo Toys. New setting (bedroom), new look (warm
+ * afternoon light), new frame (a tidy-up mission). Pictures made with Canva. */
+const bgU3L5Messy = `${A}/scenes/bg-u3l5-messy-wide.png`;
+const bgU3L5Room = `${A}/scenes/bg-u3l5-room-empty-wide.png`;
+const bgU3L5BallBox = `${A}/scenes/bg-u3l5-ball-box-wide.png`;
+const bgU3L5TeddyBed = `${A}/scenes/bg-u3l5-teddy-bed-wide.png`;
+const bgU3L5CarChair = `${A}/scenes/bg-u3l5-car-chair-wide.png`;
+const bgU3L5Wobble = `${A}/scenes/bg-u3l5-box-wobble-wide.png`;
+const bgU3L5Kitten = `${A}/scenes/bg-u3l5-kitten-wide.png`;
+const itemOctopus = `${A}/items/item-octopus.png`;
+const itemToyBox = `${A}/items/item-toybox.png`;
+/* Places painted in bg-u3l5-room-empty-wide (checked on a % grid). */
+const U3L5_PLACES = [
+  { label: 'in the box', x: 59, y: 49, w: 27, h: 24 },
+  { label: 'on the bed', x: 22, y: 47, w: 36, h: 22 },
+  { label: 'under the chair', x: 85, y: 52, w: 16, h: 32 },
+];
+
+export const LESSON_U3L5_TITLE = 'Tidy Up Time!';
+export const LESSON_U3L5_OBJECTIVE = 'Understand and say where a toy is with IN, ON and UNDER ("The ball goes in the box!", "Where is the teddy? It\'s on the bed!"), tidy up toys by listening, follow and retell a story about tidying up, and hear O say /o/ (octopus, box, dog) — by listening, moving, placing, spotting and speaking, no reading.';
+
+export const LESSON_U3L5_SCENES: Scene[] = [
+  { id: 'u3l5-title', kind: 'title-card', bg: bgU3L5Messy, level: 'Pre-A1', unit: 'Unit 3', lessonLabel: 'Lesson 5', title: 'Tidy Up Time!', subtitle: 'In, on, under' },
+
+  /* 1-3 Hook + story */
+  {
+    id: 'u3l5-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
+    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
+    lineDurationsMs: [5200, 4300, 4500, 6100],
+    songPrompt: 'Cheerful upbeat kids hello song',
+    lyrics: [
+      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u3l5-intro', kind: 'cinematic', bg: bgU3L5Messy, hidePipOverlay: true, title: 'Tidy Up Time!', subtitle: 'Can you help Pip?', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Oh no! My room is messy! Can you help me tidy up?' },
+      { who: 'bella', line: "Yes! Let's tidy up together!" },
+    ],
+    cta: "Let's tidy up!",
+  },
+  {
+    id: 'u3l5-story-tidy', kind: 'story-video', bg: bgU3L5Messy, videoUrl: `${A}/video/tidy-story-u3l5-a.mp4?v=1`, title: 'Tidy Up!',
+    teacher: 'Press play and watch. Point IN, ON and UNDER with your finger when you hear them!',
+    pages: [
+      { img: bgU3L5Messy, who: 'pip', line: 'Oh no! My room is messy! The toys are everywhere!', atSec: 0 },
+      { img: bgU3L5BallBox, who: 'bella', line: 'The ball goes in the box!', atSec: 5 },
+      { img: bgU3L5TeddyBed, who: 'mia', line: 'The teddy goes on the bed!', atSec: 10 },
+      { img: bgU3L5CarChair, who: 'leo', line: 'The car goes under the chair!', atSec: 15 },
+    ],
+    checkpoints: [
+      { afterPage: 2, who: 'pip', question: 'Who puts the teddy on the bed?', answer: 'Mia', options: [{ label: 'Bella', img: CAST.bella.img }, { label: 'Mia', img: CAST.mia.img }, { label: 'Leo', img: CAST.leo.img }] },
+      { afterPage: 3, who: 'leo', question: 'What goes under the chair?', answer: 'The car', options: [{ label: 'The ball', img: itemBallRed }, { label: 'The teddy', img: itemTeddy }, { label: 'The car', img: itemCar }] },
+    ],
+  },
+
+  /* 4-6 New words, move, first game */
+  {
+    id: 'u3l5-in-on-under', kind: 'listen-repeat-cards', bg: bgU3L5Room, teacher: 'In, on, under! Show each one with your hands, then say it.',
+    cards: [
+      { who: 'bella', sentence: 'In! The ball is in the box.', img: bgU3L5BallBox, imgLabel: 'In' },
+      { who: 'mia', sentence: 'On! The teddy is on the bed.', img: bgU3L5TeddyBed, imgLabel: 'On' },
+      { who: 'leo', sentence: 'Under! The car is under the chair.', img: bgU3L5CarChair, imgLabel: 'Under' },
+    ],
+  },
+  {
+    id: 'u3l5-move-say', kind: 'tpr-actions', bg: bgU3L5Room, who: 'pip',
+    teacher: 'Stand up! Say it with Pip, then do it before the ring runs out.',
+    rounds: [
+      { line: 'Hands ON your head!', emoji: '\u{1F64C}' },
+      { line: 'Hands UNDER your chin!', emoji: '\u{1F914}' },
+      { line: 'Put your hand IN your pocket!', emoji: '\u{1F44B}' },
+      { line: 'Put your toy ON your chair!', emoji: '\u{1FA91}' },
+      { line: 'Look UNDER your table!', emoji: '\u{1F440}' },
+    ],
+  },
+  {
+    // Signature game (new, Lesson Variety Engine): the tidy-up mission.
+    id: 'u3l5-tidy-up', kind: 'tidy-up', bg: bgU3L5Room, who: 'pip',
+    teacher: 'Listen to Pip and tidy up! Drag the toy to the right place, or tap the toy and then the place. Say it: "In the box!"',
+    places: U3L5_PLACES,
+    toys: [
+      { label: 'ball', img: itemBallRed, x: 30, y: 80, size: 10 },
+      { label: 'teddy bear', img: itemTeddy, x: 44, y: 88, size: 11 },
+      { label: 'car', img: itemCar, x: 58, y: 79, size: 10 },
+      { label: 'robot', img: itemRobot, x: 72, y: 87, size: 10 },
+    ],
+    rounds: [
+      { toy: 0, place: 0, at: { x: 55, y: 39 }, line: 'Put the ball in the box!', reply: 'Yes! The ball is in the box!' },
+      { toy: 1, place: 1, at: { x: 22, y: 38 }, line: 'Put the teddy bear on the bed!', reply: 'Yes! The teddy bear is on the bed!' },
+      { toy: 2, place: 2, at: { x: 84, y: 60, scale: 0.55 }, line: 'Put the car under the chair!', reply: 'Yes! The car is under the chair!' },
+      { toy: 3, place: 0, at: { x: 64, y: 38 }, line: 'Put the robot in the box!', reply: 'Yes! The robot is in the box! The room is tidy!' },
+    ],
+  },
+
+  /* 7-11 The question: Where is it? */
+  {
+    id: 'u3l5-where-is', kind: 'listen-repeat-cards', bg: bgU3L5Room, teacher: 'Ask and answer! "Where is the ball?" — "It\'s in the box!"',
+    cards: [
+      { who: 'pip', sentence: "Where is the ball? It's in the box!", img: bgU3L5BallBox, imgLabel: 'In the box' },
+      { who: 'pip', sentence: "Where is the teddy? It's on the bed!", img: bgU3L5TeddyBed, imgLabel: 'On the bed' },
+      { who: 'pip', sentence: "Where is the car? It's under the chair!", img: bgU3L5CarChair, imgLabel: 'Under the chair' },
+    ],
+  },
+  {
+    // Second new game: the same toy peeks from two places, so the PLACE word decides.
+    id: 'u3l5-peekaboo', kind: 'peek-pop', bg: bgU3L5Room, who: 'pip',
+    teacher: 'Peekaboo! The toys are hiding. Listen to the place and tap the right toy. Then say it!',
+    places: [
+      { label: 'in the box', x: 59, y: 42, from: 'below' },
+      { label: 'on the bed', x: 23, y: 41, from: 'above' },
+      { label: 'under the chair', x: 79, y: 59, from: 'right' },
+    ],
+    toys: [
+      { label: 'ball', img: itemBallRed },
+      { label: 'teddy bear', img: itemTeddy },
+      { label: 'car', img: itemCar },
+      { label: 'kitten', img: itemKitten },
+    ],
+    rounds: [
+      { toy: 0, place: 0, line: 'The ball is in the box! Tap it!', reply: 'Yes! The ball is in the box!', decoys: [[0, 2], [1, 1]] },
+      { toy: 1, place: 1, line: 'The teddy bear is on the bed! Tap it!', reply: 'Yes! The teddy bear is on the bed!', decoys: [[1, 0], [2, 2]] },
+      { toy: 2, place: 2, line: 'The car is under the chair! Tap it!', reply: 'Yes! The car is under the chair!', decoys: [[2, 1], [0, 0]] },
+      { toy: 3, place: 0, line: 'The kitten is in the box! Tap it!', reply: 'Meow! The kitten is in the box!', decoys: [[3, 1], [1, 2]] },
+    ],
+  },
+  {
+    // Badges on the toys painted in bg-u3l5-messy-wide (checked on a % grid).
+    id: 'u3l5-spin', kind: 'spin-wheel', bg: bgU3L5Messy, title: '',
+    teacher: 'Have the student spin, then say where the toy goes: "The ball goes in the box!" Or tap a number.',
+    items: [
+      { label: 'The ball goes in the box!', left: '17%', top: '72%' },
+      { label: 'The teddy goes on the bed!', left: '28%', top: '76%' },
+      { label: 'The car goes under the chair!', left: '44%', top: '84%' },
+      { label: 'The robot goes in the box!', left: '87%', top: '79%' },
+    ],
+    wheelAt: { left: '62%', top: '22%' },
+  },
+  {
+    id: 'u3l5-pip-asks', kind: 'join-stage', bg: bgU3L5Kitten, teacher: 'Pip asks you about the picture. Answer with in, on or under!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Where is the kitten?', bubble: 'right' },
+      { who: 'student', line: "It's in the box!", bubble: 'right' },
+      { who: 'pip', line: 'Where is my teddy?', bubble: 'right' },
+      { who: 'student', line: "It's on the bed!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u3l5-you-ask', kind: 'join-stage', bg: bgU3L5TeddyBed, teacher: 'Swap! Now the student asks Mia.', cast: ['mia'],
+    turns: [
+      { who: 'student', line: 'Ask Mia: Where is the teddy?', bubble: 'right' },
+      { who: 'mia', line: "It's on the bed!", bubble: 'right' },
+      { who: 'student', line: 'Ask Mia: Where is the ball?', bubble: 'right' },
+      { who: 'mia', line: "It's in the box!", bubble: 'right' },
+    ],
+  },
+
+  /* 12 Listening check: right or wrong? */
+  {
+    id: 'u3l5-tick-cross', kind: 'tick-cross', bg: bgU3L5Room, who: 'pip', teacher: 'Listen and look. Is it right? Tap ✔ or ✘.',
+    rounds: [
+      { img: bgU3L5BallBox, sentence: 'The ball is in the box.', isTrue: true },
+      { img: bgU3L5TeddyBed, sentence: 'The teddy is under the bed.', isTrue: false },
+      { img: bgU3L5CarChair, sentence: 'The car is under the chair.', isTrue: true },
+      { img: bgU3L5Kitten, sentence: 'The kitten is on the bed.', isTrue: false },
+    ],
+  },
+
+  /* 13-15 Phonics: O says /o/ */
+  {
+    id: 'u3l5-model-o', kind: 'sound-model', bg: bgU3L5Room, who: 'pip', letter: 'O', phoneme: '/o/', sound: 'o',
+    teacher: 'O says /o/ — octopus, box, dog, on!',
+    anchors: [
+      { word: 'octopus', emoji: '\u{1F419}', img: itemOctopus },
+      { word: 'box', emoji: '\u{1F4E6}', img: itemToyBox },
+      { word: 'dog', emoji: '\u{1F436}', img: itemDog },
+    ],
+  },
+  { id: 'u3l5-trace-o', kind: 'trace', bg: bgU3L5Room, who: 'pip', letter: 'O', phoneme: '/o/', word: 'octopus', speakWord: false, teacher: 'Trace the big O with your finger! Round and round: /o/ /o/ octopus!' },
+  {
+    id: 'u3l5-blocks-o', kind: 'alphabet-blocks', bg: bgU3L5Room, teacher: 'Alphabet Blocks! Tap the /o/ sound, then stack the word!', letters: ['O', 'B', 'X', 'D', 'G', 'P', 'T'],
+    tapRounds: [{ letter: 'O' }, { letter: 'B' }, { letter: 'O' }, { letter: 'D' }],
+    words: [
+      { word: 'BOX', emoji: '\u{1F4E6}' },
+      { word: 'DOG', emoji: '\u{1F436}' },
+      { word: 'POT', emoji: '\u{1F372}' },
+    ],
+  },
+
+  /* 16-18 Story payoff + retell */
+  {
+    id: 'u3l5-story-kitten', kind: 'story-video', bg: bgU3L5Wobble, videoUrl: `${A}/video/tidy-story-u3l5-b.mp4?v=1`, title: "What's in the Box?",
+    teacher: 'Press play. Guess before the end: what is in the box?',
+    pages: [
+      { img: bgU3L5Wobble, who: 'mia', line: 'Look! The box is moving! What is in the box?', atSec: 0 },
+      { img: bgU3L5Kitten, who: 'pip', line: "It's the kitten! The kitten is in the box!", atSec: 5 },
+      { img: bgU3L5Kitten, who: 'bella', line: 'Silly kitten! Our room is tidy. Well done, friends!', atSec: 10 },
+    ],
+    checkpoints: [
+      { afterPage: 0, who: 'mia', question: 'What is in the box?', answer: 'The kitten', options: [{ label: 'The teddy', img: itemTeddy }, { label: 'The kitten', img: itemKitten }, { label: 'The robot', img: itemRobot }] },
+    ],
+  },
+  {
+    id: 'u3l5-story-order', kind: 'story-order', bg: bgU3L5Room, who: 'pip', teacher: 'Put the story in order, then tell it: first, then, then, at the end!',
+    frames: [
+      { img: bgU3L5Messy, caption: 'The room is messy.', who: 'pip' },
+      { img: bgU3L5BallBox, caption: 'The ball goes in the box.', who: 'bella' },
+      { img: bgU3L5TeddyBed, caption: 'The teddy goes on the bed.', who: 'mia' },
+      { img: bgU3L5Kitten, caption: 'The kitten is in the box!', who: 'pip' },
+    ],
+  },
+  {
+    id: 'u3l5-who-said', kind: 'who-said-it', bg: bgU3L5Kitten, teacher: 'Who said it in the story? Listen and tap the friend.',
+    rounds: [
+      { line: 'Oh no! My room is messy!', who: 'pip', emotion: 'sad' },
+      { line: 'The ball goes in the box!', who: 'bella', emotion: 'happy' },
+      { line: 'The teddy goes on the bed!', who: 'mia', emotion: 'happy' },
+      { line: 'The car goes under the chair!', who: 'leo', emotion: 'happy' },
+    ],
+  },
+
+  /* 19-20 Sticker + Home Mission */
+  {
+    id: 'u3l5-sticker', kind: 'sticker-reward', bg: bgU3L5Kitten, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Great tidying! Here is a kitten sticker for you!', sticker: { img: itemKitten, label: 'Kitten' },
+  },
+  {
+    id: 'u3l5-home-mission', kind: 'home-mission', bg: bgU3L5Room, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: tidy up your toys! Say: The ball goes in the box! The teddy goes on the bed!',
+    parentNote: 'Tidy up together and ask "Where is the ball?" Help your child answer "It\'s in the box / on the bed / under the chair." Then hide a toy and play "Where is it?".',
+    steps: [
+      { emoji: '\u{1F4E6}', img: itemToyBox, say: 'In the box' },
+      { emoji: '\u{1F9F8}', img: itemTeddy, say: 'On the bed' },
+      { emoji: '\u{1F50E}', img: itemCar, say: 'Where is it?' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u3l5-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU3L5Messy, who: 'pip',
+    teacher: 'Extra time: Brain Break! Stand up and move with Pip.',
+    rounds: [
+      { line: 'Be a ball IN a box! Curl up small!', emoji: '\u{26BD}' },
+      { line: 'Be a teddy ON a bed! Lie down!', emoji: '\u{1F9F8}' },
+      { line: 'Be a kitten! Meow!', emoji: '\u{1F431}' },
+      { line: 'Swim like an octopus!', emoji: '\u{1F419}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u3l5-tidy-up-2', kind: 'tidy-up', bg: bgU3L5Room, who: 'leo',
+    teacher: 'Extra time: More tidying! Listen to Leo: in, on or under?',
+    places: U3L5_PLACES,
+    toys: [
+      { label: 'train', img: itemTrain, x: 32, y: 84, size: 10 },
+      { label: 'kite', img: itemKite, x: 48, y: 78, size: 10 },
+      { label: 'doll', img: itemDoll, x: 62, y: 88, size: 10 },
+      { label: 'plane', img: itemPlane, x: 75, y: 80, size: 10 },
+    ],
+    rounds: [
+      { toy: 1, place: 1, at: { x: 18, y: 38 }, line: 'Put the kite on the bed!', reply: 'Yes! The kite is on the bed!' },
+      { toy: 0, place: 2, at: { x: 84, y: 60, scale: 0.55 }, line: 'Put the train under the chair!', reply: 'Yes! The train is under the chair!' },
+      { toy: 2, place: 0, at: { x: 56, y: 38 }, line: 'Put the doll in the box!', reply: 'Yes! The doll is in the box!' },
+      { toy: 3, place: 1, at: { x: 30, y: 39 }, line: 'Put the plane on the bed!', reply: 'Yes! The plane is on the bed! All tidy!' },
+    ],
+  },
+
+  /* 21-22 Goodbye */
+  {
+    id: 'u3l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u3l5-finale', kind: 'finale', bg: bgU3L5Kitten, who: 'pip', line: 'Great tidying! The ball is in the box, the teddy is on the bed, and the kitten is in the box too! Goodbye, friend!' },
 ];
 
 /* =============================================================================

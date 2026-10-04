@@ -25,7 +25,7 @@ const WAVE_MS = 2800;
 function wave(r: Peek['rounds'][number], k: number): [number, number][] {
   const d = r.decoys;
   const pick: [number, number][] = k % 2 === 0
-    ? [[r.toy, r.place], d[k % d.length]]
+    ? [[r.toy, r.place], d[(k >> 1) % d.length]]
     : [d[k % d.length], d[(k + 1) % d.length]];
   const seen = new Set<number>();
   return pick.filter((p) => p && !seen.has(p[1]) && (seen.add(p[1]), true));
