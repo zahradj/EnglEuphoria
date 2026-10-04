@@ -1,22 +1,6 @@
 [
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0033-4526635541955315389.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261003%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261003T224334Z&X-Amz-Expires=49192&X-Amz-Signature=287b09e2d48fad345caab11e3cc9325bb59c27ba8bc3684e459161ba7b7481ab&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2012%3A23%3A26%20GMT",
-  "out": "public/lep1/items/item-card-head.png",
-  "sticker": true
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0034-4526635541955315389.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261003%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261003T201133Z&X-Amz-Expires=57202&X-Amz-Signature=76a7114cee7db1f583f0820747f2a56c4f5a2e9aa06b574513b3fc077f60ef0b&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2012%3A04%3A55%20GMT",
-  "out": "public/lep1/items/item-card-shoulders.png",
-  "sticker": true
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0035-4526635541955315389.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261004T022027Z&X-Amz-Expires=34784&X-Amz-Signature=c713da2ee8dc76005f86b3737b514b6c162459d84894e4c9acc8c8844af4b3d8&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2012%3A00%3A11%20GMT",
-  "out": "public/lep1/items/item-card-knees.png",
-  "sticker": true
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0036-4526635541955315389.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261003%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261003T212610Z&X-Amz-Expires=51852&X-Amz-Signature=09329156294b44235e08a32a232034e0341f67ed20f78c2ba4f00511a2fdd115&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2011%3A50%3A22%20GMT",
-  "out": "public/lep1/items/item-card-toes.png",
-  "sticker": true
- }
+ {"url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0037-6233499829519466465.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261004T163010Z&X-Amz-Expires=9908&X-Amz-Signature=782a22806b9c640dfa03f0b8d3ac658711d0735d85dac5dad70765b119d1c53d&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2019%3A15%3A18%20GMT", "out": "public/lep1/scenes/bg-u4l1-act-head-wide.png", "sticker": false},
+ {"url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0038-6233499829519466465.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261004T133344Z&X-Amz-Expires=19887&X-Amz-Signature=3eb880587012b786a07e4997b04bb691feaf28c86051268beb26c016f7d7c252&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2019%3A05%3A11%20GMT", "out": "public/lep1/scenes/bg-u4l1-act-shoulders-wide.png", "sticker": false},
+ {"url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0039-6233499829519466465.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261004T121648Z&X-Amz-Expires=23656&X-Amz-Signature=2bf25a5a993306afc508707b75ad454cf3275cd1bc65a3465921c35baa8dc81a&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2018%3A51%3A04%20GMT", "out": "public/lep1/scenes/bg-u4l1-act-knees-wide.png", "sticker": false},
+ {"url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0040-6233499829519466465.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261004T092112Z&X-Amz-Expires=37256&X-Amz-Signature=0dd89b067c316ffee72fb1eafae1b4985b13305e777623008e3e8e2aa1a58ef4&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2019%3A42%3A08%20GMT", "out": "public/lep1/scenes/bg-u4l1-act-toes-wide.png", "sticker": false}
 ]
