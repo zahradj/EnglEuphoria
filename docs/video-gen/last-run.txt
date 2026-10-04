@@ -1,1 +1,4 @@
-No story "undefined" in scripts/story-videos.json
+02-head: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started 02-head: fd518e8d-2018-4c7b-985d-bc0d16d9ef28
+saved public/lep1/video/clips/u4l1-dance/02-head.mp4 (6219307 bytes)
+1/1 clips ready for u4l1-dance
