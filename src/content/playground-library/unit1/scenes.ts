@@ -402,8 +402,12 @@ export type Scene =
   | {
       /** "Shape Fishing": "Catch a blue triangle!" — tap the fish carrying it.
        *  `targets` index `fish`, one catch per round. */
-      id: string; kind: 'shape-fishing'; bg: string; teacher: string; who: CharKey;
-      fish: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' }[];
+      id: string; kind: 'shape-fishing'; bg: string; bgVideo?: string; teacher: string; who: CharKey;
+      /** `floating: true` = toys bob around in a paddling pool painted in `bg`
+       *  (Unit 3 Lesson 4) instead of fish swimming in lanes. A catch can be a
+       *  toy picture (`img` + `word`, optional `size`): "Catch the big red ball!". */
+      floating?: boolean;
+      fish: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle'; img?: string; word?: string; size?: 'big' | 'small' }[];
       targets: number[];
     }
   | {
@@ -5276,6 +5280,272 @@ export const LESSON_U3L3_SCENES: Scene[] = [
     ],
   },
   { id: 'u3l3-finale', kind: 'finale', bg: bgU3L3Together, who: 'pip', line: "A kite, a robot and a plane! Do you like to play? Yes, we do! Thank you for helping me. Goodbye, friend!" },
+];
+
+/* ===================== Pre-A1 Unit 3 · Lesson 4 — My Favorite Toy =====================
+ * Toys & Playtime (4/6). "What's your favorite toy? — My favorite toy is my
+ * teddy bear!", BIG and SMALL, recycling every Unit 3 toy, and P /p/ (pizza,
+ * plane, pumpkin, plum). Story: Show and Tell Day — Bella forgot her toy and
+ * Pip shares. Lesson-4 game set (blueprint §3d): secret card (now with toys:
+ * "Is it a car? Is it big?"), shape fishing (toys floating in a paddling
+ * pool), sound sort, colour Simon. Pictures made with CANVA (owner's rule). */
+const bgU3L4ShowTell = `${A}/scenes/bg-u3l4-showtell-wide.png`;
+const bgU3L4Leo = `${A}/scenes/bg-u3l4-leo-wide.png`;
+const bgU3L4Mia = `${A}/scenes/bg-u3l4-mia-wide.png`;
+const bgU3L4Bella = `${A}/scenes/bg-u3l4-bella-wide.png`;
+const bgU3L4Share = `${A}/scenes/bg-u3l4-share-wide.png`;
+const bgU3L4Room = `${A}/scenes/bg-u3l4-room-empty-wide.png`;
+const bgU3L4Pool = `${A}/scenes/bg-u3l4-pool-wide.png`;
+const loopU3L4 = (name: string) => `${A}/video/loops/u3l4-${name}.mp4`;
+const T_BALL_BIG = { colorWord: 'RED', colorHex: '#EF4444', shape: 'circle' as const, img: itemBallRed, word: 'ball', size: 'big' as const };
+const T_BALL_SMALL = { colorWord: 'RED', colorHex: '#EF4444', shape: 'circle' as const, img: itemBallRed, word: 'ball', size: 'small' as const };
+const T_TEDDY_BIG = { colorWord: 'BROWN', colorHex: '#92400E', shape: 'circle' as const, img: itemTeddy, word: 'teddy bear', size: 'big' as const };
+const T_TEDDY_SMALL = { colorWord: 'BROWN', colorHex: '#92400E', shape: 'circle' as const, img: itemTeddy, word: 'teddy bear', size: 'small' as const };
+const T_CAR_BIG = { colorWord: 'BLUE', colorHex: '#3B82F6', shape: 'square' as const, img: itemCar, word: 'car', size: 'big' as const };
+const T_CAR_SMALL = { colorWord: 'BLUE', colorHex: '#3B82F6', shape: 'square' as const, img: itemCar, word: 'car', size: 'small' as const };
+const T_ROBOT_SMALL = { colorWord: 'GRAY', colorHex: '#9CA3AF', shape: 'square' as const, img: itemRobot, word: 'robot', size: 'small' as const };
+const T_ROBOT_BIG = { colorWord: 'GRAY', colorHex: '#9CA3AF', shape: 'square' as const, img: itemRobot, word: 'robot', size: 'big' as const };
+const T_KITE_SMALL = { colorWord: 'RED', colorHex: '#EF4444', shape: 'triangle' as const, img: itemKite, word: 'kite', size: 'small' as const };
+const T_PLANE_BIG = { colorWord: 'BLUE', colorHex: '#3B82F6', shape: 'triangle' as const, img: itemPlane, word: 'plane', size: 'big' as const };
+
+export const LESSON_U3L4_TITLE = 'My Favorite Toy';
+export const LESSON_U3L4_OBJECTIVE = 'Ask and answer "What\'s your favorite toy? — My favorite toy is my teddy bear!", describe a toy as BIG or SMALL ("It\'s a big red ball!"), recycle every Unit 3 toy, follow a Show and Tell story about sharing, and hear P say /p/ (pizza, plane, pumpkin, plum) — by listening, moving, asking, catching and speaking, no reading.';
+
+export const LESSON_U3L4_SCENES: Scene[] = [
+  { id: 'u3l4-title', kind: 'title-card', bg: bgU3L4ShowTell, level: 'Pre-A1', unit: 'Unit 3', lessonLabel: 'Lesson 4', title: 'My Favorite Toy', subtitle: 'Show and Tell Day' },
+
+  /* 1-3 Hook + story opener */
+  {
+    id: 'u3l4-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
+    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
+    lineDurationsMs: [5200, 4300, 4500, 6100],
+    songPrompt: 'Cheerful upbeat kids hello song',
+    lyrics: [
+      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u3l4-intro', kind: 'cinematic', bg: bgU3L4ShowTell, hidePipOverlay: true, title: 'Show and Tell Day', subtitle: "What's your favorite toy?", narrator: 'pip',
+    script: [
+      { who: 'pip', line: "Hello! Today is Show and Tell day! What's your favorite toy?" },
+      { who: 'leo', line: "Let's show our favorite toys!" },
+    ],
+    cta: "Let's show!",
+  },
+  {
+    // Slide 3: story opener — still pictures with soft fades (no zoom).
+    id: 'u3l4-story-show', kind: 'story-video', bg: bgU3L4ShowTell, videoUrl: `${A}/video/showtell-story-u3l4-a.mp4?v=1`, title: 'Show and Tell',
+    teacher: 'Press play and watch. Show BIG with wide arms and SMALL with two fingers!',
+    pages: [
+      { img: bgU3L4ShowTell, who: 'pip', line: 'It is Show and Tell day. The friends have their favorite toys!', atSec: 0 },
+      { img: bgU3L4Leo, who: 'leo', line: 'My favorite toy is my teddy bear. It is big!', atSec: 5 },
+      { img: bgU3L4Mia, who: 'mia', line: 'My favorite toy is my robot. It is small!', atSec: 10 },
+      { img: bgU3L4Bella, who: 'bella', line: 'Oh no! I forgot my toy.', atSec: 15 },
+    ],
+    checkpoints: [
+      { afterPage: 1, who: 'leo', question: "What is Leo's favorite toy?", answer: 'A teddy bear', options: [{ label: 'A robot', img: itemRobot }, { label: 'A teddy bear', img: itemTeddy }, { label: 'A kite', img: itemKite }] },
+      { afterPage: 3, who: 'pip', question: 'Who forgot her toy?', answer: 'Bella', options: [{ label: 'Mia', img: CAST.mia.img }, { label: 'Bella', img: CAST.bella.img }, { label: 'Willow', img: CAST.willow.img }] },
+    ],
+  },
+
+  /* 4-5 New words + move */
+  {
+    id: 'u3l4-big-small', kind: 'listen-repeat-cards', bg: bgU3L4Room, teacher: 'Big or small? Show it with your hands, then say it!',
+    cards: [
+      { who: 'leo', sentence: "It's big! A big teddy bear!", img: itemTeddy, imgLabel: 'Big' },
+      { who: 'mia', sentence: "It's small! A small robot!", img: itemRobot, imgLabel: 'Small' },
+    ],
+  },
+  {
+    id: 'u3l4-move-say', kind: 'tpr-actions', bg: bgU3L4Room, who: 'pip',
+    teacher: 'Stand up! Say it with Pip, then do it before the ring runs out.',
+    rounds: [
+      { line: 'Show me BIG! Arms wide open!', emoji: '\u{1F450}' },
+      { line: 'Show me small! Tiny fingers!', emoji: '\u{1F90F}' },
+      { line: 'Hug a big teddy bear!', emoji: '\u{1F9F8}', img: itemTeddy },
+      { line: 'Roll a small ball!', emoji: '\u{26BD}', img: itemBallRed },
+      { line: 'Point and say: My favorite toy is…!', emoji: '\u{1F449}' },
+    ],
+  },
+
+  /* 6 Listening game: fish the toys out of the pool */
+  {
+    id: 'u3l4-pool', kind: 'shape-fishing', bg: bgU3L4Pool, bgVideo: loopU3L4('pool'), floating: true, who: 'pip',
+    teacher: 'The toys are in the pool! Listen: big or small? Tap the toy Pip says.',
+    fish: [T_BALL_BIG, T_TEDDY_SMALL, T_CAR_BIG, T_BALL_SMALL, T_ROBOT_BIG, T_CAR_SMALL],
+    targets: [0, 3, 2, 1],
+  },
+
+  /* 8-11 The question: What's your favorite toy? */
+  {
+    id: 'u3l4-favorite', kind: 'listen-repeat-cards', bg: bgU3L4ShowTell, teacher: 'Ask and answer! Listen, then say it like the friends.',
+    cards: [
+      { who: 'pip', sentence: "What's your favorite toy? My favorite toy is my ball!", img: itemBallRed, imgLabel: 'Ball' },
+      { who: 'leo', sentence: "What's your favorite toy? My favorite toy is my teddy bear!", img: itemTeddy, imgLabel: 'Teddy bear' },
+      { who: 'willow', sentence: "What's your favorite toy? My favorite toy is my kite!", img: itemKite, imgLabel: 'Kite' },
+    ],
+  },
+  {
+    // Slide 9: badges on the toys painted in bg-u3l4-showtell-wide (checked against the art).
+    id: 'u3l4-spin', kind: 'spin-wheel', bg: bgU3L4ShowTell, title: '',
+    teacher: 'Have the student spin, point to the toy and say: "My favorite toy is my ball!" Then: "It\'s big!" or "It\'s small!". Or tap a number.',
+    items: [
+      { label: 'My favorite toy is my ball!', left: '22%', top: '76%' },
+      { label: 'My favorite toy is my robot!', left: '37%', top: '78%' },
+      { label: 'My favorite toy is my teddy bear!', left: '52%', top: '75%' },
+      { label: 'My favorite toy is my kite!', left: '77%', top: '76%' },
+    ],
+    wheelAt: { left: '86%', top: '22%' },
+  },
+  {
+    id: 'u3l4-leo-asks', kind: 'join-stage', bg: bgU3L4Leo, teacher: 'Leo asks you. Answer him with a toy you love!', cast: ['leo'],
+    turns: [
+      { who: 'leo', line: "Hello! What's your favorite toy?", bubble: 'right' },
+      { who: 'student', line: 'My favorite toy is my … !', bubble: 'right' },
+      { who: 'leo', line: 'Is it big or small?', bubble: 'right' },
+      { who: 'student', line: "It's big! / It's small!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u3l4-you-ask', kind: 'join-stage', bg: bgU3L4Mia, teacher: 'Swap! Now the student asks Mia.', cast: ['mia'],
+    turns: [
+      { who: 'student', line: "Ask Mia: What's your favorite toy?", bubble: 'right' },
+      { who: 'mia', line: 'My favorite toy is my robot!', bubble: 'right' },
+      { who: 'student', line: 'Ask Mia: Is it big?', bubble: 'right' },
+      { who: 'mia', line: "No! It's small!", bubble: 'right' },
+    ],
+  },
+
+  /* 12 Game: guess the secret toy (the child asks) */
+  {
+    id: 'u3l4-secret-toy', kind: 'secret-card', bg: bgU3L4Room, who: 'leo',
+    teacher: 'Leo has a secret favorite toy! Ask: "Is it a car?" "Is it big?" "Is it red?" Find it!',
+    cards: [T_BALL_BIG, T_CAR_SMALL, T_TEDDY_BIG, T_ROBOT_SMALL, T_CAR_BIG, T_KITE_SMALL],
+    rounds: [{ secret: 2 }, { secret: 1 }, { secret: 3 }],
+  },
+
+  /* 13-15 Phonics: P says /p/ */
+  {
+    id: 'u3l4-model-p', kind: 'sound-model', bg: bgU3L4Room, who: 'pip', letter: 'P', phoneme: '/p/', sound: 'puh',
+    teacher: 'P says /p/ — Pip, pizza, plane, pumpkin!',
+    anchors: [
+      { word: 'pizza', emoji: '\u{1F355}', img: itemPizza },
+      { word: 'plane', emoji: '\u{2708}\u{FE0F}', img: itemPlane },
+      { word: 'pumpkin', emoji: '\u{1F383}', img: itemPumpkin },
+    ],
+  },
+  { id: 'u3l4-trace-p', kind: 'trace', bg: bgU3L4Room, who: 'pip', letter: 'P', phoneme: '/p/', word: 'pizza', speakWord: false, teacher: 'Trace the big P with your finger! /p/ /p/ Pip!' },
+  {
+    id: 'u3l4-sort-pbt', kind: 'sound-sort', bg: bgU3L4Room, teacher: 'Listen! Drag each picture to its sound: /p/, /b/ or /t/.',
+    targets: [
+      { letter: 'P', phoneme: '/p/', who: 'pip' },
+      { letter: 'B', phoneme: '/b/', who: 'bella' },
+      { letter: 'T', phoneme: '/t/', who: 'leo' },
+    ],
+    items: [
+      { word: 'pizza', emoji: '\u{1F355}', img: itemPizza, letter: 'P' },
+      { word: 'plum', emoji: '\u{1F7E3}', img: itemPlum, letter: 'P' },
+      { word: 'ball', emoji: '\u{26BD}', img: itemBallRed, letter: 'B' },
+      { word: 'blocks', emoji: '\u{1F9F1}', img: itemBlocks, letter: 'B' },
+      { word: 'teddy', emoji: '\u{1F9F8}', img: itemTeddy, letter: 'T' },
+      { word: 'train', emoji: '\u{1F682}', img: itemTrain, letter: 'T' },
+    ],
+  },
+
+  /* 16-18 Story payoff, retell, personal */
+  {
+    id: 'u3l4-story-share', kind: 'story-video', bg: bgU3L4Share, videoUrl: `${A}/video/showtell-story-u3l4-b.mp4?v=1`, title: 'Pip Shares',
+    teacher: 'Press play. How is Bella at the start? And at the end?',
+    pages: [
+      { img: bgU3L4Bella, who: 'bella', line: "I'm sad. I forgot my favorite toy.", atSec: 0 },
+      { img: bgU3L4Share, who: 'pip', line: "Here you are, Bella! Let's play with my ball together!", atSec: 5 },
+      { img: bgU3L4Share, who: 'bella', line: 'Thank you, Pip! Now I am happy!', atSec: 10 },
+    ],
+    checkpoints: [
+      { afterPage: 1, who: 'pip', question: 'What does Pip give Bella?', answer: 'A ball', options: [{ label: 'A ball', img: itemBallRed }, { label: 'A teddy bear', img: itemTeddy }, { label: 'A robot', img: itemRobot }] },
+    ],
+  },
+  {
+    id: 'u3l4-story-order', kind: 'story-order', bg: bgU3L4Room, who: 'pip', teacher: 'Put the story in order, then tell it: first, then, then, at the end!',
+    frames: [
+      { img: bgU3L4Leo, caption: 'Leo has a big teddy bear.', who: 'leo' },
+      { img: bgU3L4Mia, caption: 'Mia has a small robot.', who: 'mia' },
+      { img: bgU3L4Bella, caption: 'Bella forgot her toy.', who: 'bella' },
+      { img: bgU3L4Share, caption: 'Pip shares his ball.', who: 'pip' },
+    ],
+  },
+  {
+    id: 'u3l4-show-me', kind: 'join-stage', bg: bgU3L4ShowTell, teacher: 'Your Show and Tell! The student shows a real toy from home.', cast: ['pip', 'bella'],
+    turns: [
+      { who: 'pip', line: "It's your turn! What's your favorite toy? Show me!", bubble: 'right' },
+      { who: 'student', line: 'My favorite toy is my … ! (show it)', bubble: 'right' },
+      { who: 'bella', line: 'Wow! Is it big or small?', bubble: 'right' },
+      { who: 'student', line: "It's big! / It's small!", bubble: 'right' },
+    ],
+  },
+
+  /* 19-20 Sticker + Home Mission */
+  {
+    id: 'u3l4-sticker', kind: 'sticker-reward', bg: bgU3L4Share, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Great Show and Tell! Here is a teddy bear sticker for you!', sticker: { img: itemTeddy, label: 'Teddy bear' },
+  },
+  {
+    id: 'u3l4-home-mission', kind: 'home-mission', bg: bgU3L4Room, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: show your family your favorite toy. Say: My favorite toy is my … ! Is it big or small?',
+    parentNote: 'Ask your child "What\'s your favorite toy?" and help them answer "My favorite toy is my ___! It\'s big / small." Then share a toy and play together, like Pip and Bella.',
+    steps: [
+      { emoji: '\u{1F9F8}', img: itemTeddy, say: 'Find it' },
+      { emoji: '\u{1F5E3}️', say: 'My favorite toy is…' },
+      { emoji: '\u{1F91D}', img: itemBallRed, say: 'Share' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u3l4-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU3L4ShowTell, who: 'pip',
+    teacher: 'Extra time: Brain Break! Stand up and move with Pip.',
+    rounds: [
+      { line: 'Be BIG like a teddy bear!', emoji: '\u{1F9F8}' },
+      { line: 'Be small like a robot!', emoji: '\u{1F916}' },
+      { line: 'Bounce like a ball!', emoji: '\u{26BD}' },
+      { line: 'Fly like a plane!', emoji: '\u{2708}\u{FE0F}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u3l4-pool-2', kind: 'shape-fishing', bg: bgU3L4Pool, bgVideo: loopU3L4('pool'), floating: true, who: 'mia',
+    teacher: 'Extra time: More toys in the pool! Big or small? Tap the toy Mia says.',
+    fish: [T_ROBOT_SMALL, T_PLANE_BIG, T_TEDDY_BIG, T_KITE_SMALL, T_BALL_SMALL, T_CAR_BIG],
+    targets: [2, 0, 3],
+  },
+  {
+    id: 'u3l4-toybox-lock', kind: 'color-simon', bg: bgU3L4Room, teacher: 'Extra time: The toy box has a color lock! Watch, then copy the colors. Say each one!', maxRounds: 5,
+    colors: [
+      { colorWord: 'RED', colorHex: '#EF4444', who: 'pip' },
+      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow' },
+      { colorWord: 'YELLOW', colorHex: '#FACC15', who: 'leo' },
+      { colorWord: 'GREEN', colorHex: '#22C55E', who: 'bella' },
+    ],
+  },
+
+  /* 21-22 Goodbye */
+  {
+    id: 'u3l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u3l4-finale', kind: 'finale', bg: bgU3L4Share, who: 'pip', line: "Great Show and Tell! A big teddy bear, a small robot, and friends who share. What's your favorite toy? Goodbye, friend!" },
 ];
 
 /* =============================================================================

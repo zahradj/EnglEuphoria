@@ -332,9 +332,10 @@ const UNIT1_EXTRACTORS = {
     const it = (s.items ?? []).find((i) => i.id === r.item);
     return it ? [[s.who, `Color the ${it.size} ${it.shape} ${r.colorWord.toLowerCase()}!`], [s.who, `Yes! The ${it.size} ${it.shape} is ${r.colorWord.toLowerCase()}!`]] : [];
   }),
-  'shape-fishing': (s) => (s.targets ?? []).map((i) => s.fish?.[i]).filter(Boolean).flatMap((f) => [
-    [s.who, `Catch a ${f.colorWord.toLowerCase()} ${f.shape}!`], [s.who, `You caught a ${f.colorWord.toLowerCase()} ${f.shape}!`],
-  ]),
+  'shape-fishing': (s) => (s.targets ?? []).map((i) => s.fish?.[i]).filter(Boolean).flatMap((f) => {
+    if (f.word) { const n = [f.size, f.colorWord.toLowerCase(), f.word.toLowerCase()].filter(Boolean).join(' '); return [[s.who, `Catch the ${n}!`], [s.who, `You caught the ${n}!`]]; }
+    return [[s.who, `Catch a ${f.colorWord.toLowerCase()} ${f.shape}!`], [s.who, `You caught a ${f.colorWord.toLowerCase()} ${f.shape}!`]];
+  }),
   'pattern-train': (s) => [
     [s.who, 'What comes next?'],
     ...(s.rounds ?? []).map((r) => { const c = r.answer.word ? r.answer.word.toLowerCase() : `${r.answer.colorWord.toLowerCase()} ${r.answer.shape}`; return [s.who, `Yes! ${/^[aeiou]/.test(c) ? 'An' : 'A'} ${c}!`]; }),

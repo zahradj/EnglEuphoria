@@ -182,5 +182,20 @@
         "prompt": "Leaves on the trees and the grass and flowers sway softly in a light breeze, clouds drift slowly across the blue sky."
       }
     ]
+  },
+  "u3l4-loops": {
+    "lesson": "Pre-A1 Unit 3 Lesson 4 — living game backgrounds (ping-pong loops)",
+    "provider": "higgsfield",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "seconds": 5,
+    "style": "Keep exactly the flat 2D cartoon picture-book style and everything in the first frame. Seamless gentle ambient LOOP for a game background: the camera does not move at all, nothing new appears, nothing leaves the picture.",
+    "out": "public/lep1/video/clips/u3l4-loops",
+    "beats": [
+      {
+        "id": "pool",
+        "image": "public/lep1/scenes/bg-u3l4-pool-wide.png",
+        "prompt": "The water in the paddling pool ripples gently and sparkles in the sunlight, the grass and flowers sway softly in a light breeze."
+      }
+    ]
   }
 }
