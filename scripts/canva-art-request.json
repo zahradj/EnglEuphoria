@@ -1,37 +1,7 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0065-7030636977515572942.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261004T061328Z&X-Amz-Expires=58974&X-Amz-Signature=78e2c131cf23431ade1eb87d44e16c2d0ec1e7a10a030d24a3ae49d3f685826b&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2022%3A36%3A22%20GMT",
-  "out": "public/lep1/scenes/bg-u2l2-mix-willow-pour2-wide.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0066-7030636977515572942.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261004T153328Z&X-Amz-Expires=25722&X-Amz-Signature=3d169dd9c4f5ab49ef3ee29a52baf30cd7483e9e87c5bf74de32792c7eefb05c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2022%3A42%3A10%20GMT",
-  "out": "public/lep1/scenes/bg-u2l2-mix-willow-spoon-wide.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0067-7030636977515572942.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261004T122658Z&X-Amz-Expires=35518&X-Amz-Signature=be6c81cc9e55f1f42446445976a41d5edb5470fc0ad7658531b44866fb188dea&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2022%3A18%3A56%20GMT",
-  "out": "public/lep1/scenes/bg-u2l2-mix-leo-pour2-wide.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0068-7030636977515572942.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261004T204650Z&X-Amz-Expires=6392&X-Amz-Signature=4929afd77ae40011265eb022555135fc3d4b5ba185944c33ee9b42b87f4d7334&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2022%3A33%3A22%20GMT",
-  "out": "public/lep1/scenes/bg-u2l2-mix-leo-spoon-wide.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0069-7030636977515572942.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261003%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261003T235004Z&X-Amz-Expires=79951&X-Amz-Signature=22affce3dc62094db62b35f1c14fc97a884a8c34619758ffd43ee42728536838&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2022%3A02%3A35%20GMT",
-  "out": "public/lep1/scenes/bg-u2l2-mix-mia-pour2-wide.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0070-7030636977515572942.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261004T020229Z&X-Amz-Expires=73088&X-Amz-Signature=aa49c9b9aaf810a53a97743ab1d2a0a5fcb58114863bbe37416c047fd98a87df&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2022%3A20%3A37%20GMT",
-  "out": "public/lep1/scenes/bg-u2l2-mix-mia-spoon-wide.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0071-7030636977515572942.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261003%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261003T234300Z&X-Amz-Expires=80260&X-Amz-Signature=cc1a42ef37dc20a85e9af1526232298beacc584a0182a24f3c5a603d0c5b8524&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2022%3A00%3A40%20GMT",
-  "out": "public/lep1/scenes/bg-u2l2-mix-mia-b2-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0072-8103619593217834526.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261004T190834Z&X-Amz-Expires=12119&X-Amz-Signature=6c23ba32c55c13a77e61cbefe1fc57e300caa0c08c1d9045aa8e1d40f25a3a78&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2004%20Oct%202026%2022%3A30%3A33%20GMT",
+  "out": "public/lep1/scenes/bg-u2l2-mix-mia-a2-wide.png",
   "sticker": false
  }
 ]

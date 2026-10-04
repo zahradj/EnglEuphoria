@@ -442,5 +442,30 @@
         "ownerApproved": false
       }
     ]
+  },
+  "u2l2-mix": {
+    "lesson": "Pre-A1 Unit 2 Lesson 2 — The Magic Mix (page 7). Scenario docs/scenarios/u2l2-magic-mix.md. STRICT MODE: one clip at a time, each between two Canva key pictures, screened with review-clip.py, then frame-by-frame review with the owner.",
+    "provider": "higgsfield",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "seconds": 5,
+    "out": "public/lep1/video/clips/u2l2-mix",
+    "style": "Keep exactly the soft 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, slow, gentle animation for young children. The camera stays steady. No text, no new characters, no speech.",
+    "beats": [
+      {
+        "id": "willow-stir",
+        "image": "public/lep1/scenes/bg-u2l2-mix-willow-spoon-wide.png",
+        "endImage": "public/lep1/scenes/bg-u2l2-mix-willow-b-wide.png",
+        "seconds": 5,
+        "line": "Stir, stir, stir!",
+        "bodyWords": [
+          "stir"
+        ],
+        "leader": "Willow",
+        "action": "Willow slowly stirs the paint in the glass bowl with the wooden spoon; the blue and yellow paint swirl together into green",
+        "prompt": "Willow the blue bird slowly stirs the paint in the glass bowl with the wooden spoon in small circles. The blue and yellow paint swirl together and turn green. Her feet, the table and both jars stay still. Nobody else is in the picture. The camera stays steady.",
+        "ownerApproved": true,
+        "approvedNote": "owner: \"create the video of this lesson\" 2026-10-04, after reading the scenario (scenario shot 3, first clip only)"
+      }
+    ]
   }
 }

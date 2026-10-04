@@ -1,6 +1,6 @@
 # Scenario — U2L2 "The Magic Mix" (page 7, before the Magic Paint Pots game)
 
-Skill: `.claude/skills/kids-video-scenario`. Status: **waiting for the owner's approval** (nothing ordered).
+Skill: `.claude/skills/kids-video-scenario`. Status: **approved** 2026-10-04 — stills film in the lesson; motion clips one at a time.
 
 - **Lesson:** Pre-A1 Unit 2 Lesson 2 "Green, Orange, Purple!" — page 7 (it teaches; page 8, Magic Paint Pots, lets the child do it).
 - **Goal (one):** the child can say which two colours make green, orange and purple, and name the new colour.
@@ -40,4 +40,11 @@ Repetition: each new colour is heard 3× (shot 3 action, shot 5 line twice) and 
   (start with shot 3 for Willow: start = spoon picture, end = green picture).
 
 ## Approval
-- Scenario: _not yet approved_
+- Approved: 2026-10-04, "create the video of this lesson" (owner, after reading this scenario).
+- Clips: `willow-stir` (shot 3) ordered first, alone; the others wait for the owner's OK on that clip.
+
+## Production notes
+- Key pictures (Canva, holder pages 59-71): mix-{willow,leo,mia}-{a,pour2,spoon,b}; Mia's a and b were remade as `mix-mia-a2` (she pours RED first, as her line says) and `mix-mia-b2`
+  so the blue jar from the spoon picture does not vanish.
+- The pause (shot 4) is interactive in the lesson: the film stops on the mixed bowl, the friend asks "What color is it?"
+  and the child taps the colour; then shot 5 plays. Film: `public/lep1/video/mix-story-u2l2.mp4`.
