@@ -27,3 +27,4 @@
 - **Pictures: Canva only** (Canva `generate-image`, reference images uploaded to Canva for character consistency; `remove-background` for stickers). **Never generate pictures with Higgsfield** — not backgrounds, not stickers, not "just this once".
 - **Videos: Higgsfield only** (story clips, game background loops — image-to-video from a Canva/approved picture).
 - `scripts/generate-art.mjs` refuses the Higgsfield image path; the `higgsfield-video` edge function only allows video endpoints.
+- How to get a Canva picture into the repo (holder design, export, fetch bot): `docs/canva-art-pipeline.md`.
