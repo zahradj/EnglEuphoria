@@ -299,7 +299,9 @@
         "leader": "Willow",
         "action": "Willow and the four friends keep both paws resting on top of their head; only a soft breath and a slow blink",
         "prompt": "Willow the blue bird, Pip, Mia, Leo and Bella keep both paws resting on top of their head. They keep the same pose the whole time: only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
-        "ownerApproved": false
+        "ownerApproved": false,
+        "rejected": true,
+        "review": "2026-10-04 superseded before ordering (never generated): owner chose one character per clip, framed full body, with body-part labels added afterwards. Replaced by rows 10-13."
       },
       {
         "id": "07-shoulders",
@@ -312,7 +314,9 @@
         "leader": "Willow",
         "action": "Willow and the four friends keep their arms crossed with each paw resting on the opposite shoulders; only a soft breath and a slow blink",
         "prompt": "Willow the blue bird, Pip, Mia, Leo and Bella keep their arms crossed, each paw resting on the opposite shoulders,. They keep the same pose the whole time: only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
-        "ownerApproved": false
+        "ownerApproved": false,
+        "rejected": true,
+        "review": "2026-10-04 superseded before ordering (never generated): owner chose one character per clip, framed full body, with body-part labels added afterwards. Replaced by rows 10-13."
       },
       {
         "id": "08-knees",
@@ -325,7 +329,9 @@
         "leader": "Willow",
         "action": "Willow and the four friends stay bent forward with their paws resting on their knees; only a soft breath and a slow blink",
         "prompt": "Willow the blue bird, Pip, Mia, Leo and Bella stay bent forward with their paws resting on their knees. They keep the same pose the whole time: only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
-        "ownerApproved": false
+        "ownerApproved": false,
+        "rejected": true,
+        "review": "2026-10-04 superseded before ordering (never generated): owner chose one character per clip, framed full body, with body-part labels added afterwards. Replaced by rows 10-13."
       },
       {
         "id": "09-toes",
@@ -338,6 +344,101 @@
         "leader": "Pip",
         "action": "Pip stays bent over touching his toes and wobbles gently once, then laughs silently; the others stay still",
         "prompt": "Pip the orange fox stays bent over with his paws touching his toes and wobbles gently once without falling. Willow, Mia and Bella keep the same pose, with only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
+        "ownerApproved": false,
+        "rejected": true,
+        "review": "2026-10-04 superseded before ordering (never generated): owner chose one character per clip, framed full body, with body-part labels added afterwards. Replaced by rows 10-13."
+      },
+      {
+        "id": "10-head",
+        "image": "public/lep1/scenes/bg-u4l1-leo-stand-wide.png",
+        "endImage": "public/lep1/scenes/bg-u4l1-leo-head-wide.png",
+        "seconds": 5,
+        "line": "Ready, friends? Touch your head!",
+        "bodyWords": [
+          "head"
+        ],
+        "leader": "Leo",
+        "action": "Leo slowly lifts both paws and rests them on top of his head",
+        "prompt": "Leo the lion slowly lifts both paws and rests them on top of his head, and keeps them there. Nobody else is in the picture. His feet stay still. The camera stays steady.",
+        "labels": [
+          {
+            "word": "head",
+            "at": [
+              50,
+              9
+            ],
+            "label": [
+              76,
+              16
+            ]
+          }
+        ],
+        "ownerApproved": false
+      },
+      {
+        "id": "11-shoulders",
+        "image": "public/lep1/scenes/bg-u4l1-leo-head-wide.png",
+        "endImage": "public/lep1/scenes/bg-u4l1-leo-shoulders-wide.png",
+        "seconds": 5,
+        "line": "Touch your shoulders!",
+        "bodyWords": [
+          "shoulders"
+        ],
+        "leader": "Leo",
+        "action": "Leo slowly moves both paws down from his head onto his shoulders",
+        "prompt": "Leo the lion slowly moves both paws down from his head and rests them on his shoulders, and keeps them there. Nobody else is in the picture. His feet stay still. The camera stays steady.",
+        "labels": [
+          {
+            "word": "shoulders",
+            "at": [
+              [
+                41,
+                42
+              ],
+              [
+                59,
+                42
+              ]
+            ],
+            "label": [
+              50,
+              90
+            ]
+          }
+        ],
+        "ownerApproved": false
+      },
+      {
+        "id": "12-knees",
+        "image": "public/lep1/scenes/bg-u4l1-leo-shoulders-wide.png",
+        "endImage": "public/lep1/scenes/bg-u4l1-leo-knees-wide.png",
+        "seconds": 5,
+        "line": "Touch your knees!",
+        "bodyWords": [
+          "knees"
+        ],
+        "leader": "Leo",
+        "action": "Leo slowly bends forward and moves both paws down from his shoulders onto his knees",
+        "prompt": "Leo the lion slowly bends forward a little and moves both paws down from his shoulders onto his knees, and keeps them there. Nobody else is in the picture. His feet stay still. The camera stays steady.",
+        "labels": [
+          {
+            "word": "knees",
+            "at": [
+              [
+                45,
+                69
+              ],
+              [
+                55,
+                69
+              ]
+            ],
+            "label": [
+              50,
+              90
+            ]
+          }
+        ],
         "ownerApproved": false
       }
     ]

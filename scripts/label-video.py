@@ -3,7 +3,8 @@
     python3 scripts/label-video.py <in.mp4> <out-name> '<labels json>'
 
 labels: [{"word": "head", "at": [x, y], "label": [x, y], "from": 0.5, "to": 4.0}, ...]
-  at     where the dot goes (the body part), in % of the frame (0-100)
+  at     where the dot goes (the body part), in % of the frame (0-100); a list of points for pairs
+         (shoulders, knees: one line to EACH side, so the plural is shown)
   label  where the label sits, in % of the frame (keep it on empty floor/wall, never over a face)
   from/to  seconds the label is shown (it pops in over 0.25 s)
 
@@ -29,21 +30,25 @@ pngs = []
 for n, lab in enumerate(labels):
     img = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
-    ax, ay = lab['at'][0] * W / 100, lab['at'][1] * H / 100
+    pts = lab['at'] if isinstance(lab['at'][0], list) else [lab['at']]
     lx, ly = lab['label'][0] * W / 100, lab['label'][1] * H / 100
     word = lab['word']
     bx0, by0, bx1, by1 = d.textbbox((0, 0), word, font=font)
     tw, th = bx1 - bx0, by1 - by0
     padx, pady = H * 0.03, H * 0.018
     box = [lx - tw / 2 - padx, ly - th / 2 - pady, lx + tw / 2 + padx, ly + th / 2 + pady]
-    # Line from the label's nearest edge to the dot.
-    ex = min(max(ax, box[0]), box[2]); ey = box[3] if ay > box[3] else box[1] if ay < box[1] else ly
     lw = max(4, int(H * 0.008))
-    d.line([(ex, ey), (ax, ay)], fill=(255, 255, 255, 255), width=lw + 6)
-    d.line([(ex, ey), (ax, ay)], fill=LINE, width=lw)
     r = H * 0.016
-    d.ellipse([ax - r - 3, ay - r - 3, ax + r + 3, ay + r + 3], fill=(255, 255, 255, 255))
-    d.ellipse([ax - r, ay - r, ax + r, ay + r], fill=LINE)
+    for px, py in pts:
+        ax, ay = px * W / 100, py * H / 100
+        # Line from the label's nearest edge to the dot.
+        ex = min(max(ax, box[0]), box[2]); ey = box[3] if ay > box[3] else box[1] if ay < box[1] else ly
+        d.line([(ex, ey), (ax, ay)], fill=(255, 255, 255, 255), width=lw + 6)
+        d.line([(ex, ey), (ax, ay)], fill=LINE, width=lw)
+    for px, py in pts:
+        ax, ay = px * W / 100, py * H / 100
+        d.ellipse([ax - r - 3, ay - r - 3, ax + r + 3, ay + r + 3], fill=(255, 255, 255, 255))
+        d.ellipse([ax - r, ay - r, ax + r, ay + r], fill=LINE)
     d.rounded_rectangle([box[0] + 3, box[1] + 5, box[2] + 3, box[3] + 5], radius=(box[3] - box[1]) / 2, fill=(0, 0, 0, 60))
     d.rounded_rectangle(box, radius=(box[3] - box[1]) / 2, fill=FILL, outline=LINE, width=max(3, int(H * 0.005)))
     d.text((lx - tw / 2 - bx0, ly - th / 2 - by0), word, font=font, fill=INK)
