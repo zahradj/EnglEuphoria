@@ -1,4 +1,4 @@
-import { useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
+import { SHARED_PLAY_KINDS, useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
 import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -230,13 +230,19 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   // student the floor outright: no teacher unlock needed, and the teacher's
   // copy is a live, non-interactive view of the student's work.
   const studentDriven = isSynced && (scene as { studentOnly?: boolean }).studentOnly === true;
+  // SHARED PLAY: a real game (SHARED_PLAY_KINDS) is played by the teacher AND the student together, as one
+  // player, whenever the student isn't paused. Both screens then drive and publish state (last write wins);
+  // while the student is paused the teacher alone drives and the student's screen is a live mirror.
+  const sharedPlay = isSynced && !studentDriven && SHARED_PLAY_KINDS.has(scene.kind) && (role === 'teacher' || interactionUnlocked);
   const hasActivityAuthority = !isSynced
     ? true
-    : studentDriven
-      ? role === 'student'
-      : role === 'student'
-        ? interactionUnlocked
-        : !interactionUnlocked;
+    : sharedPlay
+      ? true
+      : studentDriven
+        ? role === 'student'
+        : role === 'student'
+          ? interactionUnlocked
+          : !interactionUnlocked;
   const usesRealSync = REAL_SYNC_KINDS.has(scene.kind);
 
   // Scene-tagged: the render right after a scene change must never see the previous scene's state.
@@ -254,8 +260,9 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   }, [isSynced, hasActivityAuthority, roomId, role, scene.id]);
 
   useEffect(() => {
-    if (!isSynced || hasActivityAuthority || !roomId) return;
+    if (!isSynced || (hasActivityAuthority && !sharedPlay) || !roomId) return;
     const unsubscribe = whiteboardService.subscribeToSceneActivityState(roomId, (payload) => {
+      if (sharedPlay && payload.senderId === role) return; // our own broadcast
       // Discard snapshots for any scene other than the one currently on
       // screen — a broadcast sent right as the sender navigates away can
       // otherwise arrive while this side is still on (or has already
@@ -265,7 +272,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
       setActivityStateLocal(payload.state);
     });
     return unsubscribe;
-  }, [isSynced, hasActivityAuthority, roomId, scene.id]);
+  }, [isSynced, hasActivityAuthority, sharedPlay, role, roomId, scene.id]);
 
   // Voices in synced activities: only the driving side runs the scene
   // logic that speaks, so relay each line to the other screen so the
@@ -293,7 +300,22 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
       const ping = () => { const id = ++n; sentPings.set(id, Date.now()); void whiteboardService.sendSceneSpeech(roomId, { event: { kind: 'ping', id }, senderId: role, sceneId }); };
       ping();
       const iv = window.setInterval(ping, 8000);
-      return () => { window.clearInterval(iv); unsubPong(); setSpeechRelay(null); };
+      // Shared play: the other screen speaks too (its taps run scene logic there), so also play what it relays
+      // and answer its pings.
+      let unsubShared = () => {};
+      if (sharedPlay) {
+        setSpeechDedupe(true);
+        unsubShared = whiteboardService.subscribeToSceneSpeech(roomId, (payload) => {
+          if (payload.senderId === role) return;
+          if (payload.event.kind === 'ping') {
+            void whiteboardService.sendSceneSpeech(roomId, { event: { kind: 'pong', id: payload.event.id }, senderId: role, sceneId });
+            return;
+          }
+          if (payload.event.kind === 'pong' || payload.sceneId !== sceneId) return;
+          playRelayedSpeech(payload.event);
+        });
+      }
+      return () => { window.clearInterval(iv); unsubPong(); unsubShared(); if (sharedPlay) setSpeechDedupe(false); setSpeechRelay(null); };
     }
     setSpeechDedupe(true);
     const unsubscribe = whiteboardService.subscribeToSceneSpeech(roomId, (payload) => {
@@ -306,10 +328,10 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
       playRelayedSpeech(payload.event);
     });
     return () => { unsubscribe(); setSpeechDedupe(false); };
-  }, [isSynced, roomId, role, usesRealSync, hasActivityAuthority, scene.id]);
+  }, [isSynced, roomId, role, usesRealSync, hasActivityAuthority, sharedPlay, scene.id]);
 
   const activitySync = usesRealSync
-    ? { isSynced, isAuthority: hasActivityAuthority, state: activityState, setState: setActivityState }
+    ? { isSynced, isAuthority: hasActivityAuthority, state: activityState, setState: setActivityState, ...(sharedPlay ? { shared: true, leader: role === 'teacher' } : {}) }
     : undefined;
 
   const iCaptureTaps = isSynced && !!role && !usesRealSync && (role === 'teacher' || (role === 'student' && interactionUnlocked));
@@ -723,7 +745,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
           )}
           {isSynced && role === 'teacher' && interactionUnlocked && !studentDriven && (
             <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-emerald-600/80 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
-              ✋ Student is trying this
+              {sharedPlay ? '🤝 Playing together' : '✋ Student is trying this'}
             </div>
           )}
           {isSynced && role === 'teacher' && studentDriven && (

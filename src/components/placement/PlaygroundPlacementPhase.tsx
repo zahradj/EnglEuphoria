@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Star, Volume2, Trophy, ArrowRight, Loader2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { placementClipUrl } from './placementAudio';
 import { Button } from '@/components/ui/button';
 import type { TestResult } from './TestPhase';
 import {
@@ -15,24 +15,15 @@ interface PlaygroundPlacementPhaseProps {
   onComplete: (results: TestResult[]) => void;
 }
 
-async function speakLive(text: string, voiceId: string): Promise<HTMLAudioElement | null> {
-  try {
-    const { data, error } = await supabase.functions.invoke('elevenlabs-tts', {
-      body: { text, voiceId, speed: 0.95 },
-    });
-    if (error) throw error;
-    const blob =
-      data instanceof Blob
-        ? data
-        : new Blob([data as ArrayBuffer], { type: 'audio/mpeg' });
-    const url = URL.createObjectURL(blob);
-    const audio = new Audio(url);
-    audio.onended = () => URL.revokeObjectURL(url);
-    return audio;
-  } catch (e) {
-    console.warn('[placement] TTS failed:', e);
-    return null;
-  }
+/**
+ * Pip's lines come from saved files only (a question's own `audioUrl`, or a clip made once by the bake
+ * script). There is NO live speech generation: if no clip exists we stay silent rather than call a speech
+ * service while a child waits. The voice argument is kept for call-site compatibility; the saved clip
+ * already carries Pip's approved voice.
+ */
+async function speakStatic(text: string, _voiceId?: string): Promise<HTMLAudioElement | null> {
+  const url = await placementClipUrl(text, 'pip');
+  return url ? new Audio(url) : null;
 }
 
 export const PlaygroundPlacementPhase = ({ onComplete }: PlaygroundPlacementPhaseProps) => {
@@ -80,7 +71,7 @@ export const PlaygroundPlacementPhase = ({ onComplete }: PlaygroundPlacementPhas
     if (q.audioUrl) {
       audio = new Audio(q.audioUrl);
     } else {
-      audio = await speakLive(q.audioPrompt, content.pip.voiceId);
+      audio = await speakStatic(q.audioPrompt, content.pip.voiceId);
     }
     if (audio) {
       audio.onended = () => setPipPlaying(false);
@@ -119,7 +110,7 @@ export const PlaygroundPlacementPhase = ({ onComplete }: PlaygroundPlacementPhas
     (async () => {
       const introAudio = content.pip.introAudioUrl
         ? new Audio(content.pip.introAudioUrl)
-        : await speakLive(content.pip.intro, content.pip.voiceId);
+        : await speakStatic(content.pip.intro, content.pip.voiceId);
       if (!introAudio) return;
       setPipPlaying(true);
       audioRef.current = introAudio;

@@ -202,6 +202,8 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
       );
     }
 
+    if (joinTop) return null; // lower half of a two-row slot: the label sits on the upper half
+
     if (slot.status === 'selected') {
       return <span className="text-[10px] font-bold">Selected</span>;
     }
@@ -346,15 +348,27 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
 
                   {weekDates.map(({ day, date }) => {
                     const today = isToday(date);
-                    const slot = getSlotAt(day, row.time);
-                    const joinTop = !!prev && sameLesson(slot, getSlotAt(day, prev.time));
-                    const joinBottom = !!next && sameLesson(slot, getSlotAt(day, next.time));
+                    // A 60-minute slot in a 30-minute grid spans two rows. The lower row
+                    // belongs to that slot ("covered"): drawn as its lower half, and a tap
+                    // on it acts on the slot itself instead of trying to open a new one.
+                    const ownSlot = getSlotAt(day, row.time);
+                    const prevSlot = prev ? getSlotAt(day, prev.time) : undefined;
+                    const coveredBy =
+                      slotDuration === 30 && !ownSlot && prevSlot && prevSlot.duration === 60 ? prevSlot : undefined;
+                    const slot = coveredBy ?? ownSlot;
+                    const slotTime = coveredBy && prev ? prev.time : row.time;
+                    const nextOwn = next ? getSlotAt(day, next.time) : undefined;
+                    const joinTop = !!coveredBy || (!!prev && sameLesson(slot, getSlotAt(day, prev.time)));
+                    const joinBottom =
+                      !coveredBy &&
+                      ((slotDuration === 30 && !!ownSlot && ownSlot.duration === 60 && !!next && !nextOwn) ||
+                        (!!next && sameLesson(slot, nextOwn)));
                     return (
                       <button
                         key={`${day}-${row.time}`}
                         onClick={() => {
                           if (slot?.status === 'booked') onBookedSlotClick?.(slot);
-                          else onSlotClick(day, row.time);
+                          else onSlotClick(day, slotTime);
                         }}
                         className={cn(
                           'group relative m-[2px] flex items-center justify-center border-l border-transparent',
@@ -363,12 +377,12 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
                           joinTop && joinBottom ? 'rounded-none' : joinTop ? 'rounded-t-none rounded-b-xl' : joinBottom ? 'rounded-b-none rounded-t-xl' : 'rounded-xl',
                           joinTop && '-mt-[4px] pt-[4px] z-[1]',
                           today && !slot && 'bg-primary/[0.035]',
-                          getSlotStyle(day, row.time, joinTop, joinBottom),
+                          getSlotStyle(day, slotTime, joinTop, joinBottom),
                         )}
-                        disabled={isSlotInPast(day, row.time)}
+                        disabled={isSlotInPast(day, slotTime)}
                         aria-label={`${day} ${row.time}`}
                       >
-                        {renderSlotContent(day, row.time, joinTop, joinBottom)}
+                        {renderSlotContent(day, slotTime, joinTop, joinBottom)}
                       </button>
                     );
                   })}

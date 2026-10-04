@@ -7,6 +7,7 @@ import { useClassroomSync } from "@/hooks/useClassroomSync";
 import { useAuth } from "@/contexts/AuthContext";
 import { useScreenShare } from "@/hooks/useScreenShare";
 import { useLocalMedia } from "@/hooks/useLocalMedia";
+import { TalkTimeMeter } from "@/components/classroom/TalkTimeMeter";
 import { useStudentContext } from "@/hooks/useStudentContext";
 import { useWebRTCConnection } from "@/hooks/useWebRTCConnection";
 import { ClassroomTopBar } from "./ClassroomTopBar";
@@ -996,6 +997,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
 
   return (
     <div className={`h-dvh w-full ${hubBg} text-gray-900 flex flex-col overflow-hidden relative`}>
+      <TalkTimeMeter bookingId={classId} stream={media.stream} />
       {!classStarted && !prepMode && (
         <div className="absolute inset-0 z-[120] flex items-center justify-center bg-black/30 backdrop-blur-[2px] pointer-events-none">
           <div className="pointer-events-auto text-center max-w-sm w-[90%] px-6 py-6 bg-white rounded-2xl shadow-2xl border border-gray-200">

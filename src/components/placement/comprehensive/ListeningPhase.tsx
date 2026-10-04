@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { playElevenLabs } from '@/lib/elevenLabsAudio';
+import { placementClipUrl } from '../placementAudio';
 import { LISTENING_ITEMS } from './content';
 import { accentFor } from '../hubAccent';
 import type { Hub } from '../questionBanks';
@@ -40,9 +40,11 @@ const ListeningPhase: React.FC<Props> = ({ hub, onComplete }) => {
   const handlePlay = async () => {
     setLoading(true);
     try {
-      await playElevenLabs(item.audio_text);
+      // Saved clip only (made once by the bake script). No live speech generation, ever.
+      const url = await placementClipUrl(item.audio_text, 'teacher');
+      if (url) await new Audio(url).play();
     } catch {
-      // Silent — failure is surfaced by the disabled state next try
+      // Silent: a missing clip must never block the test (the options are not locked behind the audio).
     } finally {
       if (!cancelledRef.current) setLoading(false);
     }

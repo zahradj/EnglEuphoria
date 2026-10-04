@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { type ActivitySync, useSyncedState } from './sceneActivitySync';
+import { type ActivitySync, isSharedFollower, useSyncedState } from './sceneActivitySync';
 import { seededOrder } from './PictureMatchScene';
 import { Burst, GAME_FONT, GameStyles, HudBar, ProgressPill, PromptChip, TheatreBackdrop, TitleRibbon, TopHatIcon } from './gameTheme';
 import { safeSpeak } from './unit1/audio';
@@ -84,6 +84,8 @@ export function WhatsMissingScene({ scene, onNext, onWin, onResult, sync }: {
   const rounds = Array.isArray(scene.rounds) ? scene.rounds : [];
   const [state, setState] = useSyncedState<MissingState>(sync, INITIAL);
   const isMirror = !!sync?.isSynced && !sync.isAuthority;
+  /** Shared play: only the leader (teacher) runs the automatic sequences; the follower gets them relayed. */
+  const isFollower = isSharedFollower(sync);
 
   // ---- everything below is read defensively: a mirror may hold any snapshot
   const roundNo = Number.isFinite(state.round) ? Math.max(0, Math.min(Math.floor(state.round), rounds.length - 1)) : 0;
@@ -134,7 +136,7 @@ export function WhatsMissingScene({ scene, onNext, onWin, onResult, sync }: {
   }, [scene.id]);
 
   useEffect(() => {
-    if (finished && !gemDone.current && !isMirror) {
+    if (finished && !gemDone.current && !isMirror && !isFollower) {
       gemDone.current = true;
       sfx.whoop();
       sfx.gem();
@@ -146,7 +148,7 @@ export function WhatsMissingScene({ scene, onNext, onWin, onResult, sync }: {
 
   // ---- model first: on round 1, say each picture's word aloud, one by one
   useEffect(() => {
-    if (isMirror || finished || phase !== 'look' || !introEnabled || state.introDone === true || !n) return;
+    if (isMirror || isFollower || finished || phase !== 'look' || !introEnabled || state.introDone === true || !n) return;
     const mine = ++token.current;
     (async () => {
       await sleep(500);

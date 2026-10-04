@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { type ActivitySync, useSyncedState } from './sceneActivitySync';
+import { type ActivitySync, isSharedFollower, useSyncedState } from './sceneActivitySync';
 import { seededOrder } from './PictureMatchScene';
 import { Burst, Fish, GAME_FONT, GameStyles, HudBar, ProgressPill, PromptChip, SeaBackdrop, TitleRibbon } from './gameTheme';
 import { playLetterPhonic, safeSpeak } from './unit1/audio';
@@ -83,6 +83,8 @@ export function FirstSoundScene({ scene, onNext, onWin, onResult, sync }: {
   const [state, setState] = useSyncedState<FirstSoundState>(sync, INITIAL);
   const { round, wrong, solved, finished } = state;
   const isMirror = !!sync?.isSynced && !sync.isAuthority;
+  /** Shared play: only the leader (teacher) runs the automatic sequences; the follower gets them relayed. */
+  const isFollower = isSharedFollower(sync);
   const current = rounds[Math.min(round, rounds.length - 1)];
   const alive = useRef(true);
   const gemDone = useRef(false);
@@ -132,7 +134,7 @@ export function FirstSoundScene({ scene, onNext, onWin, onResult, sync }: {
   }, [solved, round]);
 
   useEffect(() => {
-    if (finished && !gemDone.current && !isMirror) {
+    if (finished && !gemDone.current && !isMirror && !isFollower) {
       gemDone.current = true;
       sfx.whoop();
       sfx.gem();
@@ -144,7 +146,7 @@ export function FirstSoundScene({ scene, onNext, onWin, onResult, sync }: {
 
   // Say the word when each picture appears.
   useEffect(() => {
-    if (isMirror || finished) return;
+    if (isMirror || isFollower || finished) return;
     const t = window.setTimeout(() => { void safeSpeak(current.word, 'teacher'); }, 450);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps

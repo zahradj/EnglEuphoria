@@ -193,7 +193,8 @@ export function HeroSection() {
               transition={{ duration: 0.7, delay: 0.3 }}
             >
               <Link
-                to="/student-signup"
+                // Parents set up one family account (and add each child) instead of a student account.
+                to={theme.id === 'parent' ? '/parent-signup' : '/student-signup'}
                 className={`inline-flex items-center justify-center gap-2 px-6 py-3 sm:px-8 sm:py-4 rounded-2xl bg-gradient-to-r ${theme.gradient} ${theme.gradientHover} text-white font-bold text-base sm:text-lg shadow-xl ${theme.shadow} transition-all duration-500 hover:-translate-y-0.5`}
               >
                 {t('lp.hero.ctaPrimary')}

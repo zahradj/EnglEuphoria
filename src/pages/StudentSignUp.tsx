@@ -96,7 +96,8 @@ const StudentSignUp = () => {
     }
 
     try {
-      const systemTag = age < 10 ? 'KIDS' : age < 18 ? 'TEENS' : 'ADULTS';
+      // users.current_system has a CHECK constraint on these exact lowercase values.
+      const systemTag = age < 10 ? 'kids' : age < 18 ? 'teen' : 'adult';
 
       const { data: authData, error } = await signUp(data.email, data.password, {
         role: 'student',

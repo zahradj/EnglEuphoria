@@ -1,0 +1,16 @@
+{
+  "name": "higgsfield-seedance-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx --env-file=.env.local index.ts"
+  },
+  "dependencies": {
+    "@higgsfield/client": "^0.2.6"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0",
+    "@types/node": "^22.0.0"
+  }
+}

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
+import * as TabsPrimitive from '@radix-ui/react-tabs';
+import { Users, TrendingUp, MessageSquare, Bell, CalendarDays } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { ParentStudentList } from '@/components/parent/ParentStudentList';
@@ -8,9 +10,13 @@ import { ParentStudentProgress } from '@/components/parent/ParentStudentProgress
 import { ParentMessages } from '@/components/parent/ParentMessages';
 import { ParentNotificationSettings } from '@/components/parent/ParentNotificationSettings';
 import { FamilyCalendarView } from '@/components/parent/FamilyCalendarView';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Users, TrendingUp, MessageSquare, Bell, CalendarDays } from 'lucide-react';
+import { AddChildDialog } from '@/components/parent/AddChildDialog';
+import { FamilyHero } from '@/components/parent/FamilyHero';
+import { FamilyTopBar } from '@/components/family/FamilyTopBar';
+import type { ChildCardData } from '@/components/parent/ChildCard';
+import type { FamilyChildProfile } from '@/lib/familyBuddy';
+import { useChildSnapshots } from '@/hooks/useChildSnapshots';
+import '@/components/parent/family-dashboard.css';
 
 interface StudentRelationship {
   id: string;
@@ -27,16 +33,25 @@ interface StudentRelationship {
   };
 }
 
+const TABS = [
+  { value: 'students', icon: Users, label: 'pd.tab.students' },
+  { value: 'calendar', icon: CalendarDays, label: 'pd.tab.calendar' },
+  { value: 'progress', icon: TrendingUp, label: 'pd.tab.progress' },
+  { value: 'messages', icon: MessageSquare, label: 'pd.tab.messages' },
+  { value: 'notifications', icon: Bell, label: 'pd.tab.alerts' },
+] as const;
+
 const ParentDashboard: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+  const [tab, setTab] = useState<string>('students');
 
   const { data: students = [], isLoading } = useQuery<StudentRelationship[]>({
     queryKey: ['parent-students', user?.id],
     queryFn: async (): Promise<StudentRelationship[]> => {
       if (!user?.id) return [];
-      
+
       const { data, error } = await supabase
         .from('student_parent_relationships')
         .select(`
@@ -56,8 +71,7 @@ const ParentDashboard: React.FC = () => {
         .eq('parent_id', user.id);
 
       if (error) throw error;
-      
-      // Transform the data to match the expected interface
+
       // Supabase may return student as an object or array depending on the join
       return (data || []).map(item => ({
         id: item.id,
@@ -73,122 +87,125 @@ const ParentDashboard: React.FC = () => {
     enabled: !!user?.id,
   });
 
+  const studentIds = students.map((s) => s.student_id);
+
+  // Hub, age and buddy for each child (parents may read their approved children's student_profiles).
+  const { data: profiles = {} } = useQuery<Record<string, FamilyChildProfile>>({
+    queryKey: ['parent-student-profiles', user?.id, studentIds.join(',')],
+    enabled: !!user?.id && studentIds.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('student_profiles')
+        .select('user_id, hub_type, age, companion_id')
+        .in('user_id', studentIds);
+      if (error) throw error;
+      const map: Record<string, FamilyChildProfile> = {};
+      (data ?? []).forEach((p: any) => {
+        map[p.user_id] = { hub: p.hub_type ?? null, age: p.age ?? null, companionId: p.companion_id ?? null };
+      });
+      return map;
+    },
+  });
+
+  const snapshots = useChildSnapshots(studentIds, user?.id);
+
+  const children: ChildCardData[] = students
+    .filter((s) => s.student)
+    .map((s) => ({
+      studentId: s.student_id,
+      name: s.student.full_name,
+      email: s.student.email,
+      profile: profiles[s.student_id],
+      snapshot: snapshots[s.student_id] ?? { data: null, isLoading: true, failed: false },
+      isPrimaryContact: s.is_primary_contact,
+    }));
+
+  const allSnapshotsKnown = children.length > 0 && children.every((c) => !c.snapshot.isLoading);
+  const upcomingTotal = allSnapshotsKnown
+    ? children.reduce((sum, c) => sum + (c.snapshot.data?.upcoming_lessons ?? 0), 0)
+    : null;
+
+  const parentName = (user as any)?.full_name ?? (user as any)?.name ?? null;
+
+  const viewProgress = (studentId: string) => {
+    setSelectedStudentId(studentId);
+    setTab('progress');
+  };
+
   if (isLoading) {
     return (
-      <div className="min-h-dvh bg-background">
-        <div className="container mx-auto py-8 px-4">
-          <Skeleton className="h-10 w-64 mb-4" />
-          <Skeleton className="h-6 w-96 mb-8" />
-          <Skeleton className="h-64 w-full" />
+      <div className="family-dash min-h-dvh">
+        <div className="mx-auto max-w-6xl space-y-5 px-4 py-6" aria-busy="true">
+          <div className="fd-skel h-[210px] rounded-[28px]" />
+          <div className="fd-skel h-14 rounded-full" />
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {[0, 1, 2].map((i) => <div key={i} className="fd-skel h-[330px] rounded-[28px]" />)}
+          </div>
         </div>
       </div>
     );
   }
 
+  const addChild = (variant: 'hero' | 'default') =>
+    user?.id ? (
+      <AddChildDialog
+        parentId={user.id}
+        existingCount={students.length}
+        variant={variant}
+        relationshipType={students[0]?.relationship_type}
+      />
+    ) : null;
+
   return (
-    <div className="min-h-dvh bg-background">
-      {/* Mobile sticky header */}
-      <header className="sticky top-0 z-30 md:hidden bg-card/90 backdrop-blur-xl border-b border-border/60 px-4 py-3">
-        <h1 className="text-lg font-bold text-foreground">{t('pd.title')}</h1>
-        <p className="text-xs text-muted-foreground">{t('pd.subtitleMobile')}</p>
-      </header>
-
-      <div
-        className="container mx-auto py-4 md:py-8 px-3 md:px-4"
-        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 24px)' }}
+    <div className="family-dash min-h-dvh">
+      <main
+        className="mx-auto max-w-6xl space-y-6 px-4 py-4 md:py-8"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 32px)' }}
       >
-        <div className="mb-4 flex items-start justify-end gap-4 md:mb-8 md:justify-between">
-          <div className="hidden md:block">
-            <h1 className="text-3xl font-bold text-foreground">{t('pd.title')}</h1>
-            <p className="text-muted-foreground mt-2">
-              {t('pd.subtitleDesktop')}
-            </p>
-          </div>
-          {/* "Add a child" (AddChildDialog) returns once src/components/parent/AddChildDialog.tsx is committed. */}
-        </div>
+        <FamilyTopBar backTo="/" />
 
-        <Tabs defaultValue="students" className="space-y-4 md:space-y-6">
-          {/* Sticky bottom-sheet style tabs on mobile, inline on desktop */}
-          <TabsList
-            className="
-              grid w-full grid-cols-5 h-14 md:h-10 gap-1
-              sticky top-[60px] md:top-auto md:relative
-              z-20 bg-card/90 backdrop-blur-xl
-              lg:w-auto lg:inline-grid
-            "
-          >
-            <TabsTrigger
-              value="students"
-              className="flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-2 text-[11px] md:text-sm min-h-[44px]"
-            >
-              <Users className="h-5 w-5 md:h-4 md:w-4" />
-              <span>{t('pd.tab.students')}</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="calendar"
-              className="flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-2 text-[11px] md:text-sm min-h-[44px]"
-            >
-              <CalendarDays className="h-5 w-5 md:h-4 md:w-4" />
-              <span>{t('pd.tab.calendar')}</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="progress"
-              className="flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-2 text-[11px] md:text-sm min-h-[44px]"
-            >
-              <TrendingUp className="h-5 w-5 md:h-4 md:w-4" />
-              <span>{t('pd.tab.progress')}</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="messages"
-              className="flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-2 text-[11px] md:text-sm min-h-[44px]"
-            >
-              <MessageSquare className="h-5 w-5 md:h-4 md:w-4" />
-              <span>{t('pd.tab.messages')}</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="notifications"
-              className="flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-2 text-[11px] md:text-sm min-h-[44px]"
-            >
-              <Bell className="h-5 w-5 md:h-4 md:w-4" />
-              <span className="truncate max-w-full">{t('pd.tab.alerts')}</span>
-            </TabsTrigger>
-          </TabsList>
+        <FamilyHero
+          parentName={parentName}
+          children={children.map((c) => ({ studentId: c.studentId, name: c.name, profile: c.profile }))}
+          upcomingLessons={upcomingTotal}
+          addChildAction={addChild('hero')}
+        />
 
-          <TabsContent value="students">
-            <ParentStudentList 
-              students={students} 
-              onSelectStudent={setSelectedStudentId} 
-            />
-          </TabsContent>
+        <TabsPrimitive.Root value={tab} onValueChange={setTab} className="space-y-6">
+          <TabsPrimitive.List className="fd-tabs" aria-label={t('pd.title')}>
+            {TABS.map(({ value, icon: Icon, label }) => (
+              <TabsPrimitive.Trigger key={value} value={value} className="fd-tab">
+                <Icon className="h-4 w-4" aria-hidden />
+                <span>{t(label)}</span>
+              </TabsPrimitive.Trigger>
+            ))}
+          </TabsPrimitive.List>
 
-          <TabsContent value="calendar">
+          <TabsPrimitive.Content value="students" className="focus-visible:outline-none">
+            <ParentStudentList children={children} onViewProgress={viewProgress} addChildAction={addChild('default')} />
+          </TabsPrimitive.Content>
+
+          <TabsPrimitive.Content value="calendar" className="focus-visible:outline-none">
             {user?.id && <FamilyCalendarView parentId={user.id} />}
-          </TabsContent>
+          </TabsPrimitive.Content>
 
-          <TabsContent value="progress">
-            <ParentStudentProgress 
+          <TabsPrimitive.Content value="progress" className="focus-visible:outline-none">
+            <ParentStudentProgress
               students={students}
               selectedStudentId={selectedStudentId}
               onSelectStudent={setSelectedStudentId}
             />
-          </TabsContent>
+          </TabsPrimitive.Content>
 
-          <TabsContent value="messages">
-            {user?.id && (
-              <ParentMessages 
-                parentId={user.id} 
-                students={students} 
-              />
-            )}
-          </TabsContent>
+          <TabsPrimitive.Content value="messages" className="focus-visible:outline-none">
+            {user?.id && <ParentMessages parentId={user.id} students={students} />}
+          </TabsPrimitive.Content>
 
-          <TabsContent value="notifications">
-            {user?.id && (
-              <ParentNotificationSettings parentId={user.id} />
-            )}
-          </TabsContent>
-        </Tabs>
-      </div>
+          <TabsPrimitive.Content value="notifications" className="focus-visible:outline-none">
+            {user?.id && <ParentNotificationSettings parentId={user.id} />}
+          </TabsPrimitive.Content>
+        </TabsPrimitive.Root>
+      </main>
     </div>
   );
 };

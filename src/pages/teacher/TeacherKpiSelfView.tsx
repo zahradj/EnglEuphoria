@@ -4,17 +4,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTeacherPayoutCurrency } from "@/hooks/useTeacherPayoutCurrency";
 import { formatPay } from "@/lib/teacherPay";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, TrendingUp, TrendingDown, Gift, ArrowLeft, Info } from "lucide-react";
+import { AlertTriangle, Gift, ArrowLeft, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
-} from "recharts";
 import { calculateKpiBonus } from "@/lib/kpiBonus";
 import { useBonusPolicy } from "@/hooks/useBonusPolicy";
 import { toast } from "sonner";
+import { TeachingScorecard } from "@/components/teacher/scorecard/TeachingScorecard";
 
 type Metric = {
   overall_kpi_score: number;
@@ -27,199 +24,69 @@ type Metric = {
   lessons_taught: number;
 };
 
-type Snapshot = { snapshot_date: string; overall_kpi_score: number };
-
-const TIPS: Record<keyof Metric | "overall_kpi_score", string> = {
-  overall_kpi_score: "Focus on the lowest sub-score below to raise your overall KPI.",
-  lesson_quality_score: "Request feedback at lesson end — higher ratings lift this fastest.",
-  attendance_rate: "Confirm bookings 24h ahead; avoid last-minute cancellations.",
-  student_progress_impact: "Assign homework and follow up on speech attempts.",
-  response_time_score: "Reply to student messages within 12 hours.",
-  feedback_completion_rate: "Leave 2+ sentences of written feedback after every lesson.",
-  curriculum_coverage: "Complete each unit's 7-lesson arc; avoid skipping mastery quizzes.",
-  lessons_taught: "",
-};
-
 export default function TeacherKpiSelfView() {
   const { user } = useAuth();
   const [metric, setMetric] = useState<Metric | null>(null);
-  const [trend, setTrend] = useState<Snapshot[]>([]);
   const [alert, setAlert] = useState<{ consecutive_weeks: number; kpi_score: number } | null>(null);
   const [earnings30d, setEarnings30d] = useState(0);
 
+  // The legacy score and earnings only feed the bonus preview and the at-risk notice below.
   useEffect(() => {
     if (!user) return;
     (async () => {
       const since = new Date(Date.now() - 30 * 864e5).toISOString();
-      const [m, snaps, al, earn] = await Promise.all([
+      const [m, al, earn] = await Promise.all([
         supabase.from("teacher_performance_metrics").select("*").eq("teacher_id", user.id).maybeSingle(),
-        supabase.from("teacher_kpi_snapshots").select("snapshot_date, overall_kpi_score")
-          .eq("teacher_id", user.id).order("snapshot_date", { ascending: true }).limit(84),
         supabase.from("teacher_kpi_alerts").select("consecutive_weeks, kpi_score")
           .eq("teacher_id", user.id).order("week_start", { ascending: false }).limit(1).maybeSingle(),
         supabase.from("teacher_earnings").select("teacher_amount")
           .eq("teacher_id", user.id).gte("earned_at", since),
       ]);
       setMetric(m.data as Metric | null);
-      setTrend((snaps.data ?? []) as Snapshot[]);
       setAlert(al.data);
       setEarnings30d((earn.data ?? []).reduce((s: number, e: any) => s + Number(e.teacher_amount ?? 0), 0));
     })();
   }, [user]);
 
-  if (!metric) {
-    return (
-      <div className="container mx-auto p-6 space-y-4">
-        <Button asChild variant="ghost" size="sm">
-          <Link to="/teacher"><ArrowLeft className="w-4 h-4 mr-2" />Back to dashboard</Link>
-        </Button>
-        <p className="text-muted-foreground">
-          No KPI data yet. Metrics appear after your first completed lessons.
-        </p>
-      </div>
-    );
-  }
-
-  const subScores: [keyof Metric, string][] = [
-    ["lesson_quality_score", "Lesson Quality"],
-    ["attendance_rate", "Attendance"],
-    ["student_progress_impact", "Student Progress"],
-    ["response_time_score", "Response Time"],
-    ["feedback_completion_rate", "Feedback Completion"],
-    ["curriculum_coverage", "Curriculum Coverage"],
-  ];
-
-  const lowest = subScores
-    .map(([k, l]) => ({ k, l, v: Number(metric[k]) }))
-    .sort((a, b) => a.v - b.v)[0];
-
-  const first = trend[0]?.overall_kpi_score ?? metric.overall_kpi_score;
-  const last = trend[trend.length - 1]?.overall_kpi_score ?? metric.overall_kpi_score;
-  const trending = last - first;
-
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto max-w-3xl space-y-5 p-4 md:p-6">
       <Button asChild variant="ghost" size="sm" className="-ml-2 w-fit">
         <Link to="/teacher"><ArrowLeft className="w-4 h-4 mr-2" />Back to dashboard</Link>
       </Button>
-      <header className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">My Performance</h1>
-          <p className="text-muted-foreground">
-            Your KPI score reflects the last 30 days. Snapshots update nightly.
-          </p>
-        </div>
-        <Badge variant="outline" className="text-lg px-4 py-2">
-          {metric.overall_kpi_score.toFixed(0)} / 100
-        </Badge>
-      </header>
 
-      <Card className="border-primary/20 bg-primary/5">
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Info className="w-4 h-4 text-primary" />
-            How your KPI works
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 text-sm">
-          <p className="text-muted-foreground">
-            Your <strong className="text-foreground">Overall KPI</strong> is a weighted score from 0–100,
-            recalculated nightly over the last 30 days across six sub-scores:
-          </p>
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-muted-foreground">
-            <li>• <strong className="text-foreground">Lesson Quality (25%)</strong> — student ratings & feedback.</li>
-            <li>• <strong className="text-foreground">Attendance (20%)</strong> — punctuality, no-shows, cancellations.</li>
-            <li>• <strong className="text-foreground">Student Progress (20%)</strong> — mastery, homework, speech attempts.</li>
-            <li>• <strong className="text-foreground">Response Time (15%)</strong> — how fast you reply to messages.</li>
-            <li>• <strong className="text-foreground">Feedback Completion (10%)</strong> — written notes after each lesson.</li>
-            <li>• <strong className="text-foreground">Curriculum Coverage (10%)</strong> — completing the 6-lesson unit arc.</li>
-          </ul>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2">
-            <div className="rounded-md bg-rose-500/10 text-rose-700 dark:text-rose-300 px-3 py-2 text-xs">
-              <div className="font-bold">&lt; 55</div><div>At risk</div>
-            </div>
-            <div className="rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300 px-3 py-2 text-xs">
-              <div className="font-bold">55–69</div><div>On Track</div>
-            </div>
-            <div className="rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 px-3 py-2 text-xs">
-              <div className="font-bold">70–84</div><div>Strong</div>
-            </div>
-            <div className="rounded-md bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-300 px-3 py-2 text-xs">
-              <div className="font-bold">85+</div><div>Excellent / Elite</div>
-            </div>
-          </div>
-          <p className="text-xs text-muted-foreground pt-1">
-            Staying below 55 for 2 consecutive weeks flags you as at-risk. Reaching 85+ unlocks monthly bonuses —
-            see the bonus preview below. Focus on your lowest sub-score first to lift your overall fastest.
-          </p>
-        </CardContent>
-      </Card>
+      <header>
+        <h1 className="text-2xl font-bold md:text-3xl">My teaching</h1>
+        <p className="text-muted-foreground">Five simple goals, and one thing to focus on.</p>
+      </header>
 
       {alert && alert.consecutive_weeks >= 2 && (
         <Card className="border-amber-500 bg-amber-50 dark:bg-amber-950/20">
-          <CardContent className="p-4 flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
+          <CardContent className="flex items-start gap-3 p-4">
+            <AlertTriangle className="mt-0.5 h-5 w-5 text-amber-600" />
             <div>
-              <p className="font-semibold">You've been flagged as at-risk</p>
+              <p className="font-semibold">Let's talk about how your lessons are going</p>
               <p className="text-sm text-muted-foreground">
-                Your KPI has been below 55 for {alert.consecutive_weeks} weeks in a row.
-                Focus on <strong>{lowest.l}</strong>: {TIPS[lowest.k]}
+                Your score has been low for {alert.consecutive_weeks} weeks. The team would like to help: please check
+                in with your coordinator.
               </p>
             </div>
           </CardContent>
         </Card>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            {trending >= 0 ? (
-              <TrendingUp className="w-5 h-5 text-emerald-500" />
-            ) : (
-              <TrendingDown className="w-5 h-5 text-red-500" />
-            )}
-            Trend (last {trend.length} days)
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {trend.length > 1 ? (
-            <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={trend}>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                <XAxis dataKey="snapshot_date" tick={{ fontSize: 10 }} />
-                <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
-                <Tooltip />
-                <Line type="monotone" dataKey="overall_kpi_score"
-                  stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
-          ) : (
-            <p className="text-sm text-muted-foreground">Not enough data yet — check back tomorrow.</p>
-          )}
-        </CardContent>
-      </Card>
+      <TeachingScorecard />
 
-      <BonusPreview metric={metric} earnings30d={earnings30d} />
-
-
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {subScores.map(([k, l]) => {
-          const v = Number(metric[k]);
-          return (
-            <Card key={k}>
-              <CardContent className="p-4">
-                <div className="flex justify-between mb-2">
-                  <span className="font-medium">{l}</span>
-                  <span className="font-mono">{v.toFixed(0)}</span>
-                </div>
-                <Progress value={v} className="h-2" />
-                <p className="text-xs text-muted-foreground mt-2">{TIPS[k]}</p>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+      {metric && (
+        <details className="group rounded-2xl border bg-card">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-2 p-4 font-semibold">
+            <span className="flex items-center gap-2"><Gift className="h-4 w-4 text-primary" /> Bonus preview</span>
+            <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" aria-hidden />
+          </summary>
+          <div className="p-4 pt-0">
+            <BonusPreview metric={metric} earnings30d={earnings30d} />
+          </div>
+        </details>
+      )}
     </div>
   );
 }

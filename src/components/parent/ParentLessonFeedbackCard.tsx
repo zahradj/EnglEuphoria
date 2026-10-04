@@ -76,7 +76,7 @@ export function ParentLessonFeedbackCard({ studentId, studentName }: ParentLesso
 
   if (alreadySubmitted) {
     return (
-      <Card className="p-4 flex items-center gap-2 text-sm text-muted-foreground bg-muted/30">
+      <Card className="fd-surface p-4 flex items-center gap-2 text-sm text-muted-foreground bg-muted/30">
         <MessageCircleHeart className="h-4 w-4 shrink-0" />
         <span>Thanks for sharing your feedback on {studentName}'s last lesson.</span>
       </Card>
@@ -108,7 +108,7 @@ export function ParentLessonFeedbackCard({ studentId, studentName }: ParentLesso
   };
 
   return (
-    <Card className="p-4 space-y-3">
+    <Card className="fd-surface p-4 space-y-3">
       <p className="text-sm font-medium text-foreground">
         How was {studentName}'s last session with {lastLesson.teacherName}?
       </p>

@@ -38,3 +38,4 @@ dist-ssr
 # lesson comfort-audit screenshots (scripts/academy-comfort-audit.mjs)
 academy-audit/
 __pycache__/
+scripts/art/out/

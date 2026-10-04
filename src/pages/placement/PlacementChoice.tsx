@@ -57,7 +57,7 @@ const hubKey = (hub: Hub): HubKey => (hub === 'professional' ? 'success' : hub);
 
 const DEFAULT_AVATAR: Record<Hub, string> = {
   playground: '/mascots/pip-fox-welcome.png',
-  academy: '/mascots/nova-owl-welcome.png',
+  academy: '/mascots/nova-owl-welcome-v2.png',
   success: '/mascots/atlas-falcon-welcome.png',
   professional: '/mascots/atlas-falcon-welcome.png',
 };

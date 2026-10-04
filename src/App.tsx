@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Canonical } from "@/components/seo/Canonical";
+import { FamilySwitchButton } from "@/components/family/FamilySwitchButton";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LessonProvider } from "@/contexts/LessonContext";
 import { ThemeModeProvider } from "@/hooks/useThemeMode";
@@ -41,12 +42,14 @@ const LessonSwitchAudit = lazy(() => import("@/pages/admin/LessonSwitchAudit"));
 const TrialPacingAudit = lazy(() => import("@/pages/admin/TrialPacingAudit"));
 const ReviewModeration = lazy(() => import("@/pages/admin/ReviewModeration"));
 const TeacherKpiDashboard = lazy(() => import("@/pages/admin/TeacherKpiDashboard"));
+const TeacherScorecards = lazy(() => import("@/pages/admin/TeacherScorecards"));
 const TeacherKpiSelfView = lazy(() => import("@/pages/teacher/TeacherKpiSelfView"));
 const KpiCardGallery = lazy(() => import("@/pages/teacher/KpiCardGallery"));
 const TeacherAuraDetail = lazy(() => import("@/pages/teacher/TeacherAuraDetail"));
 const BonusApprovalQueue = lazy(() => import("@/pages/admin/BonusApprovalQueue"));
 const PublishQueue = lazy(() => import("@/pages/admin/PublishQueue"));
 const PlaygroundLessonBuilder = lazy(() => import("@/pages/admin/PlaygroundLessonBuilder"));
+const VideoBriefs = lazy(() => import("@/pages/admin/VideoBriefs"));
 const ArcadeHome = lazy(() => import("@/pages/student/arcade/ArcadeHome"));
 const AlphabetArcadeStandalone = lazy(() => import("@/pages/student/arcade/AlphabetArcadeStandalone"));
 const AdventureMapPage = lazy(() => import("@/playground/pages/AdventureMapPage"));
@@ -92,6 +95,8 @@ const MarketingAgentPage = lazy(() => import("./pages/marketing-agent/MarketingA
 const MarketingAgentAutomationsPage = lazy(() => import("./pages/marketing-agent/AutomationsPage"));
 const TemplateMarketplace = lazy(() => import("./pages/TemplateMarketplace"));
 const StudentSignUp = lazy(() => import("./pages/StudentSignUp"));
+const ParentSignUp = lazy(() => import("./pages/ParentSignUp"));
+const WhoIsLearning = lazy(() => import("./pages/WhoIsLearning"));
 const StudentApplication = lazy(() => import("./pages/StudentApplication"));
 const EmailVerification = lazy(() => import("./pages/EmailVerification"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
@@ -236,6 +241,7 @@ const App = () => {
                     <SentinelErrorBoundary>
                     <Canonical />
                     <HreflangTags />
+                    <FamilySwitchButton />
                     <Routes>
                       {/* Regional URL prefixes — persist choice then strip */}
                       <Route path="/tr/*" element={<LocalePrefixSync region="TR" />} />
@@ -490,6 +496,12 @@ const App = () => {
                       <Route path="/signup" element={<Navigate to="/student-signup" replace />} />
                       <Route path="/teacher-signup" element={<Navigate to="/for-teachers" replace />} />
                       <Route path="/student-signup" element={<Suspense fallback={<LoadingFallback />}><StudentSignUp /></Suspense>} />
+                      <Route path="/parent-signup" element={<Suspense fallback={<LoadingFallback />}><ParentSignUp /></Suspense>} />
+                      <Route path="/who-is-learning" element={
+                        <ImprovedProtectedRoute requiredRole={['parent', 'student']}>
+                          <Suspense fallback={<LoadingFallback />}><WhoIsLearning /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
                       <Route path="/teacher-application" element={<Navigate to="/for-teachers" replace />} />
                       <Route path="/student-application" element={<Suspense fallback={<LoadingFallback />}><StudentApplication /></Suspense>} />
                       <Route path="/email-verification" element={<Suspense fallback={<LoadingFallback />}><EmailVerification /></Suspense>} />
@@ -572,6 +584,11 @@ const App = () => {
                           <Suspense fallback={<LoadingFallback />}><TeacherKpiDashboard /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
+                      <Route path="/admin/teacher-scorecards" element={
+                        <ImprovedProtectedRoute requiredRole="admin">
+                          <Suspense fallback={<LoadingFallback />}><TeacherScorecards /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
                       <Route path="/teacher/kpi" element={
                         <ImprovedProtectedRoute requiredRole="teacher">
                           <Suspense fallback={<LoadingFallback />}><TeacherKpiSelfView /></Suspense>
@@ -593,6 +610,11 @@ const App = () => {
                       <Route path="/admin/publish-queue" element={
                         <ImprovedProtectedRoute requiredRole="admin">
                           <Suspense fallback={<LoadingFallback />}><PublishQueue /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/admin/video-briefs" element={
+                        <ImprovedProtectedRoute requiredRole="admin">
+                          <Suspense fallback={<LoadingFallback />}><VideoBriefs /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/admin/playground-lesson-builder" element={
