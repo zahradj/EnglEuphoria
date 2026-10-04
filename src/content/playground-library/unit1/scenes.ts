@@ -500,6 +500,28 @@ export type Scene =
       spots: { x: number; y: number; size: number; ask: string; reveal: string; target?: boolean; cover?: { img: string; label: string }; under: { img: string; label: string } }[];
     }
   | {
+      /** Toy Grabber — a claw machine that never slips (Yateland claw-machine
+       *  apps, fairground toy grabbers). The voice names a toy ("Get the big
+       *  red ball!"); the child steers the claw (tap a toy or ◀ ▶) and presses
+       *  the red button. Only the right toy wins — language, not luck.
+       *  `glass` = the empty glass box painted in bg (x/y = centre %, w/h %);
+       *  toy `x` = % across the glass, `size` = % of scene width. */
+      id: string; kind: 'claw-machine'; bg: string; bgVideo?: string; teacher: string; who: CharKey; clawImg: string;
+      glass: { x: number; y: number; w: number; h: number };
+      toys: (Thing & { x: number; size: number })[];
+      rounds: { target: number; line: string; reply: string }[];
+    }
+  | {
+      /** Ring Toss (fairground game; Wordwall-style one-tap review). Each peg
+       *  painted in bg holds a prize toy; the voice says "Throw the ring on
+       *  the kite!"; tap the peg: the ring flies in a spinning arc. Rings on
+       *  the right pegs stay. `pegs` = peg tops (x/y %), `prizes[i]` = toy on peg i. */
+      id: string; kind: 'ring-toss'; bg: string; bgVideo?: string; teacher: string; who: CharKey; ringImg: string;
+      pegs: { x: number; y: number }[];
+      prizes: Thing[];
+      rounds: { target: number; line: string; reply: string }[];
+    }
+  | {
       /** Tidy Up (Lingokids × Toy Story "pack the box with toys", Lingokids
        *  clean-up activities; Cambridge Pre A1 Starters Listening Part 4 —
        *  prepositions while listening). A messy room: the voice says "Put the

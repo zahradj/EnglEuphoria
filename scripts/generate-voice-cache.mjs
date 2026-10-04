@@ -355,6 +355,9 @@ const UNIT1_EXTRACTORS = {
   'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal]])],
   // Mirrors DrawPathScene.tsx's drawPathLines().
   'draw-path': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, `Start at ${({ pip: 'Pip', mia: 'Mia', bella: 'Bella', willow: 'Willow', leo: 'Leo' })[s.walker] ?? s.walker}!`]],
+  // Mirror ClawMachineScene.tsx's clawMachineLines() / RingTossScene.tsx's ringTossLines().
+  'claw-machine': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.toys ?? []).map((t) => [s.who, `That's the ${t.label}! Try again!`]), [s.who, 'Oops! Nothing! Try again!']],
+  'ring-toss': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
   // Mirror TidyUpScene.tsx's tidyUpLines() / PeekPopScene.tsx's peekPopLines().
   'tidy-up': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
   'peek-pop': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
