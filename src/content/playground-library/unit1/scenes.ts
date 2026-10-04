@@ -5547,15 +5547,7 @@ export const LESSON_U3L4_SCENES: Scene[] = [
     fish: [T_ROBOT_SMALL, T_PLANE_BIG, T_TEDDY_BIG, T_KITE_SMALL, T_BALL_SMALL, T_CAR_BIG],
     targets: [2, 0, 3],
   },
-  {
-    id: 'u3l4-toybox-lock', kind: 'color-simon', bg: bgU3L4Room, teacher: 'Extra time: The toy box has a color lock! Watch, then copy the colors. Say each one!', maxRounds: 5,
-    colors: [
-      { colorWord: 'RED', colorHex: '#EF4444', who: 'pip' },
-      { colorWord: 'BLUE', colorHex: '#3B82F6', who: 'willow' },
-      { colorWord: 'YELLOW', colorHex: '#FACC15', who: 'leo' },
-      { colorWord: 'GREEN', colorHex: '#22C55E', who: 'bella' },
-    ],
-  },
+  { id: 'u3l4-abc-p', kind: 'alphabet-order', bg: bgU3L4Room, teacher: 'Extra time: Where does P live? Drag the letters into ABC order and say them: M, N, O, P!', sequences: ['MNOP', 'NOPQ', 'OPQR'] },
 
   /* 21-22 Goodbye */
   {

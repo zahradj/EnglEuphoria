@@ -28,3 +28,8 @@
 - **Videos: Higgsfield only** (story clips, game background loops — image-to-video from a Canva/approved picture).
 - `scripts/generate-art.mjs` refuses the Higgsfield image path; the `higgsfield-video` edge function only allows video endpoints.
 - How to get a Canva picture into the repo (holder design, export, fetch bot): `docs/canva-art-pipeline.md`.
+
+## Vary every lesson — research, then beat the best apps (hard rule — owner, 2026-10-04)
+
+- Every new lesson: research >= 3 benchmarks (Khan Academy Kids, Lingokids, LingoAce, VIPKid, Novakid, Duolingo ABC, Oxford, Cambridge, Wordwall...) for its skill, take the mechanic (never content), make it better, and add or upgrade >= 1 mechanic.
+- Vary activities, look, scenes (settings) and themes (story frame) from the previous lesson and from the same slot of the previous unit. Follow `.claude/skills/lesson-variety-engine`; register `LESSON_PROFILE` + `RESEARCH_LOG` in `src/content/playground-library/lessonVariety.ts`. `lessonVariety.test.ts` (deploy gate) fails otherwise — fix the lesson, never the check.

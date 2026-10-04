@@ -201,7 +201,7 @@ another slot.
 | L2 | More words, sort them | `listen-colour` | `catch-sort` | `feed-monsters` | `dash` | `train-recall` | `friend-pop` |
 | L3 | Make & build | `puzzle` | `basket` | `jigsaw-puzzle` | `brick-crush` | `pattern-train` | `word-build` |
 | L4 | Ask & answer | `secret-card` | `sound-sort` | `color-simon` | `gather` | `shape-fishing` | `alphabet-order` |
-| L5 | Story (real video) | `lift-flap` | `tick-cross` | `who-said-it` | `alphabet-blocks` | `story-order` | — |
+| L5 | Story (real video) | `lift-flap`, `peek-pop` | `tick-cross`, `tidy-up` | `who-said-it` | `alphabet-blocks` | `story-order` | — |
 | L6 | Review hunt | `shape-torch` | `shadow-match` | `draw-path` | `trophy-chest` | `tile-reveal` | `stepping-stones`, `odd-one-out` |
 
 - **Shared by every lesson** (the routine children rely on, not "games"):
@@ -218,6 +218,36 @@ another slot.
 - New mechanics (2026-10 research: Lingokids *Draw Path*, Wordwall *Image
   quiz*, Khan Academy Kids shadow puzzles, the stepping-stones floor game)
   join a slot that is short of games, so the set keeps growing.
+
+## 3e. Vary everything, every lesson — research, then beat the best apps (hard rule, all hubs)
+
+Owner's standing rule (2026-10-04): *"In every next lesson vary the activities,
+the look, the scenes and the themes. Search the internet — Khan Academy,
+Oxford, Cambridge, LingoAce, Lingokids, VIPKid and the top apps and online
+schools — and create better than them. Avoid boring the student."*
+
+Every lesson, before it is designed (skill: `.claude/skills/lesson-variety-engine`):
+1. **Research ≥ 3 benchmarks** for the lesson's skill (Khan Academy Kids,
+   Lingokids, LingoAce, VIPKid, Novakid, Duolingo ABC, ABCmouse, Oxford,
+   Cambridge, Wordwall…), rotating them. Take the mechanic, never the content.
+2. **Do better** — one "better than" line per borrowed mechanic (the language
+   is the win condition, permanence, story continuity, live-class sync,
+   tap-tap alternatives, juice audit).
+3. **Add or upgrade ≥ 1 mechanic** per lesson (new kinds join a slot in §3d,
+   so each slot's set keeps growing and units stop repeating each other).
+4. **Vary at four levels** — enforced in code by `checkLessonVariety`
+   (`src/content/playground-library/lessonVariety.ts`, test in the deploy gate):
+   - activities: ≥ 4 games besides the routine spine, none from the previous
+     lesson, ≤ 50 % repeated from the same slot of the previous unit, never 3
+     of a kind in a row;
+   - look: new pictures (none reused from the previous lesson), its own light /
+     palette / mood;
+   - scenes: a setting the previous lesson did not use;
+   - theme: a new story frame / mission (show and tell, tidy-up, treasure hunt,
+     rescue, party, journey…), not the plot shape of the previous two lessons.
+5. **Register** `LESSON_PROFILE` (settings + look) and `RESEARCH_LOG`
+   (sources, mechanics, betterThan) for the lesson, and report the research to
+   the owner with links.
 
 ---
 
