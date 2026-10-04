@@ -5182,7 +5182,7 @@ export const LESSON_U3L3_SCENES: Scene[] = [
       { word: 'ball', emoji: '\u{26BD}', hit: false, img: itemBallRed },
     ],
   },
-  { id: 'u3l3-brick-crush', kind: 'brick-crush', bg: bgU3L3ParkEmpty, teacher: 'Brick Crush! Listen to the sound, then tap every brick with that letter.', who: 'pip', letters: ['K', 'T', 'D', 'B'], rows: 4, cols: 6, goal: 12, seconds: 60 },
+  { id: 'u3l3-brick-crush', kind: 'brick-crush', bg: bgU3L3ParkEmpty, teacher: 'Brick Crush! Listen to the sound, then tap every brick with that letter.', who: 'pip', letters: ['K', 'T', 'D', 'B'], rows: 3, cols: 7, goal: 10, seconds: 60 },
 
   /* 17-19 Story payoff, retell, personal */
   {
