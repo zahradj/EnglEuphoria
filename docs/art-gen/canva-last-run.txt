@@ -1,2 +1,8 @@
-+ docs/art-gen/canva-pipeline-test.png (1376, 768)
-1/1 saved
++ public/lep1/scenes/bg-u3l4-showtell-wide.png (1376, 768)
++ public/lep1/scenes/bg-u3l4-leo-wide.png (1376, 768)
++ public/lep1/scenes/bg-u3l4-mia-wide.png (1376, 768)
++ public/lep1/scenes/bg-u3l4-bella-wide.png (1376, 768)
++ public/lep1/scenes/bg-u3l4-share-wide.png (1376, 768)
++ public/lep1/scenes/bg-u3l4-room-empty-wide.png (1376, 768)
++ public/lep1/scenes/bg-u3l4-pool-wide.png (1376, 768)
+7/7 saved
