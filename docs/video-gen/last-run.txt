@@ -1,5 +1,4 @@
-skip workshop (exists)
-park: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started park: 2e507b70-60c7-43f0-aa2d-d457a3c15e5a
-saved public/lep1/video/clips/u3l3-loops/park.mp4 (7483767 bytes)
-2/2 clips ready for u3l3-loops
+01-class: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started 01-class: 7916f577-1247-4abe-96ea-5f082329c273
+saved public/lep1/video/clips/u4l1-dance/01-class.mp4 (6975139 bytes)
+1/1 clips ready for u4l1-dance
