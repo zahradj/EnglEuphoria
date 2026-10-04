@@ -15,6 +15,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { checkStory } from './check-storyboard.mjs';
 
 const PROXY = process.env.HF_PROXY_URL;
 const TOKEN = process.env.HF_PROXY_TOKEN;
@@ -72,7 +73,22 @@ async function makeClip(beat) {
 
 let ok = 0;
 const beats = (process.argv.find((a) => a.startsWith('--beats=')) ?? '').slice(8).split(',').filter(Boolean);
-const todo = beats.length ? story.beats.filter((b) => beats.includes(b.id)) : story.beats;
+const wanted = (beats.length ? story.beats.filter((b) => beats.includes(b.id)) : story.beats).filter((b) => !b.rejected);
+
+// STRICT MODE (owner, 2026-10-04): nothing is uploaded or paid for unless every wanted beat passes the storyboard check
+// (exact line, one matching action, owner's written approval, <= 5 s), and only ONE new clip is made per run.
+const bad = checkStory({ beats: wanted });
+if (bad.length) {
+  console.error('STRICT MODE: refusing to generate — fix the storyboard and get the owner\'s approval first:');
+  bad.forEach((b) => b.errs.forEach((e) => console.error(`  ${b.id}: ${e}`)));
+  process.exit(1);
+}
+const missing = wanted.filter((b) => !fs.existsSync(path.join(story.out, `${b.id}.mp4`)));
+if (missing.length > 1) {
+  console.error(`STRICT MODE: ${missing.length} new clips requested — only ONE clip per run, reviewed before the next. Use --beats=<id>.`);
+  process.exit(1);
+}
+const todo = missing;
 for (let i = 0; i < todo.length; i += 3) {
   const res = await Promise.all(todo.slice(i, i + 3).map(makeClip));
   ok += res.filter(Boolean).length;

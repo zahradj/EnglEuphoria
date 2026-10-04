@@ -28,7 +28,20 @@ other game motion is live UI (`gameFx.tsx`). Same child-safety and cost rules: o
   Every clip gets a human review against a fixed checklist; nothing is auto-published.
 - **Negative prompts and a calm camera help** (`NEGATIVE_PROMPT`, `SAFE_SUFFIX`); short clips (<= 8 s) have fewer artifacts and cost less.
 
-## The pipeline (each stage is a gate — do not skip, do not batch)
+## STRICT MODE for story clips (owner, 2026-10-04 — "be strict with Higgsfield; any mistake and I don't want wasted credits")
+
+The first U4L1 clip was rejected: it danced and waved, never showed "shoulders", and the coach did not lead — the picture did not
+match the words. So, for every story clip, before ANY credit is spent:
+1. **Write the storyboard row** in `scripts/story-videos.json`: `line` (exact words the student hears over the clip), `bodyWords`
+   (the target words the clip must show), ONE `action` that is the line, `leader`, `prompt` (that one action only — no dancing,
+   waving, clapping, swaying… unless the line says it; no "then/next/again" chains), `seconds` ≤ 5, start picture the owner has seen.
+2. **Show the owner the written rows** (line → action → prompt, start picture). `ownerApproved: true` is set ONLY after the owner's
+   written yes for that row — never by Claude on its own.
+3. `node scripts/check-storyboard.mjs <story>` must say READY. `generate-story-video.mjs` runs the same check and **refuses** to
+   upload or pay otherwise, and makes **one new clip per run** (`--beats=<id>`).
+4. Review the clip frame by frame against its line; mismatch = `rejected: true` + a `review` note (never re-ordered as is).
+
+
 
 1. **Brief** — add an entry to `src/content/playground-library/videoBriefs.ts`: one learning purpose, one approved start image
    (an existing LESSON background the user has seen, e.g. `public/lep1/scenes/`), `motion` only (sparkles, sway, drifting clouds, gentle camera push), <= 8 s.

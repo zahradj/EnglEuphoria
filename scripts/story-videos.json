@@ -144,22 +144,30 @@
       {
         "id": "river",
         "image": "public/lep1/scenes/bg-u2l6-river-wide.png",
-        "prompt": "The river water flows gently toward the viewer with sparkling ripples, reeds and flowers on the banks sway softly in the breeze, clouds drift slowly."
+        "prompt": "The river water flows gently toward the viewer with sparkling ripples, reeds and flowers on the banks sway softly in the breeze, clouds drift slowly.",
+        "loop": true,
+        "seconds": 5
       },
       {
         "id": "meadow",
         "image": "public/lep1/scenes/bg-meadow.jpg",
-        "prompt": "Flowers and grass sway softly in a light breeze, a few butterflies flutter gently, the sun glows and clouds drift slowly."
+        "prompt": "Flowers and grass sway softly in a light breeze, a few butterflies flutter gently, the sun glows and clouds drift slowly.",
+        "loop": true,
+        "seconds": 5
       },
       {
         "id": "beach",
         "image": "public/lep1/scenes/bg-u2l6-beach-wide.png",
-        "prompt": "Small waves roll gently onto the sand, the blue bird breathes, blinks and flaps one wing softly, clouds drift slowly."
+        "prompt": "Small waves roll gently onto the sand, the blue bird breathes, blinks and flaps one wing softly, clouds drift slowly.",
+        "loop": true,
+        "seconds": 5
       },
       {
         "id": "garden",
         "image": "public/lep1/scenes/bg-u2l6-garden-wide.png",
-        "prompt": "Flowers sway softly in a light breeze, the white bunny breathes, blinks and twitches her ears gently, clouds drift slowly."
+        "prompt": "Flowers sway softly in a light breeze, the white bunny breathes, blinks and twitches her ears gently, clouds drift slowly.",
+        "loop": true,
+        "seconds": 5
       }
     ]
   },
@@ -174,12 +182,16 @@
       {
         "id": "workshop",
         "image": "public/lep1/scenes/bg-u3l3-workshop-wide.png",
-        "prompt": "Warm sunlight from the window shifts softly, the curtains sway gently in a light breeze, tiny dust sparkles float in the sunbeam."
+        "prompt": "Warm sunlight from the window shifts softly, the curtains sway gently in a light breeze, tiny dust sparkles float in the sunbeam.",
+        "loop": true,
+        "seconds": 5
       },
       {
         "id": "park",
         "image": "public/lep1/scenes/bg-u3l3-park-empty-wide.png",
-        "prompt": "Leaves on the trees and the grass and flowers sway softly in a light breeze, clouds drift slowly across the blue sky."
+        "prompt": "Leaves on the trees and the grass and flowers sway softly in a light breeze, clouds drift slowly across the blue sky.",
+        "loop": true,
+        "seconds": 5
       }
     ]
   },
@@ -194,12 +206,14 @@
       {
         "id": "pool",
         "image": "public/lep1/scenes/bg-u3l4-pool-wide.png",
-        "prompt": "The water in the paddling pool ripples gently and sparkles in the sunlight, the grass and flowers sway softly in a light breeze."
+        "prompt": "The water in the paddling pool ripples gently and sparkles in the sunlight, the grass and flowers sway softly in a light breeze.",
+        "loop": true,
+        "seconds": 5
       }
     ]
   },
   "u4l1-dance": {
-    "lesson": "Pre-A1 Unit 4 Lesson 1 — Dance Class (story, page 4). ONE clip first (video-quality-gate); add the other beats only after the owner has reviewed it.",
+    "lesson": "Pre-A1 Unit 4 Lesson 1 — Dance Class (story, page 4). STRICT MODE: one action per clip, matching its spoken line; ordered one at a time only after the owner approves each written storyboard row.",
     "provider": "higgsfield",
     "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
     "seconds": 5,
@@ -209,7 +223,61 @@
       {
         "id": "01-class",
         "image": "public/lep1/scenes/bg-u4l1-dance-class-wide.png",
-        "prompt": "The friends sway slowly side to side to soft music and gently pat the tops of their heads with both paws, then put their paws on their shoulders. Willow the blue bird slowly lifts and lowers her wings like a calm coach. The friends stay in their places. The camera stays steady."
+        "prompt": "The friends sway slowly side to side to soft music and gently pat the tops of their heads with both paws, then put their paws on their shoulders. Willow the blue bird slowly lifts and lowers her wings like a calm coach. The friends stay in their places. The camera stays steady.",
+        "rejected": true,
+        "review": "2026-10-04 owner + frame review: not accurate — extra dancing/waving, never shows \"shoulders\", Willow does not lead. Not used."
+      },
+      {
+        "id": "02-head",
+        "image": "public/lep1/scenes/bg-u4l1-dance-class-wide.png",
+        "seconds": 5,
+        "line": "Ready, friends? Touch your head!",
+        "bodyWords": [
+          "head"
+        ],
+        "leader": "Willow",
+        "action": "Willow points one wing at her own head; the four friends slowly put both paws on top of their head and keep them there",
+        "prompt": "Willow the blue bird points one wing at the top of her own head. Pip, Mia, Leo and Bella slowly lift both paws and rest them on top of their head, and they keep their paws resting on their head until the end. They stay in their places. The camera stays steady.",
+        "ownerApproved": false
+      },
+      {
+        "id": "03-shoulders",
+        "image": "public/lep1/scenes/bg-u4l1-dance-class-wide.png",
+        "seconds": 5,
+        "line": "Touch your shoulders!",
+        "bodyWords": [
+          "shoulders"
+        ],
+        "leader": "Willow",
+        "action": "Willow touches her own shoulders with her wings; the four friends slowly put each paw on its own shoulder and keep them there",
+        "prompt": "Willow the blue bird touches her own shoulders with the tips of her wings. Pip, Mia, Leo and Bella slowly put each paw on its own shoulder, and they keep their paws resting on their shoulders until the end. They stay in their places. The camera stays steady.",
+        "ownerApproved": false
+      },
+      {
+        "id": "04-toes",
+        "image": "public/lep1/scenes/bg-u4l1-pip-toes-wide.png",
+        "seconds": 5,
+        "line": "Touch my toes? Whoa... oops! Ha ha!",
+        "bodyWords": [
+          "toes"
+        ],
+        "leader": "Pip",
+        "action": "Pip, already bent over, reaches down and touches his toes with both paws, wobbles gently and stays standing; Mia and Bella stay still",
+        "prompt": "Pip the orange fox is bent over. He slowly reaches down and touches his toes with both paws, wobbles gently side to side and stays standing. Mia and Bella stay in their places. Willow stays still. The camera stays steady.",
+        "ownerApproved": false
+      },
+      {
+        "id": "05-knees",
+        "image": "public/lep1/scenes/bg-u4l1-dance-knees-wide.png",
+        "seconds": 5,
+        "line": "Touch your knees!",
+        "bodyWords": [
+          "knees"
+        ],
+        "leader": "Willow",
+        "action": "the four friends keep both paws on their knees and gently bend their knees down and up; Willow nods",
+        "prompt": "Pip, Mia, Leo and Bella keep both paws resting on their knees and slowly bend their knees down and up. Willow the blue bird nods gently and stays in her place. The camera stays steady.",
+        "ownerApproved": false
       }
     ]
   }
