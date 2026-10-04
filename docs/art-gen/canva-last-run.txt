@@ -1,8 +1,2 @@
-+ public/lep1/scenes/bg-u2l2-mix-willow-pour2-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u2l2-mix-willow-spoon-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u2l2-mix-leo-pour2-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u2l2-mix-leo-spoon-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u2l2-mix-mia-pour2-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u2l2-mix-mia-spoon-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u2l2-mix-mia-b2-wide.png (1376, 768)
-7/7 saved
++ public/lep1/scenes/bg-u2l2-mix-mia-a2-wide.png (1376, 768)
+1/1 saved
