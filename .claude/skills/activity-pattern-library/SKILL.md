@@ -156,7 +156,7 @@ L2 listen-colour · catch-sort · feed-monsters · dash · train-recall · frien
 L3 puzzle · basket · jigsaw-puzzle · brick-crush · pattern-train · word-build |
 L4 secret-card · sound-sort · color-simon · gather · shape-fishing · alphabet-order |
 L5 lift-flap · tick-cross · who-said-it · alphabet-blocks · tidy-up · peek-pop |
-L6 shape-torch · shadow-match · draw-path · trophy-chest · tile-reveal · stepping-stones · odd-one-out.
+L6 shape-torch · shadow-match · draw-path · trophy-chest · tile-reveal · stepping-stones · odd-one-out · claw-machine · ring-toss.
 Run `checkSlotGames(slot, scenes)` before calling a lesson done.
 
 ### Researched Pre-A1 mechanics (Oct 2026, round 2 — "every lesson feels the same")
@@ -169,6 +169,8 @@ Run `checkSlotGames(slot, scenes)` before calling a lesson done.
 | Cross the river: tap the stone the voice names, the character hops | classroom stepping-stones floor game, app river levels | `stepping-stones` | listening + forward progress |
 | Tidy Up: put the toy the voice names in / on / under its place (drag or tap-tap); tidied toys stay | Lingokids × Toy Story "pack the box" (2026), Lingokids clean-up activities, Cambridge Starters Listening Part 4 | `tidy-up` (L5) |
 | Peekaboo Toys: toys peek out of the box / onto the bed / from under the chair; tap the one in the place you hear | ESL hide-and-seek "where is the toy?", Lingokids prepositions | `peek-pop` (L5) |
+| Toy Grabber: steer a claw to the toy the voice names ("Get the blue ball!"), press the button; never slips | claw-machine kids apps (Yateland), fairground toy grabbers | `claw-machine` (L6) |
+| Ring Toss: tap the prize to throw a spinning ring; rings stay on the pegs (also for sounds: "the P word") | fairground ring toss, Wordwall one-tap review | `ring-toss` (L6) |
 
 **Every game must pass the `game-animation` skill's juice audit** (living world, springs, squash & stretch, bursts, gentle wrong, celebration) — a correct but flat game fails.
 

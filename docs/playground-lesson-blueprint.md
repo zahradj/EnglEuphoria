@@ -202,7 +202,7 @@ another slot.
 | L3 | Make & build | `puzzle` | `basket` | `jigsaw-puzzle` | `brick-crush` | `pattern-train` | `word-build` |
 | L4 | Ask & answer | `secret-card` | `sound-sort` | `color-simon` | `gather` | `shape-fishing` | `alphabet-order` |
 | L5 | Story (real video) | `lift-flap`, `peek-pop` | `tick-cross`, `tidy-up` | `who-said-it` | `alphabet-blocks` | `story-order` | — |
-| L6 | Review hunt | `shape-torch` | `shadow-match` | `draw-path` | `trophy-chest` | `tile-reveal` | `stepping-stones`, `odd-one-out` |
+| L6 | Review hunt | `shape-torch`, `claw-machine` | `shadow-match` | `draw-path`, `ring-toss` | `trophy-chest` | `tile-reveal` | `stepping-stones`, `odd-one-out` |
 
 - **Shared by every lesson** (the routine children rely on, not "games"):
   `title-card`, `song`, `cinematic`, `story-video`, `story-order` (after any
