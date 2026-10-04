@@ -385,7 +385,9 @@ export type Scene =
        *  asks "Is it red?" / "Is it a circle?" and Pip answers yes/no until
        *  one card is left (Unit 2 Lesson 4). `secret` indexes `cards`. */
       id: string; kind: 'secret-card'; bg: string; teacher: string; who: CharKey;
-      cards: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle' }[];
+      /** A card is a coloured shape, or a TOY picture (`img` + `word`, optional `size`):
+       *  then the child asks "Is it a car?", "Is it big?", "Is it red?" (Unit 3 Lesson 4). */
+      cards: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle'; img?: string; word?: string; size?: 'big' | 'small' }[];
       rounds: { secret: number }[];
     }
   | {

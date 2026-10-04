@@ -382,7 +382,10 @@ const UNIT1_EXTRACTORS = {
   // Mirrors SecretCardScene.tsx's secretCardLines().
   'secret-card': (s) => [
     [s.who, 'I have a secret card. Ask me!'], [s.who, 'Yes, it is!'], [s.who, "No, it isn't!"],
-    ...(s.rounds ?? []).map((r) => s.cards?.[r.secret]).filter(Boolean).map((c) => [s.who, `You found it! It's ${/^[aeiou]/i.test(c.colorWord) ? 'an' : 'a'} ${c.colorWord.toLowerCase()} ${c.shape}!`]),
+    ...(s.rounds ?? []).map((r) => s.cards?.[r.secret]).filter(Boolean).map((c) => {
+      const parts = c.word ? [c.size, c.colorWord.toLowerCase(), c.word.toLowerCase()].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
+      return [s.who, `You found it! It's ${/^[aeiou]/i.test(parts) ? 'an' : 'a'} ${parts}!`];
+    }),
   ],
   // Mirrors ShapeBuilderScene.tsx's shapeBuilderLines().
   'shape-builder': (s) => [
