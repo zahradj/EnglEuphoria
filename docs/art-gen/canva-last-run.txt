@@ -1,5 +1,12 @@
-+ public/lep1/scenes/bg-u4l1-leo-stand-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l1-leo-head-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l1-leo-shoulders-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l1-leo-knees-wide.png (1376, 768)
-4/4 saved
+cut out: public/lep1/items/item-goat.png (775, 891)
+cut out: public/lep1/items/item-gift.png (865, 902)
+cut out: public/lep1/items/item-guitar.png (488, 1007)
++ public/lep1/scenes/bg-u2l2-studio-wide.png (1376, 768)
++ public/lep1/scenes/bg-u2l2-grey-painting-wide.png (1376, 768)
++ public/lep1/scenes/bg-u2l2-painting-done-wide.png (1376, 768)
++ public/lep1/scenes/bg-u2l2-monsters-wide.png (1376, 768)
++ public/lep1/scenes/bg-u2l2-market-wide.png (1376, 768)
++ public/lep1/items/item-goat.png (1024, 1024)
++ public/lep1/items/item-gift.png (1024, 1024)
++ public/lep1/items/item-guitar.png (1024, 1024)
+8/8 saved
