@@ -1,2 +1,2 @@
-u2l6-loops
-# Higgsfield run 2026-10-03: the river loop (its picture is baked now; the other three are skipped)
+u3l3-loops
+# Higgsfield 2026-10-04: ONE loop first (workshop) — reviewed before ordering the park loop

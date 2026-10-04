@@ -1372,12 +1372,12 @@
     "prompt": "one cute friendly cartoon KANGAROO standing and smiling, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft colours, gentle shading), isolated alone on a plain pure white background, nothing else in the picture. No text."
   },
   {
-    "out": "public/lep1/items/item-king.png",
+    "out": "public/lep1/items/item-kitten.png",
     "sticker": true,
     "refs": [
       "public/lep1/items/item-ball-red.png",
       "public/lep1/items/item-car.png"
     ],
-    "prompt": "one cute friendly cartoon KING with a golden crown and a red cape, smiling, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft colours, gentle shading), isolated alone on a plain pure white background, nothing else in the picture. No text."
+    "prompt": "one cute small orange-and-white KITTEN sitting and smiling, big friendly eyes, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft colours, gentle shading), isolated alone on a plain pure white background, nothing else in the picture. No text."
   }
 ]

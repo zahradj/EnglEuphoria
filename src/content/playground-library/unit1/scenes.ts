@@ -5024,7 +5024,7 @@ const itemRobot = `${A}/items/item-robot.png`;
 const itemPlane = `${A}/items/item-plane.png`;
 const itemKey = `${A}/items/item-key.png`;
 const itemKangaroo = `${A}/items/item-kangaroo.png`;
-const itemKing = `${A}/items/item-king.png`;
+const itemKitten = `${A}/items/item-kitten.png`;
 /** Living game worlds (Higgsfield loops, ping-ponged) — see game-animation skill. */
 const loopU3L3 = (name: string) => `${A}/video/loops/u3l3-${name}.mp4`;
 const K_KITE = { colorWord: 'RED', colorHex: '#EF4444', shape: 'circle' as const, img: itemKite, word: 'kite' };
@@ -5034,7 +5034,7 @@ const K_BALL = { colorWord: 'RED', colorHex: '#EF4444', shape: 'circle' as const
 const K_TEDDY = { colorWord: 'BROWN', colorHex: '#92400E', shape: 'circle' as const, img: itemTeddy, word: 'teddy bear' };
 
 export const LESSON_U3L3_TITLE = 'What Do You Like to Play?';
-export const LESSON_U3L3_OBJECTIVE = 'Name three new toys — kite, robot, plane — ask and answer "Do you like kites? — Yes, I do! / No, I don\'t.", invite a friend with "Let\'s play!", follow a short park story (Pip\'s kite gets stuck in a tree), and hear K say /k/ (kite, key, kangaroo, king) — by listening, moving, building, tapping and speaking, no reading.';
+export const LESSON_U3L3_OBJECTIVE = 'Name three new toys — kite, robot, plane — ask and answer "Do you like kites? — Yes, I do! / No, I don\'t.", invite a friend with "Let\'s play!", follow a short park story (Pip\'s kite gets stuck in a tree), and hear K say /k/ (kite, key, kangaroo, kitten) — by listening, moving, building, tapping and speaking, no reading.';
 
 export const LESSON_U3L3_SCENES: Scene[] = [
   { id: 'u3l3-title', kind: 'title-card', bg: bgU3L3Park, level: 'Pre-A1', unit: 'Unit 3', lessonLabel: 'Lesson 3', title: 'What Do You Like to Play?', subtitle: 'A day in the park' },
@@ -5117,9 +5117,9 @@ export const LESSON_U3L3_SCENES: Scene[] = [
     id: 'u3l3-spin', kind: 'spin-wheel', bg: bgU3L3Park, title: '',
     teacher: 'Have the student spin and say the toy: "It\'s a kite!" Then ask: "Do you like kites?" Or tap a number.',
     items: [
-      { label: "It's a kite!", left: '20%', top: '22%' },
-      { label: "It's a robot!", left: '50%', top: '55%' },
-      { label: "It's a plane!", left: '78%', top: '40%' },
+      { label: "It's a kite!", left: '30%', top: '25%' },
+      { label: "It's a robot!", left: '45%', top: '55%' },
+      { label: "It's a plane!", left: '56%', top: '51%' },
     ],
     wheelAt: { left: '50%', top: '28%' },
   },
@@ -5172,7 +5172,7 @@ export const LESSON_U3L3_SCENES: Scene[] = [
       { word: 'kite', emoji: '\u{1FA81}', hit: true, img: itemKite },
       { word: 'key', emoji: '\u{1F511}', hit: true, img: itemKey },
       { word: 'kangaroo', emoji: '\u{1F998}', hit: true, img: itemKangaroo },
-      { word: 'king', emoji: '\u{1F451}', hit: true, img: itemKing },
+      { word: 'kitten', emoji: '\u{1F431}', hit: true, img: itemKitten },
       { word: 'robot', emoji: '\u{1F916}', hit: false, img: itemRobot },
       { word: 'plane', emoji: '\u{2708}\u{FE0F}', hit: false, img: itemPlane },
       { word: 'ball', emoji: '\u{26BD}', hit: false, img: itemBallRed },

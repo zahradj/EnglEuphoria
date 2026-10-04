@@ -162,5 +162,20 @@
         "prompt": "Flowers sway softly in a light breeze, the white bunny breathes, blinks and twitches her ears gently, clouds drift slowly."
       }
     ]
+  },
+  "u3l3-loops": {
+    "lesson": "Pre-A1 Unit 3 Lesson 3 — living game backgrounds (ping-pong loops)",
+    "provider": "higgsfield",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "seconds": 5,
+    "style": "Keep exactly the flat 2D cartoon picture-book style and everything in the first frame. Seamless gentle ambient LOOP for a game background: the camera does not move at all, nothing new appears, nothing leaves the picture.",
+    "out": "public/lep1/video/clips/u3l3-loops",
+    "beats": [
+      {
+        "id": "workshop",
+        "image": "public/lep1/scenes/bg-u3l3-workshop-wide.png",
+        "prompt": "Warm sunlight from the window shifts softly, the curtains sway gently in a light breeze, tiny dust sparkles float in the sunbeam."
+      }
+    ]
   }
 }
