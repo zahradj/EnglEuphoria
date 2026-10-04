@@ -1,0 +1,50 @@
+name: Generate story video clips
+
+# Real animated video for Pre-A1 Lesson 5 stories (blueprint §3a), generated
+# with HIGGSFIELD only (owner's rule): scripts/generate-story-video.mjs runs the
+# story named in scripts/video-gen-request.txt (beats in
+# scripts/story-videos.json) through the higgsfield-video edge function and
+# commits the clips plus the run log (docs/video-gen/last-run.txt).
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/video-gen-request.txt'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: video-gen-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  clips:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Generate clips (Higgsfield)
+        env:
+          HF_PROXY_URL: https://dcoxpyzoqjvmuuygvlme.supabase.co/functions/v1/higgsfield-video
+          HF_PROXY_TOKEN: de472b713779b6c3f2c462fb886213e1861db78b10aa2021
+        run: |
+          mkdir -p docs/video-gen
+          node scripts/generate-story-video.mjs 2>&1 | tee docs/video-gen/last-run.txt
+      - name: Commit clips
+        if: always()
+        run: |
+          git add public/lep1/video docs/video-gen
+          if git diff --cached --quiet; then echo "No new clips."; exit 0; fi
+          git config user.name "video-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "Story video clips (Higgsfield, $(git diff --cached --name-only | wc -l) files)"
+          # Another bot may have pushed meanwhile (same run log): keep ours on conflict, retry.
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((i * 5))
+          done
+          exit 1

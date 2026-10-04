@@ -67,7 +67,17 @@ for (const [key, song] of Object.entries(SONGS)) {
     // Direct ElevenLabs call when ELEVENLABS_API_KEY is set (preferred: the DEPLOYED
     // elevenlabs-music edge function is an old version that ignores composition_plan,
     // so it invents its own lyrics). The API wants EITHER prompt OR composition_plan.
-    const res = PROXY
+    // engine "lyria": Google Lyria via the same proxy (sings the given lyrics).
+    // Its safety filter rejects prompts that describe the listeners' ages, so the
+    // prompt is music style + a [Verse]/[Chorus] lyric sheet only.
+    const lyriaPrompt = `${song.lyriaStyle ?? 'A short 25-second upbeat pop jingle, 120 BPM, bright synths and hand claps, female vocalist.'} Very short song: no intro, no extra verses, no bridge, no ad-libs. The vocalist sings only the lyrics below, each line once, in order, then the song ends.\n\n[Verse]\n${song.lines.join('\n')}\n\n[Outro]`;
+    const res = PROXY && song.engine === 'lyria'
+      ? await fetch(PROXY, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-song-token': PROXY_TOKEN },
+          body: JSON.stringify({ lyria: { prompt: lyriaPrompt, lines: song.lines } }),
+        })
+      : PROXY
       ? await fetch(PROXY, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-song-token': PROXY_TOKEN },

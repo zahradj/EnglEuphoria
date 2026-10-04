@@ -6,10 +6,15 @@ import { QUEST_COLOR_CARNIVAL_U2L1 } from './color-carnival-u2l1';
 import { QUEST_WELCOME_TOWN_U1L1 } from './welcome-town-u1l1';
 import { QUEST_RAINBOW_MEADOW_U2L2 } from './rainbow-meadow-u2l2';
 import { QUEST_SHAPE_TOWN_U2L3 } from './shape-town-u2l3';
+import { QUEST_QUESTION_PARTY_U2L4 } from './question-party-u2l4';
+import { QUEST_SHELLY_U2L5 } from './shelly-u2l5';
+import { QUEST_TREASURE_HUNT_U2L6 } from './treasure-hunt-u2l6';
+import { QUEST_TOY_BOX_U3L1 } from './toy-box-u3l1';
+import { QUEST_LEO_STAR_U1L5 } from './leo-star-u1l5';
 
 /** Every Homework Quest, by id (also the URL /homework-quest/<id>). */
 export const HOMEWORK_QUESTS: Record<string, HomeworkQuest> = Object.fromEntries(
-  [QUEST_MAGIC_CASTLE_U9L1, QUEST_MAGIC_CASTLE_U9L2, QUEST_MAGIC_CASTLE_U9L3, QUEST_COLOR_CARNIVAL_U2L1, QUEST_WELCOME_TOWN_U1L1, QUEST_RAINBOW_MEADOW_U2L2, QUEST_SHAPE_TOWN_U2L3].map((q) => [q.id, q]),
+  [QUEST_MAGIC_CASTLE_U9L1, QUEST_MAGIC_CASTLE_U9L2, QUEST_MAGIC_CASTLE_U9L3, QUEST_COLOR_CARNIVAL_U2L1, QUEST_WELCOME_TOWN_U1L1, QUEST_RAINBOW_MEADOW_U2L2, QUEST_SHAPE_TOWN_U2L3, QUEST_QUESTION_PARTY_U2L4, QUEST_SHELLY_U2L5, QUEST_TREASURE_HUNT_U2L6, QUEST_TOY_BOX_U3L1, QUEST_LEO_STAR_U1L5].map((q) => [q.id, q]),
 );
 
 export const getHomeworkQuest = (id: string): HomeworkQuest | null => HOMEWORK_QUESTS[id] ?? null;

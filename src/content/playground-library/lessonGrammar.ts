@@ -13,6 +13,17 @@ export interface LessonGrammarEntry {
 }
 
 export const LESSON_GRAMMAR: Record<string, LessonGrammarEntry> = {
+  // Pre-A1 Unit 1 Lesson 5 — Leo's Lost Star (story lesson, review of Unit 1)
+  'lep1-rich-1-5': {
+    pattern: 'Is it under the hat? — No! It\'s a bat! / Yes! Here it is!',
+    cefr: 'Pre-A1',
+    forms: [
+      { label: 'Ask where something is', formula: 'Is it under the + thing? / Is it in the + thing?' },
+      { label: 'Answer', formula: "No! It's a/an + thing. / Yes! Here it is!" },
+      { label: 'Say how someone feels', formula: 'He is / She is + sad / happy.' },
+    ],
+    examples: ['Is it under the hat? No! It\'s a bat!', 'Is it in the bag? No! It\'s a nut!', 'I am sad. I lost my star.', 'He is happy!'],
+  },
   // Pre-A1 Unit 2 Lesson 1 — Red, Blue, Yellow! (The Color Carnival)
   'lep1-rich-2-1': {
     pattern: "It's + color",
@@ -46,6 +57,54 @@ export const LESSON_GRAMMAR: Record<string, LessonGrammarEntry> = {
       { label: 'Say what you like', formula: 'I like + circles / squares / triangles' },
     ],
     examples: ['What shape is it?', "It's a circle!", "It's a square!", 'A red triangle!', 'I like circles!'],
+  },
+  // Pre-A1 Unit 2 Lesson 4 — What Color Is This?
+  'lep1-rich-2-4': {
+    pattern: 'What color / shape is this? — Is it …? Yes, it is. / No, it isn\'t.',
+    cefr: 'Pre-A1',
+    forms: [
+      { label: 'Ask the color', formula: 'What color is this?' },
+      { label: 'Ask the shape', formula: 'What shape is this?' },
+      { label: 'Yes / no question', formula: 'Is it + red? / Is it + a circle?' },
+      { label: 'Short answers', formula: "Yes, it is. / No, it isn't." },
+    ],
+    examples: ['What color is this?', "It's red!", 'What shape is this?', "It's a circle!", 'Is it blue?', "No, it isn't!", 'Yes, it is!'],
+  },
+  // Pre-A1 Unit 2 Lesson 5 — The Rainbow Fish's Scales (Shelly's story)
+  'lep1-rich-2-5': {
+    pattern: 'What color do you want? — I want + color, please.',
+    cefr: 'Pre-A1',
+    forms: [
+      { label: 'Ask what someone wants', formula: 'What color do you want?' },
+      { label: 'Say what you want', formula: 'I want + red, please!' },
+      { label: 'Give it', formula: 'Here you are!' },
+      { label: 'Say thanks', formula: 'Thank you!' },
+    ],
+    examples: ['What color do you want?', 'I want red, please!', 'Here you are! A red circle!', 'Thank you!'],
+  },
+  // Pre-A1 Unit 2 Lesson 6 — Color & Shape Hunt (unit review)
+  'lep1-rich-2-6': {
+    pattern: "It's a + color + shape",
+    cefr: 'Pre-A1',
+    forms: [
+      { label: 'Color and shape together', formula: 'a + green + triangle' },
+      { label: 'Say what it is', formula: "It's a + blue + square" },
+      { label: 'Yes / no question', formula: 'Is it + green? / Is it + a circle?' },
+      { label: 'Say what you like', formula: 'I like + color' },
+    ],
+    examples: ["It's a red circle!", "It's a blue square!", 'Find a green triangle!', 'Is it purple?', 'I like orange!'],
+  },
+  // Pre-A1 Unit 3 Lesson 1 — Ball, Car, Doll!
+  'lep1-rich-3-1': {
+    pattern: "It's a + color + toy",
+    cefr: 'Pre-A1',
+    forms: [
+      { label: 'Say the toy', formula: "It's a + ball / car / doll" },
+      { label: 'Toy and color', formula: "It's a + red + ball" },
+      { label: 'Say what you like', formula: 'I like + cars / I don’t like + dolls' },
+      { label: 'Ask for a toy', formula: 'I want a + blue + car, please!' },
+    ],
+    examples: ["What's in the bag?", "It's a ball!", "It's a red ball!", 'I like blue cars!', 'I want a green doll, please!'],
   },
   // A1 Unit 9 Lesson 1 — Magic Castle: rooms and furniture
   'castle-rich-9-1': {

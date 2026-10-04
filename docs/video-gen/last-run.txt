@@ -1,0 +1,5 @@
+skip river (exists)
+skip meadow (exists)
+skip beach (exists)
+skip garden (exists)
+4/4 clips ready for u2l6-loops

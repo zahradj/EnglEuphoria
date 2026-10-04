@@ -1,0 +1,166 @@
+{
+  "u2l5-shelly": {
+    "lesson": "Pre-A1 Unit 2 Lesson 5 — The Rainbow Fish's Scales",
+    "out": "public/lep1/video/clips/u2l5-shelly",
+    "seconds": 10,
+    "style": "Keep exactly the flat 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, gentle animation for young children. The camera stays steady. No text, no new characters.",
+    "beats": [
+      {
+        "id": "01-sea",
+        "image": "public/lep1/scenes/bg-u2l5-sea-wide.png",
+        "prompt": "The five animal friends on the little red ship wave happily and the ship bobs gently on the waves. Under the water the small grey fish swims slowly and looks up at them. Bubbles rise."
+      },
+      {
+        "id": "02-sad",
+        "image": "public/lep1/scenes/bg-u2l5-shelly-sad-wide.png",
+        "prompt": "The small grey fish swims slowly in place, looks down at her plain grey body and looks sad; one small tear floats away. Soft bubbles rise."
+      },
+      {
+        "id": "03-red",
+        "image": "public/lep1/scenes/bg-u2l5-shelly-red-wide.png",
+        "prompt": "The white bunny leans over the side of the red ship and gently drops a shiny red circle scale into the water. The red circle sinks slowly and sticks onto the grey fish's side. The fish wiggles and smiles."
+      },
+      {
+        "id": "04-blue",
+        "image": "public/lep1/scenes/bg-u2l5-shelly-blue-wide.png",
+        "prompt": "The grey mouse with the orange bow leans over the side of the red ship and drops ONE small shiny blue square into the water. The blue square sinks and sticks onto the grey fish's side next to the red circle. The rest of the fish stays grey (only one red circle and one blue square on her body). The fish smiles."
+      },
+      {
+        "id": "05-yellow",
+        "image": "public/lep1/scenes/bg-u2l5-shelly-yellow-wide.png",
+        "prompt": "The yellow lion leans over the side of the red ship and drops ONE small shiny yellow triangle into the water. The yellow triangle sinks and sticks onto the grey fish's side next to the red circle and the blue square. The rest of the fish stays grey. The fish smiles and swims in a small happy circle under the water."
+      },
+      {
+        "id": "05b-green",
+        "image": "public/lep1/scenes/bg-u2l5-shelly-green-wide.png",
+        "prompt": "The orange fox leans over the side of the red boat and drops ONE small shiny green circle into the water. The green circle sinks and sticks onto the grey fish's side next to the red, blue and yellow scales. The rest of the fish stays grey. The fish smiles and wiggles her tail."
+      },
+      {
+        "id": "05c-orange",
+        "image": "public/lep1/scenes/bg-u2l5-shelly-orange-wide.png",
+        "prompt": "The blue bird with the green scarf flaps her wings above the boat and drops ONE small shiny orange square and ONE small shiny purple triangle into the water. They sink slowly and stick onto the fish's side. The fish spins round with joy as more colours sparkle on her body."
+      },
+      {
+        "id": "06-rainbow",
+        "image": "public/lep1/scenes/bg-u2l5-shelly-rainbow-wide.png",
+        "prompt": "The colourful rainbow fish leaps happily out of the water and splashes back down, her coloured circle, square and triangle scales sparkling. The friends on the ship cheer and clap."
+      },
+      {
+        "id": "07-crab",
+        "image": "public/lep1/scenes/bg-u2l5-crab-wide.png",
+        "prompt": "On the sandy sea floor the rainbow fish swims to the small sad grey crab and gently gives it one shiny purple circle scale. The crab holds it and slowly starts to smile."
+      },
+      {
+        "id": "08-friends",
+        "image": "public/lep1/scenes/bg-u2l5-crab-wide.png",
+        "prompt": "The rainbow fish and the happy little crab dance together on the sandy sea floor, the fish swimming in a happy circle around the crab. Little hearts and bubbles float up."
+      }
+    ],
+    "provider": "higgsfield",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "note": "All 10 beats are real clips: 01-03, 06-08 made before the Higgsfield-only rule (kept); 04, 05, 05b, 05c by Higgsfield (Kling 2.5 Turbo Pro). Trimmed to 8 s each when stitched.",
+    "film": "public/lep1/video/shelly-story-u2l5",
+    "beatSeconds": 8
+  },
+  "u1l5-leo": {
+    "lesson": "Pre-A1 Unit 1 Lesson 5 — Leo's Lost Star",
+    "provider": "higgsfield",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "seconds": 10,
+    "beatSeconds": 8,
+    "out": "public/lep1/video/clips/u1l5-leo",
+    "films": [
+      {
+        "film": "public/lep1/video/leo-story-u1l5-a",
+        "beats": [
+          "01-play",
+          "02-wind",
+          "03-sad",
+          "04-friends"
+        ]
+      },
+      {
+        "film": "public/lep1/video/leo-story-u1l5-b",
+        "beats": [
+          "05-hat",
+          "06-mat",
+          "07-glow",
+          "08-found"
+        ]
+      }
+    ],
+    "style": "Keep exactly the soft 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, gentle animation for young children. The camera stays steady. No text, no new characters.",
+    "beats": [
+      {
+        "id": "01-play",
+        "image": "public/lep1/scenes/bg-l5-play-wide.png",
+        "prompt": "Leo the yellow lion sits on the grass and happily tosses his shiny golden star toy up and catches it again, smiling. Fireflies glow softly around him."
+      },
+      {
+        "id": "02-wind",
+        "image": "public/lep1/scenes/bg-l5-wind-wide.png",
+        "prompt": "A gust of wind blows; the shiny golden star flies out of Leo's paws and tumbles away into the tall grass. Leo reaches after it, surprised, then looks worried. Grass and petals sway in the wind."
+      },
+      {
+        "id": "03-sad",
+        "image": "public/lep1/scenes/bg-l5-sad-wide.png",
+        "prompt": "Leo the lion sits looking sad and a small tear rolls down. Pip the orange fox walks up, waves hello kindly and gently pats Leo's shoulder."
+      },
+      {
+        "id": "04-friends",
+        "image": "public/lep1/scenes/bg-l5-friends-wide.png",
+        "prompt": "The five friends stand in a row and wave hello one after another; the lion gives a small sad wave back. Their tails and ears move gently."
+      },
+      {
+        "id": "05-hat",
+        "image": "public/lep1/scenes/bg-l5-hat-wide.png",
+        "prompt": "The white bunny lifts the big straw hat from the grass and a tiny friendly bat flutters out and flies in a little circle around her head. The bunny laughs."
+      },
+      {
+        "id": "06-mat",
+        "image": "public/lep1/scenes/bg-l5-mat-wide.png",
+        "prompt": "The grey mouse lifts the corner of the red picnic mat and a tiny friendly ant pops out and waves. The mouse giggles."
+      },
+      {
+        "id": "07-glow",
+        "image": "public/lep1/scenes/bg-l5-glow-wide.png",
+        "prompt": "The blue bird flies in a happy circle high in the evening sky, then points down with her wing at the warm golden glow under the big oak tree. The glow sparkles."
+      },
+      {
+        "id": "08-found",
+        "image": "public/lep1/scenes/bg-l5-found-wide.png",
+        "prompt": "Under the big oak tree the lion hugs the shiny golden star and jumps for joy; the friends cheer, clap and dance around him. Stars twinkle in the sky."
+      }
+    ]
+  },
+  "u2l6-loops": {
+    "lesson": "Pre-A1 Unit 2 Lesson 6 — living game backgrounds (looped ping-pong in the games)",
+    "provider": "higgsfield",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "seconds": 5,
+    "style": "Keep exactly the flat 2D cartoon picture-book style and everything in the first frame. Seamless gentle ambient LOOP for a game background: the camera does not move at all, nothing new appears, nothing leaves the picture, characters stay in place.",
+    "out": "public/lep1/video/clips/u2l6-loops",
+    "beats": [
+      {
+        "id": "river",
+        "image": "public/lep1/scenes/bg-u2l6-river-wide.png",
+        "prompt": "The river water flows gently toward the viewer with sparkling ripples, reeds and flowers on the banks sway softly in the breeze, clouds drift slowly."
+      },
+      {
+        "id": "meadow",
+        "image": "public/lep1/scenes/bg-meadow.jpg",
+        "prompt": "Flowers and grass sway softly in a light breeze, a few butterflies flutter gently, the sun glows and clouds drift slowly."
+      },
+      {
+        "id": "beach",
+        "image": "public/lep1/scenes/bg-u2l6-beach-wide.png",
+        "prompt": "Small waves roll gently onto the sand, the blue bird breathes, blinks and flaps one wing softly, clouds drift slowly."
+      },
+      {
+        "id": "garden",
+        "image": "public/lep1/scenes/bg-u2l6-garden-wide.png",
+        "prompt": "Flowers sway softly in a light breeze, the white bunny breathes, blinks and twitches her ears gently, clouds drift slowly."
+      }
+    ]
+  }
+}
