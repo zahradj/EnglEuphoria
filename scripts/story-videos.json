@@ -239,7 +239,9 @@
         "action": "Willow points one wing at her own head; the four friends slowly put both paws on top of their head and keep them there",
         "prompt": "Willow the blue bird points one wing at the top of her own head. Pip, Mia, Leo and Bella slowly lift both paws and rest them on top of their head, and they keep their paws resting on their head until the end. They stay in their places. The camera stays steady.",
         "ownerApproved": true,
-        "approvedNote": "owner: \"go\" 2026-10-04 (clip 1 only)"
+        "approvedNote": "owner: \"go\" 2026-10-04 (clip 1 only)",
+        "rejected": true,
+        "review": "2026-10-04 frame review: paws held up beside the heads (not on top), legs keep marching/dancing, Willow only flaps. Root cause: the start picture is a mid-dance pose. Next: Canva pictures that already show each exact action; video (if any) only gentle breathing/blinking."
       },
       {
         "id": "03-shoulders",
