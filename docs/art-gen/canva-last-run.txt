@@ -1,5 +1,2 @@
-+ public/lep1/scenes/bg-u4l1-act-head-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l1-act-shoulders-wide.png (1376, 768)
 + public/lep1/scenes/bg-u4l1-act-knees-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l1-act-toes-wide.png (1376, 768)
-4/4 saved
+1/1 saved
