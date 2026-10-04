@@ -175,6 +175,11 @@
         "id": "workshop",
         "image": "public/lep1/scenes/bg-u3l3-workshop-wide.png",
         "prompt": "Warm sunlight from the window shifts softly, the curtains sway gently in a light breeze, tiny dust sparkles float in the sunbeam."
+      },
+      {
+        "id": "park",
+        "image": "public/lep1/scenes/bg-u3l3-park-empty-wide.png",
+        "prompt": "Leaves on the trees and the grass and flowers sway softly in a light breeze, clouds drift slowly across the blue sky."
       }
     ]
   }
