@@ -134,6 +134,36 @@ async function sendClassroomInviteEmail(
   }
 }
 
+interface FamilyChild { id: string; fullName: string; hub: string | null }
+
+// Family accounts: a parent's own login is never the one that sits in a lesson - the child
+// (a managed student account linked with an approved relationship) does. So an invite sent to a
+// parent's address must be booked on one of that parent's children.
+async function isParentAccount(adminClient: ReturnType<typeof createClient>, userId: string): Promise<boolean> {
+  const { data } = await adminClient.from('user_roles').select('role').eq('user_id', userId)
+  return (data ?? []).some((r: { role: string }) => r.role === 'parent')
+}
+
+async function childrenOf(adminClient: ReturnType<typeof createClient>, parentId: string): Promise<FamilyChild[]> {
+  const { data: rels } = await adminClient
+    .from('student_parent_relationships')
+    .select('student_id')
+    .eq('parent_id', parentId)
+    .not('approved_at', 'is', null)
+  const ids = (rels ?? []).map((r: { student_id: string }) => r.student_id)
+  if (ids.length === 0) return []
+  const [{ data: users }, { data: profiles }] = await Promise.all([
+    adminClient.from('users').select('id, full_name').in('id', ids),
+    adminClient.from('student_profiles').select('user_id, hub_type').in('user_id', ids),
+  ])
+  const hubOf = new Map((profiles ?? []).map((p: { user_id: string; hub_type: string | null }) => [p.user_id, p.hub_type]))
+  return (users ?? []).map((u: { id: string; full_name: string | null }) => ({
+    id: u.id,
+    fullName: u.full_name || 'Child',
+    hub: (hubOf.get(u.id) as string | null | undefined) ?? null,
+  }))
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
@@ -146,6 +176,30 @@ Deno.serve(async (req) => {
   try {
     const body = await req.json()
     const action = body?.action
+
+    // ── Teacher-only: what does this email belong to? Lets the invite dialog show "new student",
+    // "existing student" or - for a family - which child the lesson is for. Children are exposed by
+    // first name and hub only.
+    if (action === 'lookup') {
+      const auth = await requireAuth(req, { allowedRoles: ['teacher', 'admin'] })
+      if (!auth.ok) return json(auth.body, auth.status)
+
+      const lookupEmail = typeof body.studentEmail === 'string' ? body.studentEmail.trim().toLowerCase() : ''
+      if (!lookupEmail || !lookupEmail.includes('@')) return json({ kind: 'new' })
+
+      const { data: found } = await adminClient
+        .from('users').select('id, full_name').ilike('email', lookupEmail).maybeSingle()
+      if (!found) return json({ kind: 'new' })
+
+      if (await isParentAccount(adminClient, found.id)) {
+        const kids = await childrenOf(adminClient, found.id)
+        return json({
+          kind: 'parent',
+          children: kids.map((k) => ({ id: k.id, firstName: k.fullName.split(' ')[0], hub: k.hub })),
+        })
+      }
+      return json({ kind: 'student', firstName: (found.full_name || '').split(' ')[0] || null })
+    }
 
     // ── Teacher-only: create a booking for a student (found by email, or
     // created as a real new account) and email them a one-lesson join link.
@@ -179,7 +233,46 @@ Deno.serve(async (req) => {
         .ilike('email', normalizedEmail)
         .maybeSingle()
 
-      if (existingUser) {
+      // Whose sign-in the join link opens (a child's hidden account for a family invite) and the
+      // name to show for the lesson.
+      let loginEmail = normalizedEmail
+      let lessonStudentName: string | undefined = studentName || undefined
+
+      if (existingUser && await isParentAccount(adminClient, existingUser.id)) {
+        const kids = await childrenOf(adminClient, existingUser.id)
+        if (kids.length === 0) {
+          return json({ error: 'This parent has not added a child yet. Ask them to add their child from the family dashboard first.' }, 400)
+        }
+        const chosen = kids.find((k) => k.id === body.childId)
+        if (!chosen) {
+          return json({ error: 'Choose which child this lesson is for.', needsChild: true }, 400)
+        }
+        studentId = chosen.id
+        lessonStudentName = chosen.fullName
+
+        const { data: childAuth } = await adminClient.auth.admin.getUserById(chosen.id)
+        if (!childAuth?.user?.email) {
+          return json({ error: 'Could not open this child’s account. Please try again.' }, 500)
+        }
+        loginEmail = childAuth.user.email
+
+        // A child the parent just added has never had a lesson and defaults to the INTL market, which
+        // the booking trigger rejects for a teacher in another market. Same rule as a brand-new
+        // invited student: the teacher is explicitly inviting this family, so place the child in the
+        // teacher's own market - but only while the child has no lessons yet.
+        const { count: priorBookings } = await adminClient
+          .from('class_bookings').select('id', { count: 'exact', head: true }).eq('student_id', chosen.id)
+        if (!priorBookings) {
+          const { data: tp } = await adminClient
+            .from('teacher_profiles').select('market_region, market_access').eq('user_id', auth.userId).maybeSingle()
+          const teacherMarket = tp?.market_region ?? tp?.market_access?.[0] ?? null
+          if (teacherMarket) {
+            const { error: marketErr } = await adminClient
+              .from('users').update({ market_region: teacherMarket }).eq('id', chosen.id)
+            if (marketErr) console.error('[CLASSROOM-INVITE] could not set child market', marketErr)
+          }
+        }
+      } else if (existingUser) {
         studentId = existingUser.id
       } else {
         const { data: created, error: createErr } = await adminClient.auth.admin.createUser({
@@ -289,8 +382,8 @@ Deno.serve(async (req) => {
           is_booked: true,
           lesson_type: 'direct_booking',
           lesson_id: lessonId || null,
-          lesson_title: studentName
-            ? `${isTrial ? 'Trial lesson' : 'Lesson'} with ${studentName}`
+          lesson_title: lessonStudentName
+            ? `${isTrial ? 'Trial lesson' : 'Lesson'} with ${lessonStudentName}`
             : (isTrial ? 'Trial lesson' : null),
           hub_specialty: hubSpecialty,
         }
@@ -312,8 +405,8 @@ Deno.serve(async (req) => {
       const { error: inviteErr } = await adminClient.from('class_booking_invites').insert({
         booking_id: booking.id,
         token,
-        student_email: normalizedEmail,
-        student_name: studentName || null,
+        student_email: loginEmail,
+        student_name: lessonStudentName || null,
         created_by: auth.userId,
         expires_at: expiresAt,
       })
@@ -352,7 +445,7 @@ Deno.serve(async (req) => {
 
       const emailSent = await sendClassroomInviteEmail(adminClient, {
         recipientEmail: normalizedEmail,
-        studentName: studentName || normalizedEmail,
+        studentName: lessonStudentName || normalizedEmail,
         teacherName: teacherRow?.full_name || 'your teacher',
         lessonDateLabel,
         lessonTimeLabel,

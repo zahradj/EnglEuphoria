@@ -16,6 +16,11 @@ import { supabase } from '@/integrations/supabase/client';
 
 type HubChoice = 'playground' | 'academy' | 'success';
 
+type EmailLookup =
+  | { kind: 'new' }
+  | { kind: 'student'; firstName: string | null }
+  | { kind: 'parent'; children: { id: string; firstName: string; hub: string | null }[] };
+
 interface InviteStudentDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -50,6 +55,34 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
   const [busy, setBusy] = useState(false);
   const [joinLink, setJoinLink] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  // What this email belongs to (asked of the server once the address looks complete).
+  const [who, setWho] = useState<EmailLookup | null>(null);
+  const [childId, setChildId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const email = studentEmail.trim().toLowerCase();
+    setWho(null);
+    setChildId(null);
+    if (!open || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return;
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      try {
+        const { data } = await supabase.functions.invoke('classroom-invite', {
+          body: { action: 'lookup', studentEmail: email },
+        });
+        if (cancelled || !data?.kind) return;
+        setWho(data as EmailLookup);
+        // One child: no choice to make.
+        if (data.kind === 'parent' && data.children?.length === 1) setChildId(data.children[0].id);
+      } catch {
+        /* the hint is optional - booking still works and the server re-checks everything */
+      }
+    }, 450);
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [studentEmail, open]);
+
+  const needsChild = who?.kind === 'parent' && who.children.length > 0 && !childId;
+  const parentWithoutChildren = who?.kind === 'parent' && who.children.length === 0;
 
   // Duration follows the hub, matching the app-wide rule (Playground = 30
   // min, Academy/Success = 60 min) rather than a separately pickable value.
@@ -76,6 +109,8 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
     setSelectedHub(hub);
     setLessonType('regular');
     setPlaygroundHour(false);
+    setWho(null);
+    setChildId(null);
     setJoinLink(null);
     setCopied(false);
   };
@@ -89,6 +124,10 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
     e.preventDefault();
     if (!studentEmail || !date || !time) {
       toast({ title: 'Missing details', description: 'Student email, date, and time are required.', variant: 'destructive' });
+      return;
+    }
+    if (needsChild || parentWithoutChildren) {
+      toast({ title: 'Choose a child', description: 'This email is a parent account. Pick which child the lesson is for.', variant: 'destructive' });
       return;
     }
     const scheduledAt = new Date(`${date}T${time}`);
@@ -117,6 +156,7 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
           duration,
           hub: selectedHub,
           lessonType,
+          childId: childId ?? undefined,
         },
         headers: { Authorization: `Bearer ${accessToken}` },
       });
@@ -184,6 +224,43 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
                 onChange={(e) => setStudentEmail(e.target.value)}
                 required
               />
+              {who?.kind === 'new' && (
+                <p className="text-xs text-muted-foreground">
+                  New student — an account is created for them. Their progress starts from this first lesson.
+                </p>
+              )}
+              {who?.kind === 'student' && (
+                <p className="text-xs text-muted-foreground">
+                  Existing student{who.firstName ? ` (${who.firstName})` : ''} — the lesson appears on their dashboard next to their progress.
+                </p>
+              )}
+              {parentWithoutChildren && (
+                <p className="text-xs text-destructive">
+                  This is a parent account with no children added yet. Ask them to add their child from the family dashboard first.
+                </p>
+              )}
+              {who?.kind === 'parent' && who.children.length > 0 && (
+                <div className="space-y-2 rounded-lg border bg-muted/30 p-3" role="radiogroup" aria-label="Which child is the lesson for?">
+                  <p className="text-xs font-medium">Parent account — who is this lesson for?</p>
+                  <div className="flex flex-wrap gap-2">
+                    {who.children.map((c) => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        role="radio"
+                        aria-checked={childId === c.id}
+                        onClick={() => setChildId(c.id)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${childId === c.id ? 'bg-primary text-primary-foreground border-primary' : 'bg-background text-foreground border-border hover:bg-muted'}`}
+                      >
+                        {c.firstName}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">
+                    The invite email goes to the parent; the link opens the child's own classroom.
+                  </p>
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="student-name">Student name (optional)</Label>
@@ -265,7 +342,7 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
               )}
             </div>
             <DialogFooter>
-              <Button type="submit" disabled={busy} className="w-full">
+              <Button type="submit" disabled={busy || needsChild || parentWithoutChildren} className="w-full">
                 {busy ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Mail className="h-4 w-4 mr-2" />}
                 {lessonType === 'trial' ? 'Book Trial & Send Invite' : 'Book & Send Invite'}
               </Button>
