@@ -28,7 +28,7 @@ export const QUEST_CSS = `
 .hq-btn.ghost { background:rgba(255,255,255,.14)!important; color:inherit!important; box-shadow:none; border:1px solid rgba(127,127,127,.35)!important; padding:9px 16px; font-size:14px; }
 .hq-btn.violet { background:var(--hq-accent2)!important; box-shadow:0 6px 0 rgba(0,0,0,.35); }
 .hq-btn[disabled] { opacity:.45; cursor:not-allowed; }
-.hq-stage { position:relative; width:100%; max-width:100%; border-radius:22px; overflow:hidden; border:3px solid var(--hq-accent); box-shadow:0 24px 60px rgba(0,0,0,.35); background:#0d0624; }
+.hq-stage { container-type:inline-size; position:relative; width:100%; max-width:100%; border-radius:22px; overflow:hidden; border:3px solid var(--hq-accent); box-shadow:0 24px 60px rgba(0,0,0,.35); background:#0d0624; }
 .hq-art { position:absolute; inset:0; background-size:cover; background-position:center; animation:hq-drift 18s ease-in-out infinite alternate; }
 .hq-art.still { animation:none; }
 .hq-night { position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse at 50% 40%, rgba(124,58,237,.16), rgba(20,8,50,.6) 80%); }
@@ -61,6 +61,15 @@ export const QUEST_CSS = `
 .hq-hot:hover { background:rgba(255,255,255,.12)!important; }
 .hq-hot.wrong { background:rgba(251,113,133,.35)!important; animation:hq-shake .45s; }
 .hq-hot.right { background:rgba(52,211,153,.3)!important; box-shadow:inset 0 0 0 4px var(--mint); }
+/* The answer blocks live INSIDE the scene frame, along its bottom edge, sized from the frame's own width. */
+.hq-dock { position:absolute; left:0; right:0; bottom:0; z-index:7; display:flex; gap:2.2cqw; justify-content:center; align-items:flex-end; flex-wrap:nowrap; padding:7cqw 3cqw 2.4cqw; background:linear-gradient(180deg,rgba(13,6,36,0),rgba(13,6,36,.6) 55%); }
+.hq-dock .hq-card { flex:0 1 auto; width:clamp(64px,19cqw,170px); padding:1.4cqw; border-radius:2.6cqw; box-shadow:0 .9cqw 0 #b98a2e; }
+.hq-dock .hq-card .em { font-size:clamp(30px,8cqw,72px); }
+.hq-dock .hq-orb { width:clamp(56px,12cqw,110px); height:clamp(56px,12cqw,110px); font-size:clamp(22px,4.6cqw,40px); }
+.hq-dock .hq-big { min-width:clamp(96px,20cqw,190px); padding:clamp(8px,1.6cqw,16px) clamp(12px,2.4cqw,22px); font-size:clamp(16px,3.4cqw,26px); border-radius:3cqw; }
+.hq-stage:has(.hq-dock) .hq-caption:not(.hq-corner) { bottom:auto; top:12px; }
+/* On a phone the wide picture is only a thin strip: give the frame more height so the blocks never cover the scene. */
+@media (max-width:560px) { .hq-stage:has(.hq-dock) { aspect-ratio:4/3 !important; } }
 .hq-answers { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
 .hq-big { min-width:150px; padding:16px 22px; border-radius:20px; font-family:"Grandstander",system-ui,sans-serif; font-weight:900; font-size:26px; color:#fff!important; box-shadow:0 8px 0 rgba(0,0,0,.3); }
 .hq-big.t { background:linear-gradient(180deg,#6ee7b7,#059669)!important; } .hq-big.f { background:linear-gradient(180deg,#fda4af,#e11d48)!important; }
