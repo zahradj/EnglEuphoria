@@ -1,4 +1,4 @@
-willow-pour2: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started willow-pour2: c1fd4953-d6ed-4892-8976-cb9f26d98dbf
-saved public/lep1/video/clips/u2l2-mix/willow-pour2.mp4 (4589039 bytes)
+leo-pour1: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started leo-pour1: badd9a28-756e-457f-acc2-1c2fa479052d
+saved public/lep1/video/clips/u2l2-mix/leo-pour1.mp4 (4007776 bytes)
 1/1 clips ready for u2l2-mix
