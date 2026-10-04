@@ -168,6 +168,8 @@ Run `checkSlotGames(slot, scenes)` before calling a lesson done.
 | Drag each coloured picture onto its dark shadow | Khan Academy Kids shadow puzzles / preschool shadow cards | `shadow-match` | shape recognition from outline |
 | Cross the river: tap the stone the voice names, the character hops | classroom stepping-stones floor game, app river levels | `stepping-stones` | listening + forward progress |
 
+**Every game must pass the `game-animation` skill's juice audit** (living world, springs, squash & stretch, bursts, gentle wrong, celebration) — a correct but flat game fails.
+
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
 
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)

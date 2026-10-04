@@ -158,7 +158,7 @@ cards (puffy highlight, bottom lip, soft deep shadow — `CLAY_CARD` /
 `CLAY_BUTTON` in `unit1/scene-components/shared.tsx`), cards on the open side
 of the picture (never over the character), ≥ 80 px tap targets, wide 16:9 art.
 
-**Game feel — an animated video game, not flat cards (owner, 2026-10-03):**
+**Game feel — an animated video game, not flat cards (owner, 2026-10-03):** full method, numbers and the 10-point juice audit in `.claude/skills/game-animation`.
 - **Living world:** each game scene gets a seamless looping clip of its own
   picture (`bgVideo`; Higgsfield image-to-video → `scripts/make-game-loops.py`
   ping-pongs it, ~1 MB): water flows, flowers sway, the character blinks. The
