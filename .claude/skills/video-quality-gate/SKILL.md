@@ -70,6 +70,11 @@ control the motion with **pictures at both ends**, keep prompts to motion only, 
    part: the paw must visibly TOUCH it (contact, not hovering near it), seen from the front, never hidden behind another
    character or cropped by the frame. Each character keeps exactly two arms/two legs, the same props (scarf, bow, whistle)
    and the same floor spot in every key picture. A key picture that fails any of this is remade before approval.
+   **One character per clip, framed for copying (owner, 2026-10-04: "one character at a time … zoomed in so we can see the
+   character full body, and the student will follow").** A demonstration clip shows ONE character, centred, front view, whole
+   body from head to feet filling ~3/4 of the frame height with a little floor below — close enough to see every paw and
+   joint, never cropped. Group shots only as still pictures. Pick a character whose anatomy matches the words (a lion or fox
+   for shoulders/knees/toes, not a bird with wings). Fewer characters = fewer paws and faces for the model to get wrong.
 2. **Overlay check (free).** Blend each pair 50/50 (start/end). Anything doubled except the moving paws/bodies = the model will
    slide or morph it → remake the picture before any credit is spent. A character missing from one picture = remake.
 3. **Start + END frame clip.** `image` = pose before the line, `endImage` = pose the line names (Kling 2.5 Turbo Pro
