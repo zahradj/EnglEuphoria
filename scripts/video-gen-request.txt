@@ -1,2 +1,2 @@
 # strict mode: ONE clip per run (owner: "Good. Generate all of them", 2026-10-04)
-u2l2-mix --beats=mia-pour2
+u2l2-mix --beats=mia-stir
