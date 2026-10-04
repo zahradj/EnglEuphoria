@@ -6214,6 +6214,10 @@ const bgU4L1Class = `${A}/scenes/bg-u4l1-dance-class-wide.png`;
 const bgU4L1Leo = `${A}/scenes/bg-u4l1-leo-body-wide.png`;
 const bgU4L1PipToes = `${A}/scenes/bg-u4l1-pip-toes-wide.png`;
 const bgU4L1Knees = `${A}/scenes/bg-u4l1-dance-knees-wide.png`;
+const bgU4L1ActHead = `${A}/scenes/bg-u4l1-act-head-wide.png`;
+const bgU4L1ActShoulders = `${A}/scenes/bg-u4l1-act-shoulders-wide.png`;
+const bgU4L1ActKnees = `${A}/scenes/bg-u4l1-act-knees-wide.png`;
+const bgU4L1ActToes = `${A}/scenes/bg-u4l1-act-toes-wide.png`;
 const bgU4L1Studio = `${A}/scenes/bg-u4l1-studio-empty-wide.png`;
 const cardHead = `${A}/items/item-card-head.png`;
 const cardShoulders = `${A}/items/item-card-shoulders.png`;
@@ -6257,15 +6261,19 @@ export const LESSON_U4L1_SCENES: Scene[] = [
     cta: "Let's dance!",
   },
   {
-    id: 'u4l1-story-dance', kind: 'story-video', bg: bgU4L1Class, videoUrl: `${A}/video/dance-story-u4l1-a.mp4?v=1`, title: 'Dance Class',
+    // Page 4: one picture per sung line, in song order (owner review 2026-10-04: each picture shows exactly the
+    // action the line names). Stills cross-fade (no zoom); real clips only via strict mode (scripts/story-videos.json).
+    id: 'u4l1-story-dance', kind: 'story-video', bg: bgU4L1ActHead, videoUrl: `${A}/video/dance-story-u4l1-a.mp4?v=2`, title: 'Dance Class',
     teacher: 'Press play and watch. Touch each body part with the friends!',
     pages: [
-      { img: bgU4L1Class, who: 'willow', line: 'Ready, friends? Touch your head! Touch your shoulders!', atSec: 0 },
-      { img: bgU4L1PipToes, who: 'pip', line: 'Touch my toes? Whoa... oops! Ha ha!', atSec: 5 },
-      { img: bgU4L1Knees, who: 'willow', line: 'Touch your knees! Head, shoulders, knees and toes! Great dancing!', atSec: 10 },
+      { img: bgU4L1ActHead, who: 'willow', line: 'Ready, friends? Touch your head!', atSec: 0 },
+      { img: bgU4L1ActShoulders, who: 'willow', line: 'Touch your shoulders!', atSec: 4 },
+      { img: bgU4L1ActKnees, who: 'willow', line: 'Touch your knees!', atSec: 7 },
+      { img: bgU4L1ActToes, who: 'pip', line: 'Touch my toes? Whoa... oops! Ha ha!', atSec: 10 },
+      { img: bgU4L1Class, who: 'willow', line: 'Head, shoulders, knees and toes! Great dancing!', atSec: 15 },
     ],
     checkpoints: [
-      { afterPage: 1, who: 'willow', question: 'Who wobbles?', answer: 'Pip', options: [{ label: 'Pip', img: CAST.pip.img }, { label: 'Mia', img: CAST.mia.img }, { label: 'Bella', img: CAST.bella.img }] },
+      { afterPage: 3, who: 'willow', question: 'Who wobbles?', answer: 'Pip', options: [{ label: 'Pip', img: CAST.pip.img }, { label: 'Mia', img: CAST.mia.img }, { label: 'Bella', img: CAST.bella.img }] },
     ],
   },
 

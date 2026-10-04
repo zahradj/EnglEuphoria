@@ -254,7 +254,9 @@
         "leader": "Willow",
         "action": "Willow touches her own shoulders with her wings; the four friends slowly put each paw on its own shoulder and keep them there",
         "prompt": "Willow the blue bird touches her own shoulders with the tips of her wings. Pip, Mia, Leo and Bella slowly put each paw on its own shoulder, and they keep their paws resting on their shoulders until the end. They stay in their places. The camera stays steady.",
-        "ownerApproved": false
+        "ownerApproved": false,
+        "rejected": true,
+        "review": "2026-10-04 superseded before ordering (never generated): its start picture showed a different pose. Replaced by the 06-09 rows, whose Canva start pictures already show the exact action."
       },
       {
         "id": "04-toes",
@@ -267,7 +269,9 @@
         "leader": "Pip",
         "action": "Pip, already bent over, reaches down and touches his toes with both paws, wobbles gently and stays standing; Mia and Bella stay still",
         "prompt": "Pip the orange fox is bent over. He slowly reaches down and touches his toes with both paws, wobbles gently side to side and stays standing. Mia and Bella stay in their places. Willow stays still. The camera stays steady.",
-        "ownerApproved": false
+        "ownerApproved": false,
+        "rejected": true,
+        "review": "2026-10-04 superseded before ordering (never generated): its start picture showed a different pose. Replaced by the 06-09 rows, whose Canva start pictures already show the exact action."
       },
       {
         "id": "05-knees",
@@ -280,6 +284,60 @@
         "leader": "Willow",
         "action": "the four friends keep both paws on their knees and gently bend their knees down and up; Willow nods",
         "prompt": "Pip, Mia, Leo and Bella keep both paws resting on their knees and slowly bend their knees down and up. Willow the blue bird nods gently and stays in her place. The camera stays steady.",
+        "ownerApproved": false,
+        "rejected": true,
+        "review": "2026-10-04 superseded before ordering (never generated): its start picture showed a different pose. Replaced by the 06-09 rows, whose Canva start pictures already show the exact action."
+      },
+      {
+        "id": "06-head",
+        "image": "public/lep1/scenes/bg-u4l1-act-head-wide.png",
+        "seconds": 5,
+        "line": "Ready, friends? Touch your head!",
+        "bodyWords": [
+          "head"
+        ],
+        "leader": "Willow",
+        "action": "Willow and the four friends keep both paws resting on top of their head; only a soft breath and a slow blink",
+        "prompt": "Willow the blue bird, Pip, Mia, Leo and Bella keep both paws resting on top of their head. They keep the same pose the whole time: only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
+        "ownerApproved": false
+      },
+      {
+        "id": "07-shoulders",
+        "image": "public/lep1/scenes/bg-u4l1-act-shoulders-wide.png",
+        "seconds": 5,
+        "line": "Touch your shoulders!",
+        "bodyWords": [
+          "shoulders"
+        ],
+        "leader": "Willow",
+        "action": "Willow and the four friends keep their arms crossed with each paw resting on the opposite shoulders; only a soft breath and a slow blink",
+        "prompt": "Willow the blue bird, Pip, Mia, Leo and Bella keep their arms crossed, each paw resting on the opposite shoulders,. They keep the same pose the whole time: only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
+        "ownerApproved": false
+      },
+      {
+        "id": "08-knees",
+        "image": "public/lep1/scenes/bg-u4l1-act-knees-wide.png",
+        "seconds": 5,
+        "line": "Touch your knees!",
+        "bodyWords": [
+          "knees"
+        ],
+        "leader": "Willow",
+        "action": "Willow and the four friends stay bent forward with their paws resting on their knees; only a soft breath and a slow blink",
+        "prompt": "Willow the blue bird, Pip, Mia, Leo and Bella stay bent forward with their paws resting on their knees. They keep the same pose the whole time: only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
+        "ownerApproved": false
+      },
+      {
+        "id": "09-toes",
+        "image": "public/lep1/scenes/bg-u4l1-act-toes-wide.png",
+        "seconds": 5,
+        "line": "Touch my toes? Whoa... oops! Ha ha!",
+        "bodyWords": [
+          "toes"
+        ],
+        "leader": "Pip",
+        "action": "Pip stays bent over touching his toes and wobbles gently once, then laughs silently; the others stay still",
+        "prompt": "Pip the orange fox stays bent over with his paws touching his toes and wobbles gently once without falling. Willow, Mia and Bella keep the same pose, with only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
         "ownerApproved": false
       }
     ]
