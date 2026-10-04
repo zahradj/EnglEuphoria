@@ -6201,6 +6201,272 @@ export const LESSON_U3L6_SCENES: Scene[] = [
   { id: 'u3l6-finale', kind: 'finale', bg: bgU3L6Prizes, who: 'pip', line: 'What a Toy Fair! Balls, cars, dolls, teddies, kites and robots — you know them all! Unit 3 is done. Goodbye, friend!' },
 ];
 
+/* ===================== Pre-A1 Unit 4 · Lesson 1 — Head, Shoulders, Knees, Toes! =====================
+ * My Body & Face (1/6). head, shoulders, knees, toes ("Touch your knees!",
+ * "It's my head!") and E says /e/ (egg, elephant). Setting: Coach Willow's
+ * dance class in a bright studio. Lesson-Variety Engine: researched Lingokids
+ * body-parts activities and body-parts apps (tap / place the part), the
+ * classroom Simon Says and Head-Shoulders-Knees-Toes games (games4esl,
+ * tefl.net), and the Cambridge Starters body & face topic; two new games —
+ * Simon Says Touch (wait when Simon didn't say!) and Stack the Friend (rebuild
+ * Leo from head to toes). Pictures made with Canva. */
+const bgU4L1Class = `${A}/scenes/bg-u4l1-dance-class-wide.png`;
+const bgU4L1Leo = `${A}/scenes/bg-u4l1-leo-body-wide.png`;
+const bgU4L1PipToes = `${A}/scenes/bg-u4l1-pip-toes-wide.png`;
+const bgU4L1Knees = `${A}/scenes/bg-u4l1-dance-knees-wide.png`;
+const bgU4L1Studio = `${A}/scenes/bg-u4l1-studio-empty-wide.png`;
+const cardHead = `${A}/items/item-card-head.png`;
+const cardShoulders = `${A}/items/item-card-shoulders.png`;
+const cardKnees = `${A}/items/item-card-knees.png`;
+const cardToes = `${A}/items/item-card-toes.png`;
+const itemEgg = `${A}/items/item-egg.png`;
+const itemElephant = `${A}/items/item-elephant.png`;
+/* Leo's body parts painted in bg-u4l1-leo-body-wide (checked on a % grid). */
+const U4L1_PARTS = [
+  { label: 'head', x: 48, y: 25, r: 15 },
+  { label: 'shoulders', x: 48, y: 51, r: 9 },
+  { label: 'knees', x: 48, y: 80, r: 8 },
+  { label: 'toes', x: 48, y: 92, r: 7 },
+];
+
+export const LESSON_U4L1_TITLE = 'Head, Shoulders, Knees, Toes!';
+export const LESSON_U4L1_OBJECTIVE = 'Name and touch head, shoulders, knees and toes, follow "Touch your …!" (and only when Simon says), say "It\'s my head!", sing "Head, shoulders, knees and toes", and hear E say /e/ (egg, elephant) — by moving, listening, building and speaking, no reading.';
+
+export const LESSON_U4L1_SCENES: Scene[] = [
+  { id: 'u4l1-title', kind: 'title-card', bg: bgU4L1Class, level: 'Pre-A1', unit: 'Unit 4', lessonLabel: 'Lesson 1', title: 'Head, Shoulders, Knees, Toes!', subtitle: 'Dance class' },
+
+  /* 1-3 Hook + story */
+  {
+    id: 'u4l1-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
+    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
+    lineDurationsMs: [5200, 4300, 4500, 6100],
+    songPrompt: 'Cheerful upbeat kids hello song',
+    lyrics: [
+      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
+      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u4l1-intro', kind: 'cinematic', bg: bgU4L1Class, hidePipOverlay: true, title: 'Dance Class', subtitle: 'Head, shoulders, knees and toes!', narrator: 'willow',
+    script: [
+      { who: 'willow', line: 'Welcome to dance class! Today we move our bodies!' },
+      { who: 'pip', line: 'Yay! Let\'s dance!' },
+    ],
+    cta: "Let's dance!",
+  },
+  {
+    id: 'u4l1-story-dance', kind: 'story-video', bg: bgU4L1Class, videoUrl: `${A}/video/dance-story-u4l1-a.mp4?v=1`, title: 'Dance Class',
+    teacher: 'Press play and watch. Touch each body part with the friends!',
+    pages: [
+      { img: bgU4L1Class, who: 'willow', line: 'Ready, friends? Touch your head! Touch your shoulders!', atSec: 0 },
+      { img: bgU4L1PipToes, who: 'pip', line: 'Touch my toes? Whoa... oops! Ha ha!', atSec: 5 },
+      { img: bgU4L1Knees, who: 'willow', line: 'Touch your knees! Head, shoulders, knees and toes! Great dancing!', atSec: 10 },
+    ],
+    checkpoints: [
+      { afterPage: 1, who: 'willow', question: 'Who wobbles?', answer: 'Pip', options: [{ label: 'Pip', img: CAST.pip.img }, { label: 'Mia', img: CAST.mia.img }, { label: 'Bella', img: CAST.bella.img }] },
+    ],
+  },
+
+  /* 4-6 New words, move, first game */
+  {
+    id: 'u4l1-words', kind: 'listen-repeat-cards', bg: bgU4L1Studio, teacher: 'Touch it, then say it! Point to your own body every time.',
+    cards: [
+      { who: 'leo', sentence: 'Head! Touch your head.', img: cardHead, imgLabel: 'Head' },
+      { who: 'leo', sentence: 'Shoulders! Touch your shoulders.', img: cardShoulders, imgLabel: 'Shoulders' },
+      { who: 'leo', sentence: 'Knees! Touch your knees.', img: cardKnees, imgLabel: 'Knees' },
+      { who: 'leo', sentence: 'Toes! Touch your toes.', img: cardToes, imgLabel: 'Toes' },
+    ],
+  },
+  {
+    id: 'u4l1-move-say', kind: 'tpr-actions', bg: bgU4L1Studio, who: 'willow',
+    teacher: 'Stand up! Say it with Willow, then do it before the ring runs out.',
+    rounds: [
+      { line: 'Touch your head!', emoji: '\u{1F64B}', img: cardHead },
+      { line: 'Touch your shoulders!', emoji: '\u{1F937}', img: cardShoulders },
+      { line: 'Touch your knees!', emoji: '\u{1F9CE}', img: cardKnees },
+      { line: 'Touch your toes!', emoji: '\u{1F9B6}', img: cardToes },
+      { line: 'Now faster! Head, shoulders, knees and toes!', emoji: '\u{26A1}' },
+    ],
+  },
+  {
+    // Signature game (new): Simon Says on Leo — only when Simon says!
+    id: 'u4l1-simon', kind: 'simon-touch', bg: bgU4L1Leo, who: 'willow',
+    teacher: 'Simon Says! Tap Leo\'s body part — but ONLY if Willow says "Simon says". If she doesn\'t, wait!',
+    parts: U4L1_PARTS,
+    rounds: [
+      { line: 'Simon says: touch his head!', simon: true, part: 0 },
+      { line: 'Simon says: touch his knees!', simon: true, part: 2 },
+      { line: 'Touch his toes!', simon: false, part: 3 },
+      { line: 'Simon says: touch his shoulders!', simon: true, part: 1 },
+      { line: 'Simon says: touch his toes!', simon: true, part: 3 },
+    ],
+  },
+
+  /* 7-11 Recall + speaking */
+  {
+    id: 'u4l1-recall', kind: 'rapid-recall', bg: bgU4L1Studio, who: 'leo', seconds: 30,
+    teacher: 'Quick! A picture flashes — say the body part before it goes!',
+    cards: [
+      { img: cardHead, word: 'head' },
+      { img: cardKnees, word: 'knees' },
+      { img: cardShoulders, word: 'shoulders' },
+      { img: cardToes, word: 'toes' },
+    ],
+  },
+  {
+    // Badges on Leo's body parts painted in bg-u4l1-leo-body-wide.
+    id: 'u4l1-spin', kind: 'spin-wheel', bg: bgU4L1Leo, title: '',
+    teacher: 'Have the student spin, then touch that part on their own body and say it: "Head!" Or tap a number.',
+    items: [
+      { label: 'Head!', left: '62%', top: '20%' },
+      { label: 'Shoulders!', left: '62%', top: '50%' },
+      { label: 'Knees!', left: '60%', top: '79%' },
+      { label: 'Toes!', left: '36%', top: '92%' },
+    ],
+    wheelAt: { left: '84%', top: '30%' },
+  },
+  {
+    id: 'u4l1-coach-asks', kind: 'join-stage', bg: bgU4L1Class, teacher: 'Coach Willow asks the student. The student touches and answers.', cast: ['willow'],
+    turns: [
+      { who: 'willow', line: 'Touch your knees! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my knees! (touch them)", bubble: 'right' },
+      { who: 'willow', line: 'Touch your head! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my head!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l1-you-coach', kind: 'join-stage', bg: bgU4L1Knees, teacher: 'Swap! The student is the coach and tells Mia what to touch.', cast: ['mia'],
+    turns: [
+      { who: 'student', line: 'Say to Mia: Touch your shoulders!', bubble: 'right' },
+      { who: 'mia', line: 'My shoulders! Like this!', bubble: 'right' },
+      { who: 'student', line: 'Say to Mia: Touch your toes!', bubble: 'right' },
+      { who: 'mia', line: 'My toes! Like this!', bubble: 'right' },
+    ],
+  },
+
+  /* 12 Game: rebuild Leo */
+  {
+    // Second new game: Leo comes back together from head to toes.
+    id: 'u4l1-stack', kind: 'body-stack', bg: bgU4L1Studio, who: 'leo', img: bgU4L1Leo,
+    teacher: 'Oh no, Leo is in pieces! Listen and tap the right piece to build him again.',
+    source: { x: 34, y: 3, w: 32, h: 93 },
+    slices: [
+      { label: 'head', y0: 0, y1: 0.48 },
+      { label: 'shoulders', y0: 0.48, y1: 0.72 },
+      { label: 'knees', y0: 0.72, y1: 0.89 },
+      { label: 'toes', y0: 0.89, y1: 1 },
+    ],
+    rounds: [
+      { slice: 0, line: 'Where is my head?', reply: 'Yes! My head!' },
+      { slice: 1, line: 'Where are my shoulders?', reply: 'Yes! My shoulders!' },
+      { slice: 2, line: 'Where are my knees?', reply: 'Yes! My knees!' },
+      { slice: 3, line: 'Where are my toes?', reply: 'Yes! My toes!' },
+    ],
+    doneLine: 'Head, shoulders, knees and toes! Thank you!',
+  },
+
+  /* 13-15 Phonics: E says /e/ */
+  {
+    id: 'u4l1-model-e', kind: 'sound-model', bg: bgU4L1Studio, who: 'willow', letter: 'E', phoneme: '/e/', sound: 'eh',
+    teacher: 'E says /e/ — egg, elephant!',
+    anchors: [
+      { word: 'egg', emoji: '\u{1F95A}', img: itemEgg },
+      { word: 'elephant', emoji: '\u{1F418}', img: itemElephant },
+    ],
+  },
+  { id: 'u4l1-trace-e', kind: 'trace', bg: bgU4L1Studio, who: 'willow', letter: 'E', phoneme: '/e/', word: 'egg', speakWord: false, teacher: 'Trace the big E with your finger! /e/ /e/ egg!' },
+  {
+    id: 'u4l1-pop-e', kind: 'sound-pop', bg: bgU4L1Studio, teacher: 'Balloon Letter Pop! Willow calls a letter — pop only that one!', who: 'willow', goal: 8, seconds: 45,
+    targets: [
+      { letter: 'E', phoneme: '/e/' },
+      { letter: 'O', phoneme: '/o/' },
+    ],
+    items: [
+      { word: 'E', letter: 'E', emoji: 'E' },
+      { word: 'O', letter: 'O', emoji: 'O' },
+      { word: 'A', letter: 'A', emoji: 'A' },
+    ],
+  },
+
+  /* 16-18 Retell + perform */
+  {
+    id: 'u4l1-story-order', kind: 'story-order', bg: bgU4L1Studio, who: 'willow', teacher: 'Put the dance class in order, then tell it!',
+    frames: [
+      { img: bgU4L1Class, caption: 'The friends come to dance class.', who: 'willow' },
+      { img: bgU4L1PipToes, caption: 'Pip touches his toes — oops!', who: 'pip' },
+      { img: bgU4L1Knees, caption: 'Everyone touches their knees.', who: 'mia' },
+    ],
+  },
+  {
+    id: 'u4l1-perform', kind: 'join-stage', bg: bgU4L1Class, teacher: 'Show time! The student sings and touches: head, shoulders, knees and toes — slow, then fast!', cast: ['willow', 'pip'],
+    turns: [
+      { who: 'willow', line: 'Your turn! Head, shoulders, knees and toes!', bubble: 'right' },
+      { who: 'student', line: 'Head, shoulders, knees and toes! (touch them)', bubble: 'right' },
+      { who: 'pip', line: 'Now faster! Knees and toes!', bubble: 'right' },
+      { who: 'student', line: 'Head, shoulders, knees and toes, knees and toes!', bubble: 'right' },
+    ],
+  },
+
+  /* 19-20 Sticker + Home Mission */
+  {
+    id: 'u4l1-sticker', kind: 'sticker-reward', bg: bgU4L1Knees, who: 'willow', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Great dancing! Here is a Leo sticker for you!', sticker: { img: cardHead, label: 'Leo' },
+  },
+  {
+    id: 'u4l1-home-mission', kind: 'home-mission', bg: bgU4L1Studio, who: 'willow',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: play Simon Says at home! Say: Touch your head! Touch your knees!',
+    parentNote: 'Play Simon Says with your child: "Simon says, touch your head / shoulders / knees / toes." Sometimes leave out "Simon says" — they should not move! Then let your child be Simon and give you the orders.',
+    steps: [
+      { emoji: '\u{1F64B}', img: cardHead, say: 'Touch your head' },
+      { emoji: '\u{1F9CE}', img: cardKnees, say: 'Touch your knees' },
+      { emoji: '\u{1F92B}', say: 'Simon says!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u4l1-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU4L1Class, who: 'willow',
+    teacher: 'Extra time: Brain Break! Dance with Coach Willow — slow, then super fast!',
+    rounds: [
+      { line: 'Slowly: head, shoulders, knees and toes!', emoji: '\u{1F422}' },
+      { line: 'Fast: head, shoulders, knees and toes!', emoji: '\u{1F407}' },
+      { line: 'Wiggle your toes!', emoji: '\u{1F9B6}' },
+      { line: 'Shake your shoulders!', emoji: '\u{1F57A}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u4l1-simon-2', kind: 'simon-touch', bg: bgU4L1Leo, who: 'pip',
+    teacher: 'Extra time: Pip is Simon now! Listen carefully — tap only when Pip says "Simon says".',
+    parts: U4L1_PARTS,
+    rounds: [
+      { line: 'Simon says: touch his toes!', simon: true, part: 3 },
+      { line: 'Touch his head!', simon: false, part: 0 },
+      { line: 'Simon says: touch his shoulders!', simon: true, part: 1 },
+      { line: 'Touch his knees!', simon: false, part: 2 },
+      { line: 'Simon says: touch his head!', simon: true, part: 0 },
+    ],
+  },
+
+  /* 21-22 Goodbye */
+  {
+    id: 'u4l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u4l1-finale', kind: 'finale', bg: bgU4L1Knees, who: 'willow', line: 'Great dancing! Head, shoulders, knees and toes — you know them all! Goodbye, friend!' },
+];
+
 /* =============================================================================
  * Pre-A1 Unit 5, Lesson 1 — "Mom, Dad, Me!"
  *

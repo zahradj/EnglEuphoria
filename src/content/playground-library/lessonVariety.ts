@@ -54,6 +54,7 @@ export const GRANDFATHERED: readonly string[] = ['5-1'];
 export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '3-3': { settings: ['workshop', 'park'], look: 'sunny outdoor park, kites in a blue sky' },
   '3-4': { settings: ['classroom', 'garden pool'], look: 'Show and Tell circle on the rainbow rug; summer garden with a paddling pool' },
+  '4-1': { settings: ['dance studio'], look: 'bright dance studio in morning sun: mirror, barre and colourful mats; a dance class with Coach Willow' },
   '3-6': { settings: ['toy fair'], look: 'outdoor fair: sunny day with striped tents, then a golden evening with string lights' },
   '3-5': { settings: ['bedroom'], look: 'cozy bedroom in warm afternoon light; tidy-up mission with a surprise kitten' },
 };
@@ -88,6 +89,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'our claw never slips: luck never decides, only choosing the toy the words describe wins (claw apps are random)',
       'the colour decides: two balls and two cars, so "the blue ball" must be heard, not just "ball"',
       'rings stay on the pegs and prizes pile up on a shelf (permanence); wrong throws bounce back gently',
+    ],
+  },
+  '4-1': {
+    sources: ['Lingokids', 'Body-parts kids apps (tap / place the part)', 'games4esl / tefl.net classroom games', 'Cambridge (Pre A1 Starters / ELT)'],
+    mechanics: [
+      'classroom Simon Says → Simon Says Touch on Leo\'s painted body',
+      'apps\' "assemble the body" (place each part) → Stack the Friend: rebuild Leo from head to toes',
+      'the Head, Shoulders, Knees and Toes action song, slow then fast (teachingexpertise / eslkidstuff)',
+    ],
+    betterThan: [
+      'the whole sentence decides, not just the noun: without "Simon says" the right move is to wait (apps only check the tap)',
+      'the friend comes alive when rebuilt — he bounces and thanks you, a story reason to listen',
+      'every part is touched on the child\'s own body too (TPR) before it is tapped on screen',
     ],
   },
 };
