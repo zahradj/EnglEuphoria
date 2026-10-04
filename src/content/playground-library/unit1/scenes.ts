@@ -2955,6 +2955,8 @@ const bgU2L2GreyPainting = `${A}/scenes/bg-u2l2-grey-painting-wide.png`;
 const bgU2L2PaintingDone = `${A}/scenes/bg-u2l2-painting-done-wide.png`;
 const bgU2L2Monsters = `${A}/scenes/bg-u2l2-monsters-wide.png`;
 const bgU2L2Market = `${A}/scenes/bg-u2l2-market-wide.png`;
+// The Magic Mix film (docs/scenarios/u2l2-magic-mix.md): one friend, front view, pour -> pour -> stir -> mixed.
+const mixPic = (who: string, step: string) => `${A}/scenes/bg-u2l2-mix-${who}-${step}-wide.png`;
 const itemGoat = `${A}/items/item-goat.png`;
 const itemGift = `${A}/items/item-gift.png`;
 const itemGuitar = `${A}/items/item-guitar.png`;
@@ -3037,17 +3039,28 @@ export const LESSON_U2L2_SCENES: Scene[] = [
   },
   {
     // Film 2: each colour is labelled on the picture (kids-demo-video labels).
-    id: 'u2l2-story-mix', kind: 'story-video', bg: bgU2L2PaintingDone, videoUrl: `${A}/video/paint-story-u2l2-b.mp4?v=1`, title: 'The Magic Mix',
-    teacher: 'The story ends! Watch, say each color with the friends, answer the questions.',
+    id: 'u2l2-story-mix', kind: 'story-video', bg: mixPic('willow', 'b'), videoUrl: `${A}/video/mix-story-u2l2.mp4?v=1`, title: 'The Magic Mix',
+    teacher: 'Watch the friends mix paints. When the film stops, ask "What color is it?" and let the child tap and say the new color.',
     pages: [
-      { img: bgU2L2Green, who: 'willow', line: 'Blue and yellow make green. The frog is green!', atSec: 0 },
-      { img: bgU2L2Orange, who: 'leo', line: 'Red and yellow make orange. The carrot is orange!', atSec: 6 },
-      { img: bgU2L2Purple, who: 'mia', line: 'Red and blue make purple. The grapes are purple!', atSec: 12 },
-      { img: bgU2L2PaintingDone, who: 'pip', line: 'Green, orange and purple! Thank you, friends! My painting is beautiful!', atSec: 18 },
+      { img: mixPic('willow', 'a'), who: 'willow', line: 'Blue!', atSec: 0 },
+      { img: mixPic('willow', 'pour2'), who: 'willow', line: 'And yellow!', atSec: 4 },
+      { img: mixPic('willow', 'spoon'), who: 'willow', line: 'Stir, stir, stir!', atSec: 8 },
+      { img: mixPic('willow', 'b'), who: 'willow', line: "It's green! Blue and yellow make green!", atSec: 14 },
+      { img: mixPic('leo', 'a'), who: 'leo', line: 'Red!', atSec: 19 },
+      { img: mixPic('leo', 'pour2'), who: 'leo', line: 'And yellow!', atSec: 23 },
+      { img: mixPic('leo', 'spoon'), who: 'leo', line: 'Stir, stir, stir!', atSec: 27 },
+      { img: mixPic('leo', 'b'), who: 'leo', line: "It's orange! Red and yellow make orange!", atSec: 33 },
+      { img: mixPic('mia', 'a2'), who: 'mia', line: 'Red!', atSec: 38 },
+      { img: mixPic('mia', 'pour2'), who: 'mia', line: 'And blue!', atSec: 42 },
+      { img: mixPic('mia', 'spoon'), who: 'mia', line: 'Stir, stir, stir!', atSec: 46 },
+      { img: mixPic('mia', 'b2'), who: 'mia', line: "It's purple! Red and blue make purple!", atSec: 52 },
+      { img: bgU2L2Studio, who: 'pip', line: 'Now YOU mix the paints!', atSec: 57 },
     ],
+    // The Blue's Clues pause: the film stops on the mixed bowl and the friend asks; the answer line plays after the tap.
     checkpoints: [
-      { afterPage: 0, who: 'willow', question: 'What color is the frog?', answer: 'Green', options: SWATCHES },
-      { afterPage: 2, who: 'mia', question: 'What color are the grapes?', answer: 'Purple', options: SWATCHES },
+      { afterPage: 2, who: 'willow', question: 'What color is it?', answer: 'Green', options: SWATCHES },
+      { afterPage: 6, who: 'leo', question: 'What color is it?', answer: 'Orange', options: SWATCHES },
+      { afterPage: 10, who: 'mia', question: 'What color is it?', answer: 'Purple', options: SWATCHES },
     ],
   },
 
