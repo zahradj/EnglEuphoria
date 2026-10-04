@@ -5304,7 +5304,6 @@ const T_TEDDY_SMALL = { colorWord: 'BROWN', colorHex: '#92400E', shape: 'circle'
 const T_CAR_BIG = { colorWord: 'BLUE', colorHex: '#3B82F6', shape: 'square' as const, img: itemCar, word: 'car', size: 'big' as const };
 const T_CAR_SMALL = { colorWord: 'BLUE', colorHex: '#3B82F6', shape: 'square' as const, img: itemCar, word: 'car', size: 'small' as const };
 const T_ROBOT_SMALL = { colorWord: 'GRAY', colorHex: '#9CA3AF', shape: 'square' as const, img: itemRobot, word: 'robot', size: 'small' as const };
-const T_ROBOT_BIG = { colorWord: 'GRAY', colorHex: '#9CA3AF', shape: 'square' as const, img: itemRobot, word: 'robot', size: 'big' as const };
 const T_KITE_SMALL = { colorWord: 'RED', colorHex: '#EF4444', shape: 'triangle' as const, img: itemKite, word: 'kite', size: 'small' as const };
 const T_PLANE_BIG = { colorWord: 'BLUE', colorHex: '#3B82F6', shape: 'triangle' as const, img: itemPlane, word: 'plane', size: 'big' as const };
 
@@ -5375,7 +5374,7 @@ export const LESSON_U3L4_SCENES: Scene[] = [
   {
     id: 'u3l4-pool', kind: 'shape-fishing', bg: bgU3L4Pool, bgVideo: loopU3L4('pool'), floating: true, who: 'pip',
     teacher: 'The toys are in the pool! Listen: big or small? Tap the toy Pip says.',
-    fish: [T_BALL_BIG, T_TEDDY_SMALL, T_CAR_BIG, T_BALL_SMALL, T_ROBOT_BIG, T_CAR_SMALL],
+    fish: [T_BALL_BIG, T_TEDDY_SMALL, T_CAR_BIG, T_BALL_SMALL, T_TEDDY_BIG, T_CAR_SMALL],
     targets: [0, 3, 2, 1],
   },
 

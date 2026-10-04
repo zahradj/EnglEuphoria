@@ -151,8 +151,9 @@ export function ShapeFishingScene({ scene, onWin, onLose, onNext, sync }: { scen
         if (caughtSet.has(i)) return null;
         const n = scene.fish.length;
         const a = (i / n) * Math.PI * 2;
-        const cx = 48 + Math.cos(a) * 17, cy = 43 + Math.sin(a) * 9; // the water of the pool painted in bg
-        const sz = f.size === 'small' ? 9 : f.size === 'big' ? 15 : 12;
+        // A ring over the whole water of the pool painted in bg, wide enough that no two toys touch.
+        const cx = 51 + Math.cos(a) * 24, cy = 47 + Math.sin(a) * 11;
+        const sz = f.size === 'small' ? 7 : f.size === 'big' ? 11 : 9;
         return (
           <motion.button
             key={i}
@@ -163,7 +164,7 @@ export function ShapeFishingScene({ scene, onWin, onLose, onNext, sync }: { scen
             initial={{ scale: 0 }}
             animate={wrong === i
               ? { scale: 1, x: [0, -12, 12, -8, 8, 0] }
-              : { scale: 1, x: [0, 14 * Math.cos(a + 1), 0, -14 * Math.cos(a + 1), 0], y: [0, -8, 0, 6, 0], rotate: [-6, 6, -6] }}
+              : { scale: 1, x: [0, 8 * Math.cos(a + 1), 0, -8 * Math.cos(a + 1), 0], y: [0, -8, 0, 6, 0], rotate: [-6, 6, -6] }}
             transition={wrong === i ? { duration: 0.45 } : { scale: { type: 'spring', stiffness: 260, damping: 14, delay: i * 0.08 }, x: { duration: 7 + (i % 3), repeat: Infinity, ease: 'easeInOut' }, y: { duration: 2.4 + (i % 2) * 0.6, repeat: Infinity, ease: 'easeInOut' }, rotate: { duration: 3 + (i % 3) * 0.5, repeat: Infinity, ease: 'easeInOut' } }}
             whileTap={{ scale: 0.85 }}
           >
