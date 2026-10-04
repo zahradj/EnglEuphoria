@@ -2974,6 +2974,16 @@ const U2L2_FOODS = [
   { word: 'plum', img: itemPlum, colorWord: 'PURPLE' },
 ];
 const SWATCHES = [{ label: 'Green', colorHex: GREEN }, { label: 'Orange', colorHex: ORANGE }, { label: 'Purple', colorHex: PURPLE }];
+const U2L2_PAINTS = [
+  { colorWord: 'RED', colorHex: '#EF4444' },
+  { colorWord: 'BLUE', colorHex: '#3B82F6' },
+  { colorWord: 'YELLOW', colorHex: '#FACC15' },
+];
+const U2L2_ANSWERS = [
+  { colorWord: 'GREEN', colorHex: GREEN },
+  { colorWord: 'ORANGE', colorHex: ORANGE },
+  { colorWord: 'PURPLE', colorHex: PURPLE },
+];
 
 export const LESSON_U2L2_TITLE = 'Green, Orange, Purple!';
 export const LESSON_U2L2_OBJECTIVE = 'Name green, orange and purple (frog, carrot, grapes), ask and answer "What color is it?" — "It\'s green.", say "I like purple.", mix red, blue and yellow into the new colours, and hear G say /g/ (goat, gift, grapes) — by listening, moving, tapping and speaking, no reading.';
@@ -3018,6 +3028,69 @@ export const LESSON_U2L2_SCENES: Scene[] = [
 
   /* 4-6 Input: the colours, move & say, signature game */
   {
+    // The Magic Mix, part 1 (docs/scenarios/u2l2-magic-mix.md): ONE friend pours, pours, stirs; the film stops
+    // for "What color is it?". Then the child does the same in the paint game right after (learn, then play).
+    id: 'u2l2-mix-green', kind: 'story-video', bg: mixPic('willow', 'b'), videoUrl: `${A}/video/mix-willow-u2l2.mp4?v=1`, title: 'Willow Makes Green',
+    teacher: 'Watch Willow mix. Say the colors with Willow. When the film stops, ask "What color is it?" and let the child say and tap it.',
+    pages: [
+      { img: mixPic('willow', 'a'), who: 'willow', line: 'Blue!', atSec: 0 },
+      { img: mixPic('willow', 'pour2'), who: 'willow', line: 'And yellow!', atSec: 5 },
+      { img: mixPic('willow', 'spoon'), who: 'willow', line: 'Stir, stir, stir!', atSec: 10 },
+      { img: mixPic('willow', 'b'), who: 'willow', line: "It's green! Blue and yellow make green!", atSec: 15 },
+    ],
+    checkpoints: [{ afterPage: 2, who: 'willow', question: 'What color is it?', answer: 'Green', options: SWATCHES }],
+  },
+  {
+    id: 'u2l2-pots-green', kind: 'color-mix', bg: bgU2L2PaintLab, who: 'pip', potImg: itemPaintPot,
+    teacher: 'Now the child mixes like Willow: tap the two jars, stir three times, then say and tap the new color.',
+    paints: U2L2_PAINTS,
+    answers: U2L2_ANSWERS,
+    rounds: [{ a: 'BLUE', b: 'YELLOW', result: 'GREEN', resultHex: GREEN, who: 'willow', img: itemFrog, label: 'Frog', line: 'The frog is green!' }],
+  },
+
+  {
+    // The Magic Mix, part 2 (docs/scenarios/u2l2-magic-mix.md): ONE friend pours, pours, stirs; the film stops
+    // for "What color is it?". Then the child does the same in the paint game right after (learn, then play).
+    id: 'u2l2-mix-orange', kind: 'story-video', bg: mixPic('leo', 'b'), videoUrl: `${A}/video/mix-leo-u2l2.mp4?v=1`, title: 'Leo Makes Orange',
+    teacher: 'Watch Leo mix. Say the colors with Leo. When the film stops, ask "What color is it?" and let the child say and tap it.',
+    pages: [
+      { img: mixPic('leo', 'a'), who: 'leo', line: 'Red!', atSec: 0 },
+      { img: mixPic('leo', 'pour2'), who: 'leo', line: 'And yellow!', atSec: 5 },
+      { img: mixPic('leo', 'spoon'), who: 'leo', line: 'Stir, stir, stir!', atSec: 10 },
+      { img: mixPic('leo', 'b'), who: 'leo', line: "It's orange! Red and yellow make orange!", atSec: 15 },
+    ],
+    checkpoints: [{ afterPage: 2, who: 'leo', question: 'What color is it?', answer: 'Orange', options: SWATCHES }],
+  },
+  {
+    id: 'u2l2-pots-orange', kind: 'color-mix', bg: bgU2L2PaintLab, who: 'pip', potImg: itemPaintPot,
+    teacher: 'Now the child mixes like Leo: tap the two jars, stir three times, then say and tap the new color.',
+    paints: U2L2_PAINTS,
+    answers: U2L2_ANSWERS,
+    rounds: [{ a: 'RED', b: 'YELLOW', result: 'ORANGE', resultHex: ORANGE, who: 'leo', img: itemCarrot, label: 'Carrot', line: 'The carrot is orange!' }],
+  },
+
+  {
+    // The Magic Mix, part 3 (docs/scenarios/u2l2-magic-mix.md): ONE friend pours, pours, stirs; the film stops
+    // for "What color is it?". Then the child does the same in the paint game right after (learn, then play).
+    id: 'u2l2-mix-purple', kind: 'story-video', bg: mixPic('mia', 'b2'), videoUrl: `${A}/video/mix-mia-u2l2.mp4?v=1`, title: 'Mia Makes Purple',
+    teacher: 'Watch Mia mix. Say the colors with Mia. When the film stops, ask "What color is it?" and let the child say and tap it.',
+    pages: [
+      { img: mixPic('mia', 'a2'), who: 'mia', line: 'Red!', atSec: 0 },
+      { img: mixPic('mia', 'pour2'), who: 'mia', line: 'And blue!', atSec: 5 },
+      { img: mixPic('mia', 'spoon'), who: 'mia', line: 'Stir, stir, stir!', atSec: 10 },
+      { img: mixPic('mia', 'b2'), who: 'mia', line: "It's purple! Red and blue make purple!", atSec: 15 },
+    ],
+    checkpoints: [{ afterPage: 2, who: 'mia', question: 'What color is it?', answer: 'Purple', options: SWATCHES }],
+  },
+  {
+    id: 'u2l2-pots-purple', kind: 'color-mix', bg: bgU2L2PaintLab, who: 'pip', potImg: itemPaintPot,
+    teacher: 'Now the child mixes like Mia: tap the two jars, stir three times, then say and tap the new color.',
+    paints: U2L2_PAINTS,
+    answers: U2L2_ANSWERS,
+    rounds: [{ a: 'RED', b: 'BLUE', result: 'PURPLE', resultHex: PURPLE, who: 'mia', img: itemGrapes, label: 'Grapes', line: 'The grapes are purple!' }],
+  },
+
+  {
     id: 'u2l2-vocab-colors', kind: 'color-model', bg: bgU2L2Studio,
     teacher: 'Tap a color. Listen, say it, then say the sentence!',
     items: [
@@ -3037,53 +3110,6 @@ export const LESSON_U2L2_SCENES: Scene[] = [
       { line: 'Show me something orange!', emoji: '\u{1F440}' },
     ],
   },
-  {
-    // Film 2: each colour is labelled on the picture (kids-demo-video labels).
-    id: 'u2l2-story-mix', kind: 'story-video', bg: mixPic('willow', 'b'), videoUrl: `${A}/video/mix-story-u2l2.mp4?v=1`, title: 'The Magic Mix',
-    teacher: 'Watch the friends mix paints. When the film stops, ask "What color is it?" and let the child tap and say the new color.',
-    pages: [
-      { img: mixPic('willow', 'a'), who: 'willow', line: 'Blue!', atSec: 0 },
-      { img: mixPic('willow', 'pour2'), who: 'willow', line: 'And yellow!', atSec: 4 },
-      { img: mixPic('willow', 'spoon'), who: 'willow', line: 'Stir, stir, stir!', atSec: 8 },
-      { img: mixPic('willow', 'b'), who: 'willow', line: "It's green! Blue and yellow make green!", atSec: 14 },
-      { img: mixPic('leo', 'a'), who: 'leo', line: 'Red!', atSec: 19 },
-      { img: mixPic('leo', 'pour2'), who: 'leo', line: 'And yellow!', atSec: 23 },
-      { img: mixPic('leo', 'spoon'), who: 'leo', line: 'Stir, stir, stir!', atSec: 27 },
-      { img: mixPic('leo', 'b'), who: 'leo', line: "It's orange! Red and yellow make orange!", atSec: 33 },
-      { img: mixPic('mia', 'a2'), who: 'mia', line: 'Red!', atSec: 38 },
-      { img: mixPic('mia', 'pour2'), who: 'mia', line: 'And blue!', atSec: 42 },
-      { img: mixPic('mia', 'spoon'), who: 'mia', line: 'Stir, stir, stir!', atSec: 46 },
-      { img: mixPic('mia', 'b2'), who: 'mia', line: "It's purple! Red and blue make purple!", atSec: 52 },
-      { img: bgU2L2Studio, who: 'pip', line: 'Now YOU mix the paints!', atSec: 57 },
-    ],
-    // The Blue's Clues pause: the film stops on the mixed bowl and the friend asks; the answer line plays after the tap.
-    checkpoints: [
-      { afterPage: 2, who: 'willow', question: 'What color is it?', answer: 'Green', options: SWATCHES },
-      { afterPage: 6, who: 'leo', question: 'What color is it?', answer: 'Orange', options: SWATCHES },
-      { afterPage: 10, who: 'mia', question: 'What color is it?', answer: 'Purple', options: SWATCHES },
-    ],
-  },
-
-  {
-    id: 'u2l2-paint-pots', kind: 'color-mix', bg: bgU2L2PaintLab, who: 'pip', potImg: itemPaintPot,
-    teacher: 'Magic Paint Pots! Mix two paints, then name the new color.',
-    paints: [
-      { colorWord: 'RED', colorHex: '#EF4444' },
-      { colorWord: 'BLUE', colorHex: '#3B82F6' },
-      { colorWord: 'YELLOW', colorHex: '#FACC15' },
-    ],
-    answers: [
-      { colorWord: 'GREEN', colorHex: GREEN },
-      { colorWord: 'ORANGE', colorHex: ORANGE },
-      { colorWord: 'PURPLE', colorHex: PURPLE },
-    ],
-    rounds: [
-      { a: 'BLUE', b: 'YELLOW', result: 'GREEN', resultHex: GREEN, who: 'willow', img: itemFrog, label: 'Frog', line: 'The frog is green!' },
-      { a: 'RED', b: 'YELLOW', result: 'ORANGE', resultHex: ORANGE, who: 'leo', img: itemCarrot, label: 'Carrot', line: 'The carrot is orange!' },
-      { a: 'RED', b: 'BLUE', result: 'PURPLE', resultHex: PURPLE, who: 'mia', img: itemGrapes, label: 'Grapes', line: 'The grapes are purple!' },
-    ],
-  },
-
   /* 7-9 Controlled practice */
   {
     id: 'u2l2-catch', kind: 'catch-sort', bg: bgU2L2Market, teacher: 'Catch it! Green or orange? Say the color as you catch it.', goal: 8, seconds: 45,

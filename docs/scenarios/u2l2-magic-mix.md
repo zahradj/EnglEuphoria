@@ -48,3 +48,13 @@ Repetition: each new colour is heard 3× (shot 3 action, shot 5 line twice) and 
   so the blue jar from the spoon picture does not vanish.
 - The pause (shot 4) is interactive in the lesson: the film stops on the mixed bowl, the friend asks "What color is it?"
   and the child taps the colour; then shot 5 plays. Film: `public/lep1/video/mix-story-u2l2.mp4`.
+
+## Update 2026-10-04 — one film per page (owner: "Good. Generate all of them … each video is going to be in one page")
+- Three film pages, each followed by the paint game for that colour (learn, then play):
+  `u2l2-mix-green` (Willow) → `u2l2-pots-green` → `u2l2-mix-orange` (Leo) → `u2l2-pots-orange` →
+  `u2l2-mix-purple` (Mia) → `u2l2-pots-purple`, then the colour cards. Films: `public/lep1/video/mix-{willow,leo,mia}-u2l2.mp4`.
+- Each film (21 s): pour clip "Blue!" (0 s) → pour clip "And yellow!" (5 s) → stir (10 s) → stops at 15 s for
+  "What color is it?" → "It's green! Blue and yellow make green!". Labels: the two paints and the new colour.
+- Motion: 8 Higgsfield clips ordered one at a time (~$0.30 each); all pours passed. The stir clips cannot blend colours
+  (paint went yellow/red), so only their first ~1.5 s is used, then a soft fade into the mixed picture. Mia's stir clip
+  was not made (credits ran out); her spoon picture fades into the purple picture. Pip's closing line moved to the game.

@@ -417,15 +417,19 @@ const UNIT1_EXTRACTORS = {
     ]),
   ],
   // Mirrors ColorMixScene.tsx's colorMixLines().
-  'color-mix': (s) => [
-    [s.who, 'What color is it?'],
-    [s.who, 'Stir, stir, stir!'],
-    ...(s.rounds ?? []).flatMap((r) => [
+  'color-mix': (s) => (s.rounds ?? []).flatMap((r) => {
+    const cap = (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+    const res = (x, y) => `It's ${r.result.toLowerCase()}! ${cap(x)} and ${y.toLowerCase()} make ${r.result.toLowerCase()}!`;
+    return [
       [s.who, `Mix ${r.a.toLowerCase()} and ${r.b.toLowerCase()}!`],
-      [s.who, `It's ${r.result.toLowerCase()}!`],
+      [r.who, `${cap(r.a)}!`], [r.who, `${cap(r.b)}!`],
+      [r.who, `And ${r.a.toLowerCase()}!`], [r.who, `And ${r.b.toLowerCase()}!`],
+      [r.who, 'Stir, stir, stir!'],
+      [r.who, 'What color is it?'],
+      [r.who, res(r.a, r.b)], [r.who, res(r.b, r.a)],
       [r.who, r.line],
-    ]),
-  ],
+    ];
+  }),
   'join-stage': (s) => (s.turns ?? []).filter((t) => t.who !== 'student').map((t) => [t.who, t.line]),
   'hello-doors': (s) => {
     const out = (s.cast ?? []).map((who) => [who, CAST[who]?.name ?? who]);

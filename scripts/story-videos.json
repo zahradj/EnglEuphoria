@@ -465,7 +465,7 @@
         "prompt": "Willow the blue bird slowly stirs the paint in the glass bowl with the wooden spoon in small circles. The blue and yellow paint swirl together and turn green. Her feet, the table and both jars stay still. Nobody else is in the picture. The camera stays steady.",
         "ownerApproved": true,
         "approvedNote": "owner: \"create the video of this lesson\" 2026-10-04, after reading the scenario (scenario shot 3, first clip only)",
-        "review": "2026-10-04 review-clip: START 0.99, END 0.97, POSE 0.62 (fail). Frame review: the stir action is right (one wing, spoon in the bowl, feet/table/jars still, nobody else, no text), but the paint turns mostly YELLOW at ~4.3 s and ends blotchy yellow/green, not the clean green of the end picture. Not in the lesson; waiting for the owner (use with a fade into the green picture, or reject). No other clip ordered. Owner 2026-10-04: \"Good\" — used with a 0.8 s fade into the green picture."
+        "review": "2026-10-04 review-clip: START 0.99, END 0.97, POSE 0.62 (fail). Frame review: the stir action is right (one wing, spoon in the bowl, feet/table/jars still, nobody else, no text), but the paint turns mostly YELLOW at ~4.3 s and ends blotchy yellow/green, not the clean green of the end picture. Not in the lesson; waiting for the owner (use with a fade into the green picture, or reject). No other clip ordered. Owner 2026-10-04: \"Good\" — used with a 0.8 s fade into the green picture. Final film uses its first ~1.4 s, then a 1.6 s fade into the green picture."
       },
       {
         "id": "willow-pour1",
@@ -480,7 +480,8 @@
         "action": "Willow keeps slowly pouring blue paint from the jar into the glass bowl, and the blue paint in the bowl rises a little",
         "prompt": "Willow the blue bird keeps slowly pouring blue paint from the jar into the glass bowl, and the blue paint in the bowl rises a little. Her feet, the table and the jars on the table stay still. Nobody else is in the picture. The camera stays steady.",
         "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next"
+        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+        "review": "2026-10-04 PASS: blue keeps pouring, bowl fills blue, feet/jars still."
       },
       {
         "id": "willow-pour2",
@@ -495,7 +496,8 @@
         "action": "Willow keeps slowly pouring yellow paint from the jar onto the paint in the glass bowl; the yellow paint stays on top, the colours do not mix yet",
         "prompt": "Willow the bird keeps slowly pouring yellow paint from the jar onto the paint in the glass bowl; the yellow paint stays on top, the colours do not mix yet. Her feet, the table and the blue jar stay still. Nobody else is in the picture. The camera stays steady.",
         "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next"
+        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+        "review": "2026-10-04 PASS: yellow lies on top of the blue, not mixed."
       },
       {
         "id": "leo-pour1",
@@ -510,7 +512,8 @@
         "action": "Leo keeps slowly pouring red paint from the jar into the glass bowl, and the red paint in the bowl rises a little",
         "prompt": "Leo the lion keeps slowly pouring red paint from the jar into the glass bowl, and the red paint in the bowl rises a little. His feet, the table and the jars on the table stay still. Nobody else is in the picture. The camera stays steady.",
         "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next"
+        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+        "review": "2026-10-04 PASS: red pours, bowl fills red."
       },
       {
         "id": "leo-pour2",
@@ -525,7 +528,8 @@
         "action": "Leo keeps slowly pouring yellow paint from the jar onto the paint in the glass bowl; the yellow paint stays on top, the colours do not mix yet",
         "prompt": "Leo the lion keeps slowly pouring yellow paint from the jar onto the paint in the glass bowl; the yellow paint stays on top, the colours do not mix yet. His feet, the table and the red jar stay still. Nobody else is in the picture. The camera stays steady.",
         "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next"
+        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+        "review": "2026-10-04 PASS: yellow layer on top of the red (checked close up)."
       },
       {
         "id": "leo-stir",
@@ -540,7 +544,8 @@
         "action": "Leo slowly stirs the paint in the glass bowl with the wooden spoon; the red and yellow paint blend into one even orange colour",
         "prompt": "Leo the lion slowly stirs the paint in the glass bowl with the wooden spoon in small circles. The red and yellow paint blend into one smooth, even orange colour that fills the whole bowl. His feet, the table and both jars stay still. The camera stays steady.",
         "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next"
+        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+        "review": "2026-10-04 review-clip POSE 0.53 (fail): the paint flips red/yellow/red and ends RED, not orange. Used only for its first ~1.6 s (spoon moving, two colours), then a 1.6 s fade into the orange picture. No retry (the model cannot blend colours)."
       },
       {
         "id": "mia-pour1",
@@ -555,7 +560,8 @@
         "action": "Mia keeps slowly pouring red paint from the jar into the glass bowl, and the red paint in the bowl rises a little",
         "prompt": "Mia the mouse keeps slowly pouring red paint from the jar into the glass bowl, and the red paint in the bowl rises a little. Her feet, the table and the blue jar stay still. Nobody else is in the picture. The camera stays steady.",
         "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next"
+        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+        "review": "2026-10-04 PASS: red pours into the empty bowl, blue jar stays."
       },
       {
         "id": "mia-pour2",
@@ -570,7 +576,8 @@
         "action": "Mia keeps slowly pouring blue paint from the jar onto the paint in the glass bowl; the blue paint stays on top, the colours do not mix yet",
         "prompt": "Mia the mouse keeps slowly pouring blue paint from the jar onto the paint in the glass bowl; the blue paint stays on top, the colours do not mix yet. Her feet, the table and the red jar stay still. Nobody else is in the picture. The camera stays steady.",
         "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next"
+        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+        "review": "2026-10-04 PASS: blue pours onto the red, not purple yet."
       },
       {
         "id": "mia-stir",
@@ -585,7 +592,8 @@
         "action": "Mia slowly stirs the paint in the glass bowl with the wooden spoon; the red and blue paint blend into one even purple colour",
         "prompt": "Mia the mouse slowly stirs the paint in the glass bowl with the wooden spoon in small circles. The red and blue paint blend into one smooth, even purple colour that fills the whole bowl. Her feet, the table and both jars stay still. The camera stays steady.",
         "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next"
+        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+        "review": "2026-10-04 NOT MADE: Higgsfield 403 not_enough_credits (nothing charged). The film uses the spoon picture fading into the purple picture."
       }
     ]
   }
