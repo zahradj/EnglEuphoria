@@ -312,7 +312,7 @@ const UNIT1_EXTRACTORS = {
   ])],
   'train-recall': (s) => [
     ...(s.cars ?? []).map((c) => ['pip', c.word]),
-    ['pip', "Choo choo! One car is empty. Which toy is missing?"],
+    ['pip', s.question ?? "Choo choo! One car is empty. Which toy is missing?"],
     ...(s.cars ?? []).map((c) => ['pip', `Yes! It's the ${c.word.toLowerCase()}!`]),
   ],
   'shape-sort': (s) => [
@@ -419,6 +419,7 @@ const UNIT1_EXTRACTORS = {
   // Mirrors ColorMixScene.tsx's colorMixLines().
   'color-mix': (s) => [
     [s.who, 'What color is it?'],
+    [s.who, 'Stir, stir, stir!'],
     ...(s.rounds ?? []).flatMap((r) => [
       [s.who, `Mix ${r.a.toLowerCase()} and ${r.b.toLowerCase()}!`],
       [s.who, `It's ${r.result.toLowerCase()}!`],

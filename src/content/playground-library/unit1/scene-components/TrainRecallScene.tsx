@@ -34,7 +34,7 @@ export function TrainRecallScene({ scene, onWin, onLose, onNext, sync }: { scene
       const distractors = others.sort(() => Math.random() - 0.5).slice(0, 2);
       const nextChoices = [scene.cars[idx].word, ...distractors].sort(() => Math.random() - 0.5);
       setState((s) => ({ ...s, missingIdx: idx, choices: nextChoices, phase: 'ask' }));
-      await safeSpeak('Choo choo! One car is empty. Which toy is missing?', 'pip');
+      await safeSpeak(scene.question ?? 'Choo choo! One car is empty. Which toy is missing?', 'pip');
     })();
   }, [isRemoteMirror]);
 
@@ -56,7 +56,7 @@ export function TrainRecallScene({ scene, onWin, onLose, onNext, sync }: { scene
     <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="pointer-events-none absolute inset-x-0 top-4 z-30 flex justify-center px-4">
         <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
-          {phase === 'ask' || phase === 'done' ? 'Choo choo! Which toy is missing?' : scene.teacher}
+          {phase === 'ask' || phase === 'done' ? (scene.question ?? 'Choo choo! Which toy is missing?') : scene.teacher}
         </div>
       </div>
       {/* The toy train: rolls in while the toys are shown; one wagon is covered. */}

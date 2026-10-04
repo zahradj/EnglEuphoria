@@ -55,6 +55,10 @@ match the words. So, for every story clip, before ANY credit is spent:
    fix the brief (do not just re-roll: re-rolling burns money).
 6. **Then the rest** — one brief at a time, each reviewed. Only the user sets a brief to `clip-approved`.
 
+## Scenario first: `.claude/skills/kids-video-scenario`
+
+No video of any kind without an owner-approved scenario (`docs/scenarios/`). The storyboard rows below come from its shot list.
+
 ## Demonstration pages first: `.claude/skills/kids-demo-video`
 
 For any "watch and copy" page, build the owner-approved labelled stills film with that skill BEFORE thinking about paid

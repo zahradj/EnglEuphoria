@@ -23,6 +23,10 @@
 - **Games: background loops only** (owner, 2026-10-04: games should feel like an animated video game). A game may use a short, silent, calm image-to-video loop of a game picture the owner has seen (`bgVideo`, ping-ponged by `scripts/make-game-loops.py`, still picture as fallback). Never characters doing new actions, never speech or text. Everything else in a game is live UI motion (`unit1/scene-components/gameFx.tsx`).
 - **Never zoom or pan a still picture** (no Ken Burns / `zoompan` / CSS scale loops on story pictures): it shakes. Stills hold still and cross-fade (`scripts/make-stills-film.py`).
 
+## Scenario first (hard rule — owner, 2026-10-04)
+
+- **Every video** (story film, demonstration, song video, stills film, AI clip) starts with a written scenario in `docs/scenarios/` following `.claude/skills/kids-video-scenario`: one learning goal, beats, a shot list (exact line → ONE action → camera → start/end picture → label → pause), pictures needed, cost. The owner approves it in writing before any picture is made or clip ordered. A film that teaches comes BEFORE the game that uses it.
+
 ## Demonstration pages (hard rule — owner, 2026-10-04: "way better, keep it as a skill")
 
 - Every "watch and copy" page (body parts, actions, TPR, point-to) follows `.claude/skills/kids-demo-video`: ONE character, full body, front view, one picture per spoken line, the word added by us with a line to the exact spot (`scripts/label-video.py`), stills film first; AI motion only via strict mode with start + end key pictures.

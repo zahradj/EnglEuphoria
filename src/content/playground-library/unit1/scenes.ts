@@ -328,6 +328,8 @@ export type Scene =
        *  "missing card" mechanic), thematically built around the train
        *  toy itself. First used by Unit 3 Lesson 2. */
       id: string; kind: 'train-recall'; bg: string; teacher: string;
+      /** Spoken + shown question (default: "Choo choo! One car is empty. Which toy is missing?"). */
+      question?: string;
       cars: { word: string; img?: string; emoji: string }[];
     }
   | {
@@ -3034,6 +3036,22 @@ export const LESSON_U2L2_SCENES: Scene[] = [
     ],
   },
   {
+    // Film 2: each colour is labelled on the picture (kids-demo-video labels).
+    id: 'u2l2-story-mix', kind: 'story-video', bg: bgU2L2PaintingDone, videoUrl: `${A}/video/paint-story-u2l2-b.mp4?v=1`, title: 'The Magic Mix',
+    teacher: 'The story ends! Watch, say each color with the friends, answer the questions.',
+    pages: [
+      { img: bgU2L2Green, who: 'willow', line: 'Blue and yellow make green. The frog is green!', atSec: 0 },
+      { img: bgU2L2Orange, who: 'leo', line: 'Red and yellow make orange. The carrot is orange!', atSec: 6 },
+      { img: bgU2L2Purple, who: 'mia', line: 'Red and blue make purple. The grapes are purple!', atSec: 12 },
+      { img: bgU2L2PaintingDone, who: 'pip', line: 'Green, orange and purple! Thank you, friends! My painting is beautiful!', atSec: 18 },
+    ],
+    checkpoints: [
+      { afterPage: 0, who: 'willow', question: 'What color is the frog?', answer: 'Green', options: SWATCHES },
+      { afterPage: 2, who: 'mia', question: 'What color are the grapes?', answer: 'Purple', options: SWATCHES },
+    ],
+  },
+
+  {
     id: 'u2l2-paint-pots', kind: 'color-mix', bg: bgU2L2PaintLab, who: 'pip', potImg: itemPaintPot,
     teacher: 'Magic Paint Pots! Mix two paints, then name the new color.',
     paints: [
@@ -3134,6 +3152,7 @@ export const LESSON_U2L2_SCENES: Scene[] = [
   },
   {
     id: 'u2l2-train-recall', kind: 'train-recall', bg: bgU2L2Market, teacher: "All aboard the color train! Remember the food in each car, and say its color.",
+    question: 'Choo choo! One car is empty. What is missing?',
     cars: [
       { word: 'FROG', img: itemFrog, emoji: '\u{1F438}' },
       { word: 'CARROT', img: itemCarrot, emoji: '\u{1F955}' },
@@ -3166,22 +3185,6 @@ export const LESSON_U2L2_SCENES: Scene[] = [
       { word: 'plum', letter: 'P', img: itemPlum, emoji: '\u{1F7E3}' },
     ],
   },
-  {
-    // Film 2: each colour is labelled on the picture (kids-demo-video labels).
-    id: 'u2l2-story-mix', kind: 'story-video', bg: bgU2L2PaintingDone, videoUrl: `${A}/video/paint-story-u2l2-b.mp4?v=1`, title: 'The Magic Mix',
-    teacher: 'The story ends! Watch, say each color with the friends, answer the questions.',
-    pages: [
-      { img: bgU2L2Green, who: 'willow', line: 'Blue and yellow make green. The frog is green!', atSec: 0 },
-      { img: bgU2L2Orange, who: 'leo', line: 'Red and yellow make orange. The carrot is orange!', atSec: 6 },
-      { img: bgU2L2Purple, who: 'mia', line: 'Red and blue make purple. The grapes are purple!', atSec: 12 },
-      { img: bgU2L2PaintingDone, who: 'pip', line: 'Green, orange and purple! Thank you, friends! My painting is beautiful!', atSec: 18 },
-    ],
-    checkpoints: [
-      { afterPage: 0, who: 'willow', question: 'What color is the frog?', answer: 'Green', options: SWATCHES },
-      { afterPage: 2, who: 'mia', question: 'What color are the grapes?', answer: 'Purple', options: SWATCHES },
-    ],
-  },
-
   /* 17-20 Personal, reward, home mission */
   {
     id: 'u2l2-my-color', kind: 'join-stage', bg: bgU2L2PaintingDone, teacher: 'What color do YOU like? Say: I like … Show something in that color!', cast: ['mia', 'leo', 'pip'],
