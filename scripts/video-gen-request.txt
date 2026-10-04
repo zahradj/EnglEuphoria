@@ -1,1 +1,2 @@
-# (no request) — strict mode: clips are ordered only after the owner approves the written storyboard
+# strict mode: ONE clip, owner approved the scenario ("create the video of this lesson", 2026-10-04)
+u2l2-mix --beats=willow-stir
