@@ -69,6 +69,8 @@ import { TileRevealScene } from './scene-components/TileRevealScene';
 import { TidyUpScene } from './scene-components/TidyUpScene';
 import { PeekPopScene } from './scene-components/PeekPopScene';
 import { ClawMachineScene } from './scene-components/ClawMachineScene';
+import { SimonTouchScene } from './scene-components/SimonTouchScene';
+import { BodyStackScene } from './scene-components/BodyStackScene';
 import { RingTossScene } from './scene-components/RingTossScene';
 import { ShadowMatchScene } from './scene-components/ShadowMatchScene';
 import { SteppingStonesScene } from './scene-components/SteppingStonesScene';
@@ -244,6 +246,8 @@ export function SceneRenderer(props: {
     case 'home-mission': return <HomeMissionScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'lift-flap': return <LiftFlapScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'draw-path': return <DrawPathScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
+    case 'simon-touch': return <SimonTouchScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
+    case 'body-stack': return <BodyStackScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'claw-machine': return <ClawMachineScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'ring-toss': return <RingTossScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'tidy-up': return <TidyUpScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;

@@ -500,6 +500,26 @@ export type Scene =
       spots: { x: number; y: number; size: number; ask: string; reveal: string; target?: boolean; cover?: { img: string; label: string }; under: { img: string; label: string } }[];
     }
   | {
+      /** Simon Says Touch (classroom "Simon says, touch your knees!" + the
+       *  apps' tap-the-body-part). A friend is painted in `bg`; `parts` are
+       *  spots on the body (x/y centre %, r = radius in vh). With "Simon
+       *  says" the child taps that part; without it the child must wait. */
+      id: string; kind: 'simon-touch'; bg: string; bgVideo?: string; teacher: string; who: CharKey;
+      parts: { label: string; x: number; y: number; r: number }[];
+      rounds: { line: string; simon: boolean; part: number }[];
+    }
+  | {
+      /** Stack the Friend (apps' "assemble the body"): a friend painted in
+       *  `img` is cut into horizontal slices (fractions y0..y1 of the `source`
+       *  box, which is in % of the picture); the voice names a part, the
+       *  child taps that slice and it drops into the frame. */
+      id: string; kind: 'body-stack'; bg: string; bgVideo?: string; teacher: string; who: CharKey;
+      img: string; source: { x: number; y: number; w: number; h: number };
+      slices: { label: string; y0: number; y1: number }[];
+      rounds: { slice: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Toy Grabber — a claw machine that never slips (Yateland claw-machine
        *  apps, fairground toy grabbers). The voice names a toy ("Get the big
        *  red ball!"); the child steers the claw (tap a toy or ◀ ▶) and presses

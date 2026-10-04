@@ -355,6 +355,9 @@ const UNIT1_EXTRACTORS = {
   'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal]])],
   // Mirrors DrawPathScene.tsx's drawPathLines().
   'draw-path': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, `Start at ${({ pip: 'Pip', mia: 'Mia', bella: 'Bella', willow: 'Willow', leo: 'Leo' })[s.walker] ?? s.walker}!`]],
+  // Mirror SimonTouchScene.tsx's simonTouchLines() / BodyStackScene.tsx's bodyStackLines().
+  'simon-touch': (s) => [...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.parts ?? []).map((p) => [s.who, `Yes! ${p.label.charAt(0).toUpperCase() + p.label.slice(1)}!`]), [s.who, "Good listening! Simon didn't say!"], [s.who, "Oops! Simon didn't say!"]],
+  'body-stack': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, s.doneLine]],
   // Mirror ClawMachineScene.tsx's clawMachineLines() / RingTossScene.tsx's ringTossLines().
   'claw-machine': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.toys ?? []).map((t) => [s.who, `That's the ${t.label}! Try again!`]), [s.who, 'Oops! Nothing! Try again!']],
   'ring-toss': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
