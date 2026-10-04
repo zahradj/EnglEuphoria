@@ -52,6 +52,7 @@ export const VARIETY_ENFORCED_FROM = { unit: 3, lesson: 4 };
 export const GRANDFATHERED: readonly string[] = ['5-1'];
 
 export const LESSON_PROFILE: Record<string, LessonProfile> = {
+  '2-2': { settings: ['art studio', 'fruit market', 'meadow'], look: "Pip's sunny paint studio indoors, a striped market stall, the rainbow meadow; colour-mixing mission" },
   '3-3': { settings: ['workshop', 'park'], look: 'sunny outdoor park, kites in a blue sky' },
   '3-4': { settings: ['classroom', 'garden pool'], look: 'Show and Tell circle on the rainbow rug; summer garden with a paddling pool' },
   '4-1': { settings: ['dance studio'], look: 'bright dance studio in morning sun: mirror, barre and colourful mats; a dance class with Coach Willow' },
@@ -60,6 +61,19 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
 };
 
 export const RESEARCH_LOG: Record<string, ResearchEntry> = {
+  '2-2': {
+    sources: ['Lingokids', 'Khan Academy Kids', 'Cambridge (Pre A1 Starters / ELT)', '7ESL / TinyTap "Feed the colour monster"'],
+    mechanics: [
+      'Lingokids "Mixing Colors" audiobook + colour games → Magic Paint Pots inside a painting story',
+      'classroom / 7ESL "Feed the colour monster" → Colour Monsters (the monster ASKS by voice)',
+      'catch-in-the-right-basket colour sort (Khan Academy Kids sorting) → Catch it! at the market',
+    ],
+    betterThan: [
+      'the colour is only HEARD (no printed word), and a wrong food is named back ("The carrot is orange!") so every mistake teaches',
+      'the monsters ask in turn: the child must listen to WHO is hungry and WHAT colour',
+      'eaten food stays on each monster\'s plate (permanence); the story film labels each colour with a line to the thing',
+    ],
+  },
   '3-4': {
     sources: ['Cambridge (Pre A1 Starters / ELT)', 'Wordwall', 'Lingokids'],
     mechanics: ['Guess Who information gap (child asks yes/no questions)', 'magnet fishing for the word you hear'],

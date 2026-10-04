@@ -64,6 +64,7 @@ Tell the owner which apps were researched, what was taken, and what we did bette
 ## Research log so far (keep adding)
 | Lesson | Researched | Taken | Better |
 |---|---|---|---|
+| U2L2 Green, Orange, Purple (rebuild 2) | Lingokids Mixing Colors, Khan Academy Kids sorting, Cambridge Starters picture tasks, 7ESL/TinyTap Feed the colour monster | Colour Monsters (new), Catch it at the market, Magic Paint Pots in a story | colour only heard, wrong food named back, food stays on the plate; labelled story film |
 | U3L4 My Favorite Toy | Cambridge Starters, Wordwall, Lingokids | Guess Who info-gap; magnet fishing | toys bob in a living pool; big/small pairs force the size word |
 | U3L5 Tidy Up Time | Lingokids (Toy Story "pack the box", clean-up activities, prepositions), Cambridge Starters Listening Part 4, Khan Academy Kids, VIPKid/Novakid live classes | Tidy Up (put it in/on/under); Peekaboo Toys (hide-and-seek "where is it?") | same toy in two places → listen for the place word; tidied toys stay; drag or tap-tap, no timer |
 | U3L6 The Toy Fair | toy-grabber apps (Yateland Claw Machine), Wordwall review templates, Khan Academy Kids / Duolingo ABC review loops | Toy Grabber (claw machine), Ring Toss (+ Sound Toss for D T K P O) | claw never slips — only the right words win; two balls / two cars so the colour decides; rings stay on pegs, prizes pile up |

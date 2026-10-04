@@ -362,6 +362,16 @@ const UNIT1_EXTRACTORS = {
   'claw-machine': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.toys ?? []).map((t) => [s.who, `That's the ${t.label}! Try again!`]), [s.who, 'Oops! Nothing! Try again!']],
   'ring-toss': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
   // Mirror TidyUpScene.tsx's tidyUpLines() / PeekPopScene.tsx's peekPopLines().
+  // Mirror ColorMonstersScene.tsx's colorMonstersLines().
+  'color-monsters': (s) => {
+    const cap = (w) => w.charAt(0).toUpperCase() + w.slice(1);
+    const out = (s.rounds ?? []).map((r) => [s.who, r.line]);
+    for (const f of s.foods ?? []) {
+      out.push([s.who, `Yum! ${cap(f.colorWord.toLowerCase())} ${f.word}! Thank you!`]);
+      out.push([s.who, `No, thank you! The ${f.word} ${f.plural ? 'are' : 'is'} ${f.colorWord.toLowerCase()}!`]);
+    }
+    return out;
+  },
   'tidy-up': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
   'peek-pop': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
   // Mirrors TileRevealScene.tsx's tileRevealLines().

@@ -110,7 +110,7 @@ new Pre-A1 lesson needs it, that's exactly when to run the Research Step.
 |---|---|
 | **Discovery / model** (new content, teacher-led, first exposure) | `meet`, `meet-group`, `meet-greet`, `name-gate`, `sound-model`, `color-model`, `shape-model`, `toy-model`, `numbers-learn`, `he-she-model`, `listen-repeat-cards` |
 | **Controlled / recognition practice** (low-risk, guided) | `listen-colour`, `picture-match`, `echo`, `trace`, `sound-sort`, `color-sort`, `shape-sort`, `plural-sort`, `he-she-sort`, `color-spot`, `color-spy`, `alphabet-order`, `alphabet-blocks`, `basket`, `count-balloons`, `age-balloons` |
-| **Interactive game practice** (student-led, real stakes, game-feel) | `word-build`, `sentence-build`, `dash`, `catch-sort`, `sound-pop`, `brick-crush`, `gather`, `memory`, `puzzle`, `hello-doors`, `friend-pop`, `feed-monsters`, `color-simon`, `train-recall`, `odd-one-out`, `shape-torch`, `feelings-dice`, `feelings-wheel`, `x-is-feeling`, `i-am-feeling`, `age-sentence-match`, `who-said-it`, `color-mix`, `shape-builder`, `shape-fishing`, `pattern-train` |
+| **Interactive game practice** (student-led, real stakes, game-feel) | `word-build`, `sentence-build`, `dash`, `catch-sort`, `sound-pop`, `brick-crush`, `gather`, `memory`, `puzzle`, `hello-doors`, `friend-pop`, `feed-monsters`, `color-monsters` (Colour Monsters: a monster asks by voice for food of its colour — U2L2), `color-simon`, `train-recall`, `odd-one-out`, `shape-torch`, `feelings-dice`, `feelings-wheel`, `x-is-feeling`, `i-am-feeling`, `age-sentence-match`, `who-said-it`, `color-mix`, `shape-builder`, `shape-fishing`, `pattern-train` |
 | **Speaking production** | `roleplay`, `join-stage`, `voice-stage`, `he-she-say`, `spin-wheel`, `secret-card` (child asks yes/no questions) |
 | **Story** | `story-video` (animated, narrated, picture questions — preferred for Pre-A1 non-readers), `flipbook` (text pages; needs an adult to read), `story-order` (jumbled pictures → retell), `tick-cross` (listen: true or false?) |
 | **Review / assessment / boss** | `trophy-chest`, `feelings-bingo`, `age-quiz`, `color-quiz`, `feeling-quiz` (plus any of the interactive-practice kinds above, re-run at higher difficulty with no new content) |
@@ -152,7 +152,7 @@ avoid-forever rule for a `kind` that's otherwise fine elsewhere.
 Each lesson NUMBER owns its signature games (`SLOT_GAMES` + `checkSlotGames()` in
 `unit1/sceneValidator.ts`); inside a unit a child never meets the same game twice.
 L1 mystery-bag · picture-match · memory · sound-pop · rapid-recall · hello-doors |
-L2 listen-colour · catch-sort · feed-monsters · dash · train-recall · friend-pop |
+L2 listen-colour · catch-sort · feed-monsters · color-monsters · dash · train-recall · friend-pop |
 L3 puzzle · basket · jigsaw-puzzle · brick-crush · pattern-train · word-build |
 L4 secret-card · sound-sort · color-simon · gather · shape-fishing · alphabet-order |
 L5 lift-flap · tick-cross · who-said-it · alphabet-blocks · tidy-up · peek-pop |

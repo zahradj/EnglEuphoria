@@ -204,7 +204,7 @@ another slot.
 | Slot | Feel | Reveal (6) | Match / sort (7) | Game break (12) | Phonics game (14) | Recall (15) | Extra-time favourite |
 |---|---|---|---|---|---|---|---|
 | L1 | Meet the words | `mystery-bag` | `picture-match` | `memory` | `sound-pop` | `rapid-recall` | `hello-doors` |
-| L2 | More words, sort them | `listen-colour` | `catch-sort` | `feed-monsters` | `dash` | `train-recall` | `friend-pop` |
+| L2 | More words, sort them | `listen-colour` | `catch-sort` | `feed-monsters`, `color-monsters` | `dash` | `train-recall` | `friend-pop` |
 | L3 | Make & build | `puzzle` | `basket` | `jigsaw-puzzle` | `brick-crush` | `pattern-train` | `word-build` |
 | L4 | Ask & answer | `secret-card` | `sound-sort` | `color-simon` | `gather` | `shape-fishing` | `alphabet-order` |
 | L5 | Story (real video) | `lift-flap`, `peek-pop` | `tick-cross`, `tidy-up` | `who-said-it` | `alphabet-blocks` | `story-order` | — |
