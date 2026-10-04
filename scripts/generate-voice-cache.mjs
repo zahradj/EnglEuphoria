@@ -305,7 +305,11 @@ const UNIT1_EXTRACTORS = {
     out.push(['pip', `Wonderful! ${(s.items ?? []).map((it) => buildToySentence(it.colorWord, it.toyWord, it.plural)).join(' ')}`]);
     return out;
   },
-  'plural-sort': (s) => [['teacher', 'Amazing! One or many, you know them all!'], ...(s.items ?? []).map((it) => [s.who, it.word])],
+  // Mirrors PluralSortScene.tsx (pluralLine for every correct drop).
+  'plural-sort': (s) => [[s.who, 'Amazing! One or many, you know them all!'], [s.who, 'It is'], [s.who, 'They are'], ...(s.items ?? []).flatMap((it) => [
+    [s.who, it.word],
+    [s.who, it.plural ? `They are ${it.word}!` : `It's ${/^[aeiou]/i.test(it.word) ? 'an' : 'a'} ${it.word}!`],
+  ])],
   'train-recall': (s) => [
     ...(s.cars ?? []).map((c) => ['pip', c.word]),
     ['pip', "Choo choo! One car is empty. Which toy is missing?"],
@@ -323,6 +327,63 @@ const UNIT1_EXTRACTORS = {
   'color-simon': (s) => (s.colors ?? []).map((c) => [c.who, c.colorWord]),
   // WordPictureMatchScene.tsx: says the word, then "Yes! <word>!" (had no extractor).
   'word-picture-match': (s) => (s.rounds ?? []).flatMap((r) => [[r.who ?? 'pip', r.word], [r.who ?? 'pip', `Yes! ${r.word}!`]]),
+  // Mirror ListenColourScene / ShapeFishingScene / PatternTrainScene line helpers.
+  'listen-colour': (s) => (s.rounds ?? []).flatMap((r) => {
+    const it = (s.items ?? []).find((i) => i.id === r.item);
+    return it ? [[s.who, `Color the ${it.size} ${it.shape} ${r.colorWord.toLowerCase()}!`], [s.who, `Yes! The ${it.size} ${it.shape} is ${r.colorWord.toLowerCase()}!`]] : [];
+  }),
+  'shape-fishing': (s) => (s.targets ?? []).map((i) => s.fish?.[i]).filter(Boolean).flatMap((f) => [
+    [s.who, `Catch a ${f.colorWord.toLowerCase()} ${f.shape}!`], [s.who, `You caught a ${f.colorWord.toLowerCase()} ${f.shape}!`],
+  ]),
+  'pattern-train': (s) => [
+    [s.who, 'What comes next?'],
+    ...(s.rounds ?? []).map((r) => [s.who, `Yes! ${/^[aeiou]/i.test(r.answer.colorWord) ? 'An' : 'A'} ${r.answer.colorWord.toLowerCase()} ${r.answer.shape}!`]),
+  ],
+  'tick-cross': (s) => [[s.who, "That's right!"], ...(s.rounds ?? []).map((r) => [s.who, r.sentence])],
+  'story-video': (s) => [
+    ...(s.pages ?? []).map((p) => [p.who, p.line]),
+    ...(s.checkpoints ?? []).flatMap((c) => [[c.who, c.question], [c.who, `Yes! ${c.answer}!`]]),
+  ],
+  'story-order': (s) => (s.frames ?? []).map((f) => [f.who ?? s.who, f.caption]),
+  // Mirror TprActionsScene / RapidRecallScene / StickerRewardScene / HomeMissionScene line helpers.
+  'tpr-actions': (s) => (s.rounds ?? []).map((r) => [s.who, r.line]),
+  'rapid-recall': (s) => (s.cards ?? []).map((c) => [s.who, c.say ?? c.word]),
+  'sticker-reward': (s) => [[s.who, 'You earned a sticker!'], [s.who, s.line]],
+  'home-mission': (s) => [[s.who, s.line], [s.who, 'Mission accepted!']],
+  // Mirrors LiftFlapScene.tsx's liftFlapLines().
+  'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal]])],
+  // Mirrors DrawPathScene.tsx's drawPathLines().
+  'draw-path': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, `Start at ${({ pip: 'Pip', mia: 'Mia', bella: 'Bella', willow: 'Willow', leo: 'Leo' })[s.walker] ?? s.walker}!`]],
+  // Mirrors TileRevealScene.tsx's tileRevealLines().
+  'tile-reveal': (s) => [[s.who, 'What is it?'], ...(s.rounds ?? []).map((r) => [s.who, r.line])],
+  // Mirrors ShadowMatchScene.tsx's shadowMatchLines().
+  'shadow-match': (s) => [[s.who, 'Find the shadow!'], ...(s.items ?? []).map((it) => [s.who, it.line])],
+  // Mirrors SteppingStonesScene.tsx's steppingStonesLines().
+  'stepping-stones': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, s.goal?.line]],
+  // Mirrors MysteryBagScene.tsx's mysteryBagLines().
+  'mystery-bag': (s) => {
+    const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
+    return [[s.who, "What's in the bag?"], ...(s.rounds ?? []).flatMap((r) => [
+      [s.who, `It's ${art(r.toyWord)} ${r.toyWord.toLowerCase()}!`],
+      [s.who, `It's ${art(r.colorWord)} ${r.colorWord.toLowerCase()} ${r.toyWord.toLowerCase()}!`],
+    ])];
+  },
+  // Mirrors OddOneOutScene.tsx's oddOneOutLines().
+  'odd-one-out': (s) => [[s.who, 'Which one is different?'], ...(s.rounds ?? []).map((r) => [s.who, r.line])],
+  // Mirrors ShapeTorchScene.tsx's shapeTorchLines() (find / found / "That's a … ." for every gem).
+  'shape-torch': (s) => {
+    const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
+    const t = (s.targets ?? []).map((i) => s.gems?.[i]).filter(Boolean).flatMap((g) => [
+      [s.who, `Find ${art(g.colorWord)} ${g.colorWord.toLowerCase()} ${g.shape}!`],
+      [s.who, `Yes! ${art(g.colorWord) === 'an' ? 'An' : 'A'} ${g.colorWord.toLowerCase()} ${g.shape}!`],
+    ]);
+    return [...t, ...(s.gems ?? []).map((g) => [s.who, `That's ${art(g.colorWord)} ${g.colorWord.toLowerCase()} ${g.shape}.`])];
+  },
+  // Mirrors SecretCardScene.tsx's secretCardLines().
+  'secret-card': (s) => [
+    [s.who, 'I have a secret card. Ask me!'], [s.who, 'Yes, it is!'], [s.who, "No, it isn't!"],
+    ...(s.rounds ?? []).map((r) => s.cards?.[r.secret]).filter(Boolean).map((c) => [s.who, `You found it! It's ${/^[aeiou]/i.test(c.colorWord) ? 'an' : 'a'} ${c.colorWord.toLowerCase()} ${c.shape}!`]),
+  ],
   // Mirrors ShapeBuilderScene.tsx's shapeBuilderLines().
   'shape-builder': (s) => [
     [s.who, 'What shape is it?'],

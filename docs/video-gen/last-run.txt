@@ -1,0 +1,7 @@
+skip meadow (exists)
+skip beach (exists)
+river: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started river: cc602732-aa98-47eb-800f-5dee8d1a793f
+saved public/lep1/video/clips/u2l6-loops/river.mp4 (10090550 bytes)
+skip garden (exists)
+4/4 clips ready for u2l6-loops

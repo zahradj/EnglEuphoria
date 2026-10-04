@@ -601,5 +601,665 @@
       "public/lep1/scenes/bg-u2l3-shape-parade.png"
     ],
     "prompt": "One red TRIANGLE flag on a short wooden pole, side view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l4-party-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-town-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A sunny garden party in a meadow. The same five friends as the references stand on the grass across the lower part of the picture: Pip the orange fox, Willow the blue bird with a green scarf, Bella the white bunny, Mia the grey mouse with an orange bow, Leo the yellow lion, all smiling. On the far LEFT a bunch of three ROUND balloons (one red, one blue, one yellow) tied to a post. In the MIDDLE on a small wooden table one big GREEN SQUARE present box with a yellow ribbon. Across the TOP a string of bunting made of TRIANGLE flags in red, blue and yellow. Blue sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l4-secret-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-town-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Pip the orange fox (same design as the reference) sits on the LEFT third of the picture behind a small wooden table, holding one playing card face-down against his chest, smiling playfully with a finger on his lips (it's a secret). The middle and right two thirds of the picture are open, plain, calm meadow grass and sky with nothing in them. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l4-whale-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-town-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Willow the blue bird with a green scarf (same design as the reference) stands on a sandy beach on the LEFT third of the picture, pointing happily at one big friendly blue WHALE in the sea in the middle, spouting water. The right third is open sea and sky. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-whale.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-town-wide.png"
+    ],
+    "prompt": "One cute friendly blue whale, side view, spouting a little water, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-wheel.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-town-wide.png"
+    ],
+    "prompt": "One single round wooden cart wheel with spokes, front view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-whistle.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l2-meadow-wide.png",
+      "public/lep1/scenes/bg-u2l3-town-wide.png"
+    ],
+    "prompt": "One shiny silver whistle with a red cord, side view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-sea-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A calm blue sea under a sunny sky. On the LEFT half a small red wooden SHIP floats on the water with the five friends from the reference standing on its deck and waving: Pip the orange fox, Willow the blue bird with a green scarf, Bella the white bunny, Mia the grey mouse with an orange bow, Leo the yellow lion. On the RIGHT, under the clear water, one small round light-GREY fish with big friendly eyes looks up at them a little sadly. A few pink SHELLS lie on the sandy sea floor at the bottom. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-sad-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Underwater close-up: Shelly, a small round light-GREY fish with big friendly eyes and a little tail fin (same fish as in the first reference image) swims in the middle-right of the picture looking SAD, with a small tear. She is completely grey with NO colours. Soft blue water, bubbles, sandy floor with pink shells. The left third is open blue water. No other animals. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-red-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Bella the white bunny (same design as the reference) leans over the side of the small red wooden ship on the LEFT and drops one shiny RED CIRCLE-shaped scale into the water. Shelly, a small round light-GREY fish with big friendly eyes and a little tail fin (same fish as in the first reference image) is just below the surface on the right, now with exactly ONE red circle scale on her side, smiling. Blue sea, sunny sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-blue-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Mia the grey mouse with an orange bow (same design as the reference) leans over the side of the small red wooden ship on the LEFT and drops one shiny BLUE SQUARE-shaped scale into the water. Shelly, a small round light-GREY fish with big friendly eyes and a little tail fin (same fish as in the first reference image) is just below the surface on the right, with one red circle scale and one blue square scale on her side, smiling. Blue sea, sunny sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-yellow-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Leo the yellow lion (same design as the reference) leans over the side of the small red wooden ship on the LEFT and drops one shiny YELLOW TRIANGLE-shaped scale into the water. Shelly, a small round light-GREY fish with big friendly eyes and a little tail fin (same fish as in the first reference image) is just below the surface on the right, with one red circle, one blue square and one yellow triangle scale on her side, happy. Blue sea, sunny sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-rainbow-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Shelly, a small round fish with big friendly eyes and a little tail fin (same fish as in the first reference image) is now a RAINBOW fish: her body is covered in shiny scales shaped like circles, squares and triangles in red, orange, yellow, green, blue and purple. She leaps happily out of the water in the middle-right with sparkles. On the LEFT the small red wooden ship with the five friends from the reference cheering. Blue sea, sunny sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-crab-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Underwater on the sandy sea floor: the rainbow fish Shelly (round fish covered in red, orange, yellow, green, blue and purple circle, square and triangle scales, same fish as the references) on the RIGHT gives one shiny PURPLE CIRCLE scale to a small sad grey crab on the LEFT. The crab starts to smile. Pink shells, bubbles, soft blue water. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-ship.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "One small red wooden toy ship with a white sail, side view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-shoe.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "One single red children's sneaker shoe, side view, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-shell.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-sea-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "One pink spiral sea shell, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/items/item-shelly.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-shelly-rainbow-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "Shelly the rainbow fish: a small round fish covered in shiny scales shaped like circles, squares and triangles in red, orange, yellow, green, blue and purple, big friendly eyes, side view (same fish as the rainbow reference), drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look), isolated alone on a plain pure white background, nothing else in the picture, no text, no letters, no numbers."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-map-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A sunny green meadow. Pip the orange fox (same design as the reference) stands in the middle-left holding up a big old paper treasure MAP with both paws, looking excited. The map shows a winding dotted path with three simple marks on it: one red circle, one blue square and one yellow triangle, and a big red X at the end. Behind Pip the other four friends lean in to look: Willow the blue bird with a green scarf, Bella the white bunny, Mia the grey mouse with an orange bow, Leo the yellow lion. The right third of the picture is open meadow and sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-garden-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A flower garden full of colourful flowers. Bella the white bunny (same design as the reference) kneels on the LEFT and holds up one shiny flat RED CIRCLE gem, round like a coin, smiling with surprise. The right half of the picture is open garden and sky. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-beach-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A sunny sandy beach by the sea. Willow the blue bird with a green scarf (same design as the reference) stands on the LEFT next to a little hole in the sand and holds up one shiny flat BLUE SQUARE gem with four equal sides, smiling. The right half is open beach, sea and sky. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-cave-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Inside a cosy rocky cave lit by a warm torch. Leo the yellow lion (same design as the reference) stands on the LEFT holding a torch (flashlight) whose beam shines on one shiny flat YELLOW TRIANGLE gem on a rock in the middle. The right third is plain rocky cave wall. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-chest-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A sunny meadow. A big closed wooden treasure chest stands in the middle. Its lid has three empty holes: one round circle hole, one square hole and one triangle hole. Mia the grey mouse with an orange bow (same design as the reference) puts a shiny red circle gem into the circle hole. A blue square gem and a yellow triangle gem lie next to the chest. The other friends watch excitedly from the left: Pip the orange fox, Willow the blue bird with a green scarf, Bella the white bunny, Leo the yellow lion. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-rainbow-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A sunny meadow. A big wooden treasure chest stands OPEN in the middle and a bright RAINBOW with six clear bands (red, orange, yellow, green, blue, purple) bursts up out of it into the sky with sparkles. The five friends from the references cheer and jump around the chest: Pip the orange fox, Willow the blue bird with a green scarf, Bella the white bunny, Mia the grey mouse with an orange bow, Leo the yellow lion. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-cave-empty-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/scenes/bg-u2l5-sea-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). Inside a big empty rocky cave, seen straight on: a wide smooth grey-brown rock wall fills the whole picture edge to edge, with a few small stones on the sandy floor at the bottom. Soft even light. Calm and plain, nothing on the wall. No characters, no objects. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-rainbow.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-shell.png",
+      "public/lep1/items/item-ship.png"
+    ],
+    "prompt": "One single cute cartoon RAINBOW arch with six clear bands (red, orange, yellow, green, blue, purple from the outside in) and a small fluffy white cloud at each end, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-gem-red-circle.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-rainbow.png"
+    ],
+    "prompt": "One single treasure gem: a shiny flat RED CIRCLE gem, perfectly round like a coin, with a little sparkle highlight, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), seen straight on, isolated alone on a plain pure white background, nothing else in the picture. No flowers, no plants, no grass, no scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-gem-blue-square.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-rainbow.png"
+    ],
+    "prompt": "One single treasure gem: a shiny flat BLUE SQUARE gem with four equal straight sides, with a little sparkle highlight, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), seen straight on, isolated alone on a plain pure white background, nothing else in the picture. No flowers, no plants, no grass, no scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-gem-yellow-triangle.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-rainbow.png"
+    ],
+    "prompt": "One single treasure gem: a shiny flat YELLOW TRIANGLE gem with three straight sides, with a little sparkle highlight, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), seen straight on, isolated alone on a plain pure white background, nothing else in the picture. No flowers, no plants, no grass, no scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a cosy children's playroom: warm wooden floor and soft yellow walls that fill the whole picture edge to edge, a window with curtains, a rug. In the middle stands a big open wooden toy box. The five friends from the reference sit and stand around it, smiling: Pip the orange fox, Willow the blue bird with a green scarf, Bella the white bunny, Mia the grey mouse with an orange bow, Leo the yellow lion. On the floor in front: one plain RED ball, one small BLUE toy car and one baby doll in a GREEN dress. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-toybox-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a cosy children's playroom: warm wooden floor and soft yellow walls that fill the whole picture edge to edge, a window with curtains, a rug. Pip the orange fox (same design as the reference) on the LEFT lifts the lid of a big closed wooden toy box and peeks inside with a curious, excited face; a soft magical glow comes out of the box. The right third of the picture is open playroom. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-ball-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a cosy children's playroom: warm wooden floor and soft yellow walls that fill the whole picture edge to edge, a window with curtains, a rug. Bella the white bunny (same design as the reference) on the LEFT happily bounces one big plain RED ball (one solid red colour, no stripes). The right half of the picture is open playroom floor and wall. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-car-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a cosy children's playroom: warm wooden floor and soft yellow walls that fill the whole picture edge to edge, a window with curtains, a rug. Willow the blue bird with a green scarf (same design as the reference) on the LEFT pushes one small plain BLUE toy car across the floor, smiling. The right half is open playroom. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-doll-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a cosy children's playroom: warm wooden floor and soft yellow walls that fill the whole picture edge to edge, a window with curtains, a rug. Mia the grey mouse with an orange bow (same design as the reference) on the LEFT hugs one baby doll in a GREEN dress, smiling. The right half is open playroom. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-play-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a cosy children's playroom: warm wooden floor and soft yellow walls that fill the whole picture edge to edge, a window with curtains, a rug. All five friends from the reference play together happily: Bella throws a plain RED ball to Leo, Willow drives a BLUE toy car on the rug, Mia rocks a doll in a GREEN dress, Pip claps and laughs. Bright, joyful. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-shop-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A bright toy shop: wooden shelves fill the back wall edge to edge with toys of many colours — balls, toy cars and dolls. Pip the orange fox (same design as the reference) stands on the LEFT behind a small wooden shop counter, smiling and waving like a shopkeeper. The right third of the picture is open shop floor in front of the shelves. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-shelf-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l4-party-wide.png",
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A wide wooden toy shelf seen straight on, filling the picture, with three long shelves and plain warm wall behind. Nine toys stand apart from each other with clear space between them, three on each shelf: TOP shelf from left to right: a plain RED ball, a BLUE toy car, a doll in a GREEN dress. MIDDLE shelf: a plain YELLOW ball, a doll in a PURPLE dress, an ORANGE toy car. BOTTOM shelf: a GREEN toy car, a plain BLUE ball, a doll in a RED dress. No characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-ball-red.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one plain round toy ball in solid RED (one single colour, no stripes) with a cute small happy face, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-ball-blue.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one plain round toy ball in solid BLUE (one single colour, no stripes) with a cute small happy face, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-ball-yellow.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one plain round toy ball in solid YELLOW (one single colour, no stripes) with a cute small happy face, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-car-red.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one small toy car in solid RED, side view, with a cute happy face, exactly like the blue toy car reference but red, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-car-green.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one small toy car in solid GREEN, side view, with a cute happy face, exactly like the blue toy car reference but green, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-doll-purple.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one baby doll in a PURPLE dress, exactly like the doll reference but with a purple dress, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-doll-yellow.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one baby doll in a YELLOW dress, exactly like the doll reference but with a yellow dress, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-dog.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one cute friendly brown puppy dog sitting, smiling, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/items/item-door.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png"
+    ],
+    "prompt": "one simple wooden front door with a round knob, closed, seen straight on, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery, no other objects. No text."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l1-room-empty-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference image (bold dark outlines, soft flat colours, friendly picture-book look). The same cosy children's playroom as the reference — warm wooden floor and soft yellow walls filling the whole picture edge to edge, the window with curtains, a round rug — but EMPTY and calm: no characters, no toys, no toy box, nothing on the floor. Only the plain room. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l2-party-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A birthday party in the same cosy playroom as the first reference (warm wooden floor, soft yellow walls filling the whole picture edge to edge, window with curtains), with balloons and paper garlands. Leo the yellow lion (same design as the reference) wears a little party hat in the middle and smiles; in front of him are THREE wrapped presents with bows (one big, one long, one round). The other friends cheer around him: Pip the orange fox, Willow the blue bird with a green scarf, Bella the white bunny, Mia the grey mouse with an orange bow. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l2-teddy-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). the same cosy playroom as the first reference (warm wooden floor, soft yellow walls filling the whole picture edge to edge, window with curtains). Leo the yellow lion (same design as the reference) on the LEFT hugs one soft BROWN TEDDY BEAR, eyes closed, very happy, torn wrapping paper at his feet. The right half of the picture is open playroom. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l2-blocks-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). the same cosy playroom as the first reference (warm wooden floor, soft yellow walls filling the whole picture edge to edge, window with curtains). Bella the white bunny (same design as the reference) on the LEFT kneels and stacks colourful toy BLOCKS (red, blue, yellow, green cubes) into a little tower, more blocks on the floor. The right half is open playroom. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l2-train-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). the same cosy playroom as the first reference (warm wooden floor, soft yellow walls filling the whole picture edge to edge, window with curtains). Willow the blue bird with a green scarf (same design as the reference) on the LEFT kneels next to one RED TOY TRAIN (an engine and two small wagons) on a little wooden track, smiling. The right half is open playroom. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l2-cake-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). The birthday party in the same cosy playroom as the first reference (warm wooden floor, soft yellow walls filling the whole picture edge to edge, window with curtains). EXACTLY five friends, each one appearing ONLY ONCE (never draw any character twice): ONE Pip the orange fox, ONE Willow the blue bird with a green scarf, ONE Bella the white bunny, ONE Mia the grey mouse with an orange bow, ONE Leo the yellow lion. They play together: a tall tower of colourful toy blocks, a red toy train going round a track, Leo the yellow lion hugging a brown teddy bear, and a birthday cake with candles on a little table. Everyone is laughing. Balloons and garlands. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l2-shelf-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u3l1-playroom-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). A wide wooden toy shelf seen straight on, filling the picture, with TWO long shelves and plain warm wall behind. Six groups of toys stand apart with clear space between them. TOP shelf, left to right: ONE brown teddy bear alone; THREE brown teddy bears sitting together; ONE red toy train alone. BOTTOM shelf, left to right: a pile of colourful toy blocks; ONE red ball alone; THREE red balls together. No characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-teddies.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png",
+      "public/lep1/items/item-teddy.png"
+    ],
+    "prompt": "THREE soft brown teddy bears sitting close together side by side, like the teddy bear reference, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/items/item-trains.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png",
+      "public/lep1/items/item-teddy.png"
+    ],
+    "prompt": "TWO small red toy trains side by side, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/items/item-balls.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png",
+      "public/lep1/items/item-teddy.png"
+    ],
+    "prompt": "THREE plain round RED toy balls with cute happy faces, grouped together, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/items/item-cars.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png",
+      "public/lep1/items/item-teddy.png"
+    ],
+    "prompt": "THREE small BLUE toy cars with cute happy faces, grouped together, exactly like the blue car reference, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/items/item-dolls.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-car.png",
+      "public/lep1/items/item-doll.png",
+      "public/lep1/items/item-teddy.png"
+    ],
+    "prompt": "THREE baby dolls in GREEN dresses sitting together, exactly like the doll reference, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-play-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-empty-wide.png",
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images. SETTING: the very same evening meadow and big oak tree as in the FIRST reference image (same place, same tree on the far right). CHARACTERS: they look exactly like the friends in the SECOND reference image (same faces, colours and clothes) (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. Leo the yellow lion (same design as the reference) sits on the grass in the middle-left, happily holding up one shiny golden STAR toy with both paws, smiling. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-wind-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-empty-wide.png",
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images. SETTING: the very same evening meadow and big oak tree as in the FIRST reference image (same place, same tree on the far right). CHARACTERS: they look exactly like the friends in the SECOND reference image (same faces, colours and clothes) (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. A gust of wind blows; the shiny golden star toy flies out of Leo's paws and away into the tall grass on the right. Leo the yellow lion (same design as the reference) reaches after it with a surprised, worried face. Leaves and petals blow in the wind. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-sad-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-empty-wide.png",
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images. SETTING: the very same evening meadow and big oak tree as in the FIRST reference image (same place, same tree on the far right). CHARACTERS: they look exactly like the friends in the SECOND reference image (same faces, colours and clothes) (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. Leo the yellow lion (same design as the reference) sits on the grass on the LEFT looking SAD with a small tear, empty paws. Pip the orange fox walks up beside him and waves hello kindly. The right third of the picture is open meadow. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-friends-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-empty-wide.png",
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images. SETTING: the very same evening meadow and big oak tree as in the FIRST reference image (same place, same tree on the far right). CHARACTERS: they look exactly like the friends in the SECOND reference image (same faces, colours and clothes) (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. All five friends stand in a row on the grass, each one ONLY ONCE, waving hello: from left to right Pip the orange fox, Mia the grey mouse with an orange bow, Bella the white bunny, Willow the blue bird with a green scarf, Leo the yellow lion. Leo still looks a little sad; the others smile kindly. Clear space between the friends. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-hat-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-empty-wide.png",
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images. SETTING: the very same evening meadow and big oak tree as in the FIRST reference image (same place, same tree on the far right). CHARACTERS: they look exactly like the friends in the SECOND reference image (same faces, colours and clothes) (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. Bella the white bunny (same design as the reference) on the LEFT lifts a big round straw HAT from the grass; under it is a tiny friendly cartoon BAT that flutters up, surprised. No star. The right half is open meadow. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-mat-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-empty-wide.png",
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images. SETTING: the very same evening meadow and big oak tree as in the FIRST reference image (same place, same tree on the far right). CHARACTERS: they look exactly like the friends in the SECOND reference image (same faces, colours and clothes) (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. Mia the grey mouse with an orange bow (same design as the reference) on the LEFT lifts the corner of a red picnic MAT on the grass; under it is one tiny friendly cartoon ANT waving. No star. The right half is open meadow. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-glow-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-empty-wide.png",
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images. SETTING: the very same evening meadow and big oak tree as in the FIRST reference image (same place, same tree on the far right). CHARACTERS: they look exactly like the friends in the SECOND reference image (same faces, colours and clothes) (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. Willow the blue bird with a green scarf (same design as the reference) flies high in the sky in the middle and points down with her wing at a warm golden GLOW under the big oak tree on the right. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-found-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-empty-wide.png",
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images. SETTING: the very same evening meadow and big oak tree as in the FIRST reference image (same place, same tree on the far right). CHARACTERS: they look exactly like the friends in the SECOND reference image (same faces, colours and clothes) (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge, now darker with many twinkling stars. Under the big oak tree Leo the yellow lion hugs the shiny golden star, very happy. The other friends cheer and jump around him: Pip the orange fox, Mia the grey mouse with an orange bow, Bella the white bunny, Willow the blue bird with a green scarf. Each friend appears only once. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-l5-empty-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). a calm meadow at early evening: soft purple-blue sky with the first twinkling stars, gentle green hills, tall grass, a few flowers, and ONE big round oak tree on the far right; the meadow fills the whole picture edge to edge. Calm and EMPTY: no characters and no objects on the grass, only the meadow, the big oak tree on the right and the evening sky. Plenty of open grass in the lower half. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-tree.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-hat.png",
+      "public/lep1/items/item-bag.png"
+    ],
+    "prompt": "one big round friendly oak tree with a thick brown trunk and a full green leafy top, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/items/item-star-gold.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-hat.png",
+      "public/lep1/items/item-bag.png"
+    ],
+    "prompt": "one shiny golden five-point STAR toy with a cute happy face and little sparkles, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft flat colours), isolated alone on a plain pure white background, nothing else in the picture. No scenery. No text."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-green-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-shelly-yellow-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). SAME PLACE, SAME SHIP AND SAME FISH as the FIRST reference image (same sea, same little red wooden boat on the LEFT, same small round fish under the surface on the right). Now Pip the orange fox (same design as in the second reference image) sits in the boat instead of the lion, leans over the side and drops one shiny GREEN CIRCLE-shaped scale into the water. Shelly, the small round light-GREY fish with big friendly eyes, is just below the surface on the right, now with one red circle, one blue square, one yellow triangle and one green circle scale on her side, smiling. The rest of the fish is still grey. Only Pip in the boat. Blue sea, sunny sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l5-shelly-orange-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l5-shelly-yellow-wide.png",
+      "public/lep1/scenes/bg-u2l4-party-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). SAME PLACE, SAME SHIP AND SAME FISH as the FIRST reference image (same sea, same little red wooden boat on the LEFT, same small round fish under the surface on the right). Now Willow the blue bird with a green scarf (same design as in the second reference image) flies just above the boat and drops two shiny scales into the water: one ORANGE SQUARE and one PURPLE TRIANGLE. Shelly, the small round light-GREY fish with big friendly eyes, is just below the surface on the right, now with a red circle, a blue square, a yellow triangle and a green circle scale on her side, looking up excited. The red boat is completely EMPTY: nothing inside it, no shapes in or near the boat, no yellow triangle anywhere except the one already on the fish's side. Blue sea, sunny sky. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-gem-green-triangle.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-gem-red-circle.png",
+      "public/lep1/items/item-gem-blue-square.png",
+      "public/lep1/items/item-gem-yellow-triangle.png"
+    ],
+    "prompt": "one shiny GREEN TRIANGLE-shaped treasure gem, cut and sparkling exactly like the gems in the reference images (same cartoon sticker style, bold dark outline, soft flat colours, little white shine), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-gem-purple-circle.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-gem-red-circle.png",
+      "public/lep1/items/item-gem-blue-square.png",
+      "public/lep1/items/item-gem-yellow-triangle.png"
+    ],
+    "prompt": "one shiny PURPLE CIRCLE-shaped treasure gem, cut and sparkling exactly like the gems in the reference images (same cartoon sticker style, bold dark outline, soft flat colours, little white shine), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-gem-orange-square.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-gem-red-circle.png",
+      "public/lep1/items/item-gem-blue-square.png",
+      "public/lep1/items/item-gem-yellow-triangle.png"
+    ],
+    "prompt": "one shiny ORANGE SQUARE-shaped treasure gem, cut and sparkling exactly like the gems in the reference images (same cartoon sticker style, bold dark outline, soft flat colours, little white shine), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-medal-rainbow.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-gem-red-circle.png",
+      "public/lep1/items/item-gem-blue-square.png",
+      "public/lep1/items/item-gem-yellow-triangle.png"
+    ],
+    "prompt": "one round golden champion MEDAL with a rainbow-striped ribbon (red, orange, yellow, green, blue, purple) and, on the gold disc, a small red circle, blue square and yellow triangle in relief; same cartoon sticker style as the reference images (bold dark outline, soft flat colours, shine), isolated alone on a plain pure white background, nothing else in the picture. No text, letters or numbers."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-gems-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u2l6-beach-wide.png",
+      "public/lep1/items/item-gem-red-circle.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft flat colours, friendly picture-book look). The same sunny beach as the first reference image. On the sand in the LOWER half lie SIX big shiny treasure gems in ONE neat row from left to right, evenly spaced with clear space between them: a RED CIRCLE, an ORANGE SQUARE, a YELLOW TRIANGLE, a GREEN CIRCLE, a BLUE SQUARE, a PURPLE TRIANGLE. Each gem appears only once. A small open wooden treasure chest sits far away on the right edge. The upper half is calm sky and sea with open space. No characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u2l6-river-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-meadow.jpg",
+      "public/lep1/scenes/bg-u2l6-beach-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft colours, friendly picture-book look, gentle depth). A wide sparkling blue RIVER seen from slightly above: it comes from far-away green hills at the top of the picture and flows down toward the viewer, and it is WIDE, filling the middle of the picture from about 14% to 86% of the width. On the far LEFT edge and the far RIGHT edge are grassy river banks with flowers, reeds and small bushes. The water has soft ripples, little white wave highlights and a few lily pads near the banks only. The open water in the middle is EMPTY: no stones, no rocks, no boats, no characters, no animals. Sunny sky with soft clouds at the very top. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-stone.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-gem-red-circle.png",
+      "public/lep1/items/item-hat.png"
+    ],
+    "prompt": "one big round flat RIVER STEPPING STONE seen from slightly above: a smooth light-grey rock with a soft rounded 3D shape, a glossy wet highlight on top, a little green moss on one side and a darker grey underside, drawn in exactly the same cartoon sticker style as the reference images (bold dark outline, soft shading), isolated alone on a plain pure white background, nothing else in the picture. No text."
   }
 ]

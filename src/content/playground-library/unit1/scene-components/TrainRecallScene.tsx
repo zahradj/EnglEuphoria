@@ -3,6 +3,9 @@ import type { Scene } from '../scenes';
 import { safeSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
+import { STICKER_TILTS, StickerButton, TrainEngine, TrainTrack, TrainWagon } from './shared';
+
+const WAGON_COLORS = ['#3B82F6', '#22C55E', '#F59E0B', '#A855F7', '#14B8A6', '#EC4899'];
 
 /* ---------- Train recall (the train's cars are covered one by one; recall which toy was in the one that stays hidden) ---------- */
 
@@ -56,47 +59,48 @@ export function TrainRecallScene({ scene, onWin, onLose, onNext, sync }: { scene
           {phase === 'ask' || phase === 'done' ? 'Choo choo! Which toy is missing?' : scene.teacher}
         </div>
       </div>
-      <div className="absolute inset-x-0 top-[42%] z-10 flex -translate-y-1/2 items-center justify-center gap-3 px-4">
-        {scene.cars.map((car, i) => {
-          const isMissing = missingIdx === i;
-          const showContents = phase === 'reveal' || (phase !== 'hidden' && !isMissing) || (phase === 'done' && isMissing);
-          return (
-            <div key={i} className="flex flex-col items-center gap-1">
-              <div className={`relative flex h-24 w-24 items-center justify-center rounded-2xl border-4 border-white bg-gradient-to-b from-orange-400 to-orange-600 shadow-xl sm:h-28 sm:w-28 ${isMissing && phase === 'ask' ? 'animate-pulse ring-4 ring-yellow-300' : ''}`}>
+      {/* The toy train: rolls in while the toys are shown; one wagon is covered. */}
+      <div className="absolute inset-x-0 top-[20%] z-10 flex flex-col items-center px-3">
+        <div className="flex items-end gap-1" style={{ animation: 'lep1-card-in 0.9s ease-out' }}>
+          <TrainEngine moving={phase === 'reveal' || phase === 'done'} className="h-[23vh] w-[28vh] shrink-0" />
+          {scene.cars.map((car, i) => {
+            const isMissing = missingIdx === i;
+            const showContents = phase === 'reveal' || (phase !== 'hidden' && !isMissing) || (phase === 'done' && isMissing);
+            return (
+              <TrainWagon key={i} color={WAGON_COLORS[i % WAGON_COLORS.length]} moving={phase === 'done'} glow={isMissing && phase === 'ask'} className="h-[23vh] w-[21vh] shrink-0">
                 {showContents ? (
-                  car.img ? <img src={car.img} alt={car.word} className="h-3/4 w-3/4 object-contain" draggable={false} /> : <span className="text-3xl">{car.emoji}</span>
+                  car.img ? <img src={car.img} alt={car.word} className="h-full w-full object-contain" style={{ animation: phase === 'done' && isMissing ? 'lep1-pop 0.5s ease-out' : undefined }} draggable={false} /> : <span className="text-3xl">{car.emoji}</span>
                 ) : (
-                  <span className="text-3xl font-black text-white">?</span>
+                  <span className="grid h-full w-full place-items-center rounded-lg bg-gradient-to-b from-orange-300 to-orange-500 text-3xl font-black text-white">?</span>
                 )}
-              </div>
-              <div className="h-3 w-16 rounded-b-lg bg-neutral-700" />
-              <div className="flex gap-3">
-                <span className="h-4 w-4 rounded-full bg-neutral-800" />
-                <span className="h-4 w-4 rounded-full bg-neutral-800" />
-              </div>
-            </div>
-          );
-        })}
+              </TrainWagon>
+            );
+          })}
+        </div>
+        <TrainTrack moving={phase === 'reveal' || phase === 'done'} className="-mt-[1vh] w-[96%]" />
       </div>
       {phase === 'ask' && (
-        <div className="absolute inset-x-0 bottom-10 z-30 flex flex-wrap justify-center gap-3 px-4">
+        <div className="absolute inset-x-0 bottom-[11%] z-30 flex flex-wrap justify-center gap-3 px-4">
           {choices.map((word) => {
             const isPicked = picked === word;
             return (
-              <button
+              <StickerButton
                 key={word}
                 onClick={() => pick(word)}
                 disabled={!!picked}
-                className={`rounded-2xl border-4 bg-white px-6 py-3 text-lg font-black uppercase text-orange-700 shadow-xl active:scale-95 ${isPicked && wrong ? 'border-red-400 animate-[lep1-shake_0.4s_ease-out]' : 'border-white'}`}
+                label={word.toLowerCase()}
+                tilt={STICKER_TILTS[choices.indexOf(word) % STICKER_TILTS.length]}
+                state={isPicked && wrong ? 'wrong' : undefined}
+                size="h-[min(18vh,15vw)] w-[min(18vh,15vw)]"
               >
-                {word}
-              </button>
+                {(() => { const c = scene.cars.find((x) => x.word === word); return c?.img ? <img src={c.img} alt="" className="h-full w-full object-contain" draggable={false} /> : <span className="text-4xl">{c?.emoji}</span>; })()}
+              </StickerButton>
             );
           })}
         </div>
       )}
       {phase === 'done' && (
-        <div className="absolute inset-x-0 bottom-10 z-30 flex justify-center">
+        <div className="absolute inset-x-0 bottom-[11%] z-30 flex justify-center">
           <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
             All aboard! Next →
           </button>

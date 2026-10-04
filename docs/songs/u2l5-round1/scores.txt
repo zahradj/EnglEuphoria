@@ -1,0 +1,15 @@
+
+=== docs/songs/u2l5-shelly-take1.mp3  length=27.7s  score=0.85  missing=3  extra=5
+heard: shine rally shally shally little grey fish a red circle a blue square a yellow triangle green and orange and purple too shally is a rainbow fish
+line starts (s): [np.float64(1.9), np.float64(3.2), 7.8, np.float64(13.0)]
+lineDurationsMs: [3240, 4520, 5200, 14782]
+
+=== docs/songs/u2l5-shelly-take2.mp3  length=61.4s  score=0.64  missing=4  extra=20
+heard: shally shally little gray fish a red circle a blue square a yellow triangle green as orange and purple too shelly is a rainbow fish shelly shelly little brave fish a red circle as a scary yellow don't try and go
+line starts (s): [np.float64(9.7), np.float64(11.5), np.float64(16.1), np.float64(19.1)]
+lineDurationsMs: [11520, 4580, 3040, 42222]
+
+=== docs/songs/u2l5-shelly-take3.mp3  length=61.2s  score=0.87  missing=2  extra=5
+heard: shelly shelly little great fish a red circle up a square a yellow triangle green and orange and purple too shelly is a rainbow fish good bye you
+line starts (s): [np.float64(2.5), np.float64(6.3), np.float64(10.6), np.float64(14.4)]
+lineDurationsMs: [6260, 4360, 3740, 46871]

@@ -2,7 +2,7 @@
 name: video-quality-gate
 description: >
   REQUIRED before ordering ANY generated video (Gemini Veo, Higgsfield Seedance, FAL) for EnglEuphoria lessons or games.
-  FOR LESSONS ONLY (never games). A paid-generation gate: brief -> preflight -> approved still -> ONE clip -> frame-by-frame human review -> the rest.
+  Lessons get the full gate; games only short silent ambient background loops (owner, 2026-10-04). A paid-generation gate: brief -> preflight -> approved still -> ONE clip -> frame-by-frame human review -> the rest.
   Covers child safety (conservative, ages 4-12), anatomy/visual-error prevention (hands, faces, limbs, text, flicker),
   silent audio, and a cost guard. Use whenever the user asks for a video, a promo, an animated clip, or a "Gemini/Higgsfield video".
 ---
@@ -12,8 +12,10 @@ description: >
 The product owner's rules: **no money wasted, no mistakes (body parts, visuals), always conservative and safe for children.**
 Video is expensive and unforgiving, so we prevent errors *before* generating instead of fixing them after.
 
-**Scope: lesson videos only** (short silent intro/atmosphere clips that open a lesson). **Never generate video for games** — the owner
-decided games stay interactive and un-animated by video.
+**Scope: lesson videos** (short silent intro/atmosphere clips and Lesson-5 story films). **Games** (owner, 2026-10-04: "I need like an
+animation video game — the games are very flat"): only a short, silent, calm **background loop** of a game picture the owner has seen
+(`bgVideo`; `scripts/make-game-loops.py` ping-pongs it; the still stays as fallback). No new character actions, no speech, no text; all
+other game motion is live UI (`gameFx.tsx`). Same child-safety and cost rules: one clip first, look at it before ordering more.
 
 ## Why these rules (research summary)
 

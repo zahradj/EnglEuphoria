@@ -1,0 +1,4 @@
+Higgsfield: 2 pictures to make
++ public/lep1/items/item-stone.png (1807996B, Higgsfield)
++ public/lep1/scenes/bg-u2l6-river-wide.png (4766160B, Higgsfield)
+Done. made 2, failed 0

@@ -30,20 +30,44 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Generate missing art
-        run: node scripts/generate-art.mjs
+      - name: Generate missing art (Higgsfield)
+        env:
+          HF_PROXY_URL: https://dcoxpyzoqjvmuuygvlme.supabase.co/functions/v1/higgsfield-video
+          HF_PROXY_TOKEN: de472b713779b6c3f2c462fb886213e1861db78b10aa2021
+        run: |
+          mkdir -p docs/art-gen
+          set -o pipefail
+          node scripts/generate-art.mjs 2>&1 | tee docs/art-gen/last-run.txt || true
       - name: Cut out stickers
         run: |
           pip install --quiet pillow
+          # Higgsfield returns JPEG/WebP at 2k: save as real PNG at the lesson's sizes.
+          python - <<'PY'
+          from PIL import Image
+          import os
+          made = [l.strip() for l in open('art-made.txt') if l.strip()] if os.path.exists('art-made.txt') else []
+          for p in made:
+              im = Image.open(p).convert('RGB')
+              w, h = im.size
+              size = (1376, 768) if w > h * 1.3 else (1024, 1024) if abs(w - h) < 8 else None
+              if size: im = im.resize(size, Image.LANCZOS)
+              im.save(p, 'PNG', optimize=True)
+              print('png', p, im.size)
+          PY
           python scripts/cutout-stickers.py art-stickers.txt
           python scripts/outpaint-composite.py art-outpaint.txt
-          rm -f art-stickers.txt art-outpaint.txt
+          rm -f art-stickers.txt art-outpaint.txt art-made.txt
       - name: Commit new art
+        if: always()
         run: |
-          git add public
+          git add public docs/art-gen
           if git diff --cached --quiet; then echo "No new art."; exit 0; fi
           git config user.name "art-bake-bot"
           git config user.email "actions@users.noreply.github.com"
           git commit -m "Bake lesson art ($(git diff --cached --name-only | wc -l) files)"
-          git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          # Another bot may have pushed meanwhile (same run log): keep ours on conflict, retry.
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
