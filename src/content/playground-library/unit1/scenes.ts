@@ -500,6 +500,32 @@ export type Scene =
       spots: { x: number; y: number; size: number; ask: string; reveal: string; target?: boolean; cover?: { img: string; label: string }; under: { img: string; label: string } }[];
     }
   | {
+      /** Tidy Up (Lingokids × Toy Story "pack the box with toys", Lingokids
+       *  clean-up activities; Cambridge Pre A1 Starters Listening Part 4 —
+       *  prepositions while listening). A messy room: the voice says "Put the
+       *  ball in the box!"; the child drags the toy (or taps toy, then place)
+       *  to the right place painted in the picture. The toy flies there in an
+       *  arc and lands with a bounce; tidied toys stay. `places` = drop zones
+       *  (x/y = centre %, w/h = size %); `at` = where the toy lands (% of the scene). */
+      id: string; kind: 'tidy-up'; bg: string; bgVideo?: string; teacher: string; who: CharKey;
+      places: { label: string; x: number; y: number; w: number; h: number }[];
+      toys: (Thing & { x: number; y: number; size: number })[];
+      rounds: { toy: number; place: number; at: { x: number; y: number }; line: string; reply: string }[];
+    }
+  | {
+      /** Peekaboo Toys (classroom "hide the toy — where is it?" games, ESL
+       *  hide-and-seek; Lingokids prepositions). Toys peek out of hiding
+       *  places painted in the picture — up out of the box, down onto the bed,
+       *  out from under the chair. The voice says "The teddy is under the
+       *  chair!"; the child taps that toy in THAT place (the same toy may also
+       *  peek somewhere else, so the place word matters). `places`: x/y = where
+       *  a peeking toy sits (%), `from` = the side it peeks from. */
+      id: string; kind: 'peek-pop'; bg: string; bgVideo?: string; teacher: string; who: CharKey;
+      places: { label: string; x: number; y: number; from: 'below' | 'above' | 'left' | 'right' }[];
+      toys: Thing[];
+      rounds: { toy: number; place: number; line: string; reply: string; decoys: [number, number][] }[];
+    }
+  | {
       /** Draw Path (Lingokids "Draw Path", 2026): the voice names a thing
        *  ("Take Pip to the purple circle!"); the child draws a line with a
        *  finger from the character to it, and the character walks the line.

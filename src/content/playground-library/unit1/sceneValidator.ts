@@ -30,7 +30,7 @@ export const SCENE_KINDS = [
   'numbers-learn', 'numbers-review', 'candle-cake', 'count-balloons',
   'age-balloons', 'age-sentence-match', 'meet-greet', 'age-quiz',
   'trophy-chest', 'flipbook', 'color-model', 'color-sort', 'color-quiz', 'listen-repeat-cards',
-  'color-spot', 'shape-model', 'shape-sort', 'color-spy', 'color-simon', 'color-mix', 'shape-builder', 'secret-card', 'listen-colour', 'shape-fishing', 'pattern-train', 'tick-cross', 'story-order', 'story-video', 'odd-one-out', 'shape-torch', 'mystery-bag', 'tpr-actions', 'rapid-recall', 'sticker-reward', 'home-mission', 'lift-flap', 'draw-path', 'tile-reveal', 'shadow-match', 'stepping-stones', 'catch-sort', 'spin-wheel', 'toy-model',
+  'color-spot', 'shape-model', 'shape-sort', 'color-spy', 'color-simon', 'color-mix', 'shape-builder', 'secret-card', 'listen-colour', 'shape-fishing', 'pattern-train', 'tick-cross', 'story-order', 'story-video', 'odd-one-out', 'shape-torch', 'mystery-bag', 'tpr-actions', 'rapid-recall', 'sticker-reward', 'home-mission', 'lift-flap', 'draw-path', 'tile-reveal', 'tidy-up', 'peek-pop', 'shadow-match', 'stepping-stones', 'catch-sort', 'spin-wheel', 'toy-model',
   'plural-sort', 'train-recall',
   'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap',
   'sentence-build', 'word-picture-match', 'jigsaw-puzzle',
@@ -211,7 +211,7 @@ export const SLOT_GAMES: Record<1 | 2 | 3 | 4 | 5 | 6, readonly string[]> = {
   2: ['listen-colour', 'catch-sort', 'feed-monsters', 'dash', 'train-recall', 'friend-pop'],
   3: ['puzzle', 'basket', 'jigsaw-puzzle', 'brick-crush', 'pattern-train', 'word-build'],
   4: ['secret-card', 'sound-sort', 'color-simon', 'gather', 'shape-fishing', 'alphabet-order'],
-  5: ['lift-flap', 'tick-cross', 'who-said-it', 'alphabet-blocks'],
+  5: ['lift-flap', 'tick-cross', 'who-said-it', 'alphabet-blocks', 'tidy-up', 'peek-pop'],
   6: ['shape-torch', 'shadow-match', 'draw-path', 'trophy-chest', 'tile-reveal', 'stepping-stones', 'odd-one-out'],
 };
 
