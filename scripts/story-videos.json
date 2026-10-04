@@ -197,5 +197,20 @@
         "prompt": "The water in the paddling pool ripples gently and sparkles in the sunlight, the grass and flowers sway softly in a light breeze."
       }
     ]
+  },
+  "u4l1-dance": {
+    "lesson": "Pre-A1 Unit 4 Lesson 1 — Dance Class (story, page 4). ONE clip first (video-quality-gate); add the other beats only after the owner has reviewed it.",
+    "provider": "higgsfield",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "seconds": 5,
+    "out": "public/lep1/video/clips/u4l1-dance",
+    "style": "Keep exactly the soft 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, slow, gentle animation for young children. The camera stays steady. No text, no new characters, no speech.",
+    "beats": [
+      {
+        "id": "01-class",
+        "image": "public/lep1/scenes/bg-u4l1-dance-class-wide.png",
+        "prompt": "The friends sway slowly side to side to soft music and gently pat the tops of their heads with both paws, then put their paws on their shoulders. Willow the blue bird slowly lifts and lowers her wings like a calm coach. The friends stay in their places. The camera stays steady."
+      }
+    ]
   }
 }
