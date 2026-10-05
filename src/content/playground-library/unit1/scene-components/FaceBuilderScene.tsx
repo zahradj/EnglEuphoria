@@ -130,7 +130,7 @@ export function FaceBuilderScene({ scene, onWin, onLose, onNext, sync }: { scene
       </div>
 
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[86%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-base font-black text-orange-700 shadow-xl sm:text-xl">
-        {r ? `🥞 ${r.line}` : `🎉 ${scene.doneLine}`}
+        {r ? `${scene.icon ?? '🥞'} ${r.line}` : `🎉 ${scene.doneLine}`}
         {r && <span className="ml-2 rounded-full bg-orange-100 px-2 py-0.5 text-sm text-orange-600">{round + 1}/{total}</span>}
       </div>
       {r && <button onClick={() => cueSpeak(r.line, scene.who)} aria-label="Hear it again" className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊</button>}

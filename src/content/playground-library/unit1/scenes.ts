@@ -525,6 +525,8 @@ export type Scene =
       spots: { label: string; boxes: { x: number; y: number; w: number; h: number }[] }[];
       rounds: { spot: number; line: string; reply: string }[];
       doneLine: string;
+      /** Emoji at the start of the question banner (default 🥞). */
+      icon?: string;
     }
   | {
       /** Stack the Friend (apps' "assemble the body"): a friend painted in
@@ -6661,6 +6663,8 @@ const bgU4L2MiaMouth = `${A}/scenes/bg-u4l2-mia-mouth-wide.png`;
 const bgU4L2MiaNose = `${A}/scenes/bg-u4l2-mia-nose-wide.png`;
 const bgU4L2PancakeBlank = `${A}/scenes/bg-u4l2-pancake-blank-wide.png`;
 const bgU4L2PancakeFace = `${A}/scenes/bg-u4l2-pancake-face-wide.png`;
+const bgU4L2RobotBlank = `${A}/scenes/bg-u4l2-robot-blank-wide.png`;
+const bgU4L2RobotFace = `${A}/scenes/bg-u4l2-robot-face-wide.png`;
 const cardEyes = `${A}/items/item-card-eyes.png`;
 const cardEars = `${A}/items/item-card-ears.png`;
 const cardNose = `${A}/items/item-card-nose.png`;
@@ -6673,6 +6677,14 @@ const U4L2_FACE_SPOTS = [
   { label: 'nose', boxes: [{ x: 45.6, y: 41, w: 9.3, h: 19 }] },
   { label: 'mouth', boxes: [{ x: 36, y: 52, w: 28.5, h: 24.5 }] },
   { label: 'ears', boxes: [{ x: 28.8, y: 29.5, w: 7.2, h: 25 }, { x: 65.4, y: 29, w: 7.2, h: 25.5 }] },
+];
+/* The robot face on bg-u4l2-robot-face (measured against the blank robot, % of the picture). The mouth box
+ * touches the button nose, so the nose is always placed before the mouth. */
+const U4L2_ROBOT_SPOTS = [
+  { label: 'eyes', boxes: [{ x: 33.7, y: 32.6, w: 11.9, h: 21.6 }, { x: 54.5, y: 32.6, w: 11.9, h: 21.6 }] },
+  { label: 'nose', boxes: [{ x: 46.1, y: 51.6, w: 7.8, h: 14.6 }] },
+  { label: 'mouth', boxes: [{ x: 32.7, y: 60.7, w: 34.2, h: 18.5 }] },
+  { label: 'ears', boxes: [{ x: 20.9, y: 42.2, w: 5.1, h: 23.7 }, { x: 74, y: 42.2, w: 5.1, h: 23.4 }] },
 ];
 
 export const LESSON_U4L2_TITLE = 'Eyes, Ears, Mouth, Nose!';
@@ -6864,16 +6876,17 @@ export const LESSON_U4L2_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u4l2-pancake-2', kind: 'face-builder', bg: bgU4L2PancakeBlank, doneImg: bgU4L2PancakeFace, who: 'mia',
-    teacher: 'Extra time: Mia makes a pancake too! Listen carefully — a new order.',
-    spots: U4L2_FACE_SPOTS,
+    // Same game, new context: Mia builds a robot friend (owner: page 20 must not repeat page 6's pancake).
+    id: 'u4l2-robot', kind: 'face-builder', bg: bgU4L2RobotBlank, doneImg: bgU4L2RobotFace, who: 'mia', icon: '\u{1F916}',
+    teacher: 'Extra time: Mia builds a robot friend! Listen carefully — a new order.',
+    spots: U4L2_ROBOT_SPOTS,
     rounds: [
-      { spot: 3, line: 'Ears first! Where do the ears go?', reply: 'Yes! The ears!' },
-      { spot: 1, line: 'Now the nose! Where does it go?', reply: 'Yes! The nose!' },
-      { spot: 0, line: 'Where do the eyes go?', reply: 'Yes! The eyes!' },
-      { spot: 2, line: 'And the mouth?', reply: 'Yes! The mouth!' },
+      { spot: 3, line: 'My robot has no face! Ears first. Where do the ears go?', reply: 'Yes! Robot ears!' },
+      { spot: 1, line: 'Now the nose! Where does it go?', reply: 'Yes! A button nose!' },
+      { spot: 0, line: 'Where do the eyes go?', reply: 'Yes! Two light eyes!' },
+      { spot: 2, line: 'And the mouth?', reply: 'Yes! A big robot smile!' },
     ],
-    doneLine: 'My pancake is smiling too! Thank you!',
+    doneLine: 'Hello, robot friend! Eyes, ears, nose and mouth!',
   },
 
   /* 20-21 Goodbye */
