@@ -1,0 +1,86 @@
+[
+ {
+  "file": "07cd7e44.mp3",
+  "voice": "willow",
+  "text": "Stir, stir, stir!",
+  "before": 0.0,
+  "after": 0.0,
+  "take": null
+ },
+ {
+  "file": "9f8a3a73.mp3",
+  "voice": "leo",
+  "text": "Stir, stir, stir!",
+  "before": 0.0,
+  "after": 0.0,
+  "take": null
+ },
+ {
+  "file": "312d65d6.mp3",
+  "voice": "mia",
+  "text": "Stir, stir, stir!",
+  "before": 0.0,
+  "after": 0.0,
+  "take": null
+ },
+ {
+  "file": "3cf56e23.mp3",
+  "voice": "pip",
+  "text": "Yes! A ball!",
+  "before": 0.0,
+  "after": 0.0,
+  "take": null
+ },
+ {
+  "file": "5f8cebb2.mp3",
+  "voice": "pip",
+  "text": "It's a ball!",
+  "before": 0.0,
+  "after": 0.0,
+  "take": null
+ },
+ {
+  "file": "34cad20e.mp3",
+  "voice": "pip",
+  "text": "Jump like a ball!",
+  "before": 0.02,
+  "after": 0.0,
+  "take": {
+   "model": "eleven_turbo_v2",
+   "seed": 101,
+   "phonemes": true
+  }
+ },
+ {
+  "file": "5d2ebf71.mp3",
+  "voice": "pip",
+  "text": "It's a red ball!",
+  "before": 0.0,
+  "after": 0.0,
+  "take": null
+ },
+ {
+  "file": "0eeb7792.mp3",
+  "voice": "pip",
+  "text": "Star",
+  "before": 0.0,
+  "after": 0.0,
+  "take": null
+ },
+ {
+  "file": "5cb7152e.mp3",
+  "voice": "bella",
+  "text": "ant.",
+  "before": 0.0,
+  "after": 0.0,
+  "take": null
+ },
+ {
+  "file": "bc3c2e3c.mp3",
+  "voice": "mia",
+  "text": "shell",
+  "before": 0.0,
+  "after": 0.0,
+  "take": null
+ }
+]
