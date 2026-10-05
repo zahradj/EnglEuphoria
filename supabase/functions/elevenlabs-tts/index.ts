@@ -13,6 +13,33 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { approvedVoiceId, languageLock, normalizeForSpeech, safeVoiceSettings, SHORT_LINE_TTS_MODEL, ttsModelFor } from "../_shared/speechPolicy.ts";
 import { withPhonemes } from "../_shared/pronunciations.ts";
 import { elevenLabsKeys, fetchElevenLabs } from "../_shared/elevenKeys.ts";
+import { requireAuth } from "../_shared/authGuard.ts";
+
+// Owner's rule: NO live clips. Students, teachers and visitors only ever get lines that were already
+// generated and stored (the bake script, or an admin in the editors). Making a NEW clip needs an admin /
+// content-creator login or the service key (the bake script), so a student can never trigger - or pay
+// for - a live generation, and a quota or key problem can't break a lesson.
+async function mayGenerate(req: Request): Promise<boolean> {
+  try {
+    const token = (req.headers.get("Authorization") ?? "").replace(/^Bearer /, "");
+    if (!token) return false;
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    if (serviceKey && token === serviceKey) return true;
+    // The service key can be presented in a different form than our env copy (key rotation): ask Auth itself.
+    // Only the service role may list users, so a 200 here proves the caller holds it.
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    if (supabaseUrl && token.split(".").length === 3) {
+      const probe = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1`, {
+        headers: { apikey: token, Authorization: `Bearer ${token}` },
+      });
+      if (probe.ok) return true;
+    }
+    const auth = await requireAuth(req, { allowedRoles: ["admin", "content_creator"] });
+    return auth.ok;
+  } catch {
+    return false;
+  }
+}
 
 const BUCKET = "sfx-cache";
 async function cacheKey(text: string, voiceId: string, speed: number | null, model: string): Promise<string> {
@@ -67,7 +94,8 @@ Deno.serve(async (req) => {
 
     // Student-facing paths that must never spend credits or wait on the provider ask for
     // cacheOnly: a line that was never stored simply isn't available (the caller stays silent).
-    if (body.cacheOnly === true) {
+    if (body.cacheOnly === true || !(await mayGenerate(req))) {
+      if (body.cacheOnly !== true) console.warn("tts: not stored, live generation refused:", text.slice(0, 120));
       return new Response(JSON.stringify({ error: "audio_not_cached" }), {
         status: 404,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

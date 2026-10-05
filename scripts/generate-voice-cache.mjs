@@ -45,6 +45,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 import * as unit1Scenes from '../src/content/playground-library/unit1/scenes.ts';
 import * as wtScenes from '../src/content/playground-library/welcome-town/scenes.ts';
 import * as wtA2Scenes from '../src/content/playground-library/welcome-town-a2/scenes.ts';
@@ -73,6 +74,27 @@ fs.mkdirSync(OUT_DIR, { recursive: true });
 const SUPABASE_URL = 'https://dcoxpyzoqjvmuuygvlme.supabase.co';
 const ANON_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjb3hweXpvcWp2bXV1eWd2bG1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5NTcxMzMsImV4cCI6MjA2NTUzMzEzM30.qWD7MJ3O7xrH2KBzIfPqGvVXigVaamR6DMVOW3rnO7s';
+
+/**
+ * The elevenlabs-tts function only MAKES new clips for an admin login or the service key (owner's rule: no live
+ * clips for students). Baking is that authorised caller: the key comes from BAKE_SERVICE_KEY, or from the logged-in
+ * Supabase CLI, and is only ever sent to our own function - never printed or written anywhere.
+ */
+let bakeKeyCache;
+function bakeBearer() {
+  if (bakeKeyCache) return bakeKeyCache;
+  let key = process.env.BAKE_SERVICE_KEY;
+  if (!key) {
+    try {
+      const out = execFileSync('npx', ['supabase', 'projects', 'api-keys', '--project-ref', 'dcoxpyzoqjvmuuygvlme', '-o', 'json'], {
+        encoding: 'utf8', shell: true, stdio: ['ignore', 'pipe', 'ignore'],
+      });
+      key = JSON.parse(out).find((k) => k.name === 'service_role')?.api_key;
+    } catch { /* handled below */ }
+  }
+  if (!key) throw new Error('No service key: set BAKE_SERVICE_KEY or log in with `npx supabase login`');
+  return (bakeKeyCache = key);
+}
 
 // Mirrors unit1/audio.ts's VOICE_ID — keep in sync. A voice re-cast there
 // (see that file's version-history comment on `key()`) needs the same
@@ -635,7 +657,7 @@ async function generateClip(character, text) {
       if (attempt > 0) await sleep(500 * attempt);
       const res = await fetch(`${SUPABASE_URL}/functions/v1/elevenlabs-tts`, {
         method: 'POST',
-        headers: { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}`, 'Content-Type': 'application/json' },
+        headers: { apikey: ANON_KEY, Authorization: `Bearer ${bakeBearer()}`, 'Content-Type': 'application/json' },
         // Speech policy: the CLEANED text, in an APPROVED (no-accent) voice. The clip filename still derives from the original text.
         body: JSON.stringify({ text: normalizeForSpeech(text), voiceId: approvedVoiceId(voiceId) }),
       });
