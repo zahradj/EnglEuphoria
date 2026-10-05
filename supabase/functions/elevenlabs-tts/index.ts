@@ -65,9 +65,18 @@ Deno.serve(async (req) => {
       if (cached) return new Response(await cached.arrayBuffer(), { headers: audioHeaders });
     }
 
+    // Student-facing paths that must never spend credits or wait on the provider ask for
+    // cacheOnly: a line that was never stored simply isn't available (the caller stays silent).
+    if (body.cacheOnly === true) {
+      return new Response(JSON.stringify({ error: "audio_not_cached" }), {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     if (elevenLabsKeys().length === 0) {
-      return new Response(JSON.stringify({ error: "ElevenLabs not connected" }), {
-        status: 500,
+      return new Response(JSON.stringify({ error: "audio_unavailable" }), {
+        status: 503,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -98,9 +107,12 @@ Deno.serve(async (req) => {
 
     if (!r.ok) {
       const err = await r.text();
+      // The provider's own message (e.g. "Invalid API key", quota or billing details) is for our
+      // logs only - it must never reach a student's screen. Callers get a neutral code and stay silent.
       console.error("ElevenLabs TTS error:", r.status, err);
-      return new Response(JSON.stringify({ error: err || `TTS failed: ${r.status}` }), {
-        status: r.status,
+      return new Response(JSON.stringify({ error: "audio_unavailable" }), {
+        // Our provider account failing (bad key, quota, billing) is not the caller's fault.
+        status: r.status === 401 || r.status === 402 || r.status === 403 || r.status === 429 ? 503 : r.status,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -123,7 +135,7 @@ Deno.serve(async (req) => {
     return new Response(audio, { headers: audioHeaders });
   } catch (e) {
     console.error("TTS route error:", e);
-    return new Response(JSON.stringify({ error: String((e as Error)?.message ?? e) }), {
+    return new Response(JSON.stringify({ error: "audio_unavailable" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
