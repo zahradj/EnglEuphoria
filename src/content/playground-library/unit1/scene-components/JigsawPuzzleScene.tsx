@@ -1,7 +1,10 @@
 import { useMemo, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import type { Scene } from '../scenes';
 import * as sfx from '../sfx';
 import { PUZZLE_BOARD_SIZE } from './shared';
+import { Bursts, LivingBg, useBursts } from './gameFx';
+import { Confetti } from '../fx';
 
 /* ---------- Jigsaw puzzle (real interlocking piece shapes, drag to assemble) ---------- */
 
@@ -92,6 +95,16 @@ export function JigsawPuzzleScene({ scene, onNext, onWin }: { scene: Extract<Sce
   const [placed, setPlaced] = useState<Set<string>>(new Set());
   const [zOrder, setZOrder] = useState<string[]>(pieces.map((p) => p.id));
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const [bursts, fire] = useBursts();
+  const [justPlaced, setJustPlaced] = useState('');
+  /** Burst on the centre of a board cell (board % → scene %). */
+  const burstOn = (r: number, c: number) => {
+    const root = rootRef.current?.getBoundingClientRect(), b = stageRef.current?.getBoundingClientRect();
+    if (!root || !b) return;
+    const x = b.left + ((c + 0.5) * CELL / 100) * b.width, y = b.top + ((r + 0.5) * CELL / 100) * b.height;
+    fire(((x - root.left) / root.width) * 100, ((y - root.top) / root.height) * 100, 'stars');
+  };
   const dragId = useRef<string | null>(null);
   const gemDone = useRef(false);
   const total = pieces.length;
@@ -133,11 +146,16 @@ export function JigsawPuzzleScene({ scene, onNext, onWin }: { scene: Extract<Sce
         return next;
       });
       sfx.match();
+      burstOn(piece.r, piece.c);
+      setJustPlaced(id);
+      window.setTimeout(() => setJustPlaced((j) => (j === id ? '' : j)), 600);
     }
   };
 
   return (
-    <div className="absolute inset-0 flex flex-col items-center gap-4 overflow-hidden bg-cover bg-center pb-20 pt-20" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div ref={rootRef} className="absolute inset-0 flex flex-col items-center gap-4 overflow-hidden pb-20 pt-20">
+      <LivingBg img={scene.bg} video={scene.bgVideo} />
+      {done && <Confetti count={70} />}
       <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">
         🧩 {scene.teacher} <span className="ml-1 opacity-60">({placed.size}/{total})</span>
       </div>
@@ -174,10 +192,14 @@ export function JigsawPuzzleScene({ scene, onNext, onWin }: { scene: Extract<Sce
           const piece = pieces.find((p) => p.id === id)!;
           const pos = positions[id];
           const isPlaced = placed.has(id);
+          const k = pieces.indexOf(piece);
           return (
-            <div
+            <motion.div
               key={id}
               onPointerDown={onPointerDown(id)}
+              initial={{ scale: 0, rotate: k % 2 ? 20 : -20 }}
+              animate={justPlaced === id ? { scale: [1.18, 0.94, 1], rotate: 0 } : { scale: 1, rotate: isPlaced ? 0 : (k % 3) - 1 }}
+              transition={justPlaced === id ? { duration: 0.45 } : { type: 'spring', stiffness: 240, damping: 15, delay: k * 0.05 }}
               className={`absolute ${isPlaced ? '' : 'cursor-grab active:cursor-grabbing'}`}
               style={{
                 left: `${pos.left}%`, top: `${pos.top}%`, width: `${PIECE}%`, height: `${PIECE}%`,
@@ -203,14 +225,15 @@ export function JigsawPuzzleScene({ scene, onNext, onWin }: { scene: Extract<Sce
                 />
                 <path d={piece.d} fill="none" stroke="white" strokeWidth={0.8} opacity={0.9} />
               </svg>
-            </div>
+            </motion.div>
           );
         })}
       </div>
+      <Bursts items={bursts} />
       {done && (
-        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>
+        <motion.div className="absolute inset-x-0 bottom-8 z-30 flex justify-center" initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.8, type: 'spring' }}>
           <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">You built the whole picture! ⭐ Next</button>
-        </div>
+        </motion.div>
       )}
     </div>
   );

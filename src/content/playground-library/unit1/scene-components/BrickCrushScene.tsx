@@ -1,15 +1,17 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
 import { cueSpeak, playLetterPhonic } from '../audio';
 import * as sfx from '../sfx';
+import { Bursts, useBursts, useShake } from './gameFx';
 
 /* ---------- Brick crush ---------- */
 
 type Brick = { id: number; letter: string; color: string; crashed: boolean; wobble: boolean };
 
 export function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extract<Scene, { kind: 'brick-crush' }>; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void }) {
-  const LETTER_COLORS: Record<string, string> = { H: '#FF6B6B', M: '#4DABF7', N: '#FFD43B', W: '#9775FA', A: '#51CF66', S: '#FF922B' };
+  const LETTER_COLORS: Record<string, string> = { H: '#FF6B6B', M: '#4DABF7', N: '#FFD43B', W: '#9775FA', A: '#51CF66', S: '#FF922B', K: '#F06595', T: '#20C997', D: '#FF8787', B: '#748FFC' };
   const phonemeFor = (L: string) => {
     const map: Record<string, string> = { H: 'h, h', M: 'mmm', N: 'nnn', W: 'wuh', A: 'ah', S: 'sss' };
     return map[L] ?? L.toLowerCase();
@@ -36,6 +38,9 @@ export function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extra
   const [flash, setFlash] = useState<null | 'hit' | 'miss'>(null);
   const [combo, setCombo] = useState(0);
   const c = CAST[scene.who];
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const [bursts, fire] = useBursts();
+  const [shakeCtl, shake] = useShake();
 
   const callNewSound = useCallback(async () => {
     const remaining = bricks.filter((b) => !b.crashed);
@@ -72,10 +77,12 @@ export function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extra
     } else if (timeLeft <= 0) { setPhase('lose'); cueSpeak('Great try!', 'teacher'); }
   }, [score, timeLeft, phase, scene.goal, gemDone, onWin]);
 
-  const tapBrick = (b: Brick) => {
+  const tapBrick = (b: Brick, e?: React.MouseEvent) => {
     if (phase !== 'play' || b.crashed) return;
     if (b.letter === targetLetter) {
       sfx.pop();
+      const root = rootRef.current?.getBoundingClientRect();
+      if (root && e) fire(((e.clientX - root.left) / root.width) * 100, ((e.clientY - root.top) / root.height) * 100, 'sparkle');
       setBricks((prev) => prev.map((x) => (x.id === b.id ? { ...x, crashed: true } : x)));
       setScore((s) => s + 1); setCombo((k) => k + 1); setFlash('hit');
       window.setTimeout(() => setFlash(null), 220);
@@ -83,9 +90,9 @@ export function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extra
       const nextScore = score + 1;
       if (remainingOfTarget === 0 || nextScore % 4 === 0) window.setTimeout(() => { void callNewSound(); }, 400);
     } else {
-      sfx.wrong(); onLose(); setMisses((m) => m + 1); setCombo(0);
+      // Gentle: the brick wobbles and the screen nudges — no red flash, no miss counter.
+      sfx.wrong(); onLose(); setMisses((m) => m + 1); setCombo(0); shake();
       setBricks((prev) => prev.map((x) => (x.id === b.id ? { ...x, wobble: true } : x)));
-      setFlash('miss');
       window.setTimeout(() => { setBricks((prev) => prev.map((x) => (x.id === b.id ? { ...x, wobble: false } : x))); setFlash(null); }, 400);
     }
   };
@@ -93,26 +100,40 @@ export function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extra
   const replaySound = () => { void playLetterPhonic(targetLetter); };
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
+    <motion.div ref={rootRef} className="absolute inset-0 overflow-hidden" animate={shakeCtl}>
       <div className="pointer-events-none absolute inset-x-0 top-3 z-30 flex items-start justify-between px-4">
         <div className="pointer-events-auto rounded-2xl bg-white/95 px-4 py-2 text-sm font-black text-orange-700 shadow-xl backdrop-blur">⭐ {score}/{scene.goal} · ⏱ {timeLeft}s{combo >= 3 ? ` · 🔥 x${combo}` : ''}</div>
         <button onClick={replaySound} className="pointer-events-auto flex items-center gap-2 rounded-full px-5 py-3 text-lg font-black text-white shadow-2xl ring-4 ring-white/60 active:scale-95" style={{ background: `linear-gradient(135deg, ${c.color}, #FEBE4C)` }}>🔊 Sound: <span className="text-2xl">{phonemeFor(targetLetter)}</span></button>
       </div>
       <div className="absolute inset-x-0 top-20 bottom-6 z-10 grid place-items-center px-4">
         <div className="grid gap-2 sm:gap-3" style={{ gridTemplateColumns: `repeat(${scene.cols}, minmax(0, 1fr))`, width: 'min(calc(96*var(--svw,1vw)), 900px)' }}>
-          {bricks.map((b) => {
-            if (b.crashed) return <div key={b.id} className="aspect-square rounded-2xl bg-transparent" aria-hidden />;
+          {bricks.map((b, i) => {
             const isTarget = b.letter === targetLetter;
             return (
-              <button key={b.id} onClick={() => tapBrick(b)} className={`relative aspect-square rounded-2xl border-b-[6px] border-black/25 shadow-xl transition-all active:translate-y-1 active:border-b-2 ${isTarget ? 'ring-4 ring-white/80 animate-pulse' : ''} ${b.wobble ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`} style={{ background: `linear-gradient(160deg, ${b.color}, ${b.color}dd 60%, ${b.color}99)` }} aria-label={`Brick ${b.letter}`}>
+              <div key={b.id} className="relative aspect-square">
+              <AnimatePresence>
+              {!b.crashed && (
+              <motion.button
+                key="brick"
+                onClick={(e) => tapBrick(b, e)}
+                initial={{ y: -120, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ scale: [1, 1.35, 0], rotate: i % 2 ? 40 : -40, opacity: [1, 1, 0], transition: { duration: 0.4 } }}
+                transition={{ type: 'spring', stiffness: 300, damping: 18, delay: (Math.floor(i / scene.cols)) * 0.06 + (i % scene.cols) * 0.02 }}
+                whileTap={{ scale: 0.88 }}
+                className={`absolute inset-0 rounded-2xl border-b-[6px] border-black/25 shadow-xl transition-all active:translate-y-1 active:border-b-2 ${isTarget ? 'ring-4 ring-white/80 animate-pulse' : ''} ${b.wobble ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''}`} style={{ background: `linear-gradient(160deg, ${b.color}, ${b.color}dd 60%, ${b.color}99)` }} aria-label={`Brick ${b.letter}`}>
                 <span className="grid h-full w-full place-items-center text-3xl font-black text-white drop-shadow-[0_2px_0_rgba(0,0,0,0.35)] sm:text-4xl md:text-5xl">{b.letter}</span>
                 <span className="pointer-events-none absolute inset-x-2 top-2 h-1/3 rounded-xl bg-white/25 blur-sm" />
-              </button>
+              </motion.button>
+              )}
+              </AnimatePresence>
+              </div>
             );
           })}
         </div>
       </div>
-      {flash && <div className="pointer-events-none absolute inset-0 z-20" style={{ background: flash === 'hit' ? 'radial-gradient(circle at center, rgba(34,197,94,0.35), transparent 60%)' : 'radial-gradient(circle at center, rgba(239,68,68,0.35), transparent 60%)' }} />}
+      {flash === 'hit' && <div className="pointer-events-none absolute inset-0 z-20" style={{ background: 'radial-gradient(circle at center, rgba(34,197,94,0.25), transparent 60%)' }} />}
+      <Bursts items={bursts} />
       {phase === 'intro' && (
         <div className="absolute inset-0 z-40 grid place-items-center bg-black/40 backdrop-blur-sm">
           <div className="rounded-3xl bg-white/95 px-8 py-6 text-center shadow-2xl">
@@ -127,7 +148,6 @@ export function BrickCrushScene({ scene, onNext, onWin, onLose }: { scene: Extra
           <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl ring-4 ring-white/50 active:scale-95">{phase === 'win' ? '✨ Champion! Next →' : `Nice try (${score}/${scene.goal}) — Next →`}</button>
         </div>
       )}
-      {misses > 0 && <div className="pointer-events-none absolute right-4 bottom-4 z-30 rounded-full bg-black/60 px-3 py-1 text-xs font-black text-white">Misses: {misses}</div>}
-    </div>
+    </motion.div>
   );
 }

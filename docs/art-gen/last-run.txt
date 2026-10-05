@@ -1,2 +1,3 @@
-Higgsfield: 0 pictures to make
-Done. made 0, failed 0
+Higgsfield: 1 pictures to make
++ public/lep1/items/item-kitten.png (2064348B, Higgsfield)
+Done. made 1, failed 0

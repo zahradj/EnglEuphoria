@@ -22,6 +22,11 @@ export default defineConfig(() => ({
         navigateFallback: "/index.html",
         navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,woff2}"],
+        // Lesson art and voice clips (~500 MB) are NOT precached: precaching them made
+        // every first visit download ~260 MB in the background, and the pictures of the
+        // page being viewed queued behind it ("pictures not loading", 2026-10-04).
+        // They are cached on demand by the media rule below instead.
+        globIgnores: ["lep1/**", "audio-cache/**", "welcome-town/**", "magic-castle/**", "jungle-adventure/**", "scenes/**", "puppets/**", "assets/**/*.png"],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         runtimeCaching: [
           {
@@ -50,15 +55,16 @@ export default defineConfig(() => ({
             },
           },
           {
-            // Images/fonts are safe to keep on CacheFirst — they're content-hashed
-            // too but change far less often, and re-fetching them on every load has
-            // no benefit worth the bandwidth.
+            // Images/fonts: StaleWhileRevalidate, not CacheFirst. Lesson pictures keep
+            // their file name when they are redrawn (e.g. a fixed story picture), so
+            // CacheFirst kept showing the OLD picture for up to 30 days. This still
+            // shows the cached copy instantly and refreshes it in the background.
             urlPattern: ({ url, sameOrigin }) =>
               sameOrigin && /\.(?:woff2|png|svg|jpg|jpeg|webp)$/.test(url.pathname),
-            handler: "CacheFirst",
+            handler: "StaleWhileRevalidate",
             options: {
-              cacheName: "static-assets-media",
-              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheName: "static-assets-media-v2",
+              expiration: { maxEntries: 600, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },
         ],

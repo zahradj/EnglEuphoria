@@ -312,7 +312,7 @@ const UNIT1_EXTRACTORS = {
   ])],
   'train-recall': (s) => [
     ...(s.cars ?? []).map((c) => ['pip', c.word]),
-    ['pip', "Choo choo! One car is empty. Which toy is missing?"],
+    ['pip', s.question ?? "Choo choo! One car is empty. Which toy is missing?"],
     ...(s.cars ?? []).map((c) => ['pip', `Yes! It's the ${c.word.toLowerCase()}!`]),
   ],
   'shape-sort': (s) => [
@@ -332,12 +332,13 @@ const UNIT1_EXTRACTORS = {
     const it = (s.items ?? []).find((i) => i.id === r.item);
     return it ? [[s.who, `Color the ${it.size} ${it.shape} ${r.colorWord.toLowerCase()}!`], [s.who, `Yes! The ${it.size} ${it.shape} is ${r.colorWord.toLowerCase()}!`]] : [];
   }),
-  'shape-fishing': (s) => (s.targets ?? []).map((i) => s.fish?.[i]).filter(Boolean).flatMap((f) => [
-    [s.who, `Catch a ${f.colorWord.toLowerCase()} ${f.shape}!`], [s.who, `You caught a ${f.colorWord.toLowerCase()} ${f.shape}!`],
-  ]),
+  'shape-fishing': (s) => (s.targets ?? []).map((i) => s.fish?.[i]).filter(Boolean).flatMap((f) => {
+    if (f.word) { const n = [f.size, f.colorWord.toLowerCase(), f.word.toLowerCase()].filter(Boolean).join(' '); return [[s.who, `Catch the ${n}!`], [s.who, `You caught the ${n}!`]]; }
+    return [[s.who, `Catch a ${f.colorWord.toLowerCase()} ${f.shape}!`], [s.who, `You caught a ${f.colorWord.toLowerCase()} ${f.shape}!`]];
+  }),
   'pattern-train': (s) => [
     [s.who, 'What comes next?'],
-    ...(s.rounds ?? []).map((r) => [s.who, `Yes! ${/^[aeiou]/i.test(r.answer.colorWord) ? 'An' : 'A'} ${r.answer.colorWord.toLowerCase()} ${r.answer.shape}!`]),
+    ...(s.rounds ?? []).map((r) => { const c = r.answer.word ? r.answer.word.toLowerCase() : `${r.answer.colorWord.toLowerCase()} ${r.answer.shape}`; return [s.who, `Yes! ${/^[aeiou]/.test(c) ? 'An' : 'A'} ${c}!`]; }),
   ],
   'tick-cross': (s) => [[s.who, "That's right!"], ...(s.rounds ?? []).map((r) => [s.who, r.sentence])],
   'story-video': (s) => [
@@ -354,6 +355,25 @@ const UNIT1_EXTRACTORS = {
   'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal]])],
   // Mirrors DrawPathScene.tsx's drawPathLines().
   'draw-path': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, `Start at ${({ pip: 'Pip', mia: 'Mia', bella: 'Bella', willow: 'Willow', leo: 'Leo' })[s.walker] ?? s.walker}!`]],
+  // Mirror SimonTouchScene.tsx's simonTouchLines() / BodyStackScene.tsx's bodyStackLines().
+  'simon-touch': (s) => [...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.parts ?? []).map((p) => [s.who, `Yes! ${p.label.charAt(0).toUpperCase() + p.label.slice(1)}!`]), [s.who, "Good listening! Simon didn't say!"], [s.who, "Oops! Simon didn't say!"]],
+  'body-stack': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, s.doneLine]],
+  // Mirror ClawMachineScene.tsx's clawMachineLines() / RingTossScene.tsx's ringTossLines().
+  'claw-machine': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.toys ?? []).map((t) => [s.who, `That's the ${t.label}! Try again!`]), [s.who, 'Oops! Nothing! Try again!']],
+  'ring-toss': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+  // Mirror TidyUpScene.tsx's tidyUpLines() / PeekPopScene.tsx's peekPopLines().
+  // Mirror ColorMonstersScene.tsx's colorMonstersLines().
+  'color-monsters': (s) => {
+    const cap = (w) => w.charAt(0).toUpperCase() + w.slice(1);
+    const out = (s.rounds ?? []).map((r) => [s.who, r.line]);
+    for (const f of s.foods ?? []) {
+      out.push([s.who, `Yum! ${cap(f.colorWord.toLowerCase())} ${f.word}! Thank you!`]);
+      out.push([s.who, `No, thank you! The ${f.word} ${f.plural ? 'are' : 'is'} ${f.colorWord.toLowerCase()}!`]);
+    }
+    return out;
+  },
+  'tidy-up': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+  'peek-pop': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
   // Mirrors TileRevealScene.tsx's tileRevealLines().
   'tile-reveal': (s) => [[s.who, 'What is it?'], ...(s.rounds ?? []).map((r) => [s.who, r.line])],
   // Mirrors ShadowMatchScene.tsx's shadowMatchLines().
@@ -382,7 +402,10 @@ const UNIT1_EXTRACTORS = {
   // Mirrors SecretCardScene.tsx's secretCardLines().
   'secret-card': (s) => [
     [s.who, 'I have a secret card. Ask me!'], [s.who, 'Yes, it is!'], [s.who, "No, it isn't!"],
-    ...(s.rounds ?? []).map((r) => s.cards?.[r.secret]).filter(Boolean).map((c) => [s.who, `You found it! It's ${/^[aeiou]/i.test(c.colorWord) ? 'an' : 'a'} ${c.colorWord.toLowerCase()} ${c.shape}!`]),
+    ...(s.rounds ?? []).map((r) => s.cards?.[r.secret]).filter(Boolean).map((c) => {
+      const parts = c.word ? [c.size, c.colorWord.toLowerCase(), c.word.toLowerCase()].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
+      return [s.who, `You found it! It's ${/^[aeiou]/i.test(parts) ? 'an' : 'a'} ${parts}!`];
+    }),
   ],
   // Mirrors ShapeBuilderScene.tsx's shapeBuilderLines().
   'shape-builder': (s) => [
@@ -394,14 +417,19 @@ const UNIT1_EXTRACTORS = {
     ]),
   ],
   // Mirrors ColorMixScene.tsx's colorMixLines().
-  'color-mix': (s) => [
-    [s.who, 'What color is it?'],
-    ...(s.rounds ?? []).flatMap((r) => [
+  'color-mix': (s) => (s.rounds ?? []).flatMap((r) => {
+    const cap = (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+    const res = (x, y) => `It's ${r.result.toLowerCase()}! ${cap(x)} and ${y.toLowerCase()} make ${r.result.toLowerCase()}!`;
+    return [
       [s.who, `Mix ${r.a.toLowerCase()} and ${r.b.toLowerCase()}!`],
-      [s.who, `It's ${r.result.toLowerCase()}!`],
+      [r.who, `${cap(r.a)}!`], [r.who, `${cap(r.b)}!`],
+      [r.who, `And ${r.a.toLowerCase()}!`], [r.who, `And ${r.b.toLowerCase()}!`],
+      [r.who, 'Stir, stir, stir!'],
+      [r.who, 'What color is it?'],
+      [r.who, res(r.a, r.b)], [r.who, res(r.b, r.a)],
       [r.who, r.line],
-    ]),
-  ],
+    ];
+  }),
   'join-stage': (s) => (s.turns ?? []).filter((t) => t.who !== 'student').map((t) => [t.who, t.line]),
   'hello-doors': (s) => {
     const out = (s.cast ?? []).map((who) => [who, CAST[who]?.name ?? who]);

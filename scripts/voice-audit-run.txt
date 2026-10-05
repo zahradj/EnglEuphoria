@@ -4,3 +4,4 @@ run 3: 2026-10-02T20:05:13Z inline audio
 run 4: 2026-10-02T21:14:24Z after English-lock re-record
 run 5: 2026-10-03T09:53:48Z new Pre-A1 U2 L2 clips
 run 6: 2026-10-03T10:57:12Z new Pre-A1 U2 L3 clips
+run 7: 2026-10-05T14:21:46Z 920 new clips (U2L2 films/game, U3L3-U3L6, U4L1, credits back)

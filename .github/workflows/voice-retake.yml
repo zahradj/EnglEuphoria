@@ -32,7 +32,9 @@ jobs:
           AUDIT_TOKEN: de472b713779b6c3f2c462fb886213e1861db78b10aa2021
         run: |
           ROUND=$(grep -oE '^round [0-9]+' scripts/voice-retake-run.txt | tail -1 | grep -oE '[0-9]+' || echo 1)
-          RETAKE_ROUND=${ROUND:-1} python scripts/voice-retake.py
+          # A last line "files: a.mp3,b.mp3" re-takes just those clips (any length).
+          FILES=$(grep -v '^\s*#' scripts/voice-retake-run.txt | tail -1 | sed -n 's/^files:[[:space:]]*//p')
+          RETAKE_FILES="$FILES" RETAKE_ROUND=${ROUND:-1} python scripts/voice-retake.py
       - name: Commit
         run: |
           git add public/audio-cache docs/voice-audit/retakes*.json

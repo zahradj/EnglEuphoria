@@ -1261,5 +1261,123 @@
       "public/lep1/items/item-hat.png"
     ],
     "prompt": "one big round flat RIVER STEPPING STONE seen from slightly above: a smooth light-grey rock with a soft rounded 3D shape, a glossy wet highlight on top, a little green moss on one side and a darker grey underside, drawn in exactly the same cartoon sticker style as the reference images (bold dark outline, soft shading), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l3-park-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u3l1-play-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft colours, friendly picture-book look). A sunny PARK with a wide open green lawn, a few round trees at the edges, one big leafy tree on the RIGHT, flowers, soft clouds in a blue sky. The five friends look exactly like in the first reference image: Pip the orange fox, Mia the grey mouse with an orange bow, Bella the white bunny, Willow the blue bird with a green scarf, Leo the yellow lion. Each friend appears only ONCE. Pip flies a RED diamond KITE high in the sky on the LEFT; Leo in the middle holds a friendly silver toy ROBOT; Mia on the right holds up a small BLUE toy PLANE; Bella and Willow watch and clap. Everyone is happy and playing. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l3-kite-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u3l1-play-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft colours, friendly picture-book look). A sunny PARK with a wide open green lawn, a few round trees at the edges, one big leafy tree on the RIGHT, flowers, soft clouds in a blue sky. Pip the orange fox (same design as the first reference image) runs happily across the lawn on the LEFT holding the string of a RED diamond KITE with a long tail that flies high in the sky. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l3-robot-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u3l1-play-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft colours, friendly picture-book look). A sunny PARK with a wide open green lawn, a few round trees at the edges, one big leafy tree on the RIGHT, flowers, soft clouds in a blue sky. Leo the yellow lion (same design as the first reference image) sits on the grass in the middle and smiles at a friendly silver toy ROBOT that walks on the grass and waves its arm. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l3-plane-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u3l1-play-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft colours, friendly picture-book look). A sunny PARK with a wide open green lawn, a few round trees at the edges, one big leafy tree on the RIGHT, flowers, soft clouds in a blue sky. Mia the grey mouse with an orange bow (same design as the first reference image) on the LEFT has just thrown a small BLUE toy PLANE that glides through the air to the right over the grass. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l3-stuck-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u3l1-play-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft colours, friendly picture-book look). A sunny PARK with a wide open green lawn, a few round trees at the edges, one big leafy tree on the RIGHT, flowers, soft clouds in a blue sky. The RED diamond KITE is stuck in the branches of the big leafy tree on the RIGHT. Pip the orange fox (same design as the first reference image) stands under the tree looking up, a little sad. Willow the blue bird with a green scarf flies toward the kite to help. No other characters. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l3-together-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u3l1-play-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft colours, friendly picture-book look). A sunny PARK with a wide open green lawn, a few round trees at the edges, one big leafy tree on the RIGHT, flowers, soft clouds in a blue sky. The five friends look exactly like in the first reference image: Pip the orange fox, Mia the grey mouse with an orange bow, Bella the white bunny, Willow the blue bird with a green scarf, Leo the yellow lion. Each friend appears only ONCE. All five friends play together happily in the middle of the lawn: the red diamond kite flies high, the silver toy robot dances, the small blue toy plane glides above them. A joyful, sunny moment. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l3-park-empty-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u3l1-play-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft colours, friendly picture-book look). A sunny PARK with a wide open green lawn, a few round trees at the edges, one big leafy tree on the RIGHT, flowers, soft clouds in a blue sky. Calm and EMPTY: no characters, no toys, only the lawn, the trees and the sky. Plenty of open grass in the lower half. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u3l3-workshop-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-l5-roleplay-friends.jpg",
+      "public/lep1/scenes/bg-u3l1-play-wide.png"
+    ],
+    "prompt": "A 16:9 widescreen cartoon picture, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, soft colours, friendly picture-book look). A cosy, colourful TOY WORKSHOP: a big wooden work table across the lower half of the picture, shelves with paint pots and boxes on the back wall, a window with sunshine. The middle of the table is EMPTY and clear. No characters, no toys on the table. No text, letters or numbers anywhere."
+  },
+  {
+    "out": "public/lep1/items/item-kite.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-ball-red.png",
+      "public/lep1/items/item-car.png"
+    ],
+    "prompt": "one RED diamond-shaped toy KITE with a long wavy tail with small bows and a string, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft colours, gentle shading), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-robot.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-ball-red.png",
+      "public/lep1/items/item-car.png"
+    ],
+    "prompt": "one friendly silver toy ROBOT with a round head, two big kind eyes, a smile, little antenna and blue buttons, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft colours, gentle shading), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-plane.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-ball-red.png",
+      "public/lep1/items/item-car.png"
+    ],
+    "prompt": "one small BLUE toy PLANE with white wings and a red propeller, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft colours, gentle shading), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-key.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-ball-red.png",
+      "public/lep1/items/item-car.png"
+    ],
+    "prompt": "one shiny golden KEY with a round loop, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft colours, gentle shading), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-kangaroo.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-ball-red.png",
+      "public/lep1/items/item-car.png"
+    ],
+    "prompt": "one cute friendly cartoon KANGAROO standing and smiling, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft colours, gentle shading), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/items/item-kitten.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-ball-red.png",
+      "public/lep1/items/item-car.png"
+    ],
+    "prompt": "one cute small orange-and-white KITTEN sitting and smiling, big friendly eyes, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft colours, gentle shading), isolated alone on a plain pure white background, nothing else in the picture. No text."
   }
 ]

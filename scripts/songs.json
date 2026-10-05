@@ -533,8 +533,7 @@
       "What shape is this? It's a circle, a circle!",
       "Is it blue? Yes, it is! Yes, it is!",
       "Is it green? No, it isn't! No, it isn't!"
-    ],
-    "engine": "lyria"
+    ]
   },
   "u2l5-shelly": {
     "publicPath": "public/lep1/audio/shelly-song-u2l5.mp3",
