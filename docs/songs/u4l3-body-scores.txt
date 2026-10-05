@@ -1,0 +1,15 @@
+
+=== docs/songs/u4l3-body-take1.mp3  length=20.1s  score=0.71  missing=10  extra=4
+heard: and fingers feet and arms and fingers feet and arms clap your hands wake your arms and fingers feet and arms
+line starts (s): [np.float64(0.4), 7.9, np.float64(10.2), np.float64(12.1)]
+lineDurationsMs: [7860, 2320, 1960, 7922]
+
+=== docs/songs/u4l3-body-take2.mp3  length=20.1s  score=0.63  missing=10  extra=10
+heard: hands fingers b n r hands fingers b n r clap your hands wiggle your fingers stand your feet wave your arms hands fingers b n rms
+line starts (s): [np.float64(0.0), np.float64(7.3), np.float64(12.1), np.float64(15.3)]
+lineDurationsMs: [7300, 4840, 3200, 4722]
+
+=== docs/songs/u4l3-body-take3.mp3  length=20.1s  score=0.87  missing=4  extra=3
+heard: dancing and feeling arms hands fingers feet and arms clap your hands wiggle your fingers step your feet wave your arms hands fingers feet and arms
+line starts (s): [np.float64(0.4), np.float64(4.1), np.float64(8.2), np.float64(12.1)]
+lineDurationsMs: [4140, 4080, 3880, 7962]
