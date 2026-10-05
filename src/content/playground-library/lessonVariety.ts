@@ -56,6 +56,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '3-3': { settings: ['workshop', 'park'], look: 'sunny outdoor park, kites in a blue sky' },
   '3-4': { settings: ['classroom', 'garden pool'], look: 'Show and Tell circle on the rainbow rug; summer garden with a paddling pool' },
   '4-1': { settings: ['dance studio'], look: 'bright dance studio in morning sun: mirror, barre and colourful mats; a dance class with Coach Willow' },
+  '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '3-6': { settings: ['toy fair'], look: 'outdoor fair: sunny day with striped tents, then a golden evening with string lights' },
   '3-5': { settings: ['bedroom'], look: 'cozy bedroom in warm afternoon light; tidy-up mission with a surprise kitten' },
 };
@@ -116,6 +117,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the whole sentence decides, not just the noun: without "Simon says" the right move is to wait (apps only check the tap)',
       'the friend comes alive when rebuilt — he bounces and thanks you, a story reason to listen',
       'every part is touched on the child\'s own body too (TPR) before it is tapped on screen',
+    ],
+  },
+  '4-2': {
+    sources: ['Lingokids (face-parts games, Face Scramble)', 'TinyTap (parts of the face)', 'Genki English ("Make a face" song)', 'Face Maker drag-and-drop game (englishflashgames)', 'Cambridge (Pre A1 Starters body & face)'],
+    mechanics: [
+      'apps\' "put the features back on the face" → Pancake Faces: tap WHERE each fruit part goes on a plain pancake',
+      'the classroom "Point to your …!" routine → the child gives the order to Mia (role swap)',
+      'face-parts action songs → our own Eyes, Ears, Mouth and Nose song, sung while pointing',
+    ],
+    betterThan: [
+      'no picture of the part to match: the spoken word alone tells the child where to tap (the apps show the piece)',
+      'a wrong place is named back ("Not there! That\'s for the nose!"), so every mistake teaches a word',
+      'the finished pancake comes alive and smiles, and the same game returns with a new order for Mia',
     ],
   },
 };

@@ -511,6 +511,17 @@ export type Scene =
       rounds: { line: string; simon: boolean; part: number }[];
     }
   | {
+      /** Pancake Faces (Lingokids "put the features back on the face" + Mr.
+       *  Potato Head, U4L2): the voice names a face part, the child taps
+       *  WHERE it goes on the plain pancake in `bg`; the piece is cut from
+       *  `doneImg` (same picture with the face on). `spots` = boxes in % of
+       *  the 16:9 picture; a wrong place is named back. */
+      id: string; kind: 'face-builder'; bg: string; doneImg: string; teacher: string; who: CharKey;
+      spots: { label: string; boxes: { x: number; y: number; w: number; h: number }[] }[];
+      rounds: { spot: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Stack the Friend (apps' "assemble the body"): a friend painted in
        *  `img` is cut into horizontal slices (fractions y0..y1 of the `source`
        *  box, which is in % of the picture); the voice names a part, the
@@ -6626,6 +6637,254 @@ export const LESSON_U4L1_SCENES: Scene[] = [
     ],
   },
   { id: 'u4l1-finale', kind: 'finale', bg: bgU4L1Knees, who: 'willow', line: 'Great dancing! Head, shoulders, knees and toes — you know them all! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 4 · Lesson 2 — Eyes, Ears, Mouth, Nose! =====================
+ * My Body & Face (2/6). eyes, ears, mouth, nose ("Point to your eyes!",
+ * "It's my nose!") and N says /n/ (nest, nut, nose); E /e/ recycled.
+ * Setting: Pip and Mia's breakfast kitchen — Pancake Faces. Lesson-Variety
+ * Engine: researched Lingokids face-parts games ("put the features back on
+ * the face", Face Scramble), TinyTap parts-of-the-face matching, Genki
+ * English "Make a face", the Face Maker drag-and-drop game and Cambridge
+ * Starters body & face; new game Pancake Faces (tap WHERE the part goes; a
+ * wrong place is named back). Pictures made with Canva. */
+const bgU4L2Kitchen = `${A}/scenes/bg-u4l2-kitchen-wide.png`;
+const bgU4L2MiaFace = `${A}/scenes/bg-u4l2-mia-face-wide.png`;
+const bgU4L2MiaEyes = `${A}/scenes/bg-u4l2-mia-eyes-wide.png`;
+const bgU4L2MiaEars = `${A}/scenes/bg-u4l2-mia-ears-wide.png`;
+const bgU4L2MiaMouth = `${A}/scenes/bg-u4l2-mia-mouth-wide.png`;
+const bgU4L2MiaNose = `${A}/scenes/bg-u4l2-mia-nose-wide.png`;
+const bgU4L2PancakeBlank = `${A}/scenes/bg-u4l2-pancake-blank-wide.png`;
+const bgU4L2PancakeFace = `${A}/scenes/bg-u4l2-pancake-face-wide.png`;
+const cardEyes = `${A}/items/item-card-eyes.png`;
+const cardEars = `${A}/items/item-card-ears.png`;
+const cardNose = `${A}/items/item-card-nose.png`;
+const cardMouth = `${A}/items/item-card-mouth.png`;
+const itemNestU4 = `${A}/items/item-nest.png`;
+const itemNutU4 = `${A}/items/item-nut.png`;
+/* The fruit face on bg-u4l2-pancake-face (measured against the blank pancake, % of the picture). */
+const U4L2_FACE_SPOTS = [
+  { label: 'eyes', boxes: [{ x: 41, y: 31.5, w: 6.4, h: 11 }, { x: 52.6, y: 31.5, w: 6.4, h: 11 }] },
+  { label: 'nose', boxes: [{ x: 45.6, y: 41, w: 9.3, h: 19 }] },
+  { label: 'mouth', boxes: [{ x: 36, y: 52, w: 28.5, h: 24.5 }] },
+  { label: 'ears', boxes: [{ x: 28.8, y: 29.5, w: 7.2, h: 25 }, { x: 65.4, y: 29, w: 7.2, h: 25.5 }] },
+];
+
+export const LESSON_U4L2_TITLE = 'Eyes, Ears, Mouth, Nose!';
+export const LESSON_U4L2_OBJECTIVE = 'Name and point to eyes, ears, mouth and nose, follow "Point to your …!" / "Touch your …!", say "It\'s my nose!", build a pancake face from what you hear, sing the face song, and hear N say /n/ (nest, nut, nose) — by moving, listening, building and speaking, no reading.';
+
+export const LESSON_U4L2_SCENES: Scene[] = [
+  { id: 'u4l2-title', kind: 'title-card', bg: bgU4L2Kitchen, level: 'Pre-A1', unit: 'Unit 4', lessonLabel: 'Lesson 2', title: 'Eyes, Ears, Mouth, Nose!', subtitle: 'Pancake faces' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u4l2-song', kind: 'song', bg: bgU4L2Kitchen, title: '\u{1F3B5} Eyes, Ears, Mouth and Nose \u{1F3B5}', teacher: 'Sing and point! Point to each part of your face as you sing it.',
+    durationSeconds: 20, bigWord: 'Face', songUrl: `${A}/audio/face-song-u4l2.mp3?v=1`,
+    lineDurationsMs: [7740, 4040, 3800, 4482],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'mia', text: 'Eyes, ears, mouth and nose! Eyes, ears, mouth and nose!', emotion: 'happy' },
+      { who: 'mia', text: 'Two eyes to see! Two ears to hear!', emotion: 'happy' },
+      { who: 'pip', text: 'One little nose and one big smile!', emotion: 'happy' },
+      { who: 'pip', text: 'Eyes, ears, mouth and nose!', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u4l2-intro', kind: 'cinematic', bg: bgU4L2Kitchen, hidePipOverlay: true, title: 'Pancake Faces', subtitle: 'Eyes, ears, mouth, nose!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Good morning! Let\'s make pancake faces!' },
+      { who: 'mia', line: 'Yes! A pancake with eyes, ears, a nose and a mouth!' },
+    ],
+    cta: "Let's cook!",
+  },
+
+  /* 3-5 New words, move, signature game */
+  {
+    id: 'u4l2-words', kind: 'listen-repeat-cards', bg: bgU4L2MiaFace, teacher: 'Look at Mia, point to your own face, then say it!',
+    cards: [
+      { who: 'mia', sentence: 'Eyes! Point to your eyes.', img: bgU4L2MiaEyes, imgLabel: 'Eyes' },
+      { who: 'mia', sentence: 'Ears! Touch your ears.', img: bgU4L2MiaEars, imgLabel: 'Ears' },
+      { who: 'mia', sentence: 'Nose! Touch your nose.', img: bgU4L2MiaNose, imgLabel: 'Nose' },
+      { who: 'mia', sentence: 'Mouth! Point to your mouth.', img: bgU4L2MiaMouth, imgLabel: 'Mouth' },
+    ],
+  },
+  {
+    id: 'u4l2-move-say', kind: 'tpr-actions', bg: bgU4L2MiaFace, who: 'mia',
+    teacher: 'Say it with Mia, then do it before the ring runs out.',
+    rounds: [
+      { line: 'Point to your eyes!', emoji: '\u{1F440}', img: cardEyes },
+      { line: 'Touch your ears!', emoji: '\u{1F442}', img: cardEars },
+      { line: 'Touch your nose!', emoji: '\u{1F443}', img: cardNose },
+      { line: 'Point to your mouth!', emoji: '\u{1F444}', img: cardMouth },
+      { line: 'Close your eyes! Now open your eyes!', emoji: '\u{1F648}' },
+    ],
+  },
+  {
+    // Signature game (new): build the pancake face from what you hear.
+    id: 'u4l2-pancake', kind: 'face-builder', bg: bgU4L2PancakeBlank, doneImg: bgU4L2PancakeFace, who: 'pip',
+    teacher: 'Pancake Faces! Listen to Pip and tap WHERE each part goes on the pancake. Say it too!',
+    spots: U4L2_FACE_SPOTS,
+    rounds: [
+      { spot: 0, line: 'Where do the eyes go?', reply: 'Yes! Two blueberry eyes!' },
+      { spot: 1, line: 'Where does the nose go?', reply: 'Yes! A strawberry nose!' },
+      { spot: 2, line: 'Where does the mouth go?', reply: 'Yes! A banana mouth! It smiles!' },
+      { spot: 3, line: 'Where do the ears go?', reply: 'Yes! Two apple ears!' },
+    ],
+    doneLine: 'Eyes, ears, nose and mouth! A happy pancake face!',
+  },
+
+  /* 6-9 Practice + speaking */
+  {
+    id: 'u4l2-spin', kind: 'spin-wheel', bg: bgU4L2MiaFace, title: '',
+    teacher: 'Have the student spin, then point to that part on their own face and say it: "Nose!" Or tap a number.',
+    items: [
+      { label: 'Eyes!', left: '34%', top: '60%' },
+      { label: 'Ears!', left: '20%', top: '33%' },
+      { label: 'Nose!', left: '54.3%', top: '69.5%' },
+      { label: 'Mouth!', left: '50%', top: '89%' },
+    ],
+    wheelAt: { left: '86%', top: '40%' },
+  },
+  {
+    id: 'u4l2-pip-asks', kind: 'join-stage', bg: bgU4L2Kitchen, teacher: 'Pip asks. The student points and answers.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Point to your nose! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my nose! (point to it)", bubble: 'right' },
+      { who: 'pip', line: 'Point to your mouth! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my mouth!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l2-you-ask', kind: 'join-stage', bg: bgU4L2MiaFace, teacher: 'Swap! The student tells Mia what to point to.', cast: ['mia'],
+    turns: [
+      { who: 'student', line: 'Say to Mia: Point to your eyes!', bubble: 'right' },
+      { who: 'mia', line: 'My eyes! Here they are!', bubble: 'right' },
+      { who: 'student', line: 'Say to Mia: Touch your ears!', bubble: 'right' },
+      { who: 'mia', line: 'My ears! Big ears!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l2-train', kind: 'train-recall', bg: bgU4L2Kitchen, teacher: 'Remember the face part in each car. One car goes empty — say what is missing!',
+    question: 'Choo choo! One car is empty. What is missing?',
+    cars: [
+      { word: 'EYES', img: cardEyes, emoji: '\u{1F440}' },
+      { word: 'EARS', img: cardEars, emoji: '\u{1F442}' },
+      { word: 'NOSE', img: cardNose, emoji: '\u{1F443}' },
+      { word: 'MOUTH', img: cardMouth, emoji: '\u{1F444}' },
+    ],
+  },
+
+  /* 10-13 Phonics: N says /n/ (E recycled) */
+  {
+    id: 'u4l2-model-n', kind: 'sound-model', bg: bgU4L2Kitchen, who: 'mia', letter: 'N', phoneme: '/n/', sound: 'nnn',
+    teacher: 'N says /n/ — nose, nest, nut!',
+    anchors: [
+      { word: 'nose', emoji: '\u{1F443}', img: cardNose },
+      { word: 'nest', emoji: '\u{1FAB9}', img: itemNestU4 },
+      { word: 'nut', emoji: '\u{1F330}', img: itemNutU4 },
+    ],
+  },
+  { id: 'u4l2-trace-n', kind: 'trace', bg: bgU4L2Kitchen, who: 'mia', letter: 'N', phoneme: '/n/', word: 'nose', speakWord: false, teacher: 'Trace the big N with your finger! /n/ /n/ nose!' },
+  {
+    id: 'u4l2-dash-n', kind: 'dash', bg: bgU4L2Kitchen, who: 'pip', targetLetter: 'N', targetPhoneme: '/n/', goal: 6, seconds: 40,
+    teacher: 'N Dash! Catch only the things that start with /n/.',
+    items: [
+      { word: 'nose', letter: 'N', img: cardNose, emoji: '\u{1F443}' },
+      { word: 'nest', letter: 'N', img: itemNestU4, emoji: '\u{1FAB9}' },
+      { word: 'nut', letter: 'N', img: itemNutU4, emoji: '\u{1F330}' },
+      { word: 'egg', letter: 'E', img: itemEgg, emoji: '\u{1F95A}' },
+      { word: 'elephant', letter: 'E', img: itemElephant, emoji: '\u{1F418}' },
+      { word: 'mouth', letter: 'M', img: cardMouth, emoji: '\u{1F444}' },
+    ],
+  },
+  {
+    id: 'u4l2-catch-ne', kind: 'catch-sort', bg: bgU4L2PancakeBlank, teacher: 'Catch it! /n/ or /e/? Say the word as you catch it.', goal: 8, seconds: 45,
+    left: { label: 'N', img: itemNestU4, emoji: '\u{1FAB9}' },
+    right: { label: 'E', img: itemEgg, emoji: '\u{1F95A}' },
+    items: [
+      { word: 'nose', img: cardNose, emoji: '\u{1F443}', target: 'left' },
+      { word: 'nest', img: itemNestU4, emoji: '\u{1FAB9}', target: 'left' },
+      { word: 'nut', img: itemNutU4, emoji: '\u{1F330}', target: 'left' },
+      { word: 'egg', img: itemEgg, emoji: '\u{1F95A}', target: 'right' },
+      { word: 'elephant', img: itemElephant, emoji: '\u{1F418}', target: 'right' },
+    ],
+  },
+
+  /* 14-15 Retell + perform */
+  {
+    id: 'u4l2-story-order', kind: 'story-order', bg: bgU4L2Kitchen, who: 'pip', teacher: 'Put the breakfast in order, then tell it!',
+    frames: [
+      { img: bgU4L2Kitchen, caption: 'Pip and Mia make pancakes.', who: 'pip' },
+      { img: bgU4L2PancakeBlank, caption: 'A plain pancake. No face!', who: 'mia' },
+      { img: bgU4L2PancakeFace, caption: 'Eyes, ears, a nose and a mouth!', who: 'pip' },
+    ],
+  },
+  {
+    id: 'u4l2-perform', kind: 'join-stage', bg: bgU4L2Kitchen, teacher: 'Show time! The student sings and points: eyes, ears, mouth and nose — slow, then fast!', cast: ['mia', 'pip'],
+    turns: [
+      { who: 'mia', line: 'Your turn! Eyes, ears, mouth and nose!', bubble: 'right' },
+      { who: 'student', line: 'Eyes, ears, mouth and nose! (point to them)', bubble: 'right' },
+      { who: 'pip', line: 'Now faster!', bubble: 'right' },
+      { who: 'student', line: 'Eyes, ears, mouth and nose!', bubble: 'right' },
+    ],
+  },
+
+  /* 16-17 Sticker + Home Mission */
+  {
+    id: 'u4l2-sticker', kind: 'sticker-reward', bg: bgU4L2PancakeFace, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Yummy work! Here is a pancake-face sticker for you!', sticker: { img: cardMouth, label: 'Smile' },
+  },
+  {
+    id: 'u4l2-home-mission', kind: 'home-mission', bg: bgU4L2Kitchen, who: 'mia',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: make a funny face at home! Point and say: eyes, ears, nose, mouth!',
+    parentNote: 'Make a "face" on a plate with your child (fruit, crackers or paper shapes). Ask: "Where do the eyes go? Where does the nose go?" Let your child point and say "eyes", "ears", "nose", "mouth". Then play "Point to your …!" and swap roles.',
+    steps: [
+      { emoji: '\u{1F440}', img: cardEyes, say: 'Eyes' },
+      { emoji: '\u{1F443}', img: cardNose, say: 'Nose' },
+      { emoji: '\u{1F444}', img: cardMouth, say: 'Mouth' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u4l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU4L2Kitchen, who: 'pip',
+    teacher: 'Extra time: Funny Faces! Do each face with Pip.',
+    rounds: [
+      { line: 'Open your mouth wide!', emoji: '\u{1F62E}' },
+      { line: 'Close your eyes!', emoji: '\u{1F60C}' },
+      { line: 'Wiggle your nose!', emoji: '\u{1F443}' },
+      { line: 'Cover your ears!', emoji: '\u{1F64A}' },
+      { line: 'Big smile!', emoji: '\u{1F601}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u4l2-pancake-2', kind: 'face-builder', bg: bgU4L2PancakeBlank, doneImg: bgU4L2PancakeFace, who: 'mia',
+    teacher: 'Extra time: Mia makes a pancake too! Listen carefully — a new order.',
+    spots: U4L2_FACE_SPOTS,
+    rounds: [
+      { spot: 3, line: 'Ears first! Where do the ears go?', reply: 'Yes! The ears!' },
+      { spot: 1, line: 'Now the nose! Where does it go?', reply: 'Yes! The nose!' },
+      { spot: 0, line: 'Where do the eyes go?', reply: 'Yes! The eyes!' },
+      { spot: 2, line: 'And the mouth?', reply: 'Yes! The mouth!' },
+    ],
+    doneLine: 'My pancake is smiling too! Thank you!',
+  },
+
+  /* 20-21 Goodbye */
+  {
+    id: 'u4l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u4l2-finale', kind: 'finale', bg: bgU4L2PancakeFace, who: 'pip', line: 'Yummy pancake faces! Eyes, ears, mouth and nose — you know them all! Goodbye, friend!' },
 ];
 
 /* =============================================================================

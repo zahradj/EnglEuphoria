@@ -168,6 +168,7 @@ const PlayUnit3Lesson4 = lazy(() => import("./pages/playground-scene/PlayUnit3Le
 const PlayUnit3Lesson5 = lazy(() => import("./pages/playground-scene/PlayUnit3Lesson5"));
 const PlayUnit3Lesson6 = lazy(() => import("./pages/playground-scene/PlayUnit3Lesson6"));
 const PlayUnit4Lesson1 = lazy(() => import("./pages/playground-scene/PlayUnit4Lesson1"));
+const PlayUnit4Lesson2 = lazy(() => import("./pages/playground-scene/PlayUnit4Lesson2"));
 const PlayUnit5Lesson1 = lazy(() => import("./pages/playground-scene/PlayUnit5Lesson1"));
 const PlayWelcomeTown1 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown1"));
 const PlayWelcomeTown2 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown2"));
@@ -377,6 +378,11 @@ const App = () => {
                       <Route path="/playground-scene/unit-4-lesson-1" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayUnit4Lesson1 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-4-lesson-2" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit4Lesson2 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/playground-scene/unit-5-lesson-1" element={

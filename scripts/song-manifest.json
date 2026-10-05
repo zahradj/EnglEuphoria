@@ -103,5 +103,10 @@
     "path": "public/lep1/audio/family-song-u5l1.mp3",
     "bytes": 321037,
     "sha256": "d582bb07e3a0fd35c423d038f627159b0eda3b19de76fedc355e1ffa3b15c5b5"
+  },
+  "u4l2-face": {
+    "path": "public/lep1/audio/face-song-u4l2.mp3",
+    "bytes": 321037,
+    "sha256": "24327c89ecc42f2f2975164d51a1b44cf3467c2e714f48cfd35eb07cfa250fce"
   }
 }
