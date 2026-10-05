@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
 import { safeSpeak } from '../audio';
@@ -97,8 +97,8 @@ export function ListenRepeatCardsScene({ scene, onNext, onWin, sync }: { scene: 
         <div className="pointer-events-none absolute right-4 top-16 z-20 rounded-full bg-black/30 px-3 py-1 text-sm font-black text-white">{idx + 1}/{total}</div>
         <div className={`absolute z-10 flex flex-col items-center gap-4 portrait:inset-x-0 portrait:bottom-28 portrait:top-auto landscape:inset-y-0 landscape:w-[30%] landscape:justify-center ${side === 'left' ? 'landscape:left-0' : 'landscape:right-0'}`}>
           <p
-            className={`text-center font-black leading-none text-white portrait:text-orange-600 portrait:drop-shadow-none drop-shadow-[0_6px_14px_rgba(0,0,0,0.65)] transition-transform ${playing ? 'scale-110' : ''}`}
-            style={{ fontSize: 'clamp(3rem, calc(7*var(--svw,1vw)), 7rem)' }}
+            className={`text-center font-black leading-none text-white transition-transform ${playing ? 'scale-110' : ''}`}
+            style={{ ...THICK_WORDS, fontSize: 'clamp(3rem, calc(7*var(--svw,1vw)), 7rem)' }}
           >
             {card!.imgLabel}
           </p>
@@ -115,12 +115,9 @@ export function ListenRepeatCardsScene({ scene, onNext, onWin, sync }: { scene: 
               {repeated ? '✅' : held ? '🎤 …' : '🎤 Say it'}
             </button>
           </div>
+          {/* Next is always there: saying it aloud is encouraged, never required. */}
+          <button onClick={next} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95">Next →</button>
         </div>
-        {repeated && (
-          <div className="absolute inset-x-0 bottom-6 z-30 flex justify-center portrait:bottom-4">
-            <button onClick={next} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>Next →</button>
-          </div>
-        )}
       </div>
     );
   }
@@ -130,11 +127,7 @@ export function ListenRepeatCardsScene({ scene, onNext, onWin, sync }: { scene: 
     return (
       <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
         <div className="pointer-events-none absolute inset-0 bg-black/10" />
-        <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
-          <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
-            🎧 {scene.teacher} <span className="opacity-60">({idx + 1}/{total})</span>
-          </div>
-        </div>
+        <div className="pointer-events-none absolute right-4 top-16 z-20 rounded-full bg-black/30 px-3 py-1 text-sm font-black text-white">{idx + 1}/{total}</div>
 
         {/* No enclosing card — the word floats directly on the background.
             'top' (a group shot with no single clean empty side) spans the
@@ -149,16 +142,16 @@ export function ListenRepeatCardsScene({ scene, onNext, onWin, sync }: { scene: 
             : `absolute inset-y-0 z-10 flex w-1/2 flex-col items-center justify-center gap-8 px-1 ${side === 'right' ? 'right-0' : 'left-0'}`
         }>
           <p
-            className="text-center font-black leading-none text-white drop-shadow-[0_6px_14px_rgba(0,0,0,0.7)]"
-            style={{ fontSize: side === 'top' ? 'clamp(3.5rem, calc(10*var(--svw,1vw)), 7rem)' : 'clamp(4.5rem, calc(13*var(--svw,1vw)), 10rem)' }}
+            className="text-center font-black leading-none text-white"
+            style={{ ...THICK_WORDS, fontSize: side === 'top' ? 'clamp(3.5rem, calc(10*var(--svw,1vw)), 7rem)' : 'clamp(4.5rem, calc(13*var(--svw,1vw)), 10rem)' }}
           >
             {words.map((w, i) => {
               const fixedColor = card!.wordColors?.[i];
               return (
                 <span
                   key={i}
-                  className={`transition-colors ${i === activeWord ? 'rounded bg-yellow-300 px-1 text-orange-900' : ''}`}
-                  style={fixedColor && i !== activeWord ? { color: fixedColor } : undefined}
+                  className="transition-colors"
+                  style={{ color: i === activeWord ? '#FDE047' : fixedColor ?? undefined }}
                 >
                   {w}{i < words.length - 1 ? ' ' : ''}
                 </span>
@@ -180,59 +173,73 @@ export function ListenRepeatCardsScene({ scene, onNext, onWin, sync }: { scene: 
           </div>
         </div>
 
-        {repeated && (
+        {/* Next is always there: saying it aloud is encouraged, never required. */}
           <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
             <button onClick={next} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>Next →</button>
           </div>
-        )}
       </div>
     );
   }
 
+  // Universal vocabulary page (owner, 2026-10-05: no card frames, no framed banner — "the frame looks tacky").
+  // A scene picture fills the screen; an object picture floats big over the lesson's scene; the sentence is
+  // thick outlined game-title text under it.
+  const isScenePic = /\/scenes\//.test(card!.img);
   return (
-    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
-      <div className="pointer-events-none absolute inset-0 bg-black/20" />
-      <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
-        <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
-          🎧 {scene.teacher} <span className="opacity-60">({idx + 1}/{total})</span>
+    <div key={idx} className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${isScenePic ? card!.img : scene.bg})`, animation: 'lep1-fade-in 0.45s ease-out' }}>
+      {isScenePic
+        ? <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/45 to-transparent" />
+        : <div className="pointer-events-none absolute inset-0 bg-black/15" />}
+      <div className="pointer-events-none absolute right-4 top-16 z-20 rounded-full bg-black/30 px-3 py-1 text-sm font-black text-white">{idx + 1}/{total}</div>
+
+      <div className={`absolute inset-x-0 z-10 flex flex-col items-center gap-4 px-4 ${isScenePic ? 'bottom-24' : 'inset-y-0 justify-center pb-10 pt-16'}`}>
+        {!isScenePic && (
+          <img
+            src={card!.img}
+            alt={card!.imgLabel}
+            className="object-contain drop-shadow-[0_14px_18px_rgba(0,0,0,0.35)]"
+            style={{ height: 'min(36vh, 40vw)', maxWidth: '80vw', animation: 'lep1-bob 3s ease-in-out infinite' }}
+          />
+        )}
+        <p className="max-w-[92vw] text-center font-black leading-tight text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(2rem, calc(5*var(--svw,1vw)), 4.6rem)' }}>
+          {words.map((w, i) => {
+            const fixedColor = card!.wordColors?.[i];
+            return (
+              <span key={i} className="transition-colors" style={{ color: i === activeWord ? '#FDE047' : fixedColor ?? undefined }}>
+                {w}{i < words.length - 1 ? ' ' : ''}
+              </span>
+            );
+          })}
+        </p>
+        <div className="flex flex-row items-center gap-3">
+          <img src={c.img} alt={c.name} className="h-12 w-12 object-contain drop-shadow-lg" />
+          <button onClick={play} disabled={playing} aria-label="Listen" className="rounded-full bg-white/90 px-5 py-3 text-base font-black text-orange-700 shadow-lg active:scale-95 disabled:opacity-60">
+            🔊
+          </button>
+          <button
+            onPointerDown={(e) => { e.currentTarget.setPointerCapture?.(e.pointerId); startHold(); }} onPointerUp={endHold} onPointerCancel={endHold}
+            disabled={!heard || repeated}
+            className={`min-w-[8.5rem] rounded-full px-5 py-3 text-base font-black text-white shadow-lg transition disabled:opacity-40 ${held ? 'brightness-110' : ''}`}
+            style={{ background: repeated ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
+          >
+            {repeated ? '✅' : held ? '🎤 …' : '🎤 Say it'}
+          </button>
         </div>
       </div>
 
-      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 justify-center px-4">
-        <div className="flex w-full max-w-md flex-col items-center gap-4 rounded-[2rem] bg-white/95 p-6 shadow-2xl ring-4 ring-white/70">
-          <div className="flex items-center gap-3">
-            <img src={c.img} alt={c.name} className="h-16 w-16 object-contain drop-shadow-lg" />
-            <span className="rounded-full px-3 py-1 text-xs font-black uppercase tracking-widest text-white shadow" style={{ background: c.color }}>{c.name}</span>
-          </div>
-          <div className="grid h-32 w-32 place-items-center rounded-3xl bg-orange-50 shadow-inner">
-            <img src={card!.img} alt={card!.imgLabel} className="h-24 w-24 object-contain drop-shadow" />
-          </div>
-          <p className="text-center text-xl font-black leading-snug text-slate-800 sm:text-2xl">
-            {words.map((w, i) => (
-              <span key={i} className={`transition-colors ${i === activeWord ? 'rounded bg-yellow-300 px-1 text-orange-900' : ''}`}>{w}{i < words.length - 1 ? ' ' : ''}</span>
-            ))}
-          </p>
-          <div className="flex w-full gap-2">
-            <button onClick={play} disabled={playing} className="flex-1 rounded-full bg-white py-3 text-sm font-bold text-orange-700 shadow-md ring-2 ring-orange-200 active:scale-95 disabled:opacity-50">
-              🔊 {playing ? 'Listening…' : 'Listen'}
-            </button>
-            <button
-              onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onPointerCancel={endHold}
-              disabled={!heard || repeated}
-              className={`flex-1 rounded-full py-3 text-sm font-black text-white shadow-xl transition disabled:opacity-40 ${held ? 'scale-95' : ''}`}
-              style={{ background: repeated ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
-            >
-              {repeated ? '✅ Great job!' : held ? '🎤 Keep talking…' : '🎤 Hold & repeat'}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {repeated && (
-        <div className="absolute inset-x-0 bottom-8 z-30 flex justify-center">
+      {/* Next is always there: saying it aloud is encouraged, never required. */}
+        <div className="absolute inset-x-0 bottom-6 z-30 flex justify-center">
           <button onClick={next} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>Next →</button>
         </div>
-      )}
     </div>
   );
 }
+
+/** Thick game-title lettering for the vocabulary words: white letters with a heavy dark outline
+ *  drawn under the fill (so the letters look fatter, not thinner) and a soft drop shadow. */
+const THICK_WORDS: CSSProperties = {
+  WebkitTextStroke: '0.16em #6B2A0E',
+  paintOrder: 'stroke fill',
+  textShadow: '0 0.08em 0 #6B2A0E, 0 0.18em 0.3em rgba(0,0,0,0.35)',
+  letterSpacing: '0.01em',
+};
