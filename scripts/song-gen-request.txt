@@ -1,2 +1,2 @@
 # round 2: better takes for kite/dad/tidy (2026-10-05)
-u5l1-family
+u3l5-tidy
