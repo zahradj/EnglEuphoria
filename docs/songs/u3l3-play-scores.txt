@@ -1,0 +1,15 @@
+
+=== docs/songs/u3l3-play-take1.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: do you like kites yes i do yes i do do you like robots yes i do yes i do do you like balls no i don't no i don't do you like to play yes i do let's play
+line starts (s): [np.float64(0.8), np.float64(4.7), np.float64(9.2), np.float64(13.0)]
+lineDurationsMs: [4740, 4500, 3800, 7022]
+
+=== docs/songs/u3l3-play-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: do you like kites yes i do yes i do do you like robots yes i do yes i do do you like balls no i don't no i don't do you like to play yes i do let's play
+line starts (s): [np.float64(0.0), np.float64(3.7), np.float64(7.3), np.float64(11.5)]
+lineDurationsMs: [3710, 3590, 4160, 8602]
+
+=== docs/songs/u3l3-play-take3.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: do you like kites yes i do yes i do do you like robots yes i do yes i do do you like balls no i don't no i don't do you like to play yes i do let's play
+line starts (s): [np.float64(0.0), np.float64(3.7), np.float64(7.7), np.float64(11.9)]
+lineDurationsMs: [3700, 4000, 4200, 8162]
