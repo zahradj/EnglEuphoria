@@ -29,6 +29,10 @@ export function TraceScene({ scene, onNext, onWin }: { scene: Extract<Scene, { k
     R: [{ from: { x: 180, y: 470 }, to: { x: 180, y: 110 } }, { from: { x: 180, y: 110 }, to: { x: 350, y: 115 } }, { from: { x: 350, y: 115 }, to: { x: 405, y: 200 } }, { from: { x: 405, y: 200 }, to: { x: 350, y: 285 } }, { from: { x: 350, y: 285 }, to: { x: 180, y: 290 } }, { from: { x: 280, y: 290 }, to: { x: 420, y: 470 } }],
     W: [{ from: { x: 120, y: 110 }, to: { x: 205, y: 470 } }, { from: { x: 205, y: 470 }, to: { x: 300, y: 170 } }, { from: { x: 300, y: 170 }, to: { x: 395, y: 470 } }, { from: { x: 395, y: 470 }, to: { x: 480, y: 110 } }],
     Y: [{ from: { x: 160, y: 110 }, to: { x: 300, y: 300 } }, { from: { x: 440, y: 110 }, to: { x: 300, y: 300 } }, { from: { x: 300, y: 300 }, to: { x: 300, y: 470 } }],
+    // E, F, K were missing too (E and F traced against the H outline until 2026-10-05).
+    E: [{ from: { x: 190, y: 110 }, to: { x: 190, y: 470 } }, { from: { x: 190, y: 110 }, to: { x: 420, y: 110 } }, { from: { x: 190, y: 290 }, to: { x: 390, y: 290 } }, { from: { x: 190, y: 470 }, to: { x: 420, y: 470 } }],
+    F: [{ from: { x: 190, y: 110 }, to: { x: 190, y: 470 } }, { from: { x: 190, y: 110 }, to: { x: 420, y: 110 } }, { from: { x: 190, y: 290 }, to: { x: 390, y: 290 } }],
+    K: [{ from: { x: 185, y: 110 }, to: { x: 185, y: 470 } }, { from: { x: 420, y: 110 }, to: { x: 185, y: 310 } }, { from: { x: 265, y: 245 }, to: { x: 430, y: 470 } }],
     T: [{ from: { x: 150, y: 150 }, to: { x: 450, y: 150 } }, { from: { x: 300, y: 150 }, to: { x: 300, y: 470 } }],
     B: [
       { from: { x: 180, y: 130 }, to: { x: 180, y: 470 } },

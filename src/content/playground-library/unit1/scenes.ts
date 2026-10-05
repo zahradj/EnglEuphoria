@@ -556,6 +556,14 @@ export type Scene =
        *  painted in bg holds a prize toy; the voice says "Throw the ring on
        *  the kite!"; tap the peg: the ring flies in a spinning arc. Rings on
        *  the right pegs stay. `pegs` = peg tops (x/y %), `prizes[i]` = toy on peg i. */
+      /** Sand Prints (U4L3 signature): hear "Make a footprint!", press the matching body-part sticker into
+       *  the sand; the print stays. parts[i].label: hand / finger / foot / arm. */
+      id: string; kind: 'sand-prints'; bg: string; teacher: string; who: CharKey;
+      parts: { label: string; img: string }[];
+      rounds: { part: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Calm first-sound pick: the recorded letter sound, then "Which one starts with this sound?";
        *  three still pictures, no clock, wrong taps are named back and cost nothing. */
       id: string; kind: 'sound-pick'; bg: string; teacher: string; who: CharKey;
