@@ -80,4 +80,11 @@ describe('classroom hygiene', () => {
     const teacher = read('src/components/teacher/classroom/TeacherClassroom.tsx');
     expect(teacher).toMatch(/handleStartClass[\s\S]{0,1400}setSceneInteractionUnlocked\(true\)/);
   });
+  it('the teacher is never left stuck as a read-only mirror: both lesson players offer a one-tap take-over', () => {
+    for (const f of ['src/pages/playground-scene/PlayUnitLesson.tsx', 'src/pages/playground-scene/PlayWelcomeTownLesson.tsx']) {
+      const src = read(f);
+      expect(src, `${f} must define teacherMirrored/takeOver`).toMatch(/teacherMirrored[\s\S]*takeOver/);
+      expect(src, `${f} must show the take-over control to a mirrored teacher`).toContain('tap anywhere to take over');
+    }
+  });
 });
