@@ -1,2 +1,9 @@
-+ public/lep1/scenes/bg-u2l2-mix-mia-a2-wide.png (1376, 768)
-1/1 saved
++ public/lep1/scenes/bg-u4l2-kitchen-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l2-mia-face-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l2-mia-eyes-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l2-mia-ears-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l2-mia-mouth-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l2-mia-nose-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l2-pancake-blank-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l2-pancake-face-wide.png (1376, 768)
+8/8 saved
