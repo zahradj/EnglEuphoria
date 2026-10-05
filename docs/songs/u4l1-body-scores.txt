@@ -1,0 +1,14 @@
+
+=== docs/songs/u4l1-body-take1.mp3  length=20.1s  score=0.85  missing=8  extra=0
+heard: head shoulders knees and toes knees and toes touch your head and touch your toes head shoulders knees and toes knees and toes
+line starts (s): [None, np.float64(0.0), np.float64(7.7), np.float64(12.1)]
+
+=== docs/songs/u4l1-body-take2.mp3  length=20.1s  score=0.92  missing=4  extra=1
+heard: head shoulders knees and toes knees and toes head shoulders knees and toes touch your head and touch your eyes head shoulders knees and toes knees and toes
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(8.1), np.float64(11.7)]
+lineDurationsMs: [4060, 4040, 3600, 8362]
+
+=== docs/songs/u4l1-body-take3.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: head shoulders knees and toes knees and toes head shoulders knees and toes knees and toes touch your head and touch your toes head shoulders knees and toes knees and toes
+line starts (s): [np.float64(0.0), np.float64(3.6), np.float64(7.6), np.float64(11.5)]
+lineDurationsMs: [3580, 3980, 3960, 8542]
