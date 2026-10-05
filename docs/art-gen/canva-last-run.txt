@@ -1,4 +1,3 @@
-cut out: public/lep1/items/item-card-ears.png (433, 681)
-+ public/lep1/scenes/bg-u4l1-leo-toes-wide.png (1376, 768)
-+ public/lep1/items/item-card-ears.png (1024, 1024)
++ public/lep1/scenes/bg-u4l3-beach-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l3-bella-wide.png (1376, 768)
 2/2 saved
