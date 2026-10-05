@@ -30,8 +30,13 @@ jobs:
         with:
           node-version: '22'
       - name: Record missing clips
+        env:
+          # The voice function only records NEW clips for the service key (owner's "no live clips" rule).
+          # Repo secret set by the owner in GitHub → Settings → Secrets and variables → Actions.
+          BAKE_SERVICE_KEY: ${{ secrets.BAKE_SERVICE_KEY }}
         run: |
           set -e
+          if [ -z "$BAKE_SERVICE_KEY" ]; then echo "::error::Add the BAKE_SERVICE_KEY repository secret (Supabase service_role key) so new clips can be recorded."; exit 1; fi
           grep -v '^\s*#' scripts/voice-bake-targets.txt | grep -v '^\s*$' | while read -r target; do
             echo "== $target"
             npx -y tsx scripts/generate-voice-cache.mjs --lesson="$target"
