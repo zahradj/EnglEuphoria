@@ -3059,7 +3059,7 @@ export const LESSON_U2L2_SCENES: Scene[] = [
     pages: [
       { img: mixPic('willow', 'a'), who: 'willow', line: 'Blue!', atSec: 0 },
       { img: mixPic('willow', 'pour2'), who: 'willow', line: 'And yellow!', atSec: 5 },
-      { img: mixPic('willow', 'spoon'), who: 'willow', line: 'Stir, stir, stir!', atSec: 10 },
+      { img: mixPic('willow', 'spoon'), who: 'willow', line: 'Mix, mix, mix, mix!', atSec: 10 },
       { img: mixPic('willow', 'b'), who: 'willow', line: "It's green! Blue and yellow make green!", atSec: 15 },
     ],
     checkpoints: [{ afterPage: 2, who: 'willow', question: 'What color is it?', answer: 'Green', options: SWATCHES }],
@@ -3080,7 +3080,7 @@ export const LESSON_U2L2_SCENES: Scene[] = [
     pages: [
       { img: mixPic('leo', 'a'), who: 'leo', line: 'Red!', atSec: 0 },
       { img: mixPic('leo', 'pour2'), who: 'leo', line: 'And yellow!', atSec: 5 },
-      { img: mixPic('leo', 'spoon'), who: 'leo', line: 'Stir, stir, stir!', atSec: 10 },
+      { img: mixPic('leo', 'spoon'), who: 'leo', line: 'Mix, mix, mix, mix!', atSec: 10 },
       { img: mixPic('leo', 'b'), who: 'leo', line: "It's orange! Red and yellow make orange!", atSec: 15 },
     ],
     checkpoints: [{ afterPage: 2, who: 'leo', question: 'What color is it?', answer: 'Orange', options: SWATCHES }],
@@ -3101,7 +3101,7 @@ export const LESSON_U2L2_SCENES: Scene[] = [
     pages: [
       { img: mixPic('mia', 'a2'), who: 'mia', line: 'Red!', atSec: 0 },
       { img: mixPic('mia', 'pour2'), who: 'mia', line: 'And blue!', atSec: 5 },
-      { img: mixPic('mia', 'spoon'), who: 'mia', line: 'Stir, stir, stir!', atSec: 10 },
+      { img: mixPic('mia', 'spoon'), who: 'mia', line: 'Mix, mix, mix, mix!', atSec: 10 },
       { img: mixPic('mia', 'b2'), who: 'mia', line: "It's purple! Red and blue make purple!", atSec: 15 },
     ],
     checkpoints: [{ afterPage: 2, who: 'mia', question: 'What color is it?', answer: 'Purple', options: SWATCHES }],

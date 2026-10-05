@@ -454,7 +454,7 @@ const UNIT1_EXTRACTORS = {
       [s.who, `Mix ${r.a.toLowerCase()} and ${r.b.toLowerCase()}!`],
       [r.who, `${cap(r.a)}!`], [r.who, `${cap(r.b)}!`],
       [r.who, `And ${r.a.toLowerCase()}!`], [r.who, `And ${r.b.toLowerCase()}!`],
-      [r.who, 'Stir, stir, stir!'],
+      [r.who, 'Mix, mix, mix, mix!'],
       [r.who, 'What color is it?'],
       [r.who, res(r.a, r.b)], [r.who, res(r.b, r.a)],
       [r.who, r.line],

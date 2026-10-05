@@ -14,7 +14,7 @@ import { Bursts, useBursts, useShake } from './gameFx';
  *   1. Pip: "Mix blue and yellow!" — the child taps the BLUE jar: it tips and
  *      pours into the glass bowl ("Blue!"), then the YELLOW jar ("And yellow!").
  *      The second paint lies on top of the first, as in the film.
- *   2. "Stir, stir, stir!" — three stirs (tap the spoon button, or draw circles
+ *   2. "Mix, mix, mix, mix!" — four stirs (tap the spoon button, or draw circles
  *      in the bowl): the two layers swirl and blend into the new colour.
  *   3. "What color is it?" — the child names it; the friend answers with the
  *      film's line ("It's green! Blue and yellow make green!") and the round's
@@ -28,7 +28,8 @@ export function mixLine(a: string, b: string) {
   return `Mix ${a.toLowerCase()} and ${b.toLowerCase()}!`;
 }
 export const MIX_QUESTION = 'What color is it?';
-export const STIR_LINE = 'Stir, stir, stir!';
+// Owner 2026-10-05: "stir" was heard as "steer" — the voice says "mix" instead.
+export const STIR_LINE = 'Mix, mix, mix, mix!';
 const cap = (w: string) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
 /** What the friend says as each jar pours (the film's lines). */
 export function pourLine(color: string, second: boolean) {
@@ -40,7 +41,7 @@ export function resultLine(result: string, a: string, b: string) {
 }
 
 type Phase = 'pick' | 'stir' | 'name' | 'reveal';
-const STIRS = 3; // "Stir, stir, stir!"
+const STIRS = 4; // "Mix, mix, mix, mix!" — one stir per "mix"
 const DRAW_PER_STIR = 2 * Math.PI; // one circle drawn in the bowl = one stir
 
 export function ColorMixScene({ scene, onWin, onLose, onNext, sync }: { scene: Extract<Scene, { kind: 'color-mix' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void; sync?: ActivitySync }) {
@@ -94,7 +95,7 @@ export function ColorMixScene({ scene, onWin, onLose, onNext, sync }: { scene: E
     busy.current = false;
   };
 
-  // One stir: the layers turn and blend a third of the way. The third stir finishes the colour.
+  // One stir: the layers turn and blend a quarter of the way. The fourth stir finishes the colour.
   const stirOnce = () => {
     if (!r || phase !== 'stir' || stirs >= STIRS) return;
     sfx.pop();
@@ -243,7 +244,7 @@ export function ColorMixScene({ scene, onWin, onLose, onNext, sync }: { scene: E
         ))}
         {phase === 'stir' && (
           <motion.button onClick={stirOnce} className={`${CLAY_BUTTON} px-10 py-4 text-2xl`} animate={{ scale: [1, 1.06, 1] }} transition={{ duration: 1.1, repeat: Infinity }}>
-            {'\u{1F944}'} Stir!
+            {'\u{1F944}'} Mix!
           </motion.button>
         )}
         {phase === 'name' && scene.answers.map((ans) => (
