@@ -1,0 +1,15 @@
+
+=== docs/songs/u3l6-fair-take1.mp3  length=20.1s  score=0.89  missing=3  extra=4
+heard: toy fair toy fair play and win i want the robot please the robot please i want the type please the type please play and win and say it thank you for it
+line starts (s): [np.float64(0.0), 4.0, 8.0, np.float64(12.0)]
+lineDurationsMs: [4000, 4000, 3980, 8082]
+
+=== docs/songs/u3l6-fair-take2.mp3  length=20.1s  score=0.85  missing=6  extra=3
+heard: toy fair toy fair flamin' i want the robot please the robot please i want the type please the type please play and win and say thank you hooray
+line starts (s): [np.float64(0.0), np.float64(3.4), np.float64(7.8), np.float64(11.8)]
+lineDurationsMs: [3400, 4380, 4020, 8262]
+
+=== docs/songs/u3l6-fair-take3.mp3  length=20.1s  score=0.62  missing=12  extra=12
+heard: toy fair toy fair playin' when i want the robot please the robot please i want the tight please the tight please playin' when i say it's bad but you for it
+line starts (s): [np.float64(0.0), np.float64(3.2), np.float64(8.9), np.float64(12.9)]
+lineDurationsMs: [3200, 5660, 4060, 7142]
