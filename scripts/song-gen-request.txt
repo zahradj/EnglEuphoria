@@ -1,1 +1,2 @@
-# U4L2 song
+# U4L2: score the existing takes only
+score:u4l2-face
