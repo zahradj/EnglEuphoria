@@ -1,12 +1,12 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0085-5175154022318368584.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261004T224017Z&X-Amz-Expires=78177&X-Amz-Signature=52a0d18b597dbe6f64cf596a60a93caf3ef593afe183b763a6e2504f4642456c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2020%3A23%3A14%20GMT",
-  "out": "public/lep1/scenes/bg-u4l2-pizza-blank-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0085-4689891165665199379.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T094348Z&X-Amz-Expires=37147&X-Amz-Signature=67671e1227ef2f1d7929ab485f1a67d9196595555cc6b29d03563d78b7f4d311&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2020%3A02%3A55%20GMT",
+  "out": "public/lep1/scenes/bg-u4l2-robot-blank-wide.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0086-5175154022318368584.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T113417Z&X-Amz-Expires=30490&X-Amz-Signature=fa11278f6659aaeb48e22884c6493afe3cbe018f453d08116b47647d484757d1&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2020%3A02%3A27%20GMT",
-  "out": "public/lep1/scenes/bg-u4l2-pizza-face-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0086-4689891165665199379.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T163743Z&X-Amz-Expires=14428&X-Amz-Signature=00f88b4f8829162018a7b10004c5823fe62580b115dc6d788caeb4ee1d861115&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2020%3A38%3A11%20GMT",
+  "out": "public/lep1/scenes/bg-u4l2-robot-face-wide.png",
   "sticker": false
  }
 ]
