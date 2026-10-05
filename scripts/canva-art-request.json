@@ -1,22 +1,12 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0081-5574848484564551714.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T061743Z&X-Amz-Expires=39565&X-Amz-Signature=c263acbfbab503ba33c4ab31f2dd12212ce798225555fb2e7bf508856237c326&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2017%3A17%3A08%20GMT",
-  "out": "public/lep1/items/item-card-eyes.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0085-5175154022318368584.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261004T224017Z&X-Amz-Expires=78177&X-Amz-Signature=52a0d18b597dbe6f64cf596a60a93caf3ef593afe183b763a6e2504f4642456c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2020%3A23%3A14%20GMT",
+  "out": "public/lep1/scenes/bg-u4l2-pizza-blank-wide.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0082-5574848484564551714.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T002854Z&X-Amz-Expires=60621&X-Amz-Signature=17eb979e09974c2d3c3fd9c5d8f9cede08b365d8180767f25d2a9916b56695ef&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2017%3A19%3A15%20GMT",
-  "out": "public/lep1/items/item-card-ears.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0083-5574848484564551714.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T053036Z&X-Amz-Expires=43796&X-Amz-Signature=ce4b5b1559d835727cd56a1ce2eba8420139669c6f0a08262c80e6e120eaeb69&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2017%3A40%3A32%20GMT",
-  "out": "public/lep1/items/item-card-nose.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0084-5574848484564551714.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T050032Z&X-Amz-Expires=46781&X-Amz-Signature=3245c77275e386340e3fa84ba18e2ca45ec01be5b14986277b6c45b30c9b4565&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2018%3A00%3A13%20GMT",
-  "out": "public/lep1/items/item-card-mouth.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0086-5175154022318368584.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T113417Z&X-Amz-Expires=30490&X-Amz-Signature=fa11278f6659aaeb48e22884c6493afe3cbe018f453d08116b47647d484757d1&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2020%3A02%3A27%20GMT",
+  "out": "public/lep1/scenes/bg-u4l2-pizza-face-wide.png",
   "sticker": false
  }
 ]
