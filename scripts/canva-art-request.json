@@ -1,12 +1,12 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0085-4689891165665199379.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T094348Z&X-Amz-Expires=37147&X-Amz-Signature=67671e1227ef2f1d7929ab485f1a67d9196595555cc6b29d03563d78b7f4d311&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2020%3A02%3A55%20GMT",
-  "out": "public/lep1/scenes/bg-u4l2-robot-blank-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0087-2018130689907804621.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T004724Z&X-Amz-Expires=73452&X-Amz-Signature=d2ac6d30cba3f0a1e60be1015ea749c3fbf5d3e87294c6f60579ab4df9a1a959&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2021%3A11%3A36%20GMT",
+  "out": "public/lep1/scenes/bg-u4l1-leo-toes-wide.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0086-4689891165665199379.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T163743Z&X-Amz-Expires=14428&X-Amz-Signature=00f88b4f8829162018a7b10004c5823fe62580b115dc6d788caeb4ee1d861115&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2020%3A38%3A11%20GMT",
-  "out": "public/lep1/scenes/bg-u4l2-robot-face-wide.png",
-  "sticker": false
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0088-2018130689907804621.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T150933Z&X-Amz-Expires=21035&X-Amz-Signature=45031383cb758019c5320cca0f4963c3c88da0ecf6e73668be8ad49c4bf12936&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2021%3A00%3A08%20GMT",
+  "out": "public/lep1/items/item-card-ears.png",
+  "sticker": true
  }
 ]
