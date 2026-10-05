@@ -1,4 +1,4 @@
-# Games that suit the Academy hub (ages 11–18) — research, 2026-10-05
+# Games that suit the Academy hub — research, 2026-10-05
 
 The Academy is its own hub, not a grown-up Playground:
 - **Cast** (`cast_vault_characters`, hub = academy): **Vee**, the mentor (16–19, direct, upbeat, "treats mistakes as normal"); **Ava** (13–15, curious, asks lots of questions), **Theo** (13–15, easygoing, a good listener) and **Mia** (13–15), the recurring conversation leads. Semi-realistic illustrated teens in everyday clothes, **not mascots**.
