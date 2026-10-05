@@ -11,6 +11,8 @@ interface FrontPageSlideProps {
   unitTitle?: string;
   subtitle?: string;
   lessonNumber?: number | string;
+  /** 'game' = the Academy Starline skin (src/styles/academy-game.css): game type, blue→violet, text lifted clear of the nav bar. */
+  skin?: 'game';
 }
 
 /**
@@ -80,7 +82,9 @@ export default function FrontPageSlide({
   unitTitle,
   subtitle,
   lessonNumber,
+  skin,
 }: FrontPageSlideProps) {
+  const game = skin === 'game';
   const theme = getEditorialTheme(hub);
   const palette = getIntroPalette(hub);
 
@@ -124,11 +128,11 @@ export default function FrontPageSlide({
       {/* Scrim for text legibility over any image/gradient. */}
       <div
         className="absolute inset-0"
-        style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.72) 100%)' }}
+        style={{ background: game ? 'linear-gradient(180deg, rgba(7,10,36,0.35) 0%, rgba(7,10,36,0) 30%, rgba(7,10,36,0.88) 100%)' : 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.72) 100%)' }}
       />
 
       {/* Logo — top-right, overlaid */}
-      <div className="absolute top-5 right-6 z-10 flex items-center gap-2">
+      <div className={`absolute top-5 right-6 z-10 items-center gap-2 ${game ? 'hidden' : 'flex'}`}>
         <img
           src="/favicon.png?v=10"
           alt="EnglEuphoria"
@@ -140,7 +144,7 @@ export default function FrontPageSlide({
       </div>
 
       {/* Content block, bottom-aligned over the full-bleed art. */}
-      <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-3 px-8 py-8 md:px-12 md:py-10">
+      <div className={`ag-root absolute inset-x-0 bottom-0 z-10 flex flex-col gap-3 px-8 md:px-12 ${game ? 'pb-28 pt-8 md:pb-28' : 'py-8 md:py-10'}`}>
         {level && (
           <span
             className={`inline-flex self-start items-center px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest ${palette.pillBg} ${palette.pillText}`}
@@ -150,19 +154,19 @@ export default function FrontPageSlide({
         )}
 
         <h1
-          className="font-serif text-3xl md:text-5xl lg:text-6xl font-black text-white leading-[1.05] max-w-3xl drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)]"
+          className={game ? 'ag-title max-w-3xl text-4xl md:text-6xl lg:text-7xl' : 'font-serif text-3xl md:text-5xl lg:text-6xl font-black text-white leading-[1.05] max-w-3xl drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)]'}
         >
           {lessonTitle}
         </h1>
 
         {unitLessonLine && (
-          <p className="text-sm md:text-base font-semibold uppercase tracking-[0.18em] text-white/90 drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]">
+          <p className={game ? 'ag-chip' : 'text-sm md:text-base font-semibold uppercase tracking-[0.18em] text-white/90 drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]'}>
             {unitLessonLine}
           </p>
         )}
 
         {(subtitle || (topic && topic !== lessonTitle)) && (
-          <p className="text-sm md:text-lg text-white/90 font-light leading-relaxed max-w-2xl drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]">
+          <p className={game ? 'ag-prompt max-w-2xl text-base md:text-xl' : 'text-sm md:text-lg text-white/90 font-light leading-relaxed max-w-2xl drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]'}>
             {subtitle || topic}
           </p>
         )}
@@ -171,13 +175,15 @@ export default function FrontPageSlide({
         <div
           className="mt-1 h-1 w-20 rounded-full"
           style={{
-            background: `linear-gradient(90deg, ${palette.primary}, ${palette.accent})`,
+            background: game ? 'linear-gradient(90deg, #3b6dff, #8b5cf6, #d95cf0)' : `linear-gradient(90deg, ${palette.primary}, ${palette.accent})`,
           }}
         />
 
-        <span className="text-[10px] uppercase tracking-[0.3em] text-white/70 font-bold">
-          {theme.label}
-        </span>
+        {!game && (
+          <span className="text-[10px] uppercase tracking-[0.3em] text-white/70 font-bold">
+            {theme.label}
+          </span>
+        )}
       </div>
     </div>
   );

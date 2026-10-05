@@ -1,0 +1,20 @@
+{
+  "cover": "/academy/a1u1l1/gate.webp",
+  "gate": "/academy/a1u1l1/gate.webp",
+  "classroom": "/academy/a1u1l1/classroom.webp",
+  "blocks": {
+    "warmup": "/academy/a1u1l1/bg-warmup.webp",
+    "vocab": "/academy/a1u1l1/bg-vocab.webp",
+    "reading": "/academy/a1u1l1/bg-reading.webp",
+    "grammar": "/academy/a1u1l1/bg-grammar.webp",
+    "practice": "/academy/a1u1l1/classroom.webp",
+    "interactive": "/academy/a1u1l1/gate.webp",
+    "speaking": "/academy/a1u1l1/bg-warmup.webp"
+  },
+  "items": {
+    "hello": "/academy/a1u1l1/hello.png",
+    "goodbye": "/academy/a1u1l1/goodbye2.png",
+    "name": "/academy/a1u1l1/name.png",
+    "nametag": "/academy/a1u1l1/nametag.png"
+  }
+}

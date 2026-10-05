@@ -35,7 +35,7 @@ const TYPE_LABELS: Record<string, string> = {
   grammar_color_decode: 'Grammar', grammar_pattern: 'Grammar pattern', grammar_formula: 'Grammar formula',
   error_detection: 'Spot the mistake', correction: 'Fix it', fill_blank: 'Fill the gap', sentence_builder: 'Build the sentence',
   canvas_game: 'Drag game', conversation_fill: 'Chat', sound_challenge_game: 'Sound challenge', escape_room_slot: 'Escape room',
-  expedition_game: 'Expedition', speaking_task: 'Speaking', role_play: 'Role-play', debate_scale: 'Opinion',
+  expedition_game: 'Expedition', name_tag_studio: 'Name tag', speaking_task: 'Speaking', role_play: 'Role-play', debate_scale: 'Opinion',
   reflection: 'Reflection', lesson_summary: 'Recap',
 };
 

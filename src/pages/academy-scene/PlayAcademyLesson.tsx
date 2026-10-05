@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Sun, Moon, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import '@/styles/academy-game.css';
 import { Helmet } from 'react-helmet-async';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -94,62 +95,59 @@ const SESSION_KEY_PREFIX = 'academy-scene-idx:';
 const BLOCK_SCENES: Record<Block, { background: string; motif: string; accent: string }> = {
   warmup: {
     background:
-      'radial-gradient(ellipse 900px 700px at 15% 0%, rgba(129,140,248,0.35), transparent 60%), ' +
-      'radial-gradient(ellipse 800px 800px at 90% 100%, rgba(217,70,239,0.22), transparent 60%), ' +
-      'linear-gradient(160deg, #171335 0%, #100e28 55%, #0b0a1f 100%)',
-    motif: 'radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1.5px)',
-    accent: '#a5b4fc',
+      'radial-gradient(ellipse 900px 700px at 15% 0%, rgba(91,140,255,0.38), transparent 60%), ' +
+      'radial-gradient(ellipse 800px 800px at 90% 100%, rgba(168,85,247,0.26), transparent 60%), ' +
+      'linear-gradient(160deg, #141a52 0%, #0d1140 55%, #070a24 100%)',
+    motif: 'radial-gradient(circle, rgba(200,214,255,0.5) 1px, transparent 1.5px)',
+    accent: '#8fb4ff',
   },
   vocab: {
     background:
-      'radial-gradient(ellipse 850px 650px at 85% 5%, rgba(192,132,252,0.32), transparent 60%), ' +
-      'radial-gradient(ellipse 700px 900px at 5% 95%, rgba(129,140,248,0.24), transparent 60%), ' +
-      'linear-gradient(160deg, #1d1440 0%, #140f30 55%, #0b0a1f 100%)',
-    motif: 'radial-gradient(circle, rgba(216,180,254,0.55) 1.5px, transparent 2px)',
-    accent: '#d8b4fe',
+      'radial-gradient(ellipse 900px 700px at 15% 0%, rgba(139,92,246,0.36), transparent 60%), ' +
+      'radial-gradient(ellipse 800px 800px at 90% 100%, rgba(59,109,255,0.26), transparent 60%), ' +
+      'linear-gradient(160deg, #1b1668 0%, #120f4a 55%, #070a24 100%)',
+    motif: 'radial-gradient(circle, rgba(200,214,255,0.5) 1px, transparent 1.5px)',
+    accent: '#b78bff',
   },
   reading: {
     background:
-      'radial-gradient(ellipse 900px 700px at 10% 100%, rgba(96,165,250,0.26), transparent 60%), ' +
-      'radial-gradient(ellipse 750px 600px at 95% 0%, rgba(129,140,248,0.24), transparent 60%), ' +
-      'linear-gradient(160deg, #101a3a 0%, #0e1330 55%, #0b0a1f 100%)',
-    motif:
-      'repeating-linear-gradient(0deg, rgba(147,197,253,0.06) 0px, rgba(147,197,253,0.06) 1px, transparent 1px, transparent 28px)',
-    accent: '#93c5fd',
+      'radial-gradient(ellipse 900px 700px at 15% 0%, rgba(59,109,255,0.34), transparent 60%), ' +
+      'radial-gradient(ellipse 800px 800px at 90% 100%, rgba(124,92,246,0.24), transparent 60%), ' +
+      'linear-gradient(160deg, #0f1c5c 0%, #0c1244 55%, #070a24 100%)',
+    motif: 'radial-gradient(circle, rgba(200,214,255,0.5) 1px, transparent 1.5px)',
+    accent: '#86b6ff',
   },
   grammar: {
     background:
-      'radial-gradient(ellipse 850px 700px at 90% 90%, rgba(45,212,191,0.22), transparent 60%), ' +
-      'radial-gradient(ellipse 800px 650px at 5% 10%, rgba(99,102,241,0.28), transparent 60%), ' +
-      'linear-gradient(160deg, #12213a 0%, #101430 55%, #0b0a1f 100%)',
-    motif:
-      'linear-gradient(rgba(94,234,212,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(94,234,212,0.08) 1px, transparent 1px)',
-    accent: '#5eead4',
+      'radial-gradient(ellipse 900px 700px at 15% 0%, rgba(99,102,241,0.36), transparent 60%), ' +
+      'radial-gradient(ellipse 800px 800px at 90% 100%, rgba(134,236,255,0.18), transparent 60%), ' +
+      'linear-gradient(160deg, #141a58 0%, #0f1348 55%, #070a24 100%)',
+    motif: 'linear-gradient(rgba(134,236,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(134,236,255,0.07) 1px, transparent 1px)',
+    accent: '#86ecff',
   },
   practice: {
     background:
-      'radial-gradient(ellipse 900px 700px at 20% 100%, rgba(52,211,153,0.24), transparent 60%), ' +
-      'radial-gradient(ellipse 750px 700px at 85% 10%, rgba(99,102,241,0.24), transparent 60%), ' +
-      'linear-gradient(160deg, #10231f 0%, #10182e 55%, #0b0a1f 100%)',
-    motif: 'radial-gradient(circle at 50% 50%, transparent 24%, rgba(110,231,183,0.12) 25%, transparent 26%)',
-    accent: '#6ee7b7',
+      'radial-gradient(ellipse 900px 700px at 15% 0%, rgba(124,92,246,0.34), transparent 60%), ' +
+      'radial-gradient(ellipse 800px 800px at 90% 100%, rgba(59,130,255,0.26), transparent 60%), ' +
+      'linear-gradient(160deg, #1a1766 0%, #110f48 55%, #070a24 100%)',
+    motif: 'radial-gradient(circle, rgba(200,214,255,0.5) 1px, transparent 1.5px)',
+    accent: '#a99bff',
   },
   interactive: {
     background:
-      'radial-gradient(ellipse 900px 700px at 95% 100%, rgba(244,114,182,0.28), transparent 60%), ' +
-      'radial-gradient(ellipse 750px 650px at 5% 0%, rgba(168,85,247,0.28), transparent 60%), ' +
-      'linear-gradient(160deg, #29103a 0%, #1a0f30 55%, #0b0a1f 100%)',
-    motif:
-      'repeating-linear-gradient(115deg, rgba(244,114,182,0.07) 0px, rgba(244,114,182,0.07) 2px, transparent 2px, transparent 26px)',
-    accent: '#f9a8d4',
+      'radial-gradient(ellipse 900px 700px at 15% 0%, rgba(217,92,240,0.32), transparent 60%), ' +
+      'radial-gradient(ellipse 800px 800px at 90% 100%, rgba(99,102,241,0.3), transparent 60%), ' +
+      'linear-gradient(160deg, #2a1470 0%, #190f52 55%, #070a24 100%)',
+    motif: 'radial-gradient(circle, rgba(200,214,255,0.5) 1px, transparent 1.5px)',
+    accent: '#e3a2ff',
   },
   speaking: {
     background:
-      'radial-gradient(ellipse 900px 800px at 50% 100%, rgba(45,212,191,0.26), transparent 65%), ' +
-      'radial-gradient(ellipse 700px 700px at 15% 0%, rgba(129,140,248,0.24), transparent 60%), ' +
-      'linear-gradient(160deg, #10231f 0%, #101430 55%, #0b0a1f 100%)',
-    motif: 'radial-gradient(circle at 50% 100%, rgba(94,234,212,0.18), transparent 55%)',
-    accent: '#99f6e4',
+      'radial-gradient(ellipse 900px 700px at 15% 0%, rgba(134,236,255,0.2), transparent 60%), ' +
+      'radial-gradient(ellipse 800px 800px at 90% 100%, rgba(139,92,246,0.3), transparent 60%), ' +
+      'linear-gradient(160deg, #161c5e 0%, #0f1348 55%, #070a24 100%)',
+    motif: 'radial-gradient(circle, rgba(200,214,255,0.5) 1px, transparent 1.5px)',
+    accent: '#9ad8ff',
   },
 };
 
@@ -174,14 +172,13 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
     ['teacher', 'admin', 'content_creator'].includes(String((user as any)?.role ?? '')) ||
     (isDevBypassActive && (bypassRole === 'teacher' || bypassRole === 'admin'));
 
-  const [theme, setTheme] = useState<Theme>('dark');
   const [i, setI] = useState(0);
   const [completeOpen, setCompleteOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const creditedBlocks = useRef<Set<string>>(new Set());
   const startTimeRef = useRef<number>(Date.now());
 
-  const t = themeMap[theme];
+  const t = themeMap.game;
 
   useEffect(() => {
     let cancelled = false;
@@ -421,6 +418,7 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
     slide?.type === 'story_page' ||
     slide?.type === 'escape_room_slot' ||
     slide?.type === 'expedition_game' ||
+    slide?.type === 'name_tag_studio' ||
     slide?.type === 'hidden_object_slot' ||
     slide?.type === 'detective_mystery_slot' ||
     slide?.type === 'story_engine_slot' ||
@@ -580,7 +578,7 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
           letterboxed/boxed-in look this replaces). */}
       <div
         dir="ltr"
-        className="relative h-dvh w-full overflow-hidden text-white font-sans transition-[background-image] duration-500"
+        className="ag-root relative h-dvh w-full overflow-hidden font-sans transition-[background-image] duration-500"
         data-hub="academy"
         style={
           pageBgImage
@@ -588,29 +586,25 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
             : { background: cssScene.background }
         }
       >
+        {/* Starline skin: the scene art is the page; a cool indigo wash (no cards) keeps the HUD and any text readable. */}
         {pageBgImage ? (
           <>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/55" />
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,0.35)_100%)]" />
+            {/* Only a light top wash for the HUD and a gentle edge vignette: the art stays vivid. */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#070a24]/60 to-transparent" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_62%,rgba(7,10,36,0.38)_100%)]" />
           </>
         ) : (
           <div className="pointer-events-none absolute inset-0 opacity-[0.35]" style={{ backgroundImage: cssScene.motif, backgroundSize: '26px 26px' }} />
         )}
 
-        <div className="relative z-10 flex h-full w-full flex-col px-0 pb-4 pt-4">
-          {/* Top chrome — lesson chip, block label, minimal controls. */}
-          <header className="relative flex items-center justify-between gap-3 px-4 pb-2 md:px-8">
-            <div className="flex min-w-0 items-center gap-3 rounded-full bg-black/30 py-1.5 pl-1.5 pr-4 backdrop-blur-md ring-1 ring-white/10">
-              <img
-                src="/favicon.png?v=10"
-                alt="EnglEuphoria"
-                className="h-8 w-8 shrink-0 rounded-full bg-white/95 object-contain p-0.5 ring-1 ring-white/20"
-              />
+        <div className="relative z-10 flex h-full w-full flex-col pt-3">
+          {/* HUD: bare — logo, quest trail + XP, wallet. */}
+          <header className="relative flex items-center justify-between gap-3 px-4 pb-1 md:px-8">
+            <div className="flex min-w-0 items-center gap-3">
+              <img src="/favicon.png?v=10" alt="EnglEuphoria" className="h-9 w-9 shrink-0 rounded-full object-contain drop-shadow-[0_0_10px_rgba(139,92,246,0.8)]" />
               <div className="hidden min-w-0 2xl:block">
-                <div className="truncate text-sm font-semibold leading-tight">{lesson.title}</div>
-                <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: cssScene.accent }}>
-                  {blockLabel}
-                </div>
+                <div className="ag-title truncate text-sm">{lesson.title}</div>
+                <div className="ag-chip !text-[11px]">{blockLabel}</div>
               </div>
             </div>
             <QuestHud
@@ -619,33 +613,17 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
               progress={slides.length > 1 ? i / (slides.length - 1) : 0}
               xp={xp}
               streak={streak}
-              accent={cssScene.accent}
               muted={sfxMuted}
               onToggleMute={toggleMute}
             />
-            <div className="flex shrink-0 items-center gap-2 rounded-full bg-black/30 px-2 py-1.5 backdrop-blur-md ring-1 ring-white/10">
+            <div className="flex shrink-0 items-center gap-2">
               <CoinBalance />
               <ProfileAvatar size="sm" />
-              <button
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="rounded-full p-1.5 text-white/80 transition hover:bg-white/10 hover:text-white"
-                aria-label="Toggle theme"
-              >
-                {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </button>
             </div>
           </header>
 
-          {/* Scene content — grows to fill the space between the top bar and
-              the progress dots, exactly like Playground's flex-1 scene slot.
-              scene_dialogue/canvas_game/living_canvas render edge-to-edge
-              inside it (their art is already the page background above, so
-              they're purely the interactive layer here); everything else is
-              a real speech bubble anchored over the scene, not a boxed
-              content card. Bubble content always renders in the LIGHT theme
-              regardless of the page's dark/light toggle, since a white
-              bubble needs dark text (themeMap.light) independent of what the
-              toggle does to the surrounding chrome. */}
+          {/* Scene content. Full-bleed slides (story, dialogue, games) draw straight over their own art. Everything else
+              is BARE: text and game buttons sit directly on the picture, carried by a soft bottom scrim — no card. */}
           <main className="relative flex-1 min-h-0">
             <AnimatePresence mode="wait">
               {isFullBleedSlideType ? (
@@ -657,13 +635,9 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.25 }}
                 >
-                  {/* Slide types that draw NO card of their own (reading text, grammar rows, clusters,
-                      vocab) used to paint dark-theme text straight onto the busy scene — dark-on-dark
-                      grammar rows and unframed paragraphs the student could barely read. Give them a
-                      themed, high-contrast "journal page" frame (light theme tokens, scrolls inside). */}
                   {['reading_passage', 'grammar_pattern', 'cluster', 'vocab'].includes(String(slide.type)) && !(slide as any).image_url ? (
-                    <div className="mx-4 max-h-full w-full max-w-3xl overflow-y-auto rounded-3xl border-4 border-emerald-800 bg-[#fbf8ee] p-6 text-slate-900 shadow-[0_8px_0_0_#064e3b,0_24px_44px_rgba(0,0,0,0.4)] md:p-8">
-                      {guarded(<SlideRenderer slide={slide} t={themeMap.light} fullBleed={false} onAnswer={handleAnswer} />)}
+                    <div className="ag-scrim-soft mx-2 max-h-full w-full max-w-4xl overflow-y-auto px-14 py-10 md:px-16">
+                      {guarded(<SlideRenderer slide={slide} t={themeMap.game} fullBleed={false} onAnswer={handleAnswer} />)}
                     </div>
                   ) : (
                     guarded(<SlideRenderer slide={slide} t={t} fullBleed={slide.type !== 'intro'} onAnswer={handleAnswer} />)
@@ -672,66 +646,45 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
               ) : (
                 <motion.div
                   key={i}
-                  className="absolute inset-x-0 bottom-0 mx-auto flex max-h-full w-full max-w-3xl flex-col px-4 md:px-8"
+                  className="absolute inset-0 flex items-center justify-center px-3 pb-20 pt-1 md:px-8"
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -16 }}
                   transition={{ duration: 0.25 }}
                 >
-                  <span className="mb-2 inline-flex w-fit items-center gap-2 rounded-full border-2 border-white/90 bg-emerald-800 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-white shadow-[0_4px_0_0_rgba(0,0,0,0.4)]">
-                    <span aria-hidden>{currentLevel.emoji}</span> {currentLevel.title}
-                  </span>
-                  {/* Mission card: chunky border + 3D drop, accent strip on top — a game panel, not a slide. */}
-                  <div className="relative flex min-h-0 flex-col overflow-hidden rounded-3xl border-4 border-emerald-800 bg-white text-slate-900 shadow-[0_8px_0_0_#064e3b,0_24px_44px_rgba(0,0,0,0.4)]">
-                    <div className="h-2 shrink-0" style={{ background: `linear-gradient(90deg, ${cssScene.accent}, #fbbf24, #34d399)` }} />
-                    <div className="min-h-0 overflow-y-auto px-5 py-4 md:px-7 md:py-5 [&_button:not(:disabled)]:transition [&_button:not(:disabled):active]:translate-y-px">
-                      {guarded(<SlideRenderer slide={slide} t={themeMap.light} onAnswer={handleAnswer} />)}
+                  {/* Centred between the HUD and the Back/Next bar; a soft radial glow (not a card) carries the text. */}
+                  <div className="ag-scrim-soft flex max-h-full w-full max-w-4xl flex-col px-14 py-10 md:px-16">
+                    <span className="ag-chip mb-3"><span aria-hidden>{currentLevel.emoji}</span> {currentLevel.title}</span>
+                    <div className="min-h-0 overflow-y-auto pr-1">
+                      {guarded(<SlideRenderer slide={slide} t={themeMap.game} onAnswer={handleAnswer} />)}
                     </div>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
           </main>
-
-          {/* Progress dots — one per slide, sitting just above the fixed nav
-              bar, the same position Playground's dot row holds. */}
-          <div className="mt-3 flex flex-wrap justify-center gap-1.5 px-4 pb-16">
-            {slides.map((s, idx) => (
-              <span
-                key={s.id ?? idx}
-                className="h-2 rounded-full shadow transition-all"
-                style={{
-                  width: idx === i ? '2rem' : '0.5rem',
-                  background: idx <= i ? cssScene.accent : 'rgba(255,255,255,0.3)',
-                }}
-              />
-            ))}
-          </div>
         </div>
 
-        {/* Fixed bottom nav — same fixed-to-viewport placement as
-            Playground's Back/counter/Next bar, independent of scene content
-            height. */}
+        {/* Fixed bottom controls — angular game buttons, independent of scene height. */}
         <div className="fixed inset-x-0 bottom-4 z-[80] flex items-center justify-between gap-3 px-4 md:px-8">
           <button
             onClick={() => setI((n) => Math.max(0, n - 1))}
             disabled={i === 0}
-            className="flex items-center gap-1.5 rounded-full bg-white/90 px-5 py-3 text-sm font-bold text-slate-800 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+            className="ag-btn ag-btn--ghost !min-h-[46px] !px-5 text-sm"
           >
             <ChevronLeft className="h-4 w-4" /> Back
           </button>
           <button
             onClick={() => setNavOpen(true)}
             aria-label={`Slide ${i + 1} of ${slides.length}. Open the lesson map`}
-            className="min-h-[44px] rounded-full bg-white/90 px-4 py-2 text-sm font-extrabold tabular-nums text-slate-800 shadow-xl backdrop-blur transition hover:bg-white"
+            className="ag-title min-h-[44px] px-3 py-2 text-sm tabular-nums"
           >
-            {i + 1} / {slides.length} <span aria-hidden className="ml-1 text-slate-500">▾</span>
+            {i + 1} / {slides.length} <span aria-hidden className="ml-1 opacity-70">▾</span>
           </button>
           <button
             onClick={handleNext}
             disabled={saving}
-            className="flex items-center gap-1.5 rounded-full px-5 py-3 text-sm font-bold text-[#0B0A1F] shadow-xl backdrop-blur transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
-            style={{ background: cssScene.accent }}
+            className="ag-btn !min-h-[48px] !px-6 text-sm"
           >
             {i === slides.length - 1 ? (saving ? 'Saving…' : 'Finish') : 'Next'} <ChevronRight className="h-4 w-4" />
           </button>

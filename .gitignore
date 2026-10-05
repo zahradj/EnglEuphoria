@@ -39,3 +39,8 @@ dist-ssr
 academy-audit/
 __pycache__/
 scripts/art/out/
+
+# local lesson files for the dev-only ?local= preview (never deployed)
+public/_dev-preview/
+academy-audit/
+academy-audit-*.log

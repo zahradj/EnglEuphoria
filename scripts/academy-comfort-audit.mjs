@@ -64,16 +64,29 @@ for (const mode of modes) {
     defaultViewport: { width: W, height: H, isMobile: tag === 'mob', hasTouch: tag === 'mob', deviceScaleFactor: 1 },
   });
   const page = await browser.newPage();
+  // LOCAL_CONTENT=<path to a content.json>: audit an UNPUBLISHED lesson (hidden from students by RLS) by answering the
+  // player's lesson request from the file instead of the database. Nothing is written anywhere.
+  if (process.env.LOCAL_CONTENT) {
+    const localContent = JSON.parse(fs.readFileSync(process.env.LOCAL_CONTENT, 'utf8'));
+    await page.setRequestInterception(true);
+    page.on('request', (req) => {
+      if (req.method() === 'GET' && /\/rest\/v1\/curriculum_lessons\?/.test(req.url()) && req.url().includes(`id=eq.${lessonId}`)) {
+        const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-expose-headers': '*' };
+        return req.respond({ status: 200, contentType: 'application/json', headers: cors, body: JSON.stringify({ id: lessonId, title: 'Local preview', content: localContent }) });
+      }
+      return req.continue();
+    });
+  }
   const url = `${base}/academy-scene/${lessonId}?dev_bypass=true&as_role=student`;
   await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
   await page.evaluate((id) => sessionStorage.setItem('academy-scene-idx:' + id, '0'), lessonId);
   await page.reload({ waitUntil: 'networkidle2' });
   await sleep(2500);
   const navCounter = () => {
-    const nav = [...document.querySelectorAll('div.fixed')].find((d) => /Back/.test(d.innerText) && /Next|Finish/.test(d.innerText));
+    const nav = [...document.querySelectorAll('div.fixed')].find((d) => /Back/i.test(d.innerText) && /Next|Finish/i.test(d.innerText));
     return ((nav && nav.innerText.match(/(\d+)\s*\/\s*(\d+)/)) || []);
   };
-  const total = Number(countArg) || (await page.evaluate(() => { const nav = [...document.querySelectorAll('div.fixed')].find((d) => /Back/.test(d.innerText) && /Next|Finish/.test(d.innerText)); return Number(((nav && nav.innerText.match(/(\d+)\s*\/\s*(\d+)/)) || [])[2]) || 40; }));
+  const total = Number(countArg) || (await page.evaluate(() => { const nav = [...document.querySelectorAll('div.fixed')].find((d) => /Back/i.test(d.innerText) && /Next|Finish/i.test(d.innerText)); return Number(((nav && nav.innerText.match(/(\d+)\s*\/\s*(\d+)/)) || [])[2]) || 40; }));
   const results = [];
   for (let k = 0; k < total; k++) {
     await sleep(1500);
@@ -81,8 +94,8 @@ for (const mode of modes) {
     await sleep(300);
     const r = await page.evaluate(() => {
       const issues = [];
-      const counter = (() => { const nv = [...document.querySelectorAll('div.fixed')].find((d) => /Back/.test(d.innerText) && /Next|Finish/.test(d.innerText)); return ((nv && nv.innerText.match(/(\d+)\s*\/\s*\d+/)) || [])[0]; })();
-      const nav = [...document.querySelectorAll('div.fixed')].find((d) => /Back/.test(d.innerText) && /Next|Finish/.test(d.innerText));
+      const counter = (() => { const nv = [...document.querySelectorAll('div.fixed')].find((d) => /Back/i.test(d.innerText) && /Next|Finish/i.test(d.innerText)); return ((nv && nv.innerText.match(/(\d+)\s*\/\s*\d+/)) || [])[0]; })();
+      const nav = [...document.querySelectorAll('div.fixed')].find((d) => /Back/i.test(d.innerText) && /Next|Finish/i.test(d.innerText));
       const navTop = nav ? nav.getBoundingClientRect().top : innerHeight - 70;
       const main = document.querySelector('main');
       const els = [...(main ? main.querySelectorAll('button,input,textarea,select') : [])];
@@ -119,8 +132,8 @@ for (const mode of modes) {
     results.push(r);
     // Click the LESSON's Next (inside the fixed bar), never a slide's own inner Next button.
     const advanced = await page.evaluate(() => {
-      const navEl = [...document.querySelectorAll('div.fixed')].find((d) => /Back/.test(d.innerText) && /Next|Finish/.test(d.innerText));
-      const n = navEl && [...navEl.querySelectorAll('button')].find((b) => /Next/.test(b.innerText));
+      const navEl = [...document.querySelectorAll('div.fixed')].find((d) => /Back/i.test(d.innerText) && /Next|Finish/i.test(d.innerText));
+      const n = navEl && [...navEl.querySelectorAll('button')].find((b) => /Next/i.test(b.innerText));
       if (!n) return false; n.click(); return true;
     });
     if (!advanced) break;

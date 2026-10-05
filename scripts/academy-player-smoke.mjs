@@ -49,11 +49,11 @@ async function openLesson({ role = 'student', inject = false, failFirst = false 
   await page.goto(`http://localhost:8080/academy-scene/${ID}?dev_bypass=true&as_role=${role}`, { waitUntil: 'networkidle2' });
   return page;
 }
-const counter = (page) => page.evaluate(() => { const n = [...document.querySelectorAll('div.fixed')].find((d) => /Back/.test(d.innerText) && /Next|Finish/.test(d.innerText)); return ((n && n.innerText.match(/(\d+)\s*\/\s*(\d+)/)) || []).slice(1).map(Number); });
-const clickCounter = (page) => page.evaluate(() => { const n = [...document.querySelectorAll('div.fixed')].find((d) => /Back/.test(d.innerText) && /Next|Finish/.test(d.innerText)); const b = n && [...n.querySelectorAll('button')].find((x) => /\d+\s*\/\s*\d+/.test(x.innerText)); if (!b) return false; b.click(); return true; });
+const counter = (page) => page.evaluate(() => { const n = [...document.querySelectorAll('div.fixed')].find((d) => /Back/i.test(d.innerText) && /Next|Finish/i.test(d.innerText)); return ((n && n.innerText.match(/(\d+)\s*\/\s*(\d+)/)) || []).slice(1).map(Number); });
+const clickCounter = (page) => page.evaluate(() => { const n = [...document.querySelectorAll('div.fixed')].find((d) => /Back/i.test(d.innerText) && /Next|Finish/i.test(d.innerText)); const b = n && [...n.querySelectorAll('button')].find((x) => /\d+\s*\/\s*\d+/.test(x.innerText)); if (!b) return false; b.click(); return true; });
 const clickIn = (page, scopeSel, re) => page.evaluate((sel, src) => { const root = document.querySelector(sel) || document; const b = [...root.querySelectorAll('button')].find((x) => new RegExp(src, 'i').test(x.innerText)); if (!b) return false; b.click(); return true; }, scopeSel, re.source);
 const dismiss = async (page) => { for (let k = 0; k < 4; k++) { const ok = await clickIn(page, '[role="dialog"][aria-label]', /Go!|Next level|Finish/); if (!ok) return; await sleep(700); } };
-const next = async (page) => { await page.evaluate(() => { const n = [...document.querySelectorAll('div.fixed')].find((d) => /Back/.test(d.innerText)); [...n.querySelectorAll('button')].find((x) => /Next|Finish/.test(x.innerText)).click(); }); await sleep(600); await dismiss(page); };
+const next = async (page) => { await page.evaluate(() => { const n = [...document.querySelectorAll('div.fixed')].find((d) => /Back/i.test(d.innerText)); [...n.querySelectorAll('button')].find((x) => /Next|Finish/i.test(x.innerText)).click(); }); await sleep(600); await dismiss(page); };
 const fresh = async (page, idx) => { await page.evaluate((id, i) => { sessionStorage.setItem('academy-scene-idx:' + id, String(i)); localStorage.removeItem('academy-resume:' + id); }, ID, idx); await page.reload({ waitUntil: 'networkidle2' }); await sleep(2000); await dismiss(page); };
 
 // which index is the escape room in the live lesson?

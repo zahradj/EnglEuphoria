@@ -1,3 +1,4 @@
+import '@/styles/academy-game.css';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
@@ -13,6 +14,7 @@ import { useAcademyAudio } from '@/hooks/useAcademyAudio';
 import type { CanvasGameSlide, LivingCanvasSlide, ScaffoldedMediaSlide } from '@/components/creator-studio/shared/canvasSchema';
 import { LivingCanvas } from '@/components/creator-studio/shared/LivingCanvas';
 import { ExpeditionGame, type ExpeditionSlide } from '@/components/academy/game/ExpeditionGame';
+import { NameTagStudio, type NameTagStudioSlide } from '@/components/academy/game/NameTagStudio';
 import { ScaffoldedPlayer } from '@/components/creator-studio/shared/ScaffoldedPlayer';
 import { SoloVocabCard } from '@/components/creator-studio/shared/SoloVocabCard';
 import { StoryEngineSlot } from '@/story-engine';
@@ -279,6 +281,7 @@ export type Slide =
   | { type: 'reflection'; block: Block; prompt: string }
   | { type: 'cluster'; block: Block; title: string; content?: string; activities: ClusterActivity[]; image_url?: string }
   | (ExpeditionSlide & { block: Block })
+  | (NameTagStudioSlide & { block: Block })
   | (CanvasGameSlide & { block: Block })
   | (LivingCanvasSlide & { block: Block })
   | (ScaffoldedMediaSlide & { block: Block })
@@ -386,7 +389,17 @@ export interface ThemeTokens {
   btnGhost: string;
 }
 
-export const themeMap: Record<'dark' | 'light', ThemeTokens> = {
+export const themeMap: Record<'dark' | 'light' | 'game', ThemeTokens> = {
+  // Academy game skin (src/styles/academy-game.css): bare text on the scene art, blue→violet game buttons, no cards.
+  game: {
+    bg: 'bg-transparent',
+    card: 'bg-transparent border-transparent',
+    text: 'ag-text',
+    muted: 'ag-muted',
+    chip: 'ag-chip',
+    inputBg: 'ag-input',
+    btnGhost: 'ag-opt',
+  },
   dark: {
     bg: 'bg-slate-950',
     card: 'bg-slate-900 border-slate-800',
@@ -410,12 +423,9 @@ export const themeMap: Record<'dark' | 'light', ThemeTokens> = {
 // ─── Audio button (shared by vocab / reading / listening) ────────────────────
 function ListenButton({ text, label = 'Listen', variant = 'pill' }: { text: string; label?: string; variant?: 'pill' | 'block' }) {
   const { playVoice, isPlaying, isLoading } = useAcademyAudio();
-  const base = 'inline-flex items-center gap-2 font-medium rounded-md transition focus:outline-none focus:ring-2 focus:ring-indigo-500';
-  const sizes = variant === 'block'
-    ? 'px-5 py-3 text-base bg-indigo-600 hover:bg-indigo-500 text-white'
-    : 'px-4 py-2.5 text-sm bg-indigo-600/90 hover:bg-indigo-500 text-white';
+  const size = variant === 'block' ? '!min-h-[52px] !px-6 text-base' : '!min-h-[44px] !px-4 text-sm';
   return (
-    <button onClick={() => playVoice(text)} className={`${base} ${sizes}`} aria-label={label}>
+    <button onClick={() => playVoice(text)} className={`ag-btn ${size}`} aria-label={label}>
       {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Volume2 className={`w-4 h-4 ${isPlaying ? 'animate-pulse' : ''}`} />}
       <span>{isPlaying ? 'Playing…' : label}</span>
     </button>
@@ -431,6 +441,7 @@ function Intro({ slide, t }: { slide: Extract<Slide, { type: 'intro' }>; t: Them
   if (isLessonCover) {
     return (
       <FrontPageSlide
+        skin="game"
         hub="academy"
         lessonTitle={slide.title}
         topic={slide.title}
@@ -452,26 +463,26 @@ function Intro({ slide, t }: { slide: Extract<Slide, { type: 'intro' }>; t: Them
   );
 }
 
-function QuestionSlide({ slide, t }: { slide: Extract<Slide, { type: 'question' }>; t: ThemeTokens }) {
+function QuestionSlide({ slide }: { slide: Extract<Slide, { type: 'question' }>; t: ThemeTokens }) {
   const [val, setVal] = useState('');
   return (
-    <div className="space-y-6 max-w-2xl">
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
+    <div className="ag-rise w-full max-w-2xl space-y-5">
+      <h2 className="ag-prompt text-2xl md:text-3xl">{slide.prompt}</h2>
       <textarea
         value={val}
         onChange={(e) => setVal(e.target.value)}
         placeholder={slide.placeholder ?? 'Type your answer…'}
-        className={`w-full min-h-[120px] rounded-md border px-4 py-3 text-base outline-none focus:border-indigo-500 ${t.inputBg}`}
+        className="ag-input min-h-[120px] resize-y text-lg"
       />
     </div>
   );
 }
 
-function PollSlide({ slide, t }: { slide: Extract<Slide, { type: 'poll' }>; t: ThemeTokens }) {
+function PollSlide({ slide }: { slide: Extract<Slide, { type: 'poll' }>; t: ThemeTokens }) {
   const [picked, setPicked] = useState<number | null>(null);
   return (
-    <div className="space-y-6 max-w-2xl w-full">
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
+    <div className="ag-rise w-full max-w-2xl space-y-5">
+      <h2 className="ag-prompt text-2xl md:text-3xl">{slide.prompt}</h2>
       <div className="space-y-3">
         {slide.options.map((opt, i) => {
           const active = picked === i;
@@ -480,20 +491,18 @@ function PollSlide({ slide, t }: { slide: Extract<Slide, { type: 'poll' }>; t: T
             <button
               key={opt.label}
               onClick={() => setPicked(i)}
-              className={`relative w-full text-left rounded-md border overflow-hidden transition ${active ? 'border-indigo-500' : 'border-slate-700 hover:border-indigo-500/60'}`}
+              className={`ag-opt relative overflow-hidden ${active ? 'is-on' : ''} ${showResults && !active ? 'is-dim' : ''}`}
             >
               {showResults && (
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${opt.pct}%` }}
-                  transition={{ duration: 0.5, ease: 'easeOut' }}
-                  className={`absolute inset-y-0 left-0 ${active ? 'bg-indigo-600/40' : 'bg-slate-800'}`}
+                  transition={{ duration: 0.6, ease: 'easeOut' }}
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#86ecff]/45 to-[#d95cf0]/40"
                 />
               )}
-              <div className="relative flex justify-between items-center px-4 py-3">
-                <span className={`font-medium ${t.text}`}>{opt.label}</span>
-                {showResults && <span className={`text-sm ${t.muted}`}>{opt.pct}%</span>}
-              </div>
+              <span className="relative">{opt.label}</span>
+              {showResults && <span className="ag-title relative text-base">{opt.pct}%</span>}
             </button>
           );
         })}
@@ -502,21 +511,15 @@ function PollSlide({ slide, t }: { slide: Extract<Slide, { type: 'poll' }>; t: T
   );
 }
 
-function OpinionSlide({ slide, t }: { slide: Extract<Slide, { type: 'opinion' }>; t: ThemeTokens }) {
+function OpinionSlide({ slide }: { slide: Extract<Slide, { type: 'opinion' }>; t: ThemeTokens }) {
   const [picked, setPicked] = useState<string | null>(null);
   const opts = ['Agree', 'Not sure', 'Disagree'];
   return (
-    <div className="space-y-6 max-w-2xl w-full">
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
+    <div className="ag-rise w-full max-w-2xl space-y-5">
+      <h2 className="ag-prompt text-2xl md:text-3xl">{slide.prompt}</h2>
       <div className="flex flex-wrap gap-3">
         {opts.map((o) => (
-          <button
-            key={o}
-            onClick={() => setPicked(o)}
-            className={`px-5 py-2.5 rounded-full text-sm font-medium transition ${
-              picked === o ? 'bg-indigo-600 text-white' : t.btnGhost
-            }`}
-          >
+          <button key={o} onClick={() => setPicked(o)} className={`ag-opt !w-auto ${picked === o ? 'is-on' : picked ? 'is-dim' : ''}`}>
             {o}
           </button>
         ))}
@@ -540,27 +543,27 @@ function VocabSlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 'vo
         {imageUrl ? (
           <img src={imageUrl} alt={slide.word} className="absolute inset-0 h-full w-full object-cover" />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-700" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#2f4fd0] via-[#4a3fd0] to-[#7c3aed]" />
         )}
       </div>
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(0deg, rgba(15,10,40,0.88) 0%, rgba(15,10,40,0.55) 42%, rgba(15,10,40,0.05) 72%)',
+          background: 'linear-gradient(0deg, rgba(7,10,36,0.9) 0%, rgba(7,10,36,0.55) 40%, rgba(7,10,36,0) 70%)',
         }}
       />
       <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-6 md:p-10">
-        <span className="text-xs font-bold uppercase tracking-widest text-white/70">Vocabulary</span>
+        <span className="ag-chip">Vocabulary</span>
         <div className="flex items-center gap-4 flex-wrap">
-          <h2 className="text-4xl md:text-5xl font-bold text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">{slide.word}</h2>
+          <h2 className="ag-title text-4xl md:text-5xl">{slide.word}</h2>
           <ListenButton text={slide.word} label="Listen" />
         </div>
-        <p className="max-w-2xl text-lg md:text-xl text-white/95 drop-shadow-[0_1px_6px_rgba(0,0,0,0.45)]">
-          <RichText text={slide.definition} highlightClassName="bg-white text-indigo-700 font-bold px-1.5 py-0.5 rounded-md shadow-sm" />
+        <p className="ag-prompt max-w-2xl text-lg md:text-xl">
+          <RichText text={slide.definition} highlightClassName="bg-[#86ecff] text-[#0b1250] font-bold px-1.5 py-0.5 rounded-md" />
         </p>
         {slide.example && (
-          <p className="max-w-2xl text-base italic text-white/85 border-l-2 border-white/60 pl-4">
-            “<RichText text={slide.example} highlightClassName="bg-white text-indigo-700 font-bold px-1.5 py-0.5 rounded-md not-italic shadow-sm" />”
+          <p className="ag-muted max-w-2xl border-l-4 border-[#86ecff] pl-4 text-base italic">
+            “<RichText text={slide.example} highlightClassName="bg-[#86ecff] text-[#0b1250] font-bold px-1.5 py-0.5 rounded-md not-italic" />”
           </p>
         )}
       </div>
@@ -589,7 +592,7 @@ function PatternVocabSlide({ slide, fullBleed }: { slide: Extract<Slide, { type:
         {slide.image_url ? (
           <img src={slide.image_url} alt="" className="absolute inset-0 h-full w-full object-cover" />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-700" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#2f4fd0] via-[#4a3fd0] to-[#7c3aed]" />
         )}
       </div>
       {/* Scrim, stronger on the panel side for text legibility, fading out
@@ -598,23 +601,23 @@ function PatternVocabSlide({ slide, fullBleed }: { slide: Extract<Slide, { type:
         className="absolute inset-0"
         style={{
           background: onLeft
-            ? 'linear-gradient(90deg, rgba(15,10,40,0.82) 0%, rgba(15,10,40,0.55) 45%, rgba(15,10,40,0.05) 75%)'
-            : 'linear-gradient(270deg, rgba(15,10,40,0.82) 0%, rgba(15,10,40,0.55) 45%, rgba(15,10,40,0.05) 75%)',
+            ? 'linear-gradient(90deg, rgba(7,10,36,0.86) 0%, rgba(7,10,36,0.58) 45%, rgba(7,10,36,0) 78%)'
+            : 'linear-gradient(270deg, rgba(7,10,36,0.86) 0%, rgba(7,10,36,0.58) 45%, rgba(7,10,36,0) 78%)',
         }}
       />
       <div
         className={`absolute inset-y-0 ${onLeft ? 'left-0 text-left' : 'right-0 text-right'} flex w-full flex-col justify-center gap-5 p-6 md:w-[58%] md:p-12`}
       >
-        <span className="text-xs font-bold uppercase tracking-widest text-white/70">Vocabulary in a sentence</span>
-        <p className="max-w-xl text-2xl font-bold leading-snug text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] md:text-4xl">
-          <RichText text={sentence} highlightClassName="bg-white text-indigo-700 px-2 py-0.5 rounded-lg shadow-sm" />
+        <span className="ag-chip">Vocabulary in a sentence</span>
+        <p className="ag-title max-w-xl text-2xl leading-snug md:text-4xl">
+          <RichText text={sentence} highlightClassName="bg-[#86ecff] text-[#0b1250] px-2 py-0.5 rounded-lg" />
         </p>
         <div className={onLeft ? '' : 'flex justify-end'}>
           <ListenButton text={stripMd(sentence)} label="Listen to the sentence" variant="block" />
         </div>
-        <div className={`max-w-xs rounded-2xl bg-white/95 px-4 py-3 shadow-xl backdrop-blur ${onLeft ? '' : 'self-end'}`}>
-          <div className="text-base font-bold text-indigo-700">{slide.word}</div>
-          <div className="text-sm text-slate-600">
+        <div className={`max-w-xs border-l-4 border-[#86ecff] pl-4 ${onLeft ? '' : 'self-end'}`}>
+          <div className="ag-title text-lg">{slide.word}</div>
+          <div className="ag-prompt text-sm">
             <RichText text={slide.definition} />
           </div>
         </div>
@@ -626,15 +629,13 @@ function PatternVocabSlide({ slide, fullBleed }: { slide: Extract<Slide, { type:
 function ObjectiveBanner({ objective }: { objective?: { title: string; skill: string; how: string } }) {
   if (!objective) return null;
   return (
-    <div className="w-full max-w-3xl rounded-xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-purple-50 p-4 shadow-sm">
-      <div className="flex items-baseline justify-between gap-3 mb-1">
-        <h3 className="text-base md:text-lg font-semibold text-indigo-900 leading-tight">{objective.title}</h3>
-        <span className="text-[10px] uppercase tracking-widest font-semibold text-indigo-600 whitespace-nowrap">
-          {objective.skill}
-        </span>
+    <div className="w-full max-w-3xl border-l-4 border-[#86ecff] pl-4">
+      <div className="mb-1 flex items-baseline justify-between gap-3">
+        <h3 className="ag-title text-base leading-tight md:text-lg">{objective.title}</h3>
+        <span className="ag-chip whitespace-nowrap !text-[10px]">{objective.skill}</span>
       </div>
-      <p className="text-sm text-slate-700 leading-snug">
-        <span className="font-medium text-slate-900">How:</span> {objective.how}
+      <p className="ag-prompt text-sm leading-snug">
+        <span className="font-bold">How:</span> {objective.how}
       </p>
     </div>
   );
@@ -696,34 +697,21 @@ function MatchingSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: '
   const total = slide.pairs.length;
   const done = Object.keys(solved).length;
   return (
-    <div className="space-y-5 w-full max-w-3xl">
+    <div className="ag-rise w-full max-w-3xl space-y-4">
       <ObjectiveBanner objective={objective} />
       <div className="flex items-baseline justify-between gap-3">
-        <h2 className={`text-xl md:text-2xl font-semibold ${t.text}`}>{slide.prompt}</h2>
-        <span className="text-xs font-semibold text-indigo-600 whitespace-nowrap">
-          {done} / {total}
-        </span>
+        <h2 className="ag-prompt text-xl md:text-2xl">{slide.prompt}</h2>
+        <span className="ag-title whitespace-nowrap text-sm">{done} / {total}</span>
       </div>
-      <div className="h-1.5 w-full rounded-full bg-indigo-100 overflow-hidden">
-        <div
-          className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500"
-          style={{ width: `${total > 0 ? (done / total) * 100 : 0}%` }}
-        />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+      <div className="ag-bar"><i style={{ width: `${total > 0 ? (done / total) * 100 : 0}%` }} /></div>
+      <div className="grid grid-cols-2 gap-2 md:gap-4">
         <div className="space-y-2">
           {slide.pairs.map((p) => (
             <button
               key={p.left}
               disabled={!!solved[p.left]}
               onClick={() => setSelL(p.left)}
-              className={`w-full text-left px-4 py-3 rounded-lg border-2 font-semibold transition ${
-                solved[p.left]
-                  ? 'border-emerald-400 bg-emerald-50 text-emerald-700 opacity-70'
-                  : selL === p.left
-                    ? 'border-indigo-500 bg-indigo-50 text-indigo-800 shadow-sm scale-[1.01]'
-                    : 'border-slate-200 bg-white text-slate-800 hover:border-indigo-400'
-              }`}
+              className={`ag-opt !min-h-[48px] !px-3 !text-sm md:!text-base ${solved[p.left] ? 'is-ok' : selL === p.left ? 'is-on' : ''}`}
             >
               {p.left}
             </button>
@@ -738,15 +726,7 @@ function MatchingSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: '
                 key={p.right}
                 disabled={used || !selL}
                 onClick={() => selL && tryPair(selL, p.right)}
-                className={`w-full text-left px-4 py-3 rounded-lg border-2 transition ${
-                  used
-                    ? 'border-emerald-400 bg-emerald-50 text-emerald-700 opacity-70'
-                    : isWrong
-                      ? 'border-red-400 bg-red-50 text-red-700'
-                      : selL
-                        ? 'border-slate-200 bg-white text-slate-800 hover:border-indigo-500 hover:bg-indigo-50 cursor-pointer'
-                        : 'border-slate-200 bg-white text-slate-500'
-                }`}
+                className={`ag-opt !min-h-[48px] !px-3 !text-sm md:!text-base ${used ? 'is-ok' : isWrong ? 'is-oops' : !selL ? 'is-dim' : ''}`}
               >
                 {p.right}
               </button>
@@ -754,9 +734,7 @@ function MatchingSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: '
           })}
         </div>
       </div>
-      {!selL && done < total && (
-        <p className="text-xs text-slate-500 text-center">Tap a word on the left, then tap its match on the right.</p>
-      )}
+      {!selL && done < total && <p className="ag-muted text-center text-xs">Tap a word on the left, then tap its match on the right.</p>}
     </div>
   );
 }
@@ -771,63 +749,48 @@ function MatchingSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: '
 // to any slide carrying an `image_url` that doesn't already handle it
 // itself. Don't hand-roll this image+gradient+panel shell again elsewhere.
 function FullBleedSplitPanel({ imageUrl, children }: { imageUrl: string; children: React.ReactNode }) {
+  // Edge-to-edge scene with the text carried by a feathered gradient — no panel, no seam, no card.
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden md:flex-row">
-      <div className="relative min-h-0 flex-1 md:h-full">
-        <img src={imageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 md:hidden" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0) 55%, rgba(255,255,255,1) 100%)' }} />
-        <div className="absolute inset-0 hidden md:block" style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0) 55%, rgba(255,255,255,1) 100%)' }} />
-      </div>
-      <div className="min-h-0 flex-1 overflow-y-auto bg-white px-6 py-5 md:h-full md:px-8 md:py-7">
+    <div className="ag-root relative h-full w-full overflow-hidden">
+      <img src={imageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0 md:hidden" style={{ background: 'linear-gradient(180deg, rgba(7,10,36,0) 25%, rgba(7,10,36,0.9) 62%)' }} />
+      <div className="absolute inset-0 hidden md:block" style={{ background: 'linear-gradient(90deg, rgba(7,10,36,0) 30%, rgba(7,10,36,0.82) 58%, rgba(7,10,36,0.92) 100%)' }} />
+      <div className="relative ml-auto flex h-full w-full flex-col justify-end overflow-y-auto px-6 py-6 md:w-[56%] md:justify-center md:px-10 md:py-10">
         {children}
       </div>
     </div>
   );
 }
 
-function ReadingSlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 'reading_passage' }>; t: ThemeTokens; fullBleed?: boolean }) {
-  // Full-bleed split-page layout: an edge-to-edge scene panel filling the
-  // left half (no rounded card, no border), the passage in a scrollable
-  // panel filling the right half -- a vertical (left/right) split rather
-  // than stacking image-over-text, so both get equal full-height real
-  // estate. Stacks top/bottom on narrow viewports where a 50/50 side split
-  // would leave neither side readable. Falls back to the original
-  // plain-text layout when no image is set yet.
-  if (fullBleed && slide.image_url) {
-    return (
-      <FullBleedSplitPanel imageUrl={slide.image_url}>
-        <div className="mb-2 text-xs font-bold uppercase tracking-widest text-indigo-400">Reading</div>
-        <h2 className="mb-3 text-xl font-bold text-slate-800 md:text-2xl">{slide.title}</h2>
-        <ListenButton text={slide.passage} label="Listen to the passage" variant="block" />
-        <p className="mt-4 text-base leading-relaxed text-slate-700 md:text-lg">
-          <RichText text={slide.passage} highlightClassName="bg-indigo-100 text-indigo-700 font-bold px-1.5 py-0.5 rounded-md shadow-sm" />
-        </p>
-      </FullBleedSplitPanel>
-    );
-  }
-  return (
-    <div className="space-y-5 max-w-2xl w-full">
-      <div className={`text-xs uppercase tracking-widest ${t.muted}`}>Reading</div>
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.title}</h2>
+function ReadingSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 'reading_passage' }>; t: ThemeTokens; fullBleed?: boolean }) {
+  const hl = 'bg-[#86ecff] text-[#0b1250] font-bold px-1.5 py-0.5 rounded-md';
+  const body = (
+    <div className="ag-rise w-full max-w-2xl space-y-4">
+      <div className="ag-chip">Reading</div>
+      <h2 className="ag-title text-2xl md:text-3xl">{slide.title}</h2>
       <ListenButton text={slide.passage} label="Listen to the passage" variant="block" />
-      <p className={`text-lg leading-relaxed ${t.text}`}>
-        <RichText text={slide.passage} highlightClassName="bg-indigo-100 text-indigo-700 font-bold px-1.5 py-0.5 rounded-md shadow-sm" />
+      <p className="ag-prompt text-lg leading-relaxed md:text-xl">
+        <RichText text={slide.passage} highlightClassName={hl} />
       </p>
     </div>
   );
+  if (fullBleed && slide.image_url) return <FullBleedSplitPanel imageUrl={slide.image_url}>{body}</FullBleedSplitPanel>;
+  return body;
 }
 
-function ListeningSlide({ slide, t }: { slide: Extract<Slide, { type: 'listening' }>; t: ThemeTokens }) {
+function ListeningSlide({ slide }: { slide: Extract<Slide, { type: 'listening' }>; t: ThemeTokens }) {
   const [showTranscript, setShowTranscript] = useState(false);
   return (
-    <div className="space-y-5 max-w-2xl w-full">
-      <div className={`text-xs uppercase tracking-widest ${t.muted}`}>Listening</div>
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
-      <ListenButton text={slide.transcript} label="Play audio" variant="block" />
-      <button onClick={() => setShowTranscript((s) => !s)} className="min-h-[44px] rounded-lg border-2 border-slate-300 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-100">
-        {showTranscript ? 'Hide transcript' : 'Show transcript'}
-      </button>
-      {showTranscript && <p className={`italic border-l-2 border-indigo-500 pl-4 ${t.muted}`}>{slide.transcript}</p>}
+    <div className="ag-rise w-full max-w-2xl space-y-4">
+      <div className="ag-chip">Listening</div>
+      <h2 className="ag-prompt text-2xl md:text-3xl">{slide.prompt}</h2>
+      <div className="flex flex-wrap items-center gap-3">
+        <ListenButton text={slide.transcript} label="Play audio" variant="block" />
+        <button onClick={() => setShowTranscript((x) => !x)} className="ag-btn ag-btn--ghost !min-h-[52px] text-sm">
+          {showTranscript ? 'Hide transcript' : 'Show transcript'}
+        </button>
+      </div>
+      {showTranscript && <p className="ag-muted border-l-4 border-[#86ecff] pl-4 text-lg italic">{slide.transcript}</p>}
     </div>
   );
 }
@@ -841,36 +804,37 @@ function TrueFalseSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: 
     setPicks({});
   }, [items.length, JSON.stringify(items)]);
   const item = items[index];
-  if (!item) return <div className={t.muted}>No items.</div>;
+  if (!item) return <div className="ag-muted">No items.</div>;
   const picked = picks[index] ?? null;
   const correct = picked !== null && picked === item.answer;
   const score = items.reduce((s, it, i) => s + ((picks[i] !== undefined && picks[i] === it.answer) ? 1 : 0), 0);
   return (
-    <div className="space-y-6 max-w-2xl w-full">
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{item.statement}</h2>
-      <div className="flex gap-3">
-        {/* True/False as thumbs up/down -- an icon a pre-reader recognizes
-            instantly, not text they have to decode. True stays first. */}
+    <div className="ag-rise w-full max-w-2xl space-y-5">
+      <h2 className="ag-prompt text-2xl md:text-3xl">{item.statement}</h2>
+      <div className="grid grid-cols-2 gap-3">
+        {/* True/False as thumbs up/down: an icon a learner recognises instantly. True stays first. */}
         {[true, false].map((v) => {
           const active = picked === v;
           const isAnswer = picked !== null && v === item.answer;
-          let cls = t.btnGhost;
-          if (active && correct) cls = 'bg-emerald-600 text-white border-emerald-600';
-          else if (active && !correct) cls = 'bg-red-600 text-white border-red-600';
-          else if (picked !== null && isAnswer) cls = 'border border-emerald-500 text-emerald-300';
+          let cls = '';
+          if (active && correct) cls = 'is-ok';
+          else if (active && !correct) cls = 'is-oops';
+          else if (picked !== null && isAnswer) cls = 'is-hint';
+          else if (picked !== null) cls = 'is-dim';
           return (
             <button
               key={String(v)}
+              disabled={picked !== null}
               onClick={() => {
                 if (picked !== null) return;
                 setPicks((p) => ({ ...p, [index]: v }));
                 onAnswer?.({ itemIndex: index, isCorrect: v === item.answer, skillTag: item.skillTag });
               }}
-              className={`flex flex-col items-center gap-1 px-8 py-3 rounded-xl font-medium transition ${cls}`}
+              className={`ag-opt !flex-col !justify-center !gap-1 !py-4 text-center ${cls}`}
               aria-label={v ? 'True' : 'False'}
             >
               <span className="text-3xl leading-none">{v ? '👍' : '👎'}</span>
-              <span className="text-xs uppercase tracking-widest">{v ? 'True' : 'False'}</span>
+              <span className="ag-title text-sm uppercase tracking-widest">{v ? 'True' : 'False'}</span>
             </button>
           );
         })}
@@ -889,40 +853,35 @@ function MultipleSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: '
     setPicks({});
   }, [items.length, JSON.stringify(items)]);
   const item = items[index];
-  if (!item) return <div className={t.muted}>No items.</div>;
+  if (!item) return <div className="ag-muted">No items.</div>;
   const picked = picks[index] ?? null;
   const score = items.reduce((s, it, i) => s + ((picks[i] && picks[i] === it.answer) ? 1 : 0), 0);
   return (
-    <div className="space-y-6 max-w-2xl w-full">
-      {/* GrammarMarkup (not raw text) so a "___" blank renders as its own
-          dashed box, not plain underscore characters buried in the
-          sentence -- confirmed live: a student couldn't tell the blank
-          apart from the rest of the question. */}
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}><GrammarMarkup text={item.question} /></h2>
-      {/* Chunky, colorful pill options with a clear correct/wrong icon on
-          pick -- matches the true/false thumbs-up/down treatment instead of
-          the old plain bordered rows that looked identical whichever theme
-          wrapped them. */}
+    <div className="ag-rise w-full max-w-2xl space-y-5">
+      {/* GrammarMarkup (not raw text) so a "___" blank renders as its own box, not buried underscores. */}
+      <h2 className="ag-prompt text-2xl md:text-3xl"><GrammarMarkup text={item.question} /></h2>
       <div className="grid gap-3 sm:grid-cols-2">
         {item.options.map((opt) => {
           const active = picked === opt;
           const isAnswer = opt === item.answer;
-          let cls = `${t.btnGhost} bg-transparent`;
-          if (picked && active && isAnswer) cls = 'border-2 border-emerald-500 bg-emerald-500/10 text-emerald-600';
-          else if (picked && active && !isAnswer) cls = 'border-2 border-red-500 bg-red-500/10 text-red-600';
-          else if (picked && isAnswer) cls = 'border-2 border-emerald-500/50 text-emerald-600';
+          let cls = '';
+          if (picked && active && isAnswer) cls = 'is-ok';
+          else if (picked && active && !isAnswer) cls = 'is-oops';
+          else if (picked && isAnswer) cls = 'is-hint';
+          else if (picked) cls = 'is-dim';
           return (
             <button
               key={opt}
+              disabled={picked !== null}
               onClick={() => {
                 if (picked !== null) return;
                 setPicks((p) => ({ ...p, [index]: opt }));
                 onAnswer?.({ itemIndex: index, isCorrect: opt === item.answer, skillTag: item.skillTag });
               }}
-              className={`flex items-center justify-between gap-2 rounded-2xl border-2 px-5 py-4 text-lg font-semibold shadow-sm transition ${cls}`}
+              className={`ag-opt ${cls}`}
             >
               <span>{opt}</span>
-              {picked && active && (isAnswer ? <span className="text-xl">✓</span> : <span className="text-xl">✗</span>)}
+              {picked && active && (isAnswer ? <span className="text-xl">✓</span> : <span className="text-xl">↻</span>)}
               {picked && !active && isAnswer && <span className="text-xl">✓</span>}
             </button>
           );
@@ -933,74 +892,46 @@ function MultipleSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: '
   );
 }
 
-function GrammarPatternSlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 'grammar_pattern' }>; t: ThemeTokens; fullBleed?: boolean }) {
-  const rowGrid = (rowCardCls: string) => (
-    <div className="grid grid-cols-2 gap-3">
-      {slide.rows.map((r, i) => (
-        <React.Fragment key={i}>
-          <div className={`px-4 py-3 rounded-md border ${rowCardCls}`}>
-            <div className="text-base text-slate-800"><GrammarMarkup text={r.a} /></div>
-          </div>
-          <div className="px-4 py-3 rounded-md border border-indigo-500/40 bg-indigo-500/5">
-            <div className="text-base font-semibold text-indigo-700"><GrammarMarkup text={r.b} /></div>
-          </div>
-        </React.Fragment>
-      ))}
+function GrammarPatternSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 'grammar_pattern' }>; t: ThemeTokens; fullBleed?: boolean }) {
+  const body = (
+    <div className="ag-rise w-full max-w-3xl space-y-5">
+      <div className="ag-chip">Grammar</div>
+      <h2 className="ag-title text-2xl md:text-3xl"><GrammarMarkup text={slide.title} /></h2>
+      {/* Pattern rows: bare text pairs on a hairline — the answer side in cyan. No boxes. */}
+      <div className="grid grid-cols-[1fr_1fr] gap-x-4">
+        {slide.rows.map((r, i) => (
+          <React.Fragment key={i}>
+            <div className="ag-prompt border-b border-white/20 py-3 text-lg md:text-xl"><GrammarMarkup text={r.a} /></div>
+            <div className="border-b border-white/20 py-3 text-lg font-bold md:text-xl" style={{ color: '#86ecff', textShadow: '0 1px 2px rgba(7,10,36,0.9)' }}><GrammarMarkup text={r.b} /></div>
+          </React.Fragment>
+        ))}
+      </div>
+      {slide.rule && <p className="ag-muted text-base md:text-lg"><GrammarMarkup text={slide.rule} /></p>}
     </div>
   );
-  // Same full-bleed left-image / right-content split as ReadingSlide and
-  // ClusterSlide, for the same reason: an edge-to-edge scene instead of a
-  // small bounded card, blended (not a hard seam) into the text panel.
-  if (fullBleed && slide.image_url) {
-    return (
-      <FullBleedSplitPanel imageUrl={slide.image_url}>
-        <div className="mb-2 text-xs font-bold uppercase tracking-widest text-indigo-400">Grammar</div>
-        <h2 className="mb-4 text-xl font-bold text-slate-800 md:text-2xl">
-          <GrammarMarkup text={slide.title} />
-        </h2>
-        {rowGrid('border-slate-200 bg-slate-50')}
-        {slide.rule && (
-          <p className="mt-4 text-sm text-slate-500">
-            <GrammarMarkup text={slide.rule} />
-          </p>
-        )}
-      </FullBleedSplitPanel>
-    );
-  }
-  return (
-    <div className="space-y-6 max-w-3xl w-full">
-      <div className={`text-xs uppercase tracking-widest ${t.muted}`}>Grammar</div>
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>
-        <GrammarMarkup text={slide.title} />
-      </h2>
-      {rowGrid(t.card)}
-      {slide.rule && (
-        <p className={`text-sm ${t.muted}`}>
-          <GrammarMarkup text={slide.rule} />
-        </p>
-      )}
-    </div>
-  );
+  if (fullBleed && slide.image_url) return <FullBleedSplitPanel imageUrl={slide.image_url}>{body}</FullBleedSplitPanel>;
+  return body;
 }
 
 // ─── Color-decoded grammar building blocks ─────────────────────────────────
 // One palette shared by grammar_color_decode + grammar_formula.
 // Pure Tailwind so it adapts to dark mode via existing theme tokens.
+// Role colours for the grammar slides: saturated blue→violet family with cyan/gold/pink accents, white or deep-ink text.
 const ROLE_STYLES: Record<string, { pill: string; label: string; name: string }> = {
-  subject:  { pill: 'bg-sky-100 text-sky-900 border-sky-300',           label: 'text-sky-700',    name: 'Subject' },
-  verb:     { pill: 'bg-rose-100 text-rose-900 border-rose-300',         label: 'text-rose-700',   name: 'Verb' },
-  aux:      { pill: 'bg-violet-100 text-violet-900 border-violet-300',   label: 'text-violet-700', name: 'Auxiliary' },
-  neg:      { pill: 'bg-red-100 text-red-900 border-red-300',            label: 'text-red-700',    name: 'Negative' },
-  object:   { pill: 'bg-amber-100 text-amber-900 border-amber-300',      label: 'text-amber-700',  name: 'Object' },
-  time:     { pill: 'bg-emerald-100 text-emerald-900 border-emerald-300',label: 'text-emerald-700',name: 'Time' },
-  place:    { pill: 'bg-teal-100 text-teal-900 border-teal-300',         label: 'text-teal-700',   name: 'Place' },
-  freq:     { pill: 'bg-fuchsia-100 text-fuchsia-900 border-fuchsia-300',label: 'text-fuchsia-700',name: 'Frequency' },
-  adj:      { pill: 'bg-lime-100 text-lime-900 border-lime-300',         label: 'text-lime-700',   name: 'Adjective' },
-  adv:      { pill: 'bg-cyan-100 text-cyan-900 border-cyan-300',         label: 'text-cyan-700',   name: 'Adverb' },
-  question: { pill: 'bg-indigo-100 text-indigo-900 border-indigo-300',   label: 'text-indigo-700', name: 'Question word' },
-  conn:     { pill: 'bg-slate-100 text-slate-900 border-slate-300',      label: 'text-slate-700',  name: 'Connector' },
-  purpose:  { pill: 'bg-orange-100 text-orange-900 border-orange-300',   label: 'text-orange-700', name: 'Purpose (why)' },
-  other:    { pill: 'bg-slate-50 text-slate-900 border-slate-200',       label: 'text-slate-700',  name: 'Other' },
+  subject: { pill: 'bg-gradient-to-br from-[#2f6bff] to-[#5b8cff] text-white border-transparent', label: 'text-[#cfe0ff]', name: 'Subject' },
+  verb: { pill: 'bg-gradient-to-br from-[#d95cf0] to-[#8b5cf6] text-white border-transparent', label: 'text-[#cfe0ff]', name: 'Verb' },
+  aux: { pill: 'bg-gradient-to-br from-[#7c3aed] to-[#a78bfa] text-white border-transparent', label: 'text-[#cfe0ff]', name: 'Auxiliary' },
+  neg: { pill: 'bg-gradient-to-br from-[#e0529c] to-[#a64ee0] text-white border-transparent', label: 'text-[#cfe0ff]', name: 'Negative' },
+  object: { pill: 'bg-gradient-to-br from-[#ffd76a] to-[#ffb86b] text-[#2a1450] border-transparent', label: 'text-[#cfe0ff]', name: 'Object' },
+  time: { pill: 'bg-gradient-to-br from-[#19c3c8] to-[#6ff5cf] text-[#05222c] border-transparent', label: 'text-[#cfe0ff]', name: 'Time' },
+  place: { pill: 'bg-gradient-to-br from-[#3fb7e8] to-[#86ecff] text-[#05222c] border-transparent', label: 'text-[#cfe0ff]', name: 'Place' },
+  freq: { pill: 'bg-gradient-to-br from-[#b46cff] to-[#e08cff] text-white border-transparent', label: 'text-[#cfe0ff]', name: 'Frequency' },
+  adj: { pill: 'bg-gradient-to-br from-[#5b8cff] to-[#9ab8ff] text-[#0b1250] border-transparent', label: 'text-[#cfe0ff]', name: 'Adjective' },
+  adv: { pill: 'bg-gradient-to-br from-[#25a8d8] to-[#7fd3ff] text-[#05222c] border-transparent', label: 'text-[#cfe0ff]', name: 'Adverb' },
+  question: { pill: 'bg-gradient-to-br from-[#4a3fd0] to-[#7a6bff] text-white border-transparent', label: 'text-[#cfe0ff]', name: 'Question word' },
+  conn: { pill: 'bg-gradient-to-br from-[#5a5f9e] to-[#8a90d0] text-white border-transparent', label: 'text-[#cfe0ff]', name: 'Connector' },
+  purpose: { pill: 'bg-gradient-to-br from-[#ff9ad5] to-[#ffd76a] text-[#2a1450] border-transparent', label: 'text-[#cfe0ff]', name: 'Purpose (why)' },
+  other: { pill: 'bg-gradient-to-br from-[#4b4f94] to-[#7479c0] text-white border-transparent', label: 'text-[#cfe0ff]', name: 'Other' },
 };
 const roleStyle = (r?: string) => ROLE_STYLES[(r || 'other').toLowerCase()] || ROLE_STYLES.other;
 
@@ -1015,8 +946,8 @@ function GrammarColorDecodeSlide({ slide, t }: { slide: Extract<Slide, { type: '
         const s = roleStyle(c.role);
         return (
           <div key={i} className="flex flex-col items-center gap-1">
-            <span className={`uppercase tracking-widest text-xs font-semibold ${s.label}`}>{s.name}</span>
-            <span className={`inline-flex items-center rounded-xl border-2 ${s.pill} ${big ? 'px-4 py-3 text-xl md:text-2xl font-semibold' : 'px-3 py-2 text-base md:text-lg'} shadow-sm`}>
+            <span className={`ag-chip !text-[11px] !tracking-[0.12em]`}>{s.name}</span>
+            <span className={`inline-flex items-center rounded-xl border-2 ${s.pill} ${big ? 'px-4 py-3 text-xl md:text-2xl font-semibold' : 'px-3 py-2 text-base md:text-lg'} shadow-[0_4px_0_rgba(20,22,100,0.55)]`}>
               {c.text}
             </span>
           </div>
@@ -1026,13 +957,13 @@ function GrammarColorDecodeSlide({ slide, t }: { slide: Extract<Slide, { type: '
   );
   return (
     <div className="space-y-6 max-w-4xl w-full">
-      <div className={`text-xs uppercase tracking-widest ${t.muted}`}>Grammar · Color decode</div>
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.title}</h2>
-      <div className="rounded-2xl border border-slate-200 bg-white/70 p-5 md:p-7 space-y-5">
+      <div className="ag-chip">Grammar · Color decode</div>
+      <h2 className="ag-title text-2xl md:text-3xl">{slide.title}</h2>
+      <div className="space-y-5 py-2">
         {renderRow(slide.chunks, 'main', true)}
         {slide.variants && slide.variants.length > 0 && (
-          <div className="border-t border-dashed border-slate-300 pt-5 space-y-3">
-            <div className={`text-xs uppercase tracking-widest ${t.muted} text-center`}>Same pattern, new words</div>
+          <div className="space-y-3 border-t border-dashed border-white/30 pt-5">
+            <div className="ag-chip justify-center">Same pattern, new words</div>
             {slide.variants.map((v, i) => renderRow(v.chunks, `v${i}`))}
           </div>
         )}
@@ -1041,11 +972,11 @@ function GrammarColorDecodeSlide({ slide, t }: { slide: Extract<Slide, { type: '
         {rolesUsed.map((r) => {
           const s = roleStyle(r);
           return (
-            <span key={r} className={`text-xs px-2.5 py-1 rounded-full border ${s.pill}`}>● {s.name}</span>
+            <span key={r} className={`rounded-full px-3 py-1 text-xs font-bold ${s.pill}`}>● {s.name}</span>
           );
         })}
       </div>
-      {slide.rule && <p className={`text-sm text-center ${t.muted}`}><GrammarMarkup text={slide.rule} /></p>}
+      {slide.rule && <p className="ag-muted text-center text-base"><GrammarMarkup text={slide.rule} /></p>}
     </div>
   );
 }
@@ -1171,16 +1102,14 @@ function GrammarFormulaSlide({ slide, t }: { slide: Extract<Slide, { type: 'gram
   );
 }
 
-function ItemPager({ total, index, setIndex, score, t }: { total: number; index: number; setIndex: (i: number) => void; score: number; t: ThemeTokens }) {
+function ItemPager({ total, index, setIndex, score }: { total: number; index: number; setIndex: (i: number) => void; score: number; t: ThemeTokens }) {
   if (total <= 1) return null;
   return (
-    <div className={`flex items-center justify-between gap-3 text-sm ${t.muted}`}>
-      <span>Item {index + 1} of {total} · Score: {score}/{total}</span>
+    <div className="flex items-center justify-between gap-3">
+      <span className="ag-chip">Item {index + 1}/{total} · Score {score}/{total}</span>
       <div className="flex gap-2">
-        <button disabled={index === 0} onClick={() => setIndex(Math.max(0, index - 1))}
-          className="min-h-[44px] rounded-lg border-2 border-slate-400 px-4 text-sm font-semibold text-slate-800 hover:bg-slate-100 disabled:opacity-30">← Prev</button>
-        <button disabled={index >= total - 1} onClick={() => setIndex(Math.min(total - 1, index + 1))}
-          className="min-h-[44px] rounded-lg border-2 border-indigo-500 bg-indigo-50 px-4 text-sm font-semibold text-indigo-800 hover:bg-indigo-100 disabled:opacity-30">Next →</button>
+        <button disabled={index === 0} onClick={() => setIndex(Math.max(0, index - 1))} className="ag-btn ag-btn--ghost !min-h-[44px] !px-4 text-sm">← Prev</button>
+        <button disabled={index >= total - 1} onClick={() => setIndex(Math.min(total - 1, index + 1))} className="ag-btn !min-h-[44px] !px-4 text-sm">Next →</button>
       </div>
     </div>
   );
@@ -1190,35 +1119,34 @@ function ErrorDetectionSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { t
   const items = getErrorDetectionItems(slide);
   const [index, setIndex] = useState(0);
   const [picks, setPicks] = useState<Record<number, number>>({});
-  // Reset when the underlying items change (teacher edits in Creator) so
-  // we never render with a stale index past the new array length.
+  // Reset when the underlying items change (teacher edits in Creator) so we never render a stale index.
   useEffect(() => {
     setIndex((i) => Math.min(i, Math.max(0, items.length - 1)));
     setPicks({});
   }, [items.length, JSON.stringify(items)]);
   const item = items[index];
-  if (!item) return <div className={t.muted}>No items.</div>;
+  if (!item) return <div className="ag-muted">No items.</div>;
   const words = item.sentence.split(/\s+/);
   const picked = picks[index] ?? null;
   const score = items.reduce((s, it, i) => s + ((picks[i] ?? -1) === it.wrongIndex ? 1 : 0), 0);
   return (
-    <div className="space-y-6 max-w-2xl w-full">
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
-      <div className="flex flex-wrap gap-2 text-xl">
+    <div className="ag-rise w-full max-w-2xl space-y-5">
+      <h2 className="ag-prompt text-2xl md:text-3xl">{slide.prompt}</h2>
+      <div className="flex flex-wrap gap-3">
         {words.map((w, i) => {
           const isPicked = picked === i;
           const isWrong = i === item.wrongIndex;
-          let cls = `border-slate-700 hover:border-indigo-500 ${t.text}`;
-          if (picked !== null && isPicked && isWrong) cls = 'border-emerald-500 bg-emerald-500/10 text-emerald-200';
-          else if (picked !== null && isPicked && !isWrong) cls = 'border-red-500 bg-red-500/10 text-red-200';
-          else if (picked !== null && isWrong) cls = 'border-emerald-500/60 text-emerald-300';
+          let cls = '';
+          if (picked !== null && isPicked && isWrong) cls = 'is-ok';
+          else if (picked !== null && isPicked && !isWrong) cls = 'is-oops';
+          else if (picked !== null && isWrong) cls = 'is-hint';
           return (
-            <button key={i} onClick={() => {
+            <button key={i} disabled={picked !== null} onClick={() => {
                 if (picked !== null) return;
                 setPicks((p) => ({ ...p, [index]: i }));
                 onAnswer?.({ itemIndex: index, isCorrect: i === item.wrongIndex, skillTag: item.skillTag });
               }}
-              className={`px-3 py-1.5 rounded-md border transition ${cls}`}>
+              className={`ag-tile !text-xl ${cls}`}>
               {w}
             </button>
           );
@@ -1239,7 +1167,7 @@ function CorrectionSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type:
     setVals({}); setSubs({});
   }, [items.length, JSON.stringify(items)]);
   const item = items[index];
-  if (!item) return <div className={t.muted}>No items.</div>;
+  if (!item) return <div className="ag-muted">No items.</div>;
   const val = vals[index] ?? '';
   const submitted = !!subs[index];
   const norm = (s: string) => s.trim().toLowerCase().replace(/[.!?]/g, '');
@@ -1250,25 +1178,21 @@ function CorrectionSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type:
     onAnswer?.({ itemIndex: index, isCorrect: norm(val) === norm(item.answer), skillTag: item.skillTag });
   };
   return (
-    <div className="space-y-6 max-w-2xl w-full">
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
-      <p className={`text-lg italic border-l-2 border-red-500 pl-4 ${t.muted}`}>{item.wrong}</p>
+    <div className="ag-rise w-full max-w-2xl space-y-5">
+      <h2 className="ag-prompt text-2xl md:text-3xl">{slide.prompt}</h2>
+      <p className="ag-title border-l-4 border-[#e08cff] pl-4 text-xl md:text-2xl">{item.wrong}</p>
       <input
         value={val}
         onChange={(e) => { setVals((p) => ({ ...p, [index]: e.target.value })); setSubs((p) => ({ ...p, [index]: false })); }}
+        onKeyDown={(e) => e.key === 'Enter' && check()}
         placeholder="Write the corrected sentence…"
-        className={`w-full rounded-md border px-4 py-3 outline-none focus:border-indigo-500 ${t.inputBg} ${
-          submitted ? (correct ? 'border-emerald-500' : 'border-red-500') : ''
-        }`}
+        className={`ag-input text-lg ${submitted ? (correct ? 'is-ok' : 'is-oops') : ''}`}
       />
-      <button onClick={check}
-        className="px-5 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium">
-        Check
-      </button>
+      <button onClick={check} className="ag-btn">Check</button>
       {submitted && (
-        <div className={`text-sm flex items-center gap-2 ${correct ? 'text-emerald-400' : 'text-red-400'}`}>
-          {correct ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
-          {correct ? 'Correct.' : `Try again. Expected: ${item.answer}`}
+        <div className="ag-feedback" style={{ color: correct ? '#6ff5cf' : '#f0b3ff' }}>
+          {correct ? <Check className="h-5 w-5" /> : <X className="h-5 w-5" />}
+          {correct ? 'Correct!' : `Try again. Expected: ${item.answer}`}
         </div>
       )}
       <ItemPager total={items.length} index={index} setIndex={setIndex} score={score} t={t} />
@@ -1286,7 +1210,7 @@ function FillBlankSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: 
     setVals({}); setSubs({});
   }, [items.length, JSON.stringify(items)]);
   const item = items[index];
-  if (!item) return <div className={t.muted}>No items.</div>;
+  if (!item) return <div className="ag-muted">No items.</div>;
   const val = vals[index] ?? '';
   const submitted = !!subs[index];
   const correct = submitted && val.trim().toLowerCase() === item.answer.toLowerCase();
@@ -1296,27 +1220,24 @@ function FillBlankSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { type: 
     onAnswer?.({ itemIndex: index, isCorrect: val.trim().toLowerCase() === item.answer.toLowerCase(), skillTag: item.skillTag });
   };
   return (
-    <div className="space-y-6 max-w-2xl w-full">
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
-      <div className={`text-2xl ${t.text} flex items-center gap-3 flex-wrap`}>
+    <div className="ag-rise w-full max-w-2xl space-y-5">
+      <h2 className="ag-prompt text-2xl md:text-3xl">{slide.prompt}</h2>
+      <div className="ag-title flex flex-wrap items-center gap-3 text-2xl md:text-3xl">
         <span>{item.before}</span>
         <input
           value={val}
           onChange={(e) => { setVals((p) => ({ ...p, [index]: e.target.value })); setSubs((p) => ({ ...p, [index]: false })); }}
           onKeyDown={(e) => e.key === 'Enter' && check()}
-          className={`w-32 px-3 py-1.5 rounded-md border text-center outline-none focus:border-indigo-500 ${t.inputBg} ${
-            submitted ? (correct ? 'border-emerald-500' : 'border-red-500') : ''
-          }`}
+          aria-label="Your answer"
+          className={`ag-input !w-36 text-center ${submitted ? (correct ? 'is-ok' : 'is-oops') : ''}`}
         />
         <span>{item.after}</span>
       </div>
-      <button onClick={check}
-        className="px-5 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium">
-        Check
-      </button>
-      {submitted && !correct && (
-        <div className="text-sm text-red-400 flex items-center gap-2">
-          <X className="w-4 h-4" /> Expected: {item.answer}
+      <button onClick={check} className="ag-btn">Check</button>
+      {submitted && (
+        <div className="ag-feedback" style={{ color: correct ? '#6ff5cf' : '#f0b3ff' }}>
+          {correct ? <Check className="h-5 w-5" /> : <X className="h-5 w-5" />}
+          {correct ? 'Correct!' : `Try again. Expected: ${item.answer}`}
         </div>
       )}
       <ItemPager total={items.length} index={index} setIndex={setIndex} score={score} t={t} />
@@ -1333,11 +1254,11 @@ function SentenceBuilderSlide({ slide, t, onAnswer }: { slide: Extract<Slide, { 
     setScores({});
   }, [items.length, JSON.stringify(items)]);
   const item = items[index];
-  if (!item) return <div className={t.muted}>No items.</div>;
+  if (!item) return <div className="ag-muted">No items.</div>;
   const score = Object.values(scores).filter(Boolean).length;
   return (
-    <div className="space-y-4 max-w-2xl w-full">
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
+    <div className="ag-rise w-full max-w-2xl space-y-4">
+      <h2 className="ag-prompt text-2xl md:text-3xl">{slide.prompt}</h2>
       <SentenceBuilderItemView
         key={index}
         item={item}
@@ -1381,50 +1302,42 @@ function SentenceBuilderItemView({ item, t, onScored, footer }: {
   };
 
   return (
-    <div className="space-y-6 max-w-2xl w-full">
-      <div className={`min-h-[60px] rounded-md border-2 border-dashed p-3 flex flex-wrap gap-2 ${
-        checked ? (correct ? 'border-emerald-500' : 'border-red-500') : 'border-slate-700'
-      }`}>
-        {answer.length === 0 && <span className={`text-sm ${t.muted}`}>Tap words below to build the sentence.</span>}
+    <div className="w-full max-w-2xl space-y-6">
+      <div className={`ag-slot ${checked ? (correct ? 'is-ok' : 'is-oops') : ''}`}>
+        {answer.length === 0 && <span className="ag-muted text-base">Tap the words below to build the sentence.</span>}
         {answer.map((w, i) => (
-          <button key={`${w}-${i}`} onClick={() => unpick(w, i)} className="px-3 py-1.5 rounded-md bg-indigo-600/20 border border-indigo-500/50 text-indigo-200">
-            {w}
-          </button>
+          <button key={`${w}-${i}`} onClick={() => unpick(w, i)} className="ag-tile is-placed">{w}</button>
         ))}
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-3">
         {bank.map((w, i) => (
-          <button key={`${w}-${i}`} onClick={() => pick(w, i)} className={`px-3 py-1.5 rounded-md border transition ${t.btnGhost}`}>
-            {w}
-          </button>
+          <button key={`${w}-${i}`} onClick={() => pick(w, i)} className="ag-tile">{w}</button>
         ))}
       </div>
-      <div className="flex gap-3">
-        <button onClick={check} disabled={answer.length !== item.answer.length} className="px-5 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white text-sm font-medium">
-          Check
-        </button>
-        <button onClick={reset} className={`px-5 py-2 rounded-md text-sm ${t.btnGhost}`}>Reset</button>
+      <div className="flex flex-wrap items-center gap-3">
+        <button onClick={check} disabled={answer.length !== item.answer.length} className="ag-btn">Check</button>
+        <button onClick={reset} className="ag-btn ag-btn--ghost">Reset</button>
+        {checked && (
+          <span className="ag-feedback" style={{ color: correct ? '#6ff5cf' : '#f0b3ff' }}>
+            {correct ? <Check className="h-5 w-5" /> : <X className="h-5 w-5" />}
+            {correct ? 'Correct!' : 'Not quite — try again.'}
+          </span>
+        )}
       </div>
       {footer}
     </div>
   );
 }
 
-function DebateScaleSlide({ slide, t }: { slide: Extract<Slide, { type: 'debate_scale' }>; t: ThemeTokens }) {
+function DebateScaleSlide({ slide }: { slide: Extract<Slide, { type: 'debate_scale' }>; t: ThemeTokens }) {
   const labels = ['Strongly\ndisagree', 'Disagree', 'Neutral', 'Agree', 'Strongly\nagree'];
   const [picked, setPicked] = useState<number | null>(null);
   return (
-    <div className="space-y-8 max-w-2xl w-full">
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
+    <div className="ag-rise w-full max-w-2xl space-y-6">
+      <h2 className="ag-prompt text-2xl md:text-3xl">{slide.prompt}</h2>
       <div className="grid grid-cols-5 gap-2">
         {labels.map((l, i) => (
-          <button
-            key={i}
-            onClick={() => setPicked(i)}
-            className={`px-2 py-3 rounded-md text-xs font-medium whitespace-pre-line transition ${
-              picked === i ? 'bg-indigo-600 text-white' : t.btnGhost
-            }`}
-          >
+          <button key={i} onClick={() => setPicked(i)} className={`ag-opt !justify-center !px-1 text-center !text-xs whitespace-pre-line ${picked === i ? 'is-on' : picked !== null ? 'is-dim' : ''}`}>
             {l}
           </button>
         ))}
@@ -1455,9 +1368,7 @@ function RolePlaySlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 
   if (!selected) {
     const picker = (
       <div className="mx-auto w-full max-w-md space-y-5 text-center">
-        <div className={fullBleed ? 'text-lg font-bold text-white drop-shadow-lg' : `text-lg font-bold ${t.text}`}>
-          Who do you want to text? 💬
-        </div>
+        <div className="ag-title text-2xl">Who do you want to text? 💬</div>
         <div className="flex flex-wrap justify-center gap-5">
           {slide.characters.map((c) => (
             <motion.button
@@ -1465,12 +1376,12 @@ function RolePlaySlide({ slide, t, fullBleed }: { slide: Extract<Slide, { type: 
               onClick={() => setSelectedId(c.id)}
               whileTap={{ scale: 0.95 }}
               whileHover={{ scale: 1.05 }}
-              className="flex flex-col items-center gap-2 rounded-3xl bg-white/95 px-6 py-5 shadow-2xl backdrop-blur-sm transition"
+              className="flex flex-col items-center gap-2 px-4 py-3"
             >
-              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-2xl font-bold text-white shadow-lg">
+              <span className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#3b6dff] to-[#8b5cf6] text-3xl font-bold text-white shadow-[0_0_0_3px_#86ecff,0_0_24px_rgba(134,236,255,0.55)]">
                 {c.name[0]}
               </span>
-              <span className="text-base font-bold text-slate-800">{c.name}</span>
+              <span className="ag-title text-xl">{c.name}</span>
             </motion.button>
           ))}
         </div>
@@ -1562,7 +1473,7 @@ function RolePlayConversation({
             <button
               onClick={() => playVoice(stripMd(m.text))}
               aria-label="Hear this message again"
-              className="mr-2 flex h-9 w-9 shrink-0 items-center justify-center self-center rounded-full bg-indigo-600 text-base text-white shadow-lg transition active:scale-95"
+              className="mr-2 flex h-10 w-10 shrink-0 items-center justify-center self-center rounded-full bg-gradient-to-br from-[#3b6dff] to-[#8b5cf6] text-base text-white shadow-lg transition active:scale-95"
             >
               🔊
             </button>
@@ -1570,8 +1481,8 @@ function RolePlayConversation({
           <div
             className={
               m.from === 'char'
-                ? 'max-w-[75%] rounded-2xl rounded-bl-sm bg-white/95 px-4 py-3 text-base text-slate-800 shadow-lg backdrop-blur-sm'
-                : 'max-w-[75%] rounded-2xl rounded-br-sm bg-gradient-to-br from-indigo-500 to-indigo-600 px-4 py-3 text-base text-white shadow-lg'
+                ? 'max-w-[75%] rounded-2xl rounded-bl-sm bg-[#f7f5ff] px-4 py-3 text-base font-medium text-[#1b1d6e] shadow-lg'
+                : 'max-w-[75%] rounded-2xl rounded-br-sm bg-gradient-to-br from-[#3b6dff] to-[#8b5cf6] px-4 py-3 text-base font-medium text-white shadow-lg'
             }
           >
             <GrammarMarkup text={m.text} />
@@ -1583,9 +1494,9 @@ function RolePlayConversation({
 
   const typingBubble = typing && (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
-      <div className="flex items-center gap-1 rounded-2xl rounded-bl-sm bg-white/95 px-4 py-3.5 shadow-lg backdrop-blur-sm">
+      <div className="flex items-center gap-1 rounded-2xl rounded-bl-sm bg-[#f7f5ff] px-4 py-3.5 shadow-lg">
         {[0, 1, 2].map((d) => (
-          <span key={d} className="h-2 w-2 animate-bounce rounded-full bg-slate-400" style={{ animationDelay: `${d * 0.15}s` }} />
+          <span key={d} className="h-2 w-2 animate-bounce rounded-full bg-[#8a90d0]" style={{ animationDelay: `${d * 0.15}s` }} />
         ))}
       </div>
     </motion.div>
@@ -1593,7 +1504,7 @@ function RolePlayConversation({
 
   const doneBadge = stage === 'done' && !typing && (
     <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="flex justify-center pt-1">
-      <span className="rounded-full bg-emerald-500 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white shadow-lg">
+      <span className="rounded-full bg-gradient-to-r from-[#19c3c8] to-[#6ff5cf] px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#05222c] shadow-lg">
         ✓ Conversation complete
       </span>
     </motion.div>
@@ -1601,7 +1512,7 @@ function RolePlayConversation({
 
   const hintsRow = stage !== 'done' && !typing && hints && hints.length > 0 && (
     <div className={`flex flex-wrap items-center justify-center gap-1.5 ${fullBleed ? '' : 'border-t border-slate-200 bg-indigo-50/60 px-4 pt-2.5'}`}>
-      <span className={`text-xs font-bold ${fullBleed ? 'text-white drop-shadow' : 'text-indigo-400'}`}>💡 Try:</span>
+      <span className="ag-chip !text-xs">💡 Try</span>
       {hints.map((h, i) => (
         <motion.button
           key={h}
@@ -1609,7 +1520,7 @@ function RolePlayConversation({
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: i * 0.08 }}
           onClick={() => setDraft(h)}
-          className="rounded-full border border-indigo-200 bg-white/95 px-3 py-1 text-xs font-semibold text-indigo-600 shadow-lg backdrop-blur-sm transition active:scale-95"
+          className="ag-btn ag-btn--ghost !min-h-[40px] !px-3 !py-1 !text-xs !normal-case !tracking-normal"
         >
           {h}
         </motion.button>
@@ -1618,20 +1529,20 @@ function RolePlayConversation({
   );
 
   const composeBar = (
-    <div className={`flex items-center gap-2 ${fullBleed ? 'rounded-full bg-white/95 px-3 py-2 shadow-2xl backdrop-blur-sm' : 'border-t border-slate-200 bg-white px-4 py-3'}`}>
+    <div className={`flex items-center gap-2 ${fullBleed ? '' : 'border-t border-slate-200 bg-white px-4 py-3'}`}>
       <input
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
         onKeyDown={(e) => e.key === 'Enter' && send()}
         disabled={stage === 'done'}
         placeholder="Type your reply…"
-        className={`flex-1 text-base text-slate-900 outline-none disabled:opacity-50 ${fullBleed ? 'bg-transparent px-3' : 'rounded-full border border-slate-300 px-5 py-3 focus:border-indigo-500'}`}
+        className={`flex-1 text-base outline-none disabled:opacity-50 ${fullBleed ? 'ag-input' : 'rounded-full border border-slate-300 px-5 py-3 text-slate-900 focus:border-indigo-500'}`}
       />
       <button
         onClick={send}
         disabled={!draft.trim() || stage === 'done'}
         aria-label="Send"
-        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-lg text-white transition disabled:opacity-30"
+        className="ag-btn !min-h-[48px] !w-12 !px-0 text-lg"
       >
         ➤
       </button>
@@ -1651,13 +1562,13 @@ function RolePlayConversation({
         {character.bg_image_url && (
           <img src={character.bg_image_url} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover" />
         )}
-        <div className="flex items-center gap-2 rounded-full bg-black/30 px-4 py-2 shadow-lg backdrop-blur-md">
-          <span className="relative flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-xs font-bold text-white">
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#3b6dff] to-[#8b5cf6] text-sm font-bold text-white shadow-[0_0_0_2px_#86ecff]">
             {character.name[0]}
             <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-400" />
           </span>
-          <span className="text-sm font-semibold text-white">{character.name}</span>
-          <span className="text-xs text-emerald-300">{typing ? 'typing…' : 'online'}</span>
+          <span className="ag-title text-lg">{character.name}</span>
+          <span className="ag-muted text-xs">{typing ? 'typing…' : 'online'}</span>
         </div>
         <div className="mt-4 flex w-full max-w-xl flex-1 flex-col justify-end gap-3 overflow-y-auto">
           {messageItems}
@@ -2428,52 +2339,33 @@ function SoundChallengeGameSlide({ slide }: { slide: Extract<Slide, { type: 'sou
     }, 1400);
   };
 
+  const stateFor = (guess: boolean) => {
+    if (picked === null) return '';
+    if (item.answer === guess) return 'is-ok';
+    if (picked === guess) return 'is-oops';
+    return 'is-dim';
+  };
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-end gap-4 overflow-hidden px-4 pb-24 text-center">
-      {finished ? (
-        <div className="space-y-3">
-          <div className="text-5xl drop-shadow-lg">🏆</div>
-          <h2 className="text-2xl font-bold text-white drop-shadow-lg">Challenge complete!</h2>
-          <p className="font-semibold text-white drop-shadow">
-            <span className="font-bold text-yellow-300">{score} / {items.length}</span> correct!
-          </p>
-        </div>
-      ) : (
-        <>
-          <span className="flex items-center gap-1 rounded-full bg-orange-100/90 px-3 py-1 text-xs font-bold text-orange-600 shadow backdrop-blur-sm">
-            🔥 {streak}
-          </span>
-          <div className="max-w-sm rounded-2xl bg-white/90 px-5 py-4 text-base font-bold text-slate-800 shadow-xl backdrop-blur-sm">
-            {item.statement}
+    <div className="relative flex h-full w-full items-center justify-center px-3 pb-20">
+      <div className="ag-scrim-soft flex w-full max-w-2xl flex-col items-center gap-5 px-16 py-12 text-center">
+        {finished ? (
+          <div className="ag-rise space-y-3">
+            <div className="text-6xl drop-shadow-[0_0_18px_rgba(255,215,106,0.8)]">🏆</div>
+            <h2 className="ag-title text-3xl md:text-4xl">Challenge complete!</h2>
+            <p className="ag-prompt text-xl"><span style={{ color: '#ffd76a' }}>{score} / {items.length}</span> correct!</p>
           </div>
-          <button
-            onClick={() => void playVoice(item.statement)}
-            className="flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg transition active:scale-95"
-          >
-            🔊 Listen again
-          </button>
-          <div className="flex items-center justify-center gap-6">
-            <button
-              onClick={() => pick(true)}
-              disabled={picked !== null}
-              className={`flex h-20 w-20 items-center justify-center rounded-2xl border-4 text-3xl shadow-lg backdrop-blur-sm transition active:scale-95 ${
-                picked !== null && item.answer ? 'border-emerald-500 bg-emerald-500' : 'border-white bg-white/90'
-              }`}
-            >
-              👍
-            </button>
-            <button
-              onClick={() => pick(false)}
-              disabled={picked !== null}
-              className={`flex h-20 w-20 items-center justify-center rounded-2xl border-4 text-3xl shadow-lg backdrop-blur-sm transition active:scale-95 ${
-                picked !== null && !item.answer ? 'border-emerald-500 bg-emerald-500' : 'border-white bg-white/90'
-              }`}
-            >
-              👎
-            </button>
-          </div>
-        </>
-      )}
+        ) : (
+          <>
+            <span className="ag-title text-base" style={{ color: streak >= 3 ? '#ff9ad5' : '#cdc6ff' }}>🔥 {streak}</span>
+            <div className="ag-title text-2xl md:text-3xl">{item.statement}</div>
+            <button onClick={() => void playVoice(item.statement)} className="ag-btn ag-btn--ghost !min-h-[48px] text-sm">🔊 Listen again</button>
+            <div className="grid w-full max-w-sm grid-cols-2 gap-4">
+              <button onClick={() => pick(true)} disabled={picked !== null} aria-label="True" className={`ag-opt !h-24 !flex-col !justify-center text-4xl ${stateFor(true)}`}>👍</button>
+              <button onClick={() => pick(false)} disabled={picked !== null} aria-label="False" className={`ag-opt !h-24 !flex-col !justify-center text-4xl ${stateFor(false)}`}>👎</button>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }
@@ -2605,31 +2497,22 @@ function StoryPageSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 's
     });
   }, [slide]);
 
-  // Explorer's-journal frame: an opaque parchment card with a green header bar,
-  // docked to the right so the illustration (the page background) stays
-  // visible on the left. The text scrolls INSIDE the card, so long passages
-  // are never clipped by the viewport (they were, with the old translucent
-  // centred card at text-2xl).
+  // Bare narration: the illustration is the page background; the text sits in a soft de-focused zone docked to the
+  // right (desktop) or bottom (phone) so the picture and its characters stay visible. No card, no frame.
   const page = (
-    <div className={`relative flex max-h-[62%] w-full flex-col overflow-hidden rounded-xl md:max-h-full border-[3px] border-amber-900/80 bg-[#fbf3df] shadow-2xl ${fullBleed ? 'max-w-xl md:ml-auto' : 'max-w-2xl'}`}>
-      <div className="flex shrink-0 items-center justify-between gap-3 bg-emerald-900 px-5 py-2.5 text-amber-100">
-        <div className="text-xs font-bold uppercase tracking-widest">📖 {slide.title || 'Read Together!'}</div>
-        <button
-          onClick={() => playVoice(slide.passage)}
-          className="flex min-h-[40px] items-center gap-2 rounded-full bg-amber-300 px-4 py-2 text-sm font-bold text-emerald-950 shadow transition active:scale-95"
-        >
-          🔊 Listen
-        </button>
+    <div className={`ag-scrim-soft ag-rise flex max-h-[66%] w-full flex-col overflow-hidden px-14 py-12 md:max-h-full ${fullBleed ? 'max-w-xl md:ml-auto' : 'max-w-2xl'}`}>
+      <div className="mb-3 flex shrink-0 flex-wrap items-center justify-between gap-3">
+        <div className="ag-chip">📖 {slide.title || 'Read Together!'}</div>
+        <button onClick={() => playVoice(slide.passage)} className="ag-btn !min-h-[44px] !px-4 text-sm">🔊 Listen</button>
       </div>
-      <div className="min-h-0 overflow-y-auto px-6 py-5">
-        <p className="text-lg font-medium leading-relaxed text-stone-800 md:text-xl">
+      <div className="min-h-0 overflow-y-auto pr-1">
+        <p className="ag-prompt text-lg leading-relaxed md:text-2xl md:leading-relaxed">
           {tokens.map((p, i) =>
             p.hit ? (
               <button
                 key={i}
                 onClick={() => playVoice(p.hit!.word)}
-                className="mx-0.5 rounded-lg px-1.5 py-0.5 font-extrabold transition active:scale-95"
-                style={{ background: `${p.hit.color}26`, color: p.hit.color, filter: 'brightness(0.72)' }}
+                className="mx-0.5 rounded-md bg-[#86ecff]/20 px-1.5 py-0.5 font-extrabold text-[#c9f6ff] underline decoration-[#86ecff] decoration-2 underline-offset-4 transition active:scale-95"
               >
                 {p.hit.emoji} {p.tok.trim()}
               </button>
@@ -2643,9 +2526,8 @@ function StoryPageSlide({ slide, fullBleed }: { slide: Extract<Slide, { type: 's
   );
 
   return (
-    <div className={fullBleed ? 'relative flex h-full w-full items-end justify-center overflow-hidden px-4 py-2 md:items-center md:px-10' : 'relative w-full max-w-3xl aspect-video overflow-hidden rounded-2xl shadow-2xl mx-auto flex items-center justify-center px-4'}>
+    <div className={fullBleed ? 'relative flex h-full w-full items-end justify-center overflow-hidden px-2 pb-20 pt-2 md:items-center md:px-8 md:pb-2' : 'relative aspect-video w-full max-w-3xl overflow-hidden rounded-2xl shadow-2xl'}>
       {!fullBleed && <img src={slide.bg_image_url} alt="" className="absolute inset-0 h-full w-full object-cover" />}
-      {!fullBleed && <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />}
       {page}
     </div>
   );
@@ -2751,16 +2633,16 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
       )}
 
       {slide.title && (
-        <span className="absolute left-5 top-5 w-fit rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-indigo-700 shadow">
+        <span className="ag-chip absolute left-5 top-5 z-20">
           {slide.title}
         </span>
       )}
 
       {!started && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 backdrop-blur-[1px]">
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-[#070a24]/25">
           <button
             onClick={begin}
-            className="flex items-center gap-2 rounded-full bg-indigo-600 px-7 py-3.5 text-base font-bold text-white shadow-2xl transition hover:bg-indigo-500 active:scale-95"
+            className="ag-btn ag-btn--gold !min-h-[56px] !px-8 text-base"
           >
             ▶ Watch the conversation
           </button>
@@ -2771,7 +2653,7 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
         <>
           <button
             onClick={replay}
-            className="absolute right-5 top-5 z-30 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-xs font-bold uppercase tracking-widest text-indigo-700 shadow-xl ring-1 ring-indigo-200 active:scale-95"
+            className="ag-btn ag-btn--ghost absolute right-5 top-5 z-30 !min-h-[44px] !px-4 text-xs"
             aria-label="Hear this line again"
           >
             🔁 Replay
@@ -2789,8 +2671,8 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
               label already says who's talking. */}
           <div className="absolute inset-x-0 top-3 z-20 flex justify-center px-4 transition-all duration-300">
             <div className="relative max-w-[340px] rounded-2xl bg-white px-5 py-3 text-center shadow-2xl">
-              <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-indigo-500">{nameFor(current.speaker)}</div>
-              <div className="text-lg font-semibold text-slate-800">
+              <div className="mb-1 text-[11px] font-bold uppercase tracking-widest text-[#6d3cdc]">{nameFor(current.speaker)}</div>
+              <div className="text-lg font-semibold text-[#1b1d6e]">
                 <DialogueLineText text={current.text} onWordTap={(w) => playVoice(w)} />
               </div>
               <div className="absolute -bottom-2 left-7 h-4 w-4 rotate-45 bg-white" />
@@ -2798,7 +2680,7 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
           </div>
           {hasVocabWords && step === 0 && (
             <div className="absolute inset-x-0 top-[14%] z-20 flex justify-center px-4">
-              <span className="rounded-full bg-white/95 px-4 py-1.5 text-xs font-bold text-indigo-700 shadow-lg">
+              <span className="ag-title text-sm">
                 👆 Tap the highlighted words to hear and repeat them!
               </span>
             </div>
@@ -2814,19 +2696,19 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
               actually saying their own name, not repeating the question. */}
           <div className="absolute inset-x-0 bottom-6 z-30 flex flex-col items-center gap-3 px-4">
             {!currentRepeated ? (
-              <div className="mx-auto w-full max-w-xl rounded-t-3xl border-t-4 border-indigo-400 bg-white/95 p-6 text-center shadow-2xl backdrop-blur">
-                <div className="mb-2 text-xs font-bold uppercase tracking-widest text-indigo-500">
+              <div className="ag-scrim-soft mx-auto w-full max-w-xl px-14 py-8 text-center">
+                <div className="ag-chip mb-2 justify-center">
                   {current.student_answer ? '🎤 Your turn — answer!' : '🎤 Your turn — say it out loud'}
                 </div>
                 {current.student_answer && (
-                  <div className="mb-3 text-base font-semibold text-slate-700">"{current.student_answer}"</div>
+                  <div className="ag-title mb-3 text-lg">"{current.student_answer}"</div>
                 )}
                 <button
                   onPointerDown={startHold}
                   onPointerUp={endHold}
                   onPointerLeave={endHold}
                   onPointerCancel={endHold}
-                  className={`w-full rounded-full bg-indigo-600 py-5 text-base font-black uppercase tracking-widest text-white shadow-xl transition active:scale-95 ${held ? 'scale-95 bg-indigo-700' : ''}`}
+                  className={`ag-btn ag-btn--gold !min-h-[64px] w-full text-base ${held ? "!translate-y-[3px]" : ""}`}
                 >
                   {held ? 'Keep holding…' : current.student_answer ? 'Hold & say your answer' : 'Hold & repeat the line'}
                 </button>
@@ -2834,7 +2716,7 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
             ) : (
               <button
                 onClick={advance}
-                className="rounded-full bg-white/95 px-6 py-3 text-sm font-bold uppercase tracking-widest text-indigo-700 shadow-xl ring-1 ring-indigo-200 active:scale-95"
+                className="ag-btn !min-h-[52px] text-sm"
               >
                 {step === slide.lines.length - 1 ? 'Finish ✓' : 'Next line →'}
               </button>
@@ -2845,7 +2727,7 @@ function SceneDialogueSlide({ slide, fullBleed }: { slide: Extract<Slide, { type
 
       {finished && (
         <div className="absolute inset-x-0 bottom-6 z-30 flex justify-center">
-          <span className="rounded-full bg-emerald-500 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-xl">
+          <span className="rounded-full bg-gradient-to-r from-[#19c3c8] to-[#6ff5cf] px-6 py-3 text-sm font-bold uppercase tracking-widest text-[#05222c] shadow-xl">
             ✓ Scene complete
           </span>
         </div>
@@ -2916,7 +2798,7 @@ function ConversationFillSlide({ slide, fullBleed }: { slide: Extract<Slide, { t
       )}
 
       {slide.title && (
-        <span className="absolute left-5 top-5 z-20 w-fit rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-indigo-700 shadow">
+        <span className="ag-chip absolute left-5 top-5 z-20">
           {slide.title}
         </span>
       )}
@@ -2931,15 +2813,15 @@ function ConversationFillSlide({ slide, fullBleed }: { slide: Extract<Slide, { t
               <div key={i} className={`flex ${side === 'left' ? 'justify-start' : 'justify-end'}`}>
                 <div className="relative max-w-[82%]">
                   <div className="rounded-2xl bg-white px-4 py-2.5 shadow-xl">
-                    <div className="mb-0.5 text-[10px] font-bold uppercase tracking-widest text-indigo-500">{nameFor(line.speaker)}</div>
-                    <div className="text-base font-semibold leading-snug text-slate-800">
+                    <div className="mb-0.5 text-[11px] font-bold uppercase tracking-widest text-[#6d3cdc]">{nameFor(line.speaker)}</div>
+                    <div className="text-base font-semibold leading-snug text-[#1b1d6e]">
                       {line.before}
                       <button
                         onClick={() => tapBlank(i)}
                         className={
                           filled
-                            ? 'mx-1 inline-flex items-center rounded-md bg-emerald-100 px-2 py-0.5 align-middle font-bold text-emerald-700 ring-1 ring-emerald-400'
-                            : `mx-1 inline-block min-w-[2.75rem] rounded-md border-2 border-dashed px-1 align-middle ${wrongLine === i ? 'border-red-400 bg-red-50' : 'border-indigo-400 bg-indigo-50'}`
+                            ? 'mx-1 inline-flex items-center rounded-md bg-[#6ff5cf] px-2 py-0.5 align-middle font-bold text-[#05222c]'
+                            : `mx-1 inline-block min-w-[2.75rem] rounded-md border-2 border-dashed px-1 align-middle ${wrongLine === i ? 'border-[#d95cf0] bg-[#fde8ff]' : 'border-[#8b5cf6] bg-[#ece8ff]'}`
                         }
                       >
                         {filled ? tileWord : ' '}
@@ -2955,18 +2837,16 @@ function ConversationFillSlide({ slide, fullBleed }: { slide: Extract<Slide, { t
         </div>
 
         {/* Word bank -- tap a tile, then tap the blank it belongs in. */}
-        <div className="shrink-0 border-t border-white/15 bg-black/25 px-4 py-3 backdrop-blur-sm">
+        <div className="ag-scrim-bottom shrink-0 px-4 pb-20 pt-8">
           {allDone ? (
-            <div className="text-center text-sm font-bold text-emerald-300">🎉 Great job! You completed the story.</div>
+            <div className="ag-title text-center text-lg" style={{ color: "#6ff5cf" }}>🎉 Great job! You completed the story.</div>
           ) : (
             <div className="flex flex-wrap justify-center gap-2">
               {tiles.filter((t) => !usedTileIds.has(t.id)).map((t) => (
                 <button
                   key={t.id}
                   onClick={() => tapTile(t.id)}
-                  className={`rounded-full px-4 py-2 text-sm font-bold shadow transition active:scale-95 ${
-                    selected === t.id ? 'bg-white text-indigo-700 ring-2 ring-white' : 'bg-indigo-600 text-white hover:bg-indigo-500'
-                  }`}
+                  className={`ag-tile ${selected === t.id ? 'is-placed' : ''}`}
                 >
                   {t.word}
                 </button>
@@ -2979,16 +2859,16 @@ function ConversationFillSlide({ slide, fullBleed }: { slide: Extract<Slide, { t
   );
 }
 
-function SpeakingTaskSlide({ slide, t }: { slide: Extract<Slide, { type: 'speaking_task' }>; t: ThemeTokens }) {
+function SpeakingTaskSlide({ slide }: { slide: Extract<Slide, { type: 'speaking_task' }>; t: ThemeTokens }) {
   return (
-    <div className="space-y-6 max-w-2xl w-full">
-      <div className={`text-xs uppercase tracking-widest ${t.muted}`}>Speaking</div>
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
+    <div className="ag-rise w-full max-w-2xl space-y-5">
+      <div className="ag-chip">Speaking mission</div>
+      <h2 className="ag-prompt text-2xl md:text-3xl">{slide.prompt}</h2>
       {slide.starters && slide.starters.length > 0 && (
-        <div className={`rounded-md border border-slate-700 p-4 space-y-2`}>
-          <div className={`text-xs uppercase tracking-widest ${t.muted}`}>Sentence starters</div>
-          {slide.starters.map((s) => (
-            <div key={s} className={`text-base ${t.text}`}>· {s}</div>
+        <div className="space-y-2 border-l-4 border-[#86ecff] pl-4">
+          <div className="ag-chip !text-[11px]">Sentence starters</div>
+          {slide.starters.map((st) => (
+            <div key={st} className="ag-title text-lg md:text-xl">{st}</div>
           ))}
         </div>
       )}
@@ -2996,21 +2876,19 @@ function SpeakingTaskSlide({ slide, t }: { slide: Extract<Slide, { type: 'speaki
   );
 }
 
-function ReflectionSlide({ slide, t }: { slide: Extract<Slide, { type: 'reflection' }>; t: ThemeTokens }) {
+function ReflectionSlide({ slide }: { slide: Extract<Slide, { type: 'reflection' }>; t: ThemeTokens }) {
   const opts = ['Easy', 'Just right', 'Challenging'];
   const [picked, setPicked] = useState<string | null>(null);
   return (
-    <div className="space-y-6 max-w-2xl w-full">
-      <div className={`text-xs uppercase tracking-widest ${t.muted}`}>Reflection</div>
-      <h2 className={`text-2xl md:text-3xl font-semibold ${t.text}`}>{slide.prompt}</h2>
-      <div className="flex flex-wrap gap-3">
+    <div className="ag-rise w-full max-w-2xl space-y-5">
+      <div className="ag-chip">Reflection</div>
+      <h2 className="ag-prompt text-2xl md:text-3xl">{slide.prompt}</h2>
+      <div className="grid grid-cols-3 gap-3">
         {opts.map((o) => (
-          <button key={o} onClick={() => setPicked(o)} className={`px-5 py-2.5 rounded-full text-sm font-medium transition ${
-            picked === o ? 'bg-indigo-600 text-white' : t.btnGhost
-          }`}>{o}</button>
+          <button key={o} onClick={() => setPicked(o)} className={`ag-opt !justify-center text-center ${picked === o ? 'is-on' : picked ? 'is-dim' : ''}`}>{o}</button>
         ))}
       </div>
-      {picked && <p className={`text-sm ${t.muted}`}>Lesson complete. Great work.</p>}
+      {picked && <p className="ag-muted text-base">Great work — thanks for telling us.</p>}
     </div>
   );
 }
@@ -3192,41 +3070,31 @@ function SlideMediaHeader({ slide }: { slide: Slide }) {
   );
 }
 
-function VocabDeckSlide({ slide, t }: { slide: Extract<Slide, { type: 'vocab_deck' }>; t: ThemeTokens }) {
+function VocabDeckSlide({ slide }: { slide: Extract<Slide, { type: 'vocab_deck' }>; t: ThemeTokens }) {
   const cards = slide.cards?.length ? slide.cards : [{ word: '—', definition: '' }];
   const [i, setI] = useState(0);
   const card = cards[Math.min(i, cards.length - 1)];
   const prev = () => setI((n) => Math.max(0, n - 1));
   const next = () => setI((n) => Math.min(cards.length - 1, n + 1));
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-3">
-      {/* Header: title, progress dots and the card controls live together at the TOP so they are
-          always on screen (student comfort: never make a control reachable only by scrolling). */}
+    <div className="mx-auto w-full max-w-5xl space-y-4">
+      {/* Title, progress diamonds and the card controls stay together at the TOP so they are always on screen
+          (student comfort: never make a control reachable only by scrolling). */}
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <div className={`truncate text-xs font-semibold uppercase tracking-widest ${t.muted}`}>{slide.title || 'Vocabulary'}</div>
-          <div className="mt-1 flex gap-1.5" aria-hidden>
+          <div className="ag-chip truncate">{slide.title || 'Vocabulary'}</div>
+          <div className="mt-2 flex gap-2" aria-hidden>
             {cards.map((_, idx) => (
-              <span key={idx} className={`h-2 w-2 rounded-full ${idx === i ? 'bg-indigo-600' : 'bg-indigo-200'}`} />
+              <span key={idx} className="h-2.5 w-2.5 rotate-45 rounded-[2px]" style={{ background: idx === i ? 'linear-gradient(135deg,#86ecff,#8b5cf6)' : 'rgba(205,198,255,0.35)', boxShadow: idx === i ? '0 0 8px rgba(134,236,255,0.9)' : undefined }} />
             ))}
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          <span className={`text-sm font-semibold tabular-nums ${t.muted}`}>{i + 1} / {cards.length}</span>
-          <button
-            onClick={prev}
-            disabled={i === 0}
-            aria-label="Previous word"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-lg border-2 border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
-          >
+          <span className="ag-title text-sm tabular-nums">{i + 1} / {cards.length}</span>
+          <button onClick={prev} disabled={i === 0} aria-label="Previous word" className="ag-btn ag-btn--ghost !min-h-[44px] !w-11 !px-0">
             <ChevronLeft className="h-5 w-5" />
           </button>
-          <button
-            onClick={next}
-            disabled={i >= cards.length - 1}
-            aria-label="Next word"
-            className="inline-flex h-11 min-w-[5.5rem] items-center justify-center gap-1 rounded-lg bg-indigo-600 px-3 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40"
-          >
+          <button onClick={next} disabled={i >= cards.length - 1} aria-label="Next word" className="ag-btn !min-h-[44px] !px-4 text-sm">
             Next word <ChevronRight className="h-4 w-4" />
           </button>
         </div>
@@ -3234,27 +3102,26 @@ function VocabDeckSlide({ slide, t }: { slide: Extract<Slide, { type: 'vocab_dec
       <AnimatePresence mode="wait">
         <motion.div
           key={i}
-          initial={{ opacity: 0, x: 24 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -24 }}
-          transition={{ duration: 0.2 }}
-          className="grid grid-cols-1 items-center gap-4 md:grid-cols-2 md:gap-6"
+          initial={{ opacity: 0, x: 28, scale: 0.97 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          exit={{ opacity: 0, x: -28 }}
+          transition={{ duration: 0.22 }}
+          className={`grid grid-cols-1 items-center gap-4 md:gap-8 ${card.image_url ? 'md:grid-cols-2' : ''}`}
         >
-          <div className="flex h-[22vh] min-h-[140px] w-full items-center justify-center overflow-hidden rounded-xl border border-indigo-100 bg-white md:h-[30vh]">
-            {card.image_url ? (
-              <img src={card.image_url} alt={card.word} className="h-full w-full object-contain" />
-            ) : (
-              <div className="px-4 text-center text-5xl font-bold text-indigo-200" aria-hidden>{card.word.slice(0, 1).toUpperCase()}</div>
-            )}
-          </div>
+          {/* The picture floats bare on the scene (stickers are cut-outs); no frame, no card. */}
+          {card.image_url && (
+            <div className="flex h-[24vh] min-h-[150px] w-full items-center justify-center md:h-[34vh]">
+              <img src={card.image_url} alt={card.word} className="h-full w-full object-contain drop-shadow-[0_14px_22px_rgba(7,10,36,0.7)]" />
+            </div>
+          )}
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-3">
-              <h2 className={`text-3xl font-semibold md:text-4xl ${t.text}`}>{card.word}</h2>
+              <h2 className="ag-title text-4xl md:text-5xl">{card.word}</h2>
               <ListenButton text={card.word} label="Listen" />
             </div>
-            <p className={`text-base md:text-lg ${t.text}`}>{card.definition}</p>
+            <p className="ag-prompt text-lg md:text-xl">{card.definition}</p>
             {card.example && (
-              <p className={`border-l-2 border-indigo-500 pl-4 text-base italic ${t.muted}`}>“{card.example}”</p>
+              <p className="ag-muted border-l-4 border-[#86ecff] pl-4 text-base italic md:text-lg">“{card.example}”</p>
             )}
           </div>
         </motion.div>
@@ -3307,88 +3174,64 @@ function VocabImageMatchSlide({ slide, t }: { slide: Extract<Slide, { type: 'voc
   const doneCount = Object.keys(solved).length;
   const totalCount = pairs.length;
   return (
-    <div className="w-full max-w-3xl mx-auto space-y-5 flex flex-col items-center">
+    <div className="ag-rise mx-auto flex w-full max-w-3xl flex-col items-center space-y-4">
       <ObjectiveBanner objective={objective} />
-      <div className="w-full flex items-baseline justify-between gap-3">
-        <h2 className={`text-xl md:text-2xl font-semibold ${t.text}`}>
-          {slide.prompt || 'Drag each word onto the matching image.'}
-        </h2>
-        <span className="text-xs font-semibold text-indigo-600 whitespace-nowrap">
-          {doneCount} / {totalCount}
-        </span>
+      <div className="flex w-full items-baseline justify-between gap-3">
+        <h2 className="ag-prompt text-xl md:text-2xl">{slide.prompt || 'Drag each word onto the matching image.'}</h2>
+        <span className="ag-title whitespace-nowrap text-sm">{doneCount} / {totalCount}</span>
       </div>
-      <div className="w-full h-1.5 rounded-full bg-indigo-100 overflow-hidden">
-        <div
-          className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500"
-          style={{ width: `${totalCount > 0 ? (doneCount / totalCount) * 100 : 0}%` }}
-        />
-      </div>
+      <div className="ag-bar w-full"><i style={{ width: `${totalCount > 0 ? (doneCount / totalCount) * 100 : 0}%` }} /></div>
 
-
-      {/* Words row — centered above the image grid */}
+      {/* Words row — tap (or drag) a word, then its picture. */}
       <div className="flex flex-wrap items-center justify-center gap-3">
         {pairs.map((p) => {
           const done = !!solved[p.word];
           return (
-            <div
+            <button
               key={p.word}
               draggable={!done}
+              disabled={done}
               onDragStart={() => setDragWord(p.word)}
               onClick={() => !done && setDragWord(dragWord === p.word ? null : p.word)}
-              className={`px-5 py-3 rounded-xl border-2 font-semibold text-lg cursor-grab active:cursor-grabbing select-none transition ${
-                done
-                  ? 'border-emerald-500/60 bg-emerald-500/10 text-emerald-700 opacity-60'
-                  : dragWord === p.word
-                  ? 'border-indigo-500 bg-indigo-50 text-indigo-700 shadow-md scale-105'
-                  : 'border-slate-300 bg-white text-slate-800 hover:border-indigo-400'
-              }`}
+              className={`ag-tile !text-lg ${done ? 'is-ok' : dragWord === p.word ? 'is-placed' : ''}`}
             >
               {p.word}
-            </div>
+            </button>
           );
         })}
       </div>
 
-      {/* 2×2 image grid — aligned, equal squares, centered */}
-      <div className="grid grid-cols-2 gap-4 w-full max-w-[28rem] md:grid-cols-4 md:max-w-3xl mx-auto place-items-center">
+      {/* Pictures float bare on the scene (stickers are cut-outs). A glow, not a frame, shows state. */}
+      <div className="mx-auto grid w-full max-w-[28rem] grid-cols-2 place-items-center gap-3 md:max-w-3xl md:grid-cols-4">
         {shuffledImages.map((p) => {
           const matchedWord = Object.entries(solved).find(([, url]) => url === p.image_url)?.[0];
           const isWrong = wrongImg === p.image_url;
           return (
-            <div
+            <button
               key={p.image_url}
               onDragOver={(e) => e.preventDefault()}
               onDrop={() => dragWord && tryMatch(dragWord, p.image_url)}
               onClick={() => dragWord && tryMatch(dragWord, p.image_url)}
-              className={`relative aspect-square w-full rounded-2xl overflow-hidden border-2 transition flex items-center justify-center bg-white ${
-                matchedWord
-                  ? 'border-emerald-500'
-                  : isWrong
-                  ? 'border-red-500 bg-red-50'
-                  : 'border-slate-300 hover:border-indigo-500'
+              className={`relative flex aspect-square w-full items-center justify-center rounded-[28px] transition ${
+                matchedWord ? 'shadow-[0_0_0_3px_#6ff5cf,0_0_26px_rgba(111,245,207,0.6)]' : isWrong ? 'animate-[ag-wobble_0.45s_ease-in-out] shadow-[0_0_0_3px_#d95cf0]' : dragWord ? 'hover:shadow-[0_0_0_3px_#86ecff,0_0_22px_rgba(134,236,255,0.55)]' : ''
               }`}
             >
               {p.image_url ? (
-                <img src={p.image_url} alt="" className="object-contain w-full h-full p-2" />
+                <img src={p.image_url} alt="" className="h-full w-full object-contain p-2 drop-shadow-[0_10px_16px_rgba(7,10,36,0.7)]" />
               ) : (
-                <div className="text-indigo-300 text-5xl">🖼️</div>
+                <div className="text-5xl">🖼️</div>
               )}
               {matchedWord && (
-                <div className="absolute inset-x-0 bottom-0 bg-emerald-600/90 text-white text-sm font-semibold py-1.5 text-center">
-                  {matchedWord} <Check className="inline w-4 h-4 ml-1" />
+                <div className="ag-title absolute inset-x-2 bottom-1 rounded-lg bg-gradient-to-r from-[#19c3c8] to-[#6ff5cf] py-1 text-center text-sm !text-[#05222c]" style={{ textShadow: 'none' }}>
+                  {matchedWord} <Check className="ml-1 inline h-4 w-4" />
                 </div>
               )}
-            </div>
+            </button>
           );
         })}
       </div>
-
-      <div className={`text-sm ${t.muted}`}>
-        {Object.keys(solved).length} / {pairs.length} matched
-      </div>
     </div>
   );
-
 }
 
 function renderSlideInner({ slide, t, fullBleed, onAnswer }: { slide: Slide; t: ThemeTokens; fullBleed?: boolean; onAnswer?: OnAnswer }) {
@@ -3424,6 +3267,7 @@ function renderSlideInner({ slide, t, fullBleed, onAnswer }: { slide: Slide; t: 
     case 'sound_challenge_game': return <SoundChallengeGameSlide slide={slide} />;
     case 'find_in_scene_game': return <FindInSceneGameSlide slide={slide} />;
     case 'expedition_game': return <ExpeditionGame slide={slide as ExpeditionSlide} onAnswer={onAnswer} />;
+    case 'name_tag_studio': return <NameTagStudio slide={slide as NameTagStudioSlide} onAnswer={onAnswer} />;
     case 'story_page': return <StoryPageSlide slide={slide} fullBleed={fullBleed} />;
     case 'speaking_task': return <SpeakingTaskSlide slide={slide} t={t} />;
     case 'reflection': return <ReflectionSlide slide={slide} t={t} />;
@@ -3487,7 +3331,7 @@ const BESPOKE_FULLBLEED_TYPES = new Set([
   'number_chart', 'number_quiz_game', 'letter_sound_game', 'word_blend',
   'picture_match_game', 'say_it_game', 'sound_challenge_game', 'find_in_scene_game',
   'story_page', 'scaffolded_media', 'vocab_solo', 'vocab_deck', 'vocab_image_match',
-  'story_engine_slot', 'escape_room_slot', 'detective_mystery_slot', 'hidden_object_slot', 'expedition_game',
+  'story_engine_slot', 'escape_room_slot', 'detective_mystery_slot', 'hidden_object_slot', 'expedition_game', 'name_tag_studio',
 ]);
 
 export function SlideRenderer({ slide, t, fullBleed, onAnswer }: { slide: Slide; t: ThemeTokens; fullBleed?: boolean; onAnswer?: OnAnswer }) {
@@ -3526,34 +3370,34 @@ export function SlideRenderer({ slide, t, fullBleed, onAnswer }: { slide: Slide;
   );
 }
 
-function AcademyLessonSummary({ slide, t }: { slide: Extract<Slide, { type: 'lesson_summary' }>; t: ThemeTokens }) {
+function AcademyLessonSummary({ slide }: { slide: Extract<Slide, { type: 'lesson_summary' }>; t: ThemeTokens }) {
   return (
-    <div className="space-y-6 max-w-2xl w-full">
-      <div className={`text-xs uppercase tracking-[0.2em] ${t.muted}`}>📋 Lesson Recap</div>
-      <h2 className={`text-3xl md:text-4xl font-semibold ${t.text}`}>{slide.title || 'Review Sheet'}</h2>
+    <div className="ag-rise w-full max-w-2xl space-y-5">
+      <div className="ag-chip">📋 Lesson recap</div>
+      <h2 className="ag-title text-3xl md:text-5xl">{slide.title || 'Review Sheet'}</h2>
       {slide.vocab_recap?.length > 0 && (
-        <div className={`rounded-md border border-slate-300 p-4 space-y-2`}>
-          <div className="text-xs font-semibold uppercase tracking-widest text-indigo-700">Vocabulary mastered</div>
+        <div className="space-y-2">
+          <div className="ag-chip !text-[11px]">Vocabulary mastered</div>
           <div className="flex flex-wrap gap-2">
             {slide.vocab_recap.slice(0, 14).map((w) => (
-              <span key={w} className="px-3 py-1.5 rounded-full bg-indigo-100 text-indigo-900 text-sm font-semibold border border-indigo-300">{w}</span>
+              <span key={w} className="ag-tile !min-h-[36px] !px-3 !py-1 !text-sm !cursor-default">{w}</span>
             ))}
           </div>
         </div>
       )}
       {slide.grammar_recap && (
-        <div className={`rounded-md border border-slate-300 p-4 space-y-1`}>
-          <div className="text-xs font-semibold uppercase tracking-widest text-indigo-700">Grammar rule</div>
-          <p className={`text-base ${t.text}`}>{slide.grammar_recap}</p>
+        <div className="space-y-1 border-l-4 border-[#e08cff] pl-4">
+          <div className="ag-chip !text-[11px]">Grammar rule</div>
+          <p className="ag-prompt text-base md:text-lg">{slide.grammar_recap}</p>
         </div>
       )}
       {slide.takeaway && (
-        <div className={`rounded-md border border-indigo-400 bg-indigo-50 p-4 space-y-1`}>
-          <div className="text-xs font-semibold uppercase tracking-widest text-indigo-700">Your takeaway</div>
-          <p className={`text-base ${t.text}`}>{slide.takeaway}</p>
+        <div className="space-y-1 border-l-4 border-[#ffd76a] pl-4">
+          <div className="ag-chip !text-[11px]" style={{ color: '#ffe9a8' }}>Your takeaway</div>
+          <p className="ag-prompt text-base md:text-lg">{slide.takeaway}</p>
         </div>
       )}
-      <p className={`text-xs ${t.muted}`}>📸 Tip: screenshot this for review later.</p>
+      <p className="ag-muted text-xs">📸 Tip: screenshot this for review later.</p>
     </div>
   );
 }
