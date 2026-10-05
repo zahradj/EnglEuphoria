@@ -15,6 +15,14 @@ export type PlacementVoice = 'teacher' | 'pip';
 
 export const placementVoiceForHub = (hub: Hub): PlacementVoice => (hub === 'playground' ? 'pip' : 'teacher');
 
+/**
+ * The mascot greeting each hub speaks on the "how would you like to start" screen. Saved clips only: the screen plays
+ * the clip for exactly this text, so if an admin rewrites a greeting in Content Creator, add the new text here and
+ * re-run the bake (until then that screen is silent - it never generates speech live).
+ */
+export const ACADEMY_GREETING = "Hi! I'm Nova. Take a deep breath and pick the best answer — you've got this.";
+export const SUCCESS_GREETING = "Welcome. I'm Atlas. I'll guide you through a short professional English check.";
+
 interface KidsContentLike {
   pip?: { intro?: string };
   sections?: { questions?: { audioPrompt?: string }[] }[];
@@ -29,6 +37,8 @@ export function placementLines(kidsContent?: KidsContentLike | null): [Placement
       if (q.audio_script) out.push([placementVoiceForHub(hub), q.audio_script]);
     }
   }
+
+  out.push(['teacher', ACADEMY_GREETING], ['teacher', SUCCESS_GREETING]);
 
   // Comprehensive placement listening stage (Academy / Professional).
   for (const item of LISTENING_ITEMS) if (item.audio_text) out.push(['teacher', item.audio_text]);

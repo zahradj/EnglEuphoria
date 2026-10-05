@@ -57,7 +57,6 @@ const MIGRATE = new Set([
   'hooks/useSuccessAudio.ts',
   'hooks/useTextToSpeech.ts',
   'lib/playSlideAudio.ts',
-  'pages/placement/PlacementChoice.tsx',
   'playground-blueprint/lib/speech.ts',
 ]);
 
