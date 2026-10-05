@@ -1,0 +1,15 @@
+
+=== docs/songs/u3l5-tidy-take1.mp3  length=20.1s  score=0.91  missing=3  extra=3
+heard: daddy up daddy up put the toys away the ball goes in the box in in in the teddy goes on the set on on on the car goes under the chair under under
+line starts (s): [np.float64(0.4), np.float64(3.2), np.float64(7.2), np.float64(11.5)]
+lineDurationsMs: [3160, 4040, 4300, 8562]
+
+=== docs/songs/u3l5-tidy-take2.mp3  length=20.1s  score=0.85  missing=5  extra=5
+heard: tiny up tiny up put the toy away the ball goes in the box in in in the tiny goes on the bed on on on the bar goes under the chair under under
+line starts (s): [np.float64(0.4), np.float64(3.1), np.float64(7.3), np.float64(11.3)]
+lineDurationsMs: [3120, 4140, 4020, 8782]
+
+=== docs/songs/u3l5-tidy-take3.mp3  length=20.1s  score=0.88  missing=4  extra=4
+heard: tighty up tighty up put the toys away the ball goes in the box in in in the tighty goes on the bed on on on the bar goes under the chair under under
+line starts (s): [np.float64(0.4), np.float64(3.1), np.float64(7.4), np.float64(11.4)]
+lineDurationsMs: [3140, 4260, 4020, 8642]
