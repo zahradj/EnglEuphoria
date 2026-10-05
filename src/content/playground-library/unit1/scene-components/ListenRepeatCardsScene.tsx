@@ -84,6 +84,47 @@ export function ListenRepeatCardsScene({ scene, onNext, onWin, sync }: { scene: 
 
   const c = CAST[card!.who];
 
+  if (scene.cardScenes) {
+    // The card's own picture IS the scene: no card, no thumbnail, no framed banner.
+    // Only the word itself floats in the picture's open side (bottom on an upright
+    // phone, where the picture is cropped to the character); the voice says the sentence.
+    const side = scene.textSide ?? 'right';
+    return (
+      <div key={idx} className="absolute inset-0 overflow-hidden" style={{ animation: 'lep1-fade-in 0.5s ease-out' }}>
+        {/* Upright phone: the whole picture on a warm plain fill, with the word below it, never on the face. */}
+        <div className="absolute inset-0 hidden portrait:block" style={{ background: 'linear-gradient(180deg, #f8ecd8 0%, #efd9b5 100%)' }} />
+        <div className="absolute inset-0 bg-cover bg-center portrait:bg-contain portrait:bg-[position:center_32%] portrait:bg-no-repeat" style={{ backgroundImage: `url(${card!.img})` }} />
+        <div className="pointer-events-none absolute right-4 top-16 z-20 rounded-full bg-black/30 px-3 py-1 text-sm font-black text-white">{idx + 1}/{total}</div>
+        <div className={`absolute z-10 flex flex-col items-center gap-4 portrait:inset-x-0 portrait:bottom-28 portrait:top-auto landscape:inset-y-0 landscape:w-[30%] landscape:justify-center ${side === 'left' ? 'landscape:left-0' : 'landscape:right-0'}`}>
+          <p
+            className={`text-center font-black leading-none text-white portrait:text-orange-600 portrait:drop-shadow-none drop-shadow-[0_6px_14px_rgba(0,0,0,0.65)] transition-transform ${playing ? 'scale-110' : ''}`}
+            style={{ fontSize: 'clamp(3rem, calc(7*var(--svw,1vw)), 7rem)' }}
+          >
+            {card!.imgLabel}
+          </p>
+          <div className="flex flex-row items-center gap-3">
+            <button onClick={play} disabled={playing} aria-label="Listen" className="rounded-full bg-white/90 px-5 py-3 text-base font-black text-orange-700 shadow-lg active:scale-95 disabled:opacity-60">
+              🔊
+            </button>
+            <button
+              onPointerDown={(e) => { e.currentTarget.setPointerCapture?.(e.pointerId); startHold(); }} onPointerUp={endHold} onPointerCancel={endHold}
+              disabled={!heard || repeated}
+              className={`min-w-[8.5rem] rounded-full px-5 py-3 text-base font-black text-white shadow-lg transition disabled:opacity-40 ${held ? 'brightness-110' : ''}`}
+              style={{ background: repeated ? 'linear-gradient(90deg, #10B981, #34D399)' : 'linear-gradient(90deg, #FE6A2F, #FF8A4C)' }}
+            >
+              {repeated ? '✅' : held ? '🎤 …' : '🎤 Say it'}
+            </button>
+          </div>
+        </div>
+        {repeated && (
+          <div className="absolute inset-x-0 bottom-6 z-30 flex justify-center portrait:bottom-4">
+            <button onClick={next} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-lg font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.4s ease-out' }}>Next →</button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   if (scene.bare) {
     const side = scene.textSide ?? 'right';
     return (

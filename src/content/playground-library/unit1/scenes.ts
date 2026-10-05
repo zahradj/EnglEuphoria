@@ -274,6 +274,11 @@ export type Scene =
        *  (e.g. a 3-character group shot with someone on both edges).
        *  Defaults to 'right'. */
       textSide?: 'left' | 'right' | 'top';
+      /** Each card's own `img` becomes the full-screen picture (implies `bare`):
+       *  no card, no thumbnail, no framed banner — just the scene and the word.
+       *  First used by Unit 4 Lesson 2 (owner: "use the image as a full scene,
+       *  no vocabulary cards; the frame looks tacky"). */
+      cardScenes?: boolean;
     }
   | {
       /** Tap the real illustrated object inside a full scene to find its
@@ -6700,12 +6705,12 @@ export const LESSON_U4L2_SCENES: Scene[] = [
 
   /* 3-5 New words, move, signature game */
   {
-    id: 'u4l2-words', kind: 'listen-repeat-cards', bg: bgU4L2MiaFace, teacher: 'Look at Mia, point to your own face, then say it!',
+    id: 'u4l2-words', kind: 'listen-repeat-cards', bg: bgU4L2MiaFace, cardScenes: true, textSide: 'right', teacher: 'Look at Mia, point to your own face, then say it!',
     cards: [
-      { who: 'mia', sentence: 'Eyes! Point to your eyes.', img: bgU4L2MiaEyes, imgLabel: 'Eyes' },
-      { who: 'mia', sentence: 'Ears! Touch your ears.', img: bgU4L2MiaEars, imgLabel: 'Ears' },
-      { who: 'mia', sentence: 'Nose! Touch your nose.', img: bgU4L2MiaNose, imgLabel: 'Nose' },
-      { who: 'mia', sentence: 'Mouth! Point to your mouth.', img: bgU4L2MiaMouth, imgLabel: 'Mouth' },
+      { who: 'mia', sentence: 'Eyes! Point to your eyes.', img: bgU4L2MiaEyes, imgLabel: 'Eyes!' },
+      { who: 'mia', sentence: 'Ears! Touch your ears.', img: bgU4L2MiaEars, imgLabel: 'Ears!' },
+      { who: 'mia', sentence: 'Nose! Touch your nose.', img: bgU4L2MiaNose, imgLabel: 'Nose!' },
+      { who: 'mia', sentence: 'Mouth! Point to your mouth.', img: bgU4L2MiaMouth, imgLabel: 'Mouth!' },
     ],
   },
   {
