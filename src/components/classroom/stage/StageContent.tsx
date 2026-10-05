@@ -42,7 +42,7 @@ const CREATOR_NATIVE_TYPES = new Set([
   'scene_dialogue', 'conversation_fill', 'number_chart', 'number_quiz_game',
   'letter_sound_game', 'word_blend', 'picture_match_game', 'say_it_game',
   'sound_challenge_game', 'find_in_scene_game', 'story_page',
-  'story_engine_slot', 'escape_room_slot', 'detective_mystery_slot', 'hidden_object_slot', 'expedition_game', 'name_tag_studio',
+  'story_engine_slot', 'escape_room_slot', 'detective_mystery_slot', 'hidden_object_slot', 'expedition_game', 'name_tag_studio', 'gate_guard', 'reply_quest',
 ]);
 const isCreatorNativeSlide = (s: any) =>
   !!s && typeof s.type === 'string' && CREATOR_NATIVE_TYPES.has(s.type);

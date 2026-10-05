@@ -17,7 +17,7 @@ const FULL_BLEED_TYPES = new Set([
   'scene_dialogue', 'conversation_fill', 'role_play', 'number_chart', 'number_quiz_game',
   'letter_sound_game', 'word_blend', 'picture_match_game', 'say_it_game',
   'sound_challenge_game', 'find_in_scene_game', 'story_page', 'escape_room_slot',
-  'expedition_game', 'name_tag_studio', 'hidden_object_slot', 'detective_mystery_slot', 'story_engine_slot',
+  'expedition_game', 'name_tag_studio', 'gate_guard', 'reply_quest', 'hidden_object_slot', 'detective_mystery_slot', 'story_engine_slot',
   'canvas_game', 'living_canvas', 'vocab', 'reading_passage', 'cluster', 'grammar_pattern',
   'intro',
 ]);

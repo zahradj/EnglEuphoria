@@ -15,6 +15,8 @@ import type { CanvasGameSlide, LivingCanvasSlide, ScaffoldedMediaSlide } from '@
 import { LivingCanvas } from '@/components/creator-studio/shared/LivingCanvas';
 import { ExpeditionGame, type ExpeditionSlide } from '@/components/academy/game/ExpeditionGame';
 import { NameTagStudio, type NameTagStudioSlide } from '@/components/academy/game/NameTagStudio';
+import { GateGuard, type GateGuardSlide } from '@/components/academy/game/GateGuard';
+import { ReplyQuest, type ReplyQuestSlide } from '@/components/academy/game/ReplyQuest';
 import { ScaffoldedPlayer } from '@/components/creator-studio/shared/ScaffoldedPlayer';
 import { SoloVocabCard } from '@/components/creator-studio/shared/SoloVocabCard';
 import { StoryEngineSlot } from '@/story-engine';
@@ -282,6 +284,8 @@ export type Slide =
   | { type: 'cluster'; block: Block; title: string; content?: string; activities: ClusterActivity[]; image_url?: string }
   | (ExpeditionSlide & { block: Block })
   | (NameTagStudioSlide & { block: Block })
+  | (GateGuardSlide & { block: Block })
+  | (ReplyQuestSlide & { block: Block })
   | (CanvasGameSlide & { block: Block })
   | (LivingCanvasSlide & { block: Block })
   | (ScaffoldedMediaSlide & { block: Block })
@@ -3268,6 +3272,8 @@ function renderSlideInner({ slide, t, fullBleed, onAnswer }: { slide: Slide; t: 
     case 'find_in_scene_game': return <FindInSceneGameSlide slide={slide} />;
     case 'expedition_game': return <ExpeditionGame slide={slide as ExpeditionSlide} onAnswer={onAnswer} />;
     case 'name_tag_studio': return <NameTagStudio slide={slide as NameTagStudioSlide} onAnswer={onAnswer} />;
+    case 'gate_guard': return <GateGuard slide={slide as GateGuardSlide} onAnswer={onAnswer} />;
+    case 'reply_quest': return <ReplyQuest slide={slide as ReplyQuestSlide} onAnswer={onAnswer} />;
     case 'story_page': return <StoryPageSlide slide={slide} fullBleed={fullBleed} />;
     case 'speaking_task': return <SpeakingTaskSlide slide={slide} t={t} />;
     case 'reflection': return <ReflectionSlide slide={slide} t={t} />;
@@ -3331,7 +3337,7 @@ const BESPOKE_FULLBLEED_TYPES = new Set([
   'number_chart', 'number_quiz_game', 'letter_sound_game', 'word_blend',
   'picture_match_game', 'say_it_game', 'sound_challenge_game', 'find_in_scene_game',
   'story_page', 'scaffolded_media', 'vocab_solo', 'vocab_deck', 'vocab_image_match',
-  'story_engine_slot', 'escape_room_slot', 'detective_mystery_slot', 'hidden_object_slot', 'expedition_game', 'name_tag_studio',
+  'story_engine_slot', 'escape_room_slot', 'detective_mystery_slot', 'hidden_object_slot', 'expedition_game', 'name_tag_studio', 'gate_guard', 'reply_quest',
 ]);
 
 export function SlideRenderer({ slide, t, fullBleed, onAnswer }: { slide: Slide; t: ThemeTokens; fullBleed?: boolean; onAnswer?: OnAnswer }) {

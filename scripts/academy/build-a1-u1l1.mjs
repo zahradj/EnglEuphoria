@@ -14,6 +14,18 @@
  *
  * Pacing target: 60 minutes (CLAUDE.md / owner, 2026-10-05). Minutes per slide are in PACING below and are checked.
  *
+ * RESEARCH LOG (2026-10-05, v2 — owner asked to rebuild with real benchmarks; take the mechanic, never the content):
+ *  - VIPKid  — "I do / we do / you do" + a reward every 2-3 min -> each phrase: model (story/dialogue), guided (builder/fill), solo
+ *              (Name Tag Studio, Reply Quest); XP/stars/level splash give the reward beat. Better: rewards are earned by use of language.
+ *  - Lingokids / LingoAce — story characters, stars/badges -> one continuous cast (Ava, Theo, Vee, Nova) and star ratings per game.
+ *  - Cambridge A1 (Starters/Movers speaking + listening) — name & spelling questions, listen-and-write names -> spell-the-tags match,
+ *              Gate Guard (hear a name, check the written one), role-play "examiner" questions. Better: spelling is tested by ear AND eye.
+ *  - Oxford / Headway-style Unit 1 — "I am / My name is / What's your name? / Nice to meet you" PPP -> same target chunks, teen setting.
+ *  - Gimkit / Blooket — streaks, currency, power-ups -> streak flame + stars (no punishing timers). Better: no luck, only accuracy.
+ *  - Papers, Please — speed + precision at a checkpoint -> GATE GUARD (new mechanic).
+ *  - Visual novels (language-learning research) — branching replies + a character who visibly reacts -> REPLY QUEST (new mechanic).
+ *  - Duolingo — gentle wrong-answer feedback, character reactions -> violet "try again" states, mood badge on the character.
+ *
  * Scope note (curriculum engine): L1 owns "I am / you are / My name is / What's your name? / Nice to meet you"
  * + spelling a name. Age and numbers belong to L4 ("say their name and age"), so they are NOT taught here.
  */
@@ -147,17 +159,6 @@ add(3, 'gate dialogue', withArt({
   ],
 }, 'bg_image_url', art.gate));
 
-add(2, 'chat fill', withArt({
-  type: 'conversation_fill', block: 'reading', title: 'Chat at the Gate',
-  cast: [CAST.ava, CAST.theo],
-  lines: [
-    { speaker: 'ava', before: 'Hello! I ', answer: 'am', after: ' Ava.' },
-    { speaker: 'theo', before: 'Hi, Ava! My ', answer: 'name', after: ' is Theo.' },
-    { speaker: 'ava', before: 'Nice to ', answer: 'meet', after: ' you, Theo!' },
-    { speaker: 'theo', before: 'Nice to meet ', answer: 'you', after: ', Ava!' },
-  ],
-}, 'bg_image_url', art.gate));
-
 add(2, 'listening', {
   type: 'listening', block: 'reading',
   prompt: 'You get a voice message from a mentor. Listen: what is the mentor\'s name?',
@@ -250,31 +251,6 @@ add(1.5, 'fill blank', {
   ],
 });
 
-add(1.5, 'fix it', {
-  type: 'correction', block: 'practice', prompt: 'Fix the mistake in each sentence.',
-  items: [
-    { wrong: 'I are Mia.', answer: 'I am Mia.' },
-    { wrong: 'Name my is Theo.', answer: 'My name is Theo.' },
-    { wrong: 'What is you name?', answer: 'What is your name?' },
-  ],
-});
-
-add(1.5, 'question & answer', {
-  type: 'matching', block: 'practice', prompt: 'Match each question to its answer.',
-  pairs: [
-    { left: 'What is your name?', right: 'My name is Mia.' },
-    { left: 'Hello!', right: 'Hi!' },
-    { left: 'Nice to meet you!', right: 'Nice to meet you, too.' },
-    { left: 'Goodbye!', right: 'See you tomorrow!' },
-  ],
-});
-
-add(2, 'write your intro', {
-  type: 'question', block: 'practice',
-  prompt: 'Your turn! Write two sentences: say hello and tell Ava your name.',
-  placeholder: 'Hello! I am … My name is …',
-});
-
 add(2, 'sounds m / n', {
   type: 'sound_challenge_game', block: 'practice',
   items: [
@@ -285,6 +261,26 @@ add(2, 'sounds m / n', {
     { statement: '"Nice" and "Nova" start with the same sound.', answer: true },
     { statement: '"Meet" starts with the sound /n/.', answer: false },
   ],
+});
+
+
+// Gate Guard (NEW signature mechanic #2): a "Papers, Please"-style checkpoint — hear the visitor's name, read the tag,
+// LET IN or NAME DESK. The right answer is derived from the spoken line + the tag (src/lib/academy/gateGuard.ts).
+const GATE_ROUNDS = [
+  { visitor: 'theo', says: 'Hi! I am Theo.', tag: 'Theo', ok: true },
+  { visitor: 'ava', says: 'Hello! My name is Ava.', tag: 'Eva', ok: false },
+  { visitor: 'mia', says: 'I am Mia.', tag: 'Mia', ok: true },
+  { visitor: 'vee', says: 'Hello! I am Vee.', tag: 'Vea', ok: false },
+  { visitor: 'theo', says: 'My name is Theo.', tag: 'Thea', ok: false },
+  { visitor: 'ava', says: 'I am Ava.', tag: 'Ava', ok: true },
+  { visitor: 'mia', says: 'My name is Mia.', tag: 'Mina', ok: false },
+  { visitor: 'vee', says: 'I am Vee.', tag: 'Vee', ok: true },
+];
+add(5, 'Gate Guard', {
+  type: 'gate_guard', block: 'practice', title: 'Gate Guard',
+  intro: 'Nova needs a helper at the gate! Read the visitor’s name tag. Is it the same name you hear?',
+  rounds: GATE_ROUNDS,
+  nova_lines: { ok: 'Scan OK! Welcome to Starline!', done: 'Gate duty complete!' },
 });
 
 // ───────────────────────── INTERACTIVE · "Name Tag Studio" signature mechanic (≈ 6 min) ─────────────────────────
@@ -310,6 +306,31 @@ add(6, 'Name Tag Studio', {
 });
 
 // ───────────────────────── SPEAKING · "Season Premiere" (≈ 8 min) ─────────────────────────
+// Reply Quest (NEW signature mechanic #3): a visual-novel conversation. Pick the best reply; Ava reacts; a friendship meter
+// fills. "…" in a reply is filled with the name the student made in Name Tag Studio.
+add(4, 'Reply Quest', {
+  type: 'reply_quest', block: 'speaking', title: 'Talk to Ava', character: 'ava',
+  turns: [
+    { npc: 'Hello! I am Ava. What is your name?', replies: [
+      { text: 'Hello! I am …', ok: true, react: 'Nice! Welcome to Starline!' },
+      { text: 'Goodbye!', react: 'Hmm… we just met!' },
+      { text: 'Thank you.', react: 'Hmm, I asked your name.' } ] },
+    { npc: 'Nice to meet you!', replies: [
+      { text: 'Nice to meet you, too!', ok: true, react: 'Great! You are so friendly.' },
+      { text: 'My name is Ava.', react: 'That is MY name!' },
+      { text: 'Goodbye!', react: 'Not yet! We just said hello.' } ] },
+    { npc: 'Sorry, one more time. What is your name?', replies: [
+      { text: 'My name is …', ok: true, react: 'Got it! I will remember.' },
+      { text: 'Nice to meet you!', react: 'Yes! But what is your NAME?' },
+      { text: 'Goodbye!', react: 'Wait! First tell me your name.' } ] },
+    { npc: 'Oh no, I am late for class. Goodbye!', replies: [
+      { text: 'Goodbye! See you tomorrow!', ok: true, react: 'See you in class!' },
+      { text: 'Hello! I am …', react: 'We already said hello. Now it is goodbye!' },
+      { text: 'What is your name?', react: 'I am Ava! Now it is time to say goodbye.' } ] },
+  ],
+  done_line: 'Ava says: “See you in class!”',
+});
+
 add(4, 'gate check role-play', withArt({
   type: 'role_play', block: 'speaking', title: 'Gate Check',
   characters: [
@@ -359,15 +380,20 @@ const levels = {
   vocab: { title: 'Name Tag Check', emoji: '🏷️', goal: 'Learn the words for saying hello and names.', ican: 'say hello, goodbye and name words.' },
   reading: { title: 'Hallway Chatter', emoji: '💬', goal: 'Listen and read how students introduce themselves.', ican: 'understand short introductions.' },
   grammar: { title: 'Code Breaker', emoji: '🔓', goal: 'Crack the pattern: I am… / My name is…', ican: 'use I am, you are and My name is.' },
-  practice: { title: 'Training Arc', emoji: '⚔️', goal: 'Build and fix sentences to power up.', ican: 'build correct sentences to introduce myself.' },
+  practice: { title: 'Training Arc', emoji: '⚔️', goal: 'Build sentences, then guard the gate: match every name tag.', ican: 'build sentences and recognise names I hear.' },
   interactive: { title: 'Name Tag Studio', emoji: '🪪', goal: 'Design your own student name tag and let Nova scan it.', ican: 'make and say my own introduction.' },
-  speaking: { title: 'Season Premiere', emoji: '🎤', goal: 'Meet three new classmates.', ican: 'introduce myself and ask someone\'s name.' },
+  speaking: { title: 'Season Premiere', emoji: '🎤', goal: 'Chat with Ava, then meet new classmates.', ican: 'introduce myself, reply in a conversation and ask someone\'s name.' },
 };
 
 const content = { hub: 'academy', levels, slides, homework_missions: [] };
 if (art.blocks) content.blockImages = art.blocks;
 
 // ───────────────────────── CHECKS ─────────────────────────
+const nameIn = (t) => (t.match(/(?:\bI am|\bI['’]m|\bmy name is|\bmy name['’]s)\s+([A-Za-z]+)/i) || [])[1];
+for (const [i, r] of GATE_ROUNDS.entries()) {
+  const want = !!nameIn(r.says) && nameIn(r.says).toLowerCase() === r.tag.toLowerCase();
+  if (want !== r.ok) { console.error(`✗ gate round ${i + 1}: ok=${r.ok} but "${r.says}" vs tag "${r.tag}"`); process.exitCode = 1; }
+}
 const total = PACING.reduce((s, [, m]) => s + m, 0);
 const types = new Set(slides.map((s) => s.type));
 console.log(`Slides: ${slides.length}   estimated minutes: ${total}   distinct slide types: ${types.size}`);

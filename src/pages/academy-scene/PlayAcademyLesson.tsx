@@ -419,6 +419,8 @@ export default function PlayAcademyLesson({ roomId, role }: PlayAcademyLessonPro
     slide?.type === 'escape_room_slot' ||
     slide?.type === 'expedition_game' ||
     slide?.type === 'name_tag_studio' ||
+    slide?.type === 'gate_guard' ||
+    slide?.type === 'reply_quest' ||
     slide?.type === 'hidden_object_slot' ||
     slide?.type === 'detective_mystery_slot' ||
     slide?.type === 'story_engine_slot' ||

@@ -27,6 +27,15 @@ await page.goto(`http://localhost:8080/academy-scene/${lessonId}?dev_bypass=true
 await page.evaluate((id, i) => sessionStorage.setItem('academy-scene-idx:' + id, i), lessonId, idx);
 await page.reload({ waitUntil: 'networkidle2' });
 await new Promise((r) => setTimeout(r, 2500));
+// CLICKS="Start duty|Let in|Next visitor": click buttons by visible text, in order, then screenshot to debug-slide.png
+for (const label of (process.env.CLICKS || '').split('|').filter(Boolean)) {
+  await page.evaluate((txt) => {
+    const b = [...document.querySelectorAll('button')].find((x) => new RegExp(txt, 'i').test(x.innerText) && !x.disabled);
+    if (b) b.click();
+  }, label);
+  await new Promise((r) => setTimeout(r, 700));
+}
+await page.screenshot({ path: process.env.SHOT || 'debug-slide.png' });
 const out = await page.evaluate((sel) => {
   const r = (el) => { const b = el.getBoundingClientRect(); return { x: Math.round(b.x), y: Math.round(b.y), w: Math.round(b.width), h: Math.round(b.height), bottom: Math.round(b.bottom) }; };
   const nav = [...document.querySelectorAll('div.fixed')].find((d) => /Back/i.test(d.innerText) && /Next|Finish/i.test(d.innerText));
