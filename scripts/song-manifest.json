@@ -64,6 +64,11 @@
     "bytes": 321037,
     "sha256": "dcff03caad0a427bbeff1b543e28facdab66d2f2a9c5c65ec896592d2ec7cf17"
   },
+  "u2l4-what-color": {
+    "path": "public/lep1/audio/what-color-song-u2l4.mp3",
+    "bytes": 321037,
+    "sha256": "8a970dc7d519e019d8a993425b8bdd0df7281d9768a304d01cbde84c14e726b6"
+  },
   "u2l5-shelly": {
     "path": "public/lep1/audio/shelly-song-u2l5.mp3",
     "bytes": 688812,
