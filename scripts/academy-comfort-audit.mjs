@@ -82,6 +82,12 @@ for (const mode of modes) {
   await page.evaluate((id) => sessionStorage.setItem('academy-scene-idx:' + id, '0'), lessonId);
   await page.reload({ waitUntil: 'networkidle2' });
   await sleep(2500);
+  // The dev-bypass banner (DevBypassWrapper) is 40px of fixed banner + a `pt-10` spacer that production never has; it pushes the
+  // page below the viewport and makes bottom controls look "under the nav". Remove both so the audit measures the real layout.
+  await page.evaluate(() => {
+    const banner = [...document.querySelectorAll('div.fixed')].find((d) => /DEV BYPASS ACTIVE/.test(d.innerText));
+    if (banner) { banner.style.display = 'none'; const sp = banner.nextElementSibling; if (sp && /pt-10/.test(sp.className)) sp.style.paddingTop = '0'; }
+  });
   const navCounter = () => {
     const nav = [...document.querySelectorAll('div.fixed')].find((d) => /Back/i.test(d.innerText) && /Next|Finish/i.test(d.innerText));
     return ((nav && nav.innerText.match(/(\d+)\s*\/\s*(\d+)/)) || []);

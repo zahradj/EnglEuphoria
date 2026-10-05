@@ -157,3 +157,6 @@
 .ag-input.is-ok { border-bottom-color: var(--ag-ok-b); }
 .ag-input.is-oops { border-bottom-color: var(--ag-magenta); }
 .ag-feedback { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; text-shadow: 0 1px 2px rgba(7, 10, 36, 0.9); }
+
+/* A dark surface for hosts that do not paint the game scene themselves (creator preview, demo page). */
+.ag-surface { background: linear-gradient(160deg, #141a52 0%, #0d1140 60%, #070a24 100%); border-radius: 24px; padding: 1.5rem; box-shadow: 0 10px 30px rgba(7, 10, 36, 0.35); }

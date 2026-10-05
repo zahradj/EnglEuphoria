@@ -75,7 +75,7 @@ export function RoleplayScene({ scene, onNext, onWin, sync }: { scene: Extract<S
   // Flex justify (not a raw left:% + translateX) so the bubble is clamped by
   // inset-x-4 on every viewport — a long line anchored toward an edge can't
   // get clipped by this scene's overflow-hidden container on narrow phones.
-  const bubbleAlign: Record<CharKey, 'start' | 'center' | 'end'> = { pip: 'start', marigold: 'end', mia: 'center', bella: 'center', willow: 'center', leo: 'end' };
+  const bubbleAlign: Record<CharKey, 'start' | 'center' | 'end'> = { pip: 'start', marigold: 'end', mia: 'center', bella: 'center', willow: 'center', leo: 'end', ava: 'start', theo: 'end', vee: 'center', nova: 'center' };
   const current = step >= 0 && step < scene.script.length ? scene.script[step] : null;
   const replayCurrent = () => { if (current) void safeSpeak(current.line, voiceOf(current.who)); };
 

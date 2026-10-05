@@ -14,8 +14,8 @@ export function staticContextForSlide(slide: Slide): React.ReactNode {
     case 'reading_passage':
       return (
         <ContextCard icon={<BookOpen className="h-4 w-4" />} eyebrow="Reading">
-          <h3 className="mb-3 text-lg font-semibold text-slate-100">{slide.title}</h3>
-          <p className="whitespace-pre-line text-[15px] leading-relaxed text-slate-300">
+          <h3 className="ag-title mb-3 text-xl">{slide.title}</h3>
+          <p className="ag-prompt whitespace-pre-line text-base leading-relaxed">
             {slide.passage}
           </p>
         </ContextCard>
@@ -24,7 +24,7 @@ export function staticContextForSlide(slide: Slide): React.ReactNode {
     case 'listening':
       return (
         <ContextCard icon={<Headphones className="h-4 w-4" />} eyebrow="Transcript">
-          <p className="whitespace-pre-line text-[15px] leading-relaxed text-slate-300">
+          <p className="ag-prompt whitespace-pre-line text-base leading-relaxed">
             {slide.transcript}
           </p>
         </ContextCard>
@@ -33,10 +33,10 @@ export function staticContextForSlide(slide: Slide): React.ReactNode {
     case 'vocab':
       return (
         <ContextCard icon={<Sparkles className="h-4 w-4" />} eyebrow="Word in focus">
-          <div className="text-3xl font-bold tracking-tight text-indigo-300">{slide.word}</div>
-          <div className="mt-3 text-sm text-slate-300">{slide.definition}</div>
+          <div className="ag-title text-4xl">{slide.word}</div>
+          <div className="ag-prompt mt-3 text-base">{slide.definition}</div>
           {slide.example && (
-            <div className="mt-4 rounded-md border-l-2 border-indigo-500/60 bg-slate-900/40 px-3 py-2 text-sm italic text-slate-400">
+            <div className="ag-muted mt-4 border-l-4 border-[#86ecff] pl-3 text-base italic">
               “{slide.example}”
             </div>
           )}
@@ -46,20 +46,20 @@ export function staticContextForSlide(slide: Slide): React.ReactNode {
     case 'grammar_pattern':
       return (
         <ContextCard icon={<Target className="h-4 w-4" />} eyebrow="Pattern">
-          <h3 className="mb-3 text-base font-semibold text-slate-100">{slide.title}</h3>
+          <h3 className="ag-title mb-3 text-lg">{slide.title}</h3>
           <div className="space-y-1.5">
             {slide.rows.map((r, i) => (
               <div
                 key={i}
-                className="grid grid-cols-[1fr_1fr] gap-3 rounded-md border border-slate-800 bg-slate-900/40 px-3 py-2 text-sm"
+                className="grid grid-cols-[1fr_1fr] gap-3 border-b border-white/15 py-2 text-base"
               >
-                <div className="text-slate-300">{r.a}</div>
-                <div className="font-medium text-indigo-300">{r.b}</div>
+                <div className="ag-prompt">{r.a}</div>
+                <div className="font-bold" style={{ color: "#86ecff" }}>{r.b}</div>
               </div>
             ))}
           </div>
           {slide.rule && (
-            <div className="mt-3 text-xs text-slate-400">{slide.rule}</div>
+            <div className="ag-muted mt-3 text-sm">{slide.rule}</div>
           )}
         </ContextCard>
       );
@@ -67,14 +67,14 @@ export function staticContextForSlide(slide: Slide): React.ReactNode {
     case 'role_play':
       return (
         <ContextCard icon={<Sparkles className="h-4 w-4" />} eyebrow="Scene">
-          <h3 className="mb-3 text-base font-semibold text-slate-100">{slide.title}</h3>
-          <div className="space-y-2 text-sm text-slate-300">
-            <div className="rounded-md bg-slate-900/40 px-3 py-2">
-              <span className="text-xs uppercase tracking-wide text-indigo-400">A · </span>
+          <h3 className="ag-title mb-3 text-lg">{slide.title}</h3>
+          <div className="space-y-2 text-base">
+            <div className="ag-prompt py-1">
+              <span className="ag-chip">A · </span>
               {slide.lineA}
             </div>
-            <div className="rounded-md bg-slate-900/40 px-3 py-2">
-              <span className="text-xs uppercase tracking-wide text-purple-400">B · </span>
+            <div className="ag-prompt py-1">
+              <span className="ag-chip">B · </span>
               {slide.lineB}
             </div>
           </div>
@@ -110,22 +110,19 @@ export function FocusPanel({
   totalSlides: number;
 }) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
-      <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-indigo-400">
+    <div className="p-2 md:p-4">
+      <div className="ag-chip">
         {blockLabel}
       </div>
-      <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-100">
+      <h2 className="ag-title mt-2 text-3xl">
         {lessonTitle}
       </h2>
-      <p className="mt-3 text-sm leading-relaxed text-slate-400">
+      <p className="ag-prompt mt-3 text-base leading-relaxed">
         {BLOCK_HINTS[block]}
       </p>
-      <div className="mt-6 flex items-center gap-2 text-xs text-slate-500">
-        <div className="h-1 flex-1 overflow-hidden rounded-full bg-slate-800">
-          <div
-            className="h-full bg-indigo-500"
-            style={{ width: `${((slideIndex + 1) / totalSlides) * 100}%` }}
-          />
+      <div className="ag-muted mt-6 flex items-center gap-2 text-xs">
+        <div className="ag-bar flex-1">
+          <i style={{ width: `${((slideIndex + 1) / totalSlides) * 100}%` }} />
         </div>
         <span className="font-mono tabular-nums">
           {slideIndex + 1}/{totalSlides}
@@ -145,8 +142,8 @@ function ContextCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
-      <div className="mb-4 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-indigo-400">
+    <div className="p-2 md:p-4">
+      <div className="ag-chip mb-4">
         {icon}
         {eyebrow}
       </div>

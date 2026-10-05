@@ -45,7 +45,8 @@ export default function AcademyClassroom() {
   const [i, setI] = useState(0);
   const [theme] = useState<Theme>('dark');
   const [isFs, setIsFs] = useState(false);
-  const t = themeMap[theme];
+  void theme;
+  const t = themeMap.game;
   const slide = deck[i];
   const { playVoice, isPlaying, isLoading } = useAcademyAudio();
 
@@ -97,7 +98,7 @@ export default function AcademyClassroom() {
       title="ENGLEUPHORIA · ACADEMY"
       subtitle={`${deckTitle}${deckLevel ? ` · ${deckLevel}` : ''}`}
       xpSlot={
-        <span className="text-xs font-mono text-muted-foreground">
+        <span className="ag-title text-xs">
           {i + 1} / {deck.length}
         </span>
       }
@@ -105,7 +106,7 @@ export default function AcademyClassroom() {
         <div className="flex items-center gap-3">
           <button
             onClick={goBack}
-            className="flex items-center gap-1 rounded-md border border-slate-700 px-2.5 py-1 text-xs text-slate-300 transition hover:border-indigo-500"
+            className="ag-btn ag-btn--ghost !min-h-[36px] !px-3 text-xs"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Back
           </button>
@@ -122,7 +123,7 @@ export default function AcademyClassroom() {
           </div>
           <button
             onClick={toggleFs}
-            className="rounded-md border border-slate-700 p-1.5 transition hover:border-indigo-500"
+            className="ag-btn ag-btn--ghost !min-h-[36px] !w-9 !px-0"
             aria-label="Fullscreen"
           >
             {isFs ? <Minimize className="h-3.5 w-3.5" /> : <Maximize className="h-3.5 w-3.5" />}
@@ -134,7 +135,7 @@ export default function AcademyClassroom() {
           <button
             onClick={prev}
             disabled={i === 0}
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-700 px-5 py-2.5 transition hover:border-indigo-500 disabled:cursor-not-allowed disabled:opacity-30"
+            className="ag-btn ag-btn--ghost"
           >
             <ChevronLeft className="h-4 w-4" /> Prev
           </button>
@@ -143,14 +144,14 @@ export default function AcademyClassroom() {
               <button
                 onClick={() => playVoice(voiceText)}
                 disabled={isLoading}
-                className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:bg-indigo-500"
+                className="ag-btn !min-h-[44px] text-sm"
               >
                 <Volume2 className={`h-4 w-4 ${isPlaying ? 'animate-pulse' : ''}`} />
                 {isLoading ? 'Loading…' : 'Listen'}
               </button>
             )}
             {showSpeak && (
-              <div className="inline-flex items-center gap-2 rounded-xl border border-purple-700 bg-purple-900/40 px-4 py-2 text-sm font-semibold text-purple-200">
+              <div className="ag-chip">
                 <Mic className="h-4 w-4" /> Speak
               </div>
             )}
@@ -158,7 +159,7 @@ export default function AcademyClassroom() {
           <button
             onClick={next}
             disabled={i === deck.length - 1}
-            className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 font-semibold text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-30"
+            className="ag-btn"
           >
             Next <ChevronRight className="h-4 w-4" />
           </button>
@@ -187,9 +188,9 @@ export default function AcademyClassroom() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className={`w-full rounded-2xl border ${t.card} p-6 shadow-xl shadow-indigo-950/30 md:p-8`}
+            className="w-full p-2 md:p-4"
           >
-            <div className="mb-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-indigo-400">
+            <div className="ag-chip mb-4">
               {blockLabel}
             </div>
             <SlideRenderer slide={slide} t={t} />

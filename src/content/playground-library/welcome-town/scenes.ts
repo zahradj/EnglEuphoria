@@ -57,7 +57,9 @@ import type { ColorPlaySceneData } from '../ColorPlayScene';
 
 const W = '/welcome-town';
 
-export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat';
+export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat'
+  /** Academy Cast Vault characters (teen cast), used by the Academy sample lesson in this engine (./academySample.ts). */
+  | 'ava' | 'theo' | 'vee' | 'nova';
 
 /** Every one of these maps onto an audio.ts voice already built for that
  *  exact character (pip/mia/bella/willow/leo are the same characters as the
@@ -77,6 +79,12 @@ export const VOICE_KEY: Record<CharKey, 'pip' | 'mia' | 'bella' | 'willow' | 'le
   coco: 'teacher',
   wim: 'teacher',
   catcat: 'teacher',
+  // Academy cast -> approved native-American voices already in this engine: Ava (warm teen girl) uses mia's voice,
+  // Theo (easygoing teen boy) leo's, Vee (mentor) the teacher voice, Nova (owl mascot) pip's. Clips are baked later.
+  ava: 'mia',
+  theo: 'leo',
+  vee: 'teacher',
+  nova: 'pip',
 };
 
 /** No `img` field — every character appears painted directly into a scene's
@@ -96,6 +104,10 @@ export const CAST: Record<CharKey, { name: string; emoji: string; color: string 
   coco: { name: 'Coco', emoji: '\u{1F412}', color: '#8B5A2B' },
   wim: { name: 'Wim', emoji: '\u{1F9D9}', color: '#4A4E69' },
   catcat: { name: 'Cat-cat', emoji: '\u{1F431}', color: '#9A8C98' },
+  ava: { name: 'Ava', emoji: '\u{1F60A}', color: '#8B5CF6' },
+  theo: { name: 'Theo', emoji: '\u{1F60E}', color: '#3B6DFF' },
+  vee: { name: 'Vee', emoji: '\u{1F9D1}', color: '#6D3CDC' },
+  nova: { name: 'Nova', emoji: '\u{1F989}', color: '#86ECFF' },
 };
 
 const bgWide = `${W}/scenes/bg-classroom-wide.png`;

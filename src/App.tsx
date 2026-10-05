@@ -188,6 +188,8 @@ const AcademyLibraryPublic = lazy(() => import("./pages/playground-library/Acade
 // New Academy lesson engine (Phase 1) — canonical AcademyDemo.tsx schema/renderer,
 // routed to for any curriculum_lessons row with ai_metadata.contentFormat === 'academy-v2'.
 const PlayAcademyLesson = lazy(() => import("./pages/academy-scene/PlayAcademyLesson"));
+// Comparison sample: the Academy A1 U1 L1 lesson rebuilt on the Playground scene player (not in the curriculum).
+const PlayAcademySample = lazy(() => import("./pages/playground-scene/PlayAcademySample"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
 const AcademyClassroom = lazy(() => import("./pages/AcademyClassroom"));
 const AcademyCreator = lazy(() => import("./pages/AcademyCreator"));
@@ -382,6 +384,12 @@ const App = () => {
                       <Route path="/playground-scene/unit-5-lesson-1" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayUnit5Lesson1 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* Comparison sample — Academy "My Name Is…" on the Playground scene player. */}
+                      <Route path="/playground-scene/sample-academy-a1-1" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayAcademySample /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* A1 tier — Welcome Town, Unit 1 Lesson 1 ("Hello, Class!"). */}

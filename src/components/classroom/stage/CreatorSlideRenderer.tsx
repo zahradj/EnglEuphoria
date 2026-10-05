@@ -66,27 +66,26 @@ export const CreatorSlideRenderer: React.FC<Props> = ({ slide, hub, theme = 'lig
   // card on a dark scene backdrop.
   const bgImage = academySlideBackground(slide);
   const fullBleed = isAcademyFullBleed(slide);
+  // Same Starline game skin as the student player (src/styles/academy-game.css): the scene art stays vivid, text is
+  // BARE on a feathered de-focused zone (no cards), blue→violet palette.
   const sceneStyle: React.CSSProperties = bgImage
-    ? { backgroundImage: `linear-gradient(rgba(8,8,24,0.35), rgba(8,8,24,0.35)), url("${bgImage}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
-    : { background: 'linear-gradient(160deg, #171335 0%, #100e28 55%, #0b0a1f 100%)' };
+    ? { backgroundImage: `url("${bgImage}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
+    : { background: 'linear-gradient(160deg, #141a52 0%, #0d1140 55%, #070a24 100%)' };
 
-  // Soft rounded "picture frame" around every Academy slide: margins on all
-  // sides, extra room at the bottom so the floating teacher toolbar never sits
-  // on top of lesson content, rounded corners, a drop shadow and an inner
-  // vignette so the edges fade instead of cutting off hard.
+  // Rounded window around every Academy slide with room at the bottom for the floating teacher toolbar.
   const frame = (children: React.ReactNode) => (
     <div
       className="h-full w-full p-3 pb-[88px] md:p-5 md:pb-[92px]"
       style={{ background: 'linear-gradient(135deg, hsl(220 100% 97%) 0%, hsl(260 60% 94%) 100%)' }}
     >
       <div
-        className="relative h-full w-full overflow-hidden rounded-[28px] ring-1 ring-white/50 shadow-[0_12px_40px_rgba(30,27,75,0.28)]"
+        className="ag-root relative h-full w-full overflow-hidden rounded-[28px] ring-1 ring-white/50 shadow-[0_12px_40px_rgba(30,27,75,0.28)]"
         style={sceneStyle}
       >
         {children}
         <div
           className="pointer-events-none absolute inset-0 rounded-[28px]"
-          style={{ boxShadow: 'inset 0 0 70px 6px rgba(8,8,24,0.35)' }}
+          style={{ boxShadow: 'inset 0 0 70px 6px rgba(7,10,36,0.3)' }}
         />
       </div>
     </div>
@@ -96,20 +95,20 @@ export const CreatorSlideRenderer: React.FC<Props> = ({ slide, hub, theme = 'lig
     return frame(
       <div className={`absolute inset-0 flex items-center justify-center ${slide?.type === 'intro' ? '[&>div]:!min-h-0' : ''}`}>
         {needsJournalFrame(slide) ? (
-          <div className="mx-4 max-h-full w-full max-w-3xl overflow-y-auto rounded-3xl border-4 border-emerald-800 bg-[#fbf8ee] p-6 text-slate-900 shadow-xl md:p-8">
-            <AcademySlideRenderer slide={slide as any} t={academyThemeMap.light} fullBleed={false} onAnswer={onAnswer} />
+          <div className="ag-scrim-soft mx-2 max-h-full w-full max-w-4xl overflow-y-auto px-14 py-10 md:px-16">
+            <AcademySlideRenderer slide={slide as any} t={academyThemeMap.game} fullBleed={false} onAnswer={onAnswer} />
           </div>
         ) : (
-          <AcademySlideRenderer slide={slide as any} t={academyThemeMap.dark} fullBleed={slide?.type !== 'intro'} onAnswer={onAnswer} />
+          <AcademySlideRenderer slide={slide as any} t={academyThemeMap.game} fullBleed={slide?.type !== 'intro'} onAnswer={onAnswer} />
         )}
       </div>,
     );
   }
 
   return frame(
-    <div className="absolute inset-0 flex items-center justify-center px-4 py-4 md:px-8">
-      <div className="max-h-full w-full max-w-3xl overflow-y-auto rounded-3xl border-4 border-emerald-800 bg-white p-5 text-slate-900 shadow-xl md:p-7">
-        <AcademySlideRenderer slide={slide as any} t={academyThemeMap.light} onAnswer={onAnswer} />
+    <div className="absolute inset-0 flex items-center justify-center px-3 py-3 md:px-6">
+      <div className="ag-scrim-soft flex max-h-full w-full max-w-4xl flex-col overflow-y-auto px-14 py-10 md:px-16">
+        <AcademySlideRenderer slide={slide as any} t={academyThemeMap.game} onAnswer={onAnswer} />
       </div>
     </div>,
   );

@@ -2,6 +2,7 @@ import React from 'react';
 import { AcademyHubProvider } from './HubGuard';
 import ProfileAvatar from './ProfileAvatar';
 import CoinBalance from './CoinBalance';
+import '@/styles/academy-game.css';
 
 /**
  * <AcademyWorkspace /> — the parent shell for every Academy-hub student
@@ -30,7 +31,7 @@ function Static({ children, sticky = true }: StaticProps) {
     <aside
       data-pane="static"
       className={
-        'border-border bg-card/40 lg:border-r ' +
+        'lg:border-r lg:border-white/10 ' +
         (sticky ? 'lg:sticky lg:top-16 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto' : '')
       }
     >
@@ -70,21 +71,23 @@ function AcademyWorkspace({
   return (
     <AcademyHubProvider>
       <div
+        dir="ltr"
         data-hub="academy"
         className={
-          'academy-workspace bg-background text-foreground ' +
+          'ag-root academy-workspace ' +
           (isClassroom ? 'flex min-h-dvh flex-col' : 'min-h-screen')
         }
+        style={{ background: 'linear-gradient(160deg, #141a52 0%, #0d1140 55%, #070a24 100%)' }}
       >
         {!hideTopBar && (
-          <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+          <header className="sticky top-0 z-30 border-b border-white/10 bg-[#070a24]/75 backdrop-blur">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-6">
               <div className="flex items-center gap-3">
-                <div className="h-7 w-7 rounded-md bg-gradient-to-br from-indigo-500 to-purple-600" aria-hidden="true" />
+                <div className="h-6 w-6 rotate-45 rounded-[5px] bg-gradient-to-br from-[#3b6dff] to-[#d95cf0] shadow-[0_0_12px_rgba(139,92,246,0.8)]" aria-hidden="true" />
                 <div className="leading-tight">
-                  <div className="text-sm font-semibold tracking-tight">{title}</div>
+                  <div className="ag-title text-sm">{title}</div>
                   {subtitle && (
-                    <div className="text-[11px] text-muted-foreground">{subtitle}</div>
+                    <div className="ag-muted text-[11px]">{subtitle}</div>
                   )}
                 </div>
               </div>
@@ -124,7 +127,7 @@ function AcademyWorkspace({
         )}
 
         {footer && (
-          <footer className="sticky bottom-0 z-20 border-t border-border bg-background/95 backdrop-blur">
+          <footer className="sticky bottom-0 z-20 border-t border-white/10 bg-[#070a24]/80 backdrop-blur">
             <div className="mx-auto max-w-7xl px-4 py-3 lg:px-6">{footer}</div>
           </footer>
         )}

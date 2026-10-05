@@ -2837,7 +2837,7 @@ function ConversationFillSlide({ slide, fullBleed }: { slide: Extract<Slide, { t
         </div>
 
         {/* Word bank -- tap a tile, then tap the blank it belongs in. */}
-        <div className="ag-scrim-bottom shrink-0 px-4 pb-20 pt-8">
+        <div className="ag-scrim-bottom shrink-0 px-4 pb-24 pt-8">
           {allDone ? (
             <div className="ag-title text-center text-lg" style={{ color: "#6ff5cf" }}>🎉 Great job! You completed the story.</div>
           ) : (
@@ -3351,23 +3351,28 @@ export function SlideRenderer({ slide, t, fullBleed, onAnswer }: { slide: Slide;
   // applies to any slide taking the generic full-bleed path below.
   const skipHeader = genericFullBleed || BESPOKE_FULLBLEED_TYPES.has(slide.type as string);
 
-  const inner = renderSlideInner({ slide, t: genericFullBleed ? themeMap.light : t, fullBleed, onAnswer });
+  const inner = renderSlideInner({ slide, t: genericFullBleed ? themeMap.game : t, fullBleed, onAnswer });
 
   if (genericFullBleed) {
     return (
       <FullBleedSplitPanel imageUrl={imageUrl!}>
-        <div className="mb-2 text-xs font-bold uppercase tracking-widest text-indigo-400">{(slide as any).block}</div>
+        <div className="ag-chip mb-2">{(slide as any).block}</div>
         {inner}
       </FullBleedSplitPanel>
     );
   }
 
-  return (
+  // The Academy game skin (src/styles/academy-game.css) draws light text on a dark scene. Hosts that already provide
+  // that scene (the student player and the live classroom pass themeMap.game) need nothing more; any other host
+  // (creator preview, demo page, light cards) gets its own dark surface so the text is never white-on-white.
+  const needsOwnSurface = t !== themeMap.game && !fullBleed && !BESPOKE_FULLBLEED_TYPES.has(slide.type as string);
+  const body = (
     <>
       {!skipHeader && <SlideMediaHeader slide={slide} />}
       {inner}
     </>
   );
+  return needsOwnSurface ? <div className="ag-root ag-surface">{body}</div> : body;
 }
 
 function AcademyLessonSummary({ slide }: { slide: Extract<Slide, { type: 'lesson_summary' }>; t: ThemeTokens }) {
@@ -3422,10 +3427,10 @@ export function ProgressBar({ currentBlock, slideIndex, t, slides = SLIDES }: { 
         const isDone = i < currentBlockIdx;
         return (
           <div key={b.id} className="space-y-1.5">
-            <div className={`h-1.5 rounded-full overflow-hidden ${isDone ? 'bg-indigo-600' : 'bg-slate-800'}`}>
+            <div className={`h-1.5 rounded-full overflow-hidden ${isDone ? 'bg-gradient-to-r from-[#3b6dff] to-[#8b5cf6]' : 'bg-white/20'}`}>
               {isCurrent && (
                 <motion.div
-                  className="h-full bg-indigo-500"
+                  className="h-full bg-gradient-to-r from-[#86ecff] to-[#8b5cf6]"
                   initial={{ width: 0 }}
                   animate={{ width: `${localPct}%` }}
                   transition={{ duration: 0.3 }}
@@ -3433,7 +3438,7 @@ export function ProgressBar({ currentBlock, slideIndex, t, slides = SLIDES }: { 
               )}
             </div>
             <div className={`text-[10px] md:text-xs uppercase tracking-wider text-center ${
-              isCurrent ? 'text-indigo-300 font-semibold' : isDone ? t.muted : t.muted + ' opacity-60'
+              isCurrent ? 'text-[#cfe0ff] font-bold' : isDone ? 'text-[#cdc6ff]' : 'text-[#cdc6ff] opacity-60'
             }`}>
               {b.label}
             </div>
