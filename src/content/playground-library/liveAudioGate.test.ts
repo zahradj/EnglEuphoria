@@ -41,7 +41,9 @@ const AUTHORING = new Set([
   'lib/elevenLabsAudio.ts',
 ]);
 
-// Student-facing flows still generating live. Burn this list down to zero (see docs/audio-audit.md).
+// Student-facing flows that still ASK the server to generate. Since 2026-10-05 the elevenlabs-tts function refuses to make
+// new clips for anyone but an admin / the bake script (they get saved clips or silence), so these are inert - still convert
+// them to saved files, then delete them from here. Burn this list down to zero (see docs/audio-audit.md).
 const MIGRATE = new Set([
   'components/dashboard/rooms/VocabularyRoom.tsx',
   'components/lesson-player/slides/SlideHook.tsx',
@@ -57,7 +59,6 @@ const MIGRATE = new Set([
   'hooks/useSuccessAudio.ts',
   'hooks/useTextToSpeech.ts',
   'lib/playSlideAudio.ts',
-  'pages/placement/PlacementChoice.tsx',
   'playground-blueprint/lib/speech.ts',
 ]);
 

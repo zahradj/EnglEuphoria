@@ -1,0 +1,15 @@
+
+=== docs/songs/u2l4-what-color-take1.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: what color is this it's red it's red what shape is this it's a circle a circle is it blue yes it is yes it is is it green no it isn't no it isn't
+line starts (s): [np.float64(0.0), np.float64(4.3), np.float64(8.5), np.float64(12.0)]
+lineDurationsMs: [4300, 4220, 3460, 8082]
+
+=== docs/songs/u2l4-what-color-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: what color is this it's red it's red what shape is this it's a circle a circle is it blue yes it is yes it is is it green no it isn't no it isn't
+line starts (s): [np.float64(0.0), np.float64(4.7), np.float64(8.7), np.float64(12.2)]
+lineDurationsMs: [4700, 4040, 3500, 7822]
+
+=== docs/songs/u2l4-what-color-take3.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: what color is this it's red it's red what shape is this it's a circle a circle is it blue yes it is yes it is is it green no it isn't no it isn't
+line starts (s): [np.float64(0.0), np.float64(3.6), 8.0, np.float64(11.9)]
+lineDurationsMs: [3600, 4400, 3920, 8142]

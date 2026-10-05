@@ -1,0 +1,46 @@
+name: Fetch Canva art
+
+# Pictures are made with CANVA (owner's rule, 2026-10-04; never Higgsfield).
+# The Claude session generates them with Canva and lists the (signed, short-lived)
+# download URLs in scripts/canva-art-request.json; this bot downloads them, saves
+# PNGs at the lesson sizes (wide 1376x768, stickers 1024x1024 cut out of a white
+# background), and commits them.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/canva-art-request.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: canva-art-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  art:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download and save
+        run: |
+          pip install --quiet pillow
+          mkdir -p docs/art-gen
+          python scripts/fetch-canva-art.py 2>&1 | tee docs/art-gen/canva-last-run.txt
+      - name: Commit art
+        if: always()
+        run: |
+          git add public docs/art-gen
+          if git diff --cached --quiet; then echo "No new art."; exit 0; fi
+          git config user.name "canva-art-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "Canva art ($(git diff --cached --name-only | wc -l) files)"
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((i * 5))
+          done
+          exit 1

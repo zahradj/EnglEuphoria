@@ -1,9 +1,11 @@
 import { useEffect, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import type { Scene } from '../scenes';
 import { cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { sayWithin, ShapeIcon, STICKER_FILTER, STICKER_TILTS } from './shared';
+import { Bursts, useBursts } from './gameFx';
 
 /* ---------- Pip's Secret Card (Pre-A1 Unit 2 Lesson 4 signature game) ----------
  * "Guess Who" with Unit 2's colours and shapes: Pip hides one of six coloured
@@ -15,15 +17,26 @@ import { sayWithin, ShapeIcon, STICKER_FILTER, STICKER_TILTS } from './shared';
 export const SECRET_INTRO = 'I have a secret card. Ask me!';
 export const YES_LINE = 'Yes, it is!';
 export const NO_LINE = "No, it isn't!";
-export function askLine(kind: 'color' | 'shape', word: string) {
-  return kind === 'color' ? `Is it ${word.toLowerCase()}?` : `Is it a ${word.toLowerCase()}?`;
+type AskKind = 'color' | 'shape' | 'toy' | 'size';
+const aAn = (w: string) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
+export function askLine(kind: AskKind, word: string) {
+  const w = word.toLowerCase();
+  if (kind === 'color' || kind === 'size') return `Is it ${w}?`;
+  return `Is it ${aAn(w)} ${w}?`;
 }
-export function foundLine(colorWord: string, shape: string) {
-  const c = colorWord.toLowerCase();
-  return `You found it! It's ${/^[aeiou]/.test(c) ? 'an' : 'a'} ${c} ${shape}!`;
-}
-
 type Card = Extract<Scene, { kind: 'secret-card' }>['cards'][number];
+/** "It's a red circle!" for shapes; "It's a big red ball!" for toys. */
+export function foundLine(c: Card) {
+  const parts = c.word ? [c.size, c.colorWord.toLowerCase(), c.word.toLowerCase()].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
+  return `You found it! It's ${aAn(parts)} ${parts}!`;
+}
+/** Does a card have this colour / shape / toy / size? */
+function has(c: Card, kind: AskKind, word: string) {
+  if (kind === 'color') return c.colorWord === word;
+  if (kind === 'shape') return c.shape === word;
+  if (kind === 'toy') return c.word === word;
+  return c.size === word;
+}
 type Phase = 'ask' | 'asking' | 'found';
 
 export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract<Scene, { kind: 'secret-card' }>; onWin: (gem: boolean) => void; onLose: () => void; onNext: () => void; sync?: ActivitySync }) {
@@ -41,6 +54,7 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
   const secretIdx = round < total ? scene.rounds[round]?.secret : undefined;
   const secret: Card | undefined = secretIdx != null ? scene.cards[secretIdx] : undefined;
   const outSet = useMemo(() => new Set(out), [out]);
+  const [bursts, fire] = useBursts();
   const left = scene.cards.map((_, i) => i).filter((i) => !outSet.has(i));
 
   useEffect(() => {
@@ -54,29 +68,36 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
   // Question chips: every colour and shape still on the table, not yet asked.
   const chips = useMemo(() => {
     const seen = new Set<string>();
-    const res: { kind: 'color' | 'shape'; word: string; hex?: string }[] = [];
+    const res: { kind: AskKind; word: string; hex?: string; img?: string }[] = [];
+    const add = (kind: AskKind, word: string, extra: { hex?: string; img?: string } = {}) => {
+      if (!seen.has(`${kind}:${word}`)) { seen.add(`${kind}:${word}`); res.push({ kind, word, ...extra }); }
+    };
     for (const i of left) {
       const c = scene.cards[i];
       if (!c) continue;
-      if (!seen.has(`c:${c.colorWord}`)) { seen.add(`c:${c.colorWord}`); res.push({ kind: 'color', word: c.colorWord, hex: c.colorHex }); }
-      if (!seen.has(`s:${c.shape}`)) { seen.add(`s:${c.shape}`); res.push({ kind: 'shape', word: c.shape }); }
+      if (c.word) {
+        add('toy', c.word, { img: c.img });
+        if (c.size) add('size', c.size);
+      } else add('shape', c.shape);
+      add('color', c.colorWord, { hex: c.colorHex });
     }
     const askedSet = new Set(asked);
-    return res.filter((ch) => !askedSet.has(`${ch.kind}:${ch.word}`)).sort((a, b) => (a.kind === b.kind ? 0 : a.kind === 'color' ? -1 : 1));
+    const order: AskKind[] = ['toy', 'size', 'color', 'shape'];
+    return res.filter((ch) => !askedSet.has(`${ch.kind}:${ch.word}`)).sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind));
   }, [left.join(','), asked.join(','), scene.cards]);
 
-  const ask = async (kind: 'color' | 'shape', word: string) => {
+  const ask = async (kind: AskKind, word: string) => {
     if (!secret || phase !== 'ask') return;
     const q = askLine(kind, word);
     sfx.pop();
     setState((s) => ({ ...s, phase: 'asking', question: q, answer: '', asked: [...s.asked, `${kind}:${word}`] }));
     // A moment for the child to SAY the question before Pip answers.
     await new Promise((res) => setTimeout(res, 1600));
-    const yes = kind === 'color' ? secret.colorWord === word : secret.shape === word;
+    const yes = has(secret, kind, word);
     const a = yes ? YES_LINE : NO_LINE;
     setState((s) => ({ ...s, answer: a }));
     await sayWithin(a, scene.who);
-    const fits = (c: Card) => (kind === 'color' ? c.colorWord === word : c.shape === word) === yes;
+    const fits = (c: Card) => has(c, kind, word) === yes;
     const nextOut = scene.cards.map((c, i) => (outSet.has(i) || !fits(c) ? i : -1)).filter((i) => i >= 0);
     if (yes) sfx.match(); else sfx.click();
     setState((s) => ({ ...s, out: nextOut }));
@@ -88,7 +109,8 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
     await new Promise((res) => setTimeout(res, 700));
     setState((s) => ({ ...s, phase: 'found' }));
     sfx.reveal();
-    await sayWithin(foundLine(secret.colorWord, secret.shape), scene.who, 5000);
+    fire(70, 40, 'confetti');
+    await sayWithin(foundLine(secret), scene.who, 5000);
     await new Promise((res) => setTimeout(res, 1200));
     const next = round + 1;
     const awardGem = next >= total && !gemDone;
@@ -113,7 +135,7 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/20" />
 
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-base font-black text-orange-700 shadow-xl sm:text-xl">
-        {phase === 'found' ? `🎉 ${foundLine(secret.colorWord, secret.shape)}` : '🃏 Pip has a secret card. Ask Pip!'}
+        {phase === 'found' ? `🎉 ${foundLine(secret)}` : secret.word ? '🧸 Guess the secret toy. Ask!' : '🃏 Pip has a secret card. Ask Pip!'}
         <span className="ml-2 rounded-full bg-orange-100 px-2 py-0.5 text-sm text-orange-600">{round + 1}/{total}</span>
       </div>
       <button onClick={() => cueSpeak(SECRET_INTRO, scene.who)} className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>
@@ -140,18 +162,23 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
         {scene.cards.map((c, i) => {
           const gone = outSet.has(i);
           const isSecret = phase === 'found' && i === secretIdx;
+          const scale = c.size === 'small' ? 0.62 : 1;
           return (
-            <div
-              key={i}
-              aria-label={`${c.colorWord.toLowerCase()} ${c.shape}`}
-              className={`grid aspect-[4/3] place-items-center transition-all duration-500 ${gone ? 'scale-75 opacity-25 grayscale' : ''} ${isSecret ? 'scale-125 animate-[lep1-hop_0.8s_ease-in-out_infinite]' : ''}`}
+            <motion.div
+              key={`${round}-${i}`}
+              aria-label={c.word ? [c.size, c.colorWord.toLowerCase(), c.word].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`}
+              className="grid aspect-[4/3] place-items-center"
+              initial={{ scale: 0, rotate: -12 }}
+              animate={isSecret ? { scale: [1.25, 1.4, 1.25], y: [0, -14, 0] } : gone ? { scale: 0.7, opacity: 0.22, rotate: 0 } : { scale: 1, opacity: 1, rotate: 0, y: [0, -5, 0] }}
+              transition={isSecret ? { duration: 0.8, repeat: Infinity } : gone ? { duration: 0.4 } : { scale: { type: 'spring', stiffness: 260, damping: 14, delay: i * 0.07 }, y: { duration: 2.2 + (i % 3) * 0.3, repeat: Infinity, ease: 'easeInOut' } }}
+              style={{ filter: gone ? 'grayscale(1)' : undefined }}
             >
-              {/* Each card is a die-cut sticker of its shape (no white frame). */}
-              <span className="relative block h-[12vh] w-[12vh] max-w-full" style={{ filter: STICKER_FILTER, transform: `rotate(${STICKER_TILTS[i % STICKER_TILTS.length]}deg)` }}>
+              {/* Each card is a die-cut sticker (no white frame); small toys are drawn small. */}
+              <span className="relative block h-[12vh] w-[12vh] max-w-full" style={{ filter: STICKER_FILTER, transform: `rotate(${STICKER_TILTS[i % STICKER_TILTS.length]}deg) scale(${scale})` }}>
                 {isSecret && <span className="absolute -inset-3 rounded-full bg-yellow-300/70 blur-xl" />}
-                <ShapeIcon shape={c.shape} fill={c.colorHex} />
+                {c.img ? <img src={c.img} alt="" draggable={false} className="relative h-full w-full object-contain" /> : <ShapeIcon shape={c.shape} fill={c.colorHex} />}
               </span>
-            </div>
+            </motion.div>
           );
         })}
       </div>
@@ -166,12 +193,17 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
           >
             {ch.kind === 'color'
               ? <span className="block h-7 w-7 rounded-full border-2 border-white shadow-inner" style={{ backgroundColor: ch.hex }} />
-              : <span className="block h-7 w-7"><ShapeIcon shape={ch.word} fill="#FEFBDD" /></span>}
+              : ch.kind === 'toy'
+                ? <img src={ch.img} alt="" draggable={false} className="block h-9 w-9 object-contain" />
+                : ch.kind === 'size'
+                  ? <span className="grid h-8 w-8 place-items-center font-black text-orange-500">{ch.word === 'big' ? <span className="text-2xl">⬤</span> : <span className="text-xs">⬤</span>}</span>
+                  : <span className="block h-7 w-7"><ShapeIcon shape={ch.word} fill="#FEFBDD" /></span>}
             {askLine(ch.kind, ch.word)}
           </button>
         ))}
         {phase === 'asking' && !answer && <div className="rounded-full bg-sky-500 px-6 py-3 text-lg font-black text-white shadow-2xl">🎤 Say it to Pip!</div>}
       </div>
+      <Bursts items={bursts} />
     </div>
   );
 }
@@ -181,7 +213,7 @@ export function secretCardLines(scene: Extract<Scene, { kind: 'secret-card' }>) 
   const out: [string, string][] = [[scene.who, SECRET_INTRO], [scene.who, YES_LINE], [scene.who, NO_LINE]];
   for (const r of scene.rounds) {
     const c = scene.cards[r.secret];
-    if (c) out.push([scene.who, foundLine(c.colorWord, c.shape)]);
+    if (c) out.push([scene.who, foundLine(c)]);
   }
   return out;
 }

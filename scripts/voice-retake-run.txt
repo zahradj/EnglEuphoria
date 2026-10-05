@@ -1,2 +1,4 @@
 run 1: 2026-10-02T23:02:15Z flagged short clips from the English-vowel audit
 round 2: 2026-10-02T23:07:24Z clips still above 1.0 after round 1
+# 2026-10-05 transcript audit: "stir" heard as "steer", "ball" as "bull", star/ant/shell
+files: 07cd7e44.mp3,9f8a3a73.mp3,312d65d6.mp3,3cf56e23.mp3,5f8cebb2.mp3,34cad20e.mp3,5d2ebf71.mp3,0eeb7792.mp3,5cb7152e.mp3,bc3c2e3c.mp3

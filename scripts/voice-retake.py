@@ -88,6 +88,9 @@ def main():
         # Only the clips round 1 couldn't get right.
         prev = {e['file']: e for e in json.load(open(f'{OUT}/retakes.json'))}
         todo = [{**r, 'file': f} for f, e in prev.items() if e['after'] > 1.0 for r in [{'file': f}]]
+    if os.environ.get('RETAKE_FILES'):
+        # Named clips of any length (e.g. "Stir, stir, stir!" heard as "steer" by the transcript audit).
+        todo = [{'file': f.strip()} for f in os.environ['RETAKE_FILES'].split(',') if f.strip()]
     manifest = {c['file']: c for c in json.load(open(f'{OUT}/manifest.json'))}
     print(f'{len(todo)} clips to re-take', flush=True)
     proc = audit.AutoProcessor.from_pretrained(audit.MODEL)
@@ -131,7 +134,8 @@ def main():
             entry['replaced'] = True
         log.append(entry)
         print(json.dumps(entry, ensure_ascii=False), flush=True)
-    json.dump(log, open(f'{OUT}/retakes{"" if ROUND == 1 else ROUND}.json', 'w'), ensure_ascii=False, indent=1)
+    name = 'retakes-files' if os.environ.get('RETAKE_FILES') else f'retakes{"" if ROUND == 1 else ROUND}'
+    json.dump(log, open(f'{OUT}/{name}.json', 'w'), ensure_ascii=False, indent=1)
     print(f"replaced {sum(1 for e in log if e.get('replaced'))} of {len(log)}")
 
 

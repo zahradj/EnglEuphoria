@@ -59,7 +59,9 @@ export default function VocabularyRoom() {
         awardXP({ action: 'phonics_listen', ref_id: w.id });
       }
     } catch (e) {
-      toast({ title: 'Audio unavailable', description: String(e), variant: 'destructive' });
+      // Never show the technical reason to a student; the word just isn't voiced yet.
+      console.warn('[vocabulary-room] no saved audio for this word', e);
+      toast({ title: 'No audio for this word yet' });
     } finally {
       setPlayingId(null);
     }

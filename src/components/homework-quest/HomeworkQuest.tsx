@@ -224,11 +224,11 @@ function TrueFalse({ level, say, praise, tryAgain, miss, star, done, setDots }: 
         {R.sticker && <img className="hq-char" src={R.sticker.src} alt="" style={{ left: `${R.sticker.x}%`, top: `${R.sticker.y}%` }} />}
         <HearBtn onClick={() => void say(R.line)} />
         {shown && <div className="hq-caption">{R.line}</div>}
+        <div className="hq-dock">
+          <button className="hq-big t" onClick={(e) => pick(true, e.currentTarget)}>✅ True</button>
+          <button className="hq-big f" onClick={(e) => pick(false, e.currentTarget)}>❌ False</button>
+        </div>
       </Stage>
-      <div className="hq-answers">
-        <button className="hq-big t" onClick={(e) => pick(true, e.currentTarget)}>✅ True</button>
-        <button className="hq-big f" onClick={(e) => pick(false, e.currentTarget)}>❌ False</button>
-      </div>
     </>
   );
 }
@@ -284,8 +284,8 @@ function SoundChoice({ level, quest, say, miss, star, done, setDots }: LevelProp
         <HearBtn onClick={() => void say(R.word, voice)} />
         {combo >= 2 && <div className="hq-caption hq-corner">🔥 {combo} in a row!</div>}
         {revealed && <div className="hq-caption">{R.picture ? <img src={R.picture} alt="" style={{ height: '1.8em', verticalAlign: 'middle' }} /> : <span style={{ fontSize: '1.6em' }}>{R.emoji}</span>} <b>{highlight(R.word, R.answer)}</b></div>}
+        <div className="hq-dock">{level.choices.map((c, i) => <button key={c} className={`hq-orb o${i % 3}`} onClick={(e) => pick(c, e.currentTarget)}>{c}</button>)}</div>
       </Stage>
-      <div className="hq-answers">{level.choices.map((c, i) => <button key={c} className={`hq-orb o${i % 3}`} onClick={(e) => pick(c, e.currentTarget)}>{c}</button>)}</div>
     </>
   );
 }
@@ -305,12 +305,14 @@ function PictureChoice({ level, say, praise, tryAgain, miss, star, done, setDots
   };
   return (
     <>
-      <Stage img={level.img}><HearBtn onClick={() => void say(R.line)} /></Stage>
-      <div className="hq-cards">{opts.map((o) => (
-        <button key={o.label} aria-label={o.label} className={`hq-card ${ok === o.label ? 'ok' : ''}`} onClick={(e) => pick(o.label, e.currentTarget)}>
-          {o.src ? <img src={o.src} alt="" draggable={false} /> : <span className="em">{o.emoji}</span>}
-        </button>
-      ))}</div>
+      <Stage img={level.img}>
+        <HearBtn onClick={() => void say(R.line)} />
+        <div className="hq-dock">{opts.map((o) => (
+          <button key={o.label} aria-label={o.label} className={`hq-card ${ok === o.label ? 'ok' : ''}`} onClick={(e) => pick(o.label, e.currentTarget)}>
+            {o.src ? <img src={o.src} alt="" draggable={false} /> : <span className="em">{o.emoji}</span>}
+          </button>
+        ))}</div>
+      </Stage>
     </>
   );
 }

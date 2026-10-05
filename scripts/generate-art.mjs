@@ -7,8 +7,9 @@
  * regenerate it. Runs in CI (.github/workflows/bake-art.yml), which then cuts
  * `sticker: true` images out of their white background.
  *
- * With HF_PROXY_URL + HF_PROXY_TOKEN set (bake-art.yml sets them) the
- * pictures are made with HIGGSFIELD instead (Grok Image 2.0 through the
+ * RULE (owner, 2026-10-04): pictures are made with CANVA only — the Higgsfield
+ * image path is disabled (it exits). Previously, with HF_PROXY_URL + HF_PROXY_TOKEN
+ * set the pictures were made with HIGGSFIELD instead (Grok Image 2.0 through the
  * higgsfield-video edge function, refs uploaded as image references, up to 10).
  * Its output is converted to PNG in CI (art-made.txt).
  *
@@ -81,7 +82,11 @@ async function makeOne(t) {
   }
   if (!ok) failed++;
 }
+// Owner's rule (2026-10-04): pictures are made with CANVA only, never Higgsfield.
+// The Higgsfield path below is kept only for the record and refuses to run.
 if (HF_PROXY && HF_TOKEN) {
+  console.error('Refusing: pictures must be made with Canva (CLAUDE.md "Media generators"). Higgsfield is for video only.');
+  process.exit(1);
   const todo = targets.filter((t) => !fs.existsSync(t.out));
   console.log(`Higgsfield: ${todo.length} pictures to make`);
   // Targets that use another missing target as a reference wait for it.

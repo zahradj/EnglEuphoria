@@ -174,6 +174,12 @@ just a congratulatory close.
 
 ## Activity selection at the curriculum (cross-lesson) level
 
+**Standing rule (2026-10-04) — vary everything, every lesson.** Before any lesson is designed, run the
+`lesson-variety-engine` skill: research ≥ 3 benchmark apps/schools (Khan Academy Kids, Lingokids, LingoAce, VIPKid,
+Novakid, Duolingo ABC, Oxford, Cambridge…) for the lesson's skill, take the best mechanic and make it better, add or
+upgrade ≥ 1 mechanic, and give the lesson a new setting, look and story frame. `checkLessonVariety`
+(`src/content/playground-library/lessonVariety.ts`) enforces it in the deploy gate across lessons and units.
+
 `smart-lesson-architect` already covers picking the right activity *type*
 for a micro-skill inside one lesson — don't duplicate that here. This
 skill's job is the layer above it: **does this unit's *sequence* of lessons

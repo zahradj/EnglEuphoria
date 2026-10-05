@@ -1,0 +1,4 @@
+# Raw Higgsfield/Veo source clips: kept in git for re-stitching, never served.
+# The lessons use the stitched films (public/lep1/video/*.mp4) and loops (public/lep1/video/loops).
+# Keeps each deploy small (Vercel storage was exhausted on 2026-10-03).
+public/lep1/video/clips/

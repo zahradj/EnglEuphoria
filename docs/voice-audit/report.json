@@ -12,6 +12,45 @@
     ]
   },
   {
+    "file": "07cd7e44.mp3",
+    "voice": "willow",
+    "text": "Stir, stir, stir!",
+    "heard": "Steer, steer, steer",
+    "distance": 3,
+    "rate": 1,
+    "ops": [
+      "\"stir\"→\"steer\"",
+      "\"stir\"→\"steer\"",
+      "\"stir\"→\"steer\""
+    ]
+  },
+  {
+    "file": "9f8a3a73.mp3",
+    "voice": "leo",
+    "text": "Stir, stir, stir!",
+    "heard": "Steer, steer, steer",
+    "distance": 3,
+    "rate": 1,
+    "ops": [
+      "\"stir\"→\"steer\"",
+      "\"stir\"→\"steer\"",
+      "\"stir\"→\"steer\""
+    ]
+  },
+  {
+    "file": "312d65d6.mp3",
+    "voice": "mia",
+    "text": "Stir, stir, stir!",
+    "heard": "Steer, steer, steer",
+    "distance": 3,
+    "rate": 1,
+    "ops": [
+      "\"stir\"→\"steer\"",
+      "\"stir\"→\"steer\"",
+      "\"stir\"→\"steer\""
+    ]
+  },
+  {
     "file": "366514c7.mp3",
     "voice": "pip",
     "text": "Yes! Door!",
@@ -65,6 +104,28 @@
     "rate": 1,
     "ops": [
       "\"ant\"→\"and\""
+    ]
+  },
+  {
+    "file": "5a24b8fb.mp3",
+    "voice": "pip",
+    "text": "ball",
+    "heard": "Bull",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"ball\"→\"bull\""
+    ]
+  },
+  {
+    "file": "6651e6f2.mp3",
+    "voice": "pip",
+    "text": "mat.",
+    "heard": "Matt",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"mat\"→\"matt\""
     ]
   },
   {
@@ -233,17 +294,6 @@
     ]
   },
   {
-    "file": "5a24b8fb.mp3",
-    "voice": "pip",
-    "text": "ball",
-    "heard": "Bull",
-    "distance": 1,
-    "rate": 1,
-    "ops": [
-      "\"ball\"→\"bull\""
-    ]
-  },
-  {
     "file": "fc180642.mp3",
     "voice": "pip",
     "text": "bye",
@@ -255,6 +305,28 @@
     ]
   },
   {
+    "file": "be9805d2.mp3",
+    "voice": "mia",
+    "text": "mat.",
+    "heard": "Matt",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"mat\"→\"matt\""
+    ]
+  },
+  {
+    "file": "53ee8db9.mp3",
+    "voice": "teacher",
+    "text": "Mat.",
+    "heard": "Matt",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"mat\"→\"matt\""
+    ]
+  },
+  {
     "file": "02819638.mp3",
     "voice": "teacher",
     "text": "Ant.",
@@ -263,6 +335,39 @@
     "rate": 1,
     "ops": [
       "\"ant\"→\"and\""
+    ]
+  },
+  {
+    "file": "44f1d473.mp3",
+    "voice": "bella",
+    "text": "mat.",
+    "heard": "Matt",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"mat\"→\"matt\""
+    ]
+  },
+  {
+    "file": "5cb7152e.mp3",
+    "voice": "bella",
+    "text": "ant.",
+    "heard": "And",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"ant\"→\"and\""
+    ]
+  },
+  {
+    "file": "0eeb7792.mp3",
+    "voice": "pip",
+    "text": "Star",
+    "heard": "Stop",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"star\"→\"stop\""
     ]
   },
   {
@@ -299,14 +404,14 @@
     ]
   },
   {
-    "file": "94727dfb.mp3",
-    "voice": "willow",
-    "text": "sun",
-    "heard": "Son",
+    "file": "bc3c2e3c.mp3",
+    "voice": "mia",
+    "text": "shell",
+    "heard": "Shall",
     "distance": 1,
     "rate": 1,
     "ops": [
-      "\"sun\"→\"son\""
+      "\"shell\"→\"shall\""
     ]
   },
   {
@@ -318,6 +423,28 @@
     "rate": 1,
     "ops": [
       "\"doll\"→\"dull\""
+    ]
+  },
+  {
+    "file": "f6094bc1.mp3",
+    "voice": "pip",
+    "text": "key",
+    "heard": "K",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"key\"→\"k\""
+    ]
+  },
+  {
+    "file": "afa4eb9c.mp3",
+    "voice": "pip",
+    "text": "plane",
+    "heard": "Plain",
+    "distance": 1,
+    "rate": 1,
+    "ops": [
+      "\"plane\"→\"plain\""
     ]
   },
   {
@@ -433,18 +560,6 @@
     ]
   },
   {
-    "file": "8069a786.mp3",
-    "voice": "willow",
-    "text": "The water is blue!",
-    "heard": "The water's blue",
-    "distance": 2,
-    "rate": 0.5,
-    "ops": [
-      "missing \"water\"",
-      "\"is\"→\"waters\""
-    ]
-  },
-  {
     "file": "488db998.mp3",
     "voice": "mia",
     "text": "Tap She — the girl!",
@@ -494,6 +609,50 @@
     ]
   },
   {
+    "file": "3cf56e23.mp3",
+    "voice": "pip",
+    "text": "Yes! A ball!",
+    "heard": "Yes, a bull",
+    "distance": 1,
+    "rate": 0.33,
+    "ops": [
+      "\"ball\"→\"bull\""
+    ]
+  },
+  {
+    "file": "4d1d3d50.mp3",
+    "voice": "pip",
+    "text": "Yes! D, doll!",
+    "heard": "Yes, Dee Doll",
+    "distance": 1,
+    "rate": 0.33,
+    "ops": [
+      "\"d\"→\"dee\""
+    ]
+  },
+  {
+    "file": "e2dbc9bd.mp3",
+    "voice": "pip",
+    "text": "Yes! K, kite!",
+    "heard": "Yes, Kay Kite",
+    "distance": 1,
+    "rate": 0.33,
+    "ops": [
+      "\"k\"→\"kay\""
+    ]
+  },
+  {
+    "file": "6d821499.mp3",
+    "voice": "pip",
+    "text": "Yes! O, octopus!",
+    "heard": "Yes, oh octopus",
+    "distance": 1,
+    "rate": 0.33,
+    "ops": [
+      "\"o\"→\"oh\""
+    ]
+  },
+  {
     "file": "45dbdff9.mp3",
     "voice": "bella",
     "text": "Who is angry?",
@@ -536,6 +695,28 @@
     "rate": 0.25,
     "ops": [
       "\"grrr\"→\"grr\""
+    ]
+  },
+  {
+    "file": "5f8cebb2.mp3",
+    "voice": "pip",
+    "text": "It's a ball!",
+    "heard": "It's a bull",
+    "distance": 1,
+    "rate": 0.25,
+    "ops": [
+      "\"ball\"→\"bull\""
+    ]
+  },
+  {
+    "file": "34cad20e.mp3",
+    "voice": "pip",
+    "text": "Jump like a ball!",
+    "heard": "Jump like a bull",
+    "distance": 1,
+    "rate": 0.25,
+    "ops": [
+      "\"ball\"→\"bull\""
     ]
   },
   {
@@ -597,6 +778,17 @@
     ]
   },
   {
+    "file": "5d2ebf71.mp3",
+    "voice": "pip",
+    "text": "It's a red ball!",
+    "heard": "It's a red bull",
+    "distance": 1,
+    "rate": 0.2,
+    "ops": [
+      "\"ball\"→\"bull\""
+    ]
+  },
+  {
     "file": "ddfe6626.mp3",
     "voice": "pip",
     "text": "I usually reed before bed.",
@@ -653,14 +845,14 @@
     ]
   },
   {
-    "file": "ab979f73.mp3",
-    "voice": "pip",
-    "text": "We looked together in the meadow.",
-    "heard": "We look together in the meadow",
+    "file": "bc5af2e7.mp3",
+    "voice": "mia",
+    "text": "You caught the small red kite!",
+    "heard": "You got the small red kite",
     "distance": 1,
     "rate": 0.17,
     "ops": [
-      "\"looked\"→\"look\""
+      "\"caught\"→\"got\""
     ]
   },
   {
@@ -672,6 +864,17 @@
     "rate": 0.14,
     "ops": [
       "\"reed\"→\"read\""
+    ]
+  },
+  {
+    "file": "5888bc5d.mp3",
+    "voice": "pip",
+    "text": "Shelly gives the crab a purple circle.",
+    "heard": "Shelley gives the crab a purple circle",
+    "distance": 1,
+    "rate": 0.14,
+    "ops": [
+      "\"shelly\"→\"shelley\""
     ]
   },
   {
@@ -796,17 +999,6 @@
     ]
   },
   {
-    "file": "39914743.mp3",
-    "voice": "leo",
-    "text": "Wait! I see some of my things. Reed them with me!",
-    "heard": "Wait, I see some of my things. Read them with me",
-    "distance": 1,
-    "rate": 0.09,
-    "ops": [
-      "\"reed\"→\"read\""
-    ]
-  },
-  {
     "file": "7ce93f66.mp3",
     "voice": "teacher",
     "text": "Pip! Come here! This is my favourite room in the castle.",
@@ -818,15 +1010,14 @@
     ]
   },
   {
-    "file": "7559a9a0.mp3",
-    "voice": "leo",
-    "text": "Thank you for helping me find my star — and you reed hat, mat, and bat all by yourself! Tonight, find a hat at home and reed it out loud!",
-    "heard": "Thank you for helping me find my star and you read Hat, Mat, and Bat all by yourself. Tonight, find a hat at home and read it out loud",
-    "distance": 2,
-    "rate": 0.07,
+    "file": "4561a0f9.mp3",
+    "voice": "pip",
+    "text": "Your mission: ask your family \"Do you like kites?\" Then play with your favourite toy together!",
+    "heard": "Your mission: ask your family, \"Do you like kites?\" Then play with your favorite toy together",
+    "distance": 1,
+    "rate": 0.06,
     "ops": [
-      "\"reed\"→\"read\"",
-      "\"reed\"→\"read\""
+      "\"favourite\"→\"favorite\""
     ]
   },
   {

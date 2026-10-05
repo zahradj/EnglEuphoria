@@ -96,6 +96,12 @@ real clips are being generated, and the lesson is not "done" until they are.
 Other lessons may keep picture-films (`story-video` built from stills) for
 short story openers and payoffs; Lesson 5 may not.
 
+**Demonstration pages ("watch and copy": body parts, actions, TPR, point-to) — every lesson**
+(owner-approved standard, U4L1 page 4, 2026-10-04): follow `.claude/skills/kids-demo-video`. ONE character, full body,
+front view, one picture per spoken line (Canva edits of one base picture), the target word added by us with a line to the
+exact spot (`scripts/label-video.py`; both sides for pairs), stills film first; AI motion only through strict mode with
+start + end key pictures.
+
 ---
 
 ## 3b. Extra Time — brain breaks & bonus activities (every lesson)
@@ -158,13 +164,14 @@ cards (puffy highlight, bottom lip, soft deep shadow — `CLAY_CARD` /
 `CLAY_BUTTON` in `unit1/scene-components/shared.tsx`), cards on the open side
 of the picture (never over the character), ≥ 80 px tap targets, wide 16:9 art.
 
-**Game feel — an animated video game, not flat cards (owner, 2026-10-03):**
+**Game feel — an animated video game, not flat cards (owner, 2026-10-03):** full method, numbers and the 10-point juice audit in `.claude/skills/game-animation`.
 - **Living world:** each game scene gets a seamless looping clip of its own
   picture (`bgVideo`; Higgsfield image-to-video → `scripts/make-game-loops.py`
   ping-pongs it, ~1 MB): water flows, flowers sway, the character blinks. The
   still picture stays as the poster/fallback.
 - **Painted game pieces,** never plain CSS boxes: river, stones, chests, gems
-  are illustrated art (art-targets, Higgsfield) used as stickers.
+  are illustrated art used as stickers. **Pictures are made with Canva only;
+  Higgsfield is for video only** (owner, 2026-10-04).
 - **Motion with physics** (`unit1/scene-components/gameFx.tsx`, framer-motion):
   characters breathe when idle and hop in an arc with squash & stretch
   (`Hopper`); pieces spring in, float idly (`idleFloat`), lift and tilt when
@@ -197,11 +204,11 @@ another slot.
 | Slot | Feel | Reveal (6) | Match / sort (7) | Game break (12) | Phonics game (14) | Recall (15) | Extra-time favourite |
 |---|---|---|---|---|---|---|---|
 | L1 | Meet the words | `mystery-bag` | `picture-match` | `memory` | `sound-pop` | `rapid-recall` | `hello-doors` |
-| L2 | More words, sort them | `listen-colour` | `catch-sort` | `feed-monsters` | `dash` | `train-recall` | `friend-pop` |
+| L2 | More words, sort them | `listen-colour` | `catch-sort` | `feed-monsters`, `color-monsters` | `dash` | `train-recall` | `friend-pop` |
 | L3 | Make & build | `puzzle` | `basket` | `jigsaw-puzzle` | `brick-crush` | `pattern-train` | `word-build` |
 | L4 | Ask & answer | `secret-card` | `sound-sort` | `color-simon` | `gather` | `shape-fishing` | `alphabet-order` |
-| L5 | Story (real video) | `lift-flap` | `tick-cross` | `who-said-it` | `alphabet-blocks` | `story-order` | — |
-| L6 | Review hunt | `shape-torch` | `shadow-match` | `draw-path` | `trophy-chest` | `tile-reveal` | `stepping-stones`, `odd-one-out` |
+| L5 | Story (real video) | `lift-flap`, `peek-pop` | `tick-cross`, `tidy-up` | `who-said-it` | `alphabet-blocks` | `story-order` | — |
+| L6 | Review hunt | `shape-torch`, `claw-machine` | `shadow-match` | `draw-path`, `ring-toss` | `trophy-chest` | `tile-reveal` | `stepping-stones`, `odd-one-out` |
 
 - **Shared by every lesson** (the routine children rely on, not "games"):
   `title-card`, `song`, `cinematic`, `story-video`, `story-order` (after any
@@ -217,6 +224,36 @@ another slot.
 - New mechanics (2026-10 research: Lingokids *Draw Path*, Wordwall *Image
   quiz*, Khan Academy Kids shadow puzzles, the stepping-stones floor game)
   join a slot that is short of games, so the set keeps growing.
+
+## 3e. Vary everything, every lesson — research, then beat the best apps (hard rule, all hubs)
+
+Owner's standing rule (2026-10-04): *"In every next lesson vary the activities,
+the look, the scenes and the themes. Search the internet — Khan Academy,
+Oxford, Cambridge, LingoAce, Lingokids, VIPKid and the top apps and online
+schools — and create better than them. Avoid boring the student."*
+
+Every lesson, before it is designed (skill: `.claude/skills/lesson-variety-engine`):
+1. **Research ≥ 3 benchmarks** for the lesson's skill (Khan Academy Kids,
+   Lingokids, LingoAce, VIPKid, Novakid, Duolingo ABC, ABCmouse, Oxford,
+   Cambridge, Wordwall…), rotating them. Take the mechanic, never the content.
+2. **Do better** — one "better than" line per borrowed mechanic (the language
+   is the win condition, permanence, story continuity, live-class sync,
+   tap-tap alternatives, juice audit).
+3. **Add or upgrade ≥ 1 mechanic** per lesson (new kinds join a slot in §3d,
+   so each slot's set keeps growing and units stop repeating each other).
+4. **Vary at four levels** — enforced in code by `checkLessonVariety`
+   (`src/content/playground-library/lessonVariety.ts`, test in the deploy gate):
+   - activities: ≥ 4 games besides the routine spine, none from the previous
+     lesson, ≤ 50 % repeated from the same slot of the previous unit, never 3
+     of a kind in a row;
+   - look: new pictures (none reused from the previous lesson), its own light /
+     palette / mood;
+   - scenes: a setting the previous lesson did not use;
+   - theme: a new story frame / mission (show and tell, tidy-up, treasure hunt,
+     rescue, party, journey…), not the plot shape of the previous two lessons.
+5. **Register** `LESSON_PROFILE` (settings + look) and `RESEARCH_LOG`
+   (sources, mechanics, betterThan) for the lesson, and report the research to
+   the owner with links.
 
 ---
 

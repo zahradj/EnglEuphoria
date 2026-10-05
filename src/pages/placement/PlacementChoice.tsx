@@ -8,7 +8,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Volume2, Sprout, Target, Loader2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { placementClipUrl } from '@/components/placement/placementAudio';
 import {
   attachPlacementContentRealtime,
   loadHubPlacementContent,
@@ -102,37 +102,29 @@ export default function PlacementChoice({
   const mascotLabel = pip?.label ?? 'Pip';
   const avatarUrl = pip?.avatarUrl || DEFAULT_AVATAR[hub];
 
-  // English voiceover script — kept English so the cached MP3 matches the
-  // ElevenLabs voice. The UI copy below is translated separately.
+  // The greeting is a SAVED clip (baked once, played like any file) - nothing is generated while the student waits,
+  // and a speech-service outage can't affect this screen. It is the same for every student (no name in it).
+  // If the clip is missing the screen stays silent.
   const greetingForVoice = pip?.intro
-    ? `Hi${firstName ? ` ${firstName}` : ''}! ${pip.intro}`
-    : `Hi${firstName ? ` ${firstName}` : ''}! I'm ${mascotLabel}. Pick how you'd like to start.`;
+    ? pip.intro
+    : `Hi! I'm ${mascotLabel}. Pick how you'd like to start.`;
 
-  // Fetch (or generate + cache) the hub-specific voiceover whenever content
-  // arrives. Each (voiceId, text) pair has its own cached MP3.
   useEffect(() => {
     if (!pip) return;
     let cancelled = false;
     setLoadingAudio(true);
     setAudioUrl(null);
-    (async () => {
-      try {
-        const { data, error } = await supabase.functions.invoke('placement-voiceover', {
-          body: { text: greetingForVoice, voiceId: pip.voiceId },
-        });
-        if (cancelled) return;
-        if (error) throw error;
-        if (data?.url) setAudioUrl(data.url);
-      } catch (e) {
-        console.warn('[placement-choice] voiceover unavailable', e);
-      } finally {
+    placementClipUrl(greetingForVoice, hub === 'playground' ? 'pip' : 'teacher')
+      .then((url) => {
+        if (!cancelled && url) setAudioUrl(url);
+      })
+      .finally(() => {
         if (!cancelled) setLoadingAudio(false);
-      }
-    })();
+      });
     return () => {
       cancelled = true;
     };
-  }, [pip?.voiceId, greetingForVoice]);
+  }, [pip?.voiceId, greetingForVoice, hub]);
 
   // Try to autoplay once the URL is ready. Browsers may block silently.
   useEffect(() => {

@@ -13,7 +13,7 @@ description: >
 
 ## Purpose
 
-Six specialized engines, one review pass. Each engine owns a distinct
+Seven specialized engines, one review pass. Each engine owns a distinct
 failure mode; none of them substitutes for the others, and running only one
 or two gives false confidence. This skill's job is to actually run all six
 against the lesson's real, current scene array and art — not to assume they
@@ -34,6 +34,7 @@ already pass because the content "looks reasonable."
 | 4 | **Narrative** | Does the sequence of scenes, taken together, tell one consistent story with real setting variety and stable character roles? | `narrative-engine` |
 | 5 | **Student comfort** (top priority — the user's standing rule) | Can a student SEE every word, REACH every control and ENJOY the interaction on a normal laptop AND a phone, without scrolling to find a button, squinting, or guessing what to do? | this file, section below + `scripts/academy-comfort-audit.mjs` |
 | 6 | **Voice** (standing rule: no accent, accurate pronunciation) | Does every recorded or synthesized line sound like a standard native American English speaker and say each word correctly? | this file, section below + `src/lib/speechPolicy.ts`, `voicePolicy.test.ts`, `generate-voice-cache.mjs --audit` |
+| 7 | **Variety & research** (standing rule, 2026-10-04: vary activities, look, scenes, themes; beat the best apps) | Is this lesson different from the one before it and from the same slot last unit — games, pictures, setting, story frame — and was it researched against ≥ 3 benchmark apps with a "better than" for each borrowed mechanic? | `lesson-variety-engine` + `lessonVariety.test.ts` |
 
 Run them in this order. Each later engine assumes the earlier ones already
 passed — don't skip ahead. If an earlier engine fails, fix it and re-run
@@ -168,6 +169,25 @@ voice catalogs.
    (in the deploy gate). When you re-cast a character, bump its entry in `CHARACTER_CLIP_VERSION` (client AND script) and re-bake.
 5. **Limit**: tests prove policy, not sound. A human must still listen to a sample of new clips.
    The edge functions copy `src/lib/speechPolicy.ts` to `supabase/functions/_shared/` — keep them identical (a test enforces it).
+
+## Engine 7 — Variety & research
+
+Run `npx vitest run src/content/playground-library/lessonVariety.test.ts` and read the lesson's `LESSON_PROFILE` /
+`RESEARCH_LOG`. FAIL if: a game, picture or setting repeats the previous lesson; more than half the games repeat the same
+slot of the previous unit; fewer than 4 games; no new or upgraded mechanic; fewer than 3 researched sources; or the story
+frame repeats one of the previous two lessons. Fix the lesson, never the check.
+
+## Demonstration pages (kids-demo-video standard)
+
+Any page that shows the child what to do or point at must meet `.claude/skills/kids-demo-video` (one character, full
+body, front view, one picture per line showing exactly that line, target word labelled with a line to the exact spot,
+stills cross-fade, labels timed to the line). Re-open each picture and a frame per label; a dot off the part, a group
+shot, a cropped body or an AI-written word fails the gate.
+
+## Hand-off (after all engines pass)
+
+Put the lesson on the Playground Library for the owner's review (CLAUDE.md "Lesson hand-off"): DB row title +
+`contentFormat: 'lep1-rich'` (unpublished until merged), push with `[preview]`, send the library + lesson links.
 
 ## When to run this
 
