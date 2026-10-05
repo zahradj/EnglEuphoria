@@ -73,6 +73,7 @@ import { ClawMachineScene } from './scene-components/ClawMachineScene';
 import { SimonTouchScene } from './scene-components/SimonTouchScene';
 import { BodyStackScene } from './scene-components/BodyStackScene';
 import { FaceBuilderScene } from './scene-components/FaceBuilderScene';
+import { SoundPickScene } from './scene-components/SoundPickScene';
 import { RingTossScene } from './scene-components/RingTossScene';
 import { ShadowMatchScene } from './scene-components/ShadowMatchScene';
 import { SteppingStonesScene } from './scene-components/SteppingStonesScene';
@@ -252,6 +253,7 @@ export function SceneRenderer(props: {
     case 'body-stack': return <BodyStackScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'face-builder': return <FaceBuilderScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'claw-machine': return <ClawMachineScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
+    case 'sound-pick': return <SoundPickScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'ring-toss': return <RingTossScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'color-monsters': return <ColorMonstersScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'tidy-up': return <TidyUpScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;

@@ -556,6 +556,12 @@ export type Scene =
        *  painted in bg holds a prize toy; the voice says "Throw the ring on
        *  the kite!"; tap the peg: the ring flies in a spinning arc. Rings on
        *  the right pegs stay. `pegs` = peg tops (x/y %), `prizes[i]` = toy on peg i. */
+      /** Calm first-sound pick: the recorded letter sound, then "Which one starts with this sound?";
+       *  three still pictures, no clock, wrong taps are named back and cost nothing. */
+      id: string; kind: 'sound-pick'; bg: string; teacher: string; who: CharKey;
+      rounds: { sound: string; options: { word: string; img?: string; emoji?: string }[]; answer: number }[];
+    }
+  | {
       id: string; kind: 'ring-toss'; bg: string; bgVideo?: string; teacher: string; who: CharKey; ringImg: string;
       pegs: { x: number; y: number }[];
       prizes: Thing[];
@@ -6804,17 +6810,17 @@ export const LESSON_U4L2_SCENES: Scene[] = [
   },
   { id: 'u4l2-trace-n', kind: 'trace', bg: bgU4L2Kitchen, who: 'mia', letter: 'N', phoneme: '/n/', word: 'nose', speakWord: false, teacher: 'Trace the big N with your finger! /n/ /n/ nose!' },
   {
-    id: 'u4l2-dash-n', kind: 'dash', bg: bgU4L2Kitchen, who: 'pip', targetLetter: 'N', targetPhoneme: '/n/', goal: 6, seconds: 40,
-    teacher: 'N Dash! Catch only the things that start with /n/.',
-    items: [
-      { word: 'nose', letter: 'N', img: cardNose, emoji: '\u{1F443}' },
-      { word: 'nest', letter: 'N', img: itemNestU4, emoji: '\u{1FAB9}' },
-      { word: 'nut', letter: 'N', img: itemNutU4, emoji: '\u{1F330}' },
-      { word: 'egg', letter: 'E', img: itemEgg, emoji: '\u{1F95A}' },
-      { word: 'elephant', letter: 'E', img: itemElephant, emoji: '\u{1F418}' },
-      { word: 'mouth', letter: 'M', img: cardMouth, emoji: '\u{1F444}' },
+    // Calm, untimed first-sound pick (owner: the N Dash was too fast and hard to focus on).
+    id: 'u4l2-pick-n', kind: 'sound-pick', bg: bgU4L2Kitchen, who: 'pip',
+    teacher: 'Which one? Listen to the sound, then tap the picture that starts with it. No hurry — say the word too!',
+    rounds: [
+      { sound: 'n', answer: 0, options: [{ word: 'nest', img: itemNestU4 }, { word: 'egg', img: itemEgg }, { word: 'mouth', img: cardMouth }] },
+      { sound: 'n', answer: 2, options: [{ word: 'elephant', img: itemElephant }, { word: 'eyes', img: cardEyes }, { word: 'nut', img: itemNutU4 }] },
+      { sound: 'n', answer: 1, options: [{ word: 'ears', img: cardEars }, { word: 'nose', img: cardNose }, { word: 'egg', img: itemEgg }] },
+      { sound: 'e', answer: 1, options: [{ word: 'nest', img: itemNestU4 }, { word: 'egg', img: itemEgg }, { word: 'nose', img: cardNose }] },
     ],
   },
+
   {
     id: 'u4l2-catch-ne', kind: 'catch-sort', bg: bgU4L2PancakeBlank, teacher: 'Catch it! /n/ or /e/? Say the word as you catch it.', goal: 8, seconds: 45,
     left: { label: 'N', img: itemNestU4, emoji: '\u{1FAB9}' },
