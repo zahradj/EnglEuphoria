@@ -1,0 +1,15 @@
+
+=== docs/songs/u5l1-family-take1.mp3  length=20.1s  score=0.87  missing=5  extra=3
+heard: this is my mom i love my mom this is my dad i love my dad mom and daddy we are a family mom and daddy a happy family
+line starts (s): [np.float64(0.0), np.float64(3.7), np.float64(7.6), np.float64(11.5)]
+lineDurationsMs: [3720, 3920, 3820, 8602]
+
+=== docs/songs/u5l1-family-take2.mp3  length=20.1s  score=0.92  missing=2  extra=3
+heard: this is my mom i love my mom this is my dad i love my dad mom is dad and me we are a family mom's dad and me a happy family
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(7.7), np.float64(12.5)]
+lineDurationsMs: [3800, 3900, 4780, 7582]
+
+=== docs/songs/u5l1-family-take3.mp3  length=20.1s  score=0.97  missing=1  extra=1
+heard: this is my mom i love my mom this is my dad i love my dad mom and dad and me we are a family mom and me a happy family
+line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(7.8), np.float64(12.1)]
+lineDurationsMs: [4000, 3820, 4260, 7982]
