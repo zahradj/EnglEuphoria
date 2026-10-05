@@ -6920,6 +6920,225 @@ export const LESSON_U4L2_SCENES: Scene[] = [
   { id: 'u4l2-finale', kind: 'finale', bg: bgU4L2PancakeFace, who: 'pip', line: 'Yummy pancake faces! Eyes, ears, mouth and nose — you know them all! Goodbye, friend!' },
 ];
 
+/* ===================== Pre-A1 Unit 4 · Lesson 3 — Hands, Fingers, Feet, Arms! =====================
+ * My Body & Face (3/6). hands, fingers, feet, arms ("Clap your hands!",
+ * "They're my hands!") and F says /f/ (fish, fan, feet). Setting: a sunny
+ * beach day with Bella and Leo — prints in the sand. Lesson-Variety Engine:
+ * researched the classroom handprint/footprint art activity, Lingokids body-
+ * parts games, Khan Academy Kids (calm, self-paced, a result that stays) and
+ * Cambridge Pre A1 "listen and place"; new game Sand Prints (the word alone
+ * decides which body part to press into the sand; the print stays). Calm by
+ * design (docs/research/young-learner-games.md): no clocks, no moving targets,
+ * wrong taps are named back and cost nothing. Pictures made with Canva. */
+const bgU4L3Beach = `${A}/scenes/bg-u4l3-beach-wide.png`;
+const bgU4L3Bella = `${A}/scenes/bg-u4l3-bella-wide.png`;
+const bgU4L3Hands = `${A}/scenes/bg-u4l3-bella-hands-wide.png`;
+const bgU4L3Fingers = `${A}/scenes/bg-u4l3-bella-fingers-wide.png`;
+const bgU4L3Feet = `${A}/scenes/bg-u4l3-bella-feet-wide.png`;
+const bgU4L3Arms = `${A}/scenes/bg-u4l3-bella-arms-wide.png`;
+const bgU4L3Sand = `${A}/scenes/bg-u4l3-sand-wide.png`;
+const partHand = `${A}/items/item-part-hand.png`;
+const partFinger = `${A}/items/item-part-finger.png`;
+const partFoot = `${A}/items/item-part-foot.png`;
+const partArm = `${A}/items/item-part-arm.png`;
+const itemFish = `${A}/items/item-fish.png`;
+const itemFan = `${A}/items/item-fan.png`;
+const itemFeather = `${A}/items/item-feather.png`;
+const itemFrogU4 = `${A}/items/item-frog.png`;
+
+export const LESSON_U4L3_TITLE = 'Hands, Fingers, Feet, Arms!';
+export const LESSON_U4L3_OBJECTIVE = 'Name hands, fingers, feet and arms, follow "Clap your hands!" / "Stamp your feet!", say "They\'re my hands!", press the body part you hear into the sand, sing the body song, and hear F say /f/ (fish, fan, feet) — by moving, listening, making and speaking, no reading.';
+
+export const LESSON_U4L3_SCENES: Scene[] = [
+  { id: 'u4l3-title', kind: 'title-card', bg: bgU4L3Beach, level: 'Pre-A1', unit: 'Unit 4', lessonLabel: 'Lesson 3', title: 'Hands, Fingers, Feet, Arms!', subtitle: 'A beach day' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u4l3-song', kind: 'song', bg: bgU4L3Beach, title: '\u{1F3B5} Hands, Fingers, Feet and Arms \u{1F3B5}', teacher: 'Sing and move! Clap, wiggle, stamp and wave with the song.',
+    durationSeconds: 20, bigWord: 'Move', songUrl: `${A}/audio/body-song-u4l3.mp3?v=1`,
+    lineDurationsMs: [4140, 4080, 3880, 7962],
+    songPrompt: 'Upbeat kids pop beach action song',
+    lyrics: [
+      { who: 'bella', text: 'Hands, fingers, feet and arms! Hands, fingers, feet and arms!', emotion: 'happy' },
+      { who: 'bella', text: 'Clap your hands! Wiggle your fingers!', emotion: 'happy' },
+      { who: 'leo', text: 'Stamp your feet! Wave your arms!', emotion: 'happy' },
+      { who: 'leo', text: 'Hands, fingers, feet and arms!', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u4l3-intro', kind: 'cinematic', bg: bgU4L3Beach, hidePipOverlay: true, title: 'Beach Day', subtitle: 'Hands, fingers, feet, arms!', narrator: 'bella',
+    script: [
+      { who: 'bella', line: 'Hello! It\'s a beach day!' },
+      { who: 'leo', line: 'Let\'s make prints in the sand!' },
+    ],
+    cta: "Let's go!",
+  },
+
+  /* 3-5 New words, move, signature game */
+  {
+    id: 'u4l3-words', kind: 'listen-repeat-cards', bg: bgU4L3Bella, cardScenes: true, textSide: 'right', teacher: 'Look at Bella, do it with your own body, then say it!',
+    cards: [
+      { who: 'bella', sentence: 'Hands! Clap your hands.', img: bgU4L3Hands, imgLabel: 'Hands!' },
+      { who: 'bella', sentence: 'Fingers! Wiggle your fingers.', img: bgU4L3Fingers, imgLabel: 'Fingers!' },
+      { who: 'bella', sentence: 'Feet! Stamp your feet.', img: bgU4L3Feet, imgLabel: 'Feet!' },
+      { who: 'bella', sentence: 'Arms! Wave your arms.', img: bgU4L3Arms, imgLabel: 'Arms!' },
+    ],
+  },
+  {
+    id: 'u4l3-move-say', kind: 'tpr-actions', bg: bgU4L3Bella, who: 'bella',
+    teacher: 'Say it with Bella, then do it.',
+    rounds: [
+      { line: 'Clap your hands!', emoji: '\u{1F44F}', img: bgU4L3Hands },
+      { line: 'Wiggle your fingers!', emoji: '\u{1F590}\u{FE0F}', img: bgU4L3Fingers },
+      { line: 'Stamp your feet!', emoji: '\u{1F463}', img: bgU4L3Feet },
+      { line: 'Wave your arms!', emoji: '\u{1F64C}', img: bgU4L3Arms },
+      { line: 'Touch your toes!', emoji: '\u{1F9B6}' },
+    ],
+  },
+  {
+    // Signature game (new): press the body part you hear into the sand.
+    id: 'u4l3-sand-prints', kind: 'sand-prints', bg: bgU4L3Sand, who: 'bella',
+    teacher: 'Sand Prints! Listen to Bella and tap the body part she says. Press it into the sand and say it!',
+    parts: [{ label: 'hand', img: partHand }, { label: 'finger', img: partFinger }, { label: 'foot', img: partFoot }, { label: 'arm', img: partArm }],
+    rounds: [
+      { part: 2, line: 'Press your foot in the sand!', reply: 'Yes! A footprint!' },
+      { part: 0, line: 'Press your hand in the sand!', reply: 'Yes! A handprint!' },
+      { part: 1, line: 'Press your finger in the sand!', reply: 'Yes! A fingerprint!' },
+      { part: 3, line: 'Press your arm in the sand!', reply: 'Yes! An arm print!' },
+      { part: 2, line: 'Now the other foot!', reply: 'Two footprints!' },
+    ],
+    doneLine: 'Look at all our prints in the sand!',
+  },
+
+  /* 6-9 Practice + speaking */
+  {
+    id: 'u4l3-leo-asks', kind: 'join-stage', bg: bgU4L3Beach, teacher: 'Leo asks. The student does it and answers.', cast: ['leo'],
+    turns: [
+      { who: 'leo', line: 'Clap your hands! What are they?', bubble: 'right' },
+      { who: 'student', line: "They're my hands! (clap)", bubble: 'right' },
+      { who: 'leo', line: 'Stamp your feet! What are they?', bubble: 'right' },
+      { who: 'student', line: "They're my feet!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l3-you-ask', kind: 'join-stage', bg: bgU4L3Bella, teacher: 'Swap! The student tells Bella what to do.', cast: ['bella'],
+    turns: [
+      { who: 'student', line: 'Say to Bella: Wave your arms!', bubble: 'right' },
+      { who: 'bella', line: 'My arms! Look, I wave my arms!', bubble: 'right' },
+      { who: 'student', line: 'Say to Bella: Wiggle your fingers!', bubble: 'right' },
+      { who: 'bella', line: 'My fingers! Wiggle, wiggle!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l3-whose', kind: 'puzzle', bg: bgU4L3Beach, teacher: 'Whose is it? Tap the squares to peek, then pick the friend. Say "It\'s Bella!"',
+    rounds: [
+      { who: 'bella', img: bgU4L3Hands, hint: 'Whose hands?' },
+      { who: 'leo', img: `${A}/scenes/bg-u4l1-leo-shoulders-wide.png`, hint: 'Whose shoulders?' },
+      { who: 'mia', img: `${A}/scenes/bg-u4l2-mia-ears-wide.png`, hint: 'Whose ears?' },
+    ],
+  },
+  {
+    id: 'u4l3-jigsaw', kind: 'jigsaw-puzzle', bg: bgU4L3Sand, teacher: 'Build the beach picture! Drag each piece to its place, then say who you see.',
+    image: bgU4L3Beach, rows: 2, cols: 3,
+  },
+
+  /* 10-13 Phonics: F says /f/ */
+  {
+    id: 'u4l3-model-f', kind: 'sound-model', bg: bgU4L3Beach, who: 'bella', letter: 'F', phoneme: '/f/', sound: 'fff',
+    teacher: 'F says /f/ — fish, fan, feet!',
+    anchors: [
+      { word: 'fish', emoji: '\u{1F41F}', img: itemFish },
+      { word: 'fan', emoji: '\u{1FAAD}', img: itemFan },
+      { word: 'feet', emoji: '\u{1F463}', img: partFoot },
+    ],
+  },
+  { id: 'u4l3-trace-f', kind: 'trace', bg: bgU4L3Sand, who: 'bella', letter: 'F', phoneme: '/f/', word: 'fish', speakWord: false, teacher: 'Trace the big F in the sand with your finger! /f/ /f/ fish!' },
+  {
+    id: 'u4l3-basket-f', kind: 'basket', bg: bgU4L3Beach, letter: 'F', phoneme: '/f/', who: 'leo', teacher: "Drag the /f/ things into Leo's F bucket! No hurry.", goal: 4,
+    items: [
+      { word: 'fish', emoji: '\u{1F41F}', img: itemFish, hit: true },
+      { word: 'fan', emoji: '\u{1FAAD}', img: itemFan, hit: true },
+      { word: 'feather', emoji: '\u{1FAB6}', img: itemFeather, hit: true },
+      { word: 'frog', emoji: '\u{1F438}', img: itemFrogU4, hit: true },
+      { word: 'nest', emoji: '\u{1FAB9}', img: itemNestU4, hit: false },
+      { word: 'egg', emoji: '\u{1F95A}', img: itemEgg, hit: false },
+    ],
+  },
+  {
+    id: 'u4l3-first-letter', kind: 'word-build', bg: bgU4L3Sand, teacher: 'Listen! Which letter does it start with? Tap F or N.',
+    rounds: [
+      { word: 'fish', blankIndex: 0, answer: 'F', choices: ['F', 'N'], img: itemFish, emoji: '\u{1F41F}' },
+      { word: 'nest', blankIndex: 0, answer: 'N', choices: ['F', 'N'], img: itemNestU4, emoji: '\u{1FAB9}' },
+      { word: 'fan', blankIndex: 0, answer: 'F', choices: ['F', 'N'], img: itemFan, emoji: '\u{1FAAD}' },
+      { word: 'nut', blankIndex: 0, answer: 'N', choices: ['F', 'N'], img: itemNutU4, emoji: '\u{1F330}' },
+    ],
+  },
+
+  /* 14-15 Retell + perform */
+  {
+    id: 'u4l3-story-order', kind: 'story-order', bg: bgU4L3Beach, who: 'bella', teacher: 'Put the beach day in order, then tell it!',
+    frames: [
+      { img: bgU4L3Beach, caption: 'Bella and Leo go to the beach.', who: 'bella' },
+      { img: bgU4L3Feet, caption: 'Bella stamps her feet in the sand.', who: 'bella' },
+      { img: bgU4L3Arms, caption: 'Bella waves her arms. Bye, sea!', who: 'bella' },
+    ],
+  },
+  {
+    id: 'u4l3-perform', kind: 'join-stage', bg: bgU4L3Beach, teacher: 'Show time! The student sings and moves: hands, fingers, feet and arms — slow, then fast!', cast: ['bella', 'leo'],
+    turns: [
+      { who: 'bella', line: 'Your turn! Hands, fingers, feet and arms!', bubble: 'right' },
+      { who: 'student', line: 'Hands, fingers, feet and arms! (move)', bubble: 'right' },
+      { who: 'leo', line: 'Now faster!', bubble: 'right' },
+      { who: 'student', line: 'Hands, fingers, feet and arms!', bubble: 'right' },
+    ],
+  },
+
+  /* 16-17 Sticker + Home Mission */
+  {
+    id: 'u4l3-sticker', kind: 'sticker-reward', bg: bgU4L3Beach, who: 'bella', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super moving! Here is a handprint sticker for you!', sticker: { img: partHand, label: 'Hands' },
+  },
+  {
+    id: 'u4l3-home-mission', kind: 'home-mission', bg: bgU4L3Bella, who: 'bella',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: make a handprint at home! Then clap your hands and stamp your feet!',
+    parentNote: 'Make handprints and footprints with your child (paint on paper, flour on a tray, or sand). Ask: "Is it a hand or a foot?" Let your child say "hands", "fingers", "feet", "arms". Then play "Clap your hands! Stamp your feet!" and swap roles.',
+    steps: [
+      { emoji: '\u{1F590}\u{FE0F}', img: partHand, say: 'Hands' },
+      { emoji: '\u{1F9B6}', img: partFoot, say: 'Feet' },
+      { emoji: '\u{1F4AA}', img: partArm, say: 'Arms' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u4l3-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU4L3Beach, who: 'leo',
+    teacher: 'Extra time: Beach Moves! Do each move with Leo.',
+    rounds: [
+      { line: 'Clap your hands! Clap, clap!', emoji: '\u{1F44F}' },
+      { line: 'Stamp your feet! Stamp, stamp!', emoji: '\u{1F463}' },
+      { line: 'Swim with your arms!', emoji: '\u{1F3CA}' },
+      { line: 'Wiggle your fingers like a fish!', emoji: '\u{1F41F}' },
+      { line: 'Big stretch! Arms up!', emoji: '\u{1F64C}', seconds: 4 },
+    ],
+  },
+
+  /* 20-21 Goodbye */
+  {
+    id: 'u4l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u4l3-finale', kind: 'finale', bg: bgU4L3Beach, who: 'bella', line: 'What a beach day! Hands, fingers, feet and arms — you know them all! Goodbye, friend!' },
+];
+
 /* =============================================================================
  * Pre-A1 Unit 5, Lesson 1 — "Mom, Dad, Me!"
  *

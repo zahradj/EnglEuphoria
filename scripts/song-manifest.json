@@ -108,5 +108,10 @@
     "path": "public/lep1/audio/face-song-u4l2.mp3",
     "bytes": 321037,
     "sha256": "24327c89ecc42f2f2975164d51a1b44cf3467c2e714f48cfd35eb07cfa250fce"
+  },
+  "u4l3-body": {
+    "path": "public/lep1/audio/body-song-u4l3.mp3",
+    "bytes": 321037,
+    "sha256": "ddd5c832e7fcaf8ecd56212d96c5f3458890281e649642230854bc2543a381df"
   }
 }

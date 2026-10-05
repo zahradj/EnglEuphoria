@@ -1,12 +1,12 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0087-2018130689907804621.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T004724Z&X-Amz-Expires=73452&X-Amz-Signature=d2ac6d30cba3f0a1e60be1015ea749c3fbf5d3e87294c6f60579ab4df9a1a959&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2021%3A11%3A36%20GMT",
-  "out": "public/lep1/scenes/bg-u4l1-leo-toes-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0099-3339937192707539895.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T175515Z&X-Amz-Expires=24125&X-Amz-Signature=d9d4746e7b38c4701592b163aea69fb00c47d6024a0309eab594f695865ed26c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2000%3A37%3A20%20GMT",
+  "out": "public/lep1/scenes/bg-u4l3-beach-wide.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0088-2018130689907804621.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T150933Z&X-Amz-Expires=21035&X-Amz-Signature=45031383cb758019c5320cca0f4963c3c88da0ecf6e73668be8ad49c4bf12936&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2005%20Oct%202026%2021%3A00%3A08%20GMT",
-  "out": "public/lep1/items/item-card-ears.png",
-  "sticker": true
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0100-3339937192707539895.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T085018Z&X-Amz-Expires=54852&X-Amz-Signature=1836f2c45d35c7a00fa0d20260c3cb05eb674d94e2ec2c39442b015bfd09f561&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2000%3A04%3A30%20GMT",
+  "out": "public/lep1/scenes/bg-u4l3-bella-wide.png",
+  "sticker": false
  }
 ]

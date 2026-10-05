@@ -388,6 +388,8 @@ const UNIT1_EXTRACTORS = {
   ],
   // Mirror ClawMachineScene.tsx's clawMachineLines() / RingTossScene.tsx's ringTossLines().
   'claw-machine': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.toys ?? []).map((t) => [s.who, `That's the ${t.label}! Try again!`]), [s.who, 'Oops! Nothing! Try again!']],
+  // Mirror SandPrintsScene.tsx's sandPrintsLines().
+  'sand-prints': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.parts ?? []).map((p) => [s.who, `That's your ${p.label}! Try again!`]), [s.who, s.doneLine]],
   // Mirror SoundPickScene.tsx's soundPickLines().
   'sound-pick': (s) => [[s.who, 'Which one starts with this sound?'], ...(s.rounds ?? []).flatMap((r) => (r.options ?? []).map((o, i) => [s.who, i === r.answer ? `Yes! ${o.word.charAt(0).toUpperCase() + o.word.slice(1)}!` : `${o.word.charAt(0).toUpperCase() + o.word.slice(1)}! Try again!`]))],
   'ring-toss': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),

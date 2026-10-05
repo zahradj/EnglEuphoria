@@ -57,6 +57,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '3-4': { settings: ['classroom', 'garden pool'], look: 'Show and Tell circle on the rainbow rug; summer garden with a paddling pool' },
   '4-1': { settings: ['dance studio'], look: 'bright dance studio in morning sun: mirror, barre and colourful mats; a dance class with Coach Willow' },
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
+  '4-3': { settings: ['beach'], look: 'sunny beach day: golden sand, blue sea, sandcastle and umbrella; top-down wet sand for prints; Bella and Leo' },
   '3-6': { settings: ['toy fair'], look: 'outdoor fair: sunny day with striped tents, then a golden evening with string lights' },
   '3-5': { settings: ['bedroom'], look: 'cozy bedroom in warm afternoon light; tidy-up mission with a surprise kitten' },
 };
@@ -131,7 +132,20 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'a wrong place is named back ("Not there! That\'s for the nose!"), so every mistake teaches a word',
       'the finished pancake comes alive and smiles, and the same game returns with a new order for Mia',
     ],
+  },  '4-3': {
+    sources: ['Classroom handprint / footprint art (preschool body-parts activity)', 'Lingokids (body-parts games)', 'Khan Academy Kids (calm, self-paced; a result that stays)', 'Cambridge (Pre A1 Starters listening: put the picture in the right place)', 'Sesame Workshop touch-tablet best practices (no clocks, deliberate actions)'],
+    mechanics: [
+      'handprint / footprint art → Sand Prints: hear "Press your foot in the sand!", choose the body part, the print stays in the sand',
+      'Cambridge "listen and place" → the print lands on the beach picture the child is making',
+      'peekaboo reveal → "Whose hands?": peek at a friend from earlier lessons and say who it is',
+    ],
+    betterThan: [
+      'the spoken word alone decides which body part to press (apps match picture to picture)',
+      'the prints stay: by the end the sand is a picture the child made',
+      'calm by design: no clock, nothing moving, a wrong part is named back and the right one glows after two tries',
+    ],
   },
+
 };
 
 export type VarietyIssue = { code: string; message: string };
