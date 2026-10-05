@@ -73,5 +73,35 @@
     "path": "public/lep1/audio/shelly-song-u2l5.mp3",
     "bytes": 688812,
     "sha256": "e9cbec81efebfd9f17beeaaf2e0b0b00b88a0f6584d9296213add0f4031bb623"
+  },
+  "u3l3-play": {
+    "path": "public/lep1/audio/play-song-u3l3.mp3",
+    "bytes": 321037,
+    "sha256": "00bd539157ecd48960a70e390cbfc770f99b41ae1e1e87ba3cc0f306bc2de5a3"
+  },
+  "u3l4-favorite": {
+    "path": "public/lep1/audio/favorite-toy-song-u3l4.mp3",
+    "bytes": 321037,
+    "sha256": "c4202999e10c65c105b9147e13d57f4b281a30fcd20b0dc957396375dadfe7d6"
+  },
+  "u3l5-tidy": {
+    "path": "public/lep1/audio/tidy-up-song-u3l5.mp3",
+    "bytes": 321037,
+    "sha256": "b3bf800ef434bd4115bb9634d05bbeec96272c4ff45fd2aadaf37e043f31784f"
+  },
+  "u3l6-fair": {
+    "path": "public/lep1/audio/toy-fair-song-u3l6.mp3",
+    "bytes": 321037,
+    "sha256": "df36aa96d08143accccf25206d441af14abfa5316c4ed3a610a24649925a8097"
+  },
+  "u4l1-body": {
+    "path": "public/lep1/audio/body-song-u4l1.mp3",
+    "bytes": 321037,
+    "sha256": "6f740c1c0220bdfe581253d1b1f0d9a9d25d38d772d7e8fa0b30728021510bdb"
+  },
+  "u5l1-family": {
+    "path": "public/lep1/audio/family-song-u5l1.mp3",
+    "bytes": 321037,
+    "sha256": "d582bb07e3a0fd35c423d038f627159b0eda3b19de76fedc355e1ffa3b15c5b5"
   }
 }

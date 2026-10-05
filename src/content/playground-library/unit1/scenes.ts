@@ -5273,15 +5273,15 @@ export const LESSON_U3L3_SCENES: Scene[] = [
 
   /* 1-3 Hook + story opener */
   {
-    id: 'u3l3-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
-    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
-    lineDurationsMs: [5200, 4300, 4500, 6100],
-    songPrompt: 'Cheerful upbeat kids hello song',
+    id: 'u3l3-song', kind: 'song', bg: bgU3L3Park, title: '\u{1F3B5} Do You Like to Play? \u{1F3B5}', teacher: 'Sing and answer! Shout "Yes, I do!" or "No, I don\'t!" and act out each toy.',
+    durationSeconds: 20, bigWord: 'Play', songUrl: `${A}/audio/play-song-u3l3.mp3?v=1`,
+    lineDurationsMs: [4740, 4500, 3800, 7022],
+    songPrompt: 'Upbeat kids pop song',
     lyrics: [
-      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+      { who: 'pip', text: 'Do you like kites? Yes, I do! Yes, I do!', emotion: 'happy' },
+      { who: 'leo', text: 'Do you like robots? Yes, I do! Yes, I do!', emotion: 'happy' },
+      { who: 'mia', text: 'Do you like balls? No, I don\'t! No, I don\'t!', emotion: 'happy' },
+      { who: 'pip', text: 'Do you like to play? Yes, I do! Let\'s play!', emotion: 'happy' },
     ],
   },
   {
@@ -5537,15 +5537,15 @@ export const LESSON_U3L4_SCENES: Scene[] = [
 
   /* 1-3 Hook + story opener */
   {
-    id: 'u3l4-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
-    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
-    lineDurationsMs: [5200, 4300, 4500, 6100],
-    songPrompt: 'Cheerful upbeat kids hello song',
+    id: 'u3l4-song', kind: 'song', bg: bgU3L4ShowTell, title: '\u{1F3B5} My Favorite Toy \u{1F3B5}', teacher: 'Sing and show! Arms wide on "big", tiny fingers on "small".',
+    durationSeconds: 20, bigWord: 'Toys', songUrl: `${A}/audio/favorite-toy-song-u3l4.mp3?v=1`,
+    lineDurationsMs: [4080, 3800, 3360, 8822],
+    songPrompt: 'Upbeat kids pop song',
     lyrics: [
-      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+      { who: 'bella', text: 'My favorite toy is my teddy bear! It is big!', emotion: 'happy' },
+      { who: 'leo', text: 'My favorite toy is my robot! It is small!', emotion: 'happy' },
+      { who: 'pip', text: 'Big, big, big! Small, small, small!', emotion: 'happy' },
+      { who: 'pip', text: 'What is your favorite toy? Show and tell!', emotion: 'happy' },
     ],
   },
   {
@@ -5795,15 +5795,15 @@ export const LESSON_U3L5_SCENES: Scene[] = [
 
   /* 1-3 Hook + story */
   {
-    id: 'u3l5-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
-    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
-    lineDurationsMs: [5200, 4300, 4500, 6100],
-    songPrompt: 'Cheerful upbeat kids hello song',
+    id: 'u3l5-song', kind: 'song', bg: bgU3L5Messy, title: '\u{1F3B5} Tidy Up! \u{1F3B5}', teacher: 'Sing and point! In: hands make a box. On: hands on top. Under: hands go low.',
+    durationSeconds: 20, bigWord: 'Tidy', songUrl: `${A}/audio/tidy-up-song-u3l5.mp3?v=1`,
+    lineDurationsMs: [3120, 4100, 3960, 8882],
+    songPrompt: 'Upbeat kids pop song',
     lyrics: [
-      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+      { who: 'pip', text: 'Tidy up, tidy up, put the toys away!', emotion: 'happy' },
+      { who: 'bella', text: 'The ball goes in the box! In, in, in!', emotion: 'happy' },
+      { who: 'mia', text: 'The teddy goes on the bed! On, on, on!', emotion: 'happy' },
+      { who: 'leo', text: 'The car goes under the chair! Under, under!', emotion: 'happy' },
     ],
   },
   {
@@ -6087,15 +6087,15 @@ export const LESSON_U3L6_SCENES: Scene[] = [
 
   /* 1-3 Hook + story */
   {
-    id: 'u3l6-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
-    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
-    lineDurationsMs: [5200, 4300, 4500, 6100],
-    songPrompt: 'Cheerful upbeat kids hello song',
+    id: 'u3l6-song', kind: 'song', bg: bgU3L6Fair, title: '\u{1F3B5} The Toy Fair Song \u{1F3B5}', teacher: 'Sing and point to the prizes! Say "please" and "thank you" with Pip.',
+    durationSeconds: 20, bigWord: 'Fair', songUrl: `${A}/audio/toy-fair-song-u3l6.mp3?v=1`,
+    lineDurationsMs: [3200, 4120, 4000, 8742],
+    songPrompt: 'Upbeat kids pop song',
     lyrics: [
-      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+      { who: 'pip', text: 'Toy fair, toy fair, play and win!', emotion: 'happy' },
+      { who: 'leo', text: 'I want the robot, please! The robot, please!', emotion: 'happy' },
+      { who: 'bella', text: 'I want the kite, please! The kite, please!', emotion: 'happy' },
+      { who: 'pip', text: 'Play and win and say it! Thank you! Hooray!', emotion: 'happy' },
     ],
   },
   {
@@ -6394,15 +6394,15 @@ export const LESSON_U4L1_SCENES: Scene[] = [
 
   /* 1-3 Hook + story */
   {
-    id: 'u4l1-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
-    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
-    lineDurationsMs: [5200, 4300, 4500, 6100],
-    songPrompt: 'Cheerful upbeat kids hello song',
+    id: 'u4l1-song', kind: 'song', bg: bgU4L1Class, title: '\u{1F3B5} Head, Shoulders, Knees and Toes \u{1F3B5}', teacher: 'Stand up! Touch each body part as you sing it, faster and faster.',
+    durationSeconds: 20, bigWord: 'Body', songUrl: `${A}/audio/body-song-u4l1.mp3?v=1`,
+    lineDurationsMs: [3580, 3980, 3960, 8542],
+    songPrompt: 'Upbeat kids pop song',
     lyrics: [
-      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Touch your head and touch your toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
     ],
   },
   {
@@ -6738,6 +6738,18 @@ export const LESSON_U5L1_SCENES: Scene[] = [
   {
     id: 'u5l1-vocab-family', kind: 'listen-repeat-cards', bg: bgU5L1FamilyHome, teacher: 'Listen, then repeat!', bare: true, textSide: 'top',
     cards: [{ who: 'pip', sentence: 'Family! This is my family!', img: bgU5L1FamilyHome, imgLabel: 'Family' }],
+  },
+  {
+    id: 'u5l1-song', kind: 'song', bg: bgU5L1FamilyHome, title: '\u{1F3B5} My Family Song \u{1F3B5}', teacher: 'Sing and point! Point to Mom on "mom", Dad on "dad", and give yourself a hug on "me".',
+    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-song-u5l1.mp3?v=1`,
+    lineDurationsMs: [3600, 4100, 3940, 8422],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'This is my mom! I love my mom!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my dad! I love my dad!', emotion: 'happy' },
+      { who: 'pip', text: 'Mom and dad and me! We are a family!', emotion: 'happy' },
+      { who: 'pip', text: 'Mom, dad, me! A happy family!', emotion: 'happy' },
+    ],
   },
   {
     // Per direct user request: removed this lesson's standalone M/D
