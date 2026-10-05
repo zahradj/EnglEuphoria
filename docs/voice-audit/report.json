@@ -664,6 +664,18 @@
     ]
   },
   {
+    "file": "e3d06df1.mp3",
+    "voice": "teacher",
+    "text": "Had I known, I would've left sooner.",
+    "heard": "Had I known, I would have left sooner",
+    "distance": 2,
+    "rate": 0.29,
+    "ops": [
+      "extra \"would\"",
+      "\"wouldve\"→\"have\""
+    ]
+  },
+  {
     "file": "e5ad6bde.mp3",
     "voice": "teacher",
     "text": "The chair is next to the table.",
@@ -1018,6 +1030,42 @@
     "rate": 0.06,
     "ops": [
       "\"favourite\"→\"favorite\""
+    ]
+  },
+  {
+    "file": "c6009623.mp3",
+    "voice": "teacher",
+    "text": "Reminder: the deadline for your research proposal is next Monday at five p.m. Submit through the portal, not by email. If you need an extension, request it before Friday so we can review it in time.",
+    "heard": "Reminder: the deadline for your research proposal is next Monday at 5 PM. Submit through the portal, not by email. If you need an extension, request it before Friday so we can review it in time",
+    "distance": 2,
+    "rate": 0.05,
+    "ops": [
+      "missing \"p\"",
+      "\"m\"→\"pm\""
+    ]
+  },
+  {
+    "file": "5065d2c7.mp3",
+    "voice": "teacher",
+    "text": "The headline numbers look encouraging at first glance, with new sign-ups up twelve percent quarter over quarter. However, once you factor in churn, customer retention has stayed roughly flat, even though we increased spend on loyalty programs. That's the part I think we need to dig into before the board meeting.",
+    "heard": "The headline numbers look encouraging at first glance, with new signups up twelve percent quarter over quarter. However, once you factor in churn, customer retention has stayed roughly flat, even though we increased spend on loyalty programs. That's the part I think we need to dig into before the board meeting",
+    "distance": 2,
+    "rate": 0.04,
+    "ops": [
+      "missing \"sign\"",
+      "\"ups\"→\"signups\""
+    ]
+  },
+  {
+    "file": "c3ee14ac.mp3",
+    "voice": "teacher",
+    "text": "Looking at the conversion data, my honest recommendation would be to put the campaign on hold for a fortnight while we revisit the targeting and the messaging. The click-through rate has been respectable, but the actual conversion to sign-ups has been underwhelming, which tells me the issue lies further down the funnel, not with initial visibility.",
+    "heard": "Looking at the conversion data, my honest recommendation would be to put the campaign on hold for a fortnight while we revisit the targeting and the messaging. The click-through rate has been respectable, but the actual conversion to signups has been underwhelming, which tells me the issue lies further down the funnel, not with initial visibility.",
+    "distance": 2,
+    "rate": 0.03,
+    "ops": [
+      "missing \"sign\"",
+      "\"ups\"→\"signups\""
     ]
   },
   {
