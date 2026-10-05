@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
 import { safeSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
+import { THICK_WORDS } from './shared';
 
 /* ---------- Listen & Repeat cards (one sentence at a time, object image,
  * karaoke-style word highlight synced to playback, then hold-to-repeat) ---------- */
@@ -98,7 +99,7 @@ export function ListenRepeatCardsScene({ scene, onNext, onWin, sync }: { scene: 
         <div className={`absolute z-10 flex flex-col items-center gap-4 portrait:inset-x-0 portrait:bottom-28 portrait:top-auto landscape:inset-y-0 landscape:w-[30%] landscape:justify-center ${side === 'left' ? 'landscape:left-0' : 'landscape:right-0'}`}>
           <p
             className={`text-center font-black leading-none text-white transition-transform ${playing ? 'scale-110' : ''}`}
-            style={{ ...THICK_WORDS, fontSize: 'clamp(3rem, calc(7*var(--svw,1vw)), 7rem)' }}
+            style={{ ...THICK_WORDS, fontSize: `clamp(2.4rem, min(calc(7*var(--svw,1vw)), calc(${(26 / Math.max(4, card!.imgLabel.length * 0.62)).toFixed(2)}*var(--svw,1vw))), 7rem)` }}
           >
             {card!.imgLabel}
           </p>
@@ -139,11 +140,11 @@ export function ListenRepeatCardsScene({ scene, onNext, onWin, sync }: { scene: 
         <div className={
           side === 'top'
             ? 'absolute inset-x-0 top-24 z-10 flex flex-col items-center gap-6 px-4'
-            : `absolute inset-y-0 z-10 flex w-1/2 flex-col items-center justify-center gap-8 px-1 ${side === 'right' ? 'right-0' : 'left-0'}`
+            : `absolute z-10 flex flex-col items-center justify-center gap-8 px-1 landscape:inset-y-0 landscape:w-1/2 portrait:inset-x-0 portrait:bottom-24 portrait:gap-4 ${side === 'right' ? 'landscape:right-0' : 'landscape:left-0'}`
         }>
           <p
             className="text-center font-black leading-none text-white"
-            style={{ ...THICK_WORDS, fontSize: side === 'top' ? 'clamp(3.5rem, calc(10*var(--svw,1vw)), 7rem)' : 'clamp(4.5rem, calc(13*var(--svw,1vw)), 10rem)' }}
+            style={{ ...THICK_WORDS, fontSize: side === 'top' ? 'clamp(3.5rem, calc(10*var(--svw,1vw)), 7rem)' : 'clamp(3rem, min(calc(13*var(--svw,1vw)), calc(9*var(--svh,1vh))), 10rem)' }}
           >
             {words.map((w, i) => {
               const fixedColor = card!.wordColors?.[i];
@@ -235,11 +236,3 @@ export function ListenRepeatCardsScene({ scene, onNext, onWin, sync }: { scene: 
   );
 }
 
-/** Thick game-title lettering for the vocabulary words: white letters with a heavy dark outline
- *  drawn under the fill (so the letters look fatter, not thinner) and a soft drop shadow. */
-const THICK_WORDS: CSSProperties = {
-  WebkitTextStroke: '0.16em #6B2A0E',
-  paintOrder: 'stroke fill',
-  textShadow: '0 0.08em 0 #6B2A0E, 0 0.18em 0.3em rgba(0,0,0,0.35)',
-  letterSpacing: '0.01em',
-};

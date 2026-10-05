@@ -468,3 +468,12 @@ export function ThingArt({ thing, shadow = false }: { thing: Thing; shadow?: boo
     </span>
   );
 }
+
+/** Thick game-title lettering (white letters, heavy dark outline drawn under the fill, soft shadow).
+ *  Used for every word a child reads on screen in vocabulary and movement pages (owner, 2026-10-05). */
+export const THICK_WORDS: import('react').CSSProperties = {
+  WebkitTextStroke: '0.16em #6B2A0E',
+  paintOrder: 'stroke fill',
+  textShadow: '0 0.08em 0 #6B2A0E, 0 0.18em 0.3em rgba(0,0,0,0.35)',
+  letterSpacing: '0.01em',
+};

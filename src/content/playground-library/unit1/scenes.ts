@@ -6389,6 +6389,7 @@ const bgU4L1ActToes = `${A}/scenes/bg-u4l1-act-toes-wide.png`;
 const bgU4L1LeoHead = `${A}/scenes/bg-u4l1-leo-head-wide.png`;
 const bgU4L1LeoShoulders = `${A}/scenes/bg-u4l1-leo-shoulders-wide.png`;
 const bgU4L1LeoKnees = `${A}/scenes/bg-u4l1-leo-knees-wide.png`;
+const bgU4L1LeoToes = `${A}/scenes/bg-u4l1-leo-toes-wide.png`;
 const bgU4L1Studio = `${A}/scenes/bg-u4l1-studio-empty-wide.png`;
 const cardHead = `${A}/items/item-card-head.png`;
 const cardShoulders = `${A}/items/item-card-shoulders.png`;
@@ -6450,22 +6451,22 @@ export const LESSON_U4L1_SCENES: Scene[] = [
 
   /* 4-6 New words, move, first game */
   {
-    id: 'u4l1-words', kind: 'listen-repeat-cards', bg: bgU4L1Studio, teacher: 'Touch it, then say it! Point to your own body every time.',
+    id: 'u4l1-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU4L1Studio, teacher: 'Touch it, then say it! Point to your own body every time.',
     cards: [
-      { who: 'leo', sentence: 'Head! Touch your head.', img: cardHead, imgLabel: 'Head' },
-      { who: 'leo', sentence: 'Shoulders! Touch your shoulders.', img: cardShoulders, imgLabel: 'Shoulders' },
-      { who: 'leo', sentence: 'Knees! Touch your knees.', img: cardKnees, imgLabel: 'Knees' },
-      { who: 'leo', sentence: 'Toes! Touch your toes.', img: cardToes, imgLabel: 'Toes' },
+      { who: 'leo', sentence: 'Head! Touch your head.', img: bgU4L1LeoHead, imgLabel: 'Head!' },
+      { who: 'leo', sentence: 'Shoulders! Touch your shoulders.', img: bgU4L1LeoShoulders, imgLabel: 'Shoulders!' },
+      { who: 'leo', sentence: 'Knees! Touch your knees.', img: bgU4L1LeoKnees, imgLabel: 'Knees!' },
+      { who: 'leo', sentence: 'Toes! Touch your toes.', img: bgU4L1LeoToes, imgLabel: 'Toes!' },
     ],
   },
   {
     id: 'u4l1-move-say', kind: 'tpr-actions', bg: bgU4L1Studio, who: 'willow',
     teacher: 'Stand up! Say it with Willow, then do it before the ring runs out.',
     rounds: [
-      { line: 'Touch your head!', emoji: '\u{1F64B}', img: cardHead },
-      { line: 'Touch your shoulders!', emoji: '\u{1F937}', img: cardShoulders },
-      { line: 'Touch your knees!', emoji: '\u{1F9CE}', img: cardKnees },
-      { line: 'Touch your toes!', emoji: '\u{1F9B6}', img: cardToes },
+      { line: 'Touch your head!', emoji: '\u{1F64B}', img: bgU4L1LeoHead },
+      { line: 'Touch your shoulders!', emoji: '\u{1F937}', img: bgU4L1LeoShoulders },
+      { line: 'Touch your knees!', emoji: '\u{1F9CE}', img: bgU4L1LeoKnees },
+      { line: 'Touch your toes!', emoji: '\u{1F9B6}', img: bgU4L1LeoToes },
       { line: 'Now faster! Head, shoulders, knees and toes!', emoji: '\u{26A1}' },
     ],
   },
@@ -6729,10 +6730,10 @@ export const LESSON_U4L2_SCENES: Scene[] = [
     id: 'u4l2-move-say', kind: 'tpr-actions', bg: bgU4L2MiaFace, who: 'mia',
     teacher: 'Say it with Mia, then do it before the ring runs out.',
     rounds: [
-      { line: 'Point to your eyes!', emoji: '\u{1F440}', img: cardEyes },
-      { line: 'Touch your ears!', emoji: '\u{1F442}', img: cardEars },
-      { line: 'Touch your nose!', emoji: '\u{1F443}', img: cardNose },
-      { line: 'Point to your mouth!', emoji: '\u{1F444}', img: cardMouth },
+      { line: 'Point to your eyes!', emoji: '\u{1F440}', img: bgU4L2MiaEyes },
+      { line: 'Touch your ears!', emoji: '\u{1F442}', img: bgU4L2MiaEars },
+      { line: 'Touch your nose!', emoji: '\u{1F443}', img: bgU4L2MiaNose },
+      { line: 'Point to your mouth!', emoji: '\u{1F444}', img: bgU4L2MiaMouth },
       { line: 'Close your eyes! Now open your eyes!', emoji: '\u{1F648}' },
     ],
   },
