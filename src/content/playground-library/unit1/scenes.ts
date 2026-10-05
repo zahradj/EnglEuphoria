@@ -541,7 +541,7 @@ export type Scene =
       id: string; kind: 'ring-toss'; bg: string; bgVideo?: string; teacher: string; who: CharKey; ringImg: string;
       pegs: { x: number; y: number }[];
       prizes: Thing[];
-      rounds: { target: number; line: string; reply: string }[];
+      rounds: { target: number; line: string; reply: string; /** a letter: its recorded phonics sound plays before the line */ sound?: string }[];
     }
   | {
       /** Tidy Up (Lingokids × Toy Story "pack the box with toys", Lingokids
@@ -6251,10 +6251,10 @@ export const LESSON_U3L6_SCENES: Scene[] = [
       { label: 'octopus', img: itemOctopus },
     ],
     rounds: [
-      { target: 1, line: '/d/ /d/ /d/! Throw the ring on the D word!', reply: 'Yes! D, doll!' },
-      { target: 2, line: '/k/ /k/ /k/! Throw the ring on the K word!', reply: 'Yes! K, kite!' },
-      { target: 0, line: '/p/ /p/ /p/! Throw the ring on the P word!', reply: 'Yes! P, pizza!' },
-      { target: 3, line: '/o/ /o/ /o/! Throw the ring on the O word!', reply: 'Yes! O, octopus!' },
+      { target: 1, sound: 'd', line: 'Throw the ring on the D word!', reply: 'Yes! D, doll!' },
+      { target: 2, sound: 'k', line: 'Throw the ring on the K word!', reply: 'Yes! K, kite!' },
+      { target: 0, sound: 'p', line: 'Throw the ring on the P word!', reply: 'Yes! P, pizza!' },
+      { target: 3, sound: 'o', line: 'Throw the ring on the O word!', reply: 'Yes! O, octopus!' },
     ],
   },
 

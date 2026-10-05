@@ -26,3 +26,10 @@ LESSON_U3L2_SCENES
 LESSON_U5L1_SCENES
 GAMES
 # 2026-10-03: re-record cookie/present after adding their dictionary entries
+# 2026-10-05: lessons built while ElevenLabs credits were out (U3L3-U3L6, U4L1) + A1U2L1.
+LESSON_U3L3_SCENES
+LESSON_U3L4_SCENES
+LESSON_U3L5_SCENES
+LESSON_U3L6_SCENES
+LESSON_U4L1_SCENES
+LESSON_A1U2L1_SCENES

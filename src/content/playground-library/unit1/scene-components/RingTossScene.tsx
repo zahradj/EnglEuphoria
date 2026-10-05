@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import type { Scene } from '../scenes';
-import { cueSpeak } from '../audio';
+import { cueSpeak, playLetterPhonic } from '../audio';
 import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
@@ -35,9 +35,20 @@ export function RingTossScene({ scene, onWin, onLose, onNext, sync }: { scene: T
   const [bursts, fire] = useBursts();
   const [shakeCtl, shake] = useShake();
 
+  // A sound round plays the REAL recorded letter sound (never a voice reading "/d/"), then the line.
+  const ask = async () => {
+    if (!r) return;
+    if (r.sound) {
+      await playLetterPhonic(r.sound);
+      await wait(450);
+      await playLetterPhonic(r.sound);
+      await wait(350);
+    }
+    cueSpeak(r.line, scene.who);
+  };
   useEffect(() => {
     if (!r) return;
-    const t = window.setTimeout(() => cueSpeak(r.line, scene.who), 600);
+    const t = window.setTimeout(() => { void ask(); }, 600);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round, scene.id]);
@@ -74,10 +85,10 @@ export function RingTossScene({ scene, onWin, onLose, onNext, sync }: { scene: T
       {!r && <Confetti count={80} />}
 
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-base font-black text-orange-700 shadow-xl sm:text-xl">
-        {r ? `⭕ ${r.line}` : '🎉 Ring toss champion!'}
+        {r ? `⭕ ${r.sound ? `/${r.sound}/ · ` : ''}${r.line}` : '🎉 Ring toss champion!'}
         {r && <span className="ml-2 rounded-full bg-orange-100 px-2 py-0.5 text-sm text-orange-600">{round + 1}/{total}</span>}
       </div>
-      {r && <button onClick={() => cueSpeak(r.line, scene.who)} className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>}
+      {r && <button onClick={() => { void ask(); }} className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>}
 
       {/* Prize toys above the pegs + the pegs' tap areas. */}
       {scene.pegs.map((p, j) => {
