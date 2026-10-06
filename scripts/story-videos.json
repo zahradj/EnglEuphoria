@@ -610,7 +610,7 @@
         "image": "public/lep1/scenes/bg-u4l5-tiger-stand-wide.png",
         "endImage": "public/lep1/scenes/bg-u4l5-tiger-head-wide.png",
         "seconds": 5,
-        "line": "Look! The tiger turns his head!",
+        "line": "Look! The tiger turns his head. Turn, turn!",
         "bodyWords": [
           "head"
         ],
@@ -625,7 +625,7 @@
         "image": "public/lep1/scenes/bg-u4l5-pip-stand-wide.png",
         "endImage": "public/lep1/scenes/bg-u4l5-pip-head-wide.png",
         "seconds": 5,
-        "line": "I can do it! I turn my head!",
+        "line": "I can do it! Turn, turn! I turn my head!",
         "bodyWords": [
           "head"
         ],
@@ -640,7 +640,7 @@
         "image": "public/lep1/scenes/bg-u4l5-monkey-stand-wide.png",
         "endImage": "public/lep1/scenes/bg-u4l5-monkey-arms-wide.png",
         "seconds": 5,
-        "line": "Look! The monkey waves his arms!",
+        "line": "Look! The monkey waves his arms. Wave, wave!",
         "bodyWords": [
           "arms"
         ],
@@ -655,7 +655,7 @@
         "image": "public/lep1/scenes/bg-u4l5-pip-stand-wide.png",
         "endImage": "public/lep1/scenes/bg-u4l5-pip-arms-wide.png",
         "seconds": 5,
-        "line": "I can do it! I wave my arms!",
+        "line": "I can do it! Wave, wave! I wave my arms!",
         "bodyWords": [
           "arms"
         ],
@@ -670,7 +670,7 @@
         "image": "public/lep1/scenes/bg-u4l5-elephant-stand-wide.png",
         "endImage": "public/lep1/scenes/bg-u4l5-elephant-feet-wide.png",
         "seconds": 5,
-        "line": "Look! The elephant stomps his feet!",
+        "line": "Look! The elephant stomps his feet. Stomp, stomp!",
         "bodyWords": [
           "feet"
         ],
@@ -685,7 +685,7 @@
         "image": "public/lep1/scenes/bg-u4l5-pip-stand-wide.png",
         "endImage": "public/lep1/scenes/bg-u4l5-pip-feet-wide.png",
         "seconds": 5,
-        "line": "I can do it! I stomp my feet!",
+        "line": "I can do it! Stomp, stomp! I stomp my feet!",
         "bodyWords": [
           "feet"
         ],
@@ -700,7 +700,7 @@
         "image": "public/lep1/scenes/bg-u4l5-seal-stand-wide.png",
         "endImage": "public/lep1/scenes/bg-u4l5-seal-hands-wide.png",
         "seconds": 5,
-        "line": "Look! The seal claps her hands!",
+        "line": "Look! The seal claps her hands. Clap, clap!",
         "bodyWords": [
           "hands"
         ],
@@ -715,7 +715,7 @@
         "image": "public/lep1/scenes/bg-u4l5-pip-stand-wide.png",
         "endImage": "public/lep1/scenes/bg-u4l5-pip-hands-wide.png",
         "seconds": 5,
-        "line": "I can do it! I clap my hands!",
+        "line": "I can do it! Clap, clap! I clap my hands!",
         "bodyWords": [
           "hands"
         ],
