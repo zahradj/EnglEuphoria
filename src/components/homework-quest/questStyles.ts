@@ -70,6 +70,23 @@ export const QUEST_CSS = `
 .hq-stage:has(.hq-dock) .hq-caption:not(.hq-corner) { bottom:auto; top:12px; }
 /* On a phone the wide picture is only a thin strip: give the frame more height so the blocks never cover the scene. */
 @media (max-width:560px) { .hq-stage:has(.hq-dock) { aspect-ratio:4/3 !important; } }
+/* Word blocks / answer lines live in the frame too: a column dock (built line above the word bank). */
+.hq-dock-words { flex-direction:column; align-items:center; gap:1.6cqw; padding-top:9cqw; }
+.hq-dock-words .hq-built { min-height:0; padding:1.2cqw 2.4cqw; border-radius:2.4cqw; font-size:clamp(14px,2.6cqw,24px); box-shadow:0 .6cqw 0 rgba(0,0,0,.25); max-width:94%; }
+.hq-dock-words .hq-built .hq-w { font-size:clamp(14px,2.8cqw,26px); padding:.2em .4em; }
+.hq-dock-words .hq-words { gap:1.4cqw; max-width:96%; }
+.hq-dock-words .hq-words .hq-w { font-size:clamp(14px,2.8cqw,26px); padding:.45em .8em; border-radius:2cqw; background:var(--parchment)!important; color:var(--ink)!important; border:2px solid var(--hq-accent)!important; box-shadow:0 .7cqw 0 #b98a2e; }
+.hq-dock-words .hq-potions { gap:2.4cqw; }
+.hq-dock-words .hq-potion { color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.6); }
+.hq-dock-words .hq-bar { margin:0; }
+.hq-dock-opts { flex-wrap:wrap; align-items:stretch; padding-top:9cqw; }
+.hq-dock-opts .hq-opt { flex:1 1 22cqw; max-width:44cqw; font-size:clamp(14px,2.8cqw,24px); padding:clamp(8px,1.6cqw,16px); border-radius:2.4cqw; box-shadow:0 .7cqw 0 #b98a2e; }
+.hq-stage:has(.hq-dock-opts) .hq-book { inset:64px 6% auto 6%; }
+@media (max-width:560px) { .hq-stage:has(.hq-dock-words), .hq-stage:has(.hq-dock-opts) { aspect-ratio:1/1 !important; } }
+/* The frame never grows taller than the window (minus header and the bar/tray under it), so nothing slides below the fold. */
+.hq-stage { max-width:min(100%, max(300px, calc((100dvh - 330px) * var(--ar, 1.79)))); margin-inline:auto; }
+.hq-stage:has(.hq-dock) { max-width:min(100%, max(300px, calc((100dvh - 230px) * var(--ar, 1.79)))); }
+@media (max-width:560px) { .hq-stage, .hq-stage:has(.hq-dock) { max-width:100%; } }
 .hq-answers { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
 .hq-big { min-width:150px; padding:16px 22px; border-radius:20px; font-family:"Grandstander",system-ui,sans-serif; font-weight:900; font-size:26px; color:#fff!important; box-shadow:0 8px 0 rgba(0,0,0,.3); }
 .hq-big.t { background:linear-gradient(180deg,#6ee7b7,#059669)!important; } .hq-big.f { background:linear-gradient(180deg,#fda4af,#e11d48)!important; }

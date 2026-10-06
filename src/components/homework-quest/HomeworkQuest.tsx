@@ -76,7 +76,7 @@ function DragItem({ handlers, className, style, label, children }: { handlers: D
 
 function Stage({ img, aspect = 1376 / 768, night, children, still }: { img: string; aspect?: number; night?: boolean; still?: boolean; children?: ReactNode }) {
   return (
-    <div className="hq-stage" style={{ aspectRatio: String(aspect) }}>
+    <div className="hq-stage" style={{ aspectRatio: String(aspect), ['--ar' as string]: String(aspect) }}>
       <div className={`hq-art ${still ? 'still' : ''}`} style={{ backgroundImage: `url('${img}')` }} />
       {night && <div className="hq-night">{Array.from({ length: 16 }, (_, i) => <span key={i} className="hq-twinkle" style={{ left: `${(i * 37 + 5) % 100}%`, top: `${(i * 53 + 9) % 90}%`, animationDelay: `${(i * 170) % 2000}ms` }} />)}</div>}
       {children}
@@ -255,9 +255,11 @@ function SentenceBuilder({ level, say, miss, star, done, setDots }: LevelProps<'
       <Stage img={R.img}>
         {R.sticker && <img className="hq-char" src={R.sticker.src} alt="" style={{ left: `${R.sticker.x}%`, top: `${R.sticker.y}%` }} />}
         <HearBtn onClick={() => void say(R.line)} />
+        <div className="hq-dock hq-dock-words">
+          <div ref={builtRef} className="hq-built">{pos === 0 ? <span className="ph">Tap the words in order…</span> : words.slice(0, pos).map((w, i) => <span key={i} className="hq-w">{w}</span>)}</div>
+          <div className="hq-words">{bank.filter((b) => !used.includes(b.id)).map((b) => <button key={b.id} className="hq-w" onClick={(e) => tap(b, e.currentTarget)}>{b.w}</button>)}</div>
+        </div>
       </Stage>
-      <div ref={builtRef} className="hq-built">{pos === 0 ? <span className="ph">Tap the words in order…</span> : words.slice(0, pos).map((w, i) => <span key={i} className="hq-w">{w}</span>)}</div>
-      <div className="hq-words">{bank.filter((b) => !used.includes(b.id)).map((b) => <button key={b.id} className="hq-w" onClick={(e) => tap(b, e.currentTarget)}>{b.w}</button>)}</div>
     </>
   );
 }
@@ -346,13 +348,15 @@ function Twister({ level, quest, say, miss, star, done, setDots }: LevelProps<'t
     return (
       <>
         <Stage img={level.img} night={quest.theme.night}>
-          <div className="hq-book" style={{ inset: 'auto 6% 8% 6%' }}><div className="hq-words">{words.map((w, i) => <span key={i} className="hq-w ink">{highlight(w, level.focus)}</span>)}</div></div>
+          <div className="hq-book" style={{ inset: '6% 6% auto 6%' }}><div className="hq-words">{words.map((w, i) => <span key={i} className="hq-w ink">{highlight(w, level.focus)}</span>)}</div></div>
+          <div className="hq-dock hq-dock-words">
+            <div className="hq-potions">{speeds.map((s, i) => <div key={s} className={`hq-potion ${i <= fills ? 'on' : ''}`}><div className="hq-flask" style={{ ['--fill' as string]: i < fills ? '100%' : '0%' }} />{s}</div>)}</div>
+            <div className="hq-bar center">
+              <button className="hq-btn ghost" onClick={() => void say(level.line)}>🔊 Hear it</button>
+              <button className="hq-btn violet" disabled={fills >= 3} onClick={(e) => { sfx.right(); star(e.currentTarget); const n = fills + 1; setFills(n); if (n >= 3) window.setTimeout(() => done(misses.current), 900); }}>✨ I said it!</button>
+            </div>
+          </div>
         </Stage>
-        <div className="hq-potions">{speeds.map((s, i) => <div key={s} className={`hq-potion ${i <= fills ? 'on' : ''}`}><div className="hq-flask" style={{ ['--fill' as string]: i < fills ? '100%' : '0%' }} />{s}</div>)}</div>
-        <div className="hq-bar center">
-          <button className="hq-btn ghost" onClick={() => void say(level.line)}>🔊 Hear it</button>
-          <button className="hq-btn violet" disabled={fills >= 3} onClick={(e) => { sfx.right(); star(e.currentTarget); const n = fills + 1; setFills(n); if (n >= 3) window.setTimeout(() => done(misses.current), 900); }}>✨ I said it!</button>
-        </div>
       </>
     );
   }
@@ -361,9 +365,11 @@ function Twister({ level, quest, say, miss, star, done, setDots }: LevelProps<'t
       <Stage img={level.img} night={quest.theme.night}>
         <HearBtn onClick={() => void say(level.line)} />
         <div className="hq-caption hq-corner">⏳ {Math.max(0, left > 999 ? 0 : left)}s</div>
+        <div className="hq-dock hq-dock-words">
+          <div ref={builtRef} className="hq-built">{pos === 0 ? <span className="ph">Tap the words in order…</span> : words.slice(0, pos).map((w, i) => <span key={i} className="hq-w">{highlight(w, level.focus)}</span>)}</div>
+          <div className="hq-words">{bank.filter((b) => b.i >= pos).map((b) => <button key={`${attempt}-${b.i}`} className="hq-w" onClick={(e) => tap(b, e.currentTarget)}>{highlight(b.w, level.focus)}</button>)}</div>
+        </div>
       </Stage>
-      <div ref={builtRef} className="hq-built">{pos === 0 ? <span className="ph">Tap the words in order…</span> : words.slice(0, pos).map((w, i) => <span key={i} className="hq-w">{highlight(w, level.focus)}</span>)}</div>
-      <div className="hq-words">{bank.filter((b) => b.i >= pos).map((b) => <button key={`${attempt}-${b.i}`} className="hq-w" onClick={(e) => tap(b, e.currentTarget)}>{highlight(b.w, level.focus)}</button>)}</div>
     </>
   );
 }
@@ -398,8 +404,8 @@ function Reading({ level, quest, say, praise, tryAgain, miss, star, done, setDot
       <Stage img={level.img} night={quest.theme.night}>
         <div className="hq-book"><p className="big">{Q.q}</p><p className="hint">The book is closed now. Answer from memory!</p></div>
         <HearBtn onClick={() => void say(Q.q)} />
+        <div className="hq-dock hq-dock-opts">{Q.options.map((o) => <button key={o} className={`hq-opt ${ok === o ? 'ok' : ''}`} onClick={(e) => pick(o, e.currentTarget)}>{o}</button>)}</div>
       </Stage>
-      <div className="hq-opts">{Q.options.map((o) => <button key={o} className={`hq-opt ${ok === o ? 'ok' : ''}`} onClick={(e) => pick(o, e.currentTarget)}>{o}</button>)}</div>
     </>
   );
 }
