@@ -388,6 +388,11 @@ const UNIT1_EXTRACTORS = {
   ],
   // Mirror ClawMachineScene.tsx's clawMachineLines() / RingTossScene.tsx's ringTossLines().
   'claw-machine': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.toys ?? []).map((t) => [s.who, `That's the ${t.label}! Try again!`]), [s.who, 'Oops! Nothing! Try again!']],
+  // Mirror ShapeMagicScene / ShapePeekScene / ShapeSorterScene / ShapeBubblesScene *Lines().
+  'shape-magic': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, s.doneLine]],
+  'shape-peek': (s) => [[s.who, 'What shape is hiding?'], ...(s.rounds ?? []).map((r) => [s.who, r.reply]), ...['circle', 'square', 'triangle'].map((x) => [s.who, `Not a ${x}! Look again!`])],
+  'shape-sorter': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.blocks ?? []).map((b) => [s.who, `That's the ${String(b.colorWord).toLowerCase()} ${b.shape}! Try again!`]), [s.who, s.doneLine]],
+  'shape-bubbles': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...['circle', 'square', 'triangle'].map((x) => [s.who, `That's a ${x}!`]), [s.who, s.doneLine]],
   // Mirror SandPrintsScene.tsx's sandPrintsLines().
   'sand-prints': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.parts ?? []).map((p) => [s.who, `That's your ${p.label}! Try again!`]), [s.who, s.doneLine]],
   // Mirror SoundPickScene.tsx's soundPickLines().

@@ -564,6 +564,32 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Magic Pencil (U2L3 signature): trace the dotted shape; it turns into `img` at (x, y)% and stays.
+       *  size = pad size in vh; color = the outline / stroke colour. */
+      id: string; kind: 'shape-magic'; bg: string; teacher: string; who: CharKey;
+      rounds: { shape: 'circle' | 'square' | 'triangle'; x: number; y: number; size: number; color: string; line: string; reply: string; img: string; label: string }[];
+      doneLine: string;
+    }
+  | {
+      /** What's Peeking? A shape peeks out of a crate; pick circle / square / triangle; it jumps out as `img`. */
+      id: string; kind: 'shape-peek'; bg: string; teacher: string; who: CharKey;
+      rounds: { shape: 'circle' | 'square' | 'triangle'; color: string; reply: string; img: string; label: string }[];
+    }
+  | {
+      /** Shape Sorter: "Put in the blue square!" — tap or drag the block onto the box; rounds[].block = index in blocks. */
+      id: string; kind: 'shape-sorter'; bg: string; teacher: string; who: CharKey;
+      blocks: { shape: 'circle' | 'square' | 'triangle'; colorWord: string; colorHex: string }[];
+      rounds: { block: number; line: string; reply: string }[];
+      surprise: { img: string; label: string };
+      doneLine: string;
+    }
+  | {
+      /** Bubble Pop: calm bubbles that float in place; pop every bubble with the named shape (count = how many). */
+      id: string; kind: 'shape-bubbles'; bg: string; teacher: string; who: CharKey;
+      rounds: { shape: 'circle' | 'square' | 'triangle'; count: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Calm first-sound pick: the recorded letter sound, then "Which one starts with this sound?";
        *  three still pictures, no clock, wrong taps are named back and cost nothing. */
       id: string; kind: 'sound-pick'; bg: string; teacher: string; who: CharKey;
@@ -3455,9 +3481,11 @@ const bgU2L3DashArena = `${A}/scenes/bg-u2l3-dash-arena.png`;
  * "How to teach shapes to young learners": circle first — no corners). */
 /* Rebuilt 2026-10-06 on the 22-page blueprint (owner: "Full rebuild"):
  * full-picture word pages (Bella + clock, Mia + window, Leo + pizza) instead
- * of cards, Draw-and-Say movement, the calm games only (the timed Shape Dash,
- * the text flipbook and the "Read the word" page are gone — Pre-A1 children
- * don't read), a "Who found it?" peek puzzle, a C /k/ basket, story order,
+ * of cards and Draw-and-Say movement. Four NEW calm games (owner: "I need new
+ * activities"): Magic Pencil (trace a shape, it comes alive), What's Peeking?
+ * (feely-bag guessing), Shape Sorter (hear the colour + shape, post the
+ * block) and Bubble Pop (bubbles that wait). No timed Shape Dash, no reading
+ * pages (Pre-A1 children don't read). Then a C /k/ basket, story order,
  * sticker, home mission, brain break and the goodbye song. Research and
  * variety: lessonVariety.ts '2-3'. */
 const itemClock = `${A}/items/item-clock.png`;
@@ -3475,6 +3503,8 @@ const bgU2L3Builder = `${A}/scenes/bg-u2l3-builder-wide.png`;
 const bgU2L3Clock = `${A}/scenes/bg-u2l3-clock-wide.png`;
 const bgU2L3Window = `${A}/scenes/bg-u2l3-window-wide.png`;
 const bgU2L3Pizza = `${A}/scenes/bg-u2l3-pizza-wide.png`;
+const itemBallU2 = `${A}/items/item-ball.png`;
+const itemRobotU2 = `${A}/items/item-robot.png`;
 const RED = '#EF4444';
 const BLUE = '#3B82F6';
 const YELLOW = '#FACC15';
@@ -3528,35 +3558,16 @@ export const LESSON_U2L3_SCENES: Scene[] = [
     ],
   },
   {
-    // Signature game: name each shape, pick it in the colour you hear, build a picture.
-    id: 'u2l3-shape-builders', kind: 'shape-builder', bg: bgU2L3Builder, who: 'pip',
-    teacher: 'Shape Builders! Name the shape, then pick the color you hear.',
+    // Signature game (new): Magic Pencil — trace a shape, it comes alive in the picture.
+    id: 'u2l3-magic-pencil', kind: 'shape-magic', bg: bgU2L3Builder, who: 'pip',
+    teacher: "Pip's Magic Pencil! Listen, then trace the dotted shape with your finger. Say the shape!",
     rounds: [
-      {
-        who: 'mia', label: 'House', intro: "Let's build a house!", line: "It's a house!", alive: 'bounce',
-        pieces: [
-          { shape: 'square', colorWord: 'BLUE', colorHex: BLUE, x: 32, y: 32, w: 36, h: 36 },
-          { shape: 'triangle', colorWord: 'RED', colorHex: RED, x: 26, y: 6, w: 48, h: 26 },
-          { shape: 'circle', colorWord: 'YELLOW', colorHex: YELLOW, x: 43, y: 41, w: 14, h: 14 },
-        ],
-      },
-      {
-        who: 'leo', label: 'Rocket', intro: "Let's build a rocket!", line: "It's a rocket!", alive: 'launch',
-        pieces: [
-          { shape: 'triangle', colorWord: 'PURPLE', colorHex: '#A855F7', x: 37, y: 4, w: 26, h: 22 },
-          { shape: 'square', colorWord: 'ORANGE', colorHex: '#F97316', x: 37, y: 26, w: 26, h: 26 },
-          { shape: 'circle', colorWord: 'BLUE', colorHex: BLUE, x: 44, y: 32, w: 12, h: 12 },
-        ],
-      },
-      {
-        who: 'bella', label: 'Ice cream', intro: "Let's build an ice cream!", line: "It's an ice cream!", alive: 'wiggle',
-        pieces: [
-          { shape: 'triangle', colorWord: 'ORANGE', colorHex: '#F97316', x: 38, y: 34, w: 24, h: 34, flip: true },
-          { shape: 'circle', colorWord: 'GREEN', colorHex: '#22C55E', x: 35, y: 12, w: 30, h: 30 },
-          { shape: 'circle', colorWord: 'RED', colorHex: RED, x: 45, y: 3, w: 10, h: 10 },
-        ],
-      },
+      { shape: 'circle', x: 79, y: 42, size: 28, color: '#F59E0B', line: 'Draw a circle in the sky!', reply: "A circle! It's the sun!", img: itemSun, label: 'sun' },
+      { shape: 'square', x: 36, y: 68, size: 26, color: '#3B82F6', line: 'Draw a square on the grass!', reply: "A square! It's a present!", img: itemPresent, label: 'present' },
+      { shape: 'triangle', x: 57, y: 66, size: 26, color: '#EF4444', line: 'Draw a triangle!', reply: "A triangle! It's a pizza!", img: itemPizzaSlice, label: 'pizza' },
+      { shape: 'circle', x: 76, y: 74, size: 22, color: '#22C55E', line: 'Draw a little circle!', reply: "A circle! It's a ball!", img: itemBallU2, label: 'ball' },
     ],
+    doneLine: 'Look at your magic picture!',
   },
 
   /* 7-10 Practice + speaking */
@@ -3572,19 +3583,13 @@ export const LESSON_U2L3_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u2l3-sort-shapes', kind: 'shape-sort', bg: bgU2L3Town, teacher: 'Listen, then drag each thing to its shape! No hurry.',
-    targets: [
-      { shapeWord: 'CIRCLE', shapeColor: RED, who: 'bella' },
-      { shapeWord: 'SQUARE', shapeColor: BLUE, who: 'mia' },
-      { shapeWord: 'TRIANGLE', shapeColor: YELLOW, who: 'leo' },
-    ],
-    items: [
-      { word: 'clock', img: itemClock, emoji: '\u{1F570}️', shapeWord: 'CIRCLE' },
-      { word: 'cookie', img: itemCookie, emoji: '\u{1F36A}', shapeWord: 'CIRCLE' },
-      { word: 'window', img: itemWindow, emoji: '\u{1FA9F}', shapeWord: 'SQUARE' },
-      { word: 'present', img: itemPresent, emoji: '\u{1F381}', shapeWord: 'SQUARE' },
-      { word: 'pizza', img: itemPizzaSlice, emoji: '\u{1F355}', shapeWord: 'TRIANGLE' },
-      { word: 'flag', img: itemFlag, emoji: '\u{1F6A9}', shapeWord: 'TRIANGLE' },
+    id: 'u2l3-peek', kind: 'shape-peek', bg: bgU2L3Town, who: 'pip',
+    teacher: "What's peeking? Look at the top of the shape — round or pointy? Tap the shape and say it!",
+    rounds: [
+      { shape: 'circle', color: '#EF4444', reply: "It's a circle! A ball!", img: itemBallU2, label: 'ball' },
+      { shape: 'triangle', color: '#FACC15', reply: "It's a triangle! A pizza!", img: itemPizzaSlice, label: 'pizza' },
+      { shape: 'square', color: '#3B82F6', reply: "It's a square! A present!", img: itemPresent, label: 'present' },
+      { shape: 'triangle', color: '#EF4444', reply: "It's a triangle! A flag!", img: itemFlag, label: 'flag' },
     ],
   },
   {
@@ -3598,21 +3603,35 @@ export const LESSON_U2L3_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u2l3-shape-spy', kind: 'color-spy', bg: bgU2L3Town, who: 'pip', article: 'a', teacher: 'I Spy! Find the shape Pip says in Shape Town.',
-    spots: [
-      { colorWord: 'CIRCLE', colorHex: RED, label: 'The clock', left: '16.5%', top: '28%' },
-      { colorWord: 'SQUARE', colorHex: BLUE, label: 'The window', left: '50%', top: '50%' },
-      { colorWord: 'TRIANGLE', colorHex: '#F59E0B', label: 'The flag', left: '80%', top: '19%' },
+    id: 'u2l3-sorter', kind: 'shape-sorter', bg: bgU2L3Builder, who: 'mia',
+    teacher: 'Shape Sorter! Listen to Mia, then tap or drag the right block into the box.',
+    blocks: [
+      { shape: 'circle', colorWord: 'RED', colorHex: RED },
+      { shape: 'square', colorWord: 'BLUE', colorHex: BLUE },
+      { shape: 'triangle', colorWord: 'YELLOW', colorHex: YELLOW },
+      { shape: 'square', colorWord: 'GREEN', colorHex: '#22C55E' },
+      { shape: 'circle', colorWord: 'BLUE', colorHex: BLUE },
+      { shape: 'triangle', colorWord: 'RED', colorHex: RED },
     ],
-    clueOrder: ['TRIANGLE', 'CIRCLE', 'SQUARE'],
+    rounds: [
+      { block: 1, line: 'Put in the blue square!', reply: 'In it goes! The blue square!' },
+      { block: 0, line: 'Put in the red circle!', reply: 'In it goes! The red circle!' },
+      { block: 2, line: 'Put in the yellow triangle!', reply: 'In it goes! The yellow triangle!' },
+      { block: 3, line: 'Put in the green square!', reply: 'In it goes! The green square!' },
+      { block: 5, line: 'Put in the red triangle!', reply: 'In it goes! The red triangle!' },
+    ],
+    surprise: { img: itemRobotU2, label: 'robot' },
+    doneLine: 'Surprise! It\'s a robot!',
   },
   {
-    id: 'u2l3-who-found', kind: 'puzzle', bg: bgU2L3Town, teacher: 'Who found it? Tap the squares to peek, then pick the friend. Say "It\'s Bella! The clock is a circle."',
+    id: 'u2l3-bubbles', kind: 'shape-bubbles', bg: bgU2L3Town, who: 'leo',
+    teacher: 'Bubble Pop! Listen to Leo and pop only the bubbles with that shape. No hurry.',
     rounds: [
-      { who: 'mia', img: bgU2L3Window, hint: 'Who found the square?' },
-      { who: 'leo', img: bgU2L3Pizza, hint: 'Who found the triangle?' },
-      { who: 'bella', img: bgU2L3Clock, hint: 'Who found the circle?' },
+      { shape: 'circle', count: 3, line: 'Pop the circles!', reply: 'Pop, pop, pop! All the circles!' },
+      { shape: 'triangle', count: 3, line: 'Pop the triangles!', reply: 'Pop, pop, pop! All the triangles!' },
+      { shape: 'square', count: 3, line: 'Pop the squares!', reply: 'Pop, pop, pop! All the squares!' },
     ],
+    doneLine: 'Great popping!',
   },
 
   /* 11-13 Phonics: C says /k/ */

@@ -78,16 +78,24 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
     ],
   },
   '2-3': {
-    sources: ['Khan Academy Kids (shape recognition, Logic+)', 'Lingokids (shapes games; "7 ways to teach shapes")', 'Geometric Shapes Puzzle (littlekidsgames: build pictures from shapes)', 'englishclub / eslkidstuff (TPR shapes, "I can see a triangle!")', 'Cambridge (Pre A1 Starters / ELT)'],
+    sources: [
+      'Cambridge (Pre A1 Starters / ELT: listen and put it in the picture; "Which is correct?" picture choice)',
+      'Oxford (Numicon feely bag) + British Council LearnEnglish Kids "Mystery bag game"',
+      'Duolingo ABC / Khan Academy Kids (finger tracing; shape recognition in Logic+)',
+      'Lingokids (shapes games; "7 ways to teach shapes") and Novakid shape games',
+      'englishclub / eslkidstuff (TPR shapes: draw in the air, make shapes with the body)',
+    ],
     mechanics: [
-      'apps\' "build a picture from shapes" puzzles → Shape Builders: name the shape, pick it in the colour you HEAR, the house / rocket / ice cream comes alive',
-      'TPR "draw the shape in the air" / "make a shape with your body" (englishclub, eslkidstuff) → Draw and Say + Shape Moves',
-      'classroom shape hunt / I spy ("I can see a triangle!") → I Spy in Shape Town, then a peek puzzle "Who found the square?"',
+      'finger tracing (Duolingo ABC, Khan Academy Kids) + Cambridge "put it in the picture" → Magic Pencil: trace the shape and it comes alive in Shape Town',
+      'the feely / mystery bag (Oxford Numicon, British Council) → What\'s Peeking?: only an edge or a corner shows; guess the shape',
+      'the toddler shape-sorter toy + Cambridge colour-and-object listening → Shape Sorter: "Put in the blue square!"',
+      'bubble / balloon pop (Lingokids, Wordwall) → calm Bubble Pop: pop only the shape you hear',
     ],
     betterThan: [
-      'the colour is only heard, not shown, so building needs two words (shape + colour), where the apps only match outlines',
-      'every shape lives on a real thing in one town (clock, window, pizza), so the word sticks to the world, not to a flat outline',
-      'calm by design: no clock, no reading; the old timed Shape Dash and the reading pages were taken out (docs/research/young-learner-games.md)',
+      'tracing is not a worksheet: every finished shape becomes a thing that stays (the sun, a present, a pizza, a ball), so the child paints a whole picture',
+      'in What\'s Peeking? a wrong guess makes the shape peek out a little more — every miss is a clue, never a loss',
+      'the sorter has two blocks of each shape, so the colour must be HEARD too (recycling Lessons 1-2); a wrong block is named back',
+      'calm by design: no clock anywhere, bubbles wait on the spot, the right answer glows after two misses; no reading pages (the old timed Shape Dash, text storybook and "Read the word" are gone)',
     ],
   },
   '3-4': {
