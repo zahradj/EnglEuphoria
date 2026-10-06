@@ -2,21 +2,11 @@
  {
   "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0084-6486827488502820241.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T124720Z&X-Amz-Expires=89430&X-Amz-Signature=5af6f33828f597a458bd35ebbd41a9cb3765bdf0574bbca2bb819c530807c772&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2013%3A37%3A50%20GMT",
   "out": "public/lep1/items/sheet-u4l3-f.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0086-6486827488502820241.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T142937Z&X-Amz-Expires=82119&X-Amz-Signature=6429e28ca7fc2dc7a4462cf7d7ef112255d6a39c2e6988f90d6606e18e58f294&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2013%3A18%3A16%20GMT",
-  "out": "public/lep1/scenes/bg-u4l3-bella-fingers-wide.png",
-  "sticker": false
+  "sticker": true
  },
  {
   "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0088-6486827488502820241.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T021649Z&X-Amz-Expires=40219&X-Amz-Signature=47d7ead0e6f5f68e0d2267037f42e812b2cf6b9b3ed77cbac748119f49851345&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2013%3A27%3A08%20GMT",
   "out": "public/lep1/items/sheet-u4l3-body.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0100-6486827488502820241.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T130546Z&X-Amz-Expires=88216&X-Amz-Signature=2edd5a3a9bd070a1b76e9f694102be939f8c38ad170587292e2e76b4c6cf2f63&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2013%3A36%3A02%20GMT",
-  "out": "public/lep1/scenes/bg-u4l3-sand-wide.png",
-  "sticker": false
+  "sticker": true
  }
 ]
