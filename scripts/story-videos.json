@@ -596,5 +596,127 @@
         "review": "2026-10-04 NOT MADE: Higgsfield 403 not_enough_credits (nothing charged). The film uses the spoon picture fading into the purple picture."
       }
     ]
+  },
+  "u4l5-moves": {
+    "lesson": "Pre-A1 Unit 4 Lesson 5 — From Head to Toe, story film 'Animal Moves' (page 4). Scenario docs/scenarios/u4l5-animal-moves.md (approved 2026-10-06). STRICT MODE: one clip at a time, each between two Canva key pictures (standing pose -> move pose), screened with review-clip.py, then frame-by-frame review with the owner.",
+    "provider": "higgsfield",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "seconds": 5,
+    "out": "public/lep1/video/clips/u4l5-moves",
+    "style": "Keep exactly the soft 2D cartoon picture-book style and the same character as the first frame (bold dark outlines, soft flat colours). Smooth, slow, gentle animation for young children. The camera stays steady. No text, no new characters, no speech.",
+    "beats": [
+      {
+        "id": "tiger-head",
+        "image": "public/lep1/scenes/bg-u4l5-tiger-stand-wide.png",
+        "endImage": "public/lep1/scenes/bg-u4l5-tiger-head-wide.png",
+        "seconds": 5,
+        "line": "Look! The tiger turns his head!",
+        "bodyWords": [
+          "head"
+        ],
+        "leader": "tiger",
+        "action": "the tiger slowly turns his head to the side; his body and feet stay still",
+        "prompt": "The tiger cub slowly turns his head to the side and looks to the right, smiling. His body, arms and feet stay still. Nobody else is in the picture. The camera stays steady.",
+        "ownerApproved": false
+      },
+      {
+        "id": "pip-head",
+        "image": "public/lep1/scenes/bg-u4l5-pip-stand-wide.png",
+        "endImage": "public/lep1/scenes/bg-u4l5-pip-head-wide.png",
+        "seconds": 5,
+        "line": "I can do it! I turn my head!",
+        "bodyWords": [
+          "head"
+        ],
+        "leader": "Pip",
+        "action": "Pip slowly turns his head to the side; his body and feet stay still",
+        "prompt": "Pip the orange fox slowly turns his head to the side and looks to the right, smiling. His body, arms and feet stay still. Nobody else is in the picture. The camera stays steady.",
+        "ownerApproved": false
+      },
+      {
+        "id": "monkey-arms",
+        "image": "public/lep1/scenes/bg-u4l5-monkey-stand-wide.png",
+        "endImage": "public/lep1/scenes/bg-u4l5-monkey-arms-wide.png",
+        "seconds": 5,
+        "line": "Look! The monkey waves his arms!",
+        "bodyWords": [
+          "arms"
+        ],
+        "leader": "monkey",
+        "action": "the monkey lifts both arms high and waves his arms above his head; his feet stay still",
+        "prompt": "The monkey slowly lifts both arms high above his head and waves his arms gently. His feet and body stay in place. Nobody else is in the picture. The camera stays steady.",
+        "ownerApproved": false
+      },
+      {
+        "id": "pip-arms",
+        "image": "public/lep1/scenes/bg-u4l5-pip-stand-wide.png",
+        "endImage": "public/lep1/scenes/bg-u4l5-pip-arms-wide.png",
+        "seconds": 5,
+        "line": "I can do it! I wave my arms!",
+        "bodyWords": [
+          "arms"
+        ],
+        "leader": "Pip",
+        "action": "Pip lifts both arms high and waves his arms above his head; his feet stay still",
+        "prompt": "Pip the orange fox slowly lifts both arms high above his head and moves his arms gently side to side. His feet and body stay in place. Nobody else is in the picture. The camera stays steady.",
+        "ownerApproved": false
+      },
+      {
+        "id": "elephant-feet",
+        "image": "public/lep1/scenes/bg-u4l5-elephant-stand-wide.png",
+        "endImage": "public/lep1/scenes/bg-u4l5-elephant-feet-wide.png",
+        "seconds": 5,
+        "line": "Look! The elephant stomps his feet!",
+        "bodyWords": [
+          "feet"
+        ],
+        "leader": "elephant",
+        "action": "the elephant lifts one big foot and stomps his feet on the grass; a small puff of dust",
+        "prompt": "The little elephant slowly lifts one big foot and stomps it down on the grass, stomping his feet, with a small puff of dust. His head and body stay in place. Nobody else is in the picture. The camera stays steady.",
+        "ownerApproved": false
+      },
+      {
+        "id": "pip-feet",
+        "image": "public/lep1/scenes/bg-u4l5-pip-stand-wide.png",
+        "endImage": "public/lep1/scenes/bg-u4l5-pip-feet-wide.png",
+        "seconds": 5,
+        "line": "I can do it! I stomp my feet!",
+        "bodyWords": [
+          "feet"
+        ],
+        "leader": "Pip",
+        "action": "Pip lifts one foot and stomps his feet on the grass; a small puff of dust",
+        "prompt": "Pip the orange fox slowly lifts one foot and stomps it down on the grass, stomping his feet, with a small puff of dust. His head and body stay in place. Nobody else is in the picture. The camera stays steady.",
+        "ownerApproved": false
+      },
+      {
+        "id": "seal-hands",
+        "image": "public/lep1/scenes/bg-u4l5-seal-stand-wide.png",
+        "endImage": "public/lep1/scenes/bg-u4l5-seal-hands-wide.png",
+        "seconds": 5,
+        "line": "Look! The seal claps her hands!",
+        "bodyWords": [
+          "hands"
+        ],
+        "leader": "seal",
+        "action": "the seal claps her hands (front flippers) together in front of her chest",
+        "prompt": "The seal slowly brings her two front flippers together and claps her hands in front of her chest. Her body and tail stay in place. Nobody else is in the picture. The camera stays steady.",
+        "ownerApproved": false
+      },
+      {
+        "id": "pip-hands",
+        "image": "public/lep1/scenes/bg-u4l5-pip-stand-wide.png",
+        "endImage": "public/lep1/scenes/bg-u4l5-pip-hands-wide.png",
+        "seconds": 5,
+        "line": "I can do it! I clap my hands!",
+        "bodyWords": [
+          "hands"
+        ],
+        "leader": "Pip",
+        "action": "Pip brings his hands together in front of his chest (a clap)",
+        "prompt": "Pip the orange fox slowly brings his two paws together in front of his chest, hands meeting with a soft pat, two times. His feet and body stay in place. Nobody else is in the picture. The camera stays steady.",
+        "ownerApproved": false
+      }
+    ]
   }
 }
