@@ -33,3 +33,14 @@ export function getWelcomeTownLesson(
   if (contentFormat === GAME_LESSON_FORMAT) return getGameClassroomLesson(lessonNumber);
   return WELCOME_TOWN_LESSON_REGISTRY[`${contentFormat}-${unitNumber}-${lessonNumber}`] ?? null;
 }
+
+/** Which registered Welcome Town / Magic Castle lesson owns this scene list
+ *  (by identity — the players only receive `scenes`). Null for ad-hoc lists. */
+export function identifyWelcomeTownLesson(scenes: unknown): { contentFormat: string; unitNumber: number; lessonNumber: number; title: string } | null {
+  for (const [key, entry] of Object.entries(WELCOME_TOWN_LESSON_REGISTRY)) {
+    if (entry.scenes !== scenes) continue;
+    const m = key.match(/^(.*)-(\d+)-(\d+)$/);
+    if (m) return { contentFormat: m[1], unitNumber: Number(m[2]), lessonNumber: Number(m[3]), title: entry.title };
+  }
+  return null;
+}

@@ -1,5 +1,6 @@
 import { SHARED_PLAY_KINDS, useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
 import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
+import { useRecordClassroomCompletion } from '@/hooks/useRecordClassroomCompletion';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -683,6 +684,8 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   const totalGemsPossible = useMemo(() => SCENES.filter((s) => GEM_KINDS.has(s.kind)).length, [SCENES]);
 
   const isFinale = scene.kind === 'finale';
+  // A live-class student finishing the lesson gets progress + Homework Quest like the dashboard player does.
+  useRecordClassroomCompletion({ scenes, isFinale, role, roomId, skip: !!onFinaleReached });
 
   useEffect(() => {
     if (isFinale && !finaleFiredRef.current) {
