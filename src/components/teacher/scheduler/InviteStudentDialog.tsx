@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -10,8 +10,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, Mail, Copy, Check, UserPlus } from 'lucide-react';
+import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
+import { useTeacherStudents } from '@/hooks/useTeacherStudents';
 import { supabase } from '@/integrations/supabase/client';
 
 type HubChoice = 'playground' | 'academy' | 'success';
@@ -37,6 +40,24 @@ const HUB_OPTIONS: { id: HubChoice; label: string; duration: 30 | 60 }[] = [
   { id: 'academy', label: 'Academy', duration: 60 },
   { id: 'success', label: 'Success', duration: 60 },
 ];
+
+/** An upcoming open slot of this teacher, offered as a one-tap way to fill the date and time. */
+interface OpenSlotChoice {
+  id: string;
+  start: Date;
+  duration: 30 | 60;
+  hub: HubChoice;
+}
+
+const MAX_SLOT_CHOICES = 12;
+
+const hubFromRow = (raw: string | null, duration: 30 | 60): HubChoice => {
+  const v = String(raw ?? '').toLowerCase();
+  if (v.includes('playground')) return 'playground';
+  if (v.includes('success') || v.includes('professional')) return 'success';
+  if (v.includes('academy')) return 'academy';
+  return duration === 30 ? 'playground' : 'academy';
+};
 
 export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
   open,
@@ -100,6 +121,64 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
   useEffect(() => {
     if (open) setSelectedHub(hub);
   }, [open, hub]);
+
+  // ── One-tap pickers: the teacher's own students, and their open slots ──
+  const { students, loading: studentsLoading } = useTeacherStudents();
+  const [openSlots, setOpenSlots] = useState<OpenSlotChoice[]>([]);
+  const [slotsLoading, setSlotsLoading] = useState(false);
+  const autoFilled = useRef(false);
+
+  const applySlot = (slot: OpenSlotChoice) => {
+    setDate(format(slot.start, 'yyyy-MM-dd'));
+    setTime(format(slot.start, 'HH:mm'));
+    setSelectedHub(slot.hub);
+    setPlaygroundHour(slot.hub === 'playground' && slot.duration === 60);
+  };
+
+  useEffect(() => {
+    if (!open || !teacherId) return;
+    autoFilled.current = false;
+    let cancelled = false;
+    setSlotsLoading(true);
+    (async () => {
+      const { data, error } = await supabase
+        .from('teacher_availability')
+        .select('id, start_time, duration, hub_specialty')
+        .eq('teacher_id', teacherId)
+        .eq('is_booked', false)
+        .gte('start_time', new Date().toISOString())
+        .order('start_time', { ascending: true })
+        .limit(MAX_SLOT_CHOICES);
+      if (cancelled) return;
+      setSlotsLoading(false);
+      if (error || !data) return; // the pickers are a convenience - typing a date and time still works
+      setOpenSlots(
+        data.map((r) => {
+          const dur: 30 | 60 = (r.duration ?? 30) >= 55 ? 60 : 30;
+          return { id: r.id, start: new Date(r.start_time), duration: dur, hub: hubFromRow(r.hub_specialty, dur) };
+        }),
+      );
+    })();
+    return () => { cancelled = true; };
+  }, [open, teacherId]);
+
+  // Fill the date and time automatically with the next open slot, unless the teacher already typed one.
+  useEffect(() => {
+    if (!open || autoFilled.current || openSlots.length === 0) return;
+    autoFilled.current = true;
+    if (date || time) return;
+    applySlot(openSlots[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, openSlots]);
+
+  const pickedStudentId =
+    students.find((s) => s.email.toLowerCase() === studentEmail.trim().toLowerCase())?.id ?? '';
+  const pickStudent = (id: string) => {
+    const s = students.find((x) => x.id === id);
+    if (!s) return;
+    setStudentEmail(s.email);
+    setStudentName(s.name && s.name !== s.email ? s.name : '');
+  };
 
   const reset = () => {
     setStudentEmail('');
@@ -214,6 +293,23 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
 
         {!joinLink ? (
           <form onSubmit={handleSubmit} className="space-y-4">
+            {(studentsLoading || students.length > 0) && (
+              <div className="space-y-2">
+                <Label>Choose one of your students</Label>
+                <Select value={pickedStudentId} onValueChange={pickStudent} disabled={studentsLoading}>
+                  <SelectTrigger aria-label="Choose one of your students">
+                    <SelectValue placeholder={studentsLoading ? 'Loading your students…' : 'Pick a student — or type a new email below'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {students.map((s) => (
+                      <SelectItem key={s.id} value={s.id}>
+                        {s.name && s.name !== s.email ? `${s.name} — ${s.email}` : s.email}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="student-email">Student email</Label>
               <Input
@@ -272,6 +368,32 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
                 onChange={(e) => setStudentName(e.target.value)}
               />
             </div>
+            {(slotsLoading || openSlots.length > 0) && (
+              <div className="space-y-2">
+                <Label>Your open slots — tap one to fill the date and time</Label>
+                {slotsLoading && openSlots.length === 0 ? (
+                  <p className="text-xs text-muted-foreground">Loading your open slots…</p>
+                ) : (
+                  <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Open slots">
+                    {openSlots.map((slot) => {
+                      const active = date === format(slot.start, 'yyyy-MM-dd') && time === format(slot.start, 'HH:mm');
+                      return (
+                        <button
+                          key={slot.id}
+                          type="button"
+                          role="radio"
+                          aria-checked={active}
+                          onClick={() => applySlot(slot)}
+                          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${active ? 'bg-primary text-primary-foreground border-primary' : 'bg-background text-foreground border-border hover:bg-muted'}`}
+                        >
+                          {format(slot.start, 'EEE d MMM · HH:mm')} · {slot.duration} min
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
                 <Label htmlFor="lesson-date">Date</Label>
