@@ -1,4 +1,5 @@
-+ public/lep1/scenes/bg-u4l3-bella-hands-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l3-bella-feet-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l3-bella-arms-wide.png (1376, 768)
-3/3 saved
++ public/lep1/items/sheet-u4l3-f.png (1376, 768)
++ public/lep1/scenes/bg-u4l3-bella-fingers-wide.png (1376, 768)
++ public/lep1/items/sheet-u4l3-body.png (1376, 768)
++ public/lep1/scenes/bg-u4l3-sand-wide.png (1376, 768)
+4/4 saved
