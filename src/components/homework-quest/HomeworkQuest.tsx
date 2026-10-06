@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import type { HomeworkQuest as Quest, QuestLevel, QuestVoice, Box } from '@/content/homework-quests/types';
 import { speak, stopSpeaking, playLetterPhonic, unlockAudio } from '@/content/playground-library/unit1/audio';
 import { QUEST_CSS } from './questStyles';
@@ -24,7 +24,7 @@ type LevelProps<K extends QuestLevel['kind']> = {
 const shuffle = <T,>(a: readonly T[]): T[] => { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
 const starsFor = (m: number) => (m === 0 ? 3 : m <= 2 ? 2 : 1);
 const pct = (b: Box): CSSProperties => ({ left: `${b.x}%`, top: `${b.y}%`, width: `${b.w}%`, height: `${b.h}%` });
-const isImg = (s: string) => s.startsWith('/') || s.startsWith('http');
+const isImg = (s: string) => s.startsWith('/') || s.startsWith('./') || s.startsWith('http');
 const Icon = ({ s, size = '70%' }: { s: string; size?: string }) => (isImg(s) ? <img src={s} alt="" style={{ width: size }} draggable={false} /> : <>{s}</>);
 const highlight = (text: string, focus?: string) => {
   if (!focus) return text;
@@ -74,12 +74,34 @@ function DragItem({ handlers, className, style, label, children }: { handlers: D
   return <div ref={ref} className={className} style={style} role="img" aria-label={label}>{children}</div>;
 }
 
-function Stage({ img, aspect = 1376 / 768, night, children, still }: { img: string; aspect?: number; night?: boolean; still?: boolean; children?: ReactNode }) {
+/** The game screen's picture. It fills the free space without ever making the
+ *  page scroll, and keeps the picture's shape so % hotspots stay exact.
+ *  The picture holds still (CLAUDE.md: never zoom or pan a still picture). */
+function Stage({ img, aspect = 1376 / 768, night, children, stageRef }: { img: string; aspect?: number; night?: boolean; still?: boolean; children?: ReactNode; stageRef?: React.Ref<HTMLDivElement> }) {
+  const box = useRef<HTMLDivElement | null>(null);
+  const [size, setSize] = useState<{ w: number; h: number } | null>(null);
+  useLayoutEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const fit = () => {
+      const W = el.clientWidth, H = el.clientHeight;
+      if (!W || !H) return;
+      const w = Math.min(W, H * aspect);
+      setSize((o) => (o && Math.abs(o.w - w) < 1 ? o : { w, h: w / aspect }));
+    };
+    fit();
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(fit);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [aspect]);
   return (
-    <div className="hq-stage" style={{ aspectRatio: String(aspect) }}>
-      <div className={`hq-art ${still ? 'still' : ''}`} style={{ backgroundImage: `url('${img}')` }} />
+    <div ref={box} className="hq-stagebox">
+    <div ref={stageRef} className="hq-stage" style={size ? { width: size.w, height: size.h } : { width: '100%', aspectRatio: String(aspect) }}>
+      <div className="hq-art" style={{ backgroundImage: `url('${img}')` }} />
       {night && <div className="hq-night">{Array.from({ length: 16 }, (_, i) => <span key={i} className="hq-twinkle" style={{ left: `${(i * 37 + 5) % 100}%`, top: `${(i * 53 + 9) % 90}%`, animationDelay: `${(i * 170) % 2000}ms` }} />)}</div>}
       {children}
+    </div>
     </div>
   );
 }
@@ -192,13 +214,13 @@ function StickerDrop({ level, say, tryAgain, miss, star, done, setDots }: LevelP
   });
   return (
     <>
-      <div ref={stageRef}>
-        <Stage img={level.img} aspect={level.aspect}>
+      <>
+        <Stage img={level.img} aspect={level.aspect} stageRef={stageRef}>
           {level.zones.map((z) => <div key={z.id} data-zone={z.id} className={`hq-zone ${hover === z.id ? 'hover' : ''}`} style={pct(z.box)} />)}
           {placed.map((p) => { const s = level.stickers.find((x) => x.item === p.item)!; return <img key={p.item} className="hq-placed" src={s.src} alt={s.item} style={{ left: `${p.x}%`, top: `${p.y}%`, width: `${s.size}%` }} />; })}
           <HearBtn onClick={() => void say(level.intro)} />
         </Stage>
-      </div>
+      </>
       <div className="hq-tray">{tray.filter((s) => !placed.some((p) => p.item === s.item)).map((s) => (
         <DragItem key={s.item} handlers={handlersFor(s)} className="hq-sticker" label={s.item}><img src={s.src} alt="" draggable={false} /></DragItem>
       ))}</div>
@@ -220,7 +242,7 @@ function TrueFalse({ level, say, praise, tryAgain, miss, star, done, setDots }: 
   };
   return (
     <>
-      <Stage img={R.img}>
+      <Stage img={R.img} aspect={R.aspect}>
         {R.sticker && <img className="hq-char" src={R.sticker.src} alt="" style={{ left: `${R.sticker.x}%`, top: `${R.sticker.y}%` }} />}
         <HearBtn onClick={() => void say(R.line)} />
         {shown && <div className="hq-caption">{R.line}</div>}
@@ -435,7 +457,11 @@ function confetti() {
 
 /* =========================== Quest shell =========================== */
 
-const MAP_PATH = [[12, 74], [24, 54], [36, 74], [48, 54], [60, 74], [74, 60], [86, 40], [70, 22], [48, 20], [26, 26], [12, 40], [90, 76]];
+/** Level stops on the map: a zig-zag trail across the whole picture, left to right. */
+function mapPath(n: number): number[][] {
+  if (n <= 1) return [[50, 62]];
+  return Array.from({ length: n }, (_, i) => [10 + (i * 80) / (n - 1), i % 2 ? 40 : 70]);
+}
 
 export interface QuestResult { questId: string; stars: number; levels: Record<string, number> }
 
@@ -449,6 +475,10 @@ export default function HomeworkQuest({ quest, onComplete, onExit }: { quest: Qu
   const [dots, setDotsState] = useState<[number, number]>([0, 0]);
   const [toast, setToast] = useState<string | null>(null);
   const [soundOn, setSoundOn] = useState(true);
+  // Video-game layer: level splash, level-complete screen, answer streak, walker hop.
+  const [splash, setSplash] = useState<number | null>(null);
+  const [win, setWin] = useState<{ idx: number; got: number } | null>(null);
+  const [combo, setCombo] = useState(0);
   const starRef = useRef<HTMLSpanElement | null>(null);
   useEffect(() => { try { localStorage.setItem(storeKey, JSON.stringify(S)); } catch { /* noop */ } }, [S, storeKey]);
   useEffect(() => () => stopSpeaking(), []);
@@ -456,7 +486,7 @@ export default function HomeworkQuest({ quest, onComplete, onExit }: { quest: Qu
   const say = useCallback((text: string, voice?: QuestVoice) => (soundOn && text ? speak(text, voice ?? quest.voice).catch(() => {}) : Promise.resolve()), [soundOn, quest.voice]);
   const praise = useCallback(() => { const l = quest.praise.lines; void say(l[Math.floor(Math.random() * l.length)], quest.praise.voice); }, [quest, say]);
   const tryAgain = useCallback(() => { void say(quest.praise.tryAgain, quest.praise.voice); }, [quest, say]);
-  const miss = useCallback(() => { sfx.wrong(); setS((s) => ({ ...s, hearts: Math.max(1, s.hearts - 1) })); }, []);
+  const miss = useCallback(() => { sfx.wrong(); setCombo(0); setS((s) => ({ ...s, hearts: Math.max(1, s.hearts - 1) })); }, []);
   const star = useCallback((el: Element | null) => {
     const to = starRef.current?.getBoundingClientRect(); const r = el?.getBoundingClientRect();
     if (to && r) {
@@ -465,15 +495,26 @@ export default function HomeworkQuest({ quest, onComplete, onExit }: { quest: Qu
       requestAnimationFrame(() => { s.style.transform = `translate(${to.left - r.left - r.width / 2}px, ${to.top - r.top - r.height / 2}px) scale(.7)`; s.style.opacity = '.2'; });
       window.setTimeout(() => s.remove(), 820);
     }
+    setCombo((c) => c + 1);
     window.setTimeout(() => setS((st) => ({ ...st, stars: st.stars + 1 })), 800);
   }, []);
   const setDots = useCallback((total: number, on: number) => setDotsState([total, on]), []);
   const unlocked = (i: number) => i === 0 || S.done[i - 1] !== undefined;
   const nextIdx = quest.levels.findIndex((_, i) => unlocked(i) && S.done[i] === undefined);
+  const lastIdx = quest.levels.length - 1;
+  // The walker stands on the level just played, then hops to the next one.
+  const [walkerIdx, setWalkerIdx] = useState(nextIdx === -1 ? lastIdx : nextIdx);
+  useEffect(() => {
+    if (view !== 'map') return;
+    const t = window.setTimeout(() => setWalkerIdx(nextIdx === -1 ? lastIdx : nextIdx), 450);
+    return () => window.clearTimeout(t);
+  }, [view, nextIdx, lastIdx]);
+  const openLevel = useCallback((i: number) => { sfx.pop(); setCombo(0); setView(i); setSplash(i); window.setTimeout(() => setSplash((x) => (x === i ? null : x)), 1700); }, []);
 
   const finishLevel = useCallback((idx: number) => (misses: number) => {
     const got = starsFor(misses);
-    sfx.magic(); setToast(`Level complete! ${'⭐'.repeat(got)}`); window.setTimeout(() => setToast(null), 1900);
+    sfx.magic(); confetti(); setWin({ idx, got }); setWalkerIdx(idx);
+    [0, 1, 2].slice(0, got).forEach((k) => window.setTimeout(() => tone(880 + k * 220, 0.18, 'triangle'), 450 + k * 350));
     setS((s) => {
       const n = { ...s, hearts: 3, done: { ...s.done, [idx]: Math.max(s.done[idx] ?? 0, got) } };
       if (Object.keys(n.done).length === quest.levels.length && onComplete) {
@@ -481,19 +522,21 @@ export default function HomeworkQuest({ quest, onComplete, onExit }: { quest: Qu
       }
       return n;
     });
-    window.setTimeout(() => { stopSpeaking(); setView('map'); }, 1300);
+    window.setTimeout(() => { setWin((w) => (w && w.idx === idx ? null : w)); stopSpeaking(); setView('map'); }, 2800);
   }, [quest, onComplete]);
 
+  const path = useMemo(() => mapPath(quest.levels.length), [quest.levels.length]);
   const level = typeof view === 'number' ? quest.levels[view] : null;
   const common = level && typeof view === 'number' ? { quest, say, praise, tryAgain, miss, star, done: finishLevel(view), setDots } : null;
 
   return (
-    <div className={`hq ${quest.theme.night ? 'night' : 'day'}`} style={{ ['--hq-accent' as string]: quest.theme.accent, ['--hq-accent2' as string]: quest.theme.accent2 }} onPointerDown={() => unlockAudio()}>
+    <div className={`hq ${quest.theme.night ? 'night' : 'day'}`} style={{ ['--hq-accent' as string]: quest.theme.accent, ['--hq-accent2' as string]: quest.theme.accent2, ['--hq-world' as string]: `url('${quest.theme.mapImg}')` }} onPointerDown={() => unlockAudio()}>
       <style>{QUEST_CSS}</style>
       <div className="hq-wrap">
         <header className="hq-hud">
           <div className="hq-brand"><img src={quest.theme.guide} alt="" /><div><h1>{quest.title}</h1><small>{quest.subtitle}</small></div></div>
           <span className="hq-pill">{'❤️'.repeat(S.hearts)}{'🤍'.repeat(3 - S.hearts)}</span>
+          {combo >= 2 && <span key={combo} className="hq-pill hq-combo">🔥 {combo}</span>}
           <span ref={starRef} className="hq-pill gold">⭐ {S.stars}</span>
           <button className="hq-icon" aria-label={soundOn ? 'Sound on' : 'Sound off'} onClick={() => { setSoundOn((v) => !v); stopSpeaking(); }}>{soundOn ? '🔊' : '🔇'}</button>
           {onExit && <button className="hq-icon" aria-label="Close" onClick={onExit}>✕</button>}
@@ -501,26 +544,31 @@ export default function HomeworkQuest({ quest, onComplete, onExit }: { quest: Qu
 
         {view === 'map' || !level || !common ? (
           <>
-            <div className="hq-bar"><h2>The quest map</h2><span className="hq-pill">{Object.keys(S.done).length} / {quest.levels.length}</span></div>
+            <div className="hq-bar"><h2>🗺 The quest map</h2><span className="hq-pill">{Object.keys(S.done).length} / {quest.levels.length}</span></div>
+            <div className="hq-play">
             <Stage img={quest.theme.mapImg} night={quest.theme.night}>
               <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="hq-path" aria-hidden="true">
-                <polyline points={quest.levels.map((_, i) => MAP_PATH[i % MAP_PATH.length].join(',')).join(' ')} fill="none" stroke="var(--hq-accent)" strokeOpacity=".8" strokeDasharray="1.6 1.4" vectorEffect="non-scaling-stroke" style={{ strokeWidth: 3 }} />
+                <polyline points={quest.levels.map((_, i) => path[i].join(',')).join(' ')} fill="none" className="hq-trail" stroke="#fff" strokeOpacity=".95" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
               </svg>
               {quest.levels.map((l, i) => {
-                const [x, y] = MAP_PATH[i % MAP_PATH.length];
+                const [x, y] = path[i];
                 const state = S.done[i] !== undefined ? 'done' : !unlocked(i) ? 'locked' : i === nextIdx ? 'next' : '';
                 return (
                   <button key={i} className={`hq-node ${state}`} style={{ left: `${x}%`, top: `${y}%` }} aria-label={l.name}
-                    onClick={() => { if (state === 'locked') { sfx.wrong(); setToast('Finish the level before this one first.'); window.setTimeout(() => setToast(null), 1700); return; } sfx.pop(); setView(i); }}>
-                    <span className="gem">{state === 'locked' ? '🔒' : <Icon s={l.icon} />}</span>
-                    <span className="lbl">{i + 1}. {l.name} {'⭐'.repeat(S.done[i] ?? 0)}</span>
+                    onClick={() => { if (state === 'locked') { sfx.wrong(); setToast('Finish the level before this one first.'); window.setTimeout(() => setToast(null), 1700); return; } openLevel(i); }}>
+                    <span className="gem">{state === 'locked' ? '🔒' : <Icon s={l.icon} />}<i className="num">{i + 1}</i></span>
+                    {state === 'next' && <span className="play">▶ PLAY</span>}
+                    <span className="lbl">{l.name}</span>
+                    <span className="got">{[0, 1, 2].map((k) => <b key={k} className={k < (S.done[i] ?? 0) ? 'on' : ''}>★</b>)}</span>
                   </button>
                 );
               })}
-              {(() => { const [x, y] = MAP_PATH[(nextIdx === -1 ? quest.levels.length - 1 : nextIdx) % MAP_PATH.length]; return <img className="hq-char walker" src={quest.theme.walker} alt="" style={{ left: `${x}%`, top: `${y - 6}%` }} />; })()}
+              {(() => { const [x, y] = path[Math.min(walkerIdx, path.length - 1)] ?? [50, 50]; return <img className="hq-char walker" src={quest.theme.walker} alt="" style={{ left: `${x}%`, top: `${y - 7}%` }} />; })()}
             </Stage>
+            </div>
             <div className="hq-bar center">
-              {nextIdx !== -1 && <button className="hq-btn" onClick={() => { sfx.pop(); setView(nextIdx); }}>▶ Play {quest.levels[nextIdx].name}</button>}
+              {nextIdx !== -1 && <button className="hq-btn hq-go" onClick={() => openLevel(nextIdx)}>▶ Play level {nextIdx + 1}: {quest.levels[nextIdx].name}</button>}
+              {nextIdx === -1 && <span className="hq-pill gold">🏆 Quest complete!</span>}
               <button className="hq-btn ghost" onClick={() => setS({ stars: 0, done: {}, hearts: 3 })}>↺ Start over</button>
             </div>
           </>
@@ -531,10 +579,30 @@ export default function HomeworkQuest({ quest, onComplete, onExit }: { quest: Qu
               <span className="hq-dots">{Array.from({ length: dots[0] }, (_, i) => <i key={i} className={i < dots[1] ? 'on' : ''} />)}</span>
               <button className="hq-btn ghost" onClick={() => { stopSpeaking(); setView('map'); }}>🗺 Map</button>
             </div>
-            <LevelSwitch key={view} level={level} common={common} stars={S.stars} />
+            <div className="hq-play"><LevelSwitch key={view} level={level} common={common} stars={S.stars} /></div>
           </>
         )}
       </div>
+      {splash !== null && quest.levels[splash] && (
+        <button className="hq-splash" onClick={() => setSplash(null)} aria-label="Start the level">
+          <span className="hq-splash-card">
+            <span className="lv">LEVEL {splash + 1}</span>
+            <span className="ic"><Icon s={quest.levels[splash].icon} size="80%" /></span>
+            <span className="nm">{quest.levels[splash].name}</span>
+            <span className="go">GO!</span>
+          </span>
+        </button>
+      )}
+      {win && (
+        <button className="hq-splash win" onClick={() => { setWin(null); stopSpeaking(); setView('map'); }} aria-label="Back to the map">
+          <span className="hq-splash-card">
+            <span className="lv">LEVEL COMPLETE!</span>
+            <span className="stars">{[0, 1, 2].map((k) => <b key={k} className={k < win.got ? 'on' : ''} style={{ animationDelay: `${0.35 + k * 0.35}s` }}>★</b>)}</span>
+            <span className="nm">{quest.levels[win.idx]?.name}</span>
+            <span className="go small">Tap to go on ▶</span>
+          </span>
+        </button>
+      )}
       {toast && <div className="hq-toast" role="status">{toast}</div>}
     </div>
   );

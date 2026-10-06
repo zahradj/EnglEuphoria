@@ -51,7 +51,8 @@ export type QuestLevel =
     })
   | (LevelBase & {
       kind: 'true-false';
-      rounds: { img: string; line: string; isTrue: boolean; sticker?: PlacedSticker }[];
+      /** aspect = picture width / height when it isn't the usual wide 1376×768. */
+      rounds: { img: string; line: string; isTrue: boolean; sticker?: PlacedSticker; aspect?: number }[];
     })
   | (LevelBase & {
       /** Hear the sentence, build it word by word (extra words are traps). */
