@@ -606,6 +606,23 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Family Photo (U5L2 signature): "Take a photo of my sister!" — tap that family member in the picture
+       *  (x/y/w/h = tap box, %), flash, and a polaroid (face crop: face = centre %, faceW = % of width) slides out. */
+      id: string; kind: 'family-photo'; bg: string; teacher: string; who: CharKey;
+      members: { label: string; x: number; y: number; w: number; h: number; face: [number, number]; faceW: number }[];
+      rounds: { member: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Line Up! (U5L2): line the family up biggest → smallest. `members` are listed biggest first
+       *  (height = relative size of the sticker); `floorOrder` = how they stand on the grass at the start. */
+      id: string; kind: 'size-line'; bg: string; teacher: string; who: CharKey;
+      members: { label: string; img: string; height: number; reply: string }[];
+      floorOrder?: number[];
+      lastLine: string;
+      doneLine: string;
+    }
+  | {
       /** Who Can Do It? (U4L5 signature): "Who stomps their feet?" — tap the animal's face, its move fills the
        *  screen, then the child does the move and taps "I can do it!". face = centre of the face in `img` (%),
        *  faceW = % of the picture width the round face window shows; move = "stomps its feet" (wrong-pick line). */
@@ -7885,6 +7902,229 @@ export const LESSON_U4L6_SCENES: Scene[] = [
     ],
   },
   { id: 'u4l6-finale', kind: 'finale', bg: bgU4L6Station, who: 'pip', line: 'Head, shoulders, knees and toes — eyes, ears, nose and mouth! You know your whole body. Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 5 · Lesson 2 — Brother, Sister, Baby! =====================
+ * My Family (2/6). brother, sister, baby (+ mom, dad, me from Lesson 1) with "This is my sister!" and
+ * "Who is this?"; big / small recycled from Unit 4; S says /s/ (sister, sun, snake), B recycled (brother,
+ * baby). Setting: Pip's sunny backyard with a swing and a picnic blanket — family photo day. Lesson-Variety
+ * Engine: researched Khan Academy Kids / Lingokids camera and sticker-album rewards, Montessori size
+ * seriation, Cambridge Pre A1 "listen and point" and the classroom family-photo show-and-tell; new games
+ * Family Photo (snap the family member you hear) and Line Up! (biggest to smallest). Pictures made with
+ * Canva (Pip's family as drawn in Lesson 1). */
+const bgU5L2Yard = `${A}/scenes/bg-u5l2-yard-wide.png`;
+const bgU5L2Garden = `${A}/scenes/bg-u5l2-garden-wide.png`;
+const bgU5L2Brother = `${A}/scenes/bg-u5l2-brother-wide.png`;
+const bgU5L2Sister = `${A}/scenes/bg-u5l2-sister-wide.png`;
+const bgU5L2Baby = `${A}/scenes/bg-u5l2-baby-wide.png`;
+const famDad = `${A}/items/item-family-dad.png`;
+const famMom = `${A}/items/item-family-mom.png`;
+const famBrother = `${A}/items/item-family-brother.png`;
+const famPip = `${A}/items/item-family-pip.png`;
+const famSister = `${A}/items/item-family-sister.png`;
+const famBaby = `${A}/items/item-family-baby.png`;
+/* Pip's brother, sister and baby in bg-u5l2-yard (tap boxes + face centres, % of the picture). */
+const U5L2_MEMBERS = [
+  { label: 'brother', x: 10, y: 20, w: 18, h: 66, face: [19, 28] as [number, number], faceW: 13 },
+  { label: 'sister', x: 52, y: 40, w: 16, h: 46, face: [60, 47] as [number, number], faceW: 11 },
+  { label: 'baby', x: 68, y: 54, w: 15, h: 34, face: [75, 60] as [number, number], faceW: 10 },
+];
+
+export const LESSON_U5L2_TITLE = 'Brother, Sister, Baby!';
+export const LESSON_U5L2_OBJECTIVE = 'Name brother, sister and baby (with mom, dad and me), say "This is my sister!" and answer "Who is this?", find each family member from the word alone, line the family up from biggest to smallest, and hear S say /s/ (sister, sun, snake) — by listening, moving, playing and speaking, no reading.';
+
+export const LESSON_U5L2_SCENES: Scene[] = [
+  { id: 'u5l2-title', kind: 'title-card', bg: bgU5L2Yard, level: 'Pre-A1', unit: 'Unit 5', lessonLabel: 'Lesson 2', title: 'Brother, Sister, Baby!', subtitle: 'Family photo day' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u5l2-song', kind: 'song', bg: bgU5L2Yard, title: '\u{1F3B5} This Is My Family \u{1F3B5}', teacher: 'Sing and show! Big brother: arms up high. Little sister: hands low. Baby: rock your arms.',
+    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-song-u5l2.mp3?v=1`,
+    lineDurationsMs: [3140, 4100, 4340, 8482],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'This is my brother! He is big!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my sister! She is small!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my baby! Tiny, tiny baby!', emotion: 'happy' },
+      { who: 'pip', text: 'I love my family! I love you!', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u5l2-intro', kind: 'cinematic', bg: bgU5L2Yard, hidePipOverlay: true, title: 'Family Photo Day', subtitle: 'Meet my family!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Hi! Today is family photo day! Come and meet my family!' },
+      { who: 'pip', line: 'My brother, my sister and the baby! Let\'s take a photo!' },
+    ],
+    cta: "Let's meet them!",
+  },
+
+  /* 4-6 New words, move, signature game */
+  {
+    id: 'u5l2-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU5L2Garden, teacher: 'Listen, then say it! Show big with your arms for brother, small for sister, and rock a baby.',
+    cards: [
+      { who: 'pip', sentence: 'Brother! This is my brother.', img: bgU5L2Brother, imgLabel: 'Brother!' },
+      { who: 'pip', sentence: 'Sister! This is my sister.', img: bgU5L2Sister, imgLabel: 'Sister!' },
+      { who: 'pip', sentence: 'Baby! This is my baby.', img: bgU5L2Baby, imgLabel: 'Baby!' },
+    ],
+  },
+  {
+    id: 'u5l2-move-say', kind: 'tpr-actions', bg: bgU5L2Garden, who: 'pip',
+    teacher: 'Stand up! Say it with Pip, then do it.',
+    rounds: [
+      { line: 'Big brother! Stand up tall!', emoji: '\u{1F64B}', img: bgU5L2Brother },
+      { line: 'Little sister! Wave hello!', emoji: '\u{1F44B}', img: bgU5L2Sister },
+      { line: 'Baby! Rock the baby. Shh!', emoji: '\u{1F476}', img: bgU5L2Baby },
+      { line: 'Give your family a big hug!', emoji: '\u{1F917}' },
+      { line: 'Say: I love my family!', emoji: '\u{1F496}' },
+    ],
+  },
+  {
+    // Signature game (new): take a photo of the family member you hear.
+    id: 'u5l2-family-photo', kind: 'family-photo', bg: bgU5L2Yard, who: 'pip',
+    teacher: 'Family Photo! Listen to Pip, then tap that person to take their photo. Say: "This is my sister!"',
+    members: U5L2_MEMBERS,
+    rounds: [
+      { member: 1, line: 'Take a photo of my sister!', reply: 'Click! This is my sister!' },
+      { member: 2, line: 'Take a photo of the baby!', reply: 'Click! This is my baby!' },
+      { member: 0, line: 'Take a photo of my brother!', reply: 'Click! This is my brother!' },
+    ],
+    doneLine: 'Three great photos! I love my family!',
+  },
+
+  /* 7-10 Speaking + games */
+  {
+    id: 'u5l2-who-is-this', kind: 'join-stage', bg: bgU5L2Sister, teacher: 'Pip asks. The student answers with the whole sentence.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Who is this?', bubble: 'right' },
+      { who: 'student', line: "It's your sister!", bubble: 'right' },
+      { who: 'pip', line: 'Yes! This is my sister! And who is the tiny one?', bubble: 'right' },
+      { who: 'student', line: "It's the baby!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u5l2-line-up', kind: 'size-line', bg: bgU5L2Garden, who: 'pip',
+    teacher: 'Line Up! Help the family line up for the photo, from the biggest to the smallest. Say who it is!',
+    members: [
+      { label: 'dad', img: famDad, height: 100, reply: 'My dad! Dad is the biggest!' },
+      { label: 'mom', img: famMom, height: 92, reply: 'My mom!' },
+      { label: 'brother', img: famBrother, height: 80, reply: 'My big brother!' },
+      { label: 'Pip', img: famPip, height: 64, reply: "Pip! That's me!" },
+      { label: 'sister', img: famSister, height: 54, reply: 'My little sister!' },
+      { label: 'baby', img: famBaby, height: 36, reply: 'The baby! The baby is the smallest!' },
+    ],
+    floorOrder: [3, 0, 5, 2, 4, 1],
+    lastLine: 'Who is the smallest?',
+    doneLine: 'Say cheese! What a happy family!',
+  },
+  {
+    id: 'u5l2-you-tell', kind: 'join-stage', bg: bgU5L2Yard, teacher: 'Swap! The student tells Pip about their own family (or a toy family). Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Tell me about your family! Do you have a brother?', bubble: 'right' },
+      { who: 'student', line: 'Yes! This is my brother. / No!', bubble: 'right' },
+      { who: 'pip', line: 'Do you have a sister?', bubble: 'right' },
+      { who: 'student', line: 'Yes! This is my sister. / No!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u5l2-family-train', kind: 'train-recall', bg: bgU5L2Garden, teacher: 'All aboard the family train! Remember who sits in each car.',
+    question: 'Choo choo! One car is empty. Who is missing?',
+    cars: [
+      { word: 'BROTHER', img: famBrother, emoji: '\u{1F466}' },
+      { word: 'SISTER', img: famSister, emoji: '\u{1F467}' },
+      { word: 'BABY', img: famBaby, emoji: '\u{1F476}' },
+      { word: 'MOM', img: famMom, emoji: '\u{1F469}' },
+      { word: 'DAD', img: famDad, emoji: '\u{1F468}' },
+    ],
+  },
+
+  /* 11-13 Phonics: S says /s/ */
+  {
+    id: 'u5l2-model-s', kind: 'sound-model', bg: bgU5L2Garden, who: 'pip', letter: 'S', phoneme: '/s/', sound: 'sss',
+    teacher: 'S says /s/ — sister, sun, snake!',
+    anchors: [
+      { word: 'sister', emoji: '\u{1F467}', img: famSister },
+      { word: 'sun', emoji: '\u{2600}\u{FE0F}', img: itemSun },
+      { word: 'snake', emoji: '\u{1F40D}', img: itemSnake },
+    ],
+  },
+  { id: 'u5l2-trace-s', kind: 'trace', bg: bgU5L2Garden, who: 'pip', letter: 'S', phoneme: '/s/', word: 'sister', speakWord: false, teacher: 'Trace the big S with your finger! /s/ /s/ sister!' },
+  {
+    id: 'u5l2-pick-s', kind: 'sound-pick', bg: bgU5L2Garden, who: 'pip',
+    teacher: 'Which one? Listen to the sound, then tap the picture that starts with it. Say the word too!',
+    rounds: [
+      { sound: 's', answer: 0, options: [{ word: 'sun', img: itemSun }, { word: 'ball', img: itemBallRed }, { word: 'baby', img: famBaby }] },
+      { sound: 'b', answer: 2, options: [{ word: 'snake', img: itemSnake }, { word: 'sister', img: famSister }, { word: 'brother', img: famBrother }] },
+      { sound: 's', answer: 1, options: [{ word: 'bear', img: itemBear }, { word: 'sister', img: famSister }, { word: 'bag', img: itemBag }] },
+      { sound: 'b', answer: 0, options: [{ word: 'baby', img: famBaby }, { word: 'sun', img: itemSun }, { word: 'snake', img: itemSnake }] },
+    ],
+  },
+
+  /* 14 Perform */
+  {
+    id: 'u5l2-perform', kind: 'join-stage', bg: bgU5L2Yard, teacher: "Show time! The student points to Pip's family and says who they are.", cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Your turn! Who is in my family photo?', bubble: 'right' },
+      { who: 'student', line: 'This is your brother! This is your sister!', bubble: 'right' },
+      { who: 'pip', line: 'And the tiny one?', bubble: 'right' },
+      { who: 'student', line: 'This is the baby!', bubble: 'right' },
+    ],
+  },
+
+  /* 15-16 Sticker + Home Mission */
+  {
+    id: 'u5l2-sticker', kind: 'sticker-reward', bg: bgU5L2Yard, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super job! Here is a baby fox sticker for you!', sticker: { img: famBaby, label: 'Baby' },
+  },
+  {
+    id: 'u5l2-home-mission', kind: 'home-mission', bg: bgU5L2Yard, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: show a family photo at home and say: This is my brother! This is my sister!',
+    parentNote: 'Look at a family photo together. Your child points and says "This is my brother / sister / baby / mom / dad." Ask "Who is this?" and "Who is the biggest? Who is the smallest?" Cousins and pets count too!',
+    steps: [
+      { emoji: '\u{1F4F7}', say: 'Family photo' },
+      { emoji: '\u{1F466}', img: famBrother, say: 'This is my brother' },
+      { emoji: '\u{1F467}', img: famSister, say: 'This is my sister' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u5l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU5L2Garden, who: 'pip',
+    teacher: 'Extra time: Family Moves! Move like each family member.',
+    rounds: [
+      { line: 'Walk like a big brother! Big steps!', emoji: '\u{1F463}' },
+      { line: 'Skip like a little sister!', emoji: '\u{1F467}' },
+      { line: 'Crawl like a baby!', emoji: '\u{1F476}' },
+      { line: 'Swing on the swing! Whee!', emoji: '\u{1F3A0}' },
+      { line: 'Freeze! Say cheese!', emoji: '\u{1F4F8}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u5l2-family-photo-2', kind: 'family-photo', bg: bgU5L2Yard, who: 'pip',
+    teacher: 'Extra time: more family photos! Listen carefully.',
+    members: U5L2_MEMBERS,
+    rounds: [
+      { member: 2, line: 'Now the baby again! Smile, baby!', reply: 'Click! This is my baby!' },
+      { member: 0, line: 'Take a photo of my big brother!', reply: 'Click! This is my brother!' },
+      { member: 1, line: 'And my little sister!', reply: 'Click! This is my sister!' },
+    ],
+    doneLine: 'My photo album is full! Thank you!',
+  },
+
+  /* 17-18 Goodbye */
+  {
+    id: 'u5l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u5l2-finale', kind: 'finale', bg: bgU5L2Yard, who: 'pip', line: 'My brother, my sister and the baby — this is my family! Goodbye, friend!' },
 ];
 
 /* =============================================================================

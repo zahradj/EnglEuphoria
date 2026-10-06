@@ -123,5 +123,10 @@
     "path": "public/lep1/audio/animal-moves-song-u4l5.mp3",
     "bytes": 321037,
     "sha256": "85d9d00d3106f8d6af2174d50255f44f563c486aebcdeadcc4cbdf4a75ffd1fb"
+  },
+  "u5l2-family": {
+    "path": "public/lep1/audio/family-song-u5l2.mp3",
+    "bytes": 321037,
+    "sha256": "88ac02dcfd723ae54e7631aac3f93faefc6321001d815d3f98ad0e9de8d68489"
   }
 }

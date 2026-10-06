@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '5-2': { settings: ['backyard'], look: "sunny backyard of Pip's home: wooden fence, a tree swing, a picnic blanket; family photo day with Pip's big brother, little sister and the baby" },
   '4-6': { settings: ['space station'], look: 'bright pastel space station with round star windows and a ringed planet; Pip and Mia play Simon Says with Robo, a silver robot drawn in code' },
   '4-3': { settings: ['beach'], look: 'sunny beach day: golden sand, blue sea, sandcastle and umbrella; top-down wet sand for prints; Bella and Leo' },
   '3-6': { settings: ['toy fair'], look: 'outdoor fair: sunny day with striped tents, then a golden evening with string lights' },
@@ -182,6 +183,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '5-2': {
+    sources: ['Khan Academy Kids (camera / photo reward, calm self-paced)', 'Lingokids (family & sticker-album games)', 'Montessori (size seriation: biggest to smallest)', 'Cambridge (Pre A1 Starters listen and point)', 'classroom show-and-tell with a family photo'],
+    mechanics: [
+      'camera rewards + listen and point → Family Photo: "Take a photo of my sister!" — snap that person in the family picture, a polaroid slides out',
+      'Montessori size seriation → Line Up!: line the family up from the biggest to the smallest for the photo',
+      'family-photo show-and-tell → the child tells Pip "This is my brother" about their own family',
+    ],
+    betterThan: [
+      'no word on screen in Family Photo: the spoken family word alone finds the person, and every photo stays on the string as a keepsake',
+      'Line Up! makes each step a family word the child hears and repeats ("My big brother!"), and recycles big / small from Unit 4',
+      'calm by design: no clock, a wrong pick is named back ("That\'s my brother!") and the right one glows after two tries',
     ],
   },
   '4-6': {

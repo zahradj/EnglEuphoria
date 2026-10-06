@@ -388,6 +388,17 @@ const UNIT1_EXTRACTORS = {
   ],
   // Mirror ClawMachineScene.tsx's clawMachineLines() / RingTossScene.tsx's ringTossLines().
   'claw-machine': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.toys ?? []).map((t) => [s.who, `That's the ${t.label}! Try again!`]), [s.who, 'Oops! Nothing! Try again!']],
+  // Mirror FamilyPhotoScene.tsx's familyPhotoLines() / SizeLineScene.tsx's sizeLineLines().
+  'family-photo': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+    ...(s.members ?? []).map((m) => [s.who, `That's my ${m.label}! Try again!`]),
+    [s.who, s.doneLine],
+  ],
+  'size-line': (s) => [
+    [s.who, 'Who is the biggest?'], [s.who, 'Who is next?'], [s.who, 'Not yet! Who is bigger?'], [s.who, s.lastLine],
+    ...(s.members ?? []).map((m) => [s.who, m.reply]),
+    [s.who, s.doneLine],
+  ],
   // Mirror MoveMatchScene.tsx's moveMatchLines() / PartPeekScene.tsx's partPeekLines().
   'move-match': (s) => [
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.question], [s.who, r.reply]]),
