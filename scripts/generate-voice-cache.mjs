@@ -399,6 +399,18 @@ const UNIT1_EXTRACTORS = {
     ...(s.members ?? []).map((m) => [s.who, m.reply]),
     [s.who, s.doneLine],
   ],
+  // Mirror CookieFacesScene.tsx's cookieFacesLines() / WhosMissingScene.tsx's whosMissingLines().
+  'cookie-faces': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+    ...(s.faces ?? []).map((f) => [s.who, `No, that's ${f.name}! Try again!`]),
+    [s.who, 'Ding! The cookie is ready!'],
+    [s.who, s.doneLine],
+  ],
+  'whos-missing': (s) => [
+    [s.who, 'Look at the photos!'], [s.who, 'Lights off!'], [s.who, 'Who is missing?'],
+    ...(s.faces ?? []).flatMap((f) => [[s.who, `No, ${f.name} is here! Look again!`], [s.who, `${f.name.charAt(0).toUpperCase() + f.name.slice(1)}! Here is ${f.name}!`]]),
+    [s.who, s.doneLine],
+  ],
   // Mirror MoveMatchScene.tsx's moveMatchLines() / PartPeekScene.tsx's partPeekLines().
   'move-match': (s) => [
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.question], [s.who, r.reply]]),

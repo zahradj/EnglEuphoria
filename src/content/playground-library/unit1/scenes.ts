@@ -623,6 +623,24 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Grandma's Cookies (U5L3 signature): "Let's make a Grandpa cookie!" — pick the right face icing,
+       *  it lands on the cookie, the oven bakes it, it joins the family plate. Faces are round crops of a
+       *  picture (at = centre %, w = % of the picture width, aspect = picture width / height). `name` is
+       *  how a sentence says them ("Grandma", "the baby"). */
+      id: string; kind: 'cookie-faces'; bg: string; teacher: string; who: CharKey;
+      faces: { label: string; name: string; img: string; at: [number, number]; w: number; aspect?: number }[];
+      rounds: { face: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Who's Missing? (U5L3): a photo wall (`wall` = face indexes); the child turns the lights off,
+       *  one photo (`missing`) is gone, and they pick it from `options`. Faces as in cookie-faces. */
+      id: string; kind: 'whos-missing'; bg: string; teacher: string; who: CharKey;
+      faces: { label: string; name: string; img: string; at: [number, number]; w: number; aspect?: number }[];
+      rounds: { wall: number[]; missing: number; options: number[] }[];
+      doneLine: string;
+    }
+  | {
       /** Who Can Do It? (U4L5 signature): "Who stomps their feet?" — tap the animal's face, its move fills the
        *  screen, then the child does the move and taps "I can do it!". face = centre of the face in `img` (%),
        *  faceW = % of the picture width the round face window shows; move = "stomps its feet" (wrong-pick line). */

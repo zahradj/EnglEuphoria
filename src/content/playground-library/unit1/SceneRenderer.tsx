@@ -85,6 +85,8 @@ import { MoveMatchScene } from './scene-components/MoveMatchScene';
 import { PartPeekScene } from './scene-components/PartPeekScene';
 import { FamilyPhotoScene } from './scene-components/FamilyPhotoScene';
 import { SizeLineScene } from './scene-components/SizeLineScene';
+import { CookieFacesScene } from './scene-components/CookieFacesScene';
+import { WhosMissingScene } from './scene-components/WhosMissingScene';
 import { CountPartsScene } from './scene-components/CountPartsScene';
 import { RingTossScene } from './scene-components/RingTossScene';
 import { ShadowMatchScene } from './scene-components/ShadowMatchScene';
@@ -272,6 +274,8 @@ export function SceneRenderer(props: {
     case 'shape-bubbles': return <ShapeBubblesScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'family-photo': return <FamilyPhotoScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'size-line': return <SizeLineScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'cookie-faces': return <CookieFacesScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'whos-missing': return <WhosMissingScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'move-match': return <MoveMatchScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'part-peek': return <PartPeekScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'robo-copy': return <RoboCopyScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
