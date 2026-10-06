@@ -38,7 +38,7 @@ const highlight = (text: string, focus?: string) => {
 let actx: AudioContext | null = null;
 function tone(f: number, d: number, type: OscillatorType = 'triangle', delay = 0, gain = 0.16) {
   try {
-    actx = actx || new (window.AudioContext || (window as any).webkitAudioContext)();
+    actx = actx || new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
     const t0 = actx.currentTime + delay, o = actx.createOscillator(), v = actx.createGain();
     o.type = type; o.frequency.setValueAtTime(f, t0);
     v.gain.setValueAtTime(0.0001, t0); v.gain.exponentialRampToValueAtTime(gain, t0 + 0.01); v.gain.exponentialRampToValueAtTime(0.0001, t0 + d);
