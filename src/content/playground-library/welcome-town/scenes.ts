@@ -327,6 +327,9 @@ export type Scene =
       id: string; kind: 'flipbook'; bg: string; title: string;
       pages: {
         who?: CharKey; img: string; text: string;
+        /** Pin the caption frame to a side of the picture. Normally omitted: the player
+         *  looks at the picture and puts the frame where it has calm space (captionPlacement.ts). */
+        textPos?: 'top' | 'bottom' | 'left' | 'right';
         /** Dedicated art for the manga layout's smaller "reaction" panel —
          * a close-up of the speaking character, generated per page rather
          * than reused room art, so the second panel isn't just a flat

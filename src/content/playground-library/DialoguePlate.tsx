@@ -29,7 +29,7 @@ export function plateFontSize(line: string): string {
  */
 export type PlateLook = 'paper' | 'chalk';
 
-interface Look {
+export interface Look {
   plate: React.CSSProperties;
   text: React.CSSProperties;
   tab: React.CSSProperties;
@@ -37,7 +37,7 @@ interface Look {
   speakerFg: string;
 }
 
-const lookFor = (look: PlateLook, color: string): Look =>
+export const lookFor = (look: PlateLook, color: string): Look =>
   look === 'chalk'
     ? {
         plate: { background: 'radial-gradient(120% 140% at 30% 20%, #3C7048, #2A5535)', border: 'calc(1.4*var(--svh,1vh)) solid #B07A3E', boxShadow: '0 12px 24px rgba(0,0,0,.4), inset 0 0 34px rgba(0,0,0,.38)' },

@@ -184,6 +184,7 @@ exactly the kind of bug this section exists to prevent.
 - **Gate B (Chunking):** Does every `listen-repeat-cards`/`sentence-practice` card carry a full sentence, never a bare word? Hard requirement — this one IS already always true in this codebase; keep it that way.
 - **Gate C (Progressive combination):** If this lesson combines a skill from an earlier lesson in the same unit, does the review lesson (L4/L6) test the *combined* form, not just each half separately? See [[feedback_smart_lesson_architect_methodology]].
 - **Gate D (Art discipline):** No new art in a pure-review lesson (L4, L6) — reuse existing, already-verified images. New art elsewhere must be full-bleed (no white margin, no sticker/frame look) for scene backgrounds, and transparent/no-background for vocabulary item icons — two different rules for two different asset classes; see [[feedback_lesson_background_art_quality]].
+- **Gate E (Story text placement):** Every story/reading page's picture leaves a calm area for the caption plate (top, bottom, left or right — `StoryPlate`, chosen automatically from the image by `captionPlacement.ts`, or pinned with `textPos`). Brief it in the image prompt; look at each rendered page and confirm the plate does not cover a face or the key object. Hard requirement for A1+ stories.
 
 ## Where this departs from the original spec (generate-lesson-skill.md)
 

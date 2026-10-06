@@ -146,6 +146,18 @@ Academy B1 U1 L1 — every slide "reported" the cover).
    without help, and is there a tangible artifact of their own (a log, a map, a sentence list) to be proud of? Research
    before inventing (Cambridge task formats, app patterns), but never copy a product; adapt the underlying mechanic.
 
+10. **Story text sits in the framed plate, on the calm side of the picture** (owner rule, 2026-10-06: "the writing is down and
+    it's invisible… use the character-introduction frame; if there is space on the top it goes on top, bottom → bottom,
+    left → left, right → right"). Every story / reading page (`flipbook` in the A1+ Welcome Town family, any future
+    story scene) shows its line in `StoryPlate` (the same paper plate + name tab + speaker button as `DialoguePlate`),
+    never as a faint gradient band over the art. The side is chosen from the generated picture
+    (`src/content/playground-library/captionPlacement.ts`: the calmest of top / bottom / left / right; phones stay top/bottom);
+    pin a side with `textPos` on the page only when the picture needs an exception. Gate check: open every story page in
+    headless Chrome (laptop + phone) and confirm the plate never covers a character's face or the key object, the
+    line is fully readable, and the plate does not collide with the title chip / next arrow. When you ORDER or choose the
+    picture, leave a calm area (sky, wall, floor, table) for the text — brief it in the image prompt ("empty wall space
+    at the top for a caption") rather than relying on luck. Pre-A1 storybooks keep the book layout (caption under the picture).
+
 **Fix at the shared component** (`AcademyDemo.tsx`, `PlayAcademyLesson.tsx`, `LivingCanvas.tsx`,
 `EscapeRoomSlot.tsx`), not per lesson — comfort bugs are almost always shared-component bugs.
 

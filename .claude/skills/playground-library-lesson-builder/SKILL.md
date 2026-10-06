@@ -374,6 +374,13 @@ thing that got scene-for-scene pixel parity right in practice.
 Small, dependency-free, already-built pieces in `SceneRenderer.tsx` worth
 reaching for before hand-rolling something similar:
 
+- **`StoryPlate` + `captionPlacement.ts`** — the story/reading caption (A1+ `flipbook`). Same framed paper plate as
+  the character-introduction `DialoguePlate`, placed on the side of THE PICTURE that has calm space: top, bottom, left
+  or right (owner rule 2026-10-06). The player measures each page's image (`useCaptionPos`) and picks the calmest band;
+  override with `textPos: 'top'|'bottom'|'left'|'right'` on a page. **Blueprint rule:** when you write a story page's
+  image prompt, say where the text goes ("calm wall at the top for the caption") and keep faces/key objects out of that
+  band; the quality gate (Engine 5, item 10) checks it on the rendered page. Never print story text as a band over the art.
+
 - **`RAINBOW_10`** — a fixed 10-color spectrum (`#ef4444` red through
   `#a855f7` purple, one hue per digit 1–10) used consistently across every
   "count to 10" surface (number tiles, balloon-pop colors) so they read as
