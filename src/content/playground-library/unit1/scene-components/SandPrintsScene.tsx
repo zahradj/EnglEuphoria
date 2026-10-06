@@ -84,14 +84,14 @@ export function SandPrintsScene({ scene, onWin, onNext, sync }: { scene: Sand; o
       {done && <Confetti count={60} />}
 
       {/* The sand: every print the child makes stays here. */}
-      <div className="absolute inset-x-0 top-[12%] bottom-[32%]">
+      <div className="absolute inset-x-0 top-[30%] bottom-[28%] [@media(max-height:500px)]:top-[40%] [@media(max-height:500px)]:bottom-[24%]">
         {printShapes.map((shape, k) => {
           const spot = SPOTS[k % SPOTS.length];
           return (
             <motion.div
               key={k}
               className="absolute"
-              style={{ left: `${spot.x}%`, top: `${spot.y}%`, width: 'min(18vh, 14vw)', height: 'min(18vh, 14vw)', x: '-50%', y: '-50%', rotate: spot.r }}
+              style={{ left: `${spot.x}%`, top: `${spot.y}%`, width: 'min(22vh, 15vw)', height: 'min(22vh, 15vw)', x: '-50%', y: '-50%', rotate: spot.r }}
               initial={{ scale: 1.6, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: 'spring', stiffness: 260, damping: 14 }}
@@ -102,15 +102,15 @@ export function SandPrintsScene({ scene, onWin, onNext, sync }: { scene: Sand; o
         })}
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 top-16 z-20 flex justify-center px-4">
-        <span className="text-center font-black leading-tight text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.6rem, calc(3.6*var(--svw,1vw)), 3rem)' }}>
+      <div className="pointer-events-none absolute inset-x-0 top-16 z-20 flex flex-col items-center gap-1 px-14">
+        <span className="text-center font-black leading-tight text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.4rem, calc(3.6*var(--svw,1vw)), 3rem)' }}>
           {r ? r.line : scene.doneLine}
         </span>
+        <div className="flex gap-1">
+          {scene.rounds.map((_, i) => <span key={i} className={`text-xl transition ${i < round ? '' : 'opacity-30 grayscale'}`}>⭐</span>)}
+        </div>
       </div>
       {r && <button onClick={() => cueSpeak(r.line, scene.who)} aria-label="Hear it again" className="absolute right-3 top-16 z-30 rounded-full bg-white/90 px-4 py-2 text-lg font-black text-orange-700 shadow-lg active:scale-95">🔊</button>}
-      <div className="absolute left-3 top-16 z-30 flex gap-1">
-        {scene.rounds.map((_, i) => <span key={i} className={`text-2xl transition ${i < round ? '' : 'opacity-30 grayscale'}`}>⭐</span>)}
-      </div>
 
       {/* The body-part stickers: press one into the sand. */}
       {!done && (
@@ -144,7 +144,7 @@ export function SandPrintsScene({ scene, onWin, onNext, sync }: { scene: Sand; o
 /** A print pressed into wet sand: a darker sand shape with a soft inner shadow. */
 function PrintArt({ shape }: { shape: PrintShape }) {
   const fill = '#B98A4E';
-  const common = { fill, stroke: '#8A6232', strokeWidth: 2.5, opacity: 0.85 } as const;
+  const common = { fill, stroke: '#8A6232', strokeWidth: 2.5, opacity: 0.95 } as const;
   return (
     <svg viewBox="0 0 100 100" className="h-full w-full drop-shadow-[0_2px_0_rgba(255,255,255,0.55)]">
       {shape === 'foot' && (
