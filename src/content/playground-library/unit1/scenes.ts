@@ -8145,6 +8145,216 @@ export const LESSON_U5L2_SCENES: Scene[] = [
   { id: 'u5l2-finale', kind: 'finale', bg: bgU5L2Yard, who: 'pip', line: 'My brother, my sister and the baby — this is my family! Goodbye, friend!' },
 ];
 
+/* ===================== Pre-A1 Unit 5 · Lesson 3 — Grandma & Grandpa! =====================
+ * My Family (3/6). grandma, grandpa (+ mom, dad, baby, me recycled) with "This is my grandma!",
+ * "Hello, Grandpa!" and "I love my grandma!"; G says /g/ (already taught in Unit 2, so model + trace +
+ * one sort). Setting: Grandma and Grandpa's cozy cottage (living room, kitchen, garden gate) — a visit and
+ * a baking day. Lesson-Variety Engine: researched Lingokids / Toca Kitchen cook-and-serve play, the
+ * classroom memory game "What's missing?" (Kim's game, teach-this / games4esl), Khan Academy Kids' calm
+ * self-paced play and Cambridge Pre A1 "listen and point"; new games Grandma's Cookies (bake the face you
+ * hear) and Who's Missing? (lights off, one photo is gone). Pictures made with Canva, using Lesson 2's
+ * family picture as the character reference. */
+const bgU5L3Living = `${A}/scenes/bg-u5l3-living-wide.png`;
+const bgU5L3Grandma = `${A}/scenes/bg-u5l3-grandma-wide.png`;
+const bgU5L3Grandpa = `${A}/scenes/bg-u5l3-grandpa-wide.png`;
+const bgU5L3Kitchen = `${A}/scenes/bg-u5l3-kitchen-wide.png`;
+const bgU5L3Garden = `${A}/scenes/bg-u5l3-garden-wide.png`;
+const bgU5L3Hug = `${A}/scenes/bg-u5l3-hug-wide.png`;
+const WIDE = 1376 / 768;
+/** Round face crops for the cookie and photo-wall games (at = face centre %, w = % of picture width). */
+const U5L3_FACES = {
+  grandma: { label: 'grandma', name: 'Grandma', img: bgU5L3Living, at: [30, 33] as [number, number], w: 14, aspect: WIDE },
+  grandpa: { label: 'grandpa', name: 'Grandpa', img: bgU5L3Living, at: [70, 30] as [number, number], w: 14, aspect: WIDE },
+  pip: { label: 'Pip', name: 'Pip', img: bgU5L3Living, at: [50, 42] as [number, number], w: 13, aspect: WIDE },
+  baby: { label: 'baby', name: 'the baby', img: bgU5L2Yard, at: [76.5, 71] as [number, number], w: 14, aspect: WIDE },
+  mom: { label: 'mom', name: 'Mom', img: `${A}/scenes/bg-u5l1-mom-solo.png`, at: [36, 38] as [number, number], w: 30, aspect: 1 },
+  dad: { label: 'dad', name: 'Dad', img: `${A}/scenes/bg-u5l1-dad-solo.png`, at: [60.5, 41] as [number, number], w: 27, aspect: 1 },
+};
+
+export const LESSON_U5L3_TITLE = 'Grandma & Grandpa!';
+export const LESSON_U5L3_OBJECTIVE = 'Name grandma and grandpa (with mom, dad, the baby and me), say "This is my grandma!", "Hello, Grandpa!" and "I love my grandma!", pick the right family member from the word alone, remember who is missing from a photo wall, and hear G say /g/ (gift, goat, guitar) — by listening, moving, playing and speaking, no reading.';
+export const LESSON_U5L3_SCENES: Scene[] = [
+  { id: 'u5l3-title', kind: 'title-card', bg: bgU5L3Living, level: 'Pre-A1', unit: 'Unit 5', lessonLabel: 'Lesson 3', title: 'Grandma & Grandpa!', subtitle: 'A visit to the cottage' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u5l3-song', kind: 'song', bg: bgU5L3Living, title: '\u{1F3B5} Hello, Grandma! \u{1F3B5}', teacher: 'Sing and show! Wave for hello, hug yourself for the big, big hug.',
+    durationSeconds: 20, bigWord: 'Grandma', songUrl: `${A}/audio/grandma-song-u5l3.mp3?v=1`,
+    lineDurationsMs: [3800, 3700, 4200, 8362],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'Hello, Grandma! Hello, Grandpa!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my grandma! Big, big hug!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my grandpa! Big, big hug!', emotion: 'happy' },
+      { who: 'pip', text: 'I love my grandma! I love my grandpa!', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u5l3-intro', kind: 'cinematic', bg: bgU5L3Hug, hidePipOverlay: true, title: 'A Visit to the Cottage', subtitle: 'Meet my grandma and grandpa!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Knock, knock! This is Grandma and Grandpa\'s house!' },
+      { who: 'pip', line: 'Hello, Grandma! Hello, Grandpa! Big hug!' },
+    ],
+    cta: "Let's go in!",
+  },
+
+  /* 4-6 New words, move, signature game */
+  {
+    id: 'u5l3-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU5L3Living, teacher: 'Listen, then say it! Wave to Grandma, and give Grandpa a big hug.',
+    cards: [
+      { who: 'pip', sentence: 'Grandma! This is my grandma.', img: bgU5L3Grandma, imgLabel: 'Grandma!' },
+      { who: 'pip', sentence: 'Grandpa! This is my grandpa.', img: bgU5L3Grandpa, imgLabel: 'Grandpa!' },
+    ],
+  },
+  {
+    id: 'u5l3-move-say', kind: 'tpr-actions', bg: bgU5L3Living, who: 'pip',
+    teacher: 'Stand up! Say it with Pip, then do it.',
+    rounds: [
+      { line: 'Wave hello to Grandma! Hello, Grandma!', emoji: '\u{1F44B}', img: bgU5L3Grandma },
+      { line: 'Give Grandpa a big hug!', emoji: '\u{1F917}', img: bgU5L3Grandpa },
+      { line: 'Walk slowly, like Grandpa!', emoji: '\u{1F6B6}' },
+      { line: 'Knit like Grandma! Knit, knit!', emoji: '\u{1F9F6}' },
+      { line: 'Say: I love my grandma!', emoji: '\u{1F496}' },
+    ],
+  },
+  {
+    // Signature game (new): bake the family member you hear.
+    id: 'u5l3-cookies', kind: 'cookie-faces', bg: bgU5L3Kitchen, who: 'pip',
+    teacher: "Grandma's Cookies! Listen to Pip, pick the right face for the cookie and watch it bake. Say who it is!",
+    faces: [U5L3_FACES.grandma, U5L3_FACES.baby, U5L3_FACES.grandpa, U5L3_FACES.pip],
+    rounds: [
+      { face: 2, line: "Let's make a Grandpa cookie!", reply: 'A Grandpa cookie! This is my grandpa!' },
+      { face: 0, line: 'Now a Grandma cookie!', reply: 'A Grandma cookie! This is my grandma!' },
+      { face: 1, line: "Let's make a baby cookie!", reply: 'A baby cookie! This is the baby!' },
+      { face: 3, line: 'And a Pip cookie, please!', reply: "A Pip cookie! That's me!" },
+    ],
+    doneLine: 'Cookies for my family! Yum, yum!',
+  },
+  {
+    id: 'u5l3-who-is-this', kind: 'join-stage', bg: bgU5L3Grandpa, teacher: 'Pip asks. The student answers with the whole sentence.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Who is this?', bubble: 'right' },
+      { who: 'student', line: "It's your grandpa!", bubble: 'right' },
+      { who: 'pip', line: 'Yes! This is my grandpa! Say hello!', bubble: 'right' },
+      { who: 'student', line: 'Hello, Grandpa!', bubble: 'right' },
+    ],
+  },
+  {
+    // New game: the photo wall goes dark — who is missing?
+    id: 'u5l3-whos-missing', kind: 'whos-missing', bg: bgU5L3Living, who: 'pip',
+    teacher: "Who's Missing? Look at Grandma's photos, tap the lamp, then say who is gone.",
+    faces: [U5L3_FACES.grandma, U5L3_FACES.grandpa, U5L3_FACES.pip, U5L3_FACES.mom, U5L3_FACES.dad, U5L3_FACES.baby],
+    rounds: [
+      { wall: [0, 2, 1], missing: 1, options: [0, 1, 2] },
+      { wall: [3, 0, 4, 5], missing: 0, options: [3, 0, 5] },
+      { wall: [1, 4, 0, 3], missing: 1, options: [4, 3, 1] },
+    ],
+    doneLine: "All the photos are back! Thank you!",
+  },
+  {
+    id: 'u5l3-you-tell', kind: 'join-stage', bg: bgU5L3Living, teacher: 'Swap! The student tells Pip about their own grandma and grandpa. Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Tell me about your family! Do you have a grandma?', bubble: 'right' },
+      { who: 'student', line: 'Yes! I love my grandma!', bubble: 'right' },
+      { who: 'pip', line: 'And do you have a grandpa?', bubble: 'right' },
+      { who: 'student', line: 'Yes! I love my grandpa!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u5l3-jigsaw', kind: 'jigsaw-puzzle', bg: bgU5L3Garden, teacher: 'Build the big hug picture! Drag each piece to its place, then say who you see.',
+    image: bgU5L3Hug, rows: 2, cols: 3,
+  },
+
+  /* 10-12 Phonics: G says /g/ */
+  {
+    id: 'u5l3-model-g', kind: 'sound-model', bg: bgU5L3Garden, who: 'pip', letter: 'G', phoneme: '/g/', sound: 'guh',
+    teacher: 'G says /g/ — gift, goat, guitar — and Grandma!',
+    anchors: [
+      { word: 'gift', emoji: '\u{1F381}', img: itemGift },
+      { word: 'goat', emoji: '\u{1F410}', img: itemGoat },
+      { word: 'guitar', emoji: '\u{1F3B8}', img: itemGuitar },
+    ],
+  },
+  { id: 'u5l3-trace-g', kind: 'trace', bg: bgU5L3Garden, who: 'pip', letter: 'G', phoneme: '/g/', word: 'grandma', speakWord: false, teacher: 'Trace the big G with your finger! /g/ /g/ grandma!' },
+  {
+    id: 'u5l3-basket-g', kind: 'basket', bg: bgU5L3Garden, letter: 'G', phoneme: '/g/', who: 'pip', teacher: "Drag the /g/ things into Grandma's G basket! No hurry.", goal: 4,
+    items: [
+      { word: 'gift', emoji: '\u{1F381}', img: itemGift, hit: true },
+      { word: 'goat', emoji: '\u{1F410}', img: itemGoat, hit: true },
+      { word: 'guitar', emoji: '\u{1F3B8}', img: itemGuitar, hit: true },
+      { word: 'grapes', emoji: '\u{1F347}', img: itemGrapes, hit: true },
+      { word: 'sun', emoji: '\u{2600}\u{FE0F}', img: itemSun, hit: false },
+      { word: 'snake', emoji: '\u{1F40D}', img: itemSnake, hit: false },
+    ],
+  },
+
+  /* 13 Perform */
+  {
+    id: 'u5l3-perform', kind: 'join-stage', bg: bgU5L3Living, teacher: "Show time! The student points to Pip's grandparents and says who they are.", cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Your turn! Who is on the sofa?', bubble: 'right' },
+      { who: 'student', line: 'This is your grandma! This is your grandpa!', bubble: 'right' },
+      { who: 'pip', line: 'And who is in the middle?', bubble: 'right' },
+      { who: 'student', line: "It's you, Pip!", bubble: 'right' },
+    ],
+  },
+
+  /* 14-15 Sticker + Home Mission */
+  {
+    id: 'u5l3-sticker', kind: 'sticker-reward', bg: bgU5L3Living, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super job! Grandma has a gift for you!', sticker: { img: itemGift, label: 'Gift' },
+  },
+  {
+    id: 'u5l3-home-mission', kind: 'home-mission', bg: bgU5L3Living, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: call or visit your grandma or grandpa and say: Hello, Grandma! I love you!',
+    parentNote: 'Help your child call, video-call or visit a grandparent (or look at their photo). Your child says "Hello, Grandma! / Hello, Grandpa!" and "I love you!" Then ask "Who is this?" — "This is my grandma!"',
+    steps: [
+      { emoji: '\u{1F4DE}', say: 'Call Grandma' },
+      { emoji: '\u{1F44B}', img: bgU5L3Grandma, say: 'Hello, Grandma!' },
+      { emoji: '\u{1F496}', img: bgU5L3Grandpa, say: 'I love you, Grandpa!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u5l3-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU5L3Garden, who: 'pip',
+    teacher: 'Extra time: Garden Moves! Do each move with Pip.',
+    rounds: [
+      { line: 'Open the garden gate! Creak!', emoji: '\u{1F6AA}' },
+      { line: 'Water the flowers with Grandpa!', emoji: '\u{1F338}' },
+      { line: 'Stir the cookies with Grandma! Stir, stir!', emoji: '\u{1F944}' },
+      { line: 'Rock in the rocking chair!', emoji: '\u{1FA91}' },
+      { line: 'Freeze! Big hug!', emoji: '\u{1F917}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u5l3-spin', kind: 'spin-wheel', bg: bgU5L3Living, title: '',
+    teacher: 'Extra time: have the student spin, then point and say who it is: "Grandma!" Or tap a number.',
+    items: [
+      { label: 'Grandma!', left: '30%', top: '60%' },
+      { label: 'Pip!', left: '50%', top: '66%' },
+      { label: 'Grandpa!', left: '70%', top: '60%' },
+    ],
+    wheelAt: { left: '88%', top: '30%' },
+  },
+
+  /* 18-19 Goodbye */
+  {
+    id: 'u5l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u5l3-finale', kind: 'finale', bg: bgU5L3Hug, who: 'pip', line: 'Goodbye, Grandma! Goodbye, Grandpa! I love you! Goodbye, friend!' },
+];
+
 /* =============================================================================
  * Pre-A1 Unit 5, Lesson 1 — "Mom, Dad, Me!"
  *

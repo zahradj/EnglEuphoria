@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '5-3': { settings: ['cottage'], look: "Grandma and Grandpa's cozy cottage: a red sofa by the fireplace, a warm kitchen on baking day, a garden with a little wooden gate; Grandma (grey bun, glasses, lavender cardigan) and Grandpa (moustache, glasses, flat cap)" },
   '5-2': { settings: ['backyard'], look: "sunny backyard of Pip's home: wooden fence, a tree swing, a picnic blanket; family photo day with Pip's big brother, little sister and the baby" },
   '4-6': { settings: ['space station'], look: 'bright pastel space station with round star windows and a ringed planet; Pip and Mia play Simon Says with Robo, a silver robot drawn in code' },
   '4-3': { settings: ['beach'], look: 'sunny beach day: golden sand, blue sea, sandcastle and umbrella; top-down wet sand for prints; Bella and Leo' },
@@ -183,6 +184,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '5-3': {
+    sources: ['Lingokids / Toca Kitchen (cook-and-serve pretend play)', 'teach-this.com and games4esl ("What\'s missing?" / Kim\'s game)', 'Khan Academy Kids (calm, self-paced build and memory play)', 'Cambridge (Pre A1 Starters listen and point)'],
+    mechanics: [
+      'cook-and-serve play + listen and point → Grandma\'s Cookies: "Let\'s make a Grandpa cookie!" — pick the face icing, bake it, it joins the family plate',
+      '"What\'s missing?" memory game → Who\'s Missing?: Grandma\'s photo wall, lights off, one photo is gone — name who is missing',
+      'the big hug picture as a jigsaw, and Grandma\'s G basket for /g/ things',
+    ],
+    betterThan: [
+      'the family word alone picks the cookie face (no word on screen first), and every cookie baked stays on the plate as a family the child built',
+      'in Who\'s Missing? the child turns the lights off when ready — no clock — and answers with a family word they say back; the empty frame glows after two tries',
+      'calm by design: a wrong face is named back ("No, that\'s Grandma!") and nothing is lost for trying',
     ],
   },
   '5-2': {

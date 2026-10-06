@@ -128,5 +128,10 @@
     "path": "public/lep1/audio/family-song-u5l2.mp3",
     "bytes": 321037,
     "sha256": "88ac02dcfd723ae54e7631aac3f93faefc6321001d815d3f98ad0e9de8d68489"
+  },
+  "u5l3-grandma": {
+    "path": "public/lep1/audio/grandma-song-u5l3.mp3",
+    "bytes": 321037,
+    "sha256": "6d9bfb5a1b6c08575857b9708a36f9a8d13dd9ffccd31bb82f45aeb65c48241b"
   }
 }
