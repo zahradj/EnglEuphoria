@@ -7448,10 +7448,10 @@ const bgU4L5PipFeet = `${A}/scenes/bg-u4l5-pip-feet-wide.png`;
 const bgU4L5PipHands = `${A}/scenes/bg-u4l5-pip-hands-wide.png`;
 /* The four animals (faces measured on their own pictures, % of the picture). */
 const U4L5_ANIMALS = [
-  { label: 'tiger', img: bgU4L5Tiger, face: [50, 30] as [number, number], faceW: 20, move: 'turns his head' },
-  { label: 'monkey', img: bgU4L5Monkey, face: [50, 30] as [number, number], faceW: 20, move: 'waves his arms' },
-  { label: 'elephant', img: bgU4L5Elephant, face: [50, 30] as [number, number], faceW: 24, move: 'stomps his feet' },
-  { label: 'seal', img: bgU4L5Seal, face: [50, 30] as [number, number], faceW: 20, move: 'claps her hands' },
+  { label: 'tiger', img: bgU4L5Tiger, face: [52, 33] as [number, number], faceW: 20, move: 'turns his head' },
+  { label: 'monkey', img: bgU4L5Monkey, face: [50, 36] as [number, number], faceW: 18, move: 'waves his arms' },
+  { label: 'elephant', img: bgU4L5Elephant, face: [50, 36] as [number, number], faceW: 26, move: 'stomps his feet' },
+  { label: 'seal', img: bgU4L5Seal, face: [49, 30] as [number, number], faceW: 20, move: 'claps her hands' },
 ];
 const U4L5_FACES = U4L5_ANIMALS.map(({ label, img, face, faceW }) => ({ label, img, face, faceW }));
 
@@ -7556,10 +7556,10 @@ export const LESSON_U4L5_SCENES: Scene[] = [
     teacher: 'Whose Is It? Look at the part in the bush. Tap the animal, then name the part!',
     animals: U4L5_FACES,
     rounds: [
-      { animal: 2, part: [50, 85], partW: 22, partWord: 'feet', question: 'Whose feet are these?', reply: "The elephant's feet! He stomps his feet!" },
-      { animal: 0, part: [50, 30], partW: 20, partWord: 'head', question: 'Whose head is this?', reply: "The tiger's head! He turns his head!" },
-      { animal: 3, part: [50, 55], partW: 22, partWord: 'hands', question: 'Whose hands are these?', reply: "The seal's hands! She claps her hands!" },
-      { animal: 1, part: [50, 45], partW: 26, partWord: 'arms', question: 'Whose arms are these?', reply: "The monkey's arms! He waves his arms!" },
+      { animal: 2, part: [52, 72], partW: 24, partWord: 'feet', question: 'Whose feet are these?', reply: "The elephant's feet! He stomps his feet!" },
+      { animal: 0, part: [52, 33], partW: 20, partWord: 'head', question: 'Whose head is this?', reply: "The tiger's head! He turns his head!" },
+      { animal: 3, part: [49, 63], partW: 13, partWord: 'hands', question: 'Whose hands are these?', reply: "The seal's hands! She claps her hands!" },
+      { animal: 1, part: [33, 37], partW: 13, partWord: 'arms', question: 'Whose arms are these?', reply: "The monkey's arms! He waves his arms!" },
     ],
     doneLine: 'You found them all! Super looking!',
   },
@@ -7657,9 +7657,9 @@ export const LESSON_U4L5_SCENES: Scene[] = [
     teacher: 'Extra time: Whose Is It? again — new parts!',
     animals: U4L5_FACES,
     rounds: [
-      { animal: 1, part: [50, 30], partW: 20, partWord: 'head', question: 'Whose head is this?', reply: "The monkey's head! Hello, monkey!" },
-      { animal: 0, part: [50, 85], partW: 22, partWord: 'feet', question: 'Whose feet are these?', reply: "The tiger's feet! Stripy feet!" },
-      { animal: 2, part: [50, 30], partW: 26, partWord: 'head', question: 'Whose head is this?', reply: "The elephant's head! Big ears!" },
+      { animal: 1, part: [50, 36], partW: 20, partWord: 'head', question: 'Whose head is this?', reply: "The monkey's head! Hello, monkey!" },
+      { animal: 0, part: [49, 83], partW: 20, partWord: 'feet', question: 'Whose feet are these?', reply: "The tiger's feet! Stripy feet!" },
+      { animal: 2, part: [50, 36], partW: 28, partWord: 'head', question: 'Whose head is this?', reply: "The elephant's head! Big ears!" },
     ],
     doneLine: 'Great looking! See you soon, animals!',
   },
