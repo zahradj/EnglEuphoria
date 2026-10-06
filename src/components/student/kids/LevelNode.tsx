@@ -185,19 +185,7 @@ export const LevelNode: React.FC<LevelNodeProps> = ({
           </motion.div>
         )}
         
-        {/* Current level indicator */}
-        {isCurrent && !isNew && (
-          <motion.div
-            animate={{ y: [-5, 5, -5] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="absolute -top-10 left-1/2 -translate-x-1/2"
-          >
-            <div className="bg-white px-3 py-1 rounded-full shadow-lg text-sm font-bold text-emerald-600 whitespace-nowrap">
-              Play Now!
-            </div>
-            <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-white mx-auto" />
-          </motion.div>
-        )}
+        {/* No "Play Now!" bubble here: the GO! button already starts this lesson. */}
 
         {/* Persistent homework badge — the only other way to reach this
             lesson's practice set is a one-time popup right after finishing

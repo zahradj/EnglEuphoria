@@ -200,7 +200,7 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
     { name: 'Vocab Forest', emoji: '🌲', x: 15, y: 20 },
     { name: 'Grammar Mountain', emoji: '⛰️', x: 75, y: 15 },
     { name: 'Story River', emoji: '🌊', x: 20, y: 70 },
-    { name: 'Phonics Valley', emoji: '🔤', x: 70, y: 65 },
+    { name: 'Phonics Valley', emoji: '🔤', x: 60, y: 36 },
   ];
 
   // Assign zone names to lessons based on index

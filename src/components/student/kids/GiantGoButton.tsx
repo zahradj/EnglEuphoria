@@ -90,7 +90,7 @@ export const GiantGoButton: React.FC<GiantGoButtonProps> = ({
         initial={{ opacity: 0, x: 10 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 1 }}
-        className="absolute right-full mr-4 top-1/2 -translate-y-1/2 hidden md:block"
+        className="absolute bottom-full right-0 mb-3 hidden md:block"
       >
         <div className="bg-white rounded-2xl px-4 py-2 shadow-lg border-2 border-green-200 max-w-[200px]">
           <p className="text-sm text-gray-600">Continue with:</p>
@@ -98,9 +98,9 @@ export const GiantGoButton: React.FC<GiantGoButtonProps> = ({
             "{lessonTitle}"
           </p>
         </div>
-        {/* Arrow pointing to button */}
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full">
-          <div className="w-0 h-0 border-t-8 border-b-8 border-l-8 border-t-transparent border-b-transparent border-l-white" />
+        {/* Arrow pointing down to the button */}
+        <div className="absolute right-12 top-full">
+          <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-white" />
         </div>
       </motion.div>
     </motion.div>
