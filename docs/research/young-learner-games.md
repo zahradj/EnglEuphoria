@@ -47,6 +47,7 @@ Good fits already in the library (keep using): `sound-pick`, `face-builder`, `tr
 - **Feed the character**: drag the named food/item into a character's mouth (one item per round).
 - **Peekaboo / lift-the-flap** hunts with 3–4 flaps.
 - **Sticker scene**: the child builds a picture by placing the words they hear; the picture is theirs at the end.
+- **Built for U2L3 (2026-10-06), all calm:** `shape-magic` Magic Pencil (trace the shape, it comes alive in the picture), `shape-peek` What's Peeking? (feely-bag guessing, each miss reveals more), `shape-sorter` Shape Sorter (hear colour + shape, post the block), `shape-bubbles` Bubble Pop (bubbles float in place and wait).
 - **Calm TPR "ready" routine**: "If you're ready, touch your nose!" before a game to refocus.
 
 ## Sources
