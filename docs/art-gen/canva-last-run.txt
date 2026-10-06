@@ -1,11 +1,6 @@
-+ public/lep1/scenes/bg-u4l5-monkey-arms-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l5-elephant-feet-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l5-seal-hands-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l5-pip-head-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l5-park-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l5-pip-arms-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l5-pip-feet-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l5-pip-hands-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l5-lawn-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u4l5-tiger-head-wide.png (1376, 768)
-10/10 saved
++ public/lep1/scenes/bg-u4l5-monkey-stand-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l5-elephant-stand-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l5-seal-stand-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l5-tiger-stand-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l5-pip-stand-wide.png (1376, 768)
+5/5 saved
