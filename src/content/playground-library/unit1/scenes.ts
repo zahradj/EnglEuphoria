@@ -3510,7 +3510,7 @@ const BLUE = '#3B82F6';
 const YELLOW = '#FACC15';
 
 export const LESSON_U2L3_TITLE = 'Circle, Square, Triangle!';
-export const LESSON_U2L3_OBJECTIVE = 'Name circle, square and triangle (clock, window, pizza), ask and answer "What shape is it?" — "It\'s a circle.", say "I like circles.", build pictures from shapes in the colours you hear ("A red triangle!"), and hear C say /k/ (clock, cat, car).';
+export const LESSON_U2L3_OBJECTIVE = 'Name circle, square and triangle (clock, window, pizza), ask and answer "What shape is it?" — "It\'s a circle.", say "I like circles.", trace shapes that come alive, guess a hiding shape, post the shape in the colour you hear ("Put in the red triangle!"), and hear C say /k/ (clock, cat, car).';
 
 export const LESSON_U2L3_SCENES: Scene[] = [
   { id: 'u2l3-title', kind: 'title-card', bg: bgU2L3Town, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 3', title: 'Circle, Square, Triangle!', subtitle: 'Shapes in Shape Town' },
@@ -3637,7 +3637,7 @@ export const LESSON_U2L3_SCENES: Scene[] = [
   /* 11-13 Phonics: C says /k/ */
   {
     id: 'u2l3-model-c', kind: 'sound-model', bg: bgU2L3Builder, who: 'bella', letter: 'C', phoneme: '/k/', sound: 'kuh',
-    teacher: 'C says /k/ — clock, cat, car!',
+    teacher: 'C says /k/ — clock, cat, car! (Circle starts with C too, but there C says /s/: keep to the /k/ words today.)',
     anchors: [
       { word: 'clock', emoji: '\u{1F570}️', img: itemClock },
       { word: 'cat', emoji: '\u{1F431}', img: itemCat },
@@ -3685,7 +3685,7 @@ export const LESSON_U2L3_SCENES: Scene[] = [
     id: 'u2l3-home-mission', kind: 'home-mission', bg: bgU2L3Town, who: 'pip',
     teacher: 'Home Mission: read the parent note and show the picture steps.',
     line: 'Your mission: find a circle, a square and a triangle at home!',
-    parentNote: 'Go on a shape hunt at home with your child: a plate or clock (circle), a window or book (square), a slice of toast cut in half (triangle). Ask: "What shape is it?" Your child answers: "It\'s a circle!" Then draw the shapes in the air together.',
+    parentNote: 'Go on a shape hunt at home with your child: a plate or clock (circle), a window or book (square), a slice of toast cut corner to corner (triangle). Ask: "What shape is it?" Your child answers: "It\'s a circle!" Then draw the shapes in the air together.',
     steps: [
       { emoji: '\u{2B55}', img: itemClock, say: 'Circle' },
       { emoji: '\u{1F7E6}', img: itemWindow, say: 'Square' },
