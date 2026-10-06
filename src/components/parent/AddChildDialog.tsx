@@ -48,11 +48,11 @@ export function AddChildDialog({ parentId, existingCount, variant = 'default', r
     setSaving(false);
 
     if (result.error) {
-      toast({ title: 'Couldn’t add your child', description: result.error.message, variant: 'destructive' });
+      toast({ title: 'Couldn’t add them', description: result.error.message, variant: 'destructive' });
       return;
     }
     await queryClient.invalidateQueries({ queryKey: ['parent-students', parentId] });
-    toast({ title: children.length === 1 ? 'Child added' : 'Children added' });
+    toast({ title: children.length === 1 ? 'Family member added' : 'Family members added' });
     setOpen(false);
   };
 
@@ -69,9 +69,9 @@ export function AddChildDialog({ parentId, existingCount, variant = 'default', r
       </DialogTrigger>
       <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Add a child</DialogTitle>
+          <DialogTitle>Add a family member</DialogTitle>
           <DialogDescription>
-            Each child gets their own learning space. Lessons you buy are shared across the family.
+            Each learner — child or adult — gets their own learning space. Lessons you buy are shared across the family.
           </DialogDescription>
         </DialogHeader>
         <FamilyChildrenForm value={children} onChange={setChildren} maxCount={Math.max(room, 1)} disabled={saving} />

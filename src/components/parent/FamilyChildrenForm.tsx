@@ -7,7 +7,8 @@ import { getCompanionsForHub, getDefaultCompanionForHub } from '@/constants/comp
 
 export const MAX_FAMILY_CHILDREN = 8;
 export const MIN_CHILD_AGE = 4;
-export const MAX_CHILD_AGE = 17;
+// Adults can be added too (a parent learning alongside their children): they get a Success Hub space.
+export const MAX_CHILD_AGE = 90;
 
 export interface ChildDraft {
   fullName: string;
@@ -37,7 +38,8 @@ export async function createFamilyChildren(children: ChildDraft[], relationshipT
           fullName: c.fullName.trim(),
           dateOfBirth: c.dateOfBirth,
           // Default companion = first one for the child's hub, so the picker always has a face.
-          companionId: c.companionId ?? getDefaultCompanionForHub(assignHubFromAge(age).hub_type).id,
+          // Adults have no cartoon buddy; their card shows their initial.
+          companionId: age >= 18 ? null : (c.companionId ?? getDefaultCompanionForHub(assignHubFromAge(age).hub_type).id),
         };
       }),
     },
@@ -78,7 +80,7 @@ export function FamilyChildrenForm({ value, onChange, maxCount = MAX_FAMILY_CHIL
   return (
     <div className="space-y-5">
       <div className="rounded-2xl border bg-muted/30 p-4">
-        <p className="text-sm font-medium">How many children are learning?</p>
+        <p className="text-sm font-medium">How many people are learning? (children or adults)</p>
         <div className="mt-3 flex items-center gap-4">
           <Button
             type="button"
@@ -87,7 +89,7 @@ export function FamilyChildrenForm({ value, onChange, maxCount = MAX_FAMILY_CHIL
             className="h-11 w-11 rounded-full"
             onClick={() => setCount(value.length - 1)}
             disabled={disabled || value.length <= 1}
-            aria-label="Fewer children"
+            aria-label="Fewer people"
           >
             <Minus className="h-4 w-4" />
           </Button>
@@ -99,7 +101,7 @@ export function FamilyChildrenForm({ value, onChange, maxCount = MAX_FAMILY_CHIL
             className="h-11 w-11 rounded-full"
             onClick={() => setCount(value.length + 1)}
             disabled={disabled || value.length >= maxCount}
-            aria-label="More children"
+            aria-label="More people"
           >
             <Plus className="h-4 w-4" />
           </Button>
@@ -115,15 +117,15 @@ export function FamilyChildrenForm({ value, onChange, maxCount = MAX_FAMILY_CHIL
 
         return (
           <div key={i} className="space-y-3 rounded-2xl border p-4">
-            <p className="text-sm font-semibold">Child {i + 1}</p>
+            <p className="text-sm font-semibold">Learner {i + 1}</p>
 
             <div className="relative">
               <UserIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 value={child.fullName}
                 onChange={(e) => patch(i, { fullName: e.target.value })}
-                placeholder="Child's first name"
-                aria-label={`Child ${i + 1} name`}
+                placeholder="First name"
+                aria-label={`Learner ${i + 1} name`}
                 maxLength={80}
                 disabled={disabled}
                 className="h-11 pl-10"
@@ -138,19 +140,24 @@ export function FamilyChildrenForm({ value, onChange, maxCount = MAX_FAMILY_CHIL
                   value={child.dateOfBirth}
                   max={today}
                   onChange={(e) => patch(i, { dateOfBirth: e.target.value, companionId: null })}
-                  aria-label={`Child ${i + 1} date of birth`}
+                  aria-label={`Learner ${i + 1} date of birth`}
                   disabled={disabled}
                   className="h-11 pl-10"
                 />
               </div>
               {child.dateOfBirth && !inRange && (
                 <p className="text-xs text-destructive">
-                  Children must be {MIN_CHILD_AGE}–{MAX_CHILD_AGE} years old. Adults can sign up on their own.
+                  Learners must be {MIN_CHILD_AGE}–{MAX_CHILD_AGE} years old.
                 </p>
               )}
               {hub && (
                 <p className="text-xs text-muted-foreground">
                   {HUB_BRAND[hub].emoji} Joins the {HUB_BRAND[hub].label}
+                </p>
+              )}
+              {hub === 'professional' && (
+                <p className="text-xs text-muted-foreground">
+                  An adult learner. You manage this profile from your dashboard, so please make sure they are happy to be added.
                 </p>
               )}
             </div>
