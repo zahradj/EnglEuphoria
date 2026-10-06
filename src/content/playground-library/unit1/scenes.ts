@@ -7581,7 +7581,7 @@ export const LESSON_U4L6_SCENES: Scene[] = [
 
   /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
   {
-    id: 'u4l6-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU4L6Float, who: 'pip',
+    id: 'u4l6-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU4L6Room, who: 'pip',
     teacher: 'Extra time: Space Moves! Float like an astronaut with Pip.',
     rounds: [
       { line: 'Float like an astronaut! Wave your arms slowly!', emoji: '\u{1F468}\u{200D}\u{1F680}' },

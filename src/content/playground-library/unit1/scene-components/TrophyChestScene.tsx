@@ -8,7 +8,7 @@ import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 /** Hand-drawn treasure chest — wooden body + hinged lid that pops open on `open`, used by the Trophy Chest capstone game. */
 function TrophyChestArt({ open }: { open: boolean }) {
   return (
-    <svg viewBox="0 0 220 200" style={{ width: 'clamp(190px, calc(30*var(--svw,1vw)), 300px)', height: 'auto', overflow: 'visible', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.35))' }}>
+    <svg viewBox="0 0 220 200" style={{ width: 'min(clamp(190px, calc(30*var(--svw,1vw)), 300px), 38vh)', height: 'auto', overflow: 'visible', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.35))' }}>
       <rect x="20" y="100" width="180" height="90" rx="14" fill="#C97A2F" stroke="#2B1E17" strokeWidth={5} />
       <rect x="20" y="128" width="180" height="14" fill="#8A5420" stroke="#2B1E17" strokeWidth={3} />
       <rect x="94" y="100" width="32" height="90" fill="#8A5420" stroke="#2B1E17" strokeWidth={3} />
@@ -74,8 +74,8 @@ export function TrophyChestScene({ scene, onNext, onWin, onLose, sync }: { scene
       </div>
 
       {!finished ? (
-        <div className="absolute inset-x-0 top-24 bottom-28 z-10 flex flex-col items-center justify-center gap-5 px-4">
-          <div className="relative flex flex-col items-center">
+        <div className="absolute inset-x-0 top-24 bottom-28 z-10 flex flex-col items-center justify-center gap-5 px-4 [@media(max-height:500px)]:bottom-14 [@media(max-height:500px)]:top-16 [@media(max-height:500px)]:flex-row [@media(max-height:500px)]:gap-6">
+          <div className="relative flex flex-col items-center [@media(max-height:500px)]:mt-14">
             <TrophyChestArt open={revealed} />
             {revealed && round && (
               <div className="absolute -top-16 left-1/2 flex -translate-x-1/2 flex-col items-center" style={{ animation: 'lep1-pop 0.5s ease-out' }}>
@@ -84,7 +84,7 @@ export function TrophyChestScene({ scene, onNext, onWin, onLose, sync }: { scene
               </div>
             )}
           </div>
-          <img src={c.img} alt={c.name} width={64} height={64} className="h-16 w-16 object-contain animate-[lep1-hop_1.6s_ease-in-out_infinite]" />
+          <img src={c.img} alt={c.name} width={64} height={64} className="h-16 w-16 object-contain animate-[lep1-hop_1.6s_ease-in-out_infinite] [@media(max-height:500px)]:hidden" />
           <button onClick={() => round && safeSpeak(round.word, scene.who)} disabled={revealed} className="rounded-full bg-white/90 px-4 py-2 text-sm font-bold text-orange-700 shadow-lg ring-2 ring-orange-200 backdrop-blur disabled:opacity-40">
             🔊 Hear it again
           </button>
