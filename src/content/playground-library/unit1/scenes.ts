@@ -7925,9 +7925,9 @@ const famSister = `${A}/items/item-family-sister.png`;
 const famBaby = `${A}/items/item-family-baby.png`;
 /* Pip's brother, sister and baby in bg-u5l2-yard (tap boxes + face centres, % of the picture). */
 const U5L2_MEMBERS = [
-  { label: 'brother', x: 10, y: 20, w: 18, h: 66, face: [19, 28] as [number, number], faceW: 13 },
-  { label: 'sister', x: 52, y: 40, w: 16, h: 46, face: [60, 47] as [number, number], faceW: 11 },
-  { label: 'baby', x: 68, y: 54, w: 15, h: 34, face: [75, 60] as [number, number], faceW: 10 },
+  { label: 'brother', x: 20, y: 6, w: 19, h: 84, face: [29.5, 26] as [number, number], faceW: 20 },
+  { label: 'sister', x: 55, y: 42, w: 14, h: 48, face: [62, 54] as [number, number], faceW: 16 },
+  { label: 'baby', x: 70, y: 61, w: 14, h: 33, face: [76.5, 71] as [number, number], faceW: 14 },
 ];
 
 export const LESSON_U5L2_TITLE = 'Brother, Sister, Baby!';
@@ -8008,7 +8008,7 @@ export const LESSON_U5L2_SCENES: Scene[] = [
       { label: 'dad', img: famDad, height: 100, reply: 'My dad! Dad is the biggest!' },
       { label: 'mom', img: famMom, height: 92, reply: 'My mom!' },
       { label: 'brother', img: famBrother, height: 80, reply: 'My big brother!' },
-      { label: 'Pip', img: famPip, height: 64, reply: "Pip! That's me!" },
+      { label: 'Pip', img: famPip, height: 66, reply: "Pip! That's me!" },
       { label: 'sister', img: famSister, height: 54, reply: 'My little sister!' },
       { label: 'baby', img: famBaby, height: 36, reply: 'The baby! The baby is the smallest!' },
     ],
@@ -8100,15 +8100,15 @@ export const LESSON_U5L2_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u5l2-family-photo-2', kind: 'family-photo', bg: bgU5L2Yard, who: 'pip',
-    teacher: 'Extra time: more family photos! Listen carefully.',
-    members: U5L2_MEMBERS,
-    rounds: [
-      { member: 2, line: 'Now the baby again! Smile, baby!', reply: 'Click! This is my baby!' },
-      { member: 0, line: 'Take a photo of my big brother!', reply: 'Click! This is my brother!' },
-      { member: 1, line: 'And my little sister!', reply: 'Click! This is my sister!' },
+    id: 'u5l2-spin', kind: 'spin-wheel', bg: bgU5L2Yard, title: '',
+    teacher: 'Extra time: have the student spin, then point and say who it is: "My brother!" Or tap a number.',
+    items: [
+      { label: 'My brother!', left: '29.5%', top: '58%' },
+      { label: 'Pip!', left: '47.5%', top: '74%' },
+      { label: 'My sister!', left: '62%', top: '76%' },
+      { label: 'The baby!', left: '76.5%', top: '86%' },
     ],
-    doneLine: 'My photo album is full! Thank you!',
+    wheelAt: { left: '88%', top: '30%' },
   },
 
   /* 17-18 Goodbye */

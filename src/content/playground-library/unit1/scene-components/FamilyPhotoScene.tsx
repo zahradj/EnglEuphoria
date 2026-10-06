@@ -32,6 +32,8 @@ export function FamilyPhotoScene({ scene, onWin, onNext, sync }: { scene: Photo;
   const busy = useRef(false);
   const [misses, setMisses] = useState(0);
   const [flash, setFlash] = useState(0);
+  /** The big polaroid shows for a moment, then flies to the string so the family stays visible. */
+  const [bigOpen, setBigOpen] = useState(false);
   const [bursts, fire] = useBursts();
   const [shakeCtl, shake] = useShake();
 
@@ -65,6 +67,13 @@ export function FamilyPhotoScene({ scene, onWin, onNext, sync }: { scene: Photo;
     setState((s) => ({ ...s, round: next, gemDone: s.gemDone || next >= total }));
     if (next >= total) void sayWithin(scene.doneLine, scene.who, 4000);
   };
+
+  useEffect(() => {
+    if (!taken.length) return;
+    setBigOpen(true);
+    const t = window.setTimeout(() => setBigOpen(false), 2500);
+    return () => window.clearTimeout(t);
+  }, [taken.length]);
 
   const hint = r && misses >= 2 ? scene.members[r.member] : undefined;
   const last = taken.length ? scene.rounds[taken[taken.length - 1]] : undefined;
@@ -112,7 +121,7 @@ export function FamilyPhotoScene({ scene, onWin, onNext, sync }: { scene: Photo;
 
       {/* The newest polaroid, big, with its sentence. */}
       <AnimatePresence>
-        {last && taken.length > 0 && !done && (
+        {last && bigOpen && !done && (
           <motion.div key={taken.length} className="pointer-events-none absolute left-1/2 top-[30%] z-40 -translate-x-1/2"
             initial={{ y: 80, scale: 0.4, rotate: -12, opacity: 0 }} animate={{ y: 0, scale: 1, rotate: -4, opacity: 1 }} exit={{ y: -200, scale: 0.3, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 170, damping: 15 }}>
@@ -122,7 +131,7 @@ export function FamilyPhotoScene({ scene, onWin, onNext, sync }: { scene: Photo;
       </AnimatePresence>
 
       {/* The photo string with every photo taken so far. */}
-      <div className="absolute inset-x-0 bottom-[11%] z-30 flex items-end justify-center gap-3 px-4">
+      <div className="pointer-events-none absolute inset-x-0 bottom-[11%] z-30 flex items-end justify-center gap-3 px-4">
         {taken.map((ri, k) => {
           const m = scene.members[scene.rounds[ri].member];
           return (

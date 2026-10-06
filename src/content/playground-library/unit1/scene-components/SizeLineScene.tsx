@@ -105,7 +105,7 @@ export function SizeLineScene({ scene, onWin, onNext, sync }: { scene: Line; onW
             const glow = misses >= 2 && i === want;
             return (
               <motion.button key={i} aria-label={m.label} onClick={() => { void pick(i); }}
-                className="relative flex h-full items-end"
+                className="relative flex h-full min-w-[48px] items-end justify-center"
                 animate={wrong === i ? { x: [0, -10, 10, -6, 6, 0] } : { y: [0, -5, 0] }}
                 transition={wrong === i ? { duration: 0.4 } : { duration: 2 + (i % 3) * 0.3, repeat: Infinity, ease: 'easeInOut' }}
                 whileTap={{ scale: 0.92 }}>
