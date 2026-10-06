@@ -1442,5 +1442,12 @@
       "public/lep1/scenes/bg-u4l3-beach-wide.png"
     ],
     "prompt": "A single sticker: one cute cartoon FEATHER, soft blue and white, centred, the whole object visible with empty space around it. Cute kawaii cartoon picture-book style exactly like the reference picture: thick warm dark outlines, soft flat colours. Plain pure white background, no shadow, no text, no other objects."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u4l3-bella-fingers-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u4l3-bella-wide.png"
+    ],
+    "prompt": "Redraw the reference picture EXACTLY — same beach, sea, sky, camera, Bella the white rabbit in exactly the same spot, size, face and feet, same art style — but change only her arms and hands: she holds ONE hand up high next to her face and shows her FINGERS: all five fingers spread wide apart and wiggling (small curved motion lines at the fingertips), the fingers big and very clear; her other arm rests at her side. Exactly two arms and two hands, five fingers on each hand. No text."
   }
 ]

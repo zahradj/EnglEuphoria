@@ -1,12 +1,17 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0099-3339937192707539895.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T175515Z&X-Amz-Expires=24125&X-Amz-Signature=d9d4746e7b38c4701592b163aea69fb00c47d6024a0309eab594f695865ed26c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2000%3A37%3A20%20GMT",
-  "out": "public/lep1/scenes/bg-u4l3-beach-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0085-8190314048262593732.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T114048Z&X-Amz-Expires=92042&X-Amz-Signature=469b31d840ac62f866bdb4690512a1726a9b59db1a8ca0305179bfe20110bc8b&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2013%3A14%3A50%20GMT",
+  "out": "public/lep1/scenes/bg-u4l3-bella-hands-wide.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0100-3339937192707539895.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T085018Z&X-Amz-Expires=54852&X-Amz-Signature=1836f2c45d35c7a00fa0d20260c3cb05eb674d94e2ec2c39442b015bfd09f561&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2000%3A04%3A30%20GMT",
-  "out": "public/lep1/scenes/bg-u4l3-bella-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0087-8190314048262593732.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T191726Z&X-Amz-Expires=64315&X-Amz-Signature=66b7fedf977de4627a74c70aa1fe133a3d83bc514de92b9333cb015c8731e7bd&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2013%3A09%3A21%20GMT",
+  "out": "public/lep1/scenes/bg-u4l3-bella-feet-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0099-8190314048262593732.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T093919Z&X-Amz-Expires=10818&X-Amz-Signature=4fdcd6f8551c9cb82af8c3794cb4b7cf452947d46d53d52495a821387caffa65&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2012%3A39%3A37%20GMT",
+  "out": "public/lep1/scenes/bg-u4l3-bella-arms-wide.png",
   "sticker": false
  }
 ]
