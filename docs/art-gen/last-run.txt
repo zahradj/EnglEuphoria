@@ -1,3 +1,263 @@
-Higgsfield: 1 pictures to make
-+ public/lep1/items/item-kitten.png (2064348B, Higgsfield)
-Done. made 1, failed 0
+= exists public/magic-castle/scenes/bg-castle-rooms-empty.png
+= exists public/magic-castle/stickers/chair.png
+= exists public/magic-castle/stickers/table.png
+= exists public/magic-castle/stickers/bed.png
+= exists public/magic-castle/stickers/lamp.png
+= exists public/magic-castle/stickers/pot.png
+= exists public/magic-castle/stickers/chest-closed.png
+= exists public/magic-castle/stickers/chest-open.png
+= exists public/magic-castle/scenes/bg-castle-bedroom-tour.png
+= exists public/magic-castle/scenes/bg-castle-bedroom-nolamp.png
+= exists public/magic-castle/scenes/bg-castle-catcat-pip-door.png
+= exists public/magic-castle/stickers/door.png
+= exists public/magic-castle/stickers/window.png
+= exists public/magic-castle/scenes/bg-castle-title-l2.png
+= exists public/magic-castle/scenes/bg-castle-title-l3.png
+= exists public/magic-castle/scenes/bg-castle-lostlamp.png
+= exists public/magic-castle/scenes/bg-castle-study-empty.png
+= exists public/magic-castle/scenes/bg-hunt-kitchen-under.png
+= exists public/magic-castle/scenes/bg-hunt-bedroom-behind.png
+= exists public/magic-castle/scenes/bg-hunt-living-nextto.png
+= exists public/magic-castle/scenes/bg-hunt-dining-on.png
+= exists public/magic-castle/scenes/bg-hunt-bathroom-in.png
+= exists public/magic-castle/scenes/bg-castle-lamp-found.png
+= exists public/magic-castle/stickers/box.png
+= exists public/magic-castle/stickers/sofa.png
+= exists public/magic-castle/stickers/armchair.png
+= exists public/magic-castle/stickers/mirror.png
+= exists public/magic-castle/stickers/bookcase.png
+= exists public/magic-castle/stickers/clock.png
+= exists public/magic-castle/stickers/desk.png
+= exists public/magic-castle/scenes/bg-castle-furniture-room.png
+= exists public/welcome-town/scenes/bg-classroom-wide-wide.png
+= exists public/welcome-town/scenes/bg-classroom-circle-wide.png
+= exists public/welcome-town/scenes/bg-vocab-pip-happy-wide.png
+= exists public/welcome-town/scenes/bg-vocab-leo-tired-wide.png
+= exists public/welcome-town/scenes/bg-vocab-mia-sad-wide.png
+= exists public/welcome-town/scenes/bg-vocab-bella-angry-wide.png
+= exists public/welcome-town/scenes/bg-vocab-willow-hungry-wide.png
+= exists public/welcome-town/scenes/bg-classroom-feelings-wide.png
+= exists public/welcome-town/scenes/bg-heshe-intro-pip-wide.png
+= exists public/welcome-town/scenes/bg-heshe-together-wide.png
+= exists public/welcome-town/scenes/bg-classroom-reading-wide.png
+= exists public/welcome-town/scenes/bg-classroom-supplies2-wide.png
+= exists public/welcome-town/scenes/bg-prep-in-wide.png
+= exists public/welcome-town/scenes/bg-prep-on-wide.png
+= exists public/welcome-town/scenes/bg-prep-next-to-wide.png
+= exists public/welcome-town/scenes/bg-express-goodbye-wide.png
+= exists public/welcome-town/sprites/pip-wave.png
+= exists public/welcome-town/sprites/mia-wave.png
+= exists public/welcome-town/sprites/bella-wave.png
+= exists public/welcome-town/sprites/willow-wave.png
+= exists public/welcome-town/sprites/leo-wave.png
+= exists public/welcome-town/sprites/marigold-wave.png
+= exists public/welcome-town/scenes/bg-party-door-wide.png
+= exists public/lep1/scenes/bg-u2l2-meadow-wide.png
+= exists public/lep1/scenes/bg-u2l2-paint-lab-wide.png
+= exists public/lep1/scenes/bg-u2l2-green-wide.png
+= exists public/lep1/scenes/bg-u2l2-orange-wide.png
+= exists public/lep1/scenes/bg-u2l2-purple-wide.png
+= exists public/lep1/items/item-frog.png
+= exists public/lep1/items/item-carrot.png
+= exists public/lep1/items/item-pumpkin.png
+= exists public/lep1/items/item-plum.png
+= exists public/lep1/items/item-paint-pot-empty.png
+= exists public/lep1/scenes/bg-u2l3-town-wide.png
+= exists public/lep1/scenes/bg-u2l3-builder-wide.png
+= exists public/lep1/scenes/bg-u2l3-clock-wide.png
+= exists public/lep1/scenes/bg-u2l3-window-wide.png
+= exists public/lep1/scenes/bg-u2l3-pizza-wide.png
+= exists public/lep1/items/item-clock.png
+= exists public/lep1/items/item-window.png
+= exists public/lep1/items/item-pizza-slice.png
+= exists public/lep1/items/item-cookie.png
+= exists public/lep1/items/item-present.png
+= exists public/lep1/items/item-flag.png
+= exists public/lep1/scenes/bg-u2l4-party-wide.png
+= exists public/lep1/scenes/bg-u2l4-secret-wide.png
+= exists public/lep1/scenes/bg-u2l4-whale-wide.png
+= exists public/lep1/items/item-whale.png
+= exists public/lep1/items/item-wheel.png
+= exists public/lep1/items/item-whistle.png
+= exists public/lep1/scenes/bg-u2l5-sea-wide.png
+= exists public/lep1/scenes/bg-u2l5-shelly-sad-wide.png
+= exists public/lep1/scenes/bg-u2l5-shelly-red-wide.png
+= exists public/lep1/scenes/bg-u2l5-shelly-blue-wide.png
+= exists public/lep1/scenes/bg-u2l5-shelly-yellow-wide.png
+= exists public/lep1/scenes/bg-u2l5-shelly-rainbow-wide.png
+= exists public/lep1/scenes/bg-u2l5-crab-wide.png
+= exists public/lep1/items/item-ship.png
+= exists public/lep1/items/item-shoe.png
+= exists public/lep1/items/item-shell.png
+= exists public/lep1/items/item-shelly.png
+= exists public/lep1/scenes/bg-u2l6-map-wide.png
+= exists public/lep1/scenes/bg-u2l6-garden-wide.png
+= exists public/lep1/scenes/bg-u2l6-beach-wide.png
+= exists public/lep1/scenes/bg-u2l6-cave-wide.png
+= exists public/lep1/scenes/bg-u2l6-chest-wide.png
+= exists public/lep1/scenes/bg-u2l6-rainbow-wide.png
+= exists public/lep1/scenes/bg-u2l6-cave-empty-wide.png
+= exists public/lep1/items/item-rainbow.png
+= exists public/lep1/items/item-gem-red-circle.png
+= exists public/lep1/items/item-gem-blue-square.png
+= exists public/lep1/items/item-gem-yellow-triangle.png
+= exists public/lep1/scenes/bg-u3l1-playroom-wide.png
+= exists public/lep1/scenes/bg-u3l1-toybox-wide.png
+= exists public/lep1/scenes/bg-u3l1-ball-wide.png
+= exists public/lep1/scenes/bg-u3l1-car-wide.png
+= exists public/lep1/scenes/bg-u3l1-doll-wide.png
+= exists public/lep1/scenes/bg-u3l1-play-wide.png
+= exists public/lep1/scenes/bg-u3l1-shop-wide.png
+= exists public/lep1/scenes/bg-u3l1-shelf-wide.png
+= exists public/lep1/items/item-ball-red.png
+= exists public/lep1/items/item-ball-blue.png
+= exists public/lep1/items/item-ball-yellow.png
+= exists public/lep1/items/item-car-red.png
+= exists public/lep1/items/item-car-green.png
+= exists public/lep1/items/item-doll-purple.png
+= exists public/lep1/items/item-doll-yellow.png
+= exists public/lep1/items/item-dog.png
+= exists public/lep1/items/item-door.png
+= exists public/lep1/scenes/bg-u3l1-room-empty-wide.png
+= exists public/lep1/scenes/bg-u3l2-party-wide.png
+= exists public/lep1/scenes/bg-u3l2-teddy-wide.png
+= exists public/lep1/scenes/bg-u3l2-blocks-wide.png
+= exists public/lep1/scenes/bg-u3l2-train-wide.png
+= exists public/lep1/scenes/bg-u3l2-cake-wide.png
+= exists public/lep1/scenes/bg-u3l2-shelf-wide.png
+= exists public/lep1/items/item-teddies.png
+= exists public/lep1/items/item-trains.png
+= exists public/lep1/items/item-balls.png
+= exists public/lep1/items/item-cars.png
+= exists public/lep1/items/item-dolls.png
+= exists public/lep1/scenes/bg-l5-play-wide.png
+= exists public/lep1/scenes/bg-l5-wind-wide.png
+= exists public/lep1/scenes/bg-l5-sad-wide.png
+= exists public/lep1/scenes/bg-l5-friends-wide.png
+= exists public/lep1/scenes/bg-l5-hat-wide.png
+= exists public/lep1/scenes/bg-l5-mat-wide.png
+= exists public/lep1/scenes/bg-l5-glow-wide.png
+= exists public/lep1/scenes/bg-l5-found-wide.png
+= exists public/lep1/scenes/bg-l5-empty-wide.png
+= exists public/lep1/items/item-tree.png
+= exists public/lep1/items/item-star-gold.png
+= exists public/lep1/scenes/bg-u2l5-shelly-green-wide.png
+= exists public/lep1/scenes/bg-u2l5-shelly-orange-wide.png
+= exists public/lep1/items/item-gem-green-triangle.png
+= exists public/lep1/items/item-gem-purple-circle.png
+= exists public/lep1/items/item-gem-orange-square.png
+= exists public/lep1/items/item-medal-rainbow.png
+= exists public/lep1/scenes/bg-u2l6-gems-wide.png
+= exists public/lep1/scenes/bg-u2l6-river-wide.png
+= exists public/lep1/items/item-stone.png
+= exists public/lep1/scenes/bg-u3l3-park-wide.png
+= exists public/lep1/scenes/bg-u3l3-kite-wide.png
+= exists public/lep1/scenes/bg-u3l3-robot-wide.png
+= exists public/lep1/scenes/bg-u3l3-plane-wide.png
+= exists public/lep1/scenes/bg-u3l3-stuck-wide.png
+= exists public/lep1/scenes/bg-u3l3-together-wide.png
+= exists public/lep1/scenes/bg-u3l3-park-empty-wide.png
+= exists public/lep1/scenes/bg-u3l3-workshop-wide.png
+= exists public/lep1/items/item-kite.png
+= exists public/lep1/items/item-robot.png
+= exists public/lep1/items/item-plane.png
+= exists public/lep1/items/item-key.png
+= exists public/lep1/items/item-kangaroo.png
+= exists public/lep1/items/item-kitten.png
+! public/lep1/scenes/bg-u4l3-sand-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/scenes/bg-u4l3-sand-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/scenes/bg-u4l3-sand-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-part-hand.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-part-hand.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-part-hand.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-part-finger.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-part-finger.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-part-finger.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-part-foot.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-part-foot.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-part-foot.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-part-arm.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-part-arm.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+! public/lep1/items/item-part-arm.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-fish.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-fish.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-fish.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-fan.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-fan.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-fan.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+! public/lep1/items/item-feather.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-feather.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+! public/lep1/items/item-feather.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 402,
+    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
+Done. made 0, failed 8
