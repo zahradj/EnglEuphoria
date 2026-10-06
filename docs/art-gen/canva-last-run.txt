@@ -1,5 +1,5 @@
-+ public/lep1/items/sheet-u4l3-f.png (1376, 768)
-+ public/lep1/scenes/bg-u4l3-bella-fingers-wide.png (1376, 768)
-+ public/lep1/items/sheet-u4l3-body.png (1376, 768)
-+ public/lep1/scenes/bg-u4l3-sand-wide.png (1376, 768)
-4/4 saved
+cut out: public/lep1/items/sheet-u4l3-f.png (872, 923)
+cut out: public/lep1/items/sheet-u4l3-body.png (895, 921)
++ public/lep1/items/sheet-u4l3-f.png (1024, 1024)
++ public/lep1/items/sheet-u4l3-body.png (1024, 1024)
+2/2 saved
