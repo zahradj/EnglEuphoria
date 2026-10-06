@@ -1,0 +1,15 @@
+
+=== docs/songs/u4l4-body-take1.mp3  length=20.1s  score=0.97  missing=1  extra=1
+heard: i have two eyes i have one note i have ten fingers i have ten toes big big feet small small hands this is my body my big big body
+line starts (s): [np.float64(0.0), np.float64(3.7), np.float64(7.8), np.float64(11.3)]
+lineDurationsMs: [3660, 4100, 3500, 8802]
+
+=== docs/songs/u4l4-body-take2.mp3  length=20.1s  score=0.83  missing=5  extra=5
+heard: i have two eyes i have one nose i have ten fingers i have ten toes dig dig feet small small head this is my body my dig dig body
+line starts (s): [np.float64(0.0), np.float64(3.7), np.float64(9.4), np.float64(11.7)]
+lineDurationsMs: [3700, 5680, 2360, 8322]
+
+=== docs/songs/u4l4-body-take3.mp3  length=20.1s  score=0.97  missing=1  extra=1
+heard: i have two eyes i have one nose i have ten fingers i have ten toes thick big feet small small hands this is my body my big big body
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(8.3), np.float64(12.1)]
+lineDurationsMs: [4100, 4160, 3820, 7982]
