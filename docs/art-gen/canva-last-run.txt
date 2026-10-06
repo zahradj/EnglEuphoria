@@ -1,5 +1,7 @@
-cut out: public/lep1/items/sheet-u4l3-f.png (872, 923)
-cut out: public/lep1/items/sheet-u4l3-body.png (895, 921)
-+ public/lep1/items/sheet-u4l3-f.png (1024, 1024)
-+ public/lep1/items/sheet-u4l3-body.png (1024, 1024)
-2/2 saved
++ public/lep1/scenes/bg-u4l4-garden-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l4-pip-eyes-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l4-pip-fingers-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l4-bo-eyes-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l4-bo-feet-wide.png (1376, 768)
++ public/lep1/scenes/bg-u4l4-lawn-wide.png (1376, 768)
+6/6 saved
