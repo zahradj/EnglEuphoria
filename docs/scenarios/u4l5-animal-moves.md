@@ -56,3 +56,11 @@ one clip per shot, only with strict mode and your OK per row.
 
 ## Owner approval
 Approved: owner, 2026-10-06 — "okay go ahead now let's work on lesson five."
+
+## Motion (2026-10-06)
+Owner: "there are no motions — the head is not turning, the hands are not clapping." The paid motion clips (storyboard
+`u4l5-moves` in scripts/story-videos.json, approved 2026-10-06) could not be ordered: Higgsfield has 0 credits. Until
+then the film moves with a free 2-frame cartoon: every move has a standing picture and a move picture made as Canva
+edits of each other (overlay-checked), and the film switches between them in time with the karaoke words
+("Clap, clap!" = apart → together → apart → together). Pages: scripts/film-labels/u4l5-animal-moves-pages.json,
+labels + karaoke: scripts/film-labels/u4l5-animal-moves.json. No zoom/pan.
