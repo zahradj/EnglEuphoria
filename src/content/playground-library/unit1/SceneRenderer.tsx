@@ -81,6 +81,8 @@ import { ShapeSorterScene } from './scene-components/ShapeSorterScene';
 import { ShapeBubblesScene } from './scene-components/ShapeBubblesScene';
 import { MonsterMakerScene } from './scene-components/MonsterMakerScene';
 import { RoboCopyScene } from './scene-components/RoboCopyScene';
+import { MoveMatchScene } from './scene-components/MoveMatchScene';
+import { PartPeekScene } from './scene-components/PartPeekScene';
 import { CountPartsScene } from './scene-components/CountPartsScene';
 import { RingTossScene } from './scene-components/RingTossScene';
 import { ShadowMatchScene } from './scene-components/ShadowMatchScene';
@@ -266,6 +268,8 @@ export function SceneRenderer(props: {
     case 'shape-peek': return <ShapePeekScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'shape-sorter': return <ShapeSorterScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'shape-bubbles': return <ShapeBubblesScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'move-match': return <MoveMatchScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'part-peek': return <PartPeekScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'robo-copy': return <RoboCopyScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'monster-maker': return <MonsterMakerScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'count-parts': return <CountPartsScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

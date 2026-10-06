@@ -59,6 +59,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-1': { settings: ['dance studio'], look: 'bright dance studio in morning sun: mirror, barre and colourful mats; a dance class with Coach Willow' },
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
+  '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
   '4-6': { settings: ['space station'], look: 'bright pastel space station with round star windows and a ringed planet; Pip and Mia play Simon Says with Robo, a silver robot drawn in code' },
   '4-3': { settings: ['beach'], look: 'sunny beach day: golden sand, blue sea, sandcastle and umbrella; top-down wet sand for prints; Bella and Leo' },
   '3-6': { settings: ['toy fair'], look: 'outdoor fair: sunny day with striped tents, then a golden evening with string lights' },
@@ -168,6 +169,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the NUMBER and the SIZE decide the part (one / two / three eyes, big / small feet) — apps only ask for the part',
       'counting ends in a real sentence the child hears and says ("I have three eyes!"), and the number choice only opens after everything is counted (no guessing)',
       'calm by design: no clock, a wrong part is named back ("That\'s two eyes! Try again!") and the right one glows after two misses',
+    ],
+  },
+  '4-5': {
+    sources: ['Eric Carle "From Head to Toe" (call-and-response movement book: "Can you do it?" — "I can do it!")', 'Lingokids (action / animal games)', 'Cambridge (Pre A1 Starters listen and point; look and guess)', 'Khan Academy Kids (hide-and-reveal, calm self-paced)', 'Sesame Workshop (model → copy, pause for the child)'],
+    mechanics: [
+      'the movement-book call and response → a stills film where each animal shows ONE move, Pip asks "Can you do it?", pauses, then copies it',
+      'listen and point → Who Can Do It?: hear the move, tap the animal, then do the move and say "I can do it!"',
+      'the peekaboo "Whose tail is it?" pattern → Whose Is It?: one body part peeks out of a bush, tap the animal, the bush slides away',
+    ],
+    betterThan: [
+      'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
+      'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
+      'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
     ],
   },
   '4-6': {

@@ -1,6 +1,6 @@
 # Scenario — Pre-A1 Unit 4 Lesson 5 "From Head to Toe" · story film "Animal Moves"
 
-**Status: waiting for the owner's OK** (nothing drawn or ordered yet).
+**Status: approved by the owner (2026-10-06)** — pictures in progress (Canva).
 
 | | |
 |---|---|
@@ -51,4 +51,4 @@ with the answer after each; ≤ 12 words per line; no on-screen words except our
 one clip per shot, only with strict mode and your OK per row.
 
 ## Owner approval
-Approved: _(waiting)_
+Approved: owner, 2026-10-06 — "okay go ahead now let's work on lesson five."

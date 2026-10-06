@@ -606,6 +606,23 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Who Can Do It? (U4L5 signature): "Who stomps their feet?" — tap the animal's face, its move fills the
+       *  screen, then the child does the move and taps "I can do it!". face = centre of the face in `img` (%),
+       *  faceW = % of the picture width the round face window shows; move = "stomps its feet" (wrong-pick line). */
+      id: string; kind: 'move-match'; bg: string; teacher: string; who: CharKey;
+      animals: { label: string; img: string; face: [number, number]; faceW: number; move: string }[];
+      rounds: { animal: number; question: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Whose Is It? (U4L5): one body part peeks out of a bush (part = centre in the animal's picture, %);
+       *  tap the animal's face and the bush slides away. */
+      id: string; kind: 'part-peek'; bg: string; teacher: string; who: CharKey;
+      animals: { label: string; img: string; face: [number, number]; faceW: number }[];
+      rounds: { animal: number; part: [number, number]; partW: number; partWord: string; question: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Robo Says (U4L6 signature): Robo lights body parts in order and names them ("Simon says: touch my
        *  nose, then my knees!"); the child touches the same parts on Robo in the same order. */
       id: string; kind: 'robo-copy'; bg: string; teacher: string; who: CharKey;
@@ -7409,6 +7426,258 @@ export const LESSON_U4L4_SCENES: Scene[] = [
     ],
   },
   { id: 'u4l4-finale', kind: 'finale', bg: bgU4L4Garden, who: 'pip', line: 'Bo says bye-bye! I have two eyes, you have two eyes — great job, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 4 · Lesson 5 — From Head to Toe =====================
+ * My Body & Face (5/6, story). The film "Animal Moves" (docs/scenarios/u4l5-animal-moves.md, owner-approved
+ * 2026-10-06): a tiger turns his head, a monkey waves his arms, an elephant stomps his feet, a seal claps her
+ * hands — "Can you do it?" — "I can do it!". Verbs turn / wave / stomp / clap with the unit's body words, and
+ * T says /t/ (tiger, ten, teddy). Setting: a sunny animal park with a pond. Lesson-Variety Engine: researched
+ * Eric Carle's call-and-response movement book, Lingokids action games, Cambridge Pre A1 "listen and point" and
+ * the peekaboo "Whose tail is it?" pattern; new games Who Can Do It? and Whose Is It?. Pictures made with Canva;
+ * the film is a stills film (no paid video). */
+const bgU4L5Park = `${A}/scenes/bg-u4l5-park-wide.png`;
+const bgU4L5Lawn = `${A}/scenes/bg-u4l5-lawn-wide.png`;
+const bgU4L5Tiger = `${A}/scenes/bg-u4l5-tiger-head-wide.png`;
+const bgU4L5Monkey = `${A}/scenes/bg-u4l5-monkey-arms-wide.png`;
+const bgU4L5Elephant = `${A}/scenes/bg-u4l5-elephant-feet-wide.png`;
+const bgU4L5Seal = `${A}/scenes/bg-u4l5-seal-hands-wide.png`;
+const bgU4L5PipHead = `${A}/scenes/bg-u4l5-pip-head-wide.png`;
+const bgU4L5PipArms = `${A}/scenes/bg-u4l5-pip-arms-wide.png`;
+const bgU4L5PipFeet = `${A}/scenes/bg-u4l5-pip-feet-wide.png`;
+const bgU4L5PipHands = `${A}/scenes/bg-u4l5-pip-hands-wide.png`;
+/* The four animals (faces measured on their own pictures, % of the picture). */
+const U4L5_ANIMALS = [
+  { label: 'tiger', img: bgU4L5Tiger, face: [50, 30] as [number, number], faceW: 20, move: 'turns his head' },
+  { label: 'monkey', img: bgU4L5Monkey, face: [50, 30] as [number, number], faceW: 20, move: 'waves his arms' },
+  { label: 'elephant', img: bgU4L5Elephant, face: [50, 30] as [number, number], faceW: 24, move: 'stomps his feet' },
+  { label: 'seal', img: bgU4L5Seal, face: [50, 30] as [number, number], faceW: 20, move: 'claps her hands' },
+];
+const U4L5_FACES = U4L5_ANIMALS.map(({ label, img, face, faceW }) => ({ label, img, face, faceW }));
+
+export const LESSON_U4L5_TITLE = 'From Head to Toe';
+export const LESSON_U4L5_OBJECTIVE = 'Follow a short animal story and copy each move — turn your head, wave your arms, stomp your feet, clap your hands — answer "Can you do it?" with "I can do it!", find the animal from one body part, and hear T say /t/ (tiger, ten, teddy) — by watching, moving, listening and speaking, no reading.';
+
+export const LESSON_U4L5_SCENES: Scene[] = [
+  { id: 'u4l5-title', kind: 'title-card', bg: bgU4L5Park, level: 'Pre-A1', unit: 'Unit 4', lessonLabel: 'Lesson 5', title: 'From Head to Toe', subtitle: 'Animal park' },
+
+  /* 1-4 Hook + story */
+  {
+    id: 'u4l5-song', kind: 'song', bg: bgU4L5Park, title: '\u{1F3B5} I Can Do It! \u{1F3B5}', teacher: 'Stand up! Do each move as you sing: turn, wave, stomp, clap!',
+    durationSeconds: 20, bigWord: 'Move', songUrl: `${A}/audio/animal-moves-song-u4l5.mp3?v=1`,
+    lineDurationsMs: [3740, 4660, 3860, 7802],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'I turn my head! I can do it!', emotion: 'happy' },
+      { who: 'pip', text: 'I wave my arms! I can do it!', emotion: 'happy' },
+      { who: 'pip', text: 'I stomp my feet! I clap my hands!', emotion: 'happy' },
+      { who: 'pip', text: 'From head to toe, we can do it!', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u4l5-intro', kind: 'cinematic', bg: bgU4L5Park, hidePipOverlay: true, title: 'Animal Park', subtitle: 'Can you do it?', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Welcome to the animal park! My animal friends can move!' },
+      { who: 'pip', line: "Let's watch them — and copy them!" },
+    ],
+    cta: "Let's watch!",
+  },
+  {
+    // The approved stills film: one picture per line, the body word labelled on the part, a pause after each
+    // "Can you do it?" so the child copies the move (docs/scenarios/u4l5-animal-moves.md).
+    id: 'u4l5-story-moves', kind: 'story-video', bg: bgU4L5Park, videoUrl: `${A}/video/animal-moves-u4l5-a.mp4?v=1`, title: 'Animal Moves',
+    teacher: 'Press play and watch. When Pip asks "Can you do it?", stand up and copy the move! Then say: "I can do it!"',
+    pages: [
+      { img: bgU4L5Park, who: 'pip', line: "Look! The animals can move. Let's copy them!", atSec: 0 },
+      { img: bgU4L5Tiger, who: 'pip', line: 'Look! The tiger turns his head!', atSec: 4.5 },
+      { img: bgU4L5Tiger, who: 'pip', line: 'Can you do it?', atSec: 8 },
+      { img: bgU4L5PipHead, who: 'pip', line: 'I can do it! I turn my head!', atSec: 12.5 },
+      { img: bgU4L5Monkey, who: 'pip', line: 'Look! The monkey waves his arms!', atSec: 16 },
+      { img: bgU4L5Monkey, who: 'pip', line: 'Can you do it?', atSec: 19.5 },
+      { img: bgU4L5PipArms, who: 'pip', line: 'I can do it! I wave my arms!', atSec: 24 },
+      { img: bgU4L5Elephant, who: 'pip', line: 'Look! The elephant stomps his feet!', atSec: 27.5 },
+      { img: bgU4L5Elephant, who: 'pip', line: 'Can you do it?', atSec: 31 },
+      { img: bgU4L5PipFeet, who: 'pip', line: 'I can do it! I stomp my feet!', atSec: 35.5 },
+      { img: bgU4L5Seal, who: 'pip', line: 'Look! The seal claps her hands!', atSec: 39 },
+      { img: bgU4L5Seal, who: 'pip', line: 'Can you do it?', atSec: 42.5 },
+      { img: bgU4L5PipHands, who: 'pip', line: 'I can do it! I clap my hands!', atSec: 47 },
+      { img: bgU4L5Park, who: 'pip', line: 'From head to toe — we can do it!', atSec: 50.5 },
+    ],
+    checkpoints: [],
+  },
+
+  /* 5-7 The moves, move, signature game */
+  {
+    id: 'u4l5-moves', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU4L5Lawn, teacher: 'Do each move, then say it! Point to the body part every time.',
+    cards: [
+      { who: 'pip', sentence: 'Turn your head! Like the tiger.', img: bgU4L5Tiger, imgLabel: 'Turn your head!' },
+      { who: 'pip', sentence: 'Wave your arms! Like the monkey.', img: bgU4L5Monkey, imgLabel: 'Wave your arms!' },
+      { who: 'pip', sentence: 'Stomp your feet! Like the elephant.', img: bgU4L5Elephant, imgLabel: 'Stomp your feet!' },
+      { who: 'pip', sentence: 'Clap your hands! Like the seal.', img: bgU4L5Seal, imgLabel: 'Clap your hands!' },
+    ],
+  },
+  {
+    id: 'u4l5-move-say', kind: 'tpr-actions', bg: bgU4L5Lawn, who: 'pip',
+    teacher: 'Stand up! Say it with Pip, then do it. Then say: "I can do it!"',
+    rounds: [
+      { line: 'Turn your head like the tiger!', emoji: '\u{1F42F}', img: bgU4L5Tiger },
+      { line: 'Wave your arms like the monkey!', emoji: '\u{1F412}', img: bgU4L5Monkey },
+      { line: 'Stomp your feet like the elephant!', emoji: '\u{1F418}', img: bgU4L5Elephant },
+      { line: 'Clap your hands like the seal!', emoji: '\u{1F9AD}', img: bgU4L5Seal },
+      { line: 'Can you do it? Say: I can do it!', emoji: '\u{1F4AA}' },
+    ],
+  },
+  {
+    // Signature game (new): hear the move, find the animal, then do it yourself.
+    id: 'u4l5-who-can', kind: 'move-match', bg: bgU4L5Lawn, who: 'pip',
+    teacher: 'Who Can Do It? Listen, tap the animal, then do the move and say "I can do it!"',
+    animals: U4L5_ANIMALS,
+    rounds: [
+      { animal: 2, question: 'Who stomps his feet?', reply: 'The elephant! Stomp, stomp! Can you do it?' },
+      { animal: 3, question: 'Who claps her hands?', reply: 'The seal! Clap, clap! Can you do it?' },
+      { animal: 0, question: 'Who turns his head?', reply: 'The tiger! Turn your head! Can you do it?' },
+      { animal: 1, question: 'Who waves his arms?', reply: 'The monkey! Wave, wave! Can you do it?' },
+    ],
+    doneLine: 'Wow! You can do it — from head to toe!',
+  },
+
+  /* 8-11 Speaking + the second game */
+  {
+    id: 'u4l5-pip-asks', kind: 'join-stage', bg: bgU4L5PipArms, teacher: 'Pip asks. The student does the move and answers: "I can do it!"', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Can you wave your arms?', bubble: 'right' },
+      { who: 'student', line: 'I can do it! (wave your arms)', bubble: 'right' },
+      { who: 'pip', line: 'Can you stomp your feet?', bubble: 'right' },
+      { who: 'student', line: 'I can do it! (stomp your feet)', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l5-whose', kind: 'part-peek', bg: bgU4L5Lawn, who: 'pip',
+    teacher: 'Whose Is It? Look at the part in the bush. Tap the animal, then name the part!',
+    animals: U4L5_FACES,
+    rounds: [
+      { animal: 2, part: [50, 85], partW: 22, partWord: 'feet', question: 'Whose feet are these?', reply: "The elephant's feet! He stomps his feet!" },
+      { animal: 0, part: [50, 30], partW: 20, partWord: 'head', question: 'Whose head is this?', reply: "The tiger's head! He turns his head!" },
+      { animal: 3, part: [50, 55], partW: 22, partWord: 'hands', question: 'Whose hands are these?', reply: "The seal's hands! She claps her hands!" },
+      { animal: 1, part: [50, 45], partW: 26, partWord: 'arms', question: 'Whose arms are these?', reply: "The monkey's arms! He waves his arms!" },
+    ],
+    doneLine: 'You found them all! Super looking!',
+  },
+  {
+    id: 'u4l5-you-ask', kind: 'join-stage', bg: bgU4L5PipHands, teacher: 'Swap! The student asks Pip: "Can you clap your hands?"', cast: ['pip'],
+    turns: [
+      { who: 'student', line: 'Ask Pip: Can you clap your hands?', bubble: 'right' },
+      { who: 'pip', line: 'I can do it! Clap, clap!', bubble: 'right' },
+      { who: 'student', line: 'Ask Pip: Can you turn your head?', bubble: 'right' },
+      { who: 'pip', line: 'I can do it! Look!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l5-true-or-not', kind: 'tick-cross', bg: bgU4L5Lawn, who: 'pip',
+    teacher: 'Look and listen. Is it right? Tap ✓ or ✗.',
+    rounds: [
+      { img: bgU4L5Tiger, sentence: 'The tiger turns his head.', isTrue: true },
+      { img: bgU4L5Elephant, sentence: 'The elephant claps his hands.', isTrue: false },
+      { img: bgU4L5Monkey, sentence: 'The monkey waves his arms.', isTrue: true },
+      { img: bgU4L5Seal, sentence: 'The seal stomps her feet.', isTrue: false },
+    ],
+  },
+
+  /* 12-14 Phonics: T says /t/ */
+  {
+    id: 'u4l5-model-t', kind: 'sound-model', bg: bgU4L5Lawn, who: 'pip', letter: 'T', phoneme: '/t/', sound: 'tuh',
+    teacher: 'T says /t/ — tiger, ten, teddy!',
+    anchors: [
+      { word: 'tiger', emoji: '\u{1F42F}' },
+      { word: 'ten', emoji: '\u{1F51F}', img: itemTen },
+      { word: 'teddy', emoji: '\u{1F9F8}', img: itemTeddy },
+    ],
+  },
+  { id: 'u4l5-trace-t', kind: 'trace', bg: bgU4L5Lawn, who: 'pip', letter: 'T', phoneme: '/t/', word: 'tiger', speakWord: false, teacher: 'Trace the big T with your finger! /t/ /t/ tiger!' },
+  {
+    id: 'u4l5-blocks', kind: 'alphabet-blocks', bg: bgU4L5Lawn, teacher: 'Letter Blocks! Tap the sound, then stack the word!', letters: ['T', 'E', 'N', 'F', 'A', 'B'],
+    tapRounds: [{ letter: 'T' }, { letter: 'F' }, { letter: 'N' }, { letter: 'B' }],
+    words: [
+      { word: 'TEN', emoji: '\u{1F51F}' },
+      { word: 'NET', emoji: '\u{1F945}' },
+      { word: 'FAN', emoji: '\u{1FAAD}' },
+    ],
+  },
+
+  /* 15-16 Retell + perform */
+  {
+    id: 'u4l5-story-order', kind: 'story-order', bg: bgU4L5Lawn, who: 'pip', teacher: 'Put the animals in story order, then tell it!',
+    frames: [
+      { img: bgU4L5Tiger, caption: 'The tiger turns his head.', who: 'pip' },
+      { img: bgU4L5Monkey, caption: 'The monkey waves his arms.', who: 'pip' },
+      { img: bgU4L5Elephant, caption: 'The elephant stomps his feet.', who: 'pip' },
+    ],
+  },
+  {
+    id: 'u4l5-perform', kind: 'join-stage', bg: bgU4L5Park, teacher: 'Show time! The student is the animal: do the move and say it.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Be the tiger! Can you do it?', bubble: 'right' },
+      { who: 'student', line: 'I can do it! I turn my head!', bubble: 'right' },
+      { who: 'pip', line: 'Be the seal! Can you do it?', bubble: 'right' },
+      { who: 'student', line: 'I can do it! I clap my hands!', bubble: 'right' },
+    ],
+  },
+
+  /* 17-18 Sticker + Home Mission */
+  {
+    id: 'u4l5-sticker', kind: 'sticker-reward', bg: bgU4L5Park, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You can do it! Here is an elephant sticker for you!', sticker: { img: itemElephant, label: 'Elephant' },
+  },
+  {
+    id: 'u4l5-home-mission', kind: 'home-mission', bg: bgU4L5Park, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: be an animal at home! Ask your family: Can you do it?',
+    parentNote: 'Play "Animal Moves": your child shows a move — turn your head like a tiger, wave your arms like a monkey, stomp your feet like an elephant, clap your hands like a seal — and asks "Can you do it?". Answer "I can do it!" and copy. Then swap.',
+    steps: [
+      { emoji: '\u{1F42F}', say: 'Turn your head' },
+      { emoji: '\u{1F418}', img: itemElephant, say: 'Stomp your feet' },
+      { emoji: '\u{1F4AA}', say: 'I can do it!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u4l5-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU4L5Lawn, who: 'pip',
+    teacher: 'Extra time: Animal Moves! Move like the animals with Pip.',
+    rounds: [
+      { line: 'Walk like an elephant! Stomp, stomp!', emoji: '\u{1F418}' },
+      { line: 'Jump like a monkey!', emoji: '\u{1F412}' },
+      { line: 'Clap like a seal!', emoji: '\u{1F9AD}' },
+      { line: 'Turn your head like a tiger! Left and right!', emoji: '\u{1F42F}' },
+      { line: 'Freeze like a statue!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u4l5-whose-2', kind: 'part-peek', bg: bgU4L5Lawn, who: 'pip',
+    teacher: 'Extra time: Whose Is It? again — new parts!',
+    animals: U4L5_FACES,
+    rounds: [
+      { animal: 1, part: [50, 30], partW: 20, partWord: 'head', question: 'Whose head is this?', reply: "The monkey's head! Hello, monkey!" },
+      { animal: 0, part: [50, 85], partW: 22, partWord: 'feet', question: 'Whose feet are these?', reply: "The tiger's feet! Stripy feet!" },
+      { animal: 2, part: [50, 30], partW: 26, partWord: 'head', question: 'Whose head is this?', reply: "The elephant's head! Big ears!" },
+    ],
+    doneLine: 'Great looking! See you soon, animals!',
+  },
+
+  /* 19-20 Goodbye */
+  {
+    id: 'u4l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u4l5-finale', kind: 'finale', bg: bgU4L5Park, who: 'pip', line: 'Turn, wave, stomp and clap — from head to toe, you can do it! Goodbye, friend!' },
 ];
 
 /* ===================== Pre-A1 Unit 4 · Lesson 6 — Simon Says Body Parts =====================

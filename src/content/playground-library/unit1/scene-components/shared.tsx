@@ -477,3 +477,24 @@ export const THICK_WORDS: import('react').CSSProperties = {
   textShadow: '0 0.08em 0 #6B2A0E, 0 0.18em 0.3em rgba(0,0,0,0.35)',
   letterSpacing: '0.01em',
 };
+
+/** A round window onto one spot of a wide picture: `at` = centre of the spot (% of the picture), `w` = how much of the
+ *  picture's width fills the window (%). Used by Who Can Do It? and Whose Is It? (U4L5) to show a face or one body part
+ *  of a full scene picture without making new art. `aspect` = picture width / height (default 1376 / 768). */
+export function CropPic({ img, at, w, alt, className = '', aspect = 1376 / 768 }: { img: string; at: [number, number]; w: number; alt: string; className?: string; aspect?: number }) {
+  const scale = 100 / w; // picture width in "window widths"
+  return (
+    <div className={`relative overflow-hidden rounded-full ${className}`} role="img" aria-label={alt}>
+      <img
+        src={img} alt="" draggable={false}
+        className="absolute max-w-none select-none"
+        style={{
+          width: `${scale * 100}%`,
+          height: `${(scale * 100) / aspect}%`,
+          left: `${50 - (at[0] * scale)}%`,
+          top: `${50 - (at[1] * scale) / aspect}%`,
+        }}
+      />
+    </div>
+  );
+}
