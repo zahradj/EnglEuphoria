@@ -388,6 +388,26 @@ const UNIT1_EXTRACTORS = {
   ],
   // Mirror ClawMachineScene.tsx's clawMachineLines() / RingTossScene.tsx's ringTossLines().
   'claw-machine': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.toys ?? []).map((t) => [s.who, `That's the ${t.label}! Try again!`]), [s.who, 'Oops! Nothing! Try again!']],
+  // Mirror MonsterMakerScene / CountPartsScene *Lines().
+  'monster-maker': (s) => {
+    const NUM = ['zero', 'one', 'two', 'three', 'four', 'five'];
+    const NAME = { eyes: ['eye', 'eyes'], ears: ['ear', 'ears'], hands: ['hand', 'hands'], feet: ['foot', 'feet'] };
+    const desc = (p, v) => (typeof v === 'number' ? `${NUM[v] ?? v} ${NAME[p][v === 1 ? 0 : 1]}` : `${v} ${NAME[p][1]}`);
+    return [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply], ...(r.options ?? []).filter((v) => v !== r.answer).map((v) => [s.who, `That's ${desc(r.part, v)}! Try again!`])]), [s.who, s.doneLine]];
+  },
+  'count-parts': (s) => {
+    const NUM = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
+    const count = (l, p) => (p === 'eyes' ? l.eyes ?? 0 : p === 'ears' ? (l.ears ? 2 : 0) : p === 'arms' ? (l.hands ? l.arms ?? 2 : 0) : (l.feet ? l.legs ?? 2 : 0));
+    const out = [];
+    for (const r of s.rounds ?? []) {
+      const n = count(r.look ?? {}, r.part);
+      out.push([s.who, r.question], [s.who, r.answer]);
+      for (let k = 1; k <= n; k++) out.push([s.who, `${NUM[k] ?? k}!`]);
+      for (const v of [n - 1, n + 1]) if (v >= 1) out.push([s.who, `${NUM[v] ?? v}? Count again!`]);
+    }
+    out.push([s.who, s.doneLine]);
+    return out;
+  },
   // Mirror ShapeMagicScene / ShapePeekScene / ShapeSorterScene / ShapeBubblesScene *Lines().
   'shape-magic': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, s.doneLine]],
   'shape-peek': (s) => [[s.who, 'What shape is hiding?'], ...(s.rounds ?? []).map((r) => [s.who, r.reply]), ...['circle', 'square', 'triangle'].map((x) => [s.who, `Not a ${x}! Look again!`])],

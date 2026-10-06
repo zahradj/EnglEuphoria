@@ -590,6 +590,22 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Monster Maker (U4L4 signature): the monster says "I have three eyes!"; pick the matching part
+       *  (number or size) and it pops on. options = the values shown; answer = the right one. */
+      id: string; kind: 'monster-maker'; bg: string; teacher: string; who: CharKey; color: string;
+      rounds: { part: 'eyes' | 'ears' | 'hands' | 'feet'; answer: number | 'big' | 'small'; options: (number | 'big' | 'small')[]; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
+      /** How Many?: "How many eyes?" — tap each part to count it out loud, pick the number, hear "I have three eyes!". */
+      id: string; kind: 'count-parts'; bg: string; teacher: string; who: CharKey;
+      rounds: {
+        look: { color: string; eyes?: number; ears?: 'big' | 'small'; hands?: 'big' | 'small'; feet?: 'big' | 'small'; arms?: number; legs?: number };
+        part: 'eyes' | 'ears' | 'arms' | 'legs'; question: string; answer: string;
+      }[];
+      doneLine: string;
+    }
+  | {
       /** Calm first-sound pick: the recorded letter sound, then "Which one starts with this sound?";
        *  three still pictures, no clock, wrong taps are named back and cost nothing. */
       id: string; kind: 'sound-pick'; bg: string; teacher: string; who: CharKey;
@@ -7172,6 +7188,220 @@ export const LESSON_U4L3_SCENES: Scene[] = [
     ],
   },
   { id: 'u4l3-finale', kind: 'finale', bg: bgU4L3Beach, who: 'bella', line: 'What a beach day! Hands, fingers, feet and arms — you know them all! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 4, Lesson 4 — "My Big Body!" (curriculum: "Describe your body
+ * simply." — B). Pip meets Bo, a friendly three-eyed monster, in a flower
+ * garden, and they compare bodies: "I have two eyes. — I have three eyes!",
+ * "I have small feet. — I have BIG feet!". Language: I have + number + body
+ * part, big / small (recycles Unit 4 parts, Unit 1 numbers, Unit 3 big/small),
+ * B /b/ (ball, bag, bear, book, balloon — and Bo!). Signature game: Monster
+ * Maker (build the monster you hear). New calm game: How Many? (tap to count
+ * the parts, then say "I have three eyes!"). Lesson-Variety Engine: researched
+ * the Cambridge Pre A1 "listen and draw the monster" task, the picture book
+ * "Go Away, Big Green Monster!", Lingokids / Khan Academy Kids build-a-character
+ * and tap-to-count. Calm by design: no clocks, wrong taps are named back. */
+const bgU4L4Garden = `${A}/scenes/bg-u4l4-garden-wide.png`;
+const bgU4L4Lawn = `${A}/scenes/bg-u4l4-lawn-wide.png`;
+const bgU4L4PipEyes = `${A}/scenes/bg-u4l4-pip-eyes-wide.png`;
+const bgU4L4PipFingers = `${A}/scenes/bg-u4l4-pip-fingers-wide.png`;
+const bgU4L4BoEyes = `${A}/scenes/bg-u4l4-bo-eyes-wide.png`;
+const bgU4L4BoFeet = `${A}/scenes/bg-u4l4-bo-feet-wide.png`;
+const BO_BLUE = '#38BDF8';
+
+export const LESSON_U4L4_TITLE = 'My Big Body!';
+export const LESSON_U4L4_OBJECTIVE = 'Describe your body simply — "I have two eyes. I have ten fingers. I have big feet!" — count body parts, use big and small, build a monster from what you hear, and hear B say /b/ (ball, bag, bear, book) — by moving, counting, building and speaking, no reading.';
+
+export const LESSON_U4L4_SCENES: Scene[] = [
+  { id: 'u4l4-title', kind: 'title-card', bg: bgU4L4Garden, level: 'Pre-A1', unit: 'Unit 4', lessonLabel: 'Lesson 4', title: 'My Big Body!', subtitle: 'Pip meets Bo' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u4l4-song', kind: 'song', bg: bgU4L4Garden, title: '\u{1F3B5} My Big Body \u{1F3B5}', teacher: 'Sing and point! Eyes, nose, fingers, toes — big feet and small hands!',
+    durationSeconds: 20, bigWord: 'Body', songUrl: `${A}/audio/body-song-u4l4.mp3?v=1`,
+    lineDurationsMs: [3660, 4100, 3500, 8802],
+    songPrompt: 'Upbeat kids pop garden action song',
+    lyrics: [
+      { who: 'pip', text: 'I have two eyes! I have one nose!', emotion: 'happy' },
+      { who: 'pip', text: 'I have ten fingers! I have ten toes!', emotion: 'happy' },
+      { who: 'mia', text: 'Big, big feet! Small, small hands!', emotion: 'happy' },
+      { who: 'leo', text: 'This is my body! My big, big body!', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u4l4-intro', kind: 'cinematic', bg: bgU4L4Garden, hidePipOverlay: true, title: 'Pip Meets Bo', subtitle: 'A friendly monster!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Hello! Look, a new friend! His name is Bo.' },
+      { who: 'pip', line: 'Bo is a friendly monster. Let\'s look at his body!' },
+    ],
+    cta: "Let's look!",
+  },
+
+  /* 4-6 New language, move, signature game */
+  {
+    id: 'u4l4-words', kind: 'listen-repeat-cards', bg: bgU4L4Garden, cardScenes: true, textSide: 'right', teacher: 'Listen, show it on your own body, then say it: "I have two eyes!"',
+    cards: [
+      { who: 'pip', sentence: 'I have two eyes!', img: bgU4L4PipEyes, imgLabel: 'Two eyes!' },
+      { who: 'pip', sentence: 'I have ten fingers!', img: bgU4L4PipFingers, imgLabel: 'Ten fingers!' },
+      { who: 'pip', sentence: 'Bo has three eyes!', img: bgU4L4BoEyes, imgLabel: 'Three eyes!' },
+      { who: 'pip', sentence: 'Bo has big feet!', img: bgU4L4BoFeet, imgLabel: 'Big feet!' },
+    ],
+  },
+  {
+    id: 'u4l4-move-say', kind: 'tpr-actions', bg: bgU4L4Garden, who: 'pip',
+    teacher: 'Say it with Pip, then show it with your body.',
+    rounds: [
+      { line: 'Point to your two eyes!', emoji: '\u{1F440}', img: bgU4L4PipEyes },
+      { line: 'Show me ten fingers!', emoji: '\u{1F590}\u{FE0F}', img: bgU4L4PipFingers },
+      { line: 'Big feet! Stomp, stomp!', emoji: '\u{1F463}', img: bgU4L4BoFeet },
+      { line: 'Small hands! Make a fist!', emoji: '\u{270A}' },
+      { line: 'Big body! Stretch up tall!', emoji: '\u{1F64C}' },
+    ],
+  },
+  {
+    // Signature game (new): build the monster you hear.
+    id: 'u4l4-monster-maker', kind: 'monster-maker', bg: bgU4L4Lawn, who: 'leo', color: '#A78BFA',
+    teacher: 'Monster Maker! Listen to the monster and tap the part it has. Say it too: "Three eyes!"',
+    rounds: [
+      { part: 'eyes', answer: 3, options: [1, 2, 3], line: 'I have three eyes!', reply: 'Yes! Three eyes!' },
+      { part: 'ears', answer: 'big', options: ['small', 'big'], line: 'I have big ears!', reply: 'Big ears! I can hear you!' },
+      { part: 'hands', answer: 'small', options: ['big', 'small'], line: 'I have small hands!', reply: 'Small hands! Wave, wave!' },
+      { part: 'feet', answer: 'big', options: ['small', 'big'], line: 'I have big feet!', reply: 'Big feet! Stomp, stomp!' },
+    ],
+    doneLine: 'Look at me! I am a happy monster!',
+  },
+
+  /* 7-10 Practice + speaking */
+  {
+    id: 'u4l4-bo-asks', kind: 'join-stage', bg: bgU4L4BoEyes, teacher: 'Bo asks. The student shows it and answers: "I have two eyes!"', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Bo asks: How many eyes do you have?', bubble: 'right' },
+      { who: 'student', line: 'I have two eyes!', bubble: 'right' },
+      { who: 'pip', line: 'Bo asks: How many fingers do you have?', bubble: 'right' },
+      { who: 'student', line: 'I have ten fingers!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l4-how-many', kind: 'count-parts', bg: bgU4L4Lawn, who: 'leo',
+    teacher: 'How Many? Tap each part and count out loud, then tap the number. Say the sentence: "I have three eyes!"',
+    rounds: [
+      { look: { color: BO_BLUE, eyes: 3, hands: 'small', feet: 'big' }, part: 'eyes', question: 'How many eyes?', answer: 'I have three eyes!' },
+      { look: { color: '#F472B6', eyes: 2, hands: 'big', arms: 4, feet: 'small' }, part: 'arms', question: 'How many arms?', answer: 'I have four arms!' },
+      { look: { color: '#4ADE80', eyes: 1, ears: 'big', hands: 'small', feet: 'big', legs: 3 }, part: 'legs', question: 'How many legs?', answer: 'I have three legs!' },
+      { look: { color: '#FBBF24', eyes: 5, ears: 'small', hands: 'small', feet: 'small' }, part: 'eyes', question: 'How many eyes?', answer: 'I have five eyes!' },
+    ],
+    doneLine: 'Great counting!',
+  },
+  {
+    id: 'u4l4-you-ask', kind: 'join-stage', bg: bgU4L4BoFeet, teacher: 'Swap! The student asks Bo: "How many eyes do you have?"', cast: ['pip'],
+    turns: [
+      { who: 'student', line: 'Ask Bo: How many eyes do you have?', bubble: 'right' },
+      { who: 'pip', line: 'Bo says: I have three eyes!', bubble: 'right' },
+      { who: 'student', line: 'Ask Bo: Do you have big feet?', bubble: 'right' },
+      { who: 'pip', line: 'Bo says: Yes! I have big feet!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l4-memory', kind: 'memory', bg: bgU4L4Lawn, teacher: 'Find the pairs! Say the body part of each one: "Eyes!"',
+    pairs: [
+      { id: 'eyes', label: 'Eyes', emoji: '\u{1F440}', img: `${A}/items/item-card-eyes.png` },
+      { id: 'ears', label: 'Ears', emoji: '\u{1F442}', img: `${A}/items/item-card-ears.png` },
+      { id: 'hand', label: 'Hands', emoji: '\u{270B}', img: partHand },
+      { id: 'foot', label: 'Feet', emoji: '\u{1F9B6}', img: partFoot },
+    ],
+  },
+
+  /* 11-13 Phonics: B says /b/ */
+  {
+    id: 'u4l4-model-b', kind: 'sound-model', bg: bgU4L4Garden, who: 'pip', letter: 'B', phoneme: '/b/', sound: 'buh',
+    teacher: 'B says /b/ — ball, bag, bear… and Bo!',
+    anchors: [
+      { word: 'ball', emoji: '\u{26BD}', img: itemBallRed },
+      { word: 'bag', emoji: '\u{1F45C}', img: itemBag },
+      { word: 'bear', emoji: '\u{1F43B}', img: itemBear },
+    ],
+  },
+  { id: 'u4l4-trace-b', kind: 'trace', bg: bgU4L4Lawn, who: 'pip', letter: 'B', phoneme: '/b/', word: 'ball', speakWord: false, teacher: 'Trace the big B with your finger! /b/ /b/ ball!' },
+  {
+    id: 'u4l4-sort-bf', kind: 'sound-sort', bg: bgU4L4Lawn, teacher: 'Listen to each word. Does it start with /b/ or /f/? Drag it to B or F!',
+    targets: [
+      { letter: 'B', phoneme: '/b/', who: 'pip' },
+      { letter: 'F', phoneme: '/f/', who: 'bella' },
+    ],
+    items: [
+      { word: 'ball', img: itemBallRed, emoji: '\u{26BD}', letter: 'B' },
+      { word: 'fish', img: itemFish, emoji: '\u{1F41F}', letter: 'F' },
+      { word: 'bag', img: itemBag, emoji: '\u{1F45C}', letter: 'B' },
+      { word: 'fan', img: itemFan, emoji: '\u{1FAAD}', letter: 'F' },
+      { word: 'book', img: itemBook, emoji: '\u{1F4D6}', letter: 'B' },
+      { word: 'bear', img: itemBear, emoji: '\u{1F43B}', letter: 'B' },
+    ],
+  },
+
+  /* 14-15 Retell + perform */
+  {
+    id: 'u4l4-story-order', kind: 'story-order', bg: bgU4L4Garden, who: 'pip', teacher: 'Put the story in order, then tell it!',
+    frames: [
+      { img: bgU4L4Garden, caption: 'Pip meets Bo in the garden.', who: 'pip' },
+      { img: bgU4L4BoEyes, caption: 'Bo has three eyes!', who: 'pip' },
+      { img: bgU4L4BoFeet, caption: 'Bo has big feet!', who: 'pip' },
+    ],
+  },
+  {
+    id: 'u4l4-perform', kind: 'join-stage', bg: bgU4L4Garden, teacher: 'Show time! The student describes their own body, pointing to each part.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Your turn! Tell Bo about your body!', bubble: 'right' },
+      { who: 'student', line: 'I have two eyes! I have one nose!', bubble: 'right' },
+      { who: 'pip', line: 'And your fingers and feet?', bubble: 'right' },
+      { who: 'student', line: 'I have ten fingers! I have two feet!', bubble: 'right' },
+    ],
+  },
+
+  /* 16-17 Sticker + Home Mission */
+  {
+    id: 'u4l4-sticker', kind: 'sticker-reward', bg: bgU4L4Garden, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super describing! Here is a bear sticker for you!', sticker: { img: itemBear, label: 'Bear' },
+  },
+  {
+    id: 'u4l4-home-mission', kind: 'home-mission', bg: bgU4L4Garden, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: draw your own monster at home! Then tell your family: "It has three eyes!"',
+    parentNote: 'Draw a friendly monster together. Your child decides: how many eyes? Big or small feet? Then ask: "How many eyes do you have?" Your child answers: "I have two eyes!" Count fingers and toes together: one, two, three… ten!',
+    steps: [
+      { emoji: '\u{1F440}', img: `${A}/items/item-card-eyes.png`, say: 'Eyes' },
+      { emoji: '\u{270B}', img: partHand, say: 'Hands' },
+      { emoji: '\u{1F9B6}', img: partFoot, say: 'Feet' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u4l4-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU4L4Garden, who: 'pip',
+    teacher: 'Extra time: Monster Moves! Do each move with Pip.',
+    rounds: [
+      { line: 'Walk like a monster with big feet!', emoji: '\u{1F463}' },
+      { line: 'Wave your small hands!', emoji: '\u{1F44B}' },
+      { line: 'Blink your eyes! Blink, blink!', emoji: '\u{1F440}' },
+      { line: 'Wiggle your ten fingers!', emoji: '\u{1F590}\u{FE0F}' },
+      { line: 'Big body! Stretch up tall!', emoji: '\u{1F64C}', seconds: 4 },
+    ],
+  },
+
+  /* 19-20 Goodbye */
+  {
+    id: 'u4l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u4l4-finale', kind: 'finale', bg: bgU4L4Garden, who: 'pip', line: 'Bo says bye-bye! I have two eyes, you have two eyes — great job, friend!' },
 ];
 
 /* =============================================================================

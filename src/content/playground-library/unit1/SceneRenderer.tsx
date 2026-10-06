@@ -79,6 +79,8 @@ import { ShapeMagicScene } from './scene-components/ShapeMagicScene';
 import { ShapePeekScene } from './scene-components/ShapePeekScene';
 import { ShapeSorterScene } from './scene-components/ShapeSorterScene';
 import { ShapeBubblesScene } from './scene-components/ShapeBubblesScene';
+import { MonsterMakerScene } from './scene-components/MonsterMakerScene';
+import { CountPartsScene } from './scene-components/CountPartsScene';
 import { RingTossScene } from './scene-components/RingTossScene';
 import { ShadowMatchScene } from './scene-components/ShadowMatchScene';
 import { SteppingStonesScene } from './scene-components/SteppingStonesScene';
@@ -263,6 +265,8 @@ export function SceneRenderer(props: {
     case 'shape-peek': return <ShapePeekScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'shape-sorter': return <ShapeSorterScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'shape-bubbles': return <ShapeBubblesScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'monster-maker': return <MonsterMakerScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'count-parts': return <CountPartsScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'sound-pick': return <SoundPickScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'ring-toss': return <RingTossScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'color-monsters': return <ColorMonstersScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;

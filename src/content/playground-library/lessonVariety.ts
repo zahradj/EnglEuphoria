@@ -58,6 +58,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '3-4': { settings: ['classroom', 'garden pool'], look: 'Show and Tell circle on the rainbow rug; summer garden with a paddling pool' },
   '4-1': { settings: ['dance studio'], look: 'bright dance studio in morning sun: mirror, barre and colourful mats; a dance class with Coach Willow' },
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
+  '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-3': { settings: ['beach'], look: 'sunny beach day: golden sand, blue sea, sandcastle and umbrella; top-down wet sand for prints; Bella and Leo' },
   '3-6': { settings: ['toy fair'], look: 'outdoor fair: sunny day with striped tents, then a golden evening with string lights' },
   '3-5': { settings: ['bedroom'], look: 'cozy bedroom in warm afternoon light; tidy-up mission with a surprise kitten' },
@@ -154,7 +155,21 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'a wrong place is named back ("Not there! That\'s for the nose!"), so every mistake teaches a word',
       'the finished pancake comes alive and smiles, and the same game returns with a new order for Mia',
     ],
-  },  '4-3': {
+  },
+  '4-4': {
+    sources: ['Cambridge (Pre A1 Starters / ELT: listen and colour / draw the monster)', 'Lingokids (build-a-character body games)', 'Khan Academy Kids (tap-to-count)', 'Duolingo ABC (count and choose)', '"Go Away, Big Green Monster!" picture book (a face built part by part)'],
+    mechanics: [
+      'Cambridge "listen and draw the monster" + build-a-character apps → Monster Maker: the monster says "I have three eyes!" and the child picks the part it hears',
+      'tap-to-count (Khan Academy Kids, Duolingo ABC) → How Many?: tap each eye to count it out loud, then choose the number',
+      'the "Go Away, Big Green Monster!" reveal → a friendly monster, Bo, the class meets and compares bodies with',
+    ],
+    betterThan: [
+      'the NUMBER and the SIZE decide the part (one / two / three eyes, big / small feet) — apps only ask for the part',
+      'counting ends in a real sentence the child hears and says ("I have three eyes!"), and the number choice only opens after everything is counted (no guessing)',
+      'calm by design: no clock, a wrong part is named back ("That\'s two eyes! Try again!") and the right one glows after two misses',
+    ],
+  },
+  '4-3': {
     sources: ['Classroom handprint / footprint art (preschool body-parts activity)', 'Lingokids (body-parts games)', 'Khan Academy Kids (calm, self-paced; a result that stays)', 'Cambridge (Pre A1 Starters listening: put the picture in the right place)', 'Sesame Workshop touch-tablet best practices (no clocks, deliberate actions)'],
     mechanics: [
       'handprint / footprint art → Sand Prints: hear "Press your foot in the sand!", choose the body part, the print stays in the sand',
