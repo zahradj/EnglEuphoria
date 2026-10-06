@@ -388,6 +388,17 @@ const UNIT1_EXTRACTORS = {
   ],
   // Mirror ClawMachineScene.tsx's clawMachineLines() / RingTossScene.tsx's ringTossLines().
   'claw-machine': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.toys ?? []).map((t) => [s.who, `That's the ${t.label}! Try again!`]), [s.who, 'Oops! Nothing! Try again!']],
+  // Mirror RoboCopyScene.tsx's roboCopyLines().
+  'robo-copy': (s) => {
+    const cap = (p) => p.charAt(0).toUpperCase() + p.slice(1);
+    const parts = [...new Set((s.rounds ?? []).flatMap((r) => r.seq ?? []))];
+    return [
+      ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+      ...parts.map((p) => [s.who, `${cap(p)}!`]),
+      ...['head', 'eyes', 'ears', 'nose', 'mouth', 'shoulders', 'arms', 'hands', 'knees', 'feet'].map((p) => [s.who, `Oops! Robo's ${p}! Watch again!`]),
+      [s.who, s.doneLine],
+    ];
+  },
   // Mirror MonsterMakerScene / CountPartsScene *Lines().
   'monster-maker': (s) => {
     const NUM = ['zero', 'one', 'two', 'three', 'four', 'five'];

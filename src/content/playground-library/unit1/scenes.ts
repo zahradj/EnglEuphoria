@@ -606,6 +606,13 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Robo Says (U4L6 signature): Robo lights body parts in order and names them ("Simon says: touch my
+       *  nose, then my knees!"); the child touches the same parts on Robo in the same order. */
+      id: string; kind: 'robo-copy'; bg: string; teacher: string; who: CharKey;
+      rounds: { seq: ('head' | 'eyes' | 'ears' | 'nose' | 'mouth' | 'shoulders' | 'arms' | 'hands' | 'knees' | 'feet')[]; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Calm first-sound pick: the recorded letter sound, then "Which one starts with this sound?";
        *  three still pictures, no clock, wrong taps are named back and cost nothing. */
       id: string; kind: 'sound-pick'; bg: string; teacher: string; who: CharKey;
@@ -7402,6 +7409,213 @@ export const LESSON_U4L4_SCENES: Scene[] = [
     ],
   },
   { id: 'u4l4-finale', kind: 'finale', bg: bgU4L4Garden, who: 'pip', line: 'Bo says bye-bye! I have two eyes, you have two eyes — great job, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 4 · Lesson 6 — Simon Says Body Parts =====================
+ * My Body & Face (6/6, review). All the unit's body words — head, shoulders,
+ * knees, toes, eyes, ears, nose, mouth, hands, arms, feet — with "Touch
+ * your …!" and Simon Says; phonics review E N F B. Setting: a bright space
+ * station where Pip and Mia play with Robo the robot. Lesson-Variety Engine:
+ * researched the Simon electronic memory game, the classroom Simon Says /
+ * "Touch your …" routine (games4esl), Cambridge Pre A1 "listen and point",
+ * Lingokids Draw Path and Wordwall odd-one-out; new game Robo Says (copy
+ * Robo's body-part chain in order). Pictures made with Canva; Robo in the
+ * game is drawn in code. */
+const bgU4L6Station = `${A}/scenes/bg-u4l6-station-wide.png`;
+const bgU4L6Room = `${A}/scenes/bg-u4l6-room-wide.png`;
+const bgU4L6Float = `${A}/scenes/bg-u4l6-float-wide.png`;
+
+export const LESSON_U4L6_TITLE = 'Simon Says Body Parts';
+export const LESSON_U4L6_OBJECTIVE = 'Remember and use all the unit\'s body words (head, shoulders, knees, toes, eyes, ears, nose, mouth, hands, arms, feet): follow "Touch your …!" only when Simon says, copy a chain of two or three body parts in order, give Simon Says orders to a friend, sort face and body, and hear E, N, F and B — by moving, listening and speaking, no reading.';
+
+export const LESSON_U4L6_SCENES: Scene[] = [
+  { id: 'u4l6-title', kind: 'title-card', bg: bgU4L6Station, level: 'Pre-A1', unit: 'Unit 4', lessonLabel: 'Lesson 6', title: 'Simon Says Body Parts', subtitle: 'Space station' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u4l6-song', kind: 'song', bg: bgU4L6Station, title: '\u{1F3B5} Head, Shoulders, Knees and Toes \u{1F3B5}', teacher: 'Stand up! Touch each body part as you sing — Robo dances too!',
+    durationSeconds: 20, bigWord: 'Body', songUrl: `${A}/audio/body-song-u4l1.mp3?v=1`,
+    lineDurationsMs: [3580, 3980, 3960, 8542],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Touch your head and touch your toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+    ],
+  },
+  {
+    id: 'u4l6-intro', kind: 'cinematic', bg: bgU4L6Station, hidePipOverlay: true, title: 'Space Station', subtitle: 'Simon says!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Welcome to the space station! This is Robo, our robot friend!' },
+      { who: 'mia', line: 'Robo loves Simon Says. Let\'s play!' },
+    ],
+    cta: "Let's play!",
+  },
+
+  /* 4-6 Remember the words, move, signature game */
+  {
+    id: 'u4l6-remember', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU4L6Room, teacher: 'Remember our friends? Say each word and touch it on your own body.',
+    cards: [
+      { who: 'leo', sentence: 'Head! Touch your head.', img: bgU4L1LeoHead, imgLabel: 'Head!' },
+      { who: 'mia', sentence: 'Eyes! Touch your eyes.', img: bgU4L2MiaEyes, imgLabel: 'Eyes!' },
+      { who: 'mia', sentence: 'Nose! Touch your nose.', img: bgU4L2MiaNose, imgLabel: 'Nose!' },
+      { who: 'bella', sentence: 'Hands! Clap your hands.', img: bgU4L3Hands, imgLabel: 'Hands!' },
+      { who: 'leo', sentence: 'Knees! Touch your knees.', img: bgU4L1LeoKnees, imgLabel: 'Knees!' },
+      { who: 'bella', sentence: 'Feet! Stamp your feet.', img: bgU4L3Feet, imgLabel: 'Feet!' },
+    ],
+  },
+  {
+    id: 'u4l6-simon-move', kind: 'tpr-actions', bg: bgU4L6Room, who: 'pip',
+    teacher: 'Stand up! Simon Says on your own body: move only when Pip says "Simon says". If he doesn\'t, freeze!',
+    rounds: [
+      { line: 'Simon says: touch your ears!', emoji: '\u{1F442}' },
+      { line: 'Simon says: wave your arms!', emoji: '\u{1F44B}' },
+      { line: 'Touch your nose! Oh, Simon didn\'t say! Don\'t move!', emoji: '\u{1F92B}' },
+      { line: 'Simon says: touch your shoulders!', emoji: '\u{1F937}' },
+      { line: 'Simon says: stamp your feet!', emoji: '\u{1F463}' },
+    ],
+  },
+  {
+    // Signature game (new): copy Robo's chain of body parts.
+    id: 'u4l6-robo-says', kind: 'robo-copy', bg: bgU4L6Room, who: 'pip',
+    teacher: 'Robo Says! Watch Robo light up, then touch the same parts in the same order — on Robo and on your own body. Say each word!',
+    rounds: [
+      { seq: ['nose'], line: "Simon says: touch Robo's nose!", reply: 'Nose! Well done!' },
+      { seq: ['knees'], line: "Simon says: touch Robo's knees!", reply: 'Knees! Super!' },
+      { seq: ['eyes', 'hands'], line: 'Simon says: eyes, then hands!', reply: 'Eyes and hands! Great memory!' },
+      { seq: ['ears', 'feet'], line: 'Simon says: ears, then feet!', reply: 'Ears and feet! Wow!' },
+      { seq: ['head', 'shoulders', 'knees'], line: 'Simon says: head, shoulders, knees!', reply: 'Head, shoulders, knees! You did it!' },
+    ],
+    doneLine: 'Robo is so happy! Beep beep! You are a Simon Says star!',
+  },
+
+  /* 7-10 Speaking + sorting */
+  {
+    id: 'u4l6-robo-asks', kind: 'join-stage', bg: bgU4L6Float, teacher: 'Robo asks through Pip. The student touches and answers.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Robo says: Touch your ears! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my ears! (touch them)", bubble: 'right' },
+      { who: 'pip', line: 'Robo says: Touch your mouth! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my mouth!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l6-face-or-body', kind: 'odd-one-out', bg: bgU4L6Room, who: 'mia',
+    teacher: 'Which one is different? Three are on your face, one is not. Tap it and touch it on your body!',
+    rounds: [
+      { items: [{ label: 'eyes', img: cardEyes }, { label: 'nose', img: cardNose }, { label: 'mouth', img: cardMouth }, { label: 'foot', img: partFoot }], odd: 3, line: 'The foot! Eyes, nose and mouth are on your face.' },
+      { items: [{ label: 'ears', img: cardEars }, { label: 'hand', img: partHand }, { label: 'nose', img: cardNose }, { label: 'eyes', img: cardEyes }], odd: 1, line: 'The hand! Ears, nose and eyes are on your face.' },
+      { items: [{ label: 'mouth', img: cardMouth }, { label: 'eyes', img: cardEyes }, { label: 'arm', img: partArm }, { label: 'ears', img: cardEars }], odd: 2, line: 'The arm! Mouth, eyes and ears are on your face.' },
+    ],
+  },
+  {
+    id: 'u4l6-you-simon', kind: 'join-stage', bg: bgU4L6Station, teacher: 'Swap! The student is Simon and gives Mia orders. Sometimes leave out "Simon says"!', cast: ['mia'],
+    turns: [
+      { who: 'student', line: 'Say to Mia: Simon says, touch your nose!', bubble: 'right' },
+      { who: 'mia', line: 'My nose! Like this!', bubble: 'right' },
+      { who: 'student', line: 'Say to Mia: Touch your toes!', bubble: 'right' },
+      { who: 'mia', line: "Ha ha! Simon didn't say! I don't move!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l6-draw-path', kind: 'draw-path', bg: bgU4L6Room, who: 'mia', walker: 'pip',
+    teacher: 'Listen and draw! Draw a line from Pip to the body part Mia says. Pip floats along your line.',
+    start: { x: 9, y: 84 },
+    spots: [
+      { label: 'eyes', img: cardEyes, x: 30, y: 58, size: 10 },
+      { label: 'hand', img: partHand, x: 50, y: 82, size: 9 },
+      { label: 'nose', img: cardNose, x: 66, y: 56, size: 9 },
+      { label: 'foot', img: partFoot, x: 86, y: 78, size: 10 },
+      { label: 'ears', img: cardEars, x: 48, y: 60, size: 10 },
+    ],
+    rounds: [
+      { line: 'Take Pip to the nose!', target: 2, reply: "It's a nose! Touch your nose!" },
+      { line: 'Now take Pip to the hand!', target: 1, reply: "It's a hand! Wave your hand!" },
+      { line: 'Now the foot!', target: 3, reply: "It's a foot! Stamp your foot!" },
+    ],
+  },
+
+  /* 11-12 Phonics review: E N F B */
+  {
+    id: 'u4l6-treasure-sounds', kind: 'trophy-chest', bg: bgU4L6Room, who: 'pip',
+    teacher: 'Open the space treasure! Listen to the sound, then tap its letter. Say the word!',
+    rounds: [
+      { letter: 'E', phoneme: '/e/', word: 'egg', img: itemEgg, emoji: '\u{1F95A}', choices: ['E', 'N', 'B'] },
+      { letter: 'N', phoneme: '/n/', word: 'nest', img: itemNestU4, emoji: '\u{1FAB9}', choices: ['F', 'N', 'E'] },
+      { letter: 'F', phoneme: '/f/', word: 'fish', img: itemFish, emoji: '\u{1F41F}', choices: ['B', 'E', 'F'] },
+      { letter: 'B', phoneme: '/b/', word: 'bear', img: itemBear, emoji: '\u{1F43B}', choices: ['B', 'F', 'N'] },
+      { letter: 'E', phoneme: '/e/', word: 'elephant', img: itemElephant, emoji: '\u{1F418}', choices: ['N', 'E', 'F'] },
+      { letter: 'F', phoneme: '/f/', word: 'fan', img: itemFan, emoji: '\u{1FAAD}', choices: ['F', 'B', 'E'] },
+    ],
+  },
+  { id: 'u4l6-trace-f', kind: 'trace', bg: bgU4L6Room, who: 'pip', letter: 'F', phoneme: '/f/', word: 'feet', speakWord: false, teacher: 'Trace the big F with your finger! /f/ /f/ feet!' },
+
+  /* 13 Perform */
+  {
+    id: 'u4l6-perform', kind: 'join-stage', bg: bgU4L6Float, teacher: 'Show time! The student plays Simon Says with Pip: listen, touch, and say the word.', cast: ['pip', 'mia'],
+    turns: [
+      { who: 'pip', line: 'Simon says: touch your head! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my head! (touch it)", bubble: 'right' },
+      { who: 'mia', line: 'Now you be Simon! Tell us!', bubble: 'right' },
+      { who: 'student', line: 'Simon says: touch your knees and toes!', bubble: 'right' },
+    ],
+  },
+
+  /* 14-15 Sticker + Home Mission */
+  {
+    id: 'u4l6-sticker', kind: 'sticker-reward', bg: bgU4L6Float, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super listening! Here is a Robo sticker for you!', sticker: { img: itemRobot, label: 'Robo' },
+  },
+  {
+    id: 'u4l6-home-mission', kind: 'home-mission', bg: bgU4L6Station, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: be Simon at home! Say: Simon says, touch your nose! Then: Touch your feet!',
+    parentNote: 'Your child is Simon! Let them give you orders: "Simon says, touch your nose / ears / knees / feet." When they leave out "Simon says", don\'t move! Then swap. Try a memory chain too: "Touch your eyes, then your hands!"',
+    steps: [
+      { emoji: '\u{1F443}', img: cardNose, say: 'Touch your nose' },
+      { emoji: '\u{270B}', img: partHand, say: 'Clap your hands' },
+      { emoji: '\u{1F92B}', say: 'Simon says!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u4l6-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU4L6Float, who: 'pip',
+    teacher: 'Extra time: Space Moves! Float like an astronaut with Pip.',
+    rounds: [
+      { line: 'Float like an astronaut! Wave your arms slowly!', emoji: '\u{1F468}\u{200D}\u{1F680}' },
+      { line: 'Touch your toes! Slowly, slowly!', emoji: '\u{1F9B6}' },
+      { line: 'Blink your eyes like Robo! Blink, blink!', emoji: '\u{1F916}' },
+      { line: 'Clap your hands three times!', emoji: '\u{1F44F}' },
+      { line: 'Freeze like a robot!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u4l6-robo-says-2', kind: 'robo-copy', bg: bgU4L6Room, who: 'pip',
+    teacher: 'Extra time: Robo Says again — longer chains! Watch, then touch them in order.',
+    rounds: [
+      { seq: ['mouth', 'arms'], line: 'Simon says: mouth, then arms!', reply: 'Mouth and arms! Great!' },
+      { seq: ['shoulders', 'feet'], line: 'Simon says: shoulders, then feet!', reply: 'Shoulders and feet! Super!' },
+      { seq: ['eyes', 'nose', 'knees'], line: 'Simon says: eyes, nose, knees!', reply: 'Eyes, nose, knees! Amazing memory!' },
+    ],
+    doneLine: 'Beep beep! Robo says thank you!',
+  },
+
+  /* 16-17 Goodbye */
+  {
+    id: 'u4l6-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u4l6-finale', kind: 'finale', bg: bgU4L6Station, who: 'pip', line: 'Head, shoulders, knees and toes — eyes, ears, nose and mouth! You know your whole body. Goodbye, friend!' },
 ];
 
 /* =============================================================================
