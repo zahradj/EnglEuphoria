@@ -1,12 +1,32 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0084-6486827488502820241.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261005%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261005T124720Z&X-Amz-Expires=89430&X-Amz-Signature=5af6f33828f597a458bd35ebbd41a9cb3765bdf0574bbca2bb819c530807c772&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2013%3A37%3A50%20GMT",
-  "out": "public/lep1/items/sheet-u4l3-f.png",
-  "sticker": true
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0086-7819893003561338523.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T072121Z&X-Amz-Expires=41349&X-Amz-Signature=c6a65e8f86f2fe8b7dc328fcd6c043d0e74198e4a791f95825411af1bc773735&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2018%3A50%3A30%20GMT",
+  "out": "public/lep1/scenes/bg-u4l4-garden-wide.png",
+  "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0088-6486827488502820241.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T021649Z&X-Amz-Expires=40219&X-Amz-Signature=47d7ead0e6f5f68e0d2267037f42e812b2cf6b9b3ed77cbac748119f49851345&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2013%3A27%3A08%20GMT",
-  "out": "public/lep1/items/sheet-u4l3-body.png",
-  "sticker": true
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0100-7819893003561338523.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T131751Z&X-Amz-Expires=20862&X-Amz-Signature=925ddc278fbdce38c0babf5d187a8d369d14cdbb0bc00ebe7d325e555b5dd15a&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2019%3A05%3A33%20GMT",
+  "out": "public/lep1/scenes/bg-u4l4-pip-eyes-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0041-7819893003561338523.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T001659Z&X-Amz-Expires=67832&X-Amz-Signature=545f547512ea57e28fdfff09f2d6fed810b6eb007dd6ca0739e46f19fef80230&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2019%3A07%3A31%20GMT",
+  "out": "public/lep1/scenes/bg-u4l4-pip-fingers-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0059-7819893003561338523.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T131902Z&X-Amz-Expires=21979&X-Amz-Signature=84bab8c3b688bd25e5c03dc2df8fb3277893d3751b6b9226418a4f8c78df68cf&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2019%3A25%3A21%20GMT",
+  "out": "public/lep1/scenes/bg-u4l4-bo-eyes-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0060-7819893003561338523.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T021243Z&X-Amz-Expires=62325&X-Amz-Signature=d3f8802371415a52e1dfd2730239c7cda6487471e163f8f2c3ea0c6210ea9d38&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2019%3A31%3A28%20GMT",
+  "out": "public/lep1/scenes/bg-u4l4-bo-feet-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0062-7819893003561338523.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T013621Z&X-Amz-Expires=63741&X-Amz-Signature=52243a95e4f8827f8b6d6e7a4aa2a8ef089fe62df7017154675ad819ec840646&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2006%20Oct%202026%2019%3A18%3A42%20GMT",
+  "out": "public/lep1/scenes/bg-u4l4-lawn-wide.png",
+  "sticker": false
  }
 ]
