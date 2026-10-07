@@ -13,6 +13,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
+import { FamilyAccountCard } from './FamilyAccountCard';
 import i18n from '@/lib/i18n';
 import { toast } from 'sonner';
 
@@ -543,6 +544,8 @@ export const ProfileTab = ({ studentName }: ProfileTabProps) => {
           )}
         </CardContent>
       </Card>
+
+      <FamilyAccountCard />
     </div>
   );
 };

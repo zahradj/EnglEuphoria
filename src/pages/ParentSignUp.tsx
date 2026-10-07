@@ -73,6 +73,21 @@ const ParentSignUp = () => {
         full_name: fullName.trim(),
       } as any);
 
+      // An email that already has an account (for example one made as a student): the sign-up either
+      // errors, or - with email confirmation on - quietly returns a user with no identities.
+      const identities = (authData?.user as { identities?: unknown[] } | null | undefined)?.identities;
+      const alreadyHasAccount =
+        /already (registered|exists)|already been registered/i.test(error?.message ?? '') ||
+        (Array.isArray(identities) && identities.length === 0);
+      if (alreadyHasAccount) {
+        toast({
+          title: 'This email already has an account',
+          description: 'Sign in with it, then choose “Switch to a family account” in your Profile or Settings.',
+        });
+        navigate('/login', { replace: true });
+        return;
+      }
+
       if (error || !authData?.user) {
         toast({ title: 'Sign up failed', description: error?.message ?? 'Please try again.', variant: 'destructive' });
         return;
