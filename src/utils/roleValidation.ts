@@ -13,7 +13,7 @@ import { supabase } from '@/lib/supabase';
 export async function validateUserRole(userId: string): Promise<string | null> {
   try {
     // Fetch all roles for user (a user may have multiple roles)
-    const ROLE_PRIORITY = ['admin', 'marketing', 'content_creator', 'teacher', 'student'];
+    const ROLE_PRIORITY = ['admin', 'marketing', 'content_creator', 'teacher', 'student'] as const;
     const { data: userRoles, error } = await supabase
       .from('user_roles')
       .select('role')

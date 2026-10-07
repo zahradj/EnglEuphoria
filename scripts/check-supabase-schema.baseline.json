@@ -1,0 +1,21 @@
+{
+ "src/components/admin/library/CurriculumLinker.tsx :: curriculum": 2,
+ "src/components/admin/TeacherApplicationReview.tsx :: profiles": 2,
+ "src/components/classroom/LessonWrapUpDialog.tsx :: student_prior_knowledge": 1,
+ "src/components/student/curriculum/StudentAchievements.tsx :: student_unit_achievements": 1,
+ "src/components/student/LearningPathTab.tsx :: student_prior_knowledge": 1,
+ "src/components/student/ProfileTab.tsx :: profiles": 1,
+ "src/components/teacher/classroom/TrialLevelPicker.tsx :: student_prior_knowledge": 1,
+ "src/components/teacher/LevelChangeRequestDialog.tsx :: student_prior_knowledge": 1,
+ "src/components/teacher/ResourcesTab.tsx :: units": 1,
+ "src/hooks/useAdvancedAnalytics.ts :: ai_insights": 1,
+ "src/hooks/useAdvancedAnalytics.ts :: learning_analytics_events": 1,
+ "src/hooks/useAdvancedAnalytics.ts :: learning_interventions": 2,
+ "src/hooks/useAdvancedAnalytics.ts :: smart_recommendations": 2,
+ "src/hooks/useCurriculumExport.ts :: exports": 1,
+ "src/pages/StudentCertificatePage.tsx :: profiles": 2,
+ "src/pages/UnifiedClassroomPage.tsx :: student_prior_knowledge": 1,
+ "src/services/speakingPracticeService.ts :: ai_conversation_sessions": 3,
+ "src/services/speakingPracticeService.ts :: speaking_assessments": 2,
+ "src/services/speakingPracticeService.ts :: student_speaking_goals": 4
+}
