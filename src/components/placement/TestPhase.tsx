@@ -33,6 +33,8 @@ export interface TestResult {
    *  resolveScoreSkill) — lets completeTest() persist a real per-skill
    *  breakdown instead of one overall score copied onto every category. */
   skill: string;
+  /** The bank item's stable id (for later item analysis). */
+  itemId?: string;
   /** How long the student took on this question (milliseconds), from the moment the options appeared. */
   responseMs?: number;
   /** The student pressed "I'm not sure". */
@@ -86,7 +88,7 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
   const currentQIndex = current?.index ?? -1;
   // Options are shown in a random order: the bank's right answers are not evenly spread across positions.
   const displayOrder = useMemo(
-    () => shuffledOrder(current?.item.options.length ?? 4),
+    () => (current?.item.fixedOrder ? (current.item.options.map((_, i) => i)) : shuffledOrder(current?.item.options.length ?? 4)),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentQIndex],
   );
@@ -206,6 +208,7 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
       difficulty: item.difficulty,
       targetLevel: item.targetLevel,
       skill: resolveScoreSkill(item, resolvedHub),
+      itemId: item.id,
       responseMs,
       unsure: unsure || undefined,
       fast: fast || undefined,

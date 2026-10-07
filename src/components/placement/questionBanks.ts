@@ -1,4 +1,4 @@
-import { ACADEMY_EXTRA } from './academyItems';
+import { ACADEMY_BANK } from './academyBank';
 
 // Expert-authored placement-test question banks per hub.
 // Each bank has 24+ items so a 15-question test is freshly shuffled per attempt.
@@ -9,6 +9,10 @@ export type Hub = 'playground' | 'academy' | 'professional';
 export type Cefr = 'A1' | 'A2' | 'B1' | 'B2' | 'C1';
 
 export interface BankQuestion {
+  /** Stable id, so answers can be analysed per item later. */
+  id?: string;
+  /** Show the options in the order given (times, numbers); otherwise they are shuffled. */
+  fixedOrder?: boolean;
   question: string;
   options: string[];
   correctIndex: number;
@@ -88,68 +92,7 @@ const PLAYGROUND_POOL: BankQuestion[] = [
   { question: 'Choose the past form: "Yesterday I ___ to school."', options: ['go', 'going', 'went', 'goed'], correctIndex: 2, difficulty: 0.55, targetLevel: 'A2', feedback: { correct: 'Yes! "Went" is the past of "go".', incorrect: 'The past of "go" is "went".' } },
 ];
 
-// ---------------------------------------------------------------- ACADEMY
-const ACADEMY_POOL: BankQuestion[] = [
-  // A1
-  { question: "Choose the correct sentence:", options: ['She are my sister.', 'She is my sister.', 'She am my sister.', 'She be my sister.'], correctIndex: 1, difficulty: 0.1, targetLevel: 'A1', feedback: { correct: '"She is my sister." ✅', incorrect: 'With she/he/it we use "is".' } },
-  { question: "Complete: 'I ___ pizza for lunch every Friday.'", options: ['eats', 'eating', 'eat', 'ate'], correctIndex: 2, difficulty: 0.15, targetLevel: 'A1', feedback: { correct: 'Right! Simple present with "I".', incorrect: 'With "I" use "eat".' } },
-  { question: "Which pronoun replaces 'my friends and I'?", options: ['They', 'Us', 'We', 'Them'], correctIndex: 2, difficulty: 0.2, targetLevel: 'A1', feedback: { correct: 'Yes! → "We".', incorrect: 'Subject pronoun → "We".' } },
-  { question: 'Pick the question: "___ you a student?"', options: ['Do', 'Are', 'Is', 'Have'], correctIndex: 1, difficulty: 0.2, targetLevel: 'A1', feedback: { correct: 'Yes! "Are you a student?"', incorrect: 'Use "Are" with "you".' } },
-  // A2
-  { question: "Complete: 'Last weekend I ___ a great movie.'", options: ['watch', 'watched', 'watching', 'have watch'], correctIndex: 1, difficulty: 0.3, targetLevel: 'A2', feedback: { correct: 'Past simple → "watched". 🎬', incorrect: '"Last weekend" needs past simple.' } },
-  { question: "What's happening now? 'Look! It ___.'", options: ['rains', 'is raining', 'rained', 'rain'], correctIndex: 1, difficulty: 0.35, targetLevel: 'A2', feedback: { correct: 'Present continuous! 🌧️', incorrect: 'Right-now action = present continuous.' } },
-  { question: "Choose the preposition: 'The phone is ___ the desk.'", options: ['in', 'on', 'at', 'between'], correctIndex: 1, difficulty: 0.4, targetLevel: 'A2', feedback: { correct: 'Yes! On a surface = on.', incorrect: 'Surfaces use "on".' } },
-  { question: 'Which sentence is correct?', options: ["I'm liking this song.", 'I like this song.', 'I am like this song.', 'I likes this song.'], correctIndex: 1, difficulty: 0.4, targetLevel: 'A2', feedback: { correct: '"Like" is a stative verb.', incorrect: '"Like" is stative — use simple present.' } },
-  // B1
-  { question: "Complete: 'I ___ in this city since 2020.'", options: ['live', 'lived', 'have lived', 'am living'], correctIndex: 2, difficulty: 0.55, targetLevel: 'B1', feedback: { correct: 'Excellent! Present perfect with "since".', incorrect: '"Since 2020" → present perfect.' } },
-  { question: "Best modal: 'You ___ wear a seatbelt — it's the law.'", options: ['might', 'could', 'must', 'may'], correctIndex: 2, difficulty: 0.46, targetLevel: 'A2', feedback: { correct: 'Yes! "Must" = obligation.', incorrect: 'Legal obligation → "must".' } },
-  { question: "Comparative: 'My new laptop is ___ than my old one.'", options: ['more fast', 'faster', 'fastest', 'most fast'], correctIndex: 1, difficulty: 0.38, targetLevel: 'A2', feedback: { correct: 'Right! Short adjective → -er.', incorrect: 'Short adjective: "faster".' } },
-  { question: '🎧 What is the speaker about to do?', options: ['Go shopping for food', 'Cook dinner at home', 'Clean the kitchen', 'Watch a film'], correctIndex: 0, difficulty: 0.66, targetLevel: 'B1', type: 'listening_match', audio_script: "I'm just heading to the supermarket to pick up some bread and milk for breakfast tomorrow. I might also grab a few vegetables if they still have that fresh produce sale going on. Should only take me about twenty minutes.", feedback: { correct: 'Excellent listening! 🛒', incorrect: 'Supermarket = food shopping.' } },
-  { question: 'Choose the synonym for "begin".', options: ['end', 'finish', 'start', 'stop'], correctIndex: 2, difficulty: 0.6, targetLevel: 'B1', feedback: { correct: 'Yes! Begin = start.', incorrect: '"Begin" and "start" are synonyms.' } },
-  // B2
-  { question: "'If I ___ more time, I would learn another language.'", options: ['have', 'had', 'would have', 'will have'], correctIndex: 1, difficulty: 0.75, targetLevel: 'B2', feedback: { correct: 'Second conditional ✅', incorrect: 'Second conditional → "If + past simple".' } },
-  { question: "Passive: 'The chef prepared the meal.'", options: ['The meal prepared by the chef.', 'The meal was prepared by the chef.', 'The meal is preparing by the chef.', 'The meal has prepare by the chef.'], correctIndex: 1, difficulty: 0.8, targetLevel: 'B2', feedback: { correct: 'Perfect passive!', incorrect: 'was/were + past participle.' } },
-  { question: "Phrasal verb: 'I need to ___ this word — I don't know what it means.'", options: ['look after', 'look up', 'look for', 'look into'], correctIndex: 1, difficulty: 0.85, targetLevel: 'B2', feedback: { correct: '"Look up" = search info!', incorrect: '"Look up" = find information.' } },
-  { question: '🎧 What is the speaker\'s main point?', options: ['She enjoyed the film overall', 'She thought the film was disappointing despite good acting', 'She refused to watch the film', 'She wants to watch it a second time'], correctIndex: 1, difficulty: 0.84, targetLevel: 'B2', type: 'listening_match', audio_script: 'Honestly, the performances were excellent and the cinematography was stunning, but the story dragged on for far too long and the ending left me feeling rather let down. If they had trimmed at least twenty minutes from the middle, it would have been a much stronger film overall.', feedback: { correct: 'Brilliant inference! 🎬', incorrect: 'Praised acting, but disappointed by story.' } },
-  { question: 'Best linker: "She studied hard, ___ she passed every exam."', options: ['but', 'so', 'although', 'because'], correctIndex: 1, difficulty: 0.7, targetLevel: 'B2', feedback: { correct: 'Cause → result = "so".', incorrect: 'Result clause uses "so".' } },
-  // C1
-  { question: 'Most precise: "Her arguments were so ___ that no one could refute them."', options: ['nice', 'compelling', 'okay', 'different'], correctIndex: 1, difficulty: 0.9, targetLevel: 'C1', feedback: { correct: '"Compelling" = persuasive! 🎯', incorrect: '"Compelling" is the C1 choice.' } },
-  { question: "Inversion: 'Not only ___ the deadline, but he also exceeded expectations.'", options: ['he met', 'did he meet', 'he did meet', 'met he'], correctIndex: 1, difficulty: 0.95, targetLevel: 'C1', feedback: { correct: 'Subject-aux inversion! 🏆', incorrect: 'After "Not only" → invert.' } },
-  { question: "Idiom 'to bite the bullet' means…", options: ['To eat very quickly', 'To face a difficult situation with courage', 'To make a serious mistake', 'To speak without thinking'], correctIndex: 1, difficulty: 1.0, targetLevel: 'C1', feedback: { correct: 'Endure with courage! 💪', incorrect: '"Bite the bullet" = face it bravely.' } },
-  // Vocabulary items — this hub had ZERO items resolving to the 'vocabulary'
-  // skill (resolveScoreSkill only maps to it via imagePrompt, which Academy
-  // items never set), so despite the radar showing a "Vocabulary" category,
-  // it always fell back to a copied overall score. These are real word-
-  // knowledge items (synonym/antonym), text-only, no image needed.
-  { question: "Choose the word that means 'happy'.", options: ['glad', 'sad', 'angry', 'tired'], correctIndex: 0, difficulty: 0.15, targetLevel: 'A1', feedback: { correct: '"Glad" = happy! 😊', incorrect: '"Glad" means happy.' }, skill: 'vocabulary' },
-  { question: "Which word means the opposite of 'expensive'?", options: ['cheap', 'costly', 'rich', 'priceless'], correctIndex: 0, difficulty: 0.35, targetLevel: 'A2', feedback: { correct: 'Yes! Cheap ↔ expensive.', incorrect: 'The opposite of expensive is cheap.' }, skill: 'vocabulary' },
-  { question: "Choose the best synonym for 'huge'.", options: ['enormous', 'tiny', 'quick', 'quiet'], correctIndex: 0, difficulty: 0.55, targetLevel: 'B1', feedback: { correct: '"Enormous" = huge!', incorrect: '"Enormous" is the closest synonym.' }, skill: 'vocabulary' },
-  { question: "Choose the word closest in meaning to 'meticulous'.", options: ['careless', 'thorough', 'quick', 'lazy'], correctIndex: 1, difficulty: 0.75, targetLevel: 'B2', feedback: { correct: '"Thorough" = meticulous! 🔍', incorrect: '"Meticulous" means very thorough and careful.' }, skill: 'vocabulary' },
-  { question: "Which word best fits: 'Her explanation was so ___ that everyone understood immediately.'", options: ['lucid', 'vague', 'confusing', 'messy'], correctIndex: 0, difficulty: 0.9, targetLevel: 'C1', feedback: { correct: '"Lucid" = exceptionally clear! 💡', incorrect: '"Lucid" fits — it means very clear.' }, skill: 'vocabulary' },
-  // Writing + Speaking/Fluency items — this hub previously had no dedicated
-  // coverage for these two radar categories at all (see useStudentSkills.ts
-  // HUB_SKILL_PROFILE.academy), so the Skills Radar was showing a fabricated
-  // score for both instead of real measurement.
-  { question: 'Which sentence is written correctly?', options: ['I have went to the cinema yesterday.', 'I went to the cinema yesterday.', 'I have go to the cinema yesterday.', 'I going to the cinema yesterday.'], correctIndex: 1, difficulty: 0.35, targetLevel: 'A2', feedback: { correct: 'Simple past — no "have" needed. ✍️', incorrect: '"Yesterday" takes simple past: "went".' }, skill: 'writing' },
-  { question: "Which is the best way to start an email to a teacher you don't know well?", options: ['Hey, what\'s up?', 'Dear Ms. Carter,', 'Yo!', 'Hiya,'], correctIndex: 1, difficulty: 0.55, targetLevel: 'B1', feedback: { correct: 'Polite and appropriate. ✍️', incorrect: '"Dear + name" is the polite opener.' }, skill: 'writing' },
-  { question: 'Which sentence uses punctuation correctly?', options: ["Its important to check your work, before you hand it in.", "It's important to check your work before you hand it in.", "Its important, to check your work before you hand it in.", "It's important to check your work, before, you hand it in."], correctIndex: 1, difficulty: 0.75, targetLevel: 'B2', feedback: { correct: 'Correct apostrophe and no stray commas. ✍️', incorrect: '"It\'s" (it is) + no comma before "before".' }, skill: 'writing' },
-  { question: 'Which sentence sounds most natural?', options: ['I am liking pizza very much.', 'I like pizza very much.', 'I am like pizza very much.', 'Pizza I like very much.'], correctIndex: 1, difficulty: 0.2, targetLevel: 'A1', feedback: { correct: 'Natural word order and stative verb. 🗣️', incorrect: '"Like" is stative — no "-ing" form.' }, skill: 'speaking' },
-  { question: 'Which sentence sounds most natural in conversation?', options: ['I am afraid that I cannot to attend.', "I'm afraid I can't make it.", 'I fear I am not able for attending.', 'Unfortunately is not possible I come.'], correctIndex: 1, difficulty: 0.6, targetLevel: 'B1', feedback: { correct: 'Natural, contracted, conversational. 🗣️', incorrect: '"I\'m afraid I can\'t make it" is how this is naturally said.' }, skill: 'speaking' },
-  { question: 'Which sentence sounds most natural?', options: ['I would appreciate if you could revert back to me at your earliest convenience possible.', "I'd appreciate it if you could get back to me soon.", 'I am appreciating your reverting to me soonly.', 'Please to revert back at convenience.'], correctIndex: 1, difficulty: 0.75, targetLevel: 'B2', feedback: { correct: 'Natural and concise. 🗣️', incorrect: 'Native speakers say "get back to me soon".' }, skill: 'speaking' },
-  // Additional listening items — longer scripts (multi-sentence dialogues/
-  // monologues via ElevenLabs TTS) so listening genuinely tests comprehension
-  // of connected speech, not just a single isolated fact.
-  { question: '🎧 What color is Rex?', options: ['Black', 'Brown', 'White', 'Grey'], correctIndex: 1, difficulty: 0.2, targetLevel: 'A1', type: 'listening_match', audio_script: 'Hi! My name is Alex. I have a small dog. His name is Rex. Rex is brown and very friendly. Every day, I take Rex for a walk in the park near my house.', feedback: { correct: 'Yes! Rex is brown. 🐶', incorrect: 'Rex is brown.' } },
-  { question: '🎧 What is expected in the early afternoon?', options: ['Sunny skies all day', 'Clouds moving in', 'Heavy snow', 'A thunderstorm'], correctIndex: 1, difficulty: 0.4, targetLevel: 'A2', type: 'listening_match', audio_script: "Good morning, everyone! Today's forecast shows sunny skies in the morning, but clouds are expected to roll in by early afternoon. There's a small chance of light rain after four, so you might want to bring an umbrella just in case.", feedback: { correct: 'Yes — clouds moving in. ☁️', incorrect: 'Clouds arrive by early afternoon.' } },
-  { question: '🎧 According to the speaker, what is often overlooked?', options: ['The cost of solar panels', 'The complexity of transitioning the whole grid', 'The popularity of renewable energy', 'The efficiency of wind turbines'], correctIndex: 1, difficulty: 0.92, targetLevel: 'C1', type: 'listening_match', audio_script: "What's often overlooked in discussions about renewable energy is the sheer complexity of transitioning an entire national grid, not merely the cost of the panels or turbines themselves. Storage capacity, transmission infrastructure, and regulatory reform all have to advance in tandem, or the whole endeavor risks stalling.", feedback: { correct: 'Precisely — the systemic complexity. 🔌', incorrect: 'The speaker means grid-transition complexity, not just cost.' } },
-  // Reading comprehension — genuine passages, shown as static text (not
-  // typewriter-animated), with a question that requires actually reading it.
-  { question: 'Who does Maria walk to school with?', options: ['Leo', 'Sam', 'Her mom', 'Her dad'], correctIndex: 1, difficulty: 0.2, targetLevel: 'A1', skill: 'reading', readingPassage: 'My name is Maria. I am twelve years old. I live with my mom, dad, and my little brother Leo. Every morning I walk to school with my friend Sam. We love drawing pictures together.', feedback: { correct: 'Yes — Maria walks with Sam. 📖', incorrect: 'The passage says she walks with Sam.' } },
-  { question: "What did Tom's sister do at the beach?", options: ['Built a sandcastle', 'Collected shells', 'Watched TV', 'Cooked lunch'], correctIndex: 1, difficulty: 0.4, targetLevel: 'A2', skill: 'reading', readingPassage: "Last Saturday, Tom and his family went to the beach. They arrived early in the morning before it got too hot. Tom built a sandcastle while his sister collected shells. In the afternoon, they had a picnic and watched the sunset before driving home.", feedback: { correct: 'Yes — she collected shells. 🐚', incorrect: 'Tom built the sandcastle; his sister collected shells.' } },
-  { question: 'According to the passage, why have some schools limited phone use?', options: ['To save electricity', 'To help students focus', 'Phones are too expensive', 'Parents complained'], correctIndex: 1, difficulty: 0.6, targetLevel: 'B1', skill: 'reading', readingPassage: 'Many teenagers today spend several hours a day on their phones, often without realizing how much time has passed. While social media can help people stay connected with friends, experts warn that too much screen time may affect sleep and concentration at school. Some schools have started limiting phone use during class to help students focus.', feedback: { correct: 'Yes — to help students focus. 📱', incorrect: 'The passage says it helps students focus in class.' } },
-  { question: "What is the writer's attitude toward brands promoting recycled materials?", options: ["Fully convinced they've solved the problem", 'Skeptical the efforts are meaningful enough', 'Unaware such efforts exist', 'Certain fast fashion will disappear'], correctIndex: 1, difficulty: 0.78, targetLevel: 'B2', skill: 'reading', readingPassage: 'Despite growing awareness of its environmental impact, fast fashion continues to dominate the clothing industry. Consumers are drawn to its low prices and constant stream of new styles, even though the rapid production cycle generates enormous textile waste. A handful of brands have begun promoting recycled materials, but critics argue these efforts remain largely symbolic compared to the scale of the problem.', feedback: { correct: 'Yes — skeptical, per "largely symbolic". 👗', incorrect: 'The passage calls the efforts "largely symbolic".' } },
-  { question: "What does the passage suggest about the committee's proposal?", options: ["It fixed the department's core problems", 'It was a superficial response that avoided deeper issues', 'It was praised by all staff members', "It increased the department's budget significantly"], correctIndex: 1, difficulty: 0.92, targetLevel: 'C1', skill: 'reading', readingPassage: "The committee's recommendation, though ostensibly grounded in fiscal prudence, belied a deeper reluctance to confront the structural inefficiencies that had long plagued the department. Rather than addressing root causes, the proposed measures amounted to little more than a reshuffling of existing resources — a fact not lost on the more discerning members of staff.", feedback: { correct: 'Yes — a superficial reshuffling. 🗂️', incorrect: 'The proposal avoided the real structural problems.' } },
-];
+
 
 // ---------------------------------------------------------------- PROFESSIONAL
 const PROFESSIONAL_POOL: BankQuestion[] = [
@@ -204,7 +147,7 @@ const PROFESSIONAL_POOL: BankQuestion[] = [
 
 const POOLS: Record<Hub, BankQuestion[]> = {
   playground: PLAYGROUND_POOL,
-  academy: [...ACADEMY_POOL, ...ACADEMY_EXTRA],
+  academy: ACADEMY_BANK,
   professional: PROFESSIONAL_POOL,
 };
 

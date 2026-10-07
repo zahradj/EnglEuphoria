@@ -1,0 +1,1758 @@
+[
+ {
+  "id": "A01",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A1",
+  "myDifficulty": 0.08,
+  "tagAgrees": true,
+  "issues": [
+   "Redundant: be-verb agreement is tested again in A04 and A41 (and there is/are in A45): four be-items among 16 A1 items.",
+   "No article item (a/an/the) anywhere in the bank, although articles are the commonest A1-A2 problem for Arabic and Turkish speakers.",
+   "Distractor \"She be my sister\" is not a real learner error."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "There is ___ apple in my bag.",
+   "options": [
+    "a",
+    "the",
+    "an",
+    "some"
+   ],
+   "correctIndex": 2,
+   "tag": "A1",
+   "difficulty": 0.15,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Same skill as A41/A04; use the slot for articles (high-value for Arabic/Turkish)."
+ },
+ {
+  "id": "A02",
+  "keyOk": false,
+  "keyNote": "\"ate\" is also correct: \"I ate pizza for lunch every Friday\" is a normal past-habit sentence with no time anchor. Second defensible answer.",
+  "myLevel": "A1",
+  "myDifficulty": 0.15,
+  "tagAgrees": true,
+  "issues": [
+   "Second correct answer (ate).",
+   "Same base-form present simple as A42 (\"We play\"); third-person -s is never tested in the bank.",
+   "\"eating\" is the only really plausible wrong form for the other distractors."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "My sister ___ pizza for lunch every Friday.",
+   "options": [
+    "eat",
+    "eating",
+    "eats",
+    "is eat"
+   ],
+   "correctIndex": 2,
+   "tag": "A1",
+   "difficulty": 0.15,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Remove the past tense, test third-person -s instead of duplicating A42."
+ },
+ {
+  "id": "A03",
+  "keyOk": true,
+  "keyNote": "Unique key We.",
+  "myLevel": "A1",
+  "myDifficulty": 0.22,
+  "tagAgrees": true,
+  "issues": [
+   "Stem is metalinguistic (\"Which pronoun replaces...\") - tests the word \"pronoun\" as much as English.",
+   "Distractor set (They/Us/Them) is good: real subject/object confusions."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "My friends and I are in the same class. ___ like English.",
+   "options": [
+    "They",
+    "Us",
+    "Them",
+    "We"
+   ],
+   "correctIndex": 3,
+   "tag": "A1",
+   "difficulty": 0.2,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Put the pronoun in a sentence so the item tests use, not terminology."
+ },
+ {
+  "id": "A04",
+  "keyOk": true,
+  "keyNote": "Unique key Are.",
+  "myLevel": "A1",
+  "myDifficulty": 0.12,
+  "tagAgrees": true,
+  "issues": [
+   "\"Pick the question:\" is an odd instruction; students may not know what is asked.",
+   "Third be-item at A1 (see A01)."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Complete the question: \"___ you a student?\"",
+   "options": [
+    "Do",
+    "Is",
+    "Have",
+    "Are"
+   ],
+   "correctIndex": 3,
+   "tag": "A1",
+   "difficulty": 0.12,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Clearer instruction; key moved off B."
+ },
+ {
+  "id": "A05",
+  "keyOk": true,
+  "keyNote": "Unique key watched (\"Last weekend\" fixes the tense).",
+  "myLevel": "A1/A2",
+  "myDifficulty": 0.25,
+  "tagAgrees": true,
+  "issues": [
+   "EGP lists simple past affirmative at A1; fine as low A2.",
+   "\"have watch\" is not a realistic error; \"have watched\" would be a better distractor (Romance speakers).",
+   "Past simple with a time marker is tested four times (A05, A27, A49, A53) and \"movie\" is the topic of 7 items bank-wide."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Sound item, low-A2 difficulty. Redundancy is handled by replacing A49 and re-topicking A27, A53, A61."
+ },
+ {
+  "id": "A06",
+  "keyOk": true,
+  "keyNote": "Unique key is raining (Look! cues now).",
+  "myLevel": "A2",
+  "myDifficulty": 0.3,
+  "tagAgrees": true,
+  "issues": [
+   "Weather/rain is the topic of A06, A34, A51, A59 and A67: five items.",
+   "Overlaps A57 (present continuous contrast)."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Be quiet! The baby ___.",
+   "options": [
+    "sleeps",
+    "slept",
+    "is sleeping",
+    "sleep"
+   ],
+   "correctIndex": 2,
+   "tag": "A2",
+   "difficulty": 0.3,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Same structure, new topic; \"sleeps\" is the real simple/continuous distractor."
+ },
+ {
+  "id": "A07",
+  "keyOk": false,
+  "keyNote": "\"in the desk\" (a drawer) and \"at the desk\" are both defensible; \"between\" is impossible (needs a plural), so it is a free elimination.",
+  "myLevel": "A1",
+  "myDifficulty": 0.15,
+  "tagAgrees": false,
+  "issues": [
+   "Two defensible answers (in, at).",
+   "\"between\" needs two objects: silly distractor.",
+   "Tagged A2/0.4 but \"on the table\" is A1 content; real difficulty is low."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "There is a clock ___ the wall.",
+   "options": [
+    "in",
+    "at",
+    "on",
+    "of"
+   ],
+   "correctIndex": 2,
+   "tag": "A1",
+   "difficulty": 0.15,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Unambiguous key, realistic A1 difficulty."
+ },
+ {
+  "id": "A08",
+  "keyOk": true,
+  "keyNote": "\"I like this song.\" is the keyed answer, but \"I'm liking this song\" is acceptable informal AmE (\"I'm lovin' it\"): marginal second answer.",
+  "myLevel": "A1/A2",
+  "myDifficulty": 0.22,
+  "tagAgrees": false,
+  "issues": [
+   "\"I'm liking\" is defensible informally; \"I am like\" and \"I likes\" are obvious.",
+   "Near duplicate of A30 (same option pattern).",
+   "The stative-verb rule is a B1 notion; the A1 element is just \"I like\"."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Which sentence is correct?",
+   "options": [
+    "I likes this song.",
+    "I am like this song.",
+    "I like this song.",
+    "I like to this song."
+   ],
+   "correctIndex": 2,
+   "tag": "A1",
+   "difficulty": 0.2,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Use only real learner errors (-s after I, am like, like to)."
+ },
+ {
+  "id": "A09",
+  "keyOk": true,
+  "keyNote": "Unique key; \"am living ... since 2020\" is non-standard.",
+  "myLevel": "B1",
+  "myDifficulty": 0.52,
+  "tagAgrees": true,
+  "issues": [
+   "\"live since\" is a classic Romance/Arabic transfer error: good distractor.",
+   "\"2020\" will date; consider \"for five years\" (but A60 covers for/since)."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Solid B1 present perfect."
+ },
+ {
+  "id": "A10",
+  "keyOk": true,
+  "keyNote": "Unique key must (\"it's the law\").",
+  "myLevel": "A2",
+  "myDifficulty": 0.4,
+  "tagAgrees": true,
+  "issues": [
+   "A bit easy because of the cue; fine.",
+   "Options homogeneous modals."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Acceptable A2 obligation item."
+ },
+ {
+  "id": "A11",
+  "keyOk": true,
+  "keyNote": "Unique key faster.",
+  "myLevel": "A2",
+  "myDifficulty": 0.3,
+  "tagAgrees": true,
+  "issues": [
+   "\"than\" already eliminates fastest/most fast (test-wise).",
+   "Owning a \"new laptop\" is a mild wealth marker."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine, slightly easier than stated (A1/A2)."
+ },
+ {
+  "id": "A12",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A2",
+  "myDifficulty": 0.42,
+  "tagAgrees": false,
+  "issues": [
+   "Tagged B1/0.66 but the gist (\"supermarket\", \"bread and milk\") is explicit; most A2 students will pass.",
+   "Distractors \"Clean the kitchen\" and \"Watch a film\" have no hook in the audio (silly); \"film\" is BrE-leaning.",
+   "Idioms in the script (heading to, pick up, grab) are not needed for the question."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "🎧 What is the speaker about to do?",
+   "options": [
+    "Make breakfast at home",
+    "Meet a friend for lunch",
+    "Go shopping for food",
+    "Cook dinner for the family"
+   ],
+   "correctIndex": 2,
+   "tag": "A2",
+   "difficulty": 0.42,
+   "readingPassage": null,
+   "audioScript": "I'm just heading to the supermarket to pick up some bread and milk for breakfast tomorrow. I might also grab a few vegetables if they still have that fresh produce sale going on. Should only take me about twenty minutes."
+  },
+  "reason": "Re-level to A2; give distractors hooks in the audio (breakfast, vegetables)."
+ },
+ {
+  "id": "A13",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A2",
+  "myDifficulty": 0.25,
+  "tagAgrees": false,
+  "issues": [
+   "begin/start are A1-A2 words; tagged B1/0.6 is far too high.",
+   "Skill is vocabulary, labelled grammar.",
+   "Distractors end/finish/stop are antonyms or unrelated: elimination.",
+   "Synonym-matching format dominates the vocabulary section (A13, A22, A23, A24, A25)."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Choose the synonym for \"begin\".",
+   "options": [
+    "end",
+    "finish",
+    "start",
+    "stop"
+   ],
+   "correctIndex": 2,
+   "tag": "A2",
+   "difficulty": 0.25,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Retag A2/0.25 and skill vocabulary; better still replace with a collocation or context item."
+ },
+ {
+  "id": "A14",
+  "keyOk": true,
+  "keyNote": "Unique key had.",
+  "myLevel": "B1",
+  "myDifficulty": 0.55,
+  "tagAgrees": false,
+  "issues": [
+   "Second conditional with high-frequency words is stable by B1 (EGP authors) - not B2/0.75.",
+   "Distractors are good (have = L1 transfer, would have)."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "'If I ___ more time, I would learn another language.'",
+   "options": [
+    "have",
+    "had",
+    "would have",
+    "will have"
+   ],
+   "correctIndex": 1,
+   "tag": "B1",
+   "difficulty": 0.55,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Retag B1/0.55; item is fine."
+ },
+ {
+  "id": "A15",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1",
+  "myDifficulty": 0.58,
+  "tagAgrees": false,
+  "issues": [
+   "Stem has no instruction.",
+   "Simple past passive is B1 in the Core Inventory, not B2/0.8.",
+   "Distractors are all ungrammatical forms (\"has prepare\")."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Choose the passive form of: \"The chef prepared the meal.\"",
+   "options": [
+    "The meal prepared by the chef.",
+    "The meal is preparing by the chef.",
+    "The meal was prepared by the chef.",
+    "The meal has prepare by the chef."
+   ],
+   "correctIndex": 2,
+   "tag": "B1",
+   "difficulty": 0.58,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Add the instruction and re-level."
+ },
+ {
+  "id": "A16",
+  "keyOk": true,
+  "keyNote": "\"look up\" is keyed; \"look for this word\" is marginally defensible.",
+  "myLevel": "A2",
+  "myDifficulty": 0.4,
+  "tagAgrees": false,
+  "issues": [
+   "Tagged B2/0.85 but \"look up a word\" is taught at A2: difficulty badly inflated.",
+   "Prefix \"Phrasal verb:\" is a label, not English.",
+   "\"look for\"/\"look into\" can be argued."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "I need to ___ this word - I don't know what it means.",
+   "options": [
+    "look after",
+    "look like",
+    "look up",
+    "look out"
+   ],
+   "correctIndex": 2,
+   "tag": "A2",
+   "difficulty": 0.4,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Re-level A2; distractors that cannot fit."
+ },
+ {
+  "id": "A17",
+  "keyOk": true,
+  "keyNote": "Unique key; gist clear.",
+  "myLevel": "B2",
+  "myDifficulty": 0.75,
+  "tagAgrees": true,
+  "issues": [
+   "Key is the longest option and the only one with a contrast: test-wise.",
+   "Same design as A76 (good-but-bad opinion): redundant.",
+   "Dense written-style monologue; difficulty slightly high."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "🎧 What will the speaker do?",
+   "options": [
+    "Take the bus again",
+    "Wait for the bus in the rain",
+    "Walk the whole way to school",
+    "Ask her dad to drive her"
+   ],
+   "correctIndex": 3,
+   "tag": "B2",
+   "difficulty": 0.68,
+   "readingPassage": null,
+   "audioScript": "I was going to take the bus, but they've canceled it again, and I really don't want to be late for the third time this week. I'd rather not walk, so I think I'll ask my dad for a ride, even though he'll probably complain about it."
+  },
+  "reason": "Keep one opinion-contrast item (A76); use a decision/purpose item here."
+ },
+ {
+  "id": "A18",
+  "keyOk": true,
+  "keyNote": "Unique key so.",
+  "myLevel": "A2",
+  "myDifficulty": 0.32,
+  "tagAgrees": false,
+  "issues": [
+   "so/but/because are A2; tagged B2/0.7 is wrong by at least a level.",
+   "\"Best linker\" label unnatural.",
+   "No genuine B2 linker (despite, however, in spite of) in the bank."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "She studied hard, ___ she passed every exam.",
+   "options": [
+    "but",
+    "although",
+    "so",
+    "because"
+   ],
+   "correctIndex": 2,
+   "tag": "A2",
+   "difficulty": 0.32,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Retag A2; add a real B2 linker item elsewhere."
+ },
+ {
+  "id": "A19",
+  "keyOk": true,
+  "keyNote": "Unique key, but only because the other three are A1 words.",
+  "myLevel": "B2/C1 content, effectively B1 by elimination",
+  "myDifficulty": 0.7,
+  "tagAgrees": false,
+  "issues": [
+   "Distractors nice/okay/different are silly; the one advanced word is the key.",
+   "Stem word \"refute\" is harder than the key.",
+   "Skill is vocabulary, labelled grammar.",
+   "Same frame as A26."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "The new law will have far-reaching ___ for small businesses.",
+   "options": [
+    "locations",
+    "applications",
+    "implications",
+    "explanations"
+   ],
+   "correctIndex": 2,
+   "tag": "C1",
+   "difficulty": 0.88,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Distractors must be same-category nouns."
+ },
+ {
+  "id": "A20",
+  "keyOk": true,
+  "keyNote": "Unique key did he meet.",
+  "myLevel": "C1",
+  "myDifficulty": 0.9,
+  "tagAgrees": true,
+  "issues": [
+   "Three inversion items (A20, A77, A79)."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Keep as the one inversion item."
+ },
+ {
+  "id": "A21",
+  "keyOk": true,
+  "keyNote": "Standard gloss is accepting an unpleasant situation; keyed paraphrase acceptable.",
+  "myLevel": "C1",
+  "myDifficulty": 0.9,
+  "tagAgrees": false,
+  "issues": [
+   "Idiom in isolation measures exposure, not level; difficulty 1.0 means nobody is placed by it.",
+   "Military origin (violence) - avoid for minors.",
+   "Skill is vocabulary, labelled grammar."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "Several experts have questioned the ___ of the survey, saying the sample was too small.",
+   "options": [
+    "popularity",
+    "validity",
+    "security",
+    "simplicity"
+   ],
+   "correctIndex": 1,
+   "tag": "C1",
+   "difficulty": 0.88,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Contextual academic vocabulary item."
+ },
+ {
+  "id": "A22",
+  "keyOk": true,
+  "keyNote": "\"glad\" is correct.",
+  "myLevel": "A1/A2",
+  "myDifficulty": 0.18,
+  "tagAgrees": true,
+  "issues": [
+   "Key is the less common word and the only positive one: elimination.",
+   "glad is A2; many A1 students do not know it."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "My team won the game! I am very ___.",
+   "options": [
+    "sad",
+    "angry",
+    "happy",
+    "tired"
+   ],
+   "correctIndex": 2,
+   "tag": "A1",
+   "difficulty": 0.1,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Context sentence with A1 words."
+ },
+ {
+  "id": "A23",
+  "keyOk": true,
+  "keyNote": "Unique key; costly is a synonym.",
+  "myLevel": "A2",
+  "myDifficulty": 0.28,
+  "tagAgrees": true,
+  "issues": [
+   "\"priceless\" is C1 and arguably not an opposite; harmless.",
+   "\"rich\" is a plausible money-association distractor: good."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Acceptable A1/A2."
+ },
+ {
+  "id": "A24",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": true,
+  "issues": [
+   "\"enormous\" is a cognate (ES/FR/IT/TR): inflated for them.",
+   "quick/quiet are random distractors; tiny is the antonym."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "Everyone was hungry. Sam said: \"I'm starving!\" What does he mean?",
+   "options": [
+    "I am very tired.",
+    "I am very thirsty.",
+    "I am very hungry.",
+    "I am very cold."
+   ],
+   "correctIndex": 2,
+   "tag": "B1",
+   "difficulty": 0.5,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Non-cognate B1 meaning item with homogeneous options."
+ },
+ {
+  "id": "A25",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B2/C1 (unsure)",
+  "myDifficulty": 0.78,
+  "tagAgrees": true,
+  "issues": [
+   "\"meticulous\" is a cognate in ES/FR/IT.",
+   "Distractors careless/quick/lazy all negative: key is the only positive trait.",
+   "Level uncertain (B2 vs C1)."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "Which sentence describes a stubborn person?",
+   "options": [
+    "She never changes her mind, even when she is wrong.",
+    "She changes her mind every few minutes.",
+    "She is afraid to try new things.",
+    "She gets angry when she loses."
+   ],
+   "correctIndex": 0,
+   "tag": "B2",
+   "difficulty": 0.7,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Non-cognate B2 trait word, options of equal length. Key position: shuffle options at render time (original bank puts the key in B 58% of the time and never in D)."
+ },
+ {
+  "id": "A26",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "C1/C2",
+  "myDifficulty": 0.92,
+  "tagAgrees": false,
+  "issues": [
+   "Only positive option fits: solvable by elimination.",
+   "Second \"so ___ that\" frame.",
+   "Too hard to help placement."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "The contract was ___: it could be understood in two different ways.",
+   "options": [
+    "accurate",
+    "obvious",
+    "ambiguous",
+    "formal"
+   ],
+   "correctIndex": 2,
+   "tag": "C1",
+   "difficulty": 0.88,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Definition in stem; same-category adjectives (cognate caveat)."
+ },
+ {
+  "id": "A27",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A2",
+  "myDifficulty": 0.3,
+  "tagAgrees": true,
+  "issues": [
+   "Skill \"writing\" is wrong: grammar recognition.",
+   "\"cinema\" is BrE-leaning.",
+   "Past simple again (A05, A49, A53)."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Which sentence is correct?",
+   "options": [
+    "I have went to the movies yesterday.",
+    "I going to the movies yesterday.",
+    "I go to the movies yesterday.",
+    "I went to the movies yesterday."
+   ],
+   "correctIndex": 3,
+   "tag": "A2",
+   "difficulty": 0.3,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "AmE wording, key off B; relabel as grammar."
+ },
+ {
+  "id": "A28",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A2/B1",
+  "myDifficulty": 0.4,
+  "tagAgrees": false,
+  "issues": [
+   "Register choice with \"Dear\" is A2; tagged B1/0.55.",
+   "\"Hiya\" is BrE.",
+   "Slang options are easy by tone."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Acceptable; slightly easier than stated."
+ },
+ {
+  "id": "A29",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": false,
+  "issues": [
+   "Tagged B2/0.75; its/it's is B1.",
+   "Option D has an absurd comma (\"before, you\").",
+   "Distractors combine two errors; the key is the only comma-free one.",
+   "Skill \"writing\" but recognition."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Which sentence is correct?",
+   "options": [
+    "Its important to check your work before you hand it in.",
+    "It's important to check you're work before you hand it in.",
+    "It's important to check your work before you hand it in.",
+    "It's important too check your work before you hand it in."
+   ],
+   "correctIndex": 2,
+   "tag": "B1",
+   "difficulty": 0.5,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "One error per distractor, all real learner errors."
+ },
+ {
+  "id": "A30",
+  "keyOk": true,
+  "keyNote": "\"I like pizza very much.\" is fine; \"Pizza I like very much\" is grammatical but marked.",
+  "myLevel": "A1",
+  "myDifficulty": 0.15,
+  "tagAgrees": true,
+  "issues": [
+   "Not a speaking item: duplicate of A08.",
+   "\"sounds most natural\" is subjective.",
+   "Pizza repeated (A02)."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "A friend gives you a present. You say \"Thank you!\" Your friend says:",
+   "options": [
+    "I am thank you.",
+    "Please to thank.",
+    "You are welcome.",
+    "Yes, thank you."
+   ],
+   "correctIndex": 2,
+   "tag": "A1",
+   "difficulty": 0.12,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Real functional-language item."
+ },
+ {
+  "id": "A31",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1",
+  "myDifficulty": 0.52,
+  "tagAgrees": true,
+  "issues": [
+   "No situation: students cannot know what is being refused.",
+   "Distractors are garbage (\"is not possible I come\")."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Your friend invites you to a party on Saturday, but you are busy. What do you say?",
+   "options": [
+    "I am not agree with the party.",
+    "Thanks for asking, but I'm afraid I can't make it.",
+    "No. I will not come to your party.",
+    "Yes, I can't come to the party."
+   ],
+   "correctIndex": 1,
+   "tag": "B1",
+   "difficulty": 0.52,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Context plus L1-transfer, rudeness and yes/no distractors. Key position: shuffle options at render time (original bank puts the key in B 58% of the time and never in D)."
+ },
+ {
+  "id": "A32",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1",
+  "myDifficulty": 0.58,
+  "tagAgrees": false,
+  "issues": [
+   "\"soonly\" is not a word; \"Please to revert\" is silly.",
+   "\"revert back ... earliest convenience possible\" is common business English: defensible to some.",
+   "\"sounds natural\" is subjective; level overstated."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "You wrote to your teacher two days ago and she has not answered. Which message is the most polite?",
+   "options": [
+    "Reply to my email fast, please.",
+    "You have to answer me today.",
+    "Could you let me know when you can reply?",
+    "I need that you reply me soon."
+   ],
+   "correctIndex": 2,
+   "tag": "B1",
+   "difficulty": 0.58,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Pragmatic politeness item with realistic distractors."
+ },
+ {
+  "id": "A33",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A1",
+  "myDifficulty": 0.15,
+  "tagAgrees": true,
+  "issues": [
+   "\"Grey\" is BrE (AmE gray).",
+   "Dog: sensitivity for some Muslim families; a cat is neutral.",
+   "Sound-alike names Alex/Rex."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "🎧 What color is Milo?",
+   "options": [
+    "Black",
+    "White",
+    "Brown",
+    "Gray"
+   ],
+   "correctIndex": 2,
+   "tag": "A1",
+   "difficulty": 0.15,
+   "readingPassage": null,
+   "audioScript": "Hi! My name is Alex. I have a small cat. His name is Milo. Milo is brown and very friendly. Every afternoon, he sits by the window and watches the birds."
+  },
+  "reason": "Neutral pet, AmE spelling, key off B."
+ },
+ {
+  "id": "A34",
+  "keyOk": true,
+  "keyNote": "Unique key; \"Sunny skies all day\" is a good trap.",
+  "myLevel": "A2/B1",
+  "myDifficulty": 0.45,
+  "tagAgrees": true,
+  "issues": [
+   "\"Heavy snow\" and \"A thunderstorm\" are silly (no hook in the audio).",
+   "\"Light rain after four\" is a legitimate time trap: use it as a distractor."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "🎧 What is expected in the early afternoon?",
+   "options": [
+    "Sunny skies all day",
+    "Heavy snow",
+    "Light rain",
+    "Clouds moving in"
+   ],
+   "correctIndex": 3,
+   "tag": "A2",
+   "difficulty": 0.45,
+   "readingPassage": null,
+   "audioScript": "Good morning, everyone! Today's forecast shows sunny skies in the morning, but clouds are expected to roll in by early afternoon. There's a small chance of light rain after four, so you might want to bring an umbrella just in case."
+  },
+  "reason": "Replace a silly distractor with the audio-based trap."
+ },
+ {
+  "id": "A35",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "C1",
+  "myDifficulty": 0.88,
+  "tagAgrees": true,
+  "issues": [
+   "Key repeats audio words (complexity, transitioning, grid): lifting.",
+   "Dense written-style script, unnatural spoken.",
+   "Low teen relevance."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "🎧 According to the speaker, what is often overlooked?",
+   "options": [
+    "How much solar panels cost",
+    "How popular green energy has become",
+    "How hard it is to change the whole electricity system",
+    "How well wind turbines work"
+   ],
+   "correctIndex": 2,
+   "tag": "C1",
+   "difficulty": 0.88,
+   "readingPassage": null,
+   "audioScript": "What's often overlooked in discussions about renewable energy is the sheer complexity of transitioning an entire national grid, not merely the cost of the panels or turbines themselves. Storage capacity, transmission infrastructure, and regulatory reform all have to advance in tandem, or the whole endeavor risks stalling."
+  },
+  "reason": "Paraphrase the key."
+ },
+ {
+  "id": "A36",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A1",
+  "myDifficulty": 0.18,
+  "tagAgrees": true,
+  "issues": [
+   "Distractors all appear in the text: excellent trap design.",
+   "Key lifted verbatim; acceptable at A1.",
+   "Same genre as A47."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good A1 reading item."
+ },
+ {
+  "id": "A37",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A2",
+  "myDifficulty": 0.38,
+  "tagAgrees": true,
+  "issues": [
+   "\"Built a sandcastle\" is a good trap (Tom did it).",
+   "Watched TV/Cooked lunch are weak but cannot use picnic/sunset (shared).",
+   "Key lifted verbatim, fine at A2."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good A2 reading item."
+ },
+ {
+  "id": "A38",
+  "keyOk": true,
+  "keyNote": "Unique key (verbatim from last sentence).",
+  "myLevel": "B1",
+  "myDifficulty": 0.45,
+  "tagAgrees": true,
+  "issues": [
+   "Key lifted verbatim: answerable by matching.",
+   "Distractors non-parallel (\"To save\", \"Phones are\", \"Parents complained\") and silly.",
+   "Phone topic repeats in A54 and A75."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "According to the passage, why have some schools limited phone use?",
+   "options": [
+    "To save electricity at school",
+    "To make students sleep more",
+    "To help students concentrate",
+    "To stop students using social media"
+   ],
+   "correctIndex": 2,
+   "tag": "B1",
+   "difficulty": 0.45,
+   "readingPassage": "Many teenagers today spend several hours a day on their phones, often without realizing how much time has passed. While social media can help people stay connected with friends, experts warn that too much screen time may affect sleep and concentration at school. Some schools have started limiting phone use during class to help students focus.",
+   "audioScript": null
+  },
+  "reason": "Paraphrased key, parallel plausible distractors."
+ },
+ {
+  "id": "A39",
+  "keyOk": false,
+  "keyNote": "The passage attributes the \"symbolic\" view to critics; the writer's own attitude is not stated. Question/key not supported.",
+  "myLevel": "B2",
+  "myDifficulty": 0.7,
+  "tagAgrees": true,
+  "issues": [
+   "Wrong question target (writer vs critics).",
+   "Distractors are strawmen.",
+   "\"skeptical\" is a cognate; key longest."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "What do critics say about brands that promote recycled materials?",
+   "options": [
+    "Their clothes last longer than other brands",
+    "They have already ended fast fashion",
+    "Their efforts are too small to solve the problem",
+    "Their prices are too high for most people"
+   ],
+   "correctIndex": 2,
+   "tag": "B2",
+   "difficulty": 0.7,
+   "readingPassage": "Despite growing awareness of its environmental impact, fast fashion continues to dominate the clothing industry. Consumers are drawn to its low prices and constant stream of new styles, even though the rapid production cycle generates enormous textile waste. A handful of brands have begun promoting recycled materials, but critics argue these efforts remain largely symbolic compared to the scale of the problem.",
+   "audioScript": null
+  },
+  "reason": "Ask what the passage actually states; paraphrase key."
+ },
+ {
+  "id": "A40",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "C2",
+  "myDifficulty": 0.95,
+  "tagAgrees": false,
+  "issues": [
+   "Vocabulary at C2 (ostensibly, belied, discerning).",
+   "Workplace/committee topic irrelevant to teens.",
+   "Distractors silly.",
+   "No placement value in an A1-B2 test."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "What does the writer suggest about the \"quiet hour\" proposal?",
+   "options": [
+    "It made the school much quieter",
+    "It looked helpful but did not solve the real problem",
+    "It was supported by every teacher",
+    "It cost the school a lot of money"
+   ],
+   "correctIndex": 1,
+   "tag": "C1",
+   "difficulty": 0.88,
+   "readingPassage": "The school introduced a \"quiet hour\" every afternoon, supposedly to help students study. In practice, however, the noise simply moved from the classrooms to the corridors and the library, and several teachers pointed out that nothing had changed about the crowded timetable that caused the problem in the first place.",
+   "audioScript": null
+  },
+  "reason": "Teen-relevant B2/C1 reading with paraphrased key."
+ },
+ {
+  "id": "A41",
+  "keyOk": true,
+  "keyNote": "Unique key; \"have\" is a strong Romance distractor.",
+  "myLevel": "A1",
+  "myDifficulty": 0.1,
+  "tagAgrees": true,
+  "issues": [],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Keep."
+ },
+ {
+  "id": "A42",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A1",
+  "myDifficulty": 0.15,
+  "tagAgrees": true,
+  "issues": [
+   "Base-form present simple (also A02)."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A43",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A1",
+  "myDifficulty": 0.08,
+  "tagAgrees": true,
+  "issues": [
+   "Alliterative p-distractors: elimination by meaning only; fine at Pre-A1/A1."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A44",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A1",
+  "myDifficulty": 0.1,
+  "tagAgrees": true,
+  "issues": [],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A45",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A1",
+  "myDifficulty": 0.2,
+  "tagAgrees": true,
+  "issues": [
+   "there is/are is A1/A2."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A46",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A1",
+  "myDifficulty": 0.1,
+  "tagAgrees": true,
+  "issues": [
+   "Tests sequence knowledge more than language."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine at A1."
+ },
+ {
+  "id": "A47",
+  "keyOk": true,
+  "keyNote": "Unique key (family).",
+  "myLevel": "A1",
+  "myDifficulty": 0.15,
+  "tagAgrees": true,
+  "issues": [
+   "Same genre and content as A36 (mom, dad, little brother).",
+   "No real-life text (sign/message) at A1."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "Read the sign. When is the library closed?",
+   "options": [
+    "On Monday morning",
+    "On Friday afternoon",
+    "On Saturday and Sunday",
+    "Every evening"
+   ],
+   "correctIndex": 2,
+   "tag": "A1",
+   "difficulty": 0.15,
+   "readingPassage": "LIBRARY. Open Monday to Friday, 9:00 to 5:00. Closed on Saturday and Sunday.",
+   "audioScript": null
+  },
+  "reason": "Add real-world text; remove duplicate genre."
+ },
+ {
+  "id": "A48",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A1",
+  "myDifficulty": 0.25,
+  "tagAgrees": true,
+  "issues": [
+   "March/May and June/July are phonetic traps: legitimate but hard at A1 in one hearing.",
+   "Very short script (14 words)."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Acceptable."
+ },
+ {
+  "id": "A49",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A1/A2",
+  "myDifficulty": 0.25,
+  "tagAgrees": true,
+  "issues": [
+   "Past simple again; redundant with A05/A27/A53."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "This is my sister. ___ name is Nora.",
+   "options": [
+    "She",
+    "Hers",
+    "Her",
+    "His"
+   ],
+   "correctIndex": 2,
+   "tag": "A1",
+   "difficulty": 0.15,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Possessive adjectives are absent from the bank."
+ },
+ {
+  "id": "A50",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A1/A2",
+  "myDifficulty": 0.3,
+  "tagAgrees": true,
+  "issues": [],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A51",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A2",
+  "myDifficulty": 0.4,
+  "tagAgrees": true,
+  "issues": [
+   "Three of four options ungrammatical; weather topic."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A52",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A1/A2",
+  "myDifficulty": 0.22,
+  "tagAgrees": true,
+  "issues": [
+   "Alliterative distractors, same design as A43."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine, easier than stated."
+ },
+ {
+  "id": "A53",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A2",
+  "myDifficulty": 0.3,
+  "tagAgrees": true,
+  "issues": [
+   "Movie topic."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "We didn't ___ outside because it was too cold.",
+   "options": [
+    "went",
+    "goes",
+    "going",
+    "go"
+   ],
+   "correctIndex": 3,
+   "tag": "A2",
+   "difficulty": 0.3,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Different topic; didn't + base."
+ },
+ {
+  "id": "A54",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A2",
+  "myDifficulty": 0.35,
+  "tagAgrees": true,
+  "issues": [
+   "Negative NOT stem.",
+   "\"Water\" and \"A bottle\" overlap.",
+   "Phone topic."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "What should students leave at home?",
+   "options": [
+    "Lunch",
+    "A jacket",
+    "A water bottle",
+    "Money"
+   ],
+   "correctIndex": 3,
+   "tag": "A2",
+   "difficulty": 0.35,
+   "readingPassage": "Dear students, our school trip is on Friday. We meet at the school gate at 8:30. Please bring lunch, a bottle of water and a jacket. Please do not bring money. See you there! Ms. Lee",
+   "audioScript": null
+  },
+  "reason": "Positive stem; no overlap."
+ },
+ {
+  "id": "A55",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A2",
+  "myDifficulty": 0.45,
+  "tagAgrees": true,
+  "issues": [
+   "Mix of \"movie\" and \"cinema\".",
+   "Time trap is legitimate (corrected final value).",
+   "Options sorted ascending: do not shuffle."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "🎧 What time will they meet?",
+   "options": [
+    "6:30",
+    "7:00",
+    "7:30",
+    "8:00"
+   ],
+   "correctIndex": 1,
+   "tag": "A2",
+   "difficulty": 0.45,
+   "readingPassage": null,
+   "audioScript": "Hi Anna, it's Jack. The movie starts at seven thirty, not eight. Let's meet outside the movie theater at seven. Bring some money for popcorn!"
+  },
+  "reason": "AmE wording."
+ },
+ {
+  "id": "A56",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A2",
+  "myDifficulty": 0.35,
+  "tagAgrees": true,
+  "issues": [],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A57",
+  "keyOk": true,
+  "keyNote": "Marginal: \"today he takes the bus\" is acceptable in speech.",
+  "myLevel": "A2",
+  "myDifficulty": 0.4,
+  "tagAgrees": true,
+  "issues": [
+   "Possible second answer takes."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Acceptable."
+ },
+ {
+  "id": "A58",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A2",
+  "myDifficulty": 0.28,
+  "tagAgrees": true,
+  "issues": [],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A59",
+  "keyOk": false,
+  "keyNote": "\"is raining\" is also grammatical.",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": true,
+  "issues": [
+   "Second answer.",
+   "Rain topic."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "If you ___ hard, you will pass the test.",
+   "options": [
+    "study",
+    "studied",
+    "will study",
+    "studying"
+   ],
+   "correctIndex": 0,
+   "tag": "B1",
+   "difficulty": 0.5,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Different topic and unambiguous."
+ },
+ {
+  "id": "A60",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": true,
+  "issues": [],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good."
+ },
+ {
+  "id": "A61",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": true,
+  "issues": [
+   "Movie topic."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "The bag was so heavy ___ I could not carry it.",
+   "options": [
+    "than",
+    "as",
+    "that",
+    "but"
+   ],
+   "correctIndex": 2,
+   "tag": "B1",
+   "difficulty": 0.5,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Topic."
+ },
+ {
+  "id": "A62",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1/B2",
+  "myDifficulty": 0.62,
+  "tagAgrees": true,
+  "issues": [
+   "\"I live did\" silly."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "She asked me where ___.",
+   "options": [
+    "did I live",
+    "I lived",
+    "do I live",
+    "was I living"
+   ],
+   "correctIndex": 1,
+   "tag": "B1",
+   "difficulty": 0.62,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Plausible distractors."
+ },
+ {
+  "id": "A63",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "A2/B1",
+  "myDifficulty": 0.45,
+  "tagAgrees": true,
+  "issues": [],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A64",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1",
+  "myDifficulty": 0.48,
+  "tagAgrees": true,
+  "issues": [],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A65",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": true,
+  "issues": [
+   "Skill is grammar not vocabulary."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A66",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1",
+  "myDifficulty": 0.52,
+  "tagAgrees": true,
+  "issues": [
+   "Key longest; distractors silly."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "How did Maya's work change?",
+   "options": [
+    "She stopped going to the shelter",
+    "She moved to another animal shelter",
+    "She trained to become a vet",
+    "She got more interesting jobs to do"
+   ],
+   "correctIndex": 3,
+   "tag": "B1",
+   "difficulty": 0.52,
+   "readingPassage": "Last summer, Maya joined a volunteer program at an animal shelter near her town. At first she only cleaned the cages, which she found boring. After a month, the staff let her walk the dogs and help new visitors choose a pet. \"I didn't expect to learn so much,\" she says. \"Now I want to become a vet.\"",
+   "audioScript": null
+  },
+  "reason": "Better distractors."
+ },
+ {
+  "id": "A67",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": true,
+  "issues": [],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A68",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1",
+  "myDifficulty": 0.48,
+  "tagAgrees": true,
+  "issues": [],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A69",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1",
+  "myDifficulty": 0.58,
+  "tagAgrees": true,
+  "issues": [],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good."
+ },
+ {
+  "id": "A70",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B2",
+  "myDifficulty": 0.68,
+  "tagAgrees": true,
+  "issues": [],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A71",
+  "keyOk": true,
+  "keyNote": "Unique key but easy.",
+  "myLevel": "B1/B2",
+  "myDifficulty": 0.5,
+  "tagAgrees": false,
+  "issues": [
+   "what/who/where easy; no real B2 distinction."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "The new library, ___ opened last month, has a gaming room.",
+   "options": [
+    "that",
+    "what",
+    "which",
+    "who"
+   ],
+   "correctIndex": 2,
+   "tag": "B2",
+   "difficulty": 0.68,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Add \"that\" (wrong after comma)."
+ },
+ {
+  "id": "A72",
+  "keyOk": true,
+  "keyNote": "Marginal: \"already started\" colloquial.",
+  "myLevel": "B1/B2",
+  "myDifficulty": 0.62,
+  "tagAgrees": true,
+  "issues": [
+   "Movie topic.",
+   "Silly option."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "By the time we reached the station, the train ___.",
+   "options": [
+    "has already left",
+    "had already left",
+    "would already leave",
+    "already leaves"
+   ],
+   "correctIndex": 1,
+   "tag": "B2",
+   "difficulty": 0.65,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Clean options."
+ },
+ {
+  "id": "A73",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B2",
+  "myDifficulty": 0.7,
+  "tagAgrees": true,
+  "issues": [],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A74",
+  "keyOk": true,
+  "keyNote": "Collocation maintain; retain marginal.",
+  "myLevel": "B2",
+  "myDifficulty": 0.7,
+  "tagAgrees": true,
+  "issues": [
+   "All Latin cognates."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "A75",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1/B2",
+  "myDifficulty": 0.65,
+  "tagAgrees": true,
+  "issues": [
+   "Key longest; phone topic."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "What do the researchers suggest?",
+   "options": [
+    "Later starts improve results a lot",
+    "Later starts have no effect on sleep",
+    "Later starts help a little, but not for everyone equally",
+    "Students should never start before 9:00"
+   ],
+   "correctIndex": 2,
+   "tag": "B2",
+   "difficulty": 0.65,
+   "readingPassage": "A recent study of 1,200 students found that those whose school started an hour later slept 40 minutes more each night and scored slightly higher in math tests. However, the researchers said the difference was small, and that students who also kept regular bedtimes benefited most. They also warned that later start times can push after-school activities into the evening.",
+   "audioScript": null
+  },
+  "reason": "Topic diversification and parallel options."
+ },
+ {
+  "id": "A76",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B1/B2",
+  "myDifficulty": 0.65,
+  "tagAgrees": true,
+  "issues": [
+   "Good trap (too long)."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Keep."
+ },
+ {
+  "id": "A77",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "C1",
+  "myDifficulty": 0.9,
+  "tagAgrees": false,
+  "issues": [
+   "Third inversion item."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "I wish I ___ to the party last night. It looked fun.",
+   "options": [
+    "went",
+    "would go",
+    "had gone",
+    "have gone"
+   ],
+   "correctIndex": 2,
+   "tag": "B2",
+   "difficulty": 0.7,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Replace redundancy."
+ },
+ {
+  "id": "A78",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "B2",
+  "myDifficulty": 0.62,
+  "tagAgrees": false,
+  "issues": [
+   "Clue in stem."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "The scientist's findings were met with ___ by her colleagues, who doubted the data.",
+   "options": [
+    "enthusiasm",
+    "skepticism",
+    "indifference",
+    "gratitude"
+   ],
+   "correctIndex": 1,
+   "tag": "B2",
+   "difficulty": 0.62,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Retag."
+ },
+ {
+  "id": "A79",
+  "keyOk": true,
+  "keyNote": "Unique key.",
+  "myLevel": "C1",
+  "myDifficulty": 0.92,
+  "tagAgrees": true,
+  "issues": [
+   "Redundant."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "I'd rather you ___ me about the problem yesterday.",
+   "options": [
+    "told",
+    "would tell",
+    "had told",
+    "tell"
+   ],
+   "correctIndex": 2,
+   "tag": "C1",
+   "difficulty": 0.88,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Different C1 structure."
+ }
+]

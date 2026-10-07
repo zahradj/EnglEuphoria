@@ -95,6 +95,24 @@ describe('Academy question bank', () => {
       expect(q.difficulty, q.question).toBeLessThanOrEqual(hi);
     }
   });
+  it('every item has a unique id', () => {
+    const ids = pool.map((q) => q.id);
+    expect(ids.every(Boolean)).toBe(true);
+    expect(new Set(ids).size).toBe(pool.length);
+  });
+  it('is written in American English (no British spellings or words)', () => {
+    const banned = /(grey|cinema|colour|favourite|neighbour|neighbouring|mum|film|football|maths|whilst|autumn|centre|realise|organise|holiday)/i;
+    for (const q of pool) {
+      const text = [q.question, ...q.options, q.readingPassage ?? '', q.audio_script ?? ''].join(' ');
+      expect(text, q.id).not.toMatch(banned);
+    }
+  });
+  it('listening items have a script and reading items have a passage', () => {
+    for (const q of pool) {
+      if (q.type === 'listening_match') expect(q.audio_script, q.id).toBeTruthy();
+      if (q.skill === 'reading') expect(q.readingPassage, q.id).toBeTruthy();
+    }
+  });
   it('options are shown in a shuffled order, so the position of the right answer cannot be learned', () => {
     // The bank itself is lopsided (most right answers sit in the 2nd position), which is why the order is shuffled.
     const rand = mulberry32(7);
