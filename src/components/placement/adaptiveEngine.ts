@@ -106,9 +106,9 @@ export function initAdaptiveState(hub: Hub = 'academy'): AdaptiveState {
 const sigmoid = (x: number) => 1 / (1 + Math.exp(-x));
 
 /** Posterior mean and spread of ability given the answers so far. */
-export function estimateAbility(responses: AnswerRecord[], priorMean: number = PRIOR_MEAN): { theta: number; se: number } {
+export function estimateAbility(responses: AnswerRecord[], priorMean: number = PRIOR_MEAN, priorSd: number = PRIOR_SD): { theta: number; se: number } {
   const logPost = GRID.map((t) => {
-    let lp = -0.5 * ((t - priorMean) / PRIOR_SD) ** 2;
+    let lp = -0.5 * ((t - priorMean) / priorSd) ** 2;
     for (const r of responses) {
       const p = r.floor + (1 - r.floor) * sigmoid(t - r.d);
       lp += Math.log(Math.max(1e-9, r.correct ? p : 1 - p));
@@ -235,7 +235,8 @@ export function thetaToCefr(theta: number): Cefr {
 export interface PlacementSummary {
   theta: number;
   se: number;
-  cefr: Cefr;
+  /** The Playground (ages 4-9) also places children at Pre-A1. */
+  cefr: Cefr | 'Pre-A1';
   itemsAnswered: number;
   /** The test ended at its maximum length without reaching the precision target. */
   lowPrecision: boolean;

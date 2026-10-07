@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
 import DemographicsPhase from './DemographicsPhase';
 import TestPhase from './TestPhase';
+import KidsPlacementPhase from './kids/KidsPlacementPhase';
 import type { TestResult } from './TestPhase';
 import ComprehensivePhase from './comprehensive/ComprehensivePhase';
 import ProcessingPhase from './ProcessingPhase';
@@ -253,6 +254,8 @@ const AIPlacementTest = ({ forcedHub }: AIPlacementTestProps = {}) => {
                     indexOffset={mcqResults.length}
                     onComplete={(results, submission) => handleComprehensiveComplete(results, submission)}
                   />
+                ) : resolvedHub === 'playground' ? (
+                  <KidsPlacementPhase onComplete={handleMcqComplete} />
                 ) : (
                   <TestPhase age={age} hub={resolvedHub} onComplete={handleMcqComplete} />
                 )}

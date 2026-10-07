@@ -194,7 +194,7 @@ describe.each(FULL_HUBS)('%s placement accuracy (simulated students, imperfect i
       for (let i = 0; i < runs; i++) {
         const trueTheta = centres[lv] + gauss(rand) * 0.35;
         const { summary, n } = simulate(hub, trueTheta, rand, { tagNoise: 0.5, slip: 0.05 });
-        const placed = LEVELS.indexOf(summary.cefr);
+        const placed = LEVELS.indexOf(summary.cefr as (typeof LEVELS)[number]);
         const truth = LEVELS.indexOf(thetaToCefr(trueTheta));
         if (placed === truth) exact++;
         if (Math.abs(placed - truth) <= 1) within1++;
