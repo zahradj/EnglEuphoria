@@ -1,2 +1,2 @@
-# strict mode: ONE clip per run (owner approved the U4L5 storyboard 2026-10-06; first clip only, then review)
-u4l5-moves --beats=tiger-head
+# strict mode: ONE clip per run (owner: "Use the api" 2026-10-07; U5L5 clip 1 only, then review)
+u5l5-dad --beats=ball-throw
