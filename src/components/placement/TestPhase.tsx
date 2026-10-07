@@ -8,7 +8,6 @@ import { placementClipUrl } from './placementAudio';
 import { placementVoiceForHub } from './placementLines';
 import { supabase, supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { VocabularyImage } from '@/components/ui/VocabularyImage';
 import { getHubPool, resolveSkill, resolveScoreSkill, taskInstructionKeyFor, type Hub, type BankQuestion } from './questionBanks';
 import {
   maxItemsFor,
@@ -339,9 +338,15 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="space-y-3 mt-2"
           >
+            {/* The instruction stays on screen while the student answers (it used to vanish when the options appeared). */}
+            <div
+              dir="auto"
+              className="inline-block rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-medium text-white/80 backdrop-blur-sm"
+            >
+              {t(taskInstructionKeyFor(currentQuestion))}
+            </div>
             {(() => {
               const skill = resolveSkill(currentQuestion);
-              const showImage = skill === 'vocabulary' && !!currentQuestion.imagePrompt;
               const showAudio = skill === 'listening' && !!currentQuestion.audio_script;
               const showReading = skill === 'reading' && !!currentQuestion.readingPassage;
               return (
@@ -349,18 +354,6 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
                   {showReading && (
                     <div className="w-full mb-4 rounded-2xl border border-white/15 bg-white/5 backdrop-blur-sm p-4 text-white/90 text-sm leading-relaxed whitespace-pre-line">
                       {currentQuestion.readingPassage}
-                    </div>
-                  )}
-                  {showImage && (
-                    <div className="w-full flex justify-center mb-4 animate-fade-in">
-                      <VocabularyImage
-                        prompt={currentQuestion.imagePrompt!}
-                        alt="Question visual"
-                        style={isPlayground ? 'kawaii-chibi' : 'flat2d'}
-                        aspectRatio="1:1"
-                        testSafe
-                        className="max-w-[200px] max-h-48 object-contain rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm"
-                      />
                     </div>
                   )}
                   {showAudio && (

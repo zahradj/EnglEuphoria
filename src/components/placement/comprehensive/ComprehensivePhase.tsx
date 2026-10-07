@@ -34,6 +34,7 @@ function toLegacyResults(sub: ComprehensiveSubmission, offset = 0): TestResult[]
       isCorrect: r.correct,
       difficulty: 0.5 + idx * 0.1,
       targetLevel: idx === 2 ? 'B2' : 'A2',
+      skill: 'listening',
     });
   });
   sub.reading.forEach((r, idx) => {
@@ -44,6 +45,7 @@ function toLegacyResults(sub: ComprehensiveSubmission, offset = 0): TestResult[]
       isCorrect: r.correct,
       difficulty: 0.5 + idx * 0.1,
       targetLevel: 'B1',
+      skill: 'reading',
     });
   });
   if (sub.writing) {
@@ -56,6 +58,7 @@ function toLegacyResults(sub: ComprehensiveSubmission, offset = 0): TestResult[]
       isCorrect: strong,
       difficulty: 0.7,
       targetLevel: 'B2',
+      skill: 'writing',
     });
   }
   if (sub.speaking) {
@@ -67,6 +70,7 @@ function toLegacyResults(sub: ComprehensiveSubmission, offset = 0): TestResult[]
       isCorrect: ok,
       difficulty: 0.7,
       targetLevel: 'B2',
+      skill: 'speaking',
     });
   }
   return results;

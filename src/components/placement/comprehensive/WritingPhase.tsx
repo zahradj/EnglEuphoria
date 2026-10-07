@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { VocabularyImage } from '@/components/ui/VocabularyImage';
 import { WRITING_PROMPT } from './content';
 import { accentFor } from '../hubAccent';
 import type { Hub } from '../questionBanks';
@@ -28,13 +27,6 @@ const WritingPhase: React.FC<Props> = ({ hub, onComplete }) => {
       <p className="text-xs text-white/70 mb-3">{WRITING_PROMPT.prompt}</p>
 
       <div className="flex-1 flex flex-col gap-3 overflow-auto">
-        <VocabularyImage
-          prompt="A small group of friends sitting at a sunlit café table, talking and laughing, modern editorial illustration"
-          alt="Writing prompt"
-          style="flat2d"
-          aspectRatio="16:9"
-          className="w-full h-40 sm:h-48 object-cover rounded-2xl bg-white/5 border border-white/15"
-        />
         <Textarea
           value={text}
           onChange={(e) => setText(e.target.value)}

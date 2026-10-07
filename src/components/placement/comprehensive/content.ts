@@ -23,7 +23,6 @@ export interface ReadingPassage {
 
 export interface WritingPrompt {
   prompt: string;
-  imageUrl: string;
   minChars: number;
 }
 
@@ -106,8 +105,7 @@ export const READING_PASSAGE: ReadingPassage = {
 
 export const WRITING_PROMPT: WritingPrompt = {
   prompt:
-    'Look at this picture and describe what is happening in 3 sentences. Try to mention the people, the place, and how they might be feeling.',
-  imageUrl: '/placeholder.svg',
+    'Write 3 sentences about a place you like to go with your friends. Say where it is, what you do there, and how you feel when you are there.',
   minChars: 120,
 };
 

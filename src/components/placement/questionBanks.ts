@@ -2,7 +2,8 @@ import { ACADEMY_BANK } from './academyBank';
 
 // Expert-authored placement-test question banks per hub.
 // Each bank has 24+ items so a 15-question test is freshly shuffled per attempt.
-// `imagePrompt` triggers a Gemini-generated illustration in TestPhase.
+// The placement test shows NO generated pictures and speaks NO live speech: everything it needs is in the app bundle or
+// in public/ (see placementStatic.test.ts, the deploy gate that enforces this).
 // `audio_script` triggers ElevenLabs TTS in TestPhase.
 
 export type Hub = 'playground' | 'academy' | 'professional';
@@ -19,7 +20,6 @@ export interface BankQuestion {
   difficulty: number;
   targetLevel: Cefr;
   feedback: { correct: string; incorrect: string };
-  imagePrompt?: string;   // when set, render an AI image above the question
   audio_script?: string;  // when set, render an ElevenLabs play button
   voice_id?: string;
   type?: 'standard' | 'listening_match' | 'visual';
@@ -46,7 +46,6 @@ export function resolveSkill(q: BankQuestion): 'vocabulary' | 'listening' | 'gra
   if (q.skill === 'listening') return 'listening';
   if (q.skill === 'reading') return 'reading';
   if (q.type === 'listening_match' || q.audio_script) return 'listening';
-  if (q.imagePrompt) return 'vocabulary';
   return 'grammar';
 }
 
@@ -59,34 +58,42 @@ export function resolveSkill(q: BankQuestion): 'vocabulary' | 'listening' | 'gra
 export function resolveScoreSkill(q: BankQuestion, hub: Hub): string {
   if (q.skill) return q.skill;
   if (q.type === 'listening_match' || q.audio_script) return 'listening';
-  if (q.imagePrompt) return hub === 'professional' ? 'professional_vocabulary' : 'vocabulary';
   return hub === 'professional' ? 'grammar_accuracy' : 'grammar';
 }
 
-/** Default localized meta-instruction key for a question, keyed by skill. */
+/** What the student has to DO with this item, so every question can say it: finish a gap, listen, read, or
+ *  (otherwise) simply pick the best answer. */
+export type TaskKind = 'listening' | 'reading' | 'gap' | 'choose';
+
+export function taskKind(q: BankQuestion): TaskKind {
+  if (q.type === 'listening_match' || q.audio_script) return 'listening';
+  if (q.readingPassage) return 'reading';
+  if (q.question.includes('___')) return 'gap';
+  return 'choose';
+}
+
+/** i18n key of the localized instruction shown with every question (placement.task.<kind>). */
 export function taskInstructionKeyFor(q: BankQuestion): string {
-  if (q.taskInstructionKey) return q.taskInstructionKey;
-  const skill = resolveSkill(q);
-  return `placement.task.${skill}`;
+  return q.taskInstructionKey ?? `placement.task.${taskKind(q)}`;
 }
 
 // ---------------------------------------------------------------- PLAYGROUND
 const PLAYGROUND_POOL: BankQuestion[] = [
-  { question: "Which animal says 'Meow'?", options: ['🐱 Cat', '🐶 Dog', '🐸 Frog', '🐦 Bird'], correctIndex: 0, difficulty: 0.2, targetLevel: 'A1', feedback: { correct: 'Yes! Cats say Meow! 🐱', incorrect: 'Cats say Meow! 🐱' }, imagePrompt: 'A friendly cartoon cat sitting and saying meow' },
-  { question: 'What color is a banana? 🍌', options: ['Red', 'Blue', 'Yellow', 'Green'], correctIndex: 2, difficulty: 0.2, targetLevel: 'A1', feedback: { correct: 'Yes! Bananas are yellow!', incorrect: 'Bananas are yellow!' }, imagePrompt: 'A bright yellow banana on a white background' },
+  { question: "Which animal says 'Meow'?", options: ['🐱 Cat', '🐶 Dog', '🐸 Frog', '🐦 Bird'], correctIndex: 0, difficulty: 0.2, targetLevel: 'A1', feedback: { correct: 'Yes! Cats say Meow! 🐱', incorrect: 'Cats say Meow! 🐱' }, skill: 'vocabulary' },
+  { question: 'What color is a banana? 🍌', options: ['Red', 'Blue', 'Yellow', 'Green'], correctIndex: 2, difficulty: 0.2, targetLevel: 'A1', feedback: { correct: 'Yes! Bananas are yellow!', incorrect: 'Bananas are yellow!' }, skill: 'vocabulary' },
   { question: 'Choose the number "five".', options: ['3', '5', '7', '9'], correctIndex: 1, difficulty: 0.2, targetLevel: 'A1', feedback: { correct: 'Great counting! 🖐️', incorrect: '"Five" is 5 — like one hand!' } },
-  { question: 'Which one is a fruit?', options: ['🍎 Apple', '🚗 Car', '👟 Shoe', '📚 Book'], correctIndex: 0, difficulty: 0.2, targetLevel: 'A1', feedback: { correct: 'Yes! An apple is a fruit!', incorrect: 'Apples are fruit! 🍎' }, imagePrompt: 'A shiny red apple, simple flat illustration' },
+  { question: 'Which one is a fruit?', options: ['🍎 Apple', '🚗 Car', '👟 Shoe', '📚 Book'], correctIndex: 0, difficulty: 0.2, targetLevel: 'A1', feedback: { correct: 'Yes! An apple is a fruit!', incorrect: 'Apples are fruit! 🍎' }, skill: 'vocabulary' },
   { question: 'How do we say hello in the morning?', options: ['Good night', 'Good morning', 'Goodbye', 'See you'], correctIndex: 1, difficulty: 0.25, targetLevel: 'A1', feedback: { correct: '"Good morning!" ☀️', incorrect: 'In the morning we say "Good morning!"' } },
   { question: '🎧 Listen — which animal is it?', options: ['🐶 Dog', '🐱 Cat', '🐮 Cow', '🐔 Chicken'], correctIndex: 2, difficulty: 0.3, targetLevel: 'A1', type: 'listening_match', audio_script: 'Moo! Moo! I am a big animal on the farm and I give milk.', feedback: { correct: 'Yes! Cows say moo!', incorrect: 'Cows say moo! 🐮' } },
   { question: 'Which one do you wear on your feet?', options: ['🎩 Hat', '👟 Shoes', '🧤 Gloves', '👓 Glasses'], correctIndex: 1, difficulty: 0.3, targetLevel: 'A1', feedback: { correct: 'Yes! Shoes go on our feet!', incorrect: 'We wear shoes on our feet! 👟' } },
   { question: 'Pick the correct word: "I ___ a boy."', options: ['am', 'is', 'are', 'be'], correctIndex: 0, difficulty: 0.35, targetLevel: 'A1', feedback: { correct: '"I am" — perfect!', incorrect: 'With "I" we use "am".' } },
   { question: 'What do you do with a book? 📖', options: ['Eat it', 'Read it', 'Throw it', 'Wear it'], correctIndex: 1, difficulty: 0.35, targetLevel: 'A1', feedback: { correct: 'Yes! We read books!', incorrect: 'We read books!' } },
-  { question: 'How many legs does a spider have?', options: ['Four', 'Six', 'Eight', 'Ten'], correctIndex: 2, difficulty: 0.4, targetLevel: 'A2', feedback: { correct: 'Yes! Spiders have 8 legs! 🕷️', incorrect: 'Spiders have 8 legs! 🕷️' }, imagePrompt: 'A friendly cartoon spider with 8 legs, kid-friendly' },
+  { question: 'How many legs does a dog have?', options: ['Two', 'Four', 'Six', 'Eight'], correctIndex: 1, difficulty: 0.3, targetLevel: 'A1', skill: 'vocabulary', feedback: { correct: 'Yes! Dogs have 4 legs! 🐶', incorrect: 'Dogs have 4 legs! 🐶' } },
   { question: 'Choose the right one: "She ___ a red dress."', options: ['have', 'has', 'are', 'is have'], correctIndex: 1, difficulty: 0.4, targetLevel: 'A2', feedback: { correct: 'Yes! "She has".', incorrect: 'With she/he/it we use "has".' } },
-  { question: 'Which season is hot? ☀️', options: ['Winter', 'Summer', 'Autumn', 'Spring'], correctIndex: 1, difficulty: 0.4, targetLevel: 'A2', feedback: { correct: 'Summer is hot! 🏖️', incorrect: 'Summer is the hot season.' } },
+  { question: 'Which season is hot? ☀️', options: ['Winter', 'Summer', 'Fall', 'Spring'], correctIndex: 1, difficulty: 0.4, targetLevel: 'A2', feedback: { correct: 'Summer is hot! 🏖️', incorrect: 'Summer is the hot season.' } },
   { question: 'Find the opposite of "big".', options: ['Tall', 'Small', 'Fast', 'New'], correctIndex: 1, difficulty: 0.4, targetLevel: 'A2', feedback: { correct: 'Yes! Big ↔ small.', incorrect: 'The opposite of big is small.' } },
   { question: '🎧 Listen — what is the boy doing?', options: ['Eating', 'Sleeping', 'Running', 'Singing'], correctIndex: 0, difficulty: 0.45, targetLevel: 'A2', type: 'listening_match', audio_script: 'Yum yum! I love my breakfast. I am eating pancakes with honey.', feedback: { correct: 'Yes! He is eating.', incorrect: 'He is eating breakfast.' } },
-  { question: 'Which is a vegetable?', options: ['🥕 Carrot', '🍫 Chocolate', '🍩 Donut', '🍪 Cookie'], correctIndex: 0, difficulty: 0.45, targetLevel: 'A2', feedback: { correct: 'Yes! Carrots are vegetables. 🥕', incorrect: 'Carrots are vegetables.' }, imagePrompt: 'A bright orange carrot with green leaves, flat illustration' },
+  { question: 'Which is a vegetable?', options: ['🥕 Carrot', '🍫 Chocolate', '🍩 Donut', '🍪 Cookie'], correctIndex: 0, difficulty: 0.45, targetLevel: 'A2', feedback: { correct: 'Yes! Carrots are vegetables. 🥕', incorrect: 'Carrots are vegetables.' }, skill: 'vocabulary' },
   { question: 'Pick the correct: "There ___ five apples."', options: ['is', 'am', 'are', 'be'], correctIndex: 2, difficulty: 0.5, targetLevel: 'A2', feedback: { correct: 'Yes! With many things we use "there are".', incorrect: 'For more than one we say "there are".' } },
   { question: 'Which one is the smallest?', options: ['Elephant', 'Mouse', 'Dog', 'Cat'], correctIndex: 1, difficulty: 0.5, targetLevel: 'A2', feedback: { correct: 'Yes! A mouse is smallest!', incorrect: 'A mouse is the smallest. 🐭' } },
   { question: 'Choose the past form: "Yesterday I ___ to school."', options: ['go', 'going', 'went', 'goed'], correctIndex: 2, difficulty: 0.55, targetLevel: 'A2', feedback: { correct: 'Yes! "Went" is the past of "go".', incorrect: 'The past of "go" is "went".' } },

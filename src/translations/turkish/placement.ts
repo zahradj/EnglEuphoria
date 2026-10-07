@@ -1,8 +1,12 @@
 export const placementTranslations = {
   'placement.task.listening': 'Dinle ve doğru cevabı seç.',
-  'placement.task.vocabulary': 'Resme bak ve doğru kelimeyi seç.',
+  'placement.task.vocabulary': "En iyi cevabı seç.",
   'placement.task.grammar': 'Cümleyi tamamlamak için doğru kelimeyi seç.',
   'placement.task.reading': 'Dikkatlice oku ve en iyi cevabı seç.',
+  'placement.task.gap': "Cümleyi tamamlayan kelimeyi veya ifadeyi seç.",
+  'placement.task.choose': "En iyi cevabı seç.",
+  'placement.action.notSure': "Emin değilim",
+  'placement.feedback.neutral': "Teşekkürler! Sıradaki soru.",
   'placement.action.playAudio': 'Sesi oynat',
   'placement.action.playAgain': 'Tekrar oynat',
   'placement.action.loading': 'Yükleniyor…',
