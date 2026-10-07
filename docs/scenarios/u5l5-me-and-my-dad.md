@@ -1,6 +1,6 @@
 # Scenario — Pre-A1 Unit 5 Lesson 5 "Just Me and My Dad" · story film "My Day with Dad"
 
-**Status: waiting for the owner's approval** — nothing drawn, nothing ordered.
+**Status: approved by the owner (2026-10-07)** — pictures in progress (Canva). Nothing paid is ordered.
 
 | | |
 |---|---|
@@ -65,4 +65,4 @@ The same pictures feed the lesson's games (story order, "What do we do?" questio
 Real motion (Higgsfield) can be added later, one clip per shot, only with strict mode and your OK per row.
 
 ## Owner approval
-(waiting) — please reply "approved" or tell me what to change (story, activities, lines, number of shots).
+Approved: owner, 2026-10-07 — "Approved." 
