@@ -20,9 +20,9 @@ export interface SessionTimes {
 }
 
 /** SessionTimes from a classroom_sessions row, including the Start Lesson time from session_context. */
-export function sessionTimesFromRow(row: Record<string, any> | null | undefined): SessionTimes | null {
+export function sessionTimesFromRow(row: object | null | undefined): SessionTimes | null {
   if (!row) return null;
-  const startedAt = row.session_context?.startedAt;
+  const startedAt = (row as { session_context?: { startedAt?: unknown } | null }).session_context?.startedAt;
   return { ...row, lesson_started_at: typeof startedAt === 'string' ? startedAt : null } as SessionTimes;
 }
 

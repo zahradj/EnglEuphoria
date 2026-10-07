@@ -228,7 +228,7 @@ const PostLessonSummary: React.FC = () => {
 
   // Real time with the student (Start Lesson -> end), not the booked length; see
   // lessonTiming.ts (started_at/ended_at are not reliably written).
-  const durationMin = actualLessonMinutes(sessionTimesFromRow(session as any), booking?.scheduled_at) ?? booking?.duration ?? null;
+  const durationMin = actualLessonMinutes(sessionTimesFromRow(session), booking?.scheduled_at) ?? booking?.duration ?? null;
 
   const slidesCovered = (session?.current_slide_index ?? 0) + 1;
   const totalSlides = Array.isArray(session?.lesson_slides) ? (session?.lesson_slides as unknown[]).length : null;

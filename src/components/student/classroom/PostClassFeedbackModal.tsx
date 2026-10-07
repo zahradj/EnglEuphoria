@@ -68,7 +68,7 @@ export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
       if (cancelled) return;
       const ended = data?.occurred_at ?? (session as SessionTimes | null)?.ended_at ?? new Date().toISOString();
       setEndedAt(ended);
-      setLessonMinutes(actualLessonMinutes(sessionTimesFromRow(session as any), booking?.scheduled_at, ended));
+      setLessonMinutes(actualLessonMinutes(sessionTimesFromRow(session), booking?.scheduled_at, ended));
     })();
     return () => { cancelled = true; };
   }, [isOpen, roomId]);
