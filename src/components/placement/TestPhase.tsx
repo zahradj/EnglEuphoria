@@ -65,9 +65,9 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
   const pool = useMemo(() => getHubPool(resolvedHub), [resolvedHub]);
   const accent = accentFor(resolvedHub);
 
-  const [adaptiveState, setAdaptiveState] = useState<AdaptiveState>(() => initAdaptiveState());
+  const [adaptiveState, setAdaptiveState] = useState<AdaptiveState>(() => initAdaptiveState(resolvedHub));
   const [current, setCurrent] = useState<{ item: BankQuestion; index: number } | null>(
-    () => nextAdaptiveItem(pool, resolvedHub, initAdaptiveState()),
+    () => nextAdaptiveItem(pool, resolvedHub, initAdaptiveState(resolvedHub)),
   );
   const [results, setResults] = useState<TestResult[]>([]);
   const [phase, setPhase] = useState<'typing' | 'answering' | 'feedback'>('typing');

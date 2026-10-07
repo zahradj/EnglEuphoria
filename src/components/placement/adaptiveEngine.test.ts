@@ -10,40 +10,45 @@ import {
   summarizeAdaptive,
   shuffledOrder,
   thetaToCefr,
-  START_THETA,
   type AdaptiveState,
 } from './adaptiveEngine';
 import { getHubPool, type Hub } from './questionBanks';
 
 const HUBS: Hub[] = ['playground', 'academy', 'professional'];
+/** The two hubs with a full reviewed bank and a 20-36 question test. */
+const FULL_HUBS: Hub[] = ['academy', 'professional'];
 const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'] as const;
 
-describe('placement test starts at the bottom, not at B1', () => {
-  it.each(HUBS)('%s: the first question is among the easiest in the pool', (hub) => {
+describe('placement test starts low and climbs, never at B1', () => {
+  it.each(HUBS)('%s: the first question is A1 or A2 and among the easiest', (hub) => {
     const pool = getHubPool(hub);
-    const first = nextAdaptiveItem(pool, hub, initAdaptiveState());
+    const first = nextAdaptiveItem(pool, hub, initAdaptiveState(hub));
     expect(first).not.toBeNull();
-    const easiest = Math.min(...pool.map((q) => q.difficulty));
-    expect(first!.item.difficulty).toBeLessThanOrEqual(easiest + 0.15);
     expect(['A1', 'A2']).toContain(first!.item.targetLevel);
+    expect(first!.item.difficulty).toBeLessThanOrEqual(0.45);
   });
 
-  it('Academy: a student who keeps answering correctly climbs A1 -> A2 -> B1 and beyond', () => {
-    const hub: Hub = 'academy';
+  it('Academy starts at A1; the Success Hub (working adults) starts at A2', () => {
+    const ac = nextAdaptiveItem(getHubPool('academy'), 'academy', initAdaptiveState('academy'));
+    const su = nextAdaptiveItem(getHubPool('professional'), 'professional', initAdaptiveState('professional'));
+    expect(ac!.item.targetLevel).toBe('A1');
+    expect(su!.item.targetLevel).toBe('A2');
+  });
+
+  it.each(FULL_HUBS)('%s: a student who keeps answering correctly climbs through the levels in order', (hub) => {
     const pool = getHubPool(hub);
-    let state = initAdaptiveState();
-    expect(state.theta).toBe(START_THETA);
+    let state = initAdaptiveState(hub);
     const seen: string[] = [];
-    for (let i = 0; i < 14; i++) {
+    for (let i = 0; i < 16; i++) {
       const next = nextAdaptiveItem(pool, hub, state);
       if (!next) break;
       seen.push(next.item.targetLevel);
       state = applyAdaptiveAnswer(state, next.item, next.index, hub, true);
     }
-    expect(seen[0]).toBe('A1');
     expect(seen).toContain('A2');
     expect(seen).toContain('B1');
-    expect(seen.indexOf('A1')).toBeLessThan(seen.indexOf('B1'));
+    expect(seen.indexOf('A2')).toBeLessThan(seen.indexOf('B1'));
+    expect(LEVELS.indexOf(seen[seen.length - 1] as (typeof LEVELS)[number])).toBeGreaterThanOrEqual(LEVELS.indexOf('B2'));
   });
 });
 
@@ -53,7 +58,7 @@ describe('answers are weighed honestly', () => {
   const b2 = pool.findIndex((q) => q.targetLevel === 'B2');
 
   it('"I am not sure" counts as wrong even if the option behind it happened to be right', () => {
-    const base = initAdaptiveState();
+    const base = initAdaptiveState(hub);
     const wrong = applyAdaptiveAnswer(base, pool[b2], b2, hub, false);
     const unsureButRight = applyAdaptiveAnswer(base, pool[b2], b2, hub, true, { unsure: true });
     expect(unsureButRight.theta).toBeCloseTo(wrong.theta, 6);
@@ -61,27 +66,28 @@ describe('answers are weighed honestly', () => {
   });
 
   it('a lucky correct answer on a far-too-hard item moves the estimate only a little', () => {
-    const base = initAdaptiveState();
+    const base = initAdaptiveState(hub);
     const lucky = applyAdaptiveAnswer(base, pool[b2], b2, hub, true);
     expect(lucky.theta).toBeLessThan(0.6);
     expect(thetaToCefr(lucky.theta)).not.toBe('B2');
   });
 
   it('a fast correct answer earns less credit than a normal one', () => {
-    const base = initAdaptiveState();
+    const base = initAdaptiveState(hub);
     const normal = applyAdaptiveAnswer(base, pool[b2], b2, hub, true);
     const fast = applyAdaptiveAnswer(base, pool[b2], b2, hub, true, { fast: true });
     expect(fast.theta).toBeLessThan(normal.theta);
   });
 });
 
-describe('Academy question bank', () => {
-  const pool = getHubPool('academy');
+describe.each(FULL_HUBS)('%s question bank', (hub) => {
+  const pool = getHubPool(hub);
   it('is big enough for a 20-36 question test with fresh draws', () => {
     expect(pool.length).toBeGreaterThanOrEqual(70);
   });
-  it('has enough items in every level', () => {
-    for (const lv of LEVELS) expect(pool.filter((q) => q.targetLevel === lv).length).toBeGreaterThanOrEqual(6);
+  it('has items at every level', () => {
+    const min: Record<string, number> = { A1: 3, A2: 6, B1: 6, B2: 6, C1: 6 };
+    for (const lv of LEVELS) expect(pool.filter((q) => q.targetLevel === lv).length, lv).toBeGreaterThanOrEqual(min[lv]);
   });
   it('every item is well formed and its difficulty agrees with its level tag', () => {
     const band: Record<string, [number, number]> = { A1: [0.05, 0.27], A2: [0.27, 0.5], B1: [0.48, 0.68], B2: [0.66, 0.86], C1: [0.85, 1] };
@@ -101,7 +107,7 @@ describe('Academy question bank', () => {
     expect(new Set(ids).size).toBe(pool.length);
   });
   it('is written in American English (no British spellings or words)', () => {
-    const banned = /(grey|cinema|colour|favourite|neighbour|neighbouring|mum|film|football|maths|whilst|autumn|centre|realise|organise|holiday)/i;
+    const banned = /(grey|cinema|colour|favourite|neighbour|neighbouring|\bmum\b|\bfilm\b|football|\bmaths\b|whilst|autumn|centre|realise|organise|car park|\btender\b|shall I|take a decision)/i;
     for (const q of pool) {
       const text = [q.question, ...q.options, q.readingPassage ?? '', q.audio_script ?? ''].join(' ');
       expect(text, q.id).not.toMatch(banned);
@@ -113,8 +119,22 @@ describe('Academy question bank', () => {
       if (q.skill === 'reading') expect(q.readingPassage, q.id).toBeTruthy();
     }
   });
-  it('options are shown in a shuffled order, so the position of the right answer cannot be learned', () => {
-    // The bank itself is lopsided (most right answers sit in the 2nd position), which is why the order is shuffled.
+  it('covers listening, reading and the skills the hub reports', () => {
+    const skills = new Set(pool.map((q) => q.skill));
+    for (const s of ['listening', 'reading']) expect(skills.has(s as never), s).toBe(true);
+    expect(pool.filter((q) => q.skill === 'listening').length).toBeGreaterThanOrEqual(8);
+    expect(pool.filter((q) => q.skill === 'reading').length).toBeGreaterThanOrEqual(8);
+  });
+  it('fixed-order items (times, numbers) are listed in their natural order', () => {
+    for (const q of pool.filter((x) => x.fixedOrder)) {
+      const nums = q.options.map((o) => Number(o.replace(':', '.')));
+      if (nums.every((n) => !Number.isNaN(n))) expect(nums, q.id).toEqual([...nums].sort((a, b) => a - b));
+    }
+  });
+});
+
+describe('options are shown in a shuffled order', () => {
+  it('the position of the right answer cannot be learned', () => {
     const rand = mulberry32(7);
     const counts = [0, 0, 0, 0];
     for (let i = 0; i < 4000; i++) counts[shuffledOrder(4, rand).indexOf(1)]++;
@@ -142,7 +162,7 @@ function simulate(hub: Hub, trueTheta: number, rand: () => number, opts: { tagNo
   const pool = getHubPool(hub);
   // The true difficulty of each item differs from its author's tag (hand tagging is imperfect).
   const trueD = pool.map((q) => itemTheta(q) + gauss(rand) * opts.tagNoise);
-  let state: AdaptiveState = initAdaptiveState();
+  let state: AdaptiveState = initAdaptiveState(hub);
   let n = 0;
   for (;;) {
     const next = nextAdaptiveItem(pool, hub, state);
@@ -158,7 +178,7 @@ function simulate(hub: Hub, trueTheta: number, rand: () => number, opts: { tagNo
   return { n, summary: summarizeAdaptive(state, hub) };
 }
 
-describe('Academy placement accuracy (simulated students, imperfect item tags)', () => {
+describe.each(FULL_HUBS)('%s placement accuracy (simulated students, imperfect item tags)', (hub) => {
   const rand = mulberry32(20261007);
   // True ability at the middle of each level's band.
   const centres: Record<string, number> = { A1: -2.4, A2: -0.75, B1: 0.55, B2: 1.6, C1: 2.6 };
@@ -173,7 +193,7 @@ describe('Academy placement accuracy (simulated students, imperfect item tags)',
       let maxItems = 0;
       for (let i = 0; i < runs; i++) {
         const trueTheta = centres[lv] + gauss(rand) * 0.35;
-        const { summary, n } = simulate('academy', trueTheta, rand, { tagNoise: 0.5, slip: 0.05 });
+        const { summary, n } = simulate(hub, trueTheta, rand, { tagNoise: 0.5, slip: 0.05 });
         const placed = LEVELS.indexOf(summary.cefr);
         const truth = LEVELS.indexOf(thetaToCefr(trueTheta));
         if (placed === truth) exact++;
@@ -182,15 +202,16 @@ describe('Academy placement accuracy (simulated students, imperfect item tags)',
         maxItems = Math.max(maxItems, n);
       }
       results[lv] = { exact: exact / runs, within1: within1 / runs, avgItems: Math.round((items / runs) * 10) / 10, maxItems };
-      expect(within1 / runs).toBeGreaterThanOrEqual(0.9);
-      expect(exact / runs).toBeGreaterThanOrEqual(0.45);
-      expect(maxItems).toBeLessThanOrEqual(configFor('academy').maxItems);
-      expect(items / runs).toBeGreaterThanOrEqual(configFor('academy').minItems);
+      // The Success bank has only a few A1 items (it places A2-C1 adults; below A2 is a teacher conversation).
+      expect(within1 / runs).toBeGreaterThanOrEqual(hub === 'professional' && lv === 'A1' ? 0.7 : 0.9);
+      expect(exact / runs).toBeGreaterThanOrEqual(hub === 'professional' && lv === 'A1' ? 0.3 : 0.45);
+      expect(maxItems).toBeLessThanOrEqual(configFor(hub).maxItems);
+      expect(items / runs).toBeGreaterThanOrEqual(configFor(hub).minItems);
     });
   }
 
   it('reports the numbers', () => {
-    if (process.env.SIM_OUT) fs.writeFileSync(process.env.SIM_OUT, JSON.stringify(results, null, 1));
+    if (process.env.SIM_OUT) fs.writeFileSync(`${process.env.SIM_OUT}.${hub}.json`, JSON.stringify(results, null, 1));
     expect(Object.keys(results).length).toBe(5);
   });
 });

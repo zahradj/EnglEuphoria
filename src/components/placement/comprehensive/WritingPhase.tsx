@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { WRITING_PROMPT } from './content';
+import { writingPromptFor } from './content';
 import { accentFor } from '../hubAccent';
 import type { Hub } from '../questionBanks';
 
@@ -17,6 +17,7 @@ interface Props {
 
 const WritingPhase: React.FC<Props> = ({ hub, onComplete }) => {
   const accent = accentFor(hub);
+  const WRITING_PROMPT = writingPromptFor(hub);
   const [text, setText] = useState('');
   const sentences = (text.match(/[.!?]+/g) || []).length;
   const ok = text.length >= WRITING_PROMPT.minChars && sentences >= 3;

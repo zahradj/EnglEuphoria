@@ -1,0 +1,1417 @@
+[
+ {
+  "id": "su-01",
+  "keyOk": true,
+  "keyNote": "am is the only key.",
+  "myLevel": "A1",
+  "myDifficulty": 0.1,
+  "tagAgrees": true,
+  "issues": [
+   "Very easy; second sentence adds nothing; 'be' is a silly distractor."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Sound A1 floor check."
+ },
+ {
+  "id": "su-02",
+  "keyOk": true,
+  "keyNote": "computer; 'phone' would also work but is not offered.",
+  "myLevel": "A1",
+  "myDifficulty": 0.1,
+  "tagAgrees": true,
+  "issues": [
+   "Three distractors are semantically absurd (kitchen, window, garden); 'computer' is a cognate in ES/FR/IT/TR."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Acceptable floor item; cognate makes it very easy."
+ },
+ {
+  "id": "su-03",
+  "keyOk": true,
+  "keyNote": "On weekends.",
+  "myLevel": "A1",
+  "myDifficulty": 0.14,
+  "tagAgrees": true,
+  "issues": [
+   "Key word 'weekends' is lifted from the passage (fine at A1).",
+   "Distractors all fall inside opening hours, so they are fair and clear."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Clean A1 reading."
+ },
+ {
+  "id": "su-04",
+  "keyOk": true,
+  "keyNote": "goes.",
+  "myLevel": "A1",
+  "myDifficulty": 0.22,
+  "tagAgrees": false,
+  "issues": [
+   "Third-person -s with present simple is A1/low A2, not mid-A2.",
+   "'is go' is a silly distractor."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine item, but should be calibrated as A1+ (0.22)."
+ },
+ {
+  "id": "su-05",
+  "keyOk": true,
+  "keyNote": "sent; 'sended' is a real learner error.",
+  "myLevel": "A2",
+  "myDifficulty": 0.28,
+  "tagAgrees": true,
+  "issues": [
+   "'sending' is implausible; 'yesterday' hands the tense away (acceptable at A2)."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good A2 irregular past check."
+ },
+ {
+  "id": "su-06",
+  "keyOk": true,
+  "keyNote": "are having. (Simple present 'have' is also correct in English but is not offered.)",
+  "myLevel": "A2",
+  "myDifficulty": 0.42,
+  "tagAgrees": true,
+  "issues": [
+   "Present continuous for arrangements is A2/B1; 'having' with no auxiliary is a plausible error."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fair and well pitched."
+ },
+ {
+  "id": "su-07",
+  "keyOk": true,
+  "keyNote": "send.",
+  "myLevel": "A2",
+  "myDifficulty": 0.26,
+  "tagAgrees": true,
+  "issues": [
+   "'Could you + base verb' is a taught chunk; too easy for mid-A2.",
+   "Distractors are all wrong verb forms: homogeneous, good."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Keep, but difficulty should be lower (A2 low)."
+ },
+ {
+  "id": "su-08",
+  "keyOk": true,
+  "keyNote": "fill out is correct American English. 'fill up' is non-standard in AmE but common in some Englishes; 'fill in' (not offered) is also correct.",
+  "myLevel": "A2",
+  "myDifficulty": 0.38,
+  "tagAgrees": true,
+  "issues": [
+   "'fill on' and 'fill off' are not real phrasal verbs, so two distractors are eliminated without knowing anything.",
+   "'fill up' is defensible for some test-takers (South Asian English).",
+   "British 'fill in' vs American 'fill out' could confuse UK-trained learners."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Please ___ this form and give it to the manager.",
+   "options": [
+    "fill out",
+    "check out",
+    "turn out",
+    "run out"
+   ],
+   "correctIndex": 0,
+   "tag": "A2",
+   "difficulty": 0.38,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Make all options real phrasal verbs with 'out' so the distractors are plausible but clearly wrong in context."
+ },
+ {
+  "id": "su-09",
+  "keyOk": true,
+  "keyNote": "delayed. 'canceled' (not offered) would also be correct.",
+  "myLevel": "B1",
+  "myDifficulty": 0.42,
+  "tagAgrees": false,
+  "issues": [
+   "'delayed' as an adjective is B1 vocabulary, not A2.",
+   "Distractors (closed, lost, finished) are weak for a train; a 'canceled' distractor would be a second key, so it must stay out."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Acceptable; relabel B1-low."
+ },
+ {
+  "id": "su-10",
+  "keyOk": true,
+  "keyNote": "enough ('many' would also be right but is not offered).",
+  "myLevel": "A2",
+  "myDifficulty": 0.4,
+  "tagAgrees": true,
+  "issues": [
+   "'a' before a plural noun is a silly distractor.",
+   "Good check of countable/uncountable quantifiers."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine A2 item."
+ },
+ {
+  "id": "su-11",
+  "keyOk": true,
+  "keyNote": "Thursday at 2 p.m.",
+  "myLevel": "A2",
+  "myDifficulty": 0.36,
+  "tagAgrees": true,
+  "issues": [
+   "The '4B' versus '4 p.m.' trap is legitimate and the 'moved from' reading is a fair A2 skill.",
+   "Option 4 is a different type of answer (place), slightly unparallel."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good A2 reading."
+ },
+ {
+  "id": "su-12",
+  "keyOk": true,
+  "keyNote": "3:30; 3:20 is a legitimate 'ten minutes early' trap.",
+  "myLevel": "A2",
+  "myDifficulty": 0.38,
+  "tagAgrees": true,
+  "issues": [
+   "Short, natural, one hearing is feasible.",
+   "Trap needs only 'ten minutes early' attention, no real arithmetic: acceptable."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good A2 listening with a fair distractor."
+ },
+ {
+  "id": "su-13",
+  "keyOk": true,
+  "keyNote": "Work from home.",
+  "myLevel": "A2",
+  "myDifficulty": 0.35,
+  "tagAgrees": true,
+  "issues": [
+   "'a power problem' is unnatural; speakers say 'no power' or 'no electricity'.",
+   "Key is lifted from the audio; fine at A2.",
+   "Distractor 'Come to the office at ten' has no hook in the audio."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "🎧 What should employees do today?",
+   "options": [
+    "Work from home",
+    "Come to the office at ten",
+    "Take the day off",
+    "Call their manager"
+   ],
+   "correctIndex": 0,
+   "tag": "A2",
+   "difficulty": 0.35,
+   "readingPassage": null,
+   "audioScript": "Good morning. The office is closed today because there is no electricity. Please work from home and check your email for news."
+  },
+  "reason": "Only the audio script needs to be more natural."
+ },
+ {
+  "id": "su-14",
+  "keyOk": true,
+  "keyNote": "calendar; 'schedule' not offered.",
+  "myLevel": "A1",
+  "myDifficulty": 0.25,
+  "tagAgrees": false,
+  "issues": [
+   "Calendar is A1 vocabulary and a cognate in ES/FR/IT.",
+   "Receipt/ticket/uniform are random."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Too easy for the 0.35 stated; relabel A1/A2."
+ },
+ {
+  "id": "su-15",
+  "keyOk": false,
+  "keyNote": "'Thanks, Sam' is arguably fine, but 'best' is subjective and 'Dear, Sam' etc. are not real sign-offs; the item tests email convention, not language.",
+  "myLevel": "A2",
+  "myDifficulty": 0.3,
+  "tagAgrees": true,
+  "issues": [
+   "Opening phrases (Hello, Dear) as sign-off options are not plausible sign-offs for anyone with email experience; solved by convention knowledge.",
+   "'Best' is opinion-based.",
+   "Redundant with several register items."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "Thank you ___ your email. I will reply tomorrow.",
+   "options": [
+    "for",
+    "to",
+    "about",
+    "with"
+   ],
+   "correctIndex": 0,
+   "tag": "A2",
+   "difficulty": 0.3,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Test language, not email etiquette. A2 preposition collocation within a workplace sentence."
+ },
+ {
+  "id": "su-37",
+  "keyOk": true,
+  "keyNote": "No problem, happy to help.",
+  "myLevel": "A2",
+  "myDifficulty": 0.32,
+  "tagAgrees": true,
+  "issues": [
+   "Only one option sounds natural; others are ungrammatical, so it is solved by elimination.",
+   "Labeled 'fluency' but this is a functional-language recognition item.",
+   "Key is the longest option."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "A colleague says: 'Thanks for your help with the report!' What is the best reply?",
+   "options": [
+    "No problem. Happy to help.",
+    "No, thank you. It is fine.",
+    "Yes, I am helpful.",
+    "You are welcome for the report help."
+   ],
+   "correctIndex": 0,
+   "tag": "A2",
+   "difficulty": 0.35,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Make distractors plausible A2-learner replies instead of garbled sentences."
+ },
+ {
+  "id": "su-16",
+  "keyOk": true,
+  "keyNote": "since.",
+  "myLevel": "B1",
+  "myDifficulty": 0.46,
+  "tagAgrees": true,
+  "issues": [
+   "Standard since/for check; Romance speakers have transfer problems so it discriminates well."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good B1 item, slightly easier than 0.52."
+ },
+ {
+  "id": "su-17",
+  "keyOk": true,
+  "keyNote": "accepts.",
+  "myLevel": "B1",
+  "myDifficulty": 0.46,
+  "tagAgrees": true,
+  "issues": [
+   "First conditional is A2/B1; 'will accept' is the classic error."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Solid item."
+ },
+ {
+  "id": "su-18",
+  "keyOk": true,
+  "keyNote": "was finished.",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": true,
+  "issues": [
+   "'has finish' is a typo-like distractor that tests nothing.",
+   "Passive past is B1."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "The report ___ by the finance team last Friday.",
+   "options": [
+    "was finished",
+    "finished",
+    "is finished",
+    "was finishing"
+   ],
+   "correctIndex": 0,
+   "tag": "B1",
+   "difficulty": 0.5,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Replace the silly distractor with realistic active/present errors."
+ },
+ {
+  "id": "su-19",
+  "keyOk": true,
+  "keyNote": "if I had sent (past simple 'if I sent' is common informally but is not offered).",
+  "myLevel": "B2",
+  "myDifficulty": 0.68,
+  "tagAgrees": false,
+  "issues": [
+   "Reported yes/no question with tense backshift and 'the day before' is B2, not B1.",
+   "'did I sent' is double-wrong and silly."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good item; recalibrate to B2-low."
+ },
+ {
+  "id": "su-20",
+  "keyOk": true,
+  "keyNote": "to seeing.",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": true,
+  "issues": [
+   "'at see' is silly.",
+   "Business-email phrase; useful and fair."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good, fair B1 item."
+ },
+ {
+  "id": "su-21",
+  "keyOk": true,
+  "keyNote": "had.",
+  "myLevel": "B1",
+  "myDifficulty": 0.6,
+  "tagAgrees": true,
+  "issues": [
+   "Wish + past simple sits at the B1/B2 border.",
+   "Redundant with su-79."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Keep, B1+/B2-."
+ },
+ {
+  "id": "su-22",
+  "keyOk": true,
+  "keyNote": "most difficult.",
+  "myLevel": "A2",
+  "myDifficulty": 0.4,
+  "tagAgrees": false,
+  "issues": [
+   "Superlative with long adjectives is A2; 'difficultest' and 'most difficulter' are silly and give the key by elimination.",
+   "0.50 is too high."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "This is the ___ project I have ever worked on.",
+   "options": [
+    "most difficult",
+    "more difficult",
+    "much difficult",
+    "very difficult"
+   ],
+   "correctIndex": 0,
+   "tag": "A2",
+   "difficulty": 0.4,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Realistic learner errors for distractors; recalibrate to A2."
+ },
+ {
+  "id": "su-23",
+  "keyOk": true,
+  "keyNote": "don't have to. 'shouldn't' is weakly defensible ('a suit would look overdressed').",
+  "myLevel": "B1",
+  "myDifficulty": 0.55,
+  "tagAgrees": true,
+  "issues": [
+   "Context sentence tells the answer, which is acceptable.",
+   "Classic mustn't/don't have to trap, good."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good B1 item."
+ },
+ {
+  "id": "su-24",
+  "keyOk": true,
+  "keyNote": "whose.",
+  "myLevel": "B1",
+  "myDifficulty": 0.62,
+  "tagAgrees": true,
+  "issues": [
+   "Possessive relative is B1+/B2-."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "su-25",
+  "keyOk": true,
+  "keyNote": "feedback.",
+  "myLevel": "B1",
+  "myDifficulty": 0.45,
+  "tagAgrees": true,
+  "issues": [
+   "Feedback is a loan word in ES/FR/IT/TR.",
+   "'informations' and 'advices' test grammar not vocabulary; item mixes two constructs.",
+   "'some news' is semantically odd but a weaker learner could pick it."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good for the L1 error value; cognate lowers difficulty."
+ },
+ {
+  "id": "su-26",
+  "keyOk": true,
+  "keyNote": "launch.",
+  "myLevel": "B1",
+  "myDifficulty": 0.58,
+  "tagAgrees": true,
+  "issues": [
+   "throw/lift/attach are physical verbs and all absurd with 'product'; solved by elimination.",
+   "'launch' a product is B2 vocabulary in some lists."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "The company will ___ a new product next month.",
+   "options": [
+    "launch",
+    "found",
+    "expand",
+    "settle"
+   ],
+   "correctIndex": 0,
+   "tag": "B1",
+   "difficulty": 0.58,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Make distractors business-flavoured and plausible."
+ },
+ {
+  "id": "su-27",
+  "keyOk": true,
+  "keyNote": "afford.",
+  "myLevel": "B2",
+  "myDifficulty": 0.62,
+  "tagAgrees": false,
+  "issues": [
+   "Collocation 'can't afford mistakes' is B1+/B2.",
+   "Distractors are all money verbs: well designed."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good item."
+ },
+ {
+  "id": "su-28",
+  "keyOk": true,
+  "keyNote": "postponed. 'canceled' not offered.",
+  "myLevel": "B1",
+  "myDifficulty": 0.48,
+  "tagAgrees": true,
+  "issues": [
+   "Romance cognate (ES posponer, FR postposer).",
+   "'p' look-alike distractors are fine."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "su-29",
+  "keyOk": true,
+  "keyNote": "make.",
+  "myLevel": "A2",
+  "myDifficulty": 0.38,
+  "tagAgrees": false,
+  "issues": [
+   "'make an appointment' is A2.",
+   "French/Italian 'take an appointment' makes 'take' a realistic distractor.",
+   "'Dr. Lee' makes it medical rather than workplace."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good L1-sensitive item; recalibrate to A2."
+ },
+ {
+  "id": "su-30",
+  "keyOk": true,
+  "keyNote": "Tell Priya by Tuesday (signature must be linked to 'me').",
+  "myLevel": "B1",
+  "myDifficulty": 0.45,
+  "tagAgrees": true,
+  "issues": [
+   "Mostly lifted wording; 'me' = Priya needs a tiny inference.",
+   "A2+/B1- reading level."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fair item, lower difficulty."
+ },
+ {
+  "id": "su-31",
+  "keyOk": true,
+  "keyNote": "Employees want both home and office work.",
+  "myLevel": "B1",
+  "myDifficulty": 0.52,
+  "tagAgrees": true,
+  "issues": [
+   "Key is the longest option and contains 'both'.",
+   "'Everyone wants...all week' uses an absolute word.",
+   "Two distractors (travel costs, office too small) have no hook."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Why is the company thinking about a hybrid plan?",
+   "options": [
+    "Most staff want to work at home some days, but not every day",
+    "Most staff want to work at home every day of the week",
+    "Staff say that travel takes more time than before",
+    "Staff say that the office has become too small"
+   ],
+   "correctIndex": 0,
+   "tag": "B1",
+   "difficulty": 0.52,
+   "readingPassage": "Our survey of 500 employees shows that most people prefer to work from home two or three days a week. They say they save time on travel and can concentrate better. However, some people miss talking to colleagues in person. As a result, the company is thinking about a hybrid plan.",
+   "audioScript": null
+  },
+  "reason": "Equalize length, remove absolutes, make distractors passage-based."
+ },
+ {
+  "id": "su-32",
+  "keyOk": true,
+  "keyNote": "Keep their receipts (passage says 'please keep', not 'must').",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": true,
+  "issues": [
+   "'car park' and '1 March' are British; the test is American English.",
+   "'Stay less than six weeks' is a silly distractor.",
+   "'must... get money back' slightly overstates the passage."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "What should staff do to get their parking money back?",
+   "options": [
+    "Keep their receipts",
+    "Park behind the building",
+    "Ask for a parking permit",
+    "Park all day on Elm Street"
+   ],
+   "correctIndex": 0,
+   "tag": "B1",
+   "difficulty": 0.5,
+   "readingPassage": "Parking notice. From March 1, the parking lot behind the building will close for repairs for six weeks. Staff may use the public parking lot on Elm Street. The company will pay for up to two hours of parking each day. Please keep your receipts.",
+   "audioScript": null
+  },
+  "reason": "Americanize the text and fix the silly distractor."
+ },
+ {
+  "id": "su-33",
+  "keyOk": true,
+  "keyNote": "Meeting not in calendar.",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": true,
+  "issues": [
+   "Options are long (8-10 words), so the reading load is heavy for a listening item and the key is the longest.",
+   "'shall I send her up' is British; AmE says 'should I'."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "🎧 What is the problem?",
+   "options": [
+    "The meeting is not in the calendar",
+    "The client is late",
+    "The room is not free",
+    "Dan cannot find the client"
+   ],
+   "correctIndex": 0,
+   "tag": "B1",
+   "difficulty": 0.5,
+   "readingPassage": null,
+   "audioScript": "Hi, it's Dan from reception. A client is waiting for you downstairs. She says she has a meeting with you at eleven, but I don't see it in your calendar. Could you come down, or should I send her up?"
+  },
+  "reason": "Shorten options, Americanize the script."
+ },
+ {
+  "id": "su-34",
+  "keyOk": true,
+  "keyNote": "More people than expected signed up (lifted from audio).",
+  "myLevel": "B1",
+  "myDifficulty": 0.52,
+  "tagAgrees": true,
+  "issues": [
+   "Key is a near-verbatim lift (signed up/than expected), so word spotting suffices.",
+   "All distractors have no hook in the audio.",
+   "'main hall' is British-sounding."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "🎧 Why was the room changed?",
+   "options": [
+    "More employees registered than the organizers planned for",
+    "The session was canceled",
+    "The speaker will be late",
+    "Room 2 is being repaired"
+   ],
+   "correctIndex": 0,
+   "tag": "B1",
+   "difficulty": 0.52,
+   "readingPassage": null,
+   "audioScript": "Attention, please. The training session on customer service has moved from Room 2 to the main auditorium because more people signed up than expected. It will still start at two o'clock."
+  },
+  "reason": "Paraphrase the key so understanding, not word spotting, is tested."
+ },
+ {
+  "id": "su-35",
+  "keyOk": true,
+  "keyNote": "Stay with the current supplier (conditional on needing items by month end).",
+  "myLevel": "B2",
+  "myDifficulty": 0.64,
+  "tagAgrees": false,
+  "issues": [
+   "Conditional recommendation, contrast and percentages: more than B1.",
+   "Requires a little procurement context ('quote', 'supplier') but not specialist knowledge."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good item. Raise difficulty to B1+/B2-."
+ },
+ {
+  "id": "su-36",
+  "keyOk": false,
+  "keyNote": "Key is the most hedged option, but 'Please give us until Friday, because...' is also polite, so 'most polite' is arguable.",
+  "myLevel": "B1",
+  "myDifficulty": 0.52,
+  "tagAgrees": true,
+  "issues": [
+   "Key is longest and starts with a stock formula ('Would it be possible').",
+   "Distractor 2 uses 'please' and is not clearly rude.",
+   "Subjective superlative."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Which sentence is the most polite way to ask for a deadline extension?",
+   "options": [
+    "Would it be possible to have until Friday to finish this?",
+    "I need until Friday to finish this, so please wait.",
+    "You have to give us until Friday to finish this.",
+    "We are going to finish this on Friday, okay?"
+   ],
+   "correctIndex": 0,
+   "tag": "B1",
+   "difficulty": 0.52,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Equalize length and make distractors less arguable."
+ },
+ {
+  "id": "su-38",
+  "keyOk": true,
+  "keyNote": "Sorry, could you explain that again?",
+  "myLevel": "A2",
+  "myDifficulty": 0.4,
+  "tagAgrees": false,
+  "issues": [
+   "Labeled 'fluency' but is functional language.",
+   "Garbled distractors ('I do not hear what you speak') are silly.",
+   "Level is A2, not B1."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "You did not understand something in a meeting. What can you say?",
+   "options": [
+    "Sorry, could you explain that again?",
+    "Sorry, I am not understanding you.",
+    "Could you repeat me the sentence?",
+    "Sorry, I did not listen the last part."
+   ],
+   "correctIndex": 0,
+   "tag": "A2",
+   "difficulty": 0.4,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Make the distractors believable learner errors."
+ },
+ {
+  "id": "su-60",
+  "keyOk": true,
+  "keyNote": "I am writing to confirm...",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": true,
+  "issues": [
+   "Solved by elimination: other options are casual or garbled.",
+   "Key is longest; coachable formula.",
+   "Third register item with the same logic."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Which sentence is best for a formal email to a client?",
+   "options": [
+    "I am writing to confirm that the meeting will take place on Monday.",
+    "I am writing for to confirm that the meeting is on Monday.",
+    "Just a quick note: the meeting is on Monday, see you there!",
+    "This email is for tell you that the meeting is Monday."
+   ],
+   "correctIndex": 0,
+   "tag": "B1",
+   "difficulty": 0.5,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Make two distractors learner-error based and one too casual, all of similar length."
+ },
+ {
+  "id": "su-39",
+  "keyOk": true,
+  "keyNote": "would have noticed.",
+  "myLevel": "B2",
+  "myDifficulty": 0.64,
+  "tagAgrees": true,
+  "issues": [
+   "Third conditional is B1+/B2-; 0.74 is too high.",
+   "Redundant with su-46, su-66."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Keep as the single third-conditional item."
+ },
+ {
+  "id": "su-40",
+  "keyOk": true,
+  "keyNote": "had already sent. (Past simple 'already sent' would be acceptable in informal AmE but is not offered.)",
+  "myLevel": "B2",
+  "myDifficulty": 0.62,
+  "tagAgrees": true,
+  "issues": [
+   "'already sends' and 'would already send' are silly."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fair."
+ },
+ {
+  "id": "su-41",
+  "keyOk": true,
+  "keyNote": "which.",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": false,
+  "issues": [
+   "Non-defining 'which' is B1, not B2.",
+   "Easy elimination: what, who, where.",
+   "Redundant with su-24."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "When I started this job, I ___ getting up so early, but now it is no problem.",
+   "options": [
+    "wasn't used to",
+    "didn't use to",
+    "wasn't use to",
+    "wouldn't"
+   ],
+   "correctIndex": 0,
+   "tag": "B2",
+   "difficulty": 0.66,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Replace with a different B2 structure ('be used to + -ing')."
+ },
+ {
+  "id": "su-42",
+  "keyOk": false,
+  "keyNote": "Not defensible: in American English 'I'd rather you not mention', 'I'd rather you don't mention' and 'wouldn't mention' are all used and accepted.",
+  "myLevel": "C1",
+  "myDifficulty": 0.8,
+  "tagAgrees": false,
+  "issues": [
+   "Multiple defensible answers, including 'not mention' (option 4).",
+   "Unreliable key."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "The CEO is believed ___ the company before the scandal became public.",
+   "options": [
+    "to have left",
+    "to leave",
+    "having left",
+    "that he left"
+   ],
+   "correctIndex": 0,
+   "tag": "B2",
+   "difficulty": 0.78,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Remove the ambiguous key; test passive reporting structures."
+ },
+ {
+  "id": "su-43",
+  "keyOk": true,
+  "keyNote": "moving.",
+  "myLevel": "B1",
+  "myDifficulty": 0.62,
+  "tagAgrees": false,
+  "issues": [
+   "suggest + -ing is B1+; 0.76 overstated.",
+   "'move' could be a bare subjunctive only with a subject."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine; lower difficulty."
+ },
+ {
+  "id": "su-44",
+  "keyOk": true,
+  "keyNote": "Despite.",
+  "myLevel": "B1",
+  "myDifficulty": 0.6,
+  "tagAgrees": false,
+  "issues": [
+   "Despite + noun is B1+/B2-, not 0.72.",
+   "'Because' and 'However' are weak distractors."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine but easier than tagged."
+ },
+ {
+  "id": "su-46",
+  "keyOk": true,
+  "keyNote": "hadn't been. ('wasn't/weren't' are wrong in strict grammar but common in speech.)",
+  "myLevel": "B2",
+  "myDifficulty": 0.7,
+  "tagAgrees": true,
+  "issues": [
+   "'would have finished' cues the form.",
+   "'wasn't' and 'weren't' duplicate the same error.",
+   "Third conditional repeated."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "We are having the new servers ___ next week.",
+   "options": [
+    "installed",
+    "install",
+    "to install",
+    "installing"
+   ],
+   "correctIndex": 0,
+   "tag": "B2",
+   "difficulty": 0.66,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Reduce conditional redundancy; causative have is a B2 gap."
+ },
+ {
+  "id": "su-47",
+  "keyOk": true,
+  "keyNote": "sending.",
+  "myLevel": "B2",
+  "myDifficulty": 0.66,
+  "tagAgrees": true,
+  "issues": [
+   "deny + -ing is B2 and deny itself is B2 vocabulary.",
+   "Overlaps with su-43 (verb patterns)."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "su-48",
+  "keyOk": true,
+  "keyNote": "likely.",
+  "myLevel": "B1",
+  "myDifficulty": 0.58,
+  "tagAgrees": false,
+  "issues": [
+   "Adjective/adverb collocation (be likely to), B1+/B2- not 0.75."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "su-79",
+  "keyOk": true,
+  "keyNote": "had told.",
+  "myLevel": "B2",
+  "myDifficulty": 0.66,
+  "tagAgrees": true,
+  "issues": [
+   "Context 'Now it's too late' is a good cue.",
+   "Redundant with su-21."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Keep."
+ },
+ {
+  "id": "su-66",
+  "keyOk": true,
+  "keyNote": "had known.",
+  "myLevel": "B2",
+  "myDifficulty": 0.7,
+  "tagAgrees": true,
+  "issues": [
+   "Third conditional cue; 0.82 inflated.",
+   "Conditionals are overrepresented."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "By this time next year, I ___ at this company for ten years.",
+   "options": [
+    "will have worked",
+    "will work",
+    "have worked",
+    "would have worked"
+   ],
+   "correctIndex": 0,
+   "tag": "B2",
+   "difficulty": 0.74,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Replace with future perfect, a missing B2 structure."
+ },
+ {
+  "id": "su-49",
+  "keyOk": true,
+  "keyNote": "revise.",
+  "myLevel": "B2",
+  "myDifficulty": 0.62,
+  "tagAgrees": true,
+  "issues": [
+   "Receive/reveal/retire are look-alikes only.",
+   "Spanish 'revisar' means 'check' so it might attract some learners."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine, lower difficulty."
+ },
+ {
+  "id": "su-50",
+  "keyOk": true,
+  "keyNote": "risen.",
+  "myLevel": "B2",
+  "myDifficulty": 0.64,
+  "tagAgrees": true,
+  "issues": [
+   "'lifted' silly.",
+   "Rise/raise confusion is a good test."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "su-51",
+  "keyOk": true,
+  "keyNote": "weigh up is British; AmE says 'weigh the risks'.",
+  "myLevel": "B2",
+  "myDifficulty": 0.7,
+  "tagAgrees": true,
+  "issues": [
+   "British phrasal verb in an American-English test; 'weigh up' is not wrong but is regional.",
+   "Homogeneous options (phrasal verbs) is good."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "We need to ___ the risks before we make a decision.",
+   "options": [
+    "assess",
+    "assure",
+    "assign",
+    "assist"
+   ],
+   "correctIndex": 0,
+   "tag": "B2",
+   "difficulty": 0.7,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Avoid regional variant; keep as vocabulary."
+ },
+ {
+  "id": "su-52",
+  "keyOk": true,
+  "keyNote": "valid ('available' is also natural but not offered).",
+  "myLevel": "B1",
+  "myDifficulty": 0.62,
+  "tagAgrees": false,
+  "issues": [
+   "Cognate (ES valido, FR valable).",
+   "Distractors weak."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "su-53",
+  "keyOk": true,
+  "keyNote": "draw ('bring' also correct but not offered).",
+  "myLevel": "B2",
+  "myDifficulty": 0.76,
+  "tagAgrees": true,
+  "issues": [
+   "Fixed formal phrase; fair for B2/C1."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "su-54",
+  "keyOk": true,
+  "keyNote": "Shorter weeks did not harm productivity.",
+  "myLevel": "B2",
+  "myDifficulty": 0.65,
+  "tagAgrees": true,
+  "issues": [
+   "Passage is accessible (B1+/B2); distractors are plausible distortions: good.",
+   "Key is the longest."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good B2 reading."
+ },
+ {
+  "id": "su-55",
+  "keyOk": true,
+  "keyNote": "Cost more and complaints slow.",
+  "myLevel": "B2",
+  "myDifficulty": 0.7,
+  "tagAgrees": true,
+  "issues": [
+   "'tender' is British/jargon.",
+   "Two distractors are silly.",
+   "Key combines two facts."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Why did the company decide not to renew the contract?",
+   "options": [
+    "The cost went up and complaints were not dealt with quickly",
+    "The cleaners had stopped coming to the office",
+    "Staff said the cleaning was not done often enough",
+    "The company wanted to save 20 percent on all contracts"
+   ],
+   "correctIndex": 0,
+   "tag": "B2",
+   "difficulty": 0.7,
+   "readingPassage": "Dear colleagues, following last month's review, we have decided not to renew our contract with the current cleaning company. While their service was generally acceptable, costs rose by 20 percent and several complaints were not resolved promptly. We will ask other companies to send us offers next week, and any team leader who wishes to give input on requirements should contact me before Friday.",
+   "audioScript": null
+  },
+  "reason": "Replace 'tender', make distractors credible."
+ },
+ {
+  "id": "su-56",
+  "keyOk": true,
+  "keyNote": "It may be too positive.",
+  "myLevel": "B2",
+  "myDifficulty": 0.7,
+  "tagAgrees": true,
+  "issues": [
+   "Hedged language ('perhaps a little optimistic') is a good B2 skill.",
+   "Distractors (perfect, removed) are obviously wrong."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good."
+ },
+ {
+  "id": "su-57",
+  "keyOk": true,
+  "keyNote": "Keep investing online and review small stores.",
+  "myLevel": "B2",
+  "myDifficulty": 0.66,
+  "tagAgrees": true,
+  "issues": [
+   "Key paraphrases the speaker's words closely; level is B1+/B2-."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "su-58",
+  "keyOk": true,
+  "keyNote": "It might not make the work faster.",
+  "myLevel": "B2",
+  "myDifficulty": 0.74,
+  "tagAgrees": true,
+  "issues": [
+   "Good opinion item; key paraphrases closely."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good."
+ },
+ {
+  "id": "su-59",
+  "keyOk": true,
+  "keyNote": "A later date, or the original date for extra money.",
+  "myLevel": "B2",
+  "myDifficulty": 0.66,
+  "tagAgrees": true,
+  "issues": [
+   "Options long; numbers (twelfth/fourteenth) legitimate; one hearing feasible."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good."
+ },
+ {
+  "id": "su-62",
+  "keyOk": true,
+  "keyNote": "Obvious.",
+  "myLevel": "B1",
+  "myDifficulty": 0.5,
+  "tagAgrees": false,
+  "issues": [
+   "Key is the only professional-sounding sentence.",
+   "'scope' is business jargon.",
+   "Tests business sense, not language."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "We must reduce our costs. ___, we cannot lose our best employees.",
+   "options": [
+    "At the same time",
+    "As a result",
+    "For instance",
+    "In other words"
+   ],
+   "correctIndex": 0,
+   "tag": "B2",
+   "difficulty": 0.72,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Replace with a discourse-marker item."
+ },
+ {
+  "id": "su-63",
+  "keyOk": true,
+  "keyNote": "Softest option.",
+  "myLevel": "B1",
+  "myDifficulty": 0.58,
+  "tagAgrees": false,
+  "issues": [
+   "Cartoon-rude distractors.",
+   "Key is longest."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "You disagree with a colleague in a meeting. Which is the most diplomatic?",
+   "options": [
+    "I see your point, but I wonder if we should also consider the cost.",
+    "I understand, but you must consider the cost before we decide.",
+    "I see your point, but you are ignoring the cost completely.",
+    "I disagree because the cost is much too high for us."
+   ],
+   "correctIndex": 0,
+   "tag": "B1",
+   "difficulty": 0.58,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Make distractors plausible and equal length."
+ },
+ {
+  "id": "su-64",
+  "keyOk": true,
+  "keyNote": "had she left.",
+  "myLevel": "C1",
+  "myDifficulty": 0.86,
+  "tagAgrees": true,
+  "issues": [
+   "Negative inversion is C1; 3 of the 11 C1 items are inversion."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Keep."
+ },
+ {
+  "id": "su-65",
+  "keyOk": true,
+  "keyNote": "might have taken.",
+  "myLevel": "C1",
+  "myDifficulty": 0.86,
+  "tagAgrees": true,
+  "issues": [
+   "Conditional inversion; 'it' vs 'they' for the board in AmE is fine."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Keep."
+ },
+ {
+  "id": "su-67",
+  "keyOk": true,
+  "keyNote": "did they meet.",
+  "myLevel": "C1",
+  "myDifficulty": 0.88,
+  "tagAgrees": true,
+  "issues": [
+   "Inversion repeated; pronoun/noun mismatch 'they/the team'."
+  ],
+  "verdict": "REPLACE",
+  "fix": {
+   "question": "It was not until the audit began ___ the problem became clear.",
+   "options": [
+    "that",
+    "when",
+    "which",
+    "than"
+   ],
+   "correctIndex": 0,
+   "tag": "C1",
+   "difficulty": 0.84,
+   "readingPassage": null,
+   "audioScript": null
+  },
+  "reason": "Reduce inversion duplication."
+ },
+ {
+  "id": "su-68",
+  "keyOk": true,
+  "keyNote": "lucid.",
+  "myLevel": "C1",
+  "myDifficulty": 0.84,
+  "tagAgrees": true,
+  "issues": [
+   "Cognate in ES/FR/IT.",
+   "Distractors random."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "su-69",
+  "keyOk": true,
+  "keyNote": "contradict.",
+  "myLevel": "B2",
+  "myDifficulty": 0.68,
+  "tagAgrees": false,
+  "issues": [
+   "B2 verb and cognate."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Recalibrate to B2."
+ },
+ {
+  "id": "su-70",
+  "keyOk": true,
+  "keyNote": "validity ('reliability' also correct but not offered).",
+  "myLevel": "C1",
+  "myDifficulty": 0.8,
+  "tagAgrees": true,
+  "issues": [
+   "Look-alike -ity distractors."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "su-71",
+  "keyOk": true,
+  "keyNote": "implications.",
+  "myLevel": "C1",
+  "myDifficulty": 0.8,
+  "tagAgrees": true,
+  "issues": [
+   "-ations look-alikes."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "su-72",
+  "keyOk": true,
+  "keyNote": "plummeted.",
+  "myLevel": "C1",
+  "myDifficulty": 0.84,
+  "tagAgrees": true,
+  "issues": [
+   "Look-alike distractors."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Fine."
+ },
+ {
+  "id": "su-73",
+  "keyOk": true,
+  "keyNote": "Most studies rely on self-reports.",
+  "myLevel": "C1",
+  "myDifficulty": 0.88,
+  "tagAgrees": true,
+  "issues": [
+   "Distractor 1 absurd; key longest."
+  ],
+  "verdict": "FIX",
+  "fix": {
+   "question": "Why is the evidence described as inconclusive?",
+   "options": [
+    "Most studies rely on people's own reports gathered at an unusual time",
+    "Remote work has been tried in only a few companies",
+    "The studies compared only large companies",
+    "Few employees agreed to be interviewed"
+   ],
+   "correctIndex": 0,
+   "tag": "C1",
+   "difficulty": 0.88,
+   "readingPassage": "Proponents of remote work often cite increased autonomy and reduced commuting as decisive advantages. Critics counter that the benefits are unevenly distributed: employees with spacious homes and reliable connections thrive, whereas others find the boundary between work and private life steadily eroding. The evidence, so far, is inconclusive, largely because most studies rely on self-reported data collected during an exceptional period.",
+   "audioScript": null
+  },
+  "reason": "Improve distractors."
+ },
+ {
+  "id": "su-74",
+  "keyOk": true,
+  "keyNote": "Looked open but left out key information.",
+  "myLevel": "C1",
+  "myDifficulty": 0.9,
+  "tagAgrees": true,
+  "issues": [
+   "Distractors weak; 'ostensibly' is C2."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Keep."
+ },
+ {
+  "id": "su-75",
+  "keyOk": true,
+  "keyNote": "Cutting costs everywhere would not fix the real problem.",
+  "myLevel": "C1",
+  "myDifficulty": 0.88,
+  "tagAgrees": true,
+  "issues": [
+   "Good item with negation and contrast."
+  ],
+  "verdict": "KEEP",
+  "fix": null,
+  "reason": "Good."
+ }
+]

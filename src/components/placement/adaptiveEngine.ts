@@ -16,13 +16,18 @@ export interface HubConfig {
   maxItems: number;
   /** Stop once the standard error (in theta units) is at or below this. */
   seTarget: number;
+  /** Where selection starts, before any answer (theta; -2.1 = A1 items, -1.2 = A2 items). */
+  startTheta: number;
+  /** Centre of the prior for the ability estimate. */
+  priorMean: number;
 }
 
 const HUB_CONFIG: Record<Hub, HubConfig> = {
-  playground: { minItems: 8, maxItems: 15, seTarget: 0.55 },
-  academy: { minItems: 20, maxItems: 36, seTarget: 0.45 },
-  // The Success Hub gets its own redesign (longer, with listening, writing and speaking); until then it keeps the old length.
-  professional: { minItems: 8, maxItems: 15, seTarget: 0.55 },
+  playground: { minItems: 8, maxItems: 15, seTarget: 0.55, startTheta: -2.1, priorMean: -1.2 },
+  academy: { minItems: 20, maxItems: 36, seTarget: 0.45, startTheta: -2.1, priorMean: -1.2 },
+  // Working adults: most are A2-B2, so the test starts at A2 (not A1) and the prior sits between A2 and B1. A few A1
+  // items stay in the bank so a true beginner is still found within the first answers.
+  professional: { minItems: 20, maxItems: 36, seTarget: 0.45, startTheta: -1.2, priorMean: -0.5 },
 };
 
 export const configFor = (hub: Hub): HubConfig => HUB_CONFIG[hub];
@@ -81,11 +86,14 @@ export interface AdaptiveState {
   /** Becomes true on the first wrong answer: nobody stops on an unbroken streak before their ceiling is found. */
   hasIncorrect: boolean;
   responses: AnswerRecord[];
+  /** Centre of the prior used for this hub's estimate. */
+  priorMean: number;
 }
 
-export function initAdaptiveState(): AdaptiveState {
+export function initAdaptiveState(hub: Hub = 'academy'): AdaptiveState {
   return {
-    theta: START_THETA,
+    theta: HUB_CONFIG[hub].startTheta,
+    priorMean: HUB_CONFIG[hub].priorMean,
     se: START_SE,
     answeredIdx: new Set(),
     thetaHistory: [],
@@ -98,9 +106,9 @@ export function initAdaptiveState(): AdaptiveState {
 const sigmoid = (x: number) => 1 / (1 + Math.exp(-x));
 
 /** Posterior mean and spread of ability given the answers so far. */
-export function estimateAbility(responses: AnswerRecord[]): { theta: number; se: number } {
+export function estimateAbility(responses: AnswerRecord[], priorMean: number = PRIOR_MEAN): { theta: number; se: number } {
   const logPost = GRID.map((t) => {
-    let lp = -0.5 * ((t - PRIOR_MEAN) / PRIOR_SD) ** 2;
+    let lp = -0.5 * ((t - priorMean) / PRIOR_SD) ** 2;
     for (const r of responses) {
       const p = r.floor + (1 - r.floor) * sigmoid(t - r.d);
       lp += Math.log(Math.max(1e-9, r.correct ? p : 1 - p));
@@ -179,7 +187,7 @@ export function applyAdaptiveAnswer(
   const correct = options.unsure ? false : isCorrect;
   const floor = options.unsure ? 0 : options.fast && correct ? FAST_GUESS_FLOOR : GUESS_FLOOR;
   const responses = [...state.responses, { d: itemTheta(item), correct, floor }];
-  const { theta, se } = estimateAbility(responses);
+  const { theta, se } = estimateAbility(responses, state.priorMean);
   const skill = resolveScoreSkill(item, hub);
 
   const answeredIdx = new Set(state.answeredIdx);
@@ -192,6 +200,7 @@ export function applyAdaptiveAnswer(
     skillCounts: { ...state.skillCounts, [skill]: (state.skillCounts[skill] ?? 0) + 1 },
     hasIncorrect: state.hasIncorrect || !correct,
     responses,
+    priorMean: state.priorMean,
   };
 }
 
