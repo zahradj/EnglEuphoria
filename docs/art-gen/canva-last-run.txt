@@ -1,7 +1,4 @@
-+ public/lep1/scenes/bg-u5l3-grandpa-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l3-kitchen-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l3-hug-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l3-living-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l3-garden-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l3-grandma-wide.png (1376, 768)
-6/6 saved
++ public/lep1/scenes/bg-u5l4-picnic-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l4-tree-wide.png (1376, 768)
++ docs/art-gen/sheet-u5l4-family-th.png (1376, 768)
+3/3 saved
