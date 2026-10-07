@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
 import { safeSpeak, playLetterPhonic } from '../../unit1/audio';
@@ -9,6 +9,21 @@ import { voiceOf, MAGIC_PURPLE, MAGIC_GOLD, MAGIC_GRADIENT, MAGIC_GLOW, MagicLay
 
 /* ---------- Sound model (phonics: listen + explore anchor words) ---------- */
 
+/** True on a phone-width screen (the words then float in the corners instead of beside the letter). */
+function useNarrowScreen(): boolean {
+  const q = '(max-width: 639px)';
+  const [narrow, setNarrow] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.(q).matches);
+  useEffect(() => {
+    const m = window.matchMedia?.(q);
+    if (!m) return;
+    const on = () => setNarrow(m.matches);
+    on();
+    m.addEventListener?.('change', on);
+    return () => m.removeEventListener?.('change', on);
+  }, []);
+  return narrow;
+}
+
 export function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene, { kind: 'sound-model' }>; onNext: () => void; sync?: ActivitySync }) {
   const c = CAST[scene.who];
   // `opened` is a plain number[] (not a Set) so it survives the JSON
@@ -16,6 +31,7 @@ export function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene,
   const [state, setState] = useSyncedState(sync, { beat: -1, opened: [] as number[], phase: 'invite' as 'invite' | 'done', replays: 0 });
   const { beat, opened, phase, replays } = state;
   const openedSet = useMemo(() => new Set(opened), [opened]);
+  const narrow = useNarrowScreen();
 
   const playLetterSound = async () => {
     setState((s) => ({ ...s, beat: 0 }));
@@ -69,7 +85,7 @@ export function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene,
           the same look as the Pre-A1 sound lessons: a big "?" mystery card that opens into a flat picture
           with its word. Wide, staggered spots keep every picture clear of the letter and of each other. */}
       {scene.anchors.map((a, i) => {
-        const spot = anchorSpot(i, scene.anchors.length);
+        const spot = anchorSpot(i, scene.anchors.length, narrow);
         const isOpen = openedSet.has(i);
         const nextClosed = i === scene.anchors.findIndex((_, k) => !openedSet.has(k));
         const size = isOpen ? 'min(clamp(96px, calc(21*var(--svh,1vh)), 190px), 23vw)' : 'min(clamp(72px, calc(14*var(--svh,1vh)), 130px), 18vw)';
@@ -86,7 +102,7 @@ export function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene,
             >
               {isOpen ? (
                 a.img
-                  ? <img src={a.img} alt={a.word} draggable={false} className="h-full w-full animate-[lep1-pop_0.6s_ease-out] object-contain drop-shadow-[0_8px_10px_rgba(0,0,0,0.35)]" />
+                  ? <img src={a.img} alt={a.word} draggable={false} style={{ width: size, height: size }} className="animate-[lep1-pop_0.6s_ease-out] object-contain drop-shadow-[0_8px_10px_rgba(0,0,0,0.35)]" />
                   : <span className="animate-[lep1-pop_0.6s_ease-out]" style={{ fontSize: 'clamp(2.5rem, calc(9*var(--svh,1vh)), 5rem)' }}>{a.emoji}</span>
               ) : (
                 <span

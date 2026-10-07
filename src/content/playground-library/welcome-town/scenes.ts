@@ -947,7 +947,7 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     teacher: 'A brand-new sound! /i/ /i/ Ink!',
     anchors: [
       { word: 'ink', emoji: '\u{1F58B}\u{FE0F}' },
-      { word: 'igloo', emoji: '\u{1F9CA}' },
+      { word: 'igloo', emoji: '\u{1F9CA}', img: '/lep1/alphabet/item-igloo.png' },
       { word: 'insect', emoji: '\u{1F41B}' },
     ],
   },
@@ -957,9 +957,9 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     id: 'wt2-model-n', kind: 'sound-model', bg: bgReadingW, who: 'pip', letter: 'N', phoneme: '/n/', sound: 'nnn',
     teacher: 'A brand-new sound! /n/ /n/ Nut!',
     anchors: [
-      { word: 'nut', emoji: '\u{1F95C}' },
+      { word: 'nut', emoji: '\u{1F95C}', img: '/lep1/items/item-nut.png' },
       { word: 'net', emoji: '\u{1F945}' },
-      { word: 'nose', emoji: '\u{1F443}' },
+      { word: 'nose', emoji: '\u{1F443}', img: '/lep1/items/item-nose.png' },
     ],
   },
   { id: 'wt2-trace-n', kind: 'trace', bg: bgReadingW, who: 'pip', letter: 'N', phoneme: '/n/', word: 'nut', teacher: 'Trace the letter N! Say /n/ /n/ /n/ as you draw.' },
@@ -1433,7 +1433,7 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
     teacher: 'A brand-new sound! /f/ /f/ Fox! Just like me!',
     anchors: [
       { word: 'fan', emoji: '🪭' },
-      { word: 'fish', emoji: '🐟' },
+      { word: 'fish', emoji: '🐟', img: '/lep1/alphabet/item-fish.png' },
       { word: 'fox', emoji: '🦊' },
     ],
   },

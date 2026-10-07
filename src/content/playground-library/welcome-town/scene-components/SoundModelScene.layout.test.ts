@@ -28,4 +28,13 @@ describe('A1 sound-model anchor layout', () => {
       expect(p.y).toBeGreaterThan(25); expect(p.y).toBeLessThan(70);
     }
   });
+
+  it('phone: the words sit in the four corners around the letter (never over the middle third)', () => {
+    for (const n of [2, 3, 4]) for (let i = 0; i < n; i++) {
+      const p = anchorSpot(i, n, true);
+      expect(p.x < 30 || p.x > 70, `n=${n} i=${i}`).toBe(true);
+    }
+    const four = [0, 1, 2, 3].map((i) => anchorSpot(i, 4, true));
+    expect(four.map((p) => p.y)).toEqual([22, 72, 22, 72]);
+  });
 });
