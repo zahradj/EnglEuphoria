@@ -623,6 +623,15 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Remember? (owner, 2026-10-07): a short warm-up recall of the lesson before, near the start of every
+       *  lesson after the first. Pip says `say` ("Where is the brother?") and the child finds that picture.
+       *  mode 'click' = three pictures per turn; 'shadow' = all stickers as shadows (sticker images only).
+       *  `fromLabel` names the lesson recalled ("Lesson 2 · Brother, Sister, Baby!"). Not a game (routine). */
+      id: string; kind: 'recall-warmup'; bg: string; teacher: string; who: CharKey; mode: 'click' | 'shadow';
+      fromLabel: string;
+      items: { word: string; say: string; img: string }[];
+    }
+  | {
       /** Grandma's Cookies (U5L3 signature): "Let's make a Grandpa cookie!" — pick the right face icing,
        *  it lands on the cookie, the oven bakes it, it joins the family plate. Faces are round crops of a
        *  picture (at = centre %, w = % of the picture width, aspect = picture width / height). `name` is
@@ -1144,6 +1153,18 @@ export const LESSON_2_OBJECTIVE = 'Ask and answer "What is your name?" while rev
 export const LESSON_2_SCENES: Scene[] = [
   { id: 'l2-title', kind: 'title-card', bg: bgNameCarnivalTitle, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'The Name Carnival', subtitle: 'Ask names · answer names · win name tickets' },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · The Forest of Hellos.
+    id: 'u1l2-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-name-carnival-title.jpg`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 1 · The Forest of Hellos",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "hat", say: "Find the hat!", img: `${A}/items/item-hat.png` },
+      { word: "house", say: "Show me the house!", img: `${A}/items/item-house.png` },
+      { word: "moon", say: "Point to the moon!", img: `${A}/items/item-moon.png` },
+      { word: "mouse", say: "Find the mouse!", img: `${A}/items/item-mouse.png` },
+    ],
+  },
+  {
     id: 'l2-intro', kind: 'cinematic', bg: bgNameCarnivalGate, title: 'The Carnival Gate', subtitle: 'Every booth opens with one magic question.', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Welcome to the Name Carnival!' },
@@ -1367,6 +1388,18 @@ export const LESSON_3_OBJECTIVE = 'Ask and answer "How are you?", say I am / He 
 
 export const LESSON_3_SCENES: Scene[] = [
   { id: 'l3-title', kind: 'title-card', bg: bgFeelingsTitle, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 3 · Feelings', title: 'How Are You?', subtitle: '\u{1F60A} Happy · \u{1F622} Sad · \u{1F620} Angry — today we talk about EMOTIONS!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · The Name Carnival.
+    id: 'u1l3-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-feelings-title.jpg`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 2 · The Name Carnival",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "nut", say: "Find the nut!", img: `${A}/items/item-nut.png` },
+      { word: "nest", say: "Show me the nest!", img: `${A}/items/item-nest.png` },
+      { word: "nose", say: "Point to the nose!", img: `${A}/items/item-nose.png` },
+      { word: "water", say: "Find the water!", img: `${A}/items/item-water.png` },
+    ],
+  },
   {
     id: 'l3-song', kind: 'roleplay', bg: bgFeelingsMeadow, cast: ['pip', 'mia', 'bella', 'leo'],
     teacher: "Sing along! Clap on 'happy', hug yourself on 'sad', stomp on 'angry'. Repeat each feeling with the student.",
@@ -1671,6 +1704,18 @@ const itemTwo = `${A}/items/item-two.png`;
 
 export const LESSON_4_SCENES: Scene[] = [
   { id: 'l4-title', kind: 'title-card', bg: bgL4Party, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 4 · Birthday', title: "Bella's Birthday!", subtitle: '\u{1F382} How old are you? · \u{1F44B} Goodbye! — party with Pip, Mia, Bella & Leo!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · How Are You?.
+    id: 'u1l4-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-l4-birthday-party.jpg`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 3 · How Are You?",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "apple", say: "Find the apple!", img: `${A}/items/item-apple.png` },
+      { word: "ant", say: "Show me the ant!", img: `${A}/items/item-ant.png` },
+      { word: "cat", say: "Point to the cat!", img: `${A}/items/item-cat.png` },
+      { word: "sun", say: "Find the sun!", img: `${A}/items/item-sun.png` },
+    ],
+  },
   { id: 'l4-arrive', kind: 'meet', focus: ['birthday'], bg: bgL4Party, who: 'pip', teacher: 'Pip runs to Bella’s party. Wave hello and repeat with Pip!', line: 'Hello, friends! Today is Bella’s birthday!', repeat: 'Hello, friends!' },
   { id: 'l4-bella-age', kind: 'meet', focus: ['five'], bg: bgL4BellaFive, who: 'bella', teacher: 'Bella is FIVE today! Repeat with Bella: I am five.', line: 'Hello! I am Bella. I am five!', repeat: 'I am five.' },
   { id: 'l4-mia-age', kind: 'meet', focus: ['six'], bg: bgL4MiaSix, who: 'mia', teacher: 'Mia is SIX! Repeat with Mia: I am six.', line: 'Hi! I am Mia. I am six!', repeat: 'I am six.' },
@@ -1913,6 +1958,18 @@ export const LESSON_5_SCENES: Scene[] = [
       { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
       { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
       { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · Bella's Birthday!.
+    id: 'u1l5-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-l5-play-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 4 · Bella's Birthday!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "bag", say: "Find the bag!", img: `${A}/items/item-bag.png` },
+      { word: "ball", say: "Show me the ball!", img: `${A}/items/item-ball-kawaii.png` },
+      { word: "ten", say: "Point to the ten!", img: `${A}/items/item-ten.png` },
+      { word: "toy", say: "Find the toy!", img: `${A}/items/item-toy.png` },
     ],
   },
   {
@@ -2225,6 +2282,18 @@ export const LESSON_6_OBJECTIVE = "Students can produce all 8 Unit 1 sounds, gre
 
 export const LESSON_6_SCENES: Scene[] = [
   { id: 'l6-title', kind: 'title-card', bg: bgL6TrophyTrail, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 6', title: 'The Trophy Trail', subtitle: 'Show what you know and win the trophy!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · Leo's Lost Star.
+    id: 'u1l6-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-l6-trophy-trail.jpg`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 5 · Leo's Lost Star",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "star", say: "Find the star!", img: `${A}/items/item-star-gold.png` },
+      { word: "ant", say: "Show me the ant!", img: `${A}/items/item-ant.png` },
+      { word: "bag", say: "Point to the bag!", img: `${A}/items/item-bag.png` },
+      { word: "nut", say: "Find the nut!", img: `${A}/items/item-nut.png` },
+    ],
+  },
   {
     id: 'l6-intro', kind: 'cinematic', bg: bgBigTree, title: 'The Trophy Trail', subtitle: 'One last challenge before the trophy', narrator: 'pip',
     script: [
@@ -2653,6 +2722,18 @@ export const LESSON_U2L1_OBJECTIVE = 'Identify and name the colors red, blue, an
 
 export const LESSON_U2L1_SCENES: Scene[] = [
   { id: 'u2l1-title', kind: 'title-card', bg: bgU2L1CHero, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 1', title: 'Red, Blue, Yellow!', subtitle: 'Welcome to the Color Carnival!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 1 · Lesson 6 · The Trophy Trail.
+    id: 'u2l1-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l1c-hero.png`, who: 'pip', mode: 'click',
+    fromLabel: "Unit 1 · Lesson 6 · The Trophy Trail",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "apple", say: "Find the apple!", img: `${A}/items/item-apple.png` },
+      { word: "moon", say: "Show me the moon!", img: `${A}/items/item-moon.png` },
+      { word: "ball", say: "Point to the ball!", img: `${A}/items/item-ball-kawaii.png` },
+      { word: "snake", say: "Find the snake!", img: `${A}/items/item-snake.png` },
+    ],
+  },
   {
     id: 'u2l1-intro', kind: 'cinematic', bg: bgU2L1CHero, title: 'Red, Blue, Yellow!', subtitle: 'A carnival full of colors', narrator: 'pip', hidePipOverlay: true,
     script: [
@@ -3139,6 +3220,18 @@ export const LESSON_U2L2_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · Red, Blue, Yellow!.
+    id: 'u2l2-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l2-studio-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 1 · Red, Blue, Yellow!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "red", say: "Find red!", img: `${A}/items/item-balloon-red.png` },
+      { word: "yellow", say: "Show me yellow!", img: `${A}/items/item-popcorn-yellow.png` },
+      { word: "blue", say: "Point to blue!", img: `${A}/items/item-cottoncandy-blue.png` },
+      { word: "ring", say: "Find the ring!", img: `${A}/items/item-ring.png` },
+    ],
+  },
+  {
     id: 'u2l2-intro', kind: 'cinematic', bg: bgU2L2Studio, hidePipOverlay: true, title: "Pip's Paint Studio", subtitle: 'Can you help Pip paint?', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Hello! Welcome to my paint studio!' },
@@ -3605,6 +3698,18 @@ export const LESSON_U2L3_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · Green, Orange, Purple!.
+    id: 'u2l3-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l3-town-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 2 · Green, Orange, Purple!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "green", say: "Find green!", img: `${A}/items/item-leaf.png` },
+      { word: "orange", say: "Show me orange!", img: `${A}/items/item-carrot.png` },
+      { word: "purple", say: "Point to purple!", img: `${A}/items/item-plum.png` },
+      { word: "frog", say: "Find the frog!", img: `${A}/items/item-frog.png` },
+    ],
+  },
+  {
     id: 'u2l3-intro', kind: 'cinematic', bg: bgU2L3Town, hidePipOverlay: true, title: 'Shape Town', subtitle: 'Shapes are everywhere', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Hello! Welcome to Shape Town!' },
@@ -3898,6 +4003,17 @@ export const LESSON_U2L4_SCENES: Scene[] = [
       { who: 'willow', text: "What shape is this? It's a circle, a circle!", emotion: 'happy' },
       { who: 'leo', text: 'Is it blue? Yes, it is! Yes, it is!', emotion: 'happy' },
       { who: 'mia', text: "Is it green? No, it isn't! No, it isn't!", emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · Circle, Square, Triangle!.
+    id: 'u2l4-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l4-party-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 3 · Circle, Square, Triangle!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "circle", say: "Find the circle!", img: `${A}/scenes/bg-u2l3-clock-wide.png` },
+      { word: "square", say: "Show me the square!", img: `${A}/scenes/bg-u2l3-window-wide.png` },
+      { word: "triangle", say: "Point to the triangle!", img: `${A}/scenes/bg-u2l3-pizza-wide.png` },
     ],
   },
   {
@@ -4222,6 +4338,18 @@ export const LESSON_U2L5_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · What Color Is This?.
+    id: 'u2l5-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l5-sea-wide.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 4 · What Color Is This?",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "whale", say: "Find the whale!", img: `${A}/items/item-whale.png` },
+      { word: "wheel", say: "Show me the wheel!", img: `${A}/items/item-wheel.png` },
+      { word: "whistle", say: "Point to the whistle!", img: `${A}/items/item-whistle.png` },
+      { word: "balloon", say: "Find the balloon!", img: `${A}/items/item-balloon-red.png` },
+    ],
+  },
+  {
     id: 'u2l5-intro', kind: 'cinematic', bg: bgU2L5Sea, hidePipOverlay: true, title: "Shelly's Story", subtitle: 'A little fish in the big blue sea', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Look! A little gray fish!' },
@@ -4464,6 +4592,18 @@ export const LESSON_U2L6_SCENES: Scene[] = [
       { who: 'leo', text: 'Orange, orange, the carrot is orange!', emotion: 'happy' },
       { who: 'mia', text: 'Purple, purple, the grapes are purple!', emotion: 'happy' },
       { who: 'pip', text: 'What color is it? What color is it?', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · The Rainbow Fish's Scales.
+    id: 'u2l6-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l6-map-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 5 · The Rainbow Fish's Scales",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "ship", say: "Find the ship!", img: `${A}/items/item-ship.png` },
+      { word: "shell", say: "Show me the shell!", img: `${A}/items/item-shell.png` },
+      { word: "shoe", say: "Point to the shoe!", img: `${A}/items/item-shoe.png` },
+      { word: "clock", say: "Find the clock!", img: `${A}/items/item-clock.png` },
     ],
   },
   {
@@ -4842,6 +4982,18 @@ export const LESSON_U3L1_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 2 · Lesson 6 · Color & Shape Hunt.
+    id: 'u3l1-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l1-playroom-wide.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Unit 2 · Lesson 6 · Color & Shape Hunt",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "rainbow", say: "Find the rainbow!", img: `${A}/items/item-rainbow.png` },
+      { word: "pizza", say: "Show me the pizza!", img: `${A}/items/item-pizza-slice.png` },
+      { word: "present", say: "Point to the present!", img: `${A}/items/item-present.png` },
+      { word: "flag", say: "Find the flag!", img: `${A}/items/item-flag.png` },
+    ],
+  },
+  {
     id: 'u3l1-intro', kind: 'cinematic', bg: bgU3L1Toybox, hidePipOverlay: true, title: "Pip's Toy Box", subtitle: 'What is inside?', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Welcome to my playroom!' },
@@ -5103,6 +5255,18 @@ export const LESSON_U3L2_SCENES: Scene[] = [
       { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
       { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
       { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · Ball, Car, Doll!.
+    id: 'u3l2-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l2-party-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 1 · Ball, Car, Doll!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "ball", say: "Find the ball!", img: `${A}/items/item-ball-blue.png` },
+      { word: "car", say: "Show me the car!", img: `${A}/items/item-car-green.png` },
+      { word: "doll", say: "Point to the doll!", img: `${A}/items/item-doll.png` },
+      { word: "duck", say: "Find the duck!", img: `${A}/items/item-duck-yellow.png` },
     ],
   },
   {
@@ -5427,6 +5591,18 @@ export const LESSON_U3L3_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · Teddy Bear, Blocks, Train!.
+    id: 'u3l3-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l3-park-wide.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 2 · Teddy Bear, Blocks, Train!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "teddy bear", say: "Find the teddy bear!", img: `${A}/items/item-teddy.png` },
+      { word: "blocks", say: "Show me the blocks!", img: `${A}/items/item-blocks.png` },
+      { word: "train", say: "Point to the train!", img: `${A}/items/item-train.png` },
+      { word: "dog", say: "Find the dog!", img: `${A}/items/item-dog.png` },
+    ],
+  },
+  {
     id: 'u3l3-intro', kind: 'cinematic', bg: bgU3L3Park, hidePipOverlay: true, title: 'A Day in the Park', subtitle: 'Do you like toys?', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Hello! How are you today? Do you like toys?' },
@@ -5691,6 +5867,18 @@ export const LESSON_U3L4_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · What Do You Like to Play?.
+    id: 'u3l4-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l4-showtell-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 3 · What Do You Like to Play?",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "kite", say: "Find the kite!", img: `${A}/items/item-kite.png` },
+      { word: "robot", say: "Show me the robot!", img: `${A}/items/item-robot.png` },
+      { word: "plane", say: "Point to the plane!", img: `${A}/items/item-plane.png` },
+      { word: "key", say: "Find the key!", img: `${A}/items/item-key.png` },
+    ],
+  },
+  {
     id: 'u3l4-intro', kind: 'cinematic', bg: bgU3L4ShowTell, hidePipOverlay: true, title: 'Show and Tell Day', subtitle: "What's your favorite toy?", narrator: 'pip',
     script: [
       { who: 'pip', line: "Hello! Today is Show and Tell day! What's your favorite toy?" },
@@ -5946,6 +6134,18 @@ export const LESSON_U3L5_SCENES: Scene[] = [
       { who: 'bella', text: 'The ball goes in the box! In, in, in!', emotion: 'happy' },
       { who: 'mia', text: 'The teddy goes on the bed! On, on, on!', emotion: 'happy' },
       { who: 'leo', text: 'The car goes under the chair! Under, under!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · My Favorite Toy.
+    id: 'u3l5-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l5-messy-wide.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 4 · My Favorite Toy",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "teddy bear", say: "Find the teddy bear!", img: `${A}/items/item-teddy.png` },
+      { word: "kite", say: "Show me the kite!", img: `${A}/items/item-kite.png` },
+      { word: "robot", say: "Point to the robot!", img: `${A}/items/item-robot.png` },
+      { word: "blocks", say: "Find the blocks!", img: `${A}/items/item-blocks.png` },
     ],
   },
   {
@@ -6238,6 +6438,18 @@ export const LESSON_U3L6_SCENES: Scene[] = [
       { who: 'leo', text: 'I want the robot, please! The robot, please!', emotion: 'happy' },
       { who: 'bella', text: 'I want the kite, please! The kite, please!', emotion: 'happy' },
       { who: 'pip', text: 'Play and win and say it! Thank you! Hooray!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · Tidy Up Time!.
+    id: 'u3l6-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l6-fair-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 5 · Tidy Up Time!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "box", say: "Find the box!", img: `${A}/items/item-toybox.png` },
+      { word: "kitten", say: "Show me the kitten!", img: `${A}/items/item-kitten.png` },
+      { word: "octopus", say: "Point to the octopus!", img: `${A}/items/item-octopus.png` },
+      { word: "train", say: "Find the train!", img: `${A}/items/item-train.png` },
     ],
   },
   {
@@ -6549,6 +6761,18 @@ export const LESSON_U4L1_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 3 · Lesson 6 · The Toy Fair.
+    id: 'u4l1-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l1-dance-class-wide.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Unit 3 · Lesson 6 · The Toy Fair",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "doll", say: "Find the doll!", img: `${A}/items/item-doll.png` },
+      { word: "robot", say: "Show me the robot!", img: `${A}/items/item-robot.png` },
+      { word: "kite", say: "Point to the kite!", img: `${A}/items/item-kite.png` },
+      { word: "train", say: "Find the train!", img: `${A}/items/item-train.png` },
+    ],
+  },
+  {
     id: 'u4l1-intro', kind: 'cinematic', bg: bgU4L1Class, hidePipOverlay: true, title: 'Dance Class', subtitle: 'Head, shoulders, knees and toes!', narrator: 'willow',
     script: [
       { who: 'willow', line: 'Welcome to dance class! Today we move our bodies!' },
@@ -6832,6 +7056,18 @@ export const LESSON_U4L2_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · Head, Shoulders, Knees, Toes!.
+    id: 'u4l2-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l2-kitchen-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 1 · Head, Shoulders, Knees, Toes!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "head", say: "Find the head!", img: `${A}/items/item-card-head.png` },
+      { word: "shoulders", say: "Show me the shoulders!", img: `${A}/items/item-card-shoulders.png` },
+      { word: "knees", say: "Point to the knees!", img: `${A}/items/item-card-knees.png` },
+      { word: "toes", say: "Find the toes!", img: `${A}/items/item-card-toes.png` },
+    ],
+  },
+  {
     id: 'u4l2-intro', kind: 'cinematic', bg: bgU4L2Kitchen, hidePipOverlay: true, title: 'Pancake Faces', subtitle: 'Eyes, ears, mouth, nose!', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Good morning! Let\'s make pancake faces!' },
@@ -7076,6 +7312,18 @@ export const LESSON_U4L3_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · Eyes, Ears, Mouth, Nose!.
+    id: 'u4l3-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l3-beach-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 2 · Eyes, Ears, Mouth, Nose!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "eyes", say: "Find the eyes!", img: `${A}/items/item-card-eyes.png` },
+      { word: "ears", say: "Show me the ears!", img: `${A}/items/item-card-ears.png` },
+      { word: "nose", say: "Point to the nose!", img: `${A}/items/item-card-nose.png` },
+      { word: "mouth", say: "Find the mouth!", img: `${A}/items/item-card-mouth.png` },
+    ],
+  },
+  {
     id: 'u4l3-intro', kind: 'cinematic', bg: bgU4L3Beach, hidePipOverlay: true, title: 'Beach Day', subtitle: 'Hands, fingers, feet, arms!', narrator: 'bella',
     script: [
       { who: 'bella', line: 'Hello! It\'s a beach day!' },
@@ -7286,6 +7534,18 @@ export const LESSON_U4L4_SCENES: Scene[] = [
       { who: 'pip', text: 'I have ten fingers! I have ten toes!', emotion: 'happy' },
       { who: 'mia', text: 'Big, big feet! Small, small hands!', emotion: 'happy' },
       { who: 'leo', text: 'This is my body! My big, big body!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · Hands, Fingers, Feet, Arms!.
+    id: 'u4l4-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l4-garden-wide.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 3 · Hands, Fingers, Feet, Arms!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "hand", say: "Find the hand!", img: `${A}/items/item-part-hand.png` },
+      { word: "finger", say: "Show me the finger!", img: `${A}/items/item-part-finger.png` },
+      { word: "foot", say: "Point to the foot!", img: `${A}/items/item-part-foot.png` },
+      { word: "arm", say: "Find the arm!", img: `${A}/items/item-part-arm.png` },
     ],
   },
   {
@@ -7507,6 +7767,18 @@ export const LESSON_U4L5_SCENES: Scene[] = [
       { who: 'pip', text: 'I wave my arms! I can do it!', emotion: 'happy' },
       { who: 'pip', text: 'I stomp my feet! I clap my hands!', emotion: 'happy' },
       { who: 'pip', text: 'From head to toe, we can do it!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · My Big Body!.
+    id: 'u4l5-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l5-park-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 4 · My Big Body!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "eyes", say: "Find the eyes!", img: `${A}/items/item-card-eyes.png` },
+      { word: "ears", say: "Show me the ears!", img: `${A}/items/item-card-ears.png` },
+      { word: "hands", say: "Point to the hands!", img: `${A}/items/item-part-hand.png` },
+      { word: "feet", say: "Find the feet!", img: `${A}/items/item-part-foot.png` },
     ],
   },
   {
@@ -7749,6 +8021,18 @@ export const LESSON_U4L6_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · From Head to Toe.
+    id: 'u4l6-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l6-station-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 5 · From Head to Toe",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "tiger", say: "Find the tiger!", img: `${A}/scenes/bg-u4l5-tiger-head-wide.png` },
+      { word: "monkey", say: "Show me the monkey!", img: `${A}/scenes/bg-u4l5-monkey-arms-wide.png` },
+      { word: "elephant", say: "Point to the elephant!", img: `${A}/scenes/bg-u4l5-elephant-feet-wide.png` },
+      { word: "seal", say: "Find the seal!", img: `${A}/scenes/bg-u4l5-seal-hands-wide.png` },
+    ],
+  },
+  {
     id: 'u4l6-intro', kind: 'cinematic', bg: bgU4L6Station, hidePipOverlay: true, title: 'Space Station', subtitle: 'Simon says!', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Welcome to the space station! This is Robo, our robot friend!' },
@@ -7965,6 +8249,17 @@ export const LESSON_U5L2_SCENES: Scene[] = [
       { who: 'pip', text: 'This is my sister! She is small!', emotion: 'happy' },
       { who: 'pip', text: 'This is my baby! Tiny, tiny baby!', emotion: 'happy' },
       { who: 'pip', text: 'I love my family! I love you!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · Mom, Dad, Me!.
+    id: 'u5l2-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u5l2-yard-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 1 · Mom, Dad, Me!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "mom", say: "Find mom!", img: `${A}/items/item-family-mom.png` },
+      { word: "dad", say: "Show me dad!", img: `${A}/items/item-family-dad.png` },
+      { word: "Pip", say: "Point to Pip!", img: `${A}/items/item-family-pip.png` },
     ],
   },
   {
@@ -8187,6 +8482,17 @@ export const LESSON_U5L3_SCENES: Scene[] = [
       { who: 'pip', text: 'This is my grandma! Big, big hug!', emotion: 'happy' },
       { who: 'pip', text: 'This is my grandpa! Big, big hug!', emotion: 'happy' },
       { who: 'pip', text: 'I love my grandma! I love my grandpa!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · Brother, Sister, Baby!.
+    id: 'u5l3-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u5l3-living-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 2 · Brother, Sister, Baby!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "brother", say: "Find the brother!", img: `${A}/scenes/bg-u5l2-brother-wide.png` },
+      { word: "sister", say: "Show me the sister!", img: `${A}/scenes/bg-u5l2-sister-wide.png` },
+      { word: "baby", say: "Point to the baby!", img: `${A}/scenes/bg-u5l2-baby-wide.png` },
     ],
   },
   {
@@ -8427,6 +8733,18 @@ export const LESSON_U5L1_OBJECTIVE = 'Identify and name mom and dad, use "This i
 
 export const LESSON_U5L1_SCENES: Scene[] = [
   { id: 'u5l1-title', kind: 'title-card', bg: bgU5L1FamilyHome, level: 'Pre-A1', unit: 'Unit 5', lessonLabel: 'Lesson 1', title: 'Mom, Dad, Me!', subtitle: "Meet Pip's family!" },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 4 · Lesson 6 · Simon Says Body Parts.
+    id: 'u5l1-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u5l1-family-home.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Unit 4 · Lesson 6 · Simon Says Body Parts",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "mouth", say: "Find the mouth!", img: `${A}/items/item-card-mouth.png` },
+      { word: "foot", say: "Show me the foot!", img: `${A}/items/item-part-foot.png` },
+      { word: "ears", say: "Point to the ears!", img: `${A}/items/item-card-ears.png` },
+      { word: "hand", say: "Find the hand!", img: `${A}/items/item-part-hand.png` },
+    ],
+  },
   {
     id: 'u5l1-hello', kind: 'roleplay', bg: bgU5L1FamilyHome, teacher: "Good morning! Let's say hello and warm up together.", cast: ['pip', 'bella', 'willow', 'mia'],
     script: [

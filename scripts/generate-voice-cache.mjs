@@ -399,6 +399,11 @@ const UNIT1_EXTRACTORS = {
     ...(s.members ?? []).map((m) => [s.who, m.reply]),
     [s.who, s.doneLine],
   ],
+  // Mirror RecallWarmupScene.tsx's recallWarmupLines().
+  'recall-warmup': (s) => [
+    [s.who, 'Do you remember? Listen and find it!'], [s.who, 'Try again!'], [s.who, 'You remember! Great job!'],
+    ...(s.items ?? []).flatMap((it) => [[s.who, it.say], [s.who, `Yes! ${it.word.charAt(0).toUpperCase() + it.word.slice(1)}!`]]),
+  ],
   // Mirror CookieFacesScene.tsx's cookieFacesLines() / WhosMissingScene.tsx's whosMissingLines().
   'cookie-faces': (s) => [
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),

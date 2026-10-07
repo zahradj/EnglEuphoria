@@ -86,6 +86,7 @@ import { PartPeekScene } from './scene-components/PartPeekScene';
 import { FamilyPhotoScene } from './scene-components/FamilyPhotoScene';
 import { SizeLineScene } from './scene-components/SizeLineScene';
 import { CookieFacesScene } from './scene-components/CookieFacesScene';
+import { RecallWarmupScene } from './scene-components/RecallWarmupScene';
 import { WhosMissingScene } from './scene-components/WhosMissingScene';
 import { CountPartsScene } from './scene-components/CountPartsScene';
 import { RingTossScene } from './scene-components/RingTossScene';
@@ -274,6 +275,7 @@ export function SceneRenderer(props: {
     case 'shape-bubbles': return <ShapeBubblesScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'family-photo': return <FamilyPhotoScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'size-line': return <SizeLineScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'recall-warmup': return <RecallWarmupScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;
     case 'cookie-faces': return <CookieFacesScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'whos-missing': return <WhosMissingScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'move-match': return <MoveMatchScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

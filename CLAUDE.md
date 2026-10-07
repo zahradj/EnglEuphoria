@@ -50,3 +50,9 @@
 
 - Every new lesson: research >= 3 benchmarks (Khan Academy Kids, Lingokids, LingoAce, VIPKid, Novakid, Duolingo ABC, Oxford, Cambridge, Wordwall...) for its skill, take the mechanic (never content), make it better, and add or upgrade >= 1 mechanic.
 - Vary activities, look, scenes (settings) and themes (story frame) from the previous lesson and from the same slot of the previous unit. Follow `.claude/skills/lesson-variety-engine`; register `LESSON_PROFILE` + `RESEARCH_LOG` in `src/content/playground-library/lessonVariety.ts`. `lessonVariety.test.ts` (deploy gate) fails otherwise — fix the lesson, never the check.
+
+## Remember? warm-up (hard rule — owner, 2026-10-07)
+
+- Every Playground lesson after the very first opens (right after the title / hello song) with ONE `recall-warmup` scene: a quick "Remember?" of the lesson before, 3-5 of its words with their pictures, Pip says each word and the child finds it — no reading.
+- Vary the look: `mode: 'click'` (listen and click, three pictures) for colours and scene pictures; `mode: 'shadow'` (listen and match the shadow) only for sticker pictures with clearly different outlines.
+- `recallWarmup.test.ts` (deploy gate) fails if a lesson has none. It is a routine scene, not one of the lesson's games.

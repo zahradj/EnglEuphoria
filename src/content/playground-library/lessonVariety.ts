@@ -20,7 +20,7 @@ import type { Scene } from './unit1/scenes';
 
 /** The shared lesson spine: routine kinds every lesson may repeat (hello, story, songs, rewards…). */
 export const ROUTINE_KINDS: ReadonlySet<string> = new Set([
-  'title-card', 'song', 'cinematic', 'story-video', 'story-order', 'listen-repeat-cards', 'tpr-actions',
+  'title-card', 'song', 'cinematic', 'recall-warmup', 'story-video', 'story-order', 'listen-repeat-cards', 'tpr-actions',
   'join-stage', 'spin-wheel', 'sound-model', 'trace', 'echo', 'sticker-reward', 'home-mission', 'finale',
 ]);
 
