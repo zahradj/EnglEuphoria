@@ -19,10 +19,11 @@ import { CreditBalance } from '../CreditBalance';
 beforeEach(() => { state.available = 10; state.loading = false; state.family = false; });
 
 describe('credit balance on the student dashboard', () => {
-  it('shows the number of lesson credits and the hours they cover', () => {
+  it('shows the number of 30-minute lessons left', () => {
     render(<CreditBalance />);
-    expect(screen.getByText('10 lesson credits')).toBeTruthy();
-    expect(screen.getByText(/5 hours of lessons/)).toBeTruthy();
+    expect(screen.getByText('10 lessons left')).toBeTruthy();
+    expect(screen.getByText(/30 minutes each/)).toBeTruthy();
+    expect(screen.queryByText(/hour/i)).toBeNull();
     expect(screen.getByRole('link', { name: /buy more/i }).getAttribute('href')).toBe('/pricing');
   });
 

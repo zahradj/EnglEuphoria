@@ -77,8 +77,8 @@ export const ReferralTab: React.FC<ReferralTabProps> = ({ signupPath = '/student
   };
 
   const shareMessage = family
-    ? `Join me on Engleuphoria — live English lessons for the whole family! Sign up with my link and when you buy your first lesson pack we BOTH get a free lesson credit (30 minutes) 🎁 ${referralLink}`
-    : `Join me on Engleuphoria — the AI-powered English learning platform! Sign up with my link and when you buy your first lesson pack we BOTH get a free lesson credit (30 minutes) 🎁 ${referralLink}`;
+    ? `Join me on Engleuphoria — live English lessons for the whole family! Sign up with my link and when you buy your first lesson pack we BOTH get a free 30-minute lesson 🎁 ${referralLink}`
+    : `Join me on Engleuphoria — the AI-powered English learning platform! Sign up with my link and when you buy your first lesson pack we BOTH get a free 30-minute lesson 🎁 ${referralLink}`;
 
   if (loading) {
     return (
@@ -102,8 +102,8 @@ export const ReferralTab: React.FC<ReferralTabProps> = ({ signupPath = '/student
               <CardTitle className="text-2xl">Give a Lesson, Get a Lesson! 🎁</CardTitle>
               <CardDescription className="text-base mt-1">
                 {family
-                  ? 'Invite another family to Engleuphoria. When they buy their first package, you BOTH get a free lesson credit (30 minutes) for a child.'
-                  : 'Invite a friend to Engleuphoria. When they buy their first package, you BOTH get a free lesson credit (30 minutes).'}
+                  ? 'Invite another family to Engleuphoria. When they buy their first package, you BOTH get a free 30-minute lesson for a child.'
+                  : 'Invite a friend to Engleuphoria. When they buy their first package, you BOTH get a free 30-minute lesson.'}
               </CardDescription>
             </div>
           </div>

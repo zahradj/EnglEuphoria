@@ -50,11 +50,11 @@ export function MoveCreditsDialog({ open, onOpenChange, learners, credits, fromI
     try {
       const { error } = await (supabase as any).rpc('transfer_family_credits', { p_from: from, p_to: to, p_credits: count });
       if (error) throw error;
-      toast({ title: 'Credits moved', description: `${count} credit${count === 1 ? '' : 's'} moved from ${nameOf(from)} to ${nameOf(to)}.` });
+      toast({ title: 'Lessons moved', description: `${count} lesson${count === 1 ? '' : 's'} moved from ${nameOf(from)} to ${nameOf(to)}.` });
       await queryClient.invalidateQueries({ queryKey: ['family-credits'] });
       onOpenChange(false);
     } catch (err: any) {
-      toast({ title: 'Could not move credits', description: err?.message ?? 'Please try again.', variant: 'destructive' });
+      toast({ title: 'Could not move lessons', description: err?.message ?? 'Please try again.', variant: 'destructive' });
     } finally {
       setSaving(false);
     }
@@ -70,7 +70,7 @@ export function MoveCreditsDialog({ open, onOpenChange, learners, credits, fromI
         className="h-10 rounded-md border border-input bg-background px-3 text-sm"
       >
         {learners.map((l) => (
-          <option key={l.studentId} value={l.studentId}>{l.name} ({credits[l.studentId] ?? 0} credits)</option>
+          <option key={l.studentId} value={l.studentId}>{l.name} ({credits[l.studentId] ?? 0} lessons)</option>
         ))}
       </select>
     </label>
@@ -80,15 +80,15 @@ export function MoveCreditsDialog({ open, onOpenChange, learners, credits, fromI
     <Dialog open={open} onOpenChange={(next) => { if (!saving) onOpenChange(next); }}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Move credits between children</DialogTitle>
-          <DialogDescription>Only unused credits can be moved. Credits already used for lessons stay where they are.</DialogDescription>
+          <DialogTitle>Move lessons between children</DialogTitle>
+          <DialogDescription>Only unused lessons can be moved. Lessons already taken stay where they are.</DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4">
           {select('move-from', from, (v) => { setFrom(v); setCount(1); if (v === to) setTo(learners.find((l) => l.studentId !== v)?.studentId ?? ''); }, 'From')}
           {select('move-to', to, setTo, 'To')}
           <div className="grid gap-1 text-sm font-medium">
-            Credits to move
+            Lessons to move
             <div className="flex items-center gap-3">
               <Button type="button" variant="outline" size="icon" aria-label="One less" onClick={() => setCount((c) => Math.max(1, c - 1))} disabled={count <= 1}>
                 <Minus className="h-4 w-4" />
@@ -106,7 +106,7 @@ export function MoveCreditsDialog({ open, onOpenChange, learners, credits, fromI
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={saving}>Cancel</Button>
           <Button onClick={move} disabled={!canMove || saving}>
             {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Move credits
+            Move lessons
           </Button>
         </DialogFooter>
       </DialogContent>

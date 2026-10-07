@@ -38,7 +38,7 @@ describe('credit alert on every student dashboard', () => {
     render(<CreditAlertBanner />);
     const alert = screen.getByRole('alert');
     expect(alert.getAttribute('data-credit-alert')).toBe('empty');
-    expect(screen.getByText('You have used all your credits')).toBeTruthy();
+    expect(screen.getByText('You have used all your lessons')).toBeTruthy();
     const link = screen.getByRole('link', { name: /contact us to buy/i });
     expect(link.getAttribute('href')).toMatch(/^mailto:support@engleuphoria\.com\?subject=/);
     expect(decodeURIComponent(link.getAttribute('href')!)).toContain('kid@example.com');
@@ -48,7 +48,7 @@ describe('credit alert on every student dashboard', () => {
     state.available = 1;
     render(<CreditAlertBanner />);
     expect(screen.getByRole('alert').getAttribute('data-credit-alert')).toBe('low');
-    expect(screen.getByText('Only 1 credit left')).toBeTruthy();
+    expect(screen.getByText('Only 1 lesson left')).toBeTruthy();
   });
 });
 
