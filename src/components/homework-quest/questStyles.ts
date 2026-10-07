@@ -3,6 +3,11 @@
  *  or daylight), not tied to the app's light/dark mode — it's a game world. */
 export const QUEST_CSS = `
 .hq { --gold:#f5c542; --ember:#fe6a2f; --mint:#34d399; --rose:#fb7185; --parchment:#fff6df; --ink:#2a1459; min-height:100dvh; font-family:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif; color:#f4efff; }
+.hq { position:relative; overflow:hidden; }
+.hq-forest { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0; }
+.hq-forest::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,.14); }
+.hq.night .hq-forest::after { background:rgba(20,8,50,.62); }
+.hq-wrap { position:relative; z-index:1; }
 .hq.night { background: radial-gradient(ellipse at 50% 0%, #2b1760, #140b2e 65%); }
 .hq.day { background: radial-gradient(ellipse at 50% 0%, #fff3d6, #ffe0b8 40%, #f7b98a 100%); color:#3a1f0d; --parchment:#ffffff; }
 .hq * { box-sizing:border-box; }

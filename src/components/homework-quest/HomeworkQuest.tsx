@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, 
 import type { HomeworkQuest as Quest, QuestLevel, QuestVoice, Box } from '@/content/homework-quests/types';
 import { speak, stopSpeaking, playLetterPhonic, unlockAudio } from '@/content/playground-library/unit1/audio';
 import { QUEST_CSS } from './questStyles';
+import { JungleTheme } from '@/components/student/kids/JungleTheme';
 
 /**
  * Plays any Homework Quest (src/content/homework-quests). Voices are the
@@ -498,6 +499,8 @@ export default function HomeworkQuest({ quest, onComplete, onExit }: { quest: Qu
   return (
     <div className={`hq ${quest.theme.night ? 'night' : 'day'}`} style={{ ['--hq-accent' as string]: quest.theme.accent, ['--hq-accent2' as string]: quest.theme.accent2 }} onPointerDown={() => unlockAudio()}>
       <style>{QUEST_CSS}</style>
+      {/* The homework forest, behind every quest (same backdrop as the Homework Forest on the dashboard). */}
+      <div className="hq-forest" aria-hidden><JungleTheme /></div>
       <div className="hq-wrap">
         <header className="hq-hud">
           <div className="hq-brand"><img src={quest.theme.guide} alt="" /><div><h1>{quest.title}</h1><small>{quest.subtitle}</small></div></div>
