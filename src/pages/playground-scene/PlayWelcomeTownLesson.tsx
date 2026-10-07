@@ -1,6 +1,7 @@
 import { SHARED_PLAY_KINDS, useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
 import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
 import { useRecordClassroomCompletion } from '@/hooks/useRecordClassroomCompletion';
+import { resolveSoundSides } from '@/content/playground-library/welcome-town/scene-components/soundLayout';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -94,7 +95,8 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   ref,
 ) {
   const navigate = useNavigate();
-  const SCENES = scenes;
+  // Sound lessons mix three layouts (centre / sound-left / sound-right); scenes that don't pin one get the next in the pattern.
+  const SCENES = useMemo(() => resolveSoundSides(scenes), [scenes]);
   const finaleFiredRef = useRef(false);
 
   const [sceneIdx, setSceneIdx] = useState<number>(() => {

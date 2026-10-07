@@ -173,6 +173,12 @@ Academy B1 U1 L1 — every slide "reported" the cover).
       of the letter card, the teacher line or the bottom buttons. Phones (<640px) put the words in the four corners.
       Words start as big "?" mystery cards and open into the picture + a word chip. Spots live in `soundAnchors.ts`
       (`anchorSpot`, `letterX`); `SoundModelScene.layout.test.ts` guards the spacing.
+    - **Choosing the side (the skill).** Default: leave `soundSide` out and the lesson rotates centre → left → right across its sound
+      scenes (`soundLayout.ts`, applied by the player; the same layout never twice in a row). PIN a side only when the background
+      has a clear subject: keep the big sound card OFF the subject's face — subject in the middle (wizard, teacher, Pip) → pin
+      `left` or `right`; subject on the left → `right`; subject on the right → `left`; empty room / landscape → let the rotation
+      choose. The words may float over background props but never over the subject's face or the teacher line. Check the opened
+      state (all four pictures out) in headless Chrome, not just the closed "?" cards.
     - **Pictures.** Every anchor word has an `img`: a well-drawn CARTOON ILLUSTRATION (animated-movie look: dark outline,
       soft shading and highlights, expressive face where it fits) with a TRANSPARENT background — never a system emoji (it renders
       as an ugly 3D glyph), never a plain flat vector, never a 3D render. Canva only. Prompt:

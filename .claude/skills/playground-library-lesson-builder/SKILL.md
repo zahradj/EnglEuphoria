@@ -377,6 +377,7 @@ reaching for before hand-rolling something similar:
 - **`sound-model` layout + pictures (A1/A2, `SoundModelScene` + `soundAnchors.ts`)** — owner rule 2026-10-07, every hub.
   Sound card CENTER with the words scattered on BOTH sides (default, A1: 2 + 2), or `soundSide: 'left' | 'right'` with ALL the
   words floating on the opposite side; phones use the four corners. Words are "?" mystery cards that open into a picture + word.
+  Pattern: leave `soundSide` out and the lesson rotates centre → left → right (`soundLayout.ts`, never the same twice in a row); pin it only to keep the sound card off the background's subject (subject centre → left/right; subject left → right; subject right → left).
   Each anchor needs an `img` — a rich cartoon illustration (outline, soft shading + highlights, transparent background; NOT emoji,
   NOT 3D, NOT plain flat vector), made in Canva with: "Rich cartoon illustration sticker of <WORD>, children's animated-movie style like our Pre-A1 characters: thick dark-brown outline, soft shading with small highlights, friendly expressive face where it fits, centered, single object on a plain pure white background, no shadow, no text, NOT a 3D render, NOT an emoji."
   Export through the holder design (reuse a 1024×1024 sticker page: `update_fill`, since the design is at its 100-page limit),
