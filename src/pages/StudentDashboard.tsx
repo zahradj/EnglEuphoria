@@ -223,7 +223,7 @@ const StudentDashboard = () => {
 
   const renderActiveTab = () => {
     const tabComponents = {
-      dashboard: () => (<><CreditAlertBanner /><CreditBalance /><DashboardRouter systemId={systemId} studentName={studentName} /></>),
+      dashboard: () => (<>{systemId !== 'kids' && <><CreditAlertBanner /><CreditBalance /></>}<DashboardRouter systemId={systemId} studentName={studentName} /></>),
       "learning-path": () => <MyPathTab />,
       lessons: () => (<><CreditAlertBanner /><CreditBalance /><MyLessonsTab /></>),
       homework: () => <HomeworkTab />,

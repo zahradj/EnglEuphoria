@@ -11,6 +11,7 @@ vi.mock('../LevelNode', () => ({ LevelNode: () => null }));
 vi.mock('../WindingPath', () => ({ WindingPath: () => null }));
 vi.mock('../FloatingBackpack', () => ({ FloatingBackpack: () => null }));
 vi.mock('../GiantGoButton', () => ({ GiantGoButton: () => null }));
+vi.mock('../CreditCoin', () => ({ CreditCoin: () => null }));
 vi.mock('../LessonPlayerModal', () => ({ LessonPlayerModal: () => null }));
 vi.mock('../SceneLessonPlayerModal', () => ({ SceneLessonPlayerModal: () => null }));
 vi.mock('@/components/student/RecentLessonReports', () => ({

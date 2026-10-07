@@ -12,6 +12,7 @@ import { FloatingBackpack } from './FloatingBackpack';
 import { GiantGoButton } from './GiantGoButton';
 import { LessonPlayerModal } from './LessonPlayerModal';
 import { RecentLessonReports } from '@/components/student/RecentLessonReports';
+import { CreditCoin } from './CreditCoin';
 import { SceneLessonPlayerModal } from './SceneLessonPlayerModal';
 import { PlaygroundLesson } from '@/hooks/usePlaygroundLessons';
 import { isSceneLessonFormat } from '@/content/playground-library/sceneLessonFormats';
@@ -230,6 +231,9 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
         </div>
         
         <div className="flex items-center gap-2">
+          {/* Lesson credits: a small coin with the number */}
+          <CreditCoin />
+
           {/* Homework Forest: the lessons' Homework Quests, opened over the map */}
           <button
             type="button"
