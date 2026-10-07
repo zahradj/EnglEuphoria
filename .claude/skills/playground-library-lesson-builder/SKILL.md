@@ -382,6 +382,7 @@ reaching for before hand-rolling something similar:
   NOT 3D, NOT plain flat vector), made in Canva with: "Rich cartoon illustration sticker of <WORD>, children's animated-movie style like our Pre-A1 characters: thick dark-brown outline, soft shading with small highlights, friendly expressive face where it fits, centered, single object on a plain pure white background, no shadow, no text, NOT a 3D render, NOT an emoji."
   Export through the holder design (reuse a 1024×1024 sticker page: `update_fill`, since the design is at its 100-page limit),
   then `scripts/fetch-canva-art.py` locally. `soundPictures.test.ts` + `SoundModelScene.layout.test.ts` are the deploy gate.
+- **UNIVERSAL overlay rule (owner 2026-10-07): nothing important is hidden by text or controls.** Every text over art uses a shared, picture-aware placement: `StoryCaption` (stories/cinematics/story videos), `DialoguePlate img={scene.bg}` (character dialogue: top or bottom), `soundSide`/`anchorSpot` (sound words). Author-anchored speech (roleplay/join-stage/hello-doors) is on the ANCHORED list in `storyText.test.ts`. Run the overlay audit in lesson-quality-gate item 12 before calling a lesson done.
 - **`StoryCaption` (→ `StoryPlate` + `captionPlacement.ts`)** — THE way story / narration / reading text is shown over a
   picture, in every scene kind and hub (owner rule 2026-10-06, global): the framed paper plate of the character-introduction
   `DialoguePlate`, on the side of THE PICTURE with calm space — top, bottom, left or right — measured per page

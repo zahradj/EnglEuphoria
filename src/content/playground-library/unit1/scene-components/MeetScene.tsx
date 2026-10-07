@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DialoguePlate, plateFontSize } from '../../DialoguePlate';
+import { warmCaptionPlacement } from '../../captionPlacement';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
 import { safeSpeak } from '../audio';
@@ -14,6 +15,8 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
   const { phase, held, heardRepeat, xpBurst } = state;
   const holdTimer = useRef<number | null>(null);
   const c = CAST[scene.who];
+  // Measure the picture now so the dialogue plate is placed the moment the character speaks.
+  useEffect(() => { warmCaptionPlacement([scene.bg]); }, [scene.id]); // eslint-disable-line react-hooks/exhaustive-deps
   const repeatWord = scene.repeat ?? scene.line;
   // Local on purpose (not synced): each screen shows its own equalizer while its own voice plays.
   const [speaking, setSpeaking] = useState(false);
@@ -83,6 +86,7 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
           "your turn" bar that runs along the very bottom. */}
       {phase !== 'idle' && (
         <DialoguePlate
+          img={scene.bg}
           name={c.name}
           color={c.color}
           onTap={replayIntro}

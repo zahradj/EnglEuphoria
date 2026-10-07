@@ -193,6 +193,19 @@ Academy B1 U1 L1 — every slide "reported" the cover).
     - **Check.** Open the scene in headless Chrome at 1280×720 and 390×844, tap all four mystery cards, and confirm nothing
       overlaps and every word is readable.
 
+12. **UNIVERSAL: nothing important is ever hidden by text or controls** (owner, 2026-10-07: "make it universal, make sure you do it in the
+    future"). This is the rule behind items 10 and 11, for EVERY line of text or control laid over a lesson picture or video, in
+    every hub and scene kind — story captions, character dialogue plates (meet scenes), sound-word cards, teacher-line pills, quiz
+    prompts, buttons. Procedure for any lesson you build or edit (**overlay audit**):
+    1. List every text/control that sits over art in each scene.
+    2. Use the shared placement, never a hard-coded band: `StoryCaption` (stories, cinematics, story videos), `DialoguePlate img={scene.bg}`
+       (a character speaking — top or bottom, whichever hides less), `soundAnchors`/`soundSide` (sound words). Video pages are measured on real frames.
+    3. If a text must sit next to its speaker (roleplay / join-stage bubbles, hello-doors), it is on the ANCHORED list in `storyText.test.ts`:
+       put it on the empty side of that speaker and check it in the browser.
+    4. Open the rendered scene in headless Chrome at 1280×720 and 390×844 and look: no face, animal, key object or answer card is covered;
+       if one is, pin the side (`textPos` / `soundSide` / `pin`) — the subject always wins.
+    5. A NEW scene kind that shows text over art must use these helpers (or be added to the ANCHORED list with a reason). `storyText.test.ts` is the gate.
+
 **Fix at the shared component** (`AcademyDemo.tsx`, `PlayAcademyLesson.tsx`, `LivingCanvas.tsx`,
 `EscapeRoomSlot.tsx`), not per lesson — comfort bugs are almost always shared-component bugs.
 

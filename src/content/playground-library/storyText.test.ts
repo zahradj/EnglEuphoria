@@ -32,6 +32,33 @@ describe('story text placement (global)', () => {
     expect(read(f)).toContain('<StoryCaption');
   });
 
+  it('character dialogue plates (meet scenes) are placed from the picture too — never a fixed band over the character', () => {
+    for (const f of [
+      'src/content/playground-library/unit1/scene-components/MeetScene.tsx',
+      'src/content/playground-library/welcome-town/scene-components/MeetScene.tsx',
+    ]) {
+      const src = read(f);
+      expect(src, f).toContain('<DialoguePlate');
+      expect(src, `${f}: pass img={scene.bg} so the plate avoids the character`).toMatch(/<DialoguePlate[\s\S]{0,40}img=\{scene\.bg\}/);
+    }
+  });
+
+  it('every other text-over-art scene is on the AUTHOR-ANCHORED list (a human placed it next to its speaker); new ones must use StoryCaption/DialoguePlate', () => {
+    // Speech lines that sit beside the character who says them; the author pins where. Keep this list honest: adding a file here is a
+    // decision that the text cannot be placed automatically (e.g. a bubble pointing at its speaker).
+    const ANCHORED = new Set([
+      'RoleplayScene.tsx', 'JoinStageScene.tsx', 'HelloDoorsScene.tsx', 'SongScene.tsx', 'FinaleScene.tsx', 'TitleCardScene.tsx',
+    ]);
+    const speechBubble = /border-t-\[1[0-9]px\] border-x-transparent border-t-white/; // the old tail-bubble pattern
+    const offenders: string[] = [];
+    for (const f of [...walk('src/content/playground-library/unit1/scene-components'), ...walk('src/content/playground-library/welcome-town/scene-components')]) {
+      const base = f.split('/').pop()!;
+      if (ANCHORED.has(base)) continue;
+      if (speechBubble.test(read(f))) offenders.push(`${f}: speech bubble over art — use StoryCaption or DialoguePlate (img=…)`);
+    }
+    expect(offenders, offenders.join('\n')).toEqual([]);
+  });
+
   it('no scene brings back the old story-text patterns (faint band, grown-up pill, speech-bubble tail)', () => {
     const offenders: string[] = [];
     for (const f of [...walk('src/content/playground-library/unit1/scene-components'), ...walk('src/content/playground-library/welcome-town/scene-components')]) {
