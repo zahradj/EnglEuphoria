@@ -39,7 +39,7 @@ describe('credit alert on every student dashboard', () => {
     expect(alert.getAttribute('data-credit-alert')).toBe('empty');
     expect(screen.getByText('You have used all your credits')).toBeTruthy();
     const link = screen.getByRole('link', { name: /contact us to buy/i });
-    expect(link.getAttribute('href')).toMatch(/^mailto:hello@engleuphoria\.com\?subject=/);
+    expect(link.getAttribute('href')).toMatch(/^mailto:support@engleuphoria\.com\?subject=/);
     expect(decodeURIComponent(link.getAttribute('href')!)).toContain('kid@example.com');
   });
 
