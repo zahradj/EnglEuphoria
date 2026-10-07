@@ -6,6 +6,7 @@ import { VOICE_PROFILES, isApprovedVoice, normalizeForSpeech, unresolvedSpeechRi
 import { VOICES_BY_HUB } from '@/constants/characterVoices';
 import { LIBRARY_GAMES } from './gamesCatalog';
 import { artFor } from './alphabetArt';
+import { colorPlayLines } from './colorPlayText';
 
 /**
  * QUALITY AUDIT — "Voice" engine (see .claude/skills/lesson-quality-gate).
@@ -101,6 +102,7 @@ describe('voice policy: accurate pronunciation of the words the games teach', ()
     for (const stage of game.stages) {
       const scene = stage.scene;
       if (scene.kind === 'whats-missing') scene.rounds.forEach((r) => r.items.forEach((i) => words.add(i.word)));
+      if (scene.kind === 'color-play') colorPlayLines(scene.mode, scene.rounds, scene.intro).forEach((l) => grammarLines.add(l));
       if (scene.kind === 'grammar-gap') {
         (scene.examples ?? []).forEach((e) => grammarLines.add(e));
         scene.rounds.forEach((r) => grammarLines.add([r.before, r.answer, r.after].map((p) => p.trim()).filter(Boolean).join(' ')));

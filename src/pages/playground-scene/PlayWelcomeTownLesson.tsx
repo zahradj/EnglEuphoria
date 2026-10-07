@@ -1,5 +1,7 @@
 import { SHARED_PLAY_KINDS, useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
 import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
+import { useRecordClassroomCompletion } from '@/hooks/useRecordClassroomCompletion';
+import { resolveSoundSides } from '@/content/playground-library/welcome-town/scene-components/soundLayout';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -44,7 +46,7 @@ interface PlayWelcomeTownLessonProps {
   role?: 'teacher' | 'student';
   roomId?: string;
   hideInternalNav?: boolean;
-  onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean }) => void;
+  onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean; lockToggleApplicable?: boolean }) => void;
   persistedSceneIdx?: number | null;
   onSceneIdxPersist?: (idx: number) => void;
   /** Last interaction-unlock state persisted to the classroom session DB row, if any — recovers a refreshed/reconnecting tab instead of resetting to locked. */
@@ -56,7 +58,7 @@ interface PlayWelcomeTownLessonProps {
 /** Gem-eligible scene kinds — every activity kind that ever calls onWin(true)
  *  exactly once when completed. Kept in sync manually with SceneRenderer.tsx
  *  (title-card/cinematic never award a gem; finale is the end screen). */
-const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'sentence-build', 'letter-game', 'jigsaw-puzzle', 'spin-wheel', 'picture-match', 'first-sound', 'letter-match', 'letter-blocks', 'place-it', 'torch-hunt', 'where-castle', 'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'welcome-party', 'name-badge']);
+const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'sentence-build', 'letter-game', 'jigsaw-puzzle', 'spin-wheel', 'picture-match', 'first-sound', 'letter-match', 'letter-blocks', 'place-it', 'torch-hunt', 'where-castle', 'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play', 'welcome-party', 'name-badge']);
 
 /** Scene kinds that own real synced state (see `activityState` below)
  *  instead of relying on the generic scene_tap DOM-click-mirror. Whoever
@@ -84,7 +86,7 @@ const REAL_SYNC_KINDS = new Set<Scene['kind']>([
   'vocab-spot', 'meet', 'echo', 'memory', 'choice', 'listen-tap', 'true-false',
   'frequency-ladder', 'roleplay', 'join-stage', 'hello-doors', 'flipbook',
   'sound-model', 'word-build', 'sentence-build', 'letter-game', 'spin-wheel', 'picture-match', 'recall-warmup',
-  'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap',
+  'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play',
   'tongue-twister', 'place-it', 'torch-hunt', 'where-castle', 'welcome-party', 'name-badge',
 ]);
 
@@ -93,7 +95,8 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   ref,
 ) {
   const navigate = useNavigate();
-  const SCENES = scenes;
+  // Sound lessons mix three layouts (centre / sound-left / sound-right); scenes that don't pin one get the next in the pattern.
+  const SCENES = useMemo(() => resolveSoundSides(scenes), [scenes]);
   const finaleFiredRef = useRef(false);
 
   const [sceneIdx, setSceneIdx] = useState<number>(() => {
@@ -244,6 +247,23 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
           ? interactionUnlocked
           : !interactionUnlocked;
   const usesRealSync = REAL_SYNC_KINDS.has(scene.kind);
+
+  // TAKE OVER. With "Interaction On", most activities give the floor to the student and the teacher's own
+  // screen becomes a live mirror (only the shared games in SHARED_PLAY_KINDS let both play at once). So a
+  // teacher who tries to click would silently get nothing. Instead the teacher's screen says so, and one tap on
+  // the activity pauses the student and hands the activity to the teacher. The pause is for this scene only:
+  // moving on resumes the student automatically (unless the teacher pressed Pause themselves).
+  const teacherMirrored = isSynced && role === 'teacher' && !sharedPlay && !studentDriven && interactionUnlocked && usesRealSync;
+  const [tookOver, setTookOver] = useState(false);
+  const takeOver = useCallback(() => { setTookOver(true); setInteractionUnlocked(false); }, [setInteractionUnlocked]);
+  useEffect(() => { if (interactionUnlocked) setTookOver(false); }, [interactionUnlocked]);
+  const takeoverSceneRef = useRef(sceneIdx);
+  useEffect(() => {
+    if (takeoverSceneRef.current === sceneIdx) return;
+    takeoverSceneRef.current = sceneIdx;
+    if (tookOver && role === 'teacher') { setTookOver(false); setInteractionUnlocked(true); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sceneIdx]);
 
   // Scene-tagged: the render right after a scene change must never see the previous scene's state.
   const [activityState, setActivityStateLocal] = useSceneScopedState(scene.id);
@@ -666,6 +686,8 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   const totalGemsPossible = useMemo(() => SCENES.filter((s) => GEM_KINDS.has(s.kind)).length, [SCENES]);
 
   const isFinale = scene.kind === 'finale';
+  // A live-class student finishing the lesson gets progress + Homework Quest like the dashboard player does.
+  useRecordClassroomCompletion({ scenes, isFinale, role, roomId, skip: !!onFinaleReached });
 
   useEffect(() => {
     if (isFinale && !finaleFiredRef.current) {
@@ -743,7 +765,24 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
               </div>
             </div>
           )}
-          {isSynced && role === 'teacher' && interactionUnlocked && !studentDriven && (
+          {teacherMirrored && (
+            <button
+              type="button"
+              onClick={takeOver}
+              aria-label="Take over: pause the student and play this activity yourself"
+              className="absolute inset-0 z-40 cursor-pointer bg-transparent"
+            >
+              <span className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-bold text-white shadow-lg ring-2 ring-white/70">
+                ✋ Student is playing — tap anywhere to take over
+              </span>
+            </button>
+          )}
+          {isSynced && role === 'teacher' && tookOver && !interactionUnlocked && (
+            <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-amber-600/90 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
+              🎮 You're in control — the student is paused
+            </div>
+          )}
+          {isSynced && role === 'teacher' && interactionUnlocked && !studentDriven && !teacherMirrored && (
             <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-emerald-600/80 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
               {sharedPlay ? '🤝 Playing together' : '✋ Student is trying this'}
             </div>

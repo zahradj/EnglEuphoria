@@ -26,8 +26,9 @@ const normalizeHubKey = (h: string): TeachableHub | null => {
  * Returns the raw hub_role plus a normalized hub kind and the
  * allowed slot durations for that hub.
  *
-   * - Playground specialists: 30-minute slots only
-   * - Academy / Success / Combined: 60-minute slots only
+   * - Playground specialists: 30-minute slots (a student's one-hour lesson is two back-to-back 30s)
+   * - Academy / Success / Combined: 60-minute slots by default AND 30-minute slots, so students
+   *   of every hub can book a 30-minute (1 credit) or a 60-minute (2 credits) lesson
  */
 export const useTeacherHubRole = (teacherId: string | undefined) => {
   const [hubRole, setHubRole] = useState<HubRole>(null);
@@ -106,10 +107,12 @@ export const useTeacherHubRole = (teacherId: string | undefined) => {
       ? 'professional'
       : 'academy';
 
-  // A multi-hub teacher can open 30-minute (Playground) and 60-minute (Academy / Success) slots.
+  // One credit = 30 minutes in every hub, so every hub offers 30- and 60-minute lessons.
+  // Playground teachers open 30-minute slots only (an hour = two back-to-back 30s);
+  // Academy / Success teachers open 60-minute slots (default) or 30-minute slots.
   const allowedDurations: (30 | 60)[] = isMultiHub
-    ? [...(hubs.includes('playground') ? [30 as const] : []), ...(hubs.some((h) => h !== 'playground') ? [60 as const] : [])]
-    : isPlayground ? [30] : [60];
+    ? (hubs.some((h) => h !== 'playground') ? (hubs.includes('playground') ? [30, 60] : [60, 30]) : [30])
+    : isPlayground ? [30] : [60, 30];
 
   return { hubRole, hubKind, allowedDurations, isPlayground, loading, hubs, isMultiHub };
 };

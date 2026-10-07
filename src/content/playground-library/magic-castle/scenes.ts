@@ -634,7 +634,7 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     letter: 'CH', phoneme: '/tʃ/', sound: 'ch',
     teacher: 'Wim’s magic sound is CH! Say /ch/ /ch/ like a train: ch-ch-ch! Tap each magic box to find a CH word.',
     anchors: [
-      { word: 'chair', emoji: '\u{1FA91}' },
+      { word: 'chair', emoji: '\u{1FA91}', img: `${M}/stickers/chair.png` },
       { word: 'kitchen', emoji: '\u{1F373}' },
       { word: 'cheese', emoji: '\u{1F9C0}' },
       { word: 'chick', emoji: '\u{1F424}' },
@@ -984,10 +984,10 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
     letter: 'L', phoneme: '/l/', sound: 'lll',
     teacher: 'Wim’s first magic sound is L! Say /l/ /l/ with your tongue up. Tap each magic box to find an L word.',
     anchors: [
-      { word: 'lamp', emoji: '\u{1FA94}' },
-      { word: 'lion', emoji: '\u{1F981}' },
-      { word: 'leaf', emoji: '\u{1F343}' },
-      { word: 'lollipop', emoji: '\u{1F36D}' },
+      { word: 'lamp', emoji: '\u{1FA94}', img: `${M}/stickers/lamp.png` },
+      { word: 'lion', emoji: '\u{1F981}', img: `${M}/stickers/lion.png` },
+      { word: 'leaf', emoji: '\u{1F343}', img: '/lep1/items/item-leaf.png' },
+      { word: 'lollipop', emoji: '\u{1F36D}', img: `${M}/stickers/lollipop.png` },
     ],
   },
   { id: 'mc2-ph-trace-l', kind: 'trace', bg: bgWim, who: 'wim', letter: 'L', phoneme: '/l/', word: 'lamp', teacher: 'Trace the letter L! Say /l/ /l/ /l/ as you draw.' },
@@ -996,7 +996,7 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
     letter: 'W', phoneme: '/w/', sound: 'www',
     teacher: 'Now the W sound! Make a little circle with your lips: /w/ /w/. Tap each box to find a W word.',
     anchors: [
-      { word: 'window', emoji: '\u{1FA9F}' },
+      { word: 'window', emoji: '\u{1FA9F}', img: `${M}/stickers/window.png` },
       { word: 'wand', emoji: '\u{1FA84}' },
       { word: 'wizard', emoji: '\u{1F9D9}' },
       { word: 'web', emoji: '\u{1F578}️' },

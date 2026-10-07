@@ -91,3 +91,14 @@ export const SCENE_LESSON_META: Record<string, { title: string; objective: strin
 export function getSceneLessonMeta(unitNumber: number, lessonNumber: number): { title: string; objective: string } | null {
   return SCENE_LESSON_META[`${unitNumber}-${lessonNumber}`] ?? null;
 }
+
+/** Which Little Explorers Phonics (`lep1-rich`) lesson owns this scene list
+ *  (by identity — the players only receive `scenes`). Null for ad-hoc lists. */
+export function identifySceneLesson(scenes: unknown): { contentFormat: 'lep1-rich'; unitNumber: number; lessonNumber: number; title: string } | null {
+  for (const [key, list] of Object.entries(SCENE_LESSON_REGISTRY)) {
+    if (list !== scenes) continue;
+    const [u, l] = key.split('-').map(Number);
+    return { contentFormat: 'lep1-rich', unitNumber: u, lessonNumber: l, title: SCENE_LESSON_META[key]?.title ?? '' };
+  }
+  return null;
+}

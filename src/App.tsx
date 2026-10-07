@@ -109,6 +109,7 @@ const CommunityPage = lazy(() => import("./pages/CommunityPage"));
 const TeacherClassroomPage = lazy(() => import("./pages/TeacherClassroomPage"));
 const TeacherControlPanelPage = lazy(() => import("./pages/TeacherControlPanelPage"));
 const AIPlacementTest = lazy(() => import("./components/placement/AIPlacementTest"));
+const KidsPlacementPreview = lazy(() => import("./pages/preview/KidsPlacementPreview"));
 const PlaygroundTest = lazy(() => import("./components/placement/PlaygroundTest"));
 const AcademyTest = lazy(() => import("./components/placement/AcademyTest"));
 const SuccessTest = lazy(() => import("./components/placement/SuccessTest"));
@@ -577,7 +578,7 @@ const App = () => {
                       <Route path="/for-teachers" element={<Suspense fallback={<LoadingFallback />}><ForTeachersPage /></Suspense>} />
                       <Route path="/pricing" element={<Suspense fallback={<LoadingFallback />}><PricingPage /></Suspense>} />
                       <Route path="/login" element={<Suspense fallback={<LoadingFallback />}><Login /></Suspense>} />
-                      <Route path="/signup" element={<Navigate to="/student-signup" replace />} />
+                      <Route path="/signup" element={<Navigate to={`/student-signup${window.location.search}`} replace />} />
                       <Route path="/teacher-signup" element={<Navigate to="/for-teachers" replace />} />
                       <Route path="/student-signup" element={<Suspense fallback={<LoadingFallback />}><StudentSignUp /></Suspense>} />
                       <Route path="/parent-signup" element={<Suspense fallback={<LoadingFallback />}><ParentSignUp /></Suspense>} />
@@ -1076,6 +1077,8 @@ const App = () => {
                       <Route path="/placement-test" element={<Navigate to="/dashboard" replace />} />
                       <Route path="/placement-test-2" element={<Navigate to="/dashboard" replace />} />
 
+
+                      <Route path="/preview/placement-kids" element={<Suspense fallback={<LoadingFallback />}><KidsPlacementPreview /></Suspense>} />
 
                       {/* Three Isolated Hub Funnels — strict age-bracket routing */}
                       <Route path="/placement/playground" element={

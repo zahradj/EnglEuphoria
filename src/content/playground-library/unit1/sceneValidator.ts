@@ -32,7 +32,7 @@ export const SCENE_KINDS = [
   'trophy-chest', 'flipbook', 'color-model', 'color-sort', 'color-quiz', 'listen-repeat-cards',
   'color-spot', 'shape-model', 'shape-sort', 'color-spy', 'color-simon', 'color-mix', 'shape-builder', 'secret-card', 'listen-colour', 'shape-fishing', 'pattern-train', 'tick-cross', 'story-order', 'story-video', 'odd-one-out', 'shape-torch', 'mystery-bag', 'tpr-actions', 'rapid-recall', 'sticker-reward', 'home-mission', 'lift-flap', 'draw-path', 'tile-reveal', 'tidy-up', 'color-monsters', 'peek-pop', 'claw-machine', 'ring-toss', 'simon-touch', 'body-stack', 'face-builder', 'sound-pick', 'sand-prints', 'shape-magic', 'shape-peek', 'shape-sorter', 'shape-bubbles', 'monster-maker', 'count-parts', 'robo-copy', 'move-match', 'part-peek', 'family-photo', 'size-line', 'cookie-faces', 'whos-missing', 'family-tree', 'duck-feed', 'recall-warmup', 'shadow-match', 'stepping-stones', 'catch-sort', 'spin-wheel', 'toy-model',
   'plural-sort', 'train-recall',
-  'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap',
+  'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play',
   'sentence-build', 'word-picture-match', 'jigsaw-puzzle',
 ] as const;
 export type SceneKindName = (typeof SCENE_KINDS)[number];

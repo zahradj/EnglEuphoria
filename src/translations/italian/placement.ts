@@ -1,8 +1,12 @@
 export const placementTranslations = {
   'placement.task.listening': 'Ascolta e scegli la risposta corretta.',
-  'placement.task.vocabulary': "Guarda l'immagine e scegli la parola corretta.",
+  'placement.task.vocabulary': "Scegli la risposta migliore.",
   'placement.task.grammar': 'Scegli la parola corretta per completare la frase.',
   'placement.task.reading': 'Leggi attentamente e scegli la risposta migliore.',
+  'placement.task.gap': "Scegli la parola o l’espressione che completa la frase.",
+  'placement.task.choose': "Scegli la risposta migliore.",
+  'placement.action.notSure': "Non sono sicuro/a",
+  'placement.feedback.neutral': "Grazie! Prossima domanda.",
   'placement.action.playAudio': 'Riproduci audio',
   'placement.action.playAgain': 'Riproduci di nuovo',
   'placement.action.loading': 'Caricamento…',

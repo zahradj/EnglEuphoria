@@ -72,7 +72,8 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
     if (activeHub) setSlotDuration(activeHub === 'playground' ? 30 : 60);
   }, [activeHub, setSlotDuration]);
   // With Playground in the mix the grid needs 30-minute rows to show every slot.
-  const gridDuration: 30 | 60 = isMultiHub && hubs.includes('playground') ? 30 : slotDuration;
+  // Any teacher who can open 30-minute slots needs 30-minute rows to see them.
+  const gridDuration: 30 | 60 = allowedDurations.includes(30) ? 30 : slotDuration;
 
   const weekDates = getWeekDates();
   const hubForSlots: 'playground' | 'academy' | 'success' =
@@ -131,7 +132,7 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
         // ── INSERT: tap an empty cell ──
         else if (!existing) {
           // Mixed 30/60-minute slots must never overlap.
-          if (isMultiHub) {
+          if (allowedDurations.length > 1) {
             const shift = (t: string, delta: number) => {
               const [hh, mm] = t.split(':').map(Number);
               const total = hh * 60 + mm + delta;
@@ -197,7 +198,7 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
         setBusy(false);
       }
     },
-    [busy, getSlotAt, isSlotInPast, weekDates, slotDuration, mode, teacherId, hubForSlots, resolvedHubSpecialty, refresh, toast, isMultiHub],
+    [busy, getSlotAt, isSlotInPast, weekDates, slotDuration, mode, teacherId, hubForSlots, resolvedHubSpecialty, refresh, toast, isMultiHub, allowedDurations],
   );
 
   const onlyOneDuration = allowedDurations.length === 1;

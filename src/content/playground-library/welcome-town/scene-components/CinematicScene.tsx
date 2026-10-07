@@ -3,6 +3,7 @@ import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
 import { safeSpeak } from '../../unit1/audio';
 import { voiceOf, CARD_STYLE, CARD_FONT } from './shared';
+import { StoryCaption } from '../../StoryCaption';
 
 /* ---------- Cinematic ---------- */
 
@@ -62,12 +63,15 @@ export function CinematicScene({ scene, onNext }: { scene: Extract<Scene, { kind
         <p className="mt-1 text-sm font-semibold text-white/95 drop-shadow sm:text-base">{scene.subtitle}</p>
       </div>
       {step >= 0 && step < scene.script.length && (
-        <div className="absolute bottom-[calc(52*var(--svh,1vh))] left-1/2 max-w-[520px] -translate-x-1/2 px-4">
-          <div className="relative rounded-3xl bg-white px-6 py-4 text-center text-2xl font-black text-orange-800 shadow-2xl">
-            “{currentLine}”
-            <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 border-x-[14px] border-t-[16px] border-x-transparent border-t-white" />
-          </div>
-        </div>
+        <StoryCaption
+          img={scene.bg}
+          avoid={['top']}
+          bottomOffset="clamp(64px,9cqw,120px)"
+          name={CAST[scene.script[step].who]?.name}
+          color={CAST[scene.script[step].who]?.color}
+          text={currentLine}
+          onReplay={() => { void safeSpeak(scene.script[step].line, voiceOf(scene.script[step].who)); }}
+        />
       )}
       <div className="absolute inset-x-0 bottom-8 z-50 flex justify-center">
         <button onClick={onNext} className="rounded-full bg-white px-8 py-4 text-base font-black uppercase tracking-widest text-orange-700 shadow-2xl transition hover:scale-[1.04]">

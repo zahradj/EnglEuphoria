@@ -18,7 +18,7 @@ const corsHeaders = {
 
 const MAX_CHILDREN_PER_FAMILY = 8;
 const MIN_AGE = 4;
-const MAX_AGE = 17; // 18+ learners sign up themselves
+const MAX_AGE = 90; // adults the parent manages too (the parent learning alongside their children, a partner...)
 const CHILD_EMAIL_DOMAIN = 'children.engleuphoria.invalid';
 const RELATIONSHIPS = ['mother', 'father', 'guardian', 'other'];
 
@@ -44,10 +44,11 @@ function ageFromDob(dob: string): number {
   return age;
 }
 
-// Mirrors src/lib/hubAssignment.ts and handle_new_user(): 4-9 playground, 10-17 academy.
+// Mirrors src/lib/hubAssignment.ts and handle_new_user(): 4-9 playground, 10-17 academy, 18+ success (professional).
 function hubForAge(age: number) {
   // users.current_system has a CHECK constraint on these exact lowercase values.
   if (age < 10) return { hub: 'playground', duration: 30, goal: '3 lessons/week', system: 'kids' };
+  if (age >= 18) return { hub: 'professional', duration: 55, goal: 'Flexible', system: 'adult' };
   return { hub: 'academy', duration: 55, goal: '2 hours/week', system: 'teen' };
 }
 

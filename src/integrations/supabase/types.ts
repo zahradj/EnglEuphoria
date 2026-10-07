@@ -3340,6 +3340,7 @@ export type Database = {
       credit_packs: {
         Row: {
           created_at: string
+          family_only: boolean
           id: string
           is_active: boolean
           name: string
@@ -3353,6 +3354,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          family_only?: boolean
           id?: string
           is_active?: boolean
           name: string
@@ -3366,6 +3368,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          family_only?: boolean
           id?: string
           is_active?: boolean
           name?: string

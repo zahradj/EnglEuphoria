@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mic, Square, Play, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { SPEAKING_PROMPT } from './content';
+import { speakingPromptFor } from './content';
 import { accentFor } from '../hubAccent';
 import type { Hub } from '../questionBanks';
 
@@ -19,6 +19,7 @@ interface Props {
 
 const SpeakingPhase: React.FC<Props> = ({ hub, onComplete }) => {
   const accent = accentFor(hub);
+  const SPEAKING_PROMPT = speakingPromptFor(hub);
   const [recording, setRecording] = useState(false);
   const [blob, setBlob] = useState<Blob | null>(null);
   const [url, setUrl] = useState<string | null>(null);

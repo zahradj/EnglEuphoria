@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { ClipboardCheck, X } from 'lucide-react';
+import { ClipboardCheck, X, Backpack, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { JungleTheme } from './JungleTheme';
@@ -12,9 +12,11 @@ import { FloatingBackpack } from './FloatingBackpack';
 import { GiantGoButton } from './GiantGoButton';
 import { LessonPlayerModal } from './LessonPlayerModal';
 import { RecentLessonReports } from '@/components/student/RecentLessonReports';
+import { CreditCoin } from './CreditCoin';
 import { SceneLessonPlayerModal } from './SceneLessonPlayerModal';
 import { PlaygroundLesson } from '@/hooks/usePlaygroundLessons';
 import { isSceneLessonFormat } from '@/content/playground-library/sceneLessonFormats';
+import { buildQuestCards, readyQuestForLesson } from '@/lib/homeworkQuestCards';
 
 export type ThemeType = 'jungle' | 'space' | 'underwater';
 
@@ -76,10 +78,17 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   // The teacher's lesson reports live inside the quest (not on the dashboard home page).
   const [notesOpen, setNotesOpen] = useState(false);
+  // Homework Forest: every Homework Quest, open once its lesson is finished (shown on the map itself).
+  const [homeworkOpen, setHomeworkOpen] = useState(false);
   const navigate = useNavigate();
+  // Only the quests of lessons the student has FINISHED (same list as the Homework tab).
+  const questCards = useMemo(() => buildQuestCards(lessons).filter((c) => c.ready), [lessons]);
+  const readyQuests = questCards.length;
 
   const handleHomeworkClick = useCallback((homeworkId: string) => {
-    navigate(`/homework/${homeworkId}`);
+    // 'quest:<id>' = the lesson's Homework Quest (no assignment row needed); otherwise an assignment id.
+    if (homeworkId.startsWith('quest:')) navigate(`/homework-quest/${homeworkId.slice(6)}`);
+    else navigate(`/homework/${homeworkId}`);
   }, [navigate]);
   
   const currentLevel = lessons.find(l => l.status === 'current');
@@ -200,7 +209,7 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
     { name: 'Vocab Forest', emoji: '🌲', x: 15, y: 20 },
     { name: 'Grammar Mountain', emoji: '⛰️', x: 75, y: 15 },
     { name: 'Story River', emoji: '🌊', x: 20, y: 70 },
-    { name: 'Phonics Valley', emoji: '🔤', x: 70, y: 65 },
+    { name: 'Phonics Valley', emoji: '🔤', x: 60, y: 36 },
   ];
 
   // Assign zone names to lessons based on index
@@ -222,6 +231,23 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
         </div>
         
         <div className="flex items-center gap-2">
+          {/* Lesson credits: a small coin with the number */}
+          <CreditCoin />
+
+          {/* Homework Forest: the lessons' Homework Quests, opened over the map */}
+          <button
+            type="button"
+            onClick={() => setHomeworkOpen(true)}
+            aria-label={`Homework${readyQuests ? `, ${readyQuests} ready` : ''}`}
+            className="relative bg-white/90 backdrop-blur rounded-full px-4 py-2 shadow-lg flex items-center gap-2 font-bold text-emerald-700 transition hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-300"
+          >
+            <Backpack className="w-5 h-5" />
+            <span>Homework</span>
+            {readyQuests > 0 && (
+              <span className="absolute -right-1 -top-2 grid h-6 min-w-6 place-items-center rounded-full bg-rose-500 px-1.5 text-xs font-black text-white shadow">{readyQuests}</span>
+            )}
+          </button>
+
           {/* Teacher's notes: the lesson reports, opened over the map */}
           <button
             type="button"
@@ -278,6 +304,65 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
         </div>
       )}
 
+      {/* Homework Forest panel */}
+      {homeworkOpen && (
+        <div
+          className="absolute inset-0 z-[60] flex items-center justify-center bg-black/45 p-3 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Homework"
+          onClick={() => setHomeworkOpen(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-h-[92%] w-full max-w-2xl overflow-y-auto rounded-3xl bg-emerald-50 p-4 shadow-2xl ring-4 ring-white/80 sm:p-5"
+          >
+            <div className="mb-3 flex items-start justify-between gap-3">
+              <div>
+                <h2 className="flex items-center gap-2 text-xl font-bold text-emerald-700">
+                  <Backpack className="w-6 h-6" /> Homework Forest
+                </h2>
+                <p className="text-sm text-emerald-900/70">The homework quests of the lessons you finished.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setHomeworkOpen(false)}
+                aria-label="Close homework"
+                className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white text-emerald-700 shadow transition hover:scale-110"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            {questCards.length === 0 ? (
+              <p className="rounded-2xl bg-white p-4 text-center text-sm font-semibold text-emerald-900/70">No homework yet. Finish a lesson and its homework quest appears here!</p>
+            ) : (
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {questCards.map(({ quest }) => (
+                  <div key={quest.id} data-homework-card="ready" className="flex flex-col gap-2 rounded-2xl bg-white p-3 shadow ring-1 ring-emerald-100">
+                    <div className="flex items-center gap-3">
+                      <img src={quest.theme.guide} alt="" className="h-12 w-12 shrink-0 rounded-xl bg-emerald-50 object-contain" draggable={false} />
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold leading-tight text-emerald-900">{quest.title}</p>
+                        <p className="text-xs text-emerald-900/60">{quest.subtitle}</p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => navigate(`/homework-quest/${quest.id}`)}
+                      className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-orange-500 px-4 py-2 text-sm font-extrabold text-white shadow active:scale-95"
+                    >
+                      <Play className="h-4 w-4" /> Start quest
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        </div>
+      )}
+
       {/* Floating zone labels */}
       {zoneLabels.map((zone, i) => (
         <motion.div
@@ -327,7 +412,7 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
           theme={selectedTheme}
           score={level.score}
           zoneName={zoneNames[index]}
-          pendingHomeworkId={level.pendingHomeworkId}
+          pendingHomeworkId={level.pendingHomeworkId ?? (readyQuestForLesson(level) ? `quest:${readyQuestForLesson(level)!.id}` : null)}
           onHomeworkClick={handleHomeworkClick}
         />
       ))}

@@ -60,7 +60,7 @@ export const CreditDisplay: React.FC<CreditDisplayProps> = ({
             </div>
             <div>
               <p className="text-sm text-muted-foreground">
-                Available Credits
+                Available Credits <span className="text-xs">· 1 lesson = 25 min</span>
               </p>
               <div className="flex items-center gap-2">
                 <p className={`text-2xl font-bold ${getTextColor()}`}>

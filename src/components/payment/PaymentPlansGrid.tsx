@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ONLINE_PAYMENTS_ENABLED, contactToBuyHref } from "@/config/payments";
 import { Badge } from "@/components/ui/badge";
 import { Check, Star, CreditCard, Sparkles, Clock, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -42,8 +43,8 @@ const HUB_THEME: Record<AudienceLevel, {
   clockIcon: string;
 }> = {
   playground: {
-    label: "Playground (30-min sessions)",
-    perSessionLabel: "per 30-min session",
+    label: "Playground (25-min lessons)",
+    perSessionLabel: "per 25-min lesson",
     priceText: "text-orange-600",
     popularBg: "from-amber-500 to-orange-600",
     borderPopular: "border-orange-300",
@@ -99,6 +100,7 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
       .select("id, name, session_count, price_eur, original_price_eur, savings_eur, sort_order")
       .eq("student_level", hub)
       .eq("is_active", true)
+      .eq("family_only", false)
       .order("sort_order")
       .then(({ data, error }) => {
         if (cancelled) return;
@@ -238,6 +240,15 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
                   ))}
                 </ul>
 
+                {!ONLINE_PAYMENTS_ENABLED ? (
+                  <Button asChild className={cn("w-full", isMastery ? theme.btnMastery : popular ? theme.btnPopular : theme.btnPrimary)}>
+                    <a href={contactToBuyHref({ packName: pack.name, credits: pack.session_count })}>
+                      <CreditCard className="w-4 h-4 mr-2" />
+                      Contact us to buy {pack.session_count} lessons
+                    </a>
+                  </Button>
+                ) : (
+                <div className="space-y-2">
                 <Button
                   onClick={() => handleBuy(pack)}
                   disabled={isProcessing}
@@ -247,8 +258,13 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
                   )}
                 >
                   <CreditCard className="w-4 h-4 mr-2" />
-                  {isProcessing ? "Redirecting…" : `Buy ${pack.session_count} Sessions`}
+                  {isProcessing ? "Redirecting…" : `Buy ${pack.session_count} lessons online`}
                 </Button>
+                <Button asChild variant="ghost" size="sm" className="w-full text-muted-foreground">
+                  <a href={contactToBuyHref({ packName: pack.name, credits: pack.session_count })}>Or contact us to buy</a>
+                </Button>
+                </div>
+                )}
               </CardContent>
             </Card>
           );

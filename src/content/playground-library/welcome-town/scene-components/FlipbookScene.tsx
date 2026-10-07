@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef } from 'react';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
-import { cueSpeakOnce } from '../../unit1/audio';
+import { cueSpeak, cueSpeakOnce } from '../../unit1/audio';
+import { StoryCaption } from '../../StoryCaption';
+import { warmCaptionPlacement } from '../../captionPlacement';
 import * as sfx from '../../unit1/sfx';
 import { Confetti } from '../../unit1/fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
@@ -23,6 +25,7 @@ export function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: E
   const { pageIdx, flipping, checkpoint, solved, wrongPick, done } = state;
   const solvedSet = useMemo(() => new Set(solved), [solved]);
   const gemDone = useRef(false);
+  useEffect(() => { warmCaptionPlacement(scene.pages.map((p) => p.img)); }, [scene.id]); // measure every page's picture up front
   const page = scene.pages[pageIdx];
   const total = scene.pages.length;
 
@@ -142,15 +145,18 @@ export function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: E
           }}
         >
           <img src={page.img} alt="" className="h-full w-full object-cover" />
-          {/* Large, high-contrast story text — A1 students CAN read (unlike
-              Pre-A1, which has no reading segment at all — see
-              project_manga_panel_layout_a1_plus_only), so this sentence is
-              the actual reading-practice target of the scene, not just a
-              caption for the picture. */}
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#FFF2D0] via-[#FFF2D0]/97 to-[#FFF2D0]/0 px-4 pb-3 pt-10 text-center sm:px-6 sm:pb-4">
-            <p className="mx-auto max-w-[94%] text-lg font-black leading-snug text-orange-900 drop-shadow-[0_1px_0_rgba(255,255,255,0.6)] sm:text-2xl">{page.text}</p>
-            {page.who && <span className="mt-1 block text-[11px] font-black uppercase tracking-widest text-amber-700 sm:text-xs">— {CAST[page.who].name}</span>}
-          </div>
+          {/* The story line sits in the same framed plate as the character-introduction
+              pages, on whichever side of THIS picture has calm space — never a faint
+              band over the artwork. A1+ students read it (Pre-A1 has no reading
+              segment — see project_manga_panel_layout_a1_plus_only). */}
+          <StoryCaption
+            img={page.img}
+            pin={page.textPos}
+            name={page.who ? CAST[page.who].name : undefined}
+            color={page.who ? CAST[page.who].color : '#E3A857'}
+            text={page.text}
+            onReplay={() => cueSpeak(page.text, page.who ? voiceOf(page.who) : 'teacher')}
+          />
           {!flipping && (
             <div className="pointer-events-none absolute right-3 top-3 z-20 grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-orange-600 text-lg text-white shadow-xl ring-2 ring-white/70 animate-pulse sm:h-12 sm:w-12 sm:text-xl">▶</div>
           )}

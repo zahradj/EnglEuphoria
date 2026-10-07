@@ -321,6 +321,23 @@ export function GardenBackdrop() {
   );
 }
 
+/** Paint studio for Color Splash: a pale wall with paint splashes, an easel rail and a splattered floor. */
+export function PaintStudioBackdrop() {
+  const splats = [
+    { l: 6, t: 20, c: '#ef4444', s: 7 }, { l: 90, t: 16, c: '#3b82f6', s: 8 }, { l: 78, t: 44, c: '#facc15', s: 5 },
+    { l: 14, t: 46, c: '#22c55e', s: 5 }, { l: 50, t: 8, c: '#a855f7', s: 4 }, { l: 94, t: 70, c: '#f97316', s: 6 }, { l: 4, t: 78, c: '#ec4899', s: 6 },
+  ];
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: 'linear-gradient(180deg, #fdf4ff 0%, #fae8ff 55%, #f5d0fe 55%, #e9d5ff 100%)' }}>
+      {splats.map((s, i) => (
+        <span key={i} className="absolute rounded-full" style={{ left: `${s.l}%`, top: `${s.t}%`, width: `${s.s}cqh`, height: `${s.s * 0.82}cqh`, background: s.c, opacity: 0.35, filter: 'blur(0.2cqh)' }} />
+      ))}
+      <div className="absolute inset-x-0" style={{ top: '55%', height: '3.6%', background: 'linear-gradient(180deg, #d19a5b, #a8692f)', boxShadow: '0 0.8cqh 1.6cqh rgba(0,0,0,.25)' }} />
+      <div className="absolute inset-x-0 bottom-0" style={{ top: '58.6%', background: 'repeating-linear-gradient(90deg, #f0abfc 0, #f0abfc 8cqw, #e879f9 8cqw, #e879f9 8.4cqw)', opacity: 0.55 }} />
+    </div>
+  );
+}
+
 export function TopHatIcon({ height = '5cqh' }: { height?: string }) {
   return (
     <svg viewBox="0 0 64 56" style={{ height }} aria-hidden="true">

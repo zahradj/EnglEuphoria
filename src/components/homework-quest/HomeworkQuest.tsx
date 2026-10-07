@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, typ
 import type { HomeworkQuest as Quest, QuestLevel, QuestVoice, Box } from '@/content/homework-quests/types';
 import { speak, stopSpeaking, playLetterPhonic, unlockAudio } from '@/content/playground-library/unit1/audio';
 import { QUEST_CSS } from './questStyles';
+import { JungleTheme } from '@/components/student/kids/JungleTheme';
 
 /**
  * Plays any Homework Quest (src/content/homework-quests). Voices are the
@@ -97,7 +98,7 @@ function Stage({ img, aspect = 1376 / 768, night, children, stageRef }: { img: s
   }, [aspect]);
   return (
     <div ref={box} className="hq-stagebox">
-    <div ref={stageRef} className="hq-stage" style={size ? { width: size.w, height: size.h } : { width: '100%', aspectRatio: String(aspect) }}>
+    <div ref={stageRef} className="hq-stage" style={size ? { width: size.w, height: size.h, ['--ar' as string]: String(aspect) } : { width: '100%', aspectRatio: String(aspect), ['--ar' as string]: String(aspect) }}>
       <div className="hq-art" style={{ backgroundImage: `url('${img}')` }} />
       {night && <div className="hq-night">{Array.from({ length: 16 }, (_, i) => <span key={i} className="hq-twinkle" style={{ left: `${(i * 37 + 5) % 100}%`, top: `${(i * 53 + 9) % 90}%`, animationDelay: `${(i * 170) % 2000}ms` }} />)}</div>}
       {children}
@@ -246,11 +247,11 @@ function TrueFalse({ level, say, praise, tryAgain, miss, star, done, setDots }: 
         {R.sticker && <img className="hq-char" src={R.sticker.src} alt="" style={{ left: `${R.sticker.x}%`, top: `${R.sticker.y}%` }} />}
         <HearBtn onClick={() => void say(R.line)} />
         {shown && <div className="hq-caption">{R.line}</div>}
+        <div className="hq-dock">
+          <button className="hq-big t" onClick={(e) => pick(true, e.currentTarget)}>✅ True</button>
+          <button className="hq-big f" onClick={(e) => pick(false, e.currentTarget)}>❌ False</button>
+        </div>
       </Stage>
-      <div className="hq-answers">
-        <button className="hq-big t" onClick={(e) => pick(true, e.currentTarget)}>✅ True</button>
-        <button className="hq-big f" onClick={(e) => pick(false, e.currentTarget)}>❌ False</button>
-      </div>
     </>
   );
 }
@@ -277,9 +278,11 @@ function SentenceBuilder({ level, say, miss, star, done, setDots }: LevelProps<'
       <Stage img={R.img}>
         {R.sticker && <img className="hq-char" src={R.sticker.src} alt="" style={{ left: `${R.sticker.x}%`, top: `${R.sticker.y}%` }} />}
         <HearBtn onClick={() => void say(R.line)} />
+        <div className="hq-dock hq-dock-words">
+          <div ref={builtRef} className="hq-built">{pos === 0 ? <span className="ph">Tap the words in order…</span> : words.slice(0, pos).map((w, i) => <span key={i} className="hq-w">{w}</span>)}</div>
+          <div className="hq-words">{bank.filter((b) => !used.includes(b.id)).map((b) => <button key={b.id} className="hq-w" onClick={(e) => tap(b, e.currentTarget)}>{b.w}</button>)}</div>
+        </div>
       </Stage>
-      <div ref={builtRef} className="hq-built">{pos === 0 ? <span className="ph">Tap the words in order…</span> : words.slice(0, pos).map((w, i) => <span key={i} className="hq-w">{w}</span>)}</div>
-      <div className="hq-words">{bank.filter((b) => !used.includes(b.id)).map((b) => <button key={b.id} className="hq-w" onClick={(e) => tap(b, e.currentTarget)}>{b.w}</button>)}</div>
     </>
   );
 }
@@ -306,8 +309,8 @@ function SoundChoice({ level, quest, say, miss, star, done, setDots }: LevelProp
         <HearBtn onClick={() => void say(R.word, voice)} />
         {combo >= 2 && <div className="hq-caption hq-corner">🔥 {combo} in a row!</div>}
         {revealed && <div className="hq-caption">{R.picture ? <img src={R.picture} alt="" style={{ height: '1.8em', verticalAlign: 'middle' }} /> : <span style={{ fontSize: '1.6em' }}>{R.emoji}</span>} <b>{highlight(R.word, R.answer)}</b></div>}
+        <div className="hq-dock">{level.choices.map((c, i) => <button key={c} className={`hq-orb o${i % 3}`} onClick={(e) => pick(c, e.currentTarget)}>{c}</button>)}</div>
       </Stage>
-      <div className="hq-answers">{level.choices.map((c, i) => <button key={c} className={`hq-orb o${i % 3}`} onClick={(e) => pick(c, e.currentTarget)}>{c}</button>)}</div>
     </>
   );
 }
@@ -327,12 +330,14 @@ function PictureChoice({ level, say, praise, tryAgain, miss, star, done, setDots
   };
   return (
     <>
-      <Stage img={level.img}><HearBtn onClick={() => void say(R.line)} /></Stage>
-      <div className="hq-cards">{opts.map((o) => (
-        <button key={o.label} aria-label={o.label} className={`hq-card ${ok === o.label ? 'ok' : ''}`} onClick={(e) => pick(o.label, e.currentTarget)}>
-          {o.src ? <img src={o.src} alt="" draggable={false} /> : <span className="em">{o.emoji}</span>}
-        </button>
-      ))}</div>
+      <Stage img={level.img}>
+        <HearBtn onClick={() => void say(R.line)} />
+        <div className="hq-dock">{opts.map((o) => (
+          <button key={o.label} aria-label={o.label} className={`hq-card ${ok === o.label ? 'ok' : ''}`} onClick={(e) => pick(o.label, e.currentTarget)}>
+            {o.src ? <img src={o.src} alt="" draggable={false} /> : <span className="em">{o.emoji}</span>}
+          </button>
+        ))}</div>
+      </Stage>
     </>
   );
 }
@@ -366,13 +371,15 @@ function Twister({ level, quest, say, miss, star, done, setDots }: LevelProps<'t
     return (
       <>
         <Stage img={level.img} night={quest.theme.night}>
-          <div className="hq-book" style={{ inset: 'auto 6% 8% 6%' }}><div className="hq-words">{words.map((w, i) => <span key={i} className="hq-w ink">{highlight(w, level.focus)}</span>)}</div></div>
+          <div className="hq-book" style={{ inset: '6% 6% auto 6%' }}><div className="hq-words">{words.map((w, i) => <span key={i} className="hq-w ink">{highlight(w, level.focus)}</span>)}</div></div>
+          <div className="hq-dock hq-dock-words">
+            <div className="hq-potions">{speeds.map((s, i) => <div key={s} className={`hq-potion ${i <= fills ? 'on' : ''}`}><div className="hq-flask" style={{ ['--fill' as string]: i < fills ? '100%' : '0%' }} />{s}</div>)}</div>
+            <div className="hq-bar center">
+              <button className="hq-btn ghost" onClick={() => void say(level.line)}>🔊 Hear it</button>
+              <button className="hq-btn violet" disabled={fills >= 3} onClick={(e) => { sfx.right(); star(e.currentTarget); const n = fills + 1; setFills(n); if (n >= 3) window.setTimeout(() => done(misses.current), 900); }}>✨ I said it!</button>
+            </div>
+          </div>
         </Stage>
-        <div className="hq-potions">{speeds.map((s, i) => <div key={s} className={`hq-potion ${i <= fills ? 'on' : ''}`}><div className="hq-flask" style={{ ['--fill' as string]: i < fills ? '100%' : '0%' }} />{s}</div>)}</div>
-        <div className="hq-bar center">
-          <button className="hq-btn ghost" onClick={() => void say(level.line)}>🔊 Hear it</button>
-          <button className="hq-btn violet" disabled={fills >= 3} onClick={(e) => { sfx.right(); star(e.currentTarget); const n = fills + 1; setFills(n); if (n >= 3) window.setTimeout(() => done(misses.current), 900); }}>✨ I said it!</button>
-        </div>
       </>
     );
   }
@@ -381,9 +388,11 @@ function Twister({ level, quest, say, miss, star, done, setDots }: LevelProps<'t
       <Stage img={level.img} night={quest.theme.night}>
         <HearBtn onClick={() => void say(level.line)} />
         <div className="hq-caption hq-corner">⏳ {Math.max(0, left > 999 ? 0 : left)}s</div>
+        <div className="hq-dock hq-dock-words">
+          <div ref={builtRef} className="hq-built">{pos === 0 ? <span className="ph">Tap the words in order…</span> : words.slice(0, pos).map((w, i) => <span key={i} className="hq-w">{highlight(w, level.focus)}</span>)}</div>
+          <div className="hq-words">{bank.filter((b) => b.i >= pos).map((b) => <button key={`${attempt}-${b.i}`} className="hq-w" onClick={(e) => tap(b, e.currentTarget)}>{highlight(b.w, level.focus)}</button>)}</div>
+        </div>
       </Stage>
-      <div ref={builtRef} className="hq-built">{pos === 0 ? <span className="ph">Tap the words in order…</span> : words.slice(0, pos).map((w, i) => <span key={i} className="hq-w">{highlight(w, level.focus)}</span>)}</div>
-      <div className="hq-words">{bank.filter((b) => b.i >= pos).map((b) => <button key={`${attempt}-${b.i}`} className="hq-w" onClick={(e) => tap(b, e.currentTarget)}>{highlight(b.w, level.focus)}</button>)}</div>
     </>
   );
 }
@@ -418,8 +427,8 @@ function Reading({ level, quest, say, praise, tryAgain, miss, star, done, setDot
       <Stage img={level.img} night={quest.theme.night}>
         <div className="hq-book"><p className="big">{Q.q}</p><p className="hint">The book is closed now. Answer from memory!</p></div>
         <HearBtn onClick={() => void say(Q.q)} />
+        <div className="hq-dock hq-dock-opts">{Q.options.map((o) => <button key={o} className={`hq-opt ${ok === o ? 'ok' : ''}`} onClick={(e) => pick(o, e.currentTarget)}>{o}</button>)}</div>
       </Stage>
-      <div className="hq-opts">{Q.options.map((o) => <button key={o} className={`hq-opt ${ok === o ? 'ok' : ''}`} onClick={(e) => pick(o, e.currentTarget)}>{o}</button>)}</div>
     </>
   );
 }
@@ -532,6 +541,8 @@ export default function HomeworkQuest({ quest, onComplete, onExit }: { quest: Qu
   return (
     <div className={`hq ${quest.theme.night ? 'night' : 'day'}`} style={{ ['--hq-accent' as string]: quest.theme.accent, ['--hq-accent2' as string]: quest.theme.accent2, ['--hq-world' as string]: `url('${quest.theme.mapImg}')` }} onPointerDown={() => unlockAudio()}>
       <style>{QUEST_CSS}</style>
+      {/* The homework forest, behind every quest (same backdrop as the Homework Forest on the dashboard). */}
+      <div className="hq-forest" aria-hidden><JungleTheme /></div>
       <div className="hq-wrap">
         <header className="hq-hud">
           <div className="hq-brand"><img src={quest.theme.guide} alt="" /><div><h1>{quest.title}</h1><small>{quest.subtitle}</small></div></div>

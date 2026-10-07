@@ -1519,7 +1519,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
             // and the button used to keep showing "on" from drawingEnabled
             // alone — so the next tap turned it OFF and the teacher had to
             // tap twice ("deactivate and activate again") to unlock.
-            drawingEnabled={drawingEnabled && (sceneNavState.total > 0 && sceneNavState.lockToggleApplicable ? sceneNavState.interactionUnlocked : true)}
+            // A scene lesson that doesn't say (A1/A2 players) still has a real lock, so the button must show it: only an explicit `false` (always-unlocked scene kinds) opts out.
+            drawingEnabled={drawingEnabled && (sceneNavState.total > 0 && sceneNavState.lockToggleApplicable !== false ? sceneNavState.interactionUnlocked : true)}
             onToggleDrawing={async (enabled) => {
               // Combined "let student interact" toggle — one button covers
               // drawing AND the active scene lesson's own drag-and-drop/tap

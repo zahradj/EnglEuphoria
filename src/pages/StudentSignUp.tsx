@@ -1,4 +1,5 @@
 import { detectMarketRegion, toDbMarketRegion } from '@/lib/marketRegion';
+import { getStoredReferralCode } from '@/lib/referralCode';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -104,6 +105,7 @@ const StudentSignUp = () => {
         full_name: data.fullName,
         age,
         hub_type: assignment.hub_type,
+        ref_code: getStoredReferralCode() ?? undefined,
       } as any);
 
       if (error || !authData?.user) {

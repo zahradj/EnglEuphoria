@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
-import { Users, TrendingUp, MessageSquare, Bell, CalendarDays } from 'lucide-react';
+import { Users, TrendingUp, MessageSquare, Bell, CalendarDays, Gift } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { ParentStudentList } from '@/components/parent/ParentStudentList';
@@ -16,6 +16,12 @@ import { FamilyTopBar } from '@/components/family/FamilyTopBar';
 import type { ChildCardData } from '@/components/parent/ChildCard';
 import type { FamilyChildProfile } from '@/lib/familyBuddy';
 import { useChildSnapshots } from '@/hooks/useChildSnapshots';
+import { useFamilyCredits } from '@/hooks/useFamilyCredits';
+import { useClaimReferral } from '@/hooks/useClaimReferral';
+import { ReferralTab } from '@/components/student/tabs/ReferralTab';
+import type { FamilyLearner } from '@/components/parent/FamilyPackList';
+import { MoveCreditsDialog } from '@/components/parent/MoveCreditsDialog';
+import { FamilyLessonsPanel } from '@/components/parent/FamilyLessonsPanel';
 import '@/components/parent/family-dashboard.css';
 
 interface StudentRelationship {
@@ -39,13 +45,18 @@ const TABS = [
   { value: 'progress', icon: TrendingUp, label: 'pd.tab.progress' },
   { value: 'messages', icon: MessageSquare, label: 'pd.tab.messages' },
   { value: 'notifications', icon: Bell, label: 'pd.tab.alerts' },
+  { value: 'referrals', icon: Gift, label: 'pd.tab.referrals', fallback: 'Invite friends' },
 ] as const;
 
 const ParentDashboard: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  useClaimReferral(user?.id);
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [tab, setTab] = useState<string>('students');
+  const [focusId, setFocusId] = useState<string | null>(null);
+  const [moveFrom, setMoveFrom] = useState<string | null>(null);
+  const [moveOpen, setMoveOpen] = useState(false);
 
   const { data: students = [], isLoading } = useQuery<StudentRelationship[]>({
     queryKey: ['parent-students', user?.id],
@@ -108,6 +119,7 @@ const ParentDashboard: React.FC = () => {
   });
 
   const snapshots = useChildSnapshots(studentIds, user?.id);
+  const { data: familyCredits = {} } = useFamilyCredits(studentIds, user?.id);
 
   const children: ChildCardData[] = students
     .filter((s) => s.student)
@@ -126,6 +138,23 @@ const ParentDashboard: React.FC = () => {
     : null;
 
   const parentName = (user as any)?.full_name ?? (user as any)?.name ?? null;
+
+  const learners: FamilyLearner[] = children.map((c) => {
+    const hub = c.profile?.hub;
+    return {
+      studentId: c.studentId,
+      name: c.name,
+      hub: hub === 'academy' || hub === 'professional' ? hub : 'playground',
+    };
+  });
+  const startBuy = (studentId: string) => {
+    setFocusId(studentId);
+    document.getElementById('family-lessons')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  const startMove = (studentId: string) => {
+    setMoveFrom(studentId);
+    setMoveOpen(true);
+  };
 
   const viewProgress = (studentId: string) => {
     setSelectedStudentId(studentId);
@@ -173,16 +202,26 @@ const ParentDashboard: React.FC = () => {
 
         <TabsPrimitive.Root value={tab} onValueChange={setTab} className="space-y-6">
           <TabsPrimitive.List className="fd-tabs" aria-label={t('pd.title')}>
-            {TABS.map(({ value, icon: Icon, label }) => (
+            {TABS.map(({ value, icon: Icon, label, ...rest }) => (
               <TabsPrimitive.Trigger key={value} value={value} className="fd-tab">
                 <Icon className="h-4 w-4" aria-hidden />
-                <span>{t(label)}</span>
+                <span>{t(label, { defaultValue: 'fallback' in rest ? rest.fallback : undefined })}</span>
               </TabsPrimitive.Trigger>
             ))}
           </TabsPrimitive.List>
 
           <TabsPrimitive.Content value="students" className="focus-visible:outline-none">
-            <ParentStudentList children={children} onViewProgress={viewProgress} addChildAction={addChild('default')} />
+            <div className="grid gap-6">
+            {learners.length > 0 && <FamilyLessonsPanel learners={learners} credits={familyCredits} focusId={focusId} />}
+            <ParentStudentList
+              children={children}
+              onViewProgress={viewProgress}
+              credits={studentIds.length > 0 && Object.keys(familyCredits).length > 0 ? familyCredits : undefined}
+              onBuy={startBuy}
+              onMove={startMove}
+              addChildAction={addChild('default')}
+            />
+            </div>
           </TabsPrimitive.Content>
 
           <TabsPrimitive.Content value="calendar" className="focus-visible:outline-none">
@@ -204,7 +243,19 @@ const ParentDashboard: React.FC = () => {
           <TabsPrimitive.Content value="notifications" className="focus-visible:outline-none">
             {user?.id && <ParentNotificationSettings parentId={user.id} />}
           </TabsPrimitive.Content>
+
+          <TabsPrimitive.Content value="referrals" className="focus-visible:outline-none">
+            <ReferralTab signupPath="/parent-signup" family />
+          </TabsPrimitive.Content>
         </TabsPrimitive.Root>
+
+        <MoveCreditsDialog
+          open={moveOpen}
+          onOpenChange={setMoveOpen}
+          learners={children.map((c) => ({ studentId: c.studentId, name: c.name }))}
+          credits={familyCredits}
+          fromId={moveFrom}
+        />
       </main>
     </div>
   );

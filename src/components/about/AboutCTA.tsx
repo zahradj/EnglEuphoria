@@ -55,7 +55,7 @@ const AboutCTA = () => {
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <a
-                href="mailto:hello@engleuphoria.com"
+                href="mailto:support@engleuphoria.com"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-white/10 text-white font-semibold text-lg backdrop-blur-sm border border-white/20 transition-all duration-300 hover:bg-white/20"
               >
                 <MessageCircle className="w-5 h-5" />

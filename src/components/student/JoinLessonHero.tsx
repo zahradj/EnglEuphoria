@@ -63,7 +63,24 @@ export const JoinLessonHero: React.FC<JoinLessonHeroProps> = ({ hubId, isDark = 
   const [minutesUntil, setMinutesUntil] = useState(999);
   const [manageMode, setManageMode] = useState<'cancel' | 'reschedule' | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [isFirstLesson, setIsFirstLesson] = useState(false);
   const theme = HUB_THEMES[hubId];
+
+  // A student with no finished lesson yet (e.g. someone a teacher just invited) has no progress to
+  // show - say so, instead of leaving them wondering why their dashboard is empty.
+  useEffect(() => {
+    if (!user?.id) return;
+    let cancelled = false;
+    supabase
+      .from('class_bookings')
+      .select('id', { count: 'exact', head: true })
+      .eq('student_id', user.id)
+      .eq('status', 'completed')
+      .then(({ count, error }) => {
+        if (!cancelled && !error) setIsFirstLesson((count ?? 0) === 0);
+      });
+    return () => { cancelled = true; };
+  }, [user?.id]);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -222,6 +239,11 @@ export const JoinLessonHero: React.FC<JoinLessonHeroProps> = ({ hubId, isDark = 
                   )}
                 </div>
                 <p className="text-white/80 text-sm mt-0.5 truncate">{lesson.title}</p>
+                {isFirstLesson && (
+                  <p className="text-white/90 text-xs mt-0.5 font-medium">
+                    Your first lesson — your progress starts here and grows after every class.
+                  </p>
+                )}
                 <div className="flex items-center gap-1.5 text-white/70 text-xs mt-1">
                   <Clock className="w-3 h-3" />
                   {isLive

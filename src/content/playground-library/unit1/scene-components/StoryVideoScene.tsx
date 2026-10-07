@@ -5,6 +5,8 @@ import { cueSpeak, stopSpeaking } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { ShapeIcon, sayWithin } from './shared';
+import { StoryCaption } from '../../StoryCaption';
+import { warmCaptionPlacement } from '../../captionPlacement';
 
 /* ---------- Story video (animated, narrated, no reading needed) ----------
  * Pre-A1 children can't read yet, so the story plays like a cartoon: each
@@ -155,6 +157,12 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
   // --- Real video mode: the MP4 plays; narration and questions follow its clock. ---
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const starts = scene.pages.map((pg, i) => pg.atSec ?? i * 5);
+  // Measure every page's picture and video frames up front, so each caption plate is placed the moment its page shows.
+  useEffect(() => {
+    const wins = scene.videoUrl ? scene.pages.map((_, i) => ({ url: scene.videoUrl as string, from: starts[i], to: starts[i + 1] ?? starts[i] + 8 })) : [];
+    warmCaptionPlacement(scene.pages.map((pg) => pg.img), wins);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scene.id]);
   useEffect(() => {
     const v = videoRef.current;
     if (!scene.videoUrl || !v) return;
@@ -251,15 +259,27 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
       {!scene.videoUrl && <Fx fx={p.fx} />}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/35" />
 
-      {/* Who is talking (picture, no reading needed) */}
-      {speaker && !cp && (
+      {/* The line, in the framed plate on the calm side of this picture; the speaker's
+          picture rides inside it so non-readers still see who is talking. With captions
+          off, only the speaker's picture shows. */}
+      {scene.captions !== false && !cp ? (
+        <StoryCaption
+          img={p.img}
+          pin={p.textPos}
+          video={scene.videoUrl ? { url: scene.videoUrl, from: starts[page] ?? 0, to: starts[page + 1] ?? (starts[page] ?? 0) + 8 } : undefined}
+          name={speaker?.name}
+          color={speaker?.color}
+          text={p.line}
+          onReplay={replayPage}
+        >
+          {speaker && <img src={speaker.img} alt="" className={`h-[clamp(34px,5cqw,72px)] w-[clamp(34px,5cqw,72px)] shrink-0 rounded-full object-cover ${playing ? 'animate-[lep1-hop_0.9s_ease-in-out_infinite]' : ''}`} draggable={false} />}
+        </StoryCaption>
+      ) : speaker && !cp ? (
         <div className="absolute bottom-[12%] left-4 z-20 flex items-center gap-2 rounded-full bg-white/90 py-1 pl-1 pr-4 shadow-xl">
           <img src={speaker.img} alt={speaker.name} className={`h-14 w-14 rounded-full object-cover ${playing ? 'animate-[lep1-hop_0.9s_ease-in-out_infinite]' : ''}`} draggable={false} />
           <span className="text-2xl">🔊</span>
         </div>
-      )}
-      {/* A small caption for the grown-up */}
-      {scene.captions !== false && !cp && <div className="absolute bottom-[3%] left-1/2 z-20 max-w-[70%] -translate-x-1/2 rounded-xl bg-black/45 px-3 py-1 text-center text-sm font-semibold text-white/90">{p.line}</div>}
+      ) : null}
 
       {/* Film strip + controls */}
       <div className="absolute right-3 top-3 z-30 flex gap-2">

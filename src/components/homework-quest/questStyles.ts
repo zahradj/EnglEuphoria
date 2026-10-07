@@ -3,6 +3,11 @@
  *  or daylight), not tied to the app's light/dark mode — it's a game world. */
 export const QUEST_CSS = `
 .hq { --gold:#f5c542; --ember:#fe6a2f; --mint:#34d399; --rose:#fb7185; --parchment:#fff6df; --ink:#2a1459; height:100dvh; overflow:hidden; display:flex; flex-direction:column; font-family:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif; color:#f4efff; }
+.hq { position:relative; }
+.hq-forest { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0; }
+.hq-forest::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,.14); }
+.hq.night .hq-forest::after { background:rgba(20,8,50,.62); }
+.hq-wrap { position:relative; z-index:1; }
 .hq.night { background: radial-gradient(ellipse at 50% 0%, #2b1760, #140b2e 65%); }
 .hq.day { background: radial-gradient(ellipse at 50% 0%, #fff3d6, #ffe0b8 40%, #f7b98a 100%); color:#3a1f0d; --parchment:#ffffff; }
 .hq * { box-sizing:border-box; }
@@ -30,7 +35,7 @@ export const QUEST_CSS = `
 .hq-btn.ghost { background:rgba(255,255,255,.14)!important; color:inherit!important; box-shadow:none; border:1px solid rgba(127,127,127,.35)!important; padding:9px 16px; font-size:14px; }
 .hq-btn.violet { background:var(--hq-accent2)!important; box-shadow:0 6px 0 rgba(0,0,0,.35); }
 .hq-btn[disabled] { opacity:.45; cursor:not-allowed; }
-.hq-stage { position:relative; flex:none; border-radius:22px; overflow:hidden; border:3px solid var(--hq-accent); box-shadow:0 24px 60px rgba(0,0,0,.35); background:#0d0624; }
+.hq-stage { container-type:inline-size; position:relative; flex:none; max-width:100%; border-radius:22px; overflow:hidden; border:3px solid var(--hq-accent); box-shadow:0 24px 60px rgba(0,0,0,.35); background:#0d0624; }
 .hq-art { position:absolute; inset:0; background-size:cover; background-position:center; }
 .hq-art.still { animation:none; }
 .hq-night { position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse at 50% 40%, rgba(124,58,237,.16), rgba(20,8,50,.6) 80%); }
@@ -65,6 +70,34 @@ export const QUEST_CSS = `
 .hq-hot.right { background:rgba(52,211,153,.3)!important; box-shadow:inset 0 0 0 4px var(--mint); }
 .hq-answers { flex:none; display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
 .hq-big { min-width:150px; padding:clamp(10px,2vh,16px) 22px; border-radius:20px; font-family:"Grandstander",system-ui,sans-serif; font-weight:900; font-size:26px; color:#fff!important; box-shadow:0 8px 0 rgba(0,0,0,.3); }
+/* The answer blocks live INSIDE the scene frame, along its bottom edge, sized from the frame's own width. */
+.hq-dock { position:absolute; left:0; right:0; bottom:0; z-index:7; display:flex; gap:2.2cqw; justify-content:center; align-items:flex-end; flex-wrap:nowrap; padding:7cqw 3cqw 2.4cqw; background:linear-gradient(180deg,rgba(13,6,36,0),rgba(13,6,36,.6) 55%); }
+.hq-dock .hq-card { flex:0 1 auto; width:clamp(64px,19cqw,170px); padding:1.4cqw; border-radius:2.6cqw; box-shadow:0 .9cqw 0 #b98a2e; }
+.hq-dock .hq-card .em { font-size:clamp(30px,8cqw,72px); }
+.hq-dock .hq-orb { width:clamp(56px,12cqw,110px); height:clamp(56px,12cqw,110px); font-size:clamp(22px,4.6cqw,40px); }
+.hq-dock .hq-big { min-width:clamp(96px,20cqw,190px); padding:clamp(8px,1.6cqw,16px) clamp(12px,2.4cqw,22px); font-size:clamp(16px,3.4cqw,26px); border-radius:3cqw; }
+.hq-stage:has(.hq-dock) .hq-caption:not(.hq-corner) { bottom:auto; top:12px; }
+/* On a phone the wide picture is only a thin strip: give the frame more height so the blocks never cover the scene. */
+@media (max-width:560px) { .hq-stage:has(.hq-dock) { aspect-ratio:4/3 !important; height:auto !important; } }
+/* Word blocks / answer lines live in the frame too: a column dock (built line above the word bank). */
+.hq-dock-words { flex-direction:column; align-items:center; gap:1.6cqw; padding-top:9cqw; }
+.hq-dock-words .hq-built { min-height:0; padding:1.2cqw 2.4cqw; border-radius:2.4cqw; font-size:clamp(14px,2.6cqw,24px); box-shadow:0 .6cqw 0 rgba(0,0,0,.25); max-width:94%; }
+.hq-dock-words .hq-built .hq-w { font-size:clamp(14px,2.8cqw,26px); padding:.2em .4em; }
+.hq-dock-words .hq-words { gap:1.4cqw; max-width:96%; }
+.hq-dock-words .hq-words .hq-w { font-size:clamp(14px,2.8cqw,26px); padding:.45em .8em; border-radius:2cqw; background:var(--parchment)!important; color:var(--ink)!important; border:2px solid var(--hq-accent)!important; box-shadow:0 .7cqw 0 #b98a2e; }
+.hq-dock-words .hq-potions { gap:2.4cqw; }
+.hq-dock-words .hq-potion { color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.6); }
+.hq-dock-words .hq-bar { margin:0; }
+.hq-dock-opts { flex-wrap:wrap; align-items:stretch; padding-top:9cqw; }
+.hq-dock-opts .hq-opt { flex:1 1 22cqw; max-width:44cqw; font-size:clamp(14px,2.8cqw,24px); padding:clamp(8px,1.6cqw,16px); border-radius:2.4cqw; box-shadow:0 .7cqw 0 #b98a2e; }
+.hq-stage:has(.hq-dock-opts) .hq-book { inset:64px 6% auto 6%; }
+@media (max-width:560px) { .hq-stage:has(.hq-dock-words), .hq-stage:has(.hq-dock-opts) { aspect-ratio:1/1 !important; } }
+/* The frame never grows taller than the window (minus header and the bar/tray under it), so nothing slides below the fold. */
+.hq-stage { max-width:min(100%, max(300px, calc((100dvh - 330px) * var(--ar, 1.79)))); margin-inline:auto; }
+.hq-stage:has(.hq-dock) { max-width:min(100%, max(300px, calc((100dvh - 230px) * var(--ar, 1.79)))); }
+@media (max-width:560px) { .hq-stage, .hq-stage:has(.hq-dock) { max-width:100%; } }
+.hq-answers { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+.hq-big { min-width:150px; padding:16px 22px; border-radius:20px; font-family:"Grandstander",system-ui,sans-serif; font-weight:900; font-size:26px; color:#fff!important; box-shadow:0 8px 0 rgba(0,0,0,.3); }
 .hq-big.t { background:linear-gradient(180deg,#6ee7b7,#059669)!important; } .hq-big.f { background:linear-gradient(180deg,#fda4af,#e11d48)!important; }
 .hq-orb { width:clamp(70px,14vh,110px); height:clamp(70px,14vh,110px); border-radius:50%; font-family:"Grandstander",system-ui,sans-serif; font-weight:900; font-size:40px; color:#fff!important; }
 .hq-orb.o0 { background:radial-gradient(circle at 35% 30%,#a78bfa,#6d28d9 70%)!important; box-shadow:0 8px 0 #3b0f8c,0 0 26px rgba(167,139,250,.6); }

@@ -343,30 +343,16 @@ export const StudentManagement = () => {
       return;
     }
     try {
-      const { data: existing } = await supabase
-        .from('student_credits')
-        .select('id, total_credits')
-        .eq('student_id', studentId)
-        .maybeSingle();
-
-      if (existing) {
-        const newTotal = Math.max(0, (existing.total_credits || 0) + amount);
-        const { error } = await supabase
-          .from('student_credits')
-          .update({ total_credits: newTotal })
-          .eq('id', existing.id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from('student_credits')
-          .insert({ student_id: studentId, total_credits: Math.max(0, amount) });
-        if (error) throw error;
-      }
+      // One atomic server call (never below what the student already used); the student's
+      // dashboard updates live because student_credits is in the realtime publication.
+      const { data, error } = await (supabase as any).rpc('admin_adjust_credits', { p_student_id: studentId, p_amount: amount });
+      if (error) throw error;
+      const available = Number((data as { available?: number } | null)?.available);
 
       setStudents(prev =>
         prev.map(s =>
           s.id === studentId
-            ? { ...s, available_credits: Math.max(0, s.available_credits + amount) }
+            ? { ...s, available_credits: Number.isFinite(available) ? available : Math.max(0, s.available_credits + amount) }
             : s
         )
       );
@@ -752,11 +738,11 @@ const CreditsCell: React.FC<CreditsCellProps> = ({ balance, onAdd }) => {
           <div>
             <p className="text-sm font-medium">Grant credits</p>
             <p className="text-xs text-muted-foreground">
-              Use a negative number to remove credits.
+              1 credit = 30 minutes (+5 = Starter, +10 = Value, +20 = Mastery pack). Use a negative number to remove credits. The student sees it on their dashboard straight away.
             </p>
           </div>
           <div className="flex gap-2">
-            {[5, 10, 25].map(n => (
+            {[5, 10, 20].map(n => (
               <Button
                 key={n}
                 size="sm"

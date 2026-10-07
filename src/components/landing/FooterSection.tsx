@@ -33,7 +33,7 @@ const getFooterLinks = (t: TFn) => ({
       { label: t('lp.footer.link.about'), href: '/about' },
       { label: t('lp.footer.link.careers'), href: '/for-teachers' },
       { label: t('lp.footer.link.blog'), href: '/blog' },
-      { label: t('lp.footer.link.contact'), href: 'mailto:hello@engleuphoria.com' },
+      { label: t('lp.footer.link.contact'), href: 'mailto:support@engleuphoria.com' },
     ],
   },
 });

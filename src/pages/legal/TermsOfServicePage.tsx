@@ -29,7 +29,7 @@ export default function TermsOfServicePage() {
         <h2 className="font-display text-2xl font-semibold mt-8 mb-3">3. The Hub System</h2>
         <p>EnglEuphoria provides educational services through three specialized Hubs:</p>
         <ul className="list-disc pl-6 space-y-2 my-4">
-          <li><strong>The Playground</strong> (kids, ages 5–11): lessons are <strong>30 minutes</strong> in duration.</li>
+          <li><strong>The Playground</strong> (kids, ages 5–11): lessons are <strong>25 minutes</strong> in duration (booked in 30-minute slots).</li>
           <li><strong>The Academy</strong> (teens, ages 12–17): lessons are <strong>60 minutes</strong> in duration.</li>
           <li><strong>The Success Hub</strong> (adults / professionals, 18+): lessons are <strong>60 minutes</strong> in duration.</li>
         </ul>
@@ -96,7 +96,7 @@ export default function TermsOfServicePage() {
 
       <section>
         <h2 className="font-display text-2xl font-semibold mt-8 mb-3">9. Contact</h2>
-        <p>Questions about these Terms? Contact us at <a href="mailto:hello@engleuphoria.com" className="text-indigo-400 hover:underline">hello@engleuphoria.com</a> or by mail at:</p>
+        <p>Questions about these Terms? Contact us at <a href="mailto:support@engleuphoria.com" className="text-indigo-400 hover:underline">hello@engleuphoria.com</a> or by mail at:</p>
         <p className="not-prose">
           EnglEuphoria<br />
           30 N Gould St, Ste R<br />

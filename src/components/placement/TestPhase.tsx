@@ -8,15 +8,17 @@ import { placementClipUrl } from './placementAudio';
 import { placementVoiceForHub } from './placementLines';
 import { supabase, supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { VocabularyImage } from '@/components/ui/VocabularyImage';
 import { getHubPool, resolveSkill, resolveScoreSkill, taskInstructionKeyFor, type Hub, type BankQuestion } from './questionBanks';
 import {
-  MAX_ITEMS,
+  maxItemsFor,
   initAdaptiveState,
   nextAdaptiveItem,
   applyAdaptiveAnswer,
   shouldStopAdaptive,
+  summarizeAdaptive,
+  shuffledOrder,
   type AdaptiveState,
+  type PlacementSummary,
 } from './adaptiveEngine';
 
 export interface TestResult {
@@ -30,6 +32,21 @@ export interface TestResult {
    *  resolveScoreSkill) — lets completeTest() persist a real per-skill
    *  breakdown instead of one overall score copied onto every category. */
   skill: string;
+  /** The bank item's stable id (for later item analysis). */
+  itemId?: string;
+  /** How long the student took on this question (milliseconds), from the moment the options appeared. */
+  responseMs?: number;
+  /** The student pressed "I'm not sure". */
+  unsure?: boolean;
+  /** Answered implausibly fast for this kind of question (likely a guess); earns reduced credit. */
+  fast?: boolean;
+}
+
+/** Fastest believable time to read and answer, by kind of question. Faster than this is treated as a guess. */
+function fastLimitMs(q: BankQuestion): number {
+  if (q.readingPassage) return 3500;
+  if (q.audio_script) return 1500;
+  return 1200;
 }
 
 type Question = BankQuestion;
@@ -37,7 +54,7 @@ type Question = BankQuestion;
 interface TestPhaseProps {
   age: number;
   hub?: Hub;
-  onComplete: (results: TestResult[]) => void;
+  onComplete: (results: TestResult[], summary: PlacementSummary) => void;
 }
 
 const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
@@ -48,15 +65,17 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
   const pool = useMemo(() => getHubPool(resolvedHub), [resolvedHub]);
   const accent = accentFor(resolvedHub);
 
-  const [adaptiveState, setAdaptiveState] = useState<AdaptiveState>(() => initAdaptiveState());
+  const [adaptiveState, setAdaptiveState] = useState<AdaptiveState>(() => initAdaptiveState(resolvedHub));
   const [current, setCurrent] = useState<{ item: BankQuestion; index: number } | null>(
-    () => nextAdaptiveItem(pool, resolvedHub, initAdaptiveState()),
+    () => nextAdaptiveItem(pool, resolvedHub, initAdaptiveState(resolvedHub)),
   );
   const [results, setResults] = useState<TestResult[]>([]);
   const [phase, setPhase] = useState<'typing' | 'answering' | 'feedback'>('typing');
   const [selectedAnswer, setSelectedAnswer] = useState(-1);
+  const answeringSince = useRef<number>(0);
   const [messages, setMessages] = useState<Array<{ role: 'guide' | 'user'; text: string }>>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const answerRef = useRef<HTMLDivElement>(null);
 
   // Listening question state
   const [isPlaying, setIsPlaying] = useState(false);
@@ -67,8 +86,20 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
   const audioCacheRef = useRef<Map<number, string>>(new Map());
   const currentAudioRef = useRef<HTMLAudioElement | null>(null);
   const currentQIndex = current?.index ?? -1;
+  // Options are shown in a random order: the bank's right answers are not evenly spread across positions.
+  const displayOrder = useMemo(
+    () => (current?.item.fixedOrder ? (current.item.options.map((_, i) => i)) : shuffledOrder(current?.item.options.length ?? 4)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentQIndex],
+  );
 
   useEffect(() => {
+    // While the student answers, show the START of the question (instruction, question, text, options), not the bottom
+    // of the page: scrolling to the bottom pushed the instruction and the question itself out of sight.
+    if (phase === 'answering' && answerRef.current) {
+      answerRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      return;
+    }
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, phase]);
 
@@ -165,12 +196,16 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
 
   const currentQuestion = current?.item;
 
-  const handleAnswer = (index: number) => {
+  /** `index` is the position in the bank's own option order (-1 with `unsure`). */
+  const handleAnswer = (index: number, opts: { unsure?: boolean } = {}) => {
     if (phase !== 'answering' || !current) return;
     setSelectedAnswer(index);
 
     const { item, index: poolIndex } = current;
-    const isCorrect = index === item.correctIndex;
+    const unsure = !!opts.unsure;
+    const isCorrect = !unsure && index === item.correctIndex;
+    const responseMs = answeringSince.current ? Date.now() - answeringSince.current : undefined;
+    const fast = !unsure && responseMs !== undefined && responseMs < fastLimitMs(item);
     const result: TestResult = {
       questionIndex: poolIndex,
       selectedOption: index,
@@ -179,26 +214,46 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
       difficulty: item.difficulty,
       targetLevel: item.targetLevel,
       skill: resolveScoreSkill(item, resolvedHub),
+      itemId: item.id,
+      responseMs,
+      unsure: unsure || undefined,
+      fast: fast || undefined,
     };
     setResults(prev => [...prev, result]);
-    setMessages(prev => [...prev, { role: 'user', text: item.options[index] }]);
-    setAdaptiveState(prev => applyAdaptiveAnswer(prev, item, poolIndex, resolvedHub, isCorrect));
+    setMessages(prev => [
+      ...prev,
+      { role: 'guide', text: item.question },
+      { role: 'user', text: unsure ? t('placement.action.notSure', "I'm not sure") : item.options[index] },
+    ]);
+    setAdaptiveState(prev => applyAdaptiveAnswer(prev, item, poolIndex, resolvedHub, isCorrect, { unsure, fast }));
     setPhase('feedback');
+  };
+
+  // Placement is not a lesson: outside the kids' hub the reply to an answer is neutral, so the test neither teaches
+  // the answer to the next question nor tells the student how they are doing.
+  const feedbackFor = (item: BankQuestion, correct: boolean) =>
+    isPlayground ? (correct ? item.feedback.correct : item.feedback.incorrect) : t('placement.feedback.neutral', 'Thanks! Next one.');
+
+  const finish = (finalResults: TestResult[], finalState: AdaptiveState) => {
+    const summary = summarizeAdaptive(finalState, resolvedHub, {
+      notSureCount: finalResults.filter((r) => r.unsure).length,
+      fastCount: finalResults.filter((r) => r.fast).length,
+    });
+    setTimeout(() => onComplete(finalResults, summary), 600);
   };
 
   const handleFeedbackComplete = () => {
     if (!current) return;
     const isCorrect = selectedAnswer === current.item.correctIndex;
-    const fb = isCorrect ? current.item.feedback.correct : current.item.feedback.incorrect;
-    setMessages(prev => [...prev, { role: 'guide', text: fb }]);
+    setMessages(prev => [...prev, { role: 'guide', text: feedbackFor(current.item, isCorrect) }]);
 
     if (shouldStopAdaptive(adaptiveState, resolvedHub)) {
-      setTimeout(() => onComplete(results), 600);
+      finish(results, adaptiveState);
       return;
     }
     const nextPick = nextAdaptiveItem(pool, resolvedHub, adaptiveState);
     if (!nextPick) {
-      setTimeout(() => onComplete(results), 600);
+      finish(results, adaptiveState);
       return;
     }
     setSelectedAnswer(-1);
@@ -207,7 +262,8 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
   };
 
   const isCorrect = selectedAnswer === currentQuestion?.correctIndex;
-  const progressPct = Math.round((results.length / MAX_ITEMS) * 100);
+  const maxItems = maxItemsFor(resolvedHub);
+  const progressPct = Math.round((results.length / maxItems) * 100);
 
   return (
     <div className="flex flex-col h-full">
@@ -215,13 +271,8 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
       <div className="px-5 pt-3 pb-2">
         <div className="flex items-center justify-between text-[11px] text-white/60 mb-1.5">
           <span className="font-medium tracking-wide">
-            {isPlayground ? t('placement.progress.question') : t('placement.progress.cefr')} {Math.min(results.length + 1, MAX_ITEMS)} / {MAX_ITEMS}
+            {isPlayground ? t('placement.progress.question') : t('placement.progress.cefr')} {Math.min(results.length + 1, maxItems)} / {maxItems}
           </span>
-          {!isPlayground && currentQuestion && (
-            <span className="px-2 py-0.5 rounded-full bg-white/10 border border-white/15 text-white/70 font-semibold">
-              {currentQuestion.targetLevel}
-            </span>
-          )}
         </div>
         <div className="h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
           <motion.div
@@ -261,7 +312,7 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
                 hub={resolvedHub}
                 animate
                 onTypingComplete={() => {
-                  setMessages(prev => [...prev, { role: 'guide', text: currentQuestion.question }]);
+                  answeringSince.current = Date.now();
                   setPhase('answering');
                 }}
               />
@@ -279,7 +330,7 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
               <ChatBubble
                 key={`fb-${currentQIndex}`}
                 role="guide"
-                message={isCorrect ? currentQuestion.feedback.correct : currentQuestion.feedback.incorrect}
+                message={feedbackFor(currentQuestion, isCorrect)}
                 hub={resolvedHub}
                 animate
                 onTypingComplete={handleFeedbackComplete}
@@ -290,6 +341,7 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
 
         {phase === 'answering' && currentQuestion && (
           <motion.div
+            ref={answerRef}
             key={`opts-${currentQIndex}`}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -297,9 +349,17 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="space-y-3 mt-2"
           >
+            {/* The instruction stays on screen while the student answers (it used to vanish when the options appeared). */}
+            <div
+              dir="auto"
+              className="inline-block rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-medium text-white/80 backdrop-blur-sm"
+            >
+              {t(taskInstructionKeyFor(currentQuestion))}
+            </div>
+            {/* The question is shown together with its options, so the student always sees what is being asked. */}
+            <ChatBubble role="guide" message={currentQuestion.question} hub={resolvedHub} />
             {(() => {
               const skill = resolveSkill(currentQuestion);
-              const showImage = skill === 'vocabulary' && !!currentQuestion.imagePrompt;
               const showAudio = skill === 'listening' && !!currentQuestion.audio_script;
               const showReading = skill === 'reading' && !!currentQuestion.readingPassage;
               return (
@@ -307,18 +367,6 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
                   {showReading && (
                     <div className="w-full mb-4 rounded-2xl border border-white/15 bg-white/5 backdrop-blur-sm p-4 text-white/90 text-sm leading-relaxed whitespace-pre-line">
                       {currentQuestion.readingPassage}
-                    </div>
-                  )}
-                  {showImage && (
-                    <div className="w-full flex justify-center mb-4 animate-fade-in">
-                      <VocabularyImage
-                        prompt={currentQuestion.imagePrompt!}
-                        alt="Question visual"
-                        style={isPlayground ? 'kawaii-chibi' : 'flat2d'}
-                        aspectRatio="1:1"
-                        testSafe
-                        className="max-w-[200px] max-h-48 object-contain rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm"
-                      />
                     </div>
                   )}
                   {showAudio && (
@@ -356,17 +404,18 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
               );
             })()}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {currentQuestion.options.map((opt, i) => {
+              {displayOrder.map((origIdx, i) => {
+                const opt = currentQuestion.options[origIdx];
                 const lockedByListening = !!currentQuestion.audio_script && !hasPlayedOnce && !audioFailed;
                 return (
                   <motion.button
-                    key={i}
+                    key={origIdx}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.05 * i, duration: 0.3 }}
                     whileHover={lockedByListening ? undefined : { scale: 1.02 }}
                     whileTap={lockedByListening ? undefined : { scale: 0.97 }}
-                    onClick={() => !lockedByListening && handleAnswer(i)}
+                    onClick={() => !lockedByListening && handleAnswer(origIdx)}
                     disabled={lockedByListening}
                     aria-disabled={lockedByListening}
                     className={`backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white text-left text-sm transition-colors shadow-[0_4px_16px_rgba(0,0,0,0.2)] ${
@@ -380,6 +429,18 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
                 );
               })}
             </div>
+            {!isPlayground && (
+              <div className="flex justify-center pt-1">
+                <button
+                  type="button"
+                  onClick={() => handleAnswer(-1, { unsure: true })}
+                  disabled={!!currentQuestion.audio_script && !hasPlayedOnce && !audioFailed}
+                  className="text-xs text-white/60 underline decoration-white/30 underline-offset-4 hover:text-white/90 disabled:opacity-40"
+                >
+                  {t('placement.action.notSure', "I'm not sure")}
+                </button>
+              </div>
+            )}
           </motion.div>
         )}
       </div>

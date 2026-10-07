@@ -177,4 +177,22 @@ export const REUSABLE_ACTIVITIES: ReusableActivity[] = [
       rounds: [{ before: 'This is', after: 'ball.', choices: ['a', 'an'], answer: 'a', img: '<picture import>' }],
     },
   },
+  {
+    kind: 'color-play',
+    name: 'Color Splash (pick / paint / mix / hunt)',
+    file: 'src/content/playground-library/ColorPlayScene.tsx',
+    purpose: 'Colours: match a colour word to its paint, paint a picture from what you hear (Cambridge listen-and-colour), mix two colours, find the shape of a colour.',
+    howItWorks:
+      'One scene, four modes. Model first: every colour of the stop is said aloud as its pot lights up. pick: hear a colour, tap that paint pot. paint: "Paint the balloon blue." and the outline fills with colour. '
+      + 'mix: "What do yellow and blue make?" and the answer pot appears in the new colour. hunt: "Find the red apple." Shapes are drawn in SVG, so a colour is always exactly the colour named. '
+      + 'Each solved round adds a small painting to the art show. Wrong picks wobble (no hearts); after two the right one glows. Fully synced, shared play, safe on the student mirror.',
+    example: {
+      id: 'u1-color-splash',
+      kind: 'color-play',
+      teacher: 'Say the colours with the student, then let them paint.',
+      mode: 'paint',
+      intro: ['red', 'blue'],
+      rounds: [{ shape: 'balloon', answer: 'blue', options: ['blue', 'red'] }],
+    },
+  },
 ];

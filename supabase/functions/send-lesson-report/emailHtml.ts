@@ -27,6 +27,8 @@ type Strings = {
   placement: string; startLevel: string; englishToday: string; inClass: string; goal: string
   howYouDid: string; needs: string; good: string; great: string
   messageFrom: string; homework: string; plan: string; perWeek: string // {n}
+  planTitle: string; weekN: string // {n}
+  planRest: string // {w} weeks in total, {l} level
   ctaTrial: string; ctaRegular: string; team: string
   subjectTrial: string; subjectRegular: string // {s} student, {title}
 }
@@ -38,6 +40,8 @@ const S: Record<Lang, Strings> = {
     placement: 'Placement result', startLevel: 'Starting level', englishToday: 'English today', inClass: 'In class', goal: 'Goal',
     howYouDid: 'How you did', needs: 'Needs practice', good: 'Good', great: 'Great',
     messageFrom: 'Message from {t}', homework: 'Homework', plan: 'Recommended plan', perWeek: '{n} lesson(s) per week',
+    planTitle: 'Your learning plan', weekN: 'Week {n}',
+    planRest: 'Then the rest of level {l} — about {w} weeks in total at this pace.',
     ctaTrial: 'Book your next lesson', ctaRegular: 'Open your dashboard', team: 'The EnglEuphoria Team',
     subjectTrial: "{s}'s trial lesson report", subjectRegular: 'Lesson report: {title} — {s}',
   },
@@ -47,6 +51,8 @@ const S: Record<Lang, Strings> = {
     placement: 'Résultat de placement', startLevel: 'Niveau de départ', englishToday: "Anglais aujourd'hui", inClass: 'En classe', goal: 'Objectif',
     howYouDid: 'Vos résultats', needs: 'À travailler', good: 'Bien', great: 'Excellent',
     messageFrom: 'Message de {t}', homework: 'Devoirs', plan: 'Plan recommandé', perWeek: '{n} cours par semaine',
+    planTitle: 'Votre plan d\'apprentissage', weekN: 'Semaine {n}',
+    planRest: 'Puis la suite du niveau {l} — environ {w} semaines au total à ce rythme.',
     ctaTrial: 'Réservez votre prochain cours', ctaRegular: 'Ouvrir votre tableau de bord', team: "L'équipe EnglEuphoria",
     subjectTrial: "Rapport du cours d'essai de {s}", subjectRegular: 'Rapport de cours : {title} — {s}',
   },
@@ -56,6 +62,8 @@ const S: Record<Lang, Strings> = {
     placement: 'Resultado de nivel', startLevel: 'Nivel inicial', englishToday: 'Inglés hoy', inClass: 'En clase', goal: 'Objetivo',
     howYouDid: 'Cómo te fue', needs: 'Necesita práctica', good: 'Bien', great: 'Excelente',
     messageFrom: 'Mensaje de {t}', homework: 'Tarea', plan: 'Plan recomendado', perWeek: '{n} clase(s) por semana',
+    planTitle: 'Su plan de aprendizaje', weekN: 'Semana {n}',
+    planRest: 'Después, el resto del nivel {l}: unas {w} semanas en total a este ritmo.',
     ctaTrial: 'Reserva tu próxima clase', ctaRegular: 'Abre tu panel', team: 'El equipo de EnglEuphoria',
     subjectTrial: 'Informe de la clase de prueba de {s}', subjectRegular: 'Informe de la clase: {title} — {s}',
   },
@@ -65,6 +73,8 @@ const S: Record<Lang, Strings> = {
     placement: 'نتيجة تحديد المستوى', startLevel: 'مستوى البداية', englishToday: 'الإنجليزية اليوم', inClass: 'في الحصة', goal: 'الهدف',
     howYouDid: 'أداؤك', needs: 'يحتاج إلى تدريب', good: 'جيد', great: 'ممتاز',
     messageFrom: 'رسالة من {t}', homework: 'الواجب', plan: 'الخطة الموصى بها', perWeek: '{n} حصة في الأسبوع',
+    planTitle: 'خطة التعلم الخاصة بكم', weekN: 'الأسبوع {n}',
+    planRest: 'ثم بقية المستوى {l} — حوالي {w} أسبوعاً في المجموع بهذا الإيقاع.',
     ctaTrial: 'احجز حصتك القادمة', ctaRegular: 'افتح لوحة التحكم', team: 'فريق EnglEuphoria',
     subjectTrial: 'تقرير الحصة التجريبية لـ {s}', subjectRegular: 'تقرير الحصة: {title} — {s}',
   },
@@ -74,6 +84,8 @@ const S: Record<Lang, Strings> = {
     placement: 'Seviye sonucu', startLevel: 'Başlangıç seviyesi', englishToday: 'Bugünkü İngilizce', inClass: 'Derste', goal: 'Hedef',
     howYouDid: 'Nasıl geçti', needs: 'Pratik gerekli', good: 'İyi', great: 'Harika',
     messageFrom: '{t} tarafından mesaj', homework: 'Ödev', plan: 'Önerilen plan', perWeek: 'Haftada {n} ders',
+    planTitle: 'Öğrenme planınız', weekN: 'Hafta {n}',
+    planRest: 'Ardından {l} seviyesinin geri kalanı — bu hızda toplam yaklaşık {w} hafta.',
     ctaTrial: 'Sonraki dersinizi ayırtın', ctaRegular: 'Panelinizi açın', team: 'EnglEuphoria Ekibi',
     subjectTrial: '{s} için deneme dersi raporu', subjectRegular: 'Ders raporu: {title} — {s}',
   },
@@ -83,6 +95,8 @@ const S: Record<Lang, Strings> = {
     placement: 'Risultato del livello', startLevel: 'Livello di partenza', englishToday: 'Inglese oggi', inClass: 'In classe', goal: 'Obiettivo',
     howYouDid: 'Come è andata', needs: 'Da esercitare', good: 'Bene', great: 'Ottimo',
     messageFrom: 'Messaggio da {t}', homework: 'Compiti', plan: 'Piano consigliato', perWeek: '{n} lezioni a settimana',
+    planTitle: 'Il vostro piano di apprendimento', weekN: 'Settimana {n}',
+    planRest: 'Poi il resto del livello {l} — circa {w} settimane in totale a questo ritmo.',
     ctaTrial: 'Prenota la prossima lezione', ctaRegular: 'Apri la tua dashboard', team: 'Il team EnglEuphoria',
     subjectTrial: 'Rapporto della lezione di prova di {s}', subjectRegular: 'Rapporto della lezione: {title} — {s}',
   },
@@ -125,6 +139,11 @@ export interface LessonReportEmailProps {
     confidence?: string
     lessonsPerWeek?: number
     goal?: string
+    plan?: {
+      totalWeeks: number
+      unitsAfter: number
+      weeks: { week: number; title: string }[]
+    }
   }
 }
 
@@ -183,10 +202,20 @@ export function renderLessonReportHtml(p: LessonReportEmailProps): string {
         ${trial.goal ? `<p style="font-size:14px;color:#374151;margin:0;"><strong>${t.goal}:</strong> ${esc(trial.goal)}</p>` : ''}
       </div>` : ''
 
+  const plan = p.isTrial ? trial?.plan : undefined
   const planBlock = p.isTrial && trial?.lessonsPerWeek ? `
       <div style="background:#f9fafb;border-radius:10px;padding:18px 22px;margin:0 0 24px;border:1px solid #e5e7eb;">
         <p style="font-size:14px;color:${pal.text};font-weight:700;margin:0 0 6px;">${t.plan}</p>
         <p style="font-size:15px;color:#111827;margin:0;">${fill(t.perWeek, { n: trial.lessonsPerWeek })}</p>
+      </div>` : ''
+  const planWeeks = plan?.weeks.length ? `
+      <div style="background:#ffffff;border-radius:10px;padding:18px 22px;margin:0 0 24px;border:2px solid ${pal.primary};">
+        <p style="font-size:15px;color:${pal.text};font-weight:800;margin:0 0 10px;">🗺️ ${t.planTitle}${trial?.level ? ` · ${esc(trial.level)}` : ''}</p>
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0">${plan.weeks.map((w) => `<tr>
+          <td style="padding:7px 0;font-size:13px;font-weight:700;color:${pal.text};width:34%;text-align:${start};vertical-align:top;border-bottom:1px solid #eef0f3;">${fill(t.weekN, { n: w.week })}</td>
+          <td style="padding:7px 0;font-size:14px;color:#111827;text-align:${start};border-bottom:1px solid #eef0f3;">${esc(w.title)}</td>
+        </tr>`).join('')}</table>
+        ${plan.unitsAfter > 0 ? `<p style="font-size:13px;color:#6b7280;margin:10px 0 0;">${fill(t.planRest, { l: esc(trial?.level ?? ''), w: plan.totalWeeks })}</p>` : ''}
       </div>` : ''
 
   const intro = fill(p.isTrial ? t.afterTrial : t.afterLesson, { t: esc(p.teacherName) })
@@ -212,6 +241,7 @@ export function renderLessonReportHtml(p: LessonReportEmailProps): string {
       </div>` : ''}
       ${p.homework ? `<p style="font-size:14px;color:#374151;line-height:1.6;margin:0 0 24px;"><strong>📚 ${t.homework}:</strong> ${esc(p.homework)}</p>` : ''}
       ${planBlock}
+      ${planWeeks}
       <div style="text-align:center;margin:28px 0 8px;">
         <a href="${SITE_URL}/dashboard" style="background:${pal.primary};color:#ffffff;font-size:15px;font-weight:600;border-radius:8px;padding:14px 32px;text-decoration:none;display:inline-block;">${p.isTrial ? t.ctaTrial : t.ctaRegular}</a>
       </div>
@@ -241,6 +271,11 @@ export function renderLessonReportText(p: LessonReportEmailProps): string {
     if (p.trial.confidence) lines.push(`${t.inClass}: ${p.trial.confidence}`)
     if (p.trial.goal) lines.push(`${t.goal}: ${p.trial.goal}`)
     if (p.trial.lessonsPerWeek) lines.push(`${t.plan}: ${fill(t.perWeek, { n: p.trial.lessonsPerWeek })}`)
+    if (p.trial.plan?.weeks.length) {
+      lines.push('', `${t.planTitle}${p.trial.level ? ` · ${p.trial.level}` : ''}:`)
+      for (const w of p.trial.plan.weeks) lines.push(`- ${fill(t.weekN, { n: w.week })}: ${w.title}`)
+      if (p.trial.plan.unitsAfter > 0) lines.push(fill(t.planRest, { l: p.trial.level ?? '', w: p.trial.plan.totalWeeks }))
+    }
     lines.push('')
   }
   if (p.skills.length) {

@@ -3,9 +3,13 @@
 // answers, audio script, and image prompts MUST stay strictly English.
 export const placementTranslations = {
   'placement.task.listening': 'Listen and choose the correct answer.',
-  'placement.task.vocabulary': 'Look at the picture and choose the correct word.',
+  'placement.task.vocabulary': "Choose the best answer.",
   'placement.task.grammar': 'Choose the correct word to complete the sentence.',
   'placement.task.reading': 'Read carefully and choose the best answer.',
+  'placement.task.gap': "Choose the word or phrase that completes the sentence.",
+  'placement.task.choose': "Choose the best answer.",
+  'placement.action.notSure': "I'm not sure",
+  'placement.feedback.neutral': "Thanks! Next one.",
   'placement.action.playAudio': 'Play Audio',
   'placement.action.playAgain': 'Play Again',
   'placement.action.loading': 'Loading…',

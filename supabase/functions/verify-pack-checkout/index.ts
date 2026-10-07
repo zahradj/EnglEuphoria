@@ -46,9 +46,10 @@ serve(async (req) => {
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2023-10-16", httpClient: Stripe.createFetchHttpClient() });
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
-    // Ownership check — the session must belong to the caller, not just
-    // any valid Stripe session id someone happens to pass in.
-    if (session.metadata?.student_id !== callerId) {
+    // Ownership check — the session must belong to the caller (as the learner, or as the parent who
+    // paid for the learner), not just any valid Stripe session id someone happens to pass in.
+    const studentId = session.metadata?.student_id;
+    if (!studentId || (studentId !== callerId && session.metadata?.buyer_id !== callerId)) {
       throw new Error("This session does not belong to you");
     }
 
@@ -64,7 +65,7 @@ serve(async (req) => {
     if (!packId || !credits) throw new Error("Session is missing pack metadata");
 
     const { error: insertError } = await supabase.from("credit_purchases").insert({
-      student_id: callerId,
+      student_id: studentId,
       pack_id: packId,
       credits_purchased: credits,
       amount_paid: amountEur,
@@ -77,7 +78,7 @@ serve(async (req) => {
       throw insertError;
     }
 
-    logStep("Verified", { callerId, packId, credits, alreadyGranted: insertError?.code === "23505" });
+    logStep("Verified", { callerId, studentId, packId, credits, alreadyGranted: insertError?.code === "23505" });
 
     return new Response(JSON.stringify({ success: true, status: "paid", credits_granted: credits }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

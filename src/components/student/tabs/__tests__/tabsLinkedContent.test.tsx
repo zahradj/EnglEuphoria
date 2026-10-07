@@ -43,11 +43,12 @@ describe('student tabs link the real content', () => {
     expect(screen.getByTestId('where').textContent).toBe('/homework-quest/color-carnival-u2l1');
   });
 
-  it('Homework: an unfinished lesson keeps its quest locked and links back to the lesson', () => {
+  it('Homework: a lesson not finished yet shows no quest at all (homework appears after the lesson)', () => {
     mockLessons = [lesson({ status: 'current' })];
     mount(<HomeworkTab />);
-    fireEvent.click(screen.getAllByText('Finish the lesson to unlock')[0]);
-    expect(screen.getByTestId('where').textContent).toBe('/playground-scene/unit-2-lesson-1');
+    expect(screen.queryByText('Start quest')).toBeNull();
+    expect(screen.queryByText('Finish the lesson to unlock')).toBeNull();
+    expect(screen.getByText(/Finish a lesson on the map/)).toBeTruthy();
   });
 
   it('My Lessons: lists the built lesson, hides unbuilt slots, links the quest once finished', () => {

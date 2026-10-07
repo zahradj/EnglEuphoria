@@ -1,6 +1,9 @@
 import type { FirstSoundSceneData } from './FirstSoundScene';
 import type { LetterBlocksSceneData, LetterMatchSceneData } from './LetterTilesScene';
 import type { GrammarGapRound, GrammarGapSceneData } from './GrammarGapScene';
+import type { ColorPlaySceneData } from './ColorPlayScene';
+import type { ColorPlayMode, ColorPlayRound } from './colorPlayText';
+import type { ColorId } from './colorShapes';
 import type { SortBasket, SortBasketSceneData, SortItem } from './SortBasketScene';
 import type { WhatsMissingItem, WhatsMissingRound, WhatsMissingSceneData } from './WhatsMissingScene';
 
@@ -13,7 +16,7 @@ import type { WhatsMissingItem, WhatsMissingRound, WhatsMissingSceneData } from 
  *
  * To add another game: add an entry with its own `stages`.
  */
-export type GameScene = FirstSoundSceneData | LetterBlocksSceneData | LetterMatchSceneData | WhatsMissingSceneData | SortBasketSceneData | GrammarGapSceneData;
+export type GameScene = FirstSoundSceneData | LetterBlocksSceneData | LetterMatchSceneData | WhatsMissingSceneData | SortBasketSceneData | GrammarGapSceneData | ColorPlaySceneData;
 
 export interface GameStage {
   id: string;
@@ -262,6 +265,58 @@ function sentenceSprouts(): LibraryGame {
   };
 }
 
+/* ------------------------------------------------------------------ Color Splash */
+
+function colorSplash(): LibraryGame {
+  const stop = (id: string, station: string, title: string, blurb: string, art: string, mode: ColorPlayMode, intro: ColorId[], rounds: ColorPlayRound[]): GameStage => ({
+    id, station, title, blurb, art: `${I}/${art}`, units: rounds.length,
+    scene: { id: `splash-${id}`, kind: 'color-play', teacher: `Say the colors together, then let the student ${mode === 'pick' ? 'tap the matching paint' : mode === 'paint' ? 'paint the picture' : mode === 'mix' ? 'mix the colors' : 'find the shape'}.`, title: station, bg: '/lep1/games/color-splash-cover.jpg', mode, intro, rounds },
+  });
+  const o3 = (a: ColorId, b: ColorId, c: ColorId): ColorId[] => [a, b, c];
+  return {
+    id: 'color-splash',
+    title: 'Color Splash',
+    tagline: 'Pick the paint, paint the picture, mix new colors and find the right shape. Fill your art show with color!',
+    skill: 'Colors',
+    levels: ['Pre-A1'],
+    minutes: '10–14 min',
+    gradient: 'linear-gradient(135deg,#EF4444 0%,#F59E0B 25%,#22C55E 50%,#3B82F6 75%,#A855F7 100%)',
+    cover: '/lep1/games/color-splash-cover.jpg',
+    art: [`${I}/item-balloon-red.png`, `${I}/item-rainbow.png`, `${I}/item-apple.png`, `${I}/item-splash-blue.png`],
+    howToPlay: [
+      'Listen: every color is said aloud before you play.',
+      'Pick the paint, paint the picture, mix two colors, or find the shape.',
+      'Every right answer adds a painting to your art show.',
+      'Wrong? That is okay: try again! Finish a stop to earn your stars.',
+    ],
+    stages: [
+      stop('pick-the-paint', 'Pick the Paint', 'Color Splash: Pick the Paint', 'Hear the color and tap the paint pot.', 'item-splash-red.png', 'pick', ['red', 'blue', 'yellow'], [
+        { answer: 'red', options: o3('red', 'blue', 'yellow') }, { answer: 'blue', options: o3('yellow', 'blue', 'red') }, { answer: 'yellow', options: o3('blue', 'red', 'yellow') },
+        { answer: 'blue', options: o3('red', 'yellow', 'blue') }, { answer: 'red', options: o3('blue', 'red', 'yellow') }, { answer: 'yellow', options: o3('yellow', 'red', 'blue') },
+      ]),
+      stop('paint-it', 'Paint It', 'Color Splash: Paint It', 'Listen, then paint the picture the right color.', 'item-balloon-red.png', 'paint', ['green', 'orange'], [
+        { shape: 'balloon', answer: 'blue', options: o3('blue', 'red', 'green') }, { shape: 'apple', answer: 'red', options: o3('green', 'red', 'yellow') },
+        { shape: 'fish', answer: 'orange', options: o3('blue', 'orange', 'yellow') }, { shape: 'star', answer: 'yellow', options: o3('red', 'green', 'yellow') },
+        { shape: 'house', answer: 'green', options: o3('orange', 'blue', 'green') }, { shape: 'car', answer: 'red', options: o3('red', 'yellow', 'blue') },
+      ]),
+      stop('mix-magic', 'Mix Magic', 'Color Splash: Mix Magic', 'Mix two colors and see what they make!', 'item-splash-yellow.png', 'mix', ['purple', 'green', 'orange'], [
+        { mix: ['yellow', 'blue'], answer: 'green', options: o3('green', 'orange', 'purple') }, { mix: ['red', 'yellow'], answer: 'orange', options: o3('purple', 'orange', 'green') },
+        { mix: ['red', 'blue'], answer: 'purple', options: o3('orange', 'green', 'purple') }, { mix: ['blue', 'yellow'], answer: 'green', options: o3('purple', 'green', 'orange') },
+        { mix: ['yellow', 'red'], answer: 'orange', options: o3('orange', 'purple', 'green') }, { mix: ['blue', 'red'], answer: 'purple', options: o3('green', 'purple', 'orange') },
+      ]),
+      stop('color-hunt', 'Color Hunt', 'Color Splash: Color Hunt', 'Find the shape that is the right color.', 'item-rainbow.png', 'hunt', ['pink', 'brown', 'black'], [
+        { target: 0, items: [{ shape: 'flower', color: 'pink' }, { shape: 'star', color: 'yellow' }, { shape: 'fish', color: 'blue' }] },
+        { target: 2, items: [{ shape: 'balloon', color: 'red' }, { shape: 'apple', color: 'green' }, { shape: 'house', color: 'brown' }] },
+        { target: 1, items: [{ shape: 'fish', color: 'orange' }, { shape: 'car', color: 'black' }, { shape: 'star', color: 'purple' }] },
+        { target: 3, items: [{ shape: 'apple', color: 'red' }, { shape: 'balloon', color: 'blue' }, { shape: 'flower', color: 'yellow' }, { shape: 'star', color: 'pink' }] },
+        { target: 0, items: [{ shape: 'car', color: 'green' }, { shape: 'house', color: 'orange' }, { shape: 'fish', color: 'purple' }] },
+        { target: 2, items: [{ shape: 'star', color: 'brown' }, { shape: 'flower', color: 'red' }, { shape: 'balloon', color: 'black' }] },
+        { target: 1, items: [{ shape: 'house', color: 'yellow' }, { shape: 'apple', color: 'purple' }, { shape: 'car', color: 'pink' }, { shape: 'fish', color: 'green' }] },
+      ]),
+    ],
+  };
+}
+
 function magicShow(): LibraryGame {
   const stop = (id: string, station: string, title: string, blurb: string, pool: WhatsMissingItem[], plan: typeof PLAN_A): GameStage => ({
     id,
@@ -386,6 +441,7 @@ export const LIBRARY_GAMES: LibraryGame[] = [
   marketSort(),
   grammarGarden(),
   sentenceSprouts(),
+  colorSplash(),
 ];
 
 export function getLibraryGame(id: string | undefined): LibraryGame | undefined {

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { FocusLine } from './FocusLine';
+import { useCaptionPlacement } from './captionPlacement';
 
 /**
  * A character's line as a clean "dialogue plate" docked at the bottom of the
@@ -29,7 +30,7 @@ export function plateFontSize(line: string): string {
  */
 export type PlateLook = 'paper' | 'chalk';
 
-interface Look {
+export interface Look {
   plate: React.CSSProperties;
   text: React.CSSProperties;
   tab: React.CSSProperties;
@@ -37,7 +38,7 @@ interface Look {
   speakerFg: string;
 }
 
-const lookFor = (look: PlateLook, color: string): Look =>
+export const lookFor = (look: PlateLook, color: string): Look =>
   look === 'chalk'
     ? {
         plate: { background: 'radial-gradient(120% 140% at 30% 20%, #3C7048, #2A5535)', border: 'calc(1.4*var(--svh,1vh)) solid #B07A3E', boxShadow: '0 12px 24px rgba(0,0,0,.4), inset 0 0 34px rgba(0,0,0,.38)' },
@@ -67,6 +68,8 @@ export function DialoguePlate({
   fontSize = 'calc(4.2*var(--svh,1vh))',
   look = 'paper',
   focusLine,
+  img,
+  pin,
 }: {
   /** Speaker's name for the tab. */
   name: string;
@@ -87,14 +90,23 @@ export function DialoguePlate({
   bottom?: string;
   fontSize?: string;
   look?: PlateLook;
+  /** The picture the plate sits on. When given, the plate goes to the top or the bottom — whichever hides less of the picture
+   *  (owner rule: never hide anything important; see captionPlacement.ts). Omit to keep the plate at the bottom. */
+  img?: string;
+  /** Force 'top' or 'bottom' (a pinned exception). */
+  pin?: 'top' | 'bottom';
   /** Highlight the vocabulary in the line once the voice has finished (replaces `children`). */
   focusLine?: { text: string; focus?: string[]; reveal: boolean; before?: ReactNode; after?: ReactNode };
 }) {
   const L = lookFor(look, color);
+  // A wide plate only goes top or bottom; below the lives/hearts bar when it is at the top.
+  const placed = useCaptionPlacement(img, pin, ['left', 'right']);
+  const atTop = !!img && placed.pos === 'top';
   return (
     <div
       className="pointer-events-none absolute inset-x-0 z-20 flex justify-center px-[calc(2.5*var(--svh,1vh))]"
-      style={{ bottom }}
+      style={{ ...(atTop ? { top: 'calc(14*var(--svh,1vh))' } : { bottom }), opacity: img && !placed.ready ? 0 : 1, transition: 'opacity .2s ease' }}
+      data-plate-pos={atTop ? 'top' : 'bottom'}
     >
       <style>{`
         @keyframes dp-rise { from { opacity: 0; transform: translateY(14px) scale(.98) } to { opacity: 1; transform: none } }

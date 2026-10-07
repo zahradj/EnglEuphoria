@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BookOpen, Trophy, Zap, Calendar, TrendingUp } from "lucide-react";
 import { format } from "date-fns";
 import { ParentTeacherFeedbackCard } from "./ParentTeacherFeedbackCard";
+import { LearningPlanCard } from "@/components/student/LearningPlanCard";
 
 interface Student {
   student_id: string;
@@ -134,6 +135,7 @@ export function ParentStudentProgress({
             </dl>
           </section>
 
+          {activeStudentId && <LearningPlanCard studentId={activeStudentId} />}
           {activeStudentId && <ParentTeacherFeedbackCard studentId={activeStudentId} />}
         </>
       )}

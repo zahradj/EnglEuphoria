@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Eye, PlayCircle } from 'lucide-react';
+import { Coins, Eye, PlayCircle } from 'lucide-react';
 import { HUB_BRAND, type HubType } from '@/lib/hubAssignment';
 import { childBuddy, type FamilyChildProfile } from '@/lib/familyBuddy';
 import { hubStyle } from '@/lib/familyTheme';
@@ -18,11 +18,16 @@ export interface ChildCardData {
 interface Props {
   child: ChildCardData;
   onViewProgress: (studentId: string) => void;
+  /** Unused lesson credits (undefined while loading). */
+  credits?: number;
+  onBuy?: (studentId: string) => void;
+  /** Only offered when the family has more than one child. */
+  onMove?: (studentId: string) => void;
 }
 
 const isPlaceholderEmail = (e?: string | null) => !e || e.endsWith('.invalid');
 
-export function ChildCard({ child, onViewProgress }: Props) {
+export function ChildCard({ child, onViewProgress, credits, onBuy, onMove }: Props) {
   const { t } = useTranslation();
   const { profile, snapshot } = child;
   const hub = (profile?.hub ?? 'playground') as HubType;
@@ -92,6 +97,31 @@ export function ChildCard({ child, onViewProgress }: Props) {
           </>
         ) : (
           <p className="text-sm" style={{ color: 'var(--fd-ink-soft)' }}>{t('pd.child.noProgress')}</p>
+        )}
+
+        {(
+          <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl px-3 py-2" style={{ background: 'var(--fd-track)' }}>
+            <span className="flex items-center gap-2 text-sm font-bold">
+              <Coins className="h-4 w-4" aria-hidden />
+              {credits === undefined ? (
+                <span>Lessons</span>
+              ) : (
+                <><span className="fd-num">{credits}</span> {credits === 1 ? 'lesson left' : 'lessons left'}</>
+              )}
+            </span>
+            <span className="flex flex-wrap gap-2">
+              {onBuy && (
+                <button type="button" className="fd-btn fd-btn--outline" onClick={() => onBuy(child.studentId)}>
+                  Buy lessons
+                </button>
+              )}
+              {onMove && (credits ?? 0) > 0 && (
+                <button type="button" className="fd-btn fd-btn--outline" onClick={() => onMove(child.studentId)}>
+                  Move lessons
+                </button>
+              )}
+            </span>
+          </div>
         )}
 
         <div className="flex flex-wrap gap-2">

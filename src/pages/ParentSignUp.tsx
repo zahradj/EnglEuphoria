@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { AuthPageLayout } from '@/components/auth/AuthPageLayout';
+import { getStoredReferralCode } from '@/lib/referralCode';
 import {
   FamilyChildrenForm,
   createFamilyChildren,
@@ -71,7 +72,23 @@ const ParentSignUp = () => {
       const { data: authData, error } = await signUp(email, password, {
         role: 'parent',
         full_name: fullName.trim(),
+        ref_code: getStoredReferralCode() ?? undefined,
       } as any);
+
+      // An email that already has an account (for example one made as a student): the sign-up either
+      // errors, or - with email confirmation on - quietly returns a user with no identities.
+      const identities = (authData?.user as { identities?: unknown[] } | null | undefined)?.identities;
+      const alreadyHasAccount =
+        /already (registered|exists)|already been registered/i.test(error?.message ?? '') ||
+        (Array.isArray(identities) && identities.length === 0);
+      if (alreadyHasAccount) {
+        toast({
+          title: 'This email already has an account',
+          description: 'Sign in with it, then choose “Switch to a family account” in your Profile or Settings.',
+        });
+        navigate('/login', { replace: true });
+        return;
+      }
 
       if (error || !authData?.user) {
         toast({ title: 'Sign up failed', description: error?.message ?? 'Please try again.', variant: 'destructive' });
@@ -102,7 +119,7 @@ const ParentSignUp = () => {
 
       toast({
         title: 'Welcome to Engleuphoria!',
-        description: `${children.length === 1 ? 'Your child is' : 'Your children are'} ready to learn.`,
+        description: `${children.length === 1 ? 'Your learner is' : 'Your learners are'} ready to learn.`,
       });
       navigate('/parent', { replace: true });
     } catch (err: any) {
@@ -126,12 +143,12 @@ const ParentSignUp = () => {
         <title>Parent Sign Up — Family Account | EnglEuphoria</title>
         <meta
           name="description"
-          content="Create one parent account for the whole family and add each of your children in minutes."
+          content="Create one parent account for the whole family and add each of your children (and any adult learner) in minutes."
         />
       </Helmet>
       <AuthPageLayout
         title="Create your family account"
-        subtitle="One login for you. A learning space for each child."
+        subtitle="One login for you. A learning space for each learner."
         icon={Users}
         variant="student"
         backLink={{ to: '/', label: 'Back to Home' }}
@@ -139,7 +156,7 @@ const ParentSignUp = () => {
         <div className="mb-6">
           <div className="mb-2 flex items-center justify-between text-xs font-medium">
             <span className="text-muted-foreground">Step {step} of 2</span>
-            <span className="text-primary">{step === 1 ? 'Your account' : 'Your children'}</span>
+            <span className="text-primary">{step === 1 ? 'Your account' : 'Who is learning?'}</span>
           </div>
           <Progress value={(step / 2) * 100} className="h-2" />
         </div>

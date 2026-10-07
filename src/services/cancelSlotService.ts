@@ -108,7 +108,7 @@ export async function cancelBookedSeries({
   // Find every future slot in the series (matched by teacher + identical pattern)
   const { data: seriesSlots, error: listErr } = await supabase
     .from("teacher_availability")
-    .select("id, lesson_id, start_time, recurring_pattern")
+    .select("id, lesson_id, is_booked, student_id, start_time, recurring_pattern")
     .eq("teacher_id", anchor.teacher_id)
     .gte("start_time", nowIso);
 
@@ -123,14 +123,24 @@ export async function cancelBookedSeries({
   // single-occurrence path (refund, class_bookings/lessons update, student
   // notification, late-cancel penalty). Done one by one so a failure on one
   // lesson never leaves the others half-cancelled.
-  const bookedSlots = matching.filter((s: any) => s.lesson_id);
+  // A booked row is either a lesson (has a lesson_id) or one made by "Invite a
+  // Student" (booked for a student, no lesson_id): both have a booking the
+  // student sees, so both must go through the RPC before the rows are deleted.
+  const bookedSlots = matching.filter((s: any) => s.lesson_id || (s.is_booked && s.student_id));
   let cancelledBookings = 0;
   for (const s of bookedSlots) {
-    await cancelBookedSlot({
-      slotId: s.id,
-      reason: reason ?? "Series cancelled by teacher",
-    });
-    cancelledBookings += 1;
+    try {
+      await cancelBookedSlot({
+        slotId: s.id,
+        reason: reason ?? "Series cancelled by teacher",
+      });
+      cancelledBookings += 1;
+    } catch (err: any) {
+      // The two halves of a one-hour lesson are two rows of ONE booking:
+      // cancelling the first removes the second, so it is already gone here.
+      if (err?.code === "P0002") continue;
+      throw err;
+    }
   }
 
   // 2. Remove every future slot in the series

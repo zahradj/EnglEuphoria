@@ -21,7 +21,7 @@ export const dashboardUITranslations = {
   'pd.hero.children': 'الأطفال',
   'pd.hero.upcoming': 'دروس قادمة',
   'pd.hero.openSpace': 'افتح مساحة تعلّم',
-  'pd.hero.addChild': 'إضافة طفل',
+  'pd.hero.addChild': 'إضافة فرد من العائلة',
   'pd.child.lessons': 'دروس مكتملة',
   'pd.child.upcoming': 'قريبًا',
   'pd.child.level': 'المستوى',

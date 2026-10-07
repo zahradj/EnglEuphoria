@@ -1,5 +1,6 @@
 import { SHARED_PLAY_KINDS, useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
 import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
+import { useRecordClassroomCompletion } from '@/hooks/useRecordClassroomCompletion';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -48,7 +49,7 @@ const REAL_SYNC_KINDS = new Set<string>([
   'feeling-quiz', 'feelings-bingo',
   'numbers-learn', 'numbers-review', 'candle-cake', 'count-balloons',
   'age-balloons', 'meet-greet', 'age-quiz', 'spin-wheel', 'picture-match',
-  'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap',
+  'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play',
   'gather', 'voice-stage',
 ]);
 
@@ -270,6 +271,23 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
         : role === 'student'
           ? interactionUnlocked
           : !interactionUnlocked;
+
+  // TAKE OVER. With "Interaction On", most activities give the floor to the student and the teacher's own
+  // screen becomes a live mirror (only the shared games in SHARED_PLAY_KINDS let both play at once). So a
+  // teacher who tries to click would silently get nothing. Instead the teacher's screen says so, and one tap on
+  // the activity pauses the student and hands the activity to the teacher. The pause is for this scene only:
+  // moving on resumes the student automatically (unless the teacher pressed Pause themselves).
+  const teacherMirrored = isSynced && role === 'teacher' && !sharedPlay && !studentDriven && interactionUnlocked && !skipsLock;
+  const [tookOver, setTookOver] = useState(false);
+  const takeOver = useCallback(() => { setTookOver(true); setInteractionUnlocked(false); }, [setInteractionUnlocked]);
+  useEffect(() => { if (interactionUnlocked) setTookOver(false); }, [interactionUnlocked]);
+  const takeoverSceneRef = useRef(sceneIdx);
+  useEffect(() => {
+    if (takeoverSceneRef.current === sceneIdx) return;
+    takeoverSceneRef.current = sceneIdx;
+    if (tookOver && role === 'teacher') { setTookOver(false); setInteractionUnlocked(true); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sceneIdx]);
 
   // Scene-tagged: the render right after a scene change must never see the previous scene's state.
   const [activityState, setActivityStateLocal] = useSceneScopedState((SCENES[sceneIdx] ?? SCENES[0])?.id ?? '');
@@ -754,6 +772,8 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   );
 
   const isFinale = scene.kind === 'finale';
+  // A live-class student finishing the lesson gets progress + Homework Quest like the dashboard player does.
+  useRecordClassroomCompletion({ scenes, isFinale, role, roomId, skip: !!onFinaleReached });
 
   useEffect(() => {
     if (isFinale && !finaleFiredRef.current) {
@@ -833,7 +853,24 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
               </div>
             </div>
           )}
-          {isSynced && role === 'teacher' && interactionUnlocked && !skipsLock && !studentDriven && (
+          {teacherMirrored && (
+            <button
+              type="button"
+              onClick={takeOver}
+              aria-label="Take over: pause the student and play this activity yourself"
+              className="absolute inset-0 z-40 cursor-pointer bg-transparent"
+            >
+              <span className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-bold text-white shadow-lg ring-2 ring-white/70">
+                ✋ Student is playing — tap anywhere to take over
+              </span>
+            </button>
+          )}
+          {isSynced && role === 'teacher' && tookOver && !interactionUnlocked && (
+            <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-amber-600/90 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
+              🎮 You're in control — the student is paused
+            </div>
+          )}
+          {isSynced && role === 'teacher' && interactionUnlocked && !skipsLock && !studentDriven && !teacherMirrored && (
             <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-emerald-600/80 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
               ✋ Student is trying this
             </div>

@@ -152,6 +152,66 @@ Academy B1 U1 L1 — every slide "reported" the cover).
    without help, and is there a tangible artifact of their own (a log, a map, a sentence list) to be proud of? Research
    before inventing (Cambridge task formats, app patterns), but never copy a product; adapt the underlying mechanic.
 
+10. **Story / narration text sits in the framed plate, on the calm side of the picture — GLOBAL, every hub and scene kind**
+    (owner rule, 2026-10-06: "the writing is down and it's invisible… use the character-introduction frame; if there is space
+    on the top it goes on top, bottom → bottom, left → left, right → right… make it universal and global"). Any line of story,
+    narration or reading shown over a picture uses `<StoryCaption>` (`src/content/playground-library/StoryCaption.tsx`; same
+    paper plate + name tab + speaker button as `DialoguePlate`, built on `StoryPlate`). Today that covers: A1+ `flipbook`,
+    Pre-A1 `flipbook`, `story-video`, both `cinematic` scenes — and ANY new story-bearing scene kind must use it too.
+    Never a gradient band over the art, a "for the grown-up" pill, or a speech bubble with a tail.
+    - **TOP PRIORITY: never hide anything important** (owner, 2026-10-07: the story words covered the little fish in a video story).
+      The plate goes where nothing important is — a character, a small animal, the key object, a face. The placement therefore scores
+      each band by its BUSIEST part (a small subject in a big calm band such as the sea still counts), and for a video page it
+      measures real frames across the page's time window and takes the worst case (things that swim or walk into view later). If the
+      right side of a video is empty, the plate goes there as a tall slim column. When the automatic choice still touches a subject,
+      pin `textPos` — the subject wins over the default, always. Check every story / video page in headless Chrome while it plays.
+    - **Placement** is automatic: `captionPlacement.ts` measures the page's picture and picks the calmest of top / bottom /
+      left / right (phones: top/bottom only; a scene's own title/controls can `avoid` a side or lift the plate with
+      `bottomOffset`). Pin a side with `textPos` on a page only when the picture needs an exception. It waits (≤1.5 s, fades
+      in) instead of jumping, and story pages are measured up front.
+    - **Scale:** the plate sizes itself from the picture's width (cqw inside its own container) so it reads the same on a laptop,
+      the scaled classroom canvas and a phone — verify at both 1280×720 and 390×844.
+    - **Gate check:** `storyText.test.ts` (deploy gate) fails if a story scene stops using StoryCaption or brings back the old
+      patterns. Then LOOK at every rendered story page in headless Chrome: the plate never covers a face or the key object,
+      the line is fully readable, and it does not collide with the title chip, next arrow or CTA. When you order or choose
+      the picture, leave a calm area (sky, wall, floor, table) for the text and say so in the image prompt.
+
+11. **Sound (phonics) lessons: layout and pictures — GLOBAL** (owner rule, 2026-10-07: "the vocabulary can be scattered on both
+    the right and the left and the sound in the center — or the sound on the left or the right and the words on the opposite
+    side"; "make it universal, add it to the blueprint and the quality"). Every `sound-model` scene, every hub:
+    - **Layout.** Either (a) the sound card in the CENTER with the words floating on BOTH sides of it (A1: two left, two right,
+      staggered, wide gaps), or (b) the sound card on the LEFT or RIGHT (`soundSide: 'left' | 'right'`) with ALL the words
+      floating scattered on the OPPOSITE side. Never a row or grid of words under or beside the letter, never words on top
+      of the letter card, the teacher line or the bottom buttons. Phones (<640px) put the words in the four corners.
+      Words start as big "?" mystery cards and open into the picture + a word chip. Spots live in `soundAnchors.ts`
+      (`anchorSpot`, `letterX`); `SoundModelScene.layout.test.ts` guards the spacing.
+    - **Choosing the side (the skill).** Default: leave `soundSide` out and the lesson rotates centre → left → right across its sound
+      scenes (`soundLayout.ts`, applied by the player; the same layout never twice in a row). PIN a side only when the background
+      has a clear subject: keep the big sound card OFF the subject's face — subject in the middle (wizard, teacher, Pip) → pin
+      `left` or `right`; subject on the left → `right`; subject on the right → `left`; empty room / landscape → let the rotation
+      choose. The words may float over background props but never over the subject's face or the teacher line. Check the opened
+      state (all four pictures out) in headless Chrome, not just the closed "?" cards.
+    - **Pictures.** Every anchor word has an `img`: a well-drawn CARTOON ILLUSTRATION (animated-movie look: dark outline,
+      soft shading and highlights, expressive face where it fits) with a TRANSPARENT background — never a system emoji (it renders
+      as an ugly 3D glyph), never a plain flat vector, never a 3D render. Canva only. Prompt:
+      "Rich cartoon illustration sticker of <WORD>, children's animated-movie style like our Pre-A1 characters: thick dark-brown outline, soft shading with small highlights, friendly expressive face where it fits, centered, single object on a plain pure white background, no shadow, no text, NOT a 3D render, NOT an emoji."
+      `soundPictures.test.ts` (deploy gate) fails on any new anchor without `img`; its known emoji-only list may only shrink.
+    - **Check.** Open the scene in headless Chrome at 1280×720 and 390×844, tap all four mystery cards, and confirm nothing
+      overlaps and every word is readable.
+
+12. **UNIVERSAL: nothing important is ever hidden by text or controls** (owner, 2026-10-07: "make it universal, make sure you do it in the
+    future"). This is the rule behind items 10 and 11, for EVERY line of text or control laid over a lesson picture or video, in
+    every hub and scene kind — story captions, character dialogue plates (meet scenes), sound-word cards, teacher-line pills, quiz
+    prompts, buttons. Procedure for any lesson you build or edit (**overlay audit**):
+    1. List every text/control that sits over art in each scene.
+    2. Use the shared placement, never a hard-coded band: `StoryCaption` (stories, cinematics, story videos), `DialoguePlate img={scene.bg}`
+       (a character speaking — top or bottom, whichever hides less), `soundAnchors`/`soundSide` (sound words). Video pages are measured on real frames.
+    3. If a text must sit next to its speaker (roleplay / join-stage bubbles, hello-doors), it is on the ANCHORED list in `storyText.test.ts`:
+       put it on the empty side of that speaker and check it in the browser.
+    4. Open the rendered scene in headless Chrome at 1280×720 and 390×844 and look: no face, animal, key object or answer card is covered;
+       if one is, pin the side (`textPos` / `soundSide` / `pin`) — the subject always wins.
+    5. A NEW scene kind that shows text over art must use these helpers (or be added to the ANCHORED list with a reason). `storyText.test.ts` is the gate.
+
 **Fix at the shared component** (`AcademyDemo.tsx`, `PlayAcademyLesson.tsx`, `LivingCanvas.tsx`,
 `EscapeRoomSlot.tsx`), not per lesson — comfort bugs are almost always shared-component bugs.
 

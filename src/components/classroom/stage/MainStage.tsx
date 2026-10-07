@@ -359,7 +359,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                           onClick={() => sceneLessonHandleRef.current?.setInteractionUnlocked(!sceneNav.interactionUnlocked)}
                           className={`rounded-full px-4 py-2 text-xs font-bold shadow-lg backdrop-blur transition hover:scale-105 ${sceneNav.interactionUnlocked ? 'bg-emerald-500 text-white' : 'bg-white/90 text-slate-800'}`}
                         >
-                          {sceneNav.interactionUnlocked ? '🔓 Student can try' : '🔒 Let student try'}
+                          {sceneNav.interactionUnlocked ? '⏸ Pause student' : '▶ Resume student'}
                         </button>
                       )}
                       <div className="rounded-full bg-white/90 px-4 py-2 text-xs font-extrabold text-slate-800 shadow-lg backdrop-blur tabular-nums">

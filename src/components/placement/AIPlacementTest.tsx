@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
 import DemographicsPhase from './DemographicsPhase';
 import TestPhase from './TestPhase';
+import KidsPlacementPhase from './kids/KidsPlacementPhase';
 import type { TestResult } from './TestPhase';
 import ComprehensivePhase from './comprehensive/ComprehensivePhase';
 import ProcessingPhase from './ProcessingPhase';
@@ -17,6 +18,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import type { Hub } from './questionBanks';
+import type { PlacementSummary } from './adaptiveEngine';
+import type { ComprehensiveSubmission } from './comprehensive/ComprehensivePhase';
 
 type HubIndex = 0 | 1 | 2;
 
@@ -59,6 +62,9 @@ const AIPlacementTest = ({ forcedHub }: AIPlacementTestProps = {}) => {
   const [interests, setInterests] = useState<string[]>([]);
   const [mcqResults, setMcqResults] = useState<TestResult[]>([]);
   const [testResults, setTestResults] = useState<TestResult[]>([]);
+  // How the adaptive stage ended (ability, precision, borderline?) and the writing/speaking samples, kept for teachers.
+  const [summary, setSummary] = useState<PlacementSummary | null>(null);
+  const [productive, setProductive] = useState<unknown>(null);
 
   // Locked-funnel mode: forcedHub wins. Otherwise prefer profile, age fallback.
   const resolvedHub: Hub = forcedHub ?? (studentLevel as Hub | null) ?? hubFromAge(age);
@@ -128,7 +134,8 @@ const AIPlacementTest = ({ forcedHub }: AIPlacementTestProps = {}) => {
   };
 
   // Playground hub → MCQ-only. Academy & Professional → MCQ then 4-skill.
-  const handleMcqComplete = (results: TestResult[]) => {
+  const handleMcqComplete = (results: TestResult[], adaptiveSummary?: PlacementSummary) => {
+    if (adaptiveSummary) setSummary(adaptiveSummary);
     if (isComprehensiveHub) {
       setMcqResults(results);
       setTestStage('comprehensive');
@@ -138,14 +145,25 @@ const AIPlacementTest = ({ forcedHub }: AIPlacementTestProps = {}) => {
     }
   };
 
-  const handleComprehensiveComplete = (results: TestResult[]) => {
+  const handleComprehensiveComplete = (results: TestResult[], submission?: ComprehensiveSubmission) => {
     setTestResults([...mcqResults, ...results]);
+    if (submission) {
+      // Kept for teachers. These samples do NOT decide the level until they are scored against a rubric: the old
+      // rules (a long text counts as B2, a 10-second recording counts as B2) were not measurements.
+      setProductive({
+        listening: submission.listening,
+        reading: submission.reading,
+        writing: submission.writing ? { text: submission.writing.text } : null,
+        speaking: submission.speaking ? { durationMs: submission.speaking.durationMs, recorded: submission.speaking.audioBlob !== null } : null,
+      });
+    }
     setPhase('processing');
   };
 
   const handleProcessingComplete = async () => {
     try {
-      const route = await completeTest(age, testResults, interests);
+      // With an adaptive summary the level comes from the adaptive stage alone; the extra 4-skill stage is recorded, not scored.
+      const route = await completeTest(age, summary ? mcqResults.length ? mcqResults : testResults : testResults, interests, '', { summary: summary ?? undefined, productive });
       setPhase('complete');
       navigate(route, { replace: true });
     } catch (err) {
@@ -234,8 +252,10 @@ const AIPlacementTest = ({ forcedHub }: AIPlacementTestProps = {}) => {
                   <ComprehensivePhase
                     hub={resolvedHub}
                     indexOffset={mcqResults.length}
-                    onComplete={(results) => handleComprehensiveComplete(results)}
+                    onComplete={(results, submission) => handleComprehensiveComplete(results, submission)}
                   />
+                ) : resolvedHub === 'playground' ? (
+                  <KidsPlacementPhase onComplete={handleMcqComplete} />
                 ) : (
                   <TestPhase age={age} hub={resolvedHub} onComplete={handleMcqComplete} />
                 )}

@@ -23,7 +23,6 @@ export interface ReadingPassage {
 
 export interface WritingPrompt {
   prompt: string;
-  imageUrl: string;
   minChars: number;
 }
 
@@ -106,10 +105,24 @@ export const READING_PASSAGE: ReadingPassage = {
 
 export const WRITING_PROMPT: WritingPrompt = {
   prompt:
-    'Look at this picture and describe what is happening in 3 sentences. Try to mention the people, the place, and how they might be feeling.',
-  imageUrl: '/placeholder.svg',
+    'Write 3 sentences about a place you like to go with your friends. Say where it is, what you do there, and how you feel when you are there.',
   minChars: 120,
 };
+
+/** Success Hub (working adults): a short workplace email instead of the teenage "place you like" task. */
+export const PROFESSIONAL_WRITING_PROMPT: WritingPrompt = {
+  prompt:
+    'Write a short email (3 to 5 sentences) to a colleague. Tell them that Friday\'s meeting has moved to Monday at 10:00, say why, and ask them to confirm that they can come.',
+  minChars: 150,
+};
+
+export const PROFESSIONAL_SPEAKING_PROMPT: SpeakingPrompt = {
+  prompt: 'Describe your job or your studies. What does a normal working day look like for you, and what is the hardest part?',
+  guidance: 'Speak for at least 30 seconds. Try to use linking words like "first", "then", "because" and "however".',
+};
+
+export const writingPromptFor = (hub?: string): WritingPrompt => (hub === 'professional' ? PROFESSIONAL_WRITING_PROMPT : WRITING_PROMPT);
+export const speakingPromptFor = (hub?: string): SpeakingPrompt => (hub === 'professional' ? PROFESSIONAL_SPEAKING_PROMPT : SPEAKING_PROMPT);
 
 export const SPEAKING_PROMPT: SpeakingPrompt = {
   prompt: 'Tell us about a typical day in your life. What do you usually do from morning to evening?',

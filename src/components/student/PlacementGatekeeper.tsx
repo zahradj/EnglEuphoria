@@ -8,7 +8,8 @@ import { toast } from 'sonner';
 import DemographicsPhase from '@/components/placement/DemographicsPhase';
 import TestPhase, { type TestResult } from '@/components/placement/TestPhase';
 import ProcessingPhase from '@/components/placement/ProcessingPhase';
-import PlaygroundPlacementPhase from '@/components/placement/PlaygroundPlacementPhase';
+import KidsPlacementPhase from '@/components/placement/kids/KidsPlacementPhase';
+import type { PlacementSummary } from '@/components/placement/adaptiveEngine';
 import PlacementChoice from '@/pages/placement/PlacementChoice';
 import { usePlacementTest } from '@/hooks/usePlacementTest';
 import type { StudentLevel } from '@/hooks/useStudentLevel';
@@ -127,14 +128,17 @@ export const PlacementGatekeeper = ({
     []
   );
 
-  const handleTestComplete = useCallback((results: TestResult[]) => {
+  // How the adaptive test ended; it decides the level (the old band-percentage rule is only a fallback).
+  const [summary, setSummary] = useState<PlacementSummary | null>(null);
+  const handleTestComplete = useCallback((results: TestResult[], adaptiveSummary?: PlacementSummary) => {
     setTestResults(results);
+    if (adaptiveSummary) setSummary(adaptiveSummary);
     setPhase('processing');
   }, []);
 
   const handleProcessingComplete = useCallback(async () => {
     try {
-      await completeTest(age, testResults, interests, learningReason);
+      await completeTest(age, testResults, interests, learningReason, { summary: summary ?? undefined });
       // Read back the assigned level for the celebration screen
       const { data } = await supabase
         .from('student_profiles')
@@ -150,7 +154,7 @@ export const PlacementGatekeeper = ({
       toast.error('Something went wrong. Please try again.');
       setPhase('welcome');
     }
-  }, [age, testResults, interests, learningReason, completeTest, user]);
+  }, [age, testResults, interests, learningReason, summary, completeTest, user]);
 
   const handleUnlock = useCallback(() => {
     setNeedsPlacement(false);
@@ -356,7 +360,7 @@ export const PlacementGatekeeper = ({
                       className="h-full"
                     >
                       {isPlayground ? (
-                        <PlaygroundPlacementPhase onComplete={handleTestComplete} />
+                        <KidsPlacementPhase onComplete={handleTestComplete} />
                       ) : (
                         <TestPhase age={age} hub={themeKey} onComplete={handleTestComplete} />
                       )}

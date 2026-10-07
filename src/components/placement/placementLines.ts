@@ -7,6 +7,7 @@
  * the voice policy: 'teacher' for the Academy / Success Hub tests, 'pip' for the Playground tests.
  */
 import { getHubPool, type Hub } from './questionBanks';
+import { KIDS_BANK, KIDS_CHEERS, KIDS_LITERACY_PRACTICE, KIDS_PRACTICE, KIDS_SCRIPT } from './kids/kidsBank';
 import { LISTENING_ITEMS } from './comprehensive/content';
 import { SETS as ACADEMY_TRIAL_LISTENING } from '../trial/academy-trail/listeningSets';
 import { LISTENING as SUCCESS_TRIAL_LISTENING } from '../trial/success-trail/levels';
@@ -14,6 +15,14 @@ import { LISTENING as SUCCESS_TRIAL_LISTENING } from '../trial/success-trail/lev
 export type PlacementVoice = 'teacher' | 'pip';
 
 export const placementVoiceForHub = (hub: Hub): PlacementVoice => (hub === 'playground' ? 'pip' : 'teacher');
+
+/**
+ * The mascot greeting each hub speaks on the "how would you like to start" screen. Saved clips only: the screen plays
+ * the clip for exactly this text, so if an admin rewrites a greeting in Content Creator, add the new text here and
+ * re-run the bake (until then that screen is silent - it never generates speech live).
+ */
+export const ACADEMY_GREETING = "Hi! I'm Nova. Take a deep breath and pick the best answer — you've got this.";
+export const SUCCESS_GREETING = "Welcome. I'm Atlas. I'll guide you through a short professional English check.";
 
 interface KidsContentLike {
   pip?: { intro?: string };
@@ -30,6 +39,8 @@ export function placementLines(kidsContent?: KidsContentLike | null): [Placement
     }
   }
 
+  out.push(['teacher', ACADEMY_GREETING], ['teacher', SUCCESS_GREETING]);
+
   // Comprehensive placement listening stage (Academy / Professional).
   for (const item of LISTENING_ITEMS) if (item.audio_text) out.push(['teacher', item.audio_text]);
 
@@ -38,6 +49,10 @@ export function placementLines(kidsContent?: KidsContentLike | null): [Placement
     for (const q of set) if (q.target) out.push(['teacher', q.target]);
   }
   for (const item of Object.values(SUCCESS_TRIAL_LISTENING)) if (item.script) out.push(['teacher', item.script]);
+
+  // The Playground (ages 4-9) listen-and-tap test: Pip speaks every instruction, so every line is a saved clip.
+  for (const it of [...KIDS_PRACTICE, KIDS_LITERACY_PRACTICE, ...KIDS_BANK]) out.push(['pip', it.line]);
+  for (const text of [...Object.values(KIDS_SCRIPT), ...KIDS_CHEERS]) out.push(['pip', text]);
 
   if (kidsContent) {
     if (kidsContent.pip?.intro) out.push(['pip', kidsContent.pip.intro]);

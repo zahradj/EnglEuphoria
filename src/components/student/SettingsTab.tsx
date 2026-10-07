@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { User, Shield } from "lucide-react";
 import { useStudentLevel } from "@/hooks/useStudentLevel";
 import { cn } from "@/lib/utils";
+import { FamilyAccountCard } from "./FamilyAccountCard";
 
 export const SettingsTab = () => {
   const { studentLevel } = useStudentLevel();
@@ -87,6 +88,8 @@ export const SettingsTab = () => {
           </div>
         </CardContent>
       </Card>
+
+      <FamilyAccountCard />
     </div>
   );
 };

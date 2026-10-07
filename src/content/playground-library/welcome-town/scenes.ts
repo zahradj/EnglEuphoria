@@ -6,6 +6,7 @@ import type { LetterMatchSceneData, LetterBlocksSceneData } from '../LetterTiles
 import type { WhatsMissingSceneData } from '../WhatsMissingScene';
 import type { SortBasketSceneData } from '../SortBasketScene';
 import type { GrammarGapSceneData } from '../GrammarGapScene';
+import type { ColorPlaySceneData } from '../ColorPlayScene';
 /* =============================================================================
  * Welcome Town — A1 Unit 1 Lesson 1: "Hello, Class!"
  *
@@ -158,6 +159,7 @@ export type Scene =
   | WhatsMissingSceneData
   | SortBasketSceneData
   | GrammarGapSceneData
+  | ColorPlaySceneData
   /** `look: 'card'` — calm cream-card styling (Magic Castle Lesson 2) instead
    *  of the big hopping 3D title; same content, same behaviour. */
   | { id: string; kind: 'title-card'; bg: string; level: string; unit: string; lessonLabel: string; title: string; subtitle: string; cta?: string; look?: 'card' }
@@ -328,6 +330,9 @@ export type Scene =
       id: string; kind: 'flipbook'; bg: string; title: string;
       pages: {
         who?: CharKey; img: string; text: string;
+        /** Pin the caption frame to a side of the picture. Normally omitted: the player
+         *  looks at the picture and puts the frame where it has calm space (captionPlacement.ts). */
+        textPos?: 'top' | 'bottom' | 'left' | 'right';
         /** Dedicated art for the manga layout's smaller "reaction" panel —
          * a close-up of the speaking character, generated per page rather
          * than reused room art, so the second panel isn't just a flat
@@ -352,7 +357,7 @@ export type Scene =
        * songs generated before this field existed. */
       lineDurationsMs?: number[];
     }
-  | { id: string; kind: 'sound-model'; bg: string; who: CharKey; letter: string; phoneme: string; sound: string; teacher: string; anchors: { word: string; emoji: string; img?: string }[]; /** Wizard/magic styling (night-sky glow + sparkles). */ magic?: boolean }
+  | { id: string; kind: 'sound-model'; bg: string; who: CharKey; letter: string; phoneme: string; sound: string; teacher: string; /** Where the letter card sits: 'center' (words scattered left AND right of it — the default) or 'left' / 'right' (words floating on the OPPOSITE side). */ soundSide?: 'center' | 'left' | 'right'; anchors: { word: string; emoji: string; img?: string }[]; /** Wizard/magic styling (night-sky glow + sparkles). */ magic?: boolean }
   | { id: string; kind: 'trace'; bg: string; who: CharKey; letter: string; phoneme: string; word: string; teacher: string }
   | {
       id: string; kind: 'word-build'; bg: string; teacher: string; magic?: boolean;
@@ -955,7 +960,7 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     teacher: 'A brand-new sound! /i/ /i/ Ink!',
     anchors: [
       { word: 'ink', emoji: '\u{1F58B}\u{FE0F}' },
-      { word: 'igloo', emoji: '\u{1F9CA}' },
+      { word: 'igloo', emoji: '\u{1F9CA}', img: '/lep1/alphabet/item-igloo.png' },
       { word: 'insect', emoji: '\u{1F41B}' },
     ],
   },
@@ -965,9 +970,9 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     id: 'wt2-model-n', kind: 'sound-model', bg: bgReadingW, who: 'pip', letter: 'N', phoneme: '/n/', sound: 'nnn',
     teacher: 'A brand-new sound! /n/ /n/ Nut!',
     anchors: [
-      { word: 'nut', emoji: '\u{1F95C}' },
+      { word: 'nut', emoji: '\u{1F95C}', img: '/lep1/items/item-nut.png' },
       { word: 'net', emoji: '\u{1F945}' },
-      { word: 'nose', emoji: '\u{1F443}' },
+      { word: 'nose', emoji: '\u{1F443}', img: '/lep1/items/item-nose.png' },
     ],
   },
   { id: 'wt2-trace-n', kind: 'trace', bg: bgReadingW, who: 'pip', letter: 'N', phoneme: '/n/', word: 'nut', teacher: 'Trace the letter N! Say /n/ /n/ /n/ as you draw.' },
@@ -1464,7 +1469,7 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
     teacher: 'A brand-new sound! /f/ /f/ Fox! Just like me!',
     anchors: [
       { word: 'fan', emoji: '🪭' },
-      { word: 'fish', emoji: '🐟' },
+      { word: 'fish', emoji: '🐟', img: '/lep1/alphabet/item-fish.png' },
       { word: 'fox', emoji: '🦊' },
     ],
   },

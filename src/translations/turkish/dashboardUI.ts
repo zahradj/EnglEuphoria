@@ -21,7 +21,7 @@ export const dashboardUITranslations = {
   'pd.hero.children': 'Çocuklar',
   'pd.hero.upcoming': 'Yaklaşan dersler',
   'pd.hero.openSpace': 'Öğrenme alanı aç',
-  'pd.hero.addChild': 'Çocuk ekle',
+  'pd.hero.addChild': 'Aile üyesi ekle',
   'pd.child.lessons': 'Tamamlanan dersler',
   'pd.child.upcoming': 'Yaklaşan',
   'pd.child.level': 'Seviye',
