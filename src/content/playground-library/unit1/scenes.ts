@@ -9034,10 +9034,10 @@ export const LESSON_U5L5_SCENES: Scene[] = [
     id: 'u5l5-duck-feed', kind: 'duck-feed', bg: bgU5L5DucksA, who: 'pip',
     teacher: 'Feed the Ducks! Pip says what he and Dad do. The student taps the duck with that photo — the bread flies to it. Say the sentence together.',
     ducks: [
-      { label: 'play ball', name: 'playing ball', img: bgU5L5BallC, at: [50, 50], w: 60, aspect: U5L5_W, x: 18, y: 66 },
-      { label: 'ice cream', name: 'the ice cream', img: bgU5L5IceCream, at: [50, 45], w: 55, aspect: U5L5_W, x: 40, y: 76 },
-      { label: 'book', name: 'the book', img: bgU5L5BookB, at: [50, 50], w: 60, aspect: U5L5_W, x: 62, y: 70 },
-      { label: 'ducks', name: 'the ducks', img: bgU5L5DucksC, at: [50, 50], w: 60, aspect: U5L5_W, x: 84, y: 76 },
+      { label: 'play ball', name: 'playing ball', img: bgU5L5BallC, at: [24, 58], w: 26, aspect: U5L5_W, x: 18, y: 66 },
+      { label: 'ice cream', name: 'the ice cream', img: bgU5L5IceCream, at: [15, 48], w: 26, aspect: U5L5_W, x: 40, y: 76 },
+      { label: 'book', name: 'the book', img: bgU5L5BookB, at: [58, 50], w: 30, aspect: U5L5_W, x: 62, y: 70 },
+      { label: 'ducks', name: 'the ducks', img: bgU5L5DucksC, at: [22, 70], w: 34, aspect: U5L5_W, x: 84, y: 76 },
     ],
     rounds: [
       { duck: 0, line: 'We play ball! Which duck has it?', reply: 'Yes! We play ball!' },
