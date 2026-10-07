@@ -99,9 +99,13 @@ export function WhosMissingScene({ scene, onWin, onNext, sync }: { scene: Missin
       </div>
       {r && <button onClick={() => cueSpeak(prompt, scene.who)} aria-label="Hear it again" className="absolute right-3 top-16 z-40 rounded-full bg-white/90 px-4 py-2 text-lg font-black text-orange-700 shadow-lg active:scale-95">🔊</button>}
 
-      {/* The photo wall. */}
+      {/* Grandma's photo wall: a wallpaper panel, then the frames on it. */}
       {r && (
-        <div key={round} className="absolute inset-x-[4%] top-[29%] z-10 flex justify-center gap-[2.5vw] [@media(max-height:500px)]:top-[28%]">
+        <div className="pointer-events-none absolute inset-x-[3%] bottom-[5%] top-[25%] z-10 rounded-[28px] border-[8px] border-amber-800/90 shadow-[0_14px_30px_rgba(0,0,0,0.35)] [@media(max-height:500px)]:top-[31%]"
+          style={{ background: 'repeating-linear-gradient(90deg, #F8EBD0 0 28px, #F1DDB6 28px 56px)' }} />
+      )}
+      {r && (
+        <div key={round} className="absolute inset-x-[4%] top-[29%] z-10 flex justify-center gap-[2.5vw] [@media(max-height:500px)]:top-[35%]">
           {shown.map((fi, k) => {
             const f = scene.faces[fi];
             const gone = fi === r.missing && (phase === 'ask' || phase === 'dark');
@@ -109,7 +113,7 @@ export function WhosMissingScene({ scene, onWin, onNext, sync }: { scene: Missin
             return (
               <motion.div key={fi} className="relative rounded-md bg-amber-800 p-[1.2vh] shadow-[0_10px_22px_rgba(0,0,0,0.35)]"
                 style={{ rotate: (k % 2 ? 3 : -3) }} initial={{ y: -40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: k * 0.12 }}>
-                <div className="relative h-[min(26vh,17vw)] w-[min(26vh,17vw)] overflow-hidden rounded-sm bg-amber-50 [@media(max-height:500px)]:h-[min(24vh,15vw)] [@media(max-height:500px)]:w-[min(24vh,15vw)]">
+                <div className="relative h-[min(26vh,17vw)] w-[min(26vh,17vw)] overflow-hidden rounded-sm bg-amber-50 [@media(max-height:500px)]:h-[min(22vh,14vw)] [@media(max-height:500px)]:w-[min(22vh,14vw)]">
                   <AnimatePresence>
                     {!gone && (
                       <motion.div key="pic" className="absolute inset-0" initial={phase === 'found' ? { scale: 0.2, y: 200 } : { opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: 'spring', stiffness: 160, damping: 15 }}>

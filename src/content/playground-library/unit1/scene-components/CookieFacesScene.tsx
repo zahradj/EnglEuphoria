@@ -63,7 +63,7 @@ export function CookieFacesScene({ scene, onWin, onNext, sync }: { scene: Cookie
     }
     sfx.pop();
     setOnCookie(i);
-    await new Promise((res) => window.setTimeout(res, 900));
+    await new Promise((res) => window.setTimeout(res, 1400));
     setBaking(true);
     await new Promise((res) => window.setTimeout(res, 1600));
     sfx.match(); fire(50, 45, 'stars');

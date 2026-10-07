@@ -25,9 +25,9 @@ export const QUEST_COTTAGE_VISIT_U5L3: HomeworkQuest = {
   levels: [
     { kind: 'tap-hotspot', name: 'Who Is It?', icon: '🛋️', intro: 'Listen. Tap the right one in the picture!', img: living, aspect: 1376 / 768,
       spots: [
-        { label: 'grandma', box: { x: 18, y: 18, w: 24, h: 70 } },
-        { label: 'Pip', box: { x: 42, y: 30, w: 16, h: 62 } },
-        { label: 'grandpa', box: { x: 58, y: 15, w: 24, h: 73 } },
+        { label: 'grandma', box: { x: 24, y: 18, w: 18, h: 72 } },
+        { label: 'Pip', box: { x: 43, y: 35, w: 14, h: 52 } },
+        { label: 'grandpa', box: { x: 58, y: 16, w: 18, h: 72 } },
       ],
       rounds: [
         { target: 'grandpa', line: 'This is my grandpa!' },

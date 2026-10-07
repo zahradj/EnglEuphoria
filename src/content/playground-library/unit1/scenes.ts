@@ -8163,9 +8163,9 @@ const bgU5L3Hug = `${A}/scenes/bg-u5l3-hug-wide.png`;
 const WIDE = 1376 / 768;
 /** Round face crops for the cookie and photo-wall games (at = face centre %, w = % of picture width). */
 const U5L3_FACES = {
-  grandma: { label: 'grandma', name: 'Grandma', img: bgU5L3Living, at: [30, 33] as [number, number], w: 14, aspect: WIDE },
-  grandpa: { label: 'grandpa', name: 'Grandpa', img: bgU5L3Living, at: [70, 30] as [number, number], w: 14, aspect: WIDE },
-  pip: { label: 'Pip', name: 'Pip', img: bgU5L3Living, at: [50, 42] as [number, number], w: 13, aspect: WIDE },
+  grandma: { label: 'grandma', name: 'Grandma', img: bgU5L3Living, at: [33.5, 36] as [number, number], w: 17, aspect: WIDE },
+  grandpa: { label: 'grandpa', name: 'Grandpa', img: bgU5L3Living, at: [66.5, 34] as [number, number], w: 17, aspect: WIDE },
+  pip: { label: 'Pip', name: 'Pip', img: bgU5L3Living, at: [50, 49] as [number, number], w: 15, aspect: WIDE },
   baby: { label: 'baby', name: 'the baby', img: bgU5L2Yard, at: [76.5, 71] as [number, number], w: 14, aspect: WIDE },
   mom: { label: 'mom', name: 'Mom', img: `${A}/scenes/bg-u5l1-mom-solo.png`, at: [36, 38] as [number, number], w: 30, aspect: 1 },
   dad: { label: 'dad', name: 'Dad', img: `${A}/scenes/bg-u5l1-dad-solo.png`, at: [60.5, 41] as [number, number], w: 27, aspect: 1 },
@@ -8332,9 +8332,9 @@ export const LESSON_U5L3_SCENES: Scene[] = [
     id: 'u5l3-spin', kind: 'spin-wheel', bg: bgU5L3Living, title: '',
     teacher: 'Extra time: have the student spin, then point and say who it is: "Grandma!" Or tap a number.',
     items: [
-      { label: 'Grandma!', left: '30%', top: '60%' },
-      { label: 'Pip!', left: '50%', top: '66%' },
-      { label: 'Grandpa!', left: '70%', top: '60%' },
+      { label: 'Grandma!', left: '33%', top: '62%' },
+      { label: 'Pip!', left: '50%', top: '72%' },
+      { label: 'Grandpa!', left: '66%', top: '60%' },
     ],
     wheelAt: { left: '88%', top: '30%' },
   },
