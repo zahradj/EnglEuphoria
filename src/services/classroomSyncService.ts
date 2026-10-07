@@ -307,7 +307,9 @@ class ClassroomSyncService {
 
       // Record a timeline event so students see when the teacher ended class
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        // Local session read (no network): a stalled getUser() here held up End Class.
+        const { data: { session: authSession } } = await supabase.auth.getSession();
+        const user = authSession?.user ?? null;
         await supabase.from('classroom_timeline_events').insert({
           room_id: roomId,
           event_type: 'session_ended',

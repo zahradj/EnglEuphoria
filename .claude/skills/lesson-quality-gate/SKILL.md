@@ -80,6 +80,12 @@ upstream data it's reading is already wrong.
      independent self-check.
    - *Visual:* pictures read clearly at card size (no tiny or cropped art);
      the longest word fits its tile/slot without wrapping awkwardly.
+   **"Remember?" warm-up (`recall-warmup`, every lesson after the first — owner, 2026-10-07):**
+   - *Present:* exactly one, within the first 4 pages (after the title / hello song). `recallWarmup.test.ts` fails otherwise.
+   - *Semantic:* every item is a word the PREVIOUS lesson taught, with the picture that lesson used; re-open each picture
+     and check it shows exactly that word (no near-identical pictures — U4L2 first used four look-alike Leo scenes).
+   - *Visual:* `shadow` only for stickers with clearly different outlines; `click` for colours, scenes and look-alikes.
+     Check it on a phone: the pictures sit below Pip's line, nothing hidden.
 5. **Narrative pass**: step back from individual scenes and read the full
    scene array top to bottom as a learner would experience it. Check setting
    variety, event order, character-role stability, and (if the lesson is

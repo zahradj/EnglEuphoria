@@ -104,6 +104,17 @@ export const LESSON_A1U2L1_OBJECTIVE =
 
 export const LESSON_A1U2L1_SCENES: Scene[] = [
   { id: 'ja-title', kind: 'title-card', bg: bgTitle, level: 'A1', unit: 'Unit 2', lessonLabel: 'Lesson 1', title: 'Jungle Adventure: Jungle Animals!', subtitle: 'Meet Leo, Coco, and Willow in the jungle', cta: '\u{1F334} LET’S GO!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 1 · Lesson 4 · Speak & Meet!.
+    id: 'ja-recall-warmup', kind: 'recall-warmup', bg: '/jungle-adventure/scenes/bg-jungle-wide.png', who: 'pip', mode: 'click',
+    fromLabel: "Unit 1 · Lesson 4 · Speak & Meet!",
+    teacher: 'Warm-up from last lesson: Pip says it, the student finds the picture and says it too.',
+    items: [
+      { word: "nice to meet you", say: "Hello! Nice to meet you! Find it!", img: '/welcome-town/scenes/bg-express-hello-v2.png' },
+      { word: "my friend", say: "This is my friend! Find it!", img: '/welcome-town/scenes/bg-express-friend-v2.png' },
+      { word: "goodbye", say: "Goodbye! Find it!", img: '/welcome-town/scenes/bg-express-goodbye-v2.png' },
+    ],
+  },
 
   {
     id: 'ja-intro', kind: 'cinematic', bg: bgWide, title: 'A New Adventure', subtitle: 'Pip opens a mystery storybook', narrator: 'pip',

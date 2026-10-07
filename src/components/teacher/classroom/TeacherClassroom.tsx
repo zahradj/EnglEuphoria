@@ -72,6 +72,15 @@ interface TeacherClassroomProps {
 }
 
 
+/** Minutes of lesson with the student: from the teacher's Start Lesson press (session_context.startedAt)
+ *  to now; the class clock (from the booked start) only when Start was never pressed. */
+export function lessonMinutesWithStudent(sessionContext: unknown, classTimeSec: number, nowMs = Date.now()): number | null {
+  const startedAt = (sessionContext as { startedAt?: unknown } | null | undefined)?.startedAt;
+  const t = typeof startedAt === 'string' ? new Date(startedAt).getTime() : NaN;
+  if (Number.isFinite(t) && nowMs > t) return Math.max(1, Math.round((nowMs - t) / 60_000));
+  return classTimeSec > 0 ? Math.round(classTimeSec / 60) : null;
+}
+
 export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   classId = "101",
   studentName = "Emma",
@@ -466,7 +475,11 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   const [hasEndedClass, setHasEndedClass] = useState(false);
   const [leftEarly, setLeftEarly] = useState(false);
 
+  const endingRef = useRef(false);
   const handleEndClass = useCallback(async () => {
+   // One End at a time: a second click while the first is still saving used to run it all twice.
+   if (endingRef.current) return;
+   endingRef.current = true;
    try {
     // If the lesson never actually started (teacher is just prepping / leaving
     // before clicking Start Class), this is a plain "leave" — not an early-exit
@@ -503,7 +516,9 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     if (lessonHasStarted) {
       try {
         const endedAtMinutes = Math.round(classTime / 60);
-        const { data: authData } = await supabase.auth.getUser();
+        // The signed-in teacher is already known here. A network supabase.auth.getUser() at this
+        // point could stall (token refresh) and leave End Class doing nothing until a refresh.
+        const authData = { user: user ?? null };
         // Tab-independent handoff: fire the audit-row insert through an edge
         // function with `keepalive: true` so it still lands even if the
         // teacher's tab freezes or is closed the instant they hit End Class.
@@ -590,9 +605,11 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
        description: err?.message ?? 'Something went wrong ending the class. Please try again.',
        variant: 'destructive',
      });
+   } finally {
+     endingRef.current = false;
    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toast, endSession, timePolicy, isTrial, classTime, classId, hubType, studentId, navigate, isInterview]);
+  }, [toast, endSession, timePolicy, isTrial, classTime, classId, hubType, studentId, navigate, isInterview, user]);
 
   // Listen for End Class requests fired by the floating SafeToLeaveButton
   // overlay so the wrap-up flow runs even when the teacher uses that button.
@@ -604,6 +621,13 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     window.addEventListener('classroom:request-end-class', onRequest as EventListener);
     return () => window.removeEventListener('classroom:request-end-class', onRequest as EventListener);
   }, [handleEndClass]);
+
+  // Load the end-of-class pages now, while this build's files are certainly still on the server:
+  // a deploy mid-class used to remove PostLessonSummary-<hash>.js, so End Class crashed
+  // ("Failed to fetch dynamically imported module", live class 2026-10-07).
+  useEffect(() => {
+    void import('@/pages/PostLessonSummary').catch(() => {});
+  }, []);
 
   const handleWrapUpChange = useCallback((open: boolean) => {
     setWrapUpOpen(open);
@@ -976,12 +1000,21 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     setShowStartNudge(true);
   }, [studentPresent, classStarted, toast, studentName]);
 
+  const startingRef = useRef(false);
   const handleStartClass = useCallback(async (opts?: { force?: boolean }) => {
     if (!studentPresent && !opts?.force) {
       toast({ title: 'Waiting for student', description: 'You can start the lesson once the student joins.', variant: 'destructive' });
       return;
     }
-    await updateSessionContext({ ...(sessionContext || {}), classStarted: true, startedAt: new Date().toISOString() });
+    if (startingRef.current) return;
+    startingRef.current = true;
+    const saved = await updateSessionContext({ ...(sessionContext || {}), classStarted: true, startedAt: new Date().toISOString() })
+      .finally(() => { startingRef.current = false; });
+    if (!saved) {
+      // Used to fail silently — the button looked dead until the page was refreshed.
+      toast({ title: 'Could not start the lesson', description: 'The classroom lost its connection for a moment. Please press Start Lesson again.', variant: 'destructive' });
+      return;
+    }
     // Interaction (drag / tap / pen) is ON from the moment the class starts and stays
     // on to the end of the lesson. The teacher's "Interaction" button pauses it.
     try {
@@ -1595,7 +1628,9 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         trialCefr={trialCefr}
         lessonTitle={activeLessonTitle}
         classSummary={{
-          minutes: classTime > 0 ? Math.round(classTime / 60) : null,
+          // Time with the student: from Start Lesson to now (owner, 2026-10-07) — a late student's
+          // 25-minute lesson reads 25 min, not the booked length. Falls back to the class clock.
+          minutes: lessonMinutesWithStudent(sessionContext, classTime),
           stars: studentStars,
           pagesReached: sceneNavState.total > 0 ? sceneNavState.sceneIdx + 1 : null,
           totalPages: sceneNavState.total || null,

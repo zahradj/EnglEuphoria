@@ -226,6 +226,9 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
 
   // Auto-join local media after mount (post-PreFlightCheck)
   useEffect(() => { media.join(); return () => { media.leave(); }; }, []);
+  // Load the end-of-class summary now, while this build's files are still on the server (a deploy
+  // mid-class removes the old chunk and the end of class crashed; live class 2026-10-07).
+  useEffect(() => { void import('@/pages/PostLessonSummary').catch(() => {}); }, []);
 
   // WebRTC peer connection
   const { participants, isConnected: rtcConnected, connect: rtcConnect, disconnect: rtcDisconnect } = useWebRTCConnection({

@@ -1,5 +1,6 @@
 import type { SpinWheelSceneData } from '../SpinWheelScene';
 import type { PictureMatchSceneData } from '../PictureMatchScene';
+import type { RecallWarmupSceneData } from '../RecallWarmupScene';
 import type { FirstSoundSceneData } from '../FirstSoundScene';
 import type { LetterMatchSceneData, LetterBlocksSceneData } from '../LetterTilesScene';
 import type { WhatsMissingSceneData } from '../WhatsMissingScene';
@@ -147,6 +148,8 @@ export type Scene =
   | SpinWheelSceneData
   // Universal word-to-picture matching activity; see ../PictureMatchScene.tsx.
   | PictureMatchSceneData
+  // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
+  | RecallWarmupSceneData
   // Alphabet & phonics games shared with every scene library; see
   // ../FirstSoundScene.tsx and ../LetterTilesScene.tsx.
   | FirstSoundSceneData
@@ -672,6 +675,16 @@ const bgExpressGoodbyeW = `${W}/scenes/bg-express-goodbye-wide.png`;
 
 export const LESSON_2_SCENES: Scene[] = classroomLook([
   { id: 'wt2-title', kind: 'title-card', bg: bgWideW, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'How Are You?', subtitle: 'Say hello, then share how you feel today', cta: '\u{1F392} LET’S GO!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · Hello, My Name Is….
+    id: 'wt2-recall-warmup', kind: 'recall-warmup', bg: '/welcome-town/scenes/bg-classroom-circle-wide.png', who: 'pip', mode: 'click',
+    fromLabel: "Lesson 1 · Hello, My Name Is…",
+    teacher: 'Warm-up from last lesson: Pip says it, the student finds the picture and says it too.',
+    items: [
+      { word: "hello", say: "Find hello!", img: '/welcome-town/scenes/bg-express-hello-v2.png' },
+      { word: "goodbye", say: "Find goodbye!", img: '/welcome-town/scenes/bg-express-goodbye-wide.png' },
+    ],
+  },
 
   {
     id: 'wt2-intro', kind: 'cinematic', bg: bgCircleW, title: 'Back to Welcome Town School', subtitle: 'A quick hello before today’s lesson', narrator: 'marigold',
@@ -1106,6 +1119,18 @@ export const LESSON_3_OBJECTIVE = 'Listen carefully to short greetings and intro
 
 export const LESSON_3_SCENES: Scene[] = classroomLook([
   { id: 'wt3-title', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 3', title: 'Listen & Greet!', subtitle: 'Put on your listening ears!', cta: '👂 LET’S LISTEN!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · How Are You?.
+    id: 'wt3-recall-warmup', kind: 'recall-warmup', bg: '/welcome-town/scenes/bg-classroom-circle-wide.png', who: 'pip', mode: 'click',
+    fromLabel: "Lesson 2 · How Are You?",
+    teacher: 'Warm-up from last lesson: Pip says it, the student finds the picture and says it too.',
+    items: [
+      { word: "happy", say: "Who is happy?", img: '/welcome-town/scenes/bg-vocab-pip-happy-wide.png' },
+      { word: "sad", say: "Who is sad?", img: '/welcome-town/scenes/bg-vocab-mia-sad-wide.png' },
+      { word: "tired", say: "Who is tired?", img: '/welcome-town/scenes/bg-vocab-leo-tired-wide.png' },
+      { word: "angry", say: "Who is angry?", img: '/welcome-town/scenes/bg-vocab-bella-angry-wide.png' },
+    ],
+  },
 
   {
     id: 'wt3-intro', kind: 'cinematic', bg: bgCircle, title: 'Listening Time!', subtitle: 'Miss Marigold has a game for the class', narrator: 'marigold',
@@ -1327,6 +1352,17 @@ export const LESSON_4_OBJECTIVE = 'Part 1: Greet a partner and introduce yoursel
 
 export const LESSON_4_SCENES: Scene[] = classroomLook([
   { id: 'wt4-title', kind: 'title-card', bg: bgWideV2, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 4', title: 'Speak & Meet!', subtitle: 'Say hello and meet a new friend!', cta: '🗣️ LET’S TALK!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · Listen & Greet!.
+    id: 'wt4-recall-warmup', kind: 'recall-warmup', bg: '/welcome-town/scenes/bg-classroom-circle-v2.png', who: 'pip', mode: 'click',
+    fromLabel: "Lesson 3 · Listen & Greet!",
+    teacher: 'Warm-up from last lesson: Pip says it, the student finds the picture and says it too.',
+    items: [
+      { word: "Mia", say: "I am sad today. Who is it?", img: '/welcome-town/scenes/bg-vocab-mia-sad-wide.png' },
+      { word: "Leo", say: "I am so tired. Who is it?", img: '/welcome-town/scenes/bg-vocab-leo-tired-wide.png' },
+      { word: "Bella", say: "I am angry! Who is it?", img: '/welcome-town/scenes/bg-vocab-bella-angry-wide.png' },
+    ],
+  },
 
   {
     id: 'wt4-intro', kind: 'cinematic', bg: bgCircleV2, title: 'Time to Talk!', subtitle: 'Today you have a real conversation', narrator: 'marigold',

@@ -53,6 +53,7 @@
 
 ## Remember? warm-up (hard rule — owner, 2026-10-07)
 
+- Universal: Pre-A1 and the A1/A2 worlds (Welcome Town, Magic Castle, Jungle), one shared component `src/content/playground-library/RecallWarmupScene.tsx`; blueprint §3f, quality gate check.
 - Every Playground lesson after the very first opens (right after the title / hello song) with ONE `recall-warmup` scene: a quick "Remember?" of the lesson before, 3-5 of its words with their pictures, Pip says each word and the child finds it — no reading.
 - Vary the look: `mode: 'click'` (listen and click, three pictures) for colours and scene pictures; `mode: 'shadow'` (listen and match the shadow) only for sticker pictures with clearly different outlines.
 - `recallWarmup.test.ts` (deploy gate) fails if a lesson has none. It is a routine scene, not one of the lesson's games.

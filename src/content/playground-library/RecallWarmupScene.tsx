@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import type { Scene } from '../scenes';
-import { cueSpeak } from '../audio';
-import * as sfx from '../sfx';
-import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
-import { CLAY_BUTTON, STICKER_FILTER, THICK_WORDS, sayWithin } from './shared';
-import { Bursts, useBursts, useShake } from './gameFx';
+import { type Character, cueSpeak } from './unit1/audio';
+import * as sfx from './unit1/sfx';
+import { type ActivitySync, useSyncedState } from './sceneActivitySync';
+import { CLAY_BUTTON, STICKER_FILTER, THICK_WORDS, sayWithin } from './unit1/scene-components/shared';
+import { Bursts, useBursts, useShake } from './unit1/scene-components/gameFx';
 
 /* ---------- Remember? (warm-up recall, every lesson after the first) ----------
  * Owner's rule (2026-10-07): each lesson opens with a short reminder of the
@@ -19,7 +18,21 @@ import { Bursts, useBursts, useShake } from './gameFx';
  * "practice what you learned" start). Calm: no clock, no lost hearts; a wrong
  * tap is just "Try again!" and the right one glows after two tries. */
 
-type Recall = Extract<Scene, { kind: 'recall-warmup' }>;
+/** Universal "Remember?" warm-up (every Playground scene library: Pre-A1 and the A1/A2 worlds). */
+export interface RecallWarmupSceneData {
+  id: string;
+  kind: 'recall-warmup';
+  bg: string;
+  teacher: string;
+  who: Exclude<Character, 'teacher' | 'narrator'>;
+  /** 'click' = listen and click (three pictures); 'shadow' = listen and match the shadow (stickers only). */
+  mode: 'click' | 'shadow';
+  /** The lesson recalled, e.g. "Lesson 2 · Brother, Sister, Baby!". */
+  fromLabel: string;
+  /** 3-5 words from the lesson before: `say` is Pip's prompt ("Find the brother!"). */
+  items: { word: string; say: string; img: string }[];
+}
+type Recall = RecallWarmupSceneData;
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 export const RECALL_INTRO = 'Do you remember? Listen and find it!';
 export const RECALL_TRY = 'Try again!';

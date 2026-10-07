@@ -86,7 +86,7 @@ import { PartPeekScene } from './scene-components/PartPeekScene';
 import { FamilyPhotoScene } from './scene-components/FamilyPhotoScene';
 import { SizeLineScene } from './scene-components/SizeLineScene';
 import { CookieFacesScene } from './scene-components/CookieFacesScene';
-import { RecallWarmupScene } from './scene-components/RecallWarmupScene';
+import { RecallWarmupScene } from '../RecallWarmupScene';
 import { WhosMissingScene } from './scene-components/WhosMissingScene';
 import { CountPartsScene } from './scene-components/CountPartsScene';
 import { RingTossScene } from './scene-components/RingTossScene';

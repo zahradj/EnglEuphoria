@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { actualLessonMinutes, isLiveNow, windowCloseMs } from './lessonTiming';
+import { actualLessonMinutes, isLiveNow, sessionTimesFromRow, windowCloseMs } from './lessonTiming';
 
 const t = (iso: string) => new Date(iso).getTime();
 // The 2026-10-02 60-minute Playground lesson (booked 19:30 UTC).
@@ -33,5 +33,10 @@ describe('lessonTiming', () => {
   });
   it('is null when the class never had both sides', () => {
     expect(actualLessonMinutes({ teacher_joined_at: '2026-10-02T19:11:24Z' }, '2026-10-02T19:30:00Z', null, t('2026-10-02T22:00:00Z'))).toBe(null);
+  });
+  it('counts from the Start Lesson press when the student was late (owner, 2026-10-07)', () => {
+    const row = { teacher_joined_at: '2026-10-07T09:28:00Z', student_joined_at: '2026-10-07T09:39:00Z', session_context: { startedAt: '2026-10-07T09:40:00Z' } };
+    expect(actualLessonMinutes(sessionTimesFromRow(row), '2026-10-07T09:30:00Z', '2026-10-07T10:05:00Z')).toBe(25);
+    expect(actualLessonMinutes(sessionTimesFromRow(row), '2026-10-07T09:30:00Z', '2026-10-07T10:00:00Z')).toBe(20);
   });
 });

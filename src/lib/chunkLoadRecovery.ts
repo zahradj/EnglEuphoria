@@ -12,11 +12,19 @@
  * off-script" page into Google's search results) and one live classroom
  * crash.
  *
- * Guarded to at most one reload per page load (sessionStorage flag) so a
+ * Guarded to at most one reload per minute (sessionStorage timestamp) so a
  * genuinely broken deployment — where the reload doesn't fix it — falls
  * through to the real error boundary instead of reloading forever.
+ *
+ * It used to be "once per tab, ever" (a flag that was never cleared): a
+ * teacher who kept the same tab open across classes, with an earlier deploy
+ * having already used up that one reload, got the crash card instead — the
+ * live-class report of 2026-10-07 ("End Class didn't work, I had to
+ * refresh": PostLessonSummary-<oldhash>.js after a deploy at 09:30 UTC).
  */
 const RELOAD_FLAG = 'chunk_reload_attempted';
+/** A second chunk failure within this window means the reload did not help — show the real error. */
+export const CHUNK_RELOAD_WINDOW_MS = 60_000;
 
 export function isChunkLoadError(error: unknown): boolean {
   const message = error instanceof Error ? error.message : String(error ?? '');
@@ -54,12 +62,14 @@ export async function hardReload(): Promise<void> {
   }
 }
 
-/** Reloads the page once per session if this is the first chunk-load failure seen. Returns true if it triggered a reload (caller should not also render/log a crash). */
-export function reloadOnceForChunkError(): boolean {
+/** Reloads the page on a chunk-load failure, at most once per minute. Returns true if it triggered a reload (caller should not also render/log a crash). */
+export function reloadOnceForChunkError(now: number = Date.now()): boolean {
   if (typeof window === 'undefined') return false;
   try {
-    if (sessionStorage.getItem(RELOAD_FLAG)) return false;
-    sessionStorage.setItem(RELOAD_FLAG, '1');
+    const last = Number(sessionStorage.getItem(RELOAD_FLAG));
+    // Old builds stored '1' here; treat any non-timestamp as long ago.
+    if (Number.isFinite(last) && last > 1_000_000_000_000 && now - last < CHUNK_RELOAD_WINDOW_MS) return false;
+    sessionStorage.setItem(RELOAD_FLAG, String(now));
   } catch {
     // sessionStorage unavailable (private mode, etc.) — still attempt the one reload below.
   }

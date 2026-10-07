@@ -4,6 +4,7 @@ import { Hearts, MAX_HEARTS, Lep1Keyframes } from '../unit1/SceneRenderer';
 import { type ActivitySync } from '../sceneActivitySync';
 import { SpinWheelScene } from '../SpinWheelScene';
 import { PictureMatchScene } from '../PictureMatchScene';
+import { RecallWarmupScene } from '../RecallWarmupScene';
 import { FirstSoundScene } from '../FirstSoundScene';
 import { LetterMatchScene, LetterBlocksScene } from '../LetterTilesScene';
 import { WhatsMissingScene } from '../WhatsMissingScene';
@@ -131,6 +132,7 @@ export function SceneRenderer(props: {
       case 'letter-game': return <LetterGameScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'jigsaw-puzzle': return <JigsawPuzzleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} />;
       case 'spin-wheel': return <SpinWheelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
+      case 'recall-warmup': return <RecallWarmupScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;
       case 'picture-match': return <PictureMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'first-sound': return <FirstSoundScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'letter-match': return <LetterMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;

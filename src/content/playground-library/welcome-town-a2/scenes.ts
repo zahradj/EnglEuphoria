@@ -527,6 +527,18 @@ const A2U1L2_DAYS: { label: string; sentence: string; emoji: string; left: strin
 
 export const LESSON_A2U1L2_SCENES: Scene[] = [
   { id: 'a2u1l2-title', kind: 'title-card', bg: bgCalendar, level: 'A2', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'My Week', subtitle: 'Every day is a new adventure!', cta: '\u{1F4C5} LET’S GO!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · My Day.
+    id: 'a2u1l2-recall-warmup', kind: 'recall-warmup', bg: '/welcome-town/scenes/bg-a2-calendar.png', who: 'pip', mode: 'click',
+    fromLabel: "Lesson 1 · My Day",
+    teacher: 'Warm-up from last lesson: Pip says it, the student finds the picture and says it too.',
+    items: [
+      { word: "wake up", say: "I wake up! Find it!", img: '/welcome-town/scenes/bg-a2-morning.png' },
+      { word: "brush my teeth", say: "I brush my teeth! Find it!", img: '/welcome-town/scenes/bg-a2-bathroom.png' },
+      { word: "walk to school", say: "I walk to school! Find it!", img: '/welcome-town/scenes/bg-a2-street.png' },
+      { word: "sleep", say: "I sleep! Find it!", img: '/welcome-town/scenes/bg-a2-bedroom-asleep.png' },
+    ],
+  },
 
   {
     id: 'a2u1l2-intro', kind: 'cinematic', bg: bgCalendar, title: 'My Week', subtitle: 'Come see my whole week!', narrator: 'pip',
@@ -759,6 +771,17 @@ export const LESSON_A2U1L3_OBJECTIVE = 'Part 1: Talk about the past using past s
 
 export const LESSON_A2U1L3_SCENES: Scene[] = [
   { id: 'a2u1l3-title', kind: 'title-card', bg: bgMorning, level: 'A2', unit: 'Unit 1', lessonLabel: 'Lesson 3', title: 'Yesterday', subtitle: 'Let’s remember what already happened!', cta: '\u{23EA} LET’S GO!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · My Week.
+    id: 'a2u1l3-recall-warmup', kind: 'recall-warmup', bg: '/welcome-town/scenes/bg-a2-morning.png', who: 'pip', mode: 'click',
+    fromLabel: "Lesson 2 · My Week",
+    teacher: 'Warm-up from last lesson: Pip says it, the student finds the picture and says it too.',
+    items: [
+      { word: "the calendar", say: "Monday, Tuesday, Wednesday! Find the calendar!", img: '/welcome-town/scenes/bg-a2-calendar.png' },
+      { word: "the weekend", say: "Saturday and Sunday! Find the weekend!", img: '/welcome-town/scenes/bg-a2-weekend.png' },
+      { word: "play", say: "I play every day! Find play!", img: '/welcome-town/scenes/bg-a2-playground.png' },
+    ],
+  },
 
   {
     id: 'a2u1l3-intro', kind: 'cinematic', bg: bgMorning, title: 'Yesterday', subtitle: 'A day that already happened', narrator: 'pip',

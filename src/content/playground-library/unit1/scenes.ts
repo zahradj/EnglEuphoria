@@ -1,6 +1,7 @@
 import type { Character } from './audio';
 import type { SpinWheelSceneData } from '../SpinWheelScene';
 import type { PictureMatchSceneData } from '../PictureMatchScene';
+import type { RecallWarmupSceneData } from '../RecallWarmupScene';
 import type { FirstSoundSceneData } from '../FirstSoundScene';
 import type { LetterMatchSceneData, LetterBlocksSceneData } from '../LetterTilesScene';
 import type { WhatsMissingSceneData } from '../WhatsMissingScene';
@@ -622,15 +623,8 @@ export type Scene =
       lastLine: string;
       doneLine: string;
     }
-  | {
-      /** Remember? (owner, 2026-10-07): a short warm-up recall of the lesson before, near the start of every
-       *  lesson after the first. Pip says `say` ("Where is the brother?") and the child finds that picture.
-       *  mode 'click' = three pictures per turn; 'shadow' = all stickers as shadows (sticker images only).
-       *  `fromLabel` names the lesson recalled ("Lesson 2 · Brother, Sister, Baby!"). Not a game (routine). */
-      id: string; kind: 'recall-warmup'; bg: string; teacher: string; who: CharKey; mode: 'click' | 'shadow';
-      fromLabel: string;
-      items: { word: string; say: string; img: string }[];
-    }
+  // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
+  | RecallWarmupSceneData
   | {
       /** Grandma's Cookies (U5L3 signature): "Let's make a Grandpa cookie!" — pick the right face icing,
        *  it lands on the cookie, the oven bakes it, it joins the family plate. Faces are round crops of a
