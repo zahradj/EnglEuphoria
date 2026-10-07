@@ -404,6 +404,16 @@ const UNIT1_EXTRACTORS = {
     [s.who, 'Do you remember? Listen and find it!'], [s.who, 'Try again!'], [s.who, 'You remember! Great job!'],
     ...(s.items ?? []).flatMap((it) => [[s.who, it.say], [s.who, `Yes! ${it.word.charAt(0).toUpperCase() + it.word.slice(1)}!`]]),
   ],
+  // Mirror FamilyTreeScene.tsx's familyTreeLines().
+  'family-tree': (s) => {
+    const rowWords = ['at the top', 'in the middle', 'at the bottom'];
+    const cap = (w) => w.charAt(0).toUpperCase() + w.slice(1);
+    return [
+      [s.who, s.intro],
+      ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply], [s.who, `Not there! ${cap(s.faces?.[r.face]?.name ?? '')} goes ${rowWords[r.row] ?? 'there'}!`]]),
+      [s.who, s.doneLine],
+    ];
+  },
   // Mirror CookieFacesScene.tsx's cookieFacesLines() / WhosMissingScene.tsx's whosMissingLines().
   'cookie-faces': (s) => [
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
@@ -511,6 +521,7 @@ const UNIT1_EXTRACTORS = {
   'secret-card': (s) => [
     [s.who, 'I have a secret card. Ask me!'], [s.who, 'Yes, it is!'], [s.who, "No, it isn't!"],
     ...(s.rounds ?? []).map((r) => s.cards?.[r.secret]).filter(Boolean).map((c) => {
+      if (c.person && c.word) return [s.who, `You found it! It's ${c.word}!`];
       const parts = c.word ? [c.size, c.colorWord.toLowerCase(), c.word.toLowerCase()].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
       return [s.who, `You found it! It's ${/^[aeiou]/i.test(parts) ? 'an' : 'a'} ${parts}!`];
     }),

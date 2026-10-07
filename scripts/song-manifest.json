@@ -133,5 +133,10 @@
     "path": "public/lep1/audio/grandma-song-u5l3.mp3",
     "bytes": 321037,
     "sha256": "6d9bfb5a1b6c08575857b9708a36f9a8d13dd9ffccd31bb82f45aeb65c48241b"
+  },
+  "u5l4-family-tree": {
+    "path": "public/lep1/audio/family-tree-song-u5l4.mp3",
+    "bytes": 321037,
+    "sha256": "3e0a6f07babce96cbc82a7a3c84e3ba20c6dc9678fc0d9826abbe27c6394c966"
   }
 }

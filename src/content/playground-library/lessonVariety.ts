@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '5-4': { settings: ['hilltop oak'], look: "a sunny green hill with one giant oak tree: the whole fox family (Grandma, Grandpa, Mom, Dad, brother, Pip, sister, baby) at a picnic under it; the empty oak with three branch levels becomes the family tree" },
   '5-3': { settings: ['cottage'], look: "Grandma and Grandpa's cozy cottage: a red sofa by the fireplace, a warm kitchen on baking day, a garden with a little wooden gate; Grandma (grey bun, glasses, lavender cardigan) and Grandpa (moustache, glasses, flat cap)" },
   '5-2': { settings: ['backyard'], look: "sunny backyard of Pip's home: wooden fence, a tree swing, a picnic blanket; family photo day with Pip's big brother, little sister and the baby" },
   '4-6': { settings: ['space station'], look: 'bright pastel space station with round star windows and a ringed planet; Pip and Mia play Simon Says with Robo, a silver robot drawn in code' },
@@ -184,6 +185,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '5-4': {
+    sources: ['Lingokids / Khan Academy Kids (family sticker books, calm build play)', 'classroom "my family tree" craft (teach-this, twinkl family units)', 'Guess Who (Hasbro) information-gap questions', 'Cambridge (Pre A1 Starters "This is my…" introductions)'],
+    mechanics: [
+      'family-tree craft + sticker book → My Family Tree: hang each photo on the right branch by generation, then say "This is my grandma!"',
+      'Guess Who → Secret Card with people: the child asks "Is it big?" then "Is it Grandma?"',
+      'memory pairs of the family stickers, and a TH / S sound sort (thumb, three, thread)',
+    ],
+    betterThan: [
+      'the child BUILDS the tree one generation at a time, so "family tree" means something, and names every photo twice (Pip, then the child on the microphone)',
+      'Secret Card asks real questions about people (big / small, then the name) instead of colours and shapes — the information gap makes the question necessary',
+      'calm by design: a wrong branch is named back ("Not there! Grandma goes at the top!"), the right branch glows after two tries, no clock',
     ],
   },
   '5-3': {

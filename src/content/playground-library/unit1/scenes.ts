@@ -395,7 +395,9 @@ export type Scene =
       id: string; kind: 'secret-card'; bg: string; teacher: string; who: CharKey;
       /** A card is a coloured shape, or a TOY picture (`img` + `word`, optional `size`):
        *  then the child asks "Is it a car?", "Is it big?", "Is it red?" (Unit 3 Lesson 4). */
-      cards: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle'; img?: string; word?: string; size?: 'big' | 'small' }[];
+      /** `person: true` (family cards, Unit 5 Lesson 4): `word` is a name ("Grandma", "the baby") asked
+       *  without an article — "Is it Grandma?"; leave colorWord '' to skip colour questions. */
+      cards: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle'; img?: string; word?: string; size?: 'big' | 'small'; person?: boolean }[];
       rounds: { secret: number }[];
     }
   | {
@@ -625,6 +627,19 @@ export type Scene =
     }
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
+  | {
+      /** My Family Tree (U5L4 signature): photo frames on three branches (`slots`, % on bg; row 0 = top =
+       *  grandparents, 1 = middle = Mom & Dad, 2 = bottom = children). Each round a photo pops out
+       *  ("This is my grandma! Where does Grandma go?"), the child hangs it on the right row, then says
+       *  "This is my grandma!" and taps the mic. Faces as in cookie-faces. */
+      id: string; kind: 'family-tree'; bg: string; teacher: string; who: CharKey;
+      faces: { label: string; name: string; img: string; at: [number, number]; w: number; aspect?: number }[];
+      slots: { row: 0 | 1 | 2; x: number; y: number }[];
+      /** `say` = the sentence the child says on the microphone button ("This is my grandma!", "This is me!"). */
+      rounds: { face: number; row: 0 | 1 | 2; line: string; reply: string; say: string }[];
+      intro: string;
+      doneLine: string;
+    }
   | {
       /** Grandma's Cookies (U5L3 signature): "Let's make a Grandpa cookie!" — pick the right face icing,
        *  it lands on the cookie, the oven bakes it, it joins the family plate. Faces are round crops of a
@@ -8653,6 +8668,250 @@ export const LESSON_U5L3_SCENES: Scene[] = [
     ],
   },
   { id: 'u5l3-finale', kind: 'finale', bg: bgU5L3Hug, who: 'pip', line: 'Goodbye, Grandma! Goodbye, Grandpa! I love you! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 5 · Lesson 4 — My Family Tree =====================
+ * My Family (4/6). The whole family with "This is my ___!" (grandma, grandpa, mom, dad, brother,
+ * sister, baby, me) and "family tree"; TH says /th/ (thumb, three, thunder, thread). Setting: a sunny
+ * hill with one giant oak — the family picnic under the family's own tree. Lesson-Variety Engine:
+ * researched Lingokids / Khan Academy Kids family sticker books, the classroom "my family tree" craft,
+ * Guess Who (information gap) and Cambridge Pre A1 "This is my…"; new game My Family Tree (hang each
+ * photo on the right branch, then say "This is my grandma!"), Secret Card upgraded with people
+ * ("Is it Grandma?"). Pictures made with Canva (Lesson 2-3 family pictures as references). */
+const bgU5L4Picnic = `${A}/scenes/bg-u5l4-picnic-wide.png`;
+const bgU5L4Tree = `${A}/scenes/bg-u5l4-tree-wide.png`;
+const famGrandma = `${A}/items/item-family-grandma.png`;
+const famGrandpa = `${A}/items/item-family-grandpa.png`;
+const itemThumb = `${A}/items/item-thumb.png`;
+const itemThree = `${A}/items/item-three.png`;
+const itemThunder = `${A}/items/item-thunder.png`;
+const itemThread = `${A}/items/item-thread.png`;
+const U5L4_FACES = [
+  U5L3_FACES.grandma, U5L3_FACES.grandpa, U5L3_FACES.mom, U5L3_FACES.dad,
+  { label: 'brother', name: 'my brother', img: bgU5L2Yard, at: [29.5, 26] as [number, number], w: 20, aspect: 1376 / 768 },
+  { label: 'sister', name: 'my sister', img: bgU5L2Yard, at: [62, 54] as [number, number], w: 16, aspect: 1376 / 768 },
+  U5L3_FACES.baby,
+  U5L3_FACES.pip,
+];
+
+export const LESSON_U5L4_TITLE = 'My Family Tree';
+export const LESSON_U5L4_OBJECTIVE = 'Introduce the whole family with "This is my grandma / grandpa / mom / dad / brother / sister / baby", build a family tree by generations (grandparents at the top, Mom and Dad in the middle, the children at the bottom), ask "Is it Grandma?" to find a secret family member, and hear TH say /th/ (thumb, three, thunder) — by listening, moving, playing and speaking, no reading.';
+export const LESSON_U5L4_SCENES: Scene[] = [
+  { id: 'u5l4-title', kind: 'title-card', bg: bgU5L4Picnic, level: 'Pre-A1', unit: 'Unit 5', lessonLabel: 'Lesson 4', title: 'My Family Tree', subtitle: 'A picnic under our big tree' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u5l4-song', kind: 'song', bg: bgU5L4Picnic, title: '\u{1F3B5} My Family Tree \u{1F3B5}', teacher: 'Sing and point! Point up high for Grandma and Grandpa, to your tummy for Mom and Dad, low for the children.',
+    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-tree-song-u5l4.mp3?v=1`,
+    lineDurationsMs: [3680, 3660, 4620, 8102],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'This is my grandma, this is my grandpa!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my mom, and this is my dad!', emotion: 'happy' },
+      { who: 'pip', text: 'My brother, my sister, the baby and me!', emotion: 'happy' },
+      { who: 'pip', text: 'We are a family! My family tree!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · Grandma & Grandpa!.
+    id: 'u5l4-recall-warmup', kind: 'recall-warmup', bg: bgU5L4Picnic, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 3 · Grandma & Grandpa!',
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: 'grandma', say: 'Find Grandma!', img: bgU5L3Grandma },
+      { word: 'grandpa', say: 'Show me Grandpa!', img: bgU5L3Grandpa },
+      { word: 'a big hug', say: 'Point to the big hug!', img: bgU5L3Hug },
+    ],
+  },
+  {
+    id: 'u5l4-intro', kind: 'cinematic', bg: bgU5L4Picnic, hidePipOverlay: true, title: 'Picnic Day', subtitle: 'My whole family!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Look! This is my family! We have a picnic under our big tree.' },
+      { who: 'pip', line: "Let's make my family tree!" },
+    ],
+    cta: "Let's make it!",
+  },
+
+  /* 4-6 New language, move, signature game */
+  {
+    id: 'u5l4-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU5L4Picnic, teacher: 'Listen, then say it! Point to the picture each time you say "This is my…".',
+    cards: [
+      { who: 'pip', sentence: 'My family tree! This is my family.', img: bgU5L4Picnic, imgLabel: 'Family tree!' },
+      { who: 'pip', sentence: 'This is my grandpa.', img: bgU5L3Grandpa, imgLabel: 'This is my grandpa.' },
+      { who: 'pip', sentence: 'This is my mom.', img: `${A}/scenes/bg-u5l1-mom-solo.png`, imgLabel: 'This is my mom.' },
+      { who: 'pip', sentence: 'This is my sister.', img: bgU5L2Sister, imgLabel: 'This is my sister.' },
+    ],
+  },
+  {
+    id: 'u5l4-move-say', kind: 'tpr-actions', bg: bgU5L4Picnic, who: 'pip',
+    teacher: 'Stand up! Be the family tree. Say it with Pip, then do it.',
+    rounds: [
+      { line: 'Be a big tree! Arms up high!', emoji: '\u{1F333}' },
+      { line: 'Grandma and Grandpa at the top! Hands up!', emoji: '\u{1F64C}' },
+      { line: 'Mom and Dad in the middle! Hands on your tummy!', emoji: '\u{1F917}' },
+      { line: 'The children at the bottom! Touch your knees!', emoji: '\u{1F9D2}' },
+      { line: 'Say: This is my family!', emoji: '\u{1F496}' },
+    ],
+  },
+  {
+    // Signature game (new): hang every photo on the right branch, then say it.
+    id: 'u5l4-family-tree', kind: 'family-tree', bg: bgU5L4Tree, who: 'pip',
+    teacher: 'My Family Tree! Hang each photo on the right branch: grandparents at the top, Mom and Dad in the middle, the children at the bottom. Then the student says "This is my…!" and taps the microphone.',
+    intro: 'Grandma and Grandpa go at the top. Mom and Dad go in the middle. The children go at the bottom!',
+    faces: U5L4_FACES,
+    slots: [
+      { row: 0, x: 27, y: 32 }, { row: 0, x: 73, y: 32 },
+      { row: 1, x: 22, y: 55 }, { row: 1, x: 78, y: 55 },
+      { row: 2, x: 13, y: 77 }, { row: 2, x: 30, y: 79 }, { row: 2, x: 70, y: 79 }, { row: 2, x: 87, y: 77 },
+    ],
+    rounds: [
+      { face: 0, row: 0, line: 'This is my grandma! Where does Grandma go?', reply: 'Yes! Grandma goes at the top!', say: 'This is my grandma!' },
+      { face: 1, row: 0, line: 'This is my grandpa! Where does Grandpa go?', reply: 'Yes! Grandpa goes at the top too!', say: 'This is my grandpa!' },
+      { face: 2, row: 1, line: 'This is my mom! Where does Mom go?', reply: 'Yes! Mom goes in the middle!', say: 'This is my mom!' },
+      { face: 3, row: 1, line: 'This is my dad! Where does Dad go?', reply: 'Yes! Dad goes in the middle!', say: 'This is my dad!' },
+      { face: 4, row: 2, line: 'This is my brother! Where does he go?', reply: 'Yes! My brother goes at the bottom!', say: 'This is my brother!' },
+      { face: 5, row: 2, line: 'This is my sister! Where does she go?', reply: 'Yes! My sister goes at the bottom!', say: 'This is my sister!' },
+      { face: 6, row: 2, line: 'This is the baby! Where does the baby go?', reply: 'Yes! The baby goes at the bottom!', say: 'This is the baby!' },
+      { face: 7, row: 2, line: "And this is me, Pip! Where do I go?", reply: 'Yes! I go at the bottom, with my brother and sister!', say: 'This is me!' },
+    ],
+    doneLine: 'This is my family tree! I love my family!',
+  },
+  {
+    id: 'u5l4-who-is-this', kind: 'join-stage', bg: bgU5L4Picnic, teacher: 'Pip asks. The student points and answers with the whole sentence.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look at my family! Who is this, in the green cardigan?', bubble: 'right' },
+      { who: 'student', line: 'This is your dad!', bubble: 'right' },
+      { who: 'pip', line: 'Yes! And who has a flat cap?', bubble: 'right' },
+      { who: 'student', line: 'This is your grandpa!', bubble: 'right' },
+    ],
+  },
+  {
+    // Upgraded game: Secret Card with people — the child asks "Is it big?" then "Is it Grandma?".
+    id: 'u5l4-secret-family', kind: 'secret-card', bg: bgU5L4Tree, who: 'pip',
+    teacher: 'Who is it? Pip hides one family member. The student asks: "Is it big?" "Is it Grandma?" Pip answers yes or no.',
+    cards: [
+      { colorWord: '', colorHex: '', shape: 'circle', img: famGrandma, word: 'Grandma', size: 'big', person: true },
+      { colorWord: '', colorHex: '', shape: 'circle', img: famGrandpa, word: 'Grandpa', size: 'big', person: true },
+      { colorWord: '', colorHex: '', shape: 'circle', img: famMom, word: 'Mom', size: 'big', person: true },
+      { colorWord: '', colorHex: '', shape: 'circle', img: famDad, word: 'Dad', size: 'big', person: true },
+      { colorWord: '', colorHex: '', shape: 'circle', img: famSister, word: 'my sister', size: 'small', person: true },
+      { colorWord: '', colorHex: '', shape: 'circle', img: famBaby, word: 'the baby', size: 'small', person: true },
+    ],
+    rounds: [{ secret: 1 }, { secret: 4 }],
+  },
+  {
+    id: 'u5l4-you-tell', kind: 'join-stage', bg: bgU5L4Tree, teacher: 'Swap! The student introduces their own family (or a toy family). Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Now tell me about YOUR family! Who is in your family tree?', bubble: 'right' },
+      { who: 'student', line: 'This is my mom. This is my dad.', bubble: 'right' },
+      { who: 'pip', line: 'Lovely! Who else?', bubble: 'right' },
+      { who: 'student', line: 'This is my grandma! This is my brother!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u5l4-memory', kind: 'memory', bg: bgU5L4Tree, teacher: 'Find the pairs! Say "This is my…" for each pair you find.',
+    pairs: [
+      { id: 'grandma', label: 'Grandma', emoji: '\u{1F475}', img: famGrandma },
+      { id: 'grandpa', label: 'Grandpa', emoji: '\u{1F474}', img: famGrandpa },
+      { id: 'mom', label: 'Mom', emoji: '\u{1F469}', img: famMom },
+      { id: 'dad', label: 'Dad', emoji: '\u{1F468}', img: famDad },
+    ],
+  },
+
+  /* 11-13 Phonics: TH says /th/ */
+  {
+    id: 'u5l4-model-th', kind: 'sound-model', bg: bgU5L4Tree, who: 'pip', letter: 'Th', phoneme: '/th/', sound: 'thh',
+    teacher: 'T and H together say /th/ — put your tongue between your teeth! Thumb, three, thunder!',
+    anchors: [
+      { word: 'thumb', emoji: '\u{1F44D}', img: itemThumb },
+      { word: 'three', emoji: '3\u{FE0F}\u{20E3}', img: itemThree },
+      { word: 'thunder', emoji: '\u{26C8}\u{FE0F}', img: itemThunder },
+    ],
+  },
+  { id: 'u5l4-trace-t', kind: 'trace', bg: bgU5L4Tree, who: 'pip', letter: 'T', phoneme: '/th/', word: 'thumb', speakWord: false, teacher: 'Trace the T! T and H say /th/ — thumb!' },
+  {
+    id: 'u5l4-sort-th', kind: 'sound-sort', bg: bgU5L4Tree, teacher: 'Listen to each word. Does it start with /th/ or /s/? Drag it to TH or S!',
+    targets: [
+      { letter: 'TH', phoneme: '/th/', who: 'pip' },
+      { letter: 'S', phoneme: '/s/', who: 'mia' },
+    ],
+    items: [
+      { word: 'thumb', img: itemThumb, emoji: '\u{1F44D}', letter: 'TH' },
+      { word: 'sun', img: itemSun, emoji: '\u{2600}\u{FE0F}', letter: 'S' },
+      { word: 'three', img: itemThree, emoji: '3\u{FE0F}\u{20E3}', letter: 'TH' },
+      { word: 'snake', img: itemSnake, emoji: '\u{1F40D}', letter: 'S' },
+      { word: 'thread', img: itemThread, emoji: '\u{1F9F5}', letter: 'TH' },
+    ],
+  },
+
+  /* 14 Perform */
+  {
+    id: 'u5l4-perform', kind: 'join-stage', bg: bgU5L4Tree, teacher: "Show time! The student points to Pip's family tree and introduces everyone.", cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Your turn! Show me my family tree!', bubble: 'right' },
+      { who: 'student', line: 'This is your grandma. This is your grandpa.', bubble: 'right' },
+      { who: 'pip', line: 'And at the bottom?', bubble: 'right' },
+      { who: 'student', line: 'This is your sister. This is the baby. This is you!', bubble: 'right' },
+    ],
+  },
+
+  /* 15-16 Sticker + Home Mission */
+  {
+    id: 'u5l4-sticker', kind: 'sticker-reward', bg: bgU5L4Picnic, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super job! Here is a family tree sticker for you!', sticker: { img: itemTree, label: 'Family tree' },
+  },
+  {
+    id: 'u5l4-home-mission', kind: 'home-mission', bg: bgU5L4Tree, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: draw your family tree at home and say: This is my mom! This is my dad!',
+    parentNote: 'Draw a big tree together. Put grandparents at the top, parents in the middle and the children at the bottom (draw faces or stick photos). Your child points and says "This is my grandma / grandpa / mom / dad / brother / sister / baby."',
+    steps: [
+      { emoji: '\u{1F333}', img: itemTree, say: 'Draw a tree' },
+      { emoji: '\u{1F475}', img: famGrandma, say: 'This is my grandma' },
+      { emoji: '\u{1F469}', img: famMom, say: 'This is my mom' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u5l4-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU5L4Picnic, who: 'pip',
+    teacher: 'Extra time: Picnic Moves! Do each move with Pip.',
+    rounds: [
+      { line: 'Shake out the picnic blanket! Shake, shake!', emoji: '\u{1F9FA}' },
+      { line: 'Thumbs up! Th, th, thumb!', emoji: '\u{1F44D}' },
+      { line: 'Count to three! One, two, three!', emoji: '3\u{FE0F}\u{20E3}' },
+      { line: 'Climb the big tree! Up, up, up!', emoji: '\u{1F333}' },
+      { line: 'Freeze! Family photo! Say cheese!', emoji: '\u{1F4F8}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u5l4-spin', kind: 'spin-wheel', bg: bgU5L4Picnic, title: '',
+    teacher: 'Extra time: have the student spin, then point and say "This is your…!" Or tap a number.',
+    items: [
+      { label: 'This is your grandma!', left: '10%', top: '63%' },
+      { label: 'This is your grandpa!', left: '23%', top: '63%' },
+      { label: 'This is your mom!', left: '37%', top: '63%' },
+      { label: 'This is your dad!', left: '50%', top: '61%' },
+      { label: 'This is your sister!', left: '84%', top: '73%' },
+      { label: 'This is the baby!', left: '93%', top: '84%' },
+    ],
+    wheelAt: { left: '88%', top: '28%' },
+  },
+
+  /* 19-20 Goodbye */
+  {
+    id: 'u5l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u5l4-finale', kind: 'finale', bg: bgU5L4Picnic, who: 'pip', line: 'This is my family tree — Grandma, Grandpa, Mom, Dad, my brother, my sister, the baby and me! Goodbye, friend!' },
 ];
 
 /* =============================================================================
