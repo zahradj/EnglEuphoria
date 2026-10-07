@@ -1,2 +1,2 @@
-# song takes request
+# song takes request (retry: "read a book" / "play ball" unclear)
 u5l5-my-dad
