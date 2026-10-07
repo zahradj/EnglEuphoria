@@ -10,7 +10,7 @@
  */
 export const ONLINE_PAYMENTS_ENABLED = import.meta.env.VITE_ONLINE_PAYMENTS !== 'false';
 
-export const PAYMENT_CONTACT_EMAIL = 'hello@engleuphoria.com';
+export const PAYMENT_CONTACT_EMAIL = 'support@engleuphoria.com';
 
 /** mailto link a student/parent uses to ask for credits (pack name optional). */
 export function contactToBuyHref(opts: { packName?: string; credits?: number; studentEmail?: string | null } = {}): string {
