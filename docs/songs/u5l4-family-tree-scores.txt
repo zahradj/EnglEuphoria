@@ -1,0 +1,15 @@
+
+=== docs/songs/u5l4-family-tree-take1.mp3  length=20.1s  score=0.92  missing=3  extra=2
+heard: this is my grandpa this is my grandpa this is my mom and this is my dad my brother my sister the baby and me we are family my family truth
+line starts (s): [np.float64(0.0), np.float64(3.6), np.float64(7.4), np.float64(11.9)]
+lineDurationsMs: [3640, 3720, 4580, 8122]
+
+=== docs/songs/u5l4-family-tree-take2.mp3  length=20.1s  score=0.86  missing=4  extra=5
+heard: this is my grandma this is my grandpa this is my mom and this is my dad my brother my sister the baby and me pr family my family and me and me
+line starts (s): [np.float64(0.0), np.float64(4.2), np.float64(8.1), np.float64(13.5)]
+lineDurationsMs: [4240, 3860, 5380, 6582]
+
+=== docs/songs/u5l4-family-tree-take3.mp3  length=20.1s  score=0.94  missing=2  extra=2
+heard: this is my grandpa this is my grandpa this is my mom and this is my dad her brother my sister the baby and me we are a family my family tree
+line starts (s): [np.float64(0.0), np.float64(4.3), np.float64(8.0), np.float64(12.0)]
+lineDurationsMs: [4320, 3720, 3940, 8082]
