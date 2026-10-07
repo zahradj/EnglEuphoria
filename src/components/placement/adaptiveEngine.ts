@@ -17,6 +17,10 @@ const SE_TARGET = 0.45;
 const STABLE_RUN = 3;
 const STABLE_BAND = 0.15;
 const START_SE = 1.5;
+/** A placement test starts at the BOTTOM and climbs: theta 0 sits at difficulty 0.5, which is already B1, so a
+ *  test that started there skipped A1 and A2 entirely. -2.1 is difficulty 0.15 (the A1 items); a capable
+ *  student climbs past them in a few answers, a beginner is never thrown in at B1. */
+export const START_THETA = -2.1;
 const MIN_SE = 0.3;
 const SE_DECAY = 0.85;
 
@@ -53,7 +57,7 @@ export interface AdaptiveState {
 }
 
 export function initAdaptiveState(): AdaptiveState {
-  return { theta: 0, se: START_SE, answeredIdx: new Set(), thetaHistory: [], skillCounts: {}, hasIncorrect: false };
+  return { theta: START_THETA, se: START_SE, answeredIdx: new Set(), thetaHistory: [], skillCounts: {}, hasIncorrect: false };
 }
 
 /** Picks the next item: while any required skill is still uncovered, choose
