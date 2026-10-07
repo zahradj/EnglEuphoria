@@ -1,32 +1,17 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0041-7721939743759936004.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T151601Z&X-Amz-Expires=37944&X-Amz-Signature=8910dbd1553f83b464124b3c6366db7b2bdccfce56b3a50ae99d7020d4d90a6c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2001%3A48%3A25%20GMT",
-  "out": "public/lep1/scenes/bg-u5l3-grandpa-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0089-369813426141096682.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T103316Z&X-Amz-Expires=31303&X-Amz-Signature=87b1c48659d5f47f420c9370974d509cecf9c788d9179342b2e3dab14b7e2962&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2019%3A14%3A59%20GMT",
+  "out": "public/lep1/scenes/bg-u5l4-picnic-wide.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0059-7721939743759936004.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T043034Z&X-Amz-Expires=76996&X-Amz-Signature=73004dafcf9e3b96592ef0d312ef2ca3587431751295d0b31737d13dc58338a2&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2001%3A53%3A50%20GMT",
-  "out": "public/lep1/scenes/bg-u5l3-kitchen-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0090-369813426141096682.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T020915Z&X-Amz-Expires=62937&X-Amz-Signature=07135c8b679b8c086b16e808cf21a4f944c11f649b552d3ddc2e845e9953a174&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2019%3A38%3A12%20GMT",
+  "out": "public/lep1/scenes/bg-u5l4-tree-wide.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0060-7721939743759936004.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T154702Z&X-Amz-Expires=36436&X-Amz-Signature=3070468c5b4d89201325b4da7256b0f9730048ef2386720ddec6ca85e5f95010&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2001%3A54%3A18%20GMT",
-  "out": "public/lep1/scenes/bg-u5l3-hug-wide.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0086-7721939743759936004.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T130347Z&X-Amz-Expires=45558&X-Amz-Signature=50fe4cf881421e60849ff8b5442bdc0dad2a0dbe285ca4fbb4d60d5d86a1b06b&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2001%3A43%3A05%20GMT",
-  "out": "public/lep1/scenes/bg-u5l3-living-wide.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0087-7721939743759936004.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T020720Z&X-Amz-Expires=83274&X-Amz-Signature=ada7d07cf08bc5e22b16109888667e1878c938e61f69bd316545786b20c75ba4&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2001%3A15%3A14%20GMT",
-  "out": "public/lep1/scenes/bg-u5l3-garden-wide.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0100-7721939743759936004.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T002816Z&X-Amz-Expires=89196&X-Amz-Signature=67c0b50bd113d028420d9d955ded73df3967613182a0ca70b6c0e1e3250ed491&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2001%3A14%3A52%20GMT",
-  "out": "public/lep1/scenes/bg-u5l3-grandma-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0062-369813426141096682.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T171708Z&X-Amz-Expires=7663&X-Amz-Signature=f1a5d94400e7fc9313f4449290e77080b94b0350e9f3b22c971639147198e8b2&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2019%3A24%3A51%20GMT",
+  "out": "docs/art-gen/sheet-u5l4-family-th.png",
   "sticker": false
  }
 ]
