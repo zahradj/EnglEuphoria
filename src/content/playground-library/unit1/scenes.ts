@@ -628,6 +628,15 @@ export type Scene =
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
   | {
+      /** Feed the Ducks (U5L5 signature): ducks on the pond (x/y = centre %) carry a photo of the story
+       *  (round crop of `img`: at = centre %, w = % of width); Pip says a story sentence ("We eat ice cream!"),
+       *  the child taps that duck and bread flies to it. `name` = how a sentence says the photo ("the book"). */
+      id: string; kind: 'duck-feed'; bg: string; teacher: string; who: CharKey;
+      ducks: { label: string; name: string; img: string; at: [number, number]; w: number; aspect?: number; x: number; y: number }[];
+      rounds: { duck: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** My Family Tree (U5L4 signature): photo frames on three branches (`slots`, % on bg; row 0 = top =
        *  grandparents, 1 = middle = Mom & Dad, 2 = bottom = children). Each round a photo pops out
        *  ("This is my grandma! Where does Grandma go?"), the child hangs it on the right row, then says
@@ -8912,6 +8921,263 @@ export const LESSON_U5L4_SCENES: Scene[] = [
     ],
   },
   { id: 'u5l4-finale', kind: 'finale', bg: bgU5L4Picnic, who: 'pip', line: 'This is my family tree — Grandma, Grandpa, Mom, Dad, my brother, my sister, the baby and me! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 5 · Lesson 5 — Just Me and My Dad =====================
+ * My Family (5/6), the story lesson. A day with Dad told as a stills film ("My Day with Dad",
+ * docs/scenarios/u5l5-me-and-my-dad.md, approved 2026-10-07): "We play ball. We feed the ducks. We eat
+ * ice cream. We read a book." + "What do we do?" and "I love you, Dad!"; D says /d/ (Dad, duck, door).
+ * Setting: a sunny park with a duck pond, then Pip's living room at night (new — Lesson 4 was a hilltop
+ * oak). Lesson-Variety Engine: researched the "Just Me and My Dad"-style family-day picture book,
+ * Khan Academy Kids / Lingokids "listen and feed" play, Cambridge Pre A1 listen-and-point and
+ * story-retell; new game Feed the Ducks (a whole story sentence picks the duck), Hide and Seek with Dad
+ * (lift-flap, D words under every spot). Pictures made with Canva (Lesson 1-4 family pictures as references). */
+const u5l5 = (n: string) => `${A}/scenes/bg-u5l5-${n}-wide.png`;
+const bgU5L5Gate = u5l5('gate-a');
+const bgU5L5BallA = u5l5('ball-a');
+const bgU5L5BallC = u5l5('ball-c');
+const bgU5L5DucksA = u5l5('ducks-a');
+const bgU5L5DucksC = u5l5('ducks-c');
+const bgU5L5IceCream = u5l5('icecream-b');
+const bgU5L5BookB = u5l5('book-b');
+const bgU5L5Hug = u5l5('hug-b');
+const bgU5L5Night = u5l5('night');
+const bgU5L5Home = u5l5('home');
+const U5L5_W = 1376 / 768;
+
+export const LESSON_U5L5_TITLE = 'Just Me and My Dad';
+export const LESSON_U5L5_OBJECTIVE = 'Follow a short story about a day with Dad and say what they do together — "We play ball. We feed the ducks. We eat ice cream. We read a book." — answer "What do we do?", say "I love you, Dad!", and hear D say /d/ (Dad, duck, door) — by watching, moving, listening and speaking, no reading.';
+export const LESSON_U5L5_SCENES: Scene[] = [
+  { id: 'u5l5-title', kind: 'title-card', bg: bgU5L5Gate, level: 'Pre-A1', unit: 'Unit 5', lessonLabel: 'Lesson 5', title: 'Just Me and My Dad', subtitle: 'My day with Dad' },
+
+  /* 1-4 Hook + story */
+  {
+    id: 'u5l5-song', kind: 'song', bg: bgU5L5Gate, title: '\u{1F3B5} Just Me and My Dad \u{1F3B5}', teacher: 'Sing and do it! Throw a ball, feed the ducks, lick an ice cream, open a book — then a big hug!',
+    durationSeconds: 20, bigWord: 'Dad', songUrl: `${A}/audio/my-dad-song-u5l5.mp3?v=1`,
+    lineDurationsMs: [4000, 4000, 4000, 8000],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'We play ball, just me and my dad!', emotion: 'happy' },
+      { who: 'pip', text: 'We feed the ducks! Quack, quack, quack!', emotion: 'happy' },
+      { who: 'pip', text: 'We eat ice cream, we read a book!', emotion: 'happy' },
+      { who: 'pip', text: 'I love you, Dad! The best day!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · My Family Tree.
+    id: 'u5l5-recall-warmup', kind: 'recall-warmup', bg: bgU5L5Gate, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 4 · My Family Tree',
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: 'grandma', say: 'Find Grandma!', img: famGrandma },
+      { word: 'the baby', say: 'Show me the baby!', img: famBaby },
+      { word: 'family tree', say: 'Point to the family tree!', img: itemTree },
+      { word: 'my sister', say: 'Find my sister!', img: famSister },
+    ],
+  },
+  {
+    id: 'u5l5-intro', kind: 'cinematic', bg: bgU5L5Gate, hidePipOverlay: true, title: 'My Day with Dad', subtitle: 'Just me and my dad!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Look! This is my dad. Today is our day!' },
+      { who: 'pip', line: "Let's watch what we do!" },
+    ],
+    cta: "Let's watch!",
+  },
+  {
+    // The approved stills film: two pictures per action flip like a cartoon, the action words appear karaoke-style,
+    // and a pause after each "What do we do?" lets the child answer (docs/scenarios/u5l5-me-and-my-dad.md).
+    id: 'u5l5-story-dad', kind: 'story-video', bg: bgU5L5Gate, videoUrl: `${A}/video/my-day-with-dad-u5l5.mp4?v=1`, title: 'My Day with Dad',
+    teacher: 'Press play and watch. Say the action words with Pip — "Throw! Catch! Quack, quack! Yum, yum!" — and when Pip asks "What do we do?", the child answers before Pip: "We play ball!"',
+    pages: [
+      { img: bgU5L5Gate, who: 'pip', line: 'Today is my day with Dad! Just me and my dad!', atSec: 0 },
+      { img: bgU5L5BallA, who: 'pip', line: 'We play ball! Dad throws the ball.', atSec: 5 },
+      { img: bgU5L5BallC, who: 'pip', line: 'I catch it! Catch!', atSec: 10 },
+      { img: bgU5L5BallC, who: 'pip', line: 'What do we do?', atSec: 14 },
+      { img: bgU5L5BallC, who: 'pip', line: 'We play ball!', atSec: 18 },
+      { img: bgU5L5DucksA, who: 'pip', line: 'We feed the ducks. Quack, quack!', atSec: 20 },
+      { img: bgU5L5DucksC, who: 'pip', line: 'One, two, three, four ducks!', atSec: 25 },
+      { img: bgU5L5DucksC, who: 'pip', line: 'What do we do?', atSec: 29 },
+      { img: bgU5L5DucksC, who: 'pip', line: 'We feed the ducks!', atSec: 33 },
+      { img: bgU5L5IceCream, who: 'pip', line: 'We eat ice cream. Yum, yum!', atSec: 35.5 },
+      { img: bgU5L5BookB, who: 'pip', line: 'At home, we read a book.', atSec: 41 },
+      { img: bgU5L5BookB, who: 'pip', line: 'What do we do?', atSec: 46 },
+      { img: bgU5L5BookB, who: 'pip', line: 'We read a book!', atSec: 50 },
+      { img: bgU5L5Hug, who: 'pip', line: 'Good night, Dad! I love you!', atSec: 52.5 },
+      { img: bgU5L5Night, who: 'pip', line: 'Just me and my dad. The best day!', atSec: 58 },
+    ],
+    checkpoints: [],
+  },
+
+  /* 5-7 The words, move, signature game */
+  {
+    id: 'u5l5-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU5L5Gate, teacher: 'Listen, then say it! Do the action each time you say "We…".',
+    cards: [
+      { who: 'pip', sentence: 'We play ball.', img: bgU5L5BallA, imgLabel: 'We play ball.' },
+      { who: 'pip', sentence: 'We feed the ducks.', img: bgU5L5DucksC, imgLabel: 'We feed the ducks.' },
+      { who: 'pip', sentence: 'We eat ice cream.', img: bgU5L5IceCream, imgLabel: 'We eat ice cream.' },
+      { who: 'pip', sentence: 'We read a book.', img: bgU5L5BookB, imgLabel: 'We read a book.' },
+    ],
+  },
+  {
+    id: 'u5l5-move-say', kind: 'tpr-actions', bg: bgU5L5Gate, who: 'pip',
+    teacher: 'Stand up! Do it with Pip and say it.',
+    rounds: [
+      { line: 'Throw the ball! Catch it! We play ball!', emoji: '\u{26BD}' },
+      { line: 'Throw the bread! Quack, quack! We feed the ducks!', emoji: '\u{1F986}' },
+      { line: 'Lick your ice cream! Yum, yum!', emoji: '\u{1F366}' },
+      { line: 'Open the book! We read a book!', emoji: '\u{1F4D6}' },
+      { line: 'Big hug! I love you, Dad!', emoji: '\u{1F917}' },
+    ],
+  },
+  {
+    // Signature game (new): each duck carries a photo of the story; the story sentence picks the duck.
+    id: 'u5l5-duck-feed', kind: 'duck-feed', bg: bgU5L5DucksA, who: 'pip',
+    teacher: 'Feed the Ducks! Pip says what he and Dad do. The student taps the duck with that photo — the bread flies to it. Say the sentence together.',
+    ducks: [
+      { label: 'play ball', name: 'playing ball', img: bgU5L5BallC, at: [50, 50], w: 60, aspect: U5L5_W, x: 18, y: 66 },
+      { label: 'ice cream', name: 'the ice cream', img: bgU5L5IceCream, at: [50, 45], w: 55, aspect: U5L5_W, x: 40, y: 76 },
+      { label: 'book', name: 'the book', img: bgU5L5BookB, at: [50, 50], w: 60, aspect: U5L5_W, x: 62, y: 70 },
+      { label: 'ducks', name: 'the ducks', img: bgU5L5DucksC, at: [50, 50], w: 60, aspect: U5L5_W, x: 84, y: 76 },
+    ],
+    rounds: [
+      { duck: 0, line: 'We play ball! Which duck has it?', reply: 'Yes! We play ball!' },
+      { duck: 2, line: 'We read a book! Which duck has it?', reply: 'Yes! We read a book!' },
+      { duck: 1, line: 'We eat ice cream! Which duck has it?', reply: 'Yes! We eat ice cream! Yum, yum!' },
+      { duck: 3, line: 'We feed the ducks! Which duck has it?', reply: 'Yes! We feed the ducks! Quack, quack!' },
+    ],
+    doneLine: 'All the ducks are happy! Quack, quack!',
+  },
+  {
+    id: 'u5l5-what-do-we-do', kind: 'join-stage', bg: bgU5L5DucksC, teacher: 'Pip asks. The student answers with the whole sentence.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look! What do we do?', bubble: 'right' },
+      { who: 'student', line: 'You feed the ducks!', bubble: 'right' },
+      { who: 'pip', line: 'Yes! And with the red ball?', bubble: 'right' },
+      { who: 'student', line: 'You play ball!', bubble: 'right' },
+    ],
+  },
+
+  /* 8-10 Story check, hide and seek */
+  {
+    id: 'u5l5-story-order', kind: 'story-order', bg: bgU5L5Night, who: 'pip', teacher: 'Put my day in order, then tell it: "We play ball. We feed the ducks…"',
+    frames: [
+      { img: bgU5L5BallC, caption: 'We play ball.', who: 'pip' },
+      { img: bgU5L5DucksC, caption: 'We feed the ducks.', who: 'pip' },
+      { img: bgU5L5IceCream, caption: 'We eat ice cream.', who: 'pip' },
+      { img: bgU5L5BookB, caption: 'We read a book.', who: 'pip' },
+    ],
+  },
+  {
+    id: 'u5l5-true-or-not', kind: 'tick-cross', bg: bgU5L5Home, who: 'pip',
+    teacher: 'Look and listen. Is it right? Tap ✓ or ✗.',
+    rounds: [
+      { img: bgU5L5BallC, sentence: 'We play ball.', isTrue: true },
+      { img: bgU5L5IceCream, sentence: 'We read a book.', isTrue: false },
+      { img: bgU5L5DucksC, sentence: 'We feed the ducks.', isTrue: true },
+      { img: bgU5L5BookB, sentence: 'We eat ice cream.', isTrue: false },
+    ],
+  },
+  {
+    // Hide and seek with Dad: every spot hides a D word until Dad is found.
+    id: 'u5l5-where-dad', kind: 'lift-flap', bg: bgU5L5Home, who: 'pip',
+    teacher: 'Hide and seek! The child asks each question ("Is he behind the door?") and taps to look. Say the D word that pops out: dog, doll, duck!',
+    question: 'Where is my dad?',
+    notYet: 'Not yet! Look in the other places first!',
+    spots: [
+      { x: 14, y: 52, size: 15, ask: 'Is he behind the door?', reveal: "No! It's a dog! D, d, dog!", under: { img: itemDog, label: 'dog' } },
+      { x: 38, y: 74, size: 14, ask: 'Is he in the toy box?', reveal: "No! It's a doll! D, d, doll!", under: { img: itemDoll, label: 'doll' } },
+      { x: 62, y: 46, size: 14, ask: 'Is he behind the curtain?', reveal: "No! It's a duck! D, d, duck!", under: { img: itemDuck, label: 'duck' } },
+      { x: 84, y: 62, size: 18, ask: 'Is he behind the armchair?', reveal: "Yes! Here he is! It's Dad!", target: true, under: { img: famDad, label: 'Dad' } },
+    ],
+  },
+
+  /* 11-13 Phonics: D says /d/ */
+  {
+    id: 'u5l5-model-d', kind: 'sound-model', bg: bgU5L5Home, who: 'pip', letter: 'D', phoneme: '/d/', sound: 'duh',
+    teacher: 'D says /d/ — Dad, duck, door!',
+    anchors: [
+      { word: 'Dad', emoji: '\u{1F468}', img: famDad },
+      { word: 'duck', emoji: '\u{1F986}', img: itemDuck },
+      { word: 'door', emoji: '\u{1F6AA}', img: itemDoor },
+    ],
+  },
+  { id: 'u5l5-trace-d', kind: 'trace', bg: bgU5L5Home, who: 'pip', letter: 'D', phoneme: '/d/', word: 'Dad', speakWord: false, teacher: 'Trace the big D with your finger! /d/ /d/ Dad!' },
+  {
+    id: 'u5l5-blocks', kind: 'alphabet-blocks', bg: bgU5L5Home, teacher: 'Letter Blocks! Tap the sound, then stack the word!', letters: ['D', 'A', 'O', 'G', 'U', 'C', 'K'],
+    tapRounds: [{ letter: 'D' }, { letter: 'G' }, { letter: 'D' }, { letter: 'K' }],
+    words: [
+      { word: 'DAD', emoji: '\u{1F468}' },
+      { word: 'DOG', emoji: '\u{1F436}' },
+      { word: 'DUCK', emoji: '\u{1F986}' },
+    ],
+  },
+
+  /* 14 Perform */
+  {
+    id: 'u5l5-perform', kind: 'join-stage', bg: bgU5L5Night, teacher: 'Show time! The student tells Pip\'s day with Dad (or their own day with a grown-up). Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Your turn! What do you do with your dad, or your mom?', bubble: 'right' },
+      { who: 'student', line: 'We play ball! We read a book!', bubble: 'right' },
+      { who: 'pip', line: 'Lovely! And what do you say at night?', bubble: 'right' },
+      { who: 'student', line: 'Good night! I love you!', bubble: 'right' },
+    ],
+  },
+
+  /* 15-16 Sticker + Home Mission */
+  {
+    id: 'u5l5-sticker', kind: 'sticker-reward', bg: bgU5L5Hug, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Quack, quack! Here is a duck sticker for you!', sticker: { img: itemDuck, label: 'Duck' },
+  },
+  {
+    id: 'u5l5-home-mission', kind: 'home-mission', bg: bgU5L5Night, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: do one fun thing with your dad or your mom, and say: We play ball! I love you!',
+    parentNote: 'Do one small thing together today — play ball, read a book, have a snack. Your child says what you do: "We play ball!", "We read a book!" At bedtime, a hug and "Good night! I love you!"',
+    steps: [
+      { emoji: '\u{26BD}', img: bgU5L5BallC, say: 'We play ball' },
+      { emoji: '\u{1F4D6}', img: bgU5L5BookB, say: 'We read a book' },
+      { emoji: '\u{1F917}', img: bgU5L5Hug, say: 'I love you!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u5l5-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU5L5Gate, who: 'pip',
+    teacher: 'Extra time: Park Moves! Do each move with Pip.',
+    rounds: [
+      { line: 'Walk to the park with Dad! Walk, walk!', emoji: '\u{1F6B6}' },
+      { line: 'Waddle like a duck! Quack, quack!', emoji: '\u{1F986}' },
+      { line: 'Drum on your knees! D, d, drum!', emoji: '\u{1F941}' },
+      { line: 'Stretch and yawn! Good night!', emoji: '\u{1F319}' },
+      { line: 'Freeze! Big hug!', emoji: '\u{1F917}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u5l5-spin', kind: 'spin-wheel', bg: bgU5L5DucksC, title: '',
+    teacher: 'Extra time: have the student spin, then point and count the ducks, or say "We feed the ducks!" Or tap a number.',
+    items: [
+      { label: 'One duck!', left: '20%', top: '70%' },
+      { label: 'Two ducks!', left: '35%', top: '75%' },
+      { label: 'Three ducks!', left: '50%', top: '70%' },
+      { label: 'Four ducks!', left: '65%', top: '75%' },
+    ],
+    wheelAt: { left: '86%', top: '30%' },
+  },
+
+  /* Goodbye */
+  {
+    id: 'u5l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u5l5-finale', kind: 'finale', bg: bgU5L5Night, who: 'pip', line: 'We play ball, we feed the ducks, we eat ice cream and we read a book. I love you, Dad! Goodbye, friend!' },
 ];
 
 /* =============================================================================

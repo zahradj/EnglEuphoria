@@ -404,6 +404,13 @@ const UNIT1_EXTRACTORS = {
     [s.who, 'Do you remember? Listen and find it!'], [s.who, 'Try again!'], [s.who, 'You remember! Great job!'],
     ...(s.items ?? []).flatMap((it) => [[s.who, it.say], [s.who, `Yes! ${it.word.charAt(0).toUpperCase() + it.word.slice(1)}!`]]),
   ],
+  // Mirror DuckFeedScene.tsx's duckFeedLines().
+  'duck-feed': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+    ...(s.ducks ?? []).map((d) => [s.who, `No, that's ${d.name}! Try again!`]),
+    [s.who, 'Quack, quack! Thank you!'],
+    [s.who, s.doneLine],
+  ],
   // Mirror FamilyTreeScene.tsx's familyTreeLines().
   'family-tree': (s) => {
     const rowWords = ['at the top', 'in the middle', 'at the bottom'];

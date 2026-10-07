@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '5-5': { settings: ['duck pond', 'home at night'], look: "a sunny park with a duck pond, a bench and an ice-cream cone, then Pip's warm living room and bedroom at night; just Pip and Dad (green cardigan), four little ducks; a story told as a flip-book film" },
   '5-4': { settings: ['hilltop oak'], look: "a sunny green hill with one giant oak tree: the whole fox family (Grandma, Grandpa, Mom, Dad, brother, Pip, sister, baby) at a picnic under it; the empty oak with three branch levels becomes the family tree" },
   '5-3': { settings: ['cottage'], look: "Grandma and Grandpa's cozy cottage: a red sofa by the fireplace, a warm kitchen on baking day, a garden with a little wooden gate; Grandma (grey bun, glasses, lavender cardigan) and Grandpa (moustache, glasses, flat cap)" },
   '5-2': { settings: ['backyard'], look: "sunny backyard of Pip's home: wooden fence, a tree swing, a picnic blanket; family photo day with Pip's big brother, little sister and the baby" },
@@ -185,6 +186,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '5-5': {
+    sources: ['"Just Me and My Dad"-style family-day picture books (one shared activity per page, read aloud)', 'Khan Academy Kids / Lingokids ("listen and feed" play, calm story retell)', 'Cambridge (Pre A1 Starters listen and point; look and tick)', 'Sesame Workshop (model → pause → answer)'],
+    mechanics: [
+      'the family-day picture book → a stills film "My Day with Dad": two pictures per action flip like a cartoon, karaoke action words, "What do we do?" with a pause for the child',
+      'listen-and-feed play → Feed the Ducks: each duck carries a photo of the story, Pip says the story sentence, the child feeds that duck',
+      'peekaboo lift-the-flap books → Hide and Seek with Dad: "Is he behind the door?" — a D word (dog, doll, duck) pops out until Dad is found',
+    ],
+    betterThan: [
+      'every game answer is a whole sentence from the story ("We read a book!"), so the child retells the story while playing, with the story\'s own pictures',
+      'the film asks the child before Pip answers (planned pause), then the games check the same four sentences by listening (ducks, tick or cross) and by order (story order)',
+      'calm by design: wrong ducks are named back ("No, that\'s the book!"), the right duck glows after two tries, no clock',
     ],
   },
   '5-4': {
