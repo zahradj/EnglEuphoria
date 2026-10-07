@@ -23,13 +23,19 @@ export default function HomeworkPage() {
       if (!assignmentId) return;
       const { data, error } = await supabase
         .from('homework_assignments')
-        .select('content, title')
+        .select('content, title, source')
         .eq('id', assignmentId)
         .maybeSingle();
       if (cancelled) return;
       if (error) { setError(error.message); return; }
       if (!data?.content) { setError('Homework content not found.'); return; }
       const c = data.content as any;
+      // The old auto-generated 3-activity homework is retired: a student who opens an old link is sent to
+      // their Homework Quests instead of the retired format.
+      if (data.source === 'lep1-auto' && c?.type !== 'quest') {
+        navigate('/dashboard', { replace: true });
+        return;
+      }
       // Gamified quest homework: content = { type: 'quest', questId }.
       if (c?.type === 'quest' && getHomeworkQuest(c.questId)) { setContent(c); return; }
       if (!c.activity_1_recognition || !c.activity_2_syntax || !c.activity_3_production) {

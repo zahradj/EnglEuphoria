@@ -34,6 +34,11 @@ export interface HomeworkAssignmentWithSubmission extends HomeworkAssignment {
   submission?: HomeworkSubmission;
 }
 
+/** False for the retired auto-generated homework (old 3-activity format made by 'lep1-auto'); true for quests and teacher-sent work. */
+export function isPlayableForStudent(a: { source?: string | null; content?: any }): boolean {
+  return !(a.source === 'lep1-auto' && a.content?.type !== 'quest');
+}
+
 class HomeworkService {
   async getStudentAssignments(studentId: string): Promise<HomeworkAssignmentWithSubmission[]> {
     try {
@@ -68,8 +73,12 @@ class HomeworkService {
 
       if (submissionsError) throw submissionsError;
 
-      // Combine assignments with submissions
-      const assignmentsWithSubmissions = (assignments || []).map(assignment => ({
+      // Combine assignments with submissions. The old auto-generated 3-activity homework
+      // ('lep1-auto' without a quest) is retired: students only ever get Homework Quests (or
+      // homework their teacher sent on purpose).
+      const assignmentsWithSubmissions = (assignments || [])
+        .filter(isPlayableForStudent)
+        .map(assignment => ({
         ...assignment,
         submission: submissions?.find(s => s.assignment_id === assignment.id)
       }));
