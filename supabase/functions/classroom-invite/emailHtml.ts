@@ -43,6 +43,8 @@ export interface ClassroomInviteEmailProps {
   hub: Hub
   /** A trial lesson (the student's first class, where the teacher finds their level). */
   isTrial?: boolean
+  /** Weekly booking: how many lessons are booked in all (one every week). Omitted for a single lesson. */
+  weeklyCount?: number
 }
 
 export function renderClassroomInviteHtml(props: ClassroomInviteEmailProps): string {
@@ -77,6 +79,9 @@ export function renderClassroomInviteHtml(props: ClassroomInviteEmailProps): str
         <p style="font-size:14px;color:${palette.text};font-weight:700;margin:0 0 4px;">${props.isTrial ? 'Trial lesson time' : 'Lesson time'}</p>
         <p style="font-size:14px;color:#374151;line-height:1.6;margin:0;">${lessonDateLabel || 'TBD'}${lessonTimeLabel ? ` at ${lessonTimeLabel}` : ''}</p>
       </div>
+      ${props.weeklyCount && props.weeklyCount > 1 ? `<p style="font-size:14px;color:#37474F;line-height:1.7;margin:0 0 24px;">
+        This is a weekly class: ${props.weeklyCount} lessons are booked, one every week at the same time. All of them will also appear on your dashboard.
+      </p>` : ''}
       <div style="text-align:center;margin:24px 0;">
         <a href="${joinLink}" style="background:${palette.primary};color:#ffffff;font-size:15px;font-weight:600;border-radius:8px;padding:14px 32px;text-decoration:none;display:inline-block;">Join Your Classroom</a>
       </div>
@@ -100,6 +105,9 @@ export function renderClassroomInviteText(props: ClassroomInviteEmailProps): str
     `Hi ${props.studentName},`,
     '',
     `${props.teacherName} has scheduled your English ${props.isTrial ? 'trial lesson' : 'lesson'}${props.lessonDateLabel ? ` for ${props.lessonDateLabel}` : ''}${props.lessonTimeLabel ? ` at ${props.lessonTimeLabel}` : ''}.`,
+    ...(props.weeklyCount && props.weeklyCount > 1
+      ? ['', `This is a weekly class: ${props.weeklyCount} lessons are booked, one every week at the same time. All of them will also appear on your dashboard.`]
+      : []),
     '',
     `Join your classroom: ${props.joinLink}`,
     '',

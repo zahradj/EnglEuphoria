@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, Mail, Copy, Check, UserPlus } from 'lucide-react';
-import { format } from 'date-fns';
+import { addDays, addMinutes, format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { useTeacherStudents } from '@/hooks/useTeacherStudents';
 import { supabase } from '@/integrations/supabase/client';
@@ -41,22 +41,16 @@ const HUB_OPTIONS: { id: HubChoice; label: string; duration: 30 | 60 }[] = [
   { id: 'success', label: 'Success', duration: 60 },
 ];
 
-/** An upcoming open slot of this teacher, offered as a one-tap way to fill the date and time. */
-interface OpenSlotChoice {
-  id: string;
-  start: Date;
-  duration: 30 | 60;
-  hub: HubChoice;
-}
+/** One lesson, or the same lesson every week (booked up front, so each one shows on the student's dashboard). */
+type BookingMode = 'single' | 'weekly';
+const WEEK_CHOICES = [4, 8, 12] as const;
 
-const MAX_SLOT_CHOICES = 12;
-
-const hubFromRow = (raw: string | null, duration: 30 | 60): HubChoice => {
-  const v = String(raw ?? '').toLowerCase();
-  if (v.includes('playground')) return 'playground';
-  if (v.includes('success') || v.includes('professional')) return 'success';
-  if (v.includes('academy')) return 'academy';
-  return duration === 30 ? 'playground' : 'academy';
+/** Today's date, and the next half hour, in the teacher's own clock - what a new invite starts from. */
+const startingPoint = () => {
+  const now = new Date();
+  const next = addMinutes(now, 30 - (now.getMinutes() % 30));
+  next.setSeconds(0, 0);
+  return { date: format(now, 'yyyy-MM-dd'), time: format(next, 'HH:mm') };
 };
 
 export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
@@ -69,13 +63,17 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
   const { toast } = useToast();
   const [studentEmail, setStudentEmail] = useState('');
   const [studentName, setStudentName] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
+  const [date, setDate] = useState(() => startingPoint().date);
+  const [time, setTime] = useState(() => startingPoint().time);
+  const [mode, setMode] = useState<BookingMode>('single');
+  const [weeks, setWeeks] = useState<(typeof WEEK_CHOICES)[number]>(12);
   const [selectedHub, setSelectedHub] = useState<HubChoice>(hub);
   const [lessonType, setLessonType] = useState<'regular' | 'trial'>('regular');
   const [busy, setBusy] = useState(false);
   const [joinLink, setJoinLink] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  // What the server says about the later weekly lessons (shown on the confirmation screen).
+  const [weeklySummary, setWeeklySummary] = useState<{ wanted: number; booked: number; failed: number; known: boolean } | null>(null);
   // What this email belongs to (asked of the server once the address looks complete).
   const [who, setWho] = useState<EmailLookup | null>(null);
   const [childId, setChildId] = useState<string | null>(null);
@@ -122,54 +120,16 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
     if (open) setSelectedHub(hub);
   }, [open, hub]);
 
-  // ── One-tap pickers: the teacher's own students, and their open slots ──
+  // ── One-tap picker: the teacher's own students ──
   const { students, loading: studentsLoading } = useTeacherStudents();
-  const [openSlots, setOpenSlots] = useState<OpenSlotChoice[]>([]);
-  const [slotsLoading, setSlotsLoading] = useState(false);
-  const autoFilled = useRef(false);
 
-  const applySlot = (slot: OpenSlotChoice) => {
-    setDate(format(slot.start, 'yyyy-MM-dd'));
-    setTime(format(slot.start, 'HH:mm'));
-    setSelectedHub(slot.hub);
-    setPlaygroundHour(slot.hub === 'playground' && slot.duration === 60);
-  };
-
+  // Each time the dialog opens, start from today and the next half hour (the teacher can change both).
   useEffect(() => {
-    if (!open || !teacherId) return;
-    autoFilled.current = false;
-    let cancelled = false;
-    setSlotsLoading(true);
-    (async () => {
-      const { data, error } = await supabase
-        .from('teacher_availability')
-        .select('id, start_time, duration, hub_specialty')
-        .eq('teacher_id', teacherId)
-        .eq('is_booked', false)
-        .gte('start_time', new Date().toISOString())
-        .order('start_time', { ascending: true })
-        .limit(MAX_SLOT_CHOICES);
-      if (cancelled) return;
-      setSlotsLoading(false);
-      if (error || !data) return; // the pickers are a convenience - typing a date and time still works
-      setOpenSlots(
-        data.map((r) => {
-          const dur: 30 | 60 = (r.duration ?? 30) >= 55 ? 60 : 30;
-          return { id: r.id, start: new Date(r.start_time), duration: dur, hub: hubFromRow(r.hub_specialty, dur) };
-        }),
-      );
-    })();
-    return () => { cancelled = true; };
-  }, [open, teacherId]);
-
-  // Fill the date and time automatically with the next open slot, unless the teacher already typed one.
-  useEffect(() => {
-    if (!open || autoFilled.current || openSlots.length === 0) return;
-    autoFilled.current = true;
-    if (date || time) return;
-    applySlot(openSlots[0]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, openSlots]);
+    if (!open) return;
+    const start = startingPoint();
+    setDate(start.date);
+    setTime(start.time);
+  }, [open]);
 
   const pickedStudentId =
     students.find((s) => s.email.toLowerCase() === studentEmail.trim().toLowerCase())?.id ?? '';
@@ -183,8 +143,11 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
   const reset = () => {
     setStudentEmail('');
     setStudentName('');
-    setDate('');
-    setTime('');
+    const start = startingPoint();
+    setDate(start.date);
+    setTime(start.time);
+    setMode('single');
+    setWeeks(12);
     setSelectedHub(hub);
     setLessonType('regular');
     setPlaygroundHour(false);
@@ -192,12 +155,20 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
     setChildId(null);
     setJoinLink(null);
     setCopied(false);
+    setWeeklySummary(null);
   };
 
   const handleClose = (next: boolean) => {
     if (!next) reset();
     onOpenChange(next);
   };
+
+  // Weekly only applies to a regular lesson; a trial is always a single class.
+  const weeklyOn = mode === 'weekly' && lessonType !== 'trial';
+  const weeklyDayLabel = (() => {
+    const d = new Date(`${date}T12:00`);
+    return Number.isNaN(d.getTime()) ? 'week' : format(d, 'EEEE');
+  })();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -214,6 +185,15 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
       toast({ title: 'Invalid date/time', variant: 'destructive' });
       return;
     }
+    if (scheduledAt.getTime() < Date.now()) {
+      toast({ title: 'That time has already passed', description: 'Pick a time later today, or another day.', variant: 'destructive' });
+      return;
+    }
+    // Every later lesson of a weekly booking, exactly one week apart on the teacher's own clock
+    // (addDays keeps the local hour across a clock change).
+    const laterLessons = weeklyOn
+      ? Array.from({ length: weeks - 1 }, (_, i) => addDays(scheduledAt, 7 * (i + 1)).toISOString())
+      : [];
 
     setBusy(true);
     try {
@@ -236,6 +216,7 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
           hub: selectedHub,
           lessonType,
           childId: childId ?? undefined,
+          weeklyScheduledAt: laterLessons.length > 0 ? laterLessons : undefined,
         },
         headers: { Authorization: `Bearer ${accessToken}` },
       });
@@ -253,12 +234,37 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
       if (data?.error) throw new Error(data.error);
 
       setJoinLink(data.joinLink);
-      toast({
-        title: lessonType === 'trial' ? 'Trial lesson booked ✅' : 'Lesson booked ✅',
-        description: data.emailSent
-          ? `An invite email was sent to ${studentEmail}.`
-          : `Booked, but the invite email could not be sent — share the link below manually.`,
-      });
+      const emailNote = data.emailSent
+        ? `An invite email was sent to ${studentEmail}.`
+        : `The invite email could not be sent — share the link below manually.`;
+      if (laterLessons.length > 0) {
+        // An older server ignores the weekly dates and books just the first lesson - say so rather
+        // than let the teacher believe the whole series is booked.
+        const known = typeof data.weeklyBooked === 'number';
+        const booked = known ? data.weeklyBooked : 0;
+        const failed = known && typeof data.weeklyFailed === 'number' ? data.weeklyFailed : 0;
+        setWeeklySummary({ wanted: laterLessons.length, booked, failed, known });
+        if (!known) {
+          toast({
+            title: 'Only the first lesson was booked',
+            description: 'The booking service has not been updated for weekly lessons yet. ' + emailNote,
+            variant: 'destructive',
+          });
+        } else if (booked === laterLessons.length) {
+          toast({ title: `${booked + 1} weekly lessons booked ✅`, description: emailNote });
+        } else {
+          toast({
+            title: `${booked + 1} of ${laterLessons.length + 1} weekly lessons booked`,
+            description: `${failed} could not be booked. ${emailNote}`,
+            variant: 'destructive',
+          });
+        }
+      } else {
+        toast({
+          title: lessonType === 'trial' ? 'Trial lesson booked ✅' : 'Lesson booked ✅',
+          description: emailNote,
+        });
+      }
       onInvited?.();
     } catch (err: any) {
       toast({ title: 'Could not create invite', description: err?.message || 'Please try again.', variant: 'destructive' });
@@ -368,32 +374,6 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
                 onChange={(e) => setStudentName(e.target.value)}
               />
             </div>
-            {(slotsLoading || openSlots.length > 0) && (
-              <div className="space-y-2">
-                <Label>Your open slots — tap one to fill the date and time</Label>
-                {slotsLoading && openSlots.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">Loading your open slots…</p>
-                ) : (
-                  <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Open slots">
-                    {openSlots.map((slot) => {
-                      const active = date === format(slot.start, 'yyyy-MM-dd') && time === format(slot.start, 'HH:mm');
-                      return (
-                        <button
-                          key={slot.id}
-                          type="button"
-                          role="radio"
-                          aria-checked={active}
-                          onClick={() => applySlot(slot)}
-                          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${active ? 'bg-primary text-primary-foreground border-primary' : 'bg-background text-foreground border-border hover:bg-muted'}`}
-                        >
-                          {format(slot.start, 'EEE d MMM · HH:mm')} · {slot.duration} min
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
                 <Label htmlFor="lesson-date">Date</Label>
@@ -403,6 +383,51 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
                 <Label htmlFor="lesson-time">Time</Label>
                 <Input id="lesson-time" type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Booking</Label>
+              <div className="inline-flex rounded-lg bg-muted p-1" role="radiogroup" aria-label="One lesson or every week">
+                {([
+                  { id: 'single', label: 'One lesson' },
+                  { id: 'weekly', label: 'Every week' },
+                ] as const).map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={weeklyOn ? opt.id === 'weekly' : opt.id === 'single'}
+                    disabled={opt.id === 'weekly' && lessonType === 'trial'}
+                    onClick={() => setMode(opt.id)}
+                    className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all disabled:opacity-50 ${(weeklyOn ? opt.id === 'weekly' : opt.id === 'single') ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+              {lessonType === 'trial' && (
+                <p className="text-xs text-muted-foreground">A trial lesson is a single class. Book a regular lesson to repeat it weekly.</p>
+              )}
+              {weeklyOn && (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground">For</span>
+                    {WEEK_CHOICES.map((n) => (
+                      <button
+                        key={n}
+                        type="button"
+                        onClick={() => setWeeks(n)}
+                        className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${weeks === n ? 'bg-primary text-primary-foreground border-primary' : 'bg-background text-foreground border-border hover:bg-muted'}`}
+                      >
+                        {n} weeks
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {weeks} lessons are booked now, one every {weeklyDayLabel} at {time || 'the chosen time'}, starting {date || 'on the chosen date'}.
+                    Each one shows on the student's dashboard.
+                  </p>
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label>Lesson type</Label>
@@ -472,6 +497,16 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
           </form>
         ) : (
           <div className="space-y-4">
+            {weeklySummary && (
+              <p className={`text-sm ${weeklySummary.known && weeklySummary.failed === 0 ? 'text-foreground' : 'text-destructive'}`}>
+                {!weeklySummary.known
+                  ? 'Only the first lesson was booked — the weekly booking is not available yet.'
+                  : weeklySummary.failed === 0
+                    ? `${weeklySummary.booked + 1} lessons booked, one every ${weeklyDayLabel} at ${time}. They all show on the student's dashboard.`
+                    : `${weeklySummary.booked + 1} of ${weeklySummary.wanted + 1} lessons booked; ${weeklySummary.failed} could not be booked.`}
+                {' '}The link below opens the first lesson.
+              </p>
+            )}
             <div className="rounded-lg border bg-muted/40 p-3 text-sm break-all">{joinLink}</div>
             <div className="flex gap-2">
               <Button type="button" variant="outline" className="flex-1" onClick={handleCopy}>
