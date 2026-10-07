@@ -82,7 +82,7 @@ export const EnhancedCalendarTab = ({ teacherId }: EnhancedCalendarTabProps) => 
           <Badge variant="outline" className="capitalize">
             {isPlayground
               ? '🎪 Playground · 30-min slots only'
-              : `${hubKind} · 60-min slots only`}
+              : `${hubKind} · 60-min or 30-min slots`}
           </Badge>
         </div>
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">

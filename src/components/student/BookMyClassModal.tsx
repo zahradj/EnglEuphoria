@@ -14,6 +14,7 @@ import { usePackageValidation } from '@/hooks/usePackageValidation';
 import { useNavigate } from 'react-router-dom';
 import { useThemeMode } from '@/hooks/useThemeMode';
 import { cn } from '@/lib/utils';
+import { lessonOptions, matchingOption, creditsForLesson, lessonLengthLabel, LESSON_LENGTHS, type LessonMinutes } from '@/lib/booking/lessonSlots';
 import confetti from 'canvas-confetti';
 import { mergeAdjacentSlots, MergedSlot } from '@/utils/slotMerger';
 
@@ -44,7 +45,7 @@ const HUB_CONFIG = {
     duration: 30,
     icon: '🌈',
     headerBg: 'from-amber-400 via-orange-400 to-red-400',
-    description: 'Quick 30-minute fun sessions — half price!',
+    description: 'Fun lessons — 30 minutes or one hour',
     bookLabel: 'Book a Class',
   },
   academy: {
@@ -52,7 +53,7 @@ const HUB_CONFIG = {
     duration: 60,
     icon: '📘',
     headerBg: 'from-indigo-800 via-blue-800 to-purple-800',
-    description: 'Deep 60-minute learning sessions',
+    description: 'Focused lessons — 30 minutes or one hour',
     bookLabel: 'Book a Slot',
   },
   professional: {
@@ -60,7 +61,7 @@ const HUB_CONFIG = {
     duration: 60,
     icon: '🎯',
     headerBg: 'from-emerald-700 via-green-700 to-teal-600',
-    description: 'Professional 60-minute coaching',
+    description: 'Professional coaching — 30 minutes or one hour',
     bookLabel: 'Schedule a Session',
   },
 };
@@ -92,43 +93,19 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
 
   const hasCredits = totalCredits > 0 || trialAvailable;
   const config = HUB_CONFIG[selectedHub];
-  // Slot length is the hub's building block (Playground = 30). A Playground
-  // student can also book a one-hour lesson: two back-to-back 30-minute slots,
-  // booked atomically, costing two credits.
-  const slotDuration = config.duration;
-  const [playgroundMinutes, setPlaygroundMinutes] = useState<30 | 60>(30);
-  const lessonMinutes = selectedHub === 'playground' ? playgroundMinutes : slotDuration;
-  const creditsPerLesson = selectedHub === 'playground' && lessonMinutes === 60 ? 2 : 1;
+  // One rule for every hub: a credit is 30 minutes. The student picks a 30-minute
+  // lesson (1 credit) or a 60-minute lesson (2 credits: one 60-minute slot or two
+  // back-to-back 30-minute slots, booked atomically). See lib/booking/lessonSlots.ts.
+  // A student with a free trial starts on the 30-minute lesson (the trial is always 30 min).
+  const [chosenMinutes, setChosenMinutes] = useState<LessonMinutes>(30);
+  const lessonMinutes: LessonMinutes = chosenMinutes;
+  const creditsPerLesson = creditsForLesson(lessonMinutes);
 
-  // Compute display slots based on hub selection
-  const displaySlots: (TimeSlot & { sourceSlotIds?: string[] })[] = useMemo(() => {
-    // Strict per-hub duration: Playground = 30, Academy/Success = 60
-    const filtered = rawSlots.filter(s => s.duration === slotDuration);
-    if (selectedHub === 'playground' && lessonMinutes === 60) {
-      // Every start time that has a back-to-back 30-minute slot right after it.
-      const byTeacher = new Map<string, TimeSlot[]>();
-      for (const s of filtered) {
-        byTeacher.set(s.teacherId, [...(byTeacher.get(s.teacherId) ?? []), s]);
-      }
-      const pairs: (TimeSlot & { sourceSlotIds?: string[] })[] = [];
-      for (const list of byTeacher.values()) {
-        for (const a of list) {
-          const b = list.find(x => x.startTime.getTime() === a.endTime.getTime());
-          if (b) {
-            pairs.push({
-              ...a,
-              id: `${a.id}_${b.id}`,
-              endTime: b.endTime,
-              duration: 60,
-              sourceSlotIds: [a.id, b.id],
-            });
-          }
-        }
-      }
-      return pairs.sort((x, y) => x.startTime.getTime() - y.startTime.getTime());
-    }
-    return filtered.map(s => ({ ...s, sourceSlotIds: [s.id] }));
-  }, [rawSlots, slotDuration, selectedHub, lessonMinutes]);
+  // The bookable start times for the chosen length
+  const displaySlots: (TimeSlot & { sourceSlotIds?: string[] })[] = useMemo(
+    () => lessonOptions(rawSlots, lessonMinutes),
+    [rawSlots, lessonMinutes],
+  );
 
   // Allowed teacher hub_roles for this student's hub
   const allowedHubRoles = useMemo<string[]>(() => {
@@ -181,7 +158,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
       let query = supabase
         .from('teacher_availability')
         .select('id, teacher_id, start_time, end_time, duration, is_available, is_booked, hub_specialty')
-        .eq('duration', slotDuration)
+        .in('duration', [30, 60])
         .eq('is_available', true)
         .eq('is_booked', false)
         .gte('start_time', nowUtcIso)
@@ -229,7 +206,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
           teacherName: teacherMap[s.teacher_id] || 'Teacher',
           startTime: new Date(s.start_time),
           endTime: new Date(s.end_time),
-          duration: s.duration || slotDuration,
+          duration: s.duration || 30,
           isAvailable: s.is_available && !s.is_booked,
         }));
 
@@ -240,7 +217,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
     } finally {
       setLoadingSlots(false);
     }
-  }, [allowedHubRoles, slotDuration, teacherId, selectedHub]);
+  }, [allowedHubRoles, teacherId, selectedHub]);
 
   useEffect(() => {
     if (isOpen) {
@@ -339,25 +316,27 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
       if (useRecurring) {
         for (let week = 1; week < repeatWeeks; week++) {
           const targetStart = new Date(slot.startTime.getTime() + week * 7 * 24 * 60 * 60 * 1000);
-          const windowStart = new Date(targetStart.getTime() - 60 * 1000).toISOString();
-          const windowEnd = new Date(targetStart.getTime() + 60 * 1000).toISOString();
-
-          const wantedStarts = [targetStart.getTime()];
-          if (creditsPerLesson === 2) wantedStarts.push(targetStart.getTime() + slotDuration * 60 * 1000);
           const { data: matches } = await supabase
             .from('teacher_availability')
-            .select('id, start_time')
+            .select('id, teacher_id, start_time, end_time, duration')
             .eq('teacher_id', slot.teacherId)
-            .eq('duration', slotDuration)
+            .in('duration', [30, 60])
             .eq('is_available', true)
             .eq('is_booked', false)
-            .gte('start_time', new Date(wantedStarts[0] - 60 * 1000).toISOString())
-            .lte('start_time', new Date(wantedStarts[wantedStarts.length - 1] + 60 * 1000).toISOString());
+            .gte('start_time', new Date(targetStart.getTime() - 60 * 1000).toISOString())
+            .lte('start_time', new Date(targetStart.getTime() + 31 * 60 * 1000).toISOString());
 
-          const matchIds = wantedStarts
-            .map(t => (matches ?? []).find(m => Math.abs(new Date(m.start_time).getTime() - t) < 60 * 1000)?.id)
-            .filter(Boolean) as string[];
-          const match = matchIds.length === wantedStarts.length ? { ids: matchIds } : null;
+          const weekSlots: TimeSlot[] = (matches ?? []).map((m: any) => ({
+            id: m.id,
+            teacherId: m.teacher_id,
+            teacherName: slot.teacherName,
+            startTime: new Date(m.start_time),
+            endTime: new Date(m.end_time),
+            duration: m.duration,
+            isAvailable: true,
+          }));
+          const found = matchingOption(lessonOptions(weekSlots, lessonMinutes), slot.teacherId, targetStart.getTime());
+          const match = found ? { ids: found.sourceSlotIds } : null;
 
           if (!match) {
             skippedCount++;
@@ -480,25 +459,26 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
               </div>
             </div>
 
-            {/* Playground: choose a 30-minute lesson (1 credit) or a one-hour lesson (2 credits) */}
-            {selectedHub === 'playground' && !booked && (
+            {/* Every hub: choose a 30-minute lesson (1 credit) or a one-hour lesson (2 credits) */}
+            {!booked && (
               <div className="mb-5 flex flex-wrap items-center gap-2">
                 <span className="text-sm font-medium text-muted-foreground">Lesson length:</span>
-                {([30, 60] as const).map((m) => (
+                {LESSON_LENGTHS.map((m) => (
                   <button
                     key={m}
                     type="button"
-                    onClick={() => setPlaygroundMinutes(m)}
+                    onClick={() => setChosenMinutes(m)}
                     className={cn(
                       "px-4 py-2 rounded-full text-sm font-semibold border transition-colors",
-                      playgroundMinutes === m
+                      chosenMinutes === m
                         ? "bg-primary text-primary-foreground border-primary"
                         : "bg-background text-foreground border-border hover:bg-muted"
                     )}
                   >
-                    {m === 30 ? '30 min · 1 credit' : '1 hour · 2 credits'}
+                    {lessonLengthLabel(m)}
                   </button>
                 ))}
+                <span className="basis-full text-xs text-muted-foreground">1 credit = 30 minutes.{trialAvailable ? ' Your free trial lesson is the 30-minute one.' : ''}</span>
               </div>
             )}
 
