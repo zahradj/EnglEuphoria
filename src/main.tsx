@@ -3,6 +3,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import { installNoBrowserVoice } from './lib/noBrowserVoice'
+import { captureReferralCode } from './lib/referralCode'
 import './index.css'
 import './playground-blueprint/styles.css'
 // Creator Studio workspace fonts
@@ -26,6 +27,9 @@ import { reloadOnceForChunkError } from '@/lib/chunkLoadRecovery';
 // see chunkLoadRecovery.ts for why this exists (it was silently crashing
 // the homepage for real visitors and Googlebot, plus at least one live
 // classroom, before this was wired up).
+// A friend's referral link (?ref=code): remember it before anything redirects away.
+captureReferralCode();
+
 window.addEventListener('vite:preloadError', () => {
   reloadOnceForChunkError();
 });

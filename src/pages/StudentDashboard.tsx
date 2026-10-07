@@ -13,6 +13,7 @@ import { SystemId } from "@/types/multiTenant";
 import { DashboardRouter } from "@/components/student/dashboards/DashboardRouter";
 import { CreditAlertBanner } from "@/components/student/CreditAlertBanner";
 import { CreditBalance } from "@/components/student/CreditBalance";
+import { useClaimReferral } from "@/hooks/useClaimReferral";
 import { useStudentLevel, StudentLevel } from "@/hooks/useStudentLevel";
 import { useThemeMode } from "@/hooks/useThemeMode";
 import { PlacementGatekeeper } from "@/components/student/PlacementGatekeeper";
@@ -115,6 +116,7 @@ const StudentDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user, loading: authLoading, signOut } = useAuth();
+  useClaimReferral(user?.id);
   useHomeworkInbox(user?.id);
   const { t } = useTranslation();
   
