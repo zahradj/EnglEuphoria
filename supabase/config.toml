@@ -28,6 +28,8 @@ project_id = "dcoxpyzoqjvmuuygvlme"
     verify_jwt = false
   [functions.create-family-children]
     verify_jwt = false
+  [functions.become-family-account]
+    verify_jwt = false
   [functions.switch-profile]
     verify_jwt = false
   [functions.admin-delete-user]
