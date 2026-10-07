@@ -19,8 +19,9 @@ import { useChildSnapshots } from '@/hooks/useChildSnapshots';
 import { useFamilyCredits } from '@/hooks/useFamilyCredits';
 import { useClaimReferral } from '@/hooks/useClaimReferral';
 import { ReferralTab } from '@/components/student/tabs/ReferralTab';
-import { BuyForChildDialog, type FamilyLearner } from '@/components/parent/BuyForChildDialog';
+import type { FamilyLearner } from '@/components/parent/FamilyPackList';
 import { MoveCreditsDialog } from '@/components/parent/MoveCreditsDialog';
+import { FamilyLessonsPanel } from '@/components/parent/FamilyLessonsPanel';
 import '@/components/parent/family-dashboard.css';
 
 interface StudentRelationship {
@@ -53,7 +54,7 @@ const ParentDashboard: React.FC = () => {
   useClaimReferral(user?.id);
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [tab, setTab] = useState<string>('students');
-  const [buyFor, setBuyFor] = useState<FamilyLearner | null>(null);
+  const [focusId, setFocusId] = useState<string | null>(null);
   const [moveFrom, setMoveFrom] = useState<string | null>(null);
   const [moveOpen, setMoveOpen] = useState(false);
 
@@ -138,15 +139,17 @@ const ParentDashboard: React.FC = () => {
 
   const parentName = (user as any)?.full_name ?? (user as any)?.name ?? null;
 
-  const startBuy = (studentId: string) => {
-    const child = children.find((c) => c.studentId === studentId);
-    if (!child) return;
-    const hub = child.profile?.hub;
-    setBuyFor({
-      studentId,
-      name: child.name,
+  const learners: FamilyLearner[] = children.map((c) => {
+    const hub = c.profile?.hub;
+    return {
+      studentId: c.studentId,
+      name: c.name,
       hub: hub === 'academy' || hub === 'professional' ? hub : 'playground',
-    });
+    };
+  });
+  const startBuy = (studentId: string) => {
+    setFocusId(studentId);
+    document.getElementById('family-lessons')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   const startMove = (studentId: string) => {
     setMoveFrom(studentId);
@@ -208,6 +211,8 @@ const ParentDashboard: React.FC = () => {
           </TabsPrimitive.List>
 
           <TabsPrimitive.Content value="students" className="focus-visible:outline-none">
+            <div className="grid gap-6">
+            {learners.length > 0 && <FamilyLessonsPanel learners={learners} credits={familyCredits} focusId={focusId} />}
             <ParentStudentList
               children={children}
               onViewProgress={viewProgress}
@@ -216,6 +221,7 @@ const ParentDashboard: React.FC = () => {
               onMove={startMove}
               addChildAction={addChild('default')}
             />
+            </div>
           </TabsPrimitive.Content>
 
           <TabsPrimitive.Content value="calendar" className="focus-visible:outline-none">
@@ -243,7 +249,6 @@ const ParentDashboard: React.FC = () => {
           </TabsPrimitive.Content>
         </TabsPrimitive.Root>
 
-        <BuyForChildDialog learner={buyFor} onOpenChange={(open) => { if (!open) setBuyFor(null); }} />
         <MoveCreditsDialog
           open={moveOpen}
           onOpenChange={setMoveOpen}

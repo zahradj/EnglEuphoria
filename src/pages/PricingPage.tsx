@@ -47,6 +47,7 @@ export default function PricingPage() {
         .from('credit_packs')
         .select('id, name, student_level, session_count, price_eur, original_price_eur, savings_eur, sort_order')
         .eq('is_active', true)
+        .eq('family_only', false)
         .order('sort_order', { ascending: true });
       if (error) {
         console.error('Failed to load credit packs:', error);
