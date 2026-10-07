@@ -10,7 +10,9 @@ import type { IncidentFlag } from './incidentFlags';
 import { getClassroomHubTheme, type ClassroomHubKey } from '@/components/teacher/classroom/hubClassroomTheme';
 import { endLesson } from '@/services/endLesson';
 import { evaluateAndAssignExtraPractice } from '@/lib/remediation/evaluateAndAssignExtraPractice';
-import { advanceCurriculumProgress } from '@/services/activeCoreLessonResolver';
+import { advanceCurriculumProgress, fetchLevelMap } from '@/services/activeCoreLessonResolver';
+import { toLevelMapHub } from '@/components/teacher/classroom/UnitKnowledgeChecklist';
+import { buildLearningPlan, UNITS_PER_LEVEL, type PlanUnitInfo } from '@/lib/learningPlan';
 import { HUB_SKILL_PROFILE, normalizeSkillHub, scoreToCefr } from '@/hooks/useStudentSkills';
 import { asPayoutCurrency, formatPay } from '@/lib/teacherPay';
 
@@ -180,6 +182,8 @@ interface Draft {
   trialConfidence: string;
   trialGoal: string;
   trialLessons: number;
+  /** Unit the plan starts at; 0 = the one saved from the in-class level check. */
+  trialStartUnit: number;
   /** null = not touched yet: defaults to ON when the lesson was an email invite. */
   emailOn: boolean | null;
   /** null = the student's saved language (falls back to English). */
@@ -189,7 +193,7 @@ interface Draft {
 const emptyDraft = (): Draft => ({
   step: 1, progress: 'finished', resumeFrom: '', issues: [], skills: {}, great: [], more: [], extraGreat: '', extraMore: '',
   family: '', familyEdited: false, parentNote: '', teacherNote: '', homeworkOn: false, homework: '',
-  trialLevel: '', trialEnglish: '', trialConfidence: '', trialGoal: '', trialLessons: 0, emailOn: null, emailLang: null,
+  trialLevel: '', trialEnglish: '', trialConfidence: '', trialGoal: '', trialLessons: 0, trialStartUnit: 0, emailOn: null, emailLang: null,
 });
 
 const draftKey = (bookingId?: string) => (bookingId ? `wrapup-draft:${bookingId}` : null);
@@ -328,6 +332,34 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   // The trial's starting level: set in the classroom, else picked in this report.
   const trialLevel = trialCefr || d.trialLevel || '';
 
+  // Learning plan for the family: the level's units + the start unit the teacher saved in class.
+  const [planUnits, setPlanUnits] = useState<PlanUnitInfo[]>([]);
+  const [savedStartUnit, setSavedStartUnit] = useState(1);
+  useEffect(() => {
+    if (!open || !isTrialLesson || !trialLevel) return;
+    let cancelled = false;
+    fetchLevelMap(toLevelMapHub(hubType), trialLevel).then((map) => {
+      if (!cancelled) setPlanUnits(map.map((u) => ({ unitNumber: u.unitNumber, unitTitle: u.unitTitle, lessonCount: u.lessons.length })));
+    });
+    return () => { cancelled = true; };
+  }, [open, isTrialLesson, trialLevel, hubType]);
+  useEffect(() => {
+    if (!open || !isTrialLesson || !studentId) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await (supabase as any).from('student_prior_knowledge').select('start_unit').eq('student_id', studentId).maybeSingle();
+      if (!cancelled && data?.start_unit) setSavedStartUnit(Number(data.start_unit) || 1);
+    })();
+    return () => { cancelled = true; };
+  }, [open, isTrialLesson, studentId]);
+  const planStartUnit = d.trialStartUnit || savedStartUnit;
+  const learningPlan = useMemo(
+    () => (isTrialLesson
+      ? buildLearningPlan({ level: trialLevel, startUnit: planStartUnit, lessonsPerWeek: d.trialLessons, units: planUnits })
+      : null),
+    [isTrialLesson, trialLevel, planStartUnit, d.trialLessons, planUnits],
+  );
+
   // Family message drafted from the taps until the teacher edits it.
   const draftedFamily = useMemo(() => {
     const topic = lessonTitle ? `“${lessonTitle}”` : 'today’s lesson';
@@ -416,6 +448,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
             confidence: d.trialConfidence || undefined,
             goal: d.trialGoal.trim() || undefined,
             lessons_per_week: d.trialLessons || undefined,
+            plan: learningPlan ?? undefined,
           } : undefined,
         } as any,
         student_performance_rating: rating,
@@ -538,6 +571,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
                 trial: isTrialLesson ? {
                   level: trialLevel, englishToday: d.trialEnglish, confidence: d.trialConfidence,
                   lessonsPerWeek: d.trialLessons || undefined, goal: d.trialGoal.trim(),
+                  plan: learningPlan ?? undefined,
                 } : undefined,
               },
             },
@@ -809,6 +843,37 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
                           </Chip>
                         ))}
                       </div>
+                      {learningPlan ? (
+                        <div className="grid gap-2 rounded-xl border border-border bg-muted/30 p-3">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <span className="text-sm font-extrabold">Plan preview · {learningPlan.level}</span>
+                            <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                              Start at unit
+                              <select
+                                value={planStartUnit}
+                                onChange={(e) => set('trialStartUnit', Number(e.target.value))}
+                                className="rounded-md border border-border bg-background px-1.5 py-0.5 text-xs font-bold text-foreground"
+                              >
+                                {Array.from({ length: UNITS_PER_LEVEL }, (_, i) => i + 1).map((n) => <option key={n} value={n}>{n}</option>)}
+                              </select>
+                            </label>
+                          </div>
+                          <ol className="grid gap-1 text-sm">
+                            {learningPlan.weeks.map((w) => (
+                              <li key={w.week}><span className="font-bold">Week {w.week}:</span> {w.title}</li>
+                            ))}
+                          </ol>
+                          <p className="text-xs text-muted-foreground">
+                            {learningPlan.unitsAfter > 0 ? `Then the rest of ${learningPlan.level} (units to ${learningPlan.lastUnit}). ` : ''}
+                            About {learningPlan.totalWeeks} weeks to finish the level at {learningPlan.lessonsPerWeek} lesson{learningPlan.lessonsPerWeek === 1 ? '' : 's'} a week.
+                            It goes in the family email and on their dashboard.
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="text-xs text-muted-foreground">
+                          {trialLevel ? 'Pick lessons per week to see the learning plan the family will get.' : 'Set the level (in class or in step 2) to build the learning plan.'}
+                        </p>
+                      )}
                     </section>
                   )}
 
