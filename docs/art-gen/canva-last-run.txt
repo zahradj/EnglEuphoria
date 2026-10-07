@@ -1,6 +1,5 @@
-+ public/lep1/scenes/bg-u5l5-ball-c-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l5-ducks-a-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l5-ducks-b-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l5-ball-a-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l5-ball-b-wide.png (1376, 768)
-5/5 saved
++ public/lep1/scenes/bg-u5l5-book-a-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l5-book-b-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l5-icecream-a-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l5-icecream-b-wide.png (1376, 768)
+4/4 saved
