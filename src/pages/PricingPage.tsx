@@ -80,7 +80,7 @@ export default function PricingPage() {
             });
             void refresh();
             // Paid: straight to the student's dashboard (credits show there).
-            navigate('/dashboard', { replace: true });
+            navigate(searchParams.get('return') === 'parent' ? '/parent' : '/dashboard', { replace: true });
             return;
           }
           setVerifying(false);
@@ -92,6 +92,15 @@ export default function PricingPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // A parent buys for a child from the family dashboard (the credits go to that child).
+  useEffect(() => {
+    if ((user as { role?: string } | null)?.role === 'parent' && !searchParams.get('checkout')) {
+      toast({ title: 'Buy lessons from the family dashboard', description: 'Pick a child there, then choose a pack.' });
+      navigate('/parent', { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const handleBuy = async (packId: string) => {
     if (!user) {

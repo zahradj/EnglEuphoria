@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useStudentCredits } from '@/hooks/useStudentCredits';
 import { creditAlertLevel } from '@/components/student/CreditAlertBanner';
+import { FamilyBuyNote } from '@/components/student/FamilyBuyNote';
+import { useFamilyMembership } from '@/hooks/useFamilyMembership';
 
 /**
  * The student's lesson balance, always visible at the top of the dashboard.
@@ -14,6 +16,7 @@ export function CreditBalance({ studentId }: { studentId?: string | null }) {
   const { user } = useAuth();
   const id = studentId ?? user?.id ?? null;
   const { availableCredits, loading } = useStudentCredits(id);
+  const inFamily = useFamilyMembership(id);
   if (!id || loading || creditAlertLevel(availableCredits) !== 'none') return null;
 
   const hours = availableCredits / 2;
@@ -29,9 +32,13 @@ export function CreditBalance({ studentId }: { studentId?: string | null }) {
           <span className="text-muted-foreground"> · {hours} {hours === 1 ? 'hour' : 'hours'} of lessons (1 credit = 30 min)</span>
         </p>
       </div>
-      <Button asChild size="sm" variant="outline">
-        <Link to="/pricing">Buy more</Link>
-      </Button>
+      {inFamily ? (
+        <FamilyBuyNote className="max-w-xs" />
+      ) : (
+        <Button asChild size="sm" variant="outline">
+          <Link to="/pricing">Buy more</Link>
+        </Button>
+      )}
     </div>
   );
 }

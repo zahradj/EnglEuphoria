@@ -16,6 +16,9 @@ import { FamilyTopBar } from '@/components/family/FamilyTopBar';
 import type { ChildCardData } from '@/components/parent/ChildCard';
 import type { FamilyChildProfile } from '@/lib/familyBuddy';
 import { useChildSnapshots } from '@/hooks/useChildSnapshots';
+import { useFamilyCredits } from '@/hooks/useFamilyCredits';
+import { BuyForChildDialog, type FamilyLearner } from '@/components/parent/BuyForChildDialog';
+import { MoveCreditsDialog } from '@/components/parent/MoveCreditsDialog';
 import '@/components/parent/family-dashboard.css';
 
 interface StudentRelationship {
@@ -46,6 +49,9 @@ const ParentDashboard: React.FC = () => {
   const { user } = useAuth();
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [tab, setTab] = useState<string>('students');
+  const [buyFor, setBuyFor] = useState<FamilyLearner | null>(null);
+  const [moveFrom, setMoveFrom] = useState<string | null>(null);
+  const [moveOpen, setMoveOpen] = useState(false);
 
   const { data: students = [], isLoading } = useQuery<StudentRelationship[]>({
     queryKey: ['parent-students', user?.id],
@@ -108,6 +114,7 @@ const ParentDashboard: React.FC = () => {
   });
 
   const snapshots = useChildSnapshots(studentIds, user?.id);
+  const { data: familyCredits = {} } = useFamilyCredits(studentIds, user?.id);
 
   const children: ChildCardData[] = students
     .filter((s) => s.student)
@@ -126,6 +133,21 @@ const ParentDashboard: React.FC = () => {
     : null;
 
   const parentName = (user as any)?.full_name ?? (user as any)?.name ?? null;
+
+  const startBuy = (studentId: string) => {
+    const child = children.find((c) => c.studentId === studentId);
+    if (!child) return;
+    const hub = child.profile?.hub;
+    setBuyFor({
+      studentId,
+      name: child.name,
+      hub: hub === 'academy' || hub === 'professional' ? hub : 'playground',
+    });
+  };
+  const startMove = (studentId: string) => {
+    setMoveFrom(studentId);
+    setMoveOpen(true);
+  };
 
   const viewProgress = (studentId: string) => {
     setSelectedStudentId(studentId);
@@ -182,7 +204,14 @@ const ParentDashboard: React.FC = () => {
           </TabsPrimitive.List>
 
           <TabsPrimitive.Content value="students" className="focus-visible:outline-none">
-            <ParentStudentList children={children} onViewProgress={viewProgress} addChildAction={addChild('default')} />
+            <ParentStudentList
+              children={children}
+              onViewProgress={viewProgress}
+              credits={studentIds.length > 0 && Object.keys(familyCredits).length > 0 ? familyCredits : undefined}
+              onBuy={startBuy}
+              onMove={startMove}
+              addChildAction={addChild('default')}
+            />
           </TabsPrimitive.Content>
 
           <TabsPrimitive.Content value="calendar" className="focus-visible:outline-none">
@@ -205,6 +234,15 @@ const ParentDashboard: React.FC = () => {
             {user?.id && <ParentNotificationSettings parentId={user.id} />}
           </TabsPrimitive.Content>
         </TabsPrimitive.Root>
+
+        <BuyForChildDialog learner={buyFor} onOpenChange={(open) => { if (!open) setBuyFor(null); }} />
+        <MoveCreditsDialog
+          open={moveOpen}
+          onOpenChange={setMoveOpen}
+          learners={children.map((c) => ({ studentId: c.studentId, name: c.name }))}
+          credits={familyCredits}
+          fromId={moveFrom}
+        />
       </main>
     </div>
   );

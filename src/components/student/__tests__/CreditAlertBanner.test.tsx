@@ -2,18 +2,19 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
-const state = vi.hoisted(() => ({ available: 5, loading: false }));
+const state = vi.hoisted(() => ({ available: 5, loading: false, family: false }));
 
 vi.mock('@/hooks/useStudentCredits', () => ({
   useStudentCredits: () => ({ availableCredits: state.available, loading: state.loading }),
 }));
+vi.mock('@/hooks/useFamilyMembership', () => ({ useFamilyMembership: () => state.family }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: { id: 'S1', email: 'kid@example.com' } }) }));
 vi.mock('react-router-dom', () => ({ useNavigate: () => vi.fn() }));
 
 import { CreditAlertBanner, creditAlertLevel } from '../CreditAlertBanner';
 import { contactToBuyHref } from '@/config/payments';
 
-beforeEach(() => { state.available = 5; state.loading = false; });
+beforeEach(() => { state.available = 5; state.loading = false; state.family = false; });
 
 describe('credit alert on every student dashboard', () => {
   it('levels: plenty → none, 1–2 left → low, 0 → empty', () => {
@@ -48,6 +49,15 @@ describe('credit alert on every student dashboard', () => {
     render(<CreditAlertBanner />);
     expect(screen.getByRole('alert').getAttribute('data-credit-alert')).toBe('low');
     expect(screen.getByText('Only 1 credit left')).toBeTruthy();
+  });
+});
+
+describe('family accounts', () => {
+  it('at 0 credits a family learner is pointed to the family dashboard, not a buy button', () => {
+    state.available = 0; state.family = true;
+    render(<CreditAlertBanner />);
+    expect(screen.getByText(/family dashboard/i)).toBeTruthy();
+    expect(screen.queryByRole('link', { name: /contact us to buy/i })).toBeNull();
   });
 });
 

@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useStudentCredits } from '@/hooks/useStudentCredits';
 import { ONLINE_PAYMENTS_ENABLED, contactToBuyHref } from '@/config/payments';
+import { FamilyBuyNote } from '@/components/student/FamilyBuyNote';
+import { useFamilyMembership } from '@/hooks/useFamilyMembership';
 
 /** Credits at or below this show a gentle "running low" note. */
 export const LOW_CREDITS_AT = 2;
@@ -28,10 +30,13 @@ export function CreditAlertBanner({ studentId }: { studentId?: string | null }) 
   const id = studentId ?? user?.id ?? null;
   const { availableCredits, loading } = useStudentCredits(id);
   const level = creditAlertLevel(availableCredits);
+  const inFamily = useFamilyMembership(id);
   if (!id || loading || level === 'none') return null;
 
   const empty = level === 'empty';
-  const buy = ONLINE_PAYMENTS_ENABLED ? (
+  const buy = inFamily ? (
+    <FamilyBuyNote className="max-w-xs shrink-0 text-current opacity-90" />
+  ) : ONLINE_PAYMENTS_ENABLED ? (
     <div className="flex shrink-0 flex-wrap gap-2">
       <Button size="sm" onClick={() => navigate('/pricing')} className="gap-1.5">
         <ShoppingCart className="h-4 w-4" /> Buy online

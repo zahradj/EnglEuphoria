@@ -7,11 +7,15 @@ import { ParentLessonFeedbackCard } from "./ParentLessonFeedbackCard";
 interface ParentStudentListProps {
   children: ChildCardData[];
   onViewProgress: (studentId: string) => void;
+  /** Unused credits per child, and the buy / move actions. */
+  credits?: Record<string, number>;
+  onBuy?: (studentId: string) => void;
+  onMove?: (studentId: string) => void;
   /** "Add a child" trigger shown in the empty state. */
   addChildAction?: ReactNode;
 }
 
-export function ParentStudentList({ children: kids, onViewProgress, addChildAction }: ParentStudentListProps) {
+export function ParentStudentList({ children: kids, onViewProgress, credits, onBuy, onMove, addChildAction }: ParentStudentListProps) {
   const { t } = useTranslation();
 
   if (kids.length === 0) {
@@ -37,7 +41,13 @@ export function ParentStudentList({ children: kids, onViewProgress, addChildActi
     <div className="grid gap-x-5 gap-y-8 pt-1 md:grid-cols-2 xl:grid-cols-3">
       {kids.map((child) => (
         <div key={child.studentId} className="flex flex-col gap-3">
-          <ChildCard child={child} onViewProgress={onViewProgress} />
+          <ChildCard
+            child={child}
+            onViewProgress={onViewProgress}
+            credits={credits?.[child.studentId]}
+            onBuy={onBuy}
+            onMove={kids.length > 1 ? onMove : undefined}
+          />
           <ParentLessonFeedbackCard studentId={child.studentId} studentName={child.name} />
         </div>
       ))}
