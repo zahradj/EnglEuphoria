@@ -100,6 +100,7 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
       .select("id, name, session_count, price_eur, original_price_eur, savings_eur, sort_order")
       .eq("student_level", hub)
       .eq("is_active", true)
+      .eq("family_only", false)
       .order("sort_order")
       .then(({ data, error }) => {
         if (cancelled) return;

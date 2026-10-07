@@ -92,6 +92,10 @@ serve(async (req) => {
       .single();
 
     if (packError || !pack) throw new Error("Credit pack not found or inactive");
+    // Family packs are only sold to a parent buying for one of their children (family dashboard).
+    if (pack.family_only && targetId === user.id) {
+      throw new Error("Family packs are bought from the family dashboard");
+    }
     if (!pack.price_eur || typeof pack.price_eur !== "number" || pack.price_eur <= 0) {
       throw new Error("Invalid pack price");
     }
