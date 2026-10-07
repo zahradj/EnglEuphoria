@@ -497,7 +497,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                 <div className="flex-1">
                   <p className="font-semibold text-destructive">No credits available</p>
                   <p className="text-sm text-destructive/80 mt-1">
-                    You need at least 1 credit to book a session. {ONLINE_PAYMENTS_ENABLED ? 'Purchase a credit pack to continue.' : 'Contact us to buy more credits — they appear here as soon as they are added.'}
+                    You need at least 1 credit to book a session. {ONLINE_PAYMENTS_ENABLED ? 'Buy a credit pack online, or contact us to buy, to continue.' : 'Contact us to buy more credits — they appear here as soon as they are added.'}
                   </p>
                 </div>
                 <Button
@@ -506,8 +506,13 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                   className="shrink-0 border-destructive/30 text-destructive hover:bg-destructive/10"
                   onClick={() => { if (ONLINE_PAYMENTS_ENABLED) { onClose(); navigate('/student?tab=packages'); } else { window.location.href = contactToBuyHref({ studentEmail: user?.email }); } }}
                 >
-                  {ONLINE_PAYMENTS_ENABLED ? 'Get Credits' : 'Contact us'}
+                  {ONLINE_PAYMENTS_ENABLED ? 'Buy online' : 'Contact us'}
                 </Button>
+                {ONLINE_PAYMENTS_ENABLED && (
+                  <Button size="sm" variant="ghost" asChild className="shrink-0 text-destructive hover:bg-destructive/10">
+                    <a href={contactToBuyHref({ studentEmail: user?.email })}>Contact us to buy</a>
+                  </Button>
+                )}
               </div>
             )}
 

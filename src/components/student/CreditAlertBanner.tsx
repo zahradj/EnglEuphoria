@@ -32,9 +32,14 @@ export function CreditAlertBanner({ studentId }: { studentId?: string | null }) 
 
   const empty = level === 'empty';
   const buy = ONLINE_PAYMENTS_ENABLED ? (
-    <Button size="sm" onClick={() => navigate('/pricing')} className="gap-1.5 shrink-0">
-      <ShoppingCart className="h-4 w-4" /> Buy credits
-    </Button>
+    <div className="flex shrink-0 flex-wrap gap-2">
+      <Button size="sm" onClick={() => navigate('/pricing')} className="gap-1.5">
+        <ShoppingCart className="h-4 w-4" /> Buy online
+      </Button>
+      <Button size="sm" variant="outline" asChild className="gap-1.5 bg-transparent">
+        <a href={contactToBuyHref({ studentEmail: user?.email })}><Mail className="h-4 w-4" /> Contact us to buy</a>
+      </Button>
+    </div>
   ) : (
     <Button size="sm" asChild className="gap-1.5 shrink-0">
       <a href={contactToBuyHref({ studentEmail: user?.email })}><Mail className="h-4 w-4" /> Contact us to buy</a>
@@ -58,7 +63,7 @@ export function CreditAlertBanner({ studentId }: { studentId?: string | null }) 
           <p className="text-sm opacity-90">
             {empty
               ? ONLINE_PAYMENTS_ENABLED
-                ? 'Buy a credit pack to book your next lesson.'
+                ? 'Buy a credit pack online, or contact us to buy, to book your next lesson.'
                 : 'You can book your next lesson once you buy more credits. Contact us and your new credits will appear here as soon as they are added.'
               : '1 credit = 30 minutes (a 1-hour lesson uses 2). Top up so your next lesson is never blocked.'}
           </p>

@@ -4,10 +4,11 @@
  * Today (owner, 2026-10-07) parents pay the school DIRECTLY (bank/transfer/cash). The admin then
  * sets the student's credits in Admin → Students, and the balance shows on the student's
  * dashboard right away. Stripe checkout (create-pack-checkout → stripe-webhook → credit_purchases
- * → credits added automatically by pack size) is already built; when online payment goes live set
- * VITE_ONLINE_PAYMENTS=true and every "contact us to buy" turns into "Buy" with no code change.
+ * → credits added automatically by pack size) is on by default (owner, 2026-10-07: "Buy online or
+ * contact us to buy"), so every pack offers both. Set VITE_ONLINE_PAYMENTS=false to hide the online
+ * button again and show only "Contact us to buy".
  */
-export const ONLINE_PAYMENTS_ENABLED = import.meta.env.VITE_ONLINE_PAYMENTS === 'true';
+export const ONLINE_PAYMENTS_ENABLED = import.meta.env.VITE_ONLINE_PAYMENTS !== 'false';
 
 export const PAYMENT_CONTACT_EMAIL = 'hello@engleuphoria.com';
 
