@@ -76,7 +76,7 @@ export function BuyForChildDialog({ learner, onOpenChange }: Props) {
         <DialogHeader>
           <DialogTitle>Buy lessons for {learner?.name}</DialogTitle>
           <DialogDescription>
-            You pay once and the lessons go straight to {learner?.name}. Each lesson is 30 minutes.
+            You pay once and the lessons go straight to {learner?.name}. Each lesson is 25 minutes.
           </DialogDescription>
         </DialogHeader>
 
@@ -91,7 +91,7 @@ export function BuyForChildDialog({ learner, onOpenChange }: Props) {
                 <div className="min-w-0">
                   <p className="font-semibold">{p.name}</p>
                   <p className="text-sm text-muted-foreground">
-                    {p.session_count} lessons · 30 minutes each
+                    {p.session_count} lessons · 25 minutes each
                     {p.savings_eur > 0 ? ` · save €${p.savings_eur}` : ''}
                   </p>
                 </div>

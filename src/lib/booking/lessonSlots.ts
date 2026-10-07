@@ -12,8 +12,9 @@ export const LESSON_LENGTHS: LessonMinutes[] = [30, 60];
 
 export const creditsForLesson = (minutes: LessonMinutes): number => minutes / CREDIT_MINUTES;
 
+/** What the student reads: a lesson is 25 minutes (booked in a 30-minute slot); two slots = two lessons in a row. */
 export const lessonLengthLabel = (minutes: LessonMinutes): string =>
-  `${minutes === 30 ? '30 min' : '1 hour'} · ${creditsForLesson(minutes)} credit${creditsForLesson(minutes) === 1 ? '' : 's'}`;
+  minutes === 30 ? '25 min · 1 lesson' : '2 lessons back to back';
 
 export interface SlotLike {
   id: string;

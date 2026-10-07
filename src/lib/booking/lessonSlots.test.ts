@@ -10,8 +10,8 @@ describe('lesson length and credits (one credit = 30 minutes, every hub)', () =>
   it('30 minutes costs 1 credit, 60 minutes costs 2', () => {
     expect(creditsForLesson(30)).toBe(1);
     expect(creditsForLesson(60)).toBe(2);
-    expect(lessonLengthLabel(30)).toBe('30 min · 1 credit');
-    expect(lessonLengthLabel(60)).toBe('1 hour · 2 credits');
+    expect(lessonLengthLabel(30)).toBe('25 min · 1 lesson');
+    expect(lessonLengthLabel(60)).toBe('2 lessons back to back');
   });
 
   it('a 30-minute lesson uses only 30-minute slots', () => {

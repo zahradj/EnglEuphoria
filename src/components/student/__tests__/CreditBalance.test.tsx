@@ -22,7 +22,7 @@ describe('credit balance on the student dashboard', () => {
   it('shows the number of 30-minute lessons left', () => {
     render(<CreditBalance />);
     expect(screen.getByText('10 lessons left')).toBeTruthy();
-    expect(screen.getByText(/30 minutes each/)).toBeTruthy();
+    expect(screen.getByText(/25 minutes each/)).toBeTruthy();
     expect(screen.queryByText(/hour/i)).toBeNull();
     expect(screen.getByRole('link', { name: /buy more/i }).getAttribute('href')).toBe('/pricing');
   });

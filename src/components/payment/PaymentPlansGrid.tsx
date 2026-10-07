@@ -43,8 +43,8 @@ const HUB_THEME: Record<AudienceLevel, {
   clockIcon: string;
 }> = {
   playground: {
-    label: "Playground (30-min sessions)",
-    perSessionLabel: "per 30-min session",
+    label: "Playground (25-min lessons)",
+    perSessionLabel: "per 25-min lesson",
     priceText: "text-orange-600",
     popularBg: "from-amber-500 to-orange-600",
     borderPopular: "border-orange-300",
