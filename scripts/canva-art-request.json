@@ -1,17 +1,27 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0089-369813426141096682.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T103316Z&X-Amz-Expires=31303&X-Amz-Signature=87b1c48659d5f47f420c9370974d509cecf9c788d9179342b2e3dab14b7e2962&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2019%3A14%3A59%20GMT",
-  "out": "public/lep1/scenes/bg-u5l4-picnic-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0041-9058383013379325936.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T145112Z&X-Amz-Expires=24416&X-Amz-Signature=ad7cf56e9d995d6daa51585f18ba9c21c3685542d719a1646bda0072b898be6f&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2021%3A38%3A08%20GMT",
+  "out": "public/lep1/scenes/bg-u5l5-ball-c-wide.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0090-369813426141096682.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T020915Z&X-Amz-Expires=62937&X-Amz-Signature=07135c8b679b8c086b16e808cf21a4f944c11f649b552d3ddc2e845e9953a174&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2019%3A38%3A12%20GMT",
-  "out": "public/lep1/scenes/bg-u5l4-tree-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0059-9058383013379325936.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T164515Z&X-Amz-Expires=17426&X-Amz-Signature=4a0ef400906b310b98d5762d343d2db59fe6a5b77bcdc702740c5297f9d16131&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2021%3A35%3A41%20GMT",
+  "out": "public/lep1/scenes/bg-u5l5-ducks-a-wide.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0062-369813426141096682.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T171708Z&X-Amz-Expires=7663&X-Amz-Signature=f1a5d94400e7fc9313f4449290e77080b94b0350e9f3b22c971639147198e8b2&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2019%3A24%3A51%20GMT",
-  "out": "docs/art-gen/sheet-u5l4-family-th.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0060-9058383013379325936.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261006T230222Z&X-Amz-Expires=79256&X-Amz-Signature=ac6800de333183c98f8fc232f1c162247c75e0d4018804a752f41f35d3e30668&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2021%3A03%3A18%20GMT",
+  "out": "public/lep1/scenes/bg-u5l5-ducks-b-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0086-9058383013379325936.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T122716Z&X-Amz-Expires=32428&X-Amz-Signature=6fc4bace67cfe1c566fdf810c14ec17ed13c09b6a7b6673eabc5653ca39082c5&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2021%3A27%3A44%20GMT",
+  "out": "public/lep1/scenes/bg-u5l5-ball-a-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0100-9058383013379325936.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T194343Z&X-Amz-Expires=6158&X-Amz-Signature=c35a6d15cea0fdbea174180de3d9bf8fe960697aa5506b8bfc2b5516f314086c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Wed%2C%2007%20Oct%202026%2021%3A26%3A21%20GMT",
+  "out": "public/lep1/scenes/bg-u5l5-ball-b-wide.png",
   "sticker": false
  }
 ]
