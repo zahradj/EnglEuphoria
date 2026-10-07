@@ -28,7 +28,7 @@ export function CreditBalance({ studentId }: { studentId?: string | null }) {
         <Coins className="h-5 w-5 shrink-0 text-primary" />
         <p className="text-sm">
           <span className="font-bold">{availableCredits} {availableCredits === 1 ? 'lesson' : 'lessons'} left</span>
-          <span className="text-muted-foreground"> · 30 minutes each</span>
+          <span className="text-muted-foreground"> · 25 minutes each</span>
         </p>
       </div>
       {inFamily ? (

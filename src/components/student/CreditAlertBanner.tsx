@@ -70,7 +70,7 @@ export function CreditAlertBanner({ studentId }: { studentId?: string | null }) 
               ? ONLINE_PAYMENTS_ENABLED
                 ? 'Buy a credit pack online, or contact us to buy, to book your next lesson.'
                 : 'You can book your next lesson once you buy more credits. Contact us and your new credits will appear here as soon as they are added.'
-              : 'Each lesson is 30 minutes. Top up so your next lesson is never blocked.'}
+              : 'Each lesson is 25 minutes. Top up so your next lesson is never blocked.'}
           </p>
         </div>
       </div>

@@ -180,7 +180,7 @@ export default function PricingPage() {
                           <Sparkles className="w-4 h-4 text-primary" />
                           {pack.name}
                         </CardTitle>
-                        <CardDescription>{pack.session_count} lessons · 30 minutes each</CardDescription>
+                        <CardDescription>{pack.session_count} lessons · 25 minutes each</CardDescription>
                       </CardHeader>
                       <CardContent className="flex-1 flex flex-col">
                         <div className="mb-4">
@@ -193,13 +193,13 @@ export default function PricingPage() {
                             )}
                           </div>
                           <p className="text-xs text-muted-foreground mt-1">
-                            €{perLesson.toFixed(2)} per 30-minute lesson
+                            €{perLesson.toFixed(2)} per 25-minute lesson
                           </p>
                         </div>
                         <ul className="text-sm space-y-1.5 mb-6 flex-1">
                           <li className="flex items-center gap-2">
                             <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                            {pack.session_count} lessons · 30 minutes each
+                            {pack.session_count} lessons · 25 minutes each
                           </li>
                           <li className="flex items-center gap-2">
                             <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />

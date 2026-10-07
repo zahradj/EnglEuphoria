@@ -46,7 +46,7 @@ const HUB_CONFIG = {
     duration: 30,
     icon: '🌈',
     headerBg: 'from-amber-400 via-orange-400 to-red-400',
-    description: 'Fun lessons — 30 minutes or one hour',
+    description: 'Fun lessons — 25 minutes each',
     bookLabel: 'Book a Class',
   },
   academy: {
@@ -54,7 +54,7 @@ const HUB_CONFIG = {
     duration: 60,
     icon: '📘',
     headerBg: 'from-indigo-800 via-blue-800 to-purple-800',
-    description: 'Focused lessons — 30 minutes or one hour',
+    description: 'Focused lessons — 25 minutes each',
     bookLabel: 'Book a Slot',
   },
   professional: {
@@ -62,7 +62,7 @@ const HUB_CONFIG = {
     duration: 60,
     icon: '🎯',
     headerBg: 'from-emerald-700 via-green-700 to-teal-600',
-    description: 'Professional coaching — 30 minutes or one hour',
+    description: 'Professional coaching — 25 minutes each',
     bookLabel: 'Schedule a Session',
   },
 };
@@ -481,7 +481,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                     {lessonLengthLabel(m)}
                   </button>
                 ))}
-                <span className="basis-full text-xs text-muted-foreground">1 credit = 30 minutes.{trialAvailable ? ' Your free trial lesson is the 30-minute one.' : ''}</span>
+                <span className="basis-full text-xs text-muted-foreground">Each lesson is 25 minutes.{trialAvailable ? ' Your free trial lesson is a single 25-minute lesson.' : ''}</span>
               </div>
             )}
 

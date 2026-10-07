@@ -52,7 +52,7 @@ export const CreditCoin: React.FC<{ studentId?: string | null }> = ({ studentId 
           <p className="mt-1 text-sm text-slate-500">
             {level === 'empty'
               ? 'Ask a grown-up to buy more lessons so you can book your next class.'
-              : 'Each lesson is 30 minutes.'}
+              : 'Each lesson is 25 minutes.'}
           </p>
           {inFamily ? (
             <p className="mt-3 text-sm font-semibold text-amber-700">

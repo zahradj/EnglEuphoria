@@ -75,8 +75,8 @@ describe.each([
   it('offers a 30-minute lesson (1 credit) and a 1-hour lesson (2 credits)', async () => {
     state.hubRole = role;
     open(level);
-    expect(await screen.findByText('30 min · 1 credit')).toBeTruthy();
-    expect(screen.getByText('1 hour · 2 credits')).toBeTruthy();
+    expect(await screen.findByText('25 min · 1 lesson')).toBeTruthy();
+    expect(screen.getByText('2 lessons back to back')).toBeTruthy();
   });
 
   it('books a 30-minute lesson from one 30-minute slot', async () => {
@@ -93,7 +93,7 @@ describe.each([
   it('books a 60-minute lesson from two back-to-back 30s or one 60-minute slot', async () => {
     state.hubRole = role;
     open(level);
-    fireEvent.click(await screen.findByText('1 hour · 2 credits'));
+    fireEvent.click(await screen.findByText('2 lessons back to back'));
     await waitFor(() => expect(screen.getAllByTestId('slot').map((s) => s.textContent)).toEqual(['60:half-1+half-2', '60:whole']));
     fireEvent.click(screen.getAllByTestId('slot')[1]);
     await waitFor(() => expect(state.calls.length).toBe(1));

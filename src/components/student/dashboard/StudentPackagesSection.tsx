@@ -104,7 +104,7 @@ export const StudentPackagesSection: React.FC<StudentPackagesSectionProps> = ({
             <p className={`text-2xl font-bold ${hasActiveCredits ? 'text-student' : 'text-warning'}`}>
               {totalCredits}
             </p>
-            <p className="text-xs text-muted-foreground">1 credit = 30 minutes</p>
+            <p className="text-xs text-muted-foreground">1 lesson = 25 minutes</p>
           </div>
         </CardTitle>
         {!hasActiveCredits && (
