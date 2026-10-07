@@ -36,7 +36,10 @@ export default function PricingPage() {
   const [packs, setPacks] = useState<CreditPack[]>([]);
   const [loading, setLoading] = useState(true);
   const [buyingId, setBuyingId] = useState<string | null>(null);
-  const [verifying, setVerifying] = useState(false);
+  // Coming back from Stripe: show "confirming" straight away so the price list never flashes.
+  const [verifying, setVerifying] = useState(
+    () => searchParams.get('checkout') === 'success' && !!searchParams.get('session_id'),
+  );
 
   useEffect(() => {
     (async () => {
@@ -76,9 +79,10 @@ export default function PricingPage() {
               description: `${data.credits_granted} credit${data.credits_granted !== 1 ? 's' : ''} added to your account.`,
             });
             void refresh();
+            // Paid: straight to the student's dashboard (credits show there).
+            navigate('/dashboard', { replace: true });
+            return;
           }
-        })
-        .finally(() => {
           setVerifying(false);
           setSearchParams({}, { replace: true });
         });
