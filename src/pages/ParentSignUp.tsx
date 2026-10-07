@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { AuthPageLayout } from '@/components/auth/AuthPageLayout';
+import { getStoredReferralCode } from '@/lib/referralCode';
 import {
   FamilyChildrenForm,
   createFamilyChildren,
@@ -71,6 +72,7 @@ const ParentSignUp = () => {
       const { data: authData, error } = await signUp(email, password, {
         role: 'parent',
         full_name: fullName.trim(),
+        ref_code: getStoredReferralCode() ?? undefined,
       } as any);
 
       // An email that already has an account (for example one made as a student): the sign-up either

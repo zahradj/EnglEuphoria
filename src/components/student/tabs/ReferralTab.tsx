@@ -2,12 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Gift, Copy, Check, Share2, Users, Award, MessageCircle, Linkedin } from 'lucide-react';
+import { Gift, Copy, Check, Share2, Users, Award } from 'lucide-react';
+import { ReferralShareButtons } from '@/components/share/ReferralShareButtons';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-export const ReferralTab: React.FC = () => {
+interface ReferralTabProps {
+  /** Where the friend lands: students share the student sign-up, families the parent sign-up. */
+  signupPath?: '/student-signup' | '/parent-signup';
+  /** Wording for a parent inviting another family. */
+  family?: boolean;
+}
+
+export const ReferralTab: React.FC<ReferralTabProps> = ({ signupPath = '/student-signup', family = false }) => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [referralCode, setReferralCode] = useState<string>('');
@@ -55,7 +63,7 @@ export const ReferralTab: React.FC = () => {
     fetchReferralData();
   }, [user?.id]);
 
-  const referralLink = `${window.location.origin}/student-signup?ref=${referralCode}`;
+  const referralLink = `${window.location.origin}${signupPath}?ref=${referralCode}`;
 
   const handleCopy = async () => {
     try {
@@ -68,15 +76,9 @@ export const ReferralTab: React.FC = () => {
     }
   };
 
-  const shareMessage = `Join me on Engleuphoria — the AI-powered English learning platform! Sign up with my link and when you buy your first lesson pack we BOTH get a free lesson credit (30 minutes) 🎁 ${referralLink}`;
-
-  const handleWhatsApp = () => {
-    window.open(`https://wa.me/?text=${encodeURIComponent(shareMessage)}`, '_blank');
-  };
-
-  const handleLinkedIn = () => {
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`, '_blank');
-  };
+  const shareMessage = family
+    ? `Join me on Engleuphoria — live English lessons for the whole family! Sign up with my link and when you buy your first lesson pack we BOTH get a free lesson credit (30 minutes) 🎁 ${referralLink}`
+    : `Join me on Engleuphoria — the AI-powered English learning platform! Sign up with my link and when you buy your first lesson pack we BOTH get a free lesson credit (30 minutes) 🎁 ${referralLink}`;
 
   if (loading) {
     return (
@@ -99,7 +101,9 @@ export const ReferralTab: React.FC = () => {
             <div>
               <CardTitle className="text-2xl">Give a Lesson, Get a Lesson! 🎁</CardTitle>
               <CardDescription className="text-base mt-1">
-                Invite a friend to Engleuphoria. When they buy their first package, you BOTH get a free lesson credit (30 minutes).
+                {family
+                  ? 'Invite another family to Engleuphoria. When they buy their first package, you BOTH get a free lesson credit (30 minutes) for a child.'
+                  : 'Invite a friend to Engleuphoria. When they buy their first package, you BOTH get a free lesson credit (30 minutes).'}
               </CardDescription>
             </div>
           </div>
@@ -134,16 +138,7 @@ export const ReferralTab: React.FC = () => {
           </div>
 
           {/* Share Buttons */}
-          <div className="flex flex-wrap gap-3 pt-2">
-            <Button onClick={handleWhatsApp} className="bg-[#25D366] hover:bg-[#20BD5A] text-white gap-2">
-              <MessageCircle className="h-4 w-4" />
-              Share on WhatsApp
-            </Button>
-            <Button onClick={handleLinkedIn} className="bg-[#0A66C2] hover:bg-[#094EA0] text-white gap-2">
-              <Linkedin className="h-4 w-4" />
-              Share on LinkedIn
-            </Button>
-          </div>
+          <ReferralShareButtons link={referralLink} message={shareMessage} />
         </CardContent>
       </Card>
 
@@ -184,7 +179,7 @@ export const ReferralTab: React.FC = () => {
         <CardContent>
           <div className="space-y-4">
             {[
-              { step: '1', title: 'Share your link', desc: 'Send your unique referral link to friends via WhatsApp, LinkedIn or any channel.' },
+              { step: '1', title: 'Share your link', desc: 'Send your unique referral link via WhatsApp, Facebook, Instagram, LinkedIn or any channel.' },
               { step: '2', title: 'Friend signs up', desc: 'Your friend creates an account using your link.' },
               { step: '3', title: 'Friend buys a package', desc: 'When they purchase their first credit pack, the magic happens!' },
               { step: '4', title: 'You both win! 🎉', desc: 'You get +1 free session credit. Your friend gets +1 bonus session too.' },

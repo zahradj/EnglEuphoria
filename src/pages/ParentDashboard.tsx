@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
-import { Users, TrendingUp, MessageSquare, Bell, CalendarDays } from 'lucide-react';
+import { Users, TrendingUp, MessageSquare, Bell, CalendarDays, Gift } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { ParentStudentList } from '@/components/parent/ParentStudentList';
@@ -17,6 +17,8 @@ import type { ChildCardData } from '@/components/parent/ChildCard';
 import type { FamilyChildProfile } from '@/lib/familyBuddy';
 import { useChildSnapshots } from '@/hooks/useChildSnapshots';
 import { useFamilyCredits } from '@/hooks/useFamilyCredits';
+import { useClaimReferral } from '@/hooks/useClaimReferral';
+import { ReferralTab } from '@/components/student/tabs/ReferralTab';
 import { BuyForChildDialog, type FamilyLearner } from '@/components/parent/BuyForChildDialog';
 import { MoveCreditsDialog } from '@/components/parent/MoveCreditsDialog';
 import '@/components/parent/family-dashboard.css';
@@ -42,11 +44,13 @@ const TABS = [
   { value: 'progress', icon: TrendingUp, label: 'pd.tab.progress' },
   { value: 'messages', icon: MessageSquare, label: 'pd.tab.messages' },
   { value: 'notifications', icon: Bell, label: 'pd.tab.alerts' },
+  { value: 'referrals', icon: Gift, label: 'pd.tab.referrals', fallback: 'Invite friends' },
 ] as const;
 
 const ParentDashboard: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  useClaimReferral(user?.id);
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [tab, setTab] = useState<string>('students');
   const [buyFor, setBuyFor] = useState<FamilyLearner | null>(null);
@@ -195,10 +199,10 @@ const ParentDashboard: React.FC = () => {
 
         <TabsPrimitive.Root value={tab} onValueChange={setTab} className="space-y-6">
           <TabsPrimitive.List className="fd-tabs" aria-label={t('pd.title')}>
-            {TABS.map(({ value, icon: Icon, label }) => (
+            {TABS.map(({ value, icon: Icon, label, ...rest }) => (
               <TabsPrimitive.Trigger key={value} value={value} className="fd-tab">
                 <Icon className="h-4 w-4" aria-hidden />
-                <span>{t(label)}</span>
+                <span>{t(label, { defaultValue: 'fallback' in rest ? rest.fallback : undefined })}</span>
               </TabsPrimitive.Trigger>
             ))}
           </TabsPrimitive.List>
@@ -232,6 +236,10 @@ const ParentDashboard: React.FC = () => {
 
           <TabsPrimitive.Content value="notifications" className="focus-visible:outline-none">
             {user?.id && <ParentNotificationSettings parentId={user.id} />}
+          </TabsPrimitive.Content>
+
+          <TabsPrimitive.Content value="referrals" className="focus-visible:outline-none">
+            <ReferralTab signupPath="/parent-signup" family />
           </TabsPrimitive.Content>
         </TabsPrimitive.Root>
 
