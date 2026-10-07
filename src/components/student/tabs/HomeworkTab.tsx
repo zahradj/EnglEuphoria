@@ -16,8 +16,7 @@ import {
 } from '@/services/studentGames';
 import { zoneForTags, type AcademyZoneId } from '@/hooks/academy/useAcademyZones';
 import { usePlaygroundLessons } from '@/hooks/usePlaygroundLessons';
-import { HOMEWORK_QUESTS } from '@/content/homework-quests/registry';
-import { playgroundLessonKey, playgroundLessonPath } from '@/content/playground-library/lessonRoutes';
+import { buildQuestCards } from '@/lib/homeworkQuestCards';
 
 const GamePlayer = lazy(() => import('@/components/games/GamePlayer'));
 
@@ -49,24 +48,8 @@ function HomeworkQuestsSection() {
   const navigate = useNavigate();
   const { lessons, loading } = usePlaygroundLessons();
 
-  const cards = useMemo(() => {
-    const byKey = new Map<string, (typeof lessons)[number]>();
-    for (const l of lessons) {
-      const key = playgroundLessonKey({ contentFormat: l.contentFormat, unit_number: l.unitNumber, lesson_number: l.lessonNumber });
-      if (key) byKey.set(key, l);
-    }
-    return Object.values(HOMEWORK_QUESTS)
-      .filter((q) => q.level === 'Pre-A1' || q.level === 'A1' || q.level === 'A2')
-      .map((q) => {
-        const lesson = byKey.get(q.lessonKey) ?? null;
-        const lessonPath = lesson
-          ? playgroundLessonPath(lesson.id, { contentFormat: lesson.contentFormat, unit_number: lesson.unitNumber, lesson_number: lesson.lessonNumber })
-          : null;
-        return { quest: q, lesson, lessonPath, ready: lesson?.status === 'completed' };
-      })
-      .filter((c) => c.ready)
-      .sort((a, b) => a.quest.title.localeCompare(b.quest.title));
-  }, [lessons]);
+  // Only the quests of lessons the student has FINISHED (same list as the map's Homework panel).
+  const cards = useMemo(() => buildQuestCards(lessons).filter((c) => c.ready), [lessons]);
 
   if (loading) return <div className="h-28 animate-pulse rounded-2xl bg-muted/60" />;
   if (cards.length === 0) {
