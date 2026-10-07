@@ -153,6 +153,12 @@ Academy B1 U1 L1 — every slide "reported" the cover).
     paper plate + name tab + speaker button as `DialoguePlate`, built on `StoryPlate`). Today that covers: A1+ `flipbook`,
     Pre-A1 `flipbook`, `story-video`, both `cinematic` scenes — and ANY new story-bearing scene kind must use it too.
     Never a gradient band over the art, a "for the grown-up" pill, or a speech bubble with a tail.
+    - **TOP PRIORITY: never hide anything important** (owner, 2026-10-07: the story words covered the little fish in a video story).
+      The plate goes where nothing important is — a character, a small animal, the key object, a face. The placement therefore scores
+      each band by its BUSIEST part (a small subject in a big calm band such as the sea still counts), and for a video page it
+      measures real frames across the page's time window and takes the worst case (things that swim or walk into view later). If the
+      right side of a video is empty, the plate goes there as a tall slim column. When the automatic choice still touches a subject,
+      pin `textPos` — the subject wins over the default, always. Check every story / video page in headless Chrome while it plays.
     - **Placement** is automatic: `captionPlacement.ts` measures the page's picture and picks the calmest of top / bottom /
       left / right (phones: top/bottom only; a scene's own title/controls can `avoid` a side or lift the plate with
       `bottomOffset`). Pin a side with `textPos` on a page only when the picture needs an exception. It waits (≤1.5 s, fades

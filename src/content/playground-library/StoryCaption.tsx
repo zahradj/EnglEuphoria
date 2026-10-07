@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { StoryPlate } from './StoryPlate';
-import { useCaptionPlacement, type CaptionPos } from './captionPlacement';
+import { useCaptionPlacement, type CaptionPos, type VideoWindow } from './captionPlacement';
 
 /**
  * THE way any story / narration line is shown over a picture, in every hub and
@@ -17,6 +17,7 @@ export function StoryCaption({
   img,
   pin,
   avoid,
+  video,
   bottomOffset,
   name,
   color = '#E3A857',
@@ -28,6 +29,8 @@ export function StoryCaption({
   img: string | undefined;
   /** Force a side (a page's `textPos`) — normally omitted. */
   pin?: CaptionPos;
+  /** For a video page: the file and the seconds this page is on screen — real frames are measured so the plate never lands on something that swims or walks into view. */
+  video?: VideoWindow;
   /** Sides this scene's own title / controls already use. */
   avoid?: CaptionPos[];
   /** Lift a bottom plate above a control on the bottom edge. */
@@ -40,7 +43,7 @@ export function StoryCaption({
   onReplay: () => void;
   children?: ReactNode;
 }) {
-  const { pos, ready } = useCaptionPlacement(img, pin, avoid);
+  const { pos, ready } = useCaptionPlacement(img, pin, avoid, video);
   return (
     <div className="pointer-events-none absolute inset-0 z-20" style={{ containerType: 'inline-size', opacity: ready ? 1 : 0, transition: 'opacity .25s ease' }}>
       <StoryPlate pos={pos} bottomOffset={bottomOffset} name={name} color={color} text={text} onReplay={onReplay}>{children}</StoryPlate>

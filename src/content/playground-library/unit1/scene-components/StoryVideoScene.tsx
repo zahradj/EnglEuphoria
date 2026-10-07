@@ -6,6 +6,7 @@ import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { ShapeIcon, sayWithin } from './shared';
 import { StoryCaption } from '../../StoryCaption';
+import { warmCaptionPlacement } from '../../captionPlacement';
 
 /* ---------- Story video (animated, narrated, no reading needed) ----------
  * Pre-A1 children can't read yet, so the story plays like a cartoon: each
@@ -156,6 +157,12 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
   // --- Real video mode: the MP4 plays; narration and questions follow its clock. ---
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const starts = scene.pages.map((pg, i) => pg.atSec ?? i * 5);
+  // Measure every page's picture and video frames up front, so each caption plate is placed the moment its page shows.
+  useEffect(() => {
+    const wins = scene.videoUrl ? scene.pages.map((_, i) => ({ url: scene.videoUrl as string, from: starts[i], to: starts[i + 1] ?? starts[i] + 8 })) : [];
+    warmCaptionPlacement(scene.pages.map((pg) => pg.img), wins);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scene.id]);
   useEffect(() => {
     const v = videoRef.current;
     if (!scene.videoUrl || !v) return;
@@ -259,6 +266,7 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
         <StoryCaption
           img={p.img}
           pin={p.textPos}
+          video={scene.videoUrl ? { url: scene.videoUrl, from: starts[page] ?? 0, to: starts[page + 1] ?? (starts[page] ?? 0) + 8 } : undefined}
           name={speaker?.name}
           color={speaker?.color}
           text={p.line}

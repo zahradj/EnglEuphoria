@@ -16,8 +16,8 @@ const EDGE = 'clamp(8px,1.3cqw,24px)';
 const POSITION: Record<CaptionPos, CSSProperties> = {
   bottom: { left: EDGE, right: EDGE, bottom: EDGE, alignItems: 'flex-end' },
   top: { left: EDGE, right: 'clamp(44px,5.3cqw,80px)', top: 'clamp(34px,3.4cqw,60px)' },
-  left: { left: EDGE, top: '50%', transform: 'translateY(-50%)', width: '38%' },
-  right: { right: EDGE, top: '50%', transform: 'translateY(-50%)', width: '38%' },
+  left: { left: EDGE, top: '50%', transform: 'translateY(-50%)', width: '33%' },
+  right: { right: EDGE, top: '50%', transform: 'translateY(-50%)', width: '33%' },
 };
 
 export function StoryPlate({
