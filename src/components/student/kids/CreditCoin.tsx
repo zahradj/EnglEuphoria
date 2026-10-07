@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useStudentCredits } from '@/hooks/useStudentCredits';
 import { creditAlertLevel } from '@/components/student/CreditAlertBanner';
+import { useFamilyMembership } from '@/hooks/useFamilyMembership';
 
 /**
  * The lesson balance on the Playground map: a small gold coin with the number of credits.
@@ -14,6 +15,7 @@ export const CreditCoin: React.FC<{ studentId?: string | null }> = ({ studentId 
   const id = studentId ?? user?.id ?? null;
   const { availableCredits, loading } = useStudentCredits(id);
   const [open, setOpen] = useState(false);
+  const inFamily = useFamilyMembership(id);
   if (!id || loading) return null;
 
   const level = creditAlertLevel(availableCredits);
@@ -53,12 +55,18 @@ export const CreditCoin: React.FC<{ studentId?: string | null }> = ({ studentId 
               ? 'Ask a grown-up to buy more lessons so you can book your next class.'
               : `${hours} ${hours === 1 ? 'hour' : 'hours'} of lessons. 1 credit = 30 minutes.`}
           </p>
-          <Link
-            to="/pricing"
-            className="mt-3 inline-block rounded-full bg-amber-500 px-4 py-2 text-sm font-bold text-white hover:bg-amber-600"
-          >
-            Buy more lessons
-          </Link>
+          {inFamily ? (
+            <p className="mt-3 text-sm font-semibold text-amber-700">
+              Your parent can buy more lessons from the family dashboard.
+            </p>
+          ) : (
+            <Link
+              to="/pricing"
+              className="mt-3 inline-block rounded-full bg-amber-500 px-4 py-2 text-sm font-bold text-white hover:bg-amber-600"
+            >
+              Buy more lessons
+            </Link>
+          )}
         </div>
       )}
     </div>

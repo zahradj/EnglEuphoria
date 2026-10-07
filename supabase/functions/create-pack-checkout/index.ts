@@ -28,6 +28,7 @@ serve(async (req) => {
   try {
     const body = await req.json();
     const { packId } = body;
+    const forStudentId = typeof body.studentId === "string" ? body.studentId : null;
 
     if (!packId || typeof packId !== "string") {
       throw new Error("Valid packId is required");
@@ -46,7 +47,41 @@ serve(async (req) => {
       throw new Error("User authentication failed");
     }
     const user = userData.user;
-    logStep("User authenticated", { userId: user.id, email: user.email });
+    logStep("User authenticated", { userId: user.id });
+
+    // Who receives the credits: the signed-in user, or (family accounts) one of their children.
+    let targetId = user.id;
+    if (forStudentId && forStudentId !== user.id) {
+      if (!uuidRegex.test(forStudentId)) throw new Error("Invalid studentId format");
+      const { data: rel } = await supabaseClient
+        .from("student_parent_relationships")
+        .select("id")
+        .eq("parent_id", user.id)
+        .eq("student_id", forStudentId)
+        .not("approved_at", "is", null)
+        .maybeSingle();
+      if (!rel) throw new Error("This learner is not in your family account");
+      targetId = forStudentId;
+    }
+
+    // Stripe sends the receipt to the buyer. A child's login uses a made-up address, so use a real
+    // parent's address for a child buying from their own profile.
+    let billingEmail: string = user.email as string;
+    if (billingEmail.endsWith(".invalid")) {
+      const { data: rels } = await supabaseClient
+        .from("student_parent_relationships")
+        .select("parent_id")
+        .eq("student_id", user.id)
+        .not("approved_at", "is", null)
+        .limit(1);
+      const parentId = rels?.[0]?.parent_id;
+      if (parentId) {
+        const { data: parentUser } = await supabaseClient.auth.admin.getUserById(parentId);
+        if (parentUser?.user?.email && !parentUser.user.email.endsWith(".invalid")) {
+          billingEmail = parentUser.user.email;
+        }
+      }
+    }
 
     // Pull the pack server-side — never trust a client-supplied price.
     const { data: pack, error: packError } = await supabaseClient
@@ -62,41 +97,6 @@ serve(async (req) => {
     }
     logStep("Pack validated", { name: pack.name, price: pack.price_eur, sessions: pack.session_count });
 
-    // TEMPORARY DIAGNOSTIC: inspect the raw secret value char-by-char
-    // (without ever logging the value itself) to find exactly which
-    // character is outside the ByteString range (0-255) and where.
-    {
-      const rawKey = Deno.env.get("STRIPE_SECRET_KEY") || "";
-      const badChars: { index: number; code: number }[] = [];
-      for (let i = 0; i < rawKey.length; i++) {
-        const code = rawKey.charCodeAt(i);
-        if (code > 255) badChars.push({ index: i, code });
-      }
-      logStep("SECRET KEY DIAGNOSTIC", {
-        length: rawKey.length,
-        startsWithSkTest: rawKey.startsWith("sk_test_"),
-        firstCharCode: rawKey.charCodeAt(0),
-        lastCharCode: rawKey.charCodeAt(rawKey.length - 1),
-        badChars,
-      });
-    }
-
-    // TEMPORARY DIAGNOSTIC: raw fetch straight to Stripe's REST API,
-    // bypassing the SDK entirely, to isolate whether this environment can
-    // reach api.stripe.com at all, or whether the failure is specific to
-    // how the Stripe SDK builds/sends its request.
-    try {
-      const rawResp = await fetch("https://api.stripe.com/v1/customers?limit=1", {
-        headers: { Authorization: `Bearer ${Deno.env.get("STRIPE_SECRET_KEY") || ""}` },
-      });
-      logStep("RAW FETCH DIAGNOSTIC", { status: rawResp.status, ok: rawResp.ok });
-    } catch (rawErr) {
-      logStep("RAW FETCH DIAGNOSTIC FAILED", {
-        message: rawErr instanceof Error ? rawErr.message : String(rawErr),
-        name: rawErr instanceof Error ? rawErr.name : undefined,
-      });
-    }
-
     // Deno's edge runtime needs the fetch-based HTTP client -- the SDK's
     // default (Node's http module) fails with a generic "connection" error
     // here, per Stripe's own guidance for Deno/edge deployments.
@@ -105,12 +105,12 @@ serve(async (req) => {
       httpClient: Stripe.createFetchHttpClient(),
     });
 
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
+    const customers = await stripe.customers.list({ email: billingEmail, limit: 1 });
     let customerId: string;
     if (customers.data.length > 0) {
       customerId = customers.data[0].id;
     } else {
-      const customer = await stripe.customers.create({ email: user.email, metadata: { user_id: user.id } });
+      const customer = await stripe.customers.create({ email: billingEmail, metadata: { user_id: user.id } });
       customerId = customer.id;
     }
 
@@ -132,10 +132,11 @@ serve(async (req) => {
           quantity: 1,
         },
       ],
-      success_url: `${origin}/pricing?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/pricing?checkout=cancelled`,
+      success_url: `${origin}/pricing?checkout=success&session_id={CHECKOUT_SESSION_ID}${targetId !== user.id ? "&return=parent" : ""}`,
+      cancel_url: targetId !== user.id ? `${origin}/parent` : `${origin}/pricing?checkout=cancelled`,
       metadata: {
-        student_id: user.id,
+        student_id: targetId,
+        buyer_id: user.id,
         pack_id: pack.id,
         credits: String(pack.session_count),
         amount_eur: String(pack.price_eur),
@@ -150,19 +151,7 @@ serve(async (req) => {
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    // Temporary richer diagnostics -- Stripe's SDK collapses many distinct
-    // underlying causes into one generic "connection" message; the extra
-    // fields on a StripeConnectionError (type/code/detail/cause) disambiguate.
-    const anyErr = error as any;
-    logStep("ERROR", {
-      message: errorMessage,
-      type: anyErr?.type,
-      code: anyErr?.code,
-      detail: anyErr?.detail,
-      raw: anyErr?.raw,
-      cause: anyErr?.cause ? String(anyErr.cause?.message || anyErr.cause) : undefined,
-      stack: anyErr?.stack?.split("\n").slice(0, 5).join(" | "),
-    });
+    logStep("ERROR", { message: errorMessage, type: (error as any)?.type, code: (error as any)?.code });
     return new Response(JSON.stringify({ error: errorMessage }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
