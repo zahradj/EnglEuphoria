@@ -1,4 +1,5 @@
 import { ClipboardCheck } from 'lucide-react';
+import { LearningPlanCard } from '@/components/student/LearningPlanCard';
 import { RecentLessonReports } from '@/components/student/RecentLessonReports';
 import { useStudentLevel } from '@/hooks/useStudentLevel';
 import { cn } from '@/lib/utils';
@@ -25,6 +26,7 @@ export function LessonReportsTab() {
         </h1>
         <p className="text-muted-foreground mt-1">What your teacher wrote about your recent classes.</p>
       </div>
+      <LearningPlanCard ctaHref="/dashboard?tab=billing" />
       <RecentLessonReports hubId={hubId} limit={20} />
     </div>
   );

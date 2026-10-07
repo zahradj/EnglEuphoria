@@ -21,6 +21,17 @@ function json(body: Record<string, unknown>, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
 }
 
+/** The learning plan the wrap-up form built; only well-formed, size-limited data reaches the email. */
+const cleanPlan = (raw: any) => {
+  const weeks = (Array.isArray(raw?.weeks) ? raw.weeks : [])
+    .slice(0, 6)
+    .filter((w: any) => w && Number.isFinite(Number(w.week)) && typeof w.title === 'string' && w.title.trim())
+    .map((w: any) => ({ week: Math.min(Math.max(Math.round(Number(w.week)), 1), 99), title: clip(w.title, 80) }))
+  if (!weeks.length) return undefined
+  const num = (v: unknown, max: number) => Math.min(Math.max(Math.round(Number(v)) || 0, 0), max)
+  return { weeks, totalWeeks: Math.max(num(raw.totalWeeks, 200), weeks.length), unitsAfter: num(raw.unitsAfter, 20) }
+}
+
 const clip = (v: unknown, max = 2000): string => (typeof v === 'string' ? v.trim().slice(0, max) : '')
 const maskEmail = (e: string) => e.replace(/^(.).*(@.*)$/, '$1***$2')
 
@@ -194,6 +205,7 @@ Deno.serve(async (req) => {
         confidence: text.confidence || undefined,
         lessonsPerWeek: [1, 2, 3, 4, 5].includes(lessonsPerWeek) ? lessonsPerWeek : undefined,
         goal: text.goal || undefined,
+        plan: isTrial ? cleanPlan(t.plan) : undefined,
       } : undefined,
     }
 
