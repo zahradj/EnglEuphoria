@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { ONLINE_PAYMENTS_ENABLED, contactToBuyHref } from '@/config/payments';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, ArrowLeft, CheckCircle2, Sparkles } from 'lucide-react';
 import { useStudentCredits } from '@/hooks/useStudentCredits';
@@ -192,6 +193,11 @@ export default function PricingPage() {
                             Valid for 6 months
                           </li>
                         </ul>
+                        {!ONLINE_PAYMENTS_ENABLED ? (
+                          <Button asChild className="w-full">
+                            <a href={contactToBuyHref({ packName: pack.name, credits: pack.session_count })}>Contact us to buy</a>
+                          </Button>
+                        ) : (
                         <Button
                           onClick={() => handleBuy(pack.id)}
                           disabled={buyingId === pack.id}
@@ -203,6 +209,7 @@ export default function PricingPage() {
                             'Buy now'
                           )}
                         </Button>
+                        )}
                       </CardContent>
                     </Card>
                   );

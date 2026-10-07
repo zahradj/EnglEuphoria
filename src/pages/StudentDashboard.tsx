@@ -11,6 +11,7 @@ import { SidebarHoverShell, SidebarHoverZone, SidebarHoverArea } from "@/compone
 import { supabase } from "@/integrations/supabase/client";
 import { SystemId } from "@/types/multiTenant";
 import { DashboardRouter } from "@/components/student/dashboards/DashboardRouter";
+import { CreditAlertBanner } from "@/components/student/CreditAlertBanner";
 import { useStudentLevel, StudentLevel } from "@/hooks/useStudentLevel";
 import { useThemeMode } from "@/hooks/useThemeMode";
 import { PlacementGatekeeper } from "@/components/student/PlacementGatekeeper";
@@ -219,9 +220,9 @@ const StudentDashboard = () => {
 
   const renderActiveTab = () => {
     const tabComponents = {
-      dashboard: () => <DashboardRouter systemId={systemId} studentName={studentName} />,
+      dashboard: () => (<><CreditAlertBanner /><DashboardRouter systemId={systemId} studentName={studentName} /></>),
       "learning-path": () => <MyPathTab />,
-      lessons: () => <MyLessonsTab />,
+      lessons: () => (<><CreditAlertBanner /><MyLessonsTab /></>),
       homework: () => <HomeworkTab />,
       reports: () => <LessonReportsTab />,
       games: () => <GamesTab />,

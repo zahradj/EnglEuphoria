@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ONLINE_PAYMENTS_ENABLED, contactToBuyHref } from "@/config/payments";
 import { Badge } from "@/components/ui/badge";
 import { Check, Star, CreditCard, Sparkles, Clock, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -238,6 +239,14 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
                   ))}
                 </ul>
 
+                {!ONLINE_PAYMENTS_ENABLED ? (
+                  <Button asChild className={cn("w-full", isMastery ? theme.btnMastery : popular ? theme.btnPopular : theme.btnPrimary)}>
+                    <a href={contactToBuyHref({ packName: pack.name, credits: pack.session_count })}>
+                      <CreditCard className="w-4 h-4 mr-2" />
+                      Contact us to buy {pack.session_count} credits
+                    </a>
+                  </Button>
+                ) : (
                 <Button
                   onClick={() => handleBuy(pack)}
                   disabled={isProcessing}
@@ -247,8 +256,9 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
                   )}
                 >
                   <CreditCard className="w-4 h-4 mr-2" />
-                  {isProcessing ? "Redirecting…" : `Buy ${pack.session_count} Sessions`}
+                  {isProcessing ? "Redirecting…" : `Buy ${pack.session_count} credits`}
                 </Button>
+                )}
               </CardContent>
             </Card>
           );

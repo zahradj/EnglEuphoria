@@ -14,6 +14,7 @@ import { usePackageValidation } from '@/hooks/usePackageValidation';
 import { useNavigate } from 'react-router-dom';
 import { useThemeMode } from '@/hooks/useThemeMode';
 import { cn } from '@/lib/utils';
+import { ONLINE_PAYMENTS_ENABLED, contactToBuyHref } from '@/config/payments';
 import { lessonOptions, matchingOption, creditsForLesson, lessonLengthLabel, LESSON_LENGTHS, type LessonMinutes } from '@/lib/booking/lessonSlots';
 import confetti from 'canvas-confetti';
 import { mergeAdjacentSlots, MergedSlot } from '@/utils/slotMerger';
@@ -263,13 +264,15 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
         title: 'Not enough credits',
         description: useRecurring
           ? `Weekly series needs ${requiredCredits} credits (you have ${totalCredits}). Add more credits or pick fewer weeks.`
-          : `You need ${requiredCredits} credit${requiredCredits === 1 ? '' : 's'} to book this session (you have ${totalCredits}). Redirecting to purchase...`,
+          : `You need ${requiredCredits} credit${requiredCredits === 1 ? '' : 's'} to book this session (you have ${totalCredits}). ${ONLINE_PAYMENTS_ENABLED ? 'Redirecting to purchase...' : 'Contact us to buy more credits.'}`,
         variant: 'destructive',
       });
-      setTimeout(() => {
-        onClose();
-        navigate('/student?tab=packages');
-      }, 1800);
+      if (ONLINE_PAYMENTS_ENABLED) {
+        setTimeout(() => {
+          onClose();
+          navigate('/student?tab=packages');
+        }, 1800);
+      }
       return;
     }
 
@@ -494,16 +497,16 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                 <div className="flex-1">
                   <p className="font-semibold text-destructive">No credits available</p>
                   <p className="text-sm text-destructive/80 mt-1">
-                    You need at least 1 credit to book a session. Purchase a credit pack to continue.
+                    You need at least 1 credit to book a session. {ONLINE_PAYMENTS_ENABLED ? 'Purchase a credit pack to continue.' : 'Contact us to buy more credits — they appear here as soon as they are added.'}
                   </p>
                 </div>
                 <Button
                   size="sm"
                   variant="outline"
                   className="shrink-0 border-destructive/30 text-destructive hover:bg-destructive/10"
-                  onClick={() => { onClose(); navigate('/student?tab=packages'); }}
+                  onClick={() => { if (ONLINE_PAYMENTS_ENABLED) { onClose(); navigate('/student?tab=packages'); } else { window.location.href = contactToBuyHref({ studentEmail: user?.email }); } }}
                 >
-                  Get Credits
+                  {ONLINE_PAYMENTS_ENABLED ? 'Get Credits' : 'Contact us'}
                 </Button>
               </div>
             )}

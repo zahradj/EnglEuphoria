@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface StudentCreditsResult {
@@ -15,6 +15,7 @@ export const useStudentCredits = (studentId: string | null): StudentCreditsResul
   const [usedCredits, setUsedCredits] = useState(0);
   const [expiredCredits, setExpiredCredits] = useState(0);
   const [loading, setLoading] = useState(true);
+  const loadedOnce = useRef(false);
 
   const fetchCredits = useCallback(async () => {
     if (!studentId) {
@@ -23,7 +24,8 @@ export const useStudentCredits = (studentId: string | null): StudentCreditsResul
     }
 
     try {
-      setLoading(true);
+      // Only the first load shows a spinner; live refreshes update the number quietly.
+      if (!loadedOnce.current) setLoading(true);
       const { data, error } = await supabase
         .from('student_credits')
         .select('total_credits, used_credits, expired_credits')
@@ -47,6 +49,7 @@ export const useStudentCredits = (studentId: string | null): StudentCreditsResul
     } catch (err) {
       console.error('Error in useStudentCredits:', err);
     } finally {
+      loadedOnce.current = true;
       setLoading(false);
     }
   }, [studentId]);
@@ -75,7 +78,15 @@ export const useStudentCredits = (studentId: string | null): StudentCreditsResul
       )
       .subscribe();
 
+    // Belt and braces: a tab that was in the background (or a dropped realtime connection) refreshes
+    // the balance as soon as the student comes back to it.
+    const onVisible = () => { if (document.visibilityState === 'visible') fetchCredits(); };
+    document.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('focus', onVisible);
+
     return () => {
+      document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('focus', onVisible);
       supabase.removeChannel(channel);
     };
   }, [studentId, fetchCredits]);
