@@ -198,6 +198,7 @@ export default function PricingPage() {
                             <a href={contactToBuyHref({ packName: pack.name, credits: pack.session_count })}>Contact us to buy</a>
                           </Button>
                         ) : (
+                        <div className="space-y-2">
                         <Button
                           onClick={() => handleBuy(pack.id)}
                           disabled={buyingId === pack.id}
@@ -206,9 +207,13 @@ export default function PricingPage() {
                           {buyingId === pack.id ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
                           ) : (
-                            'Buy now'
+                            'Buy online'
                           )}
                         </Button>
+                        <Button asChild variant="ghost" size="sm" className="w-full text-muted-foreground">
+                          <a href={contactToBuyHref({ packName: pack.name, credits: pack.session_count })}>Or contact us to buy</a>
+                        </Button>
+                        </div>
                         )}
                       </CardContent>
                     </Card>

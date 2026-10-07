@@ -247,6 +247,7 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
                     </a>
                   </Button>
                 ) : (
+                <div className="space-y-2">
                 <Button
                   onClick={() => handleBuy(pack)}
                   disabled={isProcessing}
@@ -256,8 +257,12 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
                   )}
                 >
                   <CreditCard className="w-4 h-4 mr-2" />
-                  {isProcessing ? "Redirecting…" : `Buy ${pack.session_count} credits`}
+                  {isProcessing ? "Redirecting…" : `Buy ${pack.session_count} credits online`}
                 </Button>
+                <Button asChild variant="ghost" size="sm" className="w-full text-muted-foreground">
+                  <a href={contactToBuyHref({ packName: pack.name, credits: pack.session_count })}>Or contact us to buy</a>
+                </Button>
+                </div>
                 )}
               </CardContent>
             </Card>
