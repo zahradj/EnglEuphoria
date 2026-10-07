@@ -39,6 +39,7 @@ async function sendClassroomInviteEmail(
     joinLink: string
     hub: Hub
     isTrial?: boolean
+    weeklyCount?: number
   },
 ): Promise<boolean> {
   const messageId = crypto.randomUUID()
@@ -215,6 +216,29 @@ Deno.serve(async (req) => {
       if (!scheduledAt || Number.isNaN(new Date(scheduledAt).getTime())) {
         return json({ error: 'A valid scheduledAt is required' }, 400)
       }
+      // Weekly booking: the client sends the date of every LATER lesson (worked out in the teacher's
+      // own time zone, so a clock change doesn't move the hour). Up to 11 more = 12 lessons in all.
+      // Each must fall one week (give or take an hour for a clock change) after the one before.
+      const rawExtra: unknown = body.weeklyScheduledAt
+      const extraDates: Date[] = []
+      if (rawExtra !== undefined && rawExtra !== null) {
+        if (!Array.isArray(rawExtra) || rawExtra.length > 11) {
+          return json({ error: 'weeklyScheduledAt must be a list of at most 11 dates' }, 400)
+        }
+        let previousMs = new Date(scheduledAt).getTime()
+        for (const item of rawExtra) {
+          const when = new Date(String(item))
+          const gapHours = (when.getTime() - previousMs) / 3_600_000
+          if (Number.isNaN(when.getTime()) || Math.abs(gapHours - 168) > 2) {
+            return json({ error: 'Each weekly lesson must be exactly one week after the previous one' }, 400)
+          }
+          previousMs = when.getTime()
+          extraDates.push(when)
+        }
+        if (isTrial && extraDates.length > 0) {
+          return json({ error: 'A trial lesson cannot repeat weekly. Book a regular lesson instead.' }, 400)
+        }
+      }
       // teacher_availability has a CHECK constraint restricting duration to
       // exactly 30 or 60 -- clamp here so the calendar-grid insert below
       // never violates it, regardless of what the caller sent.
@@ -335,18 +359,19 @@ Deno.serve(async (req) => {
         }
       }
 
+      // Everything about a booking except when it is - shared by the first lesson and any weekly repeats.
+      const bookingFields = {
+        student_id: studentId,
+        teacher_id: auth.userId,
+        lesson_id: lessonId || null,
+        duration: durationMinutes,
+        status: 'scheduled',
+        booking_type: isTrial ? 'trial' : 'regular',
+        hub_type: hubType,
+      }
       const { data: booking, error: bookingErr } = await adminClient
         .from('class_bookings')
-        .insert({
-          student_id: studentId,
-          teacher_id: auth.userId,
-          lesson_id: lessonId || null,
-          scheduled_at: scheduledAt,
-          duration: durationMinutes,
-          status: 'scheduled',
-          booking_type: isTrial ? 'trial' : 'regular',
-          hub_type: hubType,
-        })
+        .insert({ ...bookingFields, scheduled_at: scheduledAt })
         .select('id, scheduled_at, duration')
         .single()
       if (bookingErr || !booking) {
@@ -364,35 +389,90 @@ Deno.serve(async (req) => {
       // the calendar exactly like a normal booking would. 'direct_booking'
       // is an existing, real value in this table's lesson_type CHECK
       // constraint, distinct from the open-slot 'free_slot' default.
-      const startTime = new Date(scheduledAt)
+      // A weekly series is recognised on the calendar (and by "cancel series") by the same
+      // recurring_pattern on every one of its rows, so build it once. Weekday and time are the
+      // teacher's own, from the time zone the dialog sent.
+      let recurringPattern: Record<string, unknown> | null = null
+      if (extraDates.length > 0) {
+        let patternZone = 'UTC'
+        try {
+          if (typeof timeZone === 'string' && timeZone) {
+            Intl.DateTimeFormat(undefined, { timeZone })
+            patternZone = timeZone
+          }
+        } catch { /* invalid zone: describe the series in UTC */ }
+        const parts = new Intl.DateTimeFormat('en-US', {
+          timeZone: patternZone, weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false,
+        }).formatToParts(new Date(scheduledAt))
+        const part = (type: string) => parts.find((p) => p.type === type)?.value ?? ''
+        const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(part('weekday'))
+        const hour = part('hour') === '24' ? '00' : part('hour')
+        recurringPattern = {
+          type: 'weekly',
+          selections: [{ weekday, time: `${hour}:${part('minute')}` }],
+          duration: durationMinutes,
+          horizon_weeks: extraDates.length + 1,
+          created_at: new Date().toISOString(),
+        }
+      }
+
+      // The teacher's calendar grid (ClassScheduler/useAvailabilityManager)
+      // reads booked slots from teacher_availability, not class_bookings --
+      // insert the matching already-booked row so this lesson shows up on
+      // the calendar exactly like a normal booking would. 'direct_booking'
+      // is an existing, real value in this table's lesson_type CHECK
+      // constraint, distinct from the open-slot 'free_slot' default.
       // A one-hour Playground lesson is shown on the grid as two back-to-back
       // 30-minute booked rows (Playground's slot size); every other lesson is
       // one row of its own length.
       const rowMinutes = hubType === 'playground' && durationMinutes === 60 ? 30 : durationMinutes
       const rowCount = durationMinutes / rowMinutes
-      const availabilityRows = Array.from({ length: rowCount }, (_, i) => {
-        const rowStart = new Date(startTime.getTime() + i * rowMinutes * 60_000)
-        return {
-          teacher_id: auth.userId,
-          student_id: studentId,
-          start_time: rowStart.toISOString(),
-          end_time: new Date(rowStart.getTime() + rowMinutes * 60_000).toISOString(),
-          duration: rowMinutes,
-          is_available: false,
-          is_booked: true,
-          lesson_type: 'direct_booking',
-          lesson_id: lessonId || null,
-          lesson_title: lessonStudentName
-            ? `${isTrial ? 'Trial lesson' : 'Lesson'} with ${lessonStudentName}`
-            : (isTrial ? 'Trial lesson' : null),
-          hub_specialty: hubSpecialty,
-        }
-      })
-      const { error: availabilityErr } = await adminClient.from('teacher_availability').insert(availabilityRows)
+      const availabilityRowsFor = (startTime: Date) =>
+        Array.from({ length: rowCount }, (_, i) => {
+          const rowStart = new Date(startTime.getTime() + i * rowMinutes * 60_000)
+          return {
+            teacher_id: auth.userId,
+            student_id: studentId,
+            start_time: rowStart.toISOString(),
+            end_time: new Date(rowStart.getTime() + rowMinutes * 60_000).toISOString(),
+            duration: rowMinutes,
+            is_available: false,
+            is_booked: true,
+            lesson_type: 'direct_booking',
+            lesson_id: lessonId || null,
+            lesson_title: lessonStudentName
+              ? `${isTrial ? 'Trial lesson' : 'Lesson'} with ${lessonStudentName}`
+              : (isTrial ? 'Trial lesson' : null),
+            hub_specialty: hubSpecialty,
+            recurring_pattern: recurringPattern,
+          }
+        })
+      const { error: availabilityErr } = await adminClient
+        .from('teacher_availability').insert(availabilityRowsFor(new Date(scheduledAt)))
       if (availabilityErr) {
         // Non-fatal: the booking + invite are already valid and the student
         // can still join. Only the teacher's calendar-grid display degrades.
         console.error('[CLASSROOM-INVITE] teacher_availability insert failed', availabilityErr)
+      }
+
+      // Weekly repeats: one more booking (and calendar rows) per later week, all the same student,
+      // teacher, hub and length. They appear on the student's dashboard like any booked lesson. Only
+      // the first lesson gets an emailed join link; a failed week is counted, not fatal.
+      let weeklyBooked = 0
+      let weeklyFailed = 0
+      for (const when of extraDates) {
+        const { error: extraErr } = await adminClient
+          .from('class_bookings')
+          .insert({ ...bookingFields, scheduled_at: when.toISOString() })
+        if (extraErr) {
+          console.error('[CLASSROOM-INVITE] weekly booking failed', when.toISOString(), extraErr)
+          weeklyFailed++
+          continue
+        }
+        weeklyBooked++
+        const { error: extraAvailErr } = await adminClient
+          .from('teacher_availability').insert(availabilityRowsFor(when))
+        if (extraAvailErr) console.error('[CLASSROOM-INVITE] weekly teacher_availability insert failed', extraAvailErr)
       }
 
       // Invite window: the lesson's own duration plus an hour of grace on
@@ -452,9 +532,10 @@ Deno.serve(async (req) => {
         joinLink,
         hub: hubType as Hub,
         isTrial,
+        weeklyCount: weeklyBooked > 0 ? weeklyBooked + 1 : undefined,
       })
 
-      return json({ success: true, bookingId: booking.id, joinLink, emailSent, isTrial })
+      return json({ success: true, bookingId: booking.id, joinLink, emailSent, isTrial, weeklyBooked, weeklyFailed })
     }
 
     // ── Public: redeem an invite token for a one-time sign-in credential.

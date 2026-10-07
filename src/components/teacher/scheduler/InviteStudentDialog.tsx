@@ -1,18 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, Mail, Copy, Check, UserPlus } from 'lucide-react';
-import { format } from 'date-fns';
+import { CalendarDays, Check, CheckCircle2, Clock, Copy, GraduationCap, Loader2, Mail, MessageCircle, Repeat, UserPlus, UserRound } from 'lucide-react';
+import { addDays, addMinutes, format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { useTeacherStudents } from '@/hooks/useTeacherStudents';
 import { supabase } from '@/integrations/supabase/client';
@@ -41,22 +40,52 @@ const HUB_OPTIONS: { id: HubChoice; label: string; duration: 30 | 60 }[] = [
   { id: 'success', label: 'Success', duration: 60 },
 ];
 
-/** An upcoming open slot of this teacher, offered as a one-tap way to fill the date and time. */
-interface OpenSlotChoice {
-  id: string;
-  start: Date;
-  duration: 30 | 60;
-  hub: HubChoice;
-}
+/** Each hub keeps its own colour, so the card tells the teacher at a glance which hub the lesson is for. */
+const HUB_THEME: Record<HubChoice, { emoji: string; header: string; tile: string; button: string; active: string }> = {
+  playground: {
+    emoji: '🎈',
+    header: 'from-amber-100 via-orange-50 to-rose-50',
+    tile: 'from-amber-400 to-orange-500',
+    button: 'from-amber-500 to-orange-500',
+    active: 'border-orange-400 bg-orange-50 text-orange-700 ring-2 ring-orange-200',
+  },
+  academy: {
+    emoji: '🎓',
+    header: 'from-violet-100 via-purple-50 to-fuchsia-50',
+    tile: 'from-violet-500 to-fuchsia-500',
+    button: 'from-violet-500 to-fuchsia-500',
+    active: 'border-violet-400 bg-violet-50 text-violet-700 ring-2 ring-violet-200',
+  },
+  success: {
+    emoji: '🚀',
+    header: 'from-emerald-100 via-teal-50 to-cyan-50',
+    tile: 'from-emerald-500 to-teal-500',
+    button: 'from-emerald-500 to-teal-500',
+    active: 'border-emerald-400 bg-emerald-50 text-emerald-700 ring-2 ring-emerald-200',
+  },
+};
 
-const MAX_SLOT_CHOICES = 12;
+/** A titled block of the form, drawn as a soft card. */
+const FormSection: React.FC<{ icon: React.ReactNode; title: string; children: React.ReactNode }> = ({ icon, title, children }) => (
+  <section className="space-y-3 rounded-2xl border border-border/70 bg-card p-4 shadow-sm">
+    <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+      {icon}
+      {title}
+    </h3>
+    {children}
+  </section>
+);
 
-const hubFromRow = (raw: string | null, duration: 30 | 60): HubChoice => {
-  const v = String(raw ?? '').toLowerCase();
-  if (v.includes('playground')) return 'playground';
-  if (v.includes('success') || v.includes('professional')) return 'success';
-  if (v.includes('academy')) return 'academy';
-  return duration === 30 ? 'playground' : 'academy';
+/** One lesson, or the same lesson every week (booked up front, so each one shows on the student's dashboard). */
+type BookingMode = 'single' | 'weekly';
+const WEEK_CHOICES = [4, 8, 12] as const;
+
+/** Today's date, and the next half hour, in the teacher's own clock - what a new invite starts from. */
+const startingPoint = () => {
+  const now = new Date();
+  const next = addMinutes(now, 30 - (now.getMinutes() % 30));
+  next.setSeconds(0, 0);
+  return { date: format(now, 'yyyy-MM-dd'), time: format(next, 'HH:mm') };
 };
 
 export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
@@ -69,13 +98,17 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
   const { toast } = useToast();
   const [studentEmail, setStudentEmail] = useState('');
   const [studentName, setStudentName] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
+  const [date, setDate] = useState(() => startingPoint().date);
+  const [time, setTime] = useState(() => startingPoint().time);
+  const [mode, setMode] = useState<BookingMode>('single');
+  const [weeks, setWeeks] = useState<(typeof WEEK_CHOICES)[number]>(12);
   const [selectedHub, setSelectedHub] = useState<HubChoice>(hub);
   const [lessonType, setLessonType] = useState<'regular' | 'trial'>('regular');
   const [busy, setBusy] = useState(false);
   const [joinLink, setJoinLink] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  // What the server says about the later weekly lessons (shown on the confirmation screen).
+  const [weeklySummary, setWeeklySummary] = useState<{ wanted: number; booked: number; failed: number; known: boolean } | null>(null);
   // What this email belongs to (asked of the server once the address looks complete).
   const [who, setWho] = useState<EmailLookup | null>(null);
   const [childId, setChildId] = useState<string | null>(null);
@@ -122,54 +155,16 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
     if (open) setSelectedHub(hub);
   }, [open, hub]);
 
-  // ── One-tap pickers: the teacher's own students, and their open slots ──
+  // ── One-tap picker: the teacher's own students ──
   const { students, loading: studentsLoading } = useTeacherStudents();
-  const [openSlots, setOpenSlots] = useState<OpenSlotChoice[]>([]);
-  const [slotsLoading, setSlotsLoading] = useState(false);
-  const autoFilled = useRef(false);
 
-  const applySlot = (slot: OpenSlotChoice) => {
-    setDate(format(slot.start, 'yyyy-MM-dd'));
-    setTime(format(slot.start, 'HH:mm'));
-    setSelectedHub(slot.hub);
-    setPlaygroundHour(slot.hub === 'playground' && slot.duration === 60);
-  };
-
+  // Each time the dialog opens, start from today and the next half hour (the teacher can change both).
   useEffect(() => {
-    if (!open || !teacherId) return;
-    autoFilled.current = false;
-    let cancelled = false;
-    setSlotsLoading(true);
-    (async () => {
-      const { data, error } = await supabase
-        .from('teacher_availability')
-        .select('id, start_time, duration, hub_specialty')
-        .eq('teacher_id', teacherId)
-        .eq('is_booked', false)
-        .gte('start_time', new Date().toISOString())
-        .order('start_time', { ascending: true })
-        .limit(MAX_SLOT_CHOICES);
-      if (cancelled) return;
-      setSlotsLoading(false);
-      if (error || !data) return; // the pickers are a convenience - typing a date and time still works
-      setOpenSlots(
-        data.map((r) => {
-          const dur: 30 | 60 = (r.duration ?? 30) >= 55 ? 60 : 30;
-          return { id: r.id, start: new Date(r.start_time), duration: dur, hub: hubFromRow(r.hub_specialty, dur) };
-        }),
-      );
-    })();
-    return () => { cancelled = true; };
-  }, [open, teacherId]);
-
-  // Fill the date and time automatically with the next open slot, unless the teacher already typed one.
-  useEffect(() => {
-    if (!open || autoFilled.current || openSlots.length === 0) return;
-    autoFilled.current = true;
-    if (date || time) return;
-    applySlot(openSlots[0]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, openSlots]);
+    if (!open) return;
+    const start = startingPoint();
+    setDate(start.date);
+    setTime(start.time);
+  }, [open]);
 
   const pickedStudentId =
     students.find((s) => s.email.toLowerCase() === studentEmail.trim().toLowerCase())?.id ?? '';
@@ -183,8 +178,11 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
   const reset = () => {
     setStudentEmail('');
     setStudentName('');
-    setDate('');
-    setTime('');
+    const start = startingPoint();
+    setDate(start.date);
+    setTime(start.time);
+    setMode('single');
+    setWeeks(12);
     setSelectedHub(hub);
     setLessonType('regular');
     setPlaygroundHour(false);
@@ -192,12 +190,20 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
     setChildId(null);
     setJoinLink(null);
     setCopied(false);
+    setWeeklySummary(null);
   };
 
   const handleClose = (next: boolean) => {
     if (!next) reset();
     onOpenChange(next);
   };
+
+  // Weekly only applies to a regular lesson; a trial is always a single class.
+  const weeklyOn = mode === 'weekly' && lessonType !== 'trial';
+  const weeklyDayLabel = (() => {
+    const d = new Date(`${date}T12:00`);
+    return Number.isNaN(d.getTime()) ? 'week' : format(d, 'EEEE');
+  })();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -214,6 +220,15 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
       toast({ title: 'Invalid date/time', variant: 'destructive' });
       return;
     }
+    if (scheduledAt.getTime() < Date.now()) {
+      toast({ title: 'That time has already passed', description: 'Pick a time later today, or another day.', variant: 'destructive' });
+      return;
+    }
+    // Every later lesson of a weekly booking, exactly one week apart on the teacher's own clock
+    // (addDays keeps the local hour across a clock change).
+    const laterLessons = weeklyOn
+      ? Array.from({ length: weeks - 1 }, (_, i) => addDays(scheduledAt, 7 * (i + 1)).toISOString())
+      : [];
 
     setBusy(true);
     try {
@@ -236,6 +251,7 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
           hub: selectedHub,
           lessonType,
           childId: childId ?? undefined,
+          weeklyScheduledAt: laterLessons.length > 0 ? laterLessons : undefined,
         },
         headers: { Authorization: `Bearer ${accessToken}` },
       });
@@ -253,12 +269,37 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
       if (data?.error) throw new Error(data.error);
 
       setJoinLink(data.joinLink);
-      toast({
-        title: lessonType === 'trial' ? 'Trial lesson booked ✅' : 'Lesson booked ✅',
-        description: data.emailSent
-          ? `An invite email was sent to ${studentEmail}.`
-          : `Booked, but the invite email could not be sent — share the link below manually.`,
-      });
+      const emailNote = data.emailSent
+        ? `An invite email was sent to ${studentEmail}.`
+        : `The invite email could not be sent — share the link below manually.`;
+      if (laterLessons.length > 0) {
+        // An older server ignores the weekly dates and books just the first lesson - say so rather
+        // than let the teacher believe the whole series is booked.
+        const known = typeof data.weeklyBooked === 'number';
+        const booked = known ? data.weeklyBooked : 0;
+        const failed = known && typeof data.weeklyFailed === 'number' ? data.weeklyFailed : 0;
+        setWeeklySummary({ wanted: laterLessons.length, booked, failed, known });
+        if (!known) {
+          toast({
+            title: 'Only the first lesson was booked',
+            description: 'The booking service has not been updated for weekly lessons yet. ' + emailNote,
+            variant: 'destructive',
+          });
+        } else if (booked === laterLessons.length) {
+          toast({ title: `${booked + 1} weekly lessons booked ✅`, description: emailNote });
+        } else {
+          toast({
+            title: `${booked + 1} of ${laterLessons.length + 1} weekly lessons booked`,
+            description: `${failed} could not be booked. ${emailNote}`,
+            variant: 'destructive',
+          });
+        }
+      } else {
+        toast({
+          title: lessonType === 'trial' ? 'Trial lesson booked ✅' : 'Lesson booked ✅',
+          description: emailNote,
+        });
+      }
       onInvited?.();
     } catch (err: any) {
       toast({ title: 'Could not create invite', description: err?.message || 'Please try again.', variant: 'destructive' });
@@ -278,218 +319,306 @@ export const InviteStudentDialog: React.FC<InviteStudentDialogProps> = ({
     }
   };
 
+  const theme = HUB_THEME[selectedHub];
+  const segment = (active: boolean) =>
+    `flex flex-1 items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-all disabled:opacity-50 ${active ? 'bg-background text-foreground shadow-sm ring-1 ring-border' : 'text-muted-foreground hover:text-foreground'}`;
+  const summaryDay = (() => {
+    const d = new Date(`${date}T12:00`);
+    return Number.isNaN(d.getTime()) ? 'Pick a date' : format(d, 'EEE d MMM');
+  })();
+  const summary = [
+    summaryDay,
+    time || 'pick a time',
+    `${duration} min`,
+    HUB_OPTIONS.find((h) => h.id === selectedHub)?.label,
+    weeklyOn ? `every week for ${weeks} weeks` : null,
+  ].filter(Boolean).join(' · ');
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <UserPlus className="h-5 w-5 text-primary" />
-            Invite a Student
-          </DialogTitle>
-          <DialogDescription>
-            Book a lesson for a student by email. They'll get a join link — no password needed on their end.
-          </DialogDescription>
-        </DialogHeader>
+      <DialogContent className="flex max-h-[92vh] flex-col gap-0 overflow-hidden rounded-3xl p-0 sm:max-w-lg">
+        <div className={`bg-gradient-to-br ${theme.header} px-6 pb-5 pt-6`}>
+          <DialogHeader className="space-y-1.5 text-left">
+            <DialogTitle className="flex items-center gap-3 text-xl font-extrabold tracking-tight">
+              <span className={`flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br ${theme.tile} text-white shadow-md`}>
+                <UserPlus className="h-5 w-5" />
+              </span>
+              Invite a student
+            </DialogTitle>
+            <DialogDescription className="text-[13px] leading-relaxed">
+              Book a lesson by email. They get a join link — no password needed on their end.
+            </DialogDescription>
+          </DialogHeader>
+        </div>
 
         {!joinLink ? (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {(studentsLoading || students.length > 0) && (
-              <div className="space-y-2">
-                <Label>Choose one of your students</Label>
-                <Select value={pickedStudentId} onValueChange={pickStudent} disabled={studentsLoading}>
-                  <SelectTrigger aria-label="Choose one of your students">
-                    <SelectValue placeholder={studentsLoading ? 'Loading your students…' : 'Pick a student — or type a new email below'} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {students.map((s) => (
-                      <SelectItem key={s.id} value={s.id}>
-                        {s.name && s.name !== s.email ? `${s.name} — ${s.email}` : s.email}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-            <div className="space-y-2">
-              <Label htmlFor="student-email">Student email</Label>
-              <Input
-                id="student-email"
-                type="email"
-                placeholder="student@example.com"
-                value={studentEmail}
-                onChange={(e) => setStudentEmail(e.target.value)}
-                required
-              />
-              {who?.kind === 'new' && (
-                <p className="text-xs text-muted-foreground">
-                  New student — an account is created for them. Their progress starts from this first lesson.
-                </p>
-              )}
-              {who?.kind === 'student' && (
-                <p className="text-xs text-muted-foreground">
-                  Existing student{who.firstName ? ` (${who.firstName})` : ''} — the lesson appears on their dashboard next to their progress.
-                </p>
-              )}
-              {parentWithoutChildren && (
-                <p className="text-xs text-destructive">
-                  This is a parent account with no children added yet. Ask them to add their child from the family dashboard first.
-                </p>
-              )}
-              {who?.kind === 'parent' && who.children.length > 0 && (
-                <div className="space-y-2 rounded-lg border bg-muted/30 p-3" role="radiogroup" aria-label="Which child is the lesson for?">
-                  <p className="text-xs font-medium">Parent account — who is this lesson for?</p>
-                  <div className="flex flex-wrap gap-2">
-                    {who.children.map((c) => (
-                      <button
-                        key={c.id}
-                        type="button"
-                        role="radio"
-                        aria-checked={childId === c.id}
-                        onClick={() => setChildId(c.id)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${childId === c.id ? 'bg-primary text-primary-foreground border-primary' : 'bg-background text-foreground border-border hover:bg-muted'}`}
-                      >
-                        {c.firstName}
-                      </button>
-                    ))}
-                  </div>
-                  <p className="text-[11px] text-muted-foreground">
-                    The invite email goes to the parent; the link opens the child's own classroom.
-                  </p>
+          <>
+            <form id="invite-student-form" onSubmit={handleSubmit} className="flex-1 space-y-3 overflow-y-auto px-6 py-5">
+              <FormSection icon={<UserRound className="h-3.5 w-3.5" />} title="Student">
+                {(studentsLoading || students.length > 0) && (
+                  <Select value={pickedStudentId} onValueChange={pickStudent} disabled={studentsLoading}>
+                    <SelectTrigger aria-label="Choose one of your students" className="h-11 rounded-xl">
+                      <SelectValue placeholder={studentsLoading ? 'Loading your students…' : 'Pick one of your students — or type a new email'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {students.map((st) => (
+                        <SelectItem key={st.id} value={st.id}>
+                          {st.name && st.name !== st.email ? `${st.name} — ${st.email}` : st.email}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+                <div className="space-y-1.5">
+                  <Label htmlFor="student-email" className="flex items-center gap-1.5 text-xs">
+                    <Mail className="h-3.5 w-3.5 text-muted-foreground" /> Student email
+                  </Label>
+                  <Input
+                    id="student-email"
+                    type="email"
+                    placeholder="student@example.com"
+                    value={studentEmail}
+                    onChange={(e) => setStudentEmail(e.target.value)}
+                    className="h-11 rounded-xl"
+                    required
+                  />
+                  {who?.kind === 'new' && (
+                    <p className="rounded-lg bg-sky-50 px-3 py-2 text-xs text-sky-700">
+                      New student — an account is created for them. Their progress starts from this first lesson.
+                    </p>
+                  )}
+                  {who?.kind === 'student' && (
+                    <p className="rounded-lg bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
+                      Existing student{who.firstName ? ` (${who.firstName})` : ''} — the lesson appears on their dashboard next to their progress.
+                    </p>
+                  )}
+                  {parentWithoutChildren && (
+                    <p className="rounded-lg bg-destructive/10 px-3 py-2 text-xs text-destructive">
+                      This is a parent account with no children added yet. Ask them to add their child from the family dashboard first.
+                    </p>
+                  )}
+                  {who?.kind === 'parent' && who.children.length > 0 && (
+                    <div className="space-y-2 rounded-xl border bg-muted/30 p-3" role="radiogroup" aria-label="Which child is the lesson for?">
+                      <p className="text-xs font-semibold">Parent account — who is this lesson for?</p>
+                      <div className="flex flex-wrap gap-2">
+                        {who.children.map((c) => (
+                          <button
+                            key={c.id}
+                            type="button"
+                            role="radio"
+                            aria-checked={childId === c.id}
+                            onClick={() => setChildId(c.id)}
+                            className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${childId === c.id ? theme.active : 'border-border bg-background text-foreground hover:bg-muted'}`}
+                          >
+                            {c.firstName}
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-[11px] text-muted-foreground">
+                        The invite email goes to the parent; the link opens the child's own classroom.
+                      </p>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="student-name">Student name (optional)</Label>
-              <Input
-                id="student-name"
-                type="text"
-                placeholder="Amina"
-                value={studentName}
-                onChange={(e) => setStudentName(e.target.value)}
-              />
-            </div>
-            {(slotsLoading || openSlots.length > 0) && (
-              <div className="space-y-2">
-                <Label>Your open slots — tap one to fill the date and time</Label>
-                {slotsLoading && openSlots.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">Loading your open slots…</p>
-                ) : (
-                  <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Open slots">
-                    {openSlots.map((slot) => {
-                      const active = date === format(slot.start, 'yyyy-MM-dd') && time === format(slot.start, 'HH:mm');
+                <div className="space-y-1.5">
+                  <Label htmlFor="student-name" className="text-xs">Student name <span className="font-normal text-muted-foreground">(optional)</span></Label>
+                  <Input
+                    id="student-name"
+                    type="text"
+                    placeholder="Amina"
+                    value={studentName}
+                    onChange={(e) => setStudentName(e.target.value)}
+                    className="h-11 rounded-xl"
+                  />
+                </div>
+              </FormSection>
+
+              <FormSection icon={<CalendarDays className="h-3.5 w-3.5" />} title="When">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="lesson-date" className="flex items-center gap-1.5 text-xs">
+                      <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" /> Date
+                    </Label>
+                    <Input id="lesson-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="h-11 rounded-xl" required />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="lesson-time" className="flex items-center gap-1.5 text-xs">
+                      <Clock className="h-3.5 w-3.5 text-muted-foreground" /> Time
+                    </Label>
+                    <Input id="lesson-time" type="time" value={time} onChange={(e) => setTime(e.target.value)} className="h-11 rounded-xl" required />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex gap-1 rounded-xl bg-muted p-1" role="radiogroup" aria-label="One lesson or every week">
+                    {([
+                      { id: 'single', label: 'One lesson', icon: <CalendarDays className="h-3.5 w-3.5" /> },
+                      { id: 'weekly', label: 'Every week', icon: <Repeat className="h-3.5 w-3.5" /> },
+                    ] as const).map((opt) => {
+                      const active = weeklyOn ? opt.id === 'weekly' : opt.id === 'single';
                       return (
                         <button
-                          key={slot.id}
+                          key={opt.id}
                           type="button"
                           role="radio"
                           aria-checked={active}
-                          onClick={() => applySlot(slot)}
-                          className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${active ? 'bg-primary text-primary-foreground border-primary' : 'bg-background text-foreground border-border hover:bg-muted'}`}
+                          disabled={opt.id === 'weekly' && lessonType === 'trial'}
+                          onClick={() => setMode(opt.id)}
+                          className={segment(active)}
                         >
-                          {format(slot.start, 'EEE d MMM · HH:mm')} · {slot.duration} min
+                          {opt.icon}
+                          {opt.label}
                         </button>
                       );
                     })}
                   </div>
-                )}
-              </div>
-            )}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2">
-                <Label htmlFor="lesson-date">Date</Label>
-                <Input id="lesson-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lesson-time">Time</Label>
-                <Input id="lesson-time" type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label>Lesson type</Label>
-              <div className="inline-flex rounded-lg bg-muted p-1">
-                {([
-                  { id: 'regular', label: 'Regular lesson' },
-                  { id: 'trial', label: 'Trial lesson' },
-                ] as const).map((opt) => (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    onClick={() => setLessonType(opt.id)}
-                    className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${lessonType === opt.id ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-              {lessonType === 'trial' && (
-                <p className="text-xs text-muted-foreground">
-                  The student's first class: it opens Unit 1 Lesson 1, and you set their level and prior knowledge in class.
-                  Saved to their profile and learning path.
-                </p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label>Hub</Label>
-              {/* Explicit per-lesson choice — a teacher's profile can be
-                  assigned to more than one hub, so it can't reliably stand
-                  in for which hub *this* lesson is for. Duration follows
-                  the pick (Playground 30 min, Academy/Success 60 min). */}
-              <div className="inline-flex rounded-lg bg-muted p-1">
-                {HUB_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    onClick={() => setSelectedHub(opt.id)}
-                    className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${selectedHub === opt.id ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-              {selectedHub === 'playground' && lessonType !== 'trial' ? (
-                <div className="flex items-center gap-2">
-                  {([false, true] as const).map((hour) => (
+                  {lessonType === 'trial' && (
+                    <p className="text-xs text-muted-foreground">A trial lesson is a single class. Book a regular lesson to repeat it weekly.</p>
+                  )}
+                  {weeklyOn && (
+                    <div className="space-y-2 rounded-xl bg-muted/40 p-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-medium text-muted-foreground">For</span>
+                        {WEEK_CHOICES.map((n) => (
+                          <button
+                            key={n}
+                            type="button"
+                            onClick={() => setWeeks(n)}
+                            className={`rounded-full border px-3 py-1 text-xs font-semibold transition-colors ${weeks === n ? theme.active : 'border-border bg-background text-foreground hover:bg-muted'}`}
+                          >
+                            {n} weeks
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-xs leading-relaxed text-muted-foreground">
+                        {weeks} lessons are booked now, one every {weeklyDayLabel} at {time || 'the chosen time'}, starting {date || 'on the chosen date'}.
+                        Each one shows on the student's dashboard.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </FormSection>
+
+              <FormSection icon={<GraduationCap className="h-3.5 w-3.5" />} title="Lesson">
+                <div className="flex gap-1 rounded-xl bg-muted p-1" role="radiogroup" aria-label="Lesson type">
+                  {([
+                    { id: 'regular', label: 'Regular lesson' },
+                    { id: 'trial', label: 'Trial lesson' },
+                  ] as const).map((opt) => (
                     <button
-                      key={String(hour)}
+                      key={opt.id}
                       type="button"
-                      onClick={() => setPlaygroundHour(hour)}
-                      className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${playgroundHour === hour ? 'bg-primary text-primary-foreground border-primary' : 'bg-background text-foreground border-border hover:bg-muted'}`}
+                      role="radio"
+                      aria-checked={lessonType === opt.id}
+                      onClick={() => setLessonType(opt.id)}
+                      className={segment(lessonType === opt.id)}
                     >
-                      {hour ? '1 hour' : '30 minutes'}
+                      {opt.label}
                     </button>
                   ))}
                 </div>
-              ) : (
-                <p className="text-xs text-muted-foreground">{duration}-minute lesson</p>
-              )}
-            </div>
-            <DialogFooter>
-              <Button type="submit" disabled={busy || needsChild || parentWithoutChildren} className="w-full">
-                {busy ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Mail className="h-4 w-4 mr-2" />}
-                {lessonType === 'trial' ? 'Book Trial & Send Invite' : 'Book & Send Invite'}
+                {lessonType === 'trial' && (
+                  <p className="text-xs leading-relaxed text-muted-foreground">
+                    The student's first class: it opens Unit 1 Lesson 1, and you set their level and prior knowledge in class.
+                    Saved to their profile and learning path.
+                  </p>
+                )}
+                {/* Explicit per-lesson choice — a teacher's profile can be assigned to more than one hub, so it
+                    can't reliably stand in for which hub *this* lesson is for. Duration follows the pick
+                    (Playground 30 min, Academy/Success 60 min). */}
+                <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Hub">
+                  {HUB_OPTIONS.map((opt) => {
+                    const active = selectedHub === opt.id;
+                    return (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        role="radio"
+                        aria-checked={active}
+                        onClick={() => setSelectedHub(opt.id)}
+                        className={`flex flex-col items-center gap-0.5 rounded-xl border px-2 py-2.5 text-xs font-semibold transition-all ${active ? HUB_THEME[opt.id].active : 'border-border bg-background text-muted-foreground hover:bg-muted'}`}
+                      >
+                        <span className="text-lg leading-none">{HUB_THEME[opt.id].emoji}</span>
+                        {opt.label}
+                        <span className="text-[10px] font-medium opacity-70">{opt.duration} min</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                {selectedHub === 'playground' && lessonType !== 'trial' ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-medium text-muted-foreground">Length</span>
+                    {([false, true] as const).map((hour) => (
+                      <button
+                        key={String(hour)}
+                        type="button"
+                        onClick={() => setPlaygroundHour(hour)}
+                        className={`rounded-full border px-3 py-1 text-xs font-semibold transition-colors ${playgroundHour === hour ? theme.active : 'border-border bg-background text-foreground hover:bg-muted'}`}
+                      >
+                        {hour ? '1 hour' : '30 minutes'}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">{duration}-minute lesson</p>
+                )}
+              </FormSection>
+            </form>
+
+            <div className="space-y-3 border-t bg-background px-6 py-4">
+              <p className="flex items-center justify-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-xs font-semibold text-foreground">
+                <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
+                {summary}
+              </p>
+              <Button
+                type="submit"
+                form="invite-student-form"
+                disabled={busy || needsChild || parentWithoutChildren}
+                className={`h-12 w-full rounded-xl bg-gradient-to-r ${theme.button} text-sm font-bold text-white shadow-md transition hover:opacity-95`}
+              >
+                {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
+                {lessonType === 'trial' ? 'Book trial & send invite' : weeklyOn ? `Book ${weeks} weekly lessons & send invite` : 'Book & send invite'}
               </Button>
-            </DialogFooter>
-          </form>
+            </div>
+          </>
         ) : (
-          <div className="space-y-4">
-            <div className="rounded-lg border bg-muted/40 p-3 text-sm break-all">{joinLink}</div>
+          <div className="space-y-4 px-6 py-6">
+            <div className="flex flex-col items-center gap-2 text-center">
+              <span className={`flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br ${theme.tile} text-white shadow-lg`}>
+                <CheckCircle2 className="h-7 w-7" />
+              </span>
+              <p className="text-lg font-extrabold tracking-tight">
+                {lessonType === 'trial' ? 'Trial lesson booked' : weeklySummary?.known ? `${weeklySummary.booked + 1} lessons booked` : 'Lesson booked'}
+              </p>
+              {weeklySummary && (
+                <p className={`text-sm ${weeklySummary.known && weeklySummary.failed === 0 ? 'text-muted-foreground' : 'text-destructive'}`}>
+                  {!weeklySummary.known
+                    ? 'Only the first lesson was booked — the weekly booking is not available yet.'
+                    : weeklySummary.failed === 0
+                      ? `One every ${weeklyDayLabel} at ${time}. They all show on the student's dashboard.`
+                      : `${weeklySummary.booked + 1} of ${weeklySummary.wanted + 1} booked; ${weeklySummary.failed} could not be booked.`}
+                </p>
+              )}
+              <p className="text-xs text-muted-foreground">The link below opens the first lesson.</p>
+            </div>
+            <div className="break-all rounded-xl border bg-muted/40 p-3 text-sm">{joinLink}</div>
             <div className="flex gap-2">
-              <Button type="button" variant="outline" className="flex-1" onClick={handleCopy}>
-                {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+              <Button type="button" variant="outline" className="h-11 flex-1 rounded-xl" onClick={handleCopy}>
+                {copied ? <Check className="mr-2 h-4 w-4" /> : <Copy className="mr-2 h-4 w-4" />}
                 {copied ? 'Copied' : 'Copy link'}
               </Button>
               <Button
                 type="button"
                 variant="outline"
-                className="flex-1"
+                className="h-11 flex-1 rounded-xl"
                 onClick={() =>
                   window.open(`https://wa.me/?text=${encodeURIComponent(`Join your English lesson here: ${joinLink}`)}`, '_blank')
                 }
               >
-                Share via WhatsApp
+                <MessageCircle className="mr-2 h-4 w-4" />
+                WhatsApp
               </Button>
             </div>
-            <Button type="button" className="w-full" onClick={() => handleClose(false)}>
+            <Button type="button" className={`h-11 w-full rounded-xl bg-gradient-to-r ${theme.button} font-bold text-white`} onClick={() => handleClose(false)}>
               Done
             </Button>
           </div>
