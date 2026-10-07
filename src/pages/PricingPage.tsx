@@ -139,9 +139,9 @@ export default function PricingPage() {
         </Button>
 
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold mb-2">Get more lesson credits</h1>
+          <h1 className="text-3xl font-bold mb-2">Get more lessons</h1>
           <p className="text-muted-foreground">
-            {user ? `You currently have ${availableCredits} credit${availableCredits !== 1 ? 's' : ''}.` : 'Sign in to purchase credits.'}
+            {user ? `You currently have ${availableCredits} lesson${availableCredits !== 1 ? 's' : ''}.` : 'Sign in to buy lessons.'}
           </p>
         </div>
 
@@ -180,7 +180,7 @@ export default function PricingPage() {
                           <Sparkles className="w-4 h-4 text-primary" />
                           {pack.name}
                         </CardTitle>
-                        <CardDescription>{pack.session_count} credits · {pack.session_count / 2} hours of lessons</CardDescription>
+                        <CardDescription>{pack.session_count} lessons · 30 minutes each</CardDescription>
                       </CardHeader>
                       <CardContent className="flex-1 flex flex-col">
                         <div className="mb-4">
@@ -199,7 +199,7 @@ export default function PricingPage() {
                         <ul className="text-sm space-y-1.5 mb-6 flex-1">
                           <li className="flex items-center gap-2">
                             <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                            {pack.session_count} credits · 1 credit = 30 min, 1 hour = 2 credits
+                            {pack.session_count} lessons · 30 minutes each
                           </li>
                           <li className="flex items-center gap-2">
                             <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />

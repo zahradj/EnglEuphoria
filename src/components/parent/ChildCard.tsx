@@ -103,7 +103,7 @@ export function ChildCard({ child, onViewProgress, credits, onBuy, onMove }: Pro
           <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl px-3 py-2" style={{ background: 'var(--fd-track)' }}>
             <span className="flex items-center gap-2 text-sm font-bold">
               <Coins className="h-4 w-4" aria-hidden />
-              <span className="fd-num">{credits}</span> {credits === 1 ? 'lesson credit' : 'lesson credits'}
+              <span className="fd-num">{credits}</span> {credits === 1 ? 'lesson left' : 'lessons left'}
             </span>
             <span className="flex flex-wrap gap-2">
               {onBuy && (
@@ -113,7 +113,7 @@ export function ChildCard({ child, onViewProgress, credits, onBuy, onMove }: Pro
               )}
               {onMove && credits > 0 && (
                 <button type="button" className="fd-btn fd-btn--outline" onClick={() => onMove(child.studentId)}>
-                  Move credits
+                  Move lessons
                 </button>
               )}
             </span>

@@ -243,7 +243,7 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
                   <Button asChild className={cn("w-full", isMastery ? theme.btnMastery : popular ? theme.btnPopular : theme.btnPrimary)}>
                     <a href={contactToBuyHref({ packName: pack.name, credits: pack.session_count })}>
                       <CreditCard className="w-4 h-4 mr-2" />
-                      Contact us to buy {pack.session_count} credits
+                      Contact us to buy {pack.session_count} lessons
                     </a>
                   </Button>
                 ) : (
@@ -257,7 +257,7 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
                   )}
                 >
                   <CreditCard className="w-4 h-4 mr-2" />
-                  {isProcessing ? "Redirecting…" : `Buy ${pack.session_count} credits online`}
+                  {isProcessing ? "Redirecting…" : `Buy ${pack.session_count} lessons online`}
                 </Button>
                 <Button asChild variant="ghost" size="sm" className="w-full text-muted-foreground">
                   <a href={contactToBuyHref({ packName: pack.name, credits: pack.session_count })}>Or contact us to buy</a>

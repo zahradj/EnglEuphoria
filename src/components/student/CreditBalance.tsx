@@ -9,7 +9,7 @@ import { useFamilyMembership } from '@/hooks/useFamilyMembership';
 
 /**
  * The student's lesson balance, always visible at the top of the dashboard.
- * 1 credit = 30 minutes, so the hours are shown next to it. When credits are low or gone the
+ * 1 credit = one 30-minute lesson, shown simply as a number of lessons. When they are low or gone the
  * CreditAlertBanner takes over, so this stays quiet then (no two notices for the same thing).
  */
 export function CreditBalance({ studentId }: { studentId?: string | null }) {
@@ -19,7 +19,6 @@ export function CreditBalance({ studentId }: { studentId?: string | null }) {
   const inFamily = useFamilyMembership(id);
   if (!id || loading || creditAlertLevel(availableCredits) !== 'none') return null;
 
-  const hours = availableCredits / 2;
   return (
     <div
       data-credit-balance={availableCredits}
@@ -28,8 +27,8 @@ export function CreditBalance({ studentId }: { studentId?: string | null }) {
       <div className="flex items-center gap-3">
         <Coins className="h-5 w-5 shrink-0 text-primary" />
         <p className="text-sm">
-          <span className="font-bold">{availableCredits} lesson credits</span>
-          <span className="text-muted-foreground"> · {hours} {hours === 1 ? 'hour' : 'hours'} of lessons (1 credit = 30 min)</span>
+          <span className="font-bold">{availableCredits} {availableCredits === 1 ? 'lesson' : 'lessons'} left</span>
+          <span className="text-muted-foreground"> · 30 minutes each</span>
         </p>
       </div>
       {inFamily ? (

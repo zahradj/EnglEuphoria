@@ -63,14 +63,14 @@ export function CreditAlertBanner({ studentId }: { studentId?: string | null }) 
         {empty ? <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" /> : <Coins className="mt-0.5 h-5 w-5 shrink-0" />}
         <div>
           <p className="font-bold">
-            {empty ? 'You have used all your credits' : `Only ${availableCredits} credit${availableCredits === 1 ? '' : 's'} left`}
+            {empty ? 'You have used all your lessons' : `Only ${availableCredits} lesson${availableCredits === 1 ? '' : 's'} left`}
           </p>
           <p className="text-sm opacity-90">
             {empty
               ? ONLINE_PAYMENTS_ENABLED
                 ? 'Buy a credit pack online, or contact us to buy, to book your next lesson.'
                 : 'You can book your next lesson once you buy more credits. Contact us and your new credits will appear here as soon as they are added.'
-              : '1 credit = 30 minutes (a 1-hour lesson uses 2). Top up so your next lesson is never blocked.'}
+              : 'Each lesson is 30 minutes. Top up so your next lesson is never blocked.'}
           </p>
         </div>
       </div>
