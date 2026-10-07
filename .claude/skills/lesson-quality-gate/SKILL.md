@@ -164,6 +164,23 @@ Academy B1 U1 L1 — every slide "reported" the cover).
       the line is fully readable, and it does not collide with the title chip, next arrow or CTA. When you order or choose
       the picture, leave a calm area (sky, wall, floor, table) for the text and say so in the image prompt.
 
+11. **Sound (phonics) lessons: layout and pictures — GLOBAL** (owner rule, 2026-10-07: "the vocabulary can be scattered on both
+    the right and the left and the sound in the center — or the sound on the left or the right and the words on the opposite
+    side"; "make it universal, add it to the blueprint and the quality"). Every `sound-model` scene, every hub:
+    - **Layout.** Either (a) the sound card in the CENTER with the words floating on BOTH sides of it (A1: two left, two right,
+      staggered, wide gaps), or (b) the sound card on the LEFT or RIGHT (`soundSide: 'left' | 'right'`) with ALL the words
+      floating scattered on the OPPOSITE side. Never a row or grid of words under or beside the letter, never words on top
+      of the letter card, the teacher line or the bottom buttons. Phones (<640px) put the words in the four corners.
+      Words start as big "?" mystery cards and open into the picture + a word chip. Spots live in `soundAnchors.ts`
+      (`anchorSpot`, `letterX`); `SoundModelScene.layout.test.ts` guards the spacing.
+    - **Pictures.** Every anchor word has an `img`: a well-drawn CARTOON ILLUSTRATION (animated-movie look: dark outline,
+      soft shading and highlights, expressive face where it fits) with a TRANSPARENT background — never a system emoji (it renders
+      as an ugly 3D glyph), never a plain flat vector, never a 3D render. Canva only. Prompt:
+      "Rich cartoon illustration sticker of <WORD>, children's animated-movie style like our Pre-A1 characters: thick dark-brown outline, soft shading with small highlights, friendly expressive face where it fits, centered, single object on a plain pure white background, no shadow, no text, NOT a 3D render, NOT an emoji."
+      `soundPictures.test.ts` (deploy gate) fails on any new anchor without `img`; its known emoji-only list may only shrink.
+    - **Check.** Open the scene in headless Chrome at 1280×720 and 390×844, tap all four mystery cards, and confirm nothing
+      overlaps and every word is readable.
+
 **Fix at the shared component** (`AcademyDemo.tsx`, `PlayAcademyLesson.tsx`, `LivingCanvas.tsx`,
 `EscapeRoomSlot.tsx`), not per lesson — comfort bugs are almost always shared-component bugs.
 

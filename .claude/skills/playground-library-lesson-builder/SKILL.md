@@ -374,6 +374,13 @@ thing that got scene-for-scene pixel parity right in practice.
 Small, dependency-free, already-built pieces in `SceneRenderer.tsx` worth
 reaching for before hand-rolling something similar:
 
+- **`sound-model` layout + pictures (A1/A2, `SoundModelScene` + `soundAnchors.ts`)** — owner rule 2026-10-07, every hub.
+  Sound card CENTER with the words scattered on BOTH sides (default, A1: 2 + 2), or `soundSide: 'left' | 'right'` with ALL the
+  words floating on the opposite side; phones use the four corners. Words are "?" mystery cards that open into a picture + word.
+  Each anchor needs an `img` — a rich cartoon illustration (outline, soft shading + highlights, transparent background; NOT emoji,
+  NOT 3D, NOT plain flat vector), made in Canva with: "Rich cartoon illustration sticker of <WORD>, children's animated-movie style like our Pre-A1 characters: thick dark-brown outline, soft shading with small highlights, friendly expressive face where it fits, centered, single object on a plain pure white background, no shadow, no text, NOT a 3D render, NOT an emoji."
+  Export through the holder design (reuse a 1024×1024 sticker page: `update_fill`, since the design is at its 100-page limit),
+  then `scripts/fetch-canva-art.py` locally. `soundPictures.test.ts` + `SoundModelScene.layout.test.ts` are the deploy gate.
 - **`StoryCaption` (→ `StoryPlate` + `captionPlacement.ts`)** — THE way story / narration / reading text is shown over a
   picture, in every scene kind and hub (owner rule 2026-10-06, global): the framed paper plate of the character-introduction
   `DialoguePlate`, on the side of THE PICTURE with calm space — top, bottom, left or right — measured per page

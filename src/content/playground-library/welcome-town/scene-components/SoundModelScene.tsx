@@ -4,7 +4,7 @@ import { CAST } from '../scenes';
 import { safeSpeak, playLetterPhonic } from '../../unit1/audio';
 import * as sfx from '../../unit1/sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
-import { anchorSpot } from './soundAnchors';
+import { anchorSpot, letterX } from './soundAnchors';
 import { voiceOf, MAGIC_PURPLE, MAGIC_GOLD, MAGIC_GRADIENT, MAGIC_GLOW, MagicLayer } from './shared';
 
 /* ---------- Sound model (phonics: listen + explore anchor words) ---------- */
@@ -66,7 +66,7 @@ export function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene,
           {phase === 'done' ? 'You found them all! Great listening! ⭐' : scene.teacher}
         </div>
       </div>
-      <div className="pointer-events-none absolute inset-x-0 top-1/2 z-20 flex -translate-y-1/2 flex-col items-center gap-4">
+      <div className="pointer-events-none absolute top-1/2 z-20 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4" style={{ left: `${letterX(scene.soundSide ?? 'center', narrow)}%` }}>
         <button
           type="button"
           onClick={playLetterSound}
@@ -85,7 +85,7 @@ export function SoundModelScene({ scene, onNext, sync }: { scene: Extract<Scene,
           the same look as the Pre-A1 sound lessons: a big "?" mystery card that opens into a flat picture
           with its word. Wide, staggered spots keep every picture clear of the letter and of each other. */}
       {scene.anchors.map((a, i) => {
-        const spot = anchorSpot(i, scene.anchors.length, narrow);
+        const spot = anchorSpot(i, scene.anchors.length, narrow, scene.soundSide ?? 'center');
         const isOpen = openedSet.has(i);
         const nextClosed = i === scene.anchors.findIndex((_, k) => !openedSet.has(k));
         const size = isOpen ? 'min(clamp(96px, calc(21*var(--svh,1vh)), 190px), 23vw)' : 'min(clamp(72px, calc(14*var(--svh,1vh)), 130px), 18vw)';
