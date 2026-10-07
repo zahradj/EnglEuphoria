@@ -96,7 +96,7 @@ export default function TermsOfServicePage() {
 
       <section>
         <h2 className="font-display text-2xl font-semibold mt-8 mb-3">9. Contact</h2>
-        <p>Questions about these Terms? Contact us at <a href="mailto:hello@engleuphoria.com" className="text-indigo-400 hover:underline">hello@engleuphoria.com</a> or by mail at:</p>
+        <p>Questions about these Terms? Contact us at <a href="mailto:support@engleuphoria.com" className="text-indigo-400 hover:underline">hello@engleuphoria.com</a> or by mail at:</p>
         <p className="not-prose">
           EnglEuphoria<br />
           30 N Gould St, Ste R<br />
