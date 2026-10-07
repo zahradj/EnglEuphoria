@@ -1,69 +1,129 @@
 // Computerized-adaptive-testing (CAT) logic for the live placement test.
-// Replaces a fixed 15-question array with question-by-question selection
-// driven by a running ability estimate (theta), so:
-//   - a weak student who is clearly struggling can stop once their level is
-//     confidently pinned down, instead of being forced through 15 items;
-//   - a capable student keeps climbing to harder items (up to MAX_ITEMS) as
-//     long as their true ceiling hasn't been found yet.
-// MIN_ITEMS is a floor: nobody stops before it, regardless of how one-sided
-// their answers look, so a lucky/unlucky early streak can't end the test on
-// too little evidence.
+//
+// What this does (and why it changed - see docs/placement-test-research.md):
+//  - The ability estimate is a proper Bayesian one (EAP over a grid) built from EVERY answer so far, with a
+//    guessing floor, instead of a running nudge. Its posterior spread is the real standard error (SE).
+//  - The test stops on PRECISION (SE at or below the hub's target, after a minimum length), not just a count,
+//    and has a hard maximum. The Academy runs 20-36 questions; one lucky guess can no longer decide a level.
+//  - It starts low and climbs: the prior is centred between A1 and A2 (theta 0 = difficulty 0.5 = B1, so a
+//    prior centred on 0 started students at B1 and skipped A1/A2).
+//  - "I'm not sure" answers count as wrong WITHOUT a guessing allowance; implausibly fast answers get less credit.
 import type { BankQuestion, Hub } from './questionBanks';
 import { resolveScoreSkill } from './questionBanks';
 
+export interface HubConfig {
+  minItems: number;
+  maxItems: number;
+  /** Stop once the standard error (in theta units) is at or below this. */
+  seTarget: number;
+}
+
+const HUB_CONFIG: Record<Hub, HubConfig> = {
+  playground: { minItems: 8, maxItems: 15, seTarget: 0.55 },
+  academy: { minItems: 20, maxItems: 36, seTarget: 0.45 },
+  // The Success Hub gets its own redesign (longer, with listening, writing and speaking); until then it keeps the old length.
+  professional: { minItems: 8, maxItems: 15, seTarget: 0.55 },
+};
+
+export const configFor = (hub: Hub): HubConfig => HUB_CONFIG[hub];
+export const maxItemsFor = (hub: Hub): number => HUB_CONFIG[hub].maxItems;
+
+/** Kept for callers that only need the old fixed numbers. */
 export const MAX_ITEMS = 15;
 export const MIN_ITEMS = 8;
-const SE_TARGET = 0.45;
-const STABLE_RUN = 3;
-const STABLE_BAND = 0.15;
-const START_SE = 1.5;
-/** A placement test starts at the BOTTOM and climbs: theta 0 sits at difficulty 0.5, which is already B1, so a
- *  test that started there skipped A1 and A2 entirely. -2.1 is difficulty 0.15 (the A1 items); a capable
- *  student climbs past them in a few answers, a beginner is never thrown in at B1. */
+
+/** Where selection starts (before any answer). theta = (difficulty - 0.5) * 6, so -2.1 is difficulty 0.15 = A1. */
 export const START_THETA = -2.1;
-const MIN_SE = 0.3;
-const SE_DECAY = 0.85;
+/** Prior for the estimate: centred between A1 and A2, wide enough that a few answers move it anywhere. */
+const PRIOR_MEAN = -1.2;
+const PRIOR_SD = 2.5;
+export const START_SE = PRIOR_SD;
+
+/** Chance of a correct answer from guessing alone on a 4-option question. */
+const GUESS_FLOOR = 0.2;
+/** A correct answer that came implausibly fast earns only partial credit (it is likely a guess). */
+const FAST_GUESS_FLOOR = 0.5;
+
+const GRID_MIN = -4;
+const GRID_MAX = 4;
+const GRID_STEP = 0.05;
+const GRID: number[] = Array.from({ length: Math.round((GRID_MAX - GRID_MIN) / GRID_STEP) + 1 }, (_, i) => GRID_MIN + i * GRID_STEP);
 
 // Every skill a hub's radar tracks must get at least one answered item
-// before the test is allowed to stop early — otherwise a skill would fall
-// back to a copied overall score instead of a real measurement.
+// before the test is allowed to stop early.
 const REQUIRED_SKILLS_BY_HUB: Record<Hub, string[]> = {
   playground: ['vocabulary', 'listening', 'grammar'],
   academy: ['vocabulary', 'listening', 'grammar', 'writing', 'speaking', 'reading'],
   professional: ['professional_vocabulary', 'listening', 'grammar_accuracy', 'business_writing', 'fluency', 'reading'],
 };
 
-/** Items are already curated so `difficulty` (0-1) tracks CEFR level; map it
- *  onto a -3..3 theta scale so item difficulty and student ability share one
- *  axis without needing a second per-item calibration pass. */
-function itemTheta(q: BankQuestion): number {
+/** Items are authored so `difficulty` (0-1) tracks CEFR level; map it onto a -3..3 scale. */
+export function itemTheta(q: BankQuestion): number {
   return Math.max(-3, Math.min(3, (q.difficulty - 0.5) * 6));
 }
 
+export interface AnswerRecord {
+  /** Item difficulty on the theta scale. */
+  d: number;
+  correct: boolean;
+  /** Guessing floor that applies to this answer (0 for "I'm not sure"). */
+  floor: number;
+}
+
 export interface AdaptiveState {
+  /** Current ability estimate (posterior mean). */
   theta: number;
+  /** Real standard error (posterior spread). */
   se: number;
   answeredIdx: Set<number>;
   thetaHistory: number[];
   skillCounts: Record<string, number>;
-  /** Becomes true on the first wrong answer. Gates every early-stop path: a
-   *  student on an unbroken correct streak hasn't had their ceiling found
-   *  yet, so they must keep climbing toward harder items (up to MAX_ITEMS)
-   *  instead of being cut off at the floor just because item count and se
-   *  happened to cross a threshold. A struggling student naturally answers
-   *  something wrong almost immediately, so this never delays their
-   *  early-stop in practice. */
+  /** Becomes true on the first wrong answer: nobody stops on an unbroken streak before their ceiling is found. */
   hasIncorrect: boolean;
+  responses: AnswerRecord[];
 }
 
 export function initAdaptiveState(): AdaptiveState {
-  return { theta: START_THETA, se: START_SE, answeredIdx: new Set(), thetaHistory: [], skillCounts: {}, hasIncorrect: false };
+  return {
+    theta: START_THETA,
+    se: START_SE,
+    answeredIdx: new Set(),
+    thetaHistory: [],
+    skillCounts: {},
+    hasIncorrect: false,
+    responses: [],
+  };
 }
 
-/** Picks the next item: while any required skill is still uncovered, choose
- *  only from those skills (coverage-first); otherwise pick whichever
- *  remaining item's difficulty is closest to the current ability estimate,
- *  lightly penalizing skills already over-sampled. */
+const sigmoid = (x: number) => 1 / (1 + Math.exp(-x));
+
+/** Posterior mean and spread of ability given the answers so far. */
+export function estimateAbility(responses: AnswerRecord[]): { theta: number; se: number } {
+  const logPost = GRID.map((t) => {
+    let lp = -0.5 * ((t - PRIOR_MEAN) / PRIOR_SD) ** 2;
+    for (const r of responses) {
+      const p = r.floor + (1 - r.floor) * sigmoid(t - r.d);
+      lp += Math.log(Math.max(1e-9, r.correct ? p : 1 - p));
+    }
+    return lp;
+  });
+  const max = Math.max(...logPost);
+  const w = logPost.map((lp) => Math.exp(lp - max));
+  let wSum = 0;
+  let mSum = 0;
+  for (let i = 0; i < GRID.length; i++) {
+    wSum += w[i];
+    mSum += w[i] * GRID[i];
+  }
+  const mean = mSum / wSum;
+  let vSum = 0;
+  for (let i = 0; i < GRID.length; i++) vSum += w[i] * (GRID[i] - mean) ** 2;
+  return { theta: mean, se: Math.sqrt(vSum / wSum) };
+}
+
+/** Picks the next item: while any required skill is still uncovered, choose only from those skills
+ *  (coverage-first); otherwise the remaining item whose difficulty is closest to the current estimate
+ *  (the most informative one), lightly penalising skills already over-sampled. */
 export function nextAdaptiveItem(
   pool: BankQuestion[],
   hub: Hub,
@@ -78,14 +138,11 @@ export function nextAdaptiveItem(
   if (candidates.length === 0) return null;
 
   let scoped = candidates;
-  const itemsLeftInBudget = MAX_ITEMS - state.answeredIdx.size;
-  if (uncoveredRequired.length > 0 && uncoveredRequired.length >= itemsLeftInBudget - 1) {
-    // Running out of budget to cover every required skill — force coverage.
+  if (uncoveredRequired.length > 0) {
+    // Only force coverage once the estimate has had a few answers to settle, so the first questions stay on level.
+    const forceNow = state.answeredIdx.size >= 3;
     const restricted = candidates.filter(({ q }) => uncoveredRequired.includes(resolveScoreSkill(q, hub)));
-    if (restricted.length > 0) scoped = restricted;
-  } else if (uncoveredRequired.length > 0) {
-    const restricted = candidates.filter(({ q }) => uncoveredRequired.includes(resolveScoreSkill(q, hub)));
-    if (restricted.length > 0) scoped = restricted;
+    if (forceNow && restricted.length > 0) scoped = restricted;
   }
 
   let best = scoped[0];
@@ -103,72 +160,119 @@ export function nextAdaptiveItem(
   return { item: best.q, index: best.index };
 }
 
-/** Updates the ability estimate after an answer using a simple 1-parameter
- *  logistic update: move theta toward the item's difficulty by an amount
- *  proportional to the surprise (actual vs. expected correctness) and the
- *  current uncertainty, then shrink the uncertainty (se) a notch. */
+export interface AnswerOptions {
+  /** The student pressed "I'm not sure": counted as wrong, with no guessing allowance. */
+  unsure?: boolean;
+  /** The answer came implausibly fast for the item: a correct answer earns reduced credit. */
+  fast?: boolean;
+}
+
+/** Updates the estimate after an answer. */
 export function applyAdaptiveAnswer(
   state: AdaptiveState,
   item: BankQuestion,
   index: number,
   hub: Hub,
   isCorrect: boolean,
+  options: AnswerOptions = {},
 ): AdaptiveState {
-  const d = itemTheta(item);
-  const p = 1 / (1 + Math.exp(-(state.theta - d)));
-  const error = (isCorrect ? 1 : 0) - p;
-  const k = Math.max(0.3, state.se);
-  const theta = Math.max(-3, Math.min(3, state.theta + k * error));
-  const se = Math.max(MIN_SE, state.se * SE_DECAY);
+  const correct = options.unsure ? false : isCorrect;
+  const floor = options.unsure ? 0 : options.fast && correct ? FAST_GUESS_FLOOR : GUESS_FLOOR;
+  const responses = [...state.responses, { d: itemTheta(item), correct, floor }];
+  const { theta, se } = estimateAbility(responses);
   const skill = resolveScoreSkill(item, hub);
 
   const answeredIdx = new Set(state.answeredIdx);
   answeredIdx.add(index);
-  const thetaHistory = [...state.thetaHistory, theta].slice(-STABLE_RUN);
-  const skillCounts = { ...state.skillCounts, [skill]: (state.skillCounts[skill] ?? 0) + 1 };
-  const hasIncorrect = state.hasIncorrect || !isCorrect;
-
-  return { theta, se, answeredIdx, thetaHistory, skillCounts, hasIncorrect };
+  return {
+    theta,
+    se,
+    answeredIdx,
+    thetaHistory: [...state.thetaHistory, theta].slice(-3),
+    skillCounts: { ...state.skillCounts, [skill]: (state.skillCounts[skill] ?? 0) + 1 },
+    hasIncorrect: state.hasIncorrect || !correct,
+    responses,
+  };
 }
 
-/** Stop once the floor is met, every required skill has been sampled, and
- *  either the estimate is precise enough (se below target) or the last few
- *  theta updates have settled into a narrow band — whichever comes first —
- *  or once MAX_ITEMS is reached regardless.
- *
- *  Early-stop additionally requires at least one wrong answer. Without that,
- *  a student on an unbroken correct streak would still get cut off right at
- *  the floor purely because item count and se cross their thresholds on a
- *  fixed schedule — se decays the same way regardless of correctness, so it
- *  can't by itself tell "confidently placed" apart from "still climbing
- *  toward an undiscovered ceiling." Requiring a miss first means capable
- *  students keep receiving harder items up to MAX_ITEMS until we actually
- *  find where they falter, while a struggling student (who misses almost
- *  immediately) is barely affected. */
+/** Stop once the minimum length is met, every required skill has been sampled, the student has missed
+ *  something (so a ceiling was found) and the estimate is precise enough - or at the hard maximum. */
 export function shouldStopAdaptive(state: AdaptiveState, hub: Hub): boolean {
-  const answeredCount = state.answeredIdx.size;
-  if (answeredCount >= MAX_ITEMS) return true;
-  if (answeredCount < MIN_ITEMS) return false;
+  const cfg = HUB_CONFIG[hub];
+  const answered = state.answeredIdx.size;
+  if (answered >= cfg.maxItems) return true;
+  if (answered < cfg.minItems) return false;
   if (!state.hasIncorrect) return false;
 
   const requiredSkills = REQUIRED_SKILLS_BY_HUB[hub] ?? [];
-  const allSkillsCovered = requiredSkills.every((s) => (state.skillCounts[s] ?? 0) > 0);
-  if (!allSkillsCovered) return false;
+  if (!requiredSkills.every((s) => (state.skillCounts[s] ?? 0) > 0)) return false;
 
-  if (state.se <= SE_TARGET) return true;
-
-  if (state.thetaHistory.length >= STABLE_RUN) {
-    const recent = state.thetaHistory.slice(-STABLE_RUN);
-    const spread = Math.max(...recent) - Math.min(...recent);
-    if (spread <= STABLE_BAND) return true;
-  }
-  return false;
+  return state.se <= cfg.seTarget;
 }
 
-export function thetaToCefr(theta: number): 'A1' | 'A2' | 'B1' | 'B2' | 'C1' {
-  if (theta < -1.8) return 'A1';
-  if (theta < -0.6) return 'A2';
-  if (theta < 0.6) return 'B1';
-  if (theta < 1.8) return 'B2';
-  return 'C1';
+export type Cefr = 'A1' | 'A2' | 'B1' | 'B2' | 'C1';
+const LEVELS: Cefr[] = ['A1', 'A2', 'B1', 'B2', 'C1'];
+/** Boundaries between A1|A2, A2|B1, B1|B2, B2|C1 on the theta scale: the band edges of the item difficulty scale
+ *  (A1 up to 0.25, A2 to 0.50, B1 to 0.68, B2 to 0.85), so a student is placed at the level whose items they
+ *  get right about half the time. */
+const CUT_POINTS = [-1.5, 0, 1.08, 2.1];
+
+export function thetaToCefr(theta: number): Cefr {
+  let i = 0;
+  while (i < CUT_POINTS.length && theta >= CUT_POINTS[i]) i++;
+  return LEVELS[i];
+}
+
+export interface PlacementSummary {
+  theta: number;
+  se: number;
+  cefr: Cefr;
+  itemsAnswered: number;
+  /** The test ended at its maximum length without reaching the precision target. */
+  lowPrecision: boolean;
+  /** The estimate sits close to a level boundary: confirm in lesson 1. */
+  borderline: boolean;
+  /** The neighbouring level it could equally be, when borderline. */
+  alternative?: Cefr;
+  notSureCount: number;
+  fastCount: number;
+}
+
+export function summarizeAdaptive(
+  state: AdaptiveState,
+  hub: Hub,
+  extra: { notSureCount?: number; fastCount?: number } = {},
+): PlacementSummary {
+  const cfg = HUB_CONFIG[hub];
+  const cefr = thetaToCefr(state.theta);
+  let nearest = 0;
+  for (let i = 1; i < CUT_POINTS.length; i++) {
+    if (Math.abs(state.theta - CUT_POINTS[i]) < Math.abs(state.theta - CUT_POINTS[nearest])) nearest = i;
+  }
+  const distance = Math.abs(state.theta - CUT_POINTS[nearest]);
+  const borderline = distance <= Math.max(0.2, state.se * 0.5);
+  // Levels LEVELS[nearest] (below the cut) and LEVELS[nearest + 1] (above it).
+  const alternative = borderline ? (cefr === LEVELS[nearest] ? LEVELS[nearest + 1] : LEVELS[nearest]) : undefined;
+  return {
+    theta: Math.round(state.theta * 100) / 100,
+    se: Math.round(state.se * 100) / 100,
+    cefr,
+    itemsAnswered: state.answeredIdx.size,
+    lowPrecision: state.se > cfg.seTarget,
+    borderline,
+    alternative,
+    notSureCount: extra.notSureCount ?? 0,
+    fastCount: extra.fastCount ?? 0,
+  };
+}
+
+/** A random order for showing an item's options (Fisher-Yates). The bank's correct answers are not evenly spread
+ *  across positions, so showing options in bank order would let a test-wise student pick by position. */
+export function shuffledOrder(n: number, rand: () => number = Math.random): number[] {
+  const order = Array.from({ length: n }, (_, i) => i);
+  for (let i = n - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return order;
 }

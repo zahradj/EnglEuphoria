@@ -175,6 +175,9 @@ function MyPathInner() {
             You’re starting at <span className={`font-semibold ${brand.textClass}`}>{cefr}</span>.
             Every lesson moves you one step closer to fluency.
           </p>
+          <p className="mt-1 text-center text-[11px] text-muted-foreground">
+            This is your starting level. Your teacher will confirm it in your first lesson, so don’t worry if it changes a little.
+          </p>
         </section>
 
         {/* Onboarding snapshot — shows the data the student gave us */}

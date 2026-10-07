@@ -1,3 +1,5 @@
+import { ACADEMY_EXTRA } from './academyItems';
+
 // Expert-authored placement-test question banks per hub.
 // Each bank has 24+ items so a 15-question test is freshly shuffled per attempt.
 // `imagePrompt` triggers a Gemini-generated illustration in TestPhase.
@@ -100,15 +102,15 @@ const ACADEMY_POOL: BankQuestion[] = [
   { question: 'Which sentence is correct?', options: ["I'm liking this song.", 'I like this song.', 'I am like this song.', 'I likes this song.'], correctIndex: 1, difficulty: 0.4, targetLevel: 'A2', feedback: { correct: '"Like" is a stative verb.', incorrect: '"Like" is stative — use simple present.' } },
   // B1
   { question: "Complete: 'I ___ in this city since 2020.'", options: ['live', 'lived', 'have lived', 'am living'], correctIndex: 2, difficulty: 0.55, targetLevel: 'B1', feedback: { correct: 'Excellent! Present perfect with "since".', incorrect: '"Since 2020" → present perfect.' } },
-  { question: "Best modal: 'You ___ wear a seatbelt — it's the law.'", options: ['might', 'could', 'must', 'may'], correctIndex: 2, difficulty: 0.6, targetLevel: 'B1', feedback: { correct: 'Yes! "Must" = obligation.', incorrect: 'Legal obligation → "must".' } },
-  { question: "Comparative: 'My new laptop is ___ than my old one.'", options: ['more fast', 'faster', 'fastest', 'most fast'], correctIndex: 1, difficulty: 0.65, targetLevel: 'B1', feedback: { correct: 'Right! Short adjective → -er.', incorrect: 'Short adjective: "faster".' } },
-  { question: '🎧 What is the speaker about to do?', options: ['Go shopping for food', 'Cook dinner at home', 'Clean the kitchen', 'Watch a film'], correctIndex: 0, difficulty: 0.7, targetLevel: 'B1', type: 'listening_match', audio_script: "I'm just heading to the supermarket to pick up some bread and milk for breakfast tomorrow. I might also grab a few vegetables if they still have that fresh produce sale going on. Should only take me about twenty minutes.", feedback: { correct: 'Excellent listening! 🛒', incorrect: 'Supermarket = food shopping.' } },
+  { question: "Best modal: 'You ___ wear a seatbelt — it's the law.'", options: ['might', 'could', 'must', 'may'], correctIndex: 2, difficulty: 0.46, targetLevel: 'A2', feedback: { correct: 'Yes! "Must" = obligation.', incorrect: 'Legal obligation → "must".' } },
+  { question: "Comparative: 'My new laptop is ___ than my old one.'", options: ['more fast', 'faster', 'fastest', 'most fast'], correctIndex: 1, difficulty: 0.38, targetLevel: 'A2', feedback: { correct: 'Right! Short adjective → -er.', incorrect: 'Short adjective: "faster".' } },
+  { question: '🎧 What is the speaker about to do?', options: ['Go shopping for food', 'Cook dinner at home', 'Clean the kitchen', 'Watch a film'], correctIndex: 0, difficulty: 0.66, targetLevel: 'B1', type: 'listening_match', audio_script: "I'm just heading to the supermarket to pick up some bread and milk for breakfast tomorrow. I might also grab a few vegetables if they still have that fresh produce sale going on. Should only take me about twenty minutes.", feedback: { correct: 'Excellent listening! 🛒', incorrect: 'Supermarket = food shopping.' } },
   { question: 'Choose the synonym for "begin".', options: ['end', 'finish', 'start', 'stop'], correctIndex: 2, difficulty: 0.6, targetLevel: 'B1', feedback: { correct: 'Yes! Begin = start.', incorrect: '"Begin" and "start" are synonyms.' } },
   // B2
   { question: "'If I ___ more time, I would learn another language.'", options: ['have', 'had', 'would have', 'will have'], correctIndex: 1, difficulty: 0.75, targetLevel: 'B2', feedback: { correct: 'Second conditional ✅', incorrect: 'Second conditional → "If + past simple".' } },
   { question: "Passive: 'The chef prepared the meal.'", options: ['The meal prepared by the chef.', 'The meal was prepared by the chef.', 'The meal is preparing by the chef.', 'The meal has prepare by the chef.'], correctIndex: 1, difficulty: 0.8, targetLevel: 'B2', feedback: { correct: 'Perfect passive!', incorrect: 'was/were + past participle.' } },
   { question: "Phrasal verb: 'I need to ___ this word — I don't know what it means.'", options: ['look after', 'look up', 'look for', 'look into'], correctIndex: 1, difficulty: 0.85, targetLevel: 'B2', feedback: { correct: '"Look up" = search info!', incorrect: '"Look up" = find information.' } },
-  { question: '🎧 What is the speaker\'s main point?', options: ['She enjoyed the film overall', 'She thought the film was disappointing despite good acting', 'She refused to watch the film', 'She wants to watch it a second time'], correctIndex: 1, difficulty: 0.88, targetLevel: 'B2', type: 'listening_match', audio_script: 'Honestly, the performances were excellent and the cinematography was stunning, but the story dragged on for far too long and the ending left me feeling rather let down. If they had trimmed at least twenty minutes from the middle, it would have been a much stronger film overall.', feedback: { correct: 'Brilliant inference! 🎬', incorrect: 'Praised acting, but disappointed by story.' } },
+  { question: '🎧 What is the speaker\'s main point?', options: ['She enjoyed the film overall', 'She thought the film was disappointing despite good acting', 'She refused to watch the film', 'She wants to watch it a second time'], correctIndex: 1, difficulty: 0.84, targetLevel: 'B2', type: 'listening_match', audio_script: 'Honestly, the performances were excellent and the cinematography was stunning, but the story dragged on for far too long and the ending left me feeling rather let down. If they had trimmed at least twenty minutes from the middle, it would have been a much stronger film overall.', feedback: { correct: 'Brilliant inference! 🎬', incorrect: 'Praised acting, but disappointed by story.' } },
   { question: 'Best linker: "She studied hard, ___ she passed every exam."', options: ['but', 'so', 'although', 'because'], correctIndex: 1, difficulty: 0.7, targetLevel: 'B2', feedback: { correct: 'Cause → result = "so".', incorrect: 'Result clause uses "so".' } },
   // C1
   { question: 'Most precise: "Her arguments were so ___ that no one could refute them."', options: ['nice', 'compelling', 'okay', 'different'], correctIndex: 1, difficulty: 0.9, targetLevel: 'C1', feedback: { correct: '"Compelling" = persuasive! 🎯', incorrect: '"Compelling" is the C1 choice.' } },
@@ -202,7 +204,7 @@ const PROFESSIONAL_POOL: BankQuestion[] = [
 
 const POOLS: Record<Hub, BankQuestion[]> = {
   playground: PLAYGROUND_POOL,
-  academy: ACADEMY_POOL,
+  academy: [...ACADEMY_POOL, ...ACADEMY_EXTRA],
   professional: PROFESSIONAL_POOL,
 };
 

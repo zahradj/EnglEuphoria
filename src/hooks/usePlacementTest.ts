@@ -10,6 +10,7 @@ import {
   clamp,
 } from '@/hooks/useStudentSkills';
 import type { TestResult } from '@/components/placement/TestPhase';
+import type { PlacementSummary } from '@/components/placement/adaptiveEngine';
 
 export type CefrLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1';
 
@@ -135,7 +136,8 @@ export function usePlacementTest() {
     age: number,
     results: TestResult[],
     interests: string[] = [],
-    learningReason: string = ''
+    learningReason: string = '',
+    extra: { summary?: PlacementSummary; productive?: unknown } = {},
   ): Promise<string> => {
     if (!user?.id) throw new Error('User not authenticated');
 
@@ -144,7 +146,8 @@ export function usePlacementTest() {
     const score = Math.round((correctCount / Math.max(total, 1)) * 100);
     const avgComplexity = results.reduce((acc, r) => acc + r.difficulty, 0) / Math.max(total, 1);
 
-    const cefrLevel = calculateCefrFromResults(results);
+    // The adaptive test's own ability estimate decides the level when we have it; the old band-percentage rule is the fallback.
+    const cefrLevel = extra.summary?.cefr ?? calculateCefrFromResults(results);
     const { level, track } = evaluateStudentLevel(age, correctCount, total, avgComplexity);
 
     const completedAt = new Date().toISOString();
@@ -222,11 +225,14 @@ export function usePlacementTest() {
         method: 'ai_full',
         cefr_level: cefrLevel,
         hub,
-        ability_theta: Math.max(-3, Math.min(3, (score - 50) / 25)),
-        standard_error: 0.5,
+        ability_theta: extra.summary ? extra.summary.theta : Math.max(-3, Math.min(3, (score - 50) / 25)),
+        standard_error: extra.summary ? extra.summary.se : 0.5,
         items_answered: total,
         trail: results as any,
-        duration_seconds: 0,
+        duration_seconds: Math.round(results.reduce((sum, r) => sum + (r.responseMs ?? 0), 0) / 1000),
+        // Every placement is provisional until a teacher confirms it in the first lessons; `teacher_verdict` is filled then.
+        provisional: true,
+        summary: extra.summary ? ({ ...extra.summary, productive: extra.productive ?? null } as any) : null,
       });
       if (placementErr) console.error('[usePlacementTest] placement_results insert failed (non-fatal)', placementErr);
     } catch (e) {
