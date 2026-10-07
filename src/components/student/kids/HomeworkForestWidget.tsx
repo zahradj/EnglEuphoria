@@ -22,6 +22,8 @@ interface HomeworkForestWidgetProps {
   isDark?: boolean;
   /** Lesson id the student just finished — its homework is highlighted. */
   justCompletedLessonId?: string | null;
+  /** Leave out Homework Quests (the page already lists them) and hide the widget when nothing else is left. */
+  excludeQuests?: boolean;
 }
 
 const TREE_EMOJI = ['🌳', '🌲', '🌴', '🌿', '🍀'];
@@ -29,6 +31,7 @@ const TREE_EMOJI = ['🌳', '🌲', '🌴', '🌿', '🍀'];
 export const HomeworkForestWidget: React.FC<HomeworkForestWidgetProps> = ({
   isDark = false,
   justCompletedLessonId = null,
+  excludeQuests = false,
 }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -68,7 +71,8 @@ export const HomeworkForestWidget: React.FC<HomeworkForestWidgetProps> = ({
 
   const sorted = useMemo(() => {
     const pending = assignments.filter(
-      (a) => !a.submission || a.submission.status === 'pending'
+      (a) => (!a.submission || a.submission.status === 'pending')
+        && !(excludeQuests && (a as any).content?.type === 'quest')
     );
     if (!justCompletedLessonId) return pending;
     return [...pending].sort((a, b) => {
@@ -79,6 +83,8 @@ export const HomeworkForestWidget: React.FC<HomeworkForestWidgetProps> = ({
   }, [assignments, justCompletedLessonId]);
 
   const open = (id: string) => navigate(`/homework/${id}`);
+
+  if (excludeQuests && !loading && sorted.length === 0) return null;
 
   return (
     <motion.div

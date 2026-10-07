@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, lazy, Suspense } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useStudentLevel } from '@/hooks/useStudentLevel';
-import { BookMarked, Gamepad2, Zap, Loader2, ArrowLeft, X, Lock, Play } from 'lucide-react';
+import { BookMarked, Gamepad2, Zap, Loader2, ArrowLeft, X, Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -43,9 +43,8 @@ const ZONE_CHIP: Record<AcademyZoneId, string> = {
   writing:  'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-200',
 };
 
-/** Playground: every Homework Quest, linked to the lesson it practises.
- *  Quests open once that lesson is finished; until then the card links back
- *  to the lesson itself. */
+/** Playground: the Homework Quests of the lessons this student has FINISHED - nothing else.
+ *  A quest appears here when its lesson is done; there are no locked cards for lessons not yet played. */
 function HomeworkQuestsSection() {
   const navigate = useNavigate();
   const { lessons, loading } = usePlaygroundLessons();
@@ -65,12 +64,19 @@ function HomeworkQuestsSection() {
           : null;
         return { quest: q, lesson, lessonPath, ready: lesson?.status === 'completed' };
       })
-      // Ready quests first, then by title.
-      .sort((a, b) => Number(b.ready) - Number(a.ready) || a.quest.title.localeCompare(b.quest.title));
+      .filter((c) => c.ready)
+      .sort((a, b) => a.quest.title.localeCompare(b.quest.title));
   }, [lessons]);
 
   if (loading) return <div className="h-28 animate-pulse rounded-2xl bg-muted/60" />;
-  if (cards.length === 0) return null;
+  if (cards.length === 0) {
+    return (
+      <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 p-8 text-center text-muted-foreground">
+        <p className="text-sm font-semibold">No homework yet</p>
+        <p className="mt-1 text-xs">Finish a lesson on the map and its homework quest appears here.</p>
+      </div>
+    );
+  }
 
   return (
     <section className="space-y-3" aria-label="Homework quests">
@@ -86,22 +92,12 @@ function HomeworkQuestsSection() {
                 {ready && <Badge className="mt-1.5 bg-emerald-600 px-1.5 py-0 text-[10px] text-white">Ready to play</Badge>}
               </div>
             </div>
-            {ready ? (
-              <button
-                onClick={() => navigate(`/homework-quest/${quest.id}`)}
-                className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-orange-500 px-4 py-2 text-xs font-extrabold text-white shadow active:scale-95"
-              >
-                <Play className="h-3.5 w-3.5" /> Start quest
-              </button>
-            ) : (
-              <button
-                onClick={() => lessonPath && navigate(lessonPath)}
-                disabled={!lessonPath}
-                className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-extrabold text-orange-700 ring-2 ring-orange-200 active:scale-95 disabled:opacity-50"
-              >
-                <Lock className="h-3.5 w-3.5" /> {lesson ? 'Finish the lesson to unlock' : 'Lesson coming soon'}
-              </button>
-            )}
+            <button
+              onClick={() => navigate(`/homework-quest/${quest.id}`)}
+              className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-orange-500 px-4 py-2 text-xs font-extrabold text-white shadow active:scale-95"
+            >
+              <Play className="h-3.5 w-3.5" /> Start quest
+            </button>
           </div>
         ))}
       </div>
@@ -195,7 +191,9 @@ export function HomeworkTab() {
           Homework
         </h1>
         <p className="text-muted-foreground mt-1">
-          Assigned by your teacher and synced to your Academy Journey zones.
+          {studentLevel === 'playground'
+            ? 'Finish a lesson and its homework appears here.'
+            : 'Assigned by your teacher and synced to your Academy Journey zones.'}
         </p>
       </div>
 
@@ -203,7 +201,8 @@ export function HomeworkTab() {
 
       {/* Homework Forest (pending quests) — moved here from the dashboard home page. */}
       {(studentLevel === 'playground' || studentLevel === 'academy') && (
-        <HomeworkForestWidget isDark={resolvedTheme === 'dark'} />
+        // Playground: the quests are already listed above, so the forest only shows homework a teacher sent.
+        <HomeworkForestWidget isDark={resolvedTheme === 'dark'} excludeQuests={studentLevel === 'playground'} />
       )}
 
       {/* Zone filter chips — keep in sync with the Quest Map */}
@@ -245,7 +244,7 @@ export function HomeworkTab() {
           {[1,2,3].map((i) => <div key={i} className="h-32 rounded-2xl bg-muted/60 animate-pulse" />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 backdrop-blur-xl p-8 text-center text-muted-foreground">
+        studentLevel === 'playground' ? null : <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 backdrop-blur-xl p-8 text-center text-muted-foreground">
           {zoneParam
             ? `Nothing for ${ZONE_LABEL[zoneParam]} right now.`
             : 'No homework assigned yet. Check back after your next lesson.'}

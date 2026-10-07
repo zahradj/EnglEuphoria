@@ -41,35 +41,37 @@ export const FloatingBackpack: React.FC<FloatingBackpackProps> = ({
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50"
+        // Top-centre, in the sky band under the greeting row: the map's lesson nodes (and their homework badges) sit in the
+        // lower part of the picture, and a bottom pill used to cover them so they could not be tapped.
+        className="absolute top-[4.25rem] left-1/2 -translate-x-1/2 z-30"
       >
-        <div className="flex items-center gap-4 bg-white/95 backdrop-blur-lg rounded-full px-6 py-3 shadow-2xl border-4 border-purple-300">
+        <div className="flex items-center gap-2 sm:gap-3 bg-white/95 backdrop-blur-lg rounded-full px-3 py-1.5 sm:px-4 sm:py-2 shadow-xl border-2 border-purple-300">
           {/* Backpack Button - Opens Inventory */}
           <motion.button
             whileHover={{ scale: 1.1, rotate: -5 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => setIsInventoryOpen(true)}
-            className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
+            className="relative w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
           >
-            <Backpack className="w-8 h-8 text-white" />
+            <Backpack className="w-6 h-6 text-white" />
             {unlockedBadges.length > 0 && (
-              <span className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
                 {unlockedBadges.length}
               </span>
             )}
           </motion.button>
 
           {/* Divider */}
-          <div className="w-px h-10 bg-purple-200" />
+          <div className="w-px h-8 bg-purple-200" />
 
           {/* Map Button */}
           <motion.button
             whileHover={{ scale: 1.1, rotate: 5 }}
             whileTap={{ scale: 0.9 }}
             onClick={onMapClick}
-            className="w-14 h-14 rounded-full bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
+            className="w-11 h-11 rounded-full bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
           >
-            <Map className="w-7 h-7 text-white" />
+            <Map className="w-6 h-6 text-white" />
           </motion.button>
 
           {/* Avatar Button */}
@@ -77,15 +79,15 @@ export const FloatingBackpack: React.FC<FloatingBackpackProps> = ({
             whileHover={{ scale: 1.1, rotate: -5 }}
             whileTap={{ scale: 0.9 }}
             onClick={onAvatarClick}
-            className="w-14 h-14 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow text-2xl"
+            className="w-11 h-11 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow text-xl"
           >
             🦁
           </motion.button>
 
           {/* Stars Counter */}
-          <div className="flex items-center gap-2 bg-yellow-100 rounded-full px-4 py-2">
-            <Star className="w-6 h-6 text-yellow-500 fill-yellow-500" />
-            <span className="text-lg font-bold text-yellow-700">{totalStars.toLocaleString()}</span>
+          <div className="flex items-center gap-1.5 bg-yellow-100 rounded-full px-3 py-1.5">
+            <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+            <span className="text-base font-bold text-yellow-700">{totalStars.toLocaleString()}</span>
           </div>
         </div>
       </motion.div>
