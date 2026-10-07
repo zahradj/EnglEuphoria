@@ -82,9 +82,9 @@ describe.each([
   it('books a 30-minute lesson from one 30-minute slot', async () => {
     state.hubRole = role;
     open(level);
-    const slots = await screen.findAllByTestId('slot');
-    expect(slots.map((s) => s.textContent)).toEqual(['30:half-1', '30:half-2']);
-    fireEvent.click(slots[0]);
+    // wait for the exact list (slots load asynchronously), then act on it
+    await waitFor(() => expect(screen.getAllByTestId('slot').map((s) => s.textContent)).toEqual(['30:half-1', '30:half-2']));
+    fireEvent.click(screen.getAllByTestId('slot')[0]);
     await waitFor(() => expect(state.calls.length).toBe(1));
     expect(state.calls[0].payload.p_duration).toBe(30);
     expect(state.calls[0].payload.p_slot_ids).toEqual(['half-1']);
@@ -94,9 +94,8 @@ describe.each([
     state.hubRole = role;
     open(level);
     fireEvent.click(await screen.findByText('1 hour · 2 credits'));
-    const slots = await screen.findAllByTestId('slot');
-    expect(slots.map((s) => s.textContent)).toEqual(['60:half-1+half-2', '60:whole']);
-    fireEvent.click(slots[1]);
+    await waitFor(() => expect(screen.getAllByTestId('slot').map((s) => s.textContent)).toEqual(['60:half-1+half-2', '60:whole']));
+    fireEvent.click(screen.getAllByTestId('slot')[1]);
     await waitFor(() => expect(state.calls.length).toBe(1));
     expect(state.calls[0].payload.p_duration).toBe(60);
     expect(state.calls[0].payload.p_slot_ids).toEqual(['whole']);
