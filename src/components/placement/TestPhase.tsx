@@ -75,6 +75,7 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
   const answeringSince = useRef<number>(0);
   const [messages, setMessages] = useState<Array<{ role: 'guide' | 'user'; text: string }>>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const answerRef = useRef<HTMLDivElement>(null);
 
   // Listening question state
   const [isPlaying, setIsPlaying] = useState(false);
@@ -93,6 +94,12 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
   );
 
   useEffect(() => {
+    // While the student answers, show the START of the question (instruction, question, text, options), not the bottom
+    // of the page: scrolling to the bottom pushed the instruction and the question itself out of sight.
+    if (phase === 'answering' && answerRef.current) {
+      answerRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      return;
+    }
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, phase]);
 
@@ -213,7 +220,11 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
       fast: fast || undefined,
     };
     setResults(prev => [...prev, result]);
-    setMessages(prev => [...prev, { role: 'user', text: unsure ? t('placement.action.notSure', "I'm not sure") : item.options[index] }]);
+    setMessages(prev => [
+      ...prev,
+      { role: 'guide', text: item.question },
+      { role: 'user', text: unsure ? t('placement.action.notSure', "I'm not sure") : item.options[index] },
+    ]);
     setAdaptiveState(prev => applyAdaptiveAnswer(prev, item, poolIndex, resolvedHub, isCorrect, { unsure, fast }));
     setPhase('feedback');
   };
@@ -301,7 +312,6 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
                 hub={resolvedHub}
                 animate
                 onTypingComplete={() => {
-                  setMessages(prev => [...prev, { role: 'guide', text: currentQuestion.question }]);
                   answeringSince.current = Date.now();
                   setPhase('answering');
                 }}
@@ -331,6 +341,7 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
 
         {phase === 'answering' && currentQuestion && (
           <motion.div
+            ref={answerRef}
             key={`opts-${currentQIndex}`}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -345,6 +356,8 @@ const TestPhase = ({ age, hub, onComplete }: TestPhaseProps) => {
             >
               {t(taskInstructionKeyFor(currentQuestion))}
             </div>
+            {/* The question is shown together with its options, so the student always sees what is being asked. */}
+            <ChatBubble role="guide" message={currentQuestion.question} hub={resolvedHub} />
             {(() => {
               const skill = resolveSkill(currentQuestion);
               const showAudio = skill === 'listening' && !!currentQuestion.audio_script;

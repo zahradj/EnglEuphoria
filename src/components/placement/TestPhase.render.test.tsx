@@ -24,6 +24,7 @@ import TestPhase, { type TestResult } from './TestPhase';
 
 // jsdom has no element scrolling.
 (Element.prototype as unknown as { scrollTo: () => void }).scrollTo = () => {};
+(Element.prototype as unknown as { scrollIntoView: () => void }).scrollIntoView = () => {};
 
 async function playThrough(hub: 'academy' | 'playground') {
   let done: { results: TestResult[]; summary: PlacementSummary } | null = null;
@@ -49,6 +50,16 @@ async function playThrough(hub: 'academy' | 'playground') {
 }
 
 describe('TestPhase (Academy) on screen', () => {
+  it('shows the instruction and the question together with the answer options', async () => {
+    render(<TestPhase age={14} hub="academy" onComplete={() => {}} />);
+    await waitFor(() => expect(screen.getByText(/I'm not sure/)).toBeTruthy(), { timeout: 4000 });
+    // the instruction chip (English test strings fall back to the key's default, i.e. the key itself) and a question
+    // bubble must both be present in the answering block
+    const block = screen.getByText(/I'm not sure/).closest('div')!.parentElement!;
+    expect(block.textContent).toMatch(/placement\.task\.(gap|choose|reading|listening)/);
+    expect(block.textContent!.length).toBeGreaterThan(60);
+  });
+
   it('offers "I\'m not sure", hides the level badge, and finishes with a summary', async () => {
     const { results, summary } = await playThrough('academy');
     expect(screen.queryByText('A1')).toBeNull();
