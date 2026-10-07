@@ -1,7 +1,7 @@
-+ public/lep1/scenes/bg-u5l2-sister-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l2-baby-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l2-garden-wide.png (1376, 768)
-+ docs/art-gen/sheet-u5l2-family.png (1376, 768)
-+ public/lep1/scenes/bg-u5l2-yard-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l2-brother-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l3-grandpa-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l3-kitchen-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l3-hug-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l3-living-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l3-garden-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l3-grandma-wide.png (1376, 768)
 6/6 saved
