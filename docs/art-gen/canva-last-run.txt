@@ -1,4 +1,6 @@
-+ public/lep1/scenes/bg-u5l4-picnic-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l4-tree-wide.png (1376, 768)
-+ docs/art-gen/sheet-u5l4-family-th.png (1376, 768)
-3/3 saved
++ public/lep1/scenes/bg-u5l5-ball-c-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l5-ducks-a-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l5-ducks-b-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l5-ball-a-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l5-ball-b-wide.png (1376, 768)
+5/5 saved
