@@ -50,7 +50,8 @@ export const ReferralTab: React.FC<ReferralTabProps> = ({ signupPath = '/student
           setStats({
             totalInvited: referrals.length,
             completed: referrals.filter(r => r.status === 'completed').length,
-            creditsEarned: referrals.filter(r => r.reward_given).length,
+            // A family account earns 2 free lessons per successful referral, a student 1.
+            creditsEarned: referrals.filter(r => r.reward_given).length * (family ? 2 : 1),
           });
         }
       } catch (err) {
@@ -61,7 +62,7 @@ export const ReferralTab: React.FC<ReferralTabProps> = ({ signupPath = '/student
     };
 
     fetchReferralData();
-  }, [user?.id]);
+  }, [user?.id, family]);
 
   const referralLink = `${window.location.origin}${signupPath}?ref=${referralCode}`;
 
@@ -77,7 +78,7 @@ export const ReferralTab: React.FC<ReferralTabProps> = ({ signupPath = '/student
   };
 
   const shareMessage = family
-    ? `Join me on Engleuphoria — live English lessons for the whole family! Sign up with my link and when you buy your first lesson pack we BOTH get a free 25-minute lesson 🎁 ${referralLink}`
+    ? `Join me on Engleuphoria — live English lessons for the whole family! Sign up with my link and when you buy your first lesson pack we both get free lessons 🎁 ${referralLink}`
     : `Join me on Engleuphoria — the AI-powered English learning platform! Sign up with my link and when you buy your first lesson pack we BOTH get a free 25-minute lesson 🎁 ${referralLink}`;
 
   if (loading) {
@@ -102,7 +103,7 @@ export const ReferralTab: React.FC<ReferralTabProps> = ({ signupPath = '/student
               <CardTitle className="text-2xl">Give a Lesson, Get a Lesson! 🎁</CardTitle>
               <CardDescription className="text-base mt-1">
                 {family
-                  ? 'Invite another family to Engleuphoria. When they buy their first package, you BOTH get a free 25-minute lesson for a child.'
+                  ? 'Invite another family to Engleuphoria. When they buy their first package, you get 2 free 25-minute lessons for a child and they get 1.'
                   : 'Invite a friend to Engleuphoria. When they buy their first package, you BOTH get a free 25-minute lesson.'}
               </CardDescription>
             </div>
@@ -164,7 +165,7 @@ export const ReferralTab: React.FC<ReferralTabProps> = ({ signupPath = '/student
               <div className="text-3xl font-bold text-amber-600">{stats.creditsEarned}</div>
               <div className="text-sm text-muted-foreground mt-1">
                 <Award className="h-4 w-4 inline mr-1" />
-                Credits Earned
+                Free lessons earned
               </div>
             </div>
           </div>
@@ -181,8 +182,8 @@ export const ReferralTab: React.FC<ReferralTabProps> = ({ signupPath = '/student
             {[
               { step: '1', title: 'Share your link', desc: 'Send your unique referral link via WhatsApp, Facebook, Instagram, LinkedIn or any channel.' },
               { step: '2', title: 'Friend signs up', desc: 'Your friend creates an account using your link.' },
-              { step: '3', title: 'Friend buys a package', desc: 'When they purchase their first credit pack, the magic happens!' },
-              { step: '4', title: 'You both win! 🎉', desc: 'You get +1 free session credit. Your friend gets +1 bonus session too.' },
+              { step: '3', title: 'Friend buys a package', desc: 'When they buy their first lesson pack, the reward is yours.' },
+              { step: '4', title: 'You both win! 🎉', desc: family ? 'You get 2 free lessons for one of your children. The new family gets 1 free lesson.' : 'You get 1 free lesson. Your friend gets 1 free lesson too.' },
             ].map((item) => (
               <div key={item.step} className="flex items-start gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">
