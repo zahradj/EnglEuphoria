@@ -66,3 +66,11 @@ Real motion (Higgsfield) can be added later, one clip per shot, only with strict
 
 ## Owner approval
 Approved: owner, 2026-10-07 — "Approved." 
+
+## Production notes (2026-10-07)
+- All pictures made in Canva and checked against the shot list. Three Canva tries at `ducks-c` came back with 5-6 ducks, which
+  would contradict "One, two, three, four ducks!". Instead, `ducks-b` (bread on the water) now shows exactly four ducks swimming
+  to the bread (one duck of the same Canva picture copied onto empty water), and shots 6-7 hold on it with the numbers one-four
+  pointing at each duck. Nothing appears between `ducks-a` (4 ducks) and `ducks-b` (4 ducks).
+- The Feed the Ducks game uses `bg-u5l5-pond-wide.png` (ducks-a with the painted ducks washed out) so only the game's ducks swim there.
+- Film: `public/lep1/video/my-day-with-dad-u5l5.mp4` (stills + 2-picture flips + karaoke words + labels, ~52 s, free).

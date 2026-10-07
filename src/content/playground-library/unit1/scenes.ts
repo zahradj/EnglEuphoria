@@ -631,7 +631,7 @@ export type Scene =
       /** Feed the Ducks (U5L5 signature): ducks on the pond (x/y = centre %) carry a photo of the story
        *  (round crop of `img`: at = centre %, w = % of width); Pip says a story sentence ("We eat ice cream!"),
        *  the child taps that duck and bread flies to it. `name` = how a sentence says the photo ("the book"). */
-      id: string; kind: 'duck-feed'; bg: string; teacher: string; who: CharKey;
+      id: string; kind: 'duck-feed'; bg: string; teacher: string; who: CharKey; duckImg: string;
       ducks: { label: string; name: string; img: string; at: [number, number]; w: number; aspect?: number; x: number; y: number }[];
       rounds: { duck: number; line: string; reply: string }[];
       doneLine: string;
@@ -8937,12 +8937,13 @@ const bgU5L5Gate = u5l5('gate-a');
 const bgU5L5BallA = u5l5('ball-a');
 const bgU5L5BallC = u5l5('ball-c');
 const bgU5L5DucksA = u5l5('ducks-a');
-const bgU5L5DucksC = u5l5('ducks-c');
+const bgU5L5DucksC = u5l5('ducks-b'); // four ducks at the bread (shot 6 counts them)
 const bgU5L5IceCream = u5l5('icecream-b');
 const bgU5L5BookB = u5l5('book-b');
 const bgU5L5Hug = u5l5('hug-b');
 const bgU5L5Night = u5l5('night');
 const bgU5L5Home = u5l5('home');
+const bgU5L5Pond = u5l5('pond'); // ducks-a with the painted ducks washed out (the game's ducks swim there)
 const U5L5_W = 1376 / 768;
 
 export const LESSON_U5L5_TITLE = 'Just Me and My Dad';
@@ -9031,13 +9032,13 @@ export const LESSON_U5L5_SCENES: Scene[] = [
   },
   {
     // Signature game (new): each duck carries a photo of the story; the story sentence picks the duck.
-    id: 'u5l5-duck-feed', kind: 'duck-feed', bg: bgU5L5DucksA, who: 'pip',
+    id: 'u5l5-duck-feed', kind: 'duck-feed', bg: bgU5L5Pond, who: 'pip', duckImg: itemDuck,
     teacher: 'Feed the Ducks! Pip says what he and Dad do. The student taps the duck with that photo — the bread flies to it. Say the sentence together.',
     ducks: [
-      { label: 'play ball', name: 'playing ball', img: bgU5L5BallC, at: [24, 58], w: 26, aspect: U5L5_W, x: 18, y: 66 },
-      { label: 'ice cream', name: 'the ice cream', img: bgU5L5IceCream, at: [15, 48], w: 26, aspect: U5L5_W, x: 40, y: 76 },
-      { label: 'book', name: 'the book', img: bgU5L5BookB, at: [58, 50], w: 30, aspect: U5L5_W, x: 62, y: 70 },
-      { label: 'ducks', name: 'the ducks', img: bgU5L5DucksC, at: [22, 70], w: 34, aspect: U5L5_W, x: 84, y: 76 },
+      { label: 'play ball', name: 'playing ball', img: bgU5L5BallC, at: [24, 58], w: 26, aspect: U5L5_W, x: 13, y: 60 },
+      { label: 'ice cream', name: 'the ice cream', img: bgU5L5IceCream, at: [31, 47], w: 28, aspect: U5L5_W, x: 35, y: 66 },
+      { label: 'book', name: 'the book', img: bgU5L5BookB, at: [50, 52], w: 32, aspect: U5L5_W, x: 14, y: 83 },
+      { label: 'ducks', name: 'the ducks', img: bgU5L5DucksC, at: [26, 74], w: 34, aspect: U5L5_W, x: 37, y: 85 },
     ],
     rounds: [
       { duck: 0, line: 'We play ball! Which duck has it?', reply: 'Yes! We play ball!' },
@@ -9084,10 +9085,10 @@ export const LESSON_U5L5_SCENES: Scene[] = [
     question: 'Where is my dad?',
     notYet: 'Not yet! Look in the other places first!',
     spots: [
-      { x: 14, y: 52, size: 15, ask: 'Is he behind the door?', reveal: "No! It's a dog! D, d, dog!", under: { img: itemDog, label: 'dog' } },
-      { x: 38, y: 74, size: 14, ask: 'Is he in the toy box?', reveal: "No! It's a doll! D, d, doll!", under: { img: itemDoll, label: 'doll' } },
-      { x: 62, y: 46, size: 14, ask: 'Is he behind the curtain?', reveal: "No! It's a duck! D, d, duck!", under: { img: itemDuck, label: 'duck' } },
-      { x: 84, y: 62, size: 18, ask: 'Is he behind the armchair?', reveal: "Yes! Here he is! It's Dad!", target: true, under: { img: famDad, label: 'Dad' } },
+      { x: 8, y: 42, size: 13, ask: 'Is he behind the door?', reveal: "No! It's a dog! D, d, dog!", under: { img: itemDog, label: 'dog' } },
+      { x: 12, y: 76, size: 13, ask: 'Is he in the toy box?', reveal: "No! It's a doll! D, d, doll!", under: { img: itemDoll, label: 'doll' } },
+      { x: 93, y: 40, size: 11, ask: 'Is he behind the curtain?', reveal: "No! It's a duck! D, d, duck!", under: { img: itemDuck, label: 'duck' } },
+      { x: 63, y: 62, size: 22, ask: 'Is he behind the armchair?', reveal: "Yes! Here he is! It's Dad!", target: true, under: { img: famDad, label: 'Dad' } },
     ],
   },
 
@@ -9156,10 +9157,10 @@ export const LESSON_U5L5_SCENES: Scene[] = [
     id: 'u5l5-spin', kind: 'spin-wheel', bg: bgU5L5DucksC, title: '',
     teacher: 'Extra time: have the student spin, then point and count the ducks, or say "We feed the ducks!" Or tap a number.',
     items: [
-      { label: 'One duck!', left: '20%', top: '70%' },
-      { label: 'Two ducks!', left: '35%', top: '75%' },
-      { label: 'Three ducks!', left: '50%', top: '70%' },
-      { label: 'Four ducks!', left: '65%', top: '75%' },
+      { label: 'One duck!', left: '14%', top: '66%' },
+      { label: 'Two ducks!', left: '27.5%', top: '58%' },
+      { label: 'Three ducks!', left: '26.5%', top: '72%' },
+      { label: 'Four ducks!', left: '39%', top: '76%' },
     ],
     wheelAt: { left: '86%', top: '30%' },
   },

@@ -90,18 +90,20 @@ export function DuckFeedScene({ scene, onWin, onNext, sync }: { scene: Feed; onW
         const glow = r && misses >= 2 && i === r.duck;
         const happy = fed.includes(i) && bread === null && r?.duck !== i;
         return (
-          <motion.button key={i} onClick={() => { void feed(i); }} aria-label={d.label}
-            className="absolute z-20 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
-            style={{ left: `${d.x}%`, top: `${d.y}%` }}
+          <div key={i} className="absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: `${d.x}%`, top: `${d.y}%` }}>
+          <motion.button onClick={() => { void feed(i); }} aria-label={d.label} className="relative block"
             animate={wrong === i ? { x: [0, -10, 10, -6, 6, 0] } : { y: [0, -6, 0], rotate: happy ? [0, 8, -8, 0] : [0, -2, 2, 0] }}
             transition={wrong === i ? { duration: 0.4 } : { duration: 2.4 + (i % 3) * 0.4, repeat: Infinity, ease: 'easeInOut' }}
             whileTap={{ scale: 0.9 }}>
             {glow && <span className="absolute -inset-3 animate-pulse rounded-full bg-yellow-300/80 blur-md" />}
-            <span className="relative z-10 rounded-xl border-4 border-white bg-white shadow-[0_8px_18px_rgba(0,0,0,0.3)]">
-              <CropPic img={d.img} at={d.at} w={d.w} aspect={d.aspect} alt={d.label} className="!rounded-lg h-[min(15vh,11vw)] w-[min(15vh,11vw)]" />
+            <span className="relative z-10 flex items-end">
+              <img src={scene.duckImg} alt="" draggable={false} className="h-[min(11vh,8vw)] w-[min(11vh,8vw)] object-contain drop-shadow-[0_6px_6px_rgba(0,0,0,0.25)]" />
+              <span className="-ml-2 mb-1 rounded-xl border-4 border-white bg-white shadow-[0_8px_18px_rgba(0,0,0,0.3)]">
+                <CropPic img={d.img} at={d.at} w={d.w} aspect={d.aspect} alt={d.label} className="!rounded-lg h-[min(12vh,9vw)] w-[min(12vh,9vw)]" />
+              </span>
             </span>
-            <span className="relative -mt-2 select-none leading-none" style={{ fontSize: 'min(14vh,10vw)', filter: 'drop-shadow(0 6px 6px rgba(0,0,0,0.25))' }}>🦆</span>
           </motion.button>
+          </div>
         );
       })}
 

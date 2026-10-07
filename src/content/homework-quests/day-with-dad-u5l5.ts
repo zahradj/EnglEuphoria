@@ -21,10 +21,10 @@ export const QUEST_DAY_WITH_DAD_U5L5: HomeworkQuest = {
   levels: [
     { kind: 'picture-choice', name: 'What Do We Do?', icon: '🦆', intro: 'Listen. Tap the right picture!', img: pic('ducks-a'),
       rounds: [
-        { line: 'We feed the ducks!', answer: 'ducks', options: [{ label: 'ball', src: pic('ball-c') }, { label: 'ducks', src: pic('ducks-c') }, { label: 'book', src: pic('book-b') }] },
-        { line: 'We eat ice cream!', answer: 'ice cream', options: [{ label: 'ice cream', src: pic('icecream-b') }, { label: 'ducks', src: pic('ducks-c') }, { label: 'ball', src: pic('ball-c') }] },
+        { line: 'We feed the ducks!', answer: 'ducks', options: [{ label: 'ball', src: pic('ball-c') }, { label: 'ducks', src: pic('ducks-b') }, { label: 'book', src: pic('book-b') }] },
+        { line: 'We eat ice cream!', answer: 'ice cream', options: [{ label: 'ice cream', src: pic('icecream-b') }, { label: 'ducks', src: pic('ducks-b') }, { label: 'ball', src: pic('ball-c') }] },
         { line: 'We read a book!', answer: 'book', options: [{ label: 'ball', src: pic('ball-c') }, { label: 'ice cream', src: pic('icecream-b') }, { label: 'book', src: pic('book-b') }] },
-        { line: 'We play ball!', answer: 'ball', options: [{ label: 'book', src: pic('book-b') }, { label: 'ball', src: pic('ball-c') }, { label: 'ducks', src: pic('ducks-c') }] },
+        { line: 'We play ball!', answer: 'ball', options: [{ label: 'book', src: pic('book-b') }, { label: 'ball', src: pic('ball-c') }, { label: 'ducks', src: pic('ducks-b') }] },
       ] },
     { kind: 'true-false', name: 'Yes or No?', icon: '⚖️', intro: 'Look and listen. Is it true?',
       rounds: [
