@@ -55,7 +55,7 @@ export const ReferralTab: React.FC = () => {
     fetchReferralData();
   }, [user?.id]);
 
-  const referralLink = `${window.location.origin}/signup?ref=${referralCode}`;
+  const referralLink = `${window.location.origin}/student-signup?ref=${referralCode}`;
 
   const handleCopy = async () => {
     try {
@@ -68,7 +68,7 @@ export const ReferralTab: React.FC = () => {
     }
   };
 
-  const shareMessage = `Join me on Engleuphoria — the AI-powered English learning platform! Sign up with my link and we BOTH get a free 25-min session 🎁 ${referralLink}`;
+  const shareMessage = `Join me on Engleuphoria — the AI-powered English learning platform! Sign up with my link and when you buy your first lesson pack we BOTH get a free lesson credit (30 minutes) 🎁 ${referralLink}`;
 
   const handleWhatsApp = () => {
     window.open(`https://wa.me/?text=${encodeURIComponent(shareMessage)}`, '_blank');
@@ -99,7 +99,7 @@ export const ReferralTab: React.FC = () => {
             <div>
               <CardTitle className="text-2xl">Give a Lesson, Get a Lesson! 🎁</CardTitle>
               <CardDescription className="text-base mt-1">
-                Invite a friend to Engleuphoria. When they buy their first package, you BOTH get a free 25-minute session.
+                Invite a friend to Engleuphoria. When they buy their first package, you BOTH get a free lesson credit (30 minutes).
               </CardDescription>
             </div>
           </div>

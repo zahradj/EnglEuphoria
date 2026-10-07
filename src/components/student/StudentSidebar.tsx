@@ -20,6 +20,7 @@ import {
   LogOut,
   UserCircle,
   CreditCard,
+  Gift,
   Settings as SettingsIcon,
 } from "lucide-react";
 import {
@@ -134,6 +135,7 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
       items: [
         { id: 'profile', label: t('sd.menu.profile', 'My Profile'), icon: UserCircle },
         { id: 'billing', label: t('sd.menu.billing', 'Buy Lessons'), icon: CreditCard },
+        { id: 'referrals', label: t('sd.menu.referrals', 'Invite Friends'), icon: Gift },
         { id: 'settings', label: t('sd.menu.settings', 'Settings'), icon: SettingsIcon },
       ],
     },

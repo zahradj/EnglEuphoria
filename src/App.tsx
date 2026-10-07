@@ -524,7 +524,7 @@ const App = () => {
                       <Route path="/for-teachers" element={<Suspense fallback={<LoadingFallback />}><ForTeachersPage /></Suspense>} />
                       <Route path="/pricing" element={<Suspense fallback={<LoadingFallback />}><PricingPage /></Suspense>} />
                       <Route path="/login" element={<Suspense fallback={<LoadingFallback />}><Login /></Suspense>} />
-                      <Route path="/signup" element={<Navigate to="/student-signup" replace />} />
+                      <Route path="/signup" element={<Navigate to={`/student-signup${window.location.search}`} replace />} />
                       <Route path="/teacher-signup" element={<Navigate to="/for-teachers" replace />} />
                       <Route path="/student-signup" element={<Suspense fallback={<LoadingFallback />}><StudentSignUp /></Suspense>} />
                       <Route path="/parent-signup" element={<Suspense fallback={<LoadingFallback />}><ParentSignUp /></Suspense>} />
