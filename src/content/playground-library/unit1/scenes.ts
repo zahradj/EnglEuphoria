@@ -8954,7 +8954,7 @@ export const LESSON_U5L5_SCENES: Scene[] = [
   {
     id: 'u5l5-song', kind: 'song', bg: bgU5L5Gate, title: '\u{1F3B5} Just Me and My Dad \u{1F3B5}', teacher: 'Sing and do it! Throw a ball, feed the ducks, lick an ice cream, open a book — then a big hug!',
     durationSeconds: 20, bigWord: 'Dad', songUrl: `${A}/audio/my-dad-song-u5l5.mp3?v=1`,
-    lineDurationsMs: [4000, 4000, 4000, 8000],
+    lineDurationsMs: [3730, 5970, 2210, 8152],
     songPrompt: 'Upbeat kids pop song',
     lyrics: [
       { who: 'pip', text: 'We play ball, just me and my dad!', emotion: 'happy' },

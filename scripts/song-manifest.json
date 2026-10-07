@@ -138,5 +138,10 @@
     "path": "public/lep1/audio/family-tree-song-u5l4.mp3",
     "bytes": 321037,
     "sha256": "3e0a6f07babce96cbc82a7a3c84e3ba20c6dc9678fc0d9826abbe27c6394c966"
+  },
+  "u5l5-my-dad": {
+    "path": "public/lep1/audio/my-dad-song-u5l5.mp3",
+    "bytes": 321037,
+    "sha256": "befdf0ab3292b6ee64ddd190427b68283a60f3d600ca033779e2d0d56f9c32b8"
   }
 }
