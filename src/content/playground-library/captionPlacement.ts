@@ -56,12 +56,13 @@ export function scoreRegions(rgba: ArrayLike<number>, w = SAMPLE_W, h = SAMPLE_H
 }
 
 /** The calmest side (with a small bias towards bottom/top). `sides: false` (narrow phone screens) keeps it top/bottom. */
-export function pickCaptionPos(scores: RegionScores, opts: { sides?: boolean } = {}): CaptionPos {
+export function pickCaptionPos(scores: RegionScores, opts: { sides?: boolean; avoid?: CaptionPos[] } = {}): CaptionPos {
   const sides = opts.sides ?? true;
   let best: CaptionPos = 'bottom';
   let bestScore = Infinity;
   for (const pos of CAPTION_POSITIONS) {
     if (!sides && (pos === 'left' || pos === 'right')) continue;
+    if (opts.avoid?.includes(pos)) continue; // a scene's own title / controls own that band
     const s = scores[pos] + BIAS[pos];
     if (s < bestScore) { bestScore = s; best = pos; }
   }
@@ -97,15 +98,29 @@ function scoresFor(url: string): Promise<RegionScores | null> {
   return hit;
 }
 
-/** Hook: the page's pinned side, else the picture's calmest side (bottom until it is known). */
-export function useCaptionPos(url: string | undefined, pinned?: CaptionPos): CaptionPos {
-  const [pos, setPos] = useState<CaptionPos>('bottom');
+/** Start analysing pictures early (a story's later pages) so each page's plate is placed the moment it shows. */
+export function warmCaptionPlacement(urls: (string | undefined)[]) {
+  for (const u of urls) if (u) void scoresFor(u);
+}
+
+/** Hook: the page's pinned side, else the picture's calmest side. `ready` is false only while the
+ *  picture is still being measured (max ~1.5 s), so the plate can wait instead of jumping. */
+export function useCaptionPlacement(url: string | undefined, pinned?: CaptionPos, avoid?: CaptionPos[]): { pos: CaptionPos; ready: boolean } {
+  const [state, setState] = useState<{ url?: string; pos: CaptionPos; ready: boolean }>({ pos: 'bottom', ready: false });
   useEffect(() => {
     if (pinned || !url) return;
     let live = true;
+    setState((s) => (s.url === url ? s : { url, pos: s.pos, ready: false }));
     const sides = typeof window === 'undefined' || window.innerWidth >= 640;
-    void scoresFor(url).then((sc) => { if (live) setPos(sc ? pickCaptionPos(sc, { sides }) : 'bottom'); });
-    return () => { live = false; };
-  }, [url, pinned]);
-  return pinned ?? pos;
+    const timer = window.setTimeout(() => { if (live) setState((s) => ({ ...s, url, ready: true })); }, 1500);
+    void scoresFor(url).then((sc) => { if (live) setState({ url, pos: sc ? pickCaptionPos(sc, { sides, avoid }) : 'bottom', ready: true }); });
+    return () => { live = false; window.clearTimeout(timer); };
+  }, [url, pinned, avoid?.join(',')]); // eslint-disable-line react-hooks/exhaustive-deps
+  if (pinned || !url) return { pos: pinned ?? 'bottom', ready: true };
+  return { pos: state.pos, ready: state.ready && state.url === url };
+}
+
+/** Hook: just the side (see useCaptionPlacement). */
+export function useCaptionPos(url: string | undefined, pinned?: CaptionPos, avoid?: CaptionPos[]): CaptionPos {
+  return useCaptionPlacement(url, pinned, avoid).pos;
 }

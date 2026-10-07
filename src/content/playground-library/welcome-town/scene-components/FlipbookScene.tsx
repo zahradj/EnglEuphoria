@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef } from 'react';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
 import { cueSpeak, cueSpeakOnce } from '../../unit1/audio';
-import { StoryPlate } from '../../StoryPlate';
-import { useCaptionPos } from '../../captionPlacement';
+import { StoryCaption } from '../../StoryCaption';
+import { warmCaptionPlacement } from '../../captionPlacement';
 import * as sfx from '../../unit1/sfx';
 import { Confetti } from '../../unit1/fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
@@ -25,10 +25,9 @@ export function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: E
   const { pageIdx, flipping, checkpoint, solved, wrongPick, done } = state;
   const solvedSet = useMemo(() => new Set(solved), [solved]);
   const gemDone = useRef(false);
+  useEffect(() => { warmCaptionPlacement(scene.pages.map((p) => p.img)); }, [scene.id]); // measure every page's picture up front
   const page = scene.pages[pageIdx];
   const total = scene.pages.length;
-  // The caption frame goes where the picture has calm space (top / bottom / left / right).
-  const captionPos = useCaptionPos(page?.img, page?.textPos);
 
   useEffect(() => { if (page) cueSpeakOnce(page.text, page.who ? voiceOf(page.who) : 'teacher'); }, [pageIdx]);
 
@@ -139,7 +138,6 @@ export function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: E
           style={{
             aspectRatio: '16 / 10',
             maxHeight: '100%',
-            containerType: 'inline-size', // StoryPlate sizes in cqw of THIS box (its own container, so no stray-ancestor cqw bug)
             boxShadow: '0 0 0 6px #FFF2D0, 0 0 0 9px #C9932F, 0 10px 30px rgba(0,0,0,0.45)',
             opacity: flipping ? 0 : 1,
             transform: flipping ? 'scale(0.96)' : 'scale(1)',
@@ -151,8 +149,9 @@ export function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: E
               pages, on whichever side of THIS picture has calm space — never a faint
               band over the artwork. A1+ students read it (Pre-A1 has no reading
               segment — see project_manga_panel_layout_a1_plus_only). */}
-          <StoryPlate
-            pos={captionPos}
+          <StoryCaption
+            img={page.img}
+            pin={page.textPos}
             name={page.who ? CAST[page.who].name : undefined}
             color={page.who ? CAST[page.who].color : '#E3A857'}
             text={page.text}

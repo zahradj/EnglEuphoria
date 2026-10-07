@@ -27,6 +27,7 @@ export function StoryPlate({
   text,
   speaking = false,
   onReplay,
+  bottomOffset,
   children,
 }: {
   pos: CaptionPos;
@@ -36,6 +37,8 @@ export function StoryPlate({
   text: string;
   speaking?: boolean;
   onReplay: () => void;
+  /** Lift a bottom plate above a control that owns the bottom edge (e.g. a CTA button). */
+  bottomOffset?: string;
   /** Extra content after the line (e.g. a "next" hint). */
   children?: ReactNode;
 }) {
@@ -49,7 +52,7 @@ export function StoryPlate({
     <div
       data-caption-pos={pos}
       className="pointer-events-none absolute z-20 flex"
-      style={{ ...POSITION[pos], justifyContent: 'center' }}
+      style={{ ...POSITION[pos], ...(pos === 'bottom' && bottomOffset ? { bottom: bottomOffset } : {}), justifyContent: 'center' }}
     >
       <button
         type="button"

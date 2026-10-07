@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef } from 'react';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
 import { cueSpeak, cueSpeakOnce } from '../audio';
+import { StoryCaption } from '../../StoryCaption';
+import { warmCaptionPlacement } from '../../captionPlacement';
 import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
@@ -36,6 +38,7 @@ export function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: E
   const { pageIdx, flipping, checkpoint, solved, wrongPick, done } = state;
   const solvedSet = useMemo(() => new Set(solved), [solved]);
   const gemDone = useRef(false);
+  useEffect(() => { warmCaptionPlacement(scene.pages.map((p) => p.img)); }, [scene.id]); // measure every page's picture up front
   const page = scene.pages[pageIdx];
   const total = scene.pages.length;
 
@@ -133,13 +136,16 @@ export function FlipbookScene({ scene, onNext, onWin, onLose, sync }: { scene: E
           }}
         >
           <div className="relative h-full w-full overflow-hidden rounded-[24px] bg-gradient-to-b from-[#FFFBF0] to-[#FFF2D0]">
-            <div className="h-[68%] w-full overflow-hidden">
-              <img src={page.img} alt="" className="h-full w-full object-cover" />
-            </div>
-            <div className="flex h-[32%] flex-col items-center justify-center gap-1 px-6 text-center">
-              <p className="text-base font-bold text-orange-900 sm:text-lg">{page.text}</p>
-              {page.who && <span className="text-xs font-black uppercase tracking-widest text-amber-600">— {CAST[page.who].name}</span>}
-            </div>
+            <img src={page.img} alt="" className="h-full w-full object-cover" />
+            {/* The line sits in the framed plate on the calm side of THIS picture (StoryCaption). */}
+            <StoryCaption
+              img={page.img}
+              pin={page.textPos}
+              name={page.who ? CAST[page.who].name : undefined}
+              color={page.who ? CAST[page.who].color : '#E3A857'}
+              text={page.text}
+              onReplay={() => cueSpeak(page.text, page.who ?? 'teacher')}
+            />
             {/* Book spine/gutter shadow, sells the open-book illusion. */}
             <div className="pointer-events-none absolute inset-y-0 left-1/2 w-8 -translate-x-1/2" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.16) 45%, rgba(0,0,0,0.16) 55%, transparent)' }} />
             {/* Folded page corner, purely decorative. */}

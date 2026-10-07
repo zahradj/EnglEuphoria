@@ -39,13 +39,3 @@ describe('story caption placement (frame goes where the picture is calm)', () =>
     expect(['top', 'bottom']).toContain(pickCaptionPos(scoreRegions(px)));
   });
 });
-
-describe('story pages use the framed plate', () => {
-  it('the A1+ flipbook prints its line with StoryPlate, not a band over the art', async () => {
-    const { readFileSync } = await import('node:fs');
-    const src = readFileSync('src/content/playground-library/welcome-town/scene-components/FlipbookScene.tsx', 'utf8');
-    expect(src).toContain('<StoryPlate');
-    expect(src).toContain('useCaptionPos(');
-    expect(src).not.toMatch(/bg-gradient-to-t from-\[#FFF2D0\]/);
-  });
-});

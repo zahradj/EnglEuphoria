@@ -146,17 +146,23 @@ Academy B1 U1 L1 — every slide "reported" the cover).
    without help, and is there a tangible artifact of their own (a log, a map, a sentence list) to be proud of? Research
    before inventing (Cambridge task formats, app patterns), but never copy a product; adapt the underlying mechanic.
 
-10. **Story text sits in the framed plate, on the calm side of the picture** (owner rule, 2026-10-06: "the writing is down and
-    it's invisible… use the character-introduction frame; if there is space on the top it goes on top, bottom → bottom,
-    left → left, right → right"). Every story / reading page (`flipbook` in the A1+ Welcome Town family, any future
-    story scene) shows its line in `StoryPlate` (the same paper plate + name tab + speaker button as `DialoguePlate`),
-    never as a faint gradient band over the art. The side is chosen from the generated picture
-    (`src/content/playground-library/captionPlacement.ts`: the calmest of top / bottom / left / right; phones stay top/bottom);
-    pin a side with `textPos` on the page only when the picture needs an exception. Gate check: open every story page in
-    headless Chrome (laptop + phone) and confirm the plate never covers a character's face or the key object, the
-    line is fully readable, and the plate does not collide with the title chip / next arrow. When you ORDER or choose the
-    picture, leave a calm area (sky, wall, floor, table) for the text — brief it in the image prompt ("empty wall space
-    at the top for a caption") rather than relying on luck. Pre-A1 storybooks keep the book layout (caption under the picture).
+10. **Story / narration text sits in the framed plate, on the calm side of the picture — GLOBAL, every hub and scene kind**
+    (owner rule, 2026-10-06: "the writing is down and it's invisible… use the character-introduction frame; if there is space
+    on the top it goes on top, bottom → bottom, left → left, right → right… make it universal and global"). Any line of story,
+    narration or reading shown over a picture uses `<StoryCaption>` (`src/content/playground-library/StoryCaption.tsx`; same
+    paper plate + name tab + speaker button as `DialoguePlate`, built on `StoryPlate`). Today that covers: A1+ `flipbook`,
+    Pre-A1 `flipbook`, `story-video`, both `cinematic` scenes — and ANY new story-bearing scene kind must use it too.
+    Never a gradient band over the art, a "for the grown-up" pill, or a speech bubble with a tail.
+    - **Placement** is automatic: `captionPlacement.ts` measures the page's picture and picks the calmest of top / bottom /
+      left / right (phones: top/bottom only; a scene's own title/controls can `avoid` a side or lift the plate with
+      `bottomOffset`). Pin a side with `textPos` on a page only when the picture needs an exception. It waits (≤1.5 s, fades
+      in) instead of jumping, and story pages are measured up front.
+    - **Scale:** the plate sizes itself from the picture's width (cqw inside its own container) so it reads the same on a laptop,
+      the scaled classroom canvas and a phone — verify at both 1280×720 and 390×844.
+    - **Gate check:** `storyText.test.ts` (deploy gate) fails if a story scene stops using StoryCaption or brings back the old
+      patterns. Then LOOK at every rendered story page in headless Chrome: the plate never covers a face or the key object,
+      the line is fully readable, and it does not collide with the title chip, next arrow or CTA. When you order or choose
+      the picture, leave a calm area (sky, wall, floor, table) for the text and say so in the image prompt.
 
 **Fix at the shared component** (`AcademyDemo.tsx`, `PlayAcademyLesson.tsx`, `LivingCanvas.tsx`,
 `EscapeRoomSlot.tsx`), not per lesson — comfort bugs are almost always shared-component bugs.

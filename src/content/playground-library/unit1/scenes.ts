@@ -213,7 +213,8 @@ export type Scene =
   | { id: string; kind: 'age-quiz'; bg: string; teacher: string; friends: { who: CharKey; age: number }[]; studentAges: number[] }
   | {
       id: string; kind: 'flipbook'; bg: string; title: string;
-      pages: { who?: CharKey; img: string; text: string }[];
+      /** `textPos` pins the caption plate to a side of the picture; normally omitted (captionPlacement.ts picks the calm side). */
+      pages: { who?: CharKey; img: string; text: string; textPos?: 'top' | 'bottom' | 'left' | 'right' }[];
       checkpoints: { afterPage: number; who?: CharKey; question: string; options: string[]; answer: string }[];
     }
   | {
@@ -442,7 +443,7 @@ export type Scene =
       /** A real MP4 of the story (rendered from the pages). When set, it plays
        *  instead of the animated pictures; `atSec` marks where each page starts. */
       videoUrl?: string;
-      pages: { img: string; line: string; who: CharKey; motion?: 'zoom-in' | 'zoom-out' | 'pan-left' | 'pan-right'; fx?: 'bubbles' | 'sparkles' | 'tear' | 'hearts'; holdMs?: number; atSec?: number }[];
+      pages: { img: string; line: string; who: CharKey; motion?: 'zoom-in' | 'zoom-out' | 'pan-left' | 'pan-right'; fx?: 'bubbles' | 'sparkles' | 'tear' | 'hearts'; holdMs?: number; atSec?: number; textPos?: 'top' | 'bottom' | 'left' | 'right' }[];
       checkpoints: { afterPage: number; who: CharKey; question: string; answer: string; options: { label: string; img?: string; colorHex?: string; shape?: 'circle' | 'square' | 'triangle' }[] }[];
       /** Small caption for the adult (default on). */
       captions?: boolean;
