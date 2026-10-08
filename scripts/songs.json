@@ -1491,5 +1491,41 @@
       "It's a duck! Quack, quack, quack!",
       "Horse, chicken, duck! Let's march!"
     ]
+  },
+  "u7l4-what-animal": {
+    "publicPath": "public/lep1/audio/what-animal-song-u7l4.mp3",
+    "durationSec": 20,
+    "style": "Playful bouncy kids question-and-answer song, 108 BPM with ukulele, xylophone, hand claps and a little kazoo, clear happy young vocals with a kids sing-along call-and-response feel, every word sung slowly and clearly, animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "xylophone",
+      "hand claps",
+      "call and response",
+      "clear kids vocals",
+      "sing-along chorus",
+      "108 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "What animal is this? Moo, moo! It's a cow!",
+      "What animal is this? Woof, woof! It's a dog!",
+      "What animal is this? Quack, quack! It's a duck!",
+      "Listen, look and say it! Yes!"
+    ]
   }
 }
