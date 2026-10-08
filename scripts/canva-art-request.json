@@ -1,12 +1,12 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0087-1760299856411100033.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T102647Z&X-Amz-Expires=70674&X-Amz-Signature=bac56467077bc2046c16818f7bc18f8f4bf9ffc38922963f19d8f7a24e165ba7&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2006%3A04%3A41%20GMT",
-  "out": "public/lep1/scenes/bg-u6l2-moving-truck-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0090-2159994327036671743.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T131457Z&X-Amz-Expires=63860&X-Amz-Signature=2141be5babc3c098b5660b4c98189779ce7acf7bf31abb69fb1635cd222bd7da&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2006%3A59%3A17%20GMT",
+  "out": "public/lep1/scenes/bg-u6l3-house-empty-wide.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0089-241460880354846639.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261008%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261008T033638Z&X-Amz-Expires=9384&X-Amz-Signature=897093b47cc66d2f4ed71e2055c520ed584976d6341e3f78c319ed702f615e12&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2006%3A13%3A02%20GMT",
-  "out": "public/lep1/scenes/bg-u6l2-room-empty-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0100-2159994327036671743.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T213710Z&X-Amz-Expires=32097&X-Amz-Signature=11923c6c948dbb2cde3f906ed3ab08e966f57bb3c754f4f07096c8a266d3c67a&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2006%3A32%3A07%20GMT",
+  "out": "public/lep1/scenes/bg-u6l3-family-home-wide.png",
   "sticker": false
  }
 ]
