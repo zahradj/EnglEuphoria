@@ -1,3 +1,2 @@
-+ public/lep1/scenes/bg-u7l1-petshop-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u7l1-petshop-empty-wide.png (1376, 768)
-2/2 saved
++ scripts/tmp-art/u7l1-bird-page.png (1376, 768)
+1/1 saved
