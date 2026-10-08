@@ -498,3 +498,25 @@ export function CropPic({ img, at, w, alt, className = '', aspect = 1376 / 768 }
     </div>
   );
 }
+
+/** Where a wide scene picture goes so that %-positions on it stay put: covering the screen when it is
+ *  landscape, whole (full width, a little below the middle) when it is portrait, so nothing painted is
+ *  cropped away on a phone. Put the picture and everything placed on it inside a div with this style. */
+export function useArtBox(ref: import('react').RefObject<HTMLDivElement>, aspect: number) {
+  const [size, setSize] = useState({ w: 16, h: 9 });
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const read = () => setSize({ w: el.clientWidth || 16, h: el.clientHeight || 9 });
+    read();
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(read);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [ref]);
+  const { w, h } = size;
+  const cover = w / h >= 1;
+  const bw = cover ? Math.max(w, h * aspect) : w;
+  const bh = bw / aspect;
+  return { width: bw, height: bh, left: (w - bw) / 2, top: cover ? (h - bh) / 2 : Math.max(0, (h - bh) * 0.55) } as const;
+}

@@ -631,6 +631,17 @@ export type Scene =
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
   | {
+      /** Where's Pip? (U6L1 signature): hide and seek in a dollhouse picture. Each room (x/y/w/h = % box of the
+       *  room painted in `bg`) starts dark; Pip calls `line` from room `room`, the child taps it, the light
+       *  goes on and `hider` pops up at `at` (% across the room, default 50), then the child says `say`.
+       *  `name` = the room word ("kitchen"); `aspect` = bg width / height (default 1376 / 768). */
+      id: string; kind: 'house-hide'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      hider: { img: string; label: string };
+      rooms: { name: string; x: number; y: number; w: number; h: number }[];
+      rounds: { room: number; line: string; reply: string; say: string; at?: number }[];
+      doneLine: string;
+    }
+  | {
       /** Family Buzzer Show (U5L6 signature): a game-show stage with podiums painted in bg (x/y = centre % of
        *  the podium's photo frame, by = y % of its painted red buzzer). Each round puts three `faces` on the podiums (`faces` index per podium), Pip asks a
        *  unit question, the child buzzes podium `answer`, then says `say`. `name` = how a sentence says the
@@ -9413,6 +9424,242 @@ export const LESSON_U5L6_SCENES: Scene[] = [
     ],
   },
   { id: 'u5l6-finale', kind: 'finale', bg: bgU5L6Host, who: 'pip', line: 'Grandma, Grandpa, Mom, Dad, my brother, my sister, the baby and me — this is my family! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 6 · Lesson 1 — Kitchen, Bedroom, Bathroom! =====================
+ * My House (1/6). kitchen, bedroom, bathroom, living room ("This is the kitchen.", "Where's Pip? In the
+ * kitchen!") and K says /k/ again (kitchen, key, kitten, kangaroo — K was first met in Unit 3 with the kite,
+ * so this is a quick review, no tracing). Setting: Pip's own house — the front garden, then the house opened
+ * like a dollhouse. Lesson-Variety Engine: researched dollhouse / hide-and-seek house play (Lingokids house,
+ * Toca-style rooms), Khan Academy Kids "find it" listening, Cambridge Pre A1 "listen and point" on a house
+ * picture, and the classroom "Knock knock, who's there?" and "Where's the teddy?" games; one new game —
+ * Where's Pip? (the lights are off in every room; listen, find Pip, the light clicks on). Pictures made with
+ * Canva; the room cards are cut from the same dollhouse picture so every room looks the same everywhere. */
+const bgU6L1Front = `${A}/scenes/bg-u6l1-house-front-wide.png`;
+const bgU6L1House = `${A}/scenes/bg-u6l1-dollhouse-wide.png`;
+const roomKitchen = `${A}/items/item-room-kitchen.png`;
+const roomBedroom = `${A}/items/item-room-bedroom.png`;
+const roomBathroom = `${A}/items/item-room-bathroom.png`;
+const roomLiving = `${A}/items/item-room-living-room.png`;
+/* The four rooms painted in bg-u6l1-dollhouse (% boxes, checked on a grid): upstairs bedroom | bathroom,
+ * downstairs kitchen | living room. */
+const U6L1_ROOMS = [
+  { name: 'kitchen', x: 11, y: 55, w: 37.5, h: 39 },
+  { name: 'bedroom', x: 11, y: 13, w: 37.5, h: 40 },
+  { name: 'bathroom', x: 50.5, y: 13, w: 37, h: 40 },
+  { name: 'living room', x: 50.5, y: 55, w: 37, h: 39 },
+];
+
+export const LESSON_U6L1_TITLE = 'Kitchen, Bedroom, Bathroom!';
+export const LESSON_U6L1_OBJECTIVE = 'Name four rooms — kitchen, bedroom, bathroom, living room — say "This is the kitchen!", find Pip when he calls "I\'m in the bathroom!" and answer "In the bathroom!", sing about the house, and hear K say /k/ again (kitchen, key, kitten, kangaroo) — by listening, moving, playing and speaking, no reading.';
+
+export const LESSON_U6L1_SCENES: Scene[] = [
+  { id: 'u6l1-title', kind: 'title-card', bg: bgU6L1Front, level: 'Pre-A1', unit: 'Unit 6', lessonLabel: 'Lesson 1', title: 'Kitchen, Bedroom, Bathroom!', subtitle: "Pip's house" },
+
+  /* 1-3 Hook */
+  {
+    id: 'u6l1-song', kind: 'song', bg: bgU6L1House, title: '\u{1F3B5} This Is My House \u{1F3B5}', teacher: 'Sing and point to each room in the picture!',
+    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/my-house-song-u6l1.mp3?v=1`,
+    lineDurationsMs: [4080, 4440, 6260, 5282],
+    songPrompt: 'Upbeat kids pop song about the rooms of a house',
+    lyrics: [
+      { who: 'pip', text: 'Come in, come in! This is my house!', emotion: 'happy' },
+      { who: 'pip', text: 'This is the kitchen! This is the bedroom!', emotion: 'happy' },
+      { who: 'pip', text: 'This is the bathroom! The living room too!', emotion: 'happy' },
+      { who: 'pip', text: 'Come in, come in! I love my house!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 5 · Lesson 6 · Family Match-Up.
+    id: 'u6l1-recall-warmup', kind: 'recall-warmup', bg: bgU6L1Front, who: 'pip', mode: 'click',
+    fromLabel: 'Unit 5 · Lesson 6 · Family Match-Up',
+    teacher: 'Warm-up from last lesson: Pip says a family word, the child finds the picture. Say each one together.',
+    items: [
+      { word: 'grandma', say: 'Find Grandma!', img: famGrandma },
+      { word: 'dad', say: 'Where is Dad?', img: famDad },
+      { word: 'baby', say: 'Show me the baby!', img: famBaby },
+      { word: 'sister', say: 'Find my sister!', img: famSister },
+    ],
+  },
+  {
+    id: 'u6l1-intro', kind: 'cinematic', bg: bgU6L1Front, hidePipOverlay: true, title: "Pip's House", subtitle: 'Come in!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Hello, friend! This is my house!' },
+      { who: 'pip', line: 'Come in! Let\'s look at the rooms!' },
+    ],
+    cta: 'Come in!',
+  },
+
+  /* 4-6 New words, move, first game */
+  {
+    id: 'u6l1-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU6L1House, teacher: 'Point to the room, then say it! Then point to the same room in the big house.',
+    cards: [
+      { who: 'pip', sentence: 'Kitchen! This is the kitchen.', img: roomKitchen, imgLabel: 'Kitchen!' },
+      { who: 'pip', sentence: 'Bedroom! This is the bedroom.', img: roomBedroom, imgLabel: 'Bedroom!' },
+      { who: 'pip', sentence: 'Bathroom! This is the bathroom.', img: roomBathroom, imgLabel: 'Bathroom!' },
+      { who: 'pip', sentence: 'Living room! This is the living room.', img: roomLiving, imgLabel: 'Living room!' },
+    ],
+  },
+  {
+    id: 'u6l1-move-say', kind: 'tpr-actions', bg: bgU6L1House, who: 'pip',
+    teacher: 'Stand up! Say it with Pip and do what we do in that room.',
+    rounds: [
+      { line: 'In the kitchen: cook, cook, cook!', emoji: '\u{1F373}', img: roomKitchen },
+      { line: 'In the bedroom: sleep, sleep, sleep!', emoji: '\u{1F634}', img: roomBedroom },
+      { line: 'In the bathroom: wash, wash, wash!', emoji: '\u{1F6C1}', img: roomBathroom },
+      { line: 'In the living room: sit and watch TV!', emoji: '\u{1F4FA}', img: roomLiving },
+    ],
+  },
+  {
+    // Signature game (new): hide and seek in the dark dollhouse.
+    id: 'u6l1-where-pip', kind: 'house-hide', bg: bgU6L1House, who: 'pip',
+    teacher: "Where's Pip? The lights are off! Listen to Pip, tap his room, then say where he is.",
+    hider: { img: CAST.pip.img, label: 'Pip' },
+    rooms: U6L1_ROOMS,
+    rounds: [
+      { room: 0, line: "I'm in the kitchen! Find me!", reply: "Pip is in the kitchen!", say: 'In the kitchen!', at: 30 },
+      { room: 2, line: "I'm in the bathroom! Find me!", reply: 'Pip is in the bathroom!', say: 'In the bathroom!', at: 70 },
+      { room: 1, line: "I'm in the bedroom! Find me!", reply: 'Pip is in the bedroom!', say: 'In the bedroom!', at: 75 },
+      { room: 3, line: "I'm in the living room! Find me!", reply: 'Pip is in the living room!', say: 'In the living room!', at: 22 },
+    ],
+    doneLine: 'You found me every time! Great listening!',
+  },
+
+  /* 7-11 Recall + speaking */
+  {
+    id: 'u6l1-recall', kind: 'rapid-recall', bg: bgU6L1Front, who: 'pip', seconds: 30,
+    teacher: 'Quick! A room flashes — say its name before it goes!',
+    cards: [
+      { img: roomBathroom, word: 'bathroom' },
+      { img: roomKitchen, word: 'kitchen' },
+      { img: roomLiving, word: 'living room' },
+      { img: roomBedroom, word: 'bedroom' },
+    ],
+  },
+  {
+    // Badges on the four rooms painted in bg-u6l1-dollhouse.
+    id: 'u6l1-spin', kind: 'spin-wheel', bg: bgU6L1House, title: '',
+    teacher: 'Have the student spin, then point to that room and say "This is the kitchen!" Or tap a number.',
+    items: [
+      { label: 'This is the kitchen!', left: '20%', top: '78%' },
+      { label: 'This is the bedroom!', left: '20%', top: '24%' },
+      { label: 'This is the bathroom!', left: '80%', top: '24%' },
+      { label: 'This is the living room!', left: '80%', top: '80%' },
+    ],
+    wheelAt: { left: '50%', top: '54%' },
+  },
+  {
+    id: 'u6l1-pip-asks', kind: 'join-stage', bg: bgU6L1House, teacher: 'Pip asks; the student points to the room and answers with "In the …!"', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Where do you sleep?', bubble: 'right' },
+      { who: 'student', line: 'In the bedroom!', bubble: 'right' },
+      { who: 'pip', line: 'Where do you cook?', bubble: 'right' },
+      { who: 'student', line: 'In the kitchen!', bubble: 'right' },
+    ],
+  },
+
+  /* 12 Game break */
+  {
+    id: 'u6l1-memory', kind: 'memory', bg: bgU6L1Front, teacher: 'Find the pairs! Say the room every time you turn a card.',
+    pairs: [
+      { id: 'kitchen', label: 'kitchen', emoji: '\u{1F373}', img: roomKitchen },
+      { id: 'bedroom', label: 'bedroom', emoji: '\u{1F6CF}\u{FE0F}', img: roomBedroom },
+      { id: 'bathroom', label: 'bathroom', emoji: '\u{1F6C1}', img: roomBathroom },
+      { id: 'living', label: 'living room', emoji: '\u{1F6CB}\u{FE0F}', img: roomLiving },
+    ],
+  },
+
+  /* 13-15 Phonics: K says /k/ (review) */
+  {
+    id: 'u6l1-model-k', kind: 'sound-model', bg: bgU6L1Front, who: 'pip', letter: 'K', phoneme: '/k/', sound: 'kuh',
+    teacher: 'K says /k/ — remember the kite? Now: key, kitten, kangaroo... and kitchen!',
+    anchors: [
+      { word: 'key', emoji: '\u{1F511}', img: itemKey },
+      { word: 'kitten', emoji: '\u{1F431}', img: itemKitten },
+      { word: 'kangaroo', emoji: '\u{1F998}', img: itemKangaroo },
+    ],
+  },
+  {
+    id: 'u6l1-pop-k', kind: 'sound-pop', bg: bgU6L1Front, teacher: 'Balloon Letter Pop! Pip calls a letter — pop only that one!', who: 'pip', goal: 8, seconds: 45,
+    targets: [
+      { letter: 'K', phoneme: '/k/' },
+      { letter: 'B', phoneme: '/b/' },
+    ],
+    items: [
+      { word: 'K', letter: 'K', emoji: 'K' },
+      { word: 'B', letter: 'B', emoji: 'B' },
+      { word: 'T', letter: 'T', emoji: 'T' },
+    ],
+  },
+
+  /* 16-18 My house */
+  {
+    id: 'u6l1-my-house', kind: 'join-stage', bg: bgU6L1Front, teacher: 'The student shows their own home (or draws it) and names a room: "This is the kitchen!" Then says their favourite room.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Show me your house! What room is this?', bubble: 'right' },
+      { who: 'student', line: 'This is the kitchen!', bubble: 'right' },
+      { who: 'pip', line: 'I like my bedroom! And you?', bubble: 'right' },
+      { who: 'student', line: 'I like my bedroom! / I like my living room!', bubble: 'right' },
+    ],
+  },
+
+  /* 19-20 Sticker + Home Mission */
+  {
+    id: 'u6l1-sticker', kind: 'sticker-reward', bg: bgU6L1Front, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: "You know all my rooms! Here is a house sticker for you!", sticker: { img: `${A}/items/item-house.png`, label: "Pip's house" },
+  },
+  {
+    id: 'u6l1-home-mission', kind: 'home-mission', bg: bgU6L1House, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: give a house tour! Walk in and say: This is the kitchen! This is the bedroom!',
+    parentNote: 'Let your child be the tour guide: walk from room to room while they say "This is the kitchen / bedroom / bathroom / living room!" Then play hide and seek with a toy: hide it and say "It\'s in the kitchen!" — your child goes to find it.',
+    steps: [
+      { emoji: '\u{1F373}', img: roomKitchen, say: 'This is the kitchen!' },
+      { emoji: '\u{1F6CF}\u{FE0F}', img: roomBedroom, say: 'This is the bedroom!' },
+      { emoji: '\u{1F648}', say: 'Hide and seek!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u6l1-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU6L1House, who: 'pip',
+    teacher: 'Extra time: Brain Break! Run through the house with Pip.',
+    rounds: [
+      { line: 'Tiptoe to the bedroom... shh!', emoji: '\u{1F92B}' },
+      { line: 'Brush your teeth in the bathroom!', emoji: '\u{1FAA5}' },
+      { line: 'Stir the soup in the kitchen!', emoji: '\u{1F963}' },
+      { line: 'Jump on the sofa in the living room!', emoji: '\u{1F6CB}\u{FE0F}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u6l1-where-pip-2', kind: 'house-hide', bg: bgU6L1House, who: 'pip',
+    teacher: "Extra time: Pip hides again — new places! Listen, find him, say where he is.",
+    hider: { img: CAST.pip.img, label: 'Pip' },
+    rooms: U6L1_ROOMS,
+    rounds: [
+      { room: 3, line: "Now I'm in the living room! Find me!", reply: 'Pip is in the living room!', say: 'In the living room!', at: 75 },
+      { room: 1, line: "Now I'm in the bedroom! Find me!", reply: 'Pip is in the bedroom!', say: 'In the bedroom!', at: 20 },
+      { room: 0, line: "Now I'm in the kitchen! Find me!", reply: 'Pip is in the kitchen!', say: 'In the kitchen!', at: 80 },
+      { room: 2, line: "Now I'm in the bathroom! Find me!", reply: 'Pip is in the bathroom!', say: 'In the bathroom!', at: 25 },
+    ],
+    doneLine: 'Hide and seek champion! Thank you!',
+  },
+
+  /* 21-22 Goodbye */
+  {
+    id: 'u6l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u6l1-finale', kind: 'finale', bg: bgU6L1Front, who: 'pip', line: 'Kitchen, bedroom, bathroom, living room — this is my house! Goodbye, friend!' },
 ];
 
 /* =============================================================================

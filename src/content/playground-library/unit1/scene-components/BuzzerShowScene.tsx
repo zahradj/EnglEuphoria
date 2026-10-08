@@ -1,11 +1,11 @@
-import { type RefObject, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import type { Scene } from '../scenes';
 import { cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
-import { CLAY_BUTTON, THICK_WORDS, sayWithin } from './shared';
+import { CLAY_BUTTON, THICK_WORDS, sayWithin, useArtBox } from './shared';
 import { Bursts, useBursts, useShake } from './gameFx';
 
 /* ---------- Family Buzzer Show (Pre-A1 Unit 5 Lesson 6 signature game) ----------
@@ -22,28 +22,6 @@ import { Bursts, useBursts, useShake } from './gameFx';
  * after two tries. */
 
 type Show = Extract<Scene, { kind: 'buzzer-show' }>;
-const STAGE_AR = 1376 / 768;
-
-/** Where the stage picture goes: covering the screen when it is landscape, whole (full width) when it is
- *  portrait, so all three podiums always show. Positions inside are % of the picture itself. */
-function useArtBox(ref: RefObject<HTMLDivElement>) {
-  const [size, setSize] = useState({ w: 16, h: 9 });
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const read = () => setSize({ w: el.clientWidth || 16, h: el.clientHeight || 9 });
-    read();
-    if (typeof ResizeObserver === 'undefined') return;
-    const ro = new ResizeObserver(read);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [ref]);
-  const { w, h } = size;
-  const cover = w / h >= 1;
-  const bw = cover ? Math.max(w, h * STAGE_AR) : w;
-  const bh = bw / STAGE_AR;
-  return { width: bw, height: bh, left: (w - bw) / 2, top: cover ? (h - bh) / 2 : Math.max(0, (h - bh) * 0.55) } as const;
-}
 export const buzzerWrongLine = (name: string) => `No, that's ${name}! Try again!`;
 export const BUZZER_CHEER = 'Yes! Right answer!';
 
@@ -105,7 +83,7 @@ export function BuzzerShowScene({ scene, onWin, onNext, sync }: { scene: Show; o
   };
 
   const glow = r && !buzzed && misses >= 2 ? r.answer : -1;
-  const box = useArtBox(rootRef);
+  const box = useArtBox(rootRef, 1376 / 768);
 
   return (
     <motion.div ref={rootRef} className="absolute inset-0 select-none overflow-hidden bg-gradient-to-b from-[#3b0d5c] via-[#5b1a86] to-[#b4621f]" animate={shakeCtl}>

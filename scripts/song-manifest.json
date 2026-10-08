@@ -148,5 +148,10 @@
     "path": "public/lep1/audio/family-show-song-u5l6.mp3",
     "bytes": 321037,
     "sha256": "d190ffef054080e97da34030114912e1fc6231b9e093e3a40223af7ca8d9dc54"
+  },
+  "u6l1-my-house": {
+    "path": "public/lep1/audio/my-house-song-u6l1.mp3",
+    "bytes": 321037,
+    "sha256": "6a7277132b18538aebc4d5a0d5a30b7455b3eb03f5c4da0fd1de6e1154d696ad"
   }
 }

@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '6-1': { settings: ['house front garden', 'dollhouse rooms'], look: "Pip's own cream house with a red roof and a round green door on a sunny morning, then the same house opened like a dollhouse: four warm rooms (blue bedroom, tiled bathroom, green kitchen, orange living room); lights off and on for hide and seek" },
   '5-6': { settings: ['game-show stage'], look: "a bright children's TV game-show stage: purple curtain, warm spotlights, three podiums with big red buzzers; Pip is the host with a microphone and the whole fox family claps in the front row" },
   '5-5': { settings: ['duck pond', 'home at night'], look: "a sunny park with a duck pond, a bench and an ice-cream cone, then Pip's warm living room and bedroom at night; just Pip and Dad (green cardigan), four little ducks; a story told as a flip-book film" },
   '5-4': { settings: ['hilltop oak'], look: "a sunny green hill with one giant oak tree: the whole fox family (Grandma, Grandpa, Mom, Dad, brother, Pip, sister, baby) at a picnic under it; the empty oak with three branch levels becomes the family tree" },
@@ -187,6 +188,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '6-1': {
+    sources: ['Lingokids (house and rooms play; explore-the-house hide and seek)', 'Toca Boca-style dollhouse apps (open the house, visit each room)', 'Khan Academy Kids (calm "find it" listening)', 'Cambridge (Pre A1 Starters listen and point on a house picture)', 'classroom hide-and-seek "Where\'s the teddy?" (games4esl)'],
+    mechanics: [
+      'explore-the-house hide and seek → Where\'s Pip?: every room is dark, Pip calls "I\'m in the kitchen! Find me!", the child taps the room, the light clicks on and Pip pops up',
+      'dollhouse visiting → the house opened like a dollhouse is the picture for the words, the spinner, the song and the home tour',
+      'Move & Say room actions (cook, sleep, wash, watch TV) and memory pairs of the rooms',
+    ],
+    betterThan: [
+      'all rooms are dark, so only the room WORD finds Pip — no guessing from the picture — and the child answers with the whole phrase "In the kitchen!"',
+      'a wrong room lights up empty and is named back ("No, that\'s the bathroom!"), teaching the word it opened; the right room glows after two tries, no clock',
+      'the same dollhouse picture carries the whole lesson (cards, game, spinner, home tour), so every room looks the same everywhere and the child builds one mental map of the house',
     ],
   },
   '5-6': {
