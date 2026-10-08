@@ -10940,3 +10940,186 @@ export const LESSON_U5L1_SCENES: Scene[] = [
   },
   { id: 'u5l1-finale', kind: 'finale', bg: bgU5L1FamilyHome, who: 'pip', line: 'You did it! You can say "This is my mom!" and "This is my dad!" \u{1F389}\u{1F468}\u{200D}\u{1F469}\u{200D}\u{1F466}' },
 ];
+
+/* =============================================================================
+ * Pre-A1 Unit 6, Lesson 6 — "My House Game" (unit review)
+ *
+ * Games night at Pip's house: the whole fox family plays a board game around
+ * the coffee table, and the child plays it too. Every square is a picture
+ * from the unit (rooms, furniture, coloured furniture, the doors of the
+ * story); the child answers Pip's question aloud on each square. Then three
+ * review games (odd one out, tile reveal, the sound chest K / CH / B / S)
+ * and the child shows their own house.
+ * ========================================================================= */
+
+const bgU6L6GameNight = `${A}/scenes/bg-u6l6-gamenight-wide.png`;
+
+export const LESSON_U6L6_TITLE = 'My House Game';
+export const LESSON_U6L6_OBJECTIVE = 'Review the whole unit by playing: name the rooms (kitchen, bedroom, bathroom, living room) and the furniture (table, chair, bed, sofa), say what colour a thing is ("The bed is red!"), answer "Is this my house?", and hear the first sounds K, CH, B, S — by listening, answering aloud and playing, no reading.';
+
+export const LESSON_U6L6_SCENES: Scene[] = [
+  { id: 'u6l6-title', kind: 'title-card', bg: bgU6L6GameNight, level: 'Pre-A1', unit: 'Unit 6', lessonLabel: 'Lesson 6', title: 'My House Game', subtitle: 'Games night!' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u6l6-song', kind: 'song', bg: bgU6L6GameNight, title: '\u{1F3B5} My House Game \u{1F3B5}', teacher: 'Sing and point: point to a room, a table, a chair, a bed; shake your hands for "Roll the dice", hug yourself for "I love my house"!',
+    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/my-house-game-song-u6l6.mp3?v=1`,
+    lineDurationsMs: [3850, 4280, 3960, 7972],
+    songPrompt: 'Bouncy happy kids game song',
+    lyrics: [
+      { who: 'pip', text: 'Kitchen, bedroom, bathroom too!', emotion: 'happy' },
+      { who: 'pip', text: 'Table, chair and bed for you!', emotion: 'happy' },
+      { who: 'pip', text: 'Roll the dice and say it loud!', emotion: 'happy' },
+      { who: 'pip', text: "I love my house, I'm very proud!", emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 5 · Where's My House? (the doors + the cat).
+    id: 'u6l6-recall-warmup', kind: 'recall-warmup', bg: bgU6L6GameNight, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 5 · Where's My House?",
+    teacher: "Warm-up from last lesson's story: Pip says a door (or the cat), the child finds it. Say each one together.",
+    items: [
+      { word: 'red door', say: 'Find my red door!', img: itemDoorRed },
+      { word: 'blue door', say: 'Where is the blue door?', img: itemDoorBlue },
+      { word: 'yellow door', say: 'Show me the yellow door!', img: itemDoorYellow },
+      { word: 'cat', say: 'Find the cat! Meow!', img: itemKitten },
+    ],
+  },
+  {
+    id: 'u6l6-intro', kind: 'cinematic', bg: bgU6L6GameNight, hidePipOverlay: true, title: 'My House Game', subtitle: 'Games night!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: "It's games night at my house!" },
+      { who: 'pip', line: "Let's play the My House Game together!" },
+    ],
+    cta: "Let's play!",
+  },
+
+  /* 4-5 Words back, move */
+  {
+    id: 'u6l6-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU6L6GameNight, teacher: 'Listen, then say it with Pip. Point to the picture!',
+    cards: [
+      { who: 'pip', sentence: "It's the kitchen!", img: roomKitchen, imgLabel: 'kitchen' },
+      { who: 'pip', sentence: "It's a chair!", img: itemChair, imgLabel: 'chair' },
+      { who: 'pip', sentence: 'The bed is red!', img: `${A}/items/item-bed-red.png`, imgLabel: 'red bed' },
+      { who: 'pip', sentence: 'Is this my house? Yes, it is!', img: itemDoorRed, imgLabel: 'Yes, it is!' },
+    ],
+  },
+  {
+    id: 'u6l6-move', kind: 'tpr-actions', bg: bgU6L6GameNight, who: 'pip',
+    teacher: 'Stand up! Play the house with Pip.',
+    rounds: [
+      { line: 'Shake, shake, roll the dice!', emoji: '\u{1F3B2}' },
+      { line: 'Hop, hop, hop like Pip!', emoji: '\u{1F407}' },
+      { line: 'Cook in the kitchen!', emoji: '\u{1F373}' },
+      { line: 'Sleep in your bed!', emoji: '\u{1F634}' },
+      { line: 'Knock, knock on the door!', emoji: '\u{270A}' },
+    ],
+  },
+
+  /* 6 Signature game (new): the board game */
+  {
+    id: 'u6l6-board', kind: 'house-board', bg: bgU6L6GameNight, who: 'pip',
+    teacher: 'My House Board Game! The child taps the dice, Pip hops. On each square Pip asks a question: the child answers aloud, then taps "I said it!" and Pip says it too.',
+    squares: [
+      { label: 'kitchen', img: roomKitchen, ask: 'What room is this?', say: "It's the kitchen!" },
+      { label: 'red bed', img: `${A}/items/item-bed-red.png`, ask: 'What colour is the bed?', say: 'The bed is red!' },
+      { label: 'chair', img: itemChair, ask: 'What is it?', say: "It's a chair!" },
+      { label: 'bathroom', img: roomBathroom, ask: 'What room is this?', say: "It's the bathroom!" },
+      { label: 'blue door', img: itemDoorBlue, ask: 'Is this my house?', say: "No, it isn't! The door is blue." },
+      { label: 'green sofa', img: `${A}/items/item-sofa-green.png`, ask: 'What colour is the sofa?', say: 'The sofa is green!' },
+      { label: 'bedroom', img: roomBedroom, ask: 'Where is the bed?', say: "It's in the bedroom!" },
+      { label: 'table', img: itemTable, ask: 'What is it?', say: "It's a table!" },
+      { label: 'red door', img: itemDoorRed, ask: 'Is this my house?', say: 'Yes, it is! Welcome home!' },
+    ],
+    rolls: [1, 2, 2, 3, 1, 2],
+    doneLine: 'Home! You won the My House Game!',
+  },
+
+  /* 7-9 Review games */
+  {
+    id: 'u6l6-odd-one-out', kind: 'odd-one-out', bg: bgU6L3House, who: 'mia',
+    teacher: 'Which one is different? Tap it and say why: is it a room or a thing? Which colour?',
+    rounds: [
+      { items: [{ label: 'bed', img: itemBed }, { label: 'chair', img: itemChair }, { label: 'kitchen', img: roomKitchen }, { label: 'sofa', img: itemSofa }], odd: 2, line: 'The kitchen! It is a room. Bed, chair and sofa are things.' },
+      { items: [{ label: 'bedroom', img: roomBedroom }, { label: 'table', img: itemTable }, { label: 'bathroom', img: roomBathroom }, { label: 'living room', img: roomLiving }], odd: 1, line: 'The table! Bedroom, bathroom and living room are rooms.' },
+      { items: [{ label: 'red bed', img: `${A}/items/item-bed-red.png` }, { label: 'red sofa', img: `${A}/items/item-sofa-red.png` }, { label: 'red door', img: itemDoorRed }, { label: 'blue chair', img: `${A}/items/item-chair-blue.png` }], odd: 3, line: 'The blue chair! The others are red.' },
+      { items: [{ label: 'yellow door', img: itemDoorYellow }, { label: 'green sofa', img: `${A}/items/item-sofa-green.png` }, { label: 'yellow chair', img: `${A}/items/item-chair-yellow.png` }, { label: 'yellow bed', img: `${A}/items/item-bed-yellow.png` }], odd: 1, line: 'The green sofa! The others are yellow.' },
+    ],
+  },
+  {
+    id: 'u6l6-reveal', kind: 'tile-reveal', bg: bgU6L6GameNight, who: 'pip',
+    teacher: 'Which room is hiding? Tiles pop off one by one — guess early and say "It\'s the…!"',
+    rounds: [
+      { img: `${A}/items/item-u6l3-family-kitchen.png`, word: 'kitchen', line: "It's the kitchen!", options: [{ label: 'bathroom', img: roomBathroom }, { label: 'kitchen', img: roomKitchen }, { label: 'bedroom', img: roomBedroom }] },
+      { img: `${A}/items/item-u6l3-family-bathroom.png`, word: 'bathroom', line: "It's the bathroom!", options: [{ label: 'bathroom', img: roomBathroom }, { label: 'living room', img: roomLiving }, { label: 'kitchen', img: roomKitchen }] },
+      { img: `${A}/items/item-u6l3-family-living-room.png`, word: 'living room', line: "It's the living room!", options: [{ label: 'bedroom', img: roomBedroom }, { label: 'kitchen', img: roomKitchen }, { label: 'living room', img: roomLiving }] },
+      { img: `${A}/items/item-u6l3-family-bedroom.png`, word: 'bedroom', line: "It's the bedroom!", options: [{ label: 'living room', img: roomLiving }, { label: 'bedroom', img: roomBedroom }, { label: 'bathroom', img: roomBathroom }] },
+    ],
+  },
+  {
+    id: 'u6l6-sound-chest', kind: 'trophy-chest', bg: bgU6L1House, who: 'pip',
+    teacher: 'The House Treasure Chest! Listen to the first sound, tap the letter, and a house thing pops out. Say the word!',
+    rounds: [
+      { letter: 'K', phoneme: '/k/', word: 'kitchen', img: roomKitchen, emoji: '\u{1F373}', choices: ['K', 'CH', 'S'] },
+      { letter: 'CH', phoneme: '/ch/', word: 'chair', img: itemChair, emoji: '\u{1FA91}', choices: ['B', 'CH', 'K'] },
+      { letter: 'B', phoneme: '/b/', word: 'bed', img: itemBed, emoji: '\u{1F6CF}️', choices: ['S', 'K', 'B'] },
+      { letter: 'S', phoneme: '/s/', word: 'sofa', img: itemSofa, emoji: '\u{1F6CB}️', choices: ['S', 'B', 'CH'] },
+    ],
+  },
+
+  /* 10 Perform */
+  {
+    id: 'u6l6-my-house', kind: 'join-stage', bg: bgU6L6GameNight, teacher: 'Your turn! The student shows their own house (or a drawing). Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Now tell me about YOUR house!', bubble: 'right' },
+      { who: 'student', line: 'This is my bedroom. My bed is blue!', bubble: 'right' },
+      { who: 'pip', line: 'Wow! What else?', bubble: 'right' },
+      { who: 'student', line: 'This is my kitchen. I love my house!', bubble: 'right' },
+    ],
+  },
+
+  /* 11-12 Sticker + Home Mission */
+  {
+    id: 'u6l6-sticker', kind: 'sticker-reward', bg: bgU6L6GameNight, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You won the My House Game! Here is a house sticker for you!', sticker: { img: itemHouse, label: 'House champion' },
+  },
+  {
+    id: 'u6l6-home-mission', kind: 'home-mission', bg: bgU6L6GameNight, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: give your family a house tour! Go to each room and say "This is the kitchen!" Then play a game together!',
+    parentNote: 'Let your child lead a little tour of your home. In each room ask "What room is this?" and "What colour is the chair / bed / sofa?". Then play any board game together and let them say the room words when they move.',
+    steps: [
+      { emoji: '\u{1F3E0}', img: itemHouse, say: 'This is my house!' },
+      { emoji: '\u{1F373}', img: roomKitchen, say: 'This is the kitchen!' },
+      { emoji: '\u{1F3B2}', say: 'Roll the dice!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u6l6-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU6L6GameNight, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Sit on the sofa!', emoji: '\u{1F6CB}️' },
+      { line: 'Wash your hands in the bathroom!', emoji: '\u{1F9FC}' },
+      { line: 'Jump, jump, jump to the kitchen!', emoji: '\u{1F998}' },
+      { line: 'Clap for the winner!', emoji: '\u{1F44F}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u6l6-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u6l6-finale', kind: 'finale', bg: bgU6L6GameNight, who: 'pip', line: 'You know my whole house! Kitchen, bedroom, bathroom, living room! Goodbye, friend!' },
+];

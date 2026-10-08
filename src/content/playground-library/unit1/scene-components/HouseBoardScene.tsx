@@ -117,8 +117,8 @@ export function HouseBoardScene({ scene, onWin, onNext, sync }: { scene: Board; 
       {sq && landed && <button onClick={() => cueSpeak(said ? sq.say : sq.ask, scene.who)} aria-label="Hear it again" className="absolute right-3 top-16 z-30 rounded-full bg-white/90 px-4 py-2 text-lg font-black text-orange-700 shadow-lg active:scale-95">{'\u{1F50A}'}</button>}
 
       {/* The board: a snake path START → squares → HOME. */}
-      <div className="absolute left-1/2 top-[54%] z-10 -translate-x-1/2 -translate-y-1/2 rounded-[28px] border-[6px] border-amber-700 bg-gradient-to-br from-amber-100 to-orange-200 p-2 shadow-[0_18px_40px_rgba(30,10,60,0.45)]"
-        style={{ width: 'min(94vw, 118vh)', aspectRatio: `${cols} / ${Math.ceil(total / cols) * 0.86}` }}>
+      <div className="absolute left-1/2 top-[calc(50%+36px)] z-10 -translate-x-1/2 -translate-y-1/2 rounded-[28px] border-[6px] border-amber-700 bg-gradient-to-br from-amber-100 to-orange-200 p-2 shadow-[0_18px_40px_rgba(30,10,60,0.45)]"
+        style={{ width: 'min(94vw, 100vh, calc((100vh - 190px) * 1.9))', aspectRatio: `${cols} / ${Math.ceil(total / cols) * 0.86}` }}>
         <div className="relative h-full w-full">
           {Array.from({ length: total }, (_, k) => {
             const at = slotPos(k, total, cols);
@@ -153,12 +153,12 @@ export function HouseBoardScene({ scene, onWin, onNext, sync }: { scene: Board; 
       {/* Landed: the square's picture, big, and the answer button. */}
       <AnimatePresence>
         {sq && landed && (
-          <motion.div key={`sq-${turn}`} className="absolute bottom-[4%] right-3 z-40 flex items-end gap-2" initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: 'spring', delay: 0.3 }}>
-            <img src={sq.img} alt={sq.label} draggable={false} className="h-[min(18vh,14vw)] w-auto rounded-2xl border-4 border-yellow-300 bg-white object-contain p-1 shadow-xl" />
+          <motion.div key={`sq-${turn}`} className="absolute bottom-[4%] right-3 z-40 flex items-end justify-end gap-2" style={{ maxWidth: 'calc(100vw - min(15vh, 12vw) - 40px)' }} initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ opacity: 0 }} transition={{ type: 'spring', delay: 0.3 }}>
+            <img src={sq.img} alt={sq.label} draggable={false} className="h-[min(18vh,14vw)] w-auto shrink-0 rounded-2xl border-4 border-yellow-300 bg-white object-contain p-1 shadow-xl" />
             {!said ? (
               <button onClick={() => { void answered(); }} className={`${CLAY_BUTTON} px-5 py-3 text-lg sm:text-xl`}>{'\u{1F3A4}'} I said it!</button>
             ) : (
-              <span className="rounded-2xl bg-white/95 px-4 py-2 text-lg font-black text-sky-700 shadow sm:text-xl">{sq.say}</span>
+              <span className="min-w-0 rounded-2xl bg-white/95 px-3 py-2 text-base font-black leading-tight text-sky-700 shadow sm:px-4 sm:text-xl">{sq.say}</span>
             )}
           </motion.div>
         )}

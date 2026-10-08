@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '6-6': { settings: ['games-night living room'], look: "games night at Pip's house: the whole fox family (Grandma, brother, Dad, sister, baby) around a round coffee table playing a board game, warm lamp light, a starry night window and a red sofa; a snake board path of house pictures drawn in code" },
   '6-5': { settings: ['autumn sunset street', 'park at sunset', "Pip's evening bedroom"], look: "golden autumn sunset: a park with falling orange leaves, then Pip's new street of three look-alike cream houses whose only difference is the door (blue, yellow with a cat in the window, red with a big orange tree), close-ups at each door, Mom's hug in the warm doorway and Pip's lamp-lit bedroom" },
   '6-4': { settings: ['street of coloured houses', 'empty lilac bedroom'], look: "Open House Day: a sunny little street of three small houses (red, blue, yellow) with stone paths and white fences, then one empty lilac bedroom with white stars and a round window, furnished three ways in different colours for each friend (Mia, Bella, Leo)" },
   '6-3': { settings: ['empty dollhouse', 'family evening at home'], look: "Pip's house opened like a dollhouse, first completely empty (bare rooms, sunny day) for the child to furnish, then on a cosy lamp-lit evening with the whole fox family each in a room: the baby asleep, sister brushing teeth, Mom cooking, Dad reading with Pip on the sofa" },
@@ -192,6 +193,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '6-6': {
+    sources: ['classic ESL board games (roll the dice, move, speak on the square — games4esl / teach-this board games)', 'Cambridge (Pre A1 Starters Speaking: answer short questions about a picture)', 'Duolingo ABC / Khan Academy Kids (path-style progress map, calm self-paced)', 'Lingokids ("My House" review games: odd one out, picture reveal)'],
+    mechanics: [
+      'roll-and-speak board game → My House Board Game: tap the dice, Pip hops along a path of unit pictures and asks a question on the square ("What colour is the bed?"); the child answers aloud, then Pip says it',
+      'odd one out with rooms vs things and colours, a room hiding under tiles (guess early), a K / CH / B / S sound chest',
+      'the child shows their own house ("This is my bedroom. My bed is blue!") and a home house-tour mission',
+    ],
+    betterThan: [
+      'every square asks for a whole answer ("The bed is red!", "No, it isn\'t! The door is blue.") instead of one word, so the board reviews rooms, furniture, colours AND the story question',
+      'no snakes, no losing, no clock: the dice numbers are set so every class lands on a good mix of squares and always reaches HOME in a few rolls',
+      'the board is made of the pictures the child learned this unit, so finishing it is a visible "I know my whole house" moment',
     ],
   },
   '6-5': {
