@@ -78,6 +78,12 @@ export const ACADEMY_LESSON_BLUEPRINTS = buildAllLessonBlueprints(ACADEMY_ROADMA
 export const ACADEMY_ROADMAP_ISSUES = validateRoadmap(ACADEMY_ROADMAP, STRUCTURE_FLOOR);
 export const ACADEMY_ROADMAP_SUMMARY = summarize(ACADEMY_ROADMAP);
 export { ACADEMY_ITEMS };
+/** The items a lesson introduces, joined to its blueprint (E1-E6 only; E7/E8 introduce nothing). */
+export function lessonItems(lessonId: string) {
+  const bp = ACADEMY_LESSON_BLUEPRINTS.find((b) => b.id === lessonId);
+  if (!bp || bp.episode.no > 6) return [];
+  return ACADEMY_ITEMS[bp.seasonId]?.[`E${bp.episode.no}` as 'E1'] ?? [];
+}
 export const ACADEMY_ITEM_ISSUES = validateItems(ACADEMY_SEASONS, ACADEMY_ITEMS);
 
 export function getSeason(id: string): SeasonOutline | undefined {

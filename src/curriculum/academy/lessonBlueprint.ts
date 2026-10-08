@@ -204,6 +204,8 @@ export interface AcademyLessonBlueprint {
   secondarySkills: SkillKey[];
   /** new language this session introduces (words + chunks); <= MAX_ITEMS_PER_SESSION; 0 in E7 and E8 */
   newItems: { count: number; kind: ItemKind };
+  /** what every new item of THIS lesson must relate to (unit theme + this lesson's job). Reviewers check the item list against it. */
+  itemFocus: string;
   /** structures introduced in this session (E3: the first; E6: the second, if any) */
   structures: StructureRef[];
   /** source of the Last-Time card; null only for the very first session of the roadmap */
@@ -279,6 +281,29 @@ function objectiveFor(s: SeasonOutline, type: EpisodeType): string {
   }
 }
 
+
+/** What the new items of one lesson must be related to: the unit (Season) AND this lesson's job. */
+export function itemFocusFor(s: SeasonOutline, type: EpisodeType): string {
+  const theme = s.theme.toLowerCase();
+  switch (type) {
+    case 'cold-open':
+      return `receptive words and collocations that the Cold Open story/dialogue about "${theme}" would contain`;
+    case 'word-lab':
+      return `core productive words of the lexical fields: ${s.lexicalFields.join('; ')}`;
+    case 'pattern-lab':
+      return `chunks that visibly use the structure "${s.structures[0].label}" in the context of "${theme}"`;
+    case 'on-air':
+      return `functional chunks for the real-life exchange: ${s.functions.join('; ')}`;
+    case 'deep-dive':
+      return `receptive words and collocations that a longer text about "${theme}" would contain`;
+    case 'side-quest':
+      return `core productive words for the student's chosen skin (${s.skins.map((k) => k.id).join(', ')}) within "${theme}"${s.structures[1] ? `; chunks may use "${s.structures[1].label}"` : ''}`;
+    case 'remix':
+    case 'finale':
+      return 'none: no new language in this session';
+  }
+}
+
 /** Build the blueprint of one session. `previousId` is the blueprint before it in roadmap order (null for the very first). */
 export function buildLessonBlueprint(s: SeasonOutline, episodeIndex: number, previousId: string | null): AcademyLessonBlueprint {
   const type = EPISODE_ORDER[episodeIndex];
@@ -299,6 +324,7 @@ export function buildLessonBlueprint(s: SeasonOutline, episodeIndex: number, pre
     primarySkill: meta.primarySkill,
     secondarySkills: meta.secondarySkills,
     newItems: { count: counts[episodeIndex], kind: meta.itemKind },
+    itemFocus: itemFocusFor(s, type),
     structures: type === 'pattern-lab' ? s.structures.filter((x) => x.introducedIn === 'pattern-lab') : type === 'side-quest' ? s.structures.filter((x) => x.introducedIn === 'side-quest') : [],
     recapFromLessonId: previousId,
     recycleFrom: s.recycleFrom,

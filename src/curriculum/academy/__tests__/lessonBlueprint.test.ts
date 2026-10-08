@@ -76,3 +76,16 @@ describe('Academy lesson blueprints', () => {
     expect(EPISODES['side-quest'].itemKind).toBe('core-productive');
   });
 });
+
+describe('Academy lesson blueprints: item focus (unit AND lesson related)', () => {
+  it('every introducing lesson names what its new items must relate to; E7/E8 name none', () => {
+    for (const b of ACADEMY_LESSON_BLUEPRINTS) {
+      if (b.episode.no <= 6) {
+        expect(b.itemFocus.length).toBeGreaterThan(20);
+        expect(b.itemFocus.toLowerCase()).toContain(b.episode.no === 1 || b.episode.no === 5 ? 'receptive' : b.episode.no === 2 ? 'core productive' : b.episode.no === 3 ? 'structure' : b.episode.no === 4 ? 'functional' : 'skin');
+      } else {
+        expect(b.itemFocus).toMatch(/^none/);
+      }
+    }
+  });
+});
