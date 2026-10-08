@@ -193,5 +193,10 @@
     "path": "public/lep1/audio/horse-chicken-duck-song-u7l3.mp3",
     "bytes": 321037,
     "sha256": "d0928c10bd6b18ffbda0c9eed0974f7baf1f8b133f568e6bc978d84aa8fb0b8a"
+  },
+  "u7l4-what-animal": {
+    "path": "public/lep1/audio/what-animal-song-u7l4.mp3",
+    "bytes": 321037,
+    "sha256": "5a1085ca5a80b365d3c140cdce511cdf4d8b4bcfb3c7db4c21e08aeeaeee0c3c"
   }
 }
