@@ -1,0 +1,15 @@
+
+=== docs/songs/u6l1-my-house-take1.mp3  length=20.1s  score=0.47  missing=18  extra=13
+heard: coming coming this is my house this isn't kitchen this isn't the bathroom this is the bathroom a minute we're two coming coming cut out my house
+line starts (s): [np.float64(2.2), np.float64(4.0), np.float64(8.0), np.float64(15.5)]
+lineDurationsMs: [3980, 4020, 7500, 4562]
+
+=== docs/songs/u6l1-my-house-take2.mp3  length=20.1s  score=0.81  missing=6  extra=6
+heard: come in come in this is my house this is a kitchen this is a bedroom this is a bathroom gotta be room to come in come in i love my house
+line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(8.3), np.float64(12.3)]
+lineDurationsMs: [3980, 4360, 4000, 7722]
+
+=== docs/songs/u6l1-my-house-take3.mp3  length=20.1s  score=0.80  missing=8  extra=4
+heard: coming coming this is my house this is the kitchen this is the bedroom this is the bathroom the living room too coming coming i love my house
+line starts (s): [np.float64(2.5), np.float64(4.1), np.float64(8.5), np.float64(14.8)]
+lineDurationsMs: [4080, 4440, 6260, 5282]

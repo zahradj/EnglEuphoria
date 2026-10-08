@@ -85,7 +85,7 @@ const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot'
 const REAL_SYNC_KINDS = new Set<Scene['kind']>([
   'vocab-spot', 'meet', 'echo', 'memory', 'choice', 'listen-tap', 'true-false',
   'frequency-ladder', 'roleplay', 'join-stage', 'hello-doors', 'flipbook',
-  'sound-model', 'word-build', 'sentence-build', 'letter-game', 'spin-wheel', 'picture-match',
+  'sound-model', 'word-build', 'sentence-build', 'letter-game', 'spin-wheel', 'picture-match', 'recall-warmup',
   'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play',
   'tongue-twister', 'place-it', 'torch-hunt', 'where-castle', 'welcome-party', 'name-badge',
 ]);

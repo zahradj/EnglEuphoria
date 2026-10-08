@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { actualLessonMinutes, type SessionTimes } from '@/services/lessonTiming';
+import { actualLessonMinutes, sessionTimesFromRow } from '@/services/lessonTiming';
 import { useNavigate, useParams, Navigate, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -117,7 +117,7 @@ const PostLessonSummary: React.FC = () => {
           .maybeSingle(),
         supabase
           .from('classroom_sessions')
-          .select('lesson_title, lesson_id, started_at, ended_at, star_count, current_slide_index, lesson_slides, teacher_joined_at, student_joined_at, teacher_last_ping_at, student_last_ping_at')
+          .select('lesson_title, lesson_id, started_at, ended_at, star_count, current_slide_index, lesson_slides, teacher_joined_at, student_joined_at, teacher_last_ping_at, student_last_ping_at, session_context')
           .or(`room_id.eq.${lookupId},booking_id.eq.${lookupId}`)
           .order('updated_at', { ascending: false })
           .limit(1)
@@ -226,9 +226,9 @@ const PostLessonSummary: React.FC = () => {
   if (!user) return <Navigate to="/login" replace />;
   if (!bookingId) return <Navigate to="/dashboard" replace />;
 
-  // Real time in class (both joined -> end), not the booked length; see
+  // Real time with the student (Start Lesson -> end), not the booked length; see
   // lessonTiming.ts (started_at/ended_at are not reliably written).
-  const durationMin = actualLessonMinutes(session as SessionTimes | null, booking?.scheduled_at) ?? booking?.duration ?? null;
+  const durationMin = actualLessonMinutes(sessionTimesFromRow(session), booking?.scheduled_at) ?? booking?.duration ?? null;
 
   const slidesCovered = (session?.current_slide_index ?? 0) + 1;
   const totalSlides = Array.isArray(session?.lesson_slides) ? (session?.lesson_slides as unknown[]).length : null;

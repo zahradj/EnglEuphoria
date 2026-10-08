@@ -17,9 +17,11 @@ import { Bursts, useBursts } from './gameFx';
 export const SECRET_INTRO = 'I have a secret card. Ask me!';
 export const YES_LINE = 'Yes, it is!';
 export const NO_LINE = "No, it isn't!";
-type AskKind = 'color' | 'shape' | 'toy' | 'size';
+type AskKind = 'color' | 'shape' | 'toy' | 'size' | 'person';
 const aAn = (w: string) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
 export function askLine(kind: AskKind, word: string) {
+  // People are asked by name, no article: "Is it Grandma?" (Unit 5 Lesson 4 family cards).
+  if (kind === 'person') return `Is it ${word}?`;
   const w = word.toLowerCase();
   if (kind === 'color' || kind === 'size') return `Is it ${w}?`;
   return `Is it ${aAn(w)} ${w}?`;
@@ -27,6 +29,7 @@ export function askLine(kind: AskKind, word: string) {
 type Card = Extract<Scene, { kind: 'secret-card' }>['cards'][number];
 /** "It's a red circle!" for shapes; "It's a big red ball!" for toys. */
 export function foundLine(c: Card) {
+  if (c.person && c.word) return `You found it! It's ${c.word}!`;
   const parts = c.word ? [c.size, c.colorWord.toLowerCase(), c.word.toLowerCase()].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
   return `You found it! It's ${aAn(parts)} ${parts}!`;
 }
@@ -34,7 +37,7 @@ export function foundLine(c: Card) {
 function has(c: Card, kind: AskKind, word: string) {
   if (kind === 'color') return c.colorWord === word;
   if (kind === 'shape') return c.shape === word;
-  if (kind === 'toy') return c.word === word;
+  if (kind === 'toy' || kind === 'person') return c.word === word;
   return c.size === word;
 }
 type Phase = 'ask' | 'asking' | 'found';
@@ -76,14 +79,19 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
       const c = scene.cards[i];
       if (!c) continue;
       if (c.word) {
-        add('toy', c.word, { img: c.img });
+        add(c.person ? 'person' : 'toy', c.word, { img: c.img });
         if (c.size) add('size', c.size);
       } else add('shape', c.shape);
-      add('color', c.colorWord, { hex: c.colorHex });
+      if (c.colorWord) add('color', c.colorWord, { hex: c.colorHex });
     }
     const askedSet = new Set(asked);
-    const order: AskKind[] = ['toy', 'size', 'color', 'shape'];
-    return res.filter((ch) => !askedSet.has(`${ch.kind}:${ch.word}`)).sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind));
+    const order: AskKind[] = ['size', 'toy', 'person', 'color', 'shape'];
+    let open = res.filter((ch) => !askedSet.has(`${ch.kind}:${ch.word}`));
+    // People: ask "Is it big? / Is it small?" first (the Guess Who strategy), then the names still in play —
+    // eight chips at once also covered the cards on a phone.
+    const sizeAsked = asked.some((a) => a.startsWith('size:'));
+    if (!sizeAsked && open.some((ch) => ch.kind === 'person') && open.some((ch) => ch.kind === 'size')) open = open.filter((ch) => ch.kind === 'size');
+    return open.sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind));
   }, [left.join(','), asked.join(','), scene.cards]);
 
   const ask = async (kind: AskKind, word: string) => {
@@ -135,7 +143,7 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/20" />
 
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-base font-black text-orange-700 shadow-xl sm:text-xl">
-        {phase === 'found' ? `🎉 ${foundLine(secret)}` : secret.word ? '🧸 Guess the secret toy. Ask!' : '🃏 Pip has a secret card. Ask Pip!'}
+        {phase === 'found' ? `🎉 ${foundLine(secret)}` : secret.person ? '👪 Who is it? Ask Pip!' : secret.word ? '🧸 Guess the secret toy. Ask!' : '🃏 Pip has a secret card. Ask Pip!'}
         <span className="ml-2 rounded-full bg-orange-100 px-2 py-0.5 text-sm text-orange-600">{round + 1}/{total}</span>
       </div>
       <button onClick={() => cueSpeak(SECRET_INTRO, scene.who)} className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>
@@ -166,7 +174,7 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
           return (
             <motion.div
               key={`${round}-${i}`}
-              aria-label={c.word ? [c.size, c.colorWord.toLowerCase(), c.word].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`}
+              aria-label={c.person ? c.word : c.word ? [c.size, c.colorWord.toLowerCase(), c.word].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`}
               className="grid aspect-[4/3] place-items-center"
               initial={{ scale: 0, rotate: -12 }}
               animate={isSecret ? { scale: [1.25, 1.4, 1.25], y: [0, -14, 0] } : gone ? { scale: 0.7, opacity: 0.22, rotate: 0 } : { scale: 1, opacity: 1, rotate: 0, y: [0, -5, 0] }}
@@ -193,7 +201,7 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
           >
             {ch.kind === 'color'
               ? <span className="block h-7 w-7 rounded-full border-2 border-white shadow-inner" style={{ backgroundColor: ch.hex }} />
-              : ch.kind === 'toy'
+              : ch.kind === 'toy' || ch.kind === 'person'
                 ? <img src={ch.img} alt="" draggable={false} className="block h-9 w-9 object-contain" />
                 : ch.kind === 'size'
                   ? <span className="grid h-8 w-8 place-items-center font-black text-orange-500">{ch.word === 'big' ? <span className="text-2xl">⬤</span> : <span className="text-xs">⬤</span>}</span>

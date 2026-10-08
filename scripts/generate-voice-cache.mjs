@@ -381,8 +381,157 @@ const UNIT1_EXTRACTORS = {
   // Mirror SimonTouchScene.tsx's simonTouchLines() / BodyStackScene.tsx's bodyStackLines().
   'simon-touch': (s) => [...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.parts ?? []).map((p) => [s.who, `Yes! ${p.label.charAt(0).toUpperCase() + p.label.slice(1)}!`]), [s.who, "Good listening! Simon didn't say!"], [s.who, "Oops! Simon didn't say!"]],
   'body-stack': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, s.doneLine]],
+  // Mirror FaceBuilderScene.tsx's faceBuilderLines().
+  'face-builder': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+    ...(s.spots ?? []).map((sp) => [s.who, `Not there! That's for the ${sp.label}!`]),
+    [s.who, s.doneLine],
+  ],
   // Mirror ClawMachineScene.tsx's clawMachineLines() / RingTossScene.tsx's ringTossLines().
   'claw-machine': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.toys ?? []).map((t) => [s.who, `That's the ${t.label}! Try again!`]), [s.who, 'Oops! Nothing! Try again!']],
+  // Mirror FamilyPhotoScene.tsx's familyPhotoLines() / SizeLineScene.tsx's sizeLineLines().
+  'family-photo': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+    ...(s.members ?? []).map((m) => [s.who, `That's my ${m.label}! Try again!`]),
+    [s.who, s.doneLine],
+  ],
+  'size-line': (s) => [
+    [s.who, 'Who is the biggest?'], [s.who, 'Who is next?'], [s.who, 'Not yet! Who is bigger?'], [s.who, s.lastLine],
+    ...(s.members ?? []).map((m) => [s.who, m.reply]),
+    [s.who, s.doneLine],
+  ],
+  // Mirror RecallWarmupScene.tsx's recallWarmupLines().
+  'recall-warmup': (s) => [
+    [s.who, 'Do you remember? Listen and find it!'], [s.who, 'Try again!'], [s.who, 'You remember! Great job!'],
+    ...(s.items ?? []).flatMap((it) => [[s.who, it.say], [s.who, `Yes! ${it.word.charAt(0).toUpperCase() + it.word.slice(1)}!`]]),
+  ],
+  // Mirror HouseBuilderScene.tsx's houseBuilderLines().
+  'house-builder': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+    ...(s.pieces ?? []).map((p) => [s.who, `No, that's the ${p.name}! Try again!`]),
+    ...(s.rooms ?? []).map((room) => [s.who, `No, that's the ${room.name}! Try again!`]),
+    [s.who, 'Which room?'],
+    [s.who, s.doneLine],
+  ],
+  // Mirror WhoseRoomScene.tsx's whoseRoomLines().
+  'whose-room': (s) => {
+    const rooms = s.rooms ?? [];
+    const things = s.things ?? [];
+    const diff = (a, b) => {
+      const k = things.findIndex((_, i) => rooms[a]?.things?.[i]?.color !== rooms[b]?.things?.[i]?.color);
+      return k < 0 ? null : `No! That ${things[k].name} is ${rooms[a]?.things?.[k]?.color ?? ''}!`;
+    };
+    return [
+      ...(s.rounds ?? []).flatMap((r) => {
+        const owner = rooms[r.room]?.owner ?? s.who;
+        return [[owner, r.line], [owner, 'Yes! This is my room!'], ...rooms.map((_, i) => (i === r.room ? null : diff(i, r.room))).filter(Boolean).map((l) => [owner, l])];
+      }),
+      [s.who, s.doneLine],
+    ];
+  },
+  // Mirror MovingDayScene.tsx's movingDayLines().
+  'moving-day': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+    ...(s.pieces ?? []).map((p) => [s.who, `No, that's the ${p.name}! Try again!`]),
+    [s.who, 'Thank you!'],
+    [s.who, s.doneLine],
+  ],
+  // Mirror HouseHideScene.tsx's houseHideLines().
+  'house-hide': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+    ...(s.rooms ?? []).map((room) => [s.who, `No, that's the ${room.name}! Try again!`]),
+    [s.who, 'You found me!'],
+    [s.who, s.doneLine],
+  ],
+  // Mirror BuzzerShowScene.tsx's buzzerShowLines().
+  'buzzer-show': (s) => [
+    [s.who, s.intro],
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+    ...(s.faces ?? []).map((f) => [s.who, `No, that's ${f.name}! Try again!`]),
+    [s.who, 'Yes! Right answer!'],
+    [s.who, s.doneLine],
+  ],
+  // Mirror DuckFeedScene.tsx's duckFeedLines().
+  'duck-feed': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+    ...(s.ducks ?? []).map((d) => [s.who, `No, that's ${d.name}! Try again!`]),
+    [s.who, 'Quack, quack! Thank you!'],
+    [s.who, s.doneLine],
+  ],
+  // Mirror FamilyTreeScene.tsx's familyTreeLines().
+  'family-tree': (s) => {
+    const rowWords = ['at the top', 'in the middle', 'at the bottom'];
+    const cap = (w) => w.charAt(0).toUpperCase() + w.slice(1);
+    return [
+      [s.who, s.intro],
+      ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply], [s.who, `Not there! ${cap(s.faces?.[r.face]?.name ?? '')} goes ${rowWords[r.row] ?? 'there'}!`]]),
+      [s.who, s.doneLine],
+    ];
+  },
+  // Mirror CookieFacesScene.tsx's cookieFacesLines() / WhosMissingScene.tsx's whosMissingLines().
+  'cookie-faces': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+    ...(s.faces ?? []).map((f) => [s.who, `No, that's ${f.name}! Try again!`]),
+    [s.who, 'Ding! The cookie is ready!'],
+    [s.who, s.doneLine],
+  ],
+  'whos-missing': (s) => [
+    [s.who, 'Look at the photos!'], [s.who, 'Lights off!'], [s.who, 'Who is missing?'],
+    ...(s.faces ?? []).flatMap((f) => [[s.who, `No, ${f.name} is here! Look again!`], [s.who, `${f.name.charAt(0).toUpperCase() + f.name.slice(1)}! Here is ${f.name}!`]]),
+    [s.who, s.doneLine],
+  ],
+  // Mirror MoveMatchScene.tsx's moveMatchLines() / PartPeekScene.tsx's partPeekLines().
+  'move-match': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.question], [s.who, r.reply]]),
+    ...(s.animals ?? []).map((a) => [s.who, `No, the ${a.label} ${a.move}! Try again!`]),
+    [s.who, 'I can do it!'],
+    [s.who, s.doneLine],
+  ],
+  'part-peek': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.question], [s.who, r.reply]]),
+    ...(s.animals ?? []).map((a) => [s.who, `Not the ${a.label}! Look again!`]),
+    [s.who, s.doneLine],
+  ],
+  // Mirror RoboCopyScene.tsx's roboCopyLines().
+  'robo-copy': (s) => {
+    const cap = (p) => p.charAt(0).toUpperCase() + p.slice(1);
+    const parts = [...new Set((s.rounds ?? []).flatMap((r) => r.seq ?? []))];
+    return [
+      ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+      ...parts.map((p) => [s.who, `${cap(p)}!`]),
+      ...['head', 'eyes', 'ears', 'nose', 'mouth', 'shoulders', 'arms', 'hands', 'knees', 'feet'].map((p) => [s.who, `Oops! Robo's ${p}! Watch again!`]),
+      [s.who, s.doneLine],
+    ];
+  },
+  // Mirror MonsterMakerScene / CountPartsScene *Lines().
+  'monster-maker': (s) => {
+    const NUM = ['zero', 'one', 'two', 'three', 'four', 'five'];
+    const NAME = { eyes: ['eye', 'eyes'], ears: ['ear', 'ears'], hands: ['hand', 'hands'], feet: ['foot', 'feet'] };
+    const desc = (p, v) => (typeof v === 'number' ? `${NUM[v] ?? v} ${NAME[p][v === 1 ? 0 : 1]}` : `${v} ${NAME[p][1]}`);
+    return [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply], ...(r.options ?? []).filter((v) => v !== r.answer).map((v) => [s.who, `That's ${desc(r.part, v)}! Try again!`])]), [s.who, s.doneLine]];
+  },
+  'count-parts': (s) => {
+    const NUM = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
+    const count = (l, p) => (p === 'eyes' ? l.eyes ?? 0 : p === 'ears' ? (l.ears ? 2 : 0) : p === 'arms' ? (l.hands ? l.arms ?? 2 : 0) : (l.feet ? l.legs ?? 2 : 0));
+    const out = [];
+    for (const r of s.rounds ?? []) {
+      const n = count(r.look ?? {}, r.part);
+      out.push([s.who, r.question], [s.who, r.answer]);
+      for (let k = 1; k <= n; k++) out.push([s.who, `${NUM[k] ?? k}!`]);
+      for (const v of [n - 1, n + 1]) if (v >= 1) out.push([s.who, `${NUM[v] ?? v}? Count again!`]);
+    }
+    out.push([s.who, s.doneLine]);
+    return out;
+  },
+  // Mirror ShapeMagicScene / ShapePeekScene / ShapeSorterScene / ShapeBubblesScene *Lines().
+  'shape-magic': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, s.doneLine]],
+  'shape-peek': (s) => [[s.who, 'What shape is hiding?'], ...(s.rounds ?? []).map((r) => [s.who, r.reply]), ...['circle', 'square', 'triangle'].map((x) => [s.who, `Not a ${x}! Look again!`])],
+  'shape-sorter': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.blocks ?? []).map((b) => [s.who, `That's the ${String(b.colorWord).toLowerCase()} ${b.shape}! Try again!`]), [s.who, s.doneLine]],
+  'shape-bubbles': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...['circle', 'square', 'triangle'].map((x) => [s.who, `That's a ${x}!`]), [s.who, s.doneLine]],
+  // Mirror SandPrintsScene.tsx's sandPrintsLines().
+  'sand-prints': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.parts ?? []).map((p) => [s.who, `That's your ${p.label}! Try again!`]), [s.who, s.doneLine]],
+  // Mirror SoundPickScene.tsx's soundPickLines().
+  'sound-pick': (s) => [[s.who, 'Which one starts with this sound?'], ...(s.rounds ?? []).flatMap((r) => (r.options ?? []).map((o, i) => [s.who, i === r.answer ? `Yes! ${o.word.charAt(0).toUpperCase() + o.word.slice(1)}!` : `${o.word.charAt(0).toUpperCase() + o.word.slice(1)}! Try again!`]))],
   'ring-toss': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
   // Mirror TidyUpScene.tsx's tidyUpLines() / PeekPopScene.tsx's peekPopLines().
   // Mirror ColorMonstersScene.tsx's colorMonstersLines().
@@ -426,6 +575,7 @@ const UNIT1_EXTRACTORS = {
   'secret-card': (s) => [
     [s.who, 'I have a secret card. Ask me!'], [s.who, 'Yes, it is!'], [s.who, "No, it isn't!"],
     ...(s.rounds ?? []).map((r) => s.cards?.[r.secret]).filter(Boolean).map((c) => {
+      if (c.person && c.word) return [s.who, `You found it! It's ${c.word}!`];
       const parts = c.word ? [c.size, c.colorWord.toLowerCase(), c.word.toLowerCase()].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
       return [s.who, `You found it! It's ${/^[aeiou]/i.test(parts) ? 'an' : 'a'} ${parts}!`];
     }),
@@ -447,7 +597,7 @@ const UNIT1_EXTRACTORS = {
       [s.who, `Mix ${r.a.toLowerCase()} and ${r.b.toLowerCase()}!`],
       [r.who, `${cap(r.a)}!`], [r.who, `${cap(r.b)}!`],
       [r.who, `And ${r.a.toLowerCase()}!`], [r.who, `And ${r.b.toLowerCase()}!`],
-      [r.who, 'Stir, stir, stir!'],
+      [r.who, 'Mix, mix, mix, mix!'],
       [r.who, 'What color is it?'],
       [r.who, res(r.a, r.b)], [r.who, res(r.b, r.a)],
       [r.who, r.line],

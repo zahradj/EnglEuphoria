@@ -73,5 +73,100 @@
     "path": "public/lep1/audio/shelly-song-u2l5.mp3",
     "bytes": 688812,
     "sha256": "e9cbec81efebfd9f17beeaaf2e0b0b00b88a0f6584d9296213add0f4031bb623"
+  },
+  "u3l3-play": {
+    "path": "public/lep1/audio/play-song-u3l3.mp3",
+    "bytes": 321037,
+    "sha256": "00bd539157ecd48960a70e390cbfc770f99b41ae1e1e87ba3cc0f306bc2de5a3"
+  },
+  "u3l4-favorite": {
+    "path": "public/lep1/audio/favorite-toy-song-u3l4.mp3",
+    "bytes": 321037,
+    "sha256": "c4202999e10c65c105b9147e13d57f4b281a30fcd20b0dc957396375dadfe7d6"
+  },
+  "u3l5-tidy": {
+    "path": "public/lep1/audio/tidy-up-song-u3l5.mp3",
+    "bytes": 321037,
+    "sha256": "b3bf800ef434bd4115bb9634d05bbeec96272c4ff45fd2aadaf37e043f31784f"
+  },
+  "u3l6-fair": {
+    "path": "public/lep1/audio/toy-fair-song-u3l6.mp3",
+    "bytes": 321037,
+    "sha256": "df36aa96d08143accccf25206d441af14abfa5316c4ed3a610a24649925a8097"
+  },
+  "u4l1-body": {
+    "path": "public/lep1/audio/body-song-u4l1.mp3",
+    "bytes": 321037,
+    "sha256": "6f740c1c0220bdfe581253d1b1f0d9a9d25d38d772d7e8fa0b30728021510bdb"
+  },
+  "u5l1-family": {
+    "path": "public/lep1/audio/family-song-u5l1.mp3",
+    "bytes": 321037,
+    "sha256": "d582bb07e3a0fd35c423d038f627159b0eda3b19de76fedc355e1ffa3b15c5b5"
+  },
+  "u4l2-face": {
+    "path": "public/lep1/audio/face-song-u4l2.mp3",
+    "bytes": 321037,
+    "sha256": "24327c89ecc42f2f2975164d51a1b44cf3467c2e714f48cfd35eb07cfa250fce"
+  },
+  "u4l3-body": {
+    "path": "public/lep1/audio/body-song-u4l3.mp3",
+    "bytes": 321037,
+    "sha256": "ddd5c832e7fcaf8ecd56212d96c5f3458890281e649642230854bc2543a381df"
+  },
+  "u4l4-body": {
+    "path": "public/lep1/audio/body-song-u4l4.mp3",
+    "bytes": 321037,
+    "sha256": "075f651e74c8a6e5aa1c4070f067d6a7606aa8700eb8dc7a7e89bdb37d049a26"
+  },
+  "u4l5-moves": {
+    "path": "public/lep1/audio/animal-moves-song-u4l5.mp3",
+    "bytes": 321037,
+    "sha256": "85d9d00d3106f8d6af2174d50255f44f563c486aebcdeadcc4cbdf4a75ffd1fb"
+  },
+  "u5l2-family": {
+    "path": "public/lep1/audio/family-song-u5l2.mp3",
+    "bytes": 321037,
+    "sha256": "88ac02dcfd723ae54e7631aac3f93faefc6321001d815d3f98ad0e9de8d68489"
+  },
+  "u5l3-grandma": {
+    "path": "public/lep1/audio/grandma-song-u5l3.mp3",
+    "bytes": 321037,
+    "sha256": "6d9bfb5a1b6c08575857b9708a36f9a8d13dd9ffccd31bb82f45aeb65c48241b"
+  },
+  "u5l4-family-tree": {
+    "path": "public/lep1/audio/family-tree-song-u5l4.mp3",
+    "bytes": 321037,
+    "sha256": "3e0a6f07babce96cbc82a7a3c84e3ba20c6dc9678fc0d9826abbe27c6394c966"
+  },
+  "u5l5-my-dad": {
+    "path": "public/lep1/audio/my-dad-song-u5l5.mp3",
+    "bytes": 321037,
+    "sha256": "befdf0ab3292b6ee64ddd190427b68283a60f3d600ca033779e2d0d56f9c32b8"
+  },
+  "u5l6-family-show": {
+    "path": "public/lep1/audio/family-show-song-u5l6.mp3",
+    "bytes": 321037,
+    "sha256": "d190ffef054080e97da34030114912e1fc6231b9e093e3a40223af7ca8d9dc54"
+  },
+  "u6l1-my-house": {
+    "path": "public/lep1/audio/my-house-song-u6l1.mp3",
+    "bytes": 321037,
+    "sha256": "6a7277132b18538aebc4d5a0d5a30b7455b3eb03f5c4da0fd1de6e1154d696ad"
+  },
+  "u6l2-moving-day": {
+    "path": "public/lep1/audio/moving-day-song-u6l2.mp3",
+    "bytes": 321037,
+    "sha256": "be0ea45556a9c82b3d63314a2f005fbbad80b4a6cd6e17b0bf17ddc233ec7de9"
+  },
+  "u6l3-in-my-house": {
+    "path": "public/lep1/audio/in-my-house-song-u6l3.mp3",
+    "bytes": 321037,
+    "sha256": "7d4054059140f8588f4ba1703845fb9a9d4d754c3b58acef402356de46425dc3"
+  },
+  "u6l4-my-house": {
+    "path": "public/lep1/audio/my-house-song-u6l4.mp3",
+    "bytes": 321037,
+    "sha256": "0f931fd69060fa870fe2e671c28af8bfd01009e15fa244fc5c6f3b71f5573761"
   }
 }

@@ -1,0 +1,15 @@
+
+=== docs/songs/u4l2-face-take1.mp3  length=20.1s  score=0.90  missing=3  extra=3
+heard: eyes ears mouth and nose eyes ears mouth and nose two eyes to see two ears to hear one little nose and one face one five ears mouth and nose
+line starts (s): [np.float64(0.0), np.float64(7.7), np.float64(11.8), np.float64(15.6)]
+lineDurationsMs: [7740, 4040, 3800, 4482]
+
+=== docs/songs/u4l2-face-take2.mp3  length=20.1s  score=0.67  missing=11  extra=8
+heard: eyes ears nothing no eyes ears nothing no two as to see two ears to hear one little nose that one big smile eyes ears nothing no
+line starts (s): [np.float64(0.0), np.float64(3.7), np.float64(7.8), np.float64(13.6)]
+lineDurationsMs: [3680, 4140, 5760, 6482]
+
+=== docs/songs/u4l2-face-take3.mp3  length=20.1s  score=0.84  missing=6  extra=3
+heard: eyes ears muffin nose eyes ears muffin nose two eyes to see two ears to hear one little nose and one big smile eyes ears muffin nose
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(7.8), np.float64(11.8)]
+lineDurationsMs: [3780, 4040, 4020, 8222]

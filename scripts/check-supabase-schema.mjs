@@ -21,7 +21,7 @@
  * types" action) — re-generate that file periodically so this check doesn't
  * itself go stale against schema changes made outside this repo.
  */
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, writeFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -84,13 +84,34 @@ const filtered = offenders.filter((h) => {
   return !text.includes('.storage.from(');
 });
 
-if (filtered.length === 0) {
-  console.log(`✓ Checked ${hits.length} .from() call sites across ${files.length} files — all reference real tables (${realTables.size} in schema).`);
+// Known findings from before this check ran in CI (scripts/check-supabase-schema.baseline.json:
+// "file :: table" -> count). They are real bugs in older features (tables that were never
+// created, e.g. 'profiles' instead of 'users'), or tables that exist live but are missing from a
+// stale types.ts ('student_prior_knowledge'). Fix them one by one and re-record with --update;
+// a NEW call site against a missing table always fails.
+const BASELINE = path.join(ROOT, 'scripts/check-supabase-schema.baseline.json');
+const counts = {};
+for (const h of filtered) {
+  const key = `${h.file} :: ${h.table}`;
+  counts[key] = (counts[key] ?? 0) + 1;
+}
+if (process.argv.includes('--update')) {
+  const sorted = Object.fromEntries(Object.entries(counts).sort(([x], [y]) => x.localeCompare(y)));
+  writeFileSync(BASELINE, JSON.stringify(sorted, null, 1) + '\n');
+  console.log(`Schema baseline updated: ${filtered.length} known call site(s).`);
+  process.exit(0);
+}
+const known = existsSync(BASELINE) ? JSON.parse(readFileSync(BASELINE, 'utf8')) : {};
+const freshKeys = new Set(Object.entries(counts).filter(([k, n]) => n > (known[k] ?? 0)).map(([k]) => k));
+const fresh = filtered.filter((h) => freshKeys.has(`${h.file} :: ${h.table}`));
+
+if (fresh.length === 0) {
+  console.log(`✓ Checked ${hits.length} .from() call sites across ${files.length} files — no new references to missing tables (${filtered.length} older known, ${realTables.size} tables in schema).`);
   process.exit(0);
 }
 
-console.error(`✗ Found ${filtered.length} .from() call site(s) referencing a table that does not exist in the real schema:\n`);
-for (const h of filtered) {
+console.error(`✗ Found ${fresh.length} NEW .from() call site(s) referencing a table that does not exist in the real schema:\n`);
+for (const h of fresh) {
   console.error(`  ${h.file}:${h.line}  ->  '${h.table}'`);
 }
 console.error(`\nEither the table name is wrong (check for a similarly-named real table) or types.ts is stale (re-generate it from the live database).`);

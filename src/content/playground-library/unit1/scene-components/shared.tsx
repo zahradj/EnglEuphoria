@@ -468,3 +468,55 @@ export function ThingArt({ thing, shadow = false }: { thing: Thing; shadow?: boo
     </span>
   );
 }
+
+/** Thick game-title lettering (white letters, heavy dark outline drawn under the fill, soft shadow).
+ *  Used for every word a child reads on screen in vocabulary and movement pages (owner, 2026-10-05). */
+export const THICK_WORDS: import('react').CSSProperties = {
+  WebkitTextStroke: '0.16em #6B2A0E',
+  paintOrder: 'stroke fill',
+  textShadow: '0 0.08em 0 #6B2A0E, 0 0.18em 0.3em rgba(0,0,0,0.35)',
+  letterSpacing: '0.01em',
+};
+
+/** A round window onto one spot of a wide picture: `at` = centre of the spot (% of the picture), `w` = how much of the
+ *  picture's width fills the window (%). Used by Who Can Do It? and Whose Is It? (U4L5) to show a face or one body part
+ *  of a full scene picture without making new art. `aspect` = picture width / height (default 1376 / 768). */
+export function CropPic({ img, at, w, alt, className = '', aspect = 1376 / 768 }: { img: string; at: [number, number]; w: number; alt: string; className?: string; aspect?: number }) {
+  const scale = 100 / w; // picture width in "window widths"
+  return (
+    <div className={`relative overflow-hidden rounded-full ${className}`} role="img" aria-label={alt}>
+      <img
+        src={img} alt="" draggable={false}
+        className="absolute max-w-none select-none"
+        style={{
+          width: `${scale * 100}%`,
+          height: `${(scale * 100) / aspect}%`,
+          left: `${50 - (at[0] * scale)}%`,
+          top: `${50 - (at[1] * scale) / aspect}%`,
+        }}
+      />
+    </div>
+  );
+}
+
+/** Where a wide scene picture goes so that %-positions on it stay put: covering the screen when it is
+ *  landscape, whole (full width, a little below the middle) when it is portrait, so nothing painted is
+ *  cropped away on a phone. Put the picture and everything placed on it inside a div with this style. */
+export function useArtBox(ref: import('react').RefObject<HTMLDivElement>, aspect: number) {
+  const [size, setSize] = useState({ w: 16, h: 9 });
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const read = () => setSize({ w: el.clientWidth || 16, h: el.clientHeight || 9 });
+    read();
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(read);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [ref]);
+  const { w, h } = size;
+  const cover = w / h >= 1;
+  const bw = cover ? Math.max(w, h * aspect) : w;
+  const bh = bw / aspect;
+  return { width: bw, height: bh, left: (w - bw) / 2, top: cover ? (h - bh) / 2 : Math.max(0, (h - bh) * 0.55) } as const;
+}

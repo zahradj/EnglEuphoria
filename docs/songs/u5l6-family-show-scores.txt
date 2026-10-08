@@ -1,0 +1,15 @@
+
+=== docs/songs/u5l6-family-show-take1.mp3  length=20.1s  score=0.98  missing=1  extra=0
+heard: who is this this is my mom who is this this is my dad grandma grandpa sister brother the baby and me we are family
+line starts (s): [np.float64(0.0), np.float64(3.8), 8.0, np.float64(12.0)]
+lineDurationsMs: [3850, 4150, 3960, 8102]
+
+=== docs/songs/u5l6-family-show-take2.mp3  length=20.1s  score=0.73  missing=6  extra=9
+heard: who is this this is my mom who is this this is my dad brown or brown or sister rod up to say we and me we are family
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(9.9), np.float64(12.8)]
+lineDurationsMs: [4100, 5820, 2920, 7222]
+
+=== docs/songs/u5l6-family-show-take3.mp3  length=20.1s  score=0.94  missing=2  extra=1
+heard: who is this this is my mom who is this this is my dad grandma grandma sister brother baby and me we are a family
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(8.3), np.float64(12.3)]
+lineDurationsMs: [4140, 4140, 4040, 7742]

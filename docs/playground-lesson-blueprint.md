@@ -255,6 +255,32 @@ Every lesson, before it is designed (skill: `.claude/skills/lesson-variety-engin
    (sources, mechanics, betterThan) for the lesson, and report the research to
    the owner with links.
 
+## 3f. "Remember?" warm-up — every lesson recalls the one before (hard rule, all Playground worlds)
+
+Owner's rule (2026-10-07): *"In each lesson add a reminder of what the student
+has done in the previous one — listen and match, listen and click, a pre-K
+activity — just to memorise. Make it universal."*
+
+- Every lesson after the first of its track opens — right after the title /
+  hello song, before the new words — with ONE `recall-warmup` scene
+  (`src/content/playground-library/RecallWarmupScene.tsx`, registered in the
+  Pre-A1 renderer AND the A1/A2 Welcome Town / Magic Castle / Jungle renderer).
+- 2-5 words of the lesson before, each with the picture that lesson taught it
+  with. Pip says it (`say`: "Find the brother!", "Who is happy?", "I wake up!
+  Find it!"), the child finds it — no reading, no clock, a wrong tap is just
+  "Try again!", the right picture glows after two misses.
+- Two looks, so it never feels the same:
+  - `mode: 'click'` — **listen and click**: three pictures per turn. Use it for
+    colours, scene pictures and anything with look-alike outlines.
+  - `mode: 'shadow'` — **listen and match the shadow**: every sticker is a
+    silhouette, the one you hear fills in with colour. Stickers only, and only
+    when the outlines are clearly different (never mom vs dad).
+- It is a routine scene (`ROUTINE_KINDS`), not one of the lesson's games, so it
+  never counts against the variety rules.
+- Enforced by `src/content/playground-library/recallWarmup.test.ts` (deploy
+  gate). A1/A2 lessons whose opener was already an authored review game
+  (Magic Castle `mc2-review-rooms`, `mc3-warmup-match`) are listed there.
+
 ---
 
 ## 4. Built-in Learning Loops

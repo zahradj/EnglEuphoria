@@ -1,6 +1,7 @@
 import type { Character } from './audio';
 import type { SpinWheelSceneData } from '../SpinWheelScene';
 import type { PictureMatchSceneData } from '../PictureMatchScene';
+import type { RecallWarmupSceneData } from '../RecallWarmupScene';
 import type { FirstSoundSceneData } from '../FirstSoundScene';
 import type { LetterMatchSceneData, LetterBlocksSceneData } from '../LetterTilesScene';
 import type { WhatsMissingSceneData } from '../WhatsMissingScene';
@@ -277,6 +278,11 @@ export type Scene =
        *  (e.g. a 3-character group shot with someone on both edges).
        *  Defaults to 'right'. */
       textSide?: 'left' | 'right' | 'top';
+      /** Each card's own `img` becomes the full-screen picture (implies `bare`):
+       *  no card, no thumbnail, no framed banner — just the scene and the word.
+       *  First used by Unit 4 Lesson 2 (owner: "use the image as a full scene,
+       *  no vocabulary cards; the frame looks tacky"). */
+      cardScenes?: boolean;
     }
   | {
       /** Tap the real illustrated object inside a full scene to find its
@@ -355,6 +361,8 @@ export type Scene =
       who: CharKey;
       /** 'a' → "I spy a circle!" (nouns such as shapes); default "I spy something red!". */
       article?: 'a';
+      /** bg width / height: keep the whole picture in its own box so `left`/`top` (% of the picture) stay on their things on every screen. */
+      aspect?: number;
     }
   | {
       /** "Simon Says" color-sequence memory game — press-back a growing
@@ -392,7 +400,9 @@ export type Scene =
       id: string; kind: 'secret-card'; bg: string; teacher: string; who: CharKey;
       /** A card is a coloured shape, or a TOY picture (`img` + `word`, optional `size`):
        *  then the child asks "Is it a car?", "Is it big?", "Is it red?" (Unit 3 Lesson 4). */
-      cards: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle'; img?: string; word?: string; size?: 'big' | 'small' }[];
+      /** `person: true` (family cards, Unit 5 Lesson 4): `word` is a name ("Grandma", "the baby") asked
+       *  without an article — "Is it Grandma?"; leave colorWord '' to skip colour questions. */
+      cards: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle'; img?: string; word?: string; size?: 'big' | 'small'; person?: boolean }[];
       rounds: { secret: number }[];
     }
   | {
@@ -514,6 +524,19 @@ export type Scene =
       rounds: { line: string; simon: boolean; part: number }[];
     }
   | {
+      /** Pancake Faces (Lingokids "put the features back on the face" + Mr.
+       *  Potato Head, U4L2): the voice names a face part, the child taps
+       *  WHERE it goes on the plain pancake in `bg`; the piece is cut from
+       *  `doneImg` (same picture with the face on). `spots` = boxes in % of
+       *  the 16:9 picture; a wrong place is named back. */
+      id: string; kind: 'face-builder'; bg: string; doneImg: string; teacher: string; who: CharKey;
+      spots: { label: string; boxes: { x: number; y: number; w: number; h: number }[] }[];
+      rounds: { spot: number; line: string; reply: string }[];
+      doneLine: string;
+      /** Emoji at the start of the question banner (default 🥞). */
+      icon?: string;
+    }
+  | {
       /** Stack the Friend (apps' "assemble the body"): a friend painted in
        *  `img` is cut into horizontal slices (fractions y0..y1 of the `source`
        *  box, which is in % of the picture); the voice names a part, the
@@ -541,6 +564,200 @@ export type Scene =
        *  painted in bg holds a prize toy; the voice says "Throw the ring on
        *  the kite!"; tap the peg: the ring flies in a spinning arc. Rings on
        *  the right pegs stay. `pegs` = peg tops (x/y %), `prizes[i]` = toy on peg i. */
+      /** Sand Prints (U4L3 signature): hear "Make a footprint!", press the matching body-part sticker into
+       *  the sand; the print stays. parts[i].label: hand / finger / foot / arm. */
+      id: string; kind: 'sand-prints'; bg: string; teacher: string; who: CharKey;
+      parts: { label: string; img: string }[];
+      rounds: { part: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Magic Pencil (U2L3 signature): trace the dotted shape; it turns into `img` at (x, y)% and stays.
+       *  size = pad size in vh; color = the outline / stroke colour. */
+      id: string; kind: 'shape-magic'; bg: string; teacher: string; who: CharKey;
+      rounds: { shape: 'circle' | 'square' | 'triangle'; x: number; y: number; size: number; color: string; line: string; reply: string; img: string; label: string }[];
+      doneLine: string;
+    }
+  | {
+      /** What's Peeking? A shape peeks out of a crate; pick circle / square / triangle; it jumps out as `img`. */
+      id: string; kind: 'shape-peek'; bg: string; teacher: string; who: CharKey;
+      rounds: { shape: 'circle' | 'square' | 'triangle'; color: string; reply: string; img: string; label: string }[];
+    }
+  | {
+      /** Shape Sorter: "Put in the blue square!" — tap or drag the block onto the box; rounds[].block = index in blocks. */
+      id: string; kind: 'shape-sorter'; bg: string; teacher: string; who: CharKey;
+      blocks: { shape: 'circle' | 'square' | 'triangle'; colorWord: string; colorHex: string }[];
+      rounds: { block: number; line: string; reply: string }[];
+      surprise: { img: string; label: string };
+      doneLine: string;
+    }
+  | {
+      /** Bubble Pop: calm bubbles that float in place; pop every bubble with the named shape (count = how many). */
+      id: string; kind: 'shape-bubbles'; bg: string; teacher: string; who: CharKey;
+      rounds: { shape: 'circle' | 'square' | 'triangle'; count: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Monster Maker (U4L4 signature): the monster says "I have three eyes!"; pick the matching part
+       *  (number or size) and it pops on. options = the values shown; answer = the right one. */
+      id: string; kind: 'monster-maker'; bg: string; teacher: string; who: CharKey; color: string;
+      rounds: { part: 'eyes' | 'ears' | 'hands' | 'feet'; answer: number | 'big' | 'small'; options: (number | 'big' | 'small')[]; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
+      /** How Many?: "How many eyes?" — tap each part to count it out loud, pick the number, hear "I have three eyes!". */
+      id: string; kind: 'count-parts'; bg: string; teacher: string; who: CharKey;
+      rounds: {
+        look: { color: string; eyes?: number; ears?: 'big' | 'small'; hands?: 'big' | 'small'; feet?: 'big' | 'small'; arms?: number; legs?: number };
+        part: 'eyes' | 'ears' | 'arms' | 'legs'; question: string; answer: string;
+      }[];
+      doneLine: string;
+    }
+  | {
+      /** Family Photo (U5L2 signature): "Take a photo of my sister!" — tap that family member in the picture
+       *  (x/y/w/h = tap box, %), flash, and a polaroid (face crop: face = centre %, faceW = % of width) slides out. */
+      id: string; kind: 'family-photo'; bg: string; teacher: string; who: CharKey;
+      members: { label: string; x: number; y: number; w: number; h: number; face: [number, number]; faceW: number }[];
+      rounds: { member: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Line Up! (U5L2): line the family up biggest → smallest. `members` are listed biggest first
+       *  (height = relative size of the sticker); `floorOrder` = how they stand on the grass at the start. */
+      id: string; kind: 'size-line'; bg: string; teacher: string; who: CharKey;
+      members: { label: string; img: string; height: number; reply: string }[];
+      floorOrder?: number[];
+      lastLine: string;
+      doneLine: string;
+    }
+  // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
+  | RecallWarmupSceneData
+  | {
+      /** Whose Room? (U6L4 signature): every friend's bedroom is the same empty `room` picture with the same
+       *  `things` (x/y = centre %, w = % of the picture's width), each room in its own colours (`rooms[i].things[k]`
+       *  = colour word + coloured sticker of thing k). The room's `owner` says `line` ("My bed is red and my chair
+       *  is blue!"); only room `room` matches it all. The child taps it, the owner pops in, then says `say`.
+       *  `bg` = backdrop behind the rooms; `aspect` = room width / height (default 1376 / 768). */
+      id: string; kind: 'whose-room'; bg: string; teacher: string; who: CharKey; room: string; aspect?: number;
+      things: { name: string; x: number; y: number; w: number }[];
+      rooms: { owner: CharKey; things: { color: string; img: string }[] }[];
+      rounds: { room: number; line: string; say: string }[];
+      doneLine: string;
+    }
+  | {
+      /** House Builder (U6L3 signature): an empty house picture `bg` with rooms (x/y/w/h = % box of each room).
+       *  Pip says `line` ("Put the bed in the bedroom!"); the child taps piece `piece` on the tray, then room
+       *  `room`; the piece lands at x/y (centre %) w (% of the picture's width) and stays, then the child says
+       *  `say`. `name` = the word ("bed" / "bedroom"); `aspect` = bg width / height (default 1376 / 768). */
+      id: string; kind: 'house-builder'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      rooms: { name: string; x: number; y: number; w: number; h: number }[];
+      pieces: { name: string; img: string }[];
+      rounds: { piece: number; room: number; x: number; y: number; w: number; line: string; reply: string; say: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Moving Day (U6L2 signature): the furniture `pieces` (sticker `img`) wait on the moving truck; the
+       *  empty room `bg` gets each piece at x/y (centre %) w (% of the picture's width) once it is brought in.
+       *  Pip asks `line` for piece `piece`, the child taps it, it flies into the room, then says `say`.
+       *  `name` = the word ("bed"); `aspect` = bg width / height (default 1376 / 768). */
+      id: string; kind: 'moving-day'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      pieces: { name: string; img: string; x: number; y: number; w: number }[];
+      rounds: { piece: number; line: string; reply: string; say: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Where's Pip? (U6L1 signature): hide and seek in a dollhouse picture. Each room (x/y/w/h = % box of the
+       *  room painted in `bg`) starts dark; Pip calls `line` from room `room`, the child taps it, the light
+       *  goes on and `hider` pops up at `at` (% across the room, default 50), then the child says `say`.
+       *  `name` = the room word ("kitchen"); `aspect` = bg width / height (default 1376 / 768). */
+      id: string; kind: 'house-hide'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      hider: { img: string; label: string };
+      rooms: { name: string; x: number; y: number; w: number; h: number }[];
+      rounds: { room: number; line: string; reply: string; say: string; at?: number }[];
+      doneLine: string;
+    }
+  | {
+      /** Family Buzzer Show (U5L6 signature): a game-show stage with podiums painted in bg (x/y = centre % of
+       *  the podium's photo frame, by = y % of its painted red buzzer). Each round puts three `faces` on the podiums (`faces` index per podium), Pip asks a
+       *  unit question, the child buzzes podium `answer`, then says `say`. `name` = how a sentence says the
+       *  person ("Grandpa", "the baby"). */
+      id: string; kind: 'buzzer-show'; bg: string; teacher: string; who: CharKey; intro: string;
+      podiums: { x: number; y: number; by: number }[];
+      faces: { label: string; name: string; img: string }[];
+      rounds: { faces: number[]; answer: number; line: string; reply: string; say: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Feed the Ducks (U5L5 signature): ducks on the pond (x/y = centre %) carry a photo of the story
+       *  (round crop of `img`: at = centre %, w = % of width); Pip says a story sentence ("We eat ice cream!"),
+       *  the child taps that duck and bread flies to it. `name` = how a sentence says the photo ("the book"). */
+      id: string; kind: 'duck-feed'; bg: string; teacher: string; who: CharKey; duckImg: string;
+      ducks: { label: string; name: string; img: string; at: [number, number]; w: number; aspect?: number; x: number; y: number }[];
+      rounds: { duck: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
+      /** My Family Tree (U5L4 signature): photo frames on three branches (`slots`, % on bg; row 0 = top =
+       *  grandparents, 1 = middle = Mom & Dad, 2 = bottom = children). Each round a photo pops out
+       *  ("This is my grandma! Where does Grandma go?"), the child hangs it on the right row, then says
+       *  "This is my grandma!" and taps the mic. Faces as in cookie-faces. */
+      id: string; kind: 'family-tree'; bg: string; teacher: string; who: CharKey;
+      faces: { label: string; name: string; img: string; at: [number, number]; w: number; aspect?: number }[];
+      slots: { row: 0 | 1 | 2; x: number; y: number }[];
+      /** `say` = the sentence the child says on the microphone button ("This is my grandma!", "This is me!"). */
+      rounds: { face: number; row: 0 | 1 | 2; line: string; reply: string; say: string }[];
+      intro: string;
+      doneLine: string;
+    }
+  | {
+      /** Grandma's Cookies (U5L3 signature): "Let's make a Grandpa cookie!" — pick the right face icing,
+       *  it lands on the cookie, the oven bakes it, it joins the family plate. Faces are round crops of a
+       *  picture (at = centre %, w = % of the picture width, aspect = picture width / height). `name` is
+       *  how a sentence says them ("Grandma", "the baby"). */
+      id: string; kind: 'cookie-faces'; bg: string; teacher: string; who: CharKey;
+      faces: { label: string; name: string; img: string; at: [number, number]; w: number; aspect?: number }[];
+      rounds: { face: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Who's Missing? (U5L3): a photo wall (`wall` = face indexes); the child turns the lights off,
+       *  one photo (`missing`) is gone, and they pick it from `options`. Faces as in cookie-faces. */
+      id: string; kind: 'whos-missing'; bg: string; teacher: string; who: CharKey;
+      faces: { label: string; name: string; img: string; at: [number, number]; w: number; aspect?: number }[];
+      rounds: { wall: number[]; missing: number; options: number[] }[];
+      doneLine: string;
+    }
+  | {
+      /** Who Can Do It? (U4L5 signature): "Who stomps their feet?" — tap the animal's face, its move fills the
+       *  screen, then the child does the move and taps "I can do it!". face = centre of the face in `img` (%),
+       *  faceW = % of the picture width the round face window shows; move = "stomps its feet" (wrong-pick line). */
+      id: string; kind: 'move-match'; bg: string; teacher: string; who: CharKey;
+      animals: { label: string; img: string; face: [number, number]; faceW: number; move: string }[];
+      rounds: { animal: number; question: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Whose Is It? (U4L5): one body part peeks out of a bush (part = centre in the animal's picture, %);
+       *  tap the animal's face and the bush slides away. */
+      id: string; kind: 'part-peek'; bg: string; teacher: string; who: CharKey;
+      animals: { label: string; img: string; face: [number, number]; faceW: number }[];
+      rounds: { animal: number; part: [number, number]; partW: number; partWord: string; question: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Robo Says (U4L6 signature): Robo lights body parts in order and names them ("Simon says: touch my
+       *  nose, then my knees!"); the child touches the same parts on Robo in the same order. */
+      id: string; kind: 'robo-copy'; bg: string; teacher: string; who: CharKey;
+      rounds: { seq: ('head' | 'eyes' | 'ears' | 'nose' | 'mouth' | 'shoulders' | 'arms' | 'hands' | 'knees' | 'feet')[]; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Calm first-sound pick: the recorded letter sound, then "Which one starts with this sound?";
+       *  three still pictures, no clock, wrong taps are named back and cost nothing. */
+      id: string; kind: 'sound-pick'; bg: string; teacher: string; who: CharKey;
+      rounds: { sound: string; options: { word: string; img?: string; emoji?: string }[]; answer: number }[];
+    }
+  | {
       id: string; kind: 'ring-toss'; bg: string; bgVideo?: string; teacher: string; who: CharKey; ringImg: string;
       pegs: { x: number; y: number }[];
       prizes: Thing[];
@@ -1014,6 +1231,18 @@ export const LESSON_2_OBJECTIVE = 'Ask and answer "What is your name?" while rev
 export const LESSON_2_SCENES: Scene[] = [
   { id: 'l2-title', kind: 'title-card', bg: bgNameCarnivalTitle, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'The Name Carnival', subtitle: 'Ask names · answer names · win name tickets' },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · The Forest of Hellos.
+    id: 'u1l2-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-name-carnival-title.jpg`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 1 · The Forest of Hellos",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "hat", say: "Find the hat!", img: `${A}/items/item-hat.png` },
+      { word: "house", say: "Show me the house!", img: `${A}/items/item-house.png` },
+      { word: "moon", say: "Point to the moon!", img: `${A}/items/item-moon.png` },
+      { word: "mouse", say: "Find the mouse!", img: `${A}/items/item-mouse.png` },
+    ],
+  },
+  {
     id: 'l2-intro', kind: 'cinematic', bg: bgNameCarnivalGate, title: 'The Carnival Gate', subtitle: 'Every booth opens with one magic question.', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Welcome to the Name Carnival!' },
@@ -1237,6 +1466,18 @@ export const LESSON_3_OBJECTIVE = 'Ask and answer "How are you?", say I am / He 
 
 export const LESSON_3_SCENES: Scene[] = [
   { id: 'l3-title', kind: 'title-card', bg: bgFeelingsTitle, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 3 · Feelings', title: 'How Are You?', subtitle: '\u{1F60A} Happy · \u{1F622} Sad · \u{1F620} Angry — today we talk about EMOTIONS!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · The Name Carnival.
+    id: 'u1l3-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-feelings-title.jpg`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 2 · The Name Carnival",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "nut", say: "Find the nut!", img: `${A}/items/item-nut.png` },
+      { word: "nest", say: "Show me the nest!", img: `${A}/items/item-nest.png` },
+      { word: "nose", say: "Point to the nose!", img: `${A}/items/item-nose.png` },
+      { word: "water", say: "Find the water!", img: `${A}/items/item-water.png` },
+    ],
+  },
   {
     id: 'l3-song', kind: 'roleplay', bg: bgFeelingsMeadow, cast: ['pip', 'mia', 'bella', 'leo'],
     teacher: "Sing along! Clap on 'happy', hug yourself on 'sad', stomp on 'angry'. Repeat each feeling with the student.",
@@ -1541,6 +1782,18 @@ const itemTwo = `${A}/items/item-two.png`;
 
 export const LESSON_4_SCENES: Scene[] = [
   { id: 'l4-title', kind: 'title-card', bg: bgL4Party, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 4 · Birthday', title: "Bella's Birthday!", subtitle: '\u{1F382} How old are you? · \u{1F44B} Goodbye! — party with Pip, Mia, Bella & Leo!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · How Are You?.
+    id: 'u1l4-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-l4-birthday-party.jpg`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 3 · How Are You?",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "apple", say: "Find the apple!", img: `${A}/items/item-apple.png` },
+      { word: "ant", say: "Show me the ant!", img: `${A}/items/item-ant.png` },
+      { word: "cat", say: "Point to the cat!", img: `${A}/items/item-cat.png` },
+      { word: "sun", say: "Find the sun!", img: `${A}/items/item-sun.png` },
+    ],
+  },
   { id: 'l4-arrive', kind: 'meet', focus: ['birthday'], bg: bgL4Party, who: 'pip', teacher: 'Pip runs to Bella’s party. Wave hello and repeat with Pip!', line: 'Hello, friends! Today is Bella’s birthday!', repeat: 'Hello, friends!' },
   { id: 'l4-bella-age', kind: 'meet', focus: ['five'], bg: bgL4BellaFive, who: 'bella', teacher: 'Bella is FIVE today! Repeat with Bella: I am five.', line: 'Hello! I am Bella. I am five!', repeat: 'I am five.' },
   { id: 'l4-mia-age', kind: 'meet', focus: ['six'], bg: bgL4MiaSix, who: 'mia', teacher: 'Mia is SIX! Repeat with Mia: I am six.', line: 'Hi! I am Mia. I am six!', repeat: 'I am six.' },
@@ -1783,6 +2036,18 @@ export const LESSON_5_SCENES: Scene[] = [
       { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
       { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
       { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · Bella's Birthday!.
+    id: 'u1l5-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-l5-play-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 4 · Bella's Birthday!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "bag", say: "Find the bag!", img: `${A}/items/item-bag.png` },
+      { word: "ball", say: "Show me the ball!", img: `${A}/items/item-ball-kawaii.png` },
+      { word: "ten", say: "Point to the ten!", img: `${A}/items/item-ten.png` },
+      { word: "toy", say: "Find the toy!", img: `${A}/items/item-toy.png` },
     ],
   },
   {
@@ -2095,6 +2360,18 @@ export const LESSON_6_OBJECTIVE = "Students can produce all 8 Unit 1 sounds, gre
 
 export const LESSON_6_SCENES: Scene[] = [
   { id: 'l6-title', kind: 'title-card', bg: bgL6TrophyTrail, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 6', title: 'The Trophy Trail', subtitle: 'Show what you know and win the trophy!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · Leo's Lost Star.
+    id: 'u1l6-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-l6-trophy-trail.jpg`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 5 · Leo's Lost Star",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "star", say: "Find the star!", img: `${A}/items/item-star-gold.png` },
+      { word: "ant", say: "Show me the ant!", img: `${A}/items/item-ant.png` },
+      { word: "bag", say: "Point to the bag!", img: `${A}/items/item-bag.png` },
+      { word: "nut", say: "Find the nut!", img: `${A}/items/item-nut.png` },
+    ],
+  },
   {
     id: 'l6-intro', kind: 'cinematic', bg: bgBigTree, title: 'The Trophy Trail', subtitle: 'One last challenge before the trophy', narrator: 'pip',
     script: [
@@ -2523,6 +2800,18 @@ export const LESSON_U2L1_OBJECTIVE = 'Identify and name the colors red, blue, an
 
 export const LESSON_U2L1_SCENES: Scene[] = [
   { id: 'u2l1-title', kind: 'title-card', bg: bgU2L1CHero, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 1', title: 'Red, Blue, Yellow!', subtitle: 'Welcome to the Color Carnival!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 1 · Lesson 6 · The Trophy Trail.
+    id: 'u2l1-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l1c-hero.png`, who: 'pip', mode: 'click',
+    fromLabel: "Unit 1 · Lesson 6 · The Trophy Trail",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "apple", say: "Find the apple!", img: `${A}/items/item-apple.png` },
+      { word: "moon", say: "Show me the moon!", img: `${A}/items/item-moon.png` },
+      { word: "ball", say: "Point to the ball!", img: `${A}/items/item-ball-kawaii.png` },
+      { word: "snake", say: "Find the snake!", img: `${A}/items/item-snake.png` },
+    ],
+  },
   {
     id: 'u2l1-intro', kind: 'cinematic', bg: bgU2L1CHero, title: 'Red, Blue, Yellow!', subtitle: 'A carnival full of colors', narrator: 'pip', hidePipOverlay: true,
     script: [
@@ -3009,6 +3298,18 @@ export const LESSON_U2L2_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · Red, Blue, Yellow!.
+    id: 'u2l2-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l2-studio-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 1 · Red, Blue, Yellow!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "red", say: "Find red!", img: `${A}/items/item-balloon-red.png` },
+      { word: "yellow", say: "Show me yellow!", img: `${A}/items/item-popcorn-yellow.png` },
+      { word: "blue", say: "Point to blue!", img: `${A}/items/item-cottoncandy-blue.png` },
+      { word: "ring", say: "Find the ring!", img: `${A}/items/item-ring.png` },
+    ],
+  },
+  {
     id: 'u2l2-intro', kind: 'cinematic', bg: bgU2L2Studio, hidePipOverlay: true, title: "Pip's Paint Studio", subtitle: 'Can you help Pip paint?', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Hello! Welcome to my paint studio!' },
@@ -3038,7 +3339,7 @@ export const LESSON_U2L2_SCENES: Scene[] = [
     pages: [
       { img: mixPic('willow', 'a'), who: 'willow', line: 'Blue!', atSec: 0 },
       { img: mixPic('willow', 'pour2'), who: 'willow', line: 'And yellow!', atSec: 5 },
-      { img: mixPic('willow', 'spoon'), who: 'willow', line: 'Stir, stir, stir!', atSec: 10 },
+      { img: mixPic('willow', 'spoon'), who: 'willow', line: 'Mix, mix, mix, mix!', atSec: 10 },
       { img: mixPic('willow', 'b'), who: 'willow', line: "It's green! Blue and yellow make green!", atSec: 15 },
     ],
     checkpoints: [{ afterPage: 2, who: 'willow', question: 'What color is it?', answer: 'Green', options: SWATCHES }],
@@ -3059,7 +3360,7 @@ export const LESSON_U2L2_SCENES: Scene[] = [
     pages: [
       { img: mixPic('leo', 'a'), who: 'leo', line: 'Red!', atSec: 0 },
       { img: mixPic('leo', 'pour2'), who: 'leo', line: 'And yellow!', atSec: 5 },
-      { img: mixPic('leo', 'spoon'), who: 'leo', line: 'Stir, stir, stir!', atSec: 10 },
+      { img: mixPic('leo', 'spoon'), who: 'leo', line: 'Mix, mix, mix, mix!', atSec: 10 },
       { img: mixPic('leo', 'b'), who: 'leo', line: "It's orange! Red and yellow make orange!", atSec: 15 },
     ],
     checkpoints: [{ afterPage: 2, who: 'leo', question: 'What color is it?', answer: 'Orange', options: SWATCHES }],
@@ -3080,7 +3381,7 @@ export const LESSON_U2L2_SCENES: Scene[] = [
     pages: [
       { img: mixPic('mia', 'a2'), who: 'mia', line: 'Red!', atSec: 0 },
       { img: mixPic('mia', 'pour2'), who: 'mia', line: 'And blue!', atSec: 5 },
-      { img: mixPic('mia', 'spoon'), who: 'mia', line: 'Stir, stir, stir!', atSec: 10 },
+      { img: mixPic('mia', 'spoon'), who: 'mia', line: 'Mix, mix, mix, mix!', atSec: 10 },
       { img: mixPic('mia', 'b2'), who: 'mia', line: "It's purple! Red and blue make purple!", atSec: 15 },
     ],
     checkpoints: [{ afterPage: 2, who: 'mia', question: 'What color is it?', answer: 'Purple', options: SWATCHES }],
@@ -3424,6 +3725,15 @@ const bgU2L3DashArena = `${A}/scenes/bg-u2l3-dash-arena.png`;
  * Research: shape-collage / "make a picture with shapes" (googooenglish.com,
  * twinkl.com ESL 2D shapes), "What shape is it?" Q&A (englishclub.com,
  * "How to teach shapes to young learners": circle first — no corners). */
+/* Rebuilt 2026-10-06 on the 22-page blueprint (owner: "Full rebuild"):
+ * full-picture word pages (Bella + clock, Mia + window, Leo + pizza) instead
+ * of cards and Draw-and-Say movement. Four NEW calm games (owner: "I need new
+ * activities"): Magic Pencil (trace a shape, it comes alive), What's Peeking?
+ * (feely-bag guessing), Shape Sorter (hear the colour + shape, post the
+ * block) and Bubble Pop (bubbles that wait). No timed Shape Dash, no reading
+ * pages (Pre-A1 children don't read). Then a C /k/ basket, story order,
+ * sticker, home mission, brain break and the goodbye song. Research and
+ * variety: lessonVariety.ts '2-3'. */
 const itemClock = `${A}/items/item-clock.png`;
 const itemWindow = `${A}/items/item-window.png`;
 const itemPizzaSlice = `${A}/items/item-pizza-slice.png`;
@@ -3439,16 +3749,19 @@ const bgU2L3Builder = `${A}/scenes/bg-u2l3-builder-wide.png`;
 const bgU2L3Clock = `${A}/scenes/bg-u2l3-clock-wide.png`;
 const bgU2L3Window = `${A}/scenes/bg-u2l3-window-wide.png`;
 const bgU2L3Pizza = `${A}/scenes/bg-u2l3-pizza-wide.png`;
+const itemBallU2 = `${A}/items/item-ball.png`;
+const itemRobotU2 = `${A}/items/item-robot.png`;
 const RED = '#EF4444';
 const BLUE = '#3B82F6';
 const YELLOW = '#FACC15';
 
 export const LESSON_U2L3_TITLE = 'Circle, Square, Triangle!';
-export const LESSON_U2L3_OBJECTIVE = 'Name circle, square and triangle (clock, window, pizza), ask and answer "What shape is it?" — "It\'s a circle.", say "I like circles.", build pictures from shapes in the colours you hear ("A red triangle!"), and hear C say /k/ (clock, cat, car).';
+export const LESSON_U2L3_OBJECTIVE = 'Name circle, square and triangle (clock, window, pizza), ask and answer "What shape is it?" — "It\'s a circle.", say "I like circles.", trace shapes that come alive, guess a hiding shape, post the shape in the colour you hear ("Put in the red triangle!"), and hear C say /k/ (clock, cat, car).';
 
 export const LESSON_U2L3_SCENES: Scene[] = [
-  { id: 'u2l3-title', kind: 'title-card', bg: bgU2L3Town, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 3', title: 'Circle, Square, Triangle!', subtitle: 'Build with shapes' },
+  { id: 'u2l3-title', kind: 'title-card', bg: bgU2L3Town, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 3', title: 'Circle, Square, Triangle!', subtitle: 'Shapes in Shape Town' },
 
+  /* 1-3 Hook */
   {
     // Warm-up: the lesson's shapes song (scripts/songs.json "u2l3-shapes").
     id: 'u2l3-song', kind: 'song', bg: bgU2L3Town, title: '\u{1F3B5} The Shapes Song \u{1F3B5}', teacher: 'Sing and draw each shape in the air with your finger!',
@@ -3463,143 +3776,82 @@ export const LESSON_U2L3_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · Green, Orange, Purple!.
+    id: 'u2l3-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l3-town-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 2 · Green, Orange, Purple!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "green", say: "Find green!", img: `${A}/items/item-leaf.png` },
+      { word: "orange", say: "Show me orange!", img: `${A}/items/item-carrot.png` },
+      { word: "purple", say: "Point to purple!", img: `${A}/items/item-plum.png` },
+      { word: "frog", say: "Find the frog!", img: `${A}/items/item-frog.png` },
+    ],
+  },
+  {
     id: 'u2l3-intro', kind: 'cinematic', bg: bgU2L3Town, hidePipOverlay: true, title: 'Shape Town', subtitle: 'Shapes are everywhere', narrator: 'pip',
     script: [
-      { who: 'pip', line: 'Hello! Remember red, blue and yellow?' },
-      { who: 'pip', line: 'Look! Shapes are everywhere in our town!' },
+      { who: 'pip', line: 'Hello! Welcome to Shape Town!' },
+      { who: 'pip', line: 'Bella, Mia and Leo are looking for shapes. Let\'s look too!' },
     ],
     cta: "Let's look!",
   },
 
-  /* ---- Input: the three shapes on three clear objects ---- */
+  /* 4-6 New words, move, signature game */
   {
-    id: 'u2l3-vocab-shapes', kind: 'shape-model', bg: bgU2L3Town,
-    teacher: 'Tap a shape. Listen, say it, then say the sentence!',
-    items: [
-      { shapeWord: 'CIRCLE', shapeColor: RED, who: 'bella', exampleWord: 'Clock', exampleImg: itemClock },
-      { shapeWord: 'SQUARE', shapeColor: BLUE, who: 'mia', exampleWord: 'Window', exampleImg: itemWindow },
-      { shapeWord: 'TRIANGLE', shapeColor: YELLOW, who: 'leo', exampleWord: 'Pizza', exampleImg: itemPizzaSlice },
-    ],
-  },
-  {
-    id: 'u2l3-shape-spot', kind: 'color-spot', bg: bgU2L3Town,
-    teacher: 'Find the shapes in the town! Tap each arrow.',
-    items: [
-      { colorWord: 'CIRCLE', colorHex: RED, who: 'bella', label: 'Clock', sentence: 'The clock is a circle!', left: '16.5%', top: '22%', splashImg: itemClock },
-      { colorWord: 'SQUARE', colorHex: BLUE, who: 'mia', label: 'Window', sentence: 'The window is a square!', left: '50%', top: '42%', splashImg: itemWindow },
-      { colorWord: 'TRIANGLE', colorHex: '#F59E0B', who: 'leo', label: 'Flag', sentence: 'The flag is a triangle!', left: '80%', top: '13%', splashImg: itemFlag },
-    ],
-  },
-  {
-    id: 'u2l3-question-model', kind: 'listen-repeat-cards', bg: bgU2L3Town, teacher: 'Listen to the question and the answer. Then say them!',
+    id: 'u2l3-words', kind: 'listen-repeat-cards', bg: bgU2L3Town, cardScenes: true, textSide: 'right', teacher: 'Look at the shape, draw it in the air, then say it!',
     cards: [
-      { who: 'pip', sentence: 'What shape is it?', img: itemClock, imgLabel: 'Clock' },
-      { who: 'bella', sentence: "It's a circle!", img: itemClock, imgLabel: 'Circle' },
-      { who: 'pip', sentence: 'What shape is it?', img: itemWindow, imgLabel: 'Window' },
-      { who: 'mia', sentence: "It's a square!", img: itemWindow, imgLabel: 'Square' },
-      { who: 'pip', sentence: 'What shape is it?', img: itemPizzaSlice, imgLabel: 'Pizza' },
-      { who: 'leo', sentence: "It's a triangle!", img: itemPizzaSlice, imgLabel: 'Triangle' },
+      { who: 'bella', sentence: 'Circle! The clock is a circle.', img: bgU2L3Clock, imgLabel: 'Circle!' },
+      { who: 'mia', sentence: 'Square! The window is a square.', img: bgU2L3Window, imgLabel: 'Square!' },
+      { who: 'leo', sentence: 'Triangle! The pizza is a triangle.', img: bgU2L3Pizza, imgLabel: 'Triangle!' },
     ],
   },
-
-  /* ---- Signature game ---- */
   {
-    id: 'u2l3-shape-builders', kind: 'shape-builder', bg: bgU2L3Builder, who: 'pip',
-    teacher: 'Shape Builders! Name the shape, then pick the color you hear.',
+    id: 'u2l3-draw-say', kind: 'tpr-actions', bg: bgU2L3Town, who: 'pip',
+    teacher: 'Say it with Pip, then draw the shape in the air with your finger.',
     rounds: [
-      {
-        who: 'mia', label: 'House', intro: "Let's build a house!", line: "It's a house!", alive: 'bounce',
-        pieces: [
-          { shape: 'square', colorWord: 'BLUE', colorHex: BLUE, x: 32, y: 32, w: 36, h: 36 },
-          { shape: 'triangle', colorWord: 'RED', colorHex: RED, x: 26, y: 6, w: 48, h: 26 },
-          { shape: 'circle', colorWord: 'YELLOW', colorHex: YELLOW, x: 43, y: 41, w: 14, h: 14 },
-        ],
-      },
-      {
-        who: 'leo', label: 'Rocket', intro: "Let's build a rocket!", line: "It's a rocket!", alive: 'launch',
-        pieces: [
-          { shape: 'triangle', colorWord: 'PURPLE', colorHex: '#A855F7', x: 37, y: 4, w: 26, h: 22 },
-          { shape: 'square', colorWord: 'ORANGE', colorHex: '#F97316', x: 37, y: 26, w: 26, h: 26 },
-          { shape: 'circle', colorWord: 'BLUE', colorHex: BLUE, x: 44, y: 32, w: 12, h: 12 },
-        ],
-      },
-      {
-        who: 'bella', label: 'Ice cream', intro: "Let's build an ice cream!", line: "It's an ice cream!", alive: 'wiggle',
-        pieces: [
-          { shape: 'triangle', colorWord: 'ORANGE', colorHex: '#F97316', x: 38, y: 34, w: 24, h: 34, flip: true },
-          { shape: 'circle', colorWord: 'GREEN', colorHex: '#22C55E', x: 35, y: 12, w: 30, h: 30 },
-          { shape: 'circle', colorWord: 'RED', colorHex: RED, x: 45, y: 3, w: 10, h: 10 },
-        ],
-      },
+      { line: 'Draw a circle!', emoji: '\u{2B55}', img: bgU2L3Clock },
+      { line: 'Draw a square!', emoji: '\u{1F7E6}', img: bgU2L3Window },
+      { line: 'Draw a triangle!', emoji: '\u{1F53A}', img: bgU2L3Pizza },
+      { line: 'Make a big circle with your arms!', emoji: '\u{1F64C}' },
     ],
+  },
+  {
+    // Signature game (new): Magic Pencil — trace a shape, it comes alive in the picture.
+    id: 'u2l3-magic-pencil', kind: 'shape-magic', bg: bgU2L3Builder, who: 'pip',
+    teacher: "Pip's Magic Pencil! Listen, then trace the dotted shape with your finger. Say the shape!",
+    rounds: [
+      { shape: 'circle', x: 79, y: 42, size: 28, color: '#F59E0B', line: 'Draw a circle in the sky!', reply: "A circle! It's the sun!", img: itemSun, label: 'sun' },
+      { shape: 'square', x: 36, y: 68, size: 26, color: '#3B82F6', line: 'Draw a square on the grass!', reply: "A square! It's a present!", img: itemPresent, label: 'present' },
+      { shape: 'triangle', x: 57, y: 66, size: 26, color: '#EF4444', line: 'Draw a triangle!', reply: "A triangle! It's a pizza!", img: itemPizzaSlice, label: 'pizza' },
+      { shape: 'circle', x: 76, y: 74, size: 22, color: '#22C55E', line: 'Draw a little circle!', reply: "A circle! It's a ball!", img: itemBallU2, label: 'ball' },
+    ],
+    doneLine: 'Look at your magic picture!',
   },
 
-  /* ---- Controlled practice ---- */
+  /* 7-10 Practice + speaking */
   {
-    id: 'u2l3-sort-shapes', kind: 'shape-sort', bg: bgU2L3Town, teacher: 'Listen, then drag each thing to its shape!',
-    targets: [
-      { shapeWord: 'CIRCLE', shapeColor: RED, who: 'bella' },
-      { shapeWord: 'SQUARE', shapeColor: BLUE, who: 'mia' },
-      { shapeWord: 'TRIANGLE', shapeColor: YELLOW, who: 'leo' },
-    ],
-    items: [
-      { word: 'clock', img: itemClock, emoji: '\u{1F570}️', shapeWord: 'CIRCLE' },
-      { word: 'cookie', img: itemCookie, emoji: '\u{1F36A}', shapeWord: 'CIRCLE' },
-      { word: 'window', img: itemWindow, emoji: '\u{1FA9F}', shapeWord: 'SQUARE' },
-      { word: 'present', img: itemPresent, emoji: '\u{1F381}', shapeWord: 'SQUARE' },
-      { word: 'pizza', img: itemPizzaSlice, emoji: '\u{1F355}', shapeWord: 'TRIANGLE' },
-      { word: 'flag', img: itemFlag, emoji: '\u{1F6A9}', shapeWord: 'TRIANGLE' },
-    ],
-  },
-
-  /* ---- Phonics micro-moment: C says /k/ ---- */
-  {
-    id: 'u2l3-model-c', kind: 'sound-model', bg: bgU2L3Builder, who: 'bella', letter: 'C', phoneme: '/k/', sound: 'kuh',
-    teacher: 'Listen to the /k/ sound. Clock, cat, car!',
-    anchors: [
-      { word: 'clock', emoji: '\u{1F570}️', img: itemClock },
-      { word: 'cat', emoji: '\u{1F431}', img: itemCat },
-      { word: 'car', emoji: '\u{1F697}', img: itemCarC },
-    ],
-  },
-  { id: 'u2l3-trace-c', kind: 'trace', bg: bgU2L3Clock, who: 'bella', letter: 'C', phoneme: '/k/', word: 'clock', teacher: 'Trace the big C! Say /k/ /k/ as you draw.' },
-
-  /* ---- Games ---- */
-  {
-    id: 'u2l3-shape-spy', kind: 'color-spy', bg: bgU2L3Town, who: 'pip', article: 'a', teacher: 'I Spy! Find the shape Pip says.',
-    spots: [
-      { colorWord: 'CIRCLE', colorHex: RED, label: 'The clock', left: '16.5%', top: '28%' },
-      { colorWord: 'SQUARE', colorHex: BLUE, label: 'The window', left: '50%', top: '50%' },
-      { colorWord: 'TRIANGLE', colorHex: '#F59E0B', label: 'The flag', left: '80%', top: '19%' },
-    ],
-    clueOrder: ['TRIANGLE', 'CIRCLE', 'SQUARE'],
-  },
-  {
-    id: 'u2l3-dash-triangle', kind: 'dash', bg: bgU2L3Pizza, teacher: 'Leo Dash! Tap only the TRIANGLES. Get 6!', who: 'leo', targetLetter: 'TRIANGLE', targetPhoneme: '', goal: 6, seconds: 40,
-    items: [
-      { word: 'pizza', letter: 'TRIANGLE', img: itemPizzaSlice, emoji: '\u{1F355}' },
-      { word: 'flag', letter: 'TRIANGLE', img: itemFlag, emoji: '\u{1F6A9}' },
-      { word: 'clock', letter: 'CIRCLE', img: itemClock, emoji: '\u{1F570}️' },
-      { word: 'cookie', letter: 'CIRCLE', img: itemCookie, emoji: '\u{1F36A}' },
-      { word: 'window', letter: 'SQUARE', img: itemWindow, emoji: '\u{1FA9F}' },
-      { word: 'present', letter: 'SQUARE', img: itemPresent, emoji: '\u{1F381}' },
-    ],
-  },
-
-  /* ---- Speaking: the child answers, then asks ---- */
-  {
-    id: 'u2l3-you-answer', kind: 'join-stage', bg: bgU2L3Town, teacher: 'Your turn! When it says YOU, say the shape.', cast: ['pip', 'bella', 'mia', 'leo'],
+    id: 'u2l3-pip-asks', kind: 'join-stage', bg: bgU2L3Town, teacher: 'Pip asks. The student answers: "It\'s a circle."', cast: ['pip', 'bella', 'mia', 'leo'],
     turns: [
       { who: 'pip', line: 'What shape is the clock?', bg: bgU2L3Clock, arrow: { left: '40%', top: '30%' } },
-      { who: 'student', line: "It's a …", bg: bgU2L3Clock, arrow: { left: '40%', top: '30%' } },
+      { who: 'student', line: "It's a circle!", bg: bgU2L3Clock, arrow: { left: '40%', top: '30%' } },
       { who: 'pip', line: 'What shape is the window?', bg: bgU2L3Window, arrow: { left: '43%', top: '46%' } },
-      { who: 'student', line: "It's a …", bg: bgU2L3Window, arrow: { left: '43%', top: '46%' } },
+      { who: 'student', line: "It's a square!", bg: bgU2L3Window, arrow: { left: '43%', top: '46%' } },
       { who: 'pip', line: 'What shape is the pizza?', bg: bgU2L3Pizza, arrow: { left: '39%', top: '36%' } },
-      { who: 'student', line: "It's a …", bg: bgU2L3Pizza, arrow: { left: '39%', top: '36%' } },
+      { who: 'student', line: "It's a triangle!", bg: bgU2L3Pizza, arrow: { left: '39%', top: '36%' } },
     ],
   },
   {
-    id: 'u2l3-you-ask', kind: 'join-stage', bg: bgU2L3Town, teacher: 'Now YOU ask! Say: What shape is it?', cast: ['bella', 'mia', 'leo'],
+    id: 'u2l3-peek', kind: 'shape-peek', bg: bgU2L3Town, who: 'pip',
+    teacher: "What's peeking? Look at the top of the shape — round or pointy? Tap the shape and say it!",
+    rounds: [
+      { shape: 'circle', color: '#EF4444', reply: "It's a circle! A ball!", img: itemBallU2, label: 'ball' },
+      { shape: 'triangle', color: '#FACC15', reply: "It's a triangle! A pizza!", img: itemPizzaSlice, label: 'pizza' },
+      { shape: 'square', color: '#3B82F6', reply: "It's a square! A present!", img: itemPresent, label: 'present' },
+      { shape: 'triangle', color: '#EF4444', reply: "It's a triangle! A flag!", img: itemFlag, label: 'flag' },
+    ],
+  },
+  {
+    id: 'u2l3-you-ask', kind: 'join-stage', bg: bgU2L3Town, teacher: 'Swap! The student asks: "What shape is it?"', cast: ['bella', 'mia', 'leo'],
     turns: [
       { who: 'student', line: 'Ask Bella: What shape is it?', bg: bgU2L3Clock, arrow: { left: '40%', top: '30%' } },
       { who: 'bella', line: "It's a circle!", bg: bgU2L3Clock, bubble: 'right' },
@@ -3608,53 +3860,123 @@ export const LESSON_U2L3_SCENES: Scene[] = [
       { who: 'student', line: 'Ask your teacher: What shape is it?', bg: bgU2L3Window, arrow: { left: '43%', top: '46%' } },
     ],
   },
-
-  /* ---- Game break ---- */
   {
-    id: 'u2l3-memory', kind: 'memory', bg: bgU2L3Town, teacher: 'Find the pairs! Say the shape of each one.',
-    pairs: [
-      { id: 'clock', label: 'Circle', emoji: '\u{1F570}️', img: itemClock },
-      { id: 'window', label: 'Square', emoji: '\u{1FA9F}', img: itemWindow },
-      { id: 'pizza', label: 'Triangle', emoji: '\u{1F355}', img: itemPizzaSlice },
-      { id: 'present', label: 'Square', emoji: '\u{1F381}', img: itemPresent },
+    id: 'u2l3-sorter', kind: 'shape-sorter', bg: bgU2L3Builder, who: 'mia',
+    teacher: 'Shape Sorter! Listen to Mia, then tap or drag the right block into the box.',
+    blocks: [
+      { shape: 'circle', colorWord: 'RED', colorHex: RED },
+      { shape: 'square', colorWord: 'BLUE', colorHex: BLUE },
+      { shape: 'triangle', colorWord: 'YELLOW', colorHex: YELLOW },
+      { shape: 'square', colorWord: 'GREEN', colorHex: '#22C55E' },
+      { shape: 'circle', colorWord: 'BLUE', colorHex: BLUE },
+      { shape: 'triangle', colorWord: 'RED', colorHex: RED },
     ],
-  },
-
-  /* ---- Personal production ---- */
-  {
-    id: 'u2l3-my-shape', kind: 'join-stage', bg: bgU2L3Town, teacher: 'What shape do YOU like? Say: I like …', cast: ['bella', 'leo', 'pip'],
-    turns: [
-      { who: 'bella', line: 'I like circles! What shape do you like?' },
-      { who: 'student', line: 'I like …' },
-      { who: 'leo', line: "I like triangles! I don't like squares." },
-      { who: 'student', line: "I like … I don't like …" },
-    ],
-  },
-
-  /* ---- Story payoff ---- */
-  {
-    id: 'u2l3-storybook', kind: 'flipbook', bg: bgU2L3Town, title: 'Shape Town',
-    pages: [
-      { who: 'pip', img: bgU2L3Town, text: 'Pip and his friends look for shapes.' },
-      { who: 'bella', img: bgU2L3Clock, text: 'Bella finds a circle. It is a clock!' },
-      { who: 'mia', img: bgU2L3Window, text: 'Mia finds a square. It is a window!' },
-      { who: 'leo', img: bgU2L3Pizza, text: 'Leo finds a triangle. It is a pizza. Yum!' },
-      { who: 'pip', img: bgU2L3Builder, text: 'Now they build a house with shapes!' },
-    ],
-    checkpoints: [
-      { afterPage: 1, who: 'bella', question: 'What shape is the clock?', options: ['Circle', 'Square', 'Triangle'], answer: 'Circle' },
-      { afterPage: 3, who: 'leo', question: 'What shape is the pizza?', options: ['Circle', 'Square', 'Triangle'], answer: 'Triangle' },
-    ],
-  },
-  {
-    id: 'u2l3-read-words', kind: 'word-picture-match', bg: bgU2L3Town, teacher: 'Read the word. Tap the shape!',
     rounds: [
-      { word: 'circle', who: 'bella', correctImg: shapeCircle, correctLabel: 'Circle', distractors: [{ img: shapeSquare, label: 'Square' }, { img: shapeTriangle, label: 'Triangle' }] },
-      { word: 'triangle', who: 'leo', correctImg: shapeTriangle, correctLabel: 'Triangle', distractors: [{ img: shapeCircle, label: 'Circle' }, { img: shapeSquare, label: 'Square' }] },
-      { word: 'square', who: 'mia', correctImg: shapeSquare, correctLabel: 'Square', distractors: [{ img: shapeTriangle, label: 'Triangle' }, { img: shapeCircle, label: 'Circle' }] },
+      { block: 1, line: 'Put in the blue square!', reply: 'In it goes! The blue square!' },
+      { block: 0, line: 'Put in the red circle!', reply: 'In it goes! The red circle!' },
+      { block: 2, line: 'Put in the yellow triangle!', reply: 'In it goes! The yellow triangle!' },
+      { block: 3, line: 'Put in the green square!', reply: 'In it goes! The green square!' },
+      { block: 5, line: 'Put in the red triangle!', reply: 'In it goes! The red triangle!' },
+    ],
+    surprise: { img: itemRobotU2, label: 'robot' },
+    doneLine: 'Surprise! It\'s a robot!',
+  },
+  {
+    id: 'u2l3-bubbles', kind: 'shape-bubbles', bg: bgU2L3Town, who: 'leo',
+    teacher: 'Bubble Pop! Listen to Leo and pop only the bubbles with that shape. No hurry.',
+    rounds: [
+      { shape: 'circle', count: 3, line: 'Pop the circles!', reply: 'Pop, pop, pop! All the circles!' },
+      { shape: 'triangle', count: 3, line: 'Pop the triangles!', reply: 'Pop, pop, pop! All the triangles!' },
+      { shape: 'square', count: 3, line: 'Pop the squares!', reply: 'Pop, pop, pop! All the squares!' },
+    ],
+    doneLine: 'Great popping!',
+  },
+
+  /* 11-13 Phonics: C says /k/ */
+  {
+    id: 'u2l3-model-c', kind: 'sound-model', bg: bgU2L3Builder, who: 'bella', letter: 'C', phoneme: '/k/', sound: 'kuh',
+    teacher: 'C says /k/ — clock, cat, car! (Circle starts with C too, but there C says /s/: keep to the /k/ words today.)',
+    anchors: [
+      { word: 'clock', emoji: '\u{1F570}️', img: itemClock },
+      { word: 'cat', emoji: '\u{1F431}', img: itemCat },
+      { word: 'car', emoji: '\u{1F697}', img: itemCarC },
+    ],
+  },
+  { id: 'u2l3-trace-c', kind: 'trace', bg: bgU2L3Clock, who: 'bella', letter: 'C', phoneme: '/k/', word: 'clock', speakWord: false, teacher: 'Trace the big C! It is round like a circle. /k/ /k/ clock!' },
+  {
+    id: 'u2l3-basket-c', kind: 'basket', bg: bgU2L3Builder, letter: 'C', phoneme: '/k/', who: 'bella', teacher: "Drag the /k/ things into Bella's C basket! No hurry.", goal: 4,
+    items: [
+      { word: 'clock', emoji: '\u{1F570}️', img: itemClock, hit: true },
+      { word: 'cat', emoji: '\u{1F431}', img: itemCat, hit: true },
+      { word: 'car', emoji: '\u{1F697}', img: itemCarC, hit: true },
+      { word: 'cookie', emoji: '\u{1F36A}', img: itemCookie, hit: true },
+      { word: 'window', emoji: '\u{1FA9F}', img: itemWindow, hit: false },
+      { word: 'pizza', emoji: '\u{1F355}', img: itemPizzaSlice, hit: false },
     ],
   },
 
+  /* 14-15 Retell + perform */
+  {
+    id: 'u2l3-story-order', kind: 'story-order', bg: bgU2L3Town, who: 'pip', teacher: 'Who found a shape first? Put the pictures in order, then tell the story!',
+    frames: [
+      { img: bgU2L3Clock, caption: 'Bella finds a circle. It is a clock!', who: 'bella' },
+      { img: bgU2L3Window, caption: 'Mia finds a square. It is a window!', who: 'mia' },
+      { img: bgU2L3Pizza, caption: 'Leo finds a triangle. It is a pizza!', who: 'leo' },
+    ],
+  },
+  {
+    id: 'u2l3-my-shape', kind: 'join-stage', bg: bgU2L3Town, teacher: 'Show time! The student says the shape they like: "I like circles!"', cast: ['bella', 'leo'],
+    turns: [
+      { who: 'bella', line: 'I like circles! What shape do you like?', bubble: 'right' },
+      { who: 'student', line: 'I like …', bubble: 'right' },
+      { who: 'leo', line: 'I like triangles! Draw your shape in the air!', bubble: 'right' },
+      { who: 'student', line: 'I like … (draw it)', bubble: 'right' },
+    ],
+  },
+
+  /* 16-17 Sticker + Home Mission */
+  {
+    id: 'u2l3-sticker', kind: 'sticker-reward', bg: bgU2L3Town, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super shape finder! Here is a clock sticker for you!', sticker: { img: itemClock, label: 'Circle' },
+  },
+  {
+    id: 'u2l3-home-mission', kind: 'home-mission', bg: bgU2L3Town, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: find a circle, a square and a triangle at home!',
+    parentNote: 'Go on a shape hunt at home with your child: a plate or clock (circle), a window or book (square), a slice of toast cut corner to corner (triangle). Ask: "What shape is it?" Your child answers: "It\'s a circle!" Then draw the shapes in the air together.',
+    steps: [
+      { emoji: '\u{2B55}', img: itemClock, say: 'Circle' },
+      { emoji: '\u{1F7E6}', img: itemWindow, say: 'Square' },
+      { emoji: '\u{1F53A}', img: itemPizzaSlice, say: 'Triangle' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u2l3-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU2L3Builder, who: 'leo',
+    teacher: 'Extra time: Shape Moves! Do each move with Leo.',
+    rounds: [
+      { line: 'Turn around in a circle!', emoji: '\u{1F504}' },
+      { line: 'Make a triangle with your arms!', emoji: '\u{1F53A}' },
+      { line: 'Make a square with your fingers!', emoji: '\u{1F7E6}' },
+      { line: 'Jump! Jump! Jump!', emoji: '\u{1F998}' },
+      { line: 'Big stretch! Arms up!', emoji: '\u{1F64C}', seconds: 4 },
+    ],
+  },
+
+  /* 20-21 Goodbye */
+  {
+    id: 'u2l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
   { id: 'u2l3-finale', kind: 'finale', bg: bgU2L3Town, who: 'pip', line: 'You found circles, squares and triangles! Goodbye, friends!' },
 ];
 
@@ -3759,6 +4081,17 @@ export const LESSON_U2L4_SCENES: Scene[] = [
       { who: 'willow', text: "What shape is this? It's a circle, a circle!", emotion: 'happy' },
       { who: 'leo', text: 'Is it blue? Yes, it is! Yes, it is!', emotion: 'happy' },
       { who: 'mia', text: "Is it green? No, it isn't! No, it isn't!", emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · Circle, Square, Triangle!.
+    id: 'u2l4-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l4-party-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 3 · Circle, Square, Triangle!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "circle", say: "Find the circle!", img: `${A}/scenes/bg-u2l3-clock-wide.png` },
+      { word: "square", say: "Show me the square!", img: `${A}/scenes/bg-u2l3-window-wide.png` },
+      { word: "triangle", say: "Point to the triangle!", img: `${A}/scenes/bg-u2l3-pizza-wide.png` },
     ],
   },
   {
@@ -4083,6 +4416,18 @@ export const LESSON_U2L5_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · What Color Is This?.
+    id: 'u2l5-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l5-sea-wide.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 4 · What Color Is This?",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "whale", say: "Find the whale!", img: `${A}/items/item-whale.png` },
+      { word: "wheel", say: "Show me the wheel!", img: `${A}/items/item-wheel.png` },
+      { word: "whistle", say: "Point to the whistle!", img: `${A}/items/item-whistle.png` },
+      { word: "balloon", say: "Find the balloon!", img: `${A}/items/item-balloon-red.png` },
+    ],
+  },
+  {
     id: 'u2l5-intro', kind: 'cinematic', bg: bgU2L5Sea, hidePipOverlay: true, title: "Shelly's Story", subtitle: 'A little fish in the big blue sea', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Look! A little gray fish!' },
@@ -4325,6 +4670,18 @@ export const LESSON_U2L6_SCENES: Scene[] = [
       { who: 'leo', text: 'Orange, orange, the carrot is orange!', emotion: 'happy' },
       { who: 'mia', text: 'Purple, purple, the grapes are purple!', emotion: 'happy' },
       { who: 'pip', text: 'What color is it? What color is it?', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · The Rainbow Fish's Scales.
+    id: 'u2l6-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l6-map-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 5 · The Rainbow Fish's Scales",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "ship", say: "Find the ship!", img: `${A}/items/item-ship.png` },
+      { word: "shell", say: "Show me the shell!", img: `${A}/items/item-shell.png` },
+      { word: "shoe", say: "Point to the shoe!", img: `${A}/items/item-shoe.png` },
+      { word: "clock", say: "Find the clock!", img: `${A}/items/item-clock.png` },
     ],
   },
   {
@@ -4703,6 +5060,18 @@ export const LESSON_U3L1_SCENES: Scene[] = [
     ],
   },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 2 · Lesson 6 · Color & Shape Hunt.
+    id: 'u3l1-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l1-playroom-wide.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Unit 2 · Lesson 6 · Color & Shape Hunt",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "rainbow", say: "Find the rainbow!", img: `${A}/items/item-rainbow.png` },
+      { word: "pizza", say: "Show me the pizza!", img: `${A}/items/item-pizza-slice.png` },
+      { word: "present", say: "Point to the present!", img: `${A}/items/item-present.png` },
+      { word: "flag", say: "Find the flag!", img: `${A}/items/item-flag.png` },
+    ],
+  },
+  {
     id: 'u3l1-intro', kind: 'cinematic', bg: bgU3L1Toybox, hidePipOverlay: true, title: "Pip's Toy Box", subtitle: 'What is inside?', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Welcome to my playroom!' },
@@ -4964,6 +5333,18 @@ export const LESSON_U3L2_SCENES: Scene[] = [
       { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
       { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
       { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · Ball, Car, Doll!.
+    id: 'u3l2-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l2-party-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 1 · Ball, Car, Doll!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "ball", say: "Find the ball!", img: `${A}/items/item-ball-blue.png` },
+      { word: "car", say: "Show me the car!", img: `${A}/items/item-car-green.png` },
+      { word: "doll", say: "Point to the doll!", img: `${A}/items/item-doll.png` },
+      { word: "duck", say: "Find the duck!", img: `${A}/items/item-duck-yellow.png` },
     ],
   },
   {
@@ -5276,15 +5657,27 @@ export const LESSON_U3L3_SCENES: Scene[] = [
 
   /* 1-3 Hook + story opener */
   {
-    id: 'u3l3-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
-    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
-    lineDurationsMs: [5200, 4300, 4500, 6100],
-    songPrompt: 'Cheerful upbeat kids hello song',
+    id: 'u3l3-song', kind: 'song', bg: bgU3L3Park, title: '\u{1F3B5} Do You Like to Play? \u{1F3B5}', teacher: 'Sing and answer! Shout "Yes, I do!" or "No, I don\'t!" and act out each toy.',
+    durationSeconds: 20, bigWord: 'Play', songUrl: `${A}/audio/play-song-u3l3.mp3?v=1`,
+    lineDurationsMs: [4740, 4500, 3800, 7022],
+    songPrompt: 'Upbeat kids pop song',
     lyrics: [
-      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+      { who: 'pip', text: 'Do you like kites? Yes, I do! Yes, I do!', emotion: 'happy' },
+      { who: 'leo', text: 'Do you like robots? Yes, I do! Yes, I do!', emotion: 'happy' },
+      { who: 'mia', text: 'Do you like balls? No, I don\'t! No, I don\'t!', emotion: 'happy' },
+      { who: 'pip', text: 'Do you like to play? Yes, I do! Let\'s play!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · Teddy Bear, Blocks, Train!.
+    id: 'u3l3-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l3-park-wide.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 2 · Teddy Bear, Blocks, Train!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "teddy bear", say: "Find the teddy bear!", img: `${A}/items/item-teddy.png` },
+      { word: "blocks", say: "Show me the blocks!", img: `${A}/items/item-blocks.png` },
+      { word: "train", say: "Point to the train!", img: `${A}/items/item-train.png` },
+      { word: "dog", say: "Find the dog!", img: `${A}/items/item-dog.png` },
     ],
   },
   {
@@ -5540,15 +5933,27 @@ export const LESSON_U3L4_SCENES: Scene[] = [
 
   /* 1-3 Hook + story opener */
   {
-    id: 'u3l4-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
-    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
-    lineDurationsMs: [5200, 4300, 4500, 6100],
-    songPrompt: 'Cheerful upbeat kids hello song',
+    id: 'u3l4-song', kind: 'song', bg: bgU3L4ShowTell, title: '\u{1F3B5} My Favorite Toy \u{1F3B5}', teacher: 'Sing and show! Arms wide on "big", tiny fingers on "small".',
+    durationSeconds: 20, bigWord: 'Toys', songUrl: `${A}/audio/favorite-toy-song-u3l4.mp3?v=1`,
+    lineDurationsMs: [4080, 3800, 3360, 8822],
+    songPrompt: 'Upbeat kids pop song',
     lyrics: [
-      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+      { who: 'bella', text: 'My favorite toy is my teddy bear! It is big!', emotion: 'happy' },
+      { who: 'leo', text: 'My favorite toy is my robot! It is small!', emotion: 'happy' },
+      { who: 'pip', text: 'Big, big, big! Small, small, small!', emotion: 'happy' },
+      { who: 'pip', text: 'What is your favorite toy? Show and tell!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · What Do You Like to Play?.
+    id: 'u3l4-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l4-showtell-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 3 · What Do You Like to Play?",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "kite", say: "Find the kite!", img: `${A}/items/item-kite.png` },
+      { word: "robot", say: "Show me the robot!", img: `${A}/items/item-robot.png` },
+      { word: "plane", say: "Point to the plane!", img: `${A}/items/item-plane.png` },
+      { word: "key", say: "Find the key!", img: `${A}/items/item-key.png` },
     ],
   },
   {
@@ -5798,15 +6203,27 @@ export const LESSON_U3L5_SCENES: Scene[] = [
 
   /* 1-3 Hook + story */
   {
-    id: 'u3l5-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
-    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
-    lineDurationsMs: [5200, 4300, 4500, 6100],
-    songPrompt: 'Cheerful upbeat kids hello song',
+    id: 'u3l5-song', kind: 'song', bg: bgU3L5Messy, title: '\u{1F3B5} Tidy Up! \u{1F3B5}', teacher: 'Sing and point! In: hands make a box. On: hands on top. Under: hands go low.',
+    durationSeconds: 20, bigWord: 'Tidy', songUrl: `${A}/audio/tidy-up-song-u3l5.mp3?v=1`,
+    lineDurationsMs: [3120, 4100, 3960, 8882],
+    songPrompt: 'Upbeat kids pop song',
     lyrics: [
-      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+      { who: 'pip', text: 'Tidy up, tidy up, put the toys away!', emotion: 'happy' },
+      { who: 'bella', text: 'The ball goes in the box! In, in, in!', emotion: 'happy' },
+      { who: 'mia', text: 'The teddy goes on the bed! On, on, on!', emotion: 'happy' },
+      { who: 'leo', text: 'The car goes under the chair! Under, under!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · My Favorite Toy.
+    id: 'u3l5-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l5-messy-wide.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 4 · My Favorite Toy",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "teddy bear", say: "Find the teddy bear!", img: `${A}/items/item-teddy.png` },
+      { word: "kite", say: "Show me the kite!", img: `${A}/items/item-kite.png` },
+      { word: "robot", say: "Point to the robot!", img: `${A}/items/item-robot.png` },
+      { word: "blocks", say: "Find the blocks!", img: `${A}/items/item-blocks.png` },
     ],
   },
   {
@@ -6090,15 +6507,27 @@ export const LESSON_U3L6_SCENES: Scene[] = [
 
   /* 1-3 Hook + story */
   {
-    id: 'u3l6-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
-    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
-    lineDurationsMs: [5200, 4300, 4500, 6100],
-    songPrompt: 'Cheerful upbeat kids hello song',
+    id: 'u3l6-song', kind: 'song', bg: bgU3L6Fair, title: '\u{1F3B5} The Toy Fair Song \u{1F3B5}', teacher: 'Sing and point to the prizes! Say "please" and "thank you" with Pip.',
+    durationSeconds: 20, bigWord: 'Fair', songUrl: `${A}/audio/toy-fair-song-u3l6.mp3?v=1`,
+    lineDurationsMs: [3200, 4120, 4000, 8742],
+    songPrompt: 'Upbeat kids pop song',
     lyrics: [
-      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+      { who: 'pip', text: 'Toy fair, toy fair, play and win!', emotion: 'happy' },
+      { who: 'leo', text: 'I want the robot, please! The robot, please!', emotion: 'happy' },
+      { who: 'bella', text: 'I want the kite, please! The kite, please!', emotion: 'happy' },
+      { who: 'pip', text: 'Play and win and say it! Thank you! Hooray!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · Tidy Up Time!.
+    id: 'u3l6-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l6-fair-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 5 · Tidy Up Time!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "box", say: "Find the box!", img: `${A}/items/item-toybox.png` },
+      { word: "kitten", say: "Show me the kitten!", img: `${A}/items/item-kitten.png` },
+      { word: "octopus", say: "Point to the octopus!", img: `${A}/items/item-octopus.png` },
+      { word: "train", say: "Find the train!", img: `${A}/items/item-train.png` },
     ],
   },
   {
@@ -6374,6 +6803,7 @@ const bgU4L1ActToes = `${A}/scenes/bg-u4l1-act-toes-wide.png`;
 const bgU4L1LeoHead = `${A}/scenes/bg-u4l1-leo-head-wide.png`;
 const bgU4L1LeoShoulders = `${A}/scenes/bg-u4l1-leo-shoulders-wide.png`;
 const bgU4L1LeoKnees = `${A}/scenes/bg-u4l1-leo-knees-wide.png`;
+const bgU4L1LeoToes = `${A}/scenes/bg-u4l1-leo-toes-wide.png`;
 const bgU4L1Studio = `${A}/scenes/bg-u4l1-studio-empty-wide.png`;
 const cardHead = `${A}/items/item-card-head.png`;
 const cardShoulders = `${A}/items/item-card-shoulders.png`;
@@ -6397,15 +6827,27 @@ export const LESSON_U4L1_SCENES: Scene[] = [
 
   /* 1-3 Hook + story */
   {
-    id: 'u4l1-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
-    durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
-    lineDurationsMs: [5200, 4300, 4500, 6100],
-    songPrompt: 'Cheerful upbeat kids hello song',
+    id: 'u4l1-song', kind: 'song', bg: bgU4L1Class, title: '\u{1F3B5} Head, Shoulders, Knees and Toes \u{1F3B5}', teacher: 'Stand up! Touch each body part as you sing it, faster and faster.',
+    durationSeconds: 20, bigWord: 'Body', songUrl: `${A}/audio/body-song-u4l1.mp3?v=1`,
+    lineDurationsMs: [3580, 3980, 3960, 8542],
+    songPrompt: 'Upbeat kids pop song',
     lyrics: [
-      { who: 'pip', text: '\u{1F44B} Hello, hello, hello my friend!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F333} Come with me, the fun begins!', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F44F} Clap your hands and wave up high', emotion: 'happy' },
-      { who: 'pip', text: '\u{1F495} Hello, hello, hi hi hi!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Touch your head and touch your toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 3 · Lesson 6 · The Toy Fair.
+    id: 'u4l1-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l1-dance-class-wide.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Unit 3 · Lesson 6 · The Toy Fair",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "doll", say: "Find the doll!", img: `${A}/items/item-doll.png` },
+      { word: "robot", say: "Show me the robot!", img: `${A}/items/item-robot.png` },
+      { word: "kite", say: "Point to the kite!", img: `${A}/items/item-kite.png` },
+      { word: "train", say: "Find the train!", img: `${A}/items/item-train.png` },
     ],
   },
   {
@@ -6435,22 +6877,22 @@ export const LESSON_U4L1_SCENES: Scene[] = [
 
   /* 4-6 New words, move, first game */
   {
-    id: 'u4l1-words', kind: 'listen-repeat-cards', bg: bgU4L1Studio, teacher: 'Touch it, then say it! Point to your own body every time.',
+    id: 'u4l1-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU4L1Studio, teacher: 'Touch it, then say it! Point to your own body every time.',
     cards: [
-      { who: 'leo', sentence: 'Head! Touch your head.', img: cardHead, imgLabel: 'Head' },
-      { who: 'leo', sentence: 'Shoulders! Touch your shoulders.', img: cardShoulders, imgLabel: 'Shoulders' },
-      { who: 'leo', sentence: 'Knees! Touch your knees.', img: cardKnees, imgLabel: 'Knees' },
-      { who: 'leo', sentence: 'Toes! Touch your toes.', img: cardToes, imgLabel: 'Toes' },
+      { who: 'leo', sentence: 'Head! Touch your head.', img: bgU4L1LeoHead, imgLabel: 'Head!' },
+      { who: 'leo', sentence: 'Shoulders! Touch your shoulders.', img: bgU4L1LeoShoulders, imgLabel: 'Shoulders!' },
+      { who: 'leo', sentence: 'Knees! Touch your knees.', img: bgU4L1LeoKnees, imgLabel: 'Knees!' },
+      { who: 'leo', sentence: 'Toes! Touch your toes.', img: bgU4L1LeoToes, imgLabel: 'Toes!' },
     ],
   },
   {
     id: 'u4l1-move-say', kind: 'tpr-actions', bg: bgU4L1Studio, who: 'willow',
     teacher: 'Stand up! Say it with Willow, then do it before the ring runs out.',
     rounds: [
-      { line: 'Touch your head!', emoji: '\u{1F64B}', img: cardHead },
-      { line: 'Touch your shoulders!', emoji: '\u{1F937}', img: cardShoulders },
-      { line: 'Touch your knees!', emoji: '\u{1F9CE}', img: cardKnees },
-      { line: 'Touch your toes!', emoji: '\u{1F9B6}', img: cardToes },
+      { line: 'Touch your head!', emoji: '\u{1F64B}', img: bgU4L1LeoHead },
+      { line: 'Touch your shoulders!', emoji: '\u{1F937}', img: bgU4L1LeoShoulders },
+      { line: 'Touch your knees!', emoji: '\u{1F9CE}', img: bgU4L1LeoKnees },
+      { line: 'Touch your toes!', emoji: '\u{1F9B6}', img: bgU4L1LeoToes },
       { line: 'Now faster! Head, shoulders, knees and toes!', emoji: '\u{26A1}' },
     ],
   },
@@ -6631,6 +7073,3306 @@ export const LESSON_U4L1_SCENES: Scene[] = [
   { id: 'u4l1-finale', kind: 'finale', bg: bgU4L1Knees, who: 'willow', line: 'Great dancing! Head, shoulders, knees and toes — you know them all! Goodbye, friend!' },
 ];
 
+/* ===================== Pre-A1 Unit 4 · Lesson 2 — Eyes, Ears, Mouth, Nose! =====================
+ * My Body & Face (2/6). eyes, ears, mouth, nose ("Point to your eyes!",
+ * "It's my nose!") and N says /n/ (nest, nut, nose); E /e/ recycled.
+ * Setting: Pip and Mia's breakfast kitchen — Pancake Faces. Lesson-Variety
+ * Engine: researched Lingokids face-parts games ("put the features back on
+ * the face", Face Scramble), TinyTap parts-of-the-face matching, Genki
+ * English "Make a face", the Face Maker drag-and-drop game and Cambridge
+ * Starters body & face; new game Pancake Faces (tap WHERE the part goes; a
+ * wrong place is named back). Pictures made with Canva. */
+const bgU4L2Kitchen = `${A}/scenes/bg-u4l2-kitchen-wide.png`;
+const bgU4L2MiaFace = `${A}/scenes/bg-u4l2-mia-face-wide.png`;
+const bgU4L2MiaEyes = `${A}/scenes/bg-u4l2-mia-eyes-wide.png`;
+const bgU4L2MiaEars = `${A}/scenes/bg-u4l2-mia-ears-wide.png`;
+const bgU4L2MiaMouth = `${A}/scenes/bg-u4l2-mia-mouth-wide.png`;
+const bgU4L2MiaNose = `${A}/scenes/bg-u4l2-mia-nose-wide.png`;
+const bgU4L2PancakeBlank = `${A}/scenes/bg-u4l2-pancake-blank-wide.png`;
+const bgU4L2PancakeFace = `${A}/scenes/bg-u4l2-pancake-face-wide.png`;
+const bgU4L2RobotBlank = `${A}/scenes/bg-u4l2-robot-blank-wide.png`;
+const bgU4L2RobotFace = `${A}/scenes/bg-u4l2-robot-face-wide.png`;
+const cardEyes = `${A}/items/item-card-eyes.png`;
+const cardEars = `${A}/items/item-card-ears.png`;
+const cardNose = `${A}/items/item-card-nose.png`;
+const cardMouth = `${A}/items/item-card-mouth.png`;
+const itemNestU4 = `${A}/items/item-nest.png`;
+const itemNutU4 = `${A}/items/item-nut.png`;
+/* The fruit face on bg-u4l2-pancake-face (measured against the blank pancake, % of the picture). */
+const U4L2_FACE_SPOTS = [
+  { label: 'eyes', boxes: [{ x: 41, y: 31.5, w: 6.4, h: 11 }, { x: 52.6, y: 31.5, w: 6.4, h: 11 }] },
+  { label: 'nose', boxes: [{ x: 45.6, y: 41, w: 9.3, h: 19 }] },
+  { label: 'mouth', boxes: [{ x: 36, y: 52, w: 28.5, h: 24.5 }] },
+  { label: 'ears', boxes: [{ x: 28.8, y: 29.5, w: 7.2, h: 25 }, { x: 65.4, y: 29, w: 7.2, h: 25.5 }] },
+];
+/* The robot face on bg-u4l2-robot-face (measured against the blank robot, % of the picture). The mouth box
+ * touches the button nose, so the nose is always placed before the mouth. */
+const U4L2_ROBOT_SPOTS = [
+  { label: 'eyes', boxes: [{ x: 33.7, y: 32.6, w: 11.9, h: 21.6 }, { x: 54.5, y: 32.6, w: 11.9, h: 21.6 }] },
+  { label: 'nose', boxes: [{ x: 46.1, y: 51.6, w: 7.8, h: 14.6 }] },
+  { label: 'mouth', boxes: [{ x: 32.7, y: 60.7, w: 34.2, h: 18.5 }] },
+  { label: 'ears', boxes: [{ x: 20.9, y: 42.2, w: 5.1, h: 23.7 }, { x: 74, y: 42.2, w: 5.1, h: 23.4 }] },
+];
+
+export const LESSON_U4L2_TITLE = 'Eyes, Ears, Mouth, Nose!';
+export const LESSON_U4L2_OBJECTIVE = 'Name and point to eyes, ears, mouth and nose, follow "Point to your …!" / "Touch your …!", say "It\'s my nose!", build a pancake face from what you hear, sing the face song, and hear N say /n/ (nest, nut, nose) — by moving, listening, building and speaking, no reading.';
+
+export const LESSON_U4L2_SCENES: Scene[] = [
+  { id: 'u4l2-title', kind: 'title-card', bg: bgU4L2Kitchen, level: 'Pre-A1', unit: 'Unit 4', lessonLabel: 'Lesson 2', title: 'Eyes, Ears, Mouth, Nose!', subtitle: 'Pancake faces' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u4l2-song', kind: 'song', bg: bgU4L2Kitchen, title: '\u{1F3B5} Eyes, Ears, Mouth and Nose \u{1F3B5}', teacher: 'Sing and point! Point to each part of your face as you sing it.',
+    durationSeconds: 20, bigWord: 'Face', songUrl: `${A}/audio/face-song-u4l2.mp3?v=1`,
+    lineDurationsMs: [7740, 4040, 3800, 4482],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'mia', text: 'Eyes, ears, mouth and nose! Eyes, ears, mouth and nose!', emotion: 'happy' },
+      { who: 'mia', text: 'Two eyes to see! Two ears to hear!', emotion: 'happy' },
+      { who: 'pip', text: 'One little nose and one big smile!', emotion: 'happy' },
+      { who: 'pip', text: 'Eyes, ears, mouth and nose!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · Head, Shoulders, Knees, Toes!.
+    id: 'u4l2-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l2-kitchen-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 1 · Head, Shoulders, Knees, Toes!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "head", say: "Find the head!", img: `${A}/items/item-card-head.png` },
+      { word: "shoulders", say: "Show me the shoulders!", img: `${A}/items/item-card-shoulders.png` },
+      { word: "knees", say: "Point to the knees!", img: `${A}/items/item-card-knees.png` },
+      { word: "toes", say: "Find the toes!", img: `${A}/items/item-card-toes.png` },
+    ],
+  },
+  {
+    id: 'u4l2-intro', kind: 'cinematic', bg: bgU4L2Kitchen, hidePipOverlay: true, title: 'Pancake Faces', subtitle: 'Eyes, ears, mouth, nose!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Good morning! Let\'s make pancake faces!' },
+      { who: 'mia', line: 'Yes! A pancake with eyes, ears, a nose and a mouth!' },
+    ],
+    cta: "Let's cook!",
+  },
+
+  /* 3-5 New words, move, signature game */
+  {
+    id: 'u4l2-words', kind: 'listen-repeat-cards', bg: bgU4L2MiaFace, cardScenes: true, textSide: 'right', teacher: 'Look at Mia, point to your own face, then say it!',
+    cards: [
+      { who: 'mia', sentence: 'Eyes! Point to your eyes.', img: bgU4L2MiaEyes, imgLabel: 'Eyes!' },
+      { who: 'mia', sentence: 'Ears! Touch your ears.', img: bgU4L2MiaEars, imgLabel: 'Ears!' },
+      { who: 'mia', sentence: 'Nose! Touch your nose.', img: bgU4L2MiaNose, imgLabel: 'Nose!' },
+      { who: 'mia', sentence: 'Mouth! Point to your mouth.', img: bgU4L2MiaMouth, imgLabel: 'Mouth!' },
+    ],
+  },
+  {
+    id: 'u4l2-move-say', kind: 'tpr-actions', bg: bgU4L2MiaFace, who: 'mia',
+    teacher: 'Say it with Mia, then do it before the ring runs out.',
+    rounds: [
+      { line: 'Point to your eyes!', emoji: '\u{1F440}', img: bgU4L2MiaEyes },
+      { line: 'Touch your ears!', emoji: '\u{1F442}', img: bgU4L2MiaEars },
+      { line: 'Touch your nose!', emoji: '\u{1F443}', img: bgU4L2MiaNose },
+      { line: 'Point to your mouth!', emoji: '\u{1F444}', img: bgU4L2MiaMouth },
+      { line: 'Close your eyes! Now open your eyes!', emoji: '\u{1F648}' },
+    ],
+  },
+  {
+    // Signature game (new): build the pancake face from what you hear.
+    id: 'u4l2-pancake', kind: 'face-builder', bg: bgU4L2PancakeBlank, doneImg: bgU4L2PancakeFace, who: 'pip',
+    teacher: 'Pancake Faces! Listen to Pip and tap WHERE each part goes on the pancake. Say it too!',
+    spots: U4L2_FACE_SPOTS,
+    rounds: [
+      { spot: 0, line: 'Where do the eyes go?', reply: 'Yes! Two blueberry eyes!' },
+      { spot: 1, line: 'Where does the nose go?', reply: 'Yes! A strawberry nose!' },
+      { spot: 2, line: 'Where does the mouth go?', reply: 'Yes! A banana mouth! It smiles!' },
+      { spot: 3, line: 'Where do the ears go?', reply: 'Yes! Two apple ears!' },
+    ],
+    doneLine: 'Eyes, ears, nose and mouth! A happy pancake face!',
+  },
+
+  /* 6-9 Practice + speaking */
+  {
+    id: 'u4l2-spin', kind: 'spin-wheel', bg: bgU4L2MiaFace, title: '',
+    teacher: 'Have the student spin, then point to that part on their own face and say it: "Nose!" Or tap a number.',
+    items: [
+      { label: 'Eyes!', left: '34%', top: '60%' },
+      { label: 'Ears!', left: '20%', top: '33%' },
+      { label: 'Nose!', left: '54.3%', top: '69.5%' },
+      { label: 'Mouth!', left: '50%', top: '89%' },
+    ],
+    wheelAt: { left: '86%', top: '40%' },
+  },
+  {
+    id: 'u4l2-pip-asks', kind: 'join-stage', bg: bgU4L2Kitchen, teacher: 'Pip asks. The student points and answers.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Point to your nose! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my nose! (point to it)", bubble: 'right' },
+      { who: 'pip', line: 'Point to your mouth! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my mouth!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l2-you-ask', kind: 'join-stage', bg: bgU4L2MiaFace, teacher: 'Swap! The student tells Mia what to point to.', cast: ['mia'],
+    turns: [
+      { who: 'student', line: 'Say to Mia: Point to your eyes!', bubble: 'right' },
+      { who: 'mia', line: 'My eyes! Here they are!', bubble: 'right' },
+      { who: 'student', line: 'Say to Mia: Touch your ears!', bubble: 'right' },
+      { who: 'mia', line: 'My ears! Big ears!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l2-train', kind: 'train-recall', bg: bgU4L2Kitchen, teacher: 'Remember the face part in each car. One car goes empty — say what is missing!',
+    question: 'Choo choo! One car is empty. What is missing?',
+    cars: [
+      { word: 'EYES', img: cardEyes, emoji: '\u{1F440}' },
+      { word: 'EARS', img: cardEars, emoji: '\u{1F442}' },
+      { word: 'NOSE', img: cardNose, emoji: '\u{1F443}' },
+      { word: 'MOUTH', img: cardMouth, emoji: '\u{1F444}' },
+    ],
+  },
+
+  /* 10-13 Phonics: N says /n/ (E recycled) */
+  {
+    id: 'u4l2-model-n', kind: 'sound-model', bg: bgU4L2Kitchen, who: 'mia', letter: 'N', phoneme: '/n/', sound: 'nnn',
+    teacher: 'N says /n/ — nose, nest, nut!',
+    anchors: [
+      { word: 'nose', emoji: '\u{1F443}', img: cardNose },
+      { word: 'nest', emoji: '\u{1FAB9}', img: itemNestU4 },
+      { word: 'nut', emoji: '\u{1F330}', img: itemNutU4 },
+    ],
+  },
+  { id: 'u4l2-trace-n', kind: 'trace', bg: bgU4L2Kitchen, who: 'mia', letter: 'N', phoneme: '/n/', word: 'nose', speakWord: false, teacher: 'Trace the big N with your finger! /n/ /n/ nose!' },
+  {
+    // Calm, untimed first-sound pick (owner: the N Dash was too fast and hard to focus on).
+    id: 'u4l2-pick-n', kind: 'sound-pick', bg: bgU4L2Kitchen, who: 'pip',
+    teacher: 'Which one? Listen to the sound, then tap the picture that starts with it. No hurry — say the word too!',
+    rounds: [
+      { sound: 'n', answer: 0, options: [{ word: 'nest', img: itemNestU4 }, { word: 'egg', img: itemEgg }, { word: 'mouth', img: cardMouth }] },
+      { sound: 'n', answer: 2, options: [{ word: 'elephant', img: itemElephant }, { word: 'eyes', img: cardEyes }, { word: 'nut', img: itemNutU4 }] },
+      { sound: 'n', answer: 1, options: [{ word: 'ears', img: cardEars }, { word: 'nose', img: cardNose }, { word: 'egg', img: itemEgg }] },
+      { sound: 'e', answer: 1, options: [{ word: 'nest', img: itemNestU4 }, { word: 'egg', img: itemEgg }, { word: 'nose', img: cardNose }] },
+    ],
+  },
+
+  {
+    id: 'u4l2-catch-ne', kind: 'catch-sort', bg: bgU4L2PancakeBlank, teacher: 'Catch it! /n/ or /e/? Say the word as you catch it.', goal: 8, seconds: 45,
+    left: { label: 'N', img: itemNestU4, emoji: '\u{1FAB9}' },
+    right: { label: 'E', img: itemEgg, emoji: '\u{1F95A}' },
+    items: [
+      { word: 'nose', img: cardNose, emoji: '\u{1F443}', target: 'left' },
+      { word: 'nest', img: itemNestU4, emoji: '\u{1FAB9}', target: 'left' },
+      { word: 'nut', img: itemNutU4, emoji: '\u{1F330}', target: 'left' },
+      { word: 'egg', img: itemEgg, emoji: '\u{1F95A}', target: 'right' },
+      { word: 'elephant', img: itemElephant, emoji: '\u{1F418}', target: 'right' },
+    ],
+  },
+
+  /* 14-15 Retell + perform */
+  {
+    id: 'u4l2-story-order', kind: 'story-order', bg: bgU4L2Kitchen, who: 'pip', teacher: 'Put the breakfast in order, then tell it!',
+    frames: [
+      { img: bgU4L2Kitchen, caption: 'Pip and Mia make pancakes.', who: 'pip' },
+      { img: bgU4L2PancakeBlank, caption: 'A plain pancake. No face!', who: 'mia' },
+      { img: bgU4L2PancakeFace, caption: 'Eyes, ears, a nose and a mouth!', who: 'pip' },
+    ],
+  },
+  {
+    id: 'u4l2-perform', kind: 'join-stage', bg: bgU4L2Kitchen, teacher: 'Show time! The student sings and points: eyes, ears, mouth and nose — slow, then fast!', cast: ['mia', 'pip'],
+    turns: [
+      { who: 'mia', line: 'Your turn! Eyes, ears, mouth and nose!', bubble: 'right' },
+      { who: 'student', line: 'Eyes, ears, mouth and nose! (point to them)', bubble: 'right' },
+      { who: 'pip', line: 'Now faster!', bubble: 'right' },
+      { who: 'student', line: 'Eyes, ears, mouth and nose!', bubble: 'right' },
+    ],
+  },
+
+  /* 16-17 Sticker + Home Mission */
+  {
+    id: 'u4l2-sticker', kind: 'sticker-reward', bg: bgU4L2PancakeFace, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Yummy work! Here is a pancake-face sticker for you!', sticker: { img: cardMouth, label: 'Smile' },
+  },
+  {
+    id: 'u4l2-home-mission', kind: 'home-mission', bg: bgU4L2Kitchen, who: 'mia',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: make a funny face at home! Point and say: eyes, ears, nose, mouth!',
+    parentNote: 'Make a "face" on a plate with your child (fruit, crackers or paper shapes). Ask: "Where do the eyes go? Where does the nose go?" Let your child point and say "eyes", "ears", "nose", "mouth". Then play "Point to your …!" and swap roles.',
+    steps: [
+      { emoji: '\u{1F440}', img: cardEyes, say: 'Eyes' },
+      { emoji: '\u{1F443}', img: cardNose, say: 'Nose' },
+      { emoji: '\u{1F444}', img: cardMouth, say: 'Mouth' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u4l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU4L2Kitchen, who: 'pip',
+    teacher: 'Extra time: Funny Faces! Do each face with Pip.',
+    rounds: [
+      { line: 'Open your mouth wide!', emoji: '\u{1F62E}' },
+      { line: 'Close your eyes!', emoji: '\u{1F60C}' },
+      { line: 'Wiggle your nose!', emoji: '\u{1F443}' },
+      { line: 'Cover your ears!', emoji: '\u{1F64A}' },
+      { line: 'Big smile!', emoji: '\u{1F601}', seconds: 3 },
+    ],
+  },
+  {
+    // Same game, new context: Mia builds a robot friend (owner: page 20 must not repeat page 6's pancake).
+    id: 'u4l2-robot', kind: 'face-builder', bg: bgU4L2RobotBlank, doneImg: bgU4L2RobotFace, who: 'mia', icon: '\u{1F916}',
+    teacher: 'Extra time: Mia builds a robot friend! Listen carefully — a new order.',
+    spots: U4L2_ROBOT_SPOTS,
+    rounds: [
+      { spot: 3, line: 'My robot has no face! Ears first. Where do the ears go?', reply: 'Yes! Robot ears!' },
+      { spot: 1, line: 'Now the nose! Where does it go?', reply: 'Yes! A button nose!' },
+      { spot: 0, line: 'Where do the eyes go?', reply: 'Yes! Two light eyes!' },
+      { spot: 2, line: 'And the mouth?', reply: 'Yes! A big robot smile!' },
+    ],
+    doneLine: 'Hello, robot friend! Eyes, ears, nose and mouth!',
+  },
+
+  /* 20-21 Goodbye */
+  {
+    id: 'u4l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u4l2-finale', kind: 'finale', bg: bgU4L2PancakeFace, who: 'pip', line: 'Yummy pancake faces! Eyes, ears, mouth and nose — you know them all! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 4 · Lesson 3 — Hands, Fingers, Feet, Arms! =====================
+ * My Body & Face (3/6). hands, fingers, feet, arms ("Clap your hands!",
+ * "They're my hands!") and F says /f/ (fish, fan, feet). Setting: a sunny
+ * beach day with Bella and Leo — prints in the sand. Lesson-Variety Engine:
+ * researched the classroom handprint/footprint art activity, Lingokids body-
+ * parts games, Khan Academy Kids (calm, self-paced, a result that stays) and
+ * Cambridge Pre A1 "listen and place"; new game Sand Prints (the word alone
+ * decides which body part to press into the sand; the print stays). Calm by
+ * design (docs/research/young-learner-games.md): no clocks, no moving targets,
+ * wrong taps are named back and cost nothing. Pictures made with Canva. */
+const bgU4L3Beach = `${A}/scenes/bg-u4l3-beach-wide.png`;
+const bgU4L3Bella = `${A}/scenes/bg-u4l3-bella-wide.png`;
+const bgU4L3Hands = `${A}/scenes/bg-u4l3-bella-hands-wide.png`;
+const bgU4L3Fingers = `${A}/scenes/bg-u4l3-bella-fingers-wide.png`;
+const bgU4L3Feet = `${A}/scenes/bg-u4l3-bella-feet-wide.png`;
+const bgU4L3Arms = `${A}/scenes/bg-u4l3-bella-arms-wide.png`;
+const bgU4L3Sand = `${A}/scenes/bg-u4l3-sand-wide.png`;
+const partHand = `${A}/items/item-part-hand.png`;
+const partFinger = `${A}/items/item-part-finger.png`;
+const partFoot = `${A}/items/item-part-foot.png`;
+const partArm = `${A}/items/item-part-arm.png`;
+const itemFish = `${A}/items/item-fish.png`;
+const itemFan = `${A}/items/item-fan.png`;
+const itemFeather = `${A}/items/item-feather.png`;
+const itemFrogU4 = `${A}/items/item-frog.png`;
+
+export const LESSON_U4L3_TITLE = 'Hands, Fingers, Feet, Arms!';
+export const LESSON_U4L3_OBJECTIVE = 'Name hands, fingers, feet and arms, follow "Clap your hands!" / "Stamp your feet!", say "They\'re my hands!", press the body part you hear into the sand, sing the body song, and hear F say /f/ (fish, fan, feet) — by moving, listening, making and speaking, no reading.';
+
+export const LESSON_U4L3_SCENES: Scene[] = [
+  { id: 'u4l3-title', kind: 'title-card', bg: bgU4L3Beach, level: 'Pre-A1', unit: 'Unit 4', lessonLabel: 'Lesson 3', title: 'Hands, Fingers, Feet, Arms!', subtitle: 'A beach day' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u4l3-song', kind: 'song', bg: bgU4L3Beach, title: '\u{1F3B5} Hands, Fingers, Feet and Arms \u{1F3B5}', teacher: 'Sing and move! Clap, wiggle, stamp and wave with the song.',
+    durationSeconds: 20, bigWord: 'Move', songUrl: `${A}/audio/body-song-u4l3.mp3?v=1`,
+    lineDurationsMs: [4140, 4080, 3880, 7962],
+    songPrompt: 'Upbeat kids pop beach action song',
+    lyrics: [
+      { who: 'bella', text: 'Hands, fingers, feet and arms! Hands, fingers, feet and arms!', emotion: 'happy' },
+      { who: 'bella', text: 'Clap your hands! Wiggle your fingers!', emotion: 'happy' },
+      { who: 'leo', text: 'Stamp your feet! Wave your arms!', emotion: 'happy' },
+      { who: 'leo', text: 'Hands, fingers, feet and arms!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · Eyes, Ears, Mouth, Nose!.
+    id: 'u4l3-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l3-beach-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 2 · Eyes, Ears, Mouth, Nose!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "eyes", say: "Find the eyes!", img: `${A}/items/item-card-eyes.png` },
+      { word: "ears", say: "Show me the ears!", img: `${A}/items/item-card-ears.png` },
+      { word: "nose", say: "Point to the nose!", img: `${A}/items/item-card-nose.png` },
+      { word: "mouth", say: "Find the mouth!", img: `${A}/items/item-card-mouth.png` },
+    ],
+  },
+  {
+    id: 'u4l3-intro', kind: 'cinematic', bg: bgU4L3Beach, hidePipOverlay: true, title: 'Beach Day', subtitle: 'Hands, fingers, feet, arms!', narrator: 'bella',
+    script: [
+      { who: 'bella', line: 'Hello! It\'s a beach day!' },
+      { who: 'leo', line: 'Let\'s make prints in the sand!' },
+    ],
+    cta: "Let's go!",
+  },
+
+  /* 3-5 New words, move, signature game */
+  {
+    id: 'u4l3-words', kind: 'listen-repeat-cards', bg: bgU4L3Bella, cardScenes: true, textSide: 'right', teacher: 'Look at Bella, do it with your own body, then say it!',
+    cards: [
+      { who: 'bella', sentence: 'Hands! Clap your hands.', img: bgU4L3Hands, imgLabel: 'Hands!' },
+      { who: 'bella', sentence: 'Fingers! Wiggle your fingers.', img: bgU4L3Fingers, imgLabel: 'Fingers!' },
+      { who: 'bella', sentence: 'Feet! Stamp your feet.', img: bgU4L3Feet, imgLabel: 'Feet!' },
+      { who: 'bella', sentence: 'Arms! Wave your arms.', img: bgU4L3Arms, imgLabel: 'Arms!' },
+    ],
+  },
+  {
+    id: 'u4l3-move-say', kind: 'tpr-actions', bg: bgU4L3Bella, who: 'bella',
+    teacher: 'Say it with Bella, then do it.',
+    rounds: [
+      { line: 'Clap your hands!', emoji: '\u{1F44F}', img: bgU4L3Hands },
+      { line: 'Wiggle your fingers!', emoji: '\u{1F590}\u{FE0F}', img: bgU4L3Fingers },
+      { line: 'Stamp your feet!', emoji: '\u{1F463}', img: bgU4L3Feet },
+      { line: 'Wave your arms!', emoji: '\u{1F64C}', img: bgU4L3Arms },
+      { line: 'Touch your toes!', emoji: '\u{1F9B6}' },
+    ],
+  },
+  {
+    // Signature game (new): press the body part you hear into the sand.
+    id: 'u4l3-sand-prints', kind: 'sand-prints', bg: bgU4L3Sand, who: 'bella',
+    teacher: 'Sand Prints! Listen to Bella and tap the body part she says. Press it into the sand and say it!',
+    parts: [{ label: 'hand', img: partHand }, { label: 'finger', img: partFinger }, { label: 'foot', img: partFoot }, { label: 'arm', img: partArm }],
+    rounds: [
+      { part: 2, line: 'Press your foot in the sand!', reply: 'Yes! A footprint!' },
+      { part: 0, line: 'Press your hand in the sand!', reply: 'Yes! A handprint!' },
+      { part: 1, line: 'Press your finger in the sand!', reply: 'Yes! A fingerprint!' },
+      { part: 3, line: 'Press your arm in the sand!', reply: 'Yes! An arm print!' },
+      { part: 2, line: 'Now the other foot!', reply: 'Two footprints!' },
+    ],
+    doneLine: 'Look at all our prints in the sand!',
+  },
+
+  /* 6-9 Practice + speaking */
+  {
+    id: 'u4l3-leo-asks', kind: 'join-stage', bg: bgU4L3Beach, teacher: 'Leo asks. The student does it and answers.', cast: ['leo'],
+    turns: [
+      { who: 'leo', line: 'Clap your hands! What are they?', bubble: 'right' },
+      { who: 'student', line: "They're my hands! (clap)", bubble: 'right' },
+      { who: 'leo', line: 'Stamp your feet! What are they?', bubble: 'right' },
+      { who: 'student', line: "They're my feet!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l3-you-ask', kind: 'join-stage', bg: bgU4L3Bella, teacher: 'Swap! The student tells Bella what to do.', cast: ['bella'],
+    turns: [
+      { who: 'student', line: 'Say to Bella: Wave your arms!', bubble: 'right' },
+      { who: 'bella', line: 'My arms! Look, I wave my arms!', bubble: 'right' },
+      { who: 'student', line: 'Say to Bella: Wiggle your fingers!', bubble: 'right' },
+      { who: 'bella', line: 'My fingers! Wiggle, wiggle!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l3-whose', kind: 'puzzle', bg: bgU4L3Beach, teacher: 'Whose is it? Tap the squares to peek, then pick the friend. Say "It\'s Bella!"',
+    rounds: [
+      { who: 'bella', img: bgU4L3Hands, hint: 'Whose hands?' },
+      { who: 'leo', img: `${A}/scenes/bg-u4l1-leo-shoulders-wide.png`, hint: 'Whose shoulders?' },
+      { who: 'mia', img: `${A}/scenes/bg-u4l2-mia-ears-wide.png`, hint: 'Whose ears?' },
+    ],
+  },
+  {
+    id: 'u4l3-jigsaw', kind: 'jigsaw-puzzle', bg: bgU4L3Sand, teacher: 'Build the beach picture! Drag each piece to its place, then say who you see.',
+    image: bgU4L3Beach, rows: 2, cols: 3,
+  },
+
+  /* 10-13 Phonics: F says /f/ */
+  {
+    id: 'u4l3-model-f', kind: 'sound-model', bg: bgU4L3Beach, who: 'bella', letter: 'F', phoneme: '/f/', sound: 'fff',
+    teacher: 'F says /f/ — fish, fan, feet!',
+    anchors: [
+      { word: 'fish', emoji: '\u{1F41F}', img: itemFish },
+      { word: 'fan', emoji: '\u{1FAAD}', img: itemFan },
+      { word: 'feet', emoji: '\u{1F463}', img: partFoot },
+    ],
+  },
+  { id: 'u4l3-trace-f', kind: 'trace', bg: bgU4L3Sand, who: 'bella', letter: 'F', phoneme: '/f/', word: 'fish', speakWord: false, teacher: 'Trace the big F in the sand with your finger! /f/ /f/ fish!' },
+  {
+    id: 'u4l3-basket-f', kind: 'basket', bg: bgU4L3Beach, letter: 'F', phoneme: '/f/', who: 'leo', teacher: "Drag the /f/ things into Leo's F bucket! No hurry.", goal: 4,
+    items: [
+      { word: 'fish', emoji: '\u{1F41F}', img: itemFish, hit: true },
+      { word: 'fan', emoji: '\u{1FAAD}', img: itemFan, hit: true },
+      { word: 'feather', emoji: '\u{1FAB6}', img: itemFeather, hit: true },
+      { word: 'frog', emoji: '\u{1F438}', img: itemFrogU4, hit: true },
+      { word: 'nest', emoji: '\u{1FAB9}', img: itemNestU4, hit: false },
+      { word: 'egg', emoji: '\u{1F95A}', img: itemEgg, hit: false },
+    ],
+  },
+  {
+    id: 'u4l3-first-letter', kind: 'word-build', bg: bgU4L3Sand, teacher: 'Listen! Which letter does it start with? Tap F or N.',
+    rounds: [
+      { word: 'fish', blankIndex: 0, answer: 'F', choices: ['F', 'N'], img: itemFish, emoji: '\u{1F41F}' },
+      { word: 'nest', blankIndex: 0, answer: 'N', choices: ['F', 'N'], img: itemNestU4, emoji: '\u{1FAB9}' },
+      { word: 'fan', blankIndex: 0, answer: 'F', choices: ['F', 'N'], img: itemFan, emoji: '\u{1FAAD}' },
+      { word: 'nut', blankIndex: 0, answer: 'N', choices: ['F', 'N'], img: itemNutU4, emoji: '\u{1F330}' },
+    ],
+  },
+
+  /* 14-15 Retell + perform */
+  {
+    id: 'u4l3-story-order', kind: 'story-order', bg: bgU4L3Beach, who: 'bella', teacher: 'Put the beach day in order, then tell it!',
+    frames: [
+      { img: bgU4L3Beach, caption: 'Bella and Leo go to the beach.', who: 'bella' },
+      { img: bgU4L3Feet, caption: 'Bella stamps her feet in the sand.', who: 'bella' },
+      { img: bgU4L3Arms, caption: 'Bella waves her arms. Bye, sea!', who: 'bella' },
+    ],
+  },
+  {
+    id: 'u4l3-perform', kind: 'join-stage', bg: bgU4L3Beach, teacher: 'Show time! The student sings and moves: hands, fingers, feet and arms — slow, then fast!', cast: ['bella', 'leo'],
+    turns: [
+      { who: 'bella', line: 'Your turn! Hands, fingers, feet and arms!', bubble: 'right' },
+      { who: 'student', line: 'Hands, fingers, feet and arms! (move)', bubble: 'right' },
+      { who: 'leo', line: 'Now faster!', bubble: 'right' },
+      { who: 'student', line: 'Hands, fingers, feet and arms!', bubble: 'right' },
+    ],
+  },
+
+  /* 16-17 Sticker + Home Mission */
+  {
+    id: 'u4l3-sticker', kind: 'sticker-reward', bg: bgU4L3Beach, who: 'bella', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super moving! Here is a handprint sticker for you!', sticker: { img: partHand, label: 'Hands' },
+  },
+  {
+    id: 'u4l3-home-mission', kind: 'home-mission', bg: bgU4L3Bella, who: 'bella',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: make a handprint at home! Then clap your hands and stamp your feet!',
+    parentNote: 'Make handprints and footprints with your child (paint on paper, flour on a tray, or sand). Ask: "Is it a hand or a foot?" Let your child say "hands", "fingers", "feet", "arms". Then play "Clap your hands! Stamp your feet!" and swap roles.',
+    steps: [
+      { emoji: '\u{1F590}\u{FE0F}', img: partHand, say: 'Hands' },
+      { emoji: '\u{1F9B6}', img: partFoot, say: 'Feet' },
+      { emoji: '\u{1F4AA}', img: partArm, say: 'Arms' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u4l3-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU4L3Beach, who: 'leo',
+    teacher: 'Extra time: Beach Moves! Do each move with Leo.',
+    rounds: [
+      { line: 'Clap your hands! Clap, clap!', emoji: '\u{1F44F}' },
+      { line: 'Stamp your feet! Stamp, stamp!', emoji: '\u{1F463}' },
+      { line: 'Swim with your arms!', emoji: '\u{1F3CA}' },
+      { line: 'Wiggle your fingers like a fish!', emoji: '\u{1F41F}' },
+      { line: 'Big stretch! Arms up!', emoji: '\u{1F64C}', seconds: 4 },
+    ],
+  },
+
+  /* 20-21 Goodbye */
+  {
+    id: 'u4l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u4l3-finale', kind: 'finale', bg: bgU4L3Beach, who: 'bella', line: 'What a beach day! Hands, fingers, feet and arms — you know them all! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 4, Lesson 4 — "My Big Body!" (curriculum: "Describe your body
+ * simply." — B). Pip meets Bo, a friendly three-eyed monster, in a flower
+ * garden, and they compare bodies: "I have two eyes. — I have three eyes!",
+ * "I have small feet. — I have BIG feet!". Language: I have + number + body
+ * part, big / small (recycles Unit 4 parts, Unit 1 numbers, Unit 3 big/small),
+ * B /b/ (ball, bag, bear, book, balloon — and Bo!). Signature game: Monster
+ * Maker (build the monster you hear). New calm game: How Many? (tap to count
+ * the parts, then say "I have three eyes!"). Lesson-Variety Engine: researched
+ * the Cambridge Pre A1 "listen and draw the monster" task, the picture book
+ * "Go Away, Big Green Monster!", Lingokids / Khan Academy Kids build-a-character
+ * and tap-to-count. Calm by design: no clocks, wrong taps are named back. */
+const bgU4L4Garden = `${A}/scenes/bg-u4l4-garden-wide.png`;
+const bgU4L4Lawn = `${A}/scenes/bg-u4l4-lawn-wide.png`;
+const bgU4L4PipEyes = `${A}/scenes/bg-u4l4-pip-eyes-wide.png`;
+const bgU4L4PipFingers = `${A}/scenes/bg-u4l4-pip-fingers-wide.png`;
+const bgU4L4BoEyes = `${A}/scenes/bg-u4l4-bo-eyes-wide.png`;
+const bgU4L4BoFeet = `${A}/scenes/bg-u4l4-bo-feet-wide.png`;
+const BO_BLUE = '#38BDF8';
+
+export const LESSON_U4L4_TITLE = 'My Big Body!';
+export const LESSON_U4L4_OBJECTIVE = 'Describe your body simply — "I have two eyes. I have ten fingers. I have big feet!" — count body parts, use big and small, build a monster from what you hear, and hear B say /b/ (ball, bag, bear, book) — by moving, counting, building and speaking, no reading.';
+
+export const LESSON_U4L4_SCENES: Scene[] = [
+  { id: 'u4l4-title', kind: 'title-card', bg: bgU4L4Garden, level: 'Pre-A1', unit: 'Unit 4', lessonLabel: 'Lesson 4', title: 'My Big Body!', subtitle: 'Pip meets Bo' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u4l4-song', kind: 'song', bg: bgU4L4Garden, title: '\u{1F3B5} My Big Body \u{1F3B5}', teacher: 'Sing and point! Eyes, nose, fingers, toes — big feet and small hands!',
+    durationSeconds: 20, bigWord: 'Body', songUrl: `${A}/audio/body-song-u4l4.mp3?v=1`,
+    lineDurationsMs: [3660, 4100, 3500, 8802],
+    songPrompt: 'Upbeat kids pop garden action song',
+    lyrics: [
+      { who: 'pip', text: 'I have two eyes! I have one nose!', emotion: 'happy' },
+      { who: 'pip', text: 'I have ten fingers! I have ten toes!', emotion: 'happy' },
+      { who: 'mia', text: 'Big, big feet! Small, small hands!', emotion: 'happy' },
+      { who: 'leo', text: 'This is my body! My big, big body!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · Hands, Fingers, Feet, Arms!.
+    id: 'u4l4-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l4-garden-wide.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Lesson 3 · Hands, Fingers, Feet, Arms!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "hand", say: "Find the hand!", img: `${A}/items/item-part-hand.png` },
+      { word: "finger", say: "Show me the finger!", img: `${A}/items/item-part-finger.png` },
+      { word: "foot", say: "Point to the foot!", img: `${A}/items/item-part-foot.png` },
+      { word: "arm", say: "Find the arm!", img: `${A}/items/item-part-arm.png` },
+    ],
+  },
+  {
+    id: 'u4l4-intro', kind: 'cinematic', bg: bgU4L4Garden, hidePipOverlay: true, title: 'Pip Meets Bo', subtitle: 'A friendly monster!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Hello! Look, a new friend! His name is Bo.' },
+      { who: 'pip', line: 'Bo is a friendly monster. Let\'s look at his body!' },
+    ],
+    cta: "Let's look!",
+  },
+
+  /* 4-6 New language, move, signature game */
+  {
+    id: 'u4l4-words', kind: 'listen-repeat-cards', bg: bgU4L4Garden, cardScenes: true, textSide: 'right', teacher: 'Listen, show it on your own body, then say it: "I have two eyes!"',
+    cards: [
+      { who: 'pip', sentence: 'I have two eyes!', img: bgU4L4PipEyes, imgLabel: 'Two eyes!' },
+      { who: 'pip', sentence: 'I have ten fingers!', img: bgU4L4PipFingers, imgLabel: 'Ten fingers!' },
+      { who: 'pip', sentence: 'Bo has three eyes!', img: bgU4L4BoEyes, imgLabel: 'Three eyes!' },
+      { who: 'pip', sentence: 'Bo has big feet!', img: bgU4L4BoFeet, imgLabel: 'Big feet!' },
+    ],
+  },
+  {
+    id: 'u4l4-move-say', kind: 'tpr-actions', bg: bgU4L4Garden, who: 'pip',
+    teacher: 'Say it with Pip, then show it with your body.',
+    rounds: [
+      { line: 'Point to your two eyes!', emoji: '\u{1F440}', img: bgU4L4PipEyes },
+      { line: 'Show me ten fingers!', emoji: '\u{1F590}\u{FE0F}', img: bgU4L4PipFingers },
+      { line: 'Big feet! Stomp, stomp!', emoji: '\u{1F463}', img: bgU4L4BoFeet },
+      { line: 'Small hands! Make a fist!', emoji: '\u{270A}' },
+      { line: 'Big body! Stretch up tall!', emoji: '\u{1F64C}' },
+    ],
+  },
+  {
+    // Signature game (new): build the monster you hear.
+    id: 'u4l4-monster-maker', kind: 'monster-maker', bg: bgU4L4Lawn, who: 'leo', color: '#A78BFA',
+    teacher: 'Monster Maker! Listen to the monster and tap the part it has. Say it too: "Three eyes!"',
+    rounds: [
+      { part: 'eyes', answer: 3, options: [1, 2, 3], line: 'I have three eyes!', reply: 'Yes! Three eyes!' },
+      { part: 'ears', answer: 'big', options: ['small', 'big'], line: 'I have big ears!', reply: 'Big ears! I can hear you!' },
+      { part: 'hands', answer: 'small', options: ['big', 'small'], line: 'I have small hands!', reply: 'Small hands! Wave, wave!' },
+      { part: 'feet', answer: 'big', options: ['small', 'big'], line: 'I have big feet!', reply: 'Big feet! Stomp, stomp!' },
+    ],
+    doneLine: 'Look at me! I am a happy monster!',
+  },
+
+  /* 7-10 Practice + speaking */
+  {
+    id: 'u4l4-bo-asks', kind: 'join-stage', bg: bgU4L4BoEyes, teacher: 'Bo asks. The student shows it and answers: "I have two eyes!"', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Bo asks: How many eyes do you have?', bubble: 'right' },
+      { who: 'student', line: 'I have two eyes!', bubble: 'right' },
+      { who: 'pip', line: 'Bo asks: How many fingers do you have?', bubble: 'right' },
+      { who: 'student', line: 'I have ten fingers!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l4-how-many', kind: 'count-parts', bg: bgU4L4Lawn, who: 'leo',
+    teacher: 'How Many? Tap each part and count out loud, then tap the number. Say the sentence: "I have three eyes!"',
+    rounds: [
+      { look: { color: BO_BLUE, eyes: 3, hands: 'small', feet: 'big' }, part: 'eyes', question: 'How many eyes?', answer: 'I have three eyes!' },
+      { look: { color: '#F472B6', eyes: 2, hands: 'big', arms: 4, feet: 'small' }, part: 'arms', question: 'How many arms?', answer: 'I have four arms!' },
+      { look: { color: '#4ADE80', eyes: 1, ears: 'big', hands: 'small', feet: 'big', legs: 3 }, part: 'legs', question: 'How many legs?', answer: 'I have three legs!' },
+      { look: { color: '#FBBF24', eyes: 5, ears: 'small', hands: 'small', feet: 'small' }, part: 'eyes', question: 'How many eyes?', answer: 'I have five eyes!' },
+    ],
+    doneLine: 'Great counting!',
+  },
+  {
+    id: 'u4l4-you-ask', kind: 'join-stage', bg: bgU4L4BoFeet, teacher: 'Swap! The student asks Bo: "How many eyes do you have?"', cast: ['pip'],
+    turns: [
+      { who: 'student', line: 'Ask Bo: How many eyes do you have?', bubble: 'right' },
+      { who: 'pip', line: 'Bo says: I have three eyes!', bubble: 'right' },
+      { who: 'student', line: 'Ask Bo: Do you have big feet?', bubble: 'right' },
+      { who: 'pip', line: 'Bo says: Yes! I have big feet!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l4-memory', kind: 'memory', bg: bgU4L4Lawn, teacher: 'Find the pairs! Say the body part of each one: "Eyes!"',
+    pairs: [
+      { id: 'eyes', label: 'Eyes', emoji: '\u{1F440}', img: `${A}/items/item-card-eyes.png` },
+      { id: 'ears', label: 'Ears', emoji: '\u{1F442}', img: `${A}/items/item-card-ears.png` },
+      { id: 'hand', label: 'Hands', emoji: '\u{270B}', img: partHand },
+      { id: 'foot', label: 'Feet', emoji: '\u{1F9B6}', img: partFoot },
+    ],
+  },
+
+  /* 11-13 Phonics: B says /b/ */
+  {
+    id: 'u4l4-model-b', kind: 'sound-model', bg: bgU4L4Garden, who: 'pip', letter: 'B', phoneme: '/b/', sound: 'buh',
+    teacher: 'B says /b/ — ball, bag, bear… and Bo!',
+    anchors: [
+      { word: 'ball', emoji: '\u{26BD}', img: itemBallRed },
+      { word: 'bag', emoji: '\u{1F45C}', img: itemBag },
+      { word: 'bear', emoji: '\u{1F43B}', img: itemBear },
+    ],
+  },
+  { id: 'u4l4-trace-b', kind: 'trace', bg: bgU4L4Lawn, who: 'pip', letter: 'B', phoneme: '/b/', word: 'ball', speakWord: false, teacher: 'Trace the big B with your finger! /b/ /b/ ball!' },
+  {
+    id: 'u4l4-sort-bf', kind: 'sound-sort', bg: bgU4L4Lawn, teacher: 'Listen to each word. Does it start with /b/ or /f/? Drag it to B or F!',
+    targets: [
+      { letter: 'B', phoneme: '/b/', who: 'pip' },
+      { letter: 'F', phoneme: '/f/', who: 'bella' },
+    ],
+    items: [
+      { word: 'ball', img: itemBallRed, emoji: '\u{26BD}', letter: 'B' },
+      { word: 'fish', img: itemFish, emoji: '\u{1F41F}', letter: 'F' },
+      { word: 'bag', img: itemBag, emoji: '\u{1F45C}', letter: 'B' },
+      { word: 'fan', img: itemFan, emoji: '\u{1FAAD}', letter: 'F' },
+      { word: 'book', img: itemBook, emoji: '\u{1F4D6}', letter: 'B' },
+      { word: 'bear', img: itemBear, emoji: '\u{1F43B}', letter: 'B' },
+    ],
+  },
+
+  /* 14-15 Retell + perform */
+  {
+    id: 'u4l4-story-order', kind: 'story-order', bg: bgU4L4Garden, who: 'pip', teacher: 'Put the story in order, then tell it!',
+    frames: [
+      { img: bgU4L4Garden, caption: 'Pip meets Bo in the garden.', who: 'pip' },
+      { img: bgU4L4BoEyes, caption: 'Bo has three eyes!', who: 'pip' },
+      { img: bgU4L4BoFeet, caption: 'Bo has big feet!', who: 'pip' },
+    ],
+  },
+  {
+    id: 'u4l4-perform', kind: 'join-stage', bg: bgU4L4Garden, teacher: 'Show time! The student describes their own body, pointing to each part.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Your turn! Tell Bo about your body!', bubble: 'right' },
+      { who: 'student', line: 'I have two eyes! I have one nose!', bubble: 'right' },
+      { who: 'pip', line: 'And your fingers and feet?', bubble: 'right' },
+      { who: 'student', line: 'I have ten fingers! I have two feet!', bubble: 'right' },
+    ],
+  },
+
+  /* 16-17 Sticker + Home Mission */
+  {
+    id: 'u4l4-sticker', kind: 'sticker-reward', bg: bgU4L4Garden, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super describing! Here is a bear sticker for you!', sticker: { img: itemBear, label: 'Bear' },
+  },
+  {
+    id: 'u4l4-home-mission', kind: 'home-mission', bg: bgU4L4Garden, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: draw your own monster at home! Then tell your family: "It has three eyes!"',
+    parentNote: 'Draw a friendly monster together. Your child decides: how many eyes? Big or small feet? Then ask: "How many eyes do you have?" Your child answers: "I have two eyes!" Count fingers and toes together: one, two, three… ten!',
+    steps: [
+      { emoji: '\u{1F440}', img: `${A}/items/item-card-eyes.png`, say: 'Eyes' },
+      { emoji: '\u{270B}', img: partHand, say: 'Hands' },
+      { emoji: '\u{1F9B6}', img: partFoot, say: 'Feet' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u4l4-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU4L4Garden, who: 'pip',
+    teacher: 'Extra time: Monster Moves! Do each move with Pip.',
+    rounds: [
+      { line: 'Walk like a monster with big feet!', emoji: '\u{1F463}' },
+      { line: 'Wave your small hands!', emoji: '\u{1F44B}' },
+      { line: 'Blink your eyes! Blink, blink!', emoji: '\u{1F440}' },
+      { line: 'Wiggle your ten fingers!', emoji: '\u{1F590}\u{FE0F}' },
+      { line: 'Big body! Stretch up tall!', emoji: '\u{1F64C}', seconds: 4 },
+    ],
+  },
+
+  /* 19-20 Goodbye */
+  {
+    id: 'u4l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u4l4-finale', kind: 'finale', bg: bgU4L4Garden, who: 'pip', line: 'Bo says bye-bye! I have two eyes, you have two eyes — great job, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 4 · Lesson 5 — From Head to Toe =====================
+ * My Body & Face (5/6, story). The film "Animal Moves" (docs/scenarios/u4l5-animal-moves.md, owner-approved
+ * 2026-10-06): a tiger turns his head, a monkey waves his arms, an elephant stomps his feet, a seal claps her
+ * hands — "Can you do it?" — "I can do it!". Verbs turn / wave / stomp / clap with the unit's body words, and
+ * T says /t/ (tiger, ten, teddy). Setting: a sunny animal park with a pond. Lesson-Variety Engine: researched
+ * Eric Carle's call-and-response movement book, Lingokids action games, Cambridge Pre A1 "listen and point" and
+ * the peekaboo "Whose tail is it?" pattern; new games Who Can Do It? and Whose Is It?. Pictures made with Canva;
+ * the film is a stills film (no paid video). */
+const bgU4L5Park = `${A}/scenes/bg-u4l5-park-wide.png`;
+const bgU4L5Lawn = `${A}/scenes/bg-u4l5-lawn-wide.png`;
+const bgU4L5Tiger = `${A}/scenes/bg-u4l5-tiger-head-wide.png`;
+const bgU4L5Monkey = `${A}/scenes/bg-u4l5-monkey-arms-wide.png`;
+const bgU4L5Elephant = `${A}/scenes/bg-u4l5-elephant-feet-wide.png`;
+const bgU4L5Seal = `${A}/scenes/bg-u4l5-seal-hands-wide.png`;
+const bgU4L5PipHead = `${A}/scenes/bg-u4l5-pip-head-wide.png`;
+const bgU4L5PipArms = `${A}/scenes/bg-u4l5-pip-arms-wide.png`;
+const bgU4L5PipFeet = `${A}/scenes/bg-u4l5-pip-feet-wide.png`;
+const bgU4L5PipHands = `${A}/scenes/bg-u4l5-pip-hands-wide.png`;
+/* The four animals (faces measured on their own pictures, % of the picture). */
+const U4L5_ANIMALS = [
+  { label: 'tiger', img: bgU4L5Tiger, face: [52, 33] as [number, number], faceW: 20, move: 'turns his head' },
+  { label: 'monkey', img: bgU4L5Monkey, face: [50, 36] as [number, number], faceW: 18, move: 'waves his arms' },
+  { label: 'elephant', img: bgU4L5Elephant, face: [50, 36] as [number, number], faceW: 26, move: 'stomps his feet' },
+  { label: 'seal', img: bgU4L5Seal, face: [49, 30] as [number, number], faceW: 20, move: 'claps her hands' },
+];
+const U4L5_FACES = U4L5_ANIMALS.map(({ label, img, face, faceW }) => ({ label, img, face, faceW }));
+
+export const LESSON_U4L5_TITLE = 'From Head to Toe';
+export const LESSON_U4L5_OBJECTIVE = 'Follow a short animal story and copy each move — turn your head, wave your arms, stomp your feet, clap your hands — answer "Can you do it?" with "I can do it!", find the animal from one body part, and hear T say /t/ (tiger, ten, teddy) — by watching, moving, listening and speaking, no reading.';
+
+export const LESSON_U4L5_SCENES: Scene[] = [
+  { id: 'u4l5-title', kind: 'title-card', bg: bgU4L5Park, level: 'Pre-A1', unit: 'Unit 4', lessonLabel: 'Lesson 5', title: 'From Head to Toe', subtitle: 'Animal park' },
+
+  /* 1-4 Hook + story */
+  {
+    id: 'u4l5-song', kind: 'song', bg: bgU4L5Park, title: '\u{1F3B5} I Can Do It! \u{1F3B5}', teacher: 'Stand up! Do each move as you sing: turn, wave, stomp, clap!',
+    durationSeconds: 20, bigWord: 'Move', songUrl: `${A}/audio/animal-moves-song-u4l5.mp3?v=1`,
+    lineDurationsMs: [3740, 4660, 3860, 7802],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'I turn my head! I can do it!', emotion: 'happy' },
+      { who: 'pip', text: 'I wave my arms! I can do it!', emotion: 'happy' },
+      { who: 'pip', text: 'I stomp my feet! I clap my hands!', emotion: 'happy' },
+      { who: 'pip', text: 'From head to toe, we can do it!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · My Big Body!.
+    id: 'u4l5-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l5-park-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 4 · My Big Body!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "eyes", say: "Find the eyes!", img: `${A}/items/item-card-eyes.png` },
+      { word: "ears", say: "Show me the ears!", img: `${A}/items/item-card-ears.png` },
+      { word: "hands", say: "Point to the hands!", img: `${A}/items/item-part-hand.png` },
+      { word: "feet", say: "Find the feet!", img: `${A}/items/item-part-foot.png` },
+    ],
+  },
+  {
+    id: 'u4l5-intro', kind: 'cinematic', bg: bgU4L5Park, hidePipOverlay: true, title: 'Animal Park', subtitle: 'Can you do it?', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Welcome to the animal park! My animal friends can move!' },
+      { who: 'pip', line: "Let's watch them — and copy them!" },
+    ],
+    cta: "Let's watch!",
+  },
+  {
+    // The approved stills film: one picture per line, the body word labelled on the part, a pause after each
+    // "Can you do it?" so the child copies the move (docs/scenarios/u4l5-animal-moves.md).
+    id: 'u4l5-story-moves', kind: 'story-video', bg: bgU4L5Park, videoUrl: `${A}/video/animal-moves-u4l5-a.mp4?v=3`, title: 'Animal Moves',
+    teacher: 'Press play and watch. Read and say the action words with Pip — "Turn, turn! Clap, clap!" — and when Pip asks "Can you do it?", stand up and copy the move! Then say: "I can do it!"',
+    pages: [
+      { img: bgU4L5Park, who: 'pip', line: "Look! The animals can move. Let's copy them!", atSec: 0 },
+      { img: bgU4L5Tiger, who: 'pip', line: 'Look! The tiger turns his head. Turn, turn!', atSec: 4.5 },
+      { img: bgU4L5Tiger, who: 'pip', line: 'Can you do it?', atSec: 8 },
+      { img: bgU4L5PipHead, who: 'pip', line: 'I can do it! Turn, turn! I turn my head!', atSec: 12.5 },
+      { img: bgU4L5Monkey, who: 'pip', line: 'Look! The monkey waves his arms. Wave, wave!', atSec: 16 },
+      { img: bgU4L5Monkey, who: 'pip', line: 'Can you do it?', atSec: 19.5 },
+      { img: bgU4L5PipArms, who: 'pip', line: 'I can do it! Wave, wave! I wave my arms!', atSec: 24 },
+      { img: bgU4L5Elephant, who: 'pip', line: 'Look! The elephant stomps his feet. Stomp, stomp!', atSec: 27.5 },
+      { img: bgU4L5Elephant, who: 'pip', line: 'Can you do it?', atSec: 31 },
+      { img: bgU4L5PipFeet, who: 'pip', line: 'I can do it! Stomp, stomp! I stomp my feet!', atSec: 35.5 },
+      { img: bgU4L5Seal, who: 'pip', line: 'Look! The seal claps her hands. Clap, clap!', atSec: 39 },
+      { img: bgU4L5Seal, who: 'pip', line: 'Can you do it?', atSec: 42.5 },
+      { img: bgU4L5PipHands, who: 'pip', line: 'I can do it! Clap, clap! I clap my hands!', atSec: 47 },
+      { img: bgU4L5Park, who: 'pip', line: 'From head to toe — we can do it!', atSec: 50.5 },
+    ],
+    checkpoints: [],
+  },
+
+  /* 5-7 The moves, move, signature game */
+  {
+    id: 'u4l5-moves', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU4L5Lawn, teacher: 'Do each move, then say it! Point to the body part every time.',
+    cards: [
+      { who: 'pip', sentence: 'Turn your head! Like the tiger.', img: bgU4L5Tiger, imgLabel: 'Turn your head!' },
+      { who: 'pip', sentence: 'Wave your arms! Like the monkey.', img: bgU4L5Monkey, imgLabel: 'Wave your arms!' },
+      { who: 'pip', sentence: 'Stomp your feet! Like the elephant.', img: bgU4L5Elephant, imgLabel: 'Stomp your feet!' },
+      { who: 'pip', sentence: 'Clap your hands! Like the seal.', img: bgU4L5Seal, imgLabel: 'Clap your hands!' },
+    ],
+  },
+  {
+    id: 'u4l5-move-say', kind: 'tpr-actions', bg: bgU4L5Lawn, who: 'pip',
+    teacher: 'Stand up! Say it with Pip, then do it. Then say: "I can do it!"',
+    rounds: [
+      { line: 'Turn your head like the tiger!', emoji: '\u{1F42F}', img: bgU4L5Tiger },
+      { line: 'Wave your arms like the monkey!', emoji: '\u{1F412}', img: bgU4L5Monkey },
+      { line: 'Stomp your feet like the elephant!', emoji: '\u{1F418}', img: bgU4L5Elephant },
+      { line: 'Clap your hands like the seal!', emoji: '\u{1F9AD}', img: bgU4L5Seal },
+      { line: 'Can you do it? Say: I can do it!', emoji: '\u{1F4AA}' },
+    ],
+  },
+  {
+    // Signature game (new): hear the move, find the animal, then do it yourself.
+    id: 'u4l5-who-can', kind: 'move-match', bg: bgU4L5Lawn, who: 'pip',
+    teacher: 'Who Can Do It? Listen, tap the animal, then do the move and say "I can do it!"',
+    animals: U4L5_ANIMALS,
+    rounds: [
+      { animal: 2, question: 'Who stomps his feet?', reply: 'The elephant! Stomp, stomp! Can you do it?' },
+      { animal: 3, question: 'Who claps her hands?', reply: 'The seal! Clap, clap! Can you do it?' },
+      { animal: 0, question: 'Who turns his head?', reply: 'The tiger! Turn your head! Can you do it?' },
+      { animal: 1, question: 'Who waves his arms?', reply: 'The monkey! Wave, wave! Can you do it?' },
+    ],
+    doneLine: 'Wow! You can do it — from head to toe!',
+  },
+
+  /* 8-11 Speaking + the second game */
+  {
+    id: 'u4l5-pip-asks', kind: 'join-stage', bg: bgU4L5PipArms, teacher: 'Pip asks. The student does the move and answers: "I can do it!"', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Can you wave your arms?', bubble: 'right' },
+      { who: 'student', line: 'I can do it! (wave your arms)', bubble: 'right' },
+      { who: 'pip', line: 'Can you stomp your feet?', bubble: 'right' },
+      { who: 'student', line: 'I can do it! (stomp your feet)', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l5-whose', kind: 'part-peek', bg: bgU4L5Lawn, who: 'pip',
+    teacher: 'Whose Is It? Look at the part in the bush. Tap the animal, then name the part!',
+    animals: U4L5_FACES,
+    rounds: [
+      { animal: 2, part: [52, 72], partW: 24, partWord: 'feet', question: 'Whose feet are these?', reply: "The elephant's feet! He stomps his feet!" },
+      { animal: 0, part: [52, 33], partW: 20, partWord: 'head', question: 'Whose head is this?', reply: "The tiger's head! He turns his head!" },
+      { animal: 3, part: [49, 63], partW: 13, partWord: 'hands', question: 'Whose hands are these?', reply: "The seal's hands! She claps her hands!" },
+      { animal: 1, part: [33, 37], partW: 13, partWord: 'arms', question: 'Whose arms are these?', reply: "The monkey's arms! He waves his arms!" },
+    ],
+    doneLine: 'You found them all! Super looking!',
+  },
+  {
+    id: 'u4l5-you-ask', kind: 'join-stage', bg: bgU4L5PipHands, teacher: 'Swap! The student asks Pip: "Can you clap your hands?"', cast: ['pip'],
+    turns: [
+      { who: 'student', line: 'Ask Pip: Can you clap your hands?', bubble: 'right' },
+      { who: 'pip', line: 'I can do it! Clap, clap!', bubble: 'right' },
+      { who: 'student', line: 'Ask Pip: Can you turn your head?', bubble: 'right' },
+      { who: 'pip', line: 'I can do it! Look!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l5-true-or-not', kind: 'tick-cross', bg: bgU4L5Lawn, who: 'pip',
+    teacher: 'Look and listen. Is it right? Tap ✓ or ✗.',
+    rounds: [
+      { img: bgU4L5Tiger, sentence: 'The tiger turns his head.', isTrue: true },
+      { img: bgU4L5Elephant, sentence: 'The elephant claps his hands.', isTrue: false },
+      { img: bgU4L5Monkey, sentence: 'The monkey waves his arms.', isTrue: true },
+      { img: bgU4L5Seal, sentence: 'The seal stomps her feet.', isTrue: false },
+    ],
+  },
+
+  /* 12-14 Phonics: T says /t/ */
+  {
+    id: 'u4l5-model-t', kind: 'sound-model', bg: bgU4L5Lawn, who: 'pip', letter: 'T', phoneme: '/t/', sound: 'tuh',
+    teacher: 'T says /t/ — tiger, ten, teddy!',
+    anchors: [
+      { word: 'tiger', emoji: '\u{1F42F}' },
+      { word: 'ten', emoji: '\u{1F51F}', img: itemTen },
+      { word: 'teddy', emoji: '\u{1F9F8}', img: itemTeddy },
+    ],
+  },
+  { id: 'u4l5-trace-t', kind: 'trace', bg: bgU4L5Lawn, who: 'pip', letter: 'T', phoneme: '/t/', word: 'tiger', speakWord: false, teacher: 'Trace the big T with your finger! /t/ /t/ tiger!' },
+  {
+    id: 'u4l5-blocks', kind: 'alphabet-blocks', bg: bgU4L5Lawn, teacher: 'Letter Blocks! Tap the sound, then stack the word!', letters: ['T', 'E', 'N', 'F', 'A', 'B'],
+    tapRounds: [{ letter: 'T' }, { letter: 'F' }, { letter: 'N' }, { letter: 'B' }],
+    words: [
+      { word: 'TEN', emoji: '\u{1F51F}' },
+      { word: 'NET', emoji: '\u{1F945}' },
+      { word: 'FAN', emoji: '\u{1FAAD}' },
+    ],
+  },
+
+  /* 15-16 Retell + perform */
+  {
+    id: 'u4l5-story-order', kind: 'story-order', bg: bgU4L5Lawn, who: 'pip', teacher: 'Put the animals in story order, then tell it!',
+    frames: [
+      { img: bgU4L5Tiger, caption: 'The tiger turns his head.', who: 'pip' },
+      { img: bgU4L5Monkey, caption: 'The monkey waves his arms.', who: 'pip' },
+      { img: bgU4L5Elephant, caption: 'The elephant stomps his feet.', who: 'pip' },
+    ],
+  },
+  {
+    id: 'u4l5-perform', kind: 'join-stage', bg: bgU4L5Park, teacher: 'Show time! The student is the animal: do the move and say it.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Be the tiger! Can you do it?', bubble: 'right' },
+      { who: 'student', line: 'I can do it! I turn my head!', bubble: 'right' },
+      { who: 'pip', line: 'Be the seal! Can you do it?', bubble: 'right' },
+      { who: 'student', line: 'I can do it! I clap my hands!', bubble: 'right' },
+    ],
+  },
+
+  /* 17-18 Sticker + Home Mission */
+  {
+    id: 'u4l5-sticker', kind: 'sticker-reward', bg: bgU4L5Park, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You can do it! Here is an elephant sticker for you!', sticker: { img: itemElephant, label: 'Elephant' },
+  },
+  {
+    id: 'u4l5-home-mission', kind: 'home-mission', bg: bgU4L5Park, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: be an animal at home! Ask your family: Can you do it?',
+    parentNote: 'Play "Animal Moves": your child shows a move — turn your head like a tiger, wave your arms like a monkey, stomp your feet like an elephant, clap your hands like a seal — and asks "Can you do it?". Answer "I can do it!" and copy. Then swap.',
+    steps: [
+      { emoji: '\u{1F42F}', say: 'Turn your head' },
+      { emoji: '\u{1F418}', img: itemElephant, say: 'Stomp your feet' },
+      { emoji: '\u{1F4AA}', say: 'I can do it!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u4l5-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU4L5Lawn, who: 'pip',
+    teacher: 'Extra time: Animal Moves! Move like the animals with Pip.',
+    rounds: [
+      { line: 'Walk like an elephant! Stomp, stomp!', emoji: '\u{1F418}' },
+      { line: 'Jump like a monkey!', emoji: '\u{1F412}' },
+      { line: 'Clap like a seal!', emoji: '\u{1F9AD}' },
+      { line: 'Turn your head like a tiger! Left and right!', emoji: '\u{1F42F}' },
+      { line: 'Freeze like a statue!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u4l5-whose-2', kind: 'part-peek', bg: bgU4L5Lawn, who: 'pip',
+    teacher: 'Extra time: Whose Is It? again — new parts!',
+    animals: U4L5_FACES,
+    rounds: [
+      { animal: 1, part: [50, 36], partW: 20, partWord: 'head', question: 'Whose head is this?', reply: "The monkey's head! Hello, monkey!" },
+      { animal: 0, part: [49, 83], partW: 20, partWord: 'feet', question: 'Whose feet are these?', reply: "The tiger's feet! Stripy feet!" },
+      { animal: 2, part: [50, 36], partW: 28, partWord: 'head', question: 'Whose head is this?', reply: "The elephant's head! Big ears!" },
+    ],
+    doneLine: 'Great looking! See you soon, animals!',
+  },
+
+  /* 19-20 Goodbye */
+  {
+    id: 'u4l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u4l5-finale', kind: 'finale', bg: bgU4L5Park, who: 'pip', line: 'Turn, wave, stomp and clap — from head to toe, you can do it! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 4 · Lesson 6 — Simon Says Body Parts =====================
+ * My Body & Face (6/6, review). All the unit's body words — head, shoulders,
+ * knees, toes, eyes, ears, nose, mouth, hands, arms, feet — with "Touch
+ * your …!" and Simon Says; phonics review E N F B. Setting: a bright space
+ * station where Pip and Mia play with Robo the robot. Lesson-Variety Engine:
+ * researched the Simon electronic memory game, the classroom Simon Says /
+ * "Touch your …" routine (games4esl), Cambridge Pre A1 "listen and point",
+ * Lingokids Draw Path and Wordwall odd-one-out; new game Robo Says (copy
+ * Robo's body-part chain in order). Pictures made with Canva; Robo in the
+ * game is drawn in code. */
+const bgU4L6Station = `${A}/scenes/bg-u4l6-station-wide.png`;
+const bgU4L6Room = `${A}/scenes/bg-u4l6-room-wide.png`;
+const bgU4L6Float = `${A}/scenes/bg-u4l6-float-wide.png`;
+
+export const LESSON_U4L6_TITLE = 'Simon Says Body Parts';
+export const LESSON_U4L6_OBJECTIVE = 'Remember and use all the unit\'s body words (head, shoulders, knees, toes, eyes, ears, nose, mouth, hands, arms, feet): follow "Touch your …!" only when Simon says, copy a chain of two or three body parts in order, give Simon Says orders to a friend, sort face and body, and hear E, N, F and B — by moving, listening and speaking, no reading.';
+
+export const LESSON_U4L6_SCENES: Scene[] = [
+  { id: 'u4l6-title', kind: 'title-card', bg: bgU4L6Station, level: 'Pre-A1', unit: 'Unit 4', lessonLabel: 'Lesson 6', title: 'Simon Says Body Parts', subtitle: 'Space station' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u4l6-song', kind: 'song', bg: bgU4L6Station, title: '\u{1F3B5} Head, Shoulders, Knees and Toes \u{1F3B5}', teacher: 'Stand up! Touch each body part as you sing — Robo dances too!',
+    durationSeconds: 20, bigWord: 'Body', songUrl: `${A}/audio/body-song-u4l1.mp3?v=1`,
+    lineDurationsMs: [3580, 3980, 3960, 8542],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Touch your head and touch your toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · From Head to Toe.
+    id: 'u4l6-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l6-station-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 5 · From Head to Toe",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "tiger", say: "Find the tiger!", img: `${A}/scenes/bg-u4l5-tiger-head-wide.png` },
+      { word: "monkey", say: "Show me the monkey!", img: `${A}/scenes/bg-u4l5-monkey-arms-wide.png` },
+      { word: "elephant", say: "Point to the elephant!", img: `${A}/scenes/bg-u4l5-elephant-feet-wide.png` },
+      { word: "seal", say: "Find the seal!", img: `${A}/scenes/bg-u4l5-seal-hands-wide.png` },
+    ],
+  },
+  {
+    id: 'u4l6-intro', kind: 'cinematic', bg: bgU4L6Station, hidePipOverlay: true, title: 'Space Station', subtitle: 'Simon says!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Welcome to the space station! This is Robo, our robot friend!' },
+      { who: 'mia', line: 'Robo loves Simon Says. Let\'s play!' },
+    ],
+    cta: "Let's play!",
+  },
+
+  /* 4-6 Remember the words, move, signature game */
+  {
+    id: 'u4l6-remember', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU4L6Room, teacher: 'Remember our friends? Say each word and touch it on your own body.',
+    cards: [
+      { who: 'leo', sentence: 'Head! Touch your head.', img: bgU4L1LeoHead, imgLabel: 'Head!' },
+      { who: 'mia', sentence: 'Eyes! Touch your eyes.', img: bgU4L2MiaEyes, imgLabel: 'Eyes!' },
+      { who: 'mia', sentence: 'Nose! Touch your nose.', img: bgU4L2MiaNose, imgLabel: 'Nose!' },
+      { who: 'bella', sentence: 'Hands! Clap your hands.', img: bgU4L3Hands, imgLabel: 'Hands!' },
+      { who: 'leo', sentence: 'Knees! Touch your knees.', img: bgU4L1LeoKnees, imgLabel: 'Knees!' },
+      { who: 'bella', sentence: 'Feet! Stamp your feet.', img: bgU4L3Feet, imgLabel: 'Feet!' },
+    ],
+  },
+  {
+    id: 'u4l6-simon-move', kind: 'tpr-actions', bg: bgU4L6Room, who: 'pip',
+    teacher: 'Stand up! Simon Says on your own body: move only when Pip says "Simon says". If he doesn\'t, freeze!',
+    rounds: [
+      { line: 'Simon says: touch your ears!', emoji: '\u{1F442}' },
+      { line: 'Simon says: wave your arms!', emoji: '\u{1F44B}' },
+      { line: 'Touch your nose! Oh, Simon didn\'t say! Don\'t move!', emoji: '\u{1F92B}' },
+      { line: 'Simon says: touch your shoulders!', emoji: '\u{1F937}' },
+      { line: 'Simon says: stamp your feet!', emoji: '\u{1F463}' },
+    ],
+  },
+  {
+    // Signature game (new): copy Robo's chain of body parts.
+    id: 'u4l6-robo-says', kind: 'robo-copy', bg: bgU4L6Room, who: 'pip',
+    teacher: 'Robo Says! Watch Robo light up, then touch the same parts in the same order — on Robo and on your own body. Say each word!',
+    rounds: [
+      { seq: ['nose'], line: "Simon says: touch Robo's nose!", reply: 'Nose! Well done!' },
+      { seq: ['knees'], line: "Simon says: touch Robo's knees!", reply: 'Knees! Super!' },
+      { seq: ['eyes', 'hands'], line: 'Simon says: eyes, then hands!', reply: 'Eyes and hands! Great memory!' },
+      { seq: ['ears', 'feet'], line: 'Simon says: ears, then feet!', reply: 'Ears and feet! Wow!' },
+      { seq: ['head', 'shoulders', 'knees'], line: 'Simon says: head, shoulders, knees!', reply: 'Head, shoulders, knees! You did it!' },
+    ],
+    doneLine: 'Robo is so happy! Beep beep! You are a Simon Says star!',
+  },
+
+  /* 7-10 Speaking + sorting */
+  {
+    id: 'u4l6-robo-asks', kind: 'join-stage', bg: bgU4L6Float, teacher: 'Robo asks through Pip. The student touches and answers.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Robo says: Touch your ears! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my ears! (touch them)", bubble: 'right' },
+      { who: 'pip', line: 'Robo says: Touch your mouth! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my mouth!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l6-face-or-body', kind: 'odd-one-out', bg: bgU4L6Room, who: 'mia',
+    teacher: 'Which one is different? Three are on your face, one is not. Tap it and touch it on your body!',
+    rounds: [
+      { items: [{ label: 'eyes', img: cardEyes }, { label: 'nose', img: cardNose }, { label: 'mouth', img: cardMouth }, { label: 'foot', img: partFoot }], odd: 3, line: 'The foot! Eyes, nose and mouth are on your face.' },
+      { items: [{ label: 'ears', img: cardEars }, { label: 'hand', img: partHand }, { label: 'nose', img: cardNose }, { label: 'eyes', img: cardEyes }], odd: 1, line: 'The hand! Ears, nose and eyes are on your face.' },
+      { items: [{ label: 'mouth', img: cardMouth }, { label: 'eyes', img: cardEyes }, { label: 'arm', img: partArm }, { label: 'ears', img: cardEars }], odd: 2, line: 'The arm! Mouth, eyes and ears are on your face.' },
+    ],
+  },
+  {
+    id: 'u4l6-you-simon', kind: 'join-stage', bg: bgU4L6Station, teacher: 'Swap! The student is Simon and gives Mia orders. Sometimes leave out "Simon says"!', cast: ['mia'],
+    turns: [
+      { who: 'student', line: 'Say to Mia: Simon says, touch your nose!', bubble: 'right' },
+      { who: 'mia', line: 'My nose! Like this!', bubble: 'right' },
+      { who: 'student', line: 'Say to Mia: Touch your toes!', bubble: 'right' },
+      { who: 'mia', line: "Ha ha! Simon didn't say! I don't move!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u4l6-draw-path', kind: 'draw-path', bg: bgU4L6Room, who: 'mia', walker: 'pip',
+    teacher: 'Listen and draw! Draw a line from Pip to the body part Mia says. Pip floats along your line.',
+    start: { x: 9, y: 84 },
+    spots: [
+      { label: 'eyes', img: cardEyes, x: 30, y: 58, size: 10 },
+      { label: 'hand', img: partHand, x: 50, y: 82, size: 9 },
+      { label: 'nose', img: cardNose, x: 66, y: 56, size: 9 },
+      { label: 'foot', img: partFoot, x: 86, y: 78, size: 10 },
+      { label: 'ears', img: cardEars, x: 48, y: 60, size: 10 },
+    ],
+    rounds: [
+      { line: 'Take Pip to the nose!', target: 2, reply: "It's a nose! Touch your nose!" },
+      { line: 'Now take Pip to the hand!', target: 1, reply: "It's a hand! Wave your hand!" },
+      { line: 'Now the foot!', target: 3, reply: "It's a foot! Stamp your foot!" },
+    ],
+  },
+
+  /* 11-12 Phonics review: E N F B */
+  {
+    id: 'u4l6-treasure-sounds', kind: 'trophy-chest', bg: bgU4L6Room, who: 'pip',
+    teacher: 'Open the space treasure! Listen to the sound, then tap its letter. Say the word!',
+    rounds: [
+      { letter: 'E', phoneme: '/e/', word: 'egg', img: itemEgg, emoji: '\u{1F95A}', choices: ['E', 'N', 'B'] },
+      { letter: 'N', phoneme: '/n/', word: 'nest', img: itemNestU4, emoji: '\u{1FAB9}', choices: ['F', 'N', 'E'] },
+      { letter: 'F', phoneme: '/f/', word: 'fish', img: itemFish, emoji: '\u{1F41F}', choices: ['B', 'E', 'F'] },
+      { letter: 'B', phoneme: '/b/', word: 'bear', img: itemBear, emoji: '\u{1F43B}', choices: ['B', 'F', 'N'] },
+      { letter: 'E', phoneme: '/e/', word: 'elephant', img: itemElephant, emoji: '\u{1F418}', choices: ['N', 'E', 'F'] },
+      { letter: 'F', phoneme: '/f/', word: 'fan', img: itemFan, emoji: '\u{1FAAD}', choices: ['F', 'B', 'E'] },
+    ],
+  },
+  { id: 'u4l6-trace-f', kind: 'trace', bg: bgU4L6Room, who: 'pip', letter: 'F', phoneme: '/f/', word: 'feet', speakWord: false, teacher: 'Trace the big F with your finger! /f/ /f/ feet!' },
+
+  /* 13 Perform */
+  {
+    id: 'u4l6-perform', kind: 'join-stage', bg: bgU4L6Float, teacher: 'Show time! The student plays Simon Says with Pip: listen, touch, and say the word.', cast: ['pip', 'mia'],
+    turns: [
+      { who: 'pip', line: 'Simon says: touch your head! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my head! (touch it)", bubble: 'right' },
+      { who: 'mia', line: 'Now you be Simon! Tell us!', bubble: 'right' },
+      { who: 'student', line: 'Simon says: touch your knees and toes!', bubble: 'right' },
+    ],
+  },
+
+  /* 14-15 Sticker + Home Mission */
+  {
+    id: 'u4l6-sticker', kind: 'sticker-reward', bg: bgU4L6Float, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super listening! Here is a Robo sticker for you!', sticker: { img: itemRobot, label: 'Robo' },
+  },
+  {
+    id: 'u4l6-home-mission', kind: 'home-mission', bg: bgU4L6Station, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: be Simon at home! Say: Simon says, touch your nose! Then: Touch your feet!',
+    parentNote: 'Your child is Simon! Let them give you orders: "Simon says, touch your nose / ears / knees / feet." When they leave out "Simon says", don\'t move! Then swap. Try a memory chain too: "Touch your eyes, then your hands!"',
+    steps: [
+      { emoji: '\u{1F443}', img: cardNose, say: 'Touch your nose' },
+      { emoji: '\u{270B}', img: partHand, say: 'Clap your hands' },
+      { emoji: '\u{1F92B}', say: 'Simon says!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u4l6-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU4L6Room, who: 'pip',
+    teacher: 'Extra time: Space Moves! Float like an astronaut with Pip.',
+    rounds: [
+      { line: 'Float like an astronaut! Wave your arms slowly!', emoji: '\u{1F468}\u{200D}\u{1F680}' },
+      { line: 'Touch your toes! Slowly, slowly!', emoji: '\u{1F9B6}' },
+      { line: 'Blink your eyes like Robo! Blink, blink!', emoji: '\u{1F916}' },
+      { line: 'Clap your hands three times!', emoji: '\u{1F44F}' },
+      { line: 'Freeze like a robot!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u4l6-robo-says-2', kind: 'robo-copy', bg: bgU4L6Room, who: 'pip',
+    teacher: 'Extra time: Robo Says again — longer chains! Watch, then touch them in order.',
+    rounds: [
+      { seq: ['mouth', 'arms'], line: 'Simon says: mouth, then arms!', reply: 'Mouth and arms! Great!' },
+      { seq: ['shoulders', 'feet'], line: 'Simon says: shoulders, then feet!', reply: 'Shoulders and feet! Super!' },
+      { seq: ['eyes', 'nose', 'knees'], line: 'Simon says: eyes, nose, knees!', reply: 'Eyes, nose, knees! Amazing memory!' },
+    ],
+    doneLine: 'Beep beep! Robo says thank you!',
+  },
+
+  /* 16-17 Goodbye */
+  {
+    id: 'u4l6-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u4l6-finale', kind: 'finale', bg: bgU4L6Station, who: 'pip', line: 'Head, shoulders, knees and toes — eyes, ears, nose and mouth! You know your whole body. Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 5 · Lesson 2 — Brother, Sister, Baby! =====================
+ * My Family (2/6). brother, sister, baby (+ mom, dad, me from Lesson 1) with "This is my sister!" and
+ * "Who is this?"; big / small recycled from Unit 4; S says /s/ (sister, sun, snake), B recycled (brother,
+ * baby). Setting: Pip's sunny backyard with a swing and a picnic blanket — family photo day. Lesson-Variety
+ * Engine: researched Khan Academy Kids / Lingokids camera and sticker-album rewards, Montessori size
+ * seriation, Cambridge Pre A1 "listen and point" and the classroom family-photo show-and-tell; new games
+ * Family Photo (snap the family member you hear) and Line Up! (biggest to smallest). Pictures made with
+ * Canva (Pip's family as drawn in Lesson 1). */
+const bgU5L2Yard = `${A}/scenes/bg-u5l2-yard-wide.png`;
+const bgU5L2Garden = `${A}/scenes/bg-u5l2-garden-wide.png`;
+const bgU5L2Brother = `${A}/scenes/bg-u5l2-brother-wide.png`;
+const bgU5L2Sister = `${A}/scenes/bg-u5l2-sister-wide.png`;
+const bgU5L2Baby = `${A}/scenes/bg-u5l2-baby-wide.png`;
+const famDad = `${A}/items/item-family-dad.png`;
+const famMom = `${A}/items/item-family-mom.png`;
+const famBrother = `${A}/items/item-family-brother.png`;
+const famPip = `${A}/items/item-family-pip.png`;
+const famSister = `${A}/items/item-family-sister.png`;
+const famBaby = `${A}/items/item-family-baby.png`;
+/* Pip's brother, sister and baby in bg-u5l2-yard (tap boxes + face centres, % of the picture). */
+const U5L2_MEMBERS = [
+  { label: 'brother', x: 20, y: 6, w: 19, h: 84, face: [29.5, 26] as [number, number], faceW: 20 },
+  { label: 'sister', x: 55, y: 42, w: 14, h: 48, face: [62, 54] as [number, number], faceW: 16 },
+  { label: 'baby', x: 70, y: 61, w: 14, h: 33, face: [76.5, 71] as [number, number], faceW: 14 },
+];
+
+export const LESSON_U5L2_TITLE = 'Brother, Sister, Baby!';
+export const LESSON_U5L2_OBJECTIVE = 'Name brother, sister and baby (with mom, dad and me), say "This is my sister!" and answer "Who is this?", find each family member from the word alone, line the family up from biggest to smallest, and hear S say /s/ (sister, sun, snake) — by listening, moving, playing and speaking, no reading.';
+
+export const LESSON_U5L2_SCENES: Scene[] = [
+  { id: 'u5l2-title', kind: 'title-card', bg: bgU5L2Yard, level: 'Pre-A1', unit: 'Unit 5', lessonLabel: 'Lesson 2', title: 'Brother, Sister, Baby!', subtitle: 'Family photo day' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u5l2-song', kind: 'song', bg: bgU5L2Yard, title: '\u{1F3B5} This Is My Family \u{1F3B5}', teacher: 'Sing and show! Big brother: arms up high. Little sister: hands low. Baby: rock your arms.',
+    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-song-u5l2.mp3?v=1`,
+    lineDurationsMs: [3140, 4100, 4340, 8482],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'This is my brother! He is big!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my sister! She is small!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my baby! Tiny, tiny baby!', emotion: 'happy' },
+      { who: 'pip', text: 'I love my family! I love you!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · Mom, Dad, Me!.
+    id: 'u5l2-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u5l2-yard-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 1 · Mom, Dad, Me!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "mom", say: "Find mom!", img: `${A}/items/item-family-mom.png` },
+      { word: "dad", say: "Show me dad!", img: `${A}/items/item-family-dad.png` },
+      { word: "Pip", say: "Point to Pip!", img: `${A}/items/item-family-pip.png` },
+    ],
+  },
+  {
+    id: 'u5l2-intro', kind: 'cinematic', bg: bgU5L2Yard, hidePipOverlay: true, title: 'Family Photo Day', subtitle: 'Meet my family!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Hi! Today is family photo day! Come and meet my family!' },
+      { who: 'pip', line: 'My brother, my sister and the baby! Let\'s take a photo!' },
+    ],
+    cta: "Let's meet them!",
+  },
+
+  /* 4-6 New words, move, signature game */
+  {
+    id: 'u5l2-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU5L2Garden, teacher: 'Listen, then say it! Show big with your arms for brother, small for sister, and rock a baby.',
+    cards: [
+      { who: 'pip', sentence: 'Brother! This is my brother.', img: bgU5L2Brother, imgLabel: 'Brother!' },
+      { who: 'pip', sentence: 'Sister! This is my sister.', img: bgU5L2Sister, imgLabel: 'Sister!' },
+      { who: 'pip', sentence: 'Baby! This is my baby.', img: bgU5L2Baby, imgLabel: 'Baby!' },
+    ],
+  },
+  {
+    id: 'u5l2-move-say', kind: 'tpr-actions', bg: bgU5L2Garden, who: 'pip',
+    teacher: 'Stand up! Say it with Pip, then do it.',
+    rounds: [
+      { line: 'Big brother! Stand up tall!', emoji: '\u{1F64B}', img: bgU5L2Brother },
+      { line: 'Little sister! Wave hello!', emoji: '\u{1F44B}', img: bgU5L2Sister },
+      { line: 'Baby! Rock the baby. Shh!', emoji: '\u{1F476}', img: bgU5L2Baby },
+      { line: 'Give your family a big hug!', emoji: '\u{1F917}' },
+      { line: 'Say: I love my family!', emoji: '\u{1F496}' },
+    ],
+  },
+  {
+    // Signature game (new): take a photo of the family member you hear.
+    id: 'u5l2-family-photo', kind: 'family-photo', bg: bgU5L2Yard, who: 'pip',
+    teacher: 'Family Photo! Listen to Pip, then tap that person to take their photo. Say: "This is my sister!"',
+    members: U5L2_MEMBERS,
+    rounds: [
+      { member: 1, line: 'Take a photo of my sister!', reply: 'Click! This is my sister!' },
+      { member: 2, line: 'Take a photo of the baby!', reply: 'Click! This is my baby!' },
+      { member: 0, line: 'Take a photo of my brother!', reply: 'Click! This is my brother!' },
+    ],
+    doneLine: 'Three great photos! I love my family!',
+  },
+
+  /* 7-10 Speaking + games */
+  {
+    id: 'u5l2-who-is-this', kind: 'join-stage', bg: bgU5L2Sister, teacher: 'Pip asks. The student answers with the whole sentence.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Who is this?', bubble: 'right' },
+      { who: 'student', line: "It's your sister!", bubble: 'right' },
+      { who: 'pip', line: 'Yes! This is my sister! And who is the tiny one?', bubble: 'right' },
+      { who: 'student', line: "It's the baby!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u5l2-line-up', kind: 'size-line', bg: bgU5L2Garden, who: 'pip',
+    teacher: 'Line Up! Help the family line up for the photo, from the biggest to the smallest. Say who it is!',
+    members: [
+      { label: 'dad', img: famDad, height: 100, reply: 'My dad! Dad is the biggest!' },
+      { label: 'mom', img: famMom, height: 92, reply: 'My mom!' },
+      { label: 'brother', img: famBrother, height: 80, reply: 'My big brother!' },
+      { label: 'Pip', img: famPip, height: 66, reply: "Pip! That's me!" },
+      { label: 'sister', img: famSister, height: 54, reply: 'My little sister!' },
+      { label: 'baby', img: famBaby, height: 36, reply: 'The baby! The baby is the smallest!' },
+    ],
+    floorOrder: [3, 0, 5, 2, 4, 1],
+    lastLine: 'Who is the smallest?',
+    doneLine: 'Say cheese! What a happy family!',
+  },
+  {
+    id: 'u5l2-you-tell', kind: 'join-stage', bg: bgU5L2Yard, teacher: 'Swap! The student tells Pip about their own family (or a toy family). Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Tell me about your family! Do you have a brother?', bubble: 'right' },
+      { who: 'student', line: 'Yes! This is my brother. / No!', bubble: 'right' },
+      { who: 'pip', line: 'Do you have a sister?', bubble: 'right' },
+      { who: 'student', line: 'Yes! This is my sister. / No!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u5l2-family-train', kind: 'train-recall', bg: bgU5L2Garden, teacher: 'All aboard the family train! Remember who sits in each car.',
+    question: 'Choo choo! One car is empty. Who is missing?',
+    cars: [
+      { word: 'BROTHER', img: famBrother, emoji: '\u{1F466}' },
+      { word: 'SISTER', img: famSister, emoji: '\u{1F467}' },
+      { word: 'BABY', img: famBaby, emoji: '\u{1F476}' },
+      { word: 'MOM', img: famMom, emoji: '\u{1F469}' },
+      { word: 'DAD', img: famDad, emoji: '\u{1F468}' },
+    ],
+  },
+
+  /* 11-13 Phonics: S says /s/ */
+  {
+    id: 'u5l2-model-s', kind: 'sound-model', bg: bgU5L2Garden, who: 'pip', letter: 'S', phoneme: '/s/', sound: 'sss',
+    teacher: 'S says /s/ — sister, sun, snake!',
+    anchors: [
+      { word: 'sister', emoji: '\u{1F467}', img: famSister },
+      { word: 'sun', emoji: '\u{2600}\u{FE0F}', img: itemSun },
+      { word: 'snake', emoji: '\u{1F40D}', img: itemSnake },
+    ],
+  },
+  { id: 'u5l2-trace-s', kind: 'trace', bg: bgU5L2Garden, who: 'pip', letter: 'S', phoneme: '/s/', word: 'sister', speakWord: false, teacher: 'Trace the big S with your finger! /s/ /s/ sister!' },
+  {
+    id: 'u5l2-pick-s', kind: 'sound-pick', bg: bgU5L2Garden, who: 'pip',
+    teacher: 'Which one? Listen to the sound, then tap the picture that starts with it. Say the word too!',
+    rounds: [
+      { sound: 's', answer: 0, options: [{ word: 'sun', img: itemSun }, { word: 'ball', img: itemBallRed }, { word: 'baby', img: famBaby }] },
+      { sound: 'b', answer: 2, options: [{ word: 'snake', img: itemSnake }, { word: 'sister', img: famSister }, { word: 'brother', img: famBrother }] },
+      { sound: 's', answer: 1, options: [{ word: 'bear', img: itemBear }, { word: 'sister', img: famSister }, { word: 'bag', img: itemBag }] },
+      { sound: 'b', answer: 0, options: [{ word: 'baby', img: famBaby }, { word: 'sun', img: itemSun }, { word: 'snake', img: itemSnake }] },
+    ],
+  },
+
+  /* 14 Perform */
+  {
+    id: 'u5l2-perform', kind: 'join-stage', bg: bgU5L2Yard, teacher: "Show time! The student points to Pip's family and says who they are.", cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Your turn! Who is in my family photo?', bubble: 'right' },
+      { who: 'student', line: 'This is your brother! This is your sister!', bubble: 'right' },
+      { who: 'pip', line: 'And the tiny one?', bubble: 'right' },
+      { who: 'student', line: 'This is the baby!', bubble: 'right' },
+    ],
+  },
+
+  /* 15-16 Sticker + Home Mission */
+  {
+    id: 'u5l2-sticker', kind: 'sticker-reward', bg: bgU5L2Yard, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super job! Here is a baby fox sticker for you!', sticker: { img: famBaby, label: 'Baby' },
+  },
+  {
+    id: 'u5l2-home-mission', kind: 'home-mission', bg: bgU5L2Yard, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: show a family photo at home and say: This is my brother! This is my sister!',
+    parentNote: 'Look at a family photo together. Your child points and says "This is my brother / sister / baby / mom / dad." Ask "Who is this?" and "Who is the biggest? Who is the smallest?" Cousins and pets count too!',
+    steps: [
+      { emoji: '\u{1F4F7}', say: 'Family photo' },
+      { emoji: '\u{1F466}', img: famBrother, say: 'This is my brother' },
+      { emoji: '\u{1F467}', img: famSister, say: 'This is my sister' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u5l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU5L2Garden, who: 'pip',
+    teacher: 'Extra time: Family Moves! Move like each family member.',
+    rounds: [
+      { line: 'Walk like a big brother! Big steps!', emoji: '\u{1F463}' },
+      { line: 'Skip like a little sister!', emoji: '\u{1F467}' },
+      { line: 'Crawl like a baby!', emoji: '\u{1F476}' },
+      { line: 'Swing on the swing! Whee!', emoji: '\u{1F3A0}' },
+      { line: 'Freeze! Say cheese!', emoji: '\u{1F4F8}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u5l2-spin', kind: 'spin-wheel', bg: bgU5L2Yard, title: '',
+    teacher: 'Extra time: have the student spin, then point and say who it is: "My brother!" Or tap a number.',
+    items: [
+      { label: 'My brother!', left: '29.5%', top: '58%' },
+      { label: 'Pip!', left: '47.5%', top: '74%' },
+      { label: 'My sister!', left: '62%', top: '76%' },
+      { label: 'The baby!', left: '76.5%', top: '86%' },
+    ],
+    wheelAt: { left: '88%', top: '30%' },
+  },
+
+  /* 17-18 Goodbye */
+  {
+    id: 'u5l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u5l2-finale', kind: 'finale', bg: bgU5L2Yard, who: 'pip', line: 'My brother, my sister and the baby — this is my family! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 5 · Lesson 3 — Grandma & Grandpa! =====================
+ * My Family (3/6). grandma, grandpa (+ mom, dad, baby, me recycled) with "This is my grandma!",
+ * "Hello, Grandpa!" and "I love my grandma!"; G says /g/ (already taught in Unit 2, so model + trace +
+ * one sort). Setting: Grandma and Grandpa's cozy cottage (living room, kitchen, garden gate) — a visit and
+ * a baking day. Lesson-Variety Engine: researched Lingokids / Toca Kitchen cook-and-serve play, the
+ * classroom memory game "What's missing?" (Kim's game, teach-this / games4esl), Khan Academy Kids' calm
+ * self-paced play and Cambridge Pre A1 "listen and point"; new games Grandma's Cookies (bake the face you
+ * hear) and Who's Missing? (lights off, one photo is gone). Pictures made with Canva, using Lesson 2's
+ * family picture as the character reference. */
+const bgU5L3Living = `${A}/scenes/bg-u5l3-living-wide.png`;
+const bgU5L3Grandma = `${A}/scenes/bg-u5l3-grandma-wide.png`;
+const bgU5L3Grandpa = `${A}/scenes/bg-u5l3-grandpa-wide.png`;
+const bgU5L3Kitchen = `${A}/scenes/bg-u5l3-kitchen-wide.png`;
+const bgU5L3Garden = `${A}/scenes/bg-u5l3-garden-wide.png`;
+const bgU5L3Hug = `${A}/scenes/bg-u5l3-hug-wide.png`;
+const WIDE = 1376 / 768;
+/** Round face crops for the cookie and photo-wall games (at = face centre %, w = % of picture width). */
+const U5L3_FACES = {
+  grandma: { label: 'grandma', name: 'Grandma', img: bgU5L3Living, at: [33.5, 36] as [number, number], w: 17, aspect: WIDE },
+  grandpa: { label: 'grandpa', name: 'Grandpa', img: bgU5L3Living, at: [66.5, 34] as [number, number], w: 17, aspect: WIDE },
+  pip: { label: 'Pip', name: 'Pip', img: bgU5L3Living, at: [50, 49] as [number, number], w: 15, aspect: WIDE },
+  baby: { label: 'baby', name: 'the baby', img: bgU5L2Yard, at: [76.5, 71] as [number, number], w: 14, aspect: WIDE },
+  mom: { label: 'mom', name: 'Mom', img: `${A}/scenes/bg-u5l1-mom-solo.png`, at: [36, 38] as [number, number], w: 30, aspect: 1 },
+  dad: { label: 'dad', name: 'Dad', img: `${A}/scenes/bg-u5l1-dad-solo.png`, at: [60.5, 41] as [number, number], w: 27, aspect: 1 },
+};
+
+export const LESSON_U5L3_TITLE = 'Grandma & Grandpa!';
+export const LESSON_U5L3_OBJECTIVE = 'Name grandma and grandpa (with mom, dad, the baby and me), say "This is my grandma!", "Hello, Grandpa!" and "I love my grandma!", pick the right family member from the word alone, remember who is missing from a photo wall, and hear G say /g/ (gift, goat, guitar) — by listening, moving, playing and speaking, no reading.';
+export const LESSON_U5L3_SCENES: Scene[] = [
+  { id: 'u5l3-title', kind: 'title-card', bg: bgU5L3Living, level: 'Pre-A1', unit: 'Unit 5', lessonLabel: 'Lesson 3', title: 'Grandma & Grandpa!', subtitle: 'A visit to the cottage' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u5l3-song', kind: 'song', bg: bgU5L3Living, title: '\u{1F3B5} Hello, Grandma! \u{1F3B5}', teacher: 'Sing and show! Wave for hello, hug yourself for the big, big hug.',
+    durationSeconds: 20, bigWord: 'Grandma', songUrl: `${A}/audio/grandma-song-u5l3.mp3?v=1`,
+    lineDurationsMs: [3800, 3700, 4200, 8362],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'Hello, Grandma! Hello, Grandpa!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my grandma! Big, big hug!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my grandpa! Big, big hug!', emotion: 'happy' },
+      { who: 'pip', text: 'I love my grandma! I love my grandpa!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · Brother, Sister, Baby!.
+    id: 'u5l3-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u5l3-living-wide.png`, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 2 · Brother, Sister, Baby!",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "brother", say: "Find the brother!", img: `${A}/scenes/bg-u5l2-brother-wide.png` },
+      { word: "sister", say: "Show me the sister!", img: `${A}/scenes/bg-u5l2-sister-wide.png` },
+      { word: "baby", say: "Point to the baby!", img: `${A}/scenes/bg-u5l2-baby-wide.png` },
+    ],
+  },
+  {
+    id: 'u5l3-intro', kind: 'cinematic', bg: bgU5L3Hug, hidePipOverlay: true, title: 'A Visit to the Cottage', subtitle: 'Meet my grandma and grandpa!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Knock, knock! This is Grandma and Grandpa\'s house!' },
+      { who: 'pip', line: 'Hello, Grandma! Hello, Grandpa! Big hug!' },
+    ],
+    cta: "Let's go in!",
+  },
+
+  /* 4-6 New words, move, signature game */
+  {
+    id: 'u5l3-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU5L3Living, teacher: 'Listen, then say it! Wave to Grandma, and give Grandpa a big hug.',
+    cards: [
+      { who: 'pip', sentence: 'Grandma! This is my grandma.', img: bgU5L3Grandma, imgLabel: 'Grandma!' },
+      { who: 'pip', sentence: 'Grandpa! This is my grandpa.', img: bgU5L3Grandpa, imgLabel: 'Grandpa!' },
+    ],
+  },
+  {
+    id: 'u5l3-move-say', kind: 'tpr-actions', bg: bgU5L3Living, who: 'pip',
+    teacher: 'Stand up! Say it with Pip, then do it.',
+    rounds: [
+      { line: 'Wave hello to Grandma! Hello, Grandma!', emoji: '\u{1F44B}', img: bgU5L3Grandma },
+      { line: 'Give Grandpa a big hug!', emoji: '\u{1F917}', img: bgU5L3Grandpa },
+      { line: 'Walk slowly, like Grandpa!', emoji: '\u{1F6B6}' },
+      { line: 'Knit like Grandma! Knit, knit!', emoji: '\u{1F9F6}' },
+      { line: 'Say: I love my grandma!', emoji: '\u{1F496}' },
+    ],
+  },
+  {
+    // Signature game (new): bake the family member you hear.
+    id: 'u5l3-cookies', kind: 'cookie-faces', bg: bgU5L3Kitchen, who: 'pip',
+    teacher: "Grandma's Cookies! Listen to Pip, pick the right face for the cookie and watch it bake. Say who it is!",
+    faces: [U5L3_FACES.grandma, U5L3_FACES.baby, U5L3_FACES.grandpa, U5L3_FACES.pip],
+    rounds: [
+      { face: 2, line: "Let's make a Grandpa cookie!", reply: 'A Grandpa cookie! This is my grandpa!' },
+      { face: 0, line: 'Now a Grandma cookie!', reply: 'A Grandma cookie! This is my grandma!' },
+      { face: 1, line: "Let's make a baby cookie!", reply: 'A baby cookie! This is the baby!' },
+      { face: 3, line: 'And a Pip cookie, please!', reply: "A Pip cookie! That's me!" },
+    ],
+    doneLine: 'Cookies for my family! Yum, yum!',
+  },
+  {
+    id: 'u5l3-who-is-this', kind: 'join-stage', bg: bgU5L3Grandpa, teacher: 'Pip asks. The student answers with the whole sentence.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Who is this?', bubble: 'right' },
+      { who: 'student', line: "It's your grandpa!", bubble: 'right' },
+      { who: 'pip', line: 'Yes! This is my grandpa! Say hello!', bubble: 'right' },
+      { who: 'student', line: 'Hello, Grandpa!', bubble: 'right' },
+    ],
+  },
+  {
+    // New game: the photo wall goes dark — who is missing?
+    id: 'u5l3-whos-missing', kind: 'whos-missing', bg: bgU5L3Living, who: 'pip',
+    teacher: "Who's Missing? Look at Grandma's photos, tap the lamp, then say who is gone.",
+    faces: [U5L3_FACES.grandma, U5L3_FACES.grandpa, U5L3_FACES.pip, U5L3_FACES.mom, U5L3_FACES.dad, U5L3_FACES.baby],
+    rounds: [
+      { wall: [0, 2, 1], missing: 1, options: [0, 1, 2] },
+      { wall: [3, 0, 4, 5], missing: 0, options: [3, 0, 5] },
+      { wall: [1, 4, 0, 3], missing: 1, options: [4, 3, 1] },
+    ],
+    doneLine: "All the photos are back! Thank you!",
+  },
+  {
+    id: 'u5l3-you-tell', kind: 'join-stage', bg: bgU5L3Living, teacher: 'Swap! The student tells Pip about their own grandma and grandpa. Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Tell me about your family! Do you have a grandma?', bubble: 'right' },
+      { who: 'student', line: 'Yes! I love my grandma!', bubble: 'right' },
+      { who: 'pip', line: 'And do you have a grandpa?', bubble: 'right' },
+      { who: 'student', line: 'Yes! I love my grandpa!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u5l3-jigsaw', kind: 'jigsaw-puzzle', bg: bgU5L3Garden, teacher: 'Build the big hug picture! Drag each piece to its place, then say who you see.',
+    image: bgU5L3Hug, rows: 2, cols: 3,
+  },
+
+  /* 10-12 Phonics: G says /g/ */
+  {
+    id: 'u5l3-model-g', kind: 'sound-model', bg: bgU5L3Garden, who: 'pip', letter: 'G', phoneme: '/g/', sound: 'guh',
+    teacher: 'G says /g/ — gift, goat, guitar — and Grandma!',
+    anchors: [
+      { word: 'gift', emoji: '\u{1F381}', img: itemGift },
+      { word: 'goat', emoji: '\u{1F410}', img: itemGoat },
+      { word: 'guitar', emoji: '\u{1F3B8}', img: itemGuitar },
+    ],
+  },
+  { id: 'u5l3-trace-g', kind: 'trace', bg: bgU5L3Garden, who: 'pip', letter: 'G', phoneme: '/g/', word: 'grandma', speakWord: false, teacher: 'Trace the big G with your finger! /g/ /g/ grandma!' },
+  {
+    id: 'u5l3-basket-g', kind: 'basket', bg: bgU5L3Garden, letter: 'G', phoneme: '/g/', who: 'pip', teacher: "Drag the /g/ things into Grandma's G basket! No hurry.", goal: 4,
+    items: [
+      { word: 'gift', emoji: '\u{1F381}', img: itemGift, hit: true },
+      { word: 'goat', emoji: '\u{1F410}', img: itemGoat, hit: true },
+      { word: 'guitar', emoji: '\u{1F3B8}', img: itemGuitar, hit: true },
+      { word: 'grapes', emoji: '\u{1F347}', img: itemGrapes, hit: true },
+      { word: 'sun', emoji: '\u{2600}\u{FE0F}', img: itemSun, hit: false },
+      { word: 'snake', emoji: '\u{1F40D}', img: itemSnake, hit: false },
+    ],
+  },
+
+  /* 13 Perform */
+  {
+    id: 'u5l3-perform', kind: 'join-stage', bg: bgU5L3Living, teacher: "Show time! The student points to Pip's grandparents and says who they are.", cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Your turn! Who is on the sofa?', bubble: 'right' },
+      { who: 'student', line: 'This is your grandma! This is your grandpa!', bubble: 'right' },
+      { who: 'pip', line: 'And who is in the middle?', bubble: 'right' },
+      { who: 'student', line: "It's you, Pip!", bubble: 'right' },
+    ],
+  },
+
+  /* 14-15 Sticker + Home Mission */
+  {
+    id: 'u5l3-sticker', kind: 'sticker-reward', bg: bgU5L3Living, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super job! Grandma has a gift for you!', sticker: { img: itemGift, label: 'Gift' },
+  },
+  {
+    id: 'u5l3-home-mission', kind: 'home-mission', bg: bgU5L3Living, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: call or visit your grandma or grandpa and say: Hello, Grandma! I love you!',
+    parentNote: 'Help your child call, video-call or visit a grandparent (or look at their photo). Your child says "Hello, Grandma! / Hello, Grandpa!" and "I love you!" Then ask "Who is this?" — "This is my grandma!"',
+    steps: [
+      { emoji: '\u{1F4DE}', say: 'Call Grandma' },
+      { emoji: '\u{1F44B}', img: bgU5L3Grandma, say: 'Hello, Grandma!' },
+      { emoji: '\u{1F496}', img: bgU5L3Grandpa, say: 'I love you, Grandpa!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u5l3-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU5L3Garden, who: 'pip',
+    teacher: 'Extra time: Garden Moves! Do each move with Pip.',
+    rounds: [
+      { line: 'Open the garden gate! Creak!', emoji: '\u{1F6AA}' },
+      { line: 'Water the flowers with Grandpa!', emoji: '\u{1F338}' },
+      { line: 'Stir the cookies with Grandma! Stir, stir!', emoji: '\u{1F944}' },
+      { line: 'Rock in the rocking chair!', emoji: '\u{1FA91}' },
+      { line: 'Freeze! Big hug!', emoji: '\u{1F917}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u5l3-spin', kind: 'spin-wheel', bg: bgU5L3Living, title: '',
+    teacher: 'Extra time: have the student spin, then point and say who it is: "Grandma!" Or tap a number.',
+    items: [
+      { label: 'Grandma!', left: '33%', top: '62%' },
+      { label: 'Pip!', left: '50%', top: '72%' },
+      { label: 'Grandpa!', left: '66%', top: '60%' },
+    ],
+    wheelAt: { left: '88%', top: '30%' },
+  },
+
+  /* 18-19 Goodbye */
+  {
+    id: 'u5l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u5l3-finale', kind: 'finale', bg: bgU5L3Hug, who: 'pip', line: 'Goodbye, Grandma! Goodbye, Grandpa! I love you! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 5 · Lesson 4 — My Family Tree =====================
+ * My Family (4/6). The whole family with "This is my ___!" (grandma, grandpa, mom, dad, brother,
+ * sister, baby, me) and "family tree"; TH says /th/ (thumb, three, thunder, thread). Setting: a sunny
+ * hill with one giant oak — the family picnic under the family's own tree. Lesson-Variety Engine:
+ * researched Lingokids / Khan Academy Kids family sticker books, the classroom "my family tree" craft,
+ * Guess Who (information gap) and Cambridge Pre A1 "This is my…"; new game My Family Tree (hang each
+ * photo on the right branch, then say "This is my grandma!"), Secret Card upgraded with people
+ * ("Is it Grandma?"). Pictures made with Canva (Lesson 2-3 family pictures as references). */
+const bgU5L4Picnic = `${A}/scenes/bg-u5l4-picnic-wide.png`;
+const bgU5L4Tree = `${A}/scenes/bg-u5l4-tree-wide.png`;
+const famGrandma = `${A}/items/item-family-grandma.png`;
+const famGrandpa = `${A}/items/item-family-grandpa.png`;
+const itemThumb = `${A}/items/item-thumb.png`;
+const itemThree = `${A}/items/item-three.png`;
+const itemThunder = `${A}/items/item-thunder.png`;
+const itemThread = `${A}/items/item-thread.png`;
+const U5L4_FACES = [
+  U5L3_FACES.grandma, U5L3_FACES.grandpa, U5L3_FACES.mom, U5L3_FACES.dad,
+  { label: 'brother', name: 'my brother', img: bgU5L2Yard, at: [29.5, 26] as [number, number], w: 20, aspect: 1376 / 768 },
+  { label: 'sister', name: 'my sister', img: bgU5L2Yard, at: [62, 54] as [number, number], w: 16, aspect: 1376 / 768 },
+  U5L3_FACES.baby,
+  U5L3_FACES.pip,
+];
+
+export const LESSON_U5L4_TITLE = 'My Family Tree';
+export const LESSON_U5L4_OBJECTIVE = 'Introduce the whole family with "This is my grandma / grandpa / mom / dad / brother / sister / baby", build a family tree by generations (grandparents at the top, Mom and Dad in the middle, the children at the bottom), ask "Is it Grandma?" to find a secret family member, and hear TH say /th/ (thumb, three, thunder) — by listening, moving, playing and speaking, no reading.';
+export const LESSON_U5L4_SCENES: Scene[] = [
+  { id: 'u5l4-title', kind: 'title-card', bg: bgU5L4Picnic, level: 'Pre-A1', unit: 'Unit 5', lessonLabel: 'Lesson 4', title: 'My Family Tree', subtitle: 'A picnic under our big tree' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u5l4-song', kind: 'song', bg: bgU5L4Picnic, title: '\u{1F3B5} My Family Tree \u{1F3B5}', teacher: 'Sing and point! Point up high for Grandma and Grandpa, to your tummy for Mom and Dad, low for the children.',
+    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-tree-song-u5l4.mp3?v=1`,
+    lineDurationsMs: [3680, 3660, 4620, 8102],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'This is my grandma, this is my grandpa!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my mom, and this is my dad!', emotion: 'happy' },
+      { who: 'pip', text: 'My brother, my sister, the baby and me!', emotion: 'happy' },
+      { who: 'pip', text: 'We are a family! My family tree!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · Grandma & Grandpa!.
+    id: 'u5l4-recall-warmup', kind: 'recall-warmup', bg: bgU5L4Picnic, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 3 · Grandma & Grandpa!',
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: 'grandma', say: 'Find Grandma!', img: bgU5L3Grandma },
+      { word: 'grandpa', say: 'Show me Grandpa!', img: bgU5L3Grandpa },
+      { word: 'a big hug', say: 'Point to the big hug!', img: bgU5L3Hug },
+    ],
+  },
+  {
+    id: 'u5l4-intro', kind: 'cinematic', bg: bgU5L4Picnic, hidePipOverlay: true, title: 'Picnic Day', subtitle: 'My whole family!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Look! This is my family! We have a picnic under our big tree.' },
+      { who: 'pip', line: "Let's make my family tree!" },
+    ],
+    cta: "Let's make it!",
+  },
+
+  /* 4-6 New language, move, signature game */
+  {
+    id: 'u5l4-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU5L4Picnic, teacher: 'Listen, then say it! Point to the picture each time you say "This is my…".',
+    cards: [
+      { who: 'pip', sentence: 'My family tree! This is my family.', img: bgU5L4Picnic, imgLabel: 'Family tree!' },
+      { who: 'pip', sentence: 'This is my grandpa.', img: bgU5L3Grandpa, imgLabel: 'This is my grandpa.' },
+      { who: 'pip', sentence: 'This is my mom.', img: `${A}/scenes/bg-u5l1-mom-solo.png`, imgLabel: 'This is my mom.' },
+      { who: 'pip', sentence: 'This is my sister.', img: bgU5L2Sister, imgLabel: 'This is my sister.' },
+    ],
+  },
+  {
+    id: 'u5l4-move-say', kind: 'tpr-actions', bg: bgU5L4Picnic, who: 'pip',
+    teacher: 'Stand up! Be the family tree. Say it with Pip, then do it.',
+    rounds: [
+      { line: 'Be a big tree! Arms up high!', emoji: '\u{1F333}' },
+      { line: 'Grandma and Grandpa at the top! Hands up!', emoji: '\u{1F64C}' },
+      { line: 'Mom and Dad in the middle! Hands on your tummy!', emoji: '\u{1F917}' },
+      { line: 'The children at the bottom! Touch your knees!', emoji: '\u{1F9D2}' },
+      { line: 'Say: This is my family!', emoji: '\u{1F496}' },
+    ],
+  },
+  {
+    // Signature game (new): hang every photo on the right branch, then say it.
+    id: 'u5l4-family-tree', kind: 'family-tree', bg: bgU5L4Tree, who: 'pip',
+    teacher: 'My Family Tree! Hang each photo on the right branch: grandparents at the top, Mom and Dad in the middle, the children at the bottom. Then the student says "This is my…!" and taps the microphone.',
+    intro: 'Grandma and Grandpa go at the top. Mom and Dad go in the middle. The children go at the bottom!',
+    faces: U5L4_FACES,
+    slots: [
+      { row: 0, x: 27, y: 32 }, { row: 0, x: 73, y: 32 },
+      { row: 1, x: 22, y: 55 }, { row: 1, x: 78, y: 55 },
+      { row: 2, x: 13, y: 77 }, { row: 2, x: 30, y: 79 }, { row: 2, x: 70, y: 79 }, { row: 2, x: 87, y: 77 },
+    ],
+    rounds: [
+      { face: 0, row: 0, line: 'This is my grandma! Where does Grandma go?', reply: 'Yes! Grandma goes at the top!', say: 'This is my grandma!' },
+      { face: 1, row: 0, line: 'This is my grandpa! Where does Grandpa go?', reply: 'Yes! Grandpa goes at the top too!', say: 'This is my grandpa!' },
+      { face: 2, row: 1, line: 'This is my mom! Where does Mom go?', reply: 'Yes! Mom goes in the middle!', say: 'This is my mom!' },
+      { face: 3, row: 1, line: 'This is my dad! Where does Dad go?', reply: 'Yes! Dad goes in the middle!', say: 'This is my dad!' },
+      { face: 4, row: 2, line: 'This is my brother! Where does he go?', reply: 'Yes! My brother goes at the bottom!', say: 'This is my brother!' },
+      { face: 5, row: 2, line: 'This is my sister! Where does she go?', reply: 'Yes! My sister goes at the bottom!', say: 'This is my sister!' },
+      { face: 6, row: 2, line: 'This is the baby! Where does the baby go?', reply: 'Yes! The baby goes at the bottom!', say: 'This is the baby!' },
+      { face: 7, row: 2, line: "And this is me, Pip! Where do I go?", reply: 'Yes! I go at the bottom, with my brother and sister!', say: 'This is me!' },
+    ],
+    doneLine: 'This is my family tree! I love my family!',
+  },
+  {
+    id: 'u5l4-who-is-this', kind: 'join-stage', bg: bgU5L4Picnic, teacher: 'Pip asks. The student points and answers with the whole sentence.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look at my family! Who is this, in the green cardigan?', bubble: 'right' },
+      { who: 'student', line: 'This is your dad!', bubble: 'right' },
+      { who: 'pip', line: 'Yes! And who has a flat cap?', bubble: 'right' },
+      { who: 'student', line: 'This is your grandpa!', bubble: 'right' },
+    ],
+  },
+  {
+    // Upgraded game: Secret Card with people — the child asks "Is it big?" then "Is it Grandma?".
+    id: 'u5l4-secret-family', kind: 'secret-card', bg: bgU5L4Tree, who: 'pip',
+    teacher: 'Who is it? Pip hides one family member. The student asks: "Is it big?" "Is it Grandma?" Pip answers yes or no.',
+    cards: [
+      { colorWord: '', colorHex: '', shape: 'circle', img: famGrandma, word: 'Grandma', size: 'big', person: true },
+      { colorWord: '', colorHex: '', shape: 'circle', img: famGrandpa, word: 'Grandpa', size: 'big', person: true },
+      { colorWord: '', colorHex: '', shape: 'circle', img: famMom, word: 'Mom', size: 'big', person: true },
+      { colorWord: '', colorHex: '', shape: 'circle', img: famDad, word: 'Dad', size: 'big', person: true },
+      { colorWord: '', colorHex: '', shape: 'circle', img: famSister, word: 'my sister', size: 'small', person: true },
+      { colorWord: '', colorHex: '', shape: 'circle', img: famBaby, word: 'the baby', size: 'small', person: true },
+    ],
+    rounds: [{ secret: 1 }, { secret: 4 }],
+  },
+  {
+    id: 'u5l4-you-tell', kind: 'join-stage', bg: bgU5L4Tree, teacher: 'Swap! The student introduces their own family (or a toy family). Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Now tell me about YOUR family! Who is in your family tree?', bubble: 'right' },
+      { who: 'student', line: 'This is my mom. This is my dad.', bubble: 'right' },
+      { who: 'pip', line: 'Lovely! Who else?', bubble: 'right' },
+      { who: 'student', line: 'This is my grandma! This is my brother!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u5l4-memory', kind: 'memory', bg: bgU5L4Tree, teacher: 'Find the pairs! Say "This is my…" for each pair you find.',
+    pairs: [
+      { id: 'grandma', label: 'Grandma', emoji: '\u{1F475}', img: famGrandma },
+      { id: 'grandpa', label: 'Grandpa', emoji: '\u{1F474}', img: famGrandpa },
+      { id: 'mom', label: 'Mom', emoji: '\u{1F469}', img: famMom },
+      { id: 'dad', label: 'Dad', emoji: '\u{1F468}', img: famDad },
+    ],
+  },
+
+  /* 11-13 Phonics: TH says /th/ */
+  {
+    id: 'u5l4-model-th', kind: 'sound-model', bg: bgU5L4Tree, who: 'pip', letter: 'Th', phoneme: '/th/', sound: 'thh',
+    teacher: 'T and H together say /th/ — put your tongue between your teeth! Thumb, three, thunder!',
+    anchors: [
+      { word: 'thumb', emoji: '\u{1F44D}', img: itemThumb },
+      { word: 'three', emoji: '3\u{FE0F}\u{20E3}', img: itemThree },
+      { word: 'thunder', emoji: '\u{26C8}\u{FE0F}', img: itemThunder },
+    ],
+  },
+  { id: 'u5l4-trace-t', kind: 'trace', bg: bgU5L4Tree, who: 'pip', letter: 'T', phoneme: '/th/', word: 'thumb', speakWord: false, teacher: 'Trace the T! T and H say /th/ — thumb!' },
+  {
+    id: 'u5l4-sort-th', kind: 'sound-sort', bg: bgU5L4Tree, teacher: 'Listen to each word. Does it start with /th/ or /s/? Drag it to TH or S!',
+    targets: [
+      { letter: 'TH', phoneme: '/th/', who: 'pip' },
+      { letter: 'S', phoneme: '/s/', who: 'mia' },
+    ],
+    items: [
+      { word: 'thumb', img: itemThumb, emoji: '\u{1F44D}', letter: 'TH' },
+      { word: 'sun', img: itemSun, emoji: '\u{2600}\u{FE0F}', letter: 'S' },
+      { word: 'three', img: itemThree, emoji: '3\u{FE0F}\u{20E3}', letter: 'TH' },
+      { word: 'snake', img: itemSnake, emoji: '\u{1F40D}', letter: 'S' },
+      { word: 'thread', img: itemThread, emoji: '\u{1F9F5}', letter: 'TH' },
+    ],
+  },
+
+  /* 14 Perform */
+  {
+    id: 'u5l4-perform', kind: 'join-stage', bg: bgU5L4Tree, teacher: "Show time! The student points to Pip's family tree and introduces everyone.", cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Your turn! Show me my family tree!', bubble: 'right' },
+      { who: 'student', line: 'This is your grandma. This is your grandpa.', bubble: 'right' },
+      { who: 'pip', line: 'And at the bottom?', bubble: 'right' },
+      { who: 'student', line: 'This is your sister. This is the baby. This is you!', bubble: 'right' },
+    ],
+  },
+
+  /* 15-16 Sticker + Home Mission */
+  {
+    id: 'u5l4-sticker', kind: 'sticker-reward', bg: bgU5L4Picnic, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super job! Here is a family tree sticker for you!', sticker: { img: itemTree, label: 'Family tree' },
+  },
+  {
+    id: 'u5l4-home-mission', kind: 'home-mission', bg: bgU5L4Tree, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: draw your family tree at home and say: This is my mom! This is my dad!',
+    parentNote: 'Draw a big tree together. Put grandparents at the top, parents in the middle and the children at the bottom (draw faces or stick photos). Your child points and says "This is my grandma / grandpa / mom / dad / brother / sister / baby."',
+    steps: [
+      { emoji: '\u{1F333}', img: itemTree, say: 'Draw a tree' },
+      { emoji: '\u{1F475}', img: famGrandma, say: 'This is my grandma' },
+      { emoji: '\u{1F469}', img: famMom, say: 'This is my mom' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u5l4-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU5L4Picnic, who: 'pip',
+    teacher: 'Extra time: Picnic Moves! Do each move with Pip.',
+    rounds: [
+      { line: 'Shake out the picnic blanket! Shake, shake!', emoji: '\u{1F9FA}' },
+      { line: 'Thumbs up! Th, th, thumb!', emoji: '\u{1F44D}' },
+      { line: 'Count to three! One, two, three!', emoji: '3\u{FE0F}\u{20E3}' },
+      { line: 'Climb the big tree! Up, up, up!', emoji: '\u{1F333}' },
+      { line: 'Freeze! Family photo! Say cheese!', emoji: '\u{1F4F8}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u5l4-spin', kind: 'spin-wheel', bg: bgU5L4Picnic, title: '',
+    teacher: 'Extra time: have the student spin, then point and say "This is your…!" Or tap a number.',
+    items: [
+      { label: 'This is your grandma!', left: '10%', top: '63%' },
+      { label: 'This is your grandpa!', left: '23%', top: '63%' },
+      { label: 'This is your mom!', left: '37%', top: '63%' },
+      { label: 'This is your dad!', left: '50%', top: '61%' },
+      { label: 'This is your sister!', left: '84%', top: '73%' },
+      { label: 'This is the baby!', left: '93%', top: '84%' },
+    ],
+    wheelAt: { left: '88%', top: '28%' },
+  },
+
+  /* 19-20 Goodbye */
+  {
+    id: 'u5l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u5l4-finale', kind: 'finale', bg: bgU5L4Picnic, who: 'pip', line: 'This is my family tree — Grandma, Grandpa, Mom, Dad, my brother, my sister, the baby and me! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 5 · Lesson 5 — Just Me and My Dad =====================
+ * My Family (5/6), the story lesson. A day with Dad told as a stills film ("My Day with Dad",
+ * docs/scenarios/u5l5-me-and-my-dad.md, approved 2026-10-07): "We play ball. We feed the ducks. We eat
+ * ice cream. We read a book." + "What do we do?" and "I love you, Dad!"; D says /d/ (Dad, duck, door).
+ * Setting: a sunny park with a duck pond, then Pip's living room at night (new — Lesson 4 was a hilltop
+ * oak). Lesson-Variety Engine: researched the "Just Me and My Dad"-style family-day picture book,
+ * Khan Academy Kids / Lingokids "listen and feed" play, Cambridge Pre A1 listen-and-point and
+ * story-retell; new game Feed the Ducks (a whole story sentence picks the duck), Hide and Seek with Dad
+ * (lift-flap, D words under every spot). Pictures made with Canva (Lesson 1-4 family pictures as references). */
+const u5l5 = (n: string) => `${A}/scenes/bg-u5l5-${n}-wide.png`;
+const bgU5L5Gate = u5l5('gate-a');
+const bgU5L5BallA = u5l5('ball-a');
+const bgU5L5BallC = u5l5('ball-c');
+const bgU5L5DucksA = u5l5('ducks-a');
+const bgU5L5DucksC = u5l5('ducks-b'); // four ducks at the bread (shot 6 counts them)
+const bgU5L5IceCream = u5l5('icecream-b');
+const bgU5L5BookB = u5l5('book-b');
+const bgU5L5Hug = u5l5('hug-b');
+const bgU5L5Night = u5l5('night');
+const bgU5L5Home = u5l5('home');
+const bgU5L5Pond = u5l5('pond'); // ducks-a with the painted ducks washed out (the game's ducks swim there)
+const U5L5_W = 1376 / 768;
+
+export const LESSON_U5L5_TITLE = 'Just Me and My Dad';
+export const LESSON_U5L5_OBJECTIVE = 'Follow a short story about a day with Dad and say what they do together — "We play ball. We feed the ducks. We eat ice cream. We read a book." — answer "What do we do?", say "I love you, Dad!", and hear D say /d/ (Dad, duck, door) — by watching, moving, listening and speaking, no reading.';
+export const LESSON_U5L5_SCENES: Scene[] = [
+  { id: 'u5l5-title', kind: 'title-card', bg: bgU5L5Gate, level: 'Pre-A1', unit: 'Unit 5', lessonLabel: 'Lesson 5', title: 'Just Me and My Dad', subtitle: 'My day with Dad' },
+
+  /* 1-4 Hook + story */
+  {
+    id: 'u5l5-song', kind: 'song', bg: bgU5L5Gate, title: '\u{1F3B5} Just Me and My Dad \u{1F3B5}', teacher: 'Sing and do it! Throw a ball, feed the ducks, lick an ice cream, open a book — then a big hug!',
+    durationSeconds: 20, bigWord: 'Dad', songUrl: `${A}/audio/my-dad-song-u5l5.mp3?v=1`,
+    lineDurationsMs: [3730, 5970, 2210, 8152],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'We play ball, just me and my dad!', emotion: 'happy' },
+      { who: 'pip', text: 'We feed the ducks! Quack, quack, quack!', emotion: 'happy' },
+      { who: 'pip', text: 'Yum, yum, ice cream! We read a book!', emotion: 'happy' },
+      { who: 'pip', text: 'I love you, Dad! The best day!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · My Family Tree.
+    id: 'u5l5-recall-warmup', kind: 'recall-warmup', bg: bgU5L5Gate, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 4 · My Family Tree',
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: 'grandma', say: 'Find Grandma!', img: famGrandma },
+      { word: 'the baby', say: 'Show me the baby!', img: famBaby },
+      { word: 'family tree', say: 'Point to the family tree!', img: itemTree },
+      { word: 'my sister', say: 'Find my sister!', img: famSister },
+    ],
+  },
+  {
+    id: 'u5l5-intro', kind: 'cinematic', bg: bgU5L5Gate, hidePipOverlay: true, title: 'My Day with Dad', subtitle: 'Just me and my dad!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Look! This is my dad. Today is our day!' },
+      { who: 'pip', line: "Let's watch what we do!" },
+    ],
+    cta: "Let's watch!",
+  },
+  {
+    // The approved stills film: two pictures per action flip like a cartoon, the action words appear karaoke-style,
+    // and a pause after each "What do we do?" lets the child answer (docs/scenarios/u5l5-me-and-my-dad.md).
+    id: 'u5l5-story-dad', kind: 'story-video', bg: bgU5L5Gate, videoUrl: `${A}/video/my-day-with-dad-u5l5.mp4?v=1`, title: 'My Day with Dad',
+    teacher: 'Press play and watch. Say the action words with Pip — "Throw! Catch! Quack, quack! Yum, yum!" — and when Pip asks "What do we do?", the child answers before Pip: "We play ball!"',
+    pages: [
+      { img: bgU5L5Gate, who: 'pip', line: 'Today is my day with Dad! Just me and my dad!', atSec: 0 },
+      { img: bgU5L5BallA, who: 'pip', line: 'We play ball! Dad throws the ball.', atSec: 5 },
+      { img: bgU5L5BallC, who: 'pip', line: 'I catch it! Catch!', atSec: 8.5 },
+      { img: bgU5L5BallC, who: 'pip', line: 'What do we do?', atSec: 11 },
+      { img: bgU5L5BallC, who: 'pip', line: 'We play ball!', atSec: 15.5 },
+      { img: bgU5L5DucksA, who: 'pip', line: 'We feed the ducks. Quack, quack!', atSec: 17.5 },
+      { img: bgU5L5DucksC, who: 'pip', line: 'One, two, three, four ducks!', atSec: 20.5 },
+      { img: bgU5L5DucksC, who: 'pip', line: 'What do we do?', atSec: 23 },
+      { img: bgU5L5DucksC, who: 'pip', line: 'We feed the ducks!', atSec: 27.5 },
+      { img: bgU5L5IceCream, who: 'pip', line: 'We eat ice cream. Yum, yum!', atSec: 29.5 },
+      { img: bgU5L5BookB, who: 'pip', line: 'At home, we read a book.', atSec: 32.5 },
+      { img: bgU5L5BookB, who: 'pip', line: 'What do we do?', atSec: 35.5 },
+      { img: bgU5L5BookB, who: 'pip', line: 'We read a book!', atSec: 40 },
+      { img: bgU5L5Hug, who: 'pip', line: 'Good night, Dad! I love you!', atSec: 42 },
+      { img: bgU5L5Night, who: 'pip', line: 'Just me and my dad. The best day!', atSec: 45.5 },
+    ],
+    checkpoints: [],
+  },
+
+  /* 5-7 The words, move, signature game */
+  {
+    id: 'u5l5-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU5L5Gate, teacher: 'Listen, then say it! Do the action each time you say "We…".',
+    cards: [
+      { who: 'pip', sentence: 'We play ball.', img: bgU5L5BallA, imgLabel: 'We play ball.' },
+      { who: 'pip', sentence: 'We feed the ducks.', img: bgU5L5DucksC, imgLabel: 'We feed the ducks.' },
+      { who: 'pip', sentence: 'We eat ice cream.', img: bgU5L5IceCream, imgLabel: 'We eat ice cream.' },
+      { who: 'pip', sentence: 'We read a book.', img: bgU5L5BookB, imgLabel: 'We read a book.' },
+    ],
+  },
+  {
+    id: 'u5l5-move-say', kind: 'tpr-actions', bg: bgU5L5Gate, who: 'pip',
+    teacher: 'Stand up! Do it with Pip and say it.',
+    rounds: [
+      { line: 'Throw the ball! Catch it! We play ball!', emoji: '\u{26BD}' },
+      { line: 'Throw the bread! Quack, quack! We feed the ducks!', emoji: '\u{1F986}' },
+      { line: 'Lick your ice cream! Yum, yum!', emoji: '\u{1F366}' },
+      { line: 'Open the book! We read a book!', emoji: '\u{1F4D6}' },
+      { line: 'Big hug! I love you, Dad!', emoji: '\u{1F917}' },
+    ],
+  },
+  {
+    // Signature game (new): each duck carries a photo of the story; the story sentence picks the duck.
+    id: 'u5l5-duck-feed', kind: 'duck-feed', bg: bgU5L5Pond, who: 'pip', duckImg: itemDuck,
+    teacher: 'Feed the Ducks! Pip says what he and Dad do. The student taps the duck with that photo — the bread flies to it. Say the sentence together.',
+    ducks: [
+      { label: 'play ball', name: 'playing ball', img: bgU5L5BallC, at: [24, 58], w: 26, aspect: U5L5_W, x: 13, y: 60 },
+      { label: 'ice cream', name: 'the ice cream', img: bgU5L5IceCream, at: [31, 47], w: 28, aspect: U5L5_W, x: 35, y: 66 },
+      { label: 'book', name: 'the book', img: bgU5L5BookB, at: [50, 52], w: 32, aspect: U5L5_W, x: 14, y: 83 },
+      { label: 'ducks', name: 'the ducks', img: bgU5L5DucksC, at: [26, 74], w: 34, aspect: U5L5_W, x: 37, y: 85 },
+    ],
+    rounds: [
+      { duck: 0, line: 'We play ball! Which duck has it?', reply: 'Yes! We play ball!' },
+      { duck: 2, line: 'We read a book! Which duck has it?', reply: 'Yes! We read a book!' },
+      { duck: 1, line: 'We eat ice cream! Which duck has it?', reply: 'Yes! We eat ice cream! Yum, yum!' },
+      { duck: 3, line: 'We feed the ducks! Which duck has it?', reply: 'Yes! We feed the ducks! Quack, quack!' },
+    ],
+    doneLine: 'All the ducks are happy! Quack, quack!',
+  },
+  {
+    id: 'u5l5-what-do-we-do', kind: 'join-stage', bg: bgU5L5DucksC, teacher: 'Pip asks. The student answers with the whole sentence.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look! What do we do?', bubble: 'right' },
+      { who: 'student', line: 'You feed the ducks!', bubble: 'right' },
+      { who: 'pip', line: 'Yes! And with the red ball?', bubble: 'right' },
+      { who: 'student', line: 'You play ball!', bubble: 'right' },
+    ],
+  },
+
+  /* 8-10 Story check, hide and seek */
+  {
+    id: 'u5l5-story-order', kind: 'story-order', bg: bgU5L5Night, who: 'pip', teacher: 'Put my day in order, then tell it: "We play ball. We feed the ducks…"',
+    frames: [
+      { img: bgU5L5BallC, caption: 'We play ball.', who: 'pip' },
+      { img: bgU5L5DucksC, caption: 'We feed the ducks.', who: 'pip' },
+      { img: bgU5L5IceCream, caption: 'We eat ice cream.', who: 'pip' },
+      { img: bgU5L5BookB, caption: 'We read a book.', who: 'pip' },
+    ],
+  },
+  {
+    id: 'u5l5-true-or-not', kind: 'tick-cross', bg: bgU5L5Home, who: 'pip',
+    teacher: 'Look and listen. Is it right? Tap ✓ or ✗.',
+    rounds: [
+      { img: bgU5L5BallC, sentence: 'We play ball.', isTrue: true },
+      { img: bgU5L5IceCream, sentence: 'We read a book.', isTrue: false },
+      { img: bgU5L5DucksC, sentence: 'We feed the ducks.', isTrue: true },
+      { img: bgU5L5BookB, sentence: 'We eat ice cream.', isTrue: false },
+    ],
+  },
+  {
+    // Hide and seek with Dad: every spot hides a D word until Dad is found.
+    id: 'u5l5-where-dad', kind: 'lift-flap', bg: bgU5L5Home, who: 'pip',
+    teacher: 'Hide and seek! The child asks each question ("Is he behind the door?") and taps to look. Say the D word that pops out: dog, doll, duck!',
+    question: 'Where is my dad?',
+    notYet: 'Not yet! Look in the other places first!',
+    spots: [
+      { x: 8, y: 42, size: 13, ask: 'Is he behind the door?', reveal: "No! It's a dog! D, d, dog!", under: { img: itemDog, label: 'dog' } },
+      { x: 12, y: 76, size: 13, ask: 'Is he in the toy box?', reveal: "No! It's a doll! D, d, doll!", under: { img: itemDoll, label: 'doll' } },
+      { x: 93, y: 40, size: 11, ask: 'Is he behind the curtain?', reveal: "No! It's a duck! D, d, duck!", under: { img: itemDuck, label: 'duck' } },
+      { x: 63, y: 62, size: 22, ask: 'Is he behind the armchair?', reveal: "Yes! Here he is! It's Dad!", target: true, under: { img: famDad, label: 'Dad' } },
+    ],
+  },
+
+  /* 11-13 Phonics: D says /d/ */
+  {
+    id: 'u5l5-model-d', kind: 'sound-model', bg: bgU5L5Home, who: 'pip', letter: 'D', phoneme: '/d/', sound: 'duh',
+    teacher: 'D says /d/ — Dad, duck, door!',
+    anchors: [
+      { word: 'Dad', emoji: '\u{1F468}', img: famDad },
+      { word: 'duck', emoji: '\u{1F986}', img: itemDuck },
+      { word: 'door', emoji: '\u{1F6AA}', img: itemDoor },
+    ],
+  },
+  { id: 'u5l5-trace-d', kind: 'trace', bg: bgU5L5Home, who: 'pip', letter: 'D', phoneme: '/d/', word: 'Dad', speakWord: false, teacher: 'Trace the big D with your finger! /d/ /d/ Dad!' },
+  {
+    id: 'u5l5-blocks', kind: 'alphabet-blocks', bg: bgU5L5Home, teacher: 'Letter Blocks! Tap the sound, then stack the word!', letters: ['D', 'A', 'O', 'G', 'U', 'C', 'K'],
+    tapRounds: [{ letter: 'D' }, { letter: 'G' }, { letter: 'D' }, { letter: 'K' }],
+    words: [
+      { word: 'DAD', emoji: '\u{1F468}' },
+      { word: 'DOG', emoji: '\u{1F436}' },
+      { word: 'DUCK', emoji: '\u{1F986}' },
+    ],
+  },
+
+  /* 14 Perform */
+  {
+    id: 'u5l5-perform', kind: 'join-stage', bg: bgU5L5Night, teacher: 'Show time! The student tells Pip\'s day with Dad (or their own day with a grown-up). Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Your turn! What do you do with your dad, or your mom?', bubble: 'right' },
+      { who: 'student', line: 'We play ball! We read a book!', bubble: 'right' },
+      { who: 'pip', line: 'Lovely! And what do you say at night?', bubble: 'right' },
+      { who: 'student', line: 'Good night! I love you!', bubble: 'right' },
+    ],
+  },
+
+  /* 15-16 Sticker + Home Mission */
+  {
+    id: 'u5l5-sticker', kind: 'sticker-reward', bg: bgU5L5Hug, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Quack, quack! Here is a duck sticker for you!', sticker: { img: itemDuck, label: 'Duck' },
+  },
+  {
+    id: 'u5l5-home-mission', kind: 'home-mission', bg: bgU5L5Night, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: do one fun thing with your dad or your mom, and say: We play ball! I love you!',
+    parentNote: 'Do one small thing together today — play ball, read a book, have a snack. Your child says what you do: "We play ball!", "We read a book!" At bedtime, a hug and "Good night! I love you!"',
+    steps: [
+      { emoji: '\u{26BD}', img: bgU5L5BallC, say: 'We play ball' },
+      { emoji: '\u{1F4D6}', img: bgU5L5BookB, say: 'We read a book' },
+      { emoji: '\u{1F917}', img: bgU5L5Hug, say: 'I love you!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u5l5-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU5L5Gate, who: 'pip',
+    teacher: 'Extra time: Park Moves! Do each move with Pip.',
+    rounds: [
+      { line: 'Walk to the park with Dad! Walk, walk!', emoji: '\u{1F6B6}' },
+      { line: 'Waddle like a duck! Quack, quack!', emoji: '\u{1F986}' },
+      { line: 'Drum on your knees! D, d, drum!', emoji: '\u{1F941}' },
+      { line: 'Stretch and yawn! Good night!', emoji: '\u{1F319}' },
+      { line: 'Freeze! Big hug!', emoji: '\u{1F917}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u5l5-spin', kind: 'spin-wheel', bg: bgU5L5DucksC, title: '',
+    teacher: 'Extra time: have the student spin, then point and count the ducks, or say "We feed the ducks!" Or tap a number.',
+    items: [
+      { label: 'One duck!', left: '14%', top: '66%' },
+      { label: 'Two ducks!', left: '27.5%', top: '58%' },
+      { label: 'Three ducks!', left: '26.5%', top: '72%' },
+      { label: 'Four ducks!', left: '39%', top: '76%' },
+    ],
+    wheelAt: { left: '86%', top: '30%' },
+  },
+
+  /* Goodbye */
+  {
+    id: 'u5l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u5l5-finale', kind: 'finale', bg: bgU5L5Night, who: 'pip', line: 'We play ball, we feed the ducks, we eat ice cream and we read a book. I love you, Dad! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 5 · Lesson 6 — Family Match-Up =====================
+ * My Family (6/6), the unit review. A children's TV game show: Pip is the host, the child is the
+ * contestant, the fox family claps in the front row. Reviews the whole family (mom, dad, brother,
+ * sister, baby, grandma, grandpa, me), "This is my…" / "Who is this?", the unit's stories (cookies with
+ * Grandma, the family tree, a day with Dad) and the unit's sounds (M, D, S, G, B). Setting: a game-show
+ * stage (new — Lesson 5 was a duck pond and home at night). Lesson-Variety Engine: researched the family
+ * TV quiz-show format (buzzer + podiums), Khan Academy Kids shadow puzzles, Wordwall image quiz (tile
+ * reveal), Cambridge Pre A1 listen-and-point; new game Family Buzzer Show. Pictures made with Canva. */
+const bgU5L6Stage = `${A}/scenes/bg-u5l6-stage-wide.png`;
+const bgU5L6Host = `${A}/scenes/bg-u5l6-host-wide.png`;
+const U5L6_FACES = [
+  { label: 'Grandma', name: 'Grandma', img: famGrandma },
+  { label: 'Grandpa', name: 'Grandpa', img: famGrandpa },
+  { label: 'Mom', name: 'Mom', img: famMom },
+  { label: 'Dad', name: 'Dad', img: famDad },
+  { label: 'brother', name: 'my brother', img: famBrother },
+  { label: 'sister', name: 'my sister', img: famSister },
+  { label: 'baby', name: 'the baby', img: famBaby },
+];
+
+export const LESSON_U5L6_TITLE = 'Family Match-Up';
+export const LESSON_U5L6_OBJECTIVE = 'Review the whole family — Mom, Dad, my brother, my sister, the baby, Grandma, Grandpa and me — answer "Who is this?" with "This is my…", remember what each one does in the unit\'s stories (cookies with Grandma, playing ball with Dad), and hear M, D, S, G and B again (mom, dad, sister, grandma, baby) — by playing a family game show, listening, moving and speaking, no reading.';
+export const LESSON_U5L6_SCENES: Scene[] = [
+  { id: 'u5l6-title', kind: 'title-card', bg: bgU5L6Host, level: 'Pre-A1', unit: 'Unit 5', lessonLabel: 'Lesson 6', title: 'Family Match-Up', subtitle: 'The family game show' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u5l6-song', kind: 'song', bg: bgU5L6Host, title: '\u{1F3B5} Who Is This? \u{1F3B5}', teacher: 'Sing and point! Point to a photo or a family member for each word.',
+    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-show-song-u5l6.mp3?v=1`,
+    lineDurationsMs: [3850, 4150, 3960, 8102],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'Who is this? This is my mom!', emotion: 'happy' },
+      { who: 'pip', text: 'Who is this? This is my dad!', emotion: 'happy' },
+      { who: 'pip', text: 'Grandma, Grandpa, sister, brother!', emotion: 'happy' },
+      { who: 'pip', text: 'The baby and me! We are a family!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · Just Me and My Dad.
+    id: 'u5l6-recall-warmup', kind: 'recall-warmup', bg: bgU5L6Stage, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 5 · Just Me and My Dad',
+    teacher: 'Warm-up from last lesson: Pip says what he did with Dad, the child finds the picture. Say each one together.',
+    items: [
+      { word: 'play ball', say: 'Find: we play ball!', img: `${A}/scenes/bg-u5l5-ball-c-wide.png` },
+      { word: 'feed the ducks', say: 'Show me: we feed the ducks!', img: `${A}/scenes/bg-u5l5-ducks-b-wide.png` },
+      { word: 'read a book', say: 'Point to: we read a book!', img: `${A}/scenes/bg-u5l5-book-b-wide.png` },
+    ],
+  },
+  {
+    id: 'u5l6-intro', kind: 'cinematic', bg: bgU5L6Host, hidePipOverlay: true, title: 'Family Match-Up', subtitle: 'The family game show!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Welcome to Family Match-Up! I am Pip, your host!' },
+      { who: 'pip', line: 'My family is here! Are you ready to play?' },
+    ],
+    cta: "Let's play!",
+  },
+
+  /* 4-6 The family, move, signature game */
+  {
+    id: 'u5l6-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU5L6Stage, teacher: 'Listen, then say it! Point to the photo each time: "This is my…".',
+    cards: [
+      { who: 'pip', sentence: 'Who is this? This is my grandma.', img: famGrandma, imgLabel: 'This is my grandma.' },
+      { who: 'pip', sentence: 'Who is this? This is my brother.', img: famBrother, imgLabel: 'This is my brother.' },
+      { who: 'pip', sentence: 'Who is this? This is the baby.', img: famBaby, imgLabel: 'This is the baby.' },
+      { who: 'pip', sentence: 'Who is this? This is me, Pip!', img: famPip, imgLabel: 'This is me!' },
+    ],
+  },
+  {
+    id: 'u5l6-move-say', kind: 'tpr-actions', bg: bgU5L6Stage, who: 'pip',
+    teacher: 'Stand up! Do each family move with Pip and say it.',
+    rounds: [
+      { line: 'Rock the baby! Shh, shh!', emoji: '\u{1F476}' },
+      { line: 'Stir the cookies with Grandma! Stir, stir!', emoji: '\u{1F36A}' },
+      { line: 'Throw the ball with Dad! Throw!', emoji: '\u{26BD}' },
+      { line: 'Be a big tree! Arms up high!', emoji: '\u{1F333}' },
+      { line: 'Big family hug! I love my family!', emoji: '\u{1F917}' },
+    ],
+  },
+  {
+    // Signature game (new): the family buzzer show — the unit's stories as quiz questions.
+    id: 'u5l6-buzzer', kind: 'buzzer-show', bg: bgU5L6Stage, who: 'pip',
+    teacher: 'Family Buzzer Show! Pip asks a question. The student presses the buzzer under the right family member, then says the sentence and taps the microphone.',
+    intro: 'Listen to my question. Then press the right buzzer!',
+    podiums: [{ x: 22.8, y: 72.5, by: 55.5 }, { x: 49.5, y: 72.5, by: 55.5 }, { x: 76.3, y: 72.5, by: 55.5 }],
+    faces: U5L6_FACES,
+    rounds: [
+      { faces: [1, 0, 5], answer: 1, line: 'Who bakes cookies with Pip?', reply: 'Grandma bakes cookies with Pip!', say: 'This is my grandma!' },
+      { faces: [3, 6, 2], answer: 0, line: 'Who plays ball with Pip?', reply: 'Dad plays ball with Pip!', say: 'This is my dad!' },
+      { faces: [4, 1, 6], answer: 2, line: 'Who is the smallest?', reply: 'The baby is the smallest!', say: 'This is the baby!' },
+      { faces: [2, 1, 3], answer: 1, line: 'Who has a flat cap?', reply: 'Grandpa has a flat cap!', say: 'This is my grandpa!' },
+      { faces: [4, 5, 2], answer: 0, line: "Who is Pip's big brother?", reply: 'Yes! This is his big brother!', say: 'This is my brother!' },
+      { faces: [0, 6, 5], answer: 2, line: "Who is Pip's little sister?", reply: 'Yes! This is his little sister!', say: 'This is my sister!' },
+    ],
+    doneLine: 'You are the Family Match-Up champion!',
+  },
+  {
+    id: 'u5l6-who-is-this', kind: 'join-stage', bg: bgU5L6Stage, teacher: 'Pip asks. The student answers with the whole sentence.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Who is this, with the glasses and the grey bun?', bubble: 'right' },
+      { who: 'student', line: 'This is your grandma!', bubble: 'right' },
+      { who: 'pip', line: 'Yes! And who is in the green cardigan?', bubble: 'right' },
+      { who: 'student', line: 'This is your dad!', bubble: 'right' },
+    ],
+  },
+
+  /* 7-9 Match-up games */
+  {
+    id: 'u5l6-shadows', kind: 'shadow-match', bg: bgU5L6Stage, who: 'pip',
+    teacher: 'Match-Up! Drag each family member onto their shadow (or tap them, then the shadow). Say "This is my…!"',
+    items: [
+      { label: 'Grandma', img: famGrandma, line: 'This is my grandma!' },
+      { label: 'Grandpa', img: famGrandpa, line: 'This is my grandpa!' },
+      { label: 'Mom', img: famMom, line: 'This is my mom!' },
+      { label: 'Dad', img: famDad, line: 'This is my dad!' },
+      { label: 'sister', img: famSister, line: 'This is my sister!' },
+      { label: 'baby', img: famBaby, line: 'This is the baby!' },
+    ],
+  },
+  {
+    id: 'u5l6-reveal', kind: 'tile-reveal', bg: bgU5L6Stage, who: 'pip',
+    teacher: "Who's hiding? Tiles pop off one by one — guess early and say \"This is my…!\"",
+    rounds: [
+      { img: famGrandpa, word: 'Grandpa', line: 'This is my grandpa!', options: [{ label: 'Grandpa', img: famGrandpa }, { label: 'Dad', img: famDad }, { label: 'baby', img: famBaby }] },
+      { img: famMom, word: 'Mom', line: 'This is my mom!', options: [{ label: 'sister', img: famSister }, { label: 'Grandma', img: famGrandma }, { label: 'Mom', img: famMom }] },
+      { img: famBrother, word: 'brother', line: 'This is my brother!', options: [{ label: 'brother', img: famBrother }, { label: 'Pip', img: famPip }, { label: 'Grandpa', img: famGrandpa }] },
+      { img: famBaby, word: 'baby', line: 'This is the baby!', options: [{ label: 'sister', img: famSister }, { label: 'baby', img: famBaby }, { label: 'Mom', img: famMom }] },
+    ],
+  },
+  {
+    id: 'u5l6-you-tell', kind: 'join-stage', bg: bgU5L6Host, teacher: 'Swap! The student is the host and introduces their own family (or a toy family). Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Now YOU are the host! Who is in your family?', bubble: 'right' },
+      { who: 'student', line: 'This is my mom. This is my dad.', bubble: 'right' },
+      { who: 'pip', line: 'Wow! Who else?', bubble: 'right' },
+      { who: 'student', line: 'This is my sister! This is my grandma!', bubble: 'right' },
+    ],
+  },
+
+  /* 10-11 Sounds review */
+  {
+    id: 'u5l6-trophy-sounds', kind: 'trophy-chest', bg: bgU5L6Stage, who: 'pip',
+    teacher: 'The Family Prize Chest! Listen to the first sound, tap the letter, and a family member pops out.',
+    rounds: [
+      { letter: 'M', phoneme: '/m/', word: 'mom', img: famMom, emoji: '\u{1F469}', choices: ['M', 'D', 'S'] },
+      { letter: 'D', phoneme: '/d/', word: 'dad', img: famDad, emoji: '\u{1F468}', choices: ['G', 'D', 'M'] },
+      { letter: 'S', phoneme: '/s/', word: 'sister', img: famSister, emoji: '\u{1F467}', choices: ['B', 'M', 'S'] },
+      { letter: 'G', phoneme: '/g/', word: 'grandma', img: famGrandma, emoji: '\u{1F475}', choices: ['G', 'S', 'D'] },
+      { letter: 'B', phoneme: '/b/', word: 'baby', img: famBaby, emoji: '\u{1F476}', choices: ['D', 'B', 'G'] },
+    ],
+  },
+  {
+    id: 'u5l6-perform', kind: 'join-stage', bg: bgU5L6Host, teacher: "Final round! The student introduces Pip's whole family, from the top of the family tree to the bottom.", cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Final round! Who is in my family?', bubble: 'right' },
+      { who: 'student', line: 'This is your grandma and your grandpa. This is your mom and your dad.', bubble: 'right' },
+      { who: 'pip', line: 'And the children?', bubble: 'right' },
+      { who: 'student', line: 'Your brother, your sister, the baby and you!', bubble: 'right' },
+    ],
+  },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u5l6-sticker', kind: 'sticker-reward', bg: bgU5L6Host, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You are the Family Match-Up champion! Here is a family sticker for you!', sticker: { img: famPip, label: 'Family champion' },
+  },
+  {
+    id: 'u5l6-home-mission', kind: 'home-mission', bg: bgU5L6Host, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: play the family game show at home! Ask: Who is this? Answer: This is my mom!',
+    parentNote: 'Lay out family photos (or draw faces). You are the host: point and ask "Who is this?" — your child answers "This is my mom / dad / brother / sister / grandma / grandpa / the baby!" Then swap: your child is the host and you answer.',
+    steps: [
+      { emoji: '\u{1F5BC}\u{FE0F}', img: famGrandma, say: 'Who is this?' },
+      { emoji: '\u{1F3A4}', img: famPip, say: 'You are the host' },
+      { emoji: '\u{1F496}', img: famMom, say: 'This is my mom!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u5l6-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU5L6Stage, who: 'pip',
+    teacher: 'Extra time: Game Show Moves! Do each move with Pip.',
+    rounds: [
+      { line: 'Clap for the family! Clap, clap, clap!', emoji: '\u{1F44F}' },
+      { line: 'Press the big buzzer! Buzz!', emoji: '\u{1F534}' },
+      { line: 'Wave to Grandma and Grandpa!', emoji: '\u{1F44B}' },
+      { line: 'Take a bow! Thank you!', emoji: '\u{1F647}' },
+      { line: 'Freeze! Family photo! Say cheese!', emoji: '\u{1F4F8}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u5l6-spin', kind: 'spin-wheel', bg: bgU5L6Stage, title: '',
+    teacher: 'Extra time: have the student spin, then say who it is: "This is my…!" Or tap a number.',
+    items: [
+      { label: 'This is my grandma!', left: '14%', top: '32%', img: famGrandma },
+      { label: 'This is my grandpa!', left: '30%', top: '24%', img: famGrandpa },
+      { label: 'This is my mom!', left: '14%', top: '62%', img: famMom },
+      { label: 'This is my dad!', left: '30%', top: '72%', img: famDad },
+      { label: 'This is my sister!', left: '70%', top: '72%', img: famSister },
+      { label: 'This is the baby!', left: '86%', top: '62%', img: famBaby },
+    ],
+    wheelAt: { left: '50%', top: '50%' },
+  },
+
+  /* Goodbye */
+  {
+    id: 'u5l6-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u5l6-finale', kind: 'finale', bg: bgU5L6Host, who: 'pip', line: 'Grandma, Grandpa, Mom, Dad, my brother, my sister, the baby and me — this is my family! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 6 · Lesson 1 — Kitchen, Bedroom, Bathroom! =====================
+ * My House (1/6). kitchen, bedroom, bathroom, living room ("This is the kitchen.", "Where's Pip? In the
+ * kitchen!") and K says /k/ again (kitchen, key, kitten, kangaroo — K was first met in Unit 3 with the kite,
+ * so this is a quick review, no tracing). Setting: Pip's own house — the front garden, then the house opened
+ * like a dollhouse. Lesson-Variety Engine: researched dollhouse / hide-and-seek house play (Lingokids house,
+ * Toca-style rooms), Khan Academy Kids "find it" listening, Cambridge Pre A1 "listen and point" on a house
+ * picture, and the classroom "Knock knock, who's there?" and "Where's the teddy?" games; one new game —
+ * Where's Pip? (the lights are off in every room; listen, find Pip, the light clicks on). Pictures made with
+ * Canva; the room cards are cut from the same dollhouse picture so every room looks the same everywhere. */
+const bgU6L1Front = `${A}/scenes/bg-u6l1-house-front-wide.png`;
+const bgU6L1House = `${A}/scenes/bg-u6l1-dollhouse-wide.png`;
+const roomKitchen = `${A}/items/item-room-kitchen.png`;
+const roomBedroom = `${A}/items/item-room-bedroom.png`;
+const roomBathroom = `${A}/items/item-room-bathroom.png`;
+const roomLiving = `${A}/items/item-room-living-room.png`;
+/* The four rooms painted in bg-u6l1-dollhouse (% boxes, checked on a grid): upstairs bedroom | bathroom,
+ * downstairs kitchen | living room. */
+const U6L1_ROOMS = [
+  { name: 'kitchen', x: 11, y: 55, w: 37.5, h: 39 },
+  { name: 'bedroom', x: 11, y: 13, w: 37.5, h: 40 },
+  { name: 'bathroom', x: 50.5, y: 13, w: 37, h: 40 },
+  { name: 'living room', x: 50.5, y: 55, w: 37, h: 39 },
+];
+
+export const LESSON_U6L1_TITLE = 'Kitchen, Bedroom, Bathroom!';
+export const LESSON_U6L1_OBJECTIVE = 'Name four rooms — kitchen, bedroom, bathroom, living room — say "This is the kitchen!", find Pip when he calls "I\'m in the bathroom!" and answer "In the bathroom!", sing about the house, and hear K say /k/ again (kitchen, key, kitten, kangaroo) — by listening, moving, playing and speaking, no reading.';
+
+export const LESSON_U6L1_SCENES: Scene[] = [
+  { id: 'u6l1-title', kind: 'title-card', bg: bgU6L1Front, level: 'Pre-A1', unit: 'Unit 6', lessonLabel: 'Lesson 1', title: 'Kitchen, Bedroom, Bathroom!', subtitle: "Pip's house" },
+
+  /* 1-3 Hook */
+  {
+    id: 'u6l1-song', kind: 'song', bg: bgU6L1House, title: '\u{1F3B5} This Is My House \u{1F3B5}', teacher: 'Sing and point to each room in the picture!',
+    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/my-house-song-u6l1.mp3?v=1`,
+    lineDurationsMs: [4080, 4440, 6260, 5282],
+    songPrompt: 'Upbeat kids pop song about the rooms of a house',
+    lyrics: [
+      { who: 'pip', text: 'Come in, come in! This is my house!', emotion: 'happy' },
+      { who: 'pip', text: 'This is the kitchen! This is the bedroom!', emotion: 'happy' },
+      { who: 'pip', text: 'This is the bathroom! The living room too!', emotion: 'happy' },
+      { who: 'pip', text: 'Come in, come in! I love my house!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 5 · Lesson 6 · Family Match-Up.
+    id: 'u6l1-recall-warmup', kind: 'recall-warmup', bg: bgU6L1Front, who: 'pip', mode: 'click',
+    fromLabel: 'Unit 5 · Lesson 6 · Family Match-Up',
+    teacher: 'Warm-up from last lesson: Pip says a family word, the child finds the picture. Say each one together.',
+    items: [
+      { word: 'grandma', say: 'Find Grandma!', img: famGrandma },
+      { word: 'dad', say: 'Where is Dad?', img: famDad },
+      { word: 'baby', say: 'Show me the baby!', img: famBaby },
+      { word: 'sister', say: 'Find my sister!', img: famSister },
+    ],
+  },
+  {
+    id: 'u6l1-intro', kind: 'cinematic', bg: bgU6L1Front, hidePipOverlay: true, title: "Pip's House", subtitle: 'Come in!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Hello, friend! This is my house!' },
+      { who: 'pip', line: 'Come in! Let\'s look at the rooms!' },
+    ],
+    cta: 'Come in!',
+  },
+
+  /* 4-6 New words, move, first game */
+  {
+    id: 'u6l1-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU6L1House, teacher: 'Point to the room, then say it! Then point to the same room in the big house.',
+    cards: [
+      { who: 'pip', sentence: 'Kitchen! This is the kitchen.', img: roomKitchen, imgLabel: 'Kitchen!' },
+      { who: 'pip', sentence: 'Bedroom! This is the bedroom.', img: roomBedroom, imgLabel: 'Bedroom!' },
+      { who: 'pip', sentence: 'Bathroom! This is the bathroom.', img: roomBathroom, imgLabel: 'Bathroom!' },
+      { who: 'pip', sentence: 'Living room! This is the living room.', img: roomLiving, imgLabel: 'Living room!' },
+    ],
+  },
+  {
+    id: 'u6l1-move-say', kind: 'tpr-actions', bg: bgU6L1House, who: 'pip',
+    teacher: 'Stand up! Say it with Pip and do what we do in that room.',
+    rounds: [
+      { line: 'In the kitchen: cook, cook, cook!', emoji: '\u{1F373}', img: roomKitchen },
+      { line: 'In the bedroom: sleep, sleep, sleep!', emoji: '\u{1F634}', img: roomBedroom },
+      { line: 'In the bathroom: wash, wash, wash!', emoji: '\u{1F6C1}', img: roomBathroom },
+      { line: 'In the living room: sit and watch TV!', emoji: '\u{1F4FA}', img: roomLiving },
+    ],
+  },
+  {
+    // Signature game (new): hide and seek in the dark dollhouse.
+    id: 'u6l1-where-pip', kind: 'house-hide', bg: bgU6L1House, who: 'pip',
+    teacher: "Where's Pip? The lights are off! Listen to Pip, tap his room, then say where he is.",
+    hider: { img: CAST.pip.img, label: 'Pip' },
+    rooms: U6L1_ROOMS,
+    rounds: [
+      { room: 0, line: "I'm in the kitchen! Find me!", reply: "Pip is in the kitchen!", say: 'In the kitchen!', at: 30 },
+      { room: 2, line: "I'm in the bathroom! Find me!", reply: 'Pip is in the bathroom!', say: 'In the bathroom!', at: 70 },
+      { room: 1, line: "I'm in the bedroom! Find me!", reply: 'Pip is in the bedroom!', say: 'In the bedroom!', at: 75 },
+      { room: 3, line: "I'm in the living room! Find me!", reply: 'Pip is in the living room!', say: 'In the living room!', at: 22 },
+    ],
+    doneLine: 'You found me every time! Great listening!',
+  },
+
+  /* 7-11 Recall + speaking */
+  {
+    id: 'u6l1-recall', kind: 'rapid-recall', bg: bgU6L1Front, who: 'pip', seconds: 30,
+    teacher: 'Quick! A room flashes — say its name before it goes!',
+    cards: [
+      { img: roomBathroom, word: 'bathroom' },
+      { img: roomKitchen, word: 'kitchen' },
+      { img: roomLiving, word: 'living room' },
+      { img: roomBedroom, word: 'bedroom' },
+    ],
+  },
+  {
+    // Badges on the four rooms painted in bg-u6l1-dollhouse.
+    id: 'u6l1-spin', kind: 'spin-wheel', bg: bgU6L1House, title: '',
+    teacher: 'Have the student spin, then point to that room and say "This is the kitchen!" Or tap a number.',
+    items: [
+      { label: 'This is the kitchen!', left: '20%', top: '78%' },
+      { label: 'This is the bedroom!', left: '20%', top: '24%' },
+      { label: 'This is the bathroom!', left: '80%', top: '24%' },
+      { label: 'This is the living room!', left: '80%', top: '80%' },
+    ],
+    wheelAt: { left: '50%', top: '54%' },
+  },
+  {
+    id: 'u6l1-pip-asks', kind: 'join-stage', bg: bgU6L1House, teacher: 'Pip asks; the student points to the room and answers with "In the …!"', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Where do you sleep?', bubble: 'right' },
+      { who: 'student', line: 'In the bedroom!', bubble: 'right' },
+      { who: 'pip', line: 'Where do you cook?', bubble: 'right' },
+      { who: 'student', line: 'In the kitchen!', bubble: 'right' },
+    ],
+  },
+
+  /* 12 Game break */
+  {
+    id: 'u6l1-memory', kind: 'memory', bg: bgU6L1Front, teacher: 'Find the pairs! Say the room every time you turn a card.',
+    pairs: [
+      { id: 'kitchen', label: 'kitchen', emoji: '\u{1F373}', img: roomKitchen },
+      { id: 'bedroom', label: 'bedroom', emoji: '\u{1F6CF}\u{FE0F}', img: roomBedroom },
+      { id: 'bathroom', label: 'bathroom', emoji: '\u{1F6C1}', img: roomBathroom },
+      { id: 'living', label: 'living room', emoji: '\u{1F6CB}\u{FE0F}', img: roomLiving },
+    ],
+  },
+
+  /* 13-15 Phonics: K says /k/ (review) */
+  {
+    id: 'u6l1-model-k', kind: 'sound-model', bg: bgU6L1Front, who: 'pip', letter: 'K', phoneme: '/k/', sound: 'kuh',
+    teacher: 'K says /k/ — remember the kite? Now: key, kitten, kangaroo... and kitchen!',
+    anchors: [
+      { word: 'key', emoji: '\u{1F511}', img: itemKey },
+      { word: 'kitten', emoji: '\u{1F431}', img: itemKitten },
+      { word: 'kangaroo', emoji: '\u{1F998}', img: itemKangaroo },
+    ],
+  },
+  {
+    id: 'u6l1-pop-k', kind: 'sound-pop', bg: bgU6L1Front, teacher: 'Balloon Letter Pop! Pip calls a letter — pop only that one!', who: 'pip', goal: 8, seconds: 45,
+    targets: [
+      { letter: 'K', phoneme: '/k/' },
+      { letter: 'B', phoneme: '/b/' },
+    ],
+    items: [
+      { word: 'K', letter: 'K', emoji: 'K' },
+      { word: 'B', letter: 'B', emoji: 'B' },
+      { word: 'T', letter: 'T', emoji: 'T' },
+    ],
+  },
+
+  /* 16-18 My house */
+  {
+    id: 'u6l1-my-house', kind: 'join-stage', bg: bgU6L1Front, teacher: 'The student shows their own home (or draws it) and names a room: "This is the kitchen!" Then says their favourite room.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Show me your house! What room is this?', bubble: 'right' },
+      { who: 'student', line: 'This is the kitchen!', bubble: 'right' },
+      { who: 'pip', line: 'I like my bedroom! And you?', bubble: 'right' },
+      { who: 'student', line: 'I like my bedroom! / I like my living room!', bubble: 'right' },
+    ],
+  },
+
+  /* 19-20 Sticker + Home Mission */
+  {
+    id: 'u6l1-sticker', kind: 'sticker-reward', bg: bgU6L1Front, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: "You know all my rooms! Here is a house sticker for you!", sticker: { img: `${A}/items/item-house.png`, label: "Pip's house" },
+  },
+  {
+    id: 'u6l1-home-mission', kind: 'home-mission', bg: bgU6L1House, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: give a house tour! Walk in and say: This is the kitchen! This is the bedroom!',
+    parentNote: 'Let your child be the tour guide: walk from room to room while they say "This is the kitchen / bedroom / bathroom / living room!" Then play hide and seek with a toy: hide it and say "It\'s in the kitchen!" — your child goes to find it.',
+    steps: [
+      { emoji: '\u{1F373}', img: roomKitchen, say: 'This is the kitchen!' },
+      { emoji: '\u{1F6CF}\u{FE0F}', img: roomBedroom, say: 'This is the bedroom!' },
+      { emoji: '\u{1F648}', say: 'Hide and seek!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u6l1-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU6L1House, who: 'pip',
+    teacher: 'Extra time: Brain Break! Run through the house with Pip.',
+    rounds: [
+      { line: 'Tiptoe to the bedroom... shh!', emoji: '\u{1F92B}' },
+      { line: 'Brush your teeth in the bathroom!', emoji: '\u{1FAA5}' },
+      { line: 'Stir the soup in the kitchen!', emoji: '\u{1F963}' },
+      { line: 'Jump on the sofa in the living room!', emoji: '\u{1F6CB}\u{FE0F}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u6l1-where-pip-2', kind: 'house-hide', bg: bgU6L1House, who: 'pip',
+    teacher: "Extra time: Pip hides again — new places! Listen, find him, say where he is.",
+    hider: { img: CAST.pip.img, label: 'Pip' },
+    rooms: U6L1_ROOMS,
+    rounds: [
+      { room: 3, line: "Now I'm in the living room! Find me!", reply: 'Pip is in the living room!', say: 'In the living room!', at: 75 },
+      { room: 1, line: "Now I'm in the bedroom! Find me!", reply: 'Pip is in the bedroom!', say: 'In the bedroom!', at: 20 },
+      { room: 0, line: "Now I'm in the kitchen! Find me!", reply: 'Pip is in the kitchen!', say: 'In the kitchen!', at: 80 },
+      { room: 2, line: "Now I'm in the bathroom! Find me!", reply: 'Pip is in the bathroom!', say: 'In the bathroom!', at: 25 },
+    ],
+    doneLine: 'Hide and seek champion! Thank you!',
+  },
+
+  /* 21-22 Goodbye */
+  {
+    id: 'u6l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u6l1-finale', kind: 'finale', bg: bgU6L1Front, who: 'pip', line: 'Kitchen, bedroom, bathroom, living room — this is my house! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 6 · Lesson 2 — Table, Chair, Bed! =====================
+ * My House (2/6). table, chair, bed, sofa ("It's a chair!", "Bring the bed, please!") and CH says /ch/
+ * (chair, cheese, chick, cherries). Theme: moving day — Pip's family moves into a new house, the furniture
+ * comes off the truck and the empty room fills up. Lesson-Variety Engine: researched Toca Boca / Lingokids
+ * "decorate the room" play, Khan Academy Kids calm listening, Cambridge Pre A1 "listen and draw a line",
+ * and the classroom "pass the box / what's in the box?" furniture games; one new game — Moving Day (bring
+ * each piece from the truck to its place in the new room). Pictures made with Canva (the furniture and CH
+ * stickers are cut from two Canva sticker sheets). */
+const bgU6L2Truck = `${A}/scenes/bg-u6l2-moving-truck-wide.png`;
+const bgU6L2Room = `${A}/scenes/bg-u6l2-room-empty-wide.png`;
+const itemTable = `${A}/items/item-table.png`;
+const itemChair = `${A}/items/item-chair.png`;
+const itemBed = `${A}/items/item-bed.png`;
+const itemSofa = `${A}/items/item-sofa.png`;
+const itemCheese = `${A}/items/item-cheese.png`;
+const itemChick = `${A}/items/item-chick.png`;
+const itemCherries = `${A}/items/item-cherries.png`;
+const itemChicken = `${A}/items/item-chicken.png`;
+/* Where each piece stands in bg-u6l2-room-empty (centre %, width % of the picture). */
+const U6L2_PIECES = [
+  { name: 'table', img: itemTable, x: 47, y: 80, w: 17 },
+  { name: 'chair', img: itemChair, x: 60, y: 78, w: 8 },
+  { name: 'bed', img: itemBed, x: 20, y: 76, w: 24 },
+  { name: 'sofa', img: itemSofa, x: 80, y: 77, w: 25 },
+];
+
+export const LESSON_U6L2_TITLE = 'Table, Chair, Bed!';
+export const LESSON_U6L2_OBJECTIVE = 'Name four pieces of furniture — table, chair, bed, sofa — say "It\'s a chair!", bring the right piece when Pip asks "Bring the bed, please!", sing about moving day, and hear CH say /ch/ (chair, cheese, chick, cherries) — by listening, moving, playing and speaking, no reading.';
+
+export const LESSON_U6L2_SCENES: Scene[] = [
+  { id: 'u6l2-title', kind: 'title-card', bg: bgU6L2Truck, level: 'Pre-A1', unit: 'Unit 6', lessonLabel: 'Lesson 2', title: 'Table, Chair, Bed!', subtitle: 'Moving day' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u6l2-song', kind: 'song', bg: bgU6L2Truck, title: '\u{1F3B5} Moving Day \u{1F3B5}', teacher: 'Sing and point: table, chair, bed, sofa!',
+    durationSeconds: 20, bigWord: 'Furniture', songUrl: `${A}/audio/moving-day-song-u6l2.mp3?v=1`,
+    lineDurationsMs: [5860, 2840, 3020, 8342],
+    songPrompt: 'Upbeat kids pop song about moving into a new house',
+    lyrics: [
+      { who: 'pip', text: 'Table and chair! Table and chair!', emotion: 'happy' },
+      { who: 'pip', text: 'Bed and sofa! Over there!', emotion: 'happy' },
+      { who: 'pip', text: 'Bring it in, one, two, three!', emotion: 'happy' },
+      { who: 'pip', text: 'A new house for you and me!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 1 · Kitchen, Bedroom, Bathroom!
+    id: 'u6l2-recall-warmup', kind: 'recall-warmup', bg: bgU6L2Truck, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 1 · Kitchen, Bedroom, Bathroom!',
+    teacher: 'Warm-up from last lesson: Pip says a room, the child finds the picture. Say each room together.',
+    items: [
+      { word: 'kitchen', say: 'Find the kitchen!', img: `${A}/items/item-room-kitchen.png` },
+      { word: 'bedroom', say: 'Where is the bedroom?', img: `${A}/items/item-room-bedroom.png` },
+      { word: 'bathroom', say: 'Show me the bathroom!', img: `${A}/items/item-room-bathroom.png` },
+      { word: 'living room', say: 'Find the living room!', img: `${A}/items/item-room-living-room.png` },
+    ],
+  },
+  {
+    id: 'u6l2-intro', kind: 'cinematic', bg: bgU6L2Truck, hidePipOverlay: true, title: 'Moving Day', subtitle: 'A new house!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'It\'s moving day! We have a new house!' },
+      { who: 'pip', line: 'Look at the truck! Let\'s help!' },
+    ],
+    cta: "Let's help!",
+  },
+
+  /* 4-6 New words, move, first game */
+  {
+    id: 'u6l2-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU6L2Room, teacher: 'Point to it, then say it! Then find one in your own room.',
+    cards: [
+      { who: 'pip', sentence: "Table! It's a table.", img: itemTable, imgLabel: 'Table!' },
+      { who: 'pip', sentence: "Chair! It's a chair.", img: itemChair, imgLabel: 'Chair!' },
+      { who: 'pip', sentence: "Bed! It's a bed.", img: itemBed, imgLabel: 'Bed!' },
+      { who: 'pip', sentence: "Sofa! It's a sofa.", img: itemSofa, imgLabel: 'Sofa!' },
+    ],
+  },
+  {
+    id: 'u6l2-move-say', kind: 'tpr-actions', bg: bgU6L2Room, who: 'pip',
+    teacher: 'Stand up! Say it with Pip and act it out.',
+    rounds: [
+      { line: 'Knock on the table! Knock, knock!', emoji: '\u{270A}', img: itemTable },
+      { line: 'Sit on the chair!', emoji: '\u{1FA91}', img: itemChair },
+      { line: 'Sleep in the bed! Shh!', emoji: '\u{1F634}', img: itemBed },
+      { line: 'Jump on the sofa! Boing!', emoji: '\u{1F938}', img: itemSofa },
+    ],
+  },
+  {
+    // Signature game (new): bring each piece from the truck into the new room.
+    id: 'u6l2-moving', kind: 'moving-day', bg: bgU6L2Room, who: 'pip',
+    teacher: 'Moving day! Listen to Pip, tap the piece on the truck, then say what it is.',
+    pieces: U6L2_PIECES,
+    rounds: [
+      { piece: 3, line: 'Bring the sofa, please!', reply: 'The sofa! Over there!', say: "It's a sofa!" },
+      { piece: 0, line: 'Bring the table, please!', reply: 'The table! Over there!', say: "It's a table!" },
+      { piece: 2, line: 'Bring the bed, please!', reply: 'The bed! Over there!', say: "It's a bed!" },
+      { piece: 1, line: 'Bring the chair, please!', reply: 'The chair! Over there!', say: "It's a chair!" },
+    ],
+    doneLine: 'Our new room is ready! Thank you!',
+  },
+
+  /* 7-11 Recall + speaking */
+  {
+    id: 'u6l2-train', kind: 'train-recall', bg: bgU6L2Truck, teacher: 'Remember the furniture in each car. One car goes empty — say what is missing!',
+    question: 'Beep beep! One box is empty. What is missing?',
+    cars: [
+      { word: 'table', img: itemTable, emoji: '\u{1FA91}' },
+      { word: 'chair', img: itemChair, emoji: '\u{1FA91}' },
+      { word: 'bed', img: itemBed, emoji: '\u{1F6CF}\u{FE0F}' },
+      { word: 'sofa', img: itemSofa, emoji: '\u{1F6CB}\u{FE0F}' },
+    ],
+  },
+  {
+    id: 'u6l2-spin', kind: 'spin-wheel', bg: bgU6L2Room, title: '',
+    teacher: 'Have the student spin, then say "It\'s a chair!" for that number. Or tap a number.',
+    items: [
+      { label: "It's a bed!", left: '18%', top: '72%', img: itemBed },
+      { label: "It's a table!", left: '39%', top: '80%', img: itemTable },
+      { label: "It's a chair!", left: '61%', top: '80%', img: itemChair },
+      { label: "It's a sofa!", left: '82%', top: '72%', img: itemSofa },
+    ],
+    wheelAt: { left: '50%', top: '38%' },
+  },
+  {
+    id: 'u6l2-what-is-it', kind: 'join-stage', bg: bgU6L2Room, teacher: 'Pip asks; the student answers "It\'s a …!" and acts it out.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'You sit on it. What is it?', bubble: 'right' },
+      { who: 'student', line: "It's a chair!", bubble: 'right' },
+      { who: 'pip', line: 'You sleep in it. What is it?', bubble: 'right' },
+      { who: 'student', line: "It's a bed!", bubble: 'right' },
+    ],
+  },
+
+  /* 12-14 Phonics: CH says /ch/ */
+  {
+    id: 'u6l2-model-ch', kind: 'sound-model', bg: bgU6L2Room, who: 'pip', letter: 'CH', phoneme: '/ch/', sound: 'ch',
+    teacher: 'C and H together say /ch/ — like a little train: ch, ch, ch! Chair, cheese, chick, cherries.',
+    anchors: [
+      { word: 'chair', emoji: '\u{1FA91}', img: itemChair },
+      { word: 'cheese', emoji: '\u{1F9C0}', img: itemCheese },
+      { word: 'chick', emoji: '\u{1F424}', img: itemChick },
+      { word: 'cherries', emoji: '\u{1F352}', img: itemCherries },
+    ],
+  },
+  {
+    id: 'u6l2-pick-ch', kind: 'sound-pick', bg: bgU6L2Room, who: 'pip',
+    teacher: 'Which one? Listen to the sound, then tap the picture that starts with it. Say the word too!',
+    rounds: [
+      { sound: 'ch', answer: 1, options: [{ word: 'bed', img: itemBed }, { word: 'cheese', img: itemCheese }, { word: 'sofa', img: itemSofa }] },
+      { sound: 'k', answer: 2, options: [{ word: 'chick', img: itemChick }, { word: 'table', img: itemTable }, { word: 'key', img: `${A}/items/item-key.png` }] },
+      { sound: 'ch', answer: 0, options: [{ word: 'chicken', img: itemChicken }, { word: 'kitten', img: `${A}/items/item-kitten.png` }, { word: 'bed', img: itemBed }] },
+      { sound: 'ch', answer: 2, options: [{ word: 'table', img: itemTable }, { word: 'sofa', img: itemSofa }, { word: 'chair', img: itemChair }] },
+    ],
+  },
+  {
+    id: 'u6l2-catch-chk', kind: 'catch-sort', bg: bgU6L2Truck, teacher: 'Catch it! /ch/ or /k/? Say the word as you catch it.', goal: 8, seconds: 45,
+    left: { label: 'CH', img: itemChair, emoji: '\u{1FA91}' },
+    right: { label: 'K', img: `${A}/items/item-key.png`, emoji: '\u{1F511}' },
+    items: [
+      { word: 'cheese', img: itemCheese, emoji: '\u{1F9C0}', target: 'left' },
+      { word: 'chick', img: itemChick, emoji: '\u{1F424}', target: 'left' },
+      { word: 'cherries', img: itemCherries, emoji: '\u{1F352}', target: 'left' },
+      { word: 'chicken', img: itemChicken, emoji: '\u{1F414}', target: 'left' },
+      { word: 'kite', img: `${A}/items/item-kite.png`, emoji: '\u{1FA81}', target: 'right' },
+      { word: 'kitten', img: `${A}/items/item-kitten.png`, emoji: '\u{1F431}', target: 'right' },
+      { word: 'kangaroo', img: `${A}/items/item-kangaroo.png`, emoji: '\u{1F998}', target: 'right' },
+    ],
+  },
+
+  /* 15-16 My room */
+  {
+    id: 'u6l2-my-room', kind: 'join-stage', bg: bgU6L2Room, teacher: 'The student looks around their own room (or draws it) and names the furniture: "It\'s a bed! It\'s a chair!"', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look in your room! What can you see?', bubble: 'right' },
+      { who: 'student', line: "It's a bed! It's a chair!", bubble: 'right' },
+      { who: 'pip', line: 'Sit on your chair! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my chair!", bubble: 'right' },
+    ],
+  },
+
+  /* 19-20 Sticker + Home Mission */
+  {
+    id: 'u6l2-sticker', kind: 'sticker-reward', bg: bgU6L2Truck, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Great moving helper! Here is a sofa sticker for you!', sticker: { img: itemSofa, label: 'Moving helper' },
+  },
+  {
+    id: 'u6l2-home-mission', kind: 'home-mission', bg: bgU6L2Room, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: touch and say! Touch a table, a chair, a bed and a sofa at home!',
+    parentNote: 'Play "Touch it!": say "Touch a chair!" / "Touch the table!" and your child runs to it and says "It\'s a chair!". Then swap — your child gives the orders. Bonus: find something at home that starts with /ch/ (chair, cheese, chicken).',
+    steps: [
+      { emoji: '\u{1FA91}', img: itemChair, say: "It's a chair!" },
+      { emoji: '\u{1F6CF}\u{FE0F}', img: itemBed, say: "It's a bed!" },
+      { emoji: '\u{1F9C0}', img: itemCheese, say: 'Ch, ch, cheese!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u6l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU6L2Truck, who: 'pip',
+    teacher: 'Extra time: Brain Break! Carry the furniture with Pip.',
+    rounds: [
+      { line: 'Carry a big heavy box! Heave-ho!', emoji: '\u{1F4E6}' },
+      { line: 'Push the sofa! Push, push!', emoji: '\u{1F6CB}\u{FE0F}' },
+      { line: 'Choo choo! Ch, ch, ch!', emoji: '\u{1F682}' },
+      { line: 'Sit on the chair... and relax!', emoji: '\u{1FA91}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u6l2-train-2', kind: 'train-recall', bg: bgU6L2Room, teacher: 'Extra time: a new truck! Remember each box — one goes empty. What is missing?',
+    question: 'Beep beep! One box is empty. What is missing?',
+    cars: [
+      { word: 'cheese', img: itemCheese, emoji: '\u{1F9C0}' },
+      { word: 'sofa', img: itemSofa, emoji: '\u{1F6CB}\u{FE0F}' },
+      { word: 'chick', img: itemChick, emoji: '\u{1F424}' },
+      { word: 'bed', img: itemBed, emoji: '\u{1F6CF}\u{FE0F}' },
+    ],
+  },
+
+  /* 21-22 Goodbye */
+  {
+    id: 'u6l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u6l2-finale', kind: 'finale', bg: bgU6L2Truck, who: 'pip', line: 'Table, chair, bed and sofa — our new house is ready! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 6 · Lesson 3 — In My House =====================
+ * My House (3/6), the "make & build" lesson: the rooms of Lesson 1 and the furniture of Lesson 2 come together
+ * in one sentence — "The bed is in the bedroom!" — and the family (Unit 5) is back: "Mom is in the kitchen!".
+ * Review sounds: K and CH (no new letter in this slot). Setting: Pip's house as a dollhouse — empty for the
+ * build game, then lived in on a cosy evening. Lesson-Variety Engine: researched Toca Boca / Lingokids
+ * "build and decorate a house", Cambridge Pre A1 Starters "listen and draw a line" and "Where is…?" picture
+ * questions, Khan Academy Kids calm listening; one new game — House Builder (pick the thing, then the room).
+ * Pictures made with Canva. */
+const bgU6L3House = `${A}/scenes/bg-u6l3-house-empty-wide.png`;
+const bgU6L3Family = `${A}/scenes/bg-u6l3-family-home-wide.png`;
+/* The four rooms painted in bg-u6l3-house-empty (% boxes): upstairs bedroom | bathroom, downstairs kitchen | living room. */
+const U6L3_ROOMS = [
+  { name: 'bedroom', x: 11, y: 13, w: 37.5, h: 40 },
+  { name: 'bathroom', x: 50.5, y: 13, w: 37, h: 40 },
+  { name: 'kitchen', x: 11, y: 55, w: 37.5, h: 39 },
+  { name: 'living room', x: 50.5, y: 55, w: 37, h: 39 },
+];
+const H_BED = { colorWord: '', colorHex: '#93C5FD', shape: 'square' as const, img: itemBed, word: 'bed' };
+const H_CHAIR = { colorWord: '', colorHex: '#FCA5A5', shape: 'square' as const, img: itemChair, word: 'chair' };
+const H_SOFA = { colorWord: '', colorHex: '#FDBA74', shape: 'square' as const, img: itemSofa, word: 'sofa' };
+const H_TABLE = { colorWord: '', colorHex: '#FDE68A', shape: 'square' as const, img: itemTable, word: 'table' };
+
+export const LESSON_U6L3_TITLE = 'In My House';
+export const LESSON_U6L3_OBJECTIVE = 'Put rooms and furniture together — "The bed is in the bedroom!", "The sofa is in the living room!" — build Pip\'s house by listening, say where the family is ("Mom is in the kitchen!"), sing about the house, and hear K and CH again (key, kitchen, chair) — by listening, building, playing and speaking, no reading.';
+
+export const LESSON_U6L3_SCENES: Scene[] = [
+  { id: 'u6l3-title', kind: 'title-card', bg: bgU6L3Family, level: 'Pre-A1', unit: 'Unit 6', lessonLabel: 'Lesson 3', title: 'In My House', subtitle: 'Where is it?' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u6l3-song', kind: 'song', bg: bgU6L3Family, title: '\u{1F3B5} In My House \u{1F3B5}', teacher: 'Sing and point to each room and each thing!',
+    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/in-my-house-song-u6l3.mp3?v=1`,
+    lineDurationsMs: [4000, 3600, 5160, 7302],
+    songPrompt: 'Upbeat kids pop song about where things are in a house',
+    lyrics: [
+      { who: 'pip', text: 'The bed is in the bedroom!', emotion: 'happy' },
+      { who: 'pip', text: 'The table is in the kitchen!', emotion: 'happy' },
+      { who: 'pip', text: 'The sofa is in the living room!', emotion: 'happy' },
+      { who: 'pip', text: 'I love my house, my happy house!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 2 · Table, Chair, Bed!
+    id: 'u6l3-recall-warmup', kind: 'recall-warmup', bg: bgU6L3House, who: 'pip', mode: 'shadow',
+    fromLabel: 'Lesson 2 · Table, Chair, Bed!',
+    teacher: 'Warm-up from last lesson: Pip says a piece of furniture, the child finds its shadow. Say each one together.',
+    items: [
+      { word: 'bed', say: 'Find the bed!', img: itemBed },
+      { word: 'chair', say: 'Where is the chair?', img: itemChair },
+      { word: 'sofa', say: 'Show me the sofa!', img: itemSofa },
+      { word: 'table', say: 'Find the table!', img: itemTable },
+    ],
+  },
+  {
+    id: 'u6l3-intro', kind: 'cinematic', bg: bgU6L3House, hidePipOverlay: true, title: 'In My House', subtitle: 'Let\'s build it!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Look! Our house is empty!' },
+      { who: 'pip', line: 'Let\'s put everything in its room!' },
+    ],
+    cta: "Let's build!",
+  },
+
+  /* 4-6 The new sentence, move, signature game */
+  {
+    id: 'u6l3-sentences', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU6L3House, teacher: 'Point to the thing, then the room, and say the whole sentence!',
+    cards: [
+      { who: 'pip', sentence: 'The bed is in the bedroom.', img: itemBed, imgLabel: 'In the bedroom!' },
+      { who: 'pip', sentence: 'The table is in the kitchen.', img: itemTable, imgLabel: 'In the kitchen!' },
+      { who: 'pip', sentence: 'The sofa is in the living room.', img: itemSofa, imgLabel: 'In the living room!' },
+      { who: 'pip', sentence: 'The chair is in the kitchen.', img: itemChair, imgLabel: 'In the kitchen!' },
+    ],
+  },
+  {
+    id: 'u6l3-move-say', kind: 'tpr-actions', bg: bgU6L3House, who: 'pip',
+    teacher: 'Stand up! Carry each thing to its room with Pip, then say where it is.',
+    rounds: [
+      { line: 'Carry the bed upstairs... to the bedroom!', emoji: '\u{1F6CF}\u{FE0F}', img: itemBed },
+      { line: 'Push the sofa... into the living room!', emoji: '\u{1F6CB}\u{FE0F}', img: itemSofa },
+      { line: 'Lift the table... into the kitchen!', emoji: '\u{1F37D}\u{FE0F}', img: itemTable },
+      { line: 'Sit on the chair! Phew!', emoji: '\u{1FA91}', img: itemChair },
+    ],
+  },
+  {
+    // Signature game (new): pick the thing, then the room.
+    id: 'u6l3-builder', kind: 'house-builder', bg: bgU6L3House, who: 'pip',
+    teacher: 'House Builder! Listen to Pip: tap the thing on the tray, then tap its room. Then say the whole sentence.',
+    rooms: U6L3_ROOMS,
+    pieces: [
+      { name: 'bed', img: itemBed },
+      { name: 'sofa', img: itemSofa },
+      { name: 'table', img: itemTable },
+      { name: 'chair', img: itemChair },
+    ],
+    rounds: [
+      { piece: 0, room: 0, x: 28, y: 39, w: 18, line: 'Put the bed in the bedroom!', reply: 'The bed is in the bedroom!', say: 'The bed is in the bedroom!' },
+      { piece: 1, room: 3, x: 70, y: 81, w: 19, line: 'Put the sofa in the living room!', reply: 'The sofa is in the living room!', say: 'The sofa is in the living room!' },
+      { piece: 2, room: 2, x: 26, y: 82, w: 15, line: 'Put the table in the kitchen!', reply: 'The table is in the kitchen!', say: 'The table is in the kitchen!' },
+      { piece: 3, room: 2, x: 38, y: 83, w: 6.5, line: 'Put the chair in the kitchen!', reply: 'The chair is in the kitchen!', say: 'The chair is in the kitchen!' },
+    ],
+    doneLine: 'We did it! Our house is ready!',
+  },
+
+  /* 7-11 Where is everybody? */
+  {
+    id: 'u6l3-where-family', kind: 'join-stage', bg: bgU6L3Family, teacher: 'Look at the family in the house. Pip asks; the student points and answers "Mom is in the kitchen!"', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Where is Mom?', bubble: 'right' },
+      { who: 'student', line: 'Mom is in the kitchen!', bubble: 'right' },
+      { who: 'pip', line: 'Where is the baby?', bubble: 'right' },
+      { who: 'student', line: 'The baby is in the bedroom!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u6l3-jigsaw', kind: 'jigsaw-puzzle', bg: bgU6L3House, teacher: 'Build the evening picture! Drag each piece to its place, then say who is in each room.',
+    image: bgU6L3Family, rows: 2, cols: 3,
+  },
+  {
+    id: 'u6l3-spin', kind: 'spin-wheel', bg: bgU6L3Family, title: '',
+    teacher: 'Have the student spin, then say who is in that room: "Dad is in the living room!" Or tap a number.',
+    items: [
+      { label: 'The baby is in the bedroom!', left: '20%', top: '22%' },
+      { label: 'My sister is in the bathroom!', left: '80%', top: '22%' },
+      { label: 'Mom is in the kitchen!', left: '20%', top: '62%' },
+      { label: 'Dad is in the living room!', left: '80%', top: '62%' },
+    ],
+    wheelAt: { left: '50%', top: '54%' },
+  },
+
+  /* 12 Pattern game */
+  {
+    id: 'u6l3-pattern', kind: 'pattern-train', bg: bgU6L3House, who: 'pip',
+    teacher: 'The furniture train! What comes next? Say it, then tap it!',
+    rounds: [
+      { pattern: [H_BED, H_CHAIR, H_BED, H_CHAIR], answer: H_BED, options: [H_SOFA, H_BED, H_TABLE] },
+      { pattern: [H_SOFA, H_SOFA, H_TABLE, H_SOFA, H_SOFA], answer: H_TABLE, options: [H_TABLE, H_CHAIR, H_SOFA] },
+      { pattern: [H_TABLE, H_CHAIR, H_BED, H_TABLE, H_CHAIR], answer: H_BED, options: [H_CHAIR, H_BED, H_SOFA] },
+    ],
+  },
+
+  /* 13-14 Sounds review: K and CH, first letters */
+  {
+    id: 'u6l3-first-letter', kind: 'word-build', bg: bgU6L3House, teacher: 'What is the first sound? Listen, tap the letter, then say the word.',
+    rounds: [
+      { word: 'bed', blankIndex: 0, answer: 'B', choices: ['B', 'K', 'S', 'T'], img: itemBed, emoji: '\u{1F6CF}\u{FE0F}' },
+      { word: 'key', blankIndex: 0, answer: 'K', choices: ['B', 'K', 'S', 'T'], img: `${A}/items/item-key.png`, emoji: '\u{1F511}' },
+      { word: 'sofa', blankIndex: 0, answer: 'S', choices: ['B', 'K', 'S', 'T'], img: itemSofa, emoji: '\u{1F6CB}\u{FE0F}' },
+      { word: 'table', blankIndex: 0, answer: 'T', choices: ['B', 'K', 'S', 'T'], img: itemTable, emoji: '\u{1F37D}\u{FE0F}' },
+      { word: 'kitten', blankIndex: 0, answer: 'K', choices: ['B', 'K', 'S', 'T'], img: `${A}/items/item-kitten.png`, emoji: '\u{1F431}' },
+    ],
+  },
+
+  /* 15-16 My house */
+  {
+    id: 'u6l3-my-house', kind: 'join-stage', bg: bgU6L3Family, teacher: 'The student talks about their own home: what is in their bedroom, where their family is now.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'What is in your bedroom?', bubble: 'right' },
+      { who: 'student', line: 'The bed is in my bedroom!', bubble: 'right' },
+      { who: 'pip', line: 'Where is your mom now?', bubble: 'right' },
+      { who: 'student', line: 'Mom is in the kitchen!', bubble: 'right' },
+    ],
+  },
+
+  /* 19-20 Sticker + Home Mission */
+  {
+    id: 'u6l3-sticker', kind: 'sticker-reward', bg: bgU6L3Family, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super house builder! Here is a bed sticker for you!', sticker: { img: itemBed, label: 'House builder' },
+  },
+  {
+    id: 'u6l3-home-mission', kind: 'home-mission', bg: bgU6L3House, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: draw your house! Draw the bed in the bedroom and the table in the kitchen!',
+    parentNote: 'Help your child draw a simple house with rooms (or use a shoebox). Ask "Where is the bed?" — your child draws it and says "The bed is in the bedroom!". Then ask "Where is Mom now?" and let them answer "Mom is in the kitchen!".',
+    steps: [
+      { emoji: '\u{1F3E0}', say: 'Draw your house' },
+      { emoji: '\u{1F6CF}\u{FE0F}', img: itemBed, say: 'The bed is in the bedroom!' },
+      { emoji: '\u{1F37D}\u{FE0F}', img: itemTable, say: 'The table is in the kitchen!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u6l3-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU6L3Family, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do what each family member is doing.',
+    rounds: [
+      { line: 'Mom is in the kitchen: stir, stir, stir!', emoji: '\u{1F963}' },
+      { line: 'The baby is in the bedroom: shh, sleep!', emoji: '\u{1F634}' },
+      { line: 'Sister is in the bathroom: brush, brush, brush!', emoji: '\u{1FAA5}' },
+      { line: 'Dad is in the living room: read a book!', emoji: '\u{1F4D6}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u6l3-pattern-2', kind: 'pattern-train', bg: bgU6L3Family, who: 'pip',
+    teacher: 'Extra time: a longer furniture train! What comes next?',
+    rounds: [
+      { pattern: [H_CHAIR, H_CHAIR, H_TABLE, H_CHAIR, H_CHAIR], answer: H_TABLE, options: [H_BED, H_TABLE, H_CHAIR] },
+      { pattern: [H_BED, H_SOFA, H_TABLE, H_BED, H_SOFA], answer: H_TABLE, options: [H_SOFA, H_CHAIR, H_TABLE] },
+    ],
+  },
+
+  /* 21-22 Goodbye */
+  {
+    id: 'u6l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u6l3-finale', kind: 'finale', bg: bgU6L3Family, who: 'pip', line: 'The bed is in the bedroom, the sofa is in the living room — I love my house! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 6 · Lesson 4 — My House =====================
+ * My House (4/6), the "show and tell" lesson: the child shows a room — "This is my bedroom. My bed is red!" —
+ * putting the Unit 2 colours together with the furniture of this unit. Story frame: Open House Day on a little
+ * street of three coloured houses; Mia, Bella and Leo show their bedrooms. Review sounds: B and S (bed, sofa).
+ * Lesson-Variety Engine: researched Cambridge Pre A1 Starters Listening Part 1 (listen and draw lines to the
+ * right place), the Guess Who information game, Lingokids / Khan Academy Kids "listen and find" tasks and
+ * classroom show and tell; one new game — Whose Room? (two clues, thing + colour, find the friend's room).
+ * Pictures made with Canva; the coloured beds, chairs and sofas are recolours of the Canva furniture stickers. */
+const bgU6L4Street = `${A}/scenes/bg-u6l4-street-wide.png`;
+const bgU6L4Bedroom = `${A}/scenes/bg-u6l4-bedroom-empty-wide.png`;
+const itemBedRed = `${A}/items/item-bed-red.png`;
+const itemBedYellow = `${A}/items/item-bed-yellow.png`;
+const itemBedGreen = `${A}/items/item-bed-green.png`;
+const itemChairBlue = `${A}/items/item-chair-blue.png`;
+const itemChairYellow = `${A}/items/item-chair-yellow.png`;
+const itemChairGreen = `${A}/items/item-chair-green.png`;
+const itemSofaBlue = `${A}/items/item-sofa-blue.png`;
+const itemSofaGreen = `${A}/items/item-sofa-green.png`;
+const U6L4_RED = '#E63946';
+const U6L4_BLUE = '#3B82F6';
+const U6L4_YELLOW = '#FBBF24';
+const U6L4_GREEN = '#22C55E';
+
+export const LESSON_U6L4_TITLE = 'My House';
+export const LESSON_U6L4_OBJECTIVE = 'Show and tell a room — "This is my bedroom. My bed is red! My chair is blue!" — find each friend\'s room from two clues, ask "Is it a bed? Is it red?", sing about the house, and hear B and S again (bed, sofa) — by listening, finding, asking and speaking, no reading.';
+
+export const LESSON_U6L4_SCENES: Scene[] = [
+  { id: 'u6l4-title', kind: 'title-card', bg: bgU6L4Street, level: 'Pre-A1', unit: 'Unit 6', lessonLabel: 'Lesson 4', title: 'My House', subtitle: 'Come and see!' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u6l4-song', kind: 'song', bg: bgU6L4Street, title: '\u{1F3B5} My House \u{1F3B5}', teacher: 'Sing and point: point to your bed, your chair and your sofa when you sing the colour!',
+    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/my-house-song-u6l4.mp3?v=1`,
+    lineDurationsMs: [4400, 4660, 5490, 5512],
+    songPrompt: 'Cheerful swingy ukulele kids song about showing your house to friends',
+    lyrics: [
+      { who: 'pip', text: 'This is my house, my house, my house!', emotion: 'happy' },
+      { who: 'mia', text: 'My bed is red! My chair is blue!', emotion: 'happy' },
+      { who: 'bella', text: 'My sofa is green, and I love it too!', emotion: 'happy' },
+      { who: 'leo', text: 'Come and see my happy house!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 3 · In My House (the family evening rooms).
+    id: 'u6l4-recall-warmup', kind: 'recall-warmup', bg: bgU6L4Street, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 3 · In My House',
+    teacher: 'Warm-up from last lesson: Pip says where someone is, the child finds the room. Say each one together.',
+    items: [
+      { word: 'kitchen', say: 'Mom is in the kitchen! Find it!', img: `${A}/items/item-u6l3-family-kitchen.png` },
+      { word: 'bedroom', say: 'The baby is in the bedroom! Find it!', img: `${A}/items/item-u6l3-family-bedroom.png` },
+      { word: 'living room', say: 'Dad is in the living room! Find it!', img: `${A}/items/item-u6l3-family-living-room.png` },
+      { word: 'bathroom', say: 'My sister is in the bathroom! Find it!', img: `${A}/items/item-u6l3-family-bathroom.png` },
+    ],
+  },
+  {
+    id: 'u6l4-intro', kind: 'cinematic', bg: bgU6L4Street, title: 'My House', subtitle: 'Open House Day!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Today is Open House Day!' },
+      { who: 'mia', line: 'Come and see my house!' },
+      { who: 'pip', line: 'Let\'s see our friends\' bedrooms!' },
+    ],
+    cta: "Let's go!",
+  },
+
+  /* 4-6 The new sentences, move, signature game */
+  {
+    id: 'u6l4-sentences', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU6L4Bedroom, teacher: 'Point to the picture and say it like a show-and-tell: "My bed is red!"',
+    cards: [
+      { who: 'pip', sentence: 'This is my bedroom.', img: `${A}/items/item-room-bedroom.png`, imgLabel: 'My bedroom!' },
+      { who: 'mia', sentence: 'My bed is red.', img: itemBedRed, imgLabel: 'A red bed!' },
+      { who: 'leo', sentence: 'My chair is blue.', img: itemChairBlue, imgLabel: 'A blue chair!' },
+      { who: 'bella', sentence: 'My sofa is green.', img: itemSofaGreen, imgLabel: 'A green sofa!' },
+    ],
+  },
+  {
+    id: 'u6l4-move-say', kind: 'tpr-actions', bg: bgU6L4Bedroom, who: 'pip',
+    teacher: 'Stand up! Do each action with Pip, then say the colour.',
+    rounds: [
+      { line: 'Make your bed! My bed is red!', emoji: '\u{1F6CF}\u{FE0F}', img: itemBedRed },
+      { line: 'Sit on your chair! My chair is blue!', emoji: '\u{1FA91}', img: itemChairBlue },
+      { line: 'Jump on the sofa... no, no! Sit down!', emoji: '\u{1F6CB}\u{FE0F}', img: itemSofaGreen },
+      { line: 'Open the door: come and see my house!', emoji: '\u{1F6AA}' },
+    ],
+  },
+  {
+    // Signature game (new): two clues, thing + colour — find whose room it is.
+    id: 'u6l4-whose-room', kind: 'whose-room', bg: bgU6L4Street, who: 'pip', room: bgU6L4Bedroom,
+    teacher: 'Whose Room? Listen to the friend: "My bed is red and my chair is blue!" Find the room with BOTH, then say whose room it is.',
+    things: [
+      { name: 'bed', x: 25, y: 74, w: 30 },
+      { name: 'chair', x: 78, y: 75, w: 13 },
+    ],
+    rooms: [
+      { owner: 'mia', things: [{ color: 'red', img: itemBedRed }, { color: 'blue', img: itemChairBlue }] },
+      { owner: 'bella', things: [{ color: 'red', img: itemBedRed }, { color: 'yellow', img: itemChairYellow }] },
+      { owner: 'leo', things: [{ color: 'blue', img: itemBed }, { color: 'yellow', img: itemChairYellow }] },
+    ],
+    rounds: [
+      { room: 0, line: 'My bed is red and my chair is blue!', say: "It's Mia's room!" },
+      { room: 2, line: 'My bed is blue and my chair is yellow!', say: "It's Leo's room!" },
+      { room: 1, line: 'My bed is red and my chair is yellow!', say: "It's Bella's room!" },
+    ],
+    doneLine: 'We found every room! Thank you, friends!',
+  },
+
+  /* 7-11 Ask and answer */
+  {
+    id: 'u6l4-your-bed', kind: 'join-stage', bg: bgU6L4Bedroom, teacher: 'Mia asks about the student\'s own room. Any colour is fine!', cast: ['mia'],
+    turns: [
+      { who: 'mia', line: 'This is my bedroom. My bed is red! What colour is your bed?', bubble: 'right' },
+      { who: 'student', line: 'My bed is blue!', bubble: 'right' },
+      { who: 'mia', line: 'Cool! What colour is your chair?', bubble: 'right' },
+      { who: 'student', line: 'My chair is green!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u6l4-secret', kind: 'secret-card', bg: bgU6L4Bedroom, who: 'pip',
+    teacher: 'Pip hides one thing from his room. The student asks: "Is it a bed?" "Is it red?" Pip answers yes or no.',
+    cards: [
+      { colorWord: 'red', colorHex: U6L4_RED, shape: 'square', img: itemBedRed, word: 'bed' },
+      { colorWord: 'blue', colorHex: U6L4_BLUE, shape: 'square', img: itemBed, word: 'bed' },
+      { colorWord: 'red', colorHex: U6L4_RED, shape: 'square', img: itemChair, word: 'chair' },
+      { colorWord: 'yellow', colorHex: U6L4_YELLOW, shape: 'square', img: itemChairYellow, word: 'chair' },
+      { colorWord: 'blue', colorHex: U6L4_BLUE, shape: 'square', img: itemSofaBlue, word: 'sofa' },
+      { colorWord: 'green', colorHex: U6L4_GREEN, shape: 'square', img: itemSofaGreen, word: 'sofa' },
+    ],
+    rounds: [{ secret: 1 }, { secret: 3 }],
+  },
+  {
+    id: 'u6l4-spin', kind: 'spin-wheel', bg: bgU6L4Bedroom, title: 'Spin!',
+    teacher: 'Have the student spin, then show and tell that thing: "My bed is green!" Or tap a number.',
+    items: [
+      { label: 'My bed is green!', left: '20%', top: '62%', img: itemBedGreen },
+      { label: 'My chair is yellow!', left: '36%', top: '84%', img: itemChairYellow },
+      { label: 'My sofa is blue!', left: '64%', top: '84%', img: itemSofaBlue },
+      { label: 'My chair is green!', left: '80%', top: '62%', img: itemChairGreen },
+    ],
+    wheelAt: { left: '50%', top: '40%' },
+  },
+
+  /* 12-13 Sounds review: B and S */
+  {
+    id: 'u6l4-sort-bs', kind: 'sound-sort', bg: bgU6L4Street, teacher: 'Listen to each word. Does it start with /b/ or /s/? Drag it to B or S!',
+    targets: [
+      { letter: 'B', phoneme: '/b/', who: 'pip' },
+      { letter: 'S', phoneme: '/s/', who: 'bella' },
+    ],
+    items: [
+      { word: 'bed', img: itemBed, emoji: '\u{1F6CF}\u{FE0F}', letter: 'B' },
+      { word: 'sofa', img: itemSofa, emoji: '\u{1F6CB}\u{FE0F}', letter: 'S' },
+      { word: 'ball', img: itemBall, emoji: '\u{26BD}', letter: 'B' },
+      { word: 'sun', img: itemSun, emoji: '\u{2600}\u{FE0F}', letter: 'S' },
+      { word: 'bear', img: itemBear, emoji: '\u{1F9F8}', letter: 'B' },
+      { word: 'snake', img: itemSnake, emoji: '\u{1F40D}', letter: 'S' },
+    ],
+  },
+
+  /* 14 Show and tell */
+  {
+    id: 'u6l4-show-tell', kind: 'join-stage', bg: bgU6L4Street, teacher: 'Show and tell! The student shows their own room (a drawing, a toy or a real room on camera) and tells the colours.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Your turn! Show me your bedroom!', bubble: 'right' },
+      { who: 'student', line: 'This is my bedroom. My bed is blue!', bubble: 'right' },
+      { who: 'pip', line: 'Wow! And your chair?', bubble: 'right' },
+      { who: 'student', line: 'My chair is red!', bubble: 'right' },
+    ],
+  },
+
+  /* 15-16 Sticker + Home Mission */
+  {
+    id: 'u6l4-sticker', kind: 'sticker-reward', bg: bgU6L4Street, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Great show and tell! Here is a red bed sticker for you!', sticker: { img: itemBedRed, label: 'Show and tell star' },
+  },
+  {
+    id: 'u6l4-home-mission', kind: 'home-mission', bg: bgU6L4Bedroom, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: show your bedroom to your family! Say "This is my bedroom. My bed is…"!',
+    parentNote: 'Let your child give you a tour of their bedroom (or a toy house). They say "This is my bedroom." and point: "My bed is blue! My chair is red!". Ask "What colour is your bed?" and let them answer with a whole sentence.',
+    steps: [
+      { emoji: '\u{1F6AA}', say: 'This is my bedroom.' },
+      { emoji: '\u{1F6CF}\u{FE0F}', img: itemBedRed, say: 'My bed is red!' },
+      { emoji: '\u{1FA91}', img: itemChairBlue, say: 'My chair is blue!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u6l4-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU6L4Street, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Knock, knock on the red door!', emoji: '\u{270A}' },
+      { line: 'Walk to the blue house: step, step, step!', emoji: '\u{1F6B6}' },
+      { line: 'Climb the stairs to the bedroom!', emoji: '\u{1FA9C}' },
+      { line: 'Jump into bed... and sleep! Shh!', emoji: '\u{1F634}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u6l4-spy', kind: 'color-spy', bg: bgU6L4Street, who: 'pip', teacher: 'Extra time: I Spy on the street! Find the colour Pip says, then say "The red house!"',
+    spots: [
+      { colorWord: 'RED', colorHex: U6L4_RED, label: 'Red house', left: '24%', top: '52%' },
+      { colorWord: 'BLUE', colorHex: U6L4_BLUE, label: 'Blue house', left: '49%', top: '52%' },
+      { colorWord: 'YELLOW', colorHex: U6L4_YELLOW, label: 'Yellow house', left: '76%', top: '52%' },
+      { colorWord: 'GREEN', colorHex: U6L4_GREEN, label: 'Green tree', left: '5%', top: '56%' },
+    ],
+    clueOrder: ['BLUE', 'GREEN', 'RED', 'YELLOW'],
+    aspect: 1376 / 768,
+  },
+
+  /* Goodbye */
+  {
+    id: 'u6l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u6l4-finale', kind: 'finale', bg: bgU6L4Street, who: 'pip', line: 'This is my house! My bed is red, my chair is blue — come and see! Goodbye, friend!' },
+];
+
 /* =============================================================================
  * Pre-A1 Unit 5, Lesson 1 — "Mom, Dad, Me!"
  *
@@ -6704,6 +10446,18 @@ export const LESSON_U5L1_OBJECTIVE = 'Identify and name mom and dad, use "This i
 export const LESSON_U5L1_SCENES: Scene[] = [
   { id: 'u5l1-title', kind: 'title-card', bg: bgU5L1FamilyHome, level: 'Pre-A1', unit: 'Unit 5', lessonLabel: 'Lesson 1', title: 'Mom, Dad, Me!', subtitle: "Meet Pip's family!" },
   {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 4 · Lesson 6 · Simon Says Body Parts.
+    id: 'u5l1-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u5l1-family-home.png`, who: 'pip', mode: 'shadow',
+    fromLabel: "Unit 4 · Lesson 6 · Simon Says Body Parts",
+    teacher: 'Warm-up from last lesson: Pip says a word, the child finds it. Say each word together.',
+    items: [
+      { word: "mouth", say: "Find the mouth!", img: `${A}/items/item-card-mouth.png` },
+      { word: "foot", say: "Show me the foot!", img: `${A}/items/item-part-foot.png` },
+      { word: "ears", say: "Point to the ears!", img: `${A}/items/item-card-ears.png` },
+      { word: "hand", say: "Find the hand!", img: `${A}/items/item-part-hand.png` },
+    ],
+  },
+  {
     id: 'u5l1-hello', kind: 'roleplay', bg: bgU5L1FamilyHome, teacher: "Good morning! Let's say hello and warm up together.", cast: ['pip', 'bella', 'willow', 'mia'],
     script: [
       { who: 'pip', line: 'Hello, hello, hello my friend!', repeat: true },
@@ -6741,6 +10495,18 @@ export const LESSON_U5L1_SCENES: Scene[] = [
   {
     id: 'u5l1-vocab-family', kind: 'listen-repeat-cards', bg: bgU5L1FamilyHome, teacher: 'Listen, then repeat!', bare: true, textSide: 'top',
     cards: [{ who: 'pip', sentence: 'Family! This is my family!', img: bgU5L1FamilyHome, imgLabel: 'Family' }],
+  },
+  {
+    id: 'u5l1-song', kind: 'song', bg: bgU5L1FamilyHome, title: '\u{1F3B5} My Family Song \u{1F3B5}', teacher: 'Sing and point! Point to Mom on "mom", Dad on "dad", and give yourself a hug on "me".',
+    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-song-u5l1.mp3?v=1`,
+    lineDurationsMs: [3600, 4100, 3940, 8422],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'This is my mom! I love my mom!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my dad! I love my dad!', emotion: 'happy' },
+      { who: 'pip', text: 'Mom and dad and me! We are a family!', emotion: 'happy' },
+      { who: 'pip', text: 'Mom, dad, me! A happy family!', emotion: 'happy' },
+    ],
   },
   {
     // Per direct user request: removed this lesson's standalone M/D

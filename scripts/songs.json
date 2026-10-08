@@ -574,5 +574,741 @@
       "Shelly is a rainbow fish!"
     ],
     "engine": "lyria"
+  },
+  "u3l3-play": {
+    "publicPath": "public/lep1/audio/play-song-u3l3.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP question song for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Do you like kites? Yes, I do! Yes, I do!",
+      "Do you like robots? Yes, I do! Yes, I do!",
+      "Do you like balls? No, I don't! No, I don't!",
+      "Do you like to play? Yes, I do! Let's play!"
+    ]
+  },
+  "u3l4-favorite": {
+    "publicPath": "public/lep1/audio/favorite-toy-song-u3l4.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP question song for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "My favorite toy is my teddy bear! It is big!",
+      "My favorite toy is my robot! It is small!",
+      "Big, big, big! Small, small, small!",
+      "What is your favorite toy? Show and tell!"
+    ]
+  },
+  "u3l5-tidy": {
+    "publicPath": "public/lep1/audio/tidy-up-song-u3l5.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP clean-up song for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Tidy up, tidy up, put the toys away!",
+      "The ball goes in the box! In, in, in!",
+      "The teddy goes on the bed! On, on, on!",
+      "The car goes under the chair! Under, under!"
+    ]
+  },
+  "u3l6-fair": {
+    "publicPath": "public/lep1/audio/toy-fair-song-u3l6.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP question song for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Toy fair, toy fair, play and win!",
+      "I want the robot, please! The robot, please!",
+      "I want the kite, please! The kite, please!",
+      "Play and win and say it! Thank you! Hooray!"
+    ]
+  },
+  "u4l1-body": {
+    "publicPath": "public/lep1/audio/body-song-u4l1.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP action song to move and dance to for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Head, shoulders, knees and toes, knees and toes!",
+      "Head, shoulders, knees and toes, knees and toes!",
+      "Touch your head and touch your toes!",
+      "Head, shoulders, knees and toes, knees and toes!"
+    ]
+  },
+  "u5l1-family": {
+    "publicPath": "public/lep1/audio/family-song-u5l1.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP warm happy family song for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "This is my mom! I love my mom!",
+      "This is my dad! I love my dad!",
+      "Mom and dad and me! We are a family!",
+      "Mom, dad, me! A happy family!"
+    ]
+  },
+  "u4l2-face": {
+    "publicPath": "public/lep1/audio/face-song-u4l2.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP action song to move and dance to for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Eyes, ears, mouth and nose! Eyes, ears, mouth and nose!",
+      "Two eyes to see! Two ears to hear!",
+      "One little nose and one big smile!",
+      "Eyes, ears, mouth and nose!"
+    ]
+  },
+  "u4l3-body": {
+    "publicPath": "public/lep1/audio/body-song-u4l3.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP beach action song to move and dance to for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Hands, fingers, feet and arms! Hands, fingers, feet and arms!",
+      "Clap your hands! Wiggle your fingers!",
+      "Stamp your feet! Wave your arms!",
+      "Hands, fingers, feet and arms!"
+    ]
+  },
+  "u4l4-body": {
+    "publicPath": "public/lep1/audio/body-song-u4l4.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP garden action song to move and point to for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "I have two eyes! I have one nose!",
+      "I have ten fingers! I have ten toes!",
+      "Big, big feet! Small, small hands!",
+      "This is my body! My big, big body!"
+    ]
+  },
+  "u4l5-moves": {
+    "publicPath": "public/lep1/audio/animal-moves-song-u4l5.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP animal park action song to move and point to for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "I turn my head! I can do it!",
+      "I wave my arms! I can do it!",
+      "I stomp my feet! I clap my hands!",
+      "From head to toe, we can do it!"
+    ]
+  },
+  "u5l2-family": {
+    "publicPath": "public/lep1/audio/family-song-u5l2.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP family song about brothers and sisters to move and point to for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "This is my brother! He is big!",
+      "This is my sister! She is small!",
+      "This is my baby! Tiny, tiny baby!",
+      "I love my family! I love you!"
+    ]
+  },
+  "u5l3-grandma": {
+    "publicPath": "public/lep1/audio/grandma-song-u5l3.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP song about visiting grandma and grandpa, to wave and hug along for young children, energetic 116 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "116 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Hello, Grandma! Hello, Grandpa!",
+      "This is my grandma! Big, big hug!",
+      "This is my grandpa! Big, big hug!",
+      "I love my grandma! I love my grandpa!"
+    ]
+  },
+  "u5l4-family-tree": {
+    "publicPath": "public/lep1/audio/family-tree-song-u5l4.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP song about a family tree, to point and sing along for young children, energetic 118 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "118 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "This is my grandma, this is my grandpa!",
+      "This is my mom, and this is my dad!",
+      "My brother, my sister, the baby and me!",
+      "We are a family! My family tree!"
+    ]
+  },
+  "u5l5-my-dad": {
+    "publicPath": "public/lep1/audio/my-dad-song-u5l5.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP song about a fun day with Dad (play ball, feed the ducks, ice cream, read a book), to sing and do the actions for young children, energetic 118 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "118 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "We play ball, just me and my dad!",
+      "We feed the ducks! Quack, quack, quack!",
+      "Yum, yum, ice cream! We read a book!",
+      "I love you, Dad! The best day!"
+    ]
+  },
+  "u5l6-family-show": {
+    "publicPath": "public/lep1/audio/family-show-song-u5l6.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP song about a family game show \"Who is this? This is my mom!\", to point and sing along for young children, energetic 118 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "118 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Who is this? This is my mom!",
+      "Who is this? This is my dad!",
+      "Grandma, Grandpa, sister, brother!",
+      "The baby and me! We are a family!"
+    ]
+  },
+  "u6l1-my-house": {
+    "publicPath": "public/lep1/audio/my-house-song-u6l1.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP song about rooms in a house \"This is the kitchen, this is the bedroom\", to point and sing along for young children, cheerful 112 BPM pop with bouncy drums, groovy bass, bright piano and hand claps, fun young pop vocals with a kids sing-along feel. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat",
+      "cheerful",
+      "bouncy drums",
+      "groovy bass",
+      "bright piano",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "112 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Come in, come in! This is my house!",
+      "This is the kitchen! This is the bedroom!",
+      "This is the bathroom! The living room too!",
+      "Come in, come in! I love my house!"
+    ]
+  },
+  "u6l2-moving-day": {
+    "publicPath": "public/lep1/audio/moving-day-song-u6l2.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP song about moving into a new house \"Table, chair! Bed and sofa!\", to point and sing along for young children, bouncy 116 BPM pop with punchy drums, groovy bass, bright ukulele and hand claps, fun young pop vocals with a kids sing-along feel. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat",
+      "cheerful",
+      "punchy drums",
+      "groovy bass",
+      "bright ukulele",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "116 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Table and chair! Table and chair!",
+      "Bed and sofa! Over there!",
+      "Bring it in, one, two, three!",
+      "A new house for you and me!"
+    ]
+  },
+  "u6l3-in-my-house": {
+    "publicPath": "public/lep1/audio/in-my-house-song-u6l3.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP song about where things are in a house \"The bed is in the bedroom!\", to point and sing along for young children, warm 110 BPM pop with bouncy drums, groovy bass, bright piano and hand claps, clear fun young pop vocals with a kids sing-along feel, every word sung slowly and clearly. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat",
+      "warm",
+      "bouncy drums",
+      "groovy bass",
+      "bright piano",
+      "hand claps",
+      "clear kids vocals",
+      "sing-along chorus",
+      "110 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "The bed is in the bedroom!",
+      "The table is in the kitchen!",
+      "The sofa is in the living room!",
+      "I love my house, my happy house!"
+    ]
+  },
+  "u6l4-my-house": {
+    "publicPath": "public/lep1/audio/my-house-song-u6l4.mp3",
+    "durationSec": 20,
+    "style": "Cheerful swingy ukulele kids song about showing your house to friends, \"This is my house!\", warm 100 BPM with ukulele strums, light shuffle drums, xylophone, whistling and hand claps, clear friendly young vocals with a kids sing-along feel, every word sung slowly and clearly. Definitely not a lullaby.",
+    "positiveStyles": [
+      "ukulele",
+      "cheerful",
+      "swing shuffle",
+      "xylophone",
+      "whistling",
+      "hand claps",
+      "clear kids vocals",
+      "sing-along chorus",
+      "100 BPM",
+      "warm"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "heavy drums"
+    ],
+    "lines": [
+      "This is my house, my house, my house!",
+      "My bed is red! My chair is blue!",
+      "My sofa is green, and I love it too!",
+      "Come and see my happy house!"
+    ]
   }
 }

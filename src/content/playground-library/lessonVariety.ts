@@ -20,7 +20,7 @@ import type { Scene } from './unit1/scenes';
 
 /** The shared lesson spine: routine kinds every lesson may repeat (hello, story, songs, rewards…). */
 export const ROUTINE_KINDS: ReadonlySet<string> = new Set([
-  'title-card', 'song', 'cinematic', 'story-video', 'story-order', 'listen-repeat-cards', 'tpr-actions',
+  'title-card', 'song', 'cinematic', 'recall-warmup', 'story-video', 'story-order', 'listen-repeat-cards', 'tpr-actions',
   'join-stage', 'spin-wheel', 'sound-model', 'trace', 'echo', 'sticker-reward', 'home-mission', 'finale',
 ]);
 
@@ -53,9 +53,24 @@ export const GRANDFATHERED: readonly string[] = ['5-1'];
 
 export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '2-2': { settings: ['art studio', 'fruit market', 'meadow'], look: "Pip's sunny paint studio indoors, a striped market stall, the rainbow meadow; colour-mixing mission" },
+  '2-3': { settings: ['town street', 'builder yard'], look: 'sunny Shape Town street with a clock tower, a house and a flag; a grassy builder yard where the friends build with shapes' },
   '3-3': { settings: ['workshop', 'park'], look: 'sunny outdoor park, kites in a blue sky' },
   '3-4': { settings: ['classroom', 'garden pool'], look: 'Show and Tell circle on the rainbow rug; summer garden with a paddling pool' },
   '4-1': { settings: ['dance studio'], look: 'bright dance studio in morning sun: mirror, barre and colourful mats; a dance class with Coach Willow' },
+  '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
+  '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
+  '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '6-4': { settings: ['street of coloured houses', 'empty lilac bedroom'], look: "Open House Day: a sunny little street of three small houses (red, blue, yellow) with stone paths and white fences, then one empty lilac bedroom with white stars and a round window, furnished three ways in different colours for each friend (Mia, Bella, Leo)" },
+  '6-3': { settings: ['empty dollhouse', 'family evening at home'], look: "Pip's house opened like a dollhouse, first completely empty (bare rooms, sunny day) for the child to furnish, then on a cosy lamp-lit evening with the whole fox family each in a room: the baby asleep, sister brushing teeth, Mom cooking, Dad reading with Pip on the sofa" },
+  '6-2': { settings: ['moving-day street', 'empty new room'], look: "moving day: a blue moving truck full of boxes outside Pip's family's new house on a sunny street, then a bright, empty new room (pale walls, wooden floor, a big window) that fills up with furniture piece by piece" },
+  '6-1': { settings: ['house front garden', 'dollhouse rooms'], look: "Pip's own cream house with a red roof and a round green door on a sunny morning, then the same house opened like a dollhouse: four warm rooms (blue bedroom, tiled bathroom, green kitchen, orange living room); lights off and on for hide and seek" },
+  '5-6': { settings: ['game-show stage'], look: "a bright children's TV game-show stage: purple curtain, warm spotlights, three podiums with big red buzzers; Pip is the host with a microphone and the whole fox family claps in the front row" },
+  '5-5': { settings: ['duck pond', 'home at night'], look: "a sunny park with a duck pond, a bench and an ice-cream cone, then Pip's warm living room and bedroom at night; just Pip and Dad (green cardigan), four little ducks; a story told as a flip-book film" },
+  '5-4': { settings: ['hilltop oak'], look: "a sunny green hill with one giant oak tree: the whole fox family (Grandma, Grandpa, Mom, Dad, brother, Pip, sister, baby) at a picnic under it; the empty oak with three branch levels becomes the family tree" },
+  '5-3': { settings: ['cottage'], look: "Grandma and Grandpa's cozy cottage: a red sofa by the fireplace, a warm kitchen on baking day, a garden with a little wooden gate; Grandma (grey bun, glasses, lavender cardigan) and Grandpa (moustache, glasses, flat cap)" },
+  '5-2': { settings: ['backyard'], look: "sunny backyard of Pip's home: wooden fence, a tree swing, a picnic blanket; family photo day with Pip's big brother, little sister and the baby" },
+  '4-6': { settings: ['space station'], look: 'bright pastel space station with round star windows and a ringed planet; Pip and Mia play Simon Says with Robo, a silver robot drawn in code' },
+  '4-3': { settings: ['beach'], look: 'sunny beach day: golden sand, blue sea, sandcastle and umbrella; top-down wet sand for prints; Bella and Leo' },
   '3-6': { settings: ['toy fair'], look: 'outdoor fair: sunny day with striped tents, then a golden evening with string lights' },
   '3-5': { settings: ['bedroom'], look: 'cozy bedroom in warm afternoon light; tidy-up mission with a surprise kitten' },
 };
@@ -72,6 +87,27 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the colour is only HEARD (no printed word), and a wrong food is named back ("The carrot is orange!") so every mistake teaches',
       'the monsters ask in turn: the child must listen to WHO is hungry and WHAT colour',
       'eaten food stays on each monster\'s plate (permanence); the story film labels each colour with a line to the thing',
+    ],
+  },
+  '2-3': {
+    sources: [
+      'Cambridge (Pre A1 Starters / ELT: listen and put it in the picture; "Which is correct?" picture choice)',
+      'Oxford (Numicon feely bag) + British Council LearnEnglish Kids "Mystery bag game"',
+      'Duolingo ABC / Khan Academy Kids (finger tracing; shape recognition in Logic+)',
+      'Lingokids (shapes games; "7 ways to teach shapes") and Novakid shape games',
+      'englishclub / eslkidstuff (TPR shapes: draw in the air, make shapes with the body)',
+    ],
+    mechanics: [
+      'finger tracing (Duolingo ABC, Khan Academy Kids) + Cambridge "put it in the picture" → Magic Pencil: trace the shape and it comes alive in Shape Town',
+      'the feely / mystery bag (Oxford Numicon, British Council) → What\'s Peeking?: only an edge or a corner shows; guess the shape',
+      'the toddler shape-sorter toy + Cambridge colour-and-object listening → Shape Sorter: "Put in the blue square!"',
+      'bubble / balloon pop (Lingokids, Wordwall) → calm Bubble Pop: pop only the shape you hear',
+    ],
+    betterThan: [
+      'tracing is not a worksheet: every finished shape becomes a thing that stays (the sun, a present, a pizza, a ball), so the child paints a whole picture',
+      'in What\'s Peeking? a wrong guess makes the shape peek out a little more — every miss is a clue, never a loss',
+      'the sorter has two blocks of each shape, so the colour must be HEARD too (recycling Lessons 1-2); a wrong block is named back',
+      'calm by design: no clock anywhere, bubbles wait on the spot, the right answer glows after two misses; no reading pages (the old timed Shape Dash, text storybook and "Read the word" are gone)',
     ],
   },
   '3-4': {
@@ -118,6 +154,189 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'every part is touched on the child\'s own body too (TPR) before it is tapped on screen',
     ],
   },
+  '4-2': {
+    sources: ['Lingokids (face-parts games, Face Scramble)', 'TinyTap (parts of the face)', 'Genki English ("Make a face" song)', 'Face Maker drag-and-drop game (englishflashgames)', 'Cambridge (Pre A1 Starters body & face)'],
+    mechanics: [
+      'apps\' "put the features back on the face" → Pancake Faces: tap WHERE each fruit part goes on a plain pancake',
+      'the classroom "Point to your …!" routine → the child gives the order to Mia (role swap)',
+      'face-parts action songs → our own Eyes, Ears, Mouth and Nose song, sung while pointing',
+    ],
+    betterThan: [
+      'no picture of the part to match: the spoken word alone tells the child where to tap (the apps show the piece)',
+      'a wrong place is named back ("Not there! That\'s for the nose!"), so every mistake teaches a word',
+      'the finished pancake comes alive and smiles, and the same game returns with a new order for Mia',
+    ],
+  },
+  '4-4': {
+    sources: ['Cambridge (Pre A1 Starters / ELT: listen and colour / draw the monster)', 'Lingokids (build-a-character body games)', 'Khan Academy Kids (tap-to-count)', 'Duolingo ABC (count and choose)', '"Go Away, Big Green Monster!" picture book (a face built part by part)'],
+    mechanics: [
+      'Cambridge "listen and draw the monster" + build-a-character apps → Monster Maker: the monster says "I have three eyes!" and the child picks the part it hears',
+      'tap-to-count (Khan Academy Kids, Duolingo ABC) → How Many?: tap each eye to count it out loud, then choose the number',
+      'the "Go Away, Big Green Monster!" reveal → a friendly monster, Bo, the class meets and compares bodies with',
+    ],
+    betterThan: [
+      'the NUMBER and the SIZE decide the part (one / two / three eyes, big / small feet) — apps only ask for the part',
+      'counting ends in a real sentence the child hears and says ("I have three eyes!"), and the number choice only opens after everything is counted (no guessing)',
+      'calm by design: no clock, a wrong part is named back ("That\'s two eyes! Try again!") and the right one glows after two misses',
+    ],
+  },
+  '4-5': {
+    sources: ['Eric Carle "From Head to Toe" (call-and-response movement book: "Can you do it?" — "I can do it!")', 'Lingokids (action / animal games)', 'Cambridge (Pre A1 Starters listen and point; look and guess)', 'Khan Academy Kids (hide-and-reveal, calm self-paced)', 'Sesame Workshop (model → copy, pause for the child)'],
+    mechanics: [
+      'the movement-book call and response → a stills film where each animal shows ONE move, Pip asks "Can you do it?", pauses, then copies it',
+      'listen and point → Who Can Do It?: hear the move, tap the animal, then do the move and say "I can do it!"',
+      'the peekaboo "Whose tail is it?" pattern → Whose Is It?: one body part peeks out of a bush, tap the animal, the bush slides away',
+    ],
+    betterThan: [
+      'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
+      'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
+      'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '6-4': {
+    sources: ['Cambridge (Pre A1 Starters Listening Part 1: listen and draw lines from each name to the person described; Part 4 listen and colour)', 'Lingokids ("In My Bedroom" topics; read and colour the bedroom)', 'Guess Who (Hasbro) information game (one clue is not enough)', 'Khan Academy Kids (calm listen-and-find picture tasks)', 'classroom show and tell'],
+    mechanics: [
+      'Starters Part 1 (match a name to the one described) + Guess Who → Whose Room?: three bedrooms with the same things in different colours; a friend says "My bed is red and my chair is blue!" and the child finds the only room that fits both clues',
+      'Starters Part 4 colour words on furniture → Secret Card with coloured beds, chairs and sofas: the child asks "Is it a bed?" "Is it red?"',
+      'show and tell → the child shows their own bedroom: "This is my bedroom. My bed is blue!"; I Spy on a street of coloured houses; a B / S sound sort (bed, sofa)',
+    ],
+    betterThan: [
+      'no room can be found from one word: two rooms share each colour, so the child must understand the WHOLE show-and-tell sentence (thing + colour, twice) — the apps check one word',
+      'a wrong room is named back with what is different ("No! That chair is yellow!"), so every mistake is another colour sentence; the right room glows after two tries, no clock',
+      'each friend pops into their room and stays there, and the child then says whose room it is, so the game ends with all three friends at home and the child ready to show their own room',
+    ],
+  },
+  '6-3': {
+    sources: ['Toca Boca / Lingokids (build and decorate a house: put each thing in a room)', 'Cambridge (Pre A1 Starters listen and draw a line; "Where is…?" picture questions)', 'Khan Academy Kids (calm two-step listening tasks)', 'Wordwall (jigsaw / picture puzzles)'],
+    mechanics: [
+      'house decorating → House Builder: "Put the bed in the bedroom!" — the child picks the thing on the tray, then the room, and it stays there',
+      '"Where is…?" picture questions → the family evening picture: "Where is Mom? Mom is in the kitchen!" (Unit 5 family + Unit 6 rooms)',
+      'a furniture pattern train, a jigsaw of the family evening and a first-sound check (B, K, S, T)',
+    ],
+    betterThan: [
+      'one sentence carries TWO words the child must understand — the thing AND the room — so the game checks the whole sentence, not one word',
+      'the house the child furnishes stays furnished, and the child says the whole sentence ("The bed is in the bedroom!") after every move',
+      'calm by design: a wrong thing or room is named back, the right one glows after two tries, no clock',
+    ],
+  },
+  '6-2': {
+    sources: ['Toca Boca-style room decorating (drag furniture into a room)', 'Lingokids (house and furniture words, listen and place)', 'Khan Academy Kids (calm listening tasks)', 'Cambridge (Pre A1 Starters listen and draw a line: put the thing where it goes)'],
+    mechanics: [
+      'room decorating → Moving Day: Pip asks "Bring the bed, please!", the child taps that piece on the moving truck and it flies to its place in the empty new room',
+      'kim\'s-game memory → the moving truck version of the missing-car train: which box is empty?',
+      'a CH / K catch sort (chair, cheese, chick vs. key, kite, kitten) that brings back last lesson\'s K',
+    ],
+    betterThan: [
+      'nothing on screen names the piece — the spoken word alone picks it — and the room the child furnishes stays furnished, so the game ends with the child\'s own finished room',
+      'every piece is named twice: Pip says it, then the child says "It\'s a sofa!" on the microphone before the next box comes',
+      'calm by design: a wrong piece is named back ("No, that\'s the chair!"), the right one glows after two tries, no clock',
+    ],
+  },
+  '6-1': {
+    sources: ['Lingokids (house and rooms play; explore-the-house hide and seek)', 'Toca Boca-style dollhouse apps (open the house, visit each room)', 'Khan Academy Kids (calm "find it" listening)', 'Cambridge (Pre A1 Starters listen and point on a house picture)', 'classroom hide-and-seek "Where\'s the teddy?" (games4esl)'],
+    mechanics: [
+      'explore-the-house hide and seek → Where\'s Pip?: every room is dark, Pip calls "I\'m in the kitchen! Find me!", the child taps the room, the light clicks on and Pip pops up',
+      'dollhouse visiting → the house opened like a dollhouse is the picture for the words, the spinner, the song and the home tour',
+      'Move & Say room actions (cook, sleep, wash, watch TV) and memory pairs of the rooms',
+    ],
+    betterThan: [
+      'all rooms are dark, so only the room WORD finds Pip — no guessing from the picture — and the child answers with the whole phrase "In the kitchen!"',
+      'a wrong room lights up empty and is named back ("No, that\'s the bathroom!"), teaching the word it opened; the right room glows after two tries, no clock',
+      'the same dollhouse picture carries the whole lesson (cards, game, spinner, home tour), so every room looks the same everywhere and the child builds one mental map of the house',
+    ],
+  },
+  '5-6': {
+    sources: ['family TV quiz-show format (buzzer + podiums; the format only, no content)', 'Khan Academy Kids (shadow puzzles)', 'Wordwall (image quiz: a picture uncovers tile by tile)', 'Cambridge (Pre A1 Starters listen and point; "Who is this?")'],
+    mechanics: [
+      'the quiz-show buzzer round → Family Buzzer Show: Pip asks a question from the unit\'s stories, the child buzzes the right family member, then says "This is my grandma!"',
+      'shadow puzzles → Family Match-Up: each family sticker onto its shadow, named as it lands',
+      'image quiz → Who\'s hiding?: a family member uncovers tile by tile, guess early and say it',
+    ],
+    betterThan: [
+      'the quiz questions are the unit\'s own story moments (cookies with Grandma, ball with Dad, the family tree), so answering retells the whole unit, then the child says the full sentence',
+      'one contestant and no clock: nobody races anybody, a wrong buzzer is named back ("No, that\'s Grandpa!") and the right one glows after two tries',
+      'the sounds review unlocks family members (M mom, D dad, S sister, G grandma, B baby), so phonics and the unit words meet',
+    ],
+  },
+  '5-5': {
+    sources: ['"Just Me and My Dad"-style family-day picture books (one shared activity per page, read aloud)', 'Khan Academy Kids / Lingokids ("listen and feed" play, calm story retell)', 'Cambridge (Pre A1 Starters listen and point; look and tick)', 'Sesame Workshop (model → pause → answer)'],
+    mechanics: [
+      'the family-day picture book → a stills film "My Day with Dad": two pictures per action flip like a cartoon, karaoke action words, "What do we do?" with a pause for the child',
+      'listen-and-feed play → Feed the Ducks: each duck carries a photo of the story, Pip says the story sentence, the child feeds that duck',
+      'peekaboo lift-the-flap books → Hide and Seek with Dad: "Is he behind the door?" — a D word (dog, doll, duck) pops out until Dad is found',
+    ],
+    betterThan: [
+      'every game answer is a whole sentence from the story ("We read a book!"), so the child retells the story while playing, with the story\'s own pictures',
+      'the film asks the child before Pip answers (planned pause), then the games check the same four sentences by listening (ducks, tick or cross) and by order (story order)',
+      'calm by design: wrong ducks are named back ("No, that\'s the book!"), the right duck glows after two tries, no clock',
+    ],
+  },
+  '5-4': {
+    sources: ['Lingokids / Khan Academy Kids (family sticker books, calm build play)', 'classroom "my family tree" craft (teach-this, twinkl family units)', 'Guess Who (Hasbro) information-gap questions', 'Cambridge (Pre A1 Starters "This is my…" introductions)'],
+    mechanics: [
+      'family-tree craft + sticker book → My Family Tree: hang each photo on the right branch by generation, then say "This is my grandma!"',
+      'Guess Who → Secret Card with people: the child asks "Is it big?" then "Is it Grandma?"',
+      'memory pairs of the family stickers, and a TH / S sound sort (thumb, three, thread)',
+    ],
+    betterThan: [
+      'the child BUILDS the tree one generation at a time, so "family tree" means something, and names every photo twice (Pip, then the child on the microphone)',
+      'Secret Card asks real questions about people (big / small, then the name) instead of colours and shapes — the information gap makes the question necessary',
+      'calm by design: a wrong branch is named back ("Not there! Grandma goes at the top!"), the right branch glows after two tries, no clock',
+    ],
+  },
+  '5-3': {
+    sources: ['Lingokids / Toca Kitchen (cook-and-serve pretend play)', 'teach-this.com and games4esl ("What\'s missing?" / Kim\'s game)', 'Khan Academy Kids (calm, self-paced build and memory play)', 'Cambridge (Pre A1 Starters listen and point)'],
+    mechanics: [
+      'cook-and-serve play + listen and point → Grandma\'s Cookies: "Let\'s make a Grandpa cookie!" — pick the face icing, bake it, it joins the family plate',
+      '"What\'s missing?" memory game → Who\'s Missing?: Grandma\'s photo wall, lights off, one photo is gone — name who is missing',
+      'the big hug picture as a jigsaw, and Grandma\'s G basket for /g/ things',
+    ],
+    betterThan: [
+      'the family word alone picks the cookie face (no word on screen first), and every cookie baked stays on the plate as a family the child built',
+      'in Who\'s Missing? the child turns the lights off when ready — no clock — and answers with a family word they say back; the empty frame glows after two tries',
+      'calm by design: a wrong face is named back ("No, that\'s Grandma!") and nothing is lost for trying',
+    ],
+  },
+  '5-2': {
+    sources: ['Khan Academy Kids (camera / photo reward, calm self-paced)', 'Lingokids (family & sticker-album games)', 'Montessori (size seriation: biggest to smallest)', 'Cambridge (Pre A1 Starters listen and point)', 'classroom show-and-tell with a family photo'],
+    mechanics: [
+      'camera rewards + listen and point → Family Photo: "Take a photo of my sister!" — snap that person in the family picture, a polaroid slides out',
+      'Montessori size seriation → Line Up!: line the family up from the biggest to the smallest for the photo',
+      'family-photo show-and-tell → the child tells Pip "This is my brother" about their own family',
+    ],
+    betterThan: [
+      'no word on screen in Family Photo: the spoken family word alone finds the person, and every photo stays on the string as a keepsake',
+      'Line Up! makes each step a family word the child hears and repeats ("My big brother!"), and recycles big / small from Unit 4',
+      'calm by design: no clock, a wrong pick is named back ("That\'s my brother!") and the right one glows after two tries',
+    ],
+  },
+  '4-6': {
+    sources: ['Simon electronic memory game (watch the lights, repeat the order)', 'games4esl (Simon Says / "Touch your …" TPR)', 'Cambridge (Pre A1 Starters listen and point)', 'Lingokids (Draw Path)', 'Wordwall (odd one out)', 'Khan Academy Kids (calm, self-paced)'],
+    mechanics: [
+      'the Simon memory game + classroom Simon Says → Robo Says: Robo lights a chain of body parts, the child touches them in the same order',
+      'Lingokids Draw Path → draw a line from Pip to the body part Mia names',
+      'Wordwall odd one out → face or body? three are on the face, tap the one that is not',
+    ],
+    betterThan: [
+      'the spoken body words are what the child remembers (Simon uses colours and beeps), and every part is named again when tapped',
+      'a wrong tap names the part touched ("Oops! Robo\'s ears!") and replays the chain; the next part glows after two misses — no clock, no lives',
+      'the child then becomes Simon and gives the orders (role swap), on the screen and at home',
+    ],
+  },
+  '4-3': {
+    sources: ['Classroom handprint / footprint art (preschool body-parts activity)', 'Lingokids (body-parts games)', 'Khan Academy Kids (calm, self-paced; a result that stays)', 'Cambridge (Pre A1 Starters listening: put the picture in the right place)', 'Sesame Workshop touch-tablet best practices (no clocks, deliberate actions)'],
+    mechanics: [
+      'handprint / footprint art → Sand Prints: hear "Press your foot in the sand!", choose the body part, the print stays in the sand',
+      'Cambridge "listen and place" → the print lands on the beach picture the child is making',
+      'peekaboo reveal → "Whose hands?": peek at a friend from earlier lessons and say who it is',
+    ],
+    betterThan: [
+      'the spoken word alone decides which body part to press (apps match picture to picture)',
+      'the prints stay: by the end the sand is a picture the child made',
+      'calm by design: no clock, nothing moving, a wrong part is named back and the right one glows after two tries',
+    ],
+  },
+
 };
 
 export type VarietyIssue = { code: string; message: string };

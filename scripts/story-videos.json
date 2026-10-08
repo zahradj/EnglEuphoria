@@ -1,600 +1,827 @@
 {
-  "u2l5-shelly": {
-    "lesson": "Pre-A1 Unit 2 Lesson 5 — The Rainbow Fish's Scales",
-    "out": "public/lep1/video/clips/u2l5-shelly",
-    "seconds": 10,
-    "style": "Keep exactly the flat 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, gentle animation for young children. The camera stays steady. No text, no new characters.",
+ "u2l5-shelly": {
+  "lesson": "Pre-A1 Unit 2 Lesson 5 — The Rainbow Fish's Scales",
+  "out": "public/lep1/video/clips/u2l5-shelly",
+  "seconds": 10,
+  "style": "Keep exactly the flat 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, gentle animation for young children. The camera stays steady. No text, no new characters.",
+  "beats": [
+   {
+    "id": "01-sea",
+    "image": "public/lep1/scenes/bg-u2l5-sea-wide.png",
+    "prompt": "The five animal friends on the little red ship wave happily and the ship bobs gently on the waves. Under the water the small grey fish swims slowly and looks up at them. Bubbles rise."
+   },
+   {
+    "id": "02-sad",
+    "image": "public/lep1/scenes/bg-u2l5-shelly-sad-wide.png",
+    "prompt": "The small grey fish swims slowly in place, looks down at her plain grey body and looks sad; one small tear floats away. Soft bubbles rise."
+   },
+   {
+    "id": "03-red",
+    "image": "public/lep1/scenes/bg-u2l5-shelly-red-wide.png",
+    "prompt": "The white bunny leans over the side of the red ship and gently drops a shiny red circle scale into the water. The red circle sinks slowly and sticks onto the grey fish's side. The fish wiggles and smiles."
+   },
+   {
+    "id": "04-blue",
+    "image": "public/lep1/scenes/bg-u2l5-shelly-blue-wide.png",
+    "prompt": "The grey mouse with the orange bow leans over the side of the red ship and drops ONE small shiny blue square into the water. The blue square sinks and sticks onto the grey fish's side next to the red circle. The rest of the fish stays grey (only one red circle and one blue square on her body). The fish smiles."
+   },
+   {
+    "id": "05-yellow",
+    "image": "public/lep1/scenes/bg-u2l5-shelly-yellow-wide.png",
+    "prompt": "The yellow lion leans over the side of the red ship and drops ONE small shiny yellow triangle into the water. The yellow triangle sinks and sticks onto the grey fish's side next to the red circle and the blue square. The rest of the fish stays grey. The fish smiles and swims in a small happy circle under the water."
+   },
+   {
+    "id": "05b-green",
+    "image": "public/lep1/scenes/bg-u2l5-shelly-green-wide.png",
+    "prompt": "The orange fox leans over the side of the red boat and drops ONE small shiny green circle into the water. The green circle sinks and sticks onto the grey fish's side next to the red, blue and yellow scales. The rest of the fish stays grey. The fish smiles and wiggles her tail."
+   },
+   {
+    "id": "05c-orange",
+    "image": "public/lep1/scenes/bg-u2l5-shelly-orange-wide.png",
+    "prompt": "The blue bird with the green scarf flaps her wings above the boat and drops ONE small shiny orange square and ONE small shiny purple triangle into the water. They sink slowly and stick onto the fish's side. The fish spins round with joy as more colours sparkle on her body."
+   },
+   {
+    "id": "06-rainbow",
+    "image": "public/lep1/scenes/bg-u2l5-shelly-rainbow-wide.png",
+    "prompt": "The colourful rainbow fish leaps happily out of the water and splashes back down, her coloured circle, square and triangle scales sparkling. The friends on the ship cheer and clap."
+   },
+   {
+    "id": "07-crab",
+    "image": "public/lep1/scenes/bg-u2l5-crab-wide.png",
+    "prompt": "On the sandy sea floor the rainbow fish swims to the small sad grey crab and gently gives it one shiny purple circle scale. The crab holds it and slowly starts to smile."
+   },
+   {
+    "id": "08-friends",
+    "image": "public/lep1/scenes/bg-u2l5-crab-wide.png",
+    "prompt": "The rainbow fish and the happy little crab dance together on the sandy sea floor, the fish swimming in a happy circle around the crab. Little hearts and bubbles float up."
+   }
+  ],
+  "provider": "higgsfield",
+  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "note": "All 10 beats are real clips: 01-03, 06-08 made before the Higgsfield-only rule (kept); 04, 05, 05b, 05c by Higgsfield (Kling 2.5 Turbo Pro). Trimmed to 8 s each when stitched.",
+  "film": "public/lep1/video/shelly-story-u2l5",
+  "beatSeconds": 8
+ },
+ "u1l5-leo": {
+  "lesson": "Pre-A1 Unit 1 Lesson 5 — Leo's Lost Star",
+  "provider": "higgsfield",
+  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "seconds": 10,
+  "beatSeconds": 8,
+  "out": "public/lep1/video/clips/u1l5-leo",
+  "films": [
+   {
+    "film": "public/lep1/video/leo-story-u1l5-a",
     "beats": [
-      {
-        "id": "01-sea",
-        "image": "public/lep1/scenes/bg-u2l5-sea-wide.png",
-        "prompt": "The five animal friends on the little red ship wave happily and the ship bobs gently on the waves. Under the water the small grey fish swims slowly and looks up at them. Bubbles rise."
-      },
-      {
-        "id": "02-sad",
-        "image": "public/lep1/scenes/bg-u2l5-shelly-sad-wide.png",
-        "prompt": "The small grey fish swims slowly in place, looks down at her plain grey body and looks sad; one small tear floats away. Soft bubbles rise."
-      },
-      {
-        "id": "03-red",
-        "image": "public/lep1/scenes/bg-u2l5-shelly-red-wide.png",
-        "prompt": "The white bunny leans over the side of the red ship and gently drops a shiny red circle scale into the water. The red circle sinks slowly and sticks onto the grey fish's side. The fish wiggles and smiles."
-      },
-      {
-        "id": "04-blue",
-        "image": "public/lep1/scenes/bg-u2l5-shelly-blue-wide.png",
-        "prompt": "The grey mouse with the orange bow leans over the side of the red ship and drops ONE small shiny blue square into the water. The blue square sinks and sticks onto the grey fish's side next to the red circle. The rest of the fish stays grey (only one red circle and one blue square on her body). The fish smiles."
-      },
-      {
-        "id": "05-yellow",
-        "image": "public/lep1/scenes/bg-u2l5-shelly-yellow-wide.png",
-        "prompt": "The yellow lion leans over the side of the red ship and drops ONE small shiny yellow triangle into the water. The yellow triangle sinks and sticks onto the grey fish's side next to the red circle and the blue square. The rest of the fish stays grey. The fish smiles and swims in a small happy circle under the water."
-      },
-      {
-        "id": "05b-green",
-        "image": "public/lep1/scenes/bg-u2l5-shelly-green-wide.png",
-        "prompt": "The orange fox leans over the side of the red boat and drops ONE small shiny green circle into the water. The green circle sinks and sticks onto the grey fish's side next to the red, blue and yellow scales. The rest of the fish stays grey. The fish smiles and wiggles her tail."
-      },
-      {
-        "id": "05c-orange",
-        "image": "public/lep1/scenes/bg-u2l5-shelly-orange-wide.png",
-        "prompt": "The blue bird with the green scarf flaps her wings above the boat and drops ONE small shiny orange square and ONE small shiny purple triangle into the water. They sink slowly and stick onto the fish's side. The fish spins round with joy as more colours sparkle on her body."
-      },
-      {
-        "id": "06-rainbow",
-        "image": "public/lep1/scenes/bg-u2l5-shelly-rainbow-wide.png",
-        "prompt": "The colourful rainbow fish leaps happily out of the water and splashes back down, her coloured circle, square and triangle scales sparkling. The friends on the ship cheer and clap."
-      },
-      {
-        "id": "07-crab",
-        "image": "public/lep1/scenes/bg-u2l5-crab-wide.png",
-        "prompt": "On the sandy sea floor the rainbow fish swims to the small sad grey crab and gently gives it one shiny purple circle scale. The crab holds it and slowly starts to smile."
-      },
-      {
-        "id": "08-friends",
-        "image": "public/lep1/scenes/bg-u2l5-crab-wide.png",
-        "prompt": "The rainbow fish and the happy little crab dance together on the sandy sea floor, the fish swimming in a happy circle around the crab. Little hearts and bubbles float up."
-      }
+     "01-play",
+     "02-wind",
+     "03-sad",
+     "04-friends"
+    ]
+   },
+   {
+    "film": "public/lep1/video/leo-story-u1l5-b",
+    "beats": [
+     "05-hat",
+     "06-mat",
+     "07-glow",
+     "08-found"
+    ]
+   }
+  ],
+  "style": "Keep exactly the soft 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, gentle animation for young children. The camera stays steady. No text, no new characters.",
+  "beats": [
+   {
+    "id": "01-play",
+    "image": "public/lep1/scenes/bg-l5-play-wide.png",
+    "prompt": "Leo the yellow lion sits on the grass and happily tosses his shiny golden star toy up and catches it again, smiling. Fireflies glow softly around him."
+   },
+   {
+    "id": "02-wind",
+    "image": "public/lep1/scenes/bg-l5-wind-wide.png",
+    "prompt": "A gust of wind blows; the shiny golden star flies out of Leo's paws and tumbles away into the tall grass. Leo reaches after it, surprised, then looks worried. Grass and petals sway in the wind."
+   },
+   {
+    "id": "03-sad",
+    "image": "public/lep1/scenes/bg-l5-sad-wide.png",
+    "prompt": "Leo the lion sits looking sad and a small tear rolls down. Pip the orange fox walks up, waves hello kindly and gently pats Leo's shoulder."
+   },
+   {
+    "id": "04-friends",
+    "image": "public/lep1/scenes/bg-l5-friends-wide.png",
+    "prompt": "The five friends stand in a row and wave hello one after another; the lion gives a small sad wave back. Their tails and ears move gently."
+   },
+   {
+    "id": "05-hat",
+    "image": "public/lep1/scenes/bg-l5-hat-wide.png",
+    "prompt": "The white bunny lifts the big straw hat from the grass and a tiny friendly bat flutters out and flies in a little circle around her head. The bunny laughs."
+   },
+   {
+    "id": "06-mat",
+    "image": "public/lep1/scenes/bg-l5-mat-wide.png",
+    "prompt": "The grey mouse lifts the corner of the red picnic mat and a tiny friendly ant pops out and waves. The mouse giggles."
+   },
+   {
+    "id": "07-glow",
+    "image": "public/lep1/scenes/bg-l5-glow-wide.png",
+    "prompt": "The blue bird flies in a happy circle high in the evening sky, then points down with her wing at the warm golden glow under the big oak tree. The glow sparkles."
+   },
+   {
+    "id": "08-found",
+    "image": "public/lep1/scenes/bg-l5-found-wide.png",
+    "prompt": "Under the big oak tree the lion hugs the shiny golden star and jumps for joy; the friends cheer, clap and dance around him. Stars twinkle in the sky."
+   }
+  ]
+ },
+ "u2l6-loops": {
+  "lesson": "Pre-A1 Unit 2 Lesson 6 — living game backgrounds (looped ping-pong in the games)",
+  "provider": "higgsfield",
+  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "seconds": 5,
+  "style": "Keep exactly the flat 2D cartoon picture-book style and everything in the first frame. Seamless gentle ambient LOOP for a game background: the camera does not move at all, nothing new appears, nothing leaves the picture, characters stay in place.",
+  "out": "public/lep1/video/clips/u2l6-loops",
+  "beats": [
+   {
+    "id": "river",
+    "image": "public/lep1/scenes/bg-u2l6-river-wide.png",
+    "prompt": "The river water flows gently toward the viewer with sparkling ripples, reeds and flowers on the banks sway softly in the breeze, clouds drift slowly.",
+    "loop": true,
+    "seconds": 5
+   },
+   {
+    "id": "meadow",
+    "image": "public/lep1/scenes/bg-meadow.jpg",
+    "prompt": "Flowers and grass sway softly in a light breeze, a few butterflies flutter gently, the sun glows and clouds drift slowly.",
+    "loop": true,
+    "seconds": 5
+   },
+   {
+    "id": "beach",
+    "image": "public/lep1/scenes/bg-u2l6-beach-wide.png",
+    "prompt": "Small waves roll gently onto the sand, the blue bird breathes, blinks and flaps one wing softly, clouds drift slowly.",
+    "loop": true,
+    "seconds": 5
+   },
+   {
+    "id": "garden",
+    "image": "public/lep1/scenes/bg-u2l6-garden-wide.png",
+    "prompt": "Flowers sway softly in a light breeze, the white bunny breathes, blinks and twitches her ears gently, clouds drift slowly.",
+    "loop": true,
+    "seconds": 5
+   }
+  ]
+ },
+ "u3l3-loops": {
+  "lesson": "Pre-A1 Unit 3 Lesson 3 — living game backgrounds (ping-pong loops)",
+  "provider": "higgsfield",
+  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "seconds": 5,
+  "style": "Keep exactly the flat 2D cartoon picture-book style and everything in the first frame. Seamless gentle ambient LOOP for a game background: the camera does not move at all, nothing new appears, nothing leaves the picture.",
+  "out": "public/lep1/video/clips/u3l3-loops",
+  "beats": [
+   {
+    "id": "workshop",
+    "image": "public/lep1/scenes/bg-u3l3-workshop-wide.png",
+    "prompt": "Warm sunlight from the window shifts softly, the curtains sway gently in a light breeze, tiny dust sparkles float in the sunbeam.",
+    "loop": true,
+    "seconds": 5
+   },
+   {
+    "id": "park",
+    "image": "public/lep1/scenes/bg-u3l3-park-empty-wide.png",
+    "prompt": "Leaves on the trees and the grass and flowers sway softly in a light breeze, clouds drift slowly across the blue sky.",
+    "loop": true,
+    "seconds": 5
+   }
+  ]
+ },
+ "u3l4-loops": {
+  "lesson": "Pre-A1 Unit 3 Lesson 4 — living game backgrounds (ping-pong loops)",
+  "provider": "higgsfield",
+  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "seconds": 5,
+  "style": "Keep exactly the flat 2D cartoon picture-book style and everything in the first frame. Seamless gentle ambient LOOP for a game background: the camera does not move at all, nothing new appears, nothing leaves the picture.",
+  "out": "public/lep1/video/clips/u3l4-loops",
+  "beats": [
+   {
+    "id": "pool",
+    "image": "public/lep1/scenes/bg-u3l4-pool-wide.png",
+    "prompt": "The water in the paddling pool ripples gently and sparkles in the sunlight, the grass and flowers sway softly in a light breeze.",
+    "loop": true,
+    "seconds": 5
+   }
+  ]
+ },
+ "u4l1-dance": {
+  "lesson": "Pre-A1 Unit 4 Lesson 1 — Dance Class (story, page 4). STRICT MODE: one action per clip, matching its spoken line; ordered one at a time only after the owner approves each written storyboard row.",
+  "provider": "higgsfield",
+  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "seconds": 5,
+  "out": "public/lep1/video/clips/u4l1-dance",
+  "style": "Keep exactly the soft 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, slow, gentle animation for young children. The camera stays steady. No text, no new characters, no speech.",
+  "beats": [
+   {
+    "id": "01-class",
+    "image": "public/lep1/scenes/bg-u4l1-dance-class-wide.png",
+    "prompt": "The friends sway slowly side to side to soft music and gently pat the tops of their heads with both paws, then put their paws on their shoulders. Willow the blue bird slowly lifts and lowers her wings like a calm coach. The friends stay in their places. The camera stays steady.",
+    "rejected": true,
+    "review": "2026-10-04 owner + frame review: not accurate — extra dancing/waving, never shows \"shoulders\", Willow does not lead. Not used."
+   },
+   {
+    "id": "02-head",
+    "image": "public/lep1/scenes/bg-u4l1-dance-class-wide.png",
+    "seconds": 5,
+    "line": "Ready, friends? Touch your head!",
+    "bodyWords": [
+     "head"
     ],
-    "provider": "higgsfield",
-    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
-    "note": "All 10 beats are real clips: 01-03, 06-08 made before the Higgsfield-only rule (kept); 04, 05, 05b, 05c by Higgsfield (Kling 2.5 Turbo Pro). Trimmed to 8 s each when stitched.",
-    "film": "public/lep1/video/shelly-story-u2l5",
-    "beatSeconds": 8
-  },
-  "u1l5-leo": {
-    "lesson": "Pre-A1 Unit 1 Lesson 5 — Leo's Lost Star",
-    "provider": "higgsfield",
-    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
-    "seconds": 10,
-    "beatSeconds": 8,
-    "out": "public/lep1/video/clips/u1l5-leo",
-    "films": [
-      {
-        "film": "public/lep1/video/leo-story-u1l5-a",
-        "beats": [
-          "01-play",
-          "02-wind",
-          "03-sad",
-          "04-friends"
-        ]
-      },
-      {
-        "film": "public/lep1/video/leo-story-u1l5-b",
-        "beats": [
-          "05-hat",
-          "06-mat",
-          "07-glow",
-          "08-found"
-        ]
-      }
+    "leader": "Willow",
+    "action": "Willow points one wing at her own head; the four friends slowly put both paws on top of their head and keep them there",
+    "prompt": "Willow the blue bird points one wing at the top of her own head. Pip, Mia, Leo and Bella slowly lift both paws and rest them on top of their head, and they keep their paws resting on their head until the end. They stay in their places. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"go\" 2026-10-04 (clip 1 only)",
+    "rejected": true,
+    "review": "2026-10-04 frame review: paws held up beside the heads (not on top), legs keep marching/dancing, Willow only flaps. Root cause: the start picture is a mid-dance pose. Next: Canva pictures that already show each exact action; video (if any) only gentle breathing/blinking."
+   },
+   {
+    "id": "03-shoulders",
+    "image": "public/lep1/scenes/bg-u4l1-dance-class-wide.png",
+    "seconds": 5,
+    "line": "Touch your shoulders!",
+    "bodyWords": [
+     "shoulders"
     ],
-    "style": "Keep exactly the soft 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, gentle animation for young children. The camera stays steady. No text, no new characters.",
-    "beats": [
-      {
-        "id": "01-play",
-        "image": "public/lep1/scenes/bg-l5-play-wide.png",
-        "prompt": "Leo the yellow lion sits on the grass and happily tosses his shiny golden star toy up and catches it again, smiling. Fireflies glow softly around him."
-      },
-      {
-        "id": "02-wind",
-        "image": "public/lep1/scenes/bg-l5-wind-wide.png",
-        "prompt": "A gust of wind blows; the shiny golden star flies out of Leo's paws and tumbles away into the tall grass. Leo reaches after it, surprised, then looks worried. Grass and petals sway in the wind."
-      },
-      {
-        "id": "03-sad",
-        "image": "public/lep1/scenes/bg-l5-sad-wide.png",
-        "prompt": "Leo the lion sits looking sad and a small tear rolls down. Pip the orange fox walks up, waves hello kindly and gently pats Leo's shoulder."
-      },
-      {
-        "id": "04-friends",
-        "image": "public/lep1/scenes/bg-l5-friends-wide.png",
-        "prompt": "The five friends stand in a row and wave hello one after another; the lion gives a small sad wave back. Their tails and ears move gently."
-      },
-      {
-        "id": "05-hat",
-        "image": "public/lep1/scenes/bg-l5-hat-wide.png",
-        "prompt": "The white bunny lifts the big straw hat from the grass and a tiny friendly bat flutters out and flies in a little circle around her head. The bunny laughs."
-      },
-      {
-        "id": "06-mat",
-        "image": "public/lep1/scenes/bg-l5-mat-wide.png",
-        "prompt": "The grey mouse lifts the corner of the red picnic mat and a tiny friendly ant pops out and waves. The mouse giggles."
-      },
-      {
-        "id": "07-glow",
-        "image": "public/lep1/scenes/bg-l5-glow-wide.png",
-        "prompt": "The blue bird flies in a happy circle high in the evening sky, then points down with her wing at the warm golden glow under the big oak tree. The glow sparkles."
-      },
-      {
-        "id": "08-found",
-        "image": "public/lep1/scenes/bg-l5-found-wide.png",
-        "prompt": "Under the big oak tree the lion hugs the shiny golden star and jumps for joy; the friends cheer, clap and dance around him. Stars twinkle in the sky."
-      }
-    ]
-  },
-  "u2l6-loops": {
-    "lesson": "Pre-A1 Unit 2 Lesson 6 — living game backgrounds (looped ping-pong in the games)",
-    "provider": "higgsfield",
-    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "leader": "Willow",
+    "action": "Willow touches her own shoulders with her wings; the four friends slowly put each paw on its own shoulder and keep them there",
+    "prompt": "Willow the blue bird touches her own shoulders with the tips of her wings. Pip, Mia, Leo and Bella slowly put each paw on its own shoulder, and they keep their paws resting on their shoulders until the end. They stay in their places. The camera stays steady.",
+    "ownerApproved": false,
+    "rejected": true,
+    "review": "2026-10-04 superseded before ordering (never generated): its start picture showed a different pose. Replaced by the 06-09 rows, whose Canva start pictures already show the exact action."
+   },
+   {
+    "id": "04-toes",
+    "image": "public/lep1/scenes/bg-u4l1-pip-toes-wide.png",
     "seconds": 5,
-    "style": "Keep exactly the flat 2D cartoon picture-book style and everything in the first frame. Seamless gentle ambient LOOP for a game background: the camera does not move at all, nothing new appears, nothing leaves the picture, characters stay in place.",
-    "out": "public/lep1/video/clips/u2l6-loops",
-    "beats": [
-      {
-        "id": "river",
-        "image": "public/lep1/scenes/bg-u2l6-river-wide.png",
-        "prompt": "The river water flows gently toward the viewer with sparkling ripples, reeds and flowers on the banks sway softly in the breeze, clouds drift slowly.",
-        "loop": true,
-        "seconds": 5
-      },
-      {
-        "id": "meadow",
-        "image": "public/lep1/scenes/bg-meadow.jpg",
-        "prompt": "Flowers and grass sway softly in a light breeze, a few butterflies flutter gently, the sun glows and clouds drift slowly.",
-        "loop": true,
-        "seconds": 5
-      },
-      {
-        "id": "beach",
-        "image": "public/lep1/scenes/bg-u2l6-beach-wide.png",
-        "prompt": "Small waves roll gently onto the sand, the blue bird breathes, blinks and flaps one wing softly, clouds drift slowly.",
-        "loop": true,
-        "seconds": 5
-      },
-      {
-        "id": "garden",
-        "image": "public/lep1/scenes/bg-u2l6-garden-wide.png",
-        "prompt": "Flowers sway softly in a light breeze, the white bunny breathes, blinks and twitches her ears gently, clouds drift slowly.",
-        "loop": true,
-        "seconds": 5
-      }
-    ]
-  },
-  "u3l3-loops": {
-    "lesson": "Pre-A1 Unit 3 Lesson 3 — living game backgrounds (ping-pong loops)",
-    "provider": "higgsfield",
-    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "line": "Touch my toes? Whoa... oops! Ha ha!",
+    "bodyWords": [
+     "toes"
+    ],
+    "leader": "Pip",
+    "action": "Pip, already bent over, reaches down and touches his toes with both paws, wobbles gently and stays standing; Mia and Bella stay still",
+    "prompt": "Pip the orange fox is bent over. He slowly reaches down and touches his toes with both paws, wobbles gently side to side and stays standing. Mia and Bella stay in their places. Willow stays still. The camera stays steady.",
+    "ownerApproved": false,
+    "rejected": true,
+    "review": "2026-10-04 superseded before ordering (never generated): its start picture showed a different pose. Replaced by the 06-09 rows, whose Canva start pictures already show the exact action."
+   },
+   {
+    "id": "05-knees",
+    "image": "public/lep1/scenes/bg-u4l1-dance-knees-wide.png",
     "seconds": 5,
-    "style": "Keep exactly the flat 2D cartoon picture-book style and everything in the first frame. Seamless gentle ambient LOOP for a game background: the camera does not move at all, nothing new appears, nothing leaves the picture.",
-    "out": "public/lep1/video/clips/u3l3-loops",
-    "beats": [
-      {
-        "id": "workshop",
-        "image": "public/lep1/scenes/bg-u3l3-workshop-wide.png",
-        "prompt": "Warm sunlight from the window shifts softly, the curtains sway gently in a light breeze, tiny dust sparkles float in the sunbeam.",
-        "loop": true,
-        "seconds": 5
-      },
-      {
-        "id": "park",
-        "image": "public/lep1/scenes/bg-u3l3-park-empty-wide.png",
-        "prompt": "Leaves on the trees and the grass and flowers sway softly in a light breeze, clouds drift slowly across the blue sky.",
-        "loop": true,
-        "seconds": 5
-      }
-    ]
-  },
-  "u3l4-loops": {
-    "lesson": "Pre-A1 Unit 3 Lesson 4 — living game backgrounds (ping-pong loops)",
-    "provider": "higgsfield",
-    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "line": "Touch your knees!",
+    "bodyWords": [
+     "knees"
+    ],
+    "leader": "Willow",
+    "action": "the four friends keep both paws on their knees and gently bend their knees down and up; Willow nods",
+    "prompt": "Pip, Mia, Leo and Bella keep both paws resting on their knees and slowly bend their knees down and up. Willow the blue bird nods gently and stays in her place. The camera stays steady.",
+    "ownerApproved": false,
+    "rejected": true,
+    "review": "2026-10-04 superseded before ordering (never generated): its start picture showed a different pose. Replaced by the 06-09 rows, whose Canva start pictures already show the exact action."
+   },
+   {
+    "id": "06-head",
+    "image": "public/lep1/scenes/bg-u4l1-act-head-wide.png",
     "seconds": 5,
-    "style": "Keep exactly the flat 2D cartoon picture-book style and everything in the first frame. Seamless gentle ambient LOOP for a game background: the camera does not move at all, nothing new appears, nothing leaves the picture.",
-    "out": "public/lep1/video/clips/u3l4-loops",
-    "beats": [
-      {
-        "id": "pool",
-        "image": "public/lep1/scenes/bg-u3l4-pool-wide.png",
-        "prompt": "The water in the paddling pool ripples gently and sparkles in the sunlight, the grass and flowers sway softly in a light breeze.",
-        "loop": true,
-        "seconds": 5
-      }
-    ]
-  },
-  "u4l1-dance": {
-    "lesson": "Pre-A1 Unit 4 Lesson 1 — Dance Class (story, page 4). STRICT MODE: one action per clip, matching its spoken line; ordered one at a time only after the owner approves each written storyboard row.",
-    "provider": "higgsfield",
-    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "line": "Ready, friends? Touch your head!",
+    "bodyWords": [
+     "head"
+    ],
+    "leader": "Willow",
+    "action": "Willow and the four friends keep both paws resting on top of their head; only a soft breath and a slow blink",
+    "prompt": "Willow the blue bird, Pip, Mia, Leo and Bella keep both paws resting on top of their head. They keep the same pose the whole time: only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
+    "ownerApproved": false,
+    "rejected": true,
+    "review": "2026-10-04 superseded before ordering (never generated): owner chose one character per clip, framed full body, with body-part labels added afterwards. Replaced by rows 10-13."
+   },
+   {
+    "id": "07-shoulders",
+    "image": "public/lep1/scenes/bg-u4l1-act-shoulders-wide.png",
     "seconds": 5,
-    "out": "public/lep1/video/clips/u4l1-dance",
-    "style": "Keep exactly the soft 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, slow, gentle animation for young children. The camera stays steady. No text, no new characters, no speech.",
-    "beats": [
-      {
-        "id": "01-class",
-        "image": "public/lep1/scenes/bg-u4l1-dance-class-wide.png",
-        "prompt": "The friends sway slowly side to side to soft music and gently pat the tops of their heads with both paws, then put their paws on their shoulders. Willow the blue bird slowly lifts and lowers her wings like a calm coach. The friends stay in their places. The camera stays steady.",
-        "rejected": true,
-        "review": "2026-10-04 owner + frame review: not accurate — extra dancing/waving, never shows \"shoulders\", Willow does not lead. Not used."
-      },
-      {
-        "id": "02-head",
-        "image": "public/lep1/scenes/bg-u4l1-dance-class-wide.png",
-        "seconds": 5,
-        "line": "Ready, friends? Touch your head!",
-        "bodyWords": [
-          "head"
-        ],
-        "leader": "Willow",
-        "action": "Willow points one wing at her own head; the four friends slowly put both paws on top of their head and keep them there",
-        "prompt": "Willow the blue bird points one wing at the top of her own head. Pip, Mia, Leo and Bella slowly lift both paws and rest them on top of their head, and they keep their paws resting on their head until the end. They stay in their places. The camera stays steady.",
-        "ownerApproved": true,
-        "approvedNote": "owner: \"go\" 2026-10-04 (clip 1 only)",
-        "rejected": true,
-        "review": "2026-10-04 frame review: paws held up beside the heads (not on top), legs keep marching/dancing, Willow only flaps. Root cause: the start picture is a mid-dance pose. Next: Canva pictures that already show each exact action; video (if any) only gentle breathing/blinking."
-      },
-      {
-        "id": "03-shoulders",
-        "image": "public/lep1/scenes/bg-u4l1-dance-class-wide.png",
-        "seconds": 5,
-        "line": "Touch your shoulders!",
-        "bodyWords": [
-          "shoulders"
-        ],
-        "leader": "Willow",
-        "action": "Willow touches her own shoulders with her wings; the four friends slowly put each paw on its own shoulder and keep them there",
-        "prompt": "Willow the blue bird touches her own shoulders with the tips of her wings. Pip, Mia, Leo and Bella slowly put each paw on its own shoulder, and they keep their paws resting on their shoulders until the end. They stay in their places. The camera stays steady.",
-        "ownerApproved": false,
-        "rejected": true,
-        "review": "2026-10-04 superseded before ordering (never generated): its start picture showed a different pose. Replaced by the 06-09 rows, whose Canva start pictures already show the exact action."
-      },
-      {
-        "id": "04-toes",
-        "image": "public/lep1/scenes/bg-u4l1-pip-toes-wide.png",
-        "seconds": 5,
-        "line": "Touch my toes? Whoa... oops! Ha ha!",
-        "bodyWords": [
-          "toes"
-        ],
-        "leader": "Pip",
-        "action": "Pip, already bent over, reaches down and touches his toes with both paws, wobbles gently and stays standing; Mia and Bella stay still",
-        "prompt": "Pip the orange fox is bent over. He slowly reaches down and touches his toes with both paws, wobbles gently side to side and stays standing. Mia and Bella stay in their places. Willow stays still. The camera stays steady.",
-        "ownerApproved": false,
-        "rejected": true,
-        "review": "2026-10-04 superseded before ordering (never generated): its start picture showed a different pose. Replaced by the 06-09 rows, whose Canva start pictures already show the exact action."
-      },
-      {
-        "id": "05-knees",
-        "image": "public/lep1/scenes/bg-u4l1-dance-knees-wide.png",
-        "seconds": 5,
-        "line": "Touch your knees!",
-        "bodyWords": [
-          "knees"
-        ],
-        "leader": "Willow",
-        "action": "the four friends keep both paws on their knees and gently bend their knees down and up; Willow nods",
-        "prompt": "Pip, Mia, Leo and Bella keep both paws resting on their knees and slowly bend their knees down and up. Willow the blue bird nods gently and stays in her place. The camera stays steady.",
-        "ownerApproved": false,
-        "rejected": true,
-        "review": "2026-10-04 superseded before ordering (never generated): its start picture showed a different pose. Replaced by the 06-09 rows, whose Canva start pictures already show the exact action."
-      },
-      {
-        "id": "06-head",
-        "image": "public/lep1/scenes/bg-u4l1-act-head-wide.png",
-        "seconds": 5,
-        "line": "Ready, friends? Touch your head!",
-        "bodyWords": [
-          "head"
-        ],
-        "leader": "Willow",
-        "action": "Willow and the four friends keep both paws resting on top of their head; only a soft breath and a slow blink",
-        "prompt": "Willow the blue bird, Pip, Mia, Leo and Bella keep both paws resting on top of their head. They keep the same pose the whole time: only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
-        "ownerApproved": false,
-        "rejected": true,
-        "review": "2026-10-04 superseded before ordering (never generated): owner chose one character per clip, framed full body, with body-part labels added afterwards. Replaced by rows 10-13."
-      },
-      {
-        "id": "07-shoulders",
-        "image": "public/lep1/scenes/bg-u4l1-act-shoulders-wide.png",
-        "seconds": 5,
-        "line": "Touch your shoulders!",
-        "bodyWords": [
-          "shoulders"
-        ],
-        "leader": "Willow",
-        "action": "Willow and the four friends keep their arms crossed with each paw resting on the opposite shoulders; only a soft breath and a slow blink",
-        "prompt": "Willow the blue bird, Pip, Mia, Leo and Bella keep their arms crossed, each paw resting on the opposite shoulders,. They keep the same pose the whole time: only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
-        "ownerApproved": false,
-        "rejected": true,
-        "review": "2026-10-04 superseded before ordering (never generated): owner chose one character per clip, framed full body, with body-part labels added afterwards. Replaced by rows 10-13."
-      },
-      {
-        "id": "08-knees",
-        "image": "public/lep1/scenes/bg-u4l1-act-knees-wide.png",
-        "seconds": 5,
-        "line": "Touch your knees!",
-        "bodyWords": [
-          "knees"
-        ],
-        "leader": "Willow",
-        "action": "Willow and the four friends stay bent forward with their paws resting on their knees; only a soft breath and a slow blink",
-        "prompt": "Willow the blue bird, Pip, Mia, Leo and Bella stay bent forward with their paws resting on their knees. They keep the same pose the whole time: only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
-        "ownerApproved": false,
-        "rejected": true,
-        "review": "2026-10-04 superseded before ordering (never generated): owner chose one character per clip, framed full body, with body-part labels added afterwards. Replaced by rows 10-13."
-      },
-      {
-        "id": "09-toes",
-        "image": "public/lep1/scenes/bg-u4l1-act-toes-wide.png",
-        "seconds": 5,
-        "line": "Touch my toes? Whoa... oops! Ha ha!",
-        "bodyWords": [
-          "toes"
-        ],
-        "leader": "Pip",
-        "action": "Pip stays bent over touching his toes and wobbles gently once, then laughs silently; the others stay still",
-        "prompt": "Pip the orange fox stays bent over with his paws touching his toes and wobbles gently once without falling. Willow, Mia and Bella keep the same pose, with only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
-        "ownerApproved": false,
-        "rejected": true,
-        "review": "2026-10-04 superseded before ordering (never generated): owner chose one character per clip, framed full body, with body-part labels added afterwards. Replaced by rows 10-13."
-      },
-      {
-        "id": "10-head",
-        "image": "public/lep1/scenes/bg-u4l1-leo-stand-wide.png",
-        "endImage": "public/lep1/scenes/bg-u4l1-leo-head-wide.png",
-        "seconds": 5,
-        "line": "Ready, friends? Touch your head!",
-        "bodyWords": [
-          "head"
-        ],
-        "leader": "Leo",
-        "action": "Leo slowly lifts both paws and rests them on top of his head",
-        "prompt": "Leo the lion slowly lifts both paws and rests them on top of his head, and keeps them there. Nobody else is in the picture. His feet stay still. The camera stays steady.",
-        "labels": [
-          {
-            "word": "head",
-            "at": [
-              50,
-              9
-            ],
-            "label": [
-              76,
-              16
-            ]
-          }
-        ],
-        "ownerApproved": false
-      },
-      {
-        "id": "11-shoulders",
-        "image": "public/lep1/scenes/bg-u4l1-leo-head-wide.png",
-        "endImage": "public/lep1/scenes/bg-u4l1-leo-shoulders-wide.png",
-        "seconds": 5,
-        "line": "Touch your shoulders!",
-        "bodyWords": [
-          "shoulders"
-        ],
-        "leader": "Leo",
-        "action": "Leo slowly moves both paws down from his head onto his shoulders",
-        "prompt": "Leo the lion slowly moves both paws down from his head and rests them on his shoulders, and keeps them there. Nobody else is in the picture. His feet stay still. The camera stays steady.",
-        "labels": [
-          {
-            "word": "shoulders",
-            "at": [
-              [
-                41,
-                42
-              ],
-              [
-                59,
-                42
-              ]
-            ],
-            "label": [
-              50,
-              90
-            ]
-          }
-        ],
-        "ownerApproved": false
-      },
-      {
-        "id": "12-knees",
-        "image": "public/lep1/scenes/bg-u4l1-leo-shoulders-wide.png",
-        "endImage": "public/lep1/scenes/bg-u4l1-leo-knees-wide.png",
-        "seconds": 5,
-        "line": "Touch your knees!",
-        "bodyWords": [
-          "knees"
-        ],
-        "leader": "Leo",
-        "action": "Leo slowly bends forward and moves both paws down from his shoulders onto his knees",
-        "prompt": "Leo the lion slowly bends forward a little and moves both paws down from his shoulders onto his knees, and keeps them there. Nobody else is in the picture. His feet stay still. The camera stays steady.",
-        "labels": [
-          {
-            "word": "knees",
-            "at": [
-              [
-                45,
-                69
-              ],
-              [
-                55,
-                69
-              ]
-            ],
-            "label": [
-              50,
-              90
-            ]
-          }
-        ],
-        "ownerApproved": false
-      }
-    ]
-  },
-  "u2l2-mix": {
-    "lesson": "Pre-A1 Unit 2 Lesson 2 — The Magic Mix (page 7). Scenario docs/scenarios/u2l2-magic-mix.md. STRICT MODE: one clip at a time, each between two Canva key pictures, screened with review-clip.py, then frame-by-frame review with the owner.",
-    "provider": "higgsfield",
-    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "line": "Touch your shoulders!",
+    "bodyWords": [
+     "shoulders"
+    ],
+    "leader": "Willow",
+    "action": "Willow and the four friends keep their arms crossed with each paw resting on the opposite shoulders; only a soft breath and a slow blink",
+    "prompt": "Willow the blue bird, Pip, Mia, Leo and Bella keep their arms crossed, each paw resting on the opposite shoulders,. They keep the same pose the whole time: only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
+    "ownerApproved": false,
+    "rejected": true,
+    "review": "2026-10-04 superseded before ordering (never generated): owner chose one character per clip, framed full body, with body-part labels added afterwards. Replaced by rows 10-13."
+   },
+   {
+    "id": "08-knees",
+    "image": "public/lep1/scenes/bg-u4l1-act-knees-wide.png",
     "seconds": 5,
-    "out": "public/lep1/video/clips/u2l2-mix",
-    "style": "Keep exactly the soft 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, slow, gentle animation for young children. The camera stays steady. No text, no new characters, no speech.",
-    "beats": [
-      {
-        "id": "willow-stir",
-        "image": "public/lep1/scenes/bg-u2l2-mix-willow-spoon-wide.png",
-        "endImage": "public/lep1/scenes/bg-u2l2-mix-willow-b-wide.png",
-        "seconds": 5,
-        "line": "Stir, stir, stir!",
-        "bodyWords": [
-          "stir"
-        ],
-        "leader": "Willow",
-        "action": "Willow slowly stirs the paint in the glass bowl with the wooden spoon; the blue and yellow paint swirl together into green",
-        "prompt": "Willow the blue bird slowly stirs the paint in the glass bowl with the wooden spoon in small circles. The blue and yellow paint swirl together and turn green. Her feet, the table and both jars stay still. Nobody else is in the picture. The camera stays steady.",
-        "ownerApproved": true,
-        "approvedNote": "owner: \"create the video of this lesson\" 2026-10-04, after reading the scenario (scenario shot 3, first clip only)",
-        "review": "2026-10-04 review-clip: START 0.99, END 0.97, POSE 0.62 (fail). Frame review: the stir action is right (one wing, spoon in the bowl, feet/table/jars still, nobody else, no text), but the paint turns mostly YELLOW at ~4.3 s and ends blotchy yellow/green, not the clean green of the end picture. Not in the lesson; waiting for the owner (use with a fade into the green picture, or reject). No other clip ordered. Owner 2026-10-04: \"Good\" — used with a 0.8 s fade into the green picture. Final film uses its first ~1.4 s, then a 1.6 s fade into the green picture."
-      },
-      {
-        "id": "willow-pour1",
-        "image": "public/lep1/scenes/bg-u2l2-mix-willow-a-wide.png",
-        "holdPose": true,
-        "seconds": 5,
-        "line": "Blue!",
-        "bodyWords": [
-          "blue"
-        ],
-        "leader": "Willow",
-        "action": "Willow keeps slowly pouring blue paint from the jar into the glass bowl, and the blue paint in the bowl rises a little",
-        "prompt": "Willow the blue bird keeps slowly pouring blue paint from the jar into the glass bowl, and the blue paint in the bowl rises a little. Her feet, the table and the jars on the table stay still. Nobody else is in the picture. The camera stays steady.",
-        "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
-        "review": "2026-10-04 PASS: blue keeps pouring, bowl fills blue, feet/jars still."
-      },
-      {
-        "id": "willow-pour2",
-        "image": "public/lep1/scenes/bg-u2l2-mix-willow-pour2-wide.png",
-        "holdPose": true,
-        "seconds": 5,
-        "line": "And yellow!",
-        "bodyWords": [
-          "yellow"
-        ],
-        "leader": "Willow",
-        "action": "Willow keeps slowly pouring yellow paint from the jar onto the paint in the glass bowl; the yellow paint stays on top, the colours do not mix yet",
-        "prompt": "Willow the bird keeps slowly pouring yellow paint from the jar onto the paint in the glass bowl; the yellow paint stays on top, the colours do not mix yet. Her feet, the table and the blue jar stay still. Nobody else is in the picture. The camera stays steady.",
-        "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
-        "review": "2026-10-04 PASS: yellow lies on top of the blue, not mixed."
-      },
-      {
-        "id": "leo-pour1",
-        "image": "public/lep1/scenes/bg-u2l2-mix-leo-a-wide.png",
-        "holdPose": true,
-        "seconds": 5,
-        "line": "Red!",
-        "bodyWords": [
-          "red"
-        ],
-        "leader": "Leo",
-        "action": "Leo keeps slowly pouring red paint from the jar into the glass bowl, and the red paint in the bowl rises a little",
-        "prompt": "Leo the lion keeps slowly pouring red paint from the jar into the glass bowl, and the red paint in the bowl rises a little. His feet, the table and the jars on the table stay still. Nobody else is in the picture. The camera stays steady.",
-        "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
-        "review": "2026-10-04 PASS: red pours, bowl fills red."
-      },
-      {
-        "id": "leo-pour2",
-        "image": "public/lep1/scenes/bg-u2l2-mix-leo-pour2-wide.png",
-        "holdPose": true,
-        "seconds": 5,
-        "line": "And yellow!",
-        "bodyWords": [
-          "yellow"
-        ],
-        "leader": "Leo",
-        "action": "Leo keeps slowly pouring yellow paint from the jar onto the paint in the glass bowl; the yellow paint stays on top, the colours do not mix yet",
-        "prompt": "Leo the lion keeps slowly pouring yellow paint from the jar onto the paint in the glass bowl; the yellow paint stays on top, the colours do not mix yet. His feet, the table and the red jar stay still. Nobody else is in the picture. The camera stays steady.",
-        "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
-        "review": "2026-10-04 PASS: yellow layer on top of the red (checked close up)."
-      },
-      {
-        "id": "leo-stir",
-        "image": "public/lep1/scenes/bg-u2l2-mix-leo-spoon-wide.png",
-        "endImage": "public/lep1/scenes/bg-u2l2-mix-leo-b-wide.png",
-        "seconds": 5,
-        "line": "Stir, stir, stir!",
-        "bodyWords": [
-          "stir"
-        ],
-        "leader": "Leo",
-        "action": "Leo slowly stirs the paint in the glass bowl with the wooden spoon; the red and yellow paint blend into one even orange colour",
-        "prompt": "Leo the lion slowly stirs the paint in the glass bowl with the wooden spoon in small circles. The red and yellow paint blend into one smooth, even orange colour that fills the whole bowl. His feet, the table and both jars stay still. The camera stays steady.",
-        "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
-        "review": "2026-10-04 review-clip POSE 0.53 (fail): the paint flips red/yellow/red and ends RED, not orange. Used only for its first ~1.6 s (spoon moving, two colours), then a 1.6 s fade into the orange picture. No retry (the model cannot blend colours)."
-      },
-      {
-        "id": "mia-pour1",
-        "image": "public/lep1/scenes/bg-u2l2-mix-mia-a2-wide.png",
-        "holdPose": true,
-        "seconds": 5,
-        "line": "Red!",
-        "bodyWords": [
-          "red"
-        ],
-        "leader": "Mia",
-        "action": "Mia keeps slowly pouring red paint from the jar into the glass bowl, and the red paint in the bowl rises a little",
-        "prompt": "Mia the mouse keeps slowly pouring red paint from the jar into the glass bowl, and the red paint in the bowl rises a little. Her feet, the table and the blue jar stay still. Nobody else is in the picture. The camera stays steady.",
-        "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
-        "review": "2026-10-04 PASS: red pours into the empty bowl, blue jar stays."
-      },
-      {
-        "id": "mia-pour2",
-        "image": "public/lep1/scenes/bg-u2l2-mix-mia-pour2-wide.png",
-        "holdPose": true,
-        "seconds": 5,
-        "line": "And blue!",
-        "bodyWords": [
-          "blue"
-        ],
-        "leader": "Mia",
-        "action": "Mia keeps slowly pouring blue paint from the jar onto the paint in the glass bowl; the blue paint stays on top, the colours do not mix yet",
-        "prompt": "Mia the mouse keeps slowly pouring blue paint from the jar onto the paint in the glass bowl; the blue paint stays on top, the colours do not mix yet. Her feet, the table and the red jar stay still. Nobody else is in the picture. The camera stays steady.",
-        "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
-        "review": "2026-10-04 PASS: blue pours onto the red, not purple yet."
-      },
-      {
-        "id": "mia-stir",
-        "image": "public/lep1/scenes/bg-u2l2-mix-mia-spoon-wide.png",
-        "endImage": "public/lep1/scenes/bg-u2l2-mix-mia-b2-wide.png",
-        "seconds": 5,
-        "line": "Stir, stir, stir!",
-        "bodyWords": [
-          "stir"
-        ],
-        "leader": "Mia",
-        "action": "Mia slowly stirs the paint in the glass bowl with the wooden spoon; the red and blue paint blend into one even purple colour",
-        "prompt": "Mia the mouse slowly stirs the paint in the glass bowl with the wooden spoon in small circles. The red and blue paint blend into one smooth, even purple colour that fills the whole bowl. Her feet, the table and both jars stay still. The camera stays steady.",
-        "ownerApproved": true,
-        "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
-        "review": "2026-10-04 NOT MADE: Higgsfield 403 not_enough_credits (nothing charged). The film uses the spoon picture fading into the purple picture."
-      }
-    ]
-  }
+    "line": "Touch your knees!",
+    "bodyWords": [
+     "knees"
+    ],
+    "leader": "Willow",
+    "action": "Willow and the four friends stay bent forward with their paws resting on their knees; only a soft breath and a slow blink",
+    "prompt": "Willow the blue bird, Pip, Mia, Leo and Bella stay bent forward with their paws resting on their knees. They keep the same pose the whole time: only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
+    "ownerApproved": false,
+    "rejected": true,
+    "review": "2026-10-04 superseded before ordering (never generated): owner chose one character per clip, framed full body, with body-part labels added afterwards. Replaced by rows 10-13."
+   },
+   {
+    "id": "09-toes",
+    "image": "public/lep1/scenes/bg-u4l1-act-toes-wide.png",
+    "seconds": 5,
+    "line": "Touch my toes? Whoa... oops! Ha ha!",
+    "bodyWords": [
+     "toes"
+    ],
+    "leader": "Pip",
+    "action": "Pip stays bent over touching his toes and wobbles gently once, then laughs silently; the others stay still",
+    "prompt": "Pip the orange fox stays bent over with his paws touching his toes and wobbles gently once without falling. Willow, Mia and Bella keep the same pose, with only a soft breath and a slow blink. Nobody moves their feet. The camera stays steady.",
+    "ownerApproved": false,
+    "rejected": true,
+    "review": "2026-10-04 superseded before ordering (never generated): owner chose one character per clip, framed full body, with body-part labels added afterwards. Replaced by rows 10-13."
+   },
+   {
+    "id": "10-head",
+    "image": "public/lep1/scenes/bg-u4l1-leo-stand-wide.png",
+    "endImage": "public/lep1/scenes/bg-u4l1-leo-head-wide.png",
+    "seconds": 5,
+    "line": "Ready, friends? Touch your head!",
+    "bodyWords": [
+     "head"
+    ],
+    "leader": "Leo",
+    "action": "Leo slowly lifts both paws and rests them on top of his head",
+    "prompt": "Leo the lion slowly lifts both paws and rests them on top of his head, and keeps them there. Nobody else is in the picture. His feet stay still. The camera stays steady.",
+    "labels": [
+     {
+      "word": "head",
+      "at": [
+       50,
+       9
+      ],
+      "label": [
+       76,
+       16
+      ]
+     }
+    ],
+    "ownerApproved": false
+   },
+   {
+    "id": "11-shoulders",
+    "image": "public/lep1/scenes/bg-u4l1-leo-head-wide.png",
+    "endImage": "public/lep1/scenes/bg-u4l1-leo-shoulders-wide.png",
+    "seconds": 5,
+    "line": "Touch your shoulders!",
+    "bodyWords": [
+     "shoulders"
+    ],
+    "leader": "Leo",
+    "action": "Leo slowly moves both paws down from his head onto his shoulders",
+    "prompt": "Leo the lion slowly moves both paws down from his head and rests them on his shoulders, and keeps them there. Nobody else is in the picture. His feet stay still. The camera stays steady.",
+    "labels": [
+     {
+      "word": "shoulders",
+      "at": [
+       [
+        41,
+        42
+       ],
+       [
+        59,
+        42
+       ]
+      ],
+      "label": [
+       50,
+       90
+      ]
+     }
+    ],
+    "ownerApproved": false
+   },
+   {
+    "id": "12-knees",
+    "image": "public/lep1/scenes/bg-u4l1-leo-shoulders-wide.png",
+    "endImage": "public/lep1/scenes/bg-u4l1-leo-knees-wide.png",
+    "seconds": 5,
+    "line": "Touch your knees!",
+    "bodyWords": [
+     "knees"
+    ],
+    "leader": "Leo",
+    "action": "Leo slowly bends forward and moves both paws down from his shoulders onto his knees",
+    "prompt": "Leo the lion slowly bends forward a little and moves both paws down from his shoulders onto his knees, and keeps them there. Nobody else is in the picture. His feet stay still. The camera stays steady.",
+    "labels": [
+     {
+      "word": "knees",
+      "at": [
+       [
+        45,
+        69
+       ],
+       [
+        55,
+        69
+       ]
+      ],
+      "label": [
+       50,
+       90
+      ]
+     }
+    ],
+    "ownerApproved": false
+   }
+  ]
+ },
+ "u2l2-mix": {
+  "lesson": "Pre-A1 Unit 2 Lesson 2 — The Magic Mix (page 7). Scenario docs/scenarios/u2l2-magic-mix.md. STRICT MODE: one clip at a time, each between two Canva key pictures, screened with review-clip.py, then frame-by-frame review with the owner.",
+  "provider": "higgsfield",
+  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "seconds": 5,
+  "out": "public/lep1/video/clips/u2l2-mix",
+  "style": "Keep exactly the soft 2D cartoon picture-book style and the same characters as the first frame (bold dark outlines, soft flat colours). Smooth, slow, gentle animation for young children. The camera stays steady. No text, no new characters, no speech.",
+  "beats": [
+   {
+    "id": "willow-stir",
+    "image": "public/lep1/scenes/bg-u2l2-mix-willow-spoon-wide.png",
+    "endImage": "public/lep1/scenes/bg-u2l2-mix-willow-b-wide.png",
+    "seconds": 5,
+    "line": "Stir, stir, stir!",
+    "bodyWords": [
+     "stir"
+    ],
+    "leader": "Willow",
+    "action": "Willow slowly stirs the paint in the glass bowl with the wooden spoon; the blue and yellow paint swirl together into green",
+    "prompt": "Willow the blue bird slowly stirs the paint in the glass bowl with the wooden spoon in small circles. The blue and yellow paint swirl together and turn green. Her feet, the table and both jars stay still. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"create the video of this lesson\" 2026-10-04, after reading the scenario (scenario shot 3, first clip only)",
+    "review": "2026-10-04 review-clip: START 0.99, END 0.97, POSE 0.62 (fail). Frame review: the stir action is right (one wing, spoon in the bowl, feet/table/jars still, nobody else, no text), but the paint turns mostly YELLOW at ~4.3 s and ends blotchy yellow/green, not the clean green of the end picture. Not in the lesson; waiting for the owner (use with a fade into the green picture, or reject). No other clip ordered. Owner 2026-10-04: \"Good\" — used with a 0.8 s fade into the green picture. Final film uses its first ~1.4 s, then a 1.6 s fade into the green picture."
+   },
+   {
+    "id": "willow-pour1",
+    "image": "public/lep1/scenes/bg-u2l2-mix-willow-a-wide.png",
+    "holdPose": true,
+    "seconds": 5,
+    "line": "Blue!",
+    "bodyWords": [
+     "blue"
+    ],
+    "leader": "Willow",
+    "action": "Willow keeps slowly pouring blue paint from the jar into the glass bowl, and the blue paint in the bowl rises a little",
+    "prompt": "Willow the blue bird keeps slowly pouring blue paint from the jar into the glass bowl, and the blue paint in the bowl rises a little. Her feet, the table and the jars on the table stay still. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+    "review": "2026-10-04 PASS: blue keeps pouring, bowl fills blue, feet/jars still."
+   },
+   {
+    "id": "willow-pour2",
+    "image": "public/lep1/scenes/bg-u2l2-mix-willow-pour2-wide.png",
+    "holdPose": true,
+    "seconds": 5,
+    "line": "And yellow!",
+    "bodyWords": [
+     "yellow"
+    ],
+    "leader": "Willow",
+    "action": "Willow keeps slowly pouring yellow paint from the jar onto the paint in the glass bowl; the yellow paint stays on top, the colours do not mix yet",
+    "prompt": "Willow the bird keeps slowly pouring yellow paint from the jar onto the paint in the glass bowl; the yellow paint stays on top, the colours do not mix yet. Her feet, the table and the blue jar stay still. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+    "review": "2026-10-04 PASS: yellow lies on top of the blue, not mixed."
+   },
+   {
+    "id": "leo-pour1",
+    "image": "public/lep1/scenes/bg-u2l2-mix-leo-a-wide.png",
+    "holdPose": true,
+    "seconds": 5,
+    "line": "Red!",
+    "bodyWords": [
+     "red"
+    ],
+    "leader": "Leo",
+    "action": "Leo keeps slowly pouring red paint from the jar into the glass bowl, and the red paint in the bowl rises a little",
+    "prompt": "Leo the lion keeps slowly pouring red paint from the jar into the glass bowl, and the red paint in the bowl rises a little. His feet, the table and the jars on the table stay still. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+    "review": "2026-10-04 PASS: red pours, bowl fills red."
+   },
+   {
+    "id": "leo-pour2",
+    "image": "public/lep1/scenes/bg-u2l2-mix-leo-pour2-wide.png",
+    "holdPose": true,
+    "seconds": 5,
+    "line": "And yellow!",
+    "bodyWords": [
+     "yellow"
+    ],
+    "leader": "Leo",
+    "action": "Leo keeps slowly pouring yellow paint from the jar onto the paint in the glass bowl; the yellow paint stays on top, the colours do not mix yet",
+    "prompt": "Leo the lion keeps slowly pouring yellow paint from the jar onto the paint in the glass bowl; the yellow paint stays on top, the colours do not mix yet. His feet, the table and the red jar stay still. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+    "review": "2026-10-04 PASS: yellow layer on top of the red (checked close up)."
+   },
+   {
+    "id": "leo-stir",
+    "image": "public/lep1/scenes/bg-u2l2-mix-leo-spoon-wide.png",
+    "endImage": "public/lep1/scenes/bg-u2l2-mix-leo-b-wide.png",
+    "seconds": 5,
+    "line": "Stir, stir, stir!",
+    "bodyWords": [
+     "stir"
+    ],
+    "leader": "Leo",
+    "action": "Leo slowly stirs the paint in the glass bowl with the wooden spoon; the red and yellow paint blend into one even orange colour",
+    "prompt": "Leo the lion slowly stirs the paint in the glass bowl with the wooden spoon in small circles. The red and yellow paint blend into one smooth, even orange colour that fills the whole bowl. His feet, the table and both jars stay still. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+    "review": "2026-10-04 review-clip POSE 0.53 (fail): the paint flips red/yellow/red and ends RED, not orange. Used only for its first ~1.6 s (spoon moving, two colours), then a 1.6 s fade into the orange picture. No retry (the model cannot blend colours)."
+   },
+   {
+    "id": "mia-pour1",
+    "image": "public/lep1/scenes/bg-u2l2-mix-mia-a2-wide.png",
+    "holdPose": true,
+    "seconds": 5,
+    "line": "Red!",
+    "bodyWords": [
+     "red"
+    ],
+    "leader": "Mia",
+    "action": "Mia keeps slowly pouring red paint from the jar into the glass bowl, and the red paint in the bowl rises a little",
+    "prompt": "Mia the mouse keeps slowly pouring red paint from the jar into the glass bowl, and the red paint in the bowl rises a little. Her feet, the table and the blue jar stay still. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+    "review": "2026-10-04 PASS: red pours into the empty bowl, blue jar stays."
+   },
+   {
+    "id": "mia-pour2",
+    "image": "public/lep1/scenes/bg-u2l2-mix-mia-pour2-wide.png",
+    "holdPose": true,
+    "seconds": 5,
+    "line": "And blue!",
+    "bodyWords": [
+     "blue"
+    ],
+    "leader": "Mia",
+    "action": "Mia keeps slowly pouring blue paint from the jar onto the paint in the glass bowl; the blue paint stays on top, the colours do not mix yet",
+    "prompt": "Mia the mouse keeps slowly pouring blue paint from the jar onto the paint in the glass bowl; the blue paint stays on top, the colours do not mix yet. Her feet, the table and the red jar stay still. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+    "review": "2026-10-04 PASS: blue pours onto the red, not purple yet."
+   },
+   {
+    "id": "mia-stir",
+    "image": "public/lep1/scenes/bg-u2l2-mix-mia-spoon-wide.png",
+    "endImage": "public/lep1/scenes/bg-u2l2-mix-mia-b2-wide.png",
+    "seconds": 5,
+    "line": "Stir, stir, stir!",
+    "bodyWords": [
+     "stir"
+    ],
+    "leader": "Mia",
+    "action": "Mia slowly stirs the paint in the glass bowl with the wooden spoon; the red and blue paint blend into one even purple colour",
+    "prompt": "Mia the mouse slowly stirs the paint in the glass bowl with the wooden spoon in small circles. The red and blue paint blend into one smooth, even purple colour that fills the whole bowl. Her feet, the table and both jars stay still. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Good. Generate all of them\" 2026-10-04 (after seeing the willow-stir clip); ordered one clip per run, each screened before the next",
+    "review": "2026-10-04 NOT MADE: Higgsfield 403 not_enough_credits (nothing charged). The film uses the spoon picture fading into the purple picture."
+   }
+  ]
+ },
+ "u4l5-moves": {
+  "lesson": "Pre-A1 Unit 4 Lesson 5 — From Head to Toe, story film 'Animal Moves' (page 4). Scenario docs/scenarios/u4l5-animal-moves.md (approved 2026-10-06). STRICT MODE: one clip at a time, each between two Canva key pictures (standing pose -> move pose), screened with review-clip.py, then frame-by-frame review with the owner.",
+  "provider": "higgsfield",
+  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "seconds": 5,
+  "out": "public/lep1/video/clips/u4l5-moves",
+  "style": "Keep exactly the soft 2D cartoon picture-book style and the same character as the first frame (bold dark outlines, soft flat colours). Smooth, slow, gentle animation for young children. The camera stays steady. No text, no new characters, no speech.",
+  "beats": [
+   {
+    "id": "tiger-head",
+    "image": "public/lep1/scenes/bg-u4l5-tiger-stand-wide.png",
+    "endImage": "public/lep1/scenes/bg-u4l5-tiger-head-wide.png",
+    "seconds": 5,
+    "line": "Look! The tiger turns his head. Turn, turn!",
+    "bodyWords": [
+     "head"
+    ],
+    "leader": "tiger",
+    "action": "the tiger slowly turns his head to the side; his body and feet stay still",
+    "prompt": "The tiger cub slowly turns his head to the side and looks to the right, smiling. His body, arms and feet stay still. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next"
+   },
+   {
+    "id": "pip-head",
+    "image": "public/lep1/scenes/bg-u4l5-pip-stand-wide.png",
+    "endImage": "public/lep1/scenes/bg-u4l5-pip-head-wide.png",
+    "seconds": 5,
+    "line": "I can do it! Turn, turn! I turn my head!",
+    "bodyWords": [
+     "head"
+    ],
+    "leader": "Pip",
+    "action": "Pip slowly turns his head to the side; his body and feet stay still",
+    "prompt": "Pip the orange fox slowly turns his head to the side and looks to the right, smiling. His body, arms and feet stay still. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next"
+   },
+   {
+    "id": "monkey-arms",
+    "image": "public/lep1/scenes/bg-u4l5-monkey-stand-wide.png",
+    "endImage": "public/lep1/scenes/bg-u4l5-monkey-arms-wide.png",
+    "seconds": 5,
+    "line": "Look! The monkey waves his arms. Wave, wave!",
+    "bodyWords": [
+     "arms"
+    ],
+    "leader": "monkey",
+    "action": "the monkey lifts both arms high and waves his arms above his head; his feet stay still",
+    "prompt": "The monkey slowly lifts both arms high above his head and waves his arms gently. His feet and body stay in place. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next"
+   },
+   {
+    "id": "pip-arms",
+    "image": "public/lep1/scenes/bg-u4l5-pip-stand-wide.png",
+    "endImage": "public/lep1/scenes/bg-u4l5-pip-arms-wide.png",
+    "seconds": 5,
+    "line": "I can do it! Wave, wave! I wave my arms!",
+    "bodyWords": [
+     "arms"
+    ],
+    "leader": "Pip",
+    "action": "Pip lifts both arms high and waves his arms above his head; his feet stay still",
+    "prompt": "Pip the orange fox slowly lifts both arms high above his head and moves his arms gently side to side. His feet and body stay in place. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next"
+   },
+   {
+    "id": "elephant-feet",
+    "image": "public/lep1/scenes/bg-u4l5-elephant-stand-wide.png",
+    "endImage": "public/lep1/scenes/bg-u4l5-elephant-feet-wide.png",
+    "seconds": 5,
+    "line": "Look! The elephant stomps his feet. Stomp, stomp!",
+    "bodyWords": [
+     "feet"
+    ],
+    "leader": "elephant",
+    "action": "the elephant lifts one big foot and stomps his feet on the grass; a small puff of dust",
+    "prompt": "The little elephant slowly lifts one big foot and stomps it down on the grass, stomping his feet, with a small puff of dust. His head and body stay in place. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next"
+   },
+   {
+    "id": "pip-feet",
+    "image": "public/lep1/scenes/bg-u4l5-pip-stand-wide.png",
+    "endImage": "public/lep1/scenes/bg-u4l5-pip-feet-wide.png",
+    "seconds": 5,
+    "line": "I can do it! Stomp, stomp! I stomp my feet!",
+    "bodyWords": [
+     "feet"
+    ],
+    "leader": "Pip",
+    "action": "Pip lifts one foot and stomps his feet on the grass; a small puff of dust",
+    "prompt": "Pip the orange fox slowly lifts one foot and stomps it down on the grass, stomping his feet, with a small puff of dust. His head and body stay in place. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next"
+   },
+   {
+    "id": "seal-hands",
+    "image": "public/lep1/scenes/bg-u4l5-seal-stand-wide.png",
+    "endImage": "public/lep1/scenes/bg-u4l5-seal-hands-wide.png",
+    "seconds": 5,
+    "line": "Look! The seal claps her hands. Clap, clap!",
+    "bodyWords": [
+     "hands"
+    ],
+    "leader": "seal",
+    "action": "the seal claps her hands (front flippers) together in front of her chest",
+    "prompt": "The seal slowly brings her two front flippers together and claps her hands in front of her chest. Her body and tail stay in place. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next"
+   },
+   {
+    "id": "pip-hands",
+    "image": "public/lep1/scenes/bg-u4l5-pip-stand-wide.png",
+    "endImage": "public/lep1/scenes/bg-u4l5-pip-hands-wide.png",
+    "seconds": 5,
+    "line": "I can do it! Clap, clap! I clap my hands!",
+    "bodyWords": [
+     "hands"
+    ],
+    "leader": "Pip",
+    "action": "Pip brings his hands together in front of his chest (a clap)",
+    "prompt": "Pip the orange fox slowly brings his two paws together in front of his chest, hands meeting with a soft pat, two times. His feet and body stay in place. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next"
+   }
+  ]
+ },
+ "u5l5-dad": {
+  "lesson": "Pre-A1 Unit 5 Lesson 5 — Just Me and My Dad, story film 'My Day with Dad' (page 5). Scenario docs/scenarios/u5l5-me-and-my-dad.md (approved 2026-10-07). STRICT MODE: one clip at a time, each between two Canva key pictures already in the stills film, screened with review-clip.py, then frame-by-frame review with the owner. The hug (14% of the picture changes) stays as stills.",
+  "provider": "higgsfield",
+  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "seconds": 5,
+  "out": "public/lep1/video/clips/u5l5-dad",
+  "style": "Keep exactly the soft 2D cartoon picture-book style and the same character as the first frame (bold dark outlines, soft flat colours). Smooth, slow, gentle animation for young children. The camera stays steady. No text, no new characters, no speech.",
+  "beats": [
+   {
+    "id": "ball-throw",
+    "image": "public/lep1/scenes/bg-u5l5-ball-a-wide.png",
+    "endImage": "public/lep1/scenes/bg-u5l5-ball-b-wide.png",
+    "seconds": 5,
+    "line": "We play ball! Dad throws the ball.",
+    "bodyWords": [
+     "throw",
+     "ball"
+    ],
+    "leader": "Dad",
+    "action": "Dad swings his arm forward and throws the red ball up into the air towards Pip; nobody moves their feet",
+    "prompt": "Dad, the father fox, swings his raised arm forward and throws the red ball, which flies slowly up into the air towards Pip. Nobody moves their feet. Nobody else is in the picture. The camera stays steady.",
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Yes start\" then \"Use the api\" 2026-10-07, after reading the 6-row storyboard; clip 1 (ball-throw) ordered alone, screened and shown before any other row"
+   },
+   {
+    "id": "ball-catch",
+    "image": "public/lep1/scenes/bg-u5l5-ball-b-wide.png",
+    "endImage": "public/lep1/scenes/bg-u5l5-ball-c-wide.png",
+    "seconds": 5,
+    "line": "I catch it! Catch!",
+    "bodyWords": [
+     "catch"
+    ],
+    "leader": "Pip",
+    "action": "the red ball drops into Pip's two paws and Pip catches it; Dad stays still",
+    "prompt": "The red ball comes down slowly and Pip, the little fox, catches it in both paws and holds it. Dad stays still. Nobody moves their feet. The camera stays steady.",
+    "ownerApproved": false
+   },
+   {
+    "id": "ducks-bread",
+    "image": "public/lep1/scenes/bg-u5l5-ducks-a-wide.png",
+    "endImage": "public/lep1/scenes/bg-u5l5-ducks-b-wide.png",
+    "seconds": 5,
+    "line": "We feed the ducks. Quack, quack!",
+    "bodyWords": [
+     "feed",
+     "ducks"
+    ],
+    "leader": "Pip",
+    "action": "Pip throws the small piece of bread onto the water to feed the four ducks, which swim towards it; Dad stays still",
+    "prompt": "Pip, the little fox, gently throws the small piece of bread onto the water to feed the four ducks. The ducks swim slowly towards the bread. Dad stays still. Nobody moves their feet. The camera stays steady.",
+    "ownerApproved": false
+   },
+   {
+    "id": "icecream-lick",
+    "image": "public/lep1/scenes/bg-u5l5-icecream-a-wide.png",
+    "endImage": "public/lep1/scenes/bg-u5l5-icecream-b-wide.png",
+    "seconds": 5,
+    "line": "We eat ice cream. Yum, yum!",
+    "bodyWords": [
+     "ice cream"
+    ],
+    "leader": "Pip",
+    "action": "Pip brings his ice cream cone to his mouth and licks it; Dad keeps holding his own cone",
+    "prompt": "Pip, the little fox, brings his pink ice cream cone up to his mouth and licks it. Dad sits still and holds his cone. Nobody stands up. The camera stays steady.",
+    "ownerApproved": false
+   },
+   {
+    "id": "book-open",
+    "image": "public/lep1/scenes/bg-u5l5-book-a-wide.png",
+    "endImage": "public/lep1/scenes/bg-u5l5-book-b-wide.png",
+    "seconds": 5,
+    "line": "At home, we read a book.",
+    "bodyWords": [
+     "book"
+    ],
+    "leader": "Dad",
+    "action": "Dad opens the picture book wide on his lap; Pip stays on Dad's lap",
+    "prompt": "Dad, the father fox, slowly opens the picture book wide. Pip stays sitting on his lap and looks at the pages. Nobody stands up. The camera stays steady.",
+    "ownerApproved": false
+   },
+   {
+    "id": "gate-walk",
+    "image": "public/lep1/scenes/bg-u5l5-gate-a-wide.png",
+    "endImage": "public/lep1/scenes/bg-u5l5-gate-b-wide.png",
+    "seconds": 5,
+    "line": "Today is my day with Dad! Just me and my dad!",
+    "bodyWords": [
+     "Dad"
+    ],
+    "leader": "Pip and Dad",
+    "action": "Pip and Dad take one step forward along the path, holding hands",
+    "prompt": "Pip and Dad, the two foxes, walk one slow step forward along the path, holding hands. The gate and the flowers stay still. The camera stays steady.",
+    "ownerApproved": false
+   }
+  ]
+ }
 }

@@ -22,10 +22,10 @@ export const QUEST_LEO_STAR_U1L5: HomeworkQuest = {
   levels: [
     { kind: 'picture-choice', name: 'Find It', icon: '🔎', intro: 'Listen. Tap the right picture!', img: meadow,
       rounds: [
-        { line: 'Find the hat.', answer: 'Hat', options: [{ label: 'Bag', src: `${I}/item-bag.png` }, { label: 'Hat', src: `${I}/item-hat.png` }, { label: 'Mat', src: `${I}/item-mat.png` }] },
-        { line: 'Find the bat.', answer: 'Bat', options: [{ label: 'Bat', src: `${I}/item-bat.png` }, { label: 'Ant', src: `${I}/item-ant.png` }, { label: 'Star', src: `${I}/item-star-gold.png` }] },
+        { line: 'Find the hat.', answer: 'Hat', options: [{ label: 'Bag', src: `${I}/item-bag.png` }, { label: 'Hat', src: `${I}/item-hat.png` }, { label: 'Cat', src: `${I}/item-cat.png` }] },
+        { line: 'Find the bat.', answer: 'Bat', options: [{ label: 'Bat', emoji: '🦇' }, { label: 'Ant', src: `${I}/item-ant.png` }, { label: 'Star', src: `${I}/item-star-gold.png` }] },
         { line: 'Find the star.', answer: 'Star', options: [{ label: 'Hat', src: `${I}/item-hat.png` }, { label: 'Nut', src: `${I}/item-nut.png` }, { label: 'Star', src: `${I}/item-star-gold.png` }] },
-        { line: 'Find the ant.', answer: 'Ant', options: [{ label: 'Ant', src: `${I}/item-ant.png` }, { label: 'Bat', src: `${I}/item-bat.png` }, { label: 'Mat', src: `${I}/item-mat.png` }] },
+        { line: 'Find the ant.', answer: 'Ant', options: [{ label: 'Ant', src: `${I}/item-ant.png` }, { label: 'Bat', emoji: '🦇' }, { label: 'Cat', src: `${I}/item-cat.png` }] },
       ] },
     { kind: 'true-false', name: 'Yes or No?', icon: '⚖️', intro: 'Look and listen. Is it true?',
       rounds: [
@@ -37,10 +37,10 @@ export const QUEST_LEO_STAR_U1L5: HomeworkQuest = {
     { kind: 'sound-choice', name: 'H, M, or B?', icon: '🔤', intro: 'Listen to the word. Which sound does it start with?', img: meadow, choices: ['H', 'M', 'B'], phonics: true, voice: 'pip',
       rounds: [
         { word: 'hat', answer: 'H', picture: `${I}/item-hat.png` },
-        { word: 'mat', answer: 'M', picture: `${I}/item-mat.png` },
-        { word: 'bat', answer: 'B', picture: `${I}/item-bat.png` },
-        { word: 'bag', answer: 'B', picture: `${I}/item-bag.png` },
         { word: 'moon', answer: 'M', picture: `${I}/item-moon.png` },
+        { word: 'bat', answer: 'B', emoji: '🦇' },
+        { word: 'bag', answer: 'B', picture: `${I}/item-bag.png` },
+        { word: 'milk', answer: 'M', picture: `${I}/item-milk.png` },
       ] },
     { kind: 'treasure', name: "Leo's Box", icon: `${K}/chest-closed.png`, intro: 'Tap the box. Is the star in it?', img: meadow, closed: `${K}/chest-closed.png`, open: `${K}/chest-open.png`, win: 'Yes! Here it is! You found the star!' },
   ],

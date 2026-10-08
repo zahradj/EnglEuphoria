@@ -1,0 +1,15 @@
+
+=== docs/songs/u3l5-tidy-take1.mp3  length=20.1s  score=0.88  missing=5  extra=3
+heard: playa playa put the toys away the bowl goes in the box in in in the teddy goes on the bed on on on the car goes under the chair under under
+line starts (s): [np.float64(2.1), np.float64(3.1), np.float64(7.4), np.float64(11.4)]
+lineDurationsMs: [3140, 4280, 3980, 8662]
+
+=== docs/songs/u3l5-tidy-take2.mp3  length=20.1s  score=0.88  missing=5  extra=3
+heard: tadia tadia put the toys away the ball goes in the box in in in the tatty goes on the bed on on on the car goes under the chair under under
+line starts (s): [np.float64(2.1), np.float64(3.2), np.float64(7.4), np.float64(11.4)]
+lineDurationsMs: [3180, 4240, 3960, 8682]
+
+=== docs/songs/u3l5-tidy-take3.mp3  length=20.1s  score=0.97  missing=1  extra=1
+heard: tidy up tidy up put the toys away the ball goes in the box in in in the tagby goes on the bed on on on the car goes under the chair under under
+line starts (s): [np.float64(0.0), np.float64(3.1), np.float64(7.2), np.float64(11.2)]
+lineDurationsMs: [3120, 4100, 3960, 8882]

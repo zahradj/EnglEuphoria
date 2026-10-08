@@ -1,0 +1,14 @@
+
+=== docs/songs/u3l4-favorite-take1.mp3  length=20.1s  score=0.99  missing=0  extra=1
+heard: my favorite toy is my teddy bear it is big my favorite toy is my robot it is small hot big big big small small small what is your favorite toy show and tell
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(7.9), np.float64(11.2)]
+lineDurationsMs: [4080, 3800, 3360, 8822]
+
+=== docs/songs/u3l4-favorite-take2.mp3  length=20.1s  score=0.88  missing=4  extra=4
+heard: my favorite toy is my teddy bear in his big my favorite toy is my robot in his small big big big small small small what is your favorite toy show and tell
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(8.0), np.float64(11.5)]
+lineDurationsMs: [4080, 3960, 3500, 8522]
+
+=== docs/songs/u3l4-favorite-take3.mp3  length=20.1s  score=0.82  missing=10  extra=0
+heard: my favorite toy is my robot it is small big big big small small small what is your favorite toy show and tell
+line starts (s): [None, np.float64(1.1), np.float64(9.3), np.float64(13.9)]

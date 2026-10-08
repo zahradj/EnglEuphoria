@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { actualLessonMinutes, type SessionTimes } from '@/services/lessonTiming';
+import { actualLessonMinutes, sessionTimesFromRow, type SessionTimes } from '@/services/lessonTiming';
 import {
   Dialog,
   DialogContent,
@@ -58,7 +58,7 @@ export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
           .maybeSingle(),
         supabase
           .from('classroom_sessions')
-          .select('teacher_joined_at, student_joined_at, teacher_last_ping_at, student_last_ping_at, ended_at')
+          .select('teacher_joined_at, student_joined_at, teacher_last_ping_at, student_last_ping_at, ended_at, session_context')
           .or(`room_id.eq.${roomId},booking_id.eq.${roomId}`)
           .order('updated_at', { ascending: false })
           .limit(1)
@@ -68,7 +68,7 @@ export const PostClassFeedbackModal: React.FC<PostClassFeedbackModalProps> = ({
       if (cancelled) return;
       const ended = data?.occurred_at ?? (session as SessionTimes | null)?.ended_at ?? new Date().toISOString();
       setEndedAt(ended);
-      setLessonMinutes(actualLessonMinutes(session as SessionTimes | null, booking?.scheduled_at, ended));
+      setLessonMinutes(actualLessonMinutes(sessionTimesFromRow(session), booking?.scheduled_at, ended));
     })();
     return () => { cancelled = true; };
   }, [isOpen, roomId]);

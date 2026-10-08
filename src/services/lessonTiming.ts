@@ -13,6 +13,17 @@ export interface SessionTimes {
   teacher_last_ping_at?: string | null;
   student_last_ping_at?: string | null;
   ended_at?: string | null;
+  /** When the teacher pressed Start Lesson (classroom_sessions.session_context.startedAt).
+   *  Start needs the student in the room, so this is when the lesson with the
+   *  student really began — late student or not (owner, 2026-10-07). */
+  lesson_started_at?: string | null;
+}
+
+/** SessionTimes from a classroom_sessions row, including the Start Lesson time from session_context. */
+export function sessionTimesFromRow(row: object | null | undefined): SessionTimes | null {
+  if (!row) return null;
+  const startedAt = (row as { session_context?: { startedAt?: unknown } | null }).session_context?.startedAt;
+  return { ...row, lesson_started_at: typeof startedAt === 'string' ? startedAt : null } as SessionTimes;
 }
 
 /** A class is live while someone's heartbeat is this fresh. */
@@ -40,9 +51,12 @@ export function isLiveNow(s: SessionTimes | null | undefined, nowMs = Date.now()
   return last !== null && nowMs - last <= LIVE_PING_MS;
 }
 
-/** When the lesson really started: once both were in the room, never before
- *  the booked start (joining early to set up doesn't count). */
+/** When the lesson really started: the teacher's Start Lesson press when known; otherwise once both
+ *  were in the room, never before the booked start (joining early to set up doesn't count). */
 export function actualStartMs(s: SessionTimes | null | undefined, scheduledMs: number | null): number | null {
+  // The teacher's Start Lesson press is the real start of the lesson with the student.
+  const pressed = ms(s?.lesson_started_at);
+  if (pressed !== null) return pressed;
   const t = ms(s?.teacher_joined_at);
   const st = ms(s?.student_joined_at);
   const both = t !== null && st !== null ? Math.max(t, st) : null;

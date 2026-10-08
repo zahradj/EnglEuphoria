@@ -25,12 +25,13 @@ async function logNotification(params: {
 }
 
 export async function sendMasteryReport({ studentId, unitId, milestoneResultId }: MasteryReportParams) {
-  // 1. Fetch student profile for parent email and name
-  const { data: profile } = await supabase
-    .from('student_profiles')
-    .select('parent_email, display_name')
-    .eq('user_id', studentId)
-    .single();
+  // 1. Fetch the parent email (student_profiles) and the student's name (users.full_name —
+  //    student_profiles has no name column, so asking it for one made the whole query fail)
+  const [{ data: parent }, { data: user }] = await Promise.all([
+    supabase.from('student_profiles').select('parent_email').eq('user_id', studentId).single(),
+    supabase.from('users').select('full_name').eq('id', studentId).maybeSingle(),
+  ]);
+  const profile = parent ? { parent_email: parent.parent_email, display_name: user?.full_name ?? null } : null;
 
   if (!profile?.parent_email) {
     console.warn('No parent email found for student, skipping mastery report email');

@@ -1,0 +1,15 @@
+
+=== docs/songs/u4l5-moves-take1.mp3  length=20.1s  score=0.57  missing=14  extra=13
+heard: i turn my head like you do it i wake up like you do it i stomp my feet i flop my hands the rest is all we get through it
+line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(8.0), np.float64(14.5)]
+lineDurationsMs: [4000, 4020, 6500, 5542]
+
+=== docs/songs/u4l5-moves-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: i turn my head i can do it i wave my arms i can do it i stomp my feet i clap my hands from head to toe we can do it
+line starts (s): [np.float64(0.0), np.float64(3.7), np.float64(8.4), np.float64(12.3)]
+lineDurationsMs: [3740, 4660, 3860, 7802]
+
+=== docs/songs/u4l5-moves-take3.mp3  length=20.1s  score=0.84  missing=5  extra=5
+heard: i threw my leg i can do it i break my arms i can do it i saw my feet i caught my hands from head to toe we can do it
+line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(8.0), np.float64(11.8)]
+lineDurationsMs: [4040, 3980, 3800, 8242]

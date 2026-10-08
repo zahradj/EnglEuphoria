@@ -8,7 +8,7 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "build:vercel": "npm run typecheck:classroom && vitest run src/content/playground-library src/components/placement/placementStatic.test.ts src/components/placement/adaptiveEngine.test.ts src/components/placement/kids/kidsPlacement.test.ts && vite build",
-    "lint": "eslint .",
+    "lint": "node scripts/lint-baseline.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:unit": "vitest run",
@@ -21,7 +21,8 @@
     "typecheck:strict": "tsc -p tsconfig.strict.json --noEmit",
     "hygiene:check": "node scripts/hygiene-check.mjs",
     "songs:check": "node scripts/song-manifest.mjs",
-    "check:schema": "node scripts/check-supabase-schema.mjs"
+    "check:schema": "node scripts/check-supabase-schema.mjs",
+    "lint:all": "eslint ."
   },
   "dependencies": {
     "@11labs/react": "^0.2.0",

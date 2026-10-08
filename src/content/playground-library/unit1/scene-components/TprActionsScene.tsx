@@ -3,7 +3,7 @@ import type { Scene } from '../scenes';
 import { cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
-import { CLAY_BUTTON, CLAY_CARD, CountdownRing } from './shared';
+import { CLAY_BUTTON, CountdownRing, THICK_WORDS } from './shared';
 
 /* ---------- Move & Say (TPR) / Brain Break ----------
  * Total Physical Response, the movement-first routine of Oxford's Toy Team /
@@ -69,9 +69,9 @@ export function TprActionsScene({ scene, onWin, onNext, sync }: { scene: Tpr; on
       <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={bgStyle}>
         <div className="absolute inset-0 bg-black/20" />
         <div className="relative z-10 flex flex-col items-center gap-4 px-4">
-          <div className={`${CLAY_CARD} px-8 py-4 text-center text-2xl font-black text-orange-600`}>
+          <div className="text-center font-black leading-tight text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.8rem, calc(4*var(--svw,1vw)), 3.4rem)' }}>
             {isBreak ? '🎉 Great moving! Ready to learn again?' : '🌟 Super moves!'}
-            <div className="mt-1 text-3xl">{'⭐'.repeat(Math.min(stars, 8))}</div>
+            <div className="mt-1 text-4xl">{'⭐'.repeat(Math.min(stars, 8))}</div>
           </div>
           <button onClick={onNext} className={`${CLAY_BUTTON} px-10 py-4 text-xl`}>Next ⭐</button>
         </div>
@@ -80,8 +80,11 @@ export function TprActionsScene({ scene, onWin, onNext, sync }: { scene: Tpr; on
   }
 
   const moving = phase === 'move';
+  // No card frames (owner, 2026-10-05): a scene picture (a character doing the move) becomes the whole
+  // background; an object picture floats on its own.
+  const scenePic = !!r.img && /\/scenes\//.test(r.img);
   return (
-    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={bgStyle}>
+    <div key={scenePic ? `s${round}` : undefined} className="absolute inset-0 overflow-hidden bg-cover bg-center" style={scenePic ? { backgroundImage: `url(${r.img})`, animation: 'lep1-fade-in 0.45s ease-out' } : bgStyle}>
       <div className={`absolute inset-0 ${isBreak ? 'bg-gradient-to-br from-fuchsia-500/35 via-orange-400/20 to-sky-400/35' : 'bg-black/10'}`} />
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-base font-black text-orange-700 shadow-xl sm:text-xl">
         {isBreak ? '🕺 Brain Break!' : '🙌 Move and say!'}
@@ -94,21 +97,20 @@ export function TprActionsScene({ scene, onWin, onNext, sync }: { scene: Tpr; on
         {scene.rounds.map((_, i) => <span key={i} className={`text-xl transition ${i < stars ? 'scale-110' : 'opacity-25 grayscale'}`}>⭐</span>)}
       </div>
 
-      <div className="absolute inset-x-0 top-[14%] bottom-[18%] z-20 flex items-center justify-center gap-[4vw] px-4">
-        {/* The action card */}
-        <div key={round} className={`${CLAY_CARD} relative grid aspect-square h-[min(52vh,40vw)] place-items-center p-6`} style={{ animation: 'lep1-pop 0.45s ease-out' }}>
+      <div className={`absolute inset-x-0 top-[14%] bottom-[18%] z-20 flex items-center gap-[4vw] px-4 ${scenePic ? 'justify-end pr-[6vw] portrait:items-start portrait:pr-3 portrait:pt-6' : 'justify-center'}`}>
+        {/* The move: a picture or emoji floating on its own, the countdown ring around it */}
+        <div key={round} className={`relative grid aspect-square place-items-center ${scenePic ? 'h-[min(26vh,22vw)]' : 'h-[min(52vh,40vw)]'}`} style={{ animation: 'lep1-pop 0.45s ease-out' }}>
           {moving && <CountdownRing seconds={r.seconds ?? MOVE_SECONDS} runKey={round} color={isBreak ? '#D946EF' : '#F97316'} />}
-          {r.img
-            ? <img src={r.img} alt="" draggable={false} className="h-[70%] w-[70%] object-contain" style={{ animation: moving ? 'lep1-wobble 0.6s ease-in-out infinite' : undefined }} />
-            : <span className="text-[min(22vh,16vw)] leading-none" style={{ animation: moving ? 'lep1-wobble 0.6s ease-in-out infinite' : undefined }}>{r.emoji}</span>}
-          {r.img && <span className="absolute -bottom-4 -right-4 grid h-[34%] w-[34%] place-items-center rounded-full bg-white text-[min(9vh,7vw)] shadow-xl" style={{ animation: 'lep1-wobble 1.2s ease-in-out infinite' }}>{r.emoji}</span>}
+          {r.img && !scenePic
+            ? <img src={r.img} alt="" draggable={false} className="h-[78%] w-[78%] object-contain drop-shadow-[0_14px_18px_rgba(0,0,0,0.35)]" style={{ animation: moving ? 'lep1-wobble 0.6s ease-in-out infinite' : undefined }} />
+            : <span className={`${scenePic ? 'text-[min(14vh,11vw)]' : 'text-[min(22vh,16vw)]'} leading-none drop-shadow-[0_8px_10px_rgba(0,0,0,0.3)]`} style={{ animation: moving ? 'lep1-wobble 0.6s ease-in-out infinite' : undefined }}>{r.emoji}</span>}
           {phase === 'star' && <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-6xl" style={{ animation: 'lep1-pop 0.5s ease-out' }}>⭐</span>}
         </div>
       </div>
 
       {/* Caption for the adult + the one big control */}
       <div className="absolute inset-x-0 bottom-[5%] z-30 flex flex-col items-center gap-2 px-4">
-        <div className="rounded-2xl bg-white/90 px-4 py-1 text-center text-lg font-black text-neutral-800 shadow">{r.line}</div>
+        <div className="text-center font-black leading-tight text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.6rem, calc(3.6*var(--svw,1vw)), 3rem)' }}>{r.line}</div>
         {phase === 'ready' && <button onClick={go} className={`${CLAY_BUTTON} px-10 py-3 text-xl`}>▶ Go!</button>}
         {moving && <div className="rounded-full bg-white/90 px-6 py-2 text-xl font-black text-fuchsia-600 shadow">{isBreak ? 'Move, move, move!' : 'Do it and say it!'}</div>}
         {phase === 'star' && <button onClick={next} className={`${CLAY_BUTTON} px-10 py-3 text-xl`}>{round + 1 < total ? 'Next move ▶' : 'Done ⭐'}</button>}

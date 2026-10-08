@@ -96,7 +96,8 @@ interface UseClassroomSyncReturn {
 
   // Phase 7: Shared notes & context actions
   updateSharedNotes: (notes: string) => Promise<void>;
-  updateSessionContext: (context: Record<string, any>) => Promise<void>;
+  /** Resolves true once saved, false if the save failed (the caller can tell the teacher). */
+  updateSessionContext: (context: Record<string, any>) => Promise<boolean>;
   // Phase 8: Canvas tab
   updateCanvasTab: (tab: string) => Promise<void>;
   // Unified Main Stage actions (teacher)
@@ -554,8 +555,10 @@ export const useClassroomSync = ({
     try {
       await classroomSyncService.updateSession(roomId, { sessionContext: context });
       setSession(prev => prev ? { ...prev, sessionContext: context } : null);
+      return true;
     } catch (error) {
       console.error('Failed to update session context:', error);
+      return false;
     }
   }, [roomId]);
 

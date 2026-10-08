@@ -1379,5 +1379,75 @@
       "public/lep1/items/item-car.png"
     ],
     "prompt": "one cute small orange-and-white KITTEN sitting and smiling, big friendly eyes, drawn in exactly the same cartoon sticker style as the reference images (bold dark outlines, soft colours, gentle shading), isolated alone on a plain pure white background, nothing else in the picture. No text."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u4l3-sand-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u4l3-beach-wide.png"
+    ],
+    "prompt": "Wide 16:9 picture. Top-down view straight from above of smooth, flat, golden wet beach sand, completely empty in the middle, with a few small seashells and a starfish only near the edges and a thin line of white sea foam along the very top edge. Cute kawaii cartoon picture-book style exactly like the reference picture: thick warm dark outlines, soft flat colours. No characters, no footprints, no text, full-bleed."
+  },
+  {
+    "out": "public/lep1/items/item-part-hand.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u4l3-beach-wide.png"
+    ],
+    "prompt": "A single sticker: one cute cartoon open HAND (palm facing the viewer, five fingers spread), soft peach skin colour, centred, the whole object visible with empty space around it. Cute kawaii cartoon picture-book style exactly like the reference picture: thick warm dark outlines, soft flat colours. Plain pure white background, no shadow, no text, no other objects."
+  },
+  {
+    "out": "public/lep1/items/item-part-finger.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u4l3-beach-wide.png"
+    ],
+    "prompt": "A single sticker: one cute cartoon hand POINTING with one finger up (index finger raised, other fingers folded), soft peach skin colour, centred, the whole object visible with empty space around it. Cute kawaii cartoon picture-book style exactly like the reference picture: thick warm dark outlines, soft flat colours. Plain pure white background, no shadow, no text, no other objects."
+  },
+  {
+    "out": "public/lep1/items/item-part-foot.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u4l3-beach-wide.png"
+    ],
+    "prompt": "A single sticker: one cute cartoon bare FOOT seen from the side with five little toes, soft peach skin colour, centred, the whole object visible with empty space around it. Cute kawaii cartoon picture-book style exactly like the reference picture: thick warm dark outlines, soft flat colours. Plain pure white background, no shadow, no text, no other objects."
+  },
+  {
+    "out": "public/lep1/items/item-part-arm.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u4l3-beach-wide.png"
+    ],
+    "prompt": "A single sticker: one cute cartoon ARM (from shoulder to hand), bent a little and flexing, soft peach skin colour, centred, the whole object visible with empty space around it. Cute kawaii cartoon picture-book style exactly like the reference picture: thick warm dark outlines, soft flat colours. Plain pure white background, no shadow, no text, no other objects."
+  },
+  {
+    "out": "public/lep1/items/item-fish.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u4l3-beach-wide.png"
+    ],
+    "prompt": "A single sticker: one cute happy orange cartoon FISH, centred, the whole object visible with empty space around it. Cute kawaii cartoon picture-book style exactly like the reference picture: thick warm dark outlines, soft flat colours. Plain pure white background, no shadow, no text, no other objects."
+  },
+  {
+    "out": "public/lep1/items/item-fan.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u4l3-beach-wide.png"
+    ],
+    "prompt": "A single sticker: one cute cartoon electric desk FAN, blue, centred, the whole object visible with empty space around it. Cute kawaii cartoon picture-book style exactly like the reference picture: thick warm dark outlines, soft flat colours. Plain pure white background, no shadow, no text, no other objects."
+  },
+  {
+    "out": "public/lep1/items/item-feather.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/scenes/bg-u4l3-beach-wide.png"
+    ],
+    "prompt": "A single sticker: one cute cartoon FEATHER, soft blue and white, centred, the whole object visible with empty space around it. Cute kawaii cartoon picture-book style exactly like the reference picture: thick warm dark outlines, soft flat colours. Plain pure white background, no shadow, no text, no other objects."
+  },
+  {
+    "out": "public/lep1/scenes/bg-u4l3-bella-fingers-wide.png",
+    "refs": [
+      "public/lep1/scenes/bg-u4l3-bella-wide.png"
+    ],
+    "prompt": "Redraw the reference picture EXACTLY — same beach, sea, sky, camera, Bella the white rabbit in exactly the same spot, size, face and feet, same art style — but change only her arms and hands: she holds ONE hand up high next to her face and shows her FINGERS: all five fingers spread wide apart and wiggling (small curved motion lines at the fingertips), the fingers big and very clear; her other arm rests at her side. Exactly two arms and two hands, five fingers on each hand. No text."
   }
 ]

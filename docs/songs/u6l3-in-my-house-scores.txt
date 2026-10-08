@@ -1,0 +1,14 @@
+
+=== docs/songs/u6l3-in-my-house-take1.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: the bed is in the bedroom the table is in the kitchen the sofa is in the living room i love my house my happy house
+line starts (s): [np.float64(0.0), 4.0, np.float64(7.6), np.float64(12.8)]
+lineDurationsMs: [4000, 3600, 5160, 7302]
+
+=== docs/songs/u6l3-in-my-house-take2.mp3  length=20.1s  score=0.60  missing=10  extra=11
+heard: the bed is in the bedroom just able to sit in the kitchen just so fast and know every new i love my house my happy house
+line starts (s): [np.float64(0.0), np.float64(6.4), None, np.float64(12.7)]
+
+=== docs/songs/u6l3-in-my-house-take3.mp3  length=20.1s  score=0.95  missing=0  extra=3
+heard: the bed is in the bedroom the table is in the kitchen the sofa is in the living room i love my house my happy house my happy house
+line starts (s): [np.float64(0.0), 4.0, np.float64(7.5), np.float64(13.0)]
+lineDurationsMs: [4000, 3540, 5460, 7062]

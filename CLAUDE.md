@@ -41,6 +41,7 @@
 ## Media generators (hard rule — owner, 2026-10-04)
 
 - **Pictures: Canva only** (Canva `generate-image`, reference images uploaded to Canva for character consistency; `remove-background` for stickers). **Never generate pictures with Higgsfield** — not backgrounds, not stickers, not "just this once".
+- **Gemini is allowed for pictures too** (owner, 2026-10-06: "yes, enable Gemini for picture"): the platform's `ai-image-generation` function through `scripts/art-targets.json` + `.github/workflows/bake-art.yml`, with an approved picture as the reference for character consistency. Still never Higgsfield for pictures.
 - **Videos: Higgsfield only** (story clips, game background loops — image-to-video from a Canva/approved picture).
 - `scripts/generate-art.mjs` refuses the Higgsfield image path; the `higgsfield-video` edge function only allows video endpoints.
 - How to get a Canva picture into the repo (holder design, export, fetch bot): `docs/canva-art-pipeline.md`.
@@ -49,3 +50,10 @@
 
 - Every new lesson: research >= 3 benchmarks (Khan Academy Kids, Lingokids, LingoAce, VIPKid, Novakid, Duolingo ABC, Oxford, Cambridge, Wordwall...) for its skill, take the mechanic (never content), make it better, and add or upgrade >= 1 mechanic.
 - Vary activities, look, scenes (settings) and themes (story frame) from the previous lesson and from the same slot of the previous unit. Follow `.claude/skills/lesson-variety-engine`; register `LESSON_PROFILE` + `RESEARCH_LOG` in `src/content/playground-library/lessonVariety.ts`. `lessonVariety.test.ts` (deploy gate) fails otherwise — fix the lesson, never the check.
+
+## Remember? warm-up (hard rule — owner, 2026-10-07)
+
+- Universal: Pre-A1 and the A1/A2 worlds (Welcome Town, Magic Castle, Jungle), one shared component `src/content/playground-library/RecallWarmupScene.tsx`; blueprint §3f, quality gate check.
+- Every Playground lesson after the very first opens (right after the title / hello song) with ONE `recall-warmup` scene: a quick "Remember?" of the lesson before, 3-5 of its words with their pictures, Pip says each word and the child finds it — no reading.
+- Vary the look: `mode: 'click'` (listen and click, three pictures) for colours and scene pictures; `mode: 'shadow'` (listen and match the shadow) only for sticker pictures with clearly different outlines.
+- `recallWarmup.test.ts` (deploy gate) fails if a lesson has none. It is a routine scene, not one of the lesson's games.

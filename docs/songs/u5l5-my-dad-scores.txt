@@ -1,0 +1,15 @@
+
+=== docs/songs/u5l5-my-dad-take1.mp3  length=20.1s  score=0.77  missing=7  extra=7
+heard: we play ball just me and my dad we feed the ducks quack quack quack down down i sing we feed our books i love you dad the best day
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(9.7), 12.0]
+lineDurationsMs: [3780, 5940, 2280, 8062]
+
+=== docs/songs/u5l5-my-dad-take2.mp3  length=20.1s  score=0.87  missing=4  extra=4
+heard: we play ball just me and my dad we feed the ducks quack quack quack young young i scream we read a book i love you dad the best day
+line starts (s): [np.float64(0.0), np.float64(3.7), np.float64(9.7), np.float64(11.9)]
+lineDurationsMs: [3730, 5970, 2210, 8152]
+
+=== docs/songs/u5l5-my-dad-take3.mp3  length=20.1s  score=0.73  missing=8  extra=8
+heard: we play ball just me and my dad we beat the dots whack whack whack yum yum i scream we beat a book i love you dad the best day
+line starts (s): [np.float64(0.0), 4.0, 8.0, 12.0]
+lineDurationsMs: [4000, 4000, 4000, 8062]
