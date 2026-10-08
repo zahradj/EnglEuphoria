@@ -8,7 +8,7 @@ Canva rate-limits image generation ("quota_cooldown"): make ONE picture, wait ~2
 | Character | neutral | happy | curious | surprised | thinking | concerned |
 |---|---|---|---|---|---|---|
 | Vee | MAHXdW0wNyY | MAHXdUGuoxM | MAHXdkQRIm4 (weak tilt, may redo) | MAHXdlzhwvw | MAHXdhihuTI | MAHXdvfubSE |
-| Ava | MAHXdq0tQjs | | | | | |
+| Ava | MAHXdq0tQjs | MAHXd6yfO84 | | | | |
 | Theo | | | | | | |
 | Mia | | | | | | |
 
