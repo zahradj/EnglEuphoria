@@ -1,0 +1,15 @@
+
+=== docs/songs/u6l4-my-house-take1.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: this is my house my house my house my bed is red my chair is blue my sofa is green and i love it too come and see my happy house
+line starts (s): [np.float64(0.0), np.float64(4.4), np.float64(9.1), np.float64(14.6)]
+lineDurationsMs: [4400, 4660, 5490, 5512]
+
+=== docs/songs/u6l4-my-house-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: this is my house my house my house my bed is red my chair is blue my sofa is green and i love it too come and see my happy house
+line starts (s): [np.float64(0.0), np.float64(3.9), np.float64(8.5), np.float64(13.5)]
+lineDurationsMs: [3940, 4600, 4940, 6582]
+
+=== docs/songs/u6l4-my-house-take3.mp3  length=20.1s  score=0.97  missing=1  extra=1
+heard: this is my house my house my house my bed is red my chair is blue my sofa is green and i love it to come and see my happy house
+line starts (s): [np.float64(0.0), np.float64(4.7), np.float64(9.6), np.float64(13.9)]
+lineDurationsMs: [4660, 4940, 4300, 6162]
