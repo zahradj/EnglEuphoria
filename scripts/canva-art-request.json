@@ -1,12 +1,12 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0064-3303908627294529136.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T214309Z&X-Amz-Expires=27956&X-Amz-Signature=eaa220e2d2be0084f22386d2393bc46c3a0d3ecbc5e9eca0abbac6eabd9f4988&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2005%3A29%3A05%20GMT",
-  "out": "public/lep1/sheets/u6l2-furniture-sheet.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0087-1760299856411100033.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T102647Z&X-Amz-Expires=70674&X-Amz-Signature=bac56467077bc2046c16818f7bc18f8f4bf9ffc38922963f19d8f7a24e165ba7&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2006%3A04%3A41%20GMT",
+  "out": "public/lep1/scenes/bg-u6l2-moving-truck-wide.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0086-7603720373667004655.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T153432Z&X-Amz-Expires=52397&X-Amz-Signature=c52c079cb2f3e56c9425bd60aac013ecd01edad726fac784a7d84e12a62fe73d&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2006%3A07%3A49%20GMT",
-  "out": "public/lep1/sheets/u6l2-ch-sheet.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0089-241460880354846639.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261008%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261008T033638Z&X-Amz-Expires=9384&X-Amz-Signature=897093b47cc66d2f4ed71e2055c520ed584976d6341e3f78c319ed702f615e12&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2006%3A13%3A02%20GMT",
+  "out": "public/lep1/scenes/bg-u6l2-room-empty-wide.png",
   "sticker": false
  }
 ]
