@@ -1,2 +1,2 @@
-+ public/lep1/scenes/bg-u7l4-fair-empty-wide.png (1376, 768)
++ public/lep1/scenes/bg-u7l4-fair-wide.png (1376, 768)
 1/1 saved
