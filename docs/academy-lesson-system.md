@@ -1,6 +1,6 @@
-# Academy lesson system — "Seasons" (one-on-one, 60 min, ages 11–18, A1 → B2)
+# Academy lesson system — "Seasons" (one-on-one, 60 min, ages 11–18, A1 → C1)
 
-Status: **proposal for owner approval** (2026-10-08). Nothing here is built yet. It extends `docs/research/academy-lesson-design.md` (evidence base) and `docs/research/academy-teen-games.md` (teen game rules).
+Status: **proposal for owner approval** (2026-10-08). Nothing here is built yet. It extends `docs/research/academy-lesson-design.md` (evidence base), `docs/academy-learning-science.md` (**the scientific techniques, how each is built in, and how we measure acquisition**) and `docs/research/academy-teen-games.md` (teen game rules).
 Evidence labels: **[V]** seen in a source this session · **[K]** established literature/knowledge, re-check before quoting · **[RT]** rule of thumb · **[U]** unverified. Web fetching was mostly blocked, so many items are from search summaries.
 
 **Design brief (from the owner):** lessons are **one-on-one, live, 60 minutes**; the **student's comfort is the top priority**; units are **themed**; lessons are **fun**; the student must **actually acquire English** and **feel** their progress; the player layout must suit teen taste.
@@ -44,7 +44,7 @@ Rules: new vocabulary in E2 and E6 only; new structure in E3 and E6 only; E7–E
 ### 2.2 Spiral across Seasons
 
 - **Recycle:** each Season's E1 re-uses ~30 % of words from the previous two Seasons, so every target word meets ≥ 8–10 varied encounters across skills [K/RT]. 20–30 % new language per lesson [RT, from research].
-- **Interleave:** E7 mixes Seasons; the *Daily 10* (§6) mixes everything due.
+- **Mix for retrieval, not for learning new words:** E7 and the *Daily 10* (§6) mix everything that is due (spacing + retrieval). New vocabulary is learned in blocks (interleaving worked *against* word learning, g = −0.39 [V]); only confusable grammar contrasts are interleaved, after each is learned alone. See `academy-learning-science.md` §2–3.
 - **Dial down the supports ("training wheels").** Support fades by level and the student *sees* it:
 
 | Support | A1 | A2 | B1 | B2 |
@@ -57,6 +57,8 @@ Rules: new vocabulary in E2 and E6 only; new structure in E3 and E6 only; E7–E
 | Method in the Mission | notice → practise → produce | notice → practise → task | task → focus on form → repeat task | task-led; mediation (summarise/relay) |
 
 The student's **Training-Wheels meter** (hints used per session trending down) is an honest progress signal.
+
+**C1 shape adjustments** (same 8 episodes, different weight): supports all off by default; E3 *Pattern Lab* becomes **Language Lab** (notice register, collocation and stance in an authentic text); E4 *On Air* becomes a seminar / pitch / interview; E5 *Deep Dive* uses long authentic texts and a 250–300-word piece with feedback on **precision and register**; every Season has **mediation** work (summarise, relay, mediate viewpoints) and ≥ 1 extensive-reading/listening target for the Daily 10. This also addresses the B2 "plateau" (suggested remedies: extensive reading just below level, collocation/chunk noticing, feedback on precision [V, weak sources]).
 
 ---
 
@@ -91,11 +93,12 @@ Fixed order so the student always knows where they are; the *mechanics* inside c
 | A2 | 180–200 [V] | ~1,500 | 12 | 96 | ~67 |
 | B1 | 350–400 [V] | ~2,700 | 16 | 128 | ~75 |
 | B2 | 500–600 [V] | ~4,000 | 16 | 128 | ~80 |
-| **Total** | | | **54** | **432** | |
+| C1 | 700–800 [V] | ~5,500 (Oxford 5000 adds ~2,000 B2/C1 words to the 3000 [V]; C1 ≈ 5–6k word families, provisional [V]) | 16 | 128 | ~90 items (words + collocations) |
+| **Total** | | | **64** | **560** | |
 
-- **Reconciling with the hours data.** Cambridge's cumulative guided hours imply roughly 95 / 95 / 180 / 175 new 60-min lessons per level (≈ 545 to B2) [V for the hours]. This plan schedules **432 live sessions** and relies on ~120 h of *Daily 10* self-practice to close the gap. That trade is an **assumption**: one-to-one gives far more speaking per hour, but there is no hard data on how many fewer hours it needs, so do not cut the budget silently. **Alternative if the owner prefers to follow the hours strictly:** A1 12, A2 12, B1 22, B2 22 Seasons (≈ 544 sessions); the Season shape does not change.
+- **Reconciling with the hours data.** Cambridge's cumulative guided hours imply roughly 95 / 95 / 180 / 175 new 60-min lessons per level (≈ 545 to B2) [V for the hours]. This plan schedules **432 live sessions** and relies on ~120 h of *Daily 10* self-practice to close the gap. That trade is an **assumption**: one-to-one gives far more speaking per hour, but there is no hard data on how many fewer hours it needs, so do not cut the budget silently. **Alternative if the owner prefers to follow the hours strictly** (C1 adds ~200 hours, 700–800 cumulative [V]): A1 12, A2 12, B1 22, B2 22, C1 25 Seasons (≈ 744 sessions); the Season shape does not change.
 - Guided hours are class hours, not guarantees, and depend on age, intensity, background and out-of-class study (Cambridge).
-- Pace: at 1 / 2 / 3 sessions a week, A1→B2 takes ≈ 8.3 / 4.2 / 2.8 years. **Tell families this honestly**; a 2–3 a week plan is the one that makes the roadmap credible.
+- Pace (sessions per week varies by family: 1, 2 or 3): A1→C1 (560 sessions) takes ≈ 10.8 / 5.4 / 3.6 years in a 52-week year (add ~10 % for holidays); A1→B2 (432) ≈ 8.3 / 4.2 / 2.8. **Tell families this honestly.** Reaching C1 inside the teen years needs ≥ 2 sessions a week from about age 12, or a start higher up the roadmap after placement. The teacher dashboard shows each student's own estimated finish date.
 - Vocabulary supports: ~2–3k word families give ~95 % coverage of spoken text; 98 % needs 6–7k spoken / 8–9k written families (Nation 2006, van Zeeland & Schmitt) [V]. B2 ≈ 4k words is *enough to follow most speech*, not enough for academic reading — say so.
 - Per Season: 1–2 structures, ≤ 14 new words per session (hub cap), 8 sessions; roughly 60 % of new words productive, the rest receptive. Recheck counts against the Oxford 3000/5000 and Cambridge English Vocabulary Profile lists before locking [K].
 
@@ -104,6 +107,7 @@ Fixed order so the student always knows where they are; the *mechanics* inside c
 - **A1:** be · have got · there is/are · present simple (+ questions, negatives) · can/can't · imperatives · possessives · this/that/these/those · countable/uncountable, some/any · prepositions of place/time · present continuous (now) · like + -ing · wh-questions · adverbs of frequency.
 - **A2:** past simple (regular → irregular) · past continuous · comparatives/superlatives · going to / will · present perfect (experience, ever/never) · have to / must / should · quantifiers, too/enough · adverbs of manner · infinitive of purpose · first conditional (intro).
 - **B1:** present perfect vs past simple · present perfect continuous · past perfect · used to · zero/first/second conditionals · passive (present/past) · reported statements · defining relative clauses · modals of deduction · linking words · phrasal verbs · future forms.
+- **C1** (advanced structures agreed across teaching sources [V]; full list from the English Grammar Profile still to verify [U]): inversion after negative/restrictive adverbials and inverted conditionals · cleft sentences and fronting · mixed conditionals and the subjunctive · advanced participle/reduced clauses · ellipsis and substitution · nominalisation and complex noun phrases · passives with reporting verbs · modal nuance (*needn't have*) · hedging, stance adverbials, discourse markers · concession (*be that as it may*) · register control and collocation precision. About 2 per Season (~32 total), introduced early and recycled, not taught all at once; use inversion sparingly in writing.
 - **B2:** third and mixed conditionals · passive range · reported questions/commands · non-defining relatives · future perfect/continuous · wish/if only · perfect modals · participle clauses · hedging and discourse markers · formal/informal register.
 
 Sequencing follows learnability, not just frequency (order-of-acquisition and Processability Theory research) [K]: teach what the learner can process, re-visit forms (e.g. 3rd-person -s) in spiral recycling because they stay error-prone.
@@ -128,6 +132,7 @@ Each Season = theme + story hook + Finale Release. **A1 (10)** — cast-driven m
 **A2 (12):** Last Weekend · Travel Trouble · Gadget Wars (comparatives) · Plans & Predictions (going to/will) · Body & Health (should/must) · Have You Ever…? (present perfect) · Food Cultures (quantifiers) · City & Transport · Weather & Adventures · Online Life & Safety · Jobs & Dreams · Festival Planners.
 **B1 (16, includes the existing *Jungle Survival: Teen Expedition* arc):** Jungle Survival (storms, rescue, emergencies) · Memories & Changes (used to) · Tech & Society · Crime Scene Chat (past perfect) · Sports & Fair Play · Money Matters · Rules & Dilemmas (conditionals) · News & Fake News (passive, reporting) · Environment Heroes · Music & Identity · Travel Stories · Friendship Drama (reported speech) · School Life Abroad · Mystery Museum · Future Me · Review Season.
 **B2 (16):** Opinions that Matter · Social Media Pressure · Science & Ethics · Cultures Meet · Street Art & Creativity · Sleep, Stress & Health · Games Industry (the Minecraft-style world) · Careers & Interviews · Law & Justice · Space & Exploration · Humour & Irony · Media Literacy · Mediation Season (summarising/relaying) · Debate League · Capstone Project · Exam-style Season.
+**C1 (16):** Persuasion & Rhetoric · Identity & Belonging · AI & Tech Ethics · The Global Economy · Art & Criticism · Language & Power · Psychology of Decisions · Journalism Lab · Sustainability Debate · Science Communication · Creative Writing Workshop · Seminar Skills (academic) · Interviews & Internships (professional) · Humour & Satire · Mediation Season · Capstone Portfolio. School-safe: avoid graphic violence, partisan politics and explicit content.
 
 Themes are drafts: before writing any Season, query the full `curriculum_lessons` blueprint (no unit filter) to avoid duplicating existing topics.
 
