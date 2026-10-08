@@ -631,6 +631,17 @@ export type Scene =
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
   | {
+      /** Family Buzzer Show (U5L6 signature): a game-show stage with podiums (x/y = centre % of the photo +
+       *  buzzer column). Each round puts three `faces` on the podiums (`faces` index per podium), Pip asks a
+       *  unit question, the child buzzes podium `answer`, then says `say`. `name` = how a sentence says the
+       *  person ("Grandpa", "the baby"). */
+      id: string; kind: 'buzzer-show'; bg: string; teacher: string; who: CharKey; intro: string;
+      podiums: { x: number; y: number }[];
+      faces: { label: string; name: string; img: string }[];
+      rounds: { faces: number[]; answer: number; line: string; reply: string; say: string }[];
+      doneLine: string;
+    }
+  | {
       /** Feed the Ducks (U5L5 signature): ducks on the pond (x/y = centre %) carry a photo of the story
        *  (round crop of `img`: at = centre %, w = % of width); Pip says a story sentence ("We eat ice cream!"),
        *  the child taps that duck and bread flies to it. `name` = how a sentence says the photo ("the book"). */
@@ -9182,6 +9193,226 @@ export const LESSON_U5L5_SCENES: Scene[] = [
     ],
   },
   { id: 'u5l5-finale', kind: 'finale', bg: bgU5L5Night, who: 'pip', line: 'We play ball, we feed the ducks, we eat ice cream and we read a book. I love you, Dad! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 5 · Lesson 6 — Family Match-Up =====================
+ * My Family (6/6), the unit review. A children's TV game show: Pip is the host, the child is the
+ * contestant, the fox family claps in the front row. Reviews the whole family (mom, dad, brother,
+ * sister, baby, grandma, grandpa, me), "This is my…" / "Who is this?", the unit's stories (cookies with
+ * Grandma, the family tree, a day with Dad) and the unit's sounds (M, D, S, G, B). Setting: a game-show
+ * stage (new — Lesson 5 was a duck pond and home at night). Lesson-Variety Engine: researched the family
+ * TV quiz-show format (buzzer + podiums), Khan Academy Kids shadow puzzles, Wordwall image quiz (tile
+ * reveal), Cambridge Pre A1 listen-and-point; new game Family Buzzer Show. Pictures made with Canva. */
+const bgU5L6Stage = `${A}/scenes/bg-u5l6-stage-wide.png`;
+const bgU5L6Host = `${A}/scenes/bg-u5l6-host-wide.png`;
+const U5L6_FACES = [
+  { label: 'Grandma', name: 'Grandma', img: famGrandma },
+  { label: 'Grandpa', name: 'Grandpa', img: famGrandpa },
+  { label: 'Mom', name: 'Mom', img: famMom },
+  { label: 'Dad', name: 'Dad', img: famDad },
+  { label: 'brother', name: 'my brother', img: famBrother },
+  { label: 'sister', name: 'my sister', img: famSister },
+  { label: 'baby', name: 'the baby', img: famBaby },
+];
+
+export const LESSON_U5L6_TITLE = 'Family Match-Up';
+export const LESSON_U5L6_OBJECTIVE = 'Review the whole family — Mom, Dad, my brother, my sister, the baby, Grandma, Grandpa and me — answer "Who is this?" with "This is my…", remember what each one does in the unit\'s stories (cookies with Grandma, playing ball with Dad), and hear M, D, S, G and B again (mom, dad, sister, grandma, baby) — by playing a family game show, listening, moving and speaking, no reading.';
+export const LESSON_U5L6_SCENES: Scene[] = [
+  { id: 'u5l6-title', kind: 'title-card', bg: bgU5L6Host, level: 'Pre-A1', unit: 'Unit 5', lessonLabel: 'Lesson 6', title: 'Family Match-Up', subtitle: 'The family game show' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u5l6-song', kind: 'song', bg: bgU5L6Host, title: '\u{1F3B5} Who Is This? \u{1F3B5}', teacher: 'Sing and point! Point to a photo or a family member for each word.',
+    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-show-song-u5l6.mp3?v=1`,
+    lineDurationsMs: [4000, 4000, 4000, 8000],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'Who is this? This is my mom!', emotion: 'happy' },
+      { who: 'pip', text: 'Who is this? This is my dad!', emotion: 'happy' },
+      { who: 'pip', text: 'Grandma, Grandpa, sister, brother!', emotion: 'happy' },
+      { who: 'pip', text: 'The baby and me! We are a family!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · Just Me and My Dad.
+    id: 'u5l6-recall-warmup', kind: 'recall-warmup', bg: bgU5L6Stage, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 5 · Just Me and My Dad',
+    teacher: 'Warm-up from last lesson: Pip says what he did with Dad, the child finds the picture. Say each one together.',
+    items: [
+      { word: 'play ball', say: 'Find: we play ball!', img: `${A}/scenes/bg-u5l5-ball-c-wide.png` },
+      { word: 'feed the ducks', say: 'Show me: we feed the ducks!', img: `${A}/scenes/bg-u5l5-ducks-b-wide.png` },
+      { word: 'read a book', say: 'Point to: we read a book!', img: `${A}/scenes/bg-u5l5-book-b-wide.png` },
+    ],
+  },
+  {
+    id: 'u5l6-intro', kind: 'cinematic', bg: bgU5L6Host, hidePipOverlay: true, title: 'Family Match-Up', subtitle: 'The family game show!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Welcome to Family Match-Up! I am Pip, your host!' },
+      { who: 'pip', line: 'My family is here! Are you ready to play?' },
+    ],
+    cta: "Let's play!",
+  },
+
+  /* 4-6 The family, move, signature game */
+  {
+    id: 'u5l6-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU5L6Stage, teacher: 'Listen, then say it! Point to the photo each time: "This is my…".',
+    cards: [
+      { who: 'pip', sentence: 'Who is this? This is my grandma.', img: famGrandma, imgLabel: 'This is my grandma.' },
+      { who: 'pip', sentence: 'Who is this? This is my brother.', img: famBrother, imgLabel: 'This is my brother.' },
+      { who: 'pip', sentence: 'Who is this? This is the baby.', img: famBaby, imgLabel: 'This is the baby.' },
+      { who: 'pip', sentence: 'Who is this? This is me, Pip!', img: famPip, imgLabel: 'This is me!' },
+    ],
+  },
+  {
+    id: 'u5l6-move-say', kind: 'tpr-actions', bg: bgU5L6Stage, who: 'pip',
+    teacher: 'Stand up! Do each family move with Pip and say it.',
+    rounds: [
+      { line: 'Rock the baby! Shh, shh!', emoji: '\u{1F476}' },
+      { line: 'Stir the cookies with Grandma! Stir, stir!', emoji: '\u{1F36A}' },
+      { line: 'Throw the ball with Dad! Throw!', emoji: '\u{26BD}' },
+      { line: 'Be a big tree! Arms up high!', emoji: '\u{1F333}' },
+      { line: 'Big family hug! I love my family!', emoji: '\u{1F917}' },
+    ],
+  },
+  {
+    // Signature game (new): the family buzzer show — the unit's stories as quiz questions.
+    id: 'u5l6-buzzer', kind: 'buzzer-show', bg: bgU5L6Stage, who: 'pip',
+    teacher: 'Family Buzzer Show! Pip asks a question. The student presses the buzzer under the right family member, then says the sentence and taps the microphone.',
+    intro: 'Listen to my question. Then press the right buzzer!',
+    podiums: [{ x: 26, y: 50 }, { x: 50, y: 50 }, { x: 74, y: 50 }],
+    faces: U5L6_FACES,
+    rounds: [
+      { faces: [1, 0, 5], answer: 1, line: 'Who bakes cookies with Pip?', reply: 'Grandma bakes cookies with Pip!', say: 'This is my grandma!' },
+      { faces: [3, 6, 2], answer: 0, line: 'Who plays ball with Pip?', reply: 'Dad plays ball with Pip!', say: 'This is my dad!' },
+      { faces: [4, 1, 6], answer: 2, line: 'Who is the smallest?', reply: 'The baby is the smallest!', say: 'This is the baby!' },
+      { faces: [2, 1, 3], answer: 1, line: 'Who has a flat cap?', reply: 'Grandpa has a flat cap!', say: 'This is my grandpa!' },
+      { faces: [4, 5, 2], answer: 0, line: "Who is Pip's big brother?", reply: 'Yes! This is his big brother!', say: 'This is my brother!' },
+      { faces: [0, 6, 5], answer: 2, line: "Who is Pip's little sister?", reply: 'Yes! This is his little sister!', say: 'This is my sister!' },
+    ],
+    doneLine: 'You are the Family Match-Up champion!',
+  },
+  {
+    id: 'u5l6-who-is-this', kind: 'join-stage', bg: bgU5L6Stage, teacher: 'Pip asks. The student answers with the whole sentence.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Who is this, with the glasses and the grey bun?', bubble: 'right' },
+      { who: 'student', line: 'This is your grandma!', bubble: 'right' },
+      { who: 'pip', line: 'Yes! And who is in the green cardigan?', bubble: 'right' },
+      { who: 'student', line: 'This is your dad!', bubble: 'right' },
+    ],
+  },
+
+  /* 7-9 Match-up games */
+  {
+    id: 'u5l6-shadows', kind: 'shadow-match', bg: bgU5L6Stage, who: 'pip',
+    teacher: 'Match-Up! Drag each family member onto their shadow (or tap them, then the shadow). Say "This is my…!"',
+    items: [
+      { label: 'Grandma', img: famGrandma, line: 'This is my grandma!' },
+      { label: 'Grandpa', img: famGrandpa, line: 'This is my grandpa!' },
+      { label: 'Mom', img: famMom, line: 'This is my mom!' },
+      { label: 'Dad', img: famDad, line: 'This is my dad!' },
+      { label: 'sister', img: famSister, line: 'This is my sister!' },
+      { label: 'baby', img: famBaby, line: 'This is the baby!' },
+    ],
+  },
+  {
+    id: 'u5l6-reveal', kind: 'tile-reveal', bg: bgU5L6Stage, who: 'pip',
+    teacher: "Who's hiding? Tiles pop off one by one — guess early and say \"This is my…!\"",
+    rounds: [
+      { img: famGrandpa, word: 'Grandpa', line: 'This is my grandpa!', options: [{ label: 'Grandpa', img: famGrandpa }, { label: 'Dad', img: famDad }, { label: 'baby', img: famBaby }] },
+      { img: famMom, word: 'Mom', line: 'This is my mom!', options: [{ label: 'sister', img: famSister }, { label: 'Grandma', img: famGrandma }, { label: 'Mom', img: famMom }] },
+      { img: famBrother, word: 'brother', line: 'This is my brother!', options: [{ label: 'brother', img: famBrother }, { label: 'Pip', img: famPip }, { label: 'Grandpa', img: famGrandpa }] },
+      { img: famBaby, word: 'baby', line: 'This is the baby!', options: [{ label: 'sister', img: famSister }, { label: 'baby', img: famBaby }, { label: 'Mom', img: famMom }] },
+    ],
+  },
+  {
+    id: 'u5l6-you-tell', kind: 'join-stage', bg: bgU5L6Host, teacher: 'Swap! The student is the host and introduces their own family (or a toy family). Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Now YOU are the host! Who is in your family?', bubble: 'right' },
+      { who: 'student', line: 'This is my mom. This is my dad.', bubble: 'right' },
+      { who: 'pip', line: 'Wow! Who else?', bubble: 'right' },
+      { who: 'student', line: 'This is my sister! This is my grandma!', bubble: 'right' },
+    ],
+  },
+
+  /* 10-11 Sounds review */
+  {
+    id: 'u5l6-trophy-sounds', kind: 'trophy-chest', bg: bgU5L6Stage, who: 'pip',
+    teacher: 'The Family Prize Chest! Listen to the first sound, tap the letter, and a family member pops out.',
+    rounds: [
+      { letter: 'M', phoneme: '/m/', word: 'mom', img: famMom, emoji: '\u{1F469}', choices: ['M', 'D', 'S'] },
+      { letter: 'D', phoneme: '/d/', word: 'dad', img: famDad, emoji: '\u{1F468}', choices: ['G', 'D', 'M'] },
+      { letter: 'S', phoneme: '/s/', word: 'sister', img: famSister, emoji: '\u{1F467}', choices: ['B', 'M', 'S'] },
+      { letter: 'G', phoneme: '/g/', word: 'grandma', img: famGrandma, emoji: '\u{1F475}', choices: ['G', 'S', 'D'] },
+      { letter: 'B', phoneme: '/b/', word: 'baby', img: famBaby, emoji: '\u{1F476}', choices: ['D', 'B', 'G'] },
+    ],
+  },
+  {
+    id: 'u5l6-perform', kind: 'join-stage', bg: bgU5L6Host, teacher: "Final round! The student introduces Pip's whole family, from the top of the family tree to the bottom.", cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Final round! Who is in my family?', bubble: 'right' },
+      { who: 'student', line: 'This is your grandma and your grandpa. This is your mom and your dad.', bubble: 'right' },
+      { who: 'pip', line: 'And the children?', bubble: 'right' },
+      { who: 'student', line: 'Your brother, your sister, the baby and you!', bubble: 'right' },
+    ],
+  },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u5l6-sticker', kind: 'sticker-reward', bg: bgU5L6Host, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You are the Family Match-Up champion! Here is a family sticker for you!', sticker: { img: famPip, label: 'Family champion' },
+  },
+  {
+    id: 'u5l6-home-mission', kind: 'home-mission', bg: bgU5L6Host, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: play the family game show at home! Ask: Who is this? Answer: This is my mom!',
+    parentNote: 'Lay out family photos (or draw faces). You are the host: point and ask "Who is this?" — your child answers "This is my mom / dad / brother / sister / grandma / grandpa / the baby!" Then swap: your child is the host and you answer.',
+    steps: [
+      { emoji: '\u{1F5BC}\u{FE0F}', img: famGrandma, say: 'Who is this?' },
+      { emoji: '\u{1F3A4}', img: famPip, say: 'You are the host' },
+      { emoji: '\u{1F496}', img: famMom, say: 'This is my mom!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u5l6-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU5L6Stage, who: 'pip',
+    teacher: 'Extra time: Game Show Moves! Do each move with Pip.',
+    rounds: [
+      { line: 'Clap for the family! Clap, clap, clap!', emoji: '\u{1F44F}' },
+      { line: 'Press the big buzzer! Buzz!', emoji: '\u{1F534}' },
+      { line: 'Wave to Grandma and Grandpa!', emoji: '\u{1F44B}' },
+      { line: 'Take a bow! Thank you!', emoji: '\u{1F647}' },
+      { line: 'Freeze! Family photo! Say cheese!', emoji: '\u{1F4F8}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u5l6-spin', kind: 'spin-wheel', bg: bgU5L6Stage, title: '',
+    teacher: 'Extra time: have the student spin, then say who it is: "This is my…!" Or tap a number.',
+    items: [
+      { label: 'This is my grandma!', left: '14%', top: '32%', img: famGrandma },
+      { label: 'This is my grandpa!', left: '30%', top: '24%', img: famGrandpa },
+      { label: 'This is my mom!', left: '14%', top: '62%', img: famMom },
+      { label: 'This is my dad!', left: '30%', top: '72%', img: famDad },
+      { label: 'This is my sister!', left: '70%', top: '72%', img: famSister },
+      { label: 'This is the baby!', left: '86%', top: '62%', img: famBaby },
+    ],
+    wheelAt: { left: '50%', top: '50%' },
+  },
+
+  /* Goodbye */
+  {
+    id: 'u5l6-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u5l6-finale', kind: 'finale', bg: bgU5L6Host, who: 'pip', line: 'Grandma, Grandpa, Mom, Dad, my brother, my sister, the baby and me — this is my family! Goodbye, friend!' },
 ];
 
 /* =============================================================================

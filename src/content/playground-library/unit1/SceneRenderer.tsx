@@ -89,6 +89,7 @@ import { SizeLineScene } from './scene-components/SizeLineScene';
 import { CookieFacesScene } from './scene-components/CookieFacesScene';
 import { FamilyTreeScene } from './scene-components/FamilyTreeScene';
 import { DuckFeedScene } from './scene-components/DuckFeedScene';
+import { BuzzerShowScene } from './scene-components/BuzzerShowScene';
 import { RecallWarmupScene } from '../RecallWarmupScene';
 import { WhosMissingScene } from './scene-components/WhosMissingScene';
 import { CountPartsScene } from './scene-components/CountPartsScene';
@@ -279,6 +280,7 @@ export function SceneRenderer(props: {
     case 'family-photo': return <FamilyPhotoScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'size-line': return <SizeLineScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'recall-warmup': return <RecallWarmupScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;
+    case 'buzzer-show': return <BuzzerShowScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'duck-feed': return <DuckFeedScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'family-tree': return <FamilyTreeScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'cookie-faces': return <CookieFacesScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

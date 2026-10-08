@@ -28,6 +28,7 @@ import {
   LESSON_U5L3_SCENES, LESSON_U5L3_TITLE, LESSON_U5L3_OBJECTIVE,
   LESSON_U5L4_SCENES, LESSON_U5L4_TITLE, LESSON_U5L4_OBJECTIVE,
   LESSON_U5L5_SCENES, LESSON_U5L5_TITLE, LESSON_U5L5_OBJECTIVE,
+  LESSON_U5L6_SCENES, LESSON_U5L6_TITLE, LESSON_U5L6_OBJECTIVE,
 } from './unit1/scenes';
 import type { Scene } from './unit1/scenes';
 
@@ -38,7 +39,7 @@ export const SCENE_LESSON_REGISTRY: Record<string, Scene[]> = {
   '2-5': LESSON_U2L5_SCENES, '2-6': LESSON_U2L6_SCENES,
   '3-1': LESSON_U3L1_SCENES, '3-2': LESSON_U3L2_SCENES, '3-3': LESSON_U3L3_SCENES, '3-4': LESSON_U3L4_SCENES, '3-5': LESSON_U3L5_SCENES, '3-6': LESSON_U3L6_SCENES,
   '4-1': LESSON_U4L1_SCENES, '4-2': LESSON_U4L2_SCENES, '4-3': LESSON_U4L3_SCENES, '4-4': LESSON_U4L4_SCENES, '4-5': LESSON_U4L5_SCENES, '4-6': LESSON_U4L6_SCENES,
-  '5-1': LESSON_U5L1_SCENES, '5-2': LESSON_U5L2_SCENES, '5-3': LESSON_U5L3_SCENES, '5-4': LESSON_U5L4_SCENES, '5-5': LESSON_U5L5_SCENES,
+  '5-1': LESSON_U5L1_SCENES, '5-2': LESSON_U5L2_SCENES, '5-3': LESSON_U5L3_SCENES, '5-4': LESSON_U5L4_SCENES, '5-5': LESSON_U5L5_SCENES, '5-6': LESSON_U5L6_SCENES,
 };
 
 export function getSceneLesson(unitNumber: number, lessonNumber: number): Scene[] | null {
@@ -86,6 +87,7 @@ export const SCENE_LESSON_META: Record<string, { title: string; objective: strin
   '5-3': { title: LESSON_U5L3_TITLE, objective: LESSON_U5L3_OBJECTIVE },
   '5-4': { title: LESSON_U5L4_TITLE, objective: LESSON_U5L4_OBJECTIVE },
   '5-5': { title: LESSON_U5L5_TITLE, objective: LESSON_U5L5_OBJECTIVE },
+  '5-6': { title: LESSON_U5L6_TITLE, objective: LESSON_U5L6_OBJECTIVE },
 };
 
 export function getSceneLessonMeta(unitNumber: number, lessonNumber: number): { title: string; objective: string } | null {

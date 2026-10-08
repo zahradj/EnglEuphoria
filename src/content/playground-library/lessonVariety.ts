@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '5-6': { settings: ['game-show stage'], look: "a bright children's TV game-show stage: purple curtain, warm spotlights, three podiums with big red buzzers; Pip is the host with a microphone and the whole fox family claps in the front row" },
   '5-5': { settings: ['duck pond', 'home at night'], look: "a sunny park with a duck pond, a bench and an ice-cream cone, then Pip's warm living room and bedroom at night; just Pip and Dad (green cardigan), four little ducks; a story told as a flip-book film" },
   '5-4': { settings: ['hilltop oak'], look: "a sunny green hill with one giant oak tree: the whole fox family (Grandma, Grandpa, Mom, Dad, brother, Pip, sister, baby) at a picnic under it; the empty oak with three branch levels becomes the family tree" },
   '5-3': { settings: ['cottage'], look: "Grandma and Grandpa's cozy cottage: a red sofa by the fireplace, a warm kitchen on baking day, a garden with a little wooden gate; Grandma (grey bun, glasses, lavender cardigan) and Grandpa (moustache, glasses, flat cap)" },
@@ -186,6 +187,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '5-6': {
+    sources: ['family TV quiz-show format (buzzer + podiums; the format only, no content)', 'Khan Academy Kids (shadow puzzles)', 'Wordwall (image quiz: a picture uncovers tile by tile)', 'Cambridge (Pre A1 Starters listen and point; "Who is this?")'],
+    mechanics: [
+      'the quiz-show buzzer round → Family Buzzer Show: Pip asks a question from the unit\'s stories, the child buzzes the right family member, then says "This is my grandma!"',
+      'shadow puzzles → Family Match-Up: each family sticker onto its shadow, named as it lands',
+      'image quiz → Who\'s hiding?: a family member uncovers tile by tile, guess early and say it',
+    ],
+    betterThan: [
+      'the quiz questions are the unit\'s own story moments (cookies with Grandma, ball with Dad, the family tree), so answering retells the whole unit, then the child says the full sentence',
+      'one contestant and no clock: nobody races anybody, a wrong buzzer is named back ("No, that\'s Grandpa!") and the right one glows after two tries',
+      'the sounds review unlocks family members (M mom, D dad, S sister, G grandma, B baby), so phonics and the unit words meet',
     ],
   },
   '5-5': {
