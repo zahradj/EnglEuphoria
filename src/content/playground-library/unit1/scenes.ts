@@ -361,6 +361,8 @@ export type Scene =
       who: CharKey;
       /** 'a' → "I spy a circle!" (nouns such as shapes); default "I spy something red!". */
       article?: 'a';
+      /** bg width / height: keep the whole picture in its own box so `left`/`top` (% of the picture) stay on their things on every screen. */
+      aspect?: number;
     }
   | {
       /** "Simon Says" color-sequence memory game — press-back a growing
@@ -630,6 +632,18 @@ export type Scene =
     }
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
+  | {
+      /** Whose Room? (U6L4 signature): every friend's bedroom is the same empty `room` picture with the same
+       *  `things` (x/y = centre %, w = % of the picture's width), each room in its own colours (`rooms[i].things[k]`
+       *  = colour word + coloured sticker of thing k). The room's `owner` says `line` ("My bed is red and my chair
+       *  is blue!"); only room `room` matches it all. The child taps it, the owner pops in, then says `say`.
+       *  `bg` = backdrop behind the rooms; `aspect` = room width / height (default 1376 / 768). */
+      id: string; kind: 'whose-room'; bg: string; teacher: string; who: CharKey; room: string; aspect?: number;
+      things: { name: string; x: number; y: number; w: number }[];
+      rooms: { owner: CharKey; things: { color: string; img: string }[] }[];
+      rounds: { room: number; line: string; say: string }[];
+      doneLine: string;
+    }
   | {
       /** House Builder (U6L3 signature): an empty house picture `bg` with rooms (x/y/w/h = % box of each room).
        *  Pip says `line` ("Put the bed in the bedroom!"); the child taps piece `piece` on the tray, then room
@@ -10132,6 +10146,231 @@ export const LESSON_U6L3_SCENES: Scene[] = [
     ],
   },
   { id: 'u6l3-finale', kind: 'finale', bg: bgU6L3Family, who: 'pip', line: 'The bed is in the bedroom, the sofa is in the living room — I love my house! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 6 · Lesson 4 — My House =====================
+ * My House (4/6), the "show and tell" lesson: the child shows a room — "This is my bedroom. My bed is red!" —
+ * putting the Unit 2 colours together with the furniture of this unit. Story frame: Open House Day on a little
+ * street of three coloured houses; Mia, Bella and Leo show their bedrooms. Review sounds: B and S (bed, sofa).
+ * Lesson-Variety Engine: researched Cambridge Pre A1 Starters Listening Part 1 (listen and draw lines to the
+ * right place), the Guess Who information game, Lingokids / Khan Academy Kids "listen and find" tasks and
+ * classroom show and tell; one new game — Whose Room? (two clues, thing + colour, find the friend's room).
+ * Pictures made with Canva; the coloured beds, chairs and sofas are recolours of the Canva furniture stickers. */
+const bgU6L4Street = `${A}/scenes/bg-u6l4-street-wide.png`;
+const bgU6L4Bedroom = `${A}/scenes/bg-u6l4-bedroom-empty-wide.png`;
+const itemBedRed = `${A}/items/item-bed-red.png`;
+const itemBedYellow = `${A}/items/item-bed-yellow.png`;
+const itemBedGreen = `${A}/items/item-bed-green.png`;
+const itemChairBlue = `${A}/items/item-chair-blue.png`;
+const itemChairYellow = `${A}/items/item-chair-yellow.png`;
+const itemChairGreen = `${A}/items/item-chair-green.png`;
+const itemSofaBlue = `${A}/items/item-sofa-blue.png`;
+const itemSofaGreen = `${A}/items/item-sofa-green.png`;
+const U6L4_RED = '#E63946';
+const U6L4_BLUE = '#3B82F6';
+const U6L4_YELLOW = '#FBBF24';
+const U6L4_GREEN = '#22C55E';
+
+export const LESSON_U6L4_TITLE = 'My House';
+export const LESSON_U6L4_OBJECTIVE = 'Show and tell a room — "This is my bedroom. My bed is red! My chair is blue!" — find each friend\'s room from two clues, ask "Is it a bed? Is it red?", sing about the house, and hear B and S again (bed, sofa) — by listening, finding, asking and speaking, no reading.';
+
+export const LESSON_U6L4_SCENES: Scene[] = [
+  { id: 'u6l4-title', kind: 'title-card', bg: bgU6L4Street, level: 'Pre-A1', unit: 'Unit 6', lessonLabel: 'Lesson 4', title: 'My House', subtitle: 'Come and see!' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u6l4-song', kind: 'song', bg: bgU6L4Street, title: '\u{1F3B5} My House \u{1F3B5}', teacher: 'Sing and point: point to your bed, your chair and your sofa when you sing the colour!',
+    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/my-house-song-u6l4.mp3?v=1`,
+    lineDurationsMs: [4400, 4660, 5490, 5512],
+    songPrompt: 'Cheerful swingy ukulele kids song about showing your house to friends',
+    lyrics: [
+      { who: 'pip', text: 'This is my house, my house, my house!', emotion: 'happy' },
+      { who: 'mia', text: 'My bed is red! My chair is blue!', emotion: 'happy' },
+      { who: 'bella', text: 'My sofa is green, and I love it too!', emotion: 'happy' },
+      { who: 'leo', text: 'Come and see my happy house!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 3 · In My House (the family evening rooms).
+    id: 'u6l4-recall-warmup', kind: 'recall-warmup', bg: bgU6L4Street, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 3 · In My House',
+    teacher: 'Warm-up from last lesson: Pip says where someone is, the child finds the room. Say each one together.',
+    items: [
+      { word: 'kitchen', say: 'Mom is in the kitchen! Find it!', img: `${A}/items/item-u6l3-family-kitchen.png` },
+      { word: 'bedroom', say: 'The baby is in the bedroom! Find it!', img: `${A}/items/item-u6l3-family-bedroom.png` },
+      { word: 'living room', say: 'Dad is in the living room! Find it!', img: `${A}/items/item-u6l3-family-living-room.png` },
+      { word: 'bathroom', say: 'My sister is in the bathroom! Find it!', img: `${A}/items/item-u6l3-family-bathroom.png` },
+    ],
+  },
+  {
+    id: 'u6l4-intro', kind: 'cinematic', bg: bgU6L4Street, title: 'My House', subtitle: 'Open House Day!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Today is Open House Day!' },
+      { who: 'mia', line: 'Come and see my house!' },
+      { who: 'pip', line: 'Let\'s see our friends\' bedrooms!' },
+    ],
+    cta: "Let's go!",
+  },
+
+  /* 4-6 The new sentences, move, signature game */
+  {
+    id: 'u6l4-sentences', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU6L4Bedroom, teacher: 'Point to the picture and say it like a show-and-tell: "My bed is red!"',
+    cards: [
+      { who: 'pip', sentence: 'This is my bedroom.', img: `${A}/items/item-room-bedroom.png`, imgLabel: 'My bedroom!' },
+      { who: 'mia', sentence: 'My bed is red.', img: itemBedRed, imgLabel: 'A red bed!' },
+      { who: 'leo', sentence: 'My chair is blue.', img: itemChairBlue, imgLabel: 'A blue chair!' },
+      { who: 'bella', sentence: 'My sofa is green.', img: itemSofaGreen, imgLabel: 'A green sofa!' },
+    ],
+  },
+  {
+    id: 'u6l4-move-say', kind: 'tpr-actions', bg: bgU6L4Bedroom, who: 'pip',
+    teacher: 'Stand up! Do each action with Pip, then say the colour.',
+    rounds: [
+      { line: 'Make your bed! My bed is red!', emoji: '\u{1F6CF}\u{FE0F}', img: itemBedRed },
+      { line: 'Sit on your chair! My chair is blue!', emoji: '\u{1FA91}', img: itemChairBlue },
+      { line: 'Jump on the sofa... no, no! Sit down!', emoji: '\u{1F6CB}\u{FE0F}', img: itemSofaGreen },
+      { line: 'Open the door: come and see my house!', emoji: '\u{1F6AA}' },
+    ],
+  },
+  {
+    // Signature game (new): two clues, thing + colour — find whose room it is.
+    id: 'u6l4-whose-room', kind: 'whose-room', bg: bgU6L4Street, who: 'pip', room: bgU6L4Bedroom,
+    teacher: 'Whose Room? Listen to the friend: "My bed is red and my chair is blue!" Find the room with BOTH, then say whose room it is.',
+    things: [
+      { name: 'bed', x: 25, y: 74, w: 30 },
+      { name: 'chair', x: 78, y: 75, w: 13 },
+    ],
+    rooms: [
+      { owner: 'mia', things: [{ color: 'red', img: itemBedRed }, { color: 'blue', img: itemChairBlue }] },
+      { owner: 'bella', things: [{ color: 'red', img: itemBedRed }, { color: 'yellow', img: itemChairYellow }] },
+      { owner: 'leo', things: [{ color: 'blue', img: itemBed }, { color: 'yellow', img: itemChairYellow }] },
+    ],
+    rounds: [
+      { room: 0, line: 'My bed is red and my chair is blue!', say: "It's Mia's room!" },
+      { room: 2, line: 'My bed is blue and my chair is yellow!', say: "It's Leo's room!" },
+      { room: 1, line: 'My bed is red and my chair is yellow!', say: "It's Bella's room!" },
+    ],
+    doneLine: 'We found every room! Thank you, friends!',
+  },
+
+  /* 7-11 Ask and answer */
+  {
+    id: 'u6l4-your-bed', kind: 'join-stage', bg: bgU6L4Bedroom, teacher: 'Mia asks about the student\'s own room. Any colour is fine!', cast: ['mia'],
+    turns: [
+      { who: 'mia', line: 'This is my bedroom. My bed is red! What colour is your bed?', bubble: 'right' },
+      { who: 'student', line: 'My bed is blue!', bubble: 'right' },
+      { who: 'mia', line: 'Cool! What colour is your chair?', bubble: 'right' },
+      { who: 'student', line: 'My chair is green!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u6l4-secret', kind: 'secret-card', bg: bgU6L4Bedroom, who: 'pip',
+    teacher: 'Pip hides one thing from his room. The student asks: "Is it a bed?" "Is it red?" Pip answers yes or no.',
+    cards: [
+      { colorWord: 'red', colorHex: U6L4_RED, shape: 'square', img: itemBedRed, word: 'bed' },
+      { colorWord: 'blue', colorHex: U6L4_BLUE, shape: 'square', img: itemBed, word: 'bed' },
+      { colorWord: 'red', colorHex: U6L4_RED, shape: 'square', img: itemChair, word: 'chair' },
+      { colorWord: 'yellow', colorHex: U6L4_YELLOW, shape: 'square', img: itemChairYellow, word: 'chair' },
+      { colorWord: 'blue', colorHex: U6L4_BLUE, shape: 'square', img: itemSofaBlue, word: 'sofa' },
+      { colorWord: 'green', colorHex: U6L4_GREEN, shape: 'square', img: itemSofaGreen, word: 'sofa' },
+    ],
+    rounds: [{ secret: 1 }, { secret: 3 }],
+  },
+  {
+    id: 'u6l4-spin', kind: 'spin-wheel', bg: bgU6L4Bedroom, title: 'Spin!',
+    teacher: 'Have the student spin, then show and tell that thing: "My bed is green!" Or tap a number.',
+    items: [
+      { label: 'My bed is green!', left: '20%', top: '62%', img: itemBedGreen },
+      { label: 'My chair is yellow!', left: '36%', top: '84%', img: itemChairYellow },
+      { label: 'My sofa is blue!', left: '64%', top: '84%', img: itemSofaBlue },
+      { label: 'My chair is green!', left: '80%', top: '62%', img: itemChairGreen },
+    ],
+    wheelAt: { left: '50%', top: '40%' },
+  },
+
+  /* 12-13 Sounds review: B and S */
+  {
+    id: 'u6l4-sort-bs', kind: 'sound-sort', bg: bgU6L4Street, teacher: 'Listen to each word. Does it start with /b/ or /s/? Drag it to B or S!',
+    targets: [
+      { letter: 'B', phoneme: '/b/', who: 'pip' },
+      { letter: 'S', phoneme: '/s/', who: 'bella' },
+    ],
+    items: [
+      { word: 'bed', img: itemBed, emoji: '\u{1F6CF}\u{FE0F}', letter: 'B' },
+      { word: 'sofa', img: itemSofa, emoji: '\u{1F6CB}\u{FE0F}', letter: 'S' },
+      { word: 'ball', img: itemBall, emoji: '\u{26BD}', letter: 'B' },
+      { word: 'sun', img: itemSun, emoji: '\u{2600}\u{FE0F}', letter: 'S' },
+      { word: 'bear', img: itemBear, emoji: '\u{1F9F8}', letter: 'B' },
+      { word: 'snake', img: itemSnake, emoji: '\u{1F40D}', letter: 'S' },
+    ],
+  },
+
+  /* 14 Show and tell */
+  {
+    id: 'u6l4-show-tell', kind: 'join-stage', bg: bgU6L4Street, teacher: 'Show and tell! The student shows their own room (a drawing, a toy or a real room on camera) and tells the colours.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Your turn! Show me your bedroom!', bubble: 'right' },
+      { who: 'student', line: 'This is my bedroom. My bed is blue!', bubble: 'right' },
+      { who: 'pip', line: 'Wow! And your chair?', bubble: 'right' },
+      { who: 'student', line: 'My chair is red!', bubble: 'right' },
+    ],
+  },
+
+  /* 15-16 Sticker + Home Mission */
+  {
+    id: 'u6l4-sticker', kind: 'sticker-reward', bg: bgU6L4Street, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Great show and tell! Here is a red bed sticker for you!', sticker: { img: itemBedRed, label: 'Show and tell star' },
+  },
+  {
+    id: 'u6l4-home-mission', kind: 'home-mission', bg: bgU6L4Bedroom, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: show your bedroom to your family! Say "This is my bedroom. My bed is…"!',
+    parentNote: 'Let your child give you a tour of their bedroom (or a toy house). They say "This is my bedroom." and point: "My bed is blue! My chair is red!". Ask "What colour is your bed?" and let them answer with a whole sentence.',
+    steps: [
+      { emoji: '\u{1F6AA}', say: 'This is my bedroom.' },
+      { emoji: '\u{1F6CF}\u{FE0F}', img: itemBedRed, say: 'My bed is red!' },
+      { emoji: '\u{1FA91}', img: itemChairBlue, say: 'My chair is blue!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u6l4-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU6L4Street, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Knock, knock on the red door!', emoji: '\u{270A}' },
+      { line: 'Walk to the blue house: step, step, step!', emoji: '\u{1F6B6}' },
+      { line: 'Climb the stairs to the bedroom!', emoji: '\u{1FA9C}' },
+      { line: 'Jump into bed... and sleep! Shh!', emoji: '\u{1F634}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u6l4-spy', kind: 'color-spy', bg: bgU6L4Street, who: 'pip', teacher: 'Extra time: I Spy on the street! Find the colour Pip says, then say "The red house!"',
+    spots: [
+      { colorWord: 'RED', colorHex: U6L4_RED, label: 'Red house', left: '24%', top: '52%' },
+      { colorWord: 'BLUE', colorHex: U6L4_BLUE, label: 'Blue house', left: '49%', top: '52%' },
+      { colorWord: 'YELLOW', colorHex: U6L4_YELLOW, label: 'Yellow house', left: '76%', top: '52%' },
+      { colorWord: 'GREEN', colorHex: U6L4_GREEN, label: 'Green tree', left: '5%', top: '56%' },
+    ],
+    clueOrder: ['BLUE', 'GREEN', 'RED', 'YELLOW'],
+    aspect: 1376 / 768,
+  },
+
+  /* Goodbye */
+  {
+    id: 'u6l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u6l4-finale', kind: 'finale', bg: bgU6L4Street, who: 'pip', line: 'This is my house! My bed is red, my chair is blue — come and see! Goodbye, friend!' },
 ];
 
 /* =============================================================================

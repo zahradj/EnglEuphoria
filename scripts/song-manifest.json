@@ -163,5 +163,10 @@
     "path": "public/lep1/audio/in-my-house-song-u6l3.mp3",
     "bytes": 321037,
     "sha256": "7d4054059140f8588f4ba1703845fb9a9d4d754c3b58acef402356de46425dc3"
+  },
+  "u6l4-my-house": {
+    "path": "public/lep1/audio/my-house-song-u6l4.mp3",
+    "bytes": 321037,
+    "sha256": "0f931fd69060fa870fe2e671c28af8bfd01009e15fa244fc5c6f3b71f5573761"
   }
 }

@@ -413,6 +413,22 @@ const UNIT1_EXTRACTORS = {
     [s.who, 'Which room?'],
     [s.who, s.doneLine],
   ],
+  // Mirror WhoseRoomScene.tsx's whoseRoomLines().
+  'whose-room': (s) => {
+    const rooms = s.rooms ?? [];
+    const things = s.things ?? [];
+    const diff = (a, b) => {
+      const k = things.findIndex((_, i) => rooms[a]?.things?.[i]?.color !== rooms[b]?.things?.[i]?.color);
+      return k < 0 ? null : `No! That ${things[k].name} is ${rooms[a]?.things?.[k]?.color ?? ''}!`;
+    };
+    return [
+      ...(s.rounds ?? []).flatMap((r) => {
+        const owner = rooms[r.room]?.owner ?? s.who;
+        return [[owner, r.line], [owner, 'Yes! This is my room!'], ...rooms.map((_, i) => (i === r.room ? null : diff(i, r.room))).filter(Boolean).map((l) => [owner, l])];
+      }),
+      [s.who, s.doneLine],
+    ];
+  },
   // Mirror MovingDayScene.tsx's movingDayLines().
   'moving-day': (s) => [
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),

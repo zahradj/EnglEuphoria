@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '6-4': { settings: ['street of coloured houses', 'empty lilac bedroom'], look: "Open House Day: a sunny little street of three small houses (red, blue, yellow) with stone paths and white fences, then one empty lilac bedroom with white stars and a round window, furnished three ways in different colours for each friend (Mia, Bella, Leo)" },
   '6-3': { settings: ['empty dollhouse', 'family evening at home'], look: "Pip's house opened like a dollhouse, first completely empty (bare rooms, sunny day) for the child to furnish, then on a cosy lamp-lit evening with the whole fox family each in a room: the baby asleep, sister brushing teeth, Mom cooking, Dad reading with Pip on the sofa" },
   '6-2': { settings: ['moving-day street', 'empty new room'], look: "moving day: a blue moving truck full of boxes outside Pip's family's new house on a sunny street, then a bright, empty new room (pale walls, wooden floor, a big window) that fills up with furniture piece by piece" },
   '6-1': { settings: ['house front garden', 'dollhouse rooms'], look: "Pip's own cream house with a red roof and a round green door on a sunny morning, then the same house opened like a dollhouse: four warm rooms (blue bedroom, tiled bathroom, green kitchen, orange living room); lights off and on for hide and seek" },
@@ -190,6 +191,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '6-4': {
+    sources: ['Cambridge (Pre A1 Starters Listening Part 1: listen and draw lines from each name to the person described; Part 4 listen and colour)', 'Lingokids ("In My Bedroom" topics; read and colour the bedroom)', 'Guess Who (Hasbro) information game (one clue is not enough)', 'Khan Academy Kids (calm listen-and-find picture tasks)', 'classroom show and tell'],
+    mechanics: [
+      'Starters Part 1 (match a name to the one described) + Guess Who → Whose Room?: three bedrooms with the same things in different colours; a friend says "My bed is red and my chair is blue!" and the child finds the only room that fits both clues',
+      'Starters Part 4 colour words on furniture → Secret Card with coloured beds, chairs and sofas: the child asks "Is it a bed?" "Is it red?"',
+      'show and tell → the child shows their own bedroom: "This is my bedroom. My bed is blue!"; I Spy on a street of coloured houses; a B / S sound sort (bed, sofa)',
+    ],
+    betterThan: [
+      'no room can be found from one word: two rooms share each colour, so the child must understand the WHOLE show-and-tell sentence (thing + colour, twice) — the apps check one word',
+      'a wrong room is named back with what is different ("No! That chair is yellow!"), so every mistake is another colour sentence; the right room glows after two tries, no clock',
+      'each friend pops into their room and stays there, and the child then says whose room it is, so the game ends with all three friends at home and the child ready to show their own room',
     ],
   },
   '6-3': {
