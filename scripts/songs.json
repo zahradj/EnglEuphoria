@@ -1383,5 +1383,41 @@
       "Roll the dice and say it loud!",
       "I love my house, I'm very proud!"
     ]
+  },
+  "u7l1-dog-cat-bird": {
+    "publicPath": "public/lep1/audio/dog-cat-bird-song-u7l1.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids pet song, 108 BPM with ukulele, light piano, hand claps and a little whistle, clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly, animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "hand claps",
+      "whistle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "108 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "It's a dog! Woof, woof, woof!",
+      "It's a cat! Meow, meow, meow!",
+      "It's a bird! Tweet, tweet, tweet!",
+      "Dog, cat, bird! I love my pets!"
+    ]
   }
 }
