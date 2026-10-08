@@ -1,0 +1,15 @@
+
+=== docs/songs/u7l4-what-animal-take1.mp3  length=20.1s  score=0.91  missing=3  extra=3
+heard: what animal is this moo moo it's a cow what animal is this wolf wolf it's a dog what animal is this quack quack it's a dog listen look and say it yes
+line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(8.5), np.float64(13.1)]
+lineDurationsMs: [4020, 4520, 4520, 7002]
+
+=== docs/songs/u7l4-what-animal-take2.mp3  length=20.1s  score=0.91  missing=3  extra=3
+heard: what animal is this moo moo it's a cow what animal is this wolf wolf it's a dog what animal is this quack quack it's a dog listen look and say it yes
+line starts (s): [np.float64(0.0), np.float64(4.6), np.float64(9.0), np.float64(13.5)]
+lineDurationsMs: [4640, 4400, 4420, 6602]
+
+=== docs/songs/u7l4-what-animal-take3.mp3  length=20.1s  score=0.89  missing=4  extra=3
+heard: what animal is this move it's a cow what animal is this wolf wolf it's a dog what animal is this quack quack it's a duck listen look and say it yes
+line starts (s): [np.float64(0.0), np.float64(4.6), np.float64(8.6), np.float64(13.4)]
+lineDurationsMs: [4640, 4000, 4780, 6642]
