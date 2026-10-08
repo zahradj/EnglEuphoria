@@ -136,8 +136,8 @@ export function HouseBuilderScene({ scene, onWin, onNext, sync }: { scene: Build
 
         {/* The tray: the things still to put in the house. */}
         {!done && !landed && (
-          <div className="absolute inset-x-0 z-30 flex justify-center px-3" style={trayStyle}>
-            <div className="flex items-end gap-[min(2vw,2.5vh)] rounded-[26px] border-b-[7px] border-amber-700 bg-gradient-to-b from-amber-300 to-amber-500 px-[min(2.5vw,3.5vh)] pb-2 pt-2.5 shadow-[0_12px_24px_rgba(80,40,10,0.35)]">
+          <div className="pointer-events-none absolute inset-x-0 z-30 flex justify-center px-3" style={trayStyle}>
+            <div className="pointer-events-auto flex items-end gap-[min(2vw,2.5vh)] rounded-[26px] border-b-[7px] border-amber-700 bg-gradient-to-b from-amber-300 to-amber-500 px-[min(2.5vw,3.5vh)] pb-2 pt-2.5 shadow-[0_12px_24px_rgba(80,40,10,0.35)]">
               {waiting.map((i) => {
                 const p = scene.pieces[i];
                 const on = picked === i;
@@ -168,7 +168,7 @@ export function HouseBuilderScene({ scene, onWin, onNext, sync }: { scene: Build
       {r && <button onClick={() => cueSpeak(landed ? r.reply : r.line, scene.who)} aria-label="Hear it again" className="absolute right-3 top-16 z-30 rounded-full bg-white/90 px-4 py-2 text-lg font-black text-orange-700 shadow-lg active:scale-95">{'\u{1F50A}'}</button>}
 
       {r && landed && (
-        <motion.div className="absolute inset-x-0 z-40 flex flex-col items-center gap-2" style={trayStyle} initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.7, type: 'spring' }}>
+        <motion.div className="pointer-events-none absolute inset-x-0 z-40 flex flex-col items-center gap-2 [&>*]:pointer-events-auto" style={trayStyle} initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.7, type: 'spring' }}>
           <span className="rounded-full bg-white/90 px-4 py-1 text-base font-black text-sky-700 shadow">{'\u{1F64B}'} Your turn! Say it:</span>
           <button onClick={said} className={`${CLAY_BUTTON} px-6 py-3 text-xl sm:text-2xl`}>{'\u{1F3A4}'} {r.say}</button>
         </motion.div>
