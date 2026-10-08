@@ -1,12 +1,12 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0090-2159994327036671743.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T131457Z&X-Amz-Expires=63860&X-Amz-Signature=2141be5babc3c098b5660b4c98189779ce7acf7bf31abb69fb1635cd222bd7da&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2006%3A59%3A17%20GMT",
-  "out": "public/lep1/scenes/bg-u6l3-house-empty-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0041-3882621190110551423.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T101124Z&X-Amz-Expires=78455&X-Amz-Signature=a530464ddc2ac0898458934dc1c64634663a0b0f1d4d2b8b54521291951f8109&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2007%3A58%3A59%20GMT",
+  "out": "public/lep1/scenes/bg-u6l4-street-wide.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0100-2159994327036671743.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T213710Z&X-Amz-Expires=32097&X-Amz-Signature=11923c6c948dbb2cde3f906ed3ab08e966f57bb3c754f4f07096c8a266d3c67a&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2006%3A32%3A07%20GMT",
-  "out": "public/lep1/scenes/bg-u6l3-family-home-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0059-3882621190110551423.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T133547Z&X-Amz-Expires=66269&X-Amz-Signature=2186fd475a5c36c46332e082b7cd34d2da803cb4a406debf635006790776cbbb&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2008%3A00%3A16%20GMT",
+  "out": "public/lep1/scenes/bg-u6l4-bedroom-empty-wide.png",
   "sticker": false
  }
 ]
