@@ -92,6 +92,7 @@ import { DuckFeedScene } from './scene-components/DuckFeedScene';
 import { BuzzerShowScene } from './scene-components/BuzzerShowScene';
 import { HouseHideScene } from './scene-components/HouseHideScene';
 import { MovingDayScene } from './scene-components/MovingDayScene';
+import { HouseBuilderScene } from './scene-components/HouseBuilderScene';
 import { RecallWarmupScene } from '../RecallWarmupScene';
 import { WhosMissingScene } from './scene-components/WhosMissingScene';
 import { CountPartsScene } from './scene-components/CountPartsScene';
@@ -282,6 +283,7 @@ export function SceneRenderer(props: {
     case 'family-photo': return <FamilyPhotoScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'size-line': return <SizeLineScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'recall-warmup': return <RecallWarmupScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;
+    case 'house-builder': return <HouseBuilderScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'moving-day': return <MovingDayScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'house-hide': return <HouseHideScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'buzzer-show': return <BuzzerShowScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

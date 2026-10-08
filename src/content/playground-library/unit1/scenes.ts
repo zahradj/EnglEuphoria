@@ -631,6 +631,17 @@ export type Scene =
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
   | {
+      /** House Builder (U6L3 signature): an empty house picture `bg` with rooms (x/y/w/h = % box of each room).
+       *  Pip says `line` ("Put the bed in the bedroom!"); the child taps piece `piece` on the tray, then room
+       *  `room`; the piece lands at x/y (centre %) w (% of the picture's width) and stays, then the child says
+       *  `say`. `name` = the word ("bed" / "bedroom"); `aspect` = bg width / height (default 1376 / 768). */
+      id: string; kind: 'house-builder'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      rooms: { name: string; x: number; y: number; w: number; h: number }[];
+      pieces: { name: string; img: string }[];
+      rounds: { piece: number; room: number; x: number; y: number; w: number; line: string; reply: string; say: string }[];
+      doneLine: string;
+    }
+  | {
       /** Moving Day (U6L2 signature): the furniture `pieces` (sticker `img`) wait on the moving truck; the
        *  empty room `bg` gets each piece at x/y (centre %) w (% of the picture's width) once it is brought in.
        *  Pip asks `line` for piece `piece`, the child taps it, it flies into the room, then says `say`.
@@ -9905,6 +9916,222 @@ export const LESSON_U6L2_SCENES: Scene[] = [
     ],
   },
   { id: 'u6l2-finale', kind: 'finale', bg: bgU6L2Truck, who: 'pip', line: 'Table, chair, bed and sofa — our new house is ready! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 6 · Lesson 3 — In My House =====================
+ * My House (3/6), the "make & build" lesson: the rooms of Lesson 1 and the furniture of Lesson 2 come together
+ * in one sentence — "The bed is in the bedroom!" — and the family (Unit 5) is back: "Mom is in the kitchen!".
+ * Review sounds: K and CH (no new letter in this slot). Setting: Pip's house as a dollhouse — empty for the
+ * build game, then lived in on a cosy evening. Lesson-Variety Engine: researched Toca Boca / Lingokids
+ * "build and decorate a house", Cambridge Pre A1 Starters "listen and draw a line" and "Where is…?" picture
+ * questions, Khan Academy Kids calm listening; one new game — House Builder (pick the thing, then the room).
+ * Pictures made with Canva. */
+const bgU6L3House = `${A}/scenes/bg-u6l3-house-empty-wide.png`;
+const bgU6L3Family = `${A}/scenes/bg-u6l3-family-home-wide.png`;
+/* The four rooms painted in bg-u6l3-house-empty (% boxes): upstairs bedroom | bathroom, downstairs kitchen | living room. */
+const U6L3_ROOMS = [
+  { name: 'bedroom', x: 11, y: 13, w: 37.5, h: 40 },
+  { name: 'bathroom', x: 50.5, y: 13, w: 37, h: 40 },
+  { name: 'kitchen', x: 11, y: 55, w: 37.5, h: 39 },
+  { name: 'living room', x: 50.5, y: 55, w: 37, h: 39 },
+];
+const H_BED = { colorWord: '', colorHex: '#93C5FD', shape: 'square' as const, img: itemBed, word: 'bed' };
+const H_CHAIR = { colorWord: '', colorHex: '#FCA5A5', shape: 'square' as const, img: itemChair, word: 'chair' };
+const H_SOFA = { colorWord: '', colorHex: '#FDBA74', shape: 'square' as const, img: itemSofa, word: 'sofa' };
+const H_TABLE = { colorWord: '', colorHex: '#FDE68A', shape: 'square' as const, img: itemTable, word: 'table' };
+
+export const LESSON_U6L3_TITLE = 'In My House';
+export const LESSON_U6L3_OBJECTIVE = 'Put rooms and furniture together — "The bed is in the bedroom!", "The sofa is in the living room!" — build Pip\'s house by listening, say where the family is ("Mom is in the kitchen!"), sing about the house, and hear K and CH again (key, kitchen, chair) — by listening, building, playing and speaking, no reading.';
+
+export const LESSON_U6L3_SCENES: Scene[] = [
+  { id: 'u6l3-title', kind: 'title-card', bg: bgU6L3Family, level: 'Pre-A1', unit: 'Unit 6', lessonLabel: 'Lesson 3', title: 'In My House', subtitle: 'Where is it?' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u6l3-song', kind: 'song', bg: bgU6L3Family, title: '\u{1F3B5} In My House \u{1F3B5}', teacher: 'Sing and point to each room and each thing!',
+    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/in-my-house-song-u6l3.mp3?v=1`,
+    lineDurationsMs: [4000, 3600, 5160, 7302],
+    songPrompt: 'Upbeat kids pop song about where things are in a house',
+    lyrics: [
+      { who: 'pip', text: 'The bed is in the bedroom!', emotion: 'happy' },
+      { who: 'pip', text: 'The table is in the kitchen!', emotion: 'happy' },
+      { who: 'pip', text: 'The sofa is in the living room!', emotion: 'happy' },
+      { who: 'pip', text: 'I love my house, my happy house!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 2 · Table, Chair, Bed!
+    id: 'u6l3-recall-warmup', kind: 'recall-warmup', bg: bgU6L3House, who: 'pip', mode: 'shadow',
+    fromLabel: 'Lesson 2 · Table, Chair, Bed!',
+    teacher: 'Warm-up from last lesson: Pip says a piece of furniture, the child finds its shadow. Say each one together.',
+    items: [
+      { word: 'bed', say: 'Find the bed!', img: itemBed },
+      { word: 'chair', say: 'Where is the chair?', img: itemChair },
+      { word: 'sofa', say: 'Show me the sofa!', img: itemSofa },
+      { word: 'table', say: 'Find the table!', img: itemTable },
+    ],
+  },
+  {
+    id: 'u6l3-intro', kind: 'cinematic', bg: bgU6L3House, hidePipOverlay: true, title: 'In My House', subtitle: 'Let\'s build it!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Look! Our house is empty!' },
+      { who: 'pip', line: 'Let\'s put everything in its room!' },
+    ],
+    cta: "Let's build!",
+  },
+
+  /* 4-6 The new sentence, move, signature game */
+  {
+    id: 'u6l3-sentences', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU6L3House, teacher: 'Point to the thing, then the room, and say the whole sentence!',
+    cards: [
+      { who: 'pip', sentence: 'The bed is in the bedroom.', img: itemBed, imgLabel: 'In the bedroom!' },
+      { who: 'pip', sentence: 'The table is in the kitchen.', img: itemTable, imgLabel: 'In the kitchen!' },
+      { who: 'pip', sentence: 'The sofa is in the living room.', img: itemSofa, imgLabel: 'In the living room!' },
+      { who: 'pip', sentence: 'The chair is in the kitchen.', img: itemChair, imgLabel: 'In the kitchen!' },
+    ],
+  },
+  {
+    id: 'u6l3-move-say', kind: 'tpr-actions', bg: bgU6L3House, who: 'pip',
+    teacher: 'Stand up! Carry each thing to its room with Pip, then say where it is.',
+    rounds: [
+      { line: 'Carry the bed upstairs... to the bedroom!', emoji: '\u{1F6CF}\u{FE0F}', img: itemBed },
+      { line: 'Push the sofa... into the living room!', emoji: '\u{1F6CB}\u{FE0F}', img: itemSofa },
+      { line: 'Lift the table... into the kitchen!', emoji: '\u{1F37D}\u{FE0F}', img: itemTable },
+      { line: 'Sit on the chair! Phew!', emoji: '\u{1FA91}', img: itemChair },
+    ],
+  },
+  {
+    // Signature game (new): pick the thing, then the room.
+    id: 'u6l3-builder', kind: 'house-builder', bg: bgU6L3House, who: 'pip',
+    teacher: 'House Builder! Listen to Pip: tap the thing on the tray, then tap its room. Then say the whole sentence.',
+    rooms: U6L3_ROOMS,
+    pieces: [
+      { name: 'bed', img: itemBed },
+      { name: 'sofa', img: itemSofa },
+      { name: 'table', img: itemTable },
+      { name: 'chair', img: itemChair },
+    ],
+    rounds: [
+      { piece: 0, room: 0, x: 28, y: 42, w: 18, line: 'Put the bed in the bedroom!', reply: 'The bed is in the bedroom!', say: 'The bed is in the bedroom!' },
+      { piece: 1, room: 3, x: 70, y: 82, w: 19, line: 'Put the sofa in the living room!', reply: 'The sofa is in the living room!', say: 'The sofa is in the living room!' },
+      { piece: 2, room: 2, x: 27, y: 83, w: 15, line: 'Put the table in the kitchen!', reply: 'The table is in the kitchen!', say: 'The table is in the kitchen!' },
+      { piece: 3, room: 2, x: 39, y: 80, w: 6.5, line: 'Put the chair in the kitchen!', reply: 'The chair is in the kitchen!', say: 'The chair is in the kitchen!' },
+    ],
+    doneLine: 'We did it! Our house is ready!',
+  },
+
+  /* 7-11 Where is everybody? */
+  {
+    id: 'u6l3-where-family', kind: 'join-stage', bg: bgU6L3Family, teacher: 'Look at the family in the house. Pip asks; the student points and answers "Mom is in the kitchen!"', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Where is Mom?', bubble: 'right' },
+      { who: 'student', line: 'Mom is in the kitchen!', bubble: 'right' },
+      { who: 'pip', line: 'Where is the baby?', bubble: 'right' },
+      { who: 'student', line: 'The baby is in the bedroom!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u6l3-jigsaw', kind: 'jigsaw-puzzle', bg: bgU6L3House, teacher: 'Build the evening picture! Drag each piece to its place, then say who is in each room.',
+    image: bgU6L3Family, rows: 2, cols: 3,
+  },
+  {
+    id: 'u6l3-spin', kind: 'spin-wheel', bg: bgU6L3Family, title: '',
+    teacher: 'Have the student spin, then say who is in that room: "Dad is in the living room!" Or tap a number.',
+    items: [
+      { label: 'The baby is in the bedroom!', left: '20%', top: '22%' },
+      { label: 'My sister is in the bathroom!', left: '80%', top: '22%' },
+      { label: 'Mom is in the kitchen!', left: '20%', top: '62%' },
+      { label: 'Dad is in the living room!', left: '80%', top: '62%' },
+    ],
+    wheelAt: { left: '50%', top: '54%' },
+  },
+
+  /* 12 Pattern game */
+  {
+    id: 'u6l3-pattern', kind: 'pattern-train', bg: bgU6L3House, who: 'pip',
+    teacher: 'The furniture train! What comes next? Say it, then tap it!',
+    rounds: [
+      { pattern: [H_BED, H_CHAIR, H_BED, H_CHAIR], answer: H_BED, options: [H_SOFA, H_BED, H_TABLE] },
+      { pattern: [H_SOFA, H_SOFA, H_TABLE, H_SOFA, H_SOFA], answer: H_TABLE, options: [H_TABLE, H_CHAIR, H_SOFA] },
+      { pattern: [H_TABLE, H_CHAIR, H_BED, H_TABLE, H_CHAIR], answer: H_BED, options: [H_CHAIR, H_BED, H_SOFA] },
+    ],
+  },
+
+  /* 13-14 Sounds review: K and CH, first letters */
+  {
+    id: 'u6l3-first-letter', kind: 'word-build', bg: bgU6L3House, teacher: 'What is the first sound? Listen, tap the letter, then say the word.',
+    rounds: [
+      { word: 'bed', blankIndex: 0, answer: 'B', choices: ['B', 'K', 'S', 'T'], img: itemBed, emoji: '\u{1F6CF}\u{FE0F}' },
+      { word: 'key', blankIndex: 0, answer: 'K', choices: ['B', 'K', 'S', 'T'], img: `${A}/items/item-key.png`, emoji: '\u{1F511}' },
+      { word: 'sofa', blankIndex: 0, answer: 'S', choices: ['B', 'K', 'S', 'T'], img: itemSofa, emoji: '\u{1F6CB}\u{FE0F}' },
+      { word: 'table', blankIndex: 0, answer: 'T', choices: ['B', 'K', 'S', 'T'], img: itemTable, emoji: '\u{1F37D}\u{FE0F}' },
+      { word: 'kitten', blankIndex: 0, answer: 'K', choices: ['B', 'K', 'S', 'T'], img: `${A}/items/item-kitten.png`, emoji: '\u{1F431}' },
+    ],
+  },
+
+  /* 15-16 My house */
+  {
+    id: 'u6l3-my-house', kind: 'join-stage', bg: bgU6L3Family, teacher: 'The student talks about their own home: what is in their bedroom, where their family is now.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'What is in your bedroom?', bubble: 'right' },
+      { who: 'student', line: 'The bed is in my bedroom!', bubble: 'right' },
+      { who: 'pip', line: 'Where is your mom now?', bubble: 'right' },
+      { who: 'student', line: 'Mom is in the kitchen!', bubble: 'right' },
+    ],
+  },
+
+  /* 19-20 Sticker + Home Mission */
+  {
+    id: 'u6l3-sticker', kind: 'sticker-reward', bg: bgU6L3Family, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Super house builder! Here is a bed sticker for you!', sticker: { img: itemBed, label: 'House builder' },
+  },
+  {
+    id: 'u6l3-home-mission', kind: 'home-mission', bg: bgU6L3House, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: draw your house! Draw the bed in the bedroom and the table in the kitchen!',
+    parentNote: 'Help your child draw a simple house with rooms (or use a shoebox). Ask "Where is the bed?" — your child draws it and says "The bed is in the bedroom!". Then ask "Where is Mom now?" and let them answer "Mom is in the kitchen!".',
+    steps: [
+      { emoji: '\u{1F3E0}', say: 'Draw your house' },
+      { emoji: '\u{1F6CF}\u{FE0F}', img: itemBed, say: 'The bed is in the bedroom!' },
+      { emoji: '\u{1F37D}\u{FE0F}', img: itemTable, say: 'The table is in the kitchen!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u6l3-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU6L3Family, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do what each family member is doing.',
+    rounds: [
+      { line: 'Mom is in the kitchen: stir, stir, stir!', emoji: '\u{1F963}' },
+      { line: 'The baby is in the bedroom: shh, sleep!', emoji: '\u{1F634}' },
+      { line: 'Sister is in the bathroom: brush, brush, brush!', emoji: '\u{1FAA5}' },
+      { line: 'Dad is in the living room: read a book!', emoji: '\u{1F4D6}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u6l3-pattern-2', kind: 'pattern-train', bg: bgU6L3Family, who: 'pip',
+    teacher: 'Extra time: a longer furniture train! What comes next?',
+    rounds: [
+      { pattern: [H_CHAIR, H_CHAIR, H_TABLE, H_CHAIR, H_CHAIR], answer: H_TABLE, options: [H_BED, H_TABLE, H_CHAIR] },
+      { pattern: [H_BED, H_SOFA, H_TABLE, H_BED, H_SOFA], answer: H_TABLE, options: [H_SOFA, H_CHAIR, H_TABLE] },
+    ],
+  },
+
+  /* 21-22 Goodbye */
+  {
+    id: 'u6l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u6l3-finale', kind: 'finale', bg: bgU6L3Family, who: 'pip', line: 'The bed is in the bedroom, the sofa is in the living room — I love my house! Goodbye, friend!' },
 ];
 
 /* =============================================================================

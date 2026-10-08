@@ -32,6 +32,7 @@ import {
   LESSON_U5L6_SCENES,
   LESSON_U6L1_SCENES,
   LESSON_U6L2_SCENES,
+  LESSON_U6L3_SCENES,
 } from './scenes';
 import { validateLesson, formatValidationResult, type ValidationContext } from './sceneValidator';
 
@@ -67,6 +68,7 @@ const LESSONS: { ctx: ValidationContext; scenes: unknown[] }[] = [
   { ctx: { lessonNumber: 'U5L6' }, scenes: LESSON_U5L6_SCENES },
   { ctx: { lessonNumber: 'U6L1' }, scenes: LESSON_U6L1_SCENES },
   { ctx: { lessonNumber: 'U6L2' }, scenes: LESSON_U6L2_SCENES },
+  { ctx: { lessonNumber: 'U6L3' }, scenes: LESSON_U6L3_SCENES },
 ];
 
 describe('Playground scene validation', () => {

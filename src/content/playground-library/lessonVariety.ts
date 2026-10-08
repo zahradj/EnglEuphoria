@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '6-3': { settings: ['empty dollhouse', 'family evening at home'], look: "Pip's house opened like a dollhouse, first completely empty (bare rooms, sunny day) for the child to furnish, then on a cosy lamp-lit evening with the whole fox family each in a room: the baby asleep, sister brushing teeth, Mom cooking, Dad reading with Pip on the sofa" },
   '6-2': { settings: ['moving-day street', 'empty new room'], look: "moving day: a blue moving truck full of boxes outside Pip's family's new house on a sunny street, then a bright, empty new room (pale walls, wooden floor, a big window) that fills up with furniture piece by piece" },
   '6-1': { settings: ['house front garden', 'dollhouse rooms'], look: "Pip's own cream house with a red roof and a round green door on a sunny morning, then the same house opened like a dollhouse: four warm rooms (blue bedroom, tiled bathroom, green kitchen, orange living room); lights off and on for hide and seek" },
   '5-6': { settings: ['game-show stage'], look: "a bright children's TV game-show stage: purple curtain, warm spotlights, three podiums with big red buzzers; Pip is the host with a microphone and the whole fox family claps in the front row" },
@@ -189,6 +190,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '6-3': {
+    sources: ['Toca Boca / Lingokids (build and decorate a house: put each thing in a room)', 'Cambridge (Pre A1 Starters listen and draw a line; "Where is…?" picture questions)', 'Khan Academy Kids (calm two-step listening tasks)', 'Wordwall (jigsaw / picture puzzles)'],
+    mechanics: [
+      'house decorating → House Builder: "Put the bed in the bedroom!" — the child picks the thing on the tray, then the room, and it stays there',
+      '"Where is…?" picture questions → the family evening picture: "Where is Mom? Mom is in the kitchen!" (Unit 5 family + Unit 6 rooms)',
+      'a furniture pattern train, a jigsaw of the family evening and a first-sound check (B, K, S, T)',
+    ],
+    betterThan: [
+      'one sentence carries TWO words the child must understand — the thing AND the room — so the game checks the whole sentence, not one word',
+      'the house the child furnishes stays furnished, and the child says the whole sentence ("The bed is in the bedroom!") after every move',
+      'calm by design: a wrong thing or room is named back, the right one glows after two tries, no clock',
     ],
   },
   '6-2': {
