@@ -1,7 +1,3 @@
-+ public/lep1/scenes/bg-u5l5-hug-a-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l5-hug-b-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l5-night-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l5-home-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l5-gate-a-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l5-gate-b-wide.png (1376, 768)
-6/6 saved
++ public/lep1/scenes/bg-u5l6-stage-wide.png (1376, 768)
++ public/lep1/scenes/bg-u5l6-host-wide.png (1376, 768)
+2/2 saved
