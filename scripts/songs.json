@@ -1419,5 +1419,41 @@
       "It's a bird! Tweet, tweet, tweet!",
       "Dog, cat, bird! I love my pets!"
     ]
+  },
+  "u7l2-cow-pig-sheep": {
+    "publicPath": "public/lep1/audio/cow-pig-sheep-song-u7l2.mp3",
+    "durationSec": 20,
+    "style": "Happy bouncy kids farm song, 110 BPM with banjo, acoustic guitar, hand claps and a little fiddle, clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly, animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "banjo",
+      "acoustic guitar",
+      "hand claps",
+      "fiddle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "110 BPM",
+      "happy",
+      "country farm"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "It's a cow! Moo, moo, moo!",
+      "It's a pig! Oink, oink, oink!",
+      "It's a sheep! Baa, baa, baa!",
+      "Cow, pig, sheep! On the farm!"
+    ]
   }
 }
