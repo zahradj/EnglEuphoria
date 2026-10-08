@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '7-3': { settings: ['duck pond and bridge'], look: "the far side of the farm on a golden afternoon: a blue duck pond with lily pads and a little arched wooden bridge, a wooden stable and a red chicken coop, tall reeds and orange evening light; Pip with a brown horse, a white hen and a white farm duck" },
   '7-2': { settings: ['farmyard after rain'], look: "a sunny farmyard just after a little rain: a big red barn, a wooden fence, green hills and a rainbow, brown mud puddles and a blue water trough with a bucket and sponge; Pip with a black-and-white cow, a pink pig and a fluffy sheep" },
   '7-1': { settings: ['pet shop'], look: "a sunny little pet shop: cream walls, a big window, wooden shelves of pet toys and food, a round dog bed, a cat basket with a blue cushion and a golden bird cage; Pip waves with a brown puppy, an orange kitten and a blue bird; the empty shop becomes the Pet Photo studio" },
   '6-6': { settings: ['games-night living room'], look: "games night at Pip's house: the whole fox family (Grandma, brother, Dad, sister, baby) around a round coffee table playing a board game, warm lamp light, a starry night window and a red sofa; a snake board path of house pictures drawn in code" },
@@ -195,6 +196,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '7-3': {
+    sources: ['Cambridge (Pre A1 Starters Listening: follow a short spoken instruction)', 'classic "follow the order" memory games (Simon / listen-and-sequence, games4esl)', 'Khan Academy Kids (sequencing activities, calm self-paced)', 'Lingokids / Super Simple farm songs (animal + sound)'],
+    mechanics: [
+      'listen-and-sequence → Animal Parade: Pip says "First the horse, then the duck!", the child taps the animals in that order, they line up on the bridge and march across making their sounds',
+      'H basket (horse, hat, house, hand vs duck, chicken), first-letter build, a jigsaw of the duck pond',
+      '"Now YOU make the parade!" — the child calls an order for Pip',
+    ],
+    betterThan: [
+      'the child holds two or three NEW words in order (listening span), not just one word; the parade they build moves and makes the sounds',
+      'a wrong order costs nothing: the bridge empties and Pip says the order again; three rounds grow from two animals to three',
+      'the child then becomes the caller ("First the duck, then the horse!"), turning listening into speaking',
     ],
   },
   '7-2': {

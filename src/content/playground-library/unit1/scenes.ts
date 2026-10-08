@@ -635,6 +635,16 @@ export type Scene =
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
   | {
+      /** Animal Parade (U7L3 signature): Pip says the parade order (`line`); the child taps the animals of
+       *  `order` in that order from the pen; they line up on the bridge `lane` (x0..x1, y = feet, % of the
+       *  picture; size = % width) and march across saying their `say`. */
+      id: string; kind: 'animal-parade'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      lane: { x0: number; x1: number; y: number; size: number };
+      animals: { label: string; img: string; say: string; scale?: number }[];
+      rounds: { order: number[]; line: string }[];
+      doneLine: string;
+    }
+  | {
       /** Farm Wash (U7L2 signature): every animal (sticker at x/y = % of the picture at its feet, size = %
        *  width) starts muddy. Pip says `line`; the child taps `target` three times to scrub it clean and Pip
        *  says its `say` ("It's a pig! Oink!"). */
@@ -11541,4 +11551,191 @@ export const LESSON_U7L2_SCENES: Scene[] = [
     ],
   },
   { id: 'u7l2-finale', kind: 'finale', bg: bgU7L2Farm, who: 'pip', line: 'Cow, pig, sheep! Moo, oink, baa! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 7, Lesson 3 — "Horse, Chicken, Duck!" (Furry, feathered friends)
+ *
+ * The far side of the farm: the duck pond on a golden afternoon, with a
+ * little wooden bridge, a stable and a chicken coop. Three more animals with
+ * their sounds ("It's a horse! Neigh!"), the new Animal Parade game (tap the
+ * animals in the order you hear — they march over the bridge), an H basket
+ * (H was taught in Unit 1: hello — now horse, hat, house, hand), first letters
+ * and a jigsaw of the pond.
+ * ========================================================================= */
+
+const bgU7L3Pond = `${A}/scenes/bg-u7l3-pond-wide.png`;
+const bgU7L3PondEmpty = `${A}/scenes/bg-u7l3-pond-empty-wide.png`;
+const itemHorse = `${A}/items/item-horse.png`;
+const itemHen = `${A}/items/item-hen.png`;
+const itemFarmDuck = `${A}/items/item-farm-duck.png`;
+
+export const LESSON_U7L3_TITLE = 'Horse, Chicken, Duck!';
+export const LESSON_U7L3_OBJECTIVE = 'Name three more farm animals — horse, chicken, duck — with "It\'s a horse!", make their sounds (neigh, cluck, quack), follow a two- or three-animal order ("First the horse, then the duck!"), and hear the /h/ sound in horse, hat, house, by listening, moving and playing, no reading.';
+
+export const LESSON_U7L3_SCENES: Scene[] = [
+  { id: 'u7l3-title', kind: 'title-card', bg: bgU7L3Pond, level: 'Pre-A1', unit: 'Unit 7', lessonLabel: 'Lesson 3', title: 'Horse, Chicken, Duck!', subtitle: 'At the duck pond' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u7l3-song', kind: 'song', bg: bgU7L3Pond, title: '\u{1F3B5} Horse, Chicken, Duck! \u{1F3B5}', teacher: 'Sing and march: gallop for the horse, flap your wings for the chicken, waddle for the duck!',
+    durationSeconds: 20, bigWord: 'March', songUrl: `${A}/audio/horse-chicken-duck-song-u7l3.mp3?v=1`,
+    lineDurationsMs: [4300, 3720, 6300, 5742],
+    songPrompt: 'Happy bouncy kids farm parade song',
+    lyrics: [
+      { who: 'pip', text: "It's a horse! Neigh, neigh, neigh!", emotion: 'happy' },
+      { who: 'pip', text: "It's a chicken! Cluck, cluck, cluck!", emotion: 'happy' },
+      { who: 'pip', text: "It's a duck! Quack, quack, quack!", emotion: 'happy' },
+      { who: 'pip', text: "Horse, chicken, duck! Let's march!", emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 2 · Cow, Pig, Sheep!
+    id: 'u7l3-recall-warmup', kind: 'recall-warmup', bg: bgU7L3Pond, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 2 · Cow, Pig, Sheep!',
+    teacher: 'Warm-up from last lesson: Pip says a farm animal, the child finds it. Make the sound together!',
+    items: [
+      { word: 'cow', say: 'Find the cow! Moo!', img: itemCow },
+      { word: 'pig', say: 'Where is the pig? Oink!', img: itemPig },
+      { word: 'sheep', say: 'Find the sheep! Baa!', img: itemSheep },
+    ],
+  },
+  {
+    id: 'u7l3-intro', kind: 'cinematic', bg: bgU7L3Pond, hidePipOverlay: true, title: 'Horse, Chicken, Duck!', subtitle: 'At the duck pond', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'This is the duck pond! Look at the little bridge!' },
+      { who: 'pip', line: 'A horse, a chicken and a duck! Listen!' },
+    ],
+    cta: "Let's meet them!",
+  },
+
+  /* 4-5 The words, move */
+  {
+    id: 'u7l3-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU7L3Pond, teacher: 'Listen, then say it with the sound: "It\'s a horse! Neigh!"',
+    cards: [
+      { who: 'pip', sentence: "It's a horse! Neigh!", img: itemHorse, imgLabel: 'horse' },
+      { who: 'pip', sentence: "It's a chicken! Cluck!", img: itemHen, imgLabel: 'chicken' },
+      { who: 'pip', sentence: "It's a duck! Quack!", img: itemFarmDuck, imgLabel: 'duck' },
+    ],
+  },
+  {
+    id: 'u7l3-move', kind: 'tpr-actions', bg: bgU7L3Pond, who: 'pip',
+    teacher: 'Stand up! Move like the animals with Pip.',
+    rounds: [
+      { line: 'Gallop like a horse! Neigh!', emoji: '\u{1F40E}', img: itemHorse },
+      { line: 'Flap your wings like a chicken! Cluck!', emoji: '\u{1F414}', img: itemHen },
+      { line: 'Waddle like a duck! Quack!', emoji: '\u{1F986}', img: itemFarmDuck },
+      { line: 'March in the parade!', emoji: '\u{1F941}' },
+    ],
+  },
+
+  /* 6 Signature game (new): Animal Parade */
+  {
+    id: 'u7l3-parade', kind: 'animal-parade', bg: bgU7L3PondEmpty, who: 'pip',
+    teacher: 'Animal Parade! Pip says the order; the child taps the animals in that order and they line up on the bridge. Say the order together: "First the horse, then the duck!"',
+    lane: { x0: 22, x1: 76, y: 61, size: 10 },
+    animals: [
+      { label: 'horse', img: itemHorse, say: 'Neigh!', scale: 1.25 },
+      { label: 'chicken', img: itemHen, say: 'Cluck, cluck!', scale: 0.8 },
+      { label: 'duck', img: itemFarmDuck, say: 'Quack, quack!', scale: 0.8 },
+    ],
+    rounds: [
+      { order: [0, 2], line: 'First the horse, then the duck!' },
+      { order: [1, 0], line: 'First the chicken, then the horse!' },
+      { order: [2, 1, 0], line: 'Duck, chicken, horse! Go!' },
+    ],
+    doneLine: 'What a great parade! Neigh, cluck, quack!',
+  },
+
+  /* 7-9 More games */
+  {
+    id: 'u7l3-basket-h', kind: 'basket', bg: bgU7L3PondEmpty, letter: 'H', phoneme: '/h/', who: 'pip', teacher: "Drag the /h/ things into Pip's H basket! Horse, hat, house, hand. No hurry.", goal: 4,
+    items: [
+      { word: 'horse', emoji: '\u{1F40E}', img: itemHorse, hit: true },
+      { word: 'hat', emoji: '\u{1F452}', img: itemHat, hit: true },
+      { word: 'house', emoji: '\u{1F3E0}', img: itemHouse, hit: true },
+      { word: 'hand', emoji: '\u{270B}', img: partHand, hit: true },
+      { word: 'duck', emoji: '\u{1F986}', img: itemFarmDuck, hit: false },
+      { word: 'chicken', emoji: '\u{1F414}', img: itemHen, hit: false },
+    ],
+  },
+  {
+    id: 'u7l3-pip-asks', kind: 'join-stage', bg: bgU7L3Pond, teacher: 'Pip asks about the animals. Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's a horse! Neigh!", bubble: 'right' },
+      { who: 'pip', line: 'What does the duck say?', bubble: 'right' },
+      { who: 'student', line: 'Quack, quack!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u7l3-first-letter', kind: 'word-build', bg: bgU7L3PondEmpty, teacher: 'Which letter is first? Listen to the word and tap the first letter. Say the word!',
+    rounds: [
+      { word: 'horse', blankIndex: 0, answer: 'H', choices: ['H', 'D', 'C'], img: itemHorse, emoji: '\u{1F40E}' },
+      { word: 'duck', blankIndex: 0, answer: 'D', choices: ['C', 'D', 'H'], img: itemFarmDuck, emoji: '\u{1F986}' },
+      { word: 'hat', blankIndex: 0, answer: 'H', choices: ['D', 'C', 'H'], img: itemHat, emoji: '\u{1F452}' },
+    ],
+  },
+
+  /* 10 Jigsaw */
+  {
+    id: 'u7l3-jigsaw', kind: 'jigsaw-puzzle', bg: bgU7L3PondEmpty, teacher: 'Build the duck pond picture! Drag each piece to its place, then say the animals you see.',
+    image: bgU7L3Pond, rows: 2, cols: 3,
+  },
+
+  /* 11 My parade */
+  {
+    id: 'u7l3-my-parade', kind: 'join-stage', bg: bgU7L3Pond, teacher: 'Your turn! The child makes their own parade order for Pip. Any order is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Now YOU make the parade! Who is first?', bubble: 'right' },
+      { who: 'student', line: 'First the duck, then the horse!', bubble: 'right' },
+      { who: 'pip', line: 'Great! What does the chicken say?', bubble: 'right' },
+      { who: 'student', line: 'Cluck, cluck!', bubble: 'right' },
+    ],
+  },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u7l3-sticker', kind: 'sticker-reward', bg: bgU7L3Pond, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You made a great parade! Here is a duck sticker for you!', sticker: { img: itemFarmDuck, label: 'Parade leader' },
+  },
+  {
+    id: 'u7l3-home-mission', kind: 'home-mission', bg: bgU7L3Pond, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: make an animal parade at home with your toys! Say "First the horse, then the duck!"',
+    parentNote: 'Line up toy animals (or pictures) and let your child call the order: "First the horse, then the duck!" Then you call an order and your child lines them up. Make the animal sounds together.',
+    steps: [
+      { emoji: '\u{1F40E}', img: itemHorse, say: "It's a horse! Neigh!" },
+      { emoji: '\u{1F414}', img: itemHen, say: "It's a chicken! Cluck!" },
+      { emoji: '\u{1F986}', img: itemFarmDuck, say: "It's a duck! Quack!" },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u7l3-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU7L3Pond, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Gallop, gallop, gallop!', emoji: '\u{1F40E}' },
+      { line: 'Peck, peck, peck like a chicken!', emoji: '\u{1F414}' },
+      { line: 'Swim like a duck!', emoji: '\u{1F986}' },
+      { line: 'March over the bridge!', emoji: '\u{1F941}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u7l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u7l3-finale', kind: 'finale', bg: bgU7L3Pond, who: 'pip', line: 'Horse, chicken, duck! Neigh, cluck, quack! Goodbye, friend!' },
 ];

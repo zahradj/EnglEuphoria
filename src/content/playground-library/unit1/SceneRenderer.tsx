@@ -98,6 +98,7 @@ import { DoorKnockScene } from './scene-components/DoorKnockScene';
 import { HouseBoardScene } from './scene-components/HouseBoardScene';
 import { PhotoSnapScene } from './scene-components/PhotoSnapScene';
 import { FarmWashScene } from './scene-components/FarmWashScene';
+import { AnimalParadeScene } from './scene-components/AnimalParadeScene';
 import { RecallWarmupScene } from '../RecallWarmupScene';
 import { WhosMissingScene } from './scene-components/WhosMissingScene';
 import { CountPartsScene } from './scene-components/CountPartsScene';
@@ -291,6 +292,7 @@ export function SceneRenderer(props: {
     case 'house-builder': return <HouseBuilderScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'whose-room': return <WhoseRoomScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'door-knock': return <DoorKnockScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'animal-parade': return <AnimalParadeScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'farm-wash': return <FarmWashScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'photo-snap': return <PhotoSnapScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'house-board': return <HouseBoardScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
