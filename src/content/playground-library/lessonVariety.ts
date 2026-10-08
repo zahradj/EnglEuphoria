@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '6-5': { settings: ['autumn sunset street', 'park at sunset', "Pip's evening bedroom"], look: "golden autumn sunset: a park with falling orange leaves, then Pip's new street of three look-alike cream houses whose only difference is the door (blue, yellow with a cat in the window, red with a big orange tree), close-ups at each door, Mom's hug in the warm doorway and Pip's lamp-lit bedroom" },
   '6-4': { settings: ['street of coloured houses', 'empty lilac bedroom'], look: "Open House Day: a sunny little street of three small houses (red, blue, yellow) with stone paths and white fences, then one empty lilac bedroom with white stars and a round window, furnished three ways in different colours for each friend (Mia, Bella, Leo)" },
   '6-3': { settings: ['empty dollhouse', 'family evening at home'], look: "Pip's house opened like a dollhouse, first completely empty (bare rooms, sunny day) for the child to furnish, then on a cosy lamp-lit evening with the whole fox family each in a room: the baby asleep, sister brushing teeth, Mom cooking, Dad reading with Pip on the sofa" },
   '6-2': { settings: ['moving-day street', 'empty new room'], look: "moving day: a blue moving truck full of boxes outside Pip's family's new house on a sunny street, then a bright, empty new room (pale walls, wooden floor, a big window) that fills up with furniture piece by piece" },
@@ -191,6 +192,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '6-5': {
+    sources: ['"Is this my house?" lost-and-found picture books (a little animal tries the wrong homes before the right one)', 'Cambridge (Pre A1 Starters: look and answer yes / no; listen and point)', 'Lingokids / Khan Academy Kids (hide-and-seek, yes-no listening checks, calm self-paced)', 'Sesame Workshop / Blue\'s Clues (model, then a planned pause for the child to answer)'],
+    mechanics: [
+      'the lost-and-found picture book → a stills film "Where\'s My House?": Pip asks "Is this my house?" at three doors, a pause lets the child answer before Pip does',
+      'yes / no picture questions → Is This My House?: a friend says "My house has a red door!", an arrow stops at a door and the child answers "No, it isn\'t!" / "Yes, it is!"',
+      'story retell (story order), tick or cross on the story pictures, "Which door?" colour quiz with the story\'s doors, and hide-and-seek on the street ("Is it behind the tree?")',
+    ],
+    betterThan: [
+      'the child PRODUCES the story\'s two answers ("Yes, it is!" / "No, it isn\'t!") instead of only tapping a picture, and the same door is right for one friend and wrong for another, so the clue sentence decides',
+      'a wrong answer is explained with the colour ("Look! The door is blue. No, it isn\'t!"), the friend waves from their open door and stays there; no clock',
+      'the film, the games and the homework all use the same street and doors, so the child retells one story many ways',
     ],
   },
   '6-4': {

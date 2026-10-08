@@ -33,6 +33,7 @@ import {
   LESSON_U6L2_SCENES, LESSON_U6L2_TITLE, LESSON_U6L2_OBJECTIVE,
   LESSON_U6L3_SCENES, LESSON_U6L3_TITLE, LESSON_U6L3_OBJECTIVE,
   LESSON_U6L4_SCENES, LESSON_U6L4_TITLE, LESSON_U6L4_OBJECTIVE,
+  LESSON_U6L5_SCENES, LESSON_U6L5_TITLE, LESSON_U6L5_OBJECTIVE,
 } from './unit1/scenes';
 import type { Scene } from './unit1/scenes';
 
@@ -44,7 +45,7 @@ export const SCENE_LESSON_REGISTRY: Record<string, Scene[]> = {
   '3-1': LESSON_U3L1_SCENES, '3-2': LESSON_U3L2_SCENES, '3-3': LESSON_U3L3_SCENES, '3-4': LESSON_U3L4_SCENES, '3-5': LESSON_U3L5_SCENES, '3-6': LESSON_U3L6_SCENES,
   '4-1': LESSON_U4L1_SCENES, '4-2': LESSON_U4L2_SCENES, '4-3': LESSON_U4L3_SCENES, '4-4': LESSON_U4L4_SCENES, '4-5': LESSON_U4L5_SCENES, '4-6': LESSON_U4L6_SCENES,
   '5-1': LESSON_U5L1_SCENES, '5-2': LESSON_U5L2_SCENES, '5-3': LESSON_U5L3_SCENES, '5-4': LESSON_U5L4_SCENES, '5-5': LESSON_U5L5_SCENES, '5-6': LESSON_U5L6_SCENES,
-  '6-1': LESSON_U6L1_SCENES, '6-2': LESSON_U6L2_SCENES, '6-3': LESSON_U6L3_SCENES, '6-4': LESSON_U6L4_SCENES,
+  '6-1': LESSON_U6L1_SCENES, '6-2': LESSON_U6L2_SCENES, '6-3': LESSON_U6L3_SCENES, '6-4': LESSON_U6L4_SCENES, '6-5': LESSON_U6L5_SCENES,
 };
 
 export function getSceneLesson(unitNumber: number, lessonNumber: number): Scene[] | null {
@@ -97,6 +98,7 @@ export const SCENE_LESSON_META: Record<string, { title: string; objective: strin
   '6-2': { title: LESSON_U6L2_TITLE, objective: LESSON_U6L2_OBJECTIVE },
   '6-3': { title: LESSON_U6L3_TITLE, objective: LESSON_U6L3_OBJECTIVE },
   '6-4': { title: LESSON_U6L4_TITLE, objective: LESSON_U6L4_OBJECTIVE },
+  '6-5': { title: LESSON_U6L5_TITLE, objective: LESSON_U6L5_OBJECTIVE },
 };
 
 export function getSceneLessonMeta(unitNumber: number, lessonNumber: number): { title: string; objective: string } | null {

@@ -152,14 +152,14 @@ export function DoorKnockScene({ scene, onWin, onNext, sync }: { scene: Knock; o
 
       {/* The two answers. */}
       {r && !open && (
-        <div className="absolute inset-x-0 bottom-[5%] z-40 flex justify-center gap-3 px-3">
+        <div className="absolute inset-x-0 bottom-[5%] z-40 flex justify-center gap-3 px-3 [@media(max-height:500px)]:bottom-[3%] [@media(max-height:500px)]:justify-between">
           <motion.button onClick={() => { void answer(false); }} aria-label={KNOCK_NO}
-            className={`rounded-full border-b-[6px] border-rose-800 bg-gradient-to-b from-rose-400 to-rose-600 px-5 py-3 text-lg font-black text-white shadow-xl sm:text-2xl ${wrong === 'no' ? 'ring-4 ring-red-300' : ''}`}
+            className={`rounded-full border-b-[6px] border-rose-800 bg-gradient-to-b from-rose-400 to-rose-600 px-5 py-3 text-lg font-black text-white shadow-xl sm:text-2xl [@media(max-height:500px)]:px-3 [@media(max-height:500px)]:py-1.5 [@media(max-height:500px)]:text-base ${wrong === 'no' ? 'ring-4 ring-red-300' : ''}`}
             animate={wrong === 'no' ? { x: [0, -10, 10, -6, 6, 0] } : {}} whileTap={{ scale: 0.92 }}>
             {'\u{274C}'} {KNOCK_NO}
           </motion.button>
           <motion.button onClick={() => { void answer(true); }} aria-label={KNOCK_YES}
-            className={`rounded-full border-b-[6px] border-emerald-800 bg-gradient-to-b from-emerald-400 to-emerald-600 px-5 py-3 text-lg font-black text-white shadow-xl sm:text-2xl ${wrong === 'yes' ? 'ring-4 ring-red-300' : ''}`}
+            className={`rounded-full border-b-[6px] border-emerald-800 bg-gradient-to-b from-emerald-400 to-emerald-600 px-5 py-3 text-lg font-black text-white shadow-xl sm:text-2xl [@media(max-height:500px)]:px-3 [@media(max-height:500px)]:py-1.5 [@media(max-height:500px)]:text-base ${wrong === 'yes' ? 'ring-4 ring-red-300' : ''}`}
             animate={wrong === 'yes' ? { x: [0, -10, 10, -6, 6, 0] } : {}} whileTap={{ scale: 0.92 }}>
             {'\u{2705}'} {KNOCK_YES}
           </motion.button>
