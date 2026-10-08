@@ -4,7 +4,7 @@
 > Brand-new and Academy-only: the Playground curriculum files and the old Academy rows in the database are not used or changed.
 > Rules: `.claude/skills/academy-season-system`, `docs/academy-lesson-system.md`, `docs/academy-learning-science.md`.
 
-**Size:** 70 Seasons · 560 sessions of 60 minutes · 5328 planned new items (words + chunks).
+**Size:** 70 Seasons · 560 sessions of 60 minutes · 5452 planned new items (words + chunks).
 
 **Status of the placements.** Grammar levels are recalled from the English Grammar Profile, Pearson GSE and Cambridge lists and were **not re-checked** against the sources (they could not be opened on 2026-10-08). Rows marked ⚠ are the least certain. Word lists (Oxford 3000/5000, Cambridge Vocabulary Profile) are **not yet loaded**: each Season has an item *budget* and lexical fields, not an item list. CEFR can-do lines are paraphrased from memory of the CEFR Companion Volume (2020) and need checking at coe.int.
 
@@ -12,26 +12,26 @@
 
 | Level | Seasons | Sessions | New items (budget) | Cumulative items | Cambridge cumulative hours |
 |---|---|---|---|---|---|
-| A1 | 10 | 80 | 700 | 700 (target 700) | ~90-100 (not confirmed) |
-| A2 | 12 | 96 | 804 | 1504 (target 1500) | 180-200 |
-| B1 | 16 | 128 | 1200 | 2704 (target 2700) | 350-400 |
-| B2 | 16 | 128 | 1280 | 3984 (target 4000) | 500-600 |
-| C1 | 16 | 128 | 1344 | 5328 (target 5300) | 700-800 |
+| A1 | 10 | 80 | 800 | 800 (target 800) | ~90-100 (not confirmed) |
+| A2 | 12 | 96 | 828 | 1628 (target 1650) | 180-200 |
+| B1 | 16 | 128 | 1200 | 2828 (target 2750) | 350-400 |
+| B2 | 16 | 128 | 1280 | 4108 (target 4050) | 500-600 |
+| C1 | 16 | 128 | 1344 | 5452 (target 5400) | 700-800 |
 
 ## A1
 
 | Season | Title · theme | Structures (E3 / E6) | Functions | Release | Items |
 |---|---|---|---|---|---|
-| A1-S01 | **Who Are You?** · Online profiles and meeting people | be (am/is/are): statements, questions, negatives / possessive adjectives (my/your/his/her/our/their) | greeting and leave-taking; introducing yourself; asking for personal information; spelling | My profile card plus a 30-second voice introduction | 70 |
-| A1-S02 · Big Remix | **My Room, My Stuff** · Rooms, gadgets and where things are | there is / there are / prepositions of place (in/on/under/next to/behind) | describing a place; saying where things are; asking where something is | A voice-note tour of my room | 70 |
-| A1-S03 | **Free Time Club** · Hobbies and the Club Fair | present simple (I/you/we/they): statements and negatives / like/love/hate + -ing | talking about likes and dislikes; talking about hobbies; asking about interests | A 45-second pitch for a club I would start | 70 |
-| A1-S04 · Big Remix | **Café Night** · Food, drinks and ordering | some / any with countable and uncountable nouns / I'd like ... / Would you like ...? (as a chunk first) ⚠ | ordering food and drink; asking for and giving prices; polite requests | A short café role-play with my own menu | 70 |
-| A1-S05 | **A Day in My Life** · Daily routines and the school day | present simple he/she/it (-s) and questions with does / adverbs of frequency (always/usually/sometimes/never) | describing routines; telling the time; saying how often you do things | A short vlog script and recording of my day | 70 |
-| A1-S06 · Big Remix | **Family and Friends** · People close to me | have got / has got / possessive 's | talking about family; describing people; talking about possessions | My family or friends tree with a spoken description of three people | 70 |
-| A1-S07 | **Treasure Map Town** · Places in town and giving directions | imperatives (instructions, directions) / prepositions of movement (to/into/out of/along/across) | giving directions; asking where a place is; giving simple instructions | A voice guide that leads a friend to a hidden place on a map | 70 |
-| A1-S08 · Big Remix | **Can Do!** · Talents and abilities | can / can't for ability / and / but / because (simple linking) | talking about ability; asking for and giving help; simple linking of ideas | A talent card: what I can and cannot do, with one demonstration | 70 |
-| A1-S09 | **Market Day** · Clothes, shopping and money | this / that / these / those / how much / how many and prices | shopping; asking for and giving prices; choosing between things | A market role-play: buying and selling with prices | 70 |
-| A1-S10 · Big Remix · **level check** | **Right Now** · What is happening now: a live stream | present continuous for actions happening now / wh-questions and question word order | describing what is happening now; asking wh-questions; talking about the weather | A 60-second live commentary clip | 70 |
+| A1-S01 | **Who Are You?** · Online profiles and meeting people | be (am/is/are): statements, questions, negatives / possessive adjectives (my/your/his/her/our/their) | greeting and leave-taking; introducing yourself; asking for personal information; spelling | My profile card plus a 30-second voice introduction | 80 |
+| A1-S02 · Big Remix | **My Room, My Stuff** · Rooms, gadgets and where things are | there is / there are / prepositions of place (in/on/under/next to/behind) | describing a place; saying where things are; asking where something is | A voice-note tour of my room | 80 |
+| A1-S03 | **Free Time Club** · Hobbies and the Club Fair | present simple (I/you/we/they): statements and negatives / like/love/hate + -ing | talking about likes and dislikes; talking about hobbies; asking about interests | A 45-second pitch for a club I would start | 80 |
+| A1-S04 · Big Remix | **Café Night** · Food, drinks and ordering | some / any with countable and uncountable nouns / I'd like ... / Would you like ...? (as a chunk first) ⚠ | ordering food and drink; asking for and giving prices; polite requests | A short café role-play with my own menu | 80 |
+| A1-S05 | **A Day in My Life** · Daily routines and the school day | present simple he/she/it (-s) and questions with does / adverbs of frequency (always/usually/sometimes/never) | describing routines; telling the time; saying how often you do things | A short vlog script and recording of my day | 80 |
+| A1-S06 · Big Remix | **Family and Friends** · People close to me | have got / has got / possessive 's | talking about family; describing people; talking about possessions | My family or friends tree with a spoken description of three people | 80 |
+| A1-S07 | **Treasure Map Town** · Places in town and giving directions | imperatives (instructions, directions) / prepositions of movement (to/into/out of/along/across) | giving directions; asking where a place is; giving simple instructions | A voice guide that leads a friend to a hidden place on a map | 80 |
+| A1-S08 · Big Remix | **Can Do!** · Talents and abilities | can / can't for ability / and / but / because (simple linking) | talking about ability; asking for and giving help; simple linking of ideas | A talent card: what I can and cannot do, with one demonstration | 80 |
+| A1-S09 | **Market Day** · Clothes, shopping and money | this / that / these / those / how much / how many and prices | shopping; asking for and giving prices; choosing between things | A market role-play: buying and selling with prices | 80 |
+| A1-S10 · Big Remix · **level check** | **Right Now** · What is happening now: a live stream | present continuous for actions happening now / wh-questions and question word order | describing what is happening now; asking wh-questions; talking about the weather | A 60-second live commentary clip | 80 |
 
 <details><summary>Can-do statements, hooks and mediation</summary>
 
@@ -92,18 +92,18 @@
 
 | Season | Title · theme | Structures (E3 / E6) | Functions | Release | Items |
 |---|---|---|---|---|---|
-| A2-S01 | **Last Weekend** · Telling a story about the past | past simple of be (was/were) ⚠ / past simple: regular verbs (-ed) | describing past events; saying where you were; sequencing events (first, then, after that) | A voice note telling the story of my last weekend | 67 |
-| A2-S02 · Big Remix | **Travel Trouble** · Journeys that went wrong | past simple: irregular verbs, questions and negatives | narrating past events; asking about past events; describing a problem while travelling | A postcard or message about a trip that went wrong | 67 |
-| A2-S03 | **Gadget Wars** · Comparing technology | comparatives and superlatives | comparing; recommending; giving a reason | A written review comparing two things I own or want | 67 |
-| A2-S04 · Big Remix | **Plans and Dreams** · Plans for next week and next summer | be going to (plans and intentions) | talking about plans; asking about plans; giving reasons for plans | My plan for next summer, spoken and as a short written list | 67 |
-| A2-S05 | **Body and Health** · Feeling ill and giving advice | should / shouldn't for advice / too / enough | describing symptoms; giving advice; talking about health habits | A short advice message or voice note to a friend who feels ill | 67 |
-| A2-S06 · Big Remix | **House Rules** · Rules at home, at school and in games | must / mustn't (rules) / have to (obligation) | talking about rules; saying what is necessary; prohibiting | A short guide to the rules of a place or game I know well | 67 |
-| A2-S07 | **Food Cultures** · What people eat around the world | much / many / a few / a little / a lot of | talking about quantity; giving instructions for a recipe; comparing food customs | A short recipe video script and recording of a dish I know | 67 |
-| A2-S08 · Big Remix | **Getting Around** · Transport and city life | infinitive of purpose (to + verb) / prepositions of movement and transport phrases | giving travel directions; explaining purpose; buying a ticket | A route guide for a visitor, spoken and as a simple map | 67 |
-| A2-S09 | **Tomorrow's World** · Predictions and quick decisions | will for decisions, offers and simple predictions ⚠ | making predictions; making offers and quick decisions; agreeing and disagreeing simply | A one-minute predictions podcast clip: my world in 2040 | 67 |
-| A2-S10 · Big Remix | **Storm Warning** · Weather and an adventure that went wrong | past continuous (was/were + -ing) / so / because / then (linking sentences) | describing a scene in the past; giving reasons and results; telling a short story | An eyewitness account: what was happening when the storm started | 67 |
-| A2-S11 | **Dream Jobs** · Jobs, skills and how people do things | adverbs of manner (-ly) | talking about jobs; describing how things are done; answering simple interview questions | A short job-interview role-play: me as the candidate | 67 |
-| A2-S12 · Big Remix · **level check** | **Event Planners** · Organising a school festival | let's / shall we / how about + -ing (suggestions) | making suggestions; accepting and refusing politely; writing an invitation | A festival invitation plus a one-minute pitch for the committee | 67 |
+| A2-S01 | **Last Weekend** · Telling a story about the past | past simple of be (was/were) ⚠ / past simple: regular verbs (-ed) | describing past events; saying where you were; sequencing events (first, then, after that) | A voice note telling the story of my last weekend | 69 |
+| A2-S02 · Big Remix | **Travel Trouble** · Journeys that went wrong | past simple: irregular verbs, questions and negatives | narrating past events; asking about past events; describing a problem while travelling | A postcard or message about a trip that went wrong | 69 |
+| A2-S03 | **Gadget Wars** · Comparing technology | comparatives and superlatives | comparing; recommending; giving a reason | A written review comparing two things I own or want | 69 |
+| A2-S04 · Big Remix | **Plans and Dreams** · Plans for next week and next summer | be going to (plans and intentions) | talking about plans; asking about plans; giving reasons for plans | My plan for next summer, spoken and as a short written list | 69 |
+| A2-S05 | **Body and Health** · Feeling ill and giving advice | should / shouldn't for advice / too / enough | describing symptoms; giving advice; talking about health habits | A short advice message or voice note to a friend who feels ill | 69 |
+| A2-S06 · Big Remix | **House Rules** · Rules at home, at school and in games | must / mustn't (rules) / have to (obligation) | talking about rules; saying what is necessary; prohibiting | A short guide to the rules of a place or game I know well | 69 |
+| A2-S07 | **Food Cultures** · What people eat around the world | much / many / a few / a little / a lot of | talking about quantity; giving instructions for a recipe; comparing food customs | A short recipe video script and recording of a dish I know | 69 |
+| A2-S08 · Big Remix | **Getting Around** · Transport and city life | infinitive of purpose (to + verb) / prepositions of movement and transport phrases | giving travel directions; explaining purpose; buying a ticket | A route guide for a visitor, spoken and as a simple map | 69 |
+| A2-S09 | **Tomorrow's World** · Predictions and quick decisions | will for decisions, offers and simple predictions ⚠ | making predictions; making offers and quick decisions; agreeing and disagreeing simply | A one-minute predictions podcast clip: my world in 2040 | 69 |
+| A2-S10 · Big Remix | **Storm Warning** · Weather and an adventure that went wrong | past continuous (was/were + -ing) / so / because / then (linking sentences) | describing a scene in the past; giving reasons and results; telling a short story | An eyewitness account: what was happening when the storm started | 69 |
+| A2-S11 | **Dream Jobs** · Jobs, skills and how people do things | adverbs of manner (-ly) | talking about jobs; describing how things are done; answering simple interview questions | A short job-interview role-play: me as the candidate | 69 |
+| A2-S12 · Big Remix · **level check** | **Event Planners** · Organising a school festival | let's / shall we / how about + -ing (suggestions) | making suggestions; accepting and refusing politely; writing an invitation | A festival invitation plus a one-minute pitch for the committee | 69 |
 
 <details><summary>Can-do statements, hooks and mediation</summary>
 

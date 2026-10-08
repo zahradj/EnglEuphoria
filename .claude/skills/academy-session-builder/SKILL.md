@@ -26,7 +26,7 @@ Prerequisites: `academy-season-system` (rules), a `SeasonSpec`/`EpisodeSpec` fro
 | 48-55 | **Release** (core) | generation, ownership, portfolio | coaches; never edits for them | records privately, listens back, sends/retries |
 | 55-60 | **Wrap** (core) | metacognition, self-regulation | can-do ticks; "Best Line of the Session"; assigns homework + Daily 10 | rates can-dos; picks next skin; enjoyment emoji |
 
-Core 45 min is never skipped. If the energy dial is low: swap Mission for the **Chill track** (same language, lower-pressure game).
+Core 51 min is never skipped (Check-in 5 and Energiser 4 are the flex). If the energy dial is low: swap Mission for the **Chill track** (same language, lower-pressure game).
 
 ## Per-episode content
 

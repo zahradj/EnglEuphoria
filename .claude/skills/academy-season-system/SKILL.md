@@ -5,7 +5,7 @@ description: >
   Season, Episode, Live Session, Daily 10 practice, homework, quiz/assessment, player screen, or reviewing any of them.
   The master rules of the owner-approved "Season System": Level -> Season (= unit = 8 sessions) -> Episode -> 60-minute
   Live Session run of show; themed story worlds; fun ingredients; spaced "Remember?"; Daily 10; comfort first; scientific
-  techniques built in. Routes to the other academy-* skills. Use before smart-lesson-architect / generate-lesson for Academy.
+  techniques built in. Routes to the other academy-* skills. Academy has its OWN curriculum blueprint, lesson blueprint and skills: do not use or edit the Playground/Success ones (generate-lesson, smart-lesson-architect, lesson-quality-gate, playground-* skills) for Academy work.
 ---
 
 # Academy Season System — the master rules
@@ -36,7 +36,7 @@ If a doc and this skill disagree, the **owner's latest message wins**, then the 
 | Episode | E1 Cold Open · E2 Word Lab · E3 Pattern Lab · E4 On Air · E5 Deep Dive · E6 Side Quest · E7 Remix · E8 Finale | core productive words only in E2/E6 (receptive items/functional chunks may enter E1/E4/E5), new structure only in E3/E6, **zero new language in E7/E8**; <= 14 new items per session (<= 84 per Season) |
 | Live Session | 60 min | Check-in 5 · Remember? 7 · The Drop 10 · Notice & Build 10 · Energiser 4 · Mission 12 · Release 7 · Wrap 5 |
 
-Core (never skipped, 45 min): Remember?, Drop, Notice & Build, Mission, Release, Wrap. Flex (15): Check-in, Energiser, Take 2, extra practice.
+Core (never skipped, 51 min): Remember? 7, Drop 10, Notice & Build 10, Mission 12, Release 7, Wrap 5. Flex (9 min): Check-in 5, Energiser 4; Take 2 and extra practice also flex inside core segments.
 Every 2nd Season: E7 is a **Big Remix** (two Seasons). C1 shape: supports off, Language Lab (E3), seminar/pitch (E4), mediation every Season.
 
 ## Non-negotiables
@@ -70,8 +70,10 @@ Every 2nd Season: E7 is a **Big Remix** (two Seasons). C1 shape: supports off, L
 | Layout, tokens, comfort dock, live-mode behaviour, gamification presentation | `academy-player-ux` |
 | Final check before reporting done | `academy-quality-gate` |
 
-Also still apply (repo skills): `activity-pattern-library` (what components exist), `game-animation` (juice), `classroom-sync-robustness` (live sync),
-`lesson-variety-engine` (research log), `kids-video-scenario`/`video-quality-gate` (any video; Academy teens still need a written scenario first).
+**Hub separation (owner, 2026-10-08):** the Playground, Academy and Success each own their curriculum blueprint, lesson blueprint, skills and docs. Academy's live in
+`src/curriculum/academy/` (roadmap + `lessonBlueprint.ts`), `.claude/skills/academy-*`, `docs/academy-*`. Never edit or import the Playground/Success ones. See `docs/hub-separation.md`.
+Repo-wide rules in CLAUDE.md still apply to the Academy (voice: recorded approved voices only, never browser TTS; video: written scenario first, strict mode for paid clips).
+Other hubs' skills (`activity-pattern-library`, `game-animation`, `classroom-sync-robustness`, `lesson-variety-engine`) may be read for *patterns* only; they are not authority for the Academy.
 
 ## Open items (ask the owner, don't assume)
 

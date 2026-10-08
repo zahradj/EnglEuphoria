@@ -85,7 +85,7 @@ B2: student-led tasks, opinion defence, summarising. C1: authentic texts, regist
 
 ## Validators (a roadmap fails if any fails)
 
-- Item budget per level and per session (<= 14 new/session; hub cap in `lessonBlueprint.ts` VOCAB_CAP academy = 14).
+- Item budget per level and per session (<= 14 new/session: Academy's own constant `MAX_ITEMS_PER_SESSION` in `src/curriculum/academy/types.ts`; <= 84 per Season).
 - Cumulative level word target met within +-10 %; no item introduced twice; every item appears >= 8 times across the level in >= 3 skills.
 - Every structure's prerequisites were taught earlier; no structure introduced in E7/E8; <= 2 per Season.
 - Every can-do is assessed in a checkpoint or Release. All four skills + vocab + grammar present each Season (Nation strands 15-35 % each, adjust by level).

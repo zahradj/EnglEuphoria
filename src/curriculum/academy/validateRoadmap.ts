@@ -1,6 +1,6 @@
 // Academy roadmap v2 — validator. Pure functions, no repo imports beyond ./types.
 // A roadmap fails if any 'error' is returned. 'warn' items are reported but allowed (e.g. unverified placements).
-import { SEASONS_PER_LEVEL, type AcademyLevel, type LevelPlan, type SeasonOutline } from './types';
+import { INTRODUCING_SESSIONS, MAX_ITEMS_PER_SESSION, SEASONS_PER_LEVEL, type AcademyLevel, type LevelPlan, type SeasonOutline } from './types';
 
 export interface RoadmapIssue {
   severity: 'error' | 'warn';
@@ -14,16 +14,22 @@ const rank = (l: AcademyLevel) => LEVEL_ORDER.indexOf(l);
 
 /** New items per Season, per level. Hard cap = 6 introducing sessions (E1-E6) x 14 per session. */
 export const ITEM_BUDGET_BAND: Record<AcademyLevel, [number, number]> = {
-  A1: [60, 80],
+  A1: [70, 84],
   A2: [60, 75],
   B1: [65, 84],
   B2: [70, 84],
   C1: [80, 84],
 };
-export const MAX_ITEMS_PER_SEASON = 84;
+export const MAX_ITEMS_PER_SEASON = INTRODUCING_SESSIONS * MAX_ITEMS_PER_SESSION;
 
-/** Cumulative taught items (words + chunks) at the end of each level. Tolerance +-8 %. */
-export const CUMULATIVE_ITEM_TARGET: Record<AcademyLevel, number> = { A1: 700, A2: 1500, B1: 2700, B2: 4000, C1: 5300 };
+/**
+ * Cumulative taught items (words + chunks) at the end of each level. Tolerance +-8 %.
+ * Calibrated 2026-10-08 against the public Oxford 3000/5000 lists by CEFR level (distinct headwords, cumulative):
+ * A1 901 · A2 1,700 · B1 2,399 · B2 3,697 (3000 list 2,999 + 5000 list B2 698) · C1 4,979.
+ * A1/A2 targets sit just under the Oxford counts (closed-class function words are taught through grammar, not counted);
+ * B1+ sit above them because items also count chunks and collocations.
+ */
+export const CUMULATIVE_ITEM_TARGET: Record<AcademyLevel, number> = { A1: 800, A2: 1650, B1: 2750, B2: 4050, C1: 5400 };
 
 /**
  * Earliest level at which a structure may be introduced for productive use, e.g. 'present-perfect-experience': 'A2'.

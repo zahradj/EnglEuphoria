@@ -1,4 +1,4 @@
-// B1 (16 Seasons, 128 sessions, ~2,700 cumulative items). CEFR B1: copes with most situations while travelling; produces
+// B1 (16 Seasons, 128 sessions, ~2,750 cumulative items). CEFR B1: copes with most situations while travelling; produces
 // simple connected text on familiar topics; describes experiences, events, hopes and ambitions; gives reasons and opinions.
 // Method shifts to task-first (Mission before the rule). Mediation starts: every Season has one task. Supports: first words
 // of a frame, hints on request. Input texts ~150-300 words [U]. Presentations of the present perfect are split by sub-use.

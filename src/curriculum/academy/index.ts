@@ -7,6 +7,7 @@ import { B1_SEASONS } from './levels/b1';
 import { B2_SEASONS } from './levels/b2';
 import { C1_SEASONS } from './levels/c1';
 import { SKIN_LIBRARY } from './skins';
+import { buildAllLessonBlueprints } from './lessonBlueprint';
 import { STRUCTURES, STRUCTURE_FLOOR } from './structureLevels';
 import { CUMULATIVE_ITEM_TARGET, LEVEL_ORDER, summarize, validateRoadmap } from './validateRoadmap';
 import type { AcademyLevel, LevelPlan, SeasonOutline, StructureRef } from './types';
@@ -70,6 +71,8 @@ function build(): LevelPlan[] {
 
 export const ACADEMY_ROADMAP: LevelPlan[] = build();
 export const ACADEMY_SEASONS: SeasonOutline[] = ACADEMY_ROADMAP.flatMap((p) => p.seasons);
+/** One blueprint per Live Session, in roadmap order (560). Academy-owned; independent of the Playground and Success blueprints. */
+export const ACADEMY_LESSON_BLUEPRINTS = buildAllLessonBlueprints(ACADEMY_ROADMAP);
 export const ACADEMY_ROADMAP_ISSUES = validateRoadmap(ACADEMY_ROADMAP, STRUCTURE_FLOOR);
 export const ACADEMY_ROADMAP_SUMMARY = summarize(ACADEMY_ROADMAP);
 
@@ -78,5 +81,6 @@ export function getSeason(id: string): SeasonOutline | undefined {
 }
 
 export * from './types';
+export * from './lessonBlueprint';
 export { STRUCTURES, STRUCTURE_FLOOR } from './structureLevels';
 export { validateRoadmap, summarize, ITEM_BUDGET_BAND, CUMULATIVE_ITEM_TARGET, MAX_ITEMS_PER_SEASON } from './validateRoadmap';

@@ -77,7 +77,7 @@ Fixed order so the student always knows where they are; the *mechanics* inside c
 | 48–55 | **Release** | The student makes this Season's piece (private recording or text first → listen/read back → send or retry) and files it in the portfolio | Ownership; private-before-public |
 | 55–60 | **Wrap** | "I can…" tick-offs, Mistake Bank "fixed" count, **Best Line of the Session** (the student's own best sentence, saved), pick next session's skin, 1-tap enjoyment emoji | End on a win |
 
-**Core vs flex.** *Core (45 min, never skipped):* Remember?, Drop, Notice & Build, Mission, Release, Wrap. *Flex (15 min, teacher's call):* Check-in, Energiser, Take 2, extra practice. If the student is tired (dial 😴) the teacher swaps the Mission for the **Chill track** (lower-pressure game, same target language) — no student ever "fails" a session.
+**Core vs flex.** *Core (51 min, never skipped):* Remember? 7, Drop 10, Notice & Build 10, Mission 12, Release 7, Wrap 5. *Flex (9 min, teacher's call):* Check-in 5 and Energiser 4; Take 2 and extra practice also flex inside the core segments. If the student is tired (dial 😴) the teacher swaps the Mission for the **Chill track** (lower-pressure game, same target language) — no student ever "fails" a session.
 
 **Fun ingredients (use ≥ 5 per session):** surprise Drop · student-chosen skin · story clue · teacher-as-clueless-friend flip · a make-something Release · humour (absurd scenarios, "weird but true") · a boss moment (Remix/Finale) · collectable *Word Cards* (private deck, teen idiom — **not** stickers/mascots, per the Academy prompt ban) · music/Song Take · live reactions/emoji · a running in-joke across the Season.
 
@@ -89,18 +89,19 @@ Fixed order so the student always knows where they are; the *mechanics* inside c
 
 | Level | Cumulative guided hours (Cambridge) | Cumulative words (target) | Seasons | Live sessions (60 min) | New words/Season |
 |---|---|---|---|---|---|
-| A1 | ~90–100 [K] | 600–800 | 10 | 80 | 60–80 |
-| A2 | 180–200 [V] | ~1,500 | 12 | 96 | ~67 |
-| B1 | 350–400 [V] | ~2,700 | 16 | 128 | ~75 |
-| B2 | 500–600 [V] | ~4,000 | 16 | 128 | ~80 |
-| C1 | 700–800 [V] | ~5,300 (Oxford 5000 adds ~2,000 B2/C1 words to the 3000 [V]; C1 ≈ 5–6k word families, provisional [V]) | 16 | 128 | ~84 items (words + collocations; the per-session cap of 14 allows at most 84) |
+| A1 | ~90–100 [K] | ~800 | 10 | 80 | 80 |
+| A2 | 180–200 [V] | ~1,650 | 12 | 96 | 69 |
+| B1 | 350–400 [V] | ~2,750 | 16 | 128 | 75 |
+| B2 | 500–600 [V] | ~4,050 | 16 | 128 | 80 |
+| C1 | 700–800 [V] | ~5,400 (Oxford 5000 adds ~2,000 B2/C1 words to the 3000 [V]; C1 ≈ 5–6k word families, provisional [V]) | 16 | 128 | ~84 items (words + collocations; the per-session cap of 14 allows at most 84) |
 | **Total** | | | **70** | **560** | |
 
 - **Reconciling with the hours data.** Cambridge's cumulative guided hours imply roughly 95 / 95 / 180 / 175 new 60-min lessons per level (≈ 545 to B2) [V for the hours]. This plan schedules **432 live sessions** and relies on ~120 h of *Daily 10* self-practice to close the gap. That trade is an **assumption**: one-to-one gives far more speaking per hour, but there is no hard data on how many fewer hours it needs, so do not cut the budget silently. **Alternative if the owner prefers to follow the hours strictly** (C1 adds ~200 hours, 700–800 cumulative [V]): A1 12, A2 12, B1 22, B2 22, C1 25 Seasons (≈ 744 sessions); the Season shape does not change.
 - Guided hours are class hours, not guarantees, and depend on age, intensity, background and out-of-class study (Cambridge).
 - Pace (sessions per week varies by family: 1, 2 or 3): A1→C1 (560 sessions) takes ≈ 10.8 / 5.4 / 3.6 years in a 52-week year (add ~10 % for holidays); A1→B2 (432) ≈ 8.3 / 4.2 / 2.8. **Tell families this honestly.** Reaching C1 inside the teen years needs ≥ 2 sessions a week from about age 12, or a start higher up the roadmap after placement. The teacher dashboard shows each student's own estimated finish date.
 - Vocabulary supports: ~2–3k word families give ~95 % coverage of spoken text; 98 % needs 6–7k spoken / 8–9k written families (Nation 2006, van Zeeland & Schmitt) [V]. B2 ≈ 4k words is *enough to follow most speech*, not enough for academic reading — say so.
-- Per Season: 1–2 structures, ≤ 14 new words per session (hub cap), 8 sessions; roughly 60 % of new words productive, the rest receptive. Recheck counts against the Oxford 3000/5000 and Cambridge English Vocabulary Profile lists before locking [K].
+- Per Season: 1–2 structures, ≤ 14 new items per session (Academy's own cap), 8 sessions; roughly 60 % of new words productive, the rest receptive.
+- **Calibrated against the public Oxford 3000/5000 lists by CEFR level (2026-10-08, downloaded for analysis only, not stored in the repo).** Distinct headwords: A1 901 · A2 799 · B1 699 · B2 600 (the Oxford 3000 totals 2,999) · plus the Oxford 5000 extras B2 698 · C1 1,282 (total 4,979). Cumulative: A1 901, A2 1,700, B1 2,399, B2 3,697, C1 4,979. The first draft targets for A1/A2 (700 / 1,500) were below these, so they were raised to 800 / 1,650 (closed-class function words are taught through grammar and not counted). B1+ targets sit above the Oxford counts because our items also count chunks and collocations. Whether the Oxford lists may be stored in the repo is a licensing question for the owner; until then the roadmap holds budgets and lexical fields, not item lists.
 
 ### 4.2 Grammar sequence by level (from the English Grammar Profile pattern; **verify against EGP** [K])
 

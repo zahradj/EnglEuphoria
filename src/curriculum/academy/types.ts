@@ -99,3 +99,7 @@ export interface LevelPlan {
 /** Approved sizing (owner, 2026-10-08): seasons per level. 8 sessions each = 560 sessions A1 -> C1. */
 export const SEASONS_PER_LEVEL: Record<AcademyLevel, number> = { A1: 10, A2: 12, B1: 16, B2: 16, C1: 16 };
 export const SESSIONS_PER_SEASON = 8;
+/** Hard cap on NEW items (words + chunks) a single session may introduce. Academy's own constant; not shared with any other hub. */
+export const MAX_ITEMS_PER_SESSION = 14;
+/** Sessions that may introduce language: E1-E6. E7 (Remix) and E8 (Finale) introduce nothing. */
+export const INTRODUCING_SESSIONS = 6;

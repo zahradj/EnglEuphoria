@@ -1,4 +1,4 @@
-// B2 (16 Seasons, 128 sessions, ~4,000 cumulative items). CEFR B2: understands the main ideas of complex text; interacts with
+// B2 (16 Seasons, 128 sessions, ~4,050 cumulative items). CEFR B2: understands the main ideas of complex text; interacts with
 // fluency and spontaneity; produces clear, detailed text and explains a viewpoint with advantages and disadvantages.
 // Student-led tasks, opinion defence, summarising and mediation every Season. Supports: none by default (optional).
 // Input texts ~300-500 words [U]. Topics are school-safe: no dating/sexuality, alcohol, drugs, gambling, graphic violence, partisan politics.
