@@ -1,7 +1,7 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0060-3882621249142333111.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261008%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261008T111506Z&X-Amz-Expires=38609&X-Amz-Signature=61e68b028715c372ad81729e770eda457e3a28504349e4cd655014fe517f8944&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2021%3A58%3A35%20GMT",
-  "out": "public/lep1/scenes/bg-u7l3-pond-empty-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0060-2605850754230003941.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261008%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261008T073512Z&X-Amz-Expires=52390&X-Amz-Signature=b7a8913c785f2c2935b34c91f5fc18777ced0a026d41e809f6cab08ca0d23ae8&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2022%3A08%3A22%20GMT",
+  "out": "public/lep1/scenes/bg-u7l3-pond-wide.png",
   "sticker": false
  }
 ]

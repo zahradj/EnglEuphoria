@@ -188,5 +188,10 @@
     "path": "public/lep1/audio/cow-pig-sheep-song-u7l2.mp3",
     "bytes": 321037,
     "sha256": "3674435b5a4d813bbb8aa94b86a794a725e7b46717c34a63166480a9899ec5f0"
+  },
+  "u7l3-horse-chicken-duck": {
+    "path": "public/lep1/audio/horse-chicken-duck-song-u7l3.mp3",
+    "bytes": 321037,
+    "sha256": "d0928c10bd6b18ffbda0c9eed0974f7baf1f8b133f568e6bc978d84aa8fb0b8a"
   }
 }
