@@ -153,5 +153,10 @@
     "path": "public/lep1/audio/my-house-song-u6l1.mp3",
     "bytes": 321037,
     "sha256": "6a7277132b18538aebc4d5a0d5a30b7455b3eb03f5c4da0fd1de6e1154d696ad"
+  },
+  "u6l2-moving-day": {
+    "path": "public/lep1/audio/moving-day-song-u6l2.mp3",
+    "bytes": 321037,
+    "sha256": "be0ea45556a9c82b3d63314a2f005fbbad80b4a6cd6e17b0bf17ddc233ec7de9"
   }
 }

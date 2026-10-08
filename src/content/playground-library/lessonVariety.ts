@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '6-2': { settings: ['moving-day street', 'empty new room'], look: "moving day: a blue moving truck full of boxes outside Pip's family's new house on a sunny street, then a bright, empty new room (pale walls, wooden floor, a big window) that fills up with furniture piece by piece" },
   '6-1': { settings: ['house front garden', 'dollhouse rooms'], look: "Pip's own cream house with a red roof and a round green door on a sunny morning, then the same house opened like a dollhouse: four warm rooms (blue bedroom, tiled bathroom, green kitchen, orange living room); lights off and on for hide and seek" },
   '5-6': { settings: ['game-show stage'], look: "a bright children's TV game-show stage: purple curtain, warm spotlights, three podiums with big red buzzers; Pip is the host with a microphone and the whole fox family claps in the front row" },
   '5-5': { settings: ['duck pond', 'home at night'], look: "a sunny park with a duck pond, a bench and an ice-cream cone, then Pip's warm living room and bedroom at night; just Pip and Dad (green cardigan), four little ducks; a story told as a flip-book film" },
@@ -188,6 +189,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '6-2': {
+    sources: ['Toca Boca-style room decorating (drag furniture into a room)', 'Lingokids (house and furniture words, listen and place)', 'Khan Academy Kids (calm listening tasks)', 'Cambridge (Pre A1 Starters listen and draw a line: put the thing where it goes)'],
+    mechanics: [
+      'room decorating → Moving Day: Pip asks "Bring the bed, please!", the child taps that piece on the moving truck and it flies to its place in the empty new room',
+      'kim\'s-game memory → the moving truck version of the missing-car train: which box is empty?',
+      'a CH / K catch sort (chair, cheese, chick vs. key, kite, kitten) that brings back last lesson\'s K',
+    ],
+    betterThan: [
+      'nothing on screen names the piece — the spoken word alone picks it — and the room the child furnishes stays furnished, so the game ends with the child\'s own finished room',
+      'every piece is named twice: Pip says it, then the child says "It\'s a sofa!" on the microphone before the next box comes',
+      'calm by design: a wrong piece is named back ("No, that\'s the chair!"), the right one glows after two tries, no clock',
     ],
   },
   '6-1': {

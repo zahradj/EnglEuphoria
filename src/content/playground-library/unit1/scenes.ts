@@ -631,6 +631,16 @@ export type Scene =
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
   | {
+      /** Moving Day (U6L2 signature): the furniture `pieces` (sticker `img`) wait on the moving truck; the
+       *  empty room `bg` gets each piece at x/y (centre %) w (% of the picture's width) once it is brought in.
+       *  Pip asks `line` for piece `piece`, the child taps it, it flies into the room, then says `say`.
+       *  `name` = the word ("bed"); `aspect` = bg width / height (default 1376 / 768). */
+      id: string; kind: 'moving-day'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      pieces: { name: string; img: string; x: number; y: number; w: number }[];
+      rounds: { piece: number; line: string; reply: string; say: string }[];
+      doneLine: string;
+    }
+  | {
       /** Where's Pip? (U6L1 signature): hide and seek in a dollhouse picture. Each room (x/y/w/h = % box of the
        *  room painted in `bg`) starts dark; Pip calls `line` from room `room`, the child taps it, the light
        *  goes on and `hider` pops up at `at` (% across the room, default 50), then the child says `say`.
@@ -9660,6 +9670,241 @@ export const LESSON_U6L1_SCENES: Scene[] = [
     ],
   },
   { id: 'u6l1-finale', kind: 'finale', bg: bgU6L1Front, who: 'pip', line: 'Kitchen, bedroom, bathroom, living room — this is my house! Goodbye, friend!' },
+];
+
+/* ===================== Pre-A1 Unit 6 · Lesson 2 — Table, Chair, Bed! =====================
+ * My House (2/6). table, chair, bed, sofa ("It's a chair!", "Bring the bed, please!") and CH says /ch/
+ * (chair, cheese, chick, cherries). Theme: moving day — Pip's family moves into a new house, the furniture
+ * comes off the truck and the empty room fills up. Lesson-Variety Engine: researched Toca Boca / Lingokids
+ * "decorate the room" play, Khan Academy Kids calm listening, Cambridge Pre A1 "listen and draw a line",
+ * and the classroom "pass the box / what's in the box?" furniture games; one new game — Moving Day (bring
+ * each piece from the truck to its place in the new room). Pictures made with Canva (the furniture and CH
+ * stickers are cut from two Canva sticker sheets). */
+const bgU6L2Truck = `${A}/scenes/bg-u6l2-moving-truck-wide.png`;
+const bgU6L2Room = `${A}/scenes/bg-u6l2-room-empty-wide.png`;
+const itemTable = `${A}/items/item-table.png`;
+const itemChair = `${A}/items/item-chair.png`;
+const itemBed = `${A}/items/item-bed.png`;
+const itemSofa = `${A}/items/item-sofa.png`;
+const itemCheese = `${A}/items/item-cheese.png`;
+const itemChick = `${A}/items/item-chick.png`;
+const itemCherries = `${A}/items/item-cherries.png`;
+const itemChicken = `${A}/items/item-chicken.png`;
+/* Where each piece stands in bg-u6l2-room-empty (centre %, width % of the picture). */
+const U6L2_PIECES = [
+  { name: 'table', img: itemTable, x: 47, y: 80, w: 17 },
+  { name: 'chair', img: itemChair, x: 60, y: 78, w: 8 },
+  { name: 'bed', img: itemBed, x: 20, y: 76, w: 24 },
+  { name: 'sofa', img: itemSofa, x: 80, y: 77, w: 25 },
+];
+
+export const LESSON_U6L2_TITLE = 'Table, Chair, Bed!';
+export const LESSON_U6L2_OBJECTIVE = 'Name four pieces of furniture — table, chair, bed, sofa — say "It\'s a chair!", bring the right piece when Pip asks "Bring the bed, please!", sing about moving day, and hear CH say /ch/ (chair, cheese, chick, cherries) — by listening, moving, playing and speaking, no reading.';
+
+export const LESSON_U6L2_SCENES: Scene[] = [
+  { id: 'u6l2-title', kind: 'title-card', bg: bgU6L2Truck, level: 'Pre-A1', unit: 'Unit 6', lessonLabel: 'Lesson 2', title: 'Table, Chair, Bed!', subtitle: 'Moving day' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u6l2-song', kind: 'song', bg: bgU6L2Truck, title: '\u{1F3B5} Moving Day \u{1F3B5}', teacher: 'Sing and point: table, chair, bed, sofa!',
+    durationSeconds: 20, bigWord: 'Furniture', songUrl: `${A}/audio/moving-day-song-u6l2.mp3?v=1`,
+    lineDurationsMs: [5860, 2840, 3020, 8342],
+    songPrompt: 'Upbeat kids pop song about moving into a new house',
+    lyrics: [
+      { who: 'pip', text: 'Table and chair! Table and chair!', emotion: 'happy' },
+      { who: 'pip', text: 'Bed and sofa! Over there!', emotion: 'happy' },
+      { who: 'pip', text: 'Bring it in, one, two, three!', emotion: 'happy' },
+      { who: 'pip', text: 'A new house for you and me!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 1 · Kitchen, Bedroom, Bathroom!
+    id: 'u6l2-recall-warmup', kind: 'recall-warmup', bg: bgU6L2Truck, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 1 · Kitchen, Bedroom, Bathroom!',
+    teacher: 'Warm-up from last lesson: Pip says a room, the child finds the picture. Say each room together.',
+    items: [
+      { word: 'kitchen', say: 'Find the kitchen!', img: `${A}/items/item-room-kitchen.png` },
+      { word: 'bedroom', say: 'Where is the bedroom?', img: `${A}/items/item-room-bedroom.png` },
+      { word: 'bathroom', say: 'Show me the bathroom!', img: `${A}/items/item-room-bathroom.png` },
+      { word: 'living room', say: 'Find the living room!', img: `${A}/items/item-room-living-room.png` },
+    ],
+  },
+  {
+    id: 'u6l2-intro', kind: 'cinematic', bg: bgU6L2Truck, hidePipOverlay: true, title: 'Moving Day', subtitle: 'A new house!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'It\'s moving day! We have a new house!' },
+      { who: 'pip', line: 'Look at the truck! Let\'s help!' },
+    ],
+    cta: "Let's help!",
+  },
+
+  /* 4-6 New words, move, first game */
+  {
+    id: 'u6l2-words', kind: 'listen-repeat-cards', cardScenes: true, textSide: 'right', bg: bgU6L2Room, teacher: 'Point to it, then say it! Then find one in your own room.',
+    cards: [
+      { who: 'pip', sentence: "Table! It's a table.", img: itemTable, imgLabel: 'Table!' },
+      { who: 'pip', sentence: "Chair! It's a chair.", img: itemChair, imgLabel: 'Chair!' },
+      { who: 'pip', sentence: "Bed! It's a bed.", img: itemBed, imgLabel: 'Bed!' },
+      { who: 'pip', sentence: "Sofa! It's a sofa.", img: itemSofa, imgLabel: 'Sofa!' },
+    ],
+  },
+  {
+    id: 'u6l2-move-say', kind: 'tpr-actions', bg: bgU6L2Room, who: 'pip',
+    teacher: 'Stand up! Say it with Pip and act it out.',
+    rounds: [
+      { line: 'Knock on the table! Knock, knock!', emoji: '\u{270A}', img: itemTable },
+      { line: 'Sit on the chair!', emoji: '\u{1FA91}', img: itemChair },
+      { line: 'Sleep in the bed! Shh!', emoji: '\u{1F634}', img: itemBed },
+      { line: 'Jump on the sofa! Boing!', emoji: '\u{1F938}', img: itemSofa },
+    ],
+  },
+  {
+    // Signature game (new): bring each piece from the truck into the new room.
+    id: 'u6l2-moving', kind: 'moving-day', bg: bgU6L2Room, who: 'pip',
+    teacher: 'Moving day! Listen to Pip, tap the piece on the truck, then say what it is.',
+    pieces: U6L2_PIECES,
+    rounds: [
+      { piece: 3, line: 'Bring the sofa, please!', reply: 'The sofa! Over there!', say: "It's a sofa!" },
+      { piece: 0, line: 'Bring the table, please!', reply: 'The table! Over there!', say: "It's a table!" },
+      { piece: 2, line: 'Bring the bed, please!', reply: 'The bed! Over there!', say: "It's a bed!" },
+      { piece: 1, line: 'Bring the chair, please!', reply: 'The chair! Over there!', say: "It's a chair!" },
+    ],
+    doneLine: 'Our new room is ready! Thank you!',
+  },
+
+  /* 7-11 Recall + speaking */
+  {
+    id: 'u6l2-train', kind: 'train-recall', bg: bgU6L2Truck, teacher: 'Remember the furniture in each car. One car goes empty — say what is missing!',
+    question: 'Beep beep! One box is empty. What is missing?',
+    cars: [
+      { word: 'table', img: itemTable, emoji: '\u{1FA91}' },
+      { word: 'chair', img: itemChair, emoji: '\u{1FA91}' },
+      { word: 'bed', img: itemBed, emoji: '\u{1F6CF}\u{FE0F}' },
+      { word: 'sofa', img: itemSofa, emoji: '\u{1F6CB}\u{FE0F}' },
+    ],
+  },
+  {
+    id: 'u6l2-spin', kind: 'spin-wheel', bg: bgU6L2Room, title: '',
+    teacher: 'Have the student spin, then say "It\'s a chair!" for that number. Or tap a number.',
+    items: [
+      { label: "It's a bed!", left: '18%', top: '72%', img: itemBed },
+      { label: "It's a table!", left: '39%', top: '80%', img: itemTable },
+      { label: "It's a chair!", left: '61%', top: '80%', img: itemChair },
+      { label: "It's a sofa!", left: '82%', top: '72%', img: itemSofa },
+    ],
+    wheelAt: { left: '50%', top: '38%' },
+  },
+  {
+    id: 'u6l2-what-is-it', kind: 'join-stage', bg: bgU6L2Room, teacher: 'Pip asks; the student answers "It\'s a …!" and acts it out.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'You sit on it. What is it?', bubble: 'right' },
+      { who: 'student', line: "It's a chair!", bubble: 'right' },
+      { who: 'pip', line: 'You sleep in it. What is it?', bubble: 'right' },
+      { who: 'student', line: "It's a bed!", bubble: 'right' },
+    ],
+  },
+
+  /* 12-14 Phonics: CH says /ch/ */
+  {
+    id: 'u6l2-model-ch', kind: 'sound-model', bg: bgU6L2Room, who: 'pip', letter: 'CH', phoneme: '/ch/', sound: 'ch',
+    teacher: 'C and H together say /ch/ — like a little train: ch, ch, ch! Chair, cheese, chick, cherries.',
+    anchors: [
+      { word: 'chair', emoji: '\u{1FA91}', img: itemChair },
+      { word: 'cheese', emoji: '\u{1F9C0}', img: itemCheese },
+      { word: 'chick', emoji: '\u{1F424}', img: itemChick },
+      { word: 'cherries', emoji: '\u{1F352}', img: itemCherries },
+    ],
+  },
+  {
+    id: 'u6l2-pick-ch', kind: 'sound-pick', bg: bgU6L2Room, who: 'pip',
+    teacher: 'Which one? Listen to the sound, then tap the picture that starts with it. Say the word too!',
+    rounds: [
+      { sound: 'ch', answer: 1, options: [{ word: 'bed', img: itemBed }, { word: 'cheese', img: itemCheese }, { word: 'sofa', img: itemSofa }] },
+      { sound: 'k', answer: 2, options: [{ word: 'chick', img: itemChick }, { word: 'table', img: itemTable }, { word: 'key', img: `${A}/items/item-key.png` }] },
+      { sound: 'ch', answer: 0, options: [{ word: 'chicken', img: itemChicken }, { word: 'kitten', img: `${A}/items/item-kitten.png` }, { word: 'bed', img: itemBed }] },
+      { sound: 'ch', answer: 2, options: [{ word: 'table', img: itemTable }, { word: 'sofa', img: itemSofa }, { word: 'chair', img: itemChair }] },
+    ],
+  },
+  {
+    id: 'u6l2-catch-chk', kind: 'catch-sort', bg: bgU6L2Truck, teacher: 'Catch it! /ch/ or /k/? Say the word as you catch it.', goal: 8, seconds: 45,
+    left: { label: 'CH', img: itemChair, emoji: '\u{1FA91}' },
+    right: { label: 'K', img: `${A}/items/item-key.png`, emoji: '\u{1F511}' },
+    items: [
+      { word: 'cheese', img: itemCheese, emoji: '\u{1F9C0}', target: 'left' },
+      { word: 'chick', img: itemChick, emoji: '\u{1F424}', target: 'left' },
+      { word: 'cherries', img: itemCherries, emoji: '\u{1F352}', target: 'left' },
+      { word: 'chicken', img: itemChicken, emoji: '\u{1F414}', target: 'left' },
+      { word: 'kite', img: `${A}/items/item-kite.png`, emoji: '\u{1FA81}', target: 'right' },
+      { word: 'kitten', img: `${A}/items/item-kitten.png`, emoji: '\u{1F431}', target: 'right' },
+      { word: 'kangaroo', img: `${A}/items/item-kangaroo.png`, emoji: '\u{1F998}', target: 'right' },
+    ],
+  },
+
+  /* 15-16 My room */
+  {
+    id: 'u6l2-my-room', kind: 'join-stage', bg: bgU6L2Room, teacher: 'The student looks around their own room (or draws it) and names the furniture: "It\'s a bed! It\'s a chair!"', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look in your room! What can you see?', bubble: 'right' },
+      { who: 'student', line: "It's a bed! It's a chair!", bubble: 'right' },
+      { who: 'pip', line: 'Sit on your chair! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's my chair!", bubble: 'right' },
+    ],
+  },
+
+  /* 19-20 Sticker + Home Mission */
+  {
+    id: 'u6l2-sticker', kind: 'sticker-reward', bg: bgU6L2Truck, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Great moving helper! Here is a sofa sticker for you!', sticker: { img: itemSofa, label: 'Moving helper' },
+  },
+  {
+    id: 'u6l2-home-mission', kind: 'home-mission', bg: bgU6L2Room, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: touch and say! Touch a table, a chair, a bed and a sofa at home!',
+    parentNote: 'Play "Touch it!": say "Touch a chair!" / "Touch the table!" and your child runs to it and says "It\'s a chair!". Then swap — your child gives the orders. Bonus: find something at home that starts with /ch/ (chair, cheese, chicken).',
+    steps: [
+      { emoji: '\u{1FA91}', img: itemChair, say: "It's a chair!" },
+      { emoji: '\u{1F6CF}\u{FE0F}', img: itemBed, say: "It's a bed!" },
+      { emoji: '\u{1F9C0}', img: itemCheese, say: 'Ch, ch, cheese!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u6l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU6L2Truck, who: 'pip',
+    teacher: 'Extra time: Brain Break! Carry the furniture with Pip.',
+    rounds: [
+      { line: 'Carry a big heavy box! Heave-ho!', emoji: '\u{1F4E6}' },
+      { line: 'Push the sofa! Push, push!', emoji: '\u{1F6CB}\u{FE0F}' },
+      { line: 'Choo choo! Ch, ch, ch!', emoji: '\u{1F682}' },
+      { line: 'Sit on the chair... and relax!', emoji: '\u{1FA91}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+  {
+    id: 'u6l2-train-2', kind: 'train-recall', bg: bgU6L2Room, teacher: 'Extra time: a new truck! Remember each box — one goes empty. What is missing?',
+    question: 'Beep beep! One box is empty. What is missing?',
+    cars: [
+      { word: 'cheese', img: itemCheese, emoji: '\u{1F9C0}' },
+      { word: 'sofa', img: itemSofa, emoji: '\u{1F6CB}\u{FE0F}' },
+      { word: 'chick', img: itemChick, emoji: '\u{1F424}' },
+      { word: 'bed', img: itemBed, emoji: '\u{1F6CF}\u{FE0F}' },
+    ],
+  },
+
+  /* 21-22 Goodbye */
+  {
+    id: 'u6l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u6l2-finale', kind: 'finale', bg: bgU6L2Truck, who: 'pip', line: 'Table, chair, bed and sofa — our new house is ready! Goodbye, friend!' },
 ];
 
 /* =============================================================================

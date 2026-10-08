@@ -405,6 +405,13 @@ const UNIT1_EXTRACTORS = {
     [s.who, 'Do you remember? Listen and find it!'], [s.who, 'Try again!'], [s.who, 'You remember! Great job!'],
     ...(s.items ?? []).flatMap((it) => [[s.who, it.say], [s.who, `Yes! ${it.word.charAt(0).toUpperCase() + it.word.slice(1)}!`]]),
   ],
+  // Mirror MovingDayScene.tsx's movingDayLines().
+  'moving-day': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
+    ...(s.pieces ?? []).map((p) => [s.who, `No, that's the ${p.name}! Try again!`]),
+    [s.who, 'Thank you!'],
+    [s.who, s.doneLine],
+  ],
   // Mirror HouseHideScene.tsx's houseHideLines().
   'house-hide': (s) => [
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
