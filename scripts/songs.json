@@ -1310,5 +1310,78 @@
       "My sofa is green, and I love it too!",
       "Come and see my happy house!"
     ]
+  },
+  "u6l5-wheres-my-house": {
+    "publicPath": "public/lep1/audio/wheres-my-house-song-u6l5.mp3",
+    "durationSec": 20,
+    "style": "Gentle bouncy kids story song with a question-and-answer feel, \"Is this my house? No, it isn't!\", warm 96 BPM with acoustic guitar, soft marimba, light brushed drums, a little door-knock sound and hand claps, clear friendly young vocals with a kids sing-along feel, every word sung slowly and clearly. Not a lullaby.",
+    "positiveStyles": [
+      "acoustic guitar",
+      "marimba",
+      "bouncy",
+      "warm",
+      "brushed drums",
+      "hand claps",
+      "clear kids vocals",
+      "question and answer",
+      "sing-along chorus",
+      "96 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "heavy drums",
+      "rock"
+    ],
+    "lines": [
+      "Where's my house? Where's my house?",
+      "Is this my house? No, it isn't!",
+      "Is this my house? Yes, it is!",
+      "Knock, knock! Welcome home!"
+    ]
+  },
+  "u6l6-my-house-game": {
+    "publicPath": "public/lep1/audio/my-house-game-song-u6l6.mp3",
+    "durationSec": 20,
+    "style": "Fun bouncy kids game-night song reviewing the house, warm 112 BPM with funky bass, bright synth bells, hand claps and a dice-roll shaker, clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "funky bass",
+      "synth bells",
+      "hand claps",
+      "shaker",
+      "clear kids vocals",
+      "sing-along chorus",
+      "112 BPM",
+      "happy",
+      "game night"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Kitchen, bedroom, bathroom too!",
+      "Table, chair and bed for you!",
+      "Roll the dice and say it loud!",
+      "I love my house, I'm very proud!"
+    ]
   }
 }

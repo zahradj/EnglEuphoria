@@ -1,0 +1,15 @@
+
+=== docs/songs/u6l6-my-house-game-take1.mp3  length=20.1s  score=0.79  missing=5  extra=5
+heard: kitchen bedroom bathroom too table chair and bed for you all the dice and say it now i love my house on the rebound
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(8.9), np.float64(12.2)]
+lineDurationsMs: [4060, 4860, 3260, 7882]
+
+=== docs/songs/u6l6-my-house-game-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: kitchen bedroom bathroom too table chair and bed for you roll the dice and say it loud i love my house i'm very proud
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.1), np.float64(12.1)]
+lineDurationsMs: [3850, 4280, 3960, 7972]
+
+=== docs/songs/u6l6-my-house-game-take3.mp3  length=20.1s  score=0.98  missing=1  extra=0
+heard: kitchen bedroom bathroom table chair and bed for you roll the dice and say it loud i love my house i'm very proud
+line starts (s): [np.float64(0.0), np.float64(3.6), np.float64(8.1), np.float64(12.2)]
+lineDurationsMs: [3580, 4520, 4060, 7902]

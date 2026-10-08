@@ -1,12 +1,7 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0041-3882621190110551423.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T101124Z&X-Amz-Expires=78455&X-Amz-Signature=a530464ddc2ac0898458934dc1c64634663a0b0f1d4d2b8b54521291951f8109&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2007%3A58%3A59%20GMT",
-  "out": "public/lep1/scenes/bg-u6l4-street-wide.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0059-3882621190110551423.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T133547Z&X-Amz-Expires=66269&X-Amz-Signature=2186fd475a5c36c46332e082b7cd34d2da803cb4a406debf635006790776cbbb&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2008%3A00%3A16%20GMT",
-  "out": "public/lep1/scenes/bg-u6l4-bedroom-empty-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0060-7189389263938055964.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261008%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261008T013035Z&X-Amz-Expires=61519&X-Amz-Signature=ddefcffa048360698f797a56130d7f8546cb86605bf6fa2980c67277eb75f31c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2018%3A35%3A54%20GMT",
+  "out": "public/lep1/scenes/bg-u6l6-gamenight-wide.png",
   "sticker": false
  }
 ]

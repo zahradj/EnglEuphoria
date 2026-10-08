@@ -429,6 +429,16 @@ const UNIT1_EXTRACTORS = {
       [s.who, s.doneLine],
     ];
   },
+  // Mirror HouseBoardScene.tsx's houseBoardLines().
+  'house-board': (s) => [[s.who, 'Roll the dice!'], ...(s.squares ?? []).flatMap((q) => [[s.who, q.ask], [s.who, q.say]]), [s.who, s.doneLine]],
+  // Mirror DoorKnockScene.tsx's doorKnockLines().
+  'door-knock': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => [
+      [r.owner, r.line], [r.owner, 'Is this my house?'], [r.owner, "No, it isn't!"], [r.owner, 'Knock, knock!'], [r.owner, r.reply],
+      ...(r.tries ?? []).map((i) => s.houses?.[i]).filter(Boolean).map((h, k) => [r.owner, `Look! The door is ${h.color}. ${r.tries[k] === r.house ? 'Yes, it is!' : "No, it isn't!"}`]),
+    ]),
+    [s.who, s.doneLine],
+  ],
   // Mirror MovingDayScene.tsx's movingDayLines().
   'moving-day': (s) => [
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),

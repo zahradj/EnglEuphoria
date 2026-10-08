@@ -1,0 +1,15 @@
+[
+ {"karaoke": ["Go", "home!"], "at": [80, 22], "from": 2.4, "to": 4.9, "step": 0.5},
+ {"word": "house", "at": [[26, 62], [51, 62], [75, 62]], "label": [50, 14], "from": 6.8, "to": 9.4},
+ {"karaoke": ["red", "door!"], "at": [84, 24], "from": 11.6, "to": 14.8, "step": 0.6},
+ {"word": "blue door", "at": [62, 50], "label": [86, 18], "from": 15.2, "to": 19.4},
+ {"karaoke": ["No,", "it isn't!"], "at": [18, 22], "from": 20.0, "to": 23.8, "step": 0.6},
+ {"word": "yellow door", "at": [62, 50], "label": [84, 18], "from": 24.2, "to": 28.4},
+ {"karaoke": ["No,", "it isn't!", "Meow!"], "at": [82, 30], "from": 28.8, "to": 33.3, "step": 0.9},
+ {"word": "red door", "at": [48, 52], "label": [80, 18], "from": 33.7, "to": 38.4},
+ {"karaoke": ["Knock,", "knock!"], "at": [82, 30], "from": 38.6, "to": 40.3, "step": 0.5},
+ {"karaoke": ["Yes,", "it is!"], "at": [82, 30], "from": 40.5, "to": 42.7, "step": 0.6},
+ {"word": "home", "at": [30, 42], "label": [82, 20], "from": 43.0, "to": 46.3},
+ {"word": "bedroom", "at": [42, 62], "label": [16, 22], "from": 46.7, "to": 48.6},
+ {"karaoke": ["I love", "my house!"], "at": [80, 26], "from": 48.8, "to": 52.3, "step": 0.8}
+]
