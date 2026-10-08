@@ -1,3 +1,3 @@
-+ public/lep1/scenes/bg-u6l3-house-empty-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u6l3-family-home-wide.png (1376, 768)
++ public/lep1/scenes/bg-u6l4-street-wide.png (1376, 768)
++ public/lep1/scenes/bg-u6l4-bedroom-empty-wide.png (1376, 768)
 2/2 saved
