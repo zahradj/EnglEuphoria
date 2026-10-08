@@ -1,6 +1,6 @@
 # Scenario — Pre-A1 Unit 6 Lesson 5 "Where's My House?" · story film "Pip Finds His House"
 
-**Status: waiting for the owner's approval.** Nothing is drawn and nothing paid is ordered until you say yes.
+**Status: approved by the owner (2026-10-08)** — pictures in progress (Canva). Nothing paid is ordered.
 
 | | |
 |---|---|
@@ -64,4 +64,4 @@ description), story order (put the 5 story moments in order), tick-or-cross ("Th
 Real motion (Higgsfield) can be added later, one clip per shot, only in strict mode with your OK per row.
 
 ## Owner approval
-Waiting. Reply "Approved" (or tell me what to change) and I start the pictures.
+Approved: owner, 2026-10-08 — "Go" (reply to the scenario).
