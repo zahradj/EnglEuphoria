@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '7-5': { settings: ['barn at sunrise', 'farm gate'], look: "Grandpa's farm on a misty early morning: a big red barn with four white stall doors in a row at sunrise, Grandpa fox in a straw farmer hat and blue overalls with Pip; the doors open one by one (cow, pig, sheep, duck) and the animals gather in the golden yard" },
   '7-4': { settings: ['farm fair'], look: "the fair comes to the farm on a bright day: red-and-white striped tents, bunting flags, hay bales, prize rosettes on the fence and a big yellow-and-white striped hook-a-duck pool in the middle; Pip and the animals of the unit at the fair; a red-curtained show tent for the riddles" },
   '7-3': { settings: ['duck pond and bridge'], look: "the far side of the farm on a golden afternoon: a blue duck pond with lily pads and a little arched wooden bridge, a wooden stable and a red chicken coop, tall reeds and orange evening light; Pip with a brown horse, a white hen and a white farm duck" },
   '7-2': { settings: ['farmyard after rain'], look: "a sunny farmyard just after a little rain: a big red barn, a wooden fence, green hills and a rainbow, brown mud puddles and a blue water trough with a bucket and sponge; Pip with a black-and-white cow, a pink pig and a fluffy sheep" },
@@ -197,6 +198,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '7-5': {
+    sources: ['the traditional song "Old MacDonald Had a Farm" (public domain: an animal and its sound per verse)', 'Sesame Workshop / Blue\'s Clues (model, then a planned pause for the child to answer)', 'Super Simple / Lingokids song-choice play (the child picks the next verse)', 'Cambridge (Pre A1 Starters: look and answer yes / no; story order)'],
+    mechanics: [
+      'the song as a story → a stills film "Grandpa\'s Noisy Barn": a sound behind each barn door, "What animal is this?", a pause, then the door opens',
+      'song-choice → My Farm Song: the child is Old MacDonald, chooses an animal, it hops onto the farm and Pip sings its verse; the child sings it back',
+      'story order, "Who\'s behind the door?" (ask at each door), tick or cross, and feed the ducks with the story\'s pictures',
+    ],
+    betterThan: [
+      'the child hears the SOUND first and must produce the animal word ("It\'s a cow!") before the door opens, three times with a pause',
+      'in My Farm Song the child chooses and then sings the verse (animal word + sound) instead of only watching a song video; the farm they built stays on screen',
+      'the film, the games and the homework all use the same barn and doors, so the child retells one story many ways; no clock',
     ],
   },
   '7-4': {

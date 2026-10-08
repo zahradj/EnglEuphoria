@@ -637,6 +637,14 @@ export type Scene =
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
   | {
+      /** My Farm Song (U7L5 signature): the child is Old MacDonald, chooses each animal in any order; it hops
+       *  onto the picture at x/y (feet, % of the picture; size = % width) and Pip sings its verse
+       *  ("And on his farm he had a pig, E-I-E-I-O! With an oink, oink here…" from `label` + `sound`). */
+      id: string; kind: 'farm-verse'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      animals: { label: string; img: string; sound: string; x: number; y: number; size: number }[];
+      doneLine: string;
+    }
+  | {
       /** Animal Riddles (U7L4 signature): an animal hides behind the show-tent curtain; Pip gives `clues` one
        *  at a time and asks "What animal is this?"; the child taps one of `options` (indexes into `animals`);
        *  the right one is revealed and says its `say`. */
@@ -11946,4 +11954,220 @@ export const LESSON_U7L4_SCENES: Scene[] = [
     ],
   },
   { id: 'u7l4-finale', kind: 'finale', bg: bgU7L4Fair, who: 'pip', line: 'What animal is this? You know them all! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 7, Lesson 5 — "Old MacDonald Had a Farm" (story)
+ *
+ * The approved story film "Grandpa's Noisy Barn" (docs/scenarios/u7l5-old-macdonald.md):
+ * Grandpa is Old MacDonald; at sunrise Pip hears a sound behind each barn door,
+ * asks "What animal is this?", pauses for the child, and the door opens (cow,
+ * pig, sheep, duck). Then the new My Farm Song game (the child is Old MacDonald
+ * and sings a verse for each animal they choose), story order, "Who's behind
+ * the door?", tick or cross, and feed the ducks with the story's pictures.
+ * ========================================================================= */
+
+const bgU7L5Gate = `${A}/scenes/bg-u7l5-gate-a-wide.png`;
+const bgU7L5GateB = `${A}/scenes/bg-u7l5-gate-b-wide.png`;
+const bgU7L5Barn0 = `${A}/scenes/bg-u7l5-barn-0-wide.png`;
+const bgU7L5Barn1 = `${A}/scenes/bg-u7l5-barn-1-wide.png`;
+const bgU7L5Barn2 = `${A}/scenes/bg-u7l5-barn-2-wide.png`;
+const bgU7L5Barn3 = `${A}/scenes/bg-u7l5-barn-3-wide.png`;
+const bgU7L5Barn4 = `${A}/scenes/bg-u7l5-barn-4-wide.png`;
+const bgU7L5Yard = `${A}/scenes/bg-u7l5-yard-wide.png`;
+
+export const LESSON_U7L5_TITLE = 'Old MacDonald Had a Farm';
+export const LESSON_U7L5_OBJECTIVE = 'Follow a short story and answer "What animal is this?" from the sound ("Moo! Moo!" — "It\'s a cow!"), retell the story in order, sing "Old MacDonald had a farm, E-I-E-I-O!" with a verse for each animal, by watching, listening, answering and singing, no reading.';
+
+export const LESSON_U7L5_SCENES: Scene[] = [
+  { id: 'u7l5-title', kind: 'title-card', bg: bgU7L5Yard, level: 'Pre-A1', unit: 'Unit 7', lessonLabel: 'Lesson 5', title: 'Old MacDonald Had a Farm', subtitle: 'A story' },
+
+  /* 1-4 Hook + the film */
+  {
+    id: 'u7l5-song', kind: 'song', bg: bgU7L5Yard, title: '\u{1F3B5} Old MacDonald \u{1F3B5}', teacher: 'Sing and act: horns for the cow, hands up for E-I-E-I-O!',
+    durationSeconds: 20, bigWord: 'Farm', songUrl: `${A}/audio/old-macdonald-song-u7l5.mp3?v=1`,
+    lineDurationsMs: [3960, 4340, 4260, 7502],
+    songPrompt: 'Classic happy kids farm sing-along',
+    lyrics: [
+      { who: 'pip', text: 'Old MacDonald had a farm, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'And on his farm he had a cow, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'With a moo, moo here and a moo, moo there!', emotion: 'happy' },
+      { who: 'pip', text: 'Old MacDonald had a farm, E-I-E-I-O!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 4 · What Animal is This?
+    id: 'u7l5-recall-warmup', kind: 'recall-warmup', bg: bgU7L5Gate, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 4 · What Animal is This?',
+    teacher: 'Warm-up from last lesson: Pip says an animal, the child finds it. Make the sound together!',
+    items: [
+      { word: 'dog', say: 'Find the dog! Woof!', img: itemDog },
+      { word: 'horse', say: 'Where is the horse? Neigh!', img: itemHorse },
+      { word: 'bird', say: 'Find the bird! Tweet!', img: itemBird },
+    ],
+  },
+  {
+    id: 'u7l5-intro', kind: 'cinematic', bg: bgU7L5GateB, hidePipOverlay: true, title: 'Old MacDonald Had a Farm', subtitle: 'A story', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Good morning! This is my Grandpa.' },
+      { who: 'pip', line: "Today he is a farmer! Let's watch!" },
+    ],
+    cta: "Let's watch!",
+  },
+  {
+    // The approved stills film (docs/scenarios/u7l5-old-macdonald.md): a sound behind each barn door, "What animal is
+    // this?", a pause for the child, then the door opens.
+    id: 'u7l5-story', kind: 'story-video', bg: bgU7L5Barn0, videoUrl: `${A}/video/old-macdonald-u7l5.mp4?v=1`, title: "Grandpa's Noisy Barn",
+    teacher: 'Press play and watch. When Pip asks "What animal is this?", the child answers before the door opens: "It\'s a pig!"',
+    pages: [
+      { img: bgU7L5GateB, who: 'pip', line: "This is Grandpa's farm! Grandpa is Old MacDonald!", atSec: 0 },
+      { img: bgU7L5Barn0, who: 'pip', line: 'The animals are in the barn. Listen!', atSec: 5 },
+      { img: bgU7L5Barn0, who: 'pip', line: 'Moo! Moo! What animal is this?', atSec: 10 },
+      { img: bgU7L5Barn1, who: 'pip', line: "It's a cow!", atSec: 14 },
+      { img: bgU7L5Barn1, who: 'pip', line: 'Oink! Oink! What animal is this?', atSec: 19 },
+      { img: bgU7L5Barn2, who: 'pip', line: "It's a pig!", atSec: 23 },
+      { img: bgU7L5Barn2, who: 'pip', line: 'Baa! Baa! What animal is this?', atSec: 28 },
+      { img: bgU7L5Barn3, who: 'pip', line: "It's a sheep!", atSec: 32 },
+      { img: bgU7L5Barn3, who: 'pip', line: 'Quack! Quack! What animal is this?', atSec: 37 },
+      { img: bgU7L5Barn4, who: 'pip', line: "It's a duck!", atSec: 41 },
+      { img: bgU7L5Yard, who: 'pip', line: 'Old MacDonald had a farm, E-I-E-I-O!', atSec: 46 },
+    ],
+    checkpoints: [],
+  },
+
+  /* 5-7 The words, move, signature game */
+  {
+    id: 'u7l5-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU7L5Barn4, teacher: 'Listen, then say it: the sound, then the animal!',
+    cards: [
+      { who: 'pip', sentence: "Moo! Moo! It's a cow!", img: itemCow, imgLabel: 'cow' },
+      { who: 'pip', sentence: "Oink! Oink! It's a pig!", img: itemPig, imgLabel: 'pig' },
+      { who: 'pip', sentence: "Baa! Baa! It's a sheep!", img: itemSheep, imgLabel: 'sheep' },
+      { who: 'pip', sentence: "Quack! Quack! It's a duck!", img: itemFarmDuck, imgLabel: 'duck' },
+    ],
+  },
+  {
+    id: 'u7l5-move', kind: 'tpr-actions', bg: bgU7L5Yard, who: 'pip',
+    teacher: 'Stand up! Act the story with Pip.',
+    rounds: [
+      { line: 'Open the barn door!', emoji: '\u{1F6AA}' },
+      { line: 'Listen! Hand to your ear!', emoji: '\u{1F442}' },
+      { line: 'Moo like a cow!', emoji: '\u{1F404}', img: itemCow },
+      { line: 'Sing E-I-E-I-O!', emoji: '\u{1F3B6}' },
+    ],
+  },
+  {
+    // Signature game (new): the child is Old MacDonald and sings a verse per animal.
+    id: 'u7l5-farm-song', kind: 'farm-verse', bg: bgU7L5Barn0, who: 'pip',
+    teacher: 'My Farm Song! The child is Old MacDonald: choose an animal, Pip sings its verse, the child sings it too and taps "I sang it!".',
+    animals: [
+      { label: 'cow', img: itemCow, sound: 'moo', x: 40, y: 92, size: 13 },
+      { label: 'pig', img: itemPig, sound: 'oink', x: 56, y: 93, size: 11 },
+      { label: 'sheep', img: itemSheep, sound: 'baa', x: 71, y: 92, size: 12 },
+      { label: 'duck', img: itemFarmDuck, sound: 'quack', x: 85, y: 93, size: 9 },
+    ],
+    doneLine: 'Old MacDonald had a farm, E-I-E-I-O!',
+  },
+
+  /* 8-11 Retell and check */
+  {
+    id: 'u7l5-story-order', kind: 'story-order', bg: bgU7L5Yard, who: 'pip', teacher: 'Put the story in order, then tell it: "Moo! It\'s a cow! … Quack! It\'s a duck!"',
+    frames: [
+      { img: bgU7L5Barn1, caption: "Moo! It's a cow!", who: 'pip' },
+      { img: bgU7L5Barn2, caption: "Oink! It's a pig!", who: 'pip' },
+      { img: bgU7L5Barn3, caption: "Baa! It's a sheep!", who: 'pip' },
+      { img: bgU7L5Barn4, caption: "Quack! It's a duck!", who: 'pip' },
+    ],
+  },
+  {
+    id: 'u7l5-behind-door', kind: 'lift-flap', bg: bgU7L5Barn0, who: 'pip',
+    teacher: "Who's behind the door? The child asks at each door (\"Is it behind this door?\") and taps to open it.",
+    question: 'Where is the duck?',
+    notYet: 'Not yet! Look behind the other doors first!',
+    spots: [
+      { x: 35.5, y: 56, size: 11, ask: 'Is it behind the first door?', reveal: "No! It's a cow! Moo!", under: { img: itemCow, label: 'cow' } },
+      { x: 49.5, y: 56, size: 11, ask: 'Is it behind the second door?', reveal: "No! It's a pig! Oink!", under: { img: itemPig, label: 'pig' } },
+      { x: 63.5, y: 56, size: 11, ask: 'Is it behind the third door?', reveal: "No! It's a sheep! Baa!", under: { img: itemSheep, label: 'sheep' } },
+      { x: 77.5, y: 56, size: 11, ask: 'Is it behind the last door?', reveal: "Yes! It's the duck! Quack!", target: true, under: { img: itemFarmDuck, label: 'duck' } },
+    ],
+  },
+  {
+    id: 'u7l5-true-or-not', kind: 'tick-cross', bg: bgU7L5Barn0, who: 'pip',
+    teacher: 'Look and listen. Is it right? Tap ✓ or ✗.',
+    rounds: [
+      { img: bgU7L5Barn1, sentence: "It's a cow.", isTrue: true },
+      { img: bgU7L5Barn2, sentence: 'The pig says moo.', isTrue: false },
+      { img: bgU7L5Barn3, sentence: "It's a sheep.", isTrue: true },
+      { img: bgU7L5GateB, sentence: 'Grandpa is a farmer.', isTrue: true },
+    ],
+  },
+  {
+    id: 'u7l5-duck-feed', kind: 'duck-feed', bg: bgU7L3PondEmpty, who: 'pip', duckImg: itemDuck,
+    teacher: 'Feed the Ducks! Pip says a moment from the story. The student taps the duck with that picture — the bread flies to it. Say it together.',
+    ducks: [
+      { label: 'cow', name: 'the cow', img: bgU7L5Barn1, at: [35.5, 55], w: 16, x: 18, y: 72 },
+      { label: 'pig', name: 'the pig', img: bgU7L5Barn2, at: [49.5, 55], w: 16, x: 40, y: 76 },
+      { label: 'sheep', name: 'the sheep', img: bgU7L5Barn3, at: [63.5, 55], w: 16, x: 61, y: 74 },
+      { label: 'duck', name: 'the duck', img: bgU7L5Barn4, at: [77.5, 55], w: 16, x: 82, y: 71 },
+    ],
+    rounds: [
+      { duck: 1, line: 'Oink! Oink! Which duck has it?', reply: "Yes! It's the pig!" },
+      { duck: 3, line: 'Quack! Quack! Which duck has it?', reply: "Yes! It's the duck!" },
+      { duck: 0, line: 'Moo! Moo! Which duck has it?', reply: "Yes! It's the cow!" },
+      { duck: 2, line: 'Baa! Baa! Which duck has it?', reply: "Yes! It's the sheep!" },
+    ],
+    doneLine: 'All the ducks are happy! Quack, quack!',
+  },
+  {
+    id: 'u7l5-your-turn', kind: 'join-stage', bg: bgU7L5Yard, teacher: 'The student makes an animal sound; Pip asks "What animal is this?" and guesses. Then swap!', cast: ['pip'],
+    turns: [
+      { who: 'student', line: 'Make a sound for Pip: Oink! Oink!', bubble: 'right' },
+      { who: 'pip', line: "What animal is this? It's a pig!", bubble: 'right' },
+      { who: 'pip', line: 'Now you! Moo! Moo! What animal is this?', bubble: 'right' },
+      { who: 'student', line: "It's a cow!", bubble: 'right' },
+    ],
+  },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u7l5-sticker', kind: 'sticker-reward', bg: bgU7L5Yard, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You sang Old MacDonald! Here is a cow sticker for you!', sticker: { img: itemCow, label: 'Farm singer' },
+  },
+  {
+    id: 'u7l5-home-mission', kind: 'home-mission', bg: bgU7L5Yard, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: sing Old MacDonald at home! Your family says an animal, you sing the sound!',
+    parentNote: 'Sing "Old MacDonald had a farm, E-I-E-I-O" together. Take turns choosing the animal; your child sings the sound ("With a moo, moo here…"). Ask "What animal is this?" after making a sound.',
+    steps: [
+      { emoji: '\u{1F3B6}', say: 'Old MacDonald had a farm!' },
+      { emoji: '\u{1F404}', img: itemCow, say: 'Moo, moo!' },
+      { emoji: '\u{1F914}', say: 'What animal is this?' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u7l5-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU7L5Yard, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Wake up, animals! Stretch!', emoji: '\u{1F305}' },
+      { line: 'Moo, oink, baa, quack!', emoji: '\u{1F3B5}' },
+      { line: 'March around the farm!', emoji: '\u{1F468}\u{200D}\u{1F33E}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u7l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u7l5-finale', kind: 'finale', bg: bgU7L5Yard, who: 'pip', line: 'Old MacDonald had a farm, E-I-E-I-O! Goodbye, friend!' },
 ];

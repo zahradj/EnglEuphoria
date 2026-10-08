@@ -198,5 +198,10 @@
     "path": "public/lep1/audio/what-animal-song-u7l4.mp3",
     "bytes": 321037,
     "sha256": "5a1085ca5a80b365d3c140cdce511cdf4d8b4bcfb3c7db4c21e08aeeaeee0c3c"
+  },
+  "u7l5-old-macdonald": {
+    "path": "public/lep1/audio/old-macdonald-song-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "337679b42bfcbb0a0d97cc9a7c3f0a15248965e8fbab38ab370d8e777275b451"
   }
 }
