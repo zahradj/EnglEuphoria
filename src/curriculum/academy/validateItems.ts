@@ -2,6 +2,7 @@
 // `oxford` is an optional private reference map (headword -> CEFR level) built locally from the public Oxford 3000/5000 lists.
 // It is NOT stored in the repo; when absent, only the structural checks run.
 import { EPISODES, allocateItems } from './lessonBlueprint';
+import { referenceForms } from './americanize';
 import { EPISODE_ORDER, type AcademyLevel, type SeasonOutline } from './types';
 import { INTRODUCING_EPISODE_KEYS, type IntroducingEpisodeKey, type ItemSeed, type SeasonItems } from './itemTypes';
 
@@ -71,7 +72,7 @@ export function validateItems(seasons: SeasonOutline[], bank: Record<string, Sea
         else seen.set(norm, `${s.id} ${key}`);
 
         if (oxford && kind === 'w') {
-          const ox = oxford[norm];
+          const ox = referenceForms(norm).map((f) => oxford[f]).find(Boolean);
           if (!ox) notInOxford += 1;
           else {
             if (RANK[ox] > RANK[s.level]) err('item_above_level_oxford', `${key}: "${text}" is ${ox} in the Oxford lists, above this ${s.level} Season.`, s.id);
