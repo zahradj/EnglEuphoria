@@ -201,10 +201,14 @@ Remember? retention score trend · Mistake Bank fixed-ratio · hints per session
 6. **Theme tokens** for Explorer/Studio; align `supabase/functions/_shared/prompts/academy.ts` (ages 10–17, 13-type whitelist, "no sticker/reward language") with the real kinds, ages 11–18, and the Season System.
 7. **Skills to update when approved:** `smart-lesson-architect`, `lesson-quality-gate`, `activity-pattern-library`, `generate-lesson` (Academy section), and the Remember rule in `CLAUDE.md` for Academy.
 
-## 11. Open decisions for the owner
+## 11. Owner decisions
 
-1. Approve the Season = 8 sessions shape and the 54-Season / 432-session sizing (or change the numbers).
-2. Approve "My World" skins (extra content cost per episode: 3–6 skins).
-3. How many sessions per week do families get? (Sets the honest timeline in §4.1.)
-4. Is the Daily 10 in scope for the first release?
-5. Order of work: roadmap data → live mode → A1 Season 1 pilot (recommended).
+**Decided (2026-10-08):**
+1. **Season = one unit = 8 sessions: approved.**
+2. **Sessions per week vary per student (1, 2 or 3).** Consequences built into the design: the roadmap is counted in *sessions*, never calendar weeks; the "Remember?" step and all spacing use **calendar days since last seen**, not "last session" (at 1 a week the last session is 7 days old, so Remember? gets longer and the Daily 10 matters more); the teacher sees an estimated finish date per student from their own pace.
+3. **Go signal:** the owner will tell me when to start. Order agreed: finish gathering information and create the **skills** first, then build (A1 roadmap data → live mode → A1 Season 1 pilot).
+
+**Still open:**
+- **Daily 10 in the first release?** (explained to the owner in chat: a short optional 10-minute practice between live sessions — due reviews, 2–3 mini-games, one voice note.) Recommendation: yes, a minimal version (due reviews + one voice note), because spacing cannot happen inside a single weekly hour.
+- Extra content cost of "My World" skins (3–6 per episode) — approve or reduce.
+- Extend to **C1** (owner request, 2026-10-08): sizing and Seasons are being added; see the next revision.
