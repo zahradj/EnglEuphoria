@@ -26,6 +26,11 @@ export function ColorSimonScene({ scene, onWin, onLose, onNext, sync }: { scene:
   const isRemoteMirror = !!sync?.isSynced && !sync.isAuthority;
   const gemDone = useRef(false);
   const playingRef = useRef(false);
+  // The sequence plays over several seconds; stop touching state once the page has left
+  // (otherwise a pending step fires after unmount — e.g. when the teacher skips ahead).
+  const aliveRef = useRef(true);
+  useEffect(() => { aliveRef.current = true; return () => { aliveRef.current = false; }; }, []);
+  const later = (fn: () => void, ms: number) => window.setTimeout(() => { if (aliveRef.current) fn(); }, ms);
 
   const playSequence = useCallback(async (seq: number[]) => {
     if (playingRef.current) return;
@@ -33,13 +38,16 @@ export function ColorSimonScene({ scene, onWin, onLose, onNext, sync }: { scene:
     setState((s) => ({ ...s, phase: 'showing', userIdx: 0 }));
     await new Promise((r) => window.setTimeout(r, 500));
     for (const idx of seq) {
+      if (!aliveRef.current) return;
       setState((s) => ({ ...s, litIdx: idx }));
       await safeSpeak(scene.colors[idx].colorWord, scene.colors[idx].who);
       await new Promise((r) => window.setTimeout(r, 250));
+      if (!aliveRef.current) return;
       setState((s) => ({ ...s, litIdx: null }));
       await new Promise((r) => window.setTimeout(r, 200));
     }
     playingRef.current = false;
+    if (!aliveRef.current) return;
     setState((s) => ({ ...s, phase: 'waiting' }));
   }, [scene.colors]);
 
@@ -56,7 +64,7 @@ export function ColorSimonScene({ scene, onWin, onLose, onNext, sync }: { scene:
     if (idx === sequence[userIdx]) {
       sfx.pop();
       setState((s) => ({ ...s, litIdx: idx }));
-      window.setTimeout(() => setState((s) => ({ ...s, litIdx: null })), 200);
+      later(() => setState((s) => ({ ...s, litIdx: null })), 200);
       const next = userIdx + 1;
       if (next >= sequence.length) {
         if (round >= scene.maxRounds) {
@@ -66,7 +74,7 @@ export function ColorSimonScene({ scene, onWin, onLose, onNext, sync }: { scene:
         } else {
           sfx.match();
           setState((s) => ({ ...s, phase: 'idle' }));
-          window.setTimeout(() => { setState((s) => ({ ...s, round: s.round + 1 })); startRound(round + 1); }, 700);
+          later(() => { setState((s) => ({ ...s, round: s.round + 1 })); startRound(round + 1); }, 700);
         }
       } else {
         setState((s) => ({ ...s, userIdx: next }));
@@ -75,8 +83,8 @@ export function ColorSimonScene({ scene, onWin, onLose, onNext, sync }: { scene:
       sfx.wrong();
       onLose();
       setState((s) => ({ ...s, flashBad: idx }));
-      window.setTimeout(() => setState((s) => ({ ...s, flashBad: null })), 400);
-      window.setTimeout(() => void playSequence(sequence), 700);
+      later(() => setState((s) => ({ ...s, flashBad: null })), 400);
+      later(() => void playSequence(sequence), 700);
     }
   };
 
