@@ -633,6 +633,17 @@ export type Scene =
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
   | {
+      /** Is This My House? (U6L5 signature): the street picture `bg` with `houses` (x/y/w/h = % box of each
+       *  DOOR, `color` = its colour word). Friend `owner` says `line` ("My house has a red door!"); an arrow visits
+       *  the doors in `tries` order (ending with `house`) asking "Is this my house?"; the child answers
+       *  "No, it isn't!" / "Yes, it is!". The right door opens, the owner waves, `reply` is said, then the child
+       *  says `say`. `aspect` = bg width / height (default 1376 / 768). */
+      id: string; kind: 'door-knock'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      houses: { color: string; x: number; y: number; w: number; h: number }[];
+      rounds: { owner: CharKey; house: number; tries: number[]; line: string; reply: string; say: string }[];
+      doneLine: string;
+    }
+  | {
       /** Whose Room? (U6L4 signature): every friend's bedroom is the same empty `room` picture with the same
        *  `things` (x/y = centre %, w = % of the picture's width), each room in its own colours (`rooms[i].things[k]`
        *  = colour word + coloured sticker of thing k). The room's `owner` says `line` ("My bed is red and my chair
