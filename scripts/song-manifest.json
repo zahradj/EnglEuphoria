@@ -183,5 +183,10 @@
     "path": "public/lep1/audio/dog-cat-bird-song-u7l1.mp3",
     "bytes": 321037,
     "sha256": "30b46877ab835cc88d082ee26e3fe6f50119a4597eb77108fdb0ac5abc6c79de"
+  },
+  "u7l2-cow-pig-sheep": {
+    "path": "public/lep1/audio/cow-pig-sheep-song-u7l2.mp3",
+    "bytes": 321037,
+    "sha256": "3674435b5a4d813bbb8aa94b86a794a725e7b46717c34a63166480a9899ec5f0"
   }
 }
