@@ -12,7 +12,7 @@ Encodes the SLA (Second Language Acquisition) and CEFR principles from a user-pr
 | Hub | Ages | CEFR | Real content system |
 |---|---|---|---|
 | Playground | 4-9 | Pre-A1 → A2 | `Scene[]` in `src/content/playground-library/unit1/scenes.ts` + `SceneRenderer.tsx`, ~50 richly-interactive `kind`s (not a generic 8-type `ActivityNode` schema) |
-| Academy | 10-17 | A1 → B2 | `generate-ppp-slides` edge function → `GeneratedSlide[]` deck, persisted to `curriculum_lessons` |
+| Academy | 11-18 | A1 → C1 | **Superseded 2026-10-08 by the Season System** (one-on-one 60-min Live Sessions, 8-session Seasons): follow `academy-season-system` and its skills (`academy-roadmap-architect`, `academy-session-builder`, ...). The older `generate-ppp-slides` deck below is the legacy solo path. |
 | Success | 18+ | B1 → C1 | Not yet built in this repo as of 2026-08-12 — no lesson has ever been authored here. Apply the principles below as design guidance when it is, but there is no existing pipeline to point at. |
 
 Before writing a single scene, confirm which system you're actually generating into. Playground's `Scene[]` is what every "next lesson" request in this session has meant — assume Playground unless the user names Academy or Success.

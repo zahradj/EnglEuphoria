@@ -94,7 +94,7 @@ Fixed order so the student always knows where they are; the *mechanics* inside c
 | B1 | 350–400 [V] | ~2,700 | 16 | 128 | ~75 |
 | B2 | 500–600 [V] | ~4,000 | 16 | 128 | ~80 |
 | C1 | 700–800 [V] | ~5,500 (Oxford 5000 adds ~2,000 B2/C1 words to the 3000 [V]; C1 ≈ 5–6k word families, provisional [V]) | 16 | 128 | ~90 items (words + collocations) |
-| **Total** | | | **64** | **560** | |
+| **Total** | | | **70** | **560** | |
 
 - **Reconciling with the hours data.** Cambridge's cumulative guided hours imply roughly 95 / 95 / 180 / 175 new 60-min lessons per level (≈ 545 to B2) [V for the hours]. This plan schedules **432 live sessions** and relies on ~120 h of *Daily 10* self-practice to close the gap. That trade is an **assumption**: one-to-one gives far more speaking per hour, but there is no hard data on how many fewer hours it needs, so do not cut the budget silently. **Alternative if the owner prefers to follow the hours strictly** (C1 adds ~200 hours, 700–800 cumulative [V]): A1 12, A2 12, B1 22, B2 22, C1 25 Seasons (≈ 744 sessions); the Season shape does not change.
 - Guided hours are class hours, not guarantees, and depend on age, intensity, background and out-of-class study (Cambridge).
