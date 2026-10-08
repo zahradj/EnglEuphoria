@@ -33,7 +33,7 @@ If a doc and this skill disagree, the **owner's latest message wins**, then the 
 |---|---|---|
 | Level | A1..C1 | each ends with a level check (separate from XP) |
 | **Season** (= unit) | **8 sessions**, one theme, one story arc, one Release | 1-2 structures, 60-90 new items, 3-6 skins |
-| Episode | E1 Cold Open · E2 Word Lab · E3 Pattern Lab · E4 On Air · E5 Deep Dive · E6 Side Quest · E7 Remix · E8 Finale | new words only in E2/E6, new structure only in E3/E6, **zero new language in E7/E8** |
+| Episode | E1 Cold Open · E2 Word Lab · E3 Pattern Lab · E4 On Air · E5 Deep Dive · E6 Side Quest · E7 Remix · E8 Finale | core productive words only in E2/E6 (receptive items/functional chunks may enter E1/E4/E5), new structure only in E3/E6, **zero new language in E7/E8**; <= 14 new items per session (<= 84 per Season) |
 | Live Session | 60 min | Check-in 5 · Remember? 7 · The Drop 10 · Notice & Build 10 · Energiser 4 · Mission 12 · Release 7 · Wrap 5 |
 
 Core (never skipped, 45 min): Remember?, Drop, Notice & Build, Mission, Release, Wrap. Flex (15): Check-in, Energiser, Take 2, extra practice.

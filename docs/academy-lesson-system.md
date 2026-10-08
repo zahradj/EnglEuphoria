@@ -93,7 +93,7 @@ Fixed order so the student always knows where they are; the *mechanics* inside c
 | A2 | 180–200 [V] | ~1,500 | 12 | 96 | ~67 |
 | B1 | 350–400 [V] | ~2,700 | 16 | 128 | ~75 |
 | B2 | 500–600 [V] | ~4,000 | 16 | 128 | ~80 |
-| C1 | 700–800 [V] | ~5,500 (Oxford 5000 adds ~2,000 B2/C1 words to the 3000 [V]; C1 ≈ 5–6k word families, provisional [V]) | 16 | 128 | ~90 items (words + collocations) |
+| C1 | 700–800 [V] | ~5,300 (Oxford 5000 adds ~2,000 B2/C1 words to the 3000 [V]; C1 ≈ 5–6k word families, provisional [V]) | 16 | 128 | ~84 items (words + collocations; the per-session cap of 14 allows at most 84) |
 | **Total** | | | **70** | **560** | |
 
 - **Reconciling with the hours data.** Cambridge's cumulative guided hours imply roughly 95 / 95 / 180 / 175 new 60-min lessons per level (≈ 545 to B2) [V for the hours]. This plan schedules **432 live sessions** and relies on ~120 h of *Daily 10* self-practice to close the gap. That trade is an **assumption**: one-to-one gives far more speaking per hour, but there is no hard data on how many fewer hours it needs, so do not cut the budget silently. **Alternative if the owner prefers to follow the hours strictly** (C1 adds ~200 hours, 700–800 cumulative [V]): A1 12, A2 12, B1 22, B2 22, C1 25 Seasons (≈ 744 sessions); the Season shape does not change.
@@ -112,29 +112,15 @@ Fixed order so the student always knows where they are; the *mechanics* inside c
 
 Sequencing follows learnability, not just frequency (order-of-acquisition and Processability Theory research) [K]: teach what the learner can process, re-visit forms (e.g. 3rd-person -s) in spiral recycling because they stay error-prone.
 
-### 4.3 Themed Seasons
+### 4.3 Themed Seasons — now a real roadmap
 
-Each Season = theme + story hook + Finale Release. **A1 (10)** — cast-driven mysteries/projects; reuses the existing "A1 Academy" unit titles:
+The 70 Seasons (themes, story hooks, CEFR-referenced can-dos, functions, grammar, lexical fields, pronunciation, mediation, Releases, skins) live in code and are the **single source of truth**:
 
-| # | Season (theme) | Story hook | Language spine | Finale Release |
-|---|---|---|---|---|
-| 1 | **Who Are You?** (online profiles) | A fake profile appeared in the group chat — who made it? | be, personal info, numbers, countries | Real profile card + 30-s voice intro |
-| 2 | **My Room & Gadgets** | Theo's charger keeps vanishing | there is/are, have got, prepositions | Room tour voice note |
-| 3 | **Free Time & Hobbies** | Club Fair: Ava needs 3 members | present simple, like + -ing, frequency | Pitch for a club |
-| 4 | **Café Night** | Pop-up café on a budget | countable/uncountable, would like, prices | Order role-play + menu |
-| 5 | **Clothes & Market** | Vintage market stall | this/that, how much, colours | Haggle role-play |
-| 6 | **A Day in My Life** | Mia's vlog challenge | present simple (time, routine) | Day-in-the-life script + recording |
-| 7 | **Family & Friends** | Who's who in a family photo | possessives, describing people | Family/friends tree + descriptions |
-| 8 | **My Town** | Scavenger hunt by map | there is/are, directions, imperatives | Give directions to a hidden place |
-| 9 | **Can Do!** | Talent show | can/can't, adverbs | Talent introduction |
-| 10 | **Right Now** | Live-stream: what's happening | present continuous | Live commentary clip |
+- Data: `src/curriculum/academy/` (`levels/a1.ts` … `c1.ts`, `structureLevels.ts`, `validateRoadmap.ts`).
+- Readable version (generated): `docs/academy-roadmap-v2.md`; regenerate with `scripts/academy-roadmap-report.ts`.
+- Gate: `src/curriculum/academy/__tests__/roadmap.test.ts` (sizing, ordering rules, budgets, recycling).
 
-**A2 (12):** Last Weekend · Travel Trouble · Gadget Wars (comparatives) · Plans & Predictions (going to/will) · Body & Health (should/must) · Have You Ever…? (present perfect) · Food Cultures (quantifiers) · City & Transport · Weather & Adventures · Online Life & Safety · Jobs & Dreams · Festival Planners.
-**B1 (16, includes the existing *Jungle Survival: Teen Expedition* arc):** Jungle Survival (storms, rescue, emergencies) · Memories & Changes (used to) · Tech & Society · Crime Scene Chat (past perfect) · Sports & Fair Play · Money Matters · Rules & Dilemmas (conditionals) · News & Fake News (passive, reporting) · Environment Heroes · Music & Identity · Travel Stories · Friendship Drama (reported speech) · School Life Abroad · Mystery Museum · Future Me · Review Season.
-**B2 (16):** Opinions that Matter · Social Media Pressure · Science & Ethics · Cultures Meet · Street Art & Creativity · Sleep, Stress & Health · Games Industry (the Minecraft-style world) · Careers & Interviews · Law & Justice · Space & Exploration · Humour & Irony · Media Literacy · Mediation Season (summarising/relaying) · Debate League · Capstone Project · Exam-style Season.
-**C1 (16):** Persuasion & Rhetoric · Identity & Belonging · AI & Tech Ethics · The Global Economy · Art & Criticism · Language & Power · Psychology of Decisions · Journalism Lab · Sustainability Debate · Science Communication · Creative Writing Workshop · Seminar Skills (academic) · Interviews & Internships (professional) · Humour & Satire · Mediation Season · Capstone Portfolio. School-safe: avoid graphic violence, partisan politics and explicit content.
-
-Themes are drafts: before writing any Season, query the full `curriculum_lessons` blueprint (no unit filter) to avoid duplicating existing topics.
+It is brand new and Academy-only. The old Academy rows in the database and the Playground files are not used or changed. The theme lists that used to be here were drafts and are superseded.
 
 ---
 
