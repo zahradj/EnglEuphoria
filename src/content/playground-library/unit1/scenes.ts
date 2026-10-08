@@ -631,12 +631,12 @@ export type Scene =
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
   | {
-      /** Family Buzzer Show (U5L6 signature): a game-show stage with podiums (x/y = centre % of the photo +
-       *  buzzer column). Each round puts three `faces` on the podiums (`faces` index per podium), Pip asks a
+      /** Family Buzzer Show (U5L6 signature): a game-show stage with podiums painted in bg (x/y = centre % of
+       *  the podium's photo frame, by = y % of its painted red buzzer). Each round puts three `faces` on the podiums (`faces` index per podium), Pip asks a
        *  unit question, the child buzzes podium `answer`, then says `say`. `name` = how a sentence says the
        *  person ("Grandpa", "the baby"). */
       id: string; kind: 'buzzer-show'; bg: string; teacher: string; who: CharKey; intro: string;
-      podiums: { x: number; y: number }[];
+      podiums: { x: number; y: number; by: number }[];
       faces: { label: string; name: string; img: string }[];
       rounds: { faces: number[]; answer: number; line: string; reply: string; say: string }[];
       doneLine: string;
@@ -9224,7 +9224,7 @@ export const LESSON_U5L6_SCENES: Scene[] = [
   {
     id: 'u5l6-song', kind: 'song', bg: bgU5L6Host, title: '\u{1F3B5} Who Is This? \u{1F3B5}', teacher: 'Sing and point! Point to a photo or a family member for each word.',
     durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-show-song-u5l6.mp3?v=1`,
-    lineDurationsMs: [4000, 4000, 4000, 8000],
+    lineDurationsMs: [3850, 4150, 3960, 8102],
     songPrompt: 'Upbeat kids pop song',
     lyrics: [
       { who: 'pip', text: 'Who is this? This is my mom!', emotion: 'happy' },
@@ -9279,7 +9279,7 @@ export const LESSON_U5L6_SCENES: Scene[] = [
     id: 'u5l6-buzzer', kind: 'buzzer-show', bg: bgU5L6Stage, who: 'pip',
     teacher: 'Family Buzzer Show! Pip asks a question. The student presses the buzzer under the right family member, then says the sentence and taps the microphone.',
     intro: 'Listen to my question. Then press the right buzzer!',
-    podiums: [{ x: 26, y: 50 }, { x: 50, y: 50 }, { x: 74, y: 50 }],
+    podiums: [{ x: 22.8, y: 72.5, by: 55.5 }, { x: 49.5, y: 72.5, by: 55.5 }, { x: 76.3, y: 72.5, by: 55.5 }],
     faces: U5L6_FACES,
     rounds: [
       { faces: [1, 0, 5], answer: 1, line: 'Who bakes cookies with Pip?', reply: 'Grandma bakes cookies with Pip!', say: 'This is my grandma!' },

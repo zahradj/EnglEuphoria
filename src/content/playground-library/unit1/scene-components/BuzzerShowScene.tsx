@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { type RefObject, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import type { Scene } from '../scenes';
 import { cueSpeak } from '../audio';
@@ -22,6 +22,28 @@ import { Bursts, useBursts, useShake } from './gameFx';
  * after two tries. */
 
 type Show = Extract<Scene, { kind: 'buzzer-show' }>;
+const STAGE_AR = 1376 / 768;
+
+/** Where the stage picture goes: covering the screen when it is landscape, whole (full width) when it is
+ *  portrait, so all three podiums always show. Positions inside are % of the picture itself. */
+function useArtBox(ref: RefObject<HTMLDivElement>) {
+  const [size, setSize] = useState({ w: 16, h: 9 });
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const read = () => setSize({ w: el.clientWidth || 16, h: el.clientHeight || 9 });
+    read();
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(read);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [ref]);
+  const { w, h } = size;
+  const cover = w / h >= 1;
+  const bw = cover ? Math.max(w, h * STAGE_AR) : w;
+  const bh = bw / STAGE_AR;
+  return { width: bw, height: bh, left: (w - bw) / 2, top: cover ? (h - bh) / 2 : Math.max(0, (h - bh) * 0.55) } as const;
+}
 export const buzzerWrongLine = (name: string) => `No, that's ${name}! Try again!`;
 export const BUZZER_CHEER = 'Yes! Right answer!';
 
@@ -32,6 +54,7 @@ export function BuzzerShowScene({ scene, onWin, onNext, sync }: { scene: Show; o
   const r = round < total ? scene.rounds[round] : undefined;
   const done = round >= total;
   const busy = useRef(false);
+  const rootRef = useRef<HTMLDivElement>(null);
   const [misses, setMisses] = useState(0);
   const [wrong, setWrong] = useState(-1);
   const [bursts, fire] = useBursts();
@@ -82,9 +105,10 @@ export function BuzzerShowScene({ scene, onWin, onNext, sync }: { scene: Show; o
   };
 
   const glow = r && !buzzed && misses >= 2 ? r.answer : -1;
+  const box = useArtBox(rootRef);
 
   return (
-    <motion.div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }} animate={shakeCtl}>
+    <motion.div ref={rootRef} className="absolute inset-0 select-none overflow-hidden bg-gradient-to-b from-[#3b0d5c] via-[#5b1a86] to-[#b4621f]" animate={shakeCtl}>
       {done && <Confetti count={80} />}
       <div className="pointer-events-none absolute inset-x-0 top-16 z-30 flex flex-col items-center gap-1 px-14">
         <span className="text-center font-black leading-tight text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.1rem, min(calc(3.4*var(--svw,1vw)), 5.6vh), 2.8rem)' }}>
@@ -96,29 +120,36 @@ export function BuzzerShowScene({ scene, onWin, onNext, sync }: { scene: Show; o
       </div>
       {r && <button onClick={() => cueSpeak(buzzed ? r.reply : r.line, scene.who)} aria-label="Hear it again" className="absolute right-3 top-16 z-30 rounded-full bg-white/90 px-4 py-2 text-lg font-black text-orange-700 shadow-lg active:scale-95">🔊</button>}
 
-      {/* The contestants: a photo on each podium's frame, and its buzzer. */}
-      {r && scene.podiums.map((p, i) => {
-        const face = scene.faces[r.faces[i]];
-        if (!face) return null;
-        const lit = buzzed && i === r.answer;
-        return (
-          <div key={`${round}-${i}`} className="absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: `${p.x}%`, top: `${p.y}%` }}>
-            <motion.div className="flex flex-col items-center gap-[1.2vh]"
-              initial={{ scale: 0.4, opacity: 0 }} animate={wrong === i ? { x: [0, -10, 10, -6, 6, 0], scale: 1, opacity: 1 } : { scale: lit ? 1.12 : 1, opacity: buzzed && !lit ? 0.45 : 1 }}
-              transition={wrong === i ? { duration: 0.4 } : { type: 'spring', stiffness: 170, damping: 14, delay: i * 0.08 }}>
-              <span className={`relative rounded-full border-[0.8vh] p-[0.4vh] shadow-[0_10px_24px_rgba(0,0,0,0.35)] ${lit ? 'border-yellow-300 bg-yellow-200' : 'border-white bg-white'}`}>
-                {lit && <span className="absolute -inset-4 animate-pulse rounded-full bg-yellow-300/60 blur-xl" />}
-                <img src={face.img} alt={face.label} draggable={false} className="relative h-[min(17vh,12vw)] w-[min(17vh,12vw)] rounded-full object-contain" />
-              </span>
-              <motion.button onClick={() => { void buzz(i); }} aria-label={`Buzz for ${face.label}`} disabled={buzzed}
-                className={`relative grid h-[min(10vh,7vw)] w-[min(18vh,13vw)] place-items-center rounded-[50%] border-b-[0.9vh] border-red-900 bg-gradient-to-b from-red-400 to-red-600 text-[min(3.4vh,2.4vw)] font-black text-white shadow-[0_8px_16px_rgba(0,0,0,0.35)] ${glow === i ? 'ring-4 ring-yellow-300 animate-pulse' : ''}`}
-                whileTap={{ y: 4, scale: 0.94 }}>
-                BUZZ!
-              </motion.button>
-            </motion.div>
-          </div>
-        );
-      })}
+      {/* The stage picture in its own box (cover on landscape screens, whole picture on portrait ones),
+          so each photo sits in its podium's painted frame and each button on its painted red buzzer. */}
+      <div className="absolute" style={box}>
+        <img src={scene.bg} alt="" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full" />
+        {r && scene.podiums.map((p, i) => {
+          const face = scene.faces[r.faces[i]];
+          if (!face) return null;
+          const lit = buzzed && i === r.answer;
+          return (
+            <div key={`${round}-${i}`}>
+              <div className="pointer-events-none absolute z-20 w-[10.5%] -translate-x-1/2 -translate-y-1/2" style={{ left: `${p.x}%`, top: `${p.y}%` }}>
+                <motion.div className="relative"
+                  initial={{ scale: 0.3, opacity: 0 }} animate={wrong === i ? { x: [0, -10, 10, -6, 6, 0], scale: 1, opacity: 1 } : { scale: lit ? 1.15 : 1, opacity: buzzed && !lit ? 0.45 : 1 }}
+                  transition={wrong === i ? { duration: 0.4 } : { type: 'spring', stiffness: 170, damping: 14, delay: i * 0.08 }}>
+                  {lit && <span className="absolute -inset-5 animate-pulse rounded-full bg-yellow-300/70 blur-xl" />}
+                  <img src={face.img} alt={face.label} draggable={false}
+                    className={`relative aspect-square w-full rounded-full border-[0.5vh] object-contain shadow-[0_6px_14px_rgba(0,0,0,0.3)] ${lit ? 'border-yellow-300 bg-yellow-100' : 'border-amber-400 bg-amber-50'}`} />
+                </motion.div>
+              </div>
+              <div className="absolute z-20 h-[13%] w-[15%] -translate-x-1/2 -translate-y-1/2" style={{ left: `${p.x}%`, top: `${p.by}%` }}>
+                <motion.button onClick={() => { void buzz(i); }} aria-label={`Buzz for ${face.label}`} disabled={buzzed}
+                  className={`block h-full w-full rounded-[50%] ${glow === i ? 'animate-pulse bg-yellow-300/50 ring-4 ring-yellow-300' : 'hover:bg-white/20'}`}
+                  whileTap={{ scale: 0.85 }}>
+                  <span className="sr-only">Buzz</span>
+                </motion.button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
 
       {r && buzzed && (
         <motion.div className="absolute inset-x-0 bottom-[8%] z-40 flex flex-col items-center gap-2" initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5, type: 'spring' }}>

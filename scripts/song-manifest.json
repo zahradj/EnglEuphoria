@@ -143,5 +143,10 @@
     "path": "public/lep1/audio/my-dad-song-u5l5.mp3",
     "bytes": 321037,
     "sha256": "befdf0ab3292b6ee64ddd190427b68283a60f3d600ca033779e2d0d56f9c32b8"
+  },
+  "u5l6-family-show": {
+    "path": "public/lep1/audio/family-show-song-u5l6.mp3",
+    "bytes": 321037,
+    "sha256": "d190ffef054080e97da34030114912e1fc6231b9e093e3a40223af7ca8d9dc54"
   }
 }
