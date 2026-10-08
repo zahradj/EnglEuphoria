@@ -1,7 +1,12 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0060-7189389263938055964.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261008%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261008T013035Z&X-Amz-Expires=61519&X-Amz-Signature=ddefcffa048360698f797a56130d7f8546cb86605bf6fa2980c67277eb75f31c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2018%3A35%3A54%20GMT",
-  "out": "public/lep1/scenes/bg-u6l6-gamenight-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0060-4580679181222961318.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261008%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261008T125859Z&X-Amz-Expires=26533&X-Amz-Signature=097074df4f70d315bac2ce1036882a554de74e593102d04ceaadf07be3110d68&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2020%3A21%3A12%20GMT",
+  "out": "public/lep1/scenes/bg-u7l1-petshop-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0060-6727770307146469838.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261008%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261008T005435Z&X-Amz-Expires=69141&X-Amz-Signature=638e7cffff50423f99a160065a59336fec252bac431bcfd3458f99e4cfa944ae&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2020%3A06%3A56%20GMT",
+  "out": "public/lep1/scenes/bg-u7l1-petshop-empty-wide.png",
   "sticker": false
  }
 ]

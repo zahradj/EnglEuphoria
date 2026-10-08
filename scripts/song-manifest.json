@@ -178,5 +178,10 @@
     "path": "public/lep1/audio/my-house-game-song-u6l6.mp3",
     "bytes": 321037,
     "sha256": "e2504b7747a128aaeebf1409dd3690f22e551b7cd931a43e2d2406545cf19280"
+  },
+  "u7l1-dog-cat-bird": {
+    "path": "public/lep1/audio/dog-cat-bird-song-u7l1.mp3",
+    "bytes": 321037,
+    "sha256": "30b46877ab835cc88d082ee26e3fe6f50119a4597eb77108fdb0ac5abc6c79de"
   }
 }
