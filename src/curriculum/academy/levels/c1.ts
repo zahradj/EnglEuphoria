@@ -27,7 +27,7 @@ export const C1_SEASONS: RawSeason[] = [
   {
     title: 'Had I Known',
     theme: 'Hypothetical reasoning and regret in formal register',
-    hook: "A mock trial at school has a verdict that hinges on one 'if'. Argue what would have happened - in the formal register a court expects.",
+    hook: "Theo's mock trial at school has a verdict that hinges on one 'if'. Argue what would have happened - in the formal register a court expects.",
     release: 'A formal written statement and a spoken defence for a mock-trial case',
     canDo: [
       'I can speculate about past and present possibilities using inverted and mixed conditionals.',
@@ -44,7 +44,7 @@ export const C1_SEASONS: RawSeason[] = [
   {
     title: 'They Say...',
     theme: 'Reporting claims and evaluating sources',
-    hook: "It is said that a famous image was never real. Evaluate the claim, the sources and the way the story is told.",
+    hook: "Mia shows the group a famous image and says it was never real. Evaluate the claim, the sources and the way the story is told.",
     release: 'A media-literacy analysis: how a claim is reported, and what I would check',
     canDo: [
       'I can report claims impersonally and evaluate how reliable a source is.',
@@ -61,7 +61,7 @@ export const C1_SEASONS: RawSeason[] = [
   {
     title: 'I Suggest That...',
     theme: 'Formal proposals and recommendations',
-    hook: "The student council needs a formal proposal to change one school rule. Draft it so well that nobody can say no.",
+    hook: "Vee asks the student council, led by Ava, for a formal proposal to change one school rule. Draft it so well that nobody can say no.",
     release: 'A formal proposal letter or report with recommendations',
     canDo: [
       'I can make formal recommendations and state preferences precisely.',
@@ -95,7 +95,7 @@ export const C1_SEASONS: RawSeason[] = [
   {
     title: 'What Matters Is...',
     theme: 'Focus, emphasis and storytelling',
-    hook: "Every great story hides one sentence that changes everything. Find it, and learn how the author makes you notice it.",
+    hook: "Ava says every great story hides one sentence that changes everything. Find it, and learn how the author makes you notice it.",
     release: 'A short narrative that uses fronting and emphasis to build to a key moment',
     canDo: [
       'I can use cleft and fronted structures to shape what the reader notices.',
@@ -129,7 +129,7 @@ export const C1_SEASONS: RawSeason[] = [
   {
     title: 'Reading Between the Lines',
     theme: 'Stance, nuance and implied meaning',
-    hook: "'Admittedly, it was not a disaster.' What is the writer really saying? Decode the stance behind eight short messages.",
+    hook: "Theo sends a message: 'Admittedly, it was not a disaster.' What is he really saying? Decode the stance behind eight short messages.",
     release: 'A commentary on how a writer or speaker shows attitude',
     canDo: [
       'I can understand implied attitude and express my own stance with precision.',
@@ -146,7 +146,7 @@ export const C1_SEASONS: RawSeason[] = [
   {
     title: 'Formal or Not?',
     theme: 'Register: choosing the right voice',
-    hook: "The same request goes to a friend, a teacher and a company. Rewrite it three times - and spot why one of the replies backfires.",
+    hook: "Mia sends the same request to a friend, a teacher and a company. Rewrite it three times - and spot why one of the replies backfires.",
     release: 'Three versions of one message in different registers, with notes on word choice',
     canDo: [
       'I can adjust register to audience and purpose in speech and writing.',
@@ -163,7 +163,7 @@ export const C1_SEASONS: RawSeason[] = [
   {
     title: 'Be That As It May',
     theme: 'Conceding and counter-arguing',
-    hook: "A friend's argument is nearly right. Learn how to say 'granted' without giving up your own point.",
+    hook: "Ava's argument is nearly right. Learn how to say 'granted' without giving up your own point.",
     release: 'A two-sided argument with concessions, spoken and written',
     canDo: [
       'I can concede a point while keeping my position.',
@@ -197,7 +197,7 @@ export const C1_SEASONS: RawSeason[] = [
   {
     title: 'Words That Fit',
     theme: 'Collocation, idiom and precision',
-    hook: "'Heavy rain' but 'strong wind' - why? Hunt for the invisible rules behind natural English and break at least one on purpose.",
+    hook: "Vee asks: why 'heavy rain' but 'strong wind'? Hunt for the invisible rules behind natural English and break at least one on purpose.",
     release: 'A collocation and idiom map for a topic, with example sentences I wrote',
     canDo: [
       'I can use collocations and idioms precisely and avoid awkward word choices.',
@@ -214,7 +214,7 @@ export const C1_SEASONS: RawSeason[] = [
   {
     title: 'Mediating Worlds',
     theme: 'Mediation across cultures and viewpoints',
-    hook: "Two teams from different countries must agree a joint project. You are the only person who understands both - make it work.",
+    hook: "Two teams from different countries must agree a joint project, and Vee picks you as the only person who understands both. Make it work.",
     release: 'A live mediation of a short negotiation and a written summary',
     canDo: [
       'I can mediate between speakers with different viewpoints and summarise key decisions.',
@@ -231,7 +231,7 @@ export const C1_SEASONS: RawSeason[] = [
   {
     title: 'The Art of Persuasion',
     theme: 'Rhetoric, advertising and public speaking',
-    hook: "The best speeches use three tricks you already know. Spot them in ten clips and learn to use them ethically.",
+    hook: "Vee shows that the best speeches use three tricks you already know. Spot them in ten clips and learn to use them ethically.",
     release: 'A persuasive speech or pitch (three minutes) with an annotated script',
     canDo: [
       'I can use rhetorical devices to persuade and recognise when others use them.',
@@ -248,7 +248,7 @@ export const C1_SEASONS: RawSeason[] = [
   {
     title: 'Wit and Irony',
     theme: 'Humour, understatement and cultural nuance',
-    hook: "'Not bad at all' can mean two opposite things. Learn the signals of English humour and when not to take words literally.",
+    hook: "Theo says 'Not bad at all' - and Mia hears the opposite. Learn the signals of English humour and when not to take words literally.",
     release: 'A short comic or satirical piece (school-safe) with notes on how the humour works',
     canDo: [
       'I can recognise irony, understatement and humour, and use them tactfully.',

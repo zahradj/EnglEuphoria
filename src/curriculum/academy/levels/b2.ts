@@ -42,7 +42,7 @@ export const B2_SEASONS: RawSeason[] = [
   {
     title: 'Passive Power',
     theme: 'Systems, processes and who is responsible',
-    hook: "A school report says 'mistakes were made' - but nobody says by whom. Investigate how the passive hides and reveals people.",
+    hook: "A school report says 'mistakes were made' - but nobody says by whom. Ava is investigating for the school paper; help her see how the passive hides and reveals people.",
     release: 'A report on how a system works or who is responsible for a problem',
     canDo: [
       'I can describe processes and events when the agent is unknown or unimportant.',
@@ -59,7 +59,7 @@ export const B2_SEASONS: RawSeason[] = [
   {
     title: 'Reporting It',
     theme: 'Reporting conversations and interviews',
-    hook: "A journalist's notes are mixed up. Work out who asked what and who answered - and report it so the truth survives.",
+    hook: "Mia's interview notes are mixed up. Work out who asked what and who answered - and report it so the truth survives.",
     release: 'A written report of an interview I conducted',
     canDo: [
       'I can report questions, requests and commands accurately.',
@@ -110,7 +110,7 @@ export const B2_SEASONS: RawSeason[] = [
   {
     title: 'The Future Is...',
     theme: 'Predicting and planning the next decade',
-    hook: "A time-capsule letter from 2025 asks: what will you be doing in 2035? Answer it - and prove it is realistic.",
+    hook: "Vee's time-capsule letter from 2025 asks: what will you be doing in 2035? Answer it - and prove it is realistic.",
     release: 'A letter to my future self (written) and a short vision talk (spoken)',
     canDo: [
       'I can say what will be happening or will be completed at a future time.',
@@ -161,7 +161,7 @@ export const B2_SEASONS: RawSeason[] = [
   {
     title: 'Unless You Do',
     theme: 'Conditions, deals and negotiation',
-    hook: "Two students want the same band room. Negotiate a deal that works for both - with conditions neither can break.",
+    hook: "Ava and Theo want the same band room. Negotiate a deal that works for both - with conditions neither can break.",
     release: 'A negotiation role-play and the written agreement that follows',
     canDo: [
       'I can state conditions and negotiate an agreement.',
@@ -195,7 +195,7 @@ export const B2_SEASONS: RawSeason[] = [
   {
     title: 'The Big Picture',
     theme: 'Emphasis and focus in speaking and writing',
-    hook: "It was not the goal that won the match - it was the pass before it. Work out what really matters in the story.",
+    hook: "Theo says it was not the goal that won the match - it was the pass before it. Work out what really matters in the story.",
     release: 'A short speech or article using emphasis to make one clear point',
     canDo: [
       'I can give emphasis to the part of a sentence that matters most.',
@@ -229,7 +229,7 @@ export const B2_SEASONS: RawSeason[] = [
   {
     title: 'As Much As',
     theme: 'Comparing, measuring and describing change',
-    hook: "Two cities, two schools, two phones - but which is really better? Compare precisely, with numbers and evidence.",
+    hook: "Mia is choosing between two cities, two schools and two phones - but which is really better? Compare precisely, with numbers and evidence.",
     release: 'A comparison presentation with a chart and spoken commentary',
     canDo: [
       'I can compare things precisely and describe how they change together.',
@@ -246,7 +246,7 @@ export const B2_SEASONS: RawSeason[] = [
   {
     title: 'Say It Clearly',
     theme: 'Mediation: relaying, summarising and facilitating',
-    hook: "Two exchange students speak English but not each other's culture. You are the bridge: help them understand and decide together.",
+    hook: "Two exchange students speak English but not each other's culture. Vee asks you and Ava to be the bridge: help them understand and decide together.",
     release: 'A live mediation: summarising and relaying between two speakers, plus a written summary',
     canDo: [
       'I can summarise and relay information from one source or speaker to another.',
@@ -263,7 +263,7 @@ export const B2_SEASONS: RawSeason[] = [
   {
     title: 'Debate League',
     theme: 'Putting B2 together: argument, cohesion and delivery',
-    hook: "The semi-finals of the school debate league need a speaker who can argue either side. Show you can do both.",
+    hook: "The semi-finals of Vee's debate league need a speaker who can argue either side. Show you can do both.",
     release: 'A full debate speech (three minutes) and a written case summary',
     canDo: [
       'I can present a clear, well-structured argument and respond to questions.',

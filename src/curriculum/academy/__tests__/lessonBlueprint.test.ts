@@ -1,6 +1,6 @@
 // Deploy gate for the Academy LESSON blueprints (one per 60-minute Live Session). Fix the data, never the check.
 import { describe, expect, it } from 'vitest';
-import { ACADEMY_LESSON_BLUEPRINTS, ACADEMY_SEASONS, MAX_ITEMS_PER_SESSION, allocateItems, EPISODES, RUN_OF_SHOW } from '..';
+import { ACADEMY_CAST_NAMES, ACADEMY_LESSON_BLUEPRINTS, ACADEMY_SEASONS, MAX_ITEMS_PER_SESSION, allocateItems, EPISODES, RUN_OF_SHOW } from '..';
 
 describe('Academy lesson blueprints', () => {
   it('has one blueprint per session: 560, unique ids, correct order', () => {
@@ -122,5 +122,17 @@ describe('Academy lesson blueprints: progressive stack inside each unit', () => 
     expect(e1.buildsOn.stack).toBe('L1 = new');
     expect(e2.buildsOn.stack).toBe('L2 = L1 + new');
     expect(e3.buildsOn.stack).toBe('L3 = L1 + L2 + new');
+  });
+});
+
+describe('Academy cast (owner rule: lessons use only the Academy characters from the cast vault)', () => {
+  it('every Season hook features at least one cast member, and no lesson uses anyone else', () => {
+    for (const s of ACADEMY_SEASONS) expect(s.cast.length).toBeGreaterThan(0);
+    for (const b of ACADEMY_LESSON_BLUEPRINTS) {
+      expect(b.cast.appears.length).toBeGreaterThanOrEqual(2);
+      expect(new Set(b.cast.appears.map((a) => a.name)).size).toBe(b.cast.appears.length);
+      b.cast.appears.forEach((a) => expect(ACADEMY_CAST_NAMES).toContain(a.name));
+      expect(b.cast.appears.some((a) => a.name === 'Vee')).toBe(true);
+    }
   });
 });

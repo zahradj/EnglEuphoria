@@ -36,7 +36,7 @@ honest checkpoints. Not a topic list.
      list prerequisite forms and where each was taught.
    - **Pronunciation focus**: 1-2 intelligibility priorities (Lingua Franca Core [K]: sounds that cause misunderstanding, nuclear stress, rhythm), with minimal pairs for HVPT.
    - **Recycling**: E1 re-uses ~30 % of items from the previous two Seasons; list `recycle_from`.
-4. **Story arc** (cheap, strong): hook (a mystery/project with a cast member) -> **8 clues**, one per episode, each unlocked only by using
+4. **Story arc** (cheap, strong; characters ONLY from the Academy cast vault: Vee, Ava, Theo, Mia): hook (a mystery/project that features at least one of them) -> **8 clues**, one per episode, each unlocked only by using
    that episode's target language ("language is the key") -> Finale payoff using the student's own Release. Keep clues light (a message, a photo, a voice note).
 5. **Skins (3-6)**: topics (football, gaming, music, anime, art, tech, animals, food, travel, fashion, science) that re-dress the same language
    spine. For each skin list only what changes (nouns, scenario, picture set) - the structure, items and tasks stay identical.

@@ -9,6 +9,7 @@ import { C1_SEASONS } from './levels/c1';
 import { SKIN_LIBRARY } from './skins';
 import { buildAllLessonBlueprints } from './lessonBlueprint';
 import { ACADEMY_ITEMS } from './items';
+import { castIn } from './cast';
 import { validateItems } from './validateItems';
 import { STRUCTURES, STRUCTURE_FLOOR } from './structureLevels';
 import { CUMULATIVE_ITEM_TARGET, LEVEL_ORDER, summarize, validateRoadmap } from './validateRoadmap';
@@ -52,6 +53,7 @@ function build(): LevelPlan[] {
         title: r.title,
         theme: r.theme,
         hook: r.hook,
+        cast: castIn(r.hook),
         release: r.release,
         canDo: r.canDo,
         functions: r.functions,
@@ -93,6 +95,7 @@ export function getSeason(id: string): SeasonOutline | undefined {
 export * from './types';
 export * from './lessonBlueprint';
 export * from './itemTypes';
+export * from './cast';
 export { validateItems, expectedCounts, coverageByLevel, normalizeItem } from './validateItems';
 export { STRUCTURES, STRUCTURE_FLOOR } from './structureLevels';
 export { validateRoadmap, summarize, ITEM_BUDGET_BAND, CUMULATIVE_ITEM_TARGET, MAX_ITEMS_PER_SEASON } from './validateRoadmap';

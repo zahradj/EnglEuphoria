@@ -25,6 +25,10 @@ teacher-only drawer (plan, notes, error log) - the student never sees the plan.
 **Phone portrait**: sticky teacher video ~25-30 % height (collapse to a 72 px pill / PiP) · stage fills the rest · thumb-zone dock with 4-5 targets >= 48 px honouring `env(safe-area-inset-bottom)` · thin segmented progress under the status bar.
 **Phone landscape**: stage ~65 % + slim rail; dock as vertical strip. **Tablet**: portrait = phone layout, landscape = laptop layout. Keep audio when bandwidth drops; collapse video first.
 
+## Characters
+
+Only the Academy cast from the vault appears on screen (Vee, Ava, Theo, Mia). Their pictures follow the vault's `visual_blueprint` (semi-realistic illustrated teens, not mascots); avatars come from the vault's `avatar_url`. Their voices must be approved recorded voices (no `voice_id` is set in the vault yet: ask the owner).
+
 ## Look (two themes on one layout)
 
 Dark-first with a light option; one saturated accent + one reward colour; rounded 12-16 px cards; Lexend or Atkinson Hyperlegible body (don't claim dyslexia benefits - weak evidence).

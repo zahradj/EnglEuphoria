@@ -59,7 +59,7 @@ export const B1_SEASONS: RawSeason[] = [
   {
     title: 'Breaking News',
     theme: 'Recent events and news stories',
-    hook: "A rumour about the school is spreading fast. Is it true? Choose the right tense and report the news without making it worse.",
+    hook: "A rumour about the school is spreading through Ava's group chat. Is it true? Choose the right tense and report the news without making it worse.",
     release: 'A 60-second audio news bulletin',
     canDo: [
       'I can report recent news and say when something happened.',
@@ -110,7 +110,7 @@ export const B1_SEASONS: RawSeason[] = [
   {
     title: 'Made in the World',
     theme: 'How things are made and where they come from',
-    hook: "Where do your sneakers, your phone and your lunch really come from? Trace one product from start to finish.",
+    hook: "Theo wants to know where his sneakers, his phone and his lunch really come from. Trace one product from start to finish.",
     release: "A short 'how it is made' explainer clip",
     canDo: [
       'I can describe how something is made or done without saying who did it.',
@@ -127,7 +127,7 @@ export const B1_SEASONS: RawSeason[] = [
   {
     title: "Who's Who",
     theme: 'Describing people, places and things precisely',
-    hook: 'A guessing game goes wrong when two people turn out to have the same description. Add details until only one fits.',
+    hook: "Mia's guessing game goes wrong when two people turn out to have the same description. Add details until only one fits.",
     release: 'A "guess who / what" game I wrote and played with a partner',
     canDo: [
       'I can add detail to a description using who, which, that and where.',
@@ -144,7 +144,7 @@ export const B1_SEASONS: RawSeason[] = [
   {
     title: 'Case Closed',
     theme: 'Mystery and deduction',
-    hook: "A trophy has disappeared from the school hall. Gather the clues and work out what must have happened, or might have.",
+    hook: "A trophy has disappeared from the school hall and Vee asks you to lead the investigation with Ava and Theo. Gather the clues and work out what must have happened, or might have.",
     release: 'A detective briefing: my theory of the case with evidence',
     canDo: [
       'I can say how certain I am about something using must, might and can\'t.',
@@ -161,7 +161,7 @@ export const B1_SEASONS: RawSeason[] = [
   {
     title: 'Plans and Promises',
     theme: 'Arrangements and commitments',
-    hook: "The class trip is on but nobody has booked anything. Make arrangements and promise what you will do.",
+    hook: "Vee's class trip is on but nobody has booked anything. Make arrangements with Mia and Theo and promise what you will do.",
     release: 'A trip plan with arrangements and promises, as an invitation and short call',
     canDo: [
       'I can talk about arrangements I have made.',
@@ -199,7 +199,7 @@ export const B1_SEASONS: RawSeason[] = [
   {
     title: 'Word on the Street',
     theme: 'Reporting what people said',
-    hook: "A message went through six people and arrived completely different. Trace it back and find who changed the story.",
+    hook: "A message went through Ava, Theo, Mia and three others and arrived completely different. Trace it back and find who changed the story.",
     release: 'A story told through other people\'s words: what they said and what I replied',
     canDo: [
       'I can report what someone told me or said to me.',
@@ -216,7 +216,7 @@ export const B1_SEASONS: RawSeason[] = [
   {
     title: 'Before the Storm',
     theme: 'Narrative writing: what had already happened',
-    hook: "Four friends arrive at a cabin and find the table set for dinner. Someone had been there. Work out the story behind it.",
+    hook: "Ava, Theo, Mia and Vee arrive at a cabin and find the table set for dinner. Someone had been there. Work out the story behind it.",
     release: 'A short story of 150-200 words with a twist, written and read aloud',
     canDo: [
       'I can tell a story that includes what had happened earlier.',
@@ -251,7 +251,7 @@ export const B1_SEASONS: RawSeason[] = [
   {
     title: 'Study Abroad',
     theme: 'Rules, expectations and cultures',
-    hook: "An exchange student arrives next week and has a hundred questions. Prepare the guide that will save their first month.",
+    hook: "An exchange student arrives next week and Vee asks Mia and Theo to prepare the guide. Write the one that will save their first month.",
     release: 'An advice email for a new exchange student',
     canDo: [
       'I can explain what is necessary and what is not, and give advice to a visitor.',

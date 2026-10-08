@@ -56,7 +56,8 @@ Every 2nd Season: E7 is a **Big Remix** (two Seasons). C1 shape: supports off, L
 13. **Personalise by interest ("My World" skins)** but keep the language spine identical across skins.
 14. **Teacher-in-the-loop**: the teacher sees the plan, talk-time, hint/minute counts and can switch to the Chill track; the student never sees the plan drawer.
 15. **Progressive stack inside every unit** (owner, 2026-10-08): lesson 1 = new; lesson 2 = lesson 1 + new; lesson 3 = lessons 1 and 2 + new; and so on. Every lesson revisits ALL earlier lessons of its unit (Remember? covers them; the Mission and Release must reuse them), and E7/E8 integrate everything with no new language. In the blueprint this is `buildsOn`.
-16. **Quality gate before "done"**: run `academy-quality-gate`.
+16. **Cast (owner, 2026-10-08):** when creating lessons, use ONLY the Academy characters from the cast vault (`cast_vault_characters`, hub = academy): **Vee** (mentor: direct, upbeat, treats mistakes as normal), **Ava** (curious, asks lots of questions), **Theo** (easygoing, a good listener), **Mia** (student; traits not defined in the vault yet). Snapshot and per-lesson roles: `src/curriculum/academy/cast.ts`; art identity follows the vault's `visual_blueprint`. Never invent a new speaking character; ask the owner to add one to the vault first. Every Season hook features at least one of them (validator `no_cast`); Vee appears in every lesson.
+17. **Quality gate before "done"**: run `academy-quality-gate`.
 
 ## Which skill when
 
@@ -77,6 +78,8 @@ Repo-wide rules in CLAUDE.md still apply to the Academy (voice: recorded approve
 Other hubs' skills (`activity-pattern-library`, `game-animation`, `classroom-sync-robustness`, `lesson-variety-engine`) may be read for *patterns* only; they are not authority for the Academy.
 
 ## Open items (ask the owner, don't assume)
+
+- Cast vault gaps (2026-10-08): Mia's personality and signature traits are empty and she is not marked shared; no cast member has a `voice_id`. Voices must be the approved recorded American voices (CLAUDE.md voice rule).
 
 - Academy hand-off rule: CLAUDE.md's "Lesson hand-off" is written for the Playground Library; confirm the Academy equivalent before reporting a lesson "ready".
 - "My World" skin content cost (3-6 per episode); Daily 10 first-release scope (minimal version recommended: due reviews + voice note + recap card).

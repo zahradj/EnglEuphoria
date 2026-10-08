@@ -137,7 +137,7 @@ export const A2_SEASONS: RawSeason[] = [
   {
     title: "Tomorrow's World",
     theme: 'Predictions and quick decisions',
-    hook: "A time capsule from 2010 predicted what 2030 would be like. Check its predictions and write your own for the next capsule.",
+    hook: "Vee opens a time capsule from 2010 that predicted what 2030 would be like. Check its predictions with Mia and write your own for the next capsule.",
     release: 'A one-minute predictions podcast clip: my world in 2040',
     canDo: [
       'I can make simple predictions and say what I think will happen.',
@@ -153,7 +153,7 @@ export const A2_SEASONS: RawSeason[] = [
   {
     title: 'Storm Warning',
     theme: 'Weather and an adventure that went wrong',
-    hook: 'Four friends were camping when the storm hit. Each of them remembers a different version of that night.',
+    hook: "Ava, Theo, Mia and Vee were camping when the storm hit. Each of them remembers a different version of that night.",
     release: 'An eyewitness account: what was happening when the storm started',
     canDo: [
       'I can say what was happening at a moment in the past.',
@@ -185,7 +185,7 @@ export const A2_SEASONS: RawSeason[] = [
   {
     title: 'Event Planners',
     theme: 'Organising a school festival',
-    hook: "The school festival is in two weeks and the committee has no ideas. Make suggestions, take decisions and save the day.",
+    hook: "The school festival is in two weeks and Vee's committee has no ideas. Help Ava and Theo make suggestions, take decisions and save the day.",
     release: 'A festival invitation plus a one-minute pitch for the committee',
     canDo: [
       'I can make, accept and refuse suggestions politely.',

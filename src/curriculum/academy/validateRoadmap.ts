@@ -80,6 +80,7 @@ export function validateRoadmap(plans: LevelPlan[], structureFloor: StructureFlo
 
       // Content completeness.
       if (!s.hook.trim()) err('no_hook', 'Story hook missing.', where);
+      if (s.cast.length === 0) err('no_cast', 'The hook must feature at least one Academy cast member (Vee, Ava, Theo, Mia).', where);
       if (!s.release.trim()) err('no_release', 'Release missing.', where);
       if (s.canDo.length < 1 || s.canDo.length > 4) err('can_do_count', `canDo must have 1-4 entries (has ${s.canDo.length}).`, where);
       if (s.functions.length < 1) err('no_functions', 'At least one communicative function required.', where);

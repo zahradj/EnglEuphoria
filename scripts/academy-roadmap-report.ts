@@ -32,13 +32,13 @@ out();
 for (const p of ACADEMY_ROADMAP) {
   out(`## ${p.level}`);
   out();
-  out('| Season | Title · theme | Structures (E3 / E6) | Functions | Release | Items |');
-  out('|---|---|---|---|---|---|');
+  out('| Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |');
+  out('|---|---|---|---|---|---|---|');
   for (const s of p.seasons) {
     const flag = s.bigRemix ? ' · Big Remix' : '';
     const check = s.levelCheck ? ' · **level check**' : '';
     const st = s.structures.map((x) => `${x.label}${x.use ? ` (${x.use})` : ''}${x.confidence === 'unverified' ? ' ⚠' : ''}`).join(' / ');
-    out(`| ${s.id}${flag}${check} | **${s.title}** · ${s.theme} | ${st} | ${s.functions.join('; ')} | ${s.release} | ${s.newItemBudget} |`);
+    out(`| ${s.id}${flag}${check} | **${s.title}** · ${s.theme} | ${s.cast.join(', ')} | ${st} | ${s.functions.join('; ')} | ${s.release} | ${s.newItemBudget} |`);
   }
   out();
   out('<details><summary>Can-do statements, hooks and mediation</summary>');

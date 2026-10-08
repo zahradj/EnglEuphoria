@@ -57,8 +57,10 @@ export interface SeasonOutline {
   no: number;
   title: string;
   theme: string;
-  /** one-line story hook with a cast member (Vee, Ava, Theo, Mia) */
+  /** one-line story hook that features at least one Academy cast member (Vee, Ava, Theo, Mia) */
   hook: string;
+  /** cast members named in the hook, lead first; computed from the hook (see cast.ts) */
+  cast: string[];
   /** the thing the student makes in English and keeps in the portfolio */
   release: string;
   /** <= 4, "I can ..." paraphrased from CEFR / CEFR Companion Volume descriptors for this level */

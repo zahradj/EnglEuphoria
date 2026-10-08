@@ -41,6 +41,10 @@ Borrowed from evidence: noticing before rules; retrieval and spacing between ses
 
 Rules: new vocabulary in E2 and E6 only; new structure in E3 and E6 only; E7–E8 are **zero new language**. Every 2nd Season, E7 is a **Big Remix** (cumulative, covers two Seasons). Matches coursebook practice: a productive end-of-unit task and a cumulative review every 2 units [V: Solutions, Roadmap].
 
+### 2.1a The cast (owner rule, 2026-10-08)
+
+Lessons use only the **Academy characters from the cast vault** (`cast_vault_characters`, hub = academy): **Vee** (mentor, 16–19 presenting; direct, upbeat, treats mistakes as normal), **Ava** (13–15; warm, curious, asks lots of questions), **Theo** (13–15; easygoing, friendly, a good listener) and **Mia** (13–15; a friendly student; her personality is empty in the vault). Nobody else speaks. Every Season hook features at least one of them, Vee appears in every lesson as the mentor voice, and each lesson blueprint names who plays which part (`cast` in `lessonBlueprint.ts`, roles in `cast.ts`). Open items for the owner: define Mia's traits, and set voices (none of the four has a `voice_id`; voices must be the approved recorded American voices).
+
 ### 2.1b The unit is a progressive stack (owner rule, 2026-10-08)
 
 Inside every Season each lesson **adds to everything before it**: lesson 1 teaches something; lesson 2 = lesson 1 + lesson 2; lesson 3 = lessons 1 and 2 + lesson 3; and so on up to the Finale, which integrates all seven earlier lessons with no new language. Practically: Remember? revisits every earlier lesson of the unit (not only the last), the Mission and the Release must use language from all earlier lessons, and input texts use at least 95 % words already met. It is written into every lesson blueprint as `buildsOn` (earlier lesson ids, items known before and after, structures known before and after, the stack label, what must be reused) and enforced by `lessonBlueprint.test.ts`.

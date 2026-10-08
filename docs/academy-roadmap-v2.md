@@ -20,18 +20,18 @@
 
 ## A1
 
-| Season | Title · theme | Structures (E3 / E6) | Functions | Release | Items |
-|---|---|---|---|---|---|
-| A1-S01 | **Who Are You?** · Online profiles and meeting people | be (am/is/are): statements, questions, negatives / possessive adjectives (my/your/his/her/our/their) | greeting and leave-taking; introducing yourself; asking for personal information; spelling | My profile card plus a 30-second voice introduction | 80 |
-| A1-S02 · Big Remix | **My Room, My Stuff** · Rooms, gadgets and where things are | there is / there are / prepositions of place (in/on/under/next to/behind) | describing a place; saying where things are; asking where something is | A voice-note tour of my room | 80 |
-| A1-S03 | **Free Time Club** · Hobbies and the Club Fair | present simple (I/you/we/they): statements and negatives / like/love/hate + -ing | talking about likes and dislikes; talking about hobbies; asking about interests | A 45-second pitch for a club I would start | 80 |
-| A1-S04 · Big Remix | **Café Night** · Food, drinks and ordering | some / any with countable and uncountable nouns / I'd like ... / Would you like ...? (as a chunk first) ⚠ | ordering food and drink; asking for and giving prices; polite requests | A short café role-play with my own menu | 80 |
-| A1-S05 | **A Day in My Life** · Daily routines and the school day | present simple he/she/it (-s) and questions with does / adverbs of frequency (always/usually/sometimes/never) | describing routines; telling the time; saying how often you do things | A short vlog script and recording of my day | 80 |
-| A1-S06 · Big Remix | **Family and Friends** · People close to me | have got / has got / possessive 's | talking about family; describing people; talking about possessions | My family or friends tree with a spoken description of three people | 80 |
-| A1-S07 | **Treasure Map Town** · Places in town and giving directions | imperatives (instructions, directions) / prepositions of movement (to/into/out of/along/across) | giving directions; asking where a place is; giving simple instructions | A voice guide that leads a friend to a hidden place on a map | 80 |
-| A1-S08 · Big Remix | **Can Do!** · Talents and abilities | can / can't for ability / and / but / because (simple linking) | talking about ability; asking for and giving help; simple linking of ideas | A talent card: what I can and cannot do, with one demonstration | 80 |
-| A1-S09 | **Market Day** · Clothes, shopping and money | this / that / these / those / how much / how many and prices | shopping; asking for and giving prices; choosing between things | A market role-play: buying and selling with prices | 80 |
-| A1-S10 · Big Remix · **level check** | **Right Now** · What is happening now: a live stream | present continuous for actions happening now / wh-questions and question word order | describing what is happening now; asking wh-questions; talking about the weather | A 60-second live commentary clip | 80 |
+| Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
+|---|---|---|---|---|---|---|
+| A1-S01 | **Who Are You?** · Online profiles and meeting people | Ava | be (am/is/are): statements, questions, negatives / possessive adjectives (my/your/his/her/our/their) | greeting and leave-taking; introducing yourself; asking for personal information; spelling | My profile card plus a 30-second voice introduction | 80 |
+| A1-S02 · Big Remix | **My Room, My Stuff** · Rooms, gadgets and where things are | Theo | there is / there are / prepositions of place (in/on/under/next to/behind) | describing a place; saying where things are; asking where something is | A voice-note tour of my room | 80 |
+| A1-S03 | **Free Time Club** · Hobbies and the Club Fair | Ava | present simple (I/you/we/they): statements and negatives / like/love/hate + -ing | talking about likes and dislikes; talking about hobbies; asking about interests | A 45-second pitch for a club I would start | 80 |
+| A1-S04 · Big Remix | **Café Night** · Food, drinks and ordering | Mia | some / any with countable and uncountable nouns / I'd like ... / Would you like ...? (as a chunk first) ⚠ | ordering food and drink; asking for and giving prices; polite requests | A short café role-play with my own menu | 80 |
+| A1-S05 | **A Day in My Life** · Daily routines and the school day | Mia | present simple he/she/it (-s) and questions with does / adverbs of frequency (always/usually/sometimes/never) | describing routines; telling the time; saying how often you do things | A short vlog script and recording of my day | 80 |
+| A1-S06 · Big Remix | **Family and Friends** · People close to me | Theo | have got / has got / possessive 's | talking about family; describing people; talking about possessions | My family or friends tree with a spoken description of three people | 80 |
+| A1-S07 | **Treasure Map Town** · Places in town and giving directions | Vee | imperatives (instructions, directions) / prepositions of movement (to/into/out of/along/across) | giving directions; asking where a place is; giving simple instructions | A voice guide that leads a friend to a hidden place on a map | 80 |
+| A1-S08 · Big Remix | **Can Do!** · Talents and abilities | Theo | can / can't for ability / and / but / because (simple linking) | talking about ability; asking for and giving help; simple linking of ideas | A talent card: what I can and cannot do, with one demonstration | 80 |
+| A1-S09 | **Market Day** · Clothes, shopping and money | Ava | this / that / these / those / how much / how many and prices | shopping; asking for and giving prices; choosing between things | A market role-play: buying and selling with prices | 80 |
+| A1-S10 · Big Remix · **level check** | **Right Now** · What is happening now: a live stream | Vee | present continuous for actions happening now / wh-questions and question word order | describing what is happening now; asking wh-questions; talking about the weather | A 60-second live commentary clip | 80 |
 
 <details><summary>Can-do statements, hooks and mediation</summary>
 
@@ -90,20 +90,20 @@
 
 ## A2
 
-| Season | Title · theme | Structures (E3 / E6) | Functions | Release | Items |
-|---|---|---|---|---|---|
-| A2-S01 | **Last Weekend** · Telling a story about the past | past simple of be (was/were) ⚠ / past simple: regular verbs (-ed) | describing past events; saying where you were; sequencing events (first, then, after that) | A voice note telling the story of my last weekend | 69 |
-| A2-S02 · Big Remix | **Travel Trouble** · Journeys that went wrong | past simple: irregular verbs, questions and negatives | narrating past events; asking about past events; describing a problem while travelling | A postcard or message about a trip that went wrong | 69 |
-| A2-S03 | **Gadget Wars** · Comparing technology | comparatives and superlatives | comparing; recommending; giving a reason | A written review comparing two things I own or want | 69 |
-| A2-S04 · Big Remix | **Plans and Dreams** · Plans for next week and next summer | be going to (plans and intentions) | talking about plans; asking about plans; giving reasons for plans | My plan for next summer, spoken and as a short written list | 69 |
-| A2-S05 | **Body and Health** · Feeling ill and giving advice | should / shouldn't for advice / too / enough | describing symptoms; giving advice; talking about health habits | A short advice message or voice note to a friend who feels ill | 69 |
-| A2-S06 · Big Remix | **House Rules** · Rules at home, at school and in games | must / mustn't (rules) / have to (obligation) | talking about rules; saying what is necessary; prohibiting | A short guide to the rules of a place or game I know well | 69 |
-| A2-S07 | **Food Cultures** · What people eat around the world | much / many / a few / a little / a lot of | talking about quantity; giving instructions for a recipe; comparing food customs | A short recipe video script and recording of a dish I know | 69 |
-| A2-S08 · Big Remix | **Getting Around** · Transport and city life | infinitive of purpose (to + verb) / prepositions of movement and transport phrases | giving travel directions; explaining purpose; buying a ticket | A route guide for a visitor, spoken and as a simple map | 69 |
-| A2-S09 | **Tomorrow's World** · Predictions and quick decisions | will for decisions, offers and simple predictions ⚠ | making predictions; making offers and quick decisions; agreeing and disagreeing simply | A one-minute predictions podcast clip: my world in 2040 | 69 |
-| A2-S10 · Big Remix | **Storm Warning** · Weather and an adventure that went wrong | past continuous (was/were + -ing) / so / because / then (linking sentences) | describing a scene in the past; giving reasons and results; telling a short story | An eyewitness account: what was happening when the storm started | 69 |
-| A2-S11 | **Dream Jobs** · Jobs, skills and how people do things | adverbs of manner (-ly) | talking about jobs; describing how things are done; answering simple interview questions | A short job-interview role-play: me as the candidate | 69 |
-| A2-S12 · Big Remix · **level check** | **Event Planners** · Organising a school festival | let's / shall we / how about + -ing (suggestions) | making suggestions; accepting and refusing politely; writing an invitation | A festival invitation plus a one-minute pitch for the committee | 69 |
+| Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
+|---|---|---|---|---|---|---|
+| A2-S01 | **Last Weekend** · Telling a story about the past | Ava | past simple of be (was/were) ⚠ / past simple: regular verbs (-ed) | describing past events; saying where you were; sequencing events (first, then, after that) | A voice note telling the story of my last weekend | 69 |
+| A2-S02 · Big Remix | **Travel Trouble** · Journeys that went wrong | Theo | past simple: irregular verbs, questions and negatives | narrating past events; asking about past events; describing a problem while travelling | A postcard or message about a trip that went wrong | 69 |
+| A2-S03 | **Gadget Wars** · Comparing technology | Mia | comparatives and superlatives | comparing; recommending; giving a reason | A written review comparing two things I own or want | 69 |
+| A2-S04 · Big Remix | **Plans and Dreams** · Plans for next week and next summer | Vee, Ava | be going to (plans and intentions) | talking about plans; asking about plans; giving reasons for plans | My plan for next summer, spoken and as a short written list | 69 |
+| A2-S05 | **Body and Health** · Feeling ill and giving advice | Theo | should / shouldn't for advice / too / enough | describing symptoms; giving advice; talking about health habits | A short advice message or voice note to a friend who feels ill | 69 |
+| A2-S06 · Big Remix | **House Rules** · Rules at home, at school and in games | Mia | must / mustn't (rules) / have to (obligation) | talking about rules; saying what is necessary; prohibiting | A short guide to the rules of a place or game I know well | 69 |
+| A2-S07 | **Food Cultures** · What people eat around the world | Vee | much / many / a few / a little / a lot of | talking about quantity; giving instructions for a recipe; comparing food customs | A short recipe video script and recording of a dish I know | 69 |
+| A2-S08 · Big Remix | **Getting Around** · Transport and city life | Ava | infinitive of purpose (to + verb) / prepositions of movement and transport phrases | giving travel directions; explaining purpose; buying a ticket | A route guide for a visitor, spoken and as a simple map | 69 |
+| A2-S09 | **Tomorrow's World** · Predictions and quick decisions | Vee, Mia | will for decisions, offers and simple predictions ⚠ | making predictions; making offers and quick decisions; agreeing and disagreeing simply | A one-minute predictions podcast clip: my world in 2040 | 69 |
+| A2-S10 · Big Remix | **Storm Warning** · Weather and an adventure that went wrong | Ava, Theo, Mia, Vee | past continuous (was/were + -ing) / so / because / then (linking sentences) | describing a scene in the past; giving reasons and results; telling a short story | An eyewitness account: what was happening when the storm started | 69 |
+| A2-S11 | **Dream Jobs** · Jobs, skills and how people do things | Theo | adverbs of manner (-ly) | talking about jobs; describing how things are done; answering simple interview questions | A short job-interview role-play: me as the candidate | 69 |
+| A2-S12 · Big Remix · **level check** | **Event Planners** · Organising a school festival | Vee, Ava, Theo | let's / shall we / how about + -ing (suggestions) | making suggestions; accepting and refusing politely; writing an invitation | A festival invitation plus a one-minute pitch for the committee | 69 |
 
 <details><summary>Can-do statements, hooks and mediation</summary>
 
@@ -147,12 +147,12 @@
 - I can understand simple travel announcements and instructions.
 - Lexical fields: transport and tickets; city places and buildings; travel announcements · Pronunciation: weak "to" /tə/ in "I go there to study"; number and time stress in announcements · Skins: travel, tech, music, nature
 
-**A2-S09 Tomorrow's World** — *A time capsule from 2010 predicted what 2030 would be like. Check its predictions and write your own for the next capsule.*
+**A2-S09 Tomorrow's World** — *Vee opens a time capsule from 2010 that predicted what 2030 would be like. Check its predictions with Mia and write your own for the next capsule.*
 - I can make simple predictions and say what I think will happen.
 - I can make quick decisions and offer to help.
 - Lexical fields: technology and the future; jobs of the future; weather and environment · Pronunciation: contracted 'll /l/ ('I'll, she'll); won't vs want (vowel length) · Skins: science, tech, gaming, nature
 
-**A2-S10 Storm Warning** — *Four friends were camping when the storm hit. Each of them remembers a different version of that night.*
+**A2-S10 Storm Warning** — *Ava, Theo, Mia and Vee were camping when the storm hit. Each of them remembers a different version of that night.*
 - I can say what was happening at a moment in the past.
 - I can link two short sentences with so and because.
 - Lexical fields: weather and nature; camping and outdoor equipment; emergencies and feelings · Pronunciation: was / were /wəz/ /wə/ in connected speech; stress in two-syllable weather words · Skins: nature, film, gaming, travel
@@ -162,7 +162,7 @@
 - I can say how well someone does something.
 - Lexical fields: jobs and workplaces; personal qualities; skills and abilities · Pronunciation: -ly adverb stress (carefully, quickly); rising tone for yes/no questions · Skins: business, tech, fitness, art, animals
 
-**A2-S12 Event Planners** — *The school festival is in two weeks and the committee has no ideas. Make suggestions, take decisions and save the day.*
+**A2-S12 Event Planners** — *The school festival is in two weeks and Vee's committee has no ideas. Help Ava and Theo make suggestions, take decisions and save the day.*
 - I can make, accept and refuse suggestions politely.
 - I can write a short invitation with the key information.
 - Lexical fields: festivals and events; dates and times; food, music and decorations · Pronunciation: intonation in polite suggestions (Let's go! / Shall we ...?); dates: ordinal numbers stress · Skins: music, food, art, fashion, football
@@ -172,24 +172,24 @@
 
 ## B1
 
-| Season | Title · theme | Structures (E3 / E6) | Functions | Release | Items |
-|---|---|---|---|---|---|
-| B1-S01 | **Have You Ever...?** · Experiences and bucket lists | present perfect: experience (ever/never/been) ⚠ | talking about life experiences; asking follow-up questions; showing interest and surprise | My bucket list: three things I have done and three I want to do | 75 |
-| B1-S02 · Big Remix | **Then and Now** · Memories and how things have changed | used to ⚠ | talking about past habits; comparing past and present; reminiscing | A "then and now" photo story: how my life or my town has changed | 75 |
-| B1-S03 | **Still Going** · Things that began in the past and continue now | present perfect: for / since / how long | talking about duration; interviewing someone; giving a short personal profile | An interview with a friend about a long-term hobby or friendship, recorded | 75 |
-| B1-S04 · Big Remix | **Breaking News** · Recent events and news stories | present perfect vs past simple | reporting news; giving details of a past event; announcing results | A 60-second audio news bulletin | 75 |
-| B1-S05 | **If This, Then That** · Rules, systems and game design | zero and first conditional ⚠ | explaining rules; predicting consequences; giving warnings and instructions | The rules of a game I designed, explained step by step | 75 |
-| B1-S06 · Big Remix | **What If...?** · Imaginary situations and dilemmas | second conditional ⚠ | talking about imaginary situations; giving opinions; agreeing and disagreeing | A spoken debate: three "what if" dilemmas and my answers | 75 |
-| B1-S07 | **Made in the World** · How things are made and where they come from | passive: present and past simple | describing a process; giving factual information; sequencing steps | A short 'how it is made' explainer clip | 75 |
-| B1-S08 · Big Remix | **Who's Who** · Describing people, places and things precisely | defining relative clauses (who/which/that/where) | describing and defining; adding detail; clarifying | A "guess who / what" game I wrote and played with a partner | 75 |
-| B1-S09 | **Case Closed** · Mystery and deduction | modals of deduction (must / might / can't) ⚠ | speculating; expressing certainty and doubt; explaining a theory | A detective briefing: my theory of the case with evidence | 75 |
-| B1-S10 · Big Remix | **Plans and Promises** · Arrangements and commitments | present continuous for future arrangements (future arrangements) ⚠ / will for promises and predictions (promises and predictions) ⚠ | arranging to meet; making promises; predicting | A trip plan with arrangements and promises, as an invitation and short call | 75 |
-| B1-S11 | **Learning Machines** · Technology, AI and how we learn | verb patterns: gerund vs infinitive (common verbs) | giving opinions; recommending; comparing options | A short review of a learning tool, with a recommendation | 75 |
-| B1-S12 · Big Remix | **Word on the Street** · Reporting what people said | reported speech: statements (say/tell, basic backshift) ⚠ | reporting speech; passing on messages; clarifying what was said | A story told through other people's words: what they said and what I replied | 75 |
-| B1-S13 | **Before the Storm** · Narrative writing: what had already happened | past perfect ⚠ | narrating; sequencing past events; creating suspense | A short story of 150-200 words with a twist, written and read aloud | 75 |
-| B1-S14 · Big Remix | **Wish List** · Wishes, regrets and imagining change | wish + past simple ⚠ | expressing wishes; expressing feelings; giving encouragement | A short blog post: three things I wish were different and why | 75 |
-| B1-S15 | **Study Abroad** · Rules, expectations and cultures | mustn't vs don't have to (contrast) / although / even though / while (contrast) | explaining rules and customs; giving advice; contrasting ideas | An advice email for a new exchange student | 75 |
-| B1-S16 · Big Remix · **level check** | **Teen Talk Show** · Hosting a show: everything at B1 | question tags / common phrasal verbs (separable / inseparable) as vocabulary | hosting and interviewing; checking information; agreeing and disagreeing | A five-minute talk-show episode recorded with a guest | 75 |
+| Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
+|---|---|---|---|---|---|---|
+| B1-S01 | **Have You Ever...?** · Experiences and bucket lists | Vee | present perfect: experience (ever/never/been) ⚠ | talking about life experiences; asking follow-up questions; showing interest and surprise | My bucket list: three things I have done and three I want to do | 75 |
+| B1-S02 · Big Remix | **Then and Now** · Memories and how things have changed | Theo | used to ⚠ | talking about past habits; comparing past and present; reminiscing | A "then and now" photo story: how my life or my town has changed | 75 |
+| B1-S03 | **Still Going** · Things that began in the past and continue now | Ava, Mia | present perfect: for / since / how long | talking about duration; interviewing someone; giving a short personal profile | An interview with a friend about a long-term hobby or friendship, recorded | 75 |
+| B1-S04 · Big Remix | **Breaking News** · Recent events and news stories | Ava | present perfect vs past simple | reporting news; giving details of a past event; announcing results | A 60-second audio news bulletin | 75 |
+| B1-S05 | **If This, Then That** · Rules, systems and game design | Mia | zero and first conditional ⚠ | explaining rules; predicting consequences; giving warnings and instructions | The rules of a game I designed, explained step by step | 75 |
+| B1-S06 · Big Remix | **What If...?** · Imaginary situations and dilemmas | Vee | second conditional ⚠ | talking about imaginary situations; giving opinions; agreeing and disagreeing | A spoken debate: three "what if" dilemmas and my answers | 75 |
+| B1-S07 | **Made in the World** · How things are made and where they come from | Theo | passive: present and past simple | describing a process; giving factual information; sequencing steps | A short 'how it is made' explainer clip | 75 |
+| B1-S08 · Big Remix | **Who's Who** · Describing people, places and things precisely | Mia | defining relative clauses (who/which/that/where) | describing and defining; adding detail; clarifying | A "guess who / what" game I wrote and played with a partner | 75 |
+| B1-S09 | **Case Closed** · Mystery and deduction | Vee, Ava, Theo | modals of deduction (must / might / can't) ⚠ | speculating; expressing certainty and doubt; explaining a theory | A detective briefing: my theory of the case with evidence | 75 |
+| B1-S10 · Big Remix | **Plans and Promises** · Arrangements and commitments | Vee, Mia, Theo | present continuous for future arrangements (future arrangements) ⚠ / will for promises and predictions (promises and predictions) ⚠ | arranging to meet; making promises; predicting | A trip plan with arrangements and promises, as an invitation and short call | 75 |
+| B1-S11 | **Learning Machines** · Technology, AI and how we learn | Vee | verb patterns: gerund vs infinitive (common verbs) | giving opinions; recommending; comparing options | A short review of a learning tool, with a recommendation | 75 |
+| B1-S12 · Big Remix | **Word on the Street** · Reporting what people said | Ava, Theo, Mia | reported speech: statements (say/tell, basic backshift) ⚠ | reporting speech; passing on messages; clarifying what was said | A story told through other people's words: what they said and what I replied | 75 |
+| B1-S13 | **Before the Storm** · Narrative writing: what had already happened | Ava, Theo, Mia, Vee | past perfect ⚠ | narrating; sequencing past events; creating suspense | A short story of 150-200 words with a twist, written and read aloud | 75 |
+| B1-S14 · Big Remix | **Wish List** · Wishes, regrets and imagining change | Ava | wish + past simple ⚠ | expressing wishes; expressing feelings; giving encouragement | A short blog post: three things I wish were different and why | 75 |
+| B1-S15 | **Study Abroad** · Rules, expectations and cultures | Vee, Mia, Theo | mustn't vs don't have to (contrast) / although / even though / while (contrast) | explaining rules and customs; giving advice; contrasting ideas | An advice email for a new exchange student | 75 |
+| B1-S16 · Big Remix · **level check** | **Teen Talk Show** · Hosting a show: everything at B1 | Vee | question tags / common phrasal verbs (separable / inseparable) as vocabulary | hosting and interviewing; checking information; agreeing and disagreeing | A five-minute talk-show episode recorded with a guest | 75 |
 
 <details><summary>Can-do statements, hooks and mediation</summary>
 
@@ -211,7 +211,7 @@
 - *Mediation:* Pass on to a friend, in plain English, what a person said in a short interview.
 - Lexical fields: hobbies, clubs and habits; time periods and dates; relationships and routines · Pronunciation: for /fə/ and since /sɪns/ in connected speech; question intonation in interviews · Skins: football, gaming, art, animals, music
 
-**B1-S04 Breaking News** — *A rumour about the school is spreading fast. Is it true? Choose the right tense and report the news without making it worse.*
+**B1-S04 Breaking News** — *A rumour about the school is spreading through Ava's group chat. Is it true? Choose the right tense and report the news without making it worse.*
 - I can report recent news and say when something happened.
 - I can choose between the present perfect and the past simple for a news story.
 - *Mediation:* Turn a short written news item into a spoken summary for someone who has not read it.
@@ -229,25 +229,25 @@
 - *Mediation:* Summarise two different answers to a dilemma for a third person.
 - Lexical fields: dilemmas and choices; superpowers and fantasy; money, fame and school life · Pronunciation: 'd /d/ (I'd, she'd) vs 'would'; stress for contrast · Skins: film, gaming, anime, science
 
-**B1-S07 Made in the World** — *Where do your sneakers, your phone and your lunch really come from? Trace one product from start to finish.*
+**B1-S07 Made in the World** — *Theo wants to know where his sneakers, his phone and his lunch really come from. Trace one product from start to finish.*
 - I can describe how something is made or done without saying who did it.
 - I can understand a short factual text about a process.
 - *Mediation:* Relay the steps of a process from a diagram or text to a friend who is trying to do it.
 - Lexical fields: manufacturing and materials; food production; inventions and discoveries · Pronunciation: past participle endings /t/ /d/ /ɪd/; stress in compound nouns · Skins: fashion, food, tech, science
 
-**B1-S08 Who's Who** — *A guessing game goes wrong when two people turn out to have the same description. Add details until only one fits.*
+**B1-S08 Who's Who** — *Mia's guessing game goes wrong when two people turn out to have the same description. Add details until only one fits.*
 - I can add detail to a description using who, which, that and where.
 - I can ask for and give clarification.
 - *Mediation:* Explain what an unfamiliar object or person is, using a short description from a text.
 - Lexical fields: people and personalities; places and objects; definitions and descriptions · Pronunciation: pausing and chunking before relative pronouns; stress on the new information · Skins: film, music, animals, anime
 
-**B1-S09 Case Closed** — *A trophy has disappeared from the school hall. Gather the clues and work out what must have happened, or might have.*
+**B1-S09 Case Closed** — *A trophy has disappeared from the school hall and Vee asks you to lead the investigation with Ava and Theo. Gather the clues and work out what must have happened, or might have.*
 - I can say how certain I am about something using must, might and can't.
 - I can explain my reasoning using evidence.
 - *Mediation:* Summarise a witness account for the detective in your own words.
 - Lexical fields: crime and mystery; clues and evidence; suspects and alibis · Pronunciation: modal verbs: strong vs weak forms; intonation of doubt · Skins: film, gaming, anime, science
 
-**B1-S10 Plans and Promises** — *The class trip is on but nobody has booked anything. Make arrangements and promise what you will do.*
+**B1-S10 Plans and Promises** — *Vee's class trip is on but nobody has booked anything. Make arrangements with Mia and Theo and promise what you will do.*
 - I can talk about arrangements I have made.
 - I can make promises and simple predictions about the future.
 - *Mediation:* Pass on the key details of a booking message to a friend who must act on it.
@@ -260,13 +260,13 @@
 - *Mediation:* Explain the pros and cons given in a short text to a classmate who must decide.
 - Lexical fields: technology and AI; learning and study habits; opinion adjectives · Pronunciation: -ing and to + verb: weak forms; stress and intonation in opinions · Skins: tech, gaming, science, social
 
-**B1-S12 Word on the Street** — *A message went through six people and arrived completely different. Trace it back and find who changed the story.*
+**B1-S12 Word on the Street** — *A message went through Ava, Theo, Mia and three others and arrived completely different. Trace it back and find who changed the story.*
 - I can report what someone told me or said to me.
 - I can change pronouns and time words when I report.
 - *Mediation:* Pass on a voicemail message accurately and politely to the person it is for.
 - Lexical fields: communication verbs (say, tell, ask); messages and social media; gossip and rumours · Pronunciation: reporting verbs: said /sɛd/, told /təʊld/; sentence rhythm in reported clauses · Skins: social, film, music, gaming
 
-**B1-S13 Before the Storm** — *Four friends arrive at a cabin and find the table set for dinner. Someone had been there. Work out the story behind it.*
+**B1-S13 Before the Storm** — *Ava, Theo, Mia and Vee arrive at a cabin and find the table set for dinner. Someone had been there. Work out the story behind it.*
 - I can tell a story that includes what had happened earlier.
 - I can organise a story with linkers (after, before, when).
 - *Mediation:* Summarise a short story for someone who missed it.
@@ -279,7 +279,7 @@
 - *Mediation:* Relay a friend's wish to a teacher in a polite and clear way.
 - Lexical fields: school, home and friendships; feelings and personal growth; society and environment · Pronunciation: wish /wɪʃ/ - final /ʃ/; warm, supportive intonation · Skins: music, art, social, nature
 
-**B1-S15 Study Abroad** — *An exchange student arrives next week and has a hundred questions. Prepare the guide that will save their first month.*
+**B1-S15 Study Abroad** — *An exchange student arrives next week and Vee asks Mia and Theo to prepare the guide. Write the one that will save their first month.*
 - I can explain what is necessary and what is not, and give advice to a visitor.
 - I can write an informal email and use linkers to contrast ideas.
 - *Mediation:* Explain the school rules in a leaflet to a new student who does not read English well.
@@ -296,24 +296,24 @@
 
 ## B2
 
-| Season | Title · theme | Structures (E3 / E6) | Functions | Release | Items |
-|---|---|---|---|---|---|
-| B2-S01 | **Been There, Doing That** · Long-term projects and ongoing effort | present perfect continuous ⚠ | describing ongoing activity; reporting progress; explaining causes of results | A progress report on a project I have been working on, spoken and written | 80 |
-| B2-S02 · Big Remix | **What Might Have Been** · Regrets and alternative histories | third conditional / wish / if only + past perfect | expressing regret; speculating about the past; criticising tactfully | A short reflective essay or talk: a decision I would change and why | 80 |
-| B2-S03 | **Passive Power** · Systems, processes and who is responsible | passive: all tenses and modal passives | describing processes; reporting facts; avoiding blame | A report on how a system works or who is responsible for a problem | 80 |
-| B2-S04 · Big Remix | **Reporting It** · Reporting conversations and interviews | reported questions, commands, reporting verbs | reporting questions and requests; summarising an interview; conveying attitude with reporting verbs | A written report of an interview I conducted | 80 |
-| B2-S05 | **Who Is He Anyway?** · Biographies and profile writing | non-defining relative clauses | describing people; adding extra information; writing profiles | A profile of an interesting person with extra information | 80 |
-| B2-S06 · Big Remix | **Could Have, Should Have** · Blame, advice and criticism | perfect modals (should/could/might/must have + past participle) | speculating about the past; criticising politely; taking responsibility | A diplomatic feedback message: what could have been done differently | 80 |
-| B2-S07 | **The Future Is...** · Predicting and planning the next decade | future continuous and future perfect | predicting; planning; talking about future achievements | A letter to my future self (written) and a short vision talk (spoken) | 80 |
-| B2-S08 · Big Remix | **Opinions That Matter** · Arguing a point of view | hedging and stance (arguably, I'd suggest, to some extent) / however / despite / in spite of / whereas | arguing a case; conceding a point; hedging and emphasising | A structured spoken argument (two minutes) and a written paragraph version | 80 |
-| B2-S09 | **Get It Done** · Services, problems and polite complaints | have / get something done / embedded (indirect) questions | making complaints; asking indirectly; arranging services | A role-play: making a complaint and asking for a solution | 80 |
-| B2-S10 · Big Remix | **Unless You Do** · Conditions, deals and negotiation | unless / as long as / provided that / suppose | negotiating; setting conditions; making deals and compromises | A negotiation role-play and the written agreement that follows | 80 |
-| B2-S11 | **Remember That!** · Memory, habits and meaning-changing verbs | verbs that change meaning (remember/stop/try + -ing or to) / articles: generic reference, zero article, fixed uses | explaining differences in meaning; talking about memory and habit; writing accurately | A short talk or essay about memory and how it shapes our habits | 80 |
-| B2-S12 · Big Remix | **The Big Picture** · Emphasis and focus in speaking and writing | cleft sentences (It was ... that / What I need is ...) | emphasising; structuring a talk; contrasting ideas | A short speech or article using emphasis to make one clear point | 80 |
-| B2-S13 | **Cut the Words** · Concise, elegant writing | participle clauses (-ing / -ed) / ellipsis and substitution | editing and condensing; writing concisely; combining ideas efficiently | A shortened version of my own text, showing what I cut and why | 80 |
-| B2-S14 · Big Remix | **As Much As** · Comparing, measuring and describing change | as ... as, the more ... the more, so/such ... that | comparing in detail; describing change and trends; drawing conclusions | A comparison presentation with a chart and spoken commentary | 80 |
-| B2-S15 | **Say It Clearly** · Mediation: relaying, summarising and facilitating | reporting verbs + -ing / that / to (admit, deny, suggest, insist) | summarising; relaying information; facilitating discussion | A live mediation: summarising and relaying between two speakers, plus a written summary | 80 |
-| B2-S16 · Big Remix · **level check** | **Debate League** · Putting B2 together: argument, cohesion and delivery | cohesion: addition, result, sequence markers (moreover, consequently, as for) | debating; structuring an argument; responding to challenge | A full debate speech (three minutes) and a written case summary | 80 |
+| Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
+|---|---|---|---|---|---|---|
+| B2-S01 | **Been There, Doing That** · Long-term projects and ongoing effort | Vee | present perfect continuous ⚠ | describing ongoing activity; reporting progress; explaining causes of results | A progress report on a project I have been working on, spoken and written | 80 |
+| B2-S02 · Big Remix | **What Might Have Been** · Regrets and alternative histories | Theo | third conditional / wish / if only + past perfect | expressing regret; speculating about the past; criticising tactfully | A short reflective essay or talk: a decision I would change and why | 80 |
+| B2-S03 | **Passive Power** · Systems, processes and who is responsible | Ava | passive: all tenses and modal passives | describing processes; reporting facts; avoiding blame | A report on how a system works or who is responsible for a problem | 80 |
+| B2-S04 · Big Remix | **Reporting It** · Reporting conversations and interviews | Mia | reported questions, commands, reporting verbs | reporting questions and requests; summarising an interview; conveying attitude with reporting verbs | A written report of an interview I conducted | 80 |
+| B2-S05 | **Who Is He Anyway?** · Biographies and profile writing | Mia | non-defining relative clauses | describing people; adding extra information; writing profiles | A profile of an interesting person with extra information | 80 |
+| B2-S06 · Big Remix | **Could Have, Should Have** · Blame, advice and criticism | Ava | perfect modals (should/could/might/must have + past participle) | speculating about the past; criticising politely; taking responsibility | A diplomatic feedback message: what could have been done differently | 80 |
+| B2-S07 | **The Future Is...** · Predicting and planning the next decade | Vee | future continuous and future perfect | predicting; planning; talking about future achievements | A letter to my future self (written) and a short vision talk (spoken) | 80 |
+| B2-S08 · Big Remix | **Opinions That Matter** · Arguing a point of view | Vee | hedging and stance (arguably, I'd suggest, to some extent) / however / despite / in spite of / whereas | arguing a case; conceding a point; hedging and emphasising | A structured spoken argument (two minutes) and a written paragraph version | 80 |
+| B2-S09 | **Get It Done** · Services, problems and polite complaints | Ava | have / get something done / embedded (indirect) questions | making complaints; asking indirectly; arranging services | A role-play: making a complaint and asking for a solution | 80 |
+| B2-S10 · Big Remix | **Unless You Do** · Conditions, deals and negotiation | Ava, Theo | unless / as long as / provided that / suppose | negotiating; setting conditions; making deals and compromises | A negotiation role-play and the written agreement that follows | 80 |
+| B2-S11 | **Remember That!** · Memory, habits and meaning-changing verbs | Theo, Mia | verbs that change meaning (remember/stop/try + -ing or to) / articles: generic reference, zero article, fixed uses | explaining differences in meaning; talking about memory and habit; writing accurately | A short talk or essay about memory and how it shapes our habits | 80 |
+| B2-S12 · Big Remix | **The Big Picture** · Emphasis and focus in speaking and writing | Theo | cleft sentences (It was ... that / What I need is ...) | emphasising; structuring a talk; contrasting ideas | A short speech or article using emphasis to make one clear point | 80 |
+| B2-S13 | **Cut the Words** · Concise, elegant writing | Vee | participle clauses (-ing / -ed) / ellipsis and substitution | editing and condensing; writing concisely; combining ideas efficiently | A shortened version of my own text, showing what I cut and why | 80 |
+| B2-S14 · Big Remix | **As Much As** · Comparing, measuring and describing change | Mia | as ... as, the more ... the more, so/such ... that | comparing in detail; describing change and trends; drawing conclusions | A comparison presentation with a chart and spoken commentary | 80 |
+| B2-S15 | **Say It Clearly** · Mediation: relaying, summarising and facilitating | Vee, Ava | reporting verbs + -ing / that / to (admit, deny, suggest, insist) | summarising; relaying information; facilitating discussion | A live mediation: summarising and relaying between two speakers, plus a written summary | 80 |
+| B2-S16 · Big Remix · **level check** | **Debate League** · Putting B2 together: argument, cohesion and delivery | Vee | cohesion: addition, result, sequence markers (moreover, consequently, as for) | debating; structuring an argument; responding to challenge | A full debate speech (three minutes) and a written case summary | 80 |
 
 <details><summary>Can-do statements, hooks and mediation</summary>
 
@@ -329,13 +329,13 @@
 - *Mediation:* Relay a friend's regretful story to a teacher while keeping the key reasons.
 - Lexical fields: decisions and consequences; exams, sports and relationships; emotions about the past · Pronunciation: have /əv/ in connected speech (would've, could've); emphasis for regret · Skins: film, football, gaming, music
 
-**B2-S03 Passive Power** — *A school report says 'mistakes were made' - but nobody says by whom. Investigate how the passive hides and reveals people.*
+**B2-S03 Passive Power** — *A school report says 'mistakes were made' - but nobody says by whom. Ava is investigating for the school paper; help her see how the passive hides and reveals people.*
 - I can describe processes and events when the agent is unknown or unimportant.
 - I can write a formal factual report.
 - *Mediation:* Summarise a technical process from a text for someone with no background.
 - Lexical fields: systems and institutions; science and technology; news and public events · Pronunciation: weak forms of auxiliary verbs (been, being); stress in long noun phrases · Skins: tech, science, business, nature
 
-**B2-S04 Reporting It** — *A journalist's notes are mixed up. Work out who asked what and who answered - and report it so the truth survives.*
+**B2-S04 Reporting It** — *Mia's interview notes are mixed up. Work out who asked what and who answered - and report it so the truth survives.*
 - I can report questions, requests and commands accurately.
 - I can choose suitable reporting verbs.
 - *Mediation:* Report a long conversation to someone who was not there, selecting the key points.
@@ -353,7 +353,7 @@
 - *Mediation:* Give feedback on a friend's plan to a teacher in a balanced, tactful way.
 - Lexical fields: mistakes and consequences; teamwork and projects; tech problems · Pronunciation: perfect modals: weak "have" /əv/; intonation for politeness · Skins: tech, gaming, football, business
 
-**B2-S07 The Future Is...** — *A time-capsule letter from 2025 asks: what will you be doing in 2035? Answer it - and prove it is realistic.*
+**B2-S07 The Future Is...** — *Vee's time-capsule letter from 2025 asks: what will you be doing in 2035? Answer it - and prove it is realistic.*
 - I can say what will be happening or will be completed at a future time.
 - I can write a clear, detailed text about my future plans.
 - *Mediation:* Summarise two different predictions for the same topic from two sources.
@@ -371,7 +371,7 @@
 - *Mediation:* Help a younger sibling understand a warranty or return policy.
 - Lexical fields: repairs, services and shopping; complaints and refunds; customer service language · Pronunciation: politeness intonation in indirect questions; linking in "have it done" · Skins: tech, fashion, business, travel
 
-**B2-S10 Unless You Do** — *Two students want the same band room. Negotiate a deal that works for both - with conditions neither can break.*
+**B2-S10 Unless You Do** — *Ava and Theo want the same band room. Negotiate a deal that works for both - with conditions neither can break.*
 - I can state conditions and negotiate an agreement.
 - I can use a range of conditional structures to be precise.
 - *Mediation:* Mediate between two people who have different needs by suggesting a compromise.
@@ -383,7 +383,7 @@
 - *Mediation:* Explain a short scientific text on memory to a friend in simpler words.
 - Lexical fields: memory and psychology; habits and self-improvement; language and meaning · Pronunciation: verb + to: weak "to" /tə/; stress for contrast in near-identical pairs · Skins: science, fitness, music, tech
 
-**B2-S12 The Big Picture** — *It was not the goal that won the match - it was the pass before it. Work out what really matters in the story.*
+**B2-S12 The Big Picture** — *Theo says it was not the goal that won the match - it was the pass before it. Work out what really matters in the story.*
 - I can give emphasis to the part of a sentence that matters most.
 - I can structure a talk to guide the listener.
 - *Mediation:* Pick out the main point of a long speech and re-express it in two sentences.
@@ -395,19 +395,19 @@
 - *Mediation:* Condense a long email into a short summary that keeps all key points.
 - Lexical fields: journalism and writing; process language; academic style · Pronunciation: intonation in long compressed sentences; stress on key content words · Skins: social, film, science, business
 
-**B2-S14 As Much As** — *Two cities, two schools, two phones - but which is really better? Compare precisely, with numbers and evidence.*
+**B2-S14 As Much As** — *Mia is choosing between two cities, two schools and two phones - but which is really better? Compare precisely, with numbers and evidence.*
 - I can compare things precisely and describe how they change together.
 - I can describe a chart and draw a clear conclusion.
 - *Mediation:* Explain a chart or table from a text to a friend who cannot see it.
 - Lexical fields: data, charts and trends; cities and lifestyle; technology and cost · Pronunciation: stress and rhythm in comparison pairs; intonation in lists and numbers · Skins: business, tech, travel, science, fitness
 
-**B2-S15 Say It Clearly** — *Two exchange students speak English but not each other's culture. You are the bridge: help them understand and decide together.*
+**B2-S15 Say It Clearly** — *Two exchange students speak English but not each other's culture. Vee asks you and Ava to be the bridge: help them understand and decide together.*
 - I can summarise and relay information from one source or speaker to another.
 - I can help others understand each other by explaining and checking.
 - *Mediation:* Run a mediation between two speakers with different views and produce a neutral summary.
 - Lexical fields: intercultural communication; meetings and teamwork; reporting and summarising · Pronunciation: clear chunking for relayed information; neutral and polite tone · Skins: travel, business, social, music
 
-**B2-S16 Debate League** — *The semi-finals of the school debate league need a speaker who can argue either side. Show you can do both.*
+**B2-S16 Debate League** — *The semi-finals of Vee's debate league need a speaker who can argue either side. Show you can do both.*
 - I can present a clear, well-structured argument and respond to questions.
 - I can link ideas into a cohesive text using a range of devices.
 - *Mediation:* Chair a short discussion: summarise each speaker and invite responses.
@@ -418,24 +418,24 @@
 
 ## C1
 
-| Season | Title · theme | Structures (E3 / E6) | Functions | Release | Items |
-|---|---|---|---|---|---|
-| C1-S01 | **Rarely Do We...** · Powerful openings and emphatic style | inversion after negative / restrictive adverbials (Rarely do we ...) | emphasising; persuading; analysing style | A speech opening (90 seconds) using emphatic inversion, and a reflection on its effect | 84 |
-| C1-S02 · Big Remix | **Had I Known** · Hypothetical reasoning and regret in formal register | inverted conditionals (Had I known ..., Should you ...) / mixed conditionals ⚠ | hypothesising; arguing formally; speculating about causes | A formal written statement and a spoken defence for a mock-trial case | 84 |
-| C1-S03 | **They Say...** · Reporting claims and evaluating sources | passive reporting structures (It is said that ... / He is believed to ...) | reporting claims; evaluating sources; distancing from a claim | A media-literacy analysis: how a claim is reported, and what I would check | 84 |
-| C1-S04 · Big Remix | **I Suggest That...** · Formal proposals and recommendations | subjunctive / mandative (I suggest that he go) and would rather | making formal proposals; recommending; stating preferences | A formal proposal letter or report with recommendations | 84 |
-| C1-S05 | **In Other Words** · Dense, abstract language and academic style | nominalisation and complex noun phrases | writing academically; defining and explaining; simplifying complex ideas | A short academic-style paragraph and its plain-English version | 84 |
-| C1-S06 · Big Remix | **What Matters Is...** · Focus, emphasis and storytelling | fronting and emphasis (What matters is ..., Not only ... but) | storytelling; emphasising and contrasting; building to a climax | A short narrative that uses fronting and emphasis to build to a key moment | 84 |
-| C1-S07 | **Having Said That** · Concise, sophisticated written style | perfect participle clauses and reduced relatives (Having done ...) | editing and condensing; linking ideas economically; writing in a mature style | An edited text showing how I tightened five sentences | 84 |
-| C1-S08 · Big Remix | **Reading Between the Lines** · Stance, nuance and implied meaning | stance adverbials and advanced hedging (admittedly, arguably, ostensibly) | expressing stance; hedging and qualifying; reading implied meaning | A commentary on how a writer or speaker shows attitude | 84 |
-| C1-S09 | **Formal or Not?** · Register: choosing the right voice | register control: formal vs informal transformation | adapting register; writing formal and informal messages; recognising tone | Three versions of one message in different registers, with notes on word choice | 84 |
-| C1-S10 · Big Remix | **Be That As It May** · Conceding and counter-arguing | advanced concession (granted, much as, be that as it may, adjective + as) | conceding; counter-arguing; balancing viewpoints | A two-sided argument with concessions, spoken and written | 84 |
-| C1-S11 | **Needn't Have** · Precision with modals and obligation | modal nuance (needn't have, was to, be bound to, would rather) | judging past decisions; expressing expectation; advising precisely | A short reflective text on a plan that did and did not work | 84 |
-| C1-S12 · Big Remix | **Words That Fit** · Collocation, idiom and precision | advanced ellipsis, substitution and collocation precision ⚠ | choosing precise words; paraphrasing; using idiom | A collocation and idiom map for a topic, with example sentences I wrote | 84 |
-| C1-S13 | **Mediating Worlds** · Mediation across cultures and viewpoints | discourse markers for mediation and summary (in essence, by contrast, with regard to) ⚠ | mediating; summarising for different audiences; facilitating agreement | A live mediation of a short negotiation and a written summary | 84 |
-| C1-S14 · Big Remix | **The Art of Persuasion** · Rhetoric, advertising and public speaking | rhetorical devices (rule of three, rhetorical question, parallelism) ⚠ | persuading; presenting; analysing persuasion | A persuasive speech or pitch (three minutes) with an annotated script | 84 |
-| C1-S15 | **Wit and Irony** · Humour, understatement and cultural nuance | irony, understatement and pragmatic markers ⚠ | joking and teasing tactfully; understanding irony; managing tone | A short comic or satirical piece (school-safe) with notes on how the humour works | 84 |
-| C1-S16 · Big Remix · **level check** | **Capstone Portfolio** · Putting it all together: a student-led final project | text-level cohesion and signposting in long texts ⚠ | presenting a project; reflecting on learning; setting goals | A capstone portfolio: a spoken presentation, a written piece and a reflection on my progress | 84 |
+| Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
+|---|---|---|---|---|---|---|
+| C1-S01 | **Rarely Do We...** · Powerful openings and emphatic style | Vee | inversion after negative / restrictive adverbials (Rarely do we ...) | emphasising; persuading; analysing style | A speech opening (90 seconds) using emphatic inversion, and a reflection on its effect | 84 |
+| C1-S02 · Big Remix | **Had I Known** · Hypothetical reasoning and regret in formal register | Theo | inverted conditionals (Had I known ..., Should you ...) / mixed conditionals ⚠ | hypothesising; arguing formally; speculating about causes | A formal written statement and a spoken defence for a mock-trial case | 84 |
+| C1-S03 | **They Say...** · Reporting claims and evaluating sources | Mia | passive reporting structures (It is said that ... / He is believed to ...) | reporting claims; evaluating sources; distancing from a claim | A media-literacy analysis: how a claim is reported, and what I would check | 84 |
+| C1-S04 · Big Remix | **I Suggest That...** · Formal proposals and recommendations | Vee, Ava | subjunctive / mandative (I suggest that he go) and would rather | making formal proposals; recommending; stating preferences | A formal proposal letter or report with recommendations | 84 |
+| C1-S05 | **In Other Words** · Dense, abstract language and academic style | Vee | nominalisation and complex noun phrases | writing academically; defining and explaining; simplifying complex ideas | A short academic-style paragraph and its plain-English version | 84 |
+| C1-S06 · Big Remix | **What Matters Is...** · Focus, emphasis and storytelling | Ava | fronting and emphasis (What matters is ..., Not only ... but) | storytelling; emphasising and contrasting; building to a climax | A short narrative that uses fronting and emphasis to build to a key moment | 84 |
+| C1-S07 | **Having Said That** · Concise, sophisticated written style | Ava, Vee | perfect participle clauses and reduced relatives (Having done ...) | editing and condensing; linking ideas economically; writing in a mature style | An edited text showing how I tightened five sentences | 84 |
+| C1-S08 · Big Remix | **Reading Between the Lines** · Stance, nuance and implied meaning | Theo | stance adverbials and advanced hedging (admittedly, arguably, ostensibly) | expressing stance; hedging and qualifying; reading implied meaning | A commentary on how a writer or speaker shows attitude | 84 |
+| C1-S09 | **Formal or Not?** · Register: choosing the right voice | Mia | register control: formal vs informal transformation | adapting register; writing formal and informal messages; recognising tone | Three versions of one message in different registers, with notes on word choice | 84 |
+| C1-S10 · Big Remix | **Be That As It May** · Conceding and counter-arguing | Ava | advanced concession (granted, much as, be that as it may, adjective + as) | conceding; counter-arguing; balancing viewpoints | A two-sided argument with concessions, spoken and written | 84 |
+| C1-S11 | **Needn't Have** · Precision with modals and obligation | Theo | modal nuance (needn't have, was to, be bound to, would rather) | judging past decisions; expressing expectation; advising precisely | A short reflective text on a plan that did and did not work | 84 |
+| C1-S12 · Big Remix | **Words That Fit** · Collocation, idiom and precision | Vee | advanced ellipsis, substitution and collocation precision ⚠ | choosing precise words; paraphrasing; using idiom | A collocation and idiom map for a topic, with example sentences I wrote | 84 |
+| C1-S13 | **Mediating Worlds** · Mediation across cultures and viewpoints | Vee | discourse markers for mediation and summary (in essence, by contrast, with regard to) ⚠ | mediating; summarising for different audiences; facilitating agreement | A live mediation of a short negotiation and a written summary | 84 |
+| C1-S14 · Big Remix | **The Art of Persuasion** · Rhetoric, advertising and public speaking | Vee | rhetorical devices (rule of three, rhetorical question, parallelism) ⚠ | persuading; presenting; analysing persuasion | A persuasive speech or pitch (three minutes) with an annotated script | 84 |
+| C1-S15 | **Wit and Irony** · Humour, understatement and cultural nuance | Theo, Mia | irony, understatement and pragmatic markers ⚠ | joking and teasing tactfully; understanding irony; managing tone | A short comic or satirical piece (school-safe) with notes on how the humour works | 84 |
+| C1-S16 · Big Remix · **level check** | **Capstone Portfolio** · Putting it all together: a student-led final project | Vee | text-level cohesion and signposting in long texts ⚠ | presenting a project; reflecting on learning; setting goals | A capstone portfolio: a spoken presentation, a written piece and a reflection on my progress | 84 |
 
 <details><summary>Can-do statements, hooks and mediation</summary>
 
@@ -445,19 +445,19 @@
 - *Mediation:* Condense a long speech into three key points for someone preparing a response.
 - Lexical fields: rhetoric and public speaking; rare and notable events; formal vocabulary · Pronunciation: emphatic stress and pause after the fronted element; pace and breath in a speech · Skins: social, film, music, business
 
-**C1-S02 Had I Known** — *A mock trial at school has a verdict that hinges on one 'if'. Argue what would have happened - in the formal register a court expects.*
+**C1-S02 Had I Known** — *Theo's mock trial at school has a verdict that hinges on one 'if'. Argue what would have happened - in the formal register a court expects.*
 - I can speculate about past and present possibilities using inverted and mixed conditionals.
 - I can adapt register for a formal audience.
 - *Mediation:* Explain the key arguments of both sides of a case to a neutral listener.
 - Lexical fields: law, fairness and justice; formal reasoning; causes and consequences · Pronunciation: intonation of formal hypothesising; contrastive stress in conditionals · Skins: film, business, social, science
 
-**C1-S03 They Say...** — *It is said that a famous image was never real. Evaluate the claim, the sources and the way the story is told.*
+**C1-S03 They Say...** — *Mia shows the group a famous image and says it was never real. Evaluate the claim, the sources and the way the story is told.*
 - I can report claims impersonally and evaluate how reliable a source is.
 - I can write a clear analysis of a news story.
 - *Mediation:* Summarise a complex article for a friend and flag which claims are weak.
 - Lexical fields: media and misinformation; research and evidence; trust and credibility · Pronunciation: stress and intonation that signal doubt; rhythm of long formal sentences · Skins: social, tech, film, science
 
-**C1-S04 I Suggest That...** — *The student council needs a formal proposal to change one school rule. Draft it so well that nobody can say no.*
+**C1-S04 I Suggest That...** — *Vee asks the student council, led by Ava, for a formal proposal to change one school rule. Draft it so well that nobody can say no.*
 - I can make formal recommendations and state preferences precisely.
 - I can write a proposal with a clear structure and suitable tone.
 - *Mediation:* Turn a student's informal complaint into a polite formal request.
@@ -469,7 +469,7 @@
 - *Mediation:* Re-express a dense academic paragraph for a general audience.
 - Lexical fields: academic vocabulary; science and research; abstract nouns · Pronunciation: stress in long noun phrases; rhythm in academic reading aloud · Skins: science, tech, nature, business
 
-**C1-S06 What Matters Is...** — *Every great story hides one sentence that changes everything. Find it, and learn how the author makes you notice it.*
+**C1-S06 What Matters Is...** — *Ava says every great story hides one sentence that changes everything. Find it, and learn how the author makes you notice it.*
 - I can use cleft and fronted structures to shape what the reader notices.
 - I can write a short story with controlled effect.
 - *Mediation:* Explain the effect of a famous passage to a friend who found it confusing.
@@ -481,19 +481,19 @@
 - *Mediation:* Edit another student's text so it keeps meaning but is shorter and clearer.
 - Lexical fields: writing and editing; journalism and essays; cause, sequence and result · Pronunciation: rhythm in participle-based sentences; stress on the main clause · Skins: social, film, science, business
 
-**C1-S08 Reading Between the Lines** — *'Admittedly, it was not a disaster.' What is the writer really saying? Decode the stance behind eight short messages.*
+**C1-S08 Reading Between the Lines** — *Theo sends a message: 'Admittedly, it was not a disaster.' What is he really saying? Decode the stance behind eight short messages.*
 - I can understand implied attitude and express my own stance with precision.
 - I can hedge and qualify claims appropriately.
 - *Mediation:* Tell a listener what an author really thinks, based on a passage.
 - Lexical fields: attitude and opinion; critical reading; evidence and argument · Pronunciation: intonation that shows attitude; stress on stance adverbials · Skins: social, film, music, science
 
-**C1-S09 Formal or Not?** — *The same request goes to a friend, a teacher and a company. Rewrite it three times - and spot why one of the replies backfires.*
+**C1-S09 Formal or Not?** — *Mia sends the same request to a friend, a teacher and a company. Rewrite it three times - and spot why one of the replies backfires.*
 - I can adjust register to audience and purpose in speech and writing.
 - I can recognise when a formal or informal choice is inappropriate.
 - *Mediation:* Relay an informal message in a formal register to a third party.
 - Lexical fields: formal and informal vocabulary; email and messaging conventions; workplace and school communication · Pronunciation: formal vs informal pronunciation and pace; tone of voice and politeness · Skins: business, social, tech, fashion
 
-**C1-S10 Be That As It May** — *A friend's argument is nearly right. Learn how to say 'granted' without giving up your own point.*
+**C1-S10 Be That As It May** — *Ava's argument is nearly right. Learn how to say 'granted' without giving up your own point.*
 - I can concede a point while keeping my position.
 - I can structure a balanced argument with advanced concession.
 - *Mediation:* Help two people with opposing views find the common ground in a text.
@@ -505,25 +505,25 @@
 - *Mediation:* Explain to a friend what a set of rules really requires, which parts are optional, and which are not.
 - Lexical fields: planning and risk; travel and outdoors; work and responsibility · Pronunciation: weak and strong forms in modal chains; intonation of judgement · Skins: travel, fitness, business, nature
 
-**C1-S12 Words That Fit** — *'Heavy rain' but 'strong wind' - why? Hunt for the invisible rules behind natural English and break at least one on purpose.*
+**C1-S12 Words That Fit** — *Vee asks: why 'heavy rain' but 'strong wind'? Hunt for the invisible rules behind natural English and break at least one on purpose.*
 - I can use collocations and idioms precisely and avoid awkward word choices.
 - I can replace repeated words with natural alternatives.
 - *Mediation:* Paraphrase a text using different but natural vocabulary for a different audience.
 - Lexical fields: collocations and idioms; topic vocabulary in a chosen field; phrasal verbs and fixed expressions · Pronunciation: stress and rhythm in idioms; connected speech in fixed expressions · Skins: music, film, football, social, business
 
-**C1-S13 Mediating Worlds** — *Two teams from different countries must agree a joint project. You are the only person who understands both - make it work.*
+**C1-S13 Mediating Worlds** — *Two teams from different countries must agree a joint project, and Vee picks you as the only person who understands both. Make it work.*
 - I can mediate between speakers with different viewpoints and summarise key decisions.
 - I can convey the essence of long texts and discussions clearly.
 - *Mediation:* Chair a mediation between two parties and produce a neutral written summary.
 - Lexical fields: intercultural communication; meetings and negotiation; international projects · Pronunciation: clear signposting intonation; neutral and diplomatic tone · Skins: business, travel, social, science
 
-**C1-S14 The Art of Persuasion** — *The best speeches use three tricks you already know. Spot them in ten clips and learn to use them ethically.*
+**C1-S14 The Art of Persuasion** — *Vee shows that the best speeches use three tricks you already know. Spot them in ten clips and learn to use them ethically.*
 - I can use rhetorical devices to persuade and recognise when others use them.
 - I can deliver a structured, persuasive presentation.
 - *Mediation:* Analyse an advert for a younger audience and explain how it tries to persuade.
 - Lexical fields: advertising and marketing; speeches and campaigns; ethics of persuasion · Pronunciation: pace, pause and emphasis in speeches; rhetorical intonation (lists of three, rhetorical questions) · Skins: business, social, film, music
 
-**C1-S15 Wit and Irony** — *'Not bad at all' can mean two opposite things. Learn the signals of English humour and when not to take words literally.*
+**C1-S15 Wit and Irony** — *Theo says 'Not bad at all' - and Mia hears the opposite. Learn the signals of English humour and when not to take words literally.*
 - I can recognise irony, understatement and humour, and use them tactfully.
 - I can explain how tone changes meaning.
 - *Mediation:* Explain a joke or ironic comment to someone from another culture.

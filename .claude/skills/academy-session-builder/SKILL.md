@@ -45,6 +45,8 @@ Level scaling: A1 teacher talk <= 40 %, scaffolds full; B1 task-first; C1 semina
 
 ## Required parts of every session plan
 
+00. **Cast:** use only the Academy cast from the vault (`src/curriculum/academy/cast.ts`; blueprint field `cast`). Vee is the mentor voice (Remember? card, clue hand-over, Wrap: mistakes are normal); the Season lead and one helper student play the parts the blueprint gives them, following their vault traits (Ava asks, Theo listens, Mia = peer, traits to be defined). No invented characters.
+
 0. **Progressive stack (owner rule):** this lesson = ALL earlier lessons of the unit + its new items (`buildsOn` in the lesson blueprint). The Remember? list, the Notice & Build practice, the Mission and the Release must each reuse language from lessons 1..n-1 of the unit, not only the previous lesson. Texts for the Drop use >= 95 % words already met (earlier lessons, recycled Seasons) or glossed.
 
 1. **Last-Time card** (30-60 s): 3 bullet "what we did" (from the previous SessionPlan), 1 sentence the student produced ("Best Line"), 1 thing to remember today. Generated, never typed ad hoc.

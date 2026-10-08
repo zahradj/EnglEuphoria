@@ -5,6 +5,7 @@
 //
 // A blueprint is the *plan* for a session: objective, language load, run of show with the cognitive job of each segment, supports,
 // comfort, recap source. It does not choose the concrete game (academy-activity-selector does) and contains no lesson content.
+import { ACADEMY_CAST_NAMES, CAST_ROLES, GENERIC_HELPER_PART, type AcademyCastName } from './cast';
 import {
   EPISODE_ORDER,
   MAX_ITEMS_PER_SESSION,
@@ -204,6 +205,11 @@ export interface AcademyLessonBlueprint {
   secondarySkills: SkillKey[];
   /** new language this session introduces (words + chunks); <= MAX_ITEMS_PER_SESSION; 0 in E7 and E8 */
   newItems: { count: number; kind: ItemKind };
+  /**
+   * Cast (owner rule, 2026-10-08): lessons use ONLY the Academy characters from the cast vault. Vee is the mentor voice;
+   * the lead is the character the Season hook features; one helper student is chosen by the lesson's job and the vault traits.
+   */
+  cast: { lead: AcademyCastName; appears: { name: AcademyCastName; part: string }[] };
   /** what every new item of THIS lesson must relate to (unit theme + this lesson's job). Reviewers check the item list against it. */
   itemFocus: string;
   /**
@@ -334,6 +340,18 @@ export function itemFocusFor(s: SeasonOutline, type: EpisodeType): string {
 }
 
 /** Build the blueprint of one session. `previousId` is the blueprint before it in roadmap order (null for the very first). */
+export function castFor(s: SeasonOutline, type: EpisodeType): AcademyLessonBlueprint['cast'] {
+  const roles = CAST_ROLES[type];
+  const named = s.cast.filter((n): n is AcademyCastName => (ACADEMY_CAST_NAMES as readonly string[]).includes(n));
+  const lead: AcademyCastName = (named.find((n) => n !== 'Vee') ?? named[0] ?? 'Vee') as AcademyCastName;
+  const students: AcademyCastName[] = ['Ava', 'Theo', 'Mia'];
+  const helper = roles.helper !== lead ? roles.helper : students.find((n) => n !== lead && n !== roles.helper) ?? 'Mia';
+  const appears: { name: AcademyCastName; part: string }[] = [{ name: 'Vee', part: roles.vee }];
+  if (lead !== 'Vee') appears.push({ name: lead, part: roles.lead });
+  if (helper !== lead) appears.push({ name: helper, part: helper === roles.helper ? roles.helperRole : GENERIC_HELPER_PART[helper as 'Ava' | 'Theo' | 'Mia'] });
+  return { lead, appears };
+}
+
 export function buildLessonBlueprint(s: SeasonOutline, episodeIndex: number, previousId: string | null): AcademyLessonBlueprint {
   const type = EPISODE_ORDER[episodeIndex];
   const meta = EPISODES[type];
@@ -357,6 +375,7 @@ export function buildLessonBlueprint(s: SeasonOutline, episodeIndex: number, pre
     primarySkill: meta.primarySkill,
     secondarySkills: meta.secondarySkills,
     newItems: { count: counts[episodeIndex], kind: meta.itemKind },
+    cast: castFor(s, type),
     itemFocus: itemFocusFor(s, type),
     buildsOn: {
       lessonIds: earlierIds,
