@@ -429,6 +429,8 @@ const UNIT1_EXTRACTORS = {
       [s.who, s.doneLine],
     ];
   },
+  // Mirror HouseBoardScene.tsx's houseBoardLines().
+  'house-board': (s) => [[s.who, 'Roll the dice!'], ...(s.squares ?? []).flatMap((q) => [[s.who, q.ask], [s.who, q.say]]), [s.who, s.doneLine]],
   // Mirror DoorKnockScene.tsx's doorKnockLines().
   'door-knock': (s) => [
     ...(s.rounds ?? []).flatMap((r) => [

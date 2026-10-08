@@ -633,6 +633,15 @@ export type Scene =
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
   | {
+      /** My House Board Game (U6L6 signature): a snake path START → squares → HOME drawn over `bg`. The child
+       *  rolls the dice (values taken in order from `rolls`), Pip hops along and, on the square he lands on, asks
+       *  `ask`; the child answers aloud, taps the microphone, and Pip says `say`. Reaching HOME ends the game. */
+      id: string; kind: 'house-board'; bg: string; teacher: string; who: CharKey;
+      squares: { label: string; img: string; ask: string; say: string }[];
+      rolls: number[];
+      doneLine: string;
+    }
+  | {
       /** Is This My House? (U6L5 signature): the street picture `bg` with `houses` (x/y/w/h = % box of each
        *  DOOR, `color` = its colour word). Friend `owner` says `line` ("My house has a red door!"); an arrow visits
        *  the doors in `tries` order (ending with `house`) asking "Is this my house?"; the child answers
