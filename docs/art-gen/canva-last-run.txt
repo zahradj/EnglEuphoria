@@ -1,3 +1,3 @@
-+ public/lep1/scenes/bg-u5l6-stage-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u5l6-host-wide.png (1376, 768)
++ public/lep1/scenes/bg-u6l1-dollhouse-wide.png (1376, 768)
++ public/lep1/scenes/bg-u6l1-house-front-wide.png (1376, 768)
 2/2 saved
