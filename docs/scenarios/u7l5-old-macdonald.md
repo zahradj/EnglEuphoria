@@ -1,6 +1,6 @@
 # Scenario — Pre-A1 Unit 7 Lesson 5 "Old MacDonald Had a Farm" · story film "Grandpa's Noisy Barn"
 
-**Status: waiting for the owner's approval** — no picture made, nothing ordered.
+**Status: approved by the owner (2026-10-08)** — pictures in progress (Canva). Nothing paid is ordered.
 
 | | |
 |---|---|
@@ -65,4 +65,4 @@ our lines (cow / pig / sheep / duck), ~20 s, used as the lesson's hello song.
 **Stills film only — free** (Canva pictures + recorded voices + 2-picture flips). No paid AI clips.
 
 ## Owner approval
-Waiting — reply "Go" to approve this scenario (or tell me what to change).
+Approved: owner, 2026-10-08 — "Go" (reply to the scenario).
