@@ -1,7 +1,7 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0060-2216289381507746340.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T222748Z&X-Amz-Expires=80641&X-Amz-Signature=a6707c4e2027167c186cdacccba841d667123738f69035c2e13efee7d1fb53e8&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2020%3A51%3A49%20GMT",
-  "out": "public/lep1/scenes/bg-u7l2-farm-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0060-240335048729317155.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261008%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261008T021855Z&X-Amz-Expires=70743&X-Amz-Signature=ebd117aaa9db7e7d8cbd058c9df6331cd9c789cd48bc797d6c6a6e80fe01a444&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2021%3A57%3A58%20GMT",
+  "out": "docs/art-gen/u7l3-farm-birds-sheet.png",
   "sticker": false
  }
 ]
