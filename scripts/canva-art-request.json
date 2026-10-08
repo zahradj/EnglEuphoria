@@ -1,12 +1,12 @@
 [
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0061-5947521599512628024.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T035518Z&X-Amz-Expires=90036&X-Amz-Signature=4fa02c1448b6db2c3e571536f8c96787c13277eca786704f123af3f4febf45c3&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2004%3A55%3A54%20GMT",
-  "out": "public/lep1/scenes/bg-u6l1-dollhouse-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0064-3303908627294529136.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T214309Z&X-Amz-Expires=27956&X-Amz-Signature=eaa220e2d2be0084f22386d2393bc46c3a0d3ecbc5e9eca0abbac6eabd9f4988&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2005%3A29%3A05%20GMT",
+  "out": "public/lep1/sheets/u6l2-furniture-sheet.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0063-8815188668770126830.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T123002Z&X-Amz-Expires=58642&X-Amz-Signature=deac9e8aa8a9061b2635d9e8903f930804b894c2d265bee647283fb9de53743d&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2004%3A47%3A24%20GMT",
-  "out": "public/lep1/scenes/bg-u6l1-house-front-wide.png",
+  "url": "https://export-download.canva.com/pO_n4/DAHXATpO_n4/-1/0/0086-7603720373667004655.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261007%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261007T153432Z&X-Amz-Expires=52397&X-Amz-Signature=c52c079cb2f3e56c9425bd60aac013ecd01edad726fac784a7d84e12a62fe73d&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2008%20Oct%202026%2006%3A07%3A49%20GMT",
+  "out": "public/lep1/sheets/u6l2-ch-sheet.png",
   "sticker": false
  }
 ]
