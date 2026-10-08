@@ -430,6 +430,7 @@ const UNIT1_EXTRACTORS = {
     ];
   },
   // Mirror HouseBoardScene.tsx's houseBoardLines().
+  'photo-snap': (s) => [[s.who, 'Get your camera ready!'], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).flatMap((a) => [[s.who, a.say], [s.who, `Oops! That's the ${a.label}.`]]), [s.who, s.doneLine]],
   'house-board': (s) => [[s.who, 'Roll the dice!'], ...(s.squares ?? []).flatMap((q) => [[s.who, q.ask], [s.who, q.say]]), [s.who, s.doneLine]],
   // Mirror DoorKnockScene.tsx's doorKnockLines().
   'door-knock': (s) => [
@@ -565,7 +566,7 @@ const UNIT1_EXTRACTORS = {
   // Mirrors MysteryBagScene.tsx's mysteryBagLines().
   'mystery-bag': (s) => {
     const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
-    return [[s.who, "What's in the bag?"], ...(s.rounds ?? []).flatMap((r) => [
+    return [[s.who, s.question ?? "What's in the bag?"], ...(s.rounds ?? []).flatMap((r) => [
       [s.who, `It's ${art(r.toyWord)} ${r.toyWord.toLowerCase()}!`],
       [s.who, `It's ${art(r.colorWord)} ${r.colorWord.toLowerCase()} ${r.toyWord.toLowerCase()}!`],
     ])];

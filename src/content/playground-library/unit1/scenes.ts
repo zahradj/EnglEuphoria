@@ -478,6 +478,8 @@ export type Scene =
        *  toy it is, then it jumps out in colour ("It's a red ball!") and the
        *  child says it (Unit 3 Lesson 1). */
       id: string; kind: 'mystery-bag'; bg: string; teacher: string; who: CharKey;
+      /** Optional wording for things that are not toys (U7L1: "Who's in the bag?", "You found every pet!"). */
+      question?: string; doneText?: string;
       rounds: { img: string; toyWord: string; colorWord: string; colorHex: string; options: { toyWord: string; img: string }[] }[];
     }
   | {
@@ -632,6 +634,17 @@ export type Scene =
     }
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
+  | {
+      /** Pet Photo (U7L1 signature): the child is the photographer. `animals` sit on `spots` (x/y = % of the
+       *  picture at the animal's feet, size = % width); each round `place[i]` = the spot of animal i, so they
+       *  swap places. Pip says `line`, the child taps `target` and its photo drops into the album. */
+      id: string; kind: 'photo-snap'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      spots: { x: number; y: number; size: number }[];
+      /** `scale` shrinks a small animal (a bird) relative to the spot size. */
+      animals: { label: string; img: string; say: string; scale?: number }[];
+      rounds: { target: number; line: string; place: number[] }[];
+      doneLine: string;
+    }
   | {
       /** My House Board Game (U6L6 signature): a snake path START → squares → HOME drawn over `bg`. The child
        *  rolls the dice (values taken in order from `rolls`), Pip hops along and, on the square he lands on, asks
@@ -11122,4 +11135,206 @@ export const LESSON_U6L6_SCENES: Scene[] = [
     ],
   },
   { id: 'u6l6-finale', kind: 'finale', bg: bgU6L6GameNight, who: 'pip', line: 'You know my whole house! Kitchen, bedroom, bathroom, living room! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 7, Lesson 1 — "Dog, Cat, Bird!" (Furry, feathered friends)
+ *
+ * A new unit and a new place: Pip's town pet shop on a sunny morning — a dog
+ * bed, a cat basket and a golden bird cage. The child meets three pets, says
+ * "It's a dog! / It's a cat! / It's a bird!" with their sounds, and plays the
+ * photographer in the new Pet Photo game. D and C (dog, cat) are letters the
+ * child already knows (Unit 3 Lesson 1, Unit 2 Lesson 3), so phonics is a
+ * light review with B (bird).
+ * ========================================================================= */
+
+const bgU7L1Shop = `${A}/scenes/bg-u7l1-petshop-wide.png`;
+const bgU7L1ShopEmpty = `${A}/scenes/bg-u7l1-petshop-empty-wide.png`;
+const itemBird = `${A}/items/item-bird.png`;
+
+export const LESSON_U7L1_TITLE = 'Dog, Cat, Bird!';
+export const LESSON_U7L1_OBJECTIVE = 'Name three pets — dog, cat, bird — with "It\'s a dog!", make their sounds (woof, meow, tweet), find the pet you hear, and hear the first sounds D, C and B, by listening, moving and playing, no reading.';
+
+export const LESSON_U7L1_SCENES: Scene[] = [
+  { id: 'u7l1-title', kind: 'title-card', bg: bgU7L1Shop, level: 'Pre-A1', unit: 'Unit 7', lessonLabel: 'Lesson 1', title: 'Dog, Cat, Bird!', subtitle: 'Welcome to the pet shop!' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u7l1-song', kind: 'song', bg: bgU7L1Shop, title: '\u{1F3B5} Dog, Cat, Bird! \u{1F3B5}', teacher: 'Sing and act: paws up for the dog, whiskers for the cat, flap your wings for the bird!',
+    durationSeconds: 20, bigWord: 'Pets', songUrl: `${A}/audio/dog-cat-bird-song-u7l1.mp3?v=1`,
+    lineDurationsMs: [3820, 4480, 4300, 7462],
+    songPrompt: 'Cheerful bouncy kids pet song',
+    lyrics: [
+      { who: 'pip', text: "It's a dog! Woof, woof, woof!", emotion: 'happy' },
+      { who: 'pip', text: "It's a cat! Meow, meow, meow!", emotion: 'happy' },
+      { who: 'pip', text: "It's a bird! Tweet, tweet, tweet!", emotion: 'happy' },
+      { who: 'pip', text: 'Dog, cat, bird! I love my pets!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 6 · My House Game (the rooms).
+    id: 'u7l1-recall-warmup', kind: 'recall-warmup', bg: bgU7L1Shop, who: 'pip', mode: 'click',
+    fromLabel: 'Unit 6 · Lesson 6 · My House Game',
+    teacher: 'Warm-up from last lesson: Pip says a room, the child finds it. Say each one together.',
+    items: [
+      { word: 'kitchen', say: 'Find the kitchen!', img: roomKitchen },
+      { word: 'bedroom', say: 'Where is the bedroom?', img: roomBedroom },
+      { word: 'bathroom', say: 'Show me the bathroom!', img: roomBathroom },
+      { word: 'living room', say: 'Find the living room!', img: roomLiving },
+    ],
+  },
+  {
+    id: 'u7l1-intro', kind: 'cinematic', bg: bgU7L1Shop, hidePipOverlay: true, title: 'Dog, Cat, Bird!', subtitle: 'The pet shop', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Welcome to the pet shop!' },
+      { who: 'pip', line: "Look! A dog, a cat and a bird! Let's meet them!" },
+    ],
+    cta: "Let's meet them!",
+  },
+
+  /* 4-5 The words, move */
+  {
+    id: 'u7l1-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU7L1Shop, teacher: 'Listen, then say it with the sound: "It\'s a dog! Woof!"',
+    cards: [
+      { who: 'pip', sentence: "It's a dog! Woof!", img: itemDog, imgLabel: 'dog' },
+      { who: 'pip', sentence: "It's a cat! Meow!", img: itemCat, imgLabel: 'cat' },
+      { who: 'pip', sentence: "It's a bird! Tweet!", img: itemBird, imgLabel: 'bird' },
+    ],
+  },
+  {
+    id: 'u7l1-move', kind: 'tpr-actions', bg: bgU7L1Shop, who: 'pip',
+    teacher: 'Stand up! Move like the pets with Pip.',
+    rounds: [
+      { line: 'Wag your tail like a dog! Woof!', emoji: '\u{1F415}', img: itemDog },
+      { line: 'Stretch like a cat! Meow!', emoji: '\u{1F408}', img: itemCat },
+      { line: 'Fly like a bird! Tweet!', emoji: '\u{1F426}', img: itemBird },
+      { line: 'Sit like a dog!', emoji: '\u{1F415}', img: itemDog },
+    ],
+  },
+
+  /* 6 Signature game (new): Pet Photo */
+  {
+    id: 'u7l1-photo', kind: 'photo-snap', bg: bgU7L1ShopEmpty, who: 'pip',
+    teacher: 'Pet Photo! The child is the photographer. Pip says a pet; the child taps it to take its photo. The pets swap places, so listen to the word! Say "It\'s a dog!" with each photo.',
+    spots: [
+      { x: 13.5, y: 82, size: 15 },
+      { x: 51, y: 84, size: 13 },
+      { x: 87.4, y: 48, size: 11 },
+      { x: 47, y: 42.5, size: 10 },
+      { x: 72, y: 82, size: 13 },
+      { x: 9, y: 53, size: 9 },
+    ],
+    animals: [
+      { label: 'dog', img: itemDog, say: "It's a dog! Woof!" },
+      { label: 'cat', img: itemCat, say: "It's a cat! Meow!" },
+      { label: 'bird', img: itemBird, say: "It's a bird! Tweet!", scale: 0.6 },
+    ],
+    rounds: [
+      { target: 0, line: 'Take a photo of the dog!', place: [0, 1, 2] },
+      { target: 2, line: 'Take a photo of the bird!', place: [3, 0, 5] },
+      { target: 1, line: 'Take a photo of the cat!', place: [4, 3, 0] },
+      { target: 0, line: 'Where is the dog? Take a photo!', place: [1, 4, 2] },
+    ],
+    doneLine: 'Look at your photos! Dog, cat, bird!',
+  },
+
+  /* 7-9 More games */
+  {
+    id: 'u7l1-mystery-bag', kind: 'mystery-bag', bg: bgU7L1ShopEmpty, who: 'pip',
+    question: "Who's in the bag?", doneText: 'The bag is empty! You found every pet!',
+    teacher: "Who's in the bag? Look at the shadow, tap the pet, then say it with its colour.",
+    rounds: [
+      { img: itemCat, toyWord: 'CAT', colorWord: 'ORANGE', colorHex: '#F97316', options: [{ toyWord: 'DOG', img: itemDog }, { toyWord: 'CAT', img: itemCat }, { toyWord: 'BIRD', img: itemBird }] },
+      { img: itemBird, toyWord: 'BIRD', colorWord: 'BLUE', colorHex: '#3B82F6', options: [{ toyWord: 'BIRD', img: itemBird }, { toyWord: 'DOG', img: itemDog }, { toyWord: 'CAT', img: itemCat }] },
+      { img: itemDog, toyWord: 'DOG', colorWord: 'BROWN', colorHex: '#92400E', options: [{ toyWord: 'CAT', img: itemCat }, { toyWord: 'BIRD', img: itemBird }, { toyWord: 'DOG', img: itemDog }] },
+    ],
+  },
+  {
+    id: 'u7l1-pip-asks', kind: 'join-stage', bg: bgU7L1Shop, teacher: 'Pip asks about pets. Any answer is fine — the child can choose a pet they like.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's a dog!", bubble: 'right' },
+      { who: 'pip', line: 'What does the cat say?', bubble: 'right' },
+      { who: 'student', line: 'Meow!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u7l1-memory', kind: 'memory', bg: bgU7L1ShopEmpty, teacher: 'Find the pet pairs! Say "It\'s a cat!" every time you turn a card.',
+    pairs: [
+      { id: 'dog', label: 'dog', img: itemDog, emoji: '\u{1F415}' },
+      { id: 'cat', label: 'cat', img: itemCat, emoji: '\u{1F408}' },
+      { id: 'bird', label: 'bird', img: itemBird, emoji: '\u{1F426}' },
+    ],
+  },
+
+  /* 10 Sounds review: D, C, B */
+  {
+    id: 'u7l1-pop-dcb', kind: 'sound-pop', bg: bgU7L1ShopEmpty, teacher: 'Balloon Letter Pop! /d/ dog, /k/ cat, /b/ bird — Pip calls a letter, pop only that one!', who: 'pip', goal: 8, seconds: 45,
+    targets: [
+      { letter: 'D', phoneme: '/d/' },
+      { letter: 'C', phoneme: '/k/' },
+      { letter: 'B', phoneme: '/b/' },
+    ],
+    items: [
+      { word: 'D', letter: 'D', emoji: 'D' },
+      { word: 'C', letter: 'C', emoji: 'C' },
+      { word: 'B', letter: 'B', emoji: 'B' },
+    ],
+  },
+
+  /* 11 My pet */
+  {
+    id: 'u7l1-my-pet', kind: 'join-stage', bg: bgU7L1Shop, teacher: 'Your turn! Which pet do you like? Do you have a pet at home? Any answer is fine.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'I like the dog! Which pet do you like?', bubble: 'right' },
+      { who: 'student', line: 'I like the cat! Meow!', bubble: 'right' },
+      { who: 'pip', line: 'Can you be a bird?', bubble: 'right' },
+      { who: 'student', line: 'Tweet, tweet!', bubble: 'right' },
+    ],
+  },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u7l1-sticker', kind: 'sticker-reward', bg: bgU7L1Shop, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You took great pet photos! Here is a puppy sticker for you!', sticker: { img: itemDog, label: 'Pet photographer' },
+  },
+  {
+    id: 'u7l1-home-mission', kind: 'home-mission', bg: bgU7L1Shop, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: find a dog, a cat or a bird — at home, outside, in a book or on a toy! Point and say "It\'s a dog! Woof!"',
+    parentNote: 'Look for animals together — real pets, toys, pictures in books. Ask "What is it?" and let your child answer "It\'s a cat!" and make the sound. Ask "What does the dog say?".',
+    steps: [
+      { emoji: '\u{1F415}', img: itemDog, say: "It's a dog! Woof!" },
+      { emoji: '\u{1F408}', img: itemCat, say: "It's a cat! Meow!" },
+      { emoji: '\u{1F426}', img: itemBird, say: "It's a bird! Tweet!" },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u7l1-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU7L1Shop, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Run like a dog!', emoji: '\u{1F415}' },
+      { line: 'Tiptoe like a cat!', emoji: '\u{1F408}' },
+      { line: 'Flap, flap, fly like a bird!', emoji: '\u{1F426}' },
+      { line: 'Curl up and sleep like a cat!', emoji: '\u{1F634}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u7l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u7l1-finale', kind: 'finale', bg: bgU7L1Shop, who: 'pip', line: 'Dog, cat, bird! Woof, meow, tweet! Goodbye, friend!' },
 ];
