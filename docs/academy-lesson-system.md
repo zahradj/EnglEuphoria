@@ -216,4 +216,4 @@ Remember? retention score trend · Mistake Bank fixed-ratio · hints per session
 **Still open:**
 - **Daily 10 in the first release?** (explained to the owner in chat: a short optional 10-minute practice between live sessions — due reviews, 2–3 mini-games, one voice note.) Recommendation: yes, a minimal version (due reviews + one voice note), because spacing cannot happen inside a single weekly hour.
 - Extra content cost of "My World" skins (3–6 per episode) — approve or reduce.
-- Extend to **C1** (owner request, 2026-10-08): sizing and Seasons are being added; see the next revision.
+- **C1 added (2026-10-08):** 16 Seasons / 128 sessions (560 sessions A1→C1); confirm the sizing or switch to the hours-strict alternative in §4.1.
