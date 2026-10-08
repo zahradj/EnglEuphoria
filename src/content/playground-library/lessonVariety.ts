@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '7-2': { settings: ['farmyard after rain'], look: "a sunny farmyard just after a little rain: a big red barn, a wooden fence, green hills and a rainbow, brown mud puddles and a blue water trough with a bucket and sponge; Pip with a black-and-white cow, a pink pig and a fluffy sheep" },
   '7-1': { settings: ['pet shop'], look: "a sunny little pet shop: cream walls, a big window, wooden shelves of pet toys and food, a round dog bed, a cat basket with a blue cushion and a golden bird cage; Pip waves with a brown puppy, an orange kitten and a blue bird; the empty shop becomes the Pet Photo studio" },
   '6-6': { settings: ['games-night living room'], look: "games night at Pip's house: the whole fox family (Grandma, brother, Dad, sister, baby) around a round coffee table playing a board game, warm lamp light, a starry night window and a red sofa; a snake board path of house pictures drawn in code" },
   '6-5': { settings: ['autumn sunset street', 'park at sunset', "Pip's evening bedroom"], look: "golden autumn sunset: a park with falling orange leaves, then Pip's new street of three look-alike cream houses whose only difference is the door (blue, yellow with a cat in the window, red with a big orange tree), close-ups at each door, Mom's hug in the warm doorway and Pip's lamp-lit bedroom" },
@@ -194,6 +195,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '7-2': {
+    sources: ['Toca Boca / Lingokids pet-care "wash and groom" play', 'Khan Academy Kids (calm listen-and-do tasks, animal sounds)', 'Cambridge (Pre A1 Starters Listening: listen and point to the animal)', 'Lingokids / Super Simple farm-animal songs (animal + sound)'],
+    mechanics: [
+      'wash-and-groom play → Farm Wash: every animal is muddy after the rain, Pip says "Wash the pig!", the child scrubs that animal clean with three taps and Pip says "It\'s a pig! Oink!"',
+      'big-to-small line-up of the farm animals (cow, sheep, pig, chick), the farm train "who is missing?", first-sound pick /k/ /p/ /sh/',
+      '"Which farm animal do you like?" with the animal sound',
+    ],
+    betterThan: [
+      'the action is the answer: the child must hear the WORD to know which animal to scrub; a wrong animal is named back and stays muddy',
+      'the farm changes from muddy to clean as the child plays, so progress is a picture, not a score',
+      'calm by design: no clock, three gentle taps per animal, the right one glows after two tries',
     ],
   },
   '7-1': {
