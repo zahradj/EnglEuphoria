@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '7-4': { settings: ['farm fair'], look: "the fair comes to the farm on a bright day: red-and-white striped tents, bunting flags, hay bales, prize rosettes on the fence and a big yellow-and-white striped hook-a-duck pool in the middle; Pip and the animals of the unit at the fair; a red-curtained show tent for the riddles" },
   '7-3': { settings: ['duck pond and bridge'], look: "the far side of the farm on a golden afternoon: a blue duck pond with lily pads and a little arched wooden bridge, a wooden stable and a red chicken coop, tall reeds and orange evening light; Pip with a brown horse, a white hen and a white farm duck" },
   '7-2': { settings: ['farmyard after rain'], look: "a sunny farmyard just after a little rain: a big red barn, a wooden fence, green hills and a rainbow, brown mud puddles and a blue water trough with a bucket and sponge; Pip with a black-and-white cow, a pink pig and a fluffy sheep" },
   '7-1': { settings: ['pet shop'], look: "a sunny little pet shop: cream walls, a big window, wooden shelves of pet toys and food, a round dog bed, a cat basket with a blue cushion and a golden bird cage; Pip waves with a brown puppy, an orange kitten and a blue bird; the empty shop becomes the Pet Photo studio" },
@@ -196,6 +197,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '7-4': {
+    sources: ['"Guess the animal" riddle cards and I-spy clue games (games4esl, British Council LearnEnglish Kids)', 'Cambridge (Pre A1 Starters listening: understand short descriptions; ask and answer yes / no)', 'Khan Academy Kids (calm listen-and-choose)', 'fairground hook-a-duck (a real game children know)'],
+    mechanics: [
+      'riddle cards → Animal Riddles: an animal hides behind the show-tent curtain, Pip gives clues one by one ("It says moo." "It is big." "It is black and white.") and the child answers "What animal is this?" after any clue',
+      'hook-a-duck at the fair: toy animals float in the pool, "Catch the duck!"; Pip\'s Secret Card with animal cards ("Is it a cow?"); a D / C / H sound sort',
+      'the child asks Pip "What animal is this?" and makes a sound for Pip to guess',
+    ],
+    betterThan: [
+      'the clues use only words the child knows (sounds, big / small, colours), so a whole sentence — not one word — finds the animal',
+      'the child chooses when to answer: more clues mean more help, never a penalty; every wrong pick names an animal ("No! It isn\'t the pig.")',
+      'all nine animals of the unit are reviewed in one lesson, and the child also asks the question, not only answers it',
     ],
   },
   '7-3': {

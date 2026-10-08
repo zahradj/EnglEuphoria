@@ -430,6 +430,7 @@ const UNIT1_EXTRACTORS = {
     ];
   },
   // Mirror HouseBoardScene.tsx's houseBoardLines().
+  'animal-riddle': (s) => { const used = [...new Set((s.rounds ?? []).flatMap((r) => r.options))]; return [[s.who, 'What animal is this?'], ...(s.rounds ?? []).flatMap((r) => r.clues.map((c) => [s.who, c])), ...used.flatMap((i) => { const a = (s.animals ?? [])[i]; return a ? [[s.who, a.say], [s.who, `No! It isn't the ${a.label}.`]] : []; }), [s.who, s.doneLine]]; },
   'animal-parade': (s) => [[s.who, "Let's make an animal parade!"], [s.who, 'Listen again!'], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).map((a) => [s.who, a.say]), [s.who, s.doneLine]],
   'farm-wash': (s) => [[s.who, "Oh no! The animals are muddy! Let's wash them!"], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).flatMap((a) => [[s.who, a.say], [s.who, `Oops! That's the ${a.label}.`]]), [s.who, s.doneLine]],
   'photo-snap': (s) => [[s.who, 'Get your camera ready!'], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).flatMap((a) => [[s.who, a.say], [s.who, `Oops! That's the ${a.label}.`]]), [s.who, s.doneLine]],
