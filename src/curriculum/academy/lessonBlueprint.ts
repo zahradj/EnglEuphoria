@@ -206,6 +206,26 @@ export interface AcademyLessonBlueprint {
   newItems: { count: number; kind: ItemKind };
   /** what every new item of THIS lesson must relate to (unit theme + this lesson's job). Reviewers check the item list against it. */
   itemFocus: string;
+  /**
+   * Progressive stack inside the unit (owner rule, 2026-10-08): lesson 2 = lesson 1 + new; lesson 3 = lessons 1 and 2 + new; and so on.
+   * Every lesson revisits ALL earlier lessons of its unit, and its Mission and Release must reuse that language.
+   */
+  buildsOn: {
+    /** every earlier lesson of this unit (Season), in order */
+    lessonIds: string[];
+    /** new items taught by those earlier lessons */
+    itemsBefore: number;
+    /** itemsBefore + this lesson's new items */
+    itemsAfter: number;
+    structuresBefore: string[];
+    structuresAfter: string[];
+    /** e.g. 'L3 = L1 + L2 + new' */
+    stack: string;
+    /** what the Mission and Release must reuse */
+    mustReuse: string;
+    /** input texts for this lesson: share of running words the student already knows (earlier lessons, recycled Seasons) or sees glossed */
+    inputKnownWordsMinPct: number;
+  };
   /** structures introduced in this session (E3: the first; E6: the second, if any) */
   structures: StructureRef[];
   /** source of the Last-Time card; null only for the very first session of the roadmap */
@@ -282,6 +302,15 @@ function objectiveFor(s: SeasonOutline, type: EpisodeType): string {
 }
 
 
+
+function stackLabel(no: number): string {
+  if (no === 1) return 'L1 = new';
+  if (no === 2) return 'L2 = L1 + new';
+  if (no === 3) return 'L3 = L1 + L2 + new';
+  if (no <= 6) return `L${no} = L1 + ... + L${no - 1} + new`;
+  return `L${no} = L1 + ... + L${no - 1} (no new language)`;
+}
+
 /** What the new items of one lesson must be related to: the unit (Season) AND this lesson's job. */
 export function itemFocusFor(s: SeasonOutline, type: EpisodeType): string {
   const theme = s.theme.toLowerCase();
@@ -313,6 +342,10 @@ export function buildLessonBlueprint(s: SeasonOutline, episodeIndex: number, pre
     EPISODE_ORDER.map((t) => EPISODES[t].weight),
   );
   const mission = meta.jobs.mission;
+  const no = meta.no;
+  const earlierIds = EPISODE_ORDER.slice(0, episodeIndex).map((_, k) => `${s.id}-E${k + 1}`);
+  const itemsBefore = counts.slice(0, episodeIndex).reduce((n, x) => n + x, 0);
+  const structuresAtOrBefore = (upTo: number) => s.structures.filter((x) => (x.introducedIn === 'pattern-lab' ? 3 : 6) <= upTo).map((x) => x.id);
   return {
     id: `${s.id}-E${meta.no}`,
     seasonId: s.id,
@@ -325,6 +358,21 @@ export function buildLessonBlueprint(s: SeasonOutline, episodeIndex: number, pre
     secondarySkills: meta.secondarySkills,
     newItems: { count: counts[episodeIndex], kind: meta.itemKind },
     itemFocus: itemFocusFor(s, type),
+    buildsOn: {
+      lessonIds: earlierIds,
+      itemsBefore,
+      itemsAfter: itemsBefore + counts[episodeIndex],
+      structuresBefore: structuresAtOrBefore(no - 1),
+      structuresAfter: structuresAtOrBefore(no),
+      stack: stackLabel(no),
+      mustReuse:
+        no === 1
+          ? 'nothing earlier in this unit; about 30 % of the story words recycle from the previous two Seasons'
+          : counts[episodeIndex] > 0
+            ? `the Mission and the Release must use language from lessons 1-${no - 1} of this unit as well as this lesson's new items`
+            : `the Mission and the Release must use language from lessons 1-${no - 1} of this unit (no new language: retrieval and integration only)`,
+      inputKnownWordsMinPct: 95,
+    },
     structures: type === 'pattern-lab' ? s.structures.filter((x) => x.introducedIn === 'pattern-lab') : type === 'side-quest' ? s.structures.filter((x) => x.introducedIn === 'side-quest') : [],
     recapFromLessonId: previousId,
     recycleFrom: s.recycleFrom,
@@ -349,7 +397,7 @@ export function buildLessonBlueprint(s: SeasonOutline, episodeIndex: number, pre
     funIngredientsMin: 5,
     mediation: type === 'finale' || type === 'deep-dive' ? s.mediation : undefined,
     assessment: {
-      rememberFrom: previousId ? [previousId, ...s.recycleFrom] : [],
+      rememberFrom: Array.from(new Set([...(previousId ? [previousId] : []), ...[...earlierIds].reverse(), ...s.recycleFrom])),
       exitCanDo: type === 'finale' ? s.canDo : [objectiveFor(s, type)],
       checkpoint: type === 'finale',
       levelCheck: type === 'finale' && s.levelCheck,

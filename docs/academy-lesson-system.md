@@ -41,6 +41,10 @@ Borrowed from evidence: noticing before rules; retrieval and spacing between ses
 
 Rules: new vocabulary in E2 and E6 only; new structure in E3 and E6 only; E7–E8 are **zero new language**. Every 2nd Season, E7 is a **Big Remix** (cumulative, covers two Seasons). Matches coursebook practice: a productive end-of-unit task and a cumulative review every 2 units [V: Solutions, Roadmap].
 
+### 2.1b The unit is a progressive stack (owner rule, 2026-10-08)
+
+Inside every Season each lesson **adds to everything before it**: lesson 1 teaches something; lesson 2 = lesson 1 + lesson 2; lesson 3 = lessons 1 and 2 + lesson 3; and so on up to the Finale, which integrates all seven earlier lessons with no new language. Practically: Remember? revisits every earlier lesson of the unit (not only the last), the Mission and the Release must use language from all earlier lessons, and input texts use at least 95 % words already met. It is written into every lesson blueprint as `buildsOn` (earlier lesson ids, items known before and after, structures known before and after, the stack label, what must be reused) and enforced by `lessonBlueprint.test.ts`.
+
 ### 2.2 Spiral across Seasons
 
 - **Recycle:** each Season's E1 re-uses ~30 % of words from the previous two Seasons, so every target word meets ≥ 8–10 varied encounters across skills [K/RT]. 20–30 % new language per lesson [RT, from research].

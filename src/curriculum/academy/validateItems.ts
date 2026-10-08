@@ -29,6 +29,9 @@ export function expectedCounts(season: SeasonOutline): Record<IntroducingEpisode
   return Object.fromEntries(INTRODUCING_EPISODE_KEYS.map((k) => [k, alloc[EPISODE_BY_KEY[k]]])) as Record<IntroducingEpisodeKey, number>;
 }
 
+const STOP = new Set(['a','an','the','i','you','he','she','it','we','they','me','my','your','his','her','our','their','is','am','are','was','were','be','do','does','did','to','of','in','on','at','for','with','and','or','but','not','no','yes','this','that','these','those','can','could','would','will','have','has','had','there','what','how','who','where','when','why','please','some','any','very']);
+const tokens = (t: string) => normalizeItem(t).split(/[\s-]+/).filter((w) => w && !STOP.has(w));
+
 export function validateItems(seasons: SeasonOutline[], bank: Record<string, SeasonItems>, oxford?: Record<string, AcademyLevel>): ItemIssue[] {
   const issues: ItemIssue[] = [];
   const err = (code: string, message: string, seasonId?: string) => issues.push({ severity: 'error', seasonId, code, message });
@@ -79,6 +82,21 @@ export function validateItems(seasons: SeasonOutline[], bank: Record<string, Sea
       }
       if ((key === 'E3' || key === 'E4') && list.length > 0 && chunkCount / list.length < 0.7) {
         err('item_chunk_share', `${key}: at least 70 % of items must be chunks (has ${chunkCount}/${list.length}).`, s.id);
+      }
+    }
+    // Progressive stack: chunks of E3-E6 should reuse words taught earlier in the same unit (a heuristic, warnings only).
+    {
+      const earlier = new Set<string>();
+      for (const key of INTRODUCING_EPISODE_KEYS) {
+        const list: ItemSeed[] = si[key] ?? [];
+        if (key !== 'E1' && key !== 'E2') {
+          const chunks = list.filter((it) => it[3] === 'c');
+          if (chunks.length >= 4) {
+            const reusing = chunks.filter((it) => tokens(it[0]).some((w) => earlier.has(w))).length;
+            if (reusing / chunks.length < 0.3) warn('items_not_progressive', `${key}: only ${reusing}/${chunks.length} chunks reuse words from earlier lessons of this unit (aim for 30 % or more).`, s.id);
+          }
+        }
+        list.forEach((it) => tokens(it[0]).forEach((w) => earlier.add(w)));
       }
     }
     if (oxford) {

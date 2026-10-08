@@ -55,7 +55,8 @@ Every 2nd Season: E7 is a **Big Remix** (two Seasons). C1 shape: supports off, L
 12. **Safety**: recording only with guardian consent and a visible indicator; no public profiles/location; chat lesson-only; school-safe topics (no graphic violence, partisan politics, explicit content).
 13. **Personalise by interest ("My World" skins)** but keep the language spine identical across skins.
 14. **Teacher-in-the-loop**: the teacher sees the plan, talk-time, hint/minute counts and can switch to the Chill track; the student never sees the plan drawer.
-15. **Quality gate before "done"**: run `academy-quality-gate`.
+15. **Progressive stack inside every unit** (owner, 2026-10-08): lesson 1 = new; lesson 2 = lesson 1 + new; lesson 3 = lessons 1 and 2 + new; and so on. Every lesson revisits ALL earlier lessons of its unit (Remember? covers them; the Mission and Release must reuse them), and E7/E8 integrate everything with no new language. In the blueprint this is `buildsOn`.
+16. **Quality gate before "done"**: run `academy-quality-gate`.
 
 ## Which skill when
 

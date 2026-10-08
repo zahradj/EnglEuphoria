@@ -89,3 +89,38 @@ describe('Academy lesson blueprints: item focus (unit AND lesson related)', () =
     }
   });
 });
+
+describe('Academy lesson blueprints: progressive stack inside each unit', () => {
+  it('lesson n builds on ALL earlier lessons of its unit: L2 = L1 + new, L3 = L1 + L2 + new ...', () => {
+    for (const s of ACADEMY_SEASONS) {
+      const bps = ACADEMY_LESSON_BLUEPRINTS.filter((b) => b.seasonId === s.id);
+      let running = 0;
+      bps.forEach((b, i) => {
+        const no = i + 1;
+        expect(b.buildsOn.lessonIds).toEqual(bps.slice(0, i).map((x) => x.id));
+        expect(b.buildsOn.itemsBefore).toBe(running);
+        running += b.newItems.count;
+        expect(b.buildsOn.itemsAfter).toBe(running);
+        expect(b.buildsOn.inputKnownWordsMinPct).toBeGreaterThanOrEqual(95);
+        if (no === 1) expect(b.buildsOn.lessonIds).toHaveLength(0);
+        if (no >= 2) expect(b.buildsOn.mustReuse).toContain(`lessons 1-${no - 1}`);
+        // Remember? covers every earlier lesson of the unit
+        for (const id of b.buildsOn.lessonIds) expect(b.assessment.rememberFrom).toContain(id);
+      });
+      expect(running).toBe(s.newItemBudget);
+      // the stack only grows: structures known never shrink
+      for (let i = 1; i < bps.length; i++) {
+        expect(bps[i].buildsOn.structuresAfter.length).toBeGreaterThanOrEqual(bps[i - 1].buildsOn.structuresAfter.length);
+      }
+      expect(bps[7].buildsOn.itemsAfter).toBe(s.newItemBudget);
+      expect(bps[7].buildsOn.structuresAfter).toEqual(s.structures.map((x) => x.id));
+    }
+  });
+
+  it('labels the stack in plain words', () => {
+    const [e1, e2, e3] = ACADEMY_LESSON_BLUEPRINTS;
+    expect(e1.buildsOn.stack).toBe('L1 = new');
+    expect(e2.buildsOn.stack).toBe('L2 = L1 + new');
+    expect(e3.buildsOn.stack).toBe('L3 = L1 + L2 + new');
+  });
+});
