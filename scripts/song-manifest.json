@@ -206,8 +206,8 @@
   },
   "u7l5-farm-song-video": {
     "path": "public/lep1/audio/farm-song-video-u7l5.mp3",
-    "bytes": 1198750,
-    "sha256": "0ead05dce9b136d4e10468c9e3c71f5fcd6830b9fa55d12e43d89833d02013d5"
+    "bytes": 1247651,
+    "sha256": "998da5e684d965e498efe579fdabf4e9db2044f722fbf608aeb9ae5a34e479b3"
   },
   "u7l5-verse-pig": {
     "path": "public/lep1/audio/farm-verse-pig-u7l5.mp3",
@@ -223,5 +223,70 @@
     "path": "public/lep1/audio/farm-verse-duck-u7l5.mp3",
     "bytes": 321037,
     "sha256": "6a758cee5e912f4c5d7bd6cfd09b4d7cb3b534c93d5e8b68137b7183a73a9601"
+  },
+  "u7l5-farm2-cow": {
+    "path": "public/lep1/audio/farm2-cow-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "ed83f8cc43d067da16749dcd92bae40dfb6b3ca05aaeda02e8b1d8739cc4d1e9"
+  },
+  "u7l5-farm2-pig": {
+    "path": "public/lep1/audio/farm2-pig-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "4d17e46b2f11fd195e5394728fe63e71644f48c957da2200bdce332fdc8e0136"
+  },
+  "u7l5-farm2-sheep": {
+    "path": "public/lep1/audio/farm2-sheep-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "91d66c79c7b4ea6669e2f6a2aa647f0a53a75a53c04d35a8ff8a0d02bafd36ae"
+  },
+  "u7l5-farm2-duck": {
+    "path": "public/lep1/audio/farm2-duck-u7l5.mp3",
+    "bytes": 384985,
+    "sha256": "2f763e5229b6ae68c0bbaf2d33533c560f384dce237bd4e1b49a9e6c6f226805"
+  },
+  "u4l5-song-v1": {
+    "path": "public/lep1/audio/animal-moves-v1-u4l5.mp3",
+    "bytes": 321037,
+    "sha256": "aa1d51411580998ae20c6526be8746afa3c92fc170c6b16725d69059ddb52d92"
+  },
+  "u4l5-song-v2": {
+    "path": "public/lep1/audio/animal-moves-v2-u4l5.mp3",
+    "bytes": 321037,
+    "sha256": "9e23123a4a0d71201b8a1a06f4ef8e05b3aea7a532ce29a3402ee43d9a8df699"
+  },
+  "u5l5-song-v1": {
+    "path": "public/lep1/audio/my-dad-v1-u5l5.mp3",
+    "bytes": 321037,
+    "sha256": "42ae56c439225ca02cbb12d20840ee497d2b67c3d70c721c096a2a4446d42ef8"
+  },
+  "u5l5-song-v2": {
+    "path": "public/lep1/audio/my-dad-v2-u5l5.mp3",
+    "bytes": 321037,
+    "sha256": "37893b363977f22830132469e847821638abb9026149e6f3a2b7009d02c1961c"
+  },
+  "u6l5-song-v1": {
+    "path": "public/lep1/audio/wheres-my-house-v1-u6l5.mp3",
+    "bytes": 321037,
+    "sha256": "64be8c7764038131e32198b5997dc5903e942689e9a1e43f630aacfeafe59f5f"
+  },
+  "u6l5-song-v2": {
+    "path": "public/lep1/audio/wheres-my-house-v2-u6l5.mp3",
+    "bytes": 321037,
+    "sha256": "2181d4ecfd41b48c3f760dacd20b81213f80809d28f7987f8cdd9849770a6efe"
+  },
+  "u4l5-song-video": {
+    "path": "public/lep1/audio/animal-moves-song-video-u4l5.mp3",
+    "bytes": 858531,
+    "sha256": "18d75f7608795bd2b024f52fa1259516e837005c4e7ff40da1ce66d5dee9c528"
+  },
+  "u5l5-song-video": {
+    "path": "public/lep1/audio/my-dad-song-video-u5l5.mp3",
+    "bytes": 869816,
+    "sha256": "587c9f21fe66e03ea353a09369402c30d72213d6f758bc0e5b1a52a1ee25bcad"
+  },
+  "u6l5-song-video": {
+    "path": "public/lep1/audio/wheres-my-house-song-video-u6l5.mp3",
+    "bytes": 944630,
+    "sha256": "302e71494fda27d9bb7b5291f37367d4145400f7a0d412a548f636865fd4207d"
   }
 }
