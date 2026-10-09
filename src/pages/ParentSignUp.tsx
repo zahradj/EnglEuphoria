@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Mail, Lock, User as UserIcon, ArrowLeft, ArrowRight, Users } from 'lucide-react';
 
@@ -25,11 +26,12 @@ const RELATIONSHIPS = [
   { value: 'father', label: 'Father' },
   { value: 'guardian', label: 'Guardian' },
   { value: 'other', label: 'Other' },
-];
+] as const;
 
 const ParentSignUp = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const { user, signUp, isConfigured, loading } = useAuth();
 
   const [step, setStep] = useState<Step>(1);
@@ -145,15 +147,15 @@ const ParentSignUp = () => {
         />
       </Helmet>
       <AuthPageLayout
-        title="Create your family account"
-        subtitle="One login for you. A learning space for each learner."
+        title={t('au.fam.title', 'Create your family account')}
+        subtitle={t('au.fam.subtitle', 'One login for you. A learning space for each learner.')}
         icon={Users}
         variant="student"
         backLink={{ to: '/', label: 'Back to Home' }}
       >
         <AccountTypeSwitch active="family" />
 
-        <AuthSteps steps={['Your account', 'Who is learning?']} current={step} />
+        <AuthSteps steps={[t('au.fam.step1', 'Your account'), t('au.fam.step2', 'Who is learning?')]} current={step} />
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -168,17 +170,17 @@ const ParentSignUp = () => {
               <>
                 <AuthField
                   id="parent-name"
-                  label="Your full name"
+                  label={t('au.fam.yourName', 'Your full name')}
                   icon={UserIcon}
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Your full name"
+                  placeholder={t('au.fam.yourName', 'Your full name')}
                   autoComplete="name"
                 />
 
                 <AuthField
                   id="parent-email"
-                  label="Email"
+                  label={t('au.email', 'Email')}
                   icon={Mail}
                   type="email"
                   value={email}
@@ -189,19 +191,19 @@ const ParentSignUp = () => {
 
                 <AuthField
                   id="parent-password"
-                  label="Password"
+                  label={t('au.password', 'Password')}
                   icon={Lock}
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="At least 8 characters"
+                  placeholder={t('au.fam.pwPh', 'At least 8 characters')}
                   autoComplete="new-password"
-                  hint={password.length > 0 && password.length < 8 ? `${8 - password.length} more character${8 - password.length === 1 ? '' : 's'} to go` : undefined}
+                  hint={password.length > 0 && password.length < 8 ? t('au.fam.pwShort', 'Use at least 8 characters') : undefined}
                   right={<EyeToggle shown={showPassword} onToggle={() => setShowPassword(!showPassword)} />}
                 />
 
                 <div className="space-y-1.5">
-                  <p className="text-[13px] font-semibold tracking-wide text-slate-700 dark:text-slate-200">You are their…</p>
+                  <p className="text-[13px] font-semibold tracking-wide text-slate-700 dark:text-slate-200">{t('au.fam.youAre', 'You are their…')}</p>
                   <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                     {RELATIONSHIPS.map((r) => (
                       <button
@@ -215,7 +217,7 @@ const ParentSignUp = () => {
                             : 'border-slate-200 bg-slate-50/70 font-medium text-slate-600 hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/40 dark:text-slate-300 dark:hover:bg-slate-800'
                         }`}
                       >
-                        {r.label}
+                        {t(`au.rel.${r.value}`, r.label)}
                       </button>
                     ))}
                   </div>
@@ -230,24 +232,24 @@ const ParentSignUp = () => {
         <div className="mt-7 flex items-center gap-3">
           {step === 2 && (
             <AuthButton variant="ghost" onClick={() => setStep(1)} disabled={submitting}>
-              <ArrowLeft className="h-4 w-4" /> Back
+              <ArrowLeft className="h-4 w-4 rtl:rotate-180" /> {t('au.back', 'Back')}
             </AuthButton>
           )}
           {step === 1 ? (
             <AuthButton onClick={() => setStep(2)} disabled={!step1Valid} className="flex-1">
-              Continue <ArrowRight className="h-4 w-4" />
+              {t('au.continue', 'Continue')} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
             </AuthButton>
           ) : (
             <AuthButton onClick={handleSubmit} disabled={!step2Valid} loading={submitting} className="flex-1">
-              {submitting ? 'Creating family…' : (<>Create family account <ArrowRight className="h-4 w-4" /></>)}
+              {submitting ? t('au.fam.creating', 'Creating family…') : (<>{t('au.fam.create', 'Create family account')} <ArrowRight className="h-4 w-4 rtl:rotate-180" /></>)}
             </AuthButton>
           )}
         </div>
 
         <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-          Already have an account?{' '}
+          {t('au.haveAccount', 'Already have an account?')}{' '}
           <Link to="/login" className="font-semibold text-[var(--auth-accent)] hover:underline">
-            Log in
+            {t('au.logIn', 'Log in')}
           </Link>
         </p>
       </AuthPageLayout>

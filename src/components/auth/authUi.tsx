@@ -1,5 +1,6 @@
 import React, { forwardRef, useId } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Check, Loader2, User, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -53,11 +54,11 @@ export const AuthField = forwardRef<HTMLInputElement, AuthFieldProps>(function A
           {...inputProps}
           className={cn(
             'h-12 min-w-0 flex-1 bg-transparent text-[15px] text-slate-900 outline-none placeholder:text-slate-400 disabled:cursor-not-allowed disabled:opacity-60 dark:text-slate-50',
-            Icon ? 'pr-3' : 'px-3.5',
-            right ? 'pr-1' : '',
+            Icon ? 'pe-3' : 'px-3.5',
+            right ? 'pe-1' : '',
           )}
         />
-        {right && <span className="flex shrink-0 items-center pr-1.5">{right}</span>}
+        {right && <span className="flex shrink-0 items-center pe-1.5">{right}</span>}
       </div>
       {(error || hint) && (
         <p id={`${fieldId}-note`} className={cn('text-xs', error ? 'text-red-600 dark:text-red-400' : 'text-slate-500 dark:text-slate-400')}>
@@ -101,16 +102,17 @@ export const AuthButton = forwardRef<HTMLButtonElement, AuthButtonProps>(functio
 
 // ── Individual / Family switch (top of every sign-up page) ────────────────────────────────
 const ACCOUNT_TYPES = [
-  { key: 'individual', to: '/student-signup', label: 'Individual', sub: 'For myself', icon: User },
-  { key: 'family', to: '/parent-signup', label: 'Family', sub: 'Parent + kids', icon: Users },
+  { key: 'individual', to: '/student-signup', label: 'au.individual', sub: 'au.individualSub', defLabel: 'Individual', defSub: 'For myself', icon: User },
+  { key: 'family', to: '/parent-signup', label: 'au.family', sub: 'au.familySub', defLabel: 'Family', defSub: 'Parent + kids', icon: Users },
 ] as const;
 
 export function AccountTypeSwitch({ active, className }: { active: 'individual' | 'family'; className?: string }) {
+  const { t } = useTranslation();
   return (
     <nav aria-label="Account type" className={cn('mb-6', className)}>
-      <p className="mb-2 text-[13px] font-semibold tracking-wide text-slate-700 dark:text-slate-200">I’m signing up as</p>
+      <p className="mb-2 text-[13px] font-semibold tracking-wide text-slate-700 dark:text-slate-200">{t('au.signingUpAs', 'I’m signing up as')}</p>
       <div className="grid grid-cols-2 gap-1.5 rounded-2xl bg-slate-100 p-1.5 dark:bg-slate-800/70">
-        {ACCOUNT_TYPES.map(({ key, to, label, sub, icon: Icon }) => {
+        {ACCOUNT_TYPES.map(({ key, to, label, sub, defLabel, defSub, icon: Icon }) => {
           const on = key === active;
           return (
             <Link
@@ -134,8 +136,8 @@ export function AccountTypeSwitch({ active, className }: { active: 'individual' 
                 <Icon className="h-[18px] w-[18px]" />
               </span>
               <span className="min-w-0 leading-tight">
-                <span className={cn('block text-sm font-bold', on ? 'text-slate-900 dark:text-white' : '')}>{label}</span>
-                <span className="block truncate text-[11px] font-medium opacity-80">{sub}</span>
+                <span className={cn('block text-sm font-bold', on ? 'text-slate-900 dark:text-white' : '')}>{t(label, defLabel)}</span>
+                <span className="block text-[11px] font-medium opacity-80">{t(sub, defSub)}</span>
               </span>
             </Link>
           );
@@ -147,8 +149,9 @@ export function AccountTypeSwitch({ active, className }: { active: 'individual' 
 
 // ── Step indicator: numbered dots joined by a line ─────────────────────────────────────────
 export function AuthSteps({ steps, current, className }: { steps: string[]; current: number; className?: string }) {
+  const { t } = useTranslation();
   return (
-    <ol className={cn('mb-7 flex items-start', className)} aria-label={`Step ${current} of ${steps.length}`}>
+    <ol className={cn('mb-7 flex items-start', className)} aria-label={t('au.stepLabel', { current, total: steps.length, defaultValue: 'Step {{current}} of {{total}}' })}>
       {steps.map((label, i) => {
         const n = i + 1;
         const done = n < current;
@@ -159,7 +162,7 @@ export function AuthSteps({ steps, current, className }: { steps: string[]; curr
               <span
                 aria-hidden
                 className={cn(
-                  'absolute left-[-50%] top-[13px] h-0.5 w-full rounded-full transition-colors duration-300',
+                  'absolute start-[-50%] top-[13px] h-0.5 w-full rounded-full transition-colors duration-300',
                   n <= current ? 'bg-[var(--auth-accent,#6366f1)]' : 'bg-slate-200 dark:bg-slate-700',
                 )}
               />
@@ -186,12 +189,13 @@ export function AuthSteps({ steps, current, className }: { steps: string[]; curr
 
 // ── Show / hide password eye, shared by every password field ───────────────────────────────
 export function EyeToggle({ shown, onToggle, disabled }: { shown: boolean; onToggle: () => void; disabled?: boolean }) {
+  const { t } = useTranslation();
   return (
     <button
       type="button"
       onClick={onToggle}
       disabled={disabled}
-      aria-label={shown ? 'Hide password' : 'Show password'}
+      aria-label={shown ? t('au.hidePassword', 'Hide password') : t('au.showPassword', 'Show password')}
       aria-pressed={shown}
       className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
     >

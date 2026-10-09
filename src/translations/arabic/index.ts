@@ -20,6 +20,7 @@ import { authenticationTranslations } from './authentication';
 import { navTranslations } from './nav';
 import { dashboardUITranslations } from './dashboardUI';
 import { placementTranslations } from './placement';
+import { authUiTranslations } from './authUi';
 
 export const arabicTranslations = {
   ...placementTranslations,
@@ -42,5 +43,6 @@ export const arabicTranslations = {
   ...progressTranslations,
   ...whiteboardTranslations,
   ...authenticationTranslations,
-  ...dashboardUITranslations
+  ...dashboardUITranslations,
+  ...authUiTranslations,
 };

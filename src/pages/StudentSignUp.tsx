@@ -3,6 +3,7 @@ import { getStoredReferralCode } from '@/lib/referralCode';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Mail, Lock, User as UserIcon, Calendar, ArrowLeft, ArrowRight, CheckCircle, BookOpen } from 'lucide-react';
 
@@ -30,13 +31,13 @@ interface WizardState {
   reason: LearningReason | null;
 }
 
-const STEP_LABELS = ['Account', 'About you', 'Your goal'];
-
 const StudentSignUp = () => {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const { user, signUp, isConfigured, loading } = useAuth();
+  const stepLabels = [t('au.stu.step1', 'Account'), t('au.stu.step2', 'About you'), t('au.stu.step3', 'Your goal')];
 
   const [step, setStep] = useState<Step>(1);
   const [showPassword, setShowPassword] = useState(false);
@@ -226,15 +227,15 @@ const StudentSignUp = () => {
         />
       </Helmet>
       <AuthPageLayout
-      title="Create your account"
-      subtitle="Three quick steps and you’re in."
+      title={t('au.stu.title', 'Create your account')}
+      subtitle={t('au.stu.subtitle', 'Three quick steps and you’re in.')}
       icon={BookOpen}
       variant="student"
       backLink={{ to: '/', label: 'Back to Home' }}
     >
       <AccountTypeSwitch active="individual" />
 
-      <AuthSteps steps={STEP_LABELS} current={step} />
+      <AuthSteps steps={stepLabels} current={step} />
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -273,7 +274,7 @@ const StudentSignUp = () => {
       <div className="mt-7 flex items-center gap-3">
         {step > 1 && (
           <AuthButton variant="ghost" onClick={back} disabled={submitting}>
-            <ArrowLeft className="h-4 w-4" /> Back
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" /> {t('au.back', 'Back')}
           </AuthButton>
         )}
         {step < 3 && (
@@ -282,14 +283,14 @@ const StudentSignUp = () => {
             disabled={(step === 1 && !step1Valid) || (step === 2 && !step2Valid)}
             className="flex-1"
           >
-            Continue <ArrowRight className="h-4 w-4" />
+            {t('au.continue', 'Continue')} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
           </AuthButton>
         )}
         {step === 3 && (
           <AuthButton onClick={handleSubmit} disabled={!step3Valid} loading={submitting} className="flex-1">
-            {submitting ? 'Creating account…' : (
+            {submitting ? t('au.creating', 'Creating account…') : (
               <>
-                Start placement test <ArrowRight className="h-4 w-4" />
+                {t('au.stu.start', 'Start placement test')} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </>
             )}
           </AuthButton>
@@ -297,9 +298,9 @@ const StudentSignUp = () => {
       </div>
 
       <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-        Already have an account?{' '}
+        {t('au.haveAccount', 'Already have an account?')}{' '}
         <Link to="/login" className="font-semibold text-[var(--auth-accent)] hover:underline">
-          Log in
+          {t('au.logIn', 'Log in')}
         </Link>
       </p>
     </AuthPageLayout>
@@ -319,25 +320,26 @@ function Step1Account({
   showPassword: boolean;
   setShowPassword: (b: boolean) => void;
 }) {
+  const { t } = useTranslation();
   const passwordChecks = [
-    { ok: data.password.length >= 6, text: '6+ characters' },
-    { ok: /[A-Z]/.test(data.password), text: 'An uppercase letter' },
-    { ok: /[0-9]/.test(data.password), text: 'A number' },
+    { ok: data.password.length >= 6, text: t('au.stu.pw.len', '6+ characters') },
+    { ok: /[A-Z]/.test(data.password), text: t('au.stu.pw.upper', 'An uppercase letter') },
+    { ok: /[0-9]/.test(data.password), text: t('au.stu.pw.num', 'A number') },
   ];
 
   return (
     <>
       <AuthField
-        label="Full name"
+        label={t('au.fullName', 'Full name')}
         icon={UserIcon}
         value={data.fullName}
         onChange={(e) => update('fullName', e.target.value)}
-        placeholder="Your full name"
+        placeholder={t('au.stu.namePh', 'Your full name')}
         autoComplete="name"
       />
 
       <AuthField
-        label="Email"
+        label={t('au.email', 'Email')}
         icon={Mail}
         type="email"
         value={data.email}
@@ -348,12 +350,12 @@ function Step1Account({
 
       <div>
         <AuthField
-          label="Password"
+          label={t('au.password', 'Password')}
           icon={Lock}
           type={showPassword ? 'text' : 'password'}
           value={data.password}
           onChange={(e) => update('password', e.target.value)}
-          placeholder="Create a password"
+          placeholder={t('au.createPasswordPh', 'Create a password')}
           autoComplete="new-password"
           right={<EyeToggle shown={showPassword} onToggle={() => setShowPassword(!showPassword)} />}
         />
@@ -384,23 +386,24 @@ function Step2Age({
   age: number;
   hubLabel: string | null;
 }) {
+  const { t } = useTranslation();
   const today = new Date().toISOString().slice(0, 10);
   return (
     <>
       <AuthField
-        label="Date of birth"
+        label={t('au.dob', 'Date of birth')}
         icon={Calendar}
         type="date"
         value={dateOfBirth}
         max={today}
         onChange={(e) => onChange(e.target.value)}
-        hint="We use this to choose the best learning hub for you."
+        hint={t('au.stu.dobHint', 'We use this to choose the best learning hub for you.')}
       />
 
       {age > 0 && hubLabel && (
         <div className="rounded-xl border border-[var(--auth-accent)] bg-[var(--auth-accent-soft)] p-3.5 text-sm">
-          <p className="font-semibold text-slate-900 dark:text-white">Looks like a perfect fit for the {hubLabel}.</p>
-          <p className="text-xs text-slate-600 dark:text-slate-300">You can always switch later from your profile.</p>
+          <p className="font-semibold text-slate-900 dark:text-white">{t('au.stu.fit', { hub: hubLabel, defaultValue: 'Looks like a perfect fit for the {{hub}}.' })}</p>
+          <p className="text-xs text-slate-600 dark:text-slate-300">{t('au.stu.switchLater', 'You can always switch later from your profile.')}</p>
         </div>
       )}
     </>
@@ -415,10 +418,11 @@ function Step3Reason({
   reason: LearningReason | null;
   onChange: (v: LearningReason) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <>
       <p className="text-sm text-slate-500 dark:text-slate-400">
-        Why are you learning English? Pick the closest match.
+        {t('au.stu.why', 'Why are you learning English? Pick the closest match.')}
       </p>
       <div className="grid grid-cols-2 gap-3">
         {LEARNING_REASONS.map((r) => {
@@ -428,7 +432,7 @@ function Step3Reason({
               key={r.value}
               type="button"
               onClick={() => onChange(r.value)}
-              className={`group relative rounded-2xl border-2 p-4 text-left transition-all duration-200 ${
+              className={`group relative rounded-2xl border-2 p-4 text-start transition-all duration-200 ${
                 active
                   ? 'border-[var(--auth-accent)] bg-[var(--auth-accent-soft)] shadow-md'
                   : 'border-slate-200 bg-slate-50/70 hover:-translate-y-px hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/40 dark:hover:bg-slate-800'
@@ -438,8 +442,8 @@ function Step3Reason({
               <div className="text-2xl" aria-hidden>
                 {r.emoji}
               </div>
-              <div className="mt-1 text-sm font-bold text-slate-900 dark:text-white">{r.label}</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400">{r.blurb}</div>
+              <div className="mt-1 text-sm font-bold text-slate-900 dark:text-white">{t(`au.reason.${r.value}.label`, r.label)}</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400">{t(`au.reason.${r.value}.blurb`, r.blurb)}</div>
             </button>
           );
         })}

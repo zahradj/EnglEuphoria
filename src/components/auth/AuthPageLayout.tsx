@@ -7,15 +7,17 @@ import { ThemeModeToggle } from '@/components/ui/ThemeModeToggle';
 import logoBlack from '@/assets/logo-black.png';
 import logoWhite from '@/assets/logo-white.png';
 import { useThemeMode } from '@/hooks/useThemeMode';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import heroKid from '@/assets/hero-kid.png';
 import heroTeen from '@/assets/hero-teen.png';
 import heroAdult from '@/assets/hero-adult.png';
 
 const HERO_IMAGES = [heroKid, heroTeen, heroAdult];
 const TAGLINES = [
-  'Where kids discover the joy of English!',
-  'Level up your English, level up your future.',
-  'Professional English for the real world.',
+  { key: 'au.tagline.kids', text: 'Where kids discover the joy of English!' },
+  { key: 'au.tagline.teens', text: 'Level up your English, level up your future.' },
+  { key: 'au.tagline.adults', text: 'Professional English for the real world.' },
 ];
 
 interface AuthPageLayoutProps {
@@ -39,6 +41,7 @@ export function AuthPageLayout({
 }: AuthPageLayoutProps) {
   const { activeIndex, setActiveIndex, theme } = useHeroTheme();
   const { resolvedTheme } = useThemeMode();
+  const { t } = useTranslation();
 
   // Auto-rotate demographics
   useEffect(() => {
@@ -50,7 +53,6 @@ export function AuthPageLayout({
 
   return (
     <div
-      dir="ltr"
       className="relative min-h-dvh flex flex-col lg:flex-row bg-white dark:bg-[#09090B] transition-colors duration-300"
       style={{
         ['--auth-accent' as string]: theme.cssFrom,
@@ -59,6 +61,10 @@ export function AuthPageLayout({
       }}
     >
       <CursorTrail />
+      {/* Language: always one tap away on phones (desktop has it in the top bar of the form panel) */}
+      <div className="absolute end-3 top-3 z-30 lg:hidden">
+        <LanguageSwitcher variant="outline" size="sm" compact align="end" />
+      </div>
       {/* ── Left Panel: Branding & Hero Carousel — compact on mobile ── */}
       <div className="relative lg:w-[48%] flex flex-col items-center justify-center overflow-hidden px-6 py-6 lg:p-12">
         {/* Ambient radial glows */}
@@ -155,7 +161,7 @@ export function AuthPageLayout({
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
           >
-            {TAGLINES[activeIndex]}
+            {t(TAGLINES[activeIndex].key, TAGLINES[activeIndex].text)}
           </motion.p>
         </AnimatePresence>
 
@@ -196,7 +202,8 @@ export function AuthPageLayout({
       {/* ── Right Panel: Auth Form ── */}
       <div className="relative flex-1 flex flex-col">
         {/* Top bar — hidden on mobile (logo already visible) */}
-        <div className="hidden lg:flex items-center justify-end p-4 sm:p-6">
+        <div className="hidden lg:flex items-center justify-end gap-2 p-4 sm:p-6">
+          <LanguageSwitcher variant="ghost" size="sm" align="end" />
           <ThemeModeToggle className="text-muted-foreground hover:text-foreground hover:bg-muted" />
         </div>
 
@@ -266,7 +273,7 @@ export function AuthPageLayout({
 
             {/* Footer */}
             <p className="text-center text-xs text-muted-foreground/60 mt-6">
-              By continuing, you agree to our Terms of Service and Privacy Policy
+              {t('au.terms', 'By continuing, you agree to our Terms of Service and Privacy Policy')}
             </p>
           </motion.div>
         </div>
