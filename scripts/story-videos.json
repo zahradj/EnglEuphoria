@@ -633,7 +633,8 @@
     "action": "the tiger slowly turns his head to the side; his body and feet stay still",
     "prompt": "The tiger cub slowly turns his head to the side and looks to the right, smiling. His body, arms and feet stay still. Nobody else is in the picture. The camera stays steady.",
     "ownerApproved": true,
-    "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next"
+    "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next",
+    "review": "2026-10-09 clip 1 rejected by review-clip.py (POSE 0.59 < 0.75): the face warps at 0.75-2 s and the clip ends facing front, not turned. Waiting for the owner before any re-order."
    },
    {
     "id": "pip-head",
