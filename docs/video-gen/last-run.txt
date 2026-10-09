@@ -1,5 +1,4 @@
-street-think: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
-street-think: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started street-think: e0a25aab-bd1b-4b76-ad1c-606923b505f7
-saved public/lep1/video/clips/u6l5-house/street-think.mp4 (6282445 bytes)
+blue-ask: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started blue-ask: bbc9ed24-564f-4cf3-bee1-cd1c043efe7f
+saved public/lep1/video/clips/u6l5-house/blue-ask.mp4 (6293614 bytes)
 1/1 clips ready for u6l5-house
