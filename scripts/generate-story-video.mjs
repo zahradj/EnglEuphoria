@@ -91,17 +91,17 @@ if (reqLine.includes('--probe')) {
   const upl = async (f) => (await call({ action: 'upload', base64: fs.readFileSync(f).toString('base64'), contentType: 'image/png' })).j.public_url;
   const a = await upl(beat.image); const b = await upl(beat.endImage);
   const base = { prompt: beat.prompt, duration: 5, resolution: '720p', aspect_ratio: '16:9', generate_audio: false };
-  const shapes = {
+  const shapes = reqLine.includes('--probe2') ? { image_only: { image_url: a }, image_end: { image_url: a, end_image_url: b }, bogus: { image_url: a, zzz_not_a_field: b }, image_last_image: { image_url: a, last_image_url: b } } : {
     image_end: { image_url: a, end_image_url: b }, image_tail: { image_url: a, tail_image_url: b },
     image_last: { image_url: a, last_frame_image_url: b }, start_end: { start_image_url: a, end_image_url: b },
     first_last: { first_frame_url: a, last_frame_url: b }, images: { image_urls: [a, b] },
     medias: { medias: [{ role: 'start_image', url: a }, { role: 'end_image', url: b }] },
   };
-  const eps = ['bytedance/seedance-2.5/image-to-video', 'bytedance/seedance-2.5/reference-to-video', 'bytedance/seedance-2.5/omni-reference',
+  const eps = reqLine.includes('--probe2') ? ['bytedance/seedance-2.5/image-to-video'] : ['bytedance/seedance-2.5/image-to-video', 'bytedance/seedance-2.5/reference-to-video', 'bytedance/seedance-2.5/omni-reference',
     'bytedance/seedance-2.5/start-end-to-video', 'bytedance/seedance-2.5/first-last-frame-to-video'];
   for (const ep of eps) for (const [name, extra] of Object.entries(shapes)) {
     const r = await call({ action: 'estimate', endpoint: ep, input: { ...base, ...extra } });
-    console.log(`PROBE ${ep} ${name}: ${r.status} ${JSON.stringify(r.j).slice(0, 400)}`);
+    console.log(`PROBE ${ep} ${name}: ${r.status} ${JSON.stringify(r.j).slice(0, reqLine.includes('--probe2') ? 3000 : 400)}`);
   }
   console.log('probe done — nothing was ordered');
   process.exit(0);

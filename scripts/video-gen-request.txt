@@ -1,2 +1,2 @@
-# PROBE ONLY (free estimates, nothing ordered): which Seedance 2.5 endpoint takes start + end picture
-u4l5-moves --beats=tiger-head --probe
+# PROBE ONLY (free estimates, nothing ordered): does Seedance 2.5 image-to-video read an end picture?
+u4l5-moves --beats=tiger-head --probe --probe2
