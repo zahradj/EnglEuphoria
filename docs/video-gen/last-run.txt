@@ -1,4 +1,4 @@
-cow-door: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started cow-door: a2e18c1f-10c0-485e-9476-e02eabf77e2a
-saved public/lep1/video/clips/u7l5-barn/cow-door.mp4 (5432940 bytes)
+yard-sing: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started yard-sing: ffeee3c9-d74e-49b6-96cf-bbcced784416
+saved public/lep1/video/clips/u7l5-barn/yard-sing.mp4 (11144368 bytes)
 1/1 clips ready for u7l5-barn
