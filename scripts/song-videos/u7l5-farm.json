@@ -1,8 +1,260 @@
-{"out": "public/lep1/video/farm-song-u7l5", "audioOut": "public/lep1/audio/farm-song-video-u7l5.mp3",
- "labelsFrom": [["scripts/film-labels/u7l5-old-macdonald-pages.json", "scripts/film-labels/u7l5-old-macdonald.json"]],
+{
+ "out": "public/lep1/video/farm-song-u7l5",
+ "audioOut": "public/lep1/audio/farm-song-video-u7l5.mp3",
+ "labelsFrom": [
+  [
+   "scripts/film-labels/u7l5-old-macdonald-pages.json",
+   "scripts/film-labels/u7l5-old-macdonald.json"
+  ]
+ ],
  "verses": [
-  {"audio": "public/lep1/audio/farm2-cow-u7l5.mp3", "lines": [[0, "public/lep1/video/clips/u7l5-barn/gate-wave.mp4"], [4.7, "public/lep1/video/clips/u7l5-barn/moo-sound.mp4"], [9.9, "public/lep1/video/clips/u7l5-barn/cow-door.mp4"], [13.0, "public/lep1/video/clips/u7l5-barn/yard-sing.mp4"]]},
-  {"audio": "public/lep1/audio/farm2-pig-u7l5.mp3", "lines": [[0, "public/lep1/video/clips/u7l5-barn/gate-wave.mp4"], [4.9, "public/lep1/video/clips/u7l5-barn/oink-sound.mp4"], [9.0, "public/lep1/video/clips/u7l5-barn/pig-door.mp4"], [13.1, "public/lep1/video/clips/u7l5-barn/yard-sing.mp4"]]},
-  {"audio": "public/lep1/audio/farm2-sheep-u7l5.mp3", "lines": [[0, "public/lep1/video/clips/u7l5-barn/gate-wave.mp4"], [4.3, "public/lep1/video/clips/u7l5-barn/baa-sound.mp4"], [8.7, "public/lep1/video/clips/u7l5-barn/sheep-door.mp4"], [13.0, "public/lep1/video/clips/u7l5-barn/yard-sing.mp4"]]},
-  {"audio": "public/lep1/audio/farm2-duck-u7l5.mp3", "lines": [[0, "public/lep1/video/clips/u7l5-barn/gate-wave.mp4"], [4.1, "public/lep1/video/clips/u7l5-barn/quack-sound.mp4"], [8.3, "public/lep1/video/clips/u7l5-barn/duck-door.mp4"], [12.8, "public/lep1/video/clips/u7l5-barn/yard-sing.mp4"], [17.1, null]]}
- ]}
+  {
+   "audio": "public/lep1/audio/farm2-cow-u7l5.mp3",
+   "lines": [
+    [
+     0,
+     "public/lep1/video/clips/u7l5-barn/gate-wave.mp4",
+     [
+      {
+       "karaoke": [
+        "A farm,",
+        "a farm!"
+       ],
+       "at": [
+        40,
+        18
+       ]
+      }
+     ]
+    ],
+    [
+     4.7,
+     "public/lep1/video/clips/u7l5-barn/moo-sound.mp4"
+    ],
+    [
+     9.9,
+     "public/lep1/video/clips/u7l5-barn/cow-door.mp4",
+     [
+      {
+       "karaoke": [
+        "A cow,",
+        "a cow!"
+       ],
+       "at": [
+        14,
+        22
+       ]
+      }
+     ]
+    ],
+    [
+     13.0,
+     "public/lep1/video/clips/u7l5-barn/yard-sing.mp4",
+     [
+      {
+       "karaoke": [
+        "Moo,",
+        "moo!"
+       ],
+       "at": [
+        50,
+        20
+       ],
+       "delay": 0.8
+      }
+     ]
+    ]
+   ]
+  },
+  {
+   "audio": "public/lep1/audio/farm2-pig-u7l5.mp3",
+   "lines": [
+    [
+     0,
+     "public/lep1/video/clips/u7l5-barn/gate-wave.mp4",
+     [
+      {
+       "karaoke": [
+        "A farm,",
+        "a farm!"
+       ],
+       "at": [
+        40,
+        18
+       ]
+      }
+     ]
+    ],
+    [
+     4.9,
+     "public/lep1/video/clips/u7l5-barn/oink-sound.mp4"
+    ],
+    [
+     9.0,
+     "public/lep1/video/clips/u7l5-barn/pig-door.mp4",
+     [
+      {
+       "karaoke": [
+        "A pig,",
+        "a pig!"
+       ],
+       "at": [
+        14,
+        22
+       ]
+      }
+     ]
+    ],
+    [
+     13.1,
+     "public/lep1/video/clips/u7l5-barn/yard-sing.mp4",
+     [
+      {
+       "karaoke": [
+        "Oink,",
+        "oink!"
+       ],
+       "at": [
+        50,
+        20
+       ],
+       "delay": 0.8
+      }
+     ]
+    ]
+   ]
+  },
+  {
+   "audio": "public/lep1/audio/farm2-sheep-u7l5.mp3",
+   "lines": [
+    [
+     0,
+     "public/lep1/video/clips/u7l5-barn/gate-wave.mp4",
+     [
+      {
+       "karaoke": [
+        "A farm,",
+        "a farm!"
+       ],
+       "at": [
+        40,
+        18
+       ]
+      }
+     ]
+    ],
+    [
+     4.3,
+     "public/lep1/video/clips/u7l5-barn/baa-sound.mp4"
+    ],
+    [
+     8.7,
+     "public/lep1/video/clips/u7l5-barn/sheep-door.mp4",
+     [
+      {
+       "karaoke": [
+        "A sheep,",
+        "a sheep!"
+       ],
+       "at": [
+        14,
+        22
+       ]
+      }
+     ]
+    ],
+    [
+     13.0,
+     "public/lep1/video/clips/u7l5-barn/yard-sing.mp4",
+     [
+      {
+       "karaoke": [
+        "Baa,",
+        "baa!"
+       ],
+       "at": [
+        50,
+        20
+       ],
+       "delay": 0.8
+      }
+     ]
+    ]
+   ]
+  },
+  {
+   "audio": "public/lep1/audio/farm2-duck-u7l5.mp3",
+   "lines": [
+    [
+     0,
+     "public/lep1/video/clips/u7l5-barn/gate-wave.mp4",
+     [
+      {
+       "karaoke": [
+        "A farm,",
+        "a farm!"
+       ],
+       "at": [
+        40,
+        18
+       ]
+      }
+     ]
+    ],
+    [
+     4.1,
+     "public/lep1/video/clips/u7l5-barn/quack-sound.mp4"
+    ],
+    [
+     8.3,
+     "public/lep1/video/clips/u7l5-barn/duck-door.mp4",
+     [
+      {
+       "karaoke": [
+        "A duck,",
+        "a duck!"
+       ],
+       "at": [
+        14,
+        22
+       ]
+      }
+     ]
+    ],
+    [
+     12.8,
+     "public/lep1/video/clips/u7l5-barn/yard-sing.mp4",
+     [
+      {
+       "karaoke": [
+        "Quack,",
+        "quack!"
+       ],
+       "at": [
+        50,
+        20
+       ],
+       "delay": 0.8
+      }
+     ]
+    ],
+    [
+     17.1,
+     null,
+     [
+      {
+       "karaoke": [
+        "A farm,",
+        "a farm!"
+       ],
+       "at": [
+        50,
+        20
+       ]
+      }
+     ]
+    ]
+   ]
+  }
+ ]
+}

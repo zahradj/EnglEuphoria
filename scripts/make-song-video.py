@@ -69,7 +69,8 @@ total = round(offset, 2)
 run(*sum([['-i', p] for p in parts], []), '-filter_complex', ''.join(f'[{i}:a]' for i in range(len(parts))) +
     f'concat=n={len(parts)}:v=0:a=1[a]', '-map', '[a]', '-c:a', 'libmp3lame', '-b:a', '128k', spec['audioOut'])
 shots[0][0] = 0.0
-starts = [s[0] for s in shots]  # every sung line (for lineDurationsMs)
+sung = shots  # every sung line (lineDurationsMs, the line's own labels)
+starts = [s[0] for s in sung]
 shots = [s for s in shots if s[1]]  # clip null = the line continues the previous shot
 
 # 2. clips: bounce the tail of a clip that is shorter than its line
@@ -99,7 +100,8 @@ for pages_file, labels_file in spec.get('labelsFrom', []):
         nxt = old_pages[j + 1][1] if j + 1 < len(old_pages) else 1e9
         mine = [l for l in old_labels if 'word' in l and start <= l['from'] < nxt]
         for i, (t, c, *own) in enumerate(shots):
-            if os.path.basename(c) != os.path.basename(clip) or (own and own[0].get('replace')):
+            own = own[0] if own and isinstance(own[0], list) else own
+            if os.path.basename(c) != os.path.basename(clip) or any(o.get('replace') for o in own):
                 continue
             end = (shots[i + 1][0] if i + 1 < len(shots) else total) - 0.2
             for l in mine:
@@ -108,10 +110,14 @@ for pages_file, labels_file in spec.get('labelsFrom', []):
                     labels.append({**l, 'from': round(a, 2), 'to': round(b, 2)})
 
 # a line may bring its own label (3rd value: {"word", "at", "label"}), shown for the whole line
-for i, (t, clip, *label) in enumerate(shots):
-    if label:
-        end = (shots[i + 1][0] if i + 1 < len(shots) else total) - 0.2
-        labels.append({**{k: v for k, v in label[0].items() if k != 'replace'}, 'from': round(t + 0.4, 2), 'to': round(end, 2)})
+# or a list of them; {"karaoke": [...], "at", "delay"?, "step"?} = the sung words, big, lighting up as they are sung
+for i, (t, clip, *label) in enumerate(sung):
+    end = (sung[i + 1][0] if i + 1 < len(sung) else total) - 0.2
+    for l in (label[0] if label and isinstance(label[0], list) else label):
+        l = {k: v for k, v in l.items() if k not in ('replace', 'delay')} | {'from': round(t + l.get('delay', 0.4 if 'word' in l else 0.1), 2), 'to': round(end, 2)}
+        if 'karaoke' in l:
+            l.setdefault('step', 0.6)
+        labels.append(l)
 
 # 4. film
 env = dict(os.environ, FILM_LAST=f'{total - shots[-1][0]:.2f}')
