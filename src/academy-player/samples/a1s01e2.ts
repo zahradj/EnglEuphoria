@@ -154,6 +154,15 @@ export const A1S01E2: SceneScript = {
       ],
     },
     {
+      t: 'match',
+      prompt: 'Match each question with Ava’s answer.',
+      pairs: [
+        { left: 'How do you spell it?', right: 'A-V-A' },
+        { left: 'How old are you?', right: 'I am 13.' },
+        { left: 'Where are you from?', right: 'I am from Spain.' },
+      ],
+    },
+    {
       t: 'choice',
       prompt: 'What does Ava ask Theo to do?',
       tests: 'story',
@@ -161,15 +170,6 @@ export const A1S01E2: SceneScript = {
         { text: 'Say it again', correct: true },
         { text: 'Spell her name', correct: false },
         { text: 'Say his age', correct: false },
-      ],
-    },
-    {
-      t: 'match',
-      prompt: 'Match each question with Ava’s answer.',
-      pairs: [
-        { left: 'How do you spell it?', right: 'A-V-A' },
-        { left: 'How old are you?', right: 'I am 13.' },
-        { left: 'Where are you from?', right: 'I am from Spain.' },
       ],
     },
     { t: 'layout', mode: 'normal' },
@@ -184,6 +184,16 @@ export const A1S01E2: SceneScript = {
     { t: 'say', who: 'Vee', expr: 'happy', text: 'Now practise. First, spell names with letter tiles.' },
     { t: 'spell', prompt: 'Spell Ava’s name. Drag each letter onto the badge.', target: 'AVA' },
     { t: 'spell', prompt: 'Now spell Theo’s name.', target: 'THEO' },
+    {
+      t: 'choice',
+      prompt: 'S-A-M. Who is it?',
+      tests: 'language',
+      options: [
+        { text: 'Sam', correct: true },
+        { text: 'Mas', correct: false },
+        { text: 'Sim', correct: false },
+      ],
+    },
     { t: 'spell', prompt: 'Now spell YOUR name.', target: '{name}', save: 'spelled' },
     { t: 'say', who: 'Vee', expr: 'thumbs', text: 'Nice! Say your letters out loud: {spelled}.', repeat: true },
     { t: 'trains', criteria: [2] },
@@ -256,7 +266,7 @@ export const A1S01E2: SceneScript = {
     },
     { t: 'build', prompt: 'Build the question: How do you spell it?', target: 'How do you spell it?', extraTiles: ['old'], hint: 'It starts with: How do…' },
 
-    // ── Energiser: a quick game (odd one out, spot the mistake) ────────────────────────────
+    // ── Energiser: a quick game (odd one out, spot the mistake, numbers, letters) ───────────────
     { t: 'segment', index: 4 },
     { t: 'trains', criteria: [3] },
     { t: 'say', who: 'Vee', expr: 'happy', text: 'Quick game! Find the odd one out.' },
@@ -280,27 +290,6 @@ export const A1S01E2: SceneScript = {
         { text: 'I from Italy.', correct: false },
       ],
     },
-    { t: 'trains', criteria: [1] },
-    {
-      t: 'choice',
-      prompt: 'S-A-M. Who is it?',
-      tests: 'language',
-      options: [
-        { text: 'Sam', correct: true },
-        { text: 'Mas', correct: false },
-        { text: 'Sim', correct: false },
-      ],
-    },
-    {
-      t: 'choice',
-      prompt: 'A, B, C, D, … which letter is next?',
-      tests: 'language',
-      options: [
-        { text: 'E', correct: true },
-        { text: 'G', correct: false },
-        { text: 'B', correct: false },
-      ],
-    },
     { t: 'trains', criteria: [2] },
     {
       t: 'match',
@@ -320,6 +309,18 @@ export const A1S01E2: SceneScript = {
         { text: 'Five', correct: true },
         { text: 'Seven', correct: false },
         { text: 'Ten', correct: false },
+      ],
+    },
+    { t: 'trains', criteria: [1] },
+    { t: 'spell', prompt: 'Spell Sam’s name.', target: 'SAM' },
+    {
+      t: 'choice',
+      prompt: 'A, B, C, D, … which letter is next?',
+      tests: 'language',
+      options: [
+        { text: 'E', correct: true },
+        { text: 'G', correct: false },
+        { text: 'B', correct: false },
       ],
     },
     { t: 'trains', criteria: [5] },

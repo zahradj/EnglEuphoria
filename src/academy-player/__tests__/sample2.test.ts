@@ -210,3 +210,17 @@ describe('the hour', () => {
     A1S01E2.beats.forEach((b) => expect(Number.isFinite(beatSeconds(b))).toBe(true));
   });
 });
+
+describe('variety (academy-quality-gate #4)', () => {
+  it('never runs more than 2 screens of the same kind in a row inside a part', () => {
+    const screens = A1S01E2.beats.filter((b) => b.t === 'segment' || (isInteractive(b) && b.t !== 'end' && !(b.t === 'say' && !b.repeat && !b.hide)));
+    let run = 1;
+    for (let i = 1; i < screens.length; i++) {
+      const kind = (b: Beat) => (b.t === 'say' ? 'say' : b.t);
+      if (screens[i].t === 'segment' || screens[i - 1].t === 'segment') { run = 1; continue; }
+      run = kind(screens[i]) === kind(screens[i - 1]) ? run + 1 : 1;
+      const k = kind(screens[i]);
+      if (k !== 'say') expect(run, `more than 2 "${k}" screens in a row at screen ${i}`).toBeLessThanOrEqual(2);
+    }
+  });
+});
