@@ -115,33 +115,49 @@ def star(size, col=(255, 255, 255, 255)):
     ImageDraw.Draw(im).polygon(pts, fill=col)
     return im
 
-# background: deep purple glow + three slow colour blobs (alive, never a moving picture)
+# background: a bright playground — blue sky, soft clouds drifting, two green hills (owner: the dark one was "a lot")
 yy, xx = np.mgrid[0:H, 0:W]
-rad = np.sqrt(((xx - W * 0.45) / W) ** 2 + ((yy - H * 0.45) / H) ** 2)
-base_bg = np.stack([60 - 40 * rad, 22 - 14 * rad, 120 - 70 * rad], -1).clip(0, 255)
-BLOBS = [(PURPLE, 0.25, 0.3, 0.35), (ORANGE, 0.8, 0.25, 0.3), (GREEN, 0.7, 0.85, 0.32), (PINK, 0.15, 0.85, 0.25)]
+sky = np.stack([120 + 90 * yy / H, 190 + 50 * yy / H, 255 - 10 * yy / H], -1).clip(0, 255)
+def hill(cx, cy, rx, ry):
+    return ((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2 <= 1
+SKY = Image.fromarray(sky.astype(np.uint8)).convert('RGBA')
+hl = np.zeros((H, W, 4), np.uint8)
+hl[hill(W * 0.25, H * 1.18, W * 0.75, H * 0.36)] = (126, 211, 90, 255)
+hl[hill(W * 0.85, H * 1.25, W * 0.7, H * 0.38)] = (92, 190, 70, 255)
+HILLS = Image.fromarray(hl).filter(ImageFilter.GaussianBlur(1.5))
+SUN = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+ImageDraw.Draw(SUN).ellipse((W - 330, 60, W - 150, 240), fill=(255, 221, 87, 255))
+SUN = SUN.filter(ImageFilter.GaussianBlur(3))
+CLOUDS = [(0.12, 0.16, 1.0), (0.48, 0.10, 0.8), (0.74, 0.30, 1.1), (0.30, 0.38, 0.7)]
+
+def cloud(scale):
+    im = Image.new('RGBA', (int(360 * scale), int(160 * scale)), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    for (x, y, r) in [(0.25, 0.62, 0.3), (0.5, 0.45, 0.38), (0.75, 0.62, 0.3), (0.5, 0.72, 0.3)]:
+        R = r * im.height * 1.1
+        d.ellipse((x * im.width - R, y * im.height - R, x * im.width + R, y * im.height + R), fill=(255, 255, 255, 235))
+    return im.filter(ImageFilter.GaussianBlur(2))
+CLOUD_IMS = [cloud(c[2]) for c in CLOUDS]
 
 def background(t):
-    small = Image.fromarray(base_bg[::4, ::4].astype(np.uint8))
-    d = ImageDraw.Draw(small, 'RGBA')
-    sw, sh = small.size
-    for k, (col, bx, by, br) in enumerate(BLOBS):
-        cx = (bx + 0.04 * math.sin(t * 0.9 + k)) * sw
-        cy = (by + 0.04 * math.cos(t * 0.7 + k * 2)) * sh
-        r = br * sh * (0.9 + 0.08 * math.sin(t * 1.3 + k))
-        d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=col + (70,))
-    small = small.filter(ImageFilter.GaussianBlur(40))
-    bg = small.resize((W, H), Image.BICUBIC).convert('RGBA')
-    fade = ease_out(t / 0.6)
+    bg = SKY.copy()
+    bg.alpha_composite(SUN)
+    for k, (cx, cy, sc) in enumerate(CLOUDS):
+        im = CLOUD_IMS[k]
+        x = int(cx * W + 25 * t * (0.6 + 0.2 * k)) - im.width // 2
+        y = int(cy * H + 6 * math.sin(t * 1.2 + k)) - im.height // 2
+        bg.alpha_composite(im, (x, y)) if 0 <= x <= W - im.width else bg.paste(im, (x, y), im)
+    bg.alpha_composite(HILLS)
+    fade = ease_out(t / 0.5)
     if fade < 1:
-        bg = Image.blend(Image.new('RGBA', (W, H), (12, 4, 30, 255)), bg, fade)
+        bg = Image.blend(Image.new('RGBA', (W, H), (255, 255, 255, 255)), bg, fade)
     return bg
 
 CONF = [{'col': random.choice([PURPLE, ORANGE, GREEN, PINK, LIME, BLUE]), 'r': random.randint(8, 20),
          'sx': random.choice([-60, W + 60]) if random.random() < 0.5 else random.randint(0, W),
          'sy': random.randint(0, H) if random.random() < 0.5 else random.choice([-60, H + 60]),
          'tx': random.randint(60, W - 60), 'ty': random.randint(60, H - 60), 'ph': random.random() * 6.28,
-         'delay': random.random() * 0.4} for _ in range(46)]
+         'delay': random.random() * 0.4} for _ in range(18)]
 
 def paste_scaled(dst, spr, cx, cy, sx, sy=None, rot=0.0, alpha=1.0, anchor='center'):
     sy = sx if sy is None else sy
