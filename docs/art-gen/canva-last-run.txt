@@ -1,2 +1,2 @@
-+ public/lep1/scenes/bg-u7l5-gate-a-wide.png (1376, 768)
++ public/lep1/scenes/bg-u7l5-gate-b-wide.png (1376, 768)
 1/1 saved
