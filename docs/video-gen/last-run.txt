@@ -1,5 +1,4 @@
-gate-wave: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
-gate-wave: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started gate-wave: a3bc9749-694f-4667-bb83-102e2dc5dd7b
-saved public/lep1/video/clips/u7l5-barn/gate-wave.mp4 (7054772 bytes)
+barn-listen: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started barn-listen: 7e92e78f-aaf4-44a2-b8e5-3dee9c8d2ed8
+saved public/lep1/video/clips/u7l5-barn/barn-listen.mp4 (4849997 bytes)
 1/1 clips ready for u7l5-barn
