@@ -2250,5 +2250,388 @@
       "u6l5-wheres-my-house"
     ],
     "note": "Song video: the verse takes joined by scripts/make-song-video.py (scripts/song-videos/). Do not request this key from the song bot; re-ask a verse instead."
+  },
+  "u7l5-farm-song3": {
+    "publicPath": "public/lep1/audio/farm-song3-u7l5.mp3",
+    "bpm": 120,
+    "key": "G major",
+    "beatsPerLine": 4,
+    "barsPerLine": 2,
+    "introBars": 2,
+    "maxSeconds": 95,
+    "style": "Happy kids farm sing-along in the style of a classic barnyard song, 120 BPM, 4/4, banjo, acoustic guitar, fiddle, hand claps, bright clear young female lead vocal with a small kids choir on the chorus, every word sung clearly on the beat.",
+    "positiveStyles": [
+      "kids sing-along",
+      "barnyard",
+      "banjo",
+      "acoustic guitar",
+      "fiddle",
+      "hand claps",
+      "clear kids vocals",
+      "happy"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "spoken word",
+      "fast vocals"
+    ],
+    "targetWords": [
+      "farm",
+      "cow",
+      "pig",
+      "sheep",
+      "duck"
+    ],
+    "sections": [
+      {
+        "name": "Chorus",
+        "rhyme": "AX",
+        "lines": [
+          "A farm, a farm, on Grandpa's farm,",
+          "E-I, E-I, E-I-O!"
+        ]
+      },
+      {
+        "name": "Verse 1",
+        "rhyme": "AABB",
+        "lines": [
+          "Knock, knock! Who is in the barn?",
+          "A cow, a cow on Grandpa's farm!",
+          "A moo, moo here, a moo, moo there,",
+          "The cow says moo everywhere!"
+        ]
+      },
+      {
+        "name": "Verse 2",
+        "rhyme": "AABB",
+        "lines": [
+          "Knock, knock! Who is in the barn?",
+          "A pig, a pig on Grandpa's farm!",
+          "An oink, oink here, an oink, oink there,",
+          "The pig says oink everywhere!"
+        ]
+      },
+      {
+        "name": "Verse 3",
+        "rhyme": "AABB",
+        "lines": [
+          "Knock, knock! Who is in the barn?",
+          "A sheep, a sheep on Grandpa's farm!",
+          "A baa, baa here, a baa, baa there,",
+          "The sheep says baa everywhere!"
+        ]
+      },
+      {
+        "name": "Verse 4",
+        "rhyme": "AABB",
+        "lines": [
+          "Knock, knock! Who is in the barn?",
+          "A duck, a duck on Grandpa's farm!",
+          "A quack, quack here, a quack, quack there,",
+          "The duck says quack everywhere!"
+        ]
+      },
+      {
+        "name": "Chorus 2",
+        "rhyme": "ABAB",
+        "lines": [
+          "A farm, a farm, on Grandpa's farm,",
+          "E-I, E-I, E-I-O!",
+          "A farm, a farm, on Grandpa's farm,",
+          "Come and see! Come on, let's go!"
+        ]
+      }
+    ],
+    "lines": [
+      "A farm, a farm, on Grandpa's farm,",
+      "E-I, E-I, E-I-O!",
+      "Knock, knock! Who is in the barn?",
+      "A cow, a cow on Grandpa's farm!",
+      "A moo, moo here, a moo, moo there,",
+      "The cow says moo everywhere!",
+      "Knock, knock! Who is in the barn?",
+      "A pig, a pig on Grandpa's farm!",
+      "An oink, oink here, an oink, oink there,",
+      "The pig says oink everywhere!",
+      "Knock, knock! Who is in the barn?",
+      "A sheep, a sheep on Grandpa's farm!",
+      "A baa, baa here, a baa, baa there,",
+      "The sheep says baa everywhere!",
+      "Knock, knock! Who is in the barn?",
+      "A duck, a duck on Grandpa's farm!",
+      "A quack, quack here, a quack, quack there,",
+      "The duck says quack everywhere!",
+      "A farm, a farm, on Grandpa's farm,",
+      "E-I, E-I, E-I-O!",
+      "A farm, a farm, on Grandpa's farm,",
+      "Come and see! Come on, let's go!"
+    ],
+    "durationSec": 92,
+    "writtenWith": "kids-song-writer skill; python3 scripts/check-lyrics.py u7l5-farm-song3"
+  },
+  "u4l5-song3": {
+    "publicPath": "public/lep1/audio/animal-moves-song3-u4l5.mp3",
+    "bpm": 120,
+    "key": "C major",
+    "beatsPerLine": 4,
+    "barsPerLine": 2,
+    "introBars": 2,
+    "maxSeconds": 75,
+    "style": "Upbeat catchy kids action pop song to move along to, 120 BPM, 4/4, punchy drums, groovy bass, bright synths, hand claps, fun clear young vocals, call-and-response feel, every word sung clearly on the beat.",
+    "positiveStyles": [
+      "kids pop",
+      "action song",
+      "upbeat",
+      "punchy drums",
+      "hand claps",
+      "bright synths",
+      "clear kids vocals",
+      "catchy hook"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "spoken word",
+      "fast vocals"
+    ],
+    "targetWords": [
+      "head",
+      "arms",
+      "feet",
+      "hands"
+    ],
+    "sections": [
+      {
+        "name": "Verse 1",
+        "rhyme": "AABB",
+        "lines": [
+          "Head, head, turn your head!",
+          "Turn your head, the tiger said!",
+          "Arms, arms, up so high!",
+          "Wave your arms up to the sky!"
+        ]
+      },
+      {
+        "name": "Verse 2",
+        "rhyme": "AABB",
+        "lines": [
+          "Feet, feet, stomp your feet!",
+          "Stomp, stomp, stomp them to the beat!",
+          "Hands, hands, clap your hands!",
+          "Clap like a seal upon the sand!"
+        ]
+      },
+      {
+        "name": "Chorus",
+        "rhyme": "XBXB",
+        "lines": [
+          "I can do it, I can do it!",
+          "I can do it, yes, I can!",
+          "I can do it, I can do it!",
+          "Head and arms and feet and hands!"
+        ]
+      }
+    ],
+    "lines": [
+      "Head, head, turn your head!",
+      "Turn your head, the tiger said!",
+      "Arms, arms, up so high!",
+      "Wave your arms up to the sky!",
+      "Feet, feet, stomp your feet!",
+      "Stomp, stomp, stomp them to the beat!",
+      "Hands, hands, clap your hands!",
+      "Clap like a seal upon the sand!",
+      "I can do it, I can do it!",
+      "I can do it, yes, I can!",
+      "I can do it, I can do it!",
+      "Head and arms and feet and hands!"
+    ],
+    "durationSec": 52,
+    "writtenWith": "kids-song-writer skill; python3 scripts/check-lyrics.py u4l5-song3"
+  },
+  "u5l5-song3": {
+    "publicPath": "public/lep1/audio/my-dad-song3-u5l5.mp3",
+    "bpm": 108,
+    "key": "D major",
+    "beatsPerLine": 4,
+    "barsPerLine": 2,
+    "introBars": 2,
+    "maxSeconds": 75,
+    "style": "Warm upbeat kids pop song about a happy day with Dad, 108 BPM, 4/4, acoustic guitar, light drums, bass, hand claps, glockenspiel, clear young vocals, every word sung clearly on the beat.",
+    "positiveStyles": [
+      "kids pop",
+      "warm",
+      "happy",
+      "acoustic guitar",
+      "light drums",
+      "hand claps",
+      "glockenspiel",
+      "clear kids vocals",
+      "sing-along chorus"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "spoken word",
+      "fast vocals"
+    ],
+    "targetWords": [
+      "dad",
+      "ball",
+      "ducks",
+      "ice cream"
+    ],
+    "sections": [
+      {
+        "name": "Verse 1",
+        "rhyme": "AABB",
+        "lines": [
+          "Me and Dad, me and Dad,",
+          "The park is fun, I'm very glad!",
+          "A ball, a ball, he throws the ball,",
+          "I catch it, catch it, catch it all!"
+        ]
+      },
+      {
+        "name": "Verse 2",
+        "rhyme": "AABB",
+        "lines": [
+          "Ducks, ducks, swimming by,",
+          "We feed the ducks, they say hi!",
+          "Ice cream, ice cream, ice cream, yum!",
+          "A book, a book, we read, what fun!"
+        ]
+      },
+      {
+        "name": "Chorus",
+        "rhyme": "AAXA",
+        "lines": [
+          "Dad, Dad, I love you, Dad!",
+          "The best day that I ever had!",
+          "Dad, Dad, I love you, Dad!",
+          "Just me and my dad, my dad!"
+        ]
+      }
+    ],
+    "lines": [
+      "Me and Dad, me and Dad,",
+      "The park is fun, I'm very glad!",
+      "A ball, a ball, he throws the ball,",
+      "I catch it, catch it, catch it all!",
+      "Ducks, ducks, swimming by,",
+      "We feed the ducks, they say hi!",
+      "Ice cream, ice cream, ice cream, yum!",
+      "A book, a book, we read, what fun!",
+      "Dad, Dad, I love you, Dad!",
+      "The best day that I ever had!",
+      "Dad, Dad, I love you, Dad!",
+      "Just me and my dad, my dad!"
+    ],
+    "durationSec": 58,
+    "writtenWith": "kids-song-writer skill; python3 scripts/check-lyrics.py u5l5-song3"
+  },
+  "u6l5-song3": {
+    "publicPath": "public/lep1/audio/wheres-my-house-song3-u6l5.mp3",
+    "bpm": 100,
+    "key": "F major",
+    "beatsPerLine": 4,
+    "barsPerLine": 2,
+    "introBars": 2,
+    "maxSeconds": 75,
+    "style": "Gentle bouncy kids story song with a question-and-answer feel, 100 BPM, 4/4, acoustic guitar, soft marimba, light brushed drums, a little door-knock sound, hand claps, clear warm young vocals, every word sung clearly on the beat.",
+    "positiveStyles": [
+      "kids story song",
+      "gentle bounce",
+      "acoustic guitar",
+      "marimba",
+      "brushed drums",
+      "hand claps",
+      "clear kids vocals",
+      "question and answer"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "spoken word",
+      "fast vocals"
+    ],
+    "targetWords": [
+      "house",
+      "door",
+      "red"
+    ],
+    "sections": [
+      {
+        "name": "Verse 1",
+        "rhyme": "AABB",
+        "lines": [
+          "It's late, it's late, let's go home!",
+          "Where's my house? Oh no, oh no!",
+          "My door, my door, my door is red,",
+          "Not blue, not yellow, red, I said!"
+        ]
+      },
+      {
+        "name": "Verse 2",
+        "rhyme": "AABB",
+        "lines": [
+          "Is this my house? No, it isn't!",
+          "Is this my house? No, it isn't!",
+          "Is this my house? Yes, it is!",
+          "A red door! A hug and a kiss!"
+        ]
+      },
+      {
+        "name": "Chorus",
+        "rhyme": "AABB",
+        "lines": [
+          "Knock, knock! Who is it? It's me!",
+          "Welcome home, my house, yippee!",
+          "My house, my house, I love my house,",
+          "Quiet as a little mouse!"
+        ]
+      }
+    ],
+    "lines": [
+      "It's late, it's late, let's go home!",
+      "Where's my house? Oh no, oh no!",
+      "My door, my door, my door is red,",
+      "Not blue, not yellow, red, I said!",
+      "Is this my house? No, it isn't!",
+      "Is this my house? No, it isn't!",
+      "Is this my house? Yes, it is!",
+      "A red door! A hug and a kiss!",
+      "Knock, knock! Who is it? It's me!",
+      "Welcome home, my house, yippee!",
+      "My house, my house, I love my house,",
+      "Quiet as a little mouse!"
+    ],
+    "durationSec": 62,
+    "writtenWith": "kids-song-writer skill; python3 scripts/check-lyrics.py u6l5-song3"
   }
 }
