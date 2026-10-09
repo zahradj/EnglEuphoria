@@ -94,3 +94,18 @@ Canva holder design DAHXiX3gn1o, pages 37-55.
 | theo/football (soccer ball; first try drew an American football and was redone) | MAHXi2EGfXc | public/academy-art/cast/theo/football.webp |
 | ava/music | MAHXixAA318 | public/academy-art/cast/ava/music.webp |
 | club-lobby (scene) | MAHXi7-_6nU | public/academy-art/bg/club-lobby.webp |
+
+## Lesson A1-S01-E2 pictures
+
+Canva holder design DAHXiX3gn1o, pages 56-61 (page 56 = 1620x1080, 57-61 = 800x800). Style references: v-name card `MAHXiyPmEHA` (cards), club-lobby `MAHXi7-_6nU` (scene). Each generated once and accepted on the first candidate; no flags (drawn in code).
+
+| Picture | Canva media id | Repo path | Prompt (short) |
+|---|---|---|---|
+| club-signup-desk (scene) | MAHXjU4g7R8 | public/academy-art/bg/club-signup-desk.webp | bright teen club lobby, wooden-and-white desk on the right third with laptop, lanyard badge tray, clipboard, plant; noticeboard of flyers (no text) on the left; windows, purple bunting; open lower-centre floor; no people |
+| v-alphabet | MAHXjcLnfJ8 | public/academy-art/cards/v-alphabet.webp | wooden blocks spelling A B C in front, D blocks behind, pencil beside, on a desk |
+| v-letter | MAHXjY00WHc | public/academy-art/cards/v-letter.webp | teen hands holding a big wooden block with a single capital M |
+| v-spell | MAHXjW-kDYU | public/academy-art/cards/v-spell.webp | teen pointing at a blank name badge, floating letter bubbles M I N A |
+| v-nationality | MAHXjYJRxHE | public/academy-art/cards/v-nationality.webp | hand holding blue-purple passport booklet (no text), open booklet with a stamp, small globe |
+| v-again | MAHXjez06c8 | public/academy-art/cards/v-again.webp | teen cupping hand behind ear, speech bubble with ?, circular repeat arrow icon |
+
+Weaknesses: v-spell bubbles read M-I-N-A and are spaced like a word, fine; the badge is blank (name is not on it). v-nationality shows two booklets (closed one held, open one with the stamp ring), stamp is an unlabelled ring. v-alphabet blocks are wooden-toy style, slightly more painterly than the flat cards. Scene: desk and board are in place, lower 40% is open floor.
