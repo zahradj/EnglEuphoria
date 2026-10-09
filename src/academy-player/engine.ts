@@ -206,3 +206,32 @@ export function interpolateBeat<T extends Beat>(beat: T, vars: Record<string, Va
   const fillText = (t: string) => t.replace(/\{(\w+)\}/g, (_m, k: string) => String(vars[k] ?? VAR_DEFAULTS[k] ?? ''));
   return JSON.parse(raw, (_k, v) => (typeof v === 'string' ? fillText(v) : v)) as T;
 }
+
+/** The event that moves a beat along without the student doing anything (used to catch a late joiner up). */
+export function autoEvent(b: Beat): PlayerEvent {
+  switch (b.t) {
+    case 'choice':
+      return { type: 'choose', index: Math.max(0, b.options.findIndex((o) => o.correct !== false)) };
+    case 'sort':
+      return { type: 'fill', values: { [b.key]: [] } };
+    case 'form':
+      return { type: 'fill', values: Object.fromEntries(b.fields.map((f) => [f.key, ''])) };
+    default:
+      return { type: 'next' };
+  }
+}
+
+/**
+ * Live classroom catch-up: replay the lesson from the start, moving each beat along automatically, until it reaches the
+ * interactive beat at `index` (or the nearest one after it). Used when a student joins late or reconnects and only the
+ * teacher's position (an index) is known. Wrong tries are not recreated; answers and typed values are not recovered.
+ */
+export function replayTo(script: SceneScript, seed: number, index: number): PlayerState {
+  let s = initState(script, seed);
+  for (let n = 0; n < 5000 && s.beatIndex < index && !s.finished; n++) {
+    const next = step(script, s, autoEvent(script.beats[s.beatIndex]));
+    if (next.beatIndex === s.beatIndex && next.rev === s.rev) break;
+    s = next;
+  }
+  return s;
+}

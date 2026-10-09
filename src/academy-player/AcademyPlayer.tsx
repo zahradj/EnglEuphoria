@@ -22,6 +22,15 @@ export interface AcademyPlayerProps {
   autoStart?: boolean;
   /** called for teacher-visible signals ("I need a minute", hint use, finish) */
   onSignal?: (s: PlayerSignal) => void;
+  /** live classroom: the lesson state lives in the host (`AcademyLessonPlayer`), which applies each event and shares it. */
+  state?: PlayerState;
+  onEvent?: (e: PlayerEvent) => void;
+  /** live classroom, student whose interaction is paused by the teacher: shows the lesson but ignores input */
+  readOnly?: boolean;
+  /** live classroom, student: story lines are moved on by the teacher, not by the student */
+  lockLines?: boolean;
+  /** the classroom's own teacher bar has Back, so the player's Back is hidden there (default true) */
+  showBack?: boolean;
 }
 
 function usePrefersReduced() {
@@ -36,8 +45,9 @@ function usePrefersReduced() {
   return r;
 }
 
-export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, seed = 1, autoStart = false, onSignal }: AcademyPlayerProps) {
-  const [state, setState] = useState<PlayerState>(() => initState(script, seed));
+export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, seed = 1, autoStart = false, onSignal, state: controlledState, onEvent, readOnly = false, lockLines = false, showBack = true }: AcademyPlayerProps) {
+  const [localState, setLocalState] = useState<PlayerState>(() => initState(script, seed));
+  const state = controlledState ?? localState;
   const [started, setStarted] = useState(autoStart);
   const [theme, setTheme] = useState(themeProp);
   const [scale, setScale] = useState(1);
@@ -55,7 +65,7 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
   const [speaking, setSpeaking] = useState(false);
   const prevRight = useRef(0);
 
-  const go = useCallback((e: PlayerEvent) => setState((s) => step(script, s, e)), [script]);
+  const go = useCallback((e: PlayerEvent) => (onEvent ? onEvent(e) : setLocalState((s) => step(script, s, e))), [script, onEvent]);
   const rawBeat = script.beats[state.beatIndex];
   const beat = useMemo(() => (rawBeat ? interpolateBeat(rawBeat, state.vars) : rawBeat), [rawBeat, state.vars]);
   useEffect(() => setHintTier(0), [state.beatIndex]);
@@ -166,7 +176,7 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
           </div>
         )}
 
-        {beat?.t === 'say' && <DialogueBox key={state.beatIndex} beat={beat} reduced={reduced} onNext={() => go({ type: 'next' })} onReplay={() => void playVoice(beat.voice, { muted })} />}
+        {beat?.t === 'say' && <DialogueBox key={state.beatIndex} beat={beat} reduced={reduced} nextLabel={lockLines ? 'Your teacher moves on' : undefined} nextDisabled={lockLines} onNext={() => go({ type: 'next' })} onReplay={() => void playVoice(beat.voice, { muted })} />}
 
         {beat?.t === 'choice' && (
           <ChoiceBlock key={state.beatIndex}
@@ -233,6 +243,8 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
           </div>
         )}
 
+        {readOnly && started && <div className="ap-readonly" aria-live="polite"><span>Your teacher is showing this</span></div>}
+
         {burst > 0 && <RewardBurst key={burst} />}
 
         {cardSeg !== null && <TitleCard index={cardSeg} onDone={() => setCardSeg(null)} />}
@@ -274,7 +286,7 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
       <nav className="ap-dock" aria-label="Comfort controls">
         <div className="ap-dock-group">
           <button type="button" className="ap-btn" disabled={hintTier >= 3 || !(beat?.t === 'choice' || beat?.t === 'chat' || beat?.t === 'build')} onClick={() => { setHintTier((h) => Math.min(3, h + 1)); onSignal?.({ type: 'hint', rev: state.rev }); }} aria-label="Hint"><span className="ap-ico" aria-hidden="true">💡</span>Hint</button>
-          <button type="button" className="ap-btn" disabled={state.history.length === 0} onClick={() => go({ type: 'back' })} aria-label="Go back"><span className="ap-ico" aria-hidden="true">↶</span>Back</button>
+          {showBack && <button type="button" className="ap-btn" disabled={readOnly || state.history.length === 0} onClick={() => go({ type: 'back' })} aria-label="Go back"><span className="ap-ico" aria-hidden="true">↶</span>Back</button>}
           <button type="button" className="ap-btn" onClick={() => setShowLog(true)} aria-label="Show what they said"><span className="ap-ico" aria-hidden="true">☰</span>Lines</button>
           <button type="button" className="ap-btn" onClick={() => { setResting(true); stopVoice(); onSignal?.({ type: 'minute', rev: state.rev }); }} aria-label="I need a minute"><span className="ap-ico" aria-hidden="true">⏸</span>I need a minute</button>
           <button type="button" className="ap-btn" onClick={() => setSettingsOpen((o) => !o)} aria-expanded={settingsOpen} aria-label="Settings"><span className="ap-ico" aria-hidden="true">⚙</span>Settings</button>

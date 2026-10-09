@@ -382,3 +382,7 @@
    `justify-content: flex-end` + `overflow: auto` clips the top part so it can never be reached (the profile card hotspots). */
 .ap-panel { justify-content: flex-start; }
 .ap-panel > :first-child { margin-top: auto; }
+
+/* live classroom: the teacher paused this student's interaction (the screen is still shown, input is ignored) */
+.ap-readonly { position: absolute; inset: 0; z-index: 30; display: flex; align-items: flex-start; justify-content: center; padding-top: 52px; background: transparent; cursor: default; }
+.ap-readonly span { padding: 7px 16px; border-radius: 999px; background: rgba(255, 255, 255, 0.95); color: #4c1d95; font-weight: 800; font-size: 0.82rem; box-shadow: 0 6px 18px rgba(90, 50, 190, 0.25); pointer-events: none; }
