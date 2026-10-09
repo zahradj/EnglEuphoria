@@ -128,7 +128,7 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
         {beat?.t === 'say' && <DialogueBox key={state.beatIndex} beat={beat} reduced={reduced} onNext={() => go({ type: 'next' })} onReplay={() => void playVoice(beat.voice, { muted })} />}
 
         {beat?.t === 'choice' && (
-          <ChoiceBlock
+          <ChoiceBlock key={state.beatIndex}
             prompt={beat.prompt}
             options={beat.options}
             hintTier={hintTier}
@@ -138,7 +138,7 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
         )}
 
         {beat?.t === 'chat' && (
-          <ChatStory
+          <ChatStory key={state.beatIndex}
             title={beat.title}
             messages={beat.messages}
             reply={beat.reply}
@@ -149,10 +149,10 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
           />
         )}
 
-        {beat?.t === 'panels' && <ComicPanels layout={beat.layout} panels={beat.panels} artBase={artBase} onContinue={() => go({ type: 'next' })} />}
+        {beat?.t === 'panels' && <ComicPanels key={state.beatIndex} layout={beat.layout} panels={beat.panels} artBase={artBase} onContinue={() => go({ type: 'next' })} />}
 
         {beat?.t === 'flash' && (
-          <FlashDeck
+          <FlashDeck key={state.beatIndex}
             title={beat.title}
             cards={beat.cards}
             seed={state.seed + state.beatIndex}
@@ -163,12 +163,12 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
         )}
 
         {beat?.t === 'build' && (
-          <BuildBlock prompt={beat.prompt} target={beat.target} extraTiles={beat.extraTiles} hint={beat.hint} hintTier={hintTier} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onDone={(first) => { if (first) go({ type: 'answer', correct: true }); go({ type: 'next' }); }} />
+          <BuildBlock key={state.beatIndex} prompt={beat.prompt} target={beat.target} extraTiles={beat.extraTiles} hint={beat.hint} hintTier={hintTier} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onDone={(first) => { if (first) go({ type: 'answer', correct: true }); go({ type: 'next' }); }} />
         )}
 
-        {beat?.t === 'record' && <RecordBlock prompt={beat.prompt} model={beat.model} onContinue={() => go({ type: 'next' })} />}
+        {beat?.t === 'record' && <RecordBlock key={state.beatIndex} prompt={beat.prompt} model={beat.model} onContinue={() => go({ type: 'next' })} />}
 
-        {beat?.t === 'ticks' && <TicksBlock prompt={beat.prompt} items={beat.items} onDone={() => go({ type: 'next' })} />}
+        {beat?.t === 'ticks' && <TicksBlock key={state.beatIndex} prompt={beat.prompt} items={beat.items} onDone={() => go({ type: 'next' })} />}
 
         {beat?.t === 'end' && (
           <div className="ap-panel" style={{ justifyContent: 'center' }}>

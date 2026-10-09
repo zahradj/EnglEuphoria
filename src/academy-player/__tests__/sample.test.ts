@@ -8,7 +8,7 @@ import { ACADEMY_ITEMS } from '../../curriculum/academy/items';
 // closed-class words an A1 learner meets through grammar (not counted as items)
 const FUNCTION_WORDS = ['a', 'an', 'the', 'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'my', 'your', 'our', 'his', 'her', 'their', 'is', 'am', 'are', 'be', 'not', 'and', 'but', 'to', 'of', 'in', 'on', 'at', 'for', 'with', 'who', 'what', 'where', 'this', 'that', 'there', 'now', 'yes', 'next', 'time', 'from', 'have', 'say', 'again', 'first', 'four', 'one', 'now', 'then', 'try', 'right', 'look', 'from', 'story', 'word', 'words'];
 // routine classroom-instruction verbs the player repeats in every lesson (buttons and prompts, learned by doing)
-const INSTRUCTION_WORDS = ['pick', 'build', 'find', 'show', 'take', 'which', 'how', 'or', 'know', 'start', 'mission', 'write', 'writes', 'writes'];
+const INSTRUCTION_WORDS = ['pick', 'build', 'find', 'show', 'take', 'which', 'how', 'or', 'know', 'start', 'mission', 'write', 'writes', 'copy'];
 const CAST = ['vee', 'ava', 'theo', 'mia', 'sam'];
 
 describe('sample lesson A1-S01-E1', () => {
