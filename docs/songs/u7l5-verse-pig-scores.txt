@@ -1,0 +1,15 @@
+
+=== docs/songs/u7l5-verse-pig-take1.mp3  length=20.1s  score=0.57  missing=9  extra=21
+heard: grandpa had a farm e i e i o and on his hand he had a baby e i e i o with an on on here and an on on there grandpa had a farm e i e i o
+line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(8.3), np.float64(12.5)]
+lineDurationsMs: [4000, 4280, 4220, 7562]
+
+=== docs/songs/u7l5-verse-pig-take2.mp3  length=20.1s  score=0.39  missing=16  extra=24
+heard: grandpa out of farm yeah yeah yeah yeah and on his farm he had a big ei ei o plus then i'm going here and then i'm going to grandpa out of farm yeah yeah yeah yeah
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(9.8), np.float64(12.5)]
+lineDurationsMs: [3800, 5960, 2720, 7582]
+
+=== docs/songs/u7l5-verse-pig-take3.mp3  length=20.1s  score=0.63  missing=7  extra=19
+heard: grandpa had a farm e i e i o and on his farm he had a pig e i e i o with an oint oint's here and an oint oint there grandpa had a farm e i e i o
+line starts (s): [np.float64(0.0), np.float64(3.5), np.float64(8.4), np.float64(12.5)]
+lineDurationsMs: [3500, 4940, 4060, 7562]
