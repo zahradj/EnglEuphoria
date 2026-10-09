@@ -276,17 +276,32 @@
   },
   "u4l5-song-video": {
     "path": "public/lep1/audio/animal-moves-song-video-u4l5.mp3",
-    "bytes": 858531,
-    "sha256": "18d75f7608795bd2b024f52fa1259516e837005c4e7ff40da1ce66d5dee9c528"
+    "bytes": 799598,
+    "sha256": "d821f69ec0e595395a015185874fc5a121a3f0eecc269251e1268c983e21a37b"
   },
   "u5l5-song-video": {
     "path": "public/lep1/audio/my-dad-song-video-u5l5.mp3",
-    "bytes": 869816,
-    "sha256": "587c9f21fe66e03ea353a09369402c30d72213d6f758bc0e5b1a52a1ee25bcad"
+    "bytes": 919553,
+    "sha256": "65c8138fcd9564acce7ad011fe4ceb36e483b4e8135ad66c582faa91e3380f03"
   },
   "u6l5-song-video": {
     "path": "public/lep1/audio/wheres-my-house-song-video-u6l5.mp3",
-    "bytes": 944630,
-    "sha256": "302e71494fda27d9bb7b5291f37367d4145400f7a0d412a548f636865fd4207d"
+    "bytes": 941705,
+    "sha256": "1937e5e848c62d8e2a1b79ee8d724635f808ccb0ba7b43d5dcd3c494ebbbf961"
+  },
+  "u4l5-song3": {
+    "path": "public/lep1/audio/animal-moves-song3-u4l5.mp3",
+    "bytes": 833455,
+    "sha256": "ef6ca19a3c0c9ee004557e65c01f33ee0282e05ee812833c2d255d592df54219"
+  },
+  "u5l5-song3": {
+    "path": "public/lep1/audio/my-dad-song3-u5l5.mp3",
+    "bytes": 925824,
+    "sha256": "a3fb54dbb8c8b299808c31a4c0252e22a7b93006f5c62774dfc5a460334f6255"
+  },
+  "u6l5-song3": {
+    "path": "public/lep1/audio/wheres-my-house-song3-u6l5.mp3",
+    "bytes": 997713,
+    "sha256": "d4db9d7adf3c30b0d8e80b2fb55f04db881223217f17b3665a0040922686bd18"
   }
 }

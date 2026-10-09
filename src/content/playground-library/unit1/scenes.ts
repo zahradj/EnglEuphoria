@@ -7910,26 +7910,26 @@ export const LESSON_U4L5_SCENES: Scene[] = [
 
   /* 1-4 Hook + story */
   {
-    // Song video (docs/scenarios/u4l5-moves-song-video.md, owner 2026-10-09: repeat the words): verse takes joined by
-    // scripts/make-song-video.py (scripts/song-videos/), one moving clip per sung line. The audio is the clock.
+    // Song video (docs/scenarios/u4l5-moves-song-video.md, owner 2026-10-09: words that fit the music): ONE whole-song take written with the
+    // kids-song-writer skill, cut by scripts/make-song-video.py (scripts/song-videos/), one moving clip per sung line. The audio is the clock.
     id: 'u4l5-song', kind: 'song', bg: bgU4L5Park, title: '\u{1F3B5} I Can Do It! \u{1F3B5}', teacher: 'Stand up! Do each move as you sing: turn, wave, stomp, clap!',
-    durationSeconds: 54, bigWord: 'Move', songUrl: `${A}/audio/animal-moves-song-video-u4l5.mp3?v=1`,
-    videoUrl: `${A}/video/animal-moves-song-u4l5.mp4?v=2`,
-    lineDurationsMs: [4700, 3100, 3500, 6200, 4100, 4000, 4200, 6100, 3740, 4660, 3860, 5440],
+    durationSeconds: 50, bigWord: 'Move', songUrl: `${A}/audio/animal-moves-song-video-u4l5.mp3?v=2`,
+    videoUrl: `${A}/video/animal-moves-song-u4l5.mp4?v=3`,
+    lineDurationsMs: [10510, 2610, 3400, 8480, 1340, 2860, 3340, 7730, 2090, 1910, 2050, 3580],
     songPrompt: 'Upbeat kids pop song',
     lyrics: [
-      { who: 'pip', text: 'Head, head! The tiger turns his head!', emotion: 'happy' },
-      { who: 'pip', text: 'Head, head! I turn my head!', emotion: 'happy' },
-      { who: 'pip', text: 'Arms, arms! The monkey waves his arms!', emotion: 'happy' },
-      { who: 'pip', text: 'Arms, arms! I wave my arms!', emotion: 'happy' },
-      { who: 'pip', text: 'The elephant stomps his feet! Stomp, stomp!', emotion: 'happy' },
-      { who: 'pip', text: 'My feet, my feet! I stomp my feet!', emotion: 'happy' },
-      { who: 'pip', text: 'The seal claps her hands! Clap, clap!', emotion: 'happy' },
-      { who: 'pip', text: 'My hands, my hands! I clap my hands!', emotion: 'happy' },
-      { who: 'pip', text: 'I turn my head! I can do it!', emotion: 'happy' },
-      { who: 'pip', text: 'I wave my arms! I can do it!', emotion: 'happy' },
-      { who: 'pip', text: 'I stomp my feet! I clap my hands!', emotion: 'happy' },
-      { who: 'pip', text: 'From head to toe, we can do it!', emotion: 'happy' },
+      { who: 'pip', text: 'Head, head, turn your head!', emotion: 'happy' },
+      { who: 'pip', text: 'Turn your head, the tiger said!', emotion: 'happy' },
+      { who: 'pip', text: 'Arms, arms, up so high!', emotion: 'happy' },
+      { who: 'pip', text: 'Wave your arms up to the sky!', emotion: 'happy' },
+      { who: 'pip', text: 'Feet, feet, stomp your feet!', emotion: 'happy' },
+      { who: 'pip', text: 'Stomp, stomp, stomp them to the beat!', emotion: 'happy' },
+      { who: 'pip', text: 'Hands, hands, clap your hands!', emotion: 'happy' },
+      { who: 'pip', text: 'Clap like a seal upon the sand!', emotion: 'happy' },
+      { who: 'pip', text: 'I can do it, I can do it!', emotion: 'happy' },
+      { who: 'pip', text: 'I can do it, yes, I can!', emotion: 'happy' },
+      { who: 'pip', text: 'I can do it, I can do it!', emotion: 'happy' },
+      { who: 'pip', text: 'Head and arms and feet and hands!', emotion: 'happy' },
     ],
   },
   {
@@ -9098,26 +9098,26 @@ export const LESSON_U5L5_SCENES: Scene[] = [
 
   /* 1-4 Hook + story */
   {
-    // Song video (docs/scenarios/u5l5-my-dad-song-video.md, owner 2026-10-09: repeat the words): verse takes joined by
-    // scripts/make-song-video.py (scripts/song-videos/), one moving clip per sung line. The audio is the clock.
+    // Song video (docs/scenarios/u5l5-my-dad-song-video.md, owner 2026-10-09: words that fit the music): ONE whole-song take written with the
+    // kids-song-writer skill, cut by scripts/make-song-video.py (scripts/song-videos/), one moving clip per sung line. The audio is the clock.
     id: 'u5l5-song', kind: 'song', bg: bgU5L5Gate, title: '\u{1F3B5} Just Me and My Dad \u{1F3B5}', teacher: 'Sing and do it! Throw a ball, feed the ducks, lick an ice cream, open a book — then a big hug!',
-    durationSeconds: 55, bigWord: 'Dad', songUrl: `${A}/audio/my-dad-song-video-u5l5.mp3?v=1`,
-    videoUrl: `${A}/video/my-dad-song-u5l5.mp4?v=2`,
-    lineDurationsMs: [4200, 4200, 6400, 4500, 2400, 3900, 4100, 5700, 3730, 5970, 2210, 6990],
+    durationSeconds: 58, bigWord: 'Dad', songUrl: `${A}/audio/my-dad-song-video-u5l5.mp3?v=2`,
+    videoUrl: `${A}/video/my-dad-song-u5l5.mp4?v=3`,
+    lineDurationsMs: [8000, 4620, 4300, 4500, 4360, 4440, 5030, 5240, 3010, 5850, 3410, 4640],
     songPrompt: 'Upbeat kids pop song',
     lyrics: [
-      { who: 'pip', text: 'Dad, Dad! Just me and my dad!', emotion: 'happy' },
-      { who: 'pip', text: 'A ball, a ball! Dad throws the ball!', emotion: 'happy' },
-      { who: 'pip', text: 'A ball, a ball! I catch the ball!', emotion: 'happy' },
-      { who: 'pip', text: 'Ducks, ducks! We feed the ducks!', emotion: 'happy' },
-      { who: 'pip', text: 'Ducks, ducks! One, two, three, four ducks!', emotion: 'happy' },
-      { who: 'pip', text: 'Ice cream, ice cream! Yum, yum, yum!', emotion: 'happy' },
-      { who: 'pip', text: 'A book, a book! We read a book!', emotion: 'happy' },
-      { who: 'pip', text: 'Dad, Dad! I love you, Dad!', emotion: 'happy' },
-      { who: 'pip', text: 'We play ball, just me and my dad!', emotion: 'happy' },
-      { who: 'pip', text: 'We feed the ducks! Quack, quack, quack!', emotion: 'happy' },
-      { who: 'pip', text: 'Yum, yum, ice cream! We read a book!', emotion: 'happy' },
-      { who: 'pip', text: 'I love you, Dad! The best day!', emotion: 'happy' },
+      { who: 'pip', text: 'Me and Dad, me and Dad,', emotion: 'happy' },
+      { who: 'pip', text: "The park is fun, I'm very glad!", emotion: 'happy' },
+      { who: 'pip', text: 'A ball, a ball, he throws the ball,', emotion: 'happy' },
+      { who: 'pip', text: 'I catch it, catch it, catch it all!', emotion: 'happy' },
+      { who: 'pip', text: 'Ducks, ducks, swimming by,', emotion: 'happy' },
+      { who: 'pip', text: 'We feed the ducks, they say hi!', emotion: 'happy' },
+      { who: 'pip', text: 'Ice cream, ice cream, ice cream, yum!', emotion: 'happy' },
+      { who: 'pip', text: 'A book, a book, we read, what fun!', emotion: 'happy' },
+      { who: 'pip', text: 'Dad, Dad, I love you, Dad!', emotion: 'happy' },
+      { who: 'pip', text: 'The best day that I ever had!', emotion: 'happy' },
+      { who: 'pip', text: 'Dad, Dad, I love you, Dad!', emotion: 'happy' },
+      { who: 'pip', text: 'Just me and my dad, my dad!', emotion: 'happy' },
     ],
   },
   {
@@ -10503,26 +10503,26 @@ export const LESSON_U6L5_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    // Song video (docs/scenarios/u6l5-house-song-video.md, owner 2026-10-09: repeat the words): verse takes joined by
-    // scripts/make-song-video.py (scripts/song-videos/), one moving clip per sung line. The audio is the clock.
+    // Song video (docs/scenarios/u6l5-house-song-video.md, owner 2026-10-09: words that fit the music): ONE whole-song take written with the
+    // kids-song-writer skill, cut by scripts/make-song-video.py (scripts/song-videos/), one moving clip per sung line. The audio is the clock.
     id: 'u6l5-song', kind: 'song', bg: bgU6L5Street, title: "\u{1F3B5} Where's My House? \u{1F3B5}", teacher: 'Sing and act: hand over your eyes for "Where\'s my house?", shake your head for "No, it isn\'t!", nod for "Yes, it is!", knock in the air!',
-    durationSeconds: 59, bigWord: 'House', songUrl: `${A}/audio/wheres-my-house-song-video-u6l5.mp3?v=1`,
-    videoUrl: `${A}/video/wheres-my-house-song-u6l5.mp4?v=2`,
-    lineDurationsMs: [4100, 5100, 5300, 5300, 5000, 6900, 3100, 5060, 4800, 5040, 5900, 3360],
+    durationSeconds: 59, bigWord: 'House', songUrl: `${A}/audio/wheres-my-house-song-video-u6l5.mp3?v=2`,
+    videoUrl: `${A}/video/wheres-my-house-song-u6l5.mp4?v=3`,
+    lineDurationsMs: [12740, 5730, 2620, 6850, 5210, 4670, 2270, 7510, 2480, 1970, 2870, 3880],
     songPrompt: 'Gentle bouncy kids story song with a question-and-answer feel',
     lyrics: [
-      { who: 'pip', text: 'Home, home! Time to go home!', emotion: 'happy' },
-      { who: 'pip', text: "My house, my house! Where's my house?", emotion: 'happy' },
-      { who: 'pip', text: 'A red door, a red door! My house has a red door!', emotion: 'happy' },
-      { who: 'pip', text: "A blue door, a blue door! No, it isn't!", emotion: 'happy' },
-      { who: 'pip', text: "A yellow door, a yellow door! No, it isn't!", emotion: 'happy' },
-      { who: 'pip', text: 'A red door, a red door! Is this my house?', emotion: 'happy' },
-      { who: 'pip', text: 'Knock, knock! Yes, it is! My house!', emotion: 'happy' },
-      { who: 'pip', text: 'My house, my house! I love my house!', emotion: 'happy' },
-      { who: 'pip', text: "Where's my house? Where's my house?", emotion: 'happy' },
+      { who: 'pip', text: "It's late, it's late, let's go home!", emotion: 'happy' },
+      { who: 'pip', text: "Where's my house? Oh no, oh no!", emotion: 'happy' },
+      { who: 'pip', text: 'My door, my door, my door is red,', emotion: 'happy' },
+      { who: 'pip', text: 'Not blue, not yellow, red, I said!', emotion: 'happy' },
+      { who: 'pip', text: "Is this my house? No, it isn't!", emotion: 'happy' },
       { who: 'pip', text: "Is this my house? No, it isn't!", emotion: 'happy' },
       { who: 'pip', text: 'Is this my house? Yes, it is!', emotion: 'happy' },
-      { who: 'pip', text: 'Knock, knock! Welcome home!', emotion: 'happy' },
+      { who: 'pip', text: 'A red door! A hug and a kiss!', emotion: 'happy' },
+      { who: 'pip', text: "Knock, knock! Who is it? It's me!", emotion: 'happy' },
+      { who: 'pip', text: 'Welcome home, my house, yippee!', emotion: 'happy' },
+      { who: 'pip', text: 'My house, my house, I love my house,', emotion: 'happy' },
+      { who: 'pip', text: 'Quiet as a little mouse!', emotion: 'happy' },
     ],
   },
   {
@@ -12021,7 +12021,7 @@ export const LESSON_U7L5_SCENES: Scene[] = [
   /* 1-4 Hook + the film */
   {
     // Song video (docs/scenarios/u7l5-farm-song-video.md, owner 2026-10-09: repeat the words): verse takes joined by
-    // scripts/make-song-video.py (scripts/song-videos/), one moving clip per sung line. The audio is the clock.
+    // scripts/make-song-video.py (scripts/song-videos/). To be replaced by the whole-song take u7l5-farm-song3 (kids-song-writer). The audio is the clock.
     id: 'u7l5-song', kind: 'song', bg: bgU7L5Yard, title: '\u{1F3B5} Farm Song \u{1F3B5}', teacher: 'Sing and act: horns for the cow, hands up for E-I-E-I-O! Make each animal sound together.',
     durationSeconds: 78, bigWord: 'Farm', songUrl: `${A}/audio/farm-song-video-u7l5.mp3?v=2`,
     videoUrl: `${A}/video/farm-song-u7l5.mp4?v=2`,
