@@ -1562,5 +1562,45 @@
       "With a moo, moo here and a moo, moo there!",
       "Grandpa had a farm, E-I-E-I-O!"
     ]
+  },
+  "u7l5-farm-song-video": {
+    "publicPath": "public/lep1/audio/farm-song-video-u7l5.mp3",
+    "durationSec": 70,
+    "style": "Classic happy kids farm sing-along, 112 BPM with banjo, acoustic guitar, hand claps and a fiddle, clear happy young vocals with a kids choir feel, four short verses (cow, pig, sheep, duck) then the chorus, every word sung slowly and clearly, the traditional E-I-E-I-O farm-song melody, the words exactly as written (Grandpa, never any other name), animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "traditional",
+      "banjo",
+      "acoustic guitar",
+      "hand claps",
+      "fiddle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "112 BPM",
+      "happy",
+      "farm"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "mumbling"
+    ],
+    "lines": [
+      "Grandpa had a farm, E-I-E-I-O!",
+      "And on his farm he had a cow, E-I-E-I-O!",
+      "With a moo, moo here and a moo, moo there!",
+      "And on his farm he had a pig, E-I-E-I-O!",
+      "With an oink, oink here and an oink, oink there!",
+      "And on his farm he had a sheep, E-I-E-I-O!",
+      "With a baa, baa here and a baa, baa there!",
+      "And on his farm he had a duck, E-I-E-I-O!",
+      "With a quack, quack here and a quack, quack there!",
+      "Grandpa had a farm, E-I-E-I-O!"
+    ]
   }
 }

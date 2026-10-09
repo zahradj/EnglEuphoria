@@ -1,6 +1,6 @@
 # Scenario — Pre-A1 Unit 7 Lesson 5 "Grandpa's Farm" · song video "Grandpa Had a Farm"
 
-**Status: draft — waiting for the owner's written OK.** Nothing paid is ordered.
+**Status: approved by the owner (2026-10-09).** Nothing paid is ordered.
 
 | | |
 |---|---|
@@ -42,4 +42,4 @@ Each shot is cut to the length of its sung line (measured from the song take); a
 Song: song bot (no Higgsfield credits). Video: existing clips. **No paid clips.**
 
 ## Owner approval
-(waiting)
+Approved: owner, 2026-10-09 — "Go ahead, we might use songs for all videos. Let's try with the first one."
