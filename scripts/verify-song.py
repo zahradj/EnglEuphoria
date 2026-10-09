@@ -41,6 +41,8 @@ for take in takes:
                                   condition_on_previous_text=False)
     words = [(norm(w.word), w.start, w.end) for s in segs for w in s.words if norm(w.word)]
     heard = [w[0] for w in words]
+    # every heard word with its time, for exact line cues (scripts/song-line-times.py)
+    pathlib.Path(take).with_suffix(".words.json").write_text(json.dumps([[w, round(a, 2), round(b, 2)] for w, a, b in words]))
     sm = difflib.SequenceMatcher(None, lyric_words, heard, autojunk=False)
     ratio = sm.ratio()
     matched = sum(b.size for b in sm.get_matching_blocks())
