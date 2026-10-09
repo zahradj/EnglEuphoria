@@ -878,6 +878,30 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     teacher: 'Rub your tummy and say it with Willow!', line: 'I am hungry!', repeat: 'Hungry!',
   },
 
+  {
+    // Second introduction of the five feelings (owner 2026-10-09): all friends together, one arrow at a time.
+    id: 'wt2-vocab-feelings', kind: 'vocab-spot', bg: bgFeelingsW,
+    teacher: 'Look at each friend! Tap the arrow to hear how they feel.',
+    items: [
+      { label: 'Happy', sentence: 'I am happy.', emoji: '\u{1F60A}', left: '29.8%', top: '54.5%', color: '#FE6A2F', who: 'pip' },
+      { label: 'Tired', sentence: 'I am tired.', emoji: '\u{1F62A}', left: '40.4%', top: '55.6%', color: '#C97A2F', who: 'leo' },
+      { label: 'Sad', sentence: 'I am sad.', emoji: '\u{1F622}', left: '51.1%', top: '57.9%', color: '#B85CD1', who: 'mia' },
+      { label: 'Angry', sentence: 'I am angry.', emoji: '\u{1F620}', left: '61.8%', top: '56.8%', color: '#E76FA5', who: 'bella' },
+      { label: 'Hungry', sentence: 'I am hungry.', emoji: '\u{1F924}', left: '72.5%', top: '57.9%', color: '#4FA9E0', who: 'willow' },
+    ],
+  },
+  {
+    // Owner 2026-10-09 ("also activity like this"): drag each word onto the friend — right after the arrow page,
+    // same hotspot coordinates as wt2-vocab-feelings.
+    id: 'wt2-drag-feelings', kind: 'drag-match', bg: bgFeelingsW, teacher: 'Listen, then drag each word onto the friend who feels that way!',
+    items: [
+      { label: 'Happy', color: '#FE6A2F', who: 'pip', targetLeft: '29.8%', targetTop: '54.5%' },
+      { label: 'Tired', color: '#C97A2F', who: 'leo', targetLeft: '40.4%', targetTop: '55.6%' },
+      { label: 'Sad', color: '#B85CD1', who: 'mia', targetLeft: '51.1%', targetTop: '57.9%' },
+      { label: 'Angry', color: '#E76FA5', who: 'bella', targetLeft: '61.8%', targetTop: '56.8%' },
+      { label: 'Hungry', color: '#4FA9E0', who: 'willow', targetLeft: '72.5%', targetTop: '57.9%' },
+    ],
+  },
   /* --- Move & Say (Pre-A1 TPR game): the body shows each feeling ---- */
   {
     id: 'wt2-move-say', kind: 'prea1', teacher: 'Stand up! Do the face or the action and say the sentence with Pip.',
@@ -893,17 +917,6 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     },
   },
 
-  {
-    id: 'wt2-vocab-feelings', kind: 'vocab-spot', bg: bgFeelingsW,
-    teacher: 'Look at each friend! Tap the arrow to hear how they feel.',
-    items: [
-      { label: 'Happy', sentence: 'I am happy.', emoji: '\u{1F60A}', left: '29.8%', top: '54.5%', color: '#FE6A2F', who: 'pip' },
-      { label: 'Tired', sentence: 'I am tired.', emoji: '\u{1F62A}', left: '40.4%', top: '55.6%', color: '#C97A2F', who: 'leo' },
-      { label: 'Sad', sentence: 'I am sad.', emoji: '\u{1F622}', left: '51.1%', top: '57.9%', color: '#B85CD1', who: 'mia' },
-      { label: 'Angry', sentence: 'I am angry.', emoji: '\u{1F620}', left: '61.8%', top: '56.8%', color: '#E76FA5', who: 'bella' },
-      { label: 'Hungry', sentence: 'I am hungry.', emoji: '\u{1F924}', left: '72.5%', top: '57.9%', color: '#4FA9E0', who: 'willow' },
-    ],
-  },
   {
     // Name That Feeling (Khan Academy Kids pattern, roadmap): hear the question, tap the friend.
     id: 'wt2-choice', kind: 'listen-tap', bg: bgFeelingsW, teacher: 'Listen, then tap the right friend!',
