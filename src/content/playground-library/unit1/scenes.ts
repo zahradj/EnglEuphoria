@@ -11985,8 +11985,8 @@ export const LESSON_U7L5_SCENES: Scene[] = [
   /* 1-4 Hook + the film */
   {
     id: 'u7l5-song', kind: 'song', bg: bgU7L5Yard, title: '\u{1F3B5} Farm Song \u{1F3B5}', teacher: 'Sing and act: horns for the cow, hands up for E-I-E-I-O!',
-    durationSeconds: 20, bigWord: 'Farm', songUrl: `${A}/audio/old-macdonald-song-u7l5.mp3?v=1`,
-    lineDurationsMs: [3960, 4340, 4260, 7502],
+    durationSeconds: 20, bigWord: 'Farm', songUrl: `${A}/audio/old-macdonald-song-u7l5.mp3?v=2`,
+    lineDurationsMs: [3790, 4540, 4110, 7622],
     songPrompt: 'Classic happy kids farm sing-along',
     lyrics: [
       { who: 'pip', text: 'Grandpa had a farm, E-I-E-I-O!', emotion: 'happy' },
