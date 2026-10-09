@@ -26,5 +26,5 @@
 | 11 | I stomp my feet! I clap my hands! | Pip stomps (pip-feet) | |
 | 12 | From head to toe, we can do it! | everyone in the park (park-end) | |
 
-Each shot is cut to its sung line; a clip shorter than its line plays back and forth so it never freezes.
+Each shot is cut to its sung line (lines are about 4-5 s, the clips 5 s, so every shot keeps moving).
 Cost: song bot only (no Higgsfield credits).
