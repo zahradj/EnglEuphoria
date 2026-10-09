@@ -31,7 +31,7 @@ Canva rate limit: one picture, then ~25 min wait.
 | Character | neutral v2 | happy v2 | curious v2 | surprised v2 | thinking v2 | concerned v2 |
 |---|---|---|---|---|---|---|
 | Ava | MAHXgPkDg5c | | | | | |
-| Theo | | | | | | |
+| Theo | MAHXgZZzylw | | | | | |
 | Mia | | | | | | |
 | Vee | | | | | | |
 
