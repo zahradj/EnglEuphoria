@@ -11987,14 +11987,29 @@ export const LESSON_U7L5_SCENES: Scene[] = [
 
   /* 1-4 Hook + the film */
   {
-    id: 'u7l5-song', kind: 'song', bg: bgU7L5Yard, title: '\u{1F3B5} Farm Song \u{1F3B5}', teacher: 'Sing and act: horns for the cow, hands up for E-I-E-I-O!',
-    durationSeconds: 20, bigWord: 'Farm', songUrl: `${A}/audio/old-macdonald-song-u7l5.mp3?v=2`,
-    lineDurationsMs: [3790, 4540, 4110, 7622],
+    // Song video (docs/scenarios/u7l5-farm-song-video.md, approved 2026-10-09): four sung verses over the moving barn
+    // clips, cut to the sung lines (scripts/film-labels/u7l5-farm-song-pages.json). The audio is the clock.
+    id: 'u7l5-song', kind: 'song', bg: bgU7L5Yard, title: '\u{1F3B5} Farm Song \u{1F3B5}', teacher: 'Sing and act: horns for the cow, hands up for E-I-E-I-O! Make each animal sound together.',
+    durationSeconds: 75, bigWord: 'Farm', songUrl: `${A}/audio/farm-song-video-u7l5.mp3?v=1`,
+    videoUrl: `${A}/video/farm-song-u7l5.mp4?v=1`,
+    lineDurationsMs: [3790, 4540, 4110, 5460, 3500, 4900, 4100, 6500, 4000, 4400, 4200, 5300, 3600, 4900, 4500, 7060],
     songPrompt: 'Classic happy kids farm sing-along',
     lyrics: [
       { who: 'pip', text: 'Grandpa had a farm, E-I-E-I-O!', emotion: 'happy' },
       { who: 'pip', text: 'And on his farm he had a cow, E-I-E-I-O!', emotion: 'happy' },
       { who: 'pip', text: 'With a moo, moo here and a moo, moo there!', emotion: 'happy' },
+      { who: 'pip', text: 'Grandpa had a farm, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'Grandpa had a farm, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'And on his farm he had a pig, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'With an oink, oink here and an oink, oink there!', emotion: 'happy' },
+      { who: 'pip', text: 'Grandpa had a farm, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'Grandpa had a farm, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'And on his farm he had a sheep, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'With a baa, baa here and a baa, baa there!', emotion: 'happy' },
+      { who: 'pip', text: 'Grandpa had a farm, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'Grandpa had a farm, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'And on his farm he had a duck, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'With a quack, quack here and a quack, quack there!', emotion: 'happy' },
       { who: 'pip', text: 'Grandpa had a farm, E-I-E-I-O!', emotion: 'happy' },
     ],
   },

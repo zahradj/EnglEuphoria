@@ -203,5 +203,25 @@
     "path": "public/lep1/audio/old-macdonald-song-u7l5.mp3",
     "bytes": 321037,
     "sha256": "c785f34e15c96d4e7653644b8b2575989f6c238712371495fae5ce53e588403f"
+  },
+  "u7l5-farm-song-video": {
+    "path": "public/lep1/audio/farm-song-video-u7l5.mp3",
+    "bytes": 1198750,
+    "sha256": "0ead05dce9b136d4e10468c9e3c71f5fcd6830b9fa55d12e43d89833d02013d5"
+  },
+  "u7l5-verse-pig": {
+    "path": "public/lep1/audio/farm-verse-pig-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "fe68f1742d9415671b4f1d1e57fdeaebac9d1cc0f95a3c6984ac120a28aa7a58"
+  },
+  "u7l5-verse-sheep": {
+    "path": "public/lep1/audio/farm-verse-sheep-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "2c5b93ff14cd34522416697655cdb60cf863c5596fed0644e19946781f79e207"
+  },
+  "u7l5-verse-duck": {
+    "path": "public/lep1/audio/farm-verse-duck-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "6a758cee5e912f4c5d7bd6cfd09b4d7cb3b534c93d5e8b68137b7183a73a9601"
   }
 }

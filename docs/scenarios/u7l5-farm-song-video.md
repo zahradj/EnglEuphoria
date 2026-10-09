@@ -43,3 +43,14 @@ Song: song bot (no Higgsfield credits). Video: existing clips. **No paid clips.*
 
 ## Owner approval
 Approved: owner, 2026-10-09 — "Go ahead, we might use songs for all videos. Let's try with the first one."
+
+## As built (2026-10-09)
+- The song bot could not sing the 10 lines in one clean take (scores 0.1-0.5, skipped verses), so each animal is its own
+  short verse take (`u7l5-old-macdonald` cow, `u7l5-verse-pig`, `u7l5-verse-sheep`, `u7l5-verse-duck`; every transcript
+  checked word by word) joined into `public/lep1/audio/farm-song-video-u7l5.mp3` (75 s). This is the traditional
+  verse form: each verse starts and ends with "Grandpa had a farm, E-I-E-I-O!" — 16 sung lines.
+- Shots per verse: door rattles (…he had a cow…) → door opens on the animal + word label (…moo, moo here…) → everyone
+  sings in the yard for the two "Grandpa had a farm" lines (ping-pong of yard-sing so it keeps moving). Verse 1 opens on
+  the gate wave + **farm** label. Pages: `scripts/film-labels/u7l5-farm-song-pages.json`, labels:
+  `scripts/film-labels/u7l5-farm-song.json`. Film: `public/lep1/video/farm-song-u7l5.mp4`.
+- The karaoke words are shown by the lesson's song page (big lyric strip), not burned into the film.
