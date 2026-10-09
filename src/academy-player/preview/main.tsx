@@ -7,5 +7,5 @@ import { A1S01E1 } from '../samples/a1s01e1';
 const q = new URLSearchParams(window.location.search);
 document.body.style.margin = '0';
 createRoot(document.getElementById('root')!).render(
-  <AcademyPlayer script={A1S01E1} theme={q.get('theme') === 'explorer' ? 'explorer' : 'studio'} artBase={q.get('art') ?? undefined} autoStart={q.get('start') === '1'} />,
+  <AcademyPlayer script={A1S01E1} theme={q.get('theme') === 'explorer' ? 'explorer' : 'studio'} artBase={q.get('art') ?? (window as unknown as { __ACADEMY_ART__?: string }).__ACADEMY_ART__ ?? undefined} autoStart={q.get('start') === '1'} />,
 );
