@@ -382,3 +382,60 @@
    `justify-content: flex-end` + `overflow: auto` clips the top part so it can never be reached (the profile card hotspots). */
 .ap-panel { justify-content: flex-start; }
 .ap-panel > :first-child { margin-top: auto; }
+
+/* live one-to-one class: the student waits for the teacher */
+.ap-waiting { position: absolute; left: 50%; bottom: 20px; translate: -50% 0; margin: 0; padding: 10px 18px; border-radius: 999px; background: #fff; color: #4c1d95; font-weight: 800; box-shadow: 0 6px 20px rgba(90, 50, 190, 0.25); z-index: 5; animation: ap-rise 0.3s ease-out both; }
+
+/* ===== Live one-to-one classroom (teacher-guided) ===== */
+.lc-root { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr); background: #f5f3ff; color: #1e1b4b; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+.lc-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 14px; background: #fff; border-bottom: 1px solid #e0d6fb; flex-wrap: wrap; }
+.lc-title { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; min-width: 0; }
+.lc-title b { color: #4c1d95; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lc-live { width: 10px; height: 10px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); animation: lc-pulse 1.8s ease-out infinite; flex: none; }
+@keyframes lc-pulse { 70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+.lc-seg { display: inline-flex; border: 1px solid #c4b5fd; border-radius: 999px; overflow: hidden; }
+.lc-segbtn { border: 0; background: #fff; color: #4c1d95; padding: 6px 14px; font: inherit; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
+.lc-segbtn[aria-pressed='true'] { background: #7c3aed; color: #fff; }
+.lc-body { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr); }
+.lc-root[data-view='both'] .lc-body { grid-template-columns: minmax(0, 1fr) 360px; }
+.lc-student { position: relative; min-height: 0; height: 100%; }
+.lc-student > .ap-root { height: 100% !important; }
+.lc-student[hidden], .lc-teacher[hidden] { display: none !important; }
+.lc-tiles { position: absolute; top: 46px; right: 10px; z-index: 6; display: flex; flex-direction: column; gap: 6px; pointer-events: none; }
+.lc-tile { position: relative; width: 132px; height: 84px; border-radius: 12px; overflow: hidden; border: 2px solid #fff; box-shadow: 0 6px 18px rgba(60, 30, 120, 0.3); display: grid; place-items: center; }
+.lc-tile-teacher { background: linear-gradient(135deg, #6d28d9, #3b82f6); }
+.lc-tile-me { width: 76px; height: 50px; align-self: flex-end; background: linear-gradient(135deg, #a78bfa, #f9a8d4); }
+.lc-face { width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, 0.9); color: #5b21b6; display: grid; place-items: center; font-weight: 800; font-size: 1.1rem; }
+.lc-face-me { width: 30px; height: 30px; font-size: 0.7rem; }
+.lc-tile-name { position: absolute; left: 6px; bottom: 4px; font-size: 0.66rem; font-weight: 800; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); }
+.lc-cam { position: absolute; right: 6px; top: 4px; font-size: 0.6rem; font-weight: 700; color: #fff; opacity: 0.85; }
+@media (max-width: 700px) { .lc-tile { width: 92px; height: 60px; } .lc-tile-me { width: 54px; height: 36px; } .lc-face { width: 32px; height: 32px; font-size: 0.85rem; } .lc-tiles { top: 42px; right: 6px; } }
+
+.lc-teacher { min-height: 0; overflow: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; background: #faf8ff; border-left: 1px solid #e0d6fb; font-size: 0.88rem; }
+.lc-root[data-view='teacher'] .lc-teacher { border-left: 0; max-width: 760px; width: 100%; margin: 0 auto; }
+.lc-note { font-size: 0.74rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: #7c3aed; }
+.lc-card { background: #fff; border: 1px solid #e0d6fb; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.lc-card[data-ready='true'] { border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2); }
+.lc-card ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 3px; }
+.lc-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.lc-sub { font-size: 0.78rem; color: #5f5694; font-weight: 700; }
+.lc-say { margin: 0; font-weight: 600; }
+.lc-time { font-variant-numeric: tabular-nums; font-weight: 800; }
+.lc-time[data-over='true'] { color: #b45309; }
+.lc-bar2 { height: 8px; border-radius: 99px; background: #ede4ff; overflow: hidden; }
+.lc-bar2 i { display: block; height: 100%; background: linear-gradient(90deg, #8b5cf6, #3b82f6); border-radius: 99px; transition: width 0.4s linear; }
+.lc-bar2 i[data-over='true'] { background: #f59e0b; }
+.lc-stats { display: flex; gap: 14px; flex-wrap: wrap; }
+.lc-chip { display: inline-block; padding: 3px 10px; border-radius: 999px; background: #ede4ff; color: #4c1d95; font-weight: 700; font-size: 0.78rem; }
+.lc-chip[data-on='true'] { background: #fef3c7; color: #92400e; }
+.lc-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 0; }
+.lc-controls { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; }
+.lc-btn, .lc-go { border: 1px solid #c4b5fd; background: #fff; color: #4c1d95; border-radius: 12px; padding: 10px 12px; font: inherit; font-weight: 800; cursor: pointer; min-height: 44px; }
+.lc-btn:disabled { opacity: 0.5; cursor: default; }
+.lc-btn-main, .lc-go { background: linear-gradient(135deg, #8b5cf6, #3b82f6); color: #fff; border-color: transparent; }
+.lc-go { font-size: 1rem; min-height: 52px; }
+.lc-btn-main[data-pulse='true'] { animation: lc-glow 1.4s ease-in-out infinite; }
+@keyframes lc-glow { 50% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.35); } }
+.lc-jump { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; font-weight: 700; color: #5f5694; }
+.lc-jump select { flex: 1; min-height: 40px; border-radius: 10px; border: 1px solid #c4b5fd; padding: 0 8px; font: inherit; background: #fff; color: #1e1b4b; }
+@media (prefers-reduced-motion: reduce) { .lc-live, .lc-btn-main[data-pulse='true'] { animation: none; } }

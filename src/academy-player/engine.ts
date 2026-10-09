@@ -41,7 +41,9 @@ export type PlayerEvent =
   | { type: 'answer'; correct: boolean }
   | { type: 'fill'; values: Record<string, VarValue> }
   | { type: 'back' }
-  | { type: 'restart' };
+  | { type: 'restart' }
+  /** live classroom: the teacher jumps to the start of a run-of-show part (segment index) */
+  | { type: 'goto'; segment: number };
 
 const HISTORY_LIMIT = 60;
 const MAX_STEPS = 10_000;
@@ -146,6 +148,11 @@ function advance(script: SceneScript, s: PlayerState, toIndex: number, vars: Rec
 export function step(script: SceneScript, s: PlayerState, e: PlayerEvent): PlayerState {
   const beat = script.beats[s.beatIndex];
   switch (e.type) {
+    case 'goto': {
+      const at = script.beats.findIndex((b) => b.t === 'segment' && b.index === e.segment);
+      if (at < 0) return s;
+      return advance(script, { ...s, stage: emptyStage() }, at, s.vars, s.answers);
+    }
     case 'restart':
       return { ...initState(script, s.seed), rev: s.rev + 1 };
     case 'back': {

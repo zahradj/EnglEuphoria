@@ -1,7 +1,7 @@
 // Academy lesson player — host component. Academy-only; imports React, framer-motion and files in this folder.
 // Pictures: real art when `artBase` is set and loads, otherwise clearly-labelled placeholders. Stills hold still: only opacity
 // cross-fades are used (owner rule: no zoom, pan, parallax or scale loops on any picture). Voice: recorded clips only, never TTS.
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './academy-player.css';
 import { Backdrop, Sprite } from './art';
@@ -10,7 +10,23 @@ import { BuildBlock, ChatStory, ChoiceBlock, ComicPanels, DialogueBox, FlashDeck
 import type { CastName, SceneScript } from './scriptTypes';
 import { playVoice, stopVoice } from './voice';
 
-export type PlayerSignal = { type: 'minute' | 'hint' | 'finish'; rev: number };
+export type PlayerSignal = { type: 'minute' | 'hint' | 'finish' | 'ready'; rev: number };
+
+/** What the teacher console drives in a live one-to-one class. */
+export interface PlayerController {
+  go: (e: PlayerEvent) => void;
+  start: () => void;
+  /** the teacher gives the student a hint tier (0-3) */
+  hint: (tier: number) => void;
+}
+/** What the teacher console sees of the student's screen. */
+export interface LiveSnapshot {
+  state: PlayerState;
+  hintTier: number;
+  resting: boolean;
+  waiting: boolean;
+  started: boolean;
+}
 
 export interface AcademyPlayerProps {
   script: SceneScript;
@@ -22,6 +38,12 @@ export interface AcademyPlayerProps {
   autoStart?: boolean;
   /** called for teacher-visible signals ("I need a minute", hint use, finish) */
   onSignal?: (s: PlayerSignal) => void;
+  /** live one-to-one class: the TEACHER sets the pace. The student's "Next" becomes "I'm ready" and waits for the teacher; Back is the teacher's. */
+  live?: boolean;
+  /** live class: filled with the controls the teacher console uses */
+  controllerRef?: MutableRefObject<PlayerController | null>;
+  /** live class: called whenever the student's screen changes, so the teacher console can mirror it */
+  onState?: (s: LiveSnapshot) => void;
 }
 
 function usePrefersReduced() {
@@ -36,7 +58,7 @@ function usePrefersReduced() {
   return r;
 }
 
-export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, seed = 1, autoStart = false, onSignal }: AcademyPlayerProps) {
+export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, seed = 1, autoStart = false, onSignal, live = false, controllerRef, onState }: AcademyPlayerProps) {
   const [state, setState] = useState<PlayerState>(() => initState(script, seed));
   const [started, setStarted] = useState(autoStart);
   const [theme, setTheme] = useState(themeProp);
@@ -54,8 +76,24 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
   const [burst, setBurst] = useState(0);
   const [speaking, setSpeaking] = useState(false);
   const prevRight = useRef(0);
+  const [waiting, setWaiting] = useState(false);
 
   const go = useCallback((e: PlayerEvent) => setState((s) => step(script, s, e)), [script]);
+  // live class: moving on is the teacher's job; the student says "I'm ready" and waits
+  const goStudent = useCallback(
+    (e: PlayerEvent) => {
+      if (!live) return go(e);
+      if (e.type === 'next') {
+        setWaiting(true);
+        onSignal?.({ type: 'ready', rev: 0 });
+        return;
+      }
+      if (e.type === 'back' || e.type === 'restart' || e.type === 'goto') return;
+      go(e);
+    },
+    [live, go, onSignal],
+  );
+  useEffect(() => setWaiting(false), [state.rev]);
   const rawBeat = script.beats[state.beatIndex];
   const beat = useMemo(() => (rawBeat ? interpolateBeat(rawBeat, state.vars) : rawBeat), [rawBeat, state.vars]);
   useEffect(() => setHintTier(0), [state.beatIndex]);
@@ -84,13 +122,25 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
       if (tag === 'BUTTON' || tag === 'INPUT') return;
       if ((ev.key === 'Enter' || ev.key === ' ' || ev.key === 'ArrowRight') && beat?.t === 'say') {
         ev.preventDefault();
-        go({ type: 'next' });
+        goStudent({ type: 'next' });
       }
-      if (ev.key === 'ArrowLeft') go({ type: 'back' });
+      if (ev.key === 'ArrowLeft') goStudent({ type: 'back' });
     };
     window.addEventListener('keydown', on);
     return () => window.removeEventListener('keydown', on);
-  }, [beat, go, started, resting]);
+  }, [beat, goStudent, started, resting]);
+
+  // live class: expose the teacher's controls and mirror the student's screen
+  useEffect(() => {
+    if (!controllerRef) return;
+    controllerRef.current = { go, start: () => setStarted(true), hint: (tier) => setHintTier(Math.max(0, Math.min(3, tier))) };
+    return () => {
+      controllerRef.current = null;
+    };
+  }, [controllerRef, go]);
+  useEffect(() => {
+    onState?.({ state, hintTier, resting, waiting, started });
+  }, [state, hintTier, resting, waiting, started]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const sprites = useMemo(() => {
     const out = Object.entries(state.stage.sprites).map(([who, s]) => ({ who: who as CastName, pos: s!.pos, expr: s!.expr }));
@@ -166,7 +216,7 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
           </div>
         )}
 
-        {beat?.t === 'say' && <DialogueBox key={state.beatIndex} beat={beat} reduced={reduced} onNext={() => go({ type: 'next' })} onReplay={() => void playVoice(beat.voice, { muted })} />}
+        {beat?.t === 'say' && <DialogueBox key={state.beatIndex} beat={beat} reduced={reduced} nextLabel={live ? (waiting ? 'Waiting for your teacher…' : 'I am ready ▸') : undefined} nextDisabled={live && waiting} onNext={() => goStudent({ type: 'next' })} onReplay={() => void playVoice(beat.voice, { muted })} />}
 
         {beat?.t === 'choice' && (
           <ChoiceBlock key={state.beatIndex}
@@ -184,13 +234,13 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
             messages={beat.messages}
             reply={beat.reply}
             hintTier={hintTier}
-            onContinue={() => go({ type: 'next' })}
+            onContinue={() => goStudent({ type: 'next' })}
             onReplyWrong={() => go({ type: 'answer', correct: false })}
             onReplyRight={(i) => go({ type: 'choose', index: i })}
           />
         )}
 
-        {beat?.t === 'panels' && <ComicPanels key={state.beatIndex} layout={beat.layout} panels={beat.panels} artBase={artBase} onContinue={() => go({ type: 'next' })} />}
+        {beat?.t === 'panels' && <ComicPanels key={state.beatIndex} layout={beat.layout} panels={beat.panels} artBase={artBase} onContinue={() => goStudent({ type: 'next' })} />}
 
         {beat?.t === 'flash' && (
           <FlashDeck key={state.beatIndex}
@@ -199,25 +249,25 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
             seed={state.seed + state.beatIndex}
             onReplay={(v) => void playVoice(v, { muted })}
             onCheck={(correct) => go({ type: 'answer', correct })}
-            onDone={() => go({ type: 'next' })}
+            onDone={() => goStudent({ type: 'next' })}
           />
         )}
 
         {beat?.t === 'build' && (
-          <BuildBlock key={state.beatIndex} prompt={beat.prompt} target={beat.target} extraTiles={beat.extraTiles} hint={beat.hint} hintTier={hintTier} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onDone={(first) => { if (first) go({ type: 'answer', correct: true }); go({ type: 'next' }); }} />
+          <BuildBlock key={state.beatIndex} prompt={beat.prompt} target={beat.target} extraTiles={beat.extraTiles} hint={beat.hint} hintTier={hintTier} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onDone={(first) => { if (first) go({ type: 'answer', correct: true }); goStudent({ type: 'next' }); }} />
         )}
 
         {beat?.t === 'sort' && <SortBlock key={state.beatIndex} prompt={beat.prompt} cards={beat.cards} yes={beat.yes} no={beat.no} onDone={(known) => go({ type: 'fill', values: { [beat.key]: known } })} />}
 
-        {beat?.t === 'match' && <MatchBlock key={state.beatIndex} prompt={beat.prompt} pairs={beat.pairs} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onRight={() => go({ type: 'answer', correct: true })} onDone={() => go({ type: 'next' })} />}
+        {beat?.t === 'match' && <MatchBlock key={state.beatIndex} prompt={beat.prompt} pairs={beat.pairs} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onRight={() => go({ type: 'answer', correct: true })} onDone={() => goStudent({ type: 'next' })} />}
 
-        {beat?.t === 'profile' && <ProfileBlock key={state.beatIndex} title={beat.title} prompt={beat.prompt} rows={beat.rows} hotspots={beat.hotspots} gloss={beat.gloss} onDone={() => go({ type: 'next' })} />}
+        {beat?.t === 'profile' && <ProfileBlock key={state.beatIndex} title={beat.title} prompt={beat.prompt} rows={beat.rows} hotspots={beat.hotspots} gloss={beat.gloss} onDone={() => goStudent({ type: 'next' })} />}
 
         {beat?.t === 'form' && <FormBlock key={state.beatIndex} prompt={beat.prompt} fields={beat.fields} onDone={(values) => go({ type: 'fill', values })} />}
 
-        {beat?.t === 'record' && <RecordBlock key={state.beatIndex} prompt={beat.prompt} model={beat.model} onContinue={() => go({ type: 'next' })} />}
+        {beat?.t === 'record' && <RecordBlock key={state.beatIndex} prompt={beat.prompt} model={beat.model} onContinue={() => goStudent({ type: 'next' })} />}
 
-        {beat?.t === 'ticks' && <TicksBlock key={state.beatIndex} prompt={beat.prompt} items={beat.items} onDone={() => go({ type: 'next' })} />}
+        {beat?.t === 'ticks' && <TicksBlock key={state.beatIndex} prompt={beat.prompt} items={beat.items} onDone={() => goStudent({ type: 'next' })} />}
 
         {beat?.t === 'end' && (
           <div className="ap-panel" style={{ justifyContent: 'center' }}>
@@ -228,10 +278,12 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
               <p className="ap-chunk">
                 {acc === null ? 'No questions this time.' : `${right} of ${state.answers.length} answers were right. Wrong tries count too — that is how we learn.`}
               </p>
-              <button type="button" className="ap-btn ap-btn-primary" onClick={() => go({ type: 'restart' })}>Play again</button>
+              <button type="button" className="ap-btn ap-btn-primary" onClick={() => goStudent({ type: 'restart' })}>Play again</button>
             </div>
           </div>
         )}
+
+        {live && started && waiting && beat?.t !== 'say' && <p className="ap-waiting" role="status">Waiting for your teacher…</p>}
 
         {burst > 0 && <RewardBurst key={burst} />}
 
@@ -253,9 +305,9 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
         {!started && (
           <div className="ap-overlay" role="dialog" aria-label="Start">
             <div className="ap-overlay-box">
-              <p className="ap-prompt">Ready?</p>
-              <p className="ap-chunk">This lesson uses recorded voices. If a sound is missing it stays quiet. You can slow down, replay, or take a minute at any time.</p>
-              <button type="button" className="ap-btn ap-btn-primary" onClick={() => setStarted(true)}>Start ▸</button>
+              <p className="ap-prompt">{live ? 'Your teacher is here.' : 'Ready?'}</p>
+              <p className="ap-chunk">{live ? 'Your teacher starts the lesson. You can ask for a minute, a hint or a replay at any time.' : 'This lesson uses recorded voices. If a sound is missing it stays quiet. You can slow down, replay, or take a minute at any time.'}</p>
+              {!live && <button type="button" className="ap-btn ap-btn-primary" onClick={() => setStarted(true)}>Start ▸</button>}
             </div>
           </div>
         )}
@@ -274,7 +326,7 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
       <nav className="ap-dock" aria-label="Comfort controls">
         <div className="ap-dock-group">
           <button type="button" className="ap-btn" disabled={hintTier >= 3 || !(beat?.t === 'choice' || beat?.t === 'chat' || beat?.t === 'build')} onClick={() => { setHintTier((h) => Math.min(3, h + 1)); onSignal?.({ type: 'hint', rev: state.rev }); }} aria-label="Hint"><span className="ap-ico" aria-hidden="true">💡</span>Hint</button>
-          <button type="button" className="ap-btn" disabled={state.history.length === 0} onClick={() => go({ type: 'back' })} aria-label="Go back"><span className="ap-ico" aria-hidden="true">↶</span>Back</button>
+          {!live && <button type="button" className="ap-btn" disabled={state.history.length === 0} onClick={() => goStudent({ type: 'back' })} aria-label="Go back"><span className="ap-ico" aria-hidden="true">↶</span>Back</button>}
           <button type="button" className="ap-btn" onClick={() => setShowLog(true)} aria-label="Show what they said"><span className="ap-ico" aria-hidden="true">☰</span>Lines</button>
           <button type="button" className="ap-btn" onClick={() => { setResting(true); stopVoice(); onSignal?.({ type: 'minute', rev: state.rev }); }} aria-label="I need a minute"><span className="ap-ico" aria-hidden="true">⏸</span>I need a minute</button>
           <button type="button" className="ap-btn" onClick={() => setSettingsOpen((o) => !o)} aria-expanded={settingsOpen} aria-label="Settings"><span className="ap-ico" aria-hidden="true">⚙</span>Settings</button>
