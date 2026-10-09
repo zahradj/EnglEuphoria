@@ -1,4 +1,5 @@
-ducks-count: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started ducks-count: 895dbf20-057d-4851-8b1b-f9aa450a77ce
-saved public/lep1/video/clips/u5l5-dad/ducks-count.mp4 (7774311 bytes)
+icecream-lick: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
+icecream-lick: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started icecream-lick: 8a59b63e-cf49-4a92-a23e-a5accea62c0f
+saved public/lep1/video/clips/u5l5-dad/icecream-lick.mp4 (5114364 bytes)
 1/1 clips ready for u5l5-dad
