@@ -118,32 +118,3 @@ describe('validator', () => {
     expect(codes).toEqual(expect.arrayContaining(['cast', 'too_long', 'jump', 'flash_size', 'chunk', 'no_end']));
   });
 });
-
-describe('live classroom: the teacher jumps to a part', () => {
-  const script: SceneScript = {
-    id: 'live-test',
-    title: 'Live test',
-    cast: ['Vee'],
-    beats: [
-      { t: 'segment', index: 0 },
-      { t: 'say', who: 'Vee', text: 'Part one.' },
-      { t: 'segment', index: 1 },
-      { t: 'bg', id: 'classroom-morning', alt: 'room' },
-      { t: 'say', who: 'Vee', text: 'Part two.' },
-      { t: 'end' },
-    ],
-  };
-  it('goto lands on the first line of that part, with that part on the stage', () => {
-    const s0 = initState(script, 1);
-    expect(s0.stage.segment).toBe(0);
-    const s1 = step(script, s0, { type: 'goto', segment: 1 });
-    expect(s1.stage.segment).toBe(1);
-    expect(s1.stage.bg?.id).toBe('classroom-morning');
-    expect(script.beats[s1.beatIndex]).toMatchObject({ t: 'say', text: 'Part two.' });
-    expect(s1.rev).toBe(s0.rev + 1);
-  });
-  it('goto an unknown part changes nothing', () => {
-    const s0 = initState(script, 1);
-    expect(step(script, s0, { type: 'goto', segment: 9 })).toBe(s0);
-  });
-});

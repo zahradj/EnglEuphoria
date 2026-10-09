@@ -70,7 +70,7 @@ export function RichText({ text, keys = [], gloss = {}, onGloss }: { text: strin
 }
 
 /* ── dialogue box ── */
-export function DialogueBox({ beat, reduced, onNext, onReplay, atEnd, nextLabel, nextDisabled }: { beat: SayBeat; reduced: boolean; onNext: () => void; onReplay: () => void; atEnd?: boolean; nextLabel?: string; nextDisabled?: boolean }) {
+export function DialogueBox({ beat, reduced, onNext, onReplay, atEnd }: { beat: SayBeat; reduced: boolean; onNext: () => void; onReplay: () => void; atEnd?: boolean }) {
   const { shown, done, finish } = useTypewriter(beat.text, !reduced);
   const [open, setOpen] = useState<string | null>(null);
   useEffect(() => setOpen(null), [beat]);
@@ -90,8 +90,8 @@ export function DialogueBox({ beat, reduced, onNext, onReplay, atEnd, nextLabel,
       </div>
       <div className="ap-row">
         <button type="button" className="ap-btn" onClick={onReplay} aria-label="Replay this line">↻ Replay</button>
-        <button type="button" className="ap-btn ap-btn-primary" disabled={done && nextDisabled} onClick={() => (done ? onNext() : finish())} aria-label={done ? (atEnd ? 'Finish' : 'Next line') : 'Show the whole line'}>
-          {done ? (nextLabel ?? 'Next ▸') : 'Skip ▸▸'}
+        <button type="button" className="ap-btn ap-btn-primary" onClick={() => (done ? onNext() : finish())} aria-label={done ? (atEnd ? 'Finish' : 'Next line') : 'Show the whole line'}>
+          {done ? 'Next ▸' : 'Skip ▸▸'}
         </button>
       </div>
     </section>
