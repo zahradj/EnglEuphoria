@@ -1,5 +1,4 @@
-cat-wakes: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
-cat-wakes: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started cat-wakes: b05a0fd5-2449-4583-9da9-37c907e68771
-saved public/lep1/video/clips/u6l5-house/cat-wakes.mp4 (4877145 bytes)
+red-ask: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started red-ask: 8a07e0d2-4af6-4e6c-adc8-b7bb74c25db4
+saved public/lep1/video/clips/u6l5-house/red-ask.mp4 (7633278 bytes)
 1/1 clips ready for u6l5-house
