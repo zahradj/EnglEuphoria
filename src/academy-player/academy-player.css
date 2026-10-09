@@ -505,3 +505,8 @@
 .ap-wordpage-pic .ap-tile-drawn .ap-flag { width: auto; height: 80%; max-height: none; margin: 0; }
 .ap-wordpage-pic .ap-tile-img, .ap-wordpage-pic .ap-tile-ph { max-height: none; }
 .ap-wordpage-pic img.ap-tile-img { max-height: min(340px, 40vh); width: auto; max-width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+@media (max-width: 700px) {
+  .ap-wordpage-pic { max-width: 100%; }
+  .ap-wordpage-pic .ap-tile-drawn { height: min(180px, 24vh); max-width: none; }
+  .ap-wordpage-pic img.ap-tile-img { max-height: min(200px, 26vh); }
+}
