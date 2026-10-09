@@ -12,7 +12,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { approvedVoiceId, languageLock, normalizeForSpeech, safeVoiceSettings, SHORT_LINE_TTS_MODEL, ttsModelFor } from "../_shared/speechPolicy.ts";
 import { withPhonemes } from "../_shared/pronunciations.ts";
-import { elevenLabsKeys, fetchElevenLabs } from "../_shared/elevenKeys.ts";
+import { elevenLabsKeyNames, elevenLabsKeys, fetchElevenLabs } from "../_shared/elevenKeys.ts";
 import { requireAuth } from "../_shared/authGuard.ts";
 
 // Owner's rule: NO live clips. Students, teachers and visitors only ever get lines that were already
@@ -137,7 +137,7 @@ Deno.serve(async (req) => {
       const err = await r.text();
       // The provider's own message (e.g. "Invalid API key", quota or billing details) is for our
       // logs only - it must never reach a student's screen. Callers get a neutral code and stay silent.
-      console.error("ElevenLabs TTS error:", r.status, err);
+      console.error("ElevenLabs TTS error:", r.status, err, "key names set:", elevenLabsKeyNames().join(", "));
       return new Response(JSON.stringify({ error: "audio_unavailable" }), {
         // Our provider account failing (bad key, quota, billing) is not the caller's fault.
         status: r.status === 401 || r.status === 402 || r.status === 403 || r.status === 429 ? 503 : r.status,

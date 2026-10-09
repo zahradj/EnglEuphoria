@@ -1,10 +1,19 @@
-// ElevenLabs API keys, in the order to try. A key whose monthly quota is
-// used up answers 401 quota_exceeded; the next key is tried instead, so
-// adding a key in Supabase secrets (ELEVENLABS_API_KEY_1, elevenlab3, …)
-// keeps voices and songs working without a code change.
+// ElevenLabs API keys, in the order to try. A key whose monthly quota is used up (or that was revoked)
+// answers 401/402/429; the next key is tried instead, so adding a key in Supabase secrets keeps voices
+// and songs working without a code change. Newer names come first (owner 2026-10-09: "use another api
+// elevenlabs 2" - the secret is named "elevenlabs 2"), the older ones after.
+const NAMES = ['elevenlabs 2', 'ELEVENLABS 2', 'Elevenlabs 2', 'ElevenLabs 2', 'elevenlabs2', 'ELEVENLABS2', 'Elevenlabs2', 'ElevenLabs2',
+  'elevenlabs_2', 'ELEVENLABS_2', 'ELEVENLABS_API_KEY_2', 'ELEVENLABS_API_KEY2', 'ELEVEN_LABS_API_KEY_2', 'ELEVENLABS_KEY_2', 'elevenlab2',
+  'elevenlabs', 'ELEVENLABS', 'ElevenLabs', 'ELEVEN_LABS_API_KEY', 'ELEVENLABS_KEY',
+  'ELEVENLABS_API_KEY', 'elevenlab3', 'ELEVENLABS_API_KEY_3', 'ELEVENLABS_API_KEY_1'];
+
+/** Which names are set (names only, never values) - to debug a 401. */
+export function elevenLabsKeyNames(): string[] {
+  return NAMES.filter((n) => (Deno.env.get(n) ?? '') !== '');
+}
+
 export function elevenLabsKeys(): string[] {
-  const names = ['ELEVENLABS_API_KEY', 'elevenlab3', 'ELEVENLABS_API_KEY_3', 'ELEVENLABS_API_KEY_2', 'ELEVENLABS_API_KEY_1'];
-  const keys = names.map((n) => Deno.env.get(n) ?? '').filter(Boolean);
+  const keys = NAMES.map((n) => Deno.env.get(n) ?? '').filter(Boolean);
   return [...new Set(keys)];
 }
 
