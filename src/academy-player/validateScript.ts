@@ -100,6 +100,28 @@ export function validateScript(script: SceneScript): ScriptIssue[] {
         if (b.items.length < 1 || b.items.length > 4) err('ticks', 'Wrap shows 1-4 can-do statements.', i);
         b.items.forEach((t) => needsLine(t, i, 'Can-do'));
         break;
+      case 'sort':
+        if (b.cards.length < 3 || b.cards.length > 14) err('sort_size', 'A sort has 3-14 cards.', i);
+        b.cards.forEach((c) => needsLine(c, i, 'Sort card'));
+        break;
+      case 'match':
+        if (b.pairs.length < 3 || b.pairs.length > 7) err('match_size', 'A match has 3-7 pairs (working memory).', i);
+        b.pairs.forEach((pr) => {
+          needsLine(pr.left, i, 'Match item');
+          needsLine(pr.right, i, 'Match item');
+        });
+        break;
+      case 'profile':
+        if (b.rows.length < 2 || b.rows.length > 8) err('profile_size', 'A profile card has 2-8 rows.', i);
+        b.rows.forEach((r) => needsLine(r.value, i, 'Profile row'));
+        (b.hotspots ?? []).forEach((h) => !b.rows[h.row] && err('hotspot', `Hotspot points at missing row ${h.row}.`, i));
+        break;
+      case 'form':
+        if (b.fields.length < 1 || b.fields.length > 4) err('form_size', 'A form has 1-4 fields.', i);
+        b.fields.forEach((f) => {
+          if (f.kind === 'choice' && (f.options?.length ?? 0) < 2) err('form_options', `Field "${f.key}" needs 2+ options.`, i);
+        });
+        break;
       case 'jump':
         if (!(b.label in labels)) err('jump', `Unknown label "${b.label}".`, i);
         break;
@@ -131,6 +153,10 @@ export function scriptTexts(script: SceneScript): string[] {
     if (b.t === 'build') out.push(b.prompt, b.target, ...(b.extraTiles ?? []));
     if (b.t === 'record') out.push(b.prompt, b.model);
     if (b.t === 'ticks') out.push(b.prompt, ...b.items);
+    if (b.t === 'sort') out.push(b.prompt, ...b.cards);
+    if (b.t === 'match') out.push(b.prompt, ...b.pairs.flatMap((pr) => [pr.left, pr.right]));
+    if (b.t === 'profile') out.push(...(b.prompt ? [b.prompt] : []), ...b.rows.map((r) => r.value), ...(b.hotspots ?? []).map((h) => h.why));
+    if (b.t === 'form') out.push(b.prompt, ...b.fields.flatMap((f) => [f.label, ...(f.options ?? [])]));
   }
   return out;
 }
@@ -142,6 +168,7 @@ export function glossedWords(script: SceneScript): Set<string> {
     if (b.t === 'say' && b.gloss) Object.keys(b.gloss).forEach((k) => g.add(k.toLowerCase()));
     if (b.t === 'chat') b.messages.forEach((m) => m.gloss && Object.keys(m.gloss).forEach((k) => g.add(k.toLowerCase())));
     if (b.t === 'panels') b.panels.forEach((p) => p.keyWord && g.add(p.keyWord.word.toLowerCase()));
+    if (b.t === 'profile' && b.gloss) Object.keys(b.gloss).forEach((k) => g.add(k.toLowerCase()));
   }
   return g;
 }

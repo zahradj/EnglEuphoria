@@ -5,8 +5,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './academy-player.css';
 import { Backdrop, Sprite } from './art';
-import { accuracy, backlog, initState, step, type PlayerEvent, type PlayerState } from './engine';
-import { BuildBlock, ChatStory, ChoiceBlock, ComicPanels, DialogueBox, FlashDeck, RecordBlock, RunStrip, TicksBlock } from './parts';
+import { accuracy, backlog, initState, interpolateBeat, step, type PlayerEvent, type PlayerState } from './engine';
+import { BuildBlock, ChatStory, ChoiceBlock, ComicPanels, DialogueBox, FlashDeck, FormBlock, MatchBlock, ProfileBlock, RecordBlock, RunStrip, SortBlock, TicksBlock } from './parts';
 import type { CastName, SceneScript } from './scriptTypes';
 import { playVoice, stopVoice } from './voice';
 
@@ -51,7 +51,8 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const go = useCallback((e: PlayerEvent) => setState((s) => step(script, s, e)), [script]);
-  const beat = script.beats[state.beatIndex];
+  const rawBeat = script.beats[state.beatIndex];
+  const beat = useMemo(() => (rawBeat ? interpolateBeat(rawBeat, state.vars) : rawBeat), [rawBeat, state.vars]);
   useEffect(() => setHintTier(0), [state.beatIndex]);
 
   // recorded voice for dialogue lines (silent if no clip)
@@ -165,6 +166,14 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
         {beat?.t === 'build' && (
           <BuildBlock key={state.beatIndex} prompt={beat.prompt} target={beat.target} extraTiles={beat.extraTiles} hint={beat.hint} hintTier={hintTier} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onDone={(first) => { if (first) go({ type: 'answer', correct: true }); go({ type: 'next' }); }} />
         )}
+
+        {beat?.t === 'sort' && <SortBlock key={state.beatIndex} prompt={beat.prompt} cards={beat.cards} yes={beat.yes} no={beat.no} onDone={(known) => go({ type: 'fill', values: { [beat.key]: known } })} />}
+
+        {beat?.t === 'match' && <MatchBlock key={state.beatIndex} prompt={beat.prompt} pairs={beat.pairs} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onRight={() => go({ type: 'answer', correct: true })} onDone={() => go({ type: 'next' })} />}
+
+        {beat?.t === 'profile' && <ProfileBlock key={state.beatIndex} title={beat.title} prompt={beat.prompt} rows={beat.rows} hotspots={beat.hotspots} gloss={beat.gloss} onDone={() => go({ type: 'next' })} />}
+
+        {beat?.t === 'form' && <FormBlock key={state.beatIndex} prompt={beat.prompt} fields={beat.fields} onDone={(values) => go({ type: 'fill', values })} />}
 
         {beat?.t === 'record' && <RecordBlock key={state.beatIndex} prompt={beat.prompt} model={beat.model} onContinue={() => go({ type: 'next' })} />}
 

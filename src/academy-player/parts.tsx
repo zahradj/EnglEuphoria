@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { PictureTile, Backdrop, CastBust } from './art';
 import { seededShuffle } from './engine';
-import type { Beat, ChatMessage, ChoiceOption, FlashCard, Gloss, PanelSpec } from './scriptTypes';
+import type { Beat, ChatMessage, ChoiceOption, FlashCard, FormField, Gloss, PanelSpec, ProfileRow } from './scriptTypes';
 
 type SayBeat = Extract<Beat, { t: 'say' }>;
 
@@ -46,7 +46,7 @@ function useTypewriter(text: string, enabled: boolean) {
   return { shown: n, done: n >= text.length, finish: () => setN(text.length) };
 }
 
-function RichText({ text, keys = [], gloss = {}, onGloss }: { text: string; keys?: string[]; gloss?: Gloss; onGloss: (w: string) => void }) {
+export function RichText({ text, keys = [], gloss = {}, onGloss }: { text: string; keys?: string[]; gloss?: Gloss; onGloss: (w: string) => void }) {
   const parts = text.split(/(\s+)/);
   const keySet = new Set(keys.map((k) => k.toLowerCase()));
   const glossKeys = Object.keys(gloss).map((g) => g.toLowerCase());
@@ -362,6 +362,160 @@ export function TicksBlock({ prompt, items, onDone }: { prompt: string; items: s
       <div className="ap-row">
         <span className="ap-chunk">"Not yet" is a useful answer. It tells us what to practise.</span>
         <button type="button" className="ap-btn ap-btn-primary" disabled={Object.keys(r).length < items.length} onClick={() => onDone(r)}>Done ▸</button>
+      </div>
+    </div>
+  );
+}
+
+
+/* ── sort: one card at a time, "I know it" / "not sure yet" (teacher baseline, never a score) ── */
+export function SortBlock({ prompt, cards, yes, no, onDone }: { prompt: string; cards: string[]; yes: string; no: string; onDone: (known: number, unsure: string[]) => void }) {
+  const [i, setI] = useState(0);
+  const [known, setKnown] = useState(0);
+  const [unsure, setUnsure] = useState<string[]>([]);
+  useEffect(() => {
+    setI(0);
+    setKnown(0);
+    setUnsure([]);
+  }, [cards]);
+  const pick = (isYes: boolean) => {
+    const k = known + (isYes ? 1 : 0);
+    const u = isYes ? unsure : [...unsure, cards[i]];
+    if (i + 1 >= cards.length) onDone(k, u);
+    else {
+      setKnown(k);
+      setUnsure(u);
+      setI(i + 1);
+    }
+  };
+  return (
+    <div className="ap-panel">
+      <p className="ap-prompt">{prompt}</p>
+      <div className="ap-sortcard" aria-live="polite">{cards[i]}</div>
+      <div className="ap-row">
+        <button type="button" className="ap-btn ap-btn-primary" onClick={() => pick(true)}>{yes}</button>
+        <button type="button" className="ap-btn" onClick={() => pick(false)}>{no}</button>
+      </div>
+      <p className="ap-chunk">{i + 1} of {cards.length}. There is no wrong answer here.</p>
+    </div>
+  );
+}
+
+/* ── match: tap a left item, then its partner ── */
+export function MatchBlock({ prompt, pairs, seed, onWrong, onRight, onDone }: { prompt: string; pairs: { left: string; right: string }[]; seed: number; onWrong: () => void; onRight: () => void; onDone: () => void }) {
+  const order = useMemo(() => seededShuffle(pairs.map((_, i) => i), seed), [pairs, seed]);
+  const [done, setDone] = useState<number[]>([]);
+  const [sel, setSel] = useState<number | null>(null);
+  const [slip, setSlip] = useState<number | null>(null);
+  useEffect(() => {
+    setDone([]);
+    setSel(null);
+    setSlip(null);
+  }, [pairs]);
+  const all = done.length === pairs.length;
+  const tapRight = (ri: number) => {
+    if (sel === null || done.includes(ri)) return;
+    if (ri === sel) {
+      setDone([...done, ri]);
+      setSel(null);
+      setSlip(null);
+      if (slip !== sel) onRight();
+    } else {
+      setSlip(sel);
+      onWrong();
+    }
+  };
+  return (
+    <div className="ap-panel">
+      <p className="ap-prompt">{prompt}</p>
+      <div className="ap-match">
+        <div className="ap-match-col">
+          {pairs.map((p, i) => (
+            <button key={i} type="button" className="ap-tile" disabled={done.includes(i)} data-sel={sel === i} onClick={() => setSel(i)}>{p.left}</button>
+          ))}
+        </div>
+        <div className="ap-match-col">
+          {order.map((ri) => (
+            <button key={ri} type="button" className="ap-tile" disabled={done.includes(ri) || sel === null} onClick={() => tapRight(ri)}>{pairs[ri].right}</button>
+          ))}
+        </div>
+      </div>
+      {slip !== null && !all && <p className="ap-feedback" role="status">Not yet — try again.</p>}
+      <div className="ap-row">
+        <span className="ap-chunk">{done.length} of {pairs.length} matched. Tap a left card first.</span>
+        <button type="button" className="ap-btn ap-btn-primary" disabled={!all} onClick={onDone}>Continue ▸</button>
+      </div>
+    </div>
+  );
+}
+
+/* ── profile card: read with tap-to-gloss; optional "tap what looks odd" hotspots ── */
+export function ProfileBlock({ title, prompt, rows, hotspots = [], gloss = {}, onDone }: { title: string; prompt?: string; rows: ProfileRow[]; hotspots?: { row: number; why: string }[]; gloss?: Gloss; onDone: () => void }) {
+  const [found, setFound] = useState<number[]>([]);
+  const [msg, setMsg] = useState<string | null>(null);
+  const [open, setOpen] = useState<string | null>(null);
+  useEffect(() => {
+    setFound([]);
+    setMsg(null);
+    setOpen(null);
+  }, [rows]);
+  const spot = (i: number) => {
+    const h = hotspots.find((x) => x.row === i);
+    if (h) {
+      if (!found.includes(i)) setFound([...found, i]);
+      setMsg(h.why);
+    } else setMsg('That looks fine. Look again.');
+  };
+  const all = hotspots.length === 0 || found.length >= hotspots.length;
+  return (
+    <div className="ap-panel">
+      {prompt && <p className="ap-prompt">{prompt}</p>}
+      <div className="ap-profile" role="group" aria-label={title}>
+        <div className="ap-profile-head"><span className="ap-avatar" aria-hidden="true">?</span><b>{title}</b></div>
+        {rows.map((r, i) => (
+          <div key={i} className="ap-profile-row" data-found={found.includes(i)}>
+            <span className="ap-chunk">{r.label}</span>
+            <span className="ap-profile-val"><RichText text={r.value} gloss={gloss} onGloss={(w) => setOpen(`${w}: ${gloss[w] ?? ''}`)} /></span>
+            {hotspots.length > 0 && <button type="button" className="ap-btn" aria-label={`This looks odd: ${r.label}`} onClick={() => spot(i)}>{found.includes(i) ? '✓' : '?'}</button>}
+          </div>
+        ))}
+      </div>
+      {open && <p className="ap-gloss-pop" role="note">{open}</p>}
+      {msg && <p className="ap-feedback" role="status">{msg}</p>}
+      <div className="ap-row">
+        <span className="ap-chunk">{hotspots.length > 0 ? `${found.length} of ${hotspots.length} odd things found` : 'Tap a dotted word for its meaning'}</span>
+        <button type="button" className="ap-btn ap-btn-primary" disabled={!all} onClick={onDone}>Continue ▸</button>
+      </div>
+      {hotspots.length > 0 && !all && <button type="button" className="ap-btn" onClick={() => { setFound(hotspots.map((h) => h.row)); setMsg('Here they are. Look at the ✓ marks.'); }}>Show me</button>}
+    </div>
+  );
+}
+
+/* ── form: a small set of fields, answers saved for later screens ── */
+export function FormBlock({ prompt, fields, onDone }: { prompt: string; fields: FormField[]; onDone: (values: Record<string, string>) => void }) {
+  const [vals, setVals] = useState<Record<string, string>>({});
+  useEffect(() => setVals({}), [fields]);
+  const ok = fields.every((f) => f.optional || (vals[f.key] ?? '').trim());
+  return (
+    <div className="ap-panel">
+      <p className="ap-prompt">{prompt}</p>
+      {fields.map((f) => (
+        <div key={f.key} className="ap-field">
+          <label className="ap-chunk" htmlFor={`ap-f-${f.key}`}>{f.label}</label>
+          {f.kind === 'text' ? (
+            <input id={`ap-f-${f.key}`} className="ap-input" maxLength={24} value={vals[f.key] ?? ''} placeholder={f.placeholder} onChange={(e) => setVals({ ...vals, [f.key]: e.target.value.replace(/[{}<>]/g, '') })} />
+          ) : (
+            <div className="ap-tick-opts" role="radiogroup" aria-label={f.label}>
+              {(f.options ?? []).map((o) => (
+                <button key={o} type="button" role="radio" aria-checked={vals[f.key] === o} className="ap-btn" data-on={vals[f.key] === o} onClick={() => setVals({ ...vals, [f.key]: o })}>{o}</button>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+      <div className="ap-row">
+        <span className="ap-chunk">You can use any name or a nickname.</span>
+        <button type="button" className="ap-btn ap-btn-primary" disabled={!ok} onClick={() => onDone(vals)}>Continue ▸</button>
       </div>
     </div>
   );

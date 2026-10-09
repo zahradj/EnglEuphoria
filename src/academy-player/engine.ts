@@ -39,6 +39,7 @@ export type PlayerEvent =
   | { type: 'next' }
   | { type: 'choose'; index: number }
   | { type: 'answer'; correct: boolean }
+  | { type: 'fill'; values: Record<string, VarValue> }
   | { type: 'back' }
   | { type: 'restart' };
 
@@ -156,6 +157,11 @@ export function step(script: SceneScript, s: PlayerState, e: PlayerEvent): Playe
       // record a correctness result (from choices or widgets) without moving
       return { ...s, answers: [...s.answers, { beatIndex: s.beatIndex, correct: e.correct }], rev: s.rev + 1 };
     }
+    case 'fill': {
+      // a form / sort result: save the values, then move on
+      if (!beat) return s;
+      return advance(script, s, s.beatIndex + 1, { ...s.vars, ...e.values }, s.answers);
+    }
     case 'choose': {
       if (!beat) return s;
       const options = beat.t === 'choice' ? beat.options : beat.t === 'chat' ? beat.reply?.options : undefined;
@@ -189,4 +195,14 @@ export function backlog(script: SceneScript, s: PlayerState): { who: string; tex
 export function accuracy(s: PlayerState): number | null {
   if (!s.answers.length) return null;
   return s.answers.filter((a) => a.correct).length / s.answers.length;
+}
+
+const VAR_DEFAULTS: Record<string, string> = { name: 'friend' };
+
+/** Fill {key} placeholders in every string of a beat from the student's saved answers. Pure; returns the same beat when nothing changes. */
+export function interpolateBeat<T extends Beat>(beat: T, vars: Record<string, VarValue>): T {
+  const raw = JSON.stringify(beat);
+  if (!raw.includes('{')) return beat;
+  const fillText = (t: string) => t.replace(/\{(\w+)\}/g, (_m, k: string) => String(vars[k] ?? VAR_DEFAULTS[k] ?? ''));
+  return JSON.parse(raw, (_k, v) => (typeof v === 'string' ? fillText(v) : v)) as T;
 }

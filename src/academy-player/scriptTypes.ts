@@ -57,6 +57,21 @@ export interface ChatMessage {
   gloss?: Gloss;
 }
 
+export interface ProfileRow {
+  label: string;
+  /** shown text; may contain {key} placeholders filled from the student's answers */
+  value: string;
+}
+
+export interface FormField {
+  key: string;
+  label: string;
+  kind: 'text' | 'choice';
+  options?: string[];
+  placeholder?: string;
+  optional?: boolean;
+}
+
 export type Beat =
   | { t: 'label'; name: string }
   | { t: 'bg'; id: string; alt: string }
@@ -73,6 +88,14 @@ export type Beat =
   | { t: 'record'; prompt: string; model: string }
   /** can-do self-rating at the Wrap (yes / almost / not yet): honest evidence for the teacher, never a score */
   | { t: 'ticks'; prompt: string; items: string[] }
+  /** one card at a time, two buttons ("I know it" / "not sure yet"); the count of "yes" is saved in vars[key] (teacher baseline) */
+  | { t: 'sort'; prompt: string; cards: string[]; yes: string; no: string; key: string }
+  /** tap a left item, then its partner on the right (right side shuffled by the seed) */
+  | { t: 'match'; prompt: string; pairs: { left: string; right: string }[] }
+  /** a profile card to read (tap-to-gloss). With hotspots the student taps rows that look wrong; each reveals why. */
+  | { t: 'profile'; title: string; prompt?: string; rows: ProfileRow[]; hotspots?: { row: number; why: string }[]; gloss?: Gloss }
+  /** a small form; answers are saved in vars[field.key] and can be shown later as {key} */
+  | { t: 'form'; prompt: string; fields: FormField[] }
   | { t: 'set'; key: string; value: VarValue }
   | { t: 'if'; key: string; equals: VarValue; goto: string }
   | { t: 'jump'; label: string }
@@ -90,5 +113,5 @@ export interface SceneScript {
 }
 
 /** Beats the player stops on and waits for the student (or the teacher). */
-export const INTERACTIVE_KINDS: readonly Beat['t'][] = ['say', 'choice', 'chat', 'panels', 'flash', 'build', 'record', 'ticks', 'end'] as const;
+export const INTERACTIVE_KINDS: readonly Beat['t'][] = ['say', 'choice', 'chat', 'panels', 'flash', 'build', 'record', 'ticks', 'sort', 'match', 'profile', 'form', 'end'] as const;
 export const isInteractive = (b: Beat) => (INTERACTIVE_KINDS as readonly string[]).includes(b.t);
