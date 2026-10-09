@@ -1,6 +1,6 @@
 # Scenario — Pre-A1 Unit 5 Lesson 5 "Just Me and My Dad" · song video "Just Me and My Dad"
 
-**Status: waiting for owner approval.** Nothing is ordered.
+**Status: approved with changes by the owner (2026-10-09), see "Revised words".** Nothing is ordered.
 
 | | |
 |---|---|
@@ -27,3 +27,21 @@
 | 12 | I love you, Dad! The best day! | night sky over the house (night-best) | |
 
 Cost: song bot only (no Higgsfield credits).
+
+
+## Revised words (owner, 2026-10-09: "it sounds good, but we need to emphasize the vocabulary. A pig, a pig, a cow, a cow… a farm, a farm")
+Approved with this change. Each verse repeats its target word; shots stay as in the table above (one sung line = one clip).
+
+**u5l5-song-v1**
+1. Dad, Dad! Just me and my dad!
+2. A ball, a ball! Dad throws the ball!
+3. A ball, a ball! I catch the ball!
+4. Ducks, ducks! We feed the ducks!
+
+**u5l5-song-v2**
+1. Ducks, ducks! One, two, three, four ducks!
+2. Ice cream, ice cream! Yum, yum, yum!
+3. A book, a book! We read a book!
+4. Dad, Dad! I love you, Dad!
+
+Verse 3 stays the existing lesson song.

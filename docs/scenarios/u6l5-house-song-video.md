@@ -1,6 +1,6 @@
 # Scenario — Pre-A1 Unit 6 Lesson 5 "Where's My House?" · song video "Where's My House?"
 
-**Status: waiting for owner approval.** Nothing is ordered.
+**Status: approved with changes by the owner (2026-10-09), see "Revised words".** Nothing is ordered.
 
 | | |
 |---|---|
@@ -27,3 +27,21 @@
 | 12 | Knock, knock! Welcome home! | Pip in his bedroom (bedroom-love) | |
 
 Cost: song bot only (no Higgsfield credits).
+
+
+## Revised words (owner, 2026-10-09: "it sounds good, but we need to emphasize the vocabulary. A pig, a pig, a cow, a cow… a farm, a farm")
+Approved with this change. Each verse repeats its target word; shots stay as in the table above (one sung line = one clip).
+
+**u6l5-song-v1**
+1. Home, home! Time to go home!
+2. My house, my house! Where's my house?
+3. A red door, a red door! My house has a red door!
+4. A blue door, a blue door! No, it isn't!
+
+**u6l5-song-v2**
+1. A yellow door, a yellow door! No, it isn't!
+2. A red door, a red door! Is this my house?
+3. Knock, knock! Yes, it is! My house!
+4. My house, my house! I love my house!
+
+Verse 3 stays the existing lesson song.

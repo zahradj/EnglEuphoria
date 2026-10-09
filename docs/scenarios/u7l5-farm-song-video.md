@@ -54,3 +54,34 @@ Approved: owner, 2026-10-09 — "Go ahead, we might use songs for all videos. Le
   the gate wave + **farm** label. Pages: `scripts/film-labels/u7l5-farm-song-pages.json`, labels:
   `scripts/film-labels/u7l5-farm-song.json`. Film: `public/lep1/video/farm-song-u7l5.mp4`.
 - The karaoke words are shown by the lesson's song page (big lyric strip), not burned into the film.
+
+
+## Revised words (owner, 2026-10-09: "it sounds good, but we need to emphasize the vocabulary. A pig, a pig, a cow, a cow… a farm, a farm")
+Approved with this change. Each verse repeats its target word; shots stay as in the table above (one sung line = one clip).
+
+**u7l5-farm2-cow**
+1. A farm, a farm! Grandpa had a farm!
+2. And on his farm he had a cow, E-I-E-I-O!
+3. A cow, a cow! It's a cow! Moo, moo!
+4. With a moo, moo here and a moo, moo there!
+
+**u7l5-farm2-pig**
+1. A farm, a farm! Grandpa had a farm!
+2. And on his farm he had a pig, E-I-E-I-O!
+3. A pig, a pig! It's a pig! Oink, oink!
+4. With an oink, oink here and an oink, oink there!
+
+**u7l5-farm2-sheep**
+1. A farm, a farm! Grandpa had a farm!
+2. And on his farm he had a sheep, E-I-E-I-O!
+3. A sheep, a sheep! It's a sheep! Baa, baa!
+4. With a baa, baa here and a baa, baa there!
+
+**u7l5-farm2-duck**
+1. A farm, a farm! Grandpa had a farm!
+2. And on his farm he had a duck, E-I-E-I-O!
+3. A duck, a duck! It's a duck! Quack, quack!
+4. With a quack, quack here and a quack, quack there!
+5. A farm, a farm! Grandpa had a farm!
+
+Shots per verse: farm line → gate wave (verse 1) / yard; "…he had a cow" → door rattles; "A cow, a cow! It's a cow!" → door opens + **cow** label; "moo, moo here" → yard with all the animals.

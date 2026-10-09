@@ -1,6 +1,6 @@
 # Scenario — Pre-A1 Unit 4 Lesson 5 "Animal Moves" · song video "I Can Do It!"
 
-**Status: waiting for owner approval.** Nothing is ordered.
+**Status: approved with changes by the owner (2026-10-09), see "Revised words".** Nothing is ordered.
 
 | | |
 |---|---|
@@ -28,3 +28,21 @@
 
 Each shot is cut to its sung line (lines are about 4-5 s, the clips 5 s, so every shot keeps moving).
 Cost: song bot only (no Higgsfield credits).
+
+
+## Revised words (owner, 2026-10-09: "it sounds good, but we need to emphasize the vocabulary. A pig, a pig, a cow, a cow… a farm, a farm")
+Approved with this change. Each verse repeats its target word; shots stay as in the table above (one sung line = one clip).
+
+**u4l5-song-v1**
+1. Head, head! The tiger turns his head!
+2. Head, head! I turn my head!
+3. Arms, arms! The monkey waves his arms!
+4. Arms, arms! I wave my arms!
+
+**u4l5-song-v2**
+1. Feet, feet! The elephant stomps his feet!
+2. Feet, feet! I stomp my feet!
+3. Hands, hands! The seal claps her hands!
+4. Hands, hands! I clap my hands!
+
+Verse 3 stays the existing lesson song.
