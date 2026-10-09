@@ -94,7 +94,7 @@ export function PictureTile({ id, alt, word, artBase }: { id: string; alt: strin
   const [failed, setFailed] = useState(false);
   if (artBase && !failed) return <img className="ap-tile-img" src={`${artBase}/cards/${id}.webp`} alt={alt} onError={() => setFailed(true)} draggable={false} />;
   return (
-    <div className="ap-tile-ph" role="img" aria-label={alt} data-hue={cardIcon(id).hue}>
+    <div className="ap-tile-ph" role="img" aria-label={alt} style={{ ['--hue' as string]: cardIcon(id).hue }}>
       <span aria-hidden="true" className="ap-tile-ico">{cardIcon(id).icon}</span>
     </div>
   );

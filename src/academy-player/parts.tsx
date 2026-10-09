@@ -1,12 +1,14 @@
 // Academy lesson player — presentation parts. Imports only React and files in this folder.
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { PictureTile, Backdrop, CastBust } from './art';
+import { speakerColor } from './castVisual';
 import { seededShuffle } from './engine';
 import type { Beat, ChatMessage, ChoiceOption, FlashCard, FormField, Gloss, PanelSpec, ProfileRow } from './scriptTypes';
 
 type SayBeat = Extract<Beat, { t: 'say' }>;
 
 /* ── run-of-show strip ── */
+export const SEGMENT_GOALS = ['Meet the team', 'What do you already know?', 'Solve the mystery', 'Learn the words', 'A quick game', 'Your mission', 'Make it yours', 'Wrap-up'] as const;
 export const SEGMENT_NAMES = ['Check-in', 'Remember?', 'The Drop', 'Notice & Build', 'Energiser', 'Mission', 'Release', 'Wrap'] as const;
 
 export function RunStrip({ title, segment }: { title: string; segment: number }) {
@@ -75,7 +77,7 @@ export function DialogueBox({ beat, reduced, onNext, onReplay, atEnd }: { beat: 
   const visible = beat.text.slice(0, shown);
   return (
     <section className="ap-dialogue" aria-label="Dialogue" onClick={() => (done ? undefined : finish())}>
-      {beat.who !== 'narrator' && <span className="ap-name">{beat.who}</span>}
+      {beat.who !== 'narrator' && <span className="ap-name" style={{ background: speakerColor(beat.who) }}>{beat.who}</span>}
       {/* full text for assistive tech; the animated copy is aria-hidden so it is not read letter by letter */}
       <div className="ap-dialogue-body">
         <p className="ap-text" role="log" aria-live="polite" style={{ position: 'relative' }}>
@@ -216,7 +218,7 @@ export function ChatStory({ title, messages, reply, hintTier, onContinue, onRepl
     <div className="ap-chat" role="log" aria-live="polite">
       <div className="ap-chat-title">{title}</div>
       {messages.slice(0, count).map((m, i) => (
-        <div key={i} className="ap-bubble" data-me={m.who === 'You'}>
+        <div key={i} className="ap-bubble" data-me={m.who === 'You'} style={{ ['--who' as string]: speakerColor(m.who) }}>
           <span className="ap-bubble-who">{m.who === 'Unknown' ? m.label : m.who}</span>
           {m.text}
         </div>
@@ -517,6 +519,31 @@ export function FormBlock({ prompt, fields, onDone }: { prompt: string; fields: 
         <span className="ap-chunk">You can use any name or a nickname.</span>
         <button type="button" className="ap-btn ap-btn-primary" disabled={!ok} onClick={() => onDone(vals)}>Continue ▸</button>
       </div>
+    </div>
+  );
+}
+
+
+/* ── cinematic title card at the start of each run-of-show part (tap to skip; the parent auto-dismisses it) ── */
+export function TitleCard({ index, onDone }: { index: number; onDone: () => void }) {
+  return (
+    <div className="ap-titlecard" role="dialog" aria-label={`Part ${index + 1}: ${SEGMENT_NAMES[index]}`} onClick={onDone}>
+      <span className="ap-tc-num" aria-hidden="true">{index + 1}</span>
+      <span className="ap-tc-kicker">Part {index + 1} of 8</span>
+      <span className="ap-tc-name">{SEGMENT_NAMES[index]}</span>
+      <span className="ap-tc-goal">{SEGMENT_GOALS[index]}</span>
+      <span className="ap-tc-hint">Tap to start</span>
+    </div>
+  );
+}
+
+/** Small star burst on a correct answer (one-time, ~600 ms, never on a wrong answer). */
+export function RewardBurst() {
+  return (
+    <div className="ap-burst" aria-hidden="true">
+      {Array.from({ length: 10 }, (_, i) => (
+        <span key={i} style={{ ['--a' as string]: `${i * 36}deg`, ['--d' as string]: `${60 + (i % 3) * 22}px` }}>{i % 2 ? '★' : '✦'}</span>
+      ))}
     </div>
   );
 }

@@ -40,3 +40,7 @@ const CARD_ICONS: Record<string, { icon: string; hue: number }> = {
   'card-new': { icon: '✨', hue: 285 }, 'card-member': { icon: '🎟️', hue: 225 }, 'card-introduce': { icon: '🎤', hue: 310 },
 };
 export const cardIcon = (id: string) => CARD_ICONS[id] ?? { icon: '⭐', hue: 260 };
+
+/** Accent colours for chat senders and name plates (UI only; independent of the art palette). */
+export const SPEAKER_COLOR: Record<string, string> = { Vee: '#60a5fa', Ava: '#a78bfa', Theo: '#34d399', Mia: '#fb923c', Unknown: '#f59e0b', You: '#8fa8ff', narrator: '#94a3b8' };
+export const speakerColor = (who: string) => SPEAKER_COLOR[who] ?? '#a78bfa';

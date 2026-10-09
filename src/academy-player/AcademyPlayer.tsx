@@ -1,12 +1,12 @@
 // Academy lesson player — host component. Academy-only; imports React, framer-motion and files in this folder.
 // Pictures: real art when `artBase` is set and loads, otherwise clearly-labelled placeholders. Stills hold still: only opacity
 // cross-fades are used (owner rule: no zoom, pan, parallax or scale loops on any picture). Voice: recorded clips only, never TTS.
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './academy-player.css';
 import { Backdrop, Sprite } from './art';
 import { accuracy, backlog, initState, interpolateBeat, step, type PlayerEvent, type PlayerState } from './engine';
-import { BuildBlock, ChatStory, ChoiceBlock, ComicPanels, DialogueBox, FlashDeck, FormBlock, MatchBlock, ProfileBlock, RecordBlock, RunStrip, SortBlock, TicksBlock } from './parts';
+import { BuildBlock, ChatStory, ChoiceBlock, ComicPanels, DialogueBox, FlashDeck, FormBlock, MatchBlock, ProfileBlock, RecordBlock, RewardBurst, RunStrip, SortBlock, TicksBlock, TitleCard } from './parts';
 import type { CastName, SceneScript } from './scriptTypes';
 import { playVoice, stopVoice } from './voice';
 
@@ -49,6 +49,10 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
   const [showLog, setShowLog] = useState(false);
   const [hintTier, setHintTier] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [cardSeg, setCardSeg] = useState<number | null>(null);
+  const shownSegs = useRef<Set<number>>(new Set());
+  const [burst, setBurst] = useState(0);
+  const prevRight = useRef(0);
 
   const go = useCallback((e: PlayerEvent) => setState((s) => step(script, s, e)), [script]);
   const rawBeat = script.beats[state.beatIndex];
@@ -70,6 +74,7 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
   useEffect(() => {
     const on = (ev: KeyboardEvent) => {
       if (ev.key === 'Escape') {
+        setCardSeg(null);
         setShowLog(false);
         setResting(false);
       }
@@ -98,6 +103,29 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
   const fade = { duration: reduced ? 0 : 0.28 };
   const acc = accuracy(state);
   const right = state.answers.filter((a) => a.correct).length;
+
+  // cinematic title card once per run-of-show part (never replayed when going Back)
+  useEffect(() => {
+    if (!started || shownSegs.current.has(state.stage.segment)) return;
+    shownSegs.current.add(state.stage.segment);
+    setCardSeg(state.stage.segment);
+  }, [started, state.stage.segment]);
+  useEffect(() => {
+    if (cardSeg === null) return;
+    const id = window.setTimeout(() => setCardSeg(null), reduced ? 700 : 1700);
+    return () => window.clearTimeout(id);
+  }, [cardSeg, reduced]);
+
+  // star burst when a new correct answer arrives (success-dependent reward only)
+  useEffect(() => {
+    if (right > prevRight.current && !reduced) {
+      setBurst((b) => b + 1);
+      const id = window.setTimeout(() => setBurst(0), 700);
+      prevRight.current = right;
+      return () => window.clearTimeout(id);
+    }
+    prevRight.current = right;
+  }, [right, reduced]);
 
   const showStageArt = beat?.t === 'say' || beat?.t === 'choice';
 
@@ -192,6 +220,10 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
             </div>
           </div>
         )}
+
+        {burst > 0 && <RewardBurst key={burst} />}
+
+        {cardSeg !== null && <TitleCard index={cardSeg} onDone={() => setCardSeg(null)} />}
 
         {showLog && (
           <aside className="ap-backlog" aria-label="What they said">

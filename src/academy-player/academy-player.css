@@ -182,3 +182,62 @@
 .ap-profile-row { display: grid; grid-template-columns: 78px 1fr auto; gap: 8px; align-items: center; padding: 4px 0; border-top: 1px solid var(--ap-line); }
 .ap-profile-row[data-found="true"] { background: color-mix(in srgb, var(--ap-reward) 18%, transparent); }
 .ap-field { display: flex; flex-direction: column; gap: 6px; }
+
+/* ═════════ Game visual pass (owner 2026-10-09: "dull, dry" → illustrated, game-like). See .claude/skills/academy-game-ui. ═════════
+   Stills hold still: nothing here zooms, pans or loops a scale. One-time UI motion only; reduced motion turns it all off. */
+.ap-root { grid-template-rows: minmax(0, 1fr) auto; }
+.ap-stage { grid-row: 1; background: #0b0a24; }
+.ap-dock { grid-row: 2; }
+.ap-strip { position: absolute; top: 0; left: 0; right: 0; z-index: 6; padding-bottom: 26px; background: linear-gradient(rgba(8, 6, 28, 0.78), rgba(8, 6, 28, 0)); }
+.ap-bg-ph { padding: 0; display: block; }
+.ap-scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.ap-bg::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 38%, transparent 52%, rgba(6, 4, 24, 0.5) 100%); }
+.ap-sprite { bottom: 12%; width: min(60%, 380px); filter: drop-shadow(0 14px 16px rgba(0, 0, 0, 0.4)); animation: ap-rise 0.38s ease-out both; }
+.ap-sprite[data-pos='center'] { left: 50%; translate: -50% 0; transform: none; }
+.ap-sprite[data-dim='false'] { filter: drop-shadow(0 0 18px rgba(167, 139, 250, 0.55)) drop-shadow(0 14px 16px rgba(0, 0, 0, 0.4)); }
+.ap-sprite[data-dim='true'] { filter: brightness(0.62) saturate(0.8) drop-shadow(0 14px 16px rgba(0, 0, 0, 0.4)); }
+@keyframes ap-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.ap-dialogue { background: linear-gradient(160deg, rgba(34, 28, 92, 0.9), rgba(14, 12, 44, 0.93)); backdrop-filter: blur(12px); border: 1px solid rgba(196, 181, 253, 0.4); box-shadow: 0 10px 34px rgba(5, 3, 30, 0.55); }
+.ap-name { box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35); }
+.ap-panel { background: linear-gradient(to top, rgba(8, 6, 32, 0.9) 0%, rgba(8, 6, 32, 0.6) 55%, rgba(8, 6, 32, 0.12) 100%); backdrop-filter: blur(5px); padding-top: 64px; }
+.ap-choice, .ap-card, .ap-tile, .ap-sortcard, .ap-profile, .ap-bubble { backdrop-filter: blur(10px); }
+.ap-choice, .ap-tile { background: linear-gradient(160deg, rgba(60, 52, 140, 0.72), rgba(30, 26, 80, 0.8)); border-color: rgba(196, 181, 253, 0.35); transition: transform 0.12s ease-out, border-color 0.12s; }
+.ap-choice:hover, .ap-tile:hover:not(:disabled) { transform: translateY(-2px); border-color: #c4b5fd; }
+.ap-choice:active, .ap-tile:active:not(:disabled) { transform: translateY(1px); }
+.ap-choice[data-state='right'] { animation: ap-pop 0.35s ease-out; }
+@keyframes ap-pop { 0% { transform: translateY(4px); } 60% { transform: translateY(-3px); } 100% { transform: none; } }
+.ap-card { background: linear-gradient(160deg, rgba(60, 52, 140, 0.7), rgba(30, 26, 80, 0.8)); border-color: rgba(196, 181, 253, 0.35); }
+.ap-card[data-picked='true'] { border-color: #ffd166; box-shadow: 0 0 22px rgba(255, 209, 102, 0.35); }
+.ap-card[data-picked='true'] .ap-tile-ph { animation: ap-flip 0.42s ease-out; }
+@keyframes ap-flip { from { transform: perspective(500px) rotateY(88deg); opacity: 0.2; } to { transform: perspective(500px) rotateY(0); opacity: 1; } }
+.ap-tile-ph { background: linear-gradient(135deg, hsl(var(--hue, 260) 70% 52%), hsl(calc(var(--hue, 260) + 40) 70% 32%)); color: #fff; box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.12); }
+.ap-tile-ico { font-size: 3.2rem; line-height: 1; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35)); }
+.ap-bubble { border-left: 4px solid var(--who, var(--ap-accent)); background: rgba(30, 26, 80, 0.72); animation: ap-rise 0.28s ease-out both; }
+.ap-bubble-who { color: var(--who, var(--ap-muted)); }
+.ap-sortcard { background: linear-gradient(160deg, rgba(88, 63, 196, 0.8), rgba(40, 32, 110, 0.85)); border-color: rgba(196, 181, 253, 0.5); font-size: 1.9em; }
+.ap-profile { background: rgba(24, 20, 70, 0.78); border-color: rgba(196, 181, 253, 0.4); }
+.ap-profile-row[data-found='true'] { background: rgba(255, 209, 102, 0.2); }
+.ap-slot[data-filled='true'] { animation: ap-pop 0.3s ease-out; }
+.ap-btn-primary { background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; box-shadow: 0 4px 14px rgba(124, 58, 237, 0.45); }
+
+/* title card */
+.ap-titlecard { position: absolute; inset: 0; z-index: 8; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; padding: 24px; cursor: pointer; background: radial-gradient(circle at 50% 40%, rgba(124, 58, 237, 0.92), rgba(30, 20, 90, 0.97) 70%); animation: ap-fade 0.3s ease-out both; }
+@keyframes ap-fade { from { opacity: 0; } to { opacity: 1; } }
+.ap-tc-num { font-size: clamp(7rem, 34vw, 13rem); font-weight: 900; line-height: 0.9; color: transparent; -webkit-text-stroke: 3px rgba(255, 255, 255, 0.55); }
+.ap-tc-kicker { letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.8rem; color: #ddd6fe; }
+.ap-tc-name { font-size: clamp(1.9rem, 8vw, 3rem); font-weight: 900; color: #fff; text-shadow: 0 4px 18px rgba(0, 0, 0, 0.4); }
+.ap-tc-goal { font-size: 1.15rem; color: #ede9fe; }
+.ap-tc-hint { margin-top: 18px; font-size: 0.8rem; color: #c4b5fd; }
+
+/* reward burst: one-time, success only */
+.ap-burst { position: absolute; left: 50%; top: 42%; z-index: 7; pointer-events: none; }
+.ap-burst span { position: absolute; left: 0; top: 0; font-size: 1.6rem; color: #ffd166; text-shadow: 0 0 10px rgba(255, 209, 102, 0.8); animation: ap-star 0.65s ease-out forwards; }
+@keyframes ap-star { from { opacity: 1; transform: rotate(var(--a)) translateY(0); } to { opacity: 0; transform: rotate(var(--a)) translateY(calc(-1 * var(--d))); } }
+
+.ap-root[data-reduced='true'] .ap-sprite,
+.ap-root[data-reduced='true'] .ap-bubble,
+.ap-root[data-reduced='true'] .ap-titlecard,
+.ap-root[data-reduced='true'] .ap-card .ap-tile-ph,
+.ap-root[data-reduced='true'] .ap-choice,
+.ap-root[data-reduced='true'] .ap-slot,
+.ap-root[data-reduced='true'] .ap-burst span { animation: none !important; }
