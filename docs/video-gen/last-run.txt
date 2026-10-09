@@ -1,3 +1,4 @@
-ball-throw: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-start ball-throw failed: 403 {"detail":"not_enough_credits"}
-0/1 clips ready for u5l5-dad
+tiger-head: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started tiger-head: 9dd10c69-68c9-45b3-8e73-576a7c0a4b8d
+saved public/lep1/video/clips/u4l5-moves/tiger-head.mp4 (5275867 bytes)
+1/1 clips ready for u4l5-moves
