@@ -1,0 +1,12 @@
+
+=== docs/songs/u7l5-farm-song-video-take1.mp3  length=80.1s  score=0.13  missing=75  extra=67
+heard: hah haa haa haa haa e i e i o and i'm a song be a little cow e i e i o is a bad gender man can be e i e i o with a hot pinky amazon e i e i o and on his phone had a sheep e i e i o and on his phone e i e i o it's a bacana tancunae biai iyo it's a katacin anafab biai iyo
+line starts (s): [np.float64(10.5), np.float64(36.8), None, 47.2, None, np.float64(67.2), None, None, None, None]
+
+=== docs/songs/u7l5-farm-song-video-take2.mp3  length=80.1s  score=0.50  missing=35  extra=65
+heard: and on his farm he had a cally eye o with a moo moo here and a moo moo there with a moo moo here and a moo moo there and on his farm he had a big b i e l with a moo moo here and a moo moo in coin there and on his farm he had a sheep e i e l if i got my ear and i've got my hair if i got my ear and i've got my hair and on this morning i had a dog g i e l it was a quack quack king and a quack quack there i've got a farm here i am
+line starts (s): [None, np.float64(9.2), np.float64(18.2), np.float64(23.0), np.float64(28.0), np.float64(33.2), np.float64(45.1), np.float64(52.5), np.float64(57.3), np.float64(62.9)]
+
+=== docs/songs/u7l5-farm-song-video-take3.mp3  length=80.1s  score=0.10  missing=76  extra=97
+heard: from the head of for me i owe and on this farm you had to carry i owe with a new new year and a new new year and on this farm you had to pick i owe and on this farm you had to take ei ei o miss i'm going here and i'm going there and on this farm you had to shake ei ei o with a bow by ear and a bow by ear and on this farm you had to take ei ei o with a pot pot here and a pot right there crap ahead of far e i e o
+line starts (s): [None, np.float64(8.6), np.float64(13.4), None, None, None, None, None, None, None]
