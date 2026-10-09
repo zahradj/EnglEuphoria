@@ -320,7 +320,7 @@ class Guard extends Component<{ children: ReactNode; onRetry: () => void; skip: 
         <div className="ap-overlay-box" role="alert">
           <p className="ap-prompt">This screen did not load.</p>
           <p className="ap-chunk">{this.props.skip ? 'You can carry on from the next step.' : 'Try again.'}</p>
-          <p className="ap-chunk" style={{ fontSize: '0.75rem', opacity: 0.7, wordBreak: 'break-word' }}>{String(this.state.error.message).slice(0, 200)}</p>
+          <p className="ap-chunk" style={{ fontSize: '0.75rem', opacity: 0.7, wordBreak: 'break-word' }}>{String(this.state.error.message).slice(0, 200)}{'\n'}{String(this.state.error.stack ?? '').split('\n').slice(1, 5).map((l) => l.trim().slice(0, 140)).join(' · ')}</p>
           <button type="button" className="ap-btn ap-btn-primary" onClick={() => { this.setState({ error: null }); this.props.onRetry(); }}>{this.props.skip ? 'Skip to the next step ▸' : 'Try again'}</button>
         </div>
       </div>
