@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -30,6 +31,7 @@ export default function PricingPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const { availableCredits, refresh } = useStudentCredits(user?.id ?? null);
 
@@ -65,6 +67,19 @@ export default function PricingPage() {
 
     if (checkout === 'success' && sessionId) {
       setVerifying(true);
+      // A parent who paid for a child always lands back on the first page of the family dashboard, whatever
+      // the confirmation says (the payment itself is credited by Stripe's webhook as well).
+      const backToFamily = searchParams.get('return') === 'parent';
+      const finish = (paid: boolean) => {
+        void queryClient.invalidateQueries({ queryKey: ['family-credits'] }); // the dashboard shows the new balance at once
+        if (paid) void refresh();
+        if (paid || backToFamily) {
+          navigate(backToFamily ? '/parent' : '/dashboard', { replace: true });
+          return;
+        }
+        setVerifying(false);
+        setSearchParams({}, { replace: true });
+      };
       supabase.functions
         .invoke('verify-pack-checkout', { body: { sessionId } })
         .then(({ data, error }) => {
@@ -74,18 +89,22 @@ export default function PricingPage() {
               description: "We couldn't verify this checkout — contact support if you were charged.",
               variant: 'destructive',
             });
+            finish(false);
           } else {
             toast({
               title: 'Payment received! 🎉',
               description: `${data.credits_granted} credit${data.credits_granted !== 1 ? 's' : ''} added to your account.`,
             });
-            void refresh();
-            // Paid: straight to the student's dashboard (credits show there).
-            navigate(searchParams.get('return') === 'parent' ? '/parent' : '/dashboard', { replace: true });
-            return;
+            finish(true);
           }
-          setVerifying(false);
-          setSearchParams({}, { replace: true });
+        })
+        .catch(() => {
+          toast({
+            title: 'Could not confirm payment',
+            description: "We couldn't verify this checkout — contact support if you were charged.",
+            variant: 'destructive',
+          });
+          finish(false);
         });
     } else if (checkout === 'cancelled') {
       toast({ title: 'Checkout cancelled', description: 'No charge was made.' });
