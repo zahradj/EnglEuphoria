@@ -1565,30 +1565,31 @@
   },
   "u7l5-farm-song-video": {
     "publicPath": "public/lep1/audio/farm-song-video-u7l5.mp3",
-    "durationSec": 70,
-    "style": "Classic happy kids farm sing-along, 112 BPM with banjo, acoustic guitar, hand claps and a fiddle, clear happy young vocals with a kids choir feel, four short verses (cow, pig, sheep, duck) then the chorus, every word sung slowly and clearly, the traditional E-I-E-I-O farm-song melody, the words exactly as written (Grandpa, never any other name), animal sounds sung playfully. Definitely not a lullaby.",
+    "durationSec": 80,
+    "style": "Slow, simple kids sing-along on the traditional E-I-E-I-O farm-song melody, 100 BPM, banjo and acoustic guitar with soft hand claps, ONE clear young American singer, every single word sung slowly and very clearly, exactly the written words in order, all ten lines, no skipped verses, short instrumental gaps only between verses. Definitely not a lullaby, no rap, no mumbling.",
     "positiveStyles": [
+      "kids sing-along",
       "traditional",
+      "slow",
+      "clear diction",
       "banjo",
       "acoustic guitar",
       "hand claps",
-      "fiddle",
-      "clear kids vocals",
-      "sing-along chorus",
-      "112 BPM",
+      "100 BPM",
       "happy",
       "farm"
     ],
     "negativeStyles": [
       "lullaby",
-      "sleepy",
-      "slow",
-      "music box",
-      "adult vocals",
+      "fast",
       "rap",
+      "mumbling",
+      "skipped lines",
+      "choir",
+      "adult vocals",
       "dark",
       "instrumental only",
-      "mumbling"
+      "long intro"
     ],
     "lines": [
       "Grandpa had a farm, E-I-E-I-O!",
