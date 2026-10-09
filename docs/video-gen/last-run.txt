@@ -1,5 +1,5 @@
-ball-throw: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
-ball-throw: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started ball-throw: bc080c3d-8469-4271-aa64-d58cf51a39b4
-saved public/lep1/video/clips/u5l5-dad/ball-throw.mp4 (5450460 bytes)
-1/1 clips ready for u5l5-dad
+park-late: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
+park-late: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started park-late: 86bc735a-a856-435b-b4ae-afded37b0ee7
+saved public/lep1/video/clips/u6l5-house/park-late.mp4 (8663368 bytes)
+1/1 clips ready for u6l5-house
