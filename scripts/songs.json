@@ -1603,5 +1603,110 @@
       "With a quack, quack here and a quack, quack there!",
       "Grandpa had a farm, E-I-E-I-O!"
     ]
+  },
+  "u7l5-verse-pig": {
+    "publicPath": "public/lep1/audio/farm-verse-pig-u7l5.mp3",
+    "durationSec": 20,
+    "style": "Classic happy kids farm sing-along, 112 BPM with banjo, acoustic guitar, hand claps and a fiddle, clear happy young vocals with a kids choir feel, every word sung slowly and clearly, the traditional E-I-E-I-O farm-song melody, the words exactly as written (Grandpa, never any other name), animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "traditional",
+      "banjo",
+      "acoustic guitar",
+      "hand claps",
+      "fiddle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "112 BPM",
+      "happy",
+      "farm"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Grandpa had a farm, E-I-E-I-O!",
+      "And on his farm he had a pig, E-I-E-I-O!",
+      "With an oink, oink here and an oink, oink there!",
+      "Grandpa had a farm, E-I-E-I-O!"
+    ]
+  },
+  "u7l5-verse-sheep": {
+    "publicPath": "public/lep1/audio/farm-verse-sheep-u7l5.mp3",
+    "durationSec": 20,
+    "style": "Classic happy kids farm sing-along, 112 BPM with banjo, acoustic guitar, hand claps and a fiddle, clear happy young vocals with a kids choir feel, every word sung slowly and clearly, the traditional E-I-E-I-O farm-song melody, the words exactly as written (Grandpa, never any other name), animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "traditional",
+      "banjo",
+      "acoustic guitar",
+      "hand claps",
+      "fiddle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "112 BPM",
+      "happy",
+      "farm"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Grandpa had a farm, E-I-E-I-O!",
+      "And on his farm he had a sheep, E-I-E-I-O!",
+      "With a baa, baa here and a baa, baa there!",
+      "Grandpa had a farm, E-I-E-I-O!"
+    ]
+  },
+  "u7l5-verse-duck": {
+    "publicPath": "public/lep1/audio/farm-verse-duck-u7l5.mp3",
+    "durationSec": 20,
+    "style": "Classic happy kids farm sing-along, 112 BPM with banjo, acoustic guitar, hand claps and a fiddle, clear happy young vocals with a kids choir feel, every word sung slowly and clearly, the traditional E-I-E-I-O farm-song melody, the words exactly as written (Grandpa, never any other name), animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "traditional",
+      "banjo",
+      "acoustic guitar",
+      "hand claps",
+      "fiddle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "112 BPM",
+      "happy",
+      "farm"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Grandpa had a farm, E-I-E-I-O!",
+      "And on his farm he had a duck, E-I-E-I-O!",
+      "With a quack, quack here and a quack, quack there!",
+      "Grandpa had a farm, E-I-E-I-O!"
+    ]
   }
 }
