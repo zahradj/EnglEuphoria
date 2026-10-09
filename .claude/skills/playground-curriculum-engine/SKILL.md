@@ -269,3 +269,10 @@ Part 2 phonics strand which — unlike colors — *is* an established, correct
 pairing in this app's own Pre-A1 precedent of teaching phonics alongside
 each unit's communicative topic). Colors gets built later as its own lesson,
 in Unit 2, checked against Unit 2's own prerequisites when that time comes.
+
+## A1 roadmap and activity library (owner 2026-10-09)
+
+The A1 Playground (Welcome Town) plan lives in `docs/a1-playground-roadmap.md` (10 units x 7 lessons, can-do goals, key
+language, phonics, signature game per lesson). Every gamified activity we can use at A1 (built A1, universal, Pre-A1 games to
+port with an A1 mode, and new researched games) is in `docs/a1-activity-library.md`. Owner: "you can also use the same games
+from the Pre-A1". Check both before choosing activities for any A1 lesson.
