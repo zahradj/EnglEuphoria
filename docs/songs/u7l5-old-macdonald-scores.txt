@@ -1,15 +1,15 @@
 
-=== docs/songs/u7l5-old-macdonald-take1.mp3  length=20.1s  score=0.56  missing=9  extra=22
-heard: grandpa had a farm e i e i o and on his farm he had a cow e i e i o with a moon moon year and a moon who knew their grandpa had a farm e i e i o
-line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(8.4), np.float64(12.7)]
-lineDurationsMs: [4020, 4340, 4340, 7362]
+=== docs/songs/u7l5-old-macdonald-take1.mp3  length=20.1s  score=0.61  missing=7  extra=21
+heard: grab a head of farm e i e i o and on his farm he had a cow e i e i o with a moo moo here and a moo moo there grab a head of farm e i e i o
+line starts (s): [np.float64(0.4), np.float64(3.8), np.float64(8.1), np.float64(13.1)]
+lineDurationsMs: [3780, 4340, 4960, 6982]
 
-=== docs/songs/u7l5-old-macdonald-take2.mp3  length=20.1s  score=0.61  missing=8  extra=19
-heard: grandpa had a farm e i e i o man on his farm he had a cow e i e i o piss the moo moo here and a moo loser grandpa had a farm e i e i o
-line starts (s): [np.float64(0.6), np.float64(4.7), np.float64(9.1), np.float64(13.5)]
-lineDurationsMs: [4740, 4340, 4460, 6522]
+=== docs/songs/u7l5-old-macdonald-take2.mp3  length=20.1s  score=0.69  missing=5  extra=17
+heard: grandpa had a song e i e i o and on his farm he had a cow e i e i o with a moo moo here and a moo moo there grandpa had a song e i e i o
+line starts (s): [np.float64(0.0), np.float64(3.6), np.float64(8.0), np.float64(12.7)]
+lineDurationsMs: [3640, 4400, 4660, 7362]
 
-=== docs/songs/u7l5-old-macdonald-take3.mp3  length=20.1s  score=0.61  missing=8  extra=19
-heard: grandpa had a farm e i e o and on his farm he had a gal e i e i o with a moon moon here and a moon moon there grandpa had a farm e i e i o
-line starts (s): [np.float64(0.0), np.float64(3.6), np.float64(8.0), np.float64(12.6)]
-lineDurationsMs: [3640, 4380, 4580, 7462]
+=== docs/songs/u7l5-old-macdonald-take3.mp3  length=20.1s  score=0.74  missing=3  extra=15
+heard: grandpa had a farm e i e i o and on his farm he had a cow e i e i o with a moo moo here and a moo moo there grandpa had a farm e i e i o
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.3), np.float64(12.4)]
+lineDurationsMs: [3790, 4540, 4110, 7622]
