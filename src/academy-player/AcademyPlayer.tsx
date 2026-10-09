@@ -158,7 +158,7 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
           <div className="ap-sprites">
             <AnimatePresence initial={false}>
               {sprites.map((s) => (
-                <motion.div key={s.who} className="ap-sprite" data-pos={s.pos} data-dim={speaker !== null && speaker !== s.who} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={fade}>
+                <motion.div key={s.who} className="ap-sprite" data-pos={s.pos} data-dim={speaker !== null && speaker !== s.who} initial={reduced ? { opacity: 0 } : { opacity: 0, x: s.pos === 'left' ? -36 : s.pos === 'right' ? 36 : 0, y: s.pos === 'center' ? 24 : 0 }} animate={{ opacity: 1, x: 0, y: 0 }} exit={{ opacity: 0 }} transition={reduced ? fade : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }}>
                   <Sprite who={s.who} expr={s.expr} artBase={artBase} speaking={speaking && speaker === s.who} animate={!reduced} />
                 </motion.div>
               ))}

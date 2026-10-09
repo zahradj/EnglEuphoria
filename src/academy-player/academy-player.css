@@ -356,3 +356,21 @@
   .ap-sprite { bottom: 14%; width: min(46%, 460px); }
   .ap-sprite[data-pos='center'] { translate: -50% 0; transform: none; }
 }
+
+/* ===== Animated characters (Canva cut-outs): breathing, speaking lift, soft shadow, expression fade ===== */
+.ap-sprite-stack { transform-origin: 50% 100%; }
+.ap-sprite-stack[data-animate='true'] { animation: ap-breathe 4.6s ease-in-out infinite; }
+.ap-sprite-stack[data-speaking='true'] { animation: ap-speak 0.62s ease-in-out infinite; }
+@keyframes ap-breathe { 0%, 100% { translate: 0 0; rotate: 0deg; } 50% { translate: 0 -5px; rotate: 0.35deg; } }
+@keyframes ap-speak { 0%, 100% { translate: 0 -4px; rotate: 0deg; } 50% { translate: 0 -9px; rotate: -0.5deg; } }
+.ap-sprite-shadow { position: absolute; left: 12%; right: 12%; bottom: -3%; height: 7%; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(60, 30, 120, 0.32), rgba(60, 30, 120, 0) 70%); pointer-events: none; }
+.ap-sprite-under { position: absolute; inset: 0; z-index: 0; }
+.ap-sprite-in { position: relative; z-index: 1; animation: ap-swapin 0.28s ease-out both; }
+@keyframes ap-swapin { from { opacity: 0; } to { opacity: 1; } }
+.ap-sprite { transition: filter 0.3s ease, translate 0.3s ease; }
+.ap-root[data-reduced='true'] .ap-sprite-stack, .ap-root[data-reduced='true'] .ap-sprite-in { animation: none; }
+
+/* soft floating light motes over the scene (UI motion only, behind the characters) */
+.ap-stage::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1; background-image: radial-gradient(circle, rgba(255, 255, 255, 0.85) 0 1.6px, transparent 2.4px), radial-gradient(circle, rgba(196, 181, 253, 0.8) 0 1.3px, transparent 2.2px), radial-gradient(circle, rgba(255, 255, 255, 0.7) 0 1px, transparent 2px); background-size: 210px 230px, 330px 290px, 140px 170px; background-position: 0 0, 90px 60px, 40px 120px; opacity: 0.55; animation: ap-motes 26s linear infinite; }
+@keyframes ap-motes { from { background-position: 0 0, 90px 60px, 40px 120px; } to { background-position: 0 -230px, 90px -230px, 40px -170px; } }
+.ap-root[data-reduced='true'] .ap-stage::after { animation: none; }

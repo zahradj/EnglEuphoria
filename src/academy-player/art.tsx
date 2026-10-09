@@ -105,12 +105,24 @@ export function Sprite({ who, expr, artBase, speaking = false, animate = true }:
     const id = window.setInterval(() => setMouth((m) => !m), 170);
     return () => window.clearInterval(id);
   }, [speaking, animate]);
+  // expression change: the old picture stays underneath while the new one fades in (opacity only)
+  const [shown, setShown] = useState<Expression>(expr);
+  const [under, setUnder] = useState<Expression | null>(null);
+  useEffect(() => {
+    if (expr === shown) return;
+    setUnder(shown);
+    setShown(expr);
+    const t = window.setTimeout(() => setUnder(null), 320);
+    return () => window.clearTimeout(t);
+  }, [expr, shown]);
   const base = artBase ? `${artBase}/cast/${who.toLowerCase()}` : '';
   if (artBase && !failed) {
-    const poseOk = expr === 'neutral' || expr === 'happy';
+    const poseOk = shown === 'neutral' || shown === 'happy';
     return (
-      <div className="ap-sprite-stack">
-        <img className="ap-sprite-img" src={`${base}/${expr}.webp`} alt={`${who}, ${expr}`} onError={() => setFailed(true)} draggable={false} />
+      <div className="ap-sprite-stack" data-speaking={speaking && animate} data-animate={animate}>
+        <span className="ap-sprite-shadow" aria-hidden="true" />
+        {under && <img className="ap-sprite-img ap-sprite-under" src={`${base}/${under}.webp`} alt="" draggable={false} />}
+        <img key={shown} className="ap-sprite-img ap-sprite-in" src={`${base}/${shown}.webp`} alt={`${who}, ${shown}`} onError={() => setFailed(true)} draggable={false} />
         {animate && poseOk && !noBlink && <img className="ap-sprite-frame" data-on={blink && !mouth} src={`${base}/blink.webp`} alt="" onError={() => setNoBlink(true)} draggable={false} />}
         {animate && poseOk && !noTalk && <img className="ap-sprite-frame" data-on={mouth} src={`${base}/talk.webp`} alt="" onError={() => setNoTalk(true)} draggable={false} />}
       </div>
