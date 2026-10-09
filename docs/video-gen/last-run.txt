@@ -1,5 +1,5 @@
-pip-head: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
-pip-head: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started pip-head: 92866249-0586-4f45-aa11-a59e2351a117
-saved public/lep1/video/clips/u4l5-moves/pip-head.mp4 (5914104 bytes)
+monkey-arms: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
+monkey-arms: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started monkey-arms: 9deb3f5b-6b1d-4c5d-847a-77fe9671de08
+saved public/lep1/video/clips/u4l5-moves/monkey-arms.mp4 (6150277 bytes)
 1/1 clips ready for u4l5-moves
