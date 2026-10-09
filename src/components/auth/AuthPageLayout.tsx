@@ -49,7 +49,15 @@ export function AuthPageLayout({
   }, [setActiveIndex]);
 
   return (
-    <div className="relative min-h-dvh flex flex-col lg:flex-row bg-white dark:bg-[#09090B] transition-colors duration-300">
+    <div
+      dir="ltr"
+      className="relative min-h-dvh flex flex-col lg:flex-row bg-white dark:bg-[#09090B] transition-colors duration-300"
+      style={{
+        ['--auth-accent' as string]: theme.cssFrom,
+        ['--auth-accent-2' as string]: theme.cssTo,
+        ['--auth-accent-soft' as string]: `${theme.cssFrom}2e`,
+      }}
+    >
       <CursorTrail />
       {/* ── Left Panel: Branding & Hero Carousel — compact on mobile ── */}
       <div className="relative lg:w-[48%] flex flex-col items-center justify-center overflow-hidden px-6 py-6 lg:p-12">
@@ -203,7 +211,7 @@ export function AuthPageLayout({
             {showProgress && <div className="mb-4">{showProgress}</div>}
 
             {/* Card */}
-            <div className="relative bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl border border-slate-200/60 dark:border-slate-700/40 rounded-2xl p-8 shadow-xl shadow-slate-200/40 dark:shadow-black/20">
+            <div className="relative rounded-3xl border border-slate-200/70 bg-white p-6 shadow-[0_24px_60px_-28px_rgba(15,23,42,0.28)] dark:border-slate-700/50 dark:bg-slate-900/80 dark:shadow-black/40 sm:p-9">
               {/* Top border glow synced with theme */}
               <motion.div
                 className="absolute top-0 left-8 right-8 h-px"
@@ -214,19 +222,19 @@ export function AuthPageLayout({
               />
 
               {/* Header */}
-              <div className="text-center mb-6">
+              <div className="mb-7 text-center">
                 {Icon && (
-                  <div className="flex justify-center mb-4">
+                  <div className="mb-4 flex justify-center">
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ type: 'spring', duration: 0.5, delay: 0.1 }}
-                      className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg"
+                      className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg ring-4 ring-[var(--auth-accent-soft)]"
                       style={{
                         backgroundImage: `linear-gradient(135deg, ${theme.cssFrom}, ${theme.cssTo})`,
                       }}
                     >
-                      <Icon className="h-7 w-7 text-white" />
+                      <Icon className="h-6 w-6 text-white" />
                     </motion.div>
                   </div>
                 )}
@@ -234,10 +242,7 @@ export function AuthPageLayout({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="text-2xl font-bold bg-clip-text text-transparent"
-                  style={{
-                    backgroundImage: `linear-gradient(to right, ${theme.cssFrom}, ${theme.cssTo})`,
-                  }}
+                  className="text-[26px] font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white"
                 >
                   {title}
                 </motion.h1>
@@ -246,7 +251,7 @@ export function AuthPageLayout({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="text-muted-foreground mt-2 text-sm"
+                    className="mt-1.5 text-[15px] text-slate-500 dark:text-slate-400"
                   >
                     {subtitle}
                   </motion.p>

@@ -1,18 +1,16 @@
 import { detectMarketRegion, toDbMarketRegion } from '@/lib/marketRegion';
 import { getStoredReferralCode } from '@/lib/referralCode';
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, Mail, Lock, User as UserIcon, Calendar, Eye, EyeOff, ArrowLeft, ArrowRight, CheckCircle, BookOpen } from 'lucide-react';
+import { Loader2, Mail, Lock, User as UserIcon, Calendar, ArrowLeft, ArrowRight, CheckCircle, BookOpen } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { AuthPageLayout } from '@/components/auth/AuthPageLayout';
+import { AccountTypeSwitch, AuthButton, AuthField, AuthSteps, EyeToggle } from '@/components/auth/authUi';
 import {
   assignHubFromAge,
   calculateAgeFromDob,
@@ -74,8 +72,6 @@ const StudentSignUp = () => {
 
   const step2Valid = age >= 4 && age <= 99;
   const step3Valid = !!data.reason;
-
-  const progressPct = (step / 3) * 100;
 
   // ── Navigation ───────────────────────────────────────────────────────────
   const next = () => setStep((s) => (s < 3 ? ((s + 1) as Step) : s));
@@ -230,30 +226,15 @@ const StudentSignUp = () => {
         />
       </Helmet>
       <AuthPageLayout
-      title="Start Learning English"
+      title="Create your account"
       subtitle="Three quick steps and you’re in."
       icon={BookOpen}
       variant="student"
       backLink={{ to: '/', label: 'Back to Home' }}
     >
-      {/* Progress Bar */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2 text-xs font-medium">
-          <span className="text-muted-foreground">Step {step} of 3</span>
-          <span className="text-primary">{STEP_LABELS[step - 1]}</span>
-        </div>
-        <Progress value={progressPct} className="h-2" />
-        <div className="mt-2 flex justify-between text-[11px] text-muted-foreground">
-          {STEP_LABELS.map((label, i) => (
-            <span
-              key={label}
-              className={i + 1 <= step ? 'font-semibold text-primary' : ''}
-            >
-              {i + 1}. {label}
-            </span>
-          ))}
-        </div>
-      </div>
+      <AccountTypeSwitch active="individual" />
+
+      <AuthSteps steps={STEP_LABELS} current={step} />
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -289,58 +270,38 @@ const StudentSignUp = () => {
       </AnimatePresence>
 
       {/* Footer Nav */}
-      <div className="mt-6 flex items-center gap-2">
+      <div className="mt-7 flex items-center gap-3">
         {step > 1 && (
-          <Button type="button" variant="outline" onClick={back} disabled={submitting}>
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back
-          </Button>
+          <AuthButton variant="ghost" onClick={back} disabled={submitting}>
+            <ArrowLeft className="h-4 w-4" /> Back
+          </AuthButton>
         )}
-        <div className="flex-1" />
         {step < 3 && (
-          <Button
-            type="button"
+          <AuthButton
             onClick={next}
             disabled={(step === 1 && !step1Valid) || (step === 2 && !step2Valid)}
-            className="bg-gradient-to-r from-violet-500 to-pink-500 text-white hover:from-violet-600 hover:to-pink-600"
+            className="flex-1"
           >
-            Continue <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+            Continue <ArrowRight className="h-4 w-4" />
+          </AuthButton>
         )}
         {step === 3 && (
-          <Button
-            type="button"
-            onClick={handleSubmit}
-            disabled={!step3Valid || submitting}
-            className="bg-gradient-to-r from-violet-500 to-pink-500 text-white hover:from-violet-600 hover:to-pink-600"
-          >
-            {submitting ? (
+          <AuthButton onClick={handleSubmit} disabled={!step3Valid} loading={submitting} className="flex-1">
+            {submitting ? 'Creating account…' : (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating account…
-              </>
-            ) : (
-              <>
-                Start placement test <ArrowRight className="ml-2 h-4 w-4" />
+                Start placement test <ArrowRight className="h-4 w-4" />
               </>
             )}
-          </Button>
+          </AuthButton>
         )}
       </div>
 
-      <div className="mt-6 text-center">
-        <p className="text-sm text-muted-foreground">
-          Already have an account?{' '}
-          <Button
-            variant="link"
-            className="h-auto p-0 font-semibold text-violet-600 hover:text-violet-700"
-            onClick={() => navigate('/login')}
-          >
-            Log in
-          </Button>
-        </p>
-        {/* "Signing up your child? Create a family account" (/parent-signup)
-            returns once src/pages/ParentSignUp.tsx is committed — the route was
-            added without the page and broke every production build. */}
-      </div>
+      <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+        Already have an account?{' '}
+        <Link to="/login" className="font-semibold text-[var(--auth-accent)] hover:underline">
+          Log in
+        </Link>
+      </p>
     </AuthPageLayout>
     </>
   );
@@ -359,67 +320,49 @@ function Step1Account({
   setShowPassword: (b: boolean) => void;
 }) {
   const passwordChecks = [
-    { ok: data.password.length >= 6, text: 'At least 6 characters' },
-    { ok: /[A-Z]/.test(data.password), text: 'One uppercase letter' },
-    { ok: /[0-9]/.test(data.password), text: 'One number' },
+    { ok: data.password.length >= 6, text: '6+ characters' },
+    { ok: /[A-Z]/.test(data.password), text: 'An uppercase letter' },
+    { ok: /[0-9]/.test(data.password), text: 'A number' },
   ];
 
   return (
     <>
-      <div className="space-y-1.5">
-        <label className="text-sm font-medium">Full name</label>
-        <div className="relative">
-          <UserIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            value={data.fullName}
-            onChange={(e) => update('fullName', e.target.value)}
-            placeholder="Your full name"
-            className="h-11 pl-10"
-          />
-        </div>
-      </div>
+      <AuthField
+        label="Full name"
+        icon={UserIcon}
+        value={data.fullName}
+        onChange={(e) => update('fullName', e.target.value)}
+        placeholder="Your full name"
+        autoComplete="name"
+      />
 
-      <div className="space-y-1.5">
-        <label className="text-sm font-medium">Email</label>
-        <div className="relative">
-          <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            type="email"
-            value={data.email}
-            onChange={(e) => update('email', e.target.value)}
-            placeholder="your.email@example.com"
-            className="h-11 pl-10"
-          />
-        </div>
-      </div>
+      <AuthField
+        label="Email"
+        icon={Mail}
+        type="email"
+        value={data.email}
+        onChange={(e) => update('email', e.target.value)}
+        placeholder="your.email@example.com"
+        autoComplete="email"
+      />
 
-      <div className="space-y-1.5">
-        <label className="text-sm font-medium">Password</label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            type={showPassword ? 'text' : 'password'}
-            value={data.password}
-            onChange={(e) => update('password', e.target.value)}
-            placeholder="••••••"
-            className="h-11 pl-10 pr-10"
-          />
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="absolute right-0 top-0 h-11 px-3 hover:bg-transparent"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-          </Button>
-        </div>
+      <div>
+        <AuthField
+          label="Password"
+          icon={Lock}
+          type={showPassword ? 'text' : 'password'}
+          value={data.password}
+          onChange={(e) => update('password', e.target.value)}
+          placeholder="Create a password"
+          autoComplete="new-password"
+          right={<EyeToggle shown={showPassword} onToggle={() => setShowPassword(!showPassword)} />}
+        />
         {data.password && (
-          <ul className="mt-2 space-y-1">
+          <ul className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1">
             {passwordChecks.map((c) => (
-              <li key={c.text} className="flex items-center gap-2 text-xs">
-                <CheckCircle className={c.ok ? 'h-3 w-3 text-emerald-500' : 'h-3 w-3 text-muted-foreground/40'} />
-                <span className={c.ok ? 'text-emerald-600' : 'text-muted-foreground'}>{c.text}</span>
+              <li key={c.text} className="flex items-center gap-1.5 text-xs">
+                <CheckCircle className={c.ok ? 'h-3.5 w-3.5 text-emerald-500' : 'h-3.5 w-3.5 text-slate-300 dark:text-slate-600'} />
+                <span className={c.ok ? 'font-medium text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'}>{c.text}</span>
               </li>
             ))}
           </ul>
@@ -444,29 +387,20 @@ function Step2Age({
   const today = new Date().toISOString().slice(0, 10);
   return (
     <>
-      <div className="space-y-1.5">
-        <label className="text-sm font-medium">Date of birth</label>
-        <div className="relative">
-          <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            type="date"
-            value={dateOfBirth}
-            max={today}
-            onChange={(e) => onChange(e.target.value)}
-            className="h-11 pl-10"
-          />
-        </div>
-        <p className="text-xs text-muted-foreground">
-          We use this to choose the best learning hub for you.
-        </p>
-      </div>
+      <AuthField
+        label="Date of birth"
+        icon={Calendar}
+        type="date"
+        value={dateOfBirth}
+        max={today}
+        onChange={(e) => onChange(e.target.value)}
+        hint="We use this to choose the best learning hub for you."
+      />
 
       {age > 0 && hubLabel && (
-        <div className="rounded-xl border border-primary/20 bg-primary/5 p-3 text-sm">
-          <p className="font-medium text-foreground">Looks like a perfect fit for the {hubLabel}.</p>
-          <p className="text-xs text-muted-foreground">
-            You can always switch later from your profile.
-          </p>
+        <div className="rounded-xl border border-[var(--auth-accent)] bg-[var(--auth-accent-soft)] p-3.5 text-sm">
+          <p className="font-semibold text-slate-900 dark:text-white">Looks like a perfect fit for the {hubLabel}.</p>
+          <p className="text-xs text-slate-600 dark:text-slate-300">You can always switch later from your profile.</p>
         </div>
       )}
     </>
@@ -483,7 +417,7 @@ function Step3Reason({
 }) {
   return (
     <>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-slate-500 dark:text-slate-400">
         Why are you learning English? Pick the closest match.
       </p>
       <div className="grid grid-cols-2 gap-3">
@@ -494,18 +428,18 @@ function Step3Reason({
               key={r.value}
               type="button"
               onClick={() => onChange(r.value)}
-              className={`group relative rounded-2xl border-2 p-4 text-left transition-all ${
+              className={`group relative rounded-2xl border-2 p-4 text-left transition-all duration-200 ${
                 active
-                  ? 'border-primary bg-primary/10 shadow-md'
-                  : 'border-border bg-muted/30 hover:bg-muted/60'
+                  ? 'border-[var(--auth-accent)] bg-[var(--auth-accent-soft)] shadow-md'
+                  : 'border-slate-200 bg-slate-50/70 hover:-translate-y-px hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/40 dark:hover:bg-slate-800'
               }`}
               aria-pressed={active}
             >
               <div className="text-2xl" aria-hidden>
                 {r.emoji}
               </div>
-              <div className="mt-1 text-sm font-semibold">{r.label}</div>
-              <div className="text-xs text-muted-foreground">{r.blurb}</div>
+              <div className="mt-1 text-sm font-bold text-slate-900 dark:text-white">{r.label}</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400">{r.blurb}</div>
             </button>
           );
         })}

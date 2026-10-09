@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, Mail, Lock, User as UserIcon, Eye, EyeOff, ArrowLeft, ArrowRight, Users } from 'lucide-react';
+import { Loader2, Mail, Lock, User as UserIcon, ArrowLeft, ArrowRight, Users } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { AuthPageLayout } from '@/components/auth/AuthPageLayout';
+import { AccountTypeSwitch, AuthButton, AuthField, AuthSteps, EyeToggle } from '@/components/auth/authUi';
 import { getStoredReferralCode } from '@/lib/referralCode';
 import {
   FamilyChildrenForm,
@@ -153,13 +151,9 @@ const ParentSignUp = () => {
         variant="student"
         backLink={{ to: '/', label: 'Back to Home' }}
       >
-        <div className="mb-6">
-          <div className="mb-2 flex items-center justify-between text-xs font-medium">
-            <span className="text-muted-foreground">Step {step} of 2</span>
-            <span className="text-primary">{step === 1 ? 'Your account' : 'Who is learning?'}</span>
-          </div>
-          <Progress value={(step / 2) * 100} className="h-2" />
-        </div>
+        <AccountTypeSwitch active="family" />
+
+        <AuthSteps steps={['Your account', 'Who is learning?']} current={step} />
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -172,58 +166,53 @@ const ParentSignUp = () => {
           >
             {step === 1 && (
               <>
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium" htmlFor="parent-name">Your full name</label>
-                  <div className="relative">
-                    <UserIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input id="parent-name" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Your full name" className="h-11 pl-10" />
-                  </div>
-                </div>
+                <AuthField
+                  id="parent-name"
+                  label="Your full name"
+                  icon={UserIcon}
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Your full name"
+                  autoComplete="name"
+                />
+
+                <AuthField
+                  id="parent-email"
+                  label="Email"
+                  icon={Mail}
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your.email@example.com"
+                  autoComplete="email"
+                />
+
+                <AuthField
+                  id="parent-password"
+                  label="Password"
+                  icon={Lock}
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="At least 8 characters"
+                  autoComplete="new-password"
+                  hint={password.length > 0 && password.length < 8 ? `${8 - password.length} more character${8 - password.length === 1 ? '' : 's'} to go` : undefined}
+                  right={<EyeToggle shown={showPassword} onToggle={() => setShowPassword(!showPassword)} />}
+                />
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium" htmlFor="parent-email">Email</label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input id="parent-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your.email@example.com" className="h-11 pl-10" />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium" htmlFor="parent-password">Password</label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input
-                      id="parent-password"
-                      type={showPassword ? 'text' : 'password'}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="At least 8 characters"
-                      className="h-11 pl-10 pr-10"
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-11 px-3 hover:bg-transparent"
-                      onClick={() => setShowPassword(!showPassword)}
-                      aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <p className="text-sm font-medium">You are their…</p>
-                  <div className="flex flex-wrap gap-2">
+                  <p className="text-[13px] font-semibold tracking-wide text-slate-700 dark:text-slate-200">You are their…</p>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                     {RELATIONSHIPS.map((r) => (
                       <button
                         key={r.value}
                         type="button"
                         onClick={() => setRelationship(r.value)}
                         aria-pressed={relationship === r.value}
-                        className={`min-h-[44px] rounded-xl border-2 px-4 text-sm transition-colors ${
-                          relationship === r.value ? 'border-primary bg-primary/10 font-semibold' : 'border-border bg-muted/30 hover:bg-muted/60'
+                        className={`min-h-[44px] rounded-xl border-2 px-3 text-sm transition-all duration-200 ${
+                          relationship === r.value
+                            ? 'border-[var(--auth-accent)] bg-[var(--auth-accent-soft)] font-bold text-slate-900 dark:text-white'
+                            : 'border-slate-200 bg-slate-50/70 font-medium text-slate-600 hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/40 dark:text-slate-300 dark:hover:bg-slate-800'
                         }`}
                       >
                         {r.label}
@@ -238,54 +227,29 @@ const ParentSignUp = () => {
           </motion.div>
         </AnimatePresence>
 
-        <div className="mt-6 flex items-center gap-2">
+        <div className="mt-7 flex items-center gap-3">
           {step === 2 && (
-            <Button type="button" variant="outline" onClick={() => setStep(1)} disabled={submitting}>
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back
-            </Button>
+            <AuthButton variant="ghost" onClick={() => setStep(1)} disabled={submitting}>
+              <ArrowLeft className="h-4 w-4" /> Back
+            </AuthButton>
           )}
-          <div className="flex-1" />
           {step === 1 ? (
-            <Button
-              type="button"
-              onClick={() => setStep(2)}
-              disabled={!step1Valid}
-              className="bg-gradient-to-r from-violet-500 to-pink-500 text-white hover:from-violet-600 hover:to-pink-600"
-            >
-              Continue <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            <AuthButton onClick={() => setStep(2)} disabled={!step1Valid} className="flex-1">
+              Continue <ArrowRight className="h-4 w-4" />
+            </AuthButton>
           ) : (
-            <Button
-              type="button"
-              onClick={handleSubmit}
-              disabled={!step2Valid || submitting}
-              className="bg-gradient-to-r from-violet-500 to-pink-500 text-white hover:from-violet-600 hover:to-pink-600"
-            >
-              {submitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating family…
-                </>
-              ) : (
-                <>Create family account <ArrowRight className="ml-2 h-4 w-4" /></>
-              )}
-            </Button>
+            <AuthButton onClick={handleSubmit} disabled={!step2Valid} loading={submitting} className="flex-1">
+              {submitting ? 'Creating family…' : (<>Create family account <ArrowRight className="h-4 w-4" /></>)}
+            </AuthButton>
           )}
         </div>
 
-        <div className="mt-6 space-y-1 text-center text-sm text-muted-foreground">
-          <p>
-            Already have an account?{' '}
-            <Button variant="link" className="h-auto p-0 font-semibold text-violet-600 hover:text-violet-700" onClick={() => navigate('/login')}>
-              Log in
-            </Button>
-          </p>
-          <p>
-            Learning on your own?{' '}
-            <Button variant="link" className="h-auto p-0 font-semibold text-violet-600 hover:text-violet-700" onClick={() => navigate('/student-signup')}>
-              Sign up as a student
-            </Button>
-          </p>
-        </div>
+        <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+          Already have an account?{' '}
+          <Link to="/login" className="font-semibold text-[var(--auth-accent)] hover:underline">
+            Log in
+          </Link>
+        </p>
       </AuthPageLayout>
     </>
   );
