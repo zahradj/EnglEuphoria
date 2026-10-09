@@ -1,4 +1,5 @@
-moo-sound: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started moo-sound: 3d9308e9-a169-4386-b626-ea4ce5a90fc5
-saved public/lep1/video/clips/u7l5-barn/moo-sound.mp4 (5524007 bytes)
+cow-door: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
+cow-door: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started cow-door: 451baed5-dd46-4fd3-b1a3-7cefd1ca8d42
+saved public/lep1/video/clips/u7l5-barn/cow-door.mp4 (5284160 bytes)
 1/1 clips ready for u7l5-barn
