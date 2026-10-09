@@ -1,6 +1,6 @@
 import { detectMarketRegion, toDbMarketRegion } from '@/lib/marketRegion';
 import { getStoredReferralCode } from '@/lib/referralCode';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { AuthPageLayout } from '@/components/auth/AuthPageLayout';
+import { useSignOutOnArrival } from '@/hooks/useSignOutOnArrival';
 import { AccountTypeSwitch, AuthButton, AuthField, AuthSteps, EyeToggle } from '@/components/auth/authUi';
 import {
   assignHubFromAge,
@@ -42,7 +43,6 @@ const StudentSignUp = () => {
   const [step, setStep] = useState<Step>(1);
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [signedOut, setSignedOut] = useState(false);
   const [data, setData] = useState<WizardState>({
     fullName: '',
     email: '',
@@ -51,13 +51,8 @@ const StudentSignUp = () => {
     reason: null,
   });
 
-  // Force signout when arriving on the wizard with an active session.
-  useEffect(() => {
-    if (!loading && user && !signedOut) {
-      setSignedOut(true);
-      supabase.auth.signOut().catch(() => undefined);
-    }
-  }, [loading, user, signedOut]);
+  // Arriving with an active session starts from a clean slate (once - never the account made here).
+  useSignOutOnArrival(user, loading);
 
   const update = <K extends keyof WizardState>(key: K, value: WizardState[K]) =>
     setData((prev) => ({ ...prev, [key]: value }));

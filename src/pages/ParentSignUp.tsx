@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
@@ -7,8 +7,8 @@ import { Loader2, Mail, Lock, User as UserIcon, ArrowLeft, ArrowRight, Users } f
 
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
 import { AuthPageLayout } from '@/components/auth/AuthPageLayout';
+import { useSignOutOnArrival } from '@/hooks/useSignOutOnArrival';
 import { AccountTypeSwitch, AuthButton, AuthField, AuthSteps, EyeToggle } from '@/components/auth/authUi';
 import { getStoredReferralCode } from '@/lib/referralCode';
 import {
@@ -37,20 +37,15 @@ const ParentSignUp = () => {
   const [step, setStep] = useState<Step>(1);
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [signedOut, setSignedOut] = useState(false);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [relationship, setRelationship] = useState('guardian');
   const [children, setChildren] = useState<ChildDraft[]>([emptyChild()]);
 
-  // Same rule as the student wizard: arriving with an active session starts from a clean slate.
-  useEffect(() => {
-    if (!loading && user && !signedOut) {
-      setSignedOut(true);
-      supabase.auth.signOut().catch(() => undefined);
-    }
-  }, [loading, user, signedOut]);
+  // Same rule as the student wizard: arriving with an active session starts from a clean slate
+  // (once - never the parent account made on this page, which still has to add the children).
+  useSignOutOnArrival(user, loading);
 
   const step1Valid =
     fullName.trim().length >= 2 &&
