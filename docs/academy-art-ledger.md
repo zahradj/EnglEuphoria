@@ -57,3 +57,14 @@ Order (one picture per ~25 min, Canva rate limit): 1) scenes, 2) the remaining v
 | 4 | 14 vocabulary cards | `cards/card-<word>.webp` | one friendly illustrated picture per word, same style | |
 
 The player already uses `blink.webp` and `talk.webp` when present and falls back to the drawn placeholder animation when not.
+
+## New Canva account (owner, 2026-10-09): cast remade, v3
+
+The new Canva account cannot read the old account's pictures (permission_denied), so the cast was remade from text prompts in the same style and brand colours (neutrals first, then every frame as an edit of that neutral). Owner approval of these faces is pending. Each character has the 5 expressions plus `blink` (eyes closed) and `talk` (mouth open mid-word) frames for the player.
+
+| Character | neutral | happy | curious | surprised | thinking | concerned | blink | talk |
+|---|---|---|---|---|---|---|---|---|
+| Ava | MAHXiQliv5I | MAHXifHOV08 | MAHXiYo0nrE | MAHXieBihtA | MAHXiRJWeO4 | MAHXidqxk8s | MAHXicsrb9g | MAHXibD8oYw |
+| Theo | MAHXiT9DjNs | MAHXiX7d__c | MAHXiVkFixg | MAHXiVNeKT8 | MAHXifw44RU | MAHXiT09RMw | MAHXicKzWJM | MAHXicVi12A |
+| Mia | MAHXibnL3H4 | MAHXib-Yiwc | MAHXiURUazs | MAHXiVRJyEM | MAHXiUwITs4 | MAHXieR-uDY | MAHXiQdGlZA | MAHXiRR-HdY |
+| Vee | MAHXicJz0_c | MAHXiejqBos | MAHXiUXyYB0 | MAHXiYM1z3I | MAHXiRLa5vQ | MAHXiT2EbCs | MAHXic0whqw | MAHXiYlnAtk |
