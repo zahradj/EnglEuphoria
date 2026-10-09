@@ -49,7 +49,7 @@ Order (one picture per ~25 min, Canva rate limit): 1) scenes, 2) the remaining v
 
 | Priority | Picture | Where it goes | Prompt notes | Canva media id |
 |---|---|---|---|---|
-| 1 | scene `classroom-morning` | `bg/classroom-morning.webp` | empty bright modern classroom, morning sun, window with skyline, whiteboard with abstract scribbles (no letters), desks, plant; purple/indigo/blue accents; no people, no text; landscape 3:2 with the centre kept open for characters | |
+| 1 | scene `classroom-morning` | `bg/classroom-morning.webp` | empty bright modern classroom, morning sun, window with skyline, whiteboard with abstract scribbles (no letters), desks, plant; purple/indigo/blue accents; no people, no text; landscape 3:2 with the centre kept open for characters | MAHXhjLIIDQ |
 | 1 | scene `classroom-evening` | `bg/classroom-evening.webp` | same room, warm sunset light, still bright, not dark | |
 | 1 | scene `phone-profile-closeup` | `bg/phone-profile-closeup.webp` | giant phone with a plain profile screen (grey avatar, bars, no readable text), purple/blue glow, bright | |
 | 3 | `blink` per character (4) | `cast/<name>/blink.webp` | edit of the v2 NEUTRAL: eyes closed, everything else identical (used on neutral and happy only) | |
