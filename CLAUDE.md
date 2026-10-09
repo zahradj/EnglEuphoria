@@ -62,3 +62,13 @@
 - Every Playground lesson after the very first opens (right after the title / hello song) with ONE `recall-warmup` scene: a quick "Remember?" of the lesson before, 3-5 of its words with their pictures, Pip says each word and the child finds it — no reading.
 - Vary the look: `mode: 'click'` (listen and click, three pictures) for colours and scene pictures; `mode: 'shadow'` (listen and match the shadow) only for sticker pictures with clearly different outlines.
 - `recallWarmup.test.ts` (deploy gate) fails if a lesson has none. It is a routine scene, not one of the lesson's games.
+
+## Academy lessons — how every one is created (hard rule — owner, 2026-10-09)
+
+Whenever the owner says "create a lesson" / "proceed with creating the lesson", or whenever you create or rebuild an Academy lesson:
+
+1. **Start from the Academy blueprints**, never from memory: the roadmap/curriculum blueprint (`src/curriculum/academy/levels/`, `types.ts`) and the lesson blueprint (`buildLessonBlueprint` / `ACADEMY_LESSON_BLUEPRINTS`: objective, cast, run of show, Mission, Release, clue, supports). The lesson's tests must read the blueprint.
+2. **Use the Academy skills and lists**: `academy-season-system`, `academy-session-builder`, `academy-activity-selector` (+ the 148-game catalogue `docs/academy-games-catalog.md`), `academy-assessment-designer` where there is a check, and run `academy-quality-gate` before reporting done.
+3. **Research the internet again for every lesson** (it is a one-to-one live lesson for teens): Oxford, Cambridge, British Council, Duolingo, Busuu and other English apps and one-to-one platforms. Take mechanics, never content; log sources, quality and limits in `docs/research/academy-<lesson>-research.md`.
+4. **Be creative and visual, not dry.** The player must look like a game or a film, not a worksheet: full-bleed scenes and pictures on every screen, large characters, cinematic transitions between parts, rich reactions. A lesson that is plain text on a flat background is not done.
+5. Fill the hour (the blueprint's run of show), keep the cast to the blueprint's cast, and keep all other Academy rules (hub separation, voice, comfort).
