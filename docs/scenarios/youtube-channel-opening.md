@@ -1,6 +1,6 @@
 # Scenario — YouTube channel opening "Pip's Playground Pop" (~6 s)
 
-**Status: draft — waiting for the owner's written OK.** Nothing paid is ordered.
+**Status: approved and made (2026-10-09)** — `public/brand/channel-opening-playground.mp4`. Nothing paid.
 
 | | |
 |---|---|
@@ -28,4 +28,4 @@
 Free — our own animation and sound, existing art.
 
 ## Owner approval
-(waiting)
+Approved: owner, 2026-10-09 — sent the logo: "use this", "use motion on the letters or the words", "you can change the font". Font: Fredoka Bold (Google Fonts, OFL).
