@@ -11957,7 +11957,7 @@ export const LESSON_U7L4_SCENES: Scene[] = [
 ];
 
 /* =============================================================================
- * Pre-A1 Unit 7, Lesson 5 — "Old MacDonald Had a Farm" (story)
+ * Pre-A1 Unit 7, Lesson 5 — "Grandpa's Farm" (story)
  *
  * The approved story film "Grandpa's Noisy Barn" (docs/scenarios/u7l5-old-macdonald.md):
  * Grandpa is Old MacDonald; at sunrise Pip hears a sound behind each barn door,
@@ -11976,15 +11976,15 @@ const bgU7L5Barn3 = `${A}/scenes/bg-u7l5-barn-3-wide.png`;
 const bgU7L5Barn4 = `${A}/scenes/bg-u7l5-barn-4-wide.png`;
 const bgU7L5Yard = `${A}/scenes/bg-u7l5-yard-wide.png`;
 
-export const LESSON_U7L5_TITLE = 'Old MacDonald Had a Farm';
+export const LESSON_U7L5_TITLE = "Grandpa's Farm";
 export const LESSON_U7L5_OBJECTIVE = 'Follow a short story and answer "What animal is this?" from the sound ("Moo! Moo!" — "It\'s a cow!"), retell the story in order, sing "Old MacDonald had a farm, E-I-E-I-O!" with a verse for each animal, by watching, listening, answering and singing, no reading.';
 
 export const LESSON_U7L5_SCENES: Scene[] = [
-  { id: 'u7l5-title', kind: 'title-card', bg: bgU7L5Yard, level: 'Pre-A1', unit: 'Unit 7', lessonLabel: 'Lesson 5', title: 'Old MacDonald Had a Farm', subtitle: 'A story' },
+  { id: 'u7l5-title', kind: 'title-card', bg: bgU7L5Yard, level: 'Pre-A1', unit: 'Unit 7', lessonLabel: 'Lesson 5', title: "Grandpa's Farm", subtitle: 'A story' },
 
   /* 1-4 Hook + the film */
   {
-    id: 'u7l5-song', kind: 'song', bg: bgU7L5Yard, title: '\u{1F3B5} Old MacDonald \u{1F3B5}', teacher: 'Sing and act: horns for the cow, hands up for E-I-E-I-O!',
+    id: 'u7l5-song', kind: 'song', bg: bgU7L5Yard, title: '\u{1F3B5} Farm Song \u{1F3B5}', teacher: 'Sing and act: horns for the cow, hands up for E-I-E-I-O!',
     durationSeconds: 20, bigWord: 'Farm', songUrl: `${A}/audio/old-macdonald-song-u7l5.mp3?v=1`,
     lineDurationsMs: [3960, 4340, 4260, 7502],
     songPrompt: 'Classic happy kids farm sing-along',
@@ -12007,7 +12007,7 @@ export const LESSON_U7L5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u7l5-intro', kind: 'cinematic', bg: bgU7L5GateB, hidePipOverlay: true, title: 'Old MacDonald Had a Farm', subtitle: 'A story', narrator: 'pip',
+    id: 'u7l5-intro', kind: 'cinematic', bg: bgU7L5GateB, hidePipOverlay: true, title: "Grandpa's Farm", subtitle: 'A story', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Good morning! This is my Grandpa.' },
       { who: 'pip', line: "Today he is a farmer! Let's watch!" },

@@ -1,10 +1,12 @@
-# Scenario — Pre-A1 Unit 7 Lesson 5 "Old MacDonald Had a Farm" · story film "Grandpa's Noisy Barn"
+# Scenario — Pre-A1 Unit 7 Lesson 5 "Grandpa's Farm" · story film "Grandpa's Noisy Barn"
 
 **Status: approved by the owner (2026-10-08)** — pictures in progress (Canva). Nothing paid is ordered.
 
+Title changed by the owner (2026-10-09): "Grandpa's Farm" — no "MacDonald" in any title (the song keeps its traditional words).
+
 | | |
 |---|---|
-| Lesson | Pre-A1 Unit 7 Lesson 5 "Old MacDonald Had a Farm" — *Story* slot of the animals unit (same slot as U6L5 "Where's My House?", U5L5 "Just Me and My Dad") |
+| Lesson | Pre-A1 Unit 7 Lesson 5 "Grandpa's Farm" — *Story* slot of the animals unit (same slot as U6L5 "Where's My House?", U5L5 "Just Me and My Dad") |
 | Page | page 4 of the lesson, right after the Old MacDonald song and the Remember? warm-up, before any game (the film teaches first) |
 | Film | "Grandpa's Noisy Barn" — stills film with simple 2-picture flips (like U6L5), Pip's recorded voice, karaoke words, ~55 s |
 | Characters | Pip (narrator) · Grandpa (the fox grandpa from Unit 5: moustache, glasses — today with a straw farmer hat and blue overalls) · cow, pig, sheep, duck (the unit's stickers, drawn into the pictures) |
