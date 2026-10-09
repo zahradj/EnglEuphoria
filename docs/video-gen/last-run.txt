@@ -1,4 +1,4 @@
-barn-listen: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started barn-listen: 7e92e78f-aaf4-44a2-b8e5-3dee9c8d2ed8
-saved public/lep1/video/clips/u7l5-barn/barn-listen.mp4 (4849997 bytes)
+moo-sound: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started moo-sound: 3d9308e9-a169-4386-b626-ea4ce5a90fc5
+saved public/lep1/video/clips/u7l5-barn/moo-sound.mp4 (5524007 bytes)
 1/1 clips ready for u7l5-barn
