@@ -7941,7 +7941,7 @@ export const LESSON_U4L5_SCENES: Scene[] = [
   {
     // The approved stills film: one picture per line, the body word labelled on the part, a pause after each
     // "Can you do it?" so the child copies the move (docs/scenarios/u4l5-animal-moves.md).
-    id: 'u4l5-story-moves', kind: 'story-video', bg: bgU4L5Park, videoUrl: `${A}/video/animal-moves-u4l5-a.mp4?v=3`, title: 'Animal Moves',
+    id: 'u4l5-story-moves', kind: 'story-video', bg: bgU4L5Park, videoUrl: `${A}/video/animal-moves-u4l5-a.mp4?v=4`, title: 'Animal Moves',
     teacher: 'Press play and watch. Read and say the action words with Pip — "Turn, turn! Clap, clap!" — and when Pip asks "Can you do it?", stand up and copy the move! Then say: "I can do it!"',
     pages: [
       { img: bgU4L5Park, who: 'pip', line: "Look! The animals can move. Let's copy them!", atSec: 0 },
