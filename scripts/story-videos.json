@@ -1138,12 +1138,12 @@
     "id": "moo-sound",
     "image": "public/lep1/scenes/bg-u7l5-barn-0-wide.png",
     "line": "Moo! Moo! What animal is this?",
-    "action": "the first stall door gives a small rattle as a \"moo\" comes from behind it as if something is behind it; it stays shut; nothing else moves",
+    "action": "all four doors stay shut while Pip and Grandpa listen to the \"moo\" from behind the door; only the grass moves",
     "bodyWords": [
      "moo"
     ],
     "leader": "door",
-    "prompt": "The first stall door of the red barn gives a small rattle, as if a cow says moo behind it. It stays shut. Pip and Grandpa stay still. The camera stays steady.",
+    "prompt": "All four stall doors of the red barn stay firmly shut and nothing comes out. Pip and Grandpa stand still and listen to the \"moo\" sound from the barn; only the grass moves in the breeze. The camera stays steady.",
     "seconds": 5,
     "ownerApproved": true,
     "holdPose": true,
@@ -1162,18 +1162,20 @@
     "prompt": "The first stall door of the red barn slowly swings open and the black-and-white cow leans out and looks at us. Pip, Grandpa and the other doors stay still. The camera stays steady.",
     "seconds": 5,
     "ownerApproved": true,
-    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "note": "2026-10-09: Kling 2.6 opened the wrong door (no end picture); door rows use Kling 2.5 with the approved end picture so exactly this door opens."
    },
    {
     "id": "oink-sound",
     "image": "public/lep1/scenes/bg-u7l5-barn-1-wide.png",
     "line": "Oink! Oink! What animal is this?",
-    "action": "the second stall door gives a small rattle as a \"oink\" comes from behind it; it stays shut; the cow blinks",
+    "action": "all four doors stay shut while Pip and Grandpa listen to the \"oink\" from behind the door; only the grass moves",
     "bodyWords": [
      "oink"
     ],
     "leader": "door",
-    "prompt": "The second stall door of the red barn gives a small rattle, as if a pig says oink behind it. It stays shut. The cow blinks. The camera stays steady.",
+    "prompt": "All four stall doors of the red barn stay firmly shut and nothing comes out. Pip and Grandpa stand still and listen to the \"oink\" sound from the barn; only the grass moves in the breeze. The camera stays steady.",
     "seconds": 5,
     "ownerApproved": true,
     "holdPose": true,
@@ -1192,18 +1194,20 @@
     "prompt": "The second stall door of the red barn slowly swings open and the pink pig leans out and looks at us. Pip, Grandpa and the other doors stay still. The camera stays steady.",
     "seconds": 5,
     "ownerApproved": true,
-    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "note": "2026-10-09: Kling 2.6 opened the wrong door (no end picture); door rows use Kling 2.5 with the approved end picture so exactly this door opens."
    },
    {
     "id": "baa-sound",
     "image": "public/lep1/scenes/bg-u7l5-barn-2-wide.png",
     "line": "Baa! Baa! What animal is this?",
-    "action": "the third stall door gives a small rattle as a \"baa\" comes from behind it; it stays shut; the cow and the pig blink",
+    "action": "all four doors stay shut while Pip and Grandpa listen to the \"baa\" from behind the door; only the grass moves",
     "bodyWords": [
      "baa"
     ],
     "leader": "door",
-    "prompt": "The third stall door of the red barn gives a small rattle, as if a sheep says baa behind it. It stays shut. The cow and the pig blink. The camera stays steady.",
+    "prompt": "All four stall doors of the red barn stay firmly shut and nothing comes out. Pip and Grandpa stand still and listen to the \"baa\" sound from the barn; only the grass moves in the breeze. The camera stays steady.",
     "seconds": 5,
     "ownerApproved": true,
     "holdPose": true,
@@ -1222,18 +1226,20 @@
     "prompt": "The third stall door of the red barn slowly swings open and the fluffy white sheep leans out and looks at us. Pip, Grandpa and the other doors stay still. The camera stays steady.",
     "seconds": 5,
     "ownerApproved": true,
-    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "note": "2026-10-09: Kling 2.6 opened the wrong door (no end picture); door rows use Kling 2.5 with the approved end picture so exactly this door opens."
    },
    {
     "id": "quack-sound",
     "image": "public/lep1/scenes/bg-u7l5-barn-3-wide.png",
     "line": "Quack! Quack! What animal is this?",
-    "action": "the fourth stall door gives a small rattle as a \"quack\" comes from behind it; it stays shut; the animals in the doors blink",
+    "action": "all four doors stay shut while Pip and Grandpa listen to the \"quack\" from behind the door; only the grass moves",
     "bodyWords": [
      "quack"
     ],
     "leader": "door",
-    "prompt": "The fourth stall door of the red barn gives a small rattle, as if a duck says quack behind it. It stays shut. The cow, the pig and the sheep blink. The camera stays steady.",
+    "prompt": "All four stall doors of the red barn stay firmly shut and nothing comes out. Pip and Grandpa stand still and listen to the \"quack\" sound from the barn; only the grass moves in the breeze. The camera stays steady.",
     "seconds": 5,
     "ownerApproved": true,
     "holdPose": true,
@@ -1252,7 +1258,9 @@
     "prompt": "The fourth stall door of the red barn slowly swings open and the white duck walks out onto the grass. Pip, Grandpa, the cow, the pig and the sheep stay still. The camera stays steady.",
     "seconds": 5,
     "ownerApproved": true,
-    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "note": "2026-10-09: Kling 2.6 opened the wrong door (no end picture); door rows use Kling 2.5 with the approved end picture so exactly this door opens."
    },
    {
     "id": "yard-sing",
