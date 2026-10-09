@@ -1,5 +1,5 @@
-book-open: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
-book-open: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started book-open: c4cba11f-0428-4d0b-af34-b5bdb69a7041
-saved public/lep1/video/clips/u5l5-dad/book-open.mp4 (4841191 bytes)
+goodnight-hug: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
+goodnight-hug: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started goodnight-hug: 9bbe5581-ba7b-4f3d-98be-23c621363b7b
+saved public/lep1/video/clips/u5l5-dad/goodnight-hug.mp4 (4421734 bytes)
 1/1 clips ready for u5l5-dad
