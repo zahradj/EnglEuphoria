@@ -1,0 +1,15 @@
+
+=== docs/songs/u7l5-verse-duck-take1.mp3  length=20.1s  score=0.59  missing=9  extra=19
+heard: grandpa had a farm e i e i o an honest army had a doubt e i e i o with a quack quack here and a quack quack there grandpa had a farm e i e i o
+line starts (s): [np.float64(0.0), np.float64(5.2), np.float64(8.2), np.float64(12.7)]
+lineDurationsMs: [5240, 2920, 4540, 7362]
+
+=== docs/songs/u7l5-verse-duck-take2.mp3  length=20.1s  score=0.74  missing=3  extra=15
+heard: grandpa had a farm e i e i o and on his farm he had a duck e i e i o with a quack quack here and a quack quack there grandpa had a farm e i e i o
+line starts (s): [np.float64(0.0), np.float64(3.6), 8.5, np.float64(13.0)]
+lineDurationsMs: [3600, 4900, 4500, 7062]
+
+=== docs/songs/u7l5-verse-duck-take3.mp3  length=20.1s  score=0.38  missing=16  extra=26
+heard: grandpa had a farm e i e i o no i'm sorry i don't jump e i e i o it's a clack clack here and a clack clack there grandpa had a farm e i e i o
+line starts (s): [np.float64(0.0), np.float64(9.1), np.float64(10.1), np.float64(12.6)]
+lineDurationsMs: [9080, 1040, 2440, 7502]
