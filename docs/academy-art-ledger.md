@@ -32,7 +32,7 @@ Canva rate limit: one picture, then ~25 min wait.
 |---|---|---|---|---|---|---|
 | Ava | MAHXgPkDg5c | | | | | |
 | Theo | MAHXgZZzylw | | | | | |
-| Mia | | | | | | |
+| Mia | MAHXgluvq5c | | | | | |
 | Vee | | | | | | |
 
 ## Logo on the tee (owner, 2026-10-09: "do what's in white")
