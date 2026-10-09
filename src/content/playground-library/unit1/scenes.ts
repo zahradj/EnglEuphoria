@@ -9118,7 +9118,7 @@ export const LESSON_U5L5_SCENES: Scene[] = [
   {
     // The approved stills film: two pictures per action flip like a cartoon, the action words appear karaoke-style,
     // and a pause after each "What do we do?" lets the child answer (docs/scenarios/u5l5-me-and-my-dad.md).
-    id: 'u5l5-story-dad', kind: 'story-video', bg: bgU5L5Gate, videoUrl: `${A}/video/my-day-with-dad-u5l5.mp4?v=1`, title: 'My Day with Dad',
+    id: 'u5l5-story-dad', kind: 'story-video', bg: bgU5L5Gate, videoUrl: `${A}/video/my-day-with-dad-u5l5.mp4?v=2`, title: 'My Day with Dad',
     teacher: 'Press play and watch. Say the action words with Pip — "Throw! Catch! Quack, quack! Yum, yum!" — and when Pip asks "What do we do?", the child answers before Pip: "We play ball!"',
     pages: [
       { img: bgU5L5Gate, who: 'pip', line: 'Today is my day with Dad! Just me and my dad!', atSec: 0 },
