@@ -1,4 +1,5 @@
-night-best: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started night-best: 8806e8b3-f89e-4417-80c3-578b251a3c0f
-saved public/lep1/video/clips/u5l5-dad/night-best.mp4 (4893399 bytes)
+ball-throw: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
+ball-throw: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started ball-throw: bc080c3d-8469-4271-aa64-d58cf51a39b4
+saved public/lep1/video/clips/u5l5-dad/ball-throw.mp4 (5450460 bytes)
 1/1 clips ready for u5l5-dad
