@@ -45,3 +45,22 @@ Approved with this change. Each verse repeats its target word; shots stay as in 
 4. My house, my house! I love my house!
 
 Verse 3 stays the existing lesson song.
+
+
+## Story song (owner, 2026-10-09: "create a song with the lyrics, music and rhyming matching what's happening in the video")
+One whole-song take written with the kids-song-writer skill (`u6l5-song4`, check-lyrics.py PASS). One line per film shot, in story order: park-late, street-where, street-think, blue-no, cat-wakes, red-ask, red-door-opens, mom-hug, red-door-opens, mom-hug, bedroom-love.
+
+1. It's late, the sun is going down,
+2. Where's my house in this big town?
+3. My house, my house, its door is red,
+4. A blue door? No! I shake my head.
+5. A yellow door, a cat: Meow!
+6. A red door! Is it my house now?
+7. I knock, and the door opens wide,
+8. It's Mom! She hugs me, come inside!
+9. Is this my house? Yes, it is!
+10. Mom gives me a hug and a kiss!
+11. My house, my house, I love my house,
+12. Snug and cozy as a mouse!
+
+Status: words written and checked; waiting for the song bot (song-proxy ElevenLabs key returns 401).

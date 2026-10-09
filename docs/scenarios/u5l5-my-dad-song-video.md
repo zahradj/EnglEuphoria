@@ -45,3 +45,22 @@ Approved with this change. Each verse repeats its target word; shots stay as in 
 4. Dad, Dad! I love you, Dad!
 
 Verse 3 stays the existing lesson song.
+
+
+## Story song (owner, 2026-10-09: "create a song with the lyrics, music and rhyming matching what's happening in the video")
+One whole-song take written with the kids-song-writer skill (`u5l5-song4`, check-lyrics.py PASS). One line per film shot, in story order: gate-walk, ball-throw, ball-catch, ducks-bread, ducks-count, icecream-lick, book-open, goodnight-hug, night-best.
+
+1. Hand in hand, we walk and play,
+2. A ball, a ball, he throws my way!
+3. I catch the ball! I catch it, yes!
+4. Ducks, ducks, they like the bread the best!
+5. Ducks, ducks, they love to eat,
+6. Ice cream, ice cream, cold and sweet!
+7. At home we read a book tonight,
+8. We hug goodnight, a hug so tight!
+9. Twinkle, twinkle, stars above,
+10. Me and Dad, with lots of love!
+11. Just me and my dad, my dad and me,
+12. The best day that could ever be!
+
+Status: words written and checked; waiting for the song bot (song-proxy ElevenLabs key returns 401).
