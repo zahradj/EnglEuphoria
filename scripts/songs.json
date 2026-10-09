@@ -1714,5 +1714,376 @@
       "With a quack, quack here and a quack, quack there!",
       "Grandpa had a farm, E-I-E-I-O!"
     ]
+  },
+  "u7l5-farm2-cow": {
+    "publicPath": "public/lep1/audio/farm2-cow-u7l5.mp3",
+    "durationSec": 20,
+    "style": "Classic happy kids farm sing-along, 112 BPM with banjo, acoustic guitar, hand claps and a fiddle, clear happy young vocals with a kids choir feel, every word sung slowly and clearly, the traditional E-I-E-I-O farm-song melody, the words exactly as written (Grandpa, never any other name), animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "traditional",
+      "banjo",
+      "acoustic guitar",
+      "hand claps",
+      "fiddle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "112 BPM",
+      "happy",
+      "farm"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "A farm, a farm! Grandpa had a farm!",
+      "And on his farm he had a cow, E-I-E-I-O!",
+      "A cow, a cow! It's a cow! Moo, moo!",
+      "With a moo, moo here and a moo, moo there!"
+    ]
+  },
+  "u7l5-farm2-pig": {
+    "publicPath": "public/lep1/audio/farm2-pig-u7l5.mp3",
+    "durationSec": 20,
+    "style": "Classic happy kids farm sing-along, 112 BPM with banjo, acoustic guitar, hand claps and a fiddle, clear happy young vocals with a kids choir feel, every word sung slowly and clearly, the traditional E-I-E-I-O farm-song melody, the words exactly as written (Grandpa, never any other name), animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "traditional",
+      "banjo",
+      "acoustic guitar",
+      "hand claps",
+      "fiddle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "112 BPM",
+      "happy",
+      "farm"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "A farm, a farm! Grandpa had a farm!",
+      "And on his farm he had a pig, E-I-E-I-O!",
+      "A pig, a pig! It's a pig! Oink, oink!",
+      "With an oink, oink here and an oink, oink there!"
+    ]
+  },
+  "u7l5-farm2-sheep": {
+    "publicPath": "public/lep1/audio/farm2-sheep-u7l5.mp3",
+    "durationSec": 20,
+    "style": "Classic happy kids farm sing-along, 112 BPM with banjo, acoustic guitar, hand claps and a fiddle, clear happy young vocals with a kids choir feel, every word sung slowly and clearly, the traditional E-I-E-I-O farm-song melody, the words exactly as written (Grandpa, never any other name), animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "traditional",
+      "banjo",
+      "acoustic guitar",
+      "hand claps",
+      "fiddle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "112 BPM",
+      "happy",
+      "farm"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "A farm, a farm! Grandpa had a farm!",
+      "And on his farm he had a sheep, E-I-E-I-O!",
+      "A sheep, a sheep! It's a sheep! Baa, baa!",
+      "With a baa, baa here and a baa, baa there!"
+    ]
+  },
+  "u7l5-farm2-duck": {
+    "publicPath": "public/lep1/audio/farm2-duck-u7l5.mp3",
+    "durationSec": 24,
+    "style": "Classic happy kids farm sing-along, 112 BPM with banjo, acoustic guitar, hand claps and a fiddle, clear happy young vocals with a kids choir feel, every word sung slowly and clearly, the traditional E-I-E-I-O farm-song melody, the words exactly as written (Grandpa, never any other name), animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "traditional",
+      "banjo",
+      "acoustic guitar",
+      "hand claps",
+      "fiddle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "112 BPM",
+      "happy",
+      "farm"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "A farm, a farm! Grandpa had a farm!",
+      "And on his farm he had a duck, E-I-E-I-O!",
+      "A duck, a duck! It's a duck! Quack, quack!",
+      "With a quack, quack here and a quack, quack there!",
+      "A farm, a farm! Grandpa had a farm!"
+    ]
+  },
+  "u4l5-song-v1": {
+    "publicPath": "public/lep1/audio/animal-moves-v1-u4l5.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP animal park action song to move and point to for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby. Every word sung slowly and clearly, the words exactly as written, the repeated words (\"a cow, a cow!\") sung loud and clear.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Head, head! The tiger turns his head!",
+      "Head, head! I turn my head!",
+      "Arms, arms! The monkey waves his arms!",
+      "Arms, arms! I wave my arms!"
+    ]
+  },
+  "u4l5-song-v2": {
+    "publicPath": "public/lep1/audio/animal-moves-v2-u4l5.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP animal park action song to move and point to for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby. Every word sung slowly and clearly, the words exactly as written, the repeated words (\"a cow, a cow!\") sung loud and clear.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Feet, feet! The elephant stomps his feet!",
+      "Feet, feet! I stomp my feet!",
+      "Hands, hands! The seal claps her hands!",
+      "Hands, hands! I clap my hands!"
+    ]
+  },
+  "u5l5-song-v1": {
+    "publicPath": "public/lep1/audio/my-dad-v1-u5l5.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP song about a fun day with Dad (play ball, feed the ducks, ice cream, read a book), to sing and do the actions for young children, energetic 118 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel. Definitely not a lullaby. Every word sung slowly and clearly, the words exactly as written, the repeated words (\"a cow, a cow!\") sung loud and clear.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "118 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Dad, Dad! Just me and my dad!",
+      "A ball, a ball! Dad throws the ball!",
+      "A ball, a ball! I catch the ball!",
+      "Ducks, ducks! We feed the ducks!"
+    ]
+  },
+  "u5l5-song-v2": {
+    "publicPath": "public/lep1/audio/my-dad-v2-u5l5.mp3",
+    "durationSec": 20,
+    "style": "Upbeat catchy modern kids POP song about a fun day with Dad (play ball, feed the ducks, ice cream, read a book), to sing and do the actions for young children, energetic 118 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel. Definitely not a lullaby. Every word sung slowly and clearly, the words exactly as written, the repeated words (\"a cow, a cow!\") sung loud and clear.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "118 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Ducks, ducks! One, two, three, four ducks!",
+      "Ice cream, ice cream! Yum, yum, yum!",
+      "A book, a book! We read a book!",
+      "Dad, Dad! I love you, Dad!"
+    ]
+  },
+  "u6l5-song-v1": {
+    "publicPath": "public/lep1/audio/wheres-my-house-v1-u6l5.mp3",
+    "durationSec": 20,
+    "style": "Gentle bouncy kids story song with a question-and-answer feel, \"Is this my house? No, it isn't!\", warm 96 BPM with acoustic guitar, soft marimba, light brushed drums, a little door-knock sound and hand claps, clear friendly young vocals with a kids sing-along feel, every word sung slowly and clearly. Not a lullaby.",
+    "positiveStyles": [
+      "acoustic guitar",
+      "marimba",
+      "bouncy",
+      "warm",
+      "brushed drums",
+      "hand claps",
+      "clear kids vocals",
+      "question and answer",
+      "sing-along chorus",
+      "96 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "heavy drums",
+      "rock"
+    ],
+    "lines": [
+      "Home, home! Time to go home!",
+      "My house, my house! Where's my house?",
+      "A red door, a red door! My house has a red door!",
+      "A blue door, a blue door! No, it isn't!"
+    ]
+  },
+  "u6l5-song-v2": {
+    "publicPath": "public/lep1/audio/wheres-my-house-v2-u6l5.mp3",
+    "durationSec": 20,
+    "style": "Gentle bouncy kids story song with a question-and-answer feel, \"Is this my house? No, it isn't!\", warm 96 BPM with acoustic guitar, soft marimba, light brushed drums, a little door-knock sound and hand claps, clear friendly young vocals with a kids sing-along feel, every word sung slowly and clearly. Not a lullaby.",
+    "positiveStyles": [
+      "acoustic guitar",
+      "marimba",
+      "bouncy",
+      "warm",
+      "brushed drums",
+      "hand claps",
+      "clear kids vocals",
+      "question and answer",
+      "sing-along chorus",
+      "96 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "heavy drums",
+      "rock"
+    ],
+    "lines": [
+      "A yellow door, a yellow door! No, it isn't!",
+      "A red door, a red door! Is this my house?",
+      "Knock, knock! Yes, it is! My house!",
+      "My house, my house! I love my house!"
+    ]
   }
 }
