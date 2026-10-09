@@ -184,6 +184,9 @@ export type Scene =
        * truth instead of the UI guessing. Omit for older songs generated before this
        * field existed — they keep the even-division fallback. */
       lineDurationsMs?: number[];
+      /** Song video (owner, 2026-10-09: "do it like a song"): a silent film that plays behind the singing, kept in
+       * step with the song audio; the lyrics show as a karaoke strip at the bottom instead of the big card. */
+      videoUrl?: string;
     }
   | { id: string; kind: 'finale'; bg: string; who: Character; line: string }
   | { id: string; kind: 'name-gate'; bg: string; teacher: string; rounds: { who: CharKey; question: string; answer: string }[] }
