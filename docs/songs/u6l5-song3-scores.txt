@@ -1,15 +1,15 @@
 
 === docs/songs/u6l5-song3-take1.mp3  length=62.4s  score=0.93  missing=5  extra=6
 heard: it's late it's late let's go home where's my house oh no oh no my door my door my door is red not blue not yellow red i said is this my house now it is is this my house now it is is this my house yes it is a red door a hug and a kiss knock knock who is it it's me welcome home my house you'd be my house my house i love my house quiet as a little mouse
-line starts (s): [np.float64(11.5), np.float64(13.9), np.float64(16.3), np.float64(19.0), np.float64(30.6), np.float64(33.2), np.float64(35.8), np.float64(38.0), np.float64(42.4), np.float64(53.0), np.float64(54.7), np.float64(57.1)]
-lineDurationsMs: [13940, 2400, 2640, 11580, 2640, 2560, 2200, 4460, 10580, 1720, 2380, 5254]
+line starts (s): [np.float64(11.5), np.float64(13.9), np.float64(16.3), np.float64(19.0), np.float64(30.5), np.float64(33.2), np.float64(35.8), np.float64(38.0), np.float64(42.4), np.float64(53.0), np.float64(54.7), np.float64(57.1)]
+lineDurationsMs: [13940, 2400, 2640, 11560, 2660, 2560, 2200, 4400, 10680, 1680, 2380, 5254]
 
-=== docs/songs/u6l5-song3-take2.mp3  length=62.4s  score=0.99  missing=1  extra=1
-heard: it's late it's late let's go home where's my house oh no oh no my door my door my door is red not blue not yellow red i said is this my house no it isn't is this my house no it isn't is this my house yes it is a red door a hug and a kiss knock knock who is it it's me welcome home my house hippie my house my house i love my house quiet as a little mouse
-line starts (s): [np.float64(9.0), np.float64(12.3), np.float64(18.7), np.float64(21.4), np.float64(28.1), np.float64(32.8), np.float64(37.8), np.float64(40.5), np.float64(47.5), np.float64(50.6), np.float64(52.4), np.float64(55.2)]
-lineDurationsMs: [12280, 6460, 2620, 6720, 4680, 5040, 2660, 7060, 3040, 1820, 2780, 7194]
+=== docs/songs/u6l5-song3-take2.mp3  length=62.4s  score=0.98  missing=1  extra=2
+heard: it's late it's late let's go home where's my house oh no oh no my door my door my door is red not blue not yellow red i said is this my house no it isn't is this my house no it isn't is this my house yes it is a red door a hug and a kiss knock knock who is it it's me welcome home my house it be my house my house i love my house quiet as a little mouse
+line starts (s): [np.float64(8.9), np.float64(12.2), np.float64(18.7), np.float64(21.4), np.float64(28.1), np.float64(32.8), np.float64(37.8), np.float64(40.5), np.float64(47.5), np.float64(50.6), np.float64(52.3), np.float64(55.2)]
+lineDurationsMs: [12240, 6460, 2660, 6720, 4720, 5000, 2660, 7060, 3100, 1640, 2940, 7154]
 
-=== docs/songs/u6l5-song3-take3.mp3  length=62.4s  score=0.97  missing=3  extra=2
-heard: it's late it's late let's go home where's my house oh no oh no my door my door my door is red now blue now yellow red i said is this my house no it isn't is this my house no it isn't is this my house yes it is a red door a hug and a kiss knock knock who is it it's me welcome home my house my house my house i love my house quiet as a little mouse
-line starts (s): [np.float64(9.5), np.float64(13.5), np.float64(18.8), np.float64(21.5), np.float64(23.5), np.float64(28.5), np.float64(32.7), np.float64(37.8), np.float64(42.2), 47.5, np.float64(51.5), np.float64(54.8)]
-lineDurationsMs: [13520, 5240, 2700, 2040, 4960, 4280, 5060, 4440, 5260, 4000, 3340, 7514]
+=== docs/songs/u6l5-song3-take3.mp3  length=62.4s  score=0.96  missing=3  extra=4
+heard: it's late it's late let's go home where's my house oh no oh no my door my door my door is red not blue not yellow red i said is this my house no it isn't is this my house no it isn't is this my house yes it is a red door a hug and a kiss knock knock who is it it's me welcome home my house sleepy my house wash my house out of my house quiet as a little mouse
+line starts (s): [np.float64(9.4), np.float64(13.7), np.float64(18.7), np.float64(21.4), np.float64(23.5), np.float64(28.6), np.float64(33.2), np.float64(38.0), np.float64(42.8), np.float64(47.6), np.float64(52.5), np.float64(54.8)]
+lineDurationsMs: [13720, 5020, 2640, 2140, 5120, 4580, 4740, 4820, 4840, 4900, 2320, 7514]
