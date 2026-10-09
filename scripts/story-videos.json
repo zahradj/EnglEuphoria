@@ -634,7 +634,8 @@
     "prompt": "The tiger cub slowly turns his head to the side and looks to the right, smiling. His body, arms and feet stay still. Nobody else is in the picture. The camera stays steady.",
     "ownerApproved": true,
     "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next",
-    "review": "2026-10-09 clip 1 rejected by review-clip.py (POSE 0.59 < 0.75): the face warps at 0.75-2 s and the clip ends facing front, not turned. Waiting for the owner before any re-order."
+    "review": "2026-10-09 clip 1 rejected by review-clip.py (POSE 0.59 < 0.75): the face warps at 0.75-2 s and the clip ends facing front, not turned. Waiting for the owner before any re-order. Retry 2026-10-09 on Kling 2.6 Pro (owner sent its docs): start picture + prompt only, sound off.",
+    "endpoint": "kling-video/v2.6/pro/image-to-video"
    },
    {
     "id": "pip-head",

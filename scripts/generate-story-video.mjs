@@ -29,7 +29,6 @@ const story = all[key];
 if (!story) { console.error(`No story "${key}" in scripts/story-videos.json`); process.exit(1); }
 fs.mkdirSync(story.out, { recursive: true });
 
-const endpoint = story.endpoint ?? 'kling-video/v2.5-turbo/pro/image-to-video';
 const call = async (body) => {
   const r = await fetch(PROXY, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-song-token': TOKEN }, body: JSON.stringify(body) });
   const j = await r.json().catch(() => ({}));
@@ -41,6 +40,8 @@ const style = story.style ?? '';
 const negative = story.negativePrompt ?? 'text, letters, words, subtitles, watermark, logo, extra characters, duplicated characters, missing characters, extra limbs, extra arms, extra paws, extra fingers, fused fingers, missing limbs, deformed hands, morphing, melting, flicker, dancing, waving, walking, marching, jumping, camera shake, zoom, photorealistic, 3D render, distorted faces, blurry';
 
 async function makeClip(beat) {
+  const endpoint = beat.endpoint ?? story.endpoint ?? 'kling-video/v2.5-turbo/pro/image-to-video';
+  const startOnly = /kling-video\/v2\.6\//.test(endpoint); // Kling 2.6 Pro: start picture + prompt only, silent via sound:'off'
   const file = path.join(story.out, `${beat.id}.mp4`);
   if (fs.existsSync(file)) { console.log(`skip ${beat.id} (exists)`); return true; }
   if (!fs.existsSync(beat.image)) { console.log(`wait ${beat.id}: picture ${beat.image} not made yet`); return false; }
@@ -50,15 +51,24 @@ async function makeClip(beat) {
   const input = { image_url: up.j.public_url, prompt: `${beat.prompt} ${style}`.trim(), duration: beat.seconds ?? story.seconds ?? 10, negative_prompt: negative };
   // Start + END frame (keyframe interpolation): the model only fills in the motion between two approved pictures,
   // so it cannot invent a different action. Kling 2.5 Turbo Pro takes the end picture as tail_image_url.
-  if (beat.endImage) {
+  if (beat.endImage && !startOnly) {
     const tail = await call({ action: 'upload', base64: fs.readFileSync(beat.endImage).toString('base64'), contentType: /\.jpe?g$/i.test(beat.endImage) ? 'image/jpeg' : 'image/png' });
     if (!tail.ok || !tail.j.public_url) { console.error(`upload end picture ${beat.id} failed: ${tail.status}`); return false; }
     input.tail_image_url = tail.j.public_url;
   }
   if (typeof story.cfgScale === 'number') input.cfg_scale = story.cfgScale;
+  if (startOnly) {
+    // Only the fields Kling 2.6 Pro documents; no end-frame field exists, so the end picture cannot be sent.
+    delete input.negative_prompt; input.sound = 'off'; input.aspect_ratio = '16:9'; input.duration = 5;
+    if (beat.endImage) console.log(`${beat.id}: NOTE ${endpoint} has no end-picture input — the motion follows the prompt only`);
+  }
   const est = await call({ action: 'estimate', endpoint, input });
   console.log(`${beat.id}: estimate ${JSON.stringify(est.j)}`);
   if (!est.ok) { console.error(`${beat.id}: the estimate was refused (${est.status}) — nothing ordered. If it names tail_image_url, this endpoint has no end-frame support: pick one that has.`); return false; }
+  // Cost guard: never order a clip whose estimate is above the cap (default 10 credits) or has no credit number.
+  const credits = Number(est.j?.credits);
+  const cap = story.maxCredits ?? 10;
+  if (!(credits > 0) || credits > cap) { console.error(`${beat.id}: estimate ${est.j?.credits ?? 'has no credit price'} — above the ${cap}-credit cap or unknown; nothing ordered`); return false; }
   const st = await call({ action: 'start', endpoint, input, idempotencyKey: `${key}-${beat.id}-${Date.now()}` });
   const id = st.j.request_id;
   if (!st.ok || !id) { console.error(`start ${beat.id} failed: ${st.status} ${JSON.stringify(st.j).slice(0, 400)}`); return false; }

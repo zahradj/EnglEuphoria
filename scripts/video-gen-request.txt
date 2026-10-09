@@ -1,2 +1,2 @@
-# PROBE ONLY (free estimates, nothing ordered): does Seedance 2.5 image-to-video read an end picture?
-u4l5-moves --beats=tiger-head --probe --probe2
+# strict mode: ONE clip per run — U4L5 tiger-head retry on Kling 2.6 Pro (owner sent its docs 2026-10-09), sound off, 10-credit cap
+u4l5-moves --beats=tiger-head
