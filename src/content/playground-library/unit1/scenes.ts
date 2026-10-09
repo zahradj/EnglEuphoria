@@ -10512,7 +10512,7 @@ export const LESSON_U6L5_SCENES: Scene[] = [
   {
     // The approved stills film (docs/scenarios/u6l5-wheres-my-house.md): two pictures per moment flip like a
     // cartoon, the words appear karaoke-style, and after each "Is this my house?" a pause lets the child answer.
-    id: 'u6l5-story', kind: 'story-video', bg: bgU6L5StreetA, videoUrl: `${A}/video/wheres-my-house-u6l5.mp4?v=1`, title: "Where's My House?",
+    id: 'u6l5-story', kind: 'story-video', bg: bgU6L5StreetA, videoUrl: `${A}/video/wheres-my-house-u6l5.mp4?v=2`, title: "Where's My House?",
     teacher: 'Press play and watch. When Pip asks "Is this my house?", the child answers before Pip: "No, it isn\'t!" / "Yes, it is!" — look at the door colour!',
     pages: [
       { img: bgU6L5ParkB, who: 'pip', line: "Oh! It's late! Time to go home!", atSec: 0 },
