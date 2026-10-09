@@ -1,4 +1,4 @@
-moo-sound: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started moo-sound: e333d50e-1e43-4fbe-97b1-6aed11d0d538
-saved public/lep1/video/clips/u7l5-barn/moo-sound.mp4 (7346015 bytes)
+cow-door: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started cow-door: a2e18c1f-10c0-485e-9476-e02eabf77e2a
+saved public/lep1/video/clips/u7l5-barn/cow-door.mp4 (5432940 bytes)
 1/1 clips ready for u7l5-barn
