@@ -1,0 +1,15 @@
+
+=== docs/songs/u7l5-farm2-pig-take1.mp3  length=20.1s  score=0.61  missing=13  extra=16
+heard: a farm a farm grabbed by a farm and honest farm me at a pig e i e i o a pig a pig it's a pig oint oint with an oint oint here and an oint oint there
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.3), np.float64(12.5)]
+lineDurationsMs: [3800, 4520, 4220, 7522]
+
+=== docs/songs/u7l5-farm2-pig-take2.mp3  length=20.1s  score=0.56  missing=15  extra=18
+heard: a farm a farm grab a hat a sock and on the shiny hat a pig e i i o a pig a pig it's a pig oint oint with an oint oint here and a oint oint there
+line starts (s): [np.float64(0.0), np.float64(4.5), np.float64(9.0), np.float64(13.1)]
+lineDurationsMs: [4480, 4480, 4180, 6922]
+
+=== docs/songs/u7l5-farm2-pig-take3.mp3  length=20.1s  score=0.89  missing=3  extra=5
+heard: a farm a farm brimba had a farm and on his farm he had a pig e i o a pig a pig it's a pig oink oink with an oink oink here and an oink oink here
+line starts (s): [np.float64(0.0), np.float64(4.9), np.float64(9.0), np.float64(13.1)]
+lineDurationsMs: [4860, 4180, 4020, 7002]
