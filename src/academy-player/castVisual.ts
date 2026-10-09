@@ -31,3 +31,12 @@ export const BG_LOOK: Record<string, { from: string; to: string; label: string }
   'phone-profile-closeup': { from: '#1f2a44', to: '#3d4f7c', label: 'Phone, profile' },
 };
 export const bgLook = (id: string) => BG_LOOK[id] ?? { from: '#27304a', to: '#46557f', label: id };
+
+/** Placeholder picture for a vocabulary card until the real card art exists: a big friendly icon on a coloured tile. */
+const CARD_ICONS: Record<string, { icon: string; hue: number }> = {
+  'card-student': { icon: '🎒', hue: 265 }, 'card-teacher': { icon: '🧑‍🏫', hue: 230 }, 'card-friend': { icon: '🤝', hue: 290 }, 'card-class': { icon: '🏫', hue: 215 },
+  'card-hello': { icon: '👋', hue: 280 }, 'card-welcome': { icon: '🚪', hue: 250 }, 'card-meet': { icon: '🙌', hue: 300 }, 'card-nice': { icon: '😊', hue: 320 },
+  'card-name': { icon: '🏷️', hue: 240 }, 'card-online': { icon: '🟢', hue: 200 }, 'card-group': { icon: '👥', hue: 260 },
+  'card-new': { icon: '✨', hue: 285 }, 'card-member': { icon: '🎟️', hue: 225 }, 'card-introduce': { icon: '🎤', hue: 310 },
+};
+export const cardIcon = (id: string) => CARD_ICONS[id] ?? { icon: '⭐', hue: 260 };

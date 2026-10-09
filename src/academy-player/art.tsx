@@ -3,7 +3,8 @@
 // (or `${artBase}/bg/<id>.webp`) the player shows it instead and falls back to this placeholder if it fails to load.
 // Stills hold still: nothing here zooms, pans, or loops.
 import { useState } from 'react';
-import { CAST_LOOK, bgLook } from './castVisual';
+import { CAST_LOOK, bgLook, cardIcon } from './castVisual';
+import { SceneArt } from './scenes';
 import type { CastName, Expression } from './scriptTypes';
 
 const MOUTH: Record<Expression, string> = {
@@ -80,8 +81,8 @@ export function Backdrop({ id, alt, artBase }: { id: string; alt: string; artBas
       {artBase && !failed ? (
         <img src={`${artBase}/bg/${id}.webp`} alt="" onError={() => setFailed(true)} draggable={false} />
       ) : (
-        <div className="ap-bg-ph" style={{ background: `linear-gradient(160deg, ${look.from}, ${look.to})` }}>
-          <span className="ap-ph-tag">placeholder: {look.label}</span>
+        <div className="ap-bg-ph">
+          <SceneArt id={id} from={look.from} to={look.to} />
         </div>
       )}
     </div>
@@ -93,8 +94,8 @@ export function PictureTile({ id, alt, word, artBase }: { id: string; alt: strin
   const [failed, setFailed] = useState(false);
   if (artBase && !failed) return <img className="ap-tile-img" src={`${artBase}/cards/${id}.webp`} alt={alt} onError={() => setFailed(true)} draggable={false} />;
   return (
-    <div className="ap-tile-ph" role="img" aria-label={alt}>
-      <span aria-hidden="true">{word?.slice(0, 1).toUpperCase() ?? '?'}</span>
+    <div className="ap-tile-ph" role="img" aria-label={alt} data-hue={cardIcon(id).hue}>
+      <span aria-hidden="true" className="ap-tile-ico">{cardIcon(id).icon}</span>
     </div>
   );
 }
