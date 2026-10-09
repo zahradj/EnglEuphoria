@@ -82,8 +82,8 @@ function PhoneClose() {
   return (
     <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" className="ap-scene" aria-hidden="true">
       <defs>
-        <radialGradient id="ph-bg" cx="0.5" cy="0.45" r="0.8"><stop offset="0" stopColor="#8b6cf2" /><stop offset="0.6" stopColor="#4a3fc0" /><stop offset="1" stopColor="#2a2575" /></radialGradient>
-        <linearGradient id="ph-screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#4a53b8" /><stop offset="1" stopColor="#323a95" /></linearGradient>
+        <radialGradient id="ph-bg" cx="0.5" cy="0.45" r="0.8"><stop offset="0" stopColor="#ffffff" /><stop offset="0.55" stopColor="#e4d9ff" /><stop offset="1" stopColor="#b9a5f7" /></radialGradient>
+        <linearGradient id="ph-screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f6f2ff" /><stop offset="1" stopColor="#dccfff" /></linearGradient>
       </defs>
       <rect width="1000" height="700" fill="url(#ph-bg)" />
       <g opacity="0.55">
@@ -93,17 +93,17 @@ function PhoneClose() {
       </g>
       <Sparkles n={26} seed={5} color="#c4b5fd" />
       <g transform="translate(500 350)">
-        <rect x="-170" y="-310" width="340" height="620" rx="46" fill="#0d0d1f" stroke="#8b7cf6" strokeWidth="6" />
+        <rect x="-170" y="-310" width="340" height="620" rx="46" fill="#4c2fb8" stroke="#a78bfa" strokeWidth="6" />
         <rect x="-150" y="-290" width="300" height="580" rx="32" fill="url(#ph-screen)" />
-        <rect x="-40" y="-290" width="80" height="22" rx="11" fill="#0d0d1f" />
+        <rect x="-40" y="-290" width="80" height="22" rx="11" fill="#2f1c80" />
         {/* profile header */}
-        <circle cx="0" cy="-190" r="54" fill="#2f3580" stroke="#8b7cf6" strokeWidth="5" strokeDasharray="10 8" />
-        <text x="0" y="-170" textAnchor="middle" fontSize="64" fontWeight="800" fill="#c4b5fd" fontFamily="system-ui">?</text>
-        <rect x="-70" y="-110" width="140" height="18" rx="9" fill="#8b7cf6" />
+        <circle cx="0" cy="-190" r="54" fill="#ffffff" stroke="#8b5cf6" strokeWidth="5" strokeDasharray="10 8" />
+        <text x="0" y="-170" textAnchor="middle" fontSize="64" fontWeight="800" fill="#7c3aed" fontFamily="system-ui">?</text>
+        <rect x="-70" y="-110" width="140" height="18" rx="9" fill="#7c3aed" />
         <rect x="-50" y="-82" width="100" height="12" rx="6" fill="#4b4f9a" />
         {/* rows */}
         {[-40, 20, 80, 140].map((y, i) => (
-          <g key={y}><rect x="-120" y={y} width="76" height="14" rx="7" fill="#4b4f9a" /><rect x="-30" y={y} width={150 - i * 24} height="14" rx="7" fill="#c4b5fd" opacity="0.85" /></g>
+          <g key={y}><rect x="-120" y={y} width="76" height="14" rx="7" fill="#9a8cf0" /><rect x="-30" y={y} width={150 - i * 24} height="14" rx="7" fill="#7c3aed" opacity="0.8" /></g>
         ))}
         <circle cx="-110" cy="215" r="12" fill="#22c55e" /><rect x="-90" y="209" width="90" height="12" rx="6" fill="#4b4f9a" />
         <rect x="-120" y="240" width="240" height="34" rx="17" fill="#7c3aed" />

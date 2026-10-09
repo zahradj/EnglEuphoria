@@ -438,7 +438,7 @@ export function MatchBlock({ prompt, pairs, seed, onWrong, onRight, onDone }: { 
         </div>
         <div className="ap-match-col">
           {order.map((ri) => (
-            <button key={ri} type="button" className="ap-tile" disabled={done.includes(ri) || sel === null} onClick={() => tapRight(ri)}>{pairs[ri].right}</button>
+            <button key={ri} type="button" className="ap-tile" disabled={done.includes(ri)} onClick={() => tapRight(ri)}>{pairs[ri].right}</button>
           ))}
         </div>
       </div>
