@@ -1,5 +1,4 @@
-blue-no: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
-blue-no: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started blue-no: 22beab32-00ba-4eb5-85bd-d652d75745c1
-saved public/lep1/video/clips/u6l5-house/blue-no.mp4 (7481779 bytes)
+yellow-ask: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started yellow-ask: 741b40a6-718c-4612-a9f6-63723d740dd8
+saved public/lep1/video/clips/u6l5-house/yellow-ask.mp4 (5167067 bytes)
 1/1 clips ready for u6l5-house
