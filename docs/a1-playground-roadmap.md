@@ -69,7 +69,7 @@ Format: **Title** — I can … · key language · signature game (★ = new gam
    Pre-A1 games inside the A1 lesson: Move & Say, Name Buzzer Show, Quick fire, sticker, home mission, brain break (rebuilt 2026-10-09)
 2. **How Are You?** — say how I and others feel · How are you? I'm happy/tired/sad/angry/hungry; He/She is…, They are… · Feelings
    spinner "He is happy!" ⇄ + Name That Feeling (Khan Kids) listen-tap
-3. **How Old Are You?** — say my age, count to 20 · How old are you? I'm 7, numbers 11-20 · Birthday Candle Cake ⇄ (candle-cake) to 20
+3. **How Old Are You?** — say my age, count to 20 · How old are you? I'm 7, numbers 11-20 · Birthday Candle Cake ⇄ (candle-cake) to 20 (built 2026-10-09: Leo's birthday party, 22 pages)
 4. **This Is My Friend** — introduce a friend · This is my friend…, He's 8, Nice to meet you · Hello Doors escape (built)
 5. **Story: New Friends at the Park** — follow a story, retell 3 lines · story video with pause questions (`story-video`) ⇄
 6. **Greeting Games** — use all Unit 1 language fast · Buzzer Show quiz ⇄ + Bingo ⇄

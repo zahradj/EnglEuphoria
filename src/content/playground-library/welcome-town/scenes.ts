@@ -1123,229 +1123,203 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
 ]);
 
 /* =============================================================================
- * A1 Unit 1, Lesson 3: "Listen & Greet!"
+ * A1 Unit 1, Lesson 3: "How Old Are You?" (rebuilt 2026-10-09 to docs/a1-playground-roadmap.md)
  *
- * Per this project's own seeded curriculum blueprint (queried directly from
- * curriculum_lessons before writing a single scene, per generate-lesson's
- * §3/§4): title "Listen & Greet!", objective "Students will be able to
- * identify greetings and introductions in short audio." Sits between
- * Lesson 2 (the second vocab+phonics double lesson) and Lesson 4 "Speak &
- * Meet!" (the seeded blueprint's own productive counterpart) — so this
- * lesson stays deliberately receptive: no new vocabulary, no new phonics,
- * no new art (per Gate D — every bg below is reused verbatim from Lessons
- * 1-2's own already-verified assets). It's a listening-comprehension
- * consolidation of everything taught so far (hello/name/age, feelings,
- * teacher/student, classroom + school vocabulary), not a re-teach: every
- * round below is an in-character short line to LISTEN to and identify —
- * not a "which word means X" vocabulary drill — matching the blueprint's
- * own "identify... in short audio" framing. Production stays light (one
- * small join-stage) since Lesson 4 owns the real speaking practice for
- * this same content.
- *
- * Revision note: the first draft of this lesson ran nine near-identical
- * `choice` (tap-a-text-button) scenes back to back for this middle
- * section. Per direct user feedback that it felt repetitive/low quality,
- * and per web research into ESL listening-game design for young learners
- * (recognition-based "tap the object in the picture" mechanics read
- * better for this exact skill than a flat multiple-choice quiz — see
- * e.g. https://www.teach-this.com/esl-games/listening-games and
- * https://www.teachingexpertise.com/classroom-ideas/esl-listening-activity/),
- * most of that block is now a new `listen-tap` scene kind: every real
- * object/character already painted in a background becomes a live
- * hotspot at once (not one guided arrow, not a text menu), and a spoken
- * line has to be matched against the right one. Two plain `choice`
- * scenes remain deliberately (the greeting opener, and age — which has
- * no physical object to tap), and hello-doors still owns name-listening.
+ * One goal: I can ask "How old are you?", say my age and count to 20. Story frame: Leo's birthday party
+ * (a new setting after Lesson 2's classroom). Ages: Bella 6, Pip 7, Mia 8, Leo 9 (turning nine).
+ * Word pages for the answer, then Pre-A1 birthday games played in A1 ('prea1'): Candle Cake, Age Balloons,
+ * numbers 11-20, Pop & Count, Meet & Greet, sentence match; phonics M and D -> read MAT, DAD, MAN.
+ * Replaces the old listening-review Lesson 3 ("Listen & Greet!"), which had no new language.
  * ========================================================================= */
 
-export const LESSON_3_TITLE = 'Listen & Greet!';
-export const LESSON_3_OBJECTIVE = 'Listen carefully to short greetings and introductions from Welcome Town School and show you understand — a listening review of everything from Lessons 1 and 2, no new words.';
+export const LESSON_3_TITLE = 'How Old Are You?';
+export const LESSON_3_OBJECTIVE = 'Ask "How old are you?", answer "I am seven." for yourself and "Leo is nine." for a friend, count from 11 to 20, and learn the sounds M and D to read MAT, DAD and MAN.';
+
+
+/** Lesson 3 art: Leo's birthday party (Pip's party room), one-character pictures for the age word pages. */
+const bgL3Party = `${W}/scenes/bg-party-door-wide.png`;
+const bgL3PipAlone = `${W}/scenes/bg-heshe-intro-pip-wide.png`;
+const bgL3MiaAlone = `${W}/scenes/bg-heshe-intro-mia-wide.png`;
+const bgL3Reading = `${W}/scenes/bg-classroom-reading-wide.png`;
+const L3_FEEL = (name: string) => `${W}/sprites/${name}-v2.png`;
 
 export const LESSON_3_SCENES: Scene[] = classroomLook([
-  { id: 'wt3-title', kind: 'title-card', bg: bgWide, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 3', title: 'Listen & Greet!', subtitle: 'Put on your listening ears!', cta: '👂 LET’S LISTEN!' },
+  { id: 'wt3-title', kind: 'title-card', bg: bgL3Party, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 3', title: 'How Old Are You?', subtitle: 'Ask and say your age, and count to 20', cta: '\u{1F382} LET’S GO!' },
   {
-    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · How Are You?.
-    id: 'wt3-recall-warmup', kind: 'recall-warmup', bg: '/welcome-town/scenes/bg-classroom-circle-wide.png', who: 'pip', mode: 'click',
-    fromLabel: "Lesson 2 · How Are You?",
-    teacher: 'Warm-up from last lesson: Pip says it, the student finds the picture and says it too.',
+    // Remember? (owner, 2026-10-07): Lesson 2 · How Are You? — sticker pictures, so the shadow look.
+    id: 'wt3-recall-warmup', kind: 'recall-warmup', bg: bgL3Party, who: 'pip', mode: 'shadow',
+    fromLabel: 'Lesson 2 · How Are You?',
+    teacher: 'Warm-up from last lesson: Pip says a feeling, the student finds its shadow and says "I am happy!".',
     items: [
-      { word: "happy", say: "Who is happy?", img: '/welcome-town/scenes/bg-vocab-pip-happy-wide.png' },
-      { word: "sad", say: "Who is sad?", img: '/welcome-town/scenes/bg-vocab-mia-sad-wide.png' },
-      { word: "tired", say: "Who is tired?", img: '/welcome-town/scenes/bg-vocab-leo-tired-wide.png' },
-      { word: "angry", say: "Who is angry?", img: '/welcome-town/scenes/bg-vocab-bella-angry-wide.png' },
+      { word: 'happy', say: 'Find happy!', img: L3_FEEL('pip-happy') },
+      { word: 'tired', say: 'Find tired!', img: L3_FEEL('leo-tired') },
+      { word: 'sad', say: 'Find sad!', img: L3_FEEL('mia-sad') },
+      { word: 'hungry', say: 'Find hungry!', img: L3_FEEL('willow-hungry') },
     ],
   },
-
   {
-    id: 'wt3-intro', kind: 'cinematic', bg: bgCircle, title: 'Listening Time!', subtitle: 'Miss Marigold has a game for the class', narrator: 'marigold',
+    id: 'wt3-intro', kind: 'cinematic', bg: bgL3Party, title: 'Leo’s Birthday Party', subtitle: 'Leo is nine today!', narrator: 'marigold',
     script: [
-      { who: 'marigold', line: 'Welcome back, class! Today we play a listening game.' },
-      { who: 'marigold', line: 'Listen carefully to each friend, then choose the right answer!' },
-      { who: 'pip', line: 'I love listening games! Let’s go!' },
+      { who: 'leo', line: 'It’s my birthday! I am nine today!' },
+      { who: 'pip', line: 'Happy birthday, Leo!' },
+      { who: 'marigold', line: 'Today we ask: How old are you?' },
     ],
-    cta: '👂 LET’S LISTEN!',
+    cta: '\u{1F389} PARTY TIME!',
   },
 
-  // Round 1: greeting -- exactly what wt-roleplay modeled in Lesson 1, now
-  // tested as pure listening identification. Kept as a `choice` scene
-  // deliberately (not every round in this lesson needs to become
-  // listen-tap below -- one plain multiple-choice opener is real variety
-  // in itself right after the all-choice run this replaced).
+  /* ---- The question and the answer: one word page per age ---- */
+  { id: 'wt3-word-seven', kind: 'meet', look: 'word', word: 'seven', wordNote: '7 \u{1F382}', focus: ['seven', 'How old'], bg: bgL3PipAlone, who: 'pip', cardSide: 'right', teacher: 'Tap Pip. Hold up 7 fingers and say it with him!', line: 'How old are you? I am seven!', repeat: 'I am seven!' },
+  { id: 'wt3-echo', kind: 'echo', bg: bgL3Party, who: 'pip', textSide: 'top', teacher: 'Listen and say it with Pip!', word: 'How old are you?' },
+  { id: 'wt3-word-eight', kind: 'meet', look: 'word', word: 'eight', wordNote: '8 \u{1F382}', focus: ['eight'], bg: bgL3MiaAlone, who: 'mia', cardSide: 'left', teacher: 'Tap Mia. Hold up 8 fingers and say it with her!', line: 'I am eight!', repeat: 'I am eight!' },
   {
-    id: 'wt3-choice-hello', kind: 'choice', bg: bgCircle, who: 'marigold', teacher: 'Listen carefully, then tap what Miss Marigold is doing!',
-    prompt: 'Hello! Welcome to our class!',
-    options: [
-      { label: 'Saying hello', emoji: '👋', correct: true },
-      { label: 'Saying goodbye', emoji: '👋' },
-      { label: 'Asking a question', emoji: '❓' },
-    ],
-  },
-  // Age has no physical object in any bg to tap (unlike feelings/people/
-  // room/supplies below, all real painted things or characters) -- stays
-  // a `choice` scene for that reason, not because it's the default.
-  {
-    id: 'wt3-choice-age', kind: 'choice', bg: bgDoor, who: 'pip', teacher: 'Listen carefully, then tap what Pip is telling you!',
-    prompt: 'I am seven years old.',
-    options: [
-      { label: 'His age', emoji: '🎂', correct: true },
-      { label: 'His name', emoji: '🏷️' },
-      { label: 'Goodbye', emoji: '👋' },
+    id: 'wt3-roleplay', kind: 'roleplay', bg: bgL3Party, teacher: 'Listen to Pip and Leo, then say each line after them.', cast: ['pip', 'leo'],
+    script: [
+      { who: 'pip', line: 'How old are you, Leo?', repeat: true },
+      { who: 'leo', line: 'I am nine! How old are you?', repeat: true },
+      { who: 'pip', line: 'I am seven!', repeat: true },
     ],
   },
 
-  // Revives hello-doors — declared in the Scene union with a working
-  // renderer but not actually used by any shipped lesson yet (Lesson 1's
-  // own cubby-guessing round using this exact mechanic was replaced with
-  // real vocabulary per direct user request earlier this project) — a
-  // genuine fit here since this lesson's whole point is listen-for-the-
-  // name-then-respond, not carrying vocabulary content of its own. Also
-  // covers name-listening on its own, so a separate wt3-choice-name round
-  // (the original draft had one) would have been pure repetition of this
-  // same beat in a flatter format -- dropped in favor of this real game.
+  /* ---- Birthday games (Pre-A1 games played in A1) ---- */
   {
-    id: 'wt3-hello-doors', kind: 'hello-doors', bg: bgDoor, teacher: 'Knock knock! Listen for the name, then tap the right door!', cast: ['mia', 'leo', 'bella', 'willow'],
-    rounds: [
-      { target: 'mia', prompt: 'Knock knock! Who is it?', helloLine: 'Hello! My name is Mia.', echoLine: 'Hello, Mia!' },
-      { target: 'leo', prompt: 'Knock again! Who is it?', helloLine: 'Hello! My name is Leo.', echoLine: 'Hello, Leo!' },
-      { target: 'bella', prompt: 'One more! Who is it?', helloLine: 'Hello! My name is Bella.', echoLine: 'Hello, Bella!' },
-      { target: 'willow', prompt: 'Last one! Who is it?', helloLine: 'Hello! My name is Willow.', echoLine: 'Hello, Willow!' },
-    ],
+    id: 'wt3-candle-cake', kind: 'prea1', teacher: 'Birthday cakes! Listen to the age, then tap the cake to add that many candles. Last round: the student’s own age.',
+    scene: {
+      id: 'wt3-candle-cake', kind: 'candle-cake', bg: '/lep1/scenes/bg-l4-cake-stage.jpg', who: 'leo',
+      teacher: 'Birthday cakes! Listen to the age, then tap the cake to add that many candles. Last round: the student’s own age.',
+      rounds: [
+        { asker: 'leo', target: 9, prompt: 'I am NINE! Tap NINE candles on my cake!', celebrate: 'Nine candles! I am nine!' },
+        { asker: 'mia', target: 8, prompt: 'I am EIGHT! Tap EIGHT candles for Mia!', celebrate: 'Eight candles! I am eight!' },
+        { asker: 'bella', target: 6, prompt: 'I am SIX! Tap SIX candles for Bella!', celebrate: 'Six candles! I am six!' },
+        { asker: 'pip', target: 0, isStudent: true, prompt: 'Your turn! How old are you? Tap your age, then put candles on YOUR cake and blow!', celebrate: 'Happy birthday to YOU!' },
+      ],
+    },
   },
 
-  // --- From here down: listen-tap and true-false, not choice. Per direct
-  // feedback that the original nine near-identical choice-menu scenes in a
-  // row felt repetitive/low quality, and per web research into ESL
-  // listening-game design for young learners (recognition-based "tap the
-  // object in the picture" mechanics, e.g. Guess-the-Object/Listen-and-
-  // point, read better than a flat text-button quiz for this exact skill)
-  // — every target below is a real character or object already painted in
-  // that bg, reusing the exact hotspot coordinates this file's own
-  // vocab-spot/drag-match scenes for that same bg already established, so
-  // "where to look" is never new information, only "which one did I just
-  // hear". Capped at 2 consecutive listen-tap scenes (feelings, people) per
-  // the Hard Variety Rule — see the true-false scene below for why room +
-  // supplies content switched mechanics instead of extending this run.
-
-  // Feelings listening review (Lesson 2 content) — targets/coords match
-  // wt2-vocab-feelings' own hotspots for mia/leo/willow.
+  /* ---- Count to 20 ---- */
   {
-    id: 'wt3-listen-tap-feelings', kind: 'listen-tap', bg: bgFeelings, teacher: 'Listen, then tap the friend who feels that way!',
-    targets: [
-      { label: 'Mia', left: '52%', top: '64%', color: '#B85CD1' },
-      { label: 'Leo', left: '33%', top: '60%', color: '#C97A2F' },
-      { label: 'Willow', left: '90%', top: '64%', color: '#4FA9E0' },
-    ],
-    rounds: [
-      { prompt: 'I am sad today.', answerLabel: 'Mia', who: 'mia' },
-      { prompt: 'I am so tired.', answerLabel: 'Leo', who: 'leo' },
-    ],
+    id: 'wt3-numbers-learn', kind: 'prea1', teacher: 'New numbers! Tap each number to hear Pip say it: eleven to twenty. Next when the student can say them all.',
+    scene: { id: 'wt3-numbers-learn', kind: 'numbers-learn', bg: '/lep1/scenes/bg-l4-plain-party.jpg', who: 'pip', from: 11, to: 20, teacher: 'New numbers! Tap each number to hear Pip say it: eleven to twenty. Next when the student can say them all.' },
+  },
+  {
+    id: 'wt3-count-balloons', kind: 'prea1', teacher: 'Party balloons! Pop them one by one and count with Pip, all the way to fifteen.',
+    scene: { id: 'wt3-count-balloons', kind: 'count-balloons', bg: '/lep1/scenes/bg-l4-plain-sky.jpg', who: 'pip', total: 15, teacher: 'Party balloons! Pop them one by one and count with Pip, all the way to fifteen.' },
+  },
+  {
+    id: 'wt3-numbers-review', kind: 'prea1', teacher: 'Number game! Tap the number Pip says.',
+    scene: { id: 'wt3-numbers-review', kind: 'numbers-review', bg: '/lep1/scenes/bg-l4-plain-party.jpg', who: 'pip', from: 11, to: 20, teacher: 'Number game! Tap the number Pip says.' },
   },
 
-  // Teacher / student listening review (Lesson 1 content) — coords match
-  // wt-vocab-people's own hotspots for pip/marigold.
+  /* ---- Ask and answer ---- */
   {
-    id: 'wt3-listen-tap-people', kind: 'listen-tap', bg: bgPeople, teacher: 'Listen, then tap who is talking!',
-    targets: [
-      { label: 'Student', left: '26%', top: '42%', color: '#FE6A2F' },
-      { label: 'Teacher', left: '68%', top: '48%', color: '#8ECAE6' },
-    ],
-    rounds: [
-      { prompt: 'I am your teacher.', answerLabel: 'Teacher', who: 'marigold' },
-      { prompt: 'This is the student.', answerLabel: 'Student', who: 'marigold' },
-    ],
+    id: 'wt3-meet-greet', kind: 'prea1', teacher: 'Party guests arrive one at a time. The student asks the name, then "How old are you?", then says "Nice to meet you!"',
+    scene: {
+      id: 'wt3-meet-greet', kind: 'meet-greet', bg: '/lep1/scenes/bg-l4-cloud-sky.jpg',
+      teacher: 'Party guests arrive one at a time. The student asks the name, then "How old are you?", then says "Nice to meet you!"',
+      friends: [{ who: 'bella', age: 6 }, { who: 'mia', age: 8 }, { who: 'leo', age: 9 }],
+    },
   },
-
-  // Classroom + school-supplies listening review (Lesson 1 content), as
-  // True/False rather than a third and fourth listen-tap scene in a row.
-  // Per activity-pattern-library's Hard Variety Rule (no more than 2
-  // consecutive same-kind scenes) -- the first cut of this lesson ran
-  // FOUR listen-tap scenes back to back (feelings/people/room/supplies),
-  // the same shape of mistake the original nine-choice-scenes run was,
-  // just with a newer mechanic. Researched before redesigning:
-  // englishcurrent.com/speaking/true-false-guessing-game-activity-esl and
-  // teach-this.com/esl-games/listening-games both name True/False as a
-  // proven, fast, genuinely different listening-check format for young
-  // learners (a binary judgment call, not a search-the-scene or pick-a-
-  // button task) -- also explicitly listed in smart-lesson-architect's own
-  // "Recognition / noticing" activity family. Since True/False doesn't
-  // depend on scene hotspots, one scene freely reviews BOTH room fixtures
-  // and school supplies together instead of needing a separate scene per
-  // background.
   {
-    id: 'wt3-true-false', kind: 'true-false', bg: bgSupplies, teacher: 'Listen to each sentence. Is it TRUE or FALSE?',
-    rounds: [
-      { who: 'marigold', statement: 'This is called a board.', isTrue: true },
-      { who: 'marigold', statement: 'A bag is a chair.', isTrue: false },
-      { who: 'pip', statement: 'I carry my books in my bag.', isTrue: true },
-      { who: 'pip', statement: 'I sleep in my chair.', isTrue: false },
-    ],
-  },
-
-  // Cumulative listening-review memory match — every word tested above.
-  {
-    id: 'wt3-memory', kind: 'memory', bg: bgCircle, teacher: 'Match the matching pairs! Everything we listened to today.',
-    pairs: [
-      { id: 'hello', label: 'Hello', emoji: '👋' },
-      { id: 'name', label: 'Name', emoji: '🏷️' },
-      { id: 'age', label: 'Age', emoji: '🎂' },
-      { id: 'happy', label: 'Happy', emoji: '😊' },
-      { id: 'friend', label: 'Friend', emoji: '🤝' },
-      { id: 'teacher', label: 'Teacher', emoji: '🦉' },
-    ],
-  },
-
-  // One light production capstone (Gate A bias, not a hard gate) -- kept
-  // small since Lesson 4 "Speak & Meet!" owns the real speaking practice
-  // for this exact content.
-  {
-    id: 'wt3-join-stage', kind: 'join-stage', bg: bgCircle, teacher: 'Your turn! Listen, then say hello back!', cast: ['marigold', 'pip'],
+    id: 'wt3-your-turn', kind: 'join-stage', bg: bgL3Party, teacher: 'Your turn! When it says YOU, answer out loud, then ask Pip.', cast: ['pip', 'leo'],
     turns: [
-      { who: 'marigold', line: 'Hello! What is your name?' },
-      { who: 'student', line: 'Hello! My name is ______.' },
-      { who: 'pip', line: 'Great listening today!' },
+      { who: 'leo', line: 'Hi! How old are you?' },
+      { who: 'student', line: 'I am … !' },
+      { who: 'pip', line: 'Now ask me!' },
+      { who: 'student', line: 'How old are you, Pip?' },
+      { who: 'pip', line: 'I am seven!' },
     ],
   },
 
+  /* ---- Phonics: M and D (after s a t p i n), then read ---- */
   {
-    id: 'wt3-class-puzzle', kind: 'jigsaw-puzzle', bg: bgWide, teacher: 'Great listening! Drag the pieces to reveal the class picture!',
-    image: bgWide, rows: 2, cols: 3,
+    id: 'wt3-model-m', kind: 'sound-model', bg: bgL3Reading, who: 'pip', letter: 'M', phoneme: '/m/', sound: 'mmm',
+    teacher: 'A new sound! /m/ /m/ Moon!',
+    anchors: [
+      { word: 'moon', emoji: '\u{1F319}', img: '/lep1/items/item-moon.png' },
+      { word: 'mouse', emoji: '\u{1F42D}', img: '/lep1/items/item-mouse.png' },
+      { word: 'mat', emoji: '\u{1F9F6}', img: '/lep1/items/item-mat.png' },
+    ],
+  },
+  {
+    id: 'wt3-model-d', kind: 'sound-model', bg: bgL3Reading, who: 'marigold', letter: 'D', phoneme: '/d/', sound: 'duh',
+    teacher: 'A new sound! /d/ /d/ Dog!',
+    anchors: [
+      { word: 'dog', emoji: '\u{1F436}', img: '/lep1/items/item-dog.png' },
+      { word: 'duck', emoji: '\u{1F986}', img: '/lep1/items/item-duck-yellow.png' },
+      { word: 'dad', emoji: '\u{1F468}', img: '/lep1/items/item-family-dad.png' },
+    ],
+  },
+  {
+    id: 'wt3-word-build', kind: 'word-build', bg: bgL3Reading, teacher: 'You know 8 sounds now! Find the missing sound, then read the word.',
+    rounds: [
+      { word: 'MAT', blankIndex: 0, answer: 'M', choices: ['M', 'N', 'D'], emoji: '\u{1F9F6}' },
+      { word: 'DAD', blankIndex: 2, answer: 'D', choices: ['P', 'D', 'T'], emoji: '\u{1F468}' },
+      { word: 'MAN', blankIndex: 2, answer: 'N', choices: ['M', 'N', 'D'], emoji: '\u{1F468}' },
+    ],
+  },
+
+  /* ---- Sticker + Home Mission ---- */
+  {
+    id: 'wt3-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts Leo’s birthday sticker in their Sticker Book.',
+    scene: {
+      id: 'wt3-sticker', kind: 'sticker-reward', bg: bgL3Party, who: 'leo', teacher: 'Sticker time! The student opens the pack and puts Leo’s birthday sticker in their Sticker Book.',
+      line: 'You can ask and say your age! Here is your sticker.',
+      sticker: { img: spr('leo'), label: 'I am nine!' },
+    },
+  },
+  {
+    id: 'wt3-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'wt3-home-mission', kind: 'home-mission', bg: bgL3Party, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child learned "How old are you?" – "I am seven." and the numbers eleven to twenty. Let them ask everyone at home how old they are.',
+      steps: [
+        { emoji: '\u{2753}', say: 'Ask your family: How old are you?' },
+        { emoji: '\u{1F382}', say: 'Say: I am … !' },
+        { emoji: '\u{1F522}', say: 'Count to twenty with your family.' },
+      ],
+    },
+  },
+
+  /* --- Extra time (blueprint §3b): played only if there is time left; the teacher can skip them. --- */
+  {
+    id: 'wt3-brain-break', kind: 'prea1', teacher: 'Extra time: brain break! Count out loud while you move.',
+    scene: {
+      id: 'wt3-brain-break', kind: 'tpr-actions', mode: 'break', bg: '/lep1/scenes/bg-u3l4-room-empty-wide.png', who: 'pip',
+      teacher: 'Extra time: brain break! Count out loud while you move.',
+      rounds: [
+        { line: 'Jump eleven times! Count with me!', emoji: '\u{1F998}', seconds: 12 },
+        { line: 'Clap twelve times!', emoji: '\u{1F44F}', seconds: 10 },
+        { line: 'Touch your toes thirteen times!', emoji: '\u{1F9B6}', seconds: 14 },
+        { line: 'Freeze!', emoji: '\u{1F9CA}' },
+      ],
+    },
+  },
+  {
+    id: 'wt3-age-quiz', kind: 'prea1', teacher: 'Extra time: tap the wobbly present! Ask "How old are you?", then guess the candles. Last: the student’s own age.',
+    scene: {
+      id: 'wt3-age-quiz', kind: 'age-quiz', bg: '/lep1/scenes/bg-l4-birthday-party.jpg',
+      teacher: 'Extra time: tap the wobbly present! Ask "How old are you?", then guess the candles. Last: the student’s own age.',
+      friends: [{ who: 'bella', age: 6 }, { who: 'pip', age: 7 }, { who: 'mia', age: 8 }, { who: 'leo', age: 9 }],
+      studentAges: [6, 7, 8, 9, 10],
+    },
   },
 
   {
-    id: 'wt3-goodbye-song', kind: 'song', bg: bgExpressGoodbye, title: '🎵 Welcome Town School Goodbye Song 🎵', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    id: 'wt3-goodbye-song', kind: 'song', bg: bgExpressGoodbyeW, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
     songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
     lineDurationsMs: [3600, 4120, 4020, 8322],
     lyrics: [
-      { who: 'marigold', text: '👋 Goodbye, goodbye, my new friend' },
-      { who: 'pip', text: '👋 Goodbye, goodbye, see you again' },
-      { who: 'marigold', text: '🏫 Welcome Town School is happy today' },
-      { who: 'pip', text: '💖 Byeeee, friends! See you soon!' },
+      { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
+      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },
+      { who: 'marigold', text: '\u{1F3EB} Welcome Town School is happy today' },
+      { who: 'pip', text: '\u{1F496} Byeeee, friends! See you soon!' },
     ],
   },
-
-  { id: 'wt3-finale', kind: 'finale', bg: bgWide, who: 'pip', line: 'You listened carefully to hello, names, ages, feelings, friends, and your teacher — great job! ✨👂' },
+  { id: 'wt3-finale', kind: 'finale', bg: bgL3Party, who: 'leo', line: 'You can ask "How old are you?", say your age and count to twenty! Thank you for coming to my party!' },
 ]);
+
 
 /* =============================================================================
  * A1 Unit 1, Lesson 4: "Speak & Meet!"
