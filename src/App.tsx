@@ -146,7 +146,6 @@ const AuthCallback = lazy(() => import("./pages/AuthCallback"));
 const StudentCertificatePage = lazy(() => import("./pages/StudentCertificatePage"));
 const HomeworkPage = lazy(() => import("./pages/student/HomeworkPage"));
 const PlaygroundDemo = lazy(() => import("./pages/PlaygroundLessonRedirect"));
-const AcademyDemo = lazy(() => import("./pages/AcademyLessonRedirect"));
 const SuccessDemo = lazy(() => import("./pages/SuccessLessonRedirect"));
 const PlaygroundCreator = lazy(() => import("./pages/PlaygroundCreator"));
 const PlayScenesLessonPage = lazy(() => import("./pages/playground-scene/PlayScenesLessonPage"));
@@ -200,13 +199,7 @@ const PlayA2Unit1Lesson2 = lazy(() => import("./pages/playground-scene/PlayA2Uni
 const PlayA2Unit1Lesson3 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson3"));
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundLibraryPublic = lazy(() => import("./pages/playground-library/PlaygroundLibraryPublic"));
-const AcademyLibraryPage = lazy(() => import("./pages/playground-library/AcademyLibraryPage"));
-const AcademyLibraryPublic = lazy(() => import("./pages/playground-library/AcademyLibraryPublic"));
-// New Academy lesson engine (Phase 1) — canonical AcademyDemo.tsx schema/renderer,
-// routed to for any curriculum_lessons row with ai_metadata.contentFormat === 'academy-v2'.
-const PlayAcademyLesson = lazy(() => import("./pages/academy-scene/PlayAcademyLesson"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
-const AcademyClassroom = lazy(() => import("./pages/AcademyClassroom"));
 const AcademyCreator = lazy(() => import("./pages/AcademyCreator"));
 const SuccessCreator = lazy(() => import("./pages/SuccessCreator"));
 const DevConsole = lazy(() => import("./pages/DevConsole"));
@@ -282,7 +275,6 @@ const App = () => {
                      <Route path="/games/cast-chat-quest" element={<Suspense fallback={<LoadingFallback />}><CastChatQuest /></Suspense>} />
 
                       <Route path="/playground-demo" element={<Suspense fallback={<LoadingFallback />}><PlaygroundDemo /></Suspense>} />
-                     <Route path="/academy-demo" element={<Suspense fallback={<AcademyLoadingFallback />}><AcademyDemo /></Suspense>} />
                      <Route path="/success-demo" element={<Suspense fallback={<LoadingFallback />}><SuccessDemo /></Suspense>} />
                       <Route path="/playground-creator" element={
                         <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
@@ -293,12 +285,6 @@ const App = () => {
                       <Route path="/playground-scene/play/:lessonId" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayScenesLessonPage /></Suspense>
-                        </ImprovedProtectedRoute>
-                      } />
-                      {/* Academy Library (new engine) — 'academy-v2' format lessons. */}
-                      <Route path="/academy-scene/:id" element={
-                        <ImprovedProtectedRoute>
-                          <Suspense fallback={<LoadingFallback />}><PlayAcademyLesson /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/playground-scene/lesson-1" element={
@@ -563,25 +549,8 @@ const App = () => {
                       <Route path="/library/playground" element={
                         <Suspense fallback={<LoadingFallback />}><PlaygroundLibraryPublic /></Suspense>
                       } />
-                      {/* Academy's own content-creator dashboard library — role-gated
-                          like /playground-library above, NOT a public page: it lists
-                          the signed-in creator's own Academy rows and opens them in
-                          the Academy Creator editor. */}
-                      <Route path="/academy-library" element={
-                        <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
-                          <Suspense fallback={<LoadingFallback />}><AcademyLibraryPage /></Suspense>
-                        </ImprovedProtectedRoute>
-                      } />
-                      {/* Public, read-only mirror of the library above — anyone with the
-                          link can browse PUBLISHED Academy lessons, no account required.
-                          Same split as /library/playground: the catalog is link-shareable,
-                          but /academy-scene/:id itself still requires login to actually play. */}
-                      <Route path="/library/academy" element={
-                        <Suspense fallback={<LoadingFallback />}><AcademyLibraryPublic /></Suspense>
-                      } />
                       <Route path="/play/:lessonId" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />
                       <Route path="/play" element={<Suspense fallback={<LoadingFallback />}><PlaygroundGameRunner /></Suspense>} />
-                      <Route path="/academy-classroom" element={<Suspense fallback={<AcademyLoadingFallback />}><AcademyClassroom /></Suspense>} />
                       {/* Retired per direct user request — Academy content is now
                           authored the same way its library lessons already work,
                           not through this standalone tool. AcademyCreator.tsx and
@@ -592,7 +561,7 @@ const App = () => {
                           redirect intercepts all of them, so the tool can be
                           reinstated later (e.g. for a different program) just by
                           restoring the route below. */}
-                      <Route path="/academy-creator" element={<Navigate to="/academy-library" replace />} />
+                      <Route path="/academy-creator" element={<Navigate to="/dashboard" replace />} />
                       <Route path="/success-creator" element={
                         <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
                           <Suspense fallback={<LoadingFallback />}><SuccessCreator /></Suspense>
