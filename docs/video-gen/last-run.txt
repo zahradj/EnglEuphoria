@@ -1,5 +1,5 @@
-pip-arms: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
-pip-arms: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started pip-arms: 2b5fdb3d-b488-460f-99ab-afed12c14550
-saved public/lep1/video/clips/u4l5-moves/pip-arms.mp4 (6121129 bytes)
+elephant-feet: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
+elephant-feet: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started elephant-feet: e6eb7f44-9c21-46ca-aeb2-39a5d56c92f4
+saved public/lep1/video/clips/u4l5-moves/elephant-feet.mp4 (6744096 bytes)
 1/1 clips ready for u4l5-moves
