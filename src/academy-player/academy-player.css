@@ -374,3 +374,6 @@
 .ap-stage::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1; background-image: radial-gradient(circle, rgba(255, 255, 255, 0.85) 0 1.6px, transparent 2.4px), radial-gradient(circle, rgba(196, 181, 253, 0.8) 0 1.3px, transparent 2.2px), radial-gradient(circle, rgba(255, 255, 255, 0.7) 0 1px, transparent 2px); background-size: 210px 230px, 330px 290px, 140px 170px; background-position: 0 0, 90px 60px, 40px 120px; opacity: 0.55; animation: ap-motes 26s linear infinite; }
 @keyframes ap-motes { from { background-position: 0 0, 90px 60px, 40px 120px; } to { background-position: 0 -230px, 90px -230px, 40px -170px; } }
 .ap-root[data-reduced='true'] .ap-stage::after { animation: none; }
+
+/* the cut-out is waist-up: fade its lower edge into the scene instead of a flat cut */
+.ap-sprite-img, .ap-sprite-frame { -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%); mask-image: linear-gradient(to bottom, #000 80%, transparent 100%); }
