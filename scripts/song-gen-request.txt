@@ -1,2 +1,2 @@
-# song takes request (2026-10-09: song video verse u7l5-farm-song3, round 2)
-u7l5-farm-song3
+# re-score (word times)
+score:u4l5-song3
