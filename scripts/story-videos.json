@@ -779,9 +779,10 @@
     ],
     "leader": "Dad",
     "action": "Dad swings his arm forward and throws the red ball up into the air towards Pip; nobody moves their feet",
-    "prompt": "Dad, the father fox, swings his raised arm forward and throws the red ball, which flies slowly up into the air towards Pip. Nobody moves their feet. Nobody else is in the picture. The camera stays steady.",
+    "prompt": "Dad, the father fox, swings his raised arm forward and throws the red ball, which flies slowly up into the air towards Pip. Nobody moves their feet. There is only one ball. Nobody else is in the picture. The camera stays steady.",
     "ownerApproved": true,
-    "approvedNote": "owner: \"Yes start\" then \"Use the api\" 2026-10-07, after reading the 6-row storyboard; clip 1 (ball-throw) ordered alone, screened and shown before any other row"
+    "approvedNote": "owner: \"Yes start\" then \"Use the api\" 2026-10-07, after reading the 6-row storyboard; clip 1 (ball-throw) ordered alone, screened and shown before any other row",
+    "review": "2026-10-09 clip 1 (Kling 2.6 Pro) rejected: a second red ball appears at 2.0-2.25 s. Re-ordered once with \"There is only one ball.\""
    },
    {
     "id": "ball-catch",
