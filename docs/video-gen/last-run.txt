@@ -1,5 +1,5 @@
-mom-hug: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
-mom-hug: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started mom-hug: 7336e34f-1b7a-4c42-b025-bda78955ace3
-saved public/lep1/video/clips/u6l5-house/mom-hug.mp4 (7834553 bytes)
-1/1 clips ready for u6l5-house
+gate-wave: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
+gate-wave: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started gate-wave: a3bc9749-694f-4667-bb83-102e2dc5dd7b
+saved public/lep1/video/clips/u7l5-barn/gate-wave.mp4 (7054772 bytes)
+1/1 clips ready for u7l5-barn
