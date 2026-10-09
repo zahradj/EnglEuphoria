@@ -1,2 +1,2 @@
 # strict mode: ONE clip per run (owner: "Approve all" + "Use kling" 2026-10-09)
-u4l5-moves --beats=pip-head
+u4l5-moves --beats=monkey-arms
