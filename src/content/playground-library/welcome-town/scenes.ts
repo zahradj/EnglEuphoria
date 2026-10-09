@@ -966,6 +966,23 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     ],
   },
 
+  {
+    // Feelings Freeze (Brain Break, game list): dance, then freeze with the face Pip calls — movement for a 6-9 year
+    // old after ~15 minutes of sitting, and one more listen-and-show round of all five feelings.
+    id: 'wt2-feelings-freeze', kind: 'prea1', teacher: 'Brain break! Dance, then FREEZE with the face Pip says.',
+    scene: {
+      id: 'wt2-feelings-freeze', kind: 'tpr-actions', mode: 'break', bg: '/lep1/scenes/bg-u3l4-room-empty-wide.png', who: 'pip',
+      teacher: 'Brain break! Dance, then FREEZE with the face Pip says.',
+      rounds: [
+        { line: 'Dance, dance! Freeze! Show me happy!', emoji: '\u{1F60A}' },
+        { line: 'Dance, dance! Freeze! Show me tired!', emoji: '\u{1F62A}' },
+        { line: 'Dance, dance! Freeze! Show me angry!', emoji: '\u{1F620}' },
+        { line: 'Dance, dance! Freeze! Show me sad!', emoji: '\u{1F622}' },
+        { line: 'Dance, dance! Freeze! Show me hungry!', emoji: '\u{1F924}' },
+      ],
+    },
+  },
+
   /* Boy -> he, girl -> she, boy + girl -> they (owner 2026-10-09: "How would the student know if it is a boy or a
    * girl? ... a boy plus a girl equals they. They are happy."). One idea per page, a check after each pair. */
   {
@@ -1031,6 +1048,28 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     ],
   },
   {
+    // Claw Machine (game list): listen for the feeling, grab that friend, then say it with He / She.
+    id: 'wt2-feelings-claw', kind: 'prea1', teacher: 'Feelings Grabber! Listen to Pip, move the claw to the right friend and press the red button. Then say: He is … / She is …',
+    scene: {
+      id: 'wt2-feelings-claw', kind: 'claw-machine', bg: '/lep1/scenes/bg-u3l6-claw-machine-wide.png', who: 'pip', clawImg: '/lep1/items/item-claw.png',
+      teacher: 'Feelings Grabber! Listen to Pip, move the claw to the right friend and press the red button. Then say: He is … / She is …',
+      glass: { x: 49, y: 43, w: 50, h: 52 },
+      toys: [
+        { label: 'Pip', img: feelSpr('pip-happy'), x: 12, size: 9 },
+        { label: 'Mia', img: feelSpr('mia-sad'), x: 31, size: 9 },
+        { label: 'Leo', img: feelSpr('leo-tired'), x: 50, size: 9 },
+        { label: 'Willow', img: feelSpr('willow-hungry'), x: 69, size: 9 },
+        { label: 'Bella', img: feelSpr('bella-angry'), x: 88, size: 9 },
+      ],
+      rounds: [
+        { target: 3, line: 'Get the friend who is hungry!', reply: 'Willow! She is hungry!' },
+        { target: 2, line: 'Get the friend who is tired!', reply: 'Leo! He is tired!' },
+        { target: 4, line: 'Get the friend who is angry!', reply: 'Bella! She is angry!' },
+        { target: 0, line: 'Get the friend who is happy!', reply: 'Pip! He is happy!' },
+      ],
+    },
+  },
+  {
     // Feelings spinner (roadmap): the wheel picks a friend, the child says the whole sentence.
     id: 'wt2-spin-feelings', kind: 'spin-wheel', bg: bgFeelingsW, title: 'Spin! How is your friend?',
     teacher: 'Have the student spin the wheel and say how that friend feels: "He is happy!" / "She is sad!". If you prefer, do the activity without the spinner.',
@@ -1045,6 +1084,19 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
   },
 
   {
+    // Tile Reveal (Wordwall "Image quiz", game list): a friend hides under tiles; guess early and say the sentence.
+    id: 'wt2-who-hiding', kind: 'prea1', teacher: 'Who is hiding? Tiles pop off one by one. Guess early, tap the friend, then say: "It’s Mia! She is sad!"',
+    scene: {
+      id: 'wt2-who-hiding', kind: 'tile-reveal', bg: bgFeelingsW, who: 'pip',
+      teacher: 'Who is hiding? Tiles pop off one by one. Guess early, tap the friend, then say: "It’s Mia! She is sad!"',
+      rounds: [
+        { img: feelSpr('mia-sad'), word: 'Mia', line: 'It’s Mia! She is sad!', options: [{ label: 'Bella', img: feelSpr('bella-angry') }, { label: 'Mia', img: feelSpr('mia-sad') }, { label: 'Leo', img: feelSpr('leo-tired') }] },
+        { img: feelSpr('leo-tired'), word: 'Leo', line: 'It’s Leo! He is tired!', options: [{ label: 'Leo', img: feelSpr('leo-tired') }, { label: 'Pip', img: feelSpr('pip-happy') }, { label: 'Willow', img: feelSpr('willow-hungry') }] },
+        { img: feelSpr('bella-angry'), word: 'Bella', line: 'It’s Bella! She is angry!', options: [{ label: 'Mia', img: feelSpr('mia-sad') }, { label: 'Willow', img: feelSpr('willow-hungry') }, { label: 'Bella', img: feelSpr('bella-angry') }] },
+      ],
+    },
+  },
+  {
     id: 'wt2-storybook', kind: 'flipbook', bg: bgWideW, title: "Pip's Tired Day",
     pages: [
       { who: 'pip', img: `${W}/scenes/bg-story-pip-tired.png`, text: 'Pip feels tired today. "I am so tired!"' },
@@ -1055,6 +1107,19 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     checkpoints: [
       { afterPage: 0, who: 'pip', question: 'How is Pip at first?', options: ['Happy', 'Tired', 'Angry'], answer: 'Tired' },
       { afterPage: 3, who: 'mia', question: 'How is Pip at the end?', options: ['Sad', 'Happy', 'Tired'], answer: 'Happy' },
+    ],
+  },
+
+  {
+    // Picture <-> sentence match (game list, universal): the first READING of the lesson's sentences, as a calm self-check.
+    id: 'wt2-read-match', kind: 'picture-match', bg: bgCircleW, studentOnly: true,
+    prompt: 'Read and match!',
+    teacher: 'Auto-evaluation slide. The student reads each sentence and drags it under the right picture, without help from the teacher.',
+    items: [
+      { word: 'He is happy.', img: feelSpr('pip-happy') },
+      { word: 'She is sad.', img: feelSpr('mia-sad') },
+      { word: 'He is tired.', img: feelSpr('leo-tired') },
+      { word: 'She is hungry.', img: feelSpr('willow-hungry') },
     ],
   },
 
