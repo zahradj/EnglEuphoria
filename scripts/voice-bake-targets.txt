@@ -62,3 +62,4 @@ LESSON_U7L5_SCENES
 # 2026-10-09 A1 U1 L2 rebuilt: I am <feeling>, Feelings Survey, he/she/they quick fire, home mission
 # 2026-10-09 A1 U1 L2: Feelings Freeze, Feelings Grabber, Who is hiding?, Read and match
 # 2026-10-09 re-run: A1 U1 L2 lines still missing (70)
+# 2026-10-09 re-run after the ElevenLabs key was replaced: A1 U1 L2 lines
