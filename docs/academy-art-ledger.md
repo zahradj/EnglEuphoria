@@ -32,7 +32,7 @@ Canva rate limit: one picture, then ~25 min wait.
 |---|---|---|---|---|---|---|
 | Ava | MAHXgPkDg5c | MAHXg3yFc5M | MAHXg5Bo_1Q | MAHXhOYN5Fo | MAHXhFhrXYQ | MAHXhXILyGA |
 | Theo | MAHXgZZzylw | MAHXhTooCqc | MAHXhq0-K-A | MAHXiOXE3Lk | MAHXiKsyVeQ | MAHXibquoNA |
-| Mia | MAHXgluvq5c | | | | | |
+| Mia | MAHXgluvq5c | MAHXidKjEe4 | | | | |
 | Vee | MAHXgs-3g1I | | | | | |
 
 ## Logo on the tee: DROPPED (owner, 2026-10-09: "you can drop adding the logo")
