@@ -7,13 +7,24 @@ const NAMES = ['elevenlabs 2', 'ELEVENLABS 2', 'Elevenlabs 2', 'ElevenLabs 2', '
   'elevenlabs', 'ELEVENLABS', 'ElevenLabs', 'ELEVEN_LABS_API_KEY', 'ELEVENLABS_KEY',
   'ELEVENLABS_API_KEY', 'elevenlab3', 'ELEVENLABS_API_KEY_3', 'ELEVENLABS_API_KEY_1'];
 
-/** Which names are set (names only, never values) - to debug a 401. */
+/** Which names are set, with the SHAPE of each value (length, sk_ prefix) - never the value - to debug a 401. */
 export function elevenLabsKeyNames(): string[] {
-  return NAMES.filter((n) => (Deno.env.get(n) ?? '') !== '');
+  return NAMES.filter((n) => (Deno.env.get(n) ?? '') !== '').map((n) => {
+    const raw = Deno.env.get(n) ?? '';
+    const k = clean(raw);
+    return `${n} [${raw.length}->${k.length} chars, ${k.startsWith('sk_') ? 'sk_' : 'no sk_ prefix'}]`;
+  });
+}
+
+/** A pasted secret can carry spaces, line breaks, quotes or a label ("xi-api-key: sk_..."): keep only the key. */
+function clean(raw: string): string {
+  const s = raw.trim().replace(/^["'`]+|["'`]+$/g, '').trim();
+  const m = s.match(/sk_[A-Za-z0-9]+/);
+  return m ? m[0] : s.replace(/^(xi-api-key|bearer)\s*[:=]?\s*/i, '');
 }
 
 export function elevenLabsKeys(): string[] {
-  const keys = NAMES.map((n) => Deno.env.get(n) ?? '').filter(Boolean);
+  const keys = NAMES.map((n) => clean(Deno.env.get(n) ?? '')).filter(Boolean);
   return [...new Set(keys)];
 }
 

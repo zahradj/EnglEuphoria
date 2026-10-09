@@ -65,3 +65,4 @@ LESSON_U7L5_SCENES
 # 2026-10-09 re-run after the ElevenLabs key was replaced: A1 U1 L2 lines
 # 2026-10-09 re-run: elevenlabs-tts now also reads the 'elevenlabs 2' secret names
 # 2026-10-09 re-run: new 'elevenlabs 2' key
+# 2026-10-09 re-run: keys cleaned of spaces/quotes/labels
