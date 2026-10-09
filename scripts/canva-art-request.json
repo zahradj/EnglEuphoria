@@ -1,27 +1,7 @@
 [
   {
-    "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0001-8857973049799679654.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261009%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261009T024307Z&X-Amz-Expires=75630&X-Amz-Signature=e00f6811c6aff22b210b68d47a9d4dc54ccf901c1955501ecd1b0808886c15a8&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Fri%2C%2009%20Oct%202026%2023%3A43%3A37%20GMT",
-    "out": "public/welcome-town/sprites/pip-happy-v2.png",
-    "sticker": true
-  },
-  {
-    "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0002-8857973049799679654.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261009%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261009T160746Z&X-Amz-Expires=26221&X-Amz-Signature=9314002611520dd7376d86865a71d8a210aa628eb2396830acc4f3e8042bc071&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Fri%2C%2009%20Oct%202026%2023%3A24%3A47%20GMT",
-    "out": "public/welcome-town/sprites/leo-tired-v2.png",
-    "sticker": true
-  },
-  {
-    "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0003-8857973049799679654.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261009%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261009T040158Z&X-Amz-Expires=69596&X-Amz-Signature=10b3eccd5ba49f897b65d7c5b2629c4d1d401b701b132d11e4385d9ed5b1a9cc&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Fri%2C%2009%20Oct%202026%2023%3A21%3A54%20GMT",
-    "out": "public/welcome-town/sprites/mia-sad-v2.png",
-    "sticker": true
-  },
-  {
     "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0004-8857973049799679654.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261009%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261009T020719Z&X-Amz-Expires=76730&X-Amz-Signature=7c6b2175ef35bddaf0213174be3b04f0c878093fb92f613c873805c0d14a9488&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Fri%2C%2009%20Oct%202026%2023%3A26%3A09%20GMT",
     "out": "public/welcome-town/sprites/bella-angry-v2.png",
-    "sticker": false
-  },
-  {
-    "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0005-8857973049799679654.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261009%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261009T122242Z&X-Amz-Expires=41380&X-Amz-Signature=373ec85520e475d0e9091298082b10f78dc11651769e848beaac987caff8aa37&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Fri%2C%2009%20Oct%202026%2023%3A52%3A22%20GMT",
-    "out": "public/welcome-town/sprites/willow-hungry-v2.png",
     "sticker": true
   }
 ]
