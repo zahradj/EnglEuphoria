@@ -27,7 +27,7 @@ FUNCTION = set('a an the and or but of to in on at for with by from up as is am 
 # word -> (syllables, stresses) for words the CMU dictionary lacks or gets wrong for singing
 SPECIAL = {'oink': (1, '1'), 'baa': (1, '1'), 'moo': (1, '1'), 'quack': (1, '1'), 'e-i-e-i-o': (5, '10101'),
            'e-i': (2, '10'), 'e-i-o': (3, '101'), 'yippee': (2, '01'), 'ta-da': (2, '01'), 'grandpa': (2, '10'),
-           'grandpa\'s': (2, '10'), 'cream': (1, '0'), 'tum': (1, '1'), 'isn\'t': (2, '10'), 'where\'s': (1, '1'), 'it\'s': (1, '0'), 'i\'m': (1, '0')}
+           'grandpa\'s': (2, '10'), 'cream': (1, '0'), 'tum': (1, '1'), 'meow': (1, '1'), 'goodnight': (2, '01'), 'isn\'t': (2, '10'), 'where\'s': (1, '1'), 'it\'s': (1, '0'), 'i\'m': (1, '0')}
 FAMILIES = [set('P B T D K G'.split()), set('F V TH DH S Z SH ZH'.split()), set('M N NG'.split()), set(['L', 'R']), set(['CH', 'JH'])]
 
 
@@ -69,7 +69,7 @@ def rhyme_part(w):
     w = w.strip("-'")
     if w in SPECIAL:
         return {'oink': 'OY1 NG K', 'baa': 'AA1', 'moo': 'UW1', 'quack': 'AE1 K', 'e-i-e-i-o': 'OW1', 'e-i-o': 'OW1',
-                'yippee': 'IY1', 'ta-da': 'AA1', 'grandpa': 'AA1'}.get(w)
+                'yippee': 'IY1', 'ta-da': 'AA1', 'grandpa': 'AA1', 'meow': 'AW1'}.get(w)
     p = pronouncing.phones_for_word(w)
     return pronouncing.rhyming_part(p[0]) if p else None
 

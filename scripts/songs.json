@@ -2628,5 +2628,175 @@
     ],
     "durationSec": 62,
     "writtenWith": "kids-song-writer skill; python3 scripts/check-lyrics.py u6l5-song3"
+  },
+  "u5l5-song4": {
+    "bpm": 108,
+    "key": "D major",
+    "beatsPerLine": 4,
+    "barsPerLine": 2,
+    "introBars": 2,
+    "maxSeconds": 75,
+    "style": "Warm upbeat kids pop song about a happy day with Dad, 108 BPM, 4/4, acoustic guitar, light drums, bass, hand claps, glockenspiel, clear young vocals, every word sung clearly on the beat.",
+    "positiveStyles": [
+      "kids pop",
+      "warm",
+      "happy",
+      "acoustic guitar",
+      "light drums",
+      "hand claps",
+      "glockenspiel",
+      "clear kids vocals",
+      "sing-along chorus"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "spoken word",
+      "fast vocals"
+    ],
+    "durationSec": 58,
+    "publicPath": "public/lep1/audio/my-dad-song4-u5l5.mp3",
+    "targetWords": [
+      "dad",
+      "ball",
+      "ducks"
+    ],
+    "sections": [
+      {
+        "name": "Verse 1",
+        "rhyme": "AABB",
+        "lines": [
+          "Hand in hand, we walk and play,",
+          "A ball, a ball, he throws my way!",
+          "I catch the ball! I catch it, yes!",
+          "Ducks, ducks, they like the bread the best!"
+        ]
+      },
+      {
+        "name": "Verse 2",
+        "rhyme": "AABB",
+        "lines": [
+          "Ducks, ducks, they love to eat,",
+          "Ice cream, ice cream, cold and sweet!",
+          "At home we read a book tonight,",
+          "We hug goodnight, a hug so tight!"
+        ]
+      },
+      {
+        "name": "Chorus",
+        "rhyme": "AABB",
+        "lines": [
+          "Twinkle, twinkle, stars above,",
+          "Me and Dad, with lots of love!",
+          "Just me and my dad, my dad and me,",
+          "The best day that could ever be!"
+        ]
+      }
+    ],
+    "lines": [
+      "Hand in hand, we walk and play,",
+      "A ball, a ball, he throws my way!",
+      "I catch the ball! I catch it, yes!",
+      "Ducks, ducks, they like the bread the best!",
+      "Ducks, ducks, they love to eat,",
+      "Ice cream, ice cream, cold and sweet!",
+      "At home we read a book tonight,",
+      "We hug goodnight, a hug so tight!",
+      "Twinkle, twinkle, stars above,",
+      "Me and Dad, with lots of love!",
+      "Just me and my dad, my dad and me,",
+      "The best day that could ever be!"
+    ],
+    "writtenWith": "kids-song-writer skill: one line per story shot, in film order (gate-walk, ball-throw, ball-catch, ducks-bread, ducks-count, icecream-lick, book-open, goodnight-hug, night-best)"
+  },
+  "u6l5-song4": {
+    "bpm": 100,
+    "key": "F major",
+    "beatsPerLine": 4,
+    "barsPerLine": 2,
+    "introBars": 2,
+    "maxSeconds": 75,
+    "style": "Gentle bouncy kids story song with a question-and-answer feel, 100 BPM, 4/4, acoustic guitar, soft marimba, light brushed drums, a little door-knock sound, hand claps, clear warm young vocals, every word sung clearly on the beat.",
+    "positiveStyles": [
+      "kids story song",
+      "gentle bounce",
+      "acoustic guitar",
+      "marimba",
+      "brushed drums",
+      "hand claps",
+      "clear kids vocals",
+      "question and answer"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "spoken word",
+      "fast vocals"
+    ],
+    "durationSec": 62,
+    "publicPath": "public/lep1/audio/wheres-my-house-song4-u6l5.mp3",
+    "targetWords": [
+      "house",
+      "door"
+    ],
+    "sections": [
+      {
+        "name": "Verse 1",
+        "rhyme": "AABB",
+        "lines": [
+          "It's late, the sun is going down,",
+          "Where's my house in this big town?",
+          "My house, my house, its door is red,",
+          "A blue door? No! I shake my head."
+        ]
+      },
+      {
+        "name": "Verse 2",
+        "rhyme": "AABB",
+        "lines": [
+          "A yellow door, a cat: Meow!",
+          "A red door! Is it my house now?",
+          "I knock, and the door opens wide,",
+          "It's Mom! She hugs me, come inside!"
+        ]
+      },
+      {
+        "name": "Chorus",
+        "rhyme": "AABB",
+        "lines": [
+          "Is this my house? Yes, it is!",
+          "Mom gives me a hug and a kiss!",
+          "My house, my house, I love my house,",
+          "Snug and cozy as a mouse!"
+        ]
+      }
+    ],
+    "lines": [
+      "It's late, the sun is going down,",
+      "Where's my house in this big town?",
+      "My house, my house, its door is red,",
+      "A blue door? No! I shake my head.",
+      "A yellow door, a cat: Meow!",
+      "A red door! Is it my house now?",
+      "I knock, and the door opens wide,",
+      "It's Mom! She hugs me, come inside!",
+      "Is this my house? Yes, it is!",
+      "Mom gives me a hug and a kiss!",
+      "My house, my house, I love my house,",
+      "Snug and cozy as a mouse!"
+    ],
+    "writtenWith": "kids-song-writer skill: one line per story shot, in film order (park-late, street-where, street-think, blue-no, cat-wakes, red-ask, red-door-opens, mom-hug, red-door-opens, mom-hug, bedroom-love)"
   }
 }
