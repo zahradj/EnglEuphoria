@@ -377,3 +377,8 @@
 
 /* the cut-out is waist-up: fade its lower edge into the scene instead of a flat cut */
 .ap-sprite-img, .ap-sprite-frame { -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%); mask-image: linear-gradient(to bottom, #000 80%, transparent 100%); }
+
+/* short windows (side panels, small laptops): content taller than the stage must scroll from its TOP.
+   `justify-content: flex-end` + `overflow: auto` clips the top part so it can never be reached (the profile card hotspots). */
+.ap-panel { justify-content: flex-start; }
+.ap-panel > :first-child { margin-top: auto; }
