@@ -60,6 +60,11 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '7-5': { settings: ['barn at sunrise', 'farm gate'], look: "Grandpa's farm on a misty early morning: a big red barn with four white stall doors in a row at sunrise, Grandpa fox in a straw farmer hat and blue overalls with Pip; the doors open one by one (cow, pig, sheep, duck) and the animals gather in the golden yard" },
+  '7-4': { settings: ['farm fair'], look: "the fair comes to the farm on a bright day: red-and-white striped tents, bunting flags, hay bales, prize rosettes on the fence and a big yellow-and-white striped hook-a-duck pool in the middle; Pip and the animals of the unit at the fair; a red-curtained show tent for the riddles" },
+  '7-3': { settings: ['duck pond and bridge'], look: "the far side of the farm on a golden afternoon: a blue duck pond with lily pads and a little arched wooden bridge, a wooden stable and a red chicken coop, tall reeds and orange evening light; Pip with a brown horse, a white hen and a white farm duck" },
+  '7-2': { settings: ['farmyard after rain'], look: "a sunny farmyard just after a little rain: a big red barn, a wooden fence, green hills and a rainbow, brown mud puddles and a blue water trough with a bucket and sponge; Pip with a black-and-white cow, a pink pig and a fluffy sheep" },
+  '7-1': { settings: ['pet shop'], look: "a sunny little pet shop: cream walls, a big window, wooden shelves of pet toys and food, a round dog bed, a cat basket with a blue cushion and a golden bird cage; Pip waves with a brown puppy, an orange kitten and a blue bird; the empty shop becomes the Pet Photo studio" },
   '6-6': { settings: ['games-night living room'], look: "games night at Pip's house: the whole fox family (Grandma, brother, Dad, sister, baby) around a round coffee table playing a board game, warm lamp light, a starry night window and a red sofa; a snake board path of house pictures drawn in code" },
   '6-5': { settings: ['autumn sunset street', 'park at sunset', "Pip's evening bedroom"], look: "golden autumn sunset: a park with falling orange leaves, then Pip's new street of three look-alike cream houses whose only difference is the door (blue, yellow with a cat in the window, red with a big orange tree), close-ups at each door, Mom's hug in the warm doorway and Pip's lamp-lit bedroom" },
   '6-4': { settings: ['street of coloured houses', 'empty lilac bedroom'], look: "Open House Day: a sunny little street of three small houses (red, blue, yellow) with stone paths and white fences, then one empty lilac bedroom with white stars and a round window, furnished three ways in different colours for each friend (Mia, Bella, Leo)" },
@@ -193,6 +198,71 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '7-5': {
+    sources: ['the traditional song "Old MacDonald Had a Farm" (public domain: an animal and its sound per verse)', 'Sesame Workshop / Blue\'s Clues (model, then a planned pause for the child to answer)', 'Super Simple / Lingokids song-choice play (the child picks the next verse)', 'Cambridge (Pre A1 Starters: look and answer yes / no; story order)'],
+    mechanics: [
+      'the song as a story → a stills film "Grandpa\'s Noisy Barn": a sound behind each barn door, "What animal is this?", a pause, then the door opens',
+      'song-choice → My Farm Song: the child is Old MacDonald, chooses an animal, it hops onto the farm and Pip sings its verse; the child sings it back',
+      'story order, "Who\'s behind the door?" (ask at each door), tick or cross, and feed the ducks with the story\'s pictures',
+    ],
+    betterThan: [
+      'the child hears the SOUND first and must produce the animal word ("It\'s a cow!") before the door opens, three times with a pause',
+      'in My Farm Song the child chooses and then sings the verse (animal word + sound) instead of only watching a song video; the farm they built stays on screen',
+      'the film, the games and the homework all use the same barn and doors, so the child retells one story many ways; no clock',
+    ],
+  },
+  '7-4': {
+    sources: ['"Guess the animal" riddle cards and I-spy clue games (games4esl, British Council LearnEnglish Kids)', 'Cambridge (Pre A1 Starters listening: understand short descriptions; ask and answer yes / no)', 'Khan Academy Kids (calm listen-and-choose)', 'fairground hook-a-duck (a real game children know)'],
+    mechanics: [
+      'riddle cards → Animal Riddles: an animal hides behind the show-tent curtain, Pip gives clues one by one ("It says moo." "It is big." "It is black and white.") and the child answers "What animal is this?" after any clue',
+      'hook-a-duck at the fair: toy animals float in the pool, "Catch the duck!"; Pip\'s Secret Card with animal cards ("Is it a cow?"); a D / C / H sound sort',
+      'the child asks Pip "What animal is this?" and makes a sound for Pip to guess',
+    ],
+    betterThan: [
+      'the clues use only words the child knows (sounds, big / small, colours), so a whole sentence — not one word — finds the animal',
+      'the child chooses when to answer: more clues mean more help, never a penalty; every wrong pick names an animal ("No! It isn\'t the pig.")',
+      'all nine animals of the unit are reviewed in one lesson, and the child also asks the question, not only answers it',
+    ],
+  },
+  '7-3': {
+    sources: ['Cambridge (Pre A1 Starters Listening: follow a short spoken instruction)', 'classic "follow the order" memory games (Simon / listen-and-sequence, games4esl)', 'Khan Academy Kids (sequencing activities, calm self-paced)', 'Lingokids / Super Simple farm songs (animal + sound)'],
+    mechanics: [
+      'listen-and-sequence → Animal Parade: Pip says "First the horse, then the duck!", the child taps the animals in that order, they line up on the bridge and march across making their sounds',
+      'H basket (horse, hat, house, hand vs duck, chicken), first-letter build, a jigsaw of the duck pond',
+      '"Now YOU make the parade!" — the child calls an order for Pip',
+    ],
+    betterThan: [
+      'the child holds two or three NEW words in order (listening span), not just one word; the parade they build moves and makes the sounds',
+      'a wrong order costs nothing: the bridge empties and Pip says the order again; three rounds grow from two animals to three',
+      'the child then becomes the caller ("First the duck, then the horse!"), turning listening into speaking',
+    ],
+  },
+  '7-2': {
+    sources: ['Toca Boca / Lingokids pet-care "wash and groom" play', 'Khan Academy Kids (calm listen-and-do tasks, animal sounds)', 'Cambridge (Pre A1 Starters Listening: listen and point to the animal)', 'Lingokids / Super Simple farm-animal songs (animal + sound)'],
+    mechanics: [
+      'wash-and-groom play → Farm Wash: every animal is muddy after the rain, Pip says "Wash the pig!", the child scrubs that animal clean with three taps and Pip says "It\'s a pig! Oink!"',
+      'big-to-small line-up of the farm animals (cow, sheep, pig, chick), the farm train "who is missing?", first-sound pick /k/ /p/ /sh/',
+      '"Which farm animal do you like?" with the animal sound',
+    ],
+    betterThan: [
+      'the action is the answer: the child must hear the WORD to know which animal to scrub; a wrong animal is named back and stays muddy',
+      'the farm changes from muddy to clean as the child plays, so progress is a picture, not a score',
+      'calm by design: no clock, three gentle taps per animal, the right one glows after two tries',
+    ],
+  },
+  '7-1': {
+    sources: ['photo-safari / "snap the animal" kids apps (camera listening hunts)', 'Khan Academy Kids (calm listen-and-find, animal sounds)', 'Cambridge (Pre A1 Starters Listening: listen and point to the animal)', 'Lingokids (animals and their sounds songs)', 'feely bag / mystery bag (games4esl "What\'s in the bag?")'],
+    mechanics: [
+      'camera listening hunt → Pet Photo: Pip says "Take a photo of the bird!", the pets swap places each round, the child taps the right one and its photo drops into an album',
+      'mystery bag reused for pets: a dark shadow peeks out, the child names the pet, then says it with its colour ("It\'s a blue bird!")',
+      'animal moves (TPR), pet memory pairs, a D / C / B balloon pop and "Which pet do you like?"',
+    ],
+    betterThan: [
+      'the pets move between rounds, so the child must understand the word, not remember a place; a wrong pet says its own name and sound, so every tap teaches',
+      'the album the child fills stays on screen and every photo can be tapped to hear the word again — a thing the child made',
+      'calm by design: no clock, nothing to lose, the right pet glows after two tries',
     ],
   },
   '6-6': {

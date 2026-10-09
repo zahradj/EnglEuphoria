@@ -178,5 +178,30 @@
     "path": "public/lep1/audio/my-house-game-song-u6l6.mp3",
     "bytes": 321037,
     "sha256": "e2504b7747a128aaeebf1409dd3690f22e551b7cd931a43e2d2406545cf19280"
+  },
+  "u7l1-dog-cat-bird": {
+    "path": "public/lep1/audio/dog-cat-bird-song-u7l1.mp3",
+    "bytes": 321037,
+    "sha256": "30b46877ab835cc88d082ee26e3fe6f50119a4597eb77108fdb0ac5abc6c79de"
+  },
+  "u7l2-cow-pig-sheep": {
+    "path": "public/lep1/audio/cow-pig-sheep-song-u7l2.mp3",
+    "bytes": 321037,
+    "sha256": "3674435b5a4d813bbb8aa94b86a794a725e7b46717c34a63166480a9899ec5f0"
+  },
+  "u7l3-horse-chicken-duck": {
+    "path": "public/lep1/audio/horse-chicken-duck-song-u7l3.mp3",
+    "bytes": 321037,
+    "sha256": "d0928c10bd6b18ffbda0c9eed0974f7baf1f8b133f568e6bc978d84aa8fb0b8a"
+  },
+  "u7l4-what-animal": {
+    "path": "public/lep1/audio/what-animal-song-u7l4.mp3",
+    "bytes": 321037,
+    "sha256": "5a1085ca5a80b365d3c140cdce511cdf4d8b4bcfb3c7db4c21e08aeeaeee0c3c"
+  },
+  "u7l5-old-macdonald": {
+    "path": "public/lep1/audio/old-macdonald-song-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "337679b42bfcbb0a0d97cc9a7c3f0a15248965e8fbab38ab370d8e777275b451"
   }
 }

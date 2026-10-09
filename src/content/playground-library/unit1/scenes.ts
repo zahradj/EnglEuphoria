@@ -422,6 +422,8 @@ export type Scene =
        *  (Unit 3 Lesson 4) instead of fish swimming in lanes. A catch can be a
        *  toy picture (`img` + `word`, optional `size`): "Catch the big red ball!". */
       floating?: boolean;
+      /** Floating only: the ring the toys drift on, % of the screen (default the U3L4 paddling pool). */
+      pool?: { x: number; y: number; rx: number; ry: number; /** rotate the ring, degrees */ turn?: number };
       fish: { colorWord: string; colorHex: string; shape: 'circle' | 'square' | 'triangle'; img?: string; word?: string; size?: 'big' | 'small' }[];
       targets: number[];
     }
@@ -478,6 +480,8 @@ export type Scene =
        *  toy it is, then it jumps out in colour ("It's a red ball!") and the
        *  child says it (Unit 3 Lesson 1). */
       id: string; kind: 'mystery-bag'; bg: string; teacher: string; who: CharKey;
+      /** Optional wording for things that are not toys (U7L1: "Who's in the bag?", "You found every pet!"). */
+      question?: string; doneText?: string;
       rounds: { img: string; toyWord: string; colorWord: string; colorHex: string; options: { toyWord: string; img: string }[] }[];
     }
   | {
@@ -632,6 +636,53 @@ export type Scene =
     }
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
+  | {
+      /** My Farm Song (U7L5 signature): the child is Old MacDonald, chooses each animal in any order; it hops
+       *  onto the picture at x/y (feet, % of the picture; size = % width) and Pip sings its verse
+       *  ("And on his farm he had a pig, E-I-E-I-O! With an oink, oink here…" from `label` + `sound`). */
+      id: string; kind: 'farm-verse'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      animals: { label: string; img: string; sound: string; x: number; y: number; size: number }[];
+      doneLine: string;
+    }
+  | {
+      /** Animal Riddles (U7L4 signature): an animal hides behind the show-tent curtain; Pip gives `clues` one
+       *  at a time and asks "What animal is this?"; the child taps one of `options` (indexes into `animals`);
+       *  the right one is revealed and says its `say`. */
+      id: string; kind: 'animal-riddle'; bg: string; teacher: string; who: CharKey;
+      animals: { label: string; img: string; say: string }[];
+      rounds: { answer: number; options: number[]; clues: string[] }[];
+      doneLine: string;
+    }
+  | {
+      /** Animal Parade (U7L3 signature): Pip says the parade order (`line`); the child taps the animals of
+       *  `order` in that order from the pen; they line up on the bridge `lane` (x0..x1, y = feet, % of the
+       *  picture; size = % width) and march across saying their `say`. */
+      id: string; kind: 'animal-parade'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      lane: { x0: number; x1: number; y: number; size: number };
+      animals: { label: string; img: string; say: string; scale?: number }[];
+      rounds: { order: number[]; line: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Farm Wash (U7L2 signature): every animal (sticker at x/y = % of the picture at its feet, size = %
+       *  width) starts muddy. Pip says `line`; the child taps `target` three times to scrub it clean and Pip
+       *  says its `say` ("It's a pig! Oink!"). */
+      id: string; kind: 'farm-wash'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      animals: { label: string; img: string; x: number; y: number; size: number; say: string }[];
+      rounds: { target: number; line: string }[];
+      doneLine: string;
+    }
+  | {
+      /** Pet Photo (U7L1 signature): the child is the photographer. `animals` sit on `spots` (x/y = % of the
+       *  picture at the animal's feet, size = % width); each round `place[i]` = the spot of animal i, so they
+       *  swap places. Pip says `line`, the child taps `target` and its photo drops into the album. */
+      id: string; kind: 'photo-snap'; bg: string; teacher: string; who: CharKey; aspect?: number;
+      spots: { x: number; y: number; size: number }[];
+      /** `scale` shrinks a small animal (a bird) relative to the spot size. */
+      animals: { label: string; img: string; say: string; scale?: number }[];
+      rounds: { target: number; line: string; place: number[] }[];
+      doneLine: string;
+    }
   | {
       /** My House Board Game (U6L6 signature): a snake path START → squares → HOME drawn over `bg`. The child
        *  rolls the dice (values taken in order from `rolls`), Pip hops along and, on the square he lands on, asks
@@ -11122,4 +11173,1001 @@ export const LESSON_U6L6_SCENES: Scene[] = [
     ],
   },
   { id: 'u6l6-finale', kind: 'finale', bg: bgU6L6GameNight, who: 'pip', line: 'You know my whole house! Kitchen, bedroom, bathroom, living room! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 7, Lesson 1 — "Dog, Cat, Bird!" (Furry, feathered friends)
+ *
+ * A new unit and a new place: Pip's town pet shop on a sunny morning — a dog
+ * bed, a cat basket and a golden bird cage. The child meets three pets, says
+ * "It's a dog! / It's a cat! / It's a bird!" with their sounds, and plays the
+ * photographer in the new Pet Photo game. D and C (dog, cat) are letters the
+ * child already knows (Unit 3 Lesson 1, Unit 2 Lesson 3), so phonics is a
+ * light review with B (bird).
+ * ========================================================================= */
+
+const bgU7L1Shop = `${A}/scenes/bg-u7l1-petshop-wide.png`;
+const bgU7L1ShopEmpty = `${A}/scenes/bg-u7l1-petshop-empty-wide.png`;
+const itemBird = `${A}/items/item-bird.png`;
+
+export const LESSON_U7L1_TITLE = 'Dog, Cat, Bird!';
+export const LESSON_U7L1_OBJECTIVE = 'Name three pets — dog, cat, bird — with "It\'s a dog!", make their sounds (woof, meow, tweet), find the pet you hear, and hear the first sounds D, C and B, by listening, moving and playing, no reading.';
+
+export const LESSON_U7L1_SCENES: Scene[] = [
+  { id: 'u7l1-title', kind: 'title-card', bg: bgU7L1Shop, level: 'Pre-A1', unit: 'Unit 7', lessonLabel: 'Lesson 1', title: 'Dog, Cat, Bird!', subtitle: 'Welcome to the pet shop!' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u7l1-song', kind: 'song', bg: bgU7L1Shop, title: '\u{1F3B5} Dog, Cat, Bird! \u{1F3B5}', teacher: 'Sing and act: paws up for the dog, whiskers for the cat, flap your wings for the bird!',
+    durationSeconds: 20, bigWord: 'Pets', songUrl: `${A}/audio/dog-cat-bird-song-u7l1.mp3?v=1`,
+    lineDurationsMs: [3820, 4480, 4300, 7462],
+    songPrompt: 'Cheerful bouncy kids pet song',
+    lyrics: [
+      { who: 'pip', text: "It's a dog! Woof, woof, woof!", emotion: 'happy' },
+      { who: 'pip', text: "It's a cat! Meow, meow, meow!", emotion: 'happy' },
+      { who: 'pip', text: "It's a bird! Tweet, tweet, tweet!", emotion: 'happy' },
+      { who: 'pip', text: 'Dog, cat, bird! I love my pets!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 6 · My House Game (the rooms).
+    id: 'u7l1-recall-warmup', kind: 'recall-warmup', bg: bgU7L1Shop, who: 'pip', mode: 'click',
+    fromLabel: 'Unit 6 · Lesson 6 · My House Game',
+    teacher: 'Warm-up from last lesson: Pip says a room, the child finds it. Say each one together.',
+    items: [
+      { word: 'kitchen', say: 'Find the kitchen!', img: roomKitchen },
+      { word: 'bedroom', say: 'Where is the bedroom?', img: roomBedroom },
+      { word: 'bathroom', say: 'Show me the bathroom!', img: roomBathroom },
+      { word: 'living room', say: 'Find the living room!', img: roomLiving },
+    ],
+  },
+  {
+    id: 'u7l1-intro', kind: 'cinematic', bg: bgU7L1Shop, hidePipOverlay: true, title: 'Dog, Cat, Bird!', subtitle: 'The pet shop', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Welcome to the pet shop!' },
+      { who: 'pip', line: "Look! A dog, a cat and a bird! Let's meet them!" },
+    ],
+    cta: "Let's meet them!",
+  },
+
+  /* 4-5 The words, move */
+  {
+    id: 'u7l1-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU7L1Shop, teacher: 'Listen, then say it with the sound: "It\'s a dog! Woof!"',
+    cards: [
+      { who: 'pip', sentence: "It's a dog! Woof!", img: itemDog, imgLabel: 'dog' },
+      { who: 'pip', sentence: "It's a cat! Meow!", img: itemCat, imgLabel: 'cat' },
+      { who: 'pip', sentence: "It's a bird! Tweet!", img: itemBird, imgLabel: 'bird' },
+    ],
+  },
+  {
+    id: 'u7l1-move', kind: 'tpr-actions', bg: bgU7L1Shop, who: 'pip',
+    teacher: 'Stand up! Move like the pets with Pip.',
+    rounds: [
+      { line: 'Wag your tail like a dog! Woof!', emoji: '\u{1F415}', img: itemDog },
+      { line: 'Stretch like a cat! Meow!', emoji: '\u{1F408}', img: itemCat },
+      { line: 'Fly like a bird! Tweet!', emoji: '\u{1F426}', img: itemBird },
+      { line: 'Sit like a dog!', emoji: '\u{1F415}', img: itemDog },
+    ],
+  },
+
+  /* 6 Signature game (new): Pet Photo */
+  {
+    id: 'u7l1-photo', kind: 'photo-snap', bg: bgU7L1ShopEmpty, who: 'pip',
+    teacher: 'Pet Photo! The child is the photographer. Pip says a pet; the child taps it to take its photo. The pets swap places, so listen to the word! Say "It\'s a dog!" with each photo.',
+    spots: [
+      { x: 13.5, y: 82, size: 15 },
+      { x: 51, y: 84, size: 13 },
+      { x: 87.4, y: 48, size: 11 },
+      { x: 47, y: 42.5, size: 10 },
+      { x: 72, y: 82, size: 13 },
+      { x: 9, y: 53, size: 9 },
+    ],
+    animals: [
+      { label: 'dog', img: itemDog, say: "It's a dog! Woof!" },
+      { label: 'cat', img: itemCat, say: "It's a cat! Meow!" },
+      { label: 'bird', img: itemBird, say: "It's a bird! Tweet!", scale: 0.6 },
+    ],
+    rounds: [
+      { target: 0, line: 'Take a photo of the dog!', place: [0, 1, 2] },
+      { target: 2, line: 'Take a photo of the bird!', place: [3, 0, 5] },
+      { target: 1, line: 'Take a photo of the cat!', place: [4, 3, 0] },
+      { target: 0, line: 'Where is the dog? Take a photo!', place: [1, 4, 2] },
+    ],
+    doneLine: 'Look at your photos! Dog, cat, bird!',
+  },
+
+  /* 7-9 More games */
+  {
+    id: 'u7l1-mystery-bag', kind: 'mystery-bag', bg: bgU7L1ShopEmpty, who: 'pip',
+    question: "Who's in the bag?", doneText: 'The bag is empty! You found every pet!',
+    teacher: "Who's in the bag? Look at the shadow, tap the pet, then say it with its colour.",
+    rounds: [
+      { img: itemCat, toyWord: 'CAT', colorWord: 'ORANGE', colorHex: '#F97316', options: [{ toyWord: 'DOG', img: itemDog }, { toyWord: 'CAT', img: itemCat }, { toyWord: 'BIRD', img: itemBird }] },
+      { img: itemBird, toyWord: 'BIRD', colorWord: 'BLUE', colorHex: '#3B82F6', options: [{ toyWord: 'BIRD', img: itemBird }, { toyWord: 'DOG', img: itemDog }, { toyWord: 'CAT', img: itemCat }] },
+      { img: itemDog, toyWord: 'DOG', colorWord: 'BROWN', colorHex: '#92400E', options: [{ toyWord: 'CAT', img: itemCat }, { toyWord: 'BIRD', img: itemBird }, { toyWord: 'DOG', img: itemDog }] },
+    ],
+  },
+  {
+    id: 'u7l1-pip-asks', kind: 'join-stage', bg: bgU7L1Shop, teacher: 'Pip asks about pets. Any answer is fine — the child can choose a pet they like.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's a dog!", bubble: 'right' },
+      { who: 'pip', line: 'What does the cat say?', bubble: 'right' },
+      { who: 'student', line: 'Meow!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u7l1-memory', kind: 'memory', bg: bgU7L1ShopEmpty, teacher: 'Find the pet pairs! Say "It\'s a cat!" every time you turn a card.',
+    pairs: [
+      { id: 'dog', label: 'dog', img: itemDog, emoji: '\u{1F415}' },
+      { id: 'cat', label: 'cat', img: itemCat, emoji: '\u{1F408}' },
+      { id: 'bird', label: 'bird', img: itemBird, emoji: '\u{1F426}' },
+    ],
+  },
+
+  /* 10 Sounds review: D, C, B */
+  {
+    id: 'u7l1-pop-dcb', kind: 'sound-pop', bg: bgU7L1ShopEmpty, teacher: 'Balloon Letter Pop! /d/ dog, /k/ cat, /b/ bird — Pip calls a letter, pop only that one!', who: 'pip', goal: 8, seconds: 45,
+    targets: [
+      { letter: 'D', phoneme: '/d/' },
+      { letter: 'C', phoneme: '/k/' },
+      { letter: 'B', phoneme: '/b/' },
+    ],
+    items: [
+      { word: 'D', letter: 'D', emoji: 'D' },
+      { word: 'C', letter: 'C', emoji: 'C' },
+      { word: 'B', letter: 'B', emoji: 'B' },
+    ],
+  },
+
+  /* 11 My pet */
+  {
+    id: 'u7l1-my-pet', kind: 'join-stage', bg: bgU7L1Shop, teacher: 'Your turn! Which pet do you like? Do you have a pet at home? Any answer is fine.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'I like the dog! Which pet do you like?', bubble: 'right' },
+      { who: 'student', line: 'I like the cat! Meow!', bubble: 'right' },
+      { who: 'pip', line: 'Can you be a bird?', bubble: 'right' },
+      { who: 'student', line: 'Tweet, tweet!', bubble: 'right' },
+    ],
+  },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u7l1-sticker', kind: 'sticker-reward', bg: bgU7L1Shop, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You took great pet photos! Here is a puppy sticker for you!', sticker: { img: itemDog, label: 'Pet photographer' },
+  },
+  {
+    id: 'u7l1-home-mission', kind: 'home-mission', bg: bgU7L1Shop, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: find a dog, a cat or a bird — at home, outside, in a book or on a toy! Point and say "It\'s a dog! Woof!"',
+    parentNote: 'Look for animals together — real pets, toys, pictures in books. Ask "What is it?" and let your child answer "It\'s a cat!" and make the sound. Ask "What does the dog say?".',
+    steps: [
+      { emoji: '\u{1F415}', img: itemDog, say: "It's a dog! Woof!" },
+      { emoji: '\u{1F408}', img: itemCat, say: "It's a cat! Meow!" },
+      { emoji: '\u{1F426}', img: itemBird, say: "It's a bird! Tweet!" },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u7l1-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU7L1Shop, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Run like a dog!', emoji: '\u{1F415}' },
+      { line: 'Tiptoe like a cat!', emoji: '\u{1F408}' },
+      { line: 'Flap, flap, fly like a bird!', emoji: '\u{1F426}' },
+      { line: 'Curl up and sleep like a cat!', emoji: '\u{1F634}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u7l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u7l1-finale', kind: 'finale', bg: bgU7L1Shop, who: 'pip', line: 'Dog, cat, bird! Woof, meow, tweet! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 7, Lesson 2 — "Cow, Pig, Sheep!" (Furry, feathered friends)
+ *
+ * From the town pet shop (Lesson 1) out to the farm: a sunny farmyard just
+ * after a little rain — a red barn, mud puddles, a water trough and a
+ * rainbow. Three farm animals with their sounds ("It's a cow! Moo!"), the new
+ * Farm Wash game (scrub the muddy animal you hear), a big-to-small line-up,
+ * first sounds /k/ cow, /p/ pig, /sh/ sheep (all taught before), and an
+ * animal train.
+ * ========================================================================= */
+
+const bgU7L2Farm = `${A}/scenes/bg-u7l2-farm-wide.png`;
+const bgU7L2FarmEmpty = `${A}/scenes/bg-u7l2-farm-empty-wide.png`;
+const itemCow = `${A}/items/item-cow.png`;
+const itemPig = `${A}/items/item-pig.png`;
+const itemSheep = `${A}/items/item-sheep.png`;
+
+export const LESSON_U7L2_TITLE = 'Cow, Pig, Sheep!';
+export const LESSON_U7L2_OBJECTIVE = 'Name three farm animals — cow, pig, sheep — with "It\'s a cow!", make their sounds (moo, oink, baa), find the animal you hear, line them up from big to small, and hear the first sounds /k/, /p/, /sh/, by listening, moving and playing, no reading.';
+
+export const LESSON_U7L2_SCENES: Scene[] = [
+  { id: 'u7l2-title', kind: 'title-card', bg: bgU7L2Farm, level: 'Pre-A1', unit: 'Unit 7', lessonLabel: 'Lesson 2', title: 'Cow, Pig, Sheep!', subtitle: 'On the farm' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u7l2-song', kind: 'song', bg: bgU7L2Farm, title: '\u{1F3B5} Cow, Pig, Sheep! \u{1F3B5}', teacher: 'Sing and act: horns for the cow, a pig nose for the pig, fluffy hands for the sheep!',
+    durationSeconds: 20, bigWord: 'Farm', songUrl: `${A}/audio/cow-pig-sheep-song-u7l2.mp3?v=1`,
+    lineDurationsMs: [4560, 4320, 4900, 6282],
+    songPrompt: 'Happy bouncy kids farm song',
+    lyrics: [
+      { who: 'pip', text: "It's a cow! Moo, moo, moo!", emotion: 'happy' },
+      { who: 'pip', text: "It's a pig! Oink, oink, oink!", emotion: 'happy' },
+      { who: 'pip', text: "It's a sheep! Baa, baa, baa!", emotion: 'happy' },
+      { who: 'pip', text: 'Cow, pig, sheep! On the farm!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 1 · Dog, Cat, Bird! (stickers with clear shapes → shadows).
+    id: 'u7l2-recall-warmup', kind: 'recall-warmup', bg: bgU7L2Farm, who: 'pip', mode: 'shadow',
+    fromLabel: 'Lesson 1 · Dog, Cat, Bird!',
+    teacher: 'Warm-up from last lesson: Pip says a pet, the child matches its shadow. Make the sound together!',
+    items: [
+      { word: 'dog', say: 'Find the dog! Woof!', img: itemDog },
+      { word: 'cat', say: 'Where is the cat? Meow!', img: itemCat },
+      { word: 'bird', say: 'Find the bird! Tweet!', img: itemBird },
+    ],
+  },
+  {
+    id: 'u7l2-intro', kind: 'cinematic', bg: bgU7L2Farm, hidePipOverlay: true, title: 'Cow, Pig, Sheep!', subtitle: 'On the farm', narrator: 'pip',
+    script: [
+      { who: 'pip', line: "Welcome to the farm! It's sunny after the rain." },
+      { who: 'pip', line: 'Look! A cow, a pig and a sheep! Listen!' },
+    ],
+    cta: "Let's meet them!",
+  },
+
+  /* 4-5 The words, move */
+  {
+    id: 'u7l2-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU7L2Farm, teacher: 'Listen, then say it with the sound: "It\'s a cow! Moo!"',
+    cards: [
+      { who: 'pip', sentence: "It's a cow! Moo!", img: itemCow, imgLabel: 'cow' },
+      { who: 'pip', sentence: "It's a pig! Oink!", img: itemPig, imgLabel: 'pig' },
+      { who: 'pip', sentence: "It's a sheep! Baa!", img: itemSheep, imgLabel: 'sheep' },
+    ],
+  },
+  {
+    id: 'u7l2-move', kind: 'tpr-actions', bg: bgU7L2Farm, who: 'pip',
+    teacher: 'Stand up! Be the farm animals with Pip.',
+    rounds: [
+      { line: 'Be a big cow! Moo!', emoji: '\u{1F404}', img: itemCow },
+      { line: 'Be a happy pig! Oink, oink!', emoji: '\u{1F416}', img: itemPig },
+      { line: 'Be a fluffy sheep! Baa!', emoji: '\u{1F411}', img: itemSheep },
+      { line: 'Jump in the mud like a pig!', emoji: '\u{1F416}', img: itemPig },
+    ],
+  },
+
+  /* 6 Signature game (new): Farm Wash */
+  {
+    id: 'u7l2-wash', kind: 'farm-wash', bg: bgU7L2FarmEmpty, who: 'pip',
+    teacher: 'Farm Wash! The animals are muddy. Pip says an animal: the child taps it three times to scrub it clean. Say "It\'s a pig! Oink!" together.',
+    animals: [
+      { label: 'cow', img: itemCow, x: 24, y: 84, size: 17, say: "It's a cow! Moo!" },
+      { label: 'sheep', img: itemSheep, x: 45, y: 70, size: 14, say: "It's a sheep! Baa!" },
+      { label: 'pig', img: itemPig, x: 62, y: 92, size: 13, say: "It's a pig! Oink!" },
+    ],
+    rounds: [
+      { target: 2, line: 'Wash the pig!' },
+      { target: 0, line: 'Now wash the cow!' },
+      { target: 1, line: 'Wash the sheep!' },
+    ],
+    doneLine: 'All clean! Cow, pig, sheep!',
+  },
+
+  /* 7-9 More games */
+  {
+    id: 'u7l2-line-up', kind: 'size-line', bg: bgU7L2FarmEmpty, who: 'pip',
+    teacher: 'Line Up! Put the animals in a line from the biggest to the smallest. Say each one!',
+    members: [
+      { label: 'cow', img: itemCow, height: 100, reply: "It's a cow! The cow is big!" },
+      { label: 'sheep', img: itemSheep, height: 78, reply: "It's a sheep! Baa!" },
+      { label: 'pig', img: itemPig, height: 62, reply: "It's a pig! Oink!" },
+      { label: 'chick', img: itemChick, height: 32, reply: 'A little chick! The chick is small!' },
+    ],
+    floorOrder: [2, 0, 3, 1],
+    lastLine: 'Which one is the smallest?',
+    doneLine: 'Big cow, little chick! Well done!',
+  },
+  {
+    id: 'u7l2-pip-asks', kind: 'join-stage', bg: bgU7L2Farm, teacher: 'Pip asks about the farm animals. Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's a cow! Moo!", bubble: 'right' },
+      { who: 'pip', line: 'What does the pig say?', bubble: 'right' },
+      { who: 'student', line: 'Oink, oink!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u7l2-train', kind: 'train-recall', bg: bgU7L2FarmEmpty, teacher: 'The farm train! Remember each animal — one car goes empty. Who is missing?',
+    question: 'Choo choo! One car is empty. Who is missing?',
+    cars: [
+      { word: 'cow', img: itemCow, emoji: '\u{1F404}' },
+      { word: 'pig', img: itemPig, emoji: '\u{1F416}' },
+      { word: 'sheep', img: itemSheep, emoji: '\u{1F411}' },
+      { word: 'dog', img: itemDog, emoji: '\u{1F415}' },
+    ],
+  },
+
+  /* 10 First sounds: /k/ cow, /p/ pig, /sh/ sheep */
+  {
+    id: 'u7l2-pick', kind: 'sound-pick', bg: bgU7L2FarmEmpty, who: 'pip',
+    teacher: 'Which one? Listen to the sound, then tap the animal that starts with it. Say the word too!',
+    rounds: [
+      { sound: 'p', answer: 1, options: [{ word: 'cow', img: itemCow }, { word: 'pig', img: itemPig }, { word: 'sheep', img: itemSheep }] },
+      { sound: 'sh', answer: 2, options: [{ word: 'dog', img: itemDog }, { word: 'pig', img: itemPig }, { word: 'sheep', img: itemSheep }] },
+      { sound: 'k', answer: 0, options: [{ word: 'cow', img: itemCow }, { word: 'bird', img: itemBird }, { word: 'sheep', img: itemSheep }] },
+    ],
+  },
+
+  /* 11 My farm */
+  {
+    id: 'u7l2-my-farm', kind: 'join-stage', bg: bgU7L2Farm, teacher: 'Your turn! Which farm animal do you like? Make its sound! Any answer is fine.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'I like the pig! Oink! Which animal do you like?', bubble: 'right' },
+      { who: 'student', line: 'I like the sheep! Baa!', bubble: 'right' },
+      { who: 'pip', line: 'Can you be a cow?', bubble: 'right' },
+      { who: 'student', line: 'Moo, moo!', bubble: 'right' },
+    ],
+  },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u7l2-sticker', kind: 'sticker-reward', bg: bgU7L2Farm, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You washed all the animals! Here is a piggy sticker for you!', sticker: { img: itemPig, label: 'Farm helper' },
+  },
+  {
+    id: 'u7l2-home-mission', kind: 'home-mission', bg: bgU7L2Farm, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: find a cow, a pig or a sheep — in a book, on a toy or on TV! Point and say "It\'s a cow! Moo!"',
+    parentNote: 'Look for farm animals together — books, toys, food packets, TV. Ask "What is it?" and let your child answer "It\'s a pig!" and make the sound. Then ask "What does the sheep say?".',
+    steps: [
+      { emoji: '\u{1F404}', img: itemCow, say: "It's a cow! Moo!" },
+      { emoji: '\u{1F416}', img: itemPig, say: "It's a pig! Oink!" },
+      { emoji: '\u{1F411}', img: itemSheep, say: "It's a sheep! Baa!" },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u7l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU7L2Farm, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Walk slowly like a big cow!', emoji: '\u{1F404}' },
+      { line: 'Roll in the mud like a pig!', emoji: '\u{1F416}' },
+      { line: 'Hop like a little sheep!', emoji: '\u{1F411}' },
+      { line: 'Splash in the puddles!', emoji: '\u{1F4A6}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u7l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u7l2-finale', kind: 'finale', bg: bgU7L2Farm, who: 'pip', line: 'Cow, pig, sheep! Moo, oink, baa! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 7, Lesson 3 — "Horse, Chicken, Duck!" (Furry, feathered friends)
+ *
+ * The far side of the farm: the duck pond on a golden afternoon, with a
+ * little wooden bridge, a stable and a chicken coop. Three more animals with
+ * their sounds ("It's a horse! Neigh!"), the new Animal Parade game (tap the
+ * animals in the order you hear — they march over the bridge), an H basket
+ * (H was taught in Unit 1: hello — now horse, hat, house, hand), first letters
+ * and a jigsaw of the pond.
+ * ========================================================================= */
+
+const bgU7L3Pond = `${A}/scenes/bg-u7l3-pond-wide.png`;
+const bgU7L3PondEmpty = `${A}/scenes/bg-u7l3-pond-empty-wide.png`;
+const itemHorse = `${A}/items/item-horse.png`;
+const itemHen = `${A}/items/item-hen.png`;
+const itemFarmDuck = `${A}/items/item-farm-duck.png`;
+
+export const LESSON_U7L3_TITLE = 'Horse, Chicken, Duck!';
+export const LESSON_U7L3_OBJECTIVE = 'Name three more farm animals — horse, chicken, duck — with "It\'s a horse!", make their sounds (neigh, cluck, quack), follow a two- or three-animal order ("First the horse, then the duck!"), and hear the /h/ sound in horse, hat, house, by listening, moving and playing, no reading.';
+
+export const LESSON_U7L3_SCENES: Scene[] = [
+  { id: 'u7l3-title', kind: 'title-card', bg: bgU7L3Pond, level: 'Pre-A1', unit: 'Unit 7', lessonLabel: 'Lesson 3', title: 'Horse, Chicken, Duck!', subtitle: 'At the duck pond' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u7l3-song', kind: 'song', bg: bgU7L3Pond, title: '\u{1F3B5} Horse, Chicken, Duck! \u{1F3B5}', teacher: 'Sing and march: gallop for the horse, flap your wings for the chicken, waddle for the duck!',
+    durationSeconds: 20, bigWord: 'March', songUrl: `${A}/audio/horse-chicken-duck-song-u7l3.mp3?v=1`,
+    lineDurationsMs: [4300, 3720, 6300, 5742],
+    songPrompt: 'Happy bouncy kids farm parade song',
+    lyrics: [
+      { who: 'pip', text: "It's a horse! Neigh, neigh, neigh!", emotion: 'happy' },
+      { who: 'pip', text: "It's a chicken! Cluck, cluck, cluck!", emotion: 'happy' },
+      { who: 'pip', text: "It's a duck! Quack, quack, quack!", emotion: 'happy' },
+      { who: 'pip', text: "Horse, chicken, duck! Let's march!", emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 2 · Cow, Pig, Sheep!
+    id: 'u7l3-recall-warmup', kind: 'recall-warmup', bg: bgU7L3Pond, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 2 · Cow, Pig, Sheep!',
+    teacher: 'Warm-up from last lesson: Pip says a farm animal, the child finds it. Make the sound together!',
+    items: [
+      { word: 'cow', say: 'Find the cow! Moo!', img: itemCow },
+      { word: 'pig', say: 'Where is the pig? Oink!', img: itemPig },
+      { word: 'sheep', say: 'Find the sheep! Baa!', img: itemSheep },
+    ],
+  },
+  {
+    id: 'u7l3-intro', kind: 'cinematic', bg: bgU7L3Pond, hidePipOverlay: true, title: 'Horse, Chicken, Duck!', subtitle: 'At the duck pond', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'This is the duck pond! Look at the little bridge!' },
+      { who: 'pip', line: 'A horse, a chicken and a duck! Listen!' },
+    ],
+    cta: "Let's meet them!",
+  },
+
+  /* 4-5 The words, move */
+  {
+    id: 'u7l3-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU7L3Pond, teacher: 'Listen, then say it with the sound: "It\'s a horse! Neigh!"',
+    cards: [
+      { who: 'pip', sentence: "It's a horse! Neigh!", img: itemHorse, imgLabel: 'horse' },
+      { who: 'pip', sentence: "It's a chicken! Cluck!", img: itemHen, imgLabel: 'chicken' },
+      { who: 'pip', sentence: "It's a duck! Quack!", img: itemFarmDuck, imgLabel: 'duck' },
+    ],
+  },
+  {
+    id: 'u7l3-move', kind: 'tpr-actions', bg: bgU7L3Pond, who: 'pip',
+    teacher: 'Stand up! Move like the animals with Pip.',
+    rounds: [
+      { line: 'Gallop like a horse! Neigh!', emoji: '\u{1F40E}', img: itemHorse },
+      { line: 'Flap your wings like a chicken! Cluck!', emoji: '\u{1F414}', img: itemHen },
+      { line: 'Waddle like a duck! Quack!', emoji: '\u{1F986}', img: itemFarmDuck },
+      { line: 'March in the parade!', emoji: '\u{1F941}' },
+    ],
+  },
+
+  /* 6 Signature game (new): Animal Parade */
+  {
+    id: 'u7l3-parade', kind: 'animal-parade', bg: bgU7L3PondEmpty, who: 'pip',
+    teacher: 'Animal Parade! Pip says the order; the child taps the animals in that order and they line up on the bridge. Say the order together: "First the horse, then the duck!"',
+    lane: { x0: 22, x1: 76, y: 61, size: 10 },
+    animals: [
+      { label: 'horse', img: itemHorse, say: 'Neigh!', scale: 1.25 },
+      { label: 'chicken', img: itemHen, say: 'Cluck, cluck!', scale: 0.8 },
+      { label: 'duck', img: itemFarmDuck, say: 'Quack, quack!', scale: 0.8 },
+    ],
+    rounds: [
+      { order: [0, 2], line: 'First the horse, then the duck!' },
+      { order: [1, 0], line: 'First the chicken, then the horse!' },
+      { order: [2, 1, 0], line: 'Duck, chicken, horse! Go!' },
+    ],
+    doneLine: 'What a great parade! Neigh, cluck, quack!',
+  },
+
+  /* 7-9 More games */
+  {
+    id: 'u7l3-basket-h', kind: 'basket', bg: bgU7L3PondEmpty, letter: 'H', phoneme: '/h/', who: 'pip', teacher: "Drag the /h/ things into Pip's H basket! Horse, hat, house, hand. No hurry.", goal: 4,
+    items: [
+      { word: 'horse', emoji: '\u{1F40E}', img: itemHorse, hit: true },
+      { word: 'hat', emoji: '\u{1F452}', img: itemHat, hit: true },
+      { word: 'house', emoji: '\u{1F3E0}', img: itemHouse, hit: true },
+      { word: 'hand', emoji: '\u{270B}', img: partHand, hit: true },
+      { word: 'duck', emoji: '\u{1F986}', img: itemFarmDuck, hit: false },
+      { word: 'chicken', emoji: '\u{1F414}', img: itemHen, hit: false },
+    ],
+  },
+  {
+    id: 'u7l3-pip-asks', kind: 'join-stage', bg: bgU7L3Pond, teacher: 'Pip asks about the animals. Any answer is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's a horse! Neigh!", bubble: 'right' },
+      { who: 'pip', line: 'What does the duck say?', bubble: 'right' },
+      { who: 'student', line: 'Quack, quack!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u7l3-first-letter', kind: 'word-build', bg: bgU7L3PondEmpty, teacher: 'Which letter is first? Listen to the word and tap the first letter. Say the word!',
+    rounds: [
+      { word: 'horse', blankIndex: 0, answer: 'H', choices: ['H', 'D', 'C'], img: itemHorse, emoji: '\u{1F40E}' },
+      { word: 'duck', blankIndex: 0, answer: 'D', choices: ['C', 'D', 'H'], img: itemFarmDuck, emoji: '\u{1F986}' },
+      { word: 'hat', blankIndex: 0, answer: 'H', choices: ['D', 'C', 'H'], img: itemHat, emoji: '\u{1F452}' },
+    ],
+  },
+
+  /* 10 Jigsaw */
+  {
+    id: 'u7l3-jigsaw', kind: 'jigsaw-puzzle', bg: bgU7L3PondEmpty, teacher: 'Build the duck pond picture! Drag each piece to its place, then say the animals you see.',
+    image: bgU7L3Pond, rows: 2, cols: 3,
+  },
+
+  /* 11 My parade */
+  {
+    id: 'u7l3-my-parade', kind: 'join-stage', bg: bgU7L3Pond, teacher: 'Your turn! The child makes their own parade order for Pip. Any order is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Now YOU make the parade! Who is first?', bubble: 'right' },
+      { who: 'student', line: 'First the duck, then the horse!', bubble: 'right' },
+      { who: 'pip', line: 'Great! What does the chicken say?', bubble: 'right' },
+      { who: 'student', line: 'Cluck, cluck!', bubble: 'right' },
+    ],
+  },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u7l3-sticker', kind: 'sticker-reward', bg: bgU7L3Pond, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You made a great parade! Here is a duck sticker for you!', sticker: { img: itemFarmDuck, label: 'Parade leader' },
+  },
+  {
+    id: 'u7l3-home-mission', kind: 'home-mission', bg: bgU7L3Pond, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: make an animal parade at home with your toys! Say "First the horse, then the duck!"',
+    parentNote: 'Line up toy animals (or pictures) and let your child call the order: "First the horse, then the duck!" Then you call an order and your child lines them up. Make the animal sounds together.',
+    steps: [
+      { emoji: '\u{1F40E}', img: itemHorse, say: "It's a horse! Neigh!" },
+      { emoji: '\u{1F414}', img: itemHen, say: "It's a chicken! Cluck!" },
+      { emoji: '\u{1F986}', img: itemFarmDuck, say: "It's a duck! Quack!" },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u7l3-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU7L3Pond, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Gallop, gallop, gallop!', emoji: '\u{1F40E}' },
+      { line: 'Peck, peck, peck like a chicken!', emoji: '\u{1F414}' },
+      { line: 'Swim like a duck!', emoji: '\u{1F986}' },
+      { line: 'March over the bridge!', emoji: '\u{1F941}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u7l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u7l3-finale', kind: 'finale', bg: bgU7L3Pond, who: 'pip', line: 'Horse, chicken, duck! Neigh, cluck, quack! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 7, Lesson 4 — "What Animal is This?" (Furry, feathered friends)
+ *
+ * The fair comes to the farm: striped tents, bunting and a hook-a-duck pool in
+ * the farmyard. The child asks and answers "What animal is this? It's a …!"
+ * about all nine animals of the unit: the new Animal Riddles game (clues
+ * behind the show-tent curtain), toy animals to hook in the pool, Pip's
+ * Secret Card with animals ("Is it a cow?"), and a D / C / H sound sort.
+ * ========================================================================= */
+
+const bgU7L4Fair = `${A}/scenes/bg-u7l4-fair-wide.png`;
+const bgU7L4FairEmpty = `${A}/scenes/bg-u7l4-fair-empty-wide.png`;
+const u7Animals = [
+  { label: 'dog', img: itemDog, say: "It's a dog! Woof!" },
+  { label: 'cat', img: itemCat, say: "It's a cat! Meow!" },
+  { label: 'bird', img: itemBird, say: "It's a bird! Tweet!" },
+  { label: 'cow', img: itemCow, say: "It's a cow! Moo!" },
+  { label: 'pig', img: itemPig, say: "It's a pig! Oink!" },
+  { label: 'sheep', img: itemSheep, say: "It's a sheep! Baa!" },
+  { label: 'horse', img: itemHorse, say: "It's a horse! Neigh!" },
+  { label: 'chicken', img: itemHen, say: "It's a chicken! Cluck!" },
+  { label: 'duck', img: itemFarmDuck, say: "It's a duck! Quack!" },
+];
+
+export const LESSON_U7L4_TITLE = 'What Animal is This?';
+export const LESSON_U7L4_OBJECTIVE = 'Ask and answer "What animal is this?" — "It\'s a cow!" — about the nine animals of the unit, find an animal from spoken clues (its sound, big or small, its colour), ask yes / no questions ("Is it a cow?"), and sort the first sounds D, C, H, by listening, asking and playing, no reading.';
+
+export const LESSON_U7L4_SCENES: Scene[] = [
+  { id: 'u7l4-title', kind: 'title-card', bg: bgU7L4Fair, level: 'Pre-A1', unit: 'Unit 7', lessonLabel: 'Lesson 4', title: 'What Animal is This?', subtitle: 'The farm fair' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u7l4-song', kind: 'song', bg: bgU7L4Fair, title: '\u{1F3B5} What Animal is This? \u{1F3B5}', teacher: 'Sing and answer: the child shouts the animal before the song does!',
+    durationSeconds: 20, bigWord: 'Animal', songUrl: `${A}/audio/what-animal-song-u7l4.mp3?v=1`,
+    lineDurationsMs: [4640, 4000, 4780, 6642],
+    songPrompt: 'Playful bouncy kids question-and-answer song',
+    lyrics: [
+      { who: 'pip', text: "What animal is this? Moo, moo! It's a cow!", emotion: 'happy' },
+      { who: 'pip', text: "What animal is this? Woof, woof! It's a dog!", emotion: 'happy' },
+      { who: 'pip', text: "What animal is this? Quack, quack! It's a duck!", emotion: 'happy' },
+      { who: 'pip', text: 'Listen, look and say it! Yes!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 3 · Horse, Chicken, Duck! (clear outlines → shadows).
+    id: 'u7l4-recall-warmup', kind: 'recall-warmup', bg: bgU7L4Fair, who: 'pip', mode: 'shadow',
+    fromLabel: 'Lesson 3 · Horse, Chicken, Duck!',
+    teacher: 'Warm-up from last lesson: Pip says an animal, the child matches its shadow. Make the sound together!',
+    items: [
+      { word: 'horse', say: 'Find the horse! Neigh!', img: itemHorse },
+      { word: 'chicken', say: 'Where is the chicken? Cluck!', img: itemHen },
+      { word: 'duck', say: 'Find the duck! Quack!', img: itemFarmDuck },
+    ],
+  },
+  {
+    id: 'u7l4-intro', kind: 'cinematic', bg: bgU7L4Fair, hidePipOverlay: true, title: 'What Animal is This?', subtitle: 'The farm fair', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Hooray! The fair is at the farm today!' },
+      { who: 'pip', line: 'Let\'s play animal games! What animal is this?' },
+    ],
+    cta: "Let's play!",
+  },
+
+  /* 4-5 The question, move */
+  {
+    id: 'u7l4-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU7L4Fair, teacher: 'Ask and answer! The teacher asks "What animal is this?", the child answers "It\'s a cow!" — then swap.',
+    cards: [
+      { who: 'pip', sentence: "What animal is this? It's a cow!", img: itemCow, imgLabel: 'cow' },
+      { who: 'pip', sentence: "What animal is this? It's a cat!", img: itemCat, imgLabel: 'cat' },
+      { who: 'pip', sentence: "What animal is this? It's a horse!", img: itemHorse, imgLabel: 'horse' },
+    ],
+  },
+  {
+    id: 'u7l4-move', kind: 'tpr-actions', bg: bgU7L4Fair, who: 'pip',
+    teacher: 'Animal charades! Pip says an animal, everyone becomes it.',
+    rounds: [
+      { line: 'Be a dog! Woof!', emoji: '\u{1F415}', img: itemDog },
+      { line: 'Be a sheep! Baa!', emoji: '\u{1F411}', img: itemSheep },
+      { line: 'Be a bird! Tweet!', emoji: '\u{1F426}', img: itemBird },
+      { line: 'Be a horse! Neigh!', emoji: '\u{1F40E}', img: itemHorse },
+    ],
+  },
+
+  /* 6 Signature game (new): Animal Riddles */
+  {
+    id: 'u7l4-riddles', kind: 'animal-riddle', bg: bgU7L4FairEmpty, who: 'pip',
+    teacher: 'Animal Riddles! An animal hides in the show tent. Pip gives clues one by one; the child can answer after any clue. Ask "Another clue?" if you need help.',
+    animals: u7Animals,
+    rounds: [
+      { answer: 3, options: [4, 3, 6, 0], clues: ['It says moo.', 'It is big.', 'It is black and white.'] },
+      { answer: 8, options: [7, 2, 8, 1], clues: ['It says quack.', 'It is small.', 'It is white.'] },
+      { answer: 5, options: [5, 3, 0, 4], clues: ['It says baa.', 'It is white.', 'It is fluffy.'] },
+      { answer: 1, options: [0, 6, 8, 1], clues: ['It says meow.', 'It is small.', 'It is orange.'] },
+    ],
+    doneLine: 'You solved every riddle! Well done!',
+  },
+
+  /* 7-9 More games */
+  {
+    id: 'u7l4-hook-a-duck', kind: 'shape-fishing', bg: bgU7L4FairEmpty, who: 'pip', floating: true,
+    pool: { x: 50, y: 55, rx: 21, ry: 9, turn: 20 },
+    teacher: 'Hook-a-duck at the fair! Toy animals float in the pool. Listen and catch the right one — say "It\'s a duck!"',
+    fish: [
+      { colorWord: '', colorHex: '#ffffff', shape: 'circle', img: itemFarmDuck, word: 'duck' },
+      { colorWord: '', colorHex: '#ffffff', shape: 'circle', img: itemPig, word: 'pig' },
+      { colorWord: '', colorHex: '#ffffff', shape: 'circle', img: itemHorse, word: 'horse' },
+      { colorWord: '', colorHex: '#ffffff', shape: 'circle', img: itemHen, word: 'chicken' },
+    ],
+    targets: [0, 1, 2, 3],
+  },
+  {
+    id: 'u7l4-secret', kind: 'secret-card', bg: bgU7L4FairEmpty, who: 'pip',
+    teacher: 'Pip hides one animal card. The student asks "Is it a cow?" Pip answers yes or no. Then swap: the student hides one!',
+    cards: [
+      { colorWord: '', colorHex: '#ffffff', shape: 'square', img: itemDog, word: 'dog' },
+      { colorWord: '', colorHex: '#ffffff', shape: 'square', img: itemCat, word: 'cat' },
+      { colorWord: '', colorHex: '#ffffff', shape: 'square', img: itemCow, word: 'cow' },
+      { colorWord: '', colorHex: '#ffffff', shape: 'square', img: itemPig, word: 'pig' },
+      { colorWord: '', colorHex: '#ffffff', shape: 'square', img: itemHorse, word: 'horse' },
+      { colorWord: '', colorHex: '#ffffff', shape: 'square', img: itemFarmDuck, word: 'duck' },
+    ],
+    rounds: [{ secret: 3 }, { secret: 4 }],
+  },
+  {
+    id: 'u7l4-sort-dch', kind: 'sound-sort', bg: bgU7L4FairEmpty, teacher: 'Listen to each animal. Does it start with /d/, /k/ or /h/? Drag it to D, C or H!',
+    targets: [
+      { letter: 'D', phoneme: '/d/', who: 'pip' },
+      { letter: 'C', phoneme: '/k/', who: 'bella' },
+      { letter: 'H', phoneme: '/h/', who: 'leo' },
+    ],
+    items: [
+      { word: 'dog', img: itemDog, emoji: '\u{1F415}', letter: 'D' },
+      { word: 'cat', img: itemCat, emoji: '\u{1F408}', letter: 'C' },
+      { word: 'horse', img: itemHorse, emoji: '\u{1F40E}', letter: 'H' },
+      { word: 'duck', img: itemFarmDuck, emoji: '\u{1F986}', letter: 'D' },
+      { word: 'cow', img: itemCow, emoji: '\u{1F404}', letter: 'C' },
+      { word: 'hat', img: itemHat, emoji: '\u{1F452}', letter: 'H' },
+    ],
+  },
+
+  /* 10 You ask */
+  {
+    id: 'u7l4-you-ask', kind: 'join-stage', bg: bgU7L4Fair, teacher: 'Swap! The student asks "What animal is this?" and Pip answers. Then the student makes an animal sound and Pip guesses.', cast: ['pip'],
+    turns: [
+      { who: 'student', line: 'Ask Pip: What animal is this?', bubble: 'right' },
+      { who: 'pip', line: "It's a pig! Oink, oink!", bubble: 'right' },
+      { who: 'student', line: 'Make a sound for Pip: Moo!', bubble: 'right' },
+      { who: 'pip', line: "Is it a cow? Yes! It's a cow!", bubble: 'right' },
+    ],
+  },
+
+  /* 11-12 Sticker + Home Mission */
+  {
+    id: 'u7l4-sticker', kind: 'sticker-reward', bg: bgU7L4Fair, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You know all the animals! Here is a horse sticker for you!', sticker: { img: itemHorse, label: 'Animal expert' },
+  },
+  {
+    id: 'u7l4-home-mission', kind: 'home-mission', bg: bgU7L4Fair, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: play "What animal is this?" at home! Make an animal sound and your family guesses!',
+    parentNote: 'Take turns: one person makes an animal sound or acts like an animal, the others ask "What animal is this?" and answer "It\'s a duck!". Let your child do the asking too.',
+    steps: [
+      { emoji: '\u{1F914}', say: 'What animal is this?' },
+      { emoji: '\u{1F404}', img: itemCow, say: 'Moo, moo!' },
+      { emoji: '\u{1F389}', img: itemCow, say: "It's a cow!" },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u7l4-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU7L4Fair, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Hop like a bird!', emoji: '\u{1F426}' },
+      { line: 'Roll like a pig!', emoji: '\u{1F416}' },
+      { line: 'Swim like a duck!', emoji: '\u{1F986}' },
+      { line: 'Wag your tail like a dog!', emoji: '\u{1F415}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u7l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u7l4-finale', kind: 'finale', bg: bgU7L4Fair, who: 'pip', line: 'What animal is this? You know them all! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 7, Lesson 5 — "Old MacDonald Had a Farm" (story)
+ *
+ * The approved story film "Grandpa's Noisy Barn" (docs/scenarios/u7l5-old-macdonald.md):
+ * Grandpa is Old MacDonald; at sunrise Pip hears a sound behind each barn door,
+ * asks "What animal is this?", pauses for the child, and the door opens (cow,
+ * pig, sheep, duck). Then the new My Farm Song game (the child is Old MacDonald
+ * and sings a verse for each animal they choose), story order, "Who's behind
+ * the door?", tick or cross, and feed the ducks with the story's pictures.
+ * ========================================================================= */
+
+const bgU7L5Gate = `${A}/scenes/bg-u7l5-gate-a-wide.png`;
+const bgU7L5GateB = `${A}/scenes/bg-u7l5-gate-b-wide.png`;
+const bgU7L5Barn0 = `${A}/scenes/bg-u7l5-barn-0-wide.png`;
+const bgU7L5Barn1 = `${A}/scenes/bg-u7l5-barn-1-wide.png`;
+const bgU7L5Barn2 = `${A}/scenes/bg-u7l5-barn-2-wide.png`;
+const bgU7L5Barn3 = `${A}/scenes/bg-u7l5-barn-3-wide.png`;
+const bgU7L5Barn4 = `${A}/scenes/bg-u7l5-barn-4-wide.png`;
+const bgU7L5Yard = `${A}/scenes/bg-u7l5-yard-wide.png`;
+
+export const LESSON_U7L5_TITLE = 'Old MacDonald Had a Farm';
+export const LESSON_U7L5_OBJECTIVE = 'Follow a short story and answer "What animal is this?" from the sound ("Moo! Moo!" — "It\'s a cow!"), retell the story in order, sing "Old MacDonald had a farm, E-I-E-I-O!" with a verse for each animal, by watching, listening, answering and singing, no reading.';
+
+export const LESSON_U7L5_SCENES: Scene[] = [
+  { id: 'u7l5-title', kind: 'title-card', bg: bgU7L5Yard, level: 'Pre-A1', unit: 'Unit 7', lessonLabel: 'Lesson 5', title: 'Old MacDonald Had a Farm', subtitle: 'A story' },
+
+  /* 1-4 Hook + the film */
+  {
+    id: 'u7l5-song', kind: 'song', bg: bgU7L5Yard, title: '\u{1F3B5} Old MacDonald \u{1F3B5}', teacher: 'Sing and act: horns for the cow, hands up for E-I-E-I-O!',
+    durationSeconds: 20, bigWord: 'Farm', songUrl: `${A}/audio/old-macdonald-song-u7l5.mp3?v=1`,
+    lineDurationsMs: [3960, 4340, 4260, 7502],
+    songPrompt: 'Classic happy kids farm sing-along',
+    lyrics: [
+      { who: 'pip', text: 'Old MacDonald had a farm, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'And on his farm he had a cow, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'With a moo, moo here and a moo, moo there!', emotion: 'happy' },
+      { who: 'pip', text: 'Old MacDonald had a farm, E-I-E-I-O!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 4 · What Animal is This?
+    id: 'u7l5-recall-warmup', kind: 'recall-warmup', bg: bgU7L5Gate, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 4 · What Animal is This?',
+    teacher: 'Warm-up from last lesson: Pip says an animal, the child finds it. Make the sound together!',
+    items: [
+      { word: 'dog', say: 'Find the dog! Woof!', img: itemDog },
+      { word: 'horse', say: 'Where is the horse? Neigh!', img: itemHorse },
+      { word: 'bird', say: 'Find the bird! Tweet!', img: itemBird },
+    ],
+  },
+  {
+    id: 'u7l5-intro', kind: 'cinematic', bg: bgU7L5GateB, hidePipOverlay: true, title: 'Old MacDonald Had a Farm', subtitle: 'A story', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Good morning! This is my Grandpa.' },
+      { who: 'pip', line: "Today he is a farmer! Let's watch!" },
+    ],
+    cta: "Let's watch!",
+  },
+  {
+    // The approved stills film (docs/scenarios/u7l5-old-macdonald.md): a sound behind each barn door, "What animal is
+    // this?", a pause for the child, then the door opens.
+    id: 'u7l5-story', kind: 'story-video', bg: bgU7L5Barn0, videoUrl: `${A}/video/old-macdonald-u7l5.mp4?v=1`, title: "Grandpa's Noisy Barn",
+    teacher: 'Press play and watch. When Pip asks "What animal is this?", the child answers before the door opens: "It\'s a pig!"',
+    pages: [
+      { img: bgU7L5GateB, who: 'pip', line: "This is Grandpa's farm! Grandpa is Old MacDonald!", atSec: 0 },
+      { img: bgU7L5Barn0, who: 'pip', line: 'The animals are in the barn. Listen!', atSec: 5 },
+      { img: bgU7L5Barn0, who: 'pip', line: 'Moo! Moo! What animal is this?', atSec: 10 },
+      { img: bgU7L5Barn1, who: 'pip', line: "It's a cow!", atSec: 14 },
+      { img: bgU7L5Barn1, who: 'pip', line: 'Oink! Oink! What animal is this?', atSec: 19 },
+      { img: bgU7L5Barn2, who: 'pip', line: "It's a pig!", atSec: 23 },
+      { img: bgU7L5Barn2, who: 'pip', line: 'Baa! Baa! What animal is this?', atSec: 28 },
+      { img: bgU7L5Barn3, who: 'pip', line: "It's a sheep!", atSec: 32 },
+      { img: bgU7L5Barn3, who: 'pip', line: 'Quack! Quack! What animal is this?', atSec: 37 },
+      { img: bgU7L5Barn4, who: 'pip', line: "It's a duck!", atSec: 41 },
+      { img: bgU7L5Yard, who: 'pip', line: 'Old MacDonald had a farm, E-I-E-I-O!', atSec: 46 },
+    ],
+    checkpoints: [],
+  },
+
+  /* 5-7 The words, move, signature game */
+  {
+    id: 'u7l5-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU7L5Barn4, teacher: 'Listen, then say it: the sound, then the animal!',
+    cards: [
+      { who: 'pip', sentence: "Moo! Moo! It's a cow!", img: itemCow, imgLabel: 'cow' },
+      { who: 'pip', sentence: "Oink! Oink! It's a pig!", img: itemPig, imgLabel: 'pig' },
+      { who: 'pip', sentence: "Baa! Baa! It's a sheep!", img: itemSheep, imgLabel: 'sheep' },
+      { who: 'pip', sentence: "Quack! Quack! It's a duck!", img: itemFarmDuck, imgLabel: 'duck' },
+    ],
+  },
+  {
+    id: 'u7l5-move', kind: 'tpr-actions', bg: bgU7L5Yard, who: 'pip',
+    teacher: 'Stand up! Act the story with Pip.',
+    rounds: [
+      { line: 'Open the barn door!', emoji: '\u{1F6AA}' },
+      { line: 'Listen! Hand to your ear!', emoji: '\u{1F442}' },
+      { line: 'Moo like a cow!', emoji: '\u{1F404}', img: itemCow },
+      { line: 'Sing E-I-E-I-O!', emoji: '\u{1F3B6}' },
+    ],
+  },
+  {
+    // Signature game (new): the child is Old MacDonald and sings a verse per animal.
+    id: 'u7l5-farm-song', kind: 'farm-verse', bg: bgU7L5Barn0, who: 'pip',
+    teacher: 'My Farm Song! The child is Old MacDonald: choose an animal, Pip sings its verse, the child sings it too and taps "I sang it!".',
+    animals: [
+      { label: 'cow', img: itemCow, sound: 'moo', x: 40, y: 92, size: 13 },
+      { label: 'pig', img: itemPig, sound: 'oink', x: 56, y: 93, size: 11 },
+      { label: 'sheep', img: itemSheep, sound: 'baa', x: 71, y: 92, size: 12 },
+      { label: 'duck', img: itemFarmDuck, sound: 'quack', x: 85, y: 93, size: 9 },
+    ],
+    doneLine: 'Old MacDonald had a farm, E-I-E-I-O!',
+  },
+
+  /* 8-11 Retell and check */
+  {
+    id: 'u7l5-story-order', kind: 'story-order', bg: bgU7L5Yard, who: 'pip', teacher: 'Put the story in order, then tell it: "Moo! It\'s a cow! … Quack! It\'s a duck!"',
+    frames: [
+      { img: bgU7L5Barn1, caption: "Moo! It's a cow!", who: 'pip' },
+      { img: bgU7L5Barn2, caption: "Oink! It's a pig!", who: 'pip' },
+      { img: bgU7L5Barn3, caption: "Baa! It's a sheep!", who: 'pip' },
+      { img: bgU7L5Barn4, caption: "Quack! It's a duck!", who: 'pip' },
+    ],
+  },
+  {
+    id: 'u7l5-behind-door', kind: 'lift-flap', bg: bgU7L5Barn0, who: 'pip',
+    teacher: "Who's behind the door? The child asks at each door (\"Is it behind this door?\") and taps to open it.",
+    question: 'Where is the duck?',
+    notYet: 'Not yet! Look behind the other doors first!',
+    spots: [
+      { x: 35.5, y: 56, size: 11, ask: 'Is it behind the first door?', reveal: "No! It's a cow! Moo!", under: { img: itemCow, label: 'cow' } },
+      { x: 49.5, y: 56, size: 11, ask: 'Is it behind the second door?', reveal: "No! It's a pig! Oink!", under: { img: itemPig, label: 'pig' } },
+      { x: 63.5, y: 56, size: 11, ask: 'Is it behind the third door?', reveal: "No! It's a sheep! Baa!", under: { img: itemSheep, label: 'sheep' } },
+      { x: 77.5, y: 56, size: 11, ask: 'Is it behind the last door?', reveal: "Yes! It's the duck! Quack!", target: true, under: { img: itemFarmDuck, label: 'duck' } },
+    ],
+  },
+  {
+    id: 'u7l5-true-or-not', kind: 'tick-cross', bg: bgU7L5Barn0, who: 'pip',
+    teacher: 'Look and listen. Is it right? Tap ✓ or ✗.',
+    rounds: [
+      { img: bgU7L5Barn1, sentence: "It's a cow.", isTrue: true },
+      { img: bgU7L5Barn2, sentence: 'The pig says moo.', isTrue: false },
+      { img: bgU7L5Barn3, sentence: "It's a sheep.", isTrue: true },
+      { img: bgU7L5GateB, sentence: 'Grandpa is a farmer.', isTrue: true },
+    ],
+  },
+  {
+    id: 'u7l5-duck-feed', kind: 'duck-feed', bg: bgU7L3PondEmpty, who: 'pip', duckImg: itemDuck,
+    teacher: 'Feed the Ducks! Pip says a moment from the story. The student taps the duck with that picture — the bread flies to it. Say it together.',
+    ducks: [
+      { label: 'cow', name: 'the cow', img: bgU7L5Barn1, at: [35.5, 55], w: 16, x: 18, y: 72 },
+      { label: 'pig', name: 'the pig', img: bgU7L5Barn2, at: [49.5, 55], w: 16, x: 40, y: 76 },
+      { label: 'sheep', name: 'the sheep', img: bgU7L5Barn3, at: [63.5, 55], w: 16, x: 61, y: 74 },
+      { label: 'duck', name: 'the duck', img: bgU7L5Barn4, at: [77.5, 55], w: 16, x: 82, y: 71 },
+    ],
+    rounds: [
+      { duck: 1, line: 'Oink! Oink! Which duck has it?', reply: "Yes! It's the pig!" },
+      { duck: 3, line: 'Quack! Quack! Which duck has it?', reply: "Yes! It's the duck!" },
+      { duck: 0, line: 'Moo! Moo! Which duck has it?', reply: "Yes! It's the cow!" },
+      { duck: 2, line: 'Baa! Baa! Which duck has it?', reply: "Yes! It's the sheep!" },
+    ],
+    doneLine: 'All the ducks are happy! Quack, quack!',
+  },
+  {
+    id: 'u7l5-your-turn', kind: 'join-stage', bg: bgU7L5Yard, teacher: 'The student makes an animal sound; Pip asks "What animal is this?" and guesses. Then swap!', cast: ['pip'],
+    turns: [
+      { who: 'student', line: 'Make a sound for Pip: Oink! Oink!', bubble: 'right' },
+      { who: 'pip', line: "What animal is this? It's a pig!", bubble: 'right' },
+      { who: 'pip', line: 'Now you! Moo! Moo! What animal is this?', bubble: 'right' },
+      { who: 'student', line: "It's a cow!", bubble: 'right' },
+    ],
+  },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u7l5-sticker', kind: 'sticker-reward', bg: bgU7L5Yard, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You sang Old MacDonald! Here is a cow sticker for you!', sticker: { img: itemCow, label: 'Farm singer' },
+  },
+  {
+    id: 'u7l5-home-mission', kind: 'home-mission', bg: bgU7L5Yard, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: sing Old MacDonald at home! Your family says an animal, you sing the sound!',
+    parentNote: 'Sing "Old MacDonald had a farm, E-I-E-I-O" together. Take turns choosing the animal; your child sings the sound ("With a moo, moo here…"). Ask "What animal is this?" after making a sound.',
+    steps: [
+      { emoji: '\u{1F3B6}', say: 'Old MacDonald had a farm!' },
+      { emoji: '\u{1F404}', img: itemCow, say: 'Moo, moo!' },
+      { emoji: '\u{1F914}', say: 'What animal is this?' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u7l5-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU7L5Yard, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Wake up, animals! Stretch!', emoji: '\u{1F305}' },
+      { line: 'Moo, oink, baa, quack!', emoji: '\u{1F3B5}' },
+      { line: 'March around the farm!', emoji: '\u{1F468}\u{200D}\u{1F33E}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u7l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u7l5-finale', kind: 'finale', bg: bgU7L5Yard, who: 'pip', line: 'Old MacDonald had a farm, E-I-E-I-O! Goodbye, friend!' },
 ];

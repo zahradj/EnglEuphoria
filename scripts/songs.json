@@ -1383,5 +1383,184 @@
       "Roll the dice and say it loud!",
       "I love my house, I'm very proud!"
     ]
+  },
+  "u7l1-dog-cat-bird": {
+    "publicPath": "public/lep1/audio/dog-cat-bird-song-u7l1.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids pet song, 108 BPM with ukulele, light piano, hand claps and a little whistle, clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly, animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "hand claps",
+      "whistle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "108 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "It's a dog! Woof, woof, woof!",
+      "It's a cat! Meow, meow, meow!",
+      "It's a bird! Tweet, tweet, tweet!",
+      "Dog, cat, bird! I love my pets!"
+    ]
+  },
+  "u7l2-cow-pig-sheep": {
+    "publicPath": "public/lep1/audio/cow-pig-sheep-song-u7l2.mp3",
+    "durationSec": 20,
+    "style": "Happy bouncy kids farm song, 110 BPM with banjo, acoustic guitar, hand claps and a little fiddle, clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly, animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "banjo",
+      "acoustic guitar",
+      "hand claps",
+      "fiddle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "110 BPM",
+      "happy",
+      "country farm"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "It's a cow! Moo, moo, moo!",
+      "It's a pig! Oink, oink, oink!",
+      "It's a sheep! Baa, baa, baa!",
+      "Cow, pig, sheep! On the farm!"
+    ]
+  },
+  "u7l3-horse-chicken-duck": {
+    "publicPath": "public/lep1/audio/horse-chicken-duck-song-u7l3.mp3",
+    "durationSec": 20,
+    "style": "Happy bouncy kids farm parade song, 112 BPM with banjo, marching snare, hand claps and a little whistle, clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly, animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "banjo",
+      "marching snare",
+      "hand claps",
+      "whistle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "112 BPM",
+      "happy",
+      "parade"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "It's a horse! Neigh, neigh, neigh!",
+      "It's a chicken! Cluck, cluck, cluck!",
+      "It's a duck! Quack, quack, quack!",
+      "Horse, chicken, duck! Let's march!"
+    ]
+  },
+  "u7l4-what-animal": {
+    "publicPath": "public/lep1/audio/what-animal-song-u7l4.mp3",
+    "durationSec": 20,
+    "style": "Playful bouncy kids question-and-answer song, 108 BPM with ukulele, xylophone, hand claps and a little kazoo, clear happy young vocals with a kids sing-along call-and-response feel, every word sung slowly and clearly, animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "xylophone",
+      "hand claps",
+      "call and response",
+      "clear kids vocals",
+      "sing-along chorus",
+      "108 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "What animal is this? Moo, moo! It's a cow!",
+      "What animal is this? Woof, woof! It's a dog!",
+      "What animal is this? Quack, quack! It's a duck!",
+      "Listen, look and say it! Yes!"
+    ]
+  },
+  "u7l5-old-macdonald": {
+    "publicPath": "public/lep1/audio/old-macdonald-song-u7l5.mp3",
+    "durationSec": 20,
+    "style": "Classic happy kids farm sing-along, 112 BPM with banjo, acoustic guitar, hand claps and a fiddle, clear happy young vocals with a kids choir feel, every word sung slowly and clearly, the traditional Old MacDonald melody, animal sounds sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "traditional",
+      "banjo",
+      "acoustic guitar",
+      "hand claps",
+      "fiddle",
+      "clear kids vocals",
+      "sing-along chorus",
+      "112 BPM",
+      "happy",
+      "farm"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Old MacDonald had a farm, E-I-E-I-O!",
+      "And on his farm he had a cow, E-I-E-I-O!",
+      "With a moo, moo here and a moo, moo there!",
+      "Old MacDonald had a farm, E-I-E-I-O!"
+    ]
   }
 }

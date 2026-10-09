@@ -430,6 +430,11 @@ const UNIT1_EXTRACTORS = {
     ];
   },
   // Mirror HouseBoardScene.tsx's houseBoardLines().
+  'farm-verse': (s) => { const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a'); return [[s.who, 'You are Old MacDonald! Choose an animal for your farm!'], ...(s.animals ?? []).flatMap((a) => [[s.who, `And on his farm he had ${art(a.label)} ${a.label}, E-I-E-I-O!`], [s.who, `With ${art(a.sound)} ${a.sound}, ${a.sound} here, and ${art(a.sound)} ${a.sound}, ${a.sound} there!`]]), [s.who, s.doneLine]]; },
+  'animal-riddle': (s) => { const used = [...new Set((s.rounds ?? []).flatMap((r) => r.options))]; return [[s.who, 'What animal is this?'], ...(s.rounds ?? []).flatMap((r) => r.clues.map((c) => [s.who, c])), ...used.flatMap((i) => { const a = (s.animals ?? [])[i]; return a ? [[s.who, a.say], [s.who, `No! It isn't the ${a.label}.`]] : []; }), [s.who, s.doneLine]]; },
+  'animal-parade': (s) => [[s.who, "Let's make an animal parade!"], [s.who, 'Listen again!'], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).map((a) => [s.who, a.say]), [s.who, s.doneLine]],
+  'farm-wash': (s) => [[s.who, "Oh no! The animals are muddy! Let's wash them!"], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).flatMap((a) => [[s.who, a.say], [s.who, `Oops! That's the ${a.label}.`]]), [s.who, s.doneLine]],
+  'photo-snap': (s) => [[s.who, 'Get your camera ready!'], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).flatMap((a) => [[s.who, a.say], [s.who, `Oops! That's the ${a.label}.`]]), [s.who, s.doneLine]],
   'house-board': (s) => [[s.who, 'Roll the dice!'], ...(s.squares ?? []).flatMap((q) => [[s.who, q.ask], [s.who, q.say]]), [s.who, s.doneLine]],
   // Mirror DoorKnockScene.tsx's doorKnockLines().
   'door-knock': (s) => [
@@ -565,7 +570,7 @@ const UNIT1_EXTRACTORS = {
   // Mirrors MysteryBagScene.tsx's mysteryBagLines().
   'mystery-bag': (s) => {
     const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
-    return [[s.who, "What's in the bag?"], ...(s.rounds ?? []).flatMap((r) => [
+    return [[s.who, s.question ?? "What's in the bag?"], ...(s.rounds ?? []).flatMap((r) => [
       [s.who, `It's ${art(r.toyWord)} ${r.toyWord.toLowerCase()}!`],
       [s.who, `It's ${art(r.colorWord)} ${r.colorWord.toLowerCase()} ${r.toyWord.toLowerCase()}!`],
     ])];

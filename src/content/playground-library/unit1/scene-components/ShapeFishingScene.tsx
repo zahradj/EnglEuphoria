@@ -150,9 +150,10 @@ export function ShapeFishingScene({ scene, onWin, onLose, onNext, sync }: { scen
       {target && scene.floating && scene.fish.map((f, i) => {
         if (caughtSet.has(i)) return null;
         const n = scene.fish.length;
-        const a = (i / n) * Math.PI * 2;
+        const a = (i / n) * Math.PI * 2 + ((scene.pool?.turn ?? 0) * Math.PI) / 180;
         // A ring over the whole water of the pool painted in bg, wide enough that no two toys touch.
-        const cx = 51 + Math.cos(a) * 24, cy = 47 + Math.sin(a) * 11;
+        const pool = scene.pool ?? { x: 51, y: 47, rx: 24, ry: 11 };
+        const cx = pool.x + Math.cos(a) * pool.rx, cy = pool.y + Math.sin(a) * pool.ry;
         const sz = f.size === 'small' ? 7 : f.size === 'big' ? 11 : 9;
         return (
           <motion.button

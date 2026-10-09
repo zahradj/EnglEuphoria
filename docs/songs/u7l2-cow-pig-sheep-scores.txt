@@ -1,0 +1,15 @@
+
+=== docs/songs/u7l2-cow-pig-sheep-take1.mp3  length=20.1s  score=0.75  missing=6  extra=6
+heard: it's a cow moo moo moo it's a pig oi oi oi it's a sheep ba ba ba cow pig sheep on the farm
+line starts (s): [np.float64(0.0), np.float64(4.6), np.float64(8.9), np.float64(13.8)]
+lineDurationsMs: [4560, 4320, 4900, 6282]
+
+=== docs/songs/u7l2-cow-pig-sheep-take2.mp3  length=20.1s  score=0.71  missing=7  extra=7
+heard: it's a cow moo moo moo it's a pig oi oi oi it's a sheep bah bah bah cow pig sheep on a farm
+line starts (s): [np.float64(0.0), np.float64(4.3), np.float64(8.1), np.float64(12.7)]
+lineDurationsMs: [4320, 3780, 4640, 7322]
+
+=== docs/songs/u7l2-cow-pig-sheep-take3.mp3  length=20.1s  score=0.67  missing=8  extra=8
+heard: it's a cow moo moo moo it's a cake oi oi oi it's a sheep ba ba ba cow big sheep on the farm
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(7.9), np.float64(12.8)]
+lineDurationsMs: [3780, 4160, 4840, 7282]
