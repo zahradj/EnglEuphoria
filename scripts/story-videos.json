@@ -823,5 +823,138 @@
     "ownerApproved": false
    }
   ]
+ },
+ "u6l5-house": {
+  "lesson": "Pre-A1 Unit 6 Lesson 5 — Where's My House?, story film 'Pip Finds His House' (page 4). Scenario docs/scenarios/u6l5-wheres-my-house.md (approved). STRICT MODE: one clip at a time, each between two Canva key pictures already in the stills film, screened with review-clip.py, then frame-by-frame review with the owner. The park look and the hug stay as stills (no word in the line names the move).",
+  "provider": "higgsfield",
+  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "seconds": 5,
+  "out": "public/lep1/video/clips/u6l5-house",
+  "style": "calm 2D cartoon, autumn sunset street, steady camera",
+  "beats": [
+   {
+    "id": "street-where",
+    "image": "public/lep1/scenes/bg-u6l5-street-a-wide.png",
+    "endImage": "public/lep1/scenes/bg-u6l5-street-b-wide.png",
+    "line": "Oh no! Where's my house?",
+    "action": "Pip stops on the street of new houses and slowly puts one paw on his head, puzzled",
+    "bodyWords": [
+     "house"
+    ],
+    "leader": "Pip",
+    "prompt": "Pip, the little fox, stops on the street in front of the houses and slowly lifts one paw to the top of his head, looking puzzled. The houses stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": false
+   },
+   {
+    "id": "blue-no",
+    "image": "public/lep1/scenes/bg-u6l5-blue-a-wide.png",
+    "endImage": "public/lep1/scenes/bg-u6l5-blue-b-wide.png",
+    "line": "No, it isn't! The door is blue.",
+    "action": "Pip lowers his raised paw and points at the blue door",
+    "bodyWords": [
+     "blue",
+     "door"
+    ],
+    "leader": "Pip",
+    "prompt": "Pip, the little fox, slowly lowers his raised paw and points at the blue door. The house and the blue door stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": false
+   },
+   {
+    "id": "cat-wakes",
+    "image": "public/lep1/scenes/bg-u6l5-yellow-a-wide.png",
+    "endImage": "public/lep1/scenes/bg-u6l5-yellow-b-wide.png",
+    "line": "No, it isn't! A cat lives here. Meow!",
+    "action": "the sleepy cat in the window opens its eyes and looks at Pip; nothing else moves",
+    "bodyWords": [
+     "cat"
+    ],
+    "leader": "cat",
+    "prompt": "The sleepy cat in the window slowly opens its eyes and looks down at Pip. Pip and the yellow door stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": false
+   },
+   {
+    "id": "red-door-opens",
+    "image": "public/lep1/scenes/bg-u6l5-red-a-wide.png",
+    "endImage": "public/lep1/scenes/bg-u6l5-red-b-wide.png",
+    "line": "Knock, knock! … Yes, it is!",
+    "action": "after Pip's knock the red door slowly opens and Mom stands in the doorway smiling",
+    "bodyWords": [
+     "knock"
+    ],
+    "leader": "Mom",
+    "prompt": "After the knock, the red door slowly swings open and Mom, the fox mother in a purple dress, stands in the doorway smiling at Pip. Pip stays still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": false
+   }
+  ]
+ },
+ "u7l5-barn": {
+  "lesson": "Pre-A1 Unit 7 Lesson 5 — Grandpa's Farm, story film 'Grandpa's Noisy Barn' (page 5). Scenario docs/scenarios/u7l5-old-macdonald.md (approved 2026-10-08). STRICT MODE: one clip at a time, each between two Canva key pictures already in the stills film (aligned to 3 px), screened with review-clip.py, then frame-by-frame review with the owner. The gate wave and the yard stay as stills.",
+  "provider": "higgsfield",
+  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "seconds": 5,
+  "out": "public/lep1/video/clips/u7l5-barn",
+  "style": "calm 2D cartoon, red barn at sunrise, steady camera",
+  "beats": [
+   {
+    "id": "cow-door",
+    "image": "public/lep1/scenes/bg-u7l5-barn-0-wide.png",
+    "endImage": "public/lep1/scenes/bg-u7l5-barn-1-wide.png",
+    "line": "It's a cow!",
+    "action": "the first stall door swings open and the cow looks out; nothing else moves",
+    "bodyWords": [
+     "cow"
+    ],
+    "leader": "cow",
+    "prompt": "The first stall door of the red barn slowly swings open and the black-and-white cow leans out and looks at us. Pip, Grandpa and the other doors stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": false
+   },
+   {
+    "id": "pig-door",
+    "image": "public/lep1/scenes/bg-u7l5-barn-1-wide.png",
+    "endImage": "public/lep1/scenes/bg-u7l5-barn-2-wide.png",
+    "line": "It's a pig!",
+    "action": "the second stall door swings open and the pig looks out; nothing else moves",
+    "bodyWords": [
+     "pig"
+    ],
+    "leader": "pig",
+    "prompt": "The second stall door of the red barn slowly swings open and the pink pig leans out and looks at us. Pip, Grandpa and the other doors stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": false
+   },
+   {
+    "id": "sheep-door",
+    "image": "public/lep1/scenes/bg-u7l5-barn-2-wide.png",
+    "endImage": "public/lep1/scenes/bg-u7l5-barn-3-wide.png",
+    "line": "It's a sheep!",
+    "action": "the third stall door swings open and the sheep looks out; nothing else moves",
+    "bodyWords": [
+     "sheep"
+    ],
+    "leader": "sheep",
+    "prompt": "The third stall door of the red barn slowly swings open and the fluffy white sheep leans out and looks at us. Pip, Grandpa and the other doors stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": false
+   },
+   {
+    "id": "duck-door",
+    "image": "public/lep1/scenes/bg-u7l5-barn-3-wide.png",
+    "endImage": "public/lep1/scenes/bg-u7l5-barn-4-wide.png",
+    "line": "It's a duck!",
+    "action": "the fourth stall door swings open and the duck walks out onto the grass; nothing else moves",
+    "bodyWords": [
+     "duck"
+    ],
+    "leader": "duck",
+    "prompt": "The fourth stall door of the red barn slowly swings open and the white duck walks out onto the grass. Pip, Grandpa, the cow, the pig and the sheep stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": false
+   }
+  ]
  }
 }
