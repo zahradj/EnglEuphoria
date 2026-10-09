@@ -1,2 +1,2 @@
-# strict mode: ONE clip per run (owner: "Approve all" 2026-10-09; U4L5 clip 1 only, then review)
-u4l5-moves --beats=tiger-head
+# PROBE ONLY (free estimates, nothing ordered): which Seedance 2.5 endpoint takes start + end picture
+u4l5-moves --beats=tiger-head --probe

@@ -82,6 +82,31 @@ async function makeClip(beat) {
   return false;
 }
 
+// PROBE (estimate only, never starts a job, costs nothing): "<story> --beats=<id> --probe" asks Higgsfield for a free
+// estimate on each candidate endpoint + input layout, to learn which one takes a start AND an end picture.
+if (reqLine.includes('--probe')) {
+  const id = (reqLine.find((a) => a.startsWith('--beats=')) ?? '').slice(8);
+  const beat = story.beats.find((b) => b.id === id);
+  if (!beat?.endImage) { console.error('probe needs a beat with image + endImage'); process.exit(1); }
+  const upl = async (f) => (await call({ action: 'upload', base64: fs.readFileSync(f).toString('base64'), contentType: 'image/png' })).j.public_url;
+  const a = await upl(beat.image); const b = await upl(beat.endImage);
+  const base = { prompt: beat.prompt, duration: 5, resolution: '720p', aspect_ratio: '16:9', generate_audio: false };
+  const shapes = {
+    image_end: { image_url: a, end_image_url: b }, image_tail: { image_url: a, tail_image_url: b },
+    image_last: { image_url: a, last_frame_image_url: b }, start_end: { start_image_url: a, end_image_url: b },
+    first_last: { first_frame_url: a, last_frame_url: b }, images: { image_urls: [a, b] },
+    medias: { medias: [{ role: 'start_image', url: a }, { role: 'end_image', url: b }] },
+  };
+  const eps = ['bytedance/seedance-2.5/image-to-video', 'bytedance/seedance-2.5/reference-to-video', 'bytedance/seedance-2.5/omni-reference',
+    'bytedance/seedance-2.5/start-end-to-video', 'bytedance/seedance-2.5/first-last-frame-to-video'];
+  for (const ep of eps) for (const [name, extra] of Object.entries(shapes)) {
+    const r = await call({ action: 'estimate', endpoint: ep, input: { ...base, ...extra } });
+    console.log(`PROBE ${ep} ${name}: ${r.status} ${JSON.stringify(r.j).slice(0, 400)}`);
+  }
+  console.log('probe done — nothing was ordered');
+  process.exit(0);
+}
+
 let ok = 0;
 const beats = (process.argv.find((a) => a.startsWith('--beats=')) ?? reqLine.find((a) => a.startsWith('--beats=')) ?? '').slice(8).split(',').filter(Boolean);
 const wanted = (beats.length ? story.beats.filter((b) => beats.includes(b.id)) : story.beats).filter((b) => !b.rejected);
