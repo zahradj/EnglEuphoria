@@ -807,6 +807,12 @@ function collectPairs(lessonFilter) {
       const scenes = scenesModule[name];
       if (!Array.isArray(scenes)) continue;
       for (const scene of scenes) {
+        // A Pre-A1 game inside an A1/A2 lesson ('prea1'): spoken by the Pre-A1 renderer, so Pre-A1 extractors and voice keys.
+        if (scene.kind === 'prea1') {
+          const inner = UNIT1_EXTRACTORS[scene.scene.kind];
+          if (inner) for (const [who, text] of inner(scene.scene)) add(who, text);
+          continue;
+        }
         const extractor = extractors[scene.kind];
         if (!extractor) continue;
         for (const [who, text] of extractor(scene)) add(resolveWho(who), text);

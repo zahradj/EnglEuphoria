@@ -20,6 +20,11 @@ Companion file: [`docs/a1-activity-library.md`](a1-activity-library.md) — ever
 
 ## 2. Design rules (from the blueprint, the quality gate and the research)
 
+**Any Pre-A1 game can be used in an A1 lesson** (owner: "you can use also the same games from the pre-A"): write it as
+`{ id, kind: 'prea1', teacher, scene: <a Pre-A1 scene> }` in a Welcome Town lesson. The Pre-A1 renderer plays it, live-class
+sync uses the Pre-A1 sync list (`prea1SyncKinds.ts`) and the voice bake reads its lines with the Pre-A1 extractors. Pre-A1
+games speak with the Pre-A1 voices (pip, mia, leo, bella, willow, teacher), not `marigold`.
+
 1. **One goal per lesson** (curriculum engine: no orphan topics) — written as "I can …". Everything on the 22 pages serves it.
 2. **Unit arc of 7 lessons** (same as Pre-A1): L1-L3 new language, L4 put it together (conversation), **L5 story as a real video**
    (scenario first, `kids-video-scenario`), L6 extra practice games, L7 boss review + sticker.
@@ -59,8 +64,9 @@ official Cambridge Starters/Movers wordlists. Each unit recycles Pre-A1 words of
 
 Format: **Title** — I can … · key language · signature game (★ = new game to build, ⇄ = port a Pre-A1 game to A1)
 
-### Unit 1 · Hello, Welcome Town!  *(L1-L4 built; L2 being rebuilt to the blueprint)*
-1. **Hello, My Name Is…** — greet and say my name · Hello, My name is…, What's your name? · Welcome Party door game (built)
+### Unit 1 · Hello, Welcome Town!  *(L1 rebuilt to the blueprint 2026-10-09; L2-L4 built; L2 being rebuilt)*
+1. **Hello, My Name Is…** — greet and say my name · Hello, My name is…, What's your name? · Welcome Party door game (built) +
+   Pre-A1 games inside the A1 lesson: Move & Say, Name Buzzer Show, Quick fire, sticker, home mission, brain break (rebuilt 2026-10-09)
 2. **How Are You?** — say how I and others feel · How are you? I'm happy/tired/sad/angry/hungry; He/She is…, They are… · Feelings
    spinner "He is happy!" ⇄ + Name That Feeling (Khan Kids) listen-tap
 3. **How Old Are You?** — say my age, count to 20 · How old are you? I'm 7, numbers 11-20 · Birthday Candle Cake ⇄ (candle-cake) to 20

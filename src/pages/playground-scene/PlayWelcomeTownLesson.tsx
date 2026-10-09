@@ -1,3 +1,4 @@
+import { PREA1_REAL_SYNC_KINDS } from '@/content/playground-library/prea1SyncKinds';
 import { SHARED_PLAY_KINDS, useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
 import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
 import { useRecordClassroomCompletion } from '@/hooks/useRecordClassroomCompletion';
@@ -58,7 +59,7 @@ interface PlayWelcomeTownLessonProps {
 /** Gem-eligible scene kinds — every activity kind that ever calls onWin(true)
  *  exactly once when completed. Kept in sync manually with SceneRenderer.tsx
  *  (title-card/cinematic never award a gem; finale is the end screen). */
-const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'sentence-build', 'letter-game', 'jigsaw-puzzle', 'spin-wheel', 'picture-match', 'first-sound', 'letter-match', 'letter-blocks', 'place-it', 'torch-hunt', 'where-castle', 'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play', 'welcome-party', 'name-badge']);
+const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'sentence-build', 'letter-game', 'jigsaw-puzzle', 'spin-wheel', 'picture-match', 'first-sound', 'letter-match', 'letter-blocks', 'place-it', 'torch-hunt', 'where-castle', 'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play', 'welcome-party', 'name-badge', 'prea1']);
 
 /** Scene kinds that own real synced state (see `activityState` below)
  *  instead of relying on the generic scene_tap DOM-click-mirror. Whoever
@@ -134,6 +135,8 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   const [hearts, setHearts] = useState(MAX_HEARTS);
   const [gems, setGems] = useState(0);
   const scene = SCENES[sceneIdx] ?? SCENES[0];
+  // A Pre-A1 game inside an A1 lesson: its own kind decides sync, shared play and self-check.
+  const playScene = scene.kind === 'prea1' ? scene.scene : scene;
 
   const isSynced = role != null && !!roomId;
   const canNavigate = !isSynced || role === 'teacher';
@@ -232,11 +235,11 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   // `studentOnly` scenes (self-check / auto-evaluation slides) give the
   // student the floor outright: no teacher unlock needed, and the teacher's
   // copy is a live, non-interactive view of the student's work.
-  const studentDriven = isSynced && (scene as { studentOnly?: boolean }).studentOnly === true;
+  const studentDriven = isSynced && (playScene as { studentOnly?: boolean }).studentOnly === true;
   // SHARED PLAY: a real game (SHARED_PLAY_KINDS) is played by the teacher AND the student together, as one
   // player, whenever the student isn't paused. Both screens then drive and publish state (last write wins);
   // while the student is paused the teacher alone drives and the student's screen is a live mirror.
-  const sharedPlay = isSynced && !studentDriven && SHARED_PLAY_KINDS.has(scene.kind) && (role === 'teacher' || interactionUnlocked);
+  const sharedPlay = isSynced && !studentDriven && SHARED_PLAY_KINDS.has(playScene.kind) && (role === 'teacher' || interactionUnlocked);
   const hasActivityAuthority = !isSynced
     ? true
     : sharedPlay
@@ -246,7 +249,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
         : role === 'student'
           ? interactionUnlocked
           : !interactionUnlocked;
-  const usesRealSync = REAL_SYNC_KINDS.has(scene.kind);
+  const usesRealSync = scene.kind === 'prea1' ? PREA1_REAL_SYNC_KINDS.has(scene.scene.kind) : REAL_SYNC_KINDS.has(scene.kind);
 
   // TAKE OVER. With "Interaction On", most activities give the floor to the student and the teacher's own
   // screen becomes a live mirror (only the shared games in SHARED_PLAY_KINDS let both play at once). So a
@@ -709,7 +712,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
       dir="ltr"
       onPointerDownCapture={unlockAudio}
       className={`relative w-full overflow-hidden transition-[background-image] duration-500 [container-type:size] ${embedded ? 'h-full' : 'min-h-screen'} ${skin === 'quest' ? 'ee-quest' : ''}`}
-      style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
+      style={{ backgroundImage: `url(${(playScene as { bg?: string }).bg ?? ""})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
     >
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/55" />
       {skin === 'quest' && <div className="ee-quest-frame pointer-events-none absolute inset-2 z-[5] rounded-[26px]" aria-hidden="true" />}
@@ -738,7 +741,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
         <div key={scene.id} ref={sceneRootRef} className="relative flex-1 animate-[lep1-fade-slide_0.45s_ease-out]">
           <SceneCrashGuard
             sceneId={scene.id}
-            sceneKind={scene.kind}
+            sceneKind={playScene.kind}
             side={!isSynced ? 'solo' : role === 'teacher' ? 'teacher' : 'student mirror'}
             canSkip={!isSynced || role === 'teacher'}
             onSkip={goNext}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Scene } from './scenes';
-import { Hearts, MAX_HEARTS, Lep1Keyframes } from '../unit1/SceneRenderer';
+import { Hearts, MAX_HEARTS, Lep1Keyframes, SceneRenderer as PreA1SceneRenderer } from '../unit1/SceneRenderer';
 import { type ActivitySync } from '../sceneActivitySync';
 import { SpinWheelScene } from '../SpinWheelScene';
 import { PictureMatchScene } from '../PictureMatchScene';
@@ -145,6 +145,7 @@ export function SceneRenderer(props: {
       case 'place-it': return <PlaceItScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'torch-hunt': return <TorchHuntScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'where-castle': return <WhereCastleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'prea1': return <PreA1SceneRenderer scene={scene.scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} onRestart={props.onRestart} gemsCollected={props.gemsCollected} heartsRemaining={props.heartsRemaining} activitySync={props.activitySync} />;
       case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
       default: return null;
     }

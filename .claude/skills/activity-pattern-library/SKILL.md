@@ -178,6 +178,10 @@ Run `checkSlotGames(slot, scenes)` before calling a lesson done.
 
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)
 
+**Every Pre-A1 `kind` above is also available in A1/A2** through the wrapper `{ id, kind: 'prea1', teacher, scene: <Pre-A1 scene> }`
+(Welcome Town renderer delegates to the Pre-A1 renderer; sync via `prea1SyncKinds.ts`; voice bake reads it). First used in A1 U1 L1
+(2026-10-09: tpr-actions, buzzer-show, rapid-recall, sticker-reward, home-mission). For the Variety Rule, count the inner kind.
+
 A separate, smaller `Scene` type union from Pre-A1's (different file,
 different renderer — don't assume a Pre-A1 `kind` exists here or vice
 versa). ~23 `kind`s as of the true-false addition below:
