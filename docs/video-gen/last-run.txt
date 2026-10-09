@@ -1,5 +1,4 @@
-cow-door: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
-cow-door: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started cow-door: 451baed5-dd46-4fd3-b1a3-7cefd1ca8d42
-saved public/lep1/video/clips/u7l5-barn/cow-door.mp4 (5284160 bytes)
+oink-sound: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started oink-sound: 59766e53-1aa3-4fe3-b104-d71b6dd84ee1
+saved public/lep1/video/clips/u7l5-barn/oink-sound.mp4 (5375917 bytes)
 1/1 clips ready for u7l5-barn
