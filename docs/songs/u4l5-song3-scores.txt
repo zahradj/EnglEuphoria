@@ -1,0 +1,15 @@
+
+=== docs/songs/u4l5-song3-take1.mp3  length=52.1s  score=0.92  missing=6  extra=7
+heard: head head turn your head turn your head and tug your set arms arms up so high wave your arms up to the sky feet feet stomp your feet stomp stomp stomp into the beat hands hands clap your hands clap like a seal up on the sand i can do it i can do it i can do it yes i can i can do it i can do it head and arms and feet and hands
+line starts (s): [np.float64(8.4), np.float64(11.0), np.float64(13.2), np.float64(16.2), np.float64(20.8), np.float64(24.2), np.float64(28.7), np.float64(31.9), np.float64(36.6), np.float64(38.9), np.float64(41.0), np.float64(42.9)]
+lineDurationsMs: [10980, 2260, 2920, 4600, 3400, 4560, 3160, 4680, 2340, 2080, 1940, 9168]
+
+=== docs/songs/u4l5-song3-take2.mp3  length=52.1s  score=0.85  missing=12  extra=11
+heard: head head turn your head turn your head the tag you said on ons up so high make your arms look to the sky feet feet stomp your feet stomp stomp stomp into the beat hands hands clap your hands clap at the seal of pomacin i can do it i can do it i can do it yes i can i can do it i can do it head and arms and feet and hands
+line starts (s): [np.float64(7.5), np.float64(9.9), np.float64(17.1), np.float64(18.1), np.float64(23.3), np.float64(25.7), np.float64(31.7), np.float64(34.0), np.float64(39.6), np.float64(41.9), np.float64(44.0), np.float64(46.1)]
+lineDurationsMs: [9880, 7220, 1040, 5200, 2360, 6020, 2260, 5600, 2320, 2100, 2060, 6028]
+
+=== docs/songs/u4l5-song3-take3.mp3  length=52.1s  score=0.94  missing=5  extra=4
+heard: head head turn your head turn your head the tiger said arms arms up so high wave your arms up to the sky feet feet stomp your feet stomp stomp into the beat hands hands clap your hands clap like a seal up on the sand i can do it i can do it i can do it yes i can i can do it i can do it head and arms and feet on hands
+line starts (s): [np.float64(8.6), np.float64(11.0), np.float64(13.1), np.float64(16.5), np.float64(20.0), np.float64(26.9), np.float64(28.6), np.float64(31.7), np.float64(36.0), np.float64(43.0), np.float64(45.0), np.float64(47.1)]
+lineDurationsMs: [10960, 2140, 3400, 3520, 6920, 1680, 3080, 4280, 7020, 1980, 2080, 5028]
