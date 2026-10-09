@@ -1,2 +1,2 @@
 # strict mode: ONE clip per run (owner: "Approve all" + "Use kling" 2026-10-09)
-u5l5-dad --beats=ducks-count
+u5l5-dad --beats=icecream-lick
