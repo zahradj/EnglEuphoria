@@ -56,3 +56,5 @@ LESSON_U7L4_SCENES
 LESSON_U7L5_SCENES
 
 # 2026-10-09 re-run: missing U5L5 story lines (book)
+
+# 2026-10-09 A1 U1 L2 (Welcome Town): boy / he / girl / she / they word pages

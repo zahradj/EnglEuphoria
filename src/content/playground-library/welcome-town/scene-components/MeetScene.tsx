@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { DialoguePlate, plateFontSize } from '../../DialoguePlate';
 import { warmCaptionPlacement } from '../../captionPlacement';
 import type { Scene } from '../scenes';
@@ -103,7 +103,18 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
           again, and (per direct request) that same tap is also the student's "turn":
           the first tap while in 'repeat' completes the scene. The Next button
           lives on the plate once the scene is done. */}
-      {phase !== 'idle' && (
+      {/* Vocabulary page (look 'word', owner 2026-10-09: "remove that green box"): the character stays on
+          its side of the picture; the word, big, and the line sit straight on the open side, outlined so
+          they read on any background. Tapping the word or the speaker replays it (and is the student's turn). */}
+      {phase !== 'idle' && scene.look === 'word' && (
+        <WordPanel scene={scene} color={c.color} speaking={speaking} nudge={phase === 'repeat'} onTap={tapCloud}
+          action={phase === 'done' ? (
+            <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-[calc(4*var(--svh,1vh))] py-[calc(2*var(--svh,1vh))] text-[calc(2.6*var(--svh,1vh))] font-black text-white shadow-2xl active:scale-95" style={{ animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
+              Next ▶
+            </button>
+          ) : undefined} />
+      )}
+      {phase !== 'idle' && scene.look !== 'word' && (
         <DialoguePlate
           img={scene.bg}
           name={c.name}
@@ -129,6 +140,48 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
           <span className="animate-pulse rounded-full bg-white/95 px-5 py-2 text-base font-bold shadow-xl" style={{ color: c.color }}>👆 Tap {c.name} {c.emoji}</span>
         </div>
       )}
+    </div>
+  );
+}
+
+const OUTLINE = (px: number) => ({ WebkitTextStroke: `${px}px #fff`, paintOrder: 'stroke fill' as const, textShadow: '0 4px 14px rgba(0,0,0,0.18)' });
+
+/** The words of `line`, with the focus words in the character's colour (shown once the voice has read them). */
+function FocusLine({ line, focus, color, reveal }: { line: string; focus: string[]; color: string; reveal: boolean }) {
+  const parts = focus.length ? line.split(new RegExp(`(\\b(?:${focus.map((f) => f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b)`, 'i')) : [line];
+  return (
+    <>
+      {parts.map((p, i) => focus.some((f) => f.toLowerCase() === p.toLowerCase())
+        ? <span key={i} style={{ color: reveal ? color : undefined, transition: 'color 0.4s' }}>{p}</span>
+        : <span key={i}>{p}</span>)}
+    </>
+  );
+}
+
+function WordPanel({ scene, color, speaking, nudge, onTap, action }: {
+  scene: Extract<Scene, { kind: 'meet' }>; color: string; speaking: boolean; nudge: boolean; onTap: () => void; action?: ReactNode;
+}) {
+  const word = scene.word ?? scene.focus?.[0] ?? scene.repeat;
+  // No side given (two characters in the picture): centred above their heads, the note on the word's line.
+  const centred = !scene.cardSide;
+  const side = scene.cardSide === 'right' ? 'right-[3%] top-[calc(20*var(--svh,1vh))] w-[46%]' : scene.cardSide === 'left' ? 'left-[3%] top-[calc(20*var(--svh,1vh))] w-[46%]'
+    : 'left-1/2 -translate-x-1/2 top-[calc(17*var(--svh,1vh))] w-[70%]';
+  return (
+    <div className={`absolute z-20 flex flex-col items-center gap-[calc(1.6*var(--svh,1vh))] text-center ${side}`} style={{ animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
+      {scene.wordNote && !centred && (
+        <div className="font-black leading-none text-[#2b1e17]" style={{ fontSize: 'calc(6*var(--svh,1vh))', ...OUTLINE(6) }}>{scene.wordNote}</div>
+      )}
+      <button onClick={onTap} aria-label={`Hear ${word} again`} className="flex items-center gap-[calc(2*var(--svh,1vh))] active:scale-95">
+        {scene.wordNote && centred && <span className="font-black leading-none text-[#2b1e17]" style={{ fontSize: 'calc(8*var(--svh,1vh))', ...OUTLINE(7) }}>{scene.wordNote}</span>}
+        <span className="font-black leading-none" style={{ fontSize: 'calc(13*var(--svh,1vh))', color, ...OUTLINE(10) }}>{word}</span>
+        <span className={`flex h-[calc(9*var(--svh,1vh))] w-[calc(9*var(--svh,1vh))] shrink-0 items-center justify-center rounded-full bg-[#FFD978] text-[calc(4.4*var(--svh,1vh))] shadow-xl ring-4 ring-white ${nudge && !speaking ? 'animate-bounce' : ''}`}>
+          {speaking ? '🎶' : '🔊'}
+        </span>
+      </button>
+      <button onClick={onTap} className="font-black leading-tight text-[#2b1e17] active:scale-[0.98]" style={{ fontSize: 'calc(4.8*var(--svh,1vh))', ...OUTLINE(7) }}>
+        <FocusLine line={scene.line} focus={scene.focus ?? [word]} color={color} reveal={!speaking} />
+      </button>
+      {action}
     </div>
   );
 }

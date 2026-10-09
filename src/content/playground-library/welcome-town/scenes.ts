@@ -168,7 +168,9 @@ export type Scene =
   // side of the full-bleed `bg` was left empty for them (the character is
   // composed into the opposite side) instead of floating centered over the
   // character's face — omit for the default centered layout.
-  | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string; cardSide?: 'left' | 'right'; /** Dialogue-plate look: 'chalk' for classroom scenes, default 'paper'. */ look?: 'paper' | 'chalk'; /** Vocabulary in `line` to highlight after the voice has read it. */ focus?: string[] }
+  | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string; cardSide?: 'left' | 'right'; /** Dialogue-plate look: 'chalk' for classroom scenes, default 'paper'. 'word' = vocabulary page: no
+       *  plate — the word (big) and the line sit right on the picture's open side (owner 2026-10-09: "remove that green box"). */ look?: 'paper' | 'chalk' | 'word'; /** Vocabulary in `line` to highlight after the voice has read it. */ focus?: string[];
+      /** look 'word': the big word (default focus[0]) and an optional small line above it (e.g. "👦 + 👧 ="). */ word?: string; wordNote?: string }
   | {
       id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string;
       /** Which side of the frame is empty enough for the big bare word —
@@ -671,6 +673,8 @@ const bgVocabWillowHungryW = `${W}/scenes/bg-vocab-willow-hungry-wide.png`;
 const bgFeelingsW = `${W}/scenes/bg-classroom-feelings-wide.png`;
 const bgHeIntroPipW = `${W}/scenes/bg-heshe-intro-pip-wide.png`;
 const bgHeSheTogetherW = `${W}/scenes/bg-heshe-together-wide.png`;
+// Mia alone on the right, open wall on the left (bg-heshe-intro-mia.png widened 2026-10-09: wall + mirrored window half).
+const bgHeIntroMiaW = `${W}/scenes/bg-heshe-intro-mia-wide.png`;
 const bgReadingW = `${W}/scenes/bg-classroom-reading-wide.png`;
 const bgSupplies2W = `${W}/scenes/bg-classroom-supplies2-wide.png`;
 const bgPrepInW = `${W}/scenes/bg-prep-in-wide.png`;
@@ -715,25 +719,25 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
   {
     // Character composed into the LEFT third of bg-vocab-pip-happy.png —
     // cards dock right, onto the empty side.
-    id: 'wt2-vocab-pip-happy', kind: 'meet', focus: ['happy'], bg: bgVocabPipHappyW, who: 'pip', cardSide: 'right',
+    id: 'wt2-vocab-pip-happy', kind: 'meet', look: 'word', focus: ['happy'], bg: bgVocabPipHappyW, who: 'pip', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'Pip is happy!', repeat: 'Happy!',
   },
   {
     // Character composed into the RIGHT third of bg-vocab-leo-tired.png —
     // cards dock left.
-    id: 'wt2-vocab-leo-tired', kind: 'meet', focus: ['tired'], bg: bgVocabLeoTiredW, who: 'leo', cardSide: 'left',
+    id: 'wt2-vocab-leo-tired', kind: 'meet', look: 'word', focus: ['tired'], bg: bgVocabLeoTiredW, who: 'leo', cardSide: 'left',
     teacher: 'Listen, then repeat!', line: 'Leo is tired!', repeat: 'Tired!',
   },
   {
-    id: 'wt2-vocab-mia-sad', kind: 'meet', focus: ['sad'], bg: bgVocabMiaSadW, who: 'mia', cardSide: 'right',
+    id: 'wt2-vocab-mia-sad', kind: 'meet', look: 'word', focus: ['sad'], bg: bgVocabMiaSadW, who: 'mia', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'Mia is sad!', repeat: 'Sad!',
   },
   {
-    id: 'wt2-vocab-bella-angry', kind: 'meet', focus: ['angry'], bg: bgVocabBellaAngryW, who: 'bella', cardSide: 'left',
+    id: 'wt2-vocab-bella-angry', kind: 'meet', look: 'word', focus: ['angry'], bg: bgVocabBellaAngryW, who: 'bella', cardSide: 'left',
     teacher: 'Listen, then repeat!', line: 'Bella is angry!', repeat: 'Angry!',
   },
   {
-    id: 'wt2-vocab-willow-hungry', kind: 'meet', focus: ['hungry'], bg: bgVocabWillowHungryW, who: 'willow', cardSide: 'right',
+    id: 'wt2-vocab-willow-hungry', kind: 'meet', look: 'word', focus: ['hungry'], bg: bgVocabWillowHungryW, who: 'willow', cardSide: 'right',
     teacher: 'Listen, then repeat!', line: 'Willow is hungry!', repeat: 'Hungry!',
   },
 
@@ -834,9 +838,27 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
    * unnamed children. This is deliberately simple/visual; the full
    * He/She/They sort-and-produce sequence right below still does the real
    * teaching — this just gives students a concrete first foothold. */
+  /* Boy -> he, girl -> she, boy + girl -> they (owner 2026-10-09: "How would the student know if it is a boy or a
+   * girl? ... a boy plus a girl equals they. They are happy."). One idea per page, word on the open side of the picture. */
   {
-    id: 'wt2-heshe-intro-pip', kind: 'meet', focus: ['He'], bg: bgHeIntroPipW, who: 'pip', cardSide: 'right',
-    teacher: 'Listen, then repeat!', line: 'This is Pip. Pip is a boy. He is a boy!', repeat: 'He!',
+    id: 'wt2-boy-pip', kind: 'meet', look: 'word', word: 'boy', wordNote: '\u{1F466}', focus: ['boy'], bg: bgHeIntroPipW, who: 'pip', cardSide: 'right',
+    teacher: 'Listen, then repeat! Point to Pip: a boy.', line: 'This is Pip. Pip is a boy. He is a boy!', repeat: 'A boy!',
+  },
+  {
+    id: 'wt2-he-pip', kind: 'meet', look: 'word', word: 'He', wordNote: '\u{1F466} =', focus: ['He'], bg: bgVocabPipHappyW, who: 'pip', cardSide: 'right',
+    teacher: 'A boy = HE. Listen, then repeat!', line: 'He is happy!', repeat: 'He is happy!',
+  },
+  {
+    id: 'wt2-girl-mia', kind: 'meet', look: 'word', word: 'girl', wordNote: '\u{1F467}', focus: ['girl'], bg: bgHeIntroMiaW, who: 'mia', cardSide: 'left',
+    teacher: 'Listen, then repeat! Point to Mia: a girl.', line: 'This is Mia. Mia is a girl. She is a girl!', repeat: 'A girl!',
+  },
+  {
+    id: 'wt2-she-mia', kind: 'meet', look: 'word', word: 'She', wordNote: '\u{1F467} =', focus: ['She'], bg: bgHeIntroMiaW, who: 'mia', cardSide: 'left',
+    teacher: 'A girl = SHE. Listen, then repeat!', line: 'She is happy!', repeat: 'She is happy!',
+  },
+  {
+    id: 'wt2-they-pip-mia', kind: 'meet', look: 'word', word: 'They', wordNote: '\u{1F466} + \u{1F467} =', focus: ['They'], bg: bgHeSheTogetherW, who: 'pip',
+    teacher: 'A boy + a girl = THEY. Listen, then repeat!', line: 'A boy and a girl. They are happy!', repeat: 'They are happy!',
   },
   {
     // Refactored from a second solo tap-and-repeat "meet" scene into a real
