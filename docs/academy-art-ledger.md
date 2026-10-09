@@ -68,3 +68,29 @@ The new Canva account cannot read the old account's pictures (permission_denied)
 | Theo | MAHXiT9DjNs | MAHXiX7d__c | MAHXiVkFixg | MAHXiVNeKT8 | MAHXifw44RU | MAHXiT09RMw | MAHXicKzWJM | MAHXicVi12A |
 | Mia | MAHXibnL3H4 | MAHXib-Yiwc | MAHXiURUazs | MAHXiVRJyEM | MAHXiUwITs4 | MAHXieR-uDY | MAHXiQdGlZA | MAHXiRR-HdY |
 | Vee | MAHXicJz0_c | MAHXiejqBos | MAHXiUXyYB0 | MAHXiYM1z3I | MAHXiRLa5vQ | MAHXiT2EbCs | MAHXic0whqw | MAHXiYlnAtk |
+
+## Lesson A1-S01-E1 v3 pictures
+
+Canva holder design DAHXiX3gn1o, pages 37-55.
+
+| Picture | Canva media id | Repo path |
+|---|---|---|
+| v-name | MAHXiyPmEHA | public/academy-art/cards/v-name.webp |
+| v-age | MAHXi5iQqUo | public/academy-art/cards/v-age.webp |
+| v-country | MAHXiy6DfRw | public/academy-art/cards/v-country.webp |
+| v-hobby | MAHXi1JeULQ | public/academy-art/cards/v-hobby.webp |
+| v-family | MAHXiy75bn8 | public/academy-art/cards/v-family.webp |
+| v-mother | MAHXizl04J8 | public/academy-art/cards/v-mother.webp |
+| v-father | MAHXi2nttOE | public/academy-art/cards/v-father.webp |
+| v-brother | MAHXi9mD61w | public/academy-art/cards/v-brother.webp |
+| v-sister | MAHXi5V-izw | public/academy-art/cards/v-sister.webp |
+| v-football | MAHXi_yOoyM | public/academy-art/cards/v-football.webp |
+| v-music | MAHXi3GuGak | public/academy-art/cards/v-music.webp |
+| v-games | MAHXi6SkLiI | public/academy-art/cards/v-games.webp |
+| ava/wave | MAHXi6Jg9Bw | public/academy-art/cast/ava/wave.webp |
+| theo/wave | MAHXi191Cdw | public/academy-art/cast/theo/wave.webp |
+| vee/wave | MAHXi3y5lmA | public/academy-art/cast/vee/wave.webp |
+| vee/thumbs | MAHXi0Ziv9E | public/academy-art/cast/vee/thumbs.webp |
+| theo/football (soccer ball; first try drew an American football and was redone) | MAHXi2EGfXc | public/academy-art/cast/theo/football.webp |
+| ava/music | MAHXixAA318 | public/academy-art/cast/ava/music.webp |
+| club-lobby (scene) | MAHXi7-_6nU | public/academy-art/bg/club-lobby.webp |
