@@ -1,4 +1,36 @@
-tiger-head: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started tiger-head: 9dd10c69-68c9-45b3-8e73-576a7c0a4b8d
-saved public/lep1/video/clips/u4l5-moves/tiger-head.mp4 (5275867 bytes)
-1/1 clips ready for u4l5-moves
+PROBE bytedance/seedance-2.5/image-to-video image_end: 200 {"type":"description","pricing_description":"For 16:9 video without video input, your request costs roughly $0.2056 per second of generated video at 480p, $0.4622 at 720p, and $1.1372 at 1080p. Each 1,000 video tokens costs $0.0214 at 480p or 720p and $0.0234 at 1080p. Billable video tokens = ceil(output height × output width × (input video duration + generated video duration) × 24 / 1024). Image 
+PROBE bytedance/seedance-2.5/image-to-video image_tail: 200 {"type":"description","pricing_description":"For 16:9 video without video input, your request costs roughly $0.2056 per second of generated video at 480p, $0.4622 at 720p, and $1.1372 at 1080p. Each 1,000 video tokens costs $0.0214 at 480p or 720p and $0.0234 at 1080p. Billable video tokens = ceil(output height × output width × (input video duration + generated video duration) × 24 / 1024). Image 
+PROBE bytedance/seedance-2.5/image-to-video image_last: 200 {"type":"description","pricing_description":"For 16:9 video without video input, your request costs roughly $0.2056 per second of generated video at 480p, $0.4622 at 720p, and $1.1372 at 1080p. Each 1,000 video tokens costs $0.0214 at 480p or 720p and $0.0234 at 1080p. Billable video tokens = ceil(output height × output width × (input video duration + generated video duration) × 24 / 1024). Image 
+PROBE bytedance/seedance-2.5/image-to-video start_end: 400 {"detail":": 'image_url' is a required property"}
+PROBE bytedance/seedance-2.5/image-to-video first_last: 400 {"detail":": 'image_url' is a required property"}
+PROBE bytedance/seedance-2.5/image-to-video images: 400 {"detail":": 'image_url' is a required property"}
+PROBE bytedance/seedance-2.5/image-to-video medias: 400 {"detail":": 'image_url' is a required property"}
+PROBE bytedance/seedance-2.5/reference-to-video image_end: 400 {"detail":": 'audio_urls' is a required property"}
+PROBE bytedance/seedance-2.5/reference-to-video image_tail: 400 {"detail":": 'audio_urls' is a required property"}
+PROBE bytedance/seedance-2.5/reference-to-video image_last: 400 {"detail":": 'audio_urls' is a required property"}
+PROBE bytedance/seedance-2.5/reference-to-video start_end: 400 {"detail":": 'audio_urls' is a required property"}
+PROBE bytedance/seedance-2.5/reference-to-video first_last: 400 {"detail":": 'audio_urls' is a required property"}
+PROBE bytedance/seedance-2.5/reference-to-video images: 200 {"type":"description","pricing_description":"For 16:9 video without video input, your request costs roughly $0.2056 per second of generated video at 480p, $0.4622 at 720p, and $1.1372 at 1080p. Each 1,000 video tokens costs $0.0214 at 480p or 720p and $0.0234 at 1080p. If video inputs are provided, the token rate is multiplied by 0.6: $0.01284 per 1,000 tokens at 480p or 720p and $0.01404 at 1080p
+PROBE bytedance/seedance-2.5/reference-to-video medias: 400 {"detail":": 'audio_urls' is a required property"}
+PROBE bytedance/seedance-2.5/omni-reference image_end: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/omni-reference image_tail: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/omni-reference image_last: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/omni-reference start_end: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/omni-reference first_last: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/omni-reference images: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/omni-reference medias: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/start-end-to-video image_end: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/start-end-to-video image_tail: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/start-end-to-video image_last: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/start-end-to-video start_end: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/start-end-to-video first_last: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/start-end-to-video images: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/start-end-to-video medias: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/first-last-frame-to-video image_end: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/first-last-frame-to-video image_tail: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/first-last-frame-to-video image_last: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/first-last-frame-to-video start_end: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/first-last-frame-to-video first_last: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/first-last-frame-to-video images: 404 {"detail":"model_not_found"}
+PROBE bytedance/seedance-2.5/first-last-frame-to-video medias: 404 {"detail":"model_not_found"}
+probe done — nothing was ordered
