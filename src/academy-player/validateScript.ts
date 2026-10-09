@@ -178,7 +178,7 @@ export function scriptTexts(script: SceneScript): string[] {
     if (b.t === 'sort') out.push(b.prompt, ...b.cards);
     if (b.t === 'match') out.push(b.prompt, ...b.pairs.flatMap((pr) => [pr.left, pr.right]));
     if (b.t === 'profile') out.push(...(b.prompt ? [b.prompt] : []), ...b.rows.map((r) => r.value), ...(b.hotspots ?? []).map((h) => h.why));
-    if (b.t === 'form') out.push(b.prompt, ...b.fields.flatMap((f) => [f.label, ...(f.options ?? [])]));
+    if (b.t === 'form') out.push(b.prompt, ...b.fields.flatMap((f) => [f.label, ...(f.starter ? [f.starter] : []), ...(f.clue ? [f.clue] : []), ...(f.options ?? [])]), ...(b.model ? b.model.lines.map((l) => l.text) : []));
   }
   return out;
 }

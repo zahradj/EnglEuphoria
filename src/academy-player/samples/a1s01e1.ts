@@ -23,7 +23,20 @@ export const INVENTORY = ['name', 'age', 'country', 'hobby', 'family', 'mother',
 /** The frames the exit task uses. Each must be practised at least 3 times (see the tests). */
 export const EXIT_FRAMES = ['my name is', 'i am', 'i am from', 'i like', 'how old are you'] as const;
 
-const card = (word: string, chunk: string, meaning: string, alt: string): FlashCard => ({ word, chunk, meaning, pictureId: `v-${word}`, alt });
+const card = (word: string, chunk: string, meaning: string, alt: string, clue: string): FlashCard => ({ word, chunk, meaning, pictureId: `v-${word}`, alt, ask: `What is ${/^[aeiou]/.test(word) ? 'an' : 'a'} ${word}?`, clue });
+
+const DRAG_SETS = [
+  ['name', 'age', 'country', 'hobby'],
+  ['family', 'mother', 'father', 'brother'],
+  ['sister', 'football', 'music', 'games'],
+];
+/** Drag & drop after each set of words: drag the word onto its picture. */
+const DRAG = (n: number): Beat => ({
+  t: 'match',
+  drag: true,
+  prompt: 'Drag each word onto its picture.',
+  pairs: DRAG_SETS[n].map((w) => ({ left: w, right: w, leftPicture: { id: `v-${w}`, alt: w } })),
+});
 
 const HOBBIES = ['football ⚽', 'music 🎵', 'games 🎮', 'reading 📚', 'drawing 🎨', 'dancing 💃'];
 
@@ -56,10 +69,20 @@ export const A1S01E1: SceneScript = {
     { t: 'trains', criteria: [1] },
     {
       t: 'form',
-      prompt: 'What is your name?',
+      prompt: 'Answer in a full sentence. Follow the model.',
+      model: {
+        title: 'Model: Ava answers',
+        style: 'talk',
+        lines: [
+          { who: 'Vee', text: 'What is your name?' },
+          { who: 'Ava', text: 'My name is Ava.' },
+          { who: 'Vee', text: 'How are you today?' },
+          { who: 'Ava', text: 'I am great, thanks!' },
+        ],
+      },
       fields: [
-        { key: 'name', label: 'My name (or nickname)', kind: 'text', placeholder: 'Type here' },
-        { key: 'mood', label: 'How are you today?', kind: 'choice', options: ['😀 Great', '🙂 OK', '😴 Tired'] },
+        { key: 'name', label: 'What is your name?', kind: 'text', starter: 'My name is', placeholder: 'your name', clue: 'Type only your name. We add the rest.' },
+        { key: 'mood', label: 'How are you today?', kind: 'choice', starter: 'I am', options: ['great 😀', 'fine 🙂', 'tired 😴'], clue: 'Tap one. Then say: I am …' },
       ],
     },
     { t: 'hide', who: 'Vee' },
@@ -80,33 +103,40 @@ export const A1S01E1: SceneScript = {
     {
       t: 'flash',
       title: 'Words about you',
+      noCheck: true,
       cards: [
-        card('name', 'My name is Ava.', 'what people call you', 'A name tag on a lanyard next to a smiling teen'),
-        card('age', 'My age is 14.', 'how old you are', 'A birthday cake with candles and balloons'),
-        card('country', 'My country is Brazil.', 'the place you are from', 'A globe with small flags and a map pin'),
-        card('hobby', 'My hobby is music.', 'what you like to do', 'A teen at a desk with small icons of free-time things'),
+        card('name', 'My name is Ava.', 'what people call you', 'A name tag on a lanyard next to a smiling teen', "It is the word people use for you. Ava, Theo and Mia are names. What is your name?"),
+        card('age', 'My age is 14.', 'how old you are', 'A birthday cake with candles and balloons', "It is a number. It says how many years old you are. Theo is 14."),
+        card('country', 'My country is Brazil.', 'the place you are from', 'A globe with small flags and a map pin', "It is the big place you are from. Brazil, Spain and Japan are countries."),
+        card('hobby', 'My hobby is music.', 'what you like to do', 'A teen at a desk with small icons of free-time things', "It is a thing you like to do in your free time. Music is a hobby."),
       ],
     },
+    DRAG(0),
     {
       t: 'flash',
       title: 'Words about family',
+      noCheck: true,
       cards: [
-        card('family', 'I have a big family.', 'mother, father, brother, sister', 'A happy family of four'),
-        card('mother', 'This is my mother.', 'a woman in your family: she has children', 'A smiling woman with a teen girl'),
-        card('father', 'This is my father.', 'a man in your family: he has children', 'A smiling man with a teen boy'),
-        card('brother', 'I have a brother.', 'a boy in your family', 'Two boys fist-bumping'),
+        card('family', 'I have a big family.', 'mother, father, brother, sister', 'A happy family of four', "It is the people at home: mother, father, brother, sister."),
+        card('mother', 'This is my mother.', 'a woman in your family: she has children', 'A smiling woman with a teen girl', "She is a woman. She has children. Ava’s mother is at home."),
+        card('father', 'This is my father.', 'a man in your family: he has children', 'A smiling man with a teen boy', "He is a man. He has children. Theo’s father likes football."),
+        card('brother', 'I have a brother.', 'a boy in your family', 'Two boys fist-bumping', "He is a boy in your family. You have the same mother and father."),
       ],
     },
+    DRAG(1),
     {
       t: 'flash',
       title: 'Words about free time',
+      noCheck: true,
       cards: [
-        card('sister', 'I have a sister.', 'a girl in your family', 'Two girls laughing together'),
-        card('football', 'I like football.', 'a game with a ball and two goals', 'A football on grass with a goal'),
-        card('music', 'I like music.', 'songs: you listen to it', 'Headphones, a music note and a guitar'),
-        card('games', 'I like games.', 'things you play on a screen or a table', 'A game controller with a glowing screen'),
+        card('sister', 'I have a sister.', 'a girl in your family', 'Two girls laughing together', "She is a girl in your family. You have the same mother and father."),
+        card('football', 'I like football.', 'a game with a ball and two goals', 'A football on grass with a goal', "It is a game with a ball and two goals. Many people play it."),
+        card('music', 'I like music.', 'songs: you listen to it', 'Headphones, a music note and a guitar', "It is songs. You listen to music. Ava likes music."),
+        card('games', 'I like games.', 'things you play on a screen or a table', 'A game controller with a glowing screen', "You play games on a screen or at a table. Theo likes games."),
       ],
     },
+
+    DRAG(2),
 
     // ── The Drop (10 min) = 2. Read the story: a full-page scene, the cast act every line; read it, then say it ─
     { t: 'segment', index: 2 },
@@ -359,12 +389,23 @@ export const A1S01E1: SceneScript = {
     { t: 'say', who: 'Vee', expr: 'happy', text: 'Your turn! Make your introduction card.' },
     {
       t: 'form',
-      prompt: 'Fill your card.',
+      prompt: 'Fill your card. Follow Ava’s model.',
+      model: {
+        title: 'Model: Ava’s card, and what she says',
+        style: 'card',
+        lines: [
+          { who: 'Age', text: 'I am 14.' },
+          { who: 'Country', text: 'I am from Brazil.' },
+          { who: 'Hobby', text: 'I like music.' },
+          { who: 'Family', text: 'I have a mother and a sister.' },
+          { who: 'Then', text: 'Ask back: How old are you? Where are you from?' },
+        ],
+      },
       fields: [
-        { key: 'age', label: 'My age', kind: 'choice', options: ['11', '12', '13', '14', '15', '16', '17', '18'] },
-        { key: 'country', label: 'My country', kind: 'text', placeholder: 'For example: Brazil' },
-        { key: 'hobby', label: 'My hobby', kind: 'choice', options: HOBBIES },
-        { key: 'family', label: 'My family (tap all)', kind: 'multi', options: ['mother', 'father', 'brother', 'sister'], optional: true },
+        { key: 'age', label: 'My age', kind: 'choice', starter: 'I am', options: ['11', '12', '13', '14', '15', '16', '17', '18'] },
+        { key: 'country', label: 'My country', kind: 'text', starter: 'I am from', placeholder: 'Brazil', clue: 'Type only the country.' },
+        { key: 'hobby', label: 'My hobby', kind: 'choice', starter: 'I like', options: HOBBIES },
+        { key: 'family', label: 'My family (tap all)', kind: 'multi', options: ['mother', 'father', 'brother', 'sister'], optional: true, clue: 'Not sure? You can skip it.' },
       ],
     },
     {

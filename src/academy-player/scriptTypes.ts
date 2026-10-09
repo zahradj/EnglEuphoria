@@ -43,6 +43,10 @@ export interface FlashCard {
   chunk: string;
   /** a very short A1 meaning, e.g. "what people call you" (shown under the picture) */
   meaning?: string;
+  /** the question the card answers, e.g. "What is a name?" (shown big on the card's full page) */
+  ask?: string;
+  /** one or two very short A1 sentences with real examples (the clue) */
+  clue?: string;
   /** picture id (art slot) */
   pictureId: string;
   alt: string;
@@ -74,6 +78,17 @@ export interface FormField {
   options?: string[];
   placeholder?: string;
   optional?: boolean;
+  /** the start of the full sentence, shown before the answer ("My name is"); the saved value stays just the answer */
+  starter?: string;
+  /** one short clue under the field */
+  clue?: string;
+}
+
+/** A model to follow: a short talk (who says what) or a filled example card (label -> value). */
+export interface FormModel {
+  title: string;
+  style: 'talk' | 'card';
+  lines: { who: string; text: string }[];
 }
 
 export type Beat =
@@ -95,7 +110,7 @@ export type Beat =
   | { t: 'choice'; prompt: string; tests: 'language' | 'story'; options: ChoiceOption[] }
   | { t: 'chat'; title: string; messages: ChatMessage[]; reply?: { prompt: string; options: ChoiceOption[] } }
   | { t: 'panels'; layout: 'strip' | 'grid'; panels: PanelSpec[] }
-  | { t: 'flash'; title: string; cards: FlashCard[] }
+  | { t: 'flash'; title: string; cards: FlashCard[]; /** skip the tap-the-picture check (a drag & drop match follows) */ noCheck?: boolean }
   /** tap word tiles to build the target sentence (distractor tiles allowed); wrong order => "Not yet — try again" */
   | { t: 'build'; prompt: string; target: string; extraTiles?: string[]; hint?: string }
   /** private say-it-aloud-or-type-it step; nothing is recorded or sent (the recording booth + consent are not built yet) */
@@ -105,11 +120,11 @@ export type Beat =
   /** one card at a time, two buttons ("I know it" / "not sure yet"); the count of "yes" is saved in vars[key] (teacher baseline) */
   | { t: 'sort'; prompt: string; cards: string[]; yes: string; no: string; key: string }
   /** tap a left item, then its partner on the right (right side shuffled by the seed) */
-  | { t: 'match'; prompt: string; pairs: { left: string; right: string; leftPicture?: { id: string; alt: string } }[] }
+  | { t: 'match'; prompt: string; drag?: boolean; pairs: { left: string; right: string; leftPicture?: { id: string; alt: string } }[] }
   /** a profile card to read (tap-to-gloss). With hotspots the student taps rows that look wrong; each reveals why. */
   | { t: 'profile'; title: string; prompt?: string; rows: ProfileRow[]; hotspots?: { row: number; why: string }[]; gloss?: Gloss }
   /** a small form; answers are saved in vars[field.key] and can be shown later as {key} */
-  | { t: 'form'; prompt: string; fields: FormField[] }
+  | { t: 'form'; prompt: string; fields: FormField[]; model?: FormModel }
   | { t: 'set'; key: string; value: VarValue }
   | { t: 'if'; key: string; equals: VarValue; goto: string }
   | { t: 'jump'; label: string }

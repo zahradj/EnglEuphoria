@@ -23,7 +23,7 @@ export function beatSeconds(b: Beat): number {
     case 'panels':
       return b.panels.length * 14 + 20;
     case 'flash':
-      return b.cards.length * 30 + b.cards.length * 8; // meet + the picture check
+      return b.noCheck ? b.cards.length * 14 : b.cards.length * 30 + b.cards.length * 8; // meet (a full page per word) [+ the picture check]
     case 'build':
       return 20 + 9 * (words(b.target) + (b.extraTiles?.length ?? 0));
     case 'record':
@@ -33,7 +33,7 @@ export function beatSeconds(b: Beat): number {
     case 'sort':
       return b.cards.length * 7 + 10;
     case 'match':
-      return b.pairs.length * 11 + 15;
+      return b.drag ? b.pairs.length * 8 + 10 : b.pairs.length * 11 + 15;
     case 'profile':
       return 25 + (b.hotspots?.length ?? 0) * 28;
     case 'form':

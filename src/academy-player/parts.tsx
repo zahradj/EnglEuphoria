@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { PictureTile, Backdrop, CastBust } from './art';
 import { speakerColor } from './castVisual';
 import { seededShuffle } from './engine';
-import type { Beat, ChatMessage, ChoiceOption, FlashCard, FormField, Gloss, PanelSpec, ProfileRow } from './scriptTypes';
+import type { Beat, ChatMessage, ChoiceOption, FlashCard, FormField, FormModel, Gloss, PanelSpec, ProfileRow } from './scriptTypes';
 
 type SayBeat = Extract<Beat, { t: 'say' }>;
 
@@ -251,38 +251,67 @@ export function ChoiceBlock({ prompt, options, hintTier, onRight, onWrong, extra
 }
 
 /* ── flash deck: meet (sets of 3-4), then a gentle retrieval check ── */
-export function FlashDeck({ title, cards, seed, artBase, onCheck, onDone, onReplay }: { title: string; cards: FlashCard[]; seed: number; artBase?: string; onCheck: (correct: boolean) => void; onDone: () => void; onReplay: (voice?: string) => void }) {
+export function FlashDeck({ title, cards, seed, artBase, noCheck, onCheck, onDone, onReplay }: { title: string; cards: FlashCard[]; seed: number; artBase?: string; noCheck?: boolean; onCheck: (correct: boolean) => void; onDone: () => void; onReplay: (voice?: string) => void }) {
   const [heard, setHeard] = useState<Set<number>>(new Set());
   const [phase, setPhase] = useState<'meet' | 'check'>('meet');
   const [q, setQ] = useState(0);
+  const [focus, setFocus] = useState<number | null>(null);
   const [wrong, setWrong] = useState<number | null>(null);
   const order = useMemo(() => seededShuffle(cards.map((_, i) => i), seed), [cards, seed]);
   const choices = useMemo(() => seededShuffle(cards.map((_, i) => i), seed + q + 1), [cards, seed, q]);
   useEffect(() => {
     setHeard(new Set());
     setPhase('meet');
+    setFocus(null);
     setQ(0);
     setWrong(null);
   }, [cards]);
 
   if (phase === 'meet') {
     const all = heard.size === cards.length;
+    const open = focus === null ? null : cards[focus];
+    const see = (i: number) => {
+      setFocus(i);
+      setHeard((h) => new Set(h).add(i));
+      onReplay(cards[i].voice);
+    };
+    if (open && focus !== null) {
+      return (
+        <div className="ap-panel ap-wordpage" data-testid="word-page">
+          <div className="ap-wordpage-pic">
+            <PictureTile id={open.pictureId} alt={open.alt} word={open.word} artBase={artBase} />
+          </div>
+          <div className="ap-wordpage-body">
+            <span className="ap-wordpage-count">{focus + 1} / {cards.length}</span>
+            <h3 className="ap-wordpage-word">{open.word}</h3>
+            {open.ask && <p className="ap-wordpage-ask">❓ {open.ask}</p>}
+            {open.meaning && <p className="ap-wordpage-meaning">{open.meaning}</p>}
+            {open.clue && <p className="ap-wordpage-clue"><span aria-hidden="true">💡 </span>{open.clue}</p>}
+            <button type="button" className="ap-wordpage-say" onClick={() => onReplay(open.voice)}>🔊 {open.chunk}</button>
+            <div className="ap-row">
+              <button type="button" className="ap-btn" onClick={() => setFocus(null)}>▦ All cards</button>
+              <button type="button" className="ap-btn" disabled={focus === 0} onClick={() => see(focus - 1)}>◂ Back</button>
+              <button type="button" className="ap-btn ap-btn-primary" onClick={() => (focus + 1 < cards.length ? see(focus + 1) : setFocus(null))}>{focus + 1 < cards.length ? 'Next ▸' : 'Done ✓'}</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="ap-panel">
-        <p className="ap-prompt">{title} — tap each card</p>
+        <p className="ap-prompt">{title} — tap a card to see what it means</p>
         <div className="ap-deck">
           {cards.map((c, i) => (
-            <button key={c.word} type="button" className="ap-card" data-picked={heard.has(i)} onClick={() => { setHeard(new Set(heard).add(i)); onReplay(c.voice); }} aria-label={`${c.word}: ${c.chunk}`}>
+            <button key={c.word} type="button" className="ap-card ap-wordcard" data-picked={heard.has(i)} onClick={() => see(i)} aria-label={`${c.word}: ${c.ask ?? c.chunk}`}>
               <PictureTile id={c.pictureId} alt={c.alt} word={c.word} artBase={artBase} />
               <span className="ap-word">{c.word}</span>
-              {c.meaning && <span className="ap-meaning">{c.meaning}</span>}
-              <span className="ap-chunk">{c.chunk}</span>
+              <span className="ap-wordcard-q">{heard.has(i) ? '✓ seen' : '❓ tap to see'}</span>
             </button>
           ))}
         </div>
         <div className="ap-row">
-          <span className="ap-chunk">{heard.size} of {cards.length} heard</span>
-          <button type="button" className="ap-btn ap-btn-primary" disabled={!all} onClick={() => setPhase('check')}>Check ▸</button>
+          <span className="ap-chunk">{heard.size} of {cards.length} seen</span>
+          <button type="button" className="ap-btn ap-btn-primary" disabled={!all} onClick={() => (noCheck ? onDone() : setPhase('check'))}>{noCheck ? 'Next ▸' : 'Check ▸'}</button>
         </div>
       </div>
     );
@@ -574,6 +603,110 @@ export function MatchBlock({ prompt, pairs, seed, artBase, onWrong, onRight, onD
   );
 }
 
+/* ── drag & drop: drag each word onto its picture (pointer events: mouse, touch and pen). Tap a word, then tap a picture, works too. ── */
+export function DragMatchBlock({ prompt, pairs, seed, artBase, onWrong, onRight, onDone }: { prompt: string; pairs: { left: string; right: string; leftPicture?: { id: string; alt: string } }[]; seed: number; artBase?: string; onWrong: () => void; onRight: () => void; onDone: () => void }) {
+  const order = useMemo(() => seededShuffle(pairs.map((_, i) => i), seed), [pairs, seed]);
+  const [placed, setPlaced] = useState<number[]>([]);
+  const [held, setHeld] = useState<number | null>(null);
+  const [drag, setDrag] = useState<{ i: number; x: number; y: number } | null>(null);
+  const [slip, setSlip] = useState<number | null>(null);
+  const [shake, setShake] = useState<number | null>(null);
+  useEffect(() => {
+    setPlaced([]);
+    setHeld(null);
+    setDrag(null);
+    setSlip(null);
+  }, [pairs]);
+  const all = placed.length === pairs.length;
+  const drop = (word: number, target: number) => {
+    if (placed.includes(target)) return;
+    if (word === target) {
+      setPlaced((p) => [...p, target]);
+      setHeld(null);
+      if (slip !== word) onRight();
+      setSlip(null);
+    } else {
+      setSlip(word);
+      setShake(target);
+      window.setTimeout(() => setShake(null), 400);
+      onWrong();
+    }
+  };
+  const targetAt = (x: number, y: number): number | null => {
+    // the dragged chip sits under the pointer, so look through every element at that point
+    const el = document.elementsFromPoint(x, y).map((e) => e.closest('[data-drop]')).find(Boolean);
+    return el ? Number(el.getAttribute('data-drop')) : null;
+  };
+  return (
+    <div className="ap-panel ap-dragmatch">
+      <p className="ap-prompt">{prompt}</p>
+      <div className="ap-dm-targets">
+        {pairs.map((p, i) => (
+          <button key={i} type="button" className="ap-dm-target" data-drop={i} data-done={placed.includes(i)} data-shake={shake === i} data-over={drag !== null && !placed.includes(i)} aria-label={`${p.leftPicture?.alt ?? p.left}${placed.includes(i) ? `: ${p.right}` : ': empty'}`} onClick={() => held !== null && drop(held, i)}>
+            {p.leftPicture ? <PictureTile id={p.leftPicture.id} alt={p.leftPicture.alt} word={p.right} artBase={artBase} /> : <span className="ap-dm-text">{p.left}</span>}
+            <span className="ap-dm-slot">{placed.includes(i) ? `✓ ${p.right}` : 'drop here'}</span>
+          </button>
+        ))}
+      </div>
+      <div className="ap-dm-bank" aria-label="Words">
+        {order.map((wi) => (
+          <button
+            key={wi}
+            type="button"
+            className="ap-dm-chip"
+            disabled={placed.includes(wi)}
+            data-held={held === wi}
+            data-dragging={drag?.i === wi}
+            style={drag?.i === wi ? { transform: `translate(${drag.x}px, ${drag.y}px) scale(1.08)`, zIndex: 20, touchAction: 'none' } : { touchAction: 'none' }}
+            onPointerDown={(e) => {
+              if (placed.includes(wi)) return;
+              (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+              const r = e.currentTarget.getBoundingClientRect();
+              (e.currentTarget as HTMLElement).dataset.sx = String(e.clientX);
+              (e.currentTarget as HTMLElement).dataset.sy = String(e.clientY);
+              (e.currentTarget as HTMLElement).dataset.moved = '0';
+              void r;
+              setDrag({ i: wi, x: 0, y: 0 });
+            }}
+            onPointerMove={(e) => {
+              if (drag?.i !== wi) return;
+              const dx = e.clientX - Number(e.currentTarget.dataset.sx);
+              const dy = e.clientY - Number(e.currentTarget.dataset.sy);
+              if (Math.abs(dx) + Math.abs(dy) > 6) e.currentTarget.dataset.moved = '1';
+              setDrag({ i: wi, x: dx, y: dy });
+            }}
+            onPointerUp={(e) => {
+              if (drag?.i !== wi) return;
+              const moved = e.currentTarget.dataset.moved === '1';
+              setDrag(null);
+              if (!moved) {
+                setHeld(held === wi ? null : wi);
+                return;
+              }
+              const tg = targetAt(e.clientX, e.clientY);
+              if (tg !== null) drop(wi, tg);
+            }}
+            onPointerCancel={() => setDrag(null)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setHeld(held === wi ? null : wi);
+              }
+            }}
+          >
+            {pairs[wi].right}
+          </button>
+        ))}
+      </div>
+      {slip !== null && !all && <p className="ap-feedback" role="status">Not yet — look at the picture and try again.</p>}
+      <div className="ap-row">
+        <span className="ap-chunk">{placed.length} of {pairs.length} placed. Drag a word onto its picture (or tap a word, then a picture).</span>
+        <button type="button" className="ap-btn ap-btn-primary" disabled={!all} onClick={onDone}>Continue ▸</button>
+      </div>
+    </div>
+  );
+}
+
 /* ── profile card: read with tap-to-gloss; optional "tap what looks odd" hotspots ── */
 export function ProfileBlock({ title, prompt, rows, hotspots = [], gloss = {}, onDone }: { title: string; prompt?: string; rows: ProfileRow[]; hotspots?: { row: number; why: string }[]; gloss?: Gloss; onDone: () => void }) {
   const [found, setFound] = useState<number[]>([]);
@@ -617,20 +750,34 @@ export function ProfileBlock({ title, prompt, rows, hotspots = [], gloss = {}, o
 }
 
 /* ── form: a small set of fields, answers saved for later screens ── */
-export function FormBlock({ prompt, fields, onDone }: { prompt: string; fields: FormField[]; onDone: (values: Record<string, string>) => void }) {
+export function FormBlock({ prompt, fields, model, onDone }: { prompt: string; fields: FormField[]; model?: FormModel; onDone: (values: Record<string, string>) => void }) {
   const [vals, setVals] = useState<Record<string, string>>({});
   useEffect(() => {
     setVals({});
   }, [fields]);
   const ok = fields.every((f) => f.optional || (vals[f.key] ?? '').trim());
   return (
-    <div className="ap-panel">
+    <div className="ap-panel ap-formpanel">
       <p className="ap-prompt">{prompt}</p>
+      {model && (
+        <div className="ap-model" data-style={model.style} aria-label={model.title}>
+          <span className="ap-model-title">👀 {model.title}</span>
+          {model.lines.map((l, i) => (
+            <p key={i} className="ap-model-line" style={{ ['--who' as string]: speakerColor(l.who as never) }}>
+              <span className="ap-model-who">{l.who}</span>
+              <span className="ap-model-text">{l.text}</span>
+            </p>
+          ))}
+        </div>
+      )}
       {fields.map((f) => (
         <div key={f.key} className="ap-field">
           <label className="ap-chunk" htmlFor={`ap-f-${f.key}`}>{f.label}</label>
           {f.kind === 'text' ? (
-            <input id={`ap-f-${f.key}`} className="ap-input" maxLength={24} value={vals[f.key] ?? ''} placeholder={f.placeholder} onChange={(e) => setVals({ ...vals, [f.key]: e.target.value.replace(/[{}<>]/g, '') })} />
+            <div className="ap-starter-row">
+              {f.starter && <span className="ap-starter" aria-hidden="true">{f.starter}</span>}
+              <input id={`ap-f-${f.key}`} className="ap-input" maxLength={24} value={vals[f.key] ?? ''} placeholder={f.placeholder} aria-label={f.starter ? `${f.starter} …` : f.label} onChange={(e) => setVals({ ...vals, [f.key]: e.target.value.replace(/[{}<>]/g, '') })} />
+            </div>
           ) : f.kind === 'multi' ? (
             <div className="ap-tick-opts" role="group" aria-label={f.label}>
               {(f.options ?? []).map((o) => {
@@ -649,10 +796,12 @@ export function FormBlock({ prompt, fields, onDone }: { prompt: string; fields: 
               ))}
             </div>
           )}
+          {f.clue && <p className="ap-fieldclue"><span aria-hidden="true">💡 </span>{f.clue}</p>}
+          {f.starter && (vals[f.key] ?? '').trim() && <p className="ap-yoursentence" role="status">✅ {f.starter} {vals[f.key].trim()}.</p>}
         </div>
       ))}
       <div className="ap-row">
-        <span className="ap-chunk">You can use any name or a nickname.</span>
+        <span className="ap-chunk">Follow the model. Any name or nickname is fine.</span>
         <button type="button" className="ap-btn ap-btn-primary" disabled={!ok} onClick={() => onDone(vals)}>Continue ▸</button>
       </div>
     </div>
