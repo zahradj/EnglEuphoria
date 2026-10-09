@@ -9,7 +9,7 @@ Canva rate-limits image generation ("quota_cooldown"): make ONE picture, wait ~2
 |---|---|---|---|---|---|---|
 | Vee | MAHXdW0wNyY | MAHXdUGuoxM | MAHXdkQRIm4 (weak tilt, may redo) | MAHXdlzhwvw | MAHXdhihuTI | MAHXdvfubSE |
 | Ava | MAHXdq0tQjs | MAHXd6yfO84 | MAHXdyOvQhs | MAHXeD4yFDk | MAHXeY49NZk | MAHXeRxpygM |
-| Theo | | | | | | |
+| Theo | MAHXeduj9U8 | | | | | |
 | Mia | | | | | | |
 
 Not yet in the repo: export from Canva and fetch per `docs/canva-art-pipeline.md` to `cast/<name>/<expression>.webp`.
