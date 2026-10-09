@@ -5,9 +5,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { CAST_LOOK, bgLook, cardIcon } from './castVisual';
 import { SceneArt } from './scenes';
-import type { CastName, Expression } from './scriptTypes';
+import { POSES, type CastName, type Expression } from './scriptTypes';
 
-const MOUTH: Record<Expression, string> = {
+type Base = Exclude<Expression, 'wave' | 'thumbs' | 'football' | 'music'>;
+const MOUTH: Record<Base, string> = {
   neutral: 'M 38 74 Q 50 76 62 74',
   happy: 'M 36 72 Q 50 86 64 72',
   curious: 'M 40 76 Q 50 74 60 77',
@@ -15,7 +16,7 @@ const MOUTH: Record<Expression, string> = {
   thinking: 'M 40 76 L 60 74',
   concerned: 'M 38 78 Q 50 70 62 78',
 };
-const BROW: Record<Expression, [string, string]> = {
+const BROW: Record<Base, [string, string]> = {
   neutral: ['M 30 44 L 44 44', 'M 56 44 L 70 44'],
   happy: ['M 30 43 Q 37 39 44 43', 'M 56 43 Q 63 39 70 43'],
   curious: ['M 30 44 L 44 40', 'M 56 44 L 70 44'],
@@ -24,8 +25,9 @@ const BROW: Record<Expression, [string, string]> = {
   concerned: ['M 30 41 L 44 45', 'M 56 45 L 70 41'],
 };
 
-export function CastBust({ who, expr = 'neutral', label = true, blink = false, open = false }: { who: CastName; expr?: Expression; label?: boolean; blink?: boolean; open?: boolean }) {
+export function CastBust({ who, expr: exprIn = 'neutral', label = true, blink = false, open = false }: { who: CastName; expr?: Expression; label?: boolean; blink?: boolean; open?: boolean }) {
   const l = CAST_LOOK[who];
+  const expr: Base = (POSES.includes(exprIn) ? 'happy' : exprIn) as Base;
   const [b1, b2] = BROW[expr];
   return (
     <svg viewBox="0 0 100 130" role="img" aria-label={`${who}, ${expr} (placeholder drawing)`} className="ap-bust">
@@ -81,6 +83,7 @@ export function Sprite({ who, expr, artBase, speaking = false, animate = true }:
   const [blink, setBlink] = useState(false);
   const [mouth, setMouth] = useState(false);
   const [noBlink, setNoBlink] = useState(false);
+  const [noPose, setNoPose] = useState<Expression[]>([]); // pose pictures this character does not have: 'happy' is shown instead
   const [noTalk, setNoTalk] = useState(false);
   // blink: a calm, regular rhythm per character (deterministic, not random)
   useEffect(() => {
@@ -119,18 +122,18 @@ export function Sprite({ who, expr, artBase, speaking = false, animate = true }:
   useEffect(() => () => window.clearTimeout(underTimer.current), []);
   const base = artBase ? `${artBase}/cast/${who.toLowerCase()}` : '';
   if (artBase && !failed) {
-    const poseOk = shown === 'neutral' || shown === 'happy';
+    const poseOk = shown === 'neutral' || shown === 'happy' || noPose.includes(shown);
     return (
       <div className="ap-sprite-stack" data-speaking={speaking && animate} data-animate={animate}>
         <span className="ap-sprite-shadow" aria-hidden="true" />
         {under && <img className="ap-sprite-img ap-sprite-under" src={`${base}/${under}.webp`} alt="" draggable={false} />}
-        <img key={shown} className="ap-sprite-img ap-sprite-in" src={`${base}/${shown}.webp`} alt={`${who}, ${shown}`} onError={() => setFailed(true)} draggable={false} />
+        <img key={shown} className="ap-sprite-img ap-sprite-in" src={`${base}/${noPose.includes(shown) ? 'happy' : shown}.webp`} alt={`${who}, ${shown}`} onError={() => (POSES.includes(shown) && !noPose.includes(shown) ? setNoPose([...noPose, shown]) : setFailed(true))} draggable={false} />
         {animate && poseOk && !noBlink && <img className="ap-sprite-frame" data-on={blink && !mouth} src={`${base}/blink.webp`} alt="" onError={() => setNoBlink(true)} draggable={false} />}
         {animate && poseOk && !noTalk && <img className="ap-sprite-frame" data-on={mouth} src={`${base}/talk.webp`} alt="" onError={() => setNoTalk(true)} draggable={false} />}
       </div>
     );
   }
-  return <CastBust who={who} expr={expr} label={false} blink={animate && blink} open={animate && mouth} />;
+  return <CastBust who={who} expr={POSES.includes(expr) ? 'happy' : expr} label={false} blink={animate && blink} open={animate && mouth} />;
 }
 
 /** Full-bleed background: real picture if available, else a calm gradient labelled as a placeholder. */

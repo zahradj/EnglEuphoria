@@ -9,7 +9,13 @@ const words = (t: string) => t.trim().split(/\s+/).filter(Boolean).length;
 export function beatSeconds(b: Beat): number {
   switch (b.t) {
     case 'say':
-      return 4 + 0.45 * words(b.text);
+      // read-and-repeat adds the time to say (or type) the line; memorise mode is mostly recall time
+      return 4 + 0.45 * words(b.text) + (b.repeat ? 9 : 0) + (b.hide ? 14 : 0);
+    case 'cloze':
+      return 15 + b.bank.length * 9;
+    case 'trains':
+    case 'layout':
+      return 0;
     case 'choice':
       return 25;
     case 'chat':
@@ -17,11 +23,11 @@ export function beatSeconds(b: Beat): number {
     case 'panels':
       return b.panels.length * 14 + 20;
     case 'flash':
-      return b.cards.length * 30;
+      return b.cards.length * 30 + b.cards.length * 8; // meet + the picture check
     case 'build':
       return 20 + 9 * (words(b.target) + (b.extraTiles?.length ?? 0));
     case 'record':
-      return 80;
+      return b.hideModel ? 110 : 80;
     case 'ticks':
       return b.items.length * 22;
     case 'sort':
@@ -50,7 +56,8 @@ export function segmentSeconds(script: SceneScript, dial = 1, seed = 3): number[
       e = { type: 'choose', index: c >= 0 ? c : b.options.some((o) => o.set?.dial) ? dial : 0 };
     } else if (b.t === 'chat' && b.reply) e = { type: 'choose', index: b.reply.options.findIndex((o) => o.correct) };
     else if (b.t === 'sort') e = { type: 'fill', values: { [b.key]: b.cards.length } };
-    else if (b.t === 'form') e = { type: 'fill', values: Object.fromEntries(b.fields.map((f) => [f.key, f.kind === 'choice' ? f.options![0] : 'Sam'])) };
+    else if (b.t === 'form') e = { type: 'fill', values: Object.fromEntries(b.fields.map((f) => [f.key, f.kind === 'text' ? 'Sam' : f.options![0]])) };
+    else if (b.t === 'record' && b.hideModel) e = { type: 'fill', values: { exitPeeked: false, exitText: 'x' } };
     s = step(script, s, e);
   }
   return out;

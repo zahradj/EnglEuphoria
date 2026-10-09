@@ -5,7 +5,9 @@
 export type CastName = 'Vee' | 'Ava' | 'Theo' | 'Mia';
 export const CAST_NAMES: readonly CastName[] = ['Vee', 'Ava', 'Theo', 'Mia'] as const;
 export type Speaker = CastName | 'narrator';
-export type Expression = 'neutral' | 'happy' | 'curious' | 'surprised' | 'thinking' | 'concerned';
+export type Expression = 'neutral' | 'happy' | 'curious' | 'surprised' | 'thinking' | 'concerned' | 'wave' | 'thumbs' | 'football' | 'music';
+/** poses are acting pictures (a wave, a thumbs-up, holding a football...); a character without that picture shows 'happy' instead */
+export const POSES: readonly Expression[] = ['wave', 'thumbs', 'football', 'music'] as const;
 export type Position = 'left' | 'center' | 'right';
 export type Level = 'A1' | 'A2' | 'B1' | 'B2' | 'C1';
 export type VarValue = string | number | boolean;
@@ -39,6 +41,8 @@ export interface FlashCard {
   word: string;
   /** the word inside a short chunk, e.g. "a new student" */
   chunk: string;
+  /** a very short A1 meaning, e.g. "what people call you" (shown under the picture) */
+  meaning?: string;
   /** picture id (art slot) */
   pictureId: string;
   alt: string;
@@ -66,7 +70,7 @@ export interface ProfileRow {
 export interface FormField {
   key: string;
   label: string;
-  kind: 'text' | 'choice';
+  kind: 'text' | 'choice' | 'multi';
   options?: string[];
   placeholder?: string;
   optional?: boolean;
@@ -77,7 +81,17 @@ export type Beat =
   | { t: 'bg'; id: string; alt: string }
   | { t: 'show'; who: CastName; pos: Position; expr: Expression }
   | { t: 'hide'; who: CastName }
-  | { t: 'say'; who: Speaker; expr?: Expression; text: string; voice?: string; key?: string[]; gloss?: Gloss }
+  /**
+   * `repeat`: after reading, the student says the line out loud (or types it): "read and repeat".
+   * `hide`: memorise mode, the line is shown with its key words (or all but the first word) hidden; the student says it, then taps "Show me".
+   */
+  | { t: 'say'; who: Speaker; expr?: Expression; text: string; voice?: string; key?: string[]; gloss?: Gloss; repeat?: boolean; hide?: 'keys' | 'all' }
+  /** tags the screens that follow with the success criteria (1..n) they train; 0 = warm-up/set-up only. Checked by tests (academy-lesson-craft alignment matrix). */
+  | { t: 'trains'; criteria: number[] }
+  /** story layout: a full-page scene where the characters act the conversation, speech bubbles next to the speaker */
+  | { t: 'layout'; mode: 'story' | 'normal' }
+  /** complete the conversation: lines with {{word}} gaps; tap a gap, then a word from the bank. Wrong word => "Not yet — try again" */
+  | { t: 'cloze'; prompt: string; lines: { who: CastName; text: string }[]; bank: string[] }
   | { t: 'choice'; prompt: string; tests: 'language' | 'story'; options: ChoiceOption[] }
   | { t: 'chat'; title: string; messages: ChatMessage[]; reply?: { prompt: string; options: ChoiceOption[] } }
   | { t: 'panels'; layout: 'strip' | 'grid'; panels: PanelSpec[] }
@@ -85,13 +99,13 @@ export type Beat =
   /** tap word tiles to build the target sentence (distractor tiles allowed); wrong order => "Not yet — try again" */
   | { t: 'build'; prompt: string; target: string; extraTiles?: string[]; hint?: string }
   /** private say-it-aloud-or-type-it step; nothing is recorded or sent (the recording booth + consent are not built yet) */
-  | { t: 'record'; prompt: string; model: string }
+  | { t: 'record'; prompt: string; model: string; hideModel?: boolean }
   /** can-do self-rating at the Wrap (yes / almost / not yet): honest evidence for the teacher, never a score */
   | { t: 'ticks'; prompt: string; items: string[] }
   /** one card at a time, two buttons ("I know it" / "not sure yet"); the count of "yes" is saved in vars[key] (teacher baseline) */
   | { t: 'sort'; prompt: string; cards: string[]; yes: string; no: string; key: string }
   /** tap a left item, then its partner on the right (right side shuffled by the seed) */
-  | { t: 'match'; prompt: string; pairs: { left: string; right: string }[] }
+  | { t: 'match'; prompt: string; pairs: { left: string; right: string; leftPicture?: { id: string; alt: string } }[] }
   /** a profile card to read (tap-to-gloss). With hotspots the student taps rows that look wrong; each reveals why. */
   | { t: 'profile'; title: string; prompt?: string; rows: ProfileRow[]; hotspots?: { row: number; why: string }[]; gloss?: Gloss }
   /** a small form; answers are saved in vars[field.key] and can be shown later as {key} */
@@ -113,5 +127,5 @@ export interface SceneScript {
 }
 
 /** Beats the player stops on and waits for the student (or the teacher). */
-export const INTERACTIVE_KINDS: readonly Beat['t'][] = ['say', 'choice', 'chat', 'panels', 'flash', 'build', 'record', 'ticks', 'sort', 'match', 'profile', 'form', 'end'] as const;
+export const INTERACTIVE_KINDS: readonly Beat['t'][] = ['say', 'cloze', 'choice', 'chat', 'panels', 'flash', 'build', 'record', 'ticks', 'sort', 'match', 'profile', 'form', 'end'] as const;
 export const isInteractive = (b: Beat) => (INTERACTIVE_KINDS as readonly string[]).includes(b.t);

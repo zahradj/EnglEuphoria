@@ -48,6 +48,23 @@ export function validateScript(script: SceneScript): ScriptIssue[] {
         if (!b.voice) warn('silent', 'No voice clip id: this line will be silent until a recorded clip is added.', i);
         (b.key ?? []).forEach((k) => !b.text.toLowerCase().includes(k.toLowerCase()) && err('key_missing', `Key word "${k}" is not in the line.`, i));
         break;
+      case 'trains':
+        if (!b.criteria.length || b.criteria.some((c) => !Number.isInteger(c) || c < 0 || c > 9)) err('trains', 'A trains tag lists criterion numbers 0-9.', i);
+        break;
+      case 'cloze': {
+        if (b.lines.length < 2 || b.lines.length > 6) err('cloze_size', 'A complete-the-conversation screen has 2-6 lines.', i);
+        const gaps: string[] = [];
+        b.lines.forEach((l) => {
+          if (!cast.has(l.who)) err('cast', `"${l.who}" is not an Academy cast member.`, i);
+          needsLine(l.text.replace(/\{\{|\}\}/g, ''), i, 'Cloze line');
+          for (const m of l.text.matchAll(/\{\{([^}]+)\}\}/g)) gaps.push(m[1].trim().toLowerCase());
+        });
+        if (gaps.length < 2 || gaps.length > 6) err('cloze_gaps', 'A complete-the-conversation screen has 2-6 gaps.', i);
+        const bank = b.bank.map((w) => w.toLowerCase());
+        gaps.forEach((g) => !bank.includes(g) && err('cloze_bank', `Gap "${g}" is not in the word bank.`, i));
+        if (b.bank.length > gaps.length + 2) err('cloze_bank', 'At most 2 extra words in the bank.', i);
+        break;
+      }
       case 'choice':
         if (b.options.length < 2 || b.options.length > 4) err('options', 'A choice needs 2-4 options.', i);
         if (b.tests === 'language' && b.options.filter((o) => o.correct).length !== 1) err('correct', 'A language choice needs exactly one correct option.', i);
@@ -143,6 +160,7 @@ export function scriptTexts(script: SceneScript): string[] {
   const out: string[] = [];
   for (const b of script.beats) {
     if (b.t === 'say') out.push(b.text);
+    if (b.t === 'cloze') out.push(b.prompt, ...b.lines.map((l) => l.text.replace(/\{\{|\}\}/g, '')));
     if (b.t === 'choice') out.push(b.prompt, ...b.options.map((o) => o.text));
     if (b.t === 'chat') {
       out.push(...b.messages.map((m) => m.text));

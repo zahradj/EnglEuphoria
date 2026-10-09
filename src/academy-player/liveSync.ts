@@ -28,7 +28,7 @@ export function reconcilePlayerState(remote: unknown, script: SceneScript): Play
     rev,
     seed: typeof seed === 'number' && Number.isFinite(seed) ? seed : 1,
     vars: isObj(vars) ? (vars as PlayerState['vars']) : {},
-    stage: { bg, sprites, segment: stage.segment },
+    stage: { bg, sprites, segment: stage.segment, layout: stage.layout === 'story' ? 'story' : 'normal' },
     answers: Array.isArray(answers) ? (answers.filter((a) => isObj(a) && typeof a.correct === 'boolean') as PlayerState['answers']) : [],
     history: [], // never shared: rewinding is the teacher's own local undo
     finished: finished === true,

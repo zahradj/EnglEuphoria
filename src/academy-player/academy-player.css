@@ -386,3 +386,37 @@
 /* live classroom: the teacher paused this student's interaction (the screen is still shown, input is ignored) */
 .ap-readonly { position: absolute; inset: 0; z-index: 30; display: flex; align-items: flex-start; justify-content: center; padding-top: 52px; background: transparent; cursor: default; }
 .ap-readonly span { padding: 7px 16px; border-radius: 999px; background: rgba(255, 255, 255, 0.95); color: #4c1d95; font-weight: 800; font-size: 0.82rem; box-shadow: 0 6px 18px rgba(90, 50, 190, 0.25); pointer-events: none; }
+
+/* ===== Story layout: a full-page scene where the characters act the conversation ===== */
+.ap-stage[data-layout='story'] .ap-sprite { bottom: 0; height: 74%; width: auto; aspect-ratio: 3 / 4; }
+.ap-stage[data-layout='story'] .ap-sprite[data-pos='left'] { left: 1%; right: auto; }
+.ap-stage[data-layout='story'] .ap-sprite[data-pos='right'] { right: 1%; left: auto; }
+.ap-stage[data-layout='story'] .ap-sprite[data-pos='center'] { left: 50%; translate: -50% 0; }
+.ap-stage[data-layout='story'] .ap-sprite[data-dim='true'] { filter: brightness(0.92) saturate(0.92) drop-shadow(0 10px 12px rgba(60, 30, 120, 0.25)); }
+.ap-stage[data-layout='story'] .ap-sprite-stack { height: 100%; }
+.ap-stage[data-layout='story'] .ap-sprite-img { height: 100%; width: auto; }
+.ap-stage[data-layout='story'] .ap-dialogue { position: absolute; top: 48px; bottom: auto; left: 3%; right: auto; width: min(66%, 600px); transform: none; border-radius: 24px; z-index: 6; }
+.ap-stage[data-layout='story'] .ap-dialogue[data-side='right'] { left: auto; right: 3%; }
+.ap-stage[data-layout='story'] .ap-dialogue[data-side='center'] { left: 50%; translate: -50% 0; }
+.ap-stage[data-layout='story'] .ap-dialogue::after { content: ''; position: absolute; bottom: -14px; left: 26%; width: 26px; height: 26px; background: inherit; border-right: 1px solid #c4b5fd; border-bottom: 1px solid #c4b5fd; transform: rotate(45deg) skew(8deg, 8deg); border-radius: 0 0 8px 0; }
+.ap-stage[data-layout='story'] .ap-dialogue[data-side='right']::after { left: auto; right: 26%; }
+.ap-stage[data-layout='story'] .ap-dialogue[data-side='center']::after { left: 46%; }
+@media (max-width: 700px) {
+  .ap-stage[data-layout='story'] .ap-sprite { height: 62%; }
+  .ap-stage[data-layout='story'] .ap-dialogue { width: 94%; left: 3%; top: 44px; }
+  .ap-stage[data-layout='story'] .ap-dialogue[data-side='right'] { right: 3%; left: auto; }
+}
+
+/* vocabulary cards, read-and-repeat, complete the conversation */
+.ap-meaning { font-size: 0.82rem; font-weight: 700; color: #5b21b6; text-align: center; }
+.ap-sayit { margin: 6px 0 0; font-weight: 800; color: #5b21b6; font-size: 0.92rem; }
+.ap-typeit { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
+.ap-typeit .ap-input { flex: 1; min-width: 0; }
+.ap-cloze { display: flex; flex-direction: column; gap: 8px; }
+.ap-cloze-line { margin: 0; padding: 10px 14px; border-radius: 14px; background: #fff; border: 1px solid #e0d6fb; border-left: 5px solid var(--who, #8b5cf6); line-height: 2.1; box-shadow: 0 2px 8px rgba(90, 50, 190, 0.1); color: #231a52; }
+.ap-cloze-who { margin-right: 8px; color: var(--who, #5f5694); font-size: 0.8rem; }
+.ap-gap { display: inline-block; min-width: 4.6em; margin: 0 4px; padding: 2px 10px; border-radius: 10px; border: 2px dashed #a78bfa; background: #f5f0ff; font: inherit; font-weight: 800; color: #5b21b6; cursor: pointer; }
+.ap-gap[data-sel='true'] { border-style: solid; background: #ede4ff; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25); }
+.ap-gap[data-filled='true'] { border-style: solid; border-color: #22c55e; background: #ecfdf5; color: #166534; cursor: default; }
+.ap-bank { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.ap-match-col .ap-tile .ap-tile-img, .ap-match-col .ap-tile .ap-tile-ph { max-height: 110px; }

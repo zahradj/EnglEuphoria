@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import './academy-player.css';
 import { Backdrop, Sprite } from './art';
 import { accuracy, autoEvent, backlog, initState, interpolateBeat, replayTo, step, type PlayerEvent, type PlayerState } from './engine';
-import { BuildBlock, ChatStory, ChoiceBlock, ComicPanels, DialogueBox, FlashDeck, FormBlock, MatchBlock, ProfileBlock, RecordBlock, RewardBurst, RunStrip, SortBlock, TicksBlock, TitleCard } from './parts';
+import { BuildBlock, ChatStory, ChoiceBlock, ClozeBlock, ComicPanels, DialogueBox, FlashDeck, FormBlock, MatchBlock, ProfileBlock, RecordBlock, RewardBurst, RunStrip, SortBlock, TicksBlock, TitleCard } from './parts';
 import type { CastName, SceneScript } from './scriptTypes';
 import { playVoice, stopVoice } from './voice';
 
@@ -150,13 +150,13 @@ function AcademyPlayerInner({ script, theme: themeProp = 'studio', artBase, seed
     prevRight.current = right;
   }, [right, reduced]);
 
-  const showStageArt = beat?.t === 'say' || beat?.t === 'choice';
+  const showStageArt = beat?.t === 'say' || beat?.t === 'choice' || (state.stage.layout === 'story' && beat?.t === 'cloze');
 
   return (
     <div className="ap-root" data-theme={theme} data-reduced={reduced} style={{ fontSize: `calc(var(--ap-font-size) * ${scale})` }} aria-label="Lesson player">
       <RunStrip title={script.title} segment={state.stage.segment} />
 
-      <main className="ap-stage">
+      <main className="ap-stage" data-layout={state.stage.layout ?? 'normal'}>
         <AnimatePresence initial={false}>
           {state.stage.bg && (
             <motion.div key={state.stage.bg.id} style={{ position: 'absolute', inset: 0 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={fade}>
@@ -177,7 +177,7 @@ function AcademyPlayerInner({ script, theme: themeProp = 'studio', artBase, seed
           </div>
         )}
 
-        {beat?.t === 'say' && <DialogueBox key={state.beatIndex} beat={beat} reduced={reduced} nextLabel={lockLines ? 'Your teacher moves on' : undefined} nextDisabled={lockLines} onNext={() => go({ type: 'next' })} onReplay={() => void playVoice(beat.voice, { muted })} />}
+        {beat?.t === 'say' && <DialogueBox key={state.beatIndex} beat={beat} reduced={reduced} story={state.stage.layout === 'story'} side={sprites.find((x) => beat.who !== 'narrator' && x.who === beat.who)?.pos ?? 'center'} nextLabel={lockLines ? 'Your teacher moves on' : undefined} nextDisabled={lockLines} onNext={() => go({ type: 'next' })} onReplay={() => void playVoice(beat.voice, { muted })} />}
 
         {beat?.t === 'choice' && (
           <ChoiceBlock key={state.beatIndex}
@@ -204,7 +204,7 @@ function AcademyPlayerInner({ script, theme: themeProp = 'studio', artBase, seed
         {beat?.t === 'panels' && <ComicPanels key={state.beatIndex} layout={beat.layout} panels={beat.panels} artBase={artBase} onContinue={() => go({ type: 'next' })} />}
 
         {beat?.t === 'flash' && (
-          <FlashDeck key={state.beatIndex}
+          <FlashDeck key={state.beatIndex} artBase={artBase}
             title={beat.title}
             cards={beat.cards}
             seed={state.seed + state.beatIndex}
@@ -218,15 +218,17 @@ function AcademyPlayerInner({ script, theme: themeProp = 'studio', artBase, seed
           <BuildBlock key={state.beatIndex} prompt={beat.prompt} target={beat.target} extraTiles={beat.extraTiles} hint={beat.hint} hintTier={hintTier} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onDone={(first) => { if (first) go({ type: 'answer', correct: true }); go({ type: 'next' }); }} />
         )}
 
+        {beat?.t === 'cloze' && <ClozeBlock key={state.beatIndex} prompt={beat.prompt} lines={beat.lines} bank={beat.bank} seed={state.seed + state.beatIndex} onCheck={(correct) => go({ type: 'answer', correct })} onDone={() => go({ type: 'next' })} />}
+
         {beat?.t === 'sort' && <SortBlock key={state.beatIndex} prompt={beat.prompt} cards={beat.cards} yes={beat.yes} no={beat.no} onDone={(known) => go({ type: 'fill', values: { [beat.key]: known } })} />}
 
-        {beat?.t === 'match' && <MatchBlock key={state.beatIndex} prompt={beat.prompt} pairs={beat.pairs} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onRight={() => go({ type: 'answer', correct: true })} onDone={() => go({ type: 'next' })} />}
+        {beat?.t === 'match' && <MatchBlock key={state.beatIndex} artBase={artBase} prompt={beat.prompt} pairs={beat.pairs} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onRight={() => go({ type: 'answer', correct: true })} onDone={() => go({ type: 'next' })} />}
 
         {beat?.t === 'profile' && <ProfileBlock key={state.beatIndex} title={beat.title} prompt={beat.prompt} rows={beat.rows} hotspots={beat.hotspots} gloss={beat.gloss} onDone={() => go({ type: 'next' })} />}
 
         {beat?.t === 'form' && <FormBlock key={state.beatIndex} prompt={beat.prompt} fields={beat.fields} onDone={(values) => go({ type: 'fill', values })} />}
 
-        {beat?.t === 'record' && <RecordBlock key={state.beatIndex} prompt={beat.prompt} model={beat.model} onContinue={() => go({ type: 'next' })} />}
+        {beat?.t === 'record' && <RecordBlock key={state.beatIndex} prompt={beat.prompt} model={beat.model} hideModel={beat.hideModel} onContinue={(info) => (beat.hideModel ? go({ type: 'fill', values: { exitPeeked: info.peeked, exitText: info.typed } }) : go({ type: 'next' }))} />}
 
         {beat?.t === 'ticks' && <TicksBlock key={state.beatIndex} prompt={beat.prompt} items={beat.items} onDone={() => go({ type: 'next' })} />}
 

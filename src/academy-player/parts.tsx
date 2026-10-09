@@ -8,7 +8,7 @@ import type { Beat, ChatMessage, ChoiceOption, FlashCard, FormField, Gloss, Pane
 type SayBeat = Extract<Beat, { t: 'say' }>;
 
 /* ── run-of-show strip ── */
-export const SEGMENT_GOALS = ['Meet the team', 'What do you already know?', 'Solve the mystery', 'Learn the words', 'A quick game', 'Your mission', 'Make it yours', 'Wrap-up'] as const;
+export const SEGMENT_GOALS = ['Say hello', 'Learn the words', 'Read the story', 'Practise the words', 'A quick game', 'Say it by heart', 'Introduce yourself', 'Wrap-up'] as const;
 export const SEGMENT_NAMES = ['Check-in', 'Remember?', 'The Drop', 'Notice & Build', 'Energiser', 'Mission', 'Release', 'Wrap'] as const;
 
 export function RunStrip({ title, segment }: { title: string; segment: number }) {
@@ -70,31 +70,145 @@ export function RichText({ text, keys = [], gloss = {}, onGloss }: { text: strin
 }
 
 /* ── dialogue box ── */
-export function DialogueBox({ beat, reduced, onNext, onReplay, atEnd, nextLabel, nextDisabled }: { beat: SayBeat; reduced: boolean; onNext: () => void; onReplay: () => void; atEnd?: boolean; nextLabel?: string; nextDisabled?: boolean }) {
-  const { shown, done, finish } = useTypewriter(beat.text, !reduced);
+const mask = (text: string, kind: 'keys' | 'all', keys: string[] = []) => {
+  const k = new Set(keys.map((x) => x.toLowerCase()));
+  let first = true;
+  return text
+    .split(/(\s+)/)
+    .map((part) => {
+      const bare = part.toLowerCase().replace(/[^a-z'’-]/g, '');
+      if (!bare) return part;
+      const hide = kind === 'all' ? !first : k.size ? k.has(bare) : !first;
+      first = false;
+      return hide ? part.replace(/[A-Za-z'’-]+/g, (w) => '_'.repeat(Math.max(3, w.length))) : part;
+    })
+    .join('');
+};
+
+export function DialogueBox({ beat, reduced, onNext, onReplay, atEnd, nextLabel, nextDisabled, story = false, side = 'center' }: { beat: SayBeat; reduced: boolean; onNext: () => void; onReplay: () => void; atEnd?: boolean; nextLabel?: string; nextDisabled?: boolean; story?: boolean; side?: 'left' | 'center' | 'right' }) {
+  const memorise = !!beat.hide;
+  const { shown, done, finish } = useTypewriter(beat.text, !reduced && !memorise);
   const [open, setOpen] = useState<string | null>(null);
-  useEffect(() => setOpen(null), [beat]);
-  const visible = beat.text.slice(0, shown);
+  const [revealed, setRevealed] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [typed, setTyped] = useState('');
+  const [sent, setSent] = useState(false);
+  useEffect(() => {
+    setOpen(null);
+    setRevealed(false);
+    setTyping(false);
+    setTyped('');
+    setSent(false);
+  }, [beat]);
+  const masked = memorise && !revealed;
+  const visible = masked ? mask(beat.text, beat.hide!, beat.key) : beat.text.slice(0, shown);
+  const sayIt = !!beat.repeat || memorise; // "read and repeat" / "say it from memory"
+  const ready = memorise ? true : done;
+  const primaryLabel = !ready ? 'Skip ▸▸' : sayIt && !sent ? 'I said it ▸' : (nextLabel ?? 'Next ▸');
+  const primary = () => {
+    if (!ready) return finish();
+    onNext();
+  };
   return (
-    <section className="ap-dialogue" aria-label="Dialogue" onClick={() => (done ? undefined : finish())}>
+    <section className="ap-dialogue" data-story={story} data-side={side} aria-label="Dialogue" onClick={() => (ready ? undefined : finish())}>
       {beat.who !== 'narrator' && <span className="ap-name" style={{ background: speakerColor(beat.who) }}>{beat.who}</span>}
       {/* full text for assistive tech; the animated copy is aria-hidden so it is not read letter by letter */}
       <div className="ap-dialogue-body">
         <p className="ap-text" role="log" aria-live="polite" style={{ position: 'relative' }}>
-          <span style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>{beat.text}</span>
+          <span style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>{masked ? 'Say the line from memory.' : beat.text}</span>
           <span aria-hidden="true">
-            <RichText text={visible} keys={beat.key} gloss={done ? beat.gloss : undefined} onGloss={setOpen} />
+            <RichText text={visible} keys={masked ? [] : beat.key} gloss={ready && !masked ? beat.gloss : undefined} onGloss={setOpen} />
           </span>
         </p>
         {open && beat.gloss && <p className="ap-gloss-pop" role="note"><b>{open}</b>: {beat.gloss[open] ?? beat.gloss[Object.keys(beat.gloss).find((k) => k.toLowerCase() === open) ?? ''] ?? ''}</p>}
+        {sayIt && ready && <p className="ap-sayit" role="note">{memorise ? 'Say the whole line out loud. Then tap “Show me” to check.' : 'Now say it out loud — or type it.'}</p>}
+        {typing && (
+          <div className="ap-typeit">
+            <input className="ap-input" aria-label="Type the line" maxLength={80} value={typed} placeholder="Type it here" onChange={(e) => setTyped(e.target.value.replace(/[{}<>]/g, ''))} onKeyDown={(e) => { if (e.key === 'Enter' && typed.trim()) { setSent(true); setRevealed(true); } }} />
+            <button type="button" className="ap-btn" disabled={!typed.trim()} onClick={() => { setSent(true); setRevealed(true); }}>Check</button>
+          </div>
+        )}
+        {sent && <p className="ap-sayit" role="status">The line is: “{beat.text}”</p>}
       </div>
       <div className="ap-row">
         <button type="button" className="ap-btn" onClick={onReplay} aria-label="Replay this line">↻ Replay</button>
-        <button type="button" className="ap-btn ap-btn-primary" disabled={done && nextDisabled} onClick={() => (done ? onNext() : finish())} aria-label={done ? (atEnd ? 'Finish' : 'Next line') : 'Show the whole line'}>
-          {done ? (nextLabel ?? 'Next ▸') : 'Skip ▸▸'}
+        {sayIt && ready && !sent && <button type="button" className="ap-btn" onClick={() => setTyping((t) => !t)} aria-expanded={typing}>⌨ Type it</button>}
+        {memorise && !revealed && <button type="button" className="ap-btn" onClick={() => setRevealed(true)}>Show me</button>}
+        <button type="button" className="ap-btn ap-btn-primary" disabled={ready && nextDisabled} onClick={primary} aria-label={ready ? (sayIt && !sent ? 'I said it' : atEnd ? 'Finish' : 'Next line') : 'Show the whole line'}>
+          {primaryLabel}
         </button>
       </div>
     </section>
+  );
+}
+
+/* ── complete the conversation: tap a gap, then a word from the bank ── */
+export function ClozeBlock({ prompt, lines, bank, seed, onCheck, onDone }: { prompt: string; lines: { who: string; text: string }[]; bank: string[]; seed: number; onCheck: (correct: boolean) => void; onDone: () => void }) {
+  const parsed = useMemo(() => {
+    let n = 0;
+    return lines.map((l) => ({ who: l.who, parts: l.text.split(/(\{\{[^}]+\}\})/).filter((x) => x !== '').map((x) => (x.startsWith('{{') ? { gap: n++, answer: x.slice(2, -2).trim() } : { text: x })) }));
+  }, [lines]);
+  const answers = useMemo(() => parsed.flatMap((l) => l.parts.filter((p): p is { gap: number; answer: string } => 'gap' in p)).sort((a, b) => a.gap - b.gap).map((g) => g.answer), [parsed]);
+  const order = useMemo(() => seededShuffle(bank.map((_, i) => i), seed), [bank, seed]);
+  const [filled, setFilled] = useState<(string | null)[]>(() => answers.map(() => null));
+  const [sel, setSel] = useState<number | null>(null);
+  const [slip, setSlip] = useState<number | null>(null);
+  const [wrong, setWrong] = useState(false);
+  useEffect(() => {
+    setFilled(answers.map(() => null));
+    setSel(null);
+    setSlip(null);
+    setWrong(false);
+  }, [answers]);
+  const allDone = filled.every(Boolean);
+  const target = sel ?? filled.findIndex((f) => !f);
+  const place = (word: string) => {
+    if (target < 0 || filled[target]) return;
+    if (word.toLowerCase() === answers[target].toLowerCase()) {
+      setFilled(filled.map((f, i) => (i === target ? answers[target] : f)));
+      setSel(null);
+      setWrong(false);
+      onCheck(slip !== target);
+      setSlip(null);
+    } else {
+      setSlip(target);
+      setWrong(true);
+      onCheck(false);
+    }
+  };
+  const used = new Set(filled.filter(Boolean).map((f) => (f as string).toLowerCase()));
+  return (
+    <div className="ap-panel">
+      <p className="ap-prompt">{prompt}</p>
+      <div className="ap-cloze">
+        {parsed.map((l, li) => (
+          <p key={li} className="ap-cloze-line" style={{ ['--who' as string]: speakerColor(l.who as never) }}>
+            <b className="ap-cloze-who">{l.who}</b>
+            {l.parts.map((pt, pi) =>
+              'gap' in pt ? (
+                <button key={pi} type="button" className="ap-gap" data-filled={!!filled[pt.gap]} data-sel={target === pt.gap} aria-label={filled[pt.gap] ? `Gap ${pt.gap + 1}: ${filled[pt.gap]}` : `Gap ${pt.gap + 1}, empty`} onClick={() => !filled[pt.gap] && setSel(pt.gap)}>
+                  {filled[pt.gap] ?? '____'}
+                </button>
+              ) : (
+                <span key={pi}>{pt.text}</span>
+              ),
+            )}
+          </p>
+        ))}
+      </div>
+      <div className="ap-bank" role="group" aria-label="Word bank">
+        {order.map((bi) => (
+          <button key={bank[bi]} type="button" className="ap-tile" disabled={used.has(bank[bi].toLowerCase()) && answers.filter((a) => a.toLowerCase() === bank[bi].toLowerCase()).length <= filled.filter((f) => f && f.toLowerCase() === bank[bi].toLowerCase()).length} onClick={() => place(bank[bi])}>
+            {bank[bi]}
+          </button>
+        ))}
+      </div>
+      {wrong && !allDone && <p className="ap-feedback" role="status">Not yet — read the line and try again.</p>}
+      <div className="ap-row">
+        <span className="ap-chunk">{filled.filter(Boolean).length} of {answers.length} filled. Tap a gap to choose it.</span>
+        <button type="button" className="ap-btn ap-btn-primary" disabled={!allDone} onClick={onDone}>Continue ▸</button>
+      </div>
+    </div>
   );
 }
 
@@ -137,7 +251,7 @@ export function ChoiceBlock({ prompt, options, hintTier, onRight, onWrong, extra
 }
 
 /* ── flash deck: meet (sets of 3-4), then a gentle retrieval check ── */
-export function FlashDeck({ title, cards, seed, onCheck, onDone, onReplay }: { title: string; cards: FlashCard[]; seed: number; onCheck: (correct: boolean) => void; onDone: () => void; onReplay: (voice?: string) => void }) {
+export function FlashDeck({ title, cards, seed, artBase, onCheck, onDone, onReplay }: { title: string; cards: FlashCard[]; seed: number; artBase?: string; onCheck: (correct: boolean) => void; onDone: () => void; onReplay: (voice?: string) => void }) {
   const [heard, setHeard] = useState<Set<number>>(new Set());
   const [phase, setPhase] = useState<'meet' | 'check'>('meet');
   const [q, setQ] = useState(0);
@@ -159,8 +273,9 @@ export function FlashDeck({ title, cards, seed, onCheck, onDone, onReplay }: { t
         <div className="ap-deck">
           {cards.map((c, i) => (
             <button key={c.word} type="button" className="ap-card" data-picked={heard.has(i)} onClick={() => { setHeard(new Set(heard).add(i)); onReplay(c.voice); }} aria-label={`${c.word}: ${c.chunk}`}>
-              <PictureTile id={c.pictureId} alt={c.alt} word={c.word} />
+              <PictureTile id={c.pictureId} alt={c.alt} word={c.word} artBase={artBase} />
               <span className="ap-word">{c.word}</span>
+              {c.meaning && <span className="ap-meaning">{c.meaning}</span>}
               <span className="ap-chunk">{c.chunk}</span>
             </button>
           ))}
@@ -173,12 +288,9 @@ export function FlashDeck({ title, cards, seed, onCheck, onDone, onReplay }: { t
     );
   }
   const target = cards[order[q]];
-  const blanked = target.chunk.replace(new RegExp(target.word, 'i'), '_____');
   return (
     <div className="ap-panel">
-      <p className="ap-prompt">Which word fits? ({q + 1} of {cards.length})</p>
-      <PictureTile id={target.pictureId} alt={target.alt} word={target.word} />
-      <p className="ap-text" style={{ textAlign: 'center' }}>{blanked}</p>
+      <p className="ap-prompt">Tap the picture for “{target.word}” ({q + 1} of {cards.length})</p>
       <div className="ap-deck">
         {choices.map((ci) => (
           <button
@@ -186,6 +298,7 @@ export function FlashDeck({ title, cards, seed, onCheck, onDone, onReplay }: { t
             type="button"
             className="ap-card"
             data-wrong={wrong === ci}
+            aria-label={cards[ci].alt}
             onClick={() => {
               if (cards[ci].word === target.word) {
                 onCheck(wrong === null);
@@ -198,11 +311,11 @@ export function FlashDeck({ title, cards, seed, onCheck, onDone, onReplay }: { t
               }
             }}
           >
-            <span className="ap-word">{cards[ci].word}</span>
+            <PictureTile id={cards[ci].pictureId} alt={cards[ci].alt} word={cards[ci].word} artBase={artBase} />
           </button>
         ))}
       </div>
-      {wrong !== null && <p className="ap-feedback" role="status">Not yet — look at the picture and try again.</p>}
+      {wrong !== null && <p className="ap-feedback" role="status">Not yet — look at the pictures and try again.</p>}
     </div>
   );
 }
@@ -211,8 +324,12 @@ export function FlashDeck({ title, cards, seed, onCheck, onDone, onReplay }: { t
 export function ChatStory({ title, messages, reply, hintTier, onContinue, onReplyRight, onReplyWrong }: { title: string; messages: ChatMessage[]; reply?: { prompt: string; options: ChoiceOption[] }; hintTier: number; onContinue: () => void; onReplyRight: (i: number) => void; onReplyWrong: () => void }) {
   const [count, setCount] = useState(1);
   const bottom = useRef<HTMLDivElement>(null);
-  useEffect(() => setCount(1), [messages]);
-  useEffect(() => bottom.current?.scrollIntoView?.({ block: 'nearest' }), [count]);
+  useEffect(() => {
+    setCount(1);
+  }, [messages]);
+  useEffect(() => {
+    bottom.current?.scrollIntoView?.({ block: 'nearest' });
+  }, [count]);
   const all = count >= messages.length;
   const thread = (
     <div className="ap-chat" role="log" aria-live="polite">
@@ -321,22 +438,26 @@ export function BuildBlock({ prompt, target, extraTiles = [], hint, hintTier, se
 }
 
 /* ── private say-it-or-type-it (nothing is recorded or sent) ── */
-export function RecordBlock({ prompt, model, onContinue }: { prompt: string; model: string; onContinue: () => void }) {
+export function RecordBlock({ prompt, model, hideModel = false, onContinue }: { prompt: string; model: string; hideModel?: boolean; onContinue: (info: { typed: string; peeked: boolean }) => void }) {
   const [typed, setTyped] = useState('');
   const [said, setSaid] = useState(false);
+  const [peeked, setPeeked] = useState(false);
   useEffect(() => {
     setTyped('');
     setSaid(false);
+    setPeeked(false);
   }, [model]);
+  const showModel = !hideModel || peeked;
   return (
     <div className="ap-panel">
       <p className="ap-prompt">{prompt}</p>
-      <p className="ap-text ap-model">{model}</p>
+      {showModel ? <p className="ap-text ap-model">{model}</p> : <p className="ap-chunk">Say it without looking. Stuck? Tap “Show me”.</p>}
       <label className="ap-chunk" htmlFor="ap-type">Say it out loud — or type it. Only you and your teacher see this.</label>
-      <input id="ap-type" className="ap-input" value={typed} onChange={(e) => setTyped(e.target.value)} placeholder="Type here (optional)" />
+      <input id="ap-type" className="ap-input" maxLength={200} value={typed} onChange={(e) => setTyped(e.target.value.replace(/[{}<>]/g, ''))} placeholder="Type here (optional)" />
       <div className="ap-row">
         <button type="button" className="ap-btn" aria-pressed={said} onClick={() => setSaid((v) => !v)}>{said ? '✓ I said it' : '🎤 I said it'}</button>
-        <button type="button" className="ap-btn ap-btn-primary" disabled={!said && !typed.trim()} onClick={onContinue}>Continue ▸</button>
+        {hideModel && !peeked && <button type="button" className="ap-btn" onClick={() => setPeeked(true)}>Show me</button>}
+        <button type="button" className="ap-btn ap-btn-primary" disabled={!said && !typed.trim()} onClick={() => onContinue({ typed, peeked })}>Continue ▸</button>
       </div>
     </div>
   );
@@ -346,7 +467,9 @@ export function RecordBlock({ prompt, model, onContinue }: { prompt: string; mod
 export type TickLevel = 'yes' | 'almost' | 'notyet';
 export function TicksBlock({ prompt, items, onDone }: { prompt: string; items: string[]; onDone: (r: Record<string, TickLevel>) => void }) {
   const [r, setR] = useState<Record<string, TickLevel>>({});
-  useEffect(() => setR({}), [items]);
+  useEffect(() => {
+    setR({});
+  }, [items]);
   const levels: [TickLevel, string][] = [['yes', 'Yes'], ['almost', 'Almost'], ['notyet', 'Not yet']];
   return (
     <div className="ap-panel">
@@ -404,7 +527,7 @@ export function SortBlock({ prompt, cards, yes, no, onDone }: { prompt: string; 
 }
 
 /* ── match: tap a left item, then its partner ── */
-export function MatchBlock({ prompt, pairs, seed, onWrong, onRight, onDone }: { prompt: string; pairs: { left: string; right: string }[]; seed: number; onWrong: () => void; onRight: () => void; onDone: () => void }) {
+export function MatchBlock({ prompt, pairs, seed, artBase, onWrong, onRight, onDone }: { prompt: string; pairs: { left: string; right: string; leftPicture?: { id: string; alt: string } }[]; seed: number; artBase?: string; onWrong: () => void; onRight: () => void; onDone: () => void }) {
   const order = useMemo(() => seededShuffle(pairs.map((_, i) => i), seed), [pairs, seed]);
   const [done, setDone] = useState<number[]>([]);
   const [sel, setSel] = useState<number | null>(null);
@@ -433,7 +556,7 @@ export function MatchBlock({ prompt, pairs, seed, onWrong, onRight, onDone }: { 
       <div className="ap-match">
         <div className="ap-match-col">
           {pairs.map((p, i) => (
-            <button key={i} type="button" className="ap-tile" disabled={done.includes(i)} data-sel={sel === i} onClick={() => setSel(i)}>{p.left}</button>
+            <button key={i} type="button" className="ap-tile" disabled={done.includes(i)} data-sel={sel === i} onClick={() => setSel(i)} aria-label={p.leftPicture ? p.leftPicture.alt : undefined}>{p.leftPicture ? <PictureTile id={p.leftPicture.id} alt={p.leftPicture.alt} word={p.right} artBase={artBase} /> : p.left}</button>
           ))}
         </div>
         <div className="ap-match-col">
@@ -496,7 +619,9 @@ export function ProfileBlock({ title, prompt, rows, hotspots = [], gloss = {}, o
 /* ── form: a small set of fields, answers saved for later screens ── */
 export function FormBlock({ prompt, fields, onDone }: { prompt: string; fields: FormField[]; onDone: (values: Record<string, string>) => void }) {
   const [vals, setVals] = useState<Record<string, string>>({});
-  useEffect(() => setVals({}), [fields]);
+  useEffect(() => {
+    setVals({});
+  }, [fields]);
   const ok = fields.every((f) => f.optional || (vals[f.key] ?? '').trim());
   return (
     <div className="ap-panel">
@@ -506,6 +631,17 @@ export function FormBlock({ prompt, fields, onDone }: { prompt: string; fields: 
           <label className="ap-chunk" htmlFor={`ap-f-${f.key}`}>{f.label}</label>
           {f.kind === 'text' ? (
             <input id={`ap-f-${f.key}`} className="ap-input" maxLength={24} value={vals[f.key] ?? ''} placeholder={f.placeholder} onChange={(e) => setVals({ ...vals, [f.key]: e.target.value.replace(/[{}<>]/g, '') })} />
+          ) : f.kind === 'multi' ? (
+            <div className="ap-tick-opts" role="group" aria-label={f.label}>
+              {(f.options ?? []).map((o) => {
+                const on = (vals[f.key] ?? '').split(', ').includes(o);
+                const toggle = () => {
+                  const cur = (vals[f.key] ?? '').split(', ').filter(Boolean);
+                  setVals({ ...vals, [f.key]: (on ? cur.filter((x) => x !== o) : [...cur, o]).join(', ') });
+                };
+                return <button key={o} type="button" aria-pressed={on} className="ap-btn" data-on={on} onClick={toggle}>{o}</button>;
+              })}
+            </div>
           ) : (
             <div className="ap-tick-opts" role="radiogroup" aria-label={f.label}>
               {(f.options ?? []).map((o) => (

@@ -11,6 +11,8 @@ export interface StageState {
   bg: { id: string; alt: string } | null;
   sprites: Partial<Record<CastName, SpriteState>>;
   segment: number;
+  /** 'story' = full-page acted scene (see the `layout` beat); optional so older snapshots still load */
+  layout?: 'normal' | 'story';
 }
 
 export interface AnswerRecord {
@@ -102,6 +104,9 @@ function runUntilStop(script: SceneScript, from: number, stage: StageState, vars
         break;
       case 'segment':
         st.segment = b.index;
+        break;
+      case 'layout':
+        st.layout = b.mode;
         break;
       case 'set':
         v[b.key] = b.value;
