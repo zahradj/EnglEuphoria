@@ -202,7 +202,7 @@ export function accuracy(s: PlayerState): number | null {
   return s.answers.filter((a) => a.correct).length / s.answers.length;
 }
 
-const VAR_DEFAULTS: Record<string, string> = { name: 'friend', family: '—', age: '—', country: '—', hobby: '—' };
+const VAR_DEFAULTS: Record<string, string> = { name: 'friend', family: '—', age: '—', country: '—', hobby: '—', spelled: '—', nationality: '—' };
 
 /** Fill {key} placeholders in every string of a beat from the student's saved answers. Pure; returns the same beat when nothing changes. */
 export function interpolateBeat<T extends Beat>(beat: T, vars: Record<string, VarValue>): T {
@@ -220,6 +220,8 @@ export function autoEvent(b: Beat): PlayerEvent {
       return { type: 'choose', index: Math.max(0, b.options.findIndex((o) => o.correct !== false)) };
     case 'sort':
       return { type: 'fill', values: { [b.key]: [] } };
+    case 'spell':
+      return { type: 'fill', values: b.save ? { [b.save]: '' } : {} };
     case 'form':
       return { type: 'fill', values: Object.fromEntries(b.fields.map((f) => [f.key, ''])) };
     default:

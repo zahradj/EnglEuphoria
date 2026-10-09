@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import './academy-player.css';
 import { Backdrop, Sprite } from './art';
 import { accuracy, autoEvent, backlog, initState, interpolateBeat, replayTo, step, type PlayerEvent, type PlayerState } from './engine';
-import { BuildBlock, ChatStory, ChoiceBlock, ClozeBlock, ComicPanels, DialogueBox, DragMatchBlock, FlashDeck, FormBlock, MatchBlock, ProfileBlock, RecordBlock, RewardBurst, RunStrip, SortBlock, TicksBlock, TitleCard } from './parts';
+import { BuildBlock, ChatStory, ChoiceBlock, ClozeBlock, ComicPanels, DialogueBox, DragMatchBlock, FlashDeck, FormBlock, MatchBlock, ProfileBlock, RecordBlock, RewardBurst, RunStrip, SortBlock, SpellBlock, TicksBlock, TitleCard } from './parts';
 import type { CastName, SceneScript } from './scriptTypes';
 import { playVoice, stopVoice } from './voice';
 
@@ -227,6 +227,8 @@ function AcademyPlayerInner({ script, theme: themeProp = 'studio', artBase, seed
         {beat?.t === 'match' && !beat.drag && <MatchBlock key={state.beatIndex} artBase={artBase} prompt={beat.prompt} pairs={beat.pairs} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onRight={() => go({ type: 'answer', correct: true })} onDone={() => go({ type: 'next' })} />}
 
         {beat?.t === 'profile' && <ProfileBlock key={state.beatIndex} title={beat.title} prompt={beat.prompt} rows={beat.rows} hotspots={beat.hotspots} gloss={beat.gloss} onDone={() => go({ type: 'next' })} />}
+
+        {beat?.t === 'spell' && <SpellBlock key={state.beatIndex} prompt={beat.prompt} target={beat.target} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onRight={() => go({ type: 'answer', correct: true })} onDone={(spelled) => go(beat.save ? { type: 'fill', values: { [beat.save]: spelled } } : { type: 'next' })} />}
 
         {beat?.t === 'form' && <FormBlock key={state.beatIndex} prompt={beat.prompt} fields={beat.fields} model={beat.model} onDone={(values) => go({ type: 'fill', values })} />}
 

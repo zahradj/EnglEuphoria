@@ -2,6 +2,7 @@
 // Used only while the real Canva pictures are missing. When a real image exists at `${artBase}/cast/<name>/<expression>.webp`
 // (or `${artBase}/bg/<id>.webp`) the player shows it instead and falls back to this placeholder if it fails to load.
 // Stills hold still: nothing here zooms, pans, or loops.
+import { Flag, FlagPerson, hasFlag, NumberCard } from './drawn';
 import { useEffect, useRef, useState } from 'react';
 import { CAST_LOOK, bgLook, cardIcon } from './castVisual';
 import { SceneArt } from './scenes';
@@ -156,6 +157,9 @@ export function Backdrop({ id, alt, artBase }: { id: string; alt: string; artBas
 /** Picture for a flash card / panel: real picture if available, else a labelled tile. */
 export function PictureTile({ id, alt, word, artBase }: { id: string; alt: string; word?: string; artBase?: string }) {
   const [failed, setFailed] = useState(false);
+  if (id.startsWith('flag-') && hasFlag(id.slice(5))) return <div className="ap-tile-img ap-tile-drawn"><Flag code={id.slice(5)} label={alt} /></div>;
+  if (id.startsWith('who-') && hasFlag(id.slice(4))) return <div className="ap-tile-img ap-tile-drawn"><FlagPerson code={id.slice(4)} label={alt} /></div>;
+  if (/^num-\d+$/.test(id)) return <div className="ap-tile-img ap-tile-drawn"><NumberCard n={Number(id.slice(4))} label={alt} /></div>;
   if (artBase && !failed) return <img className="ap-tile-img" src={`${artBase}/cards/${id}.webp`} alt={alt} onError={() => setFailed(true)} draggable={false} />;
   return (
     <div className="ap-tile-ph" role="img" aria-label={alt} style={{ ['--hue' as string]: cardIcon(id).hue }}>

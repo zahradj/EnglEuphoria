@@ -137,6 +137,9 @@ export function validateScript(script: SceneScript): ScriptIssue[] {
         b.rows.forEach((r) => needsLine(r.value, i, 'Profile row'));
         (b.hotspots ?? []).forEach((h) => !b.rows[h.row] && err('hotspot', `Hotspot points at missing row ${h.row}.`, i));
         break;
+      case 'spell':
+        if (!b.target.includes('{') && !/^[A-Za-z]{2,14}$/.test(b.target)) err('spell_target', 'A spell target is 2-14 letters.', i);
+        break;
       case 'form':
         if (b.fields.length < 1 || b.fields.length > 4) err('form_size', 'A form has 1-4 fields.', i);
         b.fields.forEach((f) => {
@@ -178,6 +181,7 @@ export function scriptTexts(script: SceneScript): string[] {
     if (b.t === 'sort') out.push(b.prompt, ...b.cards);
     if (b.t === 'match') out.push(b.prompt, ...b.pairs.flatMap((pr) => [pr.left, pr.right]));
     if (b.t === 'profile') out.push(...(b.prompt ? [b.prompt] : []), ...b.rows.map((r) => r.value), ...(b.hotspots ?? []).map((h) => h.why));
+    if (b.t === 'spell') out.push(b.prompt);
     if (b.t === 'form') out.push(b.prompt, ...b.fields.flatMap((f) => [f.label, ...(f.starter ? [f.starter] : []), ...(f.clue ? [f.clue] : []), ...(f.options ?? [])]), ...(b.model ? b.model.lines.map((l) => l.text) : []));
   }
   return out;
@@ -205,7 +209,9 @@ export function knownWordShare(script: SceneScript, known: Set<string>): { share
   let ok = 0;
   const unknown = new Set<string>();
   for (const text of scriptTexts(script)) {
-    for (const w of tokens(text)) {
+    // {placeholders} are filled with the student's own words, and "M-I-N-A" is a spelling, not a word to know
+    for (const w of tokens(text.replace(/\{[^}]*\}/g, ' '))) {
+      if (/^([a-z]-)+[a-z]$/.test(w)) continue;
       total += 1;
       if (known.has(w) || glossed.has(w)) ok += 1;
       else unknown.add(w);

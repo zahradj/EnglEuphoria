@@ -277,7 +277,8 @@ export function FlashDeck({ title, cards, seed, artBase, noCheck, onCheck, onDon
     };
     if (open && focus !== null) {
       return (
-        <div className="ap-panel ap-wordpage" data-testid="word-page">
+        <div className="ap-panel" data-testid="word-page">
+         <div className="ap-wordpage">
           <div className="ap-wordpage-pic">
             <PictureTile id={open.pictureId} alt={open.alt} word={open.word} artBase={artBase} />
           </div>
@@ -294,6 +295,7 @@ export function FlashDeck({ title, cards, seed, artBase, noCheck, onCheck, onDon
               <button type="button" className="ap-btn ap-btn-primary" onClick={() => (focus + 1 < cards.length ? see(focus + 1) : setFocus(null))}>{focus + 1 < cards.length ? 'Next ▸' : 'Done ✓'}</button>
             </div>
           </div>
+         </div>
         </div>
       );
     }
@@ -431,6 +433,8 @@ export function BuildBlock({ prompt, target, extraTiles = [], hint, hintTier, se
     setMissed(false);
   }, [target]);
   const done = placed.length === goal.length;
+  // the hint lights ONE tile: the first unused tile with the next word (a sentence can repeat a word: "I am from Spain. I am Spanish.")
+  const hintIdx = done ? -1 : tiles.findIndex((t, k) => !placed.includes(k) && clean(t.w) === clean(goal[placed.length]));
   const tap = (idx: number) => {
     if (done || placed.includes(idx)) return;
     if (clean(tiles[idx].w) === clean(goal[placed.length])) {
@@ -452,7 +456,7 @@ export function BuildBlock({ prompt, target, extraTiles = [], hint, hintTier, se
       </div>
       <div className="ap-deck">
         {tiles.map((t, idx) => (
-          <button key={idx} type="button" className="ap-tile" disabled={placed.includes(idx)} data-next={hintTier >= 2 && !done && clean(t.w) === clean(goal[placed.length])} onClick={() => tap(idx)}>
+          <button key={idx} type="button" className="ap-tile" disabled={placed.includes(idx)} data-next={hintTier >= 2 && idx === hintIdx} onClick={() => tap(idx)}>
             {t.w}
           </button>
         ))}
@@ -702,6 +706,113 @@ export function DragMatchBlock({ prompt, pairs, seed, artBase, onWrong, onRight,
       <div className="ap-row">
         <span className="ap-chunk">{placed.length} of {pairs.length} placed. Drag a word onto its picture (or tap a word, then a picture).</span>
         <button type="button" className="ap-btn ap-btn-primary" disabled={!all} onClick={onDone}>Continue ▸</button>
+      </div>
+    </div>
+  );
+}
+
+/* ── spell a name: letter tiles onto a name badge (drag or tap). Copy-spelling: the name is shown, the student builds it letter by letter. ── */
+const LOOKALIKE: Record<string, string> = { A: 'E', B: 'P', C: 'S', D: 'T', E: 'I', F: 'S', G: 'J', H: 'A', I: 'E', J: 'G', K: 'Q', L: 'R', M: 'N', N: 'M', O: 'U', P: 'B', Q: 'K', R: 'L', S: 'C', T: 'D', U: 'O', V: 'B', W: 'U', X: 'S', Y: 'I', Z: 'S' };
+export function SpellBlock({ prompt, target, seed, onWrong, onRight, onDone }: { prompt: string; target: string; seed: number; onWrong: () => void; onRight: () => void; onDone: (spelled: string) => void }) {
+  const letters = useMemo(() => target.toUpperCase().replace(/[^A-Z]/g, '').split('').slice(0, 14), [target]);
+  const tiles = useMemo(() => {
+    const extra = Array.from(new Set(letters.map((l) => LOOKALIKE[l]).filter((l) => l && !letters.includes(l)))).slice(0, 2);
+    return seededShuffle([...letters, ...extra].map((l, i) => ({ l, id: i })), seed);
+  }, [letters, seed]);
+  const [used, setUsed] = useState<number[]>([]);
+  const [drag, setDrag] = useState<{ id: number; x: number; y: number } | null>(null);
+  const [bad, setBad] = useState<number | null>(null);
+  const [slip, setSlip] = useState(false);
+  useEffect(() => {
+    setUsed([]);
+    setDrag(null);
+    setBad(null);
+    setSlip(false);
+  }, [letters]);
+  const next = used.length;
+  const all = next >= letters.length;
+  const place = (id: number, slot?: number) => {
+    if (all) return;
+    const tile = tiles.find((x) => x.id === id);
+    if (!tile) return;
+    if (tile.l === letters[next] && (slot === undefined || slot === next)) {
+      setUsed([...used, id]);
+      if (!slip) onRight();
+      setSlip(false);
+    } else {
+      setBad(id);
+      setSlip(true);
+      window.setTimeout(() => setBad(null), 400);
+      onWrong();
+    }
+  };
+  const slotAt = (x: number, y: number): number | null => {
+    const el = document.elementsFromPoint(x, y).map((e) => e.closest('[data-slot]')).find(Boolean);
+    return el ? Number(el.getAttribute('data-slot')) : null;
+  };
+  const spelled = letters.join('-');
+  return (
+    <div className="ap-panel ap-spell">
+      <p className="ap-prompt">{prompt}</p>
+      <div className="ap-badge" aria-label={`Name badge: ${spelled}`}>
+        <span className="ap-badge-hello">HELLO · my name is</span>
+        <span className="ap-badge-name">{letters.join('')}</span>
+        <div className="ap-badge-slots">
+          {letters.map((l, i) => (
+            <span key={i} className="ap-letterslot" data-slot={i} data-filled={i < next} data-next={i === next && !all}>{i < next ? l : ''}</span>
+          ))}
+        </div>
+      </div>
+      <div className="ap-spell-tiles" aria-label="Letters">
+        {tiles.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            className="ap-letter"
+            disabled={used.includes(t.id)}
+            data-bad={bad === t.id}
+            data-dragging={drag?.id === t.id}
+            style={drag?.id === t.id ? { transform: `translate(${drag.x}px, ${drag.y}px) scale(1.1)`, zIndex: 20, touchAction: 'none' } : { touchAction: 'none' }}
+            onPointerDown={(e) => {
+              if (used.includes(t.id)) return;
+              (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+              e.currentTarget.dataset.sx = String(e.clientX);
+              e.currentTarget.dataset.sy = String(e.clientY);
+              e.currentTarget.dataset.moved = '0';
+              setDrag({ id: t.id, x: 0, y: 0 });
+            }}
+            onPointerMove={(e) => {
+              if (drag?.id !== t.id) return;
+              const dx = e.clientX - Number(e.currentTarget.dataset.sx);
+              const dy = e.clientY - Number(e.currentTarget.dataset.sy);
+              if (Math.abs(dx) + Math.abs(dy) > 6) e.currentTarget.dataset.moved = '1';
+              setDrag({ id: t.id, x: dx, y: dy });
+            }}
+            onPointerUp={(e) => {
+              if (drag?.id !== t.id) return;
+              const moved = e.currentTarget.dataset.moved === '1';
+              setDrag(null);
+              if (!moved) return place(t.id);
+              const s = slotAt(e.clientX, e.clientY);
+              if (s !== null) place(t.id, s);
+            }}
+            onPointerCancel={() => setDrag(null)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                place(t.id);
+              }
+            }}
+          >
+            {t.l}
+          </button>
+        ))}
+      </div>
+      {slip && !all && <p className="ap-feedback" role="status">Not yet — look at the badge. Which letter is next?</p>}
+      {all && <p className="ap-yoursentence" role="status">✅ {spelled}. Now say it out loud, letter by letter.</p>}
+      <div className="ap-row">
+        <span className="ap-chunk">{next} of {letters.length} letters. Drag a letter onto the badge (or just tap it).</span>
+        <button type="button" className="ap-btn ap-btn-primary" disabled={!all} onClick={() => onDone(spelled)}>Continue ▸</button>
       </div>
     </div>
   );

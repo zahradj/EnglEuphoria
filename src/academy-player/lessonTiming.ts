@@ -24,6 +24,8 @@ export function beatSeconds(b: Beat): number {
       return b.panels.length * 14 + 20;
     case 'flash':
       return b.noCheck ? b.cards.length * 14 : b.cards.length * 30 + b.cards.length * 8; // meet (a full page per word) [+ the picture check]
+    case 'spell':
+      return 14 + b.target.replace(/[^A-Za-z]/g, '').length * 5;
     case 'build':
       return 20 + 9 * (words(b.target) + (b.extraTiles?.length ?? 0));
     case 'record':

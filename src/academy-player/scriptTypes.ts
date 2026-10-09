@@ -112,6 +112,8 @@ export type Beat =
   | { t: 'panels'; layout: 'strip' | 'grid'; panels: PanelSpec[] }
   | { t: 'flash'; title: string; cards: FlashCard[]; /** skip the tap-the-picture check (a drag & drop match follows) */ noCheck?: boolean }
   /** tap word tiles to build the target sentence (distractor tiles allowed); wrong order => "Not yet — try again" */
+  /** spell a name: drag (or tap) the letter tiles onto the name badge, in order. `target` may hold {name}; `save` stores it as "M-I-N-A" */
+  | { t: 'spell'; prompt: string; target: string; save?: string }
   | { t: 'build'; prompt: string; target: string; extraTiles?: string[]; hint?: string }
   /** private say-it-aloud-or-type-it step; nothing is recorded or sent (the recording booth + consent are not built yet) */
   | { t: 'record'; prompt: string; model: string; hideModel?: boolean }
@@ -142,5 +144,5 @@ export interface SceneScript {
 }
 
 /** Beats the player stops on and waits for the student (or the teacher). */
-export const INTERACTIVE_KINDS: readonly Beat['t'][] = ['say', 'cloze', 'choice', 'chat', 'panels', 'flash', 'build', 'record', 'ticks', 'sort', 'match', 'profile', 'form', 'end'] as const;
+export const INTERACTIVE_KINDS: readonly Beat['t'][] = ['say', 'cloze', 'spell', 'choice', 'chat', 'panels', 'flash', 'build', 'record', 'ticks', 'sort', 'match', 'profile', 'form', 'end'] as const;
 export const isInteractive = (b: Beat) => (INTERACTIVE_KINDS as readonly string[]).includes(b.t);
