@@ -1531,7 +1531,7 @@
   "u7l5-old-macdonald": {
     "publicPath": "public/lep1/audio/old-macdonald-song-u7l5.mp3",
     "durationSec": 20,
-    "style": "Classic happy kids farm sing-along, 112 BPM with banjo, acoustic guitar, hand claps and a fiddle, clear happy young vocals with a kids choir feel, every word sung slowly and clearly, the traditional Old MacDonald melody, animal sounds sung playfully. Definitely not a lullaby.",
+    "style": "Classic happy kids farm sing-along, 112 BPM with banjo, acoustic guitar, hand claps and a fiddle, clear happy young vocals with a kids choir feel, every word sung slowly and clearly, the traditional E-I-E-I-O farm-song melody, the words exactly as written (Grandpa, never any other name), animal sounds sung playfully. Definitely not a lullaby.",
     "positiveStyles": [
       "traditional",
       "banjo",
@@ -1557,10 +1557,10 @@
       "mumbling"
     ],
     "lines": [
-      "Old MacDonald had a farm, E-I-E-I-O!",
+      "Grandpa had a farm, E-I-E-I-O!",
       "And on his farm he had a cow, E-I-E-I-O!",
       "With a moo, moo here and a moo, moo there!",
-      "Old MacDonald had a farm, E-I-E-I-O!"
+      "Grandpa had a farm, E-I-E-I-O!"
     ]
   }
 }

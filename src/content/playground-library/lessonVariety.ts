@@ -204,7 +204,7 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
     sources: ['the traditional song "Old MacDonald Had a Farm" (public domain: an animal and its sound per verse)', 'Sesame Workshop / Blue\'s Clues (model, then a planned pause for the child to answer)', 'Super Simple / Lingokids song-choice play (the child picks the next verse)', 'Cambridge (Pre A1 Starters: look and answer yes / no; story order)'],
     mechanics: [
       'the song as a story → a stills film "Grandpa\'s Noisy Barn": a sound behind each barn door, "What animal is this?", a pause, then the door opens',
-      'song-choice → My Farm Song: the child is Old MacDonald, chooses an animal, it hops onto the farm and Pip sings its verse; the child sings it back',
+      'song-choice → My Farm Song: the child is the farmer, chooses an animal, it hops onto the farm and Pip sings its verse; the child sings it back',
       'story order, "Who\'s behind the door?" (ask at each door), tick or cross, and feed the ducks with the story\'s pictures',
     ],
     betterThan: [

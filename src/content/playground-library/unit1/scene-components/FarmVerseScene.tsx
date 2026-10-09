@@ -9,7 +9,7 @@ import { CLAY_BUTTON, STICKER_FILTER, THICK_WORDS, sayWithin, useArtBox } from '
 import { Bursts, useBursts } from './gameFx';
 
 /* ---------- My Farm Song (Pre-A1 Unit 7 Lesson 5 signature game) ----------
- * The child is Old MacDonald. They choose an animal for the farm; it hops
+ * The child is the farmer. They choose an animal for the farm; it hops
  * onto the grass in front of the barn and Pip sings its verse — "And on his
  * farm he had a pig, E-I-E-I-O! With an oink, oink here and an oink, oink
  * there!" — then the child sings it too and taps "I sang it!". Every animal
@@ -23,7 +23,7 @@ import { Bursts, useBursts } from './gameFx';
  * verse again; no clock, no wrong answers. */
 
 type Verse = Extract<Scene, { kind: 'farm-verse' }>;
-export const VERSE_INTRO = 'You are Old MacDonald! Choose an animal for your farm!';
+export const VERSE_INTRO = 'You are the farmer! Choose an animal for your farm!';
 const art = (w: string) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
 export const verseHad = (label: string) => `And on his farm he had ${art(label)} ${label}, E-I-E-I-O!`;
 export const verseSound = (sound: string) => `With ${art(sound)} ${sound}, ${sound} here, and ${art(sound)} ${sound}, ${sound} there!`;

@@ -637,7 +637,7 @@ export type Scene =
   // Universal "Remember?" warm-up of the lesson before; see ../RecallWarmupScene.tsx.
   | RecallWarmupSceneData
   | {
-      /** My Farm Song (U7L5 signature): the child is Old MacDonald, chooses each animal in any order; it hops
+      /** My Farm Song (U7L5 signature): the child is the farmer, chooses each animal in any order; it hops
        *  onto the picture at x/y (feet, % of the picture; size = % width) and Pip sings its verse
        *  ("And on his farm he had a pig, E-I-E-I-O! With an oink, oink here…" from `label` + `sound`). */
       id: string; kind: 'farm-verse'; bg: string; teacher: string; who: CharKey; aspect?: number;
@@ -11960,9 +11960,9 @@ export const LESSON_U7L4_SCENES: Scene[] = [
  * Pre-A1 Unit 7, Lesson 5 — "Grandpa's Farm" (story)
  *
  * The approved story film "Grandpa's Noisy Barn" (docs/scenarios/u7l5-old-macdonald.md):
- * Grandpa is Old MacDonald; at sunrise Pip hears a sound behind each barn door,
+ * At sunrise on Grandpa's farm Pip hears a sound behind each barn door,
  * asks "What animal is this?", pauses for the child, and the door opens (cow,
- * pig, sheep, duck). Then the new My Farm Song game (the child is Old MacDonald
+ * pig, sheep, duck). Then the new My Farm Song game (the child is the farmer
  * and sings a verse for each animal they choose), story order, "Who's behind
  * the door?", tick or cross, and feed the ducks with the story's pictures.
  * ========================================================================= */
@@ -11977,7 +11977,7 @@ const bgU7L5Barn4 = `${A}/scenes/bg-u7l5-barn-4-wide.png`;
 const bgU7L5Yard = `${A}/scenes/bg-u7l5-yard-wide.png`;
 
 export const LESSON_U7L5_TITLE = "Grandpa's Farm";
-export const LESSON_U7L5_OBJECTIVE = 'Follow a short story and answer "What animal is this?" from the sound ("Moo! Moo!" — "It\'s a cow!"), retell the story in order, sing "Old MacDonald had a farm, E-I-E-I-O!" with a verse for each animal, by watching, listening, answering and singing, no reading.';
+export const LESSON_U7L5_OBJECTIVE = 'Follow a short story and answer "What animal is this?" from the sound ("Moo! Moo!" — "It\'s a cow!"), retell the story in order, sing "Grandpa had a farm, E-I-E-I-O!" with a verse for each animal, by watching, listening, answering and singing, no reading.';
 
 export const LESSON_U7L5_SCENES: Scene[] = [
   { id: 'u7l5-title', kind: 'title-card', bg: bgU7L5Yard, level: 'Pre-A1', unit: 'Unit 7', lessonLabel: 'Lesson 5', title: "Grandpa's Farm", subtitle: 'A story' },
@@ -11989,10 +11989,10 @@ export const LESSON_U7L5_SCENES: Scene[] = [
     lineDurationsMs: [3960, 4340, 4260, 7502],
     songPrompt: 'Classic happy kids farm sing-along',
     lyrics: [
-      { who: 'pip', text: 'Old MacDonald had a farm, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'Grandpa had a farm, E-I-E-I-O!', emotion: 'happy' },
       { who: 'pip', text: 'And on his farm he had a cow, E-I-E-I-O!', emotion: 'happy' },
       { who: 'pip', text: 'With a moo, moo here and a moo, moo there!', emotion: 'happy' },
-      { who: 'pip', text: 'Old MacDonald had a farm, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: 'Grandpa had a farm, E-I-E-I-O!', emotion: 'happy' },
     ],
   },
   {
@@ -12020,7 +12020,7 @@ export const LESSON_U7L5_SCENES: Scene[] = [
     id: 'u7l5-story', kind: 'story-video', bg: bgU7L5Barn0, videoUrl: `${A}/video/old-macdonald-u7l5.mp4?v=1`, title: "Grandpa's Noisy Barn",
     teacher: 'Press play and watch. When Pip asks "What animal is this?", the child answers before the door opens: "It\'s a pig!"',
     pages: [
-      { img: bgU7L5GateB, who: 'pip', line: "This is Grandpa's farm! Grandpa is Old MacDonald!", atSec: 0 },
+      { img: bgU7L5GateB, who: 'pip', line: "This is Grandpa's farm! Good morning, Grandpa!", atSec: 0 },
       { img: bgU7L5Barn0, who: 'pip', line: 'The animals are in the barn. Listen!', atSec: 5 },
       { img: bgU7L5Barn0, who: 'pip', line: 'Moo! Moo! What animal is this?', atSec: 10 },
       { img: bgU7L5Barn1, who: 'pip', line: "It's a cow!", atSec: 14 },
@@ -12030,7 +12030,7 @@ export const LESSON_U7L5_SCENES: Scene[] = [
       { img: bgU7L5Barn3, who: 'pip', line: "It's a sheep!", atSec: 32 },
       { img: bgU7L5Barn3, who: 'pip', line: 'Quack! Quack! What animal is this?', atSec: 37 },
       { img: bgU7L5Barn4, who: 'pip', line: "It's a duck!", atSec: 41 },
-      { img: bgU7L5Yard, who: 'pip', line: 'Old MacDonald had a farm, E-I-E-I-O!', atSec: 46 },
+      { img: bgU7L5Yard, who: 'pip', line: 'Grandpa had a farm, E-I-E-I-O!', atSec: 46 },
     ],
     checkpoints: [],
   },
@@ -12056,16 +12056,16 @@ export const LESSON_U7L5_SCENES: Scene[] = [
     ],
   },
   {
-    // Signature game (new): the child is Old MacDonald and sings a verse per animal.
+    // Signature game (new): the child is the farmer and sings a verse per animal.
     id: 'u7l5-farm-song', kind: 'farm-verse', bg: bgU7L5Barn0, who: 'pip',
-    teacher: 'My Farm Song! The child is Old MacDonald: choose an animal, Pip sings its verse, the child sings it too and taps "I sang it!".',
+    teacher: 'My Farm Song! The child is the farmer: choose an animal, Pip sings its verse, the child sings it too and taps "I sang it!".',
     animals: [
       { label: 'cow', img: itemCow, sound: 'moo', x: 40, y: 92, size: 13 },
       { label: 'pig', img: itemPig, sound: 'oink', x: 56, y: 93, size: 11 },
       { label: 'sheep', img: itemSheep, sound: 'baa', x: 71, y: 92, size: 12 },
       { label: 'duck', img: itemFarmDuck, sound: 'quack', x: 85, y: 93, size: 9 },
     ],
-    doneLine: 'Old MacDonald had a farm, E-I-E-I-O!',
+    doneLine: 'Grandpa had a farm, E-I-E-I-O!',
   },
 
   /* 8-11 Retell and check */
@@ -12130,15 +12130,15 @@ export const LESSON_U7L5_SCENES: Scene[] = [
   /* 12-13 Sticker + Home Mission */
   {
     id: 'u7l5-sticker', kind: 'sticker-reward', bg: bgU7L5Yard, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
-    line: 'You sang Old MacDonald! Here is a cow sticker for you!', sticker: { img: itemCow, label: 'Farm singer' },
+    line: 'You sang the farm song! Here is a cow sticker for you!', sticker: { img: itemCow, label: 'Farm singer' },
   },
   {
     id: 'u7l5-home-mission', kind: 'home-mission', bg: bgU7L5Yard, who: 'pip',
     teacher: 'Home Mission: read the parent note and show the picture steps.',
-    line: 'Your mission: sing Old MacDonald at home! Your family says an animal, you sing the sound!',
-    parentNote: 'Sing "Old MacDonald had a farm, E-I-E-I-O" together. Take turns choosing the animal; your child sings the sound ("With a moo, moo here…"). Ask "What animal is this?" after making a sound.',
+    line: 'Your mission: sing the farm song at home! Your family says an animal, you sing the sound!',
+    parentNote: 'Sing "Grandpa had a farm, E-I-E-I-O" together. Take turns choosing the animal; your child sings the sound ("With a moo, moo here…"). Ask "What animal is this?" after making a sound.',
     steps: [
-      { emoji: '\u{1F3B6}', say: 'Old MacDonald had a farm!' },
+      { emoji: '\u{1F3B6}', say: 'Grandpa had a farm!' },
       { emoji: '\u{1F404}', img: itemCow, say: 'Moo, moo!' },
       { emoji: '\u{1F914}', say: 'What animal is this?' },
     ],
@@ -12169,5 +12169,5 @@ export const LESSON_U7L5_SCENES: Scene[] = [
       { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
     ],
   },
-  { id: 'u7l5-finale', kind: 'finale', bg: bgU7L5Yard, who: 'pip', line: 'Old MacDonald had a farm, E-I-E-I-O! Goodbye, friend!' },
+  { id: 'u7l5-finale', kind: 'finale', bg: bgU7L5Yard, who: 'pip', line: 'Grandpa had a farm, E-I-E-I-O! Goodbye, friend!' },
 ];

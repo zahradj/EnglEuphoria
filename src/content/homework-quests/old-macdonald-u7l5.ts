@@ -33,6 +33,6 @@ export const QUEST_OLD_MACDONALD_U7L5: HomeworkQuest = {
         { img: sc('barn-3'), line: "It's a sheep!", isTrue: true },
         { img: sc('barn-4'), line: "It's a dog!", isTrue: false },
       ] },
-    { kind: 'treasure', name: 'Farm Prize', icon: `${K}/chest-closed.png`, intro: 'Tap the chest to open it!', img: yard, closed: `${K}/chest-closed.png`, open: `${K}/chest-open.png`, win: 'Old MacDonald had a farm, E-I-E-I-O!' },
+    { kind: 'treasure', name: 'Farm Prize', icon: `${K}/chest-closed.png`, intro: 'Tap the chest to open it!', img: yard, closed: `${K}/chest-closed.png`, open: `${K}/chest-open.png`, win: 'Grandpa had a farm, E-I-E-I-O!' },
   ],
 };
