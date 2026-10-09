@@ -1,5 +1,4 @@
-tiger-head: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
-tiger-head: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started tiger-head: 9804f8d4-8ebb-4387-9c21-acb12cfbcfaf
-saved public/lep1/video/clips/u4l5-moves/tiger-head.mp4 (5571348 bytes)
+park-intro: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started park-intro: 01e4535e-50e6-49b1-9c22-c6409d8969df
+saved public/lep1/video/clips/u4l5-moves/park-intro.mp4 (6801687 bytes)
 1/1 clips ready for u4l5-moves
