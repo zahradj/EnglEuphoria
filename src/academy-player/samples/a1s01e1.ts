@@ -1,7 +1,7 @@
 // SAMPLE lesson script: A1-S01-E1 "Who Are You? · Cold Open" (Academy cast only).
 // Written ONLY with the words this lesson introduces (the Season's E1 list: hello, welcome, name, friend, new, student, teacher,
 // class, meet, online, nice, group, member, introduce) plus closed-class words; a few story words are glossed on tap.
-// Run of show covered: Check-in (0), The Drop (2), Notice & Build vocabulary (3), Wrap (7).
+// Full 60-minute run of show: Check-in 0, Remember? 1, The Drop 2, Notice & Build 3, Energiser 4, Mission 5 (dial, Take 1 -> feedback -> Take 2), Release 6, Wrap 7.
 // No voice clips exist yet (the cast has no voice assigned): every line is silent until recorded clips are added.
 import type { SceneScript } from '../scriptTypes';
 
@@ -20,6 +20,21 @@ export const A1S01E1: SceneScript = {
     { t: 'show', who: 'Theo', pos: 'right', expr: 'neutral' },
     { t: 'say', who: 'Ava', expr: 'happy', text: 'Hello! I am Ava.' },
     { t: 'say', who: 'Theo', expr: 'happy', text: 'Hello! I am Theo. Nice to meet you.', key: ['Nice', 'meet'] },
+
+    // ── Remember? (first lesson: nothing to recall yet, so a no-stakes "what do I already know?") ──
+    { t: 'segment', index: 1 },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'This is class one. Show me a word you know.' },
+    {
+      t: 'choice',
+      prompt: 'Pick a word you know.',
+      tests: 'story',
+      options: [
+        { text: 'Hello', set: { known: 'hello' }, feedback: 'Hello! A great start.' },
+        { text: 'Friend', set: { known: 'friend' }, feedback: 'Friend! Nice one.' },
+        { text: 'Class', set: { known: 'class' }, feedback: 'Class! Yes, we are in class.' },
+      ],
+    },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Nice! You know hello and friend.' },
 
     // ── The Drop ──────────────────────────────────────────────────────────────
     { t: 'segment', index: 2 },
@@ -89,10 +104,89 @@ export const A1S01E1: SceneScript = {
       ],
     },
 
+    { t: 'say', who: 'Vee', expr: 'curious', text: 'Sam writes: My name is Sam.', key: ['name'] },
+    { t: 'build', prompt: 'Build it.', target: 'My name is Sam.', extraTiles: ['teacher'], hint: 'Start with the word My.' },
+    { t: 'build', prompt: 'Sam is new. Build it.', target: 'I am a new student.', extraTiles: ['friend'], hint: 'Sam: I am ...' },
+    {
+      t: 'flash',
+      title: 'In the chat',
+      cards: [
+        { word: 'name', chunk: 'My name is Sam.', pictureId: 'card-name', alt: 'A name tag on a jacket' },
+        { word: 'online', chunk: 'Sam is online.', pictureId: 'card-online', alt: 'A phone showing a green online dot' },
+        { word: 'group', chunk: 'a class group', pictureId: 'card-group', alt: 'Five teenagers standing together' },
+        { word: 'class', chunk: 'our class', pictureId: 'card-class', alt: 'Desks and a whiteboard in a classroom' },
+      ],
+    },
+
+    // ── Energiser (zero stakes) ───────────────────────────────────────────────
+    { t: 'segment', index: 4 },
+    { t: 'say', who: 'Theo', expr: 'happy', text: 'Find the odd one!', gloss: { odd: 'different from the others' }, key: ['odd'] },
+    {
+      t: 'choice',
+      prompt: 'Find the odd one.',
+      tests: 'language',
+      options: [
+        { text: 'teacher', correct: false, feedback: 'A teacher is a person. Find the word that is not a person.' },
+        { text: 'hello', correct: true, feedback: 'Yes! Hello is not a person.' },
+        { text: 'student', correct: false, feedback: 'A student is a person. Find the word that is not a person.' },
+      ],
+    },
+    {
+      t: 'choice',
+      prompt: 'Find the odd one.',
+      tests: 'language',
+      options: [
+        { text: 'hello', correct: false, feedback: 'Hello is a way to say hi. Look for a different word.' },
+        { text: 'welcome', correct: false, feedback: 'Welcome is a way to say hi. Look for a different word.' },
+        { text: 'friend', correct: true, feedback: 'Yes! A friend is a person.' },
+      ],
+    },
+
+    // ── Mission: Take 1 -> feedback -> Take 2, with a difficulty dial ─────────
+    { t: 'segment', index: 5 },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Mission: you meet Theo. Pick your level.', gloss: { level: 'how hard the mission is', chill: 'easy and relaxed', normal: 'not easy, not hard', push: 'a bit harder' }, key: ['level'] },
+    {
+      t: 'choice',
+      prompt: 'Chill, Normal or Push?',
+      tests: 'story',
+      options: [
+        { text: 'Chill', goto: 'm-chill', set: { dial: 'chill' }, feedback: 'Chill is a good start.' },
+        { text: 'Normal', goto: 'm-normal', set: { dial: 'normal' }, feedback: 'Normal. Let us go!' },
+        { text: 'Push', goto: 'm-push', set: { dial: 'push' }, feedback: 'Push! Nice.' },
+      ],
+    },
+    { t: 'label', name: 'm-chill' },
+    { t: 'say', who: 'Theo', expr: 'neutral', text: 'Hello! I am Theo.' },
+    { t: 'build', prompt: 'Take 1. Say hello to Theo.', target: 'Hello, my friend.', extraTiles: ['teacher'] },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Nice! Now try again, with a name.' },
+    { t: 'build', prompt: 'Take 2. Say your name.', target: 'Hello, I am Ava.', extraTiles: ['student'] },
+    { t: 'jump', label: 'm-done' },
+    { t: 'label', name: 'm-normal' },
+    { t: 'say', who: 'Theo', expr: 'neutral', text: 'Hello! Who is this?' },
+    { t: 'build', prompt: 'Take 1. Introduce Ava to Theo.', target: 'This is my friend Ava.', extraTiles: ['student'] },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Nice! Now try again, with hello first.' },
+    { t: 'build', prompt: 'Take 2. Start with hello.', target: 'Hello, this is my friend Ava.', extraTiles: ['teacher'] },
+    { t: 'jump', label: 'm-done' },
+    { t: 'label', name: 'm-push' },
+    { t: 'say', who: 'Theo', expr: 'neutral', text: 'Hello! Who is this new student?' },
+    { t: 'build', prompt: 'Take 1. Introduce Ava to Theo.', target: 'This is my new friend Ava.', extraTiles: ['teacher'] },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Nice! Now try again, with hello and his name.' },
+    { t: 'build', prompt: 'Take 2. Start with hello.', target: 'Hello Theo, this is my new friend Ava.', extraTiles: ['teacher'] },
+    { t: 'label', name: 'm-done' },
+    { t: 'say', who: 'Theo', expr: 'happy', text: 'Nice to meet you, Ava!', key: ['meet'] },
+
+    // ── Release: say it out loud, privately ───────────────────────────────────
+    { t: 'segment', index: 6 },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Now you. Say hello to the new member.' },
+    { t: 'record', prompt: 'Say hello to Sam.', model: 'Hello, Sam! Welcome to the group.' },
+    { t: 'say', who: 'Mia', expr: 'happy', text: 'Welcome to the group, new friend!', key: ['Welcome', 'group'] },
+
     // ── Wrap ──────────────────────────────────────────────────────────────────
     { t: 'segment', index: 7 },
     { t: 'bg', id: 'classroom-evening', alt: 'The classroom in warm evening light' },
     { t: 'say', who: 'Vee', expr: 'happy', text: 'Nice! You are in our group now.', key: ['Nice', 'group'] },
+    { t: 'ticks', prompt: 'How was it for you?', items: ['I know: hello, welcome, friend.', 'I know: student, teacher, class.', 'I know: Nice to meet you.'] },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Homework: say hello to one friend.', gloss: { homework: 'a small job to do after class' }, key: ['Homework'] },
     { t: 'say', who: 'Mia', expr: 'curious', text: 'Next time, we meet Sam online!', key: ['meet', 'online'] },
     { t: 'end', summary: 'Clue 1 of 8: Sam is a new member of the group, but Sam is not in our class.' },
   ],

@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import './academy-player.css';
 import { Backdrop, Sprite } from './art';
 import { accuracy, backlog, initState, step, type PlayerEvent, type PlayerState } from './engine';
-import { ChatStory, ChoiceBlock, ComicPanels, DialogueBox, FlashDeck, RunStrip } from './parts';
+import { BuildBlock, ChatStory, ChoiceBlock, ComicPanels, DialogueBox, FlashDeck, RecordBlock, RunStrip, TicksBlock } from './parts';
 import type { CastName, SceneScript } from './scriptTypes';
 import { playVoice, stopVoice } from './voice';
 
@@ -162,6 +162,14 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
           />
         )}
 
+        {beat?.t === 'build' && (
+          <BuildBlock prompt={beat.prompt} target={beat.target} extraTiles={beat.extraTiles} hint={beat.hint} hintTier={hintTier} seed={state.seed + state.beatIndex} onWrong={() => go({ type: 'answer', correct: false })} onDone={(first) => { if (first) go({ type: 'answer', correct: true }); go({ type: 'next' }); }} />
+        )}
+
+        {beat?.t === 'record' && <RecordBlock prompt={beat.prompt} model={beat.model} onContinue={() => go({ type: 'next' })} />}
+
+        {beat?.t === 'ticks' && <TicksBlock prompt={beat.prompt} items={beat.items} onDone={() => go({ type: 'next' })} />}
+
         {beat?.t === 'end' && (
           <div className="ap-panel" style={{ justifyContent: 'center' }}>
             <div className="ap-end">
@@ -212,7 +220,7 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
 
       <nav className="ap-dock" aria-label="Comfort controls">
         <div className="ap-dock-group">
-          <button type="button" className="ap-btn" disabled={hintTier >= 3 || !(beat?.t === 'choice' || beat?.t === 'chat')} onClick={() => { setHintTier((h) => Math.min(3, h + 1)); onSignal?.({ type: 'hint', rev: state.rev }); }} aria-label="Hint"><span className="ap-ico" aria-hidden="true">💡</span>Hint</button>
+          <button type="button" className="ap-btn" disabled={hintTier >= 3 || !(beat?.t === 'choice' || beat?.t === 'chat' || beat?.t === 'build')} onClick={() => { setHintTier((h) => Math.min(3, h + 1)); onSignal?.({ type: 'hint', rev: state.rev }); }} aria-label="Hint"><span className="ap-ico" aria-hidden="true">💡</span>Hint</button>
           <button type="button" className="ap-btn" disabled={state.history.length === 0} onClick={() => go({ type: 'back' })} aria-label="Go back"><span className="ap-ico" aria-hidden="true">↶</span>Back</button>
           <button type="button" className="ap-btn" onClick={() => setShowLog(true)} aria-label="Show what they said"><span className="ap-ico" aria-hidden="true">☰</span>Lines</button>
           <button type="button" className="ap-btn" onClick={() => { setResting(true); stopVoice(); onSignal?.({ type: 'minute', rev: state.rev }); }} aria-label="I need a minute"><span className="ap-ico" aria-hidden="true">⏸</span>I need a minute</button>

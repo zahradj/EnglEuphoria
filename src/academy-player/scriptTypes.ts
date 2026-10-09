@@ -67,6 +67,12 @@ export type Beat =
   | { t: 'chat'; title: string; messages: ChatMessage[]; reply?: { prompt: string; options: ChoiceOption[] } }
   | { t: 'panels'; layout: 'strip' | 'grid'; panels: PanelSpec[] }
   | { t: 'flash'; title: string; cards: FlashCard[] }
+  /** tap word tiles to build the target sentence (distractor tiles allowed); wrong order => "Not yet — try again" */
+  | { t: 'build'; prompt: string; target: string; extraTiles?: string[]; hint?: string }
+  /** private say-it-aloud-or-type-it step; nothing is recorded or sent (the recording booth + consent are not built yet) */
+  | { t: 'record'; prompt: string; model: string }
+  /** can-do self-rating at the Wrap (yes / almost / not yet): honest evidence for the teacher, never a score */
+  | { t: 'ticks'; prompt: string; items: string[] }
   | { t: 'set'; key: string; value: VarValue }
   | { t: 'if'; key: string; equals: VarValue; goto: string }
   | { t: 'jump'; label: string }
@@ -84,5 +90,5 @@ export interface SceneScript {
 }
 
 /** Beats the player stops on and waits for the student (or the teacher). */
-export const INTERACTIVE_KINDS: readonly Beat['t'][] = ['say', 'choice', 'chat', 'panels', 'flash', 'end'] as const;
+export const INTERACTIVE_KINDS: readonly Beat['t'][] = ['say', 'choice', 'chat', 'panels', 'flash', 'build', 'record', 'ticks', 'end'] as const;
 export const isInteractive = (b: Beat) => (INTERACTIVE_KINDS as readonly string[]).includes(b.t);

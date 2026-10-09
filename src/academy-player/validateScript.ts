@@ -86,6 +86,20 @@ export function validateScript(script: SceneScript): ScriptIssue[] {
           if (!c.alt.trim()) err('alt', 'Card picture needs alt text.', i);
         });
         break;
+      case 'build': {
+        needsLine(b.target, i, 'Build target');
+        const tw = words(b.target.toLowerCase().replace(/[.!?,]/g, ''));
+        if (tw.length < 3) err('build_size', 'A build target needs at least 3 words.', i);
+        if (tw.length + (b.extraTiles?.length ?? 0) > 9) err('build_size', 'At most 9 tiles on screen (working memory).', i);
+        break;
+      }
+      case 'record':
+        needsLine(b.model, i, 'Model sentence');
+        break;
+      case 'ticks':
+        if (b.items.length < 1 || b.items.length > 4) err('ticks', 'Wrap shows 1-4 can-do statements.', i);
+        b.items.forEach((t) => needsLine(t, i, 'Can-do'));
+        break;
       case 'jump':
         if (!(b.label in labels)) err('jump', `Unknown label "${b.label}".`, i);
         break;
@@ -114,6 +128,9 @@ export function scriptTexts(script: SceneScript): string[] {
     }
     if (b.t === 'panels') b.panels.forEach((p) => p.bubble && out.push(p.bubble.text));
     if (b.t === 'flash') b.cards.forEach((c) => out.push(c.chunk));
+    if (b.t === 'build') out.push(b.prompt, b.target, ...(b.extraTiles ?? []));
+    if (b.t === 'record') out.push(b.prompt, b.model);
+    if (b.t === 'ticks') out.push(b.prompt, ...b.items);
   }
   return out;
 }

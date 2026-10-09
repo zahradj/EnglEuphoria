@@ -267,3 +267,102 @@ export function ComicPanels({ layout, panels, artBase, onContinue }: { layout: '
     </div>
   );
 }
+
+
+/* ── build the sentence: tap tiles in order (distractors allowed); a wrong tile is gently refused ── */
+export function BuildBlock({ prompt, target, extraTiles = [], hint, hintTier, seed, onWrong, onDone }: { prompt: string; target: string; extraTiles?: string[]; hint?: string; hintTier: number; seed: number; onWrong: () => void; onDone: (firstTry: boolean) => void }) {
+  const goal = useMemo(() => target.trim().split(/\s+/), [target]);
+  const clean = (w: string) => w.toLowerCase().replace(/[.!?,]/g, '');
+  const tiles = useMemo(() => seededShuffle([...goal, ...extraTiles].map((w, i) => ({ w, i })), seed), [goal, extraTiles, seed]);
+  const [placed, setPlaced] = useState<number[]>([]);
+  const [slip, setSlip] = useState(false);
+  const [missed, setMissed] = useState(false);
+  useEffect(() => {
+    setPlaced([]);
+    setSlip(false);
+    setMissed(false);
+  }, [target]);
+  const done = placed.length === goal.length;
+  const tap = (idx: number) => {
+    if (done || placed.includes(idx)) return;
+    if (clean(tiles[idx].w) === clean(goal[placed.length])) {
+      setSlip(false);
+      setPlaced([...placed, idx]);
+    } else {
+      setSlip(true);
+      setMissed(true);
+      onWrong();
+    }
+  };
+  return (
+    <div className="ap-panel">
+      <p className="ap-prompt">{prompt}</p>
+      <div className="ap-build-line" aria-live="polite" aria-label="Your sentence">
+        {goal.map((_, k) => (
+          <span key={k} className="ap-slot" data-filled={k < placed.length}>{k < placed.length ? tiles[placed[k]].w : ''}</span>
+        ))}
+      </div>
+      <div className="ap-deck">
+        {tiles.map((t, idx) => (
+          <button key={idx} type="button" className="ap-tile" disabled={placed.includes(idx)} data-next={hintTier >= 2 && !done && clean(t.w) === clean(goal[placed.length])} onClick={() => tap(idx)}>
+            {t.w}
+          </button>
+        ))}
+      </div>
+      {slip && <p className="ap-feedback" role="status">Not yet — try again.{hint ? ` ${hint}` : ''}</p>}
+      <div className="ap-row">
+        <button type="button" className="ap-btn" disabled={!placed.length || done} onClick={() => setPlaced(placed.slice(0, -1))}>↶ Undo word</button>
+        <button type="button" className="ap-btn ap-btn-primary" disabled={!done} onClick={() => onDone(!missed)}>{done ? 'Great ▸' : 'Build it ▸'}</button>
+      </div>
+    </div>
+  );
+}
+
+/* ── private say-it-or-type-it (nothing is recorded or sent) ── */
+export function RecordBlock({ prompt, model, onContinue }: { prompt: string; model: string; onContinue: () => void }) {
+  const [typed, setTyped] = useState('');
+  const [said, setSaid] = useState(false);
+  useEffect(() => {
+    setTyped('');
+    setSaid(false);
+  }, [model]);
+  return (
+    <div className="ap-panel">
+      <p className="ap-prompt">{prompt}</p>
+      <p className="ap-text ap-model">{model}</p>
+      <label className="ap-chunk" htmlFor="ap-type">Say it out loud — or type it. Only you and your teacher see this.</label>
+      <input id="ap-type" className="ap-input" value={typed} onChange={(e) => setTyped(e.target.value)} placeholder="Type here (optional)" />
+      <div className="ap-row">
+        <button type="button" className="ap-btn" aria-pressed={said} onClick={() => setSaid((v) => !v)}>{said ? '✓ I said it' : '🎤 I said it'}</button>
+        <button type="button" className="ap-btn ap-btn-primary" disabled={!said && !typed.trim()} onClick={onContinue}>Continue ▸</button>
+      </div>
+    </div>
+  );
+}
+
+/* ── can-do ticks (self-rating; never a score) ── */
+export type TickLevel = 'yes' | 'almost' | 'notyet';
+export function TicksBlock({ prompt, items, onDone }: { prompt: string; items: string[]; onDone: (r: Record<string, TickLevel>) => void }) {
+  const [r, setR] = useState<Record<string, TickLevel>>({});
+  useEffect(() => setR({}), [items]);
+  const levels: [TickLevel, string][] = [['yes', 'Yes'], ['almost', 'Almost'], ['notyet', 'Not yet']];
+  return (
+    <div className="ap-panel">
+      <p className="ap-prompt">{prompt}</p>
+      {items.map((it) => (
+        <div key={it} className="ap-tick">
+          <span className="ap-text">{it}</span>
+          <span className="ap-tick-opts" role="radiogroup" aria-label={it}>
+            {levels.map(([k, label]) => (
+              <button key={k} type="button" role="radio" aria-checked={r[it] === k} className="ap-btn" data-on={r[it] === k} onClick={() => setR({ ...r, [it]: k })}>{label}</button>
+            ))}
+          </span>
+        </div>
+      ))}
+      <div className="ap-row">
+        <span className="ap-chunk">"Not yet" is a useful answer. It tells us what to practise.</span>
+        <button type="button" className="ap-btn ap-btn-primary" disabled={Object.keys(r).length < items.length} onClick={() => onDone(r)}>Done ▸</button>
+      </div>
+    </div>
+  );
+}

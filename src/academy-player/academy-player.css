@@ -157,3 +157,16 @@
   .ap-root * { animation: none !important; transition: none !important; }
 }
 .ap-root[data-reduced='true'] * { animation: none !important; transition: none !important; }
+
+/* build / record / ticks */
+.ap-build-line { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px; border-radius: 12px; background: var(--ap-surface-2); min-height: 52px; }
+.ap-slot { min-width: 44px; min-height: 36px; padding: 4px 10px; border-radius: 10px; border: 2px dashed var(--ap-muted); font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+.ap-slot[data-filled="true"] { border-style: solid; border-color: var(--ap-reward); background: var(--ap-surface); }
+.ap-tile { min-height: 44px; padding: 8px 14px; border-radius: 12px; border: 2px solid var(--ap-muted); background: var(--ap-surface); color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
+.ap-tile:disabled { opacity: 0.35; cursor: default; }
+.ap-tile[data-next="true"] { outline: 3px solid var(--ap-accent); }
+.ap-model { font-size: 1.15em; padding: 10px 14px; border-radius: 12px; background: var(--ap-surface-2); }
+.ap-input { min-height: 44px; padding: 8px 12px; border-radius: 10px; border: 2px solid var(--ap-muted); background: var(--ap-surface); color: inherit; font: inherit; }
+.ap-tick { display: flex; flex-direction: column; gap: 6px; padding: 8px 0; }
+.ap-tick-opts { display: flex; gap: 6px; flex-wrap: wrap; }
+.ap-tick-opts .ap-btn[data-on="true"] { background: var(--ap-accent); color: var(--ap-accent-ink); }
