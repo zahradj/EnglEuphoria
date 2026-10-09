@@ -1,2 +1,2 @@
 # re-score (word times)
-score:u6l5-song3
+score:u4l5-song3
