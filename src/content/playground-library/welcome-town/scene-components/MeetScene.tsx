@@ -145,6 +145,8 @@ export function MeetScene({ scene, onNext, onWin, sync }: { scene: Extract<Scene
 }
 
 const OUTLINE = (px: number) => ({ WebkitTextStroke: `${px}px #fff`, paintOrder: 'stroke fill' as const, textShadow: '0 4px 14px rgba(0,0,0,0.18)' });
+// The rounded children's display face the app already loads (index.html: Fredoka 300-700).
+const WORD_FONT = "'Fredoka', 'Nunito', ui-rounded, system-ui, sans-serif";
 
 /** The words of `line`, with the focus words in the character's colour (shown once the voice has read them). */
 function FocusLine({ line, focus, color, reveal }: { line: string; focus: string[]; color: string; reveal: boolean }) {
@@ -167,18 +169,18 @@ function WordPanel({ scene, color, speaking, nudge, onTap, action }: {
   const side = scene.cardSide === 'right' ? 'right-[3%] top-[calc(20*var(--svh,1vh))] w-[46%]' : scene.cardSide === 'left' ? 'left-[3%] top-[calc(20*var(--svh,1vh))] w-[46%]'
     : 'left-1/2 -translate-x-1/2 top-[calc(17*var(--svh,1vh))] w-[70%]';
   return (
-    <div className={`absolute z-20 flex flex-col items-center gap-[calc(1.6*var(--svh,1vh))] text-center ${side}`} style={{ animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
+    <div className={`absolute z-20 flex flex-col items-center gap-[calc(1.6*var(--svh,1vh))] text-center ${side}`} style={{ fontFamily: WORD_FONT, animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>
       {scene.wordNote && !centred && (
         <div className="font-black leading-none text-[#2b1e17]" style={{ fontSize: 'calc(6*var(--svh,1vh))', ...OUTLINE(6) }}>{scene.wordNote}</div>
       )}
       <button onClick={onTap} aria-label={`Hear ${word} again`} className="flex items-center gap-[calc(2*var(--svh,1vh))] active:scale-95">
         {scene.wordNote && centred && <span className="font-black leading-none text-[#2b1e17]" style={{ fontSize: 'calc(8*var(--svh,1vh))', ...OUTLINE(7) }}>{scene.wordNote}</span>}
-        <span className="font-black leading-none" style={{ fontSize: 'calc(13*var(--svh,1vh))', color, ...OUTLINE(10) }}>{word}</span>
+        <span className="font-bold leading-none tracking-wide" style={{ fontSize: 'calc(14*var(--svh,1vh))', color, ...OUTLINE(11), textShadow: `0 6px 0 ${color}33, 0 10px 22px rgba(0,0,0,0.18)` }}>{word}</span>
         <span className={`flex h-[calc(9*var(--svh,1vh))] w-[calc(9*var(--svh,1vh))] shrink-0 items-center justify-center rounded-full bg-[#FFD978] text-[calc(4.4*var(--svh,1vh))] shadow-xl ring-4 ring-white ${nudge && !speaking ? 'animate-bounce' : ''}`}>
           {speaking ? '🎶' : '🔊'}
         </span>
       </button>
-      <button onClick={onTap} className="font-black leading-tight text-[#2b1e17] active:scale-[0.98]" style={{ fontSize: 'calc(4.8*var(--svh,1vh))', ...OUTLINE(7) }}>
+      <button onClick={onTap} className="font-semibold leading-tight text-[#2b1e17] active:scale-[0.98]" style={{ fontSize: 'calc(5*var(--svh,1vh))', textWrap: 'balance' as never, ...OUTLINE(8) }}>
         <FocusLine line={scene.line} focus={scene.focus ?? [word]} color={color} reveal={!speaking} />
       </button>
       {action}
