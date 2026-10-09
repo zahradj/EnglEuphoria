@@ -116,7 +116,7 @@ export function Sprite({ who, expr, artBase, speaking = false, animate = true }:
       </div>
     );
   }
-  return <CastBust who={who} expr={expr} blink={animate && blink} open={animate && mouth} />;
+  return <CastBust who={who} expr={expr} label={false} blink={animate && blink} open={animate && mouth} />;
 }
 
 /** Full-bleed background: real picture if available, else a calm gradient labelled as a placeholder. */

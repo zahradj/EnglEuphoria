@@ -341,3 +341,18 @@
 .ap-tc-hint { color: #7c3aed; }
 .ap-burst span { color: #f5a524; text-shadow: 0 0 8px rgba(245, 165, 36, 0.7); }
 .ap-end .ap-star { color: #f5a524; }
+
+/* ═════════ Big-screen pass (owner 2026-10-09: check laptop and tablet) ═════════ */
+.ap-root[data-theme='studio'] { --ap-font-size: clamp(17px, 10px + 1.1vw, 24px); }
+.ap-root[data-theme='explorer'] { --ap-font-size: clamp(18px, 11px + 1.1vw, 25px); }
+.ap-panel { backdrop-filter: none; background: linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(246, 241, 255, 0.88) 38%, rgba(246, 241, 255, 0) 64%); }
+.ap-tile-ph, .ap-tile-img { max-height: 150px; }
+.ap-tile-ph { width: 100%; }
+@media (min-width: 700px) {
+  .ap-panel { padding-left: max(24px, calc((100% - 820px) / 2)); padding-right: max(24px, calc((100% - 820px) / 2)); }
+  .ap-dialogue { left: 50%; right: auto; width: min(820px, calc(100% - 48px)); translate: none; transform: translateX(-50%); bottom: 18px; }
+  .ap-choice { min-height: 62px; }
+  .ap-deck { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ap-sprite { bottom: 14%; width: min(46%, 460px); }
+  .ap-sprite[data-pos='center'] { translate: -50% 0; transform: none; }
+}

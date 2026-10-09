@@ -171,6 +171,7 @@ export const A1S01E1: SceneScript = {
         { bg: 'classroom-morning', alt: 'Vee points at the phone', who: 'Vee', expr: 'thinking', bubble: { who: 'Vee', text: 'Look at the clues. Who is Sam?' }, keyWord: { word: 'clues', meaning: 'small pieces of information that help you solve a mystery' } },
       ],
     },
+    { t: 'bg', id: 'classroom-morning', alt: 'The classroom in the morning' },
     { t: 'say', who: 'Vee', expr: 'happy', text: 'Questions about the story.' },
     {
       t: 'choice',
@@ -228,6 +229,7 @@ export const A1S01E1: SceneScript = {
 
     // ── Notice & Build (10 min) ───────────────────────────────────────────────
     { t: 'segment', index: 3 },
+    { t: 'bg', id: 'classroom-morning', alt: 'The classroom in the morning' },
     { t: 'say', who: 'Vee', expr: 'curious', text: 'Now meet the words from the story.' },
     {
       t: 'flash',
