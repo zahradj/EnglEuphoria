@@ -1,2 +1,2 @@
-# song takes request (2026-10-09: words changed to "Grandpa had a farm")
+# song takes request (2026-10-09 #2: clearer "moo")
 u7l5-old-macdonald
