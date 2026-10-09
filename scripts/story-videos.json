@@ -984,16 +984,17 @@
     "image": "public/lep1/scenes/bg-u6l5-blue-a-wide.png",
     "endImage": "public/lep1/scenes/bg-u6l5-blue-b-wide.png",
     "line": "No, it isn't! The door is blue.",
-    "action": "Pip lowers his raised paw and points at the blue door",
+    "action": "Pip turns from the door to face us, shakes his head and points at the blue door",
     "bodyWords": [
      "blue",
      "door"
     ],
     "leader": "Pip",
-    "prompt": "Pip, the little fox, slowly lowers his raised paw and points at the blue door. The house and the blue door stay still. The camera stays steady.",
+    "prompt": "Pip, the little fox, turns from the blue door to face us, shakes his head no and points one paw at the blue door. The house and the blue door stay still. The camera stays steady.",
     "seconds": 5,
     "ownerApproved": true,
-    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next",
+    "review": "2026-10-09 clip 1 rejected: Pip kept his paw on the door and never pointed. Re-ordered once with a clearer prompt."
    },
    {
     "id": "yellow-ask",
@@ -1064,7 +1065,7 @@
      "home"
     ],
     "leader": "Mom",
-    "prompt": "Mom, the fox mother in a purple dress, bends down and hugs Pip at the open door of his home. The camera stays steady.",
+    "prompt": "Mom, the fox mother in a purple dress, bends down and hugs Pip at the open door of his home. Two separate faces: Pip rests his head on her shoulder. The camera stays steady.",
     "seconds": 5,
     "ownerApproved": true,
     "endImage": "public/lep1/scenes/bg-u6l5-red-c-wide.png",
@@ -1072,7 +1073,8 @@
      "hug",
      "hugs"
     ],
-    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next",
+    "review": "2026-10-09 clip 1 rejected: the two heads merged into one face during the hug. Re-ordered once with \"two separate faces\"."
    },
    {
     "id": "bedroom-love",
