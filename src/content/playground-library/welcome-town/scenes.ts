@@ -801,8 +801,8 @@ const bgPrepNextToW = `${W}/scenes/bg-prep-next-to-wide.png`;
 const bgExpressGoodbyeW = `${W}/scenes/bg-express-goodbye-wide.png`;
 
 /** Feelings sprites (one per friend), used by the sort, quick-fire and sticker pages. */
-// -v2 = regenerated 2026-10-09 (Gemini, the wave sprite as reference): solid fills, whole bowl, no ground shadow.
-const feelSpr = (name: string) => `${W}/sprites/${name}.png`; // TODO: -v2 once regenerated (Gemini credits ran out 2026-10-09)
+// -v2 = regenerated 2026-10-09 in Canva (the wave sprite as reference): solid fills, whole bowl, no ground shadow.
+const feelSpr = (name: string) => `${W}/sprites/${name}-v2.png`;
 // Spinner badges sit above each friend's head on bg-classroom-feelings-wide.png (Pip, Leo, Mia, Bella, Willow).
 
 export const LESSON_2_SCENES: Scene[] = classroomLook([

@@ -61,3 +61,4 @@ LESSON_U7L5_SCENES
 # 2026-10-09 A1 U1 L1 rebuilt (Welcome Town): word pages + Pre-A1 games (Move & Say, Buzzer Show, Quick fire, sticker, home mission, brain break)
 # 2026-10-09 A1 U1 L2 rebuilt: I am <feeling>, Feelings Survey, he/she/they quick fire, home mission
 # 2026-10-09 A1 U1 L2: Feelings Freeze, Feelings Grabber, Who is hiding?, Read and match
+# 2026-10-09 re-run: A1 U1 L2 lines still missing (70)
