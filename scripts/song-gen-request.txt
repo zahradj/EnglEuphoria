@@ -1,2 +1,2 @@
-# re-score (word times)
-score:u6l5-song3
+# song takes request (2026-10-09: song video verse u5l5-song4, round 1)
+u5l5-song4
