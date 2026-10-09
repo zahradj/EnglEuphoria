@@ -12017,7 +12017,7 @@ export const LESSON_U7L5_SCENES: Scene[] = [
   {
     // The approved stills film (docs/scenarios/u7l5-old-macdonald.md): a sound behind each barn door, "What animal is
     // this?", a pause for the child, then the door opens.
-    id: 'u7l5-story', kind: 'story-video', bg: bgU7L5Barn0, videoUrl: `${A}/video/old-macdonald-u7l5.mp4?v=1`, title: "Grandpa's Noisy Barn",
+    id: 'u7l5-story', kind: 'story-video', bg: bgU7L5Barn0, videoUrl: `${A}/video/old-macdonald-u7l5.mp4?v=2`, title: "Grandpa's Noisy Barn",
     teacher: 'Press play and watch. When Pip asks "What animal is this?", the child answers before the door opens: "It\'s a pig!"',
     pages: [
       { img: bgU7L5GateB, who: 'pip', line: "This is Grandpa's farm! Good morning, Grandpa!", atSec: 0 },
