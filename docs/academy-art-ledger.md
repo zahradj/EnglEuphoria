@@ -13,3 +13,22 @@ Canva rate-limits image generation ("quota_cooldown"): make ONE picture, wait ~2
 | Mia | MAHXfPqxgrA | MAHXfMriuaU | MAHXfek-iZI | MAHXffmSLvk | MAHXfnXiPuE | MAHXfrn12Rs |
 
 Not yet in the repo: export from Canva and fetch per `docs/canva-art-pipeline.md` to `cast/<name>/<expression>.webp`.
+
+## Brand-colour pass (owner, 2026-10-09): clothes in shades of blue and purple
+
+Vee is already purple (above). Ava, Theo and Mia keep face, hair, skin, glasses, pose and style; ONLY the clothes change:
+
+| Character | New clothes |
+|---|---|
+| Ava | soft lavender-periwinkle tee (about #a78bfa) with the small indigo heart; jeans stay |
+| Theo | cobalt-blue denim-style jacket (about #3b5bdb) over a pale lilac tee (about #ddd6fe) |
+| Mia | violet hoodie (about #7c3aed) over a cobalt-blue tee (about #2563eb); backpack straps stay dark |
+
+Order: recolour each NEUTRAL base first (edit of the old base), owner checks, then redo the 5 expressions as edits of the new base.
+Canva rate limit: one picture, then ~25 min wait.
+
+| Character | neutral v2 | happy v2 | curious v2 | surprised v2 | thinking v2 | concerned v2 |
+|---|---|---|---|---|---|---|
+| Ava | | | | | | |
+| Theo | | | | | | |
+| Mia | | | | | | |
