@@ -1565,7 +1565,7 @@
   },
   "u7l5-farm-song-video": {
     "publicPath": "public/lep1/audio/farm-song-video-u7l5.mp3",
-    "durationSec": 80,
+    "durationSec": 84,
     "style": "Slow, simple kids sing-along on the traditional E-I-E-I-O farm-song melody, 100 BPM, banjo and acoustic guitar with soft hand claps, ONE clear young American singer, every single word sung slowly and very clearly, exactly the written words in order, all ten lines, no skipped verses, short instrumental gaps only between verses. Definitely not a lullaby, no rap, no mumbling.",
     "positiveStyles": [
       "kids sing-along",
@@ -1592,23 +1592,31 @@
       "long intro"
     ],
     "lines": [
-      "Grandpa had a farm, E-I-E-I-O!",
+      "A farm, a farm! Grandpa had a farm!",
       "And on his farm he had a cow, E-I-E-I-O!",
+      "A cow, a cow! It's a cow! Moo, moo!",
       "With a moo, moo here and a moo, moo there!",
-      "Grandpa had a farm, E-I-E-I-O!",
-      "Grandpa had a farm, E-I-E-I-O!",
+      "A farm, a farm! Grandpa had a farm!",
       "And on his farm he had a pig, E-I-E-I-O!",
+      "A pig, a pig! It's a pig! Oink, oink!",
       "With an oink, oink here and an oink, oink there!",
-      "Grandpa had a farm, E-I-E-I-O!",
-      "Grandpa had a farm, E-I-E-I-O!",
+      "A farm, a farm! Grandpa had a farm!",
       "And on his farm he had a sheep, E-I-E-I-O!",
+      "A sheep, a sheep! It's a sheep! Baa, baa!",
       "With a baa, baa here and a baa, baa there!",
-      "Grandpa had a farm, E-I-E-I-O!",
-      "Grandpa had a farm, E-I-E-I-O!",
+      "A farm, a farm! Grandpa had a farm!",
       "And on his farm he had a duck, E-I-E-I-O!",
+      "A duck, a duck! It's a duck! Quack, quack!",
       "With a quack, quack here and a quack, quack there!",
-      "Grandpa had a farm, E-I-E-I-O!"
-    ]
+      "A farm, a farm! Grandpa had a farm!"
+    ],
+    "assembledFrom": [
+      "u7l5-farm2-cow",
+      "u7l5-farm2-pig",
+      "u7l5-farm2-sheep",
+      "u7l5-farm2-duck"
+    ],
+    "note": "Song video: the verse takes joined by scripts/make-song-video.py (scripts/song-videos/). Do not request this key from the song bot; re-ask a verse instead."
   },
   "u7l5-verse-pig": {
     "publicPath": "public/lep1/audio/farm-verse-pig-u7l5.mp3",
@@ -2085,5 +2093,162 @@
       "Knock, knock! Yes, it is! My house!",
       "My house, my house! I love my house!"
     ]
+  },
+  "u4l5-song-video": {
+    "publicPath": "public/lep1/audio/animal-moves-song-video-u4l5.mp3",
+    "durationSec": 60,
+    "style": "Upbeat catchy modern kids POP animal park action song to move and point to for young children, energetic 120 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel, call-and-response. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "120 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Head, head! The tiger turns his head!",
+      "Head, head! I turn my head!",
+      "Arms, arms! The monkey waves his arms!",
+      "Arms, arms! I wave my arms!",
+      "The elephant stomps his feet! Stomp, stomp!",
+      "My feet, my feet! I stomp my feet!",
+      "The seal claps her hands! Clap, clap!",
+      "My hands, my hands! I clap my hands!",
+      "I turn my head! I can do it!",
+      "I wave my arms! I can do it!",
+      "I stomp my feet! I clap my hands!",
+      "From head to toe, we can do it!"
+    ],
+    "assembledFrom": [
+      "u4l5-song-v1",
+      "u4l5-song-v2",
+      "u4l5-moves"
+    ],
+    "note": "Song video: the verse takes joined by scripts/make-song-video.py (scripts/song-videos/). Do not request this key from the song bot; re-ask a verse instead."
+  },
+  "u5l5-song-video": {
+    "publicPath": "public/lep1/audio/my-dad-song-video-u5l5.mp3",
+    "durationSec": 60,
+    "style": "Upbeat catchy modern kids POP song about a fun day with Dad (play ball, feed the ducks, ice cream, read a book), to sing and do the actions for young children, energetic 118 BPM dance-pop with punchy drums, groovy bass, bright synths and hand claps, fun young pop vocals with a kids sing-along feel. Definitely not a lullaby.",
+    "positiveStyles": [
+      "modern kids pop",
+      "catchy pop hook",
+      "upbeat dance-pop",
+      "energetic",
+      "punchy drums",
+      "groovy bass",
+      "bright synths",
+      "hand claps",
+      "fun kids vocals",
+      "sing-along chorus",
+      "118 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "slow",
+      "soft",
+      "sleepy",
+      "gentle ballad",
+      "music box",
+      "ukulele only",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses"
+    ],
+    "lines": [
+      "Dad, Dad! Just me and my dad!",
+      "A ball, a ball! Dad throws the ball!",
+      "A ball, a ball! I catch the ball!",
+      "Ducks, ducks! We feed the ducks!",
+      "Ducks, ducks! One, two, three, four ducks!",
+      "Ice cream, ice cream! Yum, yum, yum!",
+      "A book, a book! We read a book!",
+      "Dad, Dad! I love you, Dad!",
+      "We play ball, just me and my dad!",
+      "We feed the ducks! Quack, quack, quack!",
+      "Yum, yum, ice cream! We read a book!",
+      "I love you, Dad! The best day!"
+    ],
+    "assembledFrom": [
+      "u5l5-song-v1",
+      "u5l5-song-v2",
+      "u5l5-my-dad"
+    ],
+    "note": "Song video: the verse takes joined by scripts/make-song-video.py (scripts/song-videos/). Do not request this key from the song bot; re-ask a verse instead."
+  },
+  "u6l5-song-video": {
+    "publicPath": "public/lep1/audio/wheres-my-house-song-video-u6l5.mp3",
+    "durationSec": 60,
+    "style": "Gentle bouncy kids story song with a question-and-answer feel, \"Is this my house? No, it isn't!\", warm 96 BPM with acoustic guitar, soft marimba, light brushed drums, a little door-knock sound and hand claps, clear friendly young vocals with a kids sing-along feel, every word sung slowly and clearly. Not a lullaby.",
+    "positiveStyles": [
+      "acoustic guitar",
+      "marimba",
+      "bouncy",
+      "warm",
+      "brushed drums",
+      "hand claps",
+      "clear kids vocals",
+      "question and answer",
+      "sing-along chorus",
+      "96 BPM"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "heavy drums",
+      "rock"
+    ],
+    "lines": [
+      "Home, home! Time to go home!",
+      "My house, my house! Where's my house?",
+      "A red door, a red door! My house has a red door!",
+      "A blue door, a blue door! No, it isn't!",
+      "A yellow door, a yellow door! No, it isn't!",
+      "A red door, a red door! Is this my house?",
+      "Knock, knock! Yes, it is! My house!",
+      "My house, my house! I love my house!",
+      "Where's my house? Where's my house?",
+      "Is this my house? No, it isn't!",
+      "Is this my house? Yes, it is!",
+      "Knock, knock! Welcome home!"
+    ],
+    "assembledFrom": [
+      "u6l5-song-v1",
+      "u6l5-song-v2",
+      "u6l5-wheres-my-house"
+    ],
+    "note": "Song video: the verse takes joined by scripts/make-song-video.py (scripts/song-videos/). Do not request this key from the song bot; re-ask a verse instead."
   }
 }

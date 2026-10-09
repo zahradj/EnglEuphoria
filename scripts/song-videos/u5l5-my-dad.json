@@ -1,0 +1,7 @@
+{"out": "public/lep1/video/my-dad-song-u5l5", "audioOut": "public/lep1/audio/my-dad-song-video-u5l5.mp3",
+ "labelsFrom": [["scripts/film-labels/u5l5-my-day-pages.json", "scripts/film-labels/u5l5-my-day.json"]],
+ "verses": [
+  {"audio": "public/lep1/audio/my-dad-v1-u5l5.mp3", "lines": [[2.8, "public/lep1/video/clips/u5l5-dad/gate-walk.mp4"], [4.2, "public/lep1/video/clips/u5l5-dad/ball-throw.mp4"], [8.4, "public/lep1/video/clips/u5l5-dad/ball-catch.mp4"], [14.8, "public/lep1/video/clips/u5l5-dad/ducks-bread.mp4"]]},
+  {"audio": "public/lep1/audio/my-dad-v2-u5l5.mp3", "lines": [[2.2, "public/lep1/video/clips/u5l5-dad/ducks-count.mp4"], [4.6, "public/lep1/video/clips/u5l5-dad/icecream-lick.mp4"], [8.5, "public/lep1/video/clips/u5l5-dad/book-open.mp4"], [12.6, "public/lep1/video/clips/u5l5-dad/goodnight-hug.mp4"]]},
+  {"audio": "public/lep1/audio/my-dad-song-u5l5.mp3", "lines": [[0, "public/lep1/video/clips/u5l5-dad/ball-throw.mp4"], [3.73, "public/lep1/video/clips/u5l5-dad/ducks-count.mp4"], [9.7, "public/lep1/video/clips/u5l5-dad/icecream-lick.mp4"], [11.91, "public/lep1/video/clips/u5l5-dad/night-best.mp4"]]}
+ ]}

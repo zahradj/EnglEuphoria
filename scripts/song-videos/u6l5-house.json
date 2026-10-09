@@ -1,0 +1,7 @@
+{"out": "public/lep1/video/wheres-my-house-song-u6l5", "audioOut": "public/lep1/audio/wheres-my-house-song-video-u6l5.mp3",
+ "labelsFrom": [["scripts/film-labels/u6l5-wheres-my-house-pages.json", "scripts/film-labels/u6l5-wheres-my-house.json"]],
+ "verses": [
+  {"audio": "public/lep1/audio/wheres-my-house-v1-u6l5.mp3", "lines": [[0, "public/lep1/video/clips/u6l5-house/park-late.mp4"], [4.1, "public/lep1/video/clips/u6l5-house/street-where.mp4"], [9.2, "public/lep1/video/clips/u6l5-house/street-think.mp4", {"word": "red door", "at": [74.5, 62], "label": [86, 16]}], [14.5, "public/lep1/video/clips/u6l5-house/blue-no.mp4", {"word": "blue door", "at": [62, 50], "label": [86, 18]}]]},
+  {"audio": "public/lep1/audio/wheres-my-house-v2-u6l5.mp3", "lines": [[0, "public/lep1/video/clips/u6l5-house/cat-wakes.mp4", {"word": "yellow door", "at": [62, 50], "label": [84, 18]}], [5.0, "public/lep1/video/clips/u6l5-house/red-ask.mp4"], [11.9, "public/lep1/video/clips/u6l5-house/red-door-opens.mp4"], [15.0, "public/lep1/video/clips/u6l5-house/mom-hug.mp4", {"word": "house", "at": [30, 42], "label": [82, 20], "replace": true}]]},
+  {"audio": "public/lep1/audio/wheres-my-house-song-u6l5.mp3", "lines": [[0, "public/lep1/video/clips/u6l5-house/street-where.mp4"], [4.8, "public/lep1/video/clips/u6l5-house/blue-no.mp4"], [9.84, "public/lep1/video/clips/u6l5-house/red-door-opens.mp4"], [15.74, "public/lep1/video/clips/u6l5-house/bedroom-love.mp4"]]}
+ ]}
