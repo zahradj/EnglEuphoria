@@ -1,2 +1,2 @@
 # strict mode: ONE clip per run (owner: "Approve all" + "Use kling" 2026-10-09)
-u7l5-barn --beats=oink-sound
+u7l5-barn --beats=moo-sound
