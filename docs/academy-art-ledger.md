@@ -35,10 +35,8 @@ Canva rate limit: one picture, then ~25 min wait.
 | Mia | MAHXgluvq5c | | | | | |
 | Vee | MAHXgs-3g1I | | | | | |
 
-## Logo on the tee (owner, 2026-10-09: "do what's in white")
+## Logo on the tee: DROPPED (owner, 2026-10-09: "you can drop adding the logo")
 
-Use the WHITE round "e" emblem (`src/assets/logo-white.png`, 500x500 RGBA, mark bbox 59..440) as a small chest emblem on each character's tee.
-Placed by script at repo-export time (exact pixels, not redrawn by Canva). The white mark needs a mid/dark tee to be visible:
-Ava lavender OK, Mia cobalt OK, Theo deep indigo (changed from pale lilac), Vee's tee is still WHITE -> open question (darken Vee's tee = 6 extra pictures, or put the emblem on his purple hoodie).
+No logo overlay will be added; the pictures are used as they are. (The darker tees and Ava's small chest heart stay as generated.)
 
 Vee redo: owner approved ONE redo of Vee (darker tee). Base = edit of MAHXdW0wNyY (purple hoodie base); then his 5 expressions as edits of the new Vee base.
