@@ -600,7 +600,7 @@
  "u4l5-moves": {
   "lesson": "Pre-A1 Unit 4 Lesson 5 — From Head to Toe, story film 'Animal Moves' (page 4). Scenario docs/scenarios/u4l5-animal-moves.md (approved 2026-10-06). STRICT MODE: one clip at a time, each between two Canva key pictures (standing pose -> move pose), screened with review-clip.py, then frame-by-frame review with the owner.",
   "provider": "higgsfield",
-  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "endpoint": "kling-video/v2.6/pro/image-to-video",
   "seconds": 5,
   "out": "public/lep1/video/clips/u4l5-moves",
   "style": "Keep exactly the soft 2D cartoon picture-book style and the same character as the first frame (bold dark outlines, soft flat colours). Smooth, slow, gentle animation for young children. The camera stays steady. No text, no new characters, no speech.",
@@ -635,7 +635,7 @@
     "ownerApproved": true,
     "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next",
     "review": "2026-10-09 clip 1 rejected by review-clip.py (POSE 0.59 < 0.75): the face warps at 0.75-2 s and the clip ends facing front, not turned. Waiting for the owner before any re-order. Retry 2026-10-09 on Kling 2.6 Pro (owner sent its docs): start picture + prompt only, sound off.",
-    "endpoint": "kling-video/v2.6/pro/image-to-video"
+    "accepted": "owner 2026-10-09: \"Use kling\" — Kling 2.6 Pro clip accepted"
    },
    {
     "id": "pip-head",
@@ -762,7 +762,7 @@
  "u5l5-dad": {
   "lesson": "Pre-A1 Unit 5 Lesson 5 — Just Me and My Dad, story film 'My Day with Dad' (page 5). Scenario docs/scenarios/u5l5-me-and-my-dad.md (approved 2026-10-07). STRICT MODE: one clip at a time, each between two Canva key pictures already in the stills film, screened with review-clip.py, then frame-by-frame review with the owner. The hug (14% of the picture changes) stays as stills.",
   "provider": "higgsfield",
-  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "endpoint": "kling-video/v2.6/pro/image-to-video",
   "seconds": 5,
   "out": "public/lep1/video/clips/u5l5-dad",
   "style": "Keep exactly the soft 2D cartoon picture-book style and the same character as the first frame (bold dark outlines, soft flat colours). Smooth, slow, gentle animation for young children. The camera stays steady. No text, no new characters, no speech.",
@@ -913,7 +913,7 @@
  "u6l5-house": {
   "lesson": "Pre-A1 Unit 6 Lesson 5 — Where's My House?, story film 'Pip Finds His House' (page 4). Scenario docs/scenarios/u6l5-wheres-my-house.md (approved). STRICT MODE: one clip at a time, each between two Canva key pictures already in the stills film, screened with review-clip.py, then frame-by-frame review with the owner. The park look and the hug stay as stills (no word in the line names the move).",
   "provider": "higgsfield",
-  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "endpoint": "kling-video/v2.6/pro/image-to-video",
   "seconds": 5,
   "out": "public/lep1/video/clips/u6l5-house",
   "style": "calm 2D cartoon, autumn sunset street, steady camera",
@@ -1093,7 +1093,7 @@
  "u7l5-barn": {
   "lesson": "Pre-A1 Unit 7 Lesson 5 — Grandpa's Farm, story film 'Grandpa's Noisy Barn' (page 5). Scenario docs/scenarios/u7l5-old-macdonald.md (approved 2026-10-08). STRICT MODE: one clip at a time, each between two Canva key pictures already in the stills film (aligned to 3 px), screened with review-clip.py, then frame-by-frame review with the owner. The gate wave and the yard stay as stills.",
   "provider": "higgsfield",
-  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "endpoint": "kling-video/v2.6/pro/image-to-video",
   "seconds": 5,
   "out": "public/lep1/video/clips/u7l5-barn",
   "style": "calm 2D cartoon, red barn at sunrise, steady camera",
