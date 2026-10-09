@@ -1373,12 +1373,12 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
   {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · Listen & Greet!.
     id: 'wt4-recall-warmup', kind: 'recall-warmup', bg: '/welcome-town/scenes/bg-classroom-circle-v2.png', who: 'pip', mode: 'click',
-    fromLabel: "Lesson 3 · Listen & Greet!",
-    teacher: 'Warm-up from last lesson: Pip says it, the student finds the picture and says it too.',
+    fromLabel: "Lesson 3 · How Old Are You?",
+    teacher: 'Warm-up from last lesson: Pip says an age, the student finds the friend and says "Leo is nine!".',
     items: [
-      { word: "Mia", say: "I am sad today. Who is it?", img: '/welcome-town/scenes/bg-vocab-mia-sad-wide.png' },
-      { word: "Leo", say: "I am so tired. Who is it?", img: '/welcome-town/scenes/bg-vocab-leo-tired-wide.png' },
-      { word: "Bella", say: "I am angry! Who is it?", img: '/welcome-town/scenes/bg-vocab-bella-angry-wide.png' },
+      { word: "Pip", say: "Who is seven?", img: '/welcome-town/scenes/bg-heshe-intro-pip-wide.png' },
+      { word: "Mia", say: "Who is eight?", img: '/welcome-town/scenes/bg-heshe-intro-mia-wide.png' },
+      { word: "Leo", say: "Who is nine?", img: '/welcome-town/sprites/leo-wave.png' },
     ],
   },
 
