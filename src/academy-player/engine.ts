@@ -202,13 +202,14 @@ export function accuracy(s: PlayerState): number | null {
   return s.answers.filter((a) => a.correct).length / s.answers.length;
 }
 
-const VAR_DEFAULTS: Record<string, string> = { name: 'friend' };
+const VAR_DEFAULTS: Record<string, string> = { name: 'friend', family: '—', age: '—', country: '—', hobby: '—' };
 
 /** Fill {key} placeholders in every string of a beat from the student's saved answers. Pure; returns the same beat when nothing changes. */
 export function interpolateBeat<T extends Beat>(beat: T, vars: Record<string, VarValue>): T {
   const raw = JSON.stringify(beat);
   if (!raw.includes('{')) return beat;
-  const fillText = (t: string) => t.replace(/\{(\w+)\}/g, (_m, k: string) => String(vars[k] ?? VAR_DEFAULTS[k] ?? ''));
+  const fillOnce = (t: string) => t.replace(/(?<!\{)\{(\w+)\}(?!\})/g, (_m, k: string) => String(vars[k] ?? VAR_DEFAULTS[k] ?? ''));
+  const fillText = (t: string) => fillOnce(fillOnce(t)); // two passes: a saved value may itself hold a {placeholder} (the Mission models)
   return JSON.parse(raw, (_k, v) => (typeof v === 'string' ? fillText(v) : v)) as T;
 }
 

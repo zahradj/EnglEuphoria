@@ -10,7 +10,7 @@ export function beatSeconds(b: Beat): number {
   switch (b.t) {
     case 'say':
       // read-and-repeat adds the time to say (or type) the line; memorise mode is mostly recall time
-      return 4 + 0.45 * words(b.text) + (b.repeat ? 9 : 0) + (b.hide ? 14 : 0);
+      return 4 + 0.45 * words(b.text) + (b.repeat ? 18 : 0) + (b.hide ? 14 : 0);
     case 'cloze':
       return 15 + b.bank.length * 9;
     case 'trains':

@@ -110,9 +110,13 @@ export function validateScript(script: SceneScript): ScriptIssue[] {
         if (tw.length + (b.extraTiles?.length ?? 0) > 9) err('build_size', 'At most 9 tiles on screen (working memory).', i);
         break;
       }
-      case 'record':
-        needsLine(b.model, i, 'Model sentence');
+      case 'record': {
+        // a model introduction is several short sentences: allow twice the line limit
+        const n = words(b.model).length;
+        if (!b.model.trim()) err('empty_text', 'Model sentence is empty.', i);
+        if (n > max * 2) err('too_long', `Model has ${n} words; ${script.level} allows ${max * 2} for a multi-sentence model.`, i);
         break;
+      }
       case 'ticks':
         if (b.items.length < 1 || b.items.length > 4) err('ticks', 'Wrap shows 1-4 can-do statements.', i);
         b.items.forEach((t) => needsLine(t, i, 'Can-do'));

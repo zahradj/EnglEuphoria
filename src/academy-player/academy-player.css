@@ -402,7 +402,9 @@
 .ap-stage[data-layout='story'] .ap-dialogue[data-side='right']::after { left: auto; right: 26%; }
 .ap-stage[data-layout='story'] .ap-dialogue[data-side='center']::after { left: 46%; }
 @media (max-width: 700px) {
-  .ap-stage[data-layout='story'] .ap-sprite { height: 62%; }
+  .ap-stage[data-layout='story'] .ap-sprite { width: 56%; height: auto; }
+  .ap-stage[data-layout='story'] .ap-sprite-stack { height: auto; }
+  .ap-stage[data-layout='story'] .ap-sprite-img { width: 100%; height: auto; }
   .ap-stage[data-layout='story'] .ap-dialogue { width: 94%; left: 3%; top: 44px; }
   .ap-stage[data-layout='story'] .ap-dialogue[data-side='right'] { right: 3%; left: auto; }
 }

@@ -1,435 +1,403 @@
-// A1-S01-E1 "Who Are You? · Cold Open" — full 60-minute lesson script (Academy cast only).
-// Source of truth for the plan: docs/academy-a1s01e1-spec.md and the Academy lesson blueprint (objective, cast, run of show,
-// Mission = predict and share an opinion, Release = one-sentence reaction, clue 1 unlocked by answering "Who is Sam?" in your own words).
-// Language: the Season's 14 E1 words (all glossed or met in context) plus closed-class words; the only productive language is
-// substitution into fixed frames ("Hello, my name is ___. Nice to meet you." / "What is your name?"), never new items.
-// Run of show: Check-in 0 · Remember? 1 · The Drop 2 · Notice & Build 3 · Energiser 4 · Mission 5 · Release 6 · Wrap 7.
-// No voice clips exist yet (the cast has no voice assigned): every line is silent until recorded clips are added.
-import type { SceneScript } from '../scriptTypes';
+// A1-S01-E1 "Who Are You?" — lesson script v3 (owner redo, 2026-10-09). Academy cast only.
+// Plan, objective, criteria, route and alignment: docs/academy-a1s01e1-spec.md (built with .claude/skills/academy-lesson-craft).
+// Owner order: 1 learn the words (pictures + meaning) · 2 read the story (full-page scene, read and repeat each line) ·
+// 3 practise the words (match pictures / meanings) · 4 complete the conversation · 5 say it by heart · 6 introduce yourself.
+// Every screen after a `trains` tag trains those success criteria; tests check the alignment, the exit-task coverage and the minutes.
+// Run of show (blueprint): Check-in 0 · Remember? 1 · The Drop 2 · Notice & Build 3 · Energiser 4 · Mission 5 · Release 6 · Wrap 7.
+// No voice clips exist yet: every line is silent; "I said it" is the student's own word (a live teacher hears it).
+import type { FlashCard, SceneScript } from '../scriptTypes';
 
-const PROFILE_GLOSS = { profile: 'your page online: name, picture, friends', odd: 'strange, not normal' };
-const EMOJI_SKINS = ['🎮', '🎧', '⚽', '📱'];
+/** The objective (owner decision 2026-10-09). */
+export const OBJECTIVE = 'By the end I can introduce myself to a new person: say my name, my age, where I am from and one thing I like, and ask "How old are you?" and "Where are you from?" back.';
+/** Success criteria = the Wrap tick-list. 6 is the stretch. */
+export const CRITERIA = [
+  'I said my name: My name is ___.',
+  'I said my age: I am ___.',
+  'I said where I am from: I am from ___.',
+  'I said one thing I like: I like ___.',
+  'I asked back: How old are you? Where are you from?',
+  'I said my family: I have a ___ and a ___.',
+] as const;
+/** The 12 pictured words of this lesson. */
+export const INVENTORY = ['name', 'age', 'country', 'hobby', 'family', 'mother', 'father', 'brother', 'sister', 'football', 'music', 'games'] as const;
+/** The frames the exit task uses. Each must be practised at least 3 times (see the tests). */
+export const EXIT_FRAMES = ['my name is', 'i am', 'i am from', 'i like', 'how old are you'] as const;
+
+const card = (word: string, chunk: string, meaning: string, alt: string): FlashCard => ({ word, chunk, meaning, pictureId: `v-${word}`, alt });
+
+const HOBBIES = ['football ⚽', 'music 🎵', 'games 🎮', 'reading 📚', 'drawing 🎨', 'dancing 💃'];
 
 export const A1S01E1: SceneScript = {
   lessonId: 'A1-S01-E1',
   level: 'A1',
-  title: 'Who Are You? · Cold Open',
+  title: 'Who Are You?',
   cast: ['Vee', 'Ava', 'Theo'],
   beats: [
-    // ── Check-in (5 min) ──────────────────────────────────────────────────────
+    // ── Check-in (5 min): say hello, see today's goal, give your name ─────────
     { t: 'segment', index: 0 },
-    { t: 'bg', id: 'classroom-morning', alt: 'A bright classroom in the morning with desks and a whiteboard' },
-    { t: 'show', who: 'Vee', pos: 'center', expr: 'happy' },
-    { t: 'say', who: 'Vee', expr: 'happy', text: 'Hello! I am Vee. Welcome to class.', key: ['Welcome'] },
-    { t: 'show', who: 'Ava', pos: 'left', expr: 'happy' },
-    { t: 'say', who: 'Ava', expr: 'happy', text: 'Hello! I am Ava. I am your friend in this class.', key: ['friend', 'class'] },
-    { t: 'show', who: 'Theo', pos: 'right', expr: 'neutral' },
-    { t: 'say', who: 'Theo', expr: 'happy', text: 'Hello! I am Theo. Nice to meet you.', key: ['Nice', 'meet'] },
-    { t: 'say', who: 'Vee', expr: 'curious', text: 'Now you. What is your name?' },
-    {
-      t: 'form',
-      prompt: 'Your name. Then pick one.',
-      fields: [
-        { key: 'name', label: 'Name', kind: 'text', placeholder: 'Your name' },
-        { key: 'energy', label: 'Pick one', kind: 'choice', options: ['🙂', '😐', '😴'] },
-        { key: 'skin', label: 'Pick one', kind: 'choice', options: EMOJI_SKINS },
-      ],
-    },
-    { t: 'say', who: 'Theo', expr: 'happy', text: 'Nice to meet you, {name}!', key: ['Nice', 'meet'] },
-    { t: 'say', who: 'Ava', expr: 'happy', text: 'Welcome to our group, {name}!', key: ['Welcome', 'group'] },
-    { t: 'say', who: 'Ava', expr: 'curious', text: 'Is your name nice? Yes! Hello, {name}.' },
-    { t: 'say', who: 'Vee', expr: 'happy', text: 'Now we have a story for you.' },
-
-    // ── Remember? (7 min): first lesson, so "what do I already know?" ─────────
-    { t: 'segment', index: 1 },
-    { t: 'say', who: 'Vee', expr: 'curious', text: 'First, look at the words. Do you know them?' },
-    {
-      t: 'sort',
-      prompt: 'Do you know this word?',
-      cards: ['hello', 'welcome', 'name', 'friend', 'new', 'student', 'teacher', 'class', 'meet', 'online', 'nice', 'group'],
-      yes: 'I know it',
-      no: 'Not yet',
-      key: 'known_count',
-    },
-    { t: 'say', who: 'Vee', expr: 'happy', text: 'Nice! You know words. Now try the words.' },
-    {
-      t: 'choice',
-      prompt: 'Which word is a person?',
-      tests: 'language',
-      options: [
-        { text: 'hello', correct: false, feedback: 'Hello is a word to say hi. Look for a person.' },
-        { text: 'friend', correct: true, feedback: 'Yes! A friend is a person.' },
-        { text: 'online', correct: false, feedback: 'Online is not a person. Look again.' },
-      ],
-    },
-    {
-      t: 'choice',
-      prompt: 'Which word says hi?',
-      tests: 'language',
-      options: [
-        { text: 'class', correct: false, feedback: 'A class is a group of students. Look for a word to say hi.' },
-        { text: 'hello', correct: true, feedback: 'Yes! Hello.' },
-        { text: 'name', correct: false, feedback: 'Your name is who you are. Look for a word to say hi.' },
-      ],
-    },
-    {
-      t: 'choice',
-      prompt: 'Nice to ___ you.',
-      tests: 'language',
-      options: [
-        { text: 'friend', correct: false, feedback: 'Nice to friend you? Look again.' },
-        { text: 'meet', correct: true, feedback: 'Yes! Nice to meet you.' },
-        { text: 'class', correct: false, feedback: 'Nice to class you? Look again.' },
-      ],
-    },
-
-    {
-      t: 'choice',
-      prompt: 'I am a new ___.',
-      tests: 'language',
-      options: [
-        { text: 'student', correct: true, feedback: 'Yes! I am a new student.' },
-        { text: 'hello', correct: false, feedback: 'I am a new hello? Look again.' },
-        { text: 'online', correct: false, feedback: 'I am a new online? Look again.' },
-      ],
-    },
-    { t: 'say', who: 'Vee', expr: 'happy', text: 'Nice! More words.' },
-    {
-      t: 'choice',
-      prompt: 'Welcome to our ___.',
-      tests: 'language',
-      options: [
-        { text: 'group', correct: true, feedback: 'Yes! Welcome to our group.' },
-        { text: 'name', correct: false, feedback: 'Welcome to our name? Look again.' },
-        { text: 'meet', correct: false, feedback: 'Welcome to our meet? Look again.' },
-      ],
-    },
-    {
-      t: 'choice',
-      prompt: 'My ___ is Sam.',
-      tests: 'language',
-      options: [
-        { text: 'name', correct: true, feedback: 'Yes! My name is Sam.' },
-        { text: 'class', correct: false, feedback: 'My class is Sam? Look again.' },
-        { text: 'friend', correct: false, feedback: 'My friend is Sam? That could be right, but the story says: My name is Sam.' },
-      ],
-    },
-
-    // ── The Drop (10 min): the mystery ────────────────────────────────────────
-    { t: 'segment', index: 2 },
-    { t: 'bg', id: 'classroom-morning', alt: 'The classroom; the students look at a phone' },
-    { t: 'say', who: 'Vee', expr: 'curious', text: 'Look! A new member is in our class group.', key: ['new', 'member', 'group'] },
-    { t: 'say', who: 'Ava', expr: 'curious', text: 'Who is it? I do not know.' },
-    {
-      t: 'chat',
-      title: 'Our class group',
-      messages: [
-        { who: 'Unknown', label: 'new_friend', text: 'Hello! My name is Sam. I am a new student.' },
-        { who: 'Ava', text: 'Hello, Sam! Welcome to our class group.' },
-        { who: 'Theo', text: 'Nice to meet you, Sam. Are you in our class?' },
-        { who: 'Unknown', label: 'new_friend', text: 'No. I am not in your class. I am online.' },
-        { who: 'Ava', text: 'But you are a student? Who are you, Sam?' },
-        { who: 'Unknown', label: 'new_friend', text: 'I am a teacher. And a friend. Look at my profile.', gloss: { profile: PROFILE_GLOSS.profile } },
-      ],
-      reply: {
-        prompt: 'What do you say to Sam?',
-        options: [
-          { text: 'Hello, Sam! Nice to meet you.', correct: true, feedback: 'Yes! A friendly hello.' },
-          { text: 'Hello, teacher!', correct: false, feedback: 'Sam says: I am a new student. Say hello to Sam first. Try again!' },
-          { text: 'Who is the class?', correct: false, feedback: 'That is not a good question yet. First say hello to Sam!' },
-        ],
-      },
-    },
-    { t: 'bg', id: 'phone-profile-closeup', alt: 'A phone screen showing a plain online profile with no picture' },
-    { t: 'say', who: 'Vee', expr: 'curious', text: 'Look at the profile. What is odd? Tap ? to find it.', gloss: PROFILE_GLOSS, key: ['profile', 'odd'] },
+    { t: 'trains', criteria: [0] },
+    { t: 'bg', id: 'club-lobby', alt: 'A bright club lobby with sofas, a snack table and colourful flags' },
+    { t: 'show', who: 'Vee', pos: 'center', expr: 'wave' },
+    { t: 'say', who: 'Vee', expr: 'wave', text: 'Hello! Welcome to the club. I am Vee.', key: ['Welcome'] },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Today you will introduce yourself. That is your goal.', gloss: { goal: 'what you want to do at the end' } },
     {
       t: 'profile',
-      title: 'Sam',
-      gloss: PROFILE_GLOSS,
+      title: 'My introduction card',
+      prompt: 'This card is empty. At the end of the lesson it will be full.',
       rows: [
-        { label: 'Name', value: 'Sam' },
-        { label: 'Online', value: 'Yes, now' },
-        { label: 'About', value: 'I am a new student. I am a teacher.' },
-        { label: 'Class', value: 'No class' },
-        { label: 'Friends', value: '1000 friends' },
-        { label: 'Group', value: 'Our class group' },
-      ],
-      hotspots: [
-        { row: 2, why: 'A student and a teacher? Sam, who are you?' },
-        { row: 3, why: 'Sam is a student. Sam is not in a class!' },
-        { row: 4, why: 'Sam is new, but there are 1000 friends!' },
+        { label: 'Name', value: '___' },
+        { label: 'Age', value: '___' },
+        { label: 'Country', value: '___' },
+        { label: 'Hobby', value: '___' },
+        { label: 'Family', value: '___' },
       ],
     },
-    {
-      t: 'panels',
-      layout: 'strip',
-      panels: [
-        { bg: 'phone-profile-closeup', alt: 'Ava holds up a phone', who: 'Ava', expr: 'curious', bubble: { who: 'Ava', text: 'This is the profile.' }, keyWord: { word: 'profile', meaning: 'your page online: name, picture, friends' } },
-        { bg: 'classroom-morning', alt: 'Theo looks at the phone', who: 'Theo', expr: 'thinking', bubble: { who: 'Theo', text: 'Sam is online. But Sam is not in our class.' } },
-        { bg: 'classroom-morning', alt: 'Ava looks surprised', who: 'Ava', expr: 'surprised', bubble: { who: 'Ava', text: 'A student and a teacher? Who is Sam?' } },
-        { bg: 'classroom-morning', alt: 'Theo smiles', who: 'Theo', expr: 'happy', bubble: { who: 'Theo', text: 'A new friend? Or a mystery?' }, keyWord: { word: 'mystery', meaning: 'a puzzle to solve' } },
-        { bg: 'classroom-morning', alt: 'Vee points at the phone', who: 'Vee', expr: 'thinking', bubble: { who: 'Vee', text: 'Look at the clues. Who is Sam?' }, keyWord: { word: 'clues', meaning: 'small pieces of information that help you solve a mystery' } },
-      ],
-    },
-    { t: 'bg', id: 'classroom-morning', alt: 'The classroom in the morning' },
-    { t: 'say', who: 'Vee', expr: 'happy', text: 'Questions about the story.' },
-    {
-      t: 'choice',
-      prompt: 'Is Sam in our class?',
-      tests: 'story',
-      options: [
-        { text: 'Yes', correct: false, feedback: 'Look at the chat: Sam says, I am not in your class.' },
-        { text: 'No', correct: true, feedback: 'Right! Sam is not in our class.' },
-      ],
-    },
-    {
-      t: 'choice',
-      prompt: 'Is Sam online?',
-      tests: 'story',
-      options: [
-        { text: 'Yes', correct: true, feedback: 'Right! Sam says: I am online.' },
-        { text: 'No', correct: false, feedback: 'Look at the profile: Online, yes, now.' },
-      ],
-    },
-    {
-      t: 'match',
-      prompt: 'Who says it? Match.',
-      pairs: [
-        { left: 'Sam', right: 'Look at my profile.' },
-        { left: 'Ava', right: 'Who are you, Sam?' },
-        { left: 'Theo', right: 'Are you in our class?' },
-      ],
-    },
-    {
-      t: 'choice',
-      prompt: 'Is Sam a new member of the group?',
-      tests: 'story',
-      options: [
-        { text: 'Yes', correct: true, feedback: 'Right! Sam is a new member.' },
-        { text: 'No', correct: false, feedback: 'Vee says: A new member is in our class group.' },
-      ],
-    },
-    { t: 'say', who: 'Vee', expr: 'curious', text: 'Now your idea. Who is Sam?' },
-    {
-      t: 'choice',
-      prompt: 'Who is Sam? Pick one.',
-      tests: 'story',
-      options: [
-        { text: 'A new student', set: { guess: 'a new student' } },
-        { text: 'A teacher', set: { guess: 'a teacher' } },
-        { text: 'A friend online', set: { guess: 'a friend online' } },
-      ],
-    },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'First, tell us your name. A nickname is fine.' },
+    { t: 'trains', criteria: [1] },
     {
       t: 'form',
-      prompt: 'Say it in your words.',
-      fields: [{ key: 'sam_is', label: 'Sam is a', kind: 'text', placeholder: 'friend?' }],
-    },
-    { t: 'say', who: 'Vee', expr: 'happy', text: 'Yes! This is your first clue.', gloss: { clue: 'a small piece of information that helps you solve a mystery' }, key: ['clue'] },
-
-    // ── Notice & Build (10 min) ───────────────────────────────────────────────
-    { t: 'segment', index: 3 },
-    { t: 'bg', id: 'classroom-morning', alt: 'The classroom in the morning' },
-    { t: 'say', who: 'Vee', expr: 'curious', text: 'Now meet the words from the story.' },
-    {
-      t: 'flash',
-      title: 'People',
-      cards: [
-        { word: 'student', chunk: 'a new student', pictureId: 'card-student', alt: 'A teenager with a backpack in a classroom' },
-        { word: 'teacher', chunk: 'our teacher', pictureId: 'card-teacher', alt: 'A teacher at the whiteboard' },
-        { word: 'friend', chunk: 'my friend', pictureId: 'card-friend', alt: 'Two teenagers smiling together' },
-        { word: 'class', chunk: 'our class', pictureId: 'card-class', alt: 'Desks and a whiteboard in a classroom' },
-      ],
-    },
-    {
-      t: 'flash',
-      title: 'Saying hello',
-      cards: [
-        { word: 'hello', chunk: 'Hello, friend!', pictureId: 'card-hello', alt: 'A teenager waving' },
-        { word: 'welcome', chunk: 'Welcome to the group.', pictureId: 'card-welcome', alt: 'An open door and a welcome sign' },
-        { word: 'meet', chunk: 'Nice to meet you.', pictureId: 'card-meet', alt: 'Two teenagers shaking hands' },
-        { word: 'nice', chunk: 'a nice friend', pictureId: 'card-nice', alt: 'A smiling teenager giving a thumbs up' },
-      ],
-    },
-    {
-      t: 'flash',
-      title: 'Online',
-      cards: [
-        { word: 'name', chunk: 'My name is Sam.', pictureId: 'card-name', alt: 'A name tag on a jacket' },
-        { word: 'online', chunk: 'Sam is online.', pictureId: 'card-online', alt: 'A phone showing a green online dot' },
-        { word: 'group', chunk: 'our class group', pictureId: 'card-group', alt: 'Five teenagers standing together' },
-      ],
-    },
-    {
-      t: 'flash',
-      title: 'Last three',
-      cards: [
-        { word: 'new', chunk: 'a new student', pictureId: 'card-new', alt: 'A teenager standing at a classroom door' },
-        { word: 'member', chunk: 'a group member', pictureId: 'card-member', alt: 'A teenager joining a group of friends' },
-        { word: 'introduce', chunk: 'Introduce your friend.', pictureId: 'card-introduce', alt: 'A teenager presenting a friend to a group' },
-      ],
-    },
-    { t: 'say', who: 'Vee', expr: 'curious', text: 'My name is ___. I am a ___. This is a frame.', gloss: { frame: 'a sentence with a gap that you fill in' }, key: ['name'] },
-    {
-      t: 'match',
-      prompt: 'Match each question with its answer.',
-      pairs: [
-        { left: 'What is your name?', right: 'My name is Sam.' },
-        { left: 'Are you a student?', right: 'Yes, I am a student.' },
-        { left: 'Who is Sam?', right: 'Sam is a new member.' },
-        { left: 'Hello!', right: 'Hello! Nice to meet you.' },
-        { left: 'Are you in our class?', right: 'No, I am not.' },
-      ],
-    },
-    { t: 'build', prompt: 'Sam writes: I am a new student. Build it.', target: 'I am a new student.', extraTiles: ['teacher'], hint: 'Sam says: I am ...' },
-
-    // ── Energiser (4 min, zero stakes) ────────────────────────────────────────
-    { t: 'segment', index: 4 },
-    { t: 'bg', id: 'classroom-morning', alt: 'The classroom in the morning' },
-    { t: 'say', who: 'Theo', expr: 'happy', text: 'A quick one! Pick one.' },
-    {
-      t: 'choice',
-      prompt: 'A new friend or a new teacher?',
-      tests: 'story',
-      options: [{ text: 'A new friend' }, { text: 'A new teacher' }],
-    },
-    {
-      t: 'sort',
-      prompt: 'Is it a person?',
-      cards: ['teacher', 'hello', 'student', 'online', 'friend', 'name', 'member', 'group'],
-      yes: 'A person',
-      no: 'Not a person',
-      key: 'person_count',
-    },
-    {
-      t: 'match',
-      prompt: 'Which word fits the gap?',
-      pairs: [
-        { left: 'hello', right: '___, Sam!' },
-        { left: 'welcome', right: '___ to our group.' },
-        { left: 'nice', right: '___ to meet you.' },
-        { left: 'name', right: 'My ___ is Sam.' },
-      ],
-    },
-    {
-      t: 'choice',
-      prompt: 'Find the odd one.',
-      tests: 'language',
-      options: [
-        { text: 'teacher', correct: false, feedback: 'A teacher is a person. Find the word that is not a person.' },
-        { text: 'hello', correct: true, feedback: 'Yes! Hello is not a person.' },
-        { text: 'student', correct: false, feedback: 'A student is a person. Find the word that is not a person.' },
-      ],
-    },
-    {
-      t: 'choice',
-      prompt: 'Find the odd one.',
-      tests: 'language',
-      options: [
-        { text: 'hello', correct: false, feedback: 'Hello is a way to say hi. Look for a different word.' },
-        { text: 'welcome', correct: false, feedback: 'Welcome is a way to say hi. Look for a different word.' },
-        { text: 'friend', correct: true, feedback: 'Yes! A friend is a person.' },
-      ],
-    },
-
-    // ── Mission (12 min): Take 1 -> feedback -> Take 2, then an opinion ──────
-    { t: 'segment', index: 5 },
-    { t: 'say', who: 'Vee', expr: 'happy', text: 'Mission: you meet Theo. Pick your level.', gloss: { level: 'how hard the mission is', chill: 'easy and relaxed', normal: 'not easy, not hard', push: 'a bit harder' }, key: ['level'] },
-    {
-      t: 'choice',
-      prompt: 'Chill, Normal or Push?',
-      tests: 'story',
-      options: [
-        { text: 'Chill', goto: 'm-chill', set: { dial: 'chill' }, feedback: 'Chill is a good start.' },
-        { text: 'Normal', goto: 'm-normal', set: { dial: 'normal' }, feedback: 'Normal. Let us go!' },
-        { text: 'Push', goto: 'm-push', set: { dial: 'push' }, feedback: 'Push! Nice.' },
-      ],
-    },
-    { t: 'label', name: 'm-chill' },
-    { t: 'say', who: 'Theo', expr: 'neutral', text: 'Hello! I am Theo.' },
-    { t: 'build', prompt: 'Take 1. Copy: Hello, my name is Ava.', target: 'Hello, my name is Ava.', extraTiles: ['teacher'] },
-    { t: 'say', who: 'Vee', expr: 'happy', text: 'Nice! Now try again, with your name.' },
-    { t: 'record', prompt: 'Take 2. Say it with your name.', model: 'Hello, my name is {name}. Nice to meet you.' },
-    { t: 'say', who: 'Vee', expr: 'curious', text: 'Now a question for Theo.' },
-    { t: 'build', prompt: 'Build the question.', target: 'What is your name?', extraTiles: ['class'], hint: 'Start with What.' },
-    { t: 'jump', label: 'm-done' },
-    { t: 'label', name: 'm-normal' },
-    { t: 'say', who: 'Theo', expr: 'neutral', text: 'Hello! I am Theo.' },
-    { t: 'record', prompt: 'Take 1. Say hello to Theo with your name.', model: 'Hello, my name is {name}. Nice to meet you.' },
-    { t: 'say', who: 'Theo', expr: 'happy', text: 'Nice to meet you, {name}!' },
-    { t: 'say', who: 'Vee', expr: 'happy', text: 'Nice! Now try again, and ask: What is your name?' },
-    { t: 'record', prompt: 'Take 2. Add a question for Theo.', model: 'Hello, my name is {name}. What is your name?' },
-    { t: 'say', who: 'Theo', expr: 'happy', text: 'My name is Theo.' },
-    { t: 'jump', label: 'm-done' },
-    { t: 'label', name: 'm-push' },
-    { t: 'say', who: 'Theo', expr: 'neutral', text: 'Hello! Who is this new student?' },
-    { t: 'record', prompt: 'Take 1. Say hello, your name, and ask for his name.', model: 'Hello! My name is {name}. What is your name?' },
-    { t: 'say', who: 'Theo', expr: 'happy', text: 'I am Theo. Nice to meet you, {name}!' },
-    { t: 'say', who: 'Vee', expr: 'happy', text: 'Nice! Now try again. Introduce Ava to Theo.' },
-    { t: 'record', prompt: 'Take 2. Introduce your friend.', model: 'Theo, this is my friend Ava. Ava, this is Theo.' },
-    { t: 'label', name: 'm-done' },
-    { t: 'say', who: 'Theo', expr: 'happy', text: 'Nice to meet you, friend!', key: ['meet'] },
-    { t: 'say', who: 'Ava', expr: 'curious', text: 'Hello again! What is your name?' },
-    { t: 'record', prompt: 'Answer Ava.', model: 'My name is {name}.' },
-    { t: 'say', who: 'Ava', expr: 'happy', text: 'Nice to meet you, {name}!', key: ['meet'] },
-    { t: 'bg', id: 'phone-profile-closeup', alt: 'The phone shows the profile again' },
-    {
-      t: 'say',
-      who: 'Vee',
-      expr: 'curious',
-      text: 'Now your idea. Who is Sam? I think Sam is a ___.',
-      gloss: { think: 'to have an idea', idea: 'what you think' },
-      key: ['think', 'idea'],
-    },
-    { t: 'record', prompt: 'Tell Ava your idea.', model: 'I think Sam is a friend.' },
-    { t: 'say', who: 'Ava', expr: 'happy', text: 'Nice idea, {name}!' },
-    { t: 'say', who: 'Theo', expr: 'thinking', text: 'I think Sam is a new friend.' },
-
-    // ── Release (7 min): own profile + a one-sentence reaction ────────────────
-    { t: 'segment', index: 6 },
-    { t: 'bg', id: 'classroom-evening', alt: 'The classroom in warm evening light' },
-    { t: 'say', who: 'Vee', expr: 'happy', text: 'Now make your profile, {name}.', gloss: { profile: PROFILE_GLOSS.profile }, key: ['profile'] },
-    {
-      t: 'form',
-      prompt: 'Your profile.',
+      prompt: 'What is your name?',
       fields: [
-        { key: 'role', label: 'I am a', kind: 'choice', options: ['student', 'teacher', 'friend'] },
-        { key: 'where', label: 'I am', kind: 'choice', options: ['in a class', 'online'] },
+        { key: 'name', label: 'My name (or nickname)', kind: 'text', placeholder: 'Type here' },
+        { key: 'mood', label: 'How are you today?', kind: 'choice', options: ['😀 Great', '🙂 OK', '😴 Tired'] },
+      ],
+    },
+    { t: 'hide', who: 'Vee' },
+    { t: 'show', who: 'Ava', pos: 'left', expr: 'wave' },
+    { t: 'show', who: 'Theo', pos: 'right', expr: 'wave' },
+    { t: 'say', who: 'Ava', expr: 'wave', text: 'Hi, {name}! My name is Ava. Nice to meet you.', key: ['name'] },
+    { t: 'say', who: 'Theo', expr: 'wave', text: 'Hi, {name}! I am Theo. Welcome!' },
+    { t: 'hide', who: 'Ava' },
+    { t: 'hide', who: 'Theo' },
+    { t: 'show', who: 'Vee', pos: 'center', expr: 'happy' },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Nice! Now let us learn the words for your card.' },
+
+    // ── Remember? (7 min) = 1. Learn the words: picture + meaning, 3 sets of 4, each set checked ─
+    { t: 'segment', index: 1 },
+    { t: 'trains', criteria: [1, 2, 3, 4, 5, 6] },
+    { t: 'bg', id: 'club-lobby', alt: 'The club lobby' },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Meet 12 words. Tap a picture to see its meaning.' },
+    {
+      t: 'flash',
+      title: 'Words about you',
+      cards: [
+        card('name', 'My name is Ava.', 'what people call you', 'A name tag on a lanyard next to a smiling teen'),
+        card('age', 'My age is 14.', 'how old you are', 'A birthday cake with candles and balloons'),
+        card('country', 'My country is Brazil.', 'the place you are from', 'A globe with small flags and a map pin'),
+        card('hobby', 'My hobby is music.', 'what you like to do', 'A teen at a desk with small icons of free-time things'),
+      ],
+    },
+    {
+      t: 'flash',
+      title: 'Words about family',
+      cards: [
+        card('family', 'I have a big family.', 'mother, father, brother, sister', 'A happy family of four'),
+        card('mother', 'This is my mother.', 'a woman in your family: she has children', 'A smiling woman with a teen girl'),
+        card('father', 'This is my father.', 'a man in your family: he has children', 'A smiling man with a teen boy'),
+        card('brother', 'I have a brother.', 'a boy in your family', 'Two boys fist-bumping'),
+      ],
+    },
+    {
+      t: 'flash',
+      title: 'Words about free time',
+      cards: [
+        card('sister', 'I have a sister.', 'a girl in your family', 'Two girls laughing together'),
+        card('football', 'I like football.', 'a game with a ball and two goals', 'A football on grass with a goal'),
+        card('music', 'I like music.', 'songs: you listen to it', 'Headphones, a music note and a guitar'),
+        card('games', 'I like games.', 'things you play on a screen or a table', 'A game controller with a glowing screen'),
+      ],
+    },
+
+    // ── The Drop (10 min) = 2. Read the story: a full-page scene, the cast act every line; read it, then say it ─
+    { t: 'segment', index: 2 },
+    { t: 'trains', criteria: [1, 2, 3, 4, 5, 6] },
+    { t: 'layout', mode: 'story' },
+    { t: 'bg', id: 'club-lobby', alt: 'The club lobby: Ava and Theo meet' },
+    { t: 'hide', who: 'Vee' },
+    { t: 'show', who: 'Ava', pos: 'left', expr: 'wave' },
+    { t: 'show', who: 'Theo', pos: 'right', expr: 'neutral' },
+    { t: 'say', who: 'narrator', text: 'Ava and Theo meet. Read each line, then say it.' },
+    { t: 'say', who: 'Ava', expr: 'wave', text: 'Hi! Welcome to the club. My name is Ava.', key: ['name'], repeat: true },
+    { t: 'say', who: 'Theo', expr: 'wave', text: 'Hi, Ava! My name is Theo. Nice to meet you.', key: ['name'], repeat: true },
+    { t: 'say', who: 'Ava', expr: 'happy', text: 'Nice to meet you, too. How old are you?', key: ['old'], repeat: true },
+    { t: 'say', who: 'Theo', expr: 'happy', text: 'I am 14. How old are you?', key: ['old'], repeat: true },
+    { t: 'say', who: 'Ava', expr: 'happy', text: 'I am 13. Where are you from, Theo?', key: ['from'], repeat: true },
+    { t: 'say', who: 'Theo', expr: 'happy', text: 'I am from Brazil. Where are you from?', key: ['from'], repeat: true },
+    { t: 'say', who: 'Ava', expr: 'music', text: 'I am from Spain. I like music. What do you like?', key: ['music'], repeat: true },
+    { t: 'say', who: 'Theo', expr: 'football', text: 'I like football and games. Do you have a brother?', key: ['football', 'games'], repeat: true },
+    { t: 'say', who: 'Ava', expr: 'happy', text: 'Yes! I have a brother and a sister.', key: ['brother', 'sister'], repeat: true },
+    { t: 'say', who: 'Theo', expr: 'happy', text: 'I have a mother, a father and a sister.', key: ['mother', 'father', 'sister'], repeat: true },
+    {
+      t: 'choice',
+      prompt: 'Where is Theo from?',
+      tests: 'language',
+      options: [
+        { text: 'Brazil', correct: true, feedback: 'Yes! Theo says: I am from Brazil.' },
+        { text: 'Spain', correct: false, feedback: 'Spain is Ava’s country. Theo says: I am from Brazil.' },
+        { text: 'Japan', correct: false, feedback: 'Look at the story again: I am from Brazil.' },
+      ],
+    },
+    {
+      t: 'choice',
+      prompt: 'What does Ava like?',
+      tests: 'language',
+      options: [
+        { text: 'Music', correct: true, feedback: 'Yes! Ava says: I like music.' },
+        { text: 'Football', correct: false, feedback: 'Football is Theo’s hobby. Ava says: I like music.' },
+        { text: 'Games', correct: false, feedback: 'Look again: I am from Spain. I like music.' },
+      ],
+    },
+    {
+      t: 'choice',
+      prompt: 'How old is Ava?',
+      tests: 'language',
+      options: [
+        { text: '13', correct: true, feedback: 'Yes! Ava says: I am 13.' },
+        { text: '14', correct: false, feedback: 'Fourteen is Theo’s age. Ava says: I am 13.' },
+        { text: '12', correct: false, feedback: 'Look again: I am 13.' },
+      ],
+    },
+    {
+      t: 'match',
+      prompt: 'Match each person with their facts.',
+      pairs: [
+        { left: 'Ava is from', right: 'Spain' },
+        { left: 'Theo is from', right: 'Brazil' },
+        { left: 'Ava likes', right: 'music' },
+        { left: 'Theo likes', right: 'football' },
+        { left: 'Ava is', right: '13' },
+        { left: 'Theo is', right: '14' },
+      ],
+    },
+    { t: 'hide', who: 'Ava' },
+    { t: 'show', who: 'Vee', pos: 'left', expr: 'thumbs' },
+    { t: 'say', who: 'Vee', expr: 'thumbs', text: 'Great! Name, age, country, hobby, family. Now it is your turn.' },
+    { t: 'layout', mode: 'normal' },
+    { t: 'hide', who: 'Vee' },
+    { t: 'hide', who: 'Theo' },
+
+    // ── Notice & Build (10 min) = 3. Practise the words · 4. Complete the conversation ─
+    { t: 'segment', index: 3 },
+    { t: 'trains', criteria: [1, 2, 3, 4, 6] },
+    { t: 'bg', id: 'club-lobby', alt: 'The club lobby' },
+    { t: 'show', who: 'Vee', pos: 'center', expr: 'happy' },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Now practise. First, match the pictures with the words.' },
+    {
+      t: 'match',
+      prompt: 'Match each picture with its word.',
+      pairs: [
+        { left: 'name', right: 'name', leftPicture: { id: 'v-name', alt: 'A name tag' } },
+        { left: 'age', right: 'age', leftPicture: { id: 'v-age', alt: 'A birthday cake' } },
+        { left: 'country', right: 'country', leftPicture: { id: 'v-country', alt: 'A globe with flags' } },
+        { left: 'hobby', right: 'hobby', leftPicture: { id: 'v-hobby', alt: 'A teen with free-time icons' } },
+        { left: 'football', right: 'football', leftPicture: { id: 'v-football', alt: 'A football' } },
+        { left: 'music', right: 'music', leftPicture: { id: 'v-music', alt: 'Headphones and a guitar' } },
+      ],
+    },
+    {
+      t: 'match',
+      prompt: 'Match each word with its meaning.',
+      pairs: [
+        { left: 'name', right: 'what people call you' },
+        { left: 'age', right: 'how old you are' },
+        { left: 'country', right: 'the place you are from' },
+        { left: 'hobby', right: 'what you like to do' },
+        { left: 'brother', right: 'a boy in your family' },
+        { left: 'sister', right: 'a girl in your family' },
+      ],
+    },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Now complete the conversation from the story.' },
+    { t: 'trains', criteria: [1, 2, 3, 5] },
+    {
+      t: 'cloze',
+      prompt: 'Complete the conversation. Tap a word for each gap.',
+      lines: [
+        { who: 'Ava', text: 'Hi! My {{name}} is Ava. How {{old}} are you?' },
+        { who: 'Theo', text: 'I {{am}} 14. Where are you {{from}}?' },
+      ],
+      bank: ['name', 'old', 'am', 'from', 'like'],
+    },
+    { t: 'trains', criteria: [3, 4, 6] },
+    {
+      t: 'cloze',
+      prompt: 'Complete the conversation. Tap a word for each gap.',
+      lines: [
+        { who: 'Ava', text: 'I am {{from}} Spain. I {{like}} music.' },
+        { who: 'Theo', text: 'I like {{football}}. I have a {{brother}} and a {{sister}}.' },
+      ],
+      bank: ['from', 'like', 'football', 'brother', 'sister', 'family', 'games'],
+    },
+    { t: 'trains', criteria: [3] },
+    { t: 'build', prompt: 'Build the sentence.', target: 'I am from Brazil.', extraTiles: ['like', 'Spain'], hint: 'Start with I.' },
+    { t: 'trains', criteria: [5] },
+    { t: 'build', prompt: 'Build the question.', target: 'Where are you from?', extraTiles: ['old'], hint: 'Start with Where.' },
+    { t: 'build', prompt: 'Build the question.', target: 'How old are you?', extraTiles: ['from'], hint: 'Start with How.' },
+
+    // ── Energiser (4 min): a quick game with the same words ──────────────────
+    { t: 'segment', index: 4 },
+    { t: 'trains', criteria: [6] },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Quick game! Tap the word that is different.' },
+    {
+      t: 'choice',
+      prompt: 'Which word is NOT about family?',
+      tests: 'language',
+      options: [
+        { text: 'mother', correct: false, feedback: 'A mother is in a family. Try again.' },
+        { text: 'football', correct: true, feedback: 'Yes! Football is a hobby.' },
+        { text: 'sister', correct: false, feedback: 'A sister is in a family. Try again.' },
+      ],
+    },
+    { t: 'trains', criteria: [4] },
+    {
+      t: 'choice',
+      prompt: 'Which word is a hobby?',
+      tests: 'language',
+      options: [
+        { text: 'father', correct: false, feedback: 'A father is in your family. Try again.' },
+        { text: 'music', correct: true, feedback: 'Yes! Music is a hobby.' },
+        { text: 'country', correct: false, feedback: 'A country is a place. Try again.' },
+      ],
+    },
+    {
+      t: 'match',
+      prompt: 'Speed round! Match the family pictures with the words.',
+      pairs: [
+        { left: 'family', right: 'family', leftPicture: { id: 'v-family', alt: 'A happy family of four' } },
+        { left: 'mother', right: 'mother', leftPicture: { id: 'v-mother', alt: 'A woman with a teen girl' } },
+        { left: 'father', right: 'father', leftPicture: { id: 'v-father', alt: 'A man with a teen boy' } },
+        { left: 'brother', right: 'brother', leftPicture: { id: 'v-brother', alt: 'Two boys fist-bumping' } },
+        { left: 'sister', right: 'sister', leftPicture: { id: 'v-sister', alt: 'Two girls laughing' } },
+      ],
+    },
+    { t: 'trains', criteria: [5] },
+    {
+      t: 'choice',
+      prompt: 'Which line asks about age?',
+      tests: 'language',
+      options: [
+        { text: 'Where are you from?', correct: false, feedback: 'That asks about the country. Try again.' },
+        { text: 'How old are you?', correct: true, feedback: 'Yes! How old are you? asks about age.' },
+        { text: 'What is your name?', correct: false, feedback: 'That asks about the name. Try again.' },
+      ],
+    },
+    {
+      t: 'choice',
+      prompt: 'Which line asks about the country?',
+      tests: 'language',
+      options: [
+        { text: 'How old are you?', correct: false, feedback: 'That asks about age. Try again.' },
+        { text: 'Where are you from?', correct: true, feedback: 'Yes! Where are you from? asks about the country.' },
+        { text: 'What do you like?', correct: false, feedback: 'That asks about hobbies. Try again.' },
+      ],
+    },
+    { t: 'trains', criteria: [4] },
+    {
+      t: 'choice',
+      prompt: 'Which hobby do you like?',
+      tests: 'story',
+      options: [
+        { text: 'football', set: { fun: 'football' } },
+        { text: 'music', set: { fun: 'music' } },
+        { text: 'games', set: { fun: 'games' } },
+      ],
+    },
+
+    // ── Mission (12 min) = 5. Say it by heart: fade the support, then role-play (Take 1, feedback, Take 2) ─
+    { t: 'segment', index: 5 },
+    { t: 'trains', criteria: [1, 5] },
+    { t: 'bg', id: 'club-lobby', alt: 'The club lobby' },
+    { t: 'show', who: 'Ava', pos: 'left', expr: 'happy' },
+    { t: 'show', who: 'Theo', pos: 'right', expr: 'happy' },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Now say the lines from memory. Some words are hidden.' },
+    { t: 'say', who: 'Ava', expr: 'happy', text: 'Hi! My name is Ava. How old are you?', key: ['name', 'old'], hide: 'keys' },
+    { t: 'trains', criteria: [2, 3, 5] },
+    { t: 'say', who: 'Theo', expr: 'happy', text: 'I am 14. Where are you from?', key: ['am', 'from'], hide: 'keys' },
+    { t: 'trains', criteria: [3, 4] },
+    { t: 'say', who: 'Ava', expr: 'music', text: 'I am from Spain. I like music.', key: ['Spain', 'music'], hide: 'keys' },
+    { t: 'trains', criteria: [4, 6] },
+    { t: 'say', who: 'Theo', expr: 'football', text: 'I like football. I have a brother.', key: ['football', 'brother'], hide: 'keys' },
+    { t: 'say', who: 'Vee', expr: 'thumbs', text: 'Now only the first word. Say the whole line.' },
+    { t: 'trains', criteria: [1, 5] },
+    { t: 'say', who: 'Ava', expr: 'happy', text: 'Hi! My name is Ava. How old are you?', hide: 'all' },
+    { t: 'trains', criteria: [3, 4] },
+    { t: 'say', who: 'Theo', expr: 'football', text: 'I am from Brazil. I like football.', hide: 'all' },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Now you talk with Theo. Choose how much help you want.' },
+    {
+      t: 'choice',
+      prompt: 'How much help do you want?',
+      tests: 'story',
+      options: [
+        { text: 'Chill: lots of help', goto: 'chill', set: { dial: 'chill' } },
+        { text: 'Normal', goto: 'normal', set: { dial: 'normal' } },
+        { text: 'Push: a little help', goto: 'push', set: { dial: 'push' } },
+      ],
+    },
+    { t: 'label', name: 'chill' },
+    { t: 'set', key: 'model1', value: 'Hi! My name is {name}. I am from ___.' },
+    { t: 'jump', label: 'take1' },
+    { t: 'label', name: 'normal' },
+    { t: 'set', key: 'model1', value: 'Hi! My name is {name}. I am ___. I am from ___.' },
+    { t: 'jump', label: 'take1' },
+    { t: 'label', name: 'push' },
+    { t: 'set', key: 'model1', value: 'Hi! My name is {name}. I am ___. I am from ___. I like ___.' },
+    { t: 'label', name: 'take1' },
+    { t: 'trains', criteria: [1, 2, 3, 4] },
+    { t: 'say', who: 'Theo', expr: 'wave', text: 'Hi! I am Theo. What is your name?' },
+    { t: 'record', prompt: 'Take 1: answer Theo with your own words.', model: '{model1}' },
+    { t: 'say', who: 'Vee', expr: 'thumbs', text: 'Good! Now add one new thing: ask Theo a question.' },
+    { t: 'trains', criteria: [5] },
+    { t: 'say', who: 'Theo', expr: 'happy', text: 'I am from Brazil. I like football.' },
+    { t: 'record', prompt: 'Take 2: say it again. Then ask Theo two questions.', model: 'Hi! My name is {name}. I am from ___. How old are you? Where are you from?' },
+    { t: 'hide', who: 'Ava' },
+    { t: 'hide', who: 'Theo' },
+
+    // ── Release (7 min) = 6. Introduce yourself: your card, then say it with the model hidden ─
+    { t: 'segment', index: 6 },
+    { t: 'trains', criteria: [2, 3, 4, 6] },
+    { t: 'bg', id: 'club-lobby', alt: 'The club lobby' },
+    { t: 'show', who: 'Vee', pos: 'center', expr: 'happy' },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Your turn! Make your introduction card.' },
+    {
+      t: 'form',
+      prompt: 'Fill your card.',
+      fields: [
+        { key: 'age', label: 'My age', kind: 'choice', options: ['11', '12', '13', '14', '15', '16', '17', '18'] },
+        { key: 'country', label: 'My country', kind: 'text', placeholder: 'For example: Brazil' },
+        { key: 'hobby', label: 'My hobby', kind: 'choice', options: HOBBIES },
+        { key: 'family', label: 'My family (tap all)', kind: 'multi', options: ['mother', 'father', 'brother', 'sister'], optional: true },
       ],
     },
     {
       t: 'profile',
-      title: '{name}',
-      gloss: { profile: PROFILE_GLOSS.profile },
+      title: 'My introduction card',
+      prompt: 'This is you. Read your card.',
       rows: [
         { label: 'Name', value: '{name}' },
-        { label: 'About', value: 'I am a {role}.' },
-        { label: 'Where', value: 'I am {where}.' },
-        { label: 'Group', value: 'Our class group' },
+        { label: 'Age', value: '{age}' },
+        { label: 'Country', value: '{country}' },
+        { label: 'Hobby', value: '{hobby}' },
+        { label: 'Family', value: '{family}' },
       ],
     },
-    { t: 'say', who: 'Ava', expr: 'happy', text: 'A new member! Welcome, {name}.', key: ['member', 'Welcome'] },
-    { t: 'record', prompt: 'Say hello to the group. Only you and your teacher hear this.', model: 'Hello! My name is {name}. I am a {role}.' },
-    { t: 'say', who: 'Vee', expr: 'curious', text: 'One more. Your idea about Sam.' },
-    { t: 'record', prompt: 'One sentence about Sam.', model: 'I think Sam is a friend.' },
-    { t: 'say', who: 'Ava', expr: 'happy', text: 'Nice, {name}!' },
+    { t: 'trains', criteria: [1, 2, 3, 4, 5] },
+    { t: 'say', who: 'Vee', expr: 'happy', text: 'Now introduce yourself. Do not look at the line. Say it!' },
+    { t: 'record', prompt: 'Say your introduction. Then ask two questions.', model: 'Hi! My name is {name}. I am {age}. I am from {country}. I like {hobby}. How old are you? Where are you from?', hideModel: true },
+    { t: 'hide', who: 'Vee' },
+    { t: 'show', who: 'Ava', pos: 'left', expr: 'wave' },
+    { t: 'show', who: 'Theo', pos: 'right', expr: 'wave' },
+    { t: 'say', who: 'Ava', expr: 'wave', text: 'Nice to meet you, {name}! Great introduction.' },
+    { t: 'say', who: 'Theo', expr: 'happy', text: 'Welcome to the club, {name}!' },
 
-    // ── Wrap (5 min) ──────────────────────────────────────────────────────────
+    // ── Wrap (5 min): can-do ticks tied to the criteria, homework, clue ──────
     { t: 'segment', index: 7 },
-    { t: 'say', who: 'Vee', expr: 'happy', text: 'Nice work, {name}! Your line: Hello, my name is {name}.' },
-    {
-      t: 'ticks',
-      prompt: 'How was it for you?',
-      items: ['I know: hello, student, teacher, friend.', 'I say: Hello, my name is ___.', 'I know who Sam is.'],
-    },
-    {
-      t: 'form',
-      prompt: 'Pick one for next time.',
-      fields: [{ key: 'skin_next', label: 'Pick one', kind: 'choice', options: EMOJI_SKINS }],
-    },
-    { t: 'say', who: 'Vee', expr: 'happy', text: 'Homework: say hello to one friend.', gloss: { homework: 'a small job to do after class' }, key: ['Homework'] },
-    { t: 'say', who: 'Theo', expr: 'happy', text: 'See you, friend. Nice to meet you again!' },
-    { t: 'say', who: 'Ava', expr: 'curious', text: 'Next time, we meet Sam online!', key: ['meet', 'online'] },
-    { t: 'end', summary: 'Clue 1 of 8: Sam is a new member of the group, but Sam is not in our class.' },
+    { t: 'trains', criteria: [1, 2, 3] },
+    { t: 'hide', who: 'Ava' },
+    { t: 'hide', who: 'Theo' },
+    { t: 'show', who: 'Vee', pos: 'center', expr: 'thumbs' },
+    { t: 'ticks', prompt: 'I can...', items: [CRITERIA[0], CRITERIA[1], CRITERIA[2]] },
+    { t: 'trains', criteria: [4, 5, 6] },
+    { t: 'ticks', prompt: 'I can...', items: [CRITERIA[3], CRITERIA[4], CRITERIA[5]] },
+    { t: 'say', who: 'Vee', expr: 'thumbs', text: 'Homework: introduce yourself to one friend today. Not yet is okay!' },
+    { t: 'end', summary: 'Clue 1 of 8: Ava’s group chat has a new member called Sam. Who is Sam? See you next time.' },
   ],
 };
