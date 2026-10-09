@@ -1,6 +1,6 @@
 # Scenario — Pre-A1 Unit 7 Lesson 5 "Grandpa's Farm" · story film "Grandpa's Noisy Barn"
 
-**Status: approved by the owner (2026-10-08)** — pictures in progress (Canva). Nothing paid is ordered.
+**Status: approved by the owner (2026-10-08)** — built (2026-10-09): 8 Canva pictures, stills film `public/lep1/video/old-macdonald-u7l5.mp4`. Nothing paid is ordered.
 
 Title changed by the owner (2026-10-09): "Grandpa's Farm" — no "MacDonald" in any title; the song and every line say "Grandpa had a farm, E-I-E-I-O!" (traditional tune).
 

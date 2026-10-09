@@ -93,7 +93,7 @@ export function FarmVerseScene({ scene, onWin, onNext, sync }: { scene: Verse; o
                 <motion.img src={a.img} alt={a.label} draggable={false} className="w-full" style={{ filter: STICKER_FILTER }}
                   initial={{ y: -80, scale: 0.4, opacity: 0 }}
                   animate={singing === i || done ? { y: [0, -12, 0], scale: 1, opacity: 1 } : { y: 0, scale: 1, opacity: 1 }}
-                  transition={singing === i || done ? { duration: 0.5, repeat: Infinity } : { type: 'spring', stiffness: 220, damping: 14 }} />
+                  transition={{ ...(singing === i || done ? { duration: 0.5, repeat: Infinity } : { type: 'spring' as const, stiffness: 220, damping: 14 }), scale: { type: 'spring', stiffness: 220, damping: 14 }, opacity: { duration: 0.3 } }} />
               </button>
             );
           })}
@@ -101,43 +101,35 @@ export function FarmVerseScene({ scene, onWin, onNext, sync }: { scene: Verse; o
         <Bursts items={bursts} />
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 top-16 z-30 flex justify-center px-14">
-        <span className="text-center font-black leading-tight text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1rem, min(calc(3vw), 4.6vh), 2.4rem)' }}>
+      {/* The song line, then the controls under it — the grass stays free for the animals. */}
+      <div className="absolute inset-x-0 top-16 z-40 flex flex-col items-center gap-2 px-14 [@media(max-height:500px)]:top-14 [@media(max-height:500px)]:gap-1">
+        <span className="pointer-events-none text-center font-black leading-tight text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1rem, min(calc(3vw), 4.6vh), 2.4rem)' }}>
           {done ? `\u{1F3B6} ${scene.doneLine}` : singing >= 0 && scene.animals[singing]
             ? `\u{1F3B5} ${verseHad(scene.animals[singing].label)}`
             : `\u{1F468}\u{200D}\u{1F33E} ${VERSE_INTRO}`}
         </span>
+        {done ? (
+          <motion.button initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.2, type: 'spring' }}
+            onClick={onNext} className={`${CLAY_BUTTON} px-8 py-3 text-xl`}>Next {'⭐'}</motion.button>
+        ) : singing >= 0 ? (
+          <motion.button key={`sang-${singing}`} initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} onClick={() => { void sang(); }} className={`${CLAY_BUTTON} px-6 py-3 text-lg sm:text-xl`}>
+            {'\u{1F3A4}'} I sang it!
+          </motion.button>
+        ) : (
+          <div className="flex items-end gap-2 rounded-3xl border-4 border-amber-700/70 bg-amber-100/90 px-3 py-2 shadow-xl">
+            {scene.animals.map((a, i) => {
+              const used = picked.includes(i);
+              return (
+                <motion.button key={a.label} aria-label={`choose ${a.label}`} onClick={() => { void choose(i); }} disabled={used}
+                  className={`flex w-[min(12vh,12vw)] flex-col items-center rounded-2xl bg-white/80 p-1 shadow ${used ? 'opacity-30' : ''}`} whileTap={{ scale: 0.92 }}>
+                  <img src={a.img} alt="" draggable={false} className="aspect-square w-full object-contain" />
+                  <span className="text-[min(2.4vh,2.6vw)] font-black text-amber-800">{a.label}</span>
+                </motion.button>
+              );
+            })}
+          </div>
+        )}
       </div>
-
-      {/* Choose the next animal, or sing it back. */}
-      {!done && (
-        <div className="absolute bottom-[3%] left-1/2 z-40 flex -translate-x-1/2 flex-col items-center gap-2">
-          {singing >= 0 ? (
-            <motion.button initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} onClick={() => { void sang(); }} className={`${CLAY_BUTTON} px-6 py-3 text-lg sm:text-xl`}>
-              {'\u{1F3A4}'} I sang it!
-            </motion.button>
-          ) : (
-            <div className="flex items-end gap-2 rounded-3xl border-4 border-amber-700/70 bg-amber-100/90 px-3 py-2 shadow-xl">
-              {scene.animals.map((a, i) => {
-                const used = picked.includes(i);
-                return (
-                  <motion.button key={a.label} aria-label={`choose ${a.label}`} onClick={() => { void choose(i); }} disabled={used}
-                    className={`flex w-[min(14vh,14vw)] flex-col items-center rounded-2xl bg-white/80 p-1 shadow ${used ? 'opacity-30' : ''}`} whileTap={{ scale: 0.92 }}>
-                    <img src={a.img} alt="" draggable={false} className="aspect-square w-full object-contain" />
-                    <span className="text-[min(2.4vh,2.6vw)] font-black text-amber-800">{a.label}</span>
-                  </motion.button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
-
-      {done && (
-        <motion.div className="absolute inset-x-0 bottom-[6%] z-50 flex justify-center" initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.2, type: 'spring' }}>
-          <button onClick={onNext} className={`${CLAY_BUTTON} px-8 py-3 text-xl`}>Next {'⭐'}</button>
-        </motion.div>
-      )}
     </div>
   );
 }
