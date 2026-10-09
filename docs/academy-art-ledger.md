@@ -10,6 +10,6 @@ Canva rate-limits image generation ("quota_cooldown"): make ONE picture, wait ~2
 | Vee | MAHXdW0wNyY | MAHXdUGuoxM | MAHXdkQRIm4 (weak tilt, may redo) | MAHXdlzhwvw | MAHXdhihuTI | MAHXdvfubSE |
 | Ava | MAHXdq0tQjs | MAHXd6yfO84 | MAHXdyOvQhs | MAHXeD4yFDk | MAHXeY49NZk | MAHXeRxpygM |
 | Theo | MAHXeduj9U8 | MAHXenWsjKA | MAHXekG2UjU | MAHXevsFPks | MAHXe2rbkFk | MAHXe62oBDI |
-| Mia | MAHXfPqxgrA | MAHXfMriuaU | MAHXfek-iZI | MAHXffmSLvk | | |
+| Mia | MAHXfPqxgrA | MAHXfMriuaU | MAHXfek-iZI | MAHXffmSLvk | MAHXfnXiPuE | |
 
 Not yet in the repo: export from Canva and fetch per `docs/canva-art-pipeline.md` to `cast/<name>/<expression>.webp`.
