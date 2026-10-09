@@ -1,11 +1,11 @@
 // Academy lesson player — host component. Academy-only; imports React, framer-motion and files in this folder.
 // Pictures: real art when `artBase` is set and loads, otherwise clearly-labelled placeholders. Stills hold still: only opacity
 // cross-fades are used (owner rule: no zoom, pan, parallax or scale loops on any picture). Voice: recorded clips only, never TTS.
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Component, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './academy-player.css';
 import { Backdrop, Sprite } from './art';
-import { accuracy, backlog, initState, interpolateBeat, step, type PlayerEvent, type PlayerState } from './engine';
+import { accuracy, autoEvent, backlog, initState, interpolateBeat, replayTo, step, type PlayerEvent, type PlayerState } from './engine';
 import { BuildBlock, ChatStory, ChoiceBlock, ComicPanels, DialogueBox, FlashDeck, FormBlock, MatchBlock, ProfileBlock, RecordBlock, RewardBurst, RunStrip, SortBlock, TicksBlock, TitleCard } from './parts';
 import type { CastName, SceneScript } from './scriptTypes';
 import { playVoice, stopVoice } from './voice';
@@ -45,8 +45,8 @@ function usePrefersReduced() {
   return r;
 }
 
-export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, seed = 1, autoStart = false, onSignal, state: controlledState, onEvent, readOnly = false, lockLines = false, showBack = true }: AcademyPlayerProps) {
-  const [localState, setLocalState] = useState<PlayerState>(() => initState(script, seed));
+function AcademyPlayerInner({ script, theme: themeProp = 'studio', artBase, seed = 1, autoStart = false, onSignal, state: controlledState, onEvent, readOnly = false, lockLines = false, showBack = true, initialState, onBeat }: AcademyPlayerProps & { initialState?: PlayerState; onBeat?: (i: number) => void }) {
+  const [localState, setLocalState] = useState<PlayerState>(() => initialState ?? initState(script, seed));
   const state = controlledState ?? localState;
   const [started, setStarted] = useState(autoStart);
   const [theme, setTheme] = useState(themeProp);
@@ -65,6 +65,7 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
   const [speaking, setSpeaking] = useState(false);
   const prevRight = useRef(0);
 
+  useEffect(() => onBeat?.(state.beatIndex), [state.beatIndex]); // eslint-disable-line react-hooks/exhaustive-deps
   const go = useCallback((e: PlayerEvent) => (onEvent ? onEvent(e) : setLocalState((s) => step(script, s, e))), [script, onEvent]);
   const rawBeat = script.beats[state.beatIndex];
   const beat = useMemo(() => (rawBeat ? interpolateBeat(rawBeat, state.vars) : rawBeat), [rawBeat, state.vars]);
@@ -297,11 +298,46 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
             <button type="button" className="ap-btn" onClick={() => setScale((s) => Math.min(1.4, +(s + 0.1).toFixed(1)))} aria-label="Bigger text">A+ Bigger text</button>
             <button type="button" className="ap-btn" onClick={() => setTheme((t) => (t === 'studio' ? 'explorer' : 'studio'))} aria-label="Switch look">{theme === 'studio' ? '🌙 Studio look' : '☀ Explorer look'}</button>
             <button type="button" className="ap-btn" onClick={() => setReducedPref(!reduced)} aria-pressed={reduced} aria-label="Reduce motion">{reduced ? 'Motion: off' : 'Motion: on'}</button>
+            <button type="button" className="ap-btn" onClick={() => { if (beat && beat.t !== 'end') go(autoEvent(beat)); }} aria-label="Skip this step">⏭ Skip this step</button>
             <button type="button" className="ap-btn" onClick={() => setMuted((m) => !m)} aria-pressed={muted} aria-label="Mute sound">{muted ? '🔇 Sound off' : '🔈 Sound on'}</button>
           </div>
         )}
       </nav>
     </div>
+  );
+}
+
+/** If a screen ever fails to draw, show what happened and let the lesson carry on from the next step instead of freezing. */
+class Guard extends Component<{ children: ReactNode; onRetry: () => void; skip: boolean }, { error: Error | null }> {
+  state = { error: null as Error | null };
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+  render() {
+    if (!this.state.error) return this.props.children;
+    return (
+      <div className="ap-root" data-theme="studio" style={{ display: 'grid', placeItems: 'center', padding: 24 }}>
+        <div className="ap-overlay-box" role="alert">
+          <p className="ap-prompt">This screen did not load.</p>
+          <p className="ap-chunk">{this.props.skip ? 'You can carry on from the next step.' : 'Try again.'}</p>
+          <p className="ap-chunk" style={{ fontSize: '0.75rem', opacity: 0.7, wordBreak: 'break-word' }}>{String(this.state.error.message).slice(0, 200)}</p>
+          <button type="button" className="ap-btn ap-btn-primary" onClick={() => { this.setState({ error: null }); this.props.onRetry(); }}>{this.props.skip ? 'Skip to the next step ▸' : 'Try again'}</button>
+        </div>
+      </div>
+    );
+  }
+}
+
+export function AcademyPlayer(props: AcademyPlayerProps) {
+  const lastBeat = useRef(0);
+  const [boot, setBoot] = useState<{ n: number; state?: PlayerState }>({ n: 0 });
+  const live = props.state !== undefined; // in the classroom the host owns the state: a retry only remounts
+  const retry = () =>
+    setBoot((b) => ({ n: b.n + 1, state: live ? undefined : replayTo(props.script, props.seed ?? 1, lastBeat.current + 1) }));
+  return (
+    <Guard onRetry={retry} skip={!live}>
+      <AcademyPlayerInner key={boot.n} {...props} autoStart={props.autoStart || boot.n > 0} initialState={boot.state} onBeat={(i) => { lastBeat.current = i; }} />
+    </Guard>
   );
 }
 

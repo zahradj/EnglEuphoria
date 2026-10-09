@@ -2,7 +2,7 @@
 // Used only while the real Canva pictures are missing. When a real image exists at `${artBase}/cast/<name>/<expression>.webp`
 // (or `${artBase}/bg/<id>.webp`) the player shows it instead and falls back to this placeholder if it fails to load.
 // Stills hold still: nothing here zooms, pans, or loops.
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CAST_LOOK, bgLook, cardIcon } from './castVisual';
 import { SceneArt } from './scenes';
 import type { CastName, Expression } from './scriptTypes';
@@ -108,13 +108,15 @@ export function Sprite({ who, expr, artBase, speaking = false, animate = true }:
   // expression change: the old picture stays underneath while the new one fades in (opacity only)
   const [shown, setShown] = useState<Expression>(expr);
   const [under, setUnder] = useState<Expression | null>(null);
+  const underTimer = useRef<number | undefined>(undefined);
   useEffect(() => {
     if (expr === shown) return;
     setUnder(shown);
     setShown(expr);
-    const t = window.setTimeout(() => setUnder(null), 320);
-    return () => window.clearTimeout(t);
+    window.clearTimeout(underTimer.current);
+    underTimer.current = window.setTimeout(() => setUnder(null), 320); // not cleared by this effect's own re-run
   }, [expr, shown]);
+  useEffect(() => () => window.clearTimeout(underTimer.current), []);
   const base = artBase ? `${artBase}/cast/${who.toLowerCase()}` : '';
   if (artBase && !failed) {
     const poseOk = shown === 'neutral' || shown === 'happy';
