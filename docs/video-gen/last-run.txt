@@ -1,5 +1,4 @@
-pip-hands: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
-pip-hands: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started pip-hands: 5cee2c6b-64e8-42b1-92dd-b44c73886b3c
-saved public/lep1/video/clips/u4l5-moves/pip-hands.mp4 (6239994 bytes)
+park-end: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started park-end: 98f19bdf-309a-444b-8d93-3c989cb69d62
+saved public/lep1/video/clips/u4l5-moves/park-end.mp4 (6118357 bytes)
 1/1 clips ready for u4l5-moves
