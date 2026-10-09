@@ -9,32 +9,31 @@
  ],
  "verses": [
   {
-   "audio": "public/lep1/audio/wheres-my-house-v1-u6l5.mp3",
+   "audio": "public/lep1/audio/wheres-my-house-song3-u6l5.mp3",
    "lines": [
     [
-     0,
+     9.02,
      "public/lep1/video/clips/u6l5-house/park-late.mp4",
      [
       {
        "karaoke": [
-        "Home,",
-        "home!"
+        "Home!"
        ],
        "at": [
         80,
         22
-       ]
+       ],
+       "delay": 9.02
       }
      ]
     ],
     [
-     4.1,
+     12.74,
      "public/lep1/video/clips/u6l5-house/street-where.mp4",
      [
       {
        "karaoke": [
-        "My house,",
-        "my house!"
+        "My house?"
        ],
        "at": [
         16,
@@ -44,9 +43,19 @@
      ]
     ],
     [
-     9.2,
+     18.47,
      "public/lep1/video/clips/u6l5-house/street-think.mp4",
      [
+      {
+       "karaoke": [
+        "My door,",
+        "red!"
+       ],
+       "at": [
+        17,
+        22
+       ]
+      },
       {
        "word": "red door",
        "at": [
@@ -57,57 +66,55 @@
         86,
         16
        ]
-      },
-      {
-       "karaoke": [
-        "A red",
-        "door!"
-       ],
-       "at": [
-        17,
-        22
-       ],
-       "delay": 0.3
       }
      ]
     ],
     [
-     14.5,
+     21.09,
      "public/lep1/video/clips/u6l5-house/blue-no.mp4",
      [
       {
-       "word": "blue door",
-       "at": [
-        62,
-        50
-       ],
-       "label": [
-        86,
-        18
-       ]
-      },
-      {
        "karaoke": [
-        "A blue",
-        "door!"
+        "Not",
+        "blue!"
        ],
        "at": [
         17,
         22
-       ],
-       "delay": 0.3
+       ]
       }
      ]
-    ]
-   ]
-  },
-  {
-   "audio": "public/lep1/audio/wheres-my-house-v2-u6l5.mp3",
-   "lines": [
+    ],
     [
-     0,
+     27.94,
+     "public/lep1/video/clips/u6l5-house/blue-ask.mp4",
+     [
+      {
+       "karaoke": [
+        "No,",
+        "it isn't!"
+       ],
+       "at": [
+        18,
+        22
+       ]
+      }
+     ]
+    ],
+    [
+     33.15,
      "public/lep1/video/clips/u6l5-house/cat-wakes.mp4",
      [
+      {
+       "karaoke": [
+        "No,",
+        "it isn't!"
+       ],
+       "at": [
+        16,
+        20
+       ]
+      },
       {
        "word": "yellow door",
        "at": [
@@ -118,77 +125,32 @@
         84,
         18
        ]
-      },
-      {
-       "karaoke": [
-        "A yellow",
-        "door!"
-       ],
-       "at": [
-        17,
-        22
-       ],
-       "delay": 0.3
       }
      ]
     ],
     [
-     5.0,
+     37.82,
      "public/lep1/video/clips/u6l5-house/red-ask.mp4",
      [
       {
        "karaoke": [
-        "A red",
-        "door!"
-       ],
-       "at": [
-        17,
-        22
-       ],
-       "delay": 0.3
-      }
-     ]
-    ],
-    [
-     11.9,
-     "public/lep1/video/clips/u6l5-house/red-door-opens.mp4",
-     [
-      {
-       "karaoke": [
-        "Knock,",
-        "knock!",
         "Yes,",
         "it is!"
        ],
        "at": [
-        85,
-        34
-       ],
-       "delay": 0.2,
-       "step": 0.5
+        17,
+        20
+       ]
       }
      ]
     ],
     [
-     15.0,
+     40.09,
      "public/lep1/video/clips/u6l5-house/mom-hug.mp4",
      [
       {
-       "word": "house",
-       "at": [
-        30,
-        42
-       ],
-       "label": [
-        82,
-        20
-       ],
-       "replace": true
-      },
-      {
        "karaoke": [
-        "My house,",
-        "my house!"
+        "A hug!"
        ],
        "at": [
         18,
@@ -196,20 +158,46 @@
        ]
       }
      ]
-    ]
-   ]
-  },
-  {
-   "audio": "public/lep1/audio/wheres-my-house-song-u6l5.mp3",
-   "lines": [
+    ],
     [
-     0,
+     47.6,
+     "public/lep1/video/clips/u6l5-house/red-door-opens.mp4",
+     [
+      {
+       "karaoke": [
+        "Knock,",
+        "knock!"
+       ],
+       "at": [
+        85,
+        34
+       ]
+      }
+     ]
+    ],
+    [
+     50.08,
+     "public/lep1/video/clips/u6l5-house/mom-hug.mp4",
+     [
+      {
+       "karaoke": [
+        "Welcome",
+        "home!"
+       ],
+       "at": [
+        18,
+        22
+       ]
+      }
+     ]
+    ],
+    [
+     52.05,
      "public/lep1/video/clips/u6l5-house/street-where.mp4",
      [
       {
        "karaoke": [
-        "Where's",
-        "my house?"
+        "My house!"
        ],
        "at": [
         16,
@@ -219,53 +207,17 @@
      ]
     ],
     [
-     4.8,
-     "public/lep1/video/clips/u6l5-house/blue-no.mp4",
-     [
-      {
-       "karaoke": [
-        "No,",
-        "it isn't!"
-       ],
-       "at": [
-        18,
-        22
-       ],
-       "delay": 1.6
-      }
-     ]
-    ],
-    [
-     9.84,
-     "public/lep1/video/clips/u6l5-house/red-door-opens.mp4",
-     [
-      {
-       "karaoke": [
-        "Yes,",
-        "it is!"
-       ],
-       "at": [
-        82,
-        32
-       ],
-       "delay": 1.6
-      }
-     ]
-    ],
-    [
-     15.74,
+     54.92,
      "public/lep1/video/clips/u6l5-house/bedroom-love.mp4",
      [
       {
        "karaoke": [
-        "Welcome",
-        "home!"
+        "Quiet!"
        ],
        "at": [
         80,
         28
-       ],
-       "delay": 1.0
+       ]
       }
      ]
     ]

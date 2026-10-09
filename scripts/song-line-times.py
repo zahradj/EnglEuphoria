@@ -3,7 +3,7 @@
     python3 scripts/song-line-times.py <song key> <take.mp3>
 
 Aligns the lyric words to the heard words in order (difflib, so repeated words like "head, head" stay in their own
-line), takes each line's first matched word (moved back by the words before it that were missed), keeps the cues
+line), estimates each line's start from its matched words (each moved back by the words before it) and drops strays far from the median, keeps the cues
 increasing and fills a line nobody heard from its neighbours. Prints the line starts and lineDurationsMs for the scene
 (cue 0 = audio start, so the first line also covers the intro)."""
 import difflib, json, pathlib, re, subprocess, sys
@@ -18,12 +18,14 @@ for i, line in enumerate(lines):
     for k, w in enumerate(x for x in (norm(y) for y in line.split()) if x):
         lyric.append(w); line_of.append(i); pos.append(k)
 sm = difflib.SequenceMatcher(None, lyric, [h[0] for h in heard], autojunk=False)
-first = {}
+est = {}  # line -> start estimates from each matched word (its time minus ~0.35 s per word before it)
 for b in sm.get_matching_blocks():
     for k in range(b.size):
-        i = line_of[b.a + k]
-        if i not in first:
-            first[i] = max(0.0, heard[b.b + k][1] - 0.35 * pos[b.a + k])
+        est.setdefault(line_of[b.a + k], []).append(max(0.0, heard[b.b + k][1] - 0.35 * pos[b.a + k]))
+first = {}
+for i, e in est.items():  # a stray early match (a repeated word heard in the wrong place) must not move the line
+    m = sorted(e)[len(e) // 2]
+    first[i] = min(x for x in e if x >= m - 1.5)
 starts = [first.get(i) for i in range(len(lines))]
 for i in range(1, len(starts)):  # keep increasing
     if starts[i] is not None and starts[i - 1] is not None and starts[i] <= starts[i - 1]:

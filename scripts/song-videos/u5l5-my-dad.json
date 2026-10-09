@@ -9,10 +9,10 @@
  ],
  "verses": [
   {
-   "audio": "public/lep1/audio/my-dad-v1-u5l5.mp3",
+   "audio": "public/lep1/audio/my-dad-song3-u5l5.mp3",
    "lines": [
     [
-     2.8,
+     4.25,
      "public/lep1/video/clips/u5l5-dad/gate-walk.mp4",
      [
       {
@@ -24,12 +24,16 @@
         18,
         45
        ],
-       "delay": 2.6
+       "delay": 4.25
       }
      ]
     ],
     [
-     4.2,
+     8.0,
+     null
+    ],
+    [
+     12.62,
      "public/lep1/video/clips/u5l5-dad/ball-throw.mp4",
      [
       {
@@ -45,13 +49,12 @@
      ]
     ],
     [
-     8.4,
+     16.92,
      "public/lep1/video/clips/u5l5-dad/ball-catch.mp4",
      [
       {
        "karaoke": [
-        "A ball,",
-        "a ball!"
+        "Catch!"
        ],
        "at": [
         30,
@@ -61,28 +64,7 @@
      ]
     ],
     [
-     14.8,
-     "public/lep1/video/clips/u5l5-dad/ducks-bread.mp4",
-     [
-      {
-       "karaoke": [
-        "Ducks,",
-        "ducks!"
-       ],
-       "at": [
-        22,
-        20
-       ]
-      }
-     ]
-    ]
-   ]
-  },
-  {
-   "audio": "public/lep1/audio/my-dad-v2-u5l5.mp3",
-   "lines": [
-    [
-     2.2,
+     21.42,
      "public/lep1/video/clips/u5l5-dad/ducks-count.mp4",
      [
       {
@@ -98,13 +80,27 @@
      ]
     ],
     [
-     4.6,
+     25.78,
+     "public/lep1/video/clips/u5l5-dad/ducks-bread.mp4",
+     [
+      {
+       "karaoke": [
+        "Ducks!"
+       ],
+       "at": [
+        22,
+        20
+       ]
+      }
+     ]
+    ],
+    [
+     30.22,
      "public/lep1/video/clips/u5l5-dad/icecream-lick.mp4",
      [
       {
        "karaoke": [
-        "Ice cream,",
-        "ice cream!"
+        "Ice cream!"
        ],
        "at": [
         20,
@@ -114,7 +110,7 @@
      ]
     ],
     [
-     8.5,
+     35.25,
      "public/lep1/video/clips/u5l5-dad/book-open.mp4",
      [
       {
@@ -130,7 +126,7 @@
      ]
     ],
     [
-     12.6,
+     40.49,
      "public/lep1/video/clips/u5l5-dad/goodnight-hug.mp4",
      [
       {
@@ -144,75 +140,38 @@
        ]
       }
      ]
-    ]
-   ]
-  },
-  {
-   "audio": "public/lep1/audio/my-dad-song-u5l5.mp3",
-   "lines": [
-    [
-     0,
-     "public/lep1/video/clips/u5l5-dad/ball-throw.mp4",
-     [
-      {
-       "karaoke": [
-        "Ball!"
-       ],
-       "at": [
-        30,
-        18
-       ],
-       "delay": 0.8
-      }
-     ]
     ],
     [
-     3.73,
-     "public/lep1/video/clips/u5l5-dad/ducks-count.mp4",
-     [
-      {
-       "karaoke": [
-        "Ducks!"
-       ],
-       "at": [
-        20,
-        16
-       ],
-       "delay": 0.4
-      }
-     ]
+     43.5,
+     "public/lep1/video/clips/u5l5-dad/night-best.mp4"
     ],
     [
-     9.7,
-     "public/lep1/video/clips/u5l5-dad/icecream-lick.mp4",
-     [
-      {
-       "karaoke": [
-        "Ice cream!",
-        "Book!"
-       ],
-       "at": [
-        20,
-        14
-       ],
-       "delay": 0.2,
-       "step": 1.0
-      }
-     ]
-    ],
-    [
-     11.91,
-     "public/lep1/video/clips/u5l5-dad/night-best.mp4",
+     49.35,
+     "public/lep1/video/clips/u5l5-dad/goodnight-hug.mp4",
      [
       {
        "karaoke": [
         "Dad!"
        ],
        "at": [
-        30,
-        22
+        82,
+        40
+       ]
+      }
+     ]
+    ],
+    [
+     52.76,
+     "public/lep1/video/clips/u5l5-dad/gate-walk.mp4",
+     [
+      {
+       "karaoke": [
+        "My dad!"
        ],
-       "delay": 1.2
+       "at": [
+        18,
+        45
+       ]
       }
      ]
     ]
