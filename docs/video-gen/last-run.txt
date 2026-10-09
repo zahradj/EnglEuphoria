@@ -1,5 +1,4 @@
-ducks-bread: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
-ducks-bread: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started ducks-bread: 6c1b4180-8569-417d-9508-c4ad903afebd
-saved public/lep1/video/clips/u5l5-dad/ducks-bread.mp4 (7868377 bytes)
+ducks-count: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started ducks-count: 895dbf20-057d-4851-8b1b-f9aa450a77ce
+saved public/lep1/video/clips/u5l5-dad/ducks-count.mp4 (7774311 bytes)
 1/1 clips ready for u5l5-dad
