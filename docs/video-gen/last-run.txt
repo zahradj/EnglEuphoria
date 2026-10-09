@@ -1,4 +1,5 @@
-park-intro: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-started park-intro: 01e4535e-50e6-49b1-9c22-c6409d8969df
-saved public/lep1/video/clips/u4l5-moves/park-intro.mp4 (6801687 bytes)
+pip-head: NOTE kling-video/v2.6/pro/image-to-video has no end-picture input — the motion follows the prompt only
+pip-head: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
+started pip-head: 92866249-0586-4f45-aa11-a59e2351a117
+saved public/lep1/video/clips/u4l5-moves/pip-head.mp4 (5914104 bytes)
 1/1 clips ready for u4l5-moves
