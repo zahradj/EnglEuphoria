@@ -73,7 +73,7 @@ function Classroom({ tone }: { tone: 'morning' | 'evening' }) {
         <path d="M 900 535 q -4 -60 24 -90 q 30 30 24 90 z" fill="#22c55e" /><path d="M 936 535 q -40 -30 -46 -70 q 40 8 56 50 z" fill="#16a34a" /><rect x="898" y="535" width="52" height="40" rx="8" fill="#7c3aed" />
       </g>
       <Sparkles n={m ? 18 : 10} seed={m ? 3 : 8} color={m ? '#fff' : '#ffe9b8'} />
-      {!m && <rect width="1000" height="700" fill="#4b1d7a" opacity="0.18" />}
+      {!m && <rect width="1000" height="700" fill="#6b3fb0" opacity="0.08" />}
     </svg>
   );
 }
@@ -82,8 +82,8 @@ function PhoneClose() {
   return (
     <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" className="ap-scene" aria-hidden="true">
       <defs>
-        <radialGradient id="ph-bg" cx="0.5" cy="0.45" r="0.8"><stop offset="0" stopColor="#4a35b8" /><stop offset="0.6" stopColor="#1d1b52" /><stop offset="1" stopColor="#0b0a24" /></radialGradient>
-        <linearGradient id="ph-screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#2a2f6e" /><stop offset="1" stopColor="#171a45" /></linearGradient>
+        <radialGradient id="ph-bg" cx="0.5" cy="0.45" r="0.8"><stop offset="0" stopColor="#8b6cf2" /><stop offset="0.6" stopColor="#4a3fc0" /><stop offset="1" stopColor="#2a2575" /></radialGradient>
+        <linearGradient id="ph-screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#4a53b8" /><stop offset="1" stopColor="#323a95" /></linearGradient>
       </defs>
       <rect width="1000" height="700" fill="url(#ph-bg)" />
       <g opacity="0.55">

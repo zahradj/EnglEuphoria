@@ -40,3 +40,20 @@ Canva rate limit: one picture, then ~25 min wait.
 No logo overlay will be added; the pictures are used as they are. (The darker tees and Ava's small chest heart stay as generated.)
 
 Vee redo: owner approved ONE redo of Vee (darker tee). Base = edit of MAHXdW0wNyY (purple hoodie base); then his 5 expressions as edits of the new Vee base.
+
+## Scenes and animation frames queue (owner, 2026-10-09: "generate animated images with the characters ... and generate scenes"; lesson screens too dark)
+
+Canva makes stills only. Animation is done by the player from Canva stills (blink, talk, expression cross-fades, entrances, effects); no Canva motion and no new Higgsfield video without the video gate.
+
+Order (one picture per ~25 min, Canva rate limit): 1) scenes, 2) the remaining v2 expressions, 3) animation frames, 4) vocabulary cards.
+
+| Priority | Picture | Where it goes | Prompt notes | Canva media id |
+|---|---|---|---|---|
+| 1 | scene `classroom-morning` | `bg/classroom-morning.webp` | empty bright modern classroom, morning sun, window with skyline, whiteboard with abstract scribbles (no letters), desks, plant; purple/indigo/blue accents; no people, no text; landscape 3:2 with the centre kept open for characters | |
+| 1 | scene `classroom-evening` | `bg/classroom-evening.webp` | same room, warm sunset light, still bright, not dark | |
+| 1 | scene `phone-profile-closeup` | `bg/phone-profile-closeup.webp` | giant phone with a plain profile screen (grey avatar, bars, no readable text), purple/blue glow, bright | |
+| 3 | `blink` per character (4) | `cast/<name>/blink.webp` | edit of the v2 NEUTRAL: eyes closed, everything else identical (used on neutral and happy only) | |
+| 3 | `talk` per character (4) | `cast/<name>/talk.webp` | edit of the v2 NEUTRAL: mouth open mid-word, everything else identical | |
+| 4 | 14 vocabulary cards | `cards/card-<word>.webp` | one friendly illustrated picture per word, same style | |
+
+The player already uses `blink.webp` and `talk.webp` when present and falls back to the drawn placeholder animation when not.

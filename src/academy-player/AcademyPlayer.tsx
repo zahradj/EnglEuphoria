@@ -52,6 +52,7 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
   const [cardSeg, setCardSeg] = useState<number | null>(null);
   const shownSegs = useRef<Set<number>>(new Set());
   const [burst, setBurst] = useState(0);
+  const [speaking, setSpeaking] = useState(false);
   const prevRight = useRef(0);
 
   const go = useCallback((e: PlayerEvent) => setState((s) => step(script, s, e)), [script]);
@@ -116,6 +117,17 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
     return () => window.clearTimeout(id);
   }, [cardSeg, reduced]);
 
+  // the speaker's mouth moves while the line types out
+  useEffect(() => {
+    if (!started || beat?.t !== 'say') {
+      setSpeaking(false);
+      return;
+    }
+    setSpeaking(true);
+    const id = window.setTimeout(() => setSpeaking(false), Math.min(4500, beat.text.length * 30 + 250));
+    return () => window.clearTimeout(id);
+  }, [started, state.beatIndex]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // star burst when a new correct answer arrives (success-dependent reward only)
   useEffect(() => {
     if (right > prevRight.current && !reduced) {
@@ -147,7 +159,7 @@ export function AcademyPlayer({ script, theme: themeProp = 'studio', artBase, se
             <AnimatePresence initial={false}>
               {sprites.map((s) => (
                 <motion.div key={s.who} className="ap-sprite" data-pos={s.pos} data-dim={speaker !== null && speaker !== s.who} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={fade}>
-                  <Sprite who={s.who} expr={s.expr} artBase={artBase} />
+                  <Sprite who={s.who} expr={s.expr} artBase={artBase} speaking={speaking && speaker === s.who} animate={!reduced} />
                 </motion.div>
               ))}
             </AnimatePresence>

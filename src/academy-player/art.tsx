@@ -2,7 +2,7 @@
 // Used only while the real Canva pictures are missing. When a real image exists at `${artBase}/cast/<name>/<expression>.webp`
 // (or `${artBase}/bg/<id>.webp`) the player shows it instead and falls back to this placeholder if it fails to load.
 // Stills hold still: nothing here zooms, pans, or loops.
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CAST_LOOK, bgLook, cardIcon } from './castVisual';
 import { SceneArt } from './scenes';
 import type { CastName, Expression } from './scriptTypes';
@@ -24,7 +24,7 @@ const BROW: Record<Expression, [string, string]> = {
   concerned: ['M 30 41 L 44 45', 'M 56 45 L 70 41'],
 };
 
-export function CastBust({ who, expr = 'neutral', label = true }: { who: CastName; expr?: Expression; label?: boolean }) {
+export function CastBust({ who, expr = 'neutral', label = true, blink = false, open = false }: { who: CastName; expr?: Expression; label?: boolean; blink?: boolean; open?: boolean }) {
   const l = CAST_LOOK[who];
   const [b1, b2] = BROW[expr];
   return (
@@ -44,8 +44,11 @@ export function CastBust({ who, expr = 'neutral', label = true }: { who: CastNam
       {/* face */}
       <path d={b1} stroke="#111" strokeWidth="2.2" fill="none" strokeLinecap="round" />
       <path d={b2} stroke="#111" strokeWidth="2.2" fill="none" strokeLinecap="round" />
-      <circle cx="38" cy="54" r="3" fill="#111" />
-      <circle cx="62" cy="54" r="3" fill="#111" />
+      {blink ? (
+        <g stroke="#111" strokeWidth="2.4" strokeLinecap="round"><path d="M 34 55 L 42 55" /><path d="M 58 55 L 66 55" /></g>
+      ) : (
+        <g><circle cx="38" cy="54" r="3" fill="#111" /><circle cx="62" cy="54" r="3" fill="#111" /></g>
+      )}
       {l.glasses && (
         <g fill="none" stroke="#111" strokeWidth="2">
           <circle cx="38" cy="54" r="8" />
@@ -53,7 +56,11 @@ export function CastBust({ who, expr = 'neutral', label = true }: { who: CastNam
           <path d="M 46 54 L 54 54" />
         </g>
       )}
-      <path d={MOUTH[expr]} stroke="#111" strokeWidth="2.4" fill={expr === 'surprised' ? '#7a2e2e' : 'none'} strokeLinecap="round" />
+      {open && expr !== 'surprised' ? (
+        <path d="M 40 72 Q 50 88 60 72 Q 50 76 40 72 Z" stroke="#111" strokeWidth="2.2" fill="#7a2e2e" strokeLinejoin="round" />
+      ) : (
+        <path d={MOUTH[expr]} stroke="#111" strokeWidth="2.4" fill={expr === 'surprised' ? '#7a2e2e' : 'none'} strokeLinecap="round" />
+      )}
       {label && (
         <text x="50" y="124" textAnchor="middle" fontSize="9" fontWeight="700" fill="#111" fontFamily="system-ui, sans-serif">
           {who}
@@ -63,13 +70,53 @@ export function CastBust({ who, expr = 'neutral', label = true }: { who: CastNam
   );
 }
 
-/** Character sprite: the real picture if `artBase` is set and loads, otherwise the drawn placeholder. */
-export function Sprite({ who, expr, artBase }: { who: CastName; expr: Expression; artBase?: string }) {
+/**
+ * Character sprite. Real pictures: `${artBase}/cast/<name>/<expression>.webp`. Optional extra frames, used only on neutral/happy so the
+ * pose matches: `blink.webp` (neutral pose, eyes closed) and `talk.webp` (neutral pose, mouth open mid-word). Without them (or without
+ * art) the drawn placeholder blinks and talks itself. Expression changes cross-fade (opacity). Nothing scales, zooms or pans.
+ * `animate` is false under reduced motion.
+ */
+export function Sprite({ who, expr, artBase, speaking = false, animate = true }: { who: CastName; expr: Expression; artBase?: string; speaking?: boolean; animate?: boolean }) {
   const [failed, setFailed] = useState(false);
+  const [blink, setBlink] = useState(false);
+  const [mouth, setMouth] = useState(false);
+  const [noBlink, setNoBlink] = useState(false);
+  const [noTalk, setNoTalk] = useState(false);
+  // blink: a calm, regular rhythm per character (deterministic, not random)
+  useEffect(() => {
+    if (!animate) return;
+    const period = 3300 + (who.charCodeAt(0) % 7) * 260;
+    let off: number | undefined;
+    const id = window.setInterval(() => {
+      setBlink(true);
+      off = window.setTimeout(() => setBlink(false), 150);
+    }, period);
+    return () => {
+      window.clearInterval(id);
+      if (off) window.clearTimeout(off);
+    };
+  }, [who, animate]);
+  // talk: the mouth opens and closes while the line is being spoken
+  useEffect(() => {
+    if (!animate || !speaking) {
+      setMouth(false);
+      return;
+    }
+    const id = window.setInterval(() => setMouth((m) => !m), 170);
+    return () => window.clearInterval(id);
+  }, [speaking, animate]);
+  const base = artBase ? `${artBase}/cast/${who.toLowerCase()}` : '';
   if (artBase && !failed) {
-    return <img className="ap-sprite-img" src={`${artBase}/cast/${who.toLowerCase()}/${expr}.webp`} alt={`${who}, ${expr}`} onError={() => setFailed(true)} draggable={false} />;
+    const poseOk = expr === 'neutral' || expr === 'happy';
+    return (
+      <div className="ap-sprite-stack">
+        <img className="ap-sprite-img" src={`${base}/${expr}.webp`} alt={`${who}, ${expr}`} onError={() => setFailed(true)} draggable={false} />
+        {animate && poseOk && !noBlink && <img className="ap-sprite-frame" data-on={blink && !mouth} src={`${base}/blink.webp`} alt="" onError={() => setNoBlink(true)} draggable={false} />}
+        {animate && poseOk && !noTalk && <img className="ap-sprite-frame" data-on={mouth} src={`${base}/talk.webp`} alt="" onError={() => setNoTalk(true)} draggable={false} />}
+      </div>
+    );
   }
-  return <CastBust who={who} expr={expr} />;
+  return <CastBust who={who} expr={expr} blink={animate && blink} open={animate && mouth} />;
 }
 
 /** Full-bleed background: real picture if available, else a calm gradient labelled as a placeholder. */
