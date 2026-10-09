@@ -1,15 +1,15 @@
 
-=== docs/songs/u7l5-old-macdonald-take1.mp3  length=20.1s  score=0.76  missing=3  extra=15
-heard: old macdonald had a farm e i e i o and on his farm he had a cow e i e i o with a moo moo here and a moo moo there old macdonald had a farm e i e i o
-line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(8.3), np.float64(12.6)]
-lineDurationsMs: [3960, 4340, 4260, 7502]
+=== docs/songs/u7l5-old-macdonald-take1.mp3  length=20.1s  score=0.56  missing=9  extra=22
+heard: grandpa had a farm e i e i o and on his farm he had a cow e i e i o with a moon moon year and a moon who knew their grandpa had a farm e i e i o
+line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(8.4), np.float64(12.7)]
+lineDurationsMs: [4020, 4340, 4340, 7362]
 
-=== docs/songs/u7l5-old-macdonald-take2.mp3  length=20.1s  score=0.53  missing=11  extra=24
-heard: old mcdonald had a farm e i e i o and not as far as we had a cow e i e i o with the moo moo here and the moo moo there old mcdonald had a farm e i e i o
-line starts (s): [np.float64(0.0), np.float64(3.6), np.float64(8.5), np.float64(12.5)]
-lineDurationsMs: [3600, 4860, 4000, 7602]
+=== docs/songs/u7l5-old-macdonald-take2.mp3  length=20.1s  score=0.61  missing=8  extra=19
+heard: grandpa had a farm e i e i o man on his farm he had a cow e i e i o piss the moo moo here and a moo loser grandpa had a farm e i e i o
+line starts (s): [np.float64(0.6), np.float64(4.7), np.float64(9.1), np.float64(13.5)]
+lineDurationsMs: [4740, 4340, 4460, 6522]
 
-=== docs/songs/u7l5-old-macdonald-take3.mp3  length=20.1s  score=0.59  missing=9  extra=21
-heard: old mcdonald's had a farm e i e i o and on his farm he had a cow e i e i o with a moon moon here and a moon moon there old mcdonald's had a farm e i e i o
-line starts (s): [np.float64(0.0), np.float64(4.3), np.float64(8.5), np.float64(12.8)]
-lineDurationsMs: [4260, 4280, 4260, 7262]
+=== docs/songs/u7l5-old-macdonald-take3.mp3  length=20.1s  score=0.61  missing=8  extra=19
+heard: grandpa had a farm e i e o and on his farm he had a gal e i e i o with a moon moon here and a moon moon there grandpa had a farm e i e i o
+line starts (s): [np.float64(0.0), np.float64(3.6), np.float64(8.0), np.float64(12.6)]
+lineDurationsMs: [3640, 4380, 4580, 7462]
