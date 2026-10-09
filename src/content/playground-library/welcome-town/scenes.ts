@@ -442,6 +442,14 @@ export type Scene =
       id: string; kind: 'name-badge'; bg: string; teacher: string; who: CharKey;
       rounds: { name: string; sprite?: string; choices: string[] }[];
     }
+  | {
+      /** Feelings Survey (A1 ★ "Find Someone Who"): pick a friend, ask "How are you, <name>?", hear the answer,
+       *  tap the matching face on the clipboard; the host reads the chart back. `img` = neutral picture shown
+       *  until the row is filled (`feelImg` after). See scene-components/FeelingsSurveyScene.tsx. */
+      id: string; kind: 'feelings-survey'; bg: string; teacher: string; who: CharKey; title: string; intro: string;
+      friends: { who: CharKey; name: string; feeling: string; img: string; feelImg?: string }[];
+      faces: { feeling: string; emoji: string; color: string }[];
+    }
   | { id: string; kind: 'finale'; bg: string; who: CharKey; line: string; cast?: CharKey[]; look?: 'card' };
 
 /* =============================================================================
@@ -756,28 +764,19 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
 ]);
 
 /* =============================================================================
- * A1 Unit 1, Lesson 2: "How Are You?"
+ * A1 Unit 1, Lesson 2: "How Are You?" (rebuilt 2026-10-09 to docs/a1-playground-roadmap.md)
  *
- * Same "Greetings & Introductions" unit as Lesson 1 (per this project's own
- * seeded curriculum roadmap) — spiral review of hello/name/age (~20% of
- * runtime, via a quick recall beat, not a re-teach) plus the unit's next new
- * beat: "How are you?" and feelings vocabulary (happy/sad/tired/angry).
- * This exact "Hello" → "How are you?" sequencing is already validated by
- * this project's own Pre-A1 roadmap (Unit 1 Lesson 3 is literally titled
- * "How Are You?") — A1 covers the same real-world beat a tier higher: full
- * question-and-answer practice, not just isolated vocabulary.
- *
- * Part 2 continues the phonics-through-reading progression from S/A/T to
- * P/I/N — the next three letters in the classic synthetic-phonics "satpin"
- * order, chosen because it's the smallest extension that unlocks a real
- * batch of new decodable words (sit, pin, tip, tap, nap, sat) while reusing
- * every sound already taught. The word-build payoff is reading "PIP" — the
- * lesson's own mascot's name — as a deliberate, delightful capstone in the
- * same spirit as Lesson 1's "SAT"/"AT".
+ * One goal: I can say how I feel and how my friends feel. How are you? → I am happy / tired / sad /
+ * angry / hungry → boy = he, girl = she, boy + girl = they → He is… / She is… / They are….
+ * Word pages (character on one side, word big on the open side) with a quick check after every two;
+ * Move & Say, Quick fire, sticker and home mission are Pre-A1 games played inside the lesson ('prea1');
+ * signature: the feelings spinner ("She is sad!") and Name That Feeling (listen-tap).
+ * Phonics: P, I, N after Lesson 1's S, A, T → read SIT, PIN, PIP.
+ * School supplies and in/on/next to moved out (they are Unit 2 language in the roadmap).
  * ========================================================================= */
 
 export const LESSON_2_TITLE = 'How Are You?';
-export const LESSON_2_OBJECTIVE = 'Part 1: Ask and answer "How are you?", name a feeling (happy, sad, tired, angry, hungry), and use He, She and They to say how a friend feels — plus three new school-supplies words (book, pencil, pen) and a first listen at classroom-description language ("There is...", "next to", "on"), heard and repeated once, not yet formally taught. Part 2: Learn the sounds P, I, N and read three more real words.';
+export const LESSON_2_OBJECTIVE = 'Ask and answer "How are you?" (I am happy / tired / sad / angry / hungry), say how a friend feels with He is / She is / They are, and learn the sounds P, I, N to read SIT, PIN and PIP.';
 
 /** A1 Unit 1 Lesson 2 uses 16:9 widenings of its square art (the
  *  original sits untouched in the centre; see scripts/outpaint-composite.py)
@@ -801,141 +800,112 @@ const bgPrepOnW = `${W}/scenes/bg-prep-on-wide.png`;
 const bgPrepNextToW = `${W}/scenes/bg-prep-next-to-wide.png`;
 const bgExpressGoodbyeW = `${W}/scenes/bg-express-goodbye-wide.png`;
 
+/** Feelings sprites (one per friend), used by the sort, quick-fire and sticker pages. */
+// -v2 = regenerated 2026-10-09 (Gemini, the wave sprite as reference): solid fills, whole bowl, no ground shadow.
+const feelSpr = (name: string) => `${W}/sprites/${name}-v2.png`;
+// Spinner badges sit above each friend's head on bg-classroom-feelings-wide.png (Pip, Leo, Mia, Bella, Willow).
+
 export const LESSON_2_SCENES: Scene[] = classroomLook([
-  { id: 'wt2-title', kind: 'title-card', bg: bgWideW, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'How Are You?', subtitle: 'Say hello, then share how you feel today', cta: '\u{1F392} LET’S GO!' },
+  { id: 'wt2-title', kind: 'title-card', bg: bgWideW, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 2', title: 'How Are You?', subtitle: 'Say how you feel, and how your friends feel', cta: '\u{1F392} LET’S GO!' },
   {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · Hello, My Name Is….
     id: 'wt2-recall-warmup', kind: 'recall-warmup', bg: '/welcome-town/scenes/bg-classroom-circle-wide.png', who: 'pip', mode: 'click',
     fromLabel: "Lesson 1 · Hello, My Name Is…",
     teacher: 'Warm-up from last lesson: Pip says it, the student finds the picture and says it too.',
     items: [
-      { word: "hello", say: "Find hello!", img: '/welcome-town/scenes/bg-express-hello-v2.png' },
-      { word: "goodbye", say: "Find goodbye!", img: '/welcome-town/scenes/bg-express-goodbye-wide.png' },
+      { word: "hello", say: "Find hello!", img: '/welcome-town/scenes/bg-vocab-pip-happy-wide.png' },
+      { word: "goodbye", say: "Find goodbye!", img: '/welcome-town/scenes/bg-classroom-door-wide.png' },
+      { word: "name", say: "Find: My name is Mia!", img: '/welcome-town/scenes/bg-heshe-intro-mia-wide.png' },
     ],
   },
 
   {
-    id: 'wt2-intro', kind: 'cinematic', bg: bgCircleW, title: 'Back to Welcome Town School', subtitle: 'A quick hello before today’s lesson', narrator: 'marigold',
+    id: 'wt2-intro', kind: 'cinematic', bg: bgCircleW, title: 'Back to Welcome Town School', subtitle: 'A new question today', narrator: 'marigold',
     script: [
-      { who: 'marigold', line: 'Welcome back, class! Let’s remember what we learned.' },
-      { who: 'pip', line: 'Hello! My name is Pip. I am 7 years old!' },
-      { who: 'marigold', line: 'Great job! Today we learn something new.' },
+      { who: 'marigold', line: 'Welcome back, class! Hello, Pip!' },
+      { who: 'pip', line: 'Hello, Miss Marigold! My name is Pip.' },
+      { who: 'marigold', line: 'Today we learn a new question: How are you?' },
     ],
     cta: '\u{1F392} LET’S GO!',
   },
 
   {
-    id: 'wt2-howareyou', kind: 'meet', focus: ['fine'], bg: bgCircleW, who: 'marigold',
-    teacher: 'Tap Miss Marigold to hear a new question!',
-    line: 'How are you today? I am fine, thank you!', repeat: 'I am fine, thank you!',
+    id: 'wt2-howareyou', kind: 'meet', focus: ['How are you'], bg: bgCircleW, who: 'marigold',
+    teacher: 'Tap Miss Marigold to hear the new question!',
+    line: 'How are you today? I am fine, thank you!', repeat: 'How are you?',
+  },
+  {
+    id: 'wt2-echo-howareyou', kind: 'echo', bg: bgCircleW, who: 'pip', textSide: 'top',
+    teacher: 'Listen and say it with Pip!', word: 'How are you?',
   },
 
-  /* --- Progressive vocabulary intro, one word at a time — same pattern as
-   * Pre-A1 Unit 5 Lesson 1 Part A's Mom/Dad/Me/Family sequence: each new
-   * word gets its OWN full-bleed scene showing only that one character
-   * expressing that one feeling, BEFORE any word is combined into the
-   * five-hotspot group scene below. */
+  /* --- Feelings: one word page per feeling (character on one side, the word big on the open side),
+   * a quick game after every two pages. Each friend answers "How are you?" with "I am …". */
   {
-    // Character composed into the LEFT third of bg-vocab-pip-happy.png —
-    // cards dock right, onto the empty side.
     id: 'wt2-vocab-pip-happy', kind: 'meet', look: 'word', focus: ['happy'], bg: bgVocabPipHappyW, who: 'pip', cardSide: 'right',
-    teacher: 'Listen, then repeat!', line: 'Pip is happy!', repeat: 'Happy!',
+    teacher: 'Smile and say it with Pip!', line: 'I am happy!', repeat: 'Happy!',
   },
   {
-    // Character composed into the RIGHT third of bg-vocab-leo-tired.png —
-    // cards dock left.
     id: 'wt2-vocab-leo-tired', kind: 'meet', look: 'word', focus: ['tired'], bg: bgVocabLeoTiredW, who: 'leo', cardSide: 'left',
-    teacher: 'Listen, then repeat!', line: 'Leo is tired!', repeat: 'Tired!',
+    teacher: 'Yawn and say it with Leo!', line: 'I am tired!', repeat: 'Tired!',
+  },
+  {
+    id: 'wt2-quick-tired', kind: 'choice', bg: bgVocabLeoTiredW, who: 'leo', teacher: 'Leo yawns. Which word is it?',
+    prompt: 'Yawn! I am…',
+    options: [
+      { label: 'Happy', emoji: '\u{1F60A}' },
+      { label: 'Tired', emoji: '\u{1F62A}', correct: true },
+    ],
   },
   {
     id: 'wt2-vocab-mia-sad', kind: 'meet', look: 'word', focus: ['sad'], bg: bgVocabMiaSadW, who: 'mia', cardSide: 'right',
-    teacher: 'Listen, then repeat!', line: 'Mia is sad!', repeat: 'Sad!',
+    teacher: 'Make a sad face and say it with Mia!', line: 'I am sad!', repeat: 'Sad!',
   },
   {
     id: 'wt2-vocab-bella-angry', kind: 'meet', look: 'word', focus: ['angry'], bg: bgVocabBellaAngryW, who: 'bella', cardSide: 'left',
-    teacher: 'Listen, then repeat!', line: 'Bella is angry!', repeat: 'Angry!',
+    teacher: 'Make an angry face and say it with Bella!', line: 'I am angry!', repeat: 'Angry!',
+  },
+  {
+    id: 'wt2-quick-angry', kind: 'choice', bg: bgVocabBellaAngryW, who: 'bella', teacher: 'Bella folds her arms. Which word is it?',
+    prompt: 'Grrr! I am…',
+    options: [
+      { label: 'Sad', emoji: '\u{1F622}' },
+      { label: 'Angry', emoji: '\u{1F620}', correct: true },
+    ],
   },
   {
     id: 'wt2-vocab-willow-hungry', kind: 'meet', look: 'word', focus: ['hungry'], bg: bgVocabWillowHungryW, who: 'willow', cardSide: 'right',
-    teacher: 'Listen, then repeat!', line: 'Willow is hungry!', repeat: 'Hungry!',
+    teacher: 'Rub your tummy and say it with Willow!', line: 'I am hungry!', repeat: 'Hungry!',
+  },
+
+  /* --- Move & Say (Pre-A1 TPR game): the body shows each feeling ---- */
+  {
+    id: 'wt2-move-say', kind: 'prea1', teacher: 'Stand up! Do the face or the action and say the sentence with Pip.',
+    scene: {
+      id: 'wt2-move-say', kind: 'tpr-actions', bg: '/lep1/scenes/bg-u3l4-room-empty-wide.png', who: 'pip', teacher: 'Stand up! Do the face or the action and say the sentence with Pip.',
+      rounds: [
+        { line: 'Smile big! I am happy!', emoji: '\u{1F60A}', img: feelSpr('pip-happy') },
+        { line: 'Yawn and stretch! I am tired!', emoji: '\u{1F62A}', img: feelSpr('leo-tired') },
+        { line: 'Make a sad face! I am sad!', emoji: '\u{1F622}', img: feelSpr('mia-sad') },
+        { line: 'Stamp your feet! I am angry!', emoji: '\u{1F620}', img: feelSpr('bella-angry') },
+        { line: 'Rub your tummy! I am hungry!', emoji: '\u{1F924}', img: feelSpr('willow-hungry') },
+      ],
+    },
   },
 
   {
-    // A dedicated scene purpose-built for this hotspot quartet — four
-    // classmates each visibly showing one feeling through pose and
-    // expression alone, evenly spaced, per visual-learning-engine's own
-    // rule that a vocab-spot scene needs its target words large, clean,
-    // and unambiguous rather than borrowed from an unrelated narrative
-    // scene.
     id: 'wt2-vocab-feelings', kind: 'vocab-spot', bg: bgFeelingsW,
-    teacher: 'Look at each friend! Tap the arrow to learn how they feel.',
+    teacher: 'Look at each friend! Tap the arrow to hear how they feel.',
     items: [
-      { label: 'Happy', sentence: 'Pip is happy.', emoji: '\u{1F60A}', left: '29.8%', top: '54.5%', color: '#FE6A2F', who: 'pip' },
-      { label: 'Tired', sentence: 'Leo is tired.', emoji: '\u{1F62A}', left: '40.4%', top: '55.6%', color: '#C97A2F', who: 'leo' },
-      { label: 'Sad', sentence: 'Mia is sad.', emoji: '\u{1F622}', left: '51.1%', top: '57.9%', color: '#B85CD1', who: 'mia' },
-      { label: 'Angry', sentence: 'Bella is angry.', emoji: '\u{1F620}', left: '61.8%', top: '56.8%', color: '#E76FA5', who: 'bella' },
-      { label: 'Hungry', sentence: 'Willow is hungry.', emoji: '\u{1F924}', left: '72.5%', top: '57.9%', color: '#4FA9E0', who: 'willow' },
+      { label: 'Happy', sentence: 'I am happy.', emoji: '\u{1F60A}', left: '29.8%', top: '54.5%', color: '#FE6A2F', who: 'pip' },
+      { label: 'Tired', sentence: 'I am tired.', emoji: '\u{1F62A}', left: '40.4%', top: '55.6%', color: '#C97A2F', who: 'leo' },
+      { label: 'Sad', sentence: 'I am sad.', emoji: '\u{1F622}', left: '51.1%', top: '57.9%', color: '#B85CD1', who: 'mia' },
+      { label: 'Angry', sentence: 'I am angry.', emoji: '\u{1F620}', left: '61.8%', top: '56.8%', color: '#E76FA5', who: 'bella' },
+      { label: 'Hungry', sentence: 'I am hungry.', emoji: '\u{1F924}', left: '72.5%', top: '57.9%', color: '#4FA9E0', who: 'willow' },
     ],
   },
-
   {
-    // Practice step right after discovery — target coordinates match
-    // wt2-vocab-feelings' own hotspots one-for-one, same as Lesson 1's
-    // drag-match scenes.
-    id: 'wt2-drag-feelings', kind: 'drag-match', bg: bgFeelingsW, teacher: 'Listen, then drag each word onto the friend who feels that way!',
-    items: [
-      { label: 'Happy', color: '#FE6A2F', who: 'pip', targetLeft: '29.8%', targetTop: '54.5%' },
-      { label: 'Tired', color: '#C97A2F', who: 'leo', targetLeft: '40.4%', targetTop: '55.6%' },
-      { label: 'Sad', color: '#B85CD1', who: 'mia', targetLeft: '51.1%', targetTop: '57.9%' },
-      { label: 'Angry', color: '#E76FA5', who: 'bella', targetLeft: '61.8%', targetTop: '56.8%' },
-      { label: 'Hungry', color: '#4FA9E0', who: 'willow', targetLeft: '72.5%', targetTop: '57.9%' },
-    ],
-  },
-
-  {
-    // Extra retrieval-practice round so the five feelings words actually
-    // get memorized, not just recognized-once — a genuinely different
-    // mechanic from the vocab-spot/drag-match pair just above (matching
-    // the Hard Variety Rule), same `memory` shape already proven by
-    // wt-memory-words (Lesson 1) and wt3-memory (Lesson 3).
-    id: 'wt2-feelings-memory', kind: 'memory', bg: bgFeelingsW, teacher: 'Memory game! Find the matching feelings pairs!',
-    pairs: [
-      { id: 'happy', label: 'Happy', emoji: '\u{1F60A}' },
-      { id: 'tired', label: 'Tired', emoji: '\u{1F62A}' },
-      { id: 'sad', label: 'Sad', emoji: '\u{1F622}' },
-      { id: 'angry', label: 'Angry', emoji: '\u{1F620}' },
-      { id: 'hungry', label: 'Hungry', emoji: '\u{1F924}' },
-    ],
-  },
-
-  {
-    id: 'wt2-roleplay', kind: 'roleplay', bg: bgCircleW, teacher: 'Story time! Listen to Pip and Miss Marigold, then repeat each line.', cast: ['pip', 'marigold'],
-    script: [
-      { who: 'marigold', line: 'How are you today, Pip?', repeat: true },
-      { who: 'pip', line: 'I am happy! How are you?', repeat: true },
-      { who: 'marigold', line: 'I am fine, thank you!', repeat: true },
-    ],
-  },
-
-  {
-    id: 'wt2-join-stage', kind: 'join-stage', bg: bgCircleW, teacher: 'Your turn! When it says YOU, say how you feel out loud!', cast: ['pip', 'marigold', 'leo'],
-    turns: [
-      { who: 'marigold', line: 'How are you today?' },
-      { who: 'student', line: 'I am ______.' },
-      { who: 'pip', line: 'Thanks for sharing!' },
-      { who: 'leo', line: 'I am happy you are here!' },
-    ],
-  },
-
-  {
-    // Refactored from a static 4-button "Which word means HAPPY?" MCQ into
-    // a real tap-the-friend-in-the-scene listening game — research backs
-    // this as more engaging than a flat multiple-choice quiz for young
-    // learners (ESL Kids Games' "touch the correct picture" pattern; see
-    // https://www.eslkidsgames.com/online-esl-games). Reuses bgFeelings'
-    // own established hotspot coordinates verbatim (same ones wt2-vocab-
-    // feelings/wt2-drag-feelings already use) — no new art needed, and
-    // now covers three feelings in one game instead of just one.
+    // Name That Feeling (Khan Academy Kids pattern, roadmap): hear the question, tap the friend.
     id: 'wt2-choice', kind: 'listen-tap', bg: bgFeelingsW, teacher: 'Listen, then tap the right friend!',
     targets: [
       { label: 'Happy', left: '29.8%', top: '54.5%', color: '#FE6A2F' },
@@ -945,20 +915,59 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
       { label: 'Hungry', left: '72.5%', top: '57.9%', color: '#4FA9E0' },
     ],
     rounds: [
-      { prompt: 'Who is happy?', answerLabel: 'Happy', who: 'pip' },
+      { prompt: 'Who is hungry?', answerLabel: 'Hungry', who: 'willow' },
       { prompt: 'Who is sad?', answerLabel: 'Sad', who: 'mia' },
+      { prompt: 'Who is tired?', answerLabel: 'Tired', who: 'leo' },
       { prompt: 'Who is angry?', answerLabel: 'Angry', who: 'bella' },
+      { prompt: 'Who is happy?', answerLabel: 'Happy', who: 'pip' },
     ],
   },
 
-  /* --- He / She concept primer — a simple, concrete "boy = He, girl = She"
-   * anchor BEFORE any sentence work touches pronouns, using two characters
-   * already established in this lesson (Pip, Mia) rather than inventing new
-   * unnamed children. This is deliberately simple/visual; the full
-   * He/She/They sort-and-produce sequence right below still does the real
-   * teaching — this just gives students a concrete first foothold. */
+  {
+    // Feelings Survey (owner 2026-10-09: "use a new game from the game list that serves the objective"):
+    // the child ASKS each friend "How are you?" and fills the chart from the answer they HEAR.
+    // Feelings deliberately differ from the word pages (Leo is hungry here, not tired) so it is listening, not memory.
+    id: 'wt2-feelings-survey', kind: 'feelings-survey', bg: bgCircleW, who: 'pip',
+    title: 'Pip’s Feelings Survey',
+    intro: 'Let’s ask our friends: How are you? Tap a friend!',
+    teacher: 'Feelings Survey: the student taps a friend and ASKS out loud "How are you, Leo?", then taps "I asked!". The friend answers; the student taps that face on the chart. At the end Pip reads the chart.',
+    friends: [
+      { who: 'leo', name: 'Leo', feeling: 'hungry', img: spr('leo') },
+      { who: 'mia', name: 'Mia', feeling: 'happy', img: spr('mia') },
+      { who: 'bella', name: 'Bella', feeling: 'tired', img: spr('bella') },
+      { who: 'willow', name: 'Willow', feeling: 'sad', img: spr('willow') },
+    ],
+    faces: [
+      { feeling: 'happy', emoji: '\u{1F60A}', color: '#FE6A2F' },
+      { feeling: 'tired', emoji: '\u{1F62A}', color: '#C97A2F' },
+      { feeling: 'sad', emoji: '\u{1F622}', color: '#B85CD1' },
+      { feeling: 'angry', emoji: '\u{1F620}', color: '#E76FA5' },
+      { feeling: 'hungry', emoji: '\u{1F924}', color: '#4FA9E0' },
+    ],
+  },
+  {
+    id: 'wt2-join-stage', kind: 'join-stage', bg: bgCircleW, teacher: 'Your turn! When it says YOU, say how you feel, then ask back.', cast: ['pip', 'marigold'],
+    turns: [
+      { who: 'marigold', line: 'How are you today?' },
+      { who: 'student', line: 'I am … !' },
+      { who: 'pip', line: 'Now ask me!' },
+      { who: 'student', line: 'How are you, Pip?' },
+      { who: 'pip', line: 'I am happy!' },
+    ],
+  },
+  {
+    id: 'wt2-feelings-memory', kind: 'memory', bg: bgFeelingsW, teacher: 'Memory game! Find the pairs and say each feeling!',
+    pairs: [
+      { id: 'happy', label: 'Happy', emoji: '\u{1F60A}' },
+      { id: 'tired', label: 'Tired', emoji: '\u{1F62A}' },
+      { id: 'sad', label: 'Sad', emoji: '\u{1F622}' },
+      { id: 'angry', label: 'Angry', emoji: '\u{1F620}' },
+      { id: 'hungry', label: 'Hungry', emoji: '\u{1F924}' },
+    ],
+  },
+
   /* Boy -> he, girl -> she, boy + girl -> they (owner 2026-10-09: "How would the student know if it is a boy or a
-   * girl? ... a boy plus a girl equals they. They are happy."). One idea per page, word on the open side of the picture. */
+   * girl? ... a boy plus a girl equals they. They are happy."). One idea per page, a check after each pair. */
   {
     id: 'wt2-boy-pip', kind: 'meet', look: 'word', word: 'boy', wordNote: '\u{1F466}', focus: ['boy'], bg: bgHeIntroPipW, who: 'pip', cardSide: 'right',
     teacher: 'Listen, then repeat! Point to Pip: a boy.', line: 'This is Pip. Pip is a boy. He is a boy!', repeat: 'A boy!',
@@ -966,6 +975,14 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
   {
     id: 'wt2-he-pip', kind: 'meet', look: 'word', word: 'He', wordNote: '\u{1F466} =', focus: ['He'], bg: bgVocabPipHappyW, who: 'pip', cardSide: 'right',
     teacher: 'A boy = HE. Listen, then repeat!', line: 'He is happy!', repeat: 'He is happy!',
+  },
+  {
+    id: 'wt2-heshe-check-leo', kind: 'choice', bg: bgVocabLeoTiredW, who: 'leo', teacher: 'Look at Leo. Leo is a boy. He or she?',
+    prompt: 'Leo is a boy. … is tired.',
+    options: [
+      { label: 'He', emoji: '\u{1F466}', correct: true },
+      { label: 'She', emoji: '\u{1F467}' },
+    ],
   },
   {
     id: 'wt2-girl-mia', kind: 'meet', look: 'word', word: 'girl', wordNote: '\u{1F467}', focus: ['girl'], bg: bgHeIntroMiaW, who: 'mia', cardSide: 'left',
@@ -976,118 +993,75 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     teacher: 'A girl = SHE. Listen, then repeat!', line: 'She is happy!', repeat: 'She is happy!',
   },
   {
+    id: 'wt2-heshe-check-bella', kind: 'choice', bg: bgVocabBellaAngryW, who: 'bella', teacher: 'Look at Bella. Bella is a girl. He or she?',
+    prompt: 'Bella is a girl. … is angry.',
+    options: [
+      { label: 'She', emoji: '\u{1F467}', correct: true },
+      { label: 'He', emoji: '\u{1F466}' },
+    ],
+  },
+  {
     id: 'wt2-they-pip-mia', kind: 'meet', look: 'word', word: 'They', wordNote: '\u{1F466} + \u{1F467} =', focus: ['They'], bg: bgHeSheTogetherW, who: 'pip',
     teacher: 'A boy + a girl = THEY. Listen, then repeat!', line: 'A boy and a girl. They are happy!', repeat: 'They are happy!',
   },
   {
-    // Refactored from a second solo tap-and-repeat "meet" scene into a real
-    // game: research on teaching he/she to young learners consistently
-    // points to a physical "touch the right one when I call it" mechanic
-    // (the "Wall Touch Game" / "Speed Card Practice" pattern — see
-    // https://eslkidstuff.com/esl-lesson-plans-for-esl-kids-teachers/subject-pronouns-lesson-plan/
-    // and https://numberdyslexia.com/pronoun-activities/), digitally
-    // adapted via the same listen-tap mechanic already proven above.
-    // Mia still gets introduced here — the very first round names her
-    // directly — just inside a game instead of a passive tap-once card.
     id: 'wt2-heshe-together', kind: 'listen-tap', bg: bgHeSheTogetherW, teacher: 'Listen, then tap the right friend!',
     targets: [
       { label: 'Pip', left: '37.6%', top: '52.8%', color: '#FE6A2F' },
       { label: 'Mia', left: '62.4%', top: '52.8%', color: '#B85CD1' },
     ],
     rounds: [
-      { prompt: 'This is Mia. Tap Mia — She is a girl!', answerLabel: 'Mia', who: 'mia' },
       { prompt: 'Tap He — the boy!', answerLabel: 'Pip', who: 'pip' },
       { prompt: 'Tap She — the girl!', answerLabel: 'Mia', who: 'mia' },
+      { prompt: 'Tap She!', answerLabel: 'Mia', who: 'mia' },
       { prompt: 'Tap He!', answerLabel: 'Pip', who: 'pip' },
     ],
   },
   {
-    // Quick generalization check with two DIFFERENT characters than the
-    // ones just modeled, reusing their existing vocab-scene art (no new
-    // images needed) — confirms He/She isn't just memorized for Pip/Mia.
-    id: 'wt2-heshe-check-leo', kind: 'choice', bg: bgVocabLeoTiredW, who: 'leo', teacher: 'Look at Leo. Is Leo a boy or a girl?',
-    prompt: 'Leo is a boy. We say...',
-    options: [
-      { label: 'He', emoji: '\u{1F466}', correct: true },
-      { label: 'She', emoji: '\u{1F467}' },
-    ],
-  },
-  {
-    id: 'wt2-heshe-check-bella', kind: 'choice', bg: bgVocabBellaAngryW, who: 'bella', teacher: 'Look at Bella. Is Bella a boy or a girl?',
-    prompt: 'Bella is a girl. We say...',
-    options: [
-      { label: 'She', emoji: '\u{1F467}', correct: true },
-      { label: 'He', emoji: '\u{1F466}' },
-    ],
-  },
-
-  /* --- New words: He, She, They — built directly on the five feelings
-   * just taught, never re-teaching the feeling words themselves, only the
-   * new grammar operating on them. Model (roleplay) -> practice (a real
-   * drag-to-bin sort game, not another choice scene) -> produce (join-stage). */
-  {
-    id: 'wt2-pronoun-model', kind: 'roleplay', bg: bgFeelingsW, teacher: 'New words! Listen to Miss Marigold, then repeat.', cast: ['marigold'],
-    script: [
-      { who: 'marigold', line: 'Look at Pip! He is happy.', repeat: true },
-      { who: 'marigold', line: 'Look at Mia! She is sad.', repeat: true },
-      { who: 'marigold', line: 'Look at Leo and Willow! They are tired and hungry.', repeat: true },
-    ],
-  },
-  {
-    // Individual rounds use the established boy/girl split (matching
-    // unit1's own he/she gender table): Pip and Leo -> He; Mia, Bella and
-    // Willow -> She. The two pair rounds are the only "They" practice —
-    // built from character pairs already modeled together above and in
-    // the vocab section, not a new grouping.
+    // Boys (Pip, Leo) -> He; girls (Mia, Bella, Willow) -> She; two friends together -> They.
     id: 'wt2-pronoun-sort', kind: 'pronoun-sort', bg: bgFeelingsW, teacher: 'Drag each friend to He, She, or They!',
     rounds: [
-      { who: 'pip', img: `${W}/sprites/pip-happy.png`, emotion: 'happy', answer: 'He' },
-      { who: 'mia', img: `${W}/sprites/mia-sad.png`, emotion: 'sad', answer: 'She' },
-      { who: 'leo', img: `${W}/sprites/leo-tired.png`, emotion: 'tired', answer: 'He' },
-      { who: 'bella', img: `${W}/sprites/bella-angry.png`, emotion: 'angry', answer: 'She' },
-      { who: 'willow', img: `${W}/sprites/willow-hungry.png`, emotion: 'hungry', answer: 'She' },
-      { who: ['leo', 'willow'], img: [`${W}/sprites/leo-tired.png`, `${W}/sprites/willow-hungry.png`], emotion: 'tired and hungry', answer: 'They' },
-      { who: ['pip', 'mia'], img: [`${W}/sprites/pip-happy.png`, `${W}/sprites/mia-sad.png`], emotion: 'happy and sad', answer: 'They' },
+      { who: 'pip', img: feelSpr('pip-happy'), emotion: 'happy', answer: 'He' },
+      { who: 'mia', img: feelSpr('mia-sad'), emotion: 'sad', answer: 'She' },
+      { who: 'leo', img: feelSpr('leo-tired'), emotion: 'tired', answer: 'He' },
+      { who: 'bella', img: feelSpr('bella-angry'), emotion: 'angry', answer: 'She' },
+      { who: 'willow', img: feelSpr('willow-hungry'), emotion: 'hungry', answer: 'She' },
+      { who: ['leo', 'willow'], img: [feelSpr('leo-tired'), feelSpr('willow-hungry')], emotion: 'tired and hungry', answer: 'They' },
+      { who: ['pip', 'mia'], img: [feelSpr('pip-happy'), feelSpr('mia-sad')], emotion: 'happy and sad', answer: 'They' },
     ],
   },
   {
-    id: 'wt2-pronoun-join', kind: 'join-stage', bg: bgFeelingsW, teacher: 'Your turn! Point to a friend and say He or She!', cast: ['pip', 'mia', 'marigold'],
-    turns: [
-      { who: 'marigold', line: 'Point to a friend. Is your friend a boy or a girl?' },
-      { who: 'student', line: 'He is ______. / She is ______.' },
-      { who: 'pip', line: 'Great practice!' },
+    // Feelings spinner (roadmap): the wheel picks a friend, the child says the whole sentence.
+    id: 'wt2-spin-feelings', kind: 'spin-wheel', bg: bgFeelingsW, title: 'Spin! How is your friend?',
+    teacher: 'Have the student spin the wheel and say how that friend feels: "He is happy!" / "She is sad!". If you prefer, do the activity without the spinner.',
+    items: [
+      { label: 'He is happy!', left: '31%', top: '40%' },
+      { label: 'He is tired!', left: '42%', top: '36%' },
+      { label: 'She is sad!', left: '52%', top: '51%' },
+      { label: 'She is angry!', left: '62%', top: '40%' },
+      { label: 'She is hungry!', left: '72%', top: '52%' },
     ],
+    wheelAt: { left: '16%', top: '26%' },
   },
 
   {
     id: 'wt2-storybook', kind: 'flipbook', bg: bgWideW, title: "Pip's Tired Day",
     pages: [
       { who: 'pip', img: `${W}/scenes/bg-story-pip-tired.png`, text: 'Pip feels tired today. "I am so tired!"' },
-      { who: 'mia', img: `${W}/scenes/bg-story-mia-checks-pip.png`, text: 'Mia asks, "Are you okay, Pip?"' },
+      { who: 'mia', img: `${W}/scenes/bg-story-mia-checks-pip.png`, text: 'Mia asks, "How are you, Pip?"' },
       { who: 'pip', img: `${W}/scenes/bg-story-pip-rests-plays.png`, text: 'Pip rests, then plays with his friends.' },
-      { img: `${W}/scenes/bg-story-pip-happy-friends.png`, text: 'Now Pip feels happy again! ✨' },
+      { img: `${W}/scenes/bg-story-pip-happy-friends.png`, text: 'Now Pip is happy! They are all happy!' },
     ],
     checkpoints: [
-      { afterPage: 0, who: 'pip', question: 'How does Pip feel at first?', options: ['Happy', 'Tired', 'Angry'], answer: 'Tired' },
-      { afterPage: 2, who: 'mia', question: 'How does Pip feel at the end?', options: ['Sad', 'Happy', 'Tired'], answer: 'Happy' },
+      { afterPage: 0, who: 'pip', question: 'How is Pip at first?', options: ['Happy', 'Tired', 'Angry'], answer: 'Tired' },
+      { afterPage: 3, who: 'mia', question: 'How is Pip at the end?', options: ['Sad', 'Happy', 'Tired'], answer: 'Happy' },
     ],
   },
 
-  {
-    // A natural pause point, same as Lesson 1 — the Part 1/Part 2 seam.
-    id: 'wt2-break', kind: 'title-card', bg: bgWideW, level: 'A1', unit: 'Unit 1', lessonLabel: 'Break Time', title: 'Great Job!', subtitle: 'Stretch, get some water, then come back for Part 2!', cta: '\u{1F938} I’m Ready!',
-  },
-
-  /* =========================== Part 2: Reading Review =========================
-   * Continues straight from Lesson 1's S/A/T — reviews nothing from scratch,
-   * per reading-engine's own progression table for A1 (review-through-
-   * reading, not first-time letter discovery). */
-
-  { id: 'wt2-part2-title', kind: 'title-card', bg: bgReadingW, level: 'A1', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time!', subtitle: 'You know S, A, T — now learn P, I, N!', cta: '\u{1F4D6} LET’S READ!' },
-
+  /* --- Phonics: P, I, N (after S, A, T in Lesson 1), then read real words ---- */
   {
     id: 'wt2-model-p', kind: 'sound-model', bg: bgReadingW, who: 'pip', letter: 'P', phoneme: '/p/', sound: 'puh',
-    teacher: 'A brand-new sound! /p/ /p/ Pig!',
+    teacher: 'A new sound! /p/ /p/ Pig!',
     anchors: [
       { word: 'pig', emoji: '\u{1F437}' },
       { word: 'pen', emoji: '\u{1F58A}\u{FE0F}' },
@@ -1095,29 +1069,24 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     ],
   },
   { id: 'wt2-trace-p', kind: 'trace', bg: bgReadingW, who: 'pip', letter: 'P', phoneme: '/p/', word: 'pig', teacher: 'Trace the letter P! Say /p/ /p/ /p/ as you draw.' },
-
   {
     id: 'wt2-model-i', kind: 'sound-model', bg: bgReadingW, who: 'marigold', letter: 'I', phoneme: '/\u{026A}/', sound: 'ih',
-    teacher: 'A brand-new sound! /i/ /i/ Ink!',
+    teacher: 'A new sound! /i/ /i/ Ink!',
     anchors: [
       { word: 'ink', emoji: '\u{1F58B}\u{FE0F}' },
       { word: 'igloo', emoji: '\u{1F9CA}', img: '/lep1/alphabet/item-igloo.png' },
       { word: 'insect', emoji: '\u{1F41B}' },
     ],
   },
-  { id: 'wt2-trace-i', kind: 'trace', bg: bgReadingW, who: 'marigold', letter: 'I', phoneme: '/\u{026A}/', word: 'ink', teacher: 'Trace the letter I! Say /i/ /i/ /i/ as you draw.' },
-
   {
     id: 'wt2-model-n', kind: 'sound-model', bg: bgReadingW, who: 'pip', letter: 'N', phoneme: '/n/', sound: 'nnn',
-    teacher: 'A brand-new sound! /n/ /n/ Nut!',
+    teacher: 'A new sound! /n/ /n/ Nut!',
     anchors: [
       { word: 'nut', emoji: '\u{1F95C}', img: '/lep1/items/item-nut.png' },
       { word: 'net', emoji: '\u{1F945}' },
       { word: 'nose', emoji: '\u{1F443}', img: '/lep1/items/item-nose.png' },
     ],
   },
-  { id: 'wt2-trace-n', kind: 'trace', bg: bgReadingW, who: 'pip', letter: 'N', phoneme: '/n/', word: 'nut', teacher: 'Trace the letter N! Say /n/ /n/ /n/ as you draw.' },
-
   {
     id: 'wt2-word-build', kind: 'word-build', bg: bgReadingW, teacher: 'You know 6 sounds now! Read three more real words!',
     rounds: [
@@ -1127,85 +1096,42 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     ],
   },
 
+  /* --- Quick fire, sticker, home mission (Pre-A1 games) ---- */
   {
-    id: 'wt2-letter-hunt', kind: 'letter-game', bg: bgReadingW, who: 'marigold', mode: 'name',
-    teacher: 'Alphabet game! Find the letter I say.',
-    rounds: [
-      { letter: 'P', choices: ['P', 'B', 'D'] },
-      { letter: 'I', choices: ['I', 'L', 'U'] },
-      { letter: 'N', choices: ['N', 'M', 'H'] },
-    ],
-  },
-  // Per direct user request: a revision of Lesson 1's classroom vocabulary
-  // (desk/chair/bag already taught there) plus new school-supplies words —
-  // book, pencil, pen (3 items, per this file's own established "2-3
-  // hotspots per scene" cognitive-load rule, not the 5+ a single crammed
-  // scene would need to cover everything at once). Same dedicated-image,
-  // Discovery → Practice pattern every other vocab-spot/drag-match pair in
-  // this file already uses. Placed before the preposition scenes below so
-  // "book" is already-known vocabulary by the time "The book is IN the
-  // bag" plays, not a brand-new word inside a grammar-focused sentence.
-  {
-    id: 'wt2-vocab-supplies2', kind: 'vocab-spot', bg: bgSupplies2W,
-    teacher: 'Remember desk and chair? Now learn three new school words!',
-    items: [
-      { label: 'Book', sentence: 'This is my book.', emoji: '\u{1F4D6}', left: '44.7%', top: '60.5%', color: '#2563EB' },
-      { label: 'Pencil', sentence: 'This is my pencil.', emoji: '\u{270F}\u{FE0F}', left: '51.1%', top: '56%', color: '#F59E0B' },
-      { label: 'Pen', sentence: 'This is my pen.', emoji: '\u{1F58A}\u{FE0F}', left: '55.8%', top: '56.6%', color: '#0EA5E9' },
-    ],
+    id: 'wt2-quick-fire', kind: 'prea1', teacher: 'Quick fire! Say the sentence before the ring runs out.',
+    scene: {
+      id: 'wt2-quick-fire', kind: 'rapid-recall', bg: bgCircleW, who: 'pip', seconds: 4,
+      teacher: 'Quick fire! Say the sentence before the ring runs out.',
+      cards: [
+        { img: feelSpr('mia-sad'), word: 'sad', say: 'She is sad.' },
+        { img: feelSpr('pip-happy'), word: 'happy', say: 'He is happy.' },
+        { img: feelSpr('willow-hungry'), word: 'hungry', say: 'She is hungry.' },
+        { img: feelSpr('leo-tired'), word: 'tired', say: 'He is tired.' },
+        { img: feelSpr('bella-angry'), word: 'angry', say: 'She is angry.' },
+      ],
+    },
   },
   {
-    id: 'wt2-drag-supplies2', kind: 'drag-match', bg: bgSupplies2W, teacher: 'Listen, then drag each word onto the matching thing on the desk!',
-    items: [
-      { label: 'Book', color: '#2563EB', targetLeft: '44.7%', targetTop: '60.5%' },
-      { label: 'Pencil', color: '#F59E0B', targetLeft: '51.1%', targetTop: '56%' },
-      { label: 'Pen', color: '#0EA5E9', targetLeft: '55.8%', targetTop: '56.6%' },
-    ],
+    id: 'wt2-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts happy Pip in their Sticker Book.',
+    scene: {
+      id: 'wt2-sticker', kind: 'sticker-reward', bg: bgWideW, who: 'pip', teacher: 'Sticker time! The student opens the pack and puts happy Pip in their Sticker Book.',
+      line: 'You can say how you feel! Here is your sticker.',
+      sticker: { img: feelSpr('pip-happy'), label: 'I am happy!' },
+    },
   },
   {
-    id: 'wt2-class-puzzle', kind: 'jigsaw-puzzle', bg: bgFeelingsW, teacher: 'Puzzle game! Drag the pieces to put the picture back together!',
-    image: bgFeelings, rows: 2, cols: 3,
-  },
-
-  // Per direct user request to make the unit feel more progressive/
-  // cumulative toward real production by its end -- checked against the
-  // full A1 roadmap (all 10 units) via playground-curriculum-engine first,
-  // not just guessed. Finding: "There is/There are" is already Unit 3's
-  // own core grammar target (reinforced across 4 of its 7 lessons, paired
-  // meaningfully with counting) and "in/on/next to" isn't seeded anywhere
-  // in the roadmap yet -- formally teaching either here would either waste
-  // Unit 3's teaching moment or introduce an orphan structure nothing
-  // later reinforces. So: a light, chunk-level exposure only (hear it,
-  // repeat it once -- no drilling, no quiz, nothing assessed) -- not a
-  // new taught/assessed grammar target. The real compounding capstone
-  // (light, non-formal PRODUCTION of this same pattern, layered onto
-  // everything Unit 1 has taught) is planned for Lesson 6/7 once built;
-  // formal teaching of both structures still belongs to Unit 3 and a
-  // future unit respectively.
-  //
-  // Per direct follow-up correction: an earlier draft crammed "in", "on",
-  // AND "next to" into a single narrated scene sharing one background --
-  // too much at once with nothing to anchor each preposition individually.
-  // Now confirmed as a standing project-wide rule (see smart-lesson-
-  // architect's Vocabulary logic, extended to grammar chunks): one new
-  // concept per scene, each with its own dedicated, purpose-built image
-  // that makes that one concept visually unambiguous -- the same
-  // single-concept-per-scene discipline every other `meet`/`vocab-spot`
-  // scene in this file already follows.
-  {
-    id: 'wt2-prep-in', kind: 'meet', focus: ['IN'], bg: bgPrepInW, who: 'pip',
-    teacher: 'Tap Pip to hear a new word!',
-    line: 'Look! The book is IN the bag.', repeat: 'In the bag!',
-  },
-  {
-    id: 'wt2-prep-on', kind: 'meet', focus: ['ON'], bg: bgPrepOnW, who: 'mia',
-    teacher: 'Tap Mia to hear a new word!',
-    line: 'Look! The apple is ON the desk.', repeat: 'On the desk!',
-  },
-  {
-    id: 'wt2-prep-next-to', kind: 'meet', focus: ['NEXT TO'], bg: bgPrepNextToW, who: 'leo',
-    teacher: 'Tap Leo to hear a new word!',
-    line: 'Look! The chair is NEXT TO the desk.', repeat: 'Next to the desk!',
+    id: 'wt2-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'wt2-home-mission', kind: 'home-mission', bg: bgCircleW, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child learned "How are you?", "I am happy / tired / sad / angry / hungry" and "He is… / She is… / They are…". Ask them how they feel, and let them ask you.',
+      steps: [
+        { emoji: '\u{2753}', say: 'Ask your family: How are you?' },
+        { emoji: '\u{1F60A}', say: 'Say how you feel: I am happy!' },
+        { emoji: '\u{1F46B}', say: 'Say how they feel: He is tired!' },
+      ],
+    },
   },
 
   {
@@ -1221,7 +1147,7 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     ],
   },
 
-  { id: 'wt2-finale', kind: 'finale', bg: bgWideW, who: 'pip', line: 'You said how you feel, and read three more real words — SIT, PIN, and PIP! ✨\u{1F3C6}' },
+  { id: 'wt2-finale', kind: 'finale', bg: bgWideW, who: 'pip', line: 'You can say how you feel and how your friends feel, and you read SIT, PIN and PIP! ✨\u{1F3C6}' },
 ]);
 
 /* =============================================================================
