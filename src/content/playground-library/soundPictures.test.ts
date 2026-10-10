@@ -10,7 +10,6 @@ import { join } from 'node:path';
  */
 const KNOWN_EMOJI_ONLY = new Set([
   'kitchen', 'cheese', 'chick', 'wand', 'wizard', 'web',   // Magic Castle CH + W
-  'pig', 'pen', 'pan', 'ink', 'insect', 'net', 'fan', 'fox', // Welcome Town P, I, N, F
 ]);
 
 function anchorsWithoutPicture(): string[] {

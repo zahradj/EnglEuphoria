@@ -178,6 +178,10 @@ Run `checkSlotGames(slot, scenes)` before calling a lesson done.
 
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)
 
+**Every Pre-A1 `kind` above is also available in A1/A2** through the wrapper `{ id, kind: 'prea1', teacher, scene: <Pre-A1 scene> }`
+(Welcome Town renderer delegates to the Pre-A1 renderer; sync via `prea1SyncKinds.ts`; voice bake reads it). First used in A1 U1 L1
+(2026-10-09: tpr-actions, buzzer-show, rapid-recall, sticker-reward, home-mission). For the Variety Rule, count the inner kind.
+
 A separate, smaller `Scene` type union from Pre-A1's (different file,
 different renderer — don't assume a Pre-A1 `kind` exists here or vice
 versa). ~23 `kind`s as of the true-false addition below:
@@ -187,7 +191,7 @@ versa). ~23 `kind`s as of the true-false addition below:
 | **Discovery / model** | `meet`, `sound-model` |
 | **Controlled / recognition practice** | `echo`, `trace`, `vocab-spot`, `drag-match`, `frequency-ladder`, `pronoun-sort`, `true-false`, `picture-match` |
 | **Interactive game practice** | `choice`, `listen-tap`, `memory`, `word-build`, `letter-game`, `jigsaw-puzzle`, `hello-doors` |
-| **Speaking production** | `roleplay`, `join-stage`, `spin-wheel` |
+| **Speaking production** | `roleplay`, `join-stage`, `spin-wheel`, `chat-chain` (A1 U1 L4: friend speaks, child picks the reply that fits and says it; the chat replays — Duolingo complete-the-chat / Novakid speech bubbles) |
 | **Story** | `flipbook` |
 | **Structural / closing** | `title-card`, `cinematic`, `song`, `finale` |
 
@@ -266,6 +270,20 @@ place two `spin-wheel` scenes back to back.
 - Badge numbers are the item order — keep the picture ↔ number ↔ `label`
   mapping exact (the quality gate checks it against the art).
 - `label` is exactly the target word/phrase the student should say.
+
+## Universal — Blend It! / Sound Train (`sound-blend`, every Playground scene library)
+
+`src/content/playground-library/SoundBlendScene.tsx`, registered in the Pre-A1 and the A1/A2 renderers, fully synced. **The
+phonics slide (blueprint slot 14) of every Playground lesson** (owner 2026-10-10: "on the phonics slide add a phonics game and
+sound blending, make this universal"). Each sound of a word rides in a train car with a sound button: tap each car (RECORDED
+letter sound, `playLetterPhonic`, never TTS) -> Blend! (cars roll together, sounds close together, then the word) -> pick the
+picture of the word out of three (the other rounds' pictures). 3-5 decodable words with pictures (`/lep1/items/item-<word>.png`);
+`sounds: ['sh','i','p']` for digraphs. Homework: the same game as the Homework Quest level `kind: 'sound-blend'`.
+
+```ts
+{ id: 'wt-blend', kind: 'sound-blend', bg: bgReading, teacher: 'Tap each car and say the sound, press Blend!, then find the picture.',
+  rounds: [{ word: 'hat', img: '/lep1/items/item-hat.png' }, { word: 'cat', img: '/lep1/items/item-cat.png' }, { word: 'mat', img: '/lep1/items/item-mat.png' }] }
+```
 
 ## Universal — Picture ↔ word match (`picture-match`, every Playground scene library)
 
@@ -381,3 +399,10 @@ mechanics from that category (`choice`, `listen-tap`, `hello-doors`) rather
 than picking one and running it 9 times, which is exactly the redesign
 `203d5a09` applied after the fact. Doing this check at design time, before
 writing any scene, is the entire point of consulting this skill first.
+
+## A1 roadmap and activity library (owner 2026-10-09)
+
+The A1 Playground (Welcome Town) plan lives in `docs/a1-playground-roadmap.md` (10 units x 7 lessons, can-do goals, key
+language, phonics, signature game per lesson). Every gamified activity we can use at A1 (built A1, universal, Pre-A1 games to
+port with an A1 mode, and new researched games) is in `docs/a1-activity-library.md`. Owner: "you can also use the same games
+from the Pre-A1". Check both before choosing activities for any A1 lesson.

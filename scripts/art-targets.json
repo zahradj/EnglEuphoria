@@ -1449,5 +1449,45 @@
       "public/lep1/scenes/bg-u4l3-bella-wide.png"
     ],
     "prompt": "Redraw the reference picture EXACTLY — same beach, sea, sky, camera, Bella the white rabbit in exactly the same spot, size, face and feet, same art style — but change only her arms and hands: she holds ONE hand up high next to her face and shows her FINGERS: all five fingers spread wide apart and wiggling (small curved motion lines at the fingertips), the fingers big and very clear; her other arm rests at her side. Exactly two arms and two hands, five fingers on each hand. No text."
+  },
+  {
+    "out": "public/welcome-town/sprites/pip-happy-v2.png",
+    "sticker": true,
+    "refs": [
+      "public/welcome-town/sprites/pip-wave.png"
+    ],
+    "prompt": "A single sticker: Pip the orange fox, very HAPPY: a big open smile, eyes bright, both arms up in the air, jumping for joy. Cute kawaii cartoon picture-book style exactly like the reference character: same character, same face, same colours and proportions, thick closed dark-brown outline all the way around the body, soft flat colours. Full body, front view, centred, the whole character visible with empty space around it. Plain pure white background, no shadow on the ground, no floor, no text, no other objects."
+  },
+  {
+    "out": "public/welcome-town/sprites/leo-tired-v2.png",
+    "sticker": true,
+    "refs": [
+      "public/welcome-town/sprites/leo-wave.png"
+    ],
+    "prompt": "A single sticker: Leo the yellow lion, very TIRED: big yawn with one paw over his open mouth, sleepy half-closed eyes, shoulders drooping, standing. Cute kawaii cartoon picture-book style exactly like the reference character: same character, same face, same colours and proportions, thick closed dark-brown outline all the way around the body, soft flat colours. Full body, front view, centred, the whole character visible with empty space around it. Plain pure white background, no shadow on the ground, no floor, no text, no other objects."
+  },
+  {
+    "out": "public/welcome-town/sprites/mia-sad-v2.png",
+    "sticker": true,
+    "refs": [
+      "public/welcome-town/sprites/mia-wave.png"
+    ],
+    "prompt": "A single sticker: Mia the grey mouse with an orange bow, SAD: a small frown, one tear on her cheek, eyes looking down, hands together in front of her, standing. Cute kawaii cartoon picture-book style exactly like the reference character: same character, same face, same colours and proportions, thick closed dark-brown outline all the way around the body, soft flat colours. Full body, front view, centred, the whole character visible with empty space around it. Plain pure white background, no shadow on the ground, no floor, no text, no other objects."
+  },
+  {
+    "out": "public/welcome-town/sprites/bella-angry-v2.png",
+    "sticker": true,
+    "refs": [
+      "public/welcome-town/sprites/bella-wave.png"
+    ],
+    "prompt": "A single sticker: Bella the white rabbit, ANGRY: frowning eyebrows, pouting mouth, arms crossed over her chest, standing, cheeks a little red. Cute kawaii cartoon picture-book style exactly like the reference character: same character, same face, same colours and proportions, thick closed dark-brown outline all the way around the body, soft flat colours. Full body, front view, centred, the whole character visible with empty space around it. Plain pure white background, no shadow on the ground, no floor, no text, no other objects."
+  },
+  {
+    "out": "public/welcome-town/sprites/willow-hungry-v2.png",
+    "sticker": true,
+    "refs": [
+      "public/welcome-town/sprites/willow-wave.png"
+    ],
+    "prompt": "A single sticker: Willow the blue bird with a green scarf, HUNGRY: holding an EMPTY yellow bowl in both wings in front of her (the whole bowl visible), looking at it with a hopeful, hungry face, mouth open a little. Cute kawaii cartoon picture-book style exactly like the reference character: same character, same face, same colours and proportions, thick closed dark-brown outline all the way around the body, soft flat colours. Full body, front view, centred, the whole character visible with empty space around it. Plain pure white background, no shadow on the ground, no floor, no text, no other objects."
   }
 ]

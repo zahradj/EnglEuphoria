@@ -54,3 +54,28 @@ LESSON_U7L2_SCENES
 LESSON_U7L3_SCENES
 LESSON_U7L4_SCENES
 LESSON_U7L5_SCENES
+
+# 2026-10-09 re-run: missing U5L5 story lines (book)
+
+# 2026-10-09 A1 U1 L2 (Welcome Town): boy / he / girl / she / they word pages
+# 2026-10-09 A1 U1 L1 rebuilt (Welcome Town): word pages + Pre-A1 games (Move & Say, Buzzer Show, Quick fire, sticker, home mission, brain break)
+# 2026-10-09 A1 U1 L2 rebuilt: I am <feeling>, Feelings Survey, he/she/they quick fire, home mission
+# 2026-10-09 A1 U1 L2: Feelings Freeze, Feelings Grabber, Who is hiding?, Read and match
+# 2026-10-09 re-run: A1 U1 L2 lines still missing (70)
+# 2026-10-09 re-run after the ElevenLabs key was replaced: A1 U1 L2 lines
+# 2026-10-09 re-run: elevenlabs-tts now also reads the 'elevenlabs 2' secret names
+# 2026-10-09 re-run: new 'elevenlabs 2' key
+# 2026-10-09 re-run: keys cleaned of spaces/quotes/labels
+# 2026-10-09 A1 U1 L3 rebuilt: How Old Are You?
+# 2026-10-10 A1 U1 L1-L3 redone to the 22-slide blueprint; L3 = Listen to the Greetings Song
+# 2026-10-10 Sound Train (sound-blend) words: hat cat mat bat pig nut ten fan sun hen + homework
+# 2026-10-10 re-run after key update
+# 2026-10-10 re-run: regional ElevenLabs hosts
+# 2026-10-10 re-run: all regional hosts
+# 2026-10-10 re-run: 11labs secret
+# 2026-10-10 re-run #2
+LESSON_U7L6_SCENES
+# 2026-10-10 re-run: elevenlabshub2 secret
+LESSON_U8L1_SCENES
+LESSON_U8L2_SCENES
+# 2026-10-10: bake A1 warm-up + sentence-build lines (extractors were missing)

@@ -1,0 +1,5 @@
+
+=== docs/songs/u7l5-farm2-cow-take2.mp3  length=20.1s  score=0.75  missing=8  extra=11
+heard: a farm a farm grandpa had a farm and on his farm he had a cally i i o a cow a cow a cow it's a cow move move with a move move here and a move here
+line starts (s): [np.float64(0.0), np.float64(4.5), np.float64(9.8), np.float64(12.9)]
+lineDurationsMs: [4520, 5240, 3140, 7162]

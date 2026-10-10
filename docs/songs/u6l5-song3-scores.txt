@@ -1,0 +1,15 @@
+
+=== docs/songs/u6l5-song3-take1.mp3  length=62.4s  score=0.96  missing=3  extra=4
+heard: it's late it's late let's go home where's my house oh no oh no my door my door my door is red not blue not yellow red i said is this my house no it isn't is this my house no it isn't is this my house yes it is a red door a hug and a kiss nop nop who is it it's me welcome home my house you'd be my house my house i love my house quiet as a little mouse
+line starts (s): [np.float64(11.6), np.float64(14.4), np.float64(16.5), np.float64(18.9), np.float64(30.5), np.float64(33.4), np.float64(35.7), np.float64(38.0), np.float64(51.0), np.float64(52.5), np.float64(54.8), np.float64(57.3)]
+lineDurationsMs: [14440, 2100, 2320, 11680, 2840, 2360, 2300, 12920, 1540, 2340, 2440, 5074]
+
+=== docs/songs/u6l5-song3-take2.mp3  length=62.4s  score=0.98  missing=2  extra=1
+heard: it's late it's late let's go home where's my house oh no oh no my door my door my door is red not blue not yellow red i said is this my house no it isn't is this my house no it isn't is this my house yes it is a red dora hug and a kiss knock knock who is it it's me welcome home my house yippee my house my house i love my house quiet as a little mouse
+line starts (s): [np.float64(9.0), np.float64(12.7), np.float64(18.5), np.float64(21.2), np.float64(27.9), np.float64(33.2), np.float64(37.8), np.float64(40.5), np.float64(47.6), np.float64(50.1), np.float64(52.4), np.float64(54.9)]
+lineDurationsMs: [12740, 5740, 2740, 6720, 5220, 4660, 2680, 7100, 2480, 2360, 2480, 7434]
+
+=== docs/songs/u6l5-song3-take3.mp3  length=62.4s  score=0.93  missing=5  extra=6
+heard: it's late it's late let's go home where's my house oh no oh no my door my door my door is red now blue not yellow red i said is this my house no it isn't is this my house no it isn't is this my house yes it is a red door a heart gonna kiss knock knock who is it it's me welcome home my house sweet pea my house my house i love my house quiet as a little mouse you
+line starts (s): [np.float64(9.6), np.float64(13.8), np.float64(18.7), np.float64(21.5), np.float64(23.7), np.float64(28.5), np.float64(33.1), np.float64(38.0), np.float64(42.6), np.float64(47.2), np.float64(52.2), np.float64(55.0)]
+lineDurationsMs: [13800, 4940, 2780, 2160, 4800, 4580, 4900, 4620, 4600, 5020, 2800, 7354]

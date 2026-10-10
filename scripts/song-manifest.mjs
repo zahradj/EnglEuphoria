@@ -23,6 +23,7 @@ const write = process.argv.includes('--write');
 
 const current = {};
 for (const [key, song] of Object.entries(songs)) {
+  if (song.pending) continue; // written but not recorded yet (see its "pending" note)
   const file = path.join(root, song.publicPath);
   if (!fs.existsSync(file)) { current[key] = null; continue; }
   const buf = fs.readFileSync(file);

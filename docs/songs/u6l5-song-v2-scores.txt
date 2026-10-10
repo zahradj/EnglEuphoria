@@ -1,0 +1,15 @@
+
+=== docs/songs/u6l5-song-v2-take1.mp3  length=20.1s  score=0.85  missing=6  extra=4
+heard: yeah the door yeah the door no it isn't red door red door is this my house knock knock yes it is my house my house my house i love my house
+line starts (s): [np.float64(0.6), np.float64(4.4), np.float64(9.7), np.float64(14.8)]
+lineDurationsMs: [4360, 5380, 5060, 5262]
+
+=== docs/songs/u6l5-song-v2-take2.mp3  length=20.1s  score=0.94  missing=2  extra=2
+heard: a yellow door a yellow door no it isn't a red door a red door is this my house no no yes it is my house my house my house i love my house
+line starts (s): [np.float64(0.0), 5.0, np.float64(11.9), np.float64(15.0)]
+lineDurationsMs: [5000, 6900, 3100, 5062]
+
+=== docs/songs/u6l5-song-v2-take3.mp3  length=20.1s  score=0.80  missing=6  extra=8
+heard: i got one door i got one door no it isn't a red door a red door is this my house no no yes it is my house my house my house i love my house
+line starts (s): [np.float64(0.5), np.float64(4.6), np.float64(11.2), np.float64(14.1)]
+lineDurationsMs: [4620, 6620, 2880, 5942]

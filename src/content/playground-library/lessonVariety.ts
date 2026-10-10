@@ -60,6 +60,9 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '8-2': { settings: ['bakery café'], look: "Pip's little bakery café on a sunny morning: a wooden counter with baskets of bread loaves, a glass jug of orange juice and a jug of water, a chalkboard with a drawn loaf and cup, round wooden tables with green-cushioned chairs by a big window with flower boxes; Pip in a small white apron behind the counter, friends come to the table to order" },
+  '8-1': { settings: ['picnic hill'], look: "a picnic on a sunny green spring hill: a big red-and-white checkered blanket, an open wicker basket, a shady apple tree full of red apples, a little blue stream and yellow flowers; Pip sits on the blanket with an apple, a banana and a glass of milk" },
+  '7-6': { settings: ['farm at night'], look: "Grandpa's farm at night under a big full moon and stars: the red barn with its door half open and a lantern glowing, a round haystack, a little red chicken coop, a big tree with a hollow, a blue water trough and a pond with reeds; the farm is dark and the child's torch beam finds the hiding animals, then the farm lights come on" },
   '7-5': { settings: ['barn at sunrise', 'farm gate'], look: "Grandpa's farm on a misty early morning: a big red barn with four white stall doors in a row at sunrise, Grandpa fox in a straw farmer hat and blue overalls with Pip; the doors open one by one (cow, pig, sheep, duck) and the animals gather in the golden yard" },
   '7-4': { settings: ['farm fair'], look: "the fair comes to the farm on a bright day: red-and-white striped tents, bunting flags, hay bales, prize rosettes on the fence and a big yellow-and-white striped hook-a-duck pool in the middle; Pip and the animals of the unit at the fair; a red-curtained show tent for the riddles" },
   '7-3': { settings: ['duck pond and bridge'], look: "the far side of the farm on a golden afternoon: a blue duck pond with lily pads and a little arched wooden bridge, a wooden stable and a red chicken coop, tall reeds and orange evening light; Pip with a brown horse, a white hen and a white farm duck" },
@@ -200,11 +203,50 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
     ],
   },
+  '8-2': {
+    sources: ['Lingokids and Toca-style café / shop role play (take an order and serve it)', 'Cambridge (Pre A1 Starters listening: listen and tick two things; food and drink words)', 'classroom "restaurant" role play with picture menus', 'Wordwall group sort (eat or drink)'],
+    mechanics: [
+      'café role play → Café Order: a friend orders one thing, then two ("Bread and water, please!"); the child taps them onto the tray and rings the bell to serve',
+      'group sort → Eat or drink? catch-and-sort, the café food train (what is missing?) and first sounds B, W, J',
+      'role swap: the child is the waiter and asks "What do you want?"',
+    ],
+    betterThan: [
+      'orders grow from one to two things, so the child holds a whole spoken order in mind, then builds it themself (choose, check, serve) instead of tapping one picture',
+      'a wrong tray comes back with the order said again, so the child simply listens again; the right food glows after two tries',
+      'calm by design: no clock, every friend asks politely and thanks the child, and the waiter phrases are used again in the role swap',
+    ],
+  },
+  '8-1': {
+    sources: ['Lingokids and Khan Academy Kids "feed the character" play (give the food the character asks for)', 'Cambridge (Pre A1 Starters: listen and give / point; food words)', 'classroom pretend-picnic role play (Super Simple "Do you like…?" style)', 'Sesame Workshop (model the polite request, then let the child say it)'],
+    mechanics: [
+      'feed the character → Feed Pip: Pip asks "Can I have a banana, please?", the child gives the right food from the picnic blanket and it flies to Pip, who munches and thanks them',
+      'quick-look recall of the three foods, picnic memory pairs and a letter-balloon pop for A, B, M',
+      'role swap: the child asks Pip politely for a food',
+    ],
+    betterThan: [
+      'the request is a whole polite sentence ("Can I have a banana, please?") that the child then uses themself in the role swap',
+      'a wrong food is handed back with its name ("No, thank you! That\'s an apple."), so a mistake is more listening, never a buzzer',
+      'calm by design: no clock, Pip\'s tummy fills a heart per food and the right food glows after two tries',
+    ],
+  },
+  '7-6': {
+    sources: ['Lingokids and Khan Academy Kids hide-and-seek / flashlight hidden-object play', '"Where\'s Spot?" lift-the-flap hide and seek (find the hiding animal)', 'Cambridge (Pre A1 Starters listening: listen and find; animal words)', 'Wordwall-style one-tap review games (claw grabber, stepping stones)'],
+    mechanics: [
+      'flashlight hidden-object → Night Sounds: a sound in the dark ("Moo! Moo! Who\'s there?"), the child says the animal, then moves the torch to find it; one tap shines, the next picks',
+      'shadow matching on the barn wall, stepping stones called by an animal sound, and the Animal Grabber called by a sound',
+      'role swap: the child makes the sound and Pip guesses',
+    ],
+    betterThan: [
+      'sound first, word second, picture last: the child must turn the sound into the word before seeing anything (apps show the picture first)',
+      'a wrong animal answers with its own sound ("That\'s a pig. Oink!"), so every mistake is more listening, never a buzzer',
+      'calm by design: no clock, the farm lights come on at the end and all nine animals of the unit are there',
+    ],
+  },
   '7-5': {
     sources: ['the traditional song "Old MacDonald Had a Farm" (public domain: an animal and its sound per verse)', 'Sesame Workshop / Blue\'s Clues (model, then a planned pause for the child to answer)', 'Super Simple / Lingokids song-choice play (the child picks the next verse)', 'Cambridge (Pre A1 Starters: look and answer yes / no; story order)'],
     mechanics: [
       'the song as a story → a stills film "Grandpa\'s Noisy Barn": a sound behind each barn door, "What animal is this?", a pause, then the door opens',
-      'song-choice → My Farm Song: the child is Old MacDonald, chooses an animal, it hops onto the farm and Pip sings its verse; the child sings it back',
+      'song-choice → My Farm Song: the child is the farmer, chooses an animal, it hops onto the farm and Pip sings its verse; the child sings it back',
       'story order, "Who\'s behind the door?" (ask at each door), tick or cross, and feed the ducks with the story\'s pictures',
     ],
     betterThan: [

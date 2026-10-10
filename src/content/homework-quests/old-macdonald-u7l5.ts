@@ -8,12 +8,12 @@ const yard = `${S}/bg-u7l5-yard-wide.png`;
 const sc = (n: string) => `${S}/bg-u7l5-${n}-wide.png`;
 const it = (n: string) => `${I}/item-${n}.png`;
 
-/** Pre-A1 Unit 7 Lesson 5 "Old MacDonald Had a Farm" — Old MacDonald Quest.
+/** Pre-A1 Unit 7 Lesson 5 "Grandpa's Farm" — Grandpa's Farm Quest.
  *  Reviews the story: an animal's sound → "What animal is this? It's a cow!". */
 export const QUEST_OLD_MACDONALD_U7L5: HomeworkQuest = {
   id: 'old-macdonald-u7l5',
-  title: 'Old MacDonald Quest',
-  subtitle: 'Old MacDonald Had a Farm · Pre-A1 Unit 7 · Lesson 5',
+  title: "Grandpa's Farm Quest",
+  subtitle: "Grandpa's Farm · Pre-A1 Unit 7 · Lesson 5",
   level: 'Pre-A1',
   lessonKey: 'lep1-rich-7-5',
   theme: { accent: '#B91C1C', accent2: '#F59E0B', night: false, mapImg: yard, guide: `${C}/pip-happy.png`, walker: `${C}/pip-hello.png` },
@@ -33,6 +33,6 @@ export const QUEST_OLD_MACDONALD_U7L5: HomeworkQuest = {
         { img: sc('barn-3'), line: "It's a sheep!", isTrue: true },
         { img: sc('barn-4'), line: "It's a dog!", isTrue: false },
       ] },
-    { kind: 'treasure', name: 'Farm Prize', icon: `${K}/chest-closed.png`, intro: 'Tap the chest to open it!', img: yard, closed: `${K}/chest-closed.png`, open: `${K}/chest-open.png`, win: 'Old MacDonald had a farm, E-I-E-I-O!' },
+    { kind: 'treasure', name: 'Farm Prize', icon: `${K}/chest-closed.png`, intro: 'Tap the chest to open it!', img: yard, closed: `${K}/chest-closed.png`, open: `${K}/chest-open.png`, win: 'Grandpa had a farm, E-I-E-I-O!' },
   ],
 };

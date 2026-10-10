@@ -14,7 +14,7 @@ check that no big block of extra words was sung. >= 0.85 and no extra block ->
 safe to ship. Always eyeball the printed transcript as well: Whisper mishears
 sung vowels occasionally.
 """
-import json, re, sys, difflib, pathlib
+import os, json, re, sys, difflib, pathlib
 from faster_whisper import WhisperModel
 
 root = pathlib.Path(__file__).parent
@@ -35,12 +35,15 @@ for i, line in enumerate(lines):
             if part:
                 lyric_words.append(part); line_of.append(i)
 
-model = WhisperModel("base.en", device="cpu", compute_type="int8")
+# small.en: base.en squeezed sung lines together (bad word times for karaoke cues)
+model = WhisperModel(os.environ.get("SONG_ASR_MODEL", "small.en"), device="cpu", compute_type="int8")
 for take in takes:
     segs, info = model.transcribe(take, word_timestamps=True, language="en",
                                   condition_on_previous_text=False)
     words = [(norm(w.word), w.start, w.end) for s in segs for w in s.words if norm(w.word)]
     heard = [w[0] for w in words]
+    # every heard word with its time, for exact line cues (scripts/song-line-times.py)
+    pathlib.Path(take).with_suffix(".words.json").write_text(json.dumps([[w, round(a, 2), round(b, 2)] for w, a, b in words]))
     sm = difflib.SequenceMatcher(None, lyric_words, heard, autojunk=False)
     ratio = sm.ratio()
     matched = sum(b.size for b in sm.get_matching_blocks())

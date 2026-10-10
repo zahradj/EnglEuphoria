@@ -1,0 +1,10 @@
+
+=== docs/songs/u4l5-song-v2-take1.mp3  length=20.1s  score=0.62  missing=10  extra=10
+heard: beep beep the elephant comes to speak beep beep i stop my feet hands hands the seal got your hands hands hands i clap my hands
+line starts (s): [np.float64(1.9), np.float64(5.8), np.float64(7.2), np.float64(11.6)]
+lineDurationsMs: [5820, 1400, 4430, 8412]
+
+=== docs/songs/u4l5-song-v2-take2.mp3  length=20.1s  score=0.33  missing=17  extra=20
+heard: be be be elephant songs with me be be a stomp on a feet hands hands hands let's heal across our hands hands hands hands let's walk my head
+line starts (s): [np.float64(1.9), np.float64(5.9), np.float64(7.3), np.float64(11.3)]
+lineDurationsMs: [5880, 1400, 4040, 8742]

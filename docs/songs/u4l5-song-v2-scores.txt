@@ -1,0 +1,14 @@
+
+=== docs/songs/u4l5-song-v2-take1.mp3  length=20.1s  score=0.53  missing=14  extra=14
+heard: yeah when don't you speak stop stop my seat my seat i stop my seat the seal got her hands clap clap my hands my hand i got my hands
+line starts (s): [None, np.float64(3.9), np.float64(7.5), np.float64(11.8)]
+
+=== docs/songs/u4l5-song-v2-take2.mp3  length=20.1s  score=0.83  missing=5  extra=5
+heard: the elephant sounds his feet don't sound my feet my feet i stomp my feet the steel what's her hands clap clap my hands my hands i clap my hands
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(8.1), np.float64(12.3)]
+lineDurationsMs: [4100, 4000, 4240, 7722]
+
+=== docs/songs/u4l5-song-v2-take3.mp3  length=20.1s  score=0.78  missing=7  extra=6
+heard: the elephant stomps his feet stomp stomp my feet my feet i stomp my feet the steel water hand flap flap my hands my hands i flap my hands
+line starts (s): [np.float64(0.0), np.float64(4.2), np.float64(8.2), np.float64(12.2)]
+lineDurationsMs: [4200, 3960, 4000, 7902]

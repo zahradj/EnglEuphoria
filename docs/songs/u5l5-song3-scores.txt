@@ -1,0 +1,5 @@
+
+=== docs/songs/u5l5-song3-take1.mp3  length=57.9s  score=0.94  missing=5  extra=5
+heard: me and dad me and dad the park is fun i'm very glad a ball a ball he throws the ball i catch it catch it catch it all ducks ducks swimming by we feed the ducks they say hi ice cream ice cream ice cream yum i'll put the book we read what fun dad dad i love you dad the best they got i ever had dad dad i love you dad just me and my dad my dad
+line starts (s): [np.float64(3.5), np.float64(8.0), np.float64(12.6), np.float64(16.9), np.float64(21.4), np.float64(25.8), np.float64(30.2), np.float64(36.3), np.float64(39.2), np.float64(43.5), np.float64(48.1), np.float64(52.9)]
+lineDurationsMs: [8000, 4620, 4300, 4500, 4360, 4440, 6080, 2900, 4300, 4640, 4800, 4921]
