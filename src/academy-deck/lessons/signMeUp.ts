@@ -115,6 +115,6 @@ export const SIGN_ME_UP: DeckScript = {
       prompt: 'Final scene! Sign up at the desk. Say it all. If Theo is too fast, ask him again.',
       model: 'My name is {name}. {spelled}. I am {age}. I am from {country}. I am {nationality}. My number is {numw}. Can you say it again?',
     },
-    { id: 'wrap', kind: 'wrap', bg: 'club-lobby', actors: [{ who: 'Vee', pos: 'center', expr: 'thumbs' }], heading: 'Mission complete?', ticks: CRITERIA, homework: 'Homework: spell your name to one friend today. Not yet is okay!', clue: 'Clue 2 of 8: In the fake profile, Sam’s name is spelled S-A-N. That is not right! Sam is S-A-M.' },
+    { id: 'wrap', kind: 'wrap', bg: 'club-lobby', actors: [{ who: 'Vee', pos: 'left', expr: 'thumbs' }], heading: 'Mission complete?', ticks: CRITERIA, homework: 'Homework: spell your name to one friend today. Not yet is okay!', clue: 'Clue 2 of 8: In the fake profile, Sam’s name is spelled S-A-N. That is not right! Sam is S-A-M.' },
   ],
 };

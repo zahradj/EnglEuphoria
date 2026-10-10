@@ -255,3 +255,13 @@
   .ad-strip ol { gap: 3px; flex-wrap: nowrap; }
   .ad-strip { padding: 8px 10px; }
 }
+
+/* card placement on wide screens: 2 characters = card in the middle; 1 character = card on the opposite side */
+@media (min-width: 1000px) {
+  .ad-main[data-panel='left'] .ad-slidehost { align-items: flex-start; padding-left: 2vw; }
+  .ad-main[data-panel='right'] .ad-slidehost { align-items: flex-end; padding-right: 2vw; }
+  .ad-main[data-panel='left'] .ad-panel, .ad-main[data-panel='right'] .ad-panel { width: min(880px, 100%, 60vw); }
+  .ad-main[data-panel='left'] .ad-panel[data-wide='true'], .ad-main[data-panel='right'] .ad-panel[data-wide='true'] { width: min(940px, 100%, 62vw); }
+  .ad-main[data-panel='left'] .ad-top, .ad-main[data-panel='right'] .ad-top { width: min(880px, 100%, 60vw); }
+  .ad-main[data-panel='right'] .ad-top { justify-content: flex-end; }
+}

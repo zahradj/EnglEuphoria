@@ -130,6 +130,9 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
   };
   const actorsVisible = cur.actors ?? [];
   const compact = cur.kind !== 'title' && cur.kind !== 'brief';
+  // card placement (owner 2026-10-10): two characters -> card in the middle; one character -> card on the opposite side
+  const only = actorsVisible.length === 1 ? actorsVisible[0].pos : null;
+  const panelAt = only === 'left' ? 'right' : only === 'right' ? 'left' : 'center';
   return (
     <DeckContext.Provider value={ctx}>
       <div className="ad-root" data-reduced={calm} data-kind={cur.kind} data-testid="deck">
@@ -148,7 +151,7 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
           </ol>
           <span className="ad-count">{index + 1}/{script.slides.length}</span>
         </header>
-        <main className="ad-main">
+        <main className="ad-main" data-panel={panelAt}>
           <Guard id={cur.id} onSkip={skip}>
             <SlideView key={cur.id} slide={cur} />
           </Guard>
