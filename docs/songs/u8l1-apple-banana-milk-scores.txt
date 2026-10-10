@@ -1,0 +1,15 @@
+
+=== docs/songs/u8l1-apple-banana-milk-take1.mp3  length=20.1s  score=0.76  missing=7  extra=5
+heard: an apple an apple crunch crunch crunch avadana avadana yum yum yum milk milk go go go apple banana milk i like my lunch
+line starts (s): [np.float64(0.0), np.float64(6.7), np.float64(8.6), np.float64(12.7)]
+lineDurationsMs: [6740, 1860, 4120, 7342]
+
+=== docs/songs/u8l1-apple-banana-milk-take2.mp3  length=20.1s  score=0.86  missing=4  extra=3
+heard: an apple apple crunch crunch crunch a banana a banana yum yum yum milk milk go go go apple banana milk i like my lunch
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.5), np.float64(12.6)]
+lineDurationsMs: [3820, 4720, 4100, 7422]
+
+=== docs/songs/u8l1-apple-banana-milk-take3.mp3  length=20.1s  score=0.86  missing=4  extra=3
+heard: an apple apple crunch crunch crunch a banana a banana yum yum yum milk milk go go go apple banana milk i like my lunch
+line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(8.6), np.float64(12.7)]
+lineDurationsMs: [3960, 4620, 4140, 7342]
