@@ -37,6 +37,40 @@ export const ACADEMY_GAMES: AcademyGame[] = [
       'Sentence Forge: choose the form that fits the sentence (past time or "have").',
     ],
   },
+  {
+    id: 'sound-lab',
+    title: 'Sound Lab',
+    tagline: 'Train your ears to hear the sounds that change a word: ship or sheep, pack or back, ban or van, think or sink. Crack four locks, in three voices.',
+    skill: 'Pronunciation · Listening',
+    levels: ['A1', 'A2', 'B1'],
+    minutes: '15–20 min',
+    gradient: 'linear-gradient(135deg,#134e4a 0%,#0e7490 50%,#1e3a8a 100%)',
+    cover: '/academy/games/sound-lab-cover.jpg',
+    method: 'Ears first: listen in three voices → pick the word you hear → same or different? → say it (private, never scored).',
+    howToPlay: [
+      'Listen: hear the two sounds of the lock in three different voices.',
+      'Pick the pin: hear one word and choose which word it was.',
+      'Same or different? Hear two words and decide if they are the same word.',
+      'Say it: record yourself and compare with the model. Your voice stays on your device and is never scored.',
+    ],
+  },
+  {
+    id: 'twister-lab',
+    title: 'Twister Lab',
+    tagline: 'Tongue twisters, step by step: hear them chunk by chunk, build them, spell them from memory, then record yourself three ways. Clear first, fast later.',
+    skill: 'Pronunciation · Spelling',
+    levels: ['A1', 'A2', 'B1'],
+    minutes: '15–20 min',
+    gradient: 'linear-gradient(135deg,#831843 0%,#be185d 50%,#f59e0b 100%)',
+    cover: '/academy/games/twister-lab-cover.jpg',
+    method: 'Hear it in chunks → build it → write it from memory and fix the spelling → say it slowly, normally, then faster (private, never scored).',
+    howToPlay: [
+      'Listen: hear the twister slowly, chunk by chunk, then at speed, in two voices.',
+      'Build it: tap the chunks in the right order.',
+      'Spell it: type the twister from memory. You see every word checked, with the letters to fix.',
+      'Say it: record three takes and listen to yourself. Your voice stays on your device and is never scored.',
+    ],
+  },
 ];
 
 export const getAcademyGame = (id: string | undefined) => ACADEMY_GAMES.find((g) => g.id === id);
