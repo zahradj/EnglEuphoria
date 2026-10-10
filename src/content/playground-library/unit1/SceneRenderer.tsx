@@ -4,6 +4,7 @@ import { type ActivitySync } from '../sceneActivitySync';
 import { SpinWheelScene } from '../SpinWheelScene';
 import { PictureMatchScene } from '../PictureMatchScene';
 import { FirstSoundScene } from '../FirstSoundScene';
+import { SoundBlendScene } from '../SoundBlendScene';
 import { LetterMatchScene, LetterBlocksScene } from '../LetterTilesScene';
 import { WhatsMissingScene } from '../WhatsMissingScene';
 import { SortBasketScene } from '../SortBasketScene';
@@ -357,6 +358,7 @@ export function SceneRenderer(props: {
     case 'age-quiz': return <AgeQuizScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'spin-wheel': return <SpinWheelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'picture-match': return <PictureMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+    case 'sound-blend': return <SoundBlendScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'first-sound': return <FirstSoundScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'letter-match': return <LetterMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
     case 'letter-blocks': return <LetterBlocksScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;

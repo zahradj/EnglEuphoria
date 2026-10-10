@@ -3,6 +3,7 @@ import type { SpinWheelSceneData } from '../SpinWheelScene';
 import type { PictureMatchSceneData } from '../PictureMatchScene';
 import type { RecallWarmupSceneData } from '../RecallWarmupScene';
 import type { FirstSoundSceneData } from '../FirstSoundScene';
+import type { SoundBlendSceneData } from '../SoundBlendScene';
 import type { LetterMatchSceneData, LetterBlocksSceneData } from '../LetterTilesScene';
 import type { WhatsMissingSceneData } from '../WhatsMissingScene';
 import type { SortBasketSceneData } from '../SortBasketScene';
@@ -29,6 +30,8 @@ export type Scene =
   // Alphabet & phonics games shared with every scene library; see
   // ../FirstSoundScene.tsx and ../LetterTilesScene.tsx.
   | FirstSoundSceneData
+  // Universal phonics slide (blueprint slot 14): blend the sounds on the Sound Train; see ../SoundBlendScene.tsx.
+  | SoundBlendSceneData
   | LetterMatchSceneData
   | LetterBlocksSceneData
   | WhatsMissingSceneData

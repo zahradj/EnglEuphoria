@@ -191,6 +191,8 @@ const castName = (who) => CAST[who]?.name ?? who;
  *  inferred from field names). Returns an array of [character, text] pairs
  *  for one scene instance. */
 const UNIT1_EXTRACTORS = {
+  // Universal Sound Train (../SoundBlendScene.tsx): the whole word, teacher voice (single sounds are recorded files).
+  'sound-blend': (s) => (s.rounds ?? []).map((r) => ['teacher', r.word]),
   cinematic: (s) => (s.script ?? []).map((l) => [l.who, l.line]),
   meet: (s) => {
     const out = [[s.who, s.line]];
@@ -655,6 +657,7 @@ const UNIT1_EXTRACTORS = {
  *  'marigold') and must be normalized through `voiceOf` before use — see
  *  `resolveWho` below. */
 const WT_EXTRACTORS = {
+  'sound-blend': (s) => (s.rounds ?? []).map((r) => ['teacher', r.word]),
   cinematic: (s) => (s.script ?? []).map((l) => [l.who, l.line]),
   meet: (s) => {
     const out = [[s.who, s.line]];

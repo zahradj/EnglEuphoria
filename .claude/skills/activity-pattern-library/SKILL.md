@@ -271,6 +271,20 @@ place two `spin-wheel` scenes back to back.
   mapping exact (the quality gate checks it against the art).
 - `label` is exactly the target word/phrase the student should say.
 
+## Universal — Blend It! / Sound Train (`sound-blend`, every Playground scene library)
+
+`src/content/playground-library/SoundBlendScene.tsx`, registered in the Pre-A1 and the A1/A2 renderers, fully synced. **The
+phonics slide (blueprint slot 14) of every Playground lesson** (owner 2026-10-10: "on the phonics slide add a phonics game and
+sound blending, make this universal"). Each sound of a word rides in a train car with a sound button: tap each car (RECORDED
+letter sound, `playLetterPhonic`, never TTS) -> Blend! (cars roll together, sounds close together, then the word) -> pick the
+picture of the word out of three (the other rounds' pictures). 3-5 decodable words with pictures (`/lep1/items/item-<word>.png`);
+`sounds: ['sh','i','p']` for digraphs. Homework: the same game as the Homework Quest level `kind: 'sound-blend'`.
+
+```ts
+{ id: 'wt-blend', kind: 'sound-blend', bg: bgReading, teacher: 'Tap each car and say the sound, press Blend!, then find the picture.',
+  rounds: [{ word: 'hat', img: '/lep1/items/item-hat.png' }, { word: 'cat', img: '/lep1/items/item-cat.png' }, { word: 'mat', img: '/lep1/items/item-mat.png' }] }
+```
+
 ## Universal — Picture ↔ word match (`picture-match`, every Playground scene library)
 
 `src/content/playground-library/PictureMatchScene.tsx`, registered in both

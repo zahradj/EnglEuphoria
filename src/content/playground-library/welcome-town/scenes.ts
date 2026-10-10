@@ -3,6 +3,7 @@ import type { SpinWheelSceneData } from '../SpinWheelScene';
 import type { PictureMatchSceneData } from '../PictureMatchScene';
 import type { RecallWarmupSceneData } from '../RecallWarmupScene';
 import type { FirstSoundSceneData } from '../FirstSoundScene';
+import type { SoundBlendSceneData } from '../SoundBlendScene';
 import type { LetterMatchSceneData, LetterBlocksSceneData } from '../LetterTilesScene';
 import type { WhatsMissingSceneData } from '../WhatsMissingScene';
 import type { SortBasketSceneData } from '../SortBasketScene';
@@ -158,6 +159,8 @@ export type Scene =
   // Alphabet & phonics games shared with every scene library; see
   // ../FirstSoundScene.tsx and ../LetterTilesScene.tsx.
   | FirstSoundSceneData
+  // Universal phonics slide (blueprint slot 14): blend the sounds on the Sound Train; see ../SoundBlendScene.tsx.
+  | SoundBlendSceneData
   | LetterMatchSceneData
   | LetterBlocksSceneData
   | WhatsMissingSceneData
@@ -667,10 +670,14 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
   },
   /* 14 Phonics micro-moment */
   {
-    id: 'wt-word-build-sat', kind: 'word-build', bg: bgL1Reading, teacher: 'Find the missing sound. Then read the word: sat!',
+    // Universal phonics slide (blueprint slot 14): Blend It! — say each sound, blend, find the picture.
+    id: 'wt-blend', kind: 'sound-blend', bg: bgL1Reading,
+    teacher: 'Tap each car and say the sound with the student (/h/ /a/ /t/), press Blend!, then find the picture. All -at words!',
     rounds: [
-      { word: 'sat', blankIndex: 0, answer: 's', choices: ['s', 'm', 't'], emoji: '\u{1FA91}' },
-      { word: 'sat', blankIndex: 2, answer: 't', choices: ['p', 't', 'n'], emoji: '\u{1FA91}' },
+      { word: 'hat', img: '/lep1/items/item-hat.png' },
+      { word: 'cat', img: '/lep1/items/item-cat.png' },
+      { word: 'mat', img: '/lep1/items/item-mat.png' },
+      { word: 'bat', img: '/lep1/items/item-bat.png' },
     ],
   },
   /* 15 Quick-fire recall */
@@ -990,11 +997,14 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
   },
   /* 14 Phonics micro-moment */
   {
-    id: 'wt2-word-build', kind: 'word-build', bg: bgReadingW, teacher: 'You know 6 sounds now! Read three more real words!',
+    // Universal phonics slide (blueprint slot 14): Blend It! — say each sound, blend, find the picture.
+    id: 'wt2-blend', kind: 'sound-blend', bg: bgL1Reading,
+    teacher: 'Tap each car and say the sound with the student (/p/ /i/ /g/), press Blend!, then find the picture.',
     rounds: [
-      { word: 'SIT', blankIndex: 1, answer: 'I', choices: ['I', 'O', 'U'], emoji: '\u{1FA91}' },
-      { word: 'PIN', blankIndex: 0, answer: 'P', choices: ['P', 'B', 'D'], emoji: '\u{1F4CC}' },
-      { word: 'PIP', blankIndex: 2, answer: 'P', choices: ['P', 'B', 'D'], emoji: '\u{1F98A}' },
+      { word: 'pig', img: '/lep1/items/item-pig.png' },
+      { word: 'nut', img: '/lep1/items/item-nut.png' },
+      { word: 'ten', img: '/lep1/items/item-ten.png' },
+      { word: 'fan', img: '/lep1/items/item-fan.png' },
     ],
   },
   /* 15 Quick-fire recall */
@@ -1306,7 +1316,17 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     ],
   },
   /* 14 Phonics micro-moment (review s a t p i n) */
-  { id: 'wt3-twister', kind: 'tongue-twister', bg: bgL1Reading, who: 'pip', focus: 'p|i|n|s|t', teacher: 'Listen to Pip’s tongue twister. Say it slow, then faster!', line: 'Pip sits. Pip taps. Pip spins a pin!' },
+  {
+    // Universal phonics slide (blueprint slot 14): Blend It! — say each sound, blend, find the picture.
+    id: 'wt3-blend', kind: 'sound-blend', bg: bgL1Reading,
+    teacher: 'Tap each car and say the sound with the student (/s/ /u/ /n/), press Blend!, then find the picture.',
+    rounds: [
+      { word: 'sun', img: '/lep1/items/item-sun.png' },
+      { word: 'hen', img: '/lep1/items/item-hen.png' },
+      { word: 'pig', img: '/lep1/items/item-pig.png' },
+      { word: 'cat', img: '/lep1/items/item-cat.png' },
+    ],
+  },
   /* 15 Quick-fire recall */
   {
     id: 'wt3-quick-fire', kind: 'prea1', teacher: 'Quick fire! Say the line before the ring runs out.',
@@ -1381,6 +1401,7 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     },
   },
   /* Extra time (blueprint §3b): only if there is time left */
+  { id: 'wt3-twister', kind: 'tongue-twister', bg: bgL1Reading, who: 'pip', focus: 'p|i|n|s|t', teacher: 'Extra time: listen to Pip’s tongue twister. Say it slow, then faster!', line: 'Pip sits. Pip taps. Pip spins a pin!' },
   {
     id: 'wt3-true-false', kind: 'true-false', bg: bgL1Class, teacher: 'Extra time: listen. Is it true or false? Tap the right answer.',
     rounds: [

@@ -10,6 +10,6 @@ export const PREA1_REAL_SYNC_KINDS: ReadonlySet<string> = new Set<string>([
   'feeling-quiz', 'feelings-bingo',
   'numbers-learn', 'numbers-review', 'candle-cake', 'count-balloons',
   'age-balloons', 'meet-greet', 'age-quiz', 'spin-wheel', 'picture-match',
-  'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play',
+  'first-sound', 'sound-blend', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play',
   'gather', 'voice-stage',
 ]);
