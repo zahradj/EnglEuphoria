@@ -1,7 +1,3 @@
-cut out: public/lep1/items/item-ice-cream.png (479, 998)
-cut out: public/lep1/items/item-cake.png (828, 972)
-+ public/lep1/scenes/bg-u8l3-party-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u8l3-party-empty-wide.png (1376, 768)
-+ public/lep1/items/item-ice-cream.png (1024, 1024)
-+ public/lep1/items/item-cake.png (1024, 1024)
-4/4 saved
++ public/lep1/scenes/bg-u8l4-orchard-wide.png (1376, 768)
++ public/lep1/scenes/bg-u8l4-orchard-empty-wide.png (1376, 768)
+2/2 saved
