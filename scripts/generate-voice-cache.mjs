@@ -469,6 +469,7 @@ const UNIT1_EXTRACTORS = {
     [s.who, s.doneLine],
   ],
   // Mirror DuckFeedScene.tsx's duckFeedLines().
+  'party-belt': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.friend, r.line], [r.friend, r.reply], ...(s.foods ?? []).filter((_, i) => i !== r.target).map((f) => [r.friend, `No, that's ${f.word}!`])]), [s.who, s.doneLine]],
   'cafe-order': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.customer, r.line], [r.customer, r.reply], [r.customer, `Oh no! ${r.line}`]]), ...(s.menu ?? []).map((m) => [s.who, m.word]), [s.who, s.doneLine]],
   'feed-pip': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.foods ?? []).map((f) => [s.who, `No, thank you! That's ${f.phrase}.`]), [s.who, s.doneLine]],
   'night-sounds': (s) => (s.animals ?? []).flatMap((a) => [[s.who, `${a.sound} ${a.sound} Who's there?`], [s.who, `Yes! It's a ${a.word}! ${a.sound}`], [s.who, `That's a ${a.word}. ${a.sound}`]]),

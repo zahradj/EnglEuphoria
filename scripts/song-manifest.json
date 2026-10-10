@@ -313,5 +313,10 @@
     "path": "public/lep1/audio/bread-water-juice-song-u8l2.mp3",
     "bytes": 321037,
     "sha256": "fff4c5a6d346e487209b7d6c92917e25748c997cd2e6ace04e462ffbbb07425b"
+  },
+  "u8l3-pizza-cake-ice-cream": {
+    "path": "public/lep1/audio/pizza-cake-ice-cream-song-u8l3.mp3",
+    "bytes": 321037,
+    "sha256": "70c2c2ea9d064d69704e722294e9fe1b3f61a46db3e255d74c63c8bc0da36e7c"
   }
 }

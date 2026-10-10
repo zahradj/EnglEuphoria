@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '8-3': { settings: ['park party food truck'], look: "a summer party in a green park: a bright red-and-yellow food truck with a striped awning, a big round pizza, a pink birthday cake with candles and three ice-cream cones on its counter, Pip in a white chef hat waving from the window; bunting, balloons and a wooden picnic table; a moving grey belt carries the party food past the table" },
   '8-2': { settings: ['bakery café'], look: "Pip's little bakery café on a sunny morning: a wooden counter with baskets of bread loaves, a glass jug of orange juice and a jug of water, a chalkboard with a drawn loaf and cup, round wooden tables with green-cushioned chairs by a big window with flower boxes; Pip in a small white apron behind the counter, friends come to the table to order" },
   '8-1': { settings: ['picnic hill'], look: "a picnic on a sunny green spring hill: a big red-and-white checkered blanket, an open wicker basket, a shady apple tree full of red apples, a little blue stream and yellow flowers; Pip sits on the blanket with an apple, a banana and a glass of milk" },
   '7-6': { settings: ['farm at night'], look: "Grandpa's farm at night under a big full moon and stars: the red barn with its door half open and a lantern glowing, a round haystack, a little red chicken coop, a big tree with a hollow, a blue water trough and a pond with reeds; the farm is dark and the child's torch beam finds the hiding animals, then the farm lights come on" },
@@ -201,6 +202,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '8-3': {
+    sources: ['conveyor-belt / food-factory play in kids\' apps (Toca Kitchen, Lingokids food games)', 'Wordwall whack-a-mole (tap the right one as it passes)', 'Cambridge (Pre A1 Starters: listen and find; food words)', 'Khan Academy Kids pattern activities (what comes next?)'],
+    mechanics: [
+      'conveyor belt + whack-a-mole → Party Belt: a friend asks "Ice cream, please!" and the child taps that food as it rides past on the food truck\'s belt',
+      'what comes next? → the party food train; letter bricks for the unit\'s first sounds P, C, B, J; the P basket',
+      'role swap at the truck window: the child offers "Pizza, cake or ice cream?" and serves Pip',
+    ],
+    betterThan: [
+      'the wanted food is only HEARD (nothing printed on the belt), and the earlier unit food rides along, so the three new words are picked out of the whole unit',
+      'the belt never stops and every food comes round again: no fail state, no clock; a wrong grab is named back ("No, that\'s cake!") and the right one glows after two tries',
+      'every friend asks politely and answers "Yummy! I like ice cream!", the language the child uses again in the role swap and the home mission',
     ],
   },
   '8-2': {

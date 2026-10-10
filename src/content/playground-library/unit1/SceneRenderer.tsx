@@ -93,6 +93,7 @@ import { DuckFeedScene } from './scene-components/DuckFeedScene';
 import { NightSoundsScene } from './scene-components/NightSoundsScene';
 import { FeedPipScene } from './scene-components/FeedPipScene';
 import { CafeOrderScene } from './scene-components/CafeOrderScene';
+import { PartyBeltScene } from './scene-components/PartyBeltScene';
 import { BuzzerShowScene } from './scene-components/BuzzerShowScene';
 import { HouseHideScene } from './scene-components/HouseHideScene';
 import { MovingDayScene } from './scene-components/MovingDayScene';
@@ -308,6 +309,7 @@ export function SceneRenderer(props: {
     case 'house-hide': return <HouseHideScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'buzzer-show': return <BuzzerShowScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'cafe-order': return <CafeOrderScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'party-belt': return <PartyBeltScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'feed-pip': return <FeedPipScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'night-sounds': return <NightSoundsScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'duck-feed': return <DuckFeedScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

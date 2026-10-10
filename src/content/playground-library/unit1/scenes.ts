@@ -509,6 +509,16 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Party Belt (U8L3 signature): party food rides past on a moving belt; a friend asks for one
+       *  ("Ice cream, please!") and the child taps it as it goes by. `target` = index of `foods`;
+       *  `seat` = % position of the friend (with a plate) on the stage. */
+      id: string; kind: 'party-belt'; bg: string; teacher: string; who: CharKey;
+      seat: { x: number; y: number };
+      foods: { word: string; img: string }[];
+      rounds: { friend: CharKey; target: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** "The Mystery Bag" — a toy's silhouette peeks out of a bag; tap which
        *  toy it is, then it jumps out in colour ("It's a red ball!") and the
        *  child says it (Unit 3 Lesson 1). */
@@ -12834,4 +12844,200 @@ export const LESSON_U8L2_SCENES: Scene[] = [
     ],
   },
   { id: 'u8l2-finale', kind: 'finale', bg: bgU8L2Cafe, who: 'pip', line: 'Bread, water, juice! Please and thank you! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 8, Lesson 3 — "Pizza, Cake, Ice Cream!" (Food & Drink)
+ *
+ * From Pip's café (Lesson 2) to a summer party in the park: a red-and-yellow food truck with a pizza,
+ * a birthday cake and ice-cream cones on its counter, bunting, balloons and a picnic table. The truck's
+ * moving belt is the new Party Belt game: a friend asks "Ice cream, please!" and the child grabs it as
+ * it rides past. Then the party train (what comes next?), the P basket (pizza, pig, plum…) and a letter
+ * brick game with the unit's first sounds P, C, B, J.
+ * ========================================================================= */
+
+const bgU8L3Party = `${A}/scenes/bg-u8l3-party-wide.png`;
+const bgU8L3PartyEmpty = `${A}/scenes/bg-u8l3-party-empty-wide.png`;
+const itemIceCream = `${A}/items/item-ice-cream.png`;
+const itemCake = `${A}/items/item-cake.png`;
+const F_PIZZA = { colorWord: 'RED', colorHex: '#EF4444', shape: 'triangle' as const, img: itemPizzaSlice, word: 'pizza' };
+const F_CAKE = { colorWord: 'PINK', colorHex: '#EC4899', shape: 'circle' as const, img: itemCake, word: 'cake' };
+const F_ICE = { colorWord: 'PINK', colorHex: '#F9A8D4', shape: 'triangle' as const, img: itemIceCream, word: 'ice cream' };
+
+export const LESSON_U8L3_TITLE = 'Pizza, Cake, Ice Cream!';
+export const LESSON_U8L3_OBJECTIVE = 'Name pizza, cake and ice cream ("It\'s pizza! Yummy!"), ask for party food politely ("Ice cream, please!"), pick the food a friend asks for out of all the unit\'s food, finish a food pattern and hear the first sound P (pizza), by listening, moving and playing, no reading.';
+
+export const LESSON_U8L3_SCENES: Scene[] = [
+  { id: 'u8l3-title', kind: 'title-card', bg: bgU8L3Party, level: 'Pre-A1', unit: 'Unit 8', lessonLabel: 'Lesson 3', title: 'Pizza, Cake, Ice Cream!', subtitle: "It's a party!" },
+
+  /* 1-3 Hook */
+  {
+    id: 'u8l3-song', kind: 'song', bg: bgU8L3Party, title: '\u{1F3B5} Pizza, Cake, Ice Cream! \u{1F3B5}', teacher: 'Sing and act: eat a big pizza slice, blow the candles on the cake, lick the cold ice cream!',
+    durationSeconds: 20, bigWord: 'Yummy', songUrl: `${A}/audio/pizza-cake-ice-cream-song-u8l3.mp3?v=1`,
+    lineDurationsMs: [3960, 4240, 4400, 7462],
+    songPrompt: 'Cheerful bouncy kids party song',
+    lyrics: [
+      { who: 'pip', text: 'Pizza, pizza! Yummy pizza!', emotion: 'happy' },
+      { who: 'pip', text: 'Cake, cake! Birthday cake!', emotion: 'happy' },
+      { who: 'pip', text: 'Ice cream, ice cream! Cold ice cream!', emotion: 'happy' },
+      { who: 'pip', text: 'Pizza, cake and ice cream! Yummy!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 8 · Lesson 2 · Bread, Water, Juice! (the café).
+    id: 'u8l3-recall-warmup', kind: 'recall-warmup', bg: bgU8L3PartyEmpty, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 2 · Bread, Water, Juice!',
+    teacher: 'Warm-up from last lesson: Pip orders from the café, the child finds it and says it.',
+    items: [
+      { word: 'bread', say: 'Bread, please!', img: itemBread },
+      { word: 'juice', say: 'Juice, please!', img: itemJuice },
+      { word: 'water', say: 'Water, please!', img: itemWaterGlass },
+    ],
+  },
+  {
+    id: 'u8l3-intro', kind: 'cinematic', bg: bgU8L3Party, hidePipOverlay: true, title: 'Pizza, Cake, Ice Cream!', subtitle: 'The party truck', narrator: 'pip',
+    script: [
+      { who: 'pip', line: "Hello! It's a party in the park!" },
+      { who: 'pip', line: 'My truck has pizza, cake and ice cream. Yummy!' },
+    ],
+    cta: "Let's party!",
+  },
+
+  /* 4-5 The words, move */
+  {
+    id: 'u8l3-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU8L3PartyEmpty, teacher: 'Listen, then say it with Pip: "It\'s pizza! Yummy!"',
+    cards: [
+      { who: 'pip', sentence: "It's pizza!", img: itemPizzaSlice, imgLabel: 'pizza' },
+      { who: 'pip', sentence: "It's cake!", img: itemCake, imgLabel: 'cake' },
+      { who: 'pip', sentence: "It's ice cream!", img: itemIceCream, imgLabel: 'ice cream' },
+    ],
+  },
+  {
+    id: 'u8l3-move', kind: 'tpr-actions', bg: bgU8L3Party, who: 'pip',
+    teacher: 'Stand up! Party with Pip.',
+    rounds: [
+      { line: 'Eat a big pizza! Munch, munch!', emoji: '\u{1F355}', img: itemPizzaSlice },
+      { line: 'Blow the candles on the cake! Whoosh!', emoji: '\u{1F382}', img: itemCake },
+      { line: 'Lick the ice cream! Brrr, cold!', emoji: '\u{1F366}', img: itemIceCream },
+      { line: 'Rub your tummy! Yummy!', emoji: '\u{1F60B}' },
+    ],
+  },
+
+  /* 6 Signature game (new): Party Belt */
+  {
+    id: 'u8l3-belt', kind: 'party-belt', bg: bgU8L3PartyEmpty, who: 'pip',
+    teacher: 'Party Belt! The food rides past on the belt. Listen to the friend, then tap that food as it goes by. Say it too: "Ice cream!"',
+    seat: { x: 22, y: 40 },
+    foods: [
+      { word: 'pizza', img: itemPizzaSlice },
+      { word: 'cake', img: itemCake },
+      { word: 'ice cream', img: itemIceCream },
+      { word: 'bread', img: itemBread },
+      { word: 'banana', img: itemBanana },
+    ],
+    rounds: [
+      { friend: 'mia', target: 2, line: 'Ice cream, please!', reply: 'Yummy! I like ice cream!' },
+      { friend: 'leo', target: 0, line: 'Pizza, please!', reply: 'Yummy! I like pizza!' },
+      { friend: 'bella', target: 1, line: 'Cake, please!', reply: 'Yummy! I like cake!' },
+      { friend: 'willow', target: 4, line: 'A banana, please!', reply: 'Yummy! I like bananas!' },
+    ],
+    doneLine: 'Everybody has party food! Yummy!',
+  },
+
+  /* 7-9 More games */
+  {
+    id: 'u8l3-train', kind: 'pattern-train', bg: bgU8L3PartyEmpty, who: 'leo',
+    teacher: 'The party train! What comes next? Say it, then tap it!',
+    rounds: [
+      { pattern: [F_PIZZA, F_CAKE, F_PIZZA, F_CAKE], answer: F_PIZZA, options: [F_ICE, F_PIZZA, F_CAKE] },
+      { pattern: [F_ICE, F_ICE, F_CAKE, F_ICE, F_ICE], answer: F_CAKE, options: [F_CAKE, F_PIZZA, F_ICE] },
+      { pattern: [F_PIZZA, F_CAKE, F_ICE, F_PIZZA, F_CAKE], answer: F_ICE, options: [F_PIZZA, F_ICE, F_CAKE] },
+    ],
+  },
+  {
+    id: 'u8l3-pip-asks', kind: 'join-stage', bg: bgU8L3Party, teacher: 'Pip is at the truck window. The child asks for party food politely — any food is fine.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Hello! Pizza, cake or ice cream?', bubble: 'right' },
+      { who: 'student', line: 'Ice cream, please!', bubble: 'right' },
+      { who: 'pip', line: 'Here you are! Yummy?', bubble: 'right' },
+      { who: 'student', line: 'Yummy! Thank you!', bubble: 'right' },
+    ],
+  },
+
+  /* 10-12 Sounds: P says /p/ */
+  {
+    id: 'u8l3-model-p', kind: 'sound-model', bg: bgU8L3PartyEmpty, who: 'pip', letter: 'P', phoneme: '/p/', sound: 'puh',
+    teacher: 'P says /p/ — pizza, pig, plum!',
+    anchors: [
+      { word: 'pizza', emoji: '\u{1F355}', img: itemPizzaSlice },
+      { word: 'pig', emoji: '\u{1F437}', img: itemPig },
+      { word: 'plum', emoji: '\u{1F7E3}', img: itemPlum },
+    ],
+  },
+  {
+    id: 'u8l3-basket-p', kind: 'basket', bg: bgU8L3PartyEmpty, letter: 'P', phoneme: '/p/', who: 'pip', teacher: "Drag the /p/ things into Pip's P basket! Say each word.", goal: 3, announceOnDrop: false,
+    items: [
+      { word: 'pizza', emoji: '\u{1F355}', img: itemPizzaSlice, hit: true },
+      { word: 'pig', emoji: '\u{1F437}', img: itemPig, hit: true },
+      { word: 'present', emoji: '\u{1F381}', img: itemPresent, hit: true },
+      { word: 'cake', emoji: '\u{1F382}', img: itemCake, hit: false },
+      { word: 'ice cream', emoji: '\u{1F366}', img: itemIceCream, hit: false },
+    ],
+  },
+  { id: 'u8l3-bricks', kind: 'brick-crush', bg: bgU8L3PartyEmpty, teacher: 'Brick Crush! All the food sounds of the unit. Listen, then smash every brick with that letter!', who: 'pip', letters: ['P', 'C', 'B', 'J'], rows: 5, cols: 6, goal: 14, seconds: 60 },
+
+  /* 13 My party */
+  {
+    id: 'u8l3-my-party', kind: 'join-stage', bg: bgU8L3Party, teacher: 'Your turn at the truck! Ask Pip "Pizza, cake or ice cream?" and give him his food.', cast: ['pip'],
+    turns: [
+      { who: 'student', line: 'Hello! Pizza, cake or ice cream?', bubble: 'right' },
+      { who: 'pip', line: 'Cake, please! And ice cream, please!', bubble: 'right' },
+      { who: 'student', line: 'Here you are!', bubble: 'right' },
+      { who: 'pip', line: 'Thank you! Yummy, yummy!', bubble: 'right' },
+    ],
+  },
+
+  /* 14-15 Sticker + Home Mission */
+  {
+    id: 'u8l3-sticker', kind: 'sticker-reward', bg: bgU8L3Party, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'What a party! Here is an ice-cream sticker for you!', sticker: { img: itemIceCream, label: 'Party star' },
+  },
+  {
+    id: 'u8l3-home-mission', kind: 'home-mission', bg: bgU8L3Party, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: a pretend party at home! Ask for pizza, cake or ice cream and say "Yummy!"',
+    parentNote: 'Have a pretend party with toys or drawings: your child offers "Pizza, cake or ice cream?", you answer "Ice cream, please!", and they serve it. Then swap and let them ask: "Cake, please!" — "Yummy! Thank you!".',
+    steps: [
+      { emoji: '\u{1F355}', img: itemPizzaSlice, say: 'Pizza, please!' },
+      { emoji: '\u{1F382}', img: itemCake, say: 'Cake, please!' },
+      { emoji: '\u{1F366}', img: itemIceCream, say: 'Ice cream, please! Yummy!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u8l3-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU8L3Party, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Toss the pizza up high! Catch!', emoji: '\u{1F355}' },
+      { line: 'Shiver like cold ice cream! Brrr!', emoji: '\u{1F366}' },
+      { line: 'Sing Happy Birthday and clap!', emoji: '\u{1F382}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u8l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u8l3-finale', kind: 'finale', bg: bgU8L3Party, who: 'pip', line: 'Pizza, cake, ice cream! Yummy! Goodbye, friend!' },
 ];
