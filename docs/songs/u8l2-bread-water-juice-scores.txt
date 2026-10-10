@@ -1,15 +1,15 @@
 
-=== docs/songs/u8l2-bread-water-juice-take1.mp3  length=20.1s  score=1.00  missing=0  extra=0
+=== docs/songs/u8l2-bread-water-juice-take1.mp3  length=20.1s  score=0.95  missing=1  extra=1
+heard: bread bread bread please water water water please juice juice orange juice please bread and juice thank you yeah
+line starts (s): [np.float64(0.0), np.float64(3.9), np.float64(8.3), np.float64(12.7)]
+lineDurationsMs: [3920, 4400, 4340, 7402]
+
+=== docs/songs/u8l2-bread-water-juice-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
 heard: bread bread bread please water water water please juice juice orange juice please bread and juice thank you yum
-line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.4), np.float64(13.2)]
-lineDurationsMs: [3840, 4540, 4780, 6902]
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.4), np.float64(12.7)]
+lineDurationsMs: [3840, 4540, 4360, 7322]
 
-=== docs/songs/u8l2-bread-water-juice-take2.mp3  length=20.1s  score=0.79  missing=4  extra=4
-heard: bread bread bread cheese water water water cheese juice juice or juice please bread and juice thank you go
-line starts (s): [np.float64(0.0), np.float64(3.9), np.float64(8.4), np.float64(12.7)]
-lineDurationsMs: [3920, 4460, 4360, 7322]
-
-=== docs/songs/u8l2-bread-water-juice-take3.mp3  length=20.1s  score=0.95  missing=1  extra=1
-heard: bread bread bread please water water water please juice juice orange juice please bread and juice thank you young
-line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.4), np.float64(13.2)]
-lineDurationsMs: [3800, 4580, 4820, 6862]
+=== docs/songs/u8l2-bread-water-juice-take3.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: bread bread bread please water water water please juice juice orange juice please bread and juice thank you yum
+line starts (s): [np.float64(0.0), np.float64(3.7), np.float64(8.4), np.float64(12.7)]
+lineDurationsMs: [3720, 4640, 4320, 7382]
