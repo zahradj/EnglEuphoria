@@ -3,7 +3,7 @@ import { NumberCard } from '../../academy-player/drawn';
 import { shuffled, useDeck } from '../ctx';
 import { Icon } from '../Icon';
 import type { HuntSlide, ShadowSlide } from '../types';
-import { Feedback, NOT_YET, Panel } from './shared';
+import { NOT_YET } from './shared';
 import { Art } from './teach';
 
 /** Hidden-object hunt: number cards are tucked into the scene; read the number words and find them. */
@@ -40,16 +40,17 @@ export function HuntView({ slide }: { slide: HuntSlide }) {
           </button>
         ))}
       </div>
-      <Panel title={slide.prompt}>
+      <div className="ad-gm-hud" role="group" aria-label={slide.prompt}>
+        <span className="ad-gm-title">{slide.prompt}</span>
         <div className="ad-hunt-list" aria-live="polite">
           {slide.targets.map((t) => (
-            <span key={t.word} className="ad-hunt-word" data-found={found.includes(t.word)}>{found.includes(t.word) ? <Icon name="check" /> : <Icon name="search" />} {t.word}</span>
+            <span key={t.word} className="ad-gm-chip" data-found={found.includes(t.word)}>{found.includes(t.word) ? <Icon name="check" /> : <Icon name="search" />} {t.word}</span>
           ))}
         </div>
-        {slip && !all && <Feedback kind="try">{NOT_YET} Read the word, then look for that number.</Feedback>}
-        {all && <Feedback kind="ok">You found them all!</Feedback>}
-        <p className="ad-hint-line">{found.length} of {slide.targets.length} found. Tap the number cards hidden in the scene.</p>
-      </Panel>
+        <span className="ad-gm-count">{found.length}/{slide.targets.length}</span>
+      </div>
+      {slip && !all && <p className="ad-gm-toast" role="status">{NOT_YET} Read the word, then look for that number.</p>}
+      {all && <p className="ad-gm-toast" data-ok="true" role="status"><Icon name="check" /> You found them all!</p>}
     </>
   );
 }
@@ -82,22 +83,29 @@ export function ShadowView({ slide }: { slide: ShadowSlide }) {
     }
   };
   return (
-    <Panel title={slide.prompt}>
+    <>
+      <div className="ad-gm-hud" role="group" aria-label={slide.prompt}>
+        <span className="ad-gm-title">{slide.prompt}</span>
+        <span className="ad-gm-count">{Math.min(round + 1, slide.rounds.length)}/{slide.rounds.length}</span>
+      </div>
       {!finished ? (
-        <>
-          <div className="ad-shadow" data-lit={lit} key={round}>
-            <div className="ad-shadow-art"><Art art={cur.art} /></div>
-            <span className="ad-shadow-q" aria-hidden="true">?</span>
+        <div className="ad-gm-stage">
+          <div className="ad-portal" data-lit={lit} key={round}>
+            <i className="ad-portal-ring" aria-hidden="true" />
+            <i className="ad-portal-ring ad-portal-ring2" aria-hidden="true" />
+            <div className="ad-shadow" data-lit={lit}>
+              <div className="ad-shadow-art"><Art art={cur.art} /></div>
+              <span className="ad-shadow-q" aria-hidden="true">?</span>
+            </div>
           </div>
-          <div className="ad-options" data-pics="false" role="group" aria-label="Which word?">
-            {opts.map((o) => <button key={o} type="button" className="ad-option" onClick={() => pick(o)}>{o}</button>)}
+          <div className="ad-gm-keys" role="group" aria-label="Which word?">
+            {opts.map((o, i) => <button key={o} type="button" className="ad-gm-key" data-k={i} onClick={() => pick(o)}>{o}</button>)}
           </div>
-          {slip && <Feedback kind="try">{NOT_YET} Look at the shape.</Feedback>}
-          <p className="ad-hint-line">Shadow {round + 1} of {slide.rounds.length}</p>
-        </>
+          {slip && <p className="ad-gm-toast" role="status">{NOT_YET} Look at the shape.</p>}
+        </div>
       ) : (
-        <Feedback kind="ok">All the shadows matched!</Feedback>
+        <p className="ad-gm-toast" data-ok="true" role="status"><Icon name="check" /> All the shadows matched!</p>
       )}
-    </Panel>
+    </>
   );
 }

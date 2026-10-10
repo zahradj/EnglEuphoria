@@ -13,7 +13,7 @@ const RAW: Chest[] = [
     slides: [
       { id: 'q1-shadow', kind: 'shadow', ...hw, bg: 'locker-hall', items: ['one', 'two', 'three', 'four', 'five'], prompt: 'Shadow match! Which number is hiding?', rounds: [1, 3, 5, 2, 4].map((n) => ({ art: { type: 'count' as const, n }, answer: WORDS[n], options: [WORDS[n], WORDS[(n % 5) + 1], WORDS[((n + 1) % 5) + 1]] })) },
       { id: 'q1-lockers', kind: 'lockers', ...hw, bg: 'locker-hall', items: ['one', 'two', 'three', 'four', 'five'], prompt: 'Locker Pop! Read the word and open the locker.', rounds: [3, 5, 1, 4, 2], grid: [1, 2, 3, 4, 5], words: WORDS },
-      { id: 'q1-hunt', kind: 'hunt', ...hw, bg: 'locker-hall', items: ['one', 'three', 'five', 'two'], prompt: 'Find the hidden numbers!', targets: [{ word: 'three', n: 3, x: 12, y: 44 }, { word: 'five', n: 5, x: 82, y: 38 }, { word: 'two', n: 2, x: 47, y: 24 }], decoys: [{ n: 4, x: 28, y: 66 }, { n: 1, x: 70, y: 60 }] },
+      { id: 'q1-hunt', kind: 'hunt', ...hw, bg: 'locker-hall', items: ['one', 'three', 'five', 'two'], prompt: 'Find the hidden numbers!', targets: [{ word: 'three', n: 3, x: 48, y: 74 }, { word: 'five', n: 5, x: 82, y: 38 }, { word: 'two', n: 2, x: 47, y: 24 }], decoys: [{ n: 4, x: 28, y: 66 }, { n: 1, x: 70, y: 60 }] },
     ],
   },
   {
