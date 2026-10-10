@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '8-4': { settings: ['autumn apple orchard'], look: "a sunny autumn apple orchard: trees heavy with red apples, golden leaves on the grass, a long wooden table where the four friends each hold up the food they like (Pip an apple, Mia a banana, Leo pizza, Bella ice cream); the empty orchard with a wooden counter and a little smoothie cart becomes the Smoothie Bar with a big code-drawn blender" },
   '8-3': { settings: ['park party food truck'], look: "a summer party in a green park: a bright red-and-yellow food truck with a striped awning, a big round pizza, a pink birthday cake with candles and three ice-cream cones on its counter, Pip in a white chef hat waving from the window; bunting, balloons and a wooden picnic table; a moving grey belt carries the party food past the table" },
   '8-2': { settings: ['bakery café'], look: "Pip's little bakery café on a sunny morning: a wooden counter with baskets of bread loaves, a glass jug of orange juice and a jug of water, a chalkboard with a drawn loaf and cup, round wooden tables with green-cushioned chairs by a big window with flower boxes; Pip in a small white apron behind the counter, friends come to the table to order" },
   '8-1': { settings: ['picnic hill'], look: "a picnic on a sunny green spring hill: a big red-and-white checkered blanket, an open wicker basket, a shady apple tree full of red apples, a little blue stream and yellow flowers; Pip sits on the blanket with an apple, a banana and a glass of milk" },
@@ -202,6 +203,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '8-4': {
+    sources: ['Toca Kitchen / Lingokids cooking play (put things in, see what you made)', 'Cambridge (Pre A1 Starters: listen and tick two things; "I like …" answers)', 'Sesame Workshop (model the sentence with every character, then the child says it)', 'Super Simple Songs "Do You Like…?" style ask-and-answer'],
+    mechanics: [
+      'cooking play → Smoothie Bar: a friend says "I like bananas and milk!", the child puts those in the blender, blends, and the smoothie takes their colour',
+      'tap-each-character model → Who likes what?: four friends at the orchard table each say "I like …", then the camera turns to the child',
+      'Guess Who with food cards ("Is it a banana?") and an A / B sound sort; ask-and-answer "Do you like …? Yes, I do!" both ways',
+    ],
+    betterThan: [
+      'the order IS the lesson sentence ("I like …"), heard first from every friend, then built by the child into something they can see (the smoothie colour)',
+      'the child picks one or two things, checks, then blends: a wrong mix is poured out with the line said again, and the right fruit glows after two tries',
+      'no clock and no reading; the child also asks Pip "Do you like pizza?", so the question goes both ways',
     ],
   },
   '8-3': {

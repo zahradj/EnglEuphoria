@@ -143,7 +143,7 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/20" />
 
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-base font-black text-orange-700 shadow-xl sm:text-xl">
-        {phase === 'found' ? `🎉 ${foundLine(secret)}` : secret.person ? '👪 Who is it? Ask Pip!' : secret.word ? '🧸 Guess the secret toy. Ask!' : '🃏 Pip has a secret card. Ask Pip!'}
+        {phase === 'found' ? `🎉 ${foundLine(secret)}` : secret.person ? '👪 Who is it? Ask Pip!' : secret.word ? '🃏 Guess the secret card. Ask!' : '🃏 Pip has a secret card. Ask Pip!'}
         <span className="ml-2 rounded-full bg-orange-100 px-2 py-0.5 text-sm text-orange-600">{round + 1}/{total}</span>
       </div>
       <button onClick={() => cueSpeak(SECRET_INTRO, scene.who)} className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>

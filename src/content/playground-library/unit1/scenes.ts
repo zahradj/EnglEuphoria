@@ -509,6 +509,16 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Smoothie Bar (U8L4 signature): a friend says what they like ("I like bananas and milk!"); the child
+       *  taps those `fruits` into the blender and presses Blend; the smoothie takes the mix colour (`hex`).
+       *  `mix` = indices of `fruits`; `seat` = % position of the friend on the stage. */
+      id: string; kind: 'smoothie-bar'; bg: string; teacher: string; who: CharKey;
+      seat: { x: number; y: number };
+      fruits: { word: string; img: string; hex: string }[];
+      rounds: { friend: CharKey; mix: number[]; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Party Belt (U8L3 signature): party food rides past on a moving belt; a friend asks for one
        *  ("Ice cream, please!") and the child taps it as it goes by. `target` = index of `foods`;
        *  `seat` = % position of the friend (with a plate) on the stage. */
@@ -13040,4 +13050,199 @@ export const LESSON_U8L3_SCENES: Scene[] = [
     ],
   },
   { id: 'u8l3-finale', kind: 'finale', bg: bgU8L3Party, who: 'pip', line: 'Pizza, cake, ice cream! Yummy! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 8, Lesson 4 — "I Like Apples!" (Food & Drink)
+ *
+ * From the park party (Lesson 3) to an apple orchard on a golden autumn day: the four friends at a long
+ * wooden table, each holding the food they like (Pip an apple, Mia a banana, Leo pizza, Bella ice
+ * cream). The lesson's sentence is "I like …" — heard from every friend, then said by the child. The new
+ * Smoothie Bar game: a friend says "I like bananas and milk!", the child puts them in the blender and
+ * blends a smoothie in that colour. Then the secret food card ("Is it a banana?"), and the sounds A
+ * (apple) and B (banana).
+ * ========================================================================= */
+
+const bgU8L4Orchard = `${A}/scenes/bg-u8l4-orchard-wide.png`;
+const bgU8L4OrchardEmpty = `${A}/scenes/bg-u8l4-orchard-empty-wide.png`;
+const foodCard = (img: string, word: string) => ({ colorWord: '', colorHex: '#ffffff', shape: 'square' as const, img, word });
+
+export const LESSON_U8L4_TITLE = 'I Like Apples!';
+export const LESSON_U8L4_OBJECTIVE = 'Say what you like ("I like apples!"), understand what a friend likes and make it for them, ask and answer "Do you like …? Yes, I do!", guess a secret food ("Is it a banana?") and hear the first sounds A (apple) and B (banana), by listening, moving and playing, no reading.';
+
+export const LESSON_U8L4_SCENES: Scene[] = [
+  { id: 'u8l4-title', kind: 'title-card', bg: bgU8L4Orchard, level: 'Pre-A1', unit: 'Unit 8', lessonLabel: 'Lesson 4', title: 'I Like Apples!', subtitle: 'What do you like?' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u8l4-song', kind: 'song', bg: bgU8L4Orchard, title: '\u{1F3B5} I Like Apples! \u{1F3B5}', teacher: 'Sing and point to yourself on "I like"! Crunch an apple, peel a banana, and nod "Yes, I do!"',
+    durationSeconds: 20, bigWord: 'I like', songUrl: `${A}/audio/i-like-apples-song-u8l4.mp3?v=1`,
+    lineDurationsMs: [4220, 4460, 4420, 6962],
+    songPrompt: 'Cheerful bouncy kids song about liking food',
+    lyrics: [
+      { who: 'pip', text: 'I like apples! Crunch, crunch, crunch!', emotion: 'happy' },
+      { who: 'pip', text: 'I like bananas! Yum, yum, yum!', emotion: 'happy' },
+      { who: 'pip', text: 'I like pizza! I like cake!', emotion: 'happy' },
+      { who: 'pip', text: 'Do you like apples? Yes, I do!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 8 · Lesson 3 · Pizza, Cake, Ice Cream! (the party food).
+    id: 'u8l4-recall-warmup', kind: 'recall-warmup', bg: bgU8L4OrchardEmpty, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 3 · Pizza, Cake, Ice Cream!',
+    teacher: 'Warm-up from last lesson: Pip asks for party food, the child finds it and says it.',
+    items: [
+      { word: 'pizza', say: 'Pizza, please!', img: itemPizzaSlice },
+      { word: 'cake', say: 'Cake, please!', img: itemCake },
+      { word: 'ice cream', say: 'Ice cream, please!', img: itemIceCream },
+    ],
+  },
+  {
+    id: 'u8l4-intro', kind: 'cinematic', bg: bgU8L4Orchard, hidePipOverlay: true, title: 'I Like Apples!', subtitle: 'In the orchard', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Look! An apple! I like apples!' },
+      { who: 'pip', line: 'My friends like food too. What do they like?' },
+    ],
+    cta: "Let's see!",
+  },
+
+  /* 4-5 Model "I like …", move */
+  {
+    id: 'u8l4-who-likes', kind: 'gather', bg: bgU8L4Orchard,
+    teacher: 'Who likes what? Tap each friend to hear what they like, and say it with them. Then drag the camera to the table for YOUR turn: "I like …!"',
+    hotspots: [
+      { who: 'pip', line: 'I like apples!', x: 18, y: 42, r: 9 },
+      { who: 'mia', line: 'I like bananas!', x: 37, y: 52, r: 8 },
+      { who: 'leo', line: 'I like pizza!', x: 58, y: 40, r: 10 },
+      { who: 'bella', line: 'I like ice cream!', x: 81, y: 44, r: 9 },
+    ],
+    stage: { x: 50, y: 84, r: 9 },
+  },
+  {
+    id: 'u8l4-move', kind: 'tpr-actions', bg: bgU8L4Orchard, who: 'pip',
+    teacher: 'Stand up! Pick apples with Pip.',
+    rounds: [
+      { line: 'Reach up high! Pick an apple!', emoji: '\u{1F34E}', img: itemApple },
+      { line: 'Crunch, crunch! I like apples!', emoji: '\u{1F60B}' },
+      { line: 'Peel a banana! Down, down, down!', emoji: '\u{1F34C}', img: itemBanana },
+      { line: 'Thumbs up! I like it!', emoji: '\u{1F44D}' },
+    ],
+  },
+
+  /* 6 Signature game (new): Smoothie Bar */
+  {
+    id: 'u8l4-smoothie', kind: 'smoothie-bar', bg: bgU8L4OrchardEmpty, who: 'pip',
+    teacher: 'Smoothie Bar! Listen to what the friend likes. Tap those things into the blender (tap again to take one out), then press Blend! Say it too: "Bananas and milk!"',
+    seat: { x: 17, y: 50 },
+    fruits: [
+      { word: 'apples', img: itemApple, hex: '#EF4444' },
+      { word: 'bananas', img: itemBanana, hex: '#FACC15' },
+      { word: 'milk', img: itemMilk, hex: '#F8FAFC' },
+      { word: 'oranges', img: itemOrange, hex: '#FB923C' },
+      { word: 'grapes', img: itemGrapes, hex: '#8B5CF6' },
+    ],
+    rounds: [
+      { friend: 'leo', mix: [0], line: 'I like apples!', reply: 'Yummy! An apple smoothie! I like it!' },
+      { friend: 'mia', mix: [1, 2], line: 'I like bananas and milk!', reply: 'Yummy! Thank you! I like it!' },
+      { friend: 'bella', mix: [4, 2], line: 'I like grapes and milk!', reply: 'A purple smoothie! I like it!' },
+      { friend: 'willow', mix: [3, 1], line: 'I like oranges and bananas!', reply: 'Yummy, yummy! I like it!' },
+    ],
+    doneLine: 'Four smoothies! Everybody is happy!',
+  },
+
+  /* 7-9 Ask and answer, more games */
+  {
+    id: 'u8l4-do-you-like', kind: 'join-stage', bg: bgU8L4Orchard, teacher: 'Mia asks the student. Any answer is fine: "Yes, I do!" or "No!" Then the student says what they like.', cast: ['mia'],
+    turns: [
+      { who: 'mia', line: 'Do you like apples?', bubble: 'right' },
+      { who: 'student', line: 'Yes, I do! I like apples!', bubble: 'right' },
+      { who: 'mia', line: 'Do you like bananas?', bubble: 'right' },
+      { who: 'student', line: 'Yes, I do! I like bananas!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u8l4-secret', kind: 'secret-card', bg: bgU8L4OrchardEmpty, who: 'pip',
+    teacher: 'Pip hides one food card. The student asks "Is it a banana?" Pip answers yes or no. Then swap: the student hides one!',
+    cards: [
+      foodCard(itemApple, 'apple'),
+      foodCard(itemBanana, 'banana'),
+      foodCard(itemPizzaSlice, 'pizza'),
+      foodCard(itemCake, 'cake'),
+      foodCard(itemCookie, 'cookie'),
+      foodCard(itemIceCream, 'ice cream'),
+    ],
+    rounds: [{ secret: 1 }, { secret: 3 }],
+  },
+
+  /* 10-11 Sounds: A and B */
+  {
+    id: 'u8l4-sort-ab', kind: 'sound-sort', bg: bgU8L4OrchardEmpty, teacher: 'Listen to each word. Does it start with /a/ like apple, or /b/ like banana? Drag it to A or B!',
+    targets: [
+      { letter: 'A', phoneme: '/a/', who: 'pip' },
+      { letter: 'B', phoneme: '/b/', who: 'bella' },
+    ],
+    items: [
+      { word: 'apple', img: itemApple, emoji: '\u{1F34E}', letter: 'A' },
+      { word: 'banana', img: itemBanana, emoji: '\u{1F34C}', letter: 'B' },
+      { word: 'ant', img: itemAnt, emoji: '\u{1F41C}', letter: 'A' },
+      { word: 'bread', img: itemBread, emoji: '\u{1F35E}', letter: 'B' },
+      { word: 'ball', img: itemBall, emoji: '\u{26BD}', letter: 'B' },
+      { word: 'bag', img: itemBag, emoji: '\u{1F45C}', letter: 'B' },
+    ],
+  },
+
+  /* 12 My favourite */
+  {
+    id: 'u8l4-my-turn', kind: 'join-stage', bg: bgU8L4Orchard, teacher: 'Your turn to ask! The student asks Pip "Do you like …?" and then says what they like.', cast: ['pip'],
+    turns: [
+      { who: 'student', line: 'Pip, do you like pizza?', bubble: 'right' },
+      { who: 'pip', line: 'Yes, I do! I like pizza! Do you like apples?', bubble: 'right' },
+      { who: 'student', line: 'Yes, I do! I like apples!', bubble: 'right' },
+      { who: 'pip', line: 'Me too! Crunch, crunch!', bubble: 'right' },
+    ],
+  },
+
+  /* 13-14 Sticker + Home Mission */
+  {
+    id: 'u8l4-sticker', kind: 'sticker-reward', bg: bgU8L4Orchard, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You made yummy smoothies! Here is an apple sticker for you!', sticker: { img: itemApple, label: 'Smoothie maker' },
+  },
+  {
+    id: 'u8l4-home-mission', kind: 'home-mission', bg: bgU8L4Orchard, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: at dinner, say what you like! "I like apples!" Ask your family: "Do you like bananas?"',
+    parentNote: 'At a meal or snack, let your child point and say "I like …!" for each food they like. Then they ask you "Do you like apples?" and you answer "Yes, I do!" or "No!". Make a smoothie together if you can!',
+    steps: [
+      { emoji: '\u{1F34E}', img: itemApple, say: 'I like apples!' },
+      { emoji: '\u{1F34C}', img: itemBanana, say: 'Do you like bananas?' },
+      { emoji: '\u{1F44D}', say: 'Yes, I do!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u8l4-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU8L4Orchard, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Shake the apple tree! Shake, shake!', emoji: '\u{1F333}' },
+      { line: 'Spin like a blender! Whirr!', emoji: '\u{1F300}' },
+      { line: 'Drink your smoothie! Slurp!', emoji: '\u{1F964}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u8l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u8l4-finale', kind: 'finale', bg: bgU8L4Orchard, who: 'pip', line: 'I like apples! What do you like? Goodbye, friend!' },
 ];

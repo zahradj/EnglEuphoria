@@ -318,5 +318,10 @@
     "path": "public/lep1/audio/pizza-cake-ice-cream-song-u8l3.mp3",
     "bytes": 321037,
     "sha256": "70c2c2ea9d064d69704e722294e9fe1b3f61a46db3e255d74c63c8bc0da36e7c"
+  },
+  "u8l4-i-like-apples": {
+    "path": "public/lep1/audio/i-like-apples-song-u8l4.mp3",
+    "bytes": 321037,
+    "sha256": "ba0ad463ef972eeb0cef953898c9b095435afeaafebd79f131afb5257b766177"
   }
 }
