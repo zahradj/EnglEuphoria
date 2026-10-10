@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useDeck } from '../ctx';
+import { Icon } from '../Icon';
 import type { CardSlide, WrapSlide } from '../types';
 import { Panel } from './shared';
 
@@ -22,7 +23,7 @@ export function CardView({ slide }: { slide: CardSlide }) {
     <Panel title={slide.prompt} wide>
       <div className="ad-cardgrid">
         <div className="ad-model" aria-label="Model">
-          <span className="ad-model-title">👀 Model: Ava’s card</span>
+          <span className="ad-model-title"><Icon name="eyes" /> Model: Ava’s card</span>
           {slide.model.map((m) => (
             <p key={m.label}><b>{m.label}</b> {m.text}</p>
           ))}
@@ -35,7 +36,7 @@ export function CardView({ slide }: { slide: CardSlide }) {
                 <button key={a} type="button" role="radio" aria-checked={age === String(a)} className="ad-btn ad-btn-small" data-on={age === String(a)} onClick={() => setAge(String(a))}>{a}</button>
               ))}
             </div>
-            {age && <p className="ad-yoursentence">✅ I am {age}.</p>}
+            {age && <p className="ad-yoursentence"><Icon name="check" /> I am {age}.</p>}
           </div>
           <div className="ad-field">
             <label htmlFor="ad-country">My country</label>
@@ -44,20 +45,20 @@ export function CardView({ slide }: { slide: CardSlide }) {
           <div className="ad-field">
             <label htmlFor="ad-nation">My nationality</label>
             <div className="ad-starter-row"><span className="ad-starter">I am</span><input id="ad-nation" className="ad-input" maxLength={20} value={nation} placeholder="Brazilian" onChange={(e) => setNation(e.target.value.replace(/[{}<>]/g, ''))} /></div>
-            <p className="ad-fieldclue">💡 {slide.nationalities.join(' · ')}</p>
+            <p className="ad-fieldclue"><Icon name="bulb" /> {slide.nationalities.join(' · ')}</p>
           </div>
         </div>
       </div>
       <div className="ad-printer">
         <div className="ad-printslot" />
         <div className="ad-printcard" data-printed={printed} aria-live="polite">
-          <b>🪪 CLUB SIGN-UP CARD</b>
+          <b><Icon name="idcard" /> CLUB SIGN-UP CARD</b>
           {rows.map(([k, v]) => (
             <p key={k}><span>{k}</span><i>{v}</i></p>
           ))}
         </div>
       </div>
-      <div className="ad-row"><button type="button" className="ad-btn ad-btn-primary" disabled={!ok || printed} onClick={print}>🖨️ Print my card</button></div>
+      <div className="ad-row"><button type="button" className="ad-btn ad-btn-primary" disabled={!ok || printed} onClick={print}><Icon name="printer" /> Print my card</button></div>
     </Panel>
   );
 }
@@ -72,8 +73,8 @@ export function WrapView({ slide }: { slide: WrapSlide }) {
   return (
     <Panel title={slide.heading} wide>
       <div className="ad-stamps" aria-label="Stamps collected">
-        {[['spell', '🔤', 'Spell'], ['number', '🔢', 'Number'], ['passport', '🛂', 'Passport'], ['card', '🪪', 'Card']].map(([id, icon, label]) => (
-          <span key={id} className="ad-stampbadge" data-got={stamps.includes(id)}><b>{icon}</b><i>{label}</i></span>
+        {[['spell', 'abc', 'Spell'], ['number', 'numbers', 'Number'], ['passport', 'passport', 'Passport'], ['card', 'idcard', 'Card']].map(([id, icon, label]) => (
+          <span key={id} className="ad-stampbadge" data-got={stamps.includes(id)}><b><Icon name={icon} /></b><i>{label}</i></span>
         ))}
       </div>
       <p className="ad-hint-line">Tap each line: yes · almost · not yet. Honest is best!</p>
@@ -85,9 +86,9 @@ export function WrapView({ slide }: { slide: WrapSlide }) {
           </button>
         ))}
       </div>
-      <p className="ad-homework">📝 {slide.homework}</p>
+      <p className="ad-homework"><Icon name="note" /> {slide.homework}</p>
       <button type="button" className="ad-clue-card" data-flip={flip} onClick={() => all && (setFlip(true), setVars({ ticks: Object.values(tick).join(',') }), done())} disabled={!all} aria-label="Clue for next time">
-        {flip ? slide.clue : all ? '🔎 Tap to see the clue for next time' : '🔒 Answer all lines to unlock the clue'}
+        {flip ? slide.clue : all ? <><Icon name="search" /> Tap to see the clue for next time</> : <><Icon name="lock" /> Answer all lines to unlock the clue</>}
       </button>
     </Panel>
   );

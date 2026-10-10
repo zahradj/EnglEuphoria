@@ -70,19 +70,16 @@ export type TeachArt =
   | { type: 'flag'; code: string }
   | { type: 'person'; code: string }
   | { type: 'letters'; text: string }
-  | { type: 'phrase'; icon: string }
-  /** an animated emoji picture (feelings, objects) */
-  | { type: 'emoji'; icon: string; label: string }
-  /** a Canva picture card from `cards/<id>.webp` (falls back to its label) */
+  /** a Canva picture card from `cards/<id>.webp` (flat 2D illustration; never 3D, never emoji) */
   | { type: 'card'; id: string; label: string };
 export interface TeachPage { word: string; art: TeachArt; meaning: string; example: string; clue?: string }
 export interface TeachSlide extends SlideBase { kind: 'teach'; title: string; pages: TeachPage[] }
 /** Modelling: the characters DO the language, line by line; the pattern card shows the frame and the part that changes. */
 export type ModelPart = string | { slot: string; label: string };
 export interface ModelSlide extends SlideBase { kind: 'model'; title: string; lines: { who: CastName; text: string; pic?: TeachArt; frame?: ModelPart[]; note?: string }[]; closing: string }
-export interface BorderSlide extends SlideBase { kind: 'border'; prompt: string; rounds: { flag: string; says: string; answer: string; options: string[] }[]; stamp?: string }
+export interface BorderSlide extends SlideBase { kind: 'border'; prompt: string; /** nationality word -> flag code: each passport shows its flag */ flags?: Record<string, string>; rounds: { flag: string; says: string; answer: string; options: string[] }[]; stamp?: string }
 export interface MemorySlide extends SlideBase { kind: 'memory'; prompt: string; pairs: { flag: string; text: string }[] }
-export interface PhoneChatSlide extends SlideBase { kind: 'phonechat'; prompt: string; contact: CastName; steps: { text: string; /** a sticker picture beside the message */ pic?: TeachArt; reply: string; extra?: string[] }[] }
+export interface PhoneChatSlide extends SlideBase { kind: 'phonechat'; prompt: string; contact: CastName; steps: { text: string; /** a sticker picture beside the message */ pic?: TeachArt; reply: string; extra?: string[]; /** pictures on the word tiles (key = the tile text) so beginners see what the word means */ tilePics?: Record<string, TeachArt> }[] }
 export interface FadeSlide extends SlideBase { kind: 'fade'; prompt: string; lines: { who: CastName; text: string; keys: string[] }[] }
 export interface CardSlide extends SlideBase {
   kind: 'card';

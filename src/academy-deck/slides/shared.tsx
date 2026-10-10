@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Icon } from '../Icon';
 
 /** The glass panel a game sits on, over the scene plate. */
 export function Panel({ title, children, wide = false }: { title?: string; children: ReactNode; wide?: boolean }) {
@@ -11,7 +12,7 @@ export function Panel({ title, children, wide = false }: { title?: string; child
 }
 
 export const Feedback = ({ kind, children }: { kind: 'ok' | 'try'; children: ReactNode }) => (
-  <p className={`ad-feedback ad-feedback-${kind}`} role="status">{kind === 'ok' ? '✅ ' : ''}{children}</p>
+  <p className={`ad-feedback ad-feedback-${kind}`} role="status">{kind === 'ok' && <Icon name="check" />} {children}</p>
 );
 
 /** Not yet — try again. Friendly wording only (Academy rule). */

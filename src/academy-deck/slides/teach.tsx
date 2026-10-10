@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useDeck } from '../ctx';
+import { Icon } from '../Icon';
 import { COLOR, Bubble } from '../Stage';
 import type { ModelSlide, TeachArt, TeachSlide } from '../types';
 import { Traveller, WavingFlag } from './anim';
@@ -10,12 +11,11 @@ import { Panel } from './shared';
 export function Art({ art, again = 0, size = 'md' }: { art: TeachArt; again?: number; size?: 'sm' | 'md' }) {
   const { artBase } = useDeck();
   const [broken, setBroken] = useState(false);
-  if (art.type === 'emoji') return <div className={`ad-art ad-art-emoji ad-art-${size}`} key={again} role="img" aria-label={art.label}><span>{art.icon}</span></div>;
   if (art.type === 'card') {
     return artBase && !broken ? (
       <div className={`ad-art ad-art-card ad-art-${size}`} key={again}><img src={`${artBase}/cards/${art.id}.webp`} alt={art.label} draggable={false} onError={() => setBroken(true)} /></div>
     ) : (
-      <div className={`ad-art ad-art-emoji ad-art-${size}`} role="img" aria-label={art.label}><span>🖼️</span></div>
+      <div className={`ad-art ad-art-frame ad-art-${size}`} role="img" aria-label={art.label}><Icon name="frame" className="ad-icon-big" /></div>
     );
   }
   if (art.type === 'count') {
@@ -34,7 +34,7 @@ export function Art({ art, again = 0, size = 'md' }: { art: TeachArt; again?: nu
     return (
       <div className={`ad-art ad-art-flag ad-art-${size}`} key={again}>
         <div className="ad-flagpole"><WavingFlag code={art.code} label={`Flag of ${art.code}`} /></div>
-        <span className="ad-pin" aria-hidden="true">📍</span>
+        <span className="ad-pin" aria-hidden="true"><Icon name="pin" /></span>
       </div>
     );
   }
@@ -50,7 +50,7 @@ export function Art({ art, again = 0, size = 'md' }: { art: TeachArt; again?: nu
       </div>
     );
   }
-  return <div className={`ad-art ad-art-phrase ad-art-${size}`} key={again} role="img" aria-label="Picture"><span>{art.icon}</span></div>;
+  return null;
 }
 
 const hi = (text: string, word: string): ReactNode => {
@@ -84,7 +84,7 @@ export function TeachView({ slide }: { slide: TeachSlide }) {
           <h3 className="ad-teach-word">{page.word}</h3>
           <p className="ad-teach-meaning">{page.meaning}</p>
           <p className="ad-teach-example">{hi(page.example, page.word)}</p>
-          {page.clue && <p className="ad-teach-clue"><span aria-hidden="true">💡 </span>{page.clue}</p>}
+          {page.clue && <p className="ad-teach-clue"><Icon name="bulb" /> {page.clue}</p>}
           <button type="button" className="ad-btn ad-btn-small" onClick={() => setAgain(again + 1)}>▶ Show again</button>
         </div>
       </div>
@@ -132,9 +132,9 @@ export function ModelView({ slide }: { slide: ModelSlide }) {
           )}
         </div>
       )}
-      {line.note && <p className="ad-teach-clue"><span aria-hidden="true">💡 </span>{line.note}</p>}
+      {line.note && <p className="ad-teach-clue"><Icon name="bulb" /> {line.note}</p>}
       <div className="ad-row">
-        {finished ? <span className="ad-feedback ad-feedback-ok">✅ {slide.closing}</span> : <button type="button" className="ad-btn ad-btn-primary" onClick={() => setN(n + 1)}>Watch next ▸</button>}
+        {finished ? <span className="ad-feedback ad-feedback-ok"><Icon name="check" /> {slide.closing}</span> : <button type="button" className="ad-btn ad-btn-primary" onClick={() => setN(n + 1)}>Watch next ▸</button>}
       </div>
     </Panel>
   );

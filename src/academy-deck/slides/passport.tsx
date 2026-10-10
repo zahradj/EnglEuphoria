@@ -53,6 +53,7 @@ export function BorderView({ slide }: { slide: BorderSlide }) {
           <div className="ad-passports">
             {opts.map((o) => (
               <button key={o} type="button" className="ad-passport" data-drop={o} data-stamped={stamped === o} onClick={() => held && drop(o)} aria-label={`Passport: ${o}`}>
+                {slide.flags?.[o] && <span className="ad-passport-flag"><WavingFlag code={slide.flags[o]} label={`Flag for ${o}`} /></span>}
                 <svg className="ad-passport-emblem" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="22" fill="none" stroke="#f6d77a" strokeWidth="2.5" /><ellipse cx="30" cy="30" rx="9" ry="22" fill="none" stroke="#f6d77a" strokeWidth="2" /><path d="M8 30h44M12 19h36M12 41h36" stroke="#f6d77a" strokeWidth="2" fill="none" /><path d="M30 4l2.2 5h5.3l-4.3 3.2 1.7 5.1-4.9-3.2-4.9 3.2 1.7-5.1L22.5 9h5.3z" fill="#f6d77a" transform="translate(0 -3) scale(.9) translate(3 0)" /></svg>
                 <span className="ad-passport-title">PASSPORT</span>
                 <b>{o}</b>

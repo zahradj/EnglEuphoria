@@ -3,6 +3,7 @@ import { shuffled, useDeck } from '../ctx';
 import { useDragChip } from '../drag';
 import { NumberCard } from '../../academy-player/drawn';
 import type { LockersSlide, NumTrainSlide, PadlockSlide } from '../types';
+import { Icon } from '../Icon';
 import { Feedback, NOT_YET, Panel } from './shared';
 
 /** Locker Pop: a number WORD is shown; open the locker with that number. */
@@ -34,11 +35,11 @@ export function LockersView({ slide }: { slide: LockersSlide }) {
   };
   return (
     <Panel title={slide.prompt} wide>
-      <div className="ad-lockers-ask" aria-live="polite">{finished ? '🔓 All open!' : <>Open locker: <b>{slide.words[target]}</b></>}</div>
+      <div className="ad-lockers-ask" aria-live="polite">{finished ? <><Icon name="unlock" /> All open!</> : <>Open locker: <b>{slide.words[target]}</b></>}</div>
       <div className="ad-lockers">
         {all.map((n) => (
           <button key={n} type="button" className="ad-locker" data-open={open.includes(n)} data-shake={shake === n} onClick={() => tap(n)} aria-label={`Locker ${n}`}>
-            <span className="ad-locker-interior" aria-hidden="true"><i className="ad-shelf" /><b className="ad-prize">⭐</b></span>
+            <span className="ad-locker-interior" aria-hidden="true"><i className="ad-shelf" /><b className="ad-prize"><Icon name="star" /></b></span>
             <span className="ad-locker-door" aria-hidden="true">
               <span className="ad-vents"><i /><i /><i /><i /></span>
               <span className="ad-locker-num">{n}</span>
@@ -120,7 +121,7 @@ export function PadlockView({ slide }: { slide: PadlockSlide }) {
   };
   return (
     <Panel title={slide.prompt}>
-      <div className="ad-clue">🗒️ <b>{slide.clue}</b></div>
+      <div className="ad-clue"><Icon name="note" /> <b>{slide.clue}</b></div>
       <div className="ad-padlock" data-open={opened}>
         <div className="ad-shackle" aria-hidden="true" />
         <div className="ad-dials">
@@ -134,9 +135,9 @@ export function PadlockView({ slide }: { slide: PadlockSlide }) {
           ))}
         </div>
       </div>
-      {opened && <div className="ad-drawer"><div className="ad-drawer-card">🪪 <b>Member card</b><span>{slide.code.split('').join('-')}</span></div></div>}
+      {opened && <div className="ad-drawer"><div className="ad-drawer-card"><Icon name="idcard" className="ad-icon-big" /> <b>Member card</b><span>{slide.code.split('').join('-')}</span></div></div>}
       {opened ? <Feedback kind="ok">Click! {slide.reward}</Feedback> : slip ? <Feedback kind="try">{NOT_YET} Read the clue words one by one.</Feedback> : null}
-      <div className="ad-row"><button type="button" className="ad-btn ad-btn-primary" disabled={opened} onClick={tryOpen}>🔓 Open</button></div>
+      <div className="ad-row"><button type="button" className="ad-btn ad-btn-primary" disabled={opened} onClick={tryOpen}><Icon name="unlock" /> Open</button></div>
     </Panel>
   );
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDeck } from '../ctx';
+import { Icon } from '../Icon';
 import { Bubble } from '../Stage';
 import type { BadgeSlide, BriefSlide, DialSlide, TitleSlide } from '../types';
 import { Panel } from './shared';
@@ -31,7 +32,7 @@ export function BriefView({ slide }: { slide: BriefSlide }) {
           {slide.stamps.map((s) => (
             <button key={s.id} type="button" className="ad-stampcard" data-open={open.includes(s.id)} onClick={() => !open.includes(s.id) && setOpen([...open, s.id])} aria-label={open.includes(s.id) ? s.label : 'Mission card, tap to flip'}>
               <span className="ad-stampcard-face ad-stampcard-back">?</span>
-              <span className="ad-stampcard-face ad-stampcard-front"><b>{s.icon}</b><i>{s.label}</i></span>
+              <span className="ad-stampcard-face ad-stampcard-front"><b><Icon name={s.icon} /></b><i>{s.label}</i></span>
             </button>
           ))}
         </div>
@@ -82,13 +83,13 @@ export function DialView({ slide }: { slide: DialSlide }) {
     setVars({ dial: d });
     done();
   };
-  const OPTS: [string, string, string, string][] = [['chill', '🌿', 'Chill', 'Lots of help: a long model on the screen'], ['normal', '⚡', 'Normal', 'A medium model'], ['push', '🚀', 'Push', 'A little help: short model, more to say']];
+  const OPTS: [string, string, string, string][] = [['chill', 'leaf', 'Chill', 'Lots of help: a long model on the screen'], ['normal', 'bolt', 'Normal', 'A medium model'], ['push', 'rocket', 'Push', 'A little help: short model, more to say']];
   return (
     <Panel title={slide.prompt}>
       <div className="ad-dials-choice" role="radiogroup" aria-label="How much help do you want?">
         {OPTS.map(([id, icon, name, desc]) => (
           <button key={id} type="button" role="radio" aria-checked={vars.dial === id} className="ad-dialopt" data-on={vars.dial === id} onClick={() => pick(id)}>
-            <b>{icon}</b><strong>{name}</strong><span>{desc}</span>
+            <b><Icon name={icon} /></b><strong>{name}</strong><span>{desc}</span>
           </button>
         ))}
       </div>

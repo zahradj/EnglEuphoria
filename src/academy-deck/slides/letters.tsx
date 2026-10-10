@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { shuffled, useDeck } from '../ctx';
+import { Icon } from '../Icon';
 import { useDragChip } from '../drag';
 import type { FindWrongSlide, SpellSlide } from '../types';
 import { Feedback, NOT_YET, Panel } from './shared';
@@ -92,12 +93,12 @@ export function FindWrongView({ slide }: { slide: FindWrongSlide }) {
   return (
     <Panel title={slide.prompt}>
       <div className="ad-profile">
-        <div className="ad-profile-head">👤 Profile: “Sam”</div>
+        <div className="ad-profile-head"><Icon name="user" /> Profile: “Sam”</div>
         {slide.rows.map((r, i) => (
           <button key={i} type="button" className="ad-profile-row" data-found={found.includes(i)} data-slip={slip === i} onClick={() => tap(i)} aria-label={`${r.label}: ${r.text}`}>
             <span className="ad-profile-label">{r.label}</span>
             <span className="ad-profile-text">{found.includes(i) && r.fix ? <><s>{r.text}</s> → <b>{r.fix}</b></> : r.text}</span>
-            {found.includes(i) && <span aria-hidden="true">🔍</span>}
+            {found.includes(i) && <Icon name="search" />}
           </button>
         ))}
       </div>

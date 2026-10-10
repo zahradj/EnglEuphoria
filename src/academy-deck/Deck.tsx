@@ -5,6 +5,7 @@ import { Component, useCallback, useEffect, useMemo, useRef, useState } from 're
 import type { ReactNode } from 'react';
 import './deck.css';
 import { DeckContext, type DeckCtx } from './ctx';
+import { Icon } from './Icon';
 import { Character, Plate } from './Stage';
 import { BadgeView, BriefView, DialView, TitleView } from './slides/intro';
 import { ModelView, TeachView } from './slides/teach';
@@ -175,7 +176,7 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
           <Guard id={cur.id} onSkip={skip}>
             <SlideView key={cur.id} slide={cur} />
           </Guard>
-          {toast && <div className="ad-toast" role="status">💡 {toast}</div>}
+          {toast && <div className="ad-toast" role="status"><Icon name="bulb" /> {toast}</div>}
         </main>
         {burst > 0 && !calm && (
           <div className="ad-burst" key={burst} aria-hidden="true">
@@ -184,14 +185,14 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
         )}
         <nav className="ad-dock" aria-label="Lesson controls">
           <button type="button" className="ad-dockbtn" onClick={() => go(index - 1)} disabled={index === 0}>◀ Back</button>
-          <button type="button" className="ad-dockbtn" onClick={hint}>💡 Hint</button>
-          <button type="button" className="ad-dockbtn" onClick={() => setMinute(true)}>⏸ <span className="ad-long">I need a minute</span><span className="ad-short">Minute</span></button>
-          <button type="button" className="ad-dockbtn" onClick={() => setMenu(!menu)} aria-expanded={menu}>⚙ More</button>
+          <button type="button" className="ad-dockbtn" onClick={hint}><Icon name="bulb" /> Hint</button>
+          <button type="button" className="ad-dockbtn" onClick={() => setMinute(true)}><Icon name="pause" /> <span className="ad-long">I need a minute</span><span className="ad-short">Minute</span></button>
+          <button type="button" className="ad-dockbtn" onClick={() => setMenu(!menu)} aria-expanded={menu}><Icon name="gear" /> More</button>
           <button type="button" className="ad-dockbtn ad-dock-next" onClick={next} disabled={!isSolved}>{last ? 'Finish ✓' : 'Next ▶'}</button>
         </nav>
         {menu && (
           <div className="ad-menu" role="menu">
-            <button type="button" role="menuitem" onClick={skip}>⏭ Skip this slide</button>
+            <button type="button" role="menuitem" onClick={skip}><Icon name="skip" /> Skip this slide</button>
             <button type="button" role="menuitemcheckbox" aria-checked={calm} onClick={() => setCalm(!calm)}>{calm ? '✔ ' : ''}Calm mode (no animation)</button>
           </div>
         )}
@@ -208,7 +209,7 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
         {minute && (
           <div className="ad-minute" role="dialog" aria-label="Pause">
             <div>
-              <h2>⏸ Take a minute</h2>
+              <h2><Icon name="pause" /> Take a minute</h2>
               <p>No problem. Breathe. Your place is saved.</p>
               <button type="button" className="ad-btn ad-btn-primary" onClick={() => setMinute(false)}>I’m ready ▸</button>
             </div>

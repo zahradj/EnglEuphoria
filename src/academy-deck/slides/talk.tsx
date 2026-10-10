@@ -4,6 +4,7 @@ import { useDragChip } from '../drag';
 import { COLOR, Bubble } from '../Stage';
 import type { CastName, ConvoSlide, FadeSlide, PhoneChatSlide, SaySlide, TeachArt, WhoSaidSlide } from '../types';
 import { Feedback, NOT_YET, Panel } from './shared';
+import { Icon } from '../Icon';
 import { Art } from './teach';
 
 const clean = (w: string) => w.toLowerCase().replace(/[.!?,]/g, '');
@@ -117,7 +118,7 @@ export function ConvoView({ slide }: { slide: ConvoSlide }) {
           <div className="ad-options" data-pics={opts.some((o) => o.pic)} role="group" aria-label={`${slide.me} says`}>
             {opts.map((o) => (
               <button key={o.text} type="button" className="ad-option" data-pic={!!o.pic} onClick={() => pick(o)}>
-                {o.pic && <span className="ad-option-art"><Art art={o.pic} size="sm" /></span>}
+                {o.pic ? <span className="ad-option-art"><Art art={o.pic} size="sm" /></span> : <Icon name="chat" className="ad-option-icon" />}
                 <span className="ad-option-text">{o.text}</span>
               </button>
             ))}
@@ -172,7 +173,7 @@ export function PhoneChatView({ slide }: { slide: PhoneChatSlide }) {
   return (
     <Panel title={slide.prompt} wide>
       <div className="ad-phone">
-        <div className="ad-phone-head">📱 {slide.contact}</div>
+        <div className="ad-phone-head"><Icon name="phone" /> {slide.contact}</div>
         <div className="ad-phone-thread">
           {thread.map((m, i) => (
             <div key={i} className="ad-msg-row" data-me={m.me}>
@@ -186,7 +187,10 @@ export function PhoneChatView({ slide }: { slide: PhoneChatSlide }) {
       {!finished && (
         <div className="ad-chips">
           {tiles.map((t, k) => (
-            <button key={k} type="button" className="ad-chip" disabled={used.includes(k)} data-bad={bad === k} data-next={missed && k === hintIdx} onClick={() => tap(k)}>{t.w}</button>
+            <button key={k} type="button" className="ad-chip" data-pic={!!cur.tilePics?.[t.w]} disabled={used.includes(k)} data-bad={bad === k} data-next={missed && k === hintIdx} onClick={() => tap(k)}>
+              {cur.tilePics?.[t.w] && <span className="ad-tilepic"><Art art={cur.tilePics[t.w]} size="sm" /></span>}
+              {t.w}
+            </button>
           ))}
         </div>
       )}
@@ -243,7 +247,7 @@ export function SayView({ slide }: { slide: SaySlide }) {
   const shown = peek || !!slide.open;
   return (
     <Panel title={slide.prompt} wide>
-      <div className="ad-sayhidden" data-peek={shown}>{shown ? model : '🔒 Say it from memory. The model is hidden.'}</div>
+      <div className="ad-sayhidden" data-peek={shown}>{shown ? model : <><Icon name="lock" /> Say it from memory. The model is hidden.</>}</div>
       <textarea className="ad-input ad-textarea" rows={2} value={typed} placeholder="Or type it here…" aria-label="Type your sentence" onChange={(e) => setTyped(e.target.value)} />
       <div className="ad-row">
         {!slide.open && <button type="button" className="ad-btn" onClick={() => setPeek(true)} disabled={peek}>Show me</button>}

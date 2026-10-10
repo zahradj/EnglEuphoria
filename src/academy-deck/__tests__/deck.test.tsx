@@ -40,6 +40,22 @@ describe('deck data (Sign Me Up)', () => {
     expect(wrap.kind === 'wrap' && wrap.clue).toMatch(/Clue 2 of 8/);
   });
 
+  it('NEVER emoji and never 3D-looking pictures (owner 2026-10-10): no emoji in the deck sources, pictures are Canva cards, drawn art or animated SVG', async () => {
+    const fs = await import('node:fs');
+    const path = await import('node:path');
+    const emoji = /[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{23E9}-\u{23FF}\u{FE0F}]/u;
+    const allowed = new Set('✦★✓✔➤▶◀▸◂→←·…–—‘’“”▦'.split(''));
+    const walk = (d: string): string[] => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() && e.name !== '__tests__' ? walk(path.join(d, e.name)) : /\.(ts|tsx|css)$/.test(e.name) ? [path.join(d, e.name)] : []));
+    for (const f of walk(path.resolve(__dirname, '..'))) {
+      const bad = fs.readFileSync(f, 'utf8').split('').filter((c) => emoji.test(c) && !allowed.has(c));
+      expect(bad.join(''), f).toBe('');
+    }
+    // every picture in the lesson is a Canva card, a count card, a flag or a person drawn in SVG, or letters
+    const kinds = new Set<string>();
+    JSON.stringify(slides, (_k, v) => { if (v && typeof v === 'object' && 'type' in v && typeof v.type === 'string' && ['count', 'flag', 'person', 'letters', 'card'].concat(['emoji', 'phrase']).includes(v.type)) kinds.add(v.type); return v; });
+    expect([...kinds].sort()).toEqual(['card', 'count', 'flag', 'letters', 'person']);
+  });
+
   it('never uses the browser text-to-speech', async () => {
     const fs = await import('node:fs');
     const path = await import('node:path');
@@ -143,11 +159,11 @@ describe('games', () => {
 
   it('PADLOCK: wrong code gives "Not yet", the right code opens it, awards the number stamp and unlocks Next', () => {
     open(idx('padlock'));
-    fireEvent.click(screen.getByRole('button', { name: '🔓 Open' }));
+    fireEvent.click(screen.getByRole('button', { name: /Open/ }));
     expect(screen.getByText(/Not yet/)).toBeTruthy();
     const up = (n: number, times: number) => { for (let k = 0; k < times; k++) fireEvent.click(screen.getByRole('button', { name: `Dial ${n} up` })); };
     up(1, 4); up(2, 2); up(3, 7);
-    fireEvent.click(screen.getByRole('button', { name: '🔓 Open' }));
+    fireEvent.click(screen.getByRole('button', { name: /Open/ }));
     expect(screen.getByText(/Click!/)).toBeTruthy();
     expect(screen.getByRole('button', { name: /Next/ })).toBeEnabled();
   });
@@ -211,8 +227,17 @@ describe('games', () => {
 
   it('PICTURE OPTIONS render with their picture and their words', () => {
     open(slides.findIndex((s) => s.id === 'checkin-chat'));
-    expect(screen.getByRole('img', { name: 'a happy face' })).toBeTruthy();
+    expect(screen.getByRole('img', { name: 'feeling great' })).toBeTruthy();
     expect(screen.getByRole('button', { name: /I am great/ })).toBeTruthy();
+  });
+
+  it('PASSPORTS and WORD TILES carry pictures: each passport shows its flag, the content-word tiles show what they mean', () => {
+    const border = slides.find((s) => s.kind === 'border');
+    expect(border && border.kind === 'border' && Object.keys(border.flags ?? {}).sort()).toEqual(['Brazilian', 'Italian', 'Spanish']);
+    const chat = slides.find((s) => s.id === 'phonechat');
+    expect(chat && chat.kind === 'phonechat' && chat.steps.every((st) => Object.keys(st.tilePics ?? {}).length >= 2)).toBe(true);
+    open(slides.findIndex((s) => s.kind === 'border'));
+    expect(document.querySelectorAll('.ad-passport-flag')).toHaveLength(3);
   });
 
   it('LOCKERS: opening the right locker counts, a wrong one shakes with a friendly message', () => {
