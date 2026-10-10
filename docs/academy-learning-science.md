@@ -103,3 +103,10 @@ Exact figures for: Yang et al. 2021, the L2 spacing meta-analysis (citation unco
 ## 9. Sources (search-surfaced)
 
 Rowland 2014 (Psych Bull) · Yang et al. 2021 (Psych Bull), summary at learningscientists.org · Western Ontario spacing thesis ir.lib.uwo.ca/etd/8600 · Brunmair & Richter 2019 (PMC6813467) · Li 2010; Lyster & Saito 2010; Kang & Han 2015 (SSLA/Language Learning pages) · D'Ely, Mota & Bygate 2019 (degruyterbrill 10.1075/tblt.13.10del) · Uchihara, Karas & Thomson 2025 HVPT meta-analysis (SSLA, Cambridge) · Shadowing review (ora.ox.ac.uk) · Yanagisawa & Webb 2021 (SSLA); incidental vocabulary summary (todoele.net) · Plonsky 2011 (experts.nau.edu) · Teimouri et al. 2019 (experts.nau.edu) · Goo et al. 2015; Spada & Tomita 2010 · Nakanishi (Temple); Jeon & Day 2016 (nflrc.hawaii.edu/rfl/item/528) · Hu & Nation 2000; Schmitt, Jiang & Grabe 2011 (nflrc.hawaii.edu/rfl/item/43) · Soderstrom & Bjork 2015 · Cambridge guided learning hours (support.cambridgeenglish.org/hc/en-gb/articles/202838506) · Nation 2006 (wgtn.ac.nz PDF).
+
+## 10. Corrections from the 2026-10-10 evidence pass (see `docs/academy-fast-progress-evidence-A.md` / `-B.md` and `docs/academy-effective-lesson-plan.md`)
+
+- "Yanagisawa & Webb 2021 (SSLA, 42 studies)" mixes two papers: the involvement-load meta-analysis is *Language Learning* 71(2), 2021; the 42-study "ILH Plus" model is *SSLA* 44, 2022.
+- The spacing meta-analysis is Kim & Webb (2022), *Language Learning* 72(1), 37 studies / 48 experiments. Yang et al. 2021 (*Psych. Bulletin*, 222 studies, g ≈ 0.50) is verified at abstract level.
+- Tutoring: use **0.29 SD** (Nickow, Oreopoulos & Quan, AERJ 2023), not the 0.37 of the 2020 working paper; at scale effects are a third to a half of that (Kraft et al. 2024). Never cite Bloom's "2 sigma".
+- No source supports the "8–12 encounters" rule, a talk-time percentage, "attention-span" segment lengths, the +1/+3/+7/+21 ladder as optimal, or a "10 minutes per grade" homework rule. They remain design assumptions, measured in the pilot.
