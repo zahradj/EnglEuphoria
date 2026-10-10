@@ -58,6 +58,10 @@
 - Vary the look: `mode: 'click'` (listen and click, three pictures) for colours and scene pictures; `mode: 'shadow'` (listen and match the shadow) only for sticker pictures with clearly different outlines.
 - `recallWarmup.test.ts` (deploy gate) fails if a lesson has none. It is a routine scene, not one of the lesson's games.
 
+## Lesson song placement (hard rule — owner, 2026-10-10)
+
+- The lesson's own song is **not** at the start of a Playground lesson. Order: title → Remember? warm-up → intro → (story) → the words (listen and say) → a first practice game → **the song** → more games. The child sings words they already know. (The shared hello/goodbye songs are not lesson songs.)
+
 ## Languages — every page is translated (hard rule — owner, 2026-10-09)
 
 - **Every new or edited page a student, parent or visitor sees is built with `t()` and translated into all six languages** (en, es, fr, ar, tr, it) — never hard-coded English. Put keys in `src/translations/<lang>/<area>.ts` (see `authUi.ts` for the pattern: `au.*` keys, English text as the `t()` default) and wire them into each language's `index.ts`; the parity test (`src/translations/authUi.test.ts`, copy it for a new area) fails if a language is missing a key or a `{{placeholder}}`.

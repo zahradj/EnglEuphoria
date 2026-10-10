@@ -95,6 +95,7 @@ import { FeedPipScene } from './scene-components/FeedPipScene';
 import { CafeOrderScene } from './scene-components/CafeOrderScene';
 import { PartyBeltScene } from './scene-components/PartyBeltScene';
 import { SmoothieBarScene } from './scene-components/SmoothieBarScene';
+import { CaterpillarCrawlScene } from './scene-components/CaterpillarCrawlScene';
 import { BuzzerShowScene } from './scene-components/BuzzerShowScene';
 import { HouseHideScene } from './scene-components/HouseHideScene';
 import { MovingDayScene } from './scene-components/MovingDayScene';
@@ -310,6 +311,7 @@ export function SceneRenderer(props: {
     case 'house-hide': return <HouseHideScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'buzzer-show': return <BuzzerShowScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'cafe-order': return <CafeOrderScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'caterpillar-crawl': return <CaterpillarCrawlScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'smoothie-bar': return <SmoothieBarScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'party-belt': return <PartyBeltScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'feed-pip': return <FeedPipScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

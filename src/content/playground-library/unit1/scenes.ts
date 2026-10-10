@@ -509,6 +509,15 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Caterpillar Crawl (U8L5 signature): the story's caterpillar says "I like bananas!"; the child taps that food,
+       *  the caterpillar (`headImg` + drawn segments) crawls to it, eats it and grows a segment; at the end it becomes
+       *  the butterfly (`butterflyImg`). foods x/y = centre % on the stage; `start` = where the caterpillar begins. */
+      id: string; kind: 'caterpillar-crawl'; bg: string; teacher: string; who: CharKey;
+      headImg: string; butterflyImg: string; start: { x: number; y: number };
+      foods: { word: string; img: string; x: number; y: number }[];
+      rounds: { target: number; line: string; reply: string }[];
+    }
+  | {
       /** Smoothie Bar (U8L4 signature): a friend says what they like ("I like bananas and milk!"); the child
        *  taps those `fruits` into the blender and presses Blend; the smoothie takes the mix colour (`hex`).
        *  `mix` = indices of `fruits`; `seat` = % position of the friend on the stage. */
@@ -12882,18 +12891,6 @@ export const LESSON_U8L3_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u8l3-song', kind: 'song', bg: bgU8L3Party, title: '\u{1F3B5} Pizza, Cake, Ice Cream! \u{1F3B5}', teacher: 'Sing and act: eat a big pizza slice, blow the candles on the cake, lick the cold ice cream!',
-    durationSeconds: 20, bigWord: 'Yummy', songUrl: `${A}/audio/pizza-cake-ice-cream-song-u8l3.mp3?v=1`,
-    lineDurationsMs: [3960, 4240, 4400, 7462],
-    songPrompt: 'Cheerful bouncy kids party song',
-    lyrics: [
-      { who: 'pip', text: 'Pizza, pizza! Yummy pizza!', emotion: 'happy' },
-      { who: 'pip', text: 'Cake, cake! Birthday cake!', emotion: 'happy' },
-      { who: 'pip', text: 'Ice cream, ice cream! Cold ice cream!', emotion: 'happy' },
-      { who: 'pip', text: 'Pizza, cake and ice cream! Yummy!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 8 · Lesson 2 · Bread, Water, Juice! (the café).
     id: 'u8l3-recall-warmup', kind: 'recall-warmup', bg: bgU8L3PartyEmpty, who: 'pip', mode: 'click',
     fromLabel: 'Lesson 2 · Bread, Water, Juice!',
@@ -12952,6 +12949,19 @@ export const LESSON_U8L3_SCENES: Scene[] = [
       { friend: 'willow', target: 4, line: 'A banana, please!', reply: 'Yummy! I like bananas!' },
     ],
     doneLine: 'Everybody has party food! Yummy!',
+  },
+  /* The lesson song comes after the words and the first practice (owner, 2026-10-10). */
+  {
+    id: 'u8l3-song', kind: 'song', bg: bgU8L3Party, title: '\u{1F3B5} Pizza, Cake, Ice Cream! \u{1F3B5}', teacher: 'Sing and act: eat a big pizza slice, blow the candles on the cake, lick the cold ice cream!',
+    durationSeconds: 20, bigWord: 'Yummy', songUrl: `${A}/audio/pizza-cake-ice-cream-song-u8l3.mp3?v=1`,
+    lineDurationsMs: [3960, 4240, 4400, 7462],
+    songPrompt: 'Cheerful bouncy kids party song',
+    lyrics: [
+      { who: 'pip', text: 'Pizza, pizza! Yummy pizza!', emotion: 'happy' },
+      { who: 'pip', text: 'Cake, cake! Birthday cake!', emotion: 'happy' },
+      { who: 'pip', text: 'Ice cream, ice cream! Cold ice cream!', emotion: 'happy' },
+      { who: 'pip', text: 'Pizza, cake and ice cream! Yummy!', emotion: 'happy' },
+    ],
   },
 
   /* 7-9 More games */
@@ -13075,18 +13085,6 @@ export const LESSON_U8L4_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u8l4-song', kind: 'song', bg: bgU8L4Orchard, title: '\u{1F3B5} I Like Apples! \u{1F3B5}', teacher: 'Sing and point to yourself on "I like"! Crunch an apple, peel a banana, and nod "Yes, I do!"',
-    durationSeconds: 20, bigWord: 'I like', songUrl: `${A}/audio/i-like-apples-song-u8l4.mp3?v=1`,
-    lineDurationsMs: [4220, 4460, 4420, 6962],
-    songPrompt: 'Cheerful bouncy kids song about liking food',
-    lyrics: [
-      { who: 'pip', text: 'I like apples! Crunch, crunch, crunch!', emotion: 'happy' },
-      { who: 'pip', text: 'I like bananas! Yum, yum, yum!', emotion: 'happy' },
-      { who: 'pip', text: 'I like pizza! I like cake!', emotion: 'happy' },
-      { who: 'pip', text: 'Do you like apples? Yes, I do!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 8 · Lesson 3 · Pizza, Cake, Ice Cream! (the party food).
     id: 'u8l4-recall-warmup', kind: 'recall-warmup', bg: bgU8L4OrchardEmpty, who: 'pip', mode: 'click',
     fromLabel: 'Lesson 3 · Pizza, Cake, Ice Cream!',
@@ -13148,6 +13146,19 @@ export const LESSON_U8L4_SCENES: Scene[] = [
       { friend: 'willow', mix: [3, 1], line: 'I like oranges and bananas!', reply: 'Yummy, yummy! I like it!' },
     ],
     doneLine: 'Four smoothies! Everybody is happy!',
+  },
+  /* The lesson song comes after the words and the first practice (owner, 2026-10-10). */
+  {
+    id: 'u8l4-song', kind: 'song', bg: bgU8L4Orchard, title: '\u{1F3B5} I Like Apples! \u{1F3B5}', teacher: 'Sing and point to yourself on "I like"! Crunch an apple, peel a banana, and nod "Yes, I do!"',
+    durationSeconds: 20, bigWord: 'I like', songUrl: `${A}/audio/i-like-apples-song-u8l4.mp3?v=1`,
+    lineDurationsMs: [4220, 4460, 4420, 6962],
+    songPrompt: 'Cheerful bouncy kids song about liking food',
+    lyrics: [
+      { who: 'pip', text: 'I like apples! Crunch, crunch, crunch!', emotion: 'happy' },
+      { who: 'pip', text: 'I like bananas! Yum, yum, yum!', emotion: 'happy' },
+      { who: 'pip', text: 'I like pizza! I like cake!', emotion: 'happy' },
+      { who: 'pip', text: 'Do you like apples? Yes, I do!', emotion: 'happy' },
+    ],
   },
 
   /* 7-9 Ask and answer, more games */
