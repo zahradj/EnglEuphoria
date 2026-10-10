@@ -387,8 +387,11 @@ export type Scene =
       /** img/emoji: a non-reader tapping words into order has no way to
        *  confirm WHAT sentence they're building from the (initially
        *  blank) tiles alone — a picture anchors the meaning. */
-      rounds: { words: string[]; colors?: (string | null)[]; img?: string; emoji?: string }[];
+      /** extra: trap words mixed into the tiles (a wrong word to leave out, like the homework Build It). */
+      rounds: { words: string[]; colors?: (string | null)[]; img?: string; emoji?: string; extra?: string[] }[];
       side?: 'left' | 'right' | 'top';
+      /** listen: Pip says the sentence first (and on 🔊), the child builds what they heard. */
+      listen?: boolean;
     }
   | {
       /** Tongue twister: hear it once, then say it three times — slow,
@@ -1605,6 +1608,19 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
       { who: 'student', line: 'I am fine, thank you!', wrong: ['My name is Bella.', 'Hello!'] },
       { who: 'bella', line: 'Oh, the bell! Goodbye!' },
       { who: 'student', line: 'Goodbye, Bella! See you!', wrong: ['I am happy.', 'What’s your name?'] },
+    ],
+  },
+  /* 12b Listen and build (owner, 2026-10-10: "they need to build some sentences so they can remember it", like the homework Build It) */
+  {
+    id: 'wt4-listen-build', kind: 'sentence-build', listen: true, bg: bgL1Reading,
+    teacher: 'Listen to Pip, then build the sentence. One word does not belong! Then say the whole sentence.',
+    rounds: [
+      { words: ['How', 'are', 'you?'], extra: ['is'], img: spr('pip') },
+      { words: ['I', 'am', 'fine,', 'thank', 'you!'], extra: ['are'], img: feelSpr('pip-happy') },
+      { words: ['She', 'is', 'sad.'], extra: ['He'], img: feelSpr('mia-sad') },
+      { words: ['He', 'is', 'tired.'], extra: ['She'], img: feelSpr('leo-tired') },
+      { words: ['They', 'are', 'happy.'], extra: ['is'], img: `${W}/scenes/bg-story-pip-happy-friends.png` },
+      { words: ['She', 'is', 'hungry.'], extra: ['are'], img: feelSpr('willow-hungry') },
     ],
   },
   /* 13 Personal production */
