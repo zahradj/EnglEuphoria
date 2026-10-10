@@ -1,2 +1,5 @@
-+ public/lep1/scenes/bg-u7l6-night-farm-wide.png (1376, 768)
-1/1 saved
+cut out: public/lep1/items/item-banana.png (581, 897)
++ public/lep1/scenes/bg-u8l1-picnic-empty-wide.png (1376, 768)
++ public/lep1/scenes/bg-u8l1-picnic-wide.png (1376, 768)
++ public/lep1/items/item-banana.png (1024, 1024)
+3/3 saved
