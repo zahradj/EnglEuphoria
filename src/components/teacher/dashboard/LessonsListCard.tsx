@@ -310,8 +310,8 @@ export const LessonsListCard: React.FC = () => {
             .select('room_id, flags, outcome')
             .in('room_id', bookingIds)
             .eq('reporter_id', user.id);
-          for (const inc of (incidents ?? []) as any[]) {
-            if (inc.outcome === 'not_completed' && Array.isArray(inc.flags) && inc.flags.some((f: string) => TECH_FLAGS.has(f))) {
+          for (const inc of (incidents ?? []) as { room_id: string; flags: string[] | null; outcome: string | null }[]) {
+            if (inc.outcome === 'not_completed' && Array.isArray(inc.flags) && inc.flags.some((f) => TECH_FLAGS.has(f))) {
               techSet.add(inc.room_id);
             }
           }
