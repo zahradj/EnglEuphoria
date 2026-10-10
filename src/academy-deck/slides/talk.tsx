@@ -10,6 +10,8 @@ const clean = (w: string) => w.toLowerCase().replace(/[.!?,]/g, '');
 /** Who said it? Drag each speech bubble to the character who says it. */
 export function WhoSaidView({ slide }: { slide: WhoSaidSlide }) {
   const { right, wrong, done, seed } = useDeck();
+  const [shown, setShown] = useState(slide.replay ? 1 : 0);
+  const [watched, setWatched] = useState(!slide.replay);
   const [placed, setPlaced] = useState<Record<number, CastName>>({});
   const [held, setHeld] = useState<number | null>(null);
   const [slip, setSlip] = useState(false);
@@ -32,6 +34,22 @@ export function WhoSaidView({ slide }: { slide: WhoSaidSlide }) {
   useEffect(() => {
     if (all) done();
   }, [all, done]);
+  if (!watched && slide.replay) {
+    const lines = slide.replay.slice(0, shown);
+    const last = shown >= slide.replay.length;
+    return (
+      <Panel title={slide.replayTitle ?? 'Last time, at the desk…'} wide>
+        <div className="ad-convo-log" aria-live="polite">
+          {lines.map((l, i) => (
+            <p key={i} className="ad-line" data-me={l.who === 'Ava'} style={{ ['--who' as string]: COLOR[l.who] }}><b>{l.who}</b> {l.text}</p>
+          ))}
+        </div>
+        <div className="ad-row">
+          <button type="button" className="ad-btn ad-btn-primary" onClick={() => (last ? setWatched(true) : setShown(shown + 1))}>{last ? 'Now you try ▸' : 'Next line ▸'}</button>
+        </div>
+      </Panel>
+    );
+  }
   return (
     <Panel title={slide.prompt} wide>
       <div className="ad-whos">

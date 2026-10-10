@@ -25,7 +25,14 @@ export interface SlideBase {
 export interface TitleSlide extends SlideBase { kind: 'title'; heading: string; sub: string }
 export interface BriefSlide extends SlideBase { kind: 'brief'; say: string; heading: string; stamps: { id: string; icon: string; label: string }[] }
 export interface BadgeSlide extends SlideBase { kind: 'badge'; prompt: string; starter: string }
-export interface WhoSaidSlide extends SlideBase { kind: 'whosaid'; prompt: string; items: { text: string; who: CastName }[] }
+export interface WhoSaidSlide extends SlideBase {
+  kind: 'whosaid';
+  prompt: string;
+  items: { text: string; who: CastName }[];
+  /** the conversation is shown first, line by line (nothing is asked that was not shown); then the game */
+  replay?: { who: CastName; text: string }[];
+  replayTitle?: string;
+}
 export interface LockersSlide extends SlideBase { kind: 'lockers'; prompt: string; rounds: number[]; words: Record<number, string> }
 export interface NumTrainSlide extends SlideBase { kind: 'numtrain'; prompt: string; numbers: number[]; words: Record<number, string> }
 export interface PadlockSlide extends SlideBase { kind: 'padlock'; prompt: string; clue: string; code: string; reward: string; stamp?: string }

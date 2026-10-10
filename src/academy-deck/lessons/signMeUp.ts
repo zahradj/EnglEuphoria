@@ -30,7 +30,9 @@ export const SIGN_ME_UP: DeckScript = {
     { id: 'badge', kind: 'badge', bg: 'club-signup-desk', actors: [{ who: 'Theo', pos: 'right', expr: 'wave' }], trains: [4], prompt: 'Theo gives you a badge. Put your name on it.', starter: 'My name is', hints: ['Type only your name, or a nickname.'] },
     {
       id: 'whosaid', kind: 'whosaid', bg: 'club-signup-desk', actors: [{ who: 'Ava', pos: 'left', expr: 'happy' }, { who: 'Theo', pos: 'right', expr: 'happy' }], trains: [4],
-      prompt: 'Remember? Who says it? Drag each bubble to Ava or Theo.',
+      replayTitle: 'Remember last time? Ava signed up with Theo…',
+      replay: [{ who: 'Theo', text: 'What is your name?' }, { who: 'Ava', text: 'My name is Ava.' }, { who: 'Theo', text: 'How old are you?' }, { who: 'Ava', text: 'I am 13.' }],
+      prompt: 'Who said it? Drag each bubble to Ava or Theo.',
       items: [{ text: 'What is your name?', who: 'Theo' }, { text: 'My name is Ava.', who: 'Ava' }, { text: 'How old are you?', who: 'Theo' }, { text: 'I am 13.', who: 'Ava' }],
       hints: ['Questions come from Theo at the desk. Answers come from Ava.'],
     },

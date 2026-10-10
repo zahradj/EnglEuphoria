@@ -90,6 +90,16 @@ describe('games', () => {
     expect(screen.getByRole('button', { name: /Next/ })).toBeEnabled();
   });
 
+  it('WHO SAID IT: the conversation is shown line by line first, then the drag game (nothing is asked that was not shown)', () => {
+    open(idx('whosaid'));
+    expect(screen.getByText(/Remember last time/)).toBeTruthy();
+    expect(screen.queryByText('How old are you?')).toBeNull();
+    for (let k = 0; k < 3; k++) fireEvent.click(screen.getByRole('button', { name: /Next line/ }));
+    expect(screen.getByText('I am 13.')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /Now you try/ }));
+    expect(screen.getByText(/Drag each bubble/)).toBeTruthy();
+  });
+
   it('LOCKERS: opening the right locker counts, a wrong one shakes with a friendly message', () => {
     open(idx('lockers'));
     expect(screen.getByText(/Open locker/).textContent).toMatch(/four/);
