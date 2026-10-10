@@ -199,6 +199,9 @@ const PlayWelcomeTown1 = lazy(() => import("./pages/playground-scene/PlayWelcome
 const PlayWelcomeTown2 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown2"));
 const PlayWelcomeTown3 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown3"));
 const PlayWelcomeTown4 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown4"));
+const PlayWelcomeTown5 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown5"));
+const PlayWelcomeTown6 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown6"));
+const PlayWelcomeTown7 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown7"));
 const PlayJungleLesson1 = lazy(() => import("./pages/playground-scene/PlayJungleLesson1"));
 const PlayMagicCastleLesson1 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson1"));
 const PlayMagicCastleLesson2 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson2"));
@@ -552,6 +555,24 @@ const App = () => {
                       <Route path="/playground-scene/welcome-town-lesson-4" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayWelcomeTown4 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Welcome Town, Unit 1 Lesson 5 ("Storybook: The Playground Friends"). */}
+                      <Route path="/playground-scene/welcome-town-lesson-5" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayWelcomeTown5 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Welcome Town, Unit 1 Lesson 6 ("Extra Practice: Greeting Game!"). */}
+                      <Route path="/playground-scene/welcome-town-lesson-6" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayWelcomeTown6 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Welcome Town, Unit 1 Lesson 7 ("Unit Review & Boss Test: Say Hello!"). */}
+                      <Route path="/playground-scene/welcome-town-lesson-7" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayWelcomeTown7 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* A1 tier — Jungle Adventure, Unit 2 Lesson 1 ("Jungle Animals: Lion, Monkey, Bird"). */}

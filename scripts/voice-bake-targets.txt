@@ -79,3 +79,7 @@ LESSON_U7L6_SCENES
 LESSON_U8L1_SCENES
 LESSON_U8L2_SCENES
 # 2026-10-10: bake A1 warm-up + sentence-build lines (extractors were missing)
+# 2026-10-10: A1 Unit 1 Lessons 5-7
+LESSON_5_SCENES
+LESSON_6_SCENES
+LESSON_7_SCENES

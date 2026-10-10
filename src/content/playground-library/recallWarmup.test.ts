@@ -16,7 +16,7 @@ const lessons: [string, readonly AnyScene[]][] = [
   // Pre-A1: every lesson but the very first.
   ...Object.entries(SCENE_LESSON_REGISTRY).filter(([k]) => k !== '1-1'),
   // A1 / A2 worlds (the first lesson of each track has nothing before it).
-  ...(['wt-rich-1-2', 'wt-rich-1-3', 'wt-rich-1-4', 'wt-a2-rich-1-2', 'wt-a2-rich-1-3', 'castle-rich-9-2', 'castle-rich-9-3'].map((k) => {
+  ...(['wt-rich-1-2', 'wt-rich-1-3', 'wt-rich-1-4', 'wt-rich-1-5', 'wt-rich-1-6', 'wt-rich-1-7', 'wt-a2-rich-1-2', 'wt-a2-rich-1-3', 'castle-rich-9-2', 'castle-rich-9-3'].map((k) => {
     const [fmt, u, l] = [k.replace(/-\d+-\d+$/, ''), Number(k.split('-').at(-2)), Number(k.split('-').at(-1))];
     return [k, getWelcomeTownLesson(fmt, u, l)?.scenes ?? []] as [string, readonly AnyScene[]];
   })),
