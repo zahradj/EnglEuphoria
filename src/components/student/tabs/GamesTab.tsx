@@ -16,6 +16,9 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { LIBRARY_GAMES } from '@/content/playground-library/gamesCatalog';
 import { GamesGrid } from '@/components/games/GamesGrid';
+import { ACADEMY_GAMES } from '@/academy-games/academyGamesCatalog';
+import { AcademyGamesGrid } from '@/academy-games/AcademyGamesGrid';
+import { AcademyGamePlayer } from '@/academy-games/AcademyGamePlayer';
 
 const GamePlayer = lazy(() => import('@/components/games/GamePlayer'));
 // Built-in Playground games (Alphabet Express) — not stored in the database.
@@ -187,6 +190,19 @@ export function GamesTab() {
   // Built-in games ship with the app (no teacher publishing step), so they show
   // for the Playground hub even when the database library is empty.
   const builtIns = hub === 'playground' ? LIBRARY_GAMES : [];
+  // The Academy hub's own built-in games (Verb Forge, ...).
+  const academyBuiltIns = hub === 'academy' ? ACADEMY_GAMES : [];
+
+  if (builtInGameId && academyBuiltIns.some((g) => g.id === builtInGameId)) {
+    return (
+      <div className="space-y-4">
+        <Button variant="ghost" onClick={() => setBuiltInGameId(null)} className="gap-2">
+          <ArrowLeft className="w-4 h-4" /> Back to library
+        </Button>
+        <AcademyGamePlayer gameId={builtInGameId} onBack={() => setBuiltInGameId(null)} />
+      </div>
+    );
+  }
 
   if (builtInGameId && builtIns.length > 0) {
     return (
@@ -268,7 +284,7 @@ export function GamesTab() {
           </p>
         </div>
         <Badge className={cn('text-xs px-2.5 py-1', theme.chip)}>
-          {games.length + builtIns.length} games available
+          {games.length + builtIns.length + academyBuiltIns.length} games available
         </Badge>
       </header>
 
@@ -281,7 +297,16 @@ export function GamesTab() {
         </section>
       )}
 
-      {noGamesAtAll ? (builtIns.length > 0 ? null : (
+      {academyBuiltIns.length > 0 && (
+        <section>
+          <h2 className="flex items-center gap-2 text-lg font-bold mb-3">
+            <Sparkles className="w-5 h-5" /> Featured games
+          </h2>
+          <AcademyGamesGrid onPlay={(id) => setBuiltInGameId(id)} />
+        </section>
+      )}
+
+      {noGamesAtAll ? (builtIns.length > 0 || academyBuiltIns.length > 0 ? null : (
         <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 p-12 text-center">
           <Gamepad2 className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
           <h3 className="font-semibold text-lg mb-1">No games yet</h3>
