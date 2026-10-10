@@ -21,7 +21,7 @@ export function Plate({ id, artBase }: { id: string; artBase?: string }) {
 
 /** A cast member. Falls back expr -> happy -> neutral -> a coloured initial, so a missing picture never breaks a slide. */
 export function Character({ actor, artBase, speaking = false, small = false }: { actor: Actor; artBase?: string; speaking?: boolean; small?: boolean }) {
-  const chain: Expr[] = [actor.expr ?? 'neutral', 'happy', 'neutral'];
+  const chain: Expr[] = actor.expr === 'concerned' ? ['concerned', 'neutral'] : [actor.expr ?? 'neutral', 'happy', 'neutral'];
   const [i, setI] = useState(0);
   const src = artBase && i < chain.length ? `${artBase}/cast/${actor.who.toLowerCase()}/${chain[i]}.webp` : null;
   return (

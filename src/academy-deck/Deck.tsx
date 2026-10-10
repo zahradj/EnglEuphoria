@@ -98,6 +98,13 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
   const [minute, setMinute] = useState(false);
   const [menu, setMenu] = useState(false);
   const [burst, setBurst] = useState(0);
+  const [mood, setMood] = useState<'happy' | 'concerned' | null>(null);
+  const moodTimer = useRef<number>();
+  const react = useCallback((m: 'happy' | 'concerned') => {
+    setMood(m);
+    window.clearTimeout(moodTimer.current);
+    moodTimer.current = window.setTimeout(() => setMood(null), 1400);
+  }, []);
   const [partCard, setPartCard] = useState<number | null>(homework ? null : 0);
   const shownParts = useRef<Set<number>>(new Set());
   const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
@@ -118,11 +125,15 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
   }), []);
   const setVars = useCallback((p: Vars) => setVarsState((v) => ({ ...v, ...p })), []);
   const award = useCallback((id: string) => setStamps((s) => (s.includes(id) ? s : [...s, id])), []);
-  const right = useCallback(() => setStats((s) => ({ ...s, right: s.right + 1 })), []);
+  const right = useCallback(() => {
+    setStats((s) => ({ ...s, right: s.right + 1 }));
+    react('happy');
+  }, [react]);
   const wrong = useCallback(() => {
     wrongBySlide.current[curId.current] = (wrongBySlide.current[curId.current] ?? 0) + 1;
     setStats((s) => ({ ...s, wrong: s.wrong + 1 }));
-  }, []);
+    react('concerned');
+  }, [react]);
   const ctx: DeckCtx = useMemo(() => ({ artBase, vars, setVars, done, right, wrong, award, stamps, reduced: calm, seed: 1000 + index * 17 }), [artBase, vars, setVars, done, right, wrong, award, stamps, calm, index]);
   const isSolved = !!solved[cur.id];
   const last = index === script.slides.length - 1;
@@ -180,10 +191,10 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
   const panelAt = only === 'left' ? 'right' : only === 'right' ? 'left' : 'center';
   return (
     <DeckContext.Provider value={ctx}>
-      <div className="ad-root" data-reduced={calm} data-kind={cur.kind} data-testid="deck">
+      <div className="ad-root" data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
         <Plate id={cur.bg} artBase={artBase} key={cur.bg} />
         <div className="ad-actors" aria-hidden={actorsVisible.length === 0}>
-          {actorsVisible.map((a) => <Character key={a.who} actor={a} artBase={artBase} small={compact} />)}
+          {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} />)}
         </div>
         <header className="ad-strip" aria-label="Slides">
           <span className="ad-lesson">{homework ? `${homework.label} · game ${index + 1} of ${script.slides.length}` : PARTS[cur.part]?.name}</span>
@@ -204,6 +215,7 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
         </main>
         {burst > 0 && !calm && (
           <div className="ad-burst" key={burst} aria-hidden="true">
+            <b className="ad-plus">+1 ★</b>
             {Array.from({ length: 12 }, (_, i) => <span key={i} style={{ ['--a' as string]: `${i * 30}deg`, ['--d' as string]: `${70 + (i % 3) * 26}px` }}>{i % 2 ? '★' : '✦'}</span>)}
           </div>
         )}
