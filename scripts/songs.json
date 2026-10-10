@@ -2974,5 +2974,40 @@
       "I like cake! Now I'm full!",
       "Look at me! A butterfly!"
     ]
+  },
+  "u8l6-yummy-food": {
+    "publicPath": "public/lep1/audio/yummy-food-song-u8l6.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids song, 110 BPM with ukulele, bright piano, hand claps and a little shaker, clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "hand claps",
+      "clear kids vocals",
+      "sing-along chorus",
+      "110 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Apple, banana, milk! Yummy!",
+      "Bread, water, juice, please!",
+      "Pizza, cake and ice cream!",
+      "What do you like? I like food!"
+    ]
   }
 }
