@@ -112,6 +112,8 @@ export function HomeworkApp({ artBase, lessonDate = todayISO(), demo = true }: H
   if (view === 'result' && last) {
     return shell(
       <section className="hw-result">
+        <div className="hw-confetti" aria-hidden="true">{Array.from({ length: 36 }, (_, i) => <i key={i} style={{ ['--x' as string]: `${(i * 37) % 100}%`, ['--d' as string]: `${(i % 9) * 0.18}s`, ['--c' as string]: ['#fde047', '#a78bfa', '#38bdf8', '#4ade80', '#fb923c'][i % 5], ['--s' as string]: `${8 + (i % 4) * 3}px` }} />)}</div>
+        <div className="hw-rays" aria-hidden="true" />
         <div className="hw-result-chest"><ChestArt state="done" stars={last.stars} /></div>
         <h2>{last.chest.title} complete!</h2>
         <Stars n={last.stars} big />

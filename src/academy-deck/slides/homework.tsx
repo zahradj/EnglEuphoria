@@ -47,7 +47,7 @@ export function HuntView({ slide }: { slide: HuntSlide }) {
             <span key={t.word} className="ad-gm-chip" data-found={found.includes(t.word)}>{found.includes(t.word) ? <Icon name="check" /> : <Icon name="search" />} {t.word}</span>
           ))}
         </div>
-        <span className="ad-gm-count">{found.length}/{slide.targets.length}</span>
+        <span className="ad-gm-count" key={found.length}>{found.length}/{slide.targets.length}</span>
       </div>
       {slip && !all && <p className="ad-gm-toast" role="status">{NOT_YET} Read the word, then look for that number.</p>}
       {all && <p className="ad-gm-toast" data-ok="true" role="status"><Icon name="check" /> You found them all!</p>}
