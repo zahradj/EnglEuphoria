@@ -1,6 +1,6 @@
 # Scenario — Pre-A1 Unit 8 Lesson 5 "The Very Hungry Caterpillar" · story film "The Hungry Little Caterpillar"
 
-**Status: waiting for the owner's approval.** No story picture is made and nothing is ordered until the owner says yes.
+**Status: approved by the owner (2026-10-10).** Stills only, nothing paid is ordered.
 
 | | |
 |---|---|
@@ -54,4 +54,4 @@ Stills only: Canva pictures + recorded voices. **No paid clips.**
 title → Remember? (Lesson 4) → intro → **story film** → story words (listen and say) → move → first practice game → **the song** (now the child knows the words) → more games → ask and answer → sticker → home mission → goodbye.
 
 ## Owner approval
-Approved: _(waiting)_
+Approved: owner, 2026-10-10 — "yes".
